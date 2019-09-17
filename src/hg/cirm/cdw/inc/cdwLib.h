@@ -45,9 +45,6 @@ struct sqlConnection *cdwConnect();
 struct sqlConnection *cdwConnectReadWrite();
 /* Returns read/write connection to database. */
 
-char *cdwLicensePlatePrefix(struct sqlConnection *conn);
-/* Return license plate prefix for current database - something like TST or DEV or ENCFF */
-
 long long cdwGotFile(struct sqlConnection *conn, char *submitDir, char *submitFileName, 
     char *md5, long long size);
 /* See if we already got file.  Return fileId if we do,  otherwise 0.  This returns
@@ -72,6 +69,9 @@ char *cdwTempDirForToday(char dir[PATH_LEN]);
 
 long long cdwNow();
 /* Return current time in seconds since Epoch. */
+
+struct cdwUser *cdwCurrentUser(struct sqlConnection *conn);
+/* Look in a few places for the currently logged in user and return it or NULL */
 
 struct cdwUser *cdwUserFromUserName(struct sqlConnection *conn, char* userName);
 /* Return user associated with that username or NULL if not found */
@@ -342,8 +342,8 @@ void cdwReserveTempFile(char *path);
 /* Call mkstemp on path.  This will fill in terminal XXXXXX in path with file name
  * and create an empty file of that name.  Generally that empty file doesn't stay empty for long. */
 
-void cdwBwaIndexPath(struct cdwAssembly *assembly, char indexPath[PATH_LEN]);
-/* Fill in path to BWA index. */
+void cdwIndexPath(struct cdwAssembly *assembly, char indexPath[PATH_LEN]);
+/* Fill in path to a bowtie index (originally bwa index). */
 
 void cdwAsPath(char *format, char path[PATH_LEN]);
 /* Convert something like "narrowPeak" in format to full path involving
@@ -488,6 +488,10 @@ struct slRef *tagStanzasMatchingQuery(struct tagStorm *tags, char *query);
 void cdwPrintMatchingStanzas(char *rqlQuery, int limit, struct tagStorm *tags, char *format);
 /* Show stanzas that match query */
 
+void cdwPrintSlRefList(struct slRef *results, struct slName *fieldNames, char *format, int limit);
+/* Print a linked list of results in ra, tsv, or csv format.  Each result should be a list of
+ * slPair key/values. */
+
 struct cgiParsedVars *cdwMetaVarsList(struct sqlConnection *conn, struct cdwFile *ef);
 /* Return list of cgiParsedVars dictionaries for metadata for file.  Free this up 
  * with cgiParsedVarsFreeList() */
@@ -501,6 +505,13 @@ void replaceOriginalWithSymlink(char *submitFileName, char *submitDir, char *cdw
 /* For a file that was just copied, remove original and symlink to new one instead
  * to save space. Follows symlinks if any to the real file and replaces it with a symlink */
 
+int findSubmitSymlinkExt(char *submitFileName, char *submitDir, char **pPath, char **pLastPath, int *pSymlinkLevels);
+/* Find the last symlink and real file in the chain from submitDir/submitFileName.
+ * This is useful for when target of symlink in cdw/ gets renamed 
+ * (e.g. license plate after passes validation), or removed (e.g. cdwReallyRemove* commands). 
+ * Returns 0 for success. /
+ * Returns -1 if path does not exist. */
+
 char *findSubmitSymlink(char *submitFileName, char *submitDir, char *oldPath);
 /* Find the last symlink in the chain from submitDir/submitFileName.
  * This is useful for when target of symlink in cdw/ gets renamed 
@@ -509,6 +520,19 @@ char *findSubmitSymlink(char *submitFileName, char *submitDir, char *oldPath);
 void cdwReallyRemoveFile(struct sqlConnection *conn, char *submitDir, long long fileId, boolean unSymlinkOnly, boolean really);
 /* Remove all records of file from database and from Unix file system if 
  * the really flag is set.  Otherwise just print some info on the file. */
+
+char *cdwHeadTagDependencies(struct cart *cart, boolean makeAbsolute);
+/* Return page head dependencies string.  This is content that actually appears at the top
+ * of the page, in the head tag.  Optionally make links point to absolute URLs instead of relative. */
+
+char *cdwPageHeader(struct cart *cart, boolean makeAbsolute);
+/* Return page header string. This is content that actually appears at the top
+ * of the page, like menu stuff.  Optionally make links point to absolute URLs instead of relative. */
+
+char *cdwPageFooter(struct cart *cart, boolean makeAbsolute);
+/* Return page footer string. This is content that appears in the page footer, like
+ * links to other institutions etc.  Optionally make any relative URLs into absolute
+ * URLs. */
 
 char *cdwLocalMenuBar(struct cart *cart, boolean makeAbsolute);
 /* Return menu bar string. Optionally make links in menubar to point to absolute URLs, not relative. */

@@ -11,6 +11,7 @@ cmdShouldFail = echo "Error: command should have failed" >&2; false
 all:: test
 
 test:: singleStrand doubleStrand
+	${MAKE} clean
 
 singleStrand: mkout
 	${pslToBigPsl} input/$@.psl output/$@.tmp

@@ -143,7 +143,7 @@ if (ru->recvHash)
 freez(pRu);
 }
 
-struct rudp *rudpOpen()
+struct rudp *rudpOpen() 
 /* Open up an unbound rudp.   This is suitable for
  * writing to and for reading responses.  However 
  * you'll want to rudpBind if you want to listen for
@@ -151,7 +151,7 @@ struct rudp *rudpOpen()
  * with this one.  Warns and returns NULL if there is
  * a problem. */
 {
-int sd = socket(AF_INET,  SOCK_DGRAM, IPPROTO_UDP);
+int sd = socket(AF_INET6, SOCK_DGRAM, IPPROTO_UDP);
 if (sd < 0)
     {
     warn("Couldn't open socket in rudpOpen %s", strerror(errno));
@@ -161,7 +161,7 @@ return rudpNew(sd);
 }
 
 struct rudp *rudpMustOpen()
-/* Open up unbound rudp.  Warn and die if there is a problem. */
+/* Open up unbound rudp.  Warn and die if there is a problem.  */
 {
 struct rudp *ru = rudpOpen();
 if (ru == NULL)
@@ -169,15 +169,24 @@ if (ru == NULL)
 return ru;
 }
 
-struct rudp *rudpOpenBound(struct sockaddr_in *sai)
+struct rudp *rudpOpenBound(struct sockaddr_storage *sai)
 /* Open up a rudp socket bound to a particular port and address.
  * Use this rather than rudpOpen if you want to wait for
  * messages at a specific address in a server or the like. */
 {
-struct rudp *ru = rudpOpen();
+// we should always bind listeners to IPV6 for dual stack
+struct rudp *ru = rudpOpen();  
 if (ru != NULL)
     {
-    if (bind(ru->socket, (struct sockaddr *)sai, sizeof(*sai)) < 0)
+    // Explicitly turn off IPV6_V6ONLY which is needed on non-Linux platforms like NetBSD and Darwin.
+    // This means we allow ipv4 socket connections that can have ipv4-mapped ipv6 IPs.
+    int off = 0;
+    if (setsockopt(ru->socket, IPPROTO_IPV6, IPV6_V6ONLY, (void *)&off, sizeof(off)) < 0)
+	{
+	errAbort("setsockopt IPV6_V6ONLY off failed.");
+	}
+
+    if (bind(ru->socket, (struct sockaddr *)sai, getSockSize6n4(sai)) < 0)
 	{
 	warn("Couldn't bind rudp socket: %s", strerror(errno));
 	rudpClose(&ru);
@@ -186,7 +195,7 @@ if (ru != NULL)
 return ru;
 }
 
-struct rudp *rudpMustOpenBound(struct sockaddr_in *sai)
+struct rudp *rudpMustOpenBound(struct sockaddr_storage *sai)
 /* Open up a rudp socket bound to a particular port and address
  * or die trying. */
 {
@@ -267,7 +276,7 @@ for (;;)
     }
 }
 
-static boolean getOurAck(struct rudp *ru, struct timeval *startTv, struct sockaddr_in *sai)
+static boolean getOurAck(struct rudp *ru, struct timeval *startTv, struct sockaddr_storage *sai)
 /* Wait for acknowledgement to the message we just sent.
  * The set should be zeroed out. Only wait for up to
  * ru->timeOut microseconds.   Prints a message and returns FALSE
@@ -276,7 +285,7 @@ static boolean getOurAck(struct rudp *ru, struct timeval *startTv, struct sockad
 struct rudpHeader head;
 int readSize;
 int timeOut = ru->timeOut;
-struct sockaddr_in retFrom;
+struct sockaddr_storage retFrom;
 unsigned int retFromSize = sizeof(retFrom);
 
 for (;;)
@@ -292,8 +301,16 @@ for (;;)
 		    (struct sockaddr*)&retFrom, &retFromSize);
 	if (readSize >= sizeof(head) && head.type == rudpAck && head.id == ru->lastId)
 	    {
-	    if ((sai->sin_addr.s_addr==retFrom.sin_addr.s_addr) &&
-		(sai->sin_port==retFrom.sin_port))
+	    char saiIpStr[NI_MAXHOST];
+	    char retFromIpStr[NI_MAXHOST];
+	    char saiPortStr[NI_MAXSERV];
+	    char retFromPortStr[NI_MAXSERV];
+	    getAddrAndPortAsString6n4(sai, saiIpStr, sizeof saiIpStr, saiPortStr, sizeof saiPortStr);
+	    getAddrAndPortAsString6n4(&retFrom, retFromIpStr, sizeof retFromIpStr, 
+		retFromPortStr, sizeof retFromPortStr);
+
+	    if (sameString(saiIpStr, retFromIpStr) && 
+		sameString(saiPortStr, retFromPortStr))
 		{
 		gettimeofday(&tv, NULL);
 		dt = timeDiff(startTv, &tv);
@@ -302,13 +319,9 @@ for (;;)
 		}
 	    else
 		{
-		char retFromDottedQuad[17];
-		char saiDottedQuad[17];
-		internetIpToDottedQuad(ntohl(retFrom.sin_addr.s_addr), retFromDottedQuad);
-		internetIpToDottedQuad(ntohl(sai->sin_addr.s_addr), saiDottedQuad);
-		warn("rudp: discarding mistaken ack from %s:%d by confirming recipient ip:port %s:%d"
-		    , retFromDottedQuad, retFrom.sin_port
-		    , saiDottedQuad, sai->sin_port
+		warn("rudp: discarding mistaken ack from %s:%s by confirming recipient ip:port %s:%s"
+		    , retFromIpStr, retFromPortStr
+		    , saiIpStr, saiPortStr
 		    );
 		}
 	    }
@@ -325,7 +338,7 @@ for (;;)
     }
 }
 
-int rudpSend(struct rudp *ru, struct sockaddr_in *sai, void *message, int size)
+int rudpSend(struct rudp *ru, struct sockaddr_storage *sai, void *message, int size)
 /* Send message of given size to port at host via rudp.  Prints a warning and
  * sets errno and returns -1 if there's a problem. */
 {
@@ -356,8 +369,8 @@ for (i=0; i<maxRetry; ++i)
     gettimeofday(&sendTv, NULL);
     head->sendSec = sendTv.tv_sec;
     head->sendMicro = sendTv.tv_usec;
-    err =  sendto(ru->socket, outBuf, fullSize, 0, 
-	(struct sockaddr *)sai, sizeof(*sai));
+    err = sendto(ru->socket, outBuf, fullSize, 0, 
+	(struct sockaddr *)sai, getSockSize6n4(sai));
     if (err < 0) 
 	{
 	/* Warn, wait, and retry. */
@@ -411,7 +424,7 @@ while (TRUE)
 
 
 int rudpReceiveTimeOut(struct rudp *ru, void *messageBuf, int bufSize, 
-	struct sockaddr_in *retFrom, int timeOut)
+	struct sockaddr_storage *retFrom, int timeOut)
 /* Read message into buffer of given size.  Returns actual size read on
  * success. On failure prints a warning, sets errno, and returns -1. 
  * Also returns ip address of message source. If timeOut is nonzero,
@@ -421,7 +434,7 @@ int rudpReceiveTimeOut(struct rudp *ru, void *messageBuf, int bufSize,
 char inBuf[udpEthMaxSize];
 struct rudpHeader *head = (struct rudpHeader *)inBuf;
 struct rudpHeader ackHead;
-struct sockaddr_in sai;
+struct sockaddr_storage sai;
 socklen_t saiSize = sizeof(sai);
 int readSize, err;
 assert(bufSize <= rudpMaxSize);
@@ -439,8 +452,11 @@ for (;;)
 	}
     readSize = recvfrom(ru->socket, inBuf, sizeof(inBuf), 0, 
 	(struct sockaddr*)&sai, &saiSize);
+
+    // return the entire structure
     if (retFrom != NULL)
-	*retFrom = sai;
+	*retFrom = sai; 
+
     if (readSize < 0)
 	{
 	if (errno == EINTR)
@@ -484,10 +500,10 @@ for (;;)
 	ru->recvCount = 0;
 	}
     char hashKey[64];
-    char saiDottedQuad[17];
-    internetIpToDottedQuad(ntohl(sai.sin_addr.s_addr), saiDottedQuad);
+    char saiStr[NI_MAXHOST];
+    getAddrAsString6n4(&sai, saiStr, sizeof saiStr);
     safef(hashKey, sizeof(hashKey), "%s-%d-%d-%d" 
-    	, saiDottedQuad 
+    	, saiStr
         , head->pid              
         , head->connId
         , head->id
@@ -517,7 +533,7 @@ return readSize;
 
 
 int rudpReceiveFrom(struct rudp *ru, void *messageBuf, int bufSize, 
-	struct sockaddr_in *retFrom)
+	struct sockaddr_storage *retFrom)
 /* Read message into buffer of given size.  Returns actual size read on
  * success. On failure prints a warning, sets errno, and returns -1. 
  * Also returns ip address of message source. */

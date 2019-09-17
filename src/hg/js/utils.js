@@ -560,6 +560,17 @@ function validateFloat(obj,min,max)
     }
 }
 
+function validateLabel(label)
+{   // returns true if label is valid in trackDb as short or long label
+
+    var regexp = /^[a-z][ a-z0-9/'!\$()*,\-.:;<=>?@\[\]^_`{|}~]*$/i;
+    if (regexp.test(label)) {
+        return true;
+    } else {
+        alert(label + " is an invalid label. The first character must be alphabetical and the rest of the string be alphanumeric or the following puncuation ~`!@$/^*.()_-=[{]}?|;:'<,>");
+        return false;
+    }
+}
 function validateUrl(url)
 {   // returns true if url is a valid url, otherwise returns false and shows an alert
 

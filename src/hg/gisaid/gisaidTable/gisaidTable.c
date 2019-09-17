@@ -406,11 +406,11 @@ return val;
 /* ---- Some helper routines for column methods. ---- */
 
 
-boolean anyWild(char *s)
-/* Return TRUE if there are '?' or '*' characters in s. */
-{
-return strchr(s, '?') != NULL || strchr(s, '*') != NULL;
-}
+//boolean anyWild(char *s)
+///* Return TRUE if there are '?' or '*' characters in s. */
+//{
+//return strchr(s, '?') != NULL || strchr(s, '*') != NULL;
+//}
 
 boolean wildMatchAny(char *word, struct slName *wildList)
 /* Return TRUE if word matches any thing in wildList. */

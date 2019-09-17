@@ -23,6 +23,9 @@
 
 #include "dystring.h"
 
+#define MAX_HUB_TRACKDB_FILE_SIZE    64*1024*1024
+#define MAX_HUB_GROUP_FILE_SIZE     16*1024*1024
+#define MAX_HUB_GENOME_FILE_SIZE    64*1024*1024
 
 struct trackHub 
 /* A track hub. */
@@ -163,7 +166,7 @@ struct dbDb *trackHubDbDbFromAssemblyDb(char *database);
 /* Return a dbDb structure for just this database. */
 
 struct hgPositions;
-void trackHubFindPos(char *db, char *term, struct hgPositions *hgp);
+void trackHubFindPos(struct cart *cart, char *db, char *term, struct hgPositions *hgp);
 /* Look for term in track hubs.  Update hgp if found */
 
 void trackHubAddDescription(char *trackDbFile, struct trackDb *tdb);
@@ -186,6 +189,10 @@ struct dbDb *trackHubGetBlatDbDbs();
 struct slPair *trackHubDbDbToValueLabel(struct dbDb *hubDbDbList);
 /* Given a trackHub (list of) track hub dbDb which may be missing some info,
  * return an slPair of value and label suitable for making a select/menu option. */
+
+void hubCheckBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome,
+    struct trackDb *tdb);
+/* Check remote file exists and is of correct type. Wrap this in error catcher */
 
 #endif /* TRACKHUB_H */
 

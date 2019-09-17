@@ -5,7 +5,7 @@ all: ${SUBDIRS:%=%.suball}
 %.suball:
 	${MAKE} -C $* all
 
-FILES= decipher.tables buildDecipher validateDecipher.sh checkDecipher.sh decipherWrapper.sh login.perl ../../../lib/decipherRaw.sql
+FILES= decipher.tables buildDecipher validateDecipher.sh checkDecipher.sh decipherWrapper.sh login.perl ../../../lib/decipherRaw.sql ../../../lib/decipherSnvsRaw.sql
 
 install: make-prefix installSub ${PREFIX}
 	cp ${FILES} ${PREFIX}

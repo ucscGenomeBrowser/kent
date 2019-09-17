@@ -8,11 +8,11 @@ cd $WEEKLYBLD
 setenv HGDB_CONF /cluster/home/build/.hg.conf.beta
 set log = v${BRANCHNN}.hgTables.log
 
-echo "$HOME/bin/$MACHTYPE/hgTablesTest -db=hg38 hgwbeta.cse.ucsc.edu/cgi-bin/hgTables ./logs/$log" > ./logs/$log
-$HOME/bin/$MACHTYPE/hgTablesTest -appendLog -db=hg38 hgwbeta.cse.ucsc.edu/cgi-bin/hgTables ./logs/$log
+echo "$HOME/bin/$MACHTYPE/hgTablesTest -db=hg38 hgwbeta.soe.ucsc.edu/cgi-bin/hgTables ./logs/$log" > ./logs/$log
+$HOME/bin/$MACHTYPE/hgTablesTest -appendLog -db=hg38 hgwbeta.soe.ucsc.edu/cgi-bin/hgTables ./logs/$log
 echo "" >> ./logs/$log
-echo "$HOME/bin/$MACHTYPE/hgTablesTest -appendLog -org=Mouse -orgs=1  hgwbeta.cse.ucsc.edu/cgi-bin/hgTables ./logs/$log" >> ./logs/$log
-$HOME/bin/$MACHTYPE/hgTablesTest -appendLog -org=Mouse -orgs=1  hgwbeta.cse.ucsc.edu/cgi-bin/hgTables ./logs/$log
+echo "$HOME/bin/$MACHTYPE/hgTablesTest -appendLog -org=Mouse -orgs=1  hgwbeta.soe.ucsc.edu/cgi-bin/hgTables ./logs/$log" >> ./logs/$log
+$HOME/bin/$MACHTYPE/hgTablesTest -appendLog -org=Mouse -orgs=1  hgwbeta.soe.ucsc.edu/cgi-bin/hgTables ./logs/$log
 
 # creates hgTables.log - look for unusual errors
 

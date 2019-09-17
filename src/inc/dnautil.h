@@ -261,9 +261,6 @@ int maskHeadPolyT(DNA *dna, int size);
 boolean isDna(char *poly, int size);
 /* Return TRUE if letters in poly are at least 90% ACGTNU- */
 
-boolean isAllDna(char *poly, int size);
-/* Return TRUE if size is great than 1 and all letters in poly are 100% ACGTNU- */
-
 boolean isAllNt(char *seq, int size);
 /* Return TRUE if all letters in seq are ACGTNU-. */
 

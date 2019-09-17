@@ -4,6 +4,8 @@
 #ifndef JSONPARSE_H
 #define JSONPARSE_H
 
+#include "localmem.h"
+
 /* JSON Element code let's you build up a DOM like data structure in memory and then serialize it into
    html for communication with client side code.
  */
@@ -38,41 +40,56 @@ struct jsonElement
     union jsonElementVal val;
 };
 
-// constructors for each jsonElementType
+// constructors for each jsonElementType, optionally using localmem
 
-struct jsonElement *newJsonString(char *str);
-struct jsonElement *newJsonBoolean(boolean val);
-struct jsonElement *newJsonNumber(long val);
-struct jsonElement *newJsonDouble(double val);
-struct jsonElement *newJsonObject(struct hash *h);
-struct jsonElement *newJsonList(struct slRef *list);
-struct jsonElement *newJsonNull();
+struct jsonElement *newJsonStringLm(char *str, struct lm *lm);
+struct jsonElement *newJsonBooleanLm(boolean val, struct lm *lm);
+struct jsonElement *newJsonNumberLm(long val, struct lm *lm);
+struct jsonElement *newJsonDoubleLm(double val, struct lm *lm);
+struct jsonElement *newJsonObjectLm(struct hash *h, struct lm *lm);
+struct jsonElement *newJsonListLm(struct slRef *list, struct lm *lm);
+struct jsonElement *newJsonNullLm(struct lm *lm);
+
+#define newJsonString(str) newJsonStringLm(str, NULL)
+#define newJsonBoolean(val) newJsonBooleanLm(val, NULL)
+#define newJsonNumber(val) newJsonNumberLm(val, NULL)
+#define newJsonDouble(val) newJsonDoubleLm(val, NULL)
+#define newJsonObject(hash) newJsonObjectLm(hash, NULL)
+#define newJsonList(list) newJsonListLm(list, NULL)
+#define newJsonNull() newJsonNullLm(NULL)
+
 
 void jsonObjectAdd(struct jsonElement *h, char *name, struct jsonElement *ele);
 // Add a new element to a jsonObject; existing values are replaced.
 
-void jsonListAdd(struct jsonElement *list, struct jsonElement *ele);
+void jsonObjectMerge(struct jsonElement *objA, struct jsonElement *objB);
+/* Recursively merge fields of objB into objA.  If objA and objB each have a list child with
+ * the same key then concatenate the lists.  If objA and objB each have an object child with
+ * the same key then merge the object children.  If objA and objB each have a child of some
+ * other type then objB's child replaces objA's child. */
+
+void jsonListAddLm(struct jsonElement *list, struct jsonElement *ele, struct lm *lm);
+#define jsonListAdd(list, ele) jsonListAddLm(list, ele, NULL)
 // Add a new element to a jsonList
 
-struct jsonElement *jsonParse(char *str);
+struct jsonElement *jsonParseLm(char *str, struct lm *lm);
+#define jsonParse(str) jsonParseLm(str, NULL)
 // parse string into an in-memory json representation
 
-char *jsonStringEscape(char *inString);
+int jsonStringEscapeSize(char *inString);
+/* Return the size in bytes including terminal '\0' for escaped string. */
+
+void jsonStringEscapeBuf(char *inString, char *buf, size_t bufSize);
+/* backslash escape a string for use in a double quoted json string.
+ * More conservative than javaScriptLiteralEncode because
+ * some json parsers complain if you escape & or '.
+ * bufSize must be at least jsonStringEscapeSize(inString). */
+
+char *jsonStringEscapeLm(char *inString, struct lm *lm);
+#define jsonStringEscape(inString) jsonStringEscapeLm(inString, NULL)
 /* backslash escape a string for use in a double quoted json string.
  * More conservative than javaScriptLiteralEncode because
  * some json parsers complain if you escape & or ' */
-
-void jsonFindNameRecurse(struct jsonElement *ele, char *jName, struct slName **pList);
-// Search the JSON tree recursively to find all the values associated to
-// the name, and add them to head of the list.  
-
-struct slName *jsonFindName(struct jsonElement *json, char *jName);
-// Search the JSON tree to find all the values associated to the name
-// and add them to head of the list. 
-
-struct slName *jsonFindNameUniq(struct jsonElement *json, char *jName);
-// Search the JSON tree to find all the values associated to the name
-// and add them to head of the list. 
 
 void jsonElementRecurse(struct jsonElement *ele, char *name, boolean isLast,
     void (*startCallback)(struct jsonElement *ele, char *name, boolean isLast, void *context),  

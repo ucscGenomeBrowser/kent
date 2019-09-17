@@ -33,12 +33,15 @@
 #include "wikiLink.h"
 #include "cdwFlowCharts.h"
 #include "cdwStep.h"
+#include "facetField.h"
+#include "rqlToSql.h"
 
 /* Global vars */
 struct cart *cart;	// User variables saved from click to click
 struct hash *oldVars;	// Previous cart, before current round of CGI vars folded in
 struct cdwUser *user;	// Our logged in user if any
 static char *accessibleFilesToken = NULL;  // Token for file access if any
+boolean isPublicSite = FALSE;
 
 
 char *excludeVars[] = {"cdwCommand", "submit", "DownloadFormat", NULL};
@@ -64,7 +67,10 @@ hashElFreeList(&list);
 }
 
 // fields/columns of the browse file table
-#define FILETABLEFIELDS "file_name,file_size,ucsc_db,lab,assay,data_set_id,output,format,read_size,tem_count,sample_label"
+char *fileTableFields = NULL;
+char *visibleFacetFields = NULL;
+#define FILEFIELDS "file_name,file_size,ucsc_db"
+#define FILEFACETFIELDS "species,assay,format,output,organ_anatomical_name,lab,data_set_id,biosample_cell_type,read_size,sample_label"
 
 struct dyString *printPopularTags(struct hash *hash, int maxSize)
 /* Get all hash elements, sorted by count, and print all the ones that fit */
@@ -144,9 +150,46 @@ printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s&",
 char query[2*PATH_LEN];
 safef(query, sizeof(query), "%s = '%s'", field, val);
 char *escapedQuery = cgiEncode(query);
-printf("%s=%s", "cdwFile_filter", escapedQuery);
+printf("%s=%s&cdwBrowseFiles_page=1", "cdwFile_filter", escapedQuery);
 freez(&escapedQuery);
 printf("\">%s</A>", shortVal);
+}
+
+void wrapFileSize(struct fieldedTable *table, struct fieldedRow *row,
+    char * field, char *val, char *shortVal, void *context)
+/* Write out wrapper that displays file sizes in human-readable format */
+{
+if (!isdigit(val[0]))
+    warn("Warning: expected a number for file_size, but got %s", val);
+double fVal = atof(val);
+char* valQual = "";
+int intVal = 0;
+if (fVal>=1E12)
+    {
+    intVal = round(fVal/1E12);
+    valQual = "TB";
+    }
+else if (fVal>=1E9)
+    {
+    intVal = round(fVal/1E9);
+    valQual = "GB";
+    }
+else if (fVal>=1E6)
+    {
+    intVal = round(fVal/1E6);
+    valQual = "MB";
+    }
+else if (fVal>=1E3)
+    {
+    intVal = round(fVal/1E3);
+    valQual = "KB";
+    }
+else
+    {
+    intVal = round(fVal);
+    valQual = "B";
+    }
+printf("%d %s", intVal, valQual);
 }
 
 static char *mustFindFieldInRow(char *field, struct slName *fieldList, char **row)
@@ -270,13 +313,39 @@ webSortableFieldedTable(cart, table, returnUrl, "cdwOneFile", 0, outputWrappers,
 fieldedTableFree(&table);
 }
 
+char *unquotedCartString(struct cart *cart, char *varName)
+/* Return unquoted cart variable */
+{
+char *val = cartOptionalString(cart, varName);
+if (val == NULL)
+    return "";
+stripChar(val, '"');
+stripChar(val, '\'');
+return val;
+}
+
+char *getCdwSetting(char *setting, char *deflt)
+/* Get string cdw.<setting> */
+{
+char cdwSetting[1024];
+safef(cdwSetting, sizeof cdwSetting, "cdw.%s", setting);
+return cfgOptionDefault(cdwSetting, deflt);
+} 
+
+char *getCdwTableSetting(char *setting)
+/* Get string cdw.<setting>
+ * Allows us to use non-default settings for tables */
+{
+return getCdwSetting(setting, setting); // table name is its own default
+} 
+
 void doFileFlowchart(struct sqlConnection *conn)
 /* Put up a page with info on one file */
 {
 char *idTag = cartUsualString(cart, "cdwFileTag", "accession");
 char *idVal = cartString(cart, "cdwFileVal");
 char query[512];
-sqlSafef(query, sizeof(query), "select * from cdwFileTags where %s='%s'", idTag, idVal);
+sqlSafef(query, sizeof(query), "select * from %s where %s='%s'", getCdwTableSetting("cdwFileTags"), idTag, idVal);
 struct sqlResult *sr = sqlGetResult(conn, query);
 struct slName  *list = sqlResultFieldList(sr);
 char **row;
@@ -305,7 +374,7 @@ struct sqlConnection *conn2 = cdwConnect();
 char *idTag = cartUsualString(cart, "cdwFileTag", "accession");
 char *idVal = cartString(cart, "cdwFileVal");
 char query[512];
-sqlSafef(query, sizeof(query), "select * from cdwFileTags where %s='%s'", idTag, idVal);
+sqlSafef(query, sizeof(query), "select * from %s where %s='%s'", getCdwTableSetting("cdwFileTags"), idTag, idVal);
 struct sqlResult *sr = sqlGetResult(conn, query);
 struct slName *list = sqlResultFieldList(sr);
 char **row;
@@ -355,8 +424,8 @@ struct dyString *customTextForFile(struct sqlConnection *conn, struct cdwTrackVi
 struct dyString *dy = dyStringNew(0);
 dyStringPrintf(dy, "track name=\"%s\" ", viz->shortLabel);
 dyStringPrintf(dy, "description=\"%s\" ", viz->longLabel);
-char *host = hHttpHost();
-dyStringPrintf(dy, "bigDataUrl=http://%s/cgi-bin/cdwGetFile?acc=%s", host, viz->shortLabel);
+//char *host = hHttpHost();
+dyStringPrintf(dy, "bigDataUrl=https://localhost/cgi-bin/cdwGetFile?acc=%s", viz->shortLabel);
 if (accessibleFilesToken != NULL)
     dyStringPrintf(dy, "&token=%s", accessibleFilesToken);
 dyStringPrintf(dy, " ");
@@ -369,7 +438,7 @@ else if (sameWord(viz->type, "vcfTabix"))
 
 if (indexExt != NULL)
     {
-    dyStringPrintf(dy, "bigDataIndex=http://%s/cgi-bin/cdwGetFile?addExt=%s&acc=%s", host, indexExt, viz->shortLabel);
+    dyStringPrintf(dy, "bigDataIndex=http://localhost/cgi-bin/cdwGetFile?addExt=%s&acc=%s", indexExt, viz->shortLabel);
     if (accessibleFilesToken != NULL)
         dyStringPrintf(dy, "&token=%s", accessibleFilesToken);
     }
@@ -471,7 +540,7 @@ if (!printed)
 boolean isWebBrowsableFormat(char *format)
 /* Return TRUE if it's one of the web-browseable formats */
 {
-char *formats[] = {"html", "jpg", "pdf", "png", "text", };
+char *formats[] = {"html", "jpg", "pdf", "png", "text", "tsv"};
 return stringArrayIx(format, formats, ArraySize(formats)) >= 0;
 }
 
@@ -603,25 +672,25 @@ slReverse(&fieldList);
 
 /* Build up sql query to fetch all our fields */
 struct dyString *query = dyStringNew(0);
-sqlDyStringPrintf(query, "%s", "");   // Get header correct
-char *separator = "select ";  // This will get printed before first one
+sqlDyStringPrintf(query, "select ");
 for (field = fieldList; field != NULL; field = field->next)
     {
-    dyStringPrintf(query, "%s%s", separator, field->name);
-    separator = ",";
+    if (field != fieldList) // not first one
+	sqlDyStringPrintf(query, ",");
+    sqlDyStringPrintf(query, "%s", field->name);
     }
 
 /* Put where on it to limit it to accessible files */
-dyStringPrintf(query, " from cdwFileTags where file_id in (");
+sqlDyStringPrintf(query, " from %s where file_id in (", getCdwTableSetting("cdwFileTags"));
 
 struct cdwFile *ef;
-separator = "";
 for (ef = efList; ef != NULL; ef = ef->next)
     {
-    dyStringPrintf(query, "%s%u", separator, ef->id);
-    separator = ",";
+    if (ef != efList) // not first one
+	sqlDyStringPrintf(query, ",");
+    sqlDyStringPrintf(query, "%u", ef->id);
     }
-dyStringPrintf(query, ")");
+sqlDyStringPrintf(query, ")");
 
 struct sqlResult *sr = sqlGetResult(conn, query->string);
 char **row;
@@ -697,17 +766,23 @@ slFreeList(&nameList);
 return dyStringCannibalize(&dy);
 }
 
-void searchFilesWithAccess(struct sqlConnection *conn, char *searchString, char *allFields, \
-    char* initialWhere, struct cdwFile **retList, struct dyString **retWhere, char **retFields)
+void searchFilesWithAccess(struct sqlConnection *conn, char *searchString, char *allFields, 
+    char* initialWhere, struct cdwFile **retList, struct dyString **retWhere, char **retFields,
+    boolean securityColumnsInTable)
 {
 /* Get list of files that we are authorized to see and that match searchString in the trix file
  * Returns: retList of matching files, retWhere with sql where expression for these files, retFields
  * If nothing to see, retList is NULL
  * */
-char *fields = filterFieldsToJustThoseInTable(conn, allFields, "cdwFileTags");
-struct cdwFile *efList = cdwAccessibleFileList(conn, user);
+char *fields = filterFieldsToJustThoseInTable(conn, allFields, getCdwTableSetting("cdwFileTags"));
 
-if (efList == NULL)
+struct cdwFile *efList = NULL;
+if (!securityColumnsInTable)
+    efList = cdwAccessibleFileList(conn, user);
+
+struct cdwFile *ef;
+
+if (!securityColumnsInTable && !efList)
     {
     *retList = NULL;
     return;
@@ -726,28 +801,76 @@ if (!isEmpty(searchString))
     struct trixSearchResult *tsr, *tsrList = trixSearch(trix, wordCount, words, tsmExpand);
     for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
         {
-	intValTreeAdd(searchPassTree, sqlUnsigned(tsr->itemId), tsr);
+	if (securityColumnsInTable) // creates a list with all found items file ids on it.
+	    {
+	    AllocVar(ef);
+	    ef->id = sqlUnsigned(tsr->itemId);
+	    slAddHead(&efList, ef);
+	    }
+	else
+	    {
+	    intValTreeAdd(searchPassTree, sqlUnsigned(tsr->itemId), tsr);
+	    }
 	}
+    if (securityColumnsInTable)
+	slReverse(&efList);
     }
+
 
 /* Loop through all files constructing a SQL where clause that restricts us
  * to just the ones that we're authorized to hit, and that also pass initial where clause
  * if any. */
 struct dyString *where = dyStringNew(0);
 if (!isEmpty(initialWhere))
-     dyStringPrintf(where, "(%s) and ", initialWhere);
-dyStringPrintf(where, "file_id in (0");	 // initial 0 never found, just makes code smaller
-int accessCount = 0;
-struct cdwFile *ef;
-for (ef = efList; ef != NULL; ef = ef->next)
+    sqlDyStringPrintfFrag(where, "(%-s)", initialWhere); // trust
+if (securityColumnsInTable)
     {
-    if (searchPassTree == NULL || intValTreeFind(searchPassTree, ef->id) != NULL)
+    if (user)
 	{
-	dyStringPrintf(where, ",%u", ef->id);
-	++accessCount;
+	// get all groupIds belonging to this user
+	char query[256];
+	if (!user->isAdmin)
+	    {
+	    sqlSafef(query, sizeof(query), 
+		"select groupId from cdwGroupUser "
+		" where cdwGroupUser.userId = %d", user->id);
+	    struct sqlResult *sr = sqlGetResult(conn, query);
+	    char **row;
+	    if (!isEmpty(where->string))
+		sqlDyStringPrintf(where, " and ");
+	    sqlDyStringPrintfFrag(where, "(allAccess > 0");
+	    while ((row = sqlNextRow(sr)) != NULL)
+		{
+		int groupId = sqlUnsigned(row[0]);
+		sqlDyStringPrintf(where, " or FIND_IN_SET('%u', groupIds)", groupId);
+		}
+	    sqlFreeResult(&sr);
+	    sqlDyStringPrintf(where, ")");
+	    }
+	}
+    else
+	{
+	if (!isEmpty(where->string))
+	    sqlDyStringPrintf(where, " and ");
+	sqlDyStringPrintfFrag(where, "allAccess > 0");
 	}
     }
-dyStringAppendC(where, ')');
+
+if (efList 
+    || (securityColumnsInTable && (!isEmpty(searchString)))) // have search terms but nothing was found
+    {
+    if (!isEmpty(where->string))
+	sqlDyStringPrintf(where, " and ");
+    sqlDyStringPrintfFrag(where, "file_id in (0");	 // initial 0 never found, just makes code smaller
+    for (ef = efList; ef != NULL; ef = ef->next)
+	{
+	if (searchPassTree == NULL || securityColumnsInTable || intValTreeFind(searchPassTree, ef->id) != NULL)
+	    {
+	    sqlDyStringPrintf(where, ",%u", ef->id);
+	    }
+	}
+    sqlDyStringPrintf(where, ")");
+    }
 
 rbTreeFree(&searchPassTree);
 
@@ -757,7 +880,6 @@ rbTreeFree(&searchPassTree);
 *retFields = fields;
 }
 
-
 struct cdwFile* findDownloadableFiles(struct sqlConnection *conn, struct cart *cart,
     char* initialWhere, char *searchString)
 /* return list of files that we are allowed to see and that match current filters */
@@ -766,23 +888,46 @@ struct cdwFile* findDownloadableFiles(struct sqlConnection *conn, struct cart *c
 struct cdwFile *efList = NULL;
 struct dyString *accWhere;
 char *fields;
-searchFilesWithAccess(conn, searchString, FILETABLEFIELDS, initialWhere, &efList, &accWhere, &fields);
+searchFilesWithAccess(conn, searchString, fileTableFields, initialWhere, &efList, &accWhere, &fields, FALSE);
 
 // reduce query to those that match our filters
 struct dyString *dummy;
 struct dyString *filteredWhere;
-webTableBuildQuery(cart, "cdwFileTags", accWhere->string, "cdwBrowseFiles", FILETABLEFIELDS, TRUE, &dummy, &filteredWhere);
+char *table = isEmpty(initialWhere) ? getCdwTableSetting("cdwFileFacets") : getCdwTableSetting("cdwFileTags");
+
+webTableBuildQuery(cart, table, accWhere->string, "cdwBrowseFiles", fileTableFields, FALSE, &dummy, &filteredWhere);
+
+// Selected Facet Values Filtering
+char *selectedFacetValues=cartUsualString(cart, "cdwSelectedFieldValues", "");
+struct facetField *selectedList = deLinearizeFacetValString(selectedFacetValues);
+struct facetField *sff = NULL;
+struct dyString *facetedWhere = dyStringNew(1024);
+for (sff = selectedList; sff; sff=sff->next)
+    {
+    if (slCount(sff->valList)>0)
+	{
+	sqlDyStringPrintfFrag(facetedWhere, " and ");  // use Frag to prevent NOSQLINJ tag
+	sqlDyStringPrintf(facetedWhere, "ifnull(%s,'n/a') in (", sff->fieldName);
+	struct facetVal *el;
+	for (el=sff->valList; el; el=el->next)
+	    {
+	    sqlDyStringPrintf(facetedWhere, "'%s'", el->val);
+	    if (el->next)
+		sqlDyStringPrintf(facetedWhere, ",");
+	    }
+	sqlDyStringPrintfFrag(facetedWhere, ")");
+	}
+    }
 
 // get their fileIds
-struct dyString *tagQuery = dyStringNew(0);
-dyStringAppend(tagQuery, NOSQLINJ "SELECT file_id from cdwFileTags "); // XX ask Jim is secure query needed / how to do.
-dyStringAppend(tagQuery, filteredWhere->string);
+struct dyString *tagQuery = sqlDyStringCreate("SELECT file_id from %s %-s", table, filteredWhere->string); // trust
+sqlDyStringPrintf(tagQuery,  "%-s", facetedWhere->string); // trust because it was created safely
 struct slName *fileIds = sqlQuickList(conn, tagQuery->string);
 
 // retrieve the cdwFiles objects for these
-char *idListStr = slNameListToString(fileIds, ',');
-struct dyString *fileQuery = dyStringNew(0);
-dyStringPrintf(fileQuery, NOSQLINJ "SELECT * FROM cdwFile WHERE id IN (%s) ", idListStr);
+struct dyString *fileQuery = sqlDyStringCreate("SELECT * FROM cdwFile WHERE id IN (");
+sqlDyStringPrintValuesList(fileQuery, fileIds);
+sqlDyStringPrintf(fileQuery, ")");
 return cdwFileLoadByQuery(conn, fileQuery->string);
 }
 
@@ -791,8 +936,8 @@ static void continueSearchVars()
 {
 cgiContinueHiddenVar("cdwFileSearch");
 char *fieldNames[128];
-char *fileTableFields = cloneString(FILETABLEFIELDS); // cannot modify string literals
-int fieldCount = chopString(fileTableFields, ",", fieldNames, ArraySize(fieldNames));
+char *tempFileTableFields = cloneString(fileTableFields); // cannot modify string literals
+int fieldCount = chopString(tempFileTableFields, ",", fieldNames, ArraySize(fieldNames));
 int i;
 for (i = 0; i<fieldCount; i++)
     {
@@ -802,26 +947,18 @@ for (i = 0; i<fieldCount; i++)
     }
 }
 
-void makeDownloadAllButtonForm() 
+void makeDownloadAllButtonForm(int count) 
 /* The "download all" button cannot be a form at this place, nested forms are
  * not allowed in html. So create a link instead. */
 {
-printf("<A HREF=\"cdwWebBrowse?hgsid=%s&cdwCommand=downloadFiles", cartSessionId(cart));
+if (count<0)
+    errAbort("Error: Search results in a negative number of files found");
+printf("<A class='btn btn-secondary' HREF=\"cdwWebBrowse?hgsid=%s&cdwCommand=downloadFiles", cartSessionId(cart));
 
-char *fieldNames[128];
-char *fileTableFields = cloneString(FILETABLEFIELDS); // cannot modify string literals
-int fieldCount = chopString(fileTableFields, ",", fieldNames, ArraySize(fieldNames));
-int i;
-for (i = 0; i<fieldCount; i++)
-    {
-    char varName[1024];
-    safef(varName, sizeof(varName), "cdwBrowseFiles_f_%s", fieldNames[i]);
-    printf("&%s=%s", varName, cartCgiUsualString(cart, varName, ""));
-    }
-
-printf("&cdwFileSearch=%s", cartCgiUsualString(cart, "cdwFileSearch", ""));
-printf("&cdwFile_filter=%s", cartCgiUsualString(cart, "cdwFile_filter", ""));
-printf("\">Download All</A>");
+printf("&cdwFileSearch=%s", unquotedCartString(cart, "cdwFileSearch"));
+printf("&cdwFile_filter=%s", cartUsualString(cart, "cdwFile_filter", ""));
+printf("\">Download %d File%s</A>", count, count>1?"s":"");
+printf("<br><br>\n");
 }
 
 char *createTokenForUser()
@@ -845,17 +982,19 @@ return token;
 }
 
 void accessibleFilesTable(struct cart *cart, struct sqlConnection *conn, 
-    char *searchString, char *allFields, char *from, char *initialWhere,  
+    char *searchString, char *allFields, char *fromTable, char *initialWhere,  
     char *returnUrl, char *varPrefix, int maxFieldWidth, 
     struct hash *tagOutWrappers, void *wrapperContext,
-    boolean withFilters, char *itemPlural, int pageSize)
+    boolean withFilters, char *itemPlural, int pageSize,
+    char *visibleFacetList, boolean securityColumnsInTable)
 {
 struct cdwFile *efList = NULL;
 struct dyString *where;
 char *fields;
-searchFilesWithAccess(conn, searchString, allFields, initialWhere, &efList, &where, &fields);
 
-if (efList == NULL)
+searchFilesWithAccess(conn, searchString, allFields, initialWhere, &efList, &where, &fields, securityColumnsInTable);
+
+if (!securityColumnsInTable && !efList)
     {
     if (user != NULL && user->isAdmin)
 	printf("<BR>The file database is empty.");
@@ -868,10 +1007,12 @@ if (user!=NULL)
     accessibleFilesToken = createTokenForUser();
 
 /* Let the sql system handle the rest.  Might be one long 'in' clause.... */
-struct hash *suggestHash = accessibleSuggestHash(conn, fields, efList);
+struct hash *suggestHash = NULL;
+if (!securityColumnsInTable)
+    suggestHash = accessibleSuggestHash(conn, fields, efList);
 
-webFilteredSqlTable(cart, conn, fields, from, where->string, returnUrl, varPrefix, maxFieldWidth,
-    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, suggestHash, makeDownloadAllButtonForm);
+webFilteredSqlTable(cart, conn, fields, fromTable, where->string, returnUrl, varPrefix, maxFieldWidth,
+    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, suggestHash, visibleFacetList, makeDownloadAllButtonForm);
 
 /* Clean up and go home. */
 cdwFileFreeList(&efList);
@@ -881,9 +1022,11 @@ dyStringFree(&where);
 char *showSearchControl(char *varName, char *itemPlural)
 /* Put up the search control text and stuff. Returns current search string. */
 {
-char *varVal = cartUsualString(cart, varName, "");
-printf("Search <input name=\"%s\" type=\"text\" id=\"%s\" value=\"%s\" size=60>", 
-    varName, varName, varVal);
+/* Get cart variable and clean it up some removing quotes and the like */
+char *varVal = unquotedCartString(cart, varName);
+
+printf("Search <input name=\"%s\" type=\"text\" id=\"%s\" value=\"%s\" size=60>",
+        varName, varName, varVal);
 printf("&nbsp;");
 printf("<img src=\"../images/magnify.png\">\n");
 jsInlineF(
@@ -898,27 +1041,14 @@ return varVal;
 }
 
 
-void setCdwUser(struct sqlConnection *conn)
-/* set the global variable 'user' based on the current cookie */
-{
-char *userName = wikiLinkUserName();
-
-// for debugging, accept the userName on the cgiSpoof command line
-// instead of a cookie
-if (!cgiIsOnWeb() && userName == NULL)
-    userName = cgiOptionalString("userName");
-
-if (userName != NULL)
-    user = cdwUserFromUserName(conn, userName);
-}
-
 void doDownloadUrls()
 /* serve textfile with file URLs and ask user's internet browser to save it to disk */
 {
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
-setCdwUser(conn);
+user = cdwCurrentUser(conn);
 
-if (user==NULL)
+// on non-public cirm (and development vhosts) users must be logged in to use download tokens. 
+if (user==NULL && !isPublicSite)
     {
     // this should never happen through normal UI use
     puts("Content-type: text/html\n\n");
@@ -926,7 +1056,12 @@ if (user==NULL)
     return;
     }
 
-char *token = createTokenForUser();
+// on public cirm we have users not logged in. user=NULL and download tokens are not required
+char *token = NULL;
+if (!isPublicSite)
+    {
+    token = createTokenForUser();
+    }
 
 // if we recreate the submission dir structure, we need to create a shell script
 boolean createSubdirs = FALSE;
@@ -940,7 +1075,7 @@ if (createSubdirs)
 else
     puts("Content-disposition: attachment; filename=fileUrls.txt\n");
 
-char *searchString = cartUsualString(cart, "cdwFileSearch", "");
+char *searchString = unquotedCartString(cart, "cdwFileSearch");
 char *initialWhere = cartUsualString(cart, "cdwFile_filter", "");
 
 struct cdwFile *efList = findDownloadableFiles(conn, cart, initialWhere, searchString);
@@ -967,19 +1102,30 @@ for (ef = efList; ef != NULL; ef = ef->next)
         if ( (submitFname!=NULL) && (!isEmpty(submitFname)) && (*submitFname=='/') )
             submitFname += 1;
 
-        printf("curl --netrc-file cirm_credentials 'https://%s/cgi-bin/cdwGetFile?acc=%s&token=%s' --create-dirs -o %s\n", \
-            host, vf->licensePlate, token, submitFname);
+        printf("curl ");
+	if (!isPublicSite)
+	    printf("--netrc-file cirm_credentials ");
+        printf("'https://%s/cgi-bin/cdwGetFile?acc=%s",
+            host, vf->licensePlate); 
+	if (!isPublicSite)
+	    printf("&token=%s", token);
+	printf("' --create-dirs -o %s\n", 
+	    submitFname);
         }
     else
-        printf("https://%s/cgi-bin/cdwGetFile?acc=%s&token=%s%s\n", \
-            host, vf->licensePlate, token, optArg);
+	{
+        printf("https://%s/cgi-bin/cdwGetFile?acc=%s", host, vf->licensePlate);
+	if (!isPublicSite)
+	    printf("&token=%s", token);
+	printf("%s\n", optArg);
+	}
     }
 }
 
 void doDownloadFileConfirmation(struct sqlConnection *conn)
 /* show overview page of download files */
 {
-if (user==NULL)
+if (user==NULL && !isPublicSite)
     {
     printf("Sorry, you have to log in before you can download files.");
     return;
@@ -991,7 +1137,7 @@ cgiMakeHiddenVar("cdwCommand", "downloadUrls");
 
 continueSearchVars();
 
-char *searchString = cartUsualString(cart, "cdwFileSearch", "");
+char *searchString = unquotedCartString(cart, "cdwFileSearch");
 char *initialWhere = cartUsualString(cart, "cdwFile_filter", "");
 
 struct cdwFile *efList = findDownloadableFiles(conn, cart, initialWhere, searchString);
@@ -1020,10 +1166,8 @@ puts("Name files as submitted, one single directory<br>");
 puts("<input class='scriptButton' type=radio name='cdwDownloadName' VALUE='subAndDir'>\n");
 puts("Name files as submitted and put into subdirectories<p>");
 
-cgiMakeSubmitButton();
+printf("<input class='btn btn-secondary' type='submit' name='Submit' id='Submit' value='Submit'>\n");
 printf("</FORM>\n");
-
-boolean isPublic = cfgOptionBooleanDefault("isCirmPublicSite", FALSE);
 
 jsInline 
     (
@@ -1038,7 +1182,7 @@ puts("<ul>\n");
 puts("<li>With Firefox and <a href=\"https://addons.mozilla.org/en-US/firefox/addon/downthemall/\">DownThemAll</a>: Click Tools - DownThemAll! - Manager. Right click - Advanced - Import from file. Right-click - Select All. Right-click - Toogle All\n");
 puts("<li>With Chrome and <a href=\"https://chrome.google.com/webstore/detail/tab-save/lkngoeaeclaebmpkgapchgjdbaekacki\">TabToSave</a>: Click the T/S icon next to the URL bar, click the edit button at the bottom of the screen and paste the file contents\n");
 
-if (isPublic)
+if (isPublicSite)
     {
     puts("<li>OSX/Linux: With curl and a single thread: <tt>xargs -n1 curl -JO < fileUrls.txt</tt>\n");
     puts("<li>Linux: With wget and a single thread: <tt>wget --content-disposition -i fileUrls.txt</tt>\n");
@@ -1059,8 +1203,11 @@ puts("</div>\n");
 puts("<div id='scriptDoc' style='display:none'>\n");
 puts("When you click 'submit', a shell script that runs curl will get downloaded.\n");
 puts("The URLs are valid for one week.<p>\n");
-puts("Before you start the download, create a file called cirm_credentials with your username and password like this:<br>\n");
-puts("<tt>echo 'default login <i>user@university.edu</i> password <i>mypassword</i>' > cirm_credentials</tt><p>\n");
+if (!isPublicSite)
+    {
+    puts("Before you start the download, create a file called cirm_credentials with your username and password like this:<br>\n");
+    puts("<tt>echo 'default login <i>user@university.edu</i> password <i>mypassword</i>' > cirm_credentials</tt><p>\n");
+    }
 puts("Then, to download the files:\n");
 puts("<ul>\n");
 puts("<li>Linux/OSX: With curl and a single thread: <tt>sh downloadCirm.sh</tt>\n");
@@ -1077,7 +1224,42 @@ printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "browseFiles");
 
-printf("<B>Files</B> - search, filter, and sort files. ");
+cgiMakeHiddenVar("clearSearch", "0");
+char *clearSearch = cartOptionalString(cart, "clearSearch");
+if (clearSearch && sameString(clearSearch,"1"))
+    {
+    cartSetString(cart, "cdwFile_filter", "");  // reset file filter to empty string
+    cartRemove(cart, "clearSearch");
+    }
+
+// DEBUG REMOVE
+//char *varName = "cdwSelectedFieldValues";
+//char *varVal = cartUsualString(cart, varName, "");
+//warn("varName=[%s] varVal=[%s]", varName, varVal); // DEBUG REMOVE
+
+//warn("getCdwTableSetting(cdwFileFacets)=%s", getCdwTableSetting("cdwFileFacets")); // DEBUG REMOVE
+
+char *selOp = cartOptionalString(cart, "browseFiles_facet_op");
+if (selOp)
+    {
+    char *selFieldName = cartOptionalString(cart, "browseFiles_facet_fieldName");
+    char *selFieldVal = cartOptionalString(cart, "browseFiles_facet_fieldVal");
+    if (selFieldName && selFieldVal)
+	{
+	char *selectedFacetValues=cartUsualString(cart, "cdwSelectedFieldValues", "");
+	//warn("selectedFacetValues=[%s] selFieldName=%s selFieldVal=%s selOp=%s", 
+	    //selectedFacetValues, selFieldName, selFieldVal, selOp); // DEBUG REMOVE
+	struct facetField *selList = deLinearizeFacetValString(selectedFacetValues);
+	selectedListFacetValUpdate(&selList, selFieldName, selFieldVal, selOp);
+	char *newSelectedFacetValues = linearizeFacetVals(selList);
+	//warn("newSelectedFacetValues=[%s]", newSelectedFacetValues); // DEBUG REMOVE
+	cartSetString(cart, "cdwSelectedFieldValues", newSelectedFacetValues);
+	cartRemove(cart, "browseFiles_facet_op");
+	cartRemove(cart, "browseFiles_facet_fieldName");
+	cartRemove(cart, "browseFiles_facet_fieldVal");
+	}
+    }
+
 printf("Click on file's name to see full metadata.");
 printf(" Links in ucsc_db go to the Genome Browser. <BR>\n");
 char *searchString = showSearchControl("cdwFileSearch", "files");
@@ -1095,12 +1277,22 @@ struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "file_name", wrapFileName);
 hashAdd(wrappers, "ucsc_db", wrapTrackNearFileName);
 hashAdd(wrappers, "format", wrapFormat);
+hashAdd(wrappers, "file_size", wrapFileSize);
+
 accessibleFilesTable(cart, conn, searchString,
-  FILETABLEFIELDS,
-  "cdwFileTags", where, 
+  fileTableFields,
+  isEmpty(where) ? getCdwTableSetting("cdwFileFacets") : getCdwTableSetting("cdwFileTags"),
+  where, 
   returnUrl, "cdwBrowseFiles",
-  18, wrappers, conn, TRUE, "files", 100);
+  18, wrappers, conn, FALSE, "files", 100, visibleFacetFields, TRUE);
 printf("</FORM>\n");
+}
+
+char *getBrowseTracksTables()
+{
+char tables[1024];
+safef(tables, sizeof tables, "%s,cdwTrackViz", getCdwTableSetting("cdwFileTags"));
+return cloneString(tables);
 }
 
 void doBrowseTracks(struct sqlConnection *conn)
@@ -1109,6 +1301,7 @@ void doBrowseTracks(struct sqlConnection *conn)
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "browseTracks");
+cgiMakeHiddenVar("clearSearch", "0");
 
 printf("<B>Tracks</B> - Click on ucsc_db to open Genome Browser. ");
 printf("The accession link shows more metadata.<BR>");
@@ -1123,16 +1316,17 @@ char *searchString = showSearchControl("cdwTrackSearch", "tracks");
 accessibleFilesTable(cart, conn, searchString,
     "ucsc_db,chrom,accession,format,file_size,lab,assay,data_set_id,output,"
     "enriched_in,sample_label,submit_file_name",
-    "cdwFileTags,cdwTrackViz", where, 
+    getBrowseTracksTables(), where, 
     returnUrl, "cdw_track_filter", 
-    22, wrappers, conn, TRUE, "tracks", 100);
+    22, wrappers, conn, TRUE, "tracks", 100, NULL, FALSE);
 printf("</FORM>\n");
 }
 
 struct hash* loadDatasetDescs(struct sqlConnection *conn)
 /* Load cdwDataset table and return hash with name -> cdwDataset */
 {
-char* query = NOSQLINJ "SELECT * FROM cdwDataset;";
+char query[256];
+sqlSafef(query, sizeof query, "SELECT * FROM cdwDataset");
 struct sqlResult *sr = sqlGetResult(conn, query);
 struct hash *descs = hashNew(7);
 char **row;
@@ -1163,8 +1357,6 @@ return cdwCheckAccessFromFileId(conn, fileId, user, cdwAccessRead);
 void doServeTagStorm(struct sqlConnection *conn, char *dataSet)
 /* Put up meta data tree associated with data set. */
 {
-char metaFileName[PATH_LEN];
-safef(metaFileName, sizeof(metaFileName), "%s/%s", dataSet, "meta.txt");
 printf(", <A HREF=\"cdwServeTagStorm?format=text&cdwDataSet=%s&%s\"",
 	dataSet, cartSidUrlString(cart)); 
 printf(">text</A>");
@@ -1176,10 +1368,19 @@ printf(", <A HREF=\"cdwServeTagStorm?format=csv&cdwDataSet=%s&%s\"",
 printf(">csv</A>)"); 
 }
 
+int getRecentSubmitFileId(struct sqlConnection *conn, int submitDirId, char *submitFileName)
+/* Get the file ID of the most recent index.html file for dataset. */
+{
+char query[PATH_LEN]; 
+sqlSafef(query, sizeof(query), "select max(id) from cdwFile where submitFileName='%s' and submitDirId=%d", submitFileName,
+    submitDirId);
+return sqlQuickNum(conn, query);  // returns 0 if none found
+}
+
 void doBrowseDatasets(struct sqlConnection *conn)
 /* Show datasets and links to dataset summary pages. */
 {
-printf("<UL>\n");
+printf("<ul class='list-group'>\n");
 char query[PATH_LEN]; 
 sqlSafef(query, sizeof(query), "SELECT * FROM cdwDataset ORDER BY label "); 
 struct cdwDataset *dataset, *datasetList = cdwDatasetLoadByQuery(conn, query);
@@ -1189,37 +1390,44 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
     char *label = dataset->label;
     char *desc = dataset->description;
     char *datasetId = dataset->name;
-
-    // Check if we have a dataset summary page in the CDW and store its ID. The file must have passed validation.  
-    char summFname[8000];
-    safef(summFname, sizeof(summFname), "%s/summary/index.html", datasetId);
-    int fileId = cdwFileIdFromPathSuffix(conn, summFname);
+    sqlSafef(query, sizeof(query), "select id from cdwSubmitDir where url='/data/cirm/wrangle/%s'", datasetId);
+    int submitDirId = sqlQuickNum(conn, query);
 
     // If the ID exists and the user has access print a link to the page.  
+    int fileId = getRecentSubmitFileId(conn, submitDirId, "summary/index.html");
     boolean haveAccess = ((fileId > 0) && cdwCheckFileAccess(conn, fileId, user));
     if (haveAccess)
 	{
-	printf("<LI><B><A href=\"cdwGetFile/%s/summary/index.html\">%s (%s)</A></B><BR>\n", 
+	printf("<li class='list-group-item'><b><a href=\"cdwGetFile/%s/summary/index.html\">%s (%s)</a></b><br>\n", 
 	    datasetId, label, datasetId);
+	
 	// Print out file count and descriptions. 
 	sqlSafef(query, sizeof(query), 
-	    "select count(*) from cdwFileTags where data_set_id='%s'", datasetId);  
+	    "select count(*) from %s where data_set_id='%s'", getCdwTableSetting("cdwFileTags"), datasetId);  
 	long long fileCount = sqlQuickLongLong(conn, query);
-	printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\"",
-		desc, datasetId, cartSidUrlString(cart)); 
+//	printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwFile_filter=data_set_id%%3D+%%27%s%%27&%s\"",
+//		desc, datasetId, cartSidUrlString(cart)); 
+	char varEqVal[256];
+	safef(varEqVal, sizeof(varEqVal), "data_set_id='%s'", datasetId);
+	printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwFile_filter=%s&%s\"",
+		desc, cgiEncode(varEqVal), cartSidUrlString(cart)); 
 	printf(">%lld files</A>)",fileCount);
-	printf(" (metadata: <A HREF=\"cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=%s&%s\"",
-		datasetId, cartSidUrlString(cart)); 
-	printf(">html</A>");
-	doServeTagStorm(conn, datasetId);
 
+	int fileId = getRecentSubmitFileId(conn, submitDirId, "meta.txt");
+	if ((fileId > 0) && cdwCheckFileAccess(conn, fileId, user))
+	    {
+	    printf(" (metadata: <A HREF=\"cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=%s&%s\"",
+		    datasetId, cartSidUrlString(cart)); 
+	    printf(">html</A>");
+	    doServeTagStorm(conn, datasetId);
+	    }
 	}
     else // Otherwise print a label and description. 
 	{
-	printf("<LI><B>%s (%s)</B><BR>\n", label, datasetId);
+	printf("<li class='list-group-item'><B>%s (%s)</B><BR>\n", label, datasetId);
 	printf("%s\n", desc);
 	}
-    printf("</LI>\n");
+    printf("</li>\n");
     }
 cdwDatasetFree(&datasetList);
 }
@@ -1233,7 +1441,7 @@ char metaFileName[PATH_LEN];
 safef(metaFileName, sizeof(metaFileName), "%s/%s", dataSet, "meta.txt");
 int fileId = cdwFileIdFromPathSuffix(conn, metaFileName);
 if (!cdwCheckFileAccess(conn, fileId, user))
-   errAbort("Unauthorized access to %s", metaFileName);
+    errAbort("Unauthorized access to %s", metaFileName);
 printf("<H2>Metadata tree for %s</H2>\n", dataSet);
 char *path = cdwPathForFileId(conn, fileId);
 char command[3*PATH_LEN];
@@ -1255,8 +1463,8 @@ for (format = formatList; format != NULL; format = format->next)
     {
     char countString[16];
     char query[256];
-    sqlSafef(query, sizeof(query), "select count(*) from cdwFileTags where format='%s'", 
-	format->name);
+    sqlSafef(query, sizeof(query), "select count(*) from %s where format='%s'", 
+	getCdwTableSetting("cdwFileTags"), format->name);
     sqlQuickQuery(conn, query, countString, sizeof(countString));
     row[0] = countString;
     row[1] = format->name;
@@ -1287,7 +1495,8 @@ for (lab = labList; lab != NULL; lab = lab->next)
     {
     row[0] = lab->name;
     char countString[16];
-    sqlSafef(query, sizeof(query), "select count(*) from cdwFileTags where lab='%s'", lab->name);
+    sqlSafef(query, sizeof(query), "select count(*) from %s where lab='%s'", 
+	getCdwTableSetting("cdwFileTags"), lab->name);
     sqlQuickQuery(conn, query, countString, sizeof(countString));
     row[1] = countString;
     row[2] = lab->pi;
@@ -1303,7 +1512,6 @@ hashAdd(outputWrappers, "web page", wrapExternalUrl);
 webSortableFieldedTable(cart, table, returnUrl, "cdwLab", 0, outputWrappers, NULL);
 fieldedTableFree(&table);
 }
-
 
 
 void doAnalysisQuery(struct sqlConnection *conn)
@@ -1324,23 +1532,21 @@ cgiMakeHiddenVar("cdwCommand", "analysisQuery");
 /* Fields clause */
 char *fieldsVar = "cdwQueryFields";
 char *fields = cartUsualString(cart, fieldsVar, "*");
-struct dyString *rqlQuery = dyStringCreate("select %s from files ", fields);
+struct dyString *rqlQuery = dyStringCreate("select %s from files", fields);
 
 /* Where clause */
 char *whereVar = "cdwQueryWhere";
 char *where = cartUsualString(cart, whereVar, "");
-dyStringPrintf(rqlQuery, "where accession");
 if (!isEmpty(where))
-    dyStringPrintf(rqlQuery, " and (%s)", where);
+    dyStringPrintf(rqlQuery, " where %s", where);
+
+struct rqlStatement *rql = rqlStatementParseString(rqlQuery->string);
 
 /* Limit clause */
 char *limitVar = "cdwQueryLimit";
 int limit = cartUsualInt(cart, limitVar, 10);
 
-struct tagStorm *tags = cdwUserTagStorm(conn, user);
-struct slRef *matchList = tagStanzasMatchingQuery(tags, rqlQuery->string);
-int matchCount = slCount(matchList);
-/** Write out select [  ] from files whre [  ] limit [ ] <submit> **/
+/* Write out select [  ] from files where [  ] limit [ ] <submit> **/
 printf("select ");
 cgiMakeTextVar(fieldsVar, fields, 40);
 printf("from files ");
@@ -1358,7 +1564,7 @@ char *format = cartUsualString(cart, formatVar, menu[0]);
 printf("  "); 
 cgiMakeDropList(formatVar, menu, ArraySize(menu), format);
 printf("  "); 
-cgiMakeButton("View", "View"); 
+printf("<input class='btn btn-secondary' type='submit' name='View' id='View' value='View'>\n");
 printf("</FORM>\n\n");
 
 
@@ -1368,14 +1574,112 @@ printf("<FORM class=\"inlineBlock\" ACTION=\"../cgi-bin/cdwGetMetadataAsFile\" M
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "analysisQuery");
 cgiMakeHiddenVar("Download format", format); 
-cgiMakeButton(format, "Download"); 
+printf("<input class='btn btn-secondary' type='submit' name='%s' id='%s' value='Download All Matching'>\n", format, format);
 printf("</FORM>\n\n");
 
+// Get field list for the cdwFileTags table, leaving out things we don't want to display on the site
+// (allAccess and groupIds).
+struct dyString *descQuery = dyStringNew(0);
+sqlDyStringPrintf(descQuery, "desc cdwFileTags");
+struct sqlResult *sr = sqlGetResult(conn, descQuery->string);
+char **row;
+struct slName *allFieldList = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (sameString(row[0], "allAccess") || sameString(row[0], "groupIds"))
+        continue;
+    slNameAddHead(&allFieldList, row[0]);
+    }
+sqlFreeResult(&sr);
+slReverse(&allFieldList);
+
+// Verify the query restrictions are on existing fields
+cdwCheckRqlFields(rql, allFieldList);
+
+// Obtain the list of fields to be returned by the query
+struct slName *returnedFieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
+
+// Retrieve results from the server
+struct dyString *sqlQuery = dyStringNew(0);
+sqlDyStringPrintf(sqlQuery, "select ");
+struct slName *l = returnedFieldList;
+sqlDyStringPrintfFrag(sqlQuery, "%s", l->name);
+l = l->next;
+while (l != NULL)
+    {
+    sqlDyStringPrintfFrag(sqlQuery, ",%s", l->name);
+    l = l->next;
+    }
+sqlDyStringPrintfFrag(sqlQuery, " from cdwFileTags");
+
+int whereClauseStarted = 0;
+if (!isEmpty(where))
+    {
+    // Can't use sqlDyString functions due to the possible presence of valid wildcards, but
+    // the while clause has already been validated by passing through the more restrictive
+    // rql parser anyway.
+    dyStringPrintf(sqlQuery, " where %s", rqlParseToSqlWhereClause(rql->whereClause, FALSE));
+    whereClauseStarted = 1;
+    }
+
+// Ensure the user has access to the data.  Access means either it's a public set (allAccess = 1) or one of the user's
+// associated group IDs appears in the groupIds field (or they're an admin).
+if ((user == NULL) || (!user->isAdmin))
+    {
+    if (whereClauseStarted == 0)
+        {
+        dyStringPrintf(sqlQuery, " where ");
+        whereClauseStarted = 1;
+        }
+    else
+        dyStringPrintf(sqlQuery, " and ");
+    sqlDyStringPrintfFrag(sqlQuery, "(allAccess = 1");
+    if (user != NULL)
+        {
+        // Handle group-based access for this user
+        struct dyString *groupQuery = dyStringNew(0);
+        sqlDyStringPrintf(groupQuery, "select groupId from cdwGroupUser where userId = %u\n", user->id);
+        sr = sqlGetResult(conn, groupQuery->string);
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            sqlDyStringPrintfFrag(sqlQuery, " or find_in_set(\"%s\", groupIds) > 0", row[0]);
+            }
+        sqlFreeResult(&sr);
+        }
+    sqlDyStringPrintfFrag(sqlQuery, ")");
+    }
+
+// Now to actually fetch the data!
+sr = sqlGetResult(conn, sqlQuery->string);
+struct slName *fieldNames = sqlResultFieldList(sr);
+struct slRef *resultData = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct slPair *fieldList = NULL;
+    struct slName *fieldName = fieldNames;
+    int fieldIdx = 0;
+    while (fieldName != NULL)
+        {
+        char *val = NULL;
+        if (!isEmpty(row[fieldIdx]))
+            val = cloneString(row[fieldIdx]);
+        slPairAdd(&fieldList, fieldName->name, val);
+        fieldIdx++;
+        fieldName = fieldName->next;
+        }
+    slReverse(&fieldList);
+    refAdd(&resultData, fieldList);
+    }
+
+slReverse(&resultData);
+// Now, resultData is an slRef list of results, and each result contains an slPair list of field name/value pairs.
+int matchCount = slCount(resultData);
 printf("<PRE><TT>");
 printLongWithCommas(stdout, matchCount);
 printf(" files match\n\n");
-cdwPrintMatchingStanzas(rqlQuery->string, limit, tags, format);
+cdwPrintSlRefList(resultData, fieldNames, format, limit);
 printf("</TT></PRE>\n");
+rqlStatementFree(&rql);
 }
 
 void doAnalysisJointPages(struct sqlConnection *conn)
@@ -1404,13 +1708,20 @@ for (jointDataset = datasetList; jointDataset != NULL; jointDataset = jointDatas
 	    datasetId, label, datasetId);
 	// Print out file count and descriptions. 
 	sqlSafef(query, sizeof(query), 
-	    "select count(*) from cdwFileTags where data_set_id='%s'", datasetId);  
+	    "select count(*) from %s where data_set_id='%s'", 
+		getCdwTableSetting("cdwFileTags"), datasetId);  
 	//long long fileCount = sqlQuickLongLong(conn, query);
 	printf("%s", desc); 
-	printf(" (metadata: <A HREF=\"cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=%s&%s\"",
-		datasetId, cartSidUrlString(cart)); 
-	printf(">html</A>");
-	doServeTagStorm(conn, datasetId);
+	char metaFileName[PATH_LEN];
+	safef(metaFileName, sizeof(metaFileName), "%s/%s", datasetId, "meta.txt");
+	int fileId = cdwFileIdFromPathSuffix(conn, metaFileName);
+	if ((fileId > 0) && cdwCheckFileAccess(conn, fileId, user))
+	    {
+	    printf(" (metadata: <A HREF=\"cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=%s&%s\"",
+		    datasetId, cartSidUrlString(cart)); 
+	    printf(">html</A>");
+	    doServeTagStorm(conn, datasetId);
+	    }
 	    
 	struct slName *dataset, *dataSetNames=charSepToSlNames(jointDataset->childrenNames, *",");
 	printf("("); 
@@ -1418,7 +1729,8 @@ for (jointDataset = datasetList; jointDataset != NULL; jointDataset = jointDatas
 	// Go through each sub dataset, print a link into the search files and count total files.  
 	for (dataset = dataSetNames; dataset != NULL; dataset=dataset->next)
 	    {
-	    sqlSafef(query, sizeof(query), "select count(*) from cdwFileTags where data_set_id='%s'", dataset->name); 
+	    sqlSafef(query, sizeof(query), "select count(*) from %s where data_set_id='%s'", 
+		getCdwTableSetting("cdwFileTags"), dataset->name); 
 	    totFileCount += sqlQuickNum(conn, query); 
 	    printf("<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\">%s",
 			    dataset->name, cartSidUrlString(cart), dataset->name);
@@ -1440,6 +1752,54 @@ for (jointDataset = datasetList; jointDataset != NULL; jointDataset = jointDatas
 cdwJointDatasetFree(&datasetList);
 }
 
+void facetSummaryRow(struct fieldedTable *table, struct facetField *ff)
+/* Print out row in a high level tag counting table */
+{
+struct facetVal *fv;
+int total = 0; // Col 4, 'files'
+char valValueString[PATH_LEN], valCountString[32]; // Col 3, 'popular values (files)...' and col 2, 'vals' 
+valValueString[0]= '\0'; 
+strcat(valValueString, " "); 
+safef(valCountString, sizeof(valCountString), "%d", slCount(ff->valList)); 
+bool hairpin = TRUE; 
+for (fv = ff->valList; fv != NULL; fv = fv->next)
+    {
+    total += fv->useCount;
+    if (hairpin == FALSE) continue; 
+
+    char temp[4*1024]; 
+    // Make a new name value pair which may get added to the existing string. 
+    safef(temp, sizeof(temp),"%s (%d)", fv->val, fv->useCount); 
+    int newStringLen = ((int) strlen(valValueString))+((int) strlen(temp));
+    if (newStringLen >= 107) // Check if the new string is acceptable size. 
+	{
+	// The hairpin is set to false once the full line is made, this stops the line from growing. 
+	if (hairpin) 
+	    //Remove the comma and append '...'.
+	    {
+	    valValueString[strlen(valValueString)-2] = '\0';
+	    strcat(valValueString, "..."); 
+	    hairpin = FALSE;
+	    }
+	}
+    else{ // Append the name:value pair to the string.  
+	strcat(valValueString, temp); 
+	if (fv->next != NULL)
+	    strcat(valValueString, ", "); 
+	}
+    }
+char trueTotal[PATH_LEN]; 
+safef(trueTotal, sizeof(trueTotal), "%d", total); 
+
+/* Add data to fielded table */
+char *row[4];
+row[0] = cloneString(ff->fieldName);
+row[1] = cloneString(valCountString);
+row[2] = cloneString(valValueString);
+row[3] = cloneString(trueTotal);
+fieldedTableAdd(table, row, ArraySize(row), 0);
+}
+
 void tagSummaryRow(struct fieldedTable *table, struct sqlConnection *conn, char *tag)
 /* Print out row in a high level tag counting table */
 {
@@ -1449,7 +1809,8 @@ char valValueString[PATH_LEN], valCountString[32]; // Col 3, 'popular values (fi
 
 // Get the necessary data via SQL and load into a slPair. 
 char query[PATH_LEN];
-sqlSafef(query, sizeof(query),"select %s, count(*) as count from cdwFileTags where %s is not NULL group by %s order by count desc", tag, tag, tag); 
+sqlSafef(query, sizeof(query),"select %s, count(*) as count from %s where %s is not NULL group by %s order by count desc",
+  getCdwTableSetting("cdwFileTags"), tag, tag, tag); 
 struct slPair *iter = NULL, *pairList = sqlQuickPairList(conn, query);
 
 safef(valCountString, sizeof(valCountString), "%d", slCount(&pairList)-1); 
@@ -1513,7 +1874,7 @@ tc->count = count;
 return tc;
 }
 
-void drawPrettyPieGraph(struct tagCount *tcList, char *id, char *title, char *subtitle)
+void drawPrettyPieGraph(struct facetVal *fvList, char *id, char *title, char *subtitle)
 /* Draw a pretty pie graph using D3. Import D3 and D3pie before use. */
 {
 // Some D3 administrative stuff, the title, subtitle, sizing etc. 
@@ -1538,18 +1899,18 @@ dyStringPrintf(dy,"\"footer\": {\"color\": \"#999999\",");
 dyStringPrintf(dy,"\"fontSize\": 10,");
 dyStringPrintf(dy,"\"font\": \"open sans\",");
 dyStringPrintf(dy,"\"location\": \"bottom-left\",},\n");
-dyStringPrintf(dy,"\"size\": { \"canvasWidth\": 270, \"canvasHeight\": 220},\n");
+dyStringPrintf(dy,"\"size\": { \"canvasWidth\": 330, \"canvasHeight\": 220},\n");
 dyStringPrintf(dy,"\"data\": { \"sortOrder\": \"value-desc\", \"content\": [\n");
-struct tagCount *tc = NULL;
+struct facetVal *fv = NULL;
 float colorOffset = 1;
-int totalFields =  slCount(tcList);
-for (tc=tcList; tc!=NULL; tc=tc->next)
+int totalFields =  slCount(fvList);
+for (fv=fvList; fv!=NULL; fv=fv->next)
     {
     float currentColor = colorOffset/totalFields;
     struct rgbColor color = saturatedRainbowAtPos(currentColor);
-    dyStringPrintf(dy,"\t{\"label\": \"%s\",\n\t\"value\": %ld,\n\t\"color\": \"rgb(%i,%i,%i)\"}", 
-	tc->tag, tc->count, color.r, color.b, color.g);
-    if (tc->next!=NULL) 
+    dyStringPrintf(dy,"\t{\"label\": \"%s\",\n\t\"value\": %d,\n\t\"color\": \"rgb(%i,%i,%i)\"}", 
+	fv->val, fv->useCount, color.r, color.b, color.g);
+    if (fv->next!=NULL) 
 	dyStringPrintf(dy,",\n");
     ++colorOffset;
     }
@@ -1571,6 +1932,7 @@ jsInline(dy->string);
 dyStringFree(&dy);
 }
 
+#ifdef OLD
 struct tagCount *tagCountListFromQuery(struct sqlConnection *conn, char *query)
 /* Return a tagCount list from a query that had tag/count values */
 {
@@ -1586,57 +1948,25 @@ sqlFreeResult(&sr);
 slReverse(&list);
 return list;
 }
+#endif /* OLD */
 
-struct tagCount *tagCountMajorPlusOther(struct tagCount *list, double minRatio)
-/* Return a list of only the tags that are over minRatio of total tags.
- * If there are tags that have smaller amounts than this, lump them together
- * under "other".  Returns a new list independend of old list */
-{
-/* Figure out total and minimum count to not be lumped into other */
-long total = 0;
-struct tagCount *tc;
-for (tc = list; tc != NULL; tc = tc->next)
-    total += tc->count;
-long minCount = round(minRatio * total);
-
-/* Loop through and copy ones over threshold to new list, and lump rest
- * into other */
-struct tagCount *newList = NULL, *newTc;
-struct tagCount *other = NULL;
-for (tc = list; tc != NULL; tc = tc->next)
-    {
-    if (tc->count >= minCount)
-        {
-	newTc = tagCountNew(tc->tag, tc->count);
-	slAddHead(&newList, newTc);
-	}
-    else
-        {
-	if (other == NULL)
-	    other = tagCountNew("other", 0);
-	other->count += tc->count;
-	}
-    }
-
-/* Put other onto new list if it exists */
-if (other != NULL)
-    slAddHead(&newList, other);
-
-/* Restore reversed order and return result */
-slReverse(&newList);
-return newList;
-}
-
-void pieOnTag(struct sqlConnection *conn, char *tag, char *divId)
+void pieOnFacet(struct facetField *ff, char *divId)
 /* Write a pie chart base on the values of given tag in storm */
 {
-char query[PATH_LEN]; 
-sqlSafef(query, sizeof(query), "select %s, count(*) as count from cdwFileTags where %s is not NULL group by %s order by count desc", tag, tag, tag); 
-struct tagCount *tagList = tagCountListFromQuery(conn, query);
-struct tagCount *majorTags = tagCountMajorPlusOther(tagList, 0.01);
-drawPrettyPieGraph(majorTags, divId, tag, NULL);
+struct facetVal *majorTags = facetValMajorPlusOther(ff->valList, 0.01);
+drawPrettyPieGraph(majorTags, divId, ff->fieldName, NULL);
 }
 
+void printFile(char *fname) 
+/* print file to stdout. Do nothing if file does not exist. */
+{
+FILE *fh = fopen(fname, "r");
+if (fh==NULL)
+    return;
+char buf[1000];
+while (fgets(buf, 1000, fh) != NULL)
+    puts(buf);
+}
 
 char *tagPopularityFields[] = { "tag name", "vals", "popular values (files)...", "files",};
 
@@ -1657,10 +1987,18 @@ sqlSafef(query, sizeof(query),
 long long totalBytes = sqlQuickLongLong(conn, query);
 printWithGreekByte(stdout, totalBytes);
 printf(" of data in ");
+#ifdef OLD
 sqlSafef(query, sizeof(query),
     "select count(*) from cdwFile,cdwValidFile where cdwFile.id=cdwValidFile.fileId "
     " and (errorMessage = '' or errorMessage is null)"
     );
+#endif /* OLD */
+
+/* Using a query that is faster than the table join but gives the same result 
+ * (0.2 sec vs. 0.8 sec) */
+sqlSafef(query, sizeof(query), 
+    "select count(*) from cdwFile where (errorMessage = '' || errorMessage is null)"
+    " and cdwFileName like '%%/%s%%'",  cdwLicensePlateHead(conn) );
 
 long long fileCount = sqlQuickLongLong(conn, query);
 printLongWithCommas(stdout, fileCount);
@@ -1669,55 +2007,35 @@ sqlSafef(query, sizeof(query),
     "select count(*) from cdwLab "
     );
 long long labCount = sqlQuickLongLong(conn, query);  
-printf(" from %llu labs. ", labCount); 
-printf("You have access to ");
-printLongWithCommas(stdout, cdwCountAccessible(conn, user));
-printf(" files.<BR>\n");
+printf(" from %llu labs.<BR>\n", labCount); 
+
 printf("Try using the browse menu on files or tracks. ");
 printf("The query link allows simple SQL-like queries of the metadata.");
 printf("<BR>\n");
 
+
 /* Print out some pie charts on important fields */
 static char *pieTags[] = 
     {"lab", "format", "assay", };
+struct facetField *pieFacetList = facetFieldsFromSqlTable(conn, getCdwTableSetting("cdwFileFacets"), 
+						    pieTags, ArraySize(pieTags), "N/A", NULL, NULL, NULL);
+struct facetField *ff;
 int i;
 printf("<TABLE style=\"display:inline\"><TR>\n");
-for (i=0; i<ArraySize(pieTags); ++i)
+for (i=0, ff = pieFacetList; i<ArraySize(pieTags); ++i, ff = ff->next)
     {
-    char *field = pieTags[i];
     char pieDivId[64];
     safef(pieDivId, sizeof(pieDivId), "pie_%d", i);
     printf("<TD id=\"%s\"><TD>", pieDivId);
-    pieOnTag(conn, field, pieDivId); 
+    pieOnFacet(ff, pieDivId); 
     }
 printf("</TR></TABLE>\n");
 printf("<CENTER><I>charts are based on proportion of files in each category</I></CENTER>\n");
 printf("</td></tr></table>\n");
 
-/* Print out high level tags table */
-static char *highLevelTags[] = 
-    {"data_set_id", "lab", "assay", "format", "read_size",
-    "sample_label", "species"};
-
-struct fieldedTable *table = fieldedTableNew("Important tags", tagPopularityFields, 
-    ArraySize(tagPopularityFields));
-for (i=0; i<ArraySize(highLevelTags); ++i)
-    tagSummaryRow(table, conn, highLevelTags[i]); 
-
-char returnUrl[PATH_LEN*2];
-safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?%s", cartSidUrlString(cart) );
-webSortableFieldedTable(cart, table, returnUrl, "cdwHome", 0, NULL, NULL);
-
-printf("This table is a summary of important metadata tags and number of files they ");
-printf("are attached to. Use browse tags menu to see all tags.");
-
-printf("<BR>\n\n\n\n\n\n");
-printf("<TABLE><TR>");
-printf("<a href=\"cdwGetFile/jointCirmBrain1/summary/index.html\"><img " 
-	"src=\"../images/cdwImages/qbg_krgSeurat.png\" width=%d height=%d border=5 style=\"border-width:medium\" > </a>\n", 800, 600);
-printf("</TR></TABLE>");
 }
 
+#ifdef OLD
 void doBrowseTags(struct sqlConnection *conn)
 /* Put up browse tags page */
 {
@@ -1737,6 +2055,7 @@ struct hash *outputWrappers = hashNew(0);
 webSortableFieldedTable(cart, table, returnUrl, "cdwBrowseTags", 0, outputWrappers, NULL);
 tagStormFree(&tags);
 }
+#endif /* OLD */
 
 void doHelp(struct sqlConnection *conn)
 /* Put up help page */
@@ -1744,6 +2063,12 @@ void doHelp(struct sqlConnection *conn)
 puts(
 #include "cdwHelp.h"
 );
+}
+
+void doTestPage(struct sqlConnection *conn)
+/* Put up test page */
+{
+printf("testing 1 2 3...<BR>\n");
 }
 
 void dispatch(struct sqlConnection *conn)
@@ -1782,10 +2107,12 @@ else if (sameString(command, "browseTracks"))
     {
     doBrowseTracks(conn);
     }
+#ifdef OLD
 else if (sameString(command, "browseTags"))
     {
     doBrowseTags(conn);
     }
+#endif /* OLD */
 else if (sameString(command, "browseLabs"))
     {
     doBrowseLabs(conn);
@@ -1814,6 +2141,10 @@ else if (sameString(command, "dataSetMetaTree"))
     {
     doDataSetMetaTree(conn);
     }
+else if (sameString(command, "test"))
+    {
+    doTestPage(conn);
+    }
 else
     {
     printf("unrecognized command %s<BR>\n", command);
@@ -1824,7 +2155,7 @@ void doMiddle()
 /* Menu bar has been drawn.  We are in the middle of first section. */
 {
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
-setCdwUser(conn);
+user = cdwCurrentUser(conn);
 dispatch(conn);
 sqlDisconnect(&conn);
 }
@@ -1834,10 +2165,45 @@ static void doSendMenubar()
 {
 oldVars = hashNew(0);
 cart = cartAndCookieWithHtml(hUserCookie(), excludeVars, oldVars, TRUE);
-//cartEmptyShell(localWebWrap, hUserCookie(), excludeVars, oldVars);
-//puts("Content-Type: text/html\n\n");
+puts("Content-Type: text/html\n\n");
 char* mb = cdwLocalMenuBar(cart, TRUE);
 puts(mb);
+}
+
+static void doSendUserName()
+/* send username and authentication method info in a tiny JSON block */
+{
+oldVars = hashNew(0);
+cart = cartAndCookieWithHtml(hUserCookie(), excludeVars, oldVars, TRUE);
+printf("{\n");
+int firstEntry = 1;
+if (loginUseBasicAuth())
+    {
+    if (!firstEntry)
+        printf(",");
+    else
+        firstEntry = 0;
+    printf ("\"auth\": \"basic\"\n");
+    }
+else
+    {
+    if (!firstEntry)
+        printf(",");
+    else
+        firstEntry = 0;
+    printf ("\"auth\": \"hgLogin\"\n");
+    }
+
+char *userName = wikiLinkUserName();
+if (userName != NULL)
+    {
+    if (!firstEntry)
+        printf(",");
+    else
+        firstEntry = 0;
+    printf("\"username\": \"%s\"\n", userName);
+    }
+printf("}\n");
 }
 
 void localWebStartWrapper(char *titleString)
@@ -1846,22 +2212,32 @@ void localWebStartWrapper(char *titleString)
 /* Do html header. We do this a little differently than web.c routines, mostly
  * in that we are strict rather than transitional HTML 4.01 */
     {
-    puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" "
-             "\"http://www.w3.org/TR/html4/strict.dtd\">");
-    puts("<HTML><HEAD>\n");
+    printf("<!DOCTYPE html>\n");
+    printf("<html>\n\t<head>\n");
+    webCirmPragmasEtc();
     puts(getCspMetaHeader());
-    webPragmasEtc();
     printf("<TITLE>%s</TITLE>\n", titleString);
-    webIncludeResourceFile("HGStyle.css");
-    webIncludeResourceFile("jquery-ui.css");
-    webIncludeResourceFile("nice_menu.css");
-    webIncludeResourceFile("jquery.ui.colorPicker.css");
-    jsIncludeFile("jquery.js", NULL);
-    jsIncludeFile("jquery.plugins.js", NULL);
-    jsIncludeFile("jquery-ui.js", NULL);
+    printf("\t\t<link rel=\"shortcut icon\" href=\"../images/schub.ico\" type=\"image/png\" />\n");
+    printf("\t\t<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js\"></script>");
+    webIncludeResourceFile("cirmStyle.css");
+
+    printf("\t\t<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" rel=\"stylesheet\">\n"
+        "\n"
+        "\t\t<!-- Latest compiled and minified CSS -->\n"
+        "\t\t<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css\"\n"
+        "\t\t integrity=\"sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm\"\n"
+        "\t\t crossorigin=\"anonymous\">\n"
+        "\n"
+        "\t\t<!-- Latest compiled and minified JavaScript -->\n"
+        "\t\t<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js\"\n"
+        "\t\t  integrity=\"sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q\"\n"
+        "\t\t crossorigin=\"anonymous\"></script>\n"
+        "\t\t<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js\"\n"
+        "\t\t integrity=\"sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl\"\n"
+        "\t\t crossorigin=\"anonymous\"></script>\n"
+        );
+
     jsIncludeFile("jquery.watermark.js", NULL);
-    jsIncludeFile("jquery.ui.colorPicker.js", NULL);
-    jsIncludeFile("ajax.js", NULL);
     jsIncludeFile("d3pie.min.js", NULL);
     jsIncludeFile("dagre-d3.js", NULL);
     printf("<script src=\"//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js\"></script>");
@@ -1870,9 +2246,10 @@ void localWebStartWrapper(char *titleString)
     printBodyTag(stdout);
     }
 
-webStartSectionTables();    // Start table layout code
+puts(cdwPageHeader(cart, FALSE));
+
+printf("<div class=\"cirm-page-body\">\n");
 puts(cdwLocalMenuBar(cart, FALSE));	    // Menu bar after tables open but before first section
-webFirstSection(titleString);	// Open first section
 webPushErrHandlers();	    // Now can do improved error handler
 }
 
@@ -1881,30 +2258,70 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.55");
+localWebStartWrapper("CIRM Stem Cell Hub Data Browser v0.62");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
-webEndSectionTables();
-jsInlineFinish(); 
+jsInlineFinish();
+printf("</div> <!-- cirm-page-body -->\n");
+puts(cdwPageFooter(cart, FALSE));
 printf("</BODY></HTML>\n");
 }
 
+void initFields()
+/* initialize fields */
+{
+visibleFacetFields = getCdwSetting("cdwFacetFields", FILEFACETFIELDS);
+char temp[1024];
+safef(temp, sizeof temp, "%s,%s", FILEFIELDS, visibleFacetFields);
+fileTableFields = cloneString(temp);
+
+// filter fields against fields in current facet table
+struct sqlConnection *conn = sqlConnect(cdwDatabase);
+struct slName *fNames = sqlFieldNames(conn, getCdwTableSetting("cdwFileFacets"));
+sqlDisconnect(&conn);
+
+struct dyString *dy = newDyString(128);
+char *fieldNames[128];
+char *tempFileTableFields = cloneString(fileTableFields);
+int fieldCount = chopString(tempFileTableFields, ",", fieldNames, ArraySize(fieldNames));
+int i;
+for (i = 0; i<fieldCount; i++)
+    {
+    if (slNameInList(fNames, fieldNames[i]))
+	{
+	if (dy->stringSize > 0)
+	    dyStringAppendC(dy, ',');
+	dyStringAppend(dy, fieldNames[i]);
+	}
+    }
+freeMem(fileTableFields);
+fileTableFields = dyStringCannibalize(&dy);
+
+}
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+long enteredMainTime = clock1000();
 boolean isFromWeb = cgiIsOnWeb();
 if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
 dnaUtilOpen();
 oldVars = hashNew(0);
 char *cdwCmd = cgiOptionalString("cdwCommand");
+isPublicSite = cfgOptionBooleanDefault("cdw.siteIsPublic", FALSE);
+
+initFields();
+
 if (sameOk(cdwCmd, "downloadUrls"))
     doDownloadUrls();
 else if (sameOk(cdwCmd, "menubar"))
     doSendMenubar();
+else if (sameOk(cdwCmd, "userName"))
+    doSendUserName();
 else
     cartEmptyShell(localWebWrap, hUserCookie(), excludeVars, oldVars);
+cgiExitTime("cdwWebBrowse", enteredMainTime);
 return 0;
 }
 

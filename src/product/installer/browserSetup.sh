@@ -8,6 +8,14 @@
 
 set -u -e -o pipefail # fail on unset vars and all errors, also in pipes
 
+function errorHandler {
+    echo The UCSC Genome Browser installation script exited with an error.
+    echo Please contact us at genome-mirror@soe.ucsc.edu and send us an output log 
+    echo of the command prefixed with '"bash -x"', e.g.
+    echo 'bash -x browserSetup.sh install 2>&1 > install.log'
+}
+trap errorHandler ERR
+
 # ---- GLOBAL DEFAULT SETTINGS ----
 
 # Directory where CGI-BIN and htdocs are downloaded to.
@@ -606,6 +614,7 @@ function installRedhat () {
     # make sure we have and EPEL and ghostscript and rsync (not installed on vagrant boxes)
     # imagemagick is required for the session gallery
     # MySQL-python is required for hgGeneGraph
+    yum update
     yum -y install epel-release
     yum -y install ghostscript rsync ImageMagick R-core MySQL-python curl
 
@@ -1011,7 +1020,7 @@ function mysqlChangeRootPwd ()
 
    # generate a random char string
    # OSX's tr is quite picky with unicode, so change LC_ALL temporarily
-   MYSQLROOTPWD=`cat /dev/urandom | LC_ALL=C tr -dc A-Z-a-z-0-9 | head -c8` || true
+   MYSQLROOTPWD=`cat /dev/urandom | LC_ALL=C tr -dc A-Za-z0-9 | head -c8` || true
    # paranoia check
    if [[ "$MYSQLROOTPWD" == "" ]]; then
        echo2 Error: could not generate a random Mysql root password
@@ -1097,10 +1106,15 @@ if commandExists selinuxenabled; then
     if [ selinuxenabled ]; then
        echo2
        echo2 The Genome Browser requires that SELINUX is deactivated.
-       echo2 Deactivating it now.
+       echo2 Deactivating it now with "'setenforce 0'" and in /etc/sysconfig/selinux.
        waitKey
        # deactivate selinux until next reboot
+       # On Redhat 7.5 setenforce 0 returns error code 1 if selinux is disabled
+       # so we simply ignore the error code here. Possibly we should use 'setstatus | grep 'Current mode'
+       # instead of the error code of selinuxenabled above. selinux
+       set +e
        setenforce 0
+       set -e
        # permanently deactivate after next reboot
        if [ -f /etc/sysconfig/selinux ]; then
            sed -i 's/^SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
@@ -1225,6 +1239,9 @@ function installBrowser ()
     if [[ "${SET_MYSQL_ROOT}" == "1" ]]; then
        mysqlChangeRootPwd
     fi
+
+    # Ideally, setup modern R fonts like at UCSC:
+    # Rscript -e "install.packages(c('showtext', 'curl'), repos='http://cran.us.r-project.org')
 
     # before we do anything else with mysql
     # we need to check if we can access it. 
@@ -1633,7 +1650,7 @@ function addTools {
    echo2 The UCSC User Tools were copied to /usr/local/bin
    echo2 Please note that most of the tools require an .hg.conf file in the users
    echo2 home directory. A very minimal .hg.conf file can be found here:
-   echo2 "http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/product/minimal.hg.conf"
+   echo2 "http://genome-source.soe.ucsc.edu/gitlist/kent.git/blob/master/src/product/minimal.hg.conf"
 }
 
 # ------------ end of utility functions ----------------

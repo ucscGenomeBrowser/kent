@@ -13,6 +13,7 @@
 #include "localmem.h"
 #include "net.h"
 #include "regexHelper.h"
+#include "htslib/tbx.h"
 #include "vcf.h"
 
 /* Reserved but optional INFO keys: */
@@ -504,9 +505,9 @@ if (vcff->majorVersion == 0)
     vcff->majorVersion = 4;
     vcff->minorVersion = 1;
     }
-if ((vcff->majorVersion != 4 || vcff->minorVersion < 0 || vcff->minorVersion > 2) &&
+if ((vcff->majorVersion != 4 || vcff->minorVersion < 0 || vcff->minorVersion > 3) &&
     (vcff->majorVersion != 3))
-    vcfFileErr(vcff, "VCFv%d.%d not supported -- only v3.*, v4.0, v4.1 or v4.2",
+    vcfFileErr(vcff, "VCFv%d.%d not supported -- only v3.*, v4.0 - v4.3",
 	       vcff->majorVersion, vcff->minorVersion);
 // Next, one header line beginning with single "#" that names the columns:
 if (line == NULL)
@@ -755,12 +756,25 @@ wordCount = checkWordCount(vcff, words, wordCount);
 return vcfRecordFromRow(vcff, words);
 }
 
+static boolean noAltAllele(char **alleles, int alleleCount)
+/* Return true if there is no alternate allele (missing value ".") or the given alternate allele
+ * is the same as the reference allele. */
+{
+return (alleleCount == 2 &&
+        (sameString(alleles[0], alleles[1]) || sameString(".", alleles[1])));
+}
+
 static boolean allelesHavePaddingBase(char **alleles, int alleleCount)
 /* Examine alleles to see if they either a) all start with the same base or
  * b) include a symbolic or 0-length allele.  In either of those cases, there
  * must be an initial padding base that we'll need to trim from non-symbolic
  * alleles. */
 {
+if (sameString(alleles[0], "-"))
+    return FALSE;
+else if (noAltAllele(alleles, alleleCount))
+    // Don't trim assertion of no change (ref == alt)
+    return FALSE;
 boolean hasPaddingBase = TRUE;
 char firstBase = '\0';
 if (isAllNt(alleles[0], strlen(alleles[0])))
@@ -768,7 +782,12 @@ if (isAllNt(alleles[0], strlen(alleles[0])))
 int i;
 for (i = 1;  i < alleleCount;  i++)
     {
-    if (isAllNt(alleles[i], strlen(alleles[i])))
+    if (sameString(alleles[i], "-"))
+        {
+        hasPaddingBase = FALSE;
+        break;
+        }
+    else if (isAllNt(alleles[i], strlen(alleles[i])))
 	{
 	if (firstBase == '\0')
 	    firstBase = alleles[i][0];
@@ -844,13 +863,17 @@ return TRUE;
 static int countIdenticalBasesRight(char **alleles, int alCount)
 /* Return the number of bases that are identical at the end of each allele (usually 0). */
 {
+if (noAltAllele(alleles, alCount))
+    // Don't trim assertion of no change (ref == alt)
+    return 0;
 char *alleleEnds[alCount];
 int i;
 for (i = 0;  i < alCount;  i++)
     {
     int alLen = strlen(alleles[i]);
     // If any allele is symbolic, don't try to trim.
-    if (!isAllNt(alleles[i], alLen))
+    if (sameString(alleles[i], "-") ||
+        !isAllNt(alleles[i], alLen))
 	return 0;
     alleleEnds[i] = alleles[i] + alLen-1;
     }
@@ -1076,6 +1099,42 @@ if (lineFileSetTabixRegion(vcff->lf, chrom, start, end))
     }
 
 return slCount(vcff->records) - oldCount;
+}
+
+long long vcfTabixItemCount(char *fileOrUrl, char *tbiFileOrUrl)
+/* Return the total number of items across all sequences in fileOrUrl, using index file.
+ * If tbiFileOrUrl is NULL, the index file is assumed to be fileOrUrl.tbi.
+ * NOTE: not all tabix index files include mapped item counts, so this may return 0 even for
+ * large files. */
+{
+long long itemCount = 0;
+hts_idx_t *idx = NULL;
+if (isNotEmpty(tbiFileOrUrl))
+    idx = hts_idx_load2(fileOrUrl, tbiFileOrUrl);
+else
+    {
+    idx = hts_idx_load(fileOrUrl, HTS_FMT_TBI);
+    }
+if (idx == NULL)
+    warn("vcfTabixItemCount: hts_idx_load(%s) failed.", tbiFileOrUrl ? tbiFileOrUrl : fileOrUrl);
+else
+    {
+    int tCount;
+    const char **seqNames = tbx_seqnames((tbx_t *)idx, &tCount);
+    int tid;
+    for (tid = 0;  tid < tCount;  tid++)
+        {
+        uint64_t mapped, unmapped;
+        int ret = hts_idx_get_stat(idx, tid, &mapped, &unmapped);
+        if (ret == 0)
+            itemCount += mapped;
+        // ret is -1 if counts are unavailable.
+        }
+    freeMem(seqNames);
+    hts_idx_destroy(idx);
+    idx = NULL;
+    }
+return itemCount;
 }
 
 void vcfFileFree(struct vcfFile **pVcff)
@@ -1473,13 +1532,19 @@ if (allelesHavePaddingBase(alleles, alCount))
 int trimmedBases = countIdenticalBasesRight(alleles, alCount);
 // Build a /-separated allele string, trimming bases on the right if necessary:
 dyStringClear(dy);
+if (noAltAllele(alleles, alCount))
+    alCount = 1;
 for (i = 0;  i < alCount;  i++)
     {
     char *allele = alleles[i];
     if (!sameString(allele, "."))
         {
-        if (i > 0)
+        if (i != 0)
+            {
+            if (sameString(alleles[0], allele))
+                continue;
             dyStringAppendC(dy, '/');
+            }
         if (allele[trimmedBases] == '\0')
             dyStringAppendC(dy, '-');
         else

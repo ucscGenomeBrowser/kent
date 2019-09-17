@@ -46,14 +46,14 @@ int liftOverBed(char *fileName, struct hash *chainHash,
                         int minSizeT, int minSizeQ,
                         int minChainT, int minChainQ,
                         bool fudgeThick, FILE *f, FILE *unmapped, 
-                        bool multiple, char *chainTable, int *errCt);
+                        bool multiple, bool noSerial, char *chainTable, int *errCt);
 /* Open up file, decide what type of bed it is, and lift it. 
  * Return the number of records successfully converted */
 
 int liftOverBedPlus(char *fileName, struct hash *chainHash, double minMatch,  
                     double minBlocks, int minSizeT, int minSizeQ, int minChainT,
                     int minChainQ, bool fudgeThick, FILE *f, FILE *unmapped, 
-                    bool multiple, char *chainTable, int bedPlus, bool hasBin, 
+                    bool multiple, bool noSerial, char *chainTable, int bedPlus, bool hasBin,
                     bool tabSep, int *errCt);
 /* Lift bed with N+ (where n=bedPlus param) format.
  * Return the number of records successfully converted */
@@ -61,7 +61,7 @@ int liftOverBedPlus(char *fileName, struct hash *chainHash, double minMatch,
 int liftOverBedPlusEnds(char *fileName, struct hash *chainHash, double minMatch,  
                     double minBlocks, int minSizeT, int minSizeQ, int minChainT,
                     int minChainQ, bool fudgeThick, FILE *f, FILE *unmapped, 
-                    bool multiple, char *chainTable, int bedPlus, bool hasBin, 
+                    bool multiple, bool noSerial, char *chainTable, int bedPlus, bool hasBin,
 			bool tabSep, int ends, int *errCt);
 /* Lift bed N+ file.
  * Return the number of records successfully converted */
@@ -80,7 +80,7 @@ int liftOverBedOrPositions(char *fileName, struct hash *chainHash,
                         int minSizeT, int minSizeQ,
                         int minChainT, int minChainQ,
 		        bool fudgeThick, FILE *mapped, FILE *unmapped, 
-			   bool multiple, char *chainTable, int *errCt);
+		        bool multiple, bool noSerial, char *chainTable, int *errCt);
 /* Sniff the first line of the file, and determine whether it's a */
 /* bed, a positions file, or neither. */
 
@@ -103,7 +103,7 @@ void liftOverPsl(char *fileName, struct hash *chainHash,
 
 void liftOverGenePred(char *fileName, struct hash *chainHash, 
                         double minMatch, double minBlocks, bool fudgeThick,
-                        FILE *mapped, FILE *unmapped);
+                      FILE *mapped, FILE *unmapped, boolean multiple);
 /* Lift over file in genePred format. */
 
 void liftOverSample(char *fileName, struct hash *chainHash, 

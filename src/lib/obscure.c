@@ -154,10 +154,12 @@ struct hash *hashTwoColumnFile(char *fileName)
 /* Given a two column file (key, value) return a hash. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
 struct hash *hash = hashNew(16);
-while (lineFileRow(lf, row))
+char *row[3];
+int fields = 0;
+while ((fields = lineFileChop(lf, row)) != 0)
     {
+    lineFileExpectWords(lf, 2, fields);
     char *name = row[0];
     char *value = lmCloneString(hash->lm, row[1]);
     hashAdd(hash, name, value);
@@ -252,6 +254,23 @@ for (;;)
     }
 freeMem(buf);
 }
+
+void *charToPt(char c)
+/* Convert char to pointer. Use when really want to store
+ * a char in a pointer field. */
+{
+char *pt = NULL;
+return pt+c;
+}
+
+char ptToChar(void *pt)
+/* Convert pointer to char.  Use when really want to store a
+ * pointer in a char. */
+{
+char *a = NULL, *b = pt;
+return b - a;
+}
+
 
 void *intToPt(int i)
 /* Convert integer to pointer. Use when really want to store an
@@ -621,18 +640,16 @@ void sprintWithGreekByte(char *s, int slength, long long size)
 /* Numbers formatted with PB, TB, GB, MB, KB, B */
 {
 char *greek[] = {"B", "KB", "MB", "GB", "TB", "PB"};
+int maxGreek = (sizeof(greek)/sizeof(char*))-1;
 int i = 0;
 long long d = 1;
-while ((size/d) >= 1024)
+while (((size/d) >= 1024) && (i != maxGreek))
     {
     ++i;
     d *= 1024;
     }
 double result = ((double)size)/d;
-if (result < 10)
-    safef(s,slength,"%3.1f %s",((double)size)/d, greek[i]);
-else
-    safef(s,slength,"%3.0f %s",((double)size)/d, greek[i]);
+safef(s, slength, "%3.*f %s", result < 10 ? 1 : 0, ((double)size)/d, greek[i]);
 }
 
 void printWithGreekByte(FILE *f, long long l)
@@ -640,6 +657,30 @@ void printWithGreekByte(FILE *f, long long l)
 {
 char buf[32];
 sprintWithGreekByte(buf, sizeof(buf), l);
+fprintf(f, "%s", buf);
+}
+
+void sprintWithMetricBaseUnit(char *s, int slength, long long size)
+/* Numbers formatted with Pb, Tb, Gb, Mb, kb, bp */
+{
+char *unit[] = {"bp", "kB", "Mb", "Gb", "Tb", "Pb"};
+int maxUnit = (sizeof(unit)/sizeof(char*))-1;
+int i = 0;
+long long d = 1;
+while (((size/d) >= 1000) && (i != maxUnit))
+    {
+    ++i;
+    d *= 1000;
+    }
+double result = ((double)size)/d;
+safef(s, slength, "%3.*f %s", result < 10 ? 1 : 0, ((double)size)/d, unit[i]);
+}
+
+void printWithMetricBaseUnit(FILE *f, long long l)
+/* Print with formatting in megabase, kilobase, etc. */
+{
+char buf[32];
+sprintWithMetricBaseUnit(buf, sizeof(buf), l);
 fprintf(f, "%s", buf);
 }
 

@@ -4347,3 +4347,98 @@ danRer10' > fish.list
     include vertebrateChainNet.ra
 
 ############################################################################
+# crispr 10K track (DONE - 2018-07-02 - Hiram)
+    mkdir -p /hive/data/genomes/rn6/bed/crispr.10K
+    cd /hive/data/genomes/rn6/bed/crispr.10K
+
+    # since this time, the indexing has been built into the primary script
+export PATH=/hive/data/outside/crisprTrack/crispor/tools/usrLocalBin:$PATH
+export TMPDIR=/dev/shm
+
+time (/hive/data/outside/crisprTrack/crispor/tools/crisprAddGenome ucscLocal \
+   rn6 --geneTable ensGene \
+      --baseDir /hive/data/outside/crisprTrack/crispor/genomes) > index.log 2>&1
+
+    # real    109m47.348s
+
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doCrispr.pl \
+   -buildDir=`pwd` -bigClusterHub=ku -smallClusterHub=ku \
+  -continue=guides -stop=guides -workhorse=hgwdev rn6 ensGene) > guides.log 2>&1
+    # real    18m23.512s
+
+    # step specScores were run manually to test fixes in the script to avoid
+    # the bottleneck
+    /cluster/home/hiram/kent/src/hg/utils/automation/doCrispr.pl \
+   -buildDir=`pwd` -bigClusterHub=ku -smallClusterHub=ku -debug \
+        -continue=specScores -stop=specScores -workhorse=hgwdev rn6 ensGene
+
+    /cluster/home/hiram/kent/src/hg/utils/automation/doCrispr.pl -debug \
+   -buildDir=`pwd` -bigClusterHub=ku -smallClusterHub=ku \
+        -continue=effScores -stop=offTargets -workhorse=hgwdev rn6 ensGene)
+
+    /cluster/home/hiram/kent/src/hg/utils/automation/doCrispr.pl -debug \
+   -buildDir=`pwd` -bigClusterHub=ku -smallClusterHub=ku \
+        -continue=load -stop=load -workhorse=hgwdev rn6 ensGene
+
+############################################################################
+# LIFTOVER TO regenRn0 (DONE - 2019-06-29 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/rn6/bed/blat.regenRn0.2019-06-29
+    cd /hive/data/genomes/rn6/bed/blat.regenRn0.2019-06-29
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/rn6/jkStuff/rn6.11.ooc \
+         rn6 regenRn0
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/rn6/jkStuff/rn6.11.ooc \
+         rn6 regenRn0) > doLiftOverToRegenRn0.log 2>&1
+    # real    249m30.284s
+
+    # see if the liftOver menus function in the browser from regenRn0 to galGal5
+
+    # would like to see this as a track:
+    chainToPsl rn6ToRegenRn0.over.chain.gz ../../chrom.sizes \
+   /hive/data/genomes/regenRn0/chrom.sizes ../../rn6.2bit \
+   /hive/data/genomes/regenRn0/regenRn0.2bit rn6ToRegenRn0.psl
+
+#########################################################################
+# LIFTOVER TO regenRn1 (DONE - 2019-09-09 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/rn6/bed/blat.regenRn1.2019-09-09
+    cd /hive/data/genomes/rn6/bed/blat.regenRn1.2019-09-09
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/rn6/jkStuff/rn6.11.ooc \
+         rn6 regenRn1
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/rn6/jkStuff/rn6.11.ooc \
+         rn6 regenRn1) > doLiftOverToRegenRn1.log 2>&1
+    # real    252m38.421s
+
+    # see if the liftOver menus function in the browser from rn6 to regenRn1
+
+    # would like to see this as a track:
+    hgLoadChain rn6 chainRegenRn1 rn6ToRegenRn1.over.chain.gz
+    # Loading 237485 chains into rn6.chainRegenRn1
+
+    chainSort rn6ToRegenRn1.over.chain.gz stdout \
+      | chainPreNet stdin \
+        /hive/data/genomes/rn6/chrom.sizes \
+        /hive/data/genomes/regenRn1/chrom.sizes stdout \
+      | chainNet stdin -minSpace=1 /hive/data/genomes/rn6/chrom.sizes \
+        /hive/data/genomes/regenRn1/chrom.sizes stdout /dev/null \
+      | netSyntenic stdin noClass.net
+
+   netClass -verbose=0 -noAr noClass.net rn6 regenRn1 rn6.regenRn1.net
+
+    netFilter -minGap=10 rn6.regenRn1.net \
+      | hgLoadNet -verbose=0 rn6 netRegenRn1 stdin
+
+featureBits rn6 chainRegenRn1Link > fb.rn6.chainRegenRn1Link.txt 2>&1
+
+    cat fb.rn6.chainRegenRn1Link.txt
+    # 2265178557 bases of 2729860805 (82.978%) in intersection
+
+#########################################################################

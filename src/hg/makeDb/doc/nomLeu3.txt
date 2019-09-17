@@ -780,6 +780,46 @@ nomLeu3.perChromTables = no
     #   2479386532 bases of 2756609047 (89.943%) in intersection
 
 ##############################################################################
+# create ucscToRefSeq name mapping (DONE - 2017-12-14 - Hiram)
+    mkdir /hive/data/genomes/nomLeu3/bed/ucscToRefSeq
+    cd /hive/data/genomes/nomLeu3/bed/ucscToRefSeq
+
+    # run up idKeys for refseq release
+    mkdir refseq
+    cd refseq
+    ln -s /hive/data/outside/ncbi/genomes/refseq/vertebrate_mammalian/Nomascus_leucogenys/all_assembly_versions/GCF_000146795.2_Nleu_3.0/GCF_000146795.2_Nleu_3.0_genomic.fna.gz .
+    faToTwoBit *.fna.gz refseq.nomLeu3.2bit
+    doIdKeys.pl -buildDir=`pwd` -twoBit=`pwd`/refseq.nomLeu3.2bit refseqNomLeu3
+    # real    8m48.219s
+
+    cd /hive/data/genomes/nomLeu3/bed/ucscToRefSeq
+    join -t$'\t' ../idKeys/nomLeu3.idKeys.txt refseq/refseqNomLeu3.idKeys.txt \
+      | cut -f2- | sort > ucsc.refseq.tab
+
+    join -t$'\t' <(sort ../../chrom.sizes) ucsc.refseq.tab \
+        | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+          | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+
+    # maximum size of UCSC chrom name for SQL index
+    export SZ=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    # SZ: 28
+
+    sed -e "s/21/$SZ/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab nomLeu3 ucscToRefSeq stdin ucscToRefSeq.bed
+
+    checkTableCoords nomLeu3 ucscToRefSeq
+
+    featureBits -countGaps nomLeu3 ucscToRefSeq
+    # 2962060179 bases of 2962077449 (99.999%) in intersection
+
+    # the missing bits are the chrM scaffolds:
+    calc 2962077449 - 2962060179
+    # 2962077449 - 2962060179 = 17270.000000
+
+    grep chrM ../../chrom.sizes | ave -col=2 stdin | grep total
+    # total 17270.000000
+
+##############################################################################
 # create ucscToINSDC name mapping (DONE - 2013-08-16 - Hiram)
     # this allows the "ensembl" blue bar button to appear
     mkdir /hive/data/genomes/nomLeu3/bed/ucscToINSDC
@@ -868,6 +908,40 @@ runAll $* | sort > ucscToINSDC.txt
     # verify the track link to INSDC functions
 
 ##############################################################################
+# add chromAlias table (DONE - 2017-12-14 - Hiram)
+
+    mkdir /hive/data/genomes/nomLeu3/bed/chromAlias
+    cd /hive/data/genomes/nomLeu3/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' nomLeu3 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' nomLeu3 \
+        > ucsc.genbank.tab
+
+    join -t$'\t' ../idKeys/nomLeu3.idKeys.txt \
+	../../ensembl/ensemblNomLeu3.idKeys.txt \
+	| cut -f2,3 | sort > ucsc.ensembl.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl
+    sort -o nomLeu3.chromAlias.tab nomLeu3.chromAlias.tab
+
+for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t nomLeu3.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 17484 =? 17484 OK
+# checking genbank: 17492 =? 17492 OK
+# checking ensembl: 17484 =? 17484 OK
+
+    hgLoadSqlTab nomLeu3 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        nomLeu3.chromAlias.tab
+
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################

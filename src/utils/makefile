@@ -17,6 +17,7 @@ UTILS_APPLIST = \
 	bamToPsl \
 	bedClip \
 	bedGraphToBigWig \
+	bedJoinTabOffset \
 	bedToBigBed \
 	bigBedInfo \
 	bigBedNamedItems \
@@ -43,6 +44,8 @@ UTILS_APPLIST = \
 	chopFaLines \
 	colTransform \
 	countChars \
+	endsInLf \
+	cpgIslandExt \
 	faAlign \
 	fastqToFa \
 	fastqStatsAndSubsample \
@@ -86,6 +89,7 @@ UTILS_APPLIST = \
 	spacedToTab \
 	splitFile \
 	splitFileByColumn \
+	strexCalc \
 	stringify \
 	subChar \
 	subColumn \
@@ -111,7 +115,7 @@ UCSC_APPS = \
 	ccCp \
 	convolve \
 	detab \
-	endsInLf \
+	dnsInfo \
 	faFlyBaseToUcsc \
 	faGapLocs \
 	faGapSizes \
@@ -141,13 +145,16 @@ UCSC_APPS = \
 	venn \
 	verticalSplitSqlTable \
 	weedLines \
-	wigTestMaker
+
 
 # list of scripts to install
 
 USER_APP_SCRIPTS = \
-	bedJoinTabOffset \
+	bedJoinTabOffset.py \
 	expMatrixToBarchartBed \
+	ucscApiClient \
+	tdbRename \
+	tdbSort \
 	webSync
 
 SCRIPT_FILES = \
@@ -182,6 +189,10 @@ SCRIPT_FILES = \
 	bedBestTranscript \
 	genePredToBed \
 	cgiSmokeTest \
+	phegenToBed \
+	doLocusName \
+	cancerMafToBigBed \
+	pq \
 	${USER_APP_SCRIPTS}
 
 # List of all directories to build
@@ -257,6 +268,5 @@ BAD_DIRS= \
 	geneStarts \
 	jimgrep \
 	jkShell \
-	dnsInfo \
 	wigAsciiToBinary \
 	cCp

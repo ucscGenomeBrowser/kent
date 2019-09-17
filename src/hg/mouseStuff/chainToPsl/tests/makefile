@@ -8,6 +8,7 @@ pslCheck=${DESTBINDIR}/pslCheck
 all::
 
 test: example1 example2
+	${MAKE} clean
 
 example1: mkdirs
 	@${chainToPsl} input/$@.chain.gz /dev/null /dev/null \

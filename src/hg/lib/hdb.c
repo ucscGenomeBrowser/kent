@@ -44,6 +44,7 @@
 #include "net.h"
 #include "udc.h"
 #include "paraFetch.h"
+#include "regexHelper.h"
 #include "filePath.h"
 #include "wikiLink.h"
 #include "cheapcgi.h"
@@ -227,12 +228,26 @@ return ((chrom = hgOfficialChromName(db, name)) != NULL &&
 	sameString(name, chrom));
 }
 
+static boolean minLen = 0;
+
+void setMinIndexLengthForTrashCleaner()
+/* set the minimum index size so trash cleaner will not die
+ * on custom tracks on hubs that are not currently loading.
+ * However, they might be re-established in the future,
+ * and we want to allow it to proceed without failure
+ * in order to touch the trash database table access times,
+ * preserving them from the trash cleaner.
+ * Only the trash cleaner should call this:
+ *  src/hg/utils/refreshNamedCustomTracks/refreshNamedCustomTracks.c 
+ */
+{
+minLen = 1;  // any value other than 0 is fine.
+}
 
 int hGetMinIndexLength(char *db)
 /* get the minimum index size for the given database that won't smoosh
  * together chromNames. */
 {
-static boolean minLen = 0;
 if (minLen <= 0)
     {
     struct slName *nameList = hAllChromNames(db);
@@ -579,6 +594,67 @@ hFreeConn(&conn);
 return count;
 }
 
+// This maps db names to the latest NCBI RefSeq assembly+annotation GCF_ IDs as of
+// 12/19/2017.
+struct dbToGcf
+    {
+    char *db;
+    char *gcf;
+    };
+static struct dbToGcf dbToGcf[] =
+    {
+    { "hg38", "GCF_000001405.37" },
+    { "hg19", "GCF_000001405.25" },
+    { "mm10", "GCF_000001635.26" },
+    { "danRer11", "GCF_000002035.6" },
+    { "galGal5", "GCF_000002315.4" },
+    { "canFam3", "GCF_000002285.3" },
+    { "rheMac8", "GCF_000772875.2" },
+    { "panTro5", "GCF_000001515.7" },
+    { "bosTau8", "GCF_000003055.6" },
+    { "rn6", "GCF_000001895.5" },
+    { "xenTro9", "GCF_000004195.3" },
+    { "susScr11", "GCF_000003025.6" },
+    { "equCab2", "GCF_000002305.2" },
+    { NULL, NULL }
+    };
+
+char *hNcbiGcfId(char *db)
+/* Return the NCBI RefSeq assembly+annotations ID (GCF_...) for db, or NULL if we don't know it. */
+{
+char *gcf = NULL;
+int i;
+for (i = 0;  dbToGcf[i].db != NULL;  i++)
+    if (sameString(db, dbToGcf[i].db))
+        {
+        gcf = cloneString(dbToGcf[i].gcf);
+        break;
+        }
+return gcf;
+}
+
+char *hNcbiGcaId(char *db)
+/* Return the NCBI GenBank assembly id (GCA_...) for db, or NULL if we don't know it. */
+{
+char *gca = NULL;
+if (! trackHubDatabase(db))
+    {
+    struct sqlConnection *conn = hConnectCentral();
+    char query[1024];
+    sqlSafef(query, sizeof(query), "select sourceName from dbDb where name = '%s'", db);
+    char sourceName[2048];
+    sqlQuickQuery(conn, query, sourceName, sizeof(sourceName));
+    regmatch_t substrs[2];
+    if (isNotEmpty(sourceName) &&
+        regexMatchSubstr(sourceName, "GCA_[0-9]+\\.[0-9]+", substrs, ArraySize(substrs)))
+        {
+        gca = regexSubstringClone(sourceName, substrs[0]);
+        }
+    hDisconnectCentral(&conn);
+    }
+return gca;
+}
+
 struct sqlConnection *hAllocConn(char *db)
 /* Get free connection if possible. If not allocate a new one. */
 {
@@ -898,6 +974,13 @@ if (hashLookup(tableListProfChecked, key) == NULL)
 boolean hTableExists(char *db, char *table)
 /* Return TRUE if a table exists in db. */
 {
+if (sameWord(db, CUSTOM_TRASH))
+    {
+    struct sqlConnection *conn = hAllocConn(db);
+    boolean toBeOrNotToBe = sqlTableExists(conn, table);
+    hFreeConn(&conn);
+    return toBeOrNotToBe;
+    }
 struct hash *hash = tableListGetDbHash(db);
 struct slName *tableNames = NULL, *tbl = NULL;
 char trackName[HDB_MAX_TABLE_STRING];
@@ -1609,39 +1692,30 @@ else
     }
 }
 
-static bioSeq *seqGet(char *db, char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
-/* Return sequence from the specified seq and extFile tables.   The
- * seqTbl/extFileTbl arguments may include the database, in which case they
- * override what is in db (which could even be NULL). NULL if not
+static bioSeq *seqGetConn(struct sqlConnection *seqConn, struct sqlConnection *extFileConn,
+                          char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
+/* Return sequence from the specified seq and extFile tables NULL if not
  * found. */
 {
 /* look up sequence */
-char dbBuf[64];
-char *seqDb = dbTblParse(db, seqTbl, &seqTbl, dbBuf, sizeof(dbBuf));
-struct sqlConnection *conn = hAllocConn(seqDb);
 char query[256];
 sqlSafef(query, sizeof(query),
       "select extFile,file_offset,file_size from %s where acc = '%s'",
       seqTbl, acc);
-struct sqlResult *sr = sqlMustGetResult(conn, query);
+struct sqlResult *sr = sqlMustGetResult(seqConn, query);
 char **row = sqlNextRow(sr);
 if (row == NULL)
     {
     sqlFreeResult(&sr);
-    hFreeConn(&conn);
     return NULL;
     }
 HGID extId = sqlUnsigned(row[0]);
 off_t offset = sqlLongLong(row[1]);
 size_t size = sqlUnsigned(row[2]);
 sqlFreeResult(&sr);
-hFreeConn(&conn);
 
 /* look up extFile */
-char *extDb = dbTblParse(db, extFileTbl, &extFileTbl, dbBuf, sizeof(dbBuf));
-conn = hAllocConn(extDb);
-struct largeSeqFile *lsf = largeFileHandle(conn, extId, extFileTbl);
-hFreeConn(&conn);
+struct largeSeqFile *lsf = largeFileHandle(extFileConn, extId, extFileTbl);
 
 if (lsf == NULL)
     return NULL;
@@ -1649,6 +1723,35 @@ if (lsf == NULL)
 char *buf = readOpenFileSection(lsf->fd, offset, size, lsf->path, acc);
 return faSeqFromMemText(buf, isDna);
 }
+
+static bioSeq *seqMustGetConn(struct sqlConnection *seqConn, struct sqlConnection *extFileConn,
+                              char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
+/* Return sequence from the specified seq and extFile tables.Return Abort if not
+ * found. */
+{
+bioSeq *seq = seqGetConn(seqConn, extFileConn, acc, isDna, seqTbl, extFileTbl);
+if (seq == NULL)
+    errAbort("can't find \"%s\" in seq table %s.%s", acc, sqlGetDatabase(seqConn), seqTbl);
+return seq;
+}
+
+static bioSeq *seqGet(char *db, char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
+/* Return sequence from the specified seq and extFile tables.   The
+ * seqTbl/extFileTbl arguments may include the database, in which case they
+ * override what is in db (which could even be NULL). NULL if not
+ * found. */
+{
+char seqDbBuf[64], extFileDbBuf[64];
+char *seqDb = dbTblParse(db, seqTbl, &seqTbl, seqDbBuf, sizeof(seqDbBuf));
+char *extFileDb = dbTblParse(db, extFileTbl, &extFileTbl, extFileDbBuf, sizeof(extFileDbBuf));
+struct sqlConnection *seqConn = hAllocConn(seqDb);
+struct sqlConnection *extFileConn = hAllocConn(extFileDb);
+bioSeq *seq = seqGetConn(seqConn, extFileConn, acc, isDna, seqTbl, extFileTbl);
+hFreeConn(&seqConn);
+hFreeConn(&extFileConn);
+return seq;
+}
+
 
 static bioSeq *seqMustGet(char *db, char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
 /* Return sequence from the specified seq and extFile tables.  The
@@ -1678,6 +1781,20 @@ struct dnaSeq *hDnaSeqMustGet(char *db, char *acc, char *seqTbl, char *extFileTb
  * Abort if not found. */
 {
 return seqMustGet(db, acc, TRUE, seqTbl, extFileTbl);
+}
+
+struct dnaSeq *hDnaSeqGetConn(struct sqlConnection *conn, char *acc, char *seqTbl, char *extFileTbl)
+/* Get a cDNA or DNA sequence from the specified seq and extFile tables. Return NULL if not
+ * found. */
+{
+return seqGetConn(conn, conn, acc, TRUE, seqTbl, extFileTbl);
+}
+
+struct dnaSeq *hDnaSeqMustGetConn(struct sqlConnection *conn, char *acc, char *seqTbl, char *extFileTbl)
+/* Get a cDNA or DNA sequence from the specified seq and extFile tables. 
+ * Abort if not found. */
+{
+return seqMustGetConn(conn, conn, acc, TRUE, seqTbl, extFileTbl);
 }
 
 aaSeq *hPepSeqGet(char *db, char *acc, char *seqTbl, char *extFileTbl)
@@ -3257,21 +3374,29 @@ else
 
 
 boolean hFindSplitTable(char *db, char *chrom, char *rootName,
-	char retTableBuf[HDB_MAX_TABLE_STRING], boolean *hasBin)
+	char *retTableBuf, int tableBufSize, boolean *hasBin)
 /* Find name of table in a given database that may or may not
- * be split across chromosomes. Return FALSE if table doesn't exist.  */
+ * be split across chromosomes. Return FALSE if table doesn't exist. 
+ *
+ * Do not ignore the return value. 
+ * This function does NOT tell you whether or not the table is split. 
+ * It tells you if the table exists. */
 {
 struct hTableInfo *hti = hFindTableInfo(db, chrom, rootName);
 if (hti == NULL)
+    {
+    // better than uninitialized stack value if caller ignores return value.
+    retTableBuf[0] = 0;
     return FALSE;
+    }
 if (retTableBuf != NULL)
     {
     if (chrom == NULL)
 	chrom = hDefaultChrom(db);
     if (hti->isSplit)
-	safef(retTableBuf, HDB_MAX_TABLE_STRING, "%s_%s", chrom, rootName);
+	safef(retTableBuf, tableBufSize, "%s_%s", chrom, rootName);
     else
-	safef(retTableBuf, HDB_MAX_TABLE_STRING, "%s", rootName);
+	safef(retTableBuf, tableBufSize, "%s", rootName);
     }
 if (hasBin != NULL)
     *hasBin = hti->hasBin;
@@ -3541,7 +3666,7 @@ int rowOffset = 0;
 if (fields == NULL) fields = "*";
 if (hti == NULL)
     {
-    warn("table %s doesn't exist or hFindTableInfoDb failed", rootTable);
+    warn("table %s doesn't exist in %s database, or hFindTableInfoDb failed", rootTable, db);
     }
 else
     {
@@ -3854,7 +3979,7 @@ if (!trackDbSettingClosestToHome(subtrackTdb, "noInherit"))
     struct hashCookie hc = hashFirst(compositeTdb->settingsHash);
     while ((hel = hashNext(&hc)) != NULL)
 	{
-	if (!hashLookup(subtrackTdb->settingsHash, hel->name))
+	if (!hashLookup(subtrackTdb->settingsHash, hel->name) && !trackDbNoInheritField(hel->name))
 	    hashAdd(subtrackTdb->settingsHash, hel->name, hel->val);
 	}
     }
@@ -4013,31 +4138,35 @@ struct trackDb *hTrackDb(char *db)
  *	NOTE: this result is cached, do not free it !
  */
 {
-// FIXME: This is NOT CACHED and should be!  Since some callers (e.g. hgTables) consume the list,
-// I would suggest:
-// 1) static hash by db/hub
-// 2) call creates list if not in hash
-// 3) static (to this file) routine gives the actual tdb list
-// 4) public lib routine that returns fully cloned list
-// 5) public lib routine that returns cloned individual tdb complete with up/down inheritance
-// UNFORTUNATELY, cloning the memory with prove costly in time as well, because of all the pointers
-// to relink.  THEREFORE what should be done is to make the tdb list with const ->next pointers and
-// force discpline on the callers.  Sorts should be by hdb.c routines and any new lists (such as
-// hgTables makes) should be via tdbRefs.
-// SO we are back to being STALLED because of the volume of work.
-
-// static char *existingDb = NULL;
-// static struct trackDb *tdbList = NULL;
+if (trackHubDatabase(db))
+    return NULL;
 struct trackDb *tdbList = NULL;
-//if (differentStringNullOk(existingDb, db))
-//    {
 
-    tdbList = loadTrackDb(db, NULL);
-    tdbList = trackDbLinkUpGenerations(tdbList);
-    tdbList = trackDbPolishAfterLinkup(tdbList, db);
-//    freeMem(existingDb);
-//    existingDb = cloneString(db);
-//    }
+boolean doCache = trackDbCacheOn();
+
+if (doCache)
+    {
+    char *table = hTrackDbPath();
+
+    struct sqlConnection *conn = hAllocConn(db);
+    time_t tableTime = sqlTableUpdateTime(conn, table);
+    hFreeConn(&conn);
+
+    struct trackDb *cacheTdb = trackDbCache(db, tableTime);
+
+    if (cacheTdb != NULL)
+        return cacheTdb;
+    
+    memCheckPoint(); // we want to know how much memory is used to build the tdbList
+    }
+
+tdbList = loadTrackDb(db, NULL);
+tdbList = trackDbLinkUpGenerations(tdbList);
+tdbList = trackDbPolishAfterLinkup(tdbList, db);
+
+if (doCache)
+    trackDbCloneTdbListToSharedMem(db, tdbList, memCheckPoint());
+
 return tdbList;
 }
 
@@ -4336,7 +4465,7 @@ for (trackTable = trackTableList; trackTable != NULL; trackTable = trackTable->n
 	char **row;
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
-	    struct hash *settings = trackDbSettingsFromString(row[1]);
+	    struct hash *settings = trackDbSettingsFromString(NULL, row[1]);
 	    hashAdd(hash, row[0], settings);
 	    }
 	sqlFreeResult(&sr);
@@ -5157,6 +5286,14 @@ struct slName *sln2 = *(struct slName **)el2;
 return chrNameCmp(sln1->name, sln2->name);
 }
 
+static boolean isAltFixRandom(char *str)
+/* Return TRUE if str ends with _alt, _fix or _random or contains "_hap". */
+{
+return (endsWith(str, "_alt") || endsWith(str, "_fix") || endsWith(str, "_random") ||
+        stringIn("_hap", str));
+
+}
+
 int chrNameCmpWithAltRandom(char *str1, char *str2)
 /* Compare chromosome or linkage group names str1 and str2 
  * to achieve this order:
@@ -5164,7 +5301,7 @@ int chrNameCmpWithAltRandom(char *str1, char *str2)
  * chrX
  * chrY
  * chrM
- * chr1_{alt, random} .. chr22_{alt, random}
+ * chr1_{alt,fix,hap*,random} .. chr22_{alt,fix,hap*,random}
  * chrUns
  */
 {
@@ -5179,9 +5316,9 @@ if (!startsWith("chrUn", str1) && startsWith("chrUn", str2))
     return  -1;
 
 /* if it is _alt or _random then it goes at the end */
-if ( (endsWith(str1, "_alt")||endsWith(str1, "_random")) && !(endsWith(str2, "_alt") || endsWith(str2, "_random")))
+if (isAltFixRandom(str1) && !isAltFixRandom(str2))
     return 1;
-if (!(endsWith(str1, "_alt")||endsWith(str1, "_random")) &&  (endsWith(str2, "_alt") || endsWith(str2, "_random")))
+if (!isAltFixRandom(str1) && isAltFixRandom(str2))
     return -1;
 
 /* get past "chr" or "Group" prefix: */
@@ -5249,8 +5386,8 @@ int chrSlNameCmpWithAltRandom(const void *el1, const void *el2)
  * chrX
  * chrY
  * chrM
- * chr1_{alt, random} .. chr22_{alt, random}
- * chrUns
+ * chr1_{alt,fix,hap*,random} .. chr22_{alt,fix,hap*,random}
+ * chrUn*
  */
 {
 struct slName *sln1 = *(struct slName **)el1;
@@ -5365,8 +5502,8 @@ struct trackDb *findTdbForTable(char *db,struct trackDb *parent,char *table, str
 if(isEmpty(table))
     return parent;
 
-// hub tracks aren't in the trackDb hash, just use the parent tdb
-if (isHubTrack(table))
+// hub tracks and custom tracks on hubs aren't in the trackDb hash, just use the parent tdb
+if (isHubTrack(table) || isHubTrack(db))
     return parent;
 
 struct trackDb *tdb = NULL;
@@ -5424,6 +5561,17 @@ return trackIsType(database, table, parent, "bigBed", ctLookupName) ||
     trackIsType(database, table, parent, "bigMaf", ctLookupName);
 }
 
+boolean hIsBigWig(char *database, char *table, struct trackDb *parent, struct customTrack *(*ctLookupName)(char *table))
+/* Return TRUE if table corresponds to a bigWig file.
+ * if table has no parent trackDb pass NULL for parent
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a
+ * custom track by name, otherwise pass NULL
+ */
+{
+return trackIsType(database, table, parent, "bigWig", ctLookupName) ||
+    trackIsType(database, table, parent, "mathWig", ctLookupName);
+}
+
 static char *bbiNameFromTableChrom(struct sqlConnection *conn, char *table, char *seqName)
 /* Return file name from table.  If table has a seqName column, then grab the
  * row associated with chrom (which can be e.g. '1' not 'chr1' if that is the
@@ -5470,7 +5618,7 @@ char *bbiNameFromSettingOrTableChrom(struct trackDb *tdb, struct sqlConnection *
 char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 if (fileName == NULL)
     fileName = hReplaceGbdb(trackDbSetting(tdb, "bigGeneDataUrl"));
-if (fileName == NULL)
+if ((fileName == NULL) && (conn != NULL))
     fileName = bbiNameFromTableChrom(conn, table, seqName);
 return fileName;
 }
@@ -5488,7 +5636,7 @@ static struct slName *hListSnpNNNTables(struct sqlConnection *conn, char *suffix
  * suffix may be NULL to get the 'All SNPs' table (as opposed to Common, Flagged, Mult). */
 {
 char likeExpr[64];
-safef(likeExpr, sizeof(likeExpr), "LIKE 'snp___%s'", suffix ? suffix : "");
+safef(likeExpr, sizeof(likeExpr), "snp___%s", suffix ? suffix : "");
 struct slName *snpNNNTables = sqlListTablesLike(conn, likeExpr);
 slReverse(&snpNNNTables);
 // Trim non-snpNNN tables e.g. snpSeq in hg17, hg18:
@@ -5531,6 +5679,59 @@ for (table = snpNNNTables;  table != NULL;  table = table->next)
         return tdb;
     }
 return NULL;
+}
+
+static int getGencodeVersion(const char *name)
+/* If name ends in VM?[0-9]+, return the number, else 0. */
+{
+int version = 0;
+char *p = strrchr(name, 'V');
+if (p)
+    {
+    char *versionStr = p + 1;
+    // GENCODE mouse versions begin with "VM", skip the M if present.
+    if (isalpha(*versionStr))
+        versionStr++;
+    if (isAllDigits(versionStr))
+        version = atoi(versionStr);
+    }
+return version;
+}
+
+static int cmpVDesc(const void *va, const void *vb)
+/* Compare by version number, descending, e.g. tableV2 < tableV1. */
+{
+const struct slName *a = *((struct slName **)va);
+const struct slName *b = *((struct slName **)vb);
+int aVersion = getGencodeVersion(a->name);
+int bVersion = getGencodeVersion(b->name);
+int dif = bVersion - aVersion;
+if (dif == 0)
+    dif = strcmp(b->name, a->name);
+return dif;
+}
+
+static struct slName *hListGencodeTables(struct sqlConnection *conn, char *suffix)
+/* Return a list of 'wgEncodeGencode<suffix>V<version>' tables, if any, highest version first.
+ * If suffix is NULL, it defaults to Basic. */
+{
+char likeExpr[128];
+safef(likeExpr, sizeof(likeExpr), "wgEncodeGencode%sV%%", suffix ? suffix : "Basic");
+struct slName *gencodeTables = sqlListTablesLike(conn, likeExpr);
+slSort(&gencodeTables, cmpVDesc);
+return gencodeTables;
+}
+
+char *hFindLatestGencodeTableConn(struct sqlConnection *conn, char *suffix)
+/* Return the 'wgEncodeGencode<suffix>V<version>' table with the highest version number, if any.
+ * If suffix is NULL, it defaults to Basic. */
+{
+char *tableName = NULL;
+struct slName *gencodeTables = hListGencodeTables(conn, suffix);
+if (gencodeTables)
+    tableName = cloneString(gencodeTables->name);
+slNameFreeList(&gencodeTables);
+return tableName;
 }
 
 boolean hDbHasNcbiRefSeq(char *db)

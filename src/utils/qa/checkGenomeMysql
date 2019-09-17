@@ -28,13 +28,13 @@ else
 fi
 
 # make sure this is a valid database name
-if ! mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A -Ne "show databases" | grep -qw $db
+if ! mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A -Ne "show databases" | grep -qw $db
 then
   echo -e "\nERROR: database $db not found.\n" >&2
   exit 1
 fi
 
-tableList=$(mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A -Ne "show tables" $db)
+tableList=$(mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A -Ne "show tables" $db)
 
 # for each table in list do a select * limit 5.
 # Want to limit output or else the query would take forever. However,
@@ -50,7 +50,7 @@ do
     mysql --user=genome --host=$ip -A -Ne "select * from $table limit 5" \
         $db > /dev/null
 
-#PUT THIS BACK IF SD MACHINES COME BACK  mysql --user=genome --host=hgfs-sd.cse.ucsc.edu -A -Ne "select * from $table limit 5" \
+#PUT THIS BACK IF SD MACHINES COME BACK  mysql --user=genome --host=hgfs-sd.soe.ucsc.edu -A -Ne "select * from $table limit 5" \
 #      $db > /dev/null
   done
 done

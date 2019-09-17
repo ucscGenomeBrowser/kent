@@ -43,6 +43,34 @@ r.type = rqlTypeBoolean;
 return r;
 }
 
+struct rqlEval rqlEvalCoerceToString(struct rqlEval r, char *buf, int bufSize)
+/* Return a version of r with .val.s filled in with something reasonable even
+ * if r input is not a string */
+{
+assert(bufSize >= 32);
+switch (r.type)
+    {
+    case rqlTypeBoolean:
+        r.val.s = (r.val.b ? "true" : "false");
+    case rqlTypeString:
+	break;	/* It's already done. */
+    case rqlTypeInt:
+	safef(buf, bufSize, "%lld", r.val.i);
+	r.val.s = buf;
+	break;
+    case rqlTypeDouble:
+	safef(buf, bufSize, "%g", r.val.x);
+	r.val.s = buf;
+	break;
+    default:
+	internalErr();
+	r.val.s = NULL;
+	break;
+    }
+r.type = rqlTypeString;
+return r;
+}
+
 static struct rqlEval rqlEvalEq(struct rqlParse *p, 
 	void *record, RqlEvalLookup lookup, struct lm *lm)
 /* Return true if two children are equal regardless of children type
@@ -140,6 +168,127 @@ switch (lv.type)
     }
 return res;
 }
+
+static struct rqlEval rqlEvalAdd(struct rqlParse *p, void *record, RqlEvalLookup lookup,
+	struct lm *lm)
+/* Return a + b. */
+{
+struct rqlParse *lp = p->children;
+struct rqlParse *rp = lp->next;
+struct rqlEval lv = rqlLocalEval(lp, record, lookup, lm);
+struct rqlEval rv = rqlLocalEval(rp, record, lookup, lm);
+struct rqlEval res;
+switch (lv.type)
+    {
+    case rqlTypeInt:
+	res.val.i = (lv.val.i + rv.val.i);
+	break;
+    case rqlTypeDouble:
+	res.val.x = (lv.val.x + rv.val.x);
+	break;
+    case rqlTypeString:
+	{
+	char numBuf[32];
+	if (rv.type != rqlTypeString)  // Perhaps later could coerce to string
+	    {
+	    rv = rqlEvalCoerceToString(rv, numBuf, sizeof(numBuf));
+	    }
+	int lLen = strlen(lv.val.s);
+	int rLen = strlen(rv.val.s);
+	char *s = lmAlloc(lm, lLen + rLen + 1);
+	memcpy(s, lv.val.s, lLen);
+	memcpy(s+lLen, rv.val.s, rLen);
+	res.val.s = s;
+	break;
+	}
+    default:
+	internalErr();
+	res.val.b = FALSE;
+	break;
+    }
+res.type = lv.type;
+return res;
+}
+
+static struct rqlEval rqlEvalSubtract(struct rqlParse *p, void *record, RqlEvalLookup lookup,
+	struct lm *lm)
+/* Return a - b. */
+{
+struct rqlParse *lp = p->children;
+struct rqlParse *rp = lp->next;
+struct rqlEval lv = rqlLocalEval(lp, record, lookup, lm);
+struct rqlEval rv = rqlLocalEval(rp, record, lookup, lm);
+struct rqlEval res;
+switch (lv.type)
+    {
+    case rqlTypeInt:
+	res.val.i = (lv.val.i - rv.val.i);
+	break;
+    case rqlTypeDouble:
+	res.val.x = (lv.val.x - rv.val.x);
+	break;
+    default:
+	internalErr();
+	res.val.b = FALSE;
+	break;
+    }
+res.type = lv.type;
+return res;
+}
+
+static struct rqlEval rqlEvalMultiply(struct rqlParse *p, void *record, RqlEvalLookup lookup,
+	struct lm *lm)
+/* Return a * b. */
+{
+struct rqlParse *lp = p->children;
+struct rqlParse *rp = lp->next;
+struct rqlEval lv = rqlLocalEval(lp, record, lookup, lm);
+struct rqlEval rv = rqlLocalEval(rp, record, lookup, lm);
+struct rqlEval res;
+switch (lv.type)
+    {
+    case rqlTypeInt:
+	res.val.i = (lv.val.i * rv.val.i);
+	break;
+    case rqlTypeDouble:
+	res.val.x = (lv.val.x * rv.val.x);
+	break;
+    default:
+	internalErr();
+	res.val.b = FALSE;
+	break;
+    }
+res.type = lv.type;
+return res;
+}
+
+static struct rqlEval rqlEvalDivide(struct rqlParse *p, void *record, RqlEvalLookup lookup,
+	struct lm *lm)
+/* Return a / b. */
+{
+struct rqlParse *lp = p->children;
+struct rqlParse *rp = lp->next;
+struct rqlEval lv = rqlLocalEval(lp, record, lookup, lm);
+struct rqlEval rv = rqlLocalEval(rp, record, lookup, lm);
+struct rqlEval res;
+switch (lv.type)
+    {
+    case rqlTypeInt:
+	res.val.i = (lv.val.i / rv.val.i);
+	break;
+    case rqlTypeDouble:
+	res.val.x = (lv.val.x / rv.val.x);
+	break;
+    default:
+	internalErr();
+	res.val.b = FALSE;
+	break;
+    }
+res.type = lv.type;
+return res;
+}
+
+
 
 static struct rqlEval rqlEvalLike(struct rqlParse *p, void *record, RqlEvalLookup lookup,
 	struct lm *lm)
@@ -274,8 +423,6 @@ switch (p->op)
 	break;
     case rqlOpStringToInt:
 	res = rqlLocalEval(p->children, record, lookup, lm);
-	if (isEmpty(res.val.s))
-	    errAbort("Expecting an integer value but got undefined symbol.");
 	res.type = rqlTypeInt;
 	res.val.i = atoll(res.val.s);
 	break;
@@ -318,6 +465,20 @@ switch (p->op)
 
     case rqlOpArrayIx:
        res = rqlEvalArrayIx(p, record, lookup, lm);
+       break;
+
+    /* Mathematical ops, simple binary type */
+    case rqlOpAdd:
+       res = rqlEvalAdd(p, record, lookup, lm);
+       break;
+    case rqlOpSubtract:
+       res = rqlEvalSubtract(p, record, lookup, lm);
+       break;
+    case rqlOpMultiply:
+       res = rqlEvalMultiply(p, record, lookup, lm);
+       break;
+    case rqlOpDivide:
+       res = rqlEvalDivide(p, record, lookup, lm);
        break;
 
     default:

@@ -2,7 +2,7 @@
 usage='checkMetaDb directory metaDb db0 ...'
 
 UNAME_N=`uname -n`
-UNAME_N=${UNAME_N/.cse.ucsc.edu/}
+UNAME_N=${UNAME_N/.soe.ucsc.edu/}
 
 if [ $# -lt 3 ] ; then
     echo "wrong # args: $usage" >&2

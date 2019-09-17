@@ -55,7 +55,7 @@ def constructOutputUrls(db, table, overlapFile):
                 color = "&highlight=" + db + "." + chrom + ":" + start + "-" + end + "#aaedff"
                 # Order of tracks in hgTracks URLs is very sensitive. It MUST be in this order:
                 # superTrack vis > composite vis > base track vis
-                url="http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=" + db + "&hideTracks=1"\
+                url="http://genome-test.soe.ucsc.edu/cgi-bin/hgTracks?db=" + db + "&hideTracks=1"\
                      + superTrackUrl + parentUrl + "&" + table + "=" + vis + "&gap=pack&position="\
                      + position + color + "\n"
                 gapOverUrls += url  
@@ -82,7 +82,7 @@ def checkGapOverlap(db, table, checkUnbridged=False):
     gapFile.close()
 
     gapOverFile = str(db) + ".gapOver.bed"
-    bedIntCmd = ["bedIntersect", "-aHitAny", gapFileName, tableFileName, gapOverFile]
+    bedIntCmd = ["bedIntersect", "-allowStartEqualEnd", "-aHitAny", gapFileName, tableFileName, gapOverFile]
     qaUtils.runCommand(bedIntCmd)
     
     gapOverUrls = constructOutputUrls(db, table, gapOverFile)
@@ -103,7 +103,7 @@ def checkGapOverlap(db, table, checkUnbridged=False):
         gapUnbrFile.close()
 
         gapUnbrOverFile = str(db) + ".gapOver.unbr.bed"
-        bedIntCmd = ["bedIntersect", "-aHitAny", gapUnbrFileName, tableFileName, gapUnbrOverFile]
+        bedIntCmd = ["bedIntersect", "-allowStartEqualEnd", "-aHitAny", gapUnbrFileName, tableFileName, gapUnbrOverFile]
         qaUtils.runCommand(bedIntCmd)
 
         gapUnbrOverUrls = constructOutputUrls(db, table, gapUnbrOverFile)

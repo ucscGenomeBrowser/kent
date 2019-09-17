@@ -308,8 +308,8 @@ tab = mustOpen(tabName, "w");
 cap = mustOpen(capName, "w");
 
 
-sqlDyStringAppend(query, "select authors,journal,title,year from BIB_Refs where ");
-dyStringPrintf(query, "_Refs_key = %s", ref);
+sqlDyStringPrintf(query, "select authors,journal,title,year from BIB_Refs where ");
+sqlDyStringPrintf(query, "_Refs_key = '%s'", ref);
 sr = sqlGetResultVerbose(conn, query->string);
 row = sqlNextRow(sr);
 if (row == NULL)
@@ -325,8 +325,8 @@ fprintf(ra, "acknowledgement Thanks to the Gene Expression Database group at "
 	    "directly at <A HREF='http://www.informatics.jax.org' target='_blank'>MGI.</A>\n");
 fprintf(ra, "submitSet jax%s\n", ref);
 fprintf(ra, "taxon 10090\n");	/* Mus musculus taxon */
-fprintf(ra, "fullDir http://hgwdev.cse.ucsc.edu/visiGene/full/inSitu/Mouse/jax\n");
-fprintf(ra, "thumbDir http://hgwdev.cse.ucsc.edu/visiGene/200/inSitu/Mouse/jax\n");
+fprintf(ra, "fullDir http://hgwdev.gi.ucsc.edu/visiGene/full/inSitu/Mouse/jax\n");
+fprintf(ra, "thumbDir http://hgwdev.gi.ucsc.edu/visiGene/200/inSitu/Mouse/jax\n");
 fprintf(ra, "setUrl http://www.informatics.jax.org/\n");
 fprintf(ra, "itemUrl http://www.informatics.jax.org/searches/image.cgi?%%s\n");
 fprintf(ra, "abUrl http://www.informatics.jax.org/searches/antibody.cgi?%%s\n");
@@ -373,7 +373,7 @@ if (pubMed != NULL)
 freez(&pubMed);
 
 dyStringClear(query);
-sqlDyStringAppend(query, 
+sqlDyStringPrintf(query, 
 	"select distinct MRK_Marker.symbol as gene,"
                "GXD_Specimen.sex as sex,"
 	       "GXD_Specimen.age as age,"
@@ -413,7 +413,7 @@ sqlDyStringAppend(query,
 	  "and ACC_Accession.prefixPart = 'PIX:' "
 	  "and GXD_Assay._ImagePane_key is NULL "
 	);
-dyStringPrintf(query, "and GXD_Assay._Refs_key = %s", ref);
+sqlDyStringPrintf(query, "and GXD_Assay._Refs_key = '%s'", ref);
 sr = sqlGetResultVerbose(conn, query->string);
 
 fprintf(tab, "#");
@@ -528,7 +528,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	double calcMinAge = atof(ageMin);
 	double calcMaxAge = atof(ageMax);
 	double mouseBirthAge = 21.0;
-	double mouseAdultAge = 63.0;	/* Relative to conception, not birth */
+	//double mouseAdultAge = 63.0;	/* Relative to conception, not birth */
 
 	if (age[0] == 0)
 	    {

@@ -68,7 +68,7 @@ endif
 set today=`date +%Y-%m-%d`
 # set today="2005-01-23"
 set dirPath="/usr/local/apache/htdocs-genecats/qa/test-results/trackDb"
-set urlPath="http://genecats.cse.ucsc.edu/qa/test-results/trackDb"
+set urlPath="http://genecats.soe.ucsc.edu/qa/test-results/trackDb"
 
 # remove dirs from same month last year
 set dropdir=`getMonthLastYear.csh go`

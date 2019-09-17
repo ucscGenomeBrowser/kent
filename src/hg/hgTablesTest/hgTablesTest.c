@@ -49,7 +49,7 @@ errAbort(
   "hgTablesTest - Test hgTables web page\n"
   "usage:\n"
   "   hgTablesTest url log\n"
-  "Where url is something like hgwbeta.cse.ucsc.edu/cgi-bin/hgTables\n"
+  "Where url is something like hgwbeta.soe.ucsc.edu/cgi-bin/hgTables\n"
   "and log is a file where error messages and statistics will be written\n"
   "options:\n"
   "   -org=Human - Restrict to Human (or Mouse, Fruitfly, etc.)\n"
@@ -348,7 +348,10 @@ void checkExpectedSimpleRows(struct htmlPage *outPage, int expectedRows)
 {
 if (outPage != NULL)
     {
-    int rowCount = countNoncommentLines(outPage->htmlText);
+    char *results = outPage->htmlText;
+    if (startsWith(NO_RESULTS, results))
+        results += strlen(NO_RESULTS);
+    int rowCount = countNoncommentLines(results);
     if (rowCount != expectedRows)
 	qaStatusSoftError(tablesTestList->status, 
 		"Got %d rows, expected %d", rowCount, expectedRows);

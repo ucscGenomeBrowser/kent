@@ -1367,7 +1367,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     cd /hive/data/genomes/panTro3/bed/multiz12way
 
     wget -O 46way.nh \
-http://hgdownload.cse.ucsc.edu/goldenPath/hg19/multiz46way/46way.corrected.nh
+http://hgdownload.soe.ucsc.edu/goldenPath/hg19/multiz46way/46way.corrected.nh
 
 # panTro3
 # hg19

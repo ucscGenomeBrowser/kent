@@ -16,6 +16,7 @@ CREATE TABLE gtexGeneBed (
     expCount int unsigned not null,	# Number of experiment values
     expScores longblob not null,	# Comma separated list of experiment scores
               #Indices
-    PRIMARY KEY(geneId),
+    PRIMARY KEY(chrom,geneId),
+    INDEX(geneId),
     INDEX(chrom(20), chromStart)
 );

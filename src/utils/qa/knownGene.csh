@@ -10,8 +10,8 @@ source `which qaConfig.csh`
 #### echo
 #### echo " --------------------------------------------"
 ####
-#### echo "server hgwdev.cse.ucsc.edu /
-#### machine hgwdev.cse.ucsc.edu /
+#### echo "server hgwdev.soe.ucsc.edu /
+#### machine hgwdev.soe.ucsc.edu /
 #### quick false /
 #### dbSpec $db /
 #### table all /
@@ -80,7 +80,7 @@ echo "will have some overlap. uniq tables = `cat $db.allTables | sort -u | wc -l
 # find new tables: in pushQ but NOT in a kgTables list
 echo
 echo "find new tables: in pushQ but NOT in a kgTables list"
-hgsql -h mysqlbeta -Ne "SELECT tbls FROM pushQ WHERE tbls LIKE '%knownGene%' \
+hgsql -h $sqlbeta -Ne "SELECT tbls FROM pushQ WHERE tbls LIKE '%knownGene%' \
   AND dbs = '"$db"'" qapushq | sed "s/\\n/\n/g" | egrep -r . > $db.pushqKgList
 dos2unix $db.pushqKgList >& /dev/null
 commTrio.csh $db.allTables $db.pushqKgList 

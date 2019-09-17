@@ -62,14 +62,21 @@ char *type = customTrackTypeFromBigFile(url);
 if (type==NULL)
     return url;
 
-struct netParsedUrl npu;
-netParseUrl(url, &npu);
-char baseName[PATH_LEN];
-splitPath(npu.file, NULL, baseName, NULL);
+// grab the last element in the path
+char *baseName = cloneString(url);
+char *ptr;
+if ((ptr = strrchr(baseName, '/')) != NULL)
+    baseName = ptr + 1;
+
 // For vcfTabix files that end in ".vcf.gz", only the ".gz" is stripped off by splitPath;
 // strip off the remaining ".vcf":
 if (endsWith(baseName, ".vcf"))
     baseName[strlen(baseName)-4] = '\0';
+
+// cap track name at 100 chars for sanity's sake
+if (strlen(baseName) > 100)
+    baseName[100] = 0;
+
 char *trackName = baseName;
 
 char buf[4000];

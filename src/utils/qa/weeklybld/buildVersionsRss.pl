@@ -12,7 +12,7 @@ use HTTP::Date;
 use File::Basename;
 
 my $debug = 0;
-my $urlPrefix = "http://genome-test.cse.ucsc.edu/builds";
+my $urlPrefix = "http://genome-test.soe.ucsc.edu/builds";
 
 sub usage
 {

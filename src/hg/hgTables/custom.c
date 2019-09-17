@@ -95,6 +95,8 @@ if (sameString("pgSnp", hti->type))
     fieldCount = 4; /* only 4 bed-like */
 else if (sameString("barChart", hti->type))
     fieldCount = 6; /* only 6 bed-like */
+else if (sameString("interact", hti->type))
+    fieldCount = 5; /* only 5 bed-like */
 else if (sameString("bedDetail", hti->type))
     fieldCount = ct->fieldCount - 2; /* bed part 4-12 */
 else
@@ -492,6 +494,7 @@ char *type = ct->dbTrackType;
 if (type != NULL && (startsWithWord("makeItems", type) || 
         sameWord("bedDetail", type) || 
         sameWord("barChart", type) || 
+        sameWord("interact", type) || 
         sameWord("pgSnp", type)))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
@@ -505,6 +508,8 @@ if (type != NULL && (startsWithWord("makeItems", type) ||
         fieldCount = 4;
     else if (sameWord("barChart", type))
         fieldCount = 6;
+    else if (sameWord("interact", type))
+        fieldCount = 5;
     }
 else if (ct->wiggle)
     {
@@ -594,6 +599,7 @@ char *type = ct->tdb->type;
 if (startsWithWord("makeItems", type) || 
         sameWord("bedDetail", type) || 
         sameWord("barChart", type) ||
+        sameWord("interact", type) ||
         sameWord("pgSnp", type))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);

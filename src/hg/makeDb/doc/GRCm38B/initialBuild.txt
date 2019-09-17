@@ -1,0 +1,959 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the GRCm38B
+
+#  Can use existing photograph (otherwise find one before starting here)
+
+#########################################################################
+#  Initial steps, find photograph (DONE - 2019-02-28 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/GRCm38B
+cd ~/kent/src/hg/makeDb/doc/GRCm38B
+
+sed -e 's/galGal6/GRCm38B/g; s/GalGal6/GRCm38B/g; s/DONE/TBD/g;' \
+  ../galGal6/initialBuild.txt > initialBuild.txt
+
+mkdir -p /hive/data/genomes/GRCm38B/sanger
+cd /hive/data/genomes/GRCm38B/sanger
+wget --timestamping \
+ftp://ngs.sanger.ac.uk/scratch/project/grit/kj2/mouse_GRCm38B_1.fa.gz
+wget --timestamping \
+ ftp://ngs.sanger.ac.uk/scratch/project/grit/kj2/mouse_GRCm38B_2.fa.gz
+wget --timestamping \
+ ftp://ngs.sanger.ac.uk/scratch/project/grit/kj2/mouse_GRCm38B_3.fa.gz
+# real    1m7.374s
+
+mkdir /hive/data/genomes/GRCm38B/schneider
+cd /hive/data/genomes/GRCm38B/schneider
+
+wget --timestamping \
+ftp://ftp.ncbi.nlm.nih.gov/pub/schneider/GRCm38B/assm-assm/FTP-README
+
+wget --timestamping \
+ftp://ftp.ncbi.nlm.nih.gov/pub/schneider/GRCm38B/assm-assm/GCF_000001635.20_GRCm38/GCF_000001635.20-GCF_003434805.1.gff
+wget --timestamping \
+ftp://ftp.ncbi.nlm.nih.gov/pub/schneider/GRCm38B/assm-assm/GCF_000001635.20_GRCm38/GCF_000001635.20-GCF_003434805.1.report
+wget --timestamping \
+ftp://ftp.ncbi.nlm.nih.gov/pub/schneider/GRCm38B/assm-assm/GCF_000001635.20_GRCm38/GCF_000001635.20-GCF_003434805.1.xlsx
+
+wget --timestamping \
+ftp://ftp.ncbi.nlm.nih.gov/pub/schneider/GRCm38B/assm-assm/GCF_003434805.1_GRCm38B/GCF_003434805.1-GCF_000001635.20.gff
+wget --timestamping \
+ftp://ftp.ncbi.nlm.nih.gov/pub/schneider/GRCm38B/assm-assm/GCF_003434805.1_GRCm38B/GCF_003434805.1-GCF_000001635.20.report
+wget --timestamping \
+ftp://ftp.ncbi.nlm.nih.gov/pub/schneider/GRCm38B/assm-assm/GCF_003434805.1_GRCm38B/GCF_003434805.1-GCF_000001635.20.xlsx
+
+wget --timestamping \
+ftp://ftp.ncbi.nlm.nih.gov/pub/schneider/GRCm38B/assm-reports/GCF_003434805.1_GRCm38B_assembly_regions.txt
+wget --timestamping \
+ftp://ftp.ncbi.nlm.nih.gov/pub/schneider/GRCm38B/assm-reports/GCF_003434805.1_GRCm38B_assembly_report.txt
+wget --timestamping \
+ftp://ftp.ncbi.nlm.nih.gov/pub/schneider/GRCm38B/assm-reports/GCF_003434805.1_GRCm38B_assembly_stats.txt
+
+# real    0m15.953s
+
+#  Can use existing photograph
+cd /hive/data/genomes/GRCm38B
+cp -p ../mm10/photoReference.txt ./
+cat photoReference.txt
+photoCreditURL  http://www.jax.org/
+photoCreditName Photo courtesy of The Jackson Laboratory
+
+# real    0m34.117s
+
+# this information is from the top of 
+#    GRCm38B/schneider/*_assembly_report.txt
+#    (aka: GRCm38B/schneider/GCF_003434805.1_GRCm38B_assembly_report.txt)
+
+# Assembly name:  GRCm38B
+# Description:    Genome Reference Consortium Mouse Build 38B
+# Organism name:  Mus musculus (house mouse)
+# Taxid:          10090
+# BioSample:      SAMEA3138312
+# BioProject:     PRJNA20689
+# Submitter:      Genome Reference Consortium
+# Date:           2018-08-16
+# Assembly type:  haploid-with-alt-loci
+# Release type:   major
+# Assembly level: Chromosome
+# Genome representation: full
+# RefSeq assembly accession: GCF_003434805.1
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+##      GCF_003434815.1 Primary Assembly (C57BL/6J)
+##      GCF_003434845.1 129P2/OlaHsd
+##      GCF_003434855.1 129S1/SvImJ
+##      GCF_003434865.1 129S2/SvPas
+##      GCF_003434875.1 129S6/SvEvTac
+##      GCF_003434895.1 129X1/SvJ
+##      GCF_003434905.1 A/J
+##      GCF_003434915.1 AKR/J
+##      GCF_003434925.1 BALB/c
+##      GCF_003434935.1 CAST/Ei
+##      GCF_003434945.1 MOUSE_UNKNOWN
+##      GCF_003434955.1 NOD/MrkTac
+##      GCF_003434965.1 NOD/ShiLtJ
+##      GCF_003434975.1 PWK/PhJ
+##      GCF_003434985.1 RIII
+##      GCF_003434995.1 WSB/EiJ
+##      GCF_003434885.1 129S7/SvEvBrd-Hprt-b-m2
+
+# check assembly size for later reference:
+
+faSize sanger/mouse_GRCm38B_?.fa.gz 
+
+# 2729874359 bases (74605238 N's 2655269121 real 2655269121 upper 0 lower)
+#	in 63 sequences in 3 files
+# Total size: mean 43331339.0 sd 64435176.2 min 1976
+#	(chromosome:CURRENT:MMCHR4UN_CTG6:1:1976:1) max 195284574
+#	(chromosome:CURRENT:1:1:195284574:1) median 191905
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2019-02-28)
+    cd /hive/data/genomes/GRCm38B
+    # this was hand crafted starting with the mm10.config.ra
+
+    # compare with previous version to see if it is sane:
+    diff GRCm38B.config.ra ../mm10/mm10.config.ra
+
+    # verify it really does look sane
+    cat GRCm38B.config.ra
+# Config parameters for makeGenomeDb.pl:
+db GRCm38B
+clade mammal
+genomeCladePriority 40
+scientificName Mus musculus
+commonName Mouse
+assemblyDate Aug. 2018
+assemblyLabel Preliminary GRC Mouse Build 38B (GCF_003434805.1)
+assemblyShortLabel GRCm38B
+orderKey 269
+mitoAcc NC_005089.1
+fastaFiles /hive/data/genomes/GRCm38B/ucsc/chr*.fa.gz
+agpFiles /hive/data/genomes/GRCm38B/ucsc/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir mouse
+taxId   10090
+ncbiAssemblyId   334509
+ncbiAssemblyName   GRCm38B
+photoCreditURL  http://www.jax.org/
+photoCreditName Photo courtesy of The Jackson Laboratory
+ncbiGenomeId 52
+ncbiBioProject 20689
+ncbiBioSample SAMEA3138312
+genBankAccessionID GCF_003434805.1
+
+#############################################################################
+# setup UCSC named files (DONE - 2019-02-28 - Hiram)
+
+    mkdir /hive/data/genomes/GRCm38B/ucsc
+
+    cd /hive/data/genomes/GRCm38B/sanger
+    zgrep "^>" mouse_GRCm38B_?.fa.gz | sed -e 's/.*CURRENT://;' \
+	| sed -e 's/:.*//;' | sort > chr.names.txt
+
+    # examining these file to determine name correspondence
+    cd /hive/data/genomes/GRCm38B/schneider
+
+    grep -v "^#" GCF_003434805.1_GRCm38B_assembly_report.txt \
+	| cut -f1,3,7 > ../ucsc/name.xref.tab
+
+    # this file: GCF_003434805.1-GCF_000001635.20.report
+    # was manually fixed to add the Sequence Accession: GPS_017319191.1
+    # for Sequence Name: MMCHR4UN_CTG6
+    # since it was missing
+
+    egrep "Sequence Name:|Sequence Accession:|Number Bases:" \
+	GCF_003434805.1-GCF_000001635.20.report.fixed \
+   | sed -e 's/.*: //;' | xargs -L 3 echo | tr '[ ]' '[\t]' \
+        | sort > name.genbank.size.tab
+
+    egrep "Sequence Name:|Sequence Accession:|Number Bases:" \
+	GCF_000001635.20-GCF_003434805.1.report \
+    | sed -e 's/.*://;' | xargs -L 3 echo \
+      | tr '[ ]' '[\t]' | sort > name.refseq.size.tab
+
+    cd /hive/data/genomes/GRCm38B/ucsc
+
+    join -t $'\t' <(sort ../sanger/chr.names.txt) <(sort name.xref.tab) \
+	> sequence.name.Xref.tab
+
+    ~/kent/src/hg/makeDb/doc/GRCm38B/transName.pl > seqName.to.UCSC.name.txt
+
+    # make up AGP files for each chrom:
+    for F in chr*.fa.gz
+do
+  B=`echo $F | sed -e 's/.fa.gz//;'`
+  hgFakeAgp -minContigGap=1 -minScaffoldGap=30000 $F $B.agp
+done
+
+    gzip chr*.agp
+
+    # check for duplicate sequences:
+    faToTwoBit chr*.fa.gz sanger.2bit
+    twoBitDup sanger.2bit
+    # should be silent, remove duplicates if found
+
+    # verify *.fa.gz and *.agp.gz
+    zcat chr*.agp.gz | checkAgpAndFa stdin sanger.2bit 2>&1 | tail
+# FASTA sequence entry
+# Valid Fasta file entry
+# All AGP and FASTA entries agree - both files are valid
+
+    # check for duplicate sequences:
+    #  real    0m15.691s
+
+    # and no sequence lost from orginal:
+    twoBitToFa sanger.2bit stdout | faSize stdin
+# 2729874359 bases (74605238 N's 2655269121 real 2655269121 upper 0 lower)
+#	in 63 sequences in 1 files
+# Total size: mean 43331339.0 sd 64435176.2 min 1976
+#	(chr4_GPS_017319191v1_random) max 195284574 (chr1) median 191905
+
+    # same numbers as above (except for upper/lower masking)
+# 2729874359 bases (74605238 N's 2655269121 real 2655269121 upper 0 lower)
+#	in 63 sequences in 3 files
+
+    # no longer need these temporary 2bit files
+    rm sanger.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2019-02-28 - Hiram)
+
+    # verify sequence and AGP are OK:
+    makeGenomeDb.pl -stop=agp -fileServer=hgwdev -workhorse=hgwdev \
+        GRCm38B.config.ra
+    # real    2m23.157s
+
+    makeGenomeDb.pl -continue=db -fileServer=hgwdev -workhorse=hgwdev \
+        GRCm38B.config.ra
+    # real    14m51.703s
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add GRCm38B to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/GRCm38B
+    ln -s `pwd`/GRCm38B.unmasked.2bit /gbdb/GRCm38B/GRCm38B.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2019-02-28 - Hiram)
+    mkdir /hive/data/genomes/GRCm38B/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/GRCm38B/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/GRCm38B/GRCm38B.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku GRCm38B) > do.log 2>&1
+    # real    3m9.799s
+
+    cat fb.GRCm38B.cpgIslandExtUnmasked.txt
+    # 14338424 bases of 2655285420 (0.540%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2019-10-11 - Hiram)
+    mkdir /hive/data/genomes/GRCm38B/bed/cytoBand
+    cd /hive/data/genomes/GRCm38B/bed/cytoBand
+    makeCytoBandIdeo.csh GRCm38B
+
+#############################################################################
+# run up idKeys files for chromAlias/ncbiRefSeq (DONE - 2019-02-28 - Hiram)
+    mkdir /hive/data/genomes/GRCm38B/bed/idKeys
+    cd /hive/data/genomes/GRCm38B/bed/idKeys
+
+    time (doIdKeys.pl \
+        -twoBit=/hive/data/genomes/GRCm38B/GRCm38B.unmasked.2bit \
+        -buildDir=`pwd` GRCm38B) > do.log 2>&1 &
+    # real    0m45.977s
+
+    cat GRCm38B.keySignature.txt
+    #  010884b36155a71cc61fed1e38816704
+
+#############################################################################
+# gapOverlap (DONE - 2019-02-28 - Hiram)
+    mkdir /hive/data/genomes/GRCm38B/bed/gapOverlap
+    cd /hive/data/genomes/GRCm38B/bed/gapOverlap
+    time (doGapOverlap.pl \
+        -twoBit=/hive/data/genomes/GRCm38B/GRCm38B.unmasked.2bit GRCm38B ) \
+        > do.log 2>&1 &
+    # real    1m3.608s
+
+    # there are only 3 items
+    cut -f2-5 bed.tab
+chr15   8995648 9001806 chr15:8995649-9001806
+chr6    47665147        47715755        chr6:47665148-47715755
+chrX_GPS_017319198v1_random     240296  243009  chrX_GPS_017319198v1_random:240297-243009
+
+    cat fb.GRCm38B.gapOverlap.txt
+    # 1720 bases of 2729890658 (0.000%) in intersection
+
+
+#############################################################################
+# tandemDups (DONE - 2018-10-12 - Hiram)
+    mkdir /hive/data/genomes/GRCm38B/bed/tandemDups
+    cd /hive/data/genomes/GRCm38B/bed/tandemDups
+    time (~/kent/src/hg/utils/automation/doTandemDup.pl \
+  -twoBit=/hive/data/genomes/GRCm38B/GRCm38B.unmasked.2bit GRCm38B) \
+        > do.log 2>&1 &
+    # real    97m29.383s
+
+    # one job took too much memory, run on hgwdev:
+    cd /hive/data/genomes/GRCm38B/bed/tandemDups/pairedEnds
+    time (./runOne 29 20000 chrY tmp/chrY.bed.gz) > lastOne.log 2>&1
+    # real    28m40.324s
+
+    # then continuing:
+    time (~/kent/src/hg/utils/automation/doTandemDup.pl -continue=collapsePairedEnds \
+  -twoBit=/hive/data/genomes/GRCm38B/GRCm38B.unmasked.2bit GRCm38B) \
+        > collapsePairedEnds.log 2>&1 &
+    # real    3m24.436s
+
+    cat fb.GRCm38B.tandemDups.txt
+    # 66541045 bases of 2729890658 (2.437%) in intersection
+
+    bigBedInfo GRCm38B.tandemDups.bb | sed -e 's/^/#  /;'
+#  version: 4
+#  fieldCount: 13
+#  hasHeaderExtension: yes
+#  isCompressed: yes
+#  isSwapped: 0
+#  extraIndexCount: 0
+#  itemCount: 857,692
+#  primaryDataSize: 22,480,849
+#  primaryIndexSize: 62,968
+#  zoomLevels: 9
+#  chromCount: 61
+#  basesCovered: 1,408,486,330
+#  meanDepth (of bases covered): 5.076515
+#  minDepth: 1.000000
+#  maxDepth: 240.000000
+#  std of depth: 8.787741
+
+#########################################################################
+# ucscToSanger and ucscToRefSeq table/track (DONE - 2019-03-01 - Hiram)
+    # using the name correspondence listings established before
+
+    mkdir /hive/data/genomes/GRCm38B/bed/ucscToINSDC
+    cd /hive/data/genomes/GRCm38B/bed/ucscToINSDC
+
+( join -2 2 -t$'\t' <(awk -F$'\t' 'BEGIN{OFS="\t"}{print $1,$3}' ../../ucsc/sequence.name.Xref.tab | sort) \
+   <( awk -F$'\t' 'BEGIN{OFS="\t"}{printf "%s\t%s\n", $2, $1}'  ../../ucsc/seqName.to.UCSC.name.txt | sort -k2) | awk '{printf "%s\t%s\n", $3,$2}' \
+   | sort | join -t$'\t' <(sort ../../chrom.sizes) - \
+           | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' ; \
+printf "chrM\t0\t16299\tNC_005089.1\n" ) \
+               | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+
+(awk -F$'\t' 'BEGIN{OFS="\t"}{printf "%s\t%s\n", $2, $1}'  ../../ucsc/seqName.to.UCSC.name.txt \
+    | sort | join -t$'\t' <(sort ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' ; \
+printf "chrM\t0\t16299\tMT\n" ) \
+               | sort -k1,1 -k2,2n > ucscToSanger.bed
+
+export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+echo $chrSize
+# 27
+# use the $chrSize in this sed
+sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab GRCm38B ucscToRefSeq stdin ucscToRefSeq.bed
+
+# same $chrSize in this sed
+
+sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab GRCm38B ucscToSanger stdin ucscToSanger.bed
+
+    # should be quiet for all OK
+    checkTableCoords GRCm38B
+
+    # should cover %100 entirely:
+    featureBits -countGaps GRCm38B ucscToSanger
+    # 2729890658 bases of 2729890658 (100.000%) in intersection
+    featureBits -countGaps GRCm38B ucscToRefSeq
+    # 2729890658 bases of 2729890658 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2019-03-01 - Hiram)
+
+    mkdir /hive/data/genomes/GRCm38B/bed/chromAlias
+    cd /hive/data/genomes/GRCm38B/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' GRCm38B \
+        | sort -k1,1 > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToSanger;' GRCm38B \
+        | sort -k1,1 > ucsc.sanger.tab
+
+    wc -l *.tab
+#    64 ucsc.refseq.tab
+#    64 ucsc.sanger.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+        > GRCm38B.chromAlias.tab
+
+for t in refseq sanger
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t GRCm38B.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 64 =? 64 OK
+# checking sanger: 64 =? 64 OK
+
+    hgLoadSqlTab GRCm38B chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        GRCm38B.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (TBD - 2019-02-28 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/mouse/GRCm38B
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" GRCm38B \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+   1519 AADN.1
+    124 AC.1
+    313 AC.2
+    328 AC.3
+     74 AC.4
+     20 AC.5
+      1 AC.6
+      1 NC_.1
+
+    # implies a rule: '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" GRCm38B | wc -l
+    # 2380
+
+    hgsql -N -e "select frag from gold;" GRCm38B \
+       | egrep -e '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?' | wc -l
+    # 2380
+
+    hgsql -N -e "select frag from gold;" GRCm38B \
+       | egrep -v -e '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/GRCm38B/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (DONE - 2019-02-28 - Hiram)
+    mkdir /hive/data/genomes/GRCm38B/bed/repeatMasker
+    cd /hive/data/genomes/GRCm38B/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku GRCm38B) > do.log 2>&1
+    # real    48m25.181s
+
+    cat faSize.rmsk.txt
+# 2729890658 bases (74605238 N's 2655285420 real 1470398475 upper
+#	1184886945 lower) in 64 sequences in 1 files
+# Total size: mean 42654541.5 sd 64150638.3 min 1976
+#	(chr4_GPS_017319191v1_random) max 195284574 (chr1) median 191905
+# %43.40 masked total, %44.62 masked real
+
+    egrep -i "versi|relea" do.log
+#    February 01 2017 (open-4-0-8) 1.332 version of RepeatMasker
+# CC    Dfam_Consensus RELEASE 20181026;                            *
+# CC    RepBase RELEASE 20181026;               
+
+    time featureBits -countGaps GRCm38B rmsk
+    # 1184890066 bases of 2729890658 (43.404%) in intersection
+    # real    0m23.932s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' GRCm38B \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 1184890066.000000
+    # real    0m22.132s
+
+##########################################################################
+# running simple repeat (DONE - 2019-02-28 - Hiram)
+
+    # The '-trf409 4' is a bit smaller than human which is 6
+
+    mkdir /hive/data/genomes/GRCm38B/bed/simpleRepeat
+    cd /hive/data/genomes/GRCm38B/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409=4 GRCm38B) > do.log 2>&1
+    # real    58m3.288s
+
+    cat fb.simpleRepeat
+    # 31110690 bases of 1055588482 (2.947%) in intersection
+
+    cd /hive/data/genomes/GRCm38B
+    # using the Window Masker result:
+    cd /hive/data/genomes/GRCm38B
+#     twoBitMask bed/windowMasker/GRCm38B.cleanWMSdust.2bit \
+#        -add bed/simpleRepeat/trfMask.bed  GRCm38B.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # add to rmsk after it is done:
+     twoBitMask GRCm38B.rmsk.2bit \
+         -add bed/simpleRepeat/trfMask.bed GRCm38B.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa GRCm38B.2bit stdout | faSize stdin > faSize.GRCm38B.2bit.txt
+    cat faSize.GRCm38B.2bit.txt | fold -s -w 72 | sed -e 's/^/# /;'
+# 2729890658 bases (74605238 N's 2655285420 real 1468299458 upper 
+#	1186985962 lower) in 64 sequences in 1 files
+# Total size: mean 42654541.5 sd 64150638.3 min 1976 
+#	(chr4_GPS_017319191v1_random) max 195284574 (chr1) median 191905
+# %43.48 masked total, %44.70 masked real
+
+    rm /gbdb/GRCm38B/GRCm38B.2bit
+    ln -s `pwd`/GRCm38B.2bit /gbdb/GRCm38B/GRCm38B.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2019-03-01 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/GRCm38B/bed/microsat
+    cd /cluster/data/GRCm38B/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed GRCm38B microsat microsat.bed
+    # Read 197377 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2019-03-01 - Hiram)
+
+    mkdir /hive/data/genomes/GRCm38B/bed/windowMasker
+    cd /hive/data/genomes/GRCm38B/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev GRCm38B) > do.log 2>&1
+    # real    26m58.753s
+
+    # Masking statistics
+    cat faSize.GRCm38B.cleanWMSdust.txt
+# 2729890658 bases (74605238 N's 2655285420 real 1670953600 upper
+#	984331820 lower) in 64 sequences in 1 files
+# Total size: mean 42654541.5 sd 64150638.3 min 1976
+#	(chr4_GPS_017319191v1_random) max 195284574 (chr1) median 191905
+# %36.06 masked total, %37.07 masked real
+
+    cat fb.GRCm38B.rmsk.windowmaskerSdust.txt
+    # 751642088 bases of 2729890658 (27.534%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2019-03-01 - Hiram)
+    mkdir /hive/data/genomes/GRCm38B/bed/cpgIslands
+    cd /hive/data/genomes/GRCm38B/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku GRCm38B) > do.log 2>&1
+XXX - running - Fri Mar  1 11:03:58 PST 2019
+    # real    2m5.105s
+
+    cat fb.GRCm38B.cpgIslandExt.txt
+    # 16395346 bases of 1055588482 (1.553%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2019-03-01 - Hiram)
+    mkdir /hive/data/genomes/GRCm38B/bed/genscan
+    cd /hive/data/genomes/GRCm38B/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku GRCm38B) > do.log 2>&1
+XXX - running - Fri Mar  1 11:05:11 PST 2019
+    # real    88m34.900s
+
+    cat fb.GRCm38B.genscan.txt
+    # 23911678 bases of 1055588482 (2.265%) in intersection
+
+    cat fb.GRCm38B.genscanSubopt.txt
+    # 24521608 bases of 1055588482 (2.323%) in intersection
+
+#########################################################################
+# Create kluster run files (DONE - 2019-03-01 - Hiram)
+
+    # numerator is GRCm38B gapless bases "real" as reported by:
+    featureBits -noRandom -noHap GRCm38B gap
+    # 74582633 bases of 2650898416 (2.813%) in intersection
+    #                   ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2650898416 / 2861349177 \) \* 1024
+    #  ( 2650898416 / 2861349177 ) * 1024 = 948.685326
+
+    # ==> use -repMatch=900 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/GRCm38B
+    blat GRCm38B.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/GRCm38B.11.ooc \
+        -repMatch=900
+    #   Wrote 31833 overused 11-mers to jkStuff/GRCm38B.11.ooc
+
+    # mm10 had at repMatch=900
+    #	Wrote 31822 overused 11-mers to jkStuff/mm10.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' GRCm38B \
+        | sort -k7,7nr | ave -col=7 stdin
+# Q1 50000.000000
+# median 50000.000000
+# Q3 100000.000000
+# average 422673.295455
+# min 30000.000000
+# max 3100000.000000
+# count 176
+# total 74390500.000000
+# standard deviation 936342.502856
+
+    # minimum gap size is 10000 and produces a reasonable number of lifts
+    gapToLift -verbose=2 -minGap=10000 GRCm38B jkStuff/GRCm38B.nonBridged.lft \
+        -bedFile=jkStuff/GRCm38B.nonBridged.bed
+    wc -l jkStuff/GRCm38B.nonBri*
+    #	198 jkStuff/GRCm38B.nonBridged.bed
+    #	198 jkStuff/GRCm38B.nonBridged.lft
+
+########################################################################
+# lastz/chain/net swap human/hg38 (DONE - 2019-03-01 - Hiram)
+    # original alignment
+
+    cd /hive/data/genomes/hg38/bed/lastzGRCm38B.2019-03-01
+
+    cat fb.hg38.chainGRCm38BLink.txt
+    # 967404497 bases of 3095998939 (31.247%) in intersection
+    cat fb.hg38.chainSynGRCm38BLink.txt
+    # 913717211 bases of 3095998939 (29.513%) in intersection
+    cat fb.hg38.chainRBest.GRCm38B.txt
+    # 891970056 bases of 3095998939 (28.810%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/GRCm38B/bed/blastz.hg38.swap
+    cd /hive/data/genomes/GRCm38B/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzGRCm38B.2019-03-01/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev-101 -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > swap.log 2>&1
+    #  real    60m31.849s
+
+    cat fb.GRCm38B.chainHg38Link.txt
+    # 941205213 bases of 2655285420 (35.446%) in intersection
+    cat fb.GRCm38B.chainSynHg38Link.txt
+    # 891450770 bases of 2655285420 (33.573%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` GRCm38B hg38) \
+     > rbest.log 2>&1 &
+    # real    331m35.578s
+
+    cat fb.GRCm38B.chainRBest.Hg38.txt
+    # 893587236 bases of 2655285420 (33.653%) in intersection
+
+#########################################################################
+# LIFTOVER TO mm10 (DONE - 2019-03-01 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/GRCm38B/bed/blat.mm10.2019-03-01
+    cd /hive/data/genomes/GRCm38B/bed/blat.mm10.2019-03-01
+    # something has broken since the /scratch/data/ links have disappeared,
+    # need to fully specify from(target) and to(query) sequences:
+    doSameSpeciesLiftOver.pl -verbose=2 \
+	-fileServer=hgwdev \
+	-query2Bit=/hive/data/genomes/GRCm38B/GRCm38B.2bit \
+	-querySizes=/hive/data/genomes/GRCm38B/chrom.sizes \
+	-target2Bit=/hive/data/genomes/mm10/mm10.2bit \
+	-targetSizes=/hive/data/genomes/mm10/chrom.sizes \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/GRCm38B/jkStuff/GRCm38B.11.ooc \
+         GRCm38B mm10
+
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+	-fileServer=hgwdev \
+	-query2Bit=/hive/data/genomes/GRCm38B/GRCm38B.2bit \
+	-querySizes=/hive/data/genomes/GRCm38B/chrom.sizes \
+	-target2Bit=/hive/data/genomes/mm10/mm10.2bit \
+	-targetSizes=/hive/data/genomes/mm10/chrom.sizes \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/GRCm38B/jkStuff/GRCm38B.11.ooc \
+         GRCm38B mm10) > doLiftOverToMm10.log 2>&1
+    # real    410m27.012s
+
+    # see if the liftOver menus function in the browser from GRCm38B to mm10
+
+    # load up as a track for viewing:
+    mkdir /hive/data/genomes/GRCm38B/bed/liftOverPsl
+    cd /hive/data/genomes/GRCm38B/bed/liftOverPsl
+    ln -s ../blat.mm10.2019-03-01/GRCm38BToMm10.over.chain.gz .
+    hgLoadChain GRCm38B chainMm10 *.gz
+    # Loading 176 chains into GRCm38B.chainMm10
+
+    featureBits GRCm38B chainMm10
+    # 2660658288 bases of 2655285420 (100.202%) in intersection
+
+    # let's see what it looks like as a PSL
+    chainToPsl GRCm38BToMm10.over.chain.gz \
+	/hive/data/genomes/mm10/chrom.sizes \
+	/hive/data/genomes/GRCm38B/chrom.sizes \
+	/hive/data/genomes/mm10/mm10.2bit \
+	/hive/data/genomes/GRCm38B/GRCm38B.2bit \
+	GRCm38BToMm10.over.chain.psl
+
+    pslSwap GRCm38BToMm10.over.chain.psl Mm10ToGRCm38B.over.chain.psl
+
+    hgLoadPsl GRCm38B -table=pslChainMm10 Mm10ToGRCm38B.over.chain.psl
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2019-03-01 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Mus musculus    581265  4871046 35622
+
+    # edit etc/genbank.conf to add GRCm38B just before galGal5
+
+# GRCm38B (chicken/GCF_000002315.5_GRCg6a)
+GRCm38B.serverGenome = /hive/data/genomes/GRCm38B/GRCm38B.2bit
+GRCm38B.clusterGenome = /hive/data/genomes/GRCm38B/GRCm38B.2bit
+GRCm38B.ooc = /hive/data/genomes/GRCm38B/jkStuff/GRCm38B.11.ooc
+GRCm38B.lift = /hive/data/genomes/GRCm38B/jkStuff/nonBridged.lft
+GRCm38B.perChromTables = no
+GRCm38B.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+GRCm38B.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+GRCm38B.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+GRCm38B.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+GRCm38B.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+GRCm38B.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+GRCm38B.refseq.mrna.native.load = yes
+GRCm38B.refseq.mrna.xeno.load = yes
+GRCm38B.genbank.mrna.xeno.load = yes
+GRCm38B.downloadDir = GRCm38B
+# GRCm38B.upstreamGeneTbl = refGene
+# GRCm38B.upstreamMaf = multiz7way /hive/data/genomes/galGal4/bed/multiz7way/species.lst
+
+    # verify the files specified exist before checking in the file:
+  grep ^GRCm38B etc/genbank.conf | grep hive | awk '{print $NF}' | xargs ls -og
+# -rw-rw-r-- 1 714715484 Mar  1 11:01 /hive/data/genomes/GRCm38B/GRCm38B.2bit
+# -rw-rw-r-- 1    127340 Mar  1 11:07 /hive/data/genomes/GRCm38B/jkStuff/GRCm38B.11.ooc
+# -rw-rw-r-- 1      9030 Mar  1 11:19 /hive/data/genomes/GRCm38B/jkStuff/GRCm38B.nonBridged.lft
+
+    git commit -m "Added GRCm38B; refs #22271" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # adding to src/lib/gbGenome.c
+    #    {"GRCm", mmNames},
+    git commit -m 'Adding GRCm pointing to mmNames refs #22271' src/lib/gbGenome.c
+    git push
+    make install-server
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add GRCm38B to:
+    #   etc/hgwdev.dbs
+    git add etc/hgwdev.dbs
+    git commit -m "Added GRCm38B - mouse refs #22271" etc/hgwdev.dbs
+    git push
+    make etc-update
+
+    # wait a few days for genbank magic to take place, the tracks will
+    # appear
+
+#############################################################################
+# augustus gene track (DONE - 2019-03-01 - Hiram)
+
+    mkdir /hive/data/genomes/GRCm38B/bed/augustus
+    cd /hive/data/genomes/GRCm38B/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev GRCm38B) > do.log 2>&1
+    # real    104m16.007s
+
+    cat fb.GRCm38B.augustusGene.txt
+    # 49274221 bases of 2655285420 (1.856%) in intersection
+
+#########################################################################
+# ncbiRefSeq (TBD - 2018-10-12 - Hiram)
+
+    mkdir /hive/data/genomes/GRCm38B/bed/ncbiRefSeq
+    cd /hive/data/genomes/GRCm38B/bed/ncbiRefSeq
+    # running step wise just to be careful
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.5_GRCg6a GRCm38B) > download.log 2>&1
+    # real    1m19.029s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.5_GRCg6a GRCm38B) > process.log 2>&1
+    # real    2m6.030s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.5_GRCg6a GRCm38B) > load.log 2>&1
+    # real    0m22.312s
+
+    cat fb.ncbiRefSeq.GRCm38B.txt
+    #  88641893 bases of 1055588482 (8.397%) in intersection
+
+    # need to add: include ../../refSeqComposite.ra alpha
+    # to the chicken/GRCm38B/trackDb.ra to turn on the track in the browser
+
+    # there was one gene that claimed to have a protein, but the
+    # protein sequence was not included in the protein.faa file
+    # discovered from joinerCheck
+    # manual fix to blank out this one protein, to see the entry
+    hgsql -e 'select * from ncbiRefSeqLink where protAcc="NP_989875.1";' GRCm38B
+    hgsql -e 'update ncbiRefSeqLink set protAcc="" where protAcc="NP_989875.1";' GRCm38B
+    # this makes the 'protein' link disappear from the gene details page
+    # curious that this gene is marked as a non-coding gene anyway ?
+    # gene: FET1 at chr4:63,102,774-63,105,516-
+
+    featureBits -enrichment GRCm38B refGene ncbiRefSeq 
+ # refGene 1.374%, ncbiRefSeq 8.397%, both 1.370%, cover 99.73%, enrich 11.88x
+    featureBits -enrichment GRCm38B ncbiRefSeq refGene
+ # ncbiRefSeq 8.397%, refGene 1.374%, both 1.370%, cover 16.32%, enrich 11.88x
+
+    featureBits -enrichment GRCm38B ncbiRefSeqCurated refGene
+ # ncbiRefSeqCurated 1.368%, refGene 1.374%, both 1.364%, cover 99.71%, enrich 72.59x
+    featureBits -enrichment GRCm38B refGene ncbiRefSeqCurated
+ # refGene 1.374%, ncbiRefSeqCurated 1.368%, both 1.364%, cover 99.32%, enrich 72.59x
+
+#########################################################################
+#  BLATSERVERS ENTRY (TBD - 2018-10-12 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+XXX - requested - Fri Mar  1 17:36:11 PST 2019
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("GRCm38B", "blat1a", "17892", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("GRCm38B", "blat1a", "17893", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to MEPE gene (egg shell protein)
+##  (TBD - 2018-10-12 - Hiram)
+
+    # as found from the galGal5 to GRCm38B liftOver
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr4:45667017-45672928"
+	where name="GRCm38B";' hgcentraltest
+
+#########################################################################
+# crispr 10K shoulders (TBD - 2018-10-16 - Hiram)
+    # working on this script, adding the indexFa step:
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+	-stop=indexFa -buildDir=`pwd` -smallClusterHub=ku GRCm38B ncbiRefSeq) \
+	> indexFa.log 2>&1
+    # real    23m26.694s
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+       -continue=ranges -stop=guides -buildDir=`pwd` -smallClusterHub=ku \
+           GRCm38B ncbiRefSeq) > guides.log 2>&1
+    # real    2m50.758s
+
+    # adding the /dev/shm/ setup rsync for the indexed Fa
+    # performed manually to work out the procedure
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+        -continue=specScores -stop=specScores -buildDir=`pwd` \
+           -smallClusterHub=ku GRCm38B ncbiRefSeq) > specScores.log
+
+    # had about half of ku for about half this time:
+# Completed: 884922 of 884922 jobs
+# CPU time in finished jobs:  35872791s  597879.85m  9964.66h  415.19d  1.138 y
+# IO & Wait Time:               899261s   14987.69m   249.79h   10.41d  0.029 y
+# Average job time:                 42s       0.69m     0.01h    0.00d
+# Longest finished job:             88s       1.47m     0.02h    0.00d
+# Submission to last job:        48045s     800.75m    13.35h    0.56d
+
+
+    time find tmp/outGuides -type f | xargs cut -f3-6 > ../specScores.tab
+    # real    236m17.220s
+    wc -l specScores.tab
+    # 66451712 specScores.tab
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+	-continue=effScores -stop=load \
+	    -buildDir=`pwd` -smallClusterHub=ku GRCm38B ncbiRefSeq) \
+	> load.log
+    # real    307m41.143s
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2018-10-17 - Hiram)
+xyz
+    cd $HOME/kent/src/hg/makeDb/schema
+    # verify all the business is done for release
+    ~/kent/src/hg/utils/automation/verifyBrowser.pl GRCm38B
+
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=GRCm38B -tableCoverage all.joiner
+    joinerCheck -database=GRCm38B -times all.joiner
+    joinerCheck -database=GRCm38B -keys all.joiner
+
+    # when clean, check in:
+    git commit -m 'adding rules for GRCm38B refs #22113' all.joiner
+    git push
+    # run up a 'make alpha' in hg/hgTables to get this all.joiner file
+    # into the hgwdev/genome-test system
+
+    cd /hive/data/genomes/GRCm38B
+    time (makeDownloads.pl GRCm38B) > downloads.log 2>&1
+    #  real    10m7.605s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/GRCm38B/pushQ
+    cd /hive/data/genomes/GRCm38B/pushQ
+  time (makePushQSql.pl -redmineList GRCm38B) > GRCm38B.pushQ.sql 2> stderr.out
+    # real    9m58.779s
+
+    # remove the extra chainNet files from the listings:
+    sed -i -e "/etNig1/d" redmine.GRCm38B.file.list
+    sed -i -e "/asAcu1/d" redmine.GRCm38B.file.list
+    sed -i -e "/etNig1/d" redmine.GRCm38B.table.list
+    sed -i -e "/onAlb1/d" redmine.GRCm38B.table.list
+    sed -i -e "/asAcu1/d" redmine.GRCm38B.table.list
+    sed -i -e "/Stickleback/d" redmine.GRCm38B.releaseLog.txt
+    sed -i -e "/Tetraodon/d" redmine.GRCm38B.releaseLog.txt
+    sed -i -e "/sparrow/d" redmine.GRCm38B.releaseLog.txt
+    # remove the tandemDups and gapOverlap from the file list:
+    sed -i -e "/tandemDups/d" redmine.GRCm38B.table.list
+    sed -i -e "/Tandem Dups/d" redmine.GRCm38B.releaseLog.txt
+    sed -i -e "/gapOverlap/d" redmine.GRCm38B.table.list
+    sed -i -e "/Gap Overlaps/d" redmine.GRCm38B.releaseLog.txt
+    #  real    7m21.629s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/GRCm38B/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/GRCm38B/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/GRCm38B/bbi/quality.bw
+    # WARNING: GRCm38B does not have seq
+    # WARNING: GRCm38B does not have extFile
+
+    # add the path names to the listing files in the redmine issue
+    # in the three appropriate entry boxes:
+
+#	/hive/data/genomes/GRCm38B/pushQ/redmine.GRCm38B.file.list
+#	/hive/data/genomes/GRCm38B/pushQ/redmine.GRCm38B.releaseLog.txt
+#	/hive/data/genomes/GRCm38B/pushQ/redmine.GRCm38B.table.list
+
+#########################################################################

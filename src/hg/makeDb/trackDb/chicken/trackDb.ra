@@ -2,6 +2,9 @@
 
 include trackDb.chainNet.ra
 
+track refGene override
+priority 1
+
 track bgiSnp
 shortLabel BGI SNPs
 longLabel SNPs from Beijing Genomics Institute

@@ -18,6 +18,7 @@ struct lm
     size_t blockSize;
     size_t allignMask;
     size_t allignAdd;
+    boolean doMemoryAllocs; // if true, do our own memory allocs, otherwise use passed in pointer
     };
 
 struct lmBlock
@@ -43,7 +44,7 @@ lm->blocks = mb;
 return mb;
 }
 
-struct lm *lmInit(int blockSize)
+struct lm *lmGuts(int blockSize, void *mem)
 /* Create a local memory pool. */
 {
 struct lm *lm;
@@ -59,8 +60,34 @@ if (blockSize <= 0)
 lm->blockSize = blockSize;
 lm->allignAdd = (aliSize-1);
 lm->allignMask = ~lm->allignAdd;
-newBlock(lm, blockSize);
+if (mem != NULL)
+    {
+    lm->doMemoryAllocs = FALSE;
+    struct lmBlock *mb = mem;
+    mb->free = (char *)(mb+1);
+    mb->end = ((char *)mb) + blockSize;
+    mb->next = lm->blocks;
+    lm->blocks = mb;
+    }
+else
+    {
+    lm->doMemoryAllocs = TRUE;
+    newBlock(lm, blockSize);
+    }
+
 return lm;
+}
+
+struct lm *lmInit(int blockSize)
+/* Create a local memory pool. */
+{
+return lmGuts(blockSize, NULL);
+}
+
+struct lm *lmInitWMem(void *mem, int blockSize)
+/* Create a local memory pool. */
+{
+return lmGuts(blockSize, mem);
 }
 
 void lmCleanup(struct lm **pLm)
@@ -69,9 +96,27 @@ void lmCleanup(struct lm **pLm)
     struct lm *lm = *pLm;
     if (lm == NULL)
         return;
+    *pLm = NULL;
     slFreeList(&lm->blocks);
     freeMem(lm);
-    *pLm = NULL;
+}
+
+unsigned int lmBlockHeaderSize()
+// Return the size of an lmBlock.
+{
+return sizeof(struct lmBlock);
+}
+
+size_t lmUsed(struct lm *lm)
+// Returns amount of memory allocated
+{
+size_t used = 0;
+
+struct lmBlock *mb = lm->blocks;
+for (;mb != NULL;mb = mb->next)
+    used += (mb->free - (char *)(mb+1));
+
+return used;
 }
 
 size_t lmAvailable(struct lm *lm)
@@ -100,7 +145,13 @@ struct lmBlock *mb = lm->blocks;
 void *ret;
 size_t memLeft = mb->end - mb->free;
 if (memLeft < size)
-    mb = newBlock(lm, size);
+    {
+    if (lm->doMemoryAllocs)
+        mb = newBlock(lm, size);
+    else
+        errAbort("attempted local memory alloc in fixed size allocator");
+    }
+
 ret = mb->free;
 mb->free += ((size+lm->allignAdd)&lm->allignMask);
 if (mb->free > mb->end)
@@ -135,7 +186,7 @@ memcpy(d, pt, size);
 return d;
 }
 
-char *lmCloneStringZ(struct lm *lm, char *string, int size)
+char *lmCloneStringZ(struct lm *lm, const char *string, int size)
 /* Return local mem copy of string. */
 {
 if (string == NULL)
@@ -148,7 +199,7 @@ else
     }
 }
 
-char *lmCloneString(struct lm *lm, char *string)
+char *lmCloneString(struct lm *lm, const char *string)
 /* Return local mem copy of string. */
 {
 if (string == NULL)
@@ -157,7 +208,7 @@ else
     return lmCloneStringZ(lm, string, strlen(string));
 }
 
-char *lmCloneFirstWord(struct lm *lm, char *line)
+char *lmCloneFirstWord(struct lm *lm, const char *line)
 /* Clone first word in line */
 {
 char *startFirstWord = skipLeadingSpaces(line);
@@ -170,7 +221,7 @@ else
     return lmCloneStringZ(lm, startFirstWord, endFirstWord - startFirstWord);
 }
     
-char *lmCloneSomeWord(struct lm *lm, char *line, int wordIx)
+char *lmCloneSomeWord(struct lm *lm, const char *line, int wordIx)
 /* Return a clone of the given space-delimited word within line.  Returns NULL if
  * not that many words in line. */
 {
@@ -188,7 +239,7 @@ return lmCloneFirstWord(lm, line);
 }
 
 
-struct slName *lmSlName(struct lm *lm, char *name)
+struct slName *lmSlName(struct lm *lm, const char *name)
 /* Return slName in memory. */
 {
 struct slName *n;
@@ -219,3 +270,24 @@ char **lmCloneRow(struct lm *lm, char **row, int rowSize)
 {
 return lmCloneRowExt(lm, row, rowSize, rowSize);
 }
+
+void lmRefAdd(struct lm *lm, struct slRef **pRefList, void *val)
+/* Add reference to list. */
+{
+struct slRef *ref;
+lmAllocVar(lm, ref);
+ref->val = val;
+slAddHead(pRefList, ref);
+}
+
+char *lmJoinStrings(struct lm *lm, char *a, char *b)
+/* Return concatenation of a and b allocated in lm */
+{
+int aSize = strlen(a);
+int resSize = aSize + strlen(b) + 1;
+char *output = lmAlloc(lm, resSize);
+strcpy(output, a);
+strcpy(output + aSize, b);
+return output;
+}
+

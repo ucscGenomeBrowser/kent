@@ -1,0 +1,108 @@
+track cons124way
+compositeTrack on
+shortLabel Cons 124 Insects
+longLabel Multiz Alignment & Conservation (124 insects)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+type bed 4
+group compGeno
+priority 2
+
+    track cons124wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons124way
+
+        track multiz124way
+        subTrack cons124wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 124 insects
+        subGroups view=align
+        noInherit on
+        irows on
+        summary multiz124waySummary
+        frames multiz124wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault dm6
+        speciesGroups Brachycera Nematocera Holometabola
+        sGroup_Brachycera droSim2 droSec1 droYak3 droEre2 droTak2 droEle2 droEug2 droBia2 droRho2 droFic2 droSuz1 droKik2 D_serrata droAna3 droBip2 D_obscura droPse3 droMir2 droPer1 D_subobscura D_athabasca droVir3 droWil2 droGri2 droMoj3 D_pseudoobscura_1 D_novamexicana D_hydei D_americana D_montana droAlb1 Scaptodrosophila_lebanonensis D_busckii D_arizonae D_nasuta Zaprionus_indianus D_navojoa Phortica_variegata Teleopsis_dalmanni Rhagoletis_zephyria Lucilia_cuprina Bactrocera_latifrons Bactrocera_oleae Zeugodacus_cucurbitae Phormia_regina Ceratitis_capitata Paykullia_maculata Bactrocera_tryoni musDom2 Bactrocera_dorsalis Stomoxys_calcitrans Glossina_pallidipes Glossina_fuscipes Glossina_brevipalpis Glossina_morsitans_2 Glossina_austeni Glossina_palpalis_gambiensis Ephydra_gracilis Lucilia_sericata Glossina_morsitans_1 Calliphora_vicina Sphyracephala_brevicornis Proctacanthus_coquilletti Haematobia_irritans Themira_minor Megaselia_abdita Tephritis_californica Cirrula_hians Hermetia_illucens Neobellieria_bullata Eutreta_diana Holcocephala_fusca Sarcophagidae_BV_2014 Liriomyza_trifolii Eristalis_dimidiata Condylostylus_patibulatus Megaselia_scalaris Trupanea_jonesi
+        sGroup_Nematocera Aedes_albopictus Aedes_aegypti anoGam3 Culex_quinquefasciatus A_maculatus A_merus A_dirus A_arabiensis A_sinensis A_atroparvus A_epiroticus A_quadriannulatus A_farauti A_minimus A_funestus A_melas A_coluzzii Clogmia_albipunctata Phlebotomus_papatasi A_culicifacies A_stephensi Coboldia_fuscipes Culicoides_sonorensis A_albimanus A_christyi A_cracens A_aquasalis Mochlonyx_cinctipes A_darlingi A_farauti_No4 Lutzomyia_longipalpis A_koliensis Belgica_antarctica A_punctulatus Clunio_marinus Mayetiola_destructor Chironomus_tentans Chironomus_riparius A_gambiae_1 A_nili Chaoborus_trivitattus Tipula_oleracea Trichoceridae_BV_2014
+        sGroup_Holometabola triCas2 apiMel4
+        speciesDefaultOff A_aquasalis A_christyi A_cracens A_culicifacies A_darlingi A_epiroticus A_farauti_No4 A_funestus A_gambiae_1 A_koliensis A_maculatus A_melas A_merus A_nili A_punctulatus A_quadriannulatus A_sinensis Aedes_albopictus Bactrocera_dorsalis Bactrocera_latifrons Bactrocera_oleae Bactrocera_tryoni Belgica_antarctica Calliphora_vicina Ceratitis_capitata Chaoborus_trivitattus Chironomus_riparius Chironomus_tentans Cirrula_hians Clogmia_albipunctata Coboldia_fuscipes Condylostylus_patibulatus Culex_quinquefasciatus Culicoides_sonorensis D_americana D_hydei D_montana D_nasuta D_obscura D_pseudoobscura_1 D_serrata D_subobscura Ephydra_gracilis Eristalis_dimidiata Eutreta_diana Glossina_austeni Glossina_brevipalpis Glossina_fuscipes Glossina_morsitans_1 Glossina_morsitans_2 Glossina_pallidipes Glossina_palpalis_gambiensis Haematobia_irritans Hermetia_illucens Holcocephala_fusca Liriomyza_trifolii Lucilia_cuprina Lucilia_sericata Lutzomyia_longipalpis Mayetiola_destructor Megaselia_abdita Megaselia_scalaris Mochlonyx_cinctipes Neobellieria_bullata Paykullia_maculata Phlebotomus_papatasi Phormia_regina Phortica_variegata Proctacanthus_coquilletti Rhagoletis_zephyria Sarcophagidae_BV_2014 Sphyracephala_brevicornis Stomoxys_calcitrans Teleopsis_dalmanni Tephritis_californica Themira_minor Tipula_oleracea Trichoceridae_BV_2014 Trupanea_jonesi Zaprionus_indianus Zeugodacus_cucurbitae droAlb1 droBip2 droEle2 droEug2 droFic2 droKik2 droPer1 droRho2 droSuz1 droTak2 musDom2
+        speciesDefaultOn A_albimanus A_arabiensis A_atroparvus A_coluzzii A_dirus A_farauti A_minimus A_stephensi Aedes_aegypti Clunio_marinus D_arizonae D_athabasca D_busckii D_navojoa D_novamexicana Scaptodrosophila_lebanonensis anoGam3 apiMel4 droAna3 droBia2 droEre2 droGri2 droMir2 droMoj3 droPse3 droSec1 droSim2 droVir3 droWil2 droYak3 triCas2
+        defaultMaf multiz124wayDefault
+        itemFirstCharCase noChange
+        treeImage phylo/dm6_124way.png
+        priority 100
+
+    # PhyloP conservation
+    track cons124wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons124way
+    viewLimits -20.0:9.869
+    viewLimitsMax -20:0.869
+
+        track phyloP124way
+        subTrack cons124wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel Cons 124 insects
+        longLabel 124 insects Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -20 7.532
+        maxHeightPixels 100:50:11
+        viewLimits -4.5:4.88
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons124wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons124way
+
+        track phastCons124way
+        subTrack cons124wayViewphastcons off
+        subGroups view=phastcons
+        shortLabel Cons 124 insects
+        longLabel 124 insects conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons124wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons124way
+
+        track phastConsElements124way
+        subTrack cons124wayViewelements off
+        subGroups view=elements
+        shortLabel 124 insects El
+        longLabel 124 insects Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23

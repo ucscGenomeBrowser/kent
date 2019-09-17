@@ -4883,7 +4883,7 @@ mkdir -p $3:h
     cd /cluster/data/rn3/bed
     mkdir geneList
     cd geneList
-    wget -O rn3GeneList.html "http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/hgGeneList?db=rn3"
+    wget -O rn3GeneList.html "http://hgwdev-fanhsu.soe.ucsc.edu/cgi-bin/hgGeneList?db=rn3"
     cp -p rn3GeneList.html /usr/local/apache/htdocs/goldenPath
 # Check this html file into CVS.
 

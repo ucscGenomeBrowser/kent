@@ -1,215 +1,322 @@
 <!DOCTYPE html>
 <!--#set var="TITLE" value="CIRM Stem Cell Hub at UCSC Homepage" -->
-<!--#set var="ROOT" value="" -->
 
-<!--#include virtual="$ROOT/inc/header.html" -->
+<!--#include virtual="setRoot.html" -->
+
+<!--#include virtual="${ROOT}inc/header.html" -->
 
 <div class="cirm-page-body">
-  <div class="cirm-page-title" style="background: #5cb85c;">
-       <h4 class="cirm-page-title-text">Tools from the CESCG groups</h4>
+  <div class="cirm-page-title back-light-green">
+    <h5 class="cirm-page-title-text">Tools from the CESCG groups</h5>
   </div>
-  <div class="row">
-    <div class="col-md-12 padded">
-      <a name="tagStorm"></a>
-      <!--<button type="button" class="btn-primary btn-block" data-toggle="collapse"
-      data-target="#tags">-->
-      <p class="lead"><span style="color: #1E90FF">Tag Storm:</span> Metadata made
-      simple</p><!--</button>-->
-      <!--<h4>Tag Storm</h4>
-      <p><b>Metadata made simple</b></p>-->
-      <!--<div id="tags" class="collapse">-->
-      <p>
-      The tag storm format offers an easy way to describe a hierarchical set of metadata for
-      your data. The format is presented along with a
-      <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/tagStorm"
-      target="_blank">suite of utilities</a> that allow you to manipulate and interrogate
-      your tag storm files.</p>
-      <!--Example here-->
-      <p>
-      The Tag Storm format and utilities were developed by Jim Kent.</p>
-      <!--<p>
-      A better explanation plus some tag storm examples would be useful here.-->
-    </div>
-  </div>
-  <hr>
-  <div class="row">
-    <div class="col-md-12 padded">
-      <a name="samplePsychic"></a>
-      <p class="lead toollead"><span style="color: #1E90FF">Sample Psychic:</span> See how your
-      cells compare</p>
-      <!--<h4>SamplePsychic</h4>
-      <p><b>See how your cells compare</b></p>-->
-      <p>
-      Sample Psychic can take your gene expression data and compare it to curated references.
-      This comparison is used to produce a scorecard which shows how closely your data maps
-      up to the curated cell types.</p>
-      <div class="row">
-          <div class="col-md-4">
-             <p style="text-align: center">
-             <img src="<!--#echo var="ROOT"-->/images/SamplePsychicReportCard.png"
-             height="75%" width="75%"><br>
-             Report Card view, showing matches grouped by sample. Has CSV download.
-             </p>
-          </div>
-          <div class="col-md-4">
-             <p style="text-align: center">
-             <img src="<!--#echo var="ROOT"-->/images/SamplePsychicDetailedView.png"
-             height="75%" width="75%"><br>
-             By-sample view. Similar to Report Card but easier to navigate.
-             </p>
-          </div>
-          <div class="col-md-4">
-             <p style="text-align: center">
-             <img src="<!--#echo var="ROOT"-->/images/SamplePsychicPlot.png"
-             height="75%" width="75%"><br>
-             Experimental tSNE clustering of input samples.
-             </p>
-          </div>
+  <div class="row no-gutters">
+    <div class="card-deck">
+      <a name="CellBrowser"></a>
+      <div class="card">
+        <div class="card-body text-center">
+          <img class="card-top-img" style="max-width: 300px"
+          src="https://cells.ucsc.edu/cortex-dev/thumb.png">
+          <p class="lead text-center"><span style="color: #1E90FF">Cell Browser:</span> Visualize single-cell clustering data</p>
+          <ul class="list-group list-group-flush text-left">
+            <li class="list-group-item">The Cell Browser allows for the visualization of single-cell
+            clustering data with the option to color cell by metadata attributes such as sex, age,
+            and gene expression. A number of published datasets are available through the Cell
+            Browser website or set up a Cell Browser for your own data using the code on GitHub.
+            </li>
+            <li class="list-group-item"><a href="https://cells.ucsc.edu" target="_blank">Cell
+            Browser Website</a> <i class="fas fa-external-link-alt" aria-hidden="true"></i></li>
+            <li class="list-group-item"><a href="https://github.com/maximilianh/cellBrowser"
+            target="_blank">Cell Browser GitHub</a> <i class="fab fa-github" aria-hidden="true"></i>
+            </li>
+          </ul>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">
+          The Cell Browser was created by Max Haeussler.
+          </small>
+        </div>
       </div>
-      <p>
-      The Sample Psychic web application allows
-      users to upload gene expression data and gain insights into those samples by
-      applying suites of pre-trained concept classifiers to each sample. The
-      resulting set of classification scores is presented as a report card that can
-      be used to validate the identity of the samples and explore similarity between
-      these samples and target concepts represented in in the Sample Psychic suite.
-      For CIRM, classifiers were built for both fetal tissue clusters and hand
-      labeled brain regions. One binary classifier is created for tissue
-      type/cluster. A total of 96 fetal tissue clusters are represented in the
-      Sample Psychic classifier compendium along with 30 classifiers representing
-      hand-labeled brain regions. The pattern of individual classifier scores can
-      give a picture of how user samples map to brain regions and to previously
-      analyzed clusters.</p>
-
-
-      <p><i>Website coming soon!</i></p>
-
-      <p>Sample Psychic was created by James Durbin.</a>
+      <a name="PluriTest"></a>
+      <div class="card">
+        <div class="card-body text-center">
+          <img class="card-top-img" style="max-width: 300px"
+          src="<!--#echo var='ROOT'-->images/pluritestWelcome.png">
+          <p class="lead"><span style="color: #1E90FF">PluriTest:</span> Check for Pluripotency</p>
+          <ul class="list-group list-group-flush text-left">
+            <li class="list-group-item">
+            Pluritest allows you check your samples for pluripotentcy through uploading RNA-seq
+            fastq files or Affymetrix and Illumina arrays.
+            Note: Use of Pluritest requires you to register an account.
+            </li>
+            <li class="list-group-item">
+            M&#252;ller FJ, Schuldt BM, Williams R, Mason D, Altun G, Papapetrou EP, Danner S, Goldmann JE,
+            Herbst A, Schmidt NO <em>et al</em>.
+            <a href="http://dx.doi.org/10.1038/nmeth.1580" target="_blank">
+            A bioinformatic assay for pluripotency in human cells</a>.
+            <em>Nat Methods</em>. 2011 Apr;8(4):315-7.
+            PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/21378979" target="_blank">21378979</a>; PMC: <a
+            href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3265323/" target="_blank">PMC3265323</a>
+            </li>
+            <li class="list-group-item"><a href="https://www.pluritest.org/" target="_blank">PluriTest
+            Website</a> <i class="fas fa-external-link-alt" aria-hidden="true"></i></p>
+            </li>
+          </ul>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">
+          PluriTest was created by Roy Williams and the <a
+          href="https://www.scripps.edu/loring/" target="_blank">Jeanne Loring Lab</a>.
+          </small>
+        </div>
+      </div>
     </div>
   </div>
-  <hr>
-  <div class="row">
-    <div class="col-md-12 padded">
+  <br>
+  <div class="row no-gutters">
+    <div class="card-deck">
+      <a name="Pgltools"></a>
+      <div class="card">
+        <div class="card-body text-center">
+          <span class="padded-top-img">
+            <img class="img-responsive" style="max-width: 300px"
+            src="https://raw.githubusercontent.com/billgreenwald/pgltools/master/Images/logo.png">
+          </span>
+          <p class="lead"><span style="color: #1E90FF">Pgltools:</span> Manipulate Hi-C and ChIA-PET
+          data</p>
+          <ul class="list-group list-group-flush text-left">
+            <li class="list-group-item">
+            The pgltools package gives you a number of utilities for manipulating files in the
+            <a href="https://github.com/billgreenwald/pgltools#the-pgl-file-format"
+            target="_blank">&quot;paired genomic loci&quot;</a> format, common in both Hi-C and 
+            ChIA-PET experiments. These utilities allow you to things such as convert pgl files
+            to a number of other formats, compare and contrast multiple pgl files, and other basic
+            operations like sorting or merging files.
+            </li>
+            <li class="list-group-item">
+            Greenwald WW, Li H, Smith EN, Benaglio P, Nariai N, Frazer KA.
+            <a href="https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-017-1621-0"
+            target="_blank">
+            Pgltools: a genomic arithmetic tool suite for manipulation of Hi-C peak and other chromatin
+            interaction data</a>.
+            <em>BMC Bioinformatics</em>. 2017 Apr 7;18(1):207.
+            PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28388874" target="_blank">28388874</a>; PMC: <a
+            href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5384132/" target="_blank">PMC5384132</a>
+            </li>
+            <li class="list-group-item"><a href="https://github.com/billgreenwald/pgltools"
+            target="_blank">Pgltools GitHub</a> <i class="fab fa-github" aria-hidden="true"></i></li>
+          </ul>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">
+          The Pgltools package was created by Bill Greenwald.
+          </small>
+        </div>
+      </div>
       <a name="SCIMITAR"></a>
-      <p class="lead toollead"><span style="color: #1E90FF">SCIMITAR:</span> Single Cell Inference of
-      MorphIng Trajectories and their Associated Regulation</p>
-      <!--<h4>SCIMITAR</h4>
-      <p><b>Single Cell Inference of MorphIng Trajectories and their Associated Regulation</b></p>-->
-      <p>
-      The <a href="https://github.com/dimenwarper/scimitar" target="_blank">SCIMITAR</a>
-      package contains a number of tools to help scientists analyze cell trajectory maps based
-      on single cell sequencing data. Read more:</p>
-      <p>
-      Cordero P, Stuart JM.
-      <a href="http://dx.doi.org/10.1142/9789813207813_0053" target="_blank">
-      Tracing co-regulatory network dynamics in noisy, single-cell transcriptome trajectories</a>
-      <i class="fa fa-file-pdf-o" aria-hidden="true"></i>.
-      <em>Pac Symp Biocomput</em>. 2016;22:576-587.
-      PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27897008" target="_blank">27897008</a>; PMC: <a
-      href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5203771/" target="_blank">PMC5203771</a>
-      </p>
-
-      <p>SCIMITAR was created Pablo Cordero.</p>
+      <div class="card">
+        <div class="card-body text-center">
+          <span class="padded-top-img">
+            <img src="">
+          </span>
+          <p class="lead"><span style="color: #1E90FF">SCIMITAR:</span> Single Cell Inference of
+          MorphIng Trajectories and their Associated Regulation</p>
+          <ul class="list-group list-group-flush text-left">
+            <li class="list-group-item">The SCIMITAR package contains a number of tools to help
+            scientists analyze cell trajectory maps based on single cell sequencing data.</li>
+            <li class="list-group-item">
+            Cordero P, Stuart JM.
+            <a href="http://dx.doi.org/10.1142/9789813207813_0053" target="_blank">
+            Tracing co-regulatory network dynamics in noisy, single-cell transcriptome trajectories</a>
+            <i class="far fa-file-pdf" aria-hidden="true"></i>.
+            <em>Pac Symp Biocomput</em>. 2016;22:576-587.
+            PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27897008" target="_blank">27897008</a>; PMC: <a
+            href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5203771/" target="_blank">PMC5203771</a>
+            </li>
+            <li class="list-group-item">
+            <a href="https://github.com/dimenwarper/scimitar" target="_blank">SCIMITAR GitHub</a>
+            <i class="fab fa-github" aria-hidden="true"></i></p>
+            </li>
+          </ul>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">
+          SCIMITAR was created Pablo Cordero.
+          </small>
+        </div>
+      </div>
     </div>
   </div>
-  <hr>
-  <div class="row">
-    <div class="col-md-12 padded">
+  <br>
+  <div class="row no-gutters">
+    <div class="card-deck">
+      <a name="tagStorm"></a>
+      <div class="card">
+        <div class="card-body text-center">
+          <img class="card-top-img" style="max-width: 300px"
+          src="<!--#echo var='ROOT'-->images/tagStormImage.png">
+          <p class="lead"><span style="color: #1E90FF">Tag Storm:</span> Metadata made
+          simple</p>
+          <ul class="list-group list-group-flush text-left">
+            <li class="list-group-item">
+            <p>
+            The tag storm format offers an easy way to describe
+            a hierarchical set of metadata for your data. The tag storm format is made up of
+            a number of key/value pairs spread across stanzas at various indentation levels.
+            Lower indentation levels inherit information from higher levels, so the most general
+            metadata, e.g. lab or dataset names, are generally found at the highest level and
+            more specifc metadata, e.g. sex or file name, are found at the lower level.</p>
+            <p>
+            The Tag Storm GitHub page contains more information about the format as well as a
+            suite of tools to work with and manipulate tag storm files.
+            </li>
+            <li class="list-group-item">
+            <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/tagStorm"
+            target="_blank">Tag Storm GitHub</a> <i class="fab fa-github" aria-hidden="true"></i></p>
+            </li>
+          </ul>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">
+          TagStorm format and utilities were developed by Jim Kent.
+          </small>
+        </div>
+      </div>
       <a name="RIGGLE"></a>
-      <p class="lead"><span style="color: #1E90FF">RIGGLE:</span> Regulator Inference by
-      Graph-Guided LASSO Estimation</p>
-      <!--<h4>RIGGLE</h4>
-      <p><b>Regulator Inference by Graph-Guided LASSO Estimation</b></p>-->
-      <p>
-      RIGGLE (Regulatory Inference by Graph-Guided LASSO Estimation) is a machine
-      learning framework designed to discover the transcription factor regulators of
-      a cell development trajectory by taking in expression data, known transcription
-      factor targets, and a cell development graph.</p>
-      <p style="text-align: center">
-      <img src="<!--#echo var="ROOT"-->/images/RIGGLE_demo.png" height="75%" width="75%"></p>
-      <p>
-      This process produces predictions for the transcription factor's
-      activities in each of the cell types represented in the graph based on the
-      coordinated expression of its targets, while respecting the developmental
-      relationships between the cells.</p>
-
-      <p><i>More coming soon!</i></p>
-
-      <p>RIGGLE was created by Dan Carlin.</p>
+      <div class="card">
+        <div class="card-body text-center">
+          <img class="card-top-img" style="max-width: 300px"
+          src="<!--#echo var='ROOT'-->images/RIGGLE_demo.png">
+          <p class="lead"><span style="color: #1E90FF">RIGGLE:</span> Regulator Inference by
+          Graph-Guided LASSO Estimation</p>
+          <ul class="list-group list-group-flush text-left">
+            <li class="list-group-item">
+            <p>
+            RIGGLE (Regulatory Inference by Graph-Guided LASSO Estimation)
+            is a machine learning framework designed to discover the transcription factor regulators
+            of a cell development trajectory by taking in expression data, known transcription
+            factor targets, and a cell development graph.</p>
+            <p>
+            This process produces predictions for the transcription factor's
+            activities in each of the cell types represented in the graph based on the
+            coordinated expression of its targets, while respecting the developmental
+            relationships between the cells.</p>
+            </li>
+          </ul>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">
+          RIGGLE was created by Dan Carlin.
+          </small>
+        </div>
+      </div>
     </div>
   </div>
-  <hr>
-  <div class="row">
-    <div class="col-md-12 padded">
+  <br>
+  <div class="row no-gutters">
+    <div class="card-deck">
+      <a name="samplePsychic"></a>
+      <div class="card">
+        <div class="card-body text-center">
+          <span class="card-top-img">
+            <div id="carouselInd" class="carousel slide" data-ride="carousel" style="/*background-color: black*/">
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img style="max-height: 200px"
+                  src="<!--#echo var='ROOT'-->images/SamplePsychicReportCard.png"
+                  alt="Report Card view, showing matches grouped by sample. Has CSV download.">
+                </div>
+                <div class="carousel-item">
+                  <img style="max-height: 200px"
+                  src="<!--#echo var='ROOT'-->images/SamplePsychicDetailedView.png"
+                  alt="By-sample view. Similar to Report Card but easier to navigate.">
+                </div>
+                <div class="carousel-item">
+                  <img style="max-height: 200px"
+                  src="<!--#echo var='ROOT'-->images/SamplePsychicPlot.png"
+                  alt="Experimental tSNE clustering of input samples.">
+                </div>
+              </div>
+              <a class="carousel-control-prev" href="#carouselInd" role="button" data-slide="prev">
+              <i class="fas fa-angle-left fa-2x text-primary" aria-hidden="true"></i>
+              </a>
+              <a class="carousel-control-next" href="#carouselInd" role="button" data-slide="next">
+              <i class="fas fa-angle-right fa-2x text-primary" aria-hidden="true"></i>
+              </a>
+            </div>
+          </span>
+          <p class="lead"><span style="color: #1E90FF">Sample Psychic:</span> See how your
+          cells compare</p>
+            <ul class="list-group list-group-flush text-left">
+            <li class="list-group-item">
+            <p>
+            Sample Psychic can take your gene expression data and
+            compare it to curated references.
+            This comparison is used to produce a scorecard which shows how closely your data maps
+            up to the curated cell types.</p>
+            <p>
+            The Sample Psychic web application allows
+            users to upload gene expression data and gain insights into those samples by
+            applying suites of pre-trained concept classifiers to each sample. The
+            resulting set of classification scores is presented as a report card that can
+            be used to validate the identity of the samples and explore similarity between
+            these samples and target concepts represented in in the Sample Psychic suite.
+            For CIRM, classifiers were built for both fetal tissue clusters and hand
+            labeled brain regions. One binary classifier is created for tissue
+            type/cluster. A total of 96 fetal tissue clusters are represented in the
+            Sample Psychic classifier compendium along with 30 classifiers representing
+            hand-labeled brain regions. The pattern of individual classifier scores can
+            give a picture of how user samples map to brain regions and to previously
+            analyzed clusters.</p></li>
+            <li class="list-group-item"><a href="https://samplepsychic.ucsc.edu/"
+            target="_blank">Sample Psychic Website</a> <i class="fas fa-external-link-alt"
+            aria-hidden="true"></i></p></li>
+          </ul>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">
+          Sample Psychic was created by James Durbin.
+          </small>
+        </div>
+      </div>
       <a name="MISCE"></a>
-      <p class="lead"><span style="color: #1E90FF">MISCE:</span> A Minimum Information
-      About a Stem Cell Experiment</p>
-      <!--<h4>MISCE</h4>
-      <p><b>A Minimum Information About a Stem Cell Experiment</b></p>-->
-      <p>
-      MISCE, or Minimum Information about a Stem Cell Expriment, is a
-      spreadsheet that attempts to collect a rich set of useful information (metadata) about
-      any experiment involving stem cells. The hope is that in using MISCE, the detailed
-      metadata will make the experimental data useful to others attempting to use it
-      in the future.</p>
-
-      <p>
-      MISCE consists of a number of different modules with each module describing a
-      different experimental process, e.g. celluar reprogramming or RNA sequencing,
-      and all of the important information related to this process, e.g. &quot;Biosample
-      disease stage&quot; or &quot;Assay platform&quot;. Each module can
-      be included or excluded based on the type of experiment being performed. For
-      example, you might not include the &quot;Assay_DNAMethyl&quot; module if you
-      are not performing DNA methylation assays as part of your experiment.</p>
-
-      <p><a href="<!--#echo var="ROOT"-->/MISCEv1.1.pdf">View PDF of MISCE modules</a></p>
-
-      <p>
-      MISCE was created by Sagar Jain and Richard Scheuermann;
-      it is currently maintained by UCSC.</p>
+      <div class="card">
+        <div class="card-body text-center">
+          <img class="card-img-top" style="max-width: 300px"
+          src="<!--#echo var='ROOT'-->images/misce1.png">
+          <p class="lead"><span style="color: #1E90FF">MISCE:</span> A Minimum Information
+          About a Stem Cell Experiment</p>
+          <ul class="list-group list-group-flush text-left">
+            <li class="list-group-item">
+              <p>
+              MISCE, or Minimum Information about a Stem Cell Expriment, is a
+              spreadsheet that attempts to collect a rich set of useful information (metadata) about
+              any experiment involving stem cells. The hope is that in using MISCE, the detailed
+              metadata will make the experimental data useful to others attempting to use it
+              in the future.</p>
+              <p>
+              MISCE consists of a number of different modules with each module describing a
+              different experimental process, e.g. celluar reprogramming or RNA sequencing,
+              and all of the important information related to this process, e.g. &quot;Biosample
+              disease stage&quot; or &quot;Assay platform&quot;. Each module can
+              be included or excluded based on the type of experiment being performed. For
+              example, you might not include the &quot;Assay_DNAMethyl&quot; module if you
+              are not performing DNA methylation assays as part of your experiment.</p>
+            </li>
+            <li class="list-group-item">
+              <a href="<!--#echo var='ROOT'-->MISCEv1.1.pdf">PDF of MISCE modules</a>
+              <i class="far fa-file-pdf" aria-hidden="true"></i>
+            </li>
+          </ul>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">
+          MISCE was created by Sagar Jain and Richard Scheuermann;
+          it is currently maintained by UCSC.
+          </small>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-<!--<<div class="row">
-  <div class="col-md-4">
-    <div class="tab">
-      <input id="tab-one" type="checkbox" name="tabs">
-      <label for="tab-one">Label One</label>
-      <div class="tab-content">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur,
-        architecto, explicabo perferendis nostrum, maxime impedit atque odit sunt
-        pariatur illo obcaecati soluta molestias iure facere dolorum adipisci eum?
-        Saepe, itaque.</p>
-      </div>
-    </div>
-  </div>
 
-  <div class="col-md-4">
-    <div class="tab">
-      <input id="tab-two" type="checkbox" name="tabs">
-      <label for="tab-two">Label Two</label>
-      <div class="tab-content">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur,
-        architecto, explicabo perferendis nostrum, maxime impedit atque odit sunt
-        pariatur illo obcaecati soluta molestias iure facere dolorum adipisci eum?
-        Saepe, itaque.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-4">
-    <div class="tab">
-      <input id="tab-three" type="checkbox" name="tabs">
-      <label for="tab-three">Label Three</label>
-      <div class="tab-content">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur,
-        architecto, explicabo perferendis nostrum, maxime impedit atque odit sunt
-        pariatur illo obcaecati soluta molestias iure facere dolorum adipisci eum?
-        Saepe, itaque.</p>
-      </div>
-    </div>
-  </div>
-</div>-->
-</div>
-
-<!--#include virtual="$ROOT/inc/footer.html" -->
+<!--#include virtual="${ROOT}inc/footer.html" -->

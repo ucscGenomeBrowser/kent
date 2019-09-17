@@ -22,7 +22,7 @@
 #include "obscure.h"
 #include "hgConfig.h"
 #include "grp.h"
-
+#include "udc.h"
 
 boolean isHubTrack(char *trackName)
 /* Return TRUE if it's a hub track. */
@@ -169,11 +169,9 @@ return tHub;
 static boolean
 hubTimeToCheck(struct hubConnectStatus *hub, char *notOkStatus)
 /* check to see if enough time has passed to re-check a hub that
- * has an error status.  Default time to wait is 30 minutes, but this
- * is configurable with the hub.timeToCheck conf variable */
+ * has an error status.  Use udcTimeout as the length of time to wait.*/
 {
-char *checkTimeString = cfgOptionDefault(hgHubConnectTimeToCheck, "1800");
-time_t checkTime = sqlUnsigned(checkTimeString);
+time_t checkTime = udcCacheTimeout();
 return dateIsOlderBy(notOkStatus, "%F %T", checkTime);
 }
 
@@ -204,7 +202,11 @@ if (row != NULL)
 	hubUpdateStatus( hub->errorMessage, hub);
 	if (!isEmpty(hub->errorMessage))
 	    {
-	    warn("Could not connect to hub \"%s\": %s", shortLabel, hub->errorMessage);
+            boolean isCollection = (strstr(hub->hubUrl, "hgComposite") != NULL);
+            if (isCollection)
+                warn("Your Track Collections have been removed by our trash collectors.  If you'd like your Track Collections to stay on our servers, you need to save them in a session." );
+            else
+                warn("Could not connect to hub \"%s\": %s", shortLabel, hub->errorMessage);
 	    }
 	}
     }
@@ -220,6 +222,10 @@ struct slPair *pair, *pairList = cartVarsWithPrefix(cart, hgHubConnectHubVarPref
 struct sqlConnection *conn = hConnectCentral();
 for (pair = pairList; pair != NULL; pair = pair->next)
     {
+    // is this hub turned connected??
+    if (differentString(pair->val, "1"))
+        continue;
+
     int id = hubIdFromCartName(pair->name);
     hub = hubConnectStatusForId(conn, id);
     if (hub != NULL)
@@ -245,7 +251,16 @@ for (name = nameList; name != NULL; name = name->next)
     hub = hubConnectStatusForId(conn, id);
     if (hub != NULL)
 	{
-        slAddHead(&hubList, hub);
+	if (!isEmpty(hub->errorMessage) && (strstr(hub->hubUrl, "hgComposite") != NULL))
+            {
+            // custom collection hub has disappeared.   Remove it from cart
+            cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
+            char buffer[1024];
+            safef(buffer, sizeof buffer, "hgHubConnect.hub.%d", id);
+            cartRemove(cart, buffer);
+            }
+        else
+            slAddHead(&hubList, hub);
 	}
     }
 slFreeList(&nameList);
@@ -357,7 +372,8 @@ struct trackHubGenome *hubGenome = trackHubFindGenome(hub->trackHub, database);
 struct trackDb *tdbList = trackHubTracksForGenome(hub->trackHub, hubGenome);
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, database);
-trackDbPrioritizeContainerItems(tdbList);
+//this next line causes warns to print outside of warn box on hgTrackUi
+//trackDbPrioritizeContainerItems(tdbList);
 trackHubPolishTrackNames(hub->trackHub, tdbList);
 char *fixTrackName = cloneString(trackName);
 trackHubFixName(fixTrackName);
@@ -554,44 +570,63 @@ hDisconnectCentral(&conn);
 }
 
 static char  *checkForNew( struct cart *cart)
-/* see if the user just typed in a new hub url, return id if so */
+/* see if the user just typed in a new hub url, or we have one or more hubUrl 
+ * on the command line.  Return the new database if there is one. */
 {
-struct hubConnectStatus *hub;
-char *url = cartOptionalString(cart, hgHubDataClearText);
+char *newDatabase = NULL;
+boolean doClear = FALSE;
+char *assemblyDb = cartOptionalString(cart, hgHubGenome);
+char *wantFirstDb = cartOptionalString(cart, hgHubDoFirstDb);
 
-if (url != NULL)
-    disconnectHubsSamePrefix(cart, url);
+struct slName *urls = cartOptionalSlNameList(cart, hgHubDataClearText);
+if (urls)
+    doClear = TRUE;
 else
-    url = cartOptionalString(cart, hgHubDataText);
+    urls  = cartOptionalSlNameList(cart, hgHubDataText);
 
-if (url == NULL)
+if (urls == NULL)
     return NULL;
 
-trimSpaces(url);
-
-gNewHub = hub = getAndSetHubStatus( cart, url, TRUE);
-    
-cartRemove(cart, hgHubDataClearText);
-cartRemove(cart, hgHubDataText);
-
-char *wantFirstDb = cartOptionalString(cart, hgHubDoFirstDb);
-char *newDatabase = NULL;
-if ((wantFirstDb != NULL) && (hub->trackHub != NULL))
-    newDatabase = hub->trackHub->defaultDb;
-else 
+for(; urls; urls = urls->next)
     {
-    // Check to see if the user specified an assembly within
-    // an assembly hub.
-    char *assemblyDb = cartOptionalString(cart, hgHubGenome);
-    if (assemblyDb != NULL)
-        {
-        char buffer[512];
+    char *url = cloneString(urls->name);
+    if (doClear)
+        disconnectHubsSamePrefix(cart, url);
 
-        safef(buffer, sizeof buffer, "hub_%d_%s",  hub->id, assemblyDb);
-        newDatabase = cloneString(buffer);
+    trimSpaces(url);
+
+    // go and grab the hub and set the cart variables to connect it
+    struct hubConnectStatus *hub;
+    gNewHub = hub = getAndSetHubStatus( cart, url, TRUE);
+
+    if (newDatabase == NULL)  // if we haven't picked a new database yet
+        {
+        if ((wantFirstDb != NULL) && (hub->trackHub != NULL)) // choose the first db
+            newDatabase = hub->trackHub->defaultDb;
+        else if (assemblyDb != NULL)
+            {
+            // Check to see if the user specified an assembly within
+            // an assembly hub.
+            struct trackHub *trackHub = hub->trackHub;
+            if (trackHub != NULL)
+                {
+                struct trackHubGenome *genomeList = trackHub->genomeList;
+
+                for(; genomeList; genomeList = genomeList->next)
+                    {
+                    if (sameString(assemblyDb, hubConnectSkipHubPrefix(genomeList->name)))
+                        {
+                        newDatabase = genomeList->name;
+                        break;
+                        }
+                    }
+                }
+            }
         }
     }
 
+cartRemove(cart, hgHubDataClearText);
+cartRemove(cart, hgHubDataText);
 cartRemove(cart, hgHubDoFirstDb);
 cartRemove(cart, hgHubGenome);
 return newDatabase;
@@ -692,8 +727,7 @@ hDisconnectCentral(&conn);
 }
 
 struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database)
-/* Load up stuff from data hub and append to list. The hubUrl points to
- * a trackDb.ra format file.  */
+/* Load up stuff from data hub and return list. */
 {
 /* Load trackDb.ra file and make it into proper trackDb tree */
 struct trackDb *tdbList = NULL;
@@ -704,11 +738,31 @@ if (trackHub != NULL)
     struct trackHubGenome *hubGenome = trackHubFindGenome(trackHub, database);
     if (hubGenome != NULL)
 	{
-	tdbList = trackHubTracksForGenome(trackHub, hubGenome);
-	tdbList = trackDbLinkUpGenerations(tdbList);
-	tdbList = trackDbPolishAfterLinkup(tdbList, database);
-	trackDbPrioritizeContainerItems(tdbList);
-	trackHubPolishTrackNames(trackHub, tdbList);
+        boolean doCache = trackDbCacheOn();
+
+        if (doCache)
+            {
+            // we have to open the trackDb file to get the udc cache to check for an update
+            struct udcFile *checkCache = udcFileMayOpen(hubGenome->trackDbFile, NULL);
+            time_t time = udcUpdateTime(checkCache);
+            udcFileClose(&checkCache);
+
+            struct trackDb *cacheTdb = trackDbHubCache(hubGenome->trackDbFile, time);
+
+            if (cacheTdb != NULL)
+                return cacheTdb;
+
+            memCheckPoint(); // we want to know how much memory is used to build the tdbList
+            }
+
+        tdbList = trackHubTracksForGenome(trackHub, hubGenome);
+        tdbList = trackDbLinkUpGenerations(tdbList);
+        tdbList = trackDbPolishAfterLinkup(tdbList, database);
+        trackDbPrioritizeContainerItems(tdbList);
+        trackHubPolishTrackNames(trackHub, tdbList);
+
+        if (doCache)
+            trackDbHubCloneTdbListToSharedMem(hubGenome->trackDbFile, tdbList, memCheckPoint());
 	}
     }
 return tdbList;
@@ -762,11 +816,8 @@ for (hub = hubList; hub != NULL; hub = hub->next)
 	    }
 	else
 	    {
-	    if (!trackHubDatabase(database))
-		{
-		struct grp *grp = grpFromHub(hub);
-		slAddHead(&hubGroups, grp);
-		}
+            struct grp *grp = grpFromHub(hub);
+            slAddHead(&hubGroups, grp);
 	    hubUpdateStatus(NULL, hub);
 	    }
 

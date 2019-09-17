@@ -26,6 +26,17 @@ usage: $base assemblyPrefix
   exit $status;
 } # usage
 
+my %gbAccToHg19Alt = ( gl000250 => 'chr6_apd_hap1',
+                       gl000251 => 'chr6_cox_hap2',
+                       gl000252 => 'chr6_dbb_hap3',
+                       gl000253 => 'chr6_mann_hap4',
+                       gl000254 => 'chr6_mcf_hap5',
+                       gl000255 => 'chr6_qbl_hap6',
+                       gl000256 => 'chr6_ssto_hap7',
+                       gl000257 => 'chr4_ctg9_hap1',
+                       gl000258 => 'chr17_ctg5_hap1',
+                     );
+
 sub findAssemblyMappings {
   # Return the dom node(s) of the <mapping> for the desired assembly (disregarding GRC patch suffix)
   my ($dom, $assemblyPrefix) = @_;
@@ -39,10 +50,9 @@ sub findAssemblyMappings {
     if ($name eq "LRG") {
       my @mappingNodes = $s->findnodes("mapping");
       foreach my $m (@mappingNodes) {
-	# Check the assembly name and make sure this is for a chrom, not patch etc.
+	# Check the assembly name
 	my $assembly = $m->findvalue('@coord_system');
-	my $otherId = $m->findvalue('@other_id');
-	push @mappings, $m if ($assembly =~ /^$assemblyPrefix/ && $otherId =~ /^NC_/);
+	push @mappings, $m if ($assembly =~ /^$assemblyPrefix/);
       }
     }
   }
@@ -74,6 +84,8 @@ sub parseOneLrg {
   }
 
   my $lrgName = $dom->findvalue('/lrg/fixed_annotation/id');
+  my $lrgSeq = $dom->findvalue('/lrg/fixed_annotation/sequence');
+  my $lrgSize = length($lrgSeq);
   # HGNC id & symbol
   my $hgncId = $dom->findvalue('/lrg/fixed_annotation/hgnc_id');
   my $hgncSymbol = $dom->findvalue('/lrg/updatable_annotation/annotation_set/lrg_locus[@source="HGNC"]');
@@ -97,7 +109,35 @@ sub parseOneLrg {
 
   foreach my $refMapping (@refMappings) {
     # Find BED 12+ fields.
+    my $mapType = $refMapping->findvalue('@type');
     my $seq = $refMapping->findvalue('@other_name');
+    if ($seq eq 'unlocalized') {
+      $seq = "Un";
+    }
+    if ($mapType eq 'haplotype' || $mapType eq 'patch') {
+      my $gbAcc = $refMapping->findvalue('@other_id_syn');
+      $gbAcc =~ m/^[A-Z]+\d+\.\d+$/ || die "$xmlIn: $assemblyPrefix has $mapType mapping with " .
+        "other_id_syn='$gbAcc', expecting versioned GenBank acc (e.g. 'KI270850.1').";
+      if ($assemblyPrefix eq 'GRCh37') {
+        $gbAcc =~ s/\..*//;
+        $gbAcc = lc $gbAcc;
+      } else {
+        $gbAcc =~ s/\./v/;
+      }
+      # Trim chromosome band stuff if present
+      $seq =~ s/[pq].*//;
+      if ($assemblyPrefix eq 'GRCh37' && exists $gbAccToHg19Alt{$gbAcc}) {
+        $seq = $gbAccToHg19Alt{$gbAcc};
+      } elsif ($seq eq 'Un') {
+        $seq .= "_$gbAcc";
+      } else {
+        # NOTE: as of 5/30/18, there are no mappings to hg19 or hg38 seqs with the suffix _random,
+        # so I'm not sure what those would look like in the XML.  This could cause us to lose
+        # mappings to the _random sequences, *if* any are added in the future.
+        my $suffix = ($mapType eq 'haplotype' ? 'alt' : 'fix');
+        $seq .= "_${gbAcc}_$suffix";
+      }
+    }
     $seq = 'chr' . $seq unless ($seq =~ /^chr/);
     my $start = $refMapping->findvalue('@other_start') - 1;
     my $end = $refMapping->findvalue('@other_end');
@@ -105,8 +145,14 @@ sub parseOneLrg {
     die 'Unusual number of mapping_spans' if (@mappingSpans != 1);
     my $span = $mappingSpans[0];
     my $lrgStart = $span->findvalue('@lrg_start') - 1;
-    die "$xmlIn: Unexpected $assemblyPrefix mapping_span lrgStart $lrgStart" if ($lrgStart != 0);
     my $lrgEnd = $span->findvalue('@lrg_end');
+    if ($lrgSize < $lrgEnd) {
+      die "$xmlIn: length of sequence is $lrgSize but $assemblyPrefix lrg_end is $lrgEnd";
+    }
+    my $name = $lrgName;
+    if ($lrgStart != 0 || $lrgEnd != $lrgSize) {
+      $name .= ":". ($lrgStart+1) . "-$lrgEnd";
+    }
     my $strand = $span->findvalue('@strand');
     $strand = ($strand == 1 ? '+' : '-');
 
@@ -153,9 +199,9 @@ sub parseOneLrg {
     my $mismatchesStr = join(',', @mismatches);
     my $indelsStr = join(',', @indels);
 
-    print $bedF join("\t", $seq, $start, $end, $lrgName, 0, $strand, $start, $end, 0,
+    print $bedF join("\t", $seq, $start, $end, $name, 0, $strand, $start, $end, 0,
                      $blockCount, $blockSizesStr, $blockStartsStr,
-                     $mismatchesStr, $indelsStr, $lrgEnd,
+                     $mismatchesStr, $indelsStr, $lrgSize,
                      $hgncId, $hgncSymbol, $lrgNcbiAcc,
                      $lrgSource, $lrgSourceUrl, $creationDate) . "\n";
   } # each refMapping

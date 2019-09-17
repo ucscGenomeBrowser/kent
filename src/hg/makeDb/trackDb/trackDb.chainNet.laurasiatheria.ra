@@ -57,6 +57,497 @@ html chainNet
         type netAlign pteVam1 chainPteVam1
         html chainNet
 
+##############################################################################
+# bosTau9 - cow - Bos taurus - mammal - cetartiodactyla - taxId 9913
+##############################################################################
+track chainNetBosTau9
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 240
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb bosTau9
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetBosTau9Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetBosTau9
+    spectrum on
+
+        track chainBosTau9
+        parent chainNetBosTau9Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain bosTau9
+        html chainNet
+
+    track chainNetBosTau9Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetBosTau9
+
+        track netBosTau9
+        parent chainNetBosTau9Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign bosTau9 chainBosTau9
+        html chainNet
+
+################################################################
+# bosTau8 - cow - Bos taurus - mammal - cetartiodactyla - taxId 9913
+################################################################
+track chainNetBosTau8
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 240
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb bosTau8
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetBosTau8Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetBosTau8
+    spectrum on
+
+        track chainBosTau8
+        parent chainNetBosTau8Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain bosTau8
+        html chainNet
+
+    track chainNetBosTau8Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetBosTau8
+
+        track netBosTau8
+        parent chainNetBosTau8Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign bosTau8 chainBosTau8
+        html chainNet
+
+################################################################
+# bosTau7 - cow - Bos taurus - mammal - cetartiodactyla - taxId 9913
+################################################################
+track chainNetBosTau7
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 240
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb bosTau7
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetBosTau7Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetBosTau7
+    spectrum on
+
+        track chainBosTau7
+        parent chainNetBosTau7Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain bosTau7
+        html chainNet
+
+    track chainNetBosTau7Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetBosTau7
+
+        track netBosTau7
+        parent chainNetBosTau7Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign bosTau7 chainBosTau7
+        html chainNet
+
+################################################################
+# bosTau6 - cow - Bos taurus - mammal - cetartiodactyla - taxId 9913
+################################################################
+track chainNetBosTau6
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 240
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb bosTau6
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetBosTau6Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetBosTau6
+    spectrum on
+
+        track chainBosTau6
+        parent chainNetBosTau6Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain bosTau6
+        html chainNet
+
+    track chainNetBosTau6Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetBosTau6
+
+        track netBosTau6
+        parent chainNetBosTau6Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign bosTau6 chainBosTau6
+        html chainNet
+
+################################################################
+# bosTau4 - cow - Bos taurus - mammal - cetartiodactyla - taxId 9913
+################################################################
+track chainNetBosTau4
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 240
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb bosTau4
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetBosTau4Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetBosTau4
+    spectrum on
+
+        track chainBosTau4
+        parent chainNetBosTau4Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain bosTau4
+        html chainNet
+
+    track chainNetBosTau4Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetBosTau4
+
+        track netBosTau4
+        parent chainNetBosTau4Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign bosTau4 chainBosTau4
+        html chainNet
+
+################################################################
+# bosTau3 - cow - Bos taurus - mammal - cetartiodactyla - taxId 9913
+################################################################
+track chainNetBosTau3
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 240
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb bosTau3
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetBosTau3Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetBosTau3
+    spectrum on
+
+        track chainBosTau3
+        parent chainNetBosTau3Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain bosTau3
+        html chainNet
+
+    track chainNetBosTau3Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetBosTau3
+
+        track netBosTau3
+        parent chainNetBosTau3Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign bosTau3 chainBosTau3
+        html chainNet
+
+################################################################
+# bosTau2 - cow - Bos taurus - mammal - cetartiodactyla - taxId 9913
+################################################################
+track chainNetBosTau2
+compositeTrack on
+shortLabel $o_db Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 240
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb bosTau2
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetBosTau2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetBosTau2
+    spectrum on
+
+        track chainBosTau2
+        parent chainNetBosTau2Viewchain
+        subGroups view=chain
+        shortLabel $o_db Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain bosTau2
+        html chainNet
+
+    track chainNetBosTau2Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetBosTau2
+
+        track netBosTau2
+        parent chainNetBosTau2Viewnet
+        subGroups view=net
+        shortLabel $o_db Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign bosTau2 chainBosTau2
+        html chainNet
+
+################################################################
+# bosTau1 - cow - Bos taurus - mammal - cetartiodactyla - taxId 9913
+################################################################
+track chainNetBosTau1
+compositeTrack on
+shortLabel $o_db Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 240
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb bosTau1
+chainMinScore 1000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetBosTau1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetBosTau1
+    spectrum on
+
+        track chainBosTau1
+        parent chainNetBosTau1Viewchain
+        subGroups view=chain
+        shortLabel $o_db Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain bosTau1
+        html chainNet
+
+    track chainNetBosTau1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetBosTau1
+
+        track netBosTau1
+        parent chainNetBosTau1Viewnet
+        subGroups view=net
+        shortLabel $o_db Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign bosTau1 chainBosTau1
+        html chainNet
+
+################################################################
+# oviAri4 - Sheep - Ovis aries - mammal - cetartiodactyla - 2369
+################################################################
+track chainNetOviAri4
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 205.3
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 72,-127,-29,-142,-127,100,-120,-29,-29,-120,100,-127,-142,-29,-127,72
+matrixHeader A, C, G, T
+otherDb oviAri4
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetOviAri4Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetOviAri4
+    spectrum on
+
+        track chainOviAri4
+        release alpha
+        parent chainNetOviAri4Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain oviAri4
+        html chainNet
+
+    track chainNetOviAri4Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetOviAri4
+
+        track netOviAri4
+        release alpha
+        parent chainNetOviAri4Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign oviAri4 chainOviAri4
+        html chainNet
+
 ################################################################
 # oviAri3 - Sheep - Ovis aries - mammal - cetartiodactyla - 2369
 ################################################################
@@ -647,9 +1138,62 @@ html chainNet
         type netAlign lepWed1 chainLepWed1
         html chainNet
 
-################################################################
+##############################################################################
+# neoSch1 - Hawaiian monk seal - Neomonachus schauinslandi - taxId: 29088
+##############################################################################
+track chainNetNeoSch1
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 402.43
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 3000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb neoSch1
+html chainNet
+
+    track chainNetNeoSch1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetNeoSch1
+    spectrum on
+
+        track chainNeoSch1
+        parent chainNetNeoSch1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain neoSch1
+        html chainNet
+
+    track chainNetNeoSch1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetNeoSch1
+
+        track netNeoSch1
+        parent chainNetNeoSch1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment net
+        type netAlign neoSch1 chainNeoSch1
+        html chainNet
+
+##############################################################################
 # odoRosDiv1 - Pacific walrus - Odobenus rosmarus divergens - mammal - carnivora - 2470
-################################################################
+##############################################################################
 track chainNetOdoRosDiv1
 release alpha
 compositeTrack on
@@ -879,6 +1423,169 @@ html chainNet
         html chainNet
 
 ################################################################
+# equCab3 - horse - Equus caballus - mammal - Perissodactyla - taxId 9796
+################################################################
+track chainNetEquCab3
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 240
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb equCab3
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetEquCab3Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetEquCab3
+    spectrum on
+
+        track chainEquCab3
+        parent chainNetEquCab3Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain equCab3
+        html chainNet
+
+    track chainNetEquCab3Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetEquCab3
+
+        track netEquCab3
+        parent chainNetEquCab3Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign equCab3 chainEquCab3
+        html chainNet
+
+################################################################
+# equCab2 - horse - Equus caballus - mammal - Perissodactyla - taxId 9796
+################################################################
+track chainNetEquCab2
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 240
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb equCab2
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetEquCab2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetEquCab2
+    spectrum on
+
+        track chainEquCab2
+        parent chainNetEquCab2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain equCab2
+        html chainNet
+
+    track chainNetEquCab2Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetEquCab2
+
+        track netEquCab2
+        parent chainNetEquCab2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign equCab2 chainEquCab2
+        html chainNet
+
+################################################################
+# equCab1 - horse - Equus caballus - mammal - Perissodactyla - taxId 9796
+################################################################
+track chainNetEquCab1
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 240
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb equCab1
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetEquCab1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetEquCab1
+    spectrum on
+
+        track chainEquCab1
+        parent chainNetEquCab1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain equCab1
+        html chainNet
+
+    track chainNetEquCab1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetEquCab1
+
+        track netEquCab1
+        parent chainNetEquCab1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign equCab1 chainEquCab1
+        html chainNet
+
+
+################################################################
 # panHod1 - Tibetan antelope - Pantholops hodgsonii - mammal - cetartiodactyla - 2362
 ################################################################
 track chainNetPanHod1
@@ -935,6 +1642,65 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign panHod1 chainPanHod1
+        html chainNet
+
+################################################################
+# balAcu1 - Minke whale - Balaenoptera acutorostrata scammoni - mammal - cetartiodactyla - taxId 310752
+################################################################
+track chainNetBalAcu1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 453.64
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb balAcu1
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetBalAcu1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetBalAcu1
+    spectrum on
+
+        track chainBalAcu1
+        release alpha
+        parent chainNetBalAcu1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain balAcu1
+        html chainNet
+
+    track chainNetBalAcu1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetBalAcu1
+
+        track netBalAcu1
+        release alpha
+        parent chainNetBalAcu1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign balAcu1 chainBalAcu1
         html chainNet
 
 ################################################################

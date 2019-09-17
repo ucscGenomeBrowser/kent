@@ -48,6 +48,13 @@
 #include "htmshell.h"
 #include "bigBedFind.h"
 #include "customComposite.h"
+#include "interactUi.h"
+#include "bedTabix.h"
+#include "hic.h"
+
+#ifdef USE_HAL
+#include "halBlockViz.h"
+#endif
 
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
@@ -362,7 +369,7 @@ if (groupFileName == NULL)
     return NULL;
 struct hash *ra;
 struct grp *list = NULL;
-struct lineFile *lf = udcWrapShortLineFile(groupFileName, NULL, 16*1024*1024);
+struct lineFile *lf = udcWrapShortLineFile(groupFileName, NULL, MAX_HUB_GROUP_FILE_SIZE);
 while ((ra = raNextRecord(lf)) != NULL)
     {
     struct grp *grp;
@@ -466,7 +473,10 @@ if (base == NULL)
 
 char buffer[4096];
 
-safef(buffer, sizeof(buffer), "%s_%s", hubName, base);
+if (isNotEmpty(hubName))
+    safef(buffer, sizeof(buffer), "%s_%s", hubName, base);
+else
+    safef(buffer, sizeof(buffer), "%s", base);
 
 return cloneString(buffer);
 }
@@ -486,7 +496,7 @@ static struct trackHubGenome *trackHubGenomeReadRa(char *url, struct trackHub *h
 /* Read in a genome.ra format url and return it as a list of trackHubGenomes. 
  * Also add it to hash, which is keyed by genome. */
 {
-struct lineFile *lf = udcWrapShortLineFile(url, NULL, 64*1024*1024);
+struct lineFile *lf = udcWrapShortLineFile(url, NULL, MAX_HUB_GENOME_FILE_SIZE);
 struct trackHubGenome *list = NULL, *el;
 struct hash *hash = hub->genomeHash;
 
@@ -615,7 +625,7 @@ struct trackHub *hub = grabHashedHub(hubName);
 if (hub != NULL)
     return hub;
 
-struct lineFile *lf = udcWrapShortLineFile(url, NULL, 256*1024);
+struct lineFile *lf = udcWrapShortLineFile(url, NULL, MAX_HUB_TRACKDB_FILE_SIZE);
 struct hash *hubRa = raNextRecord(lf);
 if (hubRa == NULL)
     errAbort("empty %s in trackHubOpen", url);
@@ -745,17 +755,25 @@ static void expandBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome
 /* Expand bigDataUrls so that no longer relative to genome->trackDbFile */
 {
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "bigDataUrl");
+expandOneUrl(tdb->settingsHash, genome->trackDbFile, "bigDataIndex");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "frames");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "summary");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "linkDataUrl");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "searchTrix");
+expandOneUrl(tdb->settingsHash, genome->trackDbFile, "barChartSampleUrl");
+expandOneUrl(tdb->settingsHash, genome->trackDbFile, "barChartMatrixUrl");
 }
 
 struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName)
 /* Return trackHubGenome of given name associated with hub.  Return NULL if no
- * such genome. */
+ * such genome.  Check genomeName without hub prefix to see if this hub
+ * is attached to an assembly hub.*/
 {
-return hashFindVal(hub->genomeHash, genomeName);
+struct trackHubGenome *ret = hashFindVal(hub->genomeHash, genomeName);
+
+if (ret == NULL)
+    ret = hashFindVal(hub->genomeHash, hubConnectSkipHubPrefix(genomeName));
+return ret;
 }
 
 static void requireBarChartBars(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb)
@@ -800,7 +818,7 @@ else
     {
     /* Check type field. */
     char *type = requiredSetting(hub, genome, tdb, "type");
-    if (!( isCustomComposite(tdb) && (startsWithWord("wig", type) ||  startsWithWord("bedGraph", type))))
+    if (! isCustomComposite(tdb))
         {
         if (startsWithWord("mathWig", type) )
             {
@@ -823,7 +841,10 @@ else
                   startsWithWord("bigGenePred", type) ||
                   startsWithWord("bigNarrowPeak", type) ||
                   startsWithWord("bigChain", type) ||
+                  startsWithWord("bigLolly", type) ||
                   startsWithWord("bigBarChart", type) ||
+                  startsWithWord("bigInteract", type) ||
+                  startsWithWord("hic", type) ||
                   startsWithWord("bam", type)))
                     {
                     errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
@@ -850,7 +871,11 @@ struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     if (hashLookup(hash, tdb->track))
-        errAbort("Track %s appears more than once in genome %s.", tdb->track, genome->name);
+        errAbort("Track %s appears more than once in genome %s. " 
+                "Track identifiers have to be unique. Please check your track hub files, "
+                "especially the 'track' lines. "
+                "The most likely reason for this error is that you duplicated a "
+                "'track' identifier. Hub URL: %s", tdb->track, genome->name, hub->url);
     hashAdd(hash, tdb->track, tdb);
     }
 
@@ -911,7 +936,7 @@ struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGen
 /* Get list of tracks associated with genome.  Check that it only is composed of legal
  * types.  Do a few other quick checks to catch errors early. */
 {
-struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, 64*1024*1024);
+struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, MAX_HUB_TRACKDB_FILE_SIZE);
 struct trackDb *tdbList = trackDbFromOpenRa(lf, NULL);
 lineFileClose(&lf);
 
@@ -1117,7 +1142,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 
 
 
-void trackHubFindPos(char *db, char *term, struct hgPositions *hgp)
+void trackHubFindPos(struct cart *cart, char *db, char *term, struct hgPositions *hgp)
 /* Look for term in track hubs.  Update hgp if found */
 {
 struct trackDb *tdbList = NULL;
@@ -1129,7 +1154,7 @@ if (trackHubDatabase(db))
 else
     tdbList = hubCollectTracks(db, NULL);
 
-findBigBedPosInTdbList(db, tdbList, term, hgp, NULL);
+findBigBedPosInTdbList(cart, db, tdbList, term, hgp, NULL);
 }
 
 boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost, char **pPort)
@@ -1156,4 +1181,88 @@ if (hostPort == NULL)
 *pPort = hostPort;
 
 return TRUE;
+}
+
+void hubCheckBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb)
+/* Check remote file exists and is of correct type. Wrap this in error catcher */
+{
+char *relativeUrl = trackDbSetting(tdb, "bigDataUrl");
+if (relativeUrl != NULL)
+    {
+    char *type = trackDbRequiredSetting(tdb, "type");
+    char *bigDataUrl = trackHubRelativeUrl(genome->trackDbFile, relativeUrl);
+
+    char *bigDataIndex = NULL;
+    char *relIdxUrl = trackDbSetting(tdb, "bigDataIndex");
+    if (relIdxUrl != NULL)
+        bigDataIndex = trackHubRelativeUrl(genome->trackDbFile, relIdxUrl);
+
+    verbose(2, "checking %s.%s type %s at %s\n", genome->name, tdb->track, type, bigDataUrl);
+    if (startsWithWord("bigWig", type))
+        {
+        /* Just open and close to verify file exists and is correct type. */
+        struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);
+        bbiFileClose(&bbi);
+        }
+    else if (startsWithWord("bigNarrowPeak", type) || startsWithWord("bigBed", type) ||
+                startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)||
+                startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) ||
+                startsWithWord("bigBarChart", type) || startsWithWord("bigInteract", type))
+        {
+        /* Just open and close to verify file exists and is correct type. */
+        struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
+        char *typeString = cloneString(type);
+        nextWord(&typeString);
+        if (startsWithWord("bigBed", type) && (typeString != NULL))
+            {
+            unsigned numFields = sqlUnsigned(nextWord(&typeString));
+            if (numFields > bbi->fieldCount)
+                errAbort("fewer fields in bigBed (%d) than in type statement (%d) for track %s with bigDataUrl %s", bbi->fieldCount, numFields, trackHubSkipHubName(tdb->track), bigDataUrl);
+            }
+        bbiFileClose(&bbi);
+        }
+    else if (startsWithWord("vcfTabix", type))
+        {
+        /* Just open and close to verify file exists and is correct type. */
+        struct vcfFile *vcf = vcfTabixFileAndIndexMayOpen(bigDataUrl, bigDataIndex, NULL, 0, 0, 1, 1);
+        if (vcf == NULL)
+            // Warnings already indicated whether the tabix file is missing etc.
+            errAbort("Couldn't open %s and/or its tabix index (.tbi) file.  "
+                     "See http://genome.ucsc.edu/goldenPath/help/vcf.html",
+                     bigDataUrl);
+        vcfFileFree(&vcf);
+        }
+    else if (startsWithWord("bam", type))
+        {
+        bamFileAndIndexMustExist(bigDataUrl, bigDataIndex);
+        }
+    else if (startsWithWord("longTabix", type))
+        {
+        struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
+        if (btf == NULL)
+            errAbort("Couldn't open %s and/or its tabix index (.tbi) file.", bigDataUrl);
+        bedTabixFileClose(&btf);
+        }
+#ifdef USE_HAL
+    else if (startsWithWord("halSnake", type))
+        {
+        char *errString;
+        int handle = halOpenLOD(bigDataUrl, &errString);
+        if (handle < 0)
+            errAbort("HAL open error: %s", errString);
+        if (halClose(handle, &errString) < 0)
+            errAbort("HAL close error: %s", errString);
+        }
+#endif
+    else if (startsWithWord("hic", type))
+        {
+        struct hicMeta *header;
+        char *errString = hicLoadHeader(bigDataUrl, &header, NULL);
+        if (errString != NULL)
+            errAbort("hic file error: %s", errString);
+        }
+    else
+        errAbort("unrecognized type %s in genome %s track %s", type, genome->name, tdb->track);
+    freez(&bigDataUrl);
+    }
 }

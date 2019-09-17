@@ -5472,7 +5472,7 @@ o - Load genomic dupes
     # (takes about 5 min.  Watch log file for convergence --
     # single lines correspond to outer maximization algorithm,
     # interleaved sets of lines correspond to inner maximization
-    # algorithms [see http://www.cse.ucsc.edu/~acs/Siepel-03-0304.pdf
+    # algorithms [see http://www.soe.ucsc.edu/~acs/Siepel-03-0304.pdf
     # for background])
     # Note: k=5 is adequate for a good estimate of the alpha
     # parameter, even though we'll use k=10 in the next step.  The -a

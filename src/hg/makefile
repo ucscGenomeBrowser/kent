@@ -13,13 +13,13 @@ BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgCollection hgConvert \
 	encode/hgEncodeDataVersions encode/hgEncodeVocab encode/hgEncodeApi \
 	phyloPng hgCustom hgPal hgFileUi hgFileSearch makeDb/hgCgiData \
 	js htdocs/style hgMirror hgBeacon hgGtexTrackSettings pyLib \
-	hgGeneGraph
+	hgGeneGraph hgs hubApi
 
 ifdef LOWELAB
     BROWSER_BINS += $(HOME)/lowelab/src/browser/tooltip $(HOME)/lowelab/src/browser/chooseorg
 endif
 
-BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle makeDb/hgLoadMaf utils/pslToBigPsl
+BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle makeDb/hgLoadMaf utils/pslToBigPsl utils/hubCheck
 
 ifneq ($(findstring $(shell hostname),hgwdev hgwbeta),)
     ENCODE_FILES = encode3/encodeDataWarehouse
@@ -74,6 +74,7 @@ UTILS_APPLIST = \
 	encode3/validateManifest \
 	estOrient \
 	featureBits \
+	geneBounds/clusterGenes \
 	genePredHisto \
 	genePredSingleCover \
 	genePredToBed \
@@ -104,6 +105,7 @@ UTILS_APPLIST = \
 	pslRecalcMatch \
 	pslReps \
 	pslSelect \
+	pslSomeRecords \
 	pslSort \
 	pslStats \
 	pslSwap \
@@ -125,6 +127,7 @@ UTIL_DIRS = \
 	agpCloneCheck \
 	agpCloneList \
 	agpAllToFaFile \
+	agpMergeChromScaf \
 	agpToFa \
 	agpToGl \
 	altSplice \
@@ -202,7 +205,6 @@ UTIL_DIRS = \
 	ratStuff \
 	relPairs \
 	recycleDb \
-	reviewSanity \
 	rnaStructure \
 	sage \
 	scanRa \
@@ -252,7 +254,7 @@ compile: ${BROWSER_BINS:%=%.compile} ${BROWSER_LOADERS:%=%.compile}
 # Build cgi's
 #   cgi: Destination for the binaries is /usr/local/apache/cgi-bin-${USER}
 
-cgi: ${BROWSER_BINS:%=%.bins} ${BROWSER_LOADERS:%=%.cgi} ${BROWSER_LOADERS:%=%.cgi} ${ENCODE_FILES:%=%.cgi}
+cgi: ${BROWSER_BINS:%=%.bins} ${BROWSER_LOADERS:%=%.cgi} ${ENCODE_FILES:%=%.cgi}
 %.bins: hgLib
 	cd $* && echo $* && $(MAKE)
 %.cgi: hgLib

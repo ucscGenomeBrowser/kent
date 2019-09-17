@@ -1,7 +1,3 @@
-track refGene override
-release beta,public
-priority 35
-
 track genscan override
 visibility dense
 

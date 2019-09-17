@@ -9,6 +9,7 @@ all:
 
 test: musTest nonCodingFillTest codingFillTest fillTest fill30Test \
 	cds2InsertTest
+	${MAKE} clean
 
 musTest: mkdirs
 	${transMapPslToGenePred} input/musstrain.src.gp input/musstrain.mapped.psl output/$@.mapped.gp

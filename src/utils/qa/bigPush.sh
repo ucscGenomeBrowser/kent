@@ -104,7 +104,7 @@ then
 			for tbl in $(cat "$tableList")
 			do
 				# Build command with proper database, table name, and output mode.
-				command="sudo mypush '$db' '$tbl' mysqlbeta $outputMode"
+				command="sudo mypush '$db' '$tbl' $sqlbeta $outputMode"
 				# Run command using bash
 				echo "$command" | bash
 			done
@@ -112,7 +112,7 @@ then
 		else
 			for tbl in $(echo "$tableList")
 			do
-				command="sudo mypush '$db' '$tbl' mysqlbeta $outputMode"
+				command="sudo mypush '$db' '$tbl' $sqlbeta $outputMode"
 				echo "$command" | bash
 			done
 		fi
@@ -128,13 +128,13 @@ else
 		then
 			for tbl in $(cat "$tableList")
 			do
-				command="sudo mypush '$db' '$tbl' mysqlbeta $outputMode"
+				command="sudo mypush '$db' '$tbl' $sqlbeta $outputMode"
 				echo "$command" | bash
 			done
 		else
 			for tbl in $(echo "$tableList")
 			do
-				command="sudo mypush '$db' '$tbl' mysqlbeta $outputMode"
+				command="sudo mypush '$db' '$tbl' $sqlbeta $outputMode"
 				echo "$command" | bash
 			done
 		fi

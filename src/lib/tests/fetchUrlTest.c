@@ -53,6 +53,7 @@ if (startsWith("http://",url) || startsWith("https://",url))
 	/*  Update sd with newSd, replace it with newUrl, etc. */
 	sd = newSd;
 	url = newUrl;
+	verbose(2, "New url after redirect: %s\n", url);
 	}
     }
 while (TRUE)

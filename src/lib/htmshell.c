@@ -375,7 +375,8 @@ do
 	    char *pf = prefix;
 	    while ((x = *pf++) != 0)
 		*out++ = x;
-	    char h1 = (c >> 4 ) + 0x30; if (h1 > 0x39) h1 += 7;
+	    // use (unsigned char) to shift without sign-extension. We want zeros to be added on left side.
+	    char h1 = ((unsigned char) c >> 4 ) + 0x30; if (h1 > 0x39) h1 += 7; 
 	    *out++ = h1;
 	    char h2 = (c & 0xF) + 0x30; if (h2 > 0x39) h2 += 7;
 	    *out++ = h2;
@@ -702,13 +703,15 @@ va_end(argscp);
 }
 
 void htmlVaBadRequestAbort(char *format, va_list args)
-/* Print out an HTTP header 400 status code (Bad Request) and message,
- * then exit with error.  For use as an errAbort handler. */
+/* Print out an HTTP header 400 status code (Bad Request) and message, then exit with error.
+ * NOTE: This must be installed using pushWarnHandler (pushAbortHandler optional) because
+ * vaErrAbort calls vaWarn and then noWarnAbort.  So if the defaut warn handler is used, then
+ * the error message will be printed out by defaultVaWarn before this prints out the header. */
 {
 puts("Status: 400\r");
 puts("Content-Type: text/plain; charset=UTF-8\r");
 puts("\r");
-if (format != NULL)
+if (format != NULL && args != NULL)
     {
     vfprintf(stdout, format, args);
     fprintf(stdout, "\n");
@@ -737,7 +740,6 @@ if (!initted && !errorsNoHeader)
     initted = TRUE;
     }
 printf("%s", htmlWarnStartPattern());
-// old way htmlVaParagraph(format,args); cannot use without XSS-protections
 fputs("<P>", stdout);
 htmlVaEncodeErrorText(format,args);
 fputs("</P>\n", stdout);
@@ -951,7 +953,7 @@ dyStringAppend(policy, "default-src 'self';");
 dyStringAppend(policy, "  child-src 'self';");
 */
 
-dyStringAppend(policy, " script-src 'self'");
+dyStringAppend(policy, " script-src 'self' blob:");
 // Trick for backwards compatibility with browsers that understand CSP1 but not nonces (CSP2).
 dyStringAppend(policy, " 'unsafe-inline'");
 // For browsers that DO understand nonces and CSP2, they ignore 'unsafe-inline' in script if nonce is present.
@@ -967,10 +969,12 @@ dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js");
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/bowser/1.6.1/bowser.min.js");
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/jstree/3.3.4/jstree.min.js");
+dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js");
 dyStringAppend(policy, " login.persona.org/include.js");
+dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js");
 // expMatrix
-dyStringAppend(policy, " ajax.googleapis.com/ajax");
-dyStringAppend(policy, " maxcdn.bootstrapcdn.com/bootstrap");
+dyStringAppend(policy, " ajax.googleapis.com");
+dyStringAppend(policy, " maxcdn.bootstrapcdn.com");
 dyStringAppend(policy, " d3js.org/d3.v3.min.js");
 // jsHelper
 dyStringAppend(policy, " cdn.datatables.net");
@@ -1010,7 +1014,7 @@ dyStringAppend(policy, " img-src * data:;");
 dyStringAppend(policy, " img-src 'self'");
 // used by hgGene for modbaseimages in hg/hgc/lowelab.c hg/protein/lib/domains.c hg/hgGene/domains.c
 dyStringAppend(policy, " modbase.compbio.ucsf.edu");  
-dyStringAppend(policy, " hgwdev.cse.ucsc.edu"); // used by visiGene
+dyStringAppend(policy, " hgwdev.gi.ucsc.edu"); // used by visiGene
 dyStringAppend(policy, " genome.ucsc.edu"); // used by visiGene
 dyStringAppend(policy, " code.jquery.com");          // used by hgIntegrator
 dyStringAppend(policy, " www.google-analytics.com"); // used by google analytics
@@ -1079,7 +1083,7 @@ fputs("<HEAD>\n", f);
 // CSP header
 generateCspMetaHeader(f);
 
-fputs(head, f); // TODO "head" var. not XSS safe
+fputs(head, f);
 htmlFprintf(f,"<TITLE>%s</TITLE>\n", title); 
 if (endsWith(title,"Login - UCSC Genome Browser")) 
     fprintf(f,"\t<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">\n");

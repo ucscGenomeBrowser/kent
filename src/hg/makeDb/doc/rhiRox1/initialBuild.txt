@@ -449,6 +449,40 @@ rhiRox1.upstreamGeneTbl = refGene
     cat fb.rhiRox1.chainHg38Link.txt
     #   2474156996 bases of 2856044136 (86.629%) in intersection
 
+##############################################################################
+# create ucscToRefSeq name mapping (DONE - 2017-12-14 - Hiram)
+    mkdir /hive/data/genomes/rhiRox1/bed/ucscToRefSeq
+    cd /hive/data/genomes/rhiRox1/bed/ucscToRefSeq
+
+    # run up idKeys for refseq release
+    mkdir refseq
+    cd refseq
+    ln -s /hive/data/outside/ncbi/genomes/refseq/vertebrate_mammalian/Rhinopithecus_roxellana/all_assembly_versions/GCF_000769185.1_Rrox_v1/GCF_000769185.1_Rrox_v1_genomic.fna.gz ./
+
+    faToTwoBit *.fna.gz refseq.rhiRox1.2bit
+    doIdKeys.pl -buildDir=`pwd` -twoBit=`pwd`/refseq.rhiRox1.2bit refseqRhiRox1
+    # real    68m59.898s
+
+    cd /hive/data/genomes/rhiRox1/bed/ucscToRefSeq
+    join -t$'\t' ../idKeys/rhiRox1.idKeys.txt refseq/refseqRhiRox1.idKeys.txt \
+      | cut -f2- | sort > ucsc.refseq.tab
+
+    join -t$'\t' <(sort ../../chrom.sizes) ucsc.refseq.tab \
+        | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+          | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+
+    # maximum size of UCSC chrom name for SQL index
+    export SZ=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    # SZ: 14
+
+    sed -e "s/21/$SZ/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab rhiRox1 ucscToRefSeq stdin ucscToRefSeq.bed
+
+    checkTableCoords rhiRox1 ucscToRefSeq
+
+    featureBits -countGaps rhiRox1 ucscToRefSeq
+    # 2899552139 bases of 2899552139 (100.000%) in intersection
+
 #########################################################################
 # ucscToINSDC table/track (DONE - 2015-03-23 - Hiram)
     mkdir /hive/data/genomes/rhiRox1/bed/ucscToINSDC
@@ -457,8 +491,10 @@ rhiRox1.upstreamGeneTbl = refGene
     grep chrM ../../rhiRox1.agp
 # chrM    1       16549   1       F       NC_008218.1     1       16549   +
 
+    # this is not the genbank name, lookup at NCBI entrez nucleotide:
+
     ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
-       ../../genbank/GCA_*assembly_structure/Primary_Assembly NC_008218.1
+       ../../genbank/GCA_*assembly_structure/Primary_Assembly DQ355300.1
 
     awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
          | sort > name.coordinate.tab
@@ -480,7 +516,42 @@ rhiRox1.upstreamGeneTbl = refGene
     featureBits -countGaps rhiRox1 ucscToINSDC
     # 2899552139 bases of 2899552139 (100.000%) in intersection
 
-#########################################################################
+##############################################################################
+# add chromAlias table (DONE - 2017-12-14 - Hiram)
+
+    mkdir /hive/data/genomes/rhiRox1/bed/chromAlias
+    cd /hive/data/genomes/rhiRox1/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' rhiRox1 \
+        | sort > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' rhiRox1 \
+        |sort > ucsc.genbank.tab
+
+    join -t$'\t' ../idKeys/rhiRox1.idKeys.txt \
+	../../ensembl/ensemblRhiRox1.idKeys.txt \
+	| cut -f2,3 | sort > ucsc.ensembl.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl
+    sort -o rhiRox1.chromAlias.tab rhiRox1.chromAlias.tab
+
+for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t rhiRox1.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 135512 =? 135512 OK
+# checking genbank: 135512 =? 135512 OK
+# checking ensembl: 135512 =? 135512 OK
+
+    hgLoadSqlTab rhiRox1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        rhiRox1.chromAlias.tab
+
+##############################################################################
 # fixup search rule for assembly track/gold table (DONE - 2015-03-23 - Hiram)
     hgsql -N -e "select frag from gold;" rhiRox1 | sort -u \
         > /tmp/rhiRox1.frag.gold.txt

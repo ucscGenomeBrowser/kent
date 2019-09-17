@@ -1,0 +1,17 @@
+# required db variable
+db nanGal1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/nanGal1/jkStuff/ensToUcsc.lift
+
+skipInvalid yes
+# ENSNGAT00000010911.1 txEnd 1279026 >= chromSize 1279023
+# ENSNGAT00000011043.1 txEnd 3095 >= chromSize 3068
+# ENSNGAT00000005613.1 txEnd 883 >= chromSize 874
+# ENSNGAT00000005469.1 txEnd 843 >= chromSize 822
+# ENSNGAT00000003195.1 txEnd 661 >= chromSize 657
+# ENSNGAT00000004333.1 txEnd 660 >= chromSize 631
+# ENSNGAT00000010598.1 txEnd 588 >= chromSize 564
+# ENSNGAT00000004053.1 txEnd 491 >= chromSize 488
+# ENSNGAT00000004795.1 txEnd 337 >= chromSize 334
+# ENSNGAT00000008686.1 txEnd 245 >= chromSize 238
+

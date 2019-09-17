@@ -259,6 +259,16 @@ struct bed *bed = (struct bed *)tg->items;
 /* Load category colors */
 extras->colors = getCategoryColors(tg);
 
+/* Test that configuration matches data file */
+if (bed != NULL)
+    {
+    int categCount = getCategoryCount(tg);
+    int expCount = bed->expCount;
+    if (categCount != expCount)
+        warn("Bar chart track: category count mismatch between trackDb (%d) and data file (%d)",
+                            categCount, expCount);
+    }
+
 filterCategories(tg);
 
 while (bed != NULL)
@@ -677,8 +687,8 @@ double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE,
 int i = 0;
 for (categ = categs; categ != NULL; categ = categ->next, i++)
     {
-if (!filterCategory(tg, categ->name))
-    continue;
+    if (!filterCategory(tg, categ->name))
+	continue;
     double expScore = bed->expScores[i];
     int height = valToClippedHeight(expScore, maxMedian, viewMax, 
                                         barChartMaxHeight(), extras->doLogTransform);

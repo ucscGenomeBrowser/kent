@@ -96,7 +96,7 @@ while ((axt = axtRead(lf)) != NULL)
     {
     struct mafAli *ali;
     struct mafComp *comp;
-    char srcName[128];
+    char srcName[256];
     AllocVar(ali);
     ali->score = axt->score;
     if ((ali->score == 0 && scoreZero) || score)

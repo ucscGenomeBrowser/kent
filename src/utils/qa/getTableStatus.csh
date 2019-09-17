@@ -52,7 +52,7 @@ endif
 
 # get the STATUS
 set url1="http://"
-set url2a=".cse"
+set url2a=".soe"
 set url2=".ucsc.edu/cgi-bin/hgTables?db=$db&hgta_doMetaData=1"
 set url3="&hgta_metaStatus=1"
 if ( $mach == genome-euro || $mach == genome-asia ) then

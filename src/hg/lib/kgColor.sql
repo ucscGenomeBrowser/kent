@@ -10,5 +10,5 @@ CREATE TABLE kgColor (
     g tinyint unsigned not null,	# Green component 0-255
     b tinyint unsigned not null,	# Blue component 0-255
               #Indices
-    PRIMARY KEY(kgID(10))
+    PRIMARY KEY(kgID)
 );

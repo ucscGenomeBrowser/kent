@@ -1,0 +1,65 @@
+
+<h2>Description</h2>
+<p>This track shows the alignment of sequencing reads to the genome, their coverage and the splice junctions in them. This can be helpful for quality checking of cluster markers, when designing in-situ probes or when trying to determine how specific a transcript is for a given cell type.
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>This track has multiple "Views", which can be configured independently. See
+the <a href="/goldenPath/help/multiView.html">documentation on Multi-View
+tracks</a>. There are two different types of view sub tracks in this track:</a>
+
+<p><b>Coverage:</b> bar graphs indicate the number of reads at this base pair.
+You may want to switch on auto-scaling of the y axis. For configuration
+options, see <a
+href="https://genome.ucsc.edu/goldenpath/help/hgWiggleTrackHelp.html">the graph
+tracks configuration help page</a>. These tracks are shown in "dense" by default, set any of the tracks to "full" to see the detailed coverage plot.</p>
+
+<p><b>Splice Junctions:</b> thick rectangles show exons around a splice site,
+connected by a line that indicates the intron. These gaps are shown and are
+annotated with the number of reads, in the 'score' field. You can use the
+'score' filter on the track configuration page to show only introns with a
+certain number of supporting reads. The maximum number of reads that are shown
+is 1000, even if more reads support an intron. These tracks are shown in dense by default, set this track to "pack" to see. Then click the splice junctions to see their score.</p>
+
+<h2>Methods</h2>
+<p>BAM files were provided by the data submitters, one (single end) or two files (paired end) per cell. The BAM alignments were used as submitted. They were merged with "samtools merge" into a single BAM file per cluster. The readgroup (RG) BAM tag indicates the original cell.</p>
+
+<p>From the resulting merged BAM file, coverage was obtained using "wiggletools coverage" a tool written by Daniel Zerbino and the result was converted with the UCSC tool "wigToBigWig".</p>
+
+<p>Also on the merged BAM file, the software IntronProspector was run with default settings. It retains reads with a gap longer than 70 bp and shorter than 500 kbp and merges them into annotated splice junctions.</p>
+
+<h2>Data Access</h2>
+<p>The merged BAM files, coverage bigWig files and splice junctions in bigBed format can be downloaded from the <a href='https://cells.ucsc.edu/hubs/tabulamuris/'>track hub directory</a>.</p>
+
+<p>Since the splice junction .bigBed files have their scores capped at 1000, the original IntronProspector .bed files are available in the same <a href='https://cells.ucsc.edu/hubs/tabulamuris/'>track hub directory</a>. You can also find there *.calls.tsv files with more details about each junction, e.g. the number of uniquely mapping reads.</p>
+
+<h2>Credits</h2>
+<p>WiggleTools was written by Daniel Zerbino, IntronProspector was written by Mark Diekhans, track hubs were written to a large extent by Brian Raney and colleages at the UCSC Genome Browser. Testing by Matt Speir.</p>
+
+<h2>References</h2>
+<p>
+Zerbino DR, Johnson N, Juettemann T, Wilder SP, Flicek P.
+<a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/btt737"
+target="_blank">
+WiggleTools: parallel processing of large collections of genome-wide datasets for visualization and
+statistical analysis</a>.
+<em>Bioinformatics</em>. 2014 Apr 1;30(7):1008-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24363377" target="_blank">24363377</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3967112/" target="_blank">PMC3967112</a>
+</p>
+
+<p>
+Mark Diekhans,
+<a href="https://github.com/diekhans/intronProspector"
+target="_blank">
+IntronProspector GitHub Repository </a>.
+<em>Github</em> 2018
+</p>
+
+<p>
+The Tabula Muris Consortium, Stephen R. Quake, Tony Wyss-Coray, Spyros DarmanisThe Tabula Muris Consortium, Stephen R. Quake, Tony Wyss-Coray, Spyros Darmanis:<br>
+<a href="https://doi.org/10.1101/237446" target="_blank">
+Single-cell transcriptomic characterization of 20 organs and tissues from individual mice creates a Tabula Muris</a>.
+<em>bioRxiv March 2018</em>, manuscript 237446.
+</p>
+

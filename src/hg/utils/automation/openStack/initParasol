@@ -1,0 +1,132 @@
+#!/bin/bash
+#
+# Init file for Parasol server daemon
+#
+# description: Parasol server daemon
+#
+# processname: parasol
+
+# no shell limits to interfere
+ulimit -c unlimited
+
+# directory where all parasol binaries are available
+export binDir="/data/bin"
+# directory to run the command in and were log files will accumulate
+export workDir="/data/parasol"
+
+# the internal cloud address of this machine:
+export parasolHub=`/usr/sbin/ip addr show | egrep "inet.*eth0|inet.*em1" | head -1 | awk '{print $2}' | sed -e 's#/.*##;'`
+
+# date stamp for log identification
+export dateStamp=`date "+%Y-%m-%dT%H:%M"`
+# assume exit code is zero
+export exitCode=0
+export logFile="/data/parasol/${parasolHub}.${dateStamp}.log"
+export nodeList=${parasolHub}.ms
+export subNet=`echo $parasolHub | awk -F'.' '{printf "%d.%d.%d", $1,$2,$3}'`
+
+# using ssh to communicate with the node machines
+export RSH="-rsh=/usr/bin/ssh"
+
+# from here through the rest of the script, assume working in this directory
+cd "${workDir}"
+
+# the < /dev/null to the ssh command in the while loop prevents this loop
+#  from running only once.  Something about consuming stdin makes the
+#  loop stop after only one pass
+
+# verify all the ssh keys, make their entries in known_hosts so there is
+# no pausing during para start
+initSshKeys()
+{
+	cat nodeInfo/*.ms > ${nodeList}
+        cut -f1 ${nodeList} | while read ip
+do
+   ssh -x -o 'StrictHostKeyChecking = no' -o 'BatchMode = yes' $ip 'date' < /dev/null > /dev/null
+   printf "# initialized ssh to node: $ip\n" 1>&2
+done
+}
+
+start()
+{
+	echo -n $"Starting parasol:"
+        rm -fr /dev/shm/parasol
+        mkdir -p /dev/shm/parasol
+	cat nodeInfo/*.ms > ${nodeList}
+	${binDir}/paraNodeStart ${RSH} $nodeList -hub=${parasolHub} -log=$logFile -umask=002 -userPath=bin -sysPath=. -exe=${binDir}/paraNode
+	${binDir}/paraHub -log=$logFile $nodeList subnet=$subNet &
+	echo Done.
+}
+
+restartHub()
+{
+	echo -n "Restarting just paraHub:"
+        echo Stopping Hub...
+	${binDir}/paraHubStop now
+        echo Restarting Hub...
+	rm -fr /dev/shm/parasol
+	mkdir -p /dev/shm/parasol
+	cat nodeInfo/*.ms > ${nodeList}
+	${binDir}/paraHub -log=$logFile $nodeList subnet=$subNet &
+        echo Done.
+}
+
+stop()
+{
+	echo -n $"Stopping parasol:"
+	${binDir}/paraNodeStop $nodeList
+	${binDir}/paraHubStop now
+        rm -fr /dev/shm/parasol
+}
+
+resurrect()
+{
+	echo -n $"Resurrect dead parasol nodes:"
+	rm -f dead.list
+        ${binDir}/parasol list machines | grep dead | awk '{print $1}' | sort -u | while read ip
+do
+ cat nodeInfo/$ip.ms
+ ${binDir}/parasol remove machine "${ip}" "dead machine" > /dev/null 2>&1
+done > dead.list
+	printf "${binDir}/paraNodeStart ${RSH} dead.list -hub=${parasolHub} -log=$logFile -umask=002 -userPath=bin -sysPath=. -exe=${binDir}/paraNode\n" 1>&2
+	${binDir}/paraNodeStart ${RSH} dead.list -hub=${parasolHub} -log=$logFile -umask=002 -userPath=bin -sysPath=. -exe=${binDir}/paraNode
+        awk '{print $1}' dead.list | while read ms
+do
+  sudo ${binDir}/parasol add machine `cat "nodeInfo/${ms}.ms"`
+done
+}
+
+case "$1" in
+	start)
+		start
+		exitCode=$?
+		;;
+	stop)
+		stop
+		exitCode=$?
+		;;
+	restart)
+		stop
+		start
+		exitCode=$?
+		;;
+	restartHub)
+		restartHub
+		exitCode=$?
+		;;
+	resurrect)
+		resurrect
+		exitCode=$?
+		;;
+	initialize)
+		initSshKeys
+		;;
+	status)
+		${binDir}/parasol status
+		exitCode=$?
+		;;
+	*)
+		echo $"Usage: $0 {initialize|start|stop|restart|restartHub|resurrect|status}"
+		exitCode=1
+esac
+exit $exitCode

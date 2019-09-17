@@ -1,0 +1,20 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+html gap
+priority 2
+
+track chainNetHg38 override
+chainMinScore 5000
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+
+searchTable gold
+shortCircuit 1
+termRegex [ABN][ACSB][ACGZ0-9_]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+include ../../refSeqComposite.ra

@@ -20,6 +20,7 @@ aplCal1
 aptMan1
 aquChr2
 balAcu1
+bisBis1
 bosTau7
 bosTau8
 braFlo1
@@ -59,7 +60,7 @@ eriEur2
 felCat8
 fr3
 gadMor1
-galGal5
+galGal6
 galVar1
 gasAcu1
 geoFor1
@@ -88,12 +89,14 @@ oryCun2
 oryLat2
 otoGar3
 oviAri3
-panPan1
-panTro5
+oviAri4
+panPan2
+panTro6
 papAnu2
 papHam1
-petMar2
+petMar3
 ponAbe2
+ponAbe3
 priPac1
 proCap1
 pteVam1
@@ -115,7 +118,7 @@ tupBel1
 turTru2
 vicPac2
 xenLae2
-xenTro7
+xenTro9
 #
 # this is the beginning of the list of secondary assemblies
 #
@@ -158,6 +161,7 @@ felCat4
 felCat3
 fr2
 fr1
+galGal5
 galGal4
 galGal3
 galGal2
@@ -176,10 +180,13 @@ nomLeu1
 ochPri2
 ornAna1
 oviAri1
+panPan1
+panTro5
 panTro4
 panTro3
 panTro2
 panTro1
+petMar2
 petMar1
 rheMac3
 rn5
@@ -194,6 +201,7 @@ taeGut1
 tarSyr1
 tetNig1
 vicPac1
+xenTro7
 xenTro3
 xenTro2
 xenTro1

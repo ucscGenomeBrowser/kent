@@ -1,5 +1,20 @@
 #	"$Id: trackDb.ra,v 1.125 2010/06/11 22:12:18 mary Exp $";
 
+track dgvGold
+parent dgvPlus
+shortLabel DGV Gold Standard
+longLabel Database of Genomic Variants: Gold Standard Variants
+bigDataUrl /gbdb/hg19/dgv/dgvGold.bb
+type bigBed 12 +
+url http://dgv.tcag.ca/gb2/gbrowse_details/dgv2_hg19?ref=$S;start=${;end=$};name=$$;class=Sequence
+searchIndex name
+pennantIcon New red ../goldenPath/newsarch.html#070119  Released Jul. 1, 2019
+
+
+searchTable dgvGold
+searchType bigBed
+searchDescription DGV Gold Variants
+
 track cosmicRegions
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer V82
@@ -24,7 +39,6 @@ searchDescription COSMIC Regions
 
 # chainNet tracks
 include trackDb.chainNet.ra
-include trackDb.wgEncode.ra
 include trackDb.denisova.ra
 
 #large composites
@@ -115,7 +129,7 @@ longLabel cramTest2
 bigDataUrl /hive/users/braney/cram/HG00096.mapped.ILLUMINA.bwa.GBR.low_coverage.20120522.bam.cram
 type bam
 release alpha
-#refUrl http://hgwdev.cse.ucsc.edu/~braney/cramRef/%s
+#refUrl http://hgwdev.soe.ucsc.edu/~braney/cramRef/%s
 
 searchName ucscRetroInfoRefSeq5
 searchTable ucscRetroAli5
@@ -1103,6 +1117,23 @@ informant Human N-SCAN Human N-SCAN uses mouse (mm9) as the informant and iterat
 track chainNetVenter override
 priority 450
 
+# Add override for patchwork fix and alt haplotypes track and remove old haplotype track ref#18855
+track altSeqLiftOverPsl override
+release alpha
+
+track fixSeqLiftOverPsl override
+release alpha
+
+track altLocations
+type bed 4
+group map
+color 32,32,190
+shortLabel Alt Haplotypes
+longLabel Alternate Haplotypes to Reference Sequence Correspondence
+url ../cgi-bin/hgTracks?db=$D&position=$$
+urlLabel Corresponding position:
+release beta,public
+
 # Some, but not all subtracks of pgSnp (Personal Genome Variants) were lifted
 track pgAk1 override
 origAssembly hg18
@@ -1338,6 +1369,8 @@ maxWindowToDraw 5000000
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 url http://evs.gs.washington.edu/EVS/PopStatsServlet?searchBy=rsOrChrom&target=$$&chromosome=$s&chromoStart=${&chromoEnd=$}&x=0&y=0
 urlLabel Exome Variant Server:
+
+include trackDb.gnomad.ra
 
 track exac
 compositeTrack on
@@ -1628,7 +1661,9 @@ include altSeqComposite5.ra alpha
 
 include altSeqComposite9.ra alpha
 
-include altSeqComposite10.ra alpha,beta,public
+include altSeqComposite10.ra alpha
+
+include hg19Patch13.ra
 
 track vistaEnhancers override
 url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
@@ -2578,4 +2613,24 @@ include gtexEqtl.ra
 track gtexTranscExpr override
 bigDataUrl /gbdb/hg19/gtex/gtexTranscExpr.bb
 origAssembly hg38
+
+# change these two to switch to the new refSeqComposite 2018-02
+#include trackDb.refGene.ra public
+include ../../refSeqComposite.ra
+include ../../crispr10K.ra alpha
+
+track ensGene override
+ensemblIdUrl https://grch37.ensembl.org/Homo_sapiens
+
+# ENCODE tracks
+
+include trackDb.wgEncode.ra
+
+include wgEncodeReg.ra 
+
+include encode3.ra 
+
+include wgEncodeReg.dev.ra alpha
+
+
 

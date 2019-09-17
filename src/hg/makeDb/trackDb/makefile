@@ -33,9 +33,10 @@ DBS = \
 	ailMel1 \
 	allMis1 \
 	amaVit1 geoFor1 melUnd1 \
+	ambMex1 ambMex2 \
 	ancCey1 \
 	anoCar1 anoCar2 \
-	anoGam1 \
+	anoGam1 anoGam3 \
 	aotNan1 \
 	apiMel1 \
 	apiMel2	\
@@ -45,7 +46,7 @@ DBS = \
 	ascSuu1 \
 	balAcu1 \
 	bisBis1 \
-	bosTau2 bosTau3 bosTau4 bosTau5 bosTau6 bosTau7 bosTau8 \
+	bosTau2 bosTau3 bosTau4 bosTau5 bosTau6 bosTau7 bosTau8 bosTau9 \
 	braFlo1 braFlo2 \
 	bruMal1 bruMal2 \
 	burXyl1 \
@@ -60,6 +61,8 @@ DBS = \
 	calJac1 calJac3 \
 	calMil1 \
 	canFam1 canFam2 canFamPoodle1 canFam3 \
+	casCan1 \
+	cavApe1 cavPor3 \
 	cb1 cb2 cb3 cb4 \
 	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 ce10 ce11 \
 	cebCap1 \
@@ -73,10 +76,11 @@ DBS = \
 	ci1 ci2 ci3 cioSav2 \
 	cioSav1 \
 	colAng1 \
-	criGri1 \
+	cotJap2 \
+	criGri1 criGriChoV1 criGriChoV2 \
 	danRer3 danRer4 danRer5 danRer6 danRer7 danRer10 danRer11 \
 	dasNov1 dasNov2 dasNov3 \
-	dipOrd1 proCap1 \
+	dipOrd1 dipOrd2 \
 	dirImm1 \
 	dm1 dm2 dm3 dm6 \
 	dp2 dp3 \
@@ -87,20 +91,21 @@ DBS = \
 	droPer1 \
 	droSec1 \
 	droSim1 droSim2 \
-	droVir1 droVir2 \
+	droVir1 droVir2 droVir3 \
 	droYak1 droYak2 \
 	eboVir3 eboVir2 eboVir1 bunEbo1 sudEbo1 resEbo1 taiEbo1 zaiEbo1 \
 	echTel1 echTel2 \
-	equCab1 \
-	equCab2 \
+	equCab1 equCab2 equCab3 \
 	eriEur1 eriEur2 \
 	eulFla1 \
 	eulMac1 \
 	falciparum \
-	felCat3 felCat4 felCat5  felCat8 \
+	felCat3 felCat4 felCat5 felCat8 felCat9 \
+	ficAlb1 \
 	fr1 fr2 fr3 \
+	fukDam1 \
 	gadMor1 \
-	galGal2 galGal3 galGal4 galGal5 \
+	galGal2 galGal3 galGal4 galGal5 galGal6 \
 	galVar1 \
 	gasAcu1 \
 	gorGor1 gorGor2 gorGor3 gorGor4 gorGor5 \
@@ -123,7 +128,7 @@ DBS = \
 	melInc1 melInc2 \
 	micMur1 micMur2 micMur3 \
 	micOch1 \
-	mm6 mm7 mm8 mm9 mm10 mm10Patch1 mm10Strains1 mm10Patch4 \
+	mm6 mm7 mm8 mm9 mm10 mm10Patch1 mm10Strains1 mm10Patch4 GRCm38B \
 	monDom1 monDom4 monDom5 \
 	musFur1 \
 	myoLuc1 myoLuc2 \
@@ -141,22 +146,24 @@ DBS = \
 	oryCun1 oryCun2 \
 	oryLat1 oryLat2 \
 	otoGar1 otoGar3 \
-	oviAri1 oviAri3 \
+	oviAri1 oviAri3 oviAri4 \
 	oxyTri2 \
 	panPan1 panPan2 \
 	panRed1 \
-	panTro1 panTro2 panTro3 panTro4 panTro5 \
-	papHam1 papAnu2 papAnu3 \
-	petMar1 petMar2 \
+	panTro1 panTro2 panTro3 panTro4 panTro5 panTro6 \
+	papHam1 papAnu2 papAnu3 papAnu4 \
+	perManBai1 \
+	petMar1 petMar2 petMar3 \
 	plasFalc3D7V12 \
 	poeRet1 \
-	ponAbe2 \
+	ponAbe2 ponAbe3 \
 	priExs1 \
 	priPac1 priPac2 priPac3 \
+	proCap1 \
 	proCoq1 \
 	pteVam1 tarSyr1 tarSyr2 \
 	repeats2 \
-	rheMac2 rheMac3 rheMac7 rheMac8 \
+	rheMac2 rheMac3 rheMac7 rheMac8 rheMac10 \
 	rhiBie1 \
 	rhiRox1 \
 	rn3 rn4 rn5 rn6 \
@@ -166,7 +173,7 @@ DBS = \
 	sarHar1 \
 	sc1 \
 	sorAra1 sorAra2 \
-	speTri1 speTri2 cavPor3 \
+	speTri1 speTri2 \
 	strPur1 strPur2 strPur4 \
 	strRat1 strRat2 \
 	susScr1 susScr2 susScr3 susScr11 \
@@ -197,8 +204,8 @@ ARCHIVED_DBS = \
 BUILD_TRIX = ./buildTrix
 HIVE_TRIX = /hive/data/inside/trix
 DATA_TRIX = /data/trix
-ALPHA_MACHINE = hgwdev.cse.ucsc.edu
-BETA_MACHINE = qateam@hgwbeta.cse.ucsc.edu
+ALPHA_MACHINE = hgwdev.gi.ucsc.edu
+BETA_MACHINE = qateam@hgwbeta.soe.ucsc.edu
 
 update: ${DBS:%=%_update}
 	${MKDIR} ${CGI_BIN}-${USER}/encode

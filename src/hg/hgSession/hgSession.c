@@ -31,10 +31,14 @@
 #include "customFactory.h"
 #include "udc.h"
 #include "hgSession.h"
-#include "hubConnect.h"
 #include "hgConfig.h"
 #include "sessionThumbnail.h"
+#include "filePath.h"
 #include "obscure.h"
+#include "trashDir.h"
+#include "hubConnect.h"
+#include "trackHub.h"
+#include "errCatch.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -48,8 +52,7 @@ errAbort(
 
 /* Global variables. */
 struct cart *cart;
-char *excludeVars[] = {"Submit", "submit", NULL};
-struct slName *existingSessionNames = NULL;
+char *excludeVars[] = {"Submit", "submit", hgsSessionDataDbSuffix, NULL};
 
 /* Javascript to confirm that the user truly wants to delete a session. */
 #define confirmDeleteFormat "return confirm('Are you sure you want to delete ' + decodeURIComponent('%s') + '?');"
@@ -155,14 +158,20 @@ printf("<A HREF=\"../cgi-bin/cartReset?%s&destination=%s\">Click here to "
 }
 
 void addSessionLink(struct dyString *dy, char *userName, char *sessionName,
-		    boolean encode)
+		    boolean encode, boolean tryShortLink)
 /* Add to dy an URL that tells hgSession to load a saved session.
  * If encode, cgiEncodeFull the URL. 
+ * If tryShortLink, print a shortened link that apache can redirect.
  * The link is an absolute link that includes the server name so people can
  * copy-paste it into emails.  */
 {
 struct dyString *dyTmp = dyStringNew(1024);
-dyStringPrintf(dyTmp, "%shgTracks?hgS_doOtherUser=submit&"
+if (tryShortLink && cfgOptionBooleanDefault("hgSession.shortLink", FALSE) &&
+        !stringIn("%2F", userName) && !stringIn("%2F", sessionName))
+    dyStringPrintf(dyTmp, "http%s://%s/s/%s/%s", cgiAppendSForHttps(), cgiServerNamePort(),
+        userName, sessionName);
+else
+    dyStringPrintf(dyTmp, "%shgTracks?hgS_doOtherUser=submit&"
 	       "hgS_otherUserName=%s&hgS_otherUserSessionName=%s",
 	       hLocalHostCgiBinUrl(), userName, sessionName);
 if (encode)
@@ -176,13 +185,24 @@ else
 dyStringFree(&dyTmp);
 }
 
+void printShareMessage(struct dyString *dy, char *userName, char *sessionName,
+            boolean encode)
+{
+struct dyString *dyTmp = dyStringNew(0);
+addSessionLink(dyTmp, userName, sessionName, encode, TRUE);
+dyStringPrintf(dy,
+    "<p>You can share this session with the following  URL: %s</p>",
+    dyTmp->string);
+//dyStringFree(&dyTmp);
+}
+
 char *getSessionLink(char *encUserName, char *encSessionName)
 /* Form a link that will take the user to a bookmarkable page that
  * will load the given session. */
 {
 struct dyString *dy = dyStringNew(1024);
 dyStringPrintf(dy, "<A HREF=\"");
-addSessionLink(dy, encUserName, encSessionName, FALSE);
+addSessionLink(dy, encUserName, encSessionName, FALSE, TRUE);
 dyStringPrintf(dy, "\">Browser</A>\n");
 return dyStringCannibalize(&dy);
 }
@@ -196,7 +216,7 @@ dyStringPrintf(dy, "<A HREF=\"mailto:?subject=UCSC browser session %s&"
 	       "body=Here is a UCSC browser session I%%27d like to share with "
 	       "you:%%20",
 	       cgiDecodeClone(encSessionName));
-addSessionLink(dy, encUserName, encSessionName, TRUE);
+addSessionLink(dy, encUserName, encSessionName, TRUE, TRUE);
 dyStringPrintf(dy, "\">Email</A>\n");
 return dyStringCannibalize(&dy);
 }
@@ -257,10 +277,11 @@ hashFree(&settingsHash);
 return val;
 }
 
-void showExistingSessions(char *userName)
+static struct slName *showExistingSessions(char *userName)
 /* Print out a table with buttons for sharing/unsharing/loading/deleting
- * previously saved sessions. */
+ * previously saved sessions.  Return a list of session names. */
 {
+struct slName *existingSessionNames = NULL;
 struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr = NULL;
 char **row = NULL;
@@ -290,7 +311,8 @@ printf("<table id=\"sessionTable\" class=\"sessionTable stripe hover row-border 
 printf("<thead><tr>");
 printf("<TH><TD><B>session name (click to load)</B></TD><TD><B>created on</B></TD><td><b>assembly</b></td>"
        "<TD align=center><B>view/edit&nbsp;<BR>details&nbsp;</B></TD>"
-       "<TD align=center><B>delete this&nbsp;<BR>session&nbsp;</B></TD><TD align=center><B>share with&nbsp;<BR>others?&nbsp;</B></TD>"
+       "<TD align=center><B>delete this&nbsp;<BR>session&nbsp;</B></TD>"
+       "<TD align=center><B>share with&nbsp;<BR>others?&nbsp;</B></TD>"
        "<td align-center><b>post in&nbsp;<br><a href=\"../cgi-bin/hgPublicSessions?%s\">public listing</a>?</b></td>"
        "<TD align=center><B>send to<BR>mail</B></TD></TH>",
        cartSidUrlString(cart));
@@ -323,14 +345,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<TR><TD>&nbsp;&nbsp;</TD><TD>");
 
     struct dyString *dy = dyStringNew(1024);
-    addSessionLink(dy, encUserName, encSessionName, FALSE);
+    addSessionLink(dy, encUserName, encSessionName, FALSE, TRUE);
     printf("<a href=\"%s\">%s</a>", dyStringContents(dy), sessionName);
     dyStringFree(&dy);
 
     char *spacePt = strchr(firstUse, ' ');
     if (spacePt != NULL) *spacePt = '\0';
         printf("&nbsp;&nbsp;</TD>"
-	        "<TD><nobr>%s<nobr>&nbsp;&nbsp;</TD><TD align=center>", firstUse);
+	        "<TD><nobr>%s</nobr>&nbsp;&nbsp;</TD><TD align=center>", firstUse);
 
     char *dbIdx = NULL;
     if (startsWith("db=", row[3]))
@@ -358,6 +380,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         }
     else
         printf("unavailable");
+
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsDeletePrefix, encSessionName);
     char command[512];
@@ -392,6 +415,7 @@ printf("</div>\n");
 printf("<P></P>\n");
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
+return existingSessionNames;
 }
 
 void showOtherUserOptions()
@@ -441,17 +465,45 @@ cgiMakeOnKeypressTextVar(hgsLoadUrlName,
 printf("&nbsp;&nbsp;");
 cgiMakeButton(hgsDoLoadUrl, "submit");
 printf("</TD></TR>\n");
+
 printf("</TABLE>\n");
 printf("<P></P>\n");
 }
 
-void showSavingOptions(char *userName)
+static struct dyString *dyPrintCheckExistingSessionJs(struct slName *existingSessionNames,
+                                                      char *exceptName)
+/* Write JS that will pop up a confirm dialog if the user's new session name is the same
+ * (case-insensitive) as any existing session name, i.e. they would be overwriting it.
+ * If exceptName is given, then it's OK for the new session name to match that. */
+{
+struct dyString *js = dyStringNew(1024);
+struct slName *sn;
+// MySQL does case-insensitive comparison because our DEFAULT CHARSET=latin1;
+// use case-insensitive comparison here to avoid clobbering (#15051).
+dyStringAppend(js, "var su, si = document.getElementsByName('" hgsNewSessionName "'); ");
+dyStringAppend(js, "if (si[0]) { su = si[0].value.trim().toUpperCase(); ");
+if (isNotEmpty(exceptName))
+    dyStringPrintf(js, "if (su !== '%s'.toUpperCase()) { ", exceptName);
+dyStringAppend(js, "if ( ");
+for (sn = existingSessionNames;  sn != NULL;  sn = sn->next)
+    {
+    char nameUpper[PATH_LEN];
+    safecpy(nameUpper, sizeof(nameUpper), sn->name);
+    touppers(nameUpper);
+    dyStringPrintf(js, "su === ");
+    dyStringQuoteString(js, '\'', nameUpper);
+    dyStringPrintf(js, "%s", (sn->next ? " || " : " )"));
+    }
+dyStringAppend(js, " { return confirm('This will overwrite the contents of the existing "
+               "session ' + si[0].value.trim() + '.  Proceed?'); } }");
+if (isNotEmpty(exceptName))
+    dyStringAppend(js, " }");
+return js;
+}
+
+void showSavingOptions(char *userName, struct slName *existingSessionNames)
 /* Show options for saving a new named session in our db or to a file. */
 {
-static char *textOutCompressMenu[] = textOutCompressMenuContents;
-static char *textOutCompressValues[] = textOutCompressValuesContents;
-static int textOutCompressMenuSize = ArraySize(textOutCompressMenu) - 1;
-
 printf("<H3>Save Settings</H3>\n");
 printf("<TABLE BORDERWIDTH=0>\n");
 
@@ -471,23 +523,7 @@ if (isNotEmpty(userName))
     printf("&nbsp;");
     if (existingSessionNames)
 	{
-	struct dyString *js = dyStringNew(1024);
-	struct slName *sn;
-        // MySQL does case-insensitive comparison because our DEFAULT CHARSET=latin1;
-        // use case-insensitive comparison here to avoid clobbering (#15051).
-        dyStringAppend(js, "var su, si = document.getElementsByName('" hgsNewSessionName "'); ");
-        dyStringAppend(js, "if (si[0]) { su = si[0].value.toUpperCase(); if ( ");
-	for (sn = existingSessionNames;  sn != NULL;  sn = sn->next)
-	    {
-            char nameUpper[PATH_LEN];
-            safecpy(nameUpper, sizeof(nameUpper), sn->name);
-            touppers(nameUpper);
-            dyStringPrintf(js, "su === ");
-            dyStringQuoteString(js, '\'', nameUpper);
-            dyStringPrintf(js, "%s", (sn->next ? " || " : " ) { "));
-	    }
-	dyStringAppend(js, "return confirm('This will overwrite the contents of the existing "
-                       "session ' + si[0].value + '.  Proceed?'); } }");
+        struct dyString *js = dyPrintCheckExistingSessionJs(existingSessionNames, NULL);
 	cgiMakeOnClickSubmitButton(js->string, hgsDoNewSession, "submit");
 	dyStringFree(&js);
 	}
@@ -504,16 +540,29 @@ cgiMakeOnKeypressTextVar(hgsSaveLocalFileName,
 			 20, jsPressOnEnter(hgsDoSaveLocal));
 printf("&nbsp;&nbsp;&nbsp;");
 printf("file type returned: ");
-cgiMakeDropListFull(hgsSaveLocalFileCompress,
-	textOutCompressMenu, textOutCompressValues, textOutCompressMenuSize,
-	cartUsualString(cart, hgsSaveLocalFileCompress, textOutCompressNone),
-	NULL, NULL);
+char *compressType = cartUsualString(cart, hgsSaveLocalFileCompress, textOutCompressNone);
+cgiMakeRadioButton(hgsSaveLocalFileCompress, textOutCompressNone,
+		   differentWord(textOutCompressGzip, compressType));
+printf("&nbsp;plain text&nbsp&nbsp");
+cgiMakeRadioButton(hgsSaveLocalFileCompress, textOutCompressGzip,
+		   sameWord(textOutCompressGzip, compressType));
+printf("&nbsp;gzip compressed (ignored if output file is blank)");
 printf("</TD><TD>");
 printf("&nbsp;");
 cgiMakeButton(hgsDoSaveLocal, "submit");
 printf("</TD></TR>\n");
 printf("<TR><TD></TD><TD colspan=3>(leave file blank to get output in "
        "browser window)</TD></TR>\n");
+printf("<TR><TD colspan=4></TD></TR>\n");
+
+printf("<TR><TD colspan=4>Save Custom Tracks:</TD></TR>\n");
+printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD colspan=2>");
+printf("backup custom tracks to archive .tar.gz</TD>");
+printf("<TD>");
+printf("&nbsp;");
+cgiMakeButton(hgsShowDownloadPrefix, "submit");
+printf("</TD></TR>\n");
+
 printf("<TR><TD colspan=4></TD></TR>\n");
 printf("</TABLE>\n");
 }
@@ -549,13 +598,14 @@ printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s "
        hgSessionName(), formMethod);
 cartSaveSession(cart);
 
+struct slName *existingSessionNames = NULL;
 if (isNotEmpty(userName))
-    showExistingSessions(userName);
+    existingSessionNames = showExistingSessions(userName);
 else if (savedSessionsSupported)
      printf("<P>If you <A HREF=\"%s\">sign in</A>, "
          "you will also have the option to save named sessions.\n",
          wikiLinkUserLoginUrl(cartSessionId(cart)));
-showSavingOptions(userName);
+showSavingOptions(userName, existingSessionNames);
 showLoadingOptions(userName, savedSessionsSupported);
 printf("</FORM>\n");
 }
@@ -671,6 +721,9 @@ cartRemovePrefix(cart, hgsLoadPrefix);
 cartRemovePrefix(cart, hgsEditPrefix);
 cartRemovePrefix(cart, hgsLoadLocalFileName);
 cartRemovePrefix(cart, hgsDeletePrefix);
+cartRemovePrefix(cart, hgsShowDownloadPrefix);
+cartRemovePrefix(cart, hgsMakeDownloadPrefix);
+cartRemovePrefix(cart, hgsDoDownloadPrefix);
 cartRemovePrefix(cart, hgsDo);
 cartRemove(cart, hgsOldSessionName);
 cartRemove(cart, hgsCancel);
@@ -694,7 +747,21 @@ static void outDefaultTracks(struct cart *cart, struct dyString *dy)
  * in trackDb if the track is not mentioned in the cart. */
 {
 char *database = cartString(cart, "db");
-struct trackDb *tdb = hTrackDb(database);
+struct trackDb *tdb = NULL;
+// Some old sessions reference databases that are no longer present, and that triggers an errAbort
+// when calling hgTrackDb.  Just move on instead of errAborting.
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    tdb = hTrackDb(database);
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    fprintf(stderr, "outDefaultTracks: Error from hTrackDb: '%s'; Continuing...",
+            errCatch->message->string);
+    tdb = NULL;
+    }
+errCatchFree(&errCatch);
+
 struct hash *parentHash = newHash(5);
 
 for(; tdb; tdb = tdb->next)
@@ -722,6 +789,67 @@ else
 }
 
 #define INITIAL_USE_COUNT 0
+static int saveCartAsSession(struct sqlConnection *conn, char *encUserName, char *encSessionName,
+                             int sharingLevel)
+/* Save all settings in cart, either adding a new session or overwriting an existing session.
+ * Return useCount so that the caller can distinguish between adding and overWriting. */
+{
+struct sqlResult *sr = NULL;
+struct dyString *dy = dyStringNew(16 * 1024);
+char **row;
+char *firstUse = "now()";
+int useCount = INITIAL_USE_COUNT;
+char firstUseBuf[32];
+
+/* If this session already existed, preserve its firstUse and useCount. */
+sqlDyStringPrintf(dy, "SELECT firstUse, useCount FROM %s "
+                  "WHERE userName = '%s' AND sessionName = '%s';",
+                  namedSessionTable, encUserName, encSessionName);
+sr = sqlGetResult(conn, dy->string);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    safef(firstUseBuf, sizeof(firstUseBuf), "'%s'", row[0]);
+    firstUse = firstUseBuf;
+    useCount = atoi(row[1]) + 1;
+    }
+sqlFreeResult(&sr);
+
+saveSessionData(cart, encUserName, encSessionName,
+                cgiOptionalString(hgsSessionDataDbSuffix));
+
+/* Remove pre-existing session (if any) before updating. */
+dyStringClear(dy);
+sqlDyStringPrintf(dy, "DELETE FROM %s WHERE userName = '%s' AND "
+                  "sessionName = '%s';",
+                  namedSessionTable, encUserName, encSessionName);
+sqlUpdate(conn, dy->string);
+
+dyStringClear(dy);
+sqlDyStringPrintf(dy, "INSERT INTO %s ", namedSessionTable);
+dyStringAppend(dy, "(userName, sessionName, contents, shared, "
+               "firstUse, lastUse, useCount, settings) VALUES (");
+dyStringPrintf(dy, "'%s', '%s', ", encUserName, encSessionName);
+dyStringAppend(dy, "'");
+cleanHgSessionFromCart(cart);
+struct dyString *encoded = newDyString(4096);
+cartEncodeState(cart, encoded);
+
+// Now add all the default visibilities to output.
+outDefaultTracks(cart, encoded);
+
+sqlDyAppendEscaped(dy, encoded->string);
+dyStringFree(&encoded);
+dyStringAppend(dy, "', ");
+dyStringPrintf(dy, "%d, ", sharingLevel);
+dyStringPrintf(dy, "%s, now(), %d, '');", firstUse, useCount);
+sqlUpdate(conn, dy->string);
+dyStringFree(&dy);
+
+/* Prevent modification of custom track collections just saved to namedSessionDb: */
+cartCopyCustomComposites(cart);
+return useCount;
+}
+
 char *doNewSession(char *userName)
 /* Save current settings in a new named session.
  * Return a message confirming what we did. */
@@ -737,58 +865,7 @@ struct sqlConnection *conn = hConnectCentral();
 
 if (sqlTableExists(conn, namedSessionTable))
     {
-    struct sqlResult *sr = NULL;
-    struct dyString *dy = dyStringNew(16 * 1024);
-    char **row;
-    char *firstUse = "now()";
-    int useCount = INITIAL_USE_COUNT;
-    char firstUseBuf[32];
-
-    /* If this session already existed, preserve its firstUse and useCount. */
-    sqlDyStringPrintf(dy, "SELECT firstUse, useCount FROM %s "
-		       "WHERE userName = '%s' AND sessionName = '%s';",
-		   namedSessionTable, encUserName, encSessionName);
-    sr = sqlGetResult(conn, dy->string);
-    if ((row = sqlNextRow(sr)) != NULL)
-	{
-	safef(firstUseBuf, sizeof(firstUseBuf), "'%s'", row[0]);
-	firstUse = firstUseBuf;
-	useCount = atoi(row[1]) + 1;
-	}
-    sqlFreeResult(&sr);
-
-    /* Remove pre-existing session (if any) before updating. */
-    dyStringClear(dy);
-    sqlDyStringPrintf(dy, "DELETE FROM %s WHERE userName = '%s' AND "
-		       "sessionName = '%s';",
-		   namedSessionTable, encUserName, encSessionName);
-    sqlUpdate(conn, dy->string);
-
-    dyStringClear(dy);
-    sqlDyStringPrintf(dy, "INSERT INTO %s ", namedSessionTable);
-    dyStringAppend(dy, "(userName, sessionName, contents, shared, "
-		       "firstUse, lastUse, useCount, settings) VALUES (");
-    dyStringPrintf(dy, "'%s', '%s', ", encUserName, encSessionName);
-    dyStringAppend(dy, "'");
-    cleanHgSessionFromCart(cart);
-    struct dyString *encoded = newDyString(4096);
-    cartEncodeState(cart, encoded);
-
-    // Now add all the default visibilities to output.
-    outDefaultTracks(cart, encoded);
-
-    sqlDyAppendEscaped(dy, encoded->string);
-    dyStringFree(&encoded);
-    dyStringAppend(dy, "', ");
-    dyStringPrintf(dy, "%d, ", (shareSession ? 1 : 0));
-    dyStringPrintf(dy, "%s, now(), %d, '');", firstUse, useCount);
-    sqlUpdate(conn, dy->string);
-    dyStringFree(&dy);
-
-    /* Prevent modification of custom tracks just saved to namedSessionDb: */
-    cartCopyCustomComposites(cart);
-    cartCopyCustomTracks(cart);
-
+    int useCount = saveCartAsSession(conn, encUserName, encSessionName, shareSession);
     if (useCount > INITIAL_USE_COUNT)
 	dyStringPrintf(dyMessage,
 	  "Overwrote the contents of session <B>%s</B> "
@@ -804,6 +881,10 @@ if (sqlTableExists(conn, namedSessionTable))
 	  htmlEncode(sessionName), (shareSession ? "may" : "may not"),
 	  getSessionLink(encUserName, encSessionName),
 	  getSessionEmailLink(encUserName, encSessionName));
+    if (shareSession)
+        {
+        printShareMessage(dyMessage, encUserName, encSessionName, FALSE);
+        }
     cartCheckForCustomTracks(cart, dyMessage);
     }
 else
@@ -859,7 +940,7 @@ char *destFile = sessionThumbnailFilePath(userIdentifier, encSessionName, firstU
 if (destFile != NULL)
     {
     struct dyString *hgTracksUrl = dyStringNew(0);
-    addSessionLink(hgTracksUrl, encUserName, encSessionName, FALSE);
+    addSessionLink(hgTracksUrl, encUserName, encSessionName, FALSE, FALSE);
     struct dyString *renderUrl =
         dyStringSub(hgTracksUrl->string, "cgi-bin/hgTracks", "cgi-bin/hgRenderTracks");
     dyStringAppend(renderUrl, "&pix=640");
@@ -886,6 +967,27 @@ char *userIdentifier = sessionThumbnailGetUserIdentifier(encUserName, userIdx);
 char *filePath = sessionThumbnailFilePath(userIdentifier, encSessionName, firstUse);
 if (filePath != NULL)
     unlink(filePath);
+}
+
+static struct slName *getUserSessionNames(char *encUserName)
+/* Return a list of unencoded session names belonging to user. */
+{
+struct slName *existingSessionNames = NULL;
+struct sqlConnection *conn = hConnectCentral();
+char query[1024];
+sqlSafef(query, sizeof(query), "select sessionName from %s where userName = '%s';",
+        namedSessionTable, encUserName);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *encSessionName = row[0];
+    char *sessionName = cgiDecodeClone(encSessionName);
+    slNameAddHead(&existingSessionNames, sessionName);
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+return existingSessionNames;
 }
 
 char *doSessionDetail(char *userName, char *sessionName)
@@ -947,20 +1049,18 @@ if ((row = sqlNextRow(sr)) != NULL)
 		   cartSessionVarName(cart), cartSessionId(cart), hgsOldSessionName, sessionName,
 		   hgsNewSessionName, hgsNewSessionName, 32, sessionName);
     jsOnEventById("change"  , hgsNewSessionName, highlightAccChanges);
-    jsOnEventById("keypress", hgsNewSessionName, highlightAccChanges);
+    jsOnEventById("keydown", hgsNewSessionName, highlightAccChanges);
 
     dyStringPrintf(dyMessage,
-		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s%s\" VALUE=\"use\">"
-		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s%s\" id='%s%s' VALUE=\"delete\">"
 		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT ID=\"%s\" NAME=\"%s\" VALUE=\"accept changes\">"
 		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"cancel\"> "
 		   "<BR>\n",
-		   hgsLoadPrefix, encSessionName, 
-		   hgsDeletePrefix, encSessionName, hgsDeletePrefix, encSessionName,
-		   hgsDoSessionChange, hgsDoSessionChange, hgsCancel);
-    char id[256];
-    safef(id, sizeof id, "%s%s", hgsDeletePrefix, encSessionName);
-    jsOnEventByIdF("click", id, confirmDeleteFormat, encSessionName);
+		   hgsDoSessionChange, hgsDoSessionChange, 
+		   hgsCancel);
+    struct slName *existingSessionNames = getUserSessionNames(encUserName);
+    struct dyString *js = dyPrintCheckExistingSessionJs( existingSessionNames, sessionName);
+    jsOnEventById("click", hgsDoSessionChange, js->string);
+    dyStringFree(&js);
 
     dyStringPrintf(dyMessage,
 		   "Share with others? <INPUT TYPE=CHECKBOX NAME=\"%s%s\"%s VALUE=on "
@@ -989,6 +1089,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     struct sqlConnection *conn2 = hConnectCentral();
     cartLoadUserSession(conn2, userName, sessionName, tmpCart, NULL, NULL);
     hDisconnectCentral(&conn2);
+    hubConnectLoadHubs(tmpCart);
     cartCheckForCustomTracks(tmpCart, dyMessage);
 
     if (gotSettings)
@@ -1061,10 +1162,10 @@ if (cartHelList != NULL)
 			   "Marked session <B>%s</B> as %s.<BR>\n",
 			   htmlEncode(sessionName),
 			   (newGallery == TRUE ? "added to gallery" : "removed from public listing"));
-        if (newGallery == FALSE)
-            thumbnailRemove(encUserName, encSessionName, conn);
-        if (newGallery == TRUE)
-            thumbnailAdd(encUserName, encSessionName, conn, dyMessage);
+            if (newGallery == FALSE)
+                thumbnailRemove(encUserName, encSessionName, conn);
+            if (newGallery == TRUE)
+                thumbnailAdd(encUserName, encSessionName, conn, dyMessage);
 	    didSomething = TRUE;
 	    }
 	}
@@ -1103,8 +1204,8 @@ if (cartHelList != NULL)
 			   "Marked session <B>%s</B> as %s.<BR>\n",
 			   htmlEncode(sessionName),
 			   (newShared == TRUE ? "shared" : "unshared"));
-        if (newShared == FALSE && inGallery == TRUE)
-            thumbnailRemove(encUserName, encSessionName, conn);
+            if (newShared == FALSE && inGallery == TRUE)
+                thumbnailRemove(encUserName, encSessionName, conn);
 	    didSomething = TRUE;
 	    }
 	}
@@ -1133,10 +1234,9 @@ if (hel != NULL)
 		   getSessionLink(encUserName, encSessionName),
 		   getSessionEmailLink(encUserName, encSessionName));
     cartLoadUserSession(conn, userName, sessionName, cart, NULL, wildStr);
-    cartHideDefaultTracks(cart);
     cartCopyCustomComposites(cart);
     hubConnectLoadHubs(cart);
-    cartCopyCustomTracks(cart);
+    cartHideDefaultTracks(cart);
     cartCheckForCustomTracks(cart, dyMessage);
     didSomething = TRUE;
     }
@@ -1189,10 +1289,9 @@ dyStringPrintf(dyMessage,
 	       getSessionLink(otherUser, encSessionName),
 	       getSessionEmailLink(encOtherUser, encSessionName));
 cartLoadUserSession(conn, otherUser, sessionName, cart, NULL, actionVar);
-cartHideDefaultTracks(cart);
 cartCopyCustomComposites(cart);
 hubConnectLoadHubs(cart);
-cartCopyCustomTracks(cart);
+cartHideDefaultTracks(cart);
 cartCheckForCustomTracks(cart, dyMessage);
 hDisconnectCentral(&conn);
 return dyStringCannibalize(&dyMessage);
@@ -1208,16 +1307,7 @@ struct pipeline *compressPipe = textOutInit(fileName, compressType, NULL);
 
 cleanHgSessionFromCart(cart);
 
-// if we're normally outputing the cart in table form, we want to turn that off
-// and turn it back on after we're through.
-char *tableSetting = cartOptionalString(cart,CART_DUMP_AS_TABLE);
-if (tableSetting != NULL)
-    cartRemove(cart,CART_DUMP_AS_TABLE);
-
-cartDump(cart);
-
-if (tableSetting != NULL)
-    cartSetString(cart, CART_DUMP_AS_TABLE, tableSetting);
+cartDumpHgSession(cart);
 
 // Now add all the default visibilities to output.
 outDefaultTracks(cart, NULL);
@@ -1292,7 +1382,7 @@ else
 	if (isNotEmpty(fileName))
 	    dyStringPrintf(dyMessage, ", only the filename <B>%s</B>",
 			   fileName);
-	dyStringAppend(dyMessage, ".  Your settings have not been changed.");
+	dyStringAppend(dyMessage, " (empty file?).  Your settings have not been changed.");
 	lf = NULL;
 	}
     dyStringPrintf(dyMessage, "&nbsp;&nbsp;"
@@ -1302,13 +1392,45 @@ else
     }
 if (lf != NULL)
     {
-    cartLoadSettings(lf, cart, NULL, actionVar);
-    cartCopyCustomComposites(cart);
-    hubConnectLoadHubs(cart);
-    cartCopyCustomTracks(cart);
-    cartHideDefaultTracks(cart);
-    cartCheckForCustomTracks(cart, dyMessage);
+    lineFileCarefulNewlines(lf);
+    struct dyString *dyLoadMessage = dyStringNew(0);
+    boolean ok = cartLoadSettingsFromUserInput(lf, cart, NULL, actionVar, dyLoadMessage);
     lineFileClose(&lf);
+    if (ok)
+        {
+        dyStringAppend(dyMessage, dyLoadMessage->string);
+        cartCopyCustomComposites(cart);
+        hubConnectLoadHubs(cart);
+        cartHideDefaultTracks(cart);
+        cartCheckForCustomTracks(cart, dyMessage);
+        }
+    else
+        {
+        dyStringClear(dyMessage);
+        dyStringAppend(dyMessage, "<span style='color: red;'><b>"
+                       "Unable to load session: </b></span>");
+        dyStringAppend(dyMessage, dyLoadMessage->string);
+        dyStringAppend(dyMessage, "The uploaded file needs to have been previously saved from the "
+                       "<b>Save Settings</b> section.\n");
+        // Looking for the words "custom track" in an error string is hokey, returning an enum
+        // from cartLoadSettings would be better, but IMO that isn't worth a big refactoring.
+        if (stringIn("custom track", dyLoadMessage->string))
+            {
+            dyStringPrintf(dyMessage, "If you would like to upload a custom track, please use the "
+                           "<a href='%s?%s'>"
+                           "Custom Tracks</a> tool.\n",
+                           hgCustomName(), cartSidUrlString(cart));
+            }
+        dyStringAppend(dyMessage, "If you feel you have reached this "
+                       "message in error, please contact the "
+                       "<A HREF=\"mailto:genome-www@soe.ucsc.edu?subject=Session file upload failed&"
+                       "body=Hello Genome Browser team,%0AMy session file failed to upload. "
+                       "The error message was:%0A");
+        dyStringAppend(dyMessage, cgiEncodeFull(dyLoadMessage->string));
+        dyStringAppend(dyMessage, "%0ACan you help me upload the data?\">"
+                       "UCSC Genome Browser team</A> for assistance.\n");
+        }
+    dyStringFree(&dyLoadMessage);
     }
 return dyStringCannibalize(&dyMessage);
 }
@@ -1364,21 +1486,29 @@ if ((row = sqlNextRow(sr)) != NULL)
 else
     errAbort("doSessionChange: got no results from query:<BR>\n%s\n", query);
 
-char *newName = cartOptionalString(cart, hgsNewSessionName);
+char *newName = trimSpaces(cartOptionalString(cart, hgsNewSessionName));
 if (isNotEmpty(newName) && !sameString(sessionName, newName))
     {
     char *encNewName = cgiEncodeFull(newName);
+    // In case the user has clicked to confirm that they want to overwrite an existing session,
+    // delete the existing row before updating the row that will overwrite it.
+    sqlSafef(query, sizeof(query), "delete from %s where userName = '%s' and sessionName = '%s';",
+             namedSessionTable, encUserName, encNewName);
+    sqlUpdate(conn, query);
     sqlSafef(query, sizeof(query),
 	  "UPDATE %s set sessionName = '%s' WHERE userName = '%s' AND sessionName = '%s';",
 	  namedSessionTable, encNewName, encUserName, encSessionName);
-	sqlUpdate(conn, query);
+    sqlUpdate(conn, query);
     dyStringPrintf(dyMessage, "Changed session name from %s to <B>%s</B>.\n",
 		   sessionName, newName);
     sessionName = newName;
     encSessionName = encNewName;
-    renamePrefixedCartVar(hgsEditPrefix, encOldSessionName, encNewName);
-    renamePrefixedCartVar(hgsLoadPrefix, encOldSessionName, encNewName);
-    renamePrefixedCartVar(hgsDeletePrefix, encOldSessionName, encNewName);
+    renamePrefixedCartVar(hgsEditPrefix         , encOldSessionName, encNewName);
+    renamePrefixedCartVar(hgsLoadPrefix         , encOldSessionName, encNewName);
+    renamePrefixedCartVar(hgsDeletePrefix       , encOldSessionName, encNewName);
+    renamePrefixedCartVar(hgsShowDownloadPrefix , encOldSessionName, encNewName);
+    renamePrefixedCartVar(hgsMakeDownloadPrefix , encOldSessionName, encNewName);
+    renamePrefixedCartVar(hgsDoDownloadPrefix   , encOldSessionName, encNewName);
     if (shared >= 2)
         {
         thumbnailRemove(encUserName, encSessionName, conn);
@@ -1461,9 +1591,157 @@ if (isEmpty(dyMessage->string))
 dyStringPrintf(dyMessage, "%s %s",
 	       getSessionLink(encUserName, encSessionName),
 	       getSessionEmailLink(encUserName, encSessionName));
+if (shared)
+    printShareMessage(dyMessage, encUserName, encSessionName, FALSE);
 return dyStringCannibalize(&dyMessage);
 }
 
+static int getSharingLevel(struct sqlConnection *conn, char *encUserName, char *encSessionName)
+/* Return the value of 'shared' from the namedSessionDb row for user & session;
+ * errAbort if there is no such session. (0 = not shared, 1 = shared by link, 2 = public session) */
+{
+char query[2048];
+sqlSafef(query, sizeof(query), "select shared from %s where userName='%s' and sessionName = '%s';",
+         namedSessionTable, encUserName, encSessionName);
+char buf[256];
+char *sharedStr = sqlQuickQuery(conn, query, buf, sizeof buf);
+if (sharedStr == NULL)
+    errAbort("Unable to find session for userName='%s' and sessionName='%s'; no result from query '%s'",
+             encUserName, encSessionName, query);
+return atoi(sharedStr);
+}
+
+char *doReSaveSession(char *userName, char *actionVar)
+/* Load a session (which may have old trash and customTrash references) and re-save it
+ * so that customTrash tables will be moved to customData* databases and trash paths
+ * will be replaced with userdata (hg.conf sessionDataDir) paths.
+ * NOTE: this is not intended to be reachable by the UI; it is for a script to update
+ * old sessions to use the new sessionData locations. */
+{
+if (userName == NULL)
+    return "Unable to re-save session -- please log in and try again.";
+struct sqlConnection *conn = hConnectCentral();
+char *sessionName = cloneString(cartString(cart, hgsNewSessionName));
+char *encUserName = cgiEncodeFull(userName);
+char *encSessionName = cgiEncodeFull(sessionName);
+int sharingLevel = getSharingLevel(conn, encUserName, encSessionName);
+cartLoadUserSession(conn, userName, sessionName, cart, NULL, actionVar);
+// Don't cartCopyCustomComposites because we're not going to make any track collection changes
+hubConnectLoadHubs(cart);
+// Some old sessions reference databases that are no longer present, and that triggers an errAbort
+// when cartHideDefaultTracks calls hgTrackDb.  Don't let that stop the process of updating other
+// stuff in the session.
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    cartHideDefaultTracks(cart);
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    fprintf(stderr, "doReSaveSession: Error from cartHideDefaultTracks: '%s'; Continuing...",
+            errCatch->message->string);
+errCatchFree(&errCatch);
+struct dyString *dyMessage = dyStringNew(1024);
+dyStringPrintf(dyMessage,
+               "Re-saved settings from user <B>%s</B>'s session <B>%s</B> "
+               "that %s be shared with others.  %s %s",
+	       userName, htmlEncode(sessionName), (sharingLevel ? "may" : "may not"),
+	       getSessionLink(userName, encSessionName),
+	       getSessionEmailLink(encUserName, encSessionName));
+cartCheckForCustomTracks(cart, dyMessage);
+int useCount = saveCartAsSession(conn, encUserName, encSessionName, sharingLevel);
+if (useCount <= INITIAL_USE_COUNT)
+    errAbort("Expected useCount of at least %d after re-saving session for "
+             "userName='%s', sessionName='%s', but got %d",
+             INITIAL_USE_COUNT+1, encUserName, encSessionName, useCount);
+hDisconnectCentral(&conn);
+return dyStringCannibalize(&dyMessage);
+}
+
+// ======================================
+
+void prepBackGroundCall(char **pBackgroundProgress, char *cleanPrefix)
+/* fix cart and save state */
+{
+*pBackgroundProgress = cloneString(cgiUsualString("backgroundProgress", NULL)); 
+cartRemove(cart, "backgroundExec");
+cartRemove(cart, "backgroundProgress");
+cartRemovePrefix(cart, cleanPrefix);
+cartSaveState(cart);  // in case it crashes
+}
+
+void launchForeAndBackGround(char *operation)
+/* update cart, launch background and foreground */
+{
+char cmd[1024]; 
+safef(cmd, sizeof cmd, "./hgSession backgroundExec=%s", operation);
+
+// allow child to see variables loaded from CGI.
+// because CGI settings have not been saved back to the cart yet
+cartSaveState(cart);   
+
+char *workUrl = NULL;
+// automatically adds hgsid
+// automatically adds backGroundProgress=%s url.progress for separate channel
+// Have to pass the userName manually since background exec will not get cookie,
+// but we are no longer using userName which was needed with saved-sessions.
+startBackgroundWork(cmd, &workUrl);
+
+htmlOpen("Background Status");
+
+jsInlineF(
+    "setTimeout(function(){location = 'hgSession?backgroundStatus=%s&hgsid=%s';},2000);\n", 
+    cgiEncode(workUrl), cartSessionId(cart));
+htmlClose();
+fflush(stdout);
+}
+
+void passSubmittedBinaryAsTrashFile(struct hashEl *list)
+/* fetch the binary file submitted in memory,
+ * and save it to temp trash location,
+ * saving the name in the cart. 
+ * This is necessary to pass the file to the background process.*/
+{
+// List should have these two
+// hgS_extractUpload_hub_9614_Anc11__binary
+// hgS_extractUpload_hub_9614_Anc11__filename
+// can have a third __filepath if crashes leaving in the cart.
+
+char *binaryParam = NULL;
+struct hashEl *hel = NULL;
+for (hel = list; hel; hel = hel->next)
+    {
+    if (endsWith(hel->name, "__binary"))
+	binaryParam = cloneString(hel->name);
+    }
+
+if (!binaryParam)
+    {
+    htmlOpen("No file selected");
+    printf("Please choose a saved session custom tracks local backup archive file (.tar.gz) to upload");
+    htmlClose();
+    exit(0);
+    } 
+
+char *binaryValue = cartOptionalString(cart, binaryParam);
+
+char *binInfo = cloneString(binaryValue);
+char *words[2];
+char *mem;
+unsigned long size;
+chopByWhite(binInfo, words, ArraySize(words));
+mem = (char *)sqlUnsignedLong(words[0]);
+size = sqlUnsignedLong(words[1]);
+
+struct tempName tn;
+trashDirFile(&tn, "backGround", cartSessionId(cart), ".bin");
+
+writeGulp(tn.forCgi, mem, size); 
+
+// add new cart var with trash path
+// hgS_extractUpload_hub_9614_Anc11__filepath
+char *varName = replaceChars(binaryParam, "__binary", "__filepath");
+cartRemove(cart, varName);  // just in case
+cartSetString(cart, varName, tn.forCgi);  // update the cart
+}
 
 void hgSession()
 /* hgSession - Interface with wiki login and do session saving/loading.
@@ -1478,7 +1756,54 @@ cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 
 char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
 
-if (cartVarExists(cart, hgsDoMainPage) || cartVarExists(cart, hgsCancel))
+char *backgroundStatus = cloneString(cartUsualString(cart, "backgroundStatus", NULL));
+
+if (backgroundStatus)
+    {
+    // clear backgroundStatus from the cart
+    cartRemove(cart, "backgroundStatus");
+    /* Save cart variables. */
+    cartSaveState(cart);
+    getBackgroundStatus(backgroundStatus);
+    exit(0);
+    }
+
+char *backgroundExec = cloneString(cgiUsualString("backgroundExec", NULL));
+
+
+struct hashEl *showDownloadList = cartFindPrefix(cart, hgsShowDownloadPrefix);
+struct hashEl *makeDownloadList = cartFindPrefix(cart, hgsMakeDownloadPrefix);
+struct hashEl *doDownloadList = cartFindPrefix(cart, hgsDoDownloadPrefix);
+
+if (showDownloadList)
+    showDownloadSessionCtData(showDownloadList);
+else if (makeDownloadList)
+    {
+    if (sameOk(backgroundExec,"makeDownloadSessionCtData"))
+	{
+	// only one, not a list.
+	struct hashEl *hel = makeDownloadList;
+	char *param1 = cloneString(hel->name);
+
+	char *backgroundProgress = NULL; 
+	prepBackGroundCall(&backgroundProgress, hgsMakeDownloadPrefix);
+
+	makeDownloadSessionCtData(param1, backgroundProgress);
+
+	exit(0);  // cannot return
+	}
+    else
+	{
+
+	launchForeAndBackGround("makeDownloadSessionCtData");
+
+	exit(0);
+	}
+
+    }
+else if (doDownloadList)
+    doDownloadSessionCtData(doDownloadList);
+else if (cartVarExists(cart, hgsDoMainPage) || cartVarExists(cart, hgsCancel))
     doMainPage(userName, NULL);
 else if (cartVarExists(cart, hgsDoNewSession))
     {
@@ -1526,6 +1851,11 @@ else if (cartVarExists(cart, hgsOldSessionName))
 	safef(message, len, "%s%s", message1, message2);
 	}
     doMainPage(userName, message);
+    }
+else if (cartVarExists(cart, hgsDoReSaveSession))
+    {
+    char *message = doReSaveSession(userName, hgsDoReSaveSession);
+    printf("\n%s\n\n", message);
     }
 else
     {

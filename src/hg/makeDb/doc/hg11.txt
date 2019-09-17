@@ -1453,3 +1453,38 @@ When it is done do:
 cd /var/tmp/hg11-dump
 gzip *.txt
 mv * /usr/local/apache/htdocs/goldenPath/05apr2002/database
+
+##############################################################################
+# liftOver to hg19 requested by user (DONE - 2017-12-22 - Hiram)
+    # picked up the sequence from hgdownload to make a 2bit file
+    # fixed the chrM name in the sequence
+    # created 2bit file:
+    # -rw-rw-r-- 1 830361244 Dec 22 08:45 /hive/data/genomes/hg11/hg11.2bit
+    # and then a .ooc file:
+    cd /hive/data/genomes/hg11
+    mkdir /hive/data/genomes/hg11
+
+    time blat hg12.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/hg11.11.ooc \
+		-repMatch=1024
+
+    mkdir /hive/data/genomes/hg11/bed/blat.hg19.2017-12-22
+    cd /hive/data/genomes/hg11/bed/blat.hg19.2017-12-22
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/hg11/jkStuff/hg11.11.ooc \
+         hg11 hg19) > do.log 2>&1
+    # real    552m56.176s
+
+##############################################################################
+# liftOver to hg38 while we are here (DONE - 2017-12-22 - Hiram)
+
+    mkdir /hive/data/genomes/hg11/bed/blat.hg38.2017-12-20
+    cd /hive/data/genomes/hg11/bed/blat.hg38.2017-12-20
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/hg11/jkStuff/hg11.11.ooc \
+         hg11 hg38) > do.log 2>&1
+    # real    553m21.557s
+
+##############################################################################

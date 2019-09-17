@@ -41,8 +41,10 @@ if (table != NULL)
     }
 }
 
-struct fieldedRow *fieldedTableAdd(struct fieldedTable *table,  char **row, int rowSize, int id)
-/* Create a new row and add it to table.  Return row. */
+
+static struct fieldedRow *fieldedTableNewRow(struct fieldedTable *table,  
+    char **row, int rowSize, int id)
+/* Create a new row and populate it, but don't add it to table yet. */
 {
 /* Make sure we got right number of fields. */
 if (table->fieldCount != rowSize)
@@ -59,6 +61,14 @@ int i;
 for (i=0; i<rowSize; ++i)
     fr->row[i] = lmCloneString(lm, row[i]);
 
+return fr;
+}
+
+struct fieldedRow *fieldedTableAdd(struct fieldedTable *table,  char **row, int rowSize, int id)
+/* Create a new row and add it to table.  Return row. */
+{
+struct fieldedRow *fr = fieldedTableNewRow(table, row, rowSize, id);
+
 /* Add it to end of list using cursor to avoid slReverse hassles. */
 *(table->cursor) = fr;
 table->cursor = &fr->next;
@@ -66,6 +76,21 @@ table->rowCount += 1;
 
 return fr;
 }
+
+struct fieldedRow *fieldedTableAddHead(struct fieldedTable *table, char **row, int rowSize, int id)
+/* Create a new row and add it to start of table.  Return row. */
+{
+if (table->rowCount == 0)
+    {
+    // Let fieldedTableAdd() handle the edges of the empty case
+    return fieldedTableAdd(table, row, rowSize, id);
+    }
+struct fieldedRow *fr = fieldedTableNewRow(table, row, rowSize, id);
+slAddHead(&table->rowList, fr);
+table->rowCount += 1;
+return fr;
+}
+
 
 int fieldedTableMaxColChars(struct fieldedTable *table, int colIx)
 /* Calculate the maximum number of characters in a cell for a column */
@@ -228,15 +253,22 @@ lineFileClose(&lf);
 return table;
 }
 
-void fieldedTableToTabFile(struct fieldedTable *table, char *fileName)
-/* Write out a fielded table back to file */
+void fieldedTableToTabFileWithId(struct fieldedTable *table, char *fileName, 
+    char *idField, int startId)
+/* Write out a fielded table back to file.  If idField is non-NULL it will be added
+ * to the start of each output line as a steadily incrementing integer starting with startId. */
 {
 FILE *f = mustOpen(fileName, "w");
 
 /* Write out header row with optional leading # */
 if (table->startsSharp)
     fputc('#', f);
+int curId = startId;
 int i;
+if (idField)
+    {
+    fprintf(f, "%s\t", idField);
+    }
 fputs(table->fields[0], f);
 for (i=1; i<table->fieldCount; ++i)
     {
@@ -249,6 +281,11 @@ fputc('\n', f);
 struct fieldedRow *fr;
 for (fr = table->rowList; fr != NULL; fr = fr->next)
     {
+    if (idField)
+	{
+	fprintf(f, "%d\t", curId);
+	curId += 1;
+	}
     fputs(fr->row[0], f);
     for (i=1; i<table->fieldCount; ++i)
 	{
@@ -261,10 +298,22 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 carefulClose(&f);
 }
 
+void fieldedTableToTabFile(struct fieldedTable *table, char *fileName)
+/* Write out a fielded table back to file */
+{
+fieldedTableToTabFileWithId(table, fileName, NULL, 0);
+}
+
+int fieldedTableFindFieldIx(struct fieldedTable *table, char *field)
+/* Return index of field in a table's row or -1 if not found */
+{
+return stringArrayIx(field, table->fields, table->fieldCount);
+}
+
 int fieldedTableMustFindFieldIx(struct fieldedTable *table, char *field)
 /* Find index of field in table's row.  Abort if field not found. */
 {
-int ix = stringArrayIx(field, table->fields, table->fieldCount);
+int ix = fieldedTableFindFieldIx(table, field);
 if (ix < 0)
     errAbort("Field %s not found in table %s", field, table->name);
 return ix;

@@ -176,7 +176,10 @@ switch (type)
 	fprintf(f, "%c", datum.datChar);
 	break;
     case vcfInfoString:
-	fprintf(f, "%s", datum.datString);
+        if (startsWith("http", datum.datString))
+            fprintf(f, "<a target=_blank href='%s'>%s</a>", datum.datString, datum.datString);
+        else
+            fprintf(f, "%s", datum.datString);
 	break;
     default:
 	errAbort("vcfPrintDatum: Unrecognized type %d", type);
@@ -223,6 +226,12 @@ struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int
  * vcff->records.  If maxErr >= zero, then continue to parse until
  * there are maxErr+1 errors.  A maxErr less than zero does not stop
  * and reports all errors. Set maxErr to VCF_IGNORE_ERRS for silence. */
+
+long long vcfTabixItemCount(char *fileOrUrl, char *tbiFileOrUrl);
+/* Return the total number of items across all sequences in fileOrUrl, using index file.
+ * If tbiFileOrUrl is NULL, the index file is assumed to be fileOrUrl.tbi.
+ * NOTE: not all tabix index files include mapped item counts, so this may return 0 even for
+ * large files. */
 
 int vcfTabixBatchRead(struct vcfFile *vcff, char *chrom, int start, int end,
                       int maxErr, int maxRecords);

@@ -1,5 +1,5 @@
 /* Jeff West's graphic design for new gateway page, see
- * http://redmine.cse.ucsc.edu/attachments/download/1727/FINAL_ART_GenomeBrowser.jpg,
+ * http://redmine.soe.ucsc.edu/attachments/download/1727/FINAL_ART_GenomeBrowser.jpg,
  * with a few tweaks (e.g. sprites). */
 
 body {
@@ -37,28 +37,15 @@ a.jwAnchor, a.jwAnchor:link, a.jwAnchor:visited,
     text-decoration: none;
 }
 
-.ui-autocomplete-category {
-    /* Adapted from https://jqueryui.com/autocomplete/#categories */
-    font-weight: bold;
-    line-height: 1.5;
-    background: lightgray;
-}
-
-.ui-menu-item {
-    /* This is necessary if a background color is specified in .ui-autocomplete-category above;
-     * the category labels actually extend upwards, behind the preceding items! */
-    background: white;
-}
-
 div.jwBanner {
     background: #f9f9f9; /* #dddee3; /* jWest: #f4f4eb; */
     padding: 5px;
     padding-left: 20px;
 }
 
-div.jwUcscLogoWrapper {
+.jwUcscLogoWrapper {
     display: inline-block;
-    width: 172px;
+    width: 272px;
     height: 55px;
 }
 
@@ -226,7 +213,7 @@ div.jwWarningBoxStatic {
 
 div.jwIconWrapper {
     display: inline-block;
-    padding-bottom: 5px;
+    padding-bottom: 13px;
     padding-right: 9px;
     text-align: center;
 }
@@ -238,33 +225,37 @@ div.jwIconSpriteLabel {
 }
 
 div.jwIconSprite {
-    width: 55px;
-    height: 55px;
+    width: 47px;
+    height: 47px;
     cursor: pointer;
 }
 
 div.jwIconSpriteHuman {
-    background: url('../images/jWestIcons55px.png') no-repeat -0px -0px;
+    background: url('../images/jWestIcons47px.png') no-repeat -0px -0px;
 }
 
 div.jwIconSpriteMouse {
-    background: url('../images/jWestIcons55px.png') no-repeat -55px -0px;
+    background: url('../images/jWestIcons47px.png') no-repeat -47px -0px;
 }
 
 div.jwIconSpriteRat {
-    background: url('../images/jWestIcons55px.png') no-repeat -110px -0px;
+    background: url('../images/jWestIcons47px.png') no-repeat -94px -0px;
+}
+
+div.jwIconSpriteZebrafish {
+    background: url('../images/jWestIcons47px.png') no-repeat -141px -0px;
 }
 
 div.jwIconSpriteFly {
-    background: url('../images/jWestIcons55px.png') no-repeat -165px -0px;
+    background: url('../images/jWestIcons47px.png') no-repeat -188px -0px;
 }
 
 div.jwIconSpriteWorm {
-    background: url('../images/jWestIcons55px.png') no-repeat -220px -0px;
+    background: url('../images/jWestIcons47px.png') no-repeat -235px -0px;
 }
 
 div.jwIconSpriteYeast {
-    background: url('../images/jWestIcons55px.png') no-repeat -0px -55px;
+    background: url('../images/jWestIcons47px.png') no-repeat -282px -0px;
 }
 
 div.jwSliderWidget {

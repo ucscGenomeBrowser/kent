@@ -346,8 +346,11 @@ void gfAlignTransTrans(int *pConn, char *nibDir, struct dnaSeq *seq,
  * and do detailed alignment.  Call 'outFunction' with each alignment
  * that is found. */
 
+int gfMayConnect(char *hostName, char *portName);
+/* Set up our network connection to server, or return -1. */
+
 int gfConnect(char *hostName, char *portName);
-/* Set up our network connection to server. */
+/* Set up our network connection to server. Aborts on error. */
 
 int gfDefaultRepMatch(int tileSize, int stepSize, boolean protTiles);
 /* Figure out appropriate step repMatch value. */
@@ -379,7 +382,7 @@ struct gfClump *gfPcrClumps(struct genoFind *gf,
 
 #define MAXSINGLEPIECESIZE 5000 /* maximum size of a single piece */
 
-#define gfVersion "36x2"	/* Current BLAT version number */
+#define gfVersion "36x4"	/* Current BLAT version number */
 
 #endif /* GENOFIND_H */
 

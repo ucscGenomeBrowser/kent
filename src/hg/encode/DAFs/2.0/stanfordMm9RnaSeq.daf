@@ -16,7 +16,7 @@
 #cell: The cell or tissue name. The cell registered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Mouse_cell_types
 #treatment: The treatment used to treat a specific cell.The treatment registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Treatments
 #replicate: The Replicate number. The replication number of a given experiment.
-#rnaExctract:   The RNA extract.  http://hgwdev.cse.ucsc.edu/ENCODE/otherTerms.html#rnaExtract
+#rnaExctract:   The RNA extract.  http://hgwdev.soe.ucsc.edu/ENCODE/otherTerms.html#rnaExtract
 #origAssembly:  The assembly that the data was originally released on (hg18 or hg19)
 #seqPlatform: The sequencing platform.The sequence platformregistered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Sequence_Platforms
 #labVersion: Free text for the lab to keep track of any other data

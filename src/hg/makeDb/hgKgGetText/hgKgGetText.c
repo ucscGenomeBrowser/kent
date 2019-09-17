@@ -11,7 +11,7 @@
 #include "spDb.h"
 
 
-char *summaryTable = "refSeqSummary";
+char *summaryTable = "hgFixed.refSeqSummary";
 
 void usage()
 /* Explain usage and exit. */
@@ -161,14 +161,14 @@ if (refSeqHash != NULL)
     fprintf(f, "\t%s", s);
     }
 
-sqlSafef(query, sizeof(query),
-    "select commentVal.val from comment,commentVal "
+safef(query, sizeof(query),
+    "NOSQLINJ select commentVal.val from comment,commentVal "
     "where comment.acc='%s' and comment.commentVal=commentVal.id"
     , spAcc);
 addText(query, spConn, f);
 
-sqlSafef(query, sizeof(query),
-    "select term.name from goaPart,term "
+safef(query, sizeof(query),
+    "NOSQLINJ select term.name from goaPart,term "
     "where goaPart.dbObjectId='%s' "
     "and goaPart.goId=term.acc"
     , spAcc);

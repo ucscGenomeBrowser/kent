@@ -28,6 +28,7 @@
 #include "joiner.h"
 #include "jsHelper.h"
 #include "jsonParse.h"
+#include "knetUdc.h"
 #include "textOut.h"
 #include "trackHub.h"
 #include "userRegions.h"
@@ -50,11 +51,8 @@ struct hash *oldVars = NULL;          /* Old contents of cart before it was upda
 
 static void writeCartVar(struct cartJson *cj, char *varName)
 {
-//#*** TODO: move jsonStringEscape inside jsonWriteString
 char *val = cartOptionalString(cj->cart, varName);
-char *encoded = jsonStringEscape(val);
-jsonWriteString(cj->jw, varName, encoded);
-freeMem(encoded);
+jsonWriteString(cj->jw, varName, val);
 }
 
 static void getQueryState(struct cartJson *cj, struct hash *paramHash)
@@ -234,7 +232,7 @@ for (tableGroup = tableGroups;  tableGroup != NULL;  tableGroup = tableGroup->ne
             else
                 {
                 char likeExpr[PATH_LEN];
-                safef(likeExpr, sizeof(likeExpr), "like 'chr%%\\_%s'", tableName);
+                safef(likeExpr, sizeof(likeExpr), "chr%%\\_%s", tableName);
                 realTables = sqlListTablesLike(conn, likeExpr);
                 if (realTables != NULL)
                     realTable = realTables->name;
@@ -326,7 +324,7 @@ for (dbTable = dbTableList;  dbTable != NULL;  dbTable = dbTable->next)
     if (isEmpty(db))
         safecpy(db, sizeof(db), cartDb);
     addAll_PrefixForJoiner(table, sizeof(table));
-    struct joinerPair *jp, *jpList = joinerRelate(joiner, db, table);
+    struct joinerPair *jp, *jpList = joinerRelate(joiner, db, table, cartDb);
     for (jp = jpList; jp != NULL; jp = jp->next)
         {
         // omit the main table from the list if some related table links back to the main table:
@@ -393,9 +391,7 @@ for (tableGroup = tableGroups;  tableGroup != NULL;  tableGroup = tableGroup->ne
             if (sameString(dtf->database, cartDb))
                 tdb = tdbForTrack(cartDb, dtf->table, &fullTrackList);
             char *description = getRelatedTableLabel(dtf->database, dtf->table, tdb);
-            //#*** TODO: move jsonStringEscape inside jsonWriteString
-            char *encoded = jsonStringEscape(description);
-            jsonWriteString(cj->jw, NULL, encoded);
+            jsonWriteString(cj->jw, NULL, description);
             jsonWriteBoolean(cj->jw, NULL, cartTrackDbIsNoGenome(dtf->database, dtf->table));
             jsonWriteListEnd(cj->jw);
             }
@@ -491,12 +487,8 @@ char *regionsDb = cartOptionalString(cart, hgtaUserRegionsDb);
 if (sameOk(regionsDb, db) && userRegionsExist())
     {
     char *userRegions = cartUsualString(cart, hgtaEnteredUserRegions, "");
-    //#*** TODO: move jsonStringEscape inside jsonWriteString
-    char *encoded = jsonStringEscape(userRegions);
-    jsonWriteString(jw, resultName, encoded);
-    //#*** TODO: move jsonStringEscape inside jsonWriteString
-    encoded = jsonStringEscape(summarizeUserRegions());
-    jsonWriteString(jw, "userRegionsSummary", encoded);
+    jsonWriteString(jw, resultName, userRegions);
+    jsonWriteString(jw, "userRegionsSummary", summarizeUserRegions());
     }
 else
     {
@@ -573,11 +565,7 @@ else
             getUserRegions(cj, paramHash);
             }
         if (warnText != NULL)
-            {
-            //#*** TODO: move jsonStringEscape inside jsonWriteString
-            char *encoded = jsonStringEscape(warnText);
-            jsonWriteString(jw, "userRegionsWarn", encoded);
-            }
+            jsonWriteString(jw, "userRegionsWarn", warnText);
         }
     else
         jsonWriteStringf(jw, "error", "Could not find any regions in input: %s", warnText);
@@ -933,6 +921,8 @@ void doMainPage()
 {
 char *db = NULL, *genome = NULL, *clade = NULL;
 getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
+char *position = windowsToAscii(cartUsualString(cart, "position", hDefaultPos(db)));
+cartSetLastPosition(cart, position, oldVars);
 initGenbankTableNames(db);
 webStartWrapperDetailedNoArgs(cart, trackHubSkipHubName(db),
                               "", "Data Integrator",
@@ -977,6 +967,11 @@ void doMiddle(struct cart *theCart)
  * serve up JSON for the UI, or display the main page. */
 {
 cart = theCart;
+
+int timeout = cartUsualInt(cart, "udcTimeout", 300);
+if (udcCacheTimeout() < timeout)
+    udcSetCacheTimeout(timeout);
+knetUdcInstall();
 
 // Try to deal with virt chrom position used by hgTracks.
 if (startsWith("virt:", cartUsualString(cart, "position", "")))

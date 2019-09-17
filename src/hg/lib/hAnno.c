@@ -20,6 +20,7 @@
 #include "annoStreamBigWig.h"
 #include "annoStreamDb.h"
 #include "annoStreamDbFactorSource.h"
+#include "annoStreamDbPslPlus.h"
 #include "annoStreamTab.h"
 #include "annoStreamVcf.h"
 #include "annoStreamLongTabix.h"
@@ -113,9 +114,8 @@ struct asObject *hAnnoGetAutoSqlForDbTable(char *db, char *table, struct trackDb
 {
 struct sqlConnection *conn = hAllocConn(db);
 char maybeSplitTable[HDB_MAX_TABLE_STRING];
-if (!hFindSplitTable(db, NULL, table, maybeSplitTable, NULL))
-    errAbort("hAnnoGetAutoSqlForDbTable: can't find table (or split table) for '%s.%s'",
-             db, table);
+if (!hFindSplitTable(db, NULL, table, maybeSplitTable, sizeof maybeSplitTable, NULL))
+    errAbort("hAnnoGetAutoSqlForDbTable: can't find table (or split table) for '%s.%s'", db, table);
 struct sqlFieldInfo *fieldList = sqlFieldInfoGet(conn, maybeSplitTable);
 struct asObject *asObj = NULL;
 if (tdb != NULL)
@@ -269,7 +269,7 @@ else if (sameString("factorSource", tdb->type) &&
     streamer = annoStreamDbFactorSourceNew(dataDb, tdb->track, sourceTable, inputsTable, assembly,
 					   maxOutRows);
     }
-else if (trackHubDatabase(db))
+else if (trackHubDatabase(db) && !isCustomTrack(selTable))
     errAbort("Unrecognized type '%s' for hub track '%s'", tdb->type, tdb->track);
 if (streamer == NULL)
     {
@@ -348,10 +348,20 @@ else
     {
     struct annoStreamer *streamer = hAnnoStreamerFromTrackDb(assembly, selTable, tdb, chrom,
                                                              maxOutRows, config);
-    if (primaryIsVariants &&
-        (asColumnNamesMatchFirstN(streamer->asObj, genePredAsObj(), 10) ||
-         asObjectsMatch(streamer->asObj, bigGenePredAsObj())))
+    boolean streamerIsGenePred = asColumnNamesMatchFirstN(streamer->asObj, genePredAsObj(), 10);
+    boolean streamerIsBigGenePred = asObjectsMatch(streamer->asObj, bigGenePredAsObj());
+    if (primaryIsVariants && (streamerIsGenePred || streamerIsBigGenePred))
+        {
+        if (streamerIsGenePred &&
+            (sameString("refGene", tdb->table) || startsWith("ncbiRefSeq", tdb->table)))
+            {
+            // We have PSL+CDS+seq for these tracks -- pass that instead of genePred
+            // to annoGratorGpVar
+            streamer->close(&streamer);
+            streamer = annoStreamDbPslPlusNew(assembly, tdb->table, maxOutRows, config);
+            }
 	grator = annoGratorGpVarNew(streamer);
+        }
     else
 	grator = annoGratorNew(streamer);
     }

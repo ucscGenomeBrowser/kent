@@ -82,7 +82,7 @@ public class ApacheReport {
       System.out.println("\nWriting daily report to \n" + filename + "\n");
       String url = "/usr/local/apache/htdocs/";
       if (outpath.startsWith(url)) {
-        String urlpath = outpath.replaceFirst(url, "http://hgwdev.cse.ucsc.edu/");
+        String urlpath = outpath.replaceFirst(url, "http://hgwdev.soe.ucsc.edu/");
         System.out.println("Try the URL directly: \n" +
                            urlpath + year + "-" + getMonth(month) + "-"
                            + df2.format(day) + ".html");
@@ -124,7 +124,7 @@ public class ApacheReport {
                    + " monthly report available at: \n" + fileMonth + "\n");
         String url = "/usr/local/apache/htdocs/";
         if (outpath.startsWith(url)) {
-          String urlpath = outpath.replaceFirst(url, "http://hgwdev.cse.ucsc.edu/");
+          String urlpath = outpath.replaceFirst(url, "http://hgwdev.soe.ucsc.edu/");
           System.out.println("Try the URL directly: \n" +
                              urlpath + year + "-" + getMonth(month) + ".html");
         }

@@ -144,7 +144,19 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                 hubSearchTextTabOut(trackHst, searchFp);
                 }
             }
-        // Write out child lines
+
+        // memory leak ditching metadata pairs.  slPairFreeValsAndList would fix that.
+        trackHst->textLength = hubSearchTextMeta;
+        trackHst->text = (char *) needMem(4096);
+        struct slPair *metaPairs = trackDbMetaPairs(tdb);
+        while (metaPairs != NULL)
+            {
+            safef(trackHst->text, 4096, "%s: %s", metaPairs->name, (char *) metaPairs->val);
+            hubSearchTextTabOut(trackHst, searchFp);
+            metaPairs = metaPairs->next;
+            }
+
+        // Write out lines for child tracks
         if (tdb->subtracks != NULL)
             trackHubCrawlTrack(tdb->subtracks, genome, hubUrl, dbName, searchFp, visitedTracks);
         }

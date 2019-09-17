@@ -1015,7 +1015,7 @@ EOF
     # included in apiMel2 -- OK.  
     # At first I wasn't sure if we wanted to load this up, so I made it 
     # available as a custom track file
-    # http://genome-test.cse.ucsc.edu/angie/apiMel2.RefSeq.gff
+    # http://genome-test.soe.ucsc.edu/angie/apiMel2.RefSeq.gff
     ln -s /cluster/data/apiMel2/bed/ncbi/apiMel2.RefSeq.gff \
       /usr/local/apache/htdocs/angie/
     # But Jim said that we should show these, so load it up:

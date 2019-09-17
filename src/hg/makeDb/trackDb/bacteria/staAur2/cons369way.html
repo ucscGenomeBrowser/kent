@@ -1,0 +1,2320 @@
+<h2>Description</h2>
+<p>
+This track shows multiple alignments of 369 bacteria,
+362 Staphylococcus aureus, one Bacillus subtilis and six Escherichia coli,
+and measurements of evolutionary conservation using
+two methods (<em>phastCons</em> and <em>phyloP</em>) from the
+<a href="http://compgen.cshl.edu/phast/" target=_BLANK>
+PHAST package</a>, for all 369 species.
+The multiple alignments were generated using multiz and
+other tools in the UCSC/<a href="http://www.bx.psu.edu/miller_lab/"
+target="_blank">Penn State Bioinformatics</a>
+comparative genomics alignment pipeline.
+Conserved elements identified by phastCons are also displayed in
+this track.
+</p>
+<p>
+The phylogenetic tree was derived from kmers in common counting
+between the sequences to obtain a 'distance' matrix, then using the
+phylip command 'neighbors' operation for the simple neighbor joining
+algorithm to establish this binary tree.  This tree is not necessarily
+biologically correct, but it does serve as a useful guide tree for the
+multiz alignment procedure.  See also:
+<a href="http://evolution.genetics.washington.edu/phylip/progs.data.dist.html"
+target="_blank">Phylip distance operations</a>, 
+<a href="https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-015-1647-5"
+target="_blank">assembly and alignment-free phylogeny reconstruction</a>, and 
+<a href="https://f1000research.com/articles/5-2789/v2"
+target="_blank">recapitulating phylogenies using k-mers</a>.
+</p>
+<p>
+Download data available at:
+<a href="https://hgdownload-test.gi.ucsc.edu:/goldenPath/staAur2/multiz369way/"
+target="_blank">hgdownload-test</a>.
+</p>
+<p>
+PhastCons (which has been used in previous Conservation tracks) is a hidden
+Markov model-based method that estimates the probability that each
+nucleotide belongs to a conserved element, based on the multiple alignment.
+It considers not just each individual alignment column, but also its
+flanking columns.  By contrast, phyloP separately measures conservation at
+individual columns, ignoring the effects of their neighbors.  As a
+consequence, the phyloP plots have a less smooth appearance than the
+phastCons plots, with more &quot;texture&quot; at individual sites.  The two methods
+have different strengths and weaknesses.  PhastCons is sensitive to &quot;runs&quot;
+of conserved sites, and is therefore effective for picking out conserved
+elements.  PhyloP, on the other hand, is more appropriate for evaluating
+signatures of selection at particular nucleotides or classes of nucleotides
+(e.g., third codon positions, or first positions of miRNA target sites).
+</p>
+<p>
+Another important difference is that phyloP can measure acceleration
+(faster evolution than expected under neutral drift) as well as
+conservation (slower than expected evolution).  In the phyloP plots, sites
+predicted to be conserved are assigned positive scores (and shown in blue),
+while sites predicted to be fast-evolving are assigned negative scores (and
+shown in red).  The absolute values of the scores represent -log p-values
+under a null hypothesis of neutral evolution.  The phastCons scores, by
+contrast, represent probabilities of negative selection and range between 0
+and 1.
+</p>
+<p>
+Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
+missing data.
+</p>
+<p>
+See also: <a href="http://genomewiki.ucsc.edu/index.php/StaAur2_369-way_conservation_lastz_parameters"
+target="_blank">lastz parameters</a> and other details, and
+chain <a href="http://genomewiki.ucsc.edu/index.php/StaAur2_369-way_Genome_size_statistics"
+target="_blank">minimum score and gap</a> parameters used in these alignments.
+</p>
+
+
+<p>
+Missing sequence in the assemblies is highlighted in the track display
+by regions of yellow when zoomed out and Ns displayed at base
+level (see <em>Gap Annotation</em>, below). </p>
+<p>
+<blockquote><table border=1 cellpadding=4 bordercolor='#aaaaaa'>
+<tr><th>Organism<br>NCBI assembly</th><th>Species</th><th>Assembly name</th><th>browser or<br>NCBI source</th></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000013465.1/"
+    target=_blank>Staph/GCF_000013465.1<br>reference sequence</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2006 (USA300_FPR3757/staAur2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=staAur2"
+    target=_blank>Feb. 2006 (USA300_FPR3757/staAur2)</a></td></tr>
+<tr align=center><td colspan=4>***** % 99 reference identity *****</td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002000685.1/"
+    target=_blank>Sa_USA300_SUR15</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM200068v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/000/685/GCF_002000685.1_ASM200068v1/"
+    target=_blank>GCF_002000685.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002000865.1/"
+    target=_blank>Sa_USA300_SUR24</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM200086v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/000/865/GCF_002000865.1_ASM200086v1/"
+    target=_blank>GCF_002000865.1</a></td></tr>
+<tr align=center><td colspan=4>***** % 98 reference identity *****</td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002000565.1/"
+    target=_blank>Sa_USA300_SUR9</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM200056v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/000/565/GCF_002000565.1_ASM200056v1/"
+    target=_blank>GCF_002000565.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002000585.1/"
+    target=_blank>Sa_USA300_SUR10</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM200058v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/000/585/GCF_002000585.1_ASM200058v1/"
+    target=_blank>GCF_002000585.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002000605.1/"
+    target=_blank>Sa_USA300_SUR11</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM200060v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/000/605/GCF_002000605.1_ASM200060v1/"
+    target=_blank>GCF_002000605.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003595425.1/"
+    target=_blank>Sa_USA300_SUR4</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM359542v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/595/425/GCF_003595425.1_ASM359542v1/"
+    target=_blank>GCF_003595425.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003595505.1/"
+    target=_blank>Sa_USA300_SUR8</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM359550v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/595/505/GCF_003595505.1_ASM359550v1/"
+    target=_blank>GCF_003595505.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002993865.1/"
+    target=_blank>Sa_USA300_NRS384</a></td><td>Staphylococcus aureus subsp. aureus USA300</td>
+    <td>Mar. 2018 (ASM299386v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/993/865/GCF_002993865.1_ASM299386v1/"
+    target=_blank>GCF_002993865.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001717685.1/"
+    target=_blank>Sa_1971C01</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Feb. 2018 (ASM171768v3)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/717/685/GCF_001717685.1_ASM171768v3/"
+    target=_blank>GCF_001717685.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002000645.1/"
+    target=_blank>Sa_USA300_SUR13</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM200064v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/000/645/GCF_002000645.1_ASM200064v1/"
+    target=_blank>GCF_002000645.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002000805.1/"
+    target=_blank>Sa_USA300_SUR21</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM200080v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/000/805/GCF_002000805.1_ASM200080v1/"
+    target=_blank>GCF_002000805.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003595405.1/"
+    target=_blank>Sa_USA300_SUR3</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM359540v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/595/405/GCF_003595405.1_ASM359540v1/"
+    target=_blank>GCF_003595405.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003595465.1/"
+    target=_blank>Sa_USA300_SUR6</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM359546v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/595/465/GCF_003595465.1_ASM359546v1/"
+    target=_blank>GCF_003595465.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003595485.1/"
+    target=_blank>Sa_USA300_SUR7</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM359548v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/595/485/GCF_003595485.1_ASM359548v1/"
+    target=_blank>GCF_003595485.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000017085.1/"
+    target=_blank>Sa_USA300_TCH1516</a></td><td>Staphylococcus aureus subsp. aureus USA300_TCH1516</td>
+    <td>Mar. 2009 (ASM1708v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/017/085/GCF_000017085.1_ASM1708v1/"
+    target=_blank>GCF_000017085.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003193725.1/"
+    target=_blank>Sa_AR_0216</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM319372v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/193/725/GCF_003193725.1_ASM319372v1/"
+    target=_blank>GCF_003193725.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002000665.1/"
+    target=_blank>Sa_USA300_SUR14</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM200066v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/000/665/GCF_002000665.1_ASM200066v1/"
+    target=_blank>GCF_002000665.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002000705.1/"
+    target=_blank>Sa_USA300_SUR16</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM200070v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/000/705/GCF_002000705.1_ASM200070v1/"
+    target=_blank>GCF_002000705.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002000725.1/"
+    target=_blank>Sa_USA300_SUR17</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM200072v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/000/725/GCF_002000725.1_ASM200072v1/"
+    target=_blank>GCF_002000725.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002000745.1/"
+    target=_blank>Sa_USA300_SUR18</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM200074v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/000/745/GCF_002000745.1_ASM200074v1/"
+    target=_blank>GCF_002000745.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002000765.1/"
+    target=_blank>Sa_USA300_SUR19</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM200076v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/000/765/GCF_002000765.1_ASM200076v1/"
+    target=_blank>GCF_002000765.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002000785.1/"
+    target=_blank>Sa_USA300_SUR20</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM200078v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/000/785/GCF_002000785.1_ASM200078v1/"
+    target=_blank>GCF_002000785.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002000825.1/"
+    target=_blank>Sa_USA300_SUR22</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM200082v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/000/825/GCF_002000825.1_ASM200082v1/"
+    target=_blank>GCF_002000825.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002000845.1/"
+    target=_blank>Sa_USA300_SUR23</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM200084v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/000/845/GCF_002000845.1_ASM200084v1/"
+    target=_blank>GCF_002000845.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000568455.1/"
+    target=_blank>Sa_USA300_ISMMS1</a></td><td>Staphylococcus aureus USA300-ISMMS1</td>
+    <td>Feb. 2014 (ASM56845v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/568/455/GCF_000568455.1_ASM56845v1/"
+    target=_blank>GCF_000568455.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001580515.1/"
+    target=_blank>Sa_UTSW_MRSA_55</a></td><td>Staphylococcus aureus</td>
+    <td>Mar. 2016 (ASM158051v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/580/515/GCF_001580515.1_ASM158051v1/"
+    target=_blank>GCF_001580515.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002000625.1/"
+    target=_blank>Sa_USA300_SUR12</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM200062v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/000/625/GCF_002000625.1_ASM200062v1/"
+    target=_blank>GCF_002000625.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001717725.1/"
+    target=_blank>Sa_1625CO1</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Dec. 2017 (ASM171772v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/717/725/GCF_001717725.1_ASM171772v2/"
+    target=_blank>GCF_001717725.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003203595.1/"
+    target=_blank>Sa_AR_0226</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM320359v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/203/595/GCF_003203595.1_ASM320359v1/"
+    target=_blank>GCF_003203595.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000815045.1/"
+    target=_blank>Sa_29b_MRSA</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2015 (ASM81504v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/815/045/GCF_000815045.1_ASM81504v1/"
+    target=_blank>GCF_000815045.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000815085.1/"
+    target=_blank>Sa_31b_MRSA</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2015 (ASM81508v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/815/085/GCF_000815085.1_ASM81508v1/"
+    target=_blank>GCF_000815085.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000815125.1/"
+    target=_blank>Sa_33b</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2015 (ASM81512v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/815/125/GCF_000815125.1_ASM81512v1/"
+    target=_blank>GCF_000815125.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000815165.1/"
+    target=_blank>Sa_26b_MRSA</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2015 (ASM81516v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/815/165/GCF_000815165.1_ASM81516v1/"
+    target=_blank>GCF_000815165.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000815205.1/"
+    target=_blank>Sa_25b_MRSA</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2015 (ASM81520v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/815/205/GCF_000815205.1_ASM81520v1/"
+    target=_blank>GCF_000815205.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000815245.1/"
+    target=_blank>Sa_27b_MRSA</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2015 (ASM81524v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/815/245/GCF_000815245.1_ASM81524v1/"
+    target=_blank>GCF_000815245.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000695875.1/"
+    target=_blank>Sa_UA_S391_USA300</a></td><td>Staphylococcus aureus</td>
+    <td>May 2014 (ASM69587v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/695/875/GCF_000695875.1_ASM69587v1/"
+    target=_blank>GCF_000695875.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002088995.1/"
+    target=_blank>Sa_C2406</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2017 (ASM208899v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/088/995/GCF_002088995.1_ASM208899v1/"
+    target=_blank>GCF_002088995.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003073395.1/"
+    target=_blank>Sa_CIT</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Apr. 2018 (ASM307339v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/073/395/GCF_003073395.1_ASM307339v1/"
+    target=_blank>GCF_003073395.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003073435.1/"
+    target=_blank>Sa_OXLIM</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Apr. 2018 (ASM307343v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/073/435/GCF_003073435.1_ASM307343v1/"
+    target=_blank>GCF_003073435.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002085525.1/"
+    target=_blank>Sa_JE2</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2017 (ASM208552v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/085/525/GCF_002085525.1_ASM208552v1/"
+    target=_blank>GCF_002085525.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001717705.1/"
+    target=_blank>Sa_1969N</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Jan. 2018 (ASM171770v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/717/705/GCF_001717705.1_ASM171770v2/"
+    target=_blank>GCF_001717705.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001735655.2/"
+    target=_blank>Sa_3020C01</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Jan. 2018 (ASM173565v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/735/655/GCF_001735655.2_ASM173565v2/"
+    target=_blank>GCF_001735655.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001183725.2/"
+    target=_blank>Sa_USA300_2014C02</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Jan. 2018 (ASM118372v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/183/725/GCF_001183725.2_ASM118372v2/"
+    target=_blank>GCF_001183725.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001956815.1/"
+    target=_blank>Sa_USA300_SUR1_a</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Jan. 2017 (ASM195681v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/956/815/GCF_001956815.1_ASM195681v1/"
+    target=_blank>GCF_001956815.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003595365.1/"
+    target=_blank>Sa_USA300_SUR1_b</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM359536v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/595/365/GCF_003595365.1_ASM359536v1/"
+    target=_blank>GCF_003595365.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003595385.1/"
+    target=_blank>Sa_USA300_SUR2</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM359538v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/595/385/GCF_003595385.1_ASM359538v1/"
+    target=_blank>GCF_003595385.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001471715.2/"
+    target=_blank>Sa_FDAARGOS_140</a></td><td>Staphylococcus aureus</td>
+    <td>Mar. 2018 (ASM147171v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/471/715/GCF_001471715.2_ASM147171v2/"
+    target=_blank>GCF_001471715.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001717975.2/"
+    target=_blank>Sa_2148C01</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Jan. 2018 (ASM171797v3)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/717/975/GCF_001717975.2_ASM171797v3/"
+    target=_blank>GCF_001717975.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001183705.3/"
+    target=_blank>Sa_USA300_2014C01</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Feb. 2018 (ASM118370v3)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/183/705/GCF_001183705.3_ASM118370v3/"
+    target=_blank>GCF_001183705.3</a></td></tr>
+<tr align=center><td colspan=4>***** % 97 reference identity *****</td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001717645.1/"
+    target=_blank>Sa_5118N</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Feb. 2018 (ASM171764v3)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/717/645/GCF_001717645.1_ASM171764v3/"
+    target=_blank>GCF_001717645.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001021895.1/"
+    target=_blank>Sa_CA15</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2015 (ASM102189v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/021/895/GCF_001021895.1_ASM102189v1/"
+    target=_blank>GCF_001021895.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003193685.1/"
+    target=_blank>Sa_AR_0223</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM319368v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/193/685/GCF_003193685.1_ASM319368v1/"
+    target=_blank>GCF_003193685.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003073415.1/"
+    target=_blank>Sa_CAR</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Apr. 2018 (ASM307341v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/073/415/GCF_003073415.1_ASM307341v1/"
+    target=_blank>GCF_003073415.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001045995.2/"
+    target=_blank>Sa_HUV05</a></td><td>Staphylococcus aureus</td>
+    <td>Oct. 2015 (ASM104599v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/045/995/GCF_001045995.2_ASM104599v2/"
+    target=_blank>GCF_001045995.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000746505.1/"
+    target=_blank>Sa_2395_USA500</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2014 (ASM74650v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/746/505/GCF_000746505.1_ASM74650v1/"
+    target=_blank>GCF_000746505.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000367745.1/"
+    target=_blank>Sa_M1</a></td><td>Staphylococcus aureus M1</td>
+    <td>Apr. 2013 (ASM36774v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/367/745/GCF_000367745.1_ASM36774v1/"
+    target=_blank>GCF_000367745.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002355355.1/"
+    target=_blank>Sa_OC8</a></td><td>Staphylococcus aureus</td>
+    <td>Oct. 2016 (ASM235535v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/355/355/GCF_002355355.1_ASM235535v1/"
+    target=_blank>GCF_002355355.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003425545.1/"
+    target=_blank>Sa_199</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM342554v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/425/545/GCF_003425545.1_ASM342554v1/"
+    target=_blank>GCF_003425545.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003425915.1/"
+    target=_blank>Sa_64</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM342591v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/425/915/GCF_003425915.1_ASM342591v1/"
+    target=_blank>GCF_003425915.1</a></td></tr>
+<tr align=center><td colspan=4>***** % 96 reference identity *****</td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003193965.1/"
+    target=_blank>Sa_AR_0225</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM319396v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/193/965/GCF_003193965.1_ASM319396v1/"
+    target=_blank>GCF_003193965.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002786465.1/"
+    target=_blank>Sa_EDCC5458</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Nov. 2017 (ASM278646v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/786/465/GCF_002786465.1_ASM278646v1/"
+    target=_blank>GCF_002786465.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900474525.1/"
+    target=_blank>Sa_NCTC13394</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (40677_F01)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/474/525/GCF_900474525.1_40677_F01/"
+    target=_blank>GCF_900474525.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003425835.1/"
+    target=_blank>Sa_28</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM342583v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/425/835/GCF_003425835.1_ASM342583v1/"
+    target=_blank>GCF_003425835.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003425885.1/"
+    target=_blank>Sa_82</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM342588v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/425/885/GCF_003425885.1_ASM342588v1/"
+    target=_blank>GCF_003425885.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003111725.1/"
+    target=_blank>Sa_SVH7513</a></td><td>Staphylococcus aureus</td>
+    <td>May 2018 (ASM311172v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/111/725/GCF_003111725.1_ASM311172v1/"
+    target=_blank>GCF_003111725.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001019485.2/"
+    target=_blank>Sa_NRS120</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2018 (ASM101948v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/019/485/GCF_001019485.2_ASM101948v2/"
+    target=_blank>GCF_001019485.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001046095.2/"
+    target=_blank>Sa_V2200</a></td><td>Staphylococcus aureus</td>
+    <td>Oct. 2015 (ASM104609v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/046/095/GCF_001046095.2_ASM104609v2/"
+    target=_blank>GCF_001046095.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001548415.1/"
+    target=_blank>Sa_MI</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2016 (ASM154841v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/548/415/GCF_001548415.1_ASM154841v1/"
+    target=_blank>GCF_001548415.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001018685.2/"
+    target=_blank>Sa_TCH_959</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2018 (ASM101868v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/018/685/GCF_001018685.2_ASM101868v2/"
+    target=_blank>GCF_001018685.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000012045.1/"
+    target=_blank>Sa_COL</a></td><td>Staphylococcus aureus subsp. aureus COL</td>
+    <td>May 2005 (ASM1204v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/012/045/GCF_000012045.1_ASM1204v1/"
+    target=_blank>GCF_000012045.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000626615.2/"
+    target=_blank>Sa_FDAARGOS_5</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Feb. 2018 (ASM62661v3)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/626/615/GCF_000626615.2_ASM62661v3/"
+    target=_blank>GCF_000626615.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900474725.1/"
+    target=_blank>Sa_NCTC13140</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (40677_A01)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/474/725/GCF_900474725.1_40677_A01/"
+    target=_blank>GCF_900474725.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001515705.1/"
+    target=_blank>Sa_Gv88</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Jan. 2016 (ASM151570v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/515/705/GCF_001515705.1_ASM151570v1/"
+    target=_blank>GCF_001515705.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001515665.1/"
+    target=_blank>Sa_Gv51</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Jan. 2016 (ASM151566v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/515/665/GCF_001515665.1_ASM151566v1/"
+    target=_blank>GCF_001515665.1</a></td></tr>
+<tr align=center><td colspan=4>***** % 95 reference identity *****</td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354885.1/"
+    target=_blank>Sa_164</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335488v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/885/GCF_003354885.1_ASM335488v1/"
+    target=_blank>GCF_003354885.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001515765.1/"
+    target=_blank>Sa_HC1335</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Jan. 2016 (ASM151576v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/515/765/GCF_001515765.1_ASM151576v1/"
+    target=_blank>GCF_001515765.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000769575.1/"
+    target=_blank>Sa_Gv69</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Oct. 2014 (ASM76957v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/769/575/GCF_000769575.1_ASM76957v1/"
+    target=_blank>GCF_000769575.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003573835.1/"
+    target=_blank>Sa_JMUB3031</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM357383v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/573/835/GCF_003573835.1_ASM357383v1/"
+    target=_blank>GCF_003573835.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001515685.1/"
+    target=_blank>Sa_Be62</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Jan. 2016 (ASM151568v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/515/685/GCF_001515685.1_ASM151568v1/"
+    target=_blank>GCF_001515685.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001515745.1/"
+    target=_blank>Sa_HC1340</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Jan. 2016 (ASM151574v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/515/745/GCF_001515745.1_ASM151574v1/"
+    target=_blank>GCF_001515745.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000418345.1/"
+    target=_blank>Sa_Bmb9393</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2013 (ASM41834v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/418/345/GCF_000418345.1_ASM41834v1/"
+    target=_blank>GCF_000418345.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002795285.1/"
+    target=_blank>Sa_USA400_0051</a></td><td>Staphylococcus aureus</td>
+    <td>Nov. 2017 (ASM279528v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/795/285/GCF_002795285.1_ASM279528v1/"
+    target=_blank>GCF_002795285.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001975005.1/"
+    target=_blank>Sa_UCI62</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Jan. 2017 (ASM197500v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/975/005/GCF_001975005.1_ASM197500v1/"
+    target=_blank>GCF_001975005.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003203615.1/"
+    target=_blank>Sa_AR_0468</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM320361v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/203/615/GCF_003203615.1_ASM320361v1/"
+    target=_blank>GCF_003203615.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003193885.1/"
+    target=_blank>Sa_AR_0467</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM319388v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/193/885/GCF_003193885.1_ASM319388v1/"
+    target=_blank>GCF_003193885.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000017125.1/"
+    target=_blank>Sa_JH1</a></td><td>Staphylococcus aureus subsp. aureus JH1</td>
+    <td>Jun. 2007 (ASM1712v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/017/125/GCF_000017125.1_ASM1712v1/"
+    target=_blank>GCF_000017125.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003330905.1/"
+    target=_blank>Sa_AR_474</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (ASM333090v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/330/905/GCF_003330905.1_ASM333090v1/"
+    target=_blank>GCF_003330905.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003073655.1/"
+    target=_blank>Sa_AR465</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2018 (ASM307365v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/073/655/GCF_003073655.1_ASM307365v1/"
+    target=_blank>GCF_003073655.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000016805.1/"
+    target=_blank>Sa_JH9</a></td><td>Staphylococcus aureus subsp. aureus JH9</td>
+    <td>May 2007 (ASM1680v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/016/805/GCF_000016805.1_ASM1680v1/"
+    target=_blank>GCF_000016805.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001019575.2/"
+    target=_blank>Sa_HPV107</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2018 (ASM101957v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/019/575/GCF_001019575.2_ASM101957v2/"
+    target=_blank>GCF_001019575.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003194025.1/"
+    target=_blank>Sa_AR_0215</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM319402v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/194/025/GCF_003194025.1_ASM319402v1/"
+    target=_blank>GCF_003194025.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001640885.1/"
+    target=_blank>Sa_ZJ5499</a></td><td>Staphylococcus aureus</td>
+    <td>May 2016 (ASM164088v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/640/885/GCF_001640885.1_ASM164088v1/"
+    target=_blank>GCF_001640885.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900092595.1/"
+    target=_blank>Sa_Sa_Newman_UoM</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2016 (Sa_Newman_UoM)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/092/595/GCF_900092595.1_Sa_Newman_UoM/"
+    target=_blank>GCF_900092595.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000010465.1/"
+    target=_blank>Sa_Newman</a></td><td>Staphylococcus aureus subsp. aureus str. Newman</td>
+    <td>Jul. 2007 (ASM1046v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/010/465/GCF_000010465.1_ASM1046v1/"
+    target=_blank>GCF_000010465.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002310395.1/"
+    target=_blank>Sa_Newman_D2C</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Sep. 2017 (ASM231039v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/310/395/GCF_002310395.1_ASM231039v1/"
+    target=_blank>GCF_002310395.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002310435.1/"
+    target=_blank>Sa_Newman_NYU_Newman</a></td><td>Staphylococcus aureus subsp. aureus str. Newman</td>
+    <td>Sep. 2017 (ASM231043v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/310/435/GCF_002310435.1_ASM231043v1/"
+    target=_blank>GCF_002310435.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003073715.1/"
+    target=_blank>Sa_AR461</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2018 (ASM307371v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/073/715/GCF_003073715.1_ASM307371v1/"
+    target=_blank>GCF_003073715.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001018835.2/"
+    target=_blank>Sa_NRS271</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2018 (ASM101883v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/018/835/GCF_001018835.2_ASM101883v2/"
+    target=_blank>GCF_001018835.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003029665.1/"
+    target=_blank>Sa_SA112</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2018 (ASM302966v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/029/665/GCF_003029665.1_ASM302966v1/"
+    target=_blank>GCF_003029665.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002386245.1/"
+    target=_blank>Sa_FDAARGOS_412</a></td><td>Staphylococcus aureus</td>
+    <td>Sep. 2017 (ASM238624v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/386/245/GCF_002386245.1_ASM238624v1/"
+    target=_blank>GCF_002386245.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900474575.1/"
+    target=_blank>Sa_NCTC9944</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (40415_F02)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/474/575/GCF_900474575.1_40415_F02/"
+    target=_blank>GCF_900474575.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354945.1/"
+    target=_blank>Sa_545</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335494v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/945/GCF_003354945.1_ASM335494v1/"
+    target=_blank>GCF_003354945.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003798185.1/"
+    target=_blank>Sa_MSSA54</a></td><td>Staphylococcus aureus</td>
+    <td>Nov. 2018 (ASM379818v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/798/185/GCF_003798185.1_ASM379818v1/"
+    target=_blank>GCF_003798185.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001019125.2/"
+    target=_blank>Sa_FDAARGOS_43</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2018 (ASM101912v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/019/125/GCF_001019125.2_ASM101912v2/"
+    target=_blank>GCF_001019125.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001019535.2/"
+    target=_blank>Sa_Mw2_2018</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2018 (ASM101953v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/019/535/GCF_001019535.2_ASM101953v2/"
+    target=_blank>GCF_001019535.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000969225.1/"
+    target=_blank>Sa_FCFHV36</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2015 (ASM96922v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/969/225/GCF_000969225.1_ASM96922v1/"
+    target=_blank>GCF_000969225.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000011265.1/"
+    target=_blank>Sa_MW2_2004</a></td><td>Staphylococcus aureus subsp. aureus MW2</td>
+    <td>May 2004 (ASM1126v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/011/265/GCF_000011265.1_ASM1126v1/"
+    target=_blank>GCF_000011265.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354965.1/"
+    target=_blank>Sa_546</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335496v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/965/GCF_003354965.1_ASM335496v1/"
+    target=_blank>GCF_003354965.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001019255.2/"
+    target=_blank>Sa_FDAARGOS_1</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2018 (ASM101925v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/019/255/GCF_001019255.2_ASM101925v2/"
+    target=_blank>GCF_001019255.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354805.1/"
+    target=_blank>Sa_54</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335480v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/805/GCF_003354805.1_ASM335480v1/"
+    target=_blank>GCF_003354805.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000204665.1/"
+    target=_blank>Sa_T0131</a></td><td>Staphylococcus aureus subsp. aureus T0131</td>
+    <td>Apr. 2011 (ASM20466v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/204/665/GCF_000204665.1_ASM20466v1/"
+    target=_blank>GCF_000204665.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354665.1/"
+    target=_blank>Sa_165</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335466v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/665/GCF_003354665.1_ASM335466v1/"
+    target=_blank>GCF_003354665.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001019205.2/"
+    target=_blank>Sa_FDAARGOS_48</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2018 (ASM101920v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/019/205/GCF_001019205.2_ASM101920v2/"
+    target=_blank>GCF_001019205.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900478245.1/"
+    target=_blank>Sa_NCTC13277</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (35910_A02)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/478/245/GCF_900478245.1_35910_A02/"
+    target=_blank>GCF_900478245.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000011505.1/"
+    target=_blank>Sa_MRSA252</a></td><td>Staphylococcus aureus subsp. aureus MRSA252</td>
+    <td>Jun. 2004 (ASM1150v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/011/505/GCF_000011505.1_ASM1150v1/"
+    target=_blank>GCF_000011505.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003394105.1/"
+    target=_blank>Sa_WCH_SK2</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM339410v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/394/105/GCF_003394105.1_ASM339410v1/"
+    target=_blank>GCF_003394105.1</a></td></tr>
+<tr align=center><td colspan=4>***** % 94 reference identity *****</td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000695215.1/"
+    target=_blank>Sa_H_EMRSA_15</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>May 2014 (ASM69521v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/695/215/GCF_000695215.1_ASM69521v1/"
+    target=_blank>GCF_000695215.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002895385.1/"
+    target=_blank>Sa_MRSA107</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2018 (ASM289538v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/895/385/GCF_002895385.1_ASM289538v1/"
+    target=_blank>GCF_002895385.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001641025.1/"
+    target=_blank>Sa_V521</a></td><td>Staphylococcus aureus</td>
+    <td>May 2016 (ASM164102v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/641/025/GCF_001641025.1_ASM164102v1/"
+    target=_blank>GCF_001641025.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001296985.1/"
+    target=_blank>Sa_GR2</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Sep. 2015 (ASM129698v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/296/985/GCF_001296985.1_ASM129698v1/"
+    target=_blank>GCF_001296985.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002407105.1/"
+    target=_blank>Sa_NMR08</a></td><td>Staphylococcus aureus</td>
+    <td>Oct. 2017 (ASM240710v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/407/105/GCF_002407105.1_ASM240710v1/"
+    target=_blank>GCF_002407105.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900474735.1/"
+    target=_blank>Sa_NCTC13395</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (40871_F01)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/474/735/GCF_900474735.1_40871_F01/"
+    target=_blank>GCF_900474735.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900017775.1/"
+    target=_blank>Sa_NZAK3</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2016 (NZAK3)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/017/775/GCF_900017775.1_NZAK3/"
+    target=_blank>GCF_900017775.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003193665.1/"
+    target=_blank>Sa_AR_0472</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM319366v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/193/665/GCF_003193665.1_ASM319366v1/"
+    target=_blank>GCF_003193665.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000239235.1/"
+    target=_blank>Sa_11819_97</a></td><td>Staphylococcus aureus subsp. aureus 11819-97</td>
+    <td>Dec. 2011 (ASM23923v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/239/235/GCF_000239235.1_ASM23923v1/"
+    target=_blank>GCF_000239235.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001457495.1/"
+    target=_blank>Sa_NCTC13435</a></td><td>Staphylococcus aureus</td>
+    <td>Mar. 2015 (NCTC13435)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/457/495/GCF_001457495.1_NCTC13435/"
+    target=_blank>GCF_001457495.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000145595.1/"
+    target=_blank>Sa_JKD6008</a></td><td>Staphylococcus aureus subsp. aureus str. JKD6008</td>
+    <td>Aug. 2010 (ASM14559v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/145/595/GCF_000145595.1_ASM14559v1/"
+    target=_blank>GCF_000145595.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003193785.1/"
+    target=_blank>Sa_AR_0473</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM319378v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/193/785/GCF_003193785.1_ASM319378v1/"
+    target=_blank>GCF_003193785.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001640925.1/"
+    target=_blank>Sa_NCCP14562</a></td><td>Staphylococcus aureus</td>
+    <td>May 2016 (ASM164092v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/640/925/GCF_001640925.1_ASM164092v1/"
+    target=_blank>GCF_001640925.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001640905.1/"
+    target=_blank>Sa_NCCP14558</a></td><td>Staphylococcus aureus</td>
+    <td>May 2016 (ASM164090v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/640/905/GCF_001640905.1_ASM164090v1/"
+    target=_blank>GCF_001640905.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000284535.1/"
+    target=_blank>Sa_HO_5096_0412</a></td><td>Staphylococcus aureus subsp. aureus HO 5096 0412</td>
+    <td>Apr. 2012 (ASM28453v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/284/535/GCF_000284535.1_ASM28453v1/"
+    target=_blank>GCF_000284535.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000144955.1/"
+    target=_blank>Sa_JKD6159</a></td><td>Staphylococcus aureus subsp. aureus JKD6159</td>
+    <td>Aug. 2010 (ASM14495v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/144/955/GCF_000144955.1_ASM14495v1/"
+    target=_blank>GCF_000144955.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003193705.1/"
+    target=_blank>Sa_AR_0219</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM319370v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/193/705/GCF_003193705.1_ASM319370v1/"
+    target=_blank>GCF_003193705.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000009665.1/"
+    target=_blank>Sa_Mu50</a></td><td>Staphylococcus aureus subsp. aureus Mu50</td>
+    <td>May 2004 (ASM966v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/009/665/GCF_000009665.1_ASM966v1/"
+    target=_blank>GCF_000009665.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003426145.1/"
+    target=_blank>Sa_MOZ66</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM342614v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/426/145/GCF_003426145.1_ASM342614v1/"
+    target=_blank>GCF_003426145.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000024585.1/"
+    target=_blank>Sa_ED98</a></td><td>Staphylococcus aureus subsp. aureus ED98</td>
+    <td>Oct. 2009 (ASM2458v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/024/585/GCF_000024585.1_ASM2458v1/"
+    target=_blank>GCF_000024585.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000485885.1/"
+    target=_blank>Sa_Z172</a></td><td>Staphylococcus aureus subsp. aureus Z172</td>
+    <td>Oct. 2013 (ASM48588v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/485/885/GCF_000485885.1_ASM48588v1/"
+    target=_blank>GCF_000485885.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001021875.1/"
+    target=_blank>Sa_M121</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2015 (ASM102187v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/021/875/GCF_001021875.1_ASM102187v1/"
+    target=_blank>GCF_001021875.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000027045.1/"
+    target=_blank>Sa_TW20</a></td><td>Staphylococcus aureus subsp. aureus TW20</td>
+    <td>Nov. 2009 (ASM2704v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/027/045/GCF_000027045.1_ASM2704v1/"
+    target=_blank>GCF_000027045.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001045795.2/"
+    target=_blank>Sa_CA12</a></td><td>Staphylococcus aureus</td>
+    <td>Oct. 2015 (ASM104579v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/045/795/GCF_001045795.2_ASM104579v2/"
+    target=_blank>GCF_001045795.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001725965.1/"
+    target=_blank>Sa_FORC_027</a></td><td>Staphylococcus aureus</td>
+    <td>Sep. 2016 (ASM172596v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/725/965/GCF_001725965.1_ASM172596v1/"
+    target=_blank>GCF_001725965.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000011525.1/"
+    target=_blank>Sa_MSSA476</a></td><td>Staphylococcus aureus subsp. aureus MSSA476</td>
+    <td>Jun. 2004 (ASM1152v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/011/525/GCF_000011525.1_ASM1152v1/"
+    target=_blank>GCF_000011525.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001018645.2/"
+    target=_blank>Sa_FDAARGOS_2</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2018 (ASM101864v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/018/645/GCF_001018645.2_ASM101864v2/"
+    target=_blank>GCF_001018645.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003351925.1/"
+    target=_blank>Sa_FORC_062</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335192v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/351/925/GCF_003351925.1_ASM335192v1/"
+    target=_blank>GCF_003351925.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003203635.1/"
+    target=_blank>Sa_AR_0228</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM320363v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/203/635/GCF_003203635.1_ASM320363v1/"
+    target=_blank>GCF_003203635.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354565.1/"
+    target=_blank>Sa_187</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335456v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/565/GCF_003354565.1_ASM335456v1/"
+    target=_blank>GCF_003354565.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354585.1/"
+    target=_blank>Sa_629</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335458v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/585/GCF_003354585.1_ASM335458v1/"
+    target=_blank>GCF_003354585.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001019495.2/"
+    target=_blank>Sa_FDAARGOS_40</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2018 (ASM101949v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/019/495/GCF_001019495.2_ASM101949v2/"
+    target=_blank>GCF_001019495.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354705.1/"
+    target=_blank>Sa_61</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335470v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/705/GCF_003354705.1_ASM335470v1/"
+    target=_blank>GCF_003354705.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354765.1/"
+    target=_blank>Sa_191</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335476v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/765/GCF_003354765.1_ASM335476v1/"
+    target=_blank>GCF_003354765.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354985.1/"
+    target=_blank>Sa_628</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335498v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/985/GCF_003354985.1_ASM335498v1/"
+    target=_blank>GCF_003354985.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001975045.1/"
+    target=_blank>Sa_UCI_28_ST5</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Jan. 2017 (ASM197504v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/975/045/GCF_001975045.1_ASM197504v1/"
+    target=_blank>GCF_001975045.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003264775.1/"
+    target=_blank>Sa_CMRSA_3</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM326477v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/264/775/GCF_003264775.1_ASM326477v1/"
+    target=_blank>GCF_003264775.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900129335.1/"
+    target=_blank>Sa_Clinical</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Dec. 2016 (PP_HGAG_QV30_2SC_T4)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/129/335/GCF_900129335.1_PP_HGAG_QV30_2SC_T4/"
+    target=_blank>GCF_900129335.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324345.1/"
+    target=_blank>Sa_17_LA_343</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (17_LA_343)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/345/GCF_900324345.1_17_LA_343/"
+    target=_blank>GCF_900324345.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000010445.1/"
+    target=_blank>Sa_Mu3</a></td><td>Staphylococcus aureus subsp. aureus Mu3</td>
+    <td>Sep. 2007 (ASM1044v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/010/445/GCF_000010445.1_ASM1044v1/"
+    target=_blank>GCF_000010445.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003203675.1/"
+    target=_blank>Sa_AR_0220</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM320367v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/203/675/GCF_003203675.1_ASM320367v1/"
+    target=_blank>GCF_003203675.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001019435.2/"
+    target=_blank>Sa_NRS1</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2018 (ASM101943v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/019/435/GCF_001019435.2_ASM101943v2/"
+    target=_blank>GCF_001019435.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002204555.1/"
+    target=_blank>Sa_ISU935_ST5</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2017 (ASM220455v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/204/555/GCF_002204555.1_ASM220455v1/"
+    target=_blank>GCF_002204555.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003031465.1/"
+    target=_blank>Sa_CR14_035</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2018 (ASM303146v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/031/465/GCF_003031465.1_ASM303146v1/"
+    target=_blank>GCF_003031465.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000382985.1/"
+    target=_blank>Sa_ST228_16125</a></td><td>Staphylococcus aureus subsp. aureus ST228</td>
+    <td>Oct. 2012 (ASM38298v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/382/985/GCF_000382985.1_ASM38298v1/"
+    target=_blank>GCF_000382985.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000160195.1/"
+    target=_blank>Sa_MN8</a></td><td>Staphylococcus aureus subsp. aureus MN8</td>
+    <td>Jun. 2010 (ASM16019v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/160/195/GCF_000160195.1_ASM16019v1/"
+    target=_blank>GCF_000160195.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000025145.1/"
+    target=_blank>Sa_04_02981</a></td><td>Staphylococcus aureus 04-02981</td>
+    <td>Nov. 2010 (ASM2514v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/025/145/GCF_000025145.1_ASM2514v1/"
+    target=_blank>GCF_000025145.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000009645.1/"
+    target=_blank>Sa_N315</a></td><td>Staphylococcus aureus subsp. aureus N315</td>
+    <td>May 2004 (ASM964v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/009/645/GCF_000009645.1_ASM964v1/"
+    target=_blank>GCF_000009645.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001019395.2/"
+    target=_blank>Sa_NRS484</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2018 (ASM101939v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/019/395/GCF_001019395.2_ASM101939v2/"
+    target=_blank>GCF_001019395.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000412775.1/"
+    target=_blank>Sa_CA_347</a></td><td>Staphylococcus aureus CA-347</td>
+    <td>Jun. 2013 (ASM41277v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/412/775/GCF_000412775.1_ASM41277v1/"
+    target=_blank>GCF_000412775.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324225.1/"
+    target=_blank>Sa_7_4623</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (7_4623)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/225/GCF_900324225.1_7_4623/"
+    target=_blank>GCF_900324225.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001278745.1/"
+    target=_blank>Sa_HOU1444_VR</a></td><td>Staphylococcus aureus</td>
+    <td>Sep. 2015 (ASM127874v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/278/745/GCF_001278745.1_ASM127874v1/"
+    target=_blank>GCF_001278745.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002209325.1/"
+    target=_blank>Sa_FORC_045</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2017 (ASM220932v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/209/325/GCF_002209325.1_ASM220932v1/"
+    target=_blank>GCF_002209325.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001027105.1/"
+    target=_blank>Sa_DSM_20231</a></td><td>Staphylococcus aureus subsp. aureus DSM 20231</td>
+    <td>Jun. 2015 (ASM102710v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/027/105/GCF_001027105.1_ASM102710v1/"
+    target=_blank>GCF_001027105.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324265.1/"
+    target=_blank>Sa_9_LA_281</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (9_LA_281)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/265/GCF_900324265.1_9_LA_281/"
+    target=_blank>GCF_900324265.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900475055.1/"
+    target=_blank>Sa_NCTC11940</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (42197_E02)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/475/055/GCF_900475055.1_42197_E02/"
+    target=_blank>GCF_900475055.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001019305.2/"
+    target=_blank>Sa_NRS70</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2018 (ASM101930v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/019/305/GCF_001019305.2_ASM101930v2/"
+    target=_blank>GCF_001019305.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003073775.1/"
+    target=_blank>Sa_AR462</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2018 (ASM307377v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/073/775/GCF_003073775.1_ASM307377v1/"
+    target=_blank>GCF_003073775.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003194185.1/"
+    target=_blank>Sa_0201753_2</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM319418v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/194/185/GCF_003194185.1_ASM319418v1/"
+    target=_blank>GCF_003194185.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002633805.1/"
+    target=_blank>Sa_CFSAN007850</a></td><td>Staphylococcus aureus</td>
+    <td>Oct. 2017 (ASM263380v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/633/805/GCF_002633805.1_ASM263380v1/"
+    target=_blank>GCF_002633805.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900474715.1/"
+    target=_blank>Sa_NCTC6136</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (41004_D01)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/474/715/GCF_900474715.1_41004_D01/"
+    target=_blank>GCF_900474715.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324205.1/"
+    target=_blank>Sa_1_1439</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (1_1439)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/205/GCF_900324205.1_1_1439/"
+    target=_blank>GCF_900324205.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001618305.1/"
+    target=_blank>Sa_RIVM6519</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2016 (ASM161830v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/618/305/GCF_001618305.1_ASM161830v1/"
+    target=_blank>GCF_001618305.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003194405.1/"
+    target=_blank>Sa_CHU15_056</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM319440v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/194/405/GCF_003194405.1_ASM319440v1/"
+    target=_blank>GCF_003194405.1</a></td></tr>
+<tr align=center><td colspan=4>***** % 93 reference identity *****</td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003350605.1/"
+    target=_blank>Sa_ch22</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (ASM335060v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/350/605/GCF_003350605.1_ASM335060v1/"
+    target=_blank>GCF_003350605.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324415.1/"
+    target=_blank>Sa_22_LA_562</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (22_LA_562)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/415/GCF_900324415.1_22_LA_562/"
+    target=_blank>GCF_900324415.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003343155.1/"
+    target=_blank>Sa_ch21</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (ASM334315v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/343/155/GCF_003343155.1_ASM334315v1/"
+    target=_blank>GCF_003343155.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002097595.2/"
+    target=_blank>Sa_M92</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM209759v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/097/595/GCF_002097595.2_ASM209759v2/"
+    target=_blank>GCF_002097595.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324235.1/"
+    target=_blank>Sa_5_3949</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (5_3949)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/235/GCF_900324235.1_5_3949/"
+    target=_blank>GCF_900324235.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002140115.1/"
+    target=_blank>Sa_FORC_039</a></td><td>Staphylococcus aureus</td>
+    <td>May 2017 (ASM214011v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/140/115/GCF_002140115.1_ASM214011v1/"
+    target=_blank>GCF_002140115.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003031425.1/"
+    target=_blank>Sa_CFSAN007896</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2018 (ASM303142v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/031/425/GCF_003031425.1_ASM303142v1/"
+    target=_blank>GCF_003031425.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001580495.1/"
+    target=_blank>Sa_FORC_012</a></td><td>Staphylococcus aureus</td>
+    <td>Mar. 2016 (ASM158049v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/580/495/GCF_001580495.1_ASM158049v1/"
+    target=_blank>GCF_001580495.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002356675.1/"
+    target=_blank>Sa_JH4899</a></td><td>Staphylococcus aureus</td>
+    <td>Mar. 2017 (ASM235667v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/356/675/GCF_002356675.1_ASM235667v1/"
+    target=_blank>GCF_002356675.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000463055.1/"
+    target=_blank>Sa_CN1</a></td><td>Staphylococcus aureus subsp. aureus CN1</td>
+    <td>Aug. 2013 (ASM46305v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/463/055/GCF_000463055.1_ASM46305v1/"
+    target=_blank>GCF_000463055.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001986135.1/"
+    target=_blank>Sa_SR434</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2017 (ASM198613v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/986/135/GCF_001986135.1_ASM198613v1/"
+    target=_blank>GCF_001986135.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003031485.1/"
+    target=_blank>Sa_CC5</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2018 (ASM303148v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/031/485/GCF_003031485.1_ASM303148v1/"
+    target=_blank>GCF_003031485.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001558795.2/"
+    target=_blank>Sa_FDAARGOS_159</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2018 (ASM155879v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/558/795/GCF_001558795.2_ASM155879v2/"
+    target=_blank>GCF_001558795.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324315.1/"
+    target=_blank>Sa_12_LA_293</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (12_LA_293)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/315/GCF_900324315.1_12_LA_293/"
+    target=_blank>GCF_900324315.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002214665.1/"
+    target=_blank>Sa_FORC_040</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2017 (ASM221466v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/214/665/GCF_002214665.1_ASM221466v1/"
+    target=_blank>GCF_002214665.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001018845.2/"
+    target=_blank>Sa_NRS153</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2018 (ASM101884v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/018/845/GCF_001018845.2_ASM101884v2/"
+    target=_blank>GCF_001018845.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000772025.1/"
+    target=_blank>Sa_FORC_001</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Nov. 2014 (ASM77202v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/772/025/GCF_000772025.1_ASM77202v1/"
+    target=_blank>GCF_000772025.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324335.1/"
+    target=_blank>Sa_15_LA_305</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (15_LA_305)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/335/GCF_900324335.1_15_LA_305/"
+    target=_blank>GCF_900324335.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003827915.1/"
+    target=_blank>Sa_FDAARGOS_504</a></td><td>Staphylococcus aureus</td>
+    <td>Nov. 2018 (ASM382791v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/827/915/GCF_003827915.1_ASM382791v1/"
+    target=_blank>GCF_003827915.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001549655.1/"
+    target=_blank>Sa_TMUS2126</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Mar. 2015 (ASM154965v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/549/655/GCF_001549655.1_ASM154965v1/"
+    target=_blank>GCF_001549655.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001549675.1/"
+    target=_blank>Sa_TMUS2134</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Mar. 2015 (ASM154967v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/549/675/GCF_001549675.1_ASM154967v1/"
+    target=_blank>GCF_001549675.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003029645.1/"
+    target=_blank>Sa_CFSAN064038</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2018 (ASM302964v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/029/645/GCF_003029645.1_ASM302964v1/"
+    target=_blank>GCF_003029645.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324305.1/"
+    target=_blank>Sa_13_LA_301</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (13_LA_301)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/305/GCF_900324305.1_13_LA_301/"
+    target=_blank>GCF_900324305.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324325.1/"
+    target=_blank>Sa_14_5418</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (14_5418)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/325/GCF_900324325.1_14_5418/"
+    target=_blank>GCF_900324325.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001281145.1/"
+    target=_blank>Sa_SA564</a></td><td>Staphylococcus aureus</td>
+    <td>Sep. 2015 (ASM128114v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/281/145/GCF_001281145.1_ASM128114v1/"
+    target=_blank>GCF_001281145.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324405.1/"
+    target=_blank>Sa_21_LA_436</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (21_LA_436)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/405/GCF_900324405.1_21_LA_436/"
+    target=_blank>GCF_900324405.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324245.1/"
+    target=_blank>Sa_8_LA_272</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (8_LA_272)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/245/GCF_900324245.1_8_LA_272/"
+    target=_blank>GCF_900324245.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324385.1/"
+    target=_blank>Sa_20_LA_415</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (20_LA_415)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/385/GCF_900324385.1_20_LA_415/"
+    target=_blank>GCF_900324385.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003193745.1/"
+    target=_blank>Sa_AR_0470</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM319374v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/193/745/GCF_003193745.1_ASM319374v1/"
+    target=_blank>GCF_003193745.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000210315.1/"
+    target=_blank>Sa_ED133</a></td><td>Staphylococcus aureus subsp. aureus ED133</td>
+    <td>Jun. 2010 (ASM21031v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/210/315/GCF_000210315.1_ASM21031v1/"
+    target=_blank>GCF_000210315.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000159535.2/"
+    target=_blank>Sa_TCH60</a></td><td>Staphylococcus aureus subsp. aureus TCH60</td>
+    <td>Nov. 2010 (ASM15953v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/159/535/GCF_000159535.2_ASM15953v2/"
+    target=_blank>GCF_000159535.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324255.1/"
+    target=_blank>Sa_2_LA_86</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (2_LA_86)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/255/GCF_900324255.1_2_LA_86/"
+    target=_blank>GCF_900324255.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324215.1/"
+    target=_blank>Sa_3_LA_115</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (3_LA_115)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/215/GCF_900324215.1_3_LA_115/"
+    target=_blank>GCF_900324215.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000253135.1/"
+    target=_blank>Sa_ECT_R_2</a></td><td>Staphylococcus aureus subsp. aureus ECT-R 2</td>
+    <td>Nov. 2010 (ASM25313v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/253/135/GCF_000253135.1_ASM25313v1/"
+    target=_blank>GCF_000253135.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324365.1/"
+    target=_blank>Sa_19_LA_388</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (19_LA_388)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/365/GCF_900324365.1_19_LA_388/"
+    target=_blank>GCF_900324365.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324275.1/"
+    target=_blank>Sa_6_LA_232</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (6_LA_232)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/275/GCF_900324275.1_6_LA_232/"
+    target=_blank>GCF_900324275.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003186105.1/"
+    target=_blank>Sa_MOK063</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM318610v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/186/105/GCF_003186105.1_ASM318610v1/"
+    target=_blank>GCF_003186105.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003030065.1/"
+    target=_blank>Sa_CFSAN018749</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2018 (ASM303006v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/030/065/GCF_003030065.1_ASM303006v1/"
+    target=_blank>GCF_003030065.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001717665.1/"
+    target=_blank>Sa_2148N</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Jan. 2018 (ASM171766v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/717/665/GCF_001717665.1_ASM171766v2/"
+    target=_blank>GCF_001717665.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900474755.1/"
+    target=_blank>Sa_NCTC10344</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (41236_E02)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/474/755/GCF_900474755.1_41236_E02/"
+    target=_blank>GCF_900474755.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003186125.1/"
+    target=_blank>Sa_MOK042</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM318612v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/186/125/GCF_003186125.1_ASM318612v1/"
+    target=_blank>GCF_003186125.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002633825.1/"
+    target=_blank>Sa_CFSAN007851</a></td><td>Staphylococcus aureus</td>
+    <td>Oct. 2017 (ASM263382v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/633/825/GCF_002633825.1_ASM263382v1/"
+    target=_blank>GCF_002633825.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003342735.1/"
+    target=_blank>Sa_E16SA093</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (ASM334273v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/342/735/GCF_003342735.1_ASM334273v1/"
+    target=_blank>GCF_003342735.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000382965.1/"
+    target=_blank>Sa_ST228_16035</a></td><td>Staphylococcus aureus subsp. aureus ST228</td>
+    <td>Oct. 2012 (ASM38296v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/382/965/GCF_000382965.1_ASM38296v1/"
+    target=_blank>GCF_000382965.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000967325.1/"
+    target=_blank>Sa_ST228_10388</a></td><td>Staphylococcus aureus subsp. aureus ST228</td>
+    <td>Oct. 2012 (ASM96732v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/967/325/GCF_000967325.1_ASM96732v1/"
+    target=_blank>GCF_000967325.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000967345.1/"
+    target=_blank>Sa_ST228_10497</a></td><td>Staphylococcus aureus subsp. aureus ST228</td>
+    <td>Oct. 2012 (ASM96734v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/967/345/GCF_000967345.1_ASM96734v1/"
+    target=_blank>GCF_000967345.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000967365.1/"
+    target=_blank>Sa_ST228_15532</a></td><td>Staphylococcus aureus subsp. aureus ST228</td>
+    <td>Oct. 2012 (ASM96736v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/967/365/GCF_000967365.1_ASM96736v1/"
+    target=_blank>GCF_000967365.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000967385.1/"
+    target=_blank>Sa_ST228_18341</a></td><td>Staphylococcus aureus subsp. aureus ST228</td>
+    <td>Oct. 2012 (ASM96738v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/967/385/GCF_000967385.1_ASM96738v1/"
+    target=_blank>GCF_000967385.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002803885.1/"
+    target=_blank>Sa_55_99_44</a></td><td>Staphylococcus aureus</td>
+    <td>Dec. 2017 (ASM280388v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/803/885/GCF_002803885.1_ASM280388v1/"
+    target=_blank>GCF_002803885.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000383005.1/"
+    target=_blank>Sa_ST228_18583</a></td><td>Staphylococcus aureus subsp. aureus ST228</td>
+    <td>Oct. 2012 (ASM38300v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/383/005/GCF_000383005.1_ASM38300v1/"
+    target=_blank>GCF_000383005.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000967405.1/"
+    target=_blank>Sa_ST228_18412</a></td><td>Staphylococcus aureus subsp. aureus ST228</td>
+    <td>Oct. 2012 (ASM96740v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/967/405/GCF_000967405.1_ASM96740v1/"
+    target=_blank>GCF_000967405.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003194065.1/"
+    target=_blank>Sa_080880048_3</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM319406v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/194/065/GCF_003194065.1_ASM319406v1/"
+    target=_blank>GCF_003194065.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003194145.1/"
+    target=_blank>Sa_101110051_1</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM319414v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/194/145/GCF_003194145.1_ASM319414v1/"
+    target=_blank>GCF_003194145.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001548295.1/"
+    target=_blank>Sa_FDA209P</a></td><td>Staphylococcus aureus</td>
+    <td>Sep. 2015 (ASM154829v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/548/295/GCF_001548295.1_ASM154829v1/"
+    target=_blank>GCF_001548295.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002025145.1/"
+    target=_blank>Sa_ATCC_6538</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Mar. 2017 (ASM202514v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/025/145/GCF_002025145.1_ASM202514v1/"
+    target=_blank>GCF_002025145.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000737615.1/"
+    target=_blank>Sa_SA268</a></td><td>Staphylococcus aureus subsp. aureus SA268</td>
+    <td>Aug. 2014 (ASM73761v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/737/615/GCF_000737615.1_ASM73761v1/"
+    target=_blank>GCF_000737615.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003264815.1/"
+    target=_blank>Sa_CMRSA_6</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM326481v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/264/815/GCF_003264815.1_ASM326481v1/"
+    target=_blank>GCF_003264815.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001444345.1/"
+    target=_blank>Sa_XQ</a></td><td>Staphylococcus aureus</td>
+    <td>Nov. 2015 (ASM144434v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/444/345/GCF_001444345.1_ASM144434v1/"
+    target=_blank>GCF_001444345.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002633785.1/"
+    target=_blank>Sa_CFSAN007847</a></td><td>Staphylococcus aureus</td>
+    <td>Oct. 2017 (ASM263378v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/633/785/GCF_002633785.1_ASM263378v1/"
+    target=_blank>GCF_002633785.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354905.1/"
+    target=_blank>Sa_78</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335490v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/905/GCF_003354905.1_ASM335490v1/"
+    target=_blank>GCF_003354905.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001298325.2/"
+    target=_blank>Sa_BA01611</a></td><td>Staphylococcus aureus</td>
+    <td>Mar. 2017 (ASM129832v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/298/325/GCF_001298325.2_ASM129832v2/"
+    target=_blank>GCF_001298325.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000828035.1/"
+    target=_blank>Sa_ST772_MRSA_V_DAR4145</a></td><td>Staphylococcus aureus subsp. aureus ST772-MRSA-V</td>
+    <td>Jan. 2015 (ASM82803v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/828/035/GCF_000828035.1_ASM82803v1/"
+    target=_blank>GCF_000828035.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003194005.1/"
+    target=_blank>Sa_AR_0469</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM319400v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/194/005/GCF_003194005.1_ASM319400v1/"
+    target=_blank>GCF_003194005.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003347055.1/"
+    target=_blank>Sa_FORC_061</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (ASM334705v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/347/055/GCF_003347055.1_ASM334705v1/"
+    target=_blank>GCF_003347055.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000009585.1/"
+    target=_blank>Sa_ST398_S0385</a></td><td>Staphylococcus aureus subsp. aureus ST398</td>
+    <td>Jan. 2010 (ASM958v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/009/585/GCF_000009585.1_ASM958v1/"
+    target=_blank>GCF_000009585.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003432365.1/"
+    target=_blank>Sa_QD_CD9</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM343236v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/432/365/GCF_003432365.1_ASM343236v1/"
+    target=_blank>GCF_003432365.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900240125.1/"
+    target=_blank>Sa_S_aureus_171</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2018 (171)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/240/125/GCF_900240125.1_171/"
+    target=_blank>GCF_900240125.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003194165.1/"
+    target=_blank>Sa_101110041_3</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM319416v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/194/165/GCF_003194165.1_ASM319416v1/"
+    target=_blank>GCF_003194165.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003490125.1/"
+    target=_blank>Sa_O17</a></td><td>Staphylococcus aureus</td>
+    <td>Sep. 2018 (ASM349012v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/490/125/GCF_003490125.1_ASM349012v1/"
+    target=_blank>GCF_003490125.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003288395.1/"
+    target=_blank>Sa_AR_475</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (ASM328839v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/288/395/GCF_003288395.1_ASM328839v1/"
+    target=_blank>GCF_003288395.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001018975.2/"
+    target=_blank>Sa_NRS143</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2018 (ASM101897v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/018/975/GCF_001018975.2_ASM101897v2/"
+    target=_blank>GCF_001018975.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001880265.1/"
+    target=_blank>Sa_SA40TW</a></td><td>Staphylococcus aureus</td>
+    <td>Nov. 2016 (ASM188026v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/880/265/GCF_001880265.1_ASM188026v1/"
+    target=_blank>GCF_001880265.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002089075.2/"
+    target=_blank>Sa_GD705</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (ASM208907v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/089/075/GCF_002089075.2_ASM208907v2/"
+    target=_blank>GCF_002089075.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003194105.1/"
+    target=_blank>Sa_13420</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM319410v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/194/105/GCF_003194105.1_ASM319410v1/"
+    target=_blank>GCF_003194105.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003431365.1/"
+    target=_blank>Sa_CFBR_105</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM343136v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/431/365/GCF_003431365.1_ASM343136v1/"
+    target=_blank>GCF_003431365.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900474555.1/"
+    target=_blank>Sa_NCTC13137</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (40657_E01)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/474/555/GCF_900474555.1_40657_E01/"
+    target=_blank>GCF_900474555.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003609915.1/"
+    target=_blank>Sa_GN1</a></td><td>Staphylococcus aureus</td>
+    <td>Oct. 2017 (ASM360991v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/609/915/GCF_003609915.1_ASM360991v1/"
+    target=_blank>GCF_003609915.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003073755.1/"
+    target=_blank>Sa_AR464</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2018 (ASM307375v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/073/755/GCF_003073755.1_ASM307375v1/"
+    target=_blank>GCF_003073755.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354685.1/"
+    target=_blank>Sa_277</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335468v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/685/GCF_003354685.1_ASM335468v1/"
+    target=_blank>GCF_003354685.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354785.1/"
+    target=_blank>Sa_85</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335478v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/785/GCF_003354785.1_ASM335478v1/"
+    target=_blank>GCF_003354785.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003342775.1/"
+    target=_blank>Sa_F17SA003</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (ASM334277v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/342/775/GCF_003342775.1_ASM334277v1/"
+    target=_blank>GCF_003342775.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354545.1/"
+    target=_blank>Sa_27</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335454v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/545/GCF_003354545.1_ASM335454v1/"
+    target=_blank>GCF_003354545.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000189455.2/"
+    target=_blank>Sa_O46</a></td><td>Staphylococcus aureus O46</td>
+    <td>Dec. 2017 (ASM18945v3)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/189/455/GCF_000189455.2_ASM18945v3/"
+    target=_blank>GCF_000189455.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002356655.1/"
+    target=_blank>Sa_No10</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2017 (ASM235665v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/356/655/GCF_002356655.1_ASM235665v1/"
+    target=_blank>GCF_002356655.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001656075.1/"
+    target=_blank>Sa_08_02300</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2016 (ASM165607v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/656/075/GCF_001656075.1_ASM165607v1/"
+    target=_blank>GCF_001656075.1</a></td></tr>
+<tr align=center><td colspan=4>***** % 92 reference identity *****</td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000597965.1/"
+    target=_blank>Sa_502A_RN6607</a></td><td>Staphylococcus aureus</td>
+    <td>Mar. 2014 (ASM59796v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/597/965/GCF_000597965.1_ASM59796v1/"
+    target=_blank>GCF_000597965.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003184985.1/"
+    target=_blank>Sa_IT1_S</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM318498v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/184/985/GCF_003184985.1_ASM318498v1/"
+    target=_blank>GCF_003184985.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003185005.1/"
+    target=_blank>Sa_IT4_R</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM318500v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/185/005/GCF_003185005.1_ASM318500v1/"
+    target=_blank>GCF_003185005.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002633865.1/"
+    target=_blank>Sa_CFSAN007894</a></td><td>Staphylococcus aureus</td>
+    <td>Oct. 2017 (ASM263386v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/633/865/GCF_002633865.1_ASM263386v1/"
+    target=_blank>GCF_002633865.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001465755.1/"
+    target=_blank>Sa_RIVM3897</a></td><td>Staphylococcus aureus</td>
+    <td>Dec. 2015 (ASM146575v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/465/755/GCF_001465755.1_ASM146575v1/"
+    target=_blank>GCF_001465755.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003193765.1/"
+    target=_blank>Sa_AR_0471</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM319376v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/193/765/GCF_003193765.1_ASM319376v1/"
+    target=_blank>GCF_003193765.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001018725.2/"
+    target=_blank>Sa_FDAARGOS_10</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2018 (ASM101872v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/018/725/GCF_001018725.2_ASM101872v2/"
+    target=_blank>GCF_001018725.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001656045.1/"
+    target=_blank>Sa_08_02119</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2016 (ASM165604v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/656/045/GCF_001656045.1_ASM165604v1/"
+    target=_blank>GCF_001656045.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003432345.1/"
+    target=_blank>Sa_NX_T55</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM343234v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/432/345/GCF_003432345.1_ASM343234v1/"
+    target=_blank>GCF_003432345.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900475245.1/"
+    target=_blank>Sa_NCTC8325_2018</a></td><td>Staphylococcus aureus subsp. aureus NCTC 8325</td>
+    <td>Jun. 2018 (43024_E01)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/475/245/GCF_900475245.1_43024_E01/"
+    target=_blank>GCF_900475245.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001900185.1/"
+    target=_blank>Sa_HG001_RN1</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Dec. 2016 (ASM190018v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/900/185/GCF_001900185.1_ASM190018v1/"
+    target=_blank>GCF_001900185.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000013425.1/"
+    target=_blank>Sa_NCTC8325_2006</a></td><td>Staphylococcus aureus subsp. aureus NCTC 8325</td>
+    <td>Feb. 2006 (ASM1342v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/013/425/GCF_000013425.1_ASM1342v1/"
+    target=_blank>GCF_000013425.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003627835.1/"
+    target=_blank>Sa_O326</a></td><td>Staphylococcus aureus</td>
+    <td>Oct. 2018 (ASM362783v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/627/835/GCF_003627835.1_ASM362783v1/"
+    target=_blank>GCF_003627835.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003073635.1/"
+    target=_blank>Sa_AR466</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2018 (ASM307363v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/073/635/GCF_003073635.1_ASM307363v1/"
+    target=_blank>GCF_003073635.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000953255.1/"
+    target=_blank>Sa_ILRI_Eymole1_1</a></td><td>Staphylococcus aureus</td>
+    <td>Oct. 2014 (Staphylococcus_aureus_Sa_ILRI_217)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/953/255/GCF_000953255.1_Staphylococcus_aureus_Sa_ILRI_217/"
+    target=_blank>GCF_000953255.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001018775.2/"
+    target=_blank>Sa_NRS149</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2018 (ASM101877v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/018/775/GCF_001018775.2_ASM101877v2/"
+    target=_blank>GCF_001018775.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900004855.1/"
+    target=_blank>Sa_BB155</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2016 (BB155)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/004/855/GCF_900004855.1_BB155/"
+    target=_blank>GCF_900004855.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000452385.2/"
+    target=_blank>Sa_Tager_104</a></td><td>Staphylococcus aureus subsp. aureus Tager 104</td>
+    <td>Mar. 2016 (ASM45238v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/452/385/GCF_000452385.2_ASM45238v2/"
+    target=_blank>GCF_000452385.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002089115.2/"
+    target=_blank>Sa_GD1539</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (ASM208911v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/089/115/GCF_002089115.2_ASM208911v2/"
+    target=_blank>GCF_002089115.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324295.1/"
+    target=_blank>Sa_16_LA_309</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (16_LA_309)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/295/GCF_900324295.1_16_LA_309/"
+    target=_blank>GCF_900324295.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001956755.1/"
+    target=_blank>Sa_SJTUF_J27</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2017 (ASM195675v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/956/755/GCF_001956755.1_ASM195675v1/"
+    target=_blank>GCF_001956755.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002442975.1/"
+    target=_blank>Sa_HZW450</a></td><td>Staphylococcus aureus</td>
+    <td>Oct. 2017 (ASM244297v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/442/975/GCF_002442975.1_ASM244297v1/"
+    target=_blank>GCF_002442975.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003573855.1/"
+    target=_blank>Sa_JMUB1273</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM357385v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/573/855/GCF_003573855.1_ASM357385v1/"
+    target=_blank>GCF_003573855.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003194205.1/"
+    target=_blank>Sa_121560027_1</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM319420v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/194/205/GCF_003194205.1_ASM319420v1/"
+    target=_blank>GCF_003194205.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001887075.1/"
+    target=_blank>Sa_LA_MRSA_ST398_E154</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Nov. 2016 (ASM188707v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/887/075/GCF_001887075.1_ASM188707v1/"
+    target=_blank>GCF_001887075.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354865.1/"
+    target=_blank>Sa_45</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335486v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/865/GCF_003354865.1_ASM335486v1/"
+    target=_blank>GCF_003354865.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354925.1/"
+    target=_blank>Sa_135</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335492v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/925/GCF_003354925.1_ASM335492v1/"
+    target=_blank>GCF_003354925.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003111745.1/"
+    target=_blank>Sa_PTDrAP2</a></td><td>Staphylococcus aureus</td>
+    <td>May 2018 (ASM311174v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/111/745/GCF_003111745.1_ASM311174v1/"
+    target=_blank>GCF_003111745.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001018655.2/"
+    target=_blank>Sa_FDAARGOS_6</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2018 (ASM101865v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/018/655/GCF_001018655.2_ASM101865v2/"
+    target=_blank>GCF_001018655.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002786535.1/"
+    target=_blank>Sa_EDCC5464</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Nov. 2017 (ASM278653v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/786/535/GCF_002786535.1_ASM278653v1/"
+    target=_blank>GCF_002786535.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002204575.1/"
+    target=_blank>Sa_ISU926_ST398</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Jun. 2017 (ASM220457v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/204/575/GCF_002204575.1_ASM220457v1/"
+    target=_blank>GCF_002204575.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000470845.1/"
+    target=_blank>Sa_SA957</a></td><td>Staphylococcus aureus subsp. aureus SA957</td>
+    <td>Sep. 2013 (ASM47084v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/470/845/GCF_000470845.1_ASM47084v1/"
+    target=_blank>GCF_000470845.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354625.1/"
+    target=_blank>Sa_468</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335462v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/625/GCF_003354625.1_ASM335462v1/"
+    target=_blank>GCF_003354625.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354745.1/"
+    target=_blank>Sa_466</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335474v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/745/GCF_003354745.1_ASM335474v1/"
+    target=_blank>GCF_003354745.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354725.1/"
+    target=_blank>Sa_143</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335472v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/725/GCF_003354725.1_ASM335472v1/"
+    target=_blank>GCF_003354725.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000237125.1/"
+    target=_blank>Sa_M013</a></td><td>Staphylococcus aureus subsp. aureus M013</td>
+    <td>Dec. 2011 (ASM23712v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/237/125/GCF_000237125.1_ASM23712v1/"
+    target=_blank>GCF_000237125.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002025125.1/"
+    target=_blank>Sa_08S00974</a></td><td>Staphylococcus aureus</td>
+    <td>Mar. 2017 (ASM202512v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/025/125/GCF_002025125.1_ASM202512v1/"
+    target=_blank>GCF_002025125.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900474695.1/"
+    target=_blank>Sa_NCTC5663</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (41004_B01)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/474/695/GCF_900474695.1_41004_B01/"
+    target=_blank>GCF_900474695.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001611365.1/"
+    target=_blank>Sa_ST20130942</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2016 (ASM161136v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/611/365/GCF_001611365.1_ASM161136v1/"
+    target=_blank>GCF_001611365.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001611385.1/"
+    target=_blank>Sa_ST20130943</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2016 (ASM161138v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/611/385/GCF_001611385.1_ASM161138v1/"
+    target=_blank>GCF_001611385.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001019275.2/"
+    target=_blank>Sa_NRS107</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2018 (ASM101927v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/019/275/GCF_001019275.2_ASM101927v2/"
+    target=_blank>GCF_001019275.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001027045.1/"
+    target=_blank>Sa_RKI4</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2015 (ASM102704v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/027/045/GCF_001027045.1_ASM102704v1/"
+    target=_blank>GCF_001027045.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001307235.1/"
+    target=_blank>Sa_JS395</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Oct. 2015 (ASM130723v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/307/235/GCF_001307235.1_ASM130723v1/"
+    target=_blank>GCF_001307235.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354605.1/"
+    target=_blank>Sa_422</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335460v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/605/GCF_003354605.1_ASM335460v1/"
+    target=_blank>GCF_003354605.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003354645.1/"
+    target=_blank>Sa_128</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (ASM335464v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/354/645/GCF_003354645.1_ASM335464v1/"
+    target=_blank>GCF_003354645.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900323905.1/"
+    target=_blank>Sa_24117_WT</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (24117-WT)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/323/905/GCF_900323905.1_24117-WT/"
+    target=_blank>GCF_900323905.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324045.1/"
+    target=_blank>Sa_24117_REV</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (24117-REV)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/045/GCF_900324045.1_24117-REV/"
+    target=_blank>GCF_900324045.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324065.1/"
+    target=_blank>Sa_24117_SCV</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (24117-SCV)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/065/GCF_900324065.1_24117-SCV/"
+    target=_blank>GCF_900324065.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003609895.1/"
+    target=_blank>Sa_GN3</a></td><td>Staphylococcus aureus</td>
+    <td>Oct. 2017 (ASM360989v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/609/895/GCF_003609895.1_ASM360989v1/"
+    target=_blank>GCF_003609895.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900096745.1/"
+    target=_blank>Sa_AUS0325</a></td><td>Staphylococcus aureus</td>
+    <td>Sep. 2016 (AUS0325)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/096/745/GCF_900096745.1_AUS0325/"
+    target=_blank>GCF_900096745.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000756205.1/"
+    target=_blank>Sa_ATCC_25923</a></td><td>Staphylococcus aureus subsp. aureus</td>
+    <td>Sep. 2014 (ASM75620v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/756/205/GCF_000756205.1_ASM75620v1/"
+    target=_blank>GCF_000756205.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002202075.1/"
+    target=_blank>Sa_Seattle_1945_G477</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2017 (ASM220207v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/202/075/GCF_002202075.1_ASM220207v1/"
+    target=_blank>GCF_002202075.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002202095.1/"
+    target=_blank>Sa_Seattle_1945_G478</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2017 (ASM220209v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/202/095/GCF_002202095.1_ASM220209v1/"
+    target=_blank>GCF_002202095.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324355.1/"
+    target=_blank>Sa_10_5235</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (10_5235)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/355/GCF_900324355.1_10_5235/"
+    target=_blank>GCF_900324355.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001465635.1/"
+    target=_blank>Sa_RIVM1295</a></td><td>Staphylococcus aureus</td>
+    <td>Dec. 2015 (ASM146563v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/465/635/GCF_001465635.1_ASM146563v1/"
+    target=_blank>GCF_001465635.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900324285.1/"
+    target=_blank>Sa_4_LA_208</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (4_LA_208)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/324/285/GCF_900324285.1_4_LA_208/"
+    target=_blank>GCF_900324285.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900474675.1/"
+    target=_blank>Sa_NCTC3761</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (40961_F01)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/474/675/GCF_900474675.1_40961_F01/"
+    target=_blank>GCF_900474675.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000296595.1/"
+    target=_blank>Sa_08BA02176</a></td><td>Staphylococcus aureus 08BA02176</td>
+    <td>Sep. 2012 (ASM29659v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/296/595/GCF_000296595.1_ASM29659v1/"
+    target=_blank>GCF_000296595.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002089095.2/"
+    target=_blank>Sa_GD1677</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (ASM208909v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/089/095/GCF_002089095.2_ASM208909v2/"
+    target=_blank>GCF_002089095.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900323925.1/"
+    target=_blank>Sa_1549_WT</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (1549-WT)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/323/925/GCF_900323925.1_1549-WT/"
+    target=_blank>GCF_900323925.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900323965.1/"
+    target=_blank>Sa_1549_SCV</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (1549-SCV)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/323/965/GCF_900323965.1_1549-SCV/"
+    target=_blank>GCF_900323965.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900323955.1/"
+    target=_blank>Sa_1549_REV</a></td><td>Staphylococcus aureus</td>
+    <td>Aug. 2018 (1549-REV)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/323/955/GCF_900323955.1_1549-REV/"
+    target=_blank>GCF_900323955.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001018805.1/"
+    target=_blank>Sa_FDAARGOS_15</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2018 (ASM101880v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/018/805/GCF_001018805.1_ASM101880v2/"
+    target=_blank>GCF_001018805.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002633845.1/"
+    target=_blank>Sa_CFSAN007883</a></td><td>Staphylococcus aureus</td>
+    <td>Oct. 2017 (ASM263384v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/633/845/GCF_002633845.1_ASM263384v1/"
+    target=_blank>GCF_002633845.1</a></td></tr>
+<tr align=center><td colspan=4>***** % 91 reference identity *****</td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900474565.1/"
+    target=_blank>Sa_NCTC8726</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (41315_B01)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/474/565/GCF_900474565.1_41315_B01/"
+    target=_blank>GCF_900474565.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003203655.1/"
+    target=_blank>Sa_AR_0222</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (ASM320365v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/203/655/GCF_003203655.1_ASM320365v1/"
+    target=_blank>GCF_003203655.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001879545.1/"
+    target=_blank>Sa_FORC_026</a></td><td>Staphylococcus aureus</td>
+    <td>Nov. 2016 (ASM187954v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/879/545/GCF_001879545.1_ASM187954v1/"
+    target=_blank>GCF_001879545.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003030085.1/"
+    target=_blank>Sa_CFSAN064037</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2018 (ASM303008v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/030/085/GCF_003030085.1_ASM303008v1/"
+    target=_blank>GCF_003030085.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000009005.1/"
+    target=_blank>Sa_RF122</a></td><td>Staphylococcus aureus RF122</td>
+    <td>Nov. 2005 (ASM900v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/009/005/GCF_000009005.1_ASM900v1/"
+    target=_blank>GCF_000009005.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002089055.1/"
+    target=_blank>Sa_GD5</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2017 (ASM208905v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/089/055/GCF_002089055.1_ASM208905v1/"
+    target=_blank>GCF_002089055.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003010875.1/"
+    target=_blank>Sa_FORC59</a></td><td>Staphylococcus aureus</td>
+    <td>Mar. 2018 (ASM301087v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/010/875/GCF_003010875.1_ASM301087v1/"
+    target=_blank>GCF_003010875.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000470865.1/"
+    target=_blank>Sa_SA40</a></td><td>Staphylococcus aureus subsp. aureus SA40</td>
+    <td>Sep. 2013 (ASM47086v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/470/865/GCF_000470865.1_ASM47086v1/"
+    target=_blank>GCF_000470865.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000237265.1/"
+    target=_blank>Sa_LGA251</a></td><td>Staphylococcus aureus subsp. aureus LGA251</td>
+    <td>Aug. 2011 (ASM23726v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/237/265/GCF_000237265.1_ASM23726v1/"
+    target=_blank>GCF_000237265.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002089035.2/"
+    target=_blank>Sa_293G</a></td><td>Staphylococcus aureus</td>
+    <td>Jul. 2018 (ASM208903v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/089/035/GCF_002089035.2_ASM208903v2/"
+    target=_blank>GCF_002089035.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001018735.2/"
+    target=_blank>Sa_NRS137</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2018 (ASM101873v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/018/735/GCF_001018735.2_ASM101873v2/"
+    target=_blank>GCF_001018735.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900474665.1/"
+    target=_blank>Sa_NCTC9752</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (41236_D02)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/474/665/GCF_900474665.1_41236_D02/"
+    target=_blank>GCF_900474665.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000258685.1/"
+    target=_blank>Sa_71193</a></td><td>Staphylococcus aureus subsp. aureus 71193</td>
+    <td>Apr. 2012 (ASM25868v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/258/685/GCF_000258685.1_ASM25868v1/"
+    target=_blank>GCF_000258685.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002850415.1/"
+    target=_blank>Sa_K18</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2018 (ASM285041v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/850/415/GCF_002850415.1_ASM285041v1/"
+    target=_blank>GCF_002850415.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002952015.1/"
+    target=_blank>Sa_K5</a></td><td>Staphylococcus aureus</td>
+    <td>Feb. 2018 (ASM295201v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/952/015/GCF_002952015.1_ASM295201v1/"
+    target=_blank>GCF_002952015.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001465675.1/"
+    target=_blank>Sa_RIVM1607</a></td><td>Staphylococcus aureus</td>
+    <td>Dec. 2015 (ASM146567v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/465/675/GCF_001465675.1_ASM146567v1/"
+    target=_blank>GCF_001465675.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000245495.1/"
+    target=_blank>Sa_VC40</a></td><td>Staphylococcus aureus subsp. aureus VC40</td>
+    <td>Feb. 2012 (ASM24549v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/245/495/GCF_000245495.1_ASM24549v1/"
+    target=_blank>GCF_000245495.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001018915.2/"
+    target=_blank>Sa_NRS133</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2018 (ASM101891v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/018/915/GCF_001018915.2_ASM101891v2/"
+    target=_blank>GCF_001018915.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001019415.2/"
+    target=_blank>Sa_NRS146</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2018 (ASM101941v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/019/415/GCF_001019415.2_ASM101941v2/"
+    target=_blank>GCF_001019415.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001611405.1/"
+    target=_blank>Sa_ST20130938</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2016 (ASM161140v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/611/405/GCF_001611405.1_ASM161140v1/"
+    target=_blank>GCF_001611405.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001611425.1/"
+    target=_blank>Sa_ST20130939</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2016 (ASM161142v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/611/425/GCF_001611425.1_ASM161142v1/"
+    target=_blank>GCF_001611425.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_900474535.1/"
+    target=_blank>Sa_NCTC7485</a></td><td>Staphylococcus aureus</td>
+    <td>Jun. 2018 (40853_C01)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/900/474/535/GCF_900474535.1_40853_C01/"
+    target=_blank>GCF_900474535.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003030225.1/"
+    target=_blank>Sa_CFSAN018750</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2018 (ASM303022v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/030/225/GCF_003030225.1_ASM303022v1/"
+    target=_blank>GCF_003030225.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000160335.2/"
+    target=_blank>Sa_55_2053</a></td><td>Staphylococcus aureus subsp. aureus 55/2053</td>
+    <td>Aug. 2013 (ASM16033v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/160/335/GCF_000160335.2_ASM16033v2/"
+    target=_blank>GCF_000160335.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_003855575.1/"
+    target=_blank>Sa_80wphwpl_v1</a></td><td>Staphylococcus aureus</td>
+    <td>Dec. 2018 (ASM385557v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/855/575/GCF_003855575.1_ASM385557v1/"
+    target=_blank>GCF_003855575.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000462955.1/"
+    target=_blank>Sa_6850</a></td><td>Staphylococcus aureus subsp. aureus 6850</td>
+    <td>Aug. 2013 (ASM46295v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/462/955/GCF_000462955.1_ASM46295v1/"
+    target=_blank>GCF_000462955.1</a></td></tr>
+<tr align=center><td colspan=4>***** % 90 reference identity *****</td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001594205.1/"
+    target=_blank>Sa_MCRF184</a></td><td>Staphylococcus aureus</td>
+    <td>Mar. 2016 (ASM159420v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/594/205/GCF_001594205.1_ASM159420v1/"
+    target=_blank>GCF_001594205.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002850395.1/"
+    target=_blank>Sa_K17</a></td><td>Staphylococcus aureus</td>
+    <td>Jan. 2018 (ASM285039v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/850/395/GCF_002850395.1_ASM285039v1/"
+    target=_blank>GCF_002850395.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001611325.1/"
+    target=_blank>Sa_ST20130940</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2016 (ASM161132v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/611/325/GCF_001611325.1_ASM161132v1/"
+    target=_blank>GCF_001611325.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001611345.1/"
+    target=_blank>Sa_ST20130941</a></td><td>Staphylococcus aureus</td>
+    <td>Apr. 2016 (ASM161134v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/611/345/GCF_001611345.1_ASM161134v1/"
+    target=_blank>GCF_001611345.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_002633765.1/"
+    target=_blank>Sa_CFSAN007835</a></td><td>Staphylococcus aureus</td>
+    <td>Oct. 2017 (ASM263376v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/633/765/GCF_002633765.1_ASM263376v1/"
+    target=_blank>GCF_002633765.1</a></td></tr>
+<tr align=center><td colspan=4>***** % 88 reference identity *****</td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_001456215.1/"
+    target=_blank>Sa_MS4</a></td><td>Staphylococcus aureus</td>
+    <td>Dec. 2015 (ASM145621v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/001/456/215/GCF_001456215.1_ASM145621v1/"
+    target=_blank>GCF_001456215.1</a></td></tr>
+<tr align=center><td colspan=4>***** others *****</td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000009045.1/"
+    target=_blank>Bacillus_subtilis_168</a></td><td>Bacillus subtilis subsp. subtilis str. 168</td>
+    <td>Mar. 2009 (ASM904v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/009/045/GCF_000009045.1_ASM904v1/"
+    target=_blank>GCF_000009045.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000005845.2/"
+    target=_blank>E_coli_K_12_MG1655</a></td><td>Escherichia coli str. K-12 substr. MG1655</td>
+    <td>Sep. 2013 (ASM584v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/005/845/GCF_000005845.2_ASM584v2/"
+    target=_blank>GCF_000005845.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000008865.2/"
+    target=_blank>E_coli_O157_H7_Sakai_RIMD_0509952</a></td><td>Escherichia coli O157:H7 str. Sakai</td>
+    <td>Jun. 2018 (ASM886v2)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/008/865/GCF_000008865.2_ASM886v2/"
+    target=_blank>GCF_000008865.2</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000026325.1/"
+    target=_blank>E_coli_UMN026</a></td><td>Escherichia coli UMN026</td>
+    <td>Dec. 2008 (ASM2632v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/026/325/GCF_000026325.1_ASM2632v1/"
+    target=_blank>GCF_000026325.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000183345.1/"
+    target=_blank>E_coli_O83_H1_NRG_857C</a></td><td>Escherichia coli O83:H1 str. NRG 857C</td>
+    <td>Nov. 2010 (ASM18334v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/183/345/GCF_000183345.1_ASM18334v1/"
+    target=_blank>GCF_000183345.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000026345.1/"
+    target=_blank>E_coli_IAI39</a></td><td>Escherichia coli IAI39</td>
+    <td>Dec. 2008 (ASM2634v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/026/345/GCF_000026345.1_ASM2634v1/"
+    target=_blank>GCF_000026345.1</a></td></tr>
+<tr align=left><td><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000299455.1/"
+    target=_blank>E_coli_O104_H4_2011C_3493</a></td><td>Escherichia coli O104:H4 str. 2011C-3493</td>
+    <td>Sep. 2012 (ASM29945v1)</td>
+    <td><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/299/455/GCF_000299455.1_ASM29945v1/"
+    target=_blank>GCF_000299455.1</a></td></tr>
+</table><br>
+<b>Table 1.</b> <em>Genome assemblies included in the 369-way Conservation track.</em>
+</blockquote></p>
+
+Downloads for data in this track are available:
+<ul>
+<li>
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/staAur2/multiz369way/">Multiz alignments</a> (MAF format), and phylogenetic trees
+<li>
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/staAur2/phyloP369way/">PhyloP conservation</a> (WIG format)
+<li>
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/staAur2/phastCons369way/">PhastCons conservation</a> (WIG format)
+</ul>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+The track configuration options allow the user to display the three different
+sets of scores by all, subclass, individually, or any combination of these.
+In full and pack display modes, conservation scores are displayed as a
+<em>wiggle track</em> (histogram) in which the height reflects the
+value of the score.
+The conservation wiggles can be configured in a variety of ways to
+highlight different aspects of the displayed information.
+Click the <a href="../goldenPath/help/hgWiggleTrackHelp.html"
+target="_blank">Graph configuration help</a> link for an explanation
+of the configuration options.</p>
+<p>
+Pairwise alignments of each species to the $organism genome are
+displayed below the conservation histogram as a grayscale density plot (in
+pack mode) or as a wiggle (in full mode) that indicates alignment quality.
+In dense display mode, conservation is shown in grayscale using
+darker values to indicate higher levels of overall conservation
+as scored by phastCons. </p>
+<p>
+Checkboxes on the track configuration page allow selection of the
+species to include in the pairwise display.
+Configuration buttons are available to select all of the species
+(<em>Set all</em>), deselect all of the species (<em>Clear all</em>), or
+use the default settings (<em>Set defaults</em>).
+Note that excluding species from the pairwise display does not alter the
+the conservation score display.</p>
+<p>
+To view detailed information about the alignments at a specific
+position, zoom the display in to 30,000 or fewer bases, then click on
+the alignment.</p>
+
+<h3>Gap Annotation</h3>
+<p>
+The <em>Display chains between alignments</em> configuration option
+enables display of gaps between alignment blocks in the pairwise alignments in
+a manner similar to the Chain track display.  The following
+conventions are used:
+<ul>
+<li><b>Single line:</b> No bases in the aligned species. Possibly due to a
+lineage-specific insertion between the aligned blocks in the $organism genome
+or a lineage-specific deletion between the aligned blocks in the aligning
+species.
+<li><b>Double line:</b> Aligning species has one or more unalignable bases in
+the gap region. Possibly due to excessive evolutionary distance between
+species or independent indels in the region between the aligned blocks in both
+species.
+<li><b>Pale yellow coloring:</b> Aligning species has Ns in the gap region.
+Reflects uncertainty in the relationship between the DNA of both species, due
+to lack of sequence in relevant portions of the aligning species.
+</ul></p>
+
+<h3>Genomic Breaks</h3>
+<p>
+Discontinuities in the genomic context (chromosome, scaffold or region) of the
+aligned DNA in the aligning species are shown as follows:
+<ul>
+<li>
+<b>Vertical blue bar:</b> Represents a discontinuity that persists indefinitely
+on either side, <em>e.g.</em> a large region of DNA on either side of the bar
+comes from a different chromosome in the aligned species due to a large scale
+rearrangement.
+<li>
+<b>Green square brackets:</b> Enclose shorter alignments consisting of DNA from
+one genomic context in the aligned species nested inside a larger chain of
+alignments from a different genomic context. The alignment within the
+brackets may represent a short misalignment, a lineage-specific insertion of a
+transposon in the $organism genome that aligns to a paralogous copy somewhere
+else in the aligned species, or other similar occurrence.
+</ul></p>
+
+<h3>Base Level</h3>
+<p>
+When zoomed-in to the base-level display, the track shows the base
+composition of each alignment.
+The numbers and symbols on the Gaps
+line indicate the lengths of gaps in the $organism sequence at those
+alignment positions relative to the longest non-$organism sequence.
+If there is sufficient space in the display, the size of the gap is shown.
+If the space is insufficient and the gap size is a multiple of 3, a
+&quot;*&quot; is displayed; other gap sizes are indicated by &quot;+&quot;.</p>
+<p>
+Codon translation is available in base-level display mode if the
+displayed region is identified as a coding segment. To display this annotation,
+select the species for translation from the pull-down menu in the Codon
+Translation configuration section at the top of the page. Then, select one of
+the following modes:
+<ul>
+<li>
+<b>No codon translation:</b> The gene annotation is not used; the bases are
+displayed without translation.
+<li>
+<b>Use default species reading frames for translation:</b> The annotations from
+the genome displayed in the <em>Default species to establish reading frame</em>
+pull-down menu are used to translate all the aligned species present in the
+alignment.
+<li>
+<b>Use reading frames for species if available, otherwise no translation:</b>
+Codon translation is performed only for those species where the region is
+annotated as protein coding.
+<li><b>Use reading frames for species if available, otherwise use default species:</b>
+Codon translation is done on those species that are annotated as being protein
+coding over the aligned region using species-specific annotation; the remaining
+species are translated using the default species annotation.
+</ul></p>
+<p>
+Codon translation uses the following gene tracks as the basis for
+translation, depending on the species chosen (<b>Table 2</b>).
+
+<blockquote><table border=1 cellpadding=4 bordercolor="#aaaaaa">
+<tr align=left><td><b>Gene Track</b></td><td><b>Species</b></td></tr>
+<tr align=left><td>NCBI RefSeq genes</td><td>all 369 genome sequences</td></tr>
+</table>
+<b>Table 2.</b> <em>Gene tracks used for codon translation.</em>
+</blockquote></p>
+
+<h2>Methods</h2>
+<p>
+Pairwise alignments with the $organism genome were generated for
+each species using lastz from repeat-masked genomic sequence.
+Pairwise alignments were then linked into chains using a dynamic programming
+algorithm that finds maximally scoring chains of gapless subsections
+of the alignments organized in a kd-tree.
+Please note the <a href="http://genomewiki.ucsc.edu/index.php/StaAur2_369-way_Genome_size_statistics"
+target="_blank">specific parameters</a> for the alignments.
+High-scoring chains were then placed along the genome, with
+gaps filled by lower-scoring chains, to produce an alignment net.
+For more information about the chaining and netting process and
+parameters for each species, see the description pages for the 
+<a href="../cgi-bin/hgTrackUi?db=staAur2&g=staph9ChainNet" target="_blank">
+Chain and Net tracks.</a>
+</p>
+<p>
+The resulting best-in-genome pairwise alignments
+were progressively aligned using multiz/autoMZ,
+following the tree topology diagrammed above, to produce multiple alignments.
+The multiple alignments were post-processed to
+add annotations indicating alignment gaps, genomic breaks,
+and base quality of the component sequences.
+The annotated multiple alignments, in MAF format, are available for
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/staAur2/multiz369way"
+target="_blank">bulk download</a>.
+An alignment summary table containing an entry for each
+alignment block in each species was generated to improve
+track display performance at large scales.
+Framing tables were constructed to enable
+visualization of codons in the multiple alignment display.</p>
+
+<h3> Phylogenetic Tree Model</h3>
+<p>
+Both <em>phastCons</em> and <em>phyloP</em> are phylogenetic methods that rely
+on a tree model containing the tree topology, branch lengths representing
+evolutionary distance at neutrally evolving sites, the background distribution
+of nucleotides, and a substitution rate matrix.
+The
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/staAur2/phastCons369way/staAur2.phastCons369way.mod"
+target="_blank">all species tree model</a> for this track was
+generated using the <em>phyloFit</em> program from the PHAST package
+(REV model, EM algorithm, medium precision) using multiple alignments of
+4-fold degenerate sites extracted from the 369-way alignment
+(msa_view).  The 4d sites were derived from the NCBI RefSeq gene set,
+filtered to select single-coverage long transcripts.
+</p>
+<p>
+This same tree model was used in the phyloP calculations, however their
+background frequencies were modified to maintain reversibility.
+The resulting tree model for
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/staAur2/phyloP369way/staAur2.phyloP369way.mod"
+target="_blank">all species</a>.
+</p>
+<h3> PhastCons Conservation </h3>
+<p>
+The phastCons program computes conservation scores based on a phylo-HMM, a
+type of probabilistic model that describes both the process of DNA
+substitution at each site in a genome and the way this process changes from
+one site to the next (Felsenstein and Churchill 1996, Yang 1995, Siepel and
+Haussler 2005).  PhastCons uses a two-state phylo-HMM, with a state for
+conserved regions and a state for non-conserved regions.  The value plotted
+at each site is the posterior probability that the corresponding alignment
+column was "generated" by the conserved state of the phylo-HMM.  These
+scores reflect the phylogeny (including branch lengths) of the species in
+question, a continuous-time Markov model of the nucleotide substitution
+process, and a tendency for conservation levels to be autocorrelated along
+the genome (i.e., to be similar at adjacent sites).  The general reversible
+(REV) substitution model was used.  Unlike many conservation-scoring programs,
+phastCons does not rely on a sliding window
+of fixed size; therefore, short highly-conserved regions and long moderately
+conserved regions can both obtain high scores.
+More information about
+phastCons can be found in Siepel <em>et al</em>. 2005.</p>
+<p>
+The phastCons parameters used were: expected-length=45,
+target-coverage=0.3, rho=0.3.</p>
+
+<h3> PhyloP Conservation </h3>
+<p>
+The phyloP program supports several different methods for computing
+p-values of conservation or acceleration, for individual nucleotides or
+larger elements
+(<a href="http://compgen.cshl.edu/phast/" target="_blank">
+http://compgen.cshl.edu/phast/</a>).
+Here it was used
+to produce separate scores at each base (--wig-scores option), considering
+all branches of the phylogeny rather than a particular subtree or lineage
+(i.e., the --subtree option was not used).  The scores were computed by
+performing a likelihood ratio test at each alignment column (--method LRT),
+and scores for both conservation and acceleration were produced (--mode CONACC).
+</p>
+<h3> Conserved Elements </h3>
+<p>
+The conserved elements were predicted by running phastCons with the
+--viterbi option.  The predicted elements are segments of the alignment
+that are likely to have been "generated" by the conserved state of the
+phylo-HMM. Each element is assigned a log-odds score equal to its log
+probability under the conserved model minus its log probability under the
+non-conserved model. The "score" field associated with this track contains
+transformed log-odds scores, taking values between 0 and 1000. (The scores
+are transformed using a monotonic function of the form a * log(x) + b.) The
+raw log odds scores are retained in the "name" field and can be seen on the
+details page or in the browser when the track's display mode is set to
+"pack" or "full".
+</p>
+
+<h2>Credits</h2>
+<p> This track was created using the following programs:
+<ul>
+<li> Alignment tools: lastz (formerly blastz) and multiz by Minmei Hou, Scott Schwartz and Webb
+Miller of the <a href="http://www.bx.psu.edu/miller_lab/"
+target="_blank">Penn State Bioinformatics Group</a>
+<li> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
+<li> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
+other programs in PHAST by
+<a href="http://siepellab.labsites.cshl.edu/"
+target="_blank">Adam Siepel</a> at Cold Spring Harbor Laboratory (original development
+done at the Haussler lab at UCSC).
+<li> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
+by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC
+<li> Tree image generator: phyloPng by Galt Barber, UCSC
+<li> Conservation track display: Kate Rosenbloom, Hiram Clawson (wiggle
+display), and Brian Raney (gap annotation and codon framing) at UCSC
+</ul>
+</p>
+<p>The phylogenetic tree is based on Murphy <em>et al</em>. (2001) and general
+consensus in the vertebrate phylogeny community as of March 2007.
+</p>
+
+<h2>References</h2>
+
+<h3>Phylo-HMMs, phastCons, and phyloP:</h3>
+<p>
+Felsenstein J, Churchill GA.
+<a href="https://academic.oup.com/mbe/article/13/1/93/1055515/A-Hidden-Markov-Model-approach-to-
+variation-among" target="_blank">A Hidden Markov Model approach to
+variation among sites in rate of evolution</a>.
+<em>Mol Biol Evol</em>. 1996 Jan;13(1):93-104.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/8583911" target="_blank">8583911</a>
+</p>
+
+<p>
+Pollard KS, Hubisz MJ, Rosenbloom KR, Siepel A.
+<a href="https://genome.cshlp.org/content/20/1/110.long" target="_blank">
+Detection of nonneutral substitution rates on mammalian phylogenies</a>.
+<em>Genome Res</em>. 2010 Jan;20(1):110-21.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/19858363" target="_blank">19858363</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2798823/" target="_blank">PMC2798823</a>
+</p>
+
+<p>
+Siepel A, Bejerano G, Pedersen JS, Hinrichs AS, Hou M, Rosenbloom K,
+Clawson H, Spieth J, Hillier LW, Richards S, <em>et al.</em>
+<a href="https://genome.cshlp.org/content/15/8/1034"
+target="_blank">Evolutionarily conserved elements in vertebrate, insect, worm,
+and yeast genomes</a>.
+<em>Genome Res</em>. 2005 Aug;15(8):1034-50.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/16024819" target="_blank">16024819</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1182216/" target="_blank">PMC1182216</a>
+</p>
+
+<p>
+Siepel A, Haussler D.
+<a href="http://compgen.cshl.edu/~acs/phylohmm.pdf"
+target="_blank">Phylogenetic Hidden Markov Models</a>.
+In: Nielsen R, editor. Statistical Methods in Molecular Evolution.
+New York: Springer; 2005. pp. 325-351.
+</p>
+
+<p>
+Yang Z.
+<a href="http://www.genetics.org/content/139/2/993"
+target="_blank">A space-time process model for the evolution of DNA
+sequences</a>.
+<em>Genetics</em>. 1995 Feb;139(2):993-1005.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/7713447" target="_blank">7713447</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1206396/" target="_blank">PMC1206396</a>
+</p>
+
+<h3>Chain/Net:</h3>
+<p>
+Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
+<a href="http://www.pnas.org/content/100/20/11484"
+target="_blank">Evolution's cauldron:
+duplication, deletion, and rearrangement in the mouse and human genomes</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/14500911" target="_blank">14500911</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC208784/" target="_blank">PMC208784</a>
+</p>
+
+<h3>Multiz:</h3>
+<p>
+Blanchette M, Kent WJ, Riemer C, Elnitski L, Smit AF, Roskin KM,
+Baertsch R, Rosenbloom K, Clawson H, Green ED, <em>et al.</em>
+<a href="https://genome.cshlp.org/content/14/4/708.abstract"
+target="_blank">Aligning multiple genomic sequences with the threaded blockset aligner</a>.
+<em>Genome Res</em>. 2004 Apr;14(4):708-15.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/15060014" target="_blank">15060014</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC383317/" target="_blank">PMC383317</a>
+</p>
+
+<h3>Lastz (formerly Blastz):</h3>
+<p>
+Chiaromonte F, Yap VB, Miller W.
+<a href="http://psb.stanford.edu/psb-online/proceedings/psb02/chiaromonte.pdf"
+target="_blank">Scoring pairwise genomic sequence alignments</a>.
+<em>Pac Symp Biocomput</em>. 2002:115-26.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">11928468</a>
+</p>
+
+<p>
+Harris RS.
+<a href="http://www.bx.psu.edu/~rsharris/rsharris_phd_thesis_2007.pdf"
+target="_blank">Improved pairwise alignment of genomic DNA</a>.
+<em>Ph.D. Thesis</em>. Pennsylvania State University, USA. 2007.
+</p>
+
+<p>
+Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC,
+Haussler D, Miller W.
+<a href="https://genome.cshlp.org/content/13/1/103.abstract"
+target="_blank">Human-mouse alignments with BLASTZ</a>.
+<em>Genome Res</em>. 2003 Jan;13(1):103-7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/12529312" target="_blank">12529312</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC430961/" target="_blank">PMC430961</a>
+</p>
+
+
+<h3>Phylogenetic Tree:</h3>
+<p>
+Bernard G, Ragan MA, Chan CX.
+<a href="https://f1000research.com/articles/5-2789/v2"
+target="_blank">Recapitulating phylogenies using k-mers: from trees to networks</a>.
+<em>F1000Res</em>. 2016;5:2789.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28105314" target="_blank">28105314</a>
+</p>
+
+<p>
+Fan H, Ives AR, Surget-Groba Y, Cannon CH.
+<a href="https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-015-1647-5"
+target="_blank">An assembly and alignment-free method of phylogeny reconstruction from 
+next-generation sequencing data</a>. <em>BMC Genomics</em>. 2015;16(1):522.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26169061" target="_blank">26169061</a>
+</p>
+
+<p>
+Murphy WJ, Eizirik E, O'Brien SJ, Madsen O, Scally M, Douady CJ, Teeling E,
+Ryder OA, Stanhope MJ, de Jong WW, Springer MS.
+<a href="http://science.sciencemag.org/content/294/5550/2348"
+target="_blank">Resolution of the early placental mammal radiation using Bayesian phylogenetics</a>.
+<em>Science</em>. 2001 Dec 14;294(5550):2348-51.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/11743200" target="_blank">11743200</a>
+</p>

@@ -168,9 +168,6 @@ struct trackDb *mustFindTrack(char *name, struct trackDb *trackList);
 struct asObject *asForTable(struct sqlConnection *conn, char *table);
 /* Get autoSQL description if any associated with table. */
 
-struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as);
-/* Convert asObject to list of sqlFieldTypes */
-
 char *connectingTableForTrack(char *rawTable);
 /* Return table name to use with all.joiner for track.
  * You can freeMem this when done. */
@@ -269,17 +266,6 @@ boolean isSqlNumType(char *type);
 
 boolean isSqlIntType(char *type);
 /* Return TRUE if it is an integer SQL type. */
-
-struct sqlFieldType
-/* List field names and types */
-    {
-    struct sqlFieldType *next;
-    char *name;		/* Name of field. */
-    char *type;		/* Type of field (MySQL notion) */
-    };
-
-struct sqlFieldType *sqlFieldTypeNew(char *name, char *type);
-/* Create a new sqlFieldType */
 
 void sqlFieldTypeFree(struct sqlFieldType **pFt);
 /* Free resources used by sqlFieldType */
@@ -734,6 +720,10 @@ void wigShowFilter(struct sqlConnection *conn);
 
 /* ----------- BigWig business in bigWig.c -------------------- */
 
+boolean isBigWig(char *database, char *table, struct trackDb *parent,
+	struct customTrack *(*ctLookupName)(char *table));
+/* Local test to see if something is bigWig.  Handles hub tracks unlike hIsBigWig. */
+
 boolean isBigWigTable(char *table);
 /* Return TRUE if table is bedGraph in current database's trackDb. */
 
@@ -870,6 +860,32 @@ struct bed *bamGetFilteredBedsOnRegions(struct sqlConnection *conn,
 
 struct slName *randomBamIds(char *table, struct sqlConnection *conn, int count);
 /* Return some semi-random qName based IDs from a BAM file. */
+
+/* Hi-C stuff from hic.c */
+
+struct hTableInfo *hicToHti(char *table);
+/* Get standard fields of hic into hti structure. */
+
+boolean isHicTable(char *table);
+/* Return TRUE if table corresponds to a hic file. */
+
+struct slName *hicGetFields();
+/* Get fields of hic as simple name list.  We represent hic with an interact structure, so
+ * this is really just an interact as object. */
+
+struct sqlFieldType *hicListFieldsAndTypes();
+/* Get fields of hic as list of sqlFieldType (again, this is really just the list of interact fields. */
+
+void showSchemaHic(char *table, struct trackDb *tdb);
+/* Show schema on hic. */
+
+void hicTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
+/* Print out selected fields from hic.  If fields is NULL, then print out all fields. */
+
+struct bed *hicGetFilteredBedsOnRegions(struct sqlConnection *conn,
+        char *db, char *table, struct region *regionList, struct lm *lm,
+        int *retFieldCount);
+/* Get list of beds from HIC, in all regions, that pass filtering. */
 
 /* VCF (Variant Call Format) stuff from vcf.c */
 

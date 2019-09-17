@@ -33,7 +33,7 @@ my $debug   = 0;
 
 # Hard-coded behaviors:
 my $basename    = $0;  $basename =~ s@.*/@@;
-my $domain      = '.cse.ucsc.edu';
+my $domain      = '.soe.ucsc.edu';
 my $cookieFile  = '/tmp/hgTestCookies';
 my @hgTsearch = ('Chr7', '20p13', 'chr3:1-1000000', 'D16S3046', 
 		 'D22S586;D22S43', 'AA205474',

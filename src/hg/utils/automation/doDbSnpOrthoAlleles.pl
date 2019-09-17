@@ -157,6 +157,7 @@ EOF
   ;
   close($fh);
 
+  my $paraRun = &HgAutomate::paraRun();
   $bossScript->add(<<_EOF_
 chmod a+x liftOne.csh
 
@@ -172,7 +173,7 @@ foreach chunkFile (split/chunk*)
   end
 end
 
-$HgAutomate::paraRun
+$paraRun
 _EOF_
   );
   $bossScript->execute();
@@ -190,6 +191,7 @@ sub join {
                    "from the first cluster run.";
   my $bossScript = new HgRemoteScript("$runDir/join.csh", $paraHub,
 				      $runDir, $whatItDoes);
+  my $paraRun = &HgAutomate::paraRun();
   $bossScript->add(<<_EOF_
 mkdir out
 ln -s ../run.liftOver/split .
@@ -201,7 +203,7 @@ foreach f (split/chunk*)
         \\{check out exists out/\$chunk.bed\\} \\
         >> jobList
     end
-$HgAutomate::paraRun
+$paraRun
 _EOF_
   );
   $bossScript->execute();

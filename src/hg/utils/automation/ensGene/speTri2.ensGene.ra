@@ -2,4 +2,10 @@
 db speTri2
 # optional nameTranslation, the sed command that will transform
 #	Ensemble names to UCSC names.  With quotes just to make sure.
-nameTranslation "s/\.1//; s/\.2//"
+#  previously:
+# nameTranslation "s/\.1//; s/\.2//"
+# UCSC has no chrM
+nameTranslation "/^MT/d;"
+
+# ensembl changed names Aug 2017:
+liftUp /hive/data/genomes/speTri2/jkStuff/ensToUcsc.lift

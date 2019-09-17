@@ -91,7 +91,7 @@ void usage()
   "       pairedTagAlign  \n"
   "       broadPeak    : ENCODE Peak formats\n"
   "       narrowPeak     These are specialized bedN+P formats.\n"
-  "       gappedPeak     See http://genomewiki.cse.ucsc.edu/EncodeDCC/index.php/File_Formats\n"
+  "       gappedPeak     See http://genomewiki.soe.ucsc.edu/EncodeDCC/index.php/File_Formats\n"
   "       bedGraph    :  BED Graph\n"
   "       rcc         :  NanoString RCC\n"
   "       idat        :  Illumina IDAT\n"

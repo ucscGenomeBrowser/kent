@@ -1,14 +1,11 @@
 # Genes and Gene Prediction Tracks
 
-track knownGene override
-bigGeneDataUrl /gbdb/mm10/knownGene.bb
-priority 1
-
 track ensGene override
 visibility hide
 
 track xenoRefGene override
 priority 3
+visibility hide
 
 # mRNA and EST
 
@@ -16,7 +13,7 @@ track mrna override
 visibility hide
 
 track intronEst override
-priority 2
+priority 0.5
 
 # Variation and Repeats
 

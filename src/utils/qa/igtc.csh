@@ -20,8 +20,8 @@ set mice=( mm9 mm8 mm7 )
 set extFileId=( $init )
 set extFileIdOld=( $init )
 
-set urlbeta="http://hgwbeta.cse.ucsc.edu/cgi-bin/hgTracks?igtc=pack"
-set urldev="http://hgwdev.cse.ucsc.edu/cgi-bin/hgTracks?igtc=pack"
+set urlbeta="http://hgwbeta.soe.ucsc.edu/cgi-bin/hgTracks?igtc=pack"
+set urldev="http://hgwdev.soe.ucsc.edu/cgi-bin/hgTracks?igtc=pack"
 
 if ($#argv != 1 ) then
   echo

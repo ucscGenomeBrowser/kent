@@ -159,7 +159,7 @@ close (FH);
 print header(-expires=>'now');
 print "\n";
 print start_html(-title=>"Genome assembly quality estimate",
-	-style=>"http://genome-test.cse.ucsc.edu/~hiram/genomeStats/genomeStats.css");
+	-style=>"http://genome-test.soe.ucsc.edu/~hiram/genomeStats/genomeStats.css");
 print "\n<HR>";
 
 if ($debugOn) {

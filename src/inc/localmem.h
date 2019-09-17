@@ -16,14 +16,26 @@ struct lm *lmInit(int blockSize);
  *                  pass in zero and a reasonable default will be used.
  */
 
+struct lm *lmInitWMem(void *mem, int blockSize);
+/* Create a local memory pool. Don't do any memory allocation.  Parameters are:
+ *      mem -- the memory to use for the blocks
+ *      blockSize - how much memory has been allocated.  If this is exhausted, an errAbort occurs.
+ */
+
 void lmCleanup(struct lm **pLm);
 /* Clean up a local memory pool. */
 
 size_t lmAvailable(struct lm *lm);
 // Returns currently available memory in pool
 
+size_t lmUsed(struct lm *lm);
+// Returns amount of memory allocated
+
 size_t lmSize(struct lm *lm);
 // Returns current size of pool, even for memory already allocated
+
+unsigned int lmBlockHeaderSize();
+// Return the size of an lmBlock.
 
 void *lmAlloc(struct lm *lm, size_t size);
 /* Allocate memory from local pool. */
@@ -36,20 +48,20 @@ void *lmCloneMem(struct lm *lm, void *pt, size_t size);
 /* Return a local mem copy of memory block. */
 
 
-char *lmCloneStringZ(struct lm *lm, char *string, int size);
+char *lmCloneStringZ(struct lm *lm, const char *string, int size);
 /* Return local mem copy of string of given size, adding null terminator. */
 
-char *lmCloneString(struct lm *lm, char *string);
+char *lmCloneString(struct lm *lm, const char *string);
 /* Return local mem copy of string. */
 
-char *lmCloneFirstWord(struct lm *lm, char *line);
+char *lmCloneFirstWord(struct lm *lm, const char *line);
 /* Clone first word in line */
 
-char *lmCloneSomeWord(struct lm *lm, char *line, int wordIx);
+char *lmCloneSomeWord(struct lm *lm, const char *line, int wordIx);
 /* Return a clone of the given space-delimited word within line.  Returns NULL if
  * not that many words in line. */
 
-struct slName *lmSlName(struct lm *lm, char *name);
+struct slName *lmSlName(struct lm *lm, const char *name);
 /* Return slName in memory. */
 
 #define lmAllocVar(lm, pt) (pt = lmAlloc(lm, sizeof(*pt)));
@@ -70,5 +82,11 @@ char **lmCloneRowExt(struct lm *lm, char **row, int rowOutSize, int rowInSize);
 /* Allocate an array of strings with rowOutSize elements.  Clone the first rowInSize elements of
  * row into the new array; leave remaining elements NULL if rowOutSize is greater than rowInSize.
  * rowOutSize must be greater than or equal to rowInSize. */
+
+void lmRefAdd(struct lm *lm, struct slRef **pRefList, void *val);
+/* Add reference to list. */
+
+char *lmJoinStrings(struct lm *lm, char *a, char *b);
+/* Return concatenation of a and b allocated in lm */
 
 #endif//ndef LOCALMEM_H

@@ -631,9 +631,11 @@ sub getNcbiAssemblyReportFile() {
   }
   my $summaryQuery = "$eUtilBase/esummary.fcgi?db=assembly&id=$assemblyId";
   my $gcfAcc = eUtilQuery($ua, $summaryQuery, '<AssemblyAccession>([\w.]+)<');
-  my $assemblyReportFile = "$gcfAcc.assembly.txt";
-  my $assemblyReportUrl = 'ftp://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/All/' .
-    $assemblyReportFile;
+  my $assemblyReportFile = "${gcfAcc}_${refAssemblyLabel}_assembly_report.txt";
+  my $assemblyReportDir = 'ftp://ftp.ncbi.nlm.nih.gov/genomes/all/' . substr($gcfAcc, 0, 3) . '/' .
+    substr($gcfAcc, 4, 3) . '/' . substr($gcfAcc, 7, 3) . '/' . substr($gcfAcc, 10, 3) .
+      "/${gcfAcc}_$refAssemblyLabel/";
+  my $assemblyReportUrl = $assemblyReportDir . $assemblyReportFile;
   my $ftpCmd = "$wget $assemblyReportUrl";
   HgAutomate::verbose(1, "# $ftpCmd\n");
   if (system($ftpCmd) == 0) {
@@ -661,7 +663,6 @@ sub tryToMakeLiftUpFromNcbiAssemblyReportFile {
     $missingContigs{$contig} = $i;
   }
   my @missingInfo = ();
-
   my $NARF = &HgAutomate::mustOpen("$ncbiAssemblyReportFile");
   while (<$NARF>) {
     next if (/^#/);
@@ -690,9 +691,20 @@ sub tryToMakeLiftUpFromNcbiAssemblyReportFile {
       }
       # If a ucsc name without the version number isn't found, try it with.
       # (e.g., chrUn_GJ057137 vs. chrUn_GJ057137v1)
+      my @namesToTry = ($ucscName);
       (my $altName = $ucscName) =~ s/$gbaTrimmed/$altTrimmed/;
-      if (!exists $chromSizes->{$ucscName}) {
-        ($ucscName, $altName) = ($altName, $ucscName);
+      push @namesToTry, $altName;
+      if ($altName =~ m/_random/) {
+        $altName =~ s/_random/_alt/;
+        push @namesToTry, $altName;
+      }
+      (my $fixName = $altName) =~ s/_alt/_fix/;
+      push @namesToTry, $fixName;
+      foreach my $name (@namesToTry) {
+        if (exists $chromSizes->{$name}) {
+          $ucscName = $name;
+          last;
+        }
       }
       if (exists $chromSizes->{$ucscName}) {
 	if ($hopefullyEqual ne '=') {
@@ -707,12 +719,13 @@ sub tryToMakeLiftUpFromNcbiAssemblyReportFile {
 	} else {
 	  # Yay!  We found a mapping.  Let this be the common case.
 	  my $size = $chromSizes->{$ucscName};
-      my $strand = "+";
+          my $strand = "+";
 	  print $LU join("\t", 0, $rsaTrimmed, $size, $ucscName, $size, $strand) . "\n";
 	  $liftUpCount++;
 	}
       } else {
-	push @missingInfo, [ "$seqRole (no $ucscName or $altName in chrom.sizes)", $rsaTrimmed, $chr ];
+	push @missingInfo, [ "$seqRole (no " . join("/", @namesToTry)  . " in chrom.sizes)",
+                             $rsaTrimmed, $chr ];
       }
     } # else this contig is not in our missing list; ignore it.
   }

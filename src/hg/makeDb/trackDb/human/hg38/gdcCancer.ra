@@ -1,0 +1,455 @@
+track gdcCancer
+shortLabel TCGA Pan-Cancer
+longLabel TCGA Pan-Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
+compositeTrack on
+group phenDis
+type bigLolly 12 + 
+visibility hide
+project_idFilterValues TCGA-LAML|Acute Myeloid Leukemia,TCGA-ACC|Adrenocortical carcinoma,TCGA-BLCA|Bladder Urothelial Carcinoma,TCGA-LGG|Brain Lower Grade Glioma,TCGA-BRCA|Breast invasive carcinoma,TCGA-CESC|Cervical squamous cell carcinoma and endocervical adenocarcinoma,TCGA-CHOL|Cholangiocarcinoma,TCGA-LCML|Chronic Myelogenous Leukemia,TCGA-COAD|Colon adenocarcinoma,TCGA-CNTL|Controls,TCGA-ESCA|Esophageal carcinoma,TCGA-FPPP|FFPE Pilot Phase II,TCGA-GBM|Glioblastoma multiforme,TCGA-HNSC|Head and Neck squamous cell carcinoma,TCGA-KICH|Kidney Chromophobe,TCGA-KIRC|Kidney renal clear cell carcinoma,TCGA-KIRP|Kidney renal papillary cell carcinoma,TCGA-LIHC|Liver hepatocellular carcinoma,TCGA-LUAD|Lung adenocarcinoma,TCGA-LUSC|Lung squamous cell carcinoma,TCGA-DLBC|Lymphoid Neoplasm Diffuse Large B-cell Lymphoma,TCGA-MESO|Mesothelioma,TCGA-MISC|Miscellaneous,TCGA-OV|Ovarian serous cystadenocarcinoma,TCGA-PAAD|Pancreatic adenocarcinoma,TCGA-PCPG|Pheochromocytoma and Paraganglioma,TCGA-PRAD|Prostate adenocarcinoma,TCGA-READ|Rectum adenocarcinoma,TCGA-SARC|Sarcoma,TCGA-SKCM|Skin Cutaneous Melanoma,TCGA-STAD|Stomach adenocarcinoma,TCGA-TGCT|Testicular Germ Cell Tumors,TCGA-THYM|Thymoma,TCGA-THCA|Thyroid carcinoma,TCGA-UCS|Uterine Carcinosarcoma,TCGA-UCEC|Uterine Corpus Endometrial Carcinoma,TCGA-UVM|Uveal Melanoma
+project_idFilterType multipleListOr
+genderFilterValues male,female
+genderFilterType multipleListOr
+maxItems 500000
+
+track allCancer
+parent gdcCancer on
+shortLabel All Cancers
+longLabel All TCGA Pan-Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/gdcCancer.bb
+autoScale on
+priority 1
+urls case_id=https://portal.gdc.cancer.gov/cases/$$
+configurable off
+
+track ACC
+priority 2
+parent gdcCancer off
+shortLabel ACC
+longLabel Adrenocortical carcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/ACC.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track BLCA
+priority 3
+parent gdcCancer off
+shortLabel BLCA
+longLabel Bladder Urothelial Carcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/BLCA.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track BRCA
+priority 4
+parent gdcCancer off
+shortLabel BRCA
+longLabel Breast invasive carcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/BRCA.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track CESC
+priority 5
+parent gdcCancer off
+shortLabel CESC
+longLabel Cervical squamous cell carcinoma and endocervical adenocarcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/CESC.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track CHOL
+priority 6
+parent gdcCancer off
+shortLabel CHOL
+longLabel Cholangiocarcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/CHOL.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track COAD
+priority 7
+parent gdcCancer off
+shortLabel COAD
+longLabel Colon adenocarcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/COAD.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track DLBC
+priority 8
+parent gdcCancer off
+shortLabel DLBC
+longLabel Lymphoid Neoplasm Diffuse Large B-cell Lymphoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/DLBC.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track ESCA
+priority 9
+parent gdcCancer off
+shortLabel ESCA
+longLabel Esophageal carcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/ESCA.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track GBM
+priority 10
+parent gdcCancer off
+shortLabel GBM
+longLabel Glioblastoma multiforme
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/GBM.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track HNSC
+priority 11
+parent gdcCancer off
+shortLabel HNSC
+longLabel Head and Neck squamous cell carcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/HNSC.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track KICH
+priority 
+parent gdcCancer off
+shortLabel KICH
+longLabel Kidney Chromophobe
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/KICH.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track KIRC
+priority 13
+parent gdcCancer off
+shortLabel KIRC
+longLabel Kidney renal clear cell carcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/KIRC.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track KIRP
+priority 14
+parent gdcCancer off
+shortLabel KIRP
+longLabel Kidney renal papillary cell carcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/KIRP.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track LAML
+priority 15
+parent gdcCancer off
+shortLabel LAML
+longLabel Acute Myeloid Leukemia
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/LAML.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track LGG
+priority 16
+parent gdcCancer off
+shortLabel LGG
+longLabel Brain Lower Grade Glioma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/LGG.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track LIHC
+priority 17
+parent gdcCancer off
+shortLabel LIHC
+longLabel Liver hepatocellular carcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/LIHC.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track LUAD
+priority 18
+parent gdcCancer off
+shortLabel LUAD
+longLabel Lung adenocarcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/LUAD.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track LUSC
+priority 19
+parent gdcCancer off
+shortLabel LUSC
+longLabel Lung squamous cell carcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/LUSC.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track MESO
+priority 20
+parent gdcCancer off
+shortLabel MESO
+longLabel Mesothelioma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/MESO.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track OV
+priority 21
+parent gdcCancer off
+shortLabel OV
+longLabel Ovarian serous cystadenocarcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/OV.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track PAAD
+priority 22
+parent gdcCancer off
+shortLabel PAAD
+longLabel Pancreatic adenocarcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/PAAD.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track PCPG
+priority 23
+parent gdcCancer off
+shortLabel PCPG
+longLabel Pheochromocytoma and Paraganglioma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/PCPG.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track PRAD
+priority 24
+parent gdcCancer off
+shortLabel PRAD
+longLabel Prostate adenocarcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/PRAD.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track READ
+priority 25
+parent gdcCancer off
+shortLabel READ
+longLabel Rectum adenocarcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/READ.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track SARC
+priority 26
+parent gdcCancer off
+shortLabel SARC
+longLabel Sarcoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/SARC.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track SKCM
+priority 27
+parent gdcCancer off
+shortLabel SKCM
+longLabel Skin Cutaneous Melanoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/SKCM.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track STAD
+priority 28
+parent gdcCancer off
+shortLabel STAD
+longLabel Stomach adenocarcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/STAD.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track TGCT
+priority 29
+parent gdcCancer off
+shortLabel TGCT
+longLabel Testicular Germ Cell Tumors
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/TGCT.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track THCA
+priority 30
+parent gdcCancer off
+shortLabel THCA
+longLabel Thyroid carcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/THCA.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track THYM
+priority 31
+parent gdcCancer off
+shortLabel THYM
+longLabel Thymoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/THYM.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track UCEC
+priority 32
+parent gdcCancer off
+shortLabel UCEC
+longLabel Uterine Corpus Endometrial Carcinoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/UCEC.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track UCS
+priority 33
+parent gdcCancer off
+shortLabel UCS
+longLabel Uterine Carcinosarcoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/UCS.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+
+track UVM
+priority 34
+parent gdcCancer off
+shortLabel UVM
+longLabel Uveal Melanoma
+group phenDis
+type bigLolly 12 + 
+lollyField 13
+bigDataUrl /gbdb/hg38/gdcCancer/UVM.bb
+autoScale on
+urls case_id=https://portal.gdc.cancer.gov/cases/193294
+configurable off
+

@@ -15,7 +15,7 @@ cvs update -dP releaseLog.html
 #set output = "/usr/local/apache/htdocs/goldenPath/releaseLog.html"
 set output = "~/cron-sandbox/RL/releaseLog.html"
 echo "Fetching releaseLog.html from hgwbeta:qaPushQ"
-wget 'http://hgwbeta.cse.ucsc.edu/cgi-bin/qaPushQ?action=releaseLog' -q -O $output
+wget 'http://hgwbeta.soe.ucsc.edu/cgi-bin/qaPushQ?action=releaseLog' -q -O $output
 if ( $status ) then
  echo "wget failed for releaseLog.html on $HOST"
  exit 1
@@ -40,7 +40,7 @@ cvs update -dP releaseLog.html
 #set output = "/usr/local/apache/htdocs/encode/releaseLog.html"
 set output = "~/cron-sandbox/RLencode/releaseLog.html"
 echo "Fetching encode releaseLog.html from hgwbeta:qaPushQ"
-wget 'http://hgwbeta.cse.ucsc.edu/cgi-bin/qaPushQ?action=encodeReleaseLog' -q -O $output
+wget 'http://hgwbeta.soe.ucsc.edu/cgi-bin/qaPushQ?action=encodeReleaseLog' -q -O $output
 if ( $status ) then
  echo "wget failed for encode releaseLog.html on $HOST"
  exit 1

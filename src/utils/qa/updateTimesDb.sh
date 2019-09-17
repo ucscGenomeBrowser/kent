@@ -2,7 +2,7 @@
 
 # quit if something within the script fails
 set -beEu -o pipefail
-
+source `which qaConfig.bash`
 umask 002
 
 ############################
@@ -119,11 +119,11 @@ then
 	# including proteins.csh.
 	tablesDev=($(hgsql -Ne "SHOW TABLES" $dbDev | sort | \
 		tee $dbDev.tables ))
-	tablesBeta=($(hgsql -h mysqlbeta -Ne "SHOW TABLES" $dbBeta | sort | \
+	tablesBeta=($(hgsql -h $sqlbeta -Ne "SHOW TABLES" $dbBeta | sort | \
 		tee $dbBeta.beta.tables ))
 else 
 	tablesDev=($(hgsql -Ne "SHOW TABLES" $dbDev | sort))
-	tablesBeta=($(hgsql -h mysqlbeta -Ne "SHOW TABLES" $dbBeta | sort))
+	tablesBeta=($(hgsql -h $sqlbeta -Ne "SHOW TABLES" $dbBeta | sort))
 fi
 
 # Combine tables from Dev and Beta, then sort and make list unique
@@ -132,12 +132,15 @@ tablesSortedUnique=$(echo "$(echo ${tablesDev[@]} ${tablesBeta[@]})" | \
 
 output=". DEV BETA\ntableName $dbDev $dbBeta\n"
 
+# if there's errors, the *** is causing wildcard expansion, so disable globbing
+set -f
+
 for tbl in $(echo ${tablesSortedUnique[@]})
 do
 	# Underscores added between date and time to that way "column" command later on works correctly
         devUpdate=$(hgsql -Ne "SELECT UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA='$dbDev' AND TABLE_NAME='$tbl'" \
 		| sed 's/ /_/g')
-        betaUpdate=$(hgsql -h mysqlbeta -Ne "SELECT UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA='$dbBeta' AND TABLE_NAME='$tbl'" \
+        betaUpdate=$(hgsql -h $sqlbeta -Ne "SELECT UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA='$dbBeta' AND TABLE_NAME='$tbl'" \
 		| sed 's/ /_/g')
 
 	# Can't have have completely empty entries or "column" won't work

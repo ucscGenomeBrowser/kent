@@ -1,0 +1,26 @@
+
+How did we make the tables:
+// generate iso-8859-1 text table:
+int i;
+for(i=128;i<256;++i)
+    {
+    printf("%2x ", i);
+    putc(i, stdout);
+    printf("\n");
+    }
+
+galtFixUtf8Chars find db hgcentraltest gbMembers userName > win1252.text
+
+Because the 1252 has just 6 holes in it, iconv was pedantic,
+and I had to add -c which skipped the output leaving the field blank.
+
+cat win1252.text | iconv -f windows-1252 -t utf-8 -c > utf8.text
+
+The utility depends on utf8.text being in the current directory.
+
+-----------
+
+Note that in gbMembers, the realName column is not obsolete.
+New records created have an empty string for a value.
+The realName thus is to be ignored. No need to fix it.
+

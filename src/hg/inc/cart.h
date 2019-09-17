@@ -79,6 +79,11 @@ struct cart *cartFromCgiOnly(char *userId, char *sessionId,
 void cartCheckout(struct cart **pCart);
 /* Save cart to database and free it up. */
 
+void cartSaveState(struct cart *cart);
+/* Free up cart and save it to database.
+ * Intended for updating cart before background CGI runs.
+ * Use cartCheckout() instead. */
+
 void cartEncodeState(struct cart *cart, struct dyString *dy);
 /* Add a CGI-encoded var=val&... string of all cart variables to dy. */
 
@@ -87,6 +92,12 @@ char *cartSessionVarName();
 
 char *cartSessionId(struct cart *cart);
 /* Return session id. */
+
+unsigned cartSessionRawId(struct cart *cart);
+/* Return raw session id without security key. */
+
+unsigned cartUserRawId(struct cart *cart);
+/* Return raw user id without security key. */
 
 char *cartSidUrlString(struct cart *cart);
 /* Return session id string as in hgsid=N . */
@@ -315,11 +326,13 @@ void cartSaveSession(struct cart *cart);
  * somewhere inside of form or bad things will happen. */
 
 void cartDump(struct cart *cart);
-/* Dump contents of cart. */
+/* Dump contents of cart with anti-XSS HTML encoding. */
+
+void cartDumpHgSession(struct cart *cart);
+/* Dump contents of cart with escaped newlines for hgSession output files.
+ * Cart variable "cartDumpAsTable" is ignored. */
 
 #define CART_DUMP_AS_TABLE "cartDumpAsTable"
-void cartDumpList(struct hashEl *elList,boolean asTable);
-/* Dump list of cart variables optionally as a table with ajax update support. */
 
 void cartDumpPrefix(struct cart *cart, char *prefix);
 /* Dump all cart variables with prefix */
@@ -384,6 +397,10 @@ __attribute__((format(printf, 3, 4)))
 
 void cartVaWebStart(struct cart *cart, char *db, char *format, va_list args);
 /* Print out pretty wrapper around things when working
+ * from cart. */
+
+void cartWebStartHeader(struct cart *cart, char *db, char *format, ...);
+/* Print out Content-type header and then pretty wrapper around things when working
  * from cart. */
 
 void cartWebEnd();
@@ -469,13 +486,22 @@ void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
  * If non-NULL, actionVar is a cartRemove wildcard string specifying the
  * CGI action variable that sent us here. */
 
-void cartLoadSettings(struct lineFile *lf, struct cart *cart,
-		      struct hash *oldVars, char *actionVar);
-/* Load settings (cartDump output) into current session, and then
- * reload the CGI settings (to support override of session settings).
+boolean cartLoadSettingsFromUserInput(struct lineFile *lf, struct cart *cart, struct hash *oldVars,
+                                      char *actionVar, struct dyString *dyMessage);
+/* Verify that the user data in lf looks like valid settings (hgSession saved file;
+ * like cartDump output, but values may or may not be htmlEncoded).
+ * Older session files may have unencoded newlines, causing bogus variables;
+ * watch out for those after pasted input variables like hgta_pastedIdentifiers.
+ * Users have uploaded custom tracks, DTC genotypes, hgTracks HTML, even
+ * binary data files.  Look for problematic patterns observed in the past.
+ * Load settings into current session, and then reload the CGI settings
+ * (to support override of session settings).
  * If non-NULL, oldVars will contain values overloaded when reloading CGI.
  * If non-NULL, actionVar is a cartRemove wildcard string specifying the
- * CGI action variable that sent us here. */
+ * CGI action variable that sent us here.
+ * If input contains suspect data, then add diagnostics to dyMessage.  If input
+ * contains so much garbage that we shouldn't even try to load what passes the filters,
+ * return FALSE. */
 
 char *cartGetOrderFromFile(char *genomeDb, struct cart *cart, char *speciesUseFile);
 /* Look in a cart variable that holds the filename that has a list of
@@ -581,9 +607,9 @@ boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,str
 void cartCopyCustomComposites(struct cart *cart);
 /* Find any custom composite hubs and copy them so they can be modified. */
 
-void cartCopyCustomTracks(struct cart *cart);
-/* If cart contains any live custom tracks, save off a new copy of them,
- * to prevent clashes by multiple uses of the same session.  */
+void cartReplaceHubVars(struct cart *cart, char *hubFileVar, char *oldHubUrl, char *newHubUrl);
+/* Replace all cart variables corresponding to oldHubUrl (and/or its hub ID) with
+ * equivalents for newHubUrl. */
 
 void cgiExitTime(char *cgiName, long enteredMainTime);
 /* single stderr print out called at end of CGI binaries to record run
@@ -617,6 +643,11 @@ char *cartGetPosition(struct cart *cart, char *database, struct cart **pLastDbPo
 
 void cartSetDbPosition(struct cart *cart, char *database, struct cart *lastDbPosCart);
 /* Set the 'position.db' variable in the cart.*/
+
+void cartSetLastPosition(struct cart *cart, char *position, struct hash *oldVars);
+/* If position and oldVars are non-NULL, and oldVars' position is different, add it to the cart
+ * as lastPosition.  This is called by cartHtmlShell{,WithHead} but not other cart openers;
+ * it should be called after cartGetPosition or equivalent. */
 
 void cartTdbFetchMinMaxPixels(struct cart *theCart, struct trackDb *tdb,
                                 int defaultMin, int defaultMax, int defaultDefault,

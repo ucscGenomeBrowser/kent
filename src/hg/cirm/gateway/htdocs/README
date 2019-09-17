@@ -1,0 +1,93 @@
+
+
+USING htmlCheck and setRoot:
+
+Note that you can use htmlCheck with several useful commands either directly on the .html files in the 
+location where we edit the .html files (kent/src/hg/cirm/gateway/htdocs),
+
+or by using a url like 
+ https://cirm-01-galt.cirm/index.html
+
+You can also login to cirmdcm from hgwdev with your password for testing:
+ https://galt%40soe.ucsc.edu:mypassword@cirmdcm.soe.ucsce.edu/index.html
+
+It is helpful to run htmlCheck with both the validate and strictTagNestCheck commands since they cover different things.
+This will find errors in the html syntax.
+
+htmlCheck getLinks is very handy for displaying all of the links and making sure they are properly formed and properly relative.
+To be properly relative, they should not start with the slash / character because that is an absolute path.
+
+This error is harmless:
+https://cirm-01-galt.cirm/index.html# doesn't exist
+It just means that the menu method employed has some dummy URLs "#" in dropdowns.
+
+This one filters out the internal # tags and off-site links to focus on the rest 
+and make sure they are correct and relative.
+htmlCheck getLinks 'https://cirm-01-galt.cirm/projects.html' | egrep -v '(http|^#)'
+
+
+Specific domain that is unwanted:
+Also, you should not use a domain in the URL like cirmdcm.soe.ucsc.edu because we do not need it and also it will fail when pushed to the public server.
+
+Obviously, if the link is something that is going completely off-site, then a protocol and domain are needed.
+
+Also, if it is a special case like a link labelled as taking the user specifically and only to the public site,
+then it would be ok to specify https://cirm.ucsc.edu.
+
+
+SETROOT SSI SOLUTION
+setRoot is an effective and efficient method for detecting how many levels deep a static page is below htdoc/ dir.
+
+setRoot.html is a small SSI command that sets what the $ROOT location is.
+At the highest level like htdoc itself, it is just an empty string.
+Each directory below that which contains .html files should have a setRoot.html too.
+And in fact, all the setRoot.html files BELOW the top level are identical.
+And they are all however different from the top level htdocs/ version.
+Basically, for all levels below htdocs, it just takes the value of ROOT from its parent directory
+and then appends "../" to the env variable.
+
+If you have a missing setRoot.html in one of the directories,
+you will see this error on the page:
+
+[an error occurred while processing this directive]
+
+The great thing about setRoot approach is that it automatically calculates
+the root from whatever directly you may be in without maintenance.
+If you move something into a subdirectory, the links should continue to work
+automatically with no new programming required.  All you have to do when making
+a new subdir for use with html is to copy the setRoot.html from a sibling directory,
+or a parent dir if it is not the htdocs root.
+
+There are 2 ways in which links on a page can be working and correct:
+1. You get the simple boilerplate of a couple of lines at the top which are identical in all .html files
+even the root too. And it never requires further editing as you move things around.
+It makes the included page header and footer work right no what directory they are being included from.
+2. You can change other internal relative links in the page to use 
+Instead of having somthing like 
+../../../image/somePic.jpg
+<!--#echo var='ROOT'-->image/somePic.jpg
+Then it will never need changing again, even if you move the html file to another directory.
+Note that there is NO TRAILING SLASH after echoing ROOT.
+This takes a little more work but is usually worth it.
+The only exception would probably be for things that are on the very same level in the same directory.
+i.e. things that are basically topically related and in a nearby directory.
+Whereas resources that need to go to the top like /image/ or /js/ should have the ROOT variable instead.
+
+Note that I use single quotes around the 'ROOT' in the echo above precisely
+because I want to be able to run htmlCheck on the local .html file, even without going through SSI and apache
+which will replace them with the value at runtime.
+
+Note that if you are commenting out a section of code that is using the SSI command,
+you will have to change the <!-- and --> in the SSI command to <!~~ and ~~>
+especially if you want to be able to run htmlCheck on the local file.
+Because html does not allow nested comments.
+If you later decide to uncomment the SSI command, just replace the ~~ with --.
+
+Note that the checkLinks command is very useful, but it only works properly 
+on the non-local html file, i.e. you are specifying a full URL, not just a local path.
+Once you have run htmCheck on the local file, and are satisfied you found no errors,
+then you can run make in the htdocs dir to send it out to
+the apache area. Then rum checkLinks on the full URL as a final verification.
+
+
+

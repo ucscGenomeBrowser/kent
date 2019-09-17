@@ -1,0 +1,112 @@
+define
+messy	"big messy string messy very messy with many messy parts"
+tidy    "tidy string"
+complex	word(messy,4)
+
+table var_test id
+notmess not messy
+not0 not 0
+not1 not 1
+notEmpty not ""
+mess3 word_range(messy,0,3)
+mess3a chop_range(messy,' ',0,3)
+mess2end word_range(messy,-2,99999)
+mess_mid word_range(messy, 3, -3)
+letMes letter_range(messy, 4, 7)
+x	complex + " complex"
+id	tidy
+less_messy tidy("messy ", messy, " very")
+mangled_date	symbol("DATE_", submission_date)
+messy	messy
+
+unroll unroll_test id
+id "1,2,3"
+summary GEO_Series_summary	
+
+table a_strex_test id
+tooLoud warn("this is a test of the warning system")
+untidy "big messy string with messy parts"
+tidyStart tidy("messy ", "big messy string with messy parts", "")
+tidyEnd tidy("", "big messy string with messy parts", " messy")
+tidyBoth tidy("messy ", "big messy string with messy parts", " messy")
+yes ( same("a", "a") ? "yes" : "no")
+no ( same("a", "b") ? "yes" : "no")
+cond ( ends_with("abc", "d") ? "D is cond" : ends_with("abc", "b") ? "B is cond" : ends_with("abc", "c") ? "C is cond" : "unmatched")
+id "constant ID"
+symboled symbol("ID_", "constant ID")
+pickedNum pick( 0? 0:"zero", 1:"one")
+pickedString pick("a"? "b": "beta", "a": "alpha")
+lowered lower("NotMixedCase")
+uppered upper("NotMixedCase")
+stripped strip("constant ID", " aeiou")
+sub_day_of_month	chop(submission_date, '-', 2)
+neg_day_of_month  chop(submission_date, '-', -1)
+last_word word("constant ID", -1)
+penultimate_word word("constant ID", -2)
+replaceSomething replace("something", "", "default value")
+replaceNothing replace("", "", "default value")
+#assay long-RNA-seq
+dashed assay[4:-3]
+long assay[:4]
+q assay[-1]
+RNA assay[5:8]
+seq assay[-3:]
+se assay[-3:-2]
+mm	chop(submission_date, '-', 1)
+dd	chop(submission_date, '-', 2)
+yyyy	chop(submission_date, '-', 0)
+usaDate chop(submission_date, '-', 1) + '/' + chop(submission_date, '-', 2) + '/' + chop(submission_date, '-', 0)
+company word(fluidics_chip, 0)
+md5.sum md5(GEO_Series_summary)
+organ trim(between('human', title, 'transcriptome'))
+untrimmed_organ "'" + between('human', title, 'transcriptome') + "'"
+alphabet3 "abcdefg"[3]
+decade submission_date[2]
+crasho 1[1]
+abc "abcdefg"
+def "abcdefg"[3:6]
+abcd "abcdefg"[:4]
+efg "abcdefg"[4:]
+atoG "abcdefg"[:]
+fg "abcdefg"[-2:]
+array1 uncsv(GEO_Series_summary,1)
+cutMid replace("abcdefg", "cde", "")
+subSub replace("abcdefg", "abcdefg", "subSub")
+
+
+table project id
+id data_set_id
+title	
+lab	lab
+submitter
+
+table donor biosample_source_id
+biosample_source_id
+species
+biosample_source_gender 
+biosample_source_age biosample_source_age_value
+biosample_source_age_unit
+# GEO_Sample_age looks like:  prenatal 16-18 W
+geo_age word(GEO_Sample_age, 1)
+geo_age_unit word(GEO_Sample_age, 2)
+geo_life_stage word(GEO_Sample_age, 0)
+project	@project
+
+table specimen id
+id 	biosample_source_id + ' ' + word(sample_label, 0) + ' ' + word(sample_label, 1) + ' ' + word(sample_label, 2)
+donor	@donor
+organ	"brain"
+tissue 	word(sample_label, 0) + ' ' + word(sample_label, 1) + ' ' + word(sample_label, 2)
+
+table fluidics_chip id
+id lab_quake_fluidics_chip
+specimen @specimen
+
+table sample id
+fluidics_chip @fluidics_chip
+specimen @specimen
+donor @donor
+id ncbi_bio_sample
+biosample_cell_type
+lab_quake_cell
+

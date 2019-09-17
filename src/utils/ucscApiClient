@@ -1,0 +1,147 @@
+#!/usr/bin/env python
+
+"""
+This code is inspired by the Ensembl python client
+https://github.com/Ensembl/ensembl-rest/wiki/Example-Python-Client
+"""
+import argparse
+import json
+import sys
+from collections import OrderedDict
+
+# support python2 and 3
+try:
+    from urllib.parse import urlparse, urlencode
+    from urllib.request import urlopen, Request
+    from urllib.error import HTTPError
+except ImportError:
+    from urlparse import urlparse
+    from urllib import urlencode
+    from urllib2 import urlopen, Request, HTTPError
+
+serverName = "https://api.genome.ucsc.edu"
+
+def parseCommandLine():
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
+        description="Command line utility for UCSC Genome Browser API access",
+        epilog="Example usage:\nucscApiClient \"/getData/track\" "
+        "\"track=gold;genome=hg38;chrom=chrM;maxItemsOutput=2\"")
+    parser.add_argument("endpoint", nargs='?', default="",
+        help="Endpoint string like \"/list/tracks\" or \"/getData/track/\"", type=str)
+    parser.add_argument("parameters", nargs='?', default="",
+        help="Parameters to endpoints. semi-colon separated key=value formatted string, "
+        "like \"genome=hg38;chrom=chrM;maxItemsOutput=2\"",type=str)
+    parser.add_argument("-p", "--pretty-print", action="store_true", default=False,
+        help="Print json response with newlines")
+    parser.add_argument("--debug", action="store_true", default=False,
+        help="Print final URL of the request")
+    parser.add_argument("-test0", action="store_true", default=False,
+        help="Run special test")
+    parser.add_argument("-getDnaExample", action="store_true", default=False,
+        help="Show example query for fetching Human GRCh38(hg38) DNA sequence")
+    return parser
+
+def tryJsonRequest(requestUrl):
+    """
+    Wrap call to urlopen in try/except and exit on an HTTP error.
+    Returns json response if request is good.
+    """
+    data = None
+    try:
+        request = Request(requestUrl)
+        response = urlopen(request)
+        content = response.read()
+        if content:
+            data = json.loads(content, object_pairs_hook=OrderedDict)
+    except HTTPError as e:
+        if e.code == 400: # does this work for other status codes?
+            msg = json.loads(e.read(), object_pairs_hook=OrderedDict)
+            sys.stderr.write("Error: %s\n" % msg["error"])
+            sys.exit(1)
+        else:
+            sys.stderr.write("Request %s failed with HTTP status %s\nreason:%s\n" %
+                (requestUrl, e.code, e.reason))
+        sys.exit(1)
+    return data
+
+def printJsonData(data, prettyPrint=False):
+    """Dump json to stdout, potentially pretty printing. Handle pipes gracefully."""
+    if data is not None:
+        try:
+            if prettyPrint:
+                print(json.dumps(data,indent=4, separators=(",",":")))
+            else:
+                print(json.dumps(data))
+        except IOError:
+            pass
+
+
+def runGetDnaExample(prettyPrint=False):
+    """
+    Run test of getting short DNA sequence from the hg38 assembly and exit.
+    """
+    req = serverName + "/getData/sequence?genome=hg38;chrom=chr1;start=11110531;end=11110538"
+    data = tryJsonRequest(req)
+    if data:
+        print("Example request for obtaining DNA sequence:\n%s" % req)
+        printJsonData(data, prettyPrint)
+    sys.exit(0)
+
+def runTest0(prettyPrint=False):
+    """
+    Run test of getting public hub data for "Plants" and print UCSC info
+    for the hg38 genome and exit
+    """
+    hubRequest =  serverName + "/list/publicHubs"
+    hg38Request = serverName + "/list/ucscGenomes"
+
+    # do plants hub test first
+    data = tryJsonRequest(hubRequest)
+    if data:
+        plantData = None
+        for obj in data['publicHubs']:
+            if obj['shortLabel'] == 'Plants':
+                plantData = obj
+        if plantData is not None:
+            print("Plants public hub data")
+            printJsonData(plantData, prettyPrint)
+
+    # now do ucsc hg38 test
+    data = tryJsonRequest(hg38Request)
+    if data:
+        hg38Data = None
+        if data['ucscGenomes']['hg38']:
+            hg38Data = data['ucscGenomes']['hg38']
+        if hg38Data is not None:
+            print("hg38/Human information")
+            printJsonData(hg38Data, prettyPrint)
+    sys.exit(0)
+
+def main():
+    cmd = parseCommandLine()
+    args = cmd.parse_args()
+    req =  serverName
+
+    if len(sys.argv) == 1:
+        cmd.print_help()
+        sys.exit(0)
+
+    # run special test
+    if args.test0:
+        runTest0(args.pretty_print)
+
+    if args.getDnaExample:
+        runGetDnaExample(args.pretty_print)
+
+    req += args.endpoint + "?" + args.parameters
+
+    # make http request and print the output
+    data = None
+    if args.debug:
+        print("request URL: %s\n" % req)
+    data = tryJsonRequest(req)
+    printJsonData(data, args.pretty_print)
+    sys.exit(0)
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,18 @@
+# required db variable
+db gorGor4
+# specific lifting to translate names:
+liftUp /hive/data/genomes/gorGor4/jkStuff/ensToUcsc.lift
+# eliminate the Ensembl chrMT since UCSC does not have the same sequence:
+nameTranslation "/^MT/d; /^CABD030131344/d; /^CABD030130414/d; /^CABD030131030/d; /^CABD030129872/d; /^CABD030131029/d; /^CABD030129492/d; /^CABD030132215/d; /^CABD030131156/d; /^CABD030132026/d; /^CABD030131168/d; /^CABD030132114/d; /^CABD030131472/d; /^CABD030130937/d; /^CABD030131115/d; /^CABD030131115/d; /^CABD030130937/d; /^CABD030129486/d; /^CABD030131340/d; /^CABD030167306/d"
+# the list CABD contigs are duplicate sequences not included in the
+# UCSC sequence
+
+skipInvalid yes
+# ENSGGOT00000040833.2 txEnd 2008 >= chromSize 2000
+# ENSGGOT00000066834.1 txEnd 2009 >= chromSize 2000
+# ENSGGOT00000065889.1 txEnd 1325 >= chromSize 1322
+# ENSGGOT00000041741.2 txEnd 923 >= chromSize 913
+# ENSGGOT00000064312.1 txEnd 900 >= chromSize 894
+# ENSGGOT00000042831.1 txEnd 872 >= chromSize 870
+# ENSGGOT00000039360.2 txEnd 831 >= chromSize 818
+

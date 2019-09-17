@@ -50,4 +50,12 @@ struct seqWindow *memSeqWindowNew(char *acc, char *seq);
 void memSeqWindowFree(struct seqWindow **pSw);
 /* Free a seqWindow that was created by memSeqWindowNew. */
 
+struct seqWindow *twoBitSeqWindowNew(char *twoBitFileName, char *chrom, uint start, uint end);
+/* Return a new seqWindow that can fetch uppercase sequence from twoBitFileName.
+ * If chrom is non-NULL and end > start then load sequence from that range; if chrom is non-NULL
+ * and start == end == 0 then fetch entire chrom. */
+
+void twoBitSeqWindowFree(struct seqWindow **pSw);
+/* Free a seqWindow that was created by twoBitSeqWindowNew. */
+
 #endif /* SEQWINDOW2_H */

@@ -39,7 +39,7 @@ fi
 echo doing upload
 
 # assumes hg18 and hg19 have the same tables
-hgsql -h mysqlbeta -N -e "SHOW TABLES LIKE 'omim%' " hg19 > omimTables
+hgsql -h hgwbeta -N -e "SHOW TABLES LIKE 'omim%' " hg19 > omimTables
 rm -f omimTableDump.tar omimTableDump.tar.gz
 
 for db in hg18 hg19 hg38

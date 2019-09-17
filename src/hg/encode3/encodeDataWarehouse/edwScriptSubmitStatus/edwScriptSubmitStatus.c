@@ -110,7 +110,7 @@ else
     }
 
 /* Write out HTTP response */
-printf("Content-Length: %d\r\n", dy->stringSize);
+printf("Content-Length: %ld\r\n", dy->stringSize);
 puts("Content-Type: application/json; charset=UTF-8\r");
 puts("\r");
 printf("%s", dy->string);
@@ -122,6 +122,7 @@ int main(int argc, char *argv[])
 if (!cgiIsOnWeb())
    usage();
 cgiSpoof(&argc, argv);
+pushWarnHandler(htmlVaBadRequestAbort);
 pushAbortHandler(htmlVaBadRequestAbort);
 edwScriptSubmitStatus();
 return 0;

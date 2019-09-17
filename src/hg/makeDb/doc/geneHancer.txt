@@ -1,0 +1,161 @@
+##############################################################################
+# GeneHancer tracks (hg19 and hg38)
+#
+# GeneHancer: database of human enhancers and their inferred target genes
+# This is a component of GeneCards, Weizmann Institute
+# Collaborators:  GeneHancer lead, Simon Fishilevich (simon.fishilevich@weizmann.ac.il), with
+# support from GeneCards lead Marilyn Safran (Marilyn.Safran@weizmann.ac.il)
+
+# Publication: Database (Oxford). 2017; 2017: bax028.
+# Published online 2017 Apr 17. doi: 10.1093/database/bax028
+# GeneHancer: genome-wide integration of enhancers and target genes in GeneCards
+
+##############################################################################
+# RM #22048: GeneHancer (2018-09-10 kate)
+
+# Files obtained from development hub prepared by Simon F:
+# https://genecards.weizmann.ac.il/geneloc/gh_hub_interactions/hub.txt  
+
+mkdir /hive/data/outside/geneHancer/lab
+cd /hive/data/outside/geneHancer/lab
+
+
+wget -r https://genecards.weizmann.ac.il/geneloc/gh_hub_interactions
+# sloppy command above -- whack extras after getting files needed
+mv genecards.weizmann.ac.il/geneloc/gh_hub_interactions/*/*.bb .
+
+// rename to UCSC conventions
+cd ..
+mv GeneHancer_hg19.bb lab/geneHancerRegElementsAll.hg19.bb
+mv GCs_genes_tss_hg19.bb lab/geneHancerGenesTssAll.hg19.bb
+mv GH_interactions1_all_hg19.bb lab/geneHancerInteractionsAll.hg19.bb
+mv GeneHancer_double_elite_hg19.bb lab/geneHancerRegElementsDoubleElite.hg19.bb
+mv GCs_genes_tss_double_elite_hg19.bb lab/geneHancerGenesTssDoubleElite.hg19.bb
+mv GH_interactions1_doubleElite_hg19.bb lab/geneHancerInteractionsDoubleElite.hg19.bb
+
+mv GeneHancer.bb lab/geneHancerRegElementsAll.hg38.bb
+mv GCs_genes_tss.bb lab/geneHancerGenesTssAll.hg38.bb
+mv GH_interactions1_all.bb lab/geneHancerInteractionsAll.hg38.bb
+mv GeneHancer_double_elite.bb lab/geneHancerRegElementsDoubleElite.hg38.bb
+mv GCs_genes_tss_double_elite.bb lab/geneHancerGenesTssDoubleElite.hg38.bb
+mv GH_interactions1_doubleElite.bb lab/geneHancerInteractionsDoubleElite.hg38.bb
+
+
+# make trackDb
+
+cd gh_hub_interactions
+cp trackDb.txt ~/kent/src/hg/makeDb/trackDb/human/hg19/trackDb.geneHancer.ra
+# merge with composite versionin UCSC development hub
+cd ~/kent/src/hg/makeDb/trackDb/human/hg19
+cat ~/public_html/hubs/geneHancer/hg38/trackDb.txt >> trackDb.geneHancer.ra
+# edit
+
+# track description
+cp hg38/GeneHancer.html ~/kent/src/hg/makeDb/trackDb/human/hg19/geneHancer.html
+
+# fix .as file for interactions tracks
+bigBedInfo -as geneHancerInteractionsDoubleElite.hg38.bb > geneHancer.as
+# edit to remove non-as stuff, remove extraneous eol chars, fix case to GB standard, also spelling
+sed 's/\r//' geneHancer.as  > geneHancerGb.as
+
+# correct interaction files chromStart, chromEnd (must be full extent of source and target regions)
+# and replace : in name with more cosmetic / 
+# (can now use new $<fieldName> to construct URL, instead of name field)
+
+mkdir fixed gbdb
+cat > make.csh << 'EOF'
+cd lab
+foreach v (All.hg19 All.hg38 DoubleElite.hg19 DoubleElite.hg38)
+  set db = $v:e
+  set f = geneHancerInteractions$v
+  echo $f
+  set sizes = /hive/data/genomes/$db/chrom.sizes
+    
+  bigBedToBed $f.bb $f.bed
+  sed 's/:/\//' $f.bed | interactFixRanges stdin stdout | \
+        bedSort stdin ../fixed/$f.bed
+  bedToBigBed -type=bed5+3 -as=../geneHancerGb.as ../fixed/$f.bed $sizes ../gbdb/$f.bb
+end
+'EOF'
+
+# link into /gbdb
+
+ln `pwd`/lab/*Tss*.bb gbdb
+ln `pwd`/lab/*RegElements*.bb gbdb
+
+cd /gbdb
+mkdir {hg19,hg38}/geneHancer
+ln -s /hive/data/outside/geneHancer/gbdb/*.hg19.bb hg19/geneHancer
+ln -s /hive/data/outside/geneHancer/gbdb/*.hg38.bb hg38/geneHancer
+
+# cleanup
+rm -fr genecards.weizmann.ac.il
+
+##############################################################################
+# Data correction from Simon 12/31/18 
+#
+# (2019-01-02 kate)
+ 
+"Unfortunately we discovered a bug with the data of the GeneHancer 
+# native track (which belongs to the current version of GeneCards, V4.8)
+# One field (`Experiment') is not populated properly in all 4 interaction bb files."
+#
+# The 'experiment' field in the GeneHancer hub is fixed (for GeneCards version 4.8, 
+# used in the UCSC live main track).  We also fixed the issue with interaction interval.
+#
+# RM #22712
+
+# retrieve corrected files from 'OwnCloud' platform:  GeneHancer_hub_V4_8_fix.zip 
+
+cd /hive/data/outside/geneHancer
+mkdir v2
+cd v2
+unzip GeneHancer_hub_V4_8_fix.zip
+ls *.bb
+#GH_interactions1_all.bb       GH_interactions1_doubleElite.bb
+#GH_interactions1_all_hg19.bb  GH_interactions1_doubleElite_hg19.bb
+
+# sanity check by converting a file to bigBed and comparing to previous version
+# -> OK
+
+ln -s `pwd`/v2/GH_interactions1_doubleElite_hg19.bb gbdb/geneHancerInteractionsDoubleElite.v2.hg19.bb
+ln -s `pwd`/v2/GH_interactions1_all_hg19.bb gbdb/geneHancerInteractionsAll.v2.hg19.bb
+ln -s `pwd`/v2/GH_interactions1_doubleElite.bb gbdb/geneHancerInteractionsDoubleElite.v2.hg38.bb
+ln -s `pwd`/v2/GH_interactions1_all.bb gbdb/geneHancerInteractionsAll.v2.hg38.bb
+
+cd /gbdb
+ln -s /hive/data/outside/geneHancer/gbdb/*.v2.hg19.bb hg19/geneHancer
+ln -s /hive/data/outside/geneHancer/gbdb/*.v2.hg38.bb hg38/geneHancer
+#
+
+# Minor changes for compatiility with previous version of track:
+#       1. Separator in item label is slash not colon
+#       2. GeneHancer* fields in .as should have initial char lower case (geneHancer*)
+# (2019-01-15 kate)
+
+cat > makeV2.csh << 'EOF'
+mkdir -f v2.fixed
+cd gbdb
+foreach v (All.v2.hg19 All.v2.hg38 DoubleElite.v2.hg19 DoubleElite.v2.hg38)
+  set db = $v:e
+  set f = geneHancerInteractions$v
+  echo $f
+  set sizes = /hive/data/genomes/$db/chrom.sizes
+  bigBedToBed $f.bb ../v2/$f.bed
+  sed 's/:/\//' ../v2/$f.bed | interactFixRanges stdin stdout | \
+        bedSort stdin ../v2.fixed/$f.bed
+  bedToBigBed -type=bed5+3 -as=../geneHancerGb.as ../v2.fixed/$f.bed $sizes ../gbdb/$f.v2.fixed.bb
+end
+'EOF'
+
+rm /gbdb/{hg19,hg38}/geneHancer/*.v2.*
+
+set dir = /hive/data/outside/geneHancer/gbdb
+ln -s $dir/geneHancerInteractionsAll.v2.hg19.v2.fixed.bb /gbdb/hg19/geneHancer/geneHancerInteractionsAll.v2.hg19.bb
+ln -s $dir/geneHancerInteractionsDoubleElite.v2.hg19.v2.fixed.bb /gbdb/hg19/geneHancer/geneHancerInteractionsDoubleElite.v2.hg19.bb
+ln -s $dir/geneHancerInteractionsAll.v2.hg38.v2.fixed.bb /gbdb/hg38/geneHancer/geneHancerInteractionsAll.v2.hg38.bb
+ln -s $dir/geneHancerInteractionsDoubleElite.v2.hg38.v2.fixed.bb /gbdb/hg38/geneHancer/geneHancerInteractionsDoubleElite.v2.hg38.bb
+
+
+
+

@@ -18,5 +18,5 @@ canPack off
 
 	track  rmskJoinedCurrent
 	parent joinedRmsk on
-	longLabel RepeatMasker v3.3.0 db20120124 : Current Dataset
+	longLabel RepeatMasker v4.0.7 Dfam_2.0 : Current Dataset
 	priority 2

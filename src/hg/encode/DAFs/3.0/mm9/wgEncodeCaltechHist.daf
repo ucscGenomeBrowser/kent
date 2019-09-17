@@ -18,7 +18,7 @@
 #protocol: The specific PCR protocol used. The protocol registered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Protocols
 #sex: The sex of the individual the tissue originated or cell sex type. The sex registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Sex
 #control: The input used as control for ChIP-seq data. The control registerd vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Controls
-#readType       the read type (single, paired, directional, length) (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#readType)
+#readType       the read type (single, paired, directional, length) (http://genome-test.soe.ucsc.edu/ENCODE/otherTerms.html#readType)
 #replicate: The Replicate number. The replication number of a given experiment.
 #setType: The identification if either the data refers to an experiment (exp) or is input (input) for another experiment.
 #controlId: The unique identification of experiments. The control ID gerneated from the lab.

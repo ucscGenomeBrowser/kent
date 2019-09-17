@@ -509,7 +509,7 @@
     cd ~/hg15
     cp -p nib/chr*.nib /scratch/hg/gs.16/build33/chromTrfMixedNib
 
-    # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
+    # Ask cluster-admin@soe.ucsc.edu to binrsync /scratch/hg to clusters
     # Copy to /iscratch as well so we can run blastz before binrsync finishes:
     rm -rf /iscratch/i/gs.16/build33/{linSpecRep,rmsk,chromTrfMixedNib}
     cp -Rp /scratch/hg/gs.16/build33/{linSpecRep,rmsk,chromTrfMixedNib} \

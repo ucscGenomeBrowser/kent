@@ -11,8 +11,10 @@
 #include "sqlSanity.h"
 #include "fieldedTable.h"
 #include "cheapcgi.h"
+#include "htmshell.h"
 #include "web.h"
 #include "cart.h"
+#include "facetField.h"
 #include "tablesTables.h"
 
 struct fieldedTable *fieldedTableFromDbQuery(struct sqlConnection *conn, char *query)
@@ -30,8 +32,43 @@ sqlFreeResult(&sr);
 return table;
 }
 
+struct fieldedTable *fieldedTableAndCountsFromDbQuery(struct sqlConnection *conn, char *query, int limit, int offset, 
+    char *selectedFields, struct facetField ***pFfArray, int *pResultCount)
+/* Return fieldedTable from a database query and also fetch use and select counts */
+{
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **fields;
+int fieldCount = sqlResultFieldArray(sr, &fields);
+struct facetField **ffArray;
+AllocArray(ffArray, fieldCount);
+struct fieldedTable *table = fieldedTableNew(query, fields, fieldCount);
+
+struct facetField *ffList = facetFieldsFromSqlTableInit(fields, fieldCount, selectedFields, ffArray);
+
+char **row;
+int i = 0;
+int id = 0;
+char *nullVal = "n/a"; 
+/* Scan through result saving it in list. */
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (perRowFacetFields(fieldCount, row, nullVal, ffArray))
+	{
+	if ((i >= offset) && (i < offset+limit))
+	    fieldedTableAdd(table, row, fieldCount, ++id);
+	++i;
+	}
+    }
+facetFieldsFromSqlTableFinish(ffList, facetValCmpSelectCountDesc);
+sqlFreeResult(&sr);
+*pFfArray = ffArray;
+*pResultCount = i;
+return table;
+}
+
 static void showTableFilterInstructionsEtc(struct fieldedTable *table, 
-    char *itemPlural, struct  fieldedTableSegment *largerContext, void (*addFunc)(void))
+    char *itemPlural, struct  fieldedTableSegment *largerContext, void (*addFunc)(int),
+    char *visibleFacetList)
 /* Print instructional text, and basic summary info on who passes filter, and a submit
  * button just in case user needs it */
 {
@@ -40,25 +77,30 @@ int matchCount = slCount(table->rowList);
 if (largerContext != NULL)  // Need to page?
      matchCount = largerContext->tableSize;
 
-cgiMakeButton("submit", "search");
+printf("<input class='btn btn-secondary' type='submit' name='submit' id='submit' value='Search'>");
 
 printf("&nbsp&nbsp;");
-cgiMakeOnClickButton("clearButton",
-"$(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');\n"
-"$('[name=cdwBrowseFiles_page]').val('1');\n"
-"$('#submit').click();\n"
-, "clear search");
+printf("<input class='btn btn-secondary' type='button' id='clearButton' VALUE=\"Clear Search\">");
+jsOnEventById("click", "clearButton",
+    "$(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');\n"
+    "$('[name=cdwBrowseFiles_page]').val('1');\n"
+    "$('[name=clearSearch]').val('1');\n"
+    "$('#submit').click();\n");
+
 printf("<br>");
 
 printf("%d&nbsp;%s&nbsp;found. ", matchCount, itemPlural);
 
 if (addFunc)
-    addFunc();
+    addFunc(matchCount);
 
-printf("<BR>\n");
-printf("You can further filter search results field by field below. ");    
-printf("Wildcard * and ? characters are allowed in text fields. ");
-printf("&GT;min or &LT;max are allowed in numerical fields.<BR>\n");
+if (!visibleFacetList)
+    {
+    printf("<BR>\n");
+    printf("You can further filter search results field by field below. ");    
+    printf("Wildcard * and ? characters are allowed in text fields. ");
+    printf("&GT;min or &LT;max are allowed in numerical fields.<BR>\n");
+    }
 }
 
 static void printSuggestScript(char *id, struct slName *suggestList)
@@ -84,6 +126,7 @@ jsInline(dy->string);
 dyStringFree(&dy);
 }
 
+#ifdef NOT_CURRENTLY_USED
 static void printWatermark(char *id, char *watermark)
 /* Print light text filter prompt as watermark. */
 {
@@ -92,6 +135,7 @@ jsInlineF(
 "  $('#%s').watermark(\"%s\");\n"
 "});\n", id, watermark);
 }
+#endif
 
 static void resetPageNumberOnChange(char *id)
 /* On change, reset page number to 1. */
@@ -113,53 +157,37 @@ static void showTableFilterControlRow(struct fieldedTable *table, struct cart *c
  * it's value is slName list of suggestion values */
 {
 /* Include javascript and style we need  */
-webIncludeResourceFile("jquery-ui.css");
-jsIncludeFile("jquery.js", NULL);
-jsIncludeFile("jquery.plugins.js", NULL);
-jsIncludeFile("jquery-ui.js", NULL);
-jsIncludeFile("jquery.watermark.js", NULL);
+printf("<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css'>\n");
+printf("<script src='https://code.jquery.com/ui/1.12.1/jquery-ui.js'></script>\n");
 
 int i;
-printf("<TR>");
+printf("<tr>");
 for (i=0; i<table->fieldCount; ++i)
     {
     char *field = table->fields[i];
     char varName[256];
     safef(varName, sizeof(varName), "%s_f_%s", varPrefix, field);
-    webPrintLinkCellStart();
-
-#ifdef MAKES_TOO_WIDE
-    /* Print out input control.  As you can see from all the commented out bits
-     * this part has been a challenge.  We'd like to make the input cell fit the
-     * table size, but if we do it with style it makes whole table wider. */
-    char *oldVal = cartUsualString(cart, varName, "");
-    printf("<input type=\"text\" name=\"%s\" style=\"display:table-cell; width=100%%\""
-	   " value=\"%s\">", varName, oldVal);
-#endif /* MAKES_TOO_WIDE */
+    printf("<td>");
 
     /* Approximate size of input control in characters */
     int size = fieldedTableMaxColChars(table, i);
     if (size > maxLenField)
 	size = maxLenField;
 
-#ifdef ACTUALLY_WORKS
-    /* This way does work last I checked and is just a line of code.
-     * Getting an id= property on the input tag though isn't possible this way. */
-    cartMakeTextVar(cart, varName, "", size + 1);
-#endif
-
     /* Print input control getting previous value from cart.  Set an id=
      * so auto-suggest can find this control. */
     char *oldVal = cartUsualString(cart, varName, "");
-    printf("<INPUT TYPE=TEXT NAME=\"%s\" id=\"%s\" SIZE=%d VALUE=\"%s\">\n",
-	varName, varName, size+1, oldVal);
-
-    /* Write out javascript to initialize autosuggest on control */
-    printWatermark(varName, " filter ");
+    printf("<INPUT TYPE=TEXT NAME=\"%s\" id=\"%s\" SIZE=%d",
+	varName, varName, size+1);
+    if (isEmpty(oldVal))
+        printf(" placeholder=\" filter \">\n");
+    else
+        printf(" value=\"%s\">\n", oldVal);
 
     /* Write out javascript to reset page number to 1 if filter changes */
     resetPageNumberOnChange(varName);
 
+    /* Set up the auto-suggest list for this filter */
     if (suggestHash != NULL)
         {
 	struct slName *suggestList = hashFindVal(suggestHash, field);
@@ -168,7 +196,7 @@ for (i=0; i<table->fieldCount; ++i)
 	    printSuggestScript(varName, suggestList);
 	    }
 	}
-    webPrintLinkCellEnd();
+    printf("</td>\n");
     }
 
 
@@ -191,7 +219,7 @@ safef(pageVar, sizeof(pageVar), "%s_page", varPrefix);
 int i;
 for (i=0; i<table->fieldCount; ++i)
     {
-    webPrintLabelCellStart();
+    printf("<td>");
     printf("<A class=\"topbar\" HREF=\"");
     printf("%s", returnUrl);
     printf("&%s=1", pageVar);
@@ -217,7 +245,7 @@ for (i=0; i<table->fieldCount; ++i)
 	    }
 	}
     printf("</A>");
-    webPrintLabelCellEnd();
+    printf("</td>\n");
     }
 
 /* Sort on field */
@@ -267,10 +295,10 @@ for (row = table->rowList; row != NULL; row = row->next)
 		val = shortVal;
 		}
 	    }
-	if (isNum[fieldIx])
-	    webPrintLinkCellRightStart();
-	else
-	    webPrintLinkCellStart();
+	if (isNum[fieldIx]) // vacuous, but left it just in case we want to do different stuff to numbers later
+            printf("<td>");
+        else
+            printf("<td>");
 	boolean printed = FALSE;
 	if (tagOutputWrappers != NULL && !isEmpty(val))
 	    {
@@ -285,7 +313,7 @@ for (row = table->rowList; row != NULL; row = row->next)
 	    }
 	if (!printed)
 	    printf("%s", val);
-	webPrintLinkCellEnd();
+	printf("</td>\n");
 	}
     printf("</TR>\n");
     }
@@ -309,7 +337,7 @@ if (largerContext != NULL)  // Need to page?
 	    {
 	    // first page
 	    safef(id, sizeof id, "%s_first", varPrefix);
-	    printf("<a href='#' id='%s' style='font-size: 150%%;'>&#9198;</a>", id);
+	    printf("<a href='#' id='%s'>&#9198;</a>", id);
 	    jsOnEventByIdF("click", id, 
 		"$('[name=%s_page]').val('1');\n"
 		"$('#submit').click();\n"
@@ -318,7 +346,7 @@ if (largerContext != NULL)  // Need to page?
 
 	    // prev page
 	    safef(id, sizeof id, "%s_prev", varPrefix);
-	    printf("<a href='#' id='%s' style='font-size: 150%%;'>&#9194;</a>", id);
+	    printf("<a href='#' id='%s'>&#9194;</a>", id);
 	    jsOnEventByIdF("click", id, 
 		"$('[name=%s_page]').val('%d');\n"
 		"$('#submit').click();\n"
@@ -340,7 +368,7 @@ if (largerContext != NULL)  // Need to page?
 	    // next page
 	    printf("&nbsp;&nbsp;&nbsp;");
 	    safef(id, sizeof id, "%s_next", varPrefix);
-	    printf("<a href='#' id='%s' style='font-size: 150%%;' >&#9193;</a>", id);
+	    printf("<a href='#' id='%s'>&#9193;</a>", id);
 	    jsOnEventByIdF("click", id, 
 		"$('[name=%s_page]').val('%d');\n"
 		"$('#submit').click();\n"
@@ -349,7 +377,7 @@ if (largerContext != NULL)  // Need to page?
 	    // last page
 	    printf("&nbsp;&nbsp;&nbsp;");
 	    safef(id, sizeof id, "%s_last", varPrefix);
-	    printf("<a href='#' id='%s' style='font-size: 150%%;' >&#9197;</a>", id);
+	    printf("<a href='#' id='%s'>&#9197;</a>", id);
 	    jsOnEventByIdF("click", id, 
 		"$('[name=%s_page]').val('%d');\n"
 		"$('#submit').click();\n"
@@ -360,13 +388,13 @@ if (largerContext != NULL)  // Need to page?
      }
 }
 
-
 void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table, 
     char *returnUrl, char *varPrefix,
     int maxLenField, struct hash *tagOutputWrappers, void *wrapperContext,
     boolean withFilters, char *itemPlural, 
     int pageSize, struct fieldedTableSegment *largerContext, struct hash *suggestHash, 
-    void (*addFunc)(void) )
+    struct facetField **ffArray, char *visibleFacetList,
+    void (*addFunc)(int))
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
  * The maxLenField is maximum character length of field before truncation with ...
@@ -375,24 +403,165 @@ void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table,
 if (strchr(returnUrl, '?') == NULL)
      errAbort("Expecting returnUrl to include ? in showFieldedTable\nIt's %s", returnUrl);
 
-if (withFilters)
-    showTableFilterInstructionsEtc(table, itemPlural, largerContext, addFunc);
+if (withFilters || visibleFacetList)
+    showTableFilterInstructionsEtc(table, itemPlural, largerContext, addFunc, visibleFacetList);
 
-/* Set up our table within table look. */
-webPrintLinkTableStart();
+printf("<div class='row'>\n"); // parent container
+
+if (visibleFacetList)
+    {
+    // left column
+    printf("<div class='col-xs-6 col-sm-4 col-md-4 col-lg-3 col-xl-3'>\n");
+
+    // reset all facet value selections
+    char *op = "resetAll";
+    htmlPrintf("<a class='btn btn-secondary' href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+	    "&browseFiles_facet_op=%s|url|"
+	    "&browseFiles_facet_fieldName=%s|url|"
+	    "&browseFiles_facet_fieldVal=%s|url|"
+	    "&cdwBrowseFiles_page=1' "
+	    ">%s</a><br><br>\n",
+	cartSessionVarName(), cartSessionId(cart),
+	op, "", "",
+	"Clear All"
+	);
+
+    struct slName *nameList = slNameListFromComma(visibleFacetList);
+    int f;
+    for (f = 0; f < table->fieldCount; ++f) 
+	{
+	struct facetField *field = ffArray[f];
+	if (slNameInListUseCase(nameList, field->fieldName)) // i.e. is this field a visible facet?
+	    {
+            htmlPrintf("<div class='card facet-card'><div class='card-body'>\n");
+            htmlPrintf("<h6 class='card-title'>%s</h6><dl>\n", field->fieldName);
+	    struct facetVal *val;
+
+	    if (!field->allSelected)  // add reset facet link
+		{
+		char *op = "reset";
+		htmlPrintf("<dd><a class='btn btn-secondary' href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+			"&browseFiles_facet_op=%s|url|"
+			"&browseFiles_facet_fieldName=%s|url|"
+			"&browseFiles_facet_fieldVal=%s|url|"
+			"&cdwBrowseFiles_page=1' "
+			">%s</a></dd>\n",
+		    cartSessionVarName(), cartSessionId(cart),
+		    op, field->fieldName, "",
+		    "Clear"
+		    );
+		}
+
+	    int valuesShown = 0;
+	    int valuesNotShown = 0;
+	    if (field->showAllValues)  // Sort alphabetically if they want all values 
+	        {
+		slSort(&field->valList, facetValCmp);
+		}
+	    for (val = field->valList; val; val=val->next)
+		{
+		boolean specificallySelected = (val->selected && !field->allSelected);
+		if ((val->selectCount > 0 && (field->showAllValues || valuesShown < FacetFieldLimit))
+		    || specificallySelected)
+		    {
+		    ++valuesShown;
+		    char *op = "add";
+		    if (specificallySelected)
+			op = "remove";
+		    printf("<dd class=\"facet\">\n");
+		    htmlPrintf("<input type=checkbox value=%s class=cdwFSCheckBox %s>&nbsp;",
+			specificallySelected ? "true" : "false", 
+			specificallySelected ? "checked" : "");
+		    htmlPrintf("<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+			    "&browseFiles_facet_op=%s|url|"
+			    "&browseFiles_facet_fieldName=%s|url|"
+			    "&browseFiles_facet_fieldVal=%s|url|"
+                            "&cdwBrowseFiles_page=1' "
+			    ">",
+			cartSessionVarName(), cartSessionId(cart),
+			op, field->fieldName, val->val
+                        );
+		    htmlPrintf("%s (%d)</a>", val->val, val->selectCount);
+		    printf("</dd>\n");
+		    }
+		else if (val->selectCount > 0)
+		    {
+		    ++valuesNotShown;
+		    }
+		}
+
+	    // show "See More" link when facet has lots of values
+	    if (valuesNotShown > 0)
+		{
+		char *op = "showAllValues";
+		htmlPrintf("<dd><a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+			"&browseFiles_facet_op=%s|url|"
+			"&browseFiles_facet_fieldName=%s|url|"
+			"&browseFiles_facet_fieldVal=%s|url|"
+			"&cdwBrowseFiles_page=1' "
+			">See %d More</a></dd>\n",
+		    cartSessionVarName(), cartSessionId(cart),
+		    op, field->fieldName, "", valuesNotShown 
+		    );
+		}
+
+	    // show "See Fewer" link when facet has lots of values
+	    if (field->showAllValues && valuesShown >= FacetFieldLimit)
+		{
+		char *op = "showSomeValues";
+		htmlPrintf("<dd><a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+			"&browseFiles_facet_op=%s|url|"
+			"&browseFiles_facet_fieldName=%s|url|"
+			"&browseFiles_facet_fieldVal=%s|url|"
+			"&cdwBrowseFiles_page=1' "
+			">%s</a></dd>\n",
+		    cartSessionVarName(), cartSessionId(cart),
+		    op, field->fieldName, "",
+		    "See Fewer"
+		    );
+		}
+            htmlPrintf("</div></div>\n");
+	    }
+	}
+    printf("</div>\n");
+    // Clicking a checkbox is actually a click on the following link
+    jsInlineF(
+	"$(function () {\n"
+	"  $('.cdwFSCheckBox').click(function() {\n"
+	"    this.nextSibling.nextSibling.click();\n"
+	"  });\n"
+	"});\n");
+    }
+
+// start right column, if there are two columns
+if (visibleFacetList)
+    printf("<div class='col-xs-6 col-sm-8 col-md-8 col-lg-9 col-xl-9'>\n");
+else
+    printf("<div class='col-12'>\n");
+    
+printf("  <div>\n");
+printf("    <table class=\"table table-striped table-bordered table-sm text-nowrap\">\n");
 
 /* Draw optional filters cells ahead of column labels*/
+printf("<thead>\n");
 if (withFilters)
     showTableFilterControlRow(table, cart, varPrefix, maxLenField, suggestHash);
-
 showTableSortingLabelRow(table, cart, varPrefix, returnUrl);
-showTableDataRows(table, pageSize, maxLenField, tagOutputWrappers, wrapperContext);
+printf("</thead>\n");
 
-/* Get rid of table within table look */
-webPrintLinkTableEnd();
+printf("<tbody>\n");
+showTableDataRows(table, pageSize, maxLenField, tagOutputWrappers, wrapperContext);
+printf("</tbody>\n");
+printf("</table>\n");
+printf("</div>");
 
 if (largerContext != NULL)
     showTablePaging(table, cart, varPrefix, largerContext, pageSize);
+
+if (visibleFacetList) // close right column, if there are two columns
+    printf("</div>");
+
+printf("</div>\n"); //close parent container
 }
 
 void webSortableFieldedTable(struct cart *cart, struct fieldedTable *table, 
@@ -405,7 +574,7 @@ void webSortableFieldedTable(struct cart *cart, struct fieldedTable *table,
 webFilteredFieldedTable(cart, table, returnUrl, varPrefix, 
     maxLenField, tagOutputWrappers, wrapperContext,
     FALSE, NULL, 
-    slCount(table->rowList), NULL, NULL, NULL);
+    slCount(table->rowList), NULL, NULL, NULL, NULL, NULL);
 }
 
 
@@ -419,11 +588,10 @@ struct dyString *query = dyStringNew(0);
 struct dyString *where = dyStringNew(0);
 struct slName *field, *fieldList = commaSepToSlNames(fields);
 boolean gotWhere = FALSE;
-sqlDyStringPrintf(query, "%s", ""); // TODO check with Galt on how to get reasonable checking back.
-dyStringPrintf(query, "select %s from %s", fields, from);
+sqlDyStringPrintf(query, "select %-s from %-s", sqlCkIl(fields), sqlCkIl(from));
 if (!isEmpty(initialWhere))
     {
-    dyStringPrintf(where, " where ");
+    sqlDyStringPrintfFrag(where, " where ");
     sqlSanityCheckWhere(initialWhere, where);
     gotWhere = TRUE;
     }
@@ -439,44 +607,51 @@ if (withFilters)
 	if (!isEmpty(val))
 	    {
 	    if (gotWhere)
-		dyStringPrintf(where, " and ");
+		sqlDyStringPrintf(where, " and ");
 	    else
 		{
-	        dyStringPrintf(where, " where ");
+	        sqlDyStringPrintf(where, " where ");
 		gotWhere = TRUE;
 		}
 	    if (anyWild(val))
-	         {
-		 char *converted = sqlLikeFromWild(val);
-		 char *escaped = makeEscapedString(converted, '"');
-		 dyStringPrintf(where, "%s like \"%s\"", field->name, escaped);
-		 freez(&escaped);
-		 freez(&converted);
-		 }
+		{
+		char *converted = sqlLikeFromWild(val);
+		sqlDyStringPrintf(where, "%s like '%s'", field->name, converted);
+		freez(&converted);
+		}
 	    else if (val[0] == '>' || val[0] == '<')
-	         {
-		 char *remaining = val+1;
-		 if (remaining[0] == '=')
-		     remaining += 1;
-		 remaining = skipLeadingSpaces(remaining);
-		 if (isNumericString(remaining))
-		     dyStringPrintf(where, "%s %s", field->name, val);
-		 else
-		     {
-		     warn("Filter for %s doesn't parse:  %s", field->name, val);
-		     dyStringPrintf(where, "%s is not null", field->name); // Let query continue
-		     }
-		 }
+		{
+		char *remaining = val+1;
+		if (remaining[0] == '=')
+		    {
+		    remaining += 1;
+		    }
+		remaining = skipLeadingSpaces(remaining);
+		if (isNumericString(remaining))
+		    {
+		    sqlDyStringPrintf(where, "%s ", field->name);
+		    if (val[0] == '>')
+			sqlDyStringPrintf(where, ">");
+		    if (val[0] == '<')
+			sqlDyStringPrintf(where, "<");
+		    if (val[1] == '=')
+			sqlDyStringPrintf(where, "=");
+		    sqlDyStringPrintf(where, "%s", remaining);
+		    }
+		else
+		    {
+		    warn("Filter for %s doesn't parse:  %s", field->name, val);
+		    sqlDyStringPrintf(where, "%s is not null", field->name); // Let query continue
+		    }
+		}
 	    else
-	         {
-		 char *escaped = makeEscapedString(val, '"');
-		 dyStringPrintf(where, "%s = \"%s\"", field->name, escaped);
-		 freez(&escaped);
-		 }
+		{
+		sqlDyStringPrintf(where, "%s = '%s'", field->name, val);
+		}
 	    }
 	}
     }
-dyStringAppend(query, where->string);
+sqlDyStringPrintf(query, "%-s", where->string);  // trust
 
 /* We do order here so as to keep order when working with tables bigger than a page. */
 char orderVar[256];
@@ -485,9 +660,9 @@ char *orderFields = cartUsualString(cart, orderVar, "");
 if (!isEmpty(orderFields))
     {
     if (orderFields[0] == '-')
-	dyStringPrintf(query, " order by %s desc", orderFields+1);
+	sqlDyStringPrintf(query, " order by %s desc", orderFields+1);
     else
-	dyStringPrintf(query, " order by %s", orderFields);
+	sqlDyStringPrintf(query, " order by %s", orderFields);
     }
 
 // return query and where expression
@@ -499,7 +674,8 @@ void webFilteredSqlTable(struct cart *cart, struct sqlConnection *conn,
     char *fields, char *from, char *initialWhere,  
     char *returnUrl, char *varPrefix, int maxFieldWidth, 
     struct hash *tagOutWrappers, void *wrapperContext,
-    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash, void (*addFunc)(void) )
+    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash, char *visibleFacetList,
+    void (*addFunc)(int) )
 /* Given a query to the database in conn that is basically a select query broken into
  * separate clauses, construct and display an HTML table around results. This HTML table has
  * column names that will sort the table, and optionally (if withFilters is set)
@@ -513,33 +689,49 @@ struct dyString *query;
 struct dyString *where;
 webTableBuildQuery(cart, from, initialWhere, varPrefix, fields, withFilters, &query, &where);
 
-/* Figure out size of query result */
-struct dyString *countQuery = dyStringNew(0);
-sqlDyStringPrintf(countQuery, "%s", ""); // TODO check with Galt on how to get reasonable checking back.
-dyStringPrintf(countQuery, "select count(*) from %s", from);
-dyStringAppend(countQuery, where->string);
-int resultsSize = sqlQuickNum(conn, countQuery->string);
-dyStringFree(&countQuery);
+char *selectedFacetValues=cartUsualString(cart, "cdwSelectedFieldValues", "");
+
+struct facetField **ffArray = NULL;
+struct fieldedTable *table = NULL;
 
 char pageVar[64];
 safef(pageVar, sizeof(pageVar), "%s_page", varPrefix);
 int page = 0;
-struct fieldedTableSegment context = { .tableSize=resultsSize};
-if (resultsSize > pageSize)
+struct fieldedTableSegment context;
+page = cartUsualInt(cart, pageVar, 0) - 1;
+if (page < 0)
+    page = 0;
+context.tableOffset = page * pageSize;
+
+if (visibleFacetList)
     {
-    page = cartUsualInt(cart, pageVar, 0) - 1;
-    if (page < 0)
-        page = 0;
-    int lastPage = (resultsSize-1)/pageSize;
+    table = fieldedTableAndCountsFromDbQuery(conn, query->string, pageSize, context.tableOffset, selectedFacetValues, &ffArray, &context.tableSize);
+    }
+else
+    {
+    /* Figure out size of query result */
+    struct dyString *countQuery = sqlDyStringCreate("select count(*) from %-s", sqlCkIl(from));
+    sqlDyStringPrintf(countQuery, "%-s", where->string);   // trust
+    context.tableSize = sqlQuickNum(conn, countQuery->string);
+    dyStringFree(&countQuery);
+    }
+
+if (context.tableSize > pageSize)
+    {
+    int lastPage = (context.tableSize-1)/pageSize;
     if (page > lastPage)
         page = lastPage;
     context.tableOffset = page * pageSize;
-    dyStringPrintf(query, " limit %d offset %d", pageSize, context.tableOffset);
     }
 
-struct fieldedTable *table = fieldedTableFromDbQuery(conn, query->string);
+if (!visibleFacetList)
+    {
+    sqlDyStringPrintf(query, " limit %d offset %d", pageSize, context.tableOffset);
+    table = fieldedTableFromDbQuery(conn, query->string);
+    }
+
 webFilteredFieldedTable(cart, table, returnUrl, varPrefix, maxFieldWidth, 
-    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, &context, suggestHash, addFunc);
+    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, &context, suggestHash, ffArray, visibleFacetList, addFunc);
 fieldedTableFree(&table);
 
 dyStringFree(&query);

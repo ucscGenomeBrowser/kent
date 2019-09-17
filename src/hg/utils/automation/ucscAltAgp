@@ -2,6 +2,7 @@
 # ucscAltAgp
 """Generate UCSC named agp and fasta files for alternate sequences"""
 import os
+import fnmatch
 import sys
 import argparse
 import tempfile
@@ -34,41 +35,37 @@ def main(args):
     """
     options = parseArgs(args)
 
-    # Their gene names. 
-    oldNameCol = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
-    cmd = "cut -f 4 " + options.inputFile + " > " + oldNameCol.name 
-    os.system(cmd)
-    
-    # Our gene names
-    newNameCol = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
-    cmd = "cut -f 4,6 " + options.inputFile + " | sed 's/\./v/g' | awk " +\
-            "'{print \"chr\"$2\"_\"$1\"_alt\"}' > " + newNameCol.name
-    os.system(cmd)
+    # Associate NW_*/NT_* contig accessions with our chr*_..._alt names and
+    # map NCBI ALT_* IDs to lists of contigs
+    ncbiContigToUcscName = dict()
+    ncbiAltIdToContigs = dict()
+    inputF = open(options.inputFile)
+    for line in inputF:
+        words = line.strip("\n").split("\t")
+        contigAcc = words[3]
+        dotToV = contigAcc.replace('.', 'v')
+        chrNum = words[5]
+        ucscName = "chr" + chrNum + "_" + dotToV + "_alt"
+        ncbiContigToUcscName[contigAcc] = ucscName
+        altId = words[0]
+        if altId in ncbiAltIdToContigs:
+            ncbiAltIdToContigs[altId].append(contigAcc)
+        else:
+            ncbiAltIdToContigs[altId] = [contigAcc]
 
-    # This two col file can be used to map their gene names to ours.  
-    altNameMap = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
-    cmd = "paste " + oldNameCol.name + " " + newNameCol.name + " | sort > " + \
-            altNameMap.name
-    os.system(cmd)
-
-    # Read the two column file into a dictionary that maps their chromosome names to ours.  
-    theirNameToOurs = dict()
-    for line in altNameMap: 
-        splitLine = line.strip("\n").split("\t")
-        theirNameToOurs.setdefault(splitLine[0], splitLine[1])
-
-    # Find all alternative agp files and store as a list.  
-    altFileList = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
-    cmd = "find " + options.path + " -name \"*agp*\" | grep \"ALT\" > " + altFileList.name
-    os.system(cmd)
+    # Find all alternative agp files and store as a list.
+    altAgpFiles = []
+    for dirName, subdirs, files in os.walk(options.path):
+        for agpFile in fnmatch.filter(files, "alt.scaf.agp.gz"):
+            altAgpFiles.append(os.path.join(dirName, agpFile))
 
     # Make new .agp and .fa files with ucsc names. 
-    for theirAgpFile in altFileList:
+    for theirAgpFile in altAgpFiles:
         # All the alternative agp files have the same name, so get a number for the file 
         # name from the file path. 
-        altNum = theirAgpFile.split("/")[3].split("_")[3]
-        ourFaFileName = "alt_" + altNum + ".fa"
-        ourAgpFileName = "alt_" + altNum + ".agp"
+        altId = theirAgpFile.split("/")[3]
+        ourFaFileName = altId + ".fa"
+        ourAgpFileName = altId + ".agp"
 
         # Go through their agp file and convert the names. 
         ourAgpFile = open(ourAgpFileName, "w")
@@ -77,19 +74,19 @@ def main(args):
                 ourAgpFile.write(line)
                 continue
             splitLine = line.strip("\n").split("\t")
-            newChrom = theirNameToOurs[splitLine[0]]
+            newChrom = ncbiContigToUcscName[splitLine[0]]
             ourAgpFile.write(newChrom + "\t" + "\t".join(splitLine[1:]) + "\n")
         ourAgpFile.close()
         print ("Finished creating " + ourAgpFileName)
 
         # Make a list of alternative chromosomes to grab out of the twoBit.
-        altChrmList = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
-        cmd = "grep \"ALT_DRER_TU_" + altNum + "\" " + options.inputFile + \
-                " | cut -f 4  > " + altChrmList.name
-        os.system(cmd)
+        altChrmList = tempfile.NamedTemporaryFile(mode="w+", delete=False)
+        for contigAcc in ncbiAltIdToContigs[altId]:
+            altChrmList.write(contigAcc + "\n");
+        altChrmList.close();
 
         # Make an fasta file with their name scheme.  
-        theirFaFile = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
+        theirFaFile = tempfile.NamedTemporaryFile(mode="w+")
         cmd = "twoBitToFa refseq.2bit " + theirFaFile.name + " -seqList=" + altChrmList.name
         os.system(cmd)
 
@@ -98,14 +95,15 @@ def main(args):
         for line in theirFaFile:
             if line.startswith(">"): 
                 theirChrom = line.strip("\n").strip(">")
-                ourFaFile.write(">" + theirNameToOurs[theirChrom] + "\n")
+                ourFaFile.write(">" + ncbiContigToUcscName[theirChrom] + "\n")
             else:
                 ourFaFile.write(line)
         ourFaFile.close() 
 
-        cmd = "gzip " + ourFaFileName
+        cmd = "gzip -f " + ourFaFileName
         os.system(cmd)
         print ("Finished creating" + ourFaFileName + ".gz")
+        os.remove(altChrmList.name)
 
 if __name__ == "__main__" : 
     sys.exit(main(sys.argv))

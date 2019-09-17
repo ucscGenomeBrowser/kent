@@ -47,6 +47,8 @@ def doLocusName(db, geneTableName, options):
         query = "SELECT name,name2 from xenoRefGene"
     elif geneTableName=="knownGene":
         query = "SELECT kgID, geneSymbol from kgXref where geneSymbol<>'' and geneSymbol not like '% %'"
+    elif geneTableName.startswith("ws"):
+        query = "SELECT name,name from %s" % geneTableName
     else:
         assert(False) # no support for this gene table yet
 

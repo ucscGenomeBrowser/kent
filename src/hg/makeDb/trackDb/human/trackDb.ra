@@ -1,3 +1,4 @@
+
 # ENCODE tracks
 include trackDb.encode.ra
 
@@ -15,6 +16,9 @@ include trackDb.pgSnp.ra
 
 # Genotype Tissue Expresssion (GTEx)
 include trackDb.gtex.ra
+
+# GeneHancer from Weizmann labs
+include trackDb.geneHancer.ra
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
@@ -97,8 +101,8 @@ type bed 4
 url http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=gene=
 
 track decipher
-shortLabel DECIPHER
-longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans
+shortLabel DECIPHER CNVs
+longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans (CNVs)
 group phenDis
 visibility hide
 color 0,0,0
@@ -106,6 +110,54 @@ type bed 4
 tableBrowser off decipherRaw knownToDecipher knownCanonToDecipher
 prevExonText Left edge
 nextExonText Right edge
+
+track decipherSnvs
+shortLabel DECIPHER SNVs
+longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans (SNVs)
+group phenDis
+visibility hide
+color 0,0,0
+type bed 4
+tableBrowser off decipherSnvsRaw
+prevExonText Left edge
+nextExonText Right edge
+html decipher
+
+track phegeni
+shortLabel PheGenI SNPs
+longLabel NCBI Phenotype-Genotype Integrator SNPs
+group phenDis
+visibility hide
+color 0,100,0
+type bigBed 9 +
+release alpha
+mouseOverField trait
+bigDataUrl /gbdb/$D/bbi/phegeni.bb
+urls studyId=https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=$$ geneId1=https://www.ncbi.nlm.nih.gov/gene/?term=$$%5Buid%5D geneId2=https://www.ncbi.nlm.nih.gov/gene/?term=$$%5Buid%5D analysisId=https://www.ncbi.nlm.nih.gov/projects/SNP/gViewer/gView.cgi?aid=$$ catalogId=https://www.ebi.ac.uk/gwas/search?query=$$
+
+track varsInPubs
+shortLabel Variants in Papers
+longLabel Genetic Variants mentioned in scientific publications
+superTrack on
+group phenDis
+type bed 3
+
+        track mastermind
+        shortLabel Mastermind Variants
+        longLabel Genomenon Mastermind Variants extracted from full text publications
+        visibility dense
+        type bigBed 9 +
+        urls url=https://mastermind.genomenon.com/detail?disease=all%20diseases&$$
+        bigDataUrl /gbdb/$D/bbi/mastermind.bb
+        noScoreFilter on
+        exonNumbers off
+        mouseOverField _mouseOver
+        itemRgb on
+        mmcnt1Filter 0
+        mmcnt2Filter 0
+        mmcnt3Filter 0
+        dataVersion /gbdb/hg19/bbi/mastermindRelease.txt
+        parent varsInPubs
 
 track caseControl
 compositeTrack on
@@ -1369,7 +1421,7 @@ track snp150Common
 shortLabel Common SNPs(150)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 150) Found in >= 1% of Samples
 group varRep
-visibility dense
+visibility hide
 url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp150Seq
@@ -1406,7 +1458,6 @@ hapmapPhase III
 codingAnnotations snp150CodingDbSnp,
 priority 13
 
-
 track snp150Mult
 shortLabel Mult. SNPs(150)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 150) That Map to Multiple Genomic Loci
@@ -1429,7 +1480,6 @@ hapmapPhase III
 codingAnnotations snp150CodingDbSnp,
 priority 19
 
-
 track snp150
 shortLabel All SNPs(150)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 150)
@@ -1449,6 +1499,87 @@ hapmapPhase III
 codingAnnotations snp150CodingDbSnp,
 priority 7
 
+
+track snp151Common
+shortLabel Common SNPs(151)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 151) Found in >= 1% of Samples
+group varRep
+visibility dense
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp151Seq
+snpExceptionDesc snp151ExceptionDesc
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp151OrthoPt5Pa2Rm8
+chimpDb panTro5
+orangDb ponAbe2
+macaqueDb rheMac8
+hapmapPhase III
+codingAnnotations snp151CodingDbSnp,
+priority 0.9
+
+track snp151Flagged
+shortLabel Flagged SNPs(151)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 151) Flagged by dbSNP as Clinically Assoc
+group varRep
+visibility hide
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp151Seq
+snpExceptionDesc snp151ExceptionDesc
+defaultGeneTracks knownGene
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp151OrthoPt5Pa2Rm8
+chimpDb panTro5
+orangDb ponAbe2
+macaqueDb rheMac8
+hapmapPhase III
+codingAnnotations snp151CodingDbSnp,
+priority 12.9
+
+track snp151Mult
+shortLabel Mult. SNPs(151)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 151) That Map to Multiple Genomic Loci
+group varRep
+visibility hide
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp151Seq
+snpExceptionDesc snp151ExceptionDesc
+defaultGeneTracks knownGene
+defaultMaxWeight 3
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp151OrthoPt5Pa2Rm8
+chimpDb panTro5
+orangDb ponAbe2
+macaqueDb rheMac8
+hapmapPhase III
+codingAnnotations snp151CodingDbSnp,
+priority 18.9
+
+track snp151
+shortLabel All SNPs(151)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 151)
+group varRep
+visibility hide
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp151OrthoPt5Pa2Rm8
+chimpDb panTro5
+orangDb ponAbe2
+macaqueDb rheMac8
+hapmapPhase III
+codingAnnotations snp151CodingDbSnp,
+priority 6.9
 
 track hgdpGeo
 shortLabel HGDP Allele Freq
@@ -3264,7 +3395,7 @@ color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
-tableBrowser noGenome omimGeneMap omimPhenotype omimGeneSymbol omim2gene
+tableBrowser noGenome omimGeneMap omimGeneMap2 omimPhenotype omimGeneSymbol omim2gene
 
 track omimAvSnp
 shortLabel OMIM Alleles
@@ -3298,6 +3429,34 @@ type bigBed 4 +
 url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=
 html cosmic
 
+track cancerMutations
+shortLabel Cancer mutations
+longLabel Cancer somatic mutations from The Cancer Genome Atlas
+group phenDis
+visibility hide
+color 0,0,0
+type bed
+release alpha
+compositeTrack on
+
+        track pancan33
+        shortLabel PanCan33
+        longLabel Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
+        type bigBed 12 +
+        release alpha
+        bigDataUrl /gbdb/$D/bbi/cancerMutations/pancan33.bb
+        urls case_id=https://portal.gdc.cancer.gov/cases/$$
+        parent cancerMutations
+
+        track tcgaBrca
+        shortLabel Breast
+        longLabel Cancer mutations: TCGA Breast Cancer
+        type bigBed 12 +
+        release alpha
+        bigDataUrl /gbdb/$D/bbi/cancerMutations/BRCA.bb
+        urls case_id=https://portal.gdc.cancer.gov/cases/$$
+        parent cancerMutations
+
 track lovd
 shortLabel LOVD Variants
 longLabel Leiden Open Variation Database Public Variants
@@ -3314,12 +3473,14 @@ shortLabel HGMD Variants
 longLabel Human Gene Mutation Database Public Variants
 group phenDis
 visibility hide
-type bigBed 8 .
+itemRgb on
+type bigBed 9 .
 url http://www.hgmd.cf.ac.uk/ac/gene.php?gene=$P&accession=$p
-urlLabel Link to HGMD:
+urlLabel Link to HGMD
 mouseOverField variantType
 tableBrowser off hgmd
 noScoreFilter on
+maxItems 1000
 
 track snpedia
 shortLabel SNPedia
@@ -3878,6 +4039,7 @@ shortCircuit 1
 semiShortCircuit 1
 termRegex ([0-9]{6})\.([0-9]{4})
 searchPriority 10
+padding 50
 
 searchName omimGene2Acc
 searchTable omimGene2
@@ -4410,6 +4572,12 @@ termRegex [0-9]+
 searchType bed
 searchPriority 50
 
+searchName decipherSnvsId
+searchTable decipherSnvs
+termRegex [0-9]+
+searchType bed
+searchPriority 50
+
 searchTable ensGene
 searchType genePred
 termRegex ENS([A-Z]{3})?T[0-9]+(\.[0-9]+)?
@@ -4896,7 +5064,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.952
+searchPriority 12.9841
 padding 250
 
 searchTable snp150
@@ -4904,7 +5072,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.9841
+searchPriority 12.951
 padding 250
 
 searchTable snp150Flagged
@@ -4921,6 +5089,38 @@ searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9843
+padding 250
+
+searchTable snp151Common
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9837
+padding 250
+
+searchTable snp151Flagged
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9838
+padding 250
+
+searchTable snp151Mult
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9839
+padding 250
+
+searchTable snp151
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.950
 padding 250
 
 include cloneEnd.trackDb.ra
@@ -4942,3 +5142,4 @@ semiShortCircuit 1
 termRegex nssv[0-9]+
 searchType bed
 searchPriority 50
+

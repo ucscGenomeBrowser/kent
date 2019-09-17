@@ -2067,7 +2067,7 @@ TMPDIR=/scratch/tmp
 
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
-   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
 
 see doc/builds.txt for specific details.
 ############################################################################
@@ -2076,7 +2076,7 @@ see doc/builds.txt for specific details.
 
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
-   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
+   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
 
 see doc/builds.txt for specific details.
 ############################################################################
@@ -2124,7 +2124,7 @@ close (FH);
 
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
-   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-07-01
+   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-07-01
 
 see doc/builds.txt for specific details.
 ############################################################################
@@ -2133,7 +2133,7 @@ see doc/builds.txt for specific details.
 
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
-   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
+   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
 
@@ -2358,4 +2358,18 @@ http://genome.crg.es/genepredictions/P.abelii/ponAbe2/geneid_v1.4/ponAbe2.geneid
 # augustusGene:CDS 1.052%, geneid 1.203%, both 0.845%, cover 80.36%,
 #    enrich 66.79x
 
-##########################################################################
+##############################################################################
+# LIFTOVER TO ponAbe3 (DONE - 2018-03-26 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/ponAbe2/bed/blat.ponAbe3.2018-03-26
+    cd /hive/data/genomes/ponAbe2/bed/blat.ponAbe3.2018-03-26
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/ponAbe2/jkStuff/ponAbe2.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         ponAbe2 ponAbe3) > do.log 2>&1
+    # real    1486m13.448s
+
+    # verify the convert link on the test browser is now active from ponAbe2 to
+    # ponAbe3
+
+##############################################################################

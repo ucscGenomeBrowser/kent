@@ -43,6 +43,9 @@ jacJac	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Dipodidae; Di
 # Squirrel Spermophilus tridecemlineatus
 speTri	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Sciuridae; Xerinae; Marmotini; Spermophilus
 
+# American beaver Castor canadensis
+casCan	Eutheria; Boreoeutheria; Euarchontoglires; Glires; Rodentia; Castorimorpha; Castoridae; Castor
+
 # Kangaroo rat Dipodomys ordii
 dipOrd	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Heteromyidae; Dipodomyinae; Dipodomys
 

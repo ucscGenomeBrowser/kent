@@ -1,0 +1,12 @@
+# required db variable
+db micMur3
+# specific lifting to translate names:
+liftUp /hive/data/genomes/micMur3/jkStuff/ensToUcsc.lift
+
+skipInvalid yes
+# ENSMICT00000068593.1 txEnd 5528 >= chromSize 5525
+# ENSMICT00000068583.1 txEnd 4860 >= chromSize 4858
+# ENSMICT00000039077.2 txEnd 4792 >= chromSize 4790
+# ENSMICT00000052172.2 txEnd 2742 >= chromSize 2739
+# ENSMICT00000049755.2 txEnd 1553 >= chromSize 1539
+# ENSMICT00000068718.1 txEnd 1264 >= chromSize 1261

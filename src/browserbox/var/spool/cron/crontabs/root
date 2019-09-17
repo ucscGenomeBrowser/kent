@@ -33,7 +33,7 @@ SHELL=/bin/bash
 0 3 * * * /root/cronCleanTmp.sh
 
 # need to make sure there always is an update script 
-*/3 * * * * if [[ ! -s /root/updateBrowser.sh ]] ; then wget http://hgdownload.cse.ucsc.edu/gbib/updateBrowser.sh -O /root/updateBrowser.sh ; chmod a+x /root/updateBrowser.sh; echo redownloaded updateBrowser.sh ;fi
+*/3 * * * * if [[ ! -s /root/updateBrowser.sh ]] ; then wget http://hgdownload.soe.ucsc.edu/gbib/updateBrowser.sh -O /root/updateBrowser.sh ; chmod a+x /root/updateBrowser.sh; echo redownloaded updateBrowser.sh ;fi
 
 # we check only once if UDR is available, as it can take a while to time out
-@reboot sleep 60; udr rsync -avP hgdownload.cse.ucsc.edu::gbib/lastUpdate /tmp/useUdr > /dev/null 2> /dev/null
+@reboot sleep 60; udr rsync -avP hgdownload.soe.ucsc.edu::gbib/lastUpdate /tmp/useUdr > /dev/null 2> /dev/null

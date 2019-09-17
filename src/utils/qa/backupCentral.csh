@@ -8,6 +8,7 @@ source `which qaConfig.csh`
 #
 #  Grab hgcentral* tables from dev, beta, rr and store as files.
 # 
+# Edit version in kent/src/utils/qa/backupCentral.csh
 ###############################################
 
 set directory="" 
@@ -41,7 +42,7 @@ set today=`date +%Y-%m-%d`
 set dirPath="/usr/local/apache/htdocs-genecats/qa/test-results/$directory"
 rm -rf $dirPath/$today/
 mkdir -p $dirPath/$today
-set urlPath="http://genecats.cse.ucsc.edu/qa/test-results/$directory/$today"
+set urlPath="http://genecats.soe.ucsc.edu/qa/test-results/$directory/$today"
 
 # remove last year's dir
 set lastYr=`date +%Y-%m --date='1 year  ago'`
@@ -51,12 +52,23 @@ set devString="hgcentraltest"
 set betaString="-h $sqlbeta hgcentralbeta"
 set rrString="-h $sqlrr hgcentral" 
 
-foreach table ( blatServers clade dbDb dbDbArch defaultDb genomeClade \
-  liftOverChain namedSessionDb targetDb )
+# set contents field size limit to 10 million
+set sizeLimit=10000000
+foreach table ( namedSessionDb )
+  hgsql   $devString -N -e "select * from namedSessionDb where length(contents) < $sizeLimit" \
+    | sort >> $dirPath/$today/hgwdev.$table
+  hgsql  $betaString -N -e "select * from namedSessionDb where length(contents) < $sizeLimit" \
+    | sort >> $dirPath/$today/hgwbeta.$table
+  hgsql    $rrString -N -e "select * from namedSessionDb where length(contents) < $sizeLimit" \
+    | sort >> $dirPath/$today/rr.$table
+end
+
+foreach table ( blatServers clade dbDb defaultDb genomeClade hubPublic liftOverChain targetDb )
   hgsql  $devString -N -e "SELECT * FROM $table" | sort >> $dirPath/$today/hgwdev.$table
   hgsql $betaString -N -e "SELECT * FROM $table" | sort >> $dirPath/$today/hgwbeta.$table
   hgsql   $rrString -N -e "SELECT * FROM $table" | sort >> $dirPath/$today/rr.$table
 end
+
 
 echo $urlPath
 chmod 650 $dirPath/$today/*.namedSessionDb

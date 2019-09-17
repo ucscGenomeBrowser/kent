@@ -18,6 +18,7 @@
 #include "udc.h"
 #include "vcf.h"
 #include "vcfUi.h"
+#include "trackHub.h"
 
 #define NA "<em>n/a</em>"
 
@@ -485,6 +486,14 @@ if (sameString(tdb->track, "exacVariants"))
            skipChr(rec->chrom), rec->chromStart+1, rec->alleles[0], rec->alleles[1],
            skipChr(rec->chrom), rec->chromStart+1, rec->alleles[0], rec->alleles[1]);
     }
+if (sameString(tdb->track, "gnomadGenomesVariants") || sameString(tdb->track, "gnomadExomesVariants"))
+    {
+    printf("<b>gnomAD:</b> "
+           "<a href=\"http://gnomad.broadinstitute.org/variant/%s-%d-%s-%s\" "
+           "target=_blank>%s:%d %s/%s</a><br>\n",
+           skipChr(rec->chrom), rec->chromStart+1, rec->alleles[0], rec->alleles[1],
+           skipChr(rec->chrom), rec->chromStart+1, rec->alleles[0], rec->alleles[1]);
+    }
 // Since these are variants, if it looks like a dbSNP or dbVar ID, provide a link:
 if (regexMatch(rec->name, "^rs[0-9]+$"))
     {
@@ -573,7 +582,9 @@ void doVcfTabixDetails(struct trackDb *tdb, char *item)
 knetUdcInstall();
 if (udcCacheTimeout() < 300)
     udcSetCacheTimeout(300);
-struct sqlConnection *conn = hAllocConnTrack(database, tdb);
+struct sqlConnection *conn = NULL;
+if (!trackHubDatabase(database))
+    conn = hAllocConnTrack(database, tdb);
 char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, tdb->table, seqName);
 hFreeConn(&conn);
 doVcfDetailsCore(tdb, fileOrUrl, TRUE);

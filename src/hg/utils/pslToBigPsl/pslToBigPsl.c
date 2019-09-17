@@ -34,17 +34,38 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-#define MAX_BLOCKS 10000
-unsigned blockSizes[MAX_BLOCKS];
-unsigned blockStarts[MAX_BLOCKS];
-unsigned oBlockStarts[MAX_BLOCKS];
+static unsigned initNumBlocks = 1000;
+static unsigned currentNumBlocks = 0;
+static unsigned *blockSizes = NULL;
+static unsigned *blockStarts = NULL;
+static unsigned *oBlockStarts = NULL;
+
+static void growBlockSpace(unsigned minBlockCount)
+/* Ensure that there is sufficient space in the block arrays  */
+{
+/* always ask for more then min */
+int size = max(2 * minBlockCount, initNumBlocks);
+if (currentNumBlocks == 0)
+    {
+    AllocArray(blockSizes, size);
+    AllocArray(blockStarts, size);
+    AllocArray(oBlockStarts, size);
+    }
+else
+    {
+    ExpandArray(blockSizes, currentNumBlocks, size);
+    ExpandArray(blockStarts, currentNumBlocks, size);
+    ExpandArray(oBlockStarts, currentNumBlocks, size);
+    }
+currentNumBlocks = size;
+}
 
 void outBigPsl(FILE *fp, struct psl *psl, struct hash *fastaHash, struct hash *cdsHash)
 {
 struct bigPsl bigPsl;
 
-if (psl->blockCount > MAX_BLOCKS)
-    errAbort("psl has more than %d blocks, make MAX_BLOCKS bigger in source", MAX_BLOCKS);
+if (psl->blockCount > currentNumBlocks)
+    growBlockSpace(psl->blockCount);
 
 // make sure blocks are represented on reference's positive strand as required by BED format
 boolean didRc = FALSE;
@@ -124,8 +145,6 @@ if (cdsHash)
 	bigPsl.thickStart = genomeCds.start;
 	bigPsl.thickEnd = genomeCds.end;
 	}
-    else
-    	warn("CDS missing for %s\n", psl->qName);
     }
 
 bigPslOutput(&bigPsl, fp, '\t', '\n');

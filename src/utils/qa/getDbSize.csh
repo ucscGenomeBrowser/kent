@@ -13,7 +13,7 @@ source `which qaConfig.csh`
 set db=""
 set index="index"
 set mach="hgwbeta"
-set url1="http://$mach.cse.ucsc.edu/cgi-bin/hgTables"
+set url1="http://$mach.soe.ucsc.edu/cgi-bin/hgTables"
 set url2=""
 set list="false"
 set size=0

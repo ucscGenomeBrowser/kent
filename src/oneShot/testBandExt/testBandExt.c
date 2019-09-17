@@ -19,8 +19,8 @@ errAbort(
   "   testBandExt a.fa b.fa\n"
   "options:\n"
   "   -maxInsert=%d - Control maximum insert size allowed\n"
-  "   -gapOpen=%d - Set gap open penalty\n"
-  "   -gapExtend=%d - Set gap extension penalty\n"
+  "   -gapOpen=N - Set gap open penalty\n"
+  "   -gapExtend=N - Set gap extension penalty\n"
   , maxInsert
   );
 }

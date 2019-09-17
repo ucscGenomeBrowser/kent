@@ -94,7 +94,7 @@ genePredToMafFrames hg38 chr22_KI270731v1_random.maf bigMafFrames.txt hg38 singl
 bedToBigBed -type=bed3+8 -as=mafFrames.as -tab bigMafFrames.txt hg38.chrom.sizes bigMafFrames.bb
 
 hgLoadMafSummary -minSeqSize=1 -test hg38 bigMafSummary chr22_KI270731v1_random.maf
-cut -f 2 bigMafSummary.tab | sort -k1,1 -k2,2n &gt; bigMafSummary.bed
+cut -f2- bigMafSummary.tab | sort -k1,1 -k2,2n &gt; bigMafSummary.bed
 bedToBigBed -type=bed3+4 -as=mafSummary.as -tab bigMafSummary.bed hg38.chrom.sizes bigMafSummary.bb </code></pre>
 <p>
 <strong>Step 7.</strong> 
@@ -187,7 +187,7 @@ In this example, you will create a bigMaf file from an existing bigMaf input fil
 <h2>Sharing your data with others</h2>
 <p>
 If you would like to share your bigMaf data track with a colleague, learn how to create a URL by 
-looking at Example 11 on <a href="customTrack.html#EXAMPLE11">this page</a>.</p>
+looking at Example 6 on <a href="customTrack.html#EXAMPLE6">this page</a>.</p>
 
 <h2>Extracting data from the bigMaf format</h2>
 <p>

@@ -24,7 +24,7 @@
 #include "sqlList.h"
 #include "hash.h"
 #include "dystring.h"
-
+#include "asParse.h"
 
 char *getDefaultProfileName();  // name of default profile
 
@@ -227,6 +227,11 @@ struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query);
  *     old info, only applies with mysql_store_result not mysql_use_result)
  * Otherwise returns a structure that you can do sqlRow() on. */
 
+unsigned long sqlEscapeStringFull(char *to, const char* from, long fromLength);
+/* Prepares a string for inclusion in a sql statement.  Output string
+ * must be 2*strlen(from)+1. fromLength is the length of the from data.
+ * Specifying fromLength allows one to encode a binary string that can contain any character including 0. */
+
 char *sqlEscapeString(const char* from);
 /* Prepares string for inclusion in a SQL statement . Remember to free
  * returned string.  Returned string contains strlen(length)*2+1 as many bytes
@@ -276,7 +281,7 @@ boolean sqlTableExists(struct sqlConnection *sc, char *table);
 /* Return TRUE if a table exists. */
 
 bool sqlColumnExists(struct sqlConnection *conn, char *tableName, char *column);
-/* return TRUE if column exists in table. tableName can contain sql wildcards  */
+/* return TRUE if column exists in table. column can contain sql wildcards  */
 
 int sqlTableSizeIfExists(struct sqlConnection *sc, char *table);
 /* Return row count if a table exists, -1 if it doesn't. */
@@ -288,8 +293,11 @@ boolean sqlTableWildExists(struct sqlConnection *sc, char *table);
 /* Return TRUE if table (which can include SQL wildcards) exists.
  * A bit slower than sqlTableExists. */
 
-boolean sqlTableOk(struct sqlConnection *sc, char *table);
-/* Return TRUE if a table not only exists, but also is not corrupted. */
+unsigned long sqlTableDataSizeFromSchema(struct sqlConnection *conn, char *db, char *table);
+/* Get table data size. Table must exist or will abort. */
+
+unsigned long sqlTableIndexSizeFromSchema(struct sqlConnection *conn, char *db, char *table);
+/* Get table index size. Table must exist or will abort. */
 
 char *sqlQuickQuery(struct sqlConnection *sc, char *query, char *buf, int bufSize);
 /* Does query and returns first field in first row.  Meant
@@ -387,6 +395,9 @@ void sqlHardUnlockAll(struct sqlConnection *sc);
 boolean sqlMaybeMakeTable(struct sqlConnection *sc, char *table, char *query);
 /* Create table from query if it doesn't exist already.
  * Returns FALSE if didn't make table. */
+
+char *sqlGetCreateTable(struct sqlConnection *sc, char *table);
+/* Get the Create table statement. table must exist. */
 
 void sqlRemakeTable(struct sqlConnection *sc, char *table, char *create);
 /* Drop table if it exists, and recreate it. */
@@ -692,17 +703,20 @@ __attribute__((format(printf, 3, 4)))
 void vaSqlDyStringPrintfExt(struct dyString *ds, boolean isFrag, char *format, va_list args);
 /* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string and isFrag is FALSE. */
+ * NOSLQINJ tag is added to beginning if it is a new empty string and isFrag is FALSE.
+ * Appends to existing string. */
 
 void vaSqlDyStringPrintf(struct dyString *ds, char *format, va_list args);
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string. */
+ * NOSLQINJ tag is added to beginning if it is a new empty string.
+ * Appends to existing string. */
 
 void sqlDyStringPrintf(struct dyString *ds, char *format, ...)
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string. */
+ * NOSLQINJ tag is added to beginning if it is a new empty string.
+ * Appends to existing string. */
 #ifdef __GNUC__
 __attribute__((format(printf, 2, 3)))
 #endif
@@ -712,23 +726,19 @@ void vaSqlDyStringPrintfFrag(struct dyString *ds, char *format, va_list args);
 /* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.
  * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
- * the entire sql string. */
+ * the entire sql string. Appends to existing string. */
 
 void sqlDyStringPrintfFrag(struct dyString *ds, char *format, ...)
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.
  * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
- * the entire sql string. */
+ * the entire sql string. Appends to existing string. */
 #ifdef __GNUC__
 __attribute__((format(printf, 2, 3)))
 #endif
 ;
 
 #define NOSQLINJ "NOSQLINJ "
-
-void sqlDyStringAppend(struct dyString *ds, char *string);
-/* Append zero terminated string to end of dyString.
- * Adds the NOSQLINJ prefix if dy string is empty. */
 
 struct dyString *sqlDyStringCreate(char *format, ...)
 /* Create a dyString with a printf style initial content
@@ -737,6 +747,12 @@ struct dyString *sqlDyStringCreate(char *format, ...)
 __attribute__((format(printf, 1, 2)))
 #endif
 ;
+
+void sqlDyStringPrintIdList(struct dyString *ds, char *fields);
+/* Append a comma-separated list of field identifiers. Aborts if invalid characters in list. */
+
+void sqlDyStringPrintValuesList(struct dyString *ds, struct slName *values);
+/* Append a comma-separated, quoted and escaped list of values. */
 
 void sqlCheckError(char *format, ...)
 /* A sql injection error has occurred. Check for settings and respond
@@ -750,5 +766,32 @@ __attribute__((format(printf, 1, 2)))
 struct sqlConnection *sqlFailoverConn(struct sqlConnection *sc);
 /* returns the failover connection of a connection or NULL.
  * (Needed because the sqlConnection is not in the .h file) */
+
+/* structure moved here from hgTables.h 2019-03-04 - Hiram */
+struct sqlFieldType
+/* List field names and types */
+    {
+    struct sqlFieldType *next;
+    char *name;         /* Name of field. */
+    char *type;         /* Type of field (MySQL notion) */
+    };
+
+struct sqlFieldType *sqlFieldTypeNew(char *name, char *type);
+/* Create a new sqlFieldType */
+
+void sqlFieldTypeFree(struct sqlFieldType **pFt);
+/* Free resources used by sqlFieldType */
+
+void sqlFieldTypeFreeList(struct sqlFieldType **pList);
+/* Free a list of dynamically allocated sqlFieldType's */
+
+struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as);
+/* Convert asObject to list of sqlFieldTypes */
+
+struct sqlFieldType *sqlListFieldsAndTypes(struct sqlConnection *conn, char *table);
+/* Get list of fields including their names and types.  The type currently is
+ * just a MySQL type string. */
+
+
 
 #endif /* JKSQL_H */

@@ -7,12 +7,12 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     affyOffset.o affyPairs.o agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
     altGraphX.o ancientRref.o \
     annoFormatVep.o annoGratorGpVar.o annoGrateWigDb.o \
-    annoStreamDb.o annoStreamDbFactorSource.o annoStreamWig.o \
+    annoStreamDb.o annoStreamDbFactorSource.o annoStreamDbPslPlus.o annoStreamWig.o \
     api.o atomDb.o autoUpgrade.o axtInfo.o axtLib.o bactigPos.o hgBam.o \
     barChartBed.o barChartCategory.o barChartUi.o barChartData.o barChartSample.o \
     baseMaskCommon.o bdgpExprLink.o bdgpGeneInfo.o \
     bed.o bed5FloatScore.o bed5Pval.o bed6FloatScore.o  bed8Attrs.o bed12Source.o \
-    bed12wSeq.o bedCart.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bigBedFind.o \
+    bed12wSeq.o bedCart.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bigBedFind.o bigBedLabel.o \
     bigGenePred.o bigPsl.o bigTransMap.o bioImage.o \
     blastTab.o blastzNet.o blatServers.o borf.o borkPseudoHom.o botDelay.o\
     cart.o cartDb.o cartJson.o cartTrackDb.o cdsEvidence.o cdsOrtho.o cdsPick.o cdsSpec.o \
@@ -39,7 +39,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     encode/pairedTagAlign.o encode/peptideMapping.o encode/tagAlign.o  \
     encode/wgEncodeGencodeAttrs.o encode/wgEncodeGencodeExonSupport.o \
     encode/wgEncodeGencodeEntrezGene.o encode/wgEncodeGencodeTag.o  \
-    encode/wgEncodeGencodePdb.o encode/wgEncodeGencodePubMed.o \
+    encode/wgEncodeGencodeGeneSymbol.o encode/wgEncodeGencodePdb.o encode/wgEncodeGencodePubMed.o \
     encode/wgEncodeGencodeRefSeq.o encode/wgEncodeGencodeGeneSource.o encode/wgEncodeGencodeTranscriptSource.o \
     encode/wgEncodeGencodeTranscriptSupport.o encode/wgEncodeGencodeTranscriptionSupportLevel.o \
     encode/wgEncodeGencodeUniProt.o \
@@ -49,7 +49,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     encode3/encode2Manifest.o encode3/encode3Valid.o \
     ensFace.o ensInfo.o ensPhusionBlast.o ensXRefZfish.o \
     est3.o estOrientInfo.o \
-    estPair.o exoFish.o expData.o expRecord.o exprBed.o factorSource.o \
+    estPair.o exoFish.o expData.o expRecord.o exprBed.o facetField.o factorSource.o \
     fbTables.o featureBits.o fileUi.o findKGAlias.o findKGProtAlias.o fishClones.o \
     flyBase2004Xref.o \
     flyBaseSwissProt.o flyreg.o flyreg2.o gbExtFile.o gbWarn.o gbMiscDiff.o gbProtAnn.o gcPercent.o gbSeq.o \
@@ -68,9 +68,9 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     hashJoin.o hCommon.o \
     hCytoBand.o hdb.o hgColors.o hgConfig.o hgExp.o hgFind.o \
     hgFindSpec.o hgFindSpecCustom.o hgHgvs.o hgHgvsParse.o \
-    hgGene.o hgMaf.o hgRelate.o hgSeq.o hgdpGeo.o hPrint.o hVarSubst.o hvGfx.o \
-    HInv.o hubConnect.o hubSearchText.o hui.o humanParalog.o \
-    imageClone.o indelShift.o isochores.o ispyTables.o \
+    hgGene.o hic.o hicUi.o hgMaf.o hgRelate.o hgSeq.o hgdpGeo.o hPrint.o hVarSubst.o hvGfx.o \
+    HInv.o hubConnect.o hubSearchText.o hui.o humanParalog.o hubPublic.o \
+    imageClone.o indelShift.o interact.o interactUi.o isochores.o ispyTables.o \
     itemAttr.o itemConf.o itemDetailsHtml.o jalview.o \
     jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o jsHelper.o kg1ToKg2.o \
     jgiGene.o joinMixer.o \
@@ -98,7 +98,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     sgdClone.o sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o snakeUi.o \
     snp.o snp125.o snp125CodingCoordless.o snp132Ext.o snpExceptions.o snpFasta.o snpMap.o snpTmp.o \
     snpUi.o snp125Exceptions.o snp125Ui.o softPromoter.o softberryHom.o soTerm.o \
-    spDb.o splignAlign.o sqlSanity.o stanMad.o stsAlias.o \
+    spDb.o splignAlign.o sqlSanity.o stanMad.o straw.o stsAlias.o \
     stsInfo.o stsInfo2.o stsInfoMouse.o stsInfoMouseNew.o stsInfoRat.o \
     stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o suggest.o \
     switchDbTss.o synMap.o synteny100000.o syntenyBerk.o syntenySanger.o \
@@ -106,9 +106,9 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     tableDescriptions.o tableStatus.o targetDb.o tfbsConsMap.o tagRepo.o \
     taxonDivision.o taxonGeneticCode.o taxonName.o taxonNode.o taxonXref.o \
     tigrCmrGene.o tigrOperon.o tilingPath.o traceInfo.o trackDb.o \
-    trackDbCustom.o trackHub.o trackLayout.o trackTable.o trackVersion.o trashDir.o \
+    trackDbCustom.o trackDbCache.o trackHub.o trackLayout.o trackTable.o trackVersion.o trashDir.o \
     transRegCode.o transRegCodeCondition.o \
-    transRegCodeProbe.o txCluster.o txCommon.o txEdgeBed.o \
+    transRegCodeProbe.o txAliDiff.o txCluster.o txCommon.o txEdgeBed.o \
     txEdgeOrtho.o txGraph.o txInfo.o txRnaAccs.o ucscRetroInfo.o ucscRetroOrtho.o \
     validateGisaid.o variant.o variantProjector.o vcfUi.o \
     vegaInfo.o vegaInfoZfish.o visiGene.o vntr.o \
@@ -138,6 +138,9 @@ jWestBanner.h: jWestBanner.html
 	sed -e 's/\\/\\\\/g; s/"/\\"/g; s/^/"/; s/$$/\\n"/;' jWestBanner.html > jWestBanner.h
 
 web.o: jWestHeader.h jWestBanner.h
+
+straw.o: straw/straw.cpp straw/straw.h
+	cd straw && ${MAKE} straw.o
 
 clean:
 	rm -f $(O);

@@ -28,7 +28,7 @@ To use the framework:
 
 Server setup:
 * start test server (jsTestServer)
-* open browser and navigate to host:port in jsTestDriver.conf (hgwdev.cse.ucsc.edu:4224)
+* open browser and navigate to host:port in jsTestDriver.conf (hgwdev.soe.ucsc.edu:4224)
 * click on "Capture this Browser" (Strict mode for HTML 4.0.1 strict)
 
 Running tests:
@@ -89,7 +89,7 @@ After a coverage run:
 % cd <dir>
 % genhtml jsTestDriver.conf-coverage.dat.
 
-View in browser:  hgwdev.cse.ucsc.edu/~kate/coverageOut
+View in browser:  hgwdev.soe.ucsc.edu/~kate/coverageOut
 
 ----------------
 JSLint here: www.jslint.com

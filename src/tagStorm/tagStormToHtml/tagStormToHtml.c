@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "htmshell.h"
 #include "tagStorm.h"
 
 boolean gEmbed = FALSE;
@@ -68,12 +69,13 @@ int fieldCount = tagStormCountFields(ts);
 
 if (!gEmbed)
     {
-    fputs(
+    fprintf(f,
     "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"
     "<HTML>\n"
     "<HEAD>\n"
+    "%s"
     "    <META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">\n"
-    , f);
+    , getCspMetaHeader());
     fprintf(f, "    <TITLE>tagStorm %s</TITLE>\n", ts->fileName);
     fputs(
     "</HEAD>\n"

@@ -1,0 +1,6 @@
+# got hgmd 2017 from Frank Schacherer Frank.Schacherer@qiagen.com and Rupert Yip Rupert.Yip@qiagen.com
+cd /hive/data/genomes/hg38/bed/hgmd
+cat /hive/data/outside/hgmd/2017.4-hgmd-public_hg38.tsv | grep -v \# | tawk '{if ($5=="I") {start=$4-1; end=$4+1; col="100,100,100"} else if ($5=="D") {start=$4-1; end=$4; col="170,170,170"} else {start=$4-1; end=$4; col="0,0,0"}; print "chr"$3,start,end,$2":"$1,0,".",start,end,col,$2,$1,$5}' | sed -e 's/M$/substitution/' | sed -e 's/I$/insertion (between the two basepairs, sequence not provided by HGMD)/' | sed -e 's/D$/deletion (endpoint not provided by HGMD)/' | sed -e 's/X$/insertion-deletion (endpoint not provided by HGMD)/' | sed -e 's/R$/regulatory variant/' | sed -e 's/S$/splicing variant/' | sort -k1,1 -k2,2n > hgmd.bed
+bedToBigBed hgmd.bed /hive/data/genomes/hg38/chrom.sizes hgmd.bb -type=bed9+ -as=hgmd.as -tab 
+ln -s /hive/data/genomes/hg38/bed/hgmd/hgmd.bb /gbdb/hg38/bbi/hgmd.bb
+hgBbiDbLink hg38 hgmd /gbdb/hg38/bbi/hgmd.bb

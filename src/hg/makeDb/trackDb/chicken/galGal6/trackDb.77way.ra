@@ -1,0 +1,111 @@
+track cons77way
+compositeTrack on
+shortLabel Conservation
+longLabel Vertebrate Multiz Alignment & Conservation (77 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+# subGroup2 clade Clade glires=Glires euarchontoglires=Euarchontoglires placental=Placental all=All_species
+subGroup2 clade Clade primate=Primate mammal=Mammal vert=Vertebrate all=All_species
+dragAndDrop subTracks
+dimensions dimensionX=clade
+visibility full
+type bed 4
+group compGeno
+priority 1
+
+    track cons77wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons77way
+
+        track multiz77way
+        subTrack cons77wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 77 Vertebrates
+        subGroups view=align clade=vert
+        noInherit on
+        irows on
+        summary multiz77waySummary
+        frames multiz77wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault galGal6
+        speciesGroups Birds Reptiles Vertebrate
+        sGroup_Birds cotJap2 melGal5 aquChr2 halLeu1 nipNip1 aptFor1 falPer1 falChe1 chaVoc2 pygAde1 egrGar1 anaPla1 pelCri1 fulGla1 carCri1 lepDis1 halAlb1 phoRub1 gavSte1 balPav1 opiHoa1 phaLep1 tauEry1 phaCar1 tytAlb1 capCar1 cucCan1 colLiv1 chlUnd1 mesUni1 pteGut1 eurHel1 strCam1 melUnd1 merNub1 apaVit1 colStr1 corBra1 bucRhi1 pseHum1 amaVit1 corCor1 serCan1 calAnn1 acaChl1 ficAlb2 geoFor1 zonAlb1 araMac1 picPub1 taeGut2 tinGut2
+        sGroup_Reptiles allSin1 allMis1 pelSin1 apaSpi1 pytBiv1 anoCar2 thaSir1 chrPic2 cheMyd1
+        sGroup_Vertebrate hg38 mm10 danRer11 angJap1 oreNil3 gasAcu1 oryLat2 mayZeb1 tetNig2 fr3 petMar3 letCam1 xenTro9 xenLae2 nanPar1
+        speciesDefaultOff cotJap2 aquChr2 halLeu1 nipNip1 aptFor1 falPer1 falChe1 chaVoc2 pygAde1 egrGar1 anaPla1 pelCri1 fulGla1 carCri1 lepDis1 halAlb1 phoRub1 gavSte1 balPav1 opiHoa1 phaLep1 tauEry1 phaCar1 tytAlb1 capCar1 cucCan1 colLiv1 chlUnd1 mesUni1 pteGut1 eurHel1 strCam1 melUnd1 merNub1 apaVit1 colStr1 corBra1 bucRhi1 pseHum1 amaVit1 corCor1 serCan1 calAnn1 acaChl1 ficAlb2 geoFor1 zonAlb1 araMac1 picPub1 taeGut2 tinGut2 chrPic2 cheMyd1 allSin1 allMis1 pelSin1 apaSpi1 pytBiv1 anoCar2 thaSir1 xenTro9 xenLae2 nanPar1 hg38 mm10 danRer11 angJap1 oreNil3 gasAcu1 oryLat2 mayZeb1 tetNig2 fr3 petMar3 letCam1
+        speciesDefaultOn melGal5 anaPla1 amaVit1 falPer1 hg38 mm10 danRer11 thaSir1
+        defaultMaf multiz77wayDefault
+        itemFirstCharCase noChange
+        treeImage phylo/galGal6_77way.png
+        priority 100
+
+    # PhyloP conservation
+    track cons77wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons77way
+    viewLimits -20.0:9.869
+    viewLimitsMax -20:0.869
+
+        track phyloP77way
+        subTrack cons77wayViewphyloP on
+        subGroups view=phyloP clade=all
+        shortLabel Cons 77 Verts
+        longLabel 77 vertebrates Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -20 7.532
+        maxHeightPixels 100:50:11
+        viewLimits -4.5:4.88
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons77wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility hide
+    subTrack cons77way
+
+        track phastCons77way
+        subTrack cons77wayViewphastcons off
+        subGroups view=phastcons clade=all
+        shortLabel Cons 77 Verts
+        longLabel 77 vertebrates conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons77wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility hide
+    subTrack cons77way
+
+        track phastConsElements77way
+        subTrack cons77wayViewelements off
+        subGroups view=elements clade=all
+        shortLabel 77 Vert. El
+        longLabel 77 vertebrates Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23

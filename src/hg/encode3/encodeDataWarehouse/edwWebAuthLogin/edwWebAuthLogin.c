@@ -66,7 +66,7 @@ cgiEncodeIntoDy("audience", serverAndPort, dyCgi);
 /* Pass a little CGI post request to Persona including our CGI vars. */
 struct dyString *dyHeader = dyStringNew(0);
 dyStringPrintf(dyHeader, "Content-type: application/x-www-form-urlencoded\r\n");
-dyStringPrintf(dyHeader, "Content-length: %d\r\n", dyCgi->stringSize);
+dyStringPrintf(dyHeader, "Content-length: %ld\r\n", dyCgi->stringSize);
 int sd = netOpenHttpExt(personaUrl, "POST", dyHeader->string);
 mustWriteFd(sd, dyCgi->string, dyCgi->stringSize);
 

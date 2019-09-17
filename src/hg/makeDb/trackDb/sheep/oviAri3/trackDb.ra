@@ -40,3 +40,5 @@ searchPriority 8
 track animalQtl override
 url http://www.animalgenome.org/cgi-bin/QTLdb/OA/qdetails?QTL_ID=$p
 urlLabel Animal Genome QTL db:
+
+include ../../refSeqComposite.ra alpha

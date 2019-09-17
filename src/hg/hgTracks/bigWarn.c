@@ -7,6 +7,7 @@
 #include "hgTracks.h"
 #include "container.h"
 #include "bigWarn.h"
+#include "hgConfig.h"
 
 static int bigWarnNumLines(char *errMsg)
 /* Count number of lines in err msg */
@@ -15,6 +16,8 @@ int n = countChars(errMsg, '\n');
 int sl = strlen(errMsg);
 if ((sl > 0) && (errMsg[sl-1]!='\n'))
     ++n;
+if (n == 0)
+    n = 1;
 return n;
 }
 
@@ -23,6 +26,8 @@ char *bigWarnReformat(char *errMsg)
 /* Return a copy of the re-formatted error message,
  * such as breaking longer lines */
 {
+if (errMsg == NULL)
+    return cloneString("");
 /* convert ". " to ".\n" to break long lines. */
 char *result = cloneString(errMsg);
 char *nl = result;
@@ -46,6 +51,11 @@ void bigDrawWarning(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hv
 {
 if (currentWindow != windows)
     return;
+
+// put the error message into the log
+if (sameString(cfgOptionDefault("bigWarn", "on"), "on"))
+    fprintf(stderr, "bigWarn: %s\n", tg->networkErrMsg);
+
 int clipXBak, clipYBak, clipWidthBak, clipHeightBak;
 hvGfxGetClip(hvg, &clipXBak, &clipYBak, &clipWidthBak, &clipHeightBak);
 hvGfxUnclip(hvg);

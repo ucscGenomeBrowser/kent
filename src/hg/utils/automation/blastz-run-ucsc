@@ -82,15 +82,32 @@ my %qSizes = ();
 my $machType = `uname -m`;
 chomp $machType;
 $machType = "i386" if ($machType eq "i686");
+my @potentialPath = ("/cluster/bin/penn/$machType", "/cluster/bin/penn",
+		   "/cluster/bin/scripts", "/cluster/bin/$machType",
+		   "/bin", "/usr/bin");
+# this defaultPath will be cleaned up at start of program
 my $defaultPath = ("/cluster/bin/penn/$machType:/cluster/bin/penn:" .
 		   "/cluster/bin/scripts:/cluster/bin/$machType:" .
 		   '/bin:/usr/bin');
+
+# these commands will be filled in with full path names to
+# avoid constant shell searches for commands through PATH
+# more efficient when commands are often repeated in a cluster job
+my $rmCmd = "rm";
+my $cpCmd = "cp";
+my $mvCmd = "mv";
+my $shCmd = "sh";
+my $lsCmd = "ls";
+my $catCmd = "cat";
+my $gzipCmd = "gzip";
+my $gunzipCmd = "gunzip";
+my $twoBitToFaCmd = "twoBitToFa";
 
 sub cleanDie {
   # Clean up $TMP (if it has been created) and then die.
   my ($msg) = @_;
   if ($TMP && -d $TMP) {
-    system("/bin/sh", "-c", "/bin/rm -rf $TMP");
+    system("$shCmd", "-c", "$rmCmd -rf $TMP");
   }
   die $msg;
 }
@@ -101,8 +118,19 @@ sub run {
   my $setPath = "export PATH=";
   $setPath .= "$defVars{PATH}:" if (defined $defVars{'PATH'});
   $setPath .= "$defaultPath; ";
-  system("/bin/sh", "-c", $setPath . $cmd) == 0 ||
+  system("$shCmd", "-c", $setPath . $cmd) == 0 ||
     &cleanDie("Command failed:\n$setPath\n$cmd\n");
+}
+
+sub findCommand {
+  my ($cmd) = @_;
+  my $setPath = "PATH=";
+  $setPath .= "$defVars{PATH}:" if (defined $defVars{'PATH'});
+  $setPath .= "$defaultPath; ";
+  my $which = qx{$setPath type -ap $cmd 2> /dev/null | head -1};
+  chomp $which;
+  $which = $cmd if ($which eq "");
+  return $which;
 }
 
 sub nfsNoodge {
@@ -110,10 +138,10 @@ sub nfsNoodge {
   # wait a second, try again.
   # Scott's blastz-run included a similar trick.
   my ($file) = @_;
-  my $ret = system("/bin/sh", "-c", "/bin/ls -d $file > /dev/null");
+  my $ret = system("$shCmd", "-c", "$lsCmd -d $file > /dev/null");
   if ($ret != 0) {
     sleep 1;
-    $ret = system("/bin/sh", "-c", "/bin/ls -d $file > /dev/null");
+    $ret = system("$shCmd", "-c", "$lsCmd -d $file > /dev/null");
     sleep 1 if ($ret != 0);
   }
 }
@@ -222,7 +250,7 @@ sub collapseFileSpecs {
   my $big = "$TMP/bigCollapse.fa";
   # avoiding exec of shell here instead of going through &run
   # and making an empty new file $big
-  &run("/bin/cp /dev/null $big");
+  &run("$cpCmd /dev/null $big");
   foreach my $spec (@fileSpecs) {
     my ($seq, $local) = unpackForBlastz($spec, '.', 'tmp');
     $local =~ s/\[\S+\]$//;
@@ -234,8 +262,8 @@ sub collapseFileSpecs {
       chomp $size;
       &run("nibFrag -masked $nib 0 $size + $local");
     }
-    &run("/bin/cat $local >> $big");
-    &run("/bin/rm -f $local") if ($local =~ /^$TMP/);
+    &run("$catCmd $local >> $big");
+    &run("$rmCmd -f $local") if ($local =~ /^$TMP/);
   }
   $collapsed = 1;
   @fileSpecs = ($big);
@@ -277,11 +305,11 @@ sub unpackForBlastz {
     # Don't use twoBitToFa's range extraction capabilities -- that
     # confuses blastz/normalizeLav.  Just extract the whole thing as
     # fa and tell blastz what range we're using:
-    &run("/cluster/bin/$machtype/twoBitToFa $fname:$seq $local");
+    &run("$twoBitToFaCmd $fname:$seq $local");
     $local .= &blastzRangeSpec($start, $end);
   } elsif ($fname =~ /\.fa(\.gz)?$/) {
     if ($1) {
-      &run("/bin/gunzip -c $fname > $local");
+      &run("$gunzipCmd -c $fname > $local");
     } else {
       $local = $fname;
     }
@@ -478,7 +506,7 @@ sub abridgeLinSpecReps {
             "$TS2 \"\\\"$qFname\\\" $qStart $qEnd\" " .
             "$TS1X $TS2X > $raw");
   } else {
-    &run("/bin/cp -p $TZF $raw");
+    &run("$cpCmd -p $TZF $raw");
   }
   # Run blastz on query reverse strand and restore repeats:
   &run("revcomp $TS2S > $TS2SR");
@@ -489,7 +517,7 @@ sub abridgeLinSpecReps {
             "$TS2 \"\\\"$qFname-\\\" $qStart $qEnd\" " .
             "$TS1X $TS2X reverse >> $raw");
   } else {
-    &run("/bin/cat $TZF >> $raw");
+    &run("$catCmd $TZF >> $raw");
   }
 }
 
@@ -527,6 +555,17 @@ sub convertOutput {
 #########################################################################
 #
 # -- main --
+# cleanup the defaultPath variable to eliminate non-existent paths:
+$defaultPath = "";
+foreach my $path (@potentialPath) {
+ if ( -d "$path" ) {
+    if (length($defaultPath)) {
+      $defaultPath .= ":$path";
+    } else {
+      $defaultPath = $path;
+    }
+ }
+}
 
 &checkOptions();
 
@@ -538,13 +577,26 @@ if ( -f "$out") {
    exit 0;
 }
 
+
 &loadDef($DEF);
+# find full pathNames for commands:
+$rmCmd = &findCommand("$rmCmd");
+$cpCmd = &findCommand("$cpCmd");
+$mvCmd = &findCommand("$mvCmd");
+$shCmd = &findCommand("$shCmd");
+$lsCmd = &findCommand("$lsCmd");
+$catCmd = &findCommand("$catCmd");
+$gzipCmd = &findCommand("$gzipCmd");
+$gunzipCmd = &findCommand("$gunzipCmd");
+$twoBitToFaCmd = &findCommand("$twoBitToFaCmd");
+
 my $seq1Dir = $defVars{'SEQ1_CTGDIR'} || $defVars{'SEQ1_DIR'};
 my $seq2Dir = $defVars{'SEQ2_CTGDIR'} || $defVars{'SEQ2_DIR'};
 my $seq1Len = $defVars{'SEQ1_CTGLEN'} || $defVars{'SEQ1_LEN'};
 my $seq2Len = $defVars{'SEQ2_CTGLEN'} || $defVars{'SEQ2_LEN'};
 &loadSeqSizes($seq1Len, \%tSizes);
 &loadSeqSizes($seq2Len, \%qSizes);
+
 
 # Make a temporary directory for intermediate files:
 if (exists($defVars{'TMPDIR'})) {
@@ -572,7 +624,7 @@ my $query2bit = $query;
 $query2bit =~ s/.lst$/.2bit/;
 # if partition step constructed the 2bit file for this query, use it:
 if ( -s $query2bit ) {
-  &run("/bin/cp -p $query2bit $TMP");  # it is used repeatedly for each tSpec
+  &run("$cpCmd -p $query2bit $TMP");  # it is used repeatedly for each tSpec
   $query2bit =~ s#qParts/##;
   $query2bit =~ s#tParts/##;  # could be this for self alignment
   @qFileSpecs = undef;
@@ -595,7 +647,7 @@ if ($opt_outFormat) {
 
 # Local file to hold concatenated results of all {target, query} runs:
 my $localOut = "$TMP/local.lav";
-&run("/bin/cp /dev/null $localOut");
+&run("$cpCmd /dev/null $localOut");
 # Local temporary files that are overwritten by each {target, query} run:
 my $littleRaw = "$TMP/little.raw";
 my $littleOut = "$TMP/little.lav";
@@ -625,7 +677,7 @@ foreach my $tSpec (@tFileSpecs) {
     }
     # there may be no lifting involved when axtResult TBD XXX
     if ($axtResult) {
-      &run("/bin/cp -p $littleRaw $littleOut");
+      &run("$cpCmd -p $littleRaw $littleOut");
     } else {
       if ($collapsed) {
         # Lift target side only:
@@ -634,41 +686,41 @@ foreach my $tSpec (@tFileSpecs) {
         &liftLav($littleRaw, $littleOut, $tSeq, $qSeq);
         if ($qLocal =~ /^$TMP/) {
             $qLocal =~ s/\[.*\]$//;
-            &run("/bin/rm $qLocal");
+            &run("$rmCmd $qLocal");
         }
       }
     }
     if ($opt_outFormat) {
       if ($axtResult) {
         if ($opt_outFormat eq 'axt') {
-          &run("/bin/cat $littleOut >> $localOut");
+          &run("$catCmd $littleOut >> $localOut");
         } else {
           my $tSizes = $defVars{'SEQ1_CTGLEN'} || $defVars{'SEQ1_LEN'};
           my $qSizes = $defVars{'SEQ2_CTGLEN'} || $defVars{'SEQ2_LEN'};
           # carry through comments
           &run("grep '^#' $littleOut | egrep -v 'identity|coverage|num_masked' > $littleConv");
           &run("axtToPsl $littleOut $tSizes $qSizes stdout >> $littleConv");
-          &run("/bin/cat $littleConv >> $localOut");
+          &run("$catCmd $littleConv >> $localOut");
         }
       } else {
         &convertOutput($littleOut, $littleConv);
-        &run("/bin/cat $littleConv >> $localOut");
+        &run("$catCmd $littleConv >> $localOut");
       }
     } else {
-      &run("/bin/cat $littleOut >> $localOut");
+      &run("$catCmd $littleOut >> $localOut");
     }
   }
   if ($tLocal =~ /^$TMP/) {
       $tLocal =~ s/\[.*\]$//;
-      &run("/bin/rm $tLocal");
+      &run("$rmCmd $tLocal");
   }
 }
 if ($opt_gz) {
-  &run("/bin/gzip $localOut");
+  &run("$gzipCmd $localOut");
   $localOut .= ".gz";
 }
 # Move collected results to final location.
-&run("/bin/mv $localOut $out");
+&run("$mvCmd $localOut $out");
 
 # Clean up temporary directory:
-&run("/bin/rm -rf $TMP");
+&run("$rmCmd -rf $TMP");

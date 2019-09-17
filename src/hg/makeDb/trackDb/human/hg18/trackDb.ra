@@ -8,6 +8,15 @@ include trackDb.pipeline.ra
 track clonePos override
 longLabel Clone Coverage
 
+track altLocations
+type bed 4
+group map
+color 32,32,190
+shortLabel Alt Haplotypes
+longLabel Alternate Haplotypes to Reference Sequence Correspondence
+url ../cgi-bin/hgTracks?db=$D&position=$$
+urlLabel Corresponding position:
+
 track phyloPCons28way
 shortLabel 28-Way Base Cons
 compositeTrack on

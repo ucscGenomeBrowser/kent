@@ -62,6 +62,7 @@
 	<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">Utilities</a></li>
 	<li class="last"><a href="../goldenPath/help/ftp.html">FTP</a></li>
 	<li class="last"><a href="../goldenPath/help/mysql.html">MySQL Access</a></li>
+	<li class="last"><a href="../goldenPath/help/api.html">JSON API</a></li>
 	</ul>
 </li>
 <li class="menuparent" id="myData"><span>My Data</span>
@@ -69,11 +70,21 @@
 	<li><a id="sessionsMenuLink" href="../cgi-bin/hgSession?hgS_doMainPage=1">My Sessions</a></li>
 	<li><a id="publicSessionsMenuLink" href="../cgi-bin/hgPublicSessions">Public Sessions</a></li>
 	<li><a id="trackHubsMenuLink" href="../cgi-bin/hgHubConnect">Track Hubs</a></li>
-	<li class="last"><a id="customTracksMenuLink" href="../cgi-bin/hgCustom">Custom Tracks</a></li>
+	<li><a id="customTracksMenuLink" href="../cgi-bin/hgCustom">Custom Tracks</a></li>
+	<li class="last"><a id="customCompositeMenuLink" href="../cgi-bin/hgCollection">Track Collection Builder</a></li>
 	</ul>
 </li>
 
 <!-- OPTIONAL_VIEW_MENU -->
+
+<!-- OPTIONAL_PROJECT_MENU_START -->
+<li class="menuparent" id="projects"><span>Projects</span>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first"><a href="../gtex.html">Genotype Tissue Expression (GTEx)</a></li>
+	<li><a href="../ENCODE/index.html">Encyclopedia of DNA Elements (ENCODE)</a></li>
+	<li class="last"><a href="../singlecell.html">UCSC Cell Browser</a></li>
+	</ul>
+<!-- OPTIONAL_PROJECT_MENU_END -->
 
 <li class="menuparent" id="help"><span>Help</span><ul style="display: none; visibility: hidden;">
 <!-- CONTEXT_SPECIFIC_HELP -->

@@ -9,7 +9,7 @@
 #Explanation of DDF terms
 #files: The name of the files to be associated with this data
 #view: The type of view that these files are. The options are listed in this DAF
-#cell: The cell name. The cell registered vocbulary is found at: http://hgwdev.cse.ucsc.edu/ENCODE/cellTypes.html
+#cell: The cell name. The cell registered vocbulary is found at: http://hgwdev.soe.ucsc.edu/ENCODE/cellTypes.html
 #labVersion: Free text for the lab to keep track of any other data
 #replicate: The Replicate number. The replication number of a given experiment.
 #origAssembly: The assembly that the data was originally released on (hg18 or hg19)

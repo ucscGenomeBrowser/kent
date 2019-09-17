@@ -69,7 +69,6 @@ boolean reportSearch(char *termToSearch)
 {
 struct hgFindSpec *shortList = NULL, *longList = NULL;
 struct hgFindSpec *hfs = NULL;
-struct hgPositions *hgp = NULL;
 int startMs = 0, endMs = 0;
 boolean gotError = FALSE;
 char *chrom = NULL;
@@ -136,10 +135,16 @@ printf("\nTook %dms to determine multiple/additive searches.\n"
 
 if (isNotEmpty(termToSearch))
     {
+    cartSetString(cart, "db", database);
+    char *position = cloneString(termToSearch);
+    struct dyString *dyWarn = dyStringNew(0);
     startMs = clock1000();
-    hgp = findGenomePos(database, termToSearch, &chrom, &chromStart, &chromEnd, cart);
+    struct hgPositions *hgp = hgFindSearch(cart, &position, &chrom, &chromStart, &chromEnd,
+                                           "checkHgFindSpec", dyWarn);
     endMs = clock1000();
-    if (hgp != NULL && hgp->singlePos != NULL)
+    if (isNotEmpty(dyWarn->string))
+        warn("%s", dyWarn->string);
+    if (hgp->singlePos != NULL)
 	{
 	struct hgPos *pos = hgp->singlePos;
 	char *table = "[No reported table!]";
@@ -152,6 +157,8 @@ if (isNotEmpty(termToSearch))
 	       termToSearch, table, chrom, chromStart+1, chromEnd,
 	       name, browserName, description);
 	}
+    else
+        hgPositionsHtml(database, hgp, "checkHgFindSpec", cart);
     printf("\nTook %dms to search for %s.\n\n",
 	   endMs - startMs, termToSearch);
     }

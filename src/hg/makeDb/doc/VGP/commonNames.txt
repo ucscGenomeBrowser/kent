@@ -1,0 +1,4 @@
+GCA_004027225.1_bStrHab1_v1.p	owl parrot
+GCA_901765095.1_aMicUni1.1	tiny Cayenne caecilian
+GCA_901699155.1_bStrTur1.1	turtle dove
+GCF_900634415.1_fCotGob3.1	channel bull blenny

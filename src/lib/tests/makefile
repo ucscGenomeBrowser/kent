@@ -13,8 +13,8 @@ BIN_DIR = bin/${MACHTYPE}
 
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
-    ${TABIX_TESTS} hacTreeTest testSumDoubles
-	rm -r output fetchUrlTest 
+    ${TABIX_TESTS} hacTreeTest testSumDoubles jsonQueryTest
+	rm -r output fetchUrlTest testSumDoubles
 	@echo tested all
 
 
@@ -168,7 +168,7 @@ ${BIN_DIR}/htmlMimeTest:  mkdirs htmlMimeTest.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/htmlMimeTest htmlMimeTest.o ${MYLIBS} ${L}
 
 htmlMime1: ${BIN_DIR}/htmlMimeTest mkdirs
-	${BIN_DIR}/htmlMimeTest http://hgwdev.cse.ucsc.edu/cgi-bin/hgBlat input/htmlMime.txt 3490 3502 > output/$@.out
+	${BIN_DIR}/htmlMimeTest https://hgwdev.gi.ucsc.edu/cgi-bin/hgBlat input/htmlMime.txt 3490 3502 > output/$@.out
 	diff expected/$@.out output/$@.out
 
 
@@ -233,6 +233,9 @@ miniBlat:  mkdirs miniBlat.o ${MYLIBS}
 
 fetchUrlTest:  mkdirs fetchUrlTest.o ${MYLIBS}
 	${CC} ${COPT} -o fetchUrlTest fetchUrlTest.o ${MYLIBS} ${L}
+
+fetchUrlViaUdcTest:  mkdirs fetchUrlViaUdcTest.o ${MYLIBS}
+	${CC} ${COPT} -o fetchUrlViaUdcTest fetchUrlViaUdcTest.o ${MYLIBS} ${L}
 
 ##
 # gff3 tests
@@ -325,11 +328,21 @@ testOutOfMem: testOutOfMem.o ${MYLIBS} mkdirs
 	-${BIN_DIR}/testOutOfMem 100000 1
 
 clean:
-	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out fetchUrlTest
+	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out fetchUrlTest fetchUrlViaUdcTest
 
 ${BIN_DIR}/testDecodedString: mkdirs testDecodedString.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/testDecodedString testDecodedString.o ${MYLIBS} ${L}
 
 testDecodedString:	${BIN_DIR}/testDecodedString mkdirs
 	${BIN_DIR}/testDecodedString -verbose=2 quote this\\ following
+
+# jsonQuery:
+jsonQueryTester=${BIN_DIR}/jsonQueryTest
+jsonQueryTest: ${jsonQueryTester} mkdirs
+	${jsonQueryTester} input/$@Json.txt input/$@Path.txt output/$@.out
+	diff expected/$@.out output/$@.out
+
+${BIN_DIR}/jsonQueryTest: jsonQueryTest.o ${MYLIBS}
+	${MKDIR} ${BIN_DIR}
+	${CC} ${COPT} -o ${BIN_DIR}/jsonQueryTest jsonQueryTest.o ${MYLIBS} ${L}
 

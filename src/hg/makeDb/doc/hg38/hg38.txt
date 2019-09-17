@@ -3645,9 +3645,9 @@ TMPDIR=/dev/shm
 
 _EOF_
 #############################################################################
-# LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 9/9/16 angie)
-# Redmine #13359
-# previously done 7/7/14
+# LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 5/30/18 angie)
+# Redmine #13359 -- otto-mate To Do #17877
+# previously done 7/7/14, 9/9/16
     set today = `date +%Y_%m_%d`
     mkdir -p /hive/data/genomes/hg38/bed/lrg/$today
     cd /hive/data/genomes/hg38/bed/lrg/$today
@@ -3657,14 +3657,18 @@ _EOF_
     # Run script to convert LRG*.xml files to BED+ for regions and genePredExt+fa for transcripts:
     ~/kent/src/hg/utils/automation/parseLrgXml.pl GRCh38
     genePredCheck lrgTranscriptsUnmapped.gp
-#Error: lrgTranscriptsUnmapped.gp:680: LRG_7t1 no exonFrame on CDS exon 46
-#checked: 805 failed: 1
+#Error: lrgTranscriptsUnmapped.gp:765: LRG_7t1 no exonFrame on CDS exon 46
+#checked: 917 failed: 1
     # If there are complaints e.g. about exonFrame, look for inconsistencies in the
     # affected transcript's coding_region/coordinates vs. exon/intron info in xml.
     # Contact Variation team leader Fiona Cunningham @EBI to resolve in the background
     # (missing exonFrame info doesn't affect our track representation because we end up using
     # psl).  We agreed to disagree about exon 46 of LRG_7t1 because that last coding exon
     # portion is only the stop codon.
+
+    # Filter out alts and patches not (yet) included in hg38:
+    mv lrg.bed lrg.allSeqs.bed
+    cut -f 1 ../../../chrom.sizes | grep -Fwf - lrg.allSeqs.bed > lrg.bed
 
     # Load LRG regions:
     bedToBigBed lrg.bed /hive/data/genomes/hg38/chrom.sizes lrg.bb \
@@ -3676,7 +3680,7 @@ _EOF_
     # Map LRG fixed_annotation transcripts from LRG coords to hg38 coords (HT MarkD):
     lrgToPsl lrg.bed /hive/data/genomes/hg38/chrom.sizes lrg.psl
     pslCheck lrg.psl
-#checked: 666 failed: 0 errors: 0
+#checked: 802 failed: 0 errors: 0
     awk '{print $10 "\t" $11;}' lrg.psl > lrg.sizes
     genePredToFakePsl -chromSize=lrg.sizes placeholder \
       lrgTranscriptsUnmapped.gp lrgTranscriptsFakePsl.psl lrgTranscripts.cds
@@ -3689,12 +3693,6 @@ _EOF_
     grep -l NR_ LRG_163.xml LRG_347.xml
 #LRG_163.xml
 #LRG_347.xml
-    # The resulting genePredExt from that process is missing the name2 column from
-    # the original; add it back:
-    cut -f 1,12 lrgTranscriptsUnmapped.gp > txName2
-    join -j 1 -a 1 -t'	' \
-      -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,2.2,1.13,1.14,1.15 \
-      lrgTranscriptsHg38NoName2.gp txName2 > lrgTranscriptsHg38.gp
 
     # Load PSL, CDS and sequences.
     hgLoadPsl hg38 -table=lrgTranscriptAli lrgTranscriptsHg38.psl
@@ -5314,61 +5312,6 @@ TMPDIR=/dev/shm
     featureBits -countGaps mm9 genomicSuperDups
     # 208214567 bases of 2725765481 (7.639%) in intersection
 
-#########################################################################
-2014-08-11: import of UCSC GENCODE group processing of GENCODE V20 (markd)
-    # download files
-    mkdir -p /hive/data/genomes/hg38/bed/gencodeV20/data
-    cd /hive/data/genomes/hg38/bed/gencodeV20
-
-    # download gencode release
-    cd data
-    wget -nv -r -np ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_20
-    mv ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_20 .
-    rm -rf ftp.sanger.ac.uk
-
-    cd ..
-    # create Makefile from previous one.
-    cp /hive/data/genomes/hg19/bed/gencodeV19/Makefile .
-
-    # build and load tables
-    (time nice make -j 10) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.
-        make cmpRelease >gencode-cmp.tsv
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.
-    ## Important to make sure filter attrs.transcriptType matches current set
-    ## figured out with
-    select distinct transcriptType from wgEncodeGencodeAttrsV20 order by transcriptType;
-    cd kent/src/hg/makeDb/trackDb
-    cp human/hg38/wgEncodeGencodeV18.ra human/hg38/wgEncodeGencodeV20.ra
-    cp human/hg38/wgEncodeGencodeV18.html human/hg38/wgEncodeGencodeV20.html
-
-    # edit these plus human/hg38/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeV20.ra in reverse order with previous
-    #   tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous minus 0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-    # - Update wgEncodeGencodeSuper.html to describe new release and to
-    #   pick up other updates.
-
-    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
-    ### track handler for this version of gencode:
-    registerTrackHandler("wgEncodeGencodeV20", gencodeGeneMethods);
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode V??' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    cd /hive/data/genomes/hg38/bed/gencodeV20
-    make joinerCheck  # output in check/joiner.out
-
-
 ##############################################################################
 # cloneEnds (DONE - 2014-08-14 - Hiram)
 
@@ -5915,55 +5858,6 @@ TMPDIR=/dev/shm
     checkTableCoords hg38 par
 
 
-#########################################################################
-2014-10-16: import of UCSC GENCODE group processing of GENCODE V21 (markd)
-    # download files
-    mkdir -p /hive/data/genomes/hg38/bed/gencodeV21/data
-    cd /hive/data/genomes/hg38/bed/gencodeV21
-
-    # create Makefile from previous one.
-    # WARNING: next build start with hg/makeDb/outside/gencode/gencodeLoad.mk
-    cp /hive/data/genomes/hg38/bed/gencodeV20/Makefile .
-
-    # download, build and load tables
-    (time nice make -j 10) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.
-        make cmpRelease >gencode-cmp.tsv
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.
-    ## Important to make sure filter attrs.transcriptType matches current set
-    ## figured out with
-    select distinct transcriptType from wgEncodeGencodeAttrsV21 order by transcriptType;
-    cd kent/src/hg/makeDb/trackDb
-    cp human/hg38/wgEncodeGencodeV18.ra human/hg38/wgEncodeGencodeV21.ra
-    cp human/hg38/wgEncodeGencodeV18.html human/hg38/wgEncodeGencodeV21.html
-
-    # edit these plus human/hg38/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeV21.ra in reverse order with previous
-    #   tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous minus 0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-    # - Update wgEncodeGencodeSuper.html to describe new release and to
-    #   pick up other updates.
-
-    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
-    ### track handler for this version of gencode:
-    registerTrackHandler("wgEncodeGencodeV21", gencodeGeneMethods);
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode V??' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    cd /hive/data/genomes/hg38/bed/gencodeV21
-    make joinerCheck  # output in check/joiner.out
-
-
 #############################################################################
 # LASTZ Cow bosTau8 (DONE - 2014-10-15 - Steve)
     mkdir /hive/data/genomes/hg38/bed/lastzBosTau8.2014-10-215
@@ -6195,7 +6089,7 @@ CLUSTER=ku
 SPECIES="hg38 mm10"
 ROOTDIR="/cluster/home/hartera/public_html/retro/hg38Jun14"
 WEBROOT=$ROOTDIR/retro.$VERSION
-WEBSERVER=http://hgwdev-hartera.cse.ucsc.edu
+WEBSERVER=http://hgwdev-hartera.soe.ucsc.edu
 SHUFFLEDIR=shuffle
 SHUFFLEROOT=$WEBROOT/$SHUFFLEDIR
 DUPDIR=dups
@@ -6273,51 +6167,6 @@ awk 'BEGIN {OFS="\t"} {print 0, $1, $2, $1, $2}' /cluster/data/hg38/chrom.sizes 
 rm tmpChrom
 
 #########################################################################
-2015-03-13: import of UCSC GENCODE group processing of GENCODE V22 (markd)
-    # download files
-    mkdir -p /hive/data/genomes/hg38/bed/gencodeV22
-    cd /hive/data/genomes/hg38/bed/gencodeV22
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set
-    # release and transcript support versions
-
-
-    # download, build and load tables
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.
-        make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk cmpRelease >gencode-cmp.tsv
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.
-    ## Important to make sure filter attrs.transcriptType matches current set
-    ## figured out with
-    select distinct transcriptType from wgEncodeGencodeAttrsV22 order by transcriptType;
-    cd kent/src/hg/makeDb/trackDb
-    cp human/hg38/wgEncodeGencodeV18.ra human/hg38/wgEncodeGencodeV22.ra
-    cp human/hg38/wgEncodeGencodeV18.html human/hg38/wgEncodeGencodeV22.html
-
-    # edit these plus human/hg38/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeV22.ra in reverse order with previous
-    #   tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous minus 0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-    # - Update wgEncodeGencodeSuper.html to describe new release and to
-    #   pick up other updates.
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode V??' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    # output in check/joiner.out
-    cd /hive/data/genomes/hg38/bed/gencodeV22
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-#########################################################################
 # UCSC to RefSeq name correspondence (DONE - 2015-04-13 - Hiram)
 
     mkdir /hive/data/genomes/hg38/bed/ucscToRefSeq
@@ -6358,94 +6207,6 @@ rm tmpChrom
 
 # see reg.txt
 #########################################################################
-2015-10-02: import of UCSC GENCODE group processing of GENCODE V23 (markd)
-    # download files
-    mkdir -p /hive/data/genomes/hg38/bed/gencodeV23
-    cd /hive/data/genomes/hg38/bed/gencodeV23
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set
-    # release and transcript support versions
-
-
-    # download, build and load tables
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.
-        make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk cmpRelease >gencode-cmp.tsv
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.
-    ## Important to make sure filter attrs.transcriptType matches current set
-    ## figured out with
-    select distinct transcriptType from wgEncodeGencodeAttrsV23 order by transcriptType;
-    cd kent/src/hg/makeDb/trackDb
-    cp human/hg38/wgEncodeGencodeV22.ra human/hg38/wgEncodeGencodeV23.ra
-    cp human/hg38/wgEncodeGencodeV22.html human/hg38/wgEncodeGencodeV23.html
-
-    # edit these plus human/hg38/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeV23.ra tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous minus 0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-    # - Update wgEncodeGencodeSuper.html to describe new release and to
-    #   pick up other updates.
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode V??' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    # output in check/joiner.out
-    cd /hive/data/genomes/hg38/bed/gencodeV23
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-#########################################################################
-2015-12-08: import of UCSC GENCODE group processing of GENCODE V24 (markd)
-    # download files
-    mkdir -p /hive/data/genomes/hg38/bed/gencodeV24
-    cd /hive/data/genomes/hg38/bed/gencodeV24
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set
-    # release and transcript support versions
-
-
-    # download, build and load tables
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense (results in gencode-cmp.tsv)
-        make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk cmpRelease
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.  Follow instructiuons in ra file to ensure
-    ## filters are correct.
-    cd kent/src/hg/makeDb/trackDb
-    cp human/hg38/wgEncodeGencodeV23.ra human/hg38/wgEncodeGencodeV24.ra
-    cp human/hg38/wgEncodeGencodeV23.html human/hg38/wgEncodeGencodeV24.html
-
-
-    # edit these plus human/hg38/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeV24.ra tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous minus 0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-    # - Update wgEncodeGencodeSuper.html to describe new release and to
-    #   pick up other updates.
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode V??' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    # output in check/joiner.out
-    ### NOT DONE SINCE TRACK NOT BEING PUSHED
-    cd /hive/data/genomes/hg38/bed/gencodeV24
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-#########################################################################
 # GWIPS-viz Ribo-seq - (DONE - 2016-02-05 - Steve)
 # contact Audrey Michel (audreymannion@gmail.com)
 # redmine #16765
@@ -6464,71 +6225,6 @@ hgsql hg38
 create table gwipsvizRiboseq select * from gc5BaseBw;
 update gwipsvizRiboseq set fileName="/gbdb/hg38/bbi/gwipsvizRiboseq/gwipsvizRiboseq.bw" where fileName="/gbdb/hg38/bbi/gc5BaseBw/gc5Base.bw";
 
-#########################################################################
-2016-07-23: import of UCSC GENCODE group processing of GENCODE V25 (markd)
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/hg38/bed/gencodeV25
-    pushd /hive/data/genomes/hg38/bed/gencodeV25
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.  Results are in gencode-cmp.tsv
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.  Follow instructions in ra file to ensure
-    ## filters are correct.
-    cd kent/src/hg/makeDb/trackDb
-    cp mouse/hg38/wgEncodeGencodeVM9.ra mouse/hg38/wgEncodeGencodeV25.ra
-    cp mouse/hg38/wgEncodeGencodeVM9.html mouse/hg38/wgEncodeGencodeV25.html
-
-    # edit these plus mouse/hg38/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeV25.ra tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous minus 0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-    # - Update wgEncodeGencodeSuper.html to describe new release and to
-    #   pick up other updates.  [ONLY if it's going to be pushed]
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode V??' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    # output in check/joiner.out
-    cd /hive/data/genomes/hg38/bed/gencodeV25
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-#########################################################################
-2017-04-16: import of UCSC GENCODE group processing of GENCODE V26 (markd)
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/hg38/bed/gencodeV26
-    pushd /hive/data/genomes/hg38/bed/gencodeV26
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.  Results are in gencode-cmp.tsv
-
-    # generate trackDb and joiner blurb
-    pushd kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg38 26 88 'March 2017'
-
-    # edit human/hg38/trackDb.wgEncode.ra to add new .ra file include
-    make DBS=hg38
-
-    # Update human/hg38/wgEncodeGencodeSuper.html and update 'Release Notes'
-    # to describe new release. [ONLY if it's going to be pushed]
-
-    # edit  all.joiner to add ~/tmp/gencodeV26.joiner
-    # verify with:
-    pushd /hive/data/genomes/hg38/bed/gencodeV26
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-    # commit all
 #########################################################################
 # COSMIC v81 DONE Chris Eisenhart 2017-05-11
 # Make a new COSCMIC track for hg19
@@ -6797,39 +6493,47 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` danRer11 hg38) \
        > rbest.log 2>&1 &
     # real	638m45.337s
-
+_EOF_
 #########################################################################
-# refSeqFuncElems NCBI refSeq functional elements, DONE 2017-08-01 Chris
-mkdir /hive/data/outside/refSeqFuncElems
-cd /hive/data/outside/refSeqFuncElems
+# refSeqFuncElems NCBI refSeq functional elements, REDONE 2017-11-29 Angie
+# previously done 2017-08-01 by Chris E
 
-# Get the data from their ftp server
-wget ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/GFF_interim/interim_GRCh38.p10_top_level_2017-05-03.gff3.gz
-gunzip interim_GRCh38.p10_top_level_2017-05-03.gff3.gz
+mkdir /hive/data/genomes/hg38/bed/refSeqFuncElems.2017-11-29
+cd /hive/data/genomes/hg38/bed/refSeqFuncElems.2017-11-29
 
-# Get a table to map refSeq chrom names to our chrom names
-hgsql hg38 -e "select * from ucscToRefSeq" | cut -f 1,4 ucscToRefSeq.tsv | awk '{print $2"\t"$1}' > refSeqToUcsc.tsv
+# NOTE FOR NEXT TIME: instead of using interim GFF, in the future these annotations might be
+# folded into the same main release GFF3 from which the ncbiRefSeq* tables are extracted by
+# doNcbiRefSeq.pl.
+wget ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/GFF_interim/interim_GRCh38.p11_top_level_2017-06-27.gff3.gz
 
-# Drop the header lines
-tail -3610666 ../interim_GRCh38.p11_top_level_2017-06-27.gff3 | sort > foo2
-join foo2 <(sort refSeqToUcsc.tsv) -t $'\t' > join.foo
+# Get mapping of RefSeq NC_* chromosome accs (and NT_*, NW_*) to hg38 chrom names
+hgsql hg38 -NBe 'select alias, chrom from chromAlias where source = "refseq" order by alias' \
+> refSeqToChrom.tab
+cut -f 2 refSeqToChrom.tab | sed -e 's/^/^/' > chrom.tab
 
-# Join with the ucscToRefSeq table to get UCSC chromosomes
-join <(tail -3610666 interim_GRCh38.p11_top_level_2017-06-27.gff3 | sort) <(sort refSeqToUcsc.tsv) -t $'\t' > join.foo
+# Use Terence Murphy's list of feature types (and the multi-type attribute regulatory_class)
+# to identify Functional Elements and swap in hg38 chrom names.
+# Use subColumn -miss so it doesn't quit when it sees a patch contig that doesn't map to an
+# hg38 chrom.  Use grep -f chrom.tab to filter out patch contig annotations.
+zcat interim_GRCh38.p11_top_level_2017-06-27.gff3.gz \
+| grep -P "(\t(CAAT_signal|GC_rich_promoter_region|TATA_box|enhancer|insulator|locus_control_region|mobile_genetic_element|origin_of_replication|promoter|protein_binding_site|recombination_feature|regulatory_region|repeat_region|sequence_feature|sequence_secondary_structure|silencer|stem_loop)\t|regulatory_class=)" \
+| subColumn -miss=/dev/null 1 stdin refSeqToChrom.tab stdout \
+| grep -f chrom.tab > funcElems.gff
+wc -l funcElems.gff
+#5756 funcElems.gff
 
-# Python script to grab just the functional elements from this list (given to us by Terence),
-# move things into a bed order and subtract 1 from the chr start coordinates provided.
-./parseRefSeqFuncElems join.foo bed 108.20170627
+# Transform GFF to BED+
+~/kent/src/hg/utils/automation/parseRefSeqFuncElems funcElems.gff /dev/stdout \
+| sort -k1,1 -k2n,2n > refSeqFuncElems.bed
+wc -l refSeqFuncElems.bed
+#5756 refSeqFuncElems.bed
 
-sort -k1,1 -k2,2n bed > sorted.bed
+# Make bigBed and link from /gbdb
+bedToBigBed -tab -type=bed9+7 -as=$HOME/kent/src/hg/lib/refSeqFuncElems.as \
+  refSeqFuncElems.bed /hive/data/genomes/hg38/chrom.sizes refSeqFuncElems.bb
+rm -f /gbdb/hg38/ncbiRefSeq/refSeqFuncElems.bb
+ln -s `pwd`/refSeqFuncElems.bb /gbdb/hg38/ncbiRefSeq/
 
-#wc sorted.bed
-#6188  159382 1763350 sorted.bed
-
-bedToBigBed -type=bed8+8 -as=refSeqFuncElems.as sorted.bed /hive/data/genomes/hg38/chrom.sizes refSeqFuncElems.bb -tab
-
-cd /gbdb/hg38/ncbiRefSeq
-ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElems.bb .
 ###################################################################
 # cosmicRegions (DONE 2017-08-03 Chris)
 # Make a new COSCMIC track for hg38 v82
@@ -6858,30 +6562,82 @@ cd /gbdb/hg38/cosmic/
 ln -s /hive/data/outside/cosmic/hg38/v82/cosMutHg38V82.bb .
 
 #########################################################################
-2017-09-14: import of UCSC GENCODE group processing of GENCODE V27 (markd)
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+# RepeatMasker Visualization track update (DONE - 2018-05-04 - ChrisL)
+    screen -S rmskJoined.2018-05-04
+    mkdir /hive/data/genomes/hg38/bed/rmskJoined.2018-05-04
+    cd /hive/data/genomes/hg38/bed/rmskJoined.2018-05-04
 
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/hg38/bed/gencodeV27
-    pushd /hive/data/genomes/hg38/bed/gencodeV27
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+    ln -s ../repeatMasker/hg38.sorted.fa.out .
+    ln -s ../repeatMasker/hg38.fa.align.gz .
 
-    # compare tables from previous release to see if number changed makes
-    # sense.  Results are in gencode-cmp.tsv
+    # this script points to the most recent RepeatMasker version:
+    time (/scratch/data/RepeatMasker/util/rmToUCSCTables.pl \
+        -out hg38.sorted.fa.out -align hg38.fa.align.gz) > do.log 2>&1 &
 
-    # generate trackDb and joiner blurb
-    pushd kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg38 27 90 'Aug 2017'
+    # no differences, forgot to remake rmsk files
+    # so instead remake the rmsk track and try again
+    mkdir /hive/data/genomes/hg38/bed/repeatMasker.2018-05-04
+    cd /hive/data/genomes/hg38/bed/repeatMasker.2018-05-04
 
-    # Update human/hg38/wgEncodeGencodeSuper.html and update 'Release Notes'
-    # to describe new release. [ONLY if it's going to be pushed]
+    # remake the sorted.fa.out and fa.align.gz, stop after masking
+    # so rmsk table isn't overwritten
+    time (doRepeatMasker.pl -stop=mask -useHMMER -bigClusterHub=ku \
+       -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` hg38) > mask.log 2>&1 &
+    # RepeatMasker bug?: Undefined id, line 1440295 of input:
+    #    10  26.1  0.0  0.0  chr13     114292339 114292382   (71946) C  L1P4           LINE/L1               (17) 6149   6106
+    # RepeatMasker bug?: Undefined id, line 3529762 of input:
+    #   992   2.3  0.5  0.0  chr3      180461254 180462048 (17833511) C  L1PA3          LINE/L1                (3) 6152   5354
+    # RepeatMasker bug?: Undefined id, line 3529763 of input:
+    #  1153   3.2  0.2  0.0  chr3      180462043 180463006 (17832553) +  L1PA3          LINE/L1               4392 5357  (789)
+    # RepeatMasker bug?: Undefined id, line 5303571 of input:
+    #   220  22.5  0.0 17.7  chr9      105798076 105799127 (32595590) C  SATR2          Satellite              (4)  866      1
+    # real    643m17.617s
 
-    # edit human/hg38/trackDb.wgEncode.ra to add new .ra file include
-    make DBS=hg38
+    # get rid of the missing id items:
+    grep -v "114292339 114292382\|180461254 180462048\|180462043 180463006\|105798076 105799127" \
+        hg38.fa.out > clean.hg38.fa.out
+    mv clean.hg38.fa.out hg38.fa.out
 
-    # edit  all.joiner to add ~/tmp/gencodeV27.joiner
-    # verify with:
-    pushd /hive/data/genomes/hg38/bed/gencodeV27
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+    # finish the last step of doCat.csh:
+    /cluster/bin/scripts/extractNestedRepeats.pl hg38.fa.out | sort -k1,1 -k2,2n > hg38.nestedRepeats.bed
 
-    # commit all
+    cd /hive/data/genomes/hg38/bed/rmskJoined.2018-05-04
+
+    rm hg38.sorted.fa.out
+    rm hg38.fa.align.gz
+    rm *.tsv
+    ln -s ../repeatMasker.2018-05-04/hg38.sorted.fa.out .
+    ln -s ../repeatMasker.2018-05-04/hg38.fa.align .
+
+    # and then re-run
+    time (/scratch/data/RepeatMasker/util/rmToUCSCTables.pl \
+        -out hg38.sorted.fa.out -align hg38.fa.align.gz) > rerun.log 2>&1 &
+    # real    141m7.268s
+
+    # confirm the counts are different from the previous version:
+    # wc -l ../rmskJoined/hg38.fa.align.tsv ../rmskJoined/hg38.sorted.fa.join.bed ../rmskJoined/hg38.sorted.fa.out.tsv
+   7203858 ../rmskJoined/hg38.fa.align.tsv
+   4607727 ../rmskJoined/hg38.sorted.fa.join.bed
+   5520118 ../rmskJoined/hg38.sorted.fa.out.tsv
+  17331703 total
+    # wc -l *.tsv
+   7227245 hg38.fa.align.tsv
+   4828114 hg38.sorted.fa.join.tsv
+   5916189 hg38.sorted.fa.out.tsv
+  17971548 total
+
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/rmskJoined.sql \
+        -renameSqlTable -verbose=4 -tab \
+            -type=bed4+9 -as=$HOME/kent/src/hg/lib/rmskJoined.as hg38 \
+                rmskJoinedCurrent hg38.sorted.fa.join.tsv \
+                    > loadJoined.log 2>&1
+
+    hgLoadSqlTab hg38 rmskAlignCurrent \
+        /cluster/home/chmalee/kent/src/hg/lib/rmskAlign.sql \
+            hg38.fa.align.tsv > loadAlign.log 2>&1
+
+    hgLoadOutJoined -verbose=2 -table=rmskOutCurrent hg38 hg38.sorted.fa.out > loadOut.log 2>&1
+
+    featureBits -countGaps hg38 rmskJoinedCurrent
+    # 2796899855 bases of 3209286105 (87.150%) in intersection
+#########################################################################

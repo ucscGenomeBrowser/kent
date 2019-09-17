@@ -90,7 +90,7 @@ void cdwPublicSubset(char *outDir)
 {
 makeDir(outDir);
 struct sqlConnection *conn = cdwConnect();
-struct slName *tableList = sqlListTablesLike(conn, "like 'cdw%'");
+struct slName *tableList = sqlListTablesLike(conn, "cdw%");
 uglyf("Got %d tables\n", slCount(tableList));
 
 char query[512];
@@ -117,6 +117,7 @@ for (table = tableList; table != NULL; table = table->next)
         sameString(tableName, "cdwBiosample") ||
         sameString(tableName, "cdwExperiment") ||
 	sameString(tableName, "cdwFileTags") ||
+	sameString(tableName, "cdwFileFacets") ||
 	sameString(tableName, "cdwScriptRegistry") ||
 	sameString(tableName, "cdwSubscriber") )
         continue;

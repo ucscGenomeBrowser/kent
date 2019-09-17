@@ -1,5 +1,5 @@
 track mappability
-superTrack on hide
+superTrack on
 group map
 shortLabel Mappability
 longLabel Hoffman Lab Umap and Bismap Mappability
@@ -7,7 +7,7 @@ longLabel Hoffman Lab Umap and Bismap Mappability
     track umap
     parent mappability
     compositeTrack on 
-    type bigBed 6
+    type bigWig
     subGroup1 view Views SR=Single-read MR=Multi-read
     group map
     shortLabel Umap
@@ -20,7 +20,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
         type bigBed 6
         visibility squish
         view SR
-        viewUi on
 
             track umap24
             parent umapBigBed on
@@ -67,7 +66,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
         visibility full
         viewLimits 0:1
         view MR
-        viewUi on
 
             track umap36Quantitative
             parent umapBigWig off
@@ -78,6 +76,7 @@ longLabel Hoffman Lab Umap and Bismap Mappability
             subGroups view=MR
             priority 6
             color 80,70,240
+            type bigWig 0.027778 1.0
 
             track umap24Quantitative
             parent umapBigWig on
@@ -87,8 +86,9 @@ longLabel Hoffman Lab Umap and Bismap Mappability
             subGroups view=MR
             priority 5
             color 80,20,240
+            type bigWig 0.041667 1.0
 
-            track umap550Quantitative
+            track umap50Quantitative
             parent umapBigWig off
             bigDataUrl /gbdb/hg38/hoffmanMappability/k50.Umap.MultiTrackMappability.bw
             shortLabel Umap M50
@@ -97,6 +97,7 @@ longLabel Hoffman Lab Umap and Bismap Mappability
             subGroups view=MR
             priority 7
             color 80,120,240
+            type bigWig 0.02 1.0
 
             track umap100Quantitative
             parent umapBigWig off
@@ -107,12 +108,14 @@ longLabel Hoffman Lab Umap and Bismap Mappability
             subGroups view=MR
             priority 8
             color 80,170,240
+            type bigWig 0.01 1.0
 
     track bismap
     parent mappability
     compositeTrack on 
     subGroup1 view Views SR=Single-read MR=Multi-read
-    type bigBed 6
+    type bigWig
+    noInherit on
     group map
     shortLabel Bismap
     longLabel Single-read and multi-read mappability after bisulfite conversion
@@ -125,7 +128,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
         visibility dense
         shortLabel Single-read mappability
         view SR
-        viewUi on
 
             track bismap50Neg
             parent bismapBigBed off
@@ -214,7 +216,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
         shortLabel Multi-read mappability
         view MR
         viewLimits 0:1
-        viewUi on
 
             track bismap50Quantitative
             parent bismapBigWig off
@@ -225,6 +226,7 @@ longLabel Hoffman Lab Umap and Bismap Mappability
             subGroups view=MR
             priority 11
             color 240,120,80
+            type bigWig 0.02 1.00
 
             track bismap36Quantitative
             parent bismapBigWig off
@@ -235,6 +237,7 @@ longLabel Hoffman Lab Umap and Bismap Mappability
             subGroups view=MR
             priority 10
             color 240,70,80
+            type bigWig 0.027778 1.00
         
             track bismap100Quantitative
             parent bismapBigWig off
@@ -245,6 +248,7 @@ longLabel Hoffman Lab Umap and Bismap Mappability
             subGroups view=MR
             priority 12
             color 240,170,80
+            type bigWig 0.01 1.00
 
             track bismap24Quantitative
             parent bismapBigWig on
@@ -255,3 +259,4 @@ longLabel Hoffman Lab Umap and Bismap Mappability
             subGroups view=MR
             priority 9
             color 240,20,80
+            type bigWig 0.041667 1.0

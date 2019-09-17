@@ -405,6 +405,7 @@ void doOutGff(char *table, struct sqlConnection *conn, boolean outputGtf)
 {
 struct hTableInfo *hti = getHti(database, table, conn);
 struct bed *bedList;
+struct hash *chromHash = NULL;
 struct slName *exonFramesList = NULL;
 char source[HDB_MAX_TABLE_STRING];
 int itemCount;
@@ -412,22 +413,26 @@ struct region *region, *regionList = getRegions();
 
 textOpen();
 
-boolean simpleTableExists = sqlTableExists(conn, table);
-// simpleTable means not split table, not custom track
-// However it still can include bbi table with bam fileName path
 int efIdx = -1;
-if (simpleTableExists)  // no tables having exonFrames are split tables anyway
-    efIdx = sqlFieldIndex(conn, table, "exonFrames");
 safef(source, sizeof(source), "%s_%s", database, table);
-itemCount = 0;
-struct hash *chromHash = NULL;
-int regionCount = slCount(regionList);
-// regionList can have many thousands of items e.g. rheMac3 has 34000 chroms!
-// This regionCount threshold should be just above the # chroms in the latest human assembly
-if (simpleTableExists && (regionCount > 500))  
+if (conn)
     {
-    chromHash = makeChromHashForTable(conn, table);
-    };
+    boolean simpleTableExists = sqlTableExists(conn, table);
+    // simpleTable means not split table, not custom track
+    // However it still can include bbi table with bam fileName path
+    if (simpleTableExists)  // no tables having exonFrames are split tables anyway
+        efIdx = sqlFieldIndex(conn, table, "exonFrames");
+    itemCount = 0;
+    int regionCount = slCount(regionList);
+    // regionList can have many thousands of items e.g. rheMac3 has 34000 chroms!
+    // This regionCount threshold should be just above the # chroms in the latest human assembly
+    if (simpleTableExists && (regionCount > 500))
+        {
+        chromHash = makeChromHashForTable(conn, table);
+        }
+    }
+// Note: code could be added here to extract exonFrames from bigGenePred
+
 // Process each region
 for (region = regionList; region != NULL; region = region->next)
     {

@@ -28,7 +28,6 @@
 #include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
-#include "barChartBed.h"
 #include "samAlignment.h"
 #include "trackHub.h"
 
@@ -179,7 +178,7 @@ for (in = inList; in != NULL; in = in->next)
 
     /* Scan through joining information and add tables,
      * avoiding duplicate additions. */
-    jpList = joinerRelate(joiner, in->db, in->table);
+    jpList = joinerRelate(joiner, in->db, in->table, database);
     for (jp = jpList; jp != NULL; jp = jp->next)
         {
 	safef(dtName, sizeof(dtName), "%s.%s",
@@ -346,6 +345,8 @@ else if (isBamTable(rootTable))
     fieldList = bamGetFields();
 else if (isVcfTable(rootTable, NULL))
     fieldList = vcfGetFields();
+else if (isHicTable(rootTable))
+    fieldList = hicGetFields();
 else
     {
     char *table = chromTable(conn, rootTable);
@@ -512,12 +513,14 @@ char *ptr = NULL;
 
 /* Extract just the db.table part of db.table.field as well as db and table separately */
 safef(dbTable, sizeof(dbTable), "%s", dbTableField);
-ptr = strchr(dbTable, '.');
+ptr = strstr(dbTable, ".hub_");
+if (ptr == NULL)
+    ptr = strchr(dbTable, '.');
 if (ptr == NULL)
     errAbort("Expected 3 .-separated words in %s but can't find first .",
 	     dbTableField);
 safencpy(db, sizeof(db), dbTable, ptr-dbTable);
-char *p2 = strchr(ptr+1, '.');
+char *p2 = strrchr(ptr+1, '.');
 if (p2 == NULL)
     errAbort("Expected 3 .-separated words in %s but can't find second .",
 	     dbTableField);
@@ -627,7 +630,10 @@ boolean anyFilter()
 {
 char *filterTable = cartOptionalString(cart, hgtaFilterTable);
 if (filterTable == NULL)
+    {
+    removeFilterVars();  // sometimes these get left around due to the back button being used
     return FALSE;
+    }
 else
     {
     char *dbTable = getDbTable(database, curTable);
@@ -724,7 +730,15 @@ else if (startsWith("set(", type))
 else
     errAbort("makeEnumValMenu: expecting a SQL type description that begins "
 	     "with \"enum(\" or \"set(\", but got \"%s\".", type);
-stripChar(dup, '\'');
+if (dup[0] == '"')
+    {
+    // bigBed uses asColumnToSqlType, which gives double-quoted, comma-and-space-separated string.
+    strSwapStrs(dup, strlen(dup)+1, "\", \"", ",");
+    stripChar(dup, '"');
+    }
+else if (dup[0] == '\'')
+    // "desc table" in mysql gives single-quoted, no-space comma-sep string.
+    stripChar(dup, '\'');
 wordCount = chopCommas(dup, words);
 len = strlen(words[wordCount-1]);
 if (words[wordCount-1][len-1] == ')')
@@ -940,8 +954,10 @@ static void filterControlsForTableDb(char *db, char *rootTable)
 struct sqlConnection *conn =  NULL;
 if (!trackHubDatabase(db))
     conn = hAllocConn(db);
-char *table = chromTable(conn, rootTable);
 struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
+char *table = rootTable;
+if (! (tdb && trackDbSetting(tdb, "bigDataUrl")))
+    table = chromTable(conn, rootTable);
 boolean isSmallWig = isWiggle(db, table);
 boolean isBigWig = tdb ? tdbIsBigWig(tdb) : isBigWigTable(table);
 boolean isWig = isSmallWig || isBigWig;
@@ -950,6 +966,7 @@ boolean isBb = tdb ? tdbIsBigBed(tdb) : isBigBed(database, table, curTrack, ctLo
 boolean isBam = tdb ? tdbIsBam(tdb) : isBamTable(rootTable);
 boolean isLongTabix = tdb ? tdbIsLongTabix(tdb) : isLongTabixTable(rootTable);
 boolean isVcf = tdb ? tdbIsVcf(tdb) : isVcfTable(rootTable, NULL);
+boolean isHic = tdb ? tdbIsHic(tdb) : isHicTable(rootTable);
 
 if (isWig)
     {
@@ -980,13 +997,15 @@ else
 	ftList = bamListFieldsAndTypes();
     else if (isVcf)
 	ftList = vcfListFieldsAndTypes();
+    else if (isHic)
+	ftList = hicListFieldsAndTypes();
     else
         ftList = sqlListFieldsAndTypes(conn, table);
     printSqlFieldListAsControlTable(ftList, db, rootTable, tdb, isBedGr);
     }
 
 /* Printf free-form query row. */
-if (!(isWig||isBedGr||isBam||isVcf||isLongTabix))
+if (!(isWig||isBedGr||isBam||isVcf||isLongTabix||isHic))
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD>\n");
@@ -1002,7 +1021,7 @@ if (!(isWig||isBedGr||isBam||isVcf||isLongTabix))
     hPrintf("</TD></TR></TABLE>\n");
     }
 
-if (isWig||isBedGr||isBam||isVcf||isLongTabix)
+if (isWig||isBedGr||isBam||isVcf||isLongTabix||isHic)
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
@@ -1037,6 +1056,7 @@ else if (type != NULL &&
         (startsWithWord("makeItems", type) || 
         sameWord("bedDetail", type) || 
         sameWord("barChart", type) || 
+        sameWord("interact", type) || 
         sameWord("pgSnp", type)))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
@@ -1078,6 +1098,11 @@ else if (isBamTable(table))
 else if (isVcfTable(table, NULL))
     {
     struct sqlFieldType *ftList = vcfListFieldsAndTypes();
+    printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
+    }
+else if (isHicTable(table))
+    {
+    struct sqlFieldType *ftList = hicListFieldsAndTypes();
     printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
     }
 else
@@ -1125,7 +1150,7 @@ else
 
 puts("</TABLE>");
 
-if (ct->wiggle || isBigWigTable(table) || isBamTable(table) || isVcfTable(table, NULL) || isLongTabixTable(table))
+if (ct->wiggle || isBigWigTable(table) || isBamTable(table) || isVcfTable(table, NULL) || isLongTabixTable(table) || isHicTable(table))
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");

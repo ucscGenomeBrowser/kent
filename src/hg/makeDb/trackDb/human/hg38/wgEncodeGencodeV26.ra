@@ -6,7 +6,7 @@ longLabel All GENCODE annotations from V26 (Ensembl 88)
 group genes
 dragAndDrop subTracks
 priority 34.179
-visibility pack
+visibility hide
 subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
 subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
 allButtonPair on
@@ -37,6 +37,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV26
     visibility pack
     subTrack wgEncodeGencodeV26
     type genePred
+    idXref wgEncodeGencodeAttrsV26 transcriptId geneId
     itemClassTbl wgEncodeGencodeAttrsV26
     itemClassNameColumn transcriptId
     itemClassClassColumn transcriptClass

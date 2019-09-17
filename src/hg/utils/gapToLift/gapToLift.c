@@ -25,6 +25,7 @@ errAbort(
   "   -minGap=M - examine gaps only >= than M\n"
   "   -insane - do *not* perform coordinate sanity checks on gaps\n"
   "   -bedFile=fileName.bed - output segments to fileName.bed\n"
+  "   -allowBridged - consider any type of gap not just the non-bridged gaps\n"
   "   -verbose=N - N > 1 see more information about procedure"
   );
 }
@@ -35,12 +36,14 @@ static boolean insane = FALSE;	/* TRUE do not perform sanity checks on gaps */
 static FILE *bedFile = NULL; /* when requested, output segments to bed file */
 static char *bedFileName = NULL; /* output to bedFileName name */
 static int minGap = 0;	/* gap size must be >= than this */
+static boolean allowBridged = FALSE;	/* TRUE allow any type of gap */
 
 static struct optionSpec options[] = {
    {"chr", OPTION_STRING},
    {"insane", OPTION_BOOLEAN},
    {"bedFile", OPTION_STRING},
    {"minGap", OPTION_INT},
+   {"allowBridged", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -217,7 +220,7 @@ for (gap = gapList; gap; gap = gap->next)
     if (prevChr && sameWord(prevChr, gap->chrom))
 	{	/* continuing same segment, check for gap break,
 		 *	or gap at end of chrom */
-	if (sameWord("no",gap->bridge) || (gap->chromEnd == chrSize))
+	if (allowBridged || sameWord("no",gap->bridge) || (gap->chromEnd == chrSize))
 	    {
 	    end = gap->chromStart;
 	    liftCount = liftOutLine(out, gap->chrom, start, end, liftCount, chrSize);
@@ -242,7 +245,7 @@ for (gap = gapList; gap; gap = gap->next)
 	    start = 0;
 	    end = gap->chromStart;
 	    /* does the first gap break it ?  Or gap goes to end of chrom. */
-	    if (sameWord("no",gap->bridge) || (gap->chromEnd == chrSize))
+	    if (allowBridged || sameWord("no",gap->bridge) || (gap->chromEnd == chrSize))
 		{
 		liftCount = liftOutLine(out, gap->chrom, start, end, liftCount, chrSize);
 		start = gap->chromEnd;
@@ -286,6 +289,7 @@ workChr = optionVal("chr", NULL);
 bedFileName = optionVal("bedFile", NULL);
 insane = optionExists("insane");
 minGap = optionInt("minGap", minGap);
+allowBridged = optionExists("allowBridged");
 gapToLift(argv[1], argv[2]);
 return 0;
 }

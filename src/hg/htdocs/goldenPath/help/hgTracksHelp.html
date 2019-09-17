@@ -50,9 +50,6 @@
 <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome" target="_blank">Browse</a> 
 the Genome Browser mailing list.</p>  
 <p> 
-See also the <a href="http://www.openhelix.com/ucsc" target="_blank">Open Helix tutorial and training 
-materials</a>.</p>
-<p> 
 <a href="../../contacts.html">Questions and feedback are welcome</a>.</p>
 
 <!-- =======What does the Genome Browser do?======= --> 
@@ -94,7 +91,7 @@ DNA can encode track features via elaborate text formatting options. Other links
 Browser to the BLAT alignment tool, provide access to the underlying relational database via the
 Table Browser, convert coordinates across different assembly dates, and open the window at the 
 complementary <a href="http://www.ensembl.org/" target="_blank">Ensembl</a> or 
-<a href="https://www.ncbi.nlm.nih.gov/mapview/" target="_blank">NCBI Map Viewer</a> annotation.</p>
+<a href="https://www.ncbi.nlm.nih.gov/genome/gdv/" target="_blank">NCBI Genome Data Viewer</a> annotation.</p>
 <p>
 The browser data represents an immense <a href="../credits.html">collaborative effort</a> involving 
 thousands of people from the international biomedical research community. The UCSC Bioinformatics 
@@ -171,6 +168,10 @@ If your initial query is unsuccessful, try entering a different related term tha
 same location. For example, if a query on a gene symbol produces no results, try entering an mRNA 
 accession, gene ID number, or descriptive words associated with the gene.</p>
 
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/5zc9sqd4SD4?rel=0" 
+frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+allowfullscreen></iframe></p>
+
 <h6>Finding a genome location using BLAT</h6>
 <p>
 If you have genomic, mRNA, or protein sequence, but don't know the name or the location to which it 
@@ -224,7 +225,7 @@ section.</p>
 <h6>Viewing genome data as text</h6>
 <p>
 The <a href="../../cgi-bin/hgTables" target="_blank">Table Browser</a>, a portal to the underlying 
-open source <a href="http://www.MySQL.com" target="_blank">MySQL</a> relational database driving the
+open source <a href="http://www.mariadb.org" target="_blank">MariaDB</a> relational database driving the
 Genome Browser, displays genomic data as columns of text rather than as graphical tracks. For more 
 information on using the Table Browser, see the section <a href="#TableBrowser">Getting started: on 
 the Table Browser</a>.</p>
@@ -410,7 +411,9 @@ Each annotation track within the window may have up to five display modes:
   This mode is useful for reducing the amount of space used by a track when you don't need 
   individual line item details or when you just want to get an overall view of an annotation. For 
   example, by opening an entire chromosome and setting the RefSeq Genes track to dense, you can get 
-  a feel for the known gene density of the chromosome without displaying excessive detail.</li>
+  a feel for the known gene density of the chromosome without displaying excessive detail. <br>
+  <img src="../../images/dense14_800_gc29.png" width="800px">
+  </li>
   <li>
   <strong>Full:</strong> the track is displayed with each annotation feature on a separate line. It 
   is recommended that you use this option sparingly, due to the large number of individual track 
@@ -420,14 +423,18 @@ Each annotation track within the window may have up to five display modes:
   you can restore the track display to full mode by narrowing the chromosomal range displayed or by 
   using a track filter to reduce the number of items displayed. On tracks that contain only hide, 
   dense, and full modes, you can toggle between full and dense display modes by clicking on the 
-  track's center label.</li>
+  track's center label.<br>
+  <img src="../../images/full14_800_gc29-1.png" width="800px">
+  </li>
   <li>
   <strong>Squish:</strong> the track is displayed with each annotation feature shown separately, but
   at 50% the height of full mode. Features are unlabeled, and more than one may be drawn on the same
   line. This mode is useful for reducing the amount of space used by a track when you want to view a
   large number of individual features and get an overall view of an annotation. It is particularly 
   good for displaying tracks in which a large number of features align to a particular section of a 
-  chromosome, e.g. EST tracks.</li>
+  chromosome, e.g. EST tracks.<br>
+  <img src="../../images/squish14_800_gc29-1.png" width="800px">
+  </li>
   <li>
   <strong>Pack:</strong> the track is displayed with each annotation feature shown separately and 
   labeled, but not necessarily displayed on a separate line. This mode is useful for reducing the 
@@ -436,7 +443,12 @@ Each annotation track within the window may have up to five display modes:
   number of lines within the requested track location exceeds 250, the track automatically defaults 
   to squish display mode. In this situation, you can restore the track display to pack mode by 
   narrowing the chromosomal range displayed or by using a track filter to reduce the number of items
-  displayed. To toggle between pack and full display modes, click on the track's center label.</li>
+  displayed. To toggle between pack and full display modes, click on the track's center label.<br>
+ 
+  <img src="../../images/pack14_800_gc29-1.png" width="800px" >
+  </li>
+ 
+
 </ul>
 <p>
 The track display controls are grouped into categories that reflect the type of data in the track, 
@@ -489,6 +501,11 @@ other configured Genome Browser settings), click the <em>default tracks</em> but
 Browser tracks page. To remove all user configuration settings and custom tracks, and completely 
 restore the defaults, click the &quot;Click here to reset&quot; link on the Genome Browser Gateway 
 page.</p>
+
+<h3> Video tutorial on changing track display modes</h3>
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/jKix2B3hwnw?rel=0" 
+frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+allowfullscreen></iframe></p>
 
 <a name="NAV"></a>
 <h3>Zooming and scrolling the tracks display</h3>
@@ -733,7 +750,7 @@ BLAT rapidly locates genomic sequences with 80% or greater similarity of length 
 more. In general, gene family members that arose within the last 350 million years can generally be 
 detected. More divergent sequences can be aligned to the human genome by using NCBI's BLAST and 
 psi-BLAST, then using BLAT to align the resulting match onto the UCSC genome assembly. In practice 
-DNA BLAT works well on primates, and protein BLAT works well on land vertebrates.</p> 
+DNA Blat works well on primates, and protein Blat works well on land vertebrates.</p> 
 <p>
 Some common uses of BLAT include:</p> 
 <ul> 
@@ -748,7 +765,10 @@ Some common uses of BLAT include:</p>
   <li> 
   searching for gene family members</li>
   <li>
-  finding human homologs of a query from another species</li> 
+  finding human homologs of a query from another species</li>
+  <li>
+  finding homologs of a query in all species hosted on the UCSC Genome Browser</li>
+  
 </ul>	
 	
 <h3>Making a BLAT query</h3>
@@ -759,10 +779,17 @@ To locate a nucleotide or protein within a genome using BLAT:</p>
   Open the <a href="../../cgi-bin/hgBlat?command=start" target="_blank">BLAT Search Genome page</a> 
   by clicking on the &quot;Tools&quot; pulldown in the top blue menu bar of the Genome Browser.</li>
   <li> 
-  Select the genome, assembly, query type, output sort order, and output type. To order the search 
+  <b>Blat a single genome</b> &ndash; Select the genome, assembly, query type, output sort order, and 
+   output type. To order the search 
   results based on the closeness of the sequence match, choose one of the score options in the 
   <em>Sort output</em> menu. The score is determined by the number of matches vs. mismatches in the 
-  final alignment of the query to the genome.</li>  
+  final alignment of the query to the genome. <br/>
+ <b>Blat ALL genomes</b> &ndash; The "Search ALL" 
+ checkbox above the Genome drop-down list allows you to search
+ the genomes of the default assemblies for all of our organisms. This shows you an ordered list of 
+the default assemblies having the greatest similarity with your query sequence. Additionally, the
+<em>Search ALL</em> feature searches any attached hubs' blat servers, meaning you can search
+your user-generated assembly hubs.  </li>  
   <li> 
   If the sequence to be uploaded is in an unformatted plain text file, enter the file name in the 
   <em>Upload sequence</em> text box, then click the <em>submit file</em> button. Otherwise, paste 
@@ -826,12 +853,14 @@ be uploaded into the Genome Browser by pasting the data into the data text box o
 tracks&quot; button on the Browser gateway and annotation tracks pages. See the 
 <a href="#CustomTracks">Creating custom annotation tracks</a> section for more information.</p>
 
+
 <h3>Using BLAT for large batch jobs or commercial use</h3>
 <p>
 For large batch jobs or internal parameter changes, it is best to install command line BLAT on your 
 own Linux server. Sources and executables are free for academic, personal, and non-profit purposes. 
-BLAT source may be downloaded from <a href="http://www.soe.ucsc.edu/~kent/src" 
-target="_blank">http://www.soe.ucsc.edu/~kent</a> (look for the <em>blatSrc*.zip</em> file with the 
+BLAT source may be downloaded from <a href="https://genome-test.gi.ucsc.edu/~kent/src/"
+target="_blank">https://genome-test.gi.ucsc.edu/~kent/src/</a> 
+(look for the <em>blatSrc*.zip</em> file with the 
 most recent date). For BLAT executables, go to <a href="http://genome-test.soe.ucsc.edu/~kent/exe/" 
 target="_blank">http://genome-test.soe.ucsc.edu/~kent/exe/</a>; binaries are sorted by platform. 
 Non-exclusive commercial licenses are available from the <a href="http://www.kentinformatics.com/" 
@@ -1181,7 +1210,7 @@ assemblies.
 <p>
 The command-line version of liftOver offers the increased flexibility and performance gained by 
 running the tool on your local server. This utility requires access to a Linux platform. The 
-executable file may be downloaded <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">here</a>.
+executable file may be downloaded <a href="https://genome-store.ucsc.edu">here</a>.
 Command-line liftOver requires a UCSC-generated <em>over.chain</em> file as input. Pre-generated 
 files for a given assembly can be accessed from the assembly's &quot;LiftOver files&quot; link on 
 the <a href="http://hgdownload.soe.ucsc.edu/downloads.html">Downloads</a> page. If the desired 
@@ -1199,33 +1228,48 @@ page. Please acknowledge the contributor(s) of the data you use.
 
 <h3>Downloading the data</h3>
 <p>
-Genome data can be downloaded in different ways:</p>
-<p> 
-<ul class="gbsNoBullet">
-  <li>
-  <strong>Via rsync:</strong> The UCSC Genome Bioinformatics hgdownload site contains download 
-  directories for all genome versions currently accessible in the Genome Browser. The rsync command 
-  <code>rsync -a -P rsync://hgdownload.soe.ucsc.edu/path/file ./</code> can quickly and efficiently 
-  download large files to your current directory (./). To download an entire directory (note the 
-  trailing slash), you would use an expression such as 
-  <code>rsync -a -P rsync://hgdownload.soe.ucsc.edu/directory/ ./</code> For more information please
-  click <a href="../help/ftp.html" target="_blank">here</a>.</li>  
-  <li>
-  <strong>Via ftp:</strong> The UCSC Genome Bioinformatics ftp site contains download directories 
-  for all genome versions currently accessible in the Genome Browser. The ftp command 
-  <code>ftp://hgdownload.soe.ucsc.edu/goldenPath/</code> will take you to a directory that contains 
-  the genome download directories. This download method is not recommended if you plan to download 
-  a large file or multiple files from a single directory compared to rsync (see above). You can, 
-  however, use the <em>mget</em> command to download multiple files: mget <em>filename1 
-  filename2</em>, or mget -a (to download all the files in the directory).</li>
-  <li> 
-  <strong>Via the Downloads link:</strong> Click the 
-  <a href="http://hgdownload.soe.ucsc.edu/downloads.html" target="_blank">Downloads</a> link on the 
-  left side bar on the UCSC Genome Bioinformatics home page to display a list of all database 
-  directories available for download. If the data you wish to download pre-dates the assembly 
-  versions listed, look for the data on our <a href="http://hgdownload.soe.ucsc.edu/downloads.html" 
-  target="_blank">Downloads</a> page.</li>
-</ul> 
+Genome data can be downloaded in different ways using our North American and European download
+servers, hgdownload and hgdownload-euro.</p>
+<dl>
+  <dt>Via rsync:</dt>
+  <dd>
+    The UCSC Genome Browser hgdownload server contains download directories for all genome versions
+    currently accessible in the Genome Browser. Either of the following rsync commands can quickly
+    and efficiently download large files to your current directory (./).</dd>
+    <pre><code>rsync -a -P rsync://hgdownload.soe.ucsc.edu/path/file ./</code></pre>
+    <pre><code>rsync -a -P rsync://hgdownload-euro.soe.ucsc.edu/path/file ./</code></pre>
+  <dd>
+    To download an entire directory (note the trailing slash), you would use an expression such
+    as:</dd>
+    <pre><code>rsync -a -P rsync://hgdownload.soe.ucsc.edu/directory/ ./</code></pre>
+    <pre><code>rsync -a -P rsync://hgdownload-euro.soe.ucsc.edu/directory/ ./</code></pre>
+  <dd>
+    For more information please click <a href="../help/ftp.html" target="_blank">here</a>.</dd>
+  <dt>Via ftp:</dt>
+  <dd>
+    The UCSC Genome Browser FTP server contains download directories for all genome versions
+    currently accessible in the Genome Browser. The FTP URLs
+    <code>ftp://hgdownload.soe.ucsc.edu/goldenPath/</code>
+    or
+    <code>ftp://hgdownload-euro.soe.ucsc.edu/goldenPath/</code>
+    will take you to a directory that contains the genome download directories. This download method
+    is not recommended if you plan to download a large file or multiple files from a single
+    directory compared to rsync (see above). You can, however, use the <code>mget</code> command to
+    download multiple files: <code>mget <em>filename1 filename2</em></code>, or <code>mget -a</code>
+    (to download all the files in the directory).</dd>
+  <dt>Via the Downloads link:</dt>
+  <dd>
+    Click the
+    <a href="http://hgdownload.soe.ucsc.edu/downloads.html" target="_blank">Downloads</a> link on
+    the left side bar on the UCSC Genome Browser home page to display a list of all database
+    directories available for download. If the data you wish to download pre-dates the assembly
+    versions listed, look for the data on our
+    <a href="http://hgdownload.soe.ucsc.edu/downloads.html" target="_blank">Downloads</a> page.</dd>
+  <dt>Via the JSON API:</dt>
+  <dd>
+    The <a href='./api.html' target=_blank>JSON API</a> can be used to query both annotation
+    and sequence data from any UCSC genome assembly or hub.</dd>
+</dl>		
 
 <h3>Types of data available</h3>
 <p>
@@ -1276,7 +1320,7 @@ on the genome, this directory may contain some or all of the following files:</p
   period less than or equal to 12, and translated into one <em>.bed</em> file per contig.</li>
   <li> 
   <strong>database.zip:</strong> The Genome Browser database as tab-delimited files and associated 
-  MySQL table-creation tiles (eliminated in later assemblies due to size restrictions).</li>
+  MariaDB (MySQL) table-creation tiles (eliminated in later assemblies due to size restrictions).</li>
   <li> 
   <strong>est.fa.zip:</strong> Sequences of all GenBank ESTs for the selected species.</li> 
   <li> 
@@ -1308,9 +1352,9 @@ assembly.</p>
 <em>Database</em> contains all of the positional and non-positional tables in the genome annotation 
 database. Each table is represented by 2 files:</p>
 <ul> 
-  <li><strong>.sql file:</strong> the MySQL commands used to create the table.</li>
+  <li><strong>.sql file:</strong> the SQL commands used to create the table.</li>
   <li>
-  <strong>.txt.gz file:</strong> the MySQL database table data in tab-delimited format and 
+  <strong>.txt.gz file:</strong> the MariaDB database table data in tab-delimited format and 
   compressed with gzip.</li>
 </ul> 
 <p>

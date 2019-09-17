@@ -271,6 +271,9 @@ def parseArgs():
     - any existing dataset of the same name will be overwritten
     - the data is written to beaconData.sqlite. You can use 'sqlite3' to inspect the data file.
     - the input file can be gzipped
+
+    e.g. to load HGMD:
+    /usr/local/apache/cgi-bin/hgBeacon -f hgmd /tmp/temp.bed hgmd
     """)
 
     parser.add_option("-d", "--debug", dest="debug", \
@@ -428,11 +431,11 @@ def readAllelesHgmd(ifh):
     for line in ifh:
         fields = line.rstrip("\n").split("\t")
         chrom, start, end = fields[:3]
-        desc = fields[10]
+        desc = fields[11]
         start = int(start)
         end = int(end)
 
-        if desc=="substitution":
+        if desc=="substitution" or desc=="splicing variant":
             assert(end-start==1)
             alt = "*"
         else:

@@ -1,0 +1,4 @@
+# required db variable
+db anoGam3
+# specific lifting to translate names:
+liftUp /hive/data/genomes/anoGam3/jkStuff/ensToUcsc.lift

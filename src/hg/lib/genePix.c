@@ -343,9 +343,9 @@ sqlFreeResult(&sr);
 for (geneEl = geneList; geneEl != NULL; geneEl = geneEl->next)
     {
     dyStringClear(dy);
-    sqlDyStringAppend(dy, "select imageProbe.image from probe,imageProbe");
+    sqlDyStringPrintf(dy, "select imageProbe.image from probe,imageProbe");
     sqlDyStringPrintf(dy, " where probe.gene = '%s' ", geneEl->name);
-    sqlDyStringAppend(dy, " and probe.id = imageProbe.probe");
+    sqlDyStringPrintf(dy, " and probe.id = imageProbe.probe");
     sr = sqlGetResult(conn, dy->string);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -441,12 +441,12 @@ if (init == NULL && taxon == 0 && contributors == NULL &&
     errAbort("must select something on genePixSelectMulti");
 if (contributors)
     {
-    sqlDyStringAppend(dy, "select image.id from ");
+    sqlDyStringPrintf(dy, "select image.id from ");
     dyStringAppend(dy, "image,imageFile,submissionSet,submissionContributor,contributor");
     }
 else
     {
-    sqlDyStringAppend(dy, "select id from image");
+    sqlDyStringPrintf(dy, "select id from image");
     }
 dyStringAppend(dy, " where");
 if (taxon != 0)

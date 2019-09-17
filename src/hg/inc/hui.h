@@ -6,6 +6,7 @@
 #ifndef HUI_H
 #define HUI_H
 
+#include "common.h"
 #include "cart.h"
 #include "trackDb.h"
 #include "customTrack.h"
@@ -86,7 +87,7 @@ char *hTrackUiForTrack(char *trackName);
 
 /* Definition for oligo match track. */
 #define oligoMatchVar "hgt.oligoMatch"
-#define oligoMatchDefault "TATAWAAR"
+#define oligoMatchDefault ""
 #define OLIGO_MATCH_TRACK_NAME "oligoMatch"
 #define OLIGO_MATCH_TRACK_LABEL "Short Match"
 #define OLIGO_MATCH_TRACK_LONGLABEL "Perfect Match to Short Sequence"
@@ -533,6 +534,7 @@ void wiggleYLineMarkDropDown(char *var, char *curVal);
 enum wiggleScaleOptEnum {
    wiggleScaleManual = 0,
    wiggleScaleAuto = 1,
+   wiggleScaleCumulative = 2,
 };
 
 enum wiggleScaleOptEnum wiggleScaleStringToEnum(char *string);
@@ -591,6 +593,22 @@ char *wiggleGridEnumToString(enum wiggleGridOptEnum x);
 
 void wiggleGridDropDown(char *var, char *curVal);
 /* Make drop down of options. */
+
+#define WIG_VIEWFUNC_SHOW_ALL "showAll"
+#define WIG_VIEWFUNC_ADD_ALL "addAll"
+#define WIG_VIEWFUNC_SUBTRACT_ALL "subtractAll"
+
+/*	Wiggle track aggregate option	*/
+enum wiggleViewFuncEnum {
+   wiggleViewFuncShowAll = 0,
+   wiggleViewFuncAddAll = 1,
+   wiggleViewFuncSubtractAll = 2,
+};
+
+char *wiggleViewFuncEnumToString(enum wiggleViewFuncEnum x);
+/* Convert from enum to string representation. */
+
+enum wiggleViewFuncEnum wiggleViewFuncStringToEnum(char *string);
 
 #define WIG_AGGREGATE_NONE "none"
 #define WIG_AGGREGATE_TRANSPARENT "transparentOverlay"
@@ -696,6 +714,9 @@ enum baseColorDrawOpt
 #define GENEPRED_CLASS_NAME_COLUMN_DEFAULT "name"
 #define GENEPRED_CLASS_CLASS_COLUMN "itemClassClassColumn"
 #define GENEPRED_CLASS_CLASS_COLUMN_DEFAULT "class"
+
+/* genbank track cart variable suffixes: */
+#define SHOW_PATENT_SEQUENCES_SUFFIX "showPatentSequences"
 
 void baseColorDrawOptDropDown(struct cart *cart, struct trackDb *tdb);
 /* Make appropriately labeled drop down of options if any are applicable.*/
@@ -977,8 +998,47 @@ boolean superTrackDropDownWithExtra(struct cart *cart, struct trackDb *tdb,
 #define superTrackDropDown(cart,tdb,visibleChild) \
         superTrackDropDownWithExtra(cart,tdb,visibleChild,NULL)
 
+typedef struct _dimensions
+    {
+    int count;
+    char**names;
+    char**subgroups;
+    char* setting;
+    } dimensions_t;
+
 boolean dimensionsExist(struct trackDb *parentTdb);
 /* Does this parent track contain dimensions? */
+
+typedef struct _membership
+    {
+    int count;
+    char **subgroups;  // Ary of Tags in parentTdb->subGroupN and in childTdb->subGroups (ie view)
+    char **membership; // Ary of Tags of subGroups that child belongs to (ie PK)
+    char **titles;     // Ary of Titles of subGroups a child belongs to (ie Peak)
+    char * setting;
+    } membership_t;
+
+typedef struct _membersForAll
+    {
+    int abcCount;
+    int dimMax;               // Arrays of "members" structs will be ordered as
+			      //    [view][dimX][dimY][dimA]... with first 3 in fixed spots
+			      //    and rest as found (and non-empty)
+    boolean filters;          // ABCs use filterComp boxes (as upposed to check boxes
+    dimensions_t *dimensions; // One struct describing "deimensions" setting"
+			      //    (e.g. dimX:cell dimY:antibody dimA:treatment)
+    members_t* members[27];   // One struct for each dimension describing groups in dimension
+			      //    (e.g. cell: GM12878,K562)
+    char* checkedTags[27];  // FIXME: Should move checkedTags into
+			    // membersForAll->members[ix]->selected;
+    char letters[27];
+    } membersForAll_t;
+
+membersForAll_t* membersForAllSubGroupsGet(struct trackDb *parentTdb, struct cart *cart);
+// Returns all the parents subGroups and members
+
+membership_t *subgroupMembershipGet(struct trackDb *childTdb);
+/* gets all the subgroup membership for a child track */
 
 int subgroupCount(struct trackDb *parentTdb);
 /* How many subGroup setting does this parent have? */
@@ -1040,7 +1100,7 @@ void wigOption(struct cart *cart, char *name, char *title, struct trackDb *tdb);
 void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,boolean boxed);
 /* UI for the wiggle track */
 
-void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb);
+void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix);
 /* Put up a choice for labels. */
 
 #define NO_SCORE_FILTER  "noScoreFilter"
@@ -1061,6 +1121,15 @@ void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb);
 boolean colonPairToDoubles(char * colonPair,double *first,double *second);
 // Non-destructive. Only sets values if found. No colon: value goes to *first
 
+boolean colonPairToInts(char * colonPair,int *first,int *second);
+// Non-destructive. Only sets values if found. No colon: value goes to *first
+
+void getScoreIntRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean parentLevel,
+                                 char *scoreName, int *limitMin, int *limitMax,int *min,int *max);
+// gets an integer score range from the cart, but the limits from trackDb
+// for any of the pointers provided, will return a value found, if found, else it's contents
+// are undisturbed (use NO_VALUE to recognize unavaliable values)
+//
 void getScoreFloatRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean parentLevel,
                          char *scoreName, double *limitMin,double *limitMax,double*min,double*max);
 // gets an double score range from the cart, but the limits from trackDb
@@ -1269,7 +1338,7 @@ return ((filterBy->slChoices == NULL) || (slNameInList(filterBy->slChoices,"All"
 }
 
 void filterBySetCfgUi(struct cart *cart, struct trackDb *tdb,
-                      filterBy_t *filterBySet, boolean onOneLine);
+                      filterBy_t *filterBySet, boolean onOneLine, char *prefix);
 // Does the UI for a list of filterBy structure
 
 char *filterByClause(filterBy_t *filterBy);
@@ -1414,15 +1483,21 @@ boolean vocabSettingIsEncode(char *setting);
     (table-based vocabs)
 */
 
-boolean isEncode2(char *database);
-// Return true for ENCODE2 assemblies
+boolean isEncode2(char *database, char *track);
+/* Return true for tracks created by UCSC DCC during ENCODE production phase */
 
-char *replaceInUrl(char* url, char *idInUrl, struct cart* cart, char *db, char* seqName, int winStart, \
-    int winEnd, char *track, boolean encode);
-/* replace $$ in url with idInUrl. Supports many other wildchards */
+char *replaceInUrl(char *url, char *idInUrl, struct cart *cart, char *db, char *seqName, 
+                        int winStart, int winEnd, char *track, boolean encode, struct slPair *fields) ;
+/* replace $$ in url with idInUrl. Supports many other wildchards, and custom fields $<field> */
 
 struct slPair *buildFieldList(struct trackDb *tdb, char *trackDbVar, struct asObject *as);
 /* Build up a hash of a list of fields in an AS file. */
 
+char *checkDataVersion(char *database, struct trackDb *tdb);
+/* see if trackDb has a dataVersion setting and check that file for version */
+
 void printDataVersion(char *database, struct trackDb *tdb);
+/* If this annotation has a dataVersion setting, print it.
+ * check hgFixed.trackVersion, meta data and trackDb 'dataVersion'. */
+
 #endif /* HUI_H */

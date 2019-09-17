@@ -58,7 +58,7 @@ if [ "${groupName}" = "other" ]; then
    groupLabel="${groupName}/synthetic assemblies"
 fi
 
-LC_NUMERIC=en_US /usr/bin/printf "<tr><td align=right><a href=\"http://genome-test.cse.ucsc.edu/~hiram/hubs/%s/%s.ncbi.html\">%s</a></td>
+LC_NUMERIC=en_US /usr/bin/printf "<tr><td align=right><a href=\"http://genome-test.soe.ucsc.edu/~hiram/hubs/%s/%s.ncbi.html\">%s</a></td>
   <td align=right>%'d</td>
   <td align=right>%'d</td>
   <td align=right>%'d</td>

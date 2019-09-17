@@ -1,24 +1,24 @@
 # set for preview 1: move date and vNNN from REVIEWDAY to LASTREVIEWDAY
-setenv REVIEWDAY 2017-11-06             # v358 preview
-setenv LASTREVIEWDAY 2017-10-16         # v357 preview
+setenv REVIEWDAY 2019-09-09             # v388 preview
+setenv LASTREVIEWDAY 2019-08-19         # v387 preview
 setenv previewSubversion       # empty string unless mistake, otherwise .1 etc
 
 # set for preview 2: move date and vNNN from REVIEW2DAY to LASTREVIEW2DAY
-setenv REVIEW2DAY  2017-11-13           # v358 preview2
-setenv LASTREVIEW2DAY  2017-10-23       # v357 preview2
+setenv REVIEW2DAY  2019-09-16           # v388 preview2
+setenv LASTREVIEW2DAY  2019-08-26       # v387 preview2
 setenv preview2Subversion      # empty string unless mistake, otherwise .1 etc
 
 # set these three for final build:  increment NN and copy date from TODAY to LASTWEEK
-setenv BRANCHNN 358                    # increment for new build
-setenv TODAY  2017-11-27               # v358 final, copy to LASTWEEK
-setenv LASTWEEK  2017-10-30            # v357 final, copy to LASTWEEK
+setenv BRANCHNN 387                    # increment for new build
+setenv TODAY 2019-09-02                # v387 final, copy to LASTWEEK
+setenv LASTWEEK 2019-08-12             # v386 final, copy to LASTWEEK
 setenv baseSubversion                  # empty string unless mistake, otherwise .1 etc (warning: fixed for _base but not _branch)
 
 setenv BUILDHOME /hive/groups/browser/newBuild
 setenv WEEKLYBLD ${BUILDHOME}/kent/src/utils/qa/weeklybld
-setenv REPLYTO ann@soe.ucsc.edu
+setenv REPLYTO azweig@ucsc.edu
 
-setenv GITSHAREDREPO hgwdev.cse.ucsc.edu:/data/git/kent.git
+setenv GITSHAREDREPO hgwdev.gi.ucsc.edu:/data/git/kent.git
 
 # see also paths in kent/java/build.xml
 setenv BUILDDIR $BUILDHOME

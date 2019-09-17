@@ -349,13 +349,96 @@ searchPriority 8
     cat fb.macFas5.genscanSubopt.txt
     # 52200998 bases of 2803866698 (1.862%) in intersection
 
+#########################################################################
+# UCSC to RefSeq name correspondence (DONE - 2017-12-14 - Hiram)
+
+    mkdir /hive/data/genomes/macFas5/bed/ucscToRefSeq
+    cd /hive/data/genomes/macFas5/bed/ucscToRefSeq
+
+    # construct idKeys in ./refseq
+    mkdir refseq
+    cd refseq
+    ln -s /hive/data/outside/ncbi/genomes/refseq/vertebrate_mammalian/Macaca_fascicularis/all_assembly_versions/GCF_000364345.1_Macaca_fascicularis_5.0/GCF_000364345.1_Macaca_fascicularis_5.0_genomic.fna.gz .
+
+    faToTwoBit *.fna.gz refseq.macFas5.2bit
+    time (doIdKeys.pl -buildDir=`pwd` -twoBit=`pwd`/refseq.macFas5.2bit refseqMacFas5) > idKeys.log 2>&1 &
+
+    cd /hive/data/genomes/macFas5/bed/ucscToRefSeq
+
+    join -t$'\t' ../idKeys/*.idKeys.txt  refseq/*.idKeys.txt \
+	| cut -f2- | sort > ucsc.refseq.tab
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+
+    join ucsc.refseq.tab name.coordinate.tab \
+       | awk '{printf "%s\t%d\t%d\t%s\n", $1,$3,$4,$2}' \
+          | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+
+    # when working perfectly, all these tab files have the same line count:
+    wc -l *.tab *.bed
+#   7601 name.coordinate.tab
+#   7601 ucsc.refseq.tab
+#   7601 ucscToRefSeq.bed
+
+    # the extra counts in the ucsc.refseq.tab are due to the duplicates
+    # in the refseq assembly.  The missing item in the bed file is chrM
+
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  25
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab macFas5 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
+
+    checkTableCoords  macFas5 -table=ucscToRefSeq
+    # would normally cover %100 all bases, this case missing chrM:
+    featureBits -countGaps macFas5 ucscToRefSeq
+    # 2946843737 bases of 2946843737 (100.000%) in intersection
+
 ########################################################################
 # ucscToINSDC table/track (DONE - 2015-01-09 - Hiram)
+    # rebuild this 2017-12-14, had incorrect chrM name before
+
+    cd /hive/data/genomes/macFas5/bed/ucscToINSDC
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+      ../../genbank/Primary_Assembly FJ906803.1
+    # this one is old, does not have the v1 business:
+    sed -e 's/v1//;' ucscToINSDC.txt | sort > ucscToINSDC.tab
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+
+    join name.coordinate.tab ucscToINSDC.tab | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # should all be the same count:
+    wc -l *
+#      7601 name.coordinate.tab
+#      7601 ucscToINSDC.bed
+#      7601 ucscToINSDC.tab
+#      7601 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 25
+    # use the 25 in this sed
+    sed -e "s/21/25/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab macFas5 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords macFas5
+    # should cover %100 entirely:
+    featureBits -countGaps macFas5 ucscToINSDC
+    # 2946843737 bases of 2946843737 (100.000%) in intersection
+
+    # below obsolete procedure:
+
     # reusing the old-style script since this genbank download is still
     # the old style, this script copied from rn6/bed/ucscToINSDC
     grep chrM ../../*.agp
 # chrM    1       16575   1       F       NC_012670       1       16575   +
     ./translateNames.sh  NC_012670.1
+
+    # this NC name is not the genbank name ! 2017-12-14
+
     awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
          | sort > name.coordinate.tab
     join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
@@ -375,6 +458,44 @@ searchPriority 8
     featureBits -countGaps macFas5 ucscToINSDC
     # 2946843737 bases of 2946843737 (100.000%) in intersection
 
+##############################################################################
+# add chromAlias table (DONE - 2017-12-14 - Hiram)
+
+    mkdir /hive/data/genomes/macFas5/bed/chromAlias
+    cd /hive/data/genomes/macFas5/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' macFas5 \
+        | sort > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' macFas5 \
+        |sort > ucsc.genbank.tab
+
+    join -t$'\t' ../idKeys/macFas5.idKeys.txt \
+	../../ensembl/ensemblMacFas5.idKeys.txt \
+	| cut -f2,3 | sort > ucsc.ensembl.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl
+    sort -o macFas5.chromAlias.tab macFas5.chromAlias.tab
+
+for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t macFas5.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 7601 =? 7601 OK
+# checking genbank: 7601 =? 7601 OK
+# checking ensembl: 7601 =? 7601 OK
+
+    hgLoadSqlTab macFas5 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        macFas5.chromAlias.tab
+
+##############################################################################
+# TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
+##############################################################################
 #########################################################################
 # Create kluster run files (DONE - 2015-01-09 - Hiram)
 

@@ -45,6 +45,10 @@
 #include "bedTabix.h"
 #include "barChartBed.h"
 #include "barChartUi.h"
+#include "interact.h"
+#include "interactUi.h"
+#include "hic.h"
+#include "cgiApoptosis.h"
 
 // placeholder when custom track uploaded file name is not known
 #define CT_NO_FILE_NAME         "custom track"
@@ -81,12 +85,16 @@ return line;
 }
 
 void customFactoryCheckChromNameDb(char *genomeDb, char *word, struct lineFile *lf)
-/* Make sure it's a chromosome or a contig.  Well, at the moment,
- * just make sure it's a chromosome. */
+/* Abort if word is not a valid sequence name for genomeDb.  If word is a recognizable alias
+ * or case-sensitive variant of a valid sequence, suggest that to the user. */
 {
-if (!hgIsOfficialChromName(genomeDb, word))
-    lineFileAbort(lf, "%s not a recognized sequence (note: sequence names are case sensitive)",
-		  word);
+char *officialChrom = hgOfficialChromName(genomeDb, word);
+if (! officialChrom)
+    lineFileAbort(lf, "'%s' is not a valid sequence name in %s", word, genomeDb);
+else if (differentString(word, officialChrom))
+    lineFileAbort(lf, "'%s' is not a valid sequence name in %s (perhaps you mean '%s'?)",
+                  word, genomeDb, officialChrom);
+freeMem(officialChrom);
 }
 
 void customFactorySetupDbTrack(struct customTrack *track)
@@ -137,14 +145,131 @@ freeMem(bCopy);
 return same;
 }
 
+boolean isValidBigDataUrl(char *url, boolean doAbort)
+/* return True if the URL is a valid bigDataUrl.
+ * It can be a local filename if this is allowed by udc.localDir
+ */
+{
+if ((startsWith("http://", url)
+   || startsWith("https://", url)
+   || startsWith("ftp://", url)))
+return TRUE;
+
+// we allow bigDataUrl's to point to trash (or sessionDataDir, if configured)
+char *sessionDataDir = cfgOption("sessionDataDir");
+char *sessionDataDirOld = cfgOption("sessionDataDirOld");
+if (startsWith(trashDir(), url) ||
+    (isNotEmpty(sessionDataDir) && startsWith(sessionDataDir, url)) ||
+    (isNotEmpty(sessionDataDirOld) && startsWith(sessionDataDirOld, url)))
+    return TRUE;
+
+char *prefix = cfgOption("udc.localDir");
+if (prefix == NULL)
+    {
+    if (doAbort)
+        errAbort("Only network protocols http, https, or ftp allowed in bigDataUrl: '%s'", url);
+    return FALSE;
+    }
+
+if (!startsWith(prefix, url))
+    {
+    if (doAbort)
+        errAbort("bigDataUrl '%s' on local file system has to start with '%s' (see udc.localDir directive in cgi-bin/hg.conf)", url, prefix);
+    return FALSE;
+    }
+
+return TRUE;
+}
+
+static void checkAllowedBigDataUrlProtocols(char *url)
+/* Abort if url is not using one of the allowed bigDataUrl network protocols.
+ * In particular, do not allow a local file reference, unless explicitely
+ * allowed by hg.conf's udc.localDir directive. */
+{
+isValidBigDataUrl(url, TRUE);
+}
+
+static char *bigDataDocPath(char *type)
+/* If type is a bigData type, provide a relative path to its custom track/format doc page. */
+{
+char *docUrl = NULL;
+if (sameString(type, "bigWig"))
+    docUrl = "../goldenPath/help/bigWig.html";
+else if (sameString(type, "bigBed"))
+    docUrl = "../goldenPath/help/bigBed.html";
+else if (sameString(type, "bam"))
+    docUrl = "../goldenPath/help/bam.html";
+else if (sameString(type, "vcfTabix"))
+    docUrl = "../goldenPath/help/vcf.html";
+return docUrl;
+}
+
+static void requireBigDataUrl(char *bigDataUrl, char *type, char *trackName)
+/* If bigDataUrl is empty, errAbort with helpful message about bigDataUrl requirement */
+{
+if (isEmpty(bigDataUrl))
+    {
+    struct dyString *doc = dyStringNew(0);
+    char *docUrl = bigDataDocPath(type);
+    if (docUrl != NULL)
+	dyStringPrintf(doc, "  For more information about the bigDataUrl setting, see "
+		       "<A HREF=\"%s\" TARGET=_BLANK>%s custom track documentation</A>.",
+		       docUrl, type);
+    errAbort("Missing bigDataUrl setting from track of type=%s (%s).  "
+	     "Please check for case and spelling and that there is no new-line "
+	     "between the 'track' and the 'bigDataUrl' if the bigDataUrl appears to be there."
+	     "%s",
+	     type, trackName, doc->string);
+    }
+}
 /*** BED Factory ***/
 
-static boolean rowIsBed(char **row, int wordCount, char *db)
-/* Return TRUE if row is consistent with BED format. */
+static boolean rowIsBed(char **row, int wordCount, char *db, struct dyString *reason)
+/* Return TRUE if row is consistent with BED format.  If it's not BED and reason is not NULL,
+ * append reason for failure. */
 {
-return wordCount >= 3 && wordCount <= bedKnownFields
-	&& hgIsOfficialChromName(db, row[0])
-	&& isdigit(row[1][0]) && isdigit(row[2][0]);
+if (wordCount < 3)
+    {
+    if (reason)
+        dyStringAppend(reason, "Too few fields (need at least 3)");
+    return FALSE;
+    }
+if (wordCount > bedKnownFields)
+    {
+    if (reason)
+        dyStringPrintf(reason, "Too many fields (expected at most %d, got %d)",
+                       bedKnownFields, wordCount);
+    return FALSE;
+    }
+char *officialChrom = hgOfficialChromName(db, row[0]);
+if (! officialChrom)
+    {
+    if (reason)
+        dyStringPrintf(reason, "'%s' is not a valid sequence name in %s", row[0], db);
+    return FALSE;
+    }
+else if (differentString(row[0], officialChrom))
+    {
+    if (reason)
+        dyStringPrintf(reason, "'%s' is not a valid sequence name in %s (perhaps you mean '%s'?)",
+                       row[0], db, officialChrom);
+    freeMem(officialChrom);
+    return FALSE;
+    }
+freeMem(officialChrom);
+if (! isAllDigits(row[1]))
+    {
+    if (reason)
+        dyStringPrintf(reason, "Second column needs to be a number but is '%s'", row[1]);
+    return FALSE;
+    }
+if (! isAllDigits(row[2]))
+    {
+    if (reason)
+        dyStringPrintf(reason, "Third column needs to be a number but is '%s'", row[2]);
+    return FALSE;
+    }
+return TRUE;
 }
 
 static boolean bedRecognizer(struct customFactory *fac,
@@ -161,7 +286,12 @@ char *dupe = cloneString(line);
 char *row[bedKnownFields+1];
 int wordCount = chopLine(dupe, row);
 char *ctDb = ctGenomeOrCurrent(track);
-boolean isBed = rowIsBed(row, wordCount, ctDb);
+struct dyString *whyNotBed = dyStringNew(0);
+boolean isBed = rowIsBed(row, wordCount, ctDb, whyNotBed);
+struct lineFile *lf = cpp->fileStack;
+if (!isBed && type != NULL)
+    lineFileAbort(lf, "%s", whyNotBed->string);
+dyStringFree(&whyNotBed);
 freeMem(dupe);
 if (isBed)
     track->fieldCount = wordCount;
@@ -290,6 +420,11 @@ if (offset != 0)
 /* If necessary load database */
 if (dbRequested)
     {
+    if (! fileExists("loader/hgLoadBed") )
+	{
+	errAbort("loading custom tracks: can not find "
+		"'cgi-bin/loader/hgLoadBed' command\n");
+	}
     customFactorySetupDbTrack(track);
     struct pipeline *dataPipe = bedLoaderPipe(track);
     FILE *out = pipelineFile(dataPipe);
@@ -583,8 +718,10 @@ static boolean encodePeakRecognizer(struct customFactory *fac,
 /* Return TRUE if looks like we're handling an encodePeak track */
 {
 enum encodePeakType pt = 0;
-if (type != NULL && !sameType(type, fac->name) &&
-    !sameString(type, "narrowPeak") && !sameString(type, "broadPeak") && !sameString(type, "gappedPeak"))
+// type is required
+if (type == NULL ||
+    (!sameType(type, fac->name) && !sameString(type, "narrowPeak") &&
+     !sameString(type, "broadPeak") && !sameString(type, "gappedPeak")))
     return FALSE;
 char *line = customFactoryNextRealTilTrack(cpp);
 if (line == NULL)
@@ -593,11 +730,13 @@ char *dupe = cloneString(line);
 char *row[ENCODE_PEAK_KNOWN_FIELDS+1];
 int wordCount = chopLine(dupe, row);
 pt = encodePeakInferType(wordCount, type);
-if (pt)
+if (pt != invalid)
     track->fieldCount = wordCount;
+else
+    lineFileAbort(cpp->fileStack, "wrong number of columns for type '%s'", type);
 freeMem(dupe);
 customPpReuse(cpp, line);
-return (pt != 0);
+return (pt != invalid);
 }
 
 static struct pipeline *encodePeakLoaderPipe(struct customTrack *track)
@@ -609,8 +748,9 @@ static struct pipeline *encodePeakLoaderPipe(struct customTrack *track)
  *		-maxChromNameLength=${nameLength} customTrash tableName stdin
  */
 struct dyString *tmpDy = newDyString(0);
-char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader",
-	"-sqlTable=loader/encodePeak.sql", "-renameSqlTable", "-trimSqlTable", "-notItemRgb", NULL, NULL, NULL, NULL, NULL, NULL};
+char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", "-sqlTable=loader/encodePeak.sql",
+                "-renameSqlTable", "-trimSqlTable", "-notItemRgb",
+                NULL, NULL, NULL, NULL, NULL, NULL};
 char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
 struct stat statBuf;
 int index = 6;
@@ -731,24 +871,30 @@ static boolean bedDetailRecognizer(struct customFactory *fac,
         struct customTrack *track)
 /* Return TRUE if looks like we're handling an bedDetail track */
 {
-if (type != NULL && !sameType(type, fac->name) &&
-    !sameString(type, "bedDetail") )
+// type is required
+if (type == NULL ||
+    (!sameType(type, fac->name) && !sameString(type, "bedDetail")))
     return FALSE;
-if (type == NULL)
-    return FALSE; /* just in case gets past bed etc. */
 char *line = customFactoryNextRealTilTrack(cpp);
 if (line == NULL)
     return FALSE;
+struct lineFile *lf = cpp->fileStack;
 char *dupe = cloneString(line);
 char *row[14+3];
 int wordCount = chopTabs(dupe, row);
 if (wordCount > 14 || wordCount < 5)
-    return FALSE;
+    lineFileAbort(lf, "type is '%s' but has %d columns; "
+                  "expecting 5 to 14 tab-separated columns", type, wordCount);
 track->fieldCount = wordCount;
 /* bed 4 + so is first part bed? */
 char *ctDb = ctGenomeOrCurrent(track);
 int bedCount = wordCount -2;
-boolean isBed = rowIsBed(row, bedCount, ctDb);
+struct dyString *whyNotBed = dyStringNew(0);
+boolean isBed = rowIsBed(row, bedCount, ctDb, whyNotBed);
+if (!isBed)
+    lineFileAbort(lf, "type is '%s' with %d columns, but first %d columns are not valid BED: %s",
+                  type, wordCount, bedCount, whyNotBed->string);
+dyStringFree(&whyNotBed);
 freeMem(dupe);
 customPpReuse(cpp, line);
 return (isBed);
@@ -888,41 +1034,47 @@ static struct customFactory bedDetailFactory =
 
 /*** pgSnp Factory - allow pgSnp(personal genome SNP) custom tracks ***/
 
-static boolean rowIsPgSnp (char **row, char *db, char *type)
+static boolean rowIsPgSnp (char **row, char *db, char *type, struct lineFile *lf)
 /* return TRUE if row looks like a pgSnp row */
 {
-boolean isPgSnp = rowIsBed(row, 3, db);
 if (type != NULL && !sameWord(type, "pgSnp"))
     return FALSE;
+struct dyString *whyNotBed = dyStringNew(0);
+boolean isPgSnp = rowIsBed(row, 3, db, whyNotBed);
 if (!isPgSnp && type == NULL)
+    {
+    dyStringFree(&whyNotBed);
     return FALSE;
+    }
 else if (!isPgSnp)
-    errAbort("Error line 1 of custom track, type is pgSnp but first 3 fields are not BED");
+    lineFileAbort(lf, "type is pgSnp but first 3 fields are not BED: %s",
+             whyNotBed->string);
+dyStringFree(&whyNotBed);
 if (!isdigit(row[4][0]) && type == NULL)
     return FALSE;
 else if (!isdigit(row[4][0]))
-    errAbort("Error line 1 of custom track, type is pgSnp but count is not an integer (%s)", row[4]);
+    lineFileAbort(lf, "type is pgSnp but count is not an integer (%s)", row[4]);
 int count = atoi(row[4]);
 if (count < 1 && type == NULL)
     return FALSE;
 else if (count < 1)
-    errAbort("Error line 1 of custom track, type is pgSnp but count is less than 1");
+    lineFileAbort(lf, "type is pgSnp but count is less than 1");
 char pattern[128]; /* include count in pattern */
 safef(pattern, sizeof(pattern), "^[ACTG-]+(\\/[ACTG-]+){%d}$", count - 1);
 if (! regexMatchNoCase(row[3], pattern) && type == NULL)
     return FALSE;
 else if (! regexMatchNoCase(row[3], pattern))
-    errAbort("Error line 1 of custom track, type is pgSnp with a count of %d but allele is invalid %s", count, row[3]);
+    lineFileAbort(lf, "type is pgSnp with a count of %d but allele is invalid (%s)", count, row[3]);
 safef(pattern, sizeof(pattern), "^[0-9]+(,[0-9]+){%d}$", count - 1);
 if (! regexMatchNoCase(row[5], pattern) && type == NULL)
     return FALSE;
 else if (! regexMatchNoCase(row[5], pattern))
-    errAbort("Error line 1 of custom track, type is pgSnp with a count of %d but frequency is invalid (%s)", count, row[5]);
+    lineFileAbort(lf, "type is pgSnp with a count of %d but frequency is invalid (%s)", count, row[5]);
 safef(pattern, sizeof(pattern), "^[0-9.]+(,[0-9.]+){%d}$", count - 1);
 if (! regexMatchNoCase(row[6], pattern) && type == NULL)
     return FALSE;
 else if (! regexMatchNoCase(row[6], pattern))
-    errAbort("Error line 1 of custom track, type is pgSnp with a count of %d but score is invalid (%s)", count, row[6]);
+    lineFileAbort(lf, "type is pgSnp with a count of %d but score is invalid (%s)", count, row[6]);
 /* if get here must be pgSnp format */
 return TRUE;
 }
@@ -941,12 +1093,16 @@ char *dupe = cloneString(line);
 char *row[7+3];
 int wordCount = chopLine(dupe, row);
 boolean isPgSnp = FALSE;
+struct lineFile *lf = cpp->fileStack;
 if (wordCount == 7)
     {
     track->fieldCount = wordCount;
     char *ctDb = ctGenomeOrCurrent(track);
-    isPgSnp = rowIsPgSnp(row, ctDb, type);
+    isPgSnp = rowIsPgSnp(row, ctDb, type, lf);
     }
+else if (type != NULL)
+    lineFileAbort(lf, "type is pgSnp so it must have 7 fields but has %d",
+                  wordCount);
 freeMem(dupe);
 customPpReuse(cpp, line);
 return (isPgSnp);
@@ -1083,17 +1239,20 @@ static struct customFactory pgSnpFactory =
 
 /* BarChart and bigBarChart tracks */
 
-static boolean rowIsBarChart (char **row, int wordCount, char *db)
+static boolean rowIsBarChart (char **row, int wordCount, char *db, struct lineFile *lf)
 /* return TRUE if row looks like a barChart row. BED 6+5 */
 {
 char *type = "barChart";
-if (!rowIsBed(row, 6, db))
-    errAbort("Error line 1 of custom track, type is %s but first 6 fields are not BED", type);
+struct dyString *whyNotBed = dyStringNew(0);
+if (!rowIsBed(row, 6, db, whyNotBed))
+    lineFileAbort(lf, "type is %s but first 6 fields are not BED: %s",
+             type, whyNotBed->string);
+dyStringFree(&whyNotBed);
 char *buf[BAR_CHART_MAX_CATEGORIES];
 int expScoresCount = chopCommas(cloneString(row[BARCHART_EXPSCORES_COLUMN_IX]), buf);
 int expCount = sqlUnsigned(row[BARCHART_EXPCOUNT_COLUMN_IX]);
 if (expCount != expScoresCount)
-    errAbort("Error line 1 of custom track, type is %s, but found %d expScores (expecting %d)", 
+    lineFileAbort(lf, "type is %s, but found %d expScores (expecting %d)",
                 type, expScoresCount, expCount);
 return TRUE;
 }
@@ -1115,7 +1274,8 @@ static boolean barChartRecognizer(struct customFactory *fac, struct customPp *cp
                                         struct customTrack *track)
 /* Return TRUE if looks like we're handling a barChart track */
 {
-if (type != NULL && !sameType(type, fac->name))
+// type is required
+if (type == NULL || !sameType(type, fac->name))
     return FALSE;
 char *line = customFactoryNextRealTilTrack(cpp);
 if (line == NULL)
@@ -1124,23 +1284,27 @@ char *dupe = cloneString(line);
 char *row[BARCHARTBED_NUM_COLS+1];
 int wordCount = chopLine(dupe, row);
 boolean isBarChart = FALSE;
+struct lineFile *lf = cpp->fileStack;
 if (wordCount == BARCHARTBED_NUM_COLS ||
         wordCount == BARCHARTBED_NUM_COLS-2)    // don't require dataOffset/dataLen
     {
     track->fieldCount = wordCount;
     char *ctDb = ctGenomeOrCurrent(track);
-    isBarChart = rowIsBarChart(row, wordCount, ctDb);
+    isBarChart = rowIsBarChart(row, wordCount, ctDb, lf);
     }
+else
+    lineFileAbort(cpp->fileStack, "type is '%s' but got %d columns (expecting %d or %d)",
+                  type, wordCount, BARCHARTBED_NUM_COLS-2, BARCHARTBED_NUM_COLS);
 freeMem(dupe);
 customPpReuse(cpp, line);
 return isBarChart;
 }
 
-static struct barChartBed *customTrackBarChart(struct customTrack *track, char *db, 
+static struct barChartBed *customTrackBarChart(struct customTrack *track, char *db,
                                     char **row, struct hash *chromHash, struct lineFile *lf)
 /* Convert a row of strings to barChart. */
 {
-// Validate first 6 standard bed fields 
+// Validate first 6 standard bed fields
 struct bed *bed;
 AllocVar(bed);
 loadAndValidateBed(row, 6, BARCHARTBED_NUM_COLS-6, lf, bed, NULL, TRUE);
@@ -1153,7 +1317,7 @@ if (!barChart)
 int count;
 sqlFloatDynamicArray(row[BARCHART_EXPSCORES_COLUMN_IX], &barChart->expScores, &count);
 if (count != barChart->expCount)
-    lineFileAbort(lf, "expecting %d elements in expScores list (field %d)", 
+    lineFileAbort(lf, "expecting %d elements in expScores list (field %d)",
                         barChart->expCount, BARCHART_EXPSCORES_COLUMN_IX+1);
 // TODO: check offset and len
 
@@ -1181,7 +1345,8 @@ if (stat(tmpDir,&statBuf))
 	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", NULL,
-	"-renameSqlTable", "-trimSqlTable", "-notItemRgb", "-noBin", NULL, NULL, NULL, NULL, NULL, NULL};
+	        "-renameSqlTable", "-trimSqlTable", "-notItemRgb", "-noBin",
+                NULL, NULL, NULL, NULL, NULL, NULL};
 
 char *schemaFile = "barChartBed.sql";
 struct dyString *ds = newDyString(0);
@@ -1191,7 +1356,7 @@ cmd1[2] = dyStringCannibalize(&ds);
 int index = 7;
 ds = newDyString(0);
 dyStringPrintf(ds, "-tmpDir=%s", tmpDir);
-cmd1[index++] = dyStringCannibalize(&ds); 
+cmd1[index++] = dyStringCannibalize(&ds);
 
 ds = newDyString(0);
 dyStringPrintf(ds, "-maxChromNameLength=%d", track->maxChromName);
@@ -1288,9 +1453,241 @@ struct customFactory barChartFactory =
     barChartLoader,
     };
 
+/************************************/
+/* Interact and bigInteract tracks */
+
+static boolean rowIsInteract (char **row, int wordCount, char *db, struct lineFile *lf)
+/* return TRUE if row looks like an interact row. BED 5+ */
+{
+char *type = "interact";
+struct dyString *whyNotBed = dyStringNew(0);
+if (!rowIsBed(row, 5, db, whyNotBed))
+    lineFileAbort(lf, "type is %s but first 5 fields are not BED: %s", type, whyNotBed->string);
+dyStringFree(&whyNotBed);
+return TRUE;
+}
+
+static boolean interactRecognizer(struct customFactory *fac, struct customPp *cpp, char *type,
+                                        struct customTrack *track)
+/* Return TRUE if looks like we're handling an interact track */
+{
+// type is required
+if (type == NULL || !sameType(type, fac->name))
+    return FALSE;
+char *line = customFactoryNextRealTilTrack(cpp);
+if (line == NULL)
+    return FALSE;
+char *dupe = cloneString(line);
+char *row[INTERACT_NUM_COLS+1];
+int wordCount = chopLine(dupe, row);
+boolean isInteract = FALSE;
+struct lineFile *lf = cpp->fileStack;
+if (wordCount == INTERACT_NUM_COLS)
+    {
+    track->fieldCount = wordCount;
+    char *ctDb = ctGenomeOrCurrent(track);
+    isInteract = rowIsInteract(row, wordCount, ctDb, lf);
+    }
+else
+    lineFileAbort(lf, "type is '%s' but got %d columns (expecting %d)",
+                  type, wordCount, INTERACT_NUM_COLS);
+freeMem(dupe);
+customPpReuse(cpp, line);
+return isInteract;
+}
+
+static struct interact *customTrackInteract(struct customTrack *track, char *db,
+                                    char **row, struct hash *chromHash, struct lineFile *lf)
+/* Convert a row of strings to interact format. */
+{
+// Validate first 5 standard bed fields
+struct bed *bed;
+AllocVar(bed);
+loadAndValidateBed(row, 5, INTERACT_NUM_COLS-5, lf, bed, NULL, TRUE);
+
+// Load as interact and validate custom fields
+struct interact *inter = interactLoadAndValidate(row);
+if (!inter)
+    lineFileAbort(lf, "Invalid interact row");
+hashStoreName(chromHash, inter->chrom);
+customFactoryCheckChromNameDb(db, inter->chrom, lf);
+int chromSize = hChromSize(db, inter->chrom);
+if (inter->chromEnd > chromSize)
+    lineFileAbort(lf, "chromEnd larger than chrom %s size (%d > %d)",
+                        inter->chrom, inter->chromEnd, chromSize);
+// TODO more validation
+return inter;
+}
+
+static struct pipeline *interactLoaderPipe(struct customTrack *track)
+{
+/* Similar to bedLoaderPipe, but loads with the specified schemaFile.
+ * Constructs and run the command:
+ *	hgLoadBed -customTrackLoader -sqlTable=loader/schemaFile -renameSqlTable
+ *                -trimSqlTable -notItemRgb -tmpDir=/data/tmp
+ *		-maxChromNameLength=${nameLength} customTrash tableName stdin
+ */
+char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
+struct stat statBuf;
+if (stat(tmpDir,&statBuf))
+    errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
+	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
+
+char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", NULL,
+	        "-renameSqlTable", "-trimSqlTable", "-notItemRgb",
+                NULL, NULL, NULL, NULL, NULL, NULL};
+
+char *schemaFile = "interact.sql";
+struct dyString *ds = newDyString(0);
+dyStringPrintf(ds, "-sqlTable=loader/%s", schemaFile);
+cmd1[2] = dyStringCannibalize(&ds);
+
+int index = 6;
+ds = newDyString(0);
+dyStringPrintf(ds, "-tmpDir=%s", tmpDir);
+cmd1[index++] = dyStringCannibalize(&ds);
+
+ds = newDyString(0);
+dyStringPrintf(ds, "-maxChromNameLength=%d", track->maxChromName);
+cmd1[index++] = dyStringCannibalize(&ds);
+
+cmd1[index++] = CUSTOM_TRASH;
+cmd1[index++] = track->dbTableName;
+cmd1[index++] = "stdin";
+assert(index <= ArraySize(cmd1));
+
+/* the "/dev/null" file isn't actually used for anything, but it is used
+ * in the pipeLineOpen to properly get a pipe started that isn't simply
+ * to STDOUT which is what a NULL would do here instead of this name.
+ *	This function exits if it can't get the pipe created
+ *	The dbStderrFile will get stderr messages from hgLoadBed into the
+ *	our private error log so we can send it back to the user
+ */
+return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort, "/dev/null", track->dbStderrFile);
+}
+
+static struct customTrack *interactFinish(struct customTrack *track, struct interact *itemList)
+/* Finish up interact tracks */
+{
+struct interact *item;
+char buf[50];
+track->tdb->type = cloneString("interact");
+track->dbTrackType = cloneString("interact");
+safef(buf, sizeof(buf), "%d", track->fieldCount);
+ctAddToSettings(track, "fieldCount", cloneString(buf));
+safef(buf, sizeof(buf), "%d", slCount(itemList));
+ctAddToSettings(track, "itemCount", cloneString(buf));
+safef(buf, sizeof(buf), "%s:%u-%u", itemList->chrom,
+                itemList->chromStart, itemList->chromEnd);
+ctAddToSettings(track, "firstItemPos", cloneString(buf));
+
+/* If necessary add track offsets. */
+int offset = track->offset;
+if (offset != 0)
+    {
+    /* Add track offsets if any */
+    for (item = itemList; item != NULL; item = item->next)
+        {
+        item->chromStart += offset;
+        item->chromEnd += offset;
+        }
+    track->offset = 0;  /*      so DB load later won't do this again */
+    hashMayRemove(track->tdb->settingsHash, "offset"); /* nor the file reader*/
+    }
+
+/* If necessary load database */
+customFactorySetupDbTrack(track);
+struct pipeline *dataPipe = interactLoaderPipe(track);
+FILE *out = pipelineFile(dataPipe);
+for (item = itemList; item != NULL; item = item->next)
+    interactOutput(item, out, '\t', '\n');
+fflush(out);            /* help see error from loader failure */
+if(ferror(out) || pipelineWait(dataPipe))
+    pipelineFailExit(track);    /* prints error and exits */
+unlink(track->dbStderrFile);    /* no errors, not used */
+pipelineFree(&dataPipe);
+return track;
+}
+
+static struct customTrack *interactLoader(struct customFactory *fac, struct hash *chromHash,
+        struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+/* Load up interact data until next track line. */
+{
+char *line;
+interactUiDirectional(track->tdb);
+char *db = ctGenomeOrCurrent(track);
+struct interact *itemList = NULL;
+if (!dbRequested)
+    errAbort("interact custom track type unavailable without custom trash database. Please set that up in your hg.conf");
+while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
+    {
+    char *row[INTERACT_NUM_COLS];
+    int wordCount = chopLine(line, row);
+    struct lineFile *lf = cpp->fileStack;
+    lineFileExpectAtLeast(lf, track->fieldCount, wordCount);
+    struct interact *item = customTrackInteract(track, db, row, chromHash, lf);
+    slAddHead(&itemList, item);
+    }
+slReverse(&itemList);
+return interactFinish(track, itemList);
+}
+
+struct customFactory interactFactory =
+/* Factory for interact tracks */
+{
+    NULL,
+    "interact",
+    interactRecognizer,
+    interactLoader,
+    };
+
+
+/*********************/
+/**** hic Factory ****/
+
+static boolean hicRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a hic track */
+{
+return (sameType(type, "hic"));
+}
+
+static struct customTrack *hicLoader(struct customFactory *fac,
+	struct hash *chromHash,
+    	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+/* Load up hic data until get next track line. */
+{
+struct hash *settings = track->tdb->settingsHash;
+char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
+requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
+checkAllowedBigDataUrlProtocols(bigDataUrl);
+
+if (doExtraChecking)
+    {
+    struct hicMeta *meta;
+    char *hicErrMsg = hicLoadHeader(bigDataUrl, &meta, track->genomeDb);
+    if (hicErrMsg != NULL)
+        {
+        track->networkErrMsg = cloneString(hicErrMsg);
+        }
+    }
+return track;
+}
+
+struct customFactory hicFactory =
+/* Factory for Hi-C tracks */
+{
+    NULL,
+    "hic",
+    hicRecognizer,
+    hicLoader,
+    };
+
+
 /*** GFF/GTF Factory - converts to BED ***/
 
-static boolean rowIsGff(char *db, char **row, int wordCount)
+static boolean rowIsGff(char *db, char **row, int wordCount, char *type, struct lineFile *lf)
 /* Return TRUE if format of this row is consistent with being a .gff */
 {
 boolean isGff = FALSE;
@@ -1299,18 +1696,34 @@ if (wordCount >= 8 && wordCount <= 9)
     /* Check that strand is + - or . */
     char *strand = row[6];
     char c = strand[0];
-    if (c == '.' || c == '+' || c == '-')
+    if ((c == '.' || c == '+' || c == '-') && strand[1] == 0)
         {
-	if (strand[1] == 0)
-	    {
-	    if (hgIsOfficialChromName(db, row[0]))
-	        {
-		if (isdigit(row[3][0]) && isdigit(row[4][0]))
-		    isGff = TRUE;
-		}
-	    }
-	}
+        // check chrom name
+        char *officialChrom = hgOfficialChromName(db, row[0]);
+        if (! officialChrom)
+            {
+            if (type != NULL)
+                lineFileAbort(lf, "type is '%s' but '%s' is not a valid sequence name in %s",
+                              type, row[0], db);
+            }
+        else if (differentString(row[0], officialChrom))
+            {
+            if (type != NULL)
+                lineFileAbort(lf, "type is '%s' but '%s' is not a valid sequence name in %s "
+                              "(perhaps you mean '%s'?)",
+                              type, row[0], db, officialChrom);
+            }
+        else if (isdigit(row[3][0]) && isdigit(row[4][0]))
+            isGff = TRUE;
+        else if (type != NULL)
+            lineFileAbort(lf, "type is '%s' but 4th and/or 5th column values are not numeric", type);
+        }
+    else if (type != NULL)
+        lineFileAbort(lf, "type is '%s' but 7th column (strand) contains '%s' "
+                      "(expecting '+', '-' or '.')", type, strand);
     }
+else if (type != NULL)
+    lineFileAbort(lf, "type is '%s' but got %d columns (expecting 8 or 9)", type, wordCount);
 return isGff;
 }
 
@@ -1327,7 +1740,7 @@ if (line == NULL)
 char *dupe = cloneString(line);
 char *row[10];
 int wordCount = chopTabs(dupe, row);
-boolean isGff = rowIsGff(track->genomeDb, row, wordCount);
+boolean isGff = rowIsGff(track->genomeDb, row, wordCount, type, cpp->fileStack);
 if (isGff)
     track->gffHelper = gffFileNew("custom input");
 freeMem(dupe);
@@ -1351,6 +1764,8 @@ if (!gffRecognizer(fac, cpp, type, track))
 char *line = customPpNextReal(cpp);
 if (gffHasGtfGroup(line))
     isGtf = TRUE;
+if (sameType(type, "gtf") && !isGtf)
+    lineFileAbort(cpp->fileStack, "type is '%s' but could not find a valid GTF group column", type);
 customPpReuse(cpp, line);
 return isGtf;
 }
@@ -1492,37 +1907,77 @@ size = atoi(sSize);
 return start < end && end <= size;
 }
 
-static boolean rowIsPsl(char **row, int wordCount)
+static boolean rowIsPsl(char **row, int wordCount, char *type, struct lineFile *lf)
 /* Return TRUE if format of this row is consistent with being a .psl */
 {
 int i, len;
 char *s, c;
 int blockCount;
 if (wordCount != PSL_NUM_COLS)
+    {
+    if (type != NULL)
+        lineFileAbort(lf, "type is '%s' but got %d columns (expecting %d)",
+                      type, wordCount, PSL_NUM_COLS);
     return FALSE;
+    }
 for (i=0; i<=7; ++i)
    if (!isdigit(row[i][0]))
+       {
+       if (type != NULL)
+           lineFileAbort(lf, "type is '%s' but column %d has a non-numeric value",
+                         type, i+1);
        return FALSE;
+       }
 s = row[8];
 len = strlen(s);
 if (len < 1 || len > 2)
+    {
+    if (type != NULL)
+        lineFileAbort(lf, "type is '%s' but strand is %d characters long (expecting 1 or 2)",
+                      type, len);
     return FALSE;
+    }
 for (i=0; i<len; ++i)
     {
     c = s[i];
     if (c != '+' && c != '-')
+        {
+        if (type != NULL)
+            lineFileAbort(lf, "type is '%s' but strand contains '%c' (expecting '+' or '-')",
+                          type, c);
         return FALSE;
+        }
     }
 if (!checkStartEnd(row[10], row[11], row[12]))
+    {
+    if (type != NULL)
+        lineFileAbort(lf, "type is '%s' but qSize=%s, qStart=%s, qEnd=%s",
+                      type, row[10], row[11], row[12]);
     return FALSE;
+    }
 if (!checkStartEnd(row[14], row[15], row[16]))
+    {
+    if (type != NULL)
+        lineFileAbort(lf, "type is '%s' but tSize=%s, tStart=%s, tEnd=%s",
+                      type, row[14], row[15], row[16]);
     return FALSE;
+    }
 if (!isdigit(row[17][0]))
-   return FALSE;
+    {
+    if (type != NULL)
+        lineFileAbort(lf, "type is '%s' but blockCount is non-numeric", type);
+    return FALSE;
+    }
 blockCount = atoi(row[17]);
 for (i=18; i<=20; ++i)
     if (countChars(row[i], ',') != blockCount)
+        {
+        if (type != NULL)
+            lineFileAbort(lf, "type is '%s' but column %d has wrong number of "
+                          "comma-separated values (%d; expecting %d)",
+                          type, i+1, countChars(row[i], ','), blockCount);
         return FALSE;
+        }
 return TRUE;
 }
 
@@ -1546,7 +2001,7 @@ else
     char *dupe = cloneString(line);
     char *row[PSL_NUM_COLS+1];
     int wordCount = chopLine(dupe, row);
-    isPsl = rowIsPsl(row, wordCount);
+    isPsl = rowIsPsl(row, wordCount, type, cpp->fileStack);
     freeMem(dupe);
     }
 customPpReuse(cpp, line);
@@ -1718,7 +2173,11 @@ static boolean mafRecognizer(struct customFactory *fac,
 {
 if (type != NULL && !sameType(type, fac->name))
     return FALSE;
-return headerStartsWith(cpp, "##maf version");
+boolean isMaf = headerStartsWith(cpp, "##maf version");
+if (type != NULL && !isMaf)
+    lineFileAbort(cpp->fileStack, "type is '%s' but header does not start with '##maf version'",
+                  type);
+return isMaf;
 }
 
 static void mafLoaderBuildTab(struct customTrack *track, char *mafFile)
@@ -1782,6 +2241,12 @@ struct hash *settings = track->tdb->settingsHash;
 
 if (!dbRequested)
     errAbort("Maf files have to be in database");
+
+if (! fileExists("loader/hgLoadMaf") )
+    {
+    errAbort("loading custom tracks: can not find "
+	"'cgi-bin/loader/hgLoadMaf' command\n");
+    }
 
 track->dbTrackType = cloneString(fac->name);
 track->wiggle = TRUE;
@@ -1978,6 +2443,16 @@ int span = 1;
 /* Load database if requested */
 if (dbRequested)
     {
+    if (! fileExists("loader/hgLoadWiggle") )
+	{
+	errAbort("loading custom tracks: can not find "
+		"'cgi-bin/loader/hgLoadWiggle' command\n");
+	}
+    if (! fileExists("loader/wigEncode") )
+	{
+	errAbort("loading custom tracks: can not find "
+		"'cgi-bin/loader/wigEncode' command\n");
+	}
     /* TODO: see if can avoid extra file copy in this case. */
     customFactorySetupDbTrack(track);
 
@@ -2207,80 +2682,6 @@ if (hashLookup(settings, "viewLimits") == NULL)
     }
 }
 
-boolean isValidBigDataUrl(char *url, boolean doAbort)
-/* return True if the URL is a valid bigDataUrl. 
- * It can be a local filename if this is allowed by udc.localDir 
- */
-{
-if ((startsWith("http://", url)
-   || startsWith("https://", url)
-   || startsWith("ftp://", url)))
-return TRUE;
-
-// we allow bigDataUrl's to point to trash
-if (startsWith(trashDir(), url))
-    return TRUE;
-
-char *prefix = cfgOption("udc.localDir");
-if (prefix == NULL)
-    {
-    if (doAbort)
-        errAbort("Only network protocols http, https, or ftp allowed in bigDataUrl: '%s'", url);
-    return FALSE;
-    }
-
-if (!startsWith(prefix, url))
-    {
-    if (doAbort)
-        errAbort("bigDataUrl '%s' on local file system has to start with '%s' (see udc.localDir directive in cgi-bin/hg.conf)", url, prefix);
-    return FALSE;
-    }
-        
-return TRUE;
-}
-
-static void checkAllowedBigDataUrlProtocols(char *url)
-/* Abort if url is not using one of the allowed bigDataUrl network protocols.
- * In particular, do not allow a local file reference, unless explicitely
- * allowed by hg.conf's udc.localDir directive. */
-{
-isValidBigDataUrl(url, TRUE);
-}
-
-static char *bigDataDocPath(char *type)
-/* If type is a bigData type, provide a relative path to its custom track/format doc page. */
-{
-char *docUrl = NULL;
-if (sameString(type, "bigWig"))
-    docUrl = "../goldenPath/help/bigWig.html";
-else if (sameString(type, "bigBed"))
-    docUrl = "../goldenPath/help/bigBed.html";
-else if (sameString(type, "bam"))
-    docUrl = "../goldenPath/help/bam.html";
-else if (sameString(type, "vcfTabix"))
-    docUrl = "../goldenPath/help/vcf.html";
-return docUrl;
-}
-
-static void requireBigDataUrl(char *bigDataUrl, char *type, char *trackName)
-/* If bigDataUrl is empty, errAbort with helpful message about bigDataUrl requirement */
-{
-if (isEmpty(bigDataUrl))
-    {
-    struct dyString *doc = dyStringNew(0);
-    char *docUrl = bigDataDocPath(type);
-    if (docUrl != NULL)
-	dyStringPrintf(doc, "  For more information about the bigDataUrl setting, see "
-		       "<A HREF=\"%s\" TARGET=_BLANK>%s custom track documentation</A>.",
-		       docUrl, type);
-    errAbort("Missing bigDataUrl setting from track of type=%s (%s).  "
-	     "Please check for case and spelling and that there is no new-line "
-	     "between the 'track' and the 'bigDataUrl' if the bigDataUrl appears to be there."
-	     "%s",
-	     type, trackName, doc->string);
-    }
-}
-
 static struct customTrack *bigWigLoader(struct customFactory *fac,
 	struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
@@ -2369,6 +2770,14 @@ static boolean bigBarChartRecognizer(struct customFactory *fac,
 return (sameType(type, "bigBarChart"));
 }
 
+static boolean bigInteractRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a bigInteract track */
+{
+return (sameType(type, "bigInteract"));
+}
+
 static boolean bigNarrowPeakRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
@@ -2428,6 +2837,15 @@ static struct customTrack *bigBarChartLoader(struct customFactory *fac,
 /* Load up bigBarChartdata until get next track line. A bit of error checking before bigBedLoad. */
 {
 requireBarChartBars(track);
+return bigBedLoader(fac, chromHash, cpp, track, dbRequested);
+}
+
+static struct customTrack *bigInteractLoader(struct customFactory *fac,
+	struct hash *chromHash,
+    	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+/* Load up bigInteract data until get next track line. */
+{
+interactUiDirectional(track->tdb);
 return bigBedLoader(fac, chromHash, cpp, track, dbRequested);
 }
 
@@ -2546,6 +2964,15 @@ static struct customFactory bigBarChartFactory =
     "bigBarChart",
     bigBarChartRecognizer,
     bigBarChartLoader
+    };
+
+static struct customFactory bigInteractFactory =
+/* Factory for bigBarChart tracks */
+    {
+    NULL,
+    "bigInteract",
+    bigInteractRecognizer,
+    bigInteractLoader
     };
 
 static struct customFactory bigBedFactory =
@@ -2822,7 +3249,25 @@ static boolean vcfRecognizer(struct customFactory *fac,
 {
 if (type != NULL && !sameType(type, fac->name))
     return FALSE;
-return headerStartsWith(cpp, "##fileformat=VCFv");
+boolean isVcf = headerStartsWith(cpp, "##fileformat=VCFv");
+if (type != NULL && !isVcf)
+    {
+    if (cpp->fileStack)
+        lineFileAbort(cpp->fileStack,
+                      "type is '%s' but header does not start with '##fileformat=VCFv'", type);
+    else
+        {
+        if (isNotEmpty(trackDbSetting(track->tdb, "bigDataUrl")))
+            errAbort("type is '%s' but can't find header with '##fileformat=VCFv' "
+                     "following track line. "
+                     "(For bgzip-compressed VCF+tabix index, please use 'type=vcfTabix' "
+                     "instead of 'type=%s')", type, type);
+        else
+            errAbort("type is '%s' but can't find header with '##fileformat=VCFv' "
+                     "following track line", type);
+        }
+    }
+return isVcf;
 }
 
 static void vcfLoaderAddDbTable(struct customTrack *track, char *vcfFile)
@@ -3040,6 +3485,9 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &bigDataOopsFactory);
     slAddTail(&factoryList, &barChartFactory);
     slAddTail(&factoryList, &bigBarChartFactory);
+    slAddTail(&factoryList, &interactFactory);
+    slAddTail(&factoryList, &bigInteractFactory);
+    slAddTail(&factoryList, &hicFactory);
     }
 }
 
@@ -3574,10 +4022,11 @@ return errCount;
 
 static struct customTrack *customFactoryParseOptionalDb(char *genomeDb, char *text,
 	boolean isFile, struct slName **retBrowserLines,
-	boolean mustBeCurrentDb)
+	boolean mustBeCurrentDb, boolean doParallelLoad)
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  If mustBeCurrentDb, die if custom track
- * is for some database other than genomeDb. */
+ * is for some database other than genomeDb. 
+ * If doParallelLoad is true, load the big tracks */
 {
 struct customTrack *trackList = NULL, *track = NULL;
 char *line = NULL;
@@ -3604,9 +4053,9 @@ if (dbTrack)
      * if we want to make the warning visible, have to extend behavior of customTrack.c */
     }
 
-setUdcCacheDir();  // Need to set udc cache dir here because this whole cust trk parse routine 
-                   // gets called very early in CGI life by cart.c when processing saved-sessions. 
-                   // It is not specific to just hgCustom and hgTracks since any CGI that uses the cart 
+setUdcCacheDir();  // Need to set udc cache dir here because this whole cust trk parse routine
+                   // gets called very early in CGI life by cart.c when processing saved-sessions.
+                   // It is not specific to just hgCustom and hgTracks since any CGI that uses the cart
                    // may need this.
 
 int ptMax = atoi(cfgOptionDefault("parallelFetch.threads", "20"));  // default number of threads for parallel fetch.
@@ -3625,6 +4074,13 @@ while ((line = customPpNextReal(cpp)) != NULL)
      * if no track line. Find out explicit type setting if any.
      * Also make sure settingsHash is set up. */
     lf = cpp->fileStack;
+    char *dataUrl = NULL;
+    if (lf->fileName && (
+            startsWith("http://" , lf->fileName) ||
+            startsWith("https://", lf->fileName) ||
+            startsWith("ftp://"  , lf->fileName)
+            ))
+        dataUrl = cloneString(lf->fileName);
     if (startsWithWord("track", line))
         {
 	track = trackLineToTrack(genomeDb, line, cpp->fileStack->lineIx);
@@ -3647,6 +4103,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	}
     if (!track)
         continue;
+
+    lazarusLives(20 * 60);   // extend keep-alive time. for big uploads on slow connections.
 
     /* verify database for custom track */
     char *ctDb = ctGenome(track);
@@ -3696,6 +4154,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	char *bigDataUrl = hashFindVal(track->tdb->settingsHash, "bigDataUrl");
 	/* Load track from appropriate factory */
         char *type = track->tdb->type;
+        lf = NULL;  // customFactoryFind may close this
 	struct customFactory *fac = customFactoryFind(genomeDb, cpp, type, track);
 	if (fac == NULL)
 	    {
@@ -3734,23 +4193,19 @@ while ((line = customPpNextReal(cpp)) != NULL)
 			 (lf ? lf->lineIx : 0), (lf ? lf->fileName : "NULL file"));
 		}
 	    }
-        char *dataUrl = NULL;
-        if (lf->fileName && (
-                startsWith("http://" , lf->fileName) ||
-                startsWith("https://", lf->fileName) ||
-                startsWith("ftp://"  , lf->fileName)
-                ))
-            dataUrl = cloneString(lf->fileName);
 	if (bigDataUrl && (ptMax > 0)) // handle separately in parallel so long timeouts don't accrue serially
                                        //  (unless ptMax == 0 which means turn parallel loading off)
-	    { 
-	    struct paraFetchData *pfd;
-	    AllocVar(pfd);
-	    pfd->track = track;  // need pointer to be stable
-	    pfd->fac = fac;
-	    slAddHead(&pfdList, pfd);
-    	    oneList = track;
-	    }
+            {
+            if (doParallelLoad)
+                {
+                struct paraFetchData *pfd;
+                AllocVar(pfd);
+                pfd->track = track;  // need pointer to be stable
+                pfd->fac = fac;
+                slAddHead(&pfdList, pfd);
+                }
+            oneList = track;
+            }
 	else
     	    oneList = fac->loader(fac, chromHash, cpp, track, dbTrack);
 
@@ -3772,9 +4227,9 @@ while ((line = customPpNextReal(cpp)) != NULL)
     }
 
 // Call the fac loader in parallel on all the bigDataUrl custom tracks
-// using pthreads to avoid long serial timeouts 
+// using pthreads to avoid long serial timeouts
 pthread_t *threads = NULL;
-if (ptMax > 0)     // parallelFetch.threads=0 to disable parallel fetch
+if (doParallelLoad && (ptMax > 0))     // parallelFetch.threads=0 to disable parallel fetch
     {
     /* launch parallel threads */
     ptMax = min(ptMax, slCount(pfdList));
@@ -3792,7 +4247,7 @@ if (ptMax > 0)     // parallelFetch.threads=0 to disable parallel fetch
 	    }
 	}
     }
-if (ptMax > 0)
+if (doParallelLoad && (ptMax > 0))
     {
     /* wait for remote parallel load to finish */
     remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
@@ -3846,15 +4301,16 @@ struct customTrack *customFactoryParse(char *genomeDb, char *text, boolean isFil
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  Die if the track is not for genomeDb. */
 {
-return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, TRUE);
+return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, TRUE, TRUE);
 }
 
 struct customTrack *customFactoryParseAnyDb(char *genomeDb, char *text, boolean isFile,
-					    struct slName **retBrowserLines)
+					    struct slName **retBrowserLines, boolean doParallelLoad)
 /* Parse text into a custom set of tracks.  Text parameter is a
- * file name if 'isFile' is set.  Track does not have to be for hGetDb(). */
+ * file name if 'isFile' is set.  Track does not have to be for hGetDb(). 
+ * If doParallelLoad is true, load the big tracks */
 {
-return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, FALSE);
+return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, FALSE, doParallelLoad);
 }
 
 static boolean testFileSettings(struct trackDb *tdb, char *ctFileName)
@@ -3881,24 +4337,6 @@ for (s = fileSettings;  s != NULL;  s = s->next)
     }
 hashElFreeList(&fileSettings);
 return isLive;
-}
-
-static void touchUdcSettings(struct trackDb *tdb)
-/* Touch existing local udcCache bitmap and sparse files.  */
-{
-char *url = trackDbSetting(tdb, "bigDataUrl");
-if (url)
-    {
-    struct slName *el, *list = udcFileCacheFiles(url, udcDefaultDir());
-    for (el = list; el; el = el->next)
-	{
-	if (fileExists(el->name) && readAndIgnore(el->name))
-	    {
-	    verbose(4, "setting bigDataUrl: %s\n", el->name);
-	    }
-	}
-    slFreeList(&list);
-    }
 }
 
 static void freeCustomTrack(struct customTrack **pTrack)
@@ -3945,12 +4383,13 @@ freez(pTrack);
 }
 
 void customFactoryTestExistence(char *genomeDb, char *fileName, boolean *retGotLive,
-				boolean *retGotExpired)
+				boolean *retGotExpired, struct customTrack **retTrackList)
 /* Test existence of custom track fileName.  If it exists, parse it just
  * enough to tell whether it refers to database tables and if so, whether
  * they are alive or have expired.  If they are live, touch them to keep
  * them active. */
 {
+struct customTrack *trackList = NULL;
 boolean trackNotFound = TRUE;
 char *line = NULL;
 struct sqlConnection *ctConn = NULL;
@@ -3960,6 +4399,8 @@ if (!fileExists(fileName))
     {
     if (retGotExpired)
 	*retGotExpired = TRUE;
+    if (retTrackList)
+	*retTrackList = trackList;
     return;
     }
 
@@ -4022,9 +4463,6 @@ while ((line = customPpNextReal(cpp)) != NULL)
     isLive = (isLive && testFileSettings(track->tdb, fileName));
 
 
-    /* Handle bigDataUrl udc settings */
-    touchUdcSettings(track->tdb);
-
     if (track->dbDataLoad)
 	/* Track was loaded into the database -- check if it still exists. */
         {
@@ -4062,8 +4500,16 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	if (retGotExpired)
 	    *retGotExpired = TRUE;
 	}
-    freeCustomTrack(&track);
+    if (retTrackList)
+	slAddHead(&trackList, track);
+    else
+	freeCustomTrack(&track);
     trackNotFound = FALSE;
+    }
+if (retTrackList)
+    {
+    slReverse(&trackList);
+    *retTrackList = trackList;
     }
 customPpFree(&cpp);
 freez(&cpp);

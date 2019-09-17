@@ -9,7 +9,6 @@
 #include <string.h>
 #include <sys/time.h>
 #include <pthread.h>
-#include "internet.h"
 #include "errAbort.h"
 #include "hash.h"
 #include "net.h"
@@ -23,13 +22,14 @@
 /* Brought errno in to get more useful error messages */
 extern int errno;
 
-static int netStreamSocket()
-/* Create a TCP/IP streaming socket.  Complain and return something
- * negative if can't */
+static int netStreamSocketFromAddrInfo(struct addrinfo *address)
+/* Create a socket from addrinfo structure.  
+ * Complain and return something negative if can't. */
 {
-int sd = socket(AF_INET, SOCK_STREAM, 0);
+int sd = socket(address->ai_family, address->ai_socktype, address->ai_protocol);
 if (sd < 0)
-    warn("Couldn't make AF_INET socket.");
+    warn("Couldn't make %s socket.", familyToString(address->ai_family));
+
 return sd;
 }
 
@@ -96,36 +96,20 @@ a.tv_sec -= b.tv_sec;
 return a;
 }
 
-static int netConnectWithTimeout(char *hostName, int port, long msTimeout)
-/* In order to avoid a very long default timeout (several minutes) for hosts that will
- * not answer the port, we are forced to connect non-blocking.
- * After the connection has been established, we return to blocking mode.
- * Also closes sd if error. */
+int netConnectWithTimeoutOneAddr(int sd, struct addrinfo *address, long msTimeout, char *hostName, int port, struct dyString *dy)
+/* Try to connect one address with timeout or return success == 0, failure == -1 */
 {
-int sd;
-struct sockaddr_in sai;		/* Some system socket info. */
-int res;
-fd_set mySet;
-
-if (hostName == NULL)
-    {
-    warn("NULL hostName in netConnect");
-    return -1;
-    }
-if (!internetFillInAddress(hostName, port, &sai))
-    return -1;
-if ((sd = netStreamSocket()) < 0)
-    return sd;
-
 // Set socket to nonblocking so we can manage our own timeout time.
 if (setSocketNonBlocking(sd, TRUE) < 0)
     {
-    close(sd);
     return -1;
     }
 
 // Trying to connect with timeout
-res = connect(sd, (struct sockaddr*) &sai, sizeof(sai));
+int res;
+res = connect(sd, address->ai_addr, address->ai_addrlen);
+char ipStr[NI_MAXHOST];
+getAddrAsString6n4((struct sockaddr_storage *)address->ai_addr, ipStr, sizeof ipStr);
 if (res < 0)
     {
     if (errno == EINPROGRESS)
@@ -137,6 +121,7 @@ if (res < 0)
 	remainingTime.tv_usec = (long) (((msTimeout/1000)-remainingTime.tv_sec)*1000000);
 	while (1) 
 	    {
+	    fd_set mySet;
 	    FD_ZERO(&mySet);
 	    FD_SET(sd, &mySet);
 	    // use tempTime (instead of using remainingTime directly) because on some platforms select() may modify the time val.
@@ -146,10 +131,10 @@ if (res < 0)
 		{
 		if (errno == EINTR)  // Ignore the interrupt 
 		    {
-                    // Subtract the elapsed time from remaining time since some platforms need this.
+		    // Subtract the elapsed time from remaining time since some platforms need this.
 		    struct timeval newTime;
 		    gettimeofday(&newTime, NULL);
-                    struct timeval elapsedTime = tvMinus(newTime, startTime);
+		    struct timeval elapsedTime = tvMinus(newTime, startTime);
 		    remainingTime = tvMinus(remainingTime, elapsedTime);
 		    if (remainingTime.tv_sec < 0)  // means our timeout has more than expired
 			{
@@ -160,8 +145,7 @@ if (res < 0)
 		    }
 		else
 		    {
-		    warn("Error in select() during TCP non-blocking connect %d - %s", errno, strerror(errno));
-		    close(sd);
+		    dyStringPrintf(dy, "Error in select() during TCP non-blocking connect %d - %s\n", errno, strerror(errno));
 		    return -1;
 		    }
 		}
@@ -170,38 +154,81 @@ if (res < 0)
 		// Socket selected for write when it is ready
 		int valOpt;
 		socklen_t lon;
-                // But check the socket for any errors
-                lon = sizeof(valOpt);
-                if (getsockopt(sd, SOL_SOCKET, SO_ERROR, (void*) (&valOpt), &lon) < 0)
-                    {
-                    warn("Error in getsockopt() %d - %s", errno, strerror(errno));
-                    close(sd);
-                    return -1;
-                    }
-                // Check the value returned...
-                if (valOpt)
-                    {
-                    warn("Error in TCP non-blocking connect() %d - %s. Host %s port %d.", valOpt, strerror(valOpt), hostName, port);
-                    close(sd);
-                    return -1;
-                    }
-		break;
+		// But check the socket for any errors
+		lon = sizeof(valOpt);
+		if (getsockopt(sd, SOL_SOCKET, SO_ERROR, (void*) (&valOpt), &lon) < 0)
+		    {
+		    warn("Error in getsockopt() %d - %s", errno, strerror(errno));
+		    return -1;
+		    }
+		// Check the value returned...
+		if (valOpt)
+		    {
+		    dyStringPrintf(dy, "Error in TCP non-blocking connect() %d - %s. Host %s IP %s port %d.\n", valOpt, strerror(valOpt), hostName, ipStr, port);
+		    return -1;
+		    }
+		break;  // OK
 		}
 	    else
 		{
-		warn("TCP non-blocking connect() to %s timed-out in select() after %ld milliseconds - Cancelling!", hostName, msTimeout);
-		close(sd);
+		dyStringPrintf(dy, "TCP non-blocking connect() to %s IP %s timed-out in select() after %ld milliseconds - Cancelling!", hostName, ipStr, msTimeout);
 		return -1;
 		}
 	    }
 	}
     else
 	{
-	warn("TCP non-blocking connect() error %d - %s", errno, strerror(errno));
-	close(sd);
+	dyStringPrintf(dy, "TCP non-blocking connect() error %d - %s", errno, strerror(errno));
 	return -1;
 	}
     }
+return 0; // OK
+}
+
+
+static int netConnectWithTimeout(char *hostName, int port, long msTimeout)
+/* In order to avoid a very long default timeout (several minutes) for hosts that will
+* not answer the port, we are forced to connect non-blocking.
+* After the connection has been established, we return to blocking mode.
+* Also closes sd if error. */
+{
+int sd;
+struct addrinfo *addressList=NULL, *address;
+char portStr[8];
+safef(portStr, sizeof portStr, "%d", port);
+
+if (hostName == NULL)
+    {
+    warn("NULL hostName in netConnect");
+    return -1;
+    }
+if (!internetGetAddrInfo6n4(hostName, portStr, &addressList))
+    return -1;
+
+struct dyString *errMsg = newDyString(256);
+for (address = addressList; address; address = address->ai_next)
+    {
+    if ((sd = netStreamSocketFromAddrInfo(address)) < 0)
+	continue;
+
+    if (netConnectWithTimeoutOneAddr(sd, address, msTimeout, hostName, port, errMsg) == 0)
+	break;
+
+    close(sd);
+    }
+boolean connected = (address != NULL); // one of the addresses connected successfully
+freeaddrinfo(addressList);
+
+if (!connected) 
+    {
+    if (!sameString(errMsg->string, ""))
+	{
+	warn("%s", errMsg->string);
+	}
+    }
+dyStringFree(&errMsg);
+if (!connected)
+    return -1;
 
 // Set to blocking mode again
 if (setSocketNonBlocking(sd, FALSE) < 0)
@@ -245,37 +272,51 @@ return netMustConnect(hostName, atoi(portName));
 }
 
 
-int netAcceptingSocketFrom(int port, int queueSize, char *host)
-/* Create a socket that can accept connections from a 
- * IP address on the current machine if the current machine
- * has multiple IP addresses. */
+int netAcceptingSocket(int port, int queueSize)
+/* Create an IPV6 socket that can accept connections from 
+ * both IPV4 and IPV6 clients on the current machine. */
 {
-struct sockaddr_in sai;
+struct sockaddr_in6 serverAddr;
 int sd;
-int flag = 1;
 
 netBlockBrokenPipes();
-if ((sd = netStreamSocket()) < 0)
-    return sd;
-if (!internetFillInAddress(host, port, &sai))
-    return -1;
-if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(int)))
-    return -1;
-if (bind(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
-    {
-    warn("Couldn't bind socket to %d: %s", port, strerror(errno));
-    close(sd);
-    return -1;
-    }
-listen(sd, queueSize);
-return sd;
-}
 
-int netAcceptingSocket(int port, int queueSize)
-/* Create a socket that can accept connections from
- * anywhere. */
-{
-return netAcceptingSocketFrom(port, queueSize, NULL);
+// Hybrid dual stack ipv6 listening socket accepts ipv6 and ipv4 mapped connections.
+if ((sd = socket(AF_INET6, SOCK_STREAM, 0)) < 0)
+    {
+    errAbort("socket() failed");
+    }
+
+// Allow local address reuse when server is restarted without waiting.
+int on = -1;
+if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, (char *)&on,sizeof(on)) < 0)
+    {
+    errAbort("setsockopt(SO_REUSEADDR) failed");
+    }
+
+// Explicitly turn off IPV6_V6ONLY which is needed on non-Linux platforms like NetBSD and Darwin.
+// This means we allow ipv4 socket connections that can have ipv4-mapped ipv6 IPs.
+int off = 0;
+if (setsockopt(sd, IPPROTO_IPV6, IPV6_V6ONLY, (void *)&off, sizeof(off)) < 0)
+    {
+    errAbort("setsockopt IPV6_V6ONLY off failed.");
+    }
+
+ZeroVar(&serverAddr);
+serverAddr.sin6_family = AF_INET6;
+serverAddr.sin6_port   = htons(port);
+serverAddr.sin6_addr   = in6addr_any;
+if (bind(sd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) < 0)
+    {
+    errAbort("Couldn't bind socket to %d: %s", port, strerror(errno));
+    }
+
+if (listen(sd, queueSize) < 0)
+    {
+    errAbort("listen() failed");
+    }
+
+return sd;
 }
 
 int netAccept(int sd)
@@ -285,28 +326,27 @@ socklen_t fromLen;
 return accept(sd, NULL, &fromLen);
 }
 
-int netAcceptFrom(int acceptor, unsigned char subnet[4])
+int netAcceptFrom(int acceptor, struct cidr *subnet)
 /* Wait for incoming connection from socket descriptor
  * from IP address in subnet.  Subnet is something
- * returned from netParseSubnet or internetParseDottedQuad. 
+ * returned from internetParseSubnetCidr. 
  * Subnet may be NULL. */
 {
-struct sockaddr_in sai;		/* Some system socket info. */
-ZeroVar(&sai);
-sai.sin_family = AF_INET;
+struct sockaddr_storage theirAddr;
+ZeroVar(&theirAddr);
 for (;;)
     {
-    socklen_t addrSize = sizeof(sai);
-    int sd = accept(acceptor, (struct sockaddr *)&sai, &addrSize);
+    int sd = accept(acceptor, NULL, NULL);
     if (sd >= 0)
 	{
 	if (subnet == NULL)
 	    return sd;
 	else
 	    {
-	    unsigned char unpacked[4]; 
-	    internetUnpackIp(ntohl(sai.sin_addr.s_addr), unpacked);
-	    if (internetIpInSubnet(unpacked, subnet))
+	    struct sockaddr_in6 clientAddr;
+	    unsigned int addrLen=sizeof(clientAddr);
+	    getpeername(sd, (struct sockaddr *)&clientAddr, &addrLen);
+	    if (internetIpInSubnetCidr(&clientAddr.sin6_addr, subnet))
 		{
 		return sd;
 		}
@@ -376,40 +416,6 @@ if (ret < 0)
 return ret;
 }
 
-static void notGoodSubnet(char *sns)
-/* Complain about subnet format. */
-{
-errAbort("'%s' is not a properly formatted subnet.  Subnets must consist of\n"
-         "one to three dot-separated numbers between 0 and 255", sns);
-}
-
-void netParseSubnet(char *in, unsigned char out[4])
-/* Parse subnet, which is a prefix of a normal dotted quad form.
- * Out will contain 255's for the don't care bits. */
-{
-out[0] = out[1] = out[2] = out[3] = 255;
-if (in != NULL)
-    {
-    char *snsCopy = strdup(in);
-    char *words[5];
-    int wordCount, i;
-    wordCount = chopString(snsCopy, ".", words, ArraySize(words));
-    if (wordCount > 3 || wordCount < 1)
-        notGoodSubnet(in);
-    for (i=0; i<wordCount; ++i)
-	{
-	char *s = words[i];
-	int x;
-	if (!isdigit(s[0]))
-	    notGoodSubnet(in);
-	x = atoi(s);
-	if (x > 255)
-	    notGoodSubnet(in);
-	out[i] = x;
-	}
-    freez(&snsCopy);
-    }
-}
 
 static void parseByteRange(char *url, ssize_t *rangeStart, ssize_t *rangeEnd, boolean terminateAtByteRange)
 /* parse the byte range information from url */
@@ -431,7 +437,6 @@ if (x)
 	    ++z;
 	    if (terminateAtByteRange)
 		*x = 0;
-	    // TODO: use something better than atoll() ?
 	    *rangeStart = atoll(y); 
 	    if (z[0] != '\0')
 		*rangeEnd = atoll(z);
@@ -441,6 +446,20 @@ if (x)
 
 }
 
+void netHandleHostForIpv6(struct netParsedUrl *npu, struct dyString *dy)
+/* if needed, add brackets around the host name, 
+ * for raw ipv6 address so it is not confused with colon port that may follow. */
+{
+boolean hostIsIpv6 = FALSE;
+if (strchr(npu->host, ':')) // Is the host really an IPV6 address?
+    hostIsIpv6 = TRUE;
+if (hostIsIpv6) // surround ipv6 host with brakets []
+    dyStringAppendC(dy, '[');
+dyStringAppend(dy, npu->host);
+if (hostIsIpv6) // surround ipv6 host with brakets []
+    dyStringAppendC(dy, ']');
+}
+
 void netParseUrl(char *url, struct netParsedUrl *parsed)
 /* Parse a URL into components.   A full URL is made up as so:
  *   http://user:password@hostName:port/file;byterange=0-499
@@ -448,7 +467,7 @@ void netParseUrl(char *url, struct netParsedUrl *parsed)
  * This is set up so that the http:// and the port are optional. 
  */
 {
-char *s, *t, *u, *v, *w;
+char *s, *t, *u, *v, *w, *br, *bl;
 char buf[MAXURLSIZE];
 
 /* Make local copy of URL. */
@@ -544,23 +563,66 @@ else
     }
 
 
+// Whenever IPv6 address : port are provided,
+// the address MUST be surrounded by square brackets like [IPv6-address]:port
+// because without the square brackets, we cannot tell if the trailing bit
+// is end end of an IPv6 address, or port number.
+
+int blCount = countChars(s, '[');
+int brCount = countChars(s, ']');
+
+// double-check any stray brackets
+if ((brCount != blCount) || (brCount > 1))
+    errAbort("badly formed url, stray square brackets in IPv6 address");
+
 /* Save port if it's there.  If not default to 80. */
-t = strchr(s, ':');
-if (t == NULL)
+bl = strchr(s, '['); // IPV6 address in url surrounded by brackets []
+br = strrchr(s, ']'); // IPV6 address in url surrounded by brackets []
+
+if (!br != !bl)  // logical XOR
+    errAbort("badly formed url, unbalanced square brackets around IPv6 address.");
+
+if (!br && isIpv6Address(s))  // host looks like IPv6 address but no brackets.
+    errAbort("badly formed url, should be protocol://[IPv6-address]:port/. Put square brackets around literal IPv6 address.");
+
+// trim off the brackets around the ipv6 host name
+if (br)
     {
+    // expecting *s == [
+    if (*s != '[')
+	errAbort("badly formed url %s, expected [ at start of ipv6 address", s);
+    ++s;    // skip [
+    *br = 0; // erase ]
+    t = br+1;
+    char c = *t;
+    if (c == 0)
+	t = NULL;
+    else if (c != ':')
+	errAbort("badly formed url %s, stray characters after ] at end of ipv6 address", s);
+    }
+else
+    {
+    t = strrchr(s, ':');
+    }
+
+if (br && !isIpv6Address(s))  // host has brackets but does not look like IPv6 address.
+    errAbort("badly formed url, brackets found, but not valid literal IPv6 address.");
+
+if (t) // the port was explicitly provided
+    {
+    *t++ = 0;
+    if (!isdigit(t[0]))
+	errAbort("Non-numeric port name %s", t);
+    safecpy(parsed->port, sizeof(parsed->port), t);
+    }
+else // get default port for each protocol
+    {  
     if (sameWord(parsed->protocol,"http"))
 	strcpy(parsed->port, "80");
     if (sameWord(parsed->protocol,"https"))
 	strcpy(parsed->port, "443");
     if (sameWord(parsed->protocol,"ftp"))
 	strcpy(parsed->port, "21");
-    }
-else
-    {
-    *t++ = 0;
-    if (!isdigit(t[0]))
-	errAbort("Non-numeric port name %s", t);
-    safecpy(parsed->port, sizeof(parsed->port), t);
     }
 
 /* What's left is the host. */
@@ -588,7 +650,9 @@ if (npu->user[0] != 0)
 	}
     dyStringAppend(dy, "@");
     }
-dyStringAppend(dy, npu->host);
+
+netHandleHostForIpv6(npu, dy);
+
 /* do not include port if it is the default */
 if (!(
  (sameString(npu->protocol, "ftp"  ) && sameString("21", npu->port)) ||
@@ -867,7 +931,6 @@ netParseUrl(url, &npu);
 if (!sameString(npu.protocol, "ftp"))
     errAbort("netGetFtpInfo: url (%s) is not for ftp.", url);
 
-// TODO maybe remove this workaround where udc cache wants info on URL "/" ?
 if (sameString(npu.file,"/"))
     {
     *retSize = 0;
@@ -1193,12 +1256,23 @@ if (proxyUrl)
 dyStringPrintf(dy, "%s %s %s\r\n", method, proxyUrl ? urlForProxy : npu.file, protocol);
 freeMem(urlForProxy);
 dyStringPrintf(dy, "User-Agent: %s\r\n", agent);
+
+dyStringPrintf(dy, "Host: ");
+netHandleHostForIpv6(&npu, dy);
+
+boolean portIsDefault = FALSE;
 /* do not need the 80 since it is the default */
-if ((sameString(npu.protocol, "http" ) && sameString("80", npu.port)) ||
-    (sameString(npu.protocol, "https") && sameString("443",npu.port)))
-    dyStringPrintf(dy, "Host: %s\r\n", npu.host);
-else
-    dyStringPrintf(dy, "Host: %s:%s\r\n", npu.host, npu.port);
+if (sameString(npu.protocol, "http" ) && sameString("80", npu.port))
+    portIsDefault = TRUE;
+if (sameString(npu.protocol, "https" ) && sameString("443", npu.port))
+    portIsDefault = TRUE;
+if (!portIsDefault)
+    {
+    dyStringAppendC(dy, ':');
+    dyStringAppend(dy, npu.port);
+    }
+dyStringPrintf(dy, "\r\n");
+
 setAuthorization(npu, "Authorization", dy);
 if (proxyUrl)
     setAuthorization(pxy, "Proxy-Authorization", dy);
@@ -1374,7 +1448,6 @@ if (startsWith("bytes ", x))
     if (z)
 	{
 	++z;
-	// TODO: use something better than atoll() ?
 	*rangeStart = atoll(y); 
 	if (z[0] != '\0')
 	    *rangeEnd = atoll(z);
@@ -1625,8 +1698,6 @@ while (TRUE)
 	return TRUE;
 	}
     close(sd);
-    if (redirectCount > 0)
-	freeMem(url);
     if (success)
 	{
 	/* we have a new url to try */
@@ -1653,6 +1724,8 @@ while (TRUE)
 		}
 	    }
 	}
+    if (redirectCount > 1)
+	freeMem(url);
     if (!success)
 	{  /* failure after 0 to 5 redirects */
 	if (redirectCount > 0)
@@ -2000,7 +2073,13 @@ struct dyString *dy = newDyString(512);
 /* Ask remote server for the file/query. */
 dyStringPrintf(dy, "GET %s HTTP/1.1\r\n", npu->file);
 dyStringPrintf(dy, "User-Agent: genome.ucsc.edu/net.c\r\n");
-dyStringPrintf(dy, "Host: %s:%s\r\n", npu->host, npu->port);
+
+dyStringPrintf(dy, "Host: ");
+netHandleHostForIpv6(npu, dy);
+dyStringAppendC(dy, ':');
+dyStringAppend(dy, npu->port);
+dyStringPrintf(dy, "\r\n");
+
 if (!sameString(npu->user,""))
     {
     char up[256];

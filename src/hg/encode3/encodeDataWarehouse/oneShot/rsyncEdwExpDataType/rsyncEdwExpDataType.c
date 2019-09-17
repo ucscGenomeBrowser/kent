@@ -400,7 +400,7 @@ return bestControl;
 void rsyncUcscExp(FILE *f)
 /* Grab encodeExp table from hgFixed and save it to tab separated file in edwExperiment format. */
 {
-struct sqlConnection *conn = sqlConnectRemote("genome-mysql.cse.ucsc.edu", 
+struct sqlConnection *conn = sqlConnectRemote("genome-mysql.soe.ucsc.edu", 
 		"genome", NULL, "hgFixed");
 struct encodeExp *exp, *expList = encodeExpLoadByQuery(conn, "select * from encodeExp");
 for (exp = expList; exp != NULL; exp = exp->next)

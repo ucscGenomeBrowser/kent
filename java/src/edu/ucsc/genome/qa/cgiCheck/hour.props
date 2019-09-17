@@ -1,4 +1,4 @@
-machine hgwbeta.cse.ucsc.edu
+machine hgwbeta.soe.ucsc.edu
 quick true
 dbSpec all
 table all

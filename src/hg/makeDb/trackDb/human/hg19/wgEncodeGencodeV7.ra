@@ -46,6 +46,7 @@ wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV7
     visibility full
     subTrack wgEncodeGencodeV7
     type genePred
+    idXref wgEncodeGencodeAttrsV7 transcriptId geneId
     itemClassTbl wgEncodeGencodeAttrsV7
     itemClassNameColumn transcriptId
     itemClassClassColumn transcriptClass

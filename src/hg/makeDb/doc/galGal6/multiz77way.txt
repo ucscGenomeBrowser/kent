@@ -1,0 +1,2564 @@
+#############################################################################
+## 77-Way Multiz (DONE - 2018-11-27 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/galGal6/bed/multiz77way
+    cd /hive/data/genomes/galGal6/bed/multiz77way
+    # determine list of databases available from alignments:
+    ls ../lastz.*/fb.galGal6* | egrep -v "RBest|chainSyn" \
+      | awk -F'/' '{print $2}' | sed -e 's/lastz.//;' | egrep -v tetNig1 \
+         > db.77.list
+    # this list happens to also fortunately include the galGal6 since
+    # there does exist a ../lastz.galGal6/fb.galGal6* result from the self
+    # alignment
+
+    # from the 220-way in the source tree, select out the 77 used here:
+    /cluster/bin/phast/tree_doctor \
+        --prune-all-but `cat db.77.list | xargs echo | tr ' ' ','` \
+        /cluster/home/hiram/kent/src/hg/utils/phyloTrees/220way.nh \
+          > t.nh
+
+    # using TreeGraph2 tree editor on the Mac, rearrange to get galGal6
+    # at the top, and attempt to get the others in phylo order:
+    /cluster/bin/phast/all_dists t.nh | grep galGal6 \
+        | sed -e "s/galGal6.//" | sort -k2n | sed -e 's/^/#\t/;'
+#       cotJap1 0.066254
+#       melGal5 0.126972
+#       tytAlb1 0.152299
+#       bucRhi1 0.162299
+#       anaPla1 0.172299
+#       apaVit1 0.182299
+#       calAnn1 0.192299
+#       cucCan1 0.202299
+#       chaVoc2 0.212299
+#       fulGla1 0.222299
+#       tauEry1 0.232299
+#       opiHoa1 0.242299
+#       phoRub1 0.252299
+#       strCam1 0.262299
+#       tinGut2 0.262299
+#       colLiv1 0.312299
+#       lepDis1 0.342299
+#       merNub1 0.342299
+#       pelCri1 0.342299
+#       phaCar1 0.352299
+#       phaLep1 0.352299
+#       pteGut1 0.352299
+#       egrGar1 0.362299
+#       nipNip1 0.362299
+#       aptFor1 0.372299
+#       pygAde1 0.372299
+#       chlUnd1 0.382299
+#       colStr1 0.382299
+#       gavSte1 0.397002
+#       aquChr2 0.402299
+#       balPav1 0.402299
+#       falChe1 0.402299
+#       falPer1 0.402299
+#       halAlb1 0.402299
+#       halLeu1 0.402299
+#       picPub1 0.402299
+#       capCar1 0.407002
+#       amaVit1 0.413002
+#       araMac1 0.413002
+#       pseHum1 0.422002
+#       eurHel1 0.422299
+#       melUnd1 0.423987
+#       carCri1 0.442299
+#       mesUni1 0.442299
+#       corBra1 0.454068
+#       corCor1 0.454068
+#       ficAlb2 0.454068
+#       acaChl1 0.464068
+#       serCan1 0.473068
+#       zonAlb1 0.473525
+#       geoFor1 0.480329
+#       taeGut2 0.484068
+#       apaSpi1 0.617442
+#       cheMyd1 0.617442
+#       chrPic2 0.617442
+#       pelSin1 0.617442
+#       allMis1 0.632299
+#       allSin1 0.632299
+#       nanPar1 0.829442
+#       pytBiv1 0.887442
+#       xenTro9 0.907386
+#       xenLae2 0.929442
+#       anoCar2 0.934442
+#       thaSir1 0.987442
+#       hg38    1.115503
+#       mm10    1.326078
+#       gasAcu1 1.758169
+#       oreNil3 1.824346
+#       tetNig2 1.846095
+#       angJap1 1.891116
+#       fr3     1.925783
+#       letCam1 1.946543
+#       petMar3 1.946543
+#       danRer11        1.971868
+#       mayZeb1 1.974346
+#       oryLat2 2.008726
+
+    #########################################################################
+    # It appears that tree is not correct when compared to the featureBits
+    # measurements of the alignments:
+#query  chain   synTen  rBest   chainSyn rBest  total
+#                               hours   hours   hours
+melGal5 94.495% 67.751% 86.165%  1.520   4.184   5.704  Turkey
+aquChr2 87.687% 78.755% 80.369%  7.449   3.867  11.316  Golden eagle
+halLeu1 86.923% 77.776% 79.411%  6.407   4.120  10.527  Bald eagle
+nipNip1 86.903% 77.318% 79.492%  7.802   4.310  12.112  Crested ibis
+aptFor1 86.834% 78.454% 79.601%  8.047   3.701  11.748  Emperor penguin
+falPer1 86.500% 76.966% 78.677% 10.423   4.570  14.993  Peregrine falcon
+falChe1 86.342% 76.498% 78.516% 10.403   4.553  14.956  Saker falcon
+chaVoc2 86.267% 77.101% 78.919%  7.031   4.043  11.074  Killdeer
+pygAde1 85.892% 77.734% 78.841%  6.260   3.759  10.019  Adelie penguin
+egrGar1 85.589% 76.499% 78.042%  6.340   4.037  10.377  Little egret
+anaPla1 85.509% 74.674% 76.829% 10.400   5.386  15.786  Mallard duck
+pelCri1 85.344% 72.186% 78.202%  7.479   5.364  12.843  Dalmatian pelican
+fulGla1 85.332% 73.091% 78.108%  9.987   5.013  15.000  Northern fulmar
+carCri1 85.094% 72.651% 77.569%  7.956   5.680  13.636  Red-legged seriema
+lepDis1 85.021% 72.372% 77.495%  8.063   5.776  13.839  Cuckoo roller
+halAlb1 84.997% 73.173% 77.620%  7.086   4.990  12.076  White-tailed eagle
+phoRub1 84.793% 70.837% 77.774%  7.551   5.334  12.885  American flamingo
+gavSte1 84.717% 72.183% 77.534% 10.203   5.240  15.443  Red-throated loon
+balPav1 84.687% 72.017% 77.336%  8.674   5.294  13.968  Crowned crain
+opiHoa1 84.579% 74.775% 76.791%  8.151   4.723  12.874  Hoatzin
+phaLep1 84.519% 70.871% 77.263%  8.705   5.806  14.511  White-tailed tropicbird
+tauEry1 84.485% 71.434% 76.784%  7.988   5.261  13.249  Red crested turaco
+phaCar1 84.182% 70.890% 76.937%  8.695   5.616  14.311  Great cormorant
+tytAlb1 84.122% 70.407% 76.219%  8.504   5.036  13.540  Barn owl
+capCar1 83.573% 68.596% 75.378% 10.311   6.741  17.052  Chuck-will's-widow
+cucCan1 83.150% 72.094% 74.353%  8.265   5.510  13.775  Common cuckoo
+colLiv1 83.073% 72.569% 74.370%  7.953   5.237  13.190  Rock pigeon
+chlUnd1 83.041% 69.052% 75.109%  7.402   5.265  12.667  Houbara bustard
+mesUni1 82.649% 67.519% 73.976%  8.597   6.372  14.969  Brown roatelo
+pteGut1 82.523% 68.882% 74.326%  8.069   5.744  13.813  Yellow-throated sandgrouse
+eurHel1 82.426% 67.655% 74.252% 11.532   6.463  17.995  Sunbittern
+strCam1 82.389% 74.592% 75.802%  6.060   3.424   9.484  Ostrich
+melUnd1 81.694% 69.821% 72.543%  9.650   7.075  16.725  Budgerigar
+merNub1 81.018% 65.336% 72.239% 10.165   7.687  17.852  Northern carmine bee-eater
+apaVit1 81.010% 67.063% 72.793% 11.106   6.586  17.692  Bar tailed trogon
+colStr1 80.987% 64.311% 72.020%  9.799   7.358  17.157  Speckled mousebird
+corBra1 80.978% 69.377% 71.439%  9.428   6.535  15.963  American crow
+bucRhi1 80.812% 66.557% 72.242% 10.362   6.817  17.179  Rhinoceros hornbill
+pseHum1 80.622% 67.986% 70.770% 10.963   7.976  18.939  Tibetan ground jay
+amaVit1 80.577% 54.029% 72.003% 11.949   8.570  20.519  Parrot
+corCor1 80.574% 68.064% 71.052%  9.863   7.091  16.954  Hooded crow
+serCan1 79.903% 66.300% 69.457% 11.959   8.717  20.676  Canary
+calAnn1 79.733% 67.104% 69.779% 10.762   6.710  17.472  Anna's hummingbird
+acaChl1 79.489% 64.470% 70.154% 10.695   7.848  18.543  Rifleman
+ficAlb2 79.354% 66.501% 69.517% 15.282  11.456  26.738  Collared flycatcher
+geoFor1 79.299% 66.972% 69.271% 12.756   7.057  19.813  Medium ground finch
+zonAlb1 78.645% 65.813% 68.277%  6.904   6.904  13.808  White-throated sparrow
+araMac1 76.180% 43.932% 67.099% 14.834  10.677  25.511  Scarlet macaw
+picPub1 74.258% 60.446% 63.830% 11.784   9.288  21.072  Downy woodpecker
+taeGut2 73.989% 65.637% 68.089%  8.065   5.552  13.617  Zebra finch
+tinGut2 73.577% 62.604% 65.205%  6.488   4.756  11.244  White throated tinamou
+cotJap1 56.121% 40.600% 40.908%  6.704   5.528  12.232  Japanese quail
+chrPic2 51.724% 41.868% 46.369%  8.319   6.549  14.868  Painted turtle
+cheMyd1 51.019% 41.642% 45.898%  8.140   5.934  14.074  Green seaturtle
+allSin1 46.056% 38.551% 41.235%  6.564   3.924  10.488  Chinese alligator
+allMis1 44.801% 37.363% 40.998%  6.142   3.851   9.993  American alligator
+pelSin1 41.985% 31.150% 35.931% 10.105   7.710  17.815  Chinese softshell turtle
+apaSpi1 38.375% 6.975%  32.776% 14.136  10.592  24.728  Spiny softshell turtle
+galGal6 16.842% n/a     n/a      0.000   0.000   0.000  Chicken
+pytBiv1 15.806% 6.802%  11.843%  5.409   4.474   9.883  Burmese python
+anoCar2 14.527% 8.896%  11.537%  8.322   6.316  14.638  Lizard
+thaSir1 11.754% 3.944%  8.850%   4.388   2.991   7.379  Garter snake
+xenTro9 8.102%  3.975%  6.270%   5.994   4.180  10.174  X. tropicalis
+xenLae2 7.927%  3.814%  6.549%   6.520   4.040  10.560  African clawed frog
+nanPar1 7.564%  3.096%  5.757%   4.114   1.901   6.015  Tibetan frog
+danRer11        6.352%  1.442%  5.199%   4.814   3.025   7.839  Zebrafish
+angJap1 5.408%  0.824%  4.100%   2.620   1.428   4.048  Japanese eel
+oreNil3 4.925%  1.433%  4.068%   2.422   1.826   4.248  Nile tilapia
+gasAcu1 4.623%  1.277%  3.605%   2.175   1.329   3.504  Stickleback
+oryLat2 4.565%  1.147%  3.596%   1.928   1.450   3.378  Medaka
+mayZeb1 4.539%  1.354%  3.720%   1.595   1.131   2.726  Zebra mbuna
+tetNig2 4.148%  1.011%  3.119%   1.717   1.150   2.867  Tetraodon
+fr3     4.007%  1.122%  3.149%   1.497   0.934   2.431  Fugu
+petMar3 3.658%  0.159%  2.467%   2.052   1.022   3.074  Lamprey
+letCam1 3.335%  0.147%  2.186%   1.467   0.958   2.425  Arctic lamprey
+
+    #	what that looks like:
+~/kent/src/hg/utils/phyloTrees/asciiTree.pl galGal6.77way.nh | sed -e 's/^/# /;'
+
+# ((((((((((((((((((((((((galGal6:0.031254,
+#                        cotJap1:0.035):0.01,
+#                       melGal5:0.085718):0.011045,
+#                      tytAlb1:0.1):0.01,
+#                     bucRhi1:0.1):0.01,
+#                    anaPla1:0.1):0.01,
+#                   apaVit1:0.1):0.01,
+#                  calAnn1:0.1):0.01,
+#                 cucCan1:0.1):0.01,
+#                chaVoc2:0.1):0.01,
+#               fulGla1:0.1):0.01,
+#              tauEry1:0.1):0.01,
+#             opiHoa1:0.1):0.01,
+#            phoRub1:0.1):0.01,
+#           (colLiv1:0.1,
+#           ((lepDis1:0.1,
+#            merNub1:0.1):0.02,
+#           ((pelCri1:0.1,
+#            (phaCar1:0.1,
+#            phaLep1:0.1):0.01):0.01,
+#           ((pteGut1:0.1,
+#            (nipNip1:0.1,
+#            egrGar1:0.1):0.01):0.01,
+#           ((pygAde1:0.1,
+#            aptFor1:0.1):0.02,
+#           (((((carCri1:0.1,
+#               mesUni1:0.1):0.02,
+#              eurHel1:0.1):0.02,
+#             balPav1:0.1):0.02,
+#            chlUnd1:0.1):0.02,
+#           (((falChe1:0.1,
+#             falPer1:0.1):0.01,
+#            (aquChr2:0.1,
+#            (halAlb1:0.05,
+#            halLeu1:0.05):0.05):0.01):0.02,
+#           ((((corBra1:0.035,
+#              corCor1:0.035):0.035,
+#             (acaChl1:0.06,
+#             (ficAlb2:0.04,
+#             (((serCan1:0.024,
+#               zonAlb1:0.024457):0.01,
+#              geoFor1:0.041261):0.015,
+#             taeGut2:0.06):0.01):0.01):0.02):0.022066,
+#            pseHum1:0.06):0.025,
+#           (gavSte1:0.04,
+#           (capCar1:0.04,
+#           (melUnd1:0.046985,
+#           (amaVit1:0.026,
+#           araMac1:0.026):0.01):0.01):0.01):0.02):0.064703):0.01):0.01):0.01):0.01):0.01):0.01):0.05):0.02,
+#          colStr1:0.2):0.02,
+#         picPub1:0.2):0.02,
+#        (strCam1:0.02,
+#        tinGut2:0.02):0.02):0.16,
+#       (allMis1:0.1,
+#       allSin1:0.1):0.15):0.045143,
+#      ((cheMyd1:0.1,
+#       chrPic2:0.1):0.05,
+#      (pelSin1:0.1,
+#      apaSpi1:0.1):0.05):0.04):0.01,
+#     ((pytBiv1:0.1,
+#      thaSir1:0.2):0.1,
+#     anoCar2:0.247):0.25):0.072,
+#    (hg38:0.145908,
+#    mm10:0.356483):0.460153):0.05,
+#   ((xenTro9:0.177944,
+#    xenLae2:0.2):0.1,
+#   nanPar1:0.2):0.07):0.211354,
+#  (((((tetNig2:0.124159,
+#      fr3:0.203847):0.09759,
+#     (oreNil3:0.1,
+#     mayZeb1:0.25):0.1):0.09759,
+#    oryLat2:0.48197):0.015,
+#   gasAcu1:0.246413):0.27064,
+#  (angJap1:0.45,
+#  danRer11:0.530752):0.2):0.47032):0.2,
+# (petMar3:0.4,
+# letCam1:0.4):0.575747);
+
+    # extract species list from that .nh file
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+        galGal6.77way.nh | xargs echo | sed 's/ //g; s/,/ /g' \
+        | sed 's/[()]//g; s/,/ /g' | tr '[ ]' '[\n]' > species.list.txt
+
+    # construct db to name translation list:
+    cat species.list.txt | while read DB
+do
+hgsql -N -e "select name,organism from dbDb where name=\"${DB}\";" hgcentraltest
+done | sed -e 's/-/_/g;' | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
+    | sed -e "s#'#_x_#g;" > db.to.name.txt
+
+/cluster/bin/phast/tree_doctor --rename "`cat db.to.name.txt`" \
+	galGal6.77way.nh \
+   | sed -e 's/0\+)/)/g; s/0\+,/,/g' \
+     | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+       | sed -e "s#_x_#'#g;" > galGal6.77way.commonNames.nh
+
+    # verify names translate correctly, scan this output:
+    sed -e 's/(//g; s/:.*//;' galGal6.77way.commonNames.nh \
+	| sed -e 's/ //g;' | sort | less
+
+
+    cat galGal6.77way.commonNames.nh | sed -e 's/^/# /;'
+# ((((((((((((((((((((((((Chicken:0.031254,
+#                        Japanese_quail:0.035):0.01,
+#                       Turkey:0.085718):0.011045,
+#                      Barn_owl:0.1):0.01,
+#                     Rhinoceros_hornbill:0.1):0.01,
+#                    Mallard_duck:0.1):0.01,
+#                   Bar_tailed_trogon:0.1):0.01,
+#                  Anna's_hummingbird:0.1):0.01,
+#                 Common_cuckoo:0.1):0.01,
+#                Killdeer:0.1):0.01,
+#               Northern_fulmar:0.1):0.01,
+#              Red_crested_turaco:0.1):0.01,
+#             Hoatzin:0.1):0.01,
+#            American_flamingo:0.1):0.01,
+#           (Rock_pigeon:0.1,
+#           ((Cuckoo_roller:0.1,
+#            Northern_carmine_bee_eater:0.1):0.02,
+#           ((Dalmatian_pelican:0.1,
+#            (Great_cormorant:0.1,
+#            White_tailed_tropicbird:0.1):0.01):0.01,
+#           ((Yellow_throated_sandgrouse:0.1,
+#            (Crested_ibis:0.1,
+#            Little_egret:0.1):0.01):0.01,
+#           ((Adelie_penguin:0.1,
+#            Emperor_penguin:0.1):0.02,
+#           (((((Red_legged_seriema:0.1,
+#               Brown_roatelo:0.1):0.02,
+#              Sunbittern:0.1):0.02,
+#             Crowned_crain:0.1):0.02,
+#            Houbara_bustard:0.1):0.02,
+#           (((Saker_falcon:0.1,
+#             Peregrine_falcon:0.1):0.01,
+#            (Golden_eagle:0.1,
+#            (White_tailed_eagle:0.05,
+#            Bald_eagle:0.05):0.05):0.01):0.02,
+#           ((((American_crow:0.035,
+#              Hooded_crow:0.035):0.035,
+#             (Rifleman:0.06,
+#             (Collared_flycatcher:0.04,
+#             (((Canary:0.024,
+#               White_throated_sparrow:0.024457):0.01,
+#              Medium_ground_finch:0.041261):0.015,
+#             Zebra_finch:0.06):0.01):0.01):0.02):0.022066,
+#            Tibetan_ground_jay:0.06):0.025,
+#           (Red_throated_loon:0.04,
+#           (Chuck_will's_widow:0.04,
+#           (Budgerigar:0.046985,
+#           (Parrot:0.026,
+#           Scarlet_macaw:0.026):0.01):0.01):0.01):0.02):0.064703):0.01):0.01):0.01):0.01):0.01):0.01):0.05):0.02,
+#          Speckled_mousebird:0.2):0.02,
+#         Downy_woodpecker:0.2):0.02,
+#        (Ostrich:0.02,
+#        White_throated_tinamou:0.02):0.02):0.16,
+#       (American_alligator:0.1,
+#       Chinese_alligator:0.1):0.15):0.045143,
+#      ((Green_seaturtle:0.1,
+#       Painted_turtle:0.1):0.05,
+#      (Chinese_softshell_turtle:0.1,
+#      Spiny_softshell_turtle:0.1):0.05):0.04):0.01,
+#     ((Burmese_python:0.1,
+#      Garter_snake:0.2):0.1,
+#     Lizard:0.247):0.25):0.072,
+#    (Human:0.145908,
+#    Mouse:0.356483):0.460153):0.05,
+#   ((X__tropicalis:0.177944,
+#    African_clawed_frog:0.2):0.1,
+#   Tibetan_frog:0.2):0.07):0.211354,
+#  (((((Tetraodon:0.124159,
+#      Fugu:0.203847):0.09759,
+#     (Nile_tilapia:0.1,
+#     Zebra_mbuna:0.25):0.1):0.09759,
+#    Medaka:0.48197):0.015,
+#   Stickleback:0.246413):0.27064,
+#  (Japanese_eel:0.45,
+#  Zebrafish:0.530752):0.2):0.47032):0.2,
+# (Lamprey:0.4,
+# Arctic_lamprey:0.4):0.575747);
+
+
+#	Use this specification in the phyloGif tool:
+#	http://genome.ucsc.edu/cgi-bin/phyloGif
+#	to obtain a png image for src/hg/htdocs/images/phylo/galGal6_77way.png
+
+    ~/kent/src/hg/utils/phyloTrees/scientificNames.sh galGal6.77way.nh \
+       | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+          > galGal6.77way.scientificNames.nh
+    
+    cat galGal6.77way.scientificNames.nh | sed -e 's/^/# /;'
+# ((((((((((((((((((((((((Gallus_gallus:0.031254,
+#                        Coturnix_japonica:0.035):0.01,
+#                       Meleagris_gallopavo:0.085718):0.011045,
+#                      Tyto_alba:0.1):0.01,
+#                     Buceros_rhinoceros_silvestris:0.1):0.01,
+#                    Anas_platyrhynchos:0.1):0.01,
+#                   Apaloderma_vittatum:0.1):0.01,
+#                  Calypte_anna:0.1):0.01,
+#                 Cuculus_canorus:0.1):0.01,
+#                Charadrius_vociferus:0.1):0.01,
+#               Fulmarus_glacialis:0.1):0.01,
+#              Tauraco_erythrolophus:0.1):0.01,
+#             Opisthocomus_hoazin:0.1):0.01,
+#            Phoenicopterus_ruber_ruber:0.1):0.01,
+#           (Columba_livia:0.1,
+#           ((Leptosomus_discolor:0.1,
+#            Merops_nubicus:0.1):0.02,
+#           ((Pelecanus_crispus:0.1,
+#            (Phalacrocorax_carbo:0.1,
+#            Phaethon_lepturus:0.1):0.01):0.01,
+#           ((Pterocles_gutturalis:0.1,
+#            (Nipponia_nippon:0.1,
+#            Egretta_garzetta:0.1):0.01):0.01,
+#           ((Pygoscelis_adeliae:0.1,
+#            Aptenodytes_forsteri:0.1):0.02,
+#           (((((Cariama_cristata:0.1,
+#               Mesitornis_unicolor:0.1):0.02,
+#              Eurypyga_helias:0.1):0.02,
+#             Balearica_pavonina_gibbericeps:0.1):0.02,
+#            Chlamydotis_undulata_macqueenii:0.1):0.02,
+#           (((Falco_cherrug:0.1,
+#             Falco_peregrinus:0.1):0.01,
+#            (Aquila_chrysaetos_canadensis:0.1,
+#            (Haliaeetus_albicilla:0.05,
+#            Haliaeetus_leucocephalus:0.05):0.05):0.01):0.02,
+#           ((((Corvus_brachyrhynchos:0.035,
+#              Corvus_cornix_cornix:0.035):0.035,
+#             (Acanthisitta_chloris:0.06,
+#             (Ficedula_albicollis:0.04,
+#             (((Serinus_canaria:0.024,
+#               Zonotrichia_albicollis:0.024457):0.01,
+#              Geospiza_fortis:0.041261):0.015,
+#             Taeniopygia_guttata:0.06):0.01):0.01):0.02):0.022066,
+#            Pseudopodoces_humilis:0.06):0.025,
+#           (Gavia_stellata:0.04,
+#           (Caprimulgus_carolinensis:0.04,
+#           (Melopsittacus_undulatus:0.046985,
+#           (Amazona_vittata:0.026,
+#           Ara_macao:0.026):0.01):0.01):0.01):0.02):0.064703):0.01):0.01):0.01):0.01):0.01):0.01):0.05):0.02,
+#          Colius_striatus:0.2):0.02,
+#         Picoides_pubescens:0.2):0.02,
+#        (Struthio_camelus_australis:0.02,
+#        Tinamus_guttatus:0.02):0.02):0.16,
+#       (Alligator_mississippiensis:0.1,
+#       Alligator_sinensis:0.1):0.15):0.045143,
+#      ((Chelonia_mydas:0.1,
+#       Chrysemys_picta_bellii:0.1):0.05,
+#      (Pelodiscus_sinensis:0.1,
+#      Apalone_spinifera:0.1):0.05):0.04):0.01,
+#     ((Python_bivittatus:0.1,
+#      Thamnophis_sirtalis:0.2):0.1,
+#     Anolis_carolinensis:0.247):0.25):0.072,
+#    (Homo_sapiens:0.145908,
+#    Mus_musculus:0.356483):0.460153):0.05,
+#   ((Xenopus_tropicalis:0.177944,
+#    Xenopus_laevis:0.2):0.1,
+#   Nanorana_parkeri:0.2):0.07):0.211354,
+#  (((((Tetraodon_nigroviridis:0.124159,
+#      Takifugu_rubripes:0.203847):0.09759,
+#     (Oreochromis_niloticus:0.1,
+#     Maylandia_zebra:0.25):0.1):0.09759,
+#    Oryzias_latipes:0.48197):0.015,
+#   Gasterosteus_aculeatus:0.246413):0.27064,
+#  (Anguilla_japonica:0.45,
+#  Danio_rerio:0.530752):0.2):0.47032):0.2,
+# (Petromyzon_marinus:0.4,
+# Lethenteron_camtschaticum:0.4):0.575747);
+
+    /cluster/bin/phast/all_dists galGal6.77way.nh | grep galGal6 \
+        | sed -e "s/galGal6.//" | sort -k2n > 77way.distances.txt
+    #	Use this output to create the table below
+    cat 77way.distances.txt | sed -e 's/^/# /;'
+# cotJap2       0.066254
+# melGal5       0.126972
+# tytAlb1       0.152299
+# bucRhi1       0.162299
+# anaPla1       0.172299
+# apaVit1       0.182299
+# calAnn1       0.192299
+# cucCan1       0.202299
+# chaVoc2       0.212299
+# fulGla1       0.222299
+# tauEry1       0.232299
+# opiHoa1       0.242299
+# phoRub1       0.252299
+# strCam1       0.262299
+# tinGut2       0.262299
+# colLiv1       0.312299
+# lepDis1       0.342299
+# merNub1       0.342299
+# pelCri1       0.342299
+# phaCar1       0.352299
+# phaLep1       0.352299
+# pteGut1       0.352299
+# egrGar1       0.362299
+# nipNip1       0.362299
+# aptFor1       0.372299
+# pygAde1       0.372299
+# chlUnd1       0.382299
+# colStr1       0.382299
+# gavSte1       0.397002
+# aquChr2       0.402299
+# balPav1       0.402299
+# falChe1       0.402299
+# falPer1       0.402299
+# halAlb1       0.402299
+# halLeu1       0.402299
+# picPub1       0.402299
+# capCar1       0.407002
+# amaVit1       0.413002
+# araMac1       0.413002
+# pseHum1       0.422002
+# eurHel1       0.422299
+# melUnd1       0.423987
+# carCri1       0.442299
+# mesUni1       0.442299
+# corBra1       0.454068
+# corCor1       0.454068
+# ficAlb2       0.454068
+# acaChl1       0.464068
+# serCan1       0.473068
+# zonAlb1       0.473525
+# geoFor1       0.480329
+# taeGut2       0.484068
+# apaSpi1       0.617442
+# cheMyd1       0.617442
+# chrPic2       0.617442
+# pelSin1       0.617442
+# allMis1       0.632299
+# allSin1       0.632299
+# nanPar1       0.829442
+# pytBiv1       0.887442
+# xenTro9       0.907386
+# xenLae2       0.929442
+# anoCar2       0.934442
+# thaSir1       0.987442
+# hg38  1.115503
+# mm10  1.326078
+# gasAcu1       1.758169
+# oreNil3       1.824346
+# tetNig2       1.846095
+# angJap1       1.891116
+# fr3   1.925783
+# letCam1       1.946543
+# petMar3       1.946543
+# danRer11      1.971868
+# mayZeb1       1.974346
+# oryLat2       2.008726
+
+    printf '#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "<77way.distances.txt") or
+        die "can not read 77way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($D, $dist) = split('"'"'\\s+'"'"', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/galGal6/bed/lastz.$D/fb.galGal6." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '"'"'{print \\$5}'"'"' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\\%%//;
+    my $swapFile="/hive/data/genomes/${D}/bed/lastz.galGal6/fb.${D}.chainGalGal6Link.txt";
+    my $swapMeasure = "0";
+    if ( -s $swapFile ) {
+	$swapMeasure =
+	    `awk '"'"'{print \\$5}'"'"' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
+	chomp $swapMeasure;
+	$swapMeasure = 0.0 if (length($swapMeasure) < 1);
+	$swapMeasure =~ s/\\%%//;
+    }
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name='"'"'$D'"'"';" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+    printf "# %%02d  %%.4f (%%%% %%06.3f) (%%%% %%06.3f) - %%s %%s\\n", $count, $dist,
+        $chainLinkMeasure, $swapMeasure, $orgName, $D;
+}
+close (FH);
+' > sizeStats.pl
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#  Have not yet done the swaps for this situation
+
+#       featureBits chainLink measures
+#               chainLink
+#  N distance  on galGal6  on other     other species
+# 01  0.0663 (% 90.071) (% 96.366) - Japanese quail cotJap2
+# 02  0.1270 (% 94.495) (% 92.491) - Turkey melGal5
+# 03  0.1523 (% 84.122) (% 79.540) - Barn owl tytAlb1
+# 04  0.1623 (% 80.812) (% 78.727) - Rhinoceros hornbill bucRhi1
+# 05  0.1723 (% 85.509) (% 83.814) - Mallard duck anaPla1
+# 06  0.1823 (% 81.010) (% 79.322) - Bar tailed trogon apaVit1
+# 07  0.1923 (% 79.733) (% 79.955) - Anna's hummingbird calAnn1
+# 08  0.2023 (% 83.150) (% 78.921) - Common cuckoo cucCan1
+# 09  0.2123 (% 86.267) (% 78.316) - Killdeer chaVoc2
+# 10  0.2223 (% 85.332) (% 78.234) - Northern fulmar fulGla1
+# 11  0.2323 (% 84.485) (% 77.102) - Red crested turaco tauEry1
+# 12  0.2423 (% 84.579) (% 78.069) - Hoatzin opiHoa1
+# 13  0.2523 (% 84.793) (% 78.057) - American flamingo phoRub1
+# 14  0.2623 (% 82.389) (% 74.035) - Ostrich strCam1
+# 15  0.2623 (% 73.577) (% 75.473) - White throated tinamou tinGut2
+# 16  0.3123 (% 83.073) (% 79.480) - Rock pigeon colLiv1
+# 17  0.3423 (% 85.021) (% 78.924) - Cuckoo roller lepDis1
+# 18  0.3423 (% 81.018) (% 79.394) - Northern carmine bee-eater merNub1
+# 19  0.3423 (% 85.344) (% 77.377) - Dalmatian pelican pelCri1
+# 20  0.3523 (% 84.182) (% 78.405) - Great cormorant phaCar1
+# 21  0.3523 (% 84.519) (% 78.068) - White-tailed tropicbird phaLep1
+# 22  0.3523 (% 82.523) (% 79.317) - Yellow-throated sandgrouse pteGut1
+# 23  0.3623 (% 85.589) (% 77.936) - Little egret egrGar1
+# 24  0.3623 (% 86.903) (% 78.539) - Crested ibis nipNip1
+# 25  0.3723 (% 86.834) (% 77.790) - Emperor penguin aptFor1
+# 26  0.3723 (% 85.892) (% 77.561) - Adelie penguin pygAde1
+# 27  0.3823 (% 83.041) (% 78.986) - Houbara bustard chlUnd1
+# 28  0.3823 (% 80.987) (% 78.528) - Speckled mousebird colStr1
+# 29  0.3970 (% 84.717) (% 78.429) - Red-throated loon gavSte1
+# 30  0.4023 (% 87.687) (% 78.786) - Golden eagle aquChr2
+# 31  0.4023 (% 84.687) (% 78.619) - Crowned crain balPav1
+# 32  0.4023 (% 86.342) (% 79.770) - Saker falcon falChe1
+# 33  0.4023 (% 86.500) (% 79.824) - Peregrine falcon falPer1
+# 34  0.4023 (% 84.997) (% 78.352) - White-tailed eagle halAlb1
+# 35  0.4023 (% 86.923) (% 78.856) - Bald eagle halLeu1
+# 36  0.4023 (% 74.258) (% 69.321) - Downy woodpecker picPub1
+# 37  0.4070 (% 83.573) (% 77.901) - Chuck-will's-widow capCar1
+# 38  0.4130 (% 80.577) (% 77.539) - Parrot amaVit1
+# 39  0.4130 (% 76.180) (% 77.878) - Scarlet macaw araMac1
+# 40  0.4220 (% 80.622) (% 80.898) - Tibetan ground jay pseHum1
+# 41  0.4223 (% 82.426) (% 78.684) - Sunbittern eurHel1
+# 42  0.4240 (% 81.694) (% 78.351) - Budgerigar melUnd1
+# 43  0.4423 (% 85.094) (% 78.856) - Red-legged seriema carCri1
+# 44  0.4423 (% 82.649) (% 79.029) - Brown roatelo mesUni1
+# 45  0.4541 (% 80.978) (% 80.022) - American crow corBra1
+# 46  0.4541 (% 80.574) (% 80.730) - Hooded crow corCor1
+# 47  0.4541 (% 79.354) (% 75.638) - Collared flycatcher ficAlb2
+# 48  0.4641 (% 79.489) (% 79.366) - Rifleman acaChl1
+# 49  0.4731 (% 79.903) (% 74.870) - Canary serCan1
+# 50  0.4735 (% 78.645) (% 79.381) - White-throated sparrow zonAlb1
+# 51  0.4803 (% 79.299) (% 79.439) - Medium ground finch geoFor1
+# 52  0.4841 (% 73.989) (% 73.358) - Zebra finch taeGut2
+# 53  0.6174 (% 38.375) (% 25.398) - Spiny softshell turtle apaSpi1
+# 54  0.6174 (% 51.019) (% 33.557) - Green seaturtle cheMyd1
+# 55  0.6174 (% 51.724) (% 33.105) - Painted turtle chrPic2
+# 56  0.6174 (% 41.985) (% 25.358) - Chinese softshell turtle pelSin1
+# 57  0.6323 (% 44.801) (% 24.041) - American alligator allMis1
+# 58  0.6323 (% 46.056) (% 23.607) - Chinese alligator allSin1
+# 59  0.8294 (% 07.564) (% 04.273) - Tibetan frog nanPar1
+# 60  0.8874 (% 15.806) (% 11.426) - Burmese python pytBiv1
+# 61  0.9074 (% 08.102) (% 06.961) - X. tropicalis xenTro9
+# 62  0.9294 (% 07.927) (% 05.220) - African clawed frog xenLae2
+# 63  0.9344 (% 14.527) (% 08.505) - Lizard anoCar2
+# 64  0.9874 (% 11.754) (% 09.922) - Garter snake thaSir1
+# 65  1.1155 (% 11.459) (% 04.977) - Human hg38
+# 66  1.3261 (% 08.388) (% 03.813) - Mouse mm10
+# 67  1.7582 (% 04.623) (% 12.925) - Stickleback gasAcu1
+# 68  1.8243 (% 04.925) (% 06.828) - Nile tilapia oreNil3
+# 69  1.8461 (% 04.148) (% 15.780) - Tetraodon tetNig2
+# 70  1.8911 (% 05.408) (% 07.077) - Japanese eel angJap1
+# 71  1.9258 (% 04.007) (% 13.581) - Fugu fr3
+# 72  1.9465 (% 03.335) (% 04.611) - Arctic lamprey letCam1
+# 73  1.9465 (% 03.658) (% 04.837) - Lamprey petMar3
+# 74  1.9719 (% 06.352) (% 05.913) - Zebrafish danRer11
+# 75  1.9743 (% 04.539) (% 07.874) - Zebra mbuna mayZeb1
+# 76  2.0087 (% 04.565) (% 07.741) - Medaka oryLat2
+
+# None of this concern for distances matters in building the first step, the
+# maf files.  The distances will be better calibrated later.
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	galGal6.77way.nh | xargs echo | sed 's/ //g; s/,/ /g' > tree.nh
+
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+    cat species.list | fold -s -w 77 | sed -e 's/^/# /;'
+# galGal6 cotJap2 melGal5 tytAlb1 bucRhi1 anaPla1 apaVit1 calAnn1 cucCan1 
+# chaVoc2 fulGla1 tauEry1 opiHoa1 phoRub1 colLiv1 lepDis1 merNub1 pelCri1 
+# phaCar1 phaLep1 pteGut1 nipNip1 egrGar1 pygAde1 aptFor1 carCri1 mesUni1 
+# eurHel1 balPav1 chlUnd1 falChe1 falPer1 aquChr2 halAlb1 halLeu1 corBra1 
+# corCor1 acaChl1 ficAlb2 serCan1 zonAlb1 geoFor1 taeGut2 pseHum1 gavSte1 
+# capCar1 melUnd1 amaVit1 araMac1 colStr1 picPub1 strCam1 tinGut2 allMis1 
+# allSin1 cheMyd1 chrPic2 pelSin1 apaSpi1 pytBiv1 thaSir1 anoCar2 hg38 mm10 
+# xenTro9 xenLae2 nanPar1 tetNig2 fr3 oreNil3 mayZeb1 oryLat2 gasAcu1 angJap1 
+# danRer11 petMar3 letCam1
+
+    # take an N50 survery to see if the quality of these genomes makes a mark
+rm -f /dev/shm/n50.txt
+printf "# db\tN50\tctg count\tN50 size\n" > n50.survey.txt
+cat species.list.txt | while read db
+do
+  n50.pl /hive/data/genomes/$db/chrom.sizes > /dev/shm/n50.txt 2>&1 
+  ctgCount=`grep "contig count" /dev/shm/n50.txt | sed -e 's/,//g;' | awk '{print $4}'`
+  n50=`tail -1 /dev/shm/n50.txt | awk '{print $2}'`
+  n50Size=`tail -1 /dev/shm/n50.txt | awk '{print $4}'`
+  printf "%s\t%d\t%d\t%d\n" "$db" "$n50" "$ctgCount" "$n50Size"
+  rm -f /dev/shm/n50.txt
+done >> n50.survey.txt
+
+    # joining that with the chainLink featureBits measurements
+    cd /hive/data/genomes/galGal6/bed/multiz75way/lastzRun
+    ./joinChainBits.sh > \
+	/hive/data/genomes/galGal6/bed/multiz77way/chainBits.txt
+
+    sort chainBits.txt | join -t$'\t' - <(sort n50.survey.txt) \
+  | awk -F$'\t' '{printf "%s\t%7s\t%7s\t%7s\t%5d\t%6d\t%8d %s\n", $1,$2,$3,$4,$9,$10,$11, $8}'
+
+melGal5 94.495% 67.751% 86.165%     6   231286  59006440 Turkey
+cotJap2 90.071% 79.633% 80.159%     4     2012  82189922 Japanese quail
+aquChr2 87.687% 78.755% 80.369%    40     1141   9230743 Golden eagle
+halLeu1 86.923% 77.776% 79.411%    40     1023   9145499 Bald eagle
+nipNip1 86.903% 77.318% 79.492%    66    59555   5211696 Crested ibis
+aptFor1 86.834% 78.454% 79.601%    71    10672   5071598 Emperor penguin
+falPer1 86.500% 76.966% 78.677%    90     7021   3935757 Peregrine falcon
+falChe1 86.342% 76.498% 78.516%    84     5863   4154532 Saker falcon
+chaVoc2 86.267% 77.101% 78.919%    98    15167   3657050 Killdeer
+pygAde1 85.892% 77.734% 78.841%    72    19264   5118896 Adelie penguin
+egrGar1 85.589% 76.499% 78.042%   113    11791   3067157 Little egret
+anaPla1 85.509% 74.674% 76.829%   268    78488   1233631 Mallard duck
+pelCri1 85.344% 72.186% 78.202%  7852    63982     43364 Dalmatian pelican
+fulGla1 85.332% 73.091% 78.108%  7016    57389     47208 Northern fulmar
+carCri1 85.094% 72.651% 77.569%  5958    53474     55197 Red-legged seriema
+lepDis1 85.021% 72.372% 77.495%  5157    57160     62640 Cuckoo roller
+halAlb1 84.997% 73.173% 77.620%  5758    50905     57319 White-tailed eagle
+phoRub1 84.793% 70.837% 77.774%  8592    76190     38071 American flamingo
+gavSte1 84.717% 72.183% 77.534%  7095    61831     45523 Red-throated loon
+balPav1 84.687% 72.017% 77.336%  6181    53491     52178 Crowned crain
+opiHoa1 84.579% 74.775% 76.791%   122    10256   2937227 Hoatzin
+phaLep1 84.519% 70.871% 77.263%  6817    66785     47896 White-tailed tropicbird
+tauEry1 84.485% 71.434% 76.784%  5784    59587     56334 Red crested turaco
+phaCar1 84.182% 70.890% 76.937%  6715    64312     48427 Great cormorant
+tytAlb1 84.122% 70.407% 76.219%  5943    62122     52818 Barn owl
+capCar1 83.573% 68.596% 75.378%  6762    70122     46345 Chuck-will's-widow
+cucCan1 83.150% 72.094% 74.353%   119    14930   2989832 Common cuckoo
+colLiv1 83.073% 72.569% 74.370%    82    14923   3148738 Rock pigeon
+chlUnd1 83.041% 69.052% 75.109%  6888    59693     45221 Houbara bustard
+mesUni1 82.649% 67.519% 73.976%  6540    67520     47102 Brown roatelo
+pteGut1 82.523% 68.882% 74.326%  6164    58607     49530 Yellow-throated sandgrouse
+eurHel1 82.426% 67.655% 74.252%  6386    62699     47243 Sunbittern
+strCam1 82.389% 74.592% 75.802%   101     6915   3593425 Ostrich
+melUnd1 81.694% 69.821% 72.543%    28    25212  10614383 Budgerigar
+merNub1 81.018% 65.336% 72.239%  6132    53499     48089 Northern carmine bee-eater
+apaVit1 81.010% 67.063% 72.793%  5440    54728     56673 Bar tailed trogon
+colStr1 80.987% 64.311% 72.020%  6512    70188     46063 Speckled mousebird
+corBra1 80.978% 69.377% 71.439%    49    10547   6953989 American crow
+bucRhi1 80.812% 66.557% 72.242%  5769    62257     53203 Rhinoceros hornbill
+pseHum1 80.622% 67.986% 70.770%    16     5406  16337386 Tibetan ground jay
+amaVit1 80.577% 54.029% 72.003% 16505   182974     19239 Parrot
+corCor1 80.574% 68.064% 71.052%    19     1298  16358221 Hooded crow
+serCan1 79.903% 66.300% 69.457%    13   304397  17815079 Canary
+calAnn1 79.733% 67.104% 69.779%    81    54736   4052191 Anna's hummingbird
+acaChl1 79.489% 64.470% 70.154%  4486    53876     64469 Rifleman
+ficAlb2 79.354% 66.501% 69.517%     6    21428  64724594 Collared flycatcher
+geoFor1 79.299% 66.972% 69.271%    54    27239   5255844 Medium ground finch
+zonAlb1 78.645% 65.813% 68.277%    52     6018   4866725 White-throated sparrow
+araMac1 76.180% 43.932% 67.099% 21024   192790     15974 Scarlet macaw
+picPub1 74.258% 60.446% 63.830%   168    31254   2093929 Downy woodpecker
+taeGut2 73.989% 65.637% 68.089%     7    37096  62374962 Zebra finch
+tinGut2 73.577% 62.604% 65.205%  1147    82514    246268 White throated tinamou
+chrPic2 51.724% 41.868% 46.369%    76    78595   7072151 Painted turtle
+cheMyd1 51.019% 41.642% 45.898%   158   140023   3864108 Green seaturtle
+allSin1 46.056% 38.551% 41.235%   325     9317   2188296 Chinese alligator
+allMis1 44.801% 37.363% 40.998%  1206    14645    508966 American alligator
+pelSin1 41.985% 31.150% 35.931%   189    19904   3350749 Chinese softshell turtle
+apaSpi1 38.375%  6.975% 32.776%   225   286620   2306994 Spiny softshell turtle
+galGal6 16.842%     n/a     n/a     4      464  91315245 Chicken
+pytBiv1 15.806%  6.802% 11.843%  1939    39113    213970 Burmese python
+anoCar2 14.527%  8.896% 11.537%     5     6457  150641573 Lizard
+thaSir1 11.754%  3.944%  8.850%   639     7930    647592 Garter snake
+xenTro9  8.102%  3.975%  6.270%     5     6822  135134832 X. tropicalis
+xenLae2  7.927%  3.814%  6.549%     9   108033  136570856 African clawed frog
+nanPar1  7.564%  3.096%  5.757%   546    25187   1069101 Tibetan frog
+danRer11         6.352%  1.442%  5.199%    14     1923  52186027 Zebrafish
+angJap1  5.408%  0.824%  4.100%  4463   323727     52849 Japanese eel
+oreNil3  4.925%  1.433%  4.068%    12     2567  37007722 Nile tilapia
+gasAcu1  4.623%  1.277%  3.605%     8       23  20083130 Stickleback
+oryLat2  4.565%  1.147%  3.596%    14     7189  29908082 Medaka
+mayZeb1  4.539%  1.354%  3.720%    62     3725   3702874 Zebra mbuna
+tetNig2  4.148%  1.011%  3.119%     5       27  13390619 Tetraodon
+fr3      4.007%  1.122%  3.149%    14     6835  11516971 Fugu
+petMar3  3.658%  0.159%  2.467%    34    12062  11932523 Lamprey
+letCam1  3.335%  0.147%  2.186%   203    86126   1051965 Arctic lamprey
+
+    # rules for selection:
+    # 1. contig count < 100 and chain bits over 30 == syntenic net
+    # 2. contig count >= 100 and recipBest chain bits > syntenic chain bits
+    # 3. all others
+
+  
+    #	bash shell syntax here ...
+    cd /hive/data/genomes/galGal6/bed/multiz77way
+    export H=/hive/data/genomes/galGal6/bed
+    mkdir mafLinks
+    # this did not work for melGal5, it needs to be recip best
+    # good, phylo close  assemblies can use syntenic net:
+    for G in chaVoc2 falPer1 falChe1 colLiv1 calAnn1 chrPic2 pygAde1 aptFor1 nipNip1 geoFor1 zonAlb1 corBra1 aquChr2 halLeu1 melUnd1 corCor1 pseHum1 serCan1 taeGut2 ficAlb2
+    do
+      mkdir mafLinks/$G
+      echo ln -s ${H}/lastz.$G/axtChain/galGal6.${G}.synNet.maf.gz ./mafLinks/$G
+      ln -s ${H}/lastz.$G/axtChain/galGal6.${G}.synNet.maf.gz ./mafLinks/$G
+    done
+
+    # assemblies using recip best net:
+    #
+    for G in melGal5 araMac1 amaVit1 phoRub1 pelCri1 gavSte1 fulGla1 chlUnd1 phaLep1 capCar1 phaCar1 mesUni1 colStr1 eurHel1 balPav1 pteGut1 merNub1 carCri1 tytAlb1 tauEry1 bucRhi1 halAlb1 apaVit1 lepDis1 acaChl1 cotJap2 allMis1 tinGut2 allSin1 anaPla1 apaSpi1 pelSin1 picPub1 cheMyd1 opiHoa1 cucCan1 egrGar1 strCam1
+    do
+      mkdir mafLinks/$G
+      echo ln -s ${H}/lastz.$G/mafRBestNet/galGal6.${G}.rbest.maf.gz ./mafLinks/$G
+      ln -s ${H}/lastz.$G/mafRBestNet/galGal6.${G}.rbest.maf.gz ./mafLinks/$G
+    done
+
+    # all other assemblies
+    #
+    for G in angJap1 anoCar2 danRer11 fr3 gasAcu1 hg38 letCam1 mayZeb1 mm10 nanPar1 oreNil3 oryLat2 petMar3 pytBiv1 tetNig2 thaSir1 xenLae2 xenTro9
+    do
+      mkdir mafLinks/$G
+      rm -f mafLinks/$G/galGal6.${G}.maf.gz
+      echo ln -s ${H}/lastz.$G/mafNet/galGal6.${G}.net.maf.gz ./mafLinks/$G
+      ln -s ${H}/lastz.$G/mafNet/galGal6.${G}.net.maf.gz ./mafLinks/$G
+    done
+
+    # verify the symLinks are good:
+    ls -ogL mafLinks/*/* | sed -e 's/^/# /; s/-rw-rw-r-- 1//;'
+#  550909609 Oct 17 08:50 mafLinks/acaChl1/galGal6.acaChl1.rbest.maf.gz
+#  340992517 Oct 17 13:55 mafLinks/allMis1/galGal6.allMis1.rbest.maf.gz
+#  342667846 Oct 17 21:37 mafLinks/allSin1/galGal6.allSin1.rbest.maf.gz
+#  563271633 Oct 18 03:00 mafLinks/amaVit1/galGal6.amaVit1.rbest.maf.gz
+#  580046372 Oct 18 03:47 mafLinks/anaPla1/galGal6.anaPla1.rbest.maf.gz
+#   43105346 Oct 17 00:36 mafLinks/angJap1/galGal6.angJap1.net.maf.gz
+#  117472326 Oct 17 13:18 mafLinks/anoCar2/galGal6.anoCar2.net.maf.gz
+#  282784817 Oct 18 07:33 mafLinks/apaSpi1/galGal6.apaSpi1.rbest.maf.gz
+#  568597883 Oct 18 04:31 mafLinks/apaVit1/galGal6.apaVit1.rbest.maf.gz
+#  581862384 Oct 17 21:48 mafLinks/aptFor1/galGal6.aptFor1.synNet.maf.gz
+#  584764623 Oct 17 18:39 mafLinks/aquChr2/galGal6.aquChr2.synNet.maf.gz
+#  528701986 Oct 18 08:15 mafLinks/araMac1/galGal6.araMac1.rbest.maf.gz
+#  588747734 Oct 18 06:28 mafLinks/balPav1/galGal6.balPav1.rbest.maf.gz
+#  564247198 Oct 18 08:13 mafLinks/bucRhi1/galGal6.bucRhi1.rbest.maf.gz
+#  515661194 Oct 18 01:42 mafLinks/calAnn1/galGal6.calAnn1.synNet.maf.gz
+#  579655272 Oct 18 08:10 mafLinks/capCar1/galGal6.capCar1.rbest.maf.gz
+#  590069847 Oct 18 14:26 mafLinks/carCri1/galGal6.carCri1.rbest.maf.gz
+#  576325192 Oct 18 11:12 mafLinks/chaVoc2/galGal6.chaVoc2.synNet.maf.gz
+#  391365585 Oct 18 16:21 mafLinks/cheMyd1/galGal6.cheMyd1.rbest.maf.gz
+#  577326896 Oct 18 21:50 mafLinks/chlUnd1/galGal6.chlUnd1.rbest.maf.gz
+#  343405712 Oct 18 17:01 mafLinks/chrPic2/galGal6.chrPic2.synNet.maf.gz
+#  549943546 Oct 18 19:07 mafLinks/colLiv1/galGal6.colLiv1.synNet.maf.gz
+#  565420162 Oct 19 07:38 mafLinks/colStr1/galGal6.colStr1.rbest.maf.gz
+#  530934943 Oct 19 02:27 mafLinks/corBra1/galGal6.corBra1.synNet.maf.gz
+#  520184560 Oct 19 03:07 mafLinks/corCor1/galGal6.corCor1.synNet.maf.gz
+#  528131533 Oct 27 03:23 mafLinks/cotJap2/galGal6.cotJap2.rbest.maf.gz
+#  580850919 Oct 19 17:12 mafLinks/cucCan1/galGal6.cucCan1.rbest.maf.gz
+#   49151285 Oct 17 11:33 mafLinks/danRer11/galGal6.danRer11.net.maf.gz
+#  595947114 Oct 19 16:31 mafLinks/egrGar1/galGal6.egrGar1.rbest.maf.gz
+#  574655612 Oct 20 01:21 mafLinks/eurHel1/galGal6.eurHel1.rbest.maf.gz
+#  576260250 Oct 19 19:43 mafLinks/falChe1/galGal6.falChe1.synNet.maf.gz
+#  580031609 Oct 19 19:43 mafLinks/falPer1/galGal6.falPer1.synNet.maf.gz
+#  514039362 Oct 17 15:15 mafLinks/ficAlb2/galGal6.ficAlb2.synNet.maf.gz
+#   31624791 Oct 17 10:24 mafLinks/fr3/galGal6.fr3.net.maf.gz
+#  589724584 Oct 19 23:48 mafLinks/fulGla1/galGal6.fulGla1.rbest.maf.gz
+#   36032098 Oct 17 00:19 mafLinks/gasAcu1/galGal6.gasAcu1.net.maf.gz
+#  586015776 Oct 20 00:01 mafLinks/gavSte1/galGal6.gavSte1.rbest.maf.gz
+#  516211209 Oct 19 19:33 mafLinks/geoFor1/galGal6.geoFor1.synNet.maf.gz
+#  585880621 Oct 20 07:20 mafLinks/halAlb1/galGal6.halAlb1.rbest.maf.gz
+#  578164364 Oct 20 03:41 mafLinks/halLeu1/galGal6.halLeu1.synNet.maf.gz
+#   89571721 Oct 12 11:13 mafLinks/hg38/galGal6.hg38.net.maf.gz
+#  593570207 Oct 20 10:38 mafLinks/lepDis1/galGal6.lepDis1.rbest.maf.gz
+#   26394724 Oct 20 07:50 mafLinks/letCam1/galGal6.letCam1.net.maf.gz
+#   36546409 Oct 20 08:13 mafLinks/mayZeb1/galGal6.mayZeb1.net.maf.gz
+#  561934526 Oct 17 16:37 mafLinks/melGal5/galGal6.melGal5.rbest.maf.gz
+#  531860577 Oct 20 11:25 mafLinks/melUnd1/galGal6.melUnd1.synNet.maf.gz
+#  564779170 Oct 20 19:31 mafLinks/merNub1/galGal6.merNub1.rbest.maf.gz
+#  572813818 Oct 20 19:14 mafLinks/mesUni1/galGal6.mesUni1.rbest.maf.gz
+#   66128061 Oct 12 11:14 mafLinks/mm10/galGal6.mm10.net.maf.gz
+#   59879758 Oct 20 18:33 mafLinks/nanPar1/galGal6.nanPar1.net.maf.gz
+#  574542147 Oct 20 19:56 mafLinks/nipNip1/galGal6.nipNip1.synNet.maf.gz
+#  588192552 Oct 21 00:33 mafLinks/opiHoa1/galGal6.opiHoa1.rbest.maf.gz
+#   39391134 Oct 20 19:02 mafLinks/oreNil3/galGal6.oreNil3.net.maf.gz
+#   36204778 Oct 20 19:43 mafLinks/oryLat2/galGal6.oryLat2.net.maf.gz
+#  591870531 Oct 21 03:00 mafLinks/pelCri1/galGal6.pelCri1.rbest.maf.gz
+#  309458982 Oct 21 06:38 mafLinks/pelSin1/galGal6.pelSin1.rbest.maf.gz
+#   28516579 Oct 17 00:21 mafLinks/petMar3/galGal6.petMar3.net.maf.gz
+#  587063102 Oct 21 05:34 mafLinks/phaCar1/galGal6.phaCar1.rbest.maf.gz
+#  590674551 Oct 21 05:52 mafLinks/phaLep1/galGal6.phaLep1.rbest.maf.gz
+#  587486272 Oct 21 07:45 mafLinks/phoRub1/galGal6.phoRub1.rbest.maf.gz
+#  515840610 Oct 21 12:20 mafLinks/picPub1/galGal6.picPub1.rbest.maf.gz
+#  524268007 Oct 21 06:02 mafLinks/pseHum1/galGal6.pseHum1.synNet.maf.gz
+#  570738640 Oct 21 13:38 mafLinks/pteGut1/galGal6.pteGut1.rbest.maf.gz
+#  576330919 Oct 21 08:25 mafLinks/pygAde1/galGal6.pygAde1.synNet.maf.gz
+#  127546060 Oct 21 07:27 mafLinks/pytBiv1/galGal6.pytBiv1.net.maf.gz
+#  510037529 Oct 21 11:02 mafLinks/serCan1/galGal6.serCan1.synNet.maf.gz
+#  590908607 Oct 21 18:05 mafLinks/strCam1/galGal6.strCam1.rbest.maf.gz
+#  496310398 Oct 17 12:22 mafLinks/taeGut2/galGal6.taeGut2.synNet.maf.gz
+#  588405382 Oct 21 20:07 mafLinks/tauEry1/galGal6.tauEry1.rbest.maf.gz
+#   32933480 Oct 21 12:56 mafLinks/tetNig2/galGal6.tetNig2.net.maf.gz
+#   95906779 Oct 21 15:00 mafLinks/thaSir1/galGal6.thaSir1.net.maf.gz
+#  524666652 Oct 17 20:11 mafLinks/tinGut2/galGal6.tinGut2.rbest.maf.gz
+#  581192491 Oct 21 22:28 mafLinks/tytAlb1/galGal6.tytAlb1.rbest.maf.gz
+#   62256127 Oct 21 16:29 mafLinks/xenLae2/galGal6.xenLae2.net.maf.gz
+#   63053844 Oct 17 09:31 mafLinks/xenTro9/galGal6.xenTro9.net.maf.gz
+#  507711592 Oct 16 21:54 mafLinks/zonAlb1/galGal6.zonAlb1.synNet.maf.gz
+
+    #	need to split these things up into smaller pieces for
+    #	efficient kluster run.
+    mkdir /hive/data/genomes/galGal6/bed/multiz77way/mafSplit
+    cd /hive/data/genomes/galGal6/bed/multiz77way/mafSplit
+
+    #	mafSplitPos splits on gaps or repeat areas that will not have
+    #	any chains, approx 5 Mbp intervals, gaps at least 10,000
+    mafSplitPos -minGap=10000 galGal6 5 stdout | sort -u \
+	| sort -k1,1 -k2,2n > mafSplit.bed
+    #   see also multiz77way.txt for more discussion of this procedure
+
+    #	run a kluster job to split them all
+    ssh ku
+    cd /hive/data/genomes/galGal6/bed/multiz77way/mafSplit
+
+    printf '#!/bin/csh -ef
+set G = $1
+set M = $2
+mkdir -p $G
+pushd $G > /dev/null
+if ( -s galGal6_${M}.00.maf ) then
+    /bin/rm -f galGal6_${M}.*.maf
+endif
+/cluster/bin/x86_64/mafSplit ../mafSplit.bed galGal6_ ../../mafLinks/${G}/${M}.maf.gz
+/bin/gzip galGal6_*.maf
+popd > /dev/null
+' > runOne
+
+    chmod +x runOne
+
+    printf '#LOOP
+runOne $(dir1) $(file1) {check out exists+ $(dir1)/galGal6_chr1.00.maf.gz}
+#ENDLOOP
+' > template
+
+    find ../mafLinks -type l | awk -F'/' '{printf "%s/%s\n", $3,$4}' \
+      | sed -e 's/.maf.gz//;' > maf.list
+
+    gensub2 maf.list single template jobList
+    para -ram=16g create jobList
+    para try ... check ... push ... etc...
+# Completed: 76 of 76 jobs
+# CPU time in finished jobs:      22801s     380.02m     6.33h    0.26d  0.001 y
+# IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+# Average job time:                 294s       4.89m     0.08h    0.00d
+# Longest finished job:             437s       7.28m     0.12h    0.01d
+# Submission to last job:          1648s      27.47m     0.46h    0.02d
+
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . -type f | grep "maf.gz" | wc -l
+    # 11509
+    find . -type f | grep ".maf.gz$" | xargs -L 1 basename | sort -u \
+        > run.maf.list
+    wc -l run.maf.list
+    # 280 run.maf.list
+
+    # number of chroms with data:
+    awk -F'.' '{print $1}' run.maf.list  | sed -e 's/galGal6_//;' \
+      | sort | uniq -c | sort -n | wc -l
+    #  247
+
+    mkdir /hive/data/genomes/galGal6/bed/multiz77way/splitRun
+    cd /hive/data/genomes/galGal6/bed/multiz77way/splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = galGal6
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /dev/shm/$db/multiz.$c
+set pairs = /hive/data/genomes/galGal6/bed/multiz77way/mafSplit
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty /dev/shm/$db
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    printf '#LOOP
+./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/galGal6/bed/multiz77way/splitRun/maf/$(root1)}
+#ENDLOOP
+' > template
+
+    ln -s  ../../mafSplit/run.maf.list maf.list
+
+    ssh ku
+    cd /hive/data/genomes/galGal6/bed/multiz77way/splitRun/run
+    gensub2 maf.list single template jobList
+    # some of these jobs get to be pretty large in memory
+    para -ram=48g create jobList
+    para try ... check ... push ... etc...
+# Completed: 280 of 280 jobs
+# CPU time in finished jobs:    6297642s  104960.70m  1749.35h   72.89d  0.200 y
+# IO & Wait Time:                  7278s     121.30m     2.02h    0.08d  0.000 y
+# Average job time:               22518s     375.29m     6.25h    0.26d
+# Longest finished job:          464353s    7739.22m   128.99h    5.37d
+# Submission to last job:        464428s    7740.47m   129.01h    5.38d
+
+    # one of these jobs took a really really long time and
+    # made a gigantic result file:
+# -rw-rw-r-- 1 12482236715 Nov 18 03:27 galGal6_chr4.01.maf
+
+    # put the split maf results back together into a single per-chrom maf file
+    #	eliminate duplicate comments
+    ssh hgwdev
+    cd /hive/data/genomes/galGal6/bed/multiz77way/splitRun
+    mkdir ../maf
+    #	no need to save the comments since they are lost with mafAddIRows
+
+    cat << '_EOF_' >> runOne
+    printf '#!/bin/csh -fe
+set C = $1
+if ( -s ../mafRBest/${C}.maf.gz ) then
+    rm -f ../mafRBest/${C}.maf.gz
+endif
+if ( -s maf/galGal6_${C}.00.maf ) then
+  head -q -n 1 maf/galGal6_${C}.00.maf | sort -u > ../mafRBest/${C}.maf
+  grep -h -v "^#" `ls maf/galGal6_${C}.*.maf | sort -t. -k2,2n` >> ../mafRBest/${C}.maf
+  tail -q -n 1 maf/galGal6_${C}.00.maf | sort -u >> ../mafRBest/${C}.maf
+else
+  touch ../mafRBest/${C}.maf
+endif
+' > runOne
+    chmod +x runOne
+
+    printf '#LOOP
+runOne $(root1) {check out exists ../mafRBest/$(root1).maf}
+#ENDLOOP
+' > template
+
+    cut -f1 ../../../chrom.sizes > chr.list
+    ssh ku
+    cd /hive/data/genomes/galGal6/bed/multiz77way/splitRun
+    gensub2 chr.list single template jobList
+    para -ram=16g create jobList
+    para try ... check ... push ... etc ...
+    para -maxJob=32 push
+# Completed: 464 of 464 jobs
+# CPU time in finished jobs:       1076s      17.93m     0.30h    0.01d  0.000 y
+# IO & Wait Time:                  1711s      28.52m     0.48h    0.02d  0.000 y
+# Average job time:                   6s       0.10m     0.00h    0.00d
+# Longest finished job:             226s       3.77m     0.06h    0.00d
+# Submission to last job:           231s       3.85m     0.06h    0.00d
+
+    cd /hive/data/genomes/galGal6/bed/multiz77way/maf
+    # about 219 of them have empty results, they can be removed
+    ls -ogrt | awk '$3 == 0' | awk '{print $NF}' | xargs rm -f
+
+    # Load into database
+    mkdir -p /gbdb/galGal6/multiz77way/maf
+    cd /hive/data/genomes/galGal6/bed/multiz77way/maf
+    ln -s `pwd`/*.maf /gbdb/galGal6/multiz77way/maf/
+
+    # this generates an immense multiz77way.tab file in the directory
+    #	where it is running.  Best to run this over in scratch.
+    #   This is going to take all day.
+    cd /dev/shm
+    time hgLoadMaf -pathPrefix=/gbdb/galGal6/multiz77way/maf galGal6 multiz77way
+    # needed to run this twice, first time had an error:
+# Indexing and tabulating /gbdb/galGal6/multiz77way/maf/chrZ.maf
+# Mysql error during sqlTableExists(extFile) 2013: Lost connection to MySQL server during query
+
+# real    23m24.464s
+
+    # second time success:
+
+    # Loaded 57517733 mafs in 245 files from /gbdb/galGal6/multiz77way/maf
+    # real    25m50.757s
+
+    time (cat /gbdb/galGal6/multiz77way/maf/*.maf \
+        | hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 galGal6 multiz77waySummary stdin)
+# Created 3725053 summary blocks from 2028742538 components and 58099551 mafs from stdin
+# real    64m55.663s
+
+# -rw-rw-r-- 1 3002803804 Nov 27 10:07 multiz77way.tab
+# -rw-rw-r-- 1  178303217 Nov 27 14:09 multiz77waySummary.tab
+
+    wc -l multiz77*.tab
+#   58099551 multiz77way.tab
+#    3725053 multiz77waySummary.tab
+
+    rm multiz77way*.tab
+
+#######################################################################
+# GAP ANNOTATE MULTIZ77WAY MAF AND LOAD TABLES (DONE - 2017-11-26 - Hiram)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #	function correctly when more than one reference sequence
+    #	are in a single file.
+    mkdir -p /hive/data/genomes/galGal6/bed/multiz77way/anno
+    cd /hive/data/genomes/galGal6/bed/multiz77way/anno
+
+    # check for N.bed files everywhere:
+    for DB in `cat ../species.list`
+do
+    if [ ! -s /hive/data/genomes/${DB}/${DB}.N.bed ]; then
+        echo "MISS: ${DB}"
+        cd /hive/data/genomes/${DB}
+        twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
+    else
+        echo "  OK: ${DB}"
+    fi
+    cd /hive/data/genomes/galGal6/bed/multiz77way/anno
+done
+
+    cd /hive/data/genomes/galGal6/bed/multiz77way/anno
+    for DB in `cat ../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL *.bed | wc -l
+    # 77
+
+    screen -S galGal6      # use a screen to control this longish job
+    ssh ku
+    cd /hive/data/genomes/galGal6/bed/multiz77way/anno
+    mkdir result
+
+    printf '#LOOP
+mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/galGal6/galGal6.2bit {check out line+ result/$(file1)}
+#ENDLOOP
+' > template
+
+    ls ../maf/*.maf > maf.list
+    gensub2 maf.list single template jobList
+    # no need to limit these jobs, there are only 358 of them
+    para -ram=64g create jobList
+    para try ... check ...
+    para -maxJob=10 push
+# Completed: 245 of 247 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:      10717s     178.62m     2.98h    0.12d  0.000 y
+# IO & Wait Time:                   883s      14.71m     0.25h    0.01d  0.000 y
+# Average job time:                  47s       0.79m     0.01h    0.00d
+# Longest finished job:            1612s      26.87m     0.45h    0.02d
+# Submission to last job:          1652s      27.53m     0.46h    0.02d
+
+    # and the last two, chr1 and chr2, completed on hgwdev due to memory limits:
+    # real    48m26.151s
+
+    du -hsc result
+    #  334G    result
+
+    # Load into database
+    rm -f /gbdb/galGal6/multiz77way/maf/*
+    cd /hive/data/genomes/galGal6/bed/multiz77way/anno/result
+
+    ln -s `pwd`/*.maf /gbdb/galGal6/multiz77way/maf/
+
+    # this generates an immense multiz77way.tab file in the directory
+    #	where it is running.  Best to run this over in scratch.
+    cd /dev/shm
+    time hgLoadMaf -pathPrefix=/gbdb/galGal6/multiz77way/maf galGal6 multiz77way
+    # Loading multiz77way into database
+    # Loaded 58099551 mafs in 247 files from /gbdb/galGal6/multiz77way/maf
+    # real    42m15.604s
+
+    # -rw-rw-r-- 1 3002803804 Nov 27 10:07 multiz77way.tab
+
+    time (cat /gbdb/galGal6/multiz77way/maf/*.maf \
+        | hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 galGal6 multiz77waySummary stdin)
+# Created 4657433 summary blocks from 2028742538 components and 58099551 mafs from stdin
+# real    75m53.456s
+
+# -rw-rw-r-- 1 3002803804 Nov 27 10:07 multiz77way.tab
+# -rw-rw-r-- 1  223274420 Dec 10 14:48 multiz77waySummary.tab
+
+    wc -l multiz77*.tab
+#   58099551 multiz77way.tab
+#    4657433 multiz77waySummary.tab
+
+    rm multiz77way*.tab
+
+##############################################################################
+# MULTIZ7WAY MAF FRAMES (DONE - 2017-11-04 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/galGal6/bed/multiz77way/frames
+    cd /hive/data/genomes/galGal6/bed/multiz77way/frames
+#   survey all the genomes to find out what kinds of gene tracks they have
+
+    printf '#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    echo -n "# ${db}: "
+    set tables = `hgsql $db -N -e "show tables" | egrep "Gene|ncbiRefSeq"`
+    foreach table ($tables)
+        if ($table == "ensGene" || $table == "refGene" || \
+           $table == "ncbiRefSeq" || $table == "mgcGenes" || \
+           $table == "knownGene" || $table == "xenoRefGene" ) then
+           set count = `hgsql $db -N -e "select count(*) from $table"`
+            echo -n "${table}: ${count}, "
+        endif
+    end
+    echo
+end
+' > showGenes.csh
+
+    chmod +x ./showGenes.csh
+    time ./showGenes.csh
+# galGal6: ncbiRefSeq: 62183, refGene: 7355, xenoRefGene: 146002, 
+# cotJap2: ncbiRefSeq: 47008, refGene: 64, xenoRefGene: 149937, 
+# melGal5: ncbiRefSeq: 48270, refGene: 108, xenoRefGene: 249461, 
+# anaPla1: ensGene: 17169, 
+# aquChr2: xenoRefGene: 360692, 
+# geoFor1: ncbiRefSeq: 16927, xenoRefGene: 363515, 
+# taeGut2: ensGene: 19225, ncbiRefSeq: 20747, refGene: 1272, xenoRefGene: 248420, 
+# melUnd1: ncbiRefSeq: 17125, xenoRefGene: 382914, 
+# allMis1: ncbiRefSeq: 22447, refGene: 54, xenoRefGene: 404750, 
+# chrPic2: xenoRefGene: 187072, 
+# pelSin1: ensGene: 21808, 
+
+# real    0m1.684s
+
+    # from that summary, use these gene sets:
+    # ncbiRefSeq - galGal6 cotJap2 melGal5 geoFor1 taeGut2 melUnd1 allMis1
+    # ensGene - anaPla1 pelSin1
+    # xenoRefGene - aquChr2 chrPic2
+
+    mkdir genes
+
+    #   1. ncbiRefSeq: galGal6 cotJap2 melGal5 geoFor1 taeGut2 melUnd1 allMis1
+    for DB in galGal6 cotJap2 melGal5 geoFor1 taeGut2 melUnd1 allMis1
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ncbiRefSeq" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > genes/${DB}.gp.gz
+    genePredCheck -db=${DB} genes/${DB}.gp.gz 2>&1 | sed -e "s/^/    # $DB /;"
+done
+    # galGal6 checked: 17422 failed: 0
+    # cotJap2 checked: 15977 failed: 0
+    # melGal5 checked: 18395 failed: 0
+    # geoFor1 checked: 14124 failed: 0
+    # taeGut2 checked: 16280 failed: 0
+    # melUnd1 checked: 14174 failed: 0
+    # allMis1 checked: 18106 failed: 0
+
+    #   2. ensGene: anaPla1 pelSin1
+    for DB in anaPla1 pelSin1
+do
+hgsql -N -e "select
+name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds
+from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /dev/shm/${DB}.tmp.gz
+    mv /dev/shm/${DB}.tmp.gz genes/$DB.gp.gz
+    genePredCheck -db=${DB} genes/${DB}.gp.gz 2>&1 | sed -e "s/^/    # $DB /;"
+done
+    # anaPla1 checked: 15482 failed: 0
+    # pelSin1 checked: 18093 failed: 0
+
+    #   3. xenoRefGene for aquChr2 chrPic2
+
+    for DB in aquChr2 chrPic2
+do
+    hgsql -N -e "select
+name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds
+from xenoRefGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /dev/shm/${DB}.tmp.gz
+    mv /dev/shm/${DB}.tmp.gz genes/$DB.gp.gz
+    genePredCheck -db=${DB} genes/${DB}.gp.gz 2>&1 | sed -e "s/^/    # $DB /;"
+done
+    # aquChr2 checked: 15300 failed: 0
+    # chrPic2 checked: 15228 failed: 0
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+# genes/allMis1.gp.gz: 18106
+# genes/anaPla1.gp.gz: 15482
+# genes/aquChr2.gp.gz: 15006
+# genes/chrPic2.gp.gz: 15071
+# genes/cotJap2.gp.gz: 15977
+# genes/galGal6.gp.gz: 17414
+# genes/geoFor1.gp.gz: 14124
+# genes/melGal5.gp.gz: 18387
+# genes/melUnd1.gp.gz: 14174
+# genes/pelSin1.gp.gz: 18093
+# genes/taeGut2.gp.gz: 16276
+
+    # kluster job to annotate each maf file
+    screen -S galGal6      # manage long running procedure with screen
+    ssh ku
+    cd /hive/data/genomes/galGal6/bed/multiz77way/frames
+
+    printf '#!/bin/csh -fe
+
+set C = $1
+set G = $2
+
+cat ../anno/result/${C}.maf | genePredToMafFrames galGal6 stdin stdout \
+        ${G} genes/${G}.gp.gz | gzip > parts/${C}.${G}.mafFrames.gz
+' > runOne
+
+    chmod +x runOne
+
+    ls ../anno/result/*.maf | sed -e "s#.*result/##; s/.maf//" > chr.list
+    ls genes | sed -e "s/.gp.gz//" > gene.list
+
+    printf '#LOOP
+runOne $(root1) $(root2) {check out exists+ parts/$(root1).$(root2).mafFrames.gz}
+#ENDLOOP
+' > template
+
+    mkdir parts
+    gensub2 chr.list gene.list template jobList
+    para -ram=64g create jobList
+    para try ... check ... push
+# Completed: 2717 of 2717 jobs
+# CPU time in finished jobs:      53070s     884.50m    14.74h    0.61d  0.002 y
+# IO & Wait Time:                  5177s      86.28m     1.44h    0.06d  0.000 y
+# Average job time:                  21s       0.36m     0.01h    0.00d
+# Longest finished job:             933s      15.55m     0.26h    0.01d
+# Submission to last job:          1300s      21.67m     0.36h    0.02d
+
+    # collect all results into one file:
+    cd /hive/data/genomes/galGal6/bed/multiz77way/frames
+    time find ./parts -type f | while read F
+do
+    echo "${F}" 1>&2
+    zcat ${F}
+done | sort -k1,1 -k2,2n > multiz77wayFrames.bed
+    # real    0m28.716s
+
+    # -rw-rw-r-- 1 155257854 Dec  4 11:06 multiz77wayFrames.bed
+
+    gzip multiz77wayFrames.bed
+
+    # verify there are frames on everything, should be 11 species:
+    # (count from: ls genes | wc)
+    zcat multiz77wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c \
+        | sed -e 's/^/# /;' > species.check.list
+    wc -l species.check.list
+    # 11
+
+#  364955 allMis1
+#  182148 anaPla1
+#  176580 aquChr2
+#  193676 chrPic2
+#  193164 cotJap2
+#  177356 galGal6
+#  211550 geoFor1
+#  191008 melGal5
+#  209757 melUnd1
+#  265679 pelSin1
+#  222413 taeGut2
+
+    #   load the resulting file
+    ssh hgwdev
+    cd /hive/data/genomes/galGal6/bed/multiz77way/frames
+    time hgLoadMafFrames galGal6 multiz77wayFrames multiz77wayFrames.bed.gz
+    #   real    0m14.572s
+
+    hgsql -e 'select count(*) from multiz77wayFrames;' galGal6
+    #	+----------+
+    #	| count(*) |
+    #	+----------+
+    #	|  2388286 |
+    #	+----------+
+
+    time featureBits -countGaps galGal6 multiz77wayFrames
+    #	36890829 bases of 1065365425 (3.463%) in intersection
+    #	real    0m12.344s
+
+    #   enable the trackDb entries:
+# frames multiz77wayFrames
+# irows on
+    #   zoom to base level in an exon to see codon displays
+    #	appears to work OK
+
+#########################################################################
+# Phylogenetic tree from 77-way (DONE - 2018-11-05 - Hiram)
+    mkdir /hive/data/genomes/galGal6/bed/multiz77way/4d
+    cd /hive/data/genomes/galGal6/bed/multiz77way/4d
+
+    # the annotated maf's are in:
+    ../anno/result/*.maf
+
+    # using ncbiRefSeq for galGal6, only transcribed genes and nothing
+    #	from the randoms and other misc.
+    hgsql -Ne "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ncbiRefSeq where cdsEnd > cdsStart;" galGal6 \
+      | egrep -E -v "chrM|chrUn|random|_alt" > ncbiRefSeq.gp
+    wc -l *.gp
+    #     49187 ncbiRefSeq.gp
+
+    # verify it is only on the chroms:
+    cut -f2 ncbiRefSeq.gp | sort | uniq -c | sort -rn | sed -e 's/^/    # /;'
+    #    6305 chr1
+    #    4341 chr2
+    #    3682 chr3
+    #    3554 chr4
+    #    3101 chr5
+    #    2296 chrZ
+    #    1926 chr7
+    #    1883 chr6
+    #    1736 chr8
+    #    1523 chr9
+    #    1293 chr14
+    #    1262 chr10
+    #    1184 chr12
+    #    1163 chr15
+    #    1045 chr18
+    #    1041 chr20
+    #    1008 chr17
+    #    1003 chr11
+    #     978 chr19
+    #     969 chr13
+    #     889 chr27
+    #     837 chr26
+    #     826 chr33
+    #     794 chr28
+    #     772 chr21
+    #     722 chr25
+    #     687 chr23
+    #     652 chr24
+    #     475 chr22
+    #     420 chr16
+    #     339 chr31
+    #     234 chr30
+    #     125 chrW
+    #     122 chr32
+
+    genePredSingleCover ncbiRefSeq.gp stdout | sort > ncbiRefSeqNR.gp
+    wc -l ncbiRefSeqNR.gp
+    #	17121 ncbiRefSeqNR.gp
+
+    ssh ku
+    mkdir /hive/data/genomes/galGal6/bed/multiz77way/4d/run
+    cd /hive/data/genomes/galGal6/bed/multiz77way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set r = "/hive/data/genomes/galGal6/bed/multiz77way"
+set c = $1
+set infile = $r/anno/result/$2
+set outfile = $3
+cd /dev/shm
+# 'clean' maf, removes all chrom names, leaves only the db name
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf
+awk -v C=$c '$2 == C {print}' $r/4d/ncbiRefSeqNR.gp | sed -e "s/\t$c\t/\tgalGal6.$c\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4d/run/$outfile
+else
+    echo "" > $r/4d/run/$outfile
+endif
+rm -f $c.gp $c.maf $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    ls -1S /hive/data/genomes/galGal6/bed/multiz77way/anno/result/*.maf \
+	| sed -e "s#.*multiz77way/anno/result/##" \
+        | egrep -E -v "chrM|chrUn|random|_alt" > maf.list
+
+    printf '#LOOP
+4d.csh $(root1) $(path1) {check out line+ ../mfa/$(root1).mfa}
+#ENDLOOP
+' > template
+
+    gensub2 maf.list single template jobList
+    para -ram=64g create jobList
+    para try ... check ... push ... etc...
+    para time
+# CPU time in finished jobs:       9637s     160.62m     2.68h    0.11d  0.000 y
+# IO & Wait Time:                    90s       1.50m     0.02h    0.00d  0.000 y
+# Average job time:                 304s       5.07m     0.08h    0.00d
+# Longest finished job:            1564s      26.07m     0.43h    0.02d
+# Submission to last job:          2786s      46.43m     0.77h    0.03d
+
+    # the two failures need more memory than 64g, finish on hgwdev:
+    ./4d.csh chr1 chr1.maf ../mfa/chr1.mfa &
+    ./4d.csh chr2 chr2.maf ../mfa/chr2.mfa
+    wait
+    # real    27m59.700s
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/galGal6/bed/multiz77way/4d
+    # verify no tiny files:
+    ls -og mfa | sort -k3nr | tail -2
+    #  -rw-rw-r-- 1  235884 Nov  3 11:25 chrY.mfa
+
+    #want comma-less species.list
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" mfa/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # real    0m3.430s
+
+    # check they are all in there:
+    grep "^>" 4d.all.mfa | wc -l
+    #   77
+
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+        ../galGal6.77way.nh
+
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	../galGal6.77way.nh > tree-commas.nh
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree tree-commas.nh 4d.all.mfa
+    #   real    82m14.661s
+
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+# ((((((((((((((((((((((((galGal6:0.0407994,cotJap2:0.075032):0.00678692,
+# melGal5:0.0460563):0.152361,tytAlb1:0.0674945):0.00362352,
+# bucRhi1:0.123125):0.00197824,anaPla1:0.155414):0.00324622,
+# apaVit1:0.120774):0.00236511,calAnn1:0.154521):0.00405339,
+# cucCan1:0.124946):0.00558146,chaVoc2:0.0681884):0.00341058,
+# fulGla1:0.0444483):0.00206427,tauEry1:0.0874257):0.00215936,
+# opiHoa1:0.086691):0.00214164,phoRub1:0.053355):0.00214444,
+# (colLiv1:0.130697,((lepDis1:0.0683669,merNub1:0.145762):0.0147436,
+# ((pelCri1:0.0517251,(phaCar1:0.0682455,
+# phaLep1:0.0630482):0.00464673):0.00345114,((pteGut1:0.09113,
+# (nipNip1:0.0461867,egrGar1:0.0615126):0.00680979):0.0024641,
+# ((pygAde1:0.015753,aptFor1:0.0127504):0.0294345,(((((carCri1:0.0598096,
+# mesUni1:0.11204):0.00462025,eurHel1:0.112293):0.00213836,
+# balPav1:0.0651192):0.00215447,chlUnd1:0.0848454):0.00267882,
+# (((falChe1:0.0024831,falPer1:0.00259406):0.0798053,(aquChr2:0.0142362,
+# (halAlb1:0.00214356,halLeu1:0.00214934):0.0176244):0.034005):0.00624518,
+# ((((corBra1:0.00212182,corCor1:0.00240367):0.0502936,(acaChl1:0.180434,
+# (ficAlb2:0.0640719,(((serCan1:0.0405358,zonAlb1:0.0478928):0.00254573,
+# geoFor1:0.0304481):0.0247191,
+# taeGut2:0.0446712):0.0146035):0.0148619):0.00208483):0.00205379,
+# pseHum1:0.0540727):0.156263,(gavSte1:0.0505629,(capCar1:0.0761202,
+# (melUnd1:0.04375,(amaVit1:0.0284858,
+# araMac1:0.0268072):0.0151638):0.0778525):0.00921769):0.00196119):0.00317845):0.00333798):0.0032279):0.00209549):0.00217019):0.00413516):0.00218366):0.00218773):0.0169635,
+# colStr1:0.131992):0.00618949,picPub1:0.178329):0.0578306,
+# (strCam1:0.0691605,tinGut2:0.162739):0.0403754):0.186966,
+# (allMis1:0.0115232,allSin1:0.0100885):0.186207):0.0235685,
+# ((cheMyd1:0.0387783,chrPic2:0.0359402):0.0315313,
+# (pelSin1:0.0266918,apaSpi1:0.0301989):0.0938125):0.0851605):0.109974,
+# ((pytBiv1:0.0908161,thaSir1:0.210469):0.201079,
+# anoCar2:0.28687):0.240369):0.193154,(hg38:0.153209,
+# mm10:0.288885):0.335161):0.195426,
+# ((xenTro9:0.131605,xenLae2:0.135359):0.444445,
+# nanPar1:0.586412):0.336097):0.462138,
+# (((((tetNig2:0.205709,fr3:0.191549):0.248318,
+# (oreNil3:0.0361466,mayZeb1:0.044998):0.298866):0.0164327,
+# oryLat2:0.452326):0.0531957,gasAcu1:0.24726):0.29165,
+# (angJap1:0.453715,danRer11:0.786127):0.0950112):0.129939):0.343984,
+# (petMar3:0.0600265,letCam1:0.0573159):0.343984);
+
+    # compare these calculated lengths to what we started with
+
+    /cluster/bin/phast/all_dists ../galGal6.77way.nh  | grep galGal6 \
+	| sed -e "s/galGal6.//;" | sort > original.dists
+
+    grep TREE all.mod | sed -e 's/TREE: //;' \
+       | /cluster/bin/phast/all_dists /dev/stdin | grep galGal6 \
+          | sed -e "s/galGal6.//;"  | sort > galGal6.dists
+
+    # printing out the 'original', the 'new' the 'difference' and
+    #    percent difference/delta
+    join original.dists galGal6.dists | awk '{
+  printf "#\t%s\t%8.6f\t%8.6f\t%8.6f\t%8.6f\n", $1, $2, $3, $2-$3, 100*($2-$3)/$3 }'       | sort -k4n
+#	melGal5	0.126972	0.093643	0.033329	35.591555
+#	cotJap2	0.066254	0.115831	-0.049577	-42.801150
+#	tytAlb1	0.152299	0.267442	-0.115143	-43.053447
+#	fulGla1	0.222299	0.268654	-0.046355	-17.254536
+#	phoRub1	0.252299	0.283926	-0.031627	-11.139170
+#	aptFor1	0.372299	0.287673	0.084626	29.417429
+#	chaVoc2	0.212299	0.288984	-0.076685	-26.536071
+#	pygAde1	0.372299	0.290675	0.081624	28.080846
+#	pelCri1	0.342299	0.296398	0.045901	15.486272
+#	nipNip1	0.362299	0.298853	0.063446	21.229835
+#	aquChr2	0.402299	0.306540	0.095759	31.238664
+#	gavSte1	0.397002	0.307756	0.089246	28.998947
+#	halAlb1	0.402299	0.312072	0.090227	28.912238
+#	halLeu1	0.402299	0.312078	0.090221	28.909760
+#	phaLep1	0.352299	0.312368	0.039931	12.783320
+#	tauEry1	0.232299	0.313696	-0.081397	-25.947733
+#	egrGar1	0.362299	0.314179	0.048120	15.316110
+#	opiHoa1	0.242299	0.315120	-0.072821	-23.108974
+#	phaCar1	0.352299	0.317565	0.034734	10.937603
+#	balPav1	0.402299	0.318668	0.083631	26.243928
+#	carCri1	0.442299	0.320117	0.122182	38.167920
+#	lepDis1	0.342299	0.320197	0.022102	6.902626
+#	bucRhi1	0.162299	0.326696	-0.164397	-50.321094
+#	apaVit1	0.182299	0.329569	-0.147270	-44.685635
+#	chlUnd1	0.382299	0.336240	0.046059	13.698251
+#	pteGut1	0.352299	0.336986	0.015313	4.544106
+#	cucCan1	0.202299	0.340160	-0.137861	-40.528281
+#	falChe1	0.402299	0.340587	0.061712	18.119306
+#	falPer1	0.402299	0.340698	0.061601	18.080822
+#	capCar1	0.407002	0.342531	0.064471	18.821946
+#	anaPla1	0.172299	0.360963	-0.188664	-52.266853
+#	colLiv1	0.312299	0.365600	-0.053301	-14.579048
+#	calAnn1	0.192299	0.365681	-0.173382	-47.413456
+#	eurHel1	0.422299	0.367980	0.054319	14.761400
+#	mesUni1	0.442299	0.372348	0.069951	18.786458
+#	colStr1	0.382299	0.381671	0.000628	0.164540
+#	araMac1	0.413002	0.386234	0.026768	6.930514
+#	amaVit1	0.413002	0.387913	0.025089	6.467687
+#	melUnd1	0.423987	0.388013	0.035974	9.271339
+#	merNub1	0.342299	0.397593	-0.055294	-13.907186
+#	strCam1	0.262299	0.423235	-0.160936	-38.025211
+#	picPub1	0.402299	0.434198	-0.031899	-7.346648
+#	pseHum1	0.422002	0.465568	-0.043566	-9.357602
+#	corBra1	0.454068	0.465964	-0.011896	-2.552987
+#	corCor1	0.454068	0.466246	-0.012178	-2.611926
+#	taeGut2	0.484068	0.489770	-0.005702	-1.164220
+#	ficAlb2	0.454068	0.494568	-0.040500	-8.188965
+#	geoFor1	0.480329	0.500266	-0.019937	-3.985280
+#	serCan1	0.473068	0.512900	-0.039832	-7.766036
+#	tinGut2	0.262299	0.516814	-0.254515	-49.246924
+#	zonAlb1	0.473525	0.520257	-0.046732	-8.982484
+#	acaChl1	0.464068	0.596068	-0.132000	-22.145124
+#	chrPic2	0.617442	0.676866	-0.059424	-8.779286
+#	cheMyd1	0.617442	0.679704	-0.062262	-9.160164
+#	allSin1	0.632299	0.696961	-0.064662	-9.277707
+#	allMis1	0.632299	0.698395	-0.066096	-9.463985
+#	pelSin1	0.617442	0.729898	-0.112456	-15.407084
+#	apaSpi1	0.617442	0.733406	-0.115964	-15.811706
+#	anoCar2	0.934442	1.161447	-0.227005	-19.545016
+#	pytBiv1	0.887442	1.166472	-0.279030	-23.920849
+#	thaSir1	0.987442	1.286125	-0.298683	-23.223481
+#	hg38	1.115503	1.315732	-0.200229	-15.218069
+#	mm10	1.326078	1.451408	-0.125330	-8.635063
+#	xenTro9	0.907386	1.934935	-1.027549	-53.105091
+#	xenLae2	0.929442	1.938689	-1.009247	-52.058221
+#	nanPar1	0.829442	1.945297	-1.115855	-57.361678
+#	gasAcu1	1.758169	2.153775	-0.395606	-18.368028
+#	angJap1	1.891116	2.163591	-0.272475	-12.593646
+#	letCam1	1.946543	2.230210	-0.283667	-12.719295
+#	petMar3	1.946543	2.232920	-0.286377	-12.825224
+#	oreNil3	1.824346	2.311156	-0.486810	-21.063485
+#	mayZeb1	1.974346	2.320007	-0.345661	-14.899136
+#	oryLat2	2.008726	2.412036	-0.403310	-16.720729
+#	fr3	1.925783	2.416010	-0.490227	-20.290769
+#	tetNig2	1.846095	2.430170	-0.584075	-24.034327
+#	danRer11 1.971868	2.496003	-0.524135	-20.998973
+
+#########################################################################
+# phastCons 77-way (DONE - 2018-12-14 - Hiram)
+    # split 77way mafs into 10M chunks and generate sufficient statistics
+    # files for # phastCons
+    ssh ku
+    mkdir -p /hive/data/genomes/galGal6/bed/multiz77way/cons/ss
+    mkdir -p /hive/data/genomes/galGal6/bed/multiz77way/cons/msa.split
+    cd /hive/data/genomes/galGal6/bed/multiz77way/cons/msa.split
+
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set c = $1
+set MAF = /hive/data/genomes/galGal6/bed/multiz77way/anno/result/$c.maf
+set WINDOWS = /hive/data/genomes/galGal6/bed/multiz77way/cons/ss/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $2 ) then
+    exit 0
+endif
+if ( -s $2.running ) then
+    exit 0
+endif
+
+date >> $2.running
+
+rm -fr $WINDOWS
+mkdir $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+date >> $2
+rm -f $2.running
+'_EOF_'
+    # << happy emacs
+    chmod +x doSplit.csh
+
+    printf '#LOOP
+doSplit.csh $(root1) {check out line+ $(root1).done}
+#ENDLOOP
+' > template
+
+#	do the easy ones first to see some immediate results
+    ls -1S -r ../../anno/result | sed -e "s/.maf//;" > maf.list
+    # all can finish OK at a 64Gb memory limit
+    gensub2 maf.list single template jobList
+    para -ram=64g create jobList
+    para try ... check ... etc
+    para push
+# Completed: 247 of 247 jobs
+# CPU time in finished jobs:      49455s     824.25m    13.74h    0.57d  0.002 y
+# IO & Wait Time:                  2892s      48.20m     0.80h    0.03d  0.000 y
+# Average job time:                 212s       3.53m     0.06h    0.00d
+# Longest finished job:           18111s     301.85m     5.03h    0.21d
+# Submission to last job:         18151s     302.52m     5.04h    0.21d
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, beware where this
+    #	takes place or do not run too many at once.
+    ssh ku
+    mkdir -p /hive/data/genomes/galGal6/bed/multiz77way/cons/run.cons
+    cd /hive/data/genomes/galGal6/bed/multiz77way/cons/run.cons
+
+    #	This is setup for multiple runs based on subsets, but only running
+    #   the 'all' subset here.
+    #   It triggers off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  Running:
+    #	all and vertebrates
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set c = $1
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set cons = /hive/data/genomes/galGal6/bed/multiz77way/cons
+set tmp = $cons/tmp/$f
+mkdir -p $tmp
+set ssSrc = $cons/ss
+set useGrp = "$grp.mod"
+if (-s $cons/$grp/$grp.non-inf) then
+  ln -s $cons/$grp/$grp.mod $tmp
+  ln -s $cons/$grp/$grp.non-inf $tmp
+  ln -s $ssSrc/$c/$f.ss $tmp
+else
+  ln -s $ssSrc/$c/$f.ss $tmp
+  ln -s $cons/$grp/$grp.mod $tmp
+endif
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f.ss $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative `cat $grp.non-inf` \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+else
+  $PHASTBIN/phastCons $f.ss $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+endif
+popd > /dev/null
+mkdir -p pp/$c bed/$c
+sleep 4
+touch pp/$c bed/$c
+rm -f pp/$c/$f.pp
+rm -f bed/$c/$f.bed
+mv $tmp/$f.pp pp/$c
+mv $tmp/$f.bed bed/$c
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x doPhast.csh
+
+    #	this template will serve for all runs
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    printf '#LOOP
+../run.cons/doPhast.csh $(root1) $(file1) 45 0.3 0.3 {check out line+ pp/$(root1)/$(file1).pp}
+#ENDLOOP
+' > template
+
+    ls -1S ../ss/chr*/chr* | sed -e "s/.ss$//" > ss.list
+    wc -l ss.list
+    #	229 ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    cd /hive/data/genomes/galGal6/bed/multiz77way/cons
+    mkdir -p all
+    cd all
+    #	Using the .mod tree
+    cp -p ../../4d/all.mod ./all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    # beware overwhelming the cluster with these fast running high I/O jobs
+    para -ram=32g create jobList
+    para try ... check ...
+    para -maxJob=16 push
+# Completed: 299 of 299 jobs
+# CPU time in finished jobs:      35432s     590.54m     9.84h    0.41d  0.001 y
+# IO & Wait Time:                  2145s      35.74m     0.60h    0.02d  0.000 y
+# Average job time:                 126s       2.09m     0.03h    0.00d
+# Longest finished job:             387s       6.45m     0.11h    0.00d
+# Submission to last job:         14019s     233.65m     3.89h    0.16d
+
+    # create Most Conserved track
+    cd /hive/data/genomes/galGal6/bed/multiz77way/cons/all
+    time cut -f1 ../../../../chrom.sizes | while read C
+do
+    echo $C 1>&2
+    ls -d bed/${C} 2> /dev/null | while read D
+    do
+        cat ${D}/${C}*.bed
+    done | sort -k1,1 -k2,2n \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
+done > tmpMostConserved.bed
+    # real    0m55.745s
+
+    # -rw-rw-r--   1 246650784 Dec 14 13:59 tmpMostConserved.bed
+
+    time /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed \
+        > mostConserved.bed
+    # real    0m40.460s
+
+    # -rw-rw-r--   1 253184497 Dec 14 14:01 mostConserved.bed
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/galGal6/bed/multiz77way/cons/all
+    time hgLoadBed galGal6 phastConsElements77way mostConserved.bed
+    # Read 7438714 elements of size 5 from mostConserved.bed
+    # real    0m55.443s
+
+    # Try for at least 5% overall cov, and 70% CDS cov
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    time featureBits galGal6 -enrichment ncbiRefSeq:cds phastConsElements77way
+    # ncbiRefSeq:cds 2.917%, phastConsElements77way 13.012%, both 2.015%, cover 69.06%, enrich 5.31x
+
+    # real    0m41.525s
+
+    time featureBits galGal6 -enrichment refGene:cds phastConsElements77way
+    # refGene:cds 0.855%, phastConsElements77way 13.012%, both 0.677%, cover 79.21%, enrich 6.09x
+    # real    0m37.093s
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /hive/data/genomes/galGal6/bed/multiz77way/cons/all
+    mkdir downloads
+
+    time for D in `ls -d pp/chr* | sed -e 's#pp/##'`
+do
+    echo "working: $D" 1>&2
+    find ./pp/${D} -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+        | gzip -c > downloads/${D}.phastCons77way.wigFix.gz
+done
+    # real    5m16.918s
+
+    #	encode those files into wiggle data
+    time (zcat downloads/*.wigFix.gz \
+	| wigEncode stdin phastCons77way.wig phastCons77way.wib)
+    #   Converted stdin, upper limit 1.00, lower limit 0.00
+    #   real    3m15.097s
+
+    du -hsc *.wi?
+    # 975M    phastCons77way.wib
+    # 102M    phastCons77way.wig
+
+    #	encode into a bigWig file:
+    #	(warning wigToBigWig process may be too large for memory limits
+    #	in bash, to avoid the 32 Gb memory limit, set 180 Gb here:
+export sizeG=188743680
+ulimit -d $sizeG
+ulimit -v $sizeG
+    time (zcat downloads/*.wigFix.gz \
+      | wigToBigWig -verbose=2 stdin \
+	../../../../chrom.sizes phastCons77way.bw) > bigWig.log 2>&1
+    egrep "VmPeak|real" bigWig.log
+    # pid=72262: VmPeak:    11716084 kB
+    # real    8m41.950s
+    # real    8m16.091s
+
+    # -rw-rw-r--   1    6688955 Dec 14 14:28 bigWig.log
+
+    bigWigInfo phastCons77way.bw | sed -e 's/^/#    /;'
+#    version: 4
+#    isCompressed: yes
+#    isSwapped: 0
+#    primaryDataSize: 1,254,221,116
+#    primaryIndexSize: 35,327,900
+#    zoomLevels: 10
+#    chromCount: 209
+#    basesCovered: 1,021,715,761
+#    mean: 0.149853
+#    min: 0.000000
+#    max: 1.000000
+#    std: 0.324058
+
+    #	if you wanted to use the bigWig file, loading bigWig table:
+    #   but we don't use the bigWig file
+    mkdir /gbdb/galGal6/bbi
+    ln -s `pwd`/phastCons77way.bw /gbdb/galGal6/bbi
+    hgsql galGal6 -e 'drop table if exists phastCons77way; \
+            create table phastCons77way (fileName varchar(255) not null); \
+            insert into phastCons77way values
+	("/gbdb/galGal6/bbi/phastCons77way.bw");'
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /hive/data/genomes/galGal6/bed/multiz77way/cons/all
+    ln -s `pwd`/phastCons77way.wib /gbdb/galGal6/multiz77way/phastCons77way.wib
+    time hgLoadWiggle -pathPrefix=/gbdb/galGal6/multiz77way galGal6 \
+	phastCons77way phastCons77way.wig
+    #   real    0m6.769s
+
+    time wigTableStats.sh galGal6 phastCons77way
+# db.table            min max   mean       count     sumData
+# galGal6.phastCons77way 0 1 0.149853 1021715761 1.53107e+08
+#       stdDev viewLimits
+#     0.324058 viewLimits=0:1
+# real    0m3.513s
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /hive/data/genomes/galGal6/bed/multiz77way/cons/all
+    time hgWiggle -doHistogram -db=galGal6 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons77way > galGal6.phastCons77way.histogram.data 2>&1
+    #	real    0m36.635s
+
+    #	create plot of histogram:
+
+    # updated for new gnuplot on hgwdev 2018-11-26 (can't get font to change)
+    printf 'set terminal pngcairo size 1000,600 background "#000000" font "/usr/share/fonts/default/Type1/n022004l.pfb"
+set output "galGal6.phastCons77way.histo.png"
+set size 1.0, 1.0
+set style line 1 lt 2 lc rgb "#ff88ff" lw 2
+set style line 2 lt 2 lc rgb "#66ff66" lw 2
+set style line 3 lt 2 lc rgb "#ffff00" lw 2
+set style line 4 lt 2 lc rgb "#ffffff" lw 2
+set border lc rgb "#ffff00"
+set key left box ls 3
+set key tc variable
+set grid noxtics
+set y2tics
+set grid ytics ls 4
+set title " Chicken/galGal6 Histogram phastCons77way track" \
+    tc rgb "#ffffff"
+set xlabel " phastCons124way score" tc rgb "#ffffff"
+set ylabel " Relative Frequency" tc rgb "#ff88ff"
+set y2label " Cumulative Relative Frequency (CRF)" tc rgb "#66ff66"
+set y2range [0:1]
+set yrange [0:0.02]
+
+plot "galGal6.phastCons77way.histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
+        "galGal6.phastCons77way.histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
+' | gnuplot
+
+    display galGal6.phastCons77way.histo.png
+
+#########################################################################
+# phyloP for 77-way (DONE - 2018-12-06 - Hiram)
+#
+    # split SS files into 1M chunks, this business needs smaller files
+    #   to complete
+
+    ssh ku
+    mkdir /hive/data/genomes/galGal6/bed/multiz77way/consPhyloP
+    cd /hive/data/genomes/galGal6/bed/multiz77way/consPhyloP
+    mkdir ss run.split
+    cd run.split
+
+    printf '#!/bin/csh -ef
+set c = $1
+set MAF = /hive/data/genomes/galGal6/bed/multiz77way/anno/result/$c.maf
+set WINDOWS = /hive/data/genomes/galGal6/bed/multiz77way/consPhyloP/ss/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $2 ) then
+    exit 0
+endif
+if ( -s $2.running ) then
+    exit 0
+endif
+
+date >> $2.running
+
+rm -fr $WINDOWS
+mkdir -p $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 1000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+date >> $2
+rm -f $2.running
+' > doSplit.csh
+
+    chmod +x doSplit.csh
+
+    #	do the easy ones first to see some immediate results
+    ls -1S -r ../../anno/result | sed -e "s/.maf//;" > maf.list
+
+    # this needs a {check out line+ $(root1.done)} test for verification:
+    printf '#LOOP
+./doSplit.csh $(root1) $(root1).done
+#ENDLOOP
+' > template
+
+    gensub2 maf.list single template jobList
+    # all can complete successfully at the 64Gb memory limit
+    para -ram=64g create jobList
+    para try ... check ... push ... etc...
+# Completed: 247 of 247 jobs
+# CPU time in finished jobs:      38282s     638.03m    10.63h    0.44d  0.001 y
+# IO & Wait Time:                  2674s      44.57m     0.74h    0.03d  0.000 y
+# Average job time:                 166s       2.76m     0.05h    0.00d
+# Longest finished job:           12645s     210.75m     3.51h    0.15d
+# Submission to last job:         17690s     294.83m     4.91h    0.20d
+
+    # run phyloP with score=LRT
+    ssh ku
+    mkdir /cluster/data/galGal6/bed/multiz77way/consPhyloP
+    cd /cluster/data/galGal6/bed/multiz77way/consPhyloP
+
+    mkdir run.phyloP
+    cd run.phyloP
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACK ../../4d/all.mod
+    #   BACKGROUND: 0.274952 0.278952 0.175546 0.270550 
+
+    grep BACKGROUND ../../4d/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.454
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../4d/all.mod 0.454 > all.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod
+    #   BACKGROUND: 0.273000 0.227000 0.227000 0.273000 
+
+    printf '#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set f = $1
+set ssFile = $1:t
+set out = $2
+set cName = $f:h
+set n = $f:r:e
+set grp = $cwd:t
+set cons = /hive/data/genomes/galGal6/bed/multiz77way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+set ssSrc = "$cons/ss/$cName/$ssFile"
+set useGrp = "$grp.mod"
+/bin/ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+echo source: $ssSrc.ss
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
+    -i SS $useGrp $ssSrc.ss > $ssFile.wigFix
+popd > /dev/null
+/bin/mkdir -p $out:h
+sleep 4
+/bin/touch $out:h
+/bin/mv $tmp/$ssFile.wigFix $out
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp
+' > doPhyloP.csh
+
+    chmod +x doPhyloP.csh
+
+    # Create list of chunks
+    find ../ss -type f | sed -e "s/.ss$//; s#../ss/##;" > ss.list
+    # make sure the list looks good
+    wc -l ss.list
+    #	1243 ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    printf '#LOOP
+../run.phyloP/doPhyloP.csh $(path1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+' > template
+
+    ######################   Running all species  #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/galGal6/bed/multiz77way/consPhyloP/all
+    cd /hive/data/genomes/galGal6/bed/multiz77way/consPhyloP/all
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    # beware overloading the cluster with these quick and high I/O jobs
+    para -ram=32g create jobList
+    para try ... check ...
+    para -maxJob=16 push
+    para time > run.time
+# Completed: 1243 of 1243 jobs
+# CPU time in finished jobs:    1719561s   28659.35m   477.66h   19.90d  0.055 y
+# IO & Wait Time:                  8564s     142.73m     2.38h    0.10d  0.000 y
+# Average job time:                1390s      23.17m     0.39h    0.02d
+# Longest finished job:            2069s      34.48m     0.57h    0.02d
+# Submission to last job:          8198s     136.63m     2.28h    0.09d
+
+    mkdir downloads
+    time for D in `ls -d wigFix/chr* | sed -e 's#wigFix/##'`
+do
+    echo "working: $D" 1>&2
+    find ./wigFix/${D} -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+        | gzip -c > downloads/${D}.phyloP77way.wigFix.gz
+done
+    #   real    15m2.353s
+
+    du -hsc downloads
+    #   2.1G    downloads
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/*.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/galGal6/chrom.sizes \
+	phyloP77way.bw) > bigWig.log 2>&1
+
+    egrep "real|VmPeak" bigWig.log
+    # pid=129258: VmPeak:   11713968 kB
+    # real    9m23.984s
+
+    bigWigInfo phyloP77way.bw  | sed -e 's/^/# /;'
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 3,133,928,233
+# primaryIndexSize: 35,343,692
+# zoomLevels: 10
+# chromCount: 209
+# basesCovered: 1,021,715,761
+# mean: 0.049308
+# min: -20.000000
+# max: 8.265000
+# std: 1.474732
+
+    #	encode those files into wiggle data
+    time (zcat downloads/*.wigFix.gz \
+	| wigEncode stdin phyloP77way.wig phyloP77way.wib)
+
+# Converted stdin, upper limit 8.27, lower limit -20.00
+# real    4m35.907s
+
+# Converted stdin, upper limit 1.31, lower limit -20.00
+# real    17m36.880s
+# -rw-rw-r--   1 1021715761 Dec 10 09:17 phyloP77way.wib
+# -rw-rw-r--   1  112855301 Dec 10 09:17 phyloP77way.wig
+
+    du -hsc *.wi?
+
+    # 975M    phyloP77way.wib
+    # 108M    phyloP77way.wig
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP77way.wib /gbdb/galGal6/multiz77way/phyloP77way.wib
+    time hgLoadWiggle -pathPrefix=/gbdb/galGal6/multiz77way galGal6 \
+	phyloP77way phyloP77way.wig
+    # real    0m6.892s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh galGal6 phyloP77way
+# db.table          min   max     mean       count     sumData
+# galGal6.phyloP77way -20 8.265 0.0493081 1021715761 5.03789e+07
+
+#       stdDev viewLimits
+#      1.47473 viewLimits=-7.32435:7.42297
+
+    #	that range is: 20+8.265= 28.265 for hBinSize=0.028265
+
+    #  Create histogram to get an overview of all the data
+    time hgWiggle -doHistogram \
+	-hBinSize=0.028265 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
+	    -db=galGal6 phyloP77way > histogram.data 2>&1
+    #   real    0m43.634s
+
+    # xaxis range:
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=2 stdin \
+	| sed -e 's/^/# /;'
+# Q1 -9.994190
+# median -3.917220
+# Q3 2.159760
+# average -3.923422
+# min -20.000000
+# max 8.236730
+# count 861
+# total -3378.066208
+# standard deviation 7.041258
+
+    # find out the range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
+      | sed -e 's/^/# /;'
+# Q1 0.000005
+# median 0.000081
+# Q3 0.000507
+# average 0.001161
+# min 0.000000
+# max 0.019245
+# count 861
+# total 0.999978
+# standard deviation 0.002967
+
+   # the y2axis range
+   grep -v chrom histogram.data | grep "^[0-9]" | ave -col=7 stdin \
+      | sed -e 's/^/# /;'
+# Q1 0.000224
+# median 0.018227
+# Q3 0.949630
+# average 0.341045
+# min 0.000001
+# max 1.000000
+# count 862
+# total 293.980895
+# standard deviation 0.441921
+
+    #	create plot of histogram:
+    # updated for new gnuplot on hgwdev 2018-11-26 (can't get font to change)
+    printf 'set terminal pngcairo size 1000,600 background "#000000" font "/usr/share/fonts/default/Type1/n022004l.pfb"
+set output "ce11.phyloP77way.histo.png"
+set size 1.0, 1.0
+set style line 1 lt 2 lc rgb "#ff88ff" lw 2
+set style line 2 lt 2 lc rgb "#66ff66" lw 2
+set style line 3 lt 2 lc rgb "#ffff00" lw 2
+set style line 4 lt 2 lc rgb "#ffffff" lw 2
+set border lc rgb "#ffff00"
+set key left box ls 3
+set key tc variable
+set grid noxtics
+set y2tics
+set grid ytics ls 4
+set title " Chicken/galGal6 Histogram phyloP77way track" \
+    tc rgb "#ffffff"
+set xlabel " phyloP77way score" tc rgb "#ffffff"
+set ylabel " Relative Frequency" tc rgb "#ff88ff"
+set y2label " Cumulative Relative Frequency (CRF)" tc rgb "#66ff66"
+set xrange [-5:5]
+set y2range [0:1]
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
+' | gnuplot
+
+    # verify it looks sane
+    display ce11.phyloP77way.histo.png &
+
+#############################################################################
+# construct download files for 77-way (DONE - 2018-12-19 - Hiram)
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/galGal6/multiz77way
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/galGal6/phastCons77way
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/galGal6/phyloP77way
+    mkdir /hive/data/genomes/galGal6/bed/multiz77way/downloads
+    cd /hive/data/genomes/galGal6/bed/multiz77way/downloads
+    mkdir multiz77way phastCons77way phyloP77way
+
+    #########################################################################
+    ## create upstream ncbiRefSeq maf files
+    cd /hive/data/genomes/galGal6/bed/multiz77way/downloads/multiz77way
+    # bash script
+
+#!/bin/sh
+export geneTbl="ncbiRefSeq"
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits galGal6 ${geneTbl}:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags galGal6 multiz77way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/galGal6/bed/multiz77way/species.list \
+        | gzip -c > upstream${S}.${geneTbl}.maf.gz
+    echo "done upstream${S}.${geneTbl}.maf.gz"
+done
+    # real    171m42.872s
+
+-rw-rw-r-- 1   52659159 Nov  6 11:46 upstream1000.knownGene.maf.gz
+-rw-rw-r-- 1  451126665 Nov  6 12:15 upstream2000.knownGene.maf.gz
+-rw-rw-r-- 1 1080533794 Nov  6 12:55 upstream5000.knownGene.maf.gz
+
+    ######################################################################
+    ## compress the maf files
+    cd /hive/data/genomes/galGal6/bed/multiz77way/downloads/multiz77way
+    mkdir maf
+    rsync -a -P ../../anno/result/ ./maf/
+    du -hsc maf/
+    # 334G    maf/
+
+    cd maf
+    time gzip *.maf &
+    # real    135m1.784s
+
+    du -hscL maf ../../anno/result/
+    #  35G     maf
+    # 334G    ../../anno/result/
+
+    cd maf
+    md5sum *.maf.gz *.nh > md5sum.txt
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/galGal6/multiz77way/maf
+    cd maf
+    ln -s `pwd`/* /usr/local/apache/htdocs-hgdownload/goldenPath/galGal6/multiz77way/maf
+    cd --
+    ln -s `pwd`/*.maf.gz `pwd`/*.nh `pwd`/*.txt \
+         /usr/local/apache/htdocs-hgdownload/goldenPath/galGal6/multiz77way/
+
+    ###########################################################################
+
+    cd /hive/data/genomes/galGal6/bed/multiz77way/downloads/multiz77way
+    grep TREE ../../4d/all.mod | awk '{print $NF}' \
+      | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+         > galGal6.77way.nh
+    ~/kent/src/hg/utils/phyloTrees/commonNames.sh galGal6.77way.nh \
+      | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+         > galGal6.77way.commonNames.nh
+    ~/kent/src/hg/utils/phyloTrees/scientificNames.sh galGal6.77way.nh \
+	| $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+	    > galGal6.77way.scientificName.nh
+    time md5sum *.nh *.maf.gz > md5sum.txt
+    #   real    0m3.147s
+
+    ln -s `pwd`/*.maf.gz `pwd`/*.nh \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/galGal6/multiz77way
+
+    du -hsc ./maf ../../anno/result
+    #  18G     ./maf
+    # 156G    ../../anno/result
+
+    # obtain the README.txt from galGal6/multiz20way and update for this
+    #   situation
+    ln -s `pwd`/*.txt \
+         /usr/local/apache/htdocs-hgdownload/goldenPath/galGal6/multiz77way/
+
+    #####################################################################
+    cd /hive/data/genomes/galGal6/bed/multiz77way/downloads/phastCons77way
+
+    mkdir galGal6.77way.phastCons
+    cd galGal6.77way.phastCons
+    ln -s ../../../cons/all/downloads/*.wigFix.gz .
+    md5sum *.gz > md5sum.txt
+
+    cd /hive/data/genomes/galGal6/bed/multiz77way/downloads/phastCons77way
+    ln -s ../../cons/all/phastCons77way.bw ./galGal6.phastCons77way.bw
+    ln -s ../../cons/all/all.mod ./galGal6.phastCons77way.mod
+    time md5sum *.mod *.bw > md5sum.txt
+    #   real    0m20.354s
+
+    # obtain the README.txt from galGal6/phastCons20way and update for this
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/galGal6/phastCons77way/galGal6.77way.phastCons
+    cd galGal6.77way.phastCons
+    ln -s `pwd`/* /usr/local/apache/htdocs-hgdownload/goldenPath/galGal6/phastCons77way/galGal6.77way.phastCons
+
+    cd ..
+    #   situation
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/galGal6/phastCons77way
+
+    #####################################################################
+    cd /hive/data/genomes/galGal6/bed/multiz77way/downloads/phyloP77way
+
+    mkdir galGal6.77way.phyloP
+    cd galGal6.77way.phyloP
+
+    ln -s ../../../consPhyloP/all/downloads/*.wigFix.gz .
+    md5sum *.wigFix.gz > md5sum.txt
+
+    cd ..
+
+    ln -s ../../consPhyloP/run.phyloP/all.mod galGal6.phyloP77way.mod
+    ln -s ../../consPhyloP/all/phyloP77way.bw galGal6.phyloP77way.bw
+
+    md5sum *.mod *.bw > md5sum.txt
+
+    # obtain the README.txt from galGal6/phyloP20way and update for this
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/galGal6/phyloP77way/galGal6.77way.phyloP
+    cd galGal6.77way.phyloP
+    ln -s `pwd`/* \
+/usr/local/apache/htdocs-hgdownload/goldenPath/galGal6/phyloP77way/galGal6.77way.phyloP
+
+    cd ..
+
+    #   situation
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/galGal6/phyloP77way
+
+#############################################################################
+# hgPal downloads (DONE - 2018-12-14 - Hiram)
+#   FASTA from 77-way for knownGene, refGene and knownCanonical
+
+    ssh hgwdev
+    screen -S galGal6HgPal
+    mkdir /hive/data/genomes/galGal6/bed/multiz77way/pal
+    cd /hive/data/genomes/galGal6/bed/multiz77way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.list
+
+    # this for loop can take hours on a high contig count assembly
+    # it is just fine on human/galGal6, just a few seconds
+    export mz=multiz77way
+    export gp=ncbiRefSeq
+    export db=galGal6
+    export I=0
+    export D=0
+    mkdir exonAA exonNuc
+    for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
+    do
+        I=`echo $I | awk '{print $1+1}'`
+        D=`echo $D | awk '{print $1+1}'`
+        dNum=`echo $D | awk '{printf "%03d", int($1/1000)}'`
+        mkdir -p exonNuc/${dNum} > /dev/null
+        mkdir -p exonAA/${dNum} > /dev/null
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/${dNum}/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/${dNum}/$C.exonAA.fa.gz &"
+        if [ $I -gt 16 ]; then
+            echo "date"
+            echo "wait"
+            I=0
+        fi
+    done > $gp.jobs
+    echo "date" >> $gp.jobs
+    echo "wait" >> $gp.jobs
+
+    time (sh -x ./$gp.jobs) > $gp.jobs.log 2>&1
+    # real    122m41.761s
+
+    export mz=multiz77way
+    export gp=ncbiRefSeq
+    time find ./exonAA -type f | grep exonAA.fa.gz | xargs zcat \
+     | gzip -c > $gp.$mz.exonAA.fa.gz
+    # real    2m25.192s
+
+    time find ./exonNuc -type f | grep exonNuc.fa.gz | xargs zcat \
+     | gzip -c > $gp.$mz.exonNuc.fa.gz
+    #   real    9m58.686s
+
+    # -rw-rw-r-- 1 1125919919 Dec 14 17:33 ncbiRefSeq.multiz77way.exonAA.fa.gz
+    # -rw-rw-r-- 1 1840895133 Dec 14 17:45 ncbiRefSeq.multiz77way.exonNuc.fa.gz
+
+    export mz=multiz77way
+    export gp=ncbiRefSeq
+    export db=galGal6
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    md5sum *.fa.gz > md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+    rm -rf exonAA exonNuc
+
+#############################################################################
+# wiki page for 77-way (TBD - 2017-11-06 - Hiram)
+    mkdir /hive/users/hiram/bigWays/galGal6.77way
+    cd /hive/users/hiram/bigWays
+    echo "galGal6" > galGal6.77way/ordered.list
+    awk '{print $1}' /hive/data/genomes/galGal6/bed/multiz77way/77way.distances.txt \
+       >> galGal6.77way/ordered.list
+
+    # sizeStats.sh catches up the cached measurements required for data
+    # in the tables.  They are usually already mostly done, only new
+    # assemblies will have updates.
+    ./sizeStats.sh galGal6.77way/ordered.list
+    # dbDb.sh constructs galGal6.77way/XenTro9_77-way_conservation_alignment.html
+    # may need to add new assembly references to srcReference.list and
+    # urlReference.list
+    ./dbDb.sh galGal6 77way
+    # sizeStats.pl constructs galGal6.77way/XenTro9_77-way_Genome_size_statistics.html
+    # this requires entries in coverage.list for new sequences
+    ./sizeStats.pl galGal6 77way
+
+    # defCheck.pl constructs XenTro9_77-way_conservation_lastz_parameters.html
+    ./defCheck.pl galGal6 77way
+
+    # this constructs the html pages in galGal6.77way/:
+# -rw-rw-r-- 1 6247 May  2 17:07 XenTro9_77-way_conservation_alignment.html
+# -rw-rw-r-- 1 8477 May  2 17:09 XenTro9_77-way_Genome_size_statistics.html
+# -rw-rw-r-- 1 5033 May  2 17:10 XenTro9_77-way_conservation_lastz_parameters.html
+
+    # add those pages to the genomewiki.  Their page names are the
+    # names of the .html files without the .html:
+#  XenTro9_77-way_conservation_alignment
+#  XenTro9_77-way_Genome_size_statistics
+#  XenTro9_77-way_conservation_lastz_parameters
+
+    # when you view the first one you enter, it will have links to the
+    # missing two.
+
+############################################################################
+# pushQ readmine (TBD - 2017-11-07 - Hiram)
+
+  cd /usr/local/apache/htdocs-hgdownload/goldenPath/galGal6
+  find -L `pwd`/multiz77way `pwd`/phastCons77way `pwd`/phyloP77way \
+	/gbdb/galGal6/multiz77way -type f \
+    > /hive/data/genomes/galGal6/bed/multiz77way/downloads/redmine.20216.fileList
+  wc -l /hive/data/genomes/galGal6/bed/multiz77way/downloads/redmine.20216.fileList
+# 1450 /hive/data/genomes/galGal6/bed/multiz77way/downloads/redmine.20216.fileList
+
+  cd /hive/data/genomes/galGal6/bed/multiz77way/downloads
+  hgsql -e 'show tables;' galGal6 | grep 77way \
+	| sed -e 's/^/galGal6./;' > redmine.20216.table.list
+
+#############################################################################
+# wiki page for 77-way (TBD - 2017-05-02 - Hiram)
+    mkdir /hive/users/hiram/bigWays/galGal6.77way
+    cd /hive/users/hiram/bigWays
+    echo "galGal6" > galGal6.77way/ordered.list
+    sort -k2,2nr /hive/data/genomes/galGal6/bed/multiz77way/chainBits.txt \
+	| grep -v "^#" | awk '{print $1}' >> galGal6.77way/ordered.list
+
+#    awk '{print $1}' /hive/data/genomes/galGal6/bed/multiz77way/77way.distances.txt \
+#       >> galGal6.77way/ordered.list
+
+    # sizeStats.sh catches up the cached measurements required for data
+    # in the tables.  They are usually already mostly done, only new
+    # assemblies will have updates.
+    ./sizeStats.sh galGal6.77way/ordered.list
+    # dbDb.sh constructs galGal6.77way/XenTro9_77-way_conservation_alignment.html
+    # may need to add new assembly references to srcReference.list and
+    # urlReference.list
+    ./dbDb.sh galGal6 77way
+    # sizeStats.pl constructs galGal6.77way/XenTro9_77-way_Genome_size_statistics.html
+    # this requires entries in coverage.list for new sequences
+    ./sizeStats.pl galGal6 77way
+
+    # defCheck.pl constructs XenTro9_77-way_conservation_lastz_parameters.html
+    ./defCheck.pl galGal6 77way
+
+    # this constructs the html pages in galGal6.77way/:
+# -rw-rw-r-- 1 6247 May  2 17:07 XenTro9_77-way_conservation_alignment.html
+# -rw-rw-r-- 1 8477 May  2 17:09 XenTro9_77-way_Genome_size_statistics.html
+# -rw-rw-r-- 1 5033 May  2 17:10 XenTro9_77-way_conservation_lastz_parameters.html
+
+    # add those pages to the genomewiki.  Their page names are the
+    # names of the .html files without the .html:
+#  XenTro9_77-way_conservation_alignment
+#  XenTro9_77-way_Genome_size_statistics
+#  XenTro9_77-way_conservation_lastz_parameters
+
+    # when you view the first one you enter, it will have links to the
+    # missing two.
+
+############################################################################

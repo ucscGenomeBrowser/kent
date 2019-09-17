@@ -26,7 +26,7 @@ void paraHubStop(char *now)
 {
 struct rudp *ru = rudpOpen();
 struct paraMessage pm;
-pmInitFromName(&pm, "localhost", paraHubPort);
+pmInitFromName(&pm, "localhost", paraHubPortStr);
 pmSendString(&pm, ru, "quit");
 }
 

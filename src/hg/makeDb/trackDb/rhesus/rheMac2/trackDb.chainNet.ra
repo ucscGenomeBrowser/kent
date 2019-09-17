@@ -1,0 +1,17 @@
+track chainNetHg38 override
+shortLabel $o_db Chain/Net
+
+    track chainHg38 override
+    shortLabel $o_db Chain
+
+    track netHg38 override
+    shortLabel $o_db Net
+
+track chainNetHg19 override
+shortLabel $o_db Chain/Net
+
+    track chainHg19 override
+    shortLabel $o_db Chain
+
+    track netHg19 override
+    shortLabel $o_db Net

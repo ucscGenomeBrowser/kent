@@ -265,6 +265,12 @@ void cgiEncodeHash(struct hash *hash, struct dyString *dy);
 /* Put a cgi-encoding of a string valued hash into dy.  Tags are always
  * alphabetical to make it easier to compare if two hashes are same. */
 
+void cgiMakeSubmitButtonMaybePressed(char *name, char *value, char *msg, 
+                char *onClick, boolean pressed);
+/* Make 'submit' type button, with optional messsage and onclick javascript, boolean pressed.
+   Set styling to indicate whether button has been pressed (for buttons that change browser mode).
+ */
+
 void cgiMakeButtonWithMsg(char *name, char *value, char *msg);
 /* Make 'submit' type button. Display msg on mouseover, if present*/
 
@@ -545,6 +551,9 @@ void cgiMakeResetButton();
 
 void cgiMakeClearButton(char *form, char *field);
 /* Make button to clear a text field. */
+
+void cgiMakeClearButtonNoSubmit(char *form, char *field);
+/* Make button to clear a text field, without resubmitting the form. */
 
 void cgiMakeFileEntry(char *name);
 /* Make file entry box/browser */

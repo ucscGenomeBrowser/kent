@@ -1,0 +1,3 @@
+project.contributors.[].name	study.authors.[].full_name
+assay.seq.paired_ends	assay.sequencing.mate_pairs
+sample.enrichment.[].markers	sample.cell_suspension.enrichment.[].markers

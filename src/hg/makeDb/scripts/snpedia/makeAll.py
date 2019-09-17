@@ -13,14 +13,35 @@ def reformatBed(bedFname, allInfo, outFname):
     for line in open(bedFname):
         row = line.rstrip("\n").split("\t")
         row = row[:4]
+        chrom, start, end, name = row
+
+        # must be bed9 to do mouse over
 
         name = row[3]
         if name not in allInfo:
             print "missing: %s" % name
             continue
-        gffInfo = allInfo[name]
+        arrayType, note = allInfo[name]
 
-        row.extend(gffInfo)
+        if arrayType=="snp":
+            color = "100,100,100" # grey
+        elif arrayType=="affy":
+            color = "150,0,255" # red-ish ?
+        elif arrayType=="illumina":
+            color = "0,0,170" # blue
+        elif arrayType=="both":
+            color = "0,0,0" # black
+        else:
+            assert(False)
+
+        row.extend(["0", ".", start, end, color])
+
+        row.append(arrayType)
+        
+        if note=="":
+            note = "(No SNPedia excerpt available)"
+        row.append(note)
+
         ofh.write("\t".join(row))
         ofh.write("\n")
 

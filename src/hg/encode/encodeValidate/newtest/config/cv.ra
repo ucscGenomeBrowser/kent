@@ -8791,12 +8791,12 @@ description Chromsome 21
 term ENM
 tag ENM
 type region
-description ENCODE pilot manually-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+description ENCODE pilot manually-selected regions (http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
 
 term ENR
 tag ENR
 type region
-description ENCODE pilot randomly-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+description ENCODE pilot randomly-selected regions (http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
 
 #removed per Redmine #222
 #term UW-5C-Myc-Region

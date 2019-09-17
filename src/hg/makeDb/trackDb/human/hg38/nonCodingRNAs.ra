@@ -27,11 +27,8 @@ longLabel RNA sequences that do not code for a protein
     urlLabel Laboratoire de Biologie Moleculaire Eucaryote:
     url http://www-snorna.biotoul.fr/plus.php?id=$$
     url2Label miRBase:
-    #url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
     url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
-    dataVersion miRBase Release 13.0 (March 2009) and snoRNABase Version 3
-    pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
-    origAssembly hg19
+    dataVersion miRBase Release 22 (March 2018) and snoRNABase Version 3 (lifted from hg19)
 
     track lincRNAsTranscripts
     superTrack nonCodingRNAs pack
@@ -261,4 +258,10 @@ searchType genePred
 semiShortCircuit 1
 termRegex TCONS_.*
 dontCheck H19
+searchPriority 50
+
+searchTable wgRnaNew
+searchMethod exact
+searchType bed
+semiShortCircuit 1
 searchPriority 50

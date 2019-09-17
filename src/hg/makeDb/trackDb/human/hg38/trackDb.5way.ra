@@ -1,0 +1,104 @@
+track cons5way
+shortLabel Cons 5 Verts
+compositeTrack on
+longLabel Multiz Alignment & Conservation (5 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility hide
+type bed 4
+priority 2
+group compGeno
+
+    track cons5wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons5way
+
+        track multiz5way
+        subTrack cons5wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 5 Vertebrates
+        subGroups view=align
+        noInherit on
+        irows on
+        summary multiz5waySummary
+        frames multiz5wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault hg38
+        speciesGroups Vertebrate
+        sGroup_Vertebrate galVar1 tupChi1 cavPor3 mm10
+        itemFirstCharCase noChange
+        treeImage phylo/hg38_5way.png
+        priority 100
+
+    # PhyloP conservation
+    track cons5wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons5way
+    viewLimits -3:0.5
+    viewLimitsMax -4.611:0.934
+
+        track phyloP5way
+        subTrack cons5wayViewphyloP off
+        subGroups view=phyloP
+        shortLabel Cons 5 Verts
+        longLabel 5 vertebrates Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -4.711 0.934
+        maxHeightPixels 100:50:11
+        viewLimits -3.107:0.934
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons5wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons5way
+
+        track phastCons5way
+        subTrack cons5wayViewphastcons off
+        subGroups view=phastcons
+        shortLabel Cons 5 Verts
+        longLabel 5 vertebrates conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons5wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons5way
+
+        track phastConsElements5way
+        subTrack cons5wayViewelements on
+        subGroups view=elements
+        shortLabel 5 Vert. El
+        longLabel 5 vertebrates Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23
+

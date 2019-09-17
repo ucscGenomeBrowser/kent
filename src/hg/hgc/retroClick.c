@@ -262,11 +262,12 @@ struct sqlResult *sr = NULL;
 char **row;
 struct psl *psl = NULL, *pslList = NULL;
 boolean hasBin;
-char splitTable[64];
+char splitTable[HDB_MAX_TABLE_STRING];
 char query[256];
 struct sqlConnection *conn = hAllocConn(database);
 
-hFindSplitTable(database, seqName, table, splitTable, &hasBin);
+if (!hFindSplitTable(database, seqName, table, splitTable, sizeof splitTable, &hasBin))
+    errAbort("track %s not found", table);
 sqlSafef(query, sizeof(query), "select * from %s where qName = '%s' and tName = '%s' and tEnd > %d and tStart < %d", splitTable, qName, tName, tStart, tEnd);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -767,7 +768,7 @@ return cds;
 static struct psl *loadAlign(struct sqlConnection *conn, struct mappingInfo *mi, int start)
 /* load a psl that must exist */
 {
-char rootTable[256], table[256], query[256];
+char rootTable[256], table[HDB_MAX_TABLE_STRING], query[256];
 boolean hasBin;
 struct sqlResult *sr;
 char **row;
@@ -777,7 +778,8 @@ if (mi->suffix == NULL)
     safef(rootTable, sizeof(rootTable), "%s%sAli", mi->tblPre, mi->geneSet);
 else
     safef(rootTable, sizeof(rootTable), "%s%sAli%s", mi->tblPre, mi->geneSet,mi->suffix);
-hFindSplitTable(database, seqName, rootTable, table, &hasBin);
+if (!hFindSplitTable(database, seqName, rootTable, table, sizeof table, &hasBin))
+    errAbort("track %s not found", rootTable);
 
 sqlSafef(query, sizeof(query), "select * from %s where qName = '%s' and tStart = %d",
       table, mi->pg->name, start);
@@ -808,10 +810,9 @@ int nwords = chopByWhite(specCopy, words, ArraySize(words));
 
 char acc[512];
 
-/* Print start of HTML. */
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", mi->seqId, track);
+char title[1024];
+safef(title, sizeof title, "%s vs Genomic [%s]", mi->seqId, track);
+htmlFramesetStart(title);
 
 /* Look up alignment and sequence in database.  Always get sequence
  * from defaultDb */

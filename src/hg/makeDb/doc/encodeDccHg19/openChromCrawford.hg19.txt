@@ -4152,7 +4152,7 @@ encodeDownloadsPage.pl -db=hg19 index.html
 2011-05-04 Anshul's Black list regions
 ======================================
 ### Should move to a separate doc but keeping here now for convenience 
-# location: ftp://encodeftp.cse.ucsc.edu/users/akundaje/rawdata/blacklists/hg19/
+# location: ftp://encodeftp.soe.ucsc.edu/users/akundaje/rawdata/blacklists/hg19/
 # contents: Anshul_Hg19UltraHighSignalArtifactRegions.bed.gz ### bed 5 needs to be altered.
 #           Duke_Hg19SignalRepeatArtifactRegions.bed.gz # Same as Duke Excluded regions already added
 #           wgEncodeHg19ConsensusSignalArtifactRegions.bed.gz ### bed 6 but last column is 0, not '.'

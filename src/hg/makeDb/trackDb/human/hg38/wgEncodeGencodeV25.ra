@@ -6,7 +6,7 @@
 ##
 track wgEncodeGencodeV25
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE V25
 longLabel All GENCODE transcripts including comprehensive set V25
 group genes
@@ -43,6 +43,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV25
     visibility pack
     subTrack wgEncodeGencodeV25
     type genePred
+    idXref wgEncodeGencodeAttrsV25 transcriptId geneId
     itemClassTbl wgEncodeGencodeAttrsV25
     itemClassNameColumn transcriptId
     itemClassClassColumn transcriptClass

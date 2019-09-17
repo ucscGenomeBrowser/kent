@@ -155,8 +155,8 @@ static const unsigned char dna_complement[256] =
 /* ................................................................ */
 /* ................................................................ */
 
-static const unsigned char fasta_decoding[4];
-static const unsigned char fasta_decoding[] = "ACGT";
+// static const unsigned char fasta_decoding[4];
+// static const unsigned char fasta_decoding[] = "ACGT";
 
 static void Fatalfr(const char *fmt, ...)
 {

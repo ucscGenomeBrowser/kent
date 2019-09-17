@@ -74,10 +74,10 @@ endif
 
 
 #### NEW WAY WITH hgTables
-#set url = "http://hgwdev.cse.ucsc.edu/cgi-bin/hgTables?db=hg16&hgta_outputType=selectedFields&hgta_regionType=genome&hgta_table=trackDb&origPhase=Get+results&outputType=Tab-separated%2C+Choose+fields...&phase=Get+these+fields&hgta_doPrintSelectedFields=get+output"
+#set url = "http://hgwdev.soe.ucsc.edu/cgi-bin/hgTables?db=hg16&hgta_outputType=selectedFields&hgta_regionType=genome&hgta_table=trackDb&origPhase=Get+results&outputType=Tab-separated%2C+Choose+fields...&phase=Get+these+fields&hgta_doPrintSelectedFields=get+output"
 
 set url1 = "http://"
-set url2 = ".cse.ucsc.edu/cgi-bin/hgTables?db="
+set url2 = ".soe.ucsc.edu/cgi-bin/hgTables?db="
 set url3 = "&hgta_outputType=selectedFields&hgta_regionType=genome&hgta_table="
 set url4 = "&outputType=Tab-separated%2C+Choose+fields...&origPhase=Get+results"
 set url5 = "&field_$field=on"

@@ -1,0 +1,17 @@
+###########
+# Add GTEx Trans Eqtl track (2018-05-14 kate)
+
+cd /hive/data/outside/GTEx/V6p/eQtl/trans
+# see make.txt in that directory (TODO: move instructions here)
+
+cp ~/kent/src/hg/lib/interact.as gtexTransEqtl.as
+# edit source->snp, target->gene
+
+set sizes = /hive/data/genomes/hg19/chrom.sizes
+set hub = /hive/data/outside/GTEx/analysis/hub
+bedToBigBed -tab -type=bed5+13 -as=gtexTransEqtl.as gtexTransEqtl.inter.bed $sizes $hub/gtexAwgTransEqtl.inter.bb
+
+# edit hub.txt, trackDb.txt to include new track
+
+
+

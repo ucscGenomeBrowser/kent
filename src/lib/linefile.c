@@ -418,13 +418,19 @@ while (size > 0)
 return totalRead;
 }
 
+void lineFileCarefulNewlines(struct lineFile *lf)
+/* Tell lf to use a less efficient method of scanning for the next newline that can handle
+ * files with a mix of newline conventions. */
+{
+lf->nlType = nlt_mixed;
+}
+
 static void determineNlType(struct lineFile *lf, char *buf, int bufSize)
 /* determine type of newline used for the file, assumes buffer not empty */
 {
 char *c = buf;
 if (bufSize==0) return;
 if (lf->nlType != nlt_undet) return;  /* if already determined just exit */
-lf->nlType = nlt_unix;  /* start with default of unix lf type */
 while (c < buf+bufSize)
     {
     if (*c=='\r')
@@ -437,18 +443,72 @@ while (c < buf+bufSize)
 	}
     if (*(c++) == '\n')
 	{
+        lf->nlType = nlt_unix;
 	return;
 	}
     }
 }
 
+static boolean findNextNewline(struct lineFile *lf, char *buf, int bytesInBuf, int *pEndIx)
+/* Return TRUE if able to find next end of line in buf, starting at buf[*pEndIx], up to bytesInBuf.
+ * When done set *pEndIx to the start of the next line if applicable, otherwise bytesInBuf. */
+{
+boolean gotLf = FALSE;
+int endIx = *pEndIx;
+switch (lf->nlType)
+    {
+    case nlt_unix:
+    case nlt_dos:
+        for (endIx = *pEndIx; endIx < bytesInBuf; ++endIx)
+            {
+            if (buf[endIx] == '\n')
+                {
+                gotLf = TRUE;
+                endIx += 1;
+                break;
+                }
+            }
+        break;
+    case nlt_mac:
+        for (endIx = *pEndIx; endIx < bytesInBuf; ++endIx)
+            {
+            if (buf[endIx] == '\r')
+                {
+                gotLf = TRUE;
+                endIx += 1;
+                break;
+                }
+            }
+        break;
+    case nlt_mixed:
+    case nlt_undet:
+        for (endIx = *pEndIx; endIx < bytesInBuf; ++endIx)
+            {
+            char c = buf[endIx];
+            if (c == '\r' || c == '\n')
+                {
+                gotLf = TRUE;
+                if (lf->zTerm)
+                    buf[endIx] = '\0';
+                endIx += 1;
+                if (c == '\r' && buf[endIx] == '\n')
+                    {
+                    if (lf->zTerm)
+                        buf[endIx] = '\0';
+                    endIx += 1;
+                    }
+                break;
+                }
+            }
+        break;
+    }
+*pEndIx = endIx;
+return gotLf;
+}
+
 boolean lineFileNext(struct lineFile *lf, char **retStart, int *retSize)
 /* Fetch next line from file. */
 {
-char *buf = lf->buf;
-int bytesInBuf = lf->bytesInBuf;
-int endIx = lf->lineEnd;
-boolean gotLf = FALSE;
 int newStart;
 
 if (lf->reuse)
@@ -456,7 +516,7 @@ if (lf->reuse)
     lf->reuse = FALSE;
     if (retSize != NULL)
 	*retSize = lf->lineEnd - lf->lineStart;
-    *retStart = buf + lf->lineStart;
+    *retStart = lf->buf + lf->lineStart;
     if (lf->metaOutput && *retStart[0] == '#')
         metaDataAdd(lf, *retStart);
     return TRUE;
@@ -506,37 +566,11 @@ if (lf->tabix != NULL && lf->tabixIter != NULL)
     return TRUE;
     }
 
-determineNlType(lf, buf+endIx, bytesInBuf);
-
-/* Find next end of line in buffer. */
-switch(lf->nlType)
-    {
-    case nlt_unix:
-    case nlt_dos:
-	for (endIx = lf->lineEnd; endIx < bytesInBuf; ++endIx)
-	    {
-	    if (buf[endIx] == '\n')
-		{
-		gotLf = TRUE;
-		endIx += 1;
-		break;
-		}
-	    }
-	break;
-    case nlt_mac:
-	for (endIx = lf->lineEnd; endIx < bytesInBuf; ++endIx)
-	    {
-	    if (buf[endIx] == '\r')
-		{
-		gotLf = TRUE;
-		endIx += 1;
-		break;
-		}
-	    }
-	break;
-    case nlt_undet:
-	break;
-    }
+char *buf = lf->buf;
+int endIx = lf->lineEnd;
+int bytesInBuf = lf->bytesInBuf;
+determineNlType(lf, buf+endIx, bytesInBuf-endIx);
+boolean gotLf = findNextNewline(lf, buf, bytesInBuf, &endIx);
 
 /* If not in buffer read in a new buffer's worth. */
 while (!gotLf)
@@ -581,40 +615,15 @@ while (!gotLf)
 	lf->bytesInBuf = lf->lineStart = lf->lineEnd = 0;
 	return FALSE;
 	}
+    else
+        endIx = sizeLeft;
+
     bytesInBuf = lf->bytesInBuf = readSize + sizeLeft;
     lf->lineEnd = 0;
 
-    determineNlType(lf, buf+endIx, bytesInBuf);
+    determineNlType(lf, buf+endIx, bytesInBuf-endIx);
+    gotLf = findNextNewline(lf, buf, bytesInBuf, &endIx);
 
-    /* Look for next end of line.  */
-    switch(lf->nlType)
-	{
-    	case nlt_unix:
-	case nlt_dos:
-	    for (endIx = sizeLeft; endIx <bytesInBuf; ++endIx)
-		{
-		if (buf[endIx] == '\n')
-		    {
-		    endIx += 1;
-		    gotLf = TRUE;
-		    break;
-		    }
-		}
-	    break;
-	case nlt_mac:
-	    for (endIx = sizeLeft; endIx <bytesInBuf; ++endIx)
-		{
-		if (buf[endIx] == '\r')
-		    {
-		    endIx += 1;
-		    gotLf = TRUE;
-		    break;
-		    }
-		}
-	    break;
-	case nlt_undet:
-	    break;
-	}
     if (!gotLf && bytesInBuf == lf->bufSize)
         {
 	if (bufSize >= 512*1024*1024)

@@ -96,6 +96,7 @@ organizations who have made this project possible through their generous funding
     <li><a href="#coelacanth_credits">Coelacanth</a></li> 
     <li><a href="#elephant_shark_credits">Elephant shark</a></li> 
     <li><a href="#fugu_credits">Fugu</a></li> 
+    <li><a href="#garter_snake_credits">Garter snake</a></li>
     <li><a href="#golden_eagle_credits">Golden eagle</a></li>
     <li><a href="#lamprey_credits">Lamprey</a></li> 
     <li><a href="#lizard_credits">Lizard</a></li> 
@@ -511,6 +512,9 @@ College of Medicine Human Genome Sequencing Center (BCM-HGSC)</a>, Houston, TX, 
 <p> 
 <strong>UCSC Baboon Genome Browser/Annotations:</strong></p> 
 <ul> 
+  <li>
+  <a href="../../cgi-bin/hgGateway?db=papAnu4" target="_blank">papAnu4</a>: Hiram Clawson and
+  Lou Nassar </li>
   <li> 
   <a href="../../cgi-bin/hgGateway?db=papAnu2" target="_blank">papAnu2</a>: Chin Li and Luvina 
   Guruvadoo </li> 
@@ -558,6 +562,9 @@ target="_blank">Max-Planck Institute for Evolutionary Anthropology</a>, Germany<
 <p> 
 <strong>UCSC Baboon Genome Browser/Annotations:</strong></p> 
 <ul> 
+  <li>
+  <a href="../../cgi-bin/hgGateway?db=panpan2" target="_blank">panPan2</a>: Hiram Clawson and Jairo
+  Navarro</li>
   <li> 
   <a href="../../cgi-bin/hgGateway?db=panPan1" target="_blank">panPan1</a>: Chin Li, Hiram Clawson, 
   and Jonathan Casper </li> 
@@ -638,16 +645,35 @@ The data are provided with the following understanding:</p>
 <!-- Cat Credits -->
 <a name="cat_credits"></a>
 <h2>Cat genome</h2> 
+The UCSC felCat9 Genome Browser displays data produced by the  Genome Sequencing Center (GSC) at 
+Washington University (WashU) School of Medicine:
+<ul>
+ <li>
+  <a href="../../cgi-bin/hgGateway?db=felCat9" target="_blank">felCat9</a> browser:
+  Nov. 2017 Felis_catus_9.0 assembly of the domestic cat</li>
+</ul>
+<p><strong>Sequencing/Assembly:</strong>
+<ul>
+  <li>
+  <a href="https://gtac.wustl.edu/" target="_blank">Genome Sequencing Center (GSC) at Washington
+  University (WashU) School of Medicine</a>, St. Louis, MO, USA </li>
+</ul>
+<p>
+
+<strong>UCSC Cat Genome Browser/Annotations <a href="../../cgi-bin/hgGateway?db=felCat9" 
+target="_blank">(felCat9)</a>:</strong> Hiram Clawson and Conner Powell
+
+<hr>
 <p> 
-The UCSC felCat8 and felCat5 Genome Browsers display data produced by the International Cat Genome 
+The UCSC  felCat8 and felCat5 Genome Browsers display data produced by the International Cat Genome 
 Sequencing Consortium: 
 <ul>
   <li>
   <a href="../../cgi-bin/hgGateway?db=felCat8" target="_blank">felCat8</a> browser:  
-  Nov. 2014 Felis_catus_8.0 assembly of the domestic cat
+  Nov. 2014 Felis_catus_8.0 assembly of the domestic cat</li>
   <li>
   <a href="../../cgi-bin/hgGateway?db=felCat5" target="_blank">felCat5</a> browser: 
-   Sep. 2011 Felis_catus-6.2 assembly of the domestic cat
+   Sep. 2011 Felis_catus-6.2 assembly of the domestic cat</li>
 </ul>
 <p> 
 <strong>Funding:</strong> <a href="http://www.genome.gov/" target="_blank">National Human Genome 
@@ -763,8 +789,15 @@ The cat sequence is made freely available with the following understanding:
 <a name="chimp_credits"></a>
 <h2>Chimpanzee genome</h2> 
 <p> 
-The UCSC Chimpanzee Genome Browsers display draft assembly data produced by the Chimpanzee Genome 
-Sequencing Consortium:</p>
+The UCSC Chimpanzee Genome Browsers display whole-genome assembly data produced by the University of
+Washington:</p>
+<ul>
+  <li>
+  Jan. 2018 <a href="../../cgi-bin/hgGateway?db=panTro6" target="_blank">panTro6</a> browser:
+  Clint_PTRv2 124x PacBio; Illumina NextSeq 500; BioNano Saphyr (two enzyme)</li>
+</ul>
+<p>
+and draft assembly data produced by the Chimpanzee Genome Sequencing Consortium:</p>
 <ul> 
   <li>
   May 2016 <a href="../../cgi-bin/hgGateway?db=panTro5" target="_blank">panTro5</a> browser: v3.0 
@@ -785,6 +818,24 @@ Sequencing Consortium:</p>
 <p>
 <strong>Funding:</strong> <a href="http://www.genome.gov/" target="_blank">National Human Genome 
 Research Institute</a> (NHGRI) </p>
+<p>
+<strong>Sequencing/Assembly (panTro6):</strong> </p>
+<p>
+The whole-genome assembly of a male chimpanzee, Clint (Yerkes pedigree number C0471) was done in
+stages, resulting in three progressive versions:
+<ul>
+  <li>
+  The backbone of the assembly is made up of contigs obtained by assembling the PacBio (P6-C4
+  chemistry) reads using the Falcon assembler. These contigs are error-corrected using the tool
+  Quiver and then further error-corrected using Pilon with 37-fold Illumina paired-end reads.</li>
+  <li>
+  BioNano optical maps are used to place the contigs into scaffolds, followed by chromosome-level
+  scaffolding using bicolor FISH.</li>
+  <li>
+  The assembly is further error-corrected, particularly in regions
+  that have clustered 1-2 bp indels. This is done by applying an Eichler-lab-created Freebayes-based
+  indel correction method.</li>
+</ul>
 <p>
 <strong>Sequencing/Assembly (panTro5):</strong> </p>
 <ul> 
@@ -862,6 +913,9 @@ Institute</p>
 <strong>UCSC Chimp Genome Browser:</strong> </p>
 <ul> 
   <li> 
+  <a href="../../cgi-bin/hgGateway?db=panTro6" target="_blank">panTro6</a>: Hiram Clawson and 
+  Jairo Navarro</li> 
+  <li>
   <a href="../../cgi-bin/hgGateway?db=panTro5" target="_blank">panTro5</a>: Hiram Clawson and 
   Chris Villarreal </li> 
   <li> 
@@ -896,11 +950,14 @@ target="_blank">Initial sequence of the chimpanzee genome and comparison with th
 <a name="chinese_hamster_credits"></a>
 <h2>Chinese hamster genome</h2> 
 <p>
-<strong>Sequencing/Assembly:</strong> <a href="http://www.genomics.cn/en/index" 
-target="_blank">Beijing Genomics Institution-Shenzhen</a> </p> 
+<strong>Sequencing/Assembly:</strong> <a href="https://www.eaglegenomics.com/eagle-case-studies/horizon-case-study/" 
+target="_blank">Eagle Genomics Ltd</a> </p> 
 <p> 
 <strong>UCSC Chinese Hamster Genome Browser/Annotations:</strong> </p> 
-<ul> 
+<ul>
+  <li>
+  <a href="../../cgi-bin/hgGateway?db=criGriChoV2" target="_blank">criGriChoV2</a>: Hiram Clawson
+   and Daniel Schmelter </li> 
   <li> 
   <a href="../../cgi-bin/hgGateway?db=criGri1" target="_blank">criGri1</a>: Hiram Clawson, Brian 
   Raney, and Steve Heitner </li> 
@@ -950,13 +1007,17 @@ Washington University School of Medicine.</p>
 <a name="cow_credits"></a>
 <h2>Cow genome</h2> 
 <p> 
-The UCSC Cow Genome Browser displays two different assemblies of the bovine genome: one provided by 
-the University of Maryland Center for Bioinformatics and Computational Biology (UMD CBCB) and one 
-from the Baylor College of Medicine Human Genome Sequencing Center (BCM-HGSC). The assemblies 
+The UCSC Cow Genome Browser displays three different assemblies of the bovine genome: one provided by 
+the University of Maryland Center for Bioinformatics and Computational Biology (UMD CBCB), one 
+from the Baylor College of Medicine Human Genome Sequencing Center (BCM-HGSC), and a third one
+from the USDA Agricultural Research Service (USDA ARS). The assemblies 
 available in the browser include: </p> 
-<ul> 
+<ul>
   <li>
-  Jun. 2014 (<a href="../../cgi-bin/hgGateway?db=bosTau6" target="_blank">bosTau8</a>) assembly - 
+  Apr. 2018 (<a href="../../cgi-bin/hgGateway?db=bosTau9" target="_blank">bosTau9</a>) assembly -
+  ARS-UCD1.2 </li> 
+  <li>
+  Jun. 2014 (<a href="../../cgi-bin/hgGateway?db=bosTau8" target="_blank">bosTau8</a>) assembly - 
   UMD CBCB version UMD_3.1.1  </li>
   <li>
   Oct. 2011 (<a href="../../cgi-bin/hgGateway?db=bosTau7" target="_blank">bosTau7</a>) assembly - 
@@ -985,6 +1046,9 @@ College Park, MD, USA </p>
 <p>
 <strong>UCSC Cow Genome Browser/Annotations:</strong> </p>
 <ul> 
+  <li>
+  <a href="../../cgi-bin/hgGateway?db=bosTau9" target="_blank">bosTau9</a>: Hiram Clawson and
+  Lou Nassar </li>
   <li> 
   <a href="../../cgi-bin/hgGateway?db=bosTau8" target="_blank">bosTau8</a>: Steve Heitner and 
   Luvina Guruvadoo </li> 
@@ -1255,6 +1319,41 @@ Peng X, Alf&ouml;ldi J, Gori K, Eisfeld AJ, Tyler SR, Tisoncik-Go J, Brawand D, 
 Hatta M <em>et al</em>.  <a href="http://www.nature.com/nbt/journal/v32/n12/full/nbt.3079.html" 
 target="_blank">The draft genome sequence of the ferret (Mustela putorius furo) facilitates study of
 human respiratory disease</a>.  <em>Nat Biotechnol</em>. 2014 Dec;32(12):1250-5. </p>
+
+<!-- Garter snake Credits -->
+<a name="garter_snake_credits"></a>
+<h2>Garter snake genome</h2>
+<p>
+<strong>Sequencing/Assembly:</strong>
+<a href="http://genome.wustl.edu/" target="_blank">The Genome Institute at Washington 
+University School of Medicine</a> </p>
+<p>
+<strong>UCSC Garter Snake Genome Browser/Annotations:</strong>
+<ul>
+  <li>
+  <a href="../../cgi-bin/hgGateway?db=aquChr2" target="_blank">thaSir1</a>: Jonathan Casper, Conner Powell </li>
+</ul>
+<a name="garter_snake_use"></a>
+<h3>Data use</h3>
+<p>
+The garter snake sequence is made freely available to the community by the Genome Sequencing Center,
+Washington University School of Medicine, with the following understanding:</p>
+<ul>
+  <li>
+  The data may be freely downloaded, used in analyses, and repackaged in databases. </li>
+  <li>
+  Users are free to use the data in scientific papers analyzing particular genes and regions if the
+  provider of these data is properly acknowledged. </li>
+  <li>
+  The center producing the data reserves the right to publish the initial large-scale analyses of
+  the data set, including large-scale identification of regions of evolutionary conservation and
+  large-scale genomic assembly. Large-scale refers to regions with size on the order of a
+  chromosome (that is, 30 Mb or more). </li>
+  <li>
+  Any redistribution of the data should carry this notice. </li>
+</ul>
+
+
 
 <!-- Gibbon Credits -->
 <a name="gibbon_credits"></a>
@@ -1583,6 +1682,28 @@ The hedgehog data are provided with the following understanding:
 <!-- Horse Credits -->
 <a name="horse_credits"></a>
 <h2>Horse genome</h2> 
+<p>The UCSC equCab3 Genome Browser displays data produced by the University of Louisville:
+<ul>
+ <li><a href="../cgi-bin/hgGateway?db=equCab3" target="_blank">equCab3</a> browser: Jan. 2018
+  University of Louisville EquCab3.0
+ </li>
+</ul>
+
+<p><strong>Sequencing/Assembly:</strong>
+  <a href="https://louisville.edu/medicine/news/researchers-fill-gaps-in-horse-reference-genome-to-guide-new-approaches-in-fighting-disease" 
+  target="_blank">University of Louisville</a>, Louisville, KY, USA 
+<p>
+
+<strong>UCSC Horse Genome Browser/Annotations:
+<ul>
+ <li> 
+  <a href="../../cgi-bin/hgGateway?db=equCab3" 
+  target="_blank">(equCab3)</a>:</strong> Hiram Clawson and Conner Powell</li>
+</ul>
+
+</p>
+
+<hr>
 <p> 
 <strong>Funding:</strong> The <a href="http://www.genome.gov/" target="_blank">National Human 
 Genome Research Institute</a> </p> 
@@ -1611,6 +1732,12 @@ Research</a>, Braunschweig, Germany </p>
 <p> 
 The horse sequence data may be freely downloaded, used in analyses, and repackaged in databases if 
 the provider is properly acknowledged. Please cite this publication when using these data:</p> 
+<p>
+Theodore S. Kalbfleisch, Edward S. Rice, Michael S. DePriest Jr., Brian P. Walenz, Matthew S.
+Hestand <em>et al</em>. <a href="https://www.nature.com/articles/s42003-018-0199-z" 
+target="_blank">Improved reference genome for the domestic horse increases assembly contiguity and
+composition</a>. <em>Nature, Commincations Biology</em>. 2018 Nov 16;197:2399-3642 </p> 
+
 <p> 
 Wade CM, Giulotto E, Sigurdsson S, Zoli M, Gnerre S, Imsland F, Lear TL, Adelson DL, Bailey E, 
 Bellone RR <em>et al</em>.  <a href="http://www.sciencemag.org/content/326/5954/865.abs" 
@@ -2152,19 +2279,29 @@ sequences</a>. <em>Nature</em>. 2007 May 10;447(7141):167-77.</p>
 <strong>Sequencing:</strong> </p>
 <ul> 
   <li>
-  <a href="http://genome.wustl.edu/genomes/detail/pongo-abelii/" target="_blank">The Genome 
-  Institute at Washington University (WUSTL)</a>, St. Louis, MO, USA </li> 
+  <a href="http://genome.wustl.edu/genomes/" target="_blank">The Genome 
+  Institute at Washington University</a> (WUSTL), St. Louis, MO, USA </li> 
   <li> 
   <a href="https://www.hgsc.bcm.edu/non-human-primates/orangutan-genome-project" 
   target="_blank">Baylor College of Medicine Human Genome Sequencing Center</a> (BCM-HGSC), 
-  Houston, TX, USA </li> 
+  Houston, TX, USA </li>
+  <li> 
+  <a href="https://eichlerlab.gs.washington.edu/" target="_blank">University of Washington</a>,
+Seattle, WA,
+  USA</li>
 </ul> 
 <p>
 <strong>Sequence Assembly and Chromosomal Sequence/AGP Construction:</strong> The Genome Institute
 at WUSTL </p>
 <p>
-<strong>DNA Source:</strong> Dr. Greely Stones, <a href="http://www.gpz.org/" 
-target="_blank">Gladys Porter Zoo</a>, Brownsville, TX, USA </p> 
+<strong>DNA Source:</strong> 
+<ul>
+ <li>Dr. Greely Stones, <a href="http://www.gpz.org/" 
+ target="_blank">Gladys Porter Zoo</a>, Brownsville, TX, USA</li>
+ <li> Susie_PABv2, <a href="https://eichlerlab.gs.washington.edu/" target="_blank">Eichler Lab</a>,
+ Seattle, WA, USA</li>
+</ul>
+</p> 
 <p>
 <strong>BAC Library:</strong> Yuko Yoshonaga in Pieter de Jong's laboratory, 
 <a href="http://bacpac.chori.org" target="_blank">Children's Hospital Oakland Research 
@@ -2186,10 +2323,13 @@ University of Washington, Seattle, WA, USA </p>
 of Health (NIH) </p>
 <p>
 <strong>UCSC Orangutan Genome Browser/Annotations:</strong> </p>
-<ul> 
-  <li> 
-  <a href="../../cgi-bin/hgGateway?db=ponAbe2" target="_blank">ponAbe2</a>: Hiram Clawson, Kayla 
-  Smith, Robert Kuhn, Ann Zweig and Donna Karolchik </li> 
+<ul>
+   <li>
+   <a href="../../cgi-bin/hgGateway?db=ponAbe3" target="_blank">ponAbe3</a>: Hiram Clawson, Conner
+   Powell</li> 
+   <li> 
+   <a href="../../cgi-bin/hgGateway?db=ponAbe2" target="_blank">ponAbe2</a>: Hiram Clawson, Kayla 
+   Smith, Robert Kuhn, Ann Zweig, and Donna Karolchik </li>
 </ul> 
 <a name="orangutan_use"></a> 
 <h3>Data use</h3> 
@@ -2202,7 +2342,18 @@ Locke DP, Hillier LW, Warren WC, Worley KC, Nazareth LV, Muzny DM, Yang SP, Wang
 Minx P <em>et al</em>. 
 <a href="http://www.nature.com/nature/journal/v469/n7331/full/nature09687.html" 
 target="_blank">Comparative and demographic analysis of orang-utan genomes</a>. <em>Nature</em>. 
-2011 Jan 27;469(7331):529-33. </p>
+2011 Jan 27;469(7331):529-33.
+</p>
+<p>
+
+Kronenberg ZN, Fiddes IT, Gordon D, Murali S, Dutcher SK, Gage FH, Warren WC, Shendure J, Haussler
+D, Schneider VA, Cao H, Ventura M, Wilson RK, Paten B, Pollen A, Eichler EE,<em> et al</em>.
+<a href="http://science.sciencemag.org/content/360/6393/eaar6343.long" target="_blank">
+High-resolution comparative analysis of great ape genomes.</a> <em>Science</em> 2018 Jun
+8;360(6393).
+
+
+ </p>
 
 <!-- Panda Credits -->
 <a name="panda_credits"></a>
@@ -2504,6 +2655,11 @@ of use</a> web page for restrictions on the use of these data.</p>
 The UCSC Genome Browser displays multiple assemblies of the Rhesus macaque genome produced by 
 different institutions: </p> 
 <ul> 
+  <li>
+  <strong><a href="../../cgi-bin/hgGateway?db=rheMac10" target="_blank">rheMac10</a> Genome 
+  Browser:</strong> Feb. 2019 draft assembly of the rhesus monkey, version Mmul_10, from the
+  <a href="https://www.genome.wustl.edu/" 
+  target="_blank">Genome Institute at Washington University School of Medicine</a>. </li>
   <li> 
   <strong><a href="../../cgi-bin/hgGateway?db=rheMac8" target="_blank">rheMac8</a> Genome 
   Browser:</strong> Nov. 2015 draft assembly of the rhesus monkey, version Mmul_8.0.1, from the 
@@ -2527,6 +2683,18 @@ different institutions: </p>
   <strong>rheMac1 Genome Browser:</strong> Jan. 2005 draft assembly of the rhesus monkey, version 
   Mmul_0.1 from MMGSC (see above) </li> 
 </ul> 
+<hr>
+<p>
+The Genome Institute at Washington University School of Medicine assembly is provided with the 
+following acknowledgments:</p>
+<p>
+Macaca mulatta Sequence and Assembly Credits: Sequencing Funds - This work was supported by the 
+NHGRI grant No. 5U24HG00908103, HIGH QUALITY HUMAN AND NON-HUMAN PRIMATE GENOME ASSEMBLIES, at 
+the McDonnell Genome Institute, Washington University School of Medicine DNA source - Coriell 
+sample id: AG07107, MMU Genome Sequencing - The McDonnell Genome Institute, Washington 
+University School of Medicine. Sequence Assembly - The McDonnell Genome Institute, Washington 
+University School of Medicine. Sequence assembly curation - The McDonnell Genome Institute, 
+Washington University School of Medicine; The University of Washington, Seattle, WA.</p>
 <hr>
 <p> 
 The BGI assembly is provided with the following acknowledgments: </p> 
@@ -2566,6 +2734,9 @@ Project</a> web page. </p>
 <p>
 <strong>UCSC Rhesus Genome Browser/Annotations:</strong> </p>
 <ul> 
+  <li>
+  <a href="../../cgi-bin/hgGateway?db=rheMac10" target="_blank">rheMac10</a>: Hiram Clawson
+  and Lou Nassar</li>
   <li> 
   <a href="../../cgi-bin/hgGateway?db=rheMac8" target="_blank">rheMac8</a>: Hiram Clawson, 
   Christopher Lee, and Cath Tyner </li>
@@ -2581,6 +2752,14 @@ Project</a> web page. </p>
 </ul> 
 <a name="rhesus_use"></a>
 <h3>Data use</h3> 
+<p>
+The Macaca mulatta Mmul_9.0 and Mmul_10 assembly sequences are made available to the community 
+by the McDonnell Genome Institute, Washington University, St Louis, MO with the following 
+understanding: Users are free to analyze these data if the providers of this data are properly 
+cited, any whole genome analyses should follow guidelines outlined in the Toronto agreement 
+on the use of this assembly.</p>
+
+<hr>
 <p>
 The initial sequencing and analysis of the rhesus macaque genome produced by the MMGSC was published
 in: Rhesus Macaque Genome Sequencing and Analysis Consortium. 
@@ -2678,6 +2857,9 @@ target="_blank">Justus-Liebig-University</a>, Germany</p>
 <p>
 <strong>UCSC Sheep Genome Browser/Annotations:</strong> </p> 
 <ul> 
+  <li>
+  <a href="../../cgi-bin/hgGateway?db=oviAri4" target="_blank">oviAri4</a>: Hiram Clawson, Chris 
+  Lee, Daniel Schmelter</li>
   <li> 
   <a href="../../cgi-bin/hgGateway?db=oviAri3" target="_blank">oviAri3</a>: Hiram Clawson, Brian 
   Raney, Matthew Speir, Brian Lee, Brooke Rhead, Steve Heitner, and Donna Karolchik</li> 
@@ -3212,13 +3394,18 @@ understanding: </p>
 <a name="chicken_credits"></a>
 <h2>Chicken genome</h2> 
 <p>
-<strong>Sequencing: </strong> <a href="http://genome.wustl.edu/genomes/detail/gallus-gallus/" 
-target="_blank">The Genome Institute at Washington University</a> (WUSTL), St. Louis, MO,
-USA</p>
+<strong>Sequencing: </strong><a href="https://www.ncbi.nlm.nih.gov/grc/chicken" target="_blank">The Genome Reference Consortium</a></p>
+<ul>
+  <li>
+  <a href="http://genome.wustl.edu/genomes/detail/gallus-gallus/" 
+  target="_blank">The Genome Institute at Washington University</a> (WUSTL), St. Louis, MO, USA
+  </li>
+</ul>
 <p>
 <strong>Physical Map:</strong> The Genome Institute at WUSTL </p> 
 <p>
-<strong>Genetic Mapping/Linkage Analysis: </strong>The Chicken Mapping Consortium: </p>
+<strong>Genetic Mapping/Linkage Analysis: </strong>The Chicken Mapping Consortium:
+</p>
 <ul> 
   <li> 
   Wageningen Map based on Wageningen broilerxbroiler mapping population ("W" linkage maps; 460 
@@ -3283,7 +3470,10 @@ WUSTL </p>
 (BGI)</a>, Beijing, China </p> 
 <p> 
 <strong>UCSC Chicken Genome Browser/Annotations:</strong> </p>
-<ul> 
+<ul>
+  <li>
+  <a href="../../cgi-bin/hgGateway?db=galGal6" target="_blank">galGal6</a>: Hiram Clawson,
+  Daniel Schmelter </li> 
   <li> 
   <a href="../../cgi-bin/hgGateway?db=galGal5" target="_blank">galGal5</a>: Hiram Clawson, Brian 
   Raney and Matthew Speir <li>
@@ -3432,6 +3622,9 @@ Research Institute</a> (NHGRI) </p>
 <strong>Sequencing/Assembly:</strong> </p>
 <ul> 
   <li>
+  <a href="https://ukhealthcare.uky.edu/genomics-core-laboratory" target="_blank">University of
+  Kentucky</a>, Lexington, KY, USA</li>
+  <li>
   <a href="http://genome.wustl.edu/genomes/detail/petromyzon-marinus/" target="_blank">The 
   Genome Institute at WUSTL</a>, St. Louis, MO, USA </li>
   <li>
@@ -3443,6 +3636,9 @@ Research Institute</a> (NHGRI) </p>
 <p> 
 <strong>UCSC Lamprey Genome Browser/Annotations:</strong> </p>
 <ul> 
+  <li> 
+  <a href="../../cgi-bin/hgGateway?db=petMar3" target="_blank">petMar3</a>: Hiram Clawson
+  and Jairo Navarro </li>
   <li> 
   <a href="../../cgi-bin/hgGateway?db=petMar2" target="_blank">petMar2</a>: Hiram Clawson, Brian 
   Raney, and Steve Heitner </li>
@@ -3771,6 +3967,9 @@ Institute</a> (JGI), Walnut Creek, CA, USA </p>
 <strong>UCSC <em>X. tropicalis</em> Genome Browser/Annotations:</strong> </p> 
 <ul> 
   <li> 
+  <a href="../../cgi-bin/hgGateway?db=xenTro9" target="_blank">xenTro9</a>: Hiram Clawson and
+  Christopher Lee</li>
+  <li>
   <a href="../../cgi-bin/hgGateway?db=xenTro7" target="_blank">xenTro7</a>: Hiram Clawson, Brian 
   Raney, and Matthew Speir </li>
   <li> 
@@ -4140,7 +4339,9 @@ target="_blank">Ensembl</a> </p>
 <ul> 
   <li>
   <a href="../../cgi-bin/hgGateway?db=anoGam1" target="_blank">anoGam1</a>: Angie Hinrichs, Galt 
-  Barber, Donna Karolchik </li> 
+  Barber, Donna Karolchik </li>
+  <li>
+  <a href="../../cgi-bin/hgGateway?db=anoGam3" target="_blank">anoGam3</a>: Hiram Clawson, Luis Nassar </li>
 </ul> 
 <p> 
 <strong>Additional Genome Browser Annotations</strong>: </p> 
@@ -5390,17 +5591,17 @@ Chancellor) were willing to take in advancing us the money in February 2000 need
 original 100-node LINUX cluster used in this work, and in the case of Dean Mantey, additional 
 personnel support. Phokion Kolaitis, Chair of Computer Science, contributed as well. </p>
 <p>
-We thank <a href="http://www.compaq.com/" target="_blank">Compaq</a> for providing an additional 
+We thank Compaq for providing an additional 
 100-CPU computational cluster in Cambridge, MA for use by the public human genome effort. We thank 
-<a href="http://www-01.ibm.com/software/info/ilog/" target="_blank">ILOG, Inc.</a> (now part of IBM)
+<a href="https://www.ibm.com/products/software" target="_blank">ILOG, Inc.</a> (now part of IBM)
 for providing discounted licenses to its CPLEX linear programming software, which was essential for 
 some of our early experiments.</p> 
 <p> 
 In December 2000, <a href="http://www.hhmi.org" target="_blank">HHMI</a> began providing support for
 equipment and personnel. In the summer of 2001, HHMI provided the primary funding for a new cluster 
-of 1000 CPUs running LINUX purchased from <a href="http://www.sgi.com/" target="_blank">Rackable</a>
-(now SGI), with additional support from <a href="http://www.ucop.edu/california-institutes/" 
-target="_blank">CISI</a> and <a href="http://www.genome.gov/" target="_blank">NHGRI</a>. Dubbed the 
+of 1000 CPUs running LINUX purchased from Rackable 
+(now SGI), with additional support from 
+CISI and <a href="http://www.genome.gov/" target="_blank">NHGRI</a>. Dubbed the 
 UCSC KiloKluster, this equipment became the computational backbone for the initial years of the 
 Genome Browser project. </p>
 

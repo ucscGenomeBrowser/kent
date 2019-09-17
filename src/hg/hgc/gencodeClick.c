@@ -11,6 +11,7 @@
 #include "ensFace.h"
 #include "htmshell.h"
 #include "jksql.h"
+#include "regexHelper.h"
 #include "encode/wgEncodeGencodeAttrs.h"
 #include "encode/wgEncodeGencodeGeneSource.h"
 #include "encode/wgEncodeGencodePdb.h"
@@ -38,19 +39,24 @@
  * but that didn't prove that helpful and end up requiring updated the ra
  * files for every GENCODE version if a URL was added or changed. */
 //FIXME: clean up RA files when CGIs no longer need them
-static char *gencodeBiotypesUrl = "http://www.gencodegenes.org/gencode_biotypes.html";
-static char *gencodeTagsUrl = "http://www.gencodegenes.org/gencode_tags.html";
 static char *ensemblTranscriptIdUrl = "http://www.ensembl.org/%s/Transcript/Summary?db=core;t=%s";
 static char *ensemblGeneIdUrl = "http://www.ensembl.org/%s/Gene/Summary?db=core;t=%s";
+static char *ensemblProteinIdUrl = "http://www.ensembl.org/%s/Transcript/ProteinSummary?db=core;t=%s";
 static char *ensemblSupportingEvidUrl = "http://www.ensembl.org/%s/Transcript/SupportingEvidence?db=core;t=%s";
-static char *vegaTranscriptIdUrl = "http://vega.sanger.ac.uk/%s/Transcript/Summary?db=core;t=%s";
-static char *vegaGeneIdUrl = "http://vega.sanger.ac.uk/%s/Gene/Summary?db=core;g=%s";
+
+static char *ensemblH37TranscriptIdUrl = "http://grch37.ensembl.org/%s/Transcript/Summary?db=core;t=%s";
+static char *ensemblH37GeneIdUrl = "http://grch37.ensembl.org/%s/Gene/Summary?db=core;t=%s";
+static char *ensemblH37ProteinIdUrl = "http://grch37.ensembl.org/%s/Transcript/ProteinSummary?db=core;t=%s";
+static char *ensemblH37SupportingEvidUrl = "http://grch37.ensembl.org/%s/Transcript/SupportingEvidence?db=core;t=%s";
+
+static char *gencodeBiotypesUrl = "http://www.gencodegenes.org/pages/biotypes.html";
+static char *gencodeTagsUrl = "http://www.gencodegenes.org/pages/tags.html";
+
 static char *yalePseudoUrl = "http://tables.pseudogene.org/%s";
-static char *hgncUrl = "http://www.genenames.org/data/hgnc_data.php?match=%s";
+static char *hgncUrl = " https://www.genenames.org/data/gene-symbol-report/#!/symbol/%s";
 static char *geneCardsUrl = "http://www.genecards.org/cgi-bin/carddisp.pl?gene=%s";
-static char *apprisHomeUrl = "http://appris.bioinfo.cnio.es/";
-static char *apprisGeneUrl = "http://appris.bioinfo.cnio.es/report.html?id=%s&namespace=Ensembl_Gene_Id&specie=%s";
-static char *apprisTranscriptUrl = "http://appris.bioinfo.cnio.es/report.html?id=%s&namespace=Ensembl_Transcript_Id&specie=%s";
+static char *apprisHomeUrl = "http://appris-tools.org/";
+static char *apprisGeneUrl = "http://appris-tools.org/#/database/id/%s/%s?sc=ensembl";
 
 static char *getBaseAcc(char *acc, char *accBuf, int accBufSize)
 /* get the accession with version number dropped. */
@@ -79,6 +85,23 @@ static char* getGencodeVersion(struct trackDb *tdb)
  * by this module. */
 {
 return trackDbSetting(tdb, "wgEncodeGencodeVersion");
+}
+
+static boolean isGrcH37Native(struct trackDb *tdb)
+/* Is this GENCODE GRCh37 native build, which requires a different Ensembl site. */
+{
+// check for non-lifted GENCODE on GRCh37/hg19
+if (sameString(database, "hg19"))
+    return stringIn("lift37", getGencodeVersion(tdb)) == NULL;
+else
+    return FALSE;
+}
+
+static boolean isFakeGeneSymbol(char* sym)
+/* is this a static gene symbol? */
+{
+static const char *regexp = "^AC[0-9]+\\.[0-9]+$";
+return regexMatch(sym, regexp);
 }
 
 static int transAnnoCmp(const void *va, const void *vb)
@@ -115,11 +138,20 @@ return transAnno;
 }
 
 static struct wgEncodeGencodeAttrs *transAttrsLoad(struct trackDb *tdb, struct sqlConnection *conn, char *gencodeId)
-/* load the gencode class information */
+/* load the gencode attributes */
 {
-return sqlQueryObjs(conn, (sqlLoadFunc)wgEncodeGencodeAttrsLoad, sqlQuerySingle|sqlQueryMust,
-                    "select * from %s where transcriptId = \"%s\"",
-                    getGencodeTable(tdb, "wgEncodeGencodeAttrs"), gencodeId);
+char query[1024];
+sqlSafef(query, sizeof(query), "select * from %s where transcriptId = \"%s\"",
+         getGencodeTable(tdb, "wgEncodeGencodeAttrs"), gencodeId);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = sqlNextRow(sr);
+if (row == NULL)
+    errAbort("gencode transcript %s not found in %s", gencodeId,
+             getGencodeTable(tdb, "wgEncodeGencodeAttrs"));
+// older version don't have proteinId column.
+struct wgEncodeGencodeAttrs *transAttrs = wgEncodeGencodeAttrsLoad(row, sqlCountColumns(sr));
+sqlFreeResult(&sr);
+return transAttrs;
 }
 
 static void getGeneBounds(struct trackDb *tdb, struct sqlConnection *conn, struct genePred *transAnno,
@@ -232,7 +264,7 @@ prExtIdAnchor(id, urlTemplate);
 #endif
 
 static void prEnsIdAnchor(char *id, char *urlTemplate)
-/* if an id to an ensembl or vega database is not empty, print an HTML anchor to it */
+/* if an id to an ensembl database is not empty, print an HTML anchor to it */
 {
 if (!isEmpty(id))
     {
@@ -249,7 +281,7 @@ if (!isEmpty(id))
 }
 
 static void prTdEnsIdAnchor(char *id, char *urlTemplate)
-/* print a table data element with an ensembl/vega anchor for a id */
+/* print a table data element with an ensembl anchor for a id */
 {
 printf("<td>");
 prEnsIdAnchor(id, urlTemplate);
@@ -265,7 +297,7 @@ subChar(speciesArg, ' ', '_');
 
 char accBuf[64];
 printf("<td><a href=\"");
-printf(urlTemplate, getBaseAcc(id, accBuf, sizeof(accBuf)), speciesArg);
+printf(urlTemplate, speciesArg, getBaseAcc(id, accBuf, sizeof(accBuf)));
 printf("\" target=_blank>%s</a>", label);
 
 freeMem(speciesArg);
@@ -327,9 +359,10 @@ char* apprisTag = findApprisTag(tags);
 char* transLabel = (apprisTag != NULL) ? apprisTagToSymbol(apprisTag) : NULL;
 char *geneLabel = ((apprisTag != NULL) || geneHasApprisTranscripts(tdb, conn, transAttrs)) ? transAttrs->geneName : NULL;
 
+// APPRIS gene and transcript now go to the same location
 printf("<tr><th><a href=\"%s\" target=_blank>APPRIS</a>\n", apprisHomeUrl);
 if (transLabel != NULL)
-    prApprisTdAnchor(transAttrs->transcriptId, transLabel, apprisTranscriptUrl);
+    prApprisTdAnchor(transAttrs->geneId, transLabel, apprisGeneUrl);
 else
     printf("<td>&nbsp;");
 if (geneLabel != NULL)
@@ -351,14 +384,29 @@ printf("<table class=\"hgcCcds\" style=\"white-space: nowrap;\"><thead>\n");
 printf("<tr><th><th>Transcript<th>Gene</tr>\n");
 printf("</thead><tbody>\n");
 
-printf("<tr><th>Gencode id");
-prTdEnsIdAnchor(transAttrs->transcriptId, ensemblTranscriptIdUrl);
-prTdEnsIdAnchor(transAttrs->geneId, ensemblGeneIdUrl);
+printf("<tr><th>GENCODE id");
+prTdEnsIdAnchor(transAttrs->transcriptId,
+                (isGrcH37Native(tdb) ? ensemblH37TranscriptIdUrl: ensemblTranscriptIdUrl));
+prTdEnsIdAnchor(transAttrs->geneId,
+                (isGrcH37Native(tdb) ? ensemblH37GeneIdUrl : ensemblGeneIdUrl));
 printf("</tr>\n");
 
+if (transAttrs->proteinId != NULL)
+    {
+    // protein id in database, maybe not for this transcript
+    printf("<tr><th>Protein id");
+    if (strlen(transAttrs->proteinId) > 0)
+        prTdEnsIdAnchor(transAttrs->proteinId,
+                        (isGrcH37Native(tdb) ? ensemblH37ProteinIdUrl: ensemblProteinIdUrl));
+    else
+        printf("<td>&nbsp;");
+    printf("<td>");
+    printf("</tr>\n");
+    }
+
 printf("<tr><th>HAVANA manual id");
-prTdEnsIdAnchor(transAttrs->havanaTranscriptId, vegaTranscriptIdUrl);
-prTdEnsIdAnchor(transAttrs->havanaGeneId, vegaGeneIdUrl);
+printf("<td>%s", transAttrs->havanaTranscriptId);
+printf("<td>%s", transAttrs->havanaGeneId);
 printf("</tr>\n");
 
 printf("<tr><th>Position");
@@ -382,7 +430,8 @@ if (haveTsl)
     printf("<tr><th><a href=\"#tsl\">Transcription Support Level</a><td><a href=\"#%s\">%s</a><td></tr>\n", tslDesc, tslDesc);
     }
 printf("<tr><th>HGNC gene symbol<td colspan=2>");
-prExtIdAnchor(transAttrs->geneName, hgncUrl);
+if (!isFakeGeneSymbol(transAttrs->geneName))
+    prExtIdAnchor(transAttrs->geneName, hgncUrl);
 printf("</tr>\n");
 
 printf("<tr><th>CCDS<td>");
@@ -395,7 +444,8 @@ if (!isEmpty(transAttrs->ccdsId))
 printf("<td></tr>\n");
 
 printf("<tr><th>GeneCards<td colspan=2>");
-prExtIdAnchor(transAttrs->geneName, geneCardsUrl);
+if (!isFakeGeneSymbol(transAttrs->geneName))
+    prExtIdAnchor(transAttrs->geneName, geneCardsUrl);
 printf("</tr>\n");
 
 if (isProteinCodingTrans(transAttrs))
@@ -709,7 +759,8 @@ printf("<td width=\"25%%\">%s", supportEvid->seqSrc);
 printf("<td width=\"25%%\">%s", supportEvid->seqId);
 }
 
-static void writeSupportingEvidenceLinkHtml(char *gencodeId, struct wgEncodeGencodeTranscriptSupport *transcriptSupports,
+static void writeSupportingEvidenceLinkHtml(struct trackDb *tdb, char *gencodeId,
+                                            struct wgEncodeGencodeTranscriptSupport *transcriptSupports,
                                             struct wgEncodeGencodeExonSupport *exonSupports)
 /* write HTML links to supporting evidence */
 {
@@ -717,7 +768,8 @@ struct supportEvid *supportEvids = loadSupportEvid(transcriptSupports, exonSuppo
 
 printf("<table class=\"hgcCcds\"><thead>\n");
 printf("<tr><th colspan=\"4\">Supporting Evidence (");
-prEnsIdAnchor(gencodeId, ensemblSupportingEvidUrl);
+prEnsIdAnchor(gencodeId,
+              (isGrcH37Native(tdb) ? ensemblH37SupportingEvidUrl: ensemblSupportingEvidUrl));
 printf(")</tr>\n");
 printf("<tr class=\"hgcCcdsSub\"><th>Source<th>Sequence<th>Source<th>Sequence</tr>\n");
 printf("</thead><tbody>\n");
@@ -829,7 +881,7 @@ if (haveEntrezGene)
 writeRefSeqLinkHtml(refSeqs);
 if (isProteinCodingTrans(transAttrs))
     writeUniProtLinkHtml(uniProts);
-writeSupportingEvidenceLinkHtml(gencodeId, transcriptSupports, exonSupports);
+writeSupportingEvidenceLinkHtml(tdb, gencodeId, transcriptSupports, exonSupports);
 
 wgEncodeGencodeAttrsFree(&transAttrs);
 wgEncodeGencodeAnnotationRemarkFreeList(&remarks);

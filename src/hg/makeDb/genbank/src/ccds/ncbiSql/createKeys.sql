@@ -228,6 +228,12 @@ ALTER TABLE [dbo].[Accessions] ADD
 		[organization_uid]
 	) REFERENCES [dbo].[Organizations] (
 		[organization_uid]
+	),
+	CONSTRAINT [FK_Accessions_CcdsStatusVals_review_status] FOREIGN KEY
+	(
+		[review_status]
+	) REFERENCES [dbo].[CcdsStatusVals] (
+		[ccds_status_val_uid]
 	)
 go
 

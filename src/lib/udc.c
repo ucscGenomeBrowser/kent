@@ -24,6 +24,7 @@
  * for each block of the file that has been fetched.  Currently the block size is 8K. */
 
 #include <sys/file.h>
+#include <sys/mman.h>
 #include "common.h"
 #include "hash.h"
 #include "obscure.h"
@@ -139,6 +140,7 @@ struct udcFile
     bits64 endData;		/* End of area in file we know to have data. */
     bits32 bitmapVersion;	/* Version of associated bitmap we were opened with. */
     struct connInfo connInfo;   /* Connection info for open net connection. */
+    void *mmapBase;             /* pointer to memory address if file has been mmapped, or NULL */
     struct ios ios;             /* Statistics on file access. */
     };
 
@@ -226,13 +228,25 @@ static int connInfoGetSocket(struct udcFile *file, char *url, bits64 offset, int
  * reuse ci->socket.  Otherwise close the socket, open a new one, and update ci,
  * or return -1 if there is an error opening a new one. */
 {
+/* NOTE: This doesn't use HTTP 1.1 keep alive to do multiple request on the
+ * same socket.  The only way subsequent random requests on the same socket
+ * work is because previous request are open-ended and this can continue
+ * reading where it left off.  The HTTP requests are issued as 1.0, even
+ * through range requests are a 1.1 feature.
+ *
+ * For FTP, the serial read approach is essential.  FTP only supports resuming
+ * from an offset, but doesn't not support limiting the number of bytes
+ * transferred.  All that can be done to stop the transfer is to abort the
+ * operation, when then requires reconnecting.
+ */ 
+
 struct connInfo *ci = &file->connInfo;
 if (ci != NULL && ci->socket > 0 && ci->offset != offset)
     {
     bits64 skipSize = (offset - ci->offset);
     if (skipSize > 0 && skipSize <= MAX_SKIP_TO_SAVE_RECONNECT)
 	{
-	verbose(4, "!! skipping %lld bytes @%lld to avoid reconnect\n", skipSize, ci->offset);
+	verbose(4, "skipping %lld bytes @%lld to avoid reconnect\n", skipSize, ci->offset);
 	udcReadAndIgnore(&file->ios.net, ci->socket, skipSize);
 	ci->offset = offset;
         file->ios.numReuse++;
@@ -254,6 +268,8 @@ if (ci == NULL || ci->socket <= 0)
 	{
 	url = transferParamsToRedirectedUrl(url, ci->redirUrl);
 	}
+    // IMPORTANT NOTE: byterange is not a real URL parameter, this is a hack to pass
+    // the range to the net.c functions, which then parse it.
     char rangeUrl[2048];
     if (ci == NULL)
 	{
@@ -1243,6 +1259,11 @@ if (file != NULL)
            file->ios.udc.numSeeks, file->ios.udc.numReads, file->ios.udc.bytesRead, file->ios.udc.numWrites,  file->ios.udc.bytesWritten, 
            file->ios.net.numSeeks, file->ios.net.numReads, file->ios.net.bytesRead, file->ios.net.numWrites,  file->ios.net.bytesWritten);
         }
+    if (file->mmapBase != NULL)
+        {
+        if (munmap(file->mmapBase, file->size) < 0)
+            errnoAbort("munmap() failed on %s", file->url);
+        }
     if (file->connInfo.socket != 0)
 	mustCloseFd(&(file->connInfo.socket));
     if (file->connInfo.ctrlSocket != 0)
@@ -1539,8 +1560,12 @@ if (!udcCacheEnabled())
     return TRUE;
 
 boolean ok = TRUE;
-/* We'll break this operation into blocks of a reasonable size to allow
- * other processes to get cache access, since we have to lock the cache files. */
+/* Original comment said:
+ *  "We'll break this operation into blocks of a reasonable size to allow
+ *   other processes to get cache access, since we have to lock the cache files."
+ * However there is no locking done, so this whole splitting might be unnecessary
+ * complexity.
+ */
 bits64 s,e, endPos=offset+size;
 for (s = offset; s < endPos; s = e)
     {
@@ -1978,7 +2003,7 @@ if (udcIsLocal(url))
     return fileSize(url);
 
 // don't go to the network if we can avoid it
-int cacheSize = udcSizeFromCache(url, NULL);
+off_t cacheSize = udcSizeFromCache(url, NULL);
 if (cacheSize!=-1)
     return cacheSize;
 
@@ -2017,3 +2042,32 @@ boolean udcExists(char *url)
 {
 return udcFileSize(url)!=-1;
 }
+
+void udcMMap(struct udcFile *file)
+/* Enable access to underlying file as memory using mmap.  udcMMapFetch
+ * must be called to actually access regions of the file. */
+{
+if (file->mmapBase != NULL)
+    errAbort("File is already mmaped: %s", file->url);
+file->mmapBase = mmap(NULL, file->size, PROT_READ, MAP_SHARED, file->fdSparse, 0);
+if (file->mmapBase == MAP_FAILED)
+    errnoAbort("mmap() failed for %s", file->url);
+}
+
+void *udcMMapFetch(struct udcFile *file, bits64 offset, bits64 size)
+/* Return pointer to a region of the file in memory, ensuring that regions is
+ * cached. udcMMap must have been called to enable access.  This must be
+ * called for first access to a range of the file or erroneous (zeros) data
+ * maybe returned.  Maybe called multiple times on a range or overlapping
+ * returns. */
+{
+if (file->mmapBase == NULL)
+    errAbort("udcMMap() has not been called for: %s", file->url);
+if ((offset + size) > file->size)
+    errAbort("udcMMapFetch on offset %lld for %lld bytes exceeds length of file %lld on %s",
+             offset, size, file->size, file->url);
+if (udcCacheEnabled() && !sameString(file->protocol, "transparent"))
+    udcCachePreload(file, offset, size);
+return ((char*)file->mmapBase) + offset;
+}
+

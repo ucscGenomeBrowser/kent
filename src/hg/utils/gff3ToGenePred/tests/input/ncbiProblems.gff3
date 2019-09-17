@@ -1,0 +1,61 @@
+##gff-version 3
+
+# ----
+# genome-build Felis_catus-6.2
+# genome-build-accession NCBI_Assembly:GCF_000181335.1
+# ----
+
+# tRNA GENE and CDS records without strand and CDS as a child of gene. Also tRNA/exons of gene on opposite strand
+NC_001700.1	RefSeq	gene	15038	16177	.	.	.	ID=gene25009;Dbxref=GeneID:807931;Name=CYTB;gbkey=Gene;gene=CYTB;gene_synonym=cytB
+NC_001700.1	RefSeq	CDS	15038	16177	.	.	0	ID=cds29481;Parent=gene25009;Dbxref=Genbank:NP_008263.1;Name=NP_008263.1;gbkey=CDS;gene=CYTB;product=cytochrome b;protein_id=NP_008263.1;transl_table=2
+NC_001700.1	RefSeq	tRNA	16178	16247	.	+	.	ID=rna33063;gbkey=tRNA;product=tRNA-Thr
+NC_001700.1	RefSeq	exon	16178	16247	.	+	.	ID=id354132;Parent=rna33063;gbkey=tRNA;product=tRNA-Thr
+NC_001700.1	RefSeq	tRNA	16248	16314	.	-	.	ID=rna33064;gbkey=tRNA;product=tRNA-Pro
+NC_001700.1	RefSeq	exon	16248	16314	.	-	.	ID=id354133;Parent=rna33064;gbkey=tRNA;product=tRNA-Pro
+
+# ----
+# genome-build dere_caf1
+# genome-build-accession NCBI_Assembly:GCF_000005135.1
+# ----
+
+# overlapping exons
+NW_001956548.1	RefSeq	pseudogene	26531107	26534144	.	+	.	ID=gene14757;Dbxref=FLYBASE:FBgn0103243,GeneID:6542396;Name=Dere\GG10940;gbkey=Gene;gene=Dere\GG10940;gene_biotype=pseudogene;gene_synonym=dere_GLEANR_10935,GG10940;locus_tag=Dere_GG10940;pseudo=true
+NW_001956548.1	RefSeq	exon	26531107	26531132	.	+	.	ID=id122119;Parent=gene14757;Dbxref=FLYBASE:FBgn0103243,GeneID:6542396;exon_number=1;gbkey=exon;gene=Dere\GG10940;number=1;pseudo=true
+NW_001956548.1	RefSeq	exon	26532889	26533060	.	+	.	ID=id122120;Parent=gene14757;Dbxref=FLYBASE:FBgn0103243,GeneID:6542396;exon_number=2;gbkey=exon;gene=Dere\GG10940;number=2;pseudo=true
+NW_001956548.1	RefSeq	exon	26533060	26533133	.	+	.	ID=id122121;Parent=gene14757;Dbxref=FLYBASE:FBgn0103243,GeneID:6542396;exon_number=3;gbkey=exon;gene=Dere\GG10940;number=3;pseudo=true
+NW_001956548.1	RefSeq	exon	26533185	26533357	.	+	.	ID=id122122;Parent=gene14757;Dbxref=FLYBASE:FBgn0103243,GeneID:6542396;exon_number=4;gbkey=exon;gene=Dere\GG10940;number=4;pseudo=true
+NW_001956548.1	RefSeq	exon	26533936	26534144	.	+	.	ID=id122123;Parent=gene14757;Dbxref=FLYBASE:FBgn0103243,GeneID:6542396;exon_number=5;gbkey=exon;gene=Dere\GG10940;number=5;pseudo=true
+
+
+# ----
+# genome-build R64
+# genome-build-accession NCBI_Assembly:GCF_000146045.2
+# ----
+
+# Yeast chrM only
+
+NC_001224.1	RefSeq	gene	13818	26701	.	+	.	ID=gene6402;Dbxref=GeneID:854598,SGD:S000007260;Name=COX1;gbkey=Gene;gene=COX1;gene_biotype=protein_coding;gene_synonym=OXI3;locus_tag=Q0045
+NC_001224.1	RefSeq	CDS	13818	13986	.	+	0	ID=cds5989;Parent=gene6402;Dbxref=Genbank:NP_009305.1,GeneID:854598,SGD:S000007260;Name=NP_009305.1;Note=subunit I of cytochrome c oxidase (Complex IV)%3B Complex IV is the terminal member of the mitochondrial inner membrane electron transport chain%3B one of three mitochondrially-encoded subunits;gbkey=CDS;gene=COX1;product=cytochrome c oxidase subunit 1;protein_id=NP_009305.1;transl_table=3
+NC_001224.1	RefSeq	CDS	16435	16470	.	+	2	ID=cds5989;Parent=gene6402;Dbxref=Genbank:NP_009305.1,GeneID:854598,SGD:S000007260;Name=NP_009305.1;Note=subunit I of cytochrome c oxidase (Complex IV)%3B Complex IV is the terminal member of the mitochondrial inner membrane electron transport chain%3B one of three mitochondrially-encoded subunits;gbkey=CDS;gene=COX1;product=cytochrome c oxidase subunit 1;protein_id=NP_009305.1;transl_table=3
+NC_001224.1	RefSeq	CDS	18954	18991	.	+	2	ID=cds5989;Parent=gene6402;Dbxref=Genbank:NP_009305.1,GeneID:854598,SGD:S000007260;Name=NP_009305.1;Note=subunit I of cytochrome c oxidase (Complex IV)%3B Complex IV is the terminal member of the mitochondrial inner membrane electron transport chain%3B one of three mitochondrially-encoded subunits;gbkey=CDS;gene=COX1;product=cytochrome c oxidase subunit 1;protein_id=NP_009305.1;transl_table=3
+NC_001224.1	RefSeq	CDS	20508	20984	.	+	0	ID=cds5989;Parent=gene6402;Dbxref=Genbank:NP_009305.1,GeneID:854598,SGD:S000007260;Name=NP_009305.1;Note=subunit I of cytochrome c oxidase (Complex IV)%3B Complex IV is the terminal member of the mitochondrial inner membrane electron transport chain%3B one of three mitochondrially-encoded subunits;gbkey=CDS;gene=COX1;product=cytochrome c oxidase subunit 1;protein_id=NP_009305.1;transl_table=3
+NC_001224.1	RefSeq	CDS	21995	22246	.	+	0	ID=cds5989;Parent=gene6402;Dbxref=Genbank:NP_009305.1,GeneID:854598,SGD:S000007260;Name=NP_009305.1;Note=subunit I of cytochrome c oxidase (Complex IV)%3B Complex IV is the terminal member of the mitochondrial inner membrane electron transport chain%3B one of three mitochondrially-encoded subunits;gbkey=CDS;gene=COX1;product=cytochrome c oxidase subunit 1;protein_id=NP_009305.1;transl_table=3
+NC_001224.1	RefSeq	CDS	23612	23746	.	+	0	ID=cds5989;Parent=gene6402;Dbxref=Genbank:NP_009305.1,GeneID:854598,SGD:S000007260;Name=NP_009305.1;Note=subunit I of cytochrome c oxidase (Complex IV)%3B Complex IV is the terminal member of the mitochondrial inner membrane electron transport chain%3B one of three mitochondrially-encoded subunits;gbkey=CDS;gene=COX1;product=cytochrome c oxidase subunit 1;protein_id=NP_009305.1;transl_table=3
+NC_001224.1	RefSeq	CDS	25318	25342	.	+	0	ID=cds5989;Parent=gene6402;Dbxref=Genbank:NP_009305.1,GeneID:854598,SGD:S000007260;Name=NP_009305.1;Note=subunit I of cytochrome c oxidase (Complex IV)%3B Complex IV is the terminal member of the mitochondrial inner membrane electron transport chain%3B one of three mitochondrially-encoded subunits;gbkey=CDS;gene=COX1;product=cytochrome c oxidase subunit 1;protein_id=NP_009305.1;transl_table=3
+NC_001224.1	RefSeq	CDS	26229	26701	.	+	2	ID=cds5989;Parent=gene6402;Dbxref=Genbank:NP_009305.1,GeneID:854598,SGD:S000007260;Name=NP_009305.1;Note=subunit I of cytochrome c oxidase (Complex IV)%3B Complex IV is the terminal member of the mitochondrial inner membrane electron transport chain%3B one of three mitochondrially-encoded subunits;gbkey=CDS;gene=COX1;product=cytochrome c oxidase subunit 1;protein_id=NP_009305.1;transl_table=3
+
+
+# ----
+# genome-build Xenopus_tropicalis_v9.1
+# genome-build-accession NCBI_Assembly:GCF_000004195.3
+# ----
+
+# case on chr MT where gene is direct parent of CDS and the accession is
+# on the CDS.  This is handled by specifying -useName -refseqHacks
+
+NC_006839.1	RefSeq	gene	2792	3759	.	+	.	ID=gene26974;Dbxref=GeneID:3283492;Name=ND1;gbkey=Gene;gene=ND1;gene_biotype=protein_coding
+NC_006839.1	RefSeq	CDS	2792	3759	.	+	0	ID=cds39761;Parent=gene26974;Dbxref=Genbank:YP_203370.1,GeneID:3283492;Name=YP_203370.1;Note=TAA stop codon is completed by the addition of 3' A residues to the mRNA;gbkey=CDS;gene=ND1;product=NADH dehydrogenase subunit 1;protein_id=YP_203370.1;transl_except=(pos:3758..3759%2Caa:TERM);transl_table=2
+NC_006839.1	RefSeq	gene	3969	5004	.	+	.	ID=gene26975;Dbxref=GeneID:3283493;Name=ND2;gbkey=Gene;gene=ND2;gene_biotype=protein_coding
+NC_006839.1	RefSeq	CDS	3969	5004	.	+	0	ID=cds39762;Parent=gene26975;Dbxref=Genbank:YP_203371.1,GeneID:3283493;Name=YP_203371.1;Note=TAA stop codon is completed by the addition of 3' A residues to the mRNA;gbkey=CDS;gene=ND2;product=NADH dehydrogenase subunit 2;protein_id=YP_203371.1;transl_except=(pos:5004..5004%2Caa:TERM);transl_table=2
+NC_006839.1	RefSeq	gene	14258	15399	.	+	.	ID=gene26986;Dbxref=GeneID:3283504;Name=CYTB;gbkey=Gene;gene=CYTB;gene_biotype=protein_coding
+NC_006839.1	RefSeq	CDS	14258	15399	.	+	0	ID=cds39773;Parent=gene26986;Dbxref=Genbank:YP_203382.1,GeneID:3283504;Name=YP_203382.1;Note=TAA stop codon is completed by the addition of 3' A residues to the mRNA;gbkey=CDS;gene=CYTB;product=cytochrome b;protein_id=YP_203382.1;transl_except=(pos:15398..15399%2Caa:TERM);transl_table=2

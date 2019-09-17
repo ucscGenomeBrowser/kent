@@ -32,11 +32,11 @@ use File::Spec;
       ),
     # General-purpose utility routines:
     qw( checkCleanSlate checkExistsUnlessDebug closeStdin
-	getAssemblyInfo getSpecies machineHasFile databaseExists
-	makeGsub mustMkdir mustOpen nfsNoodge run verbose
+	getAssemblyInfo getSpecies gensub2 machineHasFile databaseExists
+	makeGsub mustMkdir mustOpen nfsNoodge paraRun run verbose
       ),
     # Hardcoded paths/commands/constants:
-    qw( $gensub2 $para $paraRun $centralDbSql $git
+    qw( $centralDbSql $git
 	$clusterData $trackBuild $goldenPath $images $gbdb
 	$splitThreshold $runSSH $setMachtype
       ),
@@ -58,7 +58,13 @@ sub readMainCluster(); # forward declaration to keep code order
 %cluster =
     ( readMainCluster() =>
         { 'enabled' => 1, 'gigaHz' => 1.4, 'ram' => 8,
-	  'hostCount' => 512, },
+	  'hostCount' => 992, },
+      'hgwdev-101' =>
+        { 'enabled' => 1, 'gigaHz' => 2.1, 'ram' => 1,
+	  'hostCount' => 32, },
+      'hgwdev' =>
+        { 'enabled' => 1, 'gigaHz' => 2.1, 'ram' => 1,
+	  'hostCount' => 32, },
     );
 
 my %obsoleteCluster =
@@ -238,12 +244,12 @@ sub getLoadFactor {
 
 sub getWorkhorseLoads {
   #*** Would be nice to parameterize instead of hardcoding hostnames...
-  # Return a hash of workhorses (kolossus and all idle small cluster machines),
+  # Return a hash of workhorses (all idle small cluster machines),
   # associated with their load factors.
   # a valid workhorse needs to have access to hive.
   confess "Too many arguments" if (scalar(@_) != 0);
   my %horses = ();
-  foreach my $machLine ('ku', 'kolossus', 'hgwdev') {
+  foreach my $machLine ('ku', 'hgwdev') {
     my $mach = $machLine;
     $mach =~ s/[\. ].*//;
     chomp $mach;
@@ -261,7 +267,7 @@ sub chooseWorkhorse {
   if ($main::opt_workhorse) {
     return $main::opt_workhorse;
   }
-  &verbose(2, "chooseWorkhorse: polling load factors of kolossus and " .
+  &verbose(2, "chooseWorkhorse: polling load factors of " .
 	   "idle small cluster machines.  This may take a minute...\n");
   while (1) {
     my %horses = &getWorkhorseLoads();
@@ -291,7 +297,7 @@ sub getFileServer {
   my $host = `df $path 2>&1 | grep -v Filesystem`;
   if ($host =~ /(\S+):\/.*/) {
     return $1;
-  } elsif ($host =~ /^\/\w/) {
+  } else {
     my $localhost = `uname -n`;	# HOST not always present
     if ($localhost =~ s/^(\w+)(\..*)?$/$1/) {
       return $localhost;
@@ -508,18 +514,12 @@ sub processCommonOptions {
 #	These items should come from a configuration file so this
 #	business can be easily set up in other environments.
 # Hardcoded paths/command sequences:
-use vars qw( 	$gensub2 $para $paraRun $centralDbSql $git
+use vars qw( 	$centralDbSql $git
 		$clusterData $trackBuild $goldenPath $images $gbdb
 		$splitThreshold $runSSH $setMachtype
 	   );
-use vars qw( $gensub2 $para $paraRun $clusterData $trackBuild
+use vars qw( $clusterData $trackBuild
 	     $goldenPath $gbdb $centralDbSql $splitThreshold $runSSH );
-$gensub2 = '/parasol/bin/gensub2';
-$para = '/parasol/bin/para';
-$paraRun = ("$para make jobList\n" .
-	    "$para check\n" .
-	    "$para time > run.time\n" .
-	    'cat run.time');
 $centralDbSql = "hgsql -h localhost -A -N hgcentraltest";
 $git = "/usr/bin/git";
 
@@ -588,6 +588,27 @@ sub checkExistsUnlessDebug {
   exit 1 if ($problem);
 }
 
+sub paraRun {
+ my $para = '/parasol/bin/para';
+ if ( ! -e "$para" ) {
+    # allow PATH to find the para command
+    $para = "para";
+  }
+ return ("$para make jobList\n" .
+"$para check\n" .
+"$para time > run.time\n" .
+'cat run.time');
+}
+
+sub gensub2 {
+ my $answer = '/parasol/bin/gensub2';
+ if ( ! -s "$answer" ) {
+    # allow PATH to find the gensub2 command
+    $answer = "gensub2";
+  }
+ return $answer;
+}
+
 sub closeStdin {
   # If we don't do this, the script can hang ("Suspended (tty input)")
   # when it is run backgrounded (&) and then something is typed into the
@@ -654,6 +675,7 @@ sub machineHasFile {
 
 sub databaseExists {
   my ($dbHost, $db) = @_;
+  return 0 if ($dbHost =~ m/nohost/i);
   confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
   my $query = "show databases like \"$db\";";
   my $line = `echo '$query' | $HgAutomate::runSSH $dbHost $centralDbSql`;

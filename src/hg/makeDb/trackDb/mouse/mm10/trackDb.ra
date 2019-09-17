@@ -1,12 +1,17 @@
 
 include ../../refSeqComposite.ra
 
+include ../../crispr10K.ra
+
+include knownGene.ra 
+
 # chainNet tracks
 include trackDb.gliresChainNet.ra
 include trackDb.euarchontoglireChainNet.ra
 include trackDb.placentalsChainNet.ra
 include trackDb.vertebrateChainNet.ra
 include trackDb.previousVersionsChainNet.ra alpha
+include tabulamuris.ra
 
 # Local declaration so that local gold.html is picked up.
 track gold override
@@ -57,25 +62,16 @@ visibility hide
 color 20,20,170
 type bed 12
 
-track knownGeneOld8
-shortLabel Old UCSC Genes
-longLabel Previous Version of UCSC Genes
-group genes
-visibility hide
-color 82,82,160
-type genePred
-hgsid on
-oldToNew kg8ToKg9
-baseColorUseCds given
-baseColorDefault genomicCodons
-
-searchName knownGeneOld8
-searchTable knownGeneOld8
-searchDescription Previous Version of UCSC Genes
-searchMethod fuzzy
-query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
-searchPriority 3.53
-
+track xenoClinvar
+shortLabel Human Variants
+longLabel ClinVar Variants mapped to Mouse
+type bigBed 9 +
+itemRgb on
+bigDataUrl /gbdb/mm10/bbi/xenoClinvar.bb
+group x
+mouseOverField _mouseOver
+urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
+release alpha
 
 include mm10Patch4.ra
 
@@ -287,7 +283,7 @@ group genes
 type psl
 priority 37.14
 color 20,0,250
-visibility pack
+visibility hide
 ucscRetroInfo ucscRetroInfo6
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds6
@@ -396,3 +392,10 @@ priority 17
 track spMut override
 group pub
 bigDataUrl /gbdb/$D/uniprot/unipMut.bb
+
+#######################3
+# regulation tracks
+
+include trackDb.encode3.ra
+include encode3RenEnhancerGene.ra
+

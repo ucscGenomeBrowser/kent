@@ -36,12 +36,13 @@ barChartSampleUrl barChart bigBarChart
 barChartUnit barChart bigBarChart
 baseColorDefault *
 baseColorTickColor bed bigBed bigPsl
-baseColorUseCds bed psl genePred bigPsl
+baseColorUseCds bed psl genePred bigPsl bigGenePred
 baseColorUseSequence *
 baseQualRange bam
 bedFilter bed
-bedNameLabel bed barChart bigBarChart
-bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr
+bedNameLabel bed barChart bigBarChart bigBed
+bedPackDense bed bigBed
+bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr bigInteract bigChain bigGenePred bigLolly bigNarrowPeak hic
 bigGeneDataUrl genePred
 blastRef psl bigPsl
 boxedCfg *
@@ -54,10 +55,11 @@ cdsEvidence genePred
 cdsTable psl bigPsl
 cell bed bedGraph
 centerLabelsDense *
-chainColor chain
-chainLinearGap netAlign chain bed psl bigPsl
-chainMinScore netAlign chain bed psl bigPsl
-chainNormScoreAvailable netAlign bed chain
+centerLabelsPack *
+chainColor chain bigChain
+chainLinearGap netAlign chain bed psl bigPsl bigChain
+chainMinScore netAlign chain bed psl bigPsl bigChain
+chainNormScoreAvailable netAlign bed chain bigChain
 chimpDb bed
 chimpMacaqueOrthoTable bed
 chimpOrangMacOrthoTable bed
@@ -68,8 +70,9 @@ codingAnnoLabel_snp131CodingDbSnp bed
 codingAnnoLabel_snp132CodingDbSnp bed
 codingAnnoLabel_snp134CodingDbSnp bed
 codingAnnotations bed
+collapseEmptySubtracks *
 color *
-colorByStrand bigBed bed
+colorByStrand bigBed bed genePred
 colorChromDefault psl bigPsl
 compareGenomeLinks bed
 compositeTrack *
@@ -77,13 +80,15 @@ configurable *
 configureByPopup *
 container *
 controlledVocabulary *
-coriellUrlBase bed
+coriellUrlBase bed bigBed
 darkerLabels *
 dataUrl customTracks
 dataVersion *
 dateSubmitted bedGraph bed
 dateUnrestricted bed
 db *
+dbPrefixUrls bigBed bed bigPsl genePred psl
+dbPrefixLabels bigBed bed bigPsl genePred psl
 dbProfile *
 dbTrackType customTracks
 detailsTabUrls bigBed bigGenePred bigPsl
@@ -92,6 +97,8 @@ defaultLabelFields bigBed bigPsl bigGenePred bigBarChart
 defaultMaf wigMaf
 defaultMaxWeight bed
 defaultLinkedTables genePred
+denseCoverage bigBed
+densePack bed bigBed
 dimensionAchecked *
 dimensionBchecked *
 dimensionCchecked *
@@ -107,7 +114,7 @@ dragAndDrop *
 endFudge bed
 ensemblIdUrl genePred
 ensArchive genePred
-exonArrows genePred bed broadPeak
+exonArrows genePred bed broadPeak bigBed
 exonArrowsDense bed
 exonNumbers genePred bed broadPeak psl bigPsl bigBed
 expDrawExons expRatio
@@ -195,7 +202,7 @@ hoverMetadata wig bigWig
 html *
 htmlFile customTracks
 htmlUrl customTracks
-idInUrlSql altGraphX genePred chain factorSource bed
+idInUrlSql altGraphX genePred chain factorSource bed  bigChain
 idXref genePred psl
 iframeUrl *
 iframeOptions *
@@ -213,8 +220,13 @@ interTableKind encodeFiveC
 inputTracksSubgroupDisplay bed factorSource
 inputTrackTable bed factorSource
 inputTableFieldDisplay bed factorSource
+inputTableFieldUrls factorSource
+interactDirectional interact bigInteract
+interactUp interact bigInteract
+interactMultiRegion interact bigInteract
 intronGap psl genePred bigPsl
 irows wigMaf
+isGencode2 genePred
 isGencode genePred
 itemAttrTbl genePred
 itemBigImagePath bed
@@ -225,13 +237,16 @@ itemCount customTracks
 itemDetailsHtmlTable genePred psl bed bigPsl
 itemFirstCharCase wigMafProt wigMaf
 itemImagePath bed
-itemRgb bedDetail bedGraph bed bedLogR bigBed bigPsl
+itemRgb bedDetail bedGraph bed bedLogR bigBed bigPsl interact bigInteract
 lfPslTable bed
 linesAt chromGraph
+linkDataUrl  bigChain
 linkIdInName bed bigBed
-labelFields bigBed bigPsl bigGenePred bigBarChart
+labelFields bigBed bigPsl bigGenePred bigBarChart bigInteract
 labelOnFeature bed bigBed
 labelSeparator bigBed bigPsl bigGenePred
+lollipopField bigBed bigLolly
+lollyField bigBed bigLolly
 longLabel *
 longlabel genePred
 longLabelClip *
@@ -243,8 +258,8 @@ mafFile customTracks
 mafShowSnp wigMaf
 mafTrack bed
 mapDispatcher expRatio
-matrix netAlign bed chain psl bigPsl
-matrixHeader netAlign bed chain psl bigPsl
+matrix netAlign bed chain psl bigPsl bigChain
+matrixHeader netAlign bed chain psl bigPsl bigChain
 maxChromName customTracks
 maxHeightPixels *
 maxItems *
@@ -275,7 +290,7 @@ nextItemButton *
 noColorTag bam
 noInherit *
 nonBedFieldsLabel bigBed
-noScoreFilter bedGraph bed bedLogR gvf bedDetail bigBed bigPsl
+noScoreFilter bedGraph bed bedLogR gvf bedDetail bigBed bigPsl interact bigInteract
 notNCBI bed
 ococci bed
 offset customTracks
@@ -286,7 +301,7 @@ origAssembly *
 origTrackLine customTracks
 otherDb *
 otherDbTable bed
-otherOrg netAlign chain
+otherOrg netAlign chain bigChain
 otherSpecies halSnake
 pairEndsByName bam
 pairedEndUrlFormat bed
@@ -316,10 +331,13 @@ sGroup_Afrotheria wigMaf
 sGroup_Aves wigMaf
 sGroup_bird wigMaf
 sGroup_Birds wigMaf
+sGroup_Brachycera wigMaf
 sGroup_Bundibugyo_2007 wigMaf
 sGroup_Caenorhabditis wigMaf
 sGroup_Chimp wigMaf
 sGroup_DRC_2007 wigMaf
+sGroup_Deuterostomia wigMaf
+sGroup_Dorylaimia wigMaf
 sGroup_Drosophila wigMaf
 sGroup_Ebola_2014 wigMaf
 sGroup_Euarchontoglires wigMaf
@@ -328,26 +346,46 @@ sGroup_Fish wigMaf
 sGroup_Gabon wigMaf
 sGroup_Glires wigMaf
 sGroup_hiv wigMafProt wigMaf
+sGroup_Holometabola wigMaf
 sGroup_Human wigMaf
 sGroup_Laurasiatheria wigMaf
 sGroup_Mammal wigMaf
 sGroup_mammal wigMaf
 sGroup_Mammals wigMaf
 sGroup_Marburg_1987 wigMaf
+sGroup_Nematocera wigMaf
 sGroup_Nematode wigMaf
 sGroup_Nematodes wigMaf
 sGroup_Others wigMaf
+sGroup_Percent99 wigMaf
+sGroup_Percent98 wigMaf
+sGroup_Percent97 wigMaf
+sGroup_Percent96 wigMaf
+sGroup_Percent95 wigMaf
+sGroup_Percent94 wigMaf
+sGroup_Percent93 wigMaf
+sGroup_Percent92 wigMaf
+sGroup_Percent91 wigMaf
+sGroup_Percent90 wigMaf
+sGroup_Percent88 wigMaf
 sGroup_placental wigMaf
 sGroup_Placental wigMaf
 sGroup_Placental_Mammal wigMaf
 sGroup_Placental_Mammals wigMaf
+sGroup_Platyhelminthes wigMaf
+sGroup_Plectida wigMaf
 sGroup_Primate wigMaf
 sGroup_Primates wigMaf
 sGroup_primate wigMaf
 sGroup_Primates wigMaf
+sGroup_Reptiles wigMaf
 sGroup_Reston_1989-90 wigMaf
+sGroup_Rhabditina wigMaf
 sGroup_Sarcopterygii wigMaf
+sGroup_Spirurina wigMaf
+sGroup_Strongylida wigMaf
 sGroup_Sudan_1976-9 wigMaf
+sGroup_Tylenchina wigMaf
 sGroup_vertebrate wigMaf
 sGroup_Vertebrate wigMaf
 sGroup_Vertebrates wigMaf
@@ -365,7 +403,7 @@ scoreFilterMax bed bedlogR peptideMapping bigBed bigPsl
 scoreMax bed bedlogR interaction peptideMapping narrowPeak bigBed bigPsl
 scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping bigBed bigPsl
 scoreLabel bed bigBed bigPsl bigGenePred
-searchIndex bigBed bigPsl bigGenePred
+searchIndex bigBed bigPsl bigGenePred bigBarChart
 searchTrix bigBed bigPsl bigGenePred
 selectSubject psl bigPsl
 seqTable bed
@@ -441,11 +479,11 @@ treeImage wigMaf
 txInfo genePred
 type *
 url *
-url2 bed genePred
-url2Label bed genePred
+url2 bed genePred bigBarChart
+url2Label bed genePred bigBarChart
 urlLabel *
 urlName genePred psl bigPsl
-urls bigBed bed bigPsl
+urls bigBed bed bigPsl genePred psl bigBarChart bigGenePred bigLolly
 useScore *
 view *
 viewLimits *
@@ -459,6 +497,7 @@ wgEncodeGencodeAttrs genePred
 wgEncodeGencodeExonSupport genePred
 wgEncodeGencodeGeneSource genePred
 wgEncodeGencodeTranscriptSource genePred
+wgEncodeGencodeHgnc genePred
 wgEncodeGencodePdb genePred
 wgEncodeGencodePubMed genePred
 wgEncodeGencodeRefSeq genePred

@@ -454,11 +454,9 @@ else
     {
     boolean hasBin;
     int minFeatureSize = optionInt("minFeatureSize", 0);
-    boolean isSplit = hFindSplitTable(database, chrom, t, table, &hasBin);
-    boolean isFound = hTableExists(database, table);
-    verbose(3,"orTable: db: %s isFound: %s isSplit: %s %s %s %s\n", database,
-	isFound ? "TRUE" : "FALSE",
-	    isSplit ? "TRUE" : "FALSE", chrom, t, table );
+    boolean isFound = hFindSplitTable(database, chrom, t, table, sizeof table, &hasBin);
+    verbose(3,"orTable: db: %s isFound: %s %s %s %s\n", database,
+	isFound ? "TRUE" : "FALSE", chrom, t, table );
     if (isFound)
 	fbOrTableBitsQueryMinSize(database, acc, track, chrom, chromSize, conn, where,
 		   TRUE, TRUE, minFeatureSize);
@@ -554,8 +552,8 @@ s = strchr(t, '.');
 if (s != NULL)
     errAbort("Sorry, only database (not file) tracks allowed with "
              "fa output unless you use faMerge");
-// ignore isSplit return from hFindSplitTable()
-(void) hFindSplitTable(database, chrom, t, table, &hasBin);
+if (!hFindSplitTable(database, chrom, t, table, sizeof table, &hasBin))
+    errAbort("track %s not found", t);
 fbList = fbGetRangeQuery(database, trackSpec, chrom, 0, hChromSize(database, chrom),
 			 where, TRUE, TRUE);
 for (fb = fbList; fb != NULL; fb = fb->next)
@@ -753,7 +751,7 @@ for (i=0; i<tableCount; ++i)
 	    else
 		{
 		boolean hasBin;
-		if (hFindSplitTable(database, cInfo->chrom, t, table, &hasBin))
+		if (hFindSplitTable(database, cInfo->chrom, t, table, sizeof table, &hasBin))
 		    {
 		    found = TRUE;
 		    break;

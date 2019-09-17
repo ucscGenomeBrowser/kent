@@ -25,3 +25,5 @@ track grcIncidentDb override
 url https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/chicken/issues/?id=$$
 
 include trackDb.chainNet.ra
+
+include ../../refSeqComposite.ra alpha

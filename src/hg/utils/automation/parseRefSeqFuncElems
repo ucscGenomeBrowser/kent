@@ -1,30 +1,38 @@
 #!/usr/bin/env python2.7
-# parseFunctionalElements
-"""Parse out the functional elements from a gff3 file."""
+"""Parse out the functional elements from a RefSeq gff3 file."""
 import os
 import sys
 import argparse
+import re
 import urllib
 
-funcElems = ["CAAT_signal","GC_rich_promoter_region","TATA_box","enhancer","insulator",
-"locus_control_region","mobile_genetic_element","origin_of_replication","promoter",
-"protein_binding_site","recombination_feature","regulatory_region","repeat_region",
-"sequence_feature","sequence_secondary_structure","silencer","stem_loop"]
+# Terence Murphy's list of feature types for functional elements
+# (plus region, if attributes include regulatory_class)
+funcElems = ["CAAT_signal", "GC_rich_promoter_region", "TATA_box", "enhancer", "insulator",
+"locus_control_region", "mobile_genetic_element", "origin_of_replication", "promoter",
+"protein_binding_site", "recombination_feature", "region", "regulatory_region", "repeat_region",
+"sequence_feature", "sequence_secondary_structure", "silencer", "stem_loop"]
+
+# Colors to more or less match NCBI's color scheme:
+rgbBlack = "0,0,0"
+rgbRed = "192,0,0"
+rgbBlue = "0,0,192"
+rgbMagenta = "192,0,192"
+rgbTeal = "0,128,128"
+rgbBrown = "160,82,45"
+
 
 def parseArgs(args):
 	"""
 	Parse the command line arguments.
 	"""
 	parser= argparse.ArgumentParser(description= __doc__)
-	parser.add_argument ("inputFile",
-		help = " The input file. ",
+	parser.add_argument ("gff3File",
+		help = " NCBI RefSeq GFF3 file. ",
 		type = argparse.FileType("r"))
-	parser.add_argument ("outputFile",
-		help = " The output file. ",
+	parser.add_argument ("bedOutFile",
+		help = " BED 9 + file. ",
 		type =argparse.FileType("w"))
-	parser.add_argument ("annotationVersion",
-		help = " The annotation version. ex 108.20170627",
-        action = "store")
 
 	if (len(sys.argv) == 1):
 		parser.print_help()
@@ -32,81 +40,122 @@ def parseArgs(args):
 	options = parser.parse_args()
 	return options
 
+def decodeCgi(text):
+    """
+    Return a CGI-decoded version of text
+    """
+    return urllib.unquote(text)
+
+def flatten(listOfLists):
+    """
+    Return a list containing all values in listOfLists (one level, not recursive).
+    """
+    # https://stackoverflow.com/questions/11264684/flatten-list-of-lists
+    return [val for subList in listOfLists for val in subList]
+
+def removeEmpties(listWithEmpties):
+    """
+    Return a list with all non-empty values from listWithEmpties.
+    """
+    return filter(bool, listWithEmpties)
+
+def uniquify(listWithDupes):
+    """
+    Return a list with unique values from listWithDupes.
+    """
+    return list(set(listWithDupes))
+
+def chopAtFirstSemicolon(text):
+    """
+    Return text truncated at first ";".
+    """
+    return text.split(";")[0]
+
 def main(args):
     """
-    Initialized options and calls other functions.
+    Initialize options and write one line of BED+ per functional element in gff3File
     """
     options = parseArgs(args)
-    seenDescriptions = []
-    firstItem = True
-    for line in options.inputFile:
+    pmidRe = re.compile("PMID:(\d+)")
+    geneIdRe = re.compile("GeneID:(\d+)")
+    for line in options.gff3File:
         if line.startswith("#"):
             continue
         splitLine = line.strip("\n").split("\t")
-        if len(splitLine) is not 10:
-            print ("This is not the proper input file format.")
+        if len(splitLine) is not 9:
+            print ("Expected gff3File to have 9 columns, got " + str(len(splitLine)) + ".")
             exit(1)
-        if splitLine[2] not in funcElems: 
+        (chrom, source, gffType, chrStart, chrEnd, score, strand, frame, attrGlom) = splitLine
+        if gffType not in funcElems:
             continue
-        chrom = splitLine[9]
-        seqId = splitLine[0]
-        source = splitLine[1]
-        soTerm = splitLine[2]
-        chrStart = str(int(splitLine[3]) -1)
-        chrEnd = splitLine[4]
-        
-        if (int(chrEnd) - int(chrStart)) > 10000000:
-            print ("This item was longer than 10,000,000 bp and was excluded " + str(int(chrEnd) - int(chrStart)) + " " + chrom)
-            continue
-        
-        if (".") in splitLine[5]:
+        chrStart = str(int(chrStart) -1)
+        name = gffType
+        if "." == score:
             score = '0'
-        else:
-            score = splitLine[5]
-        strand = splitLine[6]
-        phase = splitLine[7]
-        attributes = ""
-        soTermBlock = [urllib.unquote(x).decode('utf8').split("=") for x in splitLine[8].split(";")]
-        temp = []
-        sID = ""
-        gbkey = ""
-        note = ""
-        experiment = ""
-        function = ""
-        regulatory_class = ""
-        standard_name = ""
-        pubMedIds = ""
-        mouseOver = ""
-        for item in soTermBlock:
-            if "ID" in item[0]:
-                sID = item[1]
-            elif "Note" in item[0]:
-                note = item[1]
-                mouseOver = note
-            elif "experiment" in item[0]:
-                experiment = item[1]
-                if "PMID" in item[1]:
-                    pmids = item[1].split("[")
-                    for item in pmids:
-                        if "PMID" in item:
-                            for pub in item.strip("]").split(","): 
-                                pubMedIds += (pub.split(":")[1]) + ","
-            elif "function" in item[0]:
-                function = item[1]
-                mouseOver += " | " + function
-            elif "standard_name" in item[0]:
-                standard_name = item[1]
-            elif "Dbxref" in item[0]:
-                dbXref = item[1].split(",")
-                for item2 in dbXref: 
-                    if "GeneID" in item2:
-                        geneId = item2.split(":")[1]
+        attributesEnc = [x.split("=") for x in attrGlom.split(";")]
+        attributes = dict((key, decodeCgi(val)) for key, val in attributesEnc)
+        if (gffType == "region" and not attributes["regulatory_class"]):
+            continue
+        geneIds = geneIdRe.findall(attributes.get("Dbxref", ""))
+        geneIds = [x + "|GeneID:" + x for x in geneIds]
+        note = attributes.get("Note", "")
+        experiment = attributes.get("experiment", "")
+        function = attributes.get("function", "")
+        gbkey = attributes.get("gbkey")
+        # Uniquify pubMedIds (and remove empty strings)
+        pubMedIds = flatten([pmidRe.findall(x) for x in [note, experiment, function]])
+        pubMedIds = uniquify(removeEmpties(pubMedIds))
+        pubMedIds.sort(key=int)
+        pubMedIds = [x + "|PMID:" + x for x in pubMedIds]
+        mouseOver = " | ".join(removeEmpties([note, function]))
+        if mouseOver == "":
+            mouseOver = gffType
+        # Match NCBI's color and label scheme
+        color = rgbBlack
+        regClass = attributes.get("regulatory_class");
+        if (regClass):
+            color = rgbTeal
+            name = regClass
+        elif gffType == "protein_binding_site":
+            color = rgbRed
+            boundMoiety = attributes.get("bound_moiety")
+            if gbkey and boundMoiety:
+                name = gbkey + ": " + boundMoiety
+            # bound_moiety is sometimes too long to display properly as a label,
+            # so add it to mouseOver.
+            if boundMoiety:
+                if mouseOver != "":
+                    mouseOver += " | "
+                mouseOver += boundMoiety
+        elif gffType == "recombination_feature":
+            color = rgbBrown
+            reClass = attributes.get("recombination_class")
+            if reClass:
+                name = reClass
             else:
-                attributes += item[0] + "=" + item[1] + "; "
-        options.outputFile.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" %
-                (chrom, chrStart, chrEnd, geneId, score, strand, \
-                    soTerm, note, pubMedIds.strip(","), experiment, \
-                    function, options.annotationVersion, mouseOver))
+                stdName = attributes.get("standard_name")
+                if gbkey and stdName:
+                        name = gbkey + ": " + stdName
+        elif gffType == "mobile_genetic_element":
+            color = rgbBlue
+            name = attributes.get("mobile_element_type", name)
+        elif gffType == "repeat_region":
+            color = rgbBlue
+            name = attributes.get("rpt_type", name)
+        elif gffType == "sequence_feature":
+            color = rgbMagenta
+            name = attributes.get("feat_class", attributes.get("standard_name", note))
+        else:
+            color = rgbBlack
+            if gbkey and note:
+                name = gbkey + ": " + chopAtFirstSemicolon(note)
+
+        # Write BED9+
+        options.bedOutFile.write("\t".join(
+                [chrom, chrStart, chrEnd, name, score, strand,
+                 chrStart, chrEnd, color, \
+                 gffType, note, ",".join(geneIds), ",".join(pubMedIds), experiment, \
+                 function, mouseOver]) + "\n")
     
 
 if __name__ == "__main__" : 

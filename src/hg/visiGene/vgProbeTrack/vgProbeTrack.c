@@ -200,7 +200,7 @@ struct sqlConnection *conn2 = sqlConnect(database);
 struct sqlConnection *conn3 = sqlConnect(database);
 int probeCount=0, vgPrbCount=0;
 
-sqlDyStringAppend(dy, 
+sqlDyStringPrintf(dy, 
 "select p.id,p.gene,antibody,probeType,fPrimer,rPrimer,p.seq,bac,g.taxon"
 " from probe p join gene g"
 " left join vgPrbMap m on m.probe = p.id"
@@ -266,19 +266,17 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (vgPrb == 0)
 	{
 	dyStringClear(dy);
-	sqlDyStringAppend(dy, "insert into vgPrb set");
-	dyStringPrintf(dy, " id=default,\n");
-	dyStringPrintf(dy, " type='%s',\n", peType);
-	dyStringAppend(dy, " seq='");
-	dyStringAppend(dy, peSeq);
-	dyStringAppend(dy, "',\n");
-	dyStringPrintf(dy, " tName='%s',\n", tName);
-	dyStringPrintf(dy, " tStart=%d,\n", tStart);
-	dyStringPrintf(dy, " tEnd=%d,\n", tEnd);
-	dyStringPrintf(dy, " tStrand='%s',\n", tStrand);
-	dyStringPrintf(dy, " db='%s',\n", db);
-	dyStringPrintf(dy, " taxon='%d',\n", taxon);
-	dyStringPrintf(dy, " state='%s'\n", state);
+	sqlDyStringPrintf(dy, "insert into vgPrb set");
+	sqlDyStringPrintf(dy, " id=default,\n");
+	sqlDyStringPrintf(dy, " type='%s',\n", peType);
+	sqlDyStringPrintf(dy, " seq='%s'\n", peSeq);
+	sqlDyStringPrintf(dy, " tName='%s',\n", tName);
+	sqlDyStringPrintf(dy, " tStart=%d,\n", tStart);
+	sqlDyStringPrintf(dy, " tEnd=%d,\n", tEnd);
+	sqlDyStringPrintf(dy, " tStrand='%s',\n", tStrand);
+	sqlDyStringPrintf(dy, " db='%s',\n", db);
+	sqlDyStringPrintf(dy, " taxon='%d',\n", taxon);
+	sqlDyStringPrintf(dy, " state='%s'\n", state);
 	verbose(2, "%s\n", dy->string);
 	sqlUpdate(conn2, dy->string);
 	vgPrb = sqlLastAutoId(conn2);
@@ -286,9 +284,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
 	
     dyStringClear(dy);
-    sqlDyStringAppend(dy, "insert into vgPrbMap set");
-    dyStringPrintf(dy, " probe=%d,\n", peProbe);
-    dyStringPrintf(dy, " vgPrb=%d \n", vgPrb);
+    sqlDyStringPrintf(dy, "insert into vgPrbMap set");
+    sqlDyStringPrintf(dy, " probe=%d,\n", peProbe);
+    sqlDyStringPrintf(dy, " vgPrb=%d \n", vgPrb);
     verbose(2, "%s\n", dy->string);
     sqlUpdate(conn2, dy->string);
 
@@ -372,18 +370,16 @@ while(more)
 	if (vgPrb == 0)
 	    {
 	    dyStringClear(dy);
-	    sqlDyStringAppend(dy, "update vgPrb set");
-	    dyStringAppend(dy, " seq='");
-	    dyStringAppend(dy, dna);
-	    dyStringAppend(dy, "',\n");
-	    dyStringPrintf(dy, " tName='%s',\n", tName);
-	    dyStringPrintf(dy, " tStart=%d,\n", tStart);
-	    dyStringPrintf(dy, " tEnd=%d,\n", tEnd);
-	    dyStringPrintf(dy, " tStrand='%s',\n", tStrand);
-	    dyStringPrintf(dy, " db='%s',\n", db);
-	    dyStringPrintf(dy, " state='%s'\n", "seq");
-	    dyStringPrintf(dy, " where id=%d\n", probeid);
-	    dyStringPrintf(dy, " and state='%s'\n", "new");
+	    sqlDyStringPrintf(dy, "update vgPrb set");
+	    sqlDyStringPrintf(dy, " seq='%s'\n", dna);
+	    sqlDyStringPrintf(dy, " tName='%s',\n", tName);
+	    sqlDyStringPrintf(dy, " tStart=%d,\n", tStart);
+	    sqlDyStringPrintf(dy, " tEnd=%d,\n", tEnd);
+	    sqlDyStringPrintf(dy, " tStrand='%s',\n", tStrand);
+	    sqlDyStringPrintf(dy, " db='%s',\n", db);
+	    sqlDyStringPrintf(dy, " state='%s'\n", "seq");
+	    sqlDyStringPrintf(dy, " where id=%d\n", probeid);
+	    sqlDyStringPrintf(dy, " and state='%s'\n", "new");
 	    verbose(2, "%s\n", dy->string);
 	    sqlUpdate(conn, dy->string);
 	    }
@@ -451,18 +447,16 @@ for(bac=bacs;bac;bac=bac->next)
 	if (vgPrb == 0)
 	    {
 	    dyStringClear(dy);
-	    sqlDyStringAppend(dy, "update vgPrb set");
-	    dyStringAppend(dy, " seq='");
-	    dyStringAppend(dy, dna);
-	    dyStringAppend(dy, "',\n");
-	    dyStringPrintf(dy, " tName='%s',\n", bac->chrom);
-	    dyStringPrintf(dy, " tStart=%d,\n", bac->chromStart);
-	    dyStringPrintf(dy, " tEnd=%d,\n", bac->chromEnd);
-	    dyStringPrintf(dy, " tStrand='%s',\n", bac->strand);
-	    dyStringPrintf(dy, " db='%s',\n", db);
-	    dyStringPrintf(dy, " state='%s'\n", "seq");
-	    dyStringPrintf(dy, " where id=%d\n", bac->probe);
-	    dyStringPrintf(dy, " and state='%s'\n", "new");
+	    sqlDyStringPrintf(dy, "update vgPrb set");
+	    sqlDyStringPrintf(dy, " seq='%s'\n", dna);
+	    sqlDyStringPrintf(dy, " tName='%s',\n", bac->chrom);
+	    sqlDyStringPrintf(dy, " tStart=%d,\n", bac->chromStart);
+	    sqlDyStringPrintf(dy, " tEnd=%d,\n", bac->chromEnd);
+	    sqlDyStringPrintf(dy, " tStrand='%s',\n", bac->strand);
+	    sqlDyStringPrintf(dy, " db='%s',\n", db);
+	    sqlDyStringPrintf(dy, " state='%s'\n", "seq");
+	    sqlDyStringPrintf(dy, " where id=%d\n", bac->probe);
+	    sqlDyStringPrintf(dy, " and state='%s'\n", "new");
 	    //verbose(2, "%s\n", dy->string); // the sql string could be quite large
 	    sqlUpdate(conn, dy->string);
 	    }
@@ -508,9 +502,9 @@ char path1[256];
 char path2[256];
 
 dyStringClear(dy);
-sqlDyStringAppend(dy, "select e.id, p.fPrimer, p.rPrimer from probe p, vgPrbMap m, vgPrb e, gene g");
-dyStringPrintf(dy, " where p.id = m.probe and m.vgPrb = e.id and g.id = p.gene and g.taxon = %d",taxon);
-dyStringAppend(dy, " and e.state = 'new' and e.type='primersMrna'");
+sqlDyStringPrintf(dy, "select e.id, p.fPrimer, p.rPrimer from probe p, vgPrbMap m, vgPrb e, gene g");
+sqlDyStringPrintf(dy, " where p.id = m.probe and m.vgPrb = e.id and g.id = p.gene and g.taxon = %d",taxon);
+sqlDyStringPrintf(dy, " and e.state = 'new' and e.type='primersMrna'");
 rc = sqlSaveQuery(conn, dy->string, "primers.query", FALSE);
 verbose(1,"rc = %d = count of primers for mrna search for taxon %d\n",rc,taxon);
 
@@ -540,9 +534,9 @@ unlink("primers.query");
  * them to type primersGenome
  */
 dyStringClear(dy);
-sqlDyStringAppend(dy, "update vgPrb set type='primersGenome'"); 
-dyStringPrintf(dy, " where taxon = %d",taxon);
-dyStringAppend(dy, " and state = 'new' and type='primersMrna'");
+sqlDyStringPrintf(dy, "update vgPrb set type='primersGenome'"); 
+sqlDyStringPrintf(dy, " where taxon = %d",taxon);
+sqlDyStringPrintf(dy, " and state = 'new' and type='primersMrna'");
 sqlUpdate(conn, dy->string);
 
 
@@ -550,9 +544,9 @@ sqlUpdate(conn, dy->string);
 /* get primers for those probes that did not find mrna isPcr matches 
  * and then do them against the genome instead */
 dyStringClear(dy);
-sqlDyStringAppend(dy, "select e.id, p.fPrimer, p.rPrimer from probe p, vgPrbMap m, vgPrb e, gene g");
-dyStringPrintf(dy, " where p.id = m.probe and m.vgPrb = e.id and g.id = p.gene and g.taxon = %d",taxon);
-dyStringAppend(dy, " and e.state = 'new' and e.type='primersGenome'");
+sqlDyStringPrintf(dy, "select e.id, p.fPrimer, p.rPrimer from probe p, vgPrbMap m, vgPrb e, gene g");
+sqlDyStringPrintf(dy, " where p.id = m.probe and m.vgPrb = e.id and g.id = p.gene and g.taxon = %d",taxon);
+sqlDyStringPrintf(dy, " and e.state = 'new' and e.type='primersGenome'");
 rc = 0;
 rc = sqlSaveQuery(conn, dy->string, "primers.query", FALSE);
 verbose(1,"rc = %d = count of primers for genome search for taxon %d\n",rc,taxon);
@@ -581,9 +575,9 @@ unlink("primers.query");
  * them to type refSeq
  */
 dyStringClear(dy);
-sqlDyStringAppend(dy, "update vgPrb set type='refSeq'"); 
-dyStringPrintf(dy, " where taxon = %d",taxon);
-dyStringAppend(dy, " and state = 'new' and type='primersGenome'");
+sqlDyStringPrintf(dy, "update vgPrb set type='refSeq'"); 
+sqlDyStringPrintf(dy, " where taxon = %d",taxon);
+sqlDyStringPrintf(dy, " and state = 'new' and type='primersGenome'");
 sqlUpdate(conn, dy->string);
 
 dyStringFree(&dy);
@@ -602,9 +596,9 @@ rc = doBacs(conn, taxon, db); verbose(1,"found seq for %d bacEndPairs\n",rc);
  */
 dyStringClear(dy);
 
-sqlDyStringAppend(dy, "update vgPrb set type='refSeq'"); 
-dyStringPrintf(dy, " where taxon = %d",taxon);
-dyStringAppend(dy, " and state = 'new' and type='bac'");
+sqlDyStringPrintf(dy, "update vgPrb set type='refSeq'"); 
+sqlDyStringPrintf(dy, " where taxon = %d",taxon);
+sqlDyStringPrintf(dy, " and state = 'new' and type='bac'");
 
 sqlUpdate(conn, dy->string);
 
@@ -696,14 +690,12 @@ while(more)
 	if (vgPrb == 0)
 	    {
 	    dyStringClear(dy);
-	    sqlDyStringAppend(dy, "update vgPrb set");
-	    dyStringAppend(dy, " seq = '");
-	    dyStringAppend(dy, dna);
-	    dyStringAppend(dy, "',\n");
-	    dyStringPrintf(dy, " db = '%s',\n", db);
-	    dyStringAppend(dy, " state = 'seq'\n");
-	    dyStringPrintf(dy, " where id=%d\n", oldProbe);
-	    dyStringPrintf(dy, " and state='%s'\n", "new");
+	    sqlDyStringPrintf(dy, "update vgPrb set");
+	    sqlDyStringPrintf(dy, " seq = '%s'\n", dna);
+	    sqlDyStringPrintf(dy, " db = '%s',\n", db);
+	    sqlDyStringPrintf(dy, " state = 'seq'\n");
+	    sqlDyStringPrintf(dy, " where id=%d\n", oldProbe);
+	    sqlDyStringPrintf(dy, " and state='%s'\n", "new");
 	    verbose(2, "%s\n", dy->string);
 	    sqlUpdate(conn, dy->string);
 	    }

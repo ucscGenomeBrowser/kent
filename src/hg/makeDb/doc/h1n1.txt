@@ -116,7 +116,7 @@
     # into:
     # >HA EPI176470
 
-    gfClient -minScore=200 -minIdentity=80 -nohead hgwdev.cse.ucsc.edu 18892  /gbdb/h1n1/nib \
+    gfClient -minScore=200 -minIdentity=80 -nohead hgwdev.soe.ucsc.edu 18892  /gbdb/h1n1/nib \
     -out=psl -t=dna -q=dna h1n1Gene.fa h1n1GenePsl.psl
 
     hgLoadPsl h1n1 h1n1GenePsl.psl
@@ -139,7 +139,7 @@
     hgLoadSeq –replace h1n1 /gbdb/h1n1/h1n1Seq/h1n1Seq.fa
 
 # BLAT
-    gfClient -minScore=200 -minIdentity=80 -nohead hgwdev.cse.ucsc.edu 18892  /gbdb/h1n1/nib \
+    gfClient -minScore=200 -minIdentity=80 -nohead hgwdev.soe.ucsc.edu 18892  /gbdb/h1n1/nib \
     -out=psl -t=dna -q=dna h1n1Seq.fa h1n1Seq.psl
 
 # load the psl result into h1n1Seq table
@@ -161,7 +161,7 @@
     hgLoadSeq -replace h1n1 /gbdb/h1n1/humanHA/humanHA.fa
 
 # BLAT
-    gfClient -minScore=500 -minIdentity=80 -nohead hgwdev.cse.ucsc.edu 18892  /gbdb/h1n1/nib \
+    gfClient -minScore=500 -minIdentity=80 -nohead hgwdev.soe.ucsc.edu 18892  /gbdb/h1n1/nib \
     -out=psl -t=dna -q=dna humanHA.fa humanHA.psl
 
 # load the psl result into humanHA table
@@ -183,7 +183,7 @@
     hgLoadSeq -replace h1n1 /gbdb/h1n1/swineHA/swineHA.fa
 
 # BLAT
-    gfClient -minScore=500 -minIdentity=80 -nohead hgwdev.cse.ucsc.edu 18892  /gbdb/h1n1/nib \
+    gfClient -minScore=500 -minIdentity=80 -nohead hgwdev.soe.ucsc.edu 18892  /gbdb/h1n1/nib \
     -out=psl -t=dna -q=dna swineHA.fa swineHA.psl
 
 # load the psl result into humanHA table
@@ -211,7 +211,7 @@
 
 # BLAT, make sure the port number is correct.
 
-    gfClient -minScore=200 -minIdentity=80 -nohead hgwdev.cse.ucsc.edu 18892  /gbdb/h1n1/nib \
+    gfClient -minScore=200 -minIdentity=80 -nohead hgwdev.soe.ucsc.edu 18892  /gbdb/h1n1/nib \
     -out=psl -t=dna -q=dna /gbdb/h1n1/h1n1_0514Seq/epiflu_0514_dna_sequence.fa h1n1_0514Seq.psl
 
 # load the psl result into h1n1_0514Seq table
@@ -277,7 +277,7 @@
 
 # BLAT the protein sequences, make sure port number is correct.
 
-    gfClient -minScore=50 -minIdentity=60 -nohead hgwdev.cse.ucsc.edu 18891  /gbdb/h1n1/nib \
+    gfClient -minScore=50 -minIdentity=60 -nohead hgwdev.soe.ucsc.edu 18891  /gbdb/h1n1/nib \
       -q=prot -out=psl -t=dnax  /gbdb/h1n1/h1n1_0514ProtSeq/epiflu_0514_protein_sequence.fa testPsl0.psl
 
     hgsql h1n1 -e 'delete from aaSeq'

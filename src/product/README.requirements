@@ -37,12 +37,12 @@ You can use the following command to get the size of the files for all
 of the assemblies, but it can also be modified to give the size for a
 particular assembly:
 
-  rsync -hna --stats rsync://hgdownload.cse.ucsc.edu/gbdb/ | egrep "Number of files:|total size is"
+  rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/gbdb/ | egrep "Number of files:|total size is"
 
 For example, to get the size of all of the files for hg19, you would
 use the following command:
 
-  rsync -hna --stats rsync://hgdownload.cse.ucsc.edu/gbdb/hg19/ | egrep "Number of files:|total size is"
+  rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/gbdb/hg19/ | egrep "Number of files:|total size is"
 
 After runnning that command, you should see output like this:
 
@@ -52,4 +52,4 @@ After runnning that command, you should see output like this:
 The next command will give you the size of the entire mySQL database,
 but can be changed to get the size for a particular assembly:
   
-  rsync -hna --stats rsync://hgdownload.cse.ucsc.edu/mysql/ | egrep "Number of files:|total size is"
+  rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/mysql/ | egrep "Number of files:|total size is"

@@ -1,0 +1,1046 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the cotJap2
+
+#  Can use existing photograph (otherwise find one before starting here)
+
+#########################################################################
+#  Initial steps, find photograph (DONE - 2018-10-24 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+sed -e 's/galGal6/cotJap2/g; s/GalGal6/CotJap2/g; s/DONE/TBD/g;' \
+	../galGal6/initialBuild.txt > initialBuild.txt
+
+mkdir ~/kent/src/hg/makeDb/doc/cotJap2
+cd ~/kent/src/hg/makeDb/doc/cotJap2
+
+#  Can use existing photograph
+cp -p ../cotJap1/photoReference.txt ./
+cat photoReference.txt
+photoCreditURL  https://www.flickr.com/people/49503118795@N01?rb=1
+photoCreditName WikiMedia Commons: Ingrid Taylor
+
+## download from NCBI
+mkdir /hive/data/genomes/cotJap2/refseq
+cd /hive/data/genomes/cotJap2/refseq
+
+rsync --stats -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_other/Coturnix_japonica/all_assembly_versions/GCF_001577835.1_Coturnix_japonica_2.0/ ./
+
+# real    0m29.478s
+
+# this information is from the top of 
+#    cotJap2/refseq/*_assembly_report.txt
+# (cotJap2/refseq/GCF_001577835.1_Coturnix_japonica_2.0_assembly_report.txt
+
+# Assembly name:  Coturnix japonica 2.0
+# Organism name:  Coturnix japonica (Japanese quail)
+# Isolate:  7356
+# Sex:  male
+# Taxid:          93934
+# BioSample:      SAMN03989050
+# BioProject:     PRJNA292031
+# Submitter:      McDonnell Genome Institute - Washington University School of Medicine
+# Date:           2016-3-1
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Chromosome
+# Genome representation: full
+# WGS project:    LSZS01
+# Assembly method: ALLPATHS-LG v. 4.7.0
+# Genome coverage: 73X
+# Sequencing technology: Illumina GA IIx
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_001577835.1
+# RefSeq assembly accession: GCF_001577835.1
+# RefSeq assembly and GenBank assemblies identical: no
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_001577845.1      GCF_001577845.1 Primary Assembly
+##      GCF_000036915.1 non-nuclear
+
+# check assembly size for later reference:
+
+faSize G*2.0_genomic.fna.gz
+# 927656957 bases (10397704 N's 917259253 real 740893913 upper 176365340 lower)
+#	in 2012 sequences in 1 files
+# Total size: mean 461062.1 sd 6240990.8 min 237 (NW_015439218.1)
+#	max 175656249 (NC_029516.1) median 4462
+# %19.01 masked total, %19.23 masked real
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2018-10-24)
+    cd /hive/data/genomes/cotJap2
+    ~/kent/src/hg/utils/automation/prepConfig.pl cotJap2 vertebrate birds \
+       refseq/*_assembly_report.txt > cotJap2.config.ra
+
+    # compare with previous version to see if it is sane:
+    diff cotJap2.config.ra ../galGal5/galGal5.config.ra
+
+    # verify it really does look sane
+    cat cotJap2.config.ra
+# config parameters for makeGenomeDb.pl:
+db cotJap2
+clade vertebrate
+scientificName Coturnix japonica
+commonName Japanese quail
+assemblyDate Mar. 2016
+assemblyLabel McDonnell Genome Institute - Washington University School of Medicine
+assemblyShortLabel Coturnix japonica 2.0
+orderKey 10079
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_003408.1
+mitoAcc none
+fastaFiles /hive/data/genomes/cotJap2/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/cotJap2/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir birds
+photoCreditURL  https://www.flickr.com/people/49503118795@N01?rb=1
+photoCreditName WikiMedia Commons: Ingrid Taylor
+ncbiGenomeId 113
+ncbiAssemblyId 654721
+ncbiAssemblyName Coturnix japonica 2.0
+ncbiBioProject 292031
+ncbiBioSample SAMN03989050
+genBankAccessionID GCF_001577835.1
+taxId 93934
+
+#############################################################################
+# setup UCSC named files (DONE - 2018-10-24 - Hiram)
+
+    mkdir /hive/data/genomes/cotJap2/ucsc
+    cd /hive/data/genomes/cotJap2/ucsc
+
+    # check for duplicate sequences:
+    time faToTwoBit -noMask ../refseq/G*2.0_genomic.fna.gz refseq.2bit
+    #  real    0m14.176s
+
+    twoBitDup refseq.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+    # the scripts creating the fasta here will be using this refseq.2bit file
+    # remove it later
+
+    # new option required to ucscCompositeAgp.pl 2016-04-13
+    time ~/kent/src/hg/utils/automation/ucscCompositeAgp.pl \
+      ../refseq/G*2.0_genomic.fna.gz \
+	../refseq/*_assembly_structure/Primary_Assembly
+NC_029516.1 chr1
+NC_029517.1 chr2
+NC_029518.1 chr3
+NC_029519.1 chr4
+NC_029520.1 chr5
+NC_029521.1 chr6
+NC_029522.1 chr7
+NC_029523.1 chr8
+NC_029524.1 chr9
+NC_029525.1 chr10
+NC_029526.1 chr11
+NC_029527.1 chr12
+NC_029528.1 chr13
+NC_029529.1 chr14
+NC_029530.1 chr15
+NC_029531.1 chr16
+NC_029532.1 chr17
+NC_029533.1 chr18
+NC_029534.1 chr19
+NC_029535.1 chr20
+NC_029536.1 chr21
+NC_029537.1 chr22
+NC_029538.1 chr23
+NC_029539.1 chr24
+NC_029540.1 chr25
+NC_029541.1 chr26
+NC_029542.1 chr27
+NC_029543.1 chr28
+NC_029544.1 chrLGE22C19W28_E50C23
+NC_029545.1 chrLGE64
+NC_029546.1 chrW
+NC_029547.1 chrZ
+
+real    3m51.531s
+
+    time ~/kent/src/hg/utils/automation/unplacedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+    # processed 1095 sequences into chrUn.fa.gz
+    # real    0m7.697s
+
+    time ~/kent/src/hg/utils/automation/unlocalizedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+# 11
+# 21
+# LGE64
+# 7
+# 26
+# 17
+# 2
+# LGE22C19W28_E50C23
+# Z
+# 1
+# 18
+# 23
+# 13
+# 27
+# 25
+# 6
+# W
+# 28
+# 3
+# 9
+# 12
+# 20
+# 14
+# 15
+# 8
+# 4
+# 24
+# 19
+# 10
+# 5
+# processed 884 sequences into chr*_random.gz 30 files
+# real    0m5.399s
+    # one of those ends up with a name over 31 characters:
+    # chrLGE22C19W28_E50C23_NW_015439740v1_random
+    # manually edit the fasta and the AGP to shorten to:
+    # chrLGE22C19W28_E50C23_random
+    # editing these two files:
+-rw-rw-r-- 1      503 Oct 24 16:56 chrLGE22C19W28_E50C23_random.agp
+-rw-rw-r-- 1     1580 Oct 24 16:56 chrLGE22C19W28_E50C23_random.fa.gz
+
+    # bash syntax here
+    mitoAcc=`grep "^# mitoAcc" ../cotJap2.config.ra | awk '{print $NF}'`
+    printf "# mitoAcc %s\n" "$mitoAcc"
+# mitoAcc NC_003408.1
+    zcat \
+  ../refseq/*_assembly_structure/non-nuclear/assem*/AGP/chrMT.comp.agp.gz \
+     | grep -v "^#" | sed -e "s/^$mitoAcc/chrM/;" > chrM.agp
+
+    cat chrM.agp
+# chrM    1       16697   1       O       NC_003408.1     1       16697   +
+
+    printf ">chrM\n" > chrM.fa
+    twoBitToFa -noMask refseq.2bit:$mitoAcc stdout | grep -v "^>" >> chrM.fa
+    gzip chrM.fa
+
+    # to verify chrom name sizes are legitimate, should be length < 32:
+    grep -h -v "^#" *.agp | cut -f1 \
+        | awk '{print length($0),$0}' | sort -rn | head -3 | sed -e 's/^/# /;'
+# 30 chrLGE64_NW_015439742v1_random
+# 30 chrLGE64_NW_015439741v1_random
+# 28 chrLGE22C19W28_E50C23_random
+
+    faSize chrM.fa.gz
+# 16697 bases (0 N's 16697 real 16697 upper 0 lower) in 1 sequences in 1 files
+
+    # verify fasta and AGPs agree
+    time faToTwoBit *.fa.gz test.2bit
+    # real    0m22.272s
+
+    cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail -4
+    # All AGP and FASTA entries agree - both files are valid
+
+    # and no sequence lost from orginal:
+    twoBitToFa test.2bit stdout | faSize stdin
+# 927656957 bases (10397704 N's 917259253 real 917259253 upper 0 lower)
+#	in 2012 sequences in 1 files
+# Total size: mean 461062.1 sd 6240990.8 min 237 (chr1_NW_015439218v1_random)
+#	max 175656249 (chr1) median 4462
+
+    # same numbers as above (except for upper/lower masking)
+# 927656957 bases (10397704 N's 917259253 real 740893913 upper 176365340 lower)
+#	in 2012 sequences in 1 files
+# Total size: mean 461062.1 sd 6240990.8 min 237 (NW_015439218.1)
+#	max 175656249 (NC_029516.1) median 4462
+
+    # no longer need these temporary 2bit files
+    rm test.2bit refseq.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2018-10-24 - Hiram)
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp cotJap2.config.ra) > agp.log 2>&1
+    # real    0m53.913s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db cotJap2.config.ra) > db.log 2>&1
+    # real    4m53.186s
+
+    # error out due to previous error and cotJap2 db exists, remove it,
+    # run manually:
+    cd jkStuff
+    ./makeDb.csh
+    # continuing
+    cd ..
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=dbDb cotJap2.config.ra) > dbDb.log 2>&1
+    # real    0m7.665s
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add cotJap2 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/cotJap2
+    ln -s `pwd`/cotJap2.unmasked.2bit /gbdb/cotJap2/cotJap2.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2018-10-24 - Hiram)
+    mkdir /hive/data/genomes/cotJap2/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/cotJap2/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/cotJap2/cotJap2.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku cotJap2) > do.log 2>&1
+    # real    1m38.145s
+
+    cat fb.cotJap2.cpgIslandExtUnmasked.txt
+    # 17281152 bases of 917263224 (1.884%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2018-10-24 - Hiram)
+    mkdir /hive/data/genomes/cotJap2/bed/cytoBand
+    cd /hive/data/genomes/cotJap2/bed/cytoBand
+    makeCytoBandIdeo.csh cotJap2
+
+#############################################################################
+# run up idKeys files for chromAlias/ncbiRefSeq (DONE - 2018-10-24 - Hiram)
+    mkdir /hive/data/genomes/cotJap2/bed/idKeys
+    cd /hive/data/genomes/cotJap2/bed/idKeys
+
+    time (doIdKeys.pl \
+        -twoBit=/hive/data/genomes/cotJap2/cotJap2.unmasked.2bit \
+        -buildDir=`pwd` cotJap2) > do.log 2>&1 &
+    # real    3m29.692s
+
+    cat cotJap2.keySignature.txt
+    #  68241645368b97713a794c7e52f3bebe
+
+#############################################################################
+# gapOverlap (DONE - 2018-10-24 - Hiram)
+    mkdir /hive/data/genomes/cotJap2/bed/gapOverlap
+    cd /hive/data/genomes/cotJap2/bed/gapOverlap
+    time (doGapOverlap.pl \
+        -twoBit=/hive/data/genomes/cotJap2/cotJap2.unmasked.2bit cotJap2 ) \
+        > do.log 2>&1 &
+    # real    4m4.820s
+
+    cat fb.cotJap2.gapOverlap.txt
+    # 99406 bases of 927656957 (0.011%) in intersection
+
+#############################################################################
+# tandemDups (DONE - 2018-10-24 - Hiram)
+    mkdir /hive/data/genomes/cotJap2/bed/tandemDups
+    cd /hive/data/genomes/cotJap2/bed/tandemDups
+    time (~/kent/src/hg/utils/automation/doTandemDup.pl \
+  -twoBit=/hive/data/genomes/cotJap2/cotJap2.unmasked.2bit cotJap2) \
+        > do.log 2>&1 &
+    # real    100m35.341s
+
+    cat fb.cotJap2.tandemDups.txt
+    # 12253990 bases of 927656957 (1.321%) in intersection
+
+    bigBedInfo cotJap2.tandemDups.bb | sed -e 's/^/#  /;'
+#  version: 4
+#  fieldCount: 13
+#  hasHeaderExtension: yes
+#  isCompressed: yes
+#  isSwapped: 0
+#  extraIndexCount: 0
+#  itemCount: 160,342
+#  primaryDataSize: 4,033,300
+#  primaryIndexSize: 46,712
+#  zoomLevels: 10
+#  chromCount: 1097
+#  basesCovered: 76,141,940
+#  meanDepth (of bases covered): 6.050932
+#  minDepth: 1.000000
+#  maxDepth: 161.000000
+#  std of depth: 11.361906
+
+#########################################################################
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2018-10-25 - Hiram)
+    # construct idKeys for the refseq sequence
+    mkdir /hive/data/genomes/cotJap2/refseq/idKeys
+    cd /hive/data/genomes/cotJap2/refseq/idKeys
+    faToTwoBit ../GC*2.0_genomic.fna.gz cotJap2.refSeq.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/cotJap2.refSeq.2bit refseqCotJap2)  > do.log 2>&1 &
+    # real    2m11.571s
+
+    cat refseqCotJap2.keySignature.txt
+    #  68241645368b97713a794c7e52f3bebe
+
+    # and the genbank sequence needs keys too:
+    mkdir /hive/data/genomes/cotJap2/refseq/idKeysGenbank
+    cd /hive/data/genomes/cotJap2/refseq/idKeysGenbank
+    faToTwoBit /hive/data/outside/ncbi/genomes/genbank/vertebrate_other/Coturnix_japonica/all_assembly_versions/GCA_001577835.1_Coturnix_japonica_2.0/GCA_001577835.1_Coturnix_japonica_2.0_genomic.fna.gz cotJap2.genbank.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/cotJap2.genbank.2bit genbankCotJap2)  > do.log 2>&1 &
+    # real    2m17.304s
+
+    cat genbankCotJap2.keySignature.txt
+    #  4d3e2bdeb63e88b97473fb83190f605c
+
+    mkdir /hive/data/genomes/cotJap2/bed/chromAlias
+    cd /hive/data/genomes/cotJap2/bed/chromAlias
+
+    join -t$'\t' ../idKeys/cotJap2.idKeys.txt \
+        ../../refseq/idKeysGenbank/genbankCotJap2.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToINSDC.bed
+
+    join -t$'\t' ../idKeys/cotJap2.idKeys.txt \
+        ../../refseq/idKeys/refseqCotJap2.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+
+    # should be same line counts throughout:
+    wc -l * ../../chrom.sizes
+    # 2011 ucscToINSDC.bed
+    # 2012 ucscToRefSeq.bed
+    # 2012 ../../chrom.sizes
+
+    # need to find the accession for the INSDC equivalent to chrM:
+    egrep chrM *
+# ucscToRefSeq.bed:chrM   0       16697   NC_003408.1
+
+    # lookup that accession at NCBI Entrez: AP003195.2
+    # and add to ucscToINSDC.bed:
+    printf "chrM\t0\t16697\tAP003195.2\n" >> ucscToINSDC.bed
+    # verify:
+    wc -l * ../../chrom.sizes
+    # 2012 ucscToINSDC.bed
+    # 2012 ucscToRefSeq.bed
+    # 2012 ../../chrom.sizes
+    egrep chrM *
+# ucscToINSDC.bed:chrM    0       16697   AP003195.2
+# ucscToRefSeq.bed:chrM   0       16697   NC_003408.1
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 30
+    # use the $chrSize in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab cotJap2 ucscToINSDC stdin ucscToINSDC.bed
+     # should be the same for ucscToRefSeq:
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 30
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' \
+         | hgLoadSqlTab cotJap2 ucscToRefSeq stdin ucscToRefSeq.bed
+
+    # should be quiet for all OK
+    checkTableCoords cotJap2
+
+    # should cover %100 entirely:
+    featureBits -countGaps cotJap2 ucscToINSDC
+    # 927656957 bases of 927656957 (100.000%) in intersection
+    featureBits -countGaps cotJap2 ucscToRefSeq
+    # 927656957 bases of 927656957 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2018-10-25 - Hiram)
+    # to be done after the ucscToRefSeq and ucscToINSDC tables are constructed
+    mkdir /hive/data/genomes/cotJap2/bed/chromAlias
+    cd /hive/data/genomes/cotJap2/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' cotJap2 \
+        | sort -k1,1 > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' cotJap2 \
+        | sort -k1,1 > ucsc.genbank.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+        > cotJap2.chromAlias.tab
+
+for t in refseq genbank
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t cotJap2.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 2012 =? 2012 OK
+# checking genbank: 2012 =? 2012 OK
+
+    hgLoadSqlTab cotJap2 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        cotJap2.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2018-10-25 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/birds/cotJap2
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" cotJap2 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+   9641 LSZS.1
+      1 NC_.1
+
+    # implies a rule: '[LN][CS][Z0-9_][S0-9][0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" cotJap2 | wc -l
+    # 9642
+
+    hgsql -N -e "select frag from gold;" cotJap2 \
+       | egrep -e '[LN][CS][Z0-9_][S0-9][0-9]+(\.[0-9]+)?' | wc -l
+    # 9642
+
+    hgsql -N -e "select frag from gold;" cotJap2 \
+       | egrep -v -e '[LN][CS][Z0-9_][S0-9][0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/cotJap2/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [LN][CS][Z0-9_][S0-9][0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (DONE - 2018-10-24 - Hiram)
+    mkdir /hive/data/genomes/cotJap2/bed/repeatMasker
+    cd /hive/data/genomes/cotJap2/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku cotJap2) > do.log 2>&1
+    # real    38m37.528s
+
+    cat faSize.rmsk.txt
+# 927656957 bases (10397704 N's 917259253 real 849317879 upper 67941374 lower)
+#	in 2012 sequences in 1 files
+# Total size: mean 461062.1 sd 6240990.8 min 237 (chr1_NW_015439218v1_random)
+#	max 175656249 (chr1) median 4462
+# %7.32 masked total, %7.41 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.7
+    #    February 01 2017 (open-4-0-7) 1.331 version of RepeatMasker
+    # CC    Dfam_Consensus RELEASE 20170127;                            *
+    # CC    RepBase RELEASE 20170127;     
+
+    time featureBits -countGaps cotJap2 rmsk
+    # 67949795 bases of 927656957 (7.325%) in intersection
+    # real    0m3.649s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' cotJap2 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 67949795.000000
+    # real    0m2.528s
+
+##########################################################################
+# running simple repeat (DONE - 2018-10-25 - Hiram)
+
+    # The '-trf409 4' is a bit smaller than human which is 6
+
+    mkdir /hive/data/genomes/cotJap2/bed/simpleRepeat
+    cd /hive/data/genomes/cotJap2/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409=4 cotJap2) > do.log 2>&1
+    # real    39m3.764s
+
+    cat fb.simpleRepeat
+    # 20596631 bases of 917263224 (2.245%) in intersection
+
+    cd /hive/data/genomes/cotJap2
+    # using the Window Masker result:
+    cd /hive/data/genomes/cotJap2
+    twoBitMask bed/windowMasker/cotJap2.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  cotJap2.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # add to rmsk after it is done:
+#     twoBitMask cotJap2.rmsk.2bit \
+#         -add bed/simpleRepeat/trfMask.bed cotJap2.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa cotJap2.2bit stdout | faSize stdin > faSize.cotJap2.2bit.txt
+    cat faSize.cotJap2.2bit.txt
+# 927656957 bases (10397704 N's 917259253 real 732832756 upper 184426497 lower)
+#	in 2012 sequences in 1 files
+# Total size: mean 461062.1 sd 6240990.8 min 237 (chr1_NW_015439218v1_random)
+#	max 175656249 (chr1) median 4462
+# %19.88 masked total, %20.11 masked real
+
+    rm /gbdb/cotJap2/cotJap2.2bit
+    ln -s `pwd`/cotJap2.2bit /gbdb/cotJap2/cotJap2.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2018-10-25 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/cotJap2/bed/microsat
+    cd /cluster/data/cotJap2/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed cotJap2 microsat microsat.bed
+    # Read 2907 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2018-10-24 - Hiram)
+
+    mkdir /hive/data/genomes/cotJap2/bed/windowMasker
+    cd /hive/data/genomes/cotJap2/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev cotJap2) > do.log 2>&1
+    # real    21m17.507s
+
+    # momemtarily broken hgwdev MySQL interrupted the load, finished that
+    # manually, then continuing:
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -continue=cleanup -dbHost=hgwdev cotJap2) > cleanup.log 2>&1
+
+    # Masking statistics
+    cat faSize.cotJap2.cleanWMSdust.txt
+# 927656957 bases (10397704 N's 917259253 real 733481307 upper 183777946 lower)
+#	in 2012 sequences in 1 files
+# Total size: mean 461062.1 sd 6240990.8 min 237 (chr1_NW_015439218v1_random)
+#	max 175656249 (chr1) median 4462
+# %19.81 masked total, %20.04 masked real
+
+    cat fb.cotJap2.rmsk.windowmaskerSdust.txt
+    # 42443355 bases of 927656957 (4.575%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2018-10-25 - Hiram)
+    mkdir /hive/data/genomes/cotJap2/bed/cpgIslands
+    cd /hive/data/genomes/cotJap2/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=hgwdev-101 cotJap2) > do.log 2>&1
+    # real    2m3.032s
+
+    cat fb.cotJap2.cpgIslandExt.txt
+    # 11708737 bases of 917263224 (1.276%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2018-10-25 - Hiram)
+    mkdir /hive/data/genomes/cotJap2/bed/genscan
+    cd /hive/data/genomes/cotJap2/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku cotJap2) > do.log 2>&1
+    # real    24m2.642s
+
+    # one job failed, finished with window size 2000000
+./lastGsBig.csh chr19 000 gtf/000/chr19.gtf pep/000/chr19.pep subopt/000/chr19.bed
+    # real    3m20.322s
+    # continuing
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku cotJap2) > makeBed.log 2>&1
+    # real    0m29.750s
+
+    cat fb.cotJap2.genscan.txt
+    # 23911678 bases of 1055588482 (2.265%) in intersection
+
+    cat fb.cotJap2.genscanSubopt.txt
+    # 24521608 bases of 1055588482 (2.323%) in intersection
+
+#########################################################################
+# Create kluster run files (DONE - 2018-10-25 - Hiram)
+
+    # numerator is cotJap2 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap cotJap2 gap
+    # 4144553 bases of 896716458 (0.462%) in intersection
+    #                   ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 896716458 / 2861349177 \) \* 1024
+    #  ( 896716458 / 2861349177 ) * 1024 = 320.910730
+
+    # ==> use -repMatch=300 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/cotJap2
+    blat cotJap2.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/cotJap2.11.ooc \
+        -repMatch=300
+    #   Wrote 18692 overused 11-mers to jkStuff/cotJap2.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' cotJap2 \
+        | sort -k7,7nr | ave -col=7 stdin
+    # all non-bridged gaps appear to be 100 bases
+    gapToLift -verbose=2 -minGap=100 cotJap2 jkStuff/nonBridged.lft \
+        -bedFile=jkStuff/nonBridged.bed
+    wc -l jkStuff/nonBri*
+    #   2531 jkStuff/nonBridged.bed
+    #   2531 jkStuff/nonBridged.lft
+
+########################################################################
+# lastz/chain/net swap human/hg38 (DONE - 2018-11-15 - Hiram)
+    # original alignment to hg38
+    cd /hive/data/genomes/hg38/bed/lastzCotJap2.2018-11-15
+
+    cat fb.hg38.chainCotJap2Link.txt
+    # 139668231 bases of 3095998939 (4.511%) in intersection
+    cat fb.hg38.chainSynCotJap2Link.txt
+    # 90319008 bases of 3095998939 (2.917%) in intersection
+    cat fb.hg38.chainRBest.CotJap2.txt
+    # 99806762 bases of 3095998939 (3.224%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/cotJap2/bed/blastz.hg38.swap
+    cd /hive/data/genomes/cotJap2/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzCotJap2.2018-11-15/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    8m9.892s
+
+    cat fb.cotJap2.chainHg38Link.txt
+    # 108800437 bases of 917263224 (11.861%) in intersection
+    cat fb.cotJap2.chainSynHg38Link.txt
+    # 87569432 bases of 917263224 (9.547%) in intersection
+
+    # mistakenly started this on ku, it failed at the download step since
+    # it could not see the /gbdb/mm10/ hierarchy:
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` cotJap2 hg38) > rbest.log 2>&1 &
+    # real    99m33.362s
+
+    # continue on hgwdev
+    time (doRecipBest.pl -load -workhorse=hgwdev -continue=download -buildDir=`pwd` cotJap2 hg38) > rbest.download.log 2>&1 &
+    # real    1m53.130s
+
+    cat fb.cotJap2.chainRBest.Hg38.txt
+    # 99417593 bases of 917263224 (10.839%) in intersection
+
+#############################################################################
+# lastz/chain/net swap mouse/mm10 (DONE - 2018-11-15 - Hiram)
+
+    # original alignment
+    cd /hive/data/genomes/mm10/bed/lastzCotJap2.2018-11-15
+
+    cat fb.mm10.chainCotJap2Link.txt
+    # 97251364 bases of 2652783500 (3.666%) in intersection
+    cat fb.mm10.chainSynCotJap2Link.txt
+    # 67653818 bases of 2652783500 (2.550%) in intersection
+    cat fb.mm10.chainRBest.CotJap2.txt 
+    # 76298136 bases of 2652783500 (2.876%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/cotJap2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/cotJap2/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzCotJap2.2018-11-15/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    6m37.873s
+
+    cat fb.cotJap2.chainMm10Link.txt
+    # 82592561 bases of 917263224 (9.004%) in intersection
+    cat fb.cotJap2.chainSynMm10Link.txt
+    # 66583746 bases of 917263224 (7.259%) in intersection
+
+    # mistakenly started this on ku, it failed at the download step since
+    # it could not see the /gbdb/mm10/ hierarchy:
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` cotJap2 mm10) > rbest.log 2>&1 &
+    # real    79m48.767s
+
+    # continue on hgwdev
+    time (doRecipBest.pl -load -workhorse=hgwdev -continue=download -buildDir=`pwd` cotJap2 mm10) > rbest.download.log 2>&1 &
+    # real    1m40.970s
+
+    cat fb.cotJap2.chainRBest.Mm10.txt
+    # 76078816 bases of 917263224 (8.294%) in intersection
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2018-10-25 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Gallus gallus	30708	600485	6392
+
+    # edit etc/genbank.conf to add cotJap2 just before galGal5
+
+# cotJap2 (Japanese quail/GCF_001577835.1_Coturnix_japonica_2.0)
+cotJap2.serverGenome = /hive/data/genomes/cotJap2/cotJap2.2bit
+cotJap2.clusterGenome = /hive/data/genomes/cotJap2/cotJap2.2bit
+cotJap2.ooc = /hive/data/genomes/cotJap2/jkStuff/cotJap2.11.ooc
+cotJap2.lift = /hive/data/genomes/cotJap2/jkStuff/nonBridged.lft
+cotJap2.perChromTables = no
+cotJap2.downloadDir = cotJap2
+cotJap2.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+cotJap2.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+cotJap2.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+cotJap2.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+cotJap2.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+cotJap2.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+# defaults yes: genbank.mrna.native.load, genbank.mrna.native.loadDesc,
+# genbank.est.native.load, refseq.mrna.native.load, refseq.mrna.native.loadDesc,
+# refseq.mrna.xeno.load , refseq.mrna.xeno.loadDesc
+# cotJap2.upstreamGeneTbl = refGene
+# cotJap2.upstreamMaf = multiz7way /hive/data/genomes/galGal4/bed/multiz7way/species.lst
+
+    # verify the files specified exist before checking in the file:
+  grep ^cotJap2 etc/genbank.conf | grep hive | awk '{print $NF}' | xargs ls -og
+# -rw-rw-r-- 1 276005530 Oct 25 08:44 /hive/data/genomes/cotJap2/cotJap2.2bit
+# -rw-rw-r-- 1 276005530 Oct 25 08:44 /hive/data/genomes/cotJap2/cotJap2.2bit
+# -rw-rw-r-- 1     74776 Oct 25 08:52 /hive/data/genomes/cotJap2/jkStuff/cotJap2.11.ooc
+# -rw-rw-r-- 1    146196 Oct 25 08:54 /hive/data/genomes/cotJap2/jkStuff/nonBridged.lft
+
+# Organism name:  Coturnix japonica (Japanese quail)
+# And edit src/lib/gbGenome.c to add new species
+#	static char *cotJapNames[] = {"Coturnix japonica", NULL};
+#	    {"cotJap", cotJapNames},
+
+    git commit -m \
+  "Added cotJap2 Japanese quail/Coturnix japonica; refs #22330" \
+       etc/genbank.conf src/lib/gbGenome.c
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add cotJap2 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/hgwdev.dbs
+    git commit -m "Added cotJap2 - Japanese quail refs #22330" etc/hgwdev.dbs
+    git push
+    make etc-update
+
+    # wait a few days for genbank magic to take place, the tracks will
+    # appear
+
+#############################################################################
+# augustus gene track (DONE - 2018-10-25 - Hiram)
+
+    mkdir /hive/data/genomes/cotJap2/bed/augustus
+    cd /hive/data/genomes/cotJap2/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=chicken -dbHost=hgwdev \
+           -workhorse=hgwdev cotJap2) > do.log 2>&1
+    # real    53m57.211s
+
+    cat fb.cotJap2.augustusGene.txt
+    # 24461637 bases of 917263224 (2.667%) in intersection
+
+#########################################################################
+# ncbiRefSeq (DONE - 2018-10-25 - Hiram)
+
+    mkdir /hive/data/genomes/cotJap2/bed/ncbiRefSeq
+    cd /hive/data/genomes/cotJap2/bed/ncbiRefSeq
+    # running step wise just to be careful
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -fileServer=hgwdev -smallClusterHub=hgwdev-101 -workhorse=hgwdev \
+      refseq vertebrate_other Coturnix_japonica \
+      GCF_001577835.1_Coturnix_japonica_2.0 cotJap2) > do.log 2>&1
+    # real    5m8.139s
+
+    cat fb.ncbiRefSeq.cotJap2.txt
+    #  67716696 bases of 917263224 (7.382%) in intersection
+
+    # need to add: include ../../refSeqComposite.ra alpha
+    # to the chicken/cotJap2/trackDb.ra to turn on the track in the browser
+
+    # there was one gene that claimed to have a protein, but the
+    # protein sequence was not included in the protein.faa file
+    # discovered from joinerCheck
+    # manual fix to blank out this one protein, to see the entry
+    hgsql -e 'select * from ncbiRefSeqLink where protAcc="NP_989875.1";' cotJap2
+    hgsql -e 'update ncbiRefSeqLink set protAcc="" where protAcc="NP_989875.1";' cotJap2
+    # this makes the 'protein' link disappear from the gene details page
+    # curious that this gene is marked as a non-coding gene anyway ?
+    # gene: FET1 at chr4:63,102,774-63,105,516-
+
+    featureBits -enrichment cotJap2 refGene ncbiRefSeq 
+ # refGene 0.016%, ncbiRefSeq 7.382%, both 0.016%, cover 99.31%, enrich 13.45x
+
+    featureBits -enrichment cotJap2 ncbiRefSeq refGene
+ # ncbiRefSeq 7.382%, refGene 0.016%, both 0.016%, cover 0.22%, enrich 13.45x
+
+    featureBits -enrichment cotJap2 ncbiRefSeqCurated refGene
+ # ncbiRefSeqCurated 0.001%, refGene 0.016%, both 0.000%, cover 0.00%, enrich 0.00x
+    featureBits -enrichment cotJap2 refGene ncbiRefSeqCurated
+ # refGene 0.016%, ncbiRefSeqCurated 0.001%, both 0.000%, cover 0.00%, enrich 0.00x
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2018-10-25 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("cotJap2", "blat1a", "17894", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("cotJap2", "blat1a", "17895", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to MEPE gene (egg shell protein)
+##  (DONE - 2018-10-25 - Hiram)
+
+    # as found from the galGal6 protein blat to cotJap2
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr4:40640683-40643612"
+	where name="cotJap2";' hgcentraltest
+
+##############################################################################
+# LIFTOVER cotJap1 TO cotJap2 (DONE - 2018-11-16 - Hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/cotJap1
+    blat cotJap1.2bit \
+        /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/cotJap1.11.ooc \
+	-repMatch=300
+    # Wrote 1938 overused 11-mers to jkStuff/cotJap1.11.ooc
+
+    mkdir /hive/data/genomes/cotJap1/bed/blat.cotJap2.2018-11-16
+    cd /hive/data/genomes/cotJap1/bed/blat.cotJap2.2018-11-16
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/cotJap1/jkStuff/cotJap1.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         cotJap1 cotJap2) > do.log 2>&1 &
+    # real    9m49.734s
+
+    # verify the convert link on the test browser is now active
+    # from cotJap1 to cotJap2
+
+##############################################################################
+# LIFTOVER TO cotJap1 (DONE - 2018-11-16 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/cotJap2/bed/blat.cotJap1.2018-11-16
+    cd /hive/data/genomes/cotJap2/bed/blat.cotJap1.2018-11-16
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/cotJap2/jkStuff/cotJap2.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         cotJap2 cotJap1) > do.log 2>&1 &
+    # real    3m18.808s
+
+    # verify the convert link on the test browser is now active
+    # from cotJap2 to cotJap1
+
+##############################################################################
+# crispr 10K shoulders (DONE - 2018-11-15 - Hiram)
+    mkdir /hive/data/genomes/cotJap2/bed/crispr.10K]
+    cd /hive/data/genomes/cotJap2/bed/crispr.10K]
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+   -stop=load -buildDir=`pwd` -smallClusterHub=hgwdev-101 cotJap2 ncbiRefSeq) \
+	> do.log 2>&1
+    # real    39m23.083s
+
+    # script under development, failed when it reached specScores, fixing
+    # and continuing:
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -continue=specScores \
+   -stop=load -buildDir=`pwd` -smallClusterHub=hgwdev-101 cotJap2 ncbiRefSeq) \
+	> specScores.log 2>&1
+    # real    870m26.370s
+
+    # add to cotJap2/trackDb.ra:
+    # include ../../crispr10K.ra
+
+    # after is appears to be correct, cleanup:
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -continue=cleanup \
+   -buildDir=`pwd` -smallClusterHub=hgwdev-101 cotJap2 ncbiRefSeq) \
+	> do.log 2>&1
+
+##############################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2018-11-26 - Hiram)
+xyz
+    cd $HOME/kent/src/hg/makeDb/schema
+    # verify all the business is done for release
+    ~/kent/src/hg/utils/automation/verifyBrowser.pl cotJap2
+# 70 tables in database cotJap2 - Japanese quail, Coturnix japonica
+# verified 59 tables in database cotJap2, 11 extra tables, 21 optional tables
+# NCBI RefSeq genes     10 optional tables
+# chainNetRBestMm10     3 optional tables
+# chainNetSynHg38       3 optional tables
+# chainNetSynMm10       3 optional tables
+# gapOverlap    1 optional tables
+# tandemDups    1 optional tables
+# 1     chainGalGal6    - extra table
+# 2     chainGalGal6Link        - extra table
+# 3     chainRBestGalGal6       - extra table
+# 4     chainRBestGalGal6Link   - extra table
+# . . . etc . . .
+# 8     crispr10KTargets        - extra table
+# 9     netGalGal6      - extra table
+# 10    netRBestGalGal6 - extra table
+# 11    netSynGalGal6   - extra table
+# 9 genbank tables found
+# verified 29 required tables, 0 missing tables
+# hg38 chainNet to cotJap2 found 3 required tables
+# mm10 chainNet to cotJap2 found 3 required tables
+# hg38 chainNet RBest and syntenic to cotJap2 found 6 optional tables
+# mm10 chainNet RBest and syntenic to cotJap2 found 3 optional tables
+# liftOver to previous versions: 1, from previous versions: 1
+
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=cotJap2 -tableCoverage all.joiner
+    joinerCheck -database=cotJap2 -times all.joiner
+    joinerCheck -database=cotJap2 -keys all.joiner
+
+    # when clean, check in:
+    git commit -m 'adding rules for cotJap2 refs #22330' all.joiner
+    git push
+    # run up a 'make alpha' in hg/hgTables to get this all.joiner file
+    # into the hgwdev/genome-test system
+
+    cd /hive/data/genomes/cotJap2
+    time (makeDownloads.pl cotJap2) > downloads.log 2>&1
+    #  real    8m50.797s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/cotJap2/pushQ
+    cd /hive/data/genomes/cotJap2/pushQ
+  time (makePushQSql.pl -redmineList cotJap2) > cotJap2.pushQ.sql 2> stderr.out
+    # real    9m45.039s
+
+    # remove the tandemDups and gapOverlap from the file list:
+    sed -i -e "/tandemDups/d" redmine.cotJap2.table.list
+    sed -i -e "/Tandem Dups/d" redmine.cotJap2.releaseLog.txt
+    sed -i -e "/gapOverlap/d" redmine.cotJap2.table.list
+    sed -i -e "/Gap Overlaps/d" redmine.cotJap2.releaseLog.txt
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/cotJap2/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/cotJap2/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/cotJap2/bbi/quality.bw
+    # WARNING: cotJap2 does not have seq
+    # WARNING: cotJap2 does not have extFile
+
+    # criapr10K did not get added to the lists:
+    printf "cotJap2.crispr10KRanges\ncotJap2.crispr10KTargets\n" \
+        >> redmine.cotJap2.table.list
+    ls -L /gbdb/cotJap2/crispr10K/*  >> redmine.cotJap2.file.list
+    printf "CRISPR Targets 10K\nCRISPR Regions 10K\n" \
+        >> redmine.cotJap2.releaseLog.txt
+
+    # add the path names to the listing files in the redmine issue
+    # in the three appropriate entry boxes:
+
+#	/hive/data/genomes/cotJap2/pushQ/redmine.cotJap2.file.list
+#	/hive/data/genomes/cotJap2/pushQ/redmine.cotJap2.releaseLog.txt
+#	/hive/data/genomes/cotJap2/pushQ/redmine.cotJap2.table.list
+
+#########################################################################

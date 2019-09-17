@@ -901,7 +901,7 @@ if (likeExpr==NULL)
     sqlSafef(query, sizeof(query), "SELECT DISTINCT tableName FROM %s ORDER BY tableName", tableList);
 else
     sqlSafef(query, sizeof(query), 
-        "SELECT DISTINCT tableName FROM %s WHERE tableName %s ORDER BY tableName", tableList, likeExpr);
+        "SELECT DISTINCT tableName FROM %s WHERE tableName LIKE '%s' ORDER BY tableName", tableList, likeExpr);
 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
@@ -923,7 +923,7 @@ char query[256];
 if (likeExpr == NULL)
     safef(query, sizeof(query), NOSQLINJ "SHOW TABLES");
 else
-    safef(query, sizeof(query), NOSQLINJ "SHOW TABLES %s", likeExpr);
+    safef(query, sizeof(query), NOSQLINJ "SHOW TABLES LIKE '%s'", likeExpr);
 
 struct slName *list = NULL, *el;
 
@@ -1662,6 +1662,25 @@ sqlUpdate(sc, query);
 return TRUE;
 }
 
+char *sqlGetCreateTable(struct sqlConnection *sc, char *table)
+/* Get the Create table statement. table must exist. */
+{
+char query[256];
+struct sqlResult *res;
+char **row = NULL;
+char *statement = NULL;
+
+sqlSafef(query, sizeof(query), "show create table %s", table);
+res = sqlGetResult(sc, query);
+if ((row=sqlNextRow(res)))
+    {
+    // skip first column which has useless table name in it.
+    statement = cloneString(row[1]);
+    }
+sqlFreeResult(&res);
+return statement;
+}
+
 void sqlRemakeTable(struct sqlConnection *sc, char *table, char *create)
 /* Drop table if it exists, and recreate it. */
 {
@@ -1690,7 +1709,10 @@ struct sqlResult *sr;
 if (sameString(table,""))
     {
     if (sameOk(cfgOption("noSqlInj.dumpStack"), "on"))
-	dumpStack("jksql sqlTableExists: Buggy code is feeding me empty table name. table=[%s].\n", table); fflush(stderr); // log only
+	{
+	dumpStack("jksql sqlTableExists: Buggy code is feeding me empty table name. table=[%s].\n", table);
+	fflush(stderr); // log only
+	}
     return FALSE;
     }
 // TODO If the ability to supply a list of tables is hardly used,
@@ -1704,7 +1726,10 @@ if (strchr(table,','))
 if (strchr(table,'%'))
     {
     if (sameOk(cfgOption("noSqlInj.dumpStack"), "on"))
-	dumpStack("jksql sqlTableExists: Buggy code is feeding me junk wildcards. table=[%s].\n", table); fflush(stderr); // log only
+	{
+	dumpStack("jksql sqlTableExists: Buggy code is feeding me junk wildcards. table=[%s].\n", table);
+	fflush(stderr); // log only
+	}
     return FALSE;
     }
 if (strchr(table,'-'))
@@ -1732,7 +1757,7 @@ if ((sr = sqlGetResultExt(sc, query, &errNo, &err)) == NULL)
         return FALSE;
     if (sc->failoverConn)
 	{
-	// if not found but we have a main connection, check the main connection, too
+	// if not found but we have a failover connection, check on it, too
 	if ((sr = sqlGetResultExt(sc->failoverConn, query, &errNo, &err)) == NULL)
 	    {
 	    if (errNo == tableNotFoundCode)
@@ -1748,13 +1773,47 @@ sqlFreeResult(&sr);
 return TRUE;
 }
 
-bool sqlColumnExists(struct sqlConnection *conn, char *tableName, char *column)
-/* return TRUE if column exists in table. tableName can contain sql wildcards  */
+// Note: this is copied from hdb.c's hParseDbDotTable.  Normally I abhor copying but I really
+// don't want to make jksql.c depend on hdb.h...
+void sqlParseDbDotTable(char *dbIn, char *dbDotTable, char *dbOut, size_t dbOutSize,
+                        char *tableOut, size_t tableOutSize)
+/* If dbDotTable contains a '.', then assume it is db.table and parse out into dbOut and tableOut.
+ * If not, then it's just a table; copy dbIn into dbOut and dbDotTable into tableOut. */
 {
+char *dot = strchr(dbDotTable, '.');
+char *table = dbDotTable;
+if (dot != NULL)
+    {
+    safencpy(dbOut, dbOutSize, dbDotTable, dot - dbDotTable);
+    table = &dot[1];
+    }
+else
+    safecpy(dbOut, dbOutSize, dbIn);
+safecpy(tableOut, tableOutSize, table);
+}
+
+// forward declaration to avoid moving code around:
+static boolean sqlConnChangeDbMainOrFailover(struct sqlConnection *sc, char *database, boolean abort);
+
+bool sqlColumnExists(struct sqlConnection *conn, char *table, char *column)
+/* return TRUE if column exists in table. column can contain sql wildcards  */
+{
+// "show columns ... like" does not support db.table names, so temporarily change database
+// if table is really db.table.
+char *connDb = cloneString(sqlGetDatabase(conn));
+char tableDb[1024];
+char tableName[1024];
+sqlParseDbDotTable(connDb, table, tableDb, sizeof tableDb, tableName, sizeof tableName);
 char query[1024];
 sqlSafef(query, 1024, "SHOW COLUMNS FROM `%s` LIKE '%s'", tableName, column);
+boolean changeDb = differentStringNullOk(connDb, tableDb);
+if (changeDb)
+    sqlConnChangeDbMainOrFailover(conn, tableDb, TRUE);
 char buf[1024];
 char *ret = sqlQuickQuery(conn, query, buf, 1024);
+if (changeDb)
+    sqlConnChangeDbMainOrFailover(conn, connDb, TRUE);
+freeMem(connDb);
 return (ret!=NULL);
 }
 
@@ -1802,11 +1861,23 @@ char query[512];
 struct sqlResult *sr;
 char **row;
 boolean exists;
+// "show tables" does not support db.table names, so temporarily change database
+// if table is really db.table.
+char *connDb = cloneString(sqlGetDatabase(sc));
+char tableDb[1024];
+char tableName[1024];
+sqlParseDbDotTable(connDb, table, tableDb, sizeof tableDb, tableName, sizeof tableName);
 
-sqlSafef(query, sizeof(query), "show tables like '%s'", table);
+sqlSafef(query, sizeof(query), "show tables like '%s'", tableName);
+boolean changeDb = differentStringNullOk(connDb, tableDb);
+if (changeDb)
+    sqlConnChangeDbMainOrFailover(sc, tableDb, TRUE);
 sr = sqlGetResult(sc, query);
 exists = ((row = sqlNextRow(sr)) != NULL);
 sqlFreeResult(&sr);
+if (changeDb)
+    sqlConnChangeDbMainOrFailover(sc, connDb, TRUE);
+freeMem(connDb);
 return exists;
 }
 
@@ -1892,7 +1963,7 @@ sqlFreeResult(&sr);
 }
 
 int sqlUpdateRows(struct sqlConnection *conn, char *query, int* matched)
-/* Execute an update query, returning the number of rows change.  If matched
+/* Execute an update query, returning the number of rows changed.  If matched
  * is not NULL, it gets the total number matching the query. */
 {
 int numChanged = 0;
@@ -2180,16 +2251,6 @@ if(sr != NULL)
     return mysql_field_count(sr->conn->conn);
 return 0;
 }
-
-#ifdef SOMETIMES  /* Not available for all MYSQL environments. */
-int sqlFieldCount(struct sqlResult *sr)
-/* Return number of fields in a row of result. */
-{
-if (sr == NULL)
-    return 0;
-return mysql_field_count(sr->result);
-}
-#endif /* SOMETIMES */
 
 int sqlFieldCount(struct sqlResult *sr)
 /* Return number of fields in a row of result. */
@@ -2656,6 +2717,15 @@ if (connErr != 0)
 return TRUE;
 }
 
+static boolean sqlConnChangeDbMainOrFailover(struct sqlConnection *sc, char *database, boolean abort)
+/* change the database of an sql connection, using failover if applicable */
+{
+if (sc->failoverConn == NULL)
+    return sqlConnChangeDbMain(sc, database, abort);
+else
+    return sqlConnChangeDbFailover(sc, database, abort);
+}
+
 static boolean sqlConnCacheEntrySetDb(struct sqlConnCacheEntry *scce,
                                       char *database,
                                       boolean abort)
@@ -2663,10 +2733,7 @@ static boolean sqlConnCacheEntrySetDb(struct sqlConnCacheEntry *scce,
 {
 struct sqlConnection *sc = scce->conn;
 
-if (sc->failoverConn == NULL) 
-    return sqlConnChangeDbMain(sc, database, abort);
-else
-    return sqlConnChangeDbFailover(sc, database, abort);
+return sqlConnChangeDbMainOrFailover(sc, database, abort);
 }
 
 static struct sqlConnCacheEntry *sqlConnCacheFindFree(struct sqlConnCache *cache,
@@ -2821,6 +2888,14 @@ if (conn != NULL)
     }
 }
 
+unsigned long sqlEscapeStringFull(char *to, const char* from, long fromLength)
+/* Prepares a string for inclusion in a sql statement.  Output string
+ * must be 2*strlen(from)+1. fromLength is the length of the from data.
+ * Specifying fromLength allows one to encode a binary string that can contain any character including 0. */
+{
+return mysql_escape_string(to, from, fromLength);
+}
+
 // where am I using this? probably just cart.c and maybe cartDb.c ?
 // but it is worth keeping just for the cart.
 void sqlDyAppendEscaped(struct dyString *dy, char *s)
@@ -2835,14 +2910,14 @@ unsigned long sqlEscapeString3(char *to, const char* from)
 /* Prepares a string for inclusion in a sql statement.  Output string
  * must be 2*strlen(from)+1.  Returns actual escaped size not counting term 0. */
 {
-return mysql_escape_string(to, from, strlen(from));
+return sqlEscapeStringFull(to, from, strlen(from));
 }
 
 char *sqlEscapeString2(char *to, const char* from)
 /* Prepares a string for inclusion in a sql statement.  Output string
  * must be 2*strlen(from)+1 */
 {
-mysql_escape_string(to, from, strlen(from));
+sqlEscapeStringFull(to, from, strlen(from));
 return to;
 }
 
@@ -3079,24 +3154,46 @@ char query[512], **row;
 struct sqlResult *sr;
 int updateIx;
 char *ret;
-sqlSafef(query, sizeof(query), "show table status like '%s'", table);
+// "show table status" does not support db.table names, so temporarily change database
+// if table is really db.table.
+char *connDb = cloneString(sqlGetDatabase(conn));
+char tableDb[1024];
+char tableName[1024];
+sqlParseDbDotTable(connDb, table, tableDb, sizeof tableDb, tableName, sizeof tableName);
+boolean changeDb = differentStringNullOk(connDb, tableDb);
+sqlSafef(query, sizeof(query), "show table status like '%s'", tableName);
 // the failover strategy for failoverConn does not work for this command, 
 // as it never returns an error. So we run this on the failover server
 // if we have a failover connection and the table is not on the main server
-if (conn->failoverConn && !sqlTableExistsOnMain(conn, table))
+boolean useFailOver = conn->failoverConn && !sqlTableExistsOnMain(conn, tableName);
+if (useFailOver)
     {
     sqlConnectIfUnconnected(conn->failoverConn, TRUE);
     monitorPrintInfo(conn->failoverConn, "SQL_TABLE_STATUS_FAILOVER");
+    if (changeDb)
+        sqlConnChangeDb(conn->failoverConn, tableDb, TRUE);
     sr = sqlGetResult(conn->failoverConn, query);
     }
 else
+    {
+    if (changeDb)
+        sqlConnChangeDb(conn, tableDb, TRUE);
     sr = sqlGetResult(conn, query);
+    }
 updateIx = getUpdateFieldIndex(sr);
 row = sqlNextRow(sr);
 if (row == NULL)
     errAbort("Database table %s doesn't exist", table);
 ret = cloneString(row[updateIx]);
 sqlFreeResult(&sr);
+if (changeDb)
+    {
+    if (useFailOver)
+        sqlConnChangeDb(conn->failoverConn, connDb, TRUE);
+    else
+        sqlConnChangeDb(conn, connDb, TRUE);
+    }
+freeMem(connDb);
 return ret;
 }
 
@@ -3109,6 +3206,52 @@ time_t time = sqlDateToUnixTime(date);
 freeMem(date);
 return time;
 }
+
+static char *sqlTablePropertyFromSchema(struct sqlConnection *conn, char *db, char *table, char *field)
+/* Get table property. Table must exist or will abort. */
+{
+char query[512], **row;
+struct sqlResult *sr;
+char *ret;
+char tableDb[1024];
+char tableName[1024];
+sqlParseDbDotTable(db, table, tableDb, sizeof tableDb, tableName, sizeof tableName);
+sqlSafef(query, sizeof(query), 
+    "SELECT %s FROM information_schema.TABLES"
+    " WHERE TABLE_SCHEMA = '%s' AND TABLE_NAME = '%s'", field, tableDb, tableName);
+// the failover strategy for failoverConn does not work for this command, 
+// as it never returns an error. So we run this on the failover server
+// if we have a failover connection and the table is not on the main server
+if (conn->failoverConn && !sqlTableExistsOnMain(conn, tableName))
+    {
+    sqlConnectIfUnconnected(conn->failoverConn, TRUE);
+    monitorPrintInfo(conn->failoverConn, "SQL_TABLE_STATUS_FAILOVER");
+    sr = sqlGetResult(conn->failoverConn, query);
+    }
+else
+    sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row == NULL)
+    errAbort("Database table %s or field %s doesn't exist", table, field);
+ret = cloneString(row[0]);
+sqlFreeResult(&sr);
+return ret;
+}
+
+unsigned long sqlTableDataSizeFromSchema(struct sqlConnection *conn, char *db, char *table)
+/* Get table data size. Table must exist or will abort. */
+{
+char *sizeString = sqlTablePropertyFromSchema(conn, db, table, "data_length");
+return sqlUnsignedLong(sizeString);
+}
+
+unsigned long sqlTableIndexSizeFromSchema(struct sqlConnection *conn, char *db, char *table)
+/* Get table index size. Table must exist or will abort. */
+{
+char *sizeString = sqlTablePropertyFromSchema(conn, db, table, "index_length");
+return sqlUnsignedLong(sizeString);
+}
+
 
 char *sqlGetPrimaryKey(struct sqlConnection *conn, char *table)
 /* Get primary key if any for table, return NULL if none. */
@@ -3552,18 +3695,10 @@ while((c = *s++) != 0)
     {
     if (disAllowed[c])
 	{
-	// DEBUG REMOVE Temporary for trying to track down some weird error 
-	//  because the stackdump should appear but does not.
-	//if (sameOk(cfgOption("noSqlInj.dumpStack"), "on"))
-	//    dumpStack("character %c disallowed in sql string part %s\n", c, sOriginal);  // DEBUG REMOVE GALT 
-
-	// TODO for some reason the warn stack is messed up sometimes very eary. -- happening in hgTables position search on brca
-	//warn("character %c disallowed in sql string part %s", c, sOriginal);
-
 	// just using this as a work-around
 	// until the problem with early errors and warn/abort stacks has been fixed.
-	char *noSqlInjLevel = cfgOption("noSqlInj.level");
-	if (noSqlInjLevel && !sameString(noSqlInjLevel, "ignore"))
+	char *noSqlInjLevel = cfgOptionDefault("noSqlInj.level", "abort");
+	if (!sameString(noSqlInjLevel, "ignore"))
 	    {
     	    fprintf(stderr, "character %c disallowed in sql string part %s\n", c, sOriginal);  
 	    fflush(stderr);
@@ -3649,6 +3784,8 @@ if (!init)
     // NOTE it is important for security that no other characters be allowed here
     init = TRUE;
     }
+if (sameString(identifiers, "*"))  // exception allowed
+    return identifiers;
 if (!sqlCheckAllowedChars(identifiers, allowed))
     {
     sqlCheckError("Illegal character found in identifier list %s", identifiers);
@@ -3748,6 +3885,15 @@ if (!init)
     // NOTE it is important for security that no other characters be allowed here
     init = TRUE;
     }
+/* A good idea but code is currently using empty in table names at least. 
+See src/hg/lib/gtexTissue.c:
+select * from gtexTissue%s order by id
+This could be re-worked someday, but not now. refs #22596
+if (identifier[0] == 0) // empty string not allowed since this is usually caused by an error.
+    {
+    sqlCheckError("Illegal empty string identifier not allowed.");
+    }
+*/
 if (!sqlCheckAllowedChars(identifier, allowed))
     {
     sqlCheckError("Illegal character found in identifier %s", identifier);
@@ -4130,7 +4276,8 @@ while (TRUE)
 void vaSqlDyStringPrintf(struct dyString *ds, char *format, va_list args)
 /* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string. */
+ * NOSLQINJ tag is added to beginning if it is a new empty string.
+ * Appends to existing string. */
 {
 vaSqlDyStringPrintfExt(ds, FALSE, format, args);
 }
@@ -4138,7 +4285,8 @@ vaSqlDyStringPrintfExt(ds, FALSE, format, args);
 void sqlDyStringPrintf(struct dyString *ds, char *format, ...)
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string. */
+ * NOSLQINJ tag is added to beginning if it is a new empty string. 
+ * Appends to existing string. */
 {
 va_list args;
 va_start(args, format);
@@ -4150,7 +4298,7 @@ void vaSqlDyStringPrintfFrag(struct dyString *ds, char *format, va_list args)
 /* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.
  * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
- * the entire sql string. */
+ * the entire sql string. Appends to existing string. */
 {
 vaSqlDyStringPrintfExt(ds, TRUE, format, args);
 }
@@ -4159,23 +4307,13 @@ void sqlDyStringPrintfFrag(struct dyString *ds, char *format, ...)
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.
  * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
- * the entire sql string. */
+ * the entire sql string. Appends to existing string. */
 
 {
 va_list args;
 va_start(args, format);
 vaSqlDyStringPrintfFrag(ds, format, args);
 va_end(args);
-}
-
-
-void sqlDyStringAppend(struct dyString *ds, char *string)
-/* Append zero terminated string to end of dyString.
- * Adds the NOSQLINJ prefix if dy string is empty. */
-{
-if (ds->stringSize == 0)
-    dyStringAppend(ds, NOSQLINJ "");
-dyStringAppendN(ds, string, strlen(string));
 }
 
 
@@ -4192,6 +4330,24 @@ va_end(args);
 return ds;
 }
 
+void sqlDyStringPrintIdList(struct dyString *ds, char *fields)
+/* Append a comma-separated list of field identifiers. Aborts if invalid characters in list. */
+{
+sqlDyStringPrintf(ds, "%-s", sqlCkIl(fields));
+}
+
+
+void sqlDyStringPrintValuesList(struct dyString *ds, struct slName *list)
+/* Append a comma-separated, quoted and escaped list of values. */
+{
+struct slName *el;
+for (el = list; el != NULL; el = el->next)
+    {
+    if (el != list)
+	sqlDyStringPrintf(ds, ",");
+    sqlDyStringPrintf(ds, "'%s'", el->name);
+    }
+}
 
 void sqlCheckError(char *format, ...)
 /* A sql injection error has occurred. Check for settings and respond
@@ -4201,50 +4357,106 @@ void sqlCheckError(char *format, ...)
 va_list args;
 va_start(args, format);
 
-char *noSqlInjLevel = cfgOption("noSqlInj.level");
+char *noSqlInjLevel = cfgOptionDefault("noSqlInj.level", "abort");
 char *noSqlInjDumpStack = cfgOption("noSqlInj.dumpStack");
-// I tried to incorporate this setting so as to avoid duplicate dumpStacks
-// but it is not working that well, and I would rather have two than zero dumps.
-//char *browserDumpStack = cfgOption("browser.dumpStack");
-//char *scriptName = cgiScriptName();
 
-if (noSqlInjLevel)
-    { 
-    // don't dump if if we are going to do it during errAbort anyway
-    if (sameOk(noSqlInjDumpStack, "on"))
-	/* && (!(sameString(noSqlInjLevel, "abort") 
-	      && cgiIsOnWeb() 
-	      && sameOk(browserDumpStack, "on"))
-	    || endsWith(scriptName, "hgSuggest")
-           ) // note: this doesn't work for hgSuggest because it doesn't set the dumpStack handler.
-               // TODO find or add a better method to tell if it would already dumpStack on abort.
-       )
-        */
-	{
-	va_list dump_args;
-    	va_copy(dump_args, args);
-	vaDumpStack(format, dump_args);
-	va_end(dump_args);
-	}
+if (sameOk(noSqlInjDumpStack, "on"))
+    {
+    va_list dump_args;
+    va_copy(dump_args, args);
+    vaDumpStack(format, dump_args);
+    va_end(dump_args);
+    }
 
-    if (sameString(noSqlInjLevel, "logOnly"))
-	{
-	vfprintf(stderr, format, args);
-	fprintf(stderr, "\n");
-	fflush(stderr);
-	}
+if (sameString(noSqlInjLevel, "logOnly"))
+    {
+    vfprintf(stderr, format, args);
+    fprintf(stderr, "\n");
+    fflush(stderr);
+    }
 
-    if (sameString(noSqlInjLevel, "warn"))
-	{
-	vaWarn(format, args);
-	}
+if (sameString(noSqlInjLevel, "warn"))
+    {
+    vaWarn(format, args);
+    }
 
-    if (sameString(noSqlInjLevel, "abort"))
-	{
-	vaErrAbort(format, args);
-	}
+if (sameString(noSqlInjLevel, "abort"))
+    {
+    vaErrAbort(format, args);
     }
 
 va_end(args);
 
+}
+
+/* functions moved here from hgTables.c 2019-04-04 - Hiram */
+struct sqlFieldType *sqlFieldTypeNew(char *name, char *type)
+/* Create a new sqlFieldType */
+{
+struct sqlFieldType *ft;
+AllocVar(ft);
+ft->name = cloneString(name);
+ft->type = cloneString(type);
+return ft;
+}
+
+void sqlFieldTypeFree(struct sqlFieldType **pFt)
+/* Free resources used by sqlFieldType */
+{
+struct sqlFieldType *ft = *pFt;
+if (ft != NULL)
+    {
+    freeMem(ft->name);
+    freeMem(ft->type);
+    freez(pFt);
+    }
+}
+
+void sqlFieldTypeFreeList(struct sqlFieldType **pList)
+/* Free a list of dynamically allocated sqlFieldType's */
+{
+struct sqlFieldType *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    sqlFieldTypeFree(&el);
+    }
+*pList = NULL;
+}
+
+struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as)
+/* Convert asObject to list of sqlFieldTypes */
+{
+struct sqlFieldType *ft, *list = NULL;
+struct asColumn *col;
+for (col = as->columnList; col != NULL; col = col->next)
+    {
+    struct dyString *type = asColumnToSqlType(col);
+    ft = sqlFieldTypeNew(col->name, type->string);
+    slAddHead(&list, ft);
+    dyStringFree(&type);
+    }
+slReverse(&list);
+return list;
+}
+
+struct sqlFieldType *sqlListFieldsAndTypes(struct sqlConnection *conn, char *table)
+/* Get list of fields including their names and types.  The type currently is
+ * just a MySQL type string. */
+{
+struct sqlFieldType *ft, *list = NULL;
+char query[512];
+struct sqlResult *sr;
+char **row;
+sqlSafef(query, sizeof(query), "describe %s", table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    ft = sqlFieldTypeNew(row[0], row[1]);
+    slAddHead(&list, ft);
+    }
+sqlFreeResult(&sr);
+slReverse(&list);
+return list;
 }

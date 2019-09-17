@@ -39,7 +39,7 @@ $WEEKLYBLD/configureSandbox.csh . $WEEKLYBLD/downloadBuildSettings.mk
 
 cd kent/src 
 make BINDIR=$BINDIR DESTDIR=$DESTDIR userApps > make.log
-./utils/userApps/mkREADME.sh $DESTDIR$BINDIR FOOTER
+./utils/userApps/mkREADME.sh $DESTDIR$BINDIR FOOTER.txt
 cd ../..
 
 # copy everything if 64 bit
@@ -54,20 +54,24 @@ if ("$HOST" == "hgwdev") then
 	case ${DESTDIR}${BINDIR}/gfServer:
 	    ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
 	    scp -p $f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
-	    ssh -n qateam@hgdownload-sd "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
-	    scp -p $f qateam@hgdownload-sd:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
+###	    ssh -n qateam@hgdownload-sd "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
+###	    scp -p $f qateam@hgdownload-sd:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
+	    ssh -n qateam@genome-euro "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t"
+	    scp -p $f qateam@genome-euro:/mirrordata/apache/htdocs/admin/exe/$BINDIR/blat/$f:t
 	    breaksw
 	default:
 	    ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
 	    scp -p $f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
-	    ssh -n qateam@hgdownload-sd "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
-	    scp -p $f qateam@hgdownload-sd:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
+###	    ssh -n qateam@hgdownload-sd "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
+###	    scp -p $f qateam@hgdownload-sd:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
+	    ssh -n qateam@genome-euro "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
+	    scp -p $f qateam@genome-euro:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
 	    breaksw
     endsw
   end
 endif
 
-echo "userApps $MACHTYPE built on $HOST and scp'd to hgdownload and hgdownload-sd [${0}: START=${ScriptStart} END=`date`]"
+echo "userApps $MACHTYPE built on $HOST and scp'd to hgdownload, hgdownload-sd and genome-euro [${0}: START=${ScriptStart} END=`date`]"
 
 exit 0
 

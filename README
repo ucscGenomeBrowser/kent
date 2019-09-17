@@ -38,6 +38,11 @@ to the library routines,  and in a few specific applications.
 The applications are scattered in other directories.  Many of them are web based.
 The UCSC Genome Browser in particular is mostly found in kent/src/hg/hgTracks.
 
+The current version number is stored in src/hg/inc/versionInfo.h .
+The current version of a running genome browser is displayed in the html
+tag <TITLE> by the hgTracks program, e.g. http://genome.ucsc.edu/cgi-bin/hgTracks, 
+in modern internet browsers, hover over a tab to show it.
+
 GENERAL INSTALL INSTRUCTIONS
 
 SEE ALSO: http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads

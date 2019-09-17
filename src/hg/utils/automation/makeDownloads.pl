@@ -21,6 +21,7 @@ use vars qw/
     $opt_allowMissedTrfs
     $opt_noChromRoot
     $opt_ignoreRepeatMasker
+    $opt_noChromFiles
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -65,6 +66,8 @@ options:
     -allowMissedTrfs      tolerate missing trfMaskChrom/*.bed files
     -noChromRoot          find RM .out files for chr*_hap in actual hap chrom name
     -ignoreRepeatMasker   do not look for RM .out files
+    -noChromFiles         even if the assembly has <= $HgAutomate::splitThreshold sequences, don't make
+                          per-chromosome FA and AGP files.
 
 Automates generation of assembly download files for genome database \$db:
     compress: Create compressed download files, md5sum.txt and README.txt in
@@ -84,7 +87,7 @@ Assumptions:
 2. $HgAutomate::clusterData/\$db/{\$db.2bit,chrom.sizes} are in place.
 3. AGP, RepeatMasker .out and trfBig .bed files are in their usual places under
    $HgAutomate::clusterData/\$db/ .  (Will complain if not able to find.)
-4. RepeatMasker version information obtained from /scratch/data/RepeatMasker/
+4. RepeatMasker version information obtained from /hive/data/staging/data/RepeatMasker/
 5. Data use conditions are generic, they may need to be specific.
 " if ($detailed);
   print "\n";
@@ -105,6 +108,7 @@ sub checkOptions {
 		      'allowMissedTrfs',
 		      'noChromRoot',
 		      'ignoreRepeatMasker',
+		      'noChromFiles',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -282,7 +286,7 @@ sub compressScaffoldFiles {
   my $hgFakeAgpDir = "$HgAutomate::trackBuild/hgFakeAgp";
   my $agpFile = &mustFindOne("$db.agp", 'scaffolds.agp',
 			     "$hgFakeAgpDir/$db.agp",
-			     "$hgFakeAgpDir/scaffolds.agp");
+			     "$hgFakeAgpDir/scaffolds.agp", "ucsc/$db.agp");
   my $outFile = &mustFindOne("$db.fa.out", 'scaffolds.out', "bed/repeatMasker/$db.fa.out");
   my $trfFile = &mustFindOne("$trfRunDirRel/trfMask.bed",
 			     "$trfRunDirRel/scaffolds.bed");
@@ -489,7 +493,7 @@ sub printTableSpecificUsage {
   my $gotConditions = 0;
 
   if (&dbHasTable($dbHost, $db, 'softBerryGene')) {
-    &printSomeHaveConditions() if (! $gotConditions);
+    &printSomeHaveConditions($fh) if (! $gotConditions);
     $gotConditions = 1;
     print $fh <<_EOF_
    softberryGene.txt and softberryPep.txt -  Free for academic
@@ -501,7 +505,7 @@ _EOF_
   }
 
   if (&dbHasTable($dbHost, $db, 'knownGene')) {
-    &printSomeHaveConditions() if (! $gotConditions);
+    &printSomeHaveConditions($fh) if (! $gotConditions);
     $gotConditions = 1;
     print $fh <<_EOF_
    Swiss-Prot/UniProt data in knownGene.txt -
@@ -631,6 +635,7 @@ For more information about this assembly, please note the NCBI resources:
     https://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId
     https://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId
     https://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject
+    https://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample
 
 Files included in this directory (updated nightly):
 
@@ -700,17 +705,17 @@ sub makeBigZipsReadme {
       $organism, $consortium, $sequencingCenter, $projectUrl) =
 	&getDescriptives();
   my $rmVersion = "";
-  if ( ! -s "/scratch/data/RepeatMasker/RepeatMasker" ) {
-    die "can not read /scratch/data/RepeatMasker/RepeatMasker\n";
+  if ( ! -s "/hive/data/staging/data/RepeatMasker/RepeatMasker" ) {
+    die "can not read /hive/data/staging/data/RepeatMasker/RepeatMasker\n";
   }
-  $rmVersion = `grep -w open /scratch/data/RepeatMasker/RepeatMasker | grep -w version | grep -w RepeatMasker`;
+  $rmVersion = `grep -w open /hive/data/staging/data/RepeatMasker/RepeatMasker | grep -w version | grep -w RepeatMasker`;
   chomp $rmVersion;
   $rmVersion =~ s/#\s*//;
   my $emblLib = "";
-  if ( ! -s "/scratch/data/RepeatMasker/Libraries/RepeatMaskerLib.embl" ) {
-    die "can not read /scratch/data/RepeatMasker/Libraries/RepeatMaskerLib.embl\n";
+  if ( ! -s "/hive/data/staging/data/RepeatMasker/Libraries/RepeatMaskerLib.embl" ) {
+    die "can not read /hive/data/staging/data/RepeatMasker/Libraries/RepeatMaskerLib.embl\n";
   }
-  $emblLib = `head -100 /scratch/data/RepeatMasker/Libraries/RepeatMaskerLib.embl | grep -w RELEASE`;
+  $emblLib = `head -100 /hive/data/staging/data/RepeatMasker/Libraries/RepeatMaskerLib.embl | grep -w RELEASE`;
   chomp $emblLib;
   $emblLib =~ s/CC\s*//;
   $emblLib =~ s/;\s*.*//;
@@ -725,7 +730,7 @@ For more information about this assembly, please note the NCBI resources:
     https://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId
     https://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId
     https://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject
-    https://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioSample
+    https://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample
 
 Files included in this directory:
 
@@ -933,7 +938,7 @@ For more information about this assembly, please note the NCBI resources:
     https://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId
     https://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId
     https://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject
-    https://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioSample
+    https://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample
 
 Repeats from RepeatMasker and Tandem Repeats Finder (with period
 of 12 or less) are shown in lower case; non-repeating sequence is
@@ -1254,7 +1259,7 @@ if (! -e "$topDir/chrom.sizes") {
   die "Sorry, this script requires $topDir/chrom.sizes.\n";
 }
 @chroms = split("\n", `awk '{print \$1;}' $topDir/chrom.sizes`);
-$chromBased = (scalar(@chroms) <= $HgAutomate::splitThreshold);
+$chromBased = (scalar(@chroms) <= $HgAutomate::splitThreshold) && ! $opt_noChromFiles;
 if ($chromBased) {
   foreach my $chr (@chroms) {
     my $chrRoot = $chr;

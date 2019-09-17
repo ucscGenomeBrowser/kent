@@ -399,3 +399,71 @@ hgwbeta hgsql -h mysqlbeta -N qapushq -e 'select rank from pushQ order by rank d
     ssh qateam@hgwbeta './bin/x86_64/hgsql qapushq < /tmp/balAcu1.sql'
 
 ###########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2018-06-13 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/balAcu/balAcu1
+
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" balAcu1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c | sed -e 's/^/#\t/;'
+#        184071 ATDI.1
+#             1 NC_.1
+
+    # implies a rule: '[AN][TC][D_][I0-9]+(\.[0-9]+[0-9_]*)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" balAcu1 | wc -l
+    # 184072
+
+    hgsql -N -e "select frag from gold;" balAcu1 \
+       | egrep -e '[AN][TC][D_][I0-9]+(\.[0-9]+[0-9_]*)?' | wc -l
+    # 184072
+
+    hgsql -N -e "select frag from gold;" balAcu1 \
+       | egrep -v -e '[AN][TC][D_][I0-9]+(\.[0-9]+[0-9_]*)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/balAcu/balAcu1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [AN][TC][D_][I0-9]+(\.[0-9]+[0-9_]*)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+#############################################################################
+# lastz/chainNet swap from human/hg38 (DONE - 2018-06-13 - Hiram)
+
+    # alignment to human:
+    cd /hive/data/genomes/hg38/bed/lastzBalAcu1.2018-06-11
+    cat fb.hg38.chainBalAcu1Link.txt
+    # 1571134497 bases of 3049335806 (51.524%) in intersection
+    cat fb.hg38.chainSynBalAcu1Link.txt
+    # 1509091721 bases of 3049335806 (49.489%) in intersection
+    cat fb.hg38.chainRBest.BalAcu1.txt
+    # 1443423443 bases of 3049335806 (47.336%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/balAcu1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/balAcu1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzBalAcu1.2018-06-11/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1 &
+    #  real    105m38.443s
+
+    cat fb.balAcu1.chainHg38Link.txt
+    # 1485701363 bases of 2286657046 (64.973%) in intersection
+
+    cat fb.balAcu1.chainSynHg38Link.txt
+    # 1444079345 bases of 2286657046 (63.152%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` balAcu1 hg38) > rbest.log 2>&1 &
+    # real    422m43.817s
+
+    cat fb.balAcu1.chainRBest.Hg38.txt
+    # 1443200492 bases of 2286657046 (63.114%) in intersection
+
+#############################################################################

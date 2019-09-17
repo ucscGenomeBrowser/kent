@@ -88,7 +88,7 @@ else
     {
     struct twoBitFile *tbf = NULL;
     // split a filename+chrom like "/gbdb/hg19/hg19.2bit:chr1"
-    // (can also be URL like "http://hgdownload.cse.ucsc.edu/gbdb/hg19/hg19.2bit:chr1")
+    // (can also be URL like "http://hgdownload.soe.ucsc.edu/gbdb/hg19/hg19.2bit:chr1")
     // into filename and tSeqName
     char *tSeqName = strrchr(fileName, ':');
     int tSeqSize = 0;

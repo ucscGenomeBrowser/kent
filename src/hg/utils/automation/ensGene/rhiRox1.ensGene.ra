@@ -1,0 +1,16 @@
+# required db variable
+db rhiRox1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/rhiRox1/jkStuff/ensToUcsc.lift
+
+skipInvalid yes
+# ENSRROT00000015658.1 txEnd 2904 >= chromSize 2895
+# ENSRROT00000003328.1 txEnd 575 >= chromSize 551
+# ENSRROT00000003014.1 txEnd 553 >= chromSize 550
+# ENSRROT00000017963.1 txEnd 425 >= chromSize 423
+# ENSRROT00000004422.1 txEnd 409 >= chromSize 406
+# ENSRROT00000005493.1 txEnd 247 >= chromSize 235
+# ENSRROT00000010204.1 txEnd 233 >= chromSize 229
+# ENSRROT00000009486.1 txEnd 223 >= chromSize 220
+# ENSRROT00000000177.1 txEnd 217 >= chromSize 214
+

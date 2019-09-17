@@ -28,7 +28,7 @@ test: compile
 	file test.png
 
 testWeb: compile
-	wget -O testWeb.png 'http://hgwdev.cse.ucsc.edu/cgi-bin/phyloPng?phyloPng_tree=(A:0.1,B:0.1);'
+	wget -O testWeb.png 'http://hgwdev.soe.ucsc.edu/cgi-bin/phyloPng?phyloPng_tree=(A:0.1,B:0.1);'
 	file testWeb.png
 
 clean::

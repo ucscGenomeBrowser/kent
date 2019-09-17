@@ -356,6 +356,37 @@ taxId 30608
     hgLoadSqlTab micMur3 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         micMur3.chromAlias.tab
 
+    cd /hive/data/genomes/micMur3/bed/chromAlias
+    # add ensembl names 2017-12-14
+    mkdir previous
+    mv *.tab previous
+    join -t$'\t' ../idKeys/micMur3.idKeys.txt \
+	../../ensembl/ensemblMicMur3.idKeys.txt \
+	| cut -f2,3 | sort > ucsc.ensembl.tab
+
+    cut -f1,2 previous/ucsc.refseq.tab > ucsc.refseq.tab
+    cut -f1,2 previous/ucsc.genbank.tab > ucsc.genbank.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl
+    sort -o micMur3.chromAlias.tab micMur3.chromAlias.tab
+
+for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t micMur3.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 7678 =? 7678 OK
+# checking genbank: 7678 =? 7678 OK
+# checking ensembl: 7678 =? 7678 OK
+
+    hgLoadSqlTab micMur3 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        micMur3.chromAlias.tab
+
 #########################################################################
 # fixup search rule for assembly track/gold table (DONE - 2017-03-02 - Hiram)
     cd ~/kent/src/hg/makeDb/trackDb/mouseLemur/micMur3

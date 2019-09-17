@@ -233,7 +233,27 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 hFreeConn(&conn);
 }
 
+static boolean shouldFilterGenbankPatentSequences(struct track *tg)
+/* is this a genbank track with patent sequence filtering enabled */
+{
+char name[256];
+safef(name, sizeof(name), "%s.%s", tg->tdb->track, SHOW_PATENT_SEQUENCES_SUFFIX);
+return (sameString(tg->tdb->track, "mrna")|| sameString(tg->tdb->track, "intronEst"))
+        && !cartUsualBoolean(cart, name, FALSE);
+}
 
+static void filterGenbankPatentSequences(struct track *tg, struct linkedFeatures **pLfList)
+/* remove genbank patent sequences  */
+{
+struct linkedFeatures *lf, *newLf = NULL;
+while ((lf = slPopHead(pLfList)) != NULL)
+    {
+    if (!isGenbankPatentAccession(lf->name))
+        slAddHead(&newLf, lf);
+    }
+slReverse(&newLf);
+*pLfList = newLf;
+}
 
 struct simpleFeature *sfFromPslX(struct psl *psl,int grayIx, int sizeMul)
 {
@@ -478,6 +498,8 @@ if (tg->visibility != tvDense)
     slSort(&lfList, linkedFeaturesCmpStart);
 if (tg->extraUiData)
     filterMrna(tg, &lfList);
+if (shouldFilterGenbankPatentSequences(tg))
+    filterGenbankPatentSequences(tg, &lfList);
 tg->items = lfList;
 sqlFreeResult(&sr);
 }

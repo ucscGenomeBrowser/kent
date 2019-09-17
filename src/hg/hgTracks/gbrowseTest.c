@@ -13,7 +13,7 @@
 
 int main(int argc, char **argv)
 /* Test harness -- dump gif to
- * http://hgwdev.cse.ucsc.edu/~angie/gbrowseTest.gif */
+ * http://hgwdev.gi.ucsc.edu/~angie/gbrowseTest.gif */
 {
 cgiSpoof(&argc, argv);
 cart = cartFromCgiOnly(0, 0, NULL, NULL);

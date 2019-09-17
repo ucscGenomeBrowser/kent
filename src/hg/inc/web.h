@@ -49,6 +49,10 @@ void webPragmasEtc();
 /* Print out stuff that tells people not to cache us, and that we use the
  * usual character set and scripting langauge. (Normally done by webStartWrap) */
 
+void webCirmPragmasEtc();
+/* Print out stuff similar to webPragmasEtc (don't cache us, character set, etc.), but
+ * use values appropriate for a more modern website (like CIRM). */
+
 void webStartSectionTables();
 /* Put up start of nepharious table layout stuff. (Normally done by webStartWrap). */
 

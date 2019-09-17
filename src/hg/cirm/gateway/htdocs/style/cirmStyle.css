@@ -1,52 +1,115 @@
+/* CSS Specific to the CIRM website
+ *
+ * Copyright (C) 2017 The Regents of the University of California
+ */
+
 input.form-control { width: 300px; }
 textarea.form-control { width: 500px; height: 200px;}
 
-/* Colors */
-.label-cescg
+/* Generic background coloring */
+.back-orange
 {
-    background-color: #FF8C00 /* orange */
+    /* orange */
+    background-color: #FF8C00
 }
 
-.label-access
+.back-dark-blue
 {
-    background-color: #4682B4 /* gray blue */
+    /* gray blue */
+    background-color: #4682B4
 }
 
-.label-files
+.back-dark-pink
 {
-    background-color: #C71585 /* magenta */
+    /* magenta */
+    background-color: #C71585
 }
 
-.label-projects
+.back-light-blue
 {
-    background-color: #1E90FF /* smurf blue */
+    /* smurf blue */
+    background-color: #1E90FF
 }
 
-.label-tools
+.back-light-green
 {
-    background-color: #5cb85c /* lime green */
+    /* lime green */
+    background-color: #5cb85c
 }
 
-/*
-.header
+.back-gray
 {
-    background-color: #aaaaaa // light gray
+    /* light gray */
+    background-color: #aaaaaa
 }
-*/
-
-.footer
+.back-dark-red
 {
-    width: 90%;
-    margin: 0% 5%;
-    background-color: #eaeaea
+    /* dark red */
+    background-color: #ff3333
 }
 
-/* Styling for title bar and text */
+/* Generic text coloring */
+.text-pink
+{
+    /*formerly .singlecell*/
+    color: #ed217c;
+}
+.text-light-blue
+{
+    /*formerly .transcriptome*/
+    color: #1E90FF;
+}
+.text-dark-pink
+{
+    /*formerly .genome*/
+    color: #C71585;
+}
+.text-light-green
+{
+    /*formerly .epigenome*/
+    color: #5cb85c;
+}
+.text-orange
+{
+    /*formerly .otherome*/
+    color: #FF8C00;
+}
+.text-dark-blue
+{
+    /* gray blue */
+    color: #4682B4
+}
+
+/* Styling for parts of page body */
+div.card.facet-card
+{
+    margin-bottom:5px
+}
+
+.cirm-banner
+{
+    width: 100%;
+    background-color: #4682B4;
+    height: 20px;
+
+}
+
+.badge
+{
+    color: white;
+}
+
 .cirm-page-title
 {
     padding-left: 5px;
     margin-top: 10px;
     width: 100%;
+    border-radius: 5px;
+}
+
+.title-bottom-pad
+{
+    margin-bottom: 10px;
 }
 
 .cirm-page-title-text
@@ -57,9 +120,82 @@ textarea.form-control { width: 500px; height: 200px;}
 
 .cirm-page-body
 {
+    font-size:14px;
     width: 90%;
     margin: 0% 5%;
 }
+
+.footer
+{
+    font-size:14px;
+    margin: 0% 5%;
+    background-color: #eaeaea;
+}
+
+.footer a
+{
+    color: #337ab7;
+}
+
+.topbar
+{
+    font-weight:bold;
+}
+
+a.btn,input.btn
+{
+    padding: 0rem 0.3rem;
+    line-height: 1.2rem;
+}
+
+.icon-sm
+{
+    font-size: 0.75rem !important;
+}
+
+.padded-deck
+{
+    padding: 0px 15px !important;
+}
+
+/* Styling for secure site banner */
+.securesite-banner
+{
+    width: 100%;
+    background-color: #ff3333;
+    min-height: 26px;
+}
+
+.securesite-text
+{
+    color:#ffb3b3;
+    width: 95%;
+    text-align: center;
+    font-size: 1.3em;
+}
+
+.securesite:hover
+{
+    color: #ff3333;
+    text-decoration: none !important;
+    background-color: #ffb3b3;
+}
+
+.securesite:active
+{
+    color: #ff3333;
+    text-decoration: none !important;
+    background-color: #ffb3b3;
+}
+
+.securesite:link,
+.securesite:visited
+{
+    color: #ffffff !important;
+    text-decoration: underline;
+    background-color: none;
+}
+
 
 /* Styling for text + links */
 .a-unstyled,
@@ -104,6 +240,52 @@ textarea.form-control { width: 500px; height: 200px;}
     background-color: #1E90FF;
 }
 
+.centered-text
+{
+    text-align: center;
+}
+
+.white-link
+{
+    color: white;
+}
+
+.navbar-nav>li>a
+{
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+.nav>li>a:focus,
+.nav>li>a:hover
+{
+    color: white;
+    text-decoration: none;
+    background-color: transparent !important;
+}
+
+nav
+{
+    margin-bottom: 10px;
+}
+
+.nav
+{
+    border-radius: 0.25em;
+}
+
+.padded-nav-link
+{
+    padding: 2px 6px !important;
+}
+
+.nav-button
+{
+    font-weight: 600;
+    margin: 0px;
+}
+
+
 .nopadding
 {
     padding: 0 !important;
@@ -127,6 +309,12 @@ textarea.form-control { width: 500px; height: 200px;}
     margin-right: 15px;
 }
 
+.padded-top-img
+{
+    display: block;
+    padding-top: 15px;
+}
+
 .btnexpand:after
 {
     font-family: "Glyphicons Halflings";
@@ -139,7 +327,7 @@ textarea.form-control { width: 500px; height: 200px;}
 {
     content: "\e080";
 }
- 
+
 /*.verticaltext { width: 20px; transform: rotate(-90deg); transform-origin: right, top; -ms-transform: rotate(-90deg); -ms-transform-origin:right, top; -webkit-transform: rotate(-90deg); -webkit-transform-origin:right, top; color: #ed217c; position: relative; }
 
 .verticaltext {
@@ -158,30 +346,6 @@ textarea.form-control { width: 500px; height: 200px;}
 }
 */
 
-
-/* Coloring for experiments types on Projects page */
-.singlecell
-{
-    color: #ed217c;
-}
-.transcriptome
-{
-    color: #1E90FF;
-}
-.genome
-{
-    color: #C71585;
-}
-.epigenome
-{
-    color: #5cb85c;
-}
-.otherome
-{
-    color: #FF8C00;
-}
-
-
 /*Styling for Projects page table*/
 .table-header-rotated th.row-header
 {
@@ -199,7 +363,7 @@ textarea.form-control { width: 500px; height: 200px;}
 
 .table-header-rotated th.rotate-45
 {
-    height: 80px;
+    height: 90px;
     width: 40px;
     min-width: 40px;
     max-width: 40px;
@@ -267,4 +431,23 @@ textarea.form-control { width: 500px; height: 200px;}
 {
     padding: 5px 0;
     margin-top: -3px;
+}
+
+.last-row
+{
+    border-bottom: 1pt solid #dddddd;
+}
+
+.label
+{
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25em;
 }

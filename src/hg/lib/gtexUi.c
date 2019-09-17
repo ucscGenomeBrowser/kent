@@ -310,6 +310,14 @@ printf("<a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>"
         "View at GTEx portal</a>\n", geneId);
 }
 
+void gtexBodyMapLink()
+/* print URL to GTEX body map HTML page */
+{
+#define GTEX_BODYMAP_HTML       "../gtexBodyMap.html"
+printf("<a target='_blank' title='Anatomy graphic of GTEx tissues' href='%s'>"
+        "View GTEx Body Map</a>\n", GTEX_BODYMAP_HTML);
+}
+
 /* Convenience functions shared by hgTrackUi and hgGtexTrackSettings. hgTrackUi is for now still
  * available from right-click */
 
@@ -333,7 +341,7 @@ void gtexGeneUiCodingFilter(struct cart *cart, char *track, struct trackDb *tdb)
 /* Checkbox to restrict display to protein coding genes */
 {
 char cartVar[1024];
-puts("<b>Limit to protein coding genes:</b>\n");
+puts("<b>Limit to protein-coding genes:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_CODING_GENE_FILTER);
 boolean isCodingOnly = cartCgiUsualBoolean(cart, cartVar, GTEX_CODING_GENE_FILTER_DEFAULT);
 cgiMakeCheckBox(cartVar, isCodingOnly);

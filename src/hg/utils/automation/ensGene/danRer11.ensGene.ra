@@ -1,0 +1,9 @@
+# required db variable
+db danRer11
+
+# haplotype lift-down from Ensembl full chrom coordinates
+#       to UCSC simple haplotype coordinates
+haplotypeLift /hive/data/genomes/danRer11/jkStuff/ensembl.alts.lift
+
+# specific lifting to translate names:
+liftUp /hive/data/genomes/danRer11/jkStuff/ensembl.lift

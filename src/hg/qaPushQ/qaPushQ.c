@@ -521,7 +521,7 @@ safef(sizesButton, sizeof(sizesButton),
     "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input TYPE=SUBMIT NAME=\"showSizes\" VALUE=\"Show Sizes\""
     " ONCLICK=\"if (document.forms[0].currLoc.value!='%s') {"
 		" document.forms[0]._action.value='xpost';"
-		" document.forms[0].action='http://%s.cse.ucsc.edu/cgi-bin/qaPushQ';"
+		" document.forms[0].action='http://%s.soe.ucsc.edu/cgi-bin/qaPushQ';"
 		"};return true;\">"
     , utsName.nodename
     , sameString(utsName.nodename, "hgwdev") ? "hgwbeta" : "hgwdev"
@@ -1012,7 +1012,7 @@ slCount(kiList)
 
 if (sameString(utsName.nodename,"hgwdev"))
     {
-    printf("<p style=\"color:red\">Machine: %s THIS IS NOT THE REAL PUSHQ- GO TO <a href=http://hgwbeta.cse.ucsc.edu/cgi-bin/qaPushQ>HGWBETA</a> </p>\n",utsName.nodename);
+    printf("<p style=\"color:red\">Machine: %s THIS IS NOT THE REAL PUSHQ- GO TO <a href=http://hgwbeta.soe.ucsc.edu/cgi-bin/qaPushQ>HGWBETA</a> </p>\n",utsName.nodename);
     }
 
 if (!sameString(msg,""))
@@ -1925,7 +1925,7 @@ printf("</TABLE>\n");
 if (sameString(utsName.nodename,"hgwdev"))
     {
     printf("<br><p style=\"color:red\">Machine: %s THIS IS NOT THE REAL PUSHQ- GO TO "
-           "<a href=http://hgwbeta.cse.ucsc.edu/cgi-bin/qaPushQ>HGWBETA</a> </p>\n",utsName.nodename);
+           "<a href=http://hgwbeta.soe.ucsc.edu/cgi-bin/qaPushQ>HGWBETA</a> </p>\n",utsName.nodename);
     }
 
 printf("</FORM>\n");
@@ -1954,7 +1954,7 @@ printf("</FORM>\n");
 void doCookieReset()
 /* reset cookie, will cause new login next time */
 {
-htmlSetCookie("qapushq", "", NULL, NULL, ".cse.ucsc.edu", FALSE);
+htmlSetCookie("qapushq", "", NULL, NULL, ".soe.ucsc.edu", FALSE);
 htmShell(TITLE, doLogoutMsg, NULL);
 }
 
@@ -2107,7 +2107,7 @@ if (loginOK)
     {
     /* try to make same cookie work with both hgwdev and hgwbeta to obviate need for double-login */
     /* note: for permanent cookie, set NULL to expire in format "Wdy, DD-Mon-YYYY HH:MM:SS GMT" (must be GMT) */
-    htmlSetCookie("qapushq", u.user, NULL, NULL, ".cse.ucsc.edu", FALSE);
+    htmlSetCookie("qapushq", u.user, NULL, NULL, ".soe.ucsc.edu", FALSE);
 
     qaUser=u.user;
     oldRandState="";
@@ -2607,7 +2607,7 @@ q = mustLoadPushQ(newQid);
 
 if (crossPost)  // support showSizes across machines
     {
-    crossUrl = sameString(utsName.nodename, "hgwdev") ? "http://hgwbeta.cse.ucsc.edu" : "http://hgwdev.cse.ucsc.edu";
+    crossUrl = sameString(utsName.nodename, "hgwdev") ? "http://hgwbeta.soe.ucsc.edu" : "http://hgwdev.soe.ucsc.edu";
     }
 
 printf("<a href=\"%s/cgi-bin/qaPushQ?action=showSizesHelp&qid=%s&cb=%s\" target=\"_blank\">HELP</a> \n",
@@ -3145,7 +3145,7 @@ printf("Size(MB) - enter the size of the total push in megabytes (MB).<br>\n");
 printf("Show Sizes button - click to see a complete list of sizes of all tables and cgis.  Tables are relative to Current Location specified.<br>\n");
 printf("Current Location - chooose the current location of the files.  Should default to hgwdev at start, after sudo mypush to hgwbeta, change this to hgwbeta.<br>\n");
 printf("Makedoc verified? - choose Y if you have verified the MakeAssembly.doc in kent/src/hg/makeDb.<br>\n");
-printf("Online help - enter status of online help. Verify <a href=http://hgwbeta.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html#IndivTracks>hgTracksHelp</a><br>\n");
+printf("Online help - enter status of online help. Verify <a href=http://hgwbeta.soe.ucsc.edu/goldenPath/help/hgTracksHelp.html#IndivTracks>hgTracksHelp</a><br>\n");
 printf("Index verified? - choose Y if the index has been verified. Use the ShowSizes button for a quick view.<br>\n");
 printf("All.joiner verified? - choose Y if the all.joiner in /hg/makeDb/schema has been verified.<br>\n");
 printf("Status - enter current status (255 char max). Put long notes in Open Issues or Notes.<br>\n");
@@ -3613,7 +3613,7 @@ exit(0);
 
 if (crossPost)  // support showSizes across machines
     {
-    //host = sameString(utsName.nodename, "hgwdev") ? "hgwbeta.cse.ucsc.edu" : "hgwdev.cse.ucsc.edu";
+    //host = sameString(utsName.nodename, "hgwdev") ? "hgwbeta.soe.ucsc.edu" : "hgwdev.soe.ucsc.edu";
     host = cfgOption("pq.crossHost");
     }
 

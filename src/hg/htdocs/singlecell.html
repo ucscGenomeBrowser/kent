@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Single cell resources at UCSC" -->
+<!--#set var="ROOT" value="." -->
+
+<!--#include virtual="$ROOT/inc/gbPageStart.html"-->
+
+<link rel="stylesheet" href="<!--#echo var="ROOT" -->/style/hgGtexTrackSettings.css">
+
+<style>
+.gbsPage dl {
+    padding-left: 60px;
+}
+
+.gbsPage dt {
+    float: left;
+    clear: left;
+    width: 250px;
+    margin-top: 0;
+    padding: 0 0 0.5em 0;
+}
+.gbsPage dd {
+    margin: 0 0 0 200px;
+    padding: 0 0 0.5em 0;
+}
+
+.gbsPage img {
+    margin-left: 0;
+}
+
+.gbsPage dl dt {
+    position: relative;
+}
+
+.gbsPage dl dt::before {   /* square bullets, from hgGateway */
+    position: absolute;
+    top: 0.4em;
+    left: -1em;
+    width: 8px;
+    height: 8px;
+    background-color: #7e1f16;  /* dark red */
+    content: '';
+}
+
+.gbsPage dl.gbsNoBullet dt::before {
+    content: none;
+}
+
+</style>
+
+<h1>Single cell resources at UCSC</h1>
+<p>
+Single cell experiments measure tens of thousands of gene loci in thousands of cells at
+the same time. That resulting data is challenging to visualize.
+The UCSC Genome Browser is adding published datasets as tracks and an entirely new data exploration tool:
+</p>
+<p>
+<dl>
+<dt><a target="_blank" 
+    href="https://cells.ucsc.edu">
+            UCSC Cell Browser</a></dt>
+    <dd>Interactively color dimensionality reduction plots by cell annotation or genes</dd>
+<dt><a target="_blank" 
+    href="../cgi-bin/hgTrackUi?db=mm10&g=tabulaMuris">
+            Tabula Muris</a></dt>
+    <dd>Genome Browser track showing single cell RNA-seq gene expression, genome coverage and splice sites</dd>
+</dl>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>UCSC Cell Browser</h2>
+        <p>
+        The <a href="https://cells.ucsc.edu" target="_blank">UCSC Cell Browser</a>
+        is a fast, lightweight viewer for single-cell data. You can:
+        <ul>
+          <li>View 2D plots of cells arranged by algorithms such as t-SNE or UMAP</li>
+          <li>Color cells by metadata and gene expression</li>
+          <li>View cluster marker genes and selected dataset-relevant genes</li>
+          <li>View heatmap showing selected gene expression across clusters</li>
+          <li>Rename clusters and add custom annotations to a selected set of cells</li>
+        </ul>
+        Contact us at
+        <a href="mailto:&#99;&#101;&#108;&#108;s&#64;&#117;&#99;s&#99;.
+        &#101;&#100;&#117;">
+        &#99;&#101;&#108;&#108;s&#64;&#117;&#99;s&#99;.&#101;&#100;&#117;</a>
+        <!-- above address is cells at ucsc.edu -->
+        to request new datasets or suggest improvements.
+        To set up your own cell browser, follow our <a href="https://cellbrowser.readthedocs.io/"
+        target="_blank">installation and set up instructions</a>.
+        </p>
+
+        <p class="text-center">
+        <a target=_blank href="https://cells.ucsc.edu" alt="Screenshot of UCSC Cell Browser">
+            <img style="width:100%" src="<!--#echo var="ROOT" -->/images/cellbrowser.png">
+        </a>
+        </p>
+    </div>
+    <div class="col-md-6">
+        <h2>Single cell datasets in the UCSC Genome Browser</h2>
+        <p>
+        Below is a screenshot of a
+        <a target="_blank"
+        href="http://genome.ucsc.edu/s/Max/tabMuris">public session</a>
+        that highlights the Tabula Muris gene expression track.
+        The session shows the Sox10 locus. The gene expression track at the top shows that the
+        gene is only well expressed in basal cells (orange), mammary gland (blue) and oligodendrocytes (pink).
+        These cell type names are shown when you hover with the mouse over the bars on
+        the genome browser. The coverage tracks below show that all exons are
+        transcribed in these, but the last exon is also transcribed in stromal cells
+        and some non-coding transcription is seen in goblet cells 3' of the gene. The
+        splicing tracks below show that proper splicing is limited to the four cell types
+        described above. This is also a non-coding region conserved in zebrafish and chicken.
+        </p>
+
+        <p class="text-center">
+        <a target="_blank" href="http://genome.ucsc.edu/s/Max/tabMuris" alt="genome browser session link">
+                <img src="../images/screenshot-tabMuris.png" style='width:100%'>
+        </a>
+        </p>
+    </div>
+</div>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html"-->
+
+<script type='text/javascript' src='/js/hgGtexTrackSettings.js'></script>
+
+

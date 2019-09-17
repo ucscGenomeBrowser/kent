@@ -4,6 +4,7 @@ include ../../../../inc/common.mk
 hubCheck = ${DESTBINDIR}/hubCheck
 
 test:: one two
+	${MAKE} clean
 
 one:	mkout
 	${hubCheck} input/hub1.txt > output/output1.txt

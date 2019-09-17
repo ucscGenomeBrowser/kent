@@ -4249,7 +4249,7 @@ close (FH)
     #	at 0.5 : 3.0
 
     #	Making the trackDb entries, taking colors from:
-    #	http://genome-test.cse.ucsc.edu/~hiram/rgbItemExamples.html
+    #	http://genome-test.soe.ucsc.edu/~hiram/rgbItemExamples.html
 
     rm -f trackDb.entries.txt
     I=1
@@ -4721,7 +4721,7 @@ ln -s /cluster/data/encode/GencodeRACEfrags/2007-04-11/custom 2007-04-11
 
 cd /cluster/data/encode/GencodeRACEfrags/2007-04-11/custom
 # change the links in the table for the Sequence_Description.html
-# http://hgdownload.cse.ucsc.edu/goldenPath/hg17/encode/datafiles/GencodeRACEfrags/2007-04-11/custom_file_*
+# http://hgdownload.soe.ucsc.edu/goldenPath/hg17/encode/datafiles/GencodeRACEfrags/2007-04-11/custom_file_*
 sed -e
 's/genome\.imim\.es\/%7Efdenoeud/hgdownload\.cse\.ucsc\.edu\/goldenPath\/hg17\/encode\/datafiles\/GencodeRACEfrags\/2007\-04\-11/g' Sequences_Description.html \
 > raceFragSequencesTable.html

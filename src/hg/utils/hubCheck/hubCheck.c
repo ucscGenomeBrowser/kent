@@ -1,5 +1,3 @@
-/* hubCheck - Check a track data hub for integrity.. */
-
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 
@@ -20,6 +18,7 @@
 #include "udc.h"
 #include "vcf.h"
 #include "bedTabix.h"
+#include "knetUdc.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -44,6 +43,7 @@ errAbort(
   "   -settings             - just list settings with support level\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
   "                                     Will create this directory if not existing\n"
+  "   -printMeta            - print the metadata for each track\n"
   "   -cacheTime=N          - set cache refresh time in seconds, default %d\n"
   "   -verbose=2            - output verbosely\n"
   , cacheTime
@@ -58,9 +58,12 @@ static struct optionSpec options[] = {
    {"settings", OPTION_BOOLEAN},
    {"checkSettings", OPTION_BOOLEAN},
    {"test", OPTION_BOOLEAN},
+   {"printMeta", OPTION_BOOLEAN},
    {"udcDir", OPTION_STRING},
    {"specHost", OPTION_STRING},
    {"cacheTime", OPTION_INT},
+   // intentionally undocumented option for hgHubConnect
+   {"htmlOut", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -69,6 +72,7 @@ struct trackHubCheckOptions
     {
     boolean checkFiles;         /* check remote files exist and are correct type */
     boolean checkSettings;      /* check trackDb settings to spec */
+    boolean printMeta;          /* print out the metadata for each track */
     char *version;              /* hub spec version to check */
     char *specHost;             /* server hosting hub spec */
     char *level;                /* check hub is valid to this support level */
@@ -77,6 +81,8 @@ struct trackHubCheckOptions
     struct hash *settings;      /* supported settings for this version */
     struct hash *extra;         /* additional trackDb settings to accept */
     struct slName *suggest;     /* list of supported settings for suggesting */
+    /* hgHubConnect only */
+    boolean htmlOut;            /* put special formatted text into the errors dyString */
     };
 
 struct trackHubSettingSpec
@@ -289,6 +295,11 @@ for (tag = page->tags; tag != NULL; tag = tag->next)
     buf[len] = 0;
     verbose(6, "Found spec: %s\n", buf);
     spec->name = cloneString(firstWordInLine(buf));
+    if (spec->name == NULL || strlen(spec->name) == 0)
+        {
+        warn("ERROR: format problem with trackDbHub.html -- contact UCSC.");
+        continue;
+        }
     spec->level = cloneString(chopPrefixAt(attr->val, '-'));
     verbose(6, "spec: name=%s, level=%s\n", spec->name, spec->level);
     savedSpec = (struct trackHubSettingSpec *)hashFindVal(specHash, spec->name);
@@ -448,87 +459,257 @@ else
 return retVal;
 }
 
-
-void hubCheckTrackFile(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb)
-/* Check remote file exists and is of correct type. Wrap this in error catcher */
+char *makeFolderObjectString(char *id, char *text, char *parent, char *title, boolean children, boolean openFolder)
+/* Construct a folder item for one of the jstree arrays */
 {
-char *relativeUrl = trackDbSetting(tdb, "bigDataUrl");
-if (relativeUrl != NULL)
+struct dyString *folderString = dyStringNew(0);
+dyStringPrintf(folderString, "{icon: '../../images/folderC.png', id: '%s', "
+    "text:\"%s\", parent:'%s',"
+    "li_attr:{title:'%s'}, children:%s, state: {opened: %s}}",
+    id, text, parent, title, children ? "true" : "false", openFolder ? "true" : "false");
+return dyStringCannibalize(&folderString);
+}
+
+char *makeChildObjectString(char *id, char *title, char *shortLabel, char *longLabel,
+    char *color, char *name, char *text, char *parent)
+/* Construct a single child item for one of the jstree arrays */
+{
+struct dyString *item = dyStringNew(0);
+dyStringPrintf(item, "{icon: 'fa fa-plus', id:'%s', li_attr:{class: 'hubError', title: '%s', "
+        "shortLabel: '%s', longLabel: '%s', color: '%s', name:'%s'}, "
+        "text:\"%s\", parent: '%s', state: {opened: true}}",
+        id, title, shortLabel, longLabel, color, name, text, parent);
+return dyStringCannibalize(&item);
+}
+
+void hubErr(struct dyString *errors, char *message, struct trackHub *hub)
+/* Construct the right javascript for the jstree for a top level hub.txt error. */
+{
+char *sl;
+char *strippedMessage = NULL;
+static int count = 0; // force a unique id for the jstree object
+char id[512];
+//TODO: Choose better default labels
+if (hub && hub->shortLabel != NULL)
     {
-    char *type = trackDbRequiredSetting(tdb, "type");
-    char *bigDataUrl = trackHubRelativeUrl(genome->trackDbFile, relativeUrl);
+    sl = hub->shortLabel;
+    }
+else
+    sl = "Hub Error";
+if (message)
+    strippedMessage = cloneString(message);
+stripChar(strippedMessage, '\n');
+safef(id, sizeof(id), "%s%d", sl, count);
 
-    char *bigDataIndex = NULL;
-    char *relIdxUrl = trackDbSetting(tdb, "bigDataIndex");
-    if (relIdxUrl != NULL)
-        bigDataIndex = trackHubRelativeUrl(genome->trackDbFile, relIdxUrl);
+// make the error message
+dyStringPrintf(errors, "trackData['%s'] = [%s];\n", sl,
+    makeChildObjectString(id, "Hub Error", sl, sl, "#550073", sl, strippedMessage, sl));
 
-    verbose(2, "checking %s.%s type %s at %s\n", genome->name, tdb->track, type, bigDataUrl);
-    if (startsWithWord("bigWig", type))
-        {
-        /* Just open and close to verify file exists and is correct type. */
-        struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);
-        bbiFileClose(&bbi);
-        }
-    else if (startsWithWord("bigBed", type) || startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)|| startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) || startsWithWord("bigBarChart", type))
-        {
-        /* Just open and close to verify file exists and is correct type. */
-        struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
-        char *typeString = cloneString(type);
-        nextWord(&typeString);
-        if (startsWithWord("bigBed", type) && (typeString != NULL))
-            {
-            unsigned numFields = sqlUnsigned(nextWord(&typeString));
-            if (numFields > bbi->fieldCount)
-                errAbort("fewer fields in bigBed (%d) than in type statement (%d) for track %s with bigDataUrl %s", bbi->fieldCount, numFields, trackHubSkipHubName(tdb->track), bigDataUrl);
-            }
-        bbiFileClose(&bbi);
-        }
-    else if (startsWithWord("vcfTabix", type))
-        {
-        /* Just open and close to verify file exists and is correct type. */
-        struct vcfFile *vcf = vcfTabixFileAndIndexMayOpen(bigDataUrl, bigDataIndex, NULL, 0, 0, 1, 1);
-        if (vcf == NULL)
-            // Warnings already indicated whether the tabix file is missing etc.
-            errAbort("Couldn't open %s and/or its tabix index (.tbi) file.  "
-                     "See http://genome.ucsc.edu/goldenPath/help/vcf.html",
-                     bigDataUrl);
-        vcfFileFree(&vcf);
-        }
-    else if (startsWithWord("bam", type))
-        {
-        bamFileAndIndexMustExist(bigDataUrl, bigDataIndex);
-        }
-    else if (startsWithWord("longTabix", type))
-        {
-        struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
-        if (btf == NULL)
-            errAbort("Couldn't open %s and/or its tabix index (.tbi) file.", bigDataUrl);
-        bedTabixFileClose(&btf);
-        }
-#ifdef USE_HAL
-    else if (startsWithWord("halSnake", type))
-        {
-        char *errString;
-        int handle = halOpenLOD(bigDataUrl, &errString);
-        if (handle < 0)
-            errAbort("HAL open error: %s", errString);
-        if (halClose(handle, &errString) < 0)
-            errAbort("HAL close error: %s", errString);
-        }
-#endif
-    else
-        errAbort("unrecognized type %s in genome %s track %s", type, genome->name, tdb->track);
-    freez(&bigDataUrl);
+// display it by default
+dyStringPrintf(errors, "trackData['#'] = [%s];\n",
+    makeFolderObjectString(sl, "Error getting hub or genomes configuration", "#", "Click to open node", TRUE, TRUE));
+count++;
+}
+
+void genomeErr(struct dyString *errors, char *message, struct trackHub *hub,
+    struct trackHubGenome *genome)
+/* Construct the right javascript for the jstree for a top-level genomes.txt error or
+ * error opening a trackDb.txt file */
+{
+static int count = 0; // forces unique ID's which the jstree object needs
+char id[512];
+char *strippedMessage = NULL;
+char *genomeName = trackHubSkipHubName(genome->name);
+if (message)
+    strippedMessage = cloneString(message);
+stripChar(strippedMessage, '\n');
+safef(id, sizeof(id), "%s%d", genomeName, count);
+
+dyStringPrintf(errors, "trackData['%s'] = [%s", genomeName,
+    makeChildObjectString(id, "Error Getting TrackDb", genomeName, genomeName, "#550073", genomeName, strippedMessage, genomeName));
+count++;
+}
+
+void trackDbErr(struct dyString *errors, char *message, struct trackHubGenome *genome, struct trackDb *tdb, boolean doHtml)
+/* Adds the right object for a jstree object of trackDb configuration errors.  */
+{
+if (!doHtml)
+    {
+    dyStringPrintf(errors, "%s", message);
+    }
+else
+    {
+    char *strippedMessage = NULL;
+    char parentOrTrackString[512];
+    char id[512];
+    static int count = 0; // forces unique ID's which the jstree object needs
+
+    if (message)
+        strippedMessage = cloneString(message);
+
+    stripChar(strippedMessage, '\n');
+    safef(id, sizeof(id), "%s%d", trackHubSkipHubName(tdb->track), count);
+    safef(parentOrTrackString, sizeof(parentOrTrackString), "%s_%s", trackHubSkipHubName(genome->name), trackHubSkipHubName(tdb->track));
+    dyStringPrintf(errors, "%s,",
+            makeChildObjectString(id, "TrackDb Error", tdb->shortLabel, tdb->longLabel,
+            "#550073", trackHubSkipHubName(tdb->track), strippedMessage, parentOrTrackString));
+    count++;
     }
 }
 
+boolean checkEmptyMembersForAll(membersForAll_t *membersForAll, struct trackDb *parentTdb)
+/* membersForAll may be allocated and exist but not have any actual members defined. */
+{
+int i;
+for (i = 0; i < ArraySize(membersForAll->members); i++)
+    {
+    if (membersForAll->members[i] != NULL)
+        return TRUE;
+    }
+return FALSE;
+}
 
-int hubCheckTrack(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb, 
+int hubCheckSubtrackSettings(struct trackHubGenome *genome, struct trackDb *tdb, struct dyString *errors, struct trackHubCheckOptions *options)
+/* Check that 'subgroups' are consistent with what is defined at the parent level */
+{
+int retVal = 0;
+if (!tdbIsSubtrack(tdb))
+    return retVal;
+
+int i;
+char *subtrackName = trackHubSkipHubName(tdb->track);
+sortOrder_t *sortOrder = NULL;
+membership_t *membership = NULL;
+membersForAll_t *membersForAll = NULL;
+struct errCatch *errCatch = errCatchNew();
+
+if (errCatchStart(errCatch))
+    {
+    membersForAll = membersForAllSubGroupsGet(tdb->parent, NULL);
+
+    // membersForAllSubGroupsGet() warns about the parent stanza, turn it into an errAbort
+    if (errCatch->gotWarning)
+        {
+        char *temp = cloneString(errCatch->message->string);
+        stripChar(temp, '\n');
+        dyStringClear(errCatch->message);
+        errAbort("%s", temp);
+        }
+
+    if (membersForAll && checkEmptyMembersForAll(membersForAll, tdb->parent))
+        {
+        membership = subgroupMembershipGet(tdb);
+        sortOrder = sortOrderGet(NULL, tdb->parent);
+
+        if (membership == NULL)
+            {
+            errAbort("missing 'subgroups' setting for subtrack %s", subtrackName);
+            }
+
+        // if a sortOrder is defined, make sure every subtrack has that membership
+        if (sortOrder)
+            {
+            for (i = 0; i < sortOrder->count; i++)
+                {
+                char *col = sortOrder->column[i];
+                if ( (!sameString(col, SUBTRACK_COLOR_SUBGROUP)) && (membership == NULL || stringArrayIx(col, membership->subgroups, membership->count) == -1))
+                    errAbort("%s not a member of sortOrder subgroup %s", subtrackName, col);
+                }
+            }
+
+        // now check that this subtrack is a member of every defined subgroup
+        for (i = 0; i < ArraySize(membersForAll->members); i++)
+            {
+            if (membersForAll->members[i] != NULL)
+                {
+                char *subgroupName = membersForAll->members[i]->groupTag;
+                if (stringArrayIx(subgroupName, membership->subgroups, membership->count) == -1)
+                    {
+                    errAbort("subtrack %s not a member of subgroup %s", subtrackName, subgroupName);
+                    }
+                }
+            }
+        }
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    retVal = 1;
+    trackDbErr(errors, errCatch->message->string, genome, tdb, options->htmlOut);
+    }
+errCatchFree(&errCatch);
+
+return retVal;
+}
+
+int hubCheckCompositeSettings(struct trackHubGenome *genome, struct trackDb *tdb, struct dyString *errors, struct trackHubCheckOptions *options)
+/* Check composite level settings like subgroups, dimensions, sortOrder, etc.
+ * Note that this function returns an int because we want to warn about all errors in a single
+ * composite stanza rather than errAbort on the first error */
+{
+int retVal = 0;
+
+// for now all the combination style stanzas can get checked here, but
+// in the future they might need their own routines
+if (! (tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsContainer(tdb)) )
+    return retVal;
+
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    // check that subgroup lines are syntactically correct:
+    // "subGroup name Title tag1=value1 ..."
+    (void)membersForAllSubGroupsGet(tdb, NULL);
+
+    // check that multiWigs have > 1 track
+    if (tdbIsContainer(tdb) && slCount(tdb->subtracks) < 2)
+        {
+        errAbort("container multiWig %s has only one subtrack. multiWigs must have more than subtrack", tdb->track);
+        }
+    }
+errCatchEnd(errCatch);
+
+if (errCatch->gotError || errCatch->gotWarning)
+    {
+    // don't add a new line because one will already be inserted by the errCatch->message
+    trackDbErr(errors, errCatch->message->string, genome, tdb, options->htmlOut);
+    retVal = 1;
+    }
+
+return retVal;
+}
+
+void hubCheckParentsAndChildren(struct trackDb *tdb)
+/* Check that a single trackDb stanza has the correct parent and subtrack pointers */
+{
+if (tdbIsSuper(tdb) || tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsContainer(tdb))
+    {
+    if (tdb->subtracks == NULL)
+        {
+        errAbort("Track \"%s\" is declared superTrack, compositeTrack, view or "
+            "container, but has no subtracks", tdb->track);
+        }
+
+    // Containers should not have a bigDataUrl setting
+    if (trackDbLocalSetting(tdb, "bigDataUrl"))
+        {
+        errAbort("Track \"%s\" is declared superTrack, compositeTrack, view or "
+            "container, and also has a bigDataUrl", tdb->track);
+        }
+    }
+else if (tdb->subtracks != NULL)
+    {
+    errAbort("Track \"%s\" has children tracks (e.g: \"%s\"), but is not a "
+        "compositeTrack, container, view or superTrack", tdb->track, tdb->subtracks->track);
+    }
+}
+
+int hubCheckTrack(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb,
                         struct trackHubCheckOptions *options, struct dyString *errors)
 /* Check track settings and optionally, files */
 {
 int retVal = 0;
+int trackDbErrorCount = 0;
 
 if (options->checkSettings && options->settings)
     {
@@ -542,21 +723,86 @@ if (options->checkSettings && options->settings)
     /* TODO: ? also need to check settings not in this list (other tdb fields) */
     }
 
-if (!options->checkFiles)
-    return retVal;
+if (options->printMeta)
+    {
+    struct slPair *metaPairs = trackDbMetaPairs(tdb);
 
+    if (metaPairs != NULL)
+        {
+        printf("%s\n", trackHubSkipHubName(tdb->track));
+        struct slPair *pair;
+        for(pair = metaPairs; pair; pair = pair->next)
+            {
+            printf("\t%s : %s\n", pair->name, (char *)pair->val);
+            }
+        printf("\n");
+        }
+    slPairFreeValsAndList(&metaPairs);
+    }
+
+struct trackDb *tempTdb = NULL;
+char *textName = NULL;
+char idName[512];
 struct errCatch *errCatch = errCatchNew();
+boolean trackIsContainer = (tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsContainer(tdb));
+
+// first get down into the subtracks
+if (tdb->subtracks != NULL)
+    {
+    for (tempTdb = tdb->subtracks; tempTdb != NULL; tempTdb = tempTdb->next)
+        retVal |= hubCheckTrack(hub, genome, tempTdb, options, errors);
+    }
+
+// for when assembly hubs have tracks with the same name, prepend assembly name to id
+safef(idName, sizeof(idName), "%s_%s", trackHubSkipHubName(genome->name), trackHubSkipHubName(tdb->track));
+
+if (options->htmlOut)
+    {
+    dyStringPrintf(errors, "trackData['%s'] = [", idName);
+    }
+
 if (errCatchStart(errCatch))
     {
-    hubCheckTrackFile(hub, genome, tdb);
+    hubCheckParentsAndChildren(tdb);
+    if (trackIsContainer)
+        retVal |= hubCheckCompositeSettings(genome, tdb, errors, options);
+
+    if (tdbIsSubtrack(tdb))
+        retVal |= hubCheckSubtrackSettings(genome, tdb, errors, options);
+
+    if (options->checkFiles)
+        hubCheckBigDataUrl(hub, genome, tdb);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
+    trackDbErrorCount += 1;
     retVal = 1;
-    dyStringPrintf(errors, "%s", errCatch->message->string);
+    if (!options->htmlOut)
+        dyStringPrintf(errors, "%s", errCatch->message->string);
     }
 errCatchFree(&errCatch);
+
+if (options->htmlOut)
+    {
+    if (trackIsContainer)
+        {
+        for (tempTdb = tdb->subtracks; tempTdb != NULL; tempTdb = tempTdb->next)
+            {
+            char subtrackName[512];
+            safef(subtrackName, sizeof(subtrackName), "%s_%s", trackHubSkipHubName(genome->name), trackHubSkipHubName(tempTdb->track));
+            textName = trackHubSkipHubName(tempTdb->longLabel);
+            dyStringPrintf(errors, "%s,", makeFolderObjectString(subtrackName, textName, idName, "TRACK", TRUE, retVal));
+            }
+        }
+    else if (!retVal)
+        {
+        // add "Error" to the trackname to force uniqueness for the jstree
+        dyStringPrintf(errors, "{icon: 'fa fa-plus', "
+            "id:'%sError', text:'No trackDb configuration errors', parent:'%s'}", idName, idName);
+        }
+    dyStringPrintf(errors, "];\n");
+    }
 
 return retVal;
 }
@@ -568,35 +814,87 @@ int hubCheckGenome(struct trackHub *hub, struct trackHubGenome *genome,
 {
 struct errCatch *errCatch = errCatchNew();
 struct trackDb *tdbList = NULL;
-int retVal = 0;
+int genomeErrorCount = 0;
+boolean openedGenome = FALSE;
 
 if (errCatchStart(errCatch))
     {
     tdbList = trackHubTracksForGenome(hub, genome);
+    tdbList = trackDbLinkUpGenerations(tdbList);
+    tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
     trackHubPolishTrackNames(hub, tdbList);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
-    retVal = 1;
-    dyStringPrintf(errors, "%s", errCatch->message->string);
+    openedGenome = TRUE;
+    genomeErrorCount += 1;
+    if (options->htmlOut)
+        {
+        genomeErr(errors, errCatch->message->string, hub, genome);
+        }
+    else
+        dyStringPrintf(errors, "%s", errCatch->message->string);
+    }
+if (errCatch->gotWarning && !errCatch->gotError)
+    {
+    openedGenome = TRUE;
+    if (options->htmlOut)
+        {
+        genomeErr(errors, errCatch->message->string, hub, genome);
+        }
+    else
+        dyStringPrintf(errors, "%s", errCatch->message->string);
     }
 errCatchFree(&errCatch);
 
 verbose(2, "%d tracks in %s\n", slCount(tdbList), genome->name);
 struct trackDb *tdb;
+int tdbCheckVal;
+static struct dyString *tdbDyString = NULL;
+if (!tdbDyString)
+    tdbDyString = dyStringNew(0);
+
+// build up the track results list, keep track of number of errors, then
+// open up genomes folder
+char *genomeName = trackHubSkipHubName(genome->name);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    retVal |= hubCheckTrack(hub, genome, tdb, options, errors);
+    if (options->htmlOut)
+        {
+        // if we haven't already found an error then open up the array
+        if (!openedGenome)
+            {
+            dyStringPrintf(errors, "trackData['%s']  = [", genomeName);
+            openedGenome = TRUE;
+            }
+        }
+    // use different dyString for the actual errors generated by each track
+    tdbCheckVal = hubCheckTrack(hub, genome, tdb, options, tdbDyString);
+    genomeErrorCount += tdbCheckVal;
+    if (options->htmlOut)
+        {
+        // when assembly hubs have tracks with the same name, prepend assembly name to id
+        char name[512];
+        safef(name, sizeof(name), "%s_%s", trackHubSkipHubName(genome->name), trackHubSkipHubName(tdb->track));
+        dyStringPrintf(errors, "%s", makeFolderObjectString(name, tdb->longLabel, genomeName, "TRACK", TRUE, tdbCheckVal ? TRUE : FALSE));
+        if (tdb->next != NULL)
+            dyStringPrintf(errors, ",");
+        }
     }
+if (options->htmlOut)
+    dyStringPrintf(errors, "];\n");
 
-return retVal;
+dyStringPrintf(errors, "%s", tdbDyString->string);
+dyStringClear(tdbDyString);
+
+return genomeErrorCount;
 }
 
 
 int trackHubCheck(char *hubUrl, struct trackHubCheckOptions *options, struct dyString *errors)
 /* Check a track data hub for integrity. Put errors in dyString.
- *      return 0 if hub has no errors, 1 otherwise 
+ *      return 0 if hub has no errors, 1 otherwise
  *      if options->checkTracks is TRUE, check remote files of individual tracks
  */
 {
@@ -606,14 +904,21 @@ int retVal = 0;
 
 if (errCatchStart(errCatch))
     {
-    hub = trackHubOpen(hubUrl, "hub_0");
+    hub = trackHubOpen(hubUrl, "");
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
     retVal = 1;
-    dyStringPrintf(errors, "%s\n", errCatch->message->string);
+    if (options->htmlOut)
+        {
+        hubErr(errors, errCatch->message->string, hub);
+        }
+    else
+        dyStringPrintf(errors, "%s\n", errCatch->message->string);
     }
+if (errCatch->gotWarning && !errCatch->gotError)
+    dyStringPrintf(errors, "%s", errCatch->message->string);
 errCatchFree(&errCatch);
 
 if (hub == NULL)
@@ -623,10 +928,30 @@ if (options->checkSettings)
     retVal |= hubSettingsCheckInit(hub, options, errors);
 
 struct trackHubGenome *genome;
+
+if (options->htmlOut)
+    dyStringPrintf(errors, "trackData['#'] = [");
+
+int numGenomeErrors = 0;
+char genomeTitleString[128];
+struct dyString *genomeErrors = dyStringNew(0);
 for (genome = hub->genomeList; genome != NULL; genome = genome->next)
     {
-    retVal |= hubCheckGenome(hub, genome, options, errors);
+    numGenomeErrors = hubCheckGenome(hub, genome, options, genomeErrors);
+    if (options->htmlOut)
+        {
+        char *genomeName = trackHubSkipHubName(genome->name);
+        safef(genomeTitleString, sizeof(genomeTitleString),
+            "%s (%d configuration error%s)", genomeName, numGenomeErrors,
+            numGenomeErrors == 1 ? "" : "s");
+        dyStringPrintf(errors, "%s,", makeFolderObjectString(genomeName, genomeTitleString, "#",
+            "Click to open node", TRUE, numGenomeErrors > 0 ? TRUE : FALSE));
+        }
+    retVal |= numGenomeErrors;
     }
+if (options->htmlOut)
+    dyStringPrintf(errors, "];\n");
+dyStringPrintf(errors, "%s", dyStringCannibalize(&genomeErrors));
 trackHubClose(&hub);
 return retVal;
 }
@@ -689,9 +1014,10 @@ if (argc != 2 && !optionExists("settings"))
 struct trackHubCheckOptions *checkOptions = NULL;
 AllocVar(checkOptions);
 
-checkOptions->specHost = (optionExists("test") ? "genome-test.cse.ucsc.edu" : "genome.ucsc.edu");
+checkOptions->specHost = (optionExists("test") ? "genome-test.soe.ucsc.edu" : "genome.ucsc.edu");
 checkOptions->specHost = optionVal("specHost", checkOptions->specHost);
 
+checkOptions->printMeta = optionExists("printMeta");
 checkOptions->checkFiles = !optionExists("noTracks");
 checkOptions->checkSettings = optionExists("checkSettings");
 
@@ -720,22 +1046,34 @@ udcSetCacheTimeout(cacheTime);
 setUdcCacheDir();
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 
+knetUdcInstall();  // make the htslib library use udc
+
 if (optionExists("settings"))
     {
     showSettings(checkOptions);
     return 0;
     }
 
+// hgHubConnect specific option for generating a jstree of the hub errors
+checkOptions->htmlOut = optionExists("htmlOut");
 struct dyString *errors = newDyString(1024);
-if (trackHubCheck(argv[1], checkOptions, errors))
+if (trackHubCheck(argv[1], checkOptions, errors) || checkOptions->htmlOut)
     {
-    // uniquify and count errors
-    struct slName *errs = slNameListFromString(errors->string, '\n');
-    slUniqify(&errs, slNameCmp, slNameFree);
-    int errCount = slCount(errs);
-    printf("Found %d problem%s:\n", errCount, errCount == 1 ? "" : "s");
-    printf("%s\n", slNameListToString(errs, '\n'));
-    return 1;
+    if (checkOptions->htmlOut) // just dump errors string to stdout
+        {
+        printf("%s", errors->string);
+        return 1;
+        }
+    else
+        {
+        // uniquify and count errors
+        struct slName *errs = slNameListFromString(errors->string, '\n');
+        slUniqify(&errs, slNameCmp, slNameFree);
+        int errCount = slCount(errs);
+        printf("Found %d problem%s:\n", errCount, errCount == 1 ? "" : "s");
+        printf("%s\n", slNameListToString(errs, '\n'));
+        return 1;
+        }
     }
 return 0;
 }

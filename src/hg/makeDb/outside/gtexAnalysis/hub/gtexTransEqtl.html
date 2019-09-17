@@ -1,0 +1,100 @@
+<h2>Description</h2>
+<p>
+This track contains genetic variants affecting gene expression in genomically 
+distant genes (trans-eQTLs), identified by GTEx Consortium analysis of 7051 samples
+(44 tissues, 449 donors).
+These include interchromosomal effects, and those where the gene transcription start site is
+more than 1 Mbp distant from the variant on the same chromosome.
+</p>
+<p>
+The data presented here are based on analysis of samples from the GTEx midpoint milestone 
+data release (V6, October 2015), reported in Nature, October 2017 (<a href="#refs">reference below</a>).
+For additional information about the GTEx Consortium and the V6 data analysis, see the 
+<a target="_blank" href="http://hgdownload.soe.ucsc.edu/hubs/gtexAnalysis/gtexAnalysisHub.html">
+GTEx Analysis hub description</a>.</p>
+
+<h2>Display Conventions</h2>
+<p>
+This display uses the <a target="_blank" href="http://genome.ucsc.edu/goldenPath/help/interact.html">
+interact track format</a>.</p>
+<p>
+Trans-eQTLs on the same chromosome are displayed as arcs connecting the SNP and gene if both
+are in the display window, a horizontal line if the interaction crosses the window but neither are 
+in window, or a vertical and horizontal connector if one is in window.
+The height of the arc/horizontal is based on the distance between SNP and gene.   
+Interchromosomal interactions are indicated by a horizontal line covering the SNP or gene, 
+a vertical extension, and if space permits, the other chromosome name in blue.</p>
+<p>
+Interactions are colored using GTEx tissue colors. The arc/line style indicates 'direction'
+of interaction; solid if SNP precedes gene, otherwise dashed.</p>
+<p>
+Mouse hover or clickthrough to interact details is activated from the interaction ends or peak.
+Hover over the peak will show the SNP/gene/tissue.  Hover over an end will show the 
+SNP id or gene name.</p>
+
+<h2>Methods</h2>
+<p>
+Association mapping was performed using
+Matrix eQTL, testing common autosomal variants (MAF &gt; .05) with protein coding
+and lincRNA gene transcripts on different chromosomes, or at a distance greater than 
+1 MB from the transcription start site. 
+Analyses were performed in each tissue separately.  
+For all association tests, stringent quality controls were applied to account for
+potential false positives due to RNA-seq read mapping errors, repeat elements, and
+population stratification.</p>
+<p>
+Full analysis methods are available in 
+<a target="_blank" href="https://media.nature.com/original/nature-assets/nature/journal/v550/n7675/extref/nature24277-s1.pdf">Supplementary Information</a> to the Nature 2017 publication
+cited in the References section below.</p>
+<p>
+Intrachromosomal annotations for this track were obtained from the 1MB analysis 
+included in the <a target="_blank" href="http://gtexPortal.org">GTEx portal</a> 
+download (gtex_analysis_v6p/single_tissue_eqtl_data/GTEx_Analysis_v6p_intrachromosomal_eQTLs.xlsx).
+Interchromosomal data was obtained from the genome-wide analysis posted in
+<a target="_blank" href="https://images.nature.com/original/nature-assets/nature/journal/v550/n7675/extref/nature24277-s4.xlsx">Supplementary file 2 from the Nature publication</a>.</p>
+
+<h2>Credits</h2>
+Thanks to the GTEx LDACC and GTEx Consortium analysts at the Princeton
+<a target="_blank" href="http://beehive.cs.princeton.edu/">BEEHIVE</a> (Engelhart Research Group), 
+and the
+<a target="_blank" href="http://battlelab.jhu.edu/">Battle Lab</a> at Johns Hopkins
+for this data.
+For full credits see the bioRxiv manuscript:
+Brian Jo, <em>et a</em>l.
+<a href="http://www.biorxiv.org/content/early/2016/09/09/074419" target="_blank">
+Distant regulatory effects of genetic variation in multiple human tissues</a>,
+https://doi.org/10.1101/074419.
+
+<h2>Contacts</h2>
+<p>
+For questions about the methods or interpretation of data presented here, contact
+<A HREF="mailto:&#97;&#106;&#98;a&#116;&#116;l&#101;&#64;&#99;&#115;.
+j&#104;&#117;.
+&#101;d&#117;">Alexis Battle</A>
+or
+<A HREF="mailto:&#98;&#101;e&#64;&#112;&#114;&#105;n&#99;&#101;&#116;&#111;n.
+e&#100;&#117;">
+Barbara Engelhart</A>.
+<!-- above address is bee at princeton.edu -->
+
+
+<!-- above address is ajbattle at cs.jhu.edu -->
+For questions about this track hub, the browser display or tools access to this data, contact the
+<a HREF="http://genome.ucsc.edu/contacts.html">
+UCSC Genome Browser mailing list</a>.</p>
+
+<h2>References</h2>
+<a name="refs">
+<p>
+GTEx Consortium., Laboratory, Data Analysis &amp;Coordinating Center (LDACC)&#8212;Analysis Working
+Group., Statistical Methods groups&#8212;Analysis Working Group., Enhancing GTEx (eGTEx) groups.,
+NIH Common Fund., NIH/NCI., NIH/NHGRI., NIH/NIMH., NIH/NIDA., Biospecimen Collection Source
+Site&#8212;NDRI. <em>et al</em>.
+<a href="http://dx.doi.org/10.1038/nature24277" target="_blank">
+Genetic effects on gene expression across human tissues</a>.
+<em>Nature</em>. 2017 Oct 11;550(7675):204-213.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29022597" target="_blank">29022597</a>
+</p>
+<p>
+
+</p>

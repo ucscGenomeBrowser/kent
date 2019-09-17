@@ -3,10 +3,12 @@ kentSrc = ../../../..
 include ${kentSrc}/inc/localEnvironment.mk
 include ${kentSrc}/inc/common.mk
 
+A = cdwBackup
+
 all:
-	chmod +x cdwBackup;
-	rm -f ${SCRIPTS}/cdwBackup;
-	@cp -p cdwBackup ${SCRIPTS};
+	chmod +x ${A}
+	rm -f ${SCRIPTS}/${A}
+	cp -p ${A} ${SCRIPTS}
 
 clean::
-	rm -f ${SCRIPTS}/cdwBackup;
+	rm -f ${SCRIPTS}/${A}

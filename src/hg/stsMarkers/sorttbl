@@ -8,7 +8,7 @@ use warnings;
 
 $0 =~ s-.*/-- ;
 
-# Modified by markd@cse.ucsc.edu to use gsort -g
+# Modified by markd@soe.ucsc.edu to use gsort -g
 # Modified by karplus@soe.ucsc.edu to look for gsort then sort
 
 use English;

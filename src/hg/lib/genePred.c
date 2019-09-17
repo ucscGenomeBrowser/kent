@@ -589,18 +589,30 @@ if (iPrevExon < 0)
 return iPrevExon;
 }
 
+static int exonCdsStart(struct genePred *gp, int iExon)
+/* get the CDS starting position in specified exon */
+{
+return (gp->cdsStart < gp->exonStarts[iExon]) ? gp->exonStarts[iExon] : gp->cdsStart;
+}
+
+static int exonCdsEnd(struct genePred *gp, int iExon)
+/* get the CDS ending position in specified exon */
+{
+return (gp->cdsEnd > gp->exonEnds[iExon]) ? gp->exonEnds[iExon] : gp->cdsEnd;
+}
+
 static void extendFramePos(struct genePred *gp)
 /* extend frame missing from last exon(s) for positive strand genes, normally
  * caused by GTF stop_codon */
 {
 int iExon = findLastFramedExon(gp);
-int frame = incrFrame(gp->exonFrames[iExon], (gp->exonEnds[iExon]-gp->exonStarts[iExon]));
+int frame = incrFrame(gp->exonFrames[iExon], (exonCdsEnd(gp, iExon) - exonCdsStart(gp, iExon)));
 for (iExon++; (iExon < gp->exonCount) && (gp->exonStarts[iExon] < gp->cdsEnd); iExon++)
     {
     if (!((gp->exonFrames[iExon] < 0) || (gp->exonFrames[iExon] == frame)))
         errAbort("conflicting frame for %s exon index %d, was %d, trying to assign %d", gp->name, iExon, gp->exonFrames[iExon], frame);
     gp->exonFrames[iExon] = frame;
-    frame = incrFrame(gp->exonFrames[iExon], (gp->exonEnds[iExon]-gp->exonStarts[iExon]));
+    frame = incrFrame(gp->exonFrames[iExon], (exonCdsEnd(gp, iExon) - exonCdsStart(gp, iExon)));
     }
 }
 
@@ -609,13 +621,13 @@ static void extendFrameNeg(struct genePred *gp)
  * caused by GTF stop_codon */
 {
 int iExon = findLastFramedExon(gp);
-int frame = incrFrame(gp->exonFrames[iExon], (gp->exonEnds[iExon]-gp->exonStarts[iExon]));
+int frame = incrFrame(gp->exonFrames[iExon], (exonCdsEnd(gp, iExon) - exonCdsStart(gp, iExon)));
 for (iExon--; (iExon >= 0) && (gp->exonEnds[iExon] > gp->cdsStart); iExon--)
     {
     if (!((gp->exonFrames[iExon] < 0) || (gp->exonFrames[iExon] == frame)))
         errAbort("conflicting frame for %s exon index %d, was %d, trying to assign %d", gp->name, iExon, gp->exonFrames[iExon], frame);
     gp->exonFrames[iExon] = frame;
-    frame = incrFrame(gp->exonFrames[iExon], (gp->exonEnds[iExon]-gp->exonStarts[iExon]));
+    frame = incrFrame(gp->exonFrames[iExon], (exonCdsEnd(gp, iExon) - exonCdsStart(gp, iExon)));
     }
 }
 
@@ -2409,4 +2421,77 @@ else
 
 if (!haveFrames)
     freez(&gp->exonFrames);
+}
+
+void genePredToCds(struct genePred *gp, struct genbankCds *cds)
+/* Fill in cds with transcript offsets computed from genePred. */
+{
+/*
+ * Warning: Genbank CDS does't have the ability to represent
+ * partial codons.  If we have genePreds created from GFF/GTF, they can have
+ * partial codons, which is indicated in frame.  This code does not correctly handle
+ * this case, or frame shifting indels.
+ */
+cds->start = cds->end = -1;
+cds->startComplete = cds->endComplete = cds->complement = FALSE;
+if (gp->cdsEnd > gp->cdsStart)
+    {
+    int e, off = 0;
+    int qCdsStart = -1, qCdsEnd = -1;
+    for (e = 0; e < gp->exonCount; ++e)
+        {
+        int eCdsStart, eCdsEnd;
+        if (genePredCdsExon(gp, e, &eCdsStart, &eCdsEnd))
+            {
+            if (qCdsStart < 0)
+                qCdsStart = off + (eCdsStart - gp->exonStarts[e]);
+            qCdsEnd = off + (eCdsEnd - gp->exonStarts[e]);
+            }
+        off += gp->exonEnds[e] - gp->exonStarts[e];
+        }
+    int qSize = off;
+    if (gp->strand[0] == '-')
+        reverseIntRange(&qCdsStart, &qCdsEnd, qSize);
+    cds->start = qCdsStart;
+    cds->end = qCdsEnd;
+    cds->startComplete = (gp->cdsStartStat != cdsIncomplete);
+    cds->endComplete = (gp->cdsEndStat != cdsIncomplete);
+    }
+}
+
+struct psl *genePredToPsl(struct genePred *gp, int chromSize, int qSize)
+/* Convert a genePred to psl, assuming perfect concordance between target & query.
+ * If qSize is 0 then the number of aligned bases will be used as qSize. */
+{
+int e = 0, aliSize = 0;
+for (e = 0; e < gp->exonCount; ++e)
+    aliSize += (gp->exonEnds[e] - gp->exonStarts[e]);
+struct psl *psl = pslNew(gp->name, qSize ? qSize : aliSize, 0, aliSize,
+                         gp->chrom, chromSize, gp->txStart, gp->txEnd,
+                         gp->strand, gp->exonCount, 0);
+// If qSize is greater than aliSize then we assume the extra bases are at the end of
+// the transcript (poly-A tail).  If the alignment is on the '-' strand, then we need
+// to offset the reversed qStarts by the number of extra bases.
+int sizeAdjust = (gp->strand[0] == '-' && qSize > aliSize) ? (qSize - aliSize) : 0;
+int i = -1;
+for (e = 0; e < gp->exonCount; ++e)
+    {
+    if (e == 0 || gp->exonStarts[e] != gp->exonEnds[e-1])
+        {
+        i++;
+        psl->blockSizes[i] = (gp->exonEnds[e] - gp->exonStarts[e]);
+        psl->qStarts[i] = i==0 ? 0 + sizeAdjust : psl->qStarts[i-1] + psl->blockSizes[i-1];
+        psl->tStarts[i] = gp->exonStarts[e];
+        }
+    else
+        {
+        // Merge "exons" that have a 0-length gap between them to avoid pslCheck failure
+        psl->blockSizes[i] += (gp->exonEnds[e] - gp->exonStarts[e]);
+        }
+    }
+psl->blockCount = i+1;
+psl->match = aliSize;
+psl->tNumInsert = psl->blockCount-1;
+psl->tBaseInsert = (gp->txEnd - gp->txStart) - aliSize;
+return psl;
 }

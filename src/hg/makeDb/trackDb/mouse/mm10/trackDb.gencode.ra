@@ -1,10 +1,10 @@
 # GENCODE
 track wgEncodeGencodeSuper
-superTrack on show
+superTrack on hide
 group genes
-shortLabel GENCODE (Ensembl)
-longLabel GENCODE Gene Annotations (Ensembl)
-priority 2
+shortLabel All GENCODE
+longLabel All GENCODE transcripts, including comprehensive set and previous version
+priority 2.1
 
 # doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
 include wgEncodeGencodeVM2.ra
@@ -19,3 +19,11 @@ include wgEncodeGencodeVM12.ra
 include wgEncodeGencodeVM13.ra
 include wgEncodeGencodeVM14.ra
 include wgEncodeGencodeVM15.ra
+include wgEncodeGencodeVM16.ra
+include wgEncodeGencodeVM17.ra
+include wgEncodeGencodeVM18.ra
+include wgEncodeGencodeVM19.ra
+include wgEncodeGencodeVM20.ra
+include wgEncodeGencodeVM21.ra
+include wgEncodeGencodeVM22.ra
+include wgEncodeGencodeVM23.ra

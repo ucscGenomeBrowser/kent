@@ -1,0 +1,10 @@
+#!/bin/tcsh -efx
+
+# TODO GALT add a section or method for unlocking stuff submitted from valData
+# so that it will not be lost.
+# must do this before we lose the db so that cdwUnlockSubmittedFile will work
+pushd /data/cirm/valData
+find -type l | checkSymlinkTargetType stdin | grep "path=/data/cirm/cdw/" | gawk '{print $1}' | sed -e 's#^path=##' > unlockFiles.txt
+cat unlockFiles.txt | xargs -IX cdwUnlockSubmittedFile X
+popd
+

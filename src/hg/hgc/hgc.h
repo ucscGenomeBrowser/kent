@@ -86,6 +86,9 @@ struct trackDb *tdbForTableArg();
 void writeFramesetType();
 /* Write document type that shows a frame set, rather than regular HTML. */
 
+void htmlFramesetStart(char *title);
+/* Write DOCTYPE HTML and HEAD sections for framesets. */
+
 struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc);
 /* get the list of alignments for the specified acc */
 
@@ -278,7 +281,7 @@ void doPeakClusters(struct trackDb *tdb, char *item);
 void doPeakClusterListItemsAssayed();
 /* Put up a page that shows all experiments associated with a cluster track. */
 
-void doFactorSource(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start);
+void doFactorSource(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start, int end);
 /* Display detailed info about a cluster of peaks from other tracks. */
 
 void doFlyreg(struct trackDb *tdb, char *item);
@@ -423,6 +426,19 @@ void printOtherSnpMappings(char *table, char *name, int start,
 void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode);
 /* Wrapper to call printCustomUrlWithLabel using the url setting in trackDb */
 
+void printCustomUrlWithFields(struct trackDb *tdb, char *itemName, char *itemLabel, boolean encode,                                                      struct slPair *fields);
+/* Wrapper to call printCustomUrlWithLabel with additional fields to substitute */
+
+void printOtherCustomUrl(struct trackDb *tdb, char *itemName, char* urlSetting, boolean encode);
+/* Wrapper to call printCustomUrlWithLabel to use another url setting other than url in trackDb e.g. url2, this allows the use of multiple urls for a track
+ *  to be set in trackDb. */
+
+void printIdOrLinks(struct asColumn *col, struct hash *fieldToUrl, struct trackDb *tdb, char *idList);
+/* if trackDb does not contain a "urls" entry for current column name, just print idList as it is.
+ *  * Otherwise treat idList as a comma-sep list of IDs and print one row per id, with a link to url,
+ *   * ($$ in url is OK, wildcards like $P, $p, are also OK)
+ *    * */
+
 void printDbSnpRsUrl(char *rsId, char *labelFormat, ...)
 /* Print a link to dbSNP's report page for an rs[0-9]+ ID. */
 #ifdef __GNUC__
@@ -489,6 +505,9 @@ void printAddWbr(char *text, int distance);
 struct slPair* getExtraFields(struct trackDb *tdb, char **fields, int fieldCount);
 /* return the extra field names and their values as a list of slPairs */
 
+struct slPair *getFields(struct trackDb *tdb, char **fields);
+/* return field names and their values as a list of slPairs.  */
+
 int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount);
 // Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
 // sr may be null for bigBeds.
@@ -504,5 +523,8 @@ INLINE char* strOrNbsp(char* val)
 {
 return isEmpty(val) ? "&nbsp;" : val;
 }
+
+void doInteractDetails(struct trackDb *tdb, char *item);
+/* Details of interaction item */
 
 #endif

@@ -588,9 +588,8 @@ void edwUpdateFileTags(struct sqlConnection *conn, long long fileId, struct dySt
 /* Update tags field in edwFile with given value */
 {
 struct dyString *query = dyStringNew(0);
-sqlDyStringAppend(query, "update edwFile set tags='");
-dyStringAppend(query, tags->string);
-dyStringPrintf(query, "' where id=%lld", fileId);
+sqlDyStringPrintf(query, "update edwFile set tags='%s'", tags->string);
+sqlDyStringPrintf(query, " where id=%lld", fileId);
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
 }
@@ -1087,34 +1086,34 @@ void edwValidFileUpdateDb(struct sqlConnection *conn, struct edwValidFile *el, l
  * id. */
 {
 struct dyString *dy = newDyString(512);
-sqlDyStringAppend(dy, "update edwValidFile set ");
+sqlDyStringPrintf(dy, "update edwValidFile set ");
 // omit id and licensePlate fields - one autoupdates and the other depends on this
 // also omit fileId which also really can't change.
-dyStringPrintf(dy, " format='%s',", el->format);
-dyStringPrintf(dy, " outputType='%s',", el->outputType);
-dyStringPrintf(dy, " experiment='%s',", el->experiment);
-dyStringPrintf(dy, " replicate='%s',", el->replicate);
-dyStringPrintf(dy, " validKey='%s',", el->validKey);
-dyStringPrintf(dy, " enrichedIn='%s',", el->enrichedIn);
-dyStringPrintf(dy, " ucscDb='%s',", el->ucscDb);
-dyStringPrintf(dy, " itemCount=%lld,", (long long)el->itemCount);
-dyStringPrintf(dy, " basesInItems=%lld,", (long long)el->basesInItems);
-dyStringPrintf(dy, " sampleCount=%lld,", (long long)el->sampleCount);
-dyStringPrintf(dy, " basesInSample=%lld,", (long long)el->basesInSample);
-dyStringPrintf(dy, " sampleBed='%s',", el->sampleBed);
-dyStringPrintf(dy, " mapRatio=%g,", el->mapRatio);
-dyStringPrintf(dy, " sampleCoverage=%g,", el->sampleCoverage);
-dyStringPrintf(dy, " depth=%g,", el->depth);
-dyStringPrintf(dy, " singleQaStatus=0,");
-dyStringPrintf(dy, " replicateQaStatus=0,");
-dyStringPrintf(dy, " technicalReplicate='%s',", el->technicalReplicate);
-dyStringPrintf(dy, " pairedEnd='%s',", el->pairedEnd);
-dyStringPrintf(dy, " qaVersion='%d',", el->qaVersion);
-dyStringPrintf(dy, " uniqueMapRatio=%g", el->uniqueMapRatio);
+sqlDyStringPrintf(dy, " format='%s',", el->format);
+sqlDyStringPrintf(dy, " outputType='%s',", el->outputType);
+sqlDyStringPrintf(dy, " experiment='%s',", el->experiment);
+sqlDyStringPrintf(dy, " replicate='%s',", el->replicate);
+sqlDyStringPrintf(dy, " validKey='%s',", el->validKey);
+sqlDyStringPrintf(dy, " enrichedIn='%s',", el->enrichedIn);
+sqlDyStringPrintf(dy, " ucscDb='%s',", el->ucscDb);
+sqlDyStringPrintf(dy, " itemCount=%lld,", (long long)el->itemCount);
+sqlDyStringPrintf(dy, " basesInItems=%lld,", (long long)el->basesInItems);
+sqlDyStringPrintf(dy, " sampleCount=%lld,", (long long)el->sampleCount);
+sqlDyStringPrintf(dy, " basesInSample=%lld,", (long long)el->basesInSample);
+sqlDyStringPrintf(dy, " sampleBed='%s',", el->sampleBed);
+sqlDyStringPrintf(dy, " mapRatio=%g,", el->mapRatio);
+sqlDyStringPrintf(dy, " sampleCoverage=%g,", el->sampleCoverage);
+sqlDyStringPrintf(dy, " depth=%g,", el->depth);
+sqlDyStringPrintf(dy, " singleQaStatus=0,");
+sqlDyStringPrintf(dy, " replicateQaStatus=0,");
+sqlDyStringPrintf(dy, " technicalReplicate='%s',", el->technicalReplicate);
+sqlDyStringPrintf(dy, " pairedEnd='%s',", el->pairedEnd);
+sqlDyStringPrintf(dy, " qaVersion='%d',", el->qaVersion);
+sqlDyStringPrintf(dy, " uniqueMapRatio=%g", el->uniqueMapRatio);
 #if (EDWVALIDFILE_NUM_COLS != 24)
    #error "Please update this routine with new column"
 #endif
-dyStringPrintf(dy, " where id=%lld\n", (long long)id);
+sqlDyStringPrintf(dy, " where id=%lld\n", (long long)id);
 sqlUpdate(conn, dy->string);
 freeDyString(&dy);
 }

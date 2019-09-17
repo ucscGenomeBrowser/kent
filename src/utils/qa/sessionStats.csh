@@ -16,6 +16,10 @@ set users=0
 set count=0
 set shared=0
 set reuse=0
+set active1=0
+set active2=0
+set lastMonth=""
+set thisMonth=""
 set countTot=0
 set userTot=0
 set shareTot=0
@@ -36,7 +40,7 @@ else
       set short=$argv[1]
     else
       echo
-      echo ' only "go" are "short" are permitted as arguments'
+      echo ' only "go" and "short" are permitted as arguments'
       $0
       exit
     endif
@@ -47,6 +51,7 @@ endif
 set months=`hgsql -N -h $sqlrr -e 'SELECT DISTINCT DATE_FORMAT(firstUse, \
   "%Y-%m") FROM namedSessionDb' hgcentral | sort -u`
 
+# set months="2018-01 2018-02 2018-03"
 # get stats
 rm -f tempOutFile
 echo
@@ -79,11 +84,23 @@ echo "total " $countTot $userTot $shareTot $reuseTot  \
   $1, $2, $3, $4, $4/$2*100, $5, $5/$2*100)}'
 set uniq=`hgsql -N -h $sqlrr -e 'SELECT COUNT(DISTINCT(userName)) \
   FROM namedSessionDb' hgcentral`
-echo "uniq " "-" "$uniq" \
-  | awk '{printf ("%7s %4s %5s \n", $1, $2, $3)}'
-
 echo "------  ----- ----- -------  -------"
 echo " first  count users  shared   reused  "
+echo
+echo "uniq users: $uniq"
+echo
+
+# get number of sessions actively viewed last month
+
+set lastMonth=`echo $months | sed "s/ /\n/g" | tail -2 | head -1`
+set thisMonth=`echo $months | sed "s/ /\n/g" | tail -1`
+set active1=`hgsql -N -h $sqlrr -e 'SELECT COUNT(*) FROM namedSessionDb \
+    WHERE DATE_FORMAT(lastUse, "%Y-%m") = "'$lastMonth'"' hgcentral`
+set active2=`hgsql -N -h $sqlrr -e 'SELECT COUNT(*) FROM namedSessionDb \
+    WHERE DATE_FORMAT(lastUse, "%Y-%m") = "'$thisMonth'"' hgcentral`
+echo "sessions last used in ${lastMonth}:   $active1"
+echo "sessions last used in ${thisMonth}:   $active2"
+echo
 echo
 
 # graph sessions

@@ -617,13 +617,14 @@ for (i=0; i<table->fieldCount; ++i)
     {
     char *field = table->fields[i];
     ixTranslator[i] = -1;
-    if (slNameFind(excludedFields, field) == NULL)
+    if (!slNameInListUseCase(excludedFields, field))
         {
 	subFields[subI] = field;
 	ixTranslator[i] = subI;
 	++subI;
 	}
     }
+
 assert(subI == subFieldCount);
 struct fieldedTable *subtable = fieldedTableNew("subtable", subFields, subFieldCount);
 
@@ -645,7 +646,6 @@ for (row = table->rowList; row != NULL; row = row->next)
 	fieldedTableAdd(subtable, subrow, subFieldCount, row->id);
 	}
     }
-
 *retSubtable = subtable;
 return TRUE;
 }

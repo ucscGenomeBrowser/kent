@@ -17,12 +17,12 @@ environment.  Please access via rsync:
   rsync -a -P rsync://hgdownload.soe.ucsc.edu/genome/admin/exe/macOSX.x86_64/ ./
 
 Or via HTTP:
-  http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/
-  http://hgdownload.cse.ucsc.edu/admin/exe/macOSX.x86_64/
+  http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/
+  http://hgdownload.soe.ucsc.edu/admin/exe/macOSX.x86_64/
 
 Or via FTP:
-  ftp://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/
-  ftp://hgdownload.cse.ucsc.edu/admin/exe/macOSX.x86_64/
+  ftp://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/
+  ftp://hgdownload.soe.ucsc.edu/admin/exe/macOSX.x86_64/
 
 Note: access via HTTP or FTP does not copy with the 'execute' bits on,
 to enable execute bits on files in a directory:  chmod +x ./*
@@ -52,8 +52,8 @@ system package management tools.
 
    Alternative to 'git' command, a gzipped tar file is available
    with all the source, via FTP or HTTP:
-     ftp://hgdownload.cse.ucsc.edu/apache/htdocs/admin/exe/userApps.src.tgz
-     http://hgdownload.cse.ucsc.edu/admin/exe/userApps.src.tgz
+     ftp://hgdownload.soe.ucsc.edu/apache/htdocs/admin/exe/userApps.src.tgz
+     http://hgdownload.soe.ucsc.edu/admin/exe/userApps.src.tgz
 
    Unpacking that file (tar xvzf userApps.src.tgz)
    creates a directory: ./userApps/
@@ -62,7 +62,7 @@ system package management tools.
    Using 'git' to fetch the source, creates a directory ./userApps/
 
    git archive --format=zip -9 \
-      --remote=git://genome-source.cse.ucsc.edu/kent.git \
+      --remote=git://genome-source.soe.ucsc.edu/kent.git \
       beta src/userApps > userApps.zip
    unzip -d userApps -j userApps.zip
    cd userApps
@@ -117,7 +117,7 @@ system package management tools.
 5. There are 'parasol' binaries built into ./userApps/kent/src/parasol/bin/
    Use these binaries to set up a job control system on a compute cluster
    or large machine with many CPU cores.  See also:
-     http://genecats.cse.ucsc.edu/eng/parasol.html
+     http://genecats.soe.ucsc.edu/eng/parasol.html
    for more information.  The usage messages from each command will help
    with the setup.
 
@@ -148,7 +148,7 @@ your own local MySQL server with UCSC data formats.  Add these three
 lines to a file in your HOME directory called '.hg.conf' and set
 its permissions to: 'chmod 600 .hg.conf'
 
-    db.host=genome-mysql.cse.ucsc.edu
+    db.host=genome-mysql.soe.ucsc.edu
     db.user=genomep
     db.password=password
     central.db=hgcentral

@@ -27,8 +27,6 @@
   <ul><strong>
     <li><a class="toc" href="http://genome.ucsc.edu/blog/genome-browser-in-a-box-gbib-origins/" 
      target="_blank">UCSC blog post about GBiB</a></li>
-    <li><a class="toc" href="http://blog.openhelix.eu/?p=20193" target="_blank">OpenHelix blog post 
-    about GBiB</a></li>
     <li><a class="toc" href="https://www.youtube.com/watch?v=1DzZZgB1gvQ" target="_blank">GBiB 
     introductory video</a></li>
   </strong></ul>
@@ -40,7 +38,13 @@ Genome Browser in a Box (GBiB) is a &quot;virtual machine&quot; of the entire UC
 website that is designed to run on most PCs (Windows, Mac OSX or Linux). GBiB allows you to access 
 much of the UCSC Genome Browser's functionality from the comfort of your own computer. It is 
 particularly directed at individuals who want to use the Genome Browser toolset to view protected 
-data.</p>
+data. If it is not human sequencing reads, it usually does not fall under
+medical data privacy rules, and you should most likely not use GBiB but rather 
+<a href="https://genome.ucsc.edu/goldenpath/help/hubQuickStartAssembly.html">assembly hubs</a> 
+or <a href="https://genome.ucsc.edu/goldenpath/help/hgTrackHubHelp.html">track hubs</a>. 
+See our <a href="https://genome.ucsc.edu/goldenPath/help/mirror.html#considerations-before-installing-a-genome-browser">mirror page</a> 
+for adiscussion of the advantages/disadvantages of the different methods to
+customize your genome data display.</p>
 
 <h3>Differences between GBiB and the Genome Browser</h3>
 <p>
@@ -56,9 +60,9 @@ Rather than installing the entire UCSC genome annotation database (several terab
 instead depends upon remote connections to various UCSC servers for much of its functionality and 
 data. It connects to the UCSC <a href="http://hgdownload.soe.ucsc.edu/downloads.html" 
 target="_blank">download server</a> to obtain genomic sequences, liftOver files, and many of the 
-other large data files, and connects to one of UCSC's <a href="mysql.html">public MySQL servers</a>
+other large data files, and connects to one of UCSC's <a href="mysql.html">public MariaDB servers</a>
 to download data displayed by the various annotation tracks. A few Genome Browser tracks are
-unavailable on the UCSC public MySQL servers due to agreements with the data distributors (DECIPHER
+unavailable on the UCSC public MariaDB servers due to agreements with the data distributors (DECIPHER
 and LOVD Variants), and thus are unavailable for use with GBiB.</p>
 <p>
 The majority of protected data use in the research community currently focuses on the human genomes,
@@ -105,18 +109,24 @@ GBiB will run on most modern PCs and major operating systems that meet these bas
   <li>
   Your network firewall must allow outgoing connections to the following servers and ports:
   <ul>
-    <li>MySQL connections, used to load tracks not local to your computer:
-    <ul>
-      <li>US server: Port 3306 on genome-mysql.soe.ucsc.edu (128.114.119.174)</li>
-      <li>European server: Port 3306 on genome-euro-mysql.soe.ucsc.edu (129.70.40.120)</li>
-    </ul>
-    <li>
-    TCP port 873 on hgdownload.soe.ucsc.edu (128.114.119.163), used by rsync to download track 
-    data</li>
-    <li>
-    TCP port 80 on hgdownload.soe.ucsc.edu (128.114.119.163), used to download html descriptions on 
-    the fly</li>
-  </ul></li>
+    <li>MariaDB connections, used to load tracks not local to your computer:
+      <ul>
+        <li>US server: Port 3306 on genome-mysql.soe.ucsc.edu (128.114.119.174)</li>
+        <li>European server: Port 3306 on genome-euro-mysql.soe.ucsc.edu (129.70.40.120)</li>
+      </ul>
+    </li>
+    <li>Rsync, used to download track data:
+      <ul>
+        <li>US server: TCP port 873 on hgdownload.soe.ucsc.edu (128.114.119.163)</li>
+        <li>European server: TCP port 873 on hgdownload-euro.soe.ucsc.edu (129.70.40.99)</li>
+      </ul></li>
+    <li>Download HTML descriptions on the fly:
+      <ul>
+        <li>US server: TCP port 80 on hgdownload.soe.ucsc.edu (128.114.119.163)</li>
+        <li>European server: TCP port 80 on hgdownload-euro.soe.ucsc.edu (129.70.40.99)</li>
+      </ul>
+    </li>
+  </ul>
 </ul>
 
 <h3>Installation</h3>
@@ -124,7 +134,8 @@ GBiB will run on most modern PCs and major operating systems that meet these bas
   <li>
   Confirm that your system meets the above requirements.</li>
   <li>
-  Download GBiB from the <a href="//genome-store.ucsc.edu/" target="_blank">Genome Browser store</a>
+  Download GBiB from the <a href="https://genome-store.ucsc.edu/" target="_blank">Genome Browser 
+  store</a>
   (see <a href="#License">Licensing Information</a>). Due to the large size of the <em>gbib.zip</em>
   product file, the download time may range from 30 minutes to a few hours depending on your 
   Internet connection speed and distance from UCSC.</li>
@@ -256,6 +267,32 @@ Depending on your network bandwidth, the download can take several minutes or up
 a DSL line. <strong>During the download</strong>, the file <em>gbib-data.vdi</em> will grow in size,
 and <strong>you will not be able to use GBiB</strong>. Once the download is complete, the default 
 tracks should load in less than three seconds for a typical genomic position.</p>
+<p>
+If you are in your GBiB on the command-line you can use a direct rsync command for files of
+interest. For example, if you knew you wanted all the GENCODE tracks on hg19 you could run either
+of the two rsync commands for the North American or European hgdownload servers:
+<pre>
+<code>sudo rsync hgdownload.soe.ucsc.edu::mysql/hg19/wgEncodeGencode* /data/mysql/hg19/.</code>
+</pre>
+<pre>
+<code>sudo rsync hgdownload-euro.soe.ucsc.edu::mysql/hg19/wgEncodeGencode* /data/mysql/hg19/.</code>
+</pre>
+<p>
+The above commands will rsync all of the files at the UCSC hgdownload server in the hg19 assembly
+that start with wgEncodeGencode to your GBiB into the hg19 directory. There are some supporting
+files in a hgFixed directory, such as for the publication tracks, that could be mirrored with such
+commands.</p>
+<p>
+You can also download gbdb files in this manner.
+<pre>
+<code>sudo rsync hgdownload.soe.ucsc.edu::gbdb/hg19/multiz100way/phyloP100way.wib /data/gbdb/hg19/multiz100way/.</code>
+</pre>
+
+<pre>
+<code>sudo rsync hgdownload-euro.soe.ucsc.edu::gbdb/hg19/multiz100way/phyloP100way.wib /data/gbdb/hg19/multiz100way/.</code>
+</pre>
+
+<p>The above command would copy the phyloP100way track to display in the GBiB from a local file.</p>
 
 <h3>Offline mode</h3>
 <p>
@@ -263,7 +300,7 @@ GBiB has an offline mode that is particularly useful when you want to ensure tha
 connects to the Internet once the initial download and setup are complete (for instance, to comply 
 with corporate IT policy). Before going offline, first mirror all the tracks that you will want to 
 access. Then, in the GBiB terminal window type the command: <code>gbibOffline</code>. This command 
-will remove GBiB's network access to the UCSC MySQL server and download servers.</p>
+will remove GBiB's network access to the UCSC MariaDB server and download servers.</p>
 <p>
 Once GBiB is in offline mode, the Genome Browser will display an error message if you attempt to
 access a data file not located on your local disk; therefore, we do not recommend this option for 
@@ -641,7 +678,7 @@ resolve this problem:</p>
 <strong>Genome Browser Error:</strong> &quot;<em>Couldn't connect to database hg19 on 
 genome-mysql.soe.ucsc.edu as genomep.</em>&quot;
 <p>
-<em>Solution 1:</em> This indicates that the virtual machine could not connect to the UCSC MySQL 
+<em>Solution 1:</em> This indicates that the virtual machine could not connect to the UCSC MariaDB 
 server. This error can be caused by a change of the IP address (e.g. on a wifi connection) that has 
 not yet been picked up by the virtual machine. In this situation, you can restart the box or run 
 the command <code>sudo ifup --force eth0</code> to reset the network connection.</p>
@@ -669,7 +706,7 @@ institution and ask them to open outgoing TCP connections to a list of UCSC host
 The commands below will allow you to find out the names of these hosts and ports.</p>
 <p>
 <em>Solution:</em> To find the hostname-port combination to open from your GBiB machine, use this 
-Mysql query:</p> 
+SQL query:</p> 
 <pre><code>mysql hgcentral -e 'select * from blatServers where db="YOURDB"'</code></pre>
 <p>
 For example, if you want to enable BLAT for hg19 and hg38, you can issue this command:
@@ -719,13 +756,16 @@ hg.conf.local</code> to incorporate the changes in hg.conf.local.</p>
 <p>
 In older GBiB's, there is an error in the <code>gbibAddTools</code> command. To fix this command, 
 edit the <code>/home/browser/.bashrc</code> file and change the following line:
-<pre><code>alias gbibAddTools='mkdir ~/bin -p; rsync -avP hgdownload.cse.ucsc.edu::genome/admin/exe/linux.x86_64/ ~/bin/'</code></pre>
-</p>
-<p>to:
-<pre><code>alias gbibAddTools='sudo mkdir -p /data/tools; sudo rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ /data/tools/ && ln -s /data/tools ~/bin'</code></pre>
+<pre><code>alias gbibAddTools='mkdir ~/bin -p; rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ ~/bin/'</code></pre>
 </p>
 <p>
-This updated command installs the tools to a location with more disk space available.
+to either of the follwing lines:
+<pre><code>alias gbibAddTools='sudo mkdir -p /data/tools; sudo rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ /data/tools/ && ln -s /data/tools ~/bin'</code></pre>
+<pre><code>alias gbibAddTools='sudo mkdir -p /data/tools; sudo rsync -avP hgdownload-euro.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ /data/tools/ && ln -s /data/tools ~/bin'</code></pre>
+</p>
+<p>
+The updated commands will install the tools to a location with more disk space available using
+either the North American or European hgdownload servers.
 </p>
 
 <a name="Commands"></a>
@@ -772,16 +812,16 @@ GBiB terminal's home directory, which can also be accessed via
     update</td> 
   </tr><tr>
     <td><code>gbibFixMysql1</code></td>
-    <td>Fix all mysql databases, fast version</td>
+    <td>Fix all MariaDB databases, fast version</td>
   </tr><tr>
     <td><code>gbibFixMysql2</code></td>
-    <td>Fix all mysql databases, intensive version</td>
+    <td>Fix all MariaDB databases, intensive version</td>
   </tr><tr>
     <td><code>gbibResetNetwork</code></td>
     <td>Reinit the eth0 network interface, in case VirtualBox dropped the network connection</td>
   </tr><tr>
     <td><code>gbibUcscLog</code></td>
-    <td>Show a real-time log of all MySQL queries on the console </td>
+    <td>Show a real-time log of all SQL queries on the console </td>
   </tr><tr>
     <td><code>gbibUcscTablesLog</code></td>
     <td>Show the tables that had to be loaded through the internet from UCSC</td>
@@ -802,6 +842,6 @@ GBiB terminal's home directory, which can also be accessed via
 <p>
 GBiB is free for non-profit academic research and for personal use. Corporate use requires a 
 license, setup fee and annual payment. To purchase a license or download the GBiB, visit the 
-<a href="//genome-store.ucsc.edu/" target="_blank">Genome Browser store</a>.</p>
+<a href="https://genome-store.ucsc.edu/" target="_blank">Genome Browser store</a>.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

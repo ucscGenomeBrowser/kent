@@ -23,7 +23,7 @@ html multiz5way
         longLabel Multiz Alignments of 5 Species
         subGroups view=align
         noInherit on
-        summary multiz5waySummary
+#        summary multiz5waySummary
 #        frames multiz5wayFrames
 #        irows on
         color 0, 10, 100

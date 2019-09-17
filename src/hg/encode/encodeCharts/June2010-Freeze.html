@@ -15,7 +15,7 @@
     var chart;
 
     var spreadSheetUrl = "http://spreadsheets.google.com/ccc?key=t2l4K2na4q_6TKd2VPgPXbQ&headers=1";
-    var reportUrl = "http://genecats.cse.ucsc.edu/cgi-bin/ENCODE/encodeJune2010-Freeze.py";
+    var reportUrl = "http://genecats.soe.ucsc.edu/cgi-bin/ENCODE/encodeJune2010-Freeze.py";
  
     function initialize() {
       var queryExpected = new google.visualization.Query(spreadSheetUrl);
@@ -103,7 +103,7 @@
             projectValue = 'Yale';
           }
 
-          var urlString = "http://genecats.cse.ucsc.edu/cgi-bin/ENCODE/encodeReportFilter.py?" 
+          var urlString = "http://genecats.soe.ucsc.edu/cgi-bin/ENCODE/encodeReportFilter.py?" 
             + "key=project"
             + "&value=" + projectValue
             + "&status=all"
@@ -147,7 +147,7 @@
     </font>
   </h2>
   <script type="text/javascript">
-      var url = "http://genecats.cse.ucsc.edu/cgi-bin/ENCODE/encodeReport.py?reportDate=1";
+      var url = "http://genecats.soe.ucsc.edu/cgi-bin/ENCODE/encodeReport.py?reportDate=1";
       $.getJSON(url+"&callback=?",
                 function (jsonData) {
                   var reportDateString = "(Report Date: " + jsonData.currentDate + ")";

@@ -28,7 +28,7 @@ struct metaWig *metaWigOpen(char *fileName)
 {
 struct metaWig *mw;
 AllocVar(mw);
-if (isBigWig(fileName))
+if (isBigWigFile(fileName))
     {
     mw->type = mwtBigWig;
     mw->bwf = bigWigFileOpen(fileName);

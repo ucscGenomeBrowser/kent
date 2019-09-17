@@ -1,0 +1,13 @@
+track encode3Reg
+superTrack on
+shortLabel ENCODE Regulation
+longLabel Integrated Regulation from ENCODE
+wgEncode 1
+group regulation
+priority 2
+pennantIcon New red
+
+include encode3.histone.ra
+include encode3.chromHmm.ra
+include encode3.atac.ra
+

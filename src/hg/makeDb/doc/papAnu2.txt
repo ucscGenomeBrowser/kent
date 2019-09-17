@@ -603,7 +603,7 @@ papAnu2.genbank.est.native.load = yes
     #   real    12m40.799s
  *** All done!
  *** Please take a look at the downloads for papAnu2 using a web browser.
- *** The downloads url is: http://hgdownload-test.cse.ucsc.edu/goldenPath/papAnu2.
+ *** The downloads url is: http://hgdownload-test.soe.ucsc.edu/goldenPath/papAnu2.
  *** Edit each README.txt to resolve any notes marked with "***":
      /cluster/data/papAnu2/goldenPath/database/README.txt
      /cluster/data/papAnu2/goldenPath/bigZips/README.txt
@@ -761,5 +761,19 @@ http://genome.crg.es/genepredictions/P.anubis/papAnu2/geneid_v1.4/papAnu2.geneid
 
     # verify the convert link on the test browser is now active from papAnu2 to
     # papAnu3
+
+#########################################################################
+# LIFTOVER TO papAnu4 (DONE - 2018-01-08 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/papAnu2/bed/blat.papAnu4.2018-01-08
+    cd /hive/data/genomes/papAnu2/bed/blat.papAnu4.2018-01-08
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/papAnu2/jkStuff/papAnu2.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         papAnu2 papAnu4) > do.log 2>&1 &
+    # real    577m17.830s
+
+    # verify the convert link on the test browser is now active from papAnu2 to
+    # papAnu4
 
 #########################################################################

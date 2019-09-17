@@ -5,6 +5,7 @@
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 
+#include <sys/mman.h>
 #include "common.h"
 #include "linefile.h"
 #include "jksql.h"
@@ -19,9 +20,8 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 #include "regexHelper.h"
-
-
-/* ----------- End of AutoSQL generated code --------------------- */
+#include "fieldedTable.h"
+#include "tagRepo.h"
 
 struct trackDb *trackDbNew()
 /* Allocate a new trackDb with just very minimal stuff filled in. */
@@ -120,7 +120,22 @@ if (sameString(var, "track"))
     parseTrackLine(bt, value, lf);
 if (bt->settingsHash == NULL)
     bt->settingsHash = hashNew(7);
-hashAdd(bt->settingsHash, var, cloneString(value));
+if (bt->viewHash == NULL)
+    bt->viewHash = hashNew(7);
+char *storeValue = cloneString(value);
+
+// squirrel away views
+if (startsWith("subGroup", var))
+    {
+    char *ptr = strchr(value, ' ');
+    if (ptr)
+        *ptr = 0;
+    hashAdd(bt->viewHash, value, storeValue);
+    if (ptr)
+        *ptr = ' ';
+    }
+
+hashAdd(bt->settingsHash, var, storeValue);
 
 if (bt->overrides != NULL)
     hashAdd(bt->overrides, var, NULL);
@@ -227,7 +242,9 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
 		   sameString("bed8Attrs", s) || sameString("gvf", s) ||
 		   sameString("vcfTabix", s) || sameString("vcf", s) || sameString("pgSnp", s) ||
 		   sameString("narrowPeak", s) || sameString("broadPeak", s) || 
-                   sameString("peptideMapping", s) || sameString("barChart", s)
+                   sameString("bigLolly", s) || 
+                   sameString("peptideMapping", s) || sameString("barChart", s) ||
+                   sameString("interact", s) || sameString("bigInteract", s)
                    );
 freeMem(t);
 return canPack;
@@ -348,9 +365,13 @@ for (;;)
         line = trimSpaces(line);
         trackDbUpdateOldTag(&word, &line);
         if (releaseTag && sameString(word, "release"))
-            errAbort("Release tag %s in stanza with include override %s, line %d of %s",
-                line, releaseTag, lf->lineIx, lf->fileName);
-        trackDbAddInfo(bt, word, line, lf);
+            {
+            if (differentString(releaseTag, line))
+                errAbort("Release tag %s in stanza with include override %s, line %d of %s",
+                    line, releaseTag, lf->lineIx, lf->fileName);
+            }
+        else
+            trackDbAddInfo(bt, word, line, lf);
         }
     if (releaseTag)
         trackDbAddRelease(bt, releaseTag);
@@ -392,11 +413,11 @@ struct hash *trackDbHashSettings(struct trackDb *tdb)
  * done on demand. Returns settings hash. */
 {
 if (tdb->settingsHash == NULL)
-    tdb->settingsHash = trackDbSettingsFromString(tdb->settings);
+    tdb->settingsHash = trackDbSettingsFromString(tdb, tdb->settings);
 return tdb->settingsHash;
 }
 
-struct hash *trackDbSettingsFromString(char *string)
+struct hash *trackDbSettingsFromString(struct trackDb *tdb, char *string)
 /* Return hash of key/value pairs from string.  Differs
  * from raFromString in that it passes the key/val
  * pair through the backwards compatability routines. */
@@ -420,9 +441,31 @@ for (;;)
     s = lineEnd;
     val = lmCloneString(hash->lm, val);
     hashAdd(hash, key, val);
+    if (tdb && startsWith("subGroup", key))
+        {
+        char *storeValue = cloneString(val);
+        char *ptr = strchr(val, ' ');
+        if (ptr)
+            *ptr = 0;
+        if (tdb->viewHash == NULL)
+            tdb->viewHash = newHash(5);
+        hashAdd(tdb->viewHash, val, storeValue);
+        if (ptr)
+            *ptr = ' ';
+        }
     }
 freeMem(dupe);
 return hash;
+}
+
+char *trackDbViewSetting(struct trackDb *tdb, char *name)
+/* Return view setting from tdb, but *not* any of it's parents. */
+{
+if (tdb == NULL)
+    errAbort("Program error: null tdb passed to trackDbSetting.");
+if (tdb->viewHash == NULL)
+    return NULL;
+return hashFindVal(tdb->viewHash, name);
 }
 
 char *trackDbLocalSetting(struct trackDb *tdb, char *name)
@@ -431,7 +474,7 @@ char *trackDbLocalSetting(struct trackDb *tdb, char *name)
 if (tdb == NULL)
     errAbort("Program error: null tdb passed to trackDbSetting.");
 if (tdb->settingsHash == NULL)
-    tdb->settingsHash = trackDbSettingsFromString(tdb->settings);
+    tdb->settingsHash = trackDbSettingsFromString(tdb, tdb->settings);
 return hashFindVal(tdb->settingsHash, name);
 }
 
@@ -441,7 +484,7 @@ struct slName *trackDbLocalSettingsWildMatch(struct trackDb *tdb, char *expressi
 if (tdb == NULL)
     errAbort("Program error: null tdb passed to trackDbSetting.");
 if (tdb->settingsHash == NULL)
-    tdb->settingsHash = trackDbSettingsFromString(tdb->settings);
+    tdb->settingsHash = trackDbSettingsFromString(tdb, tdb->settings);
 
 struct slName *slFoundVars = NULL;
 struct hashCookie brownie = hashFirst(tdb->settingsHash);
@@ -717,6 +760,12 @@ else if (sameWord("halSnake",type))
     cType = cfgSnake;
 else if (sameWord("barChart", type) || sameWord("bigBarChart", type))
     cType = cfgBarChart;
+else if (sameWord("interact", type) || sameWord("bigInteract", type))
+    cType = cfgInteract;
+else if (startsWith("bigLolly", type))
+    cType = cfgLollipop;
+else if (sameWord("hic", type))
+    cType = cfgHic;
 // TODO: Only these are configurable so far
 
 if (cType == cfgNone && warnIfNecessary)
@@ -753,15 +802,23 @@ if (ctPopup > cfgNone)
 return ctPopup;
 }
 
+boolean trackDbNoInheritField(char *field)
+/* Suppress inheritance of specific fields.
+ * NOTE: make more efficient if more of these are added */
+{
+return (sameString(field, "pennantIcon"));
+}
+
 char *trackDbSetting(struct trackDb *tdb, char *name)
-/* Look for a trackDb setting from lowest level on up chain of parents. */
+/* Look for a trackDb setting from lowest level on up chain of parents,
+ * excepting fields specifically defined as not inheritable  */
 {
 struct trackDb *generation;
 char *trackSetting = NULL;
 for (generation = tdb; generation != NULL; generation = generation->parent)
     {
-    trackSetting = trackDbLocalSetting(generation,name);
-    if (trackSetting != NULL)
+    trackSetting = trackDbLocalSetting(generation, name);
+    if (trackSetting != NULL || trackDbNoInheritField(name))
         break;
     }
 return trackSetting;
@@ -884,7 +941,10 @@ if (tdbIsCompositeView(tdb))
     if (viewName)
         {
         *viewName = trackDbLocalSetting(tdb, "view");
-        assert(*viewName != NULL);
+        if (*viewName == NULL)
+            errAbort("track '%s' appears to be a view but does not have a "
+                     "<a href=\"../goldenpath/help/trackDb/trackDbHub.html#view\" target=_blank"
+                     ">view setting</a>.", tdb->track);
         }
     return TRUE;
     }
@@ -1277,6 +1337,23 @@ void tdbExtrasMembersForAllSet(struct trackDb *tdb, struct _membersForAll *membe
 tdbExtrasGet(tdb)->membersForAll = membersForAll;
 }
 
+members_t *tdbExtrasMembers(struct trackDb *tdb, char *groupNameOrTag)
+// Returns subtrack members if already known, else NULL
+{
+struct tdbExtras *extras = tdbExtrasGet(tdb);
+
+if (extras->membersHash == NULL)
+    extras->membersHash = newHash(5);
+
+return (members_t *)hashFindVal(extras->membersHash, groupNameOrTag);
+}
+
+void tdbExtrasMembersSet(struct trackDb *tdb,  char *groupNameOrTag,  members_t *members)
+// Sets the subtrack members for later retrieval.
+{
+hashAdd(tdbExtrasGet(tdb)->membersHash, groupNameOrTag, members);
+}
+
 struct _membership *tdbExtrasMembership(struct trackDb *tdb)
 // Returns subtrack membership if already known, else NULL
 {
@@ -1375,5 +1452,120 @@ boolean trackDbSettingBlocksConfiguration(struct trackDb *tdb, boolean onlyAjax)
 if (SETTING_IS_OFF(trackDbSettingClosestToHome(tdb, "configurable")))
     return TRUE;  // never configurable
 return (onlyAjax && SETTING_IS_OFF(trackDbSettingClosestToHome(tdb,"configureByPopup")));
+}
+
+
+struct slPair *tabSepMetaPairs(char *tabSepMeta, struct trackDb *tdb, char *metaTag)
+{
+// If there's no file, there's no data.
+if (tabSepMeta == NULL)
+    return NULL;
+
+// If the trackDb entry doesn't have a foreign key, there's no data.
+if (metaTag == NULL)
+    return NULL;
+
+static char *cachedTableName = NULL;
+static struct hash *cachedHash = NULL;
+static struct fieldedTable *cachedTable = NULL;
+
+// Cache this table because there's a good chance we'll get called again with it.
+if ((cachedTableName == NULL) || differentString(tabSepMeta, cachedTableName))
+    {
+    char *requiredFields[] = {"meta"};
+    cachedTable = fieldedTableFromTabFile(tabSepMeta, NULL, requiredFields, sizeof requiredFields / sizeof (char *));
+    cachedHash = fieldedTableUniqueIndex(cachedTable, requiredFields[0]);
+    cachedTableName = cloneString(tabSepMeta);
+    }
+
+// Look for this tag in the metadata.
+struct fieldedRow *fr = hashFindVal(cachedHash, metaTag);
+if (fr == NULL)
+    return NULL;
+
+int ii;
+struct slPair *pairList = NULL;
+for(ii=0; ii < cachedTable->fieldCount; ii++)
+    {
+    char *fieldName = cachedTable->fields[ii];
+    char *fieldVal = fr->row[ii];
+    if (!isEmpty(fieldVal))
+        slAddHead(&pairList, slPairNew(fieldName, cloneString(fieldVal)));
+    }
+slReverse(&pairList);
+
+return pairList;
+}
+
+
+int cmpPairAlpha(const void *e1, const void *e2)
+/* used with slSort to sort slPairs alphabetically */
+{
+const struct slPair *a = *((struct slPair **)e1);
+const struct slPair *b = *((struct slPair **)e2);
+return strcmp(a->name, b->name);
+}
+
+static struct slPair *convertNameValueString(char *string)
+/* Convert a string composed of name=value pairs separated by white space. */
+{
+char *clone = cloneString(string);
+int count = chopByWhiteRespectDoubleQuotes(clone,NULL,0);
+char **words = needMem(sizeof(char *) * count);
+count = chopByWhiteRespectDoubleQuotes(clone,words,count);
+if (count < 1 || words[0] == NULL)
+    {
+    errAbort("This is not formatted var=val pairs:\n\t%s\n",string);
+    }
+
+int ix;
+struct slPair *pairList = NULL, *pair;
+
+for (ix = 0;ix<count;ix++)
+    {
+    if (*words[ix] == '#')
+        break;
+    
+    if (strchr(words[ix], '=') == NULL) // treat this the same as "var="
+        {
+        pair = slPairNew(words[ix], NULL);
+        }   
+    else
+        {   
+        char *name = cloneNextWordByDelimiter(&(words[ix]),'=');
+        char *value = cloneString(words[ix]);
+        pair = slPairNew(name, value);
+        }
+    slAddHead(&pairList, pair);
+    }
+
+slSort(&pairList, cmpPairAlpha);
+
+return pairList;
+}
+
+struct slPair *trackDbMetaPairs(struct trackDb *tdb)
+/* Read in metadata given a trackDb entry.  This routine understands the three ways
+ * that metadata can be represented in a trackDb stanza: "metadata" lines per stanza,
+ * or a  tab-separated or tagStorm file with a foreign key specified by the "meta" tag.
+ */
+{
+char *metaTag = trackDbSetting(tdb, "meta");
+if (metaTag != NULL)
+    {
+    char *tabSepMeta = trackDbSetting(tdb, "metaTab");
+    if (tabSepMeta)
+        return tabSepMetaPairs(tabSepMeta, tdb, metaTag);
+
+    char *tagStormFile = trackDbSetting(tdb, "metaDb");
+    if (tagStormFile)
+        return tagRepoPairs(tagStormFile, "meta", metaTag);
+    }
+
+char *metadataInTdb = trackDbSetting(tdb, "metadata");
+if (metadataInTdb)
+    return convertNameValueString(metadataInTdb);
+
+return NULL;
 }
 

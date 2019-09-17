@@ -138,7 +138,7 @@
     <P class="isRequired">Required: <span class="red">Yes</span></P>
     <P>This is the name of
     the dataset and must be unique within the Genome Browser or
-    dataHub.  Typically this is the MySQL table name or remote data
+    dataHub.  Typically this is the MariaDB table name or remote data
     file root name (without path or suffix).  Must begin with a letter
     and contain only the following chars:
     [<code>a-zA-Z0-9_</code>].</P>
@@ -161,6 +161,7 @@
     <A onclick="return jumpTo(this);" HREF="#">bedRnaElements</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigBarChart</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigBed</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigInteract</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigChain</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigMaf</A>,
@@ -186,8 +187,9 @@
     <A onclick="return jumpTo(this);" HREF="#">vcfTabix</A>,
     <A onclick="return jumpTo(this);" HREF="#">wig</A>,
     <A onclick="return jumpTo(this);" HREF="#">wigMaf</A></P>
-    <P>Detailed descriptions of each type can be found
-    below.  In many cases the type setting includes additional
+    <P>Not all track types are supported in hubs. The types specifically
+    supported are called out at the top of the Hub Track Database Definition
+    page.  In many cases the type setting includes additional
     parameters to further specify the data format.  Some track types
     have additional setting requirements, to be discussed
     below.</P>
@@ -207,6 +209,7 @@
     <A onclick="return jumpTo(this);" HREF="#">bigBarChart</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigBed</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigChain</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigInteract</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigMaf</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigWig</A>,
@@ -246,6 +249,16 @@
     is limited to 76 printable characters.</P>
     <P><B>Example:</B></P>
     <pre>   longLabel Human mRNAs from GenBank</pre>
+</DIV>
+
+<DIV class="meta"><span class="types all"></span>
+<div class="format"><code>meta</code></div>
+    <P class="isRequired">Required: No</P>
+    <P> Meta specifies the metadata tag for this track. This tag is a key into the metadata 
+    table specified in either metaDb or metaTab in the genomes.txt file. The meta tag can be 
+    any alphanumeric string. Each meta tag should appear in a trackDb stanza AND in either the 
+    tab-separated file specified by metaTab, or tagStorm file specified by metaDb in the 
+    hub's genomes.txt file.
 </DIV>
 
 <DIV class="visibility"><span class="types all"></span>
@@ -341,7 +354,7 @@
     <P>The location of a remote data file containing the chain link data.</P>
 </DIV>
 
-<DIV class="bigDataUrl"><span class="types bigBarChart bigBed bigChain bigMaf bigPsl bigWig bam vcfTabix"></span>
+<DIV class="bigDataUrl"><span class="types bigBarChart bigBed bigChain bigInteract bigMaf bigPsl bigWig bam vcfTabix"></span>
 <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
     <P class="isRequired">Required: <span class="red">For Hubs</span></P>
     <P>The location of a remote data file containing the bulk of the data for the track.
@@ -350,7 +363,7 @@
     <P>The setting is either the full URL (including <code>http:</code> or another protocol)
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
-    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigMaf, bigPsl, bigGenePred,  bigWig or
+    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigInteract, bigMaf, bigPsl, bigGenePred, bigNarrowPeak, bigWig or
     vcfTabix.  Note that bam/cram and vcfTabix types require a separate
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively), unless <A
@@ -358,7 +371,7 @@
     All occurrences of the  string <code>$D</code> in the URL will be
     substituted with the genome assembly database name.  This allows a
     trackDb entry to be used with for multiple assemblies.  <code>$D</code>
-    substitution is not implement for track hubs.
+    substitution is not implemented for track hubs.
 
     </P> <P><B>Example:</B></P>
     <pre>   bigDataUrl http://vizhub.wustl.edu/VizHub/hg19/biBrainH3K4me1.bb</pre>
@@ -570,26 +583,11 @@
 
     <P>Note: dynamic resizing of iframes is not trivial, as they have to
     be resized with javascript, across domains. We recommend keeping
-    the size static and to use scrollbars. If dynamic resizing is required, the
-    iframed page has to include a few lines of special HTML and javascript
-    code and one has to modify its body-tag, like this (see 
-    <a target="_BLANK" href="http://stackoverflow.com/questions/153152/resizing-an-iframe-based-on-content">stackoverflow</a>):
-    <pre>
-    ... html header ...
-    &lt;body onload="iframeResizePipe()"&gt;
-    &lt;iframe id="helpframe" src='' height='0' width='0' frameborder='0'&gt;&lt;/iframe&gt;
-    &lt;script type="text/javascript"&gt;
-      function iframeResizePipe() {
-       var height = document.body.scrollHeight;
-       var pipe = document.getElementById('helpframe');
-       pipe.src = 'http://genome.ucsc.edu/inc/iframeHelper.html?height='+height+'&amp;cacheb='+Math.random();
-      }
-    &lt;/script&gt;
-    ... rest of webpage ...
-    </pre>
+    the size static and to use scrollbars.
 
     <P><B>Example:</B></P>
     <pre>   iframeOptions width='800' height='800' scrolling='yes'</pre>
+    </pre>
     <P>This example fixes the size to 800x800 pixels and activates scrollbars.</P>
 </DIV>
 
@@ -715,7 +713,7 @@
     reference the same table in more than one track.
     An example of this is showing a table as a single signal track and
     as part of a combination overlay track, as described later in this
-    document.  For data contained in MySQL tables, this setting must be used
+    document.  For data contained in MariaDB tables, this setting must be used
     if the <code>track</code> setting is not the name of the table.</P>
     <P><B>Example:</B></P>
     <pre>
@@ -724,17 +722,21 @@
 </DIV>
 
 <DIV class="tableBrowser"><span class="types all"></span>
-<div class="format"><code>tableBrowser &lt;off/on&gt; [table1 ...]</code></div>
-    <P><I>NOT FOR HUBS.</I></P>
+<div class="format"><code>tableBrowser &lt;off/on/noGenome&gt; [table1 ...]</code></div>
     <P>The Table Browser typically allows querying and downloading of some or all 
-    of the raw data for a track. This setting can be used to block Table Browser access to datasets 
+    of the raw data for a track. The <code>off</code> value blocks Table Browser access to datasets 
     with restrictions (for example, those with confidentiality or licensing limitations).  
+    The <code>noGenome</code> value allows queries within specific genomic regions,
+    but not genome-wide.
     By naming additional tables in this setting, access to those 
     tables can be denied as well.</P>
-    <P><B>Example:</B></P>
+    <P><B>Examples:</B></P>
     <pre>   tableBrowser off decipherRaw knownToDecipher</pre>
     <P>The table for this track, as well as the decipherRaw and knownToDecipher tables, 
     are blocked from Table Browser access.</P>
+    <pre>   tableBrowser noGenome omimAv omimAvRepl</pre>
+    <p>Genome-wide queries are disabled for the track table as well as omimAv and omimAvRepl.
+    Queries on genomic regions are permitted.</p>
 </DIV>
 
 <DIV class="url"><span class="types all"></span>
@@ -828,7 +830,7 @@
     urlLabel NCBI Details:    </pre>
 </DIV>
 
-<DIV class="urls"><span class="types bigBed"></span>
+<DIV class="urls"><span class="types bigBed bigBarChart"></span>
     <div class="format">
         <code>urls &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
     </div>
@@ -860,7 +862,7 @@
     </pre>
 </DIV>
 
-<DIV class="skipEmptyFields"><span class="types bigBed bigPsl bigGenePred bigMaf bigChain"></span>
+<DIV class="skipEmptyFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
         <code>skipEmptyFields on</code><BR>
     </div>
@@ -870,7 +872,7 @@
     fields but only few of them have a value.</P> 
 </DIV>
 
-<DIV class="skipFields"><span class="types bigBed bigPsl bigGenePred bigMaf bigChain"></span>
+<DIV class="skipFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
         <code>skipFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
     </div>
@@ -884,7 +886,7 @@
     </pre>
 </DIV>
 
-<DIV class="sepFields"><span class="types bigBed bigPsl bigGenePred bigMaf bigChain"></span>
+<DIV class="sepFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
         <code>sepFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
     </div>
@@ -977,6 +979,16 @@
     <A HREF="../bigGenePred.html">bigGenePred help page</A>.</P>
 </DIV>
 
+<DIV class="bigNarrowPeak_intro">
+<H3>bigNarrowPeak: Peaks</H3>
+    <P>
+    The bigNarrowPeak format stores peaks over a range with a single basepair central peak. bigNarrowPeak files are based on the bigBed format.  The first six fields are the same as bed.  The other four include three scores, and the base-pair offset of the central peak.
+
+    bigNarrowPeak files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigNarrowPeak. The resulting bigBed files are in an indexed binary format. The main advantage of the bigBed files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigBed is considerably faster than regular BED files. The bigBed file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
+    For complete bigNarrowPeak format definitions please see the
+    <A HREF="../bigNarrowPeak.html">bigNarrowPeak help page</A>.</P>
+</DIV>
+
 <DIV class="bigMaf_intro">
 <H3>bigMaf: Multiple Alignments</H3>
     <P>
@@ -1039,7 +1051,9 @@
     type should end with a '<code>+</code>' (plus).  Even if there are no
     additional non-standard fields, the parameter '<code>.</code>' (dot)
     must be specified if this track is meant to be configurable.</P>
-    <P><em>Examples can be found below.</em></P>
+    <P><B>Example:</B></P>
+    <pre>  type bigBed 9 +</pre>
+
 </DIV>
 
 <DIV class="bigPsl"><span class="types bigPsl"></span>
@@ -1052,6 +1066,12 @@ There are no extra options that can appear on the type bigPsl line.
 <div class="format">
     <code>type bigChain</code></div>
 There are no extra options that can appear on the type bigChain line.
+</DIV>
+
+<DIV class="bigNarrowPeak"><span class="types bigNarrowPeak"></span>
+<div class="format">
+    <code>type bigNarrowPeak</code></div>
+There are no extra options that can appear on the type bigNarrowPeak line.
 </DIV>
 
 <DIV class="bigGenePred"><span class="types bigGenePred"></span>
@@ -1070,6 +1090,12 @@ There are no extra options that can appear on the type bigMaf line.
 <div class="format">
     <code>type bigBarChart</code></div>
 There are no extra options that can appear on the type bigBarChart line.
+</DIV>
+
+<DIV class="bigInteract"><span class="types bigInteract"></span>
+<div class="format">
+    <code>type bigInteract</code></div>
+There are no extra options that can appear on the type bigInteract line.
 </DIV>
 
 <DIV class="bed_flavors"><span class="types bed5FloatScore bedRnaElements broadPeak coloredExon gvf ld2 narrowPeak peptideMapping"></span>
@@ -1220,7 +1246,6 @@ There are no extra options that can appear on the type bigBarChart line.
     <code>&lt;column&gt;FilterLimits &lt;low&gt;[:&lt;high&gt;]</code><BR>
     <code>&lt;column&gt;FilterByRange &lt;off/on&gt;</code>
     </div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>A number of
     numerical filters are available for bed tracks.  These are
     conveniently named by the field that is filtered on.  The most
@@ -1419,7 +1444,10 @@ There are no extra options that can appear on the type bigBarChart line.
     item coloring using the value in the ninth field, <code>itemRgb</code>. The
     value of the  item field must be an R,G,B triplet.  When loaded
     into a table, this field appears as an integer with the RGB values
-    in specific bits of the integer.</P>
+    in specific bits of the integer. To observe this field, specify the type as,
+     <code>type bigBed 9</code>, or, <code>type bigBed 9+</code>, for additional
+    <A HREF="../../../FAQ/FAQformat.html#format1" target="_blank">non-standard columns</A>, 
+    in the trackDb stanza for the bigBed file.</P>
     <P><B>Example:</B></P>
     <pre>   itemRgb on</pre>
 </DIV>
@@ -1519,8 +1547,7 @@ There are no extra options that can appear on the type bigBarChart line.
     <pre>
     spectrum on
     scoreMin 700
-    scoreMax 900
-    color 0,0,128    </pre>
+    scoreMax 900</pre>
     <P>In this example, the track description will be
     displayed in blue, but the track will remain a gray scale.
     Items with scores less than or equal to 700 will be shown in very
@@ -1538,6 +1565,11 @@ There are no extra options that can appear on the type bigBarChart line.
     browser, or if there are more than one matches of that string, 
     will be give a list of the positions to choose from. See <A HREF="../bigBed.html#Ex3">HERE</A>
     for instructions on how to build an index for a bigBed file.
+    The searchIndex setting requires the input BED data to be
+    case-senstive sorted (<code>sort -k1,1 -k2,2n</code>), where
+    newer versions of the tool bedToBigBed (available
+    <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">here</a>)
+    are enhanced to catch improper input.
     <P><B>Example:</B></P>
     <pre>   searchIndex name</pre>
 </DIV>
@@ -1601,7 +1633,7 @@ There are no extra options that can appear on the type bigBarChart line.
     <pre>   bedNameLabel Gene Id</pre>
 </DIV>
 
-<DIV class="scoreLabel"><span class="types bed bigBed bigPsl bigGenePred"></span>
+<DIV class="scoreLabel"><span class="types bed bigBed bigPsl bigGenePred bigNarrowPeak"></span>
 <div class="format"><code>scoreLabel &lt;label&gt;</code></div>
     <P>When a user clicks on a track item in the Browser image, 
     the item detail page is shown. This setting specifies an 
@@ -1669,7 +1701,7 @@ There are no extra options that can appear on the type bigBarChart line.
     in looking up the sequence. These tables are loaded by hgLoadSeq.
     </LI>
     <LI>If
-    <code>hgPcrResult</code> is specified than a PCR result is
+    <code>hgPcrResult</code> is specified then a PCR result is
     used.</LI>
     <LI>If <code>lfExtra</code>
     is specified then the sequence of an item is found in the last
@@ -1975,7 +2007,7 @@ There are no extra options that can appear on the type bigBarChart line.
 <div class="format">
     <code>type wig &lt;low#&gt; &lt;high#&gt;</code><BR>
     <code>type bigWig &lt;#&gt; &lt;#&gt;</code></div>
-    <P>MySQL tables of type
+    <P>MariaDB tables of type
     <code>wig</code> and remote data files of type <code>bigWig</code>
     must declare the expected signal range for
     the data.</P>
@@ -1998,7 +2030,7 @@ There are no extra options that can appear on the type bigBarChart line.
     <code>maxLimit&lt;#&gt;</code></div>
     <P>The bedGraph type
     track has the same file format as a bed file, but is loaded into
-    the MySQL database in a form that can be graphed.  By default the
+    the MariaDB database in a form that can be graphed.  By default the
     value to be graphed is the fifth standard bed field,
     <code>score</code>;  however, you can specify a different field to use.
     Typically only the first 3 standard bed fields are included
@@ -2063,7 +2095,7 @@ There are no extra options that can appear on the type bigBarChart line.
     <pre>   graphTypeDefault points</pre>
 </DIV>
 
-<DIV class="maxHeightPixels"><span class="types wig bigWig bedGraph"></span>
+<DIV class="maxHeightPixels"><span class="types wig bigWig bedGraph bigInteract"></span>
 <div class="format"><code>maxHeightPixels &lt;max:default:min&gt;</code></div>
     <P>The amount of
     vertical viewing space for your signal track should be declared,
@@ -2228,7 +2260,7 @@ There are no extra options that can appear on the type bigBarChart line.
     wigColorBy myBed
       ...  </pre>
     <P>This wiggle track is
-    composed of a MySQL table and binary "wib" files that
+    composed of a MariaDB table and binary "wib" files that
     are referenced in the table.  The default windowing
     function is the maximum signal in each window (under each pixel)
     shown.  The span of bases covered by each row in
@@ -2265,7 +2297,7 @@ There are no extra options that can appear on the type bigBarChart line.
     maxHeightPixels 100:16:8
       ...  </pre>
     <P>This bedGraph style signal track is composed of
-    a MySQL table of items, each with a score defined in the fourth
+    a MariaDB table of items, each with a score defined in the fourth
     column.  While a wiggle track is usually composed of fixed
     interval windows of signal (e.g. 200 bp), the bedGraph table may
     define a signal in varying granularities of windows with or
@@ -2314,7 +2346,7 @@ There are no extra options that can appear on the type bigBarChart line.
 
 <DIV class="genePred"><span class="types genePred"></span>
 <div class="format"><code>type genePred [pepTable [mrnaTable]]</code></div>
-    <P>This type of track, based on MySQL tables, is for gene models and predictions.
+    <P>This type of track, based on MariaDB tables, is for gene models and predictions.
     </P>
     <UL>
     <LI>pepTable - Optional protein sequence table</LI>
@@ -2343,7 +2375,7 @@ There are no extra options that can appear on the type bigBarChart line.
 
 <DIV class="itemClassTbl"><span class="types genePred bed"></span>
 <div class="format"><code>itemClassTbl &lt;table&gt;</code></div>
-    <P>Declare a MySQL table that will link classes
+    <P>Declare a MariaDB table that will link classes
     to named gene models.</P>
 </DIV>
 
@@ -2404,7 +2436,7 @@ There are no extra options that can appear on the type bigBarChart line.
     their class is also selected from the "rnaTypes" table.  Using the
     <code>filterBy</code> setting creates a user selectable drop-down list box of
     3 choices or "all".  When the user filters by tRNA and snRNA (the
-    green and blue choices), the mySQL select statement used by the
+    green and blue choices), the SQL select statement used by the
     Browser will be limited by the where clause "<code>where
     rnaTypes.rnaType in ('tRNA','snRNA')</code>".
     </P>
@@ -2461,7 +2493,7 @@ There are no extra options that can appear on the type bigBarChart line.
 <div class="format"><code>oldToNew &lt;tableName&gt;</code></div>
     <P>In successive versions of gene models, it can
     be helpful to map older genes to their newer models.  This can be
-    done by providing a MySQL table that maps the change, and then using
+    done by providing a MariaDB table that maps the change, and then using
     this setting to ensure the gene details page shows any changes.</P>
     <P><B>Example:</B></P>
     <pre>
@@ -2711,6 +2743,20 @@ There are no extra options that can appear on the type bigBarChart line.
     <P><B>Example:</B></P>
     <pre>   showNames off</pre>
 </DIV>
+
+<div class="doWiggle"><span class="types bam"></span>
+<div class="format"><code>doWiggle on</code></div>
+    <p>The doWiggle setting enables the BAM data to be displayed as a bar graph where the
+    height is proportional to the number of reads mapped to each genomic position. Through
+    dynamic calculation of items in the current window, this feature plots a line similar
+    to a wiggle graph that can be customized with a number of graph-based configuration options
+    such as drawing indicator lines, smoothing plots, adjusting graph height and vertical range,
+    and switching from bars to points. Please note that the feature is best displayed with
+    &quot;Display mode&quot; set to full and that the default &quot;Data view scaling&quot;
+    is &quot;auto-scale to data view.&quot;</p>
+    <p><b>Example:</b></p>
+    <pre>   doWiggle on</pre>
+</div>
 
 <DIV class="bam_example"><span class="types bam"></span>
 <div class="format"><B>Example of a bam track</B></div>
@@ -3683,19 +3729,19 @@ There are no extra options that can appear on the type bigBarChart line.
     </P>
 </DIV>
 
-<DIV class="labelFields"><span class="types bigBarChart bigBed bigGenePred bigPsl"></span>
+<DIV class="labelFields"><span class="types bigBarChart bigBed bigGenePred bigNarrowPeak bigPsl"></span>
 <div class="format"><code>labelFields &lt;<EM>fieldName[,fieldName]</EM>&gt;</code></div>
     <P>A list of fields from the bigBed based file that can be used as a label. The special value <B>none</B> can be specified if no labels are desired.
     </P>
 </DIV>
 
-<DIV class="defaultLabelFields"><span class="types bigBarChart bigBed bigGenePred bigPsl"></span>
+<DIV class="defaultLabelFields"><span class="types bigBarChart bigBed bigGenePred bigNarrowPeak bigPsl"></span>
 <div class="format"><code>defaultLabelFields &lt;<EM>fieldName[,fieldName]</EM>&gt;</code></div>
     <P>A list of fields from the bigBed based file that should be used as a label by default.  Only applicable if <B>labelFields</B> is set.  If <B>defaultLabelFields</B> is not specified, the first field in labelFields is used as the default. The special value <B>none</B> can be specified if no label should be the default.
     </P>
 </DIV>
 
-<DIV class="labelSeparator"><span class="types bigBed bigGenePred bigPsl"></span>
+<DIV class="labelSeparator"><span class="types bigBed bigGenePred bigNarrowPeak bigPsl"></span>
 <div class="format"><code>labelSeparator &lt;<EM>text</EM>&gt;</code></div>
     <P>One or more characters to use as the field separator between multiple labels.  A slash (/) by default, this string can have double quotes around it if it should have white spaces in it.
     </P>
@@ -3773,7 +3819,7 @@ There are no extra options that can appear on the type bigBarChart line.
     character.  The fifth column contains the number of variants found
     in the <code>name</code> column, while the sixth and seventh columns contain
     comma-delimited arrays of frequencies and scores respectively.
-    Files in this format can be loaded into MySQL with hgLoadBed using
+    Files in this format can be loaded into MariaDB with hgLoadBed using
     the "pgSnp.sql" schema.
     </P>
     <P>The browser image
@@ -4269,6 +4315,50 @@ for each cell associated with the particular TF binding location.</P>
     </P>
 </DIV>
 
+<!-- - - - - - - - bigInteract settings - - - - - - - -->
+<DIV class="bigInteract_intro">
+<H3>bigInteract: Pairwise interactions</H3>
+    <P>
+    The bigInteract format stores interactions between pairs of regions in the genome.
+BigInteract files are created using the program bedToBigBed with a special 
+AutoSQL file that defines the fields.  The resulting files are in an indexed binary format
+that supports efficient remote access, so the file can be hosted on your web accessible server
+and displayed at UCSC.
+For the complete bigInteract format definitions please see the
+    <A HREF="../interact.html">bigInteract help page</A>.</P>
+</DIV>
+
+<DIV class="interactDirectional"><span class="types bigInteract"></span>
+<div class="format"><code>interactDirectional &lt;true|offsetSource|offsetTarget|clusterSource|clusterTarget&gt;</code></div>
+    <P>This setting is used when the interaction has an orientation (direction of effect). The offset setting shows the source (offsetSource) or target (offsetTarget) below the other end type; that is vertically displaced in the image.  The interaction is drawn with dashed lines when the target region precedes the source region (reverse direction) in the genome.
+    </P>
+    <P>The cluster setting collects all interactions with the same source (clusterSource) or target (clusterTarget) and displays each group as a single linked block display in the browser. This provides an alternate view of an interact file.
+    </P>
+</DIV>
+
+<DIV class="interactUp"><span class="types bigInteract"></span>
+<div class="format"><code>interactUp &lt;true|false&gt;</code></div>
+    <P>This setting flips the curved full visibility display so that the peak of the curves is 'up' (hills instead of valleys). 
+    </P>
+</DIV>
+
+<DIV class="interactMultiRegion"><span class="types bigInteract"></span>
+<div class="format"><code>interactMultiRegion &lt;true|padding&gt;</code></div>
+    <P>This setting causes a link to appear on the details page that appears when an interaction is clicked on. This link will generate a &quot;multi-region&quot; Genome Browser view of the interaction (or interaction cluster) endpoints. Use padding to specify non-default padding at the edges of each region.  The default value is 200 base pairs.
+    </P>
+</DIV>
+
+<DIV class="interact_example"><span class="types bigInteract"></span>
+<div class="format"><B>Example of an interact/bigInteract track</B></div>
+    <pre>
+    track snpGeneInteractions
+    type bigInteract
+    interactDirectional true
+    maxHeightPixels 300:150:20
+    bigDataUrl http://...
+    </pre>
+</div>
+
 <!-- - - - - - - - bigBarChart settings - - - - - - - -->
 <DIV class="bigBarChart_intro">
 <H3>bigBarChart: Bar charts of variables displayed on genomic regions</H3>
@@ -4453,7 +4543,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
 <div class="format"><B>Example of a Supertrack</B></div>
     <pre>
     track myFolder
-    superTrack on
+    superTrack on show
     group regulation
     shortLabel My Folder
     longLabel My folder keeps my tracks together
@@ -4471,7 +4561,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     <P>The supertrack called "My Folder"
     contains two children.  All will be grouped under 
     "regulation".  Notice that the first track is visible by
-    default (if the supertrack itself is visible), but the second
+    default (if the supertrack itself is visible by adding &quot;show&quot;), but the second
     track is not.</P>
 </DIV>
 
@@ -5000,7 +5090,10 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     inheritance can be hard to explain, they are often intuitive in
     practice. In composite subtracks, visibility settings are directly
     inherited from the parent composite, therefore, any visibility lines
-    added at the child subtrack level of a composite will be ignored.</div></P>
+    added at the child subtrack level of a composite will be ignored.
+    Also note the <a href="#parent">parent</a> line should be referenced as
+    <code>parent myComposite on</code> if one desires the child subtrack
+    in a composite to be visible (checked, selected) by default.</p></div></P>
 </DIV>
 
 <DIV class="view"><span class="types view"></span>

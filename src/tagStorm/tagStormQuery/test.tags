@@ -5,9 +5,11 @@ assay	WGS
 pipeline	Macrogen MGX-WGS-0101
 biosample_date	10 Oct 2014
 meta top
+next_level	10.0
 
 	lab_baldwin_treatment	Episome no VPA
 	ips	episome_ips_protocol.pdf
+	level	10.0
 
 		lab_baldwin_parent	A1
 
@@ -36,6 +38,8 @@ meta top
 	lab_baldwin_treatment	Episome + VPA
 	ips	episome_ips_protocol.pdf
 	treatment	vpa_treatment.pdf
+	level	20
+	next_level	21
 
 		lab_baldwin_parent	C4
 
@@ -120,7 +124,9 @@ meta top
 	meta	HDF_fib
 	lab_baldwin_treatment	Fibroblast starting cells
 	control	untreated
+	level 0
 
 	noMeta	whatever
 	cell_line nonexistant
+	level 1
 

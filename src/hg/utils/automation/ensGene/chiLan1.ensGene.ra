@@ -1,0 +1,6 @@
+# required db variable
+db chiLan1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/chiLan1/jkStuff/ensToUcsc.lift
+# eliminate the Ensembl chrMT since UCSC does not have this:
+nameTranslation "/^MT/d"

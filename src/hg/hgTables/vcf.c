@@ -176,13 +176,33 @@ else
     row[8] = row[9] = ""; // compatible with localmem usage
 }
 
-static char *vcfFileName(struct sqlConnection *conn, char *table, char *chrom)
-// Look up the vcf or vcfTabix file name, using CUSTOM_TRASH if necessary.
+static char *vcfFileName(struct sqlConnection *conn, char *table, char *chrom, boolean isTabix)
+// Look up the vcf or vcfTabix file name, using CUSTOM_TRASH if necessary; return NULL if not found.
 {
 char *fileName = bigFileNameFromCtOrHub(table, conn);
 struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
+if (isCustomTrack(table) && ! isTabix)
+    {
+    // fileName is stored in the customTrash table
+    struct customTrack *ct = ctLookupName(table);
+    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+    char query[1024];
+    sqlSafef(query, sizeof(query), "select fileName from %s", ct->dbTableName);
+    fileName = sqlQuickString(conn, query);
+    hFreeConn(&conn);
+    }
 if (fileName == NULL)
     fileName = bbiNameFromSettingOrTableChrom(tdb, conn, table, chrom);
+return fileName;
+}
+
+static char *vcfMustFindFileName(struct sqlConnection *conn, char *table, char *chrom,
+                                 boolean isTabix)
+/* Look up the vcf or vcfTabix file name; errAbort if not found. */
+{
+char *fileName = vcfFileName(conn, table, chrom, isTabix);
+if (fileName == NULL)
+    errAbort("vcfMustFindFileName: can't find VCF file; chrom=%s, table=%s", chrom, table);
 return fileName;
 }
 
@@ -253,7 +273,9 @@ struct dyString *dyGt = newDyString(1024);
 struct vcfRecord *rec;
 for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     {
-    char *fileName = vcfFileName(conn, table, region->chrom);
+    char *fileName = vcfFileName(conn, table, region->chrom, isTabix);
+    if (fileName == NULL)
+        continue;
     struct vcfFile *vcff;
     if (isTabix)
         {
@@ -310,7 +332,8 @@ for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     vcfFileFree(&vcff);
     freeMem(fileName);
     }
-
+if (!printedHeader)
+    explainWhyNoResults(f);
 if (maxOut == 0)
     errAbort("Reached output limit of %d data values, please make region smaller,\n\tor set a higher output line limit with the filter settings.", bigFileMaxOutput());
 /* Clean up and exit. */
@@ -384,7 +407,7 @@ struct bed *bedList = NULL;
 struct region *region;
 for (region = regionList; region != NULL; region = region->next)
     {
-    char *fileName = vcfFileName(conn, table, region->chrom);
+    char *fileName = vcfFileName(conn, table, region->chrom, isTabix);
     if (fileName == NULL)
 	continue;
     char *indexUrl = bigDataIndexFromCtOrHub(table, conn);
@@ -405,7 +428,7 @@ struct slName *randomVcfIds(char *table, struct sqlConnection *conn, int count, 
 /* Return some semi-random IDs from a VCF file. */
 {
 /* Read 10000 items from vcf file,  or if they ask for a big list, then 4x what they ask for. */
-char *fileName = vcfFileName(conn, table, hDefaultChrom(database));
+char *fileName = vcfMustFindFileName(conn, table, hDefaultChrom(database), isTabix);
 char *indexUrl = bigDataIndexFromCtOrHub(table, conn);
 
 struct lineFile *lf = isTabix ? lineFileTabixAndIndexMayOpen(fileName, indexUrl, TRUE) :
@@ -446,7 +469,7 @@ void showSchemaVcf(char *table, struct trackDb *tdb, boolean isTabix)
 /* Show schema on vcf. */
 {
 struct sqlConnection *conn = hAllocConn(database);
-char *fileName = vcfFileName(conn, table, hDefaultChrom(database));
+char *fileName = vcfMustFindFileName(conn, table, hDefaultChrom(database), isTabix);
 
 struct asObject *as = vcfAsObj();
 hPrintf("<B>Database:</B> %s", database);

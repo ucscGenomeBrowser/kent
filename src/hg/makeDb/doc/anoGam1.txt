@@ -1200,3 +1200,21 @@ chainSome $(path1)
     # 22154872 bases of 278268413 (7.962%) in intersection
 
 ###########################################################################
+# LIFTOVER TO anoGam3 (DONE - 2017-12-20 - Hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/anoGam1
+    blat anoGam1.2bit /dev/null /dev/null -tileSize=11 \
+	-makeOoc=jkStuff/anoGam1.11.ooc -repMatch=100
+    # Wrote 11692 overused 11-mers to jkStuff/anoGam1.11.ooc
+
+    mkdir /hive/data/genomes/anoGam1/bed/blat.anoGam3.2017-12-20
+    cd /hive/data/genomes/anoGam1/bed/blat.anoGam3.2017-12-20
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/anoGam1/jkStuff/anoGam1.11.ooc \
+         anoGam1 anoGam3) > doLiftOverToAnoGam3.log 2>&1
+    # real    7m55.472s
+
+    # see if the liftOver menus function in the browser from anoGam1 to anoGam2
+
+#########################################################################

@@ -26,8 +26,7 @@ effect categories, variant properties and multi-species conservation status.
 <div class='warn-note' style='border: 2px solid #9e5900; padding: 5px 20px;
      background-color: #ffe9cc;'>
 <p><span style='font-weight: bold; color: #c70000;'>NOTE:</span><br>
-The VAI is only a research tool, meant to be used by those who have been
-properly trained in the interpretation of genetic data,
+The VAI is only a research tool
 and should never be used to make any kind of medical decision.
 We urge users seeking information about a personal medical or genetic
 condition to consult with a qualified physician for diagnosis and for
@@ -39,13 +38,13 @@ answers to personal questions.
 <P>
 In order to use the VAI, you must provide variant calls in either the
 <A HREF="../../FAQ/FAQformat.html#format10" TARGET=_BLANK>Personal Genome SNP (pgSnp)</A> or
-<A HREF="../goldenPath/help/vcf.html" TARGET=_BLANK>VCF</A> format.
+<A HREF="../help/vcf.html" TARGET=_BLANK>VCF</A> format.
 pgSnp-formatted variants may be uploaded as a
-<A HREF="../goldenPath/help/hgTracksHelp.html#CustomTracks"
+<A HREF="../help/hgTracksHelp.html#CustomTracks"
 TARGET=_BLANK>Custom Track</A>.
 Compressed and indexed VCF files must be on a web server (HTTP, HTTPS or FTP)
 and configured as Custom Tracks, or if you happen to have a
-<A HREF="../goldenPath/help/hgTrackHubHelp.html" TARGET=_BLANK>Track Hub</A>,
+<A HREF="../help/hgTrackHubHelp.html" TARGET=_BLANK>Track Hub</A>,
 as hub tracks.
 </P>
 
@@ -142,6 +141,13 @@ spans an exon/intron border or a coding sequence/UTR border.</TD></TR>
 <TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001792"
 TARGET=_BLANK>non_coding_exon_variant</A></TD>
 <TD>A sequence variant that changes exon sequence of a non-coding gene.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0002073"
+TARGET=_BLANK>no_sequence_alteration</A></TD>
+<TD>A variant that causes no change to the transcript sequence and/or
+specifies only the reference allele, no alternate allele.
+In rare cases when the transcript sequence (e.g. from RefSeq) differs from the
+reference genome assembly, a difference from the reference genome may restore
+the transcript sequence instead of altering it.</TD></TR>
 </TABLE>
 </P>
 
@@ -302,7 +308,7 @@ TARGET=_BLANK>Davydov <em>et al.</em>, 2010</A>).
       are selected in the "Select Genes" section,
       the flag "CANONICAL=YES" is added when the transcript
       has been chosen as "canonical" (see the "Related Data" section of the
-      <A HREF="hgTrackUi?g=knownGene&hgsid=$hgsid">UCSC Genes track description</A>).
+      <A HREF="../../cgi-bin/hgTrackUi?c=chr1&g=knownGene" target=_blank>UCSC Genes track description</A>).
     </li>
   </ul>
 </P>

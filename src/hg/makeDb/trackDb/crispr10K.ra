@@ -5,7 +5,7 @@ group genes
 visibility hide
 type bed 3
 superTrack on
-html crispr
+html crispr10K
 
     track crispr10KRanges
     shortLabel CRISPR Regions 10K
@@ -14,7 +14,7 @@ html crispr
     color 110,110,110
     type bed 3
     parent crispr10K
-    html crispr
+    html crispr10K
 
     track crispr10KTargets
     shortLabel CRISPR Targets 10K
@@ -29,4 +29,4 @@ html crispr
     detailsTabUrls _offset=/gbdb/$db/crispr10K/crisprDetails.tab
     url http://crispor.org/crispor.py?org=$D&pos=$S:${&pam=NGG
     urlLabel Click here to show this guide on Crispor.org, with expression oligos, validation primers and more
-    html crispr
+    html crispr10K

@@ -16,11 +16,19 @@
   <li><a href="#ExonOnly"><strong>Exon only</strong></a></li>
   <li><a href="#GeneOnly"><strong>Gene only</strong></a></li>
   <li><a href="#CustomRegions"><strong>Custom regions</strong></a></li>
-  <li><a href="#Haplotype"><strong>Haplotype view</strong></a></li>    
+  <li><a href="#Haplotype"><strong>Haplotype view</strong></a></li>
+</ul>
+<h6><a href="#Videos">Video demonstrations of Multi-Region modes</a></h6>
+<ul>
+  <li><a href="#ExonOnlyVid"><strong>Exon only</strong></a></li>
+  <li><a href="#CustomRegionsVid"><strong>Custom regions</strong></a></li>
+  <li><a href="#HaplotypeVid"><strong>Haplotype view</strong></a></li>
 </ul>
 <h6><a href="#Examples">Examples</a></h6>
 <hr>
-<form name="googleForm1" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/goldenPath/help';">          
+<form name="googleForm1" method="GET" action="http://www.google.com/search" 
+onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+
+'   site:genome.ucsc.edu/goldenPath/help';">
 <p> 
   Search the Genome Browser help pages: &nbsp;
   <input type="hidden" name="q" value=""> 
@@ -35,7 +43,7 @@
 <a name="Intro"></a>	
 <h2>Introduction</h2> 
 <p> 
-The multi-region display allows users to &quot;slice&quot; their track viewing experience into a 
+The multi-region display allows users to &quot;slice&quot; their track-viewing experience into a 
 variety of different modes that focus the display on certain features: exon-only, gene-only, or 
 user-defined BED coordinates. Only the portions of track annotations that fall within these 
 displayed regions are shown; extraneous intergenic, intronic and otherwise unwanted regions are 
@@ -137,7 +145,8 @@ height="171"> </p>
 <p> 
 If the gene track used to compute the slicing is a 
 <a href="./trackDb/trackDbDoc.html#superTrack">super track</a> or contains other transcripts, only 
-the longest exon will be used to determine slicing, regardless of whether or not they are in the same transcript. See <a href="#Example1">Example 1</a> for more information.  
+the longest exon will be used to determine slicing, regardless of whether or not they are in the 
+same transcript. See <a href="#Example1">Example 1</a> for more information.  
 
 <a name="GeneOnly"></a> 
 <h3>Gene-only mode</h3> 
@@ -179,7 +188,7 @@ supported comments are:</p>
   <strong>#shortDesc:</strong> (Optional) A short description of the custom region, displayed next 
   to the chromosome ideogram.</li>
   <li>
-  <strong>#padding:</strong> Sets the size of the padding on either side of a BED entry in the 
+  <strong>#padding:</strong> Sets the size of the padding on either side of a multi-region boundary in the
   browser tracks window.</li>
 </ul>
 <p> 
@@ -218,7 +227,8 @@ An additional viewing mode is available on human assemblies hg17 and later: show
 haplotype placed in its chromosomal context (<a href="#Example5">Example 5</a>). The haplotype is 
 specified by entering its ID in the form <em>chr_name_alt</em> in the configuration window. To view 
 the list of haplotype IDs for a given assembly, go to 
-<code>http://hgdownload.soe.ucsc.edu/goldenPath/<strong>$db</strong>/bigZips/<strong>$db</strong>.chrom.sizes</code>, 
+<code>http://hgdownload.soe.ucsc.edu/goldenPath/<strong>$db</strong>/bigZips/<strong>$db</strong>
+.chrom.sizes</code>, 
 where <strong><code>$db</code></strong> is the human assembly name (e.g., hg38, hg19, hg18 or 
 hg17).</p>  
 <p> 
@@ -227,12 +237,69 @@ and Sequencing group. Open the track and navigate to the haplotype of interest i
 Click on the haplotype to display its details page, then click the link <strong>Show this alternate 
 haplotype placed on its chromosome</strong>.</p>
         
-<a name="Examples"></a>
-<h2>Examples</h2>       
+<a name="Videos"></a>
+<p>
+</p>
+<h2>Videos</h2>
 
-<a name="Example1"></a> 
-<h3>Example 1. Exon-only mode</h3> 
-<p> 
+<a name="ExonOnlyVid"></a>
+<p>
+</p>
+<h3>Video demonstration of Exon-only mode</h3>
+<p>
+
+</p><p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/mNEJBOkf_Gk?rel=0" 
+frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+allowfullscreen></iframe>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Visit our
+<a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
+target="_blank">YouTube channel</a>.
+</p>
+
+<a name="CustomRegionsVid"></a>
+<p>
+</p>
+<h3>Video demonstration of Custom Regions </h3>
+<p>
+</p><p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ht4sGj1Tlxw?rel=0" 
+frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+allowfullscreen></iframe>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Visit our
+<a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
+target="_blank">YouTube channel</a>.
+</p>
+ 
+
+<a name="HaplotypeVid"></a>
+<p>
+</p>
+<h3>Video demonstration of Haplotype Substitution using Multi-Region</h3>
+<p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/0lKYdqQus0I?rel=0" 
+frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+allowfullscreen></iframe>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Visit our
+<a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos"
+target="_blank">YouTube channel</a>.
+<p>
+</p><p>
+
+ 
+<a name="Examples"></a>
+<h2>Examples</h2>
+
+<a name="Example1"></a>
+<h3>Example 1. Exon-only mode</h3>
+<p>
 This screenshot shows the exon-only view for the SOD1 gene in human assembly hg38. The third
 &quot;exon&quot; from the left falls within the intron of the actual SOD1 gene, but is shown as an 
 exon because it is part of the GENCODE v22 super-track.</p>  
@@ -240,7 +307,8 @@ exon because it is part of the GENCODE v22 super-track.</p>
 <img src="../../images/MultiRegionSOD1.png" alt="Screenshot of exon-only mode" width="950"
 height="257"></p> 
 <p> 
-Click <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/exonOnlySession.txt">here</a> 
+Click <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/
+goldenPath/help/examples/sessions/exonOnlySession.txt">here</a> 
 to view this example in the Genome Browser. To quickly exit multi-region mode and return to
 the default single chromosome view, use the keyboard shortcut &quot;d v&quot;.</p> 
 
@@ -253,7 +321,8 @@ three genes (DKC1, MPP1, and F8) with varying amounts of intergenic space separa
 screenshot shows the standard browser display of the gene track in &quot;single chromosome&quot; 
 view. Compare it with the second screenshot, which shows the same region in gene-only mode with the 
 padding set to 6. (Click 
-<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/geneOnlySession.txt">here</a> 
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/
+goldenPath/help/examples/sessions/geneOnlySession.txt">here</a> 
 to view this example in the Genome Browser.)</p>  
 <p>
 <img src="../../images/MultiRegionXDefault.png" alt="Genome Browser default gene track"
@@ -288,7 +357,8 @@ compare annotations in a separate region.</p>
 width="950" height="94"></p> 
 <p> 
 Click
-<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/bed3Session.txt">here</a> 
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/
+goldenPath/help/examples/sessions/bed3Session.txt">here</a> 
 to view this example in the Genome Browser. To quickly exit multi-region mode and return to the 
 default single chromosome view, use the keyboard shortcut &quot;d v&quot;. 
 
@@ -308,7 +378,8 @@ The multi-region display utilizes the data in the blockStarts and blockSizes fie
 to draw its regions, allowing for even more customization of the Genome Browser display.</p> 
 <p> 
 Click 
-<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/bed12Session.txt">here</a> 
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/
+goldenPath/help/examples/sessions/bed12Session.txt">here</a> 
 to view this example in the Genome Browser. To quickly exit multi-region mode and return to the 
 default single chromosome view, use the keyboard shortcut &quot;d v&quot;.</p> 
 
@@ -323,7 +394,8 @@ region, since haplotypes are annotated separately from regular chromosomes.</p>
 width="881" height="344"></p> 
 <p> 
 Click 
-<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/haplotypeSession.txt">here</a> 
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/
+goldenPath/help/examples/sessions/haplotypeSession.txt">here</a> 
 to view this example in the Genome Browser. To quickly exit multi-region mode and return to the 
 default single chromosome view, use the keyboard shortcut &quot;d v&quot;.</p>
 

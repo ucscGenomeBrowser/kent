@@ -126,8 +126,10 @@ target="_blank">example trackDb.txt</a>.</p>
     <strong>track</strong> <em>newUniqueNameWithoutSpaces</em>
     <strong>parent</strong> <em>uniqueCompositeTrackName off</em> </code></pre>
 <p>
-A composite track starts with related files, usually all of the same type, that you want to group 
-and display together (referred to as &quot;subtracks&quot;). The 
+A composite track groups together related tracks, usually but not necessarily of a similar type, that you
+want to display together (referred to as &quot;subtracks&quot;). If you want to organize tracks into
+a hierarchy and there is a single level of grouping, use a composite. For example, you could group
+together called variants or ChIP-seq peaks with their underlying BAM reads or sequencing coverage. The 
 <code><strong>compositeTrack</strong> on</code> line defines the parent track that will be later 
 referenced as <code><strong>parent</strong> uniqueCompositeTrackName off</code> in each subtrack's 
 stanza. Either &quot;on&quot or &quot;off&quot; can be used to set a subtrack to be displayed or not
@@ -162,8 +164,11 @@ target="_blank">example trackDb.txt</a>.</p>
        <strong>track</strong> <em>newUniqueNameWithoutSpaces</em>
        <strong>parent</strong> <em>uniqueCompositeTrackNameInSuperTrack off</em> </code></pre>
 <p>
-A super-track starts with several different types of track data that you want to group together in 
-a high level folder. Super-tracks can contain composite tracks and container multiWigs, but not vice
+A super-track groups together different types of tracks - typically composites - in 
+a high level folder. Use a super-track if you need a second layer of hierarchy after composites. 
+For example, you could have a composite with RNA-seq results and a composite with ChIP-Seq results grouped
+together into a super-track describing a cell line.
+Super-tracks contain composite tracks or container multiWigs, but not vice
 versa. The <code><strong>superTrack</strong> on show</code> line allows for this track to be later 
 referenced as <code><strong>parent</strong> uniqueSuperTrackName</code> in each of the children 
 subtracks (note how it is only required for direct children, and not for subtracks contained in a 

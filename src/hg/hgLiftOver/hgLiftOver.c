@@ -19,7 +19,6 @@
 #include "hash.h"
 #include "liftOver.h"
 #include "liftOverChain.h"
-#include "windowsToAscii.h"
 
 
 /* CGI Variables */
@@ -314,7 +313,7 @@ cgiParagraph(
 "To lift genome annotations locally on Linux systems, download the "
 "<A HREF=\"https://genome-store.ucsc.edu\">" 
 "<I>liftOver</I></A> executable and the appropriate "
-"<A HREF=\"http://hgdownload.cse.ucsc.edu/downloads.html#liftover\">"
+"<A HREF=\"http://hgdownload.soe.ucsc.edu/downloads.html#liftover\">"
 "chain file</A>."
 " Run <I>liftOver</I> with no arguments to see the usage message.\n");
 }
@@ -448,7 +447,6 @@ if (cartOptionalString(cart, "SubmitFile"))
     userData = cartOptionalString(cart, HGLFT_DATAFILE_VAR);
 else
     userData = cartOptionalString(cart, HGLFT_USERDATA_VAR);
-userData = windowsToAscii(userData);
 cartWebStart(cart, NULL, "Lift Genome Annotations");
 
 getDbAndGenome(cart, &db, &organism, oldVars);
@@ -515,7 +513,7 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
 	ct = liftOverBed(oldTn.forCgi, chainHash, 
 			minMatch, minBlocks, 0, minSizeQ,
 			minChainT, 0,
-			fudgeThick, mapped, unmapped, multiple, NULL, &errCt);
+                        fudgeThick, mapped, unmapped, multiple, FALSE, NULL, &errCt);
     else if (lft == positions)
 	ct = liftOverPositions(oldTn.forCgi, chainHash, 
 			minMatch, minBlocks, 0, minSizeQ,

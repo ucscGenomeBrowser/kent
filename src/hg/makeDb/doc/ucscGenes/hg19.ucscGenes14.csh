@@ -1292,6 +1292,7 @@ cd $dir/pfam
 catDir result | sed '/^#/d' > allResults.tab
 awk 'BEGIN {OFS="\t"} { print $5,$1,$18-1,$19,$4,$14}' allResults.tab | sort > allUcscPfam.tab
 join  -t $'\t' -j 1  allUcscPfam.tab pfamDesc.tab | tawk '{if ($6 > $9) print $2, $3, $4, $5, $6, $1}' > ucscPfam.tab
+join  -t $'\t' -j 1  allUcscPfam.tab pfamDesc.tab | tawk '{print $2, $3, $4, $5 "/" $6 "/" $9, $6, $1}' | sort > sortAllUcscPfam.tab
 cd $dir
 
 # Convert output to knownToPfam table
@@ -1304,7 +1305,9 @@ genePredToFakePsl hg19 knownGene knownGene.psl cdsOut.tab
 sort cdsOut.tab | sed 's/\.\./   /' > sortCdsOut.tab
 sort ucscPfam.tab> sortPfam.tab
 awk '{print $10, $11}' knownGene.psl > gene.sizes
+join sortCdsOut.tab sortAllUcscPfam.tab |  awk '{print $1, $2 - 1 + 3 * $4, $2 - 1 + 3 * $5, $6}' | bedToPsl gene.sizes stdin allDomainToGene.psl
 join sortCdsOut.tab sortPfam.tab |  awk '{print $1, $2 - 1 + 3 * $4, $2 - 1 + 3 * $5, $6}' | bedToPsl gene.sizes stdin domainToGene.psl
+pslMap allDomainToGene.psl knownGene.psl stdout | pslToBed stdin stdout | bedOrBlocks -useName stdin allDomainToGenome.bed 
 pslMap domainToGene.psl knownGene.psl stdout | pslToBed stdin stdout | bedOrBlocks -useName stdin domainToGenome.bed 
 hgLoadBed $tempDb ucscGenePfam domainToGenome.bed
 

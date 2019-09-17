@@ -147,13 +147,23 @@ sub getInfrastructureEntry {
 
   # Look for the usual set of files on $dbHost:
   my $SameSpecies = ucfirst($db);  $SameSpecies =~ s/\d+$//;
+  my $sameSpecies = $db;  $sameSpecies =~ s/\d+$//;
+  my $Db = ucfirst($db);
   # 2017-03-02 - remove gc5Base.wib quality.wib quality.bw
   #              rarely, if ever, used any more
   my @gbdbFiles = map {"$HgAutomate::gbdb/$db/$_"}
-    ("$db.2bit", 'html/description.html', "bbi/gc5BaseBw/gc5Base.bw", "liftOver/${db}To$SameSpecies*");
+    ("$db.2bit", 'html/description.html', "bbi/gc5BaseBw/gc5Base.bw", "ncbiRefSeq/ncbiRefSeqVersion.txt", "ncbiRefSeq/ncbiRefSeqOther.bb", "ncbiRefSeq/ncbiRefSeqOther.ix", "ncbiRefSeq/ncbiRefSeqOther.ixx", "ncbiRefSeq/seqNcbiRefSeq.rna.fa", "liftOver/${db}To$SameSpecies*");
+
+  my @otherGbdbFiles = map {"$HgAutomate::gbdb/${sameSpecies}*/$_"}
+    ("liftOver/${sameSpecies}*To$Db.over.chain.gz");
+
   my @goldenPathFiles = map {"$HgAutomate::goldenPath/$db/$_"}
     (qw( bigZips/* database/* chromosomes/* ),
      "liftOver/${db}To$SameSpecies*");
+
+  my @otherGoldenPathFiles = map {"$HgAutomate::goldenPath/${sameSpecies}*/$_"}
+    ("liftOver/${sameSpecies}*To$Db.over.chain.gz");
+
   my $sciUnderscore = &HgAutomate::getSpecies($dbHost, $db);
   $sciUnderscore =~ s/ /_/g;
   my $gatewayPhoto = "$HgAutomate::images/$sciUnderscore.jpg";
@@ -161,7 +171,7 @@ sub getInfrastructureEntry {
      $gatewayPhoto = "$HgAutomate::images/$sciUnderscore.gif";
   }
   my @files = ();
-  foreach my $f (@gbdbFiles, @goldenPathFiles, $gatewayPhoto) {
+  foreach my $f (@gbdbFiles, @otherGbdbFiles, @goldenPathFiles, @otherGoldenPathFiles, $gatewayPhoto) {
     if (&HgAutomate::machineHasFile($dbHost, $f)) {
       push @files, $f;
     } else {
@@ -174,8 +184,8 @@ sub getInfrastructureEntry {
   $entry{'redmineFiles'} = join("\n", @files);
 
   # Look for infrastructure tables in allTables hash:
-  foreach my $t qw( chromAlias chromInfo grp seq extFile hgFindSpec trackDb history
-		    tableDescriptions ) {
+  foreach my $t (qw( chromAlias chromInfo grp seq extFile hgFindSpec trackDb history
+		    tableDescriptions )) {
     if (defined $allTables->{$t}) {
       $entry{'tables'} .= "$t ";
       $entry{'redmineTables'} .= "$db.$t ";
@@ -196,21 +206,16 @@ sub getGenbankEntry {
   # then these lists will have to be updated.  But hopefully warning messages
   # to the user will help diagnose.  Mark has been maintaining a list of
   # regexes in kent/src/hg/makeDb/genbank/etc/genbank.tbls .
+  # /cluster/data/genbank/etc/gbMetadataTables.txt - tables in hgFixed
+  # /cluster/data/genbank/etc/gbPerAssemblyTables.txt - tables in a db
   my @genbankTrackTables = qw(
     all_est all_mrna ccdsGene ccdsInfo ccdsKgMap ccdsNotes
-    chr*_est chr*_intronEst chr*_mrna intronEst mgcFailedEst mgcFullMrna
-    mgcFullStatus mgcGenes mgcIncompleteMrna mgcPickedEst mgcStatus
-    mgcUnpickedEst orfeomeGenes orfeomeMrna
-    refFlat refGene refLink refSeqAli refSeqStatus refSeqSummary
+    chr*_est chr*_intronEst chr*_mrna estOrientInfo gbMiscDiff gbWarn
+    intronEst mgcFailedEst mgcFullMrna mgcFullStatus mgcGenes
+    mgcIncompleteMrna mgcPickedEst mgcStatus
+    mgcUnpickedEst mrnaOrientInfo orfeomeGenes orfeomeMrna
+    refFlat refGene refLink refSeqAli
     xenoEst xenoMrna xenoRefFlat xenoRefGene xenoRefSeqAli
-    );
-  my @genbankRequiredTables = qw(
-    author cds cell description development gbCdnaInfo
-    gbExtFile gbLoaded gbSeq gbStatus geneName imageClone keyword
-    library mrnaClone organism productName sex source tissue
-    );
-  my @genbankHelpfulTables = qw(
-    estOrientInfo gbMiscDiff gbWarn mrnaOrientInfo
     );
   my @genbankTablesInDb = ();
   my @redmineGenbankTablesInDb = ();
@@ -222,25 +227,8 @@ sub getGenbankEntry {
       &HgAutomate::verbose(3, "Deleted $t\n");
     }
   }
-  if (scalar(@genbankTablesInDb) > 0) {
-    foreach my $t (@genbankRequiredTables) {
-      if (defined $allTables->{$t}) {
-	push @genbankTablesInDb, $t;
-	push @redmineGenbankTablesInDb, "$db.$t";
-	delete $allTables->{$t};
-      } else {
-	die "\nERROR: $db does not have required genbank table $t\n\n";
-      }
-    }
-    foreach my $t (@genbankHelpfulTables) {
-      if (defined $allTables->{$t}) {
-	push @genbankTablesInDb, $t;
-	push @redmineGenbankTablesInDb, "$db.$t";
-	delete $allTables->{$t};
-      } else {
-	&HgAutomate::verbose(1, "WARNING: $db does not have $t\n");
-      }
-    }
+  if (scalar(@genbankTablesInDb) < 0) {
+    &HgAutomate::verbose(1, "WARNING: $db does not have any genbank tables\n");
   }
   my %entry = ();
   $entry{'shortLabel'} = 'Genbank-process tracks and supporting tables';
@@ -286,6 +274,15 @@ sub getTrackDb {
 	my ($tag, $value) = split('\s', $setNameValue[$i], 2);
 	$settingHash{$tag} = $value;
 	&HgAutomate::verbose(2, "$i: $tag='$value'\n");
+    }
+    if ($type =~ /^psl/) {
+      if ($settings =~ /pepTable\s+(\w+)/) {
+	$otherTables .= " $1";
+      }
+      if ($settings =~ /baseColorUseSequence\s+(\w+)\s+(\w+)\s+(\w+)/) {
+	$otherTables .= " $2";
+	$otherTables .= " $3";
+      }
     }
     if ($type =~ /^wigMaf/) {
       if ($settings =~ /wiggle\s+(\w+)/) {
@@ -370,7 +367,11 @@ sub getTrackEntries {
       $entry{'tables'} = $table . $otherTables;
       $entry{'redmineTables'} = "$db.$table";
       if (length($otherTables)) {
-          $entry{'redmineTables'} .= "$db.$otherTables";
+          $otherTables =~ s/^ +//;
+          my @tbls = split('\s+', $otherTables);
+          foreach my $table (@tbls) {
+            $entry{'redmineTables'} .= " $db.$table";
+          }
       }
       $entry{'files'} = "";
       $entry{'redmineFiles'} = "";
@@ -699,7 +700,8 @@ sub makePushQSql {
   my ($entries, $stragglers) = &getEntries();
   &printHeader;
   &printAllEntries($entries);
-  &printMainPushQEntry();
+# Obsolete pushQ database on hgwbeta July 2019
+#   &printMainPushQEntry();
   &reportStragglers($stragglers);
 } # makePushQSql
 

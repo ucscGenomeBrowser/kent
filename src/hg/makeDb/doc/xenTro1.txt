@@ -2537,3 +2537,11 @@ doBlatz $(root1) $(root2) {check out exists psl/$(root1)_$(root2).psl}
    # genbank release 157.0 now contains misc_diff fields for MGC clones
    # reloading mRNAs results in gbMiscDiff table being created.
    ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna xenTro1
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2018-05-09 - Hiram)
+    mkdir /hive/data/genomes/xenTro1/bed/cytoBand
+    cd /hive/data/genomes/xenTro1/bed/cytoBand
+    makeCytoBandIdeo.csh xenTro1
+
+#########################################################################

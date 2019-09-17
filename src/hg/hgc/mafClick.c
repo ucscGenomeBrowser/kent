@@ -16,6 +16,7 @@
 #include "hui.h"
 #include "hCommon.h"
 #include "hubConnect.h"
+#include "trackHub.h"
 
 
 #define ADDEXONCAPITAL
@@ -779,7 +780,7 @@ else
 static void mafOrAxtClick(struct sqlConnection *conn, struct trackDb *tdb, char *axtOtherDb)
 {
 struct sqlConnection *conn2 = NULL;
-if (!isHubTrack(tdb->track))
+if (!(isHubTrack(tdb->track) || trackHubDatabase(database)))
     conn2 = hAllocConn(database);
 // MAF file location is optionally in trackDb
 char *mafFile = hashFindVal(tdb->settingsHash, "mafFile");

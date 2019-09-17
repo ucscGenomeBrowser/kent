@@ -25,6 +25,9 @@
 #include "versionInfo.h"
 #include "mailViaPipe.h"
 #include "dystring.h"
+#include "autoUpgrade.h"
+
+#define EMAILSEP ";"
 
 /* ---- Global variables. ---- */
 char msg[4096] = "";
@@ -37,7 +40,7 @@ char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update",
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 struct hash *oldCart;	/* Old cart hash. */
-char *errMsg;           /* Error message to show user when form data rejected */
+char *errMsg = NULL;    /* Error message to show user when form data rejected */
 char brwName[64];
 char brwAddr[256];
 char signature[256];
@@ -336,6 +339,8 @@ hPrintf(
 hPrintf(
     "<p id=\"confirmationMsg\" class=\"confirmationTxt\">A confirmation email has been sent to you. \n"
     "Please click the confirmation link in the email to activate your account.</p>"
+    "<p>You may have to look in your spam folder for an email from genome-www@soe.ucsc.edu, "
+    "especially if you use Microsoft Outlook or Hotmail.</p>"
     "\n"
     "<p><a href=\"%s\">Return</a></p>", returnURL);
 cartRemove(cart, "hgLogin_email");
@@ -346,6 +351,7 @@ void sendActMailOut(char *email, char *subject, char *msg)
 /* send mail to email address */
 {
 int result;
+
 result = mailViaPipe(email, subject, msg, returnAddr);
 
 if (result == -1)
@@ -358,9 +364,8 @@ if (result == -1)
         "<h3>Error emailing to: %s</h3>"
         "Click <a href=%s?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>",
         hgLoginUrl, email );
+    exit(0);
     }
-else
-    redirectToLoginPage("hgLogin.do.displayActMailSuccess=1");
 }
 
 void  displayMailSuccess()
@@ -414,7 +419,7 @@ cartRemove(cart, "hgLogin_sendMailContain");
 }
 
 void sendMailOut(char *email, char *subject, char *msg)
-/* send mail to email address */
+/* send username reminder email to email address */
 {
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
 int result;
@@ -445,9 +450,9 @@ char subject[256];
 char msg[4096];
 char *remoteAddr=getenv("REMOTE_ADDR");
 
-safef(subject, sizeof(subject),"Your user name at the %s", brwName);
+safef(subject, sizeof(subject),"Your username at the %s", brwName);
 safef(msg, sizeof(msg), 
-    "  Someone (probably you, from IP address %s) has requested user name(s) associated with this email address at the %s: \n\n  %s\n\n%s\n%s", 
+    "  Someone (probably you, from IP address %s) has requested username(s) associated with this email address at the %s: \n\n  %s\n\n%s\n%s", 
    remoteAddr, brwName, users, signature, returnAddr);
 sendMailOut(email, subject, msg);
 }
@@ -459,9 +464,9 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 
-/* find all the user names assocaited with this email address */
+/* find all the user names associated with this email address */
 char userList[512]="";
-sqlSafef(query,sizeof(query),"SELECT * FROM gbMembers WHERE email='%s'", email);
+sqlSafef(query,sizeof(query),"SELECT * FROM gbMembers WHERE email='%s' or recovEmail='%s'", email, email);
 sr = sqlGetResult(conn, query);
 int numUser = 0;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -476,12 +481,16 @@ sqlFreeResult(&sr);
 mailUsername(email, userList);
 }
 
-void sendPwdMailOut(char *email, char *subject, char *msg, char *username)
+void sendPwdMailOut(char *email, char *recovEmail, char *subject, char *msg, char *username)
 /* send password reset mail to user at registered email address */
 {
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
 int result;
+
 result = mailViaPipe(email, subject, msg, returnAddr);
+if ((result != -1) && !isEmpty(recovEmail))
+    result = mailViaPipe(recovEmail, subject, msg, returnAddr);
+
 if (result == -1)
     {
     hPrintf(
@@ -501,7 +510,7 @@ else
     }
 }
 
-void sendNewPwdMail(char *username, char *email, char *password)
+void sendNewPwdMail(char *username, char *email, char *recovEmail, char *password)
 /* send user new password */
 {
 char subject[256];
@@ -512,7 +521,7 @@ safef(subject, sizeof(subject),"New temporary password for your account at the %
 safef(msg, sizeof(msg),
     "  Someone (probably you, from IP address %s) requested a new password for the %s (%s). A temporary password for user \"%s\" has been created and was set to \"%s\". If this was your intent, you will need to log in and choose a new password now. Your temporary password will expire in 7 days.\n\n  If someone else made this request, or if you have remembered your password, and you no longer wish to change it, you may ignore this message and continue using your old password.\n\n%s\n%s",
     remoteAddr, brwName, brwAddr, username, password, signature, returnAddr);
-sendPwdMailOut(email, subject, msg, username);
+sendPwdMailOut(email, recovEmail, subject, msg, username);
 }
 
 void displayAccHelpPage(struct sqlConnection *conn)
@@ -578,6 +587,7 @@ char query[256];
 /* find email address associated with this username */
 sqlSafef(query,sizeof(query),"SELECT email FROM gbMembers WHERE userName='%s'", username);
 char *email = sqlQuickString(conn, query);
+
 if (!email || sameString(email,""))
     {
     freez(&errMsg);
@@ -585,7 +595,11 @@ if (!email || sameString(email,""))
     displayAccHelpPage(conn);
     return;
     }
-sendNewPwdMail(username, email, password);
+
+sqlSafef(query,sizeof(query),"SELECT recovEmail FROM gbMembers WHERE userName='%s'", username);
+char *recovEmail = sqlQuickString(conn, query);
+
+sendNewPwdMail(username, email, recovEmail, password);
 }
 
 void lostPassword(struct sqlConnection *conn, char *username)
@@ -628,8 +642,8 @@ safef(activateURL, sizeof(activateURL),
     cgiEncode(encToken));
 safef(subject, sizeof(subject),"%s account e-mail address confirmation", brwName);
 safef(msg, sizeof(msg),
-    "  Someone (probably you, from IP address %s) has requested an account %s with this e-mail address on the %s.\nTo confirm that this account really does belong to you on the %s, open this link in your browser:\n\n%s\n\nIf this is *not* you, do not follow the link. This confirmation code will expire in 7 days.\n\n%s\n%s", 
-     remoteAddr, username, brwName, brwName, activateURL, signature, returnAddr);
+    "Someone (probably you, from IP address %s) has requested an account %s with this e-mail address on the %s.\nTo confirm that this account really does belong to you on the %s, open this link in your browser:\n\n%s\n\nIf this is *not* you, do not follow the link. This confirmation code will expire in 7 days.\n\nIf this *is* you, after clicking the activation link, your new account gives you access to sessions you can create and name. Sessions allow you to save your Genome Browser screen configuration and share it with others with a link like https://genome.ucsc.edu/s/%s/YourSessionName\n\nFor more information on sessions, see our help page on the topic: https://genome.ucsc.edu/goldenPath/help/hgSessionHelp.html#Introduction\n\nAdditional resources:\nSubscribe to the Genome Browser Mailing List: https://groups.google.com/a/soe.ucsc.edu/group/genome-announce?hl=en\nGenome Browser User Guide: https://genome.ucsc.edu/goldenPath/help/hgTracksHelp.html\nTraining and Tutorials: https://genome.ucsc.edu/training/index.html\n\n%s\n%s",
+     remoteAddr, username, brwName, brwName, activateURL, username, signature, returnAddr);
 sendActMailOut(email, subject, msg);
 }
 
@@ -891,9 +905,17 @@ hPrintf("<div class=\"inputGroup\">"
     "<div class=\"inputGroup\">"
     "<label for=\"reenterEmail\">Re-enter Email address</label>"
     "<input type=text name=\"hgLogin_email2\" value=\"%s\" size=\"30\" id=\"emailCheck\">"
-    "</div>"
-    "\n", cartUsualString(cart, "hgLogin_userName", ""), cartUsualString(cart, "hgLogin_email", ""),
+    "</div>\n",
+    cartUsualString(cart, "hgLogin_userName", ""), cartUsualString(cart, "hgLogin_email", ""),
     cartUsualString(cart, "hgLogin_email2", ""));
+
+if (sqlFieldIndex(conn, "gbMembers", "recovEmail") != -1)
+    hPrintf("<div class=\"inputGroup\">"
+        "<label for=\"recovEmail\">Optional Secondary Recovery Email</label>"
+        "<input type=text name=\"hgLogin_recovEmail\" size=\"30\" id=\"recovEmail\">"
+        "</div>"
+        "\n");
+
 hPrintf("<div class=\"inputGroup\">"
     "<label for=\"password\">Password <small>(must be at least 5 characters)</small></label>"
     "<input type=password name=\"hgLogin_password\" value=\"%s\" size=\"30\" id=\"password\">"
@@ -920,8 +942,9 @@ cartSaveSession(cart);
 void signup(struct sqlConnection *conn)
 /* process the signup form */
 {
-char query[256];
+char query[1024];
 char *user = cartUsualString(cart, "hgLogin_userName", "");
+char *encUserName = cgiEncodeFull(user);
 if (!user || sameString(user,""))
     {
     freez(&errMsg);
@@ -930,10 +953,12 @@ if (!user || sameString(user,""))
     return;
     }
 /* Make sure the escaped usrename is less than 32 characters */
-if (strlen(user) > 32)
+if (strlen(encUserName) > 32)
     {
+    char buf[1024];
+    safef(buf,sizeof(buf), "Encoded user name: '%s' is %d characters.  Please use a shorter name: less than 32 characters after URL encoding.", encUserName, (int)strlen(encUserName));
     freez(&errMsg);
-    errMsg = cloneString("Encoded username longer than 32 characters.");
+    errMsg = cloneString(buf);
     signupPage(conn);
     return;
     }
@@ -984,6 +1009,15 @@ if (email && email2 && !sameString(email, email2))
     return;
     }
 
+char *recovEmail = cartUsualString(cart, "hgLogin_recovEmail", "");
+if (!isEmpty(recovEmail) && spc_email_isvalid(recovEmail) == 0)
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Invalid format of the recovery email address.");
+    signupPage(conn);
+    return;
+    }
+
 password = cartUsualString(cart, "hgLogin_password", "");
 if (!password || sameString(password,"") || (strlen(password)<5))
     {
@@ -1018,9 +1052,13 @@ if (sameWord(returnAddr, "NOEMAIL"))
     accActStatus = "Y";
 
 sqlSafef(query,sizeof(query), "INSERT INTO gbMembers SET "
-    "userName='%s',realName='%s',password='%s',email='%s', "
+    "userName='%s',realName='%s',password='%s',email='%s',"
     "lastUse=NOW(),accountActivated='%s'",
     user,user,encPwd,email,accActStatus);
+// set the recov email only if we got one (and we only got one if the table has this field)
+if (!isEmpty(recovEmail))
+    sqlSafefAppend(query, sizeof(query), ",recovEmail='%s'", recovEmail);
+
 sqlUpdate(conn, query);
 
 if (sameWord(returnAddr, "NOEMAIL"))
@@ -1031,17 +1069,12 @@ if (sameWord(returnAddr, "NOEMAIL"))
 
 setupNewAccount(conn, email, user);
 /* send out activate code mail, and display the mail confirmation box */
-hPrintf("<h2>%s</h2>", brwName);
-hPrintf(
-    "<p align=\"left\">\n"
-    "</p>\n"
-    "<h3>User %s successfully added.</h3>\n", user);
 cartRemove(cart, "hgLogin_email");
 cartRemove(cart, "hgLogin_email2");
 cartRemove(cart, "hgLogin_userName");
 cartRemove(cart, "user");
 cartRemove(cart, "token");
-returnToURL(150);
+redirectToLoginPage("hgLogin.do.displayActMailSuccess=1");
 }
 
 void accountHelp(struct sqlConnection *conn)
@@ -1072,7 +1105,7 @@ if (sameString(helpWith,"username"))
     else 
         {
         sqlSafef(query,sizeof(query),
-            "SELECT password FROM gbMembers WHERE email='%s'", email);
+            "SELECT password FROM gbMembers WHERE email='%s' or recovEmail='%s'", email, email);
         char *password = sqlQuickString(conn, query);
         cartSetString(cart, "hgLogin_sendMailTo", email);
         cartSetString(cart, "hgLogin_sendMailContain", "username(s)");
@@ -1239,6 +1272,12 @@ void doMiddle(struct cart *theCart)
  * dispatches to the appropriate page-maker. */
 {
 struct sqlConnection *conn = hConnectCentral();
+
+// on mirrors, try to add the field 'recovEmail' to gbMembers. This may or may not work, depending on their config
+if (sqlFieldIndex(conn, "gbMembers", "recovEmail") == -1) {
+    autoUpgradeTableAddColumn(conn, "gbMembers", "recovEmail", "varchar(255)", FALSE, "''");
+}
+
 cart = theCart;
 safecpy(brwName,sizeof(brwName), browserName());
 safecpy(brwAddr,sizeof(brwAddr), browserAddr());
@@ -1289,6 +1328,7 @@ errAbort(
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+
 long enteredMainTime = clock1000();
 pushCarefulMemHandler(100000000);
 cgiSpoof(&argc, argv);

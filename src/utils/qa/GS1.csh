@@ -26,7 +26,7 @@ if ($#argv < 1 ||  $#argv > 2 ) then
 else
   set db=$argv[1]
 endif
-set url1="http://hgwdev.cse.ucsc.edu/cgi-bin/hgTracks?db=$db"
+set url1="http://hgwdev.soe.ucsc.edu/cgi-bin/hgTracks?db=$db"
 
 if ($#argv == 2 ) then
   set betaDb=$argv[2]

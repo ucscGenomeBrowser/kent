@@ -16,23 +16,17 @@
 
 struct hgPositions *hgPositionsFind(char *db, char *query, char *extraCgi, 
 	char *hgAppName, struct cart *cart, boolean multiTerm);
-/* Return table of positions that match query or NULL if none such. */
+/* Return container of tracks and positions (if any) that match term. */
 
-struct hgPositions *findGenomePos(char *db, char *spec, char **retChromName, int *retWinStart, int *retWinEnd, struct cart *cart);
-/* Search for positions in genome that match user query.   
- * Return an hgp if the query results in a unique position.  
- * Otherwise display list of positions, put # of positions in retWinStart,
- * and return NULL. */
+struct hgPositions *hgFindSearch(struct cart *cart, char **pPosition,
+                                 char **retChrom, int *retStart, int *retEnd,
+                                 char *hgAppName, struct dyString *dyWarn);
+/* If *pPosition is a search term, then try to resolve it to genomic position(s).
+ * If unable to find a unique position then revert pPosition to lastPosition (or default position).
+ * Return a container of matching tables and positions.  Warnings/errors are appended to dyWarn. */
 
-struct hgPositions *findGenomePosWeb(char *db, char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd, struct cart *cart,
-	boolean useWeb, char *hgAppName);
-/* Search for positions in genome that match user query.   
- * Use the web library to print out HTML headers if necessary, and use 
- * hgAppName when forming URLs (instead of "hgTracks").  
- * Return an hgp if the query results in a unique position.  
- * Otherwise display list of positions, put # of positions in retWinStart,
- * and return NULL. */
+void hgPositionsHtml(char *db, struct hgPositions *hgp, char *hgAppName, struct cart *cart);
+/* Write multiple search results as HTML. */
 
 
 struct hgPositions 

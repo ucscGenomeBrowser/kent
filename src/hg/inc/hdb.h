@@ -120,6 +120,12 @@ char *hDefaultChrom(char *db);
 int hChromCount(char *db);
 /* Return the number of chromosomes (scaffolds etc.) in the given db. */
 
+char *hNcbiGcfId(char *db);
+/* Return the NCBI RefSeq assembly+annotations ID (GCF_...) for db, or NULL if we don't know it. */
+
+char *hNcbiGcaId(char *db);
+/* Return the NCBI GenBank assembly id (GCA_...) for db, or NULL if we don't know it. */
+
 struct sqlConnection *hAllocConn(char *db);
 /* Get free connection if possible. If not allocate a new one. */
 
@@ -317,6 +323,14 @@ struct dnaSeq *hDnaSeqMustGet(char *db, char *acc, char *seqTbl, char *extFileTb
 /* Get a cDNA or DNA sequence from the specified seq and extFile tables.  The
  * seqTbl/extFileTbl arguments may include the database, in which case they
  * override what is in db (which could even be NULL).
+ * Abort if not found. */
+
+struct dnaSeq *hDnaSeqGetConn(struct sqlConnection *conn, char *acc, char *seqTbl, char *extFileTbl);
+/* Get a cDNA or DNA sequence from the specified seq and extFile tables. Return NULL if not
+ * found. */
+
+struct dnaSeq *hDnaSeqMustGetConn(struct sqlConnection *conn, char *acc, char *seqTbl, char *extFileTbl);
+/* Get a cDNA or DNA sequence from the specified seq and extFile tables. 
  * Abort if not found. */
 
 aaSeq *hPepSeqGet(char *db, char *acc, char *seqTbl, char *extFileTbl);
@@ -586,9 +600,13 @@ boolean hFindFieldsAndBin(char *db, char *table,
  * and whether it's binned . */
 
 boolean hFindSplitTable(char *db, char *chrom, char *rootName,
-	char retTableBuf[HDB_MAX_TABLE_STRING], boolean *hasBin);
-/* Find name of table that may or may not be split across chromosomes.
- * Return FALSE if table doesn't exist.  */
+	char *retTableBuf, int tableBufSize, boolean *hasBin);
+/* Find name of table in a given database that may or may not
+ * be split across chromosomes. Return FALSE if table doesn't exist. 
+ *
+ * Do not ignore the return value. 
+ * This function does NOT tell you whether or not the table is split. 
+ * It tells you if the table exists. */
 
 struct slName *hSplitTableNames(char *db, char *rootName);
 /* Return a list of all split tables for rootName, or of just rootName if not
@@ -877,6 +895,17 @@ struct grp* hLoadGrps(char *db);
 /* load the grp tables using the list configured in hg.conf, returning a list
  * sorted by priority. */
 
+void setMinIndexLengthForTrashCleaner();
+/* set the minimum index size so trash cleaner will not die
+ * on custom tracks on hubs that are not currently loading.
+ * However, they might be re-established in the future,
+ * and we want to allow it to proceed without failure
+ * in order to touch the trash database table access times,
+ * preserving them from the trash cleaner.
+ * Only the trash cleaner should call this:
+ *  src/hg/utils/refreshNamedCustomTracks/refreshNamedCustomTracks.c 
+ */
+
 int hGetMinIndexLength(char *db);
 /* get the minimum index size for the given database that won't smoosh
  * together chromNames such that any group of smooshed entries has a
@@ -897,13 +926,13 @@ int chrSlNameCmp(const void *el1, const void *el2);
  * "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)?". */
 
 int chrNameCmpWithAltRandom(char *str1, char *str2);
-/* Compare chromosome or linkage group names str1 and str2 
+/* Compare chromosome or linkage group names str1 and str2
  * to achieve this order:
  * chr1 .. chr22
  * chrX
  * chrY
  * chrM
- * chr1_{alt, random} .. chr22_{alt, random}
+ * chr1_{alt,fix,hap*,random} .. chr22_{alt,fix,hap*,random}
  * chrUns
  */
 
@@ -914,8 +943,8 @@ int chrSlNameCmpWithAltRandom(const void *el1, const void *el2);
  * chrX
  * chrY
  * chrM
- * chr1_{alt, random} .. chr22_{alt, random}
- * chrUns
+ * chr1_{alt,fix,hap*,random} .. chr22_{alt,fix,hap*,random}
+ * chrUn*
  */
 
 int bedCmpExtendedChr(const void *va, const void *vb);
@@ -953,6 +982,13 @@ char *findTypeForTable(char *db,struct trackDb *parent,char *table, struct custo
 boolean trackIsType(char *database, char *table, struct trackDb *parent, char *type, struct customTrack *(*ctLookupName)(char *table));
 /* Return TRUE track is a specific type.  Type should be something like "bed" or
  * "bigBed" or "bigWig"
+ * if table has no parent trackDb pass NULL for parent
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a
+ * custom track by name, otherwise pass NULL
+ */
+
+boolean hIsBigWig(char *database, char *table, struct trackDb *parent, struct customTrack *(*ctLookupName)(char *table));
+/* Return TRUE if table corresponds to a bigWig file.
  * if table has no parent trackDb pass NULL for parent
  * If this is a custom track, pass in function ctLookupName(table) which looks up a
  * custom track by name, otherwise pass NULL
@@ -1001,6 +1037,10 @@ struct trackDb *hFindLatestSnpTrack(char *db, char *suffix, struct trackDb **pFu
 char *hFindLatestSnpTableConn(struct sqlConnection *conn, char *suffix);
 /* Return the name of the 'snp1__<suffix>' table with the highest build number, if any.
  * suffix may be NULL to get the 'All SNPs' table (as opposed to Common, Flagged, Mult). */
+
+char *hFindLatestGencodeTableConn(struct sqlConnection *conn, char *suffix);
+/* Return the 'wgEncodeGencode<suffix>V<version>' table with the highest version number, if any.
+ * If suffix is NULL, it defaults to Basic. */
 
 boolean hDbHasNcbiRefSeq(char *db);
 /* Return TRUE if db has NCBI's RefSeq alignments and annotations. */

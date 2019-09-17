@@ -5,6 +5,7 @@
 #include "common.h"
 #include "jksql.h"
 #include "cheapcgi.h"
+#include "htmshell.h"
 #include "hdb.h"
 
 
@@ -34,7 +35,7 @@ snprintf(safeVersion, sizeof(safeVersion), "%s", version);
 
 printf("Content-Type:text/html\n\n\n");
 printf("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
-printf("<HTML><HEAD>\n");
+printf("<HTML><HEAD>\n%s",getCspMetaHeader());
 
 struct sqlConnection *conn = hConnectCentral();
 if (conn)

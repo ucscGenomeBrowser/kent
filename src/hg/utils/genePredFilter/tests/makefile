@@ -6,6 +6,7 @@ genePredFilter = ${DESTBINDIR}/genePredFilter
 # -verbose=0 used to kept automated test from complaining
 
 test:: gencodeHackTest gencodeHackDbTest
+	${MAKE} clean
 
 gencodeHackTest: mkout
 	${genePredFilter} -verbose=0 input/gencodeHack.gp output/$@.gp

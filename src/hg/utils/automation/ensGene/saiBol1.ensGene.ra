@@ -1,0 +1,10 @@
+# required db variable
+db saiBol1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/saiBol1/jkStuff/ensToUcsc.lift
+
+nameTranslation '/^MT/d'
+
+skipInvalid yes
+# ENSSBOT00000006176.1 txEnd 1192 >= chromSize 1189
+

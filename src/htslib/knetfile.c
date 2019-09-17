@@ -198,6 +198,11 @@ static SOCKET socket_connect(const char *host, const char *port)
 	server.sin_port = htons(atoi(port));
 	if (connect(fd, (struct sockaddr*)&server, sizeof(server)) != 0) __err_connect("connect");
 	// freehostent(hp); // strangely in MSDN, hp is NOT freed (memory leak?!)
+
+	/* FOR CODE TO CONNECT SUPPORTING IPV6 and IPV4 using our net.c:
+	fd = netConnect(host, port);
+	*/
+
 	return fd;
 }
 #endif

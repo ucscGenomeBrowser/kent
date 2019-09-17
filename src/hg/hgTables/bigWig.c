@@ -25,6 +25,17 @@
 #include "hgTables.h"
 #include "mathWig.h"
 
+boolean isBigWig(char *database, char *table, struct trackDb *parent,
+	struct customTrack *(*ctLookupName)(char *table))
+/* Local test to see if something is big wig.  Handles hub tracks unlike hIsBigWig. */
+{
+struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
+if (tdb)
+    return tdbIsBigWig(tdb);
+else
+    return hIsBigWig(database, table, parent, ctLookupName);
+}
+
 boolean isBigWigTable(char *table)
 /* Return TRUE if table corresponds to a bigWig file. */
 {
@@ -215,7 +226,7 @@ int mathWigOutRegion(struct trackDb *track, char *table, struct sqlConnection *c
 int resultCount = 0;
 struct dataVector *dv = dataVectorNew(region->chrom, region->end - region->start);
 char *equation = cloneString(trackDbSetting(track, "mathDataUrl"));
-double *values = mathWigGetValues(equation, region->chrom, region->start, region->end);
+double *values = mathWigGetValues(database, equation, region->chrom, region->start, region->end, TRUE);
 valuesToVector(values, dv, region->start);
 resultCount = wigPrintDataVectorOut(dv, wigOutType, maxOut, NULL);
 dataVectorFree(&dv);
@@ -440,10 +451,11 @@ else
 
 void showSchemaBigWigNoTable(char *db, char *table, struct trackDb *tdb)
 {
+struct trackDb *tableTdb = hashFindVal(fullTableToTdbHash, table);
 hPrintf("<B>Database:</B> %s", db);
 printf("<BR>The data for this track is provided by a file in "
        "<A HREF=\"/goldenPath/help/bigWig.html\" TARGET=_BLANK>"
        "BigWig</A> format.");
-hPrintf("<BR><B>Data URL:</B>  %s", trackDbSetting(tdb, "bigDataUrl"));
-printTrackHtml(tdb);
+hPrintf("<BR><B>Data URL:</B>  %s", trackDbSetting(tableTdb, "bigDataUrl"));
+printTrackHtml(tableTdb);
 }

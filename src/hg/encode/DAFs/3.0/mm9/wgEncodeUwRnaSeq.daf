@@ -20,8 +20,8 @@
 #strain: The strain that the sample originated from. the strain registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Mouse_Metadata
 #control: The input used as control for ChIP-seq data. The control registerd vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Controls
 #replicate: The Replicate number. The replication number of a given experiment.
-#rnaExtract:   The RNA extract.  http://hgwdev.cse.ucsc.edu/ENCODE/otherTerms.html#rnaExtract
-#localization   the cellular compartment (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#localization)
+#rnaExtract:   The RNA extract.  http://hgwdev.soe.ucsc.edu/ENCODE/otherTerms.html#rnaExtract
+#localization   the cellular compartment (http://genome-test.soe.ucsc.edu/ENCODE/otherTerms.html#localization)
 #seqPlatform: The sequencing platform.The sequence platformregistered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Sequence_Platforms
 #tissueSourceType: The collection srouce of the tissue, either Pooled or Individual mice
 #softwareVersion: Free text for the lab to keep track of software used in processed data

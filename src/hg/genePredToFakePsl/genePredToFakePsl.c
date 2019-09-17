@@ -7,6 +7,7 @@
 #include "portable.h"
 #include "hash.h"
 #include "hdb.h"
+#include "genbank.h"
 #include "genePred.h"
 #include "genePredReader.h"
 #include "psl.h"
@@ -52,29 +53,9 @@ errAbort(
 static void cnvGenePredCds(struct genePred *gp, int qSize, FILE *cdsFh)
 /* determine CDS and output */
 {
-/*
- * Warning: Genbank CDS does't have the ability to represent
- * partial codons.  If we have genePreds created from GFF/GTF, they can have
- * partial codons, which is indicated in frame.  This code does not correctly handle
- * this case, or frame shifting indels.
- */
-int e, off = 0;
-int qCdsStart = -1, qCdsEnd = -1;
-int eCdsStart, eCdsEnd;
-
-for (e = 0; e < gp->exonCount; ++e)
-    {
-    if (genePredCdsExon(gp, e, &eCdsStart, &eCdsEnd))
-        {
-        if (qCdsStart < 0)
-            qCdsStart = off + (eCdsStart - gp->exonStarts[e]);
-        qCdsEnd = off + (eCdsEnd - gp->exonStarts[e]);
-        }
-    off += gp->exonEnds[e] - gp->exonStarts[e];
-    } 
-if (gp->strand[0] == '-')
-    reverseIntRange(&qCdsStart, &qCdsEnd, qSize);
-fprintf(cdsFh,"%s\t%d..%d\n", gp->name, qCdsStart+1, qCdsEnd); /* genbank cds is closed 1-based */
+struct genbankCds cds;
+genePredToCds(gp, &cds);
+fprintf(cdsFh,"%s\t%d..%d\n", gp->name, cds.start+1, cds.end); /* genbank cds is closed 1-based */
 }
 
 static void cnvGenePred(struct hash *chromHash, struct genePred *gp, FILE *pslFh, FILE *cdsFh)
@@ -83,50 +64,10 @@ static void cnvGenePred(struct hash *chromHash, struct genePred *gp, FILE *pslFh
 int chromSize = hashIntValDefault(chromHash, gp->chrom, 0);
 if (chromSize == 0)
     errAbort("Couldn't find chromosome/scaffold '%s' in chromInfo", gp->chrom);
-int e = 0, qSize=0;
-
-
-for (e = 0; e < gp->exonCount; ++e)
-    qSize+=(gp->exonEnds[e] - gp->exonStarts[e]);
-
-int realSize = 0;
-int sizeAdjust = 0;
+int qSize = 0;
 if (qSizes != NULL)
-    {
-    realSize = hashIntValDefault(qSizeHash, gp->name, 0);
-    // If there is a realSize (>0), but realSize is less than qSize, this subtraction would
-    // cause unsigned underflow so don't do it.  qSize > realSize implies that one of the genePred
-    // "exons" is glossing over a query gap.
-    if (realSize > qSize)
-       sizeAdjust = realSize - qSize;
-    }
-
-struct psl *psl = pslNew(gp->name, realSize ? realSize : qSize, 0, qSize,
-                         gp->chrom, chromSize, gp->txStart, gp->txEnd,
-                         gp->strand, gp->exonCount, 0);
-/* no size adjustment to qStarts for positive strand */
-if (gp->strand[0] == '+')
-   sizeAdjust = 0;
-int i = -1;
-for (e = 0; e < gp->exonCount; ++e)
-    {
-    if (e == 0 || gp->exonStarts[e] != gp->exonEnds[e-1])
-        {
-        i++;
-        psl->blockSizes[i] = (gp->exonEnds[e] - gp->exonStarts[e]);
-        psl->qStarts[i] = i==0 ? 0 + sizeAdjust : psl->qStarts[i-1] + psl->blockSizes[i-1];
-        psl->tStarts[i] = gp->exonStarts[e];
-        }
-    else
-        {
-        // Merge "exons" that have a 0-length gap between them to avoid pslCheck failure
-        psl->blockSizes[i] += (gp->exonEnds[e] - gp->exonStarts[e]);
-        }
-    }
-psl->blockCount = i+1;
-psl->match = qSize;	
-psl->tNumInsert = psl->blockCount-1; 
-psl->tBaseInsert = (gp->txEnd - gp->txStart) - qSize;
+    qSize = hashIntValDefault(qSizeHash, gp->name, 0);
+struct psl *psl = genePredToPsl(gp, chromSize, qSize);
 pslTabOut(psl, pslFh);
 pslFree(&psl);
 if (gp->cdsStart < gp->cdsEnd)

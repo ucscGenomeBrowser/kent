@@ -49,6 +49,8 @@
 #include "gtexUi.h"
 #include "genbank.h"
 #include "botDelay.h"
+#include "customComposite.h"
+#include "hicUi.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -1238,7 +1240,7 @@ char *cbrWabaMap = cartUsualString(cart, "cbrWaba.type", fcoeEnumToString(0));
 int start = cartInt(cart, "cbrWaba.start");
 int end = cartInt(cart, "cbrWaba.end");
 printf(
-"<P><A HREF=\"http://genome-test.cse.ucsc.edu/cgi-bin/tracks.exe?where=%s%%3A%d-%d\"> Temporary Intronerator link: %s:%d-%d</A> <I>for testing purposes only</I> \n</P>", chromosome+3, start, end, chromosome+3, start, end );
+"<P><A HREF=\"http://genome-test.gi.ucsc.edu/cgi-bin/tracks.exe?where=%s%%3A%d-%d\"> Temporary Intronerator link: %s:%d-%d</A> <I>for testing purposes only</I> \n</P>", chromosome+3, start, end, chromosome+3, start, end );
 */
 }
 
@@ -1718,7 +1720,7 @@ char *omimAvail = NULL;
 sqlSafef(query, sizeof(query), "select kgXref.kgID from kgXref,%s r where kgXref.refseq = r.mrnaAcc and r.omimId != 0 limit 1", refLinkTable);
 omimAvail = sqlQuickString(conn, query);
 hFreeConn(&conn);
-char *isGencode = trackDbSetting(tdb, "isGencode");
+boolean isGencode = trackDbSettingOn(tdb, "isGencode") || trackDbSettingOn(tdb, "isGencode2");
 
 printf("<B>Label:</B> ");
 labelMakeCheckBox(tdb, "gene", "gene symbol", FALSE);
@@ -1749,13 +1751,22 @@ safef(varName, sizeof(varName), "%s.show.spliceVariants", tdb->track);
 option = cartUsualBoolean(cart, varName, TRUE);
 cgiMakeCheckBox(varName, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", "splice variants");
-char *isGencode = trackDbSetting(tdb, "isGencode");
-if (isGencode != NULL)
+boolean isGencode = trackDbSettingOn(tdb, "isGencode");
+boolean isGencode2 = trackDbSettingOn(tdb, "isGencode2");
+if (isGencode || isGencode2)
     {
     safef(varName, sizeof(varName), "%s.show.comprehensive", tdb->track);
     option = cartUsualBoolean(cart, varName, FALSE);
     cgiMakeCheckBox(varName, option);
     printf(" %s&nbsp;&nbsp;&nbsp;", "show comprehensive set");
+
+    if (isGencode2)
+        {
+        safef(varName, sizeof(varName), "%s.show.pseudo", tdb->track);
+        option = cartUsualBoolean(cart, varName, FALSE);
+        cgiMakeCheckBox(varName, option);
+        printf(" %s&nbsp;&nbsp;&nbsp;", "show pseudogenes");
+        }
     }
 printf("<BR>\n");
 }
@@ -2264,6 +2275,7 @@ jsInline(
 "}\n");
 printf("<input name='%s' id='%s' size=\"%d\" value=\"%s\" type=\"TEXT\">", 
     oligoMatchVar, oligoMatchVar, 45, oligo);
+puts("<br>Examples: TATAWAAR, AAAAA");
 jsOnEventById("input", oligoMatchVar, "packTrack();");
 }
 
@@ -2689,7 +2701,7 @@ filterBy_t *filters = filterBySetGet(tdb, cart, tdb->track);
 if (filters != NULL)
     {
     puts("<p>");
-    filterBySetCfgUi(cart, tdb, filters, TRUE);
+    filterBySetCfgUi(cart, tdb, filters, TRUE, tdb->track);
     filterBySetFree(&filters);
     }
 char varName[64];
@@ -2701,9 +2713,15 @@ if (trackDbSetting(tdb, "motifTable") != NULL)
     printf("<BR>");
     }
 
-printf("<BR><B>Show cell abbreviations (to right of cluster): </B> ");
+printf("<BR><B>Cluster right label: </B>");
+
+safef(varName, sizeof(varName), "%s.showExpCounts", tdb->track);
+cartMakeCheckBox(cart, varName, TRUE);
+printf("cell count (detected/assayed)&nbsp;&nbsp;");
+
 safef(varName, sizeof(varName), "%s.showCellAbbrevs", tdb->track);
 cartMakeCheckBox(cart, varName, TRUE);
+printf("cell abbreviations");
 
 puts("<p><table>");
 jsBeginCollapsibleSectionFontSize(cart, tdb->track, "cellSources", "Cell Abbreviations", FALSE,
@@ -2769,6 +2787,7 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
                                         event);
 
         printf("</TD>\n<TD>");
+        hPrintPennantIcon(tdb);
 	safef(id, sizeof id, "%s_link", tdb->track);
         printf("<A HREF='%s?%s=%s&c=%s&g=%s' id='%s'>%s</A>&nbsp;", 
                     tdbIsDownloadsOnly(tdb) ? hgFileUiName(): hTrackUiForTrack(tdb->track),
@@ -2786,8 +2805,9 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     printf("</TD>\n");
     printf("<TD>%s", tdb->longLabel);
 
+    printf("&nbsp;&nbsp;");
     printDataVersion(database, tdb);
-    //printf("&nbsp&nbsp;<EM style='color:#666666; font-size:smaller;'>%s</EM>", dataVersion);
+    //printf("&nbsp;&nbsp;<EM style='color:#666666; font-size:smaller;'>%s</EM>", dataVersion);
     printf("</TD></TR>");
     }
 printf("</TABLE>");
@@ -2994,6 +3014,8 @@ else if (sameString(track, "lrg"))
     lrgCfgUi(cart, tdb, tdb->track, NULL, boxed);
 else if (sameString(track, "lrgTranscriptAli"))
     lrgTranscriptAliCfgUi(cart, tdb, tdb->track, NULL, boxed);
+else if (startsWithWord("hic", tdb->type) && tdbIsComposite(tdb))
+    hicCfgUiComposite(cart, tdb, tdb->track, NULL, boxed); // Some hic options aren't available at this level
 else if (tdb->type != NULL)
     {   // NOTE for developers: please avoid special cases and use cfgTypeFromTdb//cfgByCfgType()
         //  When you do, then multi-view cfg and subtrack cfg will work.
@@ -3022,7 +3044,7 @@ else if (tdb->type != NULL)
     else if (startsWithWord("factorSource",tdb->type))
         factorSourceUi(database,tdb);
     else if (startsWithWord("bigBed",tdb->type))
-        labelCfgUi(database, cart, tdb);
+        labelCfgUi(database, cart, tdb, tdb->track);
     }
 
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg
@@ -3085,6 +3107,8 @@ if (!ajax)
     webIncludeResourceFile("jquery-ui.css");
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js",NULL);
+    webIncludeResourceFile("spectrum.min.css");
+    jsIncludeFile("spectrum.min.js",NULL);
     jsonObjectAddGlobal("track", newJsonString(tdb->track));
     jsonObjectAddGlobal("db", newJsonString(database));
     }
@@ -3154,14 +3178,23 @@ if (sameWord(tdb->track,"ensGene"))
     }
 else if (sameWord(tdb->track, "refSeqComposite"))
     {
-    struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
     char longLabel[1024];
-    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+    char *version = checkDataVersion(database, tdb);
+
+    if (version)
 	{
-	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, trackVersion->version);
+	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, version);
 	}
     else
-        safef(longLabel, sizeof(longLabel), "%s", tdb->longLabel);
+	{
+	struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
+	if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+	    {
+	    safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, trackVersion->version);
+	    }
+	else
+	    safef(longLabel, sizeof(longLabel), "%s", tdb->longLabel);
+	}
     printf("<B style='font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
     }
 else
@@ -3217,6 +3250,8 @@ else if (sameString(tdb->track, WIKI_TRACK_TABLE))
 else if (sameString(tdb->type, "halSnake"))
     tdb->canPack = TRUE;
 else if (sameString(tdb->type, "bigPsl"))
+    tdb->canPack = TRUE;
+else if (startsWith(tdb->type, "bigLolly"))
     tdb->canPack = TRUE;
 else if (sameString(tdb->type, "bigChain"))
     tdb->canPack = TRUE;
@@ -3280,6 +3315,11 @@ if (!tdbIsDownloadsOnly(tdb))
 	    jsOnEventByIdF("click", "htui_reset",
                    "setVarAndPostForm('%s','1','mainForm'); return false;", setting);
 	    }
+        if ( isCustomComposite(tdb))
+            {
+            printf("\n&nbsp;&nbsp;<a href='%s' >Go to Track Collection Builder</a>\n", hgCollectionName());
+            }
+
         }
 
     if (ct)
@@ -3310,7 +3350,7 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
     ||  (trackDbSetting(tdb, "wgEncode") && tdbIsComposite(tdb)))
         {
         printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
-        if (trackDbSetting(tdb, "wgEncode"))
+        if (trackDbSetting(tdb, "wgEncode") && isEncode2(database, tdb->track))
             {
             printf("<A TARGET=_BLANK HREF='../ENCODE/index.html' TITLE='ENCODE Portal'>ENCODE at UCSC</A>");
             printf("&nbsp;&nbsp;");
@@ -3324,7 +3364,7 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
                "page'>Subtracks%s</A>", downArrow);
         printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
                "Description%s</A>", downArrow);
-        if (trackDbSetting(tdb, "wgEncode") && isEncode2(database))
+        if (trackDbSetting(tdb, "wgEncode") && isEncode2(database, tdb->track))
             {
             printf("&nbsp;&nbsp;<A HREF='#TRACK_CREDITS' TITLE='Jump to ENCODE lab contacts for this data'>"
                "Contact%s</A>", downArrow);
@@ -3397,9 +3437,9 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     printf("</td><td nowrap>");
     cgiDown(0.7); // positions top link below line
     makeTopLink(tdb);
-    printf("&nbsp</td></tr><tr valign='bottom'><td nowrap>");
+    printf("&nbsp;</td></tr><tr valign='bottom'><td nowrap>");
     makeTopLink(tdb);
-    printf("&nbsp</td></tr></table>");
+    printf("&nbsp;</td></tr></table>");
     }
 }       /*      void trackUi(struct trackDb *tdb)       */
 

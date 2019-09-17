@@ -9,9 +9,6 @@ html gap
 track xenoRefGene override
 visibility pack
 
-track refGene override
-visibility pack
-
 searchTable gold
 shortCircuit 1
 termRegex [ABCFLN][ACKLOPQRTUX][B0-9_][Z0-9][0-9]+(\.[0-9]+)?
@@ -23,3 +20,7 @@ include trackDb.chainNet.ra
 track spMut override
 group varRep
 bigDataUrl /gbdb/$D/uniprot/unipMut.bb
+
+# change these two to switch to the new refSeqComposite 2018-02
+#include trackDb.refGene.ra public
+include ../../refSeqComposite.ra

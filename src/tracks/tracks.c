@@ -1747,7 +1747,7 @@ fputs("</P>\n", stdout);
 fputs("<P>Return to <A HREF=\"../IntronWS120/index.html\">Intronerator Gateway WS120</A></P>\n", stdout);
 browserChr = cloneStringZ(ti.chrom,5);
 touppers(browserChr);
-printf("<P>Link to Genome Browser <A HREF=\"http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=ce2&org=C.+elegans&position=chr%s:%d-%d\" target=_blank> chr%s:%d-%d </A><BR>\n", browserChr, ti.chromStart, ti.chromEnd, browserChr, ti.chromStart, ti.chromEnd);
+printf("<P>Link to Genome Browser <A HREF=\"http://genome-test.soe.ucsc.edu/cgi-bin/hgTracks?db=ce2&org=C.+elegans&position=chr%s:%d-%d\" target=_blank> chr%s:%d-%d </A><BR>\n", browserChr, ti.chromStart, ti.chromEnd, browserChr, ti.chromStart, ti.chromEnd);
 free(browserChr);
 
 for (group = groupList; group != NULL; group = group->next)

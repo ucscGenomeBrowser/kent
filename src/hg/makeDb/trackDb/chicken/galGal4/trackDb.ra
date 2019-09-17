@@ -8,6 +8,12 @@ html gold
 track gap override
 html gap
 
+track snp138Common override
+visibility hide
+
+track snp138 override
+visibility dense
+
 track refGene override
 visibility pack
 

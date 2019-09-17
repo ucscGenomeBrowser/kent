@@ -1,0 +1,10 @@
+# required db variable
+db criGriChoV1
+
+# optional nameTranslation, the sed command that will transform
+#	Ensemble names to UCSC names.  With quotes just to make sure.
+#  The ENS names being dropped have illegal coordinates in the genes
+nameTranslation "s/^MT/chrM/; /ENSCGRT00000030264/d; /ENSCGRT00000031181/d; /ENSCGRT00000030473/d; /ENSCGRT00000027739/d; /ENSCGRT00000027716/d;"
+
+# Ensembl has different names for everything
+liftUp /hive/data/genomes/criGriChoV1/jkStuff/ensembl.lift

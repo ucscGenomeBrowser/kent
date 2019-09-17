@@ -187,10 +187,11 @@ sub doClusterRun {
   my $bossScript = newBash HgRemoteScript("$runDir/clusterRun.bash", $paraHub,
 				      $runDir, $whatItDoes);
 
+  my $paraRun = &HgAutomate::paraRun();
   $bossScript->add(<<_EOF_
 if [ -s runOne ]; then
   chmod +x runOne
-  $HgAutomate::paraRun
+  $paraRun
 else
   if [ ! -s $db.idKeys.txt ]; then
      printf "ERROR: previous step doIdKeys failed twoBitDup procedure" 1>&2
@@ -297,6 +298,10 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/idKeys";
 $twoBit = $opt_twoBit ? $opt_twoBit :
   "$HgAutomate::clusterData/$db/$db.2bit";
+
+if ( ! -s "$twoBit" ) {
+  die "can not find 2bit file:\n\t$twoBit";
+}
 
 # Do everything.
 $stepper->execute();

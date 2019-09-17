@@ -119,7 +119,7 @@ EXTRACT LINEAGE-SPECIFIC REPEATS (ARIAN SMIT''s scripts) (DONE 11/4/02)
     rm -rf /scratch/hg/mm2/linSpecRep
     cd ..
     cp -R linSpecRep /scratch/hg/mm2
-    # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
+    # Ask cluster-admin@soe.ucsc.edu to binrsync /scratch/hg to clusters
 
 
 CREATING DATABASE AND STORING mRNA/EST SEQUENCE AND AUXILIARY INFO 

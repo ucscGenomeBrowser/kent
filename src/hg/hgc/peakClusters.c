@@ -69,9 +69,8 @@ if (sqlTableExists(conn, table))  // Table might be withdrawn from data thrash
 	sum += sqlDouble(row[signalCol]);
 	}
     sqlFreeResult(&sr);
-    hFreeConn(&conn);
     }
-
+hFreeConn(&conn);
 if (count > 0)
     return sum/count;
 else
@@ -225,7 +224,7 @@ return wgEncodeVocabLink(vocabFile, vocabType, fieldVal, fieldVal, fieldVal, "")
 
 static void printFactorSourceTableHits(struct factorSource *cluster, struct sqlConnection *conn,
 	char *sourceTable, char *inputTrackTable, 
-	struct slName *fieldList, boolean invert, char *vocab)
+	struct slName *fieldList, boolean invert, char *vocab, struct hash *fieldToUrl)
 /* Put out a lines in an html table that shows assayed sources that have hits in this
  * cluster, or if invert is set, that have misses. */
 {
@@ -245,6 +244,10 @@ for (field = fieldList; field != NULL; field = field->next)
 sqlDyStringPrintf(query, " from %s,%s ", inputTrackTable, sourceTable);
 sqlDyStringPrintf(query, " where %s.source = %s.description", inputTrackTable, sourceTable);
 sqlDyStringPrintf(query, " and factor='%s' order by %s.source", cluster->name, inputTrackTable);
+
+boolean encodeStanford = FALSE;
+if (startsWith("enc", sourceTable))
+    encodeStanford = TRUE;
 
 int displayNo = 0;
 int fieldCount = slCount(fieldList);
@@ -279,15 +282,45 @@ while ((row = sqlNextRow(sr)) != NULL)
 	for (i=0; i<fieldCount && field != NULL; ++i, field = field->next)
 	    {
 	    char *fieldVal = row[i+offset];
+            char *link = NULL;
 	    if (vocab)
 	        {
-                char *link = cloneString(factorSourceVocabLink(vocabFile, field->name, fieldVal));
-		webPrintLinkCell(link);
+                link = cloneString(factorSourceVocabLink(vocabFile, field->name, fieldVal));
 		}
-	    else
-		webPrintLinkCell(fieldVal);
+            else if (fieldToUrl != NULL)
+                {
+                // (outside) links on vocab items
+                char *urlPattern = hashFindVal(fieldToUrl, field->name);
+                if (urlPattern != NULL)
+                    {
+                    char *url = replaceInUrl(urlPattern, fieldVal, cart, database, seqName, 
+                                                winStart, winEnd, NULL, TRUE, NULL);
+                    if (url != NULL)
+                        {
+                        struct dyString *ds = dyStringCreate("<a target='_blank' href='%s'>%s</a>\n",
+                                                                url, fieldVal);
+                        link = dyStringCannibalize(&ds);
+                        }
+                    }
+                }
+            webPrintLinkCell(link ? link : fieldVal);
 	    }
-	printMetadataForTable(row[2]);
+        char *table = row[2];
+        if (encodeStanford)
+            {
+            char *file = stringIn("ENCFF", table);
+            if (!file)
+                webPrintLinkCell(table);
+            else
+                {
+                webPrintLinkCellStart();
+                printf("<A target='_blank'"
+                        "href='https://www.encodeproject.org/files/%s'>%s</A>", file, file);
+                webPrintLinkCellEnd();
+               } 
+            }
+        else
+            printMetadataForTable(table);
 	}
     }
 sqlFreeResult(&sr);
@@ -460,19 +493,14 @@ if (motifPwmTable != NULL && sqlTableExists(conn, motifPwmTable))
     }
 }
 
-void doFactorSource(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start)
+void doFactorSource(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start, int end)
 /* Display detailed info about a cluster of TFBS peaks from other tracks. */
 {
-int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
-char **row;
-struct sqlResult *sr;
-char query[256];
-
-sqlSafef(query, sizeof(query),
-	"select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
-	tdb->table, item, seqName, start);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
+char extraWhere[256];
+safef(extraWhere, sizeof extraWhere, "name='%s'", item);
+int rowOffset;
+struct sqlResult *sr = hRangeQuery(conn, tdb->table, seqName, start, end, extraWhere, &rowOffset);
+char **row = sqlNextRow(sr);
 struct factorSource *cluster = NULL;
 if (row != NULL)
     cluster = factorSourceLoad(row + rowOffset);
@@ -494,11 +522,11 @@ printf("<B>Factor:</B> %s<BR>\n", factorLink);
 printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
 printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, item);
 
-
 /* Get list of tracks we'll look through for input. */
 char *inputTrackTable = trackDbRequiredSetting(tdb, "inputTrackTable");
-sqlSafef(query, sizeof(query), 
-    "select tableName from %s where factor='%s' order by source", inputTrackTable, 
+char query[256];
+sqlSafef(query, sizeof(query), "select tableName from %s where factor='%s' order by source", 
+                inputTrackTable, 
     cluster->name);
 
 /* Next do the lists of hits and misses.  We have the hits from the non-zero signals in
@@ -507,6 +535,8 @@ sqlSafef(query, sizeof(query),
 char *inputTableFieldDisplay = trackDbSetting(tdb, "inputTableFieldDisplay");
 if (inputTableFieldDisplay != NULL)
     {
+    char *fieldUrls = trackDbSetting(tdb, "inputTableFieldUrls");
+    struct hash *fieldToUrl = hashFromString(fieldUrls);
     struct slName *fieldList = stringToSlNames(inputTableFieldDisplay);
     char *vocab = trackDbSetting(tdb, "controlledVocabulary");
 
@@ -515,7 +545,7 @@ if (inputTableFieldDisplay != NULL)
     webPrintLinkTableStart();
     printClusterTableHeader(fieldList, TRUE, FALSE, TRUE);
     printFactorSourceTableHits(cluster, conn, sourceTable, 
-            inputTrackTable, fieldList, FALSE, vocab);
+            inputTrackTable, fieldList, FALSE, vocab, fieldToUrl);
     webPrintLinkTableEnd();
 
     webNewSectionHeaderStart();
@@ -527,7 +557,7 @@ if (inputTableFieldDisplay != NULL)
     webPrintLinkTableStart();
     printClusterTableHeader(fieldList, TRUE, FALSE, FALSE);
     printFactorSourceTableHits(cluster, conn, sourceTable, 
-            inputTrackTable, fieldList, TRUE, vocab);
+            inputTrackTable, fieldList, TRUE, vocab, fieldToUrl);
     webPrintLinkTableEnd();
     jsEndCollapsibleSection();
     }

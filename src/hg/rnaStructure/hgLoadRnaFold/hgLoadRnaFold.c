@@ -88,8 +88,6 @@ for (dirEl = dirList; dirEl != NULL; dirEl = dirEl->next)
 	else
 	    errAbort("%s is empty\n", name);
 	}
-    if (!isupper(line[0]))
-	notFold(path, 1);
     fprintf(f, "%s\t", name);	/* Save name */
     fprintf(f, "%s\t", line);	/* Save sequence */
     lineFileNeedNext(lf, &line, NULL);
@@ -104,7 +102,8 @@ for (dirEl = dirList; dirEl != NULL; dirEl = dirEl->next)
     if (s == NULL)
         notFold(path, 3);
     word = skipLeadingSpaces(s+1);
-    if (word == NULL || (!word[0] == '-' && !isdigit(word[0])))
+    // Light error checking that first word could be a number.
+    if (word == NULL || (word[0] != '-' && !isdigit(word[0])))
         notFold(path, 4);
     if ((s = strchr(word, ')')) == NULL)
         notFold(path, 5);

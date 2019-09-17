@@ -1,22 +1,3 @@
-
-
-
-gorGor3 Gorilla gorilla gorilla Gorilla
-hg38    Homo sapiens    Human
-rheMac2 Macaca mulatta  Rhesus
-susScr11        Sus scrofa      Pig
-
-
-
-
-
-
-
-
-
-
-#	$Id: vertebrates.txt,v 1.1 2010/04/05 19:09:43 hiram Exp $
-
 #  Common to all:	Eukaryota; Metazoa; Chordata; Craniata; Vertebrata;
 #  Common to all:	Eukaryota; Opisthokonta; Metazoa; Eumetazoa; Bilateria; Coelomata; Deuterostomia; Chordata; Craniata; Vertebrata; Gnathostomata; Teleostomi;
 
@@ -33,6 +14,9 @@ monDom	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Theria; Metath
 
 # Platypus Ornithorhynchus anatinus
 ornAna	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Prototheria; Monotremata; Ornithorhynchidae; Ornithorhynchus
+
+# Tibetan ground-tit - Pseudopodoces humilis
+pseHum	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Archelosauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Paridae; Pseudopodoces
 
 # Rock pigeon - Columba livia
 colLiv	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Columbiformes; Columbidae; Columba
@@ -130,6 +114,10 @@ apaSpi	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sa
 # Western Painted turtle - Chrysemys picta bellii
 chrPic	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Archelosauria; Testudines; Cryptodira; Durocryptodira; Testudinoidea; Emydidae; Chrysemys; Chrysemys picta
 
+# taxId 8296
+# Axolotl - Ambystoma mexicanum
+ambMex	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amphibia; Batrachia; Caudata; Salamandroidea; Ambystomatidae; Ambystoma
+
 # Tibetan frog - Nanorana parkeri
 nanPar	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amphibia; Batrachia; Anura; Neobatrachia; Ranoidea; Dicroglossidae; Dicroglossinae; Nanorana
 
@@ -193,10 +181,6 @@ takFla	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Osteog
 # tiger puffer Fugu Takifugu rubripes
 fr	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Tetraodontiformes; Tetraodontoidei; Tetradontoidea; Tetraodontidae; Takifugu
 
-# Spotted Gar - Lepisosteus oculatus
-lepOcu	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Semionotiformes; Lepisosteidae; Lepisosteus
-
-
 # spotted green pufferfish Tetraodon nigroviridis
 tetNig	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Tetraodontiformes; Tetraodontoidei; Tetradontoidea; Tetraodontidae; Tetraodon
 
@@ -222,3 +206,4 @@ letCam	Vertebrata; Hyperoartia; Petromyzontiformes; Petromyzontidae; Lethenteron
 # sea lamprey Petromyzon marinus
 #	several levels up different from all above
 petMar	Vertebrata; Hyperoartia; Petromyzontiformes; Petromyzontidae; Petromyzon
+

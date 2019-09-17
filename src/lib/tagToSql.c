@@ -1,8 +1,11 @@
 /* Copyright (C) 2017 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 
-/* tagToSql - convert tagStorm to a SQL table.  See src/tagStorm/tagStormToTab/tagStormToTab.c
- * for how to use this. */
+/* tagToSql - convert tagStorm to a SQL table.  
+ * See src/tagStorm/tagStormToTab/tagStormToTab.c for how to use this. 
+ *
+ * Note that functions like sqlSafef cannot be be used since they are in jksql.c
+ * which is unavailable in this dir.*/
 
 #include "common.h"
 #include "hash.h"
@@ -170,7 +173,8 @@ void tagStormToSqlCreate(struct tagStorm *tagStorm,
     char *tableName, struct tagTypeInfo *ttiList, struct hash *ttiHash,
     char **keyFields, int keyFieldCount, struct dyString *createString)
 /* Make a mysql create string out of ttiList/ttiHash, which is gotten from
- * tagStormInferTypeInfo.  Result is in createString */
+ * tagStormInferTypeInfo.  Result is in createString.
+ * Note that sqlSafef (and other jksql functions) are unavailable here. */
 {
 /* Make sure that don't get a name collision in SQL, which is case insensitive in field
  * names. */
@@ -192,7 +196,7 @@ for (tti = ttiList; tti != NULL; tti = tti->next)
     char *sqlType = NULL;
     char sqlTypeBuf[256];
     if (!isSymbolString(tti->name))
-        errAbort("Error - database needs work. Somehow symbol %s got in field list\n", tti->name);
+	errAbort("Error - tagStorm not SQL compliant. Somehow symbol %s got in field list", tti->name);
     if (sqlReservedCheck(reservedHash, tti->name))
         errAbort("Error - field '%s' is a SQL reserved word", tti->name);
     if (tti->isUnsigned)

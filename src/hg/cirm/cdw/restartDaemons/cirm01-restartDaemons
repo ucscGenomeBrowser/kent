@@ -1,0 +1,11 @@
+#!/bin/tcsh -x
+
+echo Rsyncing bowtie indexes to /dev/shm
+rsync -apv /data/cirm/valData/ramdisk/ /dev/shm/btData/
+
+# Relaunch cdwRunDaemons.  Send them initial wake up message
+set qaFifo = /data/cirm/cdw/startup/cdwQa.fifo
+killall cdwRunDaemon
+cdwRunDaemon cdw cdwJob 20 $qaFifo -log=cdwQa.log
+echo hi > $qaFifo
+

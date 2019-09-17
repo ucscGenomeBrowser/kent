@@ -14,7 +14,7 @@
 #
 #
 # to test timing, try sometime like:
-#  (hgsql -e 'flush tables'; time  wget -nv --save-headers -O output/typesTest.das 'http://hgwdev-markd.cse.ucsc.edu/cgi-bin/das/hg18/types?segment=22')>&log
+#  (hgsql -e 'flush tables'; time  wget -nv --save-headers -O output/typesTest.das 'http://hgwdev-markd.soe.ucsc.edu/cgi-bin/das/hg18/types?segment=22')>&log
 #
 # to debug:
 #  set env HGDB_CONF hg.conf
@@ -22,7 +22,7 @@
 #  r segment=chr2L:827700,845800 >& out
 
 sandbox=-${USER}
-dasUrl = http://hgwdev${sandbox}.cse.ucsc.edu/cgi-bin/das
+dasUrl = http://hgwdev${sandbox}.soe.ucsc.edu/cgi-bin/das
 testDb = hg18
 testUrl = ${dasUrl}/${testDb}
 testSeg = 22:16635715,16637714

@@ -1,0 +1,22 @@
+#!/bin/tcsh
+if ("$1" != "now") then
+    echo "Usage:"
+    echo "cdwUpdateIx now"
+    exit 1
+endif
+
+set outname = "cdw"
+
+cd /gbdb/cdw/
+cdwTextForIndex ${outname}
+if ($status) then
+    echo "Error running cdwTextForIndex."
+    exit 1
+endif
+ixIxx ${outname} ${outname}.ix ${outname}.ixx
+if ($status) then
+    echo "Error running ixIxx."
+    exit 1
+endif
+
+echo "/gbdb/cdw/${outname} created and indexed."

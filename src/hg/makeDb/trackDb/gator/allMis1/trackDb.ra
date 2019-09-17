@@ -14,6 +14,7 @@ track xenoRefGene override
 visibility pack
 
 track genscan override
+priority 4 # xenoRefGene has a default priority of 3
 visibility pack
 
 track mrna override
@@ -33,3 +34,5 @@ visibility dense
 
 track simpleRepeat override
 visibility dense
+
+include ../../refSeqComposite.ra alpha

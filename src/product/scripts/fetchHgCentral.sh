@@ -15,7 +15,7 @@ fi
 
 if [ $1 = "go" ]; then
     wget --timestamping -O /dev/stdout \
-	http://hgdownload.cse.ucsc.edu/admin/hgcentral.sql
+	http://hgdownload.soe.ucsc.edu/admin/hgcentral.sql
 else
     echo "ERROR: need to use the argument: go"
     echo "in order to get this to run"

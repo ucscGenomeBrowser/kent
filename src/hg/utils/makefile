@@ -22,8 +22,10 @@ UTILS_APPLIST = \
 	bedExtendRanges \
 	bedToPsl \
 	bedWeedOverlapping \
+	bedMergeAdjacent \
 	bigMafToMaf \
 	bigPslToPsl \
+	binFromRange \
 	chromGraphFromBin \
 	chromGraphToBin \
 	crTreeIndexBed \
@@ -35,7 +37,9 @@ UTILS_APPLIST = \
 	gff3ToGenePred \
 	gff3ToPsl \
 	gtfToGenePred \
+	hgvsToVcf \
 	hubCheck \
+	hubClone \
 	hubPublicCheck \
 	mafToBigMaf \
 	makeTableList \
@@ -58,6 +62,7 @@ SCRIPT_FILES = \
 	dumpDb.pl \
 	mergeOverlapBed4.pl \
 	mergeSortedBed3Plus.pl \
+	mysqlRowSizes.pl \
 	${USER_APP_SCRIPTS}
 
 APP_SCRIPTS = ${SCRIPT_FILES}
@@ -65,12 +70,14 @@ APP_SCRIPTS = ${SCRIPT_FILES}
 # List of directories to build of interest only at UCSC
 DIRS = ${buildRefresh} \
 	automation \
+	blatServersCheck \
 	buildReleaseLog \
 	checkUrlsInTable \
 	geoMirrorNode \
-	hgvsToVcf \
 	makeTrackIndex \
 	mysqlSecurityCheck \
+	pslFixCdsJoinGap \
+	pslMismatchGapToBed \
 	pslUniq \
 	refSeqGet \
 	safePush \
@@ -79,6 +86,7 @@ DIRS = ${buildRefresh} \
 	wigBedToStep
 
 TEST_DIRS = \
+	bedMergeAdjacent \
 	genePredFilter \
 	genePredToProt \
 	gff3ToGenePred \

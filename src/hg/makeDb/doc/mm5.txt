@@ -6500,7 +6500,7 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     cd /cluster/data/mm5/bed
     mkdir geneList
     cd geneList
-    wget -O mm5GeneList.html "http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/hgGeneList?db=mm5"
+    wget -O mm5GeneList.html "http://hgwdev-fanhsu.soe.ucsc.edu/cgi-bin/hgGeneList?db=mm5"
     cp -p mm5GeneList.html /usr/local/apache/htdocs/goldenPath
 # Check this html file into CVS.
 

@@ -262,6 +262,45 @@ TABLE.hgcLsSnp TR, TABLE.hgcLsSnp TD {
     padding-right: 5px;
 }
 
+
+/* hgTrackUi page formatting */
+label.trackUiHicLabel
+{
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+label.trackUiHicLabelExpand
+{
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+img.trackUiHicLabelArrow
+{
+    transform: rotate(0deg);
+    max-width: 9px;
+}
+
+img.trackUiHicLabelArrow.open
+{
+    transform: rotate(90deg);
+}
+
+div.trackUiHicHiddenAttributes
+{
+    font-size: 0.9em;
+    display: none;
+    max-height: 10em;
+    max-width: 60em;
+    overflow: scroll;
+    background-color: white;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    border: solid;
+    border-width: thin;
+}
+
 /* hgTracks config page groups list */
 TABLE.groupLists { background-color: #FFFEE8; width: 50em; }
 TABLE.groupLists TR:not(.blueToggleBar):not(.noData) TD { border: 1px solid; }
@@ -369,6 +408,9 @@ th.sortable { color: #0000FF; }
 th:hover.sortable { background-color: #CCFFCC; cursor: pointer; }
 tbody.sorting { color: #DDDDDD; cursor: wait;  }
 
+/* For color selector inputs */
+input[type=color] { padding: 0px; }
+
 /* tr:hover.found { color: #000088; } */
 
 .filterBy { display: none; } /* All filterBy's should be converted to dropdownchecklists by document.ready(). */
@@ -406,10 +448,25 @@ input.disabled  { opacity: 0.5; filters.alpha.opacity:50;  }
 span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 
 .positionDisplay {
-		display: inline-block;
-        padding: 5px; 
-        border: lightgray 1px solid;
+    display: inline-block;
+    padding: 5px;
+    border: lightgray 1px solid;
 }
+
+.positionDisplay:hover {
+    cursor: default;
+}
+
+.positionDisplay.pressed {
+    background: #ebf0ff;
+    webkit-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    moz-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+    border-radius: 4px;
+}
+
+
 
 .positionInput {
         padding: 7px; -moz-border-radius: 3px; border-radius: 3px;
@@ -434,6 +491,18 @@ span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 #tabs {
 	font-size: 100%;
 	margin-top: 5px;
+}
+
+table.dataTable.compact thead th, table.dataTable.compact thead td
+{
+    padding: 4px 4px 4px 17px !important;
+}
+
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc,
+table.dataTable thead .sorting_asc_disabled, table.dataTable thead .sorting_desc_disabled
+{
+    background-position: center left !important;
 }
 
 .hubList table {
@@ -615,6 +684,20 @@ div#haplotypes .textAlert { color:#DC143C; } /* dark red */
     color: gray;
 }
 
+/* for autocompleteCat (autocomplete with optional category labels) */
+.ui-autocomplete-category {
+    /* Adapted from https://jqueryui.com/autocomplete/#categories */
+    font-weight: bold;
+    line-height: 1.5;
+    background: lightgray;
+}
+
+.ui-menu-item {
+    /* This is necessary if a background color is specified in .ui-autocomplete-category above;
+     * the category labels actually extend upwards, behind the preceding items! */
+    background: white;
+}
+
 /* Added for Angie's React UI stuff */
 .cgiTitleBox {
     background-color: #D9E4F8;
@@ -684,7 +767,7 @@ div#haplotypes .textAlert { color:#DC143C; } /* dark red */
 a.reactLink {
     /* React/JSX translates &nbsp; into its UTF-8 equivalent.  Trouble is, our CGI code
      * always adds a 'CHARSET=iso-8859-1' to the header, possibly because we serve data
-     * from mysql tables with that encoding ("latin1"), so I'm reluctant to change something
+     * from MariaDB tables with that encoding ("latin1"), so I'm reluctant to change something
      * that CGIs have done since 2001 (622545af).
      * Now, why the rant about &nbsp;? -- because React/JSX also smushes <A> together with
      * its surrounding text, if there are newlines between them in the JSX.  Add some padding. */
@@ -770,3 +853,13 @@ table.sessionTable tbody tr:hover{
 a:link img.sessionThumbnail {
   padding: 5px;
 }
+
+input[type="submit"].pressed {
+    background: #d0dcff; 
+    webkit-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    moz-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+    border-radius: 4px;
+}
+

@@ -17,6 +17,7 @@ errAbort(
   "usage:\n"
   "  genePredToBigGenePred [-known] [-score=scores] [-geneNames=geneNames] [-colors=colors] file.gp stdout | sort -k1,1 -k2,2n > file.bgpInput\n"
   "NOTE: to build bigBed:\n"
+  "   wget https://genome.ucsc.edu/goldenpath/help/examples/bigGenePred.as\n"
   "   bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as file.bgpInput chrom.sizes output.bb\n"
   "options:\n"
   "    -known                input file is a genePred in knownGene format\n"
@@ -171,7 +172,7 @@ while (lineFileChopTab(lf, row))
     //  this memory will be leaked if the hash is free'd
     int numBlocks;
     sqlSignedDynamicArray(row[4], &cds->exonFrames, &numBlocks);
-    assert(numBlocks = cds->exonCount);
+    assert(numBlocks == cds->exonCount);
     hashAdd(hash, name, cds);
     }
 lineFileClose(&lf);

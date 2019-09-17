@@ -69,18 +69,15 @@ if (fqf == NULL)
 char *fastqPath = fqf->sampleFileName;
 
 char bwaIndex[PATH_LEN];
-safef(bwaIndex, sizeof(bwaIndex), "%s%s/repeatMasker/repeatMasker.fa", 
-    cdwValDataDir, vf->ucscDb);
+safef(bwaIndex, sizeof(bwaIndex), "/dev/shm/btData/repeatMasker/%s/repeatMasker.fa", 
+   vf->ucscDb);
 
 char cmd[3*PATH_LEN];
-char *saiName = cloneString(rTempName(cdwTempDir(), "cdwQaRepeat", ".sai"));
-safef(cmd, sizeof(cmd), "bwa aln %s %s > %s", bwaIndex, fastqPath, saiName);
+char *samName = cloneString(rTempName(cdwTempDir(), "cdwQaRepeat", ".sam"));
+//we used to use BWA here, see the discussion about BWA/bowtie in cdwLib.c
+safef(cmd, sizeof(cmd), "bowtie --mm --threads 4 %s %s -S > %s", bwaIndex, fastqPath, samName);
 mustSystem(cmd);
 
-char *samName = cloneString(rTempName(cdwTempDir(), "cdwQaRepeat", ".sam"));
-safef(cmd, sizeof(cmd), "bwa samse %s %s %s > %s", bwaIndex, saiName, fastqPath, samName);
-mustSystem(cmd);
-remove(saiName);
 
 char *raName = cloneString(rTempName(cdwTempDir(), "cdwQaRepeat", ".ra"));
 safef(cmd, sizeof(cmd), "edwSamRepeatAnalysis %s %s", samName, raName);
@@ -90,10 +87,7 @@ remove(samName);
 
 raIntoCdwRepeatQa(raName, conn, fileId);
 remove(raName);
-#ifdef SOON
-#endif /* SOON */
 
-freez(&saiName);
 freez(&samName);
 freez(&raName);
 cdwFastqFileFree(&fqf);

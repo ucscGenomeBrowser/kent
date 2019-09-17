@@ -5,15 +5,16 @@ use warnings;
 
 my $argc = scalar(@ARGV);
 
-if ($argc != 1) {
-  printf STDERR "usage: nBedToEnds.pl <file.2bit> > pairedEnds.tab\n";
+if ($argc != 2) {
+  printf STDERR "usage: nBedToEnds.pl <file.2bit> <endSize> > pairedEnds.tab\n";
   printf STDERR "processes the N gaps in the 2bit file into paired\n";
   printf STDERR "sequences coordinates on each side of the N gaps.\n";
-  printf STDERR "Sequences will be 1,000 bases in length when possible.\n";
+  printf STDERR "Sequences will be <endSize> bases in length when possible.\n";
   exit 255;
 }
 
 my $twoBit = shift;
+my $endSize = shift;
 
 # verify downStream and upStream coordinates are valid
 sub checkOut($$) {
@@ -25,7 +26,6 @@ sub checkOut($$) {
   printf "%s\t%s\n", $down, $up;
 }
 
-my $endSize = 1000;	# default sequence size to extract from an end
 my %chromSize;	# key is chrom name, value is size
 my @nBed;	# each element is a paired
 

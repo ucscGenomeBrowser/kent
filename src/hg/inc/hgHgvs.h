@@ -252,6 +252,9 @@ struct vcfRow *hgvsToVcfRow(char *db, char *term, boolean doLeftShift, struct dy
  * put the reason in dyError.  Protein terms are ambiguous at the nucleotide level so they are
  * not supported at this point. */
 
+uint hgvsTxToCds(uint txOffset, struct genbankCds *cds, boolean isStart, char pPrefix[2]);
+/* Return the cds-relative HGVS coord and prefix corresponding to 0-based txOffset & cds. */
+
 char *hgvsGFromVariant(struct seqWindow *gSeqWin, struct bed3 *variantBed, char *alt, char *acc,
                        boolean breakDelIns);
 /* Return an HGVS g. string representing the genomic variant at the position of variantBed with

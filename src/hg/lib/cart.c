@@ -30,6 +30,8 @@
 #include "trackHub.h"
 #include "cgiApoptosis.h"
 #include "customComposite.h"
+#include "regexHelper.h"
+#include "windowsToAscii.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -301,14 +303,12 @@ sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 }
 
-#ifndef GBROWSE
 static void copyCustomComposites(struct cart *cart, struct hashEl *el)
 /* Copy a set of custom composites to a new hub file. Update the 
  * relevant cart variables. */
 {
 struct tempName hubTn;
-char *hubFileVar = cloneString(el->name);
-char *db = el->name + sizeof(CUSTOM_COMPOSITE_SETTING);
+char *hubFileVar = el->name;
 char *oldHubFileName = el->val;
 trashDirDateFile(&hubTn, "hgComposite", "hub", ".txt");
 char *newHubFileName = cloneString(hubTn.forCgi);
@@ -317,16 +317,26 @@ char *newHubFileName = cloneString(hubTn.forCgi);
 int fd = open(oldHubFileName, O_RDONLY);
 if (fd < 0)
     {
-    cartRemove(cart, el->name);
+    cartRemove(cart, hubFileVar);
     return;
     }
 
 close(fd);
 copyFile(oldHubFileName, newHubFileName);
+cartReplaceHubVars(cart, hubFileVar, oldHubFileName, newHubFileName);
+}
 
+void cartReplaceHubVars(struct cart *cart, char *hubFileVar, char *oldHubUrl, char *newHubUrl)
+/* Replace all cart variables corresponding to oldHubUrl (and/or its hub ID) with
+ * equivalents for newHubUrl. */
+{
+if (! startsWith(customCompositeCartName, hubFileVar))
+    errAbort("cartReplaceHubVars: expected hubFileVar to begin with '"customCompositeCartName"' "
+             "but got '%s'", hubFileVar);
+char *db = hubFileVar + strlen(customCompositeCartName "-");
 char *errorMessage;
-unsigned oldHubId =  hubFindOrAddUrlInStatusTable(db, cart, oldHubFileName, &errorMessage);
-unsigned newHubId =  hubFindOrAddUrlInStatusTable(db, cart, newHubFileName, &errorMessage);
+unsigned oldHubId =  hubFindOrAddUrlInStatusTable(db, cart, oldHubUrl, &errorMessage);
+unsigned newHubId =  hubFindOrAddUrlInStatusTable(db, cart, newHubUrl, &errorMessage);
 
 // need to change hgHubConnect.hub.#hubNumber# (connected hubs)
 struct slPair *hv, *hubVarList = cartVarsWithPrefix(cart, hgHubConnectHubVarPrefix);
@@ -356,11 +366,11 @@ for(hv = hubVarList; hv; hv = hv->next)
     }
 
 // need to change hgtgroup_hub_#hubNumber# (blue bar open )
-// need to change expOrder_hub_#hubNumber#, simOrder_hub_#hubNumber# (sorting)
+// need to change expOrder_hub_#hubNumber#, simOrder_hub_#hubNumber# (sorting) -- values too
 
 // need to change trackHubs #hubNumber#   
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
-cartSetString(cart, hubFileVar, newHubFileName);
+cartSetString(cart, hubFileVar, newHubUrl);
 }
 
 void cartCopyCustomComposites(struct cart *cart)
@@ -370,53 +380,10 @@ struct hashEl *el, *elList = hashElListHash(cart->hash);
 
 for (el = elList; el != NULL; el = el->next)
     {
-    if (startsWith(CUSTOM_COMPOSITE_SETTING, el->name))
+    if (startsWith(customCompositeCartName, el->name))
         copyCustomComposites(cart, el);
     }
 }
-
-void cartCopyCustomTracks(struct cart *cart)
-/* If cart contains any live custom tracks, save off a new copy of them,
- * to prevent clashes by multiple uses of the same session.  */
-{
-struct hashEl *el, *elList = hashElListHash(cart->hash);
-
-for (el = elList; el != NULL; el = el->next)
-    {
-    if (startsWith(CUSTOM_COMPOSITE_SETTING, el->name))
-        copyCustomComposites(cart, el);
-    if (startsWith(CT_FILE_VAR_PREFIX, el->name))
-	{
-	char *db = &el->name[strlen(CT_FILE_VAR_PREFIX)];
-	struct slName *browserLines = NULL;
-	struct customTrack *ctList = NULL;
-	char *ctFileName = (char *)(el->val);
-	if (fileExists(ctFileName))
-	    ctList = customFactoryParseAnyDb(db, ctFileName, TRUE, &browserLines);
-        /* Save off only if the custom tracks are live -- if none are live,
-         * leave cart variables in place so hgSession can detect and inform
-         * the user. */
-	if (ctList)
-	    {
-	    struct customTrack *ct;
-	    static struct tempName tn;
-	    char *ctFileVar = el->name;
-	    char *ctFileName;
-	    for (ct = ctList;  ct != NULL;  ct = ct->next)
-		{
-		copyFileToTrash(&(ct->htmlFile), "ct", CT_PREFIX, ".html");
-		copyFileToTrash(&(ct->wibFile), "ct", CT_PREFIX, ".wib");
-		copyFileToTrash(&(ct->wigFile), "ct", CT_PREFIX, ".wig");
-		}
-	    trashDirFile(&tn, "ct", CT_PREFIX, ".bed");
-	    ctFileName = tn.forCgi;
-	    cartSetString(cart, ctFileVar, ctFileName);
-	    customTracksSaveFile(db, ctList, ctFileName);
-	    }
-	}
-    }
-}
-#endif /* GBROWSE */
 
 static void storeInOldVars(struct cart *cart, struct hash *oldVars, char *var)
 /* Store all cart hash elements for var into oldVars (if it exists). */
@@ -588,10 +555,10 @@ if ((row = sqlNextRow(sr)) != NULL)
 	cartRemoveLike(cart, "*");
 	cartParseOverHash(cart, row[1]);
 	cartSetString(cart, sessionVar, hgsid);
-    if (sessionTableString != NULL)
-        cartSetString(cart, hgSessionTableState, sessionTableString);
-    if (pubSessionsTableString != NULL)
-        cartSetString(cart, hgPublicSessionsTableState, pubSessionsTableString);
+	if (sessionTableString != NULL)
+	    cartSetString(cart, hgSessionTableState, sessionTableString);
+	if (pubSessionsTableString != NULL)
+	    cartSetString(cart, hgPublicSessionsTableState, pubSessionsTableString);
 	if (oldVars)
 	    hashEmpty(oldVars);
 	/* Overload settings explicitly passed in via CGI (except for the
@@ -613,14 +580,535 @@ freeMem(encSessionName);
 }
 #endif /* GBROWSE */
 
-void cartLoadSettings(struct lineFile *lf, struct cart *cart,
-		      struct hash *oldVars, char *actionVar)
-/* Load settings (cartDump output) into current session, and then
- * reload the CGI settings (to support override of session settings).
+boolean containsNonPrintable(char *string)
+/* Return TRUE if string contains non-ascii printable character(s). */
+{
+if (isEmpty(string))
+    return FALSE;
+boolean hasNonPrintable = FALSE;
+int i;
+for (i = 0;  string[i] != '\0';  i++)
+    {
+    if ((string[i] < 32 || string[i] > 126) && string[i] != '\t')
+        {
+        hasNonPrintable = TRUE;
+        break;
+        }
+    }
+return hasNonPrintable;
+}
+
+enum vsErrorType { vsNone=0, vsValid, vsBinary, vsWeird, vsData, vsVarLong, vsValLong };
+
+struct validityStats
+/* Watch out for incoming garbage data loaded as if it were a saved session file.
+ * This helps decide whether to just bail or simply remove some garbage and alert the user. */
+{
+    char *weirdCharsExample;    // First "cart variable" with unexpected punct/space/etc
+    char *dataExample;          // First "cart variable" that looks like custom track data
+    char *valTooLongExample;    // First cart variable whose value is too long to include.
+    uint validCount;            // Number of cart variables with no red flags, so *probably* ok.
+    uint binaryCount;           // Number of "cart variables" with binary data
+    uint weirdCharsCount;       // Number of "cart variables" with unexpected punct/space/etc
+    uint dataCount;             // Number of "cart variables" that look like custom track data
+    uint varTooLongCount;       // Number of "cart variables" whose length is too long.
+    uint varTooLongLength;      // Longest too-long cart var found.
+    uint valTooLongCount;       // Number of cart variables whose values are too long.
+    uint valTooLongLength;      // Longest too-long cart var value found.
+    enum vsErrorType lastType;  // The latest type of error, so we can roll back the previous call.
+};
+
+static void vsInit(struct validityStats *stats)
+/* Set all counts to 0 and pointers to NULL. */
+{
+ZeroVar(stats);
+}
+
+static void vsFreeMembers(struct validityStats *stats)
+/* Free all allocated members of stats (not stats itself, it may be a stack var). */
+{
+freeMem(stats->weirdCharsExample);
+freeMem(stats->dataExample);
+freeMem(stats->valTooLongExample);
+}
+
+static void vsGotValid(struct validityStats *stats)
+/* Update validity stats after finding a cart var with no obvious red flags.  (No guarantee
+ * it's actually a real cart variable, but at worst it's just bloating the cart a bit.) */
+{
+if (stats)
+    {
+    stats->validCount++;
+    stats->lastType = vsValid;
+    }
+}
+
+static void vsGotBinary(struct validityStats *stats)
+/* Update validity stats after finding unprintable characters in "cart var". */
+{
+if (stats)
+    {
+    stats->binaryCount++;
+    stats->lastType = vsBinary;
+    }
+}
+
+static void vsGotWeirdChar(struct validityStats *stats, char *var)
+/* Update validity stats after finding unexpected but printable characters in "cart var". */
+{
+if (stats)
+    {
+    stats->weirdCharsCount++;
+    if (stats->weirdCharsExample == NULL)
+        stats->weirdCharsExample = cloneString(var);
+    stats->lastType = vsWeird;
+    }
+}
+
+static void vsGotData(struct validityStats *stats, char *var)
+/* Update validity stats after finding apparent custom track data in "cart var". */
+{
+if (stats)
+    {
+    stats->dataCount++;
+    if (stats->dataExample == NULL)
+        stats->dataExample = cloneString(var);
+    stats->lastType = vsData;
+    }
+}
+
+static void vsGotVarTooLong(struct validityStats *stats, size_t varLen)
+/* Update validity stats after finding suspiciously lengthy "cart var". */
+{
+if (stats)
+    {
+    stats->varTooLongCount++;
+    stats->varTooLongLength = max(stats->varTooLongLength, varLen);
+    stats->lastType = vsVarLong;
+    }
+}
+
+static void vsGotValTooLong(struct validityStats *stats, char *var, size_t valLen)
+/* Update validity stats after finding cart var whose value is too long. */
+{
+if (stats)
+    {
+    stats->valTooLongCount++;
+    stats->valTooLongLength = max (stats->valTooLongLength, valLen);
+    if (stats->valTooLongExample == NULL)
+        stats->valTooLongExample = cloneString(var);
+    stats->lastType = vsValLong;
+    }
+}
+
+static void vsUndo(struct validityStats *stats)
+/* Roll back the latest increment to stats after finding an exceptional case.
+   Only one level of undo is supported.  Not supported for vs{Binary,VarLong,ValLong}. */
+{
+if (stats)
+    {
+    switch (stats->lastType)
+        {
+        case vsNone:
+            errAbort("vsUndo: nothing to undo (only one level of undo is possible)");
+            break;
+        case vsValid:
+            stats->validCount--;
+            stats->lastType = vsNone;
+            break;
+        case vsWeird:
+            stats->weirdCharsCount--;
+            if (stats->weirdCharsCount < 1)
+                freez(&stats->weirdCharsExample);
+            stats->lastType = vsNone;
+            break;
+        case vsData:
+            stats->dataCount--;
+            if (stats->dataCount < 1)
+                freez(&stats->dataExample);
+            stats->lastType = vsNone;
+            break;
+        case vsBinary:
+        case vsVarLong:
+        case vsValLong:
+            errAbort("vsUndo: not supported for lastType vsBinary, vsVarLong or vsValLong (%d)",
+                     stats->lastType);
+            break;
+        default:
+            errAbort("vsUndo: invalid lastType %d", stats->lastType);
+        }
+    }
+}
+
+static uint vsErrorCount(struct validityStats *stats)
+/* Return the sum of all error counts. */
+{
+return (stats->binaryCount +
+        stats->weirdCharsCount +
+        stats->dataCount +
+        stats->varTooLongCount +
+        stats->valTooLongCount);
+}
+
+#define CART_LOAD_TOO_MANY_ERRORS 100
+#define CART_LOAD_ENOUGH_VALID 20
+#define CART_LOAD_WAY_TOO_MANY_ERRORS 1000
+
+static boolean vsTooManyErrors(struct validityStats *stats)
+/* Return TRUE if the input seems to be completely invalid. */
+{
+if (stats)
+    {
+    uint errorSum = vsErrorCount(stats);
+    uint total = errorSum + stats->validCount;
+    return ((total > (CART_LOAD_TOO_MANY_ERRORS + CART_LOAD_ENOUGH_VALID) &&
+             errorSum > CART_LOAD_TOO_MANY_ERRORS &&
+             stats->validCount < CART_LOAD_ENOUGH_VALID) ||
+            errorSum > CART_LOAD_WAY_TOO_MANY_ERRORS);
+    }
+return FALSE;
+}
+
+#define CART_VAR_MAX_LENGTH 1024
+#define CART_VAL_MAX_LENGTH (64 * 1024)
+
+static void vsReport(struct validityStats *stats, struct dyString *dyMessage)
+/* Append summary/explanation to dyMessage.   */
+{
+if (stats && dyMessage)
+    {
+    boolean quitting = vsTooManyErrors(stats);
+    char *atLeast = (quitting ? "At least " : "");
+    dyStringPrintf(dyMessage, "<br>%d valid settings found.  ", stats->validCount);
+    if (stats->binaryCount || stats->weirdCharsCount || stats->dataCount ||
+        stats->varTooLongCount || stats->valTooLongCount)
+        dyStringPrintf(dyMessage, "<b>Note: invalid settings were found and omitted.</b>  ");
+    if (stats->binaryCount)
+        dyStringPrintf(dyMessage, "%s%d setting names contained binary data.  ",
+                       atLeast, stats->binaryCount);
+    if (stats->weirdCharsCount)
+        dyStringPrintf(dyMessage,
+                       "%s%d setting names contained unexpected characters, for example '%s'.  ",
+                       atLeast, stats->weirdCharsCount, htmlEncode(stats->weirdCharsExample));
+    if (stats->dataCount)
+        dyStringPrintf(dyMessage, "%s%d lines appeared to be custom track data, for example "
+                       "a line begins with '%s'.  ",
+                       atLeast, stats->dataCount, stats->dataExample);
+    if (stats->varTooLongCount)
+        dyStringPrintf(dyMessage, "%s%d setting names were too long (up to %d).  ",
+                       atLeast, stats->varTooLongCount, stats->varTooLongLength);
+    if (stats->valTooLongCount)
+        dyStringPrintf(dyMessage, "%s%d setting values were too long (up to %d).  ",
+                       atLeast, stats->valTooLongCount, stats->valTooLongLength);
+    if (quitting)
+        dyStringPrintf(dyMessage, "Encountered too many errors -- quitting.  ");
+    }
+}
+
+// Our timestamp vars (_, hgt_) are an exception to the usual cart var naming patterns:
+#define CART_VAR_TIMESTAMP "^([a-z]+)?_$"
+// Legitimate cart vars look like this (but so do some not-vars, so we filter further below):
+#define CART_VAR_VALID_CHARACTERS "^[A-Za-z]([A-Za-z0-9._:-]*[A-Za-z0-9]+)?$"
+
+// These are "cart variables" that are actually custom track data:
+static char *cartVarBlackList[] = { "X",
+                                    "Y",
+                                    "MT",
+                                    "fixedStep",
+                                    "variableStep",
+                                   };
+
+// Prefixes of "cart variables" from data files that have caused trouble in the past:
+static char *cartVarBlackListPrefix[] = { "ENS",                // Giant Ensembl gene info dump
+                                          "RRBS",               // Some other big tab-sep dump
+                                          "VGXS",               // Genotypes
+                                          NULL };
+
+// More complicated patterns of custom track or genotype data:
+static char *cartVarBlackListRegex[] = { "^chr[0-9XYMTUnLR]+(_[a-zA-Z0-9_]+)?$",
+                                         "^(chr)?[A-Z]{2}[0-9]{5}[0-9]+",
+                                         "^rs[0-9]+$",          // Genotypes
+                                         "^i[0-9]{5}[0-9]*$)",  // Genotypes
+                                         NULL };
+
+static boolean isValidCartVar(char *var, struct validityStats *stats)
+/* Return TRUE if var looks like a plausible cart variable name (as opposed to other stuff
+ * that users try to load in as saved-to-file session data).  If var doesn't look right,
+ * return FALSE and if stats is not NULL, record the problem. */
+{
+boolean isValid = TRUE;
+size_t varLen = strlen(var);
+if (containsNonPrintable(var))
+    {
+    vsGotBinary(stats);
+    isValid = FALSE;
+    }
+else if (varLen > CART_VAR_MAX_LENGTH)
+    {
+    vsGotVarTooLong(stats, varLen);
+    isValid = FALSE;
+    }
+else if (!regexMatch(var, CART_VAR_TIMESTAMP) &&
+         !regexMatch(var, CART_VAR_VALID_CHARACTERS))
+    {
+    vsGotWeirdChar(stats, var);
+    isValid = FALSE;
+    }
+else
+    {
+    if (stringArrayIx(var, cartVarBlackList, ArraySize(cartVarBlackList)) >= 0)
+        {
+        vsGotData(stats, var);
+        isValid = FALSE;
+        }
+    else
+        {
+        int i;
+        for (i = 0;  cartVarBlackListPrefix[i] != NULL;  i++)
+            {
+            if (startsWith(cartVarBlackListPrefix[i], var))
+                {
+                vsGotData(stats, var);
+                isValid = FALSE;
+                break;
+                }
+            }
+        if (isValid)
+            for (i = 0;  cartVarBlackListRegex[i] != NULL;  i++)
+                {
+                if (regexMatchNoCase(var, cartVarBlackListRegex[i]))
+                    {
+                    vsGotData(stats, var);
+                    isValid = FALSE;
+                    break;
+                    }
+                }
+        }
+    }
+if (isValid)
+    vsGotValid(stats);
+return isValid;
+}
+
+static char *encodeForHgSession(char *string)
+/* Allocate and return a new string with \-escaped '\\' and '\n' so that newline characters
+ * don't cause bogus cart variables to appear (while truncating the original value) in files
+ * downloaded from hgSession.  Convert "\r\n" and lone '\r' to '\n'. */
+{
+if (string == NULL)
+    return NULL;
+int inLen = strlen(string);
+char outBuf[2*inLen + 1];
+char *pIn, *pOut;
+for (pIn = string, pOut = outBuf;  *pIn != '\0';  pIn++)
+    {
+    if (*pIn == '\\')
+        {
+        *pOut++ = '\\';
+        *pOut++ = '\\';
+        }
+    else if (*pIn == '\r')
+        {
+        if (*(pIn+1) != '\n')
+            {
+            *pOut++ = '\\';
+            *pOut++ = 'n';
+            }
+        }
+    else if (*pIn == '\n')
+        {
+        *pOut++ = '\\';
+        *pOut++ = 'n';
+        }
+    else
+        *pOut++ = *pIn;
+    }
+*pOut = '\0';
+return cloneString(outBuf);
+}
+
+static void decodeForHgSession(char *string)
+/* Decode in place \-escaped '\\' and '\n' in string.  Note: some older files have only
+ * \n escaped, not backslashes -- so watch out for those. */
+{
+if (string == NULL)
+    return;
+char *pIn, *pOut;
+for (pIn = string, pOut = string;  *pIn != '\0';  pIn++, pOut++)
+    {
+    if (*pIn == '\\')
+        {
+        char *pNext = pIn + 1;
+        if (*pNext == 'n')
+            {
+            pIn++;
+            *pOut = '\n';
+            }
+        else if (*pNext == '\\')
+            {
+            pIn++;
+            *pOut = '\\';
+            }
+        else
+            // '\\' followed by anything other than '\\' or 'n' means we're reading in
+            // an older file in which '\\' was not escaped; ignore.
+            *pOut = *pIn;
+        }
+    else
+        *pOut = *pIn;
+    }
+*pOut = '\0';
+}
+
+// DEVELOPER NOTE: If you add anything to this list, verify that the specific multiline
+// input variable occurs in the middle of an alphabetically ordered cluster of variables
+// with the same CGI prefix.  If so, hasMultilineCgiPrefix needs to include the prefix.
+// If not then we need a new approach to detecting unencoded newlines.
+static char *multilineVars[] = { "hgS_newSessionDescription",
+                                 "hgta_enteredUserRegionFile",
+                                 "hgta_enteredUserRegions",
+                                 "hgta_pastedIdentifiers",
+                                 "hgva_hgvs",
+                                 "hgva_variantIds",
+                                 "phyloGif_tree",
+                                 "phyloPng_tree",
+                                 "suggestDetails" };
+
+static boolean isMultilineVar(char *var)
+/* Return TRUE if var may contain newlines that we forgot to encode for many years. */
+{
+return (var && stringArrayIx(var, multilineVars, ArraySize(multilineVars)) >= 0);
+}
+
+static boolean hasMultilineCgiPrefix(char *var)
+/* Return TRUE if var seems to come from the same CGI as a multiline var. */
+{
+boolean matches = FALSE;
+if (isNotEmpty(var))
+    {
+    if (startsWith("hgS_", var) ||
+        startsWith("hgta_", var) ||
+        startsWith("hgva_", var) ||
+        startsWith("phyloGif_", var) ||
+        startsWith("phyloPng_", var) ||
+        startsWith("suggest", var))
+        matches = TRUE;
+    }
+return matches;
+}
+
+static void extendPrevCartVar(struct cart *cart, char *prevVar, char *var, char *val)
+/* Concatenate newline and var/val onto previous variable's value. */
+{
+char *prevVal = cartString(cart, prevVar);
+struct dyString *dy = dyStringCreate("%s\n%s", prevVal, var);
+if (isNotEmpty(val))
+    dyStringPrintf(dy, " %s", val);
+cartSetString(cart, prevVar, dy->string);
+dyStringFree(&dy);
+}
+
+static void updatePrevVar(char **pPrevVar, char *var)
+/* If pPrevVar is not NULL, free the old value of *pPrevVar and set it to a clone of var. */
+{
+if (pPrevVar)
+    {
+    freeMem(*pPrevVar);
+    *pPrevVar = cloneString(var);
+    }
+}
+
+static boolean cartAddSettingIfValid(struct cart *cart, char *var, char *val,
+                                     struct validityStats *stats, char **pPrevVar,
+                                     boolean decodeVal)
+/* If var and val raise no red flags then add the setting to cart and return TRUE.
+ * Use *pPrevVar to detect and fix unencoded newlines.  Update *pPrevVar if setting is valid.
+ * If decodeVal, then call decodeForHgSession on val (from hgSession saved settings file). */
+{
+char *prevVar = pPrevVar ? *pPrevVar : NULL;
+boolean addToCart = TRUE;
+if (! isValidCartVar(var, stats))
+    {
+    // This might be a sign of garbage being uploaded as a session -- or it might
+    // be a case of unencoded newlines causing the appearance of bogus cart variables.
+    addToCart = FALSE;
+    if (isMultilineVar(prevVar) &&
+        (stats->lastType == vsWeird || stats->lastType == vsData))
+        {
+        // It's our fault with the unencoded newlines, don't count it as invalid cart var.
+        vsUndo(stats);
+        extendPrevCartVar(cart, prevVar, var, val);
+        }
+    }
+else if (isMultilineVar(prevVar))
+    {
+    // We need to watch out for "vars" that make it past the validity patterns
+    // but are part of unencoded multiline input.
+    // A bit dicey, but all of the multi-line variables that I know of occur
+    // in the middle of an alphabetized cluster of vars with the same prefix.
+    // DEVELOPER NOTE: check that assumption when changing multilineVars/hasMultilineCgiPrefix.
+    if (! hasMultilineCgiPrefix(var))
+        {
+        extendPrevCartVar(cart, prevVar, var, val);
+        addToCart = FALSE;
+        }
+    else
+        {
+        // Check cart var length post-extension.
+        char *extendedVal = cartOptionalString(cart, prevVar);
+        size_t extendedValLen = strlen(extendedVal);
+        if (extendedValLen > CART_VAL_MAX_LENGTH)
+            {
+            vsGotValTooLong(stats, prevVar, extendedValLen);
+            cartRemove(cart, prevVar);
+            }
+        }
+    }
+if (addToCart)
+    {
+    if (val != NULL)
+        {
+        size_t valLen = strlen(val);
+        if (valLen > CART_VAL_MAX_LENGTH)
+            {
+            addToCart = FALSE;
+            vsGotValTooLong(stats, var, valLen);
+            }
+        else
+            {
+            if (decodeVal)
+                decodeForHgSession(val);
+            cartAddString(cart, var, val);
+            updatePrevVar(pPrevVar, var);
+            }
+        }
+    else if (var != NULL)
+        {
+        cartSetString(cart, var, "");
+        updatePrevVar(pPrevVar, var);
+        }
+    }
+return addToCart;
+}
+
+boolean cartLoadSettingsFromUserInput(struct lineFile *lf, struct cart *cart, struct hash *oldVars,
+                                      char *actionVar, struct dyString *dyMessage)
+/* Verify that the user data in lf looks like valid settings (hgSession saved file;
+ * like cartDump output, but values may or may not be htmlEncoded).
+ * Older session files may have unencoded newlines, causing bogus variables;
+ * watch out for those after pasted input variables like hgta_pastedIdentifiers.
+ * Users have uploaded custom tracks, DTC genotypes, hgTracks HTML, even
+ * binary data files.  Look for problematic patterns observed in the past.
+ * Load settings into current session, and then reload the CGI settings
+ * (to support override of session settings).
  * If non-NULL, oldVars will contain values overloaded when reloading CGI.
  * If non-NULL, actionVar is a cartRemove wildcard string specifying the
- * CGI action variable that sent us here. */
+ * CGI action variable that sent us here.
+ * If input contains suspect data, then add diagnostics to dyMessage.  If input
+ * contains so much garbage that we shouldn't even try to load what passes the filters,
+ * return FALSE. */
 {
+boolean isValidEnough = TRUE;
 char *line = NULL;
 int size = 0;
 char *sessionVar = cartSessionVarName();
@@ -636,38 +1124,50 @@ if (sessionTableString != NULL)
 if (pubSessionsTableString != NULL)
     cartSetString(cart, hgPublicSessionsTableState, pubSessionsTableString);
 
+char *prevVar = NULL;
+struct validityStats stats;
+vsInit(&stats);
 while (lineFileNext(lf, &line, &size))
     {
-    char *var = nextWord(&line);
-    if (isEmpty(var))
-        // blank line
+    char *var = line;
+    // We actually want to keep leading spaces intact... they're a sign of var not being a real var.
+    char *p = skipLeadingSpaces(var);
+    if (!p)
+        p = var;
+    char *val = skipToSpaces(p);
+    if (val)
+        *val++ = '\0';
+    if (isEmpty(var) || var[0] == '#')
+        // Ignore blank line / comment
         continue;
-    char *val = line;
-
-    if (sameString(var, sessionVar))
+    else if (sameString(var, sessionVar))
+        // Ignore old sessionVar (already set above)
 	continue;
-    else
-	{
-	if (val != NULL)
-	    {
-	    struct dyString *dy = dyStringSub(val, "\\n", "\n");
-	    cartAddString(cart, var, dy->string);
-	    dyStringFree(&dy);
-	    }
-	else if (var != NULL)
-	    {
-	    cartSetString(cart, var, "");
-	    }
-	} /* not hgsid */
-    } /* each line */
-if (oldVars)
-    hashEmpty(oldVars);
-/* Overload settings explicitly passed in via CGI (except for the
- * command that sent us here): */
-loadCgiOverHash(cart, oldVars);
-
+    else if (! cartAddSettingIfValid(cart, var, val, &stats, &prevVar, TRUE))
+        {
+        if (vsTooManyErrors(&stats))
+            {
+            isValidEnough = FALSE;
+            break;
+            }
+        }
+    }
+freeMem(prevVar);
+if (stats.validCount == 0 && vsErrorCount(&stats) > 0)
+    isValidEnough = FALSE;
+if (isValidEnough)
+    {
+    if (oldVars)
+        hashEmpty(oldVars);
+    /* Overload settings explicitly passed in via CGI (except for the
+     * command that sent us here): */
+    loadCgiOverHash(cart, oldVars);
+    }
 if (isNotEmpty(actionVar))
     cartRemove(cart, actionVar);
+vsReport(&stats, dyMessage);
+vsFreeMembers(&stats);
+return isValidEnough;
 }
 
 static char *now()
@@ -739,6 +1239,10 @@ if (id != NULL)
     char buffer[1024];
     safef(buffer, sizeof buffer, "hgHubConnect.hub.%s", id);
     cartRemove(cart, buffer);
+
+    // now we need to remove any custom tracks that are on this hub
+    safef(buffer, sizeof buffer, "ctfile_hub_%s", id);
+    cartRemovePrefix(cart, buffer);
     }
 
 cartRemove(cart, "hubId");
@@ -839,10 +1343,16 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 	{
 	char *url = cartString(cart, hgsLoadUrlName);
 	struct lineFile *lf = netLineFileOpen(url);
-	cartLoadSettings(lf, cart, oldVars, hgsDoLoadUrl);
+        struct dyString *dyMessage = dyStringNew(0);
+	boolean ok = cartLoadSettingsFromUserInput(lf, cart, oldVars, hgsDoLoadUrl, dyMessage);
 	lineFileClose(&lf);
 	cartTrace(cart, "after cartLS", conn);
-	didSessionLoad = TRUE;
+        if (! ok)
+            {
+            warn("Unable to load session file: %s", dyMessage->string);
+            }
+	didSessionLoad = ok;
+        dyStringFree(&dyMessage);
 	}
     }
 #endif /* GBROWSE */
@@ -858,11 +1368,6 @@ if (didSessionLoad)
 pushWarnHandler(cartHubWarn);
 char *newDatabase = hubConnectLoadHubs(cart);
 popWarnHandler();
-
-#ifndef GBROWSE
-if (didSessionLoad)
-    cartCopyCustomTracks(cart);
-#endif /* GBROWSE */
 
 if (newDatabase != NULL)
     {
@@ -947,20 +1452,9 @@ struct dyString *encoded = newDyString(4096);
 /* Make up encoded string holding all variables. */
 cartEncodeState(cart, encoded);
 
-/* Make up update statement unless it looks like a robot with
- * a great bunch of variables. */
-if (encoded->stringSize < 16*1024 || cart->userInfo->useCount > 0)
-    {
-    updateOne(conn, userDbTable(), cart->userInfo, encoded->string, encoded->stringSize);
-    updateOne(conn, sessionDbTable(), cart->sessionInfo, encoded->string, encoded->stringSize);
-    }
-else
-    {
-    fprintf(stderr, "Cart stuffing bot?  Not writing %d bytes to cart on first use of %d from IP=%s\n",
-            encoded->stringSize, cart->userInfo->id, cgiRemoteAddr());
-    /* Do increment the useCount so that cookie-users don't get stuck here: */
-    updateOne(conn, userDbTable(), cart->userInfo, "", 0);
-    }
+/* update sessionDb and userDb tables (removed check for cart stuffing bots) */
+updateOne(conn, userDbTable(), cart->userInfo, encoded->string, encoded->stringSize);
+updateOne(conn, sessionDbTable(), cart->sessionInfo, encoded->string, encoded->stringSize);
 
 /* Cleanup */
 cartDefaultDisconnector(&conn);
@@ -985,6 +1479,17 @@ if (cart != NULL)
     }
 }
 
+void cartSaveState(struct cart *cart)
+/* Free up cart and save it to database.
+ * Intended for updating cart before background CGI runs.
+ * Use cartCheckout() instead. */
+{
+if (cart != NULL)
+    {
+    saveState(cart);
+    }
+}
+
 char *cartSessionVarName()
 /* Return name of CGI session ID variable. */
 {
@@ -997,6 +1502,12 @@ char *cartSessionId(struct cart *cart)
 static char buf[256];
 cartDbSecureId(buf, sizeof buf, cart->sessionInfo);
 return buf;
+}
+
+unsigned cartSessionRawId(struct cart *cart)
+/* Return raw session id without security key. */
+{
+return cart->sessionInfo->id;
 }
 
 char *cartSidUrlString(struct cart *cart)
@@ -1013,6 +1524,12 @@ char *cartUserId(struct cart *cart)
 static char buf[256];
 cartDbSecureId(buf, sizeof buf, cart->userInfo);
 return buf;
+}
+
+unsigned cartUserRawId(struct cart *cart)
+/* Return raw user id without security key. */
+{
+return cart->userInfo->id;
 }
 
 static char *cartMultShadowVar(struct cart *cart, char *var)
@@ -1453,11 +1970,21 @@ void cartSaveSession(struct cart *cart)
 cgiMakeHiddenVar(sessionVar, cartSessionId(cart));
 }
 
-static void cartDumpItem(struct hashEl *hel,boolean asTable)
-/* Dump one item in cart hash */
+static void cartDumpItem(struct hashEl *hel, boolean asTable, boolean encodeAsHtml)
+/* Dump one item in cart hash.  If encodeAsHtml, call htmlEncode on variable name and value;
+ * otherwise, call encodeForHgSession on value. */
 {
-char *var = htmlEncode(hel->name);
-char *val = htmlEncode((char *)(hel->val));
+char *var = hel->name, *val = NULL;
+if (encodeAsHtml)
+    {
+    var = htmlEncode(hel->name);
+    val = htmlEncode((char *)(hel->val));
+    }
+else
+    {
+    val = encodeForHgSession((char *)(hel->val));
+    }
+
 if (asTable)
     {
     printf("<TR><TD>%s</TD><TD>", var);
@@ -1470,13 +1997,16 @@ if (asTable)
     }
 else
     printf("%s %s\n", var, val);
-
-freeMem(var);
 freeMem(val);
+if (encodeAsHtml)
+    freeMem(var);
 }
 
-void cartDumpList(struct hashEl *elList,boolean asTable)
-/* Dump list of cart variables optionally as a table with ajax update support. */
+static void cartDumpList(struct hashEl *elList, boolean asTable, boolean encodeAsHtml)
+/* Dump list of cart variables optionally as a table with ajax update support.
+ * If encodeAsHtml, call htmlEncode on variable name and value; otherwise, call
+ * encodeForHgSession on value to prevent newlines from corrupting settings saved
+ * to a file. */
 {
 struct hashEl *el;
 
@@ -1486,7 +2016,7 @@ slSort(&elList, hashElCmp);
 if (asTable)
     printf("<table>\n");
 for (el = elList; el != NULL; el = el->next)
-    cartDumpItem(el,asTable);
+    cartDumpItem(el, asTable, encodeAsHtml);
 if (asTable)
     {
     printf("<tr><td colspan=2>&nbsp;&nbsp;<em>count: %d</em></td></tr>\n",slCount(elList));
@@ -1495,25 +2025,33 @@ if (asTable)
 hashElFreeList(&elList);
 }
 
+void cartDumpHgSession(struct cart *cart)
+/* Dump contents of cart with escaped newlines for hgSession output files.
+ * Cart variable "cartDumpAsTable" is ignored. */
+{
+struct hashEl *elList = hashElListHash(cart->hash);
+cartDumpList(elList, FALSE, FALSE);
+}
+
 void cartDump(struct cart *cart)
 /* Dump contents of cart. */
 {
 struct hashEl *elList = hashElListHash(cart->hash);
-cartDumpList(elList,cartVarExists(cart,CART_DUMP_AS_TABLE));
+cartDumpList(elList,cartVarExists(cart,CART_DUMP_AS_TABLE), TRUE);
 }
 
 void cartDumpPrefix(struct cart *cart, char *prefix)
 /* Dump all cart variables with prefix */
 {
 struct hashEl *elList = cartFindPrefix(cart, prefix);
-cartDumpList(elList,cartVarExists(cart,CART_DUMP_AS_TABLE));
+cartDumpList(elList,cartVarExists(cart,CART_DUMP_AS_TABLE), TRUE);
 }
 
 void cartDumpLike(struct cart *cart, char *wildcard)
 /* Dump all cart variables matching wildcard */
 {
 struct hashEl *elList = cartFindLike(cart, wildcard);
-cartDumpList(elList,cartVarExists(cart,CART_DUMP_AS_TABLE));
+cartDumpList(elList,cartVarExists(cart,CART_DUMP_AS_TABLE), TRUE);
 }
 
 char *cartFindFirstLike(struct cart *cart, char *wildCard)
@@ -1705,7 +2243,10 @@ char *logProxy = cfgOption("logProxy");
 if (logProxy)
     setenv("log_proxy", logProxy, TRUE);
 
-char *hguid = getCookieId(cookieName);
+// if ignoreCookie is on the URL, don't check for cookies
+char *hguid = NULL;
+if (cgiOptionalString("ignoreCookie") == NULL)
+    hguid = getCookieId(cookieName);
 char *hgsid = getSessionId();
 struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
 cartExclude(cart, sessionVar);
@@ -1806,13 +2347,23 @@ htmStart(stdout, title);
 didCartHtmlStart = TRUE;
 }
 
+static void cartVaWebStartMaybeHeader(struct cart *cart, char *db, boolean withHttpHeader,
+                                      char *format, va_list args)
+/* Print out optional Content-Type and pretty wrapper around things when working from cart. */
+{
+pushWarnHandler(htmlVaWarn);
+webStartWrapper(cart, trackHubSkipHubName(db), format, args, withHttpHeader, FALSE);
+inWeb = TRUE;
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("utils.js", NULL);
+jsIncludeFile("ajax.js", NULL);
+}
+
 void cartVaWebStart(struct cart *cart, char *db, char *format, va_list args)
 /* Print out pretty wrapper around things when working
  * from cart. */
 {
-pushWarnHandler(htmlVaWarn);
-webStartWrapper(cart, trackHubSkipHubName(db), format, args, FALSE, FALSE);
-inWeb = TRUE;
+cartVaWebStartMaybeHeader(cart, db, FALSE, format, args);
 }
 
 void cartWebStart(struct cart *cart, char *db, char *format, ...)
@@ -1823,16 +2374,26 @@ va_list args;
 va_start(args, format);
 cartVaWebStart(cart, db, format, args);
 va_end(args);
-jsIncludeFile("jquery.js", NULL);
-jsIncludeFile("utils.js", NULL);
-jsIncludeFile("ajax.js", NULL);
-// WTF - variable outside of a form on almost every page we make below?
-// Tim put this in.  Talking with him it sounds like some pages might actually
-// depend on it.  Not removing it until we have a chance to test.  Best fix
-// might be to add it to cartSaveSession, though this would then no longer be
-// well named, and not all things have 'db.'  Arrr.  Probably best to remove
-// and test a bunch.
-cgiMakeHiddenVar("db", db);  
+if (isNotEmpty(db))
+    {
+    // Why do we put an input outside of a form on almost every page we make?
+    // Tim put this in.  Talking with him it sounds like some pages might actually
+    // depend on it.  Not removing it until we have a chance to test.  Best fix
+    // might be to add it to cartSaveSession, though this would then no longer be
+    // well named, and not all things have 'db.'  Arrr.  Probably best to remove
+    // and test a bunch.
+    cgiMakeHiddenVar("db", db);
+    }
+}
+
+void cartWebStartHeader(struct cart *cart, char *db, char *format, ...)
+/* Print out Content-type header and then pretty wrapper around things when working
+ * from cart. */
+{
+va_list args;
+va_start(args, format);
+cartVaWebStartMaybeHeader(cart, db, TRUE, format, args);
+va_end(args);
 }
 
 void cartWebEnd()
@@ -1903,6 +2464,19 @@ if(isNotEmpty(cartTheme))
     }
 }
 
+void cartSetLastPosition(struct cart *cart, char *position, struct hash *oldVars)
+/* If position and oldVars are non-NULL, and oldVars' position is different, add it to the cart
+ * as lastPosition.  This is called by cartHtmlShell{,WithHead} but not other cart openers;
+ * it should be called after cartGetPosition or equivalent. */
+{
+if (position != NULL && oldVars != NULL)
+    {
+    struct hashEl *oldPos = hashLookup(oldVars, positionCgiName);
+    if (oldPos != NULL && differentString(position, oldPos->val))
+        cartSetString(cart, "lastPosition", oldPos->val);
+    }
+}
+
 void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart *cart),
 	char *cookieName, char **exclude, struct hash *oldVars)
 /* Load cart from cookie and session cgi variable.  Write web-page
@@ -1919,12 +2493,7 @@ cart = cartAndCookie(cookieName, exclude, oldVars);
 getDbAndGenome(cart, &db, &org, oldVars);
 pos = cartGetPosition(cart, db, NULL);
 pos = addCommasToPos(db, stripCommas(pos));
-if (pos != NULL && oldVars != NULL)
-    {
-    struct hashEl *oldPos = hashLookup(oldVars, positionCgiName);
-    if (oldPos != NULL && differentString(pos, oldPos->val))
-        cartSetString(cart, "lastPosition", oldPos->val);
-    }
+cartSetLastPosition(cart, pos, oldVars);
 safef(titlePlus, sizeof(titlePlus), "%s %s %s %s", 
                     org ? trackHubSkipHubName(org) : "", db ? db : "",  pos ? pos : "", title);
 popWarnHandler();
@@ -2850,6 +3419,9 @@ if (sameWord("yes", cfgOptionDefault("browser.cgiTime", "yes")) )
         cgiName, clock1000() - enteredMainTime);
 }
 
+// TODO This should probably be moved to customFactory.c
+// Only used by hgSession 
+#include "errCatch.h"
 void cartCheckForCustomTracks(struct cart *cart, struct dyString *dyMessage)
 /* Scan cart for ctfile_<db> variables.  Tally up the databases that have
  * live custom tracks and those that have expired custom tracks. */
@@ -2859,12 +3431,13 @@ struct hashEl *helList = cartFindPrefix(cart, CT_FILE_VAR_PREFIX);
 if (helList != NULL)
     {
     struct hashEl *hel;
-    boolean gotLiveCT = FALSE, gotExpiredCT = FALSE;
-    struct slName *liveDbList = NULL, *expiredDbList = NULL, *sln = NULL;
+    boolean gotLiveCT = FALSE, gotExpiredCT = FALSE, gotErrorCT = FALSE;
+    struct slName *liveDbList = NULL, *expiredDbList = NULL,  *errorDbList = NULL, *sln = NULL;
     for (hel = helList;  hel != NULL;  hel = hel->next)
 	{
 	char *db = hel->name + strlen(CT_FILE_VAR_PREFIX);
-	boolean thisGotLiveCT = FALSE, thisGotExpiredCT = FALSE;
+	boolean thisGotLiveCT = FALSE, thisGotExpiredCT = FALSE, thisGotErrorCT = FALSE;
+	char errMsg[4096];
 	/* If the file doesn't exist, just remove the cart variable so it
 	 * doesn't get copied from session to session.  If it does exist,
 	 * leave it up to customFactoryTestExistence to parse the file for
@@ -2877,15 +3450,29 @@ if (helList != NULL)
 	    }
 	else
 	    {
-	    customFactoryTestExistence(db, hel->val,
-				       &thisGotLiveCT, &thisGotExpiredCT);
+	    /* protect against errAbort */
+	    struct errCatch *errCatch = errCatchNew();
+	    if (errCatchStart(errCatch))
+		{
+		customFactoryTestExistence(db, hel->val, &thisGotLiveCT, &thisGotExpiredCT, NULL);
+		}
+	    errCatchEnd(errCatch);
+	    if (errCatch->gotError)  // tends to abort if db not found or hub not attached.
+		{
+		thisGotErrorCT = TRUE;
+		safef(errMsg, sizeof errMsg, "%s {%s}", db, errCatch->message->string);
+		}
+	    errCatchFree(&errCatch);
 	    }
 	if (thisGotLiveCT)
 	    slNameAddHead(&liveDbList, db);
 	if (thisGotExpiredCT)
 	    slNameAddHead(&expiredDbList, db);
+	if (thisGotErrorCT)
+	    slNameAddHead(&errorDbList, errMsg);
 	gotLiveCT |= thisGotLiveCT;
 	gotExpiredCT |= thisGotExpiredCT;
+	gotErrorCT |= thisGotErrorCT;
 	}
     if (gotLiveCT)
 	{
@@ -2908,6 +3495,18 @@ if (helList != NULL)
 		       "<P>Note: the session has at least one expired custom "
 		       "track (in database ");
 	for (sln = expiredDbList;  sln != NULL;  sln = sln->next)
+	    dyStringPrintf(dyMessage, "%s%s",
+			   sln->name, (sln->next ? sln->next->next ? ", " : " and " : ""));
+	dyStringPrintf(dyMessage,
+		       "), so it may not appear as originally intended.  ");
+	}
+    if (gotErrorCT)
+	{
+	slSort(&errorDbList, slNameCmp);
+	dyStringPrintf(dyMessage,
+		       "<P>Note: the session has at least one custom "
+		       "track with errors (in database ");
+	for (sln = errorDbList;  sln != NULL;  sln = sln->next)
 	    dyStringPrintf(dyMessage, "%s%s",
 			   sln->name, (sln->next ? sln->next->next ? ", " : " and " : ""));
 	dyStringPrintf(dyMessage,
@@ -2991,7 +3590,7 @@ if (sameOk(cgiOptionalString("position"), "lastDbPos"))
     
 if (position == NULL)
     {
-    position = cloneString(cartUsualString(cart, "position", NULL));
+    position = windowsToAscii(cloneString(cartUsualString(cart, "position", NULL)));
     }
 
 /* default if not set at all, as would happen if it came from a URL with no

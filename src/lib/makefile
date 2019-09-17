@@ -28,7 +28,7 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     gfNet.o gff.o gff3.o gfxPoly.o gifLabel.o \
     hacTree.o hash.o hex.o histogram.o hmmPfamParse.o hmmstats.o htmlColor.o htmlPage.o htmshell.o \
     hmac.o https.o intExp.o intValTree.o internet.o itsa.o iupac.o \
-    jointalign.o jpegSize.o jsonParse.o jsonWrite.o \
+    jointalign.o jpegSize.o jsonParse.o jsonQuery.o jsonWrite.o \
     keys.o knetUdc.o kxTok.o linefile.o lineFileOnBigBed.o localmem.o log.o longTabix.o longToList.o \
     maf.o mafFromAxt.o mafScore.o mailViaPipe.o md5.o memalloc.o \
     memgfx.o meta.o metaWig.o mgCircle.o \
@@ -39,11 +39,11 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     psl.o pslGenoShow.o pslShow.o pslTbl.o pslTransMap.o pthreadDoList.o pthreadWrap.o \
     qa.o quickHeap.o quotedP.o \
     ra.o rainbow.o raToStruct.o rbTree.o rangeTree.o regexHelper.o repMask.o \
-    rle.o rnautil.o rqlEval.o rqlParse.o rudp.o \
+    rle.o rnautil.o rqlEval.o rqlParse.o rqlToSql.o rudp.o \
     scoreWindow.o seg.o seqOut.o seqStats.o servBrcMcw.o servCrunx.o \
     servcis.o servcl.o servmsII.o servpws.o shaRes.o slog.o snof.o \
     snofmake.o snofsig.o spaceSaver.o spacedColumn.o spacedSeed.o \
-    splatAli.o sqlList.o sqlNum.o sqlReserved.o subText.o sufa.o sufx.o synQueue.o \
+    splatAli.o sqlList.o sqlNum.o sqlReserved.o strex.o subText.o sufa.o sufx.o synQueue.o \
     tabRow.o tagSchema.o tagStorm.o tagToJson.o tagToSql.o textOut.o tokenizer.o trix.o twoBit.o \
     udc.o uuid.o vcf.o vcfBits.o vGfx.o vPng.o verbose.o \
     wildcmp.o windowsToAscii.o wormdna.o \

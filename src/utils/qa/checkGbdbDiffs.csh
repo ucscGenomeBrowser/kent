@@ -38,7 +38,7 @@ endif
 
 set todayDate=`date +%Y%m%d`
 set outpath="/usr/local/apache/htdocs-genecats/qa/test-results/gbdb"
-set urlpath="http://genecats.cse.ucsc.edu/qa/test-results/gbdb"
+set urlpath="http://genecats.soe.ucsc.edu/qa/test-results/gbdb"
 
 # get the two files to compare or create if none for today
 if ($mode == "override" ) then
@@ -46,7 +46,7 @@ if ($mode == "override" ) then
 endif
 
 if (! -e $outpath/gbdb.all.$todayDate) then
-  ssh hgwbeta find /gbdb -type f -print | sort > $outpath/gbdb.all.$todayDate
+  ssh hgwbeta find /gbdb/ -type f -print | sort > $outpath/gbdb.all.$todayDate
 endif
 
 set twoFiles=`ls -ltr $outpath | grep all | tail -2 | awk '{print $NF}'`

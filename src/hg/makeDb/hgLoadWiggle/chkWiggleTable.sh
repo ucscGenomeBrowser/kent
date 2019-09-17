@@ -32,13 +32,13 @@ TABLE=$2
 
 echo "Checking Table: ${DB}.${TABLE}"
 
-C=`hgsql -N --host=hgwdev.cse.ucsc.edu --user=hguser --password=hguserstuff \
+C=`hgsql -N --host=hgwdev.soe.ucsc.edu --user=hguser --password=hguserstuff \
 	-e "describe ${TABLE};" ${DB} | \
 	egrep "chromStart|span|dataRange|sumSquares" | wc -l`
 
 if [ "${C}" -ne 4 ]; then
     echo "ERROR: table ${DB}.${TABLE} does not appear to be a wiggle table ?"
-    hgsql --host=hgwdev.cse.ucsc.edu --user=hguser --password=hguserstuff \
+    hgsql --host=hgwdev.soe.ucsc.edu --user=hguser --password=hguserstuff \
 	-e "describe ${TABLE};" ${DB}
     usage
     exit 255
@@ -47,7 +47,7 @@ fi
 #	A temporary file to save chromInfo results
 CI=/tmp/chkWig_chromInfo.$$
 
-hgsql -N --host=hgwdev.cse.ucsc.edu --user=hguser --password=hguserstuff \
+hgsql -N --host=hgwdev.soe.ucsc.edu --user=hguser --password=hguserstuff \
 	-e "select * from chromInfo;" ${DB} > "${CI}"
 
 #	A temporary file to construct the bed intersection file
@@ -76,7 +76,7 @@ fi
 RF=/tmp/chkWig_${DB}.${TABLE}.$$
 HGDB_CONF=/tmp/chkWig_hg.conf.$$
 export HGDB_CONF
-echo "db.host=hgwdev.cse.ucsc.edu" > "${HGDB_CONF}"
+echo "db.host=hgwdev.soe.ucsc.edu" > "${HGDB_CONF}"
 echo "db.user=hguser" >> "${HGDB_CONF}"
 echo "db.password=hguserstuff" >> "${HGDB_CONF}"
 chmod 600 "${HGDB_CONF}"

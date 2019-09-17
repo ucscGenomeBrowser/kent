@@ -53,9 +53,7 @@ while (lineFileRowTab(lf, row))
     if (captionId == 0)
         {
 	dyStringClear(sql);
-	sqlDyStringAppend(sql, "insert into caption values(default, \"");
-	dyStringAppend(sql, caption);
-	dyStringAppend(sql, "\")");
+	sqlDyStringPrintf(sql, "insert into caption values(default, '%s')", caption);
 	sqlUpdate(conn, sql->string);
 	verbose(1, "%s\n", sql->string);
 	captionId = sqlLastAutoId(conn);
@@ -63,8 +61,8 @@ while (lineFileRowTab(lf, row))
 	}
     dyStringClear(sql);
     sqlDyStringPrintf(sql, "update imageFile set caption=%d ", captionId);
-    dyStringPrintf(sql, "where submissionSet=%d ", gensatId);
-    dyStringPrintf(sql, "and submitId = \"%s\"", submitId);
+    sqlDyStringPrintf(sql, "where submissionSet=%d ", gensatId);
+    sqlDyStringPrintf(sql, "and submitId = '%s'", submitId);
     sqlUpdate(conn, sql->string);
     verbose(1, "%s\n", sql->string);
     }

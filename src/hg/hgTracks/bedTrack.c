@@ -14,6 +14,8 @@
 #include "cds.h"
 #include "bedTabix.h"
 #include "obscure.h"
+#include "bigBedFilter.h"
+#include "bigBedLabel.h"
 
 #define SEQ_DELIM '~'
 
@@ -33,66 +35,6 @@ ret->name = cloneString(buf);
 return ret;
 }
 
-static void calculateLabelFields(struct track *track)
-/* Figure out which fields are available to label a bigBed track. */
-{
-struct bbiFile *bbi = fetchBbiForTrack(track);
-struct asObject *as = bigBedAsOrDefault(bbi);
-struct slPair *labelList = buildFieldList(track->tdb, "labelFields",  as);
-
-if (labelList == NULL)
-    {
-    // There is no labelFields entry in the trackDb.
-    // If there is a name, use it by default, otherwise no label by default 
-    if (track->bedSize > 3)
-        slAddHead(&track->labelColumns, slIntNew(3));
-    }
-else if (sameString(labelList->name, "none"))
-    return;  // no label
-else
-    {
-    // what has the user said to use as a label
-    char cartVar[1024];
-    safef(cartVar, sizeof cartVar, "%s.label", track->tdb->track);
-    struct hashEl *labelEl = cartFindPrefix(cart, cartVar);
-    struct hash *onHash = newHash(4);
-
-    // fill hash with fields that should be used for labels
-    // first turn on all the fields that are in defaultLabelFields
-    struct slPair *defaultLabelList = buildFieldList(track->tdb, "defaultLabelFields",  as);
-    if (defaultLabelList != NULL)
-        {
-        for(; defaultLabelList; defaultLabelList = defaultLabelList->next)
-            hashStore(onHash, defaultLabelList->name);
-        }
-    else
-        // no default list, use first entry in labelFields as default
-        hashStore(onHash, labelList->name);
-
-    // use cart variables to tweak the default-on hash
-    for(; labelEl; labelEl = labelEl->next)
-        {
-        /* the field name is after the <trackName>.label string */
-        char *fieldName = &labelEl->name[strlen(cartVar) + 1];
-
-        if (sameString((char *)labelEl->val, "1"))
-            hashStore(onHash, fieldName);
-        else if (sameString((char *)labelEl->val, "0"))
-            hashRemove(onHash, fieldName);
-        }
-
-    struct slPair *thisLabel = labelList;
-    for(; thisLabel; thisLabel = thisLabel->next)
-        {
-        if (hashLookup(onHash, thisLabel->name))
-            {
-            // put this column number in the list of columns to use to make label
-            slAddHead(&track->labelColumns, slIntNew(ptToInt(thisLabel->val)));
-            }
-        }
-    slReverse(&track->labelColumns);
-    }
-}
 
 char *bedName(struct track *tg, void *item);
 
@@ -140,26 +82,30 @@ if (startsWith("bedTabix", tg->tdb->type ) || startsWith("longTabix", tg->tdb->t
     }
 else if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
-    char *scoreFilter = cartOrTdbString(cart, tg->tdb, "scoreFilter", NULL);
     struct lm *lm = lmInit(0);
     struct bigBedInterval *bb, *bbList = bigBedSelectRange(tg, chromName, winStart, winEnd, lm);
-    char *bedRow[32];
+    struct bbiFile *bbi = fetchBbiForTrack(tg);
+    char *bedRow[bbi->fieldCount];
     char startBuf[16], endBuf[16];
-    int minScore = 0;
-    if (scoreFilter)
-	minScore = atoi(scoreFilter);
+    struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, tg->tdb);
 
      if (tg->itemName == bedName && !trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
         tg->itemName = bigBedItemName;
 
-    calculateLabelFields(tg);
+    bigBedLabelCalculateFields(cart, tg->tdb, bbi,  &tg->labelColumns);
     for (bb = bbList; bb != NULL; bb = bb->next)
         {
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+        if (!bigBedFilterInterval(bedRow, filters))
+            continue;
         bed = loader(bedRow);
-        bed->label = makeLabel(tg, bb);
-        if (scoreFilter == NULL || bed->score >= minScore)
-            slAddHead(&list, bed);
+        // FIXME BRANEY: either disable for all tracks with NUM_FIELDS > label field or better,
+        // fix how label is stored so it doesn't trash custom bed field
+        // BRANEY says: the loader should be returning bed structures which include the label field.
+        if (differentString(tg->tdb->type, "bigInteract"))
+            bed->label = bigBedMakeLabel(tg->tdb, tg->labelColumns, bb, chromName);
+
+        slAddHead(&list, bed);
         }
     lmCleanup(&lm);
     }
@@ -289,7 +235,8 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
-    calculateLabelFields(tg);
+    struct bbiFile *bbi = fetchBbiForTrack(tg);
+    bigBedLabelCalculateFields(cart, tg->tdb, bbi,  &tg->labelColumns);
     bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 9, &lfList);
     }
@@ -340,7 +287,8 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
-    calculateLabelFields(tg);
+    struct bbiFile *bbi = fetchBbiForTrack(tg);
+    bigBedLabelCalculateFields(cart, tg->tdb, bbi,  &tg->labelColumns);
     bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 8, &lfList);
     }
@@ -539,7 +487,8 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
-    calculateLabelFields(tg);
+    struct bbiFile *bbi = fetchBbiForTrack(tg);
+    bigBedLabelCalculateFields(cart, tg->tdb, bbi,  &tg->labelColumns);
     bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 12, &lfList);
     }

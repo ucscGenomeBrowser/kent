@@ -148,12 +148,12 @@ while (lineFileRowTab(lf, words))
 	int i;
 	for (i=0; i<ev->accCount; ++i)
 	    {
-	    sqlSafef(query, sizeof(query), "select geneName from gbCdnaInfo where acc='%s'", acc);
+	    sqlSafef(query, sizeof(query), "select geneName from hgFixed.gbCdnaInfo where acc='%s'", acc);
 	    int nameId = sqlQuickNum(gConn, query);
 	    if (nameId != 0)
 		{
 		char name[64];
-		sqlSafef(query, sizeof(query), "select name from geneName where id=%d", nameId);
+		sqlSafef(query, sizeof(query), "select name from hgFixed.geneName where id=%d", nameId);
 		if (sqlQuickQuery(gConn, query, name, sizeof(name)))
 		    outAlias(fAlias, id, name);
 		}

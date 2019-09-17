@@ -710,7 +710,7 @@ return FALSE;
 
 void *slNameFind(void *list, char *string)
 /* Return first element of slName list (or any other list starting
- * with next/name fields) that matches string. */
+ * with next/name fields) that matches string. This is case insensitive. */
 {
 struct slName *el;
 for (el = list; el != NULL; el = el->next)
@@ -798,6 +798,42 @@ while (s != NULL && s[0] != 0)
     slAddHead(&list, el);
     s = e;
     }
+slReverse(&list);
+return list;
+}
+
+struct slName *slNameListFromCommaEscaped(char *s)
+/* Return list of slNames gotten from parsing comma delimited string.
+ * The final comma is optional. a,b,c  and a,b,c, are equivalent
+ * for comma-delimited lists. To escape commas, put two in a row, 
+ * which eliminates the possibility for null names 
+ * (eg.  a,,b,c will parse to two elements a,b and c). */
+{
+if (s == NULL)
+    return NULL;
+
+struct slName *list = NULL;
+char buffer[strlen(s) + 1], *ptr = buffer;
+
+for (; *s != 0; s++)
+    {
+    *ptr++ = *s;
+    if (*s == ',')
+        {
+        if (s[1] != ',') // if next character not also a ,
+            {
+            // we found the delimeter, add the string to the list
+            slAddHead(&list, slNameNewN(buffer, ptr - buffer - 1));
+            ptr = buffer;   // start a new buffer
+            }
+        else
+            s++; // skip the quoting comma and continue
+        }
+    }
+
+if (ptr > buffer)  // is there something in the buffer
+    slAddHead(&list, slNameNewN(buffer, ptr - buffer)); // add it to the list
+
 slReverse(&list);
 return list;
 }
@@ -1376,6 +1412,12 @@ else
     return strcmp(a,b) != 0;
 }
 
+boolean isEmptyTextField(char *s)
+/* Recognize NULL or dot as empty text */
+{
+return (isEmpty(s) || sameString(".", s));
+}
+
 boolean startsWith(const char *start, const char *string)
 /* Returns TRUE if string begins with start. */
 {
@@ -1487,6 +1529,8 @@ if (isEmpty(haystack))
 if ((p = stringIn(start, haystack)) != NULL)
     {
     pos = p + strlen(start);
+    if (isEmpty(end))
+        return cloneString(pos);
     if ((p = stringIn(end, pos)) != NULL)
         {
         len = p - pos;
@@ -1624,7 +1668,7 @@ for (;;)
 return s;
 }
 
-void replaceChar(char *s, char old, char new)
+void replaceChar(char *s, char oldc, char newc)
 /* Repace one char with another. Modifies original string. */
 {
 if (!s)
@@ -1632,8 +1676,8 @@ if (!s)
 char c;
 while((c=*s))
     {
-    if (c == old)
-       *s = new;	
+    if (c == oldc)
+       *s = newc;	
     ++s;
     }
 }
@@ -2131,10 +2175,10 @@ if (s != NULL)
 return NULL;
 }
 
-char *skipLeadingSpaces(char *s)
+char *skipLeadingSpaces(const char *stringIn)
 /* Return first non-white space. */
 {
-char c;
+char c, *s = (char *)stringIn;
 if (s == NULL) return NULL;
 for (;;)
     {
@@ -2145,10 +2189,10 @@ for (;;)
     }
 }
 
-char *skipToSpaces(char *s)
+char *skipToSpaces(const char *stringIn)
 /* Return first white space or NULL if none.. */
 {
-char c;
+char c, *s = (char *)stringIn;
 if (s == NULL)
     return NULL;
 for (;;)
@@ -2647,7 +2691,7 @@ if (sameString(fileName, "stdin"))
 if (sameString(fileName, "stdout"))
     return STDOUT_FILENO;
 // mode is necessary when O_CREAT is given, ignored otherwise
-int mode = 00664;
+int mode = 0666;
 int fd = open(fileName, flags, mode);
 if (fd < 0)
     {
@@ -3372,6 +3416,16 @@ if (slen > n)
     slen = n;
 strncat(buf, src, n);
 buf[blen+slen] = '\0';
+}
+
+void safememset(char *buf, size_t bufSize, const char c, size_t n)
+/* Append a character to a buffer repeatedly, n times with bounds checking.*/
+{
+size_t blen = strlen(buf);
+if (blen+n+1 > bufSize)
+    errAbort("buffer overflow, size %lld, new string size: %lld", (long long)bufSize, (long long)(blen+n));
+memset(buf+blen, c, n);
+buf[blen+n] = 0;
 }
 
 

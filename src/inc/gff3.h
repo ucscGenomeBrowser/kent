@@ -6,6 +6,7 @@
 #ifndef gff3_h
 #define gff3_h
 
+
 struct gff3Ann
 /* Annotation record from a GFF3 file.  Attributes define in the spec (those
  * starting with upper case letters) are parsed into fields of this
@@ -140,6 +141,10 @@ struct gff3Ann
                              * if not known */
 };
 
+/* flags */
+#define GFF3_WARN_WHEN_POSSIBLE 0x01  // generate warnings and drop entries rather than errors
+
+
 struct gff3AnnRef
 /* A reference to a gff3Ann object */
 {
@@ -191,6 +196,7 @@ struct gff3File
                                           * NULL if none specified */
     struct lineFile *lf;                 /* only set while parsing */
     FILE *errFh;            /* write errors to this file */
+    unsigned int flags;     /* flags controlling parsing */
     int maxErr;             /* maximum number of errors before aborting */
     int errCnt;             /* error count */
 };
@@ -210,6 +216,7 @@ extern char *gff3AttrOntologyTerm;
 
 /* commonly used features names */
 extern char *gff3FeatGene;
+extern char *gff3FeatPseudogene;
 extern char *gff3FeatMRna;
 extern char *gff3FeatNCRna;
 extern char *gff3FeatRRna;
@@ -222,13 +229,17 @@ extern char *gff3FeatStartCodon;
 extern char *gff3FeatStopCodon;
 extern char *gff3FeatTranscript;
 extern char *gff3FeatPrimaryTranscript;
+extern char *gff3FeatCGeneSegment;
+extern char *gff3FeatDGeneSegment;
+extern char *gff3FeatJGeneSegment;
 extern char *gff3FeatVGeneSegment;
 
-struct gff3File *gff3FileOpen(char *fileName, int maxErr, FILE *errFh);
+
+struct gff3File *gff3FileOpen(char *fileName, int maxErr, unsigned flags, FILE *errFh);
 /* Parse a GFF3 file into a gff3File object.  If maxErr not zero, then
  * continue to parse until this number of error have been reached.  A maxErr
  * less than zero does not stop reports all errors. Write errors to errFh,
- * if NULL, use stderr. */
+ * if NULL, use stderr.  See above flags. */
 
 void gff3FileFree(struct gff3File **g3fPtr);
 /* Free a gff3File object */
@@ -258,6 +269,14 @@ return ref;
 
 int gff3AnnRefLocCmp(const void *va, const void *vb);
 /* sort compare function for location of two gff3AnnRef objects */
+
+void gff3UnlinkChild(struct gff3Ann *g3a,
+                     struct gff3Ann *child);
+/* unlink the child from it's parent (do not free) */
+
+void gff3LinkChild(struct gff3Ann *g3a,
+                    struct gff3Ann *child);
+/* Add a child to a parent */
 
 INLINE int gff3PhaseToFrame(int phase)
 /* convert a phase to a frame */

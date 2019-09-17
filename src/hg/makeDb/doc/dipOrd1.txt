@@ -297,3 +297,18 @@ dipOrd1.perChromTables = no
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+#########################################################################
+# LIFTOVER TO dipOrd2 (TBD - 2017-12-31 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/dipOrd1/bed/blat.dipOrd2.2017-12-31
+    cd /hive/data/genomes/dipOrd1/bed/blat.dipOrd2.2017-12-31
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/dipOrd1/jkStuff/dipOrd1.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         dipOrd1 dipOrd2) > do.log 2>&1
+    # real    559m26.237s
+
+    # verify the convert link on the test browser is now active from dipOrd1 to
+    # dipOrd2
+
+########################################################################

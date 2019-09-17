@@ -11,3 +11,34 @@
 0.54 Dec 14 2016
    - Added data set id to browse/dataset page
    - Updated flow charts to be displayed on a separate page
+0.55 Nov 1 2017
+   - Added tab-separated-value output
+   - Tightened security particularly for cross-site-scripting
+   - Making it so that you can download via https without being
+     on VPN.
+   - Making pie charts on front page have an "other" slice that lumps together
+     slices smaller than 2% of data to help clean up charts.
+0.56 Nov 22 2017
+   - Optimizing so that code that fetches data for pie charts and metadata tags is faster.
+0.57 May 2018
+   - Adding facets to Browse/Files
+0.58 July 2 2018
+   - Adding organ_anatomical_name facet
+   - Removing browse/tags
+   - Removing tag table and brain joint analysis graphics from cdwWebBrowse default page.
+0.59 Oct 15 2018
+   - Making facets list first 25 rather than first 100 before showing "see more"
+   - Sorting facet values alphabetically rather than by use count facet is fully open
+   - Speeding up browse/data sets page.
+0.60 Dec 12 2018
+   - Optimizing speed of analysis/query page by querying cdwFileTags table rather than
+     the built-on-the-fly tagStorm.
+   - Making program behave better if you put quotes into the search string.
+0.61 Jan 11 2019
+   - Fixing things so that a "clear search" works better after coming into browsing files
+     with a URL that sets a filter.
+0.62 (in progress)
+   - Widened display area for pie charts in cdwWebBrowse to avoid truncated labels
+   - Changed button from "Download" to "Download All Matching" on analysis/query page
+   - Added count of more things to see by "see more" link on faceted search.
+   - Fixed assay word-wrapping in browse-files table.

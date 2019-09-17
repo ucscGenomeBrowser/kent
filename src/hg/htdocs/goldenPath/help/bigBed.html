@@ -40,7 +40,9 @@ Create a BED format file following the directions
 <a href="../../FAQ/FAQformat.html#format1">here</a>. When converting a BED file to a bigBed file, 
 you are limited to one track of data in your input file; therefore, you must create a separate BED 
 file for each data track. Your BED file must be sorted first on the <code>chrom</code> field, and 
-secondarily on the <code>chromStart</code> field. You can use the following UNIX <code>sort</code> 
+secondarily on the <code>chromStart</code> field. You can use utility <code>bedSort</code>
+available <a href="http://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">here</a>
+or the following UNIX <code>sort</code>
 command to do this: </p>
 <pre><code>sort -k1,1 -k2,2n unsorted.bed &gt; input.bed</code></pre>
 <p> 
@@ -55,7 +57,9 @@ Download the <code>bedToBigBed</code> program from the
 <strong>Step 4.</strong>
 Use the <code>fetchChromSizes</code> script from the 
 <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> 
-to create the <em>chrom.sizes</em> file for the UCSC database you are working with (e.g., hg19).</p>
+to create the <em>chrom.sizes</em> file for the UCSC database you are working with (e.g., hg19).
+If the assembly <code>genNom</code> is hosted by UCSC, chrom.sizes can be a URL like:
+<code>http://hgdownload.soe.ucsc.edu/goldenPath/genNom/bigZips/genNom.chrom.sizes</code></p>
 <p> 
 <strong>Step 5.</strong>
 Use the <code>bedToBigBed</code> utility to create a bigBed file from your sorted BED file, using 
@@ -86,9 +90,16 @@ Paste this custom track line into the text box on the <a href="../../cgi-bin/hgC
 track</a> management page.</p>
 <p>
 The <code>bedToBigBed</code> program can be run with several additional options. Some of these,
-such as the <code>-as</code> and <code>-type</code> options, are used in examples below. For a full 
-list of the available options, type <code>bedToBigBed</code> (with no arguments) on the command line
-to display the usage message.</p>
+such as the <code>-as</code> and <code>-type</code> options, are used in examples below. The 
+<code>-type</code> option, describes the size of the bigBed file, <code>-type=bedN[+[P]]</code>,
+where <code>N</code> is an integer between 3 and 12 and the optional <code>+[P]</code> parameter
+specifies the number of extra fields, not required, but preferred. Describing the size of the bigBed file
+is needed for access to extra fields like name, itemRgb, etc.
+Examples:<code>-type=bed6</code> or <code>-type=bed6+</code> or <code>-type=bed6+3 </code>.  
+For a full list of the available options, type <code>bedToBigBed</code> (with no arguments) on the
+command line to display the usage message.</p>
+
+
 
 <h2>Examples</h2>
 <h3>Example #1</h3>
@@ -158,16 +169,24 @@ In this example, you will create your own bigBed file from an existing bed file.
 <p>
 In this example, you will create your own bigBed file from a fully featured existing BED file that 
 contains the standard BED fields up to and including the <em>color</em> field (field 9), plus two 
-additional non-standard fields (two alternate names for each item in the file). BigBed files can 
+additional non-standard fields (two alternate names for each item in the file). Since the resulting
+bigBed file will have nine standard BED columns, which would include what is referenced as the 
+itemRgb field to inform the browser to display a R,G,B color value (e.g. 255,0,0), and two
+additional non-standard user-defined columns, the bedToBigBed program is given <code>-type=bed9+2
+</code> and a file called <code>-as=bedExample2.as</code> to help correctly interpret all the 
+columns in the data. BigBed files can 
 store extra fields in addition to the <a href="../../FAQ/FAQformat.html#format1">predefined BED 
 fields</a>. If you add extra fields to your bigBed file, you must include an AutoSql format
 (<em>.as</em>) file describing the fields. For more information on AutoSql, see 
 <a href="http://www.linuxjournal.com/article/5949" target="_blank">Kent and Brumbaugh, 2002</a>, as 
 well as examples of <em>.as</em> files in 
-<a href="http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/hg/lib"
+<a href="http://genome-source.soe.ucsc.edu/gitlist/kent.git/tree/master/src/hg/lib"
 target="_blank">this directory</a>. 
 This example also demonstrates how to create extra indices on the name field, and the first of the 
-extra fields to be used for track item search.</p>
+extra fields to be used for track item search. The searchIndex setting requires the input BED data to be
+case-senstive sorted (<code>sort -k1,1 -k2,2n</code>), where newer versions of the tool bedToBigBed
+(available <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">here</a>) are enhanced to catch
+improper input.</p>
 <ol>
   <li> 
   Save the BED file <a href="examples/bedExample2.bed"><em>bedExample2.bed</em></a> to your computer
@@ -185,9 +204,8 @@ extra fields to be used for track item search.</p>
   Run the utility to create a bigBed output file with an index on the name field and the first 
   extra field: (<em>Step 5</em>, above):
   <pre><code>bedToBigBed -as=bedExample2.as -type=bed9+2 -extraIndex=name,geneSymbol bedExample2.bed hg18.chrom.sizes myBigBed2.bb</code></pre></li>
-  <li> 
   Place the bigBed file you just created (<em>myBigBed2.bb</em>) on a web-accessible server 
-  (<em>Step 6</em>, above).</li>
+  (<em>Step 6</em>, above).</li> 
   <li> 
   Paste the URL of the file into the custom tracks entry form, or alternatively construct a track 
   line that points to your bigBed file (<em>Step 7</em>, above). Because this bigBed file includes a
@@ -228,7 +246,7 @@ extra fields to be used for track item search.</p>
 <h2>Sharing Your Data with Others</h2>
 <p>
 If you would like to share your bigBed data track with a colleague, learn how to create a URL by 
-looking at Example #11 on <a href="customTrack.html#EXAMPLE11">this page</a>.</p>
+looking at Example #6 on <a href="customTrack.html#EXAMPLE6">this page</a>.</p>
 
 <h2>Extracting Data from the bigBed Format</h2>
 <p>

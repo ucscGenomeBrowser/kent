@@ -1,0 +1,113 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes a general procedure for working up
+#	the ncbiToRefSeq track in any browser
+
+#############################################################################
+#############################################################################
+# NOTE: new genome browser builds already incorporate this procedure in their
+#       construction.  This procedure here is for catching up previous
+#       UCSC browser builds
+
+#############################################################################
+#############################################################################
+# find NCBI RefSeq assembly that should correspond with the UCSC browser
+#
+#  If the original UCSC browser was built from a RefSeq release, the
+#	files from NCBI can be found in:
+#	/hive/data/genomes/<db>/refseq/
+#
+#  If not done there, the files can be found in the UCSC local copy
+#  of genbank: /hive/data/outside/ncbi/genomes/refseq/
+#
+# for example: .../refseq/vertebrate_mammalian/Aotus_nancymaae/all_assembly_versions/GCF_000952055.2_Anan_2.0/
+#
+#############################################################################
+# run up idKeys for that RefSeq sequence
+#
+# If the RefSeq assembly exists in the local copy of genbank, the idKeys
+#	for that assembly may have already been run up.  Check for
+#	files in: /hive/data/outside/ncbi/genomes/idKeys/refseq/
+# for example: .../refseq/vertebrate_mammalian/Aotus_nancymaae/GCF_000952055.2_Anan_2.0/
+#
+# if the UCSC browser was built from a RefSeq release, the idKeys can
+#	be found in: /hive/data/genomes/<db>/refseq/idKeys/
+# or should be built there:
+
+mkdir /hive/data/genomes/<db>/refseq/idKeys/
+cd /hive/data/genomes/<db>/refseq/idKeys/
+faToTwoBit ../G*_genomic.fna.gz ./refseq.<db>.2bit
+# verify no duplicates:
+twoBitDup refseq.<db>.2bit
+# should be silent.  See notes below if there are duplicates
+
+time (doIdKeys.pl -buildDir=`pwd` -twoBit=`pwd`/refseq.<db>.2bit refseq<Db>) \
+	> do.log 2>&1
+
+#############################################################################
+# idKeys for the UCSC assembly should have already been done in:
+#	/hive/data/genomes/<db>/bed/idKeys/
+# or should be built there:
+
+mkdir /hive/data/genomes/<db>/bed/idKeys
+cd /hive/data/genomes/<db>/bed/idKeys
+
+# verify no duplicates:
+twoBitDup ../../<db>.2bit
+# should be silent.  See notes below if there are duplicates
+
+time (doIdKeys.pl -buildDir=`pwd` \
+	-twoBit=/hive/data/genomes/<db>/<db>.2bit <db>)  > do.log 2>&1
+
+#############################################################################
+# joining the two idKey lists should make the ucscToRefSeq files
+#  this is typically done in the /hive/data/genomes/<db>/bed/ucscToINSDC/
+#  directory since this track is similar in purpose to ucscToINSDC
+
+cd /hive/data/genomes/<db>/bed/ucscToINSDC
+join -t$'\t' ../idKeys/<db>.idKeys.txt \
+	../../refseq/idKeys/refseq<Db>.idKeys.txt | cut -f2,3 | sort \
+	> ucsc.refseq.tab
+
+join -t$'\t' <(sort ../../chrom.sizes) ucsc.refseq.tab \
+        | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+          | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+
+#############################################################################
+# loading the resulting bed file
+
+cd /hive/data/genomes/<db>/bed/ucscToINSDC
+
+# determine maximum size of chrom names:
+export SZ=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+printf "SZ: ${SZ}\n"
+
+sed -e "s/21/$SZ/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab <db> ucscToRefSeq stdin ucscToRefSeq.bed
+
+# checkTableCoords should be silent
+checkTableCoords <db> ucscToRefSeq
+
+# featureBits should be exactly %100: "N bases of N (100.000%) in intersection"
+featureBits -countGaps <db> ucscToRefSeq
+
+#############################################################################
+# problem areas:
+
+# Problems can arise if either the RefSeq sequence, or the UCSC sequence
+# has duplicate sequence.  To eliminate those difficulties, remove the
+# duplicates from the 2bit file(s) and use the duplicate free .2bit file(s) to
+# run up the idKeys
+
+# to identify duplicates:
+twoBitDup <file>.2bit > duplicate.list 2>&1
+
+# duplicate.list will be empty in the case of no duplicates
+# when their are duplicates, to remove them:
+
+awk '{print $1}' duplicate.list | sort -u > remove.dup.list
+twoBitToFa <file>.2bit stdout \
+	| faSomeRecords -exclude stdin remove.dup.list dupFree.fa
+faToTwoBit dupFree.fa dupFree.2bit
+
+#############################################################################

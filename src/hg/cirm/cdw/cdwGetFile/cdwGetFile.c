@@ -1,4 +1,4 @@
-/* cdwGetFile - given a file ID and a security token, send the file using Apache */
+/* cdwGetFile - given a file ID and a security token (skipped for public cirm site), send the file using Apache */
 
 /* Copyright (C) 2016 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
@@ -6,6 +6,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "hgConfig.h"
 #include "cheapcgi.h"
 #include "sqlSanity.h"
 #include "htmshell.h"
@@ -26,10 +27,22 @@ struct cart *cart;	// User variables saved from click to click
 struct hash *oldVars;	// Previous cart, before current round of CGI vars folded in
 struct cdwUser *user;	// Our logged in user if any
 
-void errExit(char *msg, char *field) 
+void errExitExt(char *msg, char *field, char *status) 
 /* print http header + message and exit. msg can contain %s */
 {
+if (status)
+    {
+    printf("Status: %s\n", status);
+    }
+else
+    {
+    // provide a generic error code when status not specified
+    // this will signal an error to the caller.
+    printf("Status: %s\n", "400 BAD REQUEST");  
+    }
+
 printf("Content-Type: text/html\n\n");
+puts("ERROR: ");
 if (!field)
     puts(msg);
 else
@@ -37,17 +50,36 @@ else
 exit(0);
 }
 
+void errExit(char *msg, char *field) 
+/* print http header + message and exit. msg can contain %s */
+{
+errExitExt(msg, field, NULL);
+}
+
 void mustHaveAccess(struct sqlConnection *conn, struct cdwFile *ef)
 /* exit with error message if user does not have access to file ef */
 {
+boolean isPublic = cfgOptionBooleanDefault("cdw.siteIsPublic", FALSE);
+if (isPublic)
+    return;
 if (cdwCheckAccess(conn, ef, user, cdwAccessRead))
     return;
 else
     if (user==NULL)
-        errExit("Sorry, this file has access restrictions. Please <a href='/cgi-bin/hgLogin'>log in</a> first.", NULL);
+        errExitExt("Sorry, this file has access restrictions. Please <a href='/cgi-bin/hgLogin'>log in</a> first.", NULL, "401 Unauthorized");
     else
-        errExit("Sorry, user %s does not have access to this file.", user->email);
+        errExitExt("Sorry, user %s does not have access to this file.", user->email, "403 Forbidden");
 }
+
+struct patcher 
+/* deal with patching replacement bits in html */
+    {
+    struct patcher *next;
+    char *match; // string to match
+    int size;   // string size
+    int count;   // match count
+    char *(*cdwLocalFunction)(struct cart *cart, boolean makeAbsolute);  // function to make
+    };
 
 static void printFileReplaceVar(char *filePath) 
 /* dump a text file to stdout with the html header, replace <!--menuBar--> with the menubar */
@@ -59,17 +91,46 @@ FILE *file = fopen(filePath, "r");
 if (file == 0) 
     errExit("Cannot open file %s", filePath);
 
-char searchStr[] = "<!--menuBar-->";
-int matchCount = 0;
+struct patcher *patcherList = NULL, *p = NULL;
+
+AllocVar(p);
+p->match = cloneString("<!--headDependencies-->");
+p->cdwLocalFunction = &cdwHeadTagDependencies;
+slAddHead(&patcherList, p);
+AllocVar(p);
+p->match = cloneString("<!--pageHeader-->");
+p->cdwLocalFunction = &cdwPageHeader;
+slAddHead(&patcherList, p);
+AllocVar(p);
+p->match = cloneString("<!--menuBar-->");
+p->cdwLocalFunction = &cdwLocalMenuBar;
+slAddHead(&patcherList, p);
+AllocVar(p);
+p->match = cloneString("<!--pageFooter-->");
+p->cdwLocalFunction = &cdwPageFooter;
+slAddHead(&patcherList, p);
+
+for(p=patcherList; p; p=p->next)
+    {
+    p->size = strlen(p->match);
+    }
 while ((c = getc(file)) != EOF)
     {
-    if (c==searchStr[matchCount])
-        matchCount++;
-    else
-        matchCount = 0;
     putchar(c);
-    if (matchCount==sizeof(searchStr)-1)
-        puts(cdwLocalMenuBar(cart, TRUE));
+
+    for(p=patcherList; p; p=p->next)
+	{
+	if (c==p->match[p->count])
+	    p->count++;
+	else
+	    p->count = 0;
+	if (p->count==p->size)
+	    {
+	    putchar('\n'); // make view source more readable
+	    puts((*p->cdwLocalFunction)(cart, TRUE));
+	    }
+	}
+
     }
 fclose(file);
 }
@@ -128,7 +189,7 @@ void sendFileByAcc(struct sqlConnection *conn, char* acc, boolean useSubmitFname
 {
 struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, acc);
 if (vf==NULL)
-    errExit("%s is not a valid accession in the CDW.", acc);
+    errExitExt("%s is not a valid accession in the CDW.", acc, "404 Not Found");
 
 struct cdwFile *ef = cdwFileFromId(conn, vf->fileId);
 char* filePath = cdwPathForFileId(conn, vf->fileId);
@@ -136,7 +197,7 @@ char* filePath = cdwPathForFileId(conn, vf->fileId);
 if (addExt != NULL)
     {
     if (! (sameWord(addExt, ".bai") || sameWord(addExt, ".tbi")))
-        errAbort("The addExt argument to cdwGetFile can only be .bai or .tbi. No other values are allowed.");
+        errAbort("ERROR: The addExt argument to cdwGetFile can only be .bai or .tbi. No other values are allowed.");
     if ((endsWith(filePath, ".vcf") || endsWith(filePath, ".VCF")) && sameWord(addExt, ".tbi"))
         // the .tbi files of .vcf files are actually named .vcf.gz.tbi
         filePath = catTwoStrings(filePath, ".gz.tbi");
@@ -161,7 +222,7 @@ if (useSubmitFname)
 else
     {
     char *formatExt = fileExtFromFormat(vf->format);
-    if (sameWord(vf->format, "unknown") && ef && ef->submitFileName && endsWith(ef->submitFileName, ".tar.gz"))
+    if (vf->format && sameWord(vf->format, "unknown") && ef && ef->submitFileName && endsWith(ef->submitFileName, ".tar.gz"))
         formatExt = cloneString(".tar.gz");
     safef(suggestName, sizeof(suggestName), "%s%s%s", vf->licensePlate, formatExt, addExt);
     freez(&formatExt);
@@ -182,7 +243,7 @@ int fileId = cdwFileIdFromPathSuffix(conn, path);
 
 
 if (fileId == 0)
-    errExit("A file with suffix %s does not exist in the database", path);
+    errExitExt("A file with suffix %s does not exist in the database", path, "404 Not Found");
     
 char *localPath = cdwPathForFileId(conn, fileId);
 

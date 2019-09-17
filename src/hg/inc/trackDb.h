@@ -29,6 +29,12 @@ struct trackDb;         // forward definition for use in cart.h
 // Forward definitions
 struct tdbExtras;
 
+// A structure to keep track of our min and max values if we're a wig 
+struct minMax 
+{
+    double min, max;
+};
+
 struct trackDb
 /* This describes an annotation track. */
     {
@@ -59,6 +65,7 @@ struct trackDb
     char *grp;	/* Which group track belongs to */
     unsigned char canPack;	/* 1 if can pack track display, 0 otherwise */
     char *settings;	/* Name/value pairs for track-specific stuff */
+    struct hash *viewHash;  /* Hash for settings. Not saved in database.*/
     struct hash *settingsHash;  /* Hash for settings. Not saved in database.
                                  * Don't use directly, rely on trackDbSetting to access. */
     /* additional info, determined from settings */
@@ -364,10 +371,13 @@ struct hash *trackDbHashSettings(struct trackDb *tdb);
 /* Force trackDb to hash up it's settings.  Usually this is just
  * done on demand. Returns settings hash. */
 
-struct hash *trackDbSettingsFromString(char *string);
+struct hash *trackDbSettingsFromString(struct trackDb *tdb, char *string);
 /* Return hash of key/value pairs from string.  Differs
  * from raFromString in that it passes the key/val
  * pair through the backwards compatability routines. */
+
+boolean trackDbNoInheritField(char *field);
+/* Suppress inheritance of specific fields */
 
 char *trackDbSetting(struct trackDb *tdb, char *name);
 /* Return setting string or NULL if none exists. */
@@ -425,6 +435,9 @@ typedef enum _eCfgType
     cfgSnake    =12,
     cfgLong     =13,
     cfgBarChart =14,
+    cfgInteract =15,
+    cfgLollipop =16,
+    cfgHic      =17,
     cfgUndetermined // Not specifically denied, but not determinable in lib code
     } eCfgType;
 
@@ -547,6 +560,30 @@ struct mdbObj;
 struct _membersForAll;
 struct _membership;
 
+enum filterCompositeType 
+// Filter composites are drop-down checkbox-lists for selecting subtracks (eg hg19::HAIB TFBS)
+    {
+    fctNone=0,      // do not offer filter for this dimension
+    fctOne=1,       // filter composite by one or all
+    fctOneOnly=2,   // filter composite by only one
+    fctMulti=3,     // filter composite by multiselect: all, one or many
+    };
+
+typedef struct _members
+    {
+    int count;
+    char * groupTag;
+    char * groupTitle;
+    char **tags;
+    char **titles;
+    boolean *selected;
+    char * setting;
+    int *subtrackCount;              // count of subtracks
+    int *currentlyVisible;           // count of visible subtracks 
+    struct slRef **subtrackList;     // set of subtracks belonging to each subgroup member
+    enum filterCompositeType fcType; // fctNone,fctOne,fctMulti
+    } members_t;
+
 struct tdbExtras
 #define TDB_EXTRAS_EMPTY_STATE 666
 // Struct for misc. data collected/calculated during CGI track setup that are cached for later use.
@@ -560,6 +597,10 @@ struct tdbExtras
     struct _membership *membership;       // hgTrackUi subtracks have individual membership info
 
     // Developer: please add your useful data that is costly to calculate/retrieve more than once
+    struct hash *membersHash;
+
+    // keep track of our children's min and max if we're scaling over all of them
+    struct minMax *minMax;
     };
 
 void tdbExtrasFree(struct tdbExtras **pTdbExtras);
@@ -589,6 +630,12 @@ struct _membersForAll *tdbExtrasMembersForAll(struct trackDb *tdb);
 void tdbExtrasMembersForAllSet(struct trackDb *tdb, struct _membersForAll *membersForAll);
 // Sets the composite view/dimensions members for all for later retrieval.
 
+members_t *tdbExtrasMembers(struct trackDb *tdb, char *groupNameOrTag);
+// Returns subtrack members if already known, else NULL
+
+void tdbExtrasMembersSet(struct trackDb *tdb,  char *groupNameOrTag,  members_t *members);
+// Sets the subtrack members for later retrieval.
+
 struct _membership *tdbExtrasMembership(struct trackDb *tdb);
 // Returns subtrack membership if already known, else NULL
 
@@ -608,13 +655,15 @@ void tdbSetCartVisibility(struct trackDb *tdb, struct cart *cart, char *vis);
 INLINE boolean tdbIsBigBed(struct trackDb *tdb)
 // Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed.
 {
-// KRR TODO: replace with table lookup  (same as bigBedFind ?)
+// TODO: replace with table lookup  (same as bigBedFind ?)
 return startsWithWord("bigBed", tdb->type) || 
         startsWithWord("bigGenePred", tdb->type) || 
         startsWithWord("bigMaf", tdb->type) || 
         startsWithWord("bigPsl", tdb->type) || 
         startsWithWord("bigNarrowPeak", tdb->type) || 
         startsWithWord("bigBarChart", tdb->type) || 
+        startsWithWord("bigInteract", tdb->type) || 
+        startsWithWord("bigLolly", tdb->type) || 
         startsWithWord("bigChain", tdb->type);
 }
 
@@ -642,6 +691,12 @@ INLINE boolean tdbIsVcf(struct trackDb *tdb)
 return startsWithWord("vcfTabix", tdb->type) || startsWithWord("vcf", tdb->type);
 }
 
+INLINE boolean tdbIsHic(struct trackDb *tdb)
+// Return TRUE if tdb corresponds to a HIC file.
+{
+return startsWithWord("hic", tdb->type);
+}
+
 INLINE boolean tdbIsBedGraph(struct trackDb *tdb)
 // Return TRUE if tdb corresponds to a bedGraph track.
 {
@@ -651,5 +706,37 @@ return startsWithWord("bedGraph", tdb->type);
 boolean trackDbSettingBlocksConfiguration(struct trackDb *tdb, boolean onlyAjax);
 // Configuration dialogs may be explicitly blocked in tracDb settings
 
+struct slPair *trackDbMetaPairs(struct trackDb *tdb);
+/* Read in metadata given a trackDb entry.  This routine understands the three ways
+ * that metadata can be represented in a trackDb stanza: "metadata" lines per stanza,
+ * or a  tab-separated or tagStorm file with a foreign key specified by the "meta" tag.
+ */
+
+char *trackDbViewSetting(struct trackDb *tdb, char *name);
+/* Return view setting from tdb, but *not* any of it's parents. */
+
+struct trackDb *lmCloneTdb(struct lm *lm, struct trackDb *tdb, struct trackDb *parent, struct hash *superHash);
+/* clone a single tdb structure.  Will clone its children if it has any */
+
+struct trackDb *lmCloneTdbList(struct lm *lm, struct trackDb *list, struct trackDb *parent, struct hash *superHash);
+/* clone a list of tdb structures. */
+
+struct trackDb *lmCloneSuper(struct lm *lm, struct trackDb *tdb, struct hash *superHash);
+/* clone a super track tdb structure. */
+
+void trackDbHubCloneTdbListToSharedMem(char *trackDbUrl, struct trackDb *list, unsigned long size);
+/* For this hub, Allocate shared memory and clone trackDb list into it. */
+
+void trackDbCloneTdbListToSharedMem(char *db, struct trackDb *list, unsigned long size);
+/* For this native db, allocate shared memory and clone trackDb list into it. */
+
+struct trackDb *trackDbCache(char *db, time_t time);
+/* Check to see if this db has a cached trackDb. */
+
+struct trackDb *trackDbHubCache(char *trackDbUrl, time_t time);
+/* Check to see if this hub has a cached trackDb. */
+
+boolean trackDbCacheOn();
+/* Check to see if we're caching trackDb contents. */
 #endif /* TRACKDB_H */
 

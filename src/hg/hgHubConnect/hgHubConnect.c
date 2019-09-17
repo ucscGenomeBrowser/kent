@@ -39,6 +39,7 @@ char *organism = NULL;
 struct hubOutputStructure
     {
     struct hubOutputStructure *next;
+    struct dyString *metaTags;
     struct dyString *descriptionMatch;
     struct genomeOutputStructure *genomes;
     int genomeCount;
@@ -49,6 +50,7 @@ struct genomeOutputStructure
     {
     struct genomeOutputStructure *next;
     struct dyString *shortLabel;
+    struct dyString *metaTags;
     struct dyString *descriptionMatch;
     struct tdbOutputStructure *tracks;
     struct dyString *assemblyLink;
@@ -63,6 +65,7 @@ struct tdbOutputStructure
     {
     struct tdbOutputStructure *next;
     struct dyString *shortLabel;
+    struct dyString *metaTags;
     struct dyString *descriptionMatch;
     struct dyString *configUrl;
     struct tdbOutputStructure *children;
@@ -144,57 +147,88 @@ return string;
 }
 
 #define GENLISTWIDTH 40
-static void printGenomeList(struct slName *genomes, int row)
+static void printGenomeList(char *hubUrl, struct slName *genomes, int row, boolean withLink)
 /* print supported assembly names from sl list */
 {
-/* List of associated genomes. */
-struct dyString *dy = newDyString(100);
-struct dyString *dyShort = newDyString(100);
-char *trimmedName = NULL;
-for(; genomes; genomes = genomes->next)
+struct dyString *dyHtml = newDyString(1024);
+struct dyString *dyShortHtml = newDyString(1024);
+
+// create two strings: one shortened to GENLISTWIDTH characters
+// and another one with all genomes
+int charCount = 0;
+struct slName *genome = genomes;
+for(; genome; genome = genome->next)
     {
-    trimmedName = trackHubSkipHubName(genomes->name);
-    dyStringPrintf(dy,"%s, ", trimmedName);
-    if (dyShort->stringSize == 0 || (dyShort->stringSize+strlen(trimmedName)<=GENLISTWIDTH))
-	dyStringPrintf(dyShort,"%s, ", trimmedName);
+    char *trimmedName = trackHubSkipHubName(genome->name);
+    char *shortName = cloneString(trimmedName);
+    // If even the first element is too long, truncate its short name.
+    if (genome==genomes && strlen(trimmedName) > GENLISTWIDTH)  
+        shortName[GENLISTWIDTH] = 0;
+
+    // append to dyShortHtml if necessary
+    if (charCount == 0 || (charCount+strlen(trimmedName)<=GENLISTWIDTH))
+        { 
+        if (withLink)
+            dyStringPrintf(dyShortHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s'>%s</a>" , genome->name, hubUrl, genome->name, shortName);
+        else
+            dyStringPrintf(dyShortHtml,"%s" , shortName);
+        dyStringPrintf(dyShortHtml,", ");
+        }
+    freeMem(shortName); 
+
+    charCount += strlen(trimmedName);
+
+    // always append to dyHtml
+    if (withLink)
+        dyStringPrintf(dyHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s'>%s</a>" , genome->name, hubUrl, genome->name, trimmedName);
+    else
+        dyStringPrintf(dyHtml,"%s" , trimmedName);
+
+    if (genome->next)
+        {
+        dyStringPrintf(dyHtml,", ");
+        }
+
     }
-char *genomesString = removeLastComma( dyStringCannibalize(&dy));
-char *genomesShort = removeLastComma( dyStringCannibalize(&dyShort));
-char tempHtml[1024+strlen(genomesString)+strlen(genomesShort)];
-if (strlen(genomesShort) > GENLISTWIDTH)  // If even the first element is too long, truncate it.
-    genomesShort[GENLISTWIDTH] = 0;
-if (strlen(genomesShort)==strlen(genomesString))
-    {
-    safef(tempHtml, sizeof tempHtml, "%s", genomesString);
-    }
+
+char *longHtml = dyStringCannibalize(&dyHtml);
+char *shortHtml = dyStringCannibalize(&dyShortHtml);
+shortHtml = removeLastComma(shortHtml);
+
+if (charCount < GENLISTWIDTH)
+    ourPrintCell(shortHtml);
 else
     {
     char id[256];
+    char tempHtml[1024+strlen(longHtml)+strlen(shortHtml)];
     safef(tempHtml, sizeof tempHtml, 
-	"<span id=Short%d>[+]&nbsp;%s...</span>"
-	"<span id=Full%d style=\"display:none\">[-]<br>%s</span>"
-	, row, genomesShort 
-	, row, genomesString);
+	"<span id=Short%d><span style='cursor:default' id='Short%dPlus'>[+]&nbsp;</span>%s...</span>"
+	"<span id=Full%d style=\"display:none\"><span style='cursor:default' id='Full%dMinus'>[-]<br></span>%s</span>"
+	, row, row, shortHtml
+	, row, row, longHtml);
 
-    safef(id, sizeof id, "Short%d", row);
+    safef(id, sizeof id, "Short%dPlus", row);
     jsOnEventByIdF("click", id,
 	"document.getElementById('Short%d').style.display='none';"
 	"document.getElementById('Full%d').style.display='inline';"
 	"return false;"
 	, row, row);
 
-    safef(id, sizeof id, "Full%d", row);
+    safef(id, sizeof id, "Full%dMinus", row);
     jsOnEventByIdF("click", id, 
 	"document.getElementById('Full%d').style.display='none';"
 	"document.getElementById('Short%d').style.display='inline';"
 	"return false;"
 	, row, row);
+    ourPrintCell(tempHtml);
     }
-ourPrintCell(tempHtml);
+
+freeMem(longHtml);
+freeMem(shortHtml);
 }
 
 
-static void printGenomes(struct trackHub *thub, int row)
+static void printGenomes(struct trackHub *thub, int row, boolean withLink)
 /* print supported assembly names from trackHub */
 {
 /* List of associated genomes. */
@@ -206,7 +240,7 @@ for(; genomes; genomes = genomes->next)
     slAddHead(&list, el);
     }
 slReverse(&list);
-printGenomeList(list, row);
+printGenomeList(thub->url, list, row, withLink);
 }
 
 
@@ -306,7 +340,8 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     else
 	ourPrintCell("");
 
-    if (!isEmpty(hub->errorMessage))
+    boolean hubHasError = (!isEmpty(hub->errorMessage));
+    if (hubHasError)
 	{
 	ourCellStart();
 	printf("<span class=\"hubError\">ERROR: %s </span>"
@@ -333,8 +368,9 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     else
 	ourPrintCell("");
 
+
     if (hub->trackHub != NULL)
-	printGenomes(hub->trackHub, count);
+	printGenomes(hub->trackHub, count, !hubHasError);
     else
 	ourPrintCell("");
 
@@ -345,6 +381,69 @@ printf("</tbody></TABLE>\n");
 printf("</div>");
 }
 
+void doValidateNewHub(char *hubUrl)
+/* Run hubCheck on a hub. */
+{
+struct dyString *cmd = dyStringNew(0);
+udcSetCacheTimeout(1);
+dyStringPrintf(cmd, "loader/hubCheck -htmlOut -noTracks %s", hubUrl);
+printf("<tr><td>");
+printf("running command: '%s'\n", cmd->string);
+printf("</td></tr></table>");
+printf("<div id=\"tracks\" class=\"hubTdbTree\" style=\"overflow: auto\"></div>");
+FILE *f = popen(cmd->string, "r");
+if (f == NULL)
+    errAbort("popen: error running command: \"%s\"", cmd->string);
+char buf[1024];
+jsInline("trackData = [];");
+while (fgets(buf, sizeof(buf), f))
+    {
+    jsInlineF("%s", buf);
+    }
+if (pclose(f) == -1)
+    errAbort("pclose: error for command \"%s\"", cmd->string);
+jsInline("hgCollection.init();");
+dyStringFree(&cmd);
+}
+
+void hgHubConnectValidateNewHub()
+{
+// put out the top of our page
+char *hubUrl = cartOptionalString(cart, "validateHubUrl");
+printf("<div id=\"validateHub\" class=\"hubList\"> \n"
+    "<table id=\"validateHub\"> \n"
+    "<thead><tr> \n");
+printf("<th colspan=\"6\" id=\"addHubBar\"><label for=\"validateHubUrl\">URL:</label> \n");
+if (hubUrl != NULL)
+    {
+	printf("<input name=\"validateText\" id=\"validateHubUrl\" class=\"hubField\" "
+	    "type=\"text\" size=\"65\" value=\"%s\"> \n", hubUrl);
+    }
+else
+    {
+    printf("<input name=\"validateText\" id=\"validateHubUrl\" class=\"hubField\" "
+        "type=\"text\" size=\"65\"> \n");
+    }
+printf("<input name=\"hubValidateButton\" id='hubValidateButton' "
+    "class=\"hubField\" type=\"button\" value=\"Validate Hub\">\n"
+    "</th> \n"
+    "</tr> \n");
+
+if (hubUrl == NULL)
+    printf("<tr><td>Enter URL to hub to check settings</td></tr> \n");
+else
+    doValidateNewHub(hubUrl);
+printf("</table>");
+
+jsOnEventById("click", "hubValidateButton",
+    "var validateText = document.getElementById('validateHubUrl');"
+    "validateText.value=$.trim(validateText.value);"
+    "if(validateUrl($('#validateHubUrl').val())) { "
+    " document.validateHubForm.elements['validateHubUrl'].value=validateText.value;"
+    " document.validateHubForm.submit(); return true; }"
+    "else { return false; }"
+    );
+}
 
 static void addPublicHubsToHubStatus(struct sqlConnection *conn, char *publicTable, char  *statusTable)
 /* Add urls in the hubPublic table to the hubStatus table if they aren't there already */
@@ -623,7 +722,8 @@ else
 
 ourPrintCellLink(hubInfo->shortLabel, hubInfo->hubUrl);
 
-if (isEmpty(hubInfo->errorMessage))
+boolean hubHasNoError = isEmpty(hubInfo->errorMessage);
+if (hubHasNoError)
     {
     if (hubInfo->tableHasDescriptionField && !isEmpty(hubInfo->descriptionUrl))
         ourPrintCellLink(hubInfo->longLabel, hubInfo->descriptionUrl);
@@ -647,7 +747,7 @@ else
     ourCellEnd();
     }
 
-printGenomeList(dbListNames, count); 
+printGenomeList(hubInfo->hubUrl, dbListNames, count, hubHasNoError); 
 printf("</tr>\n");
 }
 
@@ -660,10 +760,13 @@ printf("<li configLink='%s' nodeType='track'>\n", dyStringContents(tdbOut->confi
 printf("%s", dyStringContents(tdbOut->shortLabel));
 if (tdbOut->childCount > 0)
     printf(" (%d subtrack%s)", tdbOut->childCount, tdbOut->childCount==1?"":"s");
-printf("<br>\n");
+if (isNotEmpty(dyStringContents(tdbOut->metaTags)))
+    {
+    printf("<br><span class='descriptionMatch'><em>Metadata: %s</em></span>\n", dyStringContents(tdbOut->metaTags));
+    }
 if (isNotEmpty(dyStringContents(tdbOut->descriptionMatch)))
     {
-    printf("<span class='descriptionMatch'><em>%s</em></span>\n", dyStringContents(tdbOut->descriptionMatch));
+    printf("<br><span class='descriptionMatch'><em>Description: %s</em></span>\n", dyStringContents(tdbOut->descriptionMatch));
     }
 if (tdbOut->children != NULL)
     {
@@ -689,6 +792,10 @@ printf("<li assemblyLink='%s' nodeType='assembly'>%s",
 if (genomeOut->trackCount > 0)
     printf(" (%d track%s)", genomeOut->trackCount, genomeOut->trackCount==1?"":"s");
 
+if (isNotEmpty(dyStringContents(genomeOut->metaTags)))
+    {
+    printf("<br><span class='descriptionMatch'><em>%s</em></span>\n", dyStringContents(genomeOut->metaTags));
+    }
 if (isNotEmpty(dyStringContents(genomeOut->descriptionMatch)))
     {
     printf("<br>\n<em>Assembly Description:</em> %s\n", dyStringContents(genomeOut->descriptionMatch));
@@ -743,6 +850,7 @@ if (tdbOut == NULL)
     genomeOut->trackCount++;
     AllocVar(tdbOut);
     tdbOut->shortLabel = dyStringNew(0);
+    tdbOut->metaTags = dyStringNew(0);
     tdbOut->descriptionMatch = dyStringNew(0);
     tdbOut->configUrl = dyStringNew(0);
     struct trackDb *trackInfo = (struct trackDb *) hashFindVal(tdbHash, track);
@@ -751,7 +859,12 @@ if (tdbOut == NULL)
         // Some tracks are prefixed with the hub name; try that
         char withHubName[4096];
         safef(withHubName, sizeof(withHubName), "%s_%s", hub->name, track);
-        trackInfo = hashMustFindVal(tdbHash, withHubName);
+        trackInfo = hashFindVal(tdbHash, withHubName);
+        if (trackInfo == NULL)
+            {
+            warn("Error: Unable to locate info for matching track '%s'.  Skipping ...\n", withHubName);
+            return NULL;
+            }
         }
     if (isNotEmpty(trackInfo->longLabel))
         dyStringPrintf(tdbOut->shortLabel, "%s", trackInfo->longLabel);
@@ -776,10 +889,24 @@ if (tdbOut == NULL)
         {
         struct trackDb *parent = trackInfo->parent;
         struct tdbOutputStructure *parentOut = addOrUpdateTrackOut(parent->track, genomeOut, tdbHash, hub);
-        slAddTail(&(parentOut->children), tdbOut);
-        parentOut->childCount++;
+        if (parentOut != NULL)
+            {
+            // addOrUpdateTrackOut only returns NULL if it can't find the parent here.
+            // This probably means the trackDb is corrupted, which should have already
+            // generated a fatal error.  All the same ...
+            slAddTail(&(parentOut->children), tdbOut);
+            parentOut->childCount++;
+            }
+        else
+            {
+            // If we can't find the track's rightful parent, we can't report its position
+            // in the track hierarchy accurately.  Time to abort.  A warning will already
+            // have been generated by addOrUpdateTrackOut(parent) failing.
+            return NULL;
+            }
         }
     else
+        // No parent track, so add it to the root level track list for output
         slAddTail(&(genomeOut->tracks), tdbOut);
     hashAdd(genomeOut->tdbOutHash, track, tdbOut);
     }
@@ -830,8 +957,10 @@ struct hubOutputStructure *buildHubSearchOutputStructure(struct trackHub *hub,
         struct hubSearchText *searchResults)
 /* Build a structure that contains the data for writing out the hub search results for this hub */
 {
+struct hash *missingGenomes = hashNew(0);
 struct hubOutputStructure *hubOut = NULL;
 AllocVar(hubOut);
+hubOut->metaTags = dyStringNew(0);
 hubOut->descriptionMatch = dyStringNew(0);
 hubOut->genomeOutHash = newHash(5);
 
@@ -847,23 +976,39 @@ for (hst = searchResults; hst != NULL; hst = hst->next)
             {
             dyStringPrintf(hubOut->descriptionMatch, "%s", hst->text);
             }
+        else if (hst->textLength == hubSearchTextMeta)
+            {
+            if (isNotEmpty(dyStringContents(hubOut->metaTags)))
+                dyStringPrintf(hubOut->metaTags, ", %s", hst->text);
+            else
+                dyStringPrintf(hubOut->metaTags, "%s", hst->text);
+            }
         continue;
         }
 
     char *db = cloneString(hst->db);
+    if (hashLookup(missingGenomes, db) != NULL)
+        continue;
     struct trackHubGenome *genome = hashFindVal(hub->genomeHash, db);
     if (genome == NULL)
         {
         // assembly hub genomes are stored with a prefix; try that
         char withHubName[4096];
         safef(withHubName, sizeof(withHubName), "%s_%s", hub->name, db);
-        genome = hashMustFindVal(hub->genomeHash, withHubName);
+        genome = hashFindVal(hub->genomeHash, withHubName);
+        if (genome == NULL)
+            {
+            hashStoreName(missingGenomes, db);
+            warn("Error: Unable to find info for matching assembly '%s'.  Skipping ...\n", withHubName);
+            continue;
+            }
         }
     struct genomeOutputStructure *genomeOut = hashFindVal(hubOut->genomeOutHash, db);
     if (genomeOut == NULL)
         {
         AllocVar(genomeOut);
         genomeOut->tdbOutHash = newHash(5);
+        genomeOut->metaTags = dyStringNew(0);
         genomeOut->descriptionMatch = dyStringNew(0);
         genomeOut->shortLabel = dyStringNew(0);
         genomeOut->assemblyLink = dyStringNew(0);
@@ -882,10 +1027,17 @@ for (hst = searchResults; hst != NULL; hst = hst->next)
         slAddTail(&(hubOut->genomes), genomeOut);
         hubOut->genomeCount++;
         }
-    if (isEmpty(hst->track) && hst->textLength == hubSearchTextLong)
+    if (isEmpty(hst->track))
         {
-        // Genome description match
-        dyStringPrintf(genomeOut->descriptionMatch, "%s", hst->text);
+        if (hst->textLength == hubSearchTextLong) // Genome description match
+            dyStringPrintf(genomeOut->descriptionMatch, "%s", hst->text);
+        else if (hst->textLength == hubSearchTextMeta)
+            {
+            if (isNotEmpty(dyStringContents(genomeOut->metaTags)))
+                dyStringPrintf(genomeOut->metaTags, ", %s", hst->text);
+            else
+                dyStringPrintf(genomeOut->metaTags, "%s", hst->text);
+            }
         }
 
     if (isNotEmpty(hst->track))
@@ -903,8 +1055,18 @@ for (hst = searchResults; hst != NULL; hst = hst->next)
             buildTdbHash(tdbHash, tdbList);
             }
         struct tdbOutputStructure *tdbOut = addOrUpdateTrackOut(hst->track, genomeOut, tdbHash, hub);
-        if (hst->textLength == hubSearchTextLong)
-            dyStringPrintf(tdbOut->descriptionMatch, "%s", hst->text);
+        if (tdbOut != NULL)
+            {
+            if (hst->textLength == hubSearchTextLong)
+                dyStringPrintf(tdbOut->descriptionMatch, "%s", hst->text);
+            else if (hst->textLength == hubSearchTextMeta)
+                {
+                if (isNotEmpty(dyStringContents(tdbOut->metaTags)))
+                    dyStringPrintf(tdbOut->metaTags, ", %s", hst->text);
+                else
+                    dyStringPrintf(tdbOut->metaTags, "%s", hst->text);
+                }
+            }
         }
     }
 return hubOut;
@@ -953,6 +1115,15 @@ if (hubSearchResult != NULL)
     }
 }
 
+int hubEntryCmp(const void *va, const void *vb)
+/* Compare to sort based on shortLabel */
+{
+const struct hubEntry *a = *((struct hubEntry **)va);
+const struct hubEntry *b = *((struct hubEntry **)vb);
+
+return strcasecmp(a->shortLabel, b->shortLabel);
+}
+
 
 void printHubList(struct slName *hubsToPrint, struct hash *hubLookup, struct hash *searchResultHash)
 /* Print out a list of hubs, possibly along with search hits to those hubs.
@@ -966,6 +1137,8 @@ char *udcOldDir = cloneString(udcDefaultDir());
 char *searchUdcDir = cfgOptionDefault("hgHubConnect.cacheDir", udcOldDir);
 udcSetDefaultDir(searchUdcDir);
 udcSetCacheTimeout(1<<30);
+struct hubEntry *hubList = NULL;
+struct hubEntry *hubInfo;
 if (hubsToPrint != NULL)
     {
     printHubListHeader();
@@ -975,7 +1148,7 @@ if (hubsToPrint != NULL)
     struct slName *thisHubName = NULL;
     for (thisHubName = hubsToPrint; thisHubName != NULL; thisHubName = thisHubName->next)
         {
-        struct hubEntry *hubInfo = (struct hubEntry *) hashFindVal(hubLookup, thisHubName->name);
+        hubInfo = (struct hubEntry *) hashFindVal(hubLookup, thisHubName->name);
         if (hubInfo == NULL)
             {
             /* This shouldn't happen often, but maybe the search hits list was built from an outdated
@@ -983,10 +1156,16 @@ if (hubsToPrint != NULL)
              * Skip this hub. */
             continue;
             }
+        slAddHead(&hubList, hubInfo);
+        }
+    slSort(&hubList, hubEntryCmp);
+
+    for (hubInfo = hubList; hubInfo != NULL; hubInfo = hubInfo->next)
+        {
         struct hubSearchText *searchResult = NULL;
         if (searchResultHash != NULL)
             {
-            searchResult = (struct hubSearchText *) hashMustFindVal(searchResultHash, thisHubName->name);
+            searchResult = (struct hubSearchText *) hashMustFindVal(searchResultHash, hubInfo->hubUrl);
             }
         printOutputForHub(hubInfo, searchResult, count);
         count++;
@@ -1003,14 +1182,8 @@ if (hubsToPrint != NULL)
      * the individual hub tables when they're split by detailed search results. */
     printf("<div id='hideThisDiv'>\n");
     printf("<table class='hubList' id='hideThisTable'><tbody>\n");
-    struct slName *thisHubName = NULL;
-    for (thisHubName = hubsToPrint; thisHubName != NULL; thisHubName = thisHubName->next)
+    for (hubInfo = hubList; hubInfo != NULL; hubInfo = hubInfo->next)
         {
-        struct hubEntry *hubInfo = (struct hubEntry *) hashFindVal(hubLookup, thisHubName->name);
-        if (hubInfo == NULL)
-            {
-            continue;
-            }
         printOutputForHub(hubInfo, NULL, count);
         count++;
         }
@@ -1085,9 +1258,13 @@ if (searchEnabled && !isEmpty(hubSearchTerms))
             hashAdd(searchResultHash, hst->hubUrl, hst);
             }
         else
-            slAddTail(&(hubHashEnt->val), hst);
+            slAddHead(&(hubHashEnt->val), hst);
         hst = nextHst;
         }
+    struct hashEl *hel;
+    struct hashCookie cookie = hashFirst(searchResultHash);
+    while ((hel = hashNext(&cookie)) != NULL)
+        slReverse(&(hel->val));
     }
 else
     {
@@ -1259,6 +1436,20 @@ for(; hub; hub = hub->next)
     }
 }
 
+int hubConnectStatusCmp(const void *va, const void *vb)
+/* Compare to sort based on shortLabel */
+{
+const struct hubConnectStatus *a = *((struct hubConnectStatus **)va);
+const struct hubConnectStatus *b = *((struct hubConnectStatus **)vb);
+struct trackHub *ta = a->trackHub;
+struct trackHub *tb = b->trackHub;
+
+if ((ta == NULL) || (tb == NULL))
+    return 0;
+
+return strcasecmp(tb->shortLabel, ta->shortLabel);
+}
+
 void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
@@ -1289,10 +1480,11 @@ if (cartVarExists(cart, hgHubDoRedirect))
     }
 
 cartWebStart(cart, NULL, "%s", pageTitle);
+
 printf(
-"<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.4/themes/default/style.min.css\" />\n"
+"<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default/style.min.css\" />\n"
 "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js\"></script>\n"
-"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.4/jstree.min.js\"></script>\n"
+"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js\"></script>\n"
 "<style>.jstree-default .jstree-anchor { height: initial; } </style>\n"
 );
 jsIncludeFile("utils.js", NULL);
@@ -1302,6 +1494,8 @@ jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("hgHubConnect.js", NULL);
 webIncludeResourceFile("hgHubConnect.css");
 jsIncludeFile("jquery.cookie.js", NULL);
+jsIncludeFile("hgCollection.js", NULL);
+jsIncludeFile("spectrum.min.js", NULL);
 
 printf("<div id=\"hgHubConnectUI\"> <div id=\"description\"> \n");
 printf(
@@ -1330,6 +1524,8 @@ hPutc('\n');
 struct hubConnectStatus *hubList =  hubConnectStatusListFromCartAll(cart);
 
 checkTrackDbs(hubList);
+
+slSort(&hubList, hubConnectStatusCmp);
 
 // here's a little form for the add new hub button
 printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgHubConnect");
@@ -1371,6 +1567,16 @@ cgiMakeHiddenVar(hgHubDbFilter, "");
 cartSaveSession(cart);
 puts("</FORM>");
 
+// this is the form for the validate button
+boolean doValidate = cfgOptionBooleanDefault("hgHubConnect.validateHub", FALSE);
+if (doValidate)
+    {
+    printf("<FORM ACTION=\"%s\" NAME=\"validateHubForm\">\n",  "../cgi-bin/hgHubConnect");
+    cgiMakeHiddenVar("validateHubUrl", "");
+    cartSaveSession(cart);
+    puts("</FORM>");
+    }
+
 // ... and now the main form
 printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", "../cgi-bin/hgGateway");
 cartSaveSession(cart);
@@ -1378,11 +1584,15 @@ cartSaveSession(cart);
 // we have two tabs for the public and unlisted hubs
 printf("<div id=\"tabs\">"
        "<ul> <li><a href=\"#publicHubs\">Public Hubs</a></li>"
-       "<li><a href=\"#unlistedHubs\">My Hubs</a></li> "
-       "</ul> ");
+       "<li><a href=\"#unlistedHubs\">My Hubs</a></li> ");
+if (doValidate) // put up the validate tab if hg.conf statement present
+    printf("<li><a href=\"#validateHub\">Validate Hub</a></li>");
+printf("</ul> ");
 
 struct hash *publicHash = hgHubConnectPublic();
 hgHubConnectUnlisted(hubList, publicHash);
+if (doValidate)
+    hgHubConnectValidateNewHub();
 printf("</div>");
 
 printf("<div class=\"tabFooter\">");

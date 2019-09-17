@@ -1077,20 +1077,12 @@ boolean isAllNt(char *seq, int size)
 {
 int i;
 dnaUtilOpen();
-for (i=0; i<size-1; ++i)
+for (i = 0;  i < size;  ++i)
     {
     if (ntChars[(int)seq[i]] == 0)
 	return FALSE;
     }
 return TRUE;
-}
-
-boolean isAllDna(char *poly, int size)
-/* Return TRUE if size is great than 1 and letters in poly are 100% ACGTNU- */
-{
-if (size <= 1)
-    return FALSE;
-return isAllNt(poly, size);
 }
 
 

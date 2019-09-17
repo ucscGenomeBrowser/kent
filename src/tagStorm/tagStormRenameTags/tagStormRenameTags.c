@@ -5,6 +5,10 @@
 #include "options.h"
 #include "obscure.h"
 #include "portable.h"
+#include "dystring.h"
+#include "tagSchema.h"
+
+boolean clNoArray = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -18,11 +22,14 @@ errAbort(
   "first column is the old tag name, and the second the new tag name.\n"
   "   If in.tags and out.tags are the same, it will create a backup of\n"
   "in.tags in in.tags.bak\n"
+  "Options:\n"
+  "   -noArray - if set then don't treat .1. .2. and so forth as array indexes\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"noArray", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -43,6 +50,11 @@ struct lineFile *lf = lineFileOpen(sourceName, TRUE);
 // Read twoColName into a hash
 struct hash *hash = hashTwoColumnFile(twoColName);
 
+// Set up some variables that'll help us process tags that are fields from arrays
+int indexes[16];
+struct dyString *bracketedDy = dyStringNew(0);
+struct dyString *numberedDy = dyStringNew(0);
+
 // Open up output as a FILE
 FILE *f = mustOpen(outName, "w");
 
@@ -59,9 +71,24 @@ while (lineFileNext(lf, &line, NULL))
          fprintf(f, "%s\n", line);
     else
         {
-	// Parse out first word
+	// Parse out first word and make a variable to store the revised version
 	char *tag = nextWord(&s);
-	char *newTag = hashFindVal(hash, tag);
+	char *newTag = NULL;
+
+	// Handle array bits which are a bit complex, then easy non-array case to find new symbol
+	int indexCount = 0;
+	if (!clNoArray)
+	    indexCount = tagSchemaParseIndexes(tag, indexes, ArraySize(indexes));
+	if (indexCount > 0)
+	    {
+	    char *oldBracketed = tagSchemaFigureArrayName(tag, bracketedDy);
+	    char *newBracketed = hashFindVal(hash, oldBracketed);
+	    if (newBracketed != NULL)
+		newTag = tagSchemaInsertIndexes(newBracketed, indexes, indexCount, numberedDy);
+	    }
+	else
+	    newTag = hashFindVal(hash, tag);
+
 	if (newTag == NULL)
 	     newTag = tag;   // Just replace ourselves with ourselves
         mustWrite(f, line, leadingSpaces);
@@ -79,6 +106,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+clNoArray = optionExists("noArray");
 tagStormRenameTags(argv[1], argv[2], argv[3]);
 return 0;
 }

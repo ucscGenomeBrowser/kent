@@ -745,7 +745,7 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/danRer7/bed/multiz8way
 
     wget -O 46way.nh \
-http://hgdownload.cse.ucsc.edu/goldenPath/hg19/multiz46way/46way.corrected.nh
+http://hgdownload.soe.ucsc.edu/goldenPath/hg19/multiz46way/46way.corrected.nh
 
 # ((Zebrafish,
 # (Stickleback,

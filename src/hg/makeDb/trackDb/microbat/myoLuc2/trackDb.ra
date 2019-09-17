@@ -6,3 +6,5 @@ html gold
 track gap override
 html gap
 
+
+include ../../refSeqComposite.ra alpha

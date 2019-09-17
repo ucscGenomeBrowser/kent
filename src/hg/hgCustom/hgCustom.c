@@ -23,9 +23,11 @@
 #include "jsHelper.h"
 #include <signal.h>
 #include "trackHub.h"
+#include "botDelay.h"
 
 static long loadTime = 0;
-
+static boolean issueBotWarning = FALSE;
+#define delayFraction   0.25	/* same as hgTracks */
 
 void usage()
 /* Explain usage and exit. */
@@ -103,14 +105,15 @@ void addIntro()
 {
 puts(" Data must be formatted in\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/bigBed.html'>bigBed</A>,\n"
+" <A TARGET=_BLANK HREF='../goldenPath/help/barChart.html'>bigBarChart</A>,\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/bigChain.html'>bigChain</A>,\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/bigGenePred.html'>bigGenePred</A>,\n"
+" <A TARGET=_BLANK HREF='../goldenPath/help/interact.html'>bigInteract</A>,\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/bigMaf.html'>bigMaf</A>,\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/bigPsl.html'>bigPsl</A>,\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/bigWig.html'>bigWig</A>,\n"
-" <A TARGET=_BLANK HREF='../goldenPath/help/barChart.html'>barChart</A>,\n"
-" <A TARGET=_BLANK HREF='../goldenPath/help/barChart.html'>bigBarChart</A>,\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/bam.html'>BAM</A>,\n"
+" <A TARGET=_BLANK HREF='../goldenPath/help/barChart.html'>barChart</A>,\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/vcf.html'>VCF</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format1'>BED</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format1.7'>BED detail</A>,\n"
@@ -119,6 +122,7 @@ puts(" Data must be formatted in\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/cram.html'>CRAM</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format3'>GFF</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format4'>GTF</A>,\n"
+" <A TARGET=_BLANK HREF='../goldenPath/help/interact.html'>interact</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format5'>MAF</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format12'>narrowPeak</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format10'>Personal Genome SNP,</A>\n"
@@ -129,7 +133,7 @@ puts(" Data must be formatted in\n"
 " and"
 " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BROWSER'>browser</A>\n"
 " line attributes as described in the \n"
-" <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html'>User's Guide</A>.\n"
+" <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html'>User's Guide</A>.<br>\n"
 " Data in the bigBed, bigWig, bigGenePred, BAM and VCF formats can be provided via only a URL or embedded in a track\n"
 " line in the box below.\n"
 " Examples are\n"
@@ -222,8 +226,19 @@ puts("<P>");
 
 /* row for error message */
 if (isNotEmpty(err))
+    {
     printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<span style='color:RED; font-style:italic;'>"
            "Error</span>&nbsp;%s</B><P>", err);
+    /* send two lines of the message to the apache error log also: */
+    char *tmpString = cloneString(err);
+    char *lineBreak = strchr(tmpString, '\n');
+    if (lineBreak)  /* first line break becomes a blank */
+        *lineBreak = ' ';
+    lineBreak = strchr(tmpString, '\n');
+    if (lineBreak)  /* second one becomes end of string */
+        *lineBreak = (char) 0;
+    fprintf(stderr, "hgCustom load error: %s\n", tmpString);
+    }
 
 cgiSimpleTableStart();
 
@@ -926,6 +941,19 @@ cartWebEnd(cart);
 }
 #endif
 
+static void webBotWarning()
+/* display the overuse warning message in the javaScript warning text box
+ * html output has already started at this point, just need to add the
+ * warning handler and setup the warning javaScript box, warnings after
+ * this will go to that text box
+ */
+{
+pushWarnHandler(webVaWarn);
+htmlWarnBoxSetup(stdout);
+char *ip = getenv("REMOTE_ADDR");
+botDelayMessage(ip, botDelayMillis);
+}
+
 void doAddCustom(char *err)
 /* display form for adding custom tracks.
  * Include error message, if any */
@@ -933,6 +961,8 @@ void doAddCustom(char *err)
 cartWebStart(cart, database, "Add Custom Tracks");
 addCustomForm(NULL, err);
 helpCustom();
+if (issueBotWarning)
+    webBotWarning();
 cartWebEnd(cart);
 }
 
@@ -959,6 +989,8 @@ jsIncludeFile("jquery.js", NULL);
 manageCustomForm(warnMsg);
 webNewSection("Managing Custom Tracks");
 webIncludeHelpFile("customTrackManage", FALSE);
+if (issueBotWarning)
+    webBotWarning();
 cartWebEnd(cart);
 }
 
@@ -1296,6 +1328,7 @@ else
                 }
             }
         }
+
     addWarning(dsWarn, replacedTracksMsg(replacedCts));
     doBrowserLines(browserLines, &warnMsg);
     addWarning(dsWarn, warnMsg);
@@ -1363,6 +1396,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 long enteredMainTime = clock1000();
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgCustom", delayFraction, 0, 0, "html");
 htmlPushEarlyHandlers();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);

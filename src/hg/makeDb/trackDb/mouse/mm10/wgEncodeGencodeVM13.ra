@@ -1,6 +1,6 @@
 track wgEncodeGencodeVM13
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE VM13
 longLabel All GENCODE annotations from VM13 (Ensembl 88)
 group genes
@@ -37,6 +37,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneVM13
     visibility pack
     subTrack wgEncodeGencodeVM13
     type genePred
+    idXref wgEncodeGencodeAttrsVM13 transcriptId geneId
     itemClassTbl wgEncodeGencodeAttrsVM13
     itemClassNameColumn transcriptId
     itemClassClassColumn transcriptClass

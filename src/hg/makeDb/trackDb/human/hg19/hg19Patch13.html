@@ -1,0 +1,1073 @@
+<h2>Description</h2>
+<p>
+   Patch release 13 is the thirteenth patch release for the GRCh37 assembly.
+   This is a minor release of GRCh37 that does not disrupt the coordinate
+   system in the reference sequence GRCh37.
+   All but four patch scaffolds from patch releases 1-12 were retained.</p>
+<p>
+   Between patch release 12 and patch release 13:</p>
+<ul>
+   <li>10 patch scaffolds of type FIX were added.</li>
+   <li>14 patch scaffolds of type FIX were updated.</li>
+   <li>1 patch scaffold of type NOVEL was updated.</li>
+</ul>
+
+<p>
+   Total patch scaffolds in this patch release: 204</p>
+<ul>
+   <li>Patch scaffolds of type FIX: 131</li>
+   <li>Patch scaffolds of type NOVEL: 73</li>
+</ul>
+
+<h2>Definitions</h2>
+
+<dl>
+  <dt>Genome Patch:</dt>
+    <dd>A sequence contig/scaffold that corrects sequence
+    in a major release of the genome, or adds sequence to it.</dd>
+<br>
+  <dt>FIX patch:</dt>
+    <dd>A patch that corrects sequence or reduces an assembly gap
+    in a given major release. FIX patch sequences are meant to be
+    incorporated into the primary or existing alt-loci assembly units at
+    the next major release, and their accessions will then be
+    deprecated.</dd>
+<br>
+  <dt>NOVEL patch:<dt>
+    <dd>A patch that adds sequence to a major release. Typically,
+    NOVEL patch sequences are meant to be incorporated into the assembly
+    as new alternate loci at the next major release, and their
+    accessions will not be deprecated  (UCSC term: "new haplotype sequence").</dd>
+</dl>
+
+<h2>Patch release 13 summary table</h2>
+<table border=1>
+<tr><th>GRCh37 reference<br>location</th><th>NCBI Entrez<br>nucleotide record</th><th>GRC region<br>name</th><th>sequence<br>name</th><th>patch<br>type</th></tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr1:3823584-3845268">chr1:3823584-3845268</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806574.2?report=genbank" target="_blank">chr1_JH806574v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION77&asm=GRCh37.p13" target="_blank">REGION77</a></td>
+    <td>HG1472_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr1:31872759-32017063">chr1:31872759-32017063</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL949741.1?report=genbank" target="_blank">chr1_GL949741v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION60&asm=GRCh37.p13" target="_blank">REGION60</a></td>
+    <td>HG989_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr1:120471050-121346350">chr1:120471050-121346350</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH636053.3?report=genbank" target="_blank">chr1_JH636053v3_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=1P11&asm=GRCh37.p13" target="_blank">1P11</a></td>
+    <td>HG1292_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr1:143871003-150440213">chr1:143871003-150440213</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH636052.4?report=genbank" target="_blank">chr1_JH636052v4_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=1Q21&asm=GRCh37.p13" target="_blank">1Q21</a></td>
+    <td>HG1287_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr1:153673007-153838214">chr1:153673007-153838214</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383518.1?report=genbank" target="_blank">chr1_GL383518v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION2&asm=GRCh37.p13" target="_blank">REGION2</a></td>
+    <td>HSCHR1_1_CTG31</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr1:155180173-155275036">chr1:155180173-155275036</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383519.1?report=genbank" target="_blank">chr1_GL383519v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=MTX1&asm=GRCh37.p13" target="_blank">MTX1</a></td>
+    <td>HSCHR1_2_CTG31</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr1:198339213-198694304">chr1:198339213-198694304</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383520.1?report=genbank" target="_blank">chr1_GL383520v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION3&asm=GRCh37.p13" target="_blank">REGION3</a></td>
+    <td>HSCHR1_3_CTG31</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr1:205916833-205922707">chr1:205916833-205922707</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806573.1?report=genbank" target="_blank">chr1_JH806573v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION78&asm=GRCh37.p13" target="_blank">REGION78</a></td>
+    <td>HG1471_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr1:206072708-206940869">chr1:206072708-206940869</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH636054.1?report=genbank" target="_blank">chr1_JH636054v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=1Q32&asm=GRCh37.p13" target="_blank">1Q32</a></td>
+    <td>HG1293_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr1:235167042-235192211">chr1:235167042-235192211</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806575.1?report=genbank" target="_blank">chr1_JH806575v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION79&asm=GRCh37.p13" target="_blank">REGION79</a></td>
+    <td>HG1473_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr1:248865779-249098883">chr1:248865779-249098883</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383516.1?report=genbank" target="_blank">chr1_GL383516v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION1&asm=GRCh37.p13" target="_blank">REGION1</a></td>
+    <td>HG999_1_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr1:248865779-249098883">chr1:248865779-249098883</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383517.1?report=genbank" target="_blank">chr1_GL383517v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION1&asm=GRCh37.p13" target="_blank">REGION1</a></td>
+    <td>HG999_2_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr10:60001-224405">chr10:60001-224405</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL877873.1?report=genbank" target="_blank">chr10_GL877873v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION57&asm=GRCh37.p13" target="_blank">REGION57</a></td>
+    <td>HG905_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr10:5012527-5450243">chr10:5012527-5450243</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH636060.1?report=genbank" target="_blank">chr10_JH636060v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=AKR1CL1&asm=GRCh37.p13" target="_blank">AKR1CL1</a></td>
+    <td>HG871_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr10:17613209-18252930">chr10:17613209-18252930</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383543.1?report=genbank" target="_blank">chr10_GL383543v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=FAM23A_MRC1&asm=GRCh37.p13" target="_blank">FAM23A_MRC1</a></td>
+    <td>HG544_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr10:27574584-27706537">chr10:27574584-27706537</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383545.1?report=genbank" target="_blank">chr10_GL383545v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION16&asm=GRCh37.p13" target="_blank">REGION16</a></td>
+    <td>HSCHR10_1_CTG2</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr10:45670681-45964419">chr10:45670681-45964419</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383546.1?report=genbank" target="_blank">chr10_GL383546v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION18&asm=GRCh37.p13" target="_blank">REGION18</a></td>
+    <td>HSCHR10_1_CTG5</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr10:46224334-51886485">chr10:46224334-51886485</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH591181.2?report=genbank" target="_blank">chr10_JH591181v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=10Q11&asm=GRCh37.p13" target="_blank">10Q11</a></td>
+    <td>HG1211_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr10:46224334-51886485">chr10:46224334-51886485</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KB663606.1?report=genbank" target="_blank">chr10_KB663606v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=10Q11&asm=GRCh37.p13" target="_blank">10Q11</a></td>
+    <td>HG1074_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr10:97861451-98039369">chr10:97861451-98039369</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH591183.1?report=genbank" target="_blank">chr10_JH591183v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=ZNF518A&asm=GRCh37.p13" target="_blank">ZNF518A</a></td>
+    <td>HG339_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr10:116786296-117806873">chr10:116786296-117806873</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KE332501.1?report=genbank" target="_blank">chr10_KE332501v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=ATRNL1&asm=GRCh37.p13" target="_blank">ATRNL1</a></td>
+    <td>HG979_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr10:118348517-118544777">chr10:118348517-118544777</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH591182.1?report=genbank" target="_blank">chr10_JH591182v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=PNLIPRP2&asm=GRCh37.p13" target="_blank">PNLIPRP2</a></td>
+    <td>HG311_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr10:133258319-133381404">chr10:133258319-133381404</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383544.1?report=genbank" target="_blank">chr10_GL383544v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION17&asm=GRCh37.p13" target="_blank">REGION17</a></td>
+    <td>HG995_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr10:133727528-133781577">chr10:133727528-133781577</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806580.1?report=genbank" target="_blank">chr10_JH806580v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=PPP2R2D&asm=GRCh37.p13" target="_blank">PPP2R2D</a></td>
+    <td>HG1479_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr11:13963464-14425744">chr11:13963464-14425744</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH591184.1?report=genbank" target="_blank">chr11_JH591184v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=SPON1&asm=GRCh37.p13" target="_blank">SPON1</a></td>
+    <td>HG256_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr11:14873971-15041407">chr11:14873971-15041407</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH591185.1?report=genbank" target="_blank">chr11_JH591185v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=CALCA&asm=GRCh37.p13" target="_blank">CALCA</a></td>
+    <td>HG873_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr11:25191953-25340626">chr11:25191953-25340626</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383547.1?report=genbank" target="_blank">chr11_GL383547v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION19&asm=GRCh37.p13" target="_blank">REGION19</a></td>
+    <td>HSCHR11_1_CTG1_1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr11:49862648-50121284">chr11:49862648-50121284</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL582973.1?report=genbank" target="_blank">chr11_GL582973v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION49&asm=GRCh37.p13" target="_blank">REGION49</a></td>
+    <td>HG281_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr11:55956728-56641043">chr11:55956728-56641043</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159136.1?report=genbank" target="_blank">chr11_JH159136v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=OLFACTORY_REGION_1&asm=GRCh37.p13" target="_blank">OLFACTORY_REGION_1</a></td>
+    <td>HG142_HG150_NOVEL_TEST</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr11:55956728-56641043">chr11:55956728-56641043</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159137.1?report=genbank" target="_blank">chr11_JH159137v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=OLFACTORY_REGION_1&asm=GRCh37.p13" target="_blank">OLFACTORY_REGION_1</a></td>
+    <td>HG151_NOVEL_TEST</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr11:69614786-69922571">chr11:69614786-69922571</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL949744.1?report=genbank" target="_blank">chr11_GL949744v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION63&asm=GRCh37.p13" target="_blank">REGION63</a></td>
+    <td>HG536_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr11:70301893-71088948">chr11:70301893-71088948</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806581.1?report=genbank" target="_blank">chr11_JH806581v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=SHANK2&asm=GRCh37.p13" target="_blank">SHANK2</a></td>
+    <td>HG865_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr11:76709408-76900812">chr11:76709408-76900812</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159143.1?report=genbank" target="_blank">chr11_JH159143v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=B3GNT6&asm=GRCh37.p13" target="_blank">B3GNT6</a></td>
+    <td>HG414_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr11:94611846-94852618">chr11:94611846-94852618</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159141.2?report=genbank" target="_blank">chr11_JH159141v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=CWC15_SRSF8&asm=GRCh37.p13" target="_blank">CWC15_SRSF8</a></td>
+    <td>HG348_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr11:102702497-102822936">chr11:102702497-102822936</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159139.1?report=genbank" target="_blank">chr11_JH159139v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=MMP12&asm=GRCh37.p13" target="_blank">MMP12</a></td>
+    <td>HG305_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr11:111618733-111945380">chr11:111618733-111945380</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159142.2?report=genbank" target="_blank">chr11_JH159142v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=DIXDC1_ALG9&asm=GRCh37.p13" target="_blank">DIXDC1_ALG9</a></td>
+    <td>HG388_HG400_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr11:112687997-113234431">chr11:112687997-113234431</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159140.1?report=genbank" target="_blank">chr11_JH159140v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=NCAM1&asm=GRCh37.p13" target="_blank">NCAM1</a></td>
+    <td>HG306_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr11:118245278-118653701">chr11:118245278-118653701</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH720443.2?report=genbank" target="_blank">chr11_JH720443v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=TREH&asm=GRCh37.p13" target="_blank">TREH</a></td>
+    <td>HG122_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr11:118849111-118957986">chr11:118849111-118957986</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159138.1?report=genbank" target="_blank">chr11_JH159138v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=SLC37A4&asm=GRCh37.p13" target="_blank">SLC37A4</a></td>
+    <td>HG299_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr12:60001-282464">chr12:60001-282464</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL582974.1?report=genbank" target="_blank">chr12_GL582974v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION50&asm=GRCh37.p13" target="_blank">REGION50</a></td>
+    <td>HG858_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr12:60001-282464">chr12:60001-282464</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL877875.1?report=genbank" target="_blank">chr12_GL877875v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION50&asm=GRCh37.p13" target="_blank">REGION50</a></td>
+    <td>HSCHR12_1_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr12:6907581-7178849">chr12:6907581-7178849</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH720444.2?report=genbank" target="_blank">chr12_JH720444v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=EMG1&asm=GRCh37.p13" target="_blank">EMG1</a></td>
+    <td>HG344_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr12:10953894-11330216">chr12:10953894-11330216</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL877876.1?report=genbank" target="_blank">chr12_GL877876v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION58&asm=GRCh37.p13" target="_blank">REGION58</a></td>
+    <td>HSCHR12_2_CTG2</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr12:10953894-11330216">chr12:10953894-11330216</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL949745.1?report=genbank" target="_blank">chr12_GL949745v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION58&asm=GRCh37.p13" target="_blank">REGION58</a></td>
+    <td>HG1133_PATCH</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr12:28148967-28263711">chr12:28148967-28263711</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383549.1?report=genbank" target="_blank">chr12_GL383549v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION21&asm=GRCh37.p13" target="_blank">REGION21</a></td>
+    <td>HSCHR12_1_CTG2</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr12:58326520-58486538">chr12:58326520-58486538</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383550.1?report=genbank" target="_blank">chr12_GL383550v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION22&asm=GRCh37.p13" target="_blank">REGION22</a></td>
+    <td>HSCHR12_1_CTG2_1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr12:59323046-59454651">chr12:59323046-59454651</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383552.1?report=genbank" target="_blank">chr12_GL383552v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION23&asm=GRCh37.p13" target="_blank">REGION23</a></td>
+    <td>HSCHR12_2_CTG2_1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr12:101505377-101652073">chr12:101505377-101652073</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383553.2?report=genbank" target="_blank">chr12_GL383553v2_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION24&asm=GRCh37.p13" target="_blank">REGION24</a></td>
+    <td>HSCHR12_3_CTG2_1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr12:121761801-122096824">chr12:121761801-122096824</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KB663607.2?report=genbank" target="_blank">chr12_KB663607v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=KDM2B&asm=GRCh37.p13" target="_blank">KDM2B</a></td>
+    <td>HG1595_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr12:126711744-126890020">chr12:126711744-126890020</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383551.1?report=genbank" target="_blank">chr12_GL383551v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION20&asm=GRCh37.p13" target="_blank">REGION20</a></td>
+    <td>HSCHR12_1_CTG5</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr12:132806993-132967794">chr12:132806993-132967794</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383548.1?report=genbank" target="_blank">chr12_GL383548v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=GALNT9&asm=GRCh37.p13" target="_blank">GALNT9</a></td>
+    <td>HG996_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr13:115085142-115109878">chr13:115085142-115109878</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL582975.1?report=genbank" target="_blank">chr13_GL582975v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION51&asm=GRCh37.p13" target="_blank">REGION51</a></td>
+    <td>HG531_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr14:105803171-107268434">chr14:105803171-107268434</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KB021645.1?report=genbank" target="_blank">chr14_KB021645v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=IGH&asm=GRCh37.p13" target="_blank">IGH</a></td>
+    <td>HG1592_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr15:28557187-28842093">chr15:28557187-28842093</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383554.1?report=genbank" target="_blank">chr15_GL383554v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION25&asm=GRCh37.p13" target="_blank">REGION25</a></td>
+    <td>HSCHR15_1_CTG4</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr15:66200521-66577156">chr15:66200521-66577156</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383555.1?report=genbank" target="_blank">chr15_GL383555v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=MEGF11&asm=GRCh37.p13" target="_blank">MEGF11</a></td>
+    <td>HSCHR15_1_CTG8</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr15:99529037-99696045">chr15:99529037-99696045</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH720445.1?report=genbank" target="_blank">chr15_JH720445v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=SYNM&asm=GRCh37.p13" target="_blank">SYNM</a></td>
+    <td>HG971_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr16:55822434-56002460">chr16:55822434-56002460</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383556.1?report=genbank" target="_blank">chr16_GL383556v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION26&asm=GRCh37.p13" target="_blank">REGION26</a></td>
+    <td>HSCHR16_1_CTG3_1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr16:57774022-57871358">chr16:57774022-57871358</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH720446.1?report=genbank" target="_blank">chr16_JH720446v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION74&asm=GRCh37.p13" target="_blank">REGION74</a></td>
+    <td>HG1208_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr16:69174054-69258593">chr16:69174054-69258593</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383557.1?report=genbank" target="_blank">chr16_GL383557v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=SNTB2&asm=GRCh37.p13" target="_blank">SNTB2</a></td>
+    <td>HSCHR16_2_CTG3_1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:1-252428">chr17:1-252428</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383563.2?report=genbank" target="_blank">chr17_GL383563v2_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=DOC2B_RPH3AL&asm=GRCh37.p13" target="_blank">DOC2B_RPH3AL</a></td>
+    <td>HSCHR17_1_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:1-252428">chr17:1-252428</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806582.2?report=genbank" target="_blank">chr17_JH806582v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=DOC2B_RPH3AL&asm=GRCh37.p13" target="_blank">DOC2B_RPH3AL</a></td>
+    <td>HG417_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:252429-296626">chr17:252429-296626</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383562.1?report=genbank" target="_blank">chr17_GL383562v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=FAM101B&asm=GRCh37.p13" target="_blank">FAM101B</a></td>
+    <td>HG990_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:21250948-21566608">chr17:21250948-21566608</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383561.2?report=genbank" target="_blank">chr17_GL383561v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION27&asm=GRCh37.p13" target="_blank">REGION27</a></td>
+    <td>HG987_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:22174115-22263006">chr17:22174115-22263006</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KE332502.1?report=genbank" target="_blank">chr17_KE332502v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION103&asm=GRCh37.p13" target="_blank">REGION103</a></td>
+    <td>HG1591_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:26645159-26840019">chr17:26645159-26840019</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159145.1?report=genbank" target="_blank">chr17_JH159145v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=SLC46A1&asm=GRCh37.p13" target="_blank">SLC46A1</a></td>
+    <td>HG883_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:34034852-34246252">chr17:34034852-34246252</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KB021646.2?report=genbank" target="_blank">chr17_KB021646v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=MMP28&asm=GRCh37.p13" target="_blank">MMP28</a></td>
+    <td>HG385_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:34442621-35005379">chr17:34442621-35005379</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383560.1?report=genbank" target="_blank">chr17_GL383560v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=MYO19&asm=GRCh37.p13" target="_blank">MYO19</a></td>
+    <td>HG75_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:36372617-36711255">chr17:36372617-36711255</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383559.2?report=genbank" target="_blank">chr17_GL383559v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=SOCS7&asm=GRCh37.p13" target="_blank">SOCS7</a></td>
+    <td>HG745_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:39006985-39589187">chr17:39006985-39589187</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383564.1?report=genbank" target="_blank">chr17_GL383564v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=KRTAP_REGION_1&asm=GRCh37.p13" target="_blank">KRTAP_REGION_1</a></td>
+    <td>HSCHR17_1_CTG4</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:39006985-39589187">chr17:39006985-39589187</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159146.1?report=genbank" target="_blank">chr17_JH159146v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=KRTAP_REGION_1&asm=GRCh37.p13" target="_blank">KRTAP_REGION_1</a></td>
+    <td>HSCHR17_4_CTG4</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:39006985-39589187">chr17:39006985-39589187</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159147.1?report=genbank" target="_blank">chr17_JH159147v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=KRTAP_REGION_1&asm=GRCh37.p13" target="_blank">KRTAP_REGION_1</a></td>
+    <td>HSCHR17_5_CTG4</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:39006985-39589187">chr17:39006985-39589187</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159148.1?report=genbank" target="_blank">chr17_JH159148v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=KRTAP_REGION_1&asm=GRCh37.p13" target="_blank">KRTAP_REGION_1</a></td>
+    <td>HSCHR17_6_CTG4</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:39869611-40277911">chr17:39869611-40277911</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL582976.1?report=genbank" target="_blank">chr17_GL582976v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=TTC25&asm=GRCh37.p13" target="_blank">TTC25</a></td>
+    <td>HG185_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:43384864-44913631">chr17:43384864-44913631</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH720447.1?report=genbank" target="_blank">chr17_JH720447v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=MAPT&asm=GRCh37.p13" target="_blank">MAPT</a></td>
+    <td>HG1146_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:62273514-62649312">chr17:62273514-62649312</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383558.1?report=genbank" target="_blank">chr17_GL383558v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=PECAM1&asm=GRCh37.p13" target="_blank">PECAM1</a></td>
+    <td>HG183_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:65936106-66324470">chr17:65936106-66324470</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159144.1?report=genbank" target="_blank">chr17_JH159144v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION65&asm=GRCh37.p13" target="_blank">REGION65</a></td>
+    <td>HG747_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:68302419-68520360">chr17:68302419-68520360</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383565.1?report=genbank" target="_blank">chr17_GL383565v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION28&asm=GRCh37.p13" target="_blank">REGION28</a></td>
+    <td>HSCHR17_2_CTG4</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:75216812-75295408">chr17:75216812-75295408</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383566.1?report=genbank" target="_blank">chr17_GL383566v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION30&asm=GRCh37.p13" target="_blank">REGION30</a></td>
+    <td>HSCHR17_3_CTG4</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:77412077-77766016">chr17:77412077-77766016</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH591186.1?report=genbank" target="_blank">chr17_JH591186v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION69&asm=GRCh37.p13" target="_blank">REGION69</a></td>
+    <td>HG748_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr17:79319163-79498447">chr17:79319163-79498447</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH636061.1?report=genbank" target="_blank">chr17_JH636061v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=BAHCC1&asm=GRCh37.p13" target="_blank">BAHCC1</a></td>
+    <td>HG271_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr18:47818564-48101162">chr18:47818564-48101162</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383567.1?report=genbank" target="_blank">chr18_GL383567v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION31&asm=GRCh37.p13" target="_blank">REGION31</a></td>
+    <td>HSCHR18_1_CTG1_1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr18:49189306-49348012">chr18:49189306-49348012</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383570.1?report=genbank" target="_blank">chr18_GL383570v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION32&asm=GRCh37.p13" target="_blank">REGION32</a></td>
+    <td>HSCHR18_2_CTG1_1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr18:65090960-65219788">chr18:65090960-65219788</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383571.1?report=genbank" target="_blank">chr18_GL383571v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION33&asm=GRCh37.p13" target="_blank">REGION33</a></td>
+    <td>HSCHR18_2_CTG2</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr18:70600357-70692016">chr18:70600357-70692016</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383568.1?report=genbank" target="_blank">chr18_GL383568v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION34&asm=GRCh37.p13" target="_blank">REGION34</a></td>
+    <td>HSCHR18_1_CTG2</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr18:76253467-76412030">chr18:76253467-76412030</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383569.1?report=genbank" target="_blank">chr18_GL383569v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION35&asm=GRCh37.p13" target="_blank">REGION35</a></td>
+    <td>HSCHR18_1_CTG2_1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr18:76694886-76848997">chr18:76694886-76848997</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383572.1?report=genbank" target="_blank">chr18_GL383572v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION36&asm=GRCh37.p13" target="_blank">REGION36</a></td>
+    <td>HSCHR18_2_CTG2_1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr19:8634915-8926179">chr19:8634915-8926179</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159149.1?report=genbank" target="_blank">chr19_JH159149v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION66&asm=GRCh37.p13" target="_blank">REGION66</a></td>
+    <td>HG729_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr19:20193557-20845946">chr19:20193557-20845946</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL582977.2?report=genbank" target="_blank">chr19_GL582977v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION52&asm=GRCh37.p13" target="_blank">REGION52</a></td>
+    <td>HG730_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr19:20845947-21225187">chr19:20845947-21225187</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383573.1?report=genbank" target="_blank">chr19_GL383573v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=ZNF66&asm=GRCh37.p13" target="_blank">ZNF66</a></td>
+    <td>HSCHR19_1_CTG3</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr19:21831092-21991834">chr19:21831092-21991834</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383575.2?report=genbank" target="_blank">chr19_GL383575v2_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION37&asm=GRCh37.p13" target="_blank">REGION37</a></td>
+    <td>HSCHR19_2_CTG3</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr19:22303652-22483468">chr19:22303652-22483468</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383576.1?report=genbank" target="_blank">chr19_GL383576v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION39&asm=GRCh37.p13" target="_blank">REGION39</a></td>
+    <td>HSCHR19_3_CTG3</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr19:34643165-34791855">chr19:34643165-34791855</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383574.1?report=genbank" target="_blank">chr19_GL383574v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION38&asm=GRCh37.p13" target="_blank">REGION38</a></td>
+    <td>HSCHR19_1_CTG3_1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr19:41936867-42514711">chr19:41936867-42514711</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KE332505.1?report=genbank" target="_blank">chr19_KE332505v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=CEACAM_REGION_1&asm=GRCh37.p13" target="_blank">CEACAM_REGION_1</a></td>
+    <td>HG1350_HG959_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr19:54528888-55595686">chr19:54528888-55595686</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL949746.1?report=genbank" target="_blank">chr19_GL949746v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=LRC&asm=GRCh37.p13" target="_blank">LRC</a></td>
+    <td>HSCHR19LRC_COX1_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr19:54528888-55595686">chr19:54528888-55595686</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL949747.1?report=genbank" target="_blank">chr19_GL949747v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=LRC&asm=GRCh37.p13" target="_blank">LRC</a></td>
+    <td>HSCHR19LRC_COX2_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr19:54528888-55595686">chr19:54528888-55595686</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL949748.1?report=genbank" target="_blank">chr19_GL949748v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=LRC&asm=GRCh37.p13" target="_blank">LRC</a></td>
+    <td>HSCHR19LRC_LRC_I_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr19:54528888-55595686">chr19:54528888-55595686</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL949749.1?report=genbank" target="_blank">chr19_GL949749v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=LRC&asm=GRCh37.p13" target="_blank">LRC</a></td>
+    <td>HSCHR19LRC_LRC_J_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr19:54528888-55595686">chr19:54528888-55595686</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL949750.1?report=genbank" target="_blank">chr19_GL949750v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=LRC&asm=GRCh37.p13" target="_blank">LRC</a></td>
+    <td>HSCHR19LRC_LRC_S_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr19:54528888-55595686">chr19:54528888-55595686</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL949751.1?report=genbank" target="_blank">chr19_GL949751v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=LRC&asm=GRCh37.p13" target="_blank">LRC</a></td>
+    <td>HSCHR19LRC_LRC_T_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr19:54528888-55595686">chr19:54528888-55595686</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL949752.1?report=genbank" target="_blank">chr19_GL949752v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=LRC&asm=GRCh37.p13" target="_blank">LRC</a></td>
+    <td>HSCHR19LRC_PGF1_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr19:54528888-55595686">chr19:54528888-55595686</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL949753.1?report=genbank" target="_blank">chr19_GL949753v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=LRC&asm=GRCh37.p13" target="_blank">LRC</a></td>
+    <td>HSCHR19LRC_PGF2_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr19:54528888-55595686">chr19:54528888-55595686</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KB021647.1?report=genbank" target="_blank">chr19_KB021647v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=LRC&asm=GRCh37.p13" target="_blank">LRC</a></td>
+    <td>HG1079_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr2:36453102-36590458">chr2:36453102-36590458</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383521.1?report=genbank" target="_blank">chr2_GL383521v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION4&asm=GRCh37.p13" target="_blank">REGION4</a></td>
+    <td>HSCHR2_1_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr2:70660851-71260429">chr2:70660851-71260429</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KB663603.1?report=genbank" target="_blank">chr2_KB663603v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=CD207&asm=GRCh37.p13" target="_blank">CD207</a></td>
+    <td>HG953_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr2:95326172-95618108">chr2:95326172-95618108</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL877871.1?report=genbank" target="_blank">chr2_GL877871v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION55&asm=GRCh37.p13" target="_blank">REGION55</a></td>
+    <td>HG686_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr2:149790583-149880633">chr2:149790583-149880633</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL582966.2?report=genbank" target="_blank">chr2_GL582966v2_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION44&asm=GRCh37.p13" target="_blank">REGION44</a></td>
+    <td>HSCHR2_2_CTG12</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr2:169686873-169793704">chr2:169686873-169793704</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383522.1?report=genbank" target="_blank">chr2_GL383522v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=SPC25&asm=GRCh37.p13" target="_blank">SPC25</a></td>
+    <td>HSCHR2_1_CTG12</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr2:243059660-243189373">chr2:243059660-243189373</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL877870.2?report=genbank" target="_blank">chr2_GL877870v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION54&asm=GRCh37.p13" target="_blank">REGION54</a></td>
+    <td>HG1007_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr20:17751747-17874115">chr20:17751747-17874115</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383577.1?report=genbank" target="_blank">chr20_GL383577v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION40&asm=GRCh37.p13" target="_blank">REGION40</a></td>
+    <td>HSCHR20_1_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr20:34883261-34994224">chr20:34883261-34994224</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH720448.1?report=genbank" target="_blank">chr20_JH720448v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=DLGAP4&asm=GRCh37.p13" target="_blank">DLGAP4</a></td>
+    <td>HG144_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr20:53978607-54220677">chr20:53978607-54220677</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KB663608.1?report=genbank" target="_blank">chr20_KB663608v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION101&asm=GRCh37.p13" target="_blank">REGION101</a></td>
+    <td>HG944_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr20:61031539-61267733">chr20:61031539-61267733</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL582979.2?report=genbank" target="_blank">chr20_GL582979v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION53&asm=GRCh37.p13" target="_blank">REGION53</a></td>
+    <td>HG506_HG507_HG1000_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr21:15796462-15847792">chr21:15796462-15847792</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383578.1?report=genbank" target="_blank">chr21_GL383578v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION41&asm=GRCh37.p13" target="_blank">REGION41</a></td>
+    <td>HSCHR21_1_CTG1_1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr21:23474793-23669288">chr21:23474793-23669288</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383579.1?report=genbank" target="_blank">chr21_GL383579v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION42&asm=GRCh37.p13" target="_blank">REGION42</a></td>
+    <td>HSCHR21_2_CTG1_1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr21:34141390-34210247">chr21:34141390-34210247</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383580.1?report=genbank" target="_blank">chr21_GL383580v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION43&asm=GRCh37.p13" target="_blank">REGION43</a></td>
+    <td>HSCHR21_3_CTG1_1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr21:34777735-34884866">chr21:34777735-34884866</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383581.1?report=genbank" target="_blank">chr21_GL383581v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=TMEM50B&asm=GRCh37.p13" target="_blank">TMEM50B</a></td>
+    <td>HSCHR21_4_CTG1_1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr21:45916561-46223846">chr21:45916561-46223846</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KE332506.1?report=genbank" target="_blank">chr21_KE332506v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=KRTAP_REGION_2&asm=GRCh37.p13" target="_blank">KRTAP_REGION_2</a></td>
+    <td>HG237_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr22:16050001-16087693">chr22:16050001-16087693</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806584.1?report=genbank" target="_blank">chr22_JH806584v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION83&asm=GRCh37.p13" target="_blank">REGION83</a></td>
+    <td>HG1487_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr22:16656462-16697850">chr22:16656462-16697850</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806583.1?report=genbank" target="_blank">chr22_JH806583v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION84&asm=GRCh37.p13" target="_blank">REGION84</a></td>
+    <td>HG1486_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr22:16847851-16884805">chr22:16847851-16884805</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806585.1?report=genbank" target="_blank">chr22_JH806585v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION85&asm=GRCh37.p13" target="_blank">REGION85</a></td>
+    <td>HG1488_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr22:19134297-19346604">chr22:19134297-19346604</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH720449.1?report=genbank" target="_blank">chr22_JH720449v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=CLTCL1&asm=GRCh37.p13" target="_blank">CLTCL1</a></td>
+    <td>HG329_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr22:39280299-39407165">chr22:39280299-39407165</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383583.1?report=genbank" target="_blank">chr22_GL383583v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=APOBEC&asm=GRCh37.p13" target="_blank">APOBEC</a></td>
+    <td>HSCHR22_1_CTG2</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr22:42473660-42648568">chr22:42473660-42648568</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383582.2?report=genbank" target="_blank">chr22_GL383582v2_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=CYP2D6&asm=GRCh37.p13" target="_blank">CYP2D6</a></td>
+    <td>HSCHR22_1_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr22:42473660-42648568">chr22:42473660-42648568</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KB663609.1?report=genbank" target="_blank">chr22_KB663609v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=CYP2D6&asm=GRCh37.p13" target="_blank">CYP2D6</a></td>
+    <td>HSCHR22_2_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr22:51203354-51244566">chr22:51203354-51244566</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806586.1?report=genbank" target="_blank">chr22_JH806586v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION86&asm=GRCh37.p13" target="_blank">REGION86</a></td>
+    <td>HG497_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr3:11856742-12027971">chr3:11856742-12027971</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH636055.1?report=genbank" target="_blank">chr3_JH636055v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION73&asm=GRCh37.p13" target="_blank">REGION73</a></td>
+    <td>HSCHR3_1_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr3:50267585-50368277">chr3:50267585-50368277</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159132.1?report=genbank" target="_blank">chr3_JH159132v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=SEMA3B&asm=GRCh37.p13" target="_blank">SEMA3B</a></td>
+    <td>HG325_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr3:51416109-51584055">chr3:51416109-51584055</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383523.1?report=genbank" target="_blank">chr3_GL383523v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=VPRBP&asm=GRCh37.p13" target="_blank">VPRBP</a></td>
+    <td>HG186_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr3:53185062-53448933">chr3:53185062-53448933</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KE332495.1?report=genbank" target="_blank">chr3_KE332495v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=DCP1A&asm=GRCh37.p13" target="_blank">DCP1A</a></td>
+    <td>HG957_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr3:57369478-57399969">chr3:57369478-57399969</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383524.1?report=genbank" target="_blank">chr3_GL383524v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=DNAH12&asm=GRCh37.p13" target="_blank">DNAH12</a></td>
+    <td>HG280_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr3:60558332-60952039">chr3:60558332-60952039</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159131.1?report=genbank" target="_blank">chr3_JH159131v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION64&asm=GRCh37.p13" target="_blank">REGION64</a></td>
+    <td>HG1091_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr3:66270271-66308065">chr3:66270271-66308065</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383525.1?report=genbank" target="_blank">chr3_GL383525v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=SLC25A26&asm=GRCh37.p13" target="_blank">SLC25A26</a></td>
+    <td>HG991_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr3:151307154-151477286">chr3:151307154-151477286</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383526.1?report=genbank" target="_blank">chr3_GL383526v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION5&asm=GRCh37.p13" target="_blank">REGION5</a></td>
+    <td>HSCHR3_1_CTG2_1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr4:10001-507004">chr4:10001-507004</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KE332496.1?report=genbank" target="_blank">chr4_KE332496v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=ZNF595_ZNF718&asm=GRCh37.p13" target="_blank">ZNF595_ZNF718</a></td>
+    <td>HG174_HG254_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr4:34519577-34885480">chr4:34519577-34885480</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383528.1?report=genbank" target="_blank">chr4_GL383528v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION6&asm=GRCh37.p13" target="_blank">REGION6</a></td>
+    <td>HSCHR4_1_CTG6</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr4:62777687-62877254">chr4:62777687-62877254</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383529.1?report=genbank" target="_blank">chr4_GL383529v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=LPHN3&asm=GRCh37.p13" target="_blank">LPHN3</a></td>
+    <td>HSCHR4_2_CTG9</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr4:75382210-75689879">chr4:75382210-75689879</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL582967.1?report=genbank" target="_blank">chr4_GL582967v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION45&asm=GRCh37.p13" target="_blank">REGION45</a></td>
+    <td>HG706_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr4:156756530-156908416">chr4:156756530-156908416</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383527.1?report=genbank" target="_blank">chr4_GL383527v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION7&asm=GRCh37.p13" target="_blank">REGION7</a></td>
+    <td>HSCHR4_1_CTG12</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr4:190828226-191044276">chr4:190828226-191044276</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL877872.1?report=genbank" target="_blank">chr4_GL877872v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION56&asm=GRCh37.p13" target="_blank">REGION56</a></td>
+    <td>HG1032_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr5:12681538-12744122">chr5:12681538-12744122</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383532.1?report=genbank" target="_blank">chr5_GL383532v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION9&asm=GRCh37.p13" target="_blank">REGION9</a></td>
+    <td>HSCHR5_2_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr5:29036605-29254576">chr5:29036605-29254576</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL949742.1?report=genbank" target="_blank">chr5_GL949742v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION61&asm=GRCh37.p13" target="_blank">REGION61</a></td>
+    <td>HSCHR5_3_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr5:68512646-70910270">chr5:68512646-70910270</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL339449.2?report=genbank" target="_blank">chr5_GL339449v2_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=SMA&asm=GRCh37.p13" target="_blank">SMA</a></td>
+    <td>HSCHR5_1_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr5:94505561-94590195">chr5:94505561-94590195</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383530.1?report=genbank" target="_blank">chr5_GL383530v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=MCTP1&asm=GRCh37.p13" target="_blank">MCTP1</a></td>
+    <td>HSCHR5_1_CTG2</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr5:102420838-102687150">chr5:102420838-102687150</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159133.1?report=genbank" target="_blank">chr5_JH159133v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=PPIP5K2&asm=GRCh37.p13" target="_blank">PPIP5K2</a></td>
+    <td>HG1063_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr5:140144410-140687716">chr5:140144410-140687716</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KE332497.1?report=genbank" target="_blank">chr5_KE332497v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=PCDHB&asm=GRCh37.p13" target="_blank">PCDHB</a></td>
+    <td>HG1082_HG167_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr5:161800673-161968654">chr5:161800673-161968654</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383531.1?report=genbank" target="_blank">chr5_GL383531v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION8&asm=GRCh37.p13" target="_blank">REGION8</a></td>
+    <td>HSCHR5_1_CTG5</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr6:26585843-26826779">chr6:26585843-26826779</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806576.1?report=genbank" target="_blank">chr6_JH806576v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION80&asm=GRCh37.p13" target="_blank">REGION80</a></td>
+    <td>HG27_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr6:28477797-33448354">chr6:28477797-33448354</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH636057.1?report=genbank" target="_blank">chr6_JH636057v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=MHC&asm=GRCh37.p13" target="_blank">MHC</a></td>
+    <td>HG1322_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr6:80059725-80156628">chr6:80059725-80156628</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383533.1?report=genbank" target="_blank">chr6_GL383533v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION10&asm=GRCh37.p13" target="_blank">REGION10</a></td>
+    <td>HSCHR6_1_CTG5</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr6:107143253-107495574">chr6:107143253-107495574</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KB663604.1?report=genbank" target="_blank">chr6_KB663604v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=CD24&asm=GRCh37.p13" target="_blank">CD24</a></td>
+    <td>HG357_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr6:112323682-112586593">chr6:112323682-112586593</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH636056.1?report=genbank" target="_blank">chr6_JH636056v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=LAMA4&asm=GRCh37.p13" target="_blank">LAMA4</a></td>
+    <td>HG1304_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr6:157539699-157789039">chr6:157539699-157789039</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KE332498.1?report=genbank" target="_blank">chr6_KE332498v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=TMEM242&asm=GRCh37.p13" target="_blank">TMEM242</a></td>
+    <td>HG193_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr6:169194170-169351741">chr6:169194170-169351741</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KB021644.1?report=genbank" target="_blank">chr6_KB021644v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION99&asm=GRCh37.p13" target="_blank">REGION99</a></td>
+    <td>HSCHR6_2_CTG5</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr7:56835596-57190579">chr7:56835596-57190579</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL582970.1?report=genbank" target="_blank">chr7_GL582970v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION48&asm=GRCh37.p13" target="_blank">REGION48</a></td>
+    <td>HG736_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr7:57342227-57586048">chr7:57342227-57586048</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL582969.1?report=genbank" target="_blank">chr7_GL582969v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION46&asm=GRCh37.p13" target="_blank">REGION46</a></td>
+    <td>HG14_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr7:65012083-65286677">chr7:65012083-65286677</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KE332499.1?report=genbank" target="_blank">chr7_KE332499v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=INTS4L2&asm=GRCh37.p13" target="_blank">INTS4L2</a></td>
+    <td>HG444_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr7:71935722-75921852">chr7:71935722-75921852</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159134.2?report=genbank" target="_blank">chr7_JH159134v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=WILLIAMS&asm=GRCh37.p13" target="_blank">WILLIAMS</a></td>
+    <td>HG1257_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr7:98260131-98556215">chr7:98260131-98556215</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL582972.1?report=genbank" target="_blank">chr7_GL582972v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION47&asm=GRCh37.p13" target="_blank">REGION47</a></td>
+    <td>HG946_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr7:101718951-102072447">chr7:101718951-102072447</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL582968.1?report=genbank" target="_blank">chr7_GL582968v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=SH2B2&asm=GRCh37.p13" target="_blank">SH2B2</a></td>
+    <td>HG115_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr7:129984424-130721755">chr7:129984424-130721755</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH636058.1?report=genbank" target="_blank">chr7_JH636058v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=COPG2&asm=GRCh37.p13" target="_blank">COPG2</a></td>
+    <td>HG1308_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr7:141333209-141446383">chr7:141333209-141446383</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383534.2?report=genbank" target="_blank">chr7_GL383534v2_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION11&asm=GRCh37.p13" target="_blank">REGION11</a></td>
+    <td>HSCHR7_1_CTG6</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr7:141557850-142778624">chr7:141557850-142778624</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL582971.1?report=genbank" target="_blank">chr7_GL582971v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=TRB&asm=GRCh37.p13" target="_blank">TRB</a></td>
+    <td>HG7_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr8:1965390-2498608">chr8:1965390-2498608</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL949743.1?report=genbank" target="_blank">chr8_GL949743v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION62&asm=GRCh37.p13" target="_blank">REGION62</a></td>
+    <td>HG19_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr8:48176435-48405006">chr8:48176435-48405006</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KE332500.1?report=genbank" target="_blank">chr8_KE332500v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION102&asm=GRCh37.p13" target="_blank">REGION102</a></td>
+    <td>HG1699_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr8:143711229-143813536">chr8:143711229-143813536</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159135.2?report=genbank" target="_blank">chr8_JH159135v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=JRK&asm=GRCh37.p13" target="_blank">JRK</a></td>
+    <td>HG418_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr8:144743526-145146062">chr8:144743526-145146062</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383535.1?report=genbank" target="_blank">chr8_GL383535v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=EPPK1_SPATC1&asm=GRCh37.p13" target="_blank">EPPK1_SPATC1</a></td>
+    <td>HG104_HG975_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr8:145285645-145659901">chr8:145285645-145659901</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383536.1?report=genbank" target="_blank">chr8_GL383536v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=SCXB&asm=GRCh37.p13" target="_blank">SCXB</a></td>
+    <td>HG243_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr9:7428994-7577169">chr9:7428994-7577169</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383539.1?report=genbank" target="_blank">chr9_GL383539v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION14&asm=GRCh37.p13" target="_blank">REGION14</a></td>
+    <td>HSCHR9_1_CTG1</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr9:70835469-71130847">chr9:70835469-71130847</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH636059.1?report=genbank" target="_blank">chr9_JH636059v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=CBWD3&asm=GRCh37.p13" target="_blank">CBWD3</a></td>
+    <td>HG962_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr9:72028659-72092013">chr9:72028659-72092013</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383540.1?report=genbank" target="_blank">chr9_GL383540v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION13&asm=GRCh37.p13" target="_blank">REGION13</a></td>
+    <td>HSCHR9_1_CTG35</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr9:72639029-72804234">chr9:72639029-72804234</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383541.1?report=genbank" target="_blank">chr9_GL383541v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=MAMDC2&asm=GRCh37.p13" target="_blank">MAMDC2</a></td>
+    <td>HSCHR9_2_CTG35</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr9:90793962-90842895">chr9:90793962-90842895</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383542.1?report=genbank" target="_blank">chr9_GL383542v1_alt</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION15&asm=GRCh37.p13" target="_blank">REGION15</a></td>
+    <td>HSCHR9_3_CTG35</td><td>novel-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr9:92286339-92528796">chr9:92286339-92528796</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KB663605.1?report=genbank" target="_blank">chr9_KB663605v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION100&asm=GRCh37.p13" target="_blank">REGION100</a></td>
+    <td>HG50_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr9:132892850-133073060">chr9:132892850-133073060</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806579.1?report=genbank" target="_blank">chr9_JH806579v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION81&asm=GRCh37.p13" target="_blank">REGION81</a></td>
+    <td>HG1502_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr9:136049442-136369192">chr9:136049442-136369192</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL339450.1?report=genbank" target="_blank">chr9_GL339450v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=ABO&asm=GRCh37.p13" target="_blank">ABO</a></td>
+    <td>HG79_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr9:137025633-137247659">chr9:137025633-137247659</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806577.1?report=genbank" target="_blank">chr9_JH806577v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION82&asm=GRCh37.p13" target="_blank">REGION82</a></td>
+    <td>HG1500_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr9:137025633-137247659">chr9:137025633-137247659</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806578.1?report=genbank" target="_blank">chr9_JH806578v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION82&asm=GRCh37.p13" target="_blank">REGION82</a></td>
+    <td>HG1501_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr9:139136890-139252828">chr9:139136890-139252828</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383537.1?report=genbank" target="_blank">chr9_GL383537v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION12&asm=GRCh37.p13" target="_blank">REGION12</a></td>
+    <td>HG998_1_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chr9:139136890-139252828">chr9:139136890-139252828</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL383538.1?report=genbank" target="_blank">chr9_GL383538v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION12&asm=GRCh37.p13" target="_blank">REGION12</a></td>
+    <td>HG998_2_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:803878-1227822">chrX:803878-1227822</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/GL877877.2?report=genbank" target="_blank">chrX_GL877877v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION59&asm=GRCh37.p13" target="_blank">REGION59</a></td>
+    <td>HG480_HG481_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:36202464-37669766">chrX:36202464-37669766</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH720451.1?report=genbank" target="_blank">chrX_JH720451v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION75&asm=GRCh37.p13" target="_blank">REGION75</a></td>
+    <td>HG1423_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:36202464-37669766">chrX:36202464-37669766</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH720452.1?report=genbank" target="_blank">chrX_JH720452v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION75&asm=GRCh37.p13" target="_blank">REGION75</a></td>
+    <td>HG1424_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:45534581-45805400">chrX:45534581-45805400</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806589.1?report=genbank" target="_blank">chrX_JH806589v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION87&asm=GRCh37.p13" target="_blank">REGION87</a></td>
+    <td>HG1435_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:46609875-47079810">chrX:46609875-47079810</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/KB021648.1?report=genbank" target="_blank">chrX_KB021648v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=PHF16&asm=GRCh37.p13" target="_blank">PHF16</a></td>
+    <td>HG29_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:47619971-54424077">chrX:47619971-54424077</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806587.1?report=genbank" target="_blank">chrX_JH806587v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=DGKK_REGION98&asm=GRCh37.p13" target="_blank">DGKK_REGION98</a></td>
+    <td>HG1433_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:47619971-54424077">chrX:47619971-54424077</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806590.2?report=genbank" target="_blank">chrX_JH806590v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=DGKK_REGION98&asm=GRCh37.p13" target="_blank">DGKK_REGION98</a></td>
+    <td>HG1436_HG1432_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:62203738-63086230">chrX:62203738-63086230</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806591.1?report=genbank" target="_blank">chrX_JH806591v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION88&asm=GRCh37.p13" target="_blank">REGION88</a></td>
+    <td>HG1437_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:71530834-72366730">chrX:71530834-72366730</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806592.1?report=genbank" target="_blank">chrX_JH806592v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION89&asm=GRCh37.p13" target="_blank">REGION89</a></td>
+    <td>HG1438_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:75200416-77450502">chrX:75200416-77450502</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH720453.1?report=genbank" target="_blank">chrX_JH720453v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION76&asm=GRCh37.p13" target="_blank">REGION76</a></td>
+    <td>HG1425_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:75200416-77450502">chrX:75200416-77450502</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH720454.3?report=genbank" target="_blank">chrX_JH720454v3_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION76&asm=GRCh37.p13" target="_blank">REGION76</a></td>
+    <td>HG1426_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:100573313-100962928">chrX:100573313-100962928</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806593.1?report=genbank" target="_blank">chrX_JH806593v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION90&asm=GRCh37.p13" target="_blank">REGION90</a></td>
+    <td>HG1439_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:101383115-101773566">chrX:101383115-101773566</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806594.1?report=genbank" target="_blank">chrX_JH806594v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION91&asm=GRCh37.p13" target="_blank">REGION91</a></td>
+    <td>HG1440_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:103118514-103552339">chrX:103118514-103552339</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806595.1?report=genbank" target="_blank">chrX_JH806595v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION92&asm=GRCh37.p13" target="_blank">REGION92</a></td>
+    <td>HG1441_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:104423968-104489003">chrX:104423968-104489003</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH720455.1?report=genbank" target="_blank">chrX_JH720455v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=TEX13A&asm=GRCh37.p13" target="_blank">TEX13A</a></td>
+    <td>HG375_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:112661943-115918761">chrX:112661943-115918761</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806588.1?report=genbank" target="_blank">chrX_JH806588v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION93&asm=GRCh37.p13" target="_blank">REGION93</a></td>
+    <td>HG1434_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:112661943-115918761">chrX:112661943-115918761</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806601.1?report=genbank" target="_blank">chrX_JH806601v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION93&asm=GRCh37.p13" target="_blank">REGION93</a></td>
+    <td>HG1462_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:112661943-115918761">chrX:112661943-115918761</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806602.1?report=genbank" target="_blank">chrX_JH806602v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION93&asm=GRCh37.p13" target="_blank">REGION93</a></td>
+    <td>HG1463_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:112661943-115918761">chrX:112661943-115918761</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806603.1?report=genbank" target="_blank">chrX_JH806603v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION93&asm=GRCh37.p13" target="_blank">REGION93</a></td>
+    <td>HG1490_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:119081534-119495352">chrX:119081534-119495352</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806596.1?report=genbank" target="_blank">chrX_JH806596v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION94&asm=GRCh37.p13" target="_blank">REGION94</a></td>
+    <td>HG1442_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:134202887-135196638">chrX:134202887-135196638</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806597.1?report=genbank" target="_blank">chrX_JH806597v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION95&asm=GRCh37.p13" target="_blank">REGION95</a></td>
+    <td>HG1443_HG1444_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:139986363-140891303">chrX:139986363-140891303</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806598.1?report=genbank" target="_blank">chrX_JH806598v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION96&asm=GRCh37.p13" target="_blank">REGION96</a></td>
+    <td>HG1453_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:142299066-150174083">chrX:142299066-150174083</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806599.1?report=genbank" target="_blank">chrX_JH806599v1_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION97&asm=GRCh37.p13" target="_blank">REGION97</a></td>
+    <td>HG1458_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:142299066-150174083">chrX:142299066-150174083</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH806600.2?report=genbank" target="_blank">chrX_JH806600v2_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION97&asm=GRCh37.p13" target="_blank">REGION97</a></td>
+    <td>HG1459_PATCH</td><td>fix-patch</td>
+</tr>
+<tr><td><a href="../cgi-bin/hgTracks?db=hg19&position=chrX:151734490-154906585">chrX:151734490-154906585</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/nuccore/JH159150.3?report=genbank" target="_blank">chrX_JH159150v3_fix</a></td>
+    <td><a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION67&asm=GRCh37.p13" target="_blank">REGION67</a></td>
+    <td>HG1497_PATCH</td><td>fix-patch</td>
+</tr>
+</table>
+<h2>References</h2>
+<p>
+Data obtained from the
+   <a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/patches.shtml" target="_blank">
+   Genome Reference Consortium:</a>&nbsp;&nbsp;
+   <a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/archive/old_genbank/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37.p13/" target="_blank">FTP</a>.
+</p>

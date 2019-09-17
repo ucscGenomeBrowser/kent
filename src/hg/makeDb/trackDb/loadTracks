@@ -9,7 +9,7 @@ options:
    -sqlDir=../../lib - directory containg trackDb.sql and hgFindSpec.sql'
 
 UNAME_N=`uname -n`
-UNAME_N=${UNAME_N/.cse.ucsc.edu/}
+UNAME_N=${UNAME_N/.soe.ucsc.edu/}
 release=''
 settings=''
 local=''

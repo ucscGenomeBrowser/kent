@@ -393,5 +393,12 @@ void genePredTranslate(struct genePred *gp, struct nibTwoCache* genomeSeqs, unsi
  * mRNA sequence. If the chrom is chrM, the mitochondrial translation tables are
  * used. If protRet or cdsRet is NULL, those sequences are not returned.
  */
-#endif /* GENEPRED_H */
 
+void genePredToCds(struct genePred *gp, struct genbankCds *cds);
+/* Fill in cds with transcript offsets computed from genePred. */
+
+struct psl *genePredToPsl(struct genePred *gp, int chromSize, int qSize);
+/* Convert a genePred to psl, assuming perfect concordance between target & query.
+ * If qSize is 0 then the number of aligned bases will be used as qSize. */
+
+#endif /* GENEPRED_H */

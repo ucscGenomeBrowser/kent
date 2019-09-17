@@ -2,7 +2,7 @@
 """
 downloads a .2bit genome from UCSC
 .. note:: please comply with the restrictions of use at
-http://hgdownload.cse.ucsc.edu/downloads.html
+http://hgdownload.soe.ucsc.edu/downloads.html
 
 and do not over-use this module
 
@@ -25,9 +25,9 @@ def save_genome(name, destdir=None, mode='ftp'):
     tries to download a genome from UCSC by name
 
     for example, 'hg19' is at
-    ftp://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/hg19.2bit
+    ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.2bit
     """
-    urlpath = "%s://hgdownload.cse.ucsc.edu/goldenPath/%s/bigZips/%s.2bit" % \
+    urlpath = "%s://hgdownload.soe.ucsc.edu/goldenPath/%s/bigZips/%s.2bit" % \
               (mode, name, name)
     if destdir is None:
         destdir = getcwd()

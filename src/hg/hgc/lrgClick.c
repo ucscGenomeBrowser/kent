@@ -104,7 +104,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	char hgncIdStr[32];
 	safef(hgncIdStr, sizeof(hgncIdStr), "%d", lrg->hgncId);
         char *idUrl = replaceInUrl(url, hgncIdStr, cart, database, seqName, winStart, 
-                    winEnd, tdb->track, TRUE);
+                    winEnd, tdb->track, TRUE, NULL);
 	printf("<A HREF='%s' TARGET=_BLANK>%s</A><BR>\n", idUrl, lrg->hgncSymbol);
 	}
     else
@@ -116,7 +116,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if (isNotEmpty(url))
 	{
         char *idUrl = replaceInUrl(url, lrg->ncbiAcc, cart, database, seqName, winStart, 
-                    winEnd, tdb->track, TRUE);
+                    winEnd, tdb->track, TRUE, NULL);
 	printf("<A HREF='%s' TARGET=_BLANK>%s</A><BR>\n", idUrl, lrg->ncbiAcc);
 	}
     else
@@ -226,7 +226,7 @@ if (isNotEmpty(url))
     printf("<B>%s</B> ", urlLabel);
     //char *lrgTUrl = replaceInUrl(tdb, url, lrgName, TRUE);
     char *lrgTUrl = replaceInUrl(url, lrgName, cart, database, seqName, winStart, 
-                    winEnd, tdb->track, TRUE);
+                    winEnd, tdb->track, TRUE, NULL);
     printf("<A HREF='%s' TARGET=_BLANK>%s</A><BR>\n", lrgTUrl, item);
     }
 

@@ -9,10 +9,6 @@ priority 1
 track xenoRefGene override
 priority 1
 
-track refGene override
-release beta,public
-priority 2
-
 # mRNA and EST
 
 track mrna override

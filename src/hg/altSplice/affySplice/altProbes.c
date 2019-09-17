@@ -2119,7 +2119,7 @@ void makeJunctMdbGenericLink(struct splice *js, struct dyString *buff, char *nam
 int offSet = 100;
 int i = 0;
 dyStringClear(buff);
-dyStringPrintf(buff,"<a target=\"plots\" href=\"http://mdb1-sugnet.cse.ucsc.edu/cgi-bin/"
+dyStringPrintf(buff,"<a target=\"plots\" href=\"http://mdb1-sugnet.gi.ucsc.edu/cgi-bin/"
                     "mdbSpliceGraph?mdbsg.calledSelf=on&coordString=%s:%c:%s:%d-%d&mdbsg.cs=%d"
                     "&mdbsg.ce=%d&mdbsg.expName=%s&mdbsg.probeSummary=on&mdbsg.toScale=on\">",
                     "mm2", js->strand[0], js->tName, js->tStart, js->tEnd,
@@ -4737,7 +4737,7 @@ tissueExpThresh = optionInt("tissueExpThresh", 1);
 otherTissueExpThres = optionInt("otherTissueExpThres", 1);
 useMaxProbeSet = optionExists("useMaxProbeSet");
 db = optionVal("db", NULL);
-browserName = optionVal("browser", "hgwdev-sugnet.cse.ucsc.edu");
+browserName = optionVal("browser", "hgwdev-sugnet.gi.ucsc.edu");
 useComboProbes = optionExists("combinePSets");
 useExonBedsToo = optionExists("useExonBeds");
 skipMotifControls = optionExists("skipMotifControls");

@@ -14,7 +14,7 @@
 char *hubSearchTextCommaSepFieldNames = "hubUrl,db,track,textLength,text";
 
 /* definitions for textLength column */
-static char *values_textLength[] = {"Short", "Long", NULL};
+static char *values_textLength[] = {"Short", "Long", "Meta", NULL};
 static struct hash *valhash_textLength = NULL;
 
 void hubSearchTextStaticLoadWithNull(char **row, struct hubSearchText *ret)

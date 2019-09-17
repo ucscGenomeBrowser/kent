@@ -12,7 +12,7 @@
  <pre>
  Date: Thu, 28 Jun 2001 09:54:05 -0700
  From: Jim Kent <jim_kent@pacbell.net>
- To: tom <tom@cyber-dyne.com>, genecats@cse.ucsc.edu
+ To: tom <tom@cyber-dyne.com>, genecats@soe.ucsc.edu
  Subject: Re: [Genecats] cross-lifting hg coordinate upgrader
  
  Chuck - the first thing to do is just to make a libary routine

@@ -69,6 +69,8 @@ struct joiner *allJoiner;	/* Info on how to join tables. */
 
 static struct pipeline *compressPipeline = (struct pipeline *)NULL;
 
+static boolean issueBotWarning = FALSE;
+
 char *gsTemp = NULL;
 int saveStdout = -1;
 
@@ -180,7 +182,7 @@ va_list args;
 va_start(args, format);
 vaHtmlOpen(format, args);
 va_end(args);
-hgBotDelay();
+// hgBotDelay(); function is now in earlyBotCheck() at the start of main()
 }
 
 void htmlClose()
@@ -234,7 +236,10 @@ void textOpen()
  *	at main() exit.
  */
 {
-hgBotDelayNoWarn();  // delay but suppress warning at 10-20 sec delay level because this is not html output.
+
+// hgBotDelay function is now in earlyBotCheck() at the start of main(), and in
+// this case, the issueBotWarning flag is ignored to avoid any output here
+// hgBotDelayNoWarn();  // delay but suppress warning at 10-20 sec delay level because this is not html output.
 char *fileName = textOutSanitizeHttpFileName(cartUsualString(cart, hgtaOutFileName, ""));
 char *compressType = cartUsualString(cart, hgtaCompressType,
 				     textOutCompressNone);
@@ -378,57 +383,17 @@ hFreeConn(&conn);
 return list;
 }
 
-boolean searchPosition(char *range, struct region *region)
-/* Try and fill in region via call to hgFind. Return FALSE
- * if it can't find a single position. */
-{
-struct hgPositions *hgp = NULL;
-char retAddr[512];
-char position[512];
-safef(retAddr, sizeof(retAddr), "%s", getScriptName());
-hgp = findGenomePosWeb(database, range, &region->chrom, &region->start, &region->end,
-	cart, TRUE, retAddr);
-if (hgp != NULL && hgp->singlePos != NULL)
-    {
-    safef(position, sizeof(position),
-	    "%s:%d-%d", region->chrom, region->start+1, region->end);
-    cartSetString(cart, hgtaRange, position);
-    return TRUE;
-    }
-else if (region->start == 0)	/* Confusing way findGenomePosWeb says pos not found. */
-    {
-    cartSetString(cart, hgtaRange, hDefaultPos(database));
-    return FALSE;
-    }
-else
-    return FALSE;
-}
-
-boolean lookupPosition()
-/* Look up position (aka range) if need be.  Return FALSE if it puts
- * up multiple positions. */
+struct hgPositions *lookupPosition(struct dyString *dyWarn)
+/* Look up position (aka range) if need be.  Return a container of matching tables and positions.
+ * Warnings/errors are appended to dyWarn. */
 {
 char *range = windowsToAscii(cloneString(cartUsualString(cart, hgtaRange, "")));
-boolean isSingle = TRUE;
 range = trimSpaces(range);
-if (range[0] != 0)
-    {
-    struct region r;
-    isSingle = searchPosition(range, &r);
-    if (!isSingle)
-	{
-	// In case user manually edits the browser location as described in #13009,
-	// revert the position.  If they instead choose from the list as we expect,
-	// that will set the position to their choice.
-	char *lastPosition = cartUsualString(cart, "lastPosition", hDefaultPos(database));
-	cartSetString(cart, "position", lastPosition);
-	}
-    }
-else
-    {
-    cartSetString(cart, hgtaRange, hDefaultPos(database));
-    }
-return isSingle;
+if (isEmpty(range))
+    range = hDefaultPos(database);
+struct hgPositions *hgp = hgFindSearch(cart, &range, NULL, NULL, NULL, getScriptName(), dyWarn);
+cartSetString(cart, hgtaRange, range);
+return hgp;
 }
 
 struct region *getRegions()
@@ -593,6 +558,8 @@ if (tdb->subtracks == NULL)
 	hti = bamToHti(tdb->table);
     else if (startsWithWord("vcfTabix", tdb->type))
 	hti = vcfToHti(tdb->table, TRUE);
+    else if (sameWord("hic", tdb->type))
+	hti = hicToHti(tdb->table);
     }
 if (hti == NULL)
     {
@@ -628,6 +595,8 @@ else if (isVcfTable(table, &isTabix))
     boolean isTabix = trackIsType(database, table, curTrack, "vcfTabix", ctLookupName);
     hti = vcfToHti(table, isTabix);
     }
+else if (isHicTable(table))
+    hti = hicToHti(table);
 else if (isCustomTrack(table))
     {
     struct customTrack *ct = ctLookupName(table);
@@ -735,62 +704,6 @@ boolean isSqlIntType(char *type)
 {
 return (strstr(type, "int") != NULL);
 }
-
-struct sqlFieldType *sqlFieldTypeNew(char *name, char *type)
-/* Create a new sqlFieldType */
-{
-struct sqlFieldType *ft;
-AllocVar(ft);
-ft->name = cloneString(name);
-ft->type = cloneString(type);
-return ft;
-}
-
-void sqlFieldTypeFree(struct sqlFieldType **pFt)
-/* Free resources used by sqlFieldType */
-{
-struct sqlFieldType *ft = *pFt;
-if (ft != NULL)
-    {
-    freeMem(ft->name);
-    freeMem(ft->type);
-    freez(pFt);
-    }
-}
-
-void sqlFieldTypeFreeList(struct sqlFieldType **pList)
-/* Free a list of dynamically allocated sqlFieldType's */
-{
-struct sqlFieldType *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    sqlFieldTypeFree(&el);
-    }
-*pList = NULL;
-}
-
-struct sqlFieldType *sqlListFieldsAndTypes(struct sqlConnection *conn, char *table)
-/* Get list of fields including their names and types.  The type currently is just
- * a MySQL type string. */
-{
-struct sqlFieldType *ft, *list = NULL;
-char query[512];
-struct sqlResult *sr;
-char **row;
-sqlSafef(query, sizeof(query), "describe %s", table);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    ft = sqlFieldTypeNew(row[0], row[1]);
-    slAddHead(&list, ft);
-    }
-sqlFreeResult(&sr);
-slReverse(&list);
-return list;
-}
-
 
 static struct trackDb *findTrackInGroup(char *name, struct trackDb *trackList,
 	struct grp *group)
@@ -949,7 +862,7 @@ else if (track != NULL && !tdbIsComposite(track))
     else if (hti != NULL && trackHti != NULL && trackHti->nameField[0] != 0)
         {
         struct joinerPair *jp, *jpList;
-        jpList = joinerRelate(allJoiner, db, track->table);
+        jpList = joinerRelate(allJoiner, db, track->table, NULL);
         for (jp = jpList; jp != NULL; jp = jp->next)
             {
             if (sameString(jp->a->field, trackHti->nameField))
@@ -1199,6 +1112,8 @@ else if (isBamTable(table))
     bamTabOut(db, table, conn, fields, f);
 else if (isVcfTable(table, &isTabix))
     vcfTabOut(db, table, conn, fields, f, isTabix);
+else if (isHicTable(table))
+    hicTabOut(db, table, conn, fields, f);
 else if (isCustomTrack(table))
     {
     doTabOutCustomTracks(db, table, conn, fields, f);
@@ -1228,6 +1143,8 @@ else if (isBamTable(table))
     fieldList = bamGetFields(table);
 else if (isVcfTable(table, NULL))
     fieldList = vcfGetFields(table);
+else if (isHicTable(table))
+    fieldList = hicGetFields(table);
 else if (isCustomTrack(table))
     {
     struct customTrack *ct = ctLookupName(table);
@@ -1239,6 +1156,7 @@ else if (isCustomTrack(table))
             startsWithWord("makeItems", type) || 
             sameWord("bedDetail", type) || 
             sameWord("barChart", type) || 
+            sameWord("interact", type) || 
             sameWord("pgSnp", type))
 	        fieldList = sqlListFields(conn, ct->dbTableName);
 	hFreeConn(&conn);
@@ -1801,7 +1719,9 @@ if (sameOk(backgroundExec,"gsSendToDM"))
 
 /* Init track and group lists and figure out what page to put up. */
 initGroupsTracksTables();
-if (lookupPosition())
+struct dyString *dyWarn = dyStringNew(0);
+struct hgPositions *hgp = lookupPosition(dyWarn);
+if (hgp->singlePos && isEmpty(dyWarn->string))
     {
     if (cartUsualBoolean(cart, hgtaDoGreatOutput, FALSE))
 	doGetGreatOutput(dispatch);
@@ -1810,14 +1730,20 @@ if (lookupPosition())
     }
 else
     {
-    struct sqlConnection *conn = NULL;
-    if (!trackHubDatabase(database))
-	conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
-    webPushErrHandlersCartDb(cart, database);
-    mainPageAfterOpen(conn);
-    hFreeConn(&conn);
-    webPopErrHandlers();
-    htmlClose();
+    cartWebStartHeader(cart, database, "Table Browser");
+    if (isNotEmpty(dyWarn->string))
+        warn("%s", dyWarn->string);
+    if (hgp->posCount > 1)
+        hgPositionsHtml(database, hgp, hgTablesName(), cart);
+    else
+        {
+        struct sqlConnection *conn = NULL;
+        if (!trackHubDatabase(database))
+            conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
+        mainPageAfterOpen(conn);
+        hFreeConn(&conn);
+        }
+    cartWebEnd();
     }
 
 textOutClose(&compressPipeline, &saveStdout);
@@ -1852,6 +1778,7 @@ int main(int argc, char *argv[])
 {
 
 long enteredMainTime = clock1000();
+issueBotWarning = earlyBotCheck(enteredMainTime, "hgTables", 0.0, 0, 0, "html");
 
 pushCarefulMemHandler(LIMIT_2or6GB);
 htmlPushEarlyHandlers(); /* Make errors legible during initialization. */

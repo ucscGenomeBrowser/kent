@@ -1,0 +1,1226 @@
+track insectsRBestChainNet
+compositeTrack on
+shortLabel Insects RecipBest Chain/Net
+longLabel Insects RecipBest Chain and Net Alignments
+subGroup1 view Views chain=Chains net=Nets
+subGroup2 species Species s000=D._simulans s001=D._sechellia s002=D._yakuba s003=D._erecta s004=D._takahashii s005=D._elegans s006=D._eugracilis s007=D._biarmipes s008=D._rhopaloa s009=D._ficusphila s010=D._suzukii s011=D._kikkawai s012=D_serrata s013=D._ananassae s014=D._bipectinata s015=D_obscura s016=D._pseudoobscura s017=D._miranda s018=D._persimilis s019=D_subobscura s020=D_athabasca s021=D._virilis s022=D._willistoni s023=D._grimshawi s024=D._mojavensis s025=D_pseudoobscura_1 s026=D_novamexicana s027=D_hydei s028=D_americana s029=D_montana s030=D._albomicans s031=Scaptodrosophila_lebanonensis s032=D_busckii s033=D_arizonae s034=D_nasuta s035=Zaprionus_indianus s036=D_navojoa s037=Phortica_variegata s038=Teleopsis_dalmanni s039=Rhagoletis_zephyria s040=Lucilia_cuprina s041=Bactrocera_latifrons s042=Bactrocera_oleae s043=Zeugodacus_cucurbitae s044=Phormia_regina s045=Ceratitis_capitata s046=Paykullia_maculata s047=Bactrocera_tryoni s048=M._domestica s049=Bactrocera_dorsalis s050=Stomoxys_calcitrans s051=Glossina_pallidipes s052=Glossina_fuscipes s053=Glossina_brevipalpis s054=Glossina_morsitans_2 s055=Glossina_austeni s056=Glossina_palpalis_gambiensis s057=Ephydra_gracilis s058=Lucilia_sericata s059=Glossina_morsitans_1 s060=Calliphora_vicina s061=Sphyracephala_brevicornis s062=Proctacanthus_coquilletti s063=Haematobia_irritans s064=Themira_minor s065=Megaselia_abdita s066=Tephritis_californica s067=Cirrula_hians s068=Hermetia_illucens s069=Neobellieria_bullata s070=Eutreta_diana s071=Holcocephala_fusca s072=Sarcophagidae_BV_2014 s073=Liriomyza_trifolii s074=Eristalis_dimidiata s075=Condylostylus_patibulatus s076=Megaselia_scalaris s077=Trupanea_jonesi s078=Aedes_albopictus s079=Aedes_aegypti s080=A._gambiae s081=Culex_quinquefasciatus s082=A_maculatus s083=A_merus s084=A_dirus s085=A_arabiensis s086=A_sinensis s087=A_atroparvus s088=A_epiroticus s089=A_quadriannulatus s090=A_farauti s091=A_minimus s092=A_funestus s093=A_melas s094=A_coluzzii s095=Clogmia_albipunctata s096=Phlebotomus_papatasi s097=A_culicifacies s098=A_stephensi s099=Coboldia_fuscipes s100=Culicoides_sonorensis s101=A_albimanus s102=A_christyi s103=A_cracens s104=A_aquasalis s105=Mochlonyx_cinctipes s106=A_darlingi s107=A_farauti_No4 s108=Lutzomyia_longipalpis s109=A_koliensis s110=Belgica_antarctica s111=A_punctulatus s112=Clunio_marinus s113=Mayetiola_destructor s114=Chironomus_tentans s115=Chironomus_riparius s116=A_gambiae_1 s117=A_nili s118=Chaoborus_trivitattus s119=Tipula_oleracea s120=Trichoceridae_BV_2014 s121=T._castaneum s122=A._mellifera
+subGroup3 clade Clade c00=brachycera c01=nematocera c02=flies
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+color 0,0,0
+altColor 255,255,0
+type bed 3
+chainLinearGap loose
+chainMinScore 5000
+dimensions dimensionX=clade dimensionY=species
+sortOrder species=+ view=+ clade=+
+configurable on
+html insectsRBestChainNet
+
+    track insectsRBestChainNetViewchain
+    shortLabel RecipBest Chains
+    view chain
+    visibility pack
+    subTrack insectsRBestChainNet
+    spectrum on
+
+        track chainRBestDroSim2
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s000 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droSim2
+        otherDb droSim2
+
+        track chainRBestDroSec1
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s001 clade=c00
+        shortLabel $o_Organism rbChain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droSec1
+        otherDb droSec1
+
+        track chainRBestDroYak3
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s002 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droYak3
+        otherDb droYak3
+
+        track chainRBestDroEre2
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s003 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droEre2
+        otherDb droEre2
+
+        track chainRBestDroTak2
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s004 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droTak2
+        otherDb droTak2
+
+        track chainRBestDroEle2
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s005 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droEle2
+        otherDb droEle2
+
+        track chainRBestDroEug2
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s006 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droEug2
+        otherDb droEug2
+
+        track chainRBestDroBia2
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s007 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droBia2
+        otherDb droBia2
+
+        track chainRBestDroRho2
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s008 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droRho2
+        otherDb droRho2
+
+        track chainRBestDroFic2
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s009 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droFic2
+        otherDb droFic2
+
+        track chainRBestDroSuz1
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s010 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droSuz1
+        otherDb droSuz1
+
+        track chainRBestDroKik2
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s011 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droKik2
+        otherDb droKik2
+
+        track chainRBestD_serrata
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s012 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain D_serrata
+        otherDb D_serrata
+
+        track chainRBestDroAna3
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s013 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droAna3
+        otherDb droAna3
+
+        track chainRBestDroBip2
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s014 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droBip2
+        otherDb droBip2
+
+        track chainRBestD_obscura
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s015 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain D_obscura
+        otherDb D_obscura
+
+        track chainRBestDroPse3
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s016 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droPse3
+        otherDb droPse3
+
+        track chainRBestDroMir2
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s017 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droMir2
+        otherDb droMir2
+
+        track chainRBestDroPer1
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s018 clade=c00
+        shortLabel $o_Organism rbChain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droPer1
+        otherDb droPer1
+
+        track chainRBestD_subobscura
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s019 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain D_subobscura
+        otherDb D_subobscura
+
+        track chainRBestD_athabasca
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s020 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain D_athabasca
+        otherDb D_athabasca
+
+        track chainRBestDroVir3
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s021 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droVir3
+        otherDb droVir3
+
+        track chainRBestDroWil2
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s022 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droWil2
+        otherDb droWil2
+
+        track chainRBestDroGri2
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s023 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droGri2
+        otherDb droGri2
+
+        track chainRBestDroMoj3
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s024 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droMoj3
+        otherDb droMoj3
+
+        track chainRBestD_pseudoobscura_1
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s025 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain D_pseudoobscura_1
+        otherDb D_pseudoobscura_1
+
+        track chainRBestD_novamexicana
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s026 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain D_novamexicana
+        otherDb D_novamexicana
+
+        track chainRBestD_hydei
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s027 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain D_hydei
+        otherDb D_hydei
+
+        track chainRBestD_americana
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s028 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain D_americana
+        otherDb D_americana
+
+        track chainRBestD_montana
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s029 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain D_montana
+        otherDb D_montana
+
+        track chainRBestDroAlb1
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s030 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain droAlb1
+        otherDb droAlb1
+
+        track chainRBestScaptodrosophila_lebanonensis
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s031 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Scaptodrosophila_lebanonensis
+        otherDb Scaptodrosophila_lebanonensis
+
+        track chainRBestD_busckii
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s032 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain D_busckii
+        otherDb D_busckii
+
+        track chainRBestD_arizonae
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s033 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain D_arizonae
+        otherDb D_arizonae
+
+        track chainRBestD_nasuta
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s034 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain D_nasuta
+        otherDb D_nasuta
+
+        track chainRBestZaprionus_indianus
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s035 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Zaprionus_indianus
+        otherDb Zaprionus_indianus
+
+        track chainRBestD_navojoa
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s036 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain D_navojoa
+        otherDb D_navojoa
+
+        track chainRBestPhortica_variegata
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s037 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Phortica_variegata
+        otherDb Phortica_variegata
+
+        track chainRBestTeleopsis_dalmanni
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s038 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Teleopsis_dalmanni
+        otherDb Teleopsis_dalmanni
+
+        track chainRBestRhagoletis_zephyria
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s039 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Rhagoletis_zephyria
+        otherDb Rhagoletis_zephyria
+
+        track chainRBestLucilia_cuprina
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s040 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Lucilia_cuprina
+        otherDb Lucilia_cuprina
+
+        track chainRBestBactrocera_latifrons
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s041 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Bactrocera_latifrons
+        otherDb Bactrocera_latifrons
+
+        track chainRBestBactrocera_oleae
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s042 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Bactrocera_oleae
+        otherDb Bactrocera_oleae
+
+        track chainRBestZeugodacus_cucurbitae
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s043 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Zeugodacus_cucurbitae
+        otherDb Zeugodacus_cucurbitae
+
+        track chainRBestPhormia_regina
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s044 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Phormia_regina
+        otherDb Phormia_regina
+
+        track chainRBestCeratitis_capitata
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s045 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Ceratitis_capitata
+        otherDb Ceratitis_capitata
+
+        track chainRBestPaykullia_maculata
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s046 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Paykullia_maculata
+        otherDb Paykullia_maculata
+
+        track chainRBestBactrocera_tryoni
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s047 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Bactrocera_tryoni
+        otherDb Bactrocera_tryoni
+
+        track chainRBestMusDom2
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s048 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain musDom2
+        otherDb musDom2
+
+        track chainRBestBactrocera_dorsalis
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s049 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Bactrocera_dorsalis
+        otherDb Bactrocera_dorsalis
+
+        track chainRBestStomoxys_calcitrans
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s050 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Stomoxys_calcitrans
+        otherDb Stomoxys_calcitrans
+
+        track chainRBestGlossina_pallidipes
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s051 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Glossina_pallidipes
+        otherDb Glossina_pallidipes
+
+        track chainRBestGlossina_fuscipes
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s052 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Glossina_fuscipes
+        otherDb Glossina_fuscipes
+
+        track chainRBestGlossina_brevipalpis
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s053 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Glossina_brevipalpis
+        otherDb Glossina_brevipalpis
+
+        track chainRBestGlossina_morsitans_2
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s054 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Glossina_morsitans_2
+        otherDb Glossina_morsitans_2
+
+        track chainRBestGlossina_austeni
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s055 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Glossina_austeni
+        otherDb Glossina_austeni
+
+        track chainRBestGlossina_palpalis_gambiensis
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s056 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Glossina_palpalis_gambiensis
+        otherDb Glossina_palpalis_gambiensis
+
+        track chainRBestEphydra_gracilis
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s057 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Ephydra_gracilis
+        otherDb Ephydra_gracilis
+
+        track chainRBestLucilia_sericata
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s058 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Lucilia_sericata
+        otherDb Lucilia_sericata
+
+        track chainRBestGlossina_morsitans_1
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s059 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Glossina_morsitans_1
+        otherDb Glossina_morsitans_1
+
+        track chainRBestCalliphora_vicina
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s060 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Calliphora_vicina
+        otherDb Calliphora_vicina
+
+        track chainRBestSphyracephala_brevicornis
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s061 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sphyracephala_brevicornis
+        otherDb Sphyracephala_brevicornis
+
+        track chainRBestProctacanthus_coquilletti
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s062 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Proctacanthus_coquilletti
+        otherDb Proctacanthus_coquilletti
+
+        track chainRBestHaematobia_irritans
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s063 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Haematobia_irritans
+        otherDb Haematobia_irritans
+
+        track chainRBestThemira_minor
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s064 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Themira_minor
+        otherDb Themira_minor
+
+        track chainRBestMegaselia_abdita
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s065 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Megaselia_abdita
+        otherDb Megaselia_abdita
+
+        track chainRBestTephritis_californica
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s066 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Tephritis_californica
+        otherDb Tephritis_californica
+
+        track chainRBestCirrula_hians
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s067 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Cirrula_hians
+        otherDb Cirrula_hians
+
+        track chainRBestHermetia_illucens
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s068 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Hermetia_illucens
+        otherDb Hermetia_illucens
+
+        track chainRBestNeobellieria_bullata
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s069 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Neobellieria_bullata
+        otherDb Neobellieria_bullata
+
+        track chainRBestEutreta_diana
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s070 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Eutreta_diana
+        otherDb Eutreta_diana
+
+        track chainRBestHolcocephala_fusca
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s071 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Holcocephala_fusca
+        otherDb Holcocephala_fusca
+
+        track chainRBestSarcophagidae_BV_2014
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s072 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Sarcophagidae_BV_2014
+        otherDb Sarcophagidae_BV_2014
+
+        track chainRBestLiriomyza_trifolii
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s073 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Liriomyza_trifolii
+        otherDb Liriomyza_trifolii
+
+        track chainRBestEristalis_dimidiata
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s074 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Eristalis_dimidiata
+        otherDb Eristalis_dimidiata
+
+        track chainRBestCondylostylus_patibulatus
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s075 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Condylostylus_patibulatus
+        otherDb Condylostylus_patibulatus
+
+        track chainRBestMegaselia_scalaris
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s076 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Megaselia_scalaris
+        otherDb Megaselia_scalaris
+
+        track chainRBestTrupanea_jonesi
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s077 clade=c00
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Trupanea_jonesi
+        otherDb Trupanea_jonesi
+
+        track chainRBestAedes_albopictus
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s078 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Aedes_albopictus
+        otherDb Aedes_albopictus
+
+        track chainRBestAedes_aegypti
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s079 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Aedes_aegypti
+        otherDb Aedes_aegypti
+
+        track chainRBestAnoGam3
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s080 clade=c01
+        shortLabel $o_Organism rbChain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain anoGam3
+        otherDb anoGam3
+
+        track chainRBestCulex_quinquefasciatus
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s081 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Culex_quinquefasciatus
+        otherDb Culex_quinquefasciatus
+
+        track chainRBestA_maculatus
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s082 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_maculatus
+        otherDb A_maculatus
+
+        track chainRBestA_merus
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s083 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_merus
+        otherDb A_merus
+
+        track chainRBestA_dirus
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s084 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_dirus
+        otherDb A_dirus
+
+        track chainRBestA_arabiensis
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s085 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_arabiensis
+        otherDb A_arabiensis
+
+        track chainRBestA_sinensis
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s086 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_sinensis
+        otherDb A_sinensis
+
+        track chainRBestA_atroparvus
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s087 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_atroparvus
+        otherDb A_atroparvus
+
+        track chainRBestA_epiroticus
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s088 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_epiroticus
+        otherDb A_epiroticus
+
+        track chainRBestA_quadriannulatus
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s089 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_quadriannulatus
+        otherDb A_quadriannulatus
+
+        track chainRBestA_farauti
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s090 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_farauti
+        otherDb A_farauti
+
+        track chainRBestA_minimus
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s091 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_minimus
+        otherDb A_minimus
+
+        track chainRBestA_funestus
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s092 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_funestus
+        otherDb A_funestus
+
+        track chainRBestA_melas
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s093 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_melas
+        otherDb A_melas
+
+        track chainRBestA_coluzzii
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s094 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_coluzzii
+        otherDb A_coluzzii
+
+        track chainRBestClogmia_albipunctata
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s095 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Clogmia_albipunctata
+        otherDb Clogmia_albipunctata
+
+        track chainRBestPhlebotomus_papatasi
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s096 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Phlebotomus_papatasi
+        otherDb Phlebotomus_papatasi
+
+        track chainRBestA_culicifacies
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s097 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_culicifacies
+        otherDb A_culicifacies
+
+        track chainRBestA_stephensi
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s098 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_stephensi
+        otherDb A_stephensi
+
+        track chainRBestCoboldia_fuscipes
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s099 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Coboldia_fuscipes
+        otherDb Coboldia_fuscipes
+
+        track chainRBestCulicoides_sonorensis
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s100 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Culicoides_sonorensis
+        otherDb Culicoides_sonorensis
+
+        track chainRBestA_albimanus
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s101 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_albimanus
+        otherDb A_albimanus
+
+        track chainRBestA_christyi
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s102 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_christyi
+        otherDb A_christyi
+
+        track chainRBestA_cracens
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s103 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_cracens
+        otherDb A_cracens
+
+        track chainRBestA_aquasalis
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s104 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_aquasalis
+        otherDb A_aquasalis
+
+        track chainRBestMochlonyx_cinctipes
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s105 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Mochlonyx_cinctipes
+        otherDb Mochlonyx_cinctipes
+
+        track chainRBestA_darlingi
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s106 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_darlingi
+        otherDb A_darlingi
+
+        track chainRBestA_farauti_No4
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s107 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_farauti_No4
+        otherDb A_farauti_No4
+
+        track chainRBestLutzomyia_longipalpis
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s108 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Lutzomyia_longipalpis
+        otherDb Lutzomyia_longipalpis
+
+        track chainRBestA_koliensis
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s109 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_koliensis
+        otherDb A_koliensis
+
+        track chainRBestBelgica_antarctica
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s110 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Belgica_antarctica
+        otherDb Belgica_antarctica
+
+        track chainRBestA_punctulatus
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s111 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_punctulatus
+        otherDb A_punctulatus
+
+        track chainRBestClunio_marinus
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s112 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Clunio_marinus
+        otherDb Clunio_marinus
+
+        track chainRBestMayetiola_destructor
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s113 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Mayetiola_destructor
+        otherDb Mayetiola_destructor
+
+        track chainRBestChironomus_tentans
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s114 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Chironomus_tentans
+        otherDb Chironomus_tentans
+
+        track chainRBestChironomus_riparius
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s115 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Chironomus_riparius
+        otherDb Chironomus_riparius
+
+        track chainRBestA_gambiae_1
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s116 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_gambiae_1
+        otherDb A_gambiae_1
+
+        track chainRBestA_nili
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s117 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain A_nili
+        otherDb A_nili
+
+        track chainRBestChaoborus_trivitattus
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s118 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Chaoborus_trivitattus
+        otherDb Chaoborus_trivitattus
+
+        track chainRBestTipula_oleracea
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s119 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Tipula_oleracea
+        otherDb Tipula_oleracea
+
+        track chainRBestTrichoceridae_BV_2014
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s120 clade=c01
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain Trichoceridae_BV_2014
+        otherDb Trichoceridae_BV_2014
+
+        track chainRBestTriCas2
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s121 clade=c02
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain triCas2
+        otherDb triCas2
+
+        track chainRBestApiMel4
+        subTrack insectsRBestChainNetViewchain off
+        subGroups view=chain species=s122 clade=c02
+        shortLabel $o_db rbChain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain apiMel4
+        otherDb apiMel4
+
+    track insectsRBestChainNetViewnet
+    shortLabel RecipBest Nets
+    view net
+    visibility dense
+    subTrack insectsRBestChainNet
+
+        track netRBestDroSim2
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s000 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droSim2 chainRBestDroSim2
+        otherDb droSim2
+
+        track netRBestDroSec1
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s001 clade=c00
+        shortLabel $o_Organism rbNet
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droSec1 chainRBestDroSec1
+        otherDb droSec1
+
+        track netRBestDroYak3
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s002 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droYak3 chainRBestDroYak3
+        otherDb droYak3
+
+        track netRBestDroEre2
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s003 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droEre2 chainRBestDroEre2
+        otherDb droEre2
+
+        track netRBestDroTak2
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s004 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droTak2 chainRBestDroTak2
+        otherDb droTak2
+
+        track netRBestDroEle2
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s005 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droEle2 chainRBestDroEle2
+        otherDb droEle2
+
+        track netRBestDroEug2
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s006 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droEug2 chainRBestDroEug2
+        otherDb droEug2
+
+        track netRBestDroBia2
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s007 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droBia2 chainRBestDroBia2
+        otherDb droBia2
+
+        track netRBestDroRho2
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s008 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droRho2 chainRBestDroRho2
+        otherDb droRho2
+
+        track netRBestDroFic2
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s009 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droFic2 chainRBestDroFic2
+        otherDb droFic2
+
+        track netRBestDroSuz1
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s010 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droSuz1 chainRBestDroSuz1
+        otherDb droSuz1
+
+        track netRBestDroKik2
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s011 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droKik2 chainRBestDroKik2
+        otherDb droKik2
+
+        track netRBestDroAna3
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s013 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droAna3 chainRBestDroAna3
+        otherDb droAna3
+
+        track netRBestDroBip2
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s014 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droBip2 chainRBestDroBip2
+        otherDb droBip2
+
+        track netRBestDroPse3
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s016 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droPse3 chainRBestDroPse3
+        otherDb droPse3
+
+        track netRBestDroMir2
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s017 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droMir2 chainRBestDroMir2
+        otherDb droMir2
+
+        track netRBestDroPer1
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s018 clade=c00
+        shortLabel $o_Organism rbNet
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droPer1 chainRBestDroPer1
+        otherDb droPer1
+
+        track netRBestDroVir3
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s021 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droVir3 chainRBestDroVir3
+        otherDb droVir3
+
+        track netRBestDroWil2
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s022 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droWil2 chainRBestDroWil2
+        otherDb droWil2
+
+        track netRBestDroGri2
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s023 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droGri2 chainRBestDroGri2
+        otherDb droGri2
+
+        track netRBestDroMoj3
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s024 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droMoj3 chainRBestDroMoj3
+        otherDb droMoj3
+
+        track netRBestDroAlb1
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s030 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign droAlb1 chainRBestDroAlb1
+        otherDb droAlb1
+
+        track netRBestMusDom2
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s048 clade=c00
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign musDom2 chainRBestMusDom2
+        otherDb musDom2
+
+        track netRBestAnoGam3
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s080 clade=c01
+        shortLabel $o_Organism rbNet
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign anoGam3 chainRBestAnoGam3
+        otherDb anoGam3
+
+        track netRBestTriCas2
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s121 clade=c02
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign triCas2 chainRBestTriCas2
+        otherDb triCas2
+
+        track netRBestApiMel4
+        subTrack insectsRBestChainNetViewnet off
+        subGroups view=net species=s122 clade=c02
+        shortLabel $o_db rbNet
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign apiMel4 chainRBestApiMel4
+        otherDb apiMel4
+

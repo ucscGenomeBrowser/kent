@@ -19,16 +19,19 @@
 try:
     import MySQLdb
 except:
-    print "Installation error - could not load MySQLdb for Python. Please tell your system administrator to run " \
-        "one of these commands as root: 'yum install MySQL-python', 'apt-get install python-mysqldb' or 'pip install MySQL-python'."
+    print("Installation error - could not load MySQLdb for Python. Please tell your system administrator to run " \
+        "one of these commands as root: 'yum install MySQL-python', 'apt-get install python-mysqldb' or 'pip install MySQL-python'.")
     exit(0)
 
 # Imports from the Python 2.7 standard library
 # Please minimize global imports. Each library import can take up to 20msecs.
-import os, cgi, sys, logging
+import os, cgi, sys, logging, time
 
 from os.path import join, isfile, normpath, abspath, dirname, isdir, splitext
 from collections import namedtuple
+
+# start to support both python2 and python3 
+from six.moves import http_cookies, urllib
 
 # activate debugging output output only on dev
 import platform
@@ -37,25 +40,40 @@ if "hgwdev" in platform.node():
     cgitb.enable()
 
 # debug level: a number. the higher, the more debug info is printed
-verboseLevel = None
+# to see most debug messages, set to 1
+# another way to change this variable is by setting the URL variable "debug" to 1
+verboseLevel = 0
 
 cgiArgs = None
 
 # like in the kent tree, we keep track of whether we have already output the content-type line
 contentLineDone = False
 
+# show the bot delay warning message before other printing is done?
+doWarnBot = False
+# current bot delay in milliseconds
+botDelayMsecs = 0
+
+# two global variables: the first is the botDelay limit after which the page is slowed down and a warning is shown
+# the second is the limit after which the page is not shown anymore
+botDelayWarn = 1000
+botDelayBlock = 5000
+
 jksqlTrace = False
 
-def errAbort(msg):
+def warn(format, *args):
+    print (format % args)
+
+def errAbort(msg, status=None, headers = None):
     " show msg and abort. Like errAbort.c "
-    if not contentLineDone:
-        printContentType()
-    print msg
+    printContentType(status=status, headers=headers)
+    print(msg)
     exit(0)
 
 def debug(level, msg):
     " output debug message with a given verbosity level "
-    if level >= verboseLevel:
+    if verboseLevel >= level:
+        printContentType()
         print(msg+"<br>")
         sys.stdout.flush()
  
@@ -101,6 +119,11 @@ def parseHgConf():
 
 def cfgOption(name, default=None):
     " return hg.conf option or default "
+    global hgConf
+
+    if not hgConf:
+        parseHgConf()
+
     return hgConf.get(name, default)
 
 def cfgOptionBoolean(name, default=False):
@@ -177,7 +200,7 @@ def sqlQuery(conn, query, args=None):
             timeDiff = _timeDeltaSeconds(datetime.now(), startTime)
             sys.stderr.write("SQL_TIME 0 %s %s %.3f\n" % (conn.host, conn.db, timeDiff))
 
-    except MySQLdb.Error, errObj:
+    except MySQLdb.Error as errObj:
         # on table not found, try the secondary mysql connection, "slow-db" in hg.conf
         errCode, errDesc = errObj
         if errCode!=1146: # "table not found" error
@@ -213,8 +236,8 @@ def sqlQuery(conn, query, args=None):
 
 def htmlPageEnd(oldJquery=False):
     " close html body/page "
-    print "</body>"
-    print "</html>"
+    print("</body>")
+    print("</html>")
 
 def printMenuBar(oldJquery=False):
     baseDir = "../"
@@ -302,12 +325,12 @@ def getGbHeader():
 <!-- BEGIN added for gene interactions page -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="//code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
-<script> /*** Handle jQuery plugin naming conflict between jQuery UI and Bootstrap ***/
+<script nonce='%s'> /*** Handle jQuery plugin naming conflict between jQuery UI and Bootstrap ***/
 $.widget.bridge('uibutton', $.ui.button); $.widget.bridge('uitooltip', $.ui.tooltip);
 </script>
 <script type='text/javascript' src='../js/jquery.plugins.js'></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"></script>
-<script>
+<script nonce='%s'>
 $.fn.bsTooltip = $.fn.tooltip.noConflict();
 </script>
 <!-- END added for gene interactions page -->
@@ -316,7 +339,7 @@ $.fn.bsTooltip = $.fn.tooltip.noConflict();
 
 def webStartGbNoBanner(prefix, title):
     " output the <head> part, largely copied from web.c / webStartGbNoBanner "
-    print (getGbHeader() % (prefix, title))
+    print (getGbHeader() % (prefix, title, getNonce(), getNonce()))
 
 def runCmd(cmd, mustRun=True):
     " wrapper around system() that prints error messages. cmd preferably a list, not just a string. "
@@ -326,26 +349,56 @@ def runCmd(cmd, mustRun=True):
         errAbort("Could not run command %s" % cmd)
     return ret
 
-def printContentType(contType="text/html", fname=None):
-    " print the HTTP Content-type header line with an optional file name "
+def printContentType(contType="text/html", status=None, fname=None, headers=None):
+    """
+    print the HTTP Content-type header line with an optional file name for downloads.
+    Also optionally prints the bot delay note. The argument 'status' must be an int.
+    """
     global contentLineDone
-    contentLineDone = True
-    print("Content-type: %s; charset=utf-8" % contType)
-    if fname is not None:
-        print("Content-Disposition: attachment; filename=%s" % fname)
-    print
+    if not contentLineDone:
+        contentLineDone = True
+        print("Content-type: %s; charset=utf-8" % contType)
 
-def queryBottleneck(host, port, ip):
-    " contact UCSC-style bottleneck server to get current delay time. From hg/lib/botDelay.c "
+        if status:
+            if status==400:
+                print("Status: 400 Bad Request")
+            elif status==429:
+                print("Status: 429 Too Many Requests")
+            else:
+                raise Exception("Unknown status code, please update hgLib.py")
+
+        if fname is not None:
+            print("Content-Disposition: attachment; filename=%s" % fname)
+
+        if headers:
+            for key, val in headers.items():
+                print("%s: %s" % (key, val))
+
+        print  # this newline is essential, it means: end of header lines
+
+    if doWarnBot:
+        print ("<div style='background-color:yellow; border:2px solid black'>")
+        print ("We have a suspicion that you are an automated web bot software, not a real user. ")
+        print ("To keep our site fast for other users, we have slowed down this page. ")
+        print ("The slowdown will gradually disappear. ")
+        print ("If you think this is a mistake, please contact us at genome-www@soe.ucsc.edu. ")
+        print ("Also note that all data for hgGeneGraph can be obtained through our public MySQL server and")
+        print ("all our software source code is available and can be installed locally onto your own computer. ")
+        print ("If you are unsure how to use these resources, do not hesitate to contact us.")
+        print ("</div>")
+
+
+def botDelayTime(host, port, botString):
+    " contact UCSC-style bottleneck server to get current delay time. From hg/lib/botDelay.c:botDelayTime()"
     # send ip address
     import socket
     s =  socket.socket()
     s.connect((host, int(port)))
-    msg = ip
+    msg = botString
     d = chr(len(msg))+msg
     s.send(d)
 
-    # read delay time
+    # read delay time as ASCII chars
     expLen = ord(s.recv(1))
     totalLen = 0
     buf = list()
@@ -357,27 +410,81 @@ def queryBottleneck(host, port, ip):
             break
     return int("".join(buf))
 
-def hgBotDelay():
+# global variable, only used by findCookieData, local use without explicit 'global' will trigger a Python error
+cookies = None
+
+def findCookieData(cookieName):
+    " return value of cookie or None is not set, port of lib/cheapcgi.c:findCookieData "
+    global cookies
+    if not cookies:
+        if "HTTP_COOKIE" in os.environ:
+            cookies = http_cookies.SimpleCookie(os.environ["HTTP_COOKIE"])
+        else:
+            cookies = {}
+
+    # unlike cheapcgi, Python does not even allow duplicate cookies, so no need to handle this case
+    cookie = cookies.get(cookieName)
+    if cookie:
+        return cookie.value
+
+    return None
+
+def getCookieUser():
+    " port of lib/botDelay.c:getCookieUser: get hguid cookie value  "
+    user = None
+    centralCookie = cfgOption("central.cookie", default="hguid")
+
+    if centralCookie:
+        user = findCookieData(centralCookie)
+
+    return user
+
+def getBotCheckString(ip, fraction):
+    " port of lib/botDelay.c:getBotCheckString: compose user.ip fraction for bot check  "
+    user = getCookieUser()
+    if user:
+        botCheckString = "%s.%s %f" % (user, ip, fraction)
+    else:
+        botCheckString = "%s %f" % (ip, fraction)
+    return botCheckString
+
+def hgBotDelay(fraction=1.0):
     """
     Implement bottleneck delay, get bottleneck server from hg.conf.
     This behaves similar to the function src/hg/lib/botDelay.c:hgBotDelay
     It does not use the hgsid, currently it always uses the IP address.
-    Using the hgsid makes little sense. It is more lenient than that C version.
+    Using the hgsid makes little sense. It is more lenient than the C version.
     """
-    import time
-    if "DOCUMENT_ROOT" not in os.environ: # skip if not called from Apache
-        return
     global hgConf
-    hgConf = parseHgConf()
-    if "bottleneck.host" not in hgConf:
+    global doWarnBot
+    global botDelayMsecs
+
+    ip = os.environ.get("REMOTE_ADDR")
+    if not ip: # skip if not called from Apache
         return
-    ip = os.environ["REMOTE_ADDR"]
-    delay = queryBottleneck(hgConf["bottleneck.host"], hgConf["bottleneck.port"], ip)
-    if delay>10000:
-        time.sleep(delay/1000.0)
-    if delay>20000:
-        errAbort("Too many queries. Your IP has been blocked. Please contact genome-www@soe.ucsc.edu to unblock your IP address.")
+
+    host = cfgOption("bottleneck.host")
+    port = cfgOption("bottleneck.port")
+
+    if not "bottleneck.host" or not "bottleneck.port" or not ip:
+        return
+
+    botCheckString = getBotCheckString(ip, fraction)
+    millis = botDelayTime(host, port, botCheckString)
+    debug(1, "Bottleneck delay: %d msecs" % millis)
+    botDelayMsecs = millis
+
+    if millis>botDelayBlock:
+        # retry-after time factor 10 is based on the example in the bottleneck help message
+        errAbort("Too many HTTP requests and not enough delay between them. "
+        "Your IP has been blocked to keep this website responsive for other users. "
+        "Please contact genome-www@soe.ucsc.edu to unblock your IP address. We can also help you obtain the data you need without "
+        "web crawling. ", status=429, headers = {"Retry-after" : str(millis / 10)})
         sys.exit(0)
+
+    if millis>botDelayWarn:
+        time.sleep(millis/1000.0)
+        doWarnBot = True # = show warning message later in printContentType()
 
 def parseRa(text):
     " Parse ra-style string and return as dict name -> value "
@@ -410,27 +517,16 @@ def lineFileNextRow(inFile):
     line1 = fh.readline()
     line1 = line1.rstrip("\n").lstrip("#")
     headers = line1.split("\t")
-    #headers = [re.sub("[^a-zA-Z0-9_]","_", h) for h in headers]
-    #headers = [x if x!="" else "noName" for x in headers]
-
-    #filtHeads = []
-    #for h in headers:
-        #if h[0].isdigit():
-            #filtHeads.append("x"+h)
-        #else:
-            #filtHeads.append(h)
-    #headers = filtHeads
 
     Record = namedtuple('tsvRec', headers)
     for line in fh:
         if line.startswith("#"):
             continue
-        #line = line.decode("latin1")
         line = line.rstrip("\n")
         fields = string.split(line, "\t", maxsplit=len(headers)-1)
         try:
             rec = Record(*fields)
-        except Exception, msg:
+        except Exception as msg:
             logging.error("Exception occured while parsing line, %s" % msg)
             logging.error("Filename %s" % fh.name)
             logging.error("Line was: %s" % line)
@@ -441,7 +537,8 @@ def lineFileNextRow(inFile):
 
 def parseDict(fname):
     """ Parse text file in format key<tab>value<newline> and return as dict key->val.
-    Does not abort on duplicate keys, for performance reasons. """
+    Does not abort on duplicate keys, for performance reasons.
+    """
     import gzip
     d = {}
 
@@ -456,7 +553,7 @@ def parseDict(fname):
     return d
 
 def gbdbReplace(fname, hgConfSetting):
-    " replace /gbdb/ in fname with hgConfSetting "
+    " hdb.c: replace /gbdb/ in fname with hgConfSetting "
     if not fname.startswith("/gbdb/"):
         return None
 
@@ -489,11 +586,11 @@ def hGbdbReplace(fname):
 
 def netUrlOpen(url):
     " net.c: open a URL and return a file object "
-    import urllib2, time, errno
+    import errno
     from socket import error as SocketError
 
     # let our webservers know that we are not a Firefox
-    opener = urllib2.build_opener()
+    opener = urllib.request.build_opener()
     opener.addheaders = [('User-Agent', 'Genome Browser pyLib/hgLib.py:netUrlOpen()')]
 
     resp = None
@@ -560,10 +657,289 @@ def makeRandomKey(numBits=128+33):
     f.close()
     return base64.b64encode(binaryString, "Aa") # replace + and / with characters that are URL-friendly.
 
+
+# ============ Nonce and CSP functions =============
+
+nonce = None;
+
+def getNonce():
+    " make nonce one-use-per-page "
+    global nonce
+    if nonce:
+        return nonce
+    nonce = makeRandomKey(128+33) # at least 128 bits of protection, 33 for the world population size.
+    return nonce
+
+def getNoncePolicy():
+    " get nonce policy clause "
+    return "'nonce-" + getNonce() + "'" 
+
+def getCspPolicyString():
+    " get the policy string "
+    # example "default-src 'self'; child-src 'none'; object-src 'none'"
+    policy = ""
+    policy += "default-src *;"
+
+    '''
+    # more secure method not used yet 
+    policy += "default-src 'self';"
+    policy += "  child-src 'self';"
+    '''
+
+    policy += " script-src 'self' blob:"
+    # Trick for backwards compatibility with browsers that understand CSP1 but not nonces (CSP2).
+    policy += " 'unsafe-inline'"
+    # For browsers that DO understand nonces and CSP2, they ignore 'unsafe-inline' in script if nonce is present.
+    policy += " " + getNoncePolicy()
+    policy += " code.jquery.com"      # used by hgIntegrator jsHelper and others
+    policy += " www.google-analytics.com" # used by google analytics
+    #cirm cdw lib and web browse
+    policy += " www.samsarin.com/project/dagre-d3/latest/dagre-d3.js"
+    policy += " cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js"
+    policy += " cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"
+    policy += " cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"
+    policy += " cdnjs.cloudflare.com/ajax/libs/bowser/1.6.1/bowser.min.js"
+    policy += " cdnjs.cloudflare.com/ajax/libs/jstree/3.3.4/jstree.min.js"
+    policy += " login.persona.org/include.js"
+    # expMatrix
+    policy +=  " ajax.googleapis.com/ajax"
+    policy += " maxcdn.bootstrapcdn.com/bootstrap"
+    policy += " d3js.org/d3.v3.min.js"
+    # jsHelper
+    policy += " cdn.datatables.net"
+
+    # hgGeneGraph
+    policy += " https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"
+    policy += " http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"
+    policy += " http://cdn.rawgit.com/jedfoster/Readmore.js/master/readmore.min.js"
+
+    policy += ";"
+
+
+    policy += " style-src * 'unsafe-inline';"
+
+    '''
+    # more secure method not used yet 
+    policy += " style-src 'self' 'unsafe-inline'"
+    policy += " code.jquery.com"         # used by hgIntegrator
+    policy += " netdna.bootstrapcdn.com" # used by hgIntegrator
+    policy += " fonts.googleapis.com"    # used by hgGateway
+    policy += " maxcdn.bootstrapcdn.com" # used by hgGateway
+    policy += ";"
+    '''
+
+    # The data: protocol is used by popular browser extensions.
+    # It seems to be safe and it is too bad that it must be explicitly included.
+    policy += " font-src * data:;"
+
+    '''
+    /* more secure method not used yet 
+    policy += " font-src 'self'"
+    policy += " netdna.bootstrapcdn.com" # used by hgIntegrator
+    policy += " maxcdn.bootstrapcdn.com" # used by hgGateway
+    policy += " fonts.gstatic.com"       # used by hgGateway
+    policy += ";"
+
+    dyStringAppend(policy, " object-src 'none';");
+
+    '''
+
+    policy += " img-src * data:;"  
+
+    '''
+    # more secure method not used yet 
+    policy += " img-src 'self'"
+    # used by hgGene for modbaseimages in hg/hgc/lowelab.c hg/protein/lib/domains.c hg/hgGene/domains.c
+    policy += " modbase.compbio.ucsf.edu");  
+    policy += " hgwdev.soe.ucsc.edu"); # used by visiGene
+    policy += " genome.ucsc.edu");     # used by visiGene
+    policy += " code.jquery.com");          # used by hgIntegrator
+    policy += " www.google-analytics.com"); # used by google analytics
+    policy += " stats.g.doubleclick.net");  # used by google analytics
+    policy += ";"
+    '''
+
+    return policy
+
+def getCspMetaString(policy):
+    " get the policy string as an html header meta tag "
+    # use double quotes around policy because it contains single-quoted values.
+    return "<meta http-equiv='Content-Security-Policy' content=\"" + policy + "\">\n" 
+
+def getCspMetaResponseHeader(policy):
+    " get the policy string as an http response header "
+    return "Content-Security-Policy: " + policy + "\n"
+
+def getCspMetaHeader():
+    " return meta CSP header string "
+    return getCspMetaString(getCspPolicyString())
+
+#============ javascript inline-separation routines ===============
+
+'''
+// One of the main services that CSP (Content Security Policy) provides
+// is protecting from reflected and stored XSS attacks by disabling all inline javacript,
+// both in script tags, and in inline event handlers.  The separated javascript 
+// can be either added back to the end of the html page with a nonce or sha hashid,
+// or it can be saved to a temp file in trash and then included as a non-inline, off-page .js.
+'''
+
+jsInlineLines = ""
+
+def jsInline(javascript):
+    " Add javascript text to output file or memory structure "
+    global jsInlineLines
+    jsInlineLines += javascript
+
+def jsInlineF(format, *args):
+    " Add javascript text to output file or memory structure "
+    jsInline(format % args)
+
+jsInlineFinishCalled = False;
+
+def jsInlineFinish():
+    " finish outputting accumulated inline javascript "
+    global jsInlineFinishCalled
+    global jsInlineLines
+    if jsInlineFinishCalled:
+        # jsInlineFinish can be called multiple times when generating framesets or genomeSpace.
+        warn("jsInlineFinish() called already.")
+    print("<script type='text/javascript' nonce='%s'>\n%s</script>\n" % (getNonce(), jsInlineLines))
+    jsInlineLines = ""
+    jsInlineFinishCalled = True
+
+def jsInlineReset():
+    " used by genomeSpace to repeatedly output multiple pages to stdout "
+    global jsInlineFinishCalled
+    jsInlineFinishCalled = False
+
+jsEvents = [ 
+"abort",
+"activate",
+"afterprint",
+"afterupdate",
+"beforeactivate",
+"beforecopy",
+"beforecut",
+"beforedeactivate",
+"beforeeditfocus",
+"beforepaste",
+"beforeprint",
+"beforeunload",
+"beforeupdate",
+"blur",
+"bounce",
+"cellchange",
+"change",
+"click",
+"contextmenu",
+"controlselect",
+"copy",
+"cut",
+"dataavailable",
+"datasetchanged",
+"datasetcomplete",
+"dblclick",
+"deactivate",
+"drag",
+"dragend",
+"dragenter",
+"dragleave",
+"dragover",
+"dragstart",
+"drop",
+"error",
+"errorupdate",
+"filterchange",
+"finish",
+"focus",
+"focusin",
+"focusout",
+"hashchange",
+"help",
+"input",
+"keydown",
+"keypress",
+"keyup",
+"load",
+"losecapture",
+"message",
+"mousedown",
+"mouseenter",
+"mouseleave",
+"mousemove",
+"mouseout",
+"mouseover",
+"mouseup",
+"mousewheel",
+"move",
+"moveend",
+"movestart",
+"offline",
+"line",
+"online",
+"paste",
+"propertychange",
+"readystatechange",
+"reset",
+"resize",
+"resizeend",
+"resizestart",
+"rowenter",
+"rowexit",
+"rowsdelete",
+"rowsinserted",
+"scroll",
+"search",
+"select",
+"selectionchange",
+"selectstart",
+"start",
+"stop",
+"submit",
+"unload"
+ ]
+
+jsEventDic = None
+
+def findJsEvent(event):
+    " see if it is in the list "
+    global jsEventDic
+    # init event dic
+    if jsEventDic == None:
+        jsEventDic = {}
+    for w in jsEvents:
+        jsEventDic[w] = True
+    if jsEventDic[event]:
+        return True
+    return False
+
+def checkValidEvent(event):
+    " check if it is lowercase and a known valid event name "
+    # TODO GALT
+    temp = event.lower()
+    if temp != event:
+        warn("jsInline: javascript event %s should be given in lower-case", event)
+    event = temp; 
+    if not findJsEvent(event):
+        warn("jsInline: unknown javascript event %s", event)
+
+def jsOnEventById(eventName, idText, jsText):
+    " Add js mapping for inline event "
+    checkValidEvent(eventName)
+    jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; %s};\n", idText, eventName, jsText)
+
+def jsOnEventByIdF(eventName, idText, format, *args):
+    " Add js mapping for inline event with printf formatting "
+    checkValidEvent(eventName)
+    jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; ", idText, eventName)
+    jsInlineF(format, *args)
+    jsInlineF("};\n")
+
+#============ END of javascript inline-separation routines ===============
+
 def cartDbLoadFromId(conn, table, cartId, oldCart):
     " Like src/hg/lib/cart.c, opens cart table and parses cart contents given a cartId of the format 123123_csctac "
-    import urlparse
-
     if cartId==None:
         return {}
     cartFields = cartId.split("_")
@@ -577,10 +953,10 @@ def cartDbLoadFromId(conn, table, cartId, oldCart):
         # silently ignore invalid cart IDs for now. Future code may want to generate a new cart.
         return {}
 
-    cartList = urlparse.parse_qs(rows[0][0])
+    cartList = urllib.parse.parse_qs(rows[0][0])
 
     # by default, python returns a dict with key -> list of vals. We need only the first one
-    for key, vals in cartList.iteritems():
+    for key, vals in cartList.items():
         oldCart[key] =vals[0]
     return oldCart
 
@@ -628,19 +1004,9 @@ def cartAndCookieSimple():
         It also does not run cart.c:cartJustify, so track priorities are not applied.
         Also, if there is no hgsid parameter or no cookie, we do not create a new cart.
     """
-    import Cookie
-
     # no cgiApoptosis yet - maybe needed in the future. see cart.c / cartNew
 
-    if "HTTP_COOKIE" in os.environ:
-        cookies = Cookie.SimpleCookie(os.environ["HTTP_COOKIE"])
-        cookieName = cfgOption("central.cookie", "hguid")
-        hguid = cookies.get(cookieName)
-        if hguid is not None:
-            hguid = hguid.value # cookies have values and other attributes. We only need the value
-    else:
-        hguid = None
-
+    hguid = getCookieUser()
     hgsid = cgiString("hgsid")
 
     conn = hConnectCentral()
@@ -664,11 +1030,11 @@ def cgiSetup():
     global cgiArgs
     cgiArgs = cgi.FieldStorage() # Python has built-in cgiSpoof support: sys.argv[1] is the query string if run from the command line
 
-    hgBotDelay()
-
     if cgiString("debug"):
         global verboseLevel
         verboseLevel = int(cgiString("debug"))
+
+    hgBotDelay()
 
     cart = cartAndCookieSimple()
     return cart

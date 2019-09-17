@@ -9,6 +9,7 @@ diff = diff -u
 indir = ../../../pslSwap/tests/input/
 
 test: mrnaTest withSeqTest transTest
+	${MAKE} clean
 
 mrnaTest: mkdirs
 	${MAKE} runTest ID=$@ IN=mrna.psl

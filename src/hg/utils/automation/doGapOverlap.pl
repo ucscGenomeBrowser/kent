@@ -18,6 +18,7 @@ use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_buildDir
     $opt_twoBit
+    $opt_endSize
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -35,6 +36,8 @@ my $bigClusterHub = 'ku';
 my $workhorse = 'hgwdev';
 my $defaultWorkhorse = 'hgwdev';
 my $twoBit = "$HgAutomate::clusterData/\$db/\$db.2bit";
+my $defaultEndSize = 1000;
+my $endSize = $defaultEndSize;
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -53,7 +56,8 @@ options:
                           $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/gapOverlap
     -twoBit seq.2bit      Use seq.2bit as the input sequence instead
                           of default ($twoBit).
-
+    -endSize N            Use size N for sequence next to gap instead of
+                          default $defaultEndSize bases (limit: 5000)
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -90,6 +94,7 @@ sub checkOptions {
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      'buildDir=s',
 		      'twoBit=s',
+		      'endSize=i',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -122,7 +127,7 @@ sub doPartition {
 
   $bossScript->add(<<_EOF_
 export db=$db
-$Bin/nBedToEnds.pl $twoBit | gzip -c > \$db.pairedEnds.tab.gz
+$Bin/nBedToEnds.pl $twoBit $endSize | gzip -c > \$db.pairedEnds.tab.gz
 export count=`zcat \$db.pairedEnds.tab.gz | wc -l`
 if [ "\$count" -lt 1 ]; then
    touch \$db.gapOverlap.bed
@@ -159,7 +164,6 @@ if [ "\$count" -lt 10000 ]; then
   exit 0
 else
  export size10=`echo \$count | awk '{printf "%d", 1+\$1/10}'`
- export size1000=`echo \$size10 | awk '{printf "%d", 1+\$1/1000}'`
  zcat \$db.pairedEnds.tab.gz \\
   | split --suffix-length=1 --lines=\$size10 --numeric-suffixes - blatPairs/blatList
  cd blatPairs
@@ -207,10 +211,12 @@ sub doBlat {
   my $bossScript = newBash HgRemoteScript("$runDir/blat.bash",
 		$paraHub, $runDir, $whatItDoes);
 
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 chmod +x runOne
-$HgAutomate::gensub2 blatPairs/pair.list single template jobList
-$HgAutomate::paraRun
+$gensub2 blatPairs/pair.list single template jobList
+$paraRun
 
 find ./psl -type f | grep "\.psl\$" | xargs cat | gzip -c > $db.gapOverlap.psl.gz
 count=`zcat $db.gapOverlap.psl.gz | wc -l`
@@ -242,7 +248,7 @@ sub doLoad {
         "to complete this procedure.\n";
   }
   # And, must have something to load
-  if ( ! $opt_debug && ( -s "$runDir/$db.gapOverlap.bed" ) ) {
+  if ( ! $opt_debug && ( ! -s "$runDir/$db.gapOverlap.bed" ) ) {
     die "doLoad does not find result from blat run: $db.gapOverlap.bed, " .
       "Can run with: -continue blat or check why blat run was empty.\n";
   }
@@ -301,6 +307,8 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/gapOverlap";
 $twoBit = $opt_twoBit ? $opt_twoBit :
   "$HgAutomate::clusterData/$db/$db.2bit";
+$endSize = $opt_endSize ? $opt_endSize : $defaultEndSize;
+die "-endSize can not be larger than 5000" if ($endSize > 5000);
 
 # may be working on a 2bit file that does not have a database browser
 $dbExists = 0;

@@ -1,0 +1,996 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the panTro6
+
+#########################################################################
+# reuse photograph from panTro5 previous versions
+#    (DONE - 2018-03-23 - Hiram)
+
+mkdir /hive/data/genomes/panTro6
+cd /hive/data/genomes/panTro6
+cp -p ../panTro5/photoReference.txt .
+
+cat photoReference.txt
+
+photoCreditURL  http://www.smm.org/
+photoCreditName Science Museum of Minnesota
+
+#########################################################################
+#  Initial steps (DONE - 2018-03-23 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/panTro6
+cd ~/kent/src/hg/makeDb/doc/panTro6
+
+# best to use a most recent document since it has the latest features and
+# procedures:
+sed -e 's/felCat9/panTro6/g; s/FelCat9/PanTro6/g; s/DONE/TBD/g;' ../felCat9/initialBuild.txt > initialBuild.txt
+
+mkdir /hive/data/genomes/panTro6/refseq
+cd /hive/data/genomes/panTro6/refseq
+
+time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Pan_troglodytes/all_assembly_versions/GCF_002880755.1_Clint_PTRv2/ ./
+
+# sent 3106 bytes  received 4399985960 bytes  18219416.42 bytes/sec
+# total size is 4399437472  speedup is 1.00
+
+# real    4m0.842s
+
+# check assembly size for later reference:
+
+faSize G*_PTRv2_genomic.fna.gz
+
+# 3050398082 bases (31805092 N's 3018592990 real 1820051887 upper
+#	1198541103 lower) in 4346 sequences in 1 files
+# Total size: mean 701886.4 sd 9434013.2 min 223 (NW_019937062.1)
+#	max 224244399 (NC_036879.1) median 29187
+# %39.29 masked total, %39.71 masked real
+
+# this information is from the top of
+#    panTro6/refseq/GCF_002880755.1_Clint_PTRv2_assembly_report.txt
+
+
+# Assembly name:  Clint_PTRv2
+# Organism name:  Pan troglodytes (chimpanzee)
+# Isolate:  Yerkes chimp pedigree #C0471 (Clint)
+# Sex:  male
+# Taxid:          9598
+# BioSample:      SAMN06272697
+# BioProject:     PRJNA369439
+# Submitter:      University of Washington
+# Date:           2018-1-19
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Chromosome
+# Genome representation: full
+# WGS project:    NBAG03
+# Expected final version: yes
+# Genome coverage: 124x
+# RefSeq assembly accession: GCF_002880755.1
+#
+## Assembly-Units:
+## GenBank Unit Accession	RefSeq Unit Accession	Assembly-Unit name
+## 	GCF_002880765.1	Primary Assembly
+## 	GCF_000001485.1	non-nuclear
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2018-03-23)
+    # arguments here are: <db> <clade> <trackDbDir> <assembly_report.txt>
+    cd /hive/data/genomes/panTro6
+    $HOME/kent/src/hg/utils/automation/prepConfig.pl panTro6 mammal \
+        chimp ./refseq/*_assembly_report.txt > panTro6.config.ra
+
+    # compare to ../panTro5 to see what might need to be fixed up:
+    diff panTro6.config.ra ../panTro5/panTro5.config.ra  | less
+
+    # reset commonName Chimpanzee to: commonName Chimp
+    # reset orderKey 3337 to: orderKey 3325
+    # reset ncbiGenomeId 325 to: ncbiGenomeId 202
+    # verify it looks sane
+    cat panTro6.config.ra
+# config parameters for makeGenomeDb.pl:
+db panTro6
+clade mammal
+genomeCladePriority 35
+scientificName Pan troglodytes
+commonName Chimp
+assemblyDate Jan. 2018
+assemblyLabel University of Washington
+assemblyShortLabel Clint_PTRv2
+orderKey 3325
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_001643.1
+mitoAcc none
+fastaFiles /hive/data/genomes/panTro6/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/panTro6/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir chimp
+photoCreditURL  http://www.smm.org/
+photoCreditName Science Museum of Minnesota
+ncbiGenomeId 202
+ncbiAssemblyId 1642151
+ncbiAssemblyName Clint_PTRv2
+ncbiBioProject 369439
+ncbiBioSample SAMN06272697
+genBankAccessionID GCF_002880755.1
+taxId 9598
+
+#############################################################################
+# setup UCSC named files (DONE - 2018-03-23 - Hiram)
+
+    mkdir /hive/data/genomes/panTro6/ucsc
+    cd /hive/data/genomes/panTro6/ucsc
+
+    # check for duplicate sequences:
+    time faToTwoBit -noMask ../refseq/G*_PTRv2_genomic.fna.gz refseq.2bit
+    #  real    1m17.463s
+
+    twoBitDup refseq.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+    # the scripts creating the fasta here will be using this refseq.2bit file
+
+    time ~/kent/src/hg/utils/automation/ucscCompositeAgp.pl \
+       ../refseq/G*_PTRv2_genomic.fna.gz \
+          ../refseq/G*_PTRv2_assembly_structure/Primary_Assembly
+# NC_006492.4 chrY
+# NC_036879.1 chr1
+# NC_036880.1 chr2A
+# NC_036881.1 chr2B
+# NC_036882.1 chr3
+# NC_036883.1 chr4
+# NC_036884.1 chr5
+# NC_036885.1 chr6
+# NC_036886.1 chr7
+# NC_036887.1 chr8
+# NC_036888.1 chr9
+# NC_036889.1 chr10
+# NC_036890.1 chr11
+# NC_036891.1 chr12
+# NC_036892.1 chr13
+# NC_036893.1 chr14
+# NC_036894.1 chr15
+# NC_036895.1 chr16
+# NC_036896.1 chr17
+# NC_036897.1 chr18
+# NC_036898.1 chr19
+# NC_036899.1 chr20
+# NC_036900.1 chr21
+# NC_036901.1 chr22
+# NC_036902.1 chrX
+# real    16m9.446s
+    # unplaced sequences
+    time ~/kent/src/hg/utils/automation/unplacedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+# processed 4316 sequences into chrUn.fa.gz
+# real    0m44.310s
+
+    # unlocalized sequences
+    time ~/kent/src/hg/utils/automation/unlocalizedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+# 16
+# 5
+# processed 4 sequences into chr*_random.gz 2 files
+# real    0m6.591s
+
+    # bash syntax here
+    mitoAcc=`grep "^# mitoAcc" ../panTro6.config.ra | awk '{print $NF}'`
+    printf "# mitoAcc %s\n" "$mitoAcc"
+# mitoAcc NC_001643.1
+
+    zcat \
+  ../refseq/*_assembly_structure/non-nuclear/assem*/AGP/chrMT.comp.agp.gz \
+     | grep -v "^#" | sed -e "s/^$mitoAcc/chrM/;" > chrM.agp
+
+    printf ">chrM\n" > chrM.fa
+    twoBitToFa -noMask refseq.2bit:$mitoAcc stdout | grep -v "^>" >> chrM.fa
+    gzip chrM.fa
+
+    # verify fasta and AGPs agree
+    time faToTwoBit *.fa.gz test.2bit
+    # real    1m22.353s
+
+    time cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail -4
+    # All AGP and FASTA entries agree - both files are valid
+    # real    0m10.242s
+
+    # and no sequence lost from orginal:
+    twoBitToFa test.2bit stdout | faSize stdin
+# 3050398082 bases (31805092 N's 3018592990 real 3018592990 upper 0 lower)
+#	in 4346 sequences in 1 files
+# Total size: mean 701886.4 sd 9434013.2 min 223 (chrUn_NW_019937062v1)
+#	max 224244399 (chr1) median 29187
+
+    # same numbers as above
+# 3050398082 bases (31805092 N's 3018592990 real 1820051887 upper
+#	1198541103 lower) in 4346 sequences in 1 files
+# Total size: mean 701886.4 sd 9434013.2 min 223 (NW_019937062.1)
+#	max 224244399 (NC_036879.1) median 29187
+
+    # no longer need these temporary 2bit files
+    rm refseq.2bit test.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2018-03-23 - Hiram)
+
+    cd /hive/data/genomes/panTro6
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp panTro6.config.ra) > agp.log 2>&1
+    # real    2m43.743s
+
+    # verify there was no error in that step:
+    tail agp.log
+    #  *** All done!  (through the 'agp' step)
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db panTro6.config.ra) > db.log 2>&1
+    # real    24m48.575s
+
+    # verify gaps are all there:
+    twoBitInfo -nBed panTro6.unmasked.2bit stdout | awk '{print $3-$2}' \
+	| ave stdin | sed -e 's/^/# /;'
+# Q1 100.000000
+# median 499.000000
+# Q3 50212.500000
+# average 44482.646154
+# min 10.000000
+# max 621330.000000
+# count 715
+# total 31805092.000000
+
+    hgsql -e 'select chromEnd-chromStart from gap;' panTro6 | ave stdin | sed -e 's/^/# /;'
+# Q1 100.000000
+# median 499.000000
+# Q3 50212.500000
+# average 44482.646154
+# min 10.000000
+# max 621330.000000
+# count 715
+# total 31805092.000000
+
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add panTro6 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/panTro6
+    ln -s `pwd`/panTro6.unmasked.2bit /gbdb/panTro6/panTro6.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2018-03-24 - Hiram)
+    mkdir /hive/data/genomes/panTro6/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/panTro6/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/panTro6/panTro6.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku panTro6) > do.log 2>&1
+    # real    6m17.200s
+
+    cat fb.panTro6.cpgIslandExtUnmasked.txt
+    # 29545528 bases of 3018592990 (0.979%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2018-03-24 - Hiram)
+    mkdir /hive/data/genomes/panTro6/bed/cytoBand
+    cd /hive/data/genomes/panTro6/bed/cytoBand
+    makeCytoBandIdeo.csh panTro6
+
+#############################################################################
+# gapOverlap (DONE - 2018-03-24 - Hiram)
+    mkdir /hive/data/genomes/panTro6/bed/gapOverlap
+    cd /hive/data/genomes/panTro6/bed/gapOverlap
+    time (doGapOverlap.pl \
+	-twoBit=/hive/data/genomes/panTro6/panTro6.unmasked.2bit panTro6 ) \
+	> do.log 2>&1
+    # real    14m5.164s
+
+    cat fb.panTro6.gapOverlap.txt
+    # 6998 bases of 3050398082 (0.000%) in intersection
+
+    # only six items:
+    zcat *.bed.gz | cut -f1-5
+# chr12   113245358       113246724       chr12:113245359-113246724       633
+# chr21   18867677        18869111        chr21:18867678-18869111 667
+# chr8    127452459       127454559       chr8:127452460-127454559        1000
+# chrX    52589209        52609380        chrX:52589210-52609380  1000
+# chrY    7097196 7097619 chrY:7097197-7097619    199
+
+#############################################################################
+# tandemDups (DONE - 2018-03-24 - Hiram)
+    mkdir /hive/data/genomes/panTro6/bed/tandemDups
+    cd /hive/data/genomes/panTro6/bed/tandemDups
+    time (~/kent/src/hg/utils/automation/doTandemDup.pl \
+  -twoBit=/hive/data/genomes/panTro6/panTro6.unmasked.2bit panTro6) \
+	> do.log 2>&1 &
+    # real    96m33.185s
+
+    cat fb.panTro6.tandemDups.txt
+    # 133769723 bases of 3050398082 (4.385%) in intersection
+
+    bigBedInfo panTro6.tandemDups.bb | sed -e 's/^/#  /;'
+#  version: 4
+#  fieldCount: 13
+#  hasHeaderExtension: yes
+#  isCompressed: yes
+#  isSwapped: 0
+#  extraIndexCount: 0
+#  itemCount: 2,570,600
+#  primaryDataSize: 65,661,880
+#  primaryIndexSize: 259,136
+#  zoomLevels: 9
+#  chromCount: 4134
+#  basesCovered: 1,636,830,812
+#  meanDepth (of bases covered): 12.911632
+#  minDepth: 1.000000
+#  maxDepth: 474.000000
+#  std of depth: 28.418142
+
+#############################################################################
+# run up idKeys files for chromAlias/ncbiRefSeq (DONE - 2018-03-24 - Hiram)
+    mkdir /hive/data/genomes/panTro6/bed/idKeys
+    cd /hive/data/genomes/panTro6/bed/idKeys
+
+    time (doIdKeys.pl \
+	-twoBit=/hive/data/genomes/panTro6/panTro6.unmasked.2bit \
+	-buildDir=`pwd` panTro6) > do.log 2>&1 &
+    # real    3m56.622s
+
+    cat panTro6.keySignature.txt
+    #  d56a60e851e19f2c5b842c27bb43b990
+
+#############################################################################
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2018-03-24 - Hiram)
+    # the sequence here is working for a 'refseq' assembly
+    # beware of a chrM situation may be specific depending upon what is
+    # available in the assembly
+
+    mkdir /hive/data/genomes/panTro6/bed/ucscToINSDC
+    cd /hive/data/genomes/panTro6/bed/ucscToINSDC
+
+    join -t$'\t' ../idKeys/panTro6.idKeys.txt \
+	../../refseq/idKeysGenbank/genbankPanTro6.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToINSDC.bed
+
+    join -t$'\t' ../idKeys/panTro6.idKeys.txt \
+	../../refseq/idKeys/refseqPanTro6.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+
+    # verify line counts are the same
+    wc -l *.bed ../../chrom.sizes
+    #	4344 ucscToINSDC.bed
+    #	4346 ucscToRefSeq.bed
+    #	4346 ../../chrom.sizes
+
+    # need to find INSDC equivalents for chrY and chrM:
+    egrep "chrY|chrM" *
+ucscToRefSeq.bed:chrM   0       16554   NC_001643.1
+ucscToRefSeq.bed:chrY   0       26350515        NC_006492.4
+
+    # lookup those accessions at NCBI Entrez
+    # NC_001643.1 = D38113.1
+    # NC_006492.4 = DP000054.3
+    printf "chrM\t0\t16554\tD38113.1\n" >> ucscToINSDC.bed
+    printf "chrY\t0\t26350515\tNC_006492.4\n" >> ucscToINSDC.bed
+
+    # resort the bed file:
+    sort -k1,1 -k2,2n -o ucscToINSDC.bed ucscToINSDC.bed
+
+    # verify chrM and chrY are correct:
+    egrep "chrM|chrY" *
+ucscToINSDC.bed:chrM    0       16554   D38113.1
+ucscToINSDC.bed:chrY    0       26350515        NC_006492.4
+ucscToRefSeq.bed:chrM   0       16554   NC_001643.1
+ucscToRefSeq.bed:chrY   0       26350515        NC_006492.4
+
+    # should be same line counts throughout:
+    wc -l * ../../chrom.sizes
+    #	4346 ucscToINSDC.bed
+    #	4346 ucscToRefSeq.bed
+    #	4346 ../../chrom.sizes
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 27
+    # use the $chrSize in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab panTro6 ucscToINSDC stdin ucscToINSDC.bed
+    # should be the same for ucscToRefSeq:
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  27
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab panTro6 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
+
+    # checkTableCoords should be silent
+    checkTableCoords panTro6
+    # each should cover %100 entirely:
+    featureBits -countGaps panTro6 ucscToINSDC
+    # 3050398082 bases of 3050398082 (100.000%) in intersection
+
+    featureBits -countGaps panTro6 ucscToRefSeq
+    # 3050398082 bases of 3050398082 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2018-03-24 - Hiram)
+
+    mkdir /hive/data/genomes/panTro6/bed/chromAlias
+    cd /hive/data/genomes/panTro6/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' panTro6 \
+        | sort -k1,1 > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' panTro6 \
+        | sort -k1,1 > ucsc.genbank.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+	> panTro6.chromAlias.tab
+
+for t in refseq genbank
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t panTro6.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 4346 =? 4346 OK
+# checking genbank: 4346 =? 4346 OK
+
+    hgLoadSqlTab panTro6 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        panTro6.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2018-03-24 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/chimp/panTro6
+
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" panTro6 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c | sed -e 's/^/#\t/;'
+#            14 AACZ.1
+#            21 AC.1
+#            90 AC.2
+#            53 AC.3
+#            22 AC.4
+#            11 AC.5
+#             3 AC.6
+#             2 BS.2
+#          5037 NBAG.1
+#             1 NC_.1
+               
+    # implies a rule: '[ABN][ACSB][ACGZ0-9_]+(\.[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" panTro6 | wc -l
+    # 5254
+
+    hgsql -N -e "select frag from gold;" panTro6 \
+       | egrep -e '[ABN][ACSB][ACGZ0-9_]+(\.[0-9]+)?' | wc -l
+    # 5254
+
+    hgsql -N -e "select frag from gold;" panTro6 \
+       | egrep -v -e '[ABN][ACSB][ACGZ0-9_]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/panTro6/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [ABN][ACSB][ACGZ0-9_]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+#############################################################################
+# running repeat masker (DONE - 2018-03-24 - Hiram)
+    mkdir /hive/data/genomes/panTro6/bed/repeatMasker
+    cd /hive/data/genomes/panTro6/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku panTro6) > do.log 2>&1 &
+    # real    1035m8.587s
+
+    cat faSize.rmsk.txt
+    egrep "bases|Total|masked" faSize.rmsk.txt \
+	| fold -w 75 -s  | sed -e 's/^/# /;'
+# 3050398082 bases (31805092 N's 3018592990 real 1405499360 upper 1613093630 
+# lower) in 4346 sequences in 1 files
+# Total size: mean 701886.4 sd 9434013.2 min 223 (chrUn_NW_019937062v1) max 
+# 224244399 (chr1) median 29187
+# %52.88 masked total, %53.44 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;                                            *
+
+    time featureBits -countGaps panTro6 rmsk
+    # 1613093500 bases of 3050398082 (52.881%) in intersection
+    # real    0m35.581s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' panTro6 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 1613093500.000000
+    # real    0m38.395s
+
+##########################################################################
+# running simple repeat (DONE - 2018-03-24 - Hiram)
+
+    mkdir /hive/data/genomes/panTro6/bed/simpleRepeat
+    cd /hive/data/genomes/panTro6/bed/simpleRepeat
+    # using trf409 6 here as similar size to genome (human == 6)
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409 6 panTro6) > do.log 2>&1 &
+    # real    273m49.147s
+
+    cat fb.simpleRepeat
+    # 222649611 bases of 3018592990 (7.376%) in intersection
+
+    bigBedInfo *.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 16
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 996,217
+# primaryDataSize: 31,637,595
+# primaryIndexSize: 202,580
+# zoomLevels: 10
+# chromCount: 4274
+# basesCovered: 222,649,611
+# meanDepth (of bases covered): 1.833462
+# minDepth: 1.000000
+# maxDepth: 88.000000
+# std of depth: 2.284835
+
+    # adding this trfMask to the other masking
+    cd /hive/data/genomes/panTro6
+
+    # when using the Window Masker result:
+#    twoBitMask bed/windowMasker/panTro6.cleanWMSdust.2bit \
+#       -add bed/simpleRepeat/trfMask.bed  panTro6.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # when using Rmsk results, add to rmsk after it is done:
+    twoBitMask panTro6.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed panTro6.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    twoBitToFa panTro6.2bit stdout | faSize stdin > faSize.panTro6.2bit.txt
+    egrep "bases|Total|masked" faSize.panTro6.2bit.txt \
+	| fold -w 75 -s  | sed -e 's/^/# /;'
+# 3050398082 bases (31805092 N's 3018592990 real 1402090427 upper 1616502563 
+# lower) in 4346 sequences in 1 files
+# Total size: mean 701886.4 sd 9434013.2 min 223 (chrUn_NW_019937062v1) max 
+# 224244399 (chr1) median 29187
+# %52.99 masked total, %53.55 masked real
+
+    # reset the symlink
+    rm /gbdb/panTro6/panTro6.2bit
+    ln -s `pwd`/panTro6.2bit /gbdb/panTro6/panTro6.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2018-03-24 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/panTro6/bed/microsat
+    cd /cluster/data/panTro6/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed panTro6 microsat microsat.bed
+    # Read 28577 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2018-03-24 - Hiram)
+
+    mkdir /hive/data/genomes/panTro6/bed/windowMasker
+    cd /hive/data/genomes/panTro6/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev panTro6) > do.log 2>&1
+    # real    188m5.912s
+
+    # Masking statistics
+    cat faSize.panTro6.cleanWMSdust.txt
+    egrep "bases|Total|masked" faSize.panTro6.cleanWMSdust.txt \
+	| fold -w 75 -s  | sed -e 's/^/# /;'
+# 3050398082 bases (31805092 N's 3018592990 real 1812556664 upper 1206036326 
+# lower) in 4346 sequences in 1 files
+# Total size: mean 701886.4 sd 9434013.2 min 223 (chrUn_NW_019937062v1) max 
+# 224244399 (chr1) median 29187
+# %39.54 masked total, %39.95 masked real
+
+    cat fb.panTro6.rmsk.windowmaskerSdust.txt
+    # 971547886 bases of 3050398082 (31.850%) in intersection
+
+#############################################################################
+# ncbiRefSeq (DONE - 2018-03-24 - Hiram)
+
+    # can be run up after ucscToRefSeq table is constructed
+    mkdir /hive/data/genomes/panTro6/bed/ncbiRefSeq
+    cd /hive/data/genomes/panTro6/bed/ncbiRefSeq
+
+    # adjust the name arguments
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Pan_troglodytes \
+      GCF_002880755.1_Clint_PTRv2 panTro6) > do.log 2>&1
+    # real    10m2.131s
+
+    # started this too early.  It needs to run after the panTro6.2bit file
+    # has been masked.  Rerunning from process step:
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Pan_troglodytes \
+      GCF_002880755.1_Clint_PTRv2 panTro6) > process.log 2>&1 &
+
+    # real    8m52.047s
+
+    cat fb.ncbiRefSeq.panTro6.txt
+    #  81659062 bases of 2476453204 (3.297%) in intersection
+
+#############################################################################
+# cpgIslands - (DONE - 2018-03-24 - Hiram)
+    mkdir /hive/data/genomes/panTro6/bed/cpgIslands
+    cd /hive/data/genomes/panTro6/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku panTro6) > do.log 2>&1 &
+    # real    5m35.611s
+
+    cat fb.panTro6.cpgIslandExt.txt
+    # 22143193 bases of 3018592990 (0.734%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2018-03-24 - Hiram)
+    mkdir /hive/data/genomes/panTro6/bed/genscan
+    cd /hive/data/genomes/panTro6/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku panTro6) > do.log 2>&1 &
+    # real    182m50.882s
+
+    cat fb.panTro6.genscan.txt
+    # 53595000 bases of 3018592990 (1.775%) in intersection
+
+    cat fb.panTro6.genscanSubopt.txt
+    # 51298399 bases of 3018592990 (1.699%) in intersection
+
+    bigBedInfo panTro6.genscan.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 12
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 41,507
+# primaryDataSize: 2,449,724
+# primaryIndexSize: 38,244
+# zoomLevels: 8
+# chromCount: 871
+# basesCovered: 1,998,870,176
+# meanDepth (of bases covered): 1.000000
+# minDepth: 1.000000
+# maxDepth: 1.000000
+# std of depth: 0.000000
+
+#############################################################################
+# augustus gene track (DONE - 2018-03-24 - Hiram)
+
+    mkdir /hive/data/genomes/panTro6/bed/augustus
+    cd /hive/data/genomes/panTro6/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+     -species=human -dbHost=hgwdev -workhorse=hgwdev panTro6) > do.log 2>&1 &
+    # real    98m3.215s
+
+    cat fb.panTro6.augustusGene.txt
+    # 50421577 bases of 3018592990 (1.670%) in intersection
+
+     bigBedInfo  panTro6.augustus.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 20
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 30,411
+# primaryDataSize: 2,164,577
+# primaryIndexSize: 28,960
+# zoomLevels: 7
+# chromCount: 495
+# basesCovered: 1,295,044,049
+# meanDepth (of bases covered): 1.295008
+# minDepth: 1.000000
+# maxDepth: 4.000000
+# std of depth: 0.662334
+
+#############################################################################
+# lastz/chain/net swap human/hg38 (DONE - 2018-03-24 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg38/bed/lastzPanTro6.2018-03-24
+
+    cat fb.hg38.chainPanTro6Link.txt
+    # 2910625246 bases of 3049335806 (95.451%) in intersection
+    cat fb.hg38.chainSynPanTro6Link.txt
+    # 2890994068 bases of 3049335806 (94.807%) in intersection
+    cat fb.hg38.chainRBestPanTro6Link.txt
+    # 2743876160 bases of 3049335806 (89.983%) in intersection
+
+    # running the swap
+    mkdir /hive/data/genomes/panTro6/bed/blastz.hg38.swap
+    cd /hive/data/genomes/panTro6/bed/blastz.hg38.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg38/bed/lastzPanTro6.2018-03-24/DEF \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    # real    101m29.782s
+
+    cat fb.panTro6.chainHg38Link.txt
+    # 2814507414 bases of 3018592990 (93.239%) in intersection
+    cat fb.panTro6.chainSynHg38Link.txt
+    # 2800642800 bases of 3018592990 (92.780%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+        panTro6 hg38) > rbest.log 2>&1 &
+    # real    102m47.533s
+
+    cat fb.panTro6.chainRBestHg38Link.txt 
+    # 2748571185 bases of 3018592990 (91.055%) in intersection
+
+#############################################################################
+# lastz/chain/net swap mouse/mm10 (DONE - 2018-03-24 - Hiram)
+
+    # alignment to mouse/mm10:
+    cd /hive/data/genomes/mm10/bed/lastzPanTro6.2018-03-24/
+
+    cat fb.mm10.chainPanTro6Link.txt
+    # 935720585 bases of 2652783500 (35.273%) in intersection
+
+    cat fb.mm10.chainRBestPanTro6Link.txt
+    # 891553355 bases of 2652783500 (33.608%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/panTro6/bed/blastz.mm10.swap
+    cd /hive/data/genomes/panTro6/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzPanTro6.2018-03-24/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    78m57.631s
+
+    cat fb.panTro6.chainMm10Link.txt
+    # 934668641 bases of 3018592990 (30.964%) in intersection
+    cat fb.panTro6.chainSynMm10Link.txt
+    # 889944141 bases of 3018592990 (29.482%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	panTro6 mm10) > rbest.log 2>&1 &
+    # real    504m47.811s
+
+    cat fb.panTro6.chainRBestMm10Link.txt
+    # 890065520 bases of 3018592990 (29.486%) in intersection
+
+##############################################################################
+# Create kluster run files (DONE - 2018-03-24 - Hiram)
+
+    cd /hive/data/genomes/panTro6
+    # numerator is panTro6 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap panTro6 gap
+    # 28994139 bases of 2803637675 (1.034%) in intersection
+    #                   ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2803637675 / 2861349177 \) \* 1024
+    #  ( 2803637675 / 2861349177 ) * 1024 = 1003.346604
+
+    # ==> use -repMatch=1000 same as was panTro5
+    cd /hive/data/genomes/panTro6
+    blat panTro6.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/panTro6.11.ooc \
+        -repMatch=1000
+    #  Wrote 36740 overused 11-mers to jkStuff/panTro6.11.ooc
+    # panTro5 at repMatch=1000 was:
+    #  Wrote 38245 overused 11-mers to jkStuff/panTro5.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' panTro6 \
+        | sort -k7,7nr | ave -col=7 stdin | sed -e 's/^/# /;'
+    # there are many at 100 bases:
+# Q1 100.000000
+# median 100.000000
+# Q3 100.000000
+# average 10930.290698
+# min 10.000000
+# max 500001.000000
+# count 86
+# total 940005.000000
+# standard deviation 56419.602180
+
+    # profile:
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' panTro6 \
+	| cut -f7 | sort | uniq -c
+      1 10
+     74 100
+      1 10223
+      1 131931
+      1 15585
+      1 29588
+      1 32403
+      1 33521
+      1 500001
+      2 50001
+      1 70431
+      1 8910
+
+    # therefore, minimum gap size of 100, this is doing non-bridged gaps only
+  gapToLift -verbose=2 -minGap=100 panTro6 jkStuff/panTro6.nonBridged.lft \
+       -bedFile=stdout | sort -k1,1 -k2,2n > jkStuff/panTro6.nonBridged.bed
+
+##############################################################################
+# LIFTOVER TO panTro5 (DONE - 2018-03-24 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/panTro6/bed/blat.panTro5.2018-03-24
+    cd /hive/data/genomes/panTro6/bed/blat.panTro5.2018-03-24
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/panTro6/jkStuff/panTro6.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         panTro6 panTro5) > do.log 2>&1
+    # real    464m42.018s
+
+    # verify the convert link on the test browser is now active from panTro6 to
+    # panTro5
+
+##############################################################################
+# GENBANK AUTO UPDATE (DONE - 2018-03-25 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism      mrnaCnt   estCnt  refSeqCnt
+    # Pan troglodytes 3548    5065    2048
+    # Pan troglodytes schweinfurthii  7       0       0
+    # Pan troglodytes troglodytes     42      0       0
+    # Pan troglodytes verus   126     12315   0
+
+    # edit etc/genbank.conf to add panTro6 just before panTro5
+# panTro6 (chimp - Pan troglodytes - refseq GCF_002880755.1 - taxId 9598)
+panTro6.serverGenome = /hive/data/genomes/panTro6/panTro6.2bit
+panTro6.clusterGenome = /hive/data/genomes/panTro6/panTro6.2bit
+panTro6.ooc = /hive/data/genomes/panTro6/jkStuff/panTro6.11.ooc
+panTro6.lift = /hive/data/genomes/panTro6/jkStuff/panTro6.nonBridged.lft
+panTro6.perChromTables = no
+panTro6.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+panTro6.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+panTro6.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+panTro6.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+panTro6.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+panTro6.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+panTro6.downloadDir = panTro6
+# defaults yes: genbank.mrna.native.load genbank.mrna.native.loadDesc
+# yes: genbank.est.native.load refseq.mrna.native.load
+# yes: refseq.mrna.native.loadDesc refseq.mrna.xeno.load
+# yes: refseq.mrna.xeno.loadDesc
+# defaults no: genbank.mrna.xeno.load genbank.mrna.xeno.loadDesc
+# no: genbank.est.native.loadDesc genbank.est.xeno.load
+# no: genbank.est.xeno.loadDesc
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+# have been doing this for chimp too:
+panTro6.genbank.mrna.xeno.load = yes
+
+    # verify stated file paths do exist:
+    grep panTro6 etc/genbank.conf | egrep "Genome|ooc|lift" \
+	| awk '{print $NF}' | xargs ls -og
+-rw-rw-r-- 1    146968 Mar 24 20:30 /hive/data/genomes/panTro6/jkStuff/panTro6.11.ooc
+-rw-rw-r-- 1    258184 Mar 25 14:25 /hive/data/genomes/panTro6/jkStuff/panTro6.nonBridged.lft
+-rw-rw-r-- 1 795113145 Mar 24 20:22 /hive/data/genomes/panTro6/panTro6.2bit
+-rw-rw-r-- 1 795113145 Mar 24 20:22 /hive/data/genomes/panTro6/panTro6.2bit
+
+    # add panTro6 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding panTro6/cat refs #21043' \
+	etc/genbank.conf etc/align.dbs etc/hgwdev.dbs
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # XXX a few days later the genbank tables will be in the database
+
+#############################################################################
+#  BLATSERVERS ENTRY (DONE - 2018-08-26 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("panTro6", "blat1c", "17904", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("panTro6", "blat1c", "17905", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+##############################################################################
+## reset default position to same as what panTro5 has: FOXP2
+##  (DONE - 2018-04-09 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr7:111311998-111585728"
+	where name="panTro6";' hgcentraltest
+
+##############################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2018-04-09 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    ~/kent/src/hg/utils/automation/verifyBrowser.pl panTro6
+# 66 tables in database panTro6 - Chimp, Pan troglodytes
+# verified 66 tables in database panTro6, 0 extra tables, 24 optional tables
+# NCBI RefSeq genes     10 optional tables
+# chainNetRBestHg38     3 optional tables
+# chainNetRBestMm10     3 optional tables
+# chainNetSynHg38       3 optional tables
+# chainNetSynMm10       3 optional tables
+# gapOverlap    1 optional tables
+# tandemDups    1 optional tables
+# 13 genbank tables found
+# verified 29 required tables, 0 missing tables
+# hg38 chainNet to panTro6 found 3 required tables
+# mm10 chainNet to panTro6 found 3 required tables
+# hg38 chainNet RBest and syntenic to panTro6 found 6 optional tables
+# mm10 chainNet RBest and syntenic to panTro6 found 3 optional tables
+# liftOver to previous versions: 1, from previous versions: 1
+
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=panTro6 -tableCoverage all.joiner
+    joinerCheck -database=panTro6 -times all.joiner
+    joinerCheck -database=panTro6 -keys all.joiner
+
+    cd /hive/data/genomes/panTro6
+    # clean up obsolete trackDb work, assuming you have already checked in
+    # these trackDb files into the source tree
+    rm -fr TemporaryTrackDbCheckout
+
+    time (makeDownloads.pl -workhorse=hgwdev panTro6) > downloads.log 2>&1
+    #  real    25m49.888s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/panTro6/pushQ
+    cd /hive/data/genomes/panTro6/pushQ
+  time (makePushQSql.pl -redmineList panTro6) > panTro6.pushQ.sql 2> stderr.out
+    # remove the tandemDups and gapOverlap from the file list:
+    sed -i -e "/tandemDups/d" redmine.panTro6.table.list
+    sed -i -e "/Tandem Dups/d" redmine.panTro6.releaseLog.txt
+    sed -i -e "/gapOverlap/d" redmine.panTro6.table.list
+    sed -i -e "/Gap Overlaps/d" redmine.panTro6.releaseLog.txt
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: panTro6 does not have seq
+    # WARNING: panTro6 does not have extFile
+
+    # add the path names to the listing files in the redmine issue
+    # in the three appropriate entry boxes:
+
+/hive/data/genomes/panTro6/pushQ/redmine.panTro6.file.list
+/hive/data/genomes/panTro6/pushQ/redmine.panTro6.releaseLog.txt
+/hive/data/genomes/panTro6/pushQ/redmine.panTro6.table.list
+
+#########################################################################

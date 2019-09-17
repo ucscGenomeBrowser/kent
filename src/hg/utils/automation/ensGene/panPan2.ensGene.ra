@@ -1,0 +1,7 @@
+# required db variable
+db panPan2
+# specific lifting to translate names:
+liftUp /hive/data/genomes/panPan2/jkStuff/ensToUcsc.lift
+
+skipInvalid yes
+# ENSPPAT00000007687.1 txEnd 2172 >= chromSize 2168

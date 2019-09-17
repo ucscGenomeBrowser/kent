@@ -396,6 +396,38 @@ hgsql hgcentraltest -e "INSERT INTO genomeClade (genome, clade, priority) VALUES
     #   NC_018116.1:400-500
     #   JN161100.1:600-700
 
+    # adding ensembl names 2017-12-13
+    cd /hive/data/genomes/aotNan1/bed/chromAlias
+    mkdir previous
+    mv *.tab previous
+    cut -f1,2 previous/ucsc.genbank.tab| sort > ucsc.genbank.tab
+    cut -f1,2 previous/ucsc.refseq.tab| sort > ucsc.refseq.tab
+
+    join -t$'\t' ../idKeys/aotNan1.idKeys.txt \
+	../../ensembl/ensemblAotNan1.idKeys.txt | cut -f2,3 \
+	| sort > ucsc.ensembl.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl
+    sort -o aotNan1.chromAlias.tab aotNan1.chromAlias.tab
+
+    for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t aotNan1.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 28922 =? 28922 OK
+# checking genbank: 28922 =? 28922 OK
+# checking ensembl: 28921 =? 28921 OK
+
+    # note: ensembl does not have chrM
+    hgLoadSqlTab aotNan1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        aotNan1.chromAlias.tab
+
 #########################################################################
 # fixup search rule for assembly track/gold table (DONE - 2017-09-25 - Hiram)
 
@@ -454,6 +486,17 @@ searchPriority 8
 
     cat fb.aotNan1.rmsk.windowmaskerSdust.txt
     # 701551294 bases of 2861684817 (24.515%) in intersection
+
+##########################################################################
+# run up idKeys files for ncbiRefSeq/chromAlias (DONE - 2017-12-12 - Hiram)
+    mkdir /hive/data/genomes/aotNan1/bed/idKeys
+    cd /hive/data/genomes/aotNan1/bed/idKeys
+
+    time (doIdKeys.pl -buildDir=`pwd` aotNan1) > do.log 2>&1 &
+    # real    15m7.683s
+
+    cat aotNan1.keySignature.txt
+    #   58b0c1a568e25fcb17cb640f487eb747
 
 ##########################################################################
 # cpgIslands - (DONE - 2017-09-25 - Hiram)

@@ -6,7 +6,7 @@
 
 #include "cart.h"
 
-double *mathWigGetValues(char *equation, char *chrom, unsigned start, unsigned end);
+double *mathWigGetValues(char *db, char *equation, char *chrom, unsigned start, unsigned end, boolean missingIsZero);
 /* Build an array of doubles that is calculated from bigWig's listed
  * in equation in the requested region. */
 

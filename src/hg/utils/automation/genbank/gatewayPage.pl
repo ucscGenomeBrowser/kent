@@ -240,7 +240,7 @@ To download these data, issue this <em>wget</em> command:
 <pre>
 wget --timestamping -m -nH -x --cut-dirs=5 -e robots=off -np -k \\
    --reject \"index.html*\" -P \"$urlDirectory\" \\
-       http:<span id='wgetSrc'>//genome-test.cse.ucsc.edu</span>/gbdb/hubs/$asmType/$speciesSubgroup/$urlDirectory/
+       http:<span id='wgetSrc'>//genome-test.soe.ucsc.edu</span>/gbdb/hubs/$asmType/$speciesSubgroup/$urlDirectory/
 </pre>
 to download the files for this assembly,<br>
 creating the local directory: \"$urlDirectory\"<br>

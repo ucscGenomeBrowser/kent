@@ -11227,7 +11227,7 @@ hgsql kgHg17B -e 'load data local infile "chromInfo.tab" into table chromInfo ig
     cd /cluster/data/hg17/bed
     mkdir geneList
     cd geneList
-    wget -O hg17GeneList.html "http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/hgGeneList?db=hg17"
+    wget -O hg17GeneList.html "http://hgwdev-fanhsu.soe.ucsc.edu/cgi-bin/hgGeneList?db=hg17"
     cp -p hg17GeneList.html /usr/local/apache/htdocs/goldenPath
 # Check this html file into CVS.
 
@@ -24632,7 +24632,7 @@ foreach my $id (sort keys %idInfo) {
 
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
-   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
 
 see doc/builds.txt for specific details.
 ############################################################################
@@ -24765,7 +24765,7 @@ hg17.upstreamMaf = multiz17way /hive/data/genomes/hg17/bed/multiz17way/species.l
 
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
-   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
+   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
 ############################################################################

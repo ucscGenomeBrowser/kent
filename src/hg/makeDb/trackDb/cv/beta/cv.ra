@@ -14160,13 +14160,13 @@ term ENM
 tag ENM
 type region
 label ENCODE pilot regions
-description ENCODE pilot manually-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+description ENCODE pilot manually-selected regions (http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
 
 term ENR
 tag ENR
 type region
 label ENCODE pilot random
-description ENCODE pilot randomly-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
+description ENCODE pilot randomly-selected regions (http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
 
 term UW-5C-Myc-Region
 tag UW5CMYC

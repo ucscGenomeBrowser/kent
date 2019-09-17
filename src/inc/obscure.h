@@ -28,6 +28,12 @@ void sprintWithGreekByte(char *s, int slength, long long size);
 void printWithGreekByte(FILE *f, long long l);
 /* Print with formatting in gigabyte, terabyte, etc. */
 
+void sprintWithMetricBaseUnit(char *s, int slength, long long size);
+/* Numbers formatted with Pb, Tb, Gb, Mb, kb, bp */
+
+void printWithMetricBaseUnit(FILE *f, long long l);
+/* Print with formatting in megabase, kilobase, etc. */
+
 void writeGulp(char *file, char *buf, int size);
 /* Write out a bunch of memory. */
 
@@ -52,6 +58,14 @@ void copyOpenFile(FILE *inFh, FILE *outFh);
 
 void cpFile(int s, int d);
 /* Copy from source file to dest until reach end of file. */
+
+void *charToPt(char c);
+/* Convert char to pointer. Use when really want to store
+ * a char in a pointer field. */
+
+char ptToChar(void *pt);
+/* Convert pointer to char.  Use when really want to store a
+ * pointer in a char. */
 
 void *intToPt(int i);
 /* Convert integer to pointer. Use when really want to store an

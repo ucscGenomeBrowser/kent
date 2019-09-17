@@ -161,3 +161,52 @@ unsigned alCount = countChars(alStr, '/') + 1;
 return variantNew(row->chrom, row->start, row->end, alCount, alStr, vcfRefAllele, lm);
 }
 
+static char *findRefAllele(struct variant *variant)
+/* Find the reference allele (preferably not symbolic); return NULL if variant doesn't have one.
+ * Don't free result. */
+{
+char *refAllele = NULL;
+struct allele *allele;
+for (allele = variant->alleles;  allele != NULL;  allele = allele->next)
+    {
+    if (allele->isReference)
+        {
+        refAllele = allele->sequence;
+        if (isAllNt(refAllele, strlen(refAllele)))
+            break;
+        }
+    }
+return refAllele;
+}
+
+struct variant *splitAndTrimVariants(struct variant *variantIn, struct lm *lm)
+/* Split variantIn into a list of single-allele variants with redundant ref/alt bases trimmed. */
+{
+struct variant *variantList = NULL;
+struct variant *variant;
+for (variant = variantIn; variant != NULL;  variant = variant->next)
+    {
+    char *refAllele = findRefAllele(variant);
+    if (refAllele == NULL || !isAllNt(refAllele, strlen(refAllele)))
+        slAddHead(&variantList, variant);
+    else
+        {
+        struct allele *allele;
+        for (allele = variant->alleles;  allele != NULL;  allele = allele->next)
+            {
+            if (! allele->isReference)
+                {
+                int refLen = strlen(refAllele), altLen = strlen(allele->sequence);
+                char ref[refLen+1], alt[altLen+1];
+                safecpy(ref, sizeof(ref), refAllele);
+                safecpy(alt, sizeof(alt), allele->sequence);
+                uint start = variant->chromStart, end = variant->chromEnd;
+                trimRefAlt(ref, alt, &start, &end, &refLen, &altLen);
+                slAddHead(&variantList, variantNew(variant->chrom, start, end, 1, alt, ref, lm));
+                }
+            }
+        }
+    }
+return variantList;
+}
+

@@ -17,6 +17,7 @@ UTILS_APPLIST = \
 	axtToPsl \
 	bedCoverage \
 	chainAntiRepeat \
+	chainBridge \
 	chainFilter \
 	chainMergeSort \
 	chainNet \
@@ -33,6 +34,7 @@ UTILS_APPLIST = \
 	mafCoverage \
 	mafFetch \
 	mafRanges \
+	mafNoAlign \
 	mafToAxt \
 	mafToPsl \
 	netChainSubset \

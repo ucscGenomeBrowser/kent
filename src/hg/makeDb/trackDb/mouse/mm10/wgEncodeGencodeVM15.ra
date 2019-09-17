@@ -1,6 +1,6 @@
 track wgEncodeGencodeVM15
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE VM15
 longLabel All GENCODE annotations from VM15 (Ensembl 90)
 group genes
@@ -37,6 +37,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneVM15
     visibility pack
     subTrack wgEncodeGencodeVM15
     type genePred
+    idXref wgEncodeGencodeAttrsVM15 transcriptId geneId
     itemClassTbl wgEncodeGencodeAttrsVM15
     itemClassNameColumn transcriptId
     itemClassClassColumn transcriptClass

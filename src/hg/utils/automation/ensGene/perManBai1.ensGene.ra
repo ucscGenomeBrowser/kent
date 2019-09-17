@@ -1,0 +1,4 @@
+# required db variable
+db perManBai1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/perManBai1/jkStuff/ensToUcsc.lift

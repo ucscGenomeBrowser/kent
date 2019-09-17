@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser FAQ" -->
+<!--#set var="ROOT" value=".." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<h1>Frequently Asked Questions: Gene tracks</h1>
+
+<h2>Topics</h2>
+
+<ul>
+<li><a href="#gene">What is a gene?</a></li>
+<li><a href="#genestrans">What is a transcript and how is it related to a gene?</a></li>
+<li><a href="#genename">What is a gene name?</a></li>
+<li><a href="#mostCommon">What are the most common gene transcript tracks?</a></li>
+<li><a href="#ens">What are Ensembl and GENCODE and is there a difference?</a></li>
+<li><a href="#ensRefseq">What are the differences among GENCODE, Ensembl and RefSeq?</a></li>
+<li><a href="#hg19">For the human assembly hg19/GRCh37: What is the difference between "UCSC 
+                    Genes" track, the "GENCODE" track and the "Ensembl Genes" track?</a></li>
+<li><a href="#hg38">For the human assembly hg38/GRCh38: What are the differences between the 
+		    "GENCODE" and "All GENCODE" tracks?</a></li>
+<li><a href="#gencode">What is the difference between GENCODE comprehensive and basic?</a></li>
+<li><a href="#ncbiRefseq">What is the difference between "NCBI RefSeq" and "UCSC RefSeq"?</a></li>
+<li><a href="#ccds">What is CCDS?</a></li>
+<li><a href="#justsingle">How can I show a single transcript per gene?</a></li>
+<li><a href="#singledownload">How can I download a file with a single transcript per gene?</a></li>
+<li><a href="#whatdo">This is rather complicated. Can you tell me which gene transcript track
+                      I should use?</a></li>
+</ul>
+<hr>
+<p>
+<a href="index.html">Return to FAQ Table of Contents</a></p>
+
+<a name="gene"></a>
+<h2>The basics</h2>
+
+The genome browser contains many gene annotation tracks. Our users 
+often wonder what these contain and where the information that we present comes
+from.
+
+<h6>What is a gene?</h6>
+<p>
+The exact definition of &quot;gene&quot; depends on the context. In the context of 
+genome annotation, a gene has at least a name and is defined by a collection of
+related RNA transcript sequences (&quot;isoforms&quot;). The naming of genes and the
+assignment of the most important transcript sequences is often done manually by
+a group of biological literature curators.  For human, genes names are created
+by the <a target=_blank href="https://www.genenames.org/">Human Gene
+Nomenclature Committee (HGNC, formerly HUGO)</a>.  Non-human species have
+similar annotation groups, e.g. Mouse Genome Informatics, Wormbase, Flybase,
+etc.
+</p>
+
+<a name="genestrans"></a>
+<h6>What is a transcript and how is it related to a gene? </h6>
+<p>
+Transcripts are defined as RNA molecules that are made from a DNA template.
+Databases like the ones at the National Library of Medicine's NCBI or the
+European Bioinformatics Institute (EBI) collect these transcript sequences from
+biologists working on a gene. Every transcript has a 
+unique identifier (accession), a gene that it is assigned to, a sequence, and
+a list of exon chrom/start/end coordinates on a chromosome. 
+Usually every transcript is assigned to only a single gene. In the Genome Browser, transcript
+tracks often end with the word
+&quot;Genes&quot;, e.g. &quot;Ensembl Genes&quot;, &quot;NCBI RefSeq Genes&quot; or &quot;UCSC 
+Genes&quot;, but they really represent transcripts on chromosomes of a genome assembly.</p>
+<p>
+For example, using the databases by NCBI, the gene
+with the gene symbol <a target=_blank
+href="https://www.ncbi.nlm.nih.gov/gene/672#">BRCA1</a> has 5 protein-coding
+transcripts or isoforms. The first transcript has the NCBI accession number <a
+target=_blank
+href="https://www.ncbi.nlm.nih.gov/nuccore/NM_007294.3">NM_007294.3</a> which
+produces the protein with the accession<a target=_blank
+href="https://www.ncbi.nlm.nih.gov/protein/NP_009225.1"> NP_009225.1</a>. In
+the human genome, it is located on chromosome 17, where it is comprised of <a
+target=_blank href="https://www.ncbi.nlm.nih.gov/nuccore/U14680">23 exons</a>.
+On the version hg38/GRCh38 of the human genome, these exons cover the DNA
+nucleotides 43044295 to 43125483.</p>
+
+<a name="genename"></a>
+<h6>What is a gene or transcript accession? </h6>
+
+<p>
+Gene symbols like BRCA1 are easy to remember but sometimes change and are not
+specific to an organism.  Therefore most databases internally use unique
+identifiers to refer to sequences and some journals require authors to use
+these in manuscripts.</p>
+
+<p>
+The most common accession numbers encountered by users are either from Ensembl,
+GENCODE or RefSeq.  Human Ensembl/GENCODE gene accession numbers start with
+ENSG followed by a number and version number separated by a dot, e.g. 
+&quot;ENSG00000012048.21&quot for latest BRCA1.  Every ENSG-gene has at least
+one transcript assigned to it. The transcript identifiers start with with ENST
+and are likewise followed by a version number, e.g. 
+&quot;ENST00000619216.1&quot;. Additional details on Ensembl IDs can be found
+on the <a target="_blank" 
+href="https://uswest.ensembl.org/Help/Faq?id=488">Ensembl FAQ page</a>.</p>
+
+<p>
+NCBI refers to genes
+with plain numbers, e.g.  672 for BRCA1. Manually curated RefSeq transcript
+identifiers start with NM_ (coding) or NR_ (non-coding), followed by a number and version
+number separated by a dot, e.g. &quot;NR_046018.2&quot;.  If the transcript was
+predicted by the NCBI Gnomon software, the prefix is XM_ but these are rare in human.
+A table of these and other RefSeq prefixes can be
+found on the <a target=_blank
+href="https://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_accession_numbers_and_mole/?report=objectonly">
+NCBI website</a>.
+</p>
+
+<a name="mostCommon"></a>
+<h6>What are the most common gene transcript tracks?</h6>
+<p>
+Researchers sequence <a target="_blank" 
+href="https://en.wikipedia.org/wiki/Complementary_DNA">cDNA sequences</a> 
+and send these to NCBI Genbank. The
+Genome Browser shows these sequences in the Genbank or the <a target=_blank 
+href="../cgi-bin/hgTrackUi?db=hg38&g=est">EST track</a> (if the cDNA is just
+a single read from the 5' or 3' end). From the alignment of the cDNAs and ESTs, 
+the NCBI RefSeq group manually creates a smaller set of representative transcripts 
+which we display as the <a target=_blank 
+href=../cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite>RefSeq Curated</a> track.
+Automated programs like UCSC's or Ensembl's gene build software do the same, just
+in software, which is more systematic but also more error-prone.
+With the arrival of GENCODE, Ensembl added a manual curation to their
+human and mouse transcripts. NCBI has added an automated prediction software (Gnomon)
+which we show in the &quot;<a target=_blank 
+href=../cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite>RefSeq Predicted</a>&quot; track.</p>
+
+<p>There are many other tracks in the group &quot;Genes and Gene Predictions&quot;.
+<a target=_blank href="../cgi-bin/hgTrackUi?db=hg38&g=genscan">Genscan</a> and <a target=_blank 
+href="../cgi-bin/hgTrackUi?db=hg19&g=nscanGene">N-Scan</a> are older 
+transcript predictor algorithms that are based on the genome sequence alone. 
+<a target=_blank href="../cgi-bin/hgTrackUi?db=hg38&g=augustusGene">Augustus</a> and <a 
+target=_blank href="../cgi-bin/hgTrackUi?db=hg19&g=acembly">AceView</a> are automated 
+gene-predictors that use cDNA and EST data. These and similar gene
+tracks are only relevant when you are working on a particular locus where you
+think that the manually curated gene models (Ensembl and RefSeq) have
+errors.</p>
+
+<p>
+To illustrate differences between the most common gene tracks, here is an
+overview of a few different tracks on human (hg38) and how many transcripts
+they contain as of March 2019:
+</p>
+
+<table> 
+    <tr> 
+      <th nowrap><strong>Track name</strong></th> 
+      <th nowrap><strong>Number of transcripts</strong></th> 
+    </tr>
+    <tr> 
+      <td>Known Gene (Gencode comprehensive V29)</td>
+      <td>226,811</td> 
+    </tr> 
+    <tr> 
+      <td>Known Gene (Gencode basic V29)</td>
+      <td>112,634</td> 
+    </tr> 
+    <tr> 
+      <td>NCBI RefSeq Predicted Transcripts</td>
+      <td>94,389</td> 
+    </tr> 
+    <tr> 
+      <td>UCSC RefSeq (Curated)</td>
+      <td>80,694</td> 
+    </tr> 
+    <tr> 
+      <td>NCBI RefSeq Curated</td>
+      <td>73,080</td> 
+    </tr> 
+    <tr> 
+      <td>CCDS</td>
+      <td>32,506</td> 
+    </tr> 
+  </table>
+
+
+<a name="ens"></a>
+<h2>The differences</h2>
+
+Some of our gene tracks look similar and contain very similar information which can be confusing.
+
+<h6>What are Ensembl and GENCODE and is there a difference?</h6>
+
+<p> 
+Officially, the Ensembl and GENCODE gene models are the same. On the latest human and mouse genome 
+assemblies (hg38 and mm10), the identifiers, transcript sequences, and exon coordinates are almost
+identical between equivalent Ensembl and GENCODE versions (excluding <a target=_blank 
+href="FAQdownloads.html#downloadAlt">alternative sequences</a> or <a target=_blank 
+href="FAQdownloads.html#downloadFix">fix sequences</a>).</p>
+
+<p>GENCODE uses the UCSC convention of prefixing chromosome names with &quot;chr&quot;, e.g. 
+&quot;chr1&quot; and &quot;chrM&quot;, but Ensembl calls these &quot;1&quot; or &quot;MT&quot;. 
+At the time of writing (Ensembl 89), a few transcripts differ due to conversion issues. In 
+addition, around 160 PAR genes are duplicated in GENCODE but only once in Ensembl. The differences 
+affect fewer than 1% of the transcripts. Apart from gene annotation itself, the links to 
+external databases differ.</p>
+
+<p>The <a target=_blank
+href="https://www.gencodegenes.org/human/releases.html">GENCODE Release
+History</a> shows the release dates and can be linked to corresponding Ensembl
+releases.  You can download the gene transcript models from the website
+<a target=_blank href=https://gencodegenes.org>https://gencodegenes.org</a> or from 
+<a target=_blank href=http://ensembl.org>http://ensembl.org</a>. 
+For most applications, the files distributed on the GENCODE website
+should be easier to use, as the third party database links are easier to parse
+and the sequence identifiers match the UCSC genome files, at least for the
+primary chromosomes.</p>
+
+<p>
+Additional information on this question can be found on the <a target=_blank href=
+"https://www.gencodegenes.org/pages/faq.html">GENCODE FAQ page</a>.</p>
+
+<a name="ensRefseq"></a>
+<h6>What are the differences among Ensembl, GENCODE and RefSeq?</h6>
+<p> 
+Different institutions have different rules on how they annotate genes. E.g.
+RefSeq's criteria are more stringent, so there are fewer RefSeq
+transcripts than Ensembl/GENCODE transcripts. Also, RefSeq transcripts have their own
+sequences independent of the genome assembly, so certain population-specific variants
+may be in RefSeq that are entirely missing from the reference genome sequence. 
+This has the important implication that the position of genome variants 
+are harder to map to RefSeq transcripts than for GENCODE since RefSeq transcripts
+can have additional sequence or missing sequence relative to the genome.</p> 
+
+<p>The links from either transcript model to other gene-related databases are
+different. In general, it seems that high-throughput sequencing data results,
+e.g. RNA-seq, are often using Ensembl/GENCODE annotations and human genetics
+results are reported using RefSeq annotations. It depends on your particular
+project which gene model set you want to use. Over time, the two transcript
+databases have been and are becoming more similar.
+
+<a name="hg19"></a>
+<h6>For the human assembly hg19/GRCh37 and mouse mm9/NCBI37: What is the difference between UCSC
+Genes, the "GENCODE Gene Annotation" track and the "Ensembl Genes" track?</h6>
+<p>The &quot;<a target=_blank href="../cgi-bin/hgTrackUi?db=hg19&g=knownGene">UCSC Genes</a>&quot; 
+track, also called &quot;Known Genes&quot;, is available only on
+assemblies before hg38.  It was built with a gene predictor developed at UCSC.
+This gene predictor uses protein, EST and cDNA annotations to derive a
+relatively restricted gene transcript set. The software is no longer in use and
+there are no plans to release the track on newer human assemblies. It was last used for the 
+mm10 mouse assembly.</p>
+
+<p>The &quot;<a target=_blank 
+href="../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGencodeSuper">GENCODE Gene Annotation</a>&quot; 
+track contains data from all versions of GENCODE. &quot;<a target=_blank 
+href="../cgi-bin/hgTrackUi?db=hg19&g=ensGene">Ensembl Genes</a>&quot; track contains just
+a single Ensembl version. See the previous question for the differences between Ensembl and GENCODE.
+</p>
+
+<a name="hg38"></a>
+<h6>For the human assembly hg38/GRCh38 and mouse mm10/GRCm38: What are the differences between the "GENCODE" and 
+"All GENCODE" tracks?</h6>
+<p> 
+&quot;<a target=_blank href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE</a>&quot; is the 
+default gene track on hg38 (similar to &quot;Known Genes&quot; on hg19), which means that it is 
+associated with a large amount of third party information when you click on a gene. This related 
+information is also available using the Table Browser. This GENCODE track is updated periodically 
+to match the latest GENCODE release. &quot;<a target=_blank 
+href="../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeGencodeSuper">All GENCODE</a>&quot; is a super-track 
+that contains all versions of GENCODE as sub-tracks, but these tracks have less third-party 
+information. Sub-tracks are never removed from &quot;All GENCODE&quot;, and new sub-tracks are 
+added as there are additional GENCODE releases.
+</p>
+
+<a name="gencode"></a>
+<h6>What is the difference between "GENCODE Comprehensive" and "GENCODE Basic"?</h6>
+<p> 
+The &quot;<a target=_blank href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE</a>&quot; track 
+offers a &quot;basic&quot; gene set, and a &quot;comprehensive&quot; gene set. The 
+&quot;basic&quot; gene set represents a subset of transcripts that GENCODE believes will be 
+useful to the majority of users. The &quot;basic&quot; gene set is defined as follows in the
+<a target=_blank href="https://www.gencodegenes.org/pages/tags.html">GENCODE FAQ</a>:</p>
+<p><i>
+&quot;Identifies a subset of representative transcripts for each gene; prioritises full-length 
+protein coding transcripts over partial or non-protein coding transcripts within the same gene, and 
+intends to highlight those transcripts that will be useful to the majority of users.&quot;</i></p>
+<p>
+A more comprehensive definition can also be found in the <a target=_blank 
+href="https://uswest.ensembl.org/info/genome/genebuild/transcript_quality_tags.html#basic">
+Esnembl FAQ</a>. By default, the track displays only the &quot;basic&quot; set. In order to 
+display the complete 
+&quot;comprehensive&quot; set, the box can be ticked at the top of the <a target=_blank 
+href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE track description page</a>.</p>
+
+<p class='text-center'>
+  <img class='text-center' src="../images/ComprehensiveSet.png" 
+alt="Turning on comprehensive gene set" width="750">
+
+<a name="ncbiRefseq"></a>
+<h6>What is the difference between "NCBI RefSeq" and "UCSC RefSeq"?</h6>
+<p>
+RefSeq gene transcripts, unlike GENCODE/Ensembl/UCSC Genes, are sequences that can differ from 
+the genome. They need to be aligned to the genome to create transcript models.
+Traditionally, UCSC has aligned RefSeq with BLAT (UCSC RefSeq sub-track) and NCBI has aligned with 
+splign. The advantages of the UCSC alignments are that
+they are updated more frequently and are available for older assemblies (like
+GRCh37/hg19), but they are less stable and they are not the official alignments.
+Therefore we recommend working with the NCBI annotations.
+When an assembly has an &quot;NCBI RefSeq&quot; track, we show it by default and hide the
+&quot;UCSC RefSeq&quot; track.
+</p>
+
+<p>
+In some rare cases, the NCBI and UCSC exon boundaries differ.
+Activating both RefSeq and UCSC RefSeq tracks helps you investigate the differences.
+Activating the RefSeq Alignments track shows NCBI's splign alignments in more detail,
+including double lines where both transcript and genomic sequence are skipped in the alignment.
+When available, the RefSeq Diffs subtrack may be helpful too. The upcoming <a target=_blank 
+href=https://ncbiinsights.ncbi.nlm.nih.gov/2018/10/11/matched-annotation-by-ncbi-and-embl-ebi-mane-a-new-joint-venture-to-define-a-set-of-representative-transcripts-for-human-protein-coding-genes/>MANE gene set</a> 
+will contain a set of high-quality transcripts that are 100%
+alignable to the genome and are part of both RefSeq and Ensembl/GENCODE but
+at the time of writing this project is at an early stage.
+</p>
+
+<p>
+An anecdotal and rare example is SHANK2 and SHANK3 in hg19. It is impossible
+for either NCBI or BLAT to get the correct alignment and gene model because the genome sequence is
+missing for part of the gene.  NCBI and BLAT find slightly different exon
+boundaries at the edge of the problematic region. NCBI's aligner tries very hard
+to find exons that align to any transcript sequence,
+so it calls a few small dubious &quot;exons&quot; in the affected genomic region.
+GENCODE V19 also used an aligner that tried very hard to find exons, but it
+found small dubious &quot;exons&quot; in different places than NCBI.
+The <a target=_blank href="../cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite">RefSeq Alignments</a> 
+subtrack makes the problematic region very clear with double lines
+indicating unalignable transcript sequence.
+</p>
+
+<p> 
+When reporting results as RefSeq coordinates, e.g. as HGVS, in research
+articles, please specify the RefSeq annotation release and also the 
+RefSeq transcript ID with version (e.g. NM_012309.4 not NM_012309).
+Different RefSeq transcript versions have different sequence (for example,
+more sequence may be added to the UTRs or even the CDS), and so the transcript coordinates
+often change from one version to the next.
+</p>
+
+<a name="ccds"></a>
+<h6>What is CCDS?</h6>
+<p>
+The <a target=_blank href="https://www.ncbi.nlm.nih.gov/projects/CCDS/CcdsBrowse.cgi">
+Consensus Coding Sequence Project</a> is a list of transcript coding sequence (CDS) genomic regions
+that are identically annotated by RefSeq and Ensembl/GENCODE.   CCDS undergoes extensive manual
+review and you can consider these a subset of either gene track, filtered for high quality.
+The CCDS identifiers  are very stable and allow you to link easily between the different databases.
+As  the name implies, it does not cover UTR regions or non-coding transcripts.
+</p>
+
+<a name="justsingle"></a>
+<h6>How can I show a single transcript per gene?</h6>
+
+<p> 
+For the tracks &quot;<a target=_blank 
+href="../cgi-bin/hgTrackUi?db=hg19&g=knownGene">UCSC Genes</a>&quot; 
+(hg19) or &quot;<a target=_blank 
+href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE Genes</a>&quot; 
+(hg38), click on their title and on the configuration page, uncheck the 
+box &quot;Show splice variants&quot;. Only a single transcript will be shown. The method for how this
+transcript is selected is described in the track documentation below the 
+configuration settings.</p>
+
+<p class='text-center'>
+  <img class='text-center' src="../images/SpliceVariants.png" 
+alt="Changing splice variants" width="750">
+
+<p>For the track <a target=_blank 
+href="../cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite">
+NCBI RefSeq</a> (hg38), you can activate the subtrack &quot;RefSeq HGMD&quot;.
+It contains only the transcripts that are part of the Human Gene Mutation Database.
+</p>
+
+<a name="singledownload"></a>
+<h6>How can I download a file with a single transcript per gene?</h6>
+<p>
+This is a common request, but very often this is not necessary when designing
+an analysis.  You will have to make a choice of this single transcript using
+some mechanism, and this choice will affect your pipeline results. It may be
+easier to keep all transcripts. For example, instead of annotating enhancers
+with the closest &quot;best-transcript&quot;, you can annotate them with the closest exon
+of any transcript. When mapping variants to transcripts, you can map to all
+transcripts and sort these by accession ID, showing mainly the first.  When
+segmenting the chromosomes into gene loci, you can use the union of all
+transcripts of a gene rather than select a single "best" transcript.
+</p>
+
+<p>
+That being said, data tables called &quot;knownCanonical&quot; are available for
+many assemblies. They try to select only a single transcript/isoform per gene, 
+if possible.</p>
+
+<p>
+For hg19, the knownCanonical table is a subset of the <a target="_blank" 
+href="../cgi-bin/hgTrackUi?db=hg19&g=knownGene">UCSC Genes</a> track. It was generated by 
+identifying a canonical isoform for each cluster ID, or gene. Generally, this is the longest
+isoform. It can be downloaded directly from the <a target="_blank" 
+href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/">hg19 downloads database</a> 
+or by using the <a target="_blank" href="../cgi-bin/hgTables">Table Browser</a>.</p>
+
+<p>
+For hg38, the knownCanonical table is a subset of the <a target="_blank" 
+href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene">GENCODE v29</a> track. As opposed to the hg19 
+knownCanonical table, which used computationally generated gene clusters and generally chose the 
+longest isoform as the canonical isoform, the hg38 table uses ENSEMBL gene IDs to define clusters 
+(that is to say, one canonical isoform per ENSEMBL gene ID), and the method of choosing the 
+isoform is described as such:</p>
+
+<p>
+<i>knownCanonical identifies the canonical isoform of each cluster ID or gene using the ENSEMBL 
+gene IDs to define each cluster. The canonical transcript is chosen using the APPRIS principal 
+transcript when available. If no APPRIS tag exists for any transcript associated with the 
+cluster, then a transcript in the BASIC set is chosen. If no BASIC transcript exists, then 
+the longest isoform is used.</i></p>
+<p>
+It can be downloaded directly from the <a target="_blank" 
+href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/">hg38 downloads database</a>
+or by using the <a target="_blank" href="../cgi-bin/hgTables">Table Browser</a>.</p>
+
+<a name="whatdo"></a>
+<h6>This is rather complicated. Can you tell me which gene transcript track I should use?</h6>
+<p> 
+For automated analysis, if you are doing NGS analysis and you need to capture
+all possible transcripts, GENCODE provides one of the most comprehensive gene sets.  For human 
+genetics or variant annotation, a more restricted transcript set is usually sufficient and &quot;NCBI
+RefSeq&quot; is the standard. If you are only interested in protein-coding
+annotations, CCDS or UniProt may be an option, but this is rather unusual.
+If you are interested in the best splice site coverage, AceView is worth a
+look.
+</p>
+
+<p>
+For manual inspection of exon boundaries of a single gene, and especially if it
+is a transcript that is repetitive or hard to align (e.g. very small exons),
+look at the UCSC RefSeq track and watch for differences between the NCBI
+and UCSC exon placement. You can also BLAT the transcript sequence. 
+Manually look at ESTs, mRNAs, TransMap and possibly Augustus, Genscan, SIB, SGP
+or GeneId in obscure cases where you are looking for hints on what an
+alternative splicing could look like.</p>
+<p>
+You may also find the <a target="_blank" 
+href="http://genome.ucsc.edu/s/view/GeneSupport">Gene Support</a> public session
+helpful. This session is a collection of tracks centered around supporting evidence
+for genes.</p>
+</p>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
+

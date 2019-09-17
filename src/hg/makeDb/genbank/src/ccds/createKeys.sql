@@ -28,7 +28,7 @@ ALTER TABLE ReportQueries ADD INDEX (query_uid);
 ALTER TABLE ReportTypes ADD INDEX (report_type_uid);
 ALTER TABLE StatisticsTypes ADD INDEX (statistics_type_uid);
 ALTER TABLE SwissProtMatches ADD INDEX (prot_acc), ADD INDEX (prot_version), ADD INDEX (swiss_prot_acc), ADD INDEX (swiss_prot_acc_iso);
-ALTER TABLE Accessions ADD INDEX (organization_uid);
+ALTER TABLE Accessions ADD INDEX (organization_uid), ADD INDEX (review_status);
 ALTER TABLE Accessions_GroupVersions ADD INDEX (accession_uid), ADD INDEX (ccds_status_val_uid), ADD INDEX (group_version_uid);
 ALTER TABLE BuildQualityTests ADD INDEX (build_uid);
 ALTER TABLE BuildQualityTests ADD INDEX (acc_rejection_uid);

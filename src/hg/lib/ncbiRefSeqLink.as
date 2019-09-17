@@ -9,7 +9,7 @@ table ncbiRefSeqLink
     string protAcc;             "protein_id"
     string locusLinkId;         "locus link identifier, from Dbxref"
     string omimId;              "OMIM identifier, from Dbxref"
-    string hgnc;                "HGNC identifier (or MGI for mouse), from Dbxref"
+    string hgnc;                "HGNC identifier, from Dbxref"
     string genbank;             "genbank identifier from Dbxref"
     string pseudo;              "'true' if pseudo gene, or n/a"
     string gbkey;               "genbank key: Gene, mRNA, ncRNA, rRNA, tRNA, etc..."
@@ -17,6 +17,7 @@ table ncbiRefSeqLink
     string gene_biotype;        "bio type: protein_coding, pseudogene, C_region, J_segment_pseudogene, other"
     string gene_synonym;        "list of synonym names"
     string ncrna_class;         "type of RNA: miRNA, lncRNA, snoRNA, etc..."
-    lstring note;               "other notes from genbank record"
+    lstring note;		"other notes from genbank record"
     lstring description;        "description from rna gbff record via gbProcess"
+    string externalId;          "for outside URL link, WormBase, FlyBase, RGD, SGD, etc... from Dbxref"
     )

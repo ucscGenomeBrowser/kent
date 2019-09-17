@@ -33,7 +33,7 @@ to download all of the files from one of these admin/exe/ directories,
   for example: admin/exe/linux.x86_64/
     using the rsync command to your current directory:
 
-  rsync -aP rsync://hgdownload.cse.ucsc.edu/genome/admin/exe/linux.x86_64/ ./
+  rsync -aP rsync://hgdownload.soe.ucsc.edu/genome/admin/exe/linux.x86_64/ ./
 
 ================================================================" > "${RESULT}"
 
@@ -55,5 +55,5 @@ do
         esac
 	echo "================================================================"
 	fi
-done | grep -v "^ERROR:" >> "${RESULT}" 2>&1
+done 2>&1 | grep -v "^ERROR:" >> "${RESULT}"
 

@@ -36,7 +36,7 @@
 
    
     # on code in the CCDS subversion tree:
-    #   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
+    #   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
     # and markd's python library (it will be moved to the hausslerlab
     # repository soon)
     # may need to update

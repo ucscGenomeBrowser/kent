@@ -18,3 +18,5 @@ track intronEst override
 visibility hide
 
 include trackDb.chainNet.ra
+
+include ../../refSeqComposite.ra alpha

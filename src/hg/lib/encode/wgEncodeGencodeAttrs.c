@@ -2,9 +2,6 @@
  * generated wgEncodeGencodeAttrs.h and wgEncodeGencodeAttrs.sql.  This module links the database and
  * the RAM representation of objects. */
 
-/* Copyright (C) 2011 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
-
 #include "common.h"
 #include "linefile.h"
 #include "dystring.h"
@@ -12,7 +9,10 @@
 #include "encode/wgEncodeGencodeAttrs.h"
 
 
-void wgEncodeGencodeAttrsStaticLoad(char **row, struct wgEncodeGencodeAttrs *ret)
+
+char *wgEncodeGencodeAttrsCommaSepFieldNames = "geneId,geneName,geneType,geneStatus,transcriptId,transcriptName,transcriptType,transcriptStatus,havanaGeneId,havanaTranscriptId,ccdsId,level,transcriptClass,proteinId";
+
+void wgEncodeGencodeAttrsStaticLoad(char **row, int numColumns, struct wgEncodeGencodeAttrs *ret)
 /* Load a row from wgEncodeGencodeAttrs table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
@@ -30,9 +30,11 @@ ret->havanaTranscriptId = row[9];
 ret->ccdsId = row[10];
 ret->level = sqlSigned(row[11]);
 ret->transcriptClass = row[12];
+if (numColumns > 13)
+    ret->proteinId = row[13];
 }
 
-struct wgEncodeGencodeAttrs *wgEncodeGencodeAttrsLoad(char **row)
+struct wgEncodeGencodeAttrs *wgEncodeGencodeAttrsLoad(char **row, int numColumns)
 /* Load a wgEncodeGencodeAttrs from row fetched with select * from wgEncodeGencodeAttrs
  * from database.  Dispose of this with wgEncodeGencodeAttrsFree(). */
 {
@@ -52,6 +54,8 @@ ret->havanaTranscriptId = cloneString(row[9]);
 ret->ccdsId = cloneString(row[10]);
 ret->level = sqlSigned(row[11]);
 ret->transcriptClass = cloneString(row[12]);
+if (numColumns > 13)
+    ret->proteinId = cloneString(row[13]);
 return ret;
 }
 
@@ -61,11 +65,11 @@ struct wgEncodeGencodeAttrs *wgEncodeGencodeAttrsLoadAll(char *fileName)
 {
 struct wgEncodeGencodeAttrs *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[14];
 
 while (lineFileRow(lf, row))
     {
-    el = wgEncodeGencodeAttrsLoad(row);
+    el = wgEncodeGencodeAttrsLoad(row, WGENCODEGENCODEATTRS_NUM_COLS);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -79,11 +83,11 @@ struct wgEncodeGencodeAttrs *wgEncodeGencodeAttrsLoadAllByChar(char *fileName, c
 {
 struct wgEncodeGencodeAttrs *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[14];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
-    el = wgEncodeGencodeAttrsLoad(row);
+    el = wgEncodeGencodeAttrsLoad(row, WGENCODEGENCODEATTRS_NUM_COLS);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -113,6 +117,7 @@ ret->havanaTranscriptId = sqlStringComma(&s);
 ret->ccdsId = sqlStringComma(&s);
 ret->level = sqlSignedComma(&s);
 ret->transcriptClass = sqlStringComma(&s);
+ret->proteinId = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -136,6 +141,7 @@ freeMem(el->havanaGeneId);
 freeMem(el->havanaTranscriptId);
 freeMem(el->ccdsId);
 freeMem(el->transcriptClass);
+freeMem(el->proteinId);
 freez(pEl);
 }
 
@@ -203,6 +209,10 @@ fprintf(f, "%d", el->level);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->transcriptClass);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->proteinId);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

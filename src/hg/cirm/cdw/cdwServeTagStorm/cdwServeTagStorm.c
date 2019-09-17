@@ -28,6 +28,7 @@ typedef MYSQL_RES *	STDCALL ResGetter(MYSQL *mysql);
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */
 struct hash *oldVars = NULL;
+struct cdwUser *user;	// Our logged in user if any
 
 void usage()
 /* Explain usage and exit. */
@@ -41,6 +42,21 @@ errAbort(
   );
 }
 
+static boolean cdwCheckAccessFromFileId(struct sqlConnection *conn, int fileId, struct cdwUser *user, int accessType)
+/* Determine if user can access file given a file ID */
+{
+struct cdwFile *ef = cdwFileFromId(conn, fileId);
+boolean ok = cdwCheckAccess(conn, ef, user, accessType);
+cdwFileFree(&ef);
+return ok;
+}
+
+static boolean cdwCheckFileAccess(struct sqlConnection *conn, int fileId, struct cdwUser *user)
+/* Determine if the user can see the specified file. Return True if they can and False otherwise. */ 
+{
+return cdwCheckAccessFromFileId(conn, fileId, user, cdwAccessRead);
+}
+
 void cdwServeTagStorm(struct sqlConnection *conn)
 /* Serve up a cirm data warehouse meta.txt tagstorm as a .txt file */ 
 {
@@ -49,6 +65,13 @@ char *format = cartString(cart, "format");
 char metaFileName[PATH_LEN];
 safef(metaFileName, sizeof(metaFileName), "%s/%s", dataSet, "meta.txt");
 int fileId = cdwFileIdFromPathSuffix(conn, metaFileName);
+if (!cdwCheckFileAccess(conn, fileId, user))
+    {
+    // errAbort currently looks bad because our content-type is text/plain
+    // but the default errAbort/warn handlers seem to think we have html output.
+    printf("\nUnauthorized access to %s\n", metaFileName);
+    exit(1);
+    }
 char *path = cdwPathForFileId(conn, fileId);
 if (sameString(format,"tsv"))
     {
@@ -57,7 +80,7 @@ if (sameString(format,"tsv"))
     safef(command, sizeof(command), "./tagStormToTab %s stdout", path);
     mustSystem(command);
     }
-if (sameString(format,"csv"))
+else if (sameString(format,"csv"))
     {
     fflush(stdout);
     char command[3*PATH_LEN];
@@ -86,6 +109,7 @@ void localWebWrap(struct cart *theCart)
 cart = theCart;
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
 printf("Content-Type: text/plain\n\n");
+user = cdwCurrentUser(conn);
 cdwServeTagStorm(conn); 
 sqlDisconnect(&conn);
 }

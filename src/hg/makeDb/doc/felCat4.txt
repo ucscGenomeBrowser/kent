@@ -778,7 +778,7 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
     makeDownloads.pl felCat4 > do.log 2>&1
     # *** All done!
     # *** Please take a look at the downloads for felCat4 using a web browser.
-    # *** The downloads url is: http://hgdownload-test.cse.ucsc.edu/goldenPath/felCat4.
+    # *** The downloads url is: http://hgdownload-test.soe.ucsc.edu/goldenPath/felCat4.
     # *** Edit each README.txt to resolve any notes marked with "***":
     #	/hive/data/genomes/felCat4/goldenPath/database/README.txt
     #	/hive/data/genomes/felCat4/goldenPath/bigZips/README.txt

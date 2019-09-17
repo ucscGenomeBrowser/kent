@@ -262,6 +262,7 @@ span#home-link {
 .gbSectionBanner {
     padding: 3px;
     margin-top: 6px;
+    margin-right: 0;
     background-color: #4c759c;  /* light blue */
     color: white;
     font-weight: bold;
@@ -277,6 +278,15 @@ span#home-link {
 .gbTrackDescription h2 {
     color: #003a72;
     font-size: 24px;
+}
+
+.gbTrackDescription h3 {
+    display: inline-block;
+    padding: 6px 20px;
+    color: #003a72;
+    background-color: #dddddd;
+    font-size: 17px;
+    font-weight: bold;
 }
 
 .gbTrackDescription *:first-child {
@@ -295,3 +305,39 @@ span#home-link {
     margin-top: 0;
     background-color: #f5f5f5;
 }
+
+/* Bulleted list */
+
+.gbTrackDescription ul {
+    margin-top: 8px;
+    margin-left: 15px;
+    list-style-type: none;      /* Use custom icons instead of bullets */
+}
+
+.gbTrackDescription ul li {
+    position: relative; /* from hgGateway */
+}
+
+
+/* List without bullets */
+
+.gbTrackDescription ul.gbNoBullet {
+    padding-left: 20px;
+}
+
+.gbTrackDescription ul.gbNoBullet li::before {
+    content: none;
+}
+
+
+.gbTrackDescription ul li::before {   /* square bullets, from hgGateway */
+    position: absolute;
+    top: 0.4em;
+    left: -1em;
+    width: 8px;
+    height: 8px;
+    background-color: #7e1f16;  /* dark red */
+    content: '';
+}
+
+

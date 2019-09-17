@@ -161,6 +161,10 @@ void doHelp()
 puts(
 "In-Silico PCR searches a sequence database with a pair of\n"
 "PCR primers, using an indexing strategy for fast performance.\n"
+"See an example\n"
+"<a href='https://youtu.be/U8_QYwmdGYU?feature=player_detailpage&v=8ATcoDTOc0g&list=UUQnUJepyNOw0p8s2otX4RYQ'"
+"target='_blank'>video</a>\n"
+"on our YouTube channel.\n"
 "\n"
 "<H3>Configuration Options</H3>\n"
 "<B>Genome and Assembly</B> - The sequence database to search.<BR>\n"
@@ -575,6 +579,9 @@ printf("The temperature calculations are done assuming 50 mM salt and 50 nM anne
        "oligo concentration.  The code to calculate the melting temp comes from "
        "<A HREF=\"http://frodo.wi.mit.edu/primer3/input.htm\" target=_blank>"
        "Primer3</A>.");
+webNewSection("Help");
+printf("<a href='../FAQ/FAQblat.html#blat1c'>What is chr_alt & chr_fix?</a><BR>");
+printf("<a href='../FAQ/FAQblat.html#blat5'>Replicating in-Silico PCR results on local machine</a>");
 return ok;
 }
 

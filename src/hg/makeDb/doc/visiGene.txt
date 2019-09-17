@@ -1074,7 +1074,7 @@ vgLoadAllen \
 
 #restore fileLocation to point to dev
 update fileLocation set name =
-concat('http://hgwdev.cse.ucsc.edu',substring(name,INSTR(name,'/visiGene/')));
+concat('http://hgwdev.soe.ucsc.edu',substring(name,INSTR(name,'/visiGene/')));
 # 14 rows
 
 # clean out the old ABA records before we do a full load

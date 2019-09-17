@@ -8,6 +8,10 @@
 #include "tokenizer.h"
 #endif
 
+#ifndef HASH_H
+#include "hash.h"
+#endif
+
 enum rqlOp
 /* An operation in the parse tree. */
     {
@@ -46,6 +50,12 @@ enum rqlOp
 
     /* Fancy ops to fetch sub-parts. */
     rqlOpArrayIx,	/* An array with an index. */
+
+    /* Binary mathematical operations. */
+    rqlOpAdd,
+    rqlOpSubtract,
+    rqlOpMultiply,
+    rqlOpDivide,
     };
 
 char *rqlOpToString(enum rqlOp op);
@@ -136,6 +146,10 @@ struct rqlEval rqlEvalOnRecord(struct rqlParse *p, void *record, RqlEvalLookup l
 
 struct rqlEval rqlEvalCoerceToBoolean(struct rqlEval r);
 /* Return TRUE if it's a nonempty string or a non-zero number. */
+
+struct rqlEval rqlEvalCoerceToString(struct rqlEval r, char *buf, int bufSize);
+/* Return a version of r with .val.s filled in with something reasonable even
+ * if r input is not a string */
 
 #endif /* RQL_H */
 

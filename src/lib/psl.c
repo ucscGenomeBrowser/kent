@@ -1217,7 +1217,7 @@ for (i=0; i<psl->blockCount; ++i)
 fprintf(f, "</PRE>");
 }
 
-static void pslRecalcBounds(struct psl *psl)
+void pslRecalcBounds(struct psl *psl)
 /* Calculate qStart/qEnd tStart/tEnd at top level to be consistent
  * with blocks. */
 {
@@ -1951,13 +1951,12 @@ if (cigar == NULL)
     }
 else
     {
-    char cigarSpec[strlen(cigar+1)];  // copy since parsing is destructive
-    strcpy(cigarSpec, cigar);
+    if (strand[0] == '-' && strand[1] == '-')
+        errAbort("GFF3 spec is vague about Gap when both strands are '-'; not implemented yet.");
+    char cigarSpec[strlen(cigar)+1];  // copy since parsing is destructive
+    safecpy(cigarSpec, sizeof cigarSpec, cigar);
     char *cigarNext = cigarSpec;
-    if (strand[1] == '-')
-	for(; *cigarNext; cigarNext++)
-	    ;
-    while(getNextCigarOp(cigarSpec, (strand[1] == '-'), &cigarNext, &op, &size))
+    while(getNextCigarOp(cigarSpec, FALSE, &cigarNext, &op, &size))
 	{
 	switch (op)
 	    {

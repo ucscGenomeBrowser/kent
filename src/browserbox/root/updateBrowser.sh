@@ -44,10 +44,10 @@
 # CPU overload on hgdownload
 RSYNCOPTS="-ltrvh"
 # rsync server for CGIs and html files
-RSYNCSRC="rsync://hgdownload.cse.ucsc.edu"
+RSYNCSRC="rsync://hgdownload.soe.ucsc.edu"
 RSYNCCGIBIN=cgi-bin
 RSYNCHTDOCS=htdocs
-UPDATEFLAG=http://hgdownload.cse.ucsc.edu/gbib/lastUpdate
+UPDATEFLAG=http://hgdownload.soe.ucsc.edu/gbib/lastUpdate
 LOGFILE=/var/log/gbibUpdates.log
 DEBUG=0
 if [[ "$#" -ne 0 ]]; then
@@ -221,7 +221,7 @@ if apt-cache policy virtualbox-guest-dkms | grep "Installed: .none." > /dev/null
 fi
 
 # install R for the gtex tracks
-if apt-cache policy r-base | grep "Installed: .none." > /dev/null; then
+if apt-cache policy r-base-core | grep "Installed: .none." > /dev/null; then
    echo - Installing R
    apt-get update
    apt-get --no-install-recommends install -y r-base-core
@@ -242,6 +242,16 @@ if apt-cache policy python-mysqldb | grep "Installed: .none." > /dev/null; then
    apt-get update
    apt-get --no-install-recommends install -y python-mysqldb
    apt-get -y autoremove
+fi
+
+# install curl for checking if we are closer to European or US mirror
+if apt-cache policy curl | grep "Installed: .none." > /dev/null; then
+   echo - Installing curl
+   apt-get update
+   apt-get --no-install-recommends install -y curl
+   apt-get -y autoremove
+   # make sure that the mysql server is re-configured now
+   rm -f /usr/local/apache/trash/registration.txt
 fi
 
 echo
@@ -304,7 +314,7 @@ else
     # not updated anymore in #18337
     rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCHTDOCS/ /usr/local/apache/htdocs/ --include **/customTracks/*.html --exclude ENCODE/ --exclude *.bam --exclude *.bb --exclude */*.bw --exclude */*.gz --exclude favicon.ico --exclude folders --exclude ancestors --exclude admin --exclude goldenPath/customTracks --exclude images/mammalPsg --exclude style/gbib.css --exclude images/title.jpg --exclude images/homeIconSprite.png --exclude goldenPath/**.pdf --exclude training
 
-    PUSHLOC=hgdownload.cse.ucsc.edu::gbib/push/
+    PUSHLOC=hgdownload.soe.ucsc.edu::gbib/push/
 fi
 
 chown -R www-data.www-data /usr/local/apache/cgi-bin/*
@@ -340,7 +350,7 @@ touch /data/mysql/hgFixed/gtexTissue.{MYI,MYD,frm}
 
 if [ "$1" != "hgwdev" ] ; then
   echo - Updating GBDB files...
-  rsync $RSYNCOPTS --existing rsync://hgdownload.cse.ucsc.edu/gbdb/ /data/gbdb/
+  rsync $RSYNCOPTS --existing rsync://hgdownload.soe.ucsc.edu/gbdb/ /data/gbdb/
   chown -R www-data.www-data /data/gbdb/
 fi
 
@@ -391,12 +401,12 @@ if [ "$1" != "hgwdev" ] ; then
   # it doesn't work if I use two mysql invocations, as 'flush tables with read lock'
   # is only valid as long as the session is open
   # so I use the SYSTEM command
-  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync $RSYNCOPTS --existing rsync://hgdownload.cse.ucsc.edu/mysql/ /data/mysql/; SYSTEM chown -R mysql.mysql /data/mysql/; UNLOCK TABLES;" | mysql
+  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync $RSYNCOPTS --existing rsync://hgdownload.soe.ucsc.edu/mysql/ /data/mysql/; SYSTEM chown -R mysql.mysql /data/mysql/; UNLOCK TABLES;" | mysql
   
   echo updating hgcentral database, make sure to always overwrite
-  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync -vrz --existing rsync://hgdownload.cse.ucsc.edu/mysql/hgcentral/ /data/mysql/hgcentral/; SYSTEM chown -R mysql.mysql /data/mysql/hgcentral; UNLOCK TABLES;" | mysql
+  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync -vrz --existing rsync://hgdownload.soe.ucsc.edu/mysql/hgcentral/ /data/mysql/hgcentral/; SYSTEM chown -R mysql.mysql /data/mysql/hgcentral; UNLOCK TABLES;" | mysql
   # update blat servers
-  mysql hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".cse.ucsc.edu") WHERE host not like "%ucsc.edu"'
+  mysql hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".soe.ucsc.edu") WHERE host not like "%ucsc.edu"'
   # the box does not officially support the HAL right now, remove the ecoli hubs
   mysql hgcentral -e 'delete from hubPublic where hubUrl like "%nknguyen%"'
 fi
@@ -409,7 +419,7 @@ sed -i '/<li class="menuparent" id="downloads">/,/^<\/li>$/d' /tmp/navbar.inc
 # adding the link to the mirror tracks tool
 sed -i '/hgLiftOver/a <li><a href="../cgi-bin/hgMirror">Mirror tracks</a></li>' /tmp/navbar.inc
 # add a link to the gbib shared data folder
-sed -i '/Track Hubs/a <li><a target="_blank" href="http:\/\/127.0.0.1:1234\/folders\/">GBiB Shared Data Folder<\/a><\/li>' /tmp/navbar.inc
+sed -i '/Track Hubs/a <li><a target="_blank" href="\/folders\/">GBiB Shared Data Folder<\/a><\/li>' /tmp/navbar.inc
 # adding a link to the GBIB help pages
 sed -i '/genomewiki/a <li><a href="../goldenPath/help/gbib.html">Help on GBiB</a></li>' /tmp/navbar.inc
 cat /tmp/navbar.inc | grep -v hgNear | grep -v hgVisiGene | uniq > /usr/local/apache/htdocs/inc/globalNavBar.inc
@@ -467,16 +477,22 @@ fi
 
 # Sept 2017: check if genome-euro mysql server is closer
 if [ ! -f /usr/local/apache/trash/registration.txt ]; then
-   echo comparing latency: genome.ucsc.edu Vs. genome-euro.ucsc.edu
-   euroSpeed=$( (time -p (for i in `seq 10`; do curl -sSI genome-euro.ucsc.edu > /dev/null; done )) 2>&1 | grep real | cut -d' ' -f2 )
-   ucscSpeed=$( (time -p (for i in `seq 10`; do curl -sSI genome.ucsc.edu /dev/null; done )) 2>&1 | grep real | cut -d' ' -f2 )
-   if [[ $(awk '{if ($1 <= $2) print 1;}' <<< "$euroSpeed $ucscSpeed") -eq 1 ]]; then
-      echo genome-euro seems to be closer
-      echo modifying gbib to pull data from genome-euro instead of genome
-      sed -i s/slow-db.host=genome-mysql.cse.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ /usr/local/apache/cgi-bin/hg.conf
-   else
-      echo genome.ucsc.edu seems to be closer
-      echo not modifying /usr/local/apache/cgi-bin/hg.conf
+   # Mar 2018:  check if we can connect to genome-euro before checking what is closest
+   curl -sSI genome-euro.ucsc.edu 2>&1 > /dev/null
+   if [[ $? -eq 0 ]]; then
+      echo comparing latency: genome.ucsc.edu Vs. genome-euro.ucsc.edu
+      euroSpeed=$( (time -p (for i in `seq 10`; do curl -sSI genome-euro.ucsc.edu > /dev/null; done )) 2>&1 | grep real | cut -d' ' -f2 )
+      ucscSpeed=$( (time -p (for i in `seq 10`; do curl -sSI genome.ucsc.edu > /dev/null; done )) 2>&1 | grep real | cut -d' ' -f2 )
+      if [[ $(awk '{if ($1 <= $2) print 1;}' <<< "$euroSpeed $ucscSpeed") -eq 1 ]]; then
+         echo genome-euro seems to be closer
+         echo modifying gbib to pull data from genome-euro instead of genome
+         sed -i s/slow-db.host=genome-mysql.soe.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ /usr/local/apache/cgi-bin/hg.conf
+         # Nov 2018: hgdownload-euro is online now
+         sed -i 's#gbdbLoc2=http://hgdownload.soe.ucsc.edu/gbdb/#gbdbLoc2=http://hgdownload-euro.soe.ucsc.edu/gbdb/#' /usr/local/apache/cgi-bin/hg.conf
+      else
+         echo genome.ucsc.edu seems to be closer
+         echo not modifying /usr/local/apache/cgi-bin/hg.conf
+      fi
    fi
 fi
 

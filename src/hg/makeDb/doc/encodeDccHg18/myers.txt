@@ -326,7 +326,7 @@ Still missing replicate 1 for FOXP2 in PFSK-1 and SK-N-MC!
 
 pushQ items that are ready:
 
-releaseLogUrl = http://genome.cse.ucsc.edu/cgi-bin/hgTrackUi?db=hg18&g=wgEncodeHudsonalphaChipseq
+releaseLogUrl = http://genome.soe.ucsc.edu/cgi-bin/hgTrackUi?db=hg18&g=wgEncodeHudsonalphaChipseq
 
 # this are still missing fastqs (PFSK-1, SK-N-MC data)
 6 -> 004635

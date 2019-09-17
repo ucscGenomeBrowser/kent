@@ -1108,9 +1108,10 @@ void pubsAli(struct sqlConnection *conn, char *pslTable, char *seqTable, char *i
 /* this is just a ripoff from htcCdnaAli, similar to markd's transMapAli */
 {
 bioSeq *oSeq = NULL;
-writeFramesetType();
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>Literature Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
+
+char title[1024];
+safef(title, sizeof title, "Literature Sequence vs Genomic");
+htmlFramesetStart(title);
 
 struct psl *psl = getAlignments(conn, pslTable, item);
 if (psl == NULL)

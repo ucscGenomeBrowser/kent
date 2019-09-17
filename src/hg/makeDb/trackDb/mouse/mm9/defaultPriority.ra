@@ -17,10 +17,10 @@ track blastHg18KG override
 priority 3
 
 track xenoRefGene override
-priority 4
+priority 5
 
 track refGene override
-priority 5
+priority 4
 
 # Literature
 
@@ -33,7 +33,7 @@ track mrna override
 visibility hide
 
 track intronEst override
-priority 2
+priority 0.5
 
 # Comparative Genomics
 

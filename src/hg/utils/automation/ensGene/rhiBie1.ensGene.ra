@@ -1,0 +1,12 @@
+# required db variable
+db rhiBie1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/rhiBie1/jkStuff/ensToUcsc.lift
+
+skipInvalid yes
+# ENSRBIT00000004729.1 txEnd 1295 >= chromSize 1287
+# ENSRBIT00000004240.1 txEnd 925 >= chromSize 896
+# ENSRBIT00000007958.1 txEnd 874 >= chromSize 870
+# ENSRBIT00000005433.1 txEnd 499 >= chromSize 496
+# ENSRBIT00000004757.1 txEnd 492 >= chromSize 474
+

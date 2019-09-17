@@ -45,7 +45,7 @@ errAbort(
   "   -verbose=N - verbose level for extra information to STDERR\n\n"
   "example:\n\n"
   "   bedExtendRanges hg18 250 stdin\n\n"
-  "   bedExtendRanges -user=genome -host=genome-mysql.cse.ucsc.edu hg18 250 stdin\n\n"
+  "   bedExtendRanges -user=genome -host=genome-mysql.soe.ucsc.edu hg18 250 stdin\n\n"
   "will transform:\n"
   "    chr1 500 525 . 100 +\n" 
   "    chr1 1000 1025 . 100 -\n" 

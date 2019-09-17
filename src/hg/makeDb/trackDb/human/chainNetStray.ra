@@ -129,13 +129,13 @@ html strayChainNet
         type chain conCri1
         otherDb conCri1
 
-        track chainDasNov3
-        subTrack mammalStrayChainNetViewchain on
-        subGroups view=chain species=aoArmadillo clade=acmammal
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain dasNov3
-        otherDb dasNov3
+#        track chainDasNov3
+#        subTrack mammalStrayChainNetViewchain on
+#        subGroups view=chain species=aoArmadillo clade=acmammal
+#        shortLabel $o_Organism Chain
+#        longLabel $o_Organism ($o_date) Chained Alignments
+#        type chain dasNov3
+#        otherDb dasNov3
 
         track chainEleEdw1
         subTrack mammalStrayChainNetViewchain on
@@ -594,13 +594,13 @@ html strayChainNet
         type netAlign conCri1 chainConCri1
         otherDb conCri1
 
-        track netDasNov3
-        subTrack mammalStrayChainNetViewnet on
-        subGroups view=net species=aoArmadillo clade=acmammal
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign dasNov3 chainDasNov3
-        otherDb dasNov3
+#        track netDasNov3
+#        subTrack mammalStrayChainNetViewnet on
+#        subGroups view=net species=aoArmadillo clade=acmammal
+#        shortLabel $o_Organism Net
+#        longLabel $o_Organism ($o_date) Alignment Net
+#        type netAlign dasNov3 chainDasNov3
+#        otherDb dasNov3
 
         track netEleEdw1
         subTrack mammalStrayChainNetViewnet on

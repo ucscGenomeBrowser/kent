@@ -6,6 +6,8 @@ include trackDb.20way.ra
 
 include vertebrateChainNet.ra
 
+include ../../crispr10K.ra alpha
+
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold
@@ -34,3 +36,7 @@ include cloneEnd.trackDb.ra
 track spMut override
 group varRep
 bigDataUrl /gbdb/$D/uniprot/unipMut.bb
+
+# change these two to switch to the new refSeqComposite 2018-02
+#include trackDb.refGene.ra public
+include ../../refSeqComposite.ra

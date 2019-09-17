@@ -5,9 +5,10 @@ rm -rf $tmp
 mkdir $tmp
 hgsql $db -Ne "select transcript from knownCanonical" | awk '{print $1, 2}' > $tmp/knownCanon.txt
 hgsql $db -Ne "select * from knownToTag" | grep basic |  sed 's/basic/1/' > $tmp/knownTag.txt
-sort $tmp/knownCanon.txt $tmp/knownTag.txt | awk '{if ($1 != last) {print last, sum; sum=$2; last=$1}  else {sum += $2; }} END {print last, sum}' | tail -n +2  > $tmp/knownScore.txt
+hgsql $db -Ne "select kgId,transcriptClass from knownAttrs where transcriptClass='pseudo'" |  sed 's/pseudo/4/' > $tmp/knownAttrs.txt
+sort $tmp/knownCanon.txt $tmp/knownTag.txt $tmp/knownAttrs.txt | awk '{if ($1 != last) {print last, sum; sum=$2; last=$1}  else {sum += $2; }} END {print last, sum}' | tail -n +2  > $tmp/knownScore.txt
 hgsql $db -Ne "select * from kgColor" > $tmp/colors.txt
-hgsql $db -Ne "select * from knownGene" > $tmp/knownGene.txt
+hgsql $db -Ne "select * from knownGene" | sort -k2,2 -k4,4n > $tmp/knownGene.txt
 hgsql $db -Ne "select kgId, geneSymbol, spID from kgXref" > $tmp/geneNames.txt
 hgsql $db -Ne "select * from knownCds" > $tmp/knownCds.txt
 genePredToBigGenePred -cds=$tmp/knownCds.txt -score=$tmp/knownScore.txt  -colors=$tmp/colors.txt -geneNames=$tmp/geneNames.txt  -known $tmp/knownGene.txt  $tmp/knownGene.bgpInput

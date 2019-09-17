@@ -45,7 +45,7 @@ else
 
 INLINE int hvGfxAdjXX(struct hvGfx *hvg, int x1, int *x2Ptr,
                       int *y1Ptr, int *y2Ptr)
-/* Update a pair of coordinates if reverse-coordiates mode */
+/* Update a pair of coordinates if reverse-coordinates mode */
 {
 if (hvg->rc)
     {
@@ -66,6 +66,12 @@ if (hvg->rc)
     reverseIntRange(&x, &x2, hvg->width);
     }
 return x;
+}
+
+INLINE void hvGfxCircle(struct hvGfx *hvg, int xCen, int yCen, int rad, int colorIx,  boolean filled)
+/* Draw a circle. */
+{
+vgCircle(hvg->vg, hvGfxAdjX(hvg, xCen), yCen, rad, colorIx, filled);
 }
 
 INLINE void hvGfxDot(struct hvGfx *hvg, int x, int y, int colorIx)
@@ -237,6 +243,29 @@ if (hvg->rc)
     hvGfxRevPoly(hvg, poly);  // restore
 }
 
+INLINE void hvGfxEllipseDraw(struct hvGfx *hvg, int x1, int y1, int x2, int y2, Color color, 
+                                int mode, boolean isDashed)
+/* Draw an ellipse (or limit to top or bottom) specified by rectangle.
+ * Optionally, alternate dots.
+ * Point 0 is left, point 1 is top of rectangle.
+ */
+{
+x1 = hvGfxAdjXX(hvg, x1, &x2, &y1, &y2);
+// NOTE: dashed mode may cause a hang, so disabling for now
+vgEllipse(hvg->vg, x1, y1, x2, y2, color, mode, FALSE);
+}
+
+INLINE int hvGfxCurve(struct hvGfx *hvg, int x1, int y1, int x2, int y2, int x3, int y3,
+                                Color color, boolean isDashed)
+/* Draw a segment of an anti-aliased curve within 3 points (quadratic Bezier)
+ * Return max y value. Optionally draw curve as dashed line.
+ * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
+ * Author: Zingl Alois, 8/22/2016 */
+{
+x1 = hvGfxAdjXX(hvg, x1, &x2, &y1, &y2);
+return vgCurve(hvg->vg, x1, y1, x2, y2, x3, y3, color, isDashed);
+}
+
 INLINE int hvGfxFindColorIx(struct hvGfx *hvg, int r, int g, int b)
 /* Find color in map if possible, otherwise create new color or
  * in a pinch a close color. */
@@ -306,5 +335,28 @@ void hvGfxNextItemButton(struct hvGfx *hvg, int x, int y, int w, int h,
 /* Draw a button that looks like a fast-forward or rewind button on */
 /* a remote control. If nextItem is TRUE, it points right, otherwise */
 /* left. color is the outline color, and hvgColor is the fill color. */
+
+/*
+void hvGfxEllipseDraw(struct hvGfx *hvg, int x0, int y0, int x1, int y1, Color color, 
+                        int mode, boolean isDotted);
+*/
+/* Draw an ellipse (or limit to top or bottom) specified by rectangle, using Bresenham algorithm.
+ * Optionally, alternate dots.
+ * Point 0 is left, point 1 is top of rectangle
+ * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
+ */
+
+/*
+int hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2, 
+                        Color color, boolean isDotted);
+*/
+/* Draw a segment of an anti-aliased curve within 3 points (quadratic Bezier)
+ * Return max y value. Optionally alternate dots.
+ * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html */
+ /* Thanks to author  * @author Zingl Alois
+ * @date 22.08.2016 */
+
+void hvGfxDottedLine(struct hvGfx *hvg, int x1, int y1, int x2, int y2, Color color, boolean isDash);
+/* Brezenham line algorithm, alternating dots, by 1 pixel or two (isDash true) */
 
 #endif 

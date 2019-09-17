@@ -19,6 +19,7 @@ int ends = 0;
 bool fudgeThick = FALSE;
 bool errorHelp = FALSE;
 bool multiple = FALSE;
+bool noSerial = FALSE;
 bool hasBin = FALSE;
 bool tabSep = FALSE;
 char *chainTable = NULL;
@@ -38,6 +39,7 @@ static struct optionSpec optionSpecs[] = {
     {"minSizeQ", OPTION_INT},
     {"minSizeT", OPTION_INT},
     {"multiple", OPTION_BOOLEAN},
+    {"noSerial", OPTION_BOOLEAN},
     {"positions", OPTION_BOOLEAN},
     {"pslT", OPTION_BOOLEAN},
     {"sample", OPTION_BOOLEAN},
@@ -73,7 +75,7 @@ errAbort(
   "         after liftOver\n"
   "   -genePred - File is in genePred format\n"
   "   -sample - File is in sample format\n"
-  "   -bedPlus=N - File is bed N+ format\n"
+  "   -bedPlus=N - File is bed N+ format (i.e. first N fields conform to bed format)\n"
   "   -positions - File is in browser \"position\" format\n"
   "   -hasBin - File has bin value (used only with -bedPlus)\n"
   "   -tab - Separate by tabs rather than space (used only with -bedPlus)\n"
@@ -86,6 +88,7 @@ errAbort(
   "                  use the closest mapped base.  Recommended if using \n"
   "                  -minBlocks.\n"
   "   -multiple               Allow multiple output regions\n"
+  "   -noSerial               In -multiple mode, do not put a serial number in the 5th BED column\n"
   "   -minChainT, -minChainQ  Minimum chain size in target/query, when mapping\n" 
   "                           to multiple output regions (default 0, 0)\n"
   "   -minSizeT               deprecated synonym for -minChainT (ENCODE compat.)\n"
@@ -99,7 +102,7 @@ errAbort(
 
 void liftOver(char *oldFile, char *mapFile, double minMatch, 
                 double minBlocks, int minSizeT, int minSizeQ,
-                int minChainT, int minChainQ, bool multiple, char *chainTable, 
+                int minChainT, int minChainQ, bool multiple, bool noSerial, char *chainTable,
                 char *newFile, char *unmappedFile)
 /* liftOver - Move annotations from one assembly to another. */
 {
@@ -116,26 +119,47 @@ verbose(1, "Mapping coordinates\n");
 if (optionExists("gff"))
     {
     fprintf(stderr, "WARNING: -gff is not recommended.\nUse 'ldHgGene -out=<file.gp>' and then 'liftOver -genePred <file.gp>'\n");
+    if (multiple)
+        errAbort("ERROR: -multiple is not supported for -gff.");
+    if (chainTable)
+        errAbort("ERROR: -chainTable is not supported for -gff.");
     liftOverGff(oldFile, chainHash, minMatch, minBlocks, mapped, unmapped);
     }
 else if (optionExists("genePred"))
+    {
+    if (chainTable)
+        errAbort("ERROR: -chainTable is not supported for -genePred.");
     liftOverGenePred(oldFile, chainHash, minMatch, minBlocks, fudgeThick,
-                        mapped, unmapped);
+                     mapped, unmapped, multiple);
+    }
 else if (optionExists("sample"))
+    {
+    if (multiple)
+        errAbort("ERROR: -multiple is not supported for -sample.");
+    if (chainTable)
+        errAbort("ERROR: -chainTable is not supported for -sample.");
     liftOverSample(oldFile, chainHash, minMatch, minBlocks, fudgeThick,
                         mapped, unmapped);
+    }
 else if (optionExists("pslT"))
+    {
+    verbose(1, "Consider using pslMap instead of liftOver for PSL.\n");
+    if (multiple)
+        errAbort("ERROR: -multiple is not supported for -pslT.");
+    if (chainTable)
+        errAbort("ERROR: -chainTable is not supported for -pslT.");
     liftOverPsl(oldFile, chainHash, minMatch, minBlocks, fudgeThick,
                         mapped, unmapped);
+    }
 else if (optionExists("ends"))
     liftOverBedPlusEnds(oldFile, chainHash, minMatch, minBlocks, 
                 minSizeT, minSizeQ, 
-                minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
+                minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, noSerial,
 		chainTable, bedPlus, hasBin, tabSep, ends, &errCt);
 else if (optionExists("bedPlus"))
     liftOverBedPlus(oldFile, chainHash, minMatch, minBlocks, 
                 minSizeT, minSizeQ, 
-                minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
+                minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, noSerial,
 		chainTable, bedPlus, hasBin, tabSep, &errCt);
 else if (optionExists("positions"))
     liftOverPositions(oldFile, chainHash, minMatch, minBlocks, minSizeT, minSizeQ, 
@@ -143,7 +167,7 @@ else if (optionExists("positions"))
 		chainTable, &errCt);
 else
     liftOverBed(oldFile, chainHash, minMatch, minBlocks, minSizeT, minSizeQ, 
-                minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
+                minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, noSerial,
 		chainTable, &errCt);
 if (!optionExists("positions"))
 /* I guess liftOverPositions closes these files.  This is a little akward though. */
@@ -168,17 +192,23 @@ minMatch = optionFloat("minMatch", minMatch);
 minBlocks = optionFloat("minBlocks", minBlocks);
 fudgeThick = optionExists("fudgeThick");
 multiple = optionExists("multiple");
+noSerial = optionExists("noSerial");
 if ((!multiple) && (optionExists("minSizeT")  || optionExists("minSizeQ") ||
 		    optionExists("minChainT") || optionExists("minChainQ") ||
-		    optionExists("chainTable")))
-    errAbort("minSizeT/Q, minChainT/Q and chainTable can only be used with -multiple.");
+		    optionExists("chainTable") || optionExists("noSerial")))
+    errAbort("minSizeT/Q, minChainT/Q, noSerial and chainTable can only be used with -multiple.");
 if (optionExists("minSizeT") && optionExists("minChainT"))
     errAbort("minSizeT is currently a deprecated synonym for minChainT. Can't set both.");
 minSizeT = optionInt("minSizeT", minChainT); /* note: we're setting minChainT */
 minSizeQ = optionInt("minSizeQ", minSizeQ);
 minChainT = optionInt("minChainT", minChainT);
 minChainQ = optionInt("minChainQ", minChainQ);
-bedPlus = optionInt("bedPlus", bedPlus);
+if (optionExists("bedPlus"))
+    {
+    bedPlus = optionInt("bedPlus", bedPlus);
+    if (bedPlus < 3 || bedPlus > 15)
+        errAbort("-bedPlus=%d is out of range -- BED has between 3 and 15 fields.", bedPlus);
+    }
 ends = optionInt("ends", ends);
 hasBin = optionExists("hasBin");
 tabSep = optionExists("tab") || optionExists("tabSep");
@@ -190,6 +220,6 @@ if (optionExists("errorHelp"))
 if (argc != 5)
     usage();
 liftOver(argv[1], argv[2], minMatch, minBlocks, minSizeT, minSizeQ, 
-	 minChainT, minChainQ, multiple, chainTable, argv[3], argv[4]);
+	 minChainT, minChainQ, multiple, noSerial, chainTable, argv[3], argv[4]);
 return 0;
 }

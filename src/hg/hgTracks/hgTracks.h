@@ -59,6 +59,12 @@
 
 #define BIGBEDMAXIMUMITEMS 100000
 
+/* for botDelay call, 10 second for warning, 20 second for immediate exit */
+#define delayFraction   0.25
+extern long enteredMainTime;
+
+#include "lolly.h"
+
 struct track
 /* Structure that displays of tracks. The central data structure
  * of the graphical genome browser. */
@@ -263,6 +269,7 @@ struct track
     struct bbiSummaryElement *summary;  /* for bigBed */
     struct bbiSummaryElement *sumAll;   /* for bigBed */
     boolean drawLabelInBox;     /* draw labels into the features instead of next to them */
+    boolean drawLabelInBoxNotDense;    /* don't draw labels in dense mode, (needed only when drawLabelInBox set */
     
     struct track *nextWindow;   /* Same track in next window's track list. */
     struct track *prevWindow;   /* Same track in prev window's track list. */
@@ -281,6 +288,10 @@ struct track
 
 
     struct slInt *labelColumns; /* The columns in a bigBed that can be used for labels. */
+    boolean subTrackVisSet;     /* have we calculated visibility on this subtrack */
+    boolean subTrackVis;        /* if we calculated it, what is it */
+
+    struct lollyCartOptions *lollyCart;
     };
 
 struct window  // window in multiwindow image
@@ -885,6 +896,9 @@ void linkedFeaturesFreeList(struct linkedFeatures **pList);
 void freeLinkedFeaturesSeries(struct linkedFeaturesSeries **pList);
 /* Free up a linked features series list. */
 
+int simpleFeatureCmp(const void *va, const void *vb);
+/* Compare to sort based on start. */
+
 int linkedFeaturesCmp(const void *va, const void *vb);
 /* Compare to sort based on chrom,chromStart. */
 
@@ -1350,16 +1364,23 @@ boolean isWithCenterLabels(struct track *track);
  * the default and inhibit composite track center labels in all modes.
  * Otherwise use the global boolean withCenterLabels. */
 
-#define isCenterLabelConditional(track) \
-                        ((limitVisibility(track) == tvDense) && tdbIsCompositeChild((track)->tdb))
-// dense subtracks have conditional centerLabels
+boolean isCenterLabelConditional(struct track *track);
+/* Dense subtracks and pack subtracks (when centerLabelsPack off set)
+ *      show center labels depending on vis of previous track */
 
 boolean isCenterLabelConditionallySeen(struct track *track);
-// returns FALSE if track and prevTrack have same parent, and are both dense subtracks
+/* Returns FALSE if track and prevTrack have same parent, and are both conditional
+ * i.e. dense subtrack or pack subtrack with centerLabelsPack off set
+ */
 
-#define isCenterLabelIncluded(track) \
-                (isWithCenterLabels(track) && (theImgBox || isCenterLabelConditionallySeen(track)))
-// Center labels may be conditionally included
+boolean isCenterLabelsPackOff(struct track *track);
+/* Check for trackDb setting to suppress center labels of composite in pack mode */
+
+boolean isCenterLabelIncluded(struct track *track);
+/* Center labels may be conditionally included */
+
+boolean doCollapseEmptySubtracks(struct track *track);
+/* Suppress display of empty subtracks. Initial support only for bed's. */
 
 Color maybeDarkerLabels(struct track *track, struct hvGfx *hvg, Color color);
 /* For tracks having light track display but needing a darker label */
@@ -1536,6 +1557,22 @@ void gtexEqtlClusterMethods(struct track *tg);
 void gtexEqtlTissueMethods(struct track *tg);
 /* Install handler for GTEx eQTL Tissues track */
 
+void lollyMethods(struct track *track, struct trackDb *tdb,
+                                int wordCount, char *words[]);
+/* Lollipop track type methods */
+
+void interactMethods(struct track *tg);
+/* Interact track type methods */
+
+void interactCtMethods(struct track *tg);
+/* Interact track methods for custom track */
+
+void hicMethods(struct track *tg);
+/* Methods for Hi-C interaction data */
+
+void hicCtMethods(struct track *tg);
+/* Hi-C track methods for custom track */
+
 void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */
@@ -1546,20 +1583,6 @@ void dontLoadItems(struct track *tg);
 void filterItems(struct track *tg, boolean (*filter)(struct track *tg, void *item), 
                 char *filterType);
 /* Filter out items from track->itemList. */
-
-//#define REMOTE_TRACK_AJAX_CALLBACK
-#ifdef REMOTE_TRACK_AJAX_CALLBACK
-#define REMOTE_TRACK_HEIGHT (tl.fontHeight*2)
-
-boolean trackShouldUseAjaxRetrieval(struct track *track);
-/* Tracks with remote data sources should berendered via an ajax callback */
-
-#else//ifndef
-
-#define REMOTE_TRACK_HEIGHT 0
-#define trackShouldUseAjaxRetrieval(track)  FALSE
-
-#endif//ndef REMOTE_TRACK_AJAX_CALLBACK
 
 int gCmpPriority(const void *va, const void *vb);
 /* Compare groups based on priority. */
@@ -1578,6 +1601,9 @@ boolean isTypeBedLike(struct track *track);
 
 boolean isTypeUseItemNameAsKey(struct track *track);
 /* Check if track type is like expRatio and key is just item name. */
+
+boolean isTypeUseMapItemNameAsKey(struct track *track);
+/* Check if track type is like interact and uses map item name to link across multi regions */
 
 void setEMGeneTrack();
 /* Find the track for the gene table to use for exonMostly and geneMostly. */
@@ -1651,6 +1677,10 @@ void bedPlusLabelDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOf
 
 Color blackItemNameColor(struct track *tg, void *item, struct hvGfx *hvg);
 /* Force item name (label) color to black */
+
+void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+				char *itemName, char *mapItemName, int start, int end,
+				int x, int y, int width, int height);
 
 #endif /* HGTRACKS_H */
 

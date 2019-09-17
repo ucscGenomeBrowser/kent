@@ -53,7 +53,7 @@ set task tblopt
 set logDir misc/$task.logs
 set workDir "data/tmp/gbopt"
 set host [exec hostname]
-if {$host == "bugle.cse.ucsc.edu"} {
+if {$host == "bugle.soe.ucsc.edu"} {
     cd ~/compbio/genbank/genbank.fake
     set workDir "/scratch/tmp/gbopt"
 } elseif {$host == "hgwdev"} {
@@ -64,7 +64,7 @@ if {$host == "bugle.cse.ucsc.edu"} {
 
 
 switch $host {
-    bugle.cse.ucsc.edu {
+    bugle.soe.ucsc.edu {
         set dbFile {}
     }
     hgwdev {

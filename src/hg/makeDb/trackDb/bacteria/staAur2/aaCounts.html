@@ -1,0 +1,100 @@
+<h2>Description</h2>
+<p>
+This track shows a count of the number of different amino acids from
+each non-reference strain found at each amino acid location of the
+reference sequence, ASM1346v1/USA300_FPR3757, protein coding regions.
+</p>
+<p>
+The 369-way alignment is used to extract the data for these counts.
+The 369-way MAF file is processed with the <em>mafGene</em> command
+to extract the protein sequence for each strain that was aligned to the
+reference sequence coding regions.  The <em>ncbiGene</em> track is
+used as the reference location for coding regions.  The
+<em>mafGene</em> command is used to extract the amino-acid
+alignments:
+<pre>
+For each chromosome in the reference sequence:
+
+  mafGene -chrom=&lt;chrName&gt; -exons staAur2 369way.maf ncbiGene species.list &lt;chrName&gt;.exonAA.fa
+</pre>
+</p>
+<p>
+Typical output in the exonAA.fa file is as follows:
+<pre>
+&gt;SAUSA300_RS15440_staAur2_1_1 21 0 0 NC_007793v1:1994975-1995037+
+LYFKNSSLNYIPTTFGGEPFK
+&gt;SAUSA300_RS15440_Sa_USA300_SUR12_1_1 21 0 0 NZ_CP014407v1:1999012-1999023+
+L--KNSSLNYIPTTFGGEPFK
+&gt;SAUSA300_RS15440_Sa_USA300_TCH1516_1_1 21 0 0 NC_010079v1:1995723-1995734+
+L--KNSSLNYIPTTFGGEPFK
+&gt;SAUSA300_RS15440_Sa_JE2_1_1 21 0 0 NZ_CP020619v1:1996662-1996717+
+LYFKNSSLNYIPTTFGGE---
+&gt;SAUSA300_RS15440_Sa_C2406_1_1 21 0 0 NZ_CP019590v1:2001635-2001646+
+LYFKNSSLNYIPTTFGGEPFK
+. . .  etc  . . .
+</pre>
+This fasta file is scanned with a perl script to count those amino
+acids in each location.  For each AA location on the reference species,
+there are 23 different counts obtained.  One count for each of the 20
+amino acids, plus three extra counts for the categories:
+<ul>
+<li>AA 'X' - Unknown/not in coding sequence</li>
+<li>AA 'Z' - Termination/Stop codon found in the middle of a coding sequence</li>
+<li>AA '-' - no translation available, missing sequence</li>
+</ul>
+</p>
+<p>
+Click into any item on the screen to see details of the strains
+carrying the various amio acids at that position.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+The track will show in the window any amino acids that have a
+non-reference amino acid in at least one of the aligned
+strains.  The number of rows displayed will necessarily change as
+the size of the window changes.
+</p>
+<p>
+Amino acids are shown, one per row, in order of the biochemical
+nature of the side chain:
+ <ul>
+  <li> aliphatic hydrophobic (ala, ile, leu, val)
+  <li> aromatic hydrophobic (phe, trp, tyr)
+  <li> neutral (asn, cys, gln, met, ser, thr)
+  <li> charged positive (arg, his, lys)
+  <li> charged negative (asp, glu)
+  <li> unique (gly, pro)
+ </ul>
+</p>
+
+<p>
+In <b><em>all</em></b> display modes, <b><font color=blue>darker
+colors</font></b> indicate a higher level of occurrance of the
+amino acid residue in the strain set.  If there are no
+actual non-reference amino acids to display (<em>i.e.</em>, excluding
+the NUL row), the reference amino acid is shown in white background.
+</p>
+
+<p>
+A mouseover will give the number
+and percentage of non-reference amino acids in the set.  <em>E.g.</em>,
+in the default location <em>polC</em> gene, the serine at AA17 shows
+"68% (247/362)."
+</p>
+<p>
+In <b><em>dense</em></b> and <b><em>pack</em></b> modes, the track
+shows the amino-acid names to the left of the data row in three- and
+one-letter AA codes and in single-letter code in any
+items in the display.
+</p>
+<p>
+In <b><em>full</em></b> mode, the individual amino-acid names and their
+biochemical group (hydrophobic, neutral, positive, negative, etc)
+are displayed above each amino-acid row.
+</p>
+<p>
+In <b><em>squish</em></b> mode, only a thin colored bar is shown
+for each amino acid.
+</p>
+

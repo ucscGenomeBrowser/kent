@@ -15,7 +15,7 @@ table gwasCatalog
     lstring replSample; "Replication sample size"
     string region;     "Chromosome band / region of SNP"
     string genes;      "Reported Gene(s)"
-    string riskAllele; "Strongest SNP-Risk Allele"
+    lstring riskAllele; "Strongest SNP-Risk Allele"
     string riskAlFreq; "Risk Allele Frequency"
     string pValue;     "p-Value"
     string pValueDesc; "p-Value Description"

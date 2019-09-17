@@ -1,9 +1,11 @@
-/* tablesTables - this module deals with two types of tables SQL tables in a database,
+/* tablesTables - this module deals with two types of tables: SQL tables in a database
  * and fieldedTable objects in memory. It has routines to do sortable, filterable web
  * displays on tables. */
 
 #ifndef TABLESTABLES_H
 #define TABLESTABLES_H
+
+#include "facetField.h"
 
 void webTableBuildQuery(struct cart *cart, char *from, char *initialWhere, 
     char *varPrefix, char *fields, boolean withFilters, 
@@ -38,7 +40,8 @@ void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table,
     int maxLenField, struct hash *tagOutputWrappers, void *wrapperContext,
     boolean withFilters, char *itemPlural, 
     int pageSize, struct fieldedTableSegment *largerContext, struct hash *suggestHash, 
-    void (*addFunc)(void) );
+    struct facetField **ffArray, char *visibleFacetList,
+    void (*addFunc)(int) );
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
  * The maxLenField is maximum character length of field before truncation with ...
@@ -49,7 +52,8 @@ void webFilteredSqlTable(struct cart *cart, struct sqlConnection *conn,
     char *fields, char *from, char *initialWhere,  
     char *returnUrl, char *varPrefix, int maxFieldWidth, 
     struct hash *tagOutWrappers, void *wrapperContext,
-    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash, void (*addFunc)(void) );
+    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash, char *visibleFacetList,
+    void (*addFunc)(int) );
 /* Given a query to the database in conn that is basically a select query broken into
  * separate clauses, construct and display an HTML table around results. This HTML table has
  * column names that will sort the table, and optionally (if withFilters is set)

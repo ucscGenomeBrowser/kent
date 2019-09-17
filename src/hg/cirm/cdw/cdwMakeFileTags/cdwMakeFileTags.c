@@ -11,7 +11,6 @@
 #include "tagStorm.h"
 #include "tagToSql.h"
 
-
 void usage()
 /* Explain usage and exit. */
 {
@@ -21,6 +20,8 @@ errAbort(
   "   cdwMakeFileTags now\n"
   "options:\n"
   "   -table=tableName What table to store results in, default cdwFileTags\n"
+  "   -facets=tableName What table to store faceting columns in\n"
+  "   -fields=comma,separated,list,of,field,names to put in cdwFileFacets\n"
   "   -database=databaseName What database to store results in, default cdw\n"
   "   -types=fileName Dump list of types to file\n"
   );
@@ -29,7 +30,9 @@ errAbort(
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"table", OPTION_STRING},
+   {"facets", OPTION_STRING},
    {"database", OPTION_STRING},
+   {"fields", OPTION_STRING},
    {"types", OPTION_STRING},
    {NULL, 0},
 };
@@ -58,13 +61,13 @@ while ((row = sqlNextRow(sr)) != NULL)
      if (!hashLookup(hash, id))
          {
 	 if (deleteAny)
-	     dyStringAppendC(dy, ',');
+	     sqlDyStringPrintf(dy, ",");
 	 else
 	     deleteAny = TRUE;
-	 dyStringAppend(dy, id);
+	 sqlDyStringPrintf(dy, "'%s'", id);
 	 }
      }
-dyStringPrintf(dy, ")");
+sqlDyStringPrintf(dy, ")");
 sqlFreeResult(&sr);
 
 if (deleteAny)
@@ -72,25 +75,173 @@ if (deleteAny)
 dyStringFree(&dy);
 }
 
-void cdwMakeFileTags(char *database, char *table)
-/* cdwMakeFileTags - Create cdwFileTags table from tagStorm on same database.. */
+void makeCdwGroupFileTemp(char *database)
+/* Make temporary table converting multiple groupIds per file into a comma-separated list */
 {
 struct sqlConnection *conn = cdwConnect(database);
+struct sqlConnection *conn2 = cdwConnect(database);
+char query2[256];
+sqlSafef(query2, sizeof(query2), 
+    "CREATE TABLE `cdwGroupFileTemp` ("
+    "  `fileId` int(10) unsigned DEFAULT '0',"
+    "  `groupIds` varchar(255) DEFAULT '',"
+    "  KEY `fileId` (`fileId`)"
+    ") ENGINE=MyISAM DEFAULT CHARSET=latin1"
+    );
+sqlRemakeTable(conn, "cdwGroupFileTemp", query2);
+
+sqlSafef(query2, sizeof(query2), "select fileId, groupId from cdwGroupFile order by fileId, groupId");
+struct sqlResult *sr = sqlGetResult(conn, query2);
+char **row;
+int lastFileId = -1;
+struct dyString *query = dyStringNew(0);
+struct dyString *groupList = dyStringNew(0);
+int fileId = 0;
+int groupId = 0;
+do
+    {
+    row = sqlNextRow(sr);
+    if (row)
+	{	
+	fileId = sqlUnsigned(row[0]);
+	groupId = sqlUnsigned(row[1]);
+	}
+    else
+	{
+	fileId = -2;  // eof
+	groupId = 0;
+	}
+    if (fileId == lastFileId)
+	{
+	sqlDyStringPrintf(groupList, ",");
+	}
+    else
+	{
+	if (!isEmpty(groupList->string))
+	    {
+	    dyStringClear(query);
+	    sqlDyStringPrintf(query, "insert into cdwGroupFileTemp values (%u, '%s')", lastFileId, groupList->string);
+	    sqlUpdate(conn2, query->string);
+	    }
+	dyStringClear(groupList);
+	lastFileId = fileId;
+	}
+    dyStringPrintf(groupList, "%u", groupId);
+    }
+while (fileId != -2);
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+sqlDisconnect(&conn2);
+dyStringFree(&query);
+dyStringFree(&groupList);
+}
+
+void addGroupAndAllAcessFields(char *database, char *table)
+/* add groupIds and allAccess columns to table */
+{
+verbose(2, "adding group and allAccess fields to %s\n", table);
+struct sqlConnection *conn = cdwConnect(database);
+struct dyString *query = dyStringNew(0);
+dyStringClear(query);
+sqlDyStringPrintf(query,
+    "ALTER TABLE %s " 
+    "ADD `allAccess` tinyint(4) DEFAULT '0',"
+    "ADD  `groupIds` varchar(255) DEFAULT ''"  // total rowsize cannot exceed 65k
+    , table);
+sqlUpdate(conn, query->string);
+
+// allAccess
+verbose(2, "setting allAccess field values\n");
+dyStringClear(query);
+sqlDyStringPrintf(query,
+    "update %s t1 "
+    "inner join cdwFile t2 on t2.id = t1.file_id "
+    "set t1.allAccess = t2.allAccess"
+    , table);
+sqlUpdate(conn, query->string);
+dyStringFree(&query);
+sqlDisconnect(&conn);
+}
+
+void setGroupIdsFromTemp(char *database, char *table)
+/* set groupIds from temp table */
+{
+verbose(2, "setting %s.groupIds from cdwFileGroupTemp\n", table);
+struct sqlConnection *conn = cdwConnect(database);
+struct dyString *query = dyStringNew(0);
+dyStringClear(query);
+sqlDyStringPrintf(query,
+    "update %s t1 "
+    "inner join cdwGroupFileTemp t2 on t2.fileId = t1.file_id "
+    "set t1.groupIds = t2.groupIds"
+    , table);
+sqlUpdate(conn, query->string);
+
+// set any unset default groupIds value to 0
+dyStringClear(query);
+sqlDyStringPrintf(query,
+    "update %s "
+    "set groupIds = '0' "
+    "where groupIds = ''"
+    , table);
+sqlUpdate(conn, query->string);
+dyStringFree(&query);
+sqlDisconnect(&conn);
+}
+
+char *facetFieldFilter(char *facetFieldsCsv, char *database, char *fullTable)
+/* filter facet fields against fields in current full tags table */
+{
+struct sqlConnection *conn = sqlConnect(database);
+struct slName *fNames = sqlFieldNames(conn, fullTable);
+sqlDisconnect(&conn);
+
+struct dyString *dy = newDyString(128);
+char *fieldNames[128];
+char *tempFileTableFields = cloneString(facetFieldsCsv);
+int fieldCount = chopString(tempFileTableFields, ",", fieldNames, ArraySize(fieldNames));
+int i;
+for (i = 0; i<fieldCount; i++)
+    {
+    if (slNameInList(fNames, fieldNames[i]))
+	{
+	if (dy->stringSize > 0)
+	    dyStringAppendC(dy, ',');
+	dyStringAppend(dy, fieldNames[i]);
+	}
+    else
+	{
+	warn("Skipping facet field [%s] which is not available in table %s", fieldNames[i], fullTable);
+	}
+    }
+return dyStringCannibalize(&dy);
+}
+
+void cdwMakeFileTags(char *database, char *fullTable, char *facetTable, char *facetFieldsCsv)
+/* cdwMakeFileTags - Create cdwFileTags table from tagStorm on same database.. */
+{
+/* Create facets table, a subset of the earlier table.  Note this may be mySQL specific */
+int facetCount = chopByChar(facetFieldsCsv, ',', NULL, 0);
+if (facetCount <= 0)
+    errAbort("Comma separated facet field list is empty: %s", facetFieldsCsv);
 
 // See if somebody is already running this utility. Should only happen rarely.
+struct sqlConnection *conn = cdwConnect(database);
 if (sqlIsLocked(conn, "makeFileTags"))
-    errAbort("Another user is already running cdwMakeFileTags. Advisory lock found.");
-sqlGetLockWithTimeout(conn, "makeFileTags", 1);
+    errAbort("Another user is already running cdwMakeFileTags. Advisory lock found."); sqlGetLockWithTimeout(conn, "makeFileTags", 1);
 
 removeUnusedMetaTags(conn);
 
 /* Get tagStorm and make sure that all tags are unique in case insensitive way */
+verboseTime(2, "Before fetching tagStorm");
 struct tagStorm *tagStorm = cdwTagStorm(conn);
+verboseTime(2, "Fetching tagStorm");
 
 /* Build up list and hash of column types */
 struct tagTypeInfo *ttiList = NULL;
 struct hash *ttiHash = NULL;
 tagStormInferTypeInfo(tagStorm, &ttiList, &ttiHash);
+verboseTime(2, "Inferring column types");
 
 /* Make optionally a dump of the tag type info. */
 char *dumpName = optionVal("types", NULL);
@@ -114,11 +265,16 @@ static char *keyFields[] =  {
 };
 
 struct dyString *query = dyStringNew(0);
+// Functions in src/lib/tabToSql.c cannot use functions like sqlSafef
+// since they are in src/hg/lib/ which is not available. 
+// That is why we see NOSQLINJ exposed here.
 dyStringAppend(query, NOSQLINJ);
-tagStormToSqlCreate(tagStorm, table, ttiList, ttiHash, 
+tagStormToSqlCreate(tagStorm, fullTable, ttiList, ttiHash, 
     keyFields, ArraySize(keyFields), query);
 verbose(2, "%s\n", query->string);
-sqlRemakeTable(conn, table, query->string);
+verboseTime(2, "creating query string and tab-sep file");
+sqlRemakeTable(conn, fullTable, query->string);
+verboseTime(2, "sqlRemakeTable");
 
 /* Do insert statements for each accessioned file in the system */
 struct slRef *stanzaList = tagStanzasMatchingQuery(tagStorm, "select * from files where accession");
@@ -128,13 +284,45 @@ for (stanzaRef = stanzaList; stanzaRef != NULL; stanzaRef = stanzaRef->next)
     struct tagStanza *stanza = stanzaRef->val;
     dyStringClear(query);
     dyStringAppend(query, NOSQLINJ);
-    tagStanzaToSqlInsert(stanza, table, query);
+    tagStanzaToSqlInsert(stanza, fullTable, query);
     sqlUpdate(conn, query->string);
     }
-dyStringFree(&query);
 slFreeList(&stanzaList);
+verboseTime(2, "sql inserts");
+
+/* Make facetTable as a subset of fullTable */
+
+// strip facets that are not available in the tags table
+facetFieldsCsv = facetFieldFilter(facetFieldsCsv, database, fullTable);
+
+verbose(2, "making %s table for faceting\n", facetTable);
+struct dyString *facetCreate = dyStringNew(0);
+sqlDyStringPrintf(facetCreate, "create table %s as select %-s from %s", facetTable, sqlCkIl(facetFieldsCsv), fullTable);
+sqlRemakeTable(conn, facetTable, facetCreate->string);
+dyStringFree(&facetCreate);
+
+
+/* add columns to facilitate group and allAccess filtering */
+addGroupAndAllAcessFields(database, fullTable);
+addGroupAndAllAcessFields(database, facetTable);
+
+// groupIds
+verbose(2, "making table cdwFileGroupTemp\n");
+makeCdwGroupFileTemp(database);
+
+setGroupIdsFromTemp(database, fullTable);
+setGroupIdsFromTemp(database, facetTable);
+
+sqlDropTable(conn, "cdwGroupFileTemp");
+
+/* Release lock, clean up, go home */
 sqlReleaseLock(conn, "makeFileTags");
 sqlDisconnect(&conn);
+dyStringFree(&query);
+
+// reminder to user
+verbose(1, "Reminder: often the full text index needs updating too:\n"
+"~/bin/scripts/cdwUpdateIx now\n ");
 }
 
 int main(int argc, char *argv[])
@@ -145,6 +333,9 @@ if (argc != 2)
     usage();
 char *database = optionVal("database", "cdw");
 char *table = optionVal("table", "cdwFileTags");
-cdwMakeFileTags(database, table);
+char *facets = optionVal("facets", "cdwFileFacets");
+char *fields = optionVal("fields", "file_id,file_name,file_size,ucsc_db,output,assay,data_set_id,lab,format,read_size,sample_label,species,biosample_cell_type,organ_anatomical_name,");
+
+cdwMakeFileTags(database, table, facets, fields);
 return 0;
 }

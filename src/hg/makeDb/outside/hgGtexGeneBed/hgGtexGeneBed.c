@@ -73,7 +73,7 @@ sqlSafef(query, sizeof(query), "SELECT * from wgEncodeGencodeAttrs%s", gencodeVe
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    ga = wgEncodeGencodeAttrsLoad(row);
+    ga = wgEncodeGencodeAttrsLoad(row, sqlCountColumns(sr));
     char *baseGeneId = cloneString(ga->geneId);
     chopSuffix(baseGeneId);
     verbose(3, "...Adding geneType %s for gene %s %s to gaHash\n", 

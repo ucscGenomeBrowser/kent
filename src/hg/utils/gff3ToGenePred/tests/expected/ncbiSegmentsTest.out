@@ -1,0 +1,12 @@
+Warning: dropping CDS from gene Ighv1-34 at NC_000078.6:114851189-114851483 as we are unable to convert this form of annotation to genePred
+Warning: dropping CDS from pseudogene Ighv1-33 at NC_000078.6:114843692-114844083 as we are unable to convert this form of annotation to genePred
+Warning: dropping CDS from gene Trac at NC_000080.6:54220520-54224198 as we are unable to convert this form of annotation to genePred
+Warning: dropping CDS from pseudogene Traj1 at NC_000080.6:54218813-54218842 as we are unable to convert this form of annotation to genePred
+Warning: dropping CDS from gene Trac at NT_039614.1:1657817-1661492 as we are unable to convert this form of annotation to genePred
+Warning: dropping CDS from pseudogene Traj1 at NT_039614.1:1656110-1656139 as we are unable to convert this form of annotation to genePred
+Warning: dropping CDS from gene IGKV1-33 at NW_012132915.1:376826-377301 as we are unable to convert this form of annotation to genePred
+Warning: dropping CDS from pseudogene IGKV1-32 at NW_012132915.1:362366-362841 as we are unable to convert this form of annotation to genePred
+Warning: dropping CDS from gene IGHG3 at NT_187600.1:233682-239174 as we are unable to convert this form of annotation to genePred
+Warning: dropping CDS from gene TRBJ1-1 at NC_000007.14:142786879-142786927 as we are unable to convert this form of annotation to genePred
+Warning: dropping CDS from gene TRBD1 at NC_000007.14:142786212-142786224 as we are unable to convert this form of annotation to genePred
+Warning: dropping CDS from gene LOC109201834 at NC_031969.1:532791-533929 as we are unable to convert this form of annotation to genePred

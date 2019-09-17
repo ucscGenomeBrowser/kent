@@ -59,6 +59,7 @@ chainLinearGap medium
 priority 250.3
 
 track chainNetHg19 override
+shortLabel $o_db Chain/Net
 visibility full
 matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
 chainMinScore 5000
@@ -68,11 +69,24 @@ priority 260.3
   track chainNetHg19Viewnet override
   visibility dense
 
+    track chainHg19 override
+    shortLabel $o_db Chain
+
+    track netHg19 override
+    shortLabel $o_db Net
+
 track chainNetHg38 override
+shortLabel $o_db Chain/Net
 matrix 16 100,-176,-40,-145,-176,94,-186,-40,-40,-186,94,-176,-145,-40,-176,100
 chainMinScore 3000
 chainLinearGap medium
 priority 260.3
+
+    track chainHg38 override
+    shortLabel $o_db Chain
+
+    track netHg38 override
+    shortLabel $o_db Net
 
 track chainNetTarSyr2 override
 matrix 16 100,-174,-25,-122,-174,98,-185,-25,-25,-185,98,-174,-122,-25,-174,100

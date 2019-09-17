@@ -1,0 +1,4 @@
+# required db variable
+db criGriChoV2
+# specific lifting to translate names:
+liftUp /hive/data/genomes/criGriChoV2/jkStuff/ensToUcsc.lift

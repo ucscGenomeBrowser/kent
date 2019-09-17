@@ -82,9 +82,11 @@ if (gtexGeneBoxplot(ensGene, NULL, GTEX_DEFAULT_VERSION, FALSE, &pngTn))
 hPrintf("<br><a target='_blank' href='../cgi-bin/hgTracks?%s&position=%s:%d-%d&gtexGene=pack'>"
                 "View in GTEx track of Genome Browser</a>", 
                         cartSidUrlString(cart), curGeneChrom, curGeneStart, curGeneEnd);
-
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
+
 gtexPortalLink(ensGene);
+hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
+gtexBodyMapLink();
 }
 
 struct section *gtexSection(struct sqlConnection *conn, struct hash *sectionRa)

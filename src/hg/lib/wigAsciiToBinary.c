@@ -5,7 +5,7 @@
  *	plus, produces file to read for load into database
  *
  *	The format of the incoming data is described at:
- *	http://hgwdev.cse.ucsc.edu/encode/submission.html#WIG
+ *	http://hgwdev.gi.ucsc.edu/encode/submission.html#WIG
  *
  *	Incoming data points are chunked up into blocks.
  *	Each block of data is described by an SQL row in the .wig file

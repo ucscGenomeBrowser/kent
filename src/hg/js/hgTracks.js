@@ -1,4 +1,6 @@
-// Javascript for use in hgTracks CGI
+// hgTracks.js - Javascript for use in hgTracks CGI
+
+// Copyright (C) 2008 The Regents of the University of California
 
 // "use strict";
 // Don't complain about line break before '||' etc:
@@ -22,6 +24,14 @@ var debug = false;
  * boolean measureTiming  // true if measureTiming is on
  * Object trackDb         // hash of trackDb entries for tracks which are visible on current page
  */
+
+/* IE11 compatibility - IE doesn't have string startsWith and never will */
+if (!String.prototype.startsWith) {
+  String.prototype.startsWith = function(searchString, position) {
+    position = position || 0;
+    return this.indexOf(searchString, position) === position;
+  };
+}
 
 function initVars()
 {  // There are various entry points, so we call initVars in several places to make sure all is well
@@ -313,9 +323,13 @@ var genomePos = {
             // http://www.ensembl.org/Homo_sapiens/contigview?chr=21&start=33031934&end=33041241
             genomePos.linkFixup(pos, "ensemblLink", new RegExp("(.+start=)[0-9]+"), "end");
 
-            // Example NCBI link:
+            // Example NCBI Map Viewer link (obsolete):
             // https://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=21&BEG=33031934&END=33041241
             genomePos.linkFixup(pos, "ncbiLink", new RegExp("(.+BEG=)[0-9]+"), "END");
+
+            // Example NCBI Genome Data Viewer link
+            // https://www.ncbi.nlm.nih.gov/genome/gdv/browser/?id=GCF_000001405.37&chr=4&from=45985744&to=45991655&context=genome
+            genomePos.linkFixup(pos, "ncbiLink", new RegExp("(.+from=)[0-9]+"), "to");
 
             // Example medaka link: 
             // http://utgenome.org/medakabrowser_ens_jump.php?revision=version1.0&chr=chromosome18&start=14435198&end=14444829
@@ -376,6 +390,7 @@ var genomePos = {
         var imgWidth = jQuery(img).width() - hgTracks.insideX;
         var width = hgTracks.winEnd - hgTracks.winStart;
         var mult = width / imgWidth;   // mult is bp/pixel multiplier
+        var halfBpWidth = (imgWidth / width) / 2; // how many pixels does one bp take up;
         var startDelta;   // startDelta is how many bp's to the right/left
         var x1;
 
@@ -388,23 +403,28 @@ var genomePos = {
 
         if (hgTracks.revCmplDisp) {
             x1 = Math.min(imgWidth, selStart);
-            startDelta = Math.floor(mult * (imgWidth - x1));
+            startDelta = Math.floor(mult * (imgWidth - x1 - halfBpWidth));
         } else {
             x1 = Math.max(hgTracks.insideX, selStart);
-            startDelta = Math.floor(mult * (x1 - hgTracks.insideX));
+            startDelta = Math.floor(mult * (x1 - hgTracks.insideX + halfBpWidth));
         }
         var endDelta;
         var x2;
         if (hgTracks.revCmplDisp) {
             endDelta = startDelta;
             x2 = Math.min(imgWidth, selEnd);
-            startDelta = Math.floor(mult * (imgWidth - x2));
+            startDelta = Math.floor(mult * (imgWidth - x2 + halfBpWidth));
         } else {
             x2 = Math.max(hgTracks.insideX, selEnd);
-            endDelta = Math.floor(mult * (x2 - hgTracks.insideX));
+            endDelta = Math.floor(mult * (x2 - hgTracks.insideX - halfBpWidth));
         }
         var newStart = hgTracks.winStart + startDelta;
         var newEnd = hgTracks.winStart + 1 + endDelta;
+
+        // if user selects space between two bases, start>end can happen
+        if (newStart >= newEnd)
+            newStart = newEnd-1;
+
         if (newEnd > winEnd) {
             newEnd = winEnd;
         }
@@ -542,15 +562,23 @@ var genomePos = {
             positionDialog = $("#positionDialog")[0];
         }
         if (hgTracks.windows) {
-            var i,len;
+            var i, len, end;
+            var matches = /^virt:[0-9]+-([0-9]+)/.exec(position);
             var str = position;
+            if (matches) {
+                end = matches[1];
+                if (end < hgTracks.chromEnd) {
+                    str += "<br>(full virtual region is virt:1-" + hgTracks.chromEnd + ")";
+                }
+            }
             if (!(hgTracks.virtualSingleChrom && (hgTracks.windows.length === 1))) {
                 str += "<br>\n";
                 str += "<br>\n";
                 str += "<ul style='list-style-type:none; max-height:200px; padding:0; width:80%; overflow:hidden; overflow-y:scroll;'>\n";
                 for (i=0,len=hgTracks.windows.length; i < len; ++i) {
                     var w = hgTracks.windows[i];
-                    str += "<li>" + w.chromName + ":" + (w.winStart+1) + "-" + w.winEnd + "</li>\n";
+                    str += "<li>" + w.chromName + ":" + (w.winStart+1) + "-" + w.winEnd +
+                                "&nbsp;&nbsp;&nbsp;" + (w.winEnd - w.winStart) + " bp" + "</li>\n";
                 }
                 str += "</ul>\n";
             }
@@ -560,7 +588,7 @@ var genomePos = {
         }
         $(positionDialog).dialog({
                 modal: true,
-                title: "Window-Positions",
+                title: "Multi-region position ranges",
                 closeOnEscape: true,
                 resizable: false,
                 autoOpen: false,
@@ -3113,7 +3141,7 @@ var rightClick = {
                                     }
                                 };
                             if (rightClick.supportZoomCodon && rec.type.indexOf("genePred") !== -1) {
-                                // http://hgwdev-larrym.cse.ucsc.edu/cgi-bin/hgGene?hgg_gene=uc003tqk.2&hgg_prot=P00533&hgg_chrom=chr7&hgg_start=55086724&hgg_end=55275030&hgg_type=knownGene&db=hg19&c=chr7
+                                // http://hgwdev-larrym.gi.ucsc.edu/cgi-bin/hgGene?hgg_gene=uc003tqk.2&hgg_prot=P00533&hgg_chrom=chr7&hgg_start=55086724&hgg_end=55275030&hgg_type=knownGene&db=hg19&c=chr7
                                 var name, table;
                                 var reg = new RegExp("hgg_gene=([^&]+)");
                                 var a = reg.exec(href);
@@ -3125,8 +3153,8 @@ var rightClick = {
                                         table = a[1];
                                     }
                                 } else {
-                                    // http://hgwdev-larrym.cse.ucsc.edu/cgi-bin/hgc?o=55086724&t=55275031&g=refGene&i=NM_005228&c=chr7
-                                    // http://hgwdev-larrym.cse.ucsc.edu/cgi-bin/hgc?o=55086713&t=55270769&g=wgEncodeGencodeManualV4&i=ENST00000455089&c=chr7
+                                    // http://hgwdev-larrym.gi.ucsc.edu/cgi-bin/hgc?o=55086724&t=55275031&g=refGene&i=NM_005228&c=chr7
+                                    // http://hgwdev-larrym.gi.ucsc.edu/cgi-bin/hgc?o=55086713&t=55270769&g=wgEncodeGencodeManualV4&i=ENST00000455089&c=chr7
                                     reg = new RegExp("i=([^&]+)");
                                     a = reg.exec(href);
                                     if (a && a[1]) {
@@ -3269,8 +3297,8 @@ var rightClick = {
                 {
                 // add delete from composite
                 }
-            else if (!rec.hasChildren && 
-                (rec.type.startsWith("bigWig") || rec.type.startsWith("wig") || rec.type.startsWith("bedGraph"))) {
+            else if ((!rec.type.startsWith("wigMaf")) &&
+                (rec.type.startsWith("bigWig") || rec.type.startsWith("multiWig") || rec.type.startsWith("wig") || rec.type.startsWith("bedGraph"))) {
                 o = {};
                 o[" Make a New Collection with \"" + rec.shortLabel + "\""] = {
                     onclick: rightClick.makeHitCallback("newCollection")
@@ -3287,15 +3315,14 @@ var rightClick = {
                         menu.push(o);
                     }
                 }
-
                 menu.push($.contextMenu.separator);
             }
 
             // add sort options if this is a custom composite
-            if (rec.isCustomComposite) {
+            if (rec.isCustomComposite && tdbHasParent(rec) && tdbIsLeaf(rec)) {
 
                 o = {};
-                o[" Sort by Expression "] = {
+                o[" Sort by Magnitude "] = {
                     onclick: function(menuItemClicked, menuObject) {
                         rightClick.hit(menuItemClicked, menuObject, "sortExp");
                         return true; }
@@ -3562,7 +3589,20 @@ var popUpHgt = {
     
         $('#hgTracksDialog').dialog('option' , 'title' , popUpHgt.title);
         $('#hgTracksDialog').dialog('open');
-    
+
+        // Initialize autocomplete for alt/fix sequence names
+        autocompleteCat.init($('#singleAltHaploId'),
+                             { baseUrl: 'hgSuggest?db=' + getDb() + '&type=altOrPatch&prefix=',
+                               enterSelectsIdentical: true });
+        // Make option inputs select their associated radio buttons
+        $('input[name="emPadding"]').keyup(function() {
+            $('#virtModeType[value="exonMostly"]').attr('checked', true); });
+        $('input[name="gmPadding"]').keyup(function() {
+            $('#virtModeType[value="geneMostly"]').attr('checked', true); });
+        $('#multiRegionsBedInput').keyup(function() {
+            $('#virtModeType[value="customUrl"]').attr('checked', true); });
+        $('#singleAltHaploId').keyup(function() {
+            $('#virtModeType[value="singleAltHaplo"]').attr('checked', true); });
     }
 };
 
@@ -3586,6 +3626,9 @@ function addKeyboardHelpEntries() {
 
     html = '<span class="shortcut">c t</span>';
     $('#customTracksMenuLink').after(html);
+
+    html = '<span class="shortcut">t c</span>';
+    $('#customCompositeMenuLink').after(html);
 
     html = '<span class="shortcut">t h</span>';
     $('#trackHubsMenuLink').after(html);
@@ -4780,6 +4823,14 @@ var trackSearch = {
 ///////////////
 $(document).ready(function()
 {
+    // on Safari the back button doesn't call the ready function.  Reload the page if
+    // the back button was pressed.
+    $(window).bind("pageshow", function(event) {
+        if (event.originalEvent.persisted) {
+                window.location.reload() ;
+        }
+    });
+
     // The page may be reached via browser history (back button)
     // If so, then this code should detect if the image has been changed via js/ajax
     // and will reload the image if necessary.

@@ -1,0 +1,95 @@
+#!/usr/bin/env python
+
+import logging, sys, optparse, string
+from collections import defaultdict
+from os.path import join, basename, dirname, isfile
+
+# ==== functions =====
+    
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("""usage: %prog [options] inFile tagName replaceFile outFile - mass-rename trackDb tags given a file with oldVal<tab>newVal
+            
+    Examples:
+        %prog trackDb.orig.txt track replace.tsv trackDb.txt
+        %prog trackDb.orig.txt shortLabel replace.tsv trackDb.txt
+    """)
+
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    parser.add_option("", "--newMeta", dest="newMeta", action="store", help="keep the old name as metadata tag with this name")
+    parser.add_option("", "--suffList", dest="suffList", action="store", help="comma-sep list of suffixes. These are ignored when comparing values. Many tracks need suffixes for the various track types, e.g. peaks and coverage. A typical value could be 'pk,cov'")
+    #parser.add_option("-f", "--file", dest="file", action="store", help="run on file") 
+    #parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+    (options, args) = parser.parse_args()
+
+    if args==[]:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+        logging.getLogger().setLevel(logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+        logging.getLogger().setLevel(logging.INFO)
+
+    return args, options
+
+def parseRepl(fname):
+    d = {}
+    for line in open(fname):
+        key, val = line.rstrip("\n").split("\t")
+        assert(key not in d) # error: duplicate keys in replace file
+        d[key] = val
+    return d
+
+# ----------- main --------------
+def main():
+    args, options = parseArgs()
+
+    inFn, onlyTag, replFn, outFn = args
+    newMeta = options.newMeta
+
+    suffList = []
+    if options.suffList:
+        suffList = options.suffList.split(",")
+
+    replDict = parseRepl(replFn)
+    
+
+    ofh = open(outFn, "w")
+    for line in open(inFn):
+        if line=="\n":
+            ofh.write(line)
+            continue
+
+        tag, val = string.split(line.strip(), " ",maxsplit=1)
+        if tag!=onlyTag:
+            ofh.write(line)
+            continue
+
+        origVal = val
+        for suf in suffList:
+            val = val.replace(suf, "")
+        val = val.strip()
+
+        if val not in replDict:
+            logging.info("value '%s' (original: '%s') was not replaced, line passed though" % (val, origVal))
+            ofh.write(line)
+            continue
+
+        spcCount = len(line) - len(line.lstrip(" "))
+        suffix = origVal.replace(val, "")
+        suffix = suffix.replace("Cov", "Cv")
+        suffix = suffix.replace("Junc", "Sp")
+        newLine = "%s%s %s%s" % (" "*spcCount, tag, replDict[val], suffix)
+        ofh.write(newLine+"\n")
+        if newMeta:
+            ofh.write("%smetadata %s=%s\n" % (" "*spcCount, newMeta, val.replace(" ", "_")))
+
+    ofh.close()
+    print("Wrote "+ofh.name)
+
+
+
+main()

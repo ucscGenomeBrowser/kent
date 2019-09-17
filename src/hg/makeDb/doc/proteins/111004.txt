@@ -647,7 +647,7 @@ hgsql rn4 -N -e \
 ####################################################################
 # REACTOME UPDATE v39 (DONE, Andy 2012-01-24)
 
-scp UCSC_Reactome_v39.zip aamp@hgwdev.cse.ucsc.edu:/hive/data/outside/reactome/
+scp UCSC_Reactome_v39.zip aamp@hgwdev.soe.ucsc.edu:/hive/data/outside/reactome/
 # (from redmine #5425)
 ssh hgwdev
 cd /hive/data/outside/reactome

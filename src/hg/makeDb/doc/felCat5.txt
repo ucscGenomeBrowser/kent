@@ -834,4 +834,18 @@ http://genome.crg.es/genepredictions/F.catus/felCat5/geneid_v1.4/felCat5.geneid.
 # augustusGene:CDS 1.323%, geneid 1.520%, both 1.038%, cover 78.41%,
 #     enrich 51.59x
 
-##########################################################################
+############################################################################
+# LIFTOVER TO felCat9 (DONE - 2018-03-19 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/felCat5/bed/blat.felCat9.2018-02-28
+    cd /hive/data/genomes/felCat5/bed/blat.felCat9.2018-02-28
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/felCat5/jkStuff/felCat5.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         felCat5 felCat9) > do.log 2>&1 &
+    # real    149m5.173s
+
+    # verify the convert link on the test browser is now active from felCat5 to
+    # felCat9
+
+############################################################################

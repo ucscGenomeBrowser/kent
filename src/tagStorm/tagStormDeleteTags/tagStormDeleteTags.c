@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "tagSchema.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -40,6 +41,7 @@ FILE *f = mustOpen(outName, "w");
 // Loop through input lines.  Write them out unchanged unless first real word matches
 // something in our hash.
 char *line;
+struct dyString *arrayDy = dyStringNew(0);
 while (lineFileNext(lf, &line, NULL))
     {
     // See if a blank line or starts with # - these are comments and record separators passed through
@@ -50,9 +52,10 @@ while (lineFileNext(lf, &line, NULL))
          fprintf(f, "%s\n", line);
     else
         {
-        // Parse out first word
+        // Parse out first word and write out line unless it is one of the ones deleted
         char *tag = nextWord(&s);
-        char *tagExists = hashFindVal(deleteHash, tag);
+	char *arrayedTag = tagSchemaFigureArrayName(tag, arrayDy);
+        char *tagExists = hashFindVal(deleteHash, arrayedTag);
         if (tagExists == NULL)
             {
             mustWrite(f, line, leadingSpaces);

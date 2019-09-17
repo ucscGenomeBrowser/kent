@@ -138,8 +138,6 @@ if (htmlPath != NULL)
     }
 if (isNotEmpty(htmlString))
     {
-//#*** TODO: move jsonStringEscape inside jsonWriteString
-    htmlString = jsonStringEscape(htmlString);
     jsonWriteObjectStart(cj->jw, "assemblyDescription");
     jsonWriteString(cj->jw, "db", db);
     jsonWriteString(cj->jw, "description", htmlString);

@@ -150,11 +150,11 @@ if (isFull)
     }
 else
     {
-    char table[64];
+    char table[HDB_MAX_TABLE_STRING];
     boolean hasBin;
     struct dyString *query = newDyString(1024);
     /* Do black and white on single track.  Fetch less than we need from database. */
-    if (hFindSplitTable(database, chromName, tg->table, table, &hasBin))
+    if (hFindSplitTable(database, chromName, tg->table, table, sizeof table, &hasBin))
         {
 	sqlDyStringPrintf(query, "select genoStart,genoEnd from %s where ", table);
 	if (hasBin)

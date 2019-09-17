@@ -28,6 +28,7 @@
 #include "bedDetail.h"
 #include "pgSnp.h"
 #include "barChartBed.h"
+#include "interact.h"
 #include "hubConnect.h"
 #include "errCatch.h"
 
@@ -398,7 +399,7 @@ if (tdbForConn != NULL)
 	       "<A HREF=\"/goldenPath/help/bigWig.html\" TARGET=_BLANK>"
 	       "BigWig</A> format.<BR>\n");
     }
-jpList = joinerRelate(joiner, db, table);
+jpList = joinerRelate(joiner, db, table, NULL);
 
 /* sort and unique list */
 slUniqify(&jpList, joinerPairCmpOnAandB, joinerPairFree);
@@ -622,6 +623,12 @@ else if (sameWord("barChart", type))
     showSchemaWithAsObj(db, table, ct, asObj);
     asObjectFree(&asObj);
     }
+else if (sameWord("interact", type))
+    {
+    struct asObject *asObj = interactAsObj();
+    showSchemaWithAsObj(db, table, ct, asObj);
+    asObjectFree(&asObj);
+    }
 else
     errAbort("Unrecognized customTrack type %s", type);
 }
@@ -640,6 +647,8 @@ else if (sameString(type, "bam"))
     showSchemaBam(table, tdb);
 else if (sameString(type, "vcfTabix"))
     showSchemaVcf(table, tdb, TRUE);
+else if (sameString(type, "hic"))
+    showSchemaHic(table, tdb);
 else
     {
     hPrintf("Binary file of type %s stored at %s<BR>\n",
@@ -670,11 +679,13 @@ else if (isBamTable(table))
     showSchemaBam(table, tdb);
 else if (isVcfTable(table, &isTabix))
     showSchemaVcf(table, tdb, isTabix);
+else if (isHicTable(table))
+    showSchemaHic(table, tdb);
 else if (isCustomTrack(table))
     showSchemaCt(db, table);
 else if (sameWord(table, WIKI_TRACK_TABLE))
     showSchemaWiki(tdb, table);
-else if (tdb &&startsWithWord("bigWig", tdb->type) && !hTableExists(db, table))
+else if (isBigWig(database, table, curTrack, ctLookupName) && !hTableExists(db, table))
 	showSchemaBigWigNoTable(db, table, tdb);
 else
     showSchemaDb(db, tdb, table);
@@ -774,20 +785,4 @@ if (sqlTableExists(conn, "tableDescriptions"))
     errCatchFree(&errCatch);
     }
 return asObj;
-}
-
-struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as)
-/* Convert asObject to list of sqlFieldTypes */
-{
-struct sqlFieldType *ft, *list = NULL;
-struct asColumn *col;
-for (col = as->columnList; col != NULL; col = col->next)
-    {
-    struct dyString *type = asColumnToSqlType(col);
-    ft = sqlFieldTypeNew(col->name, type->string);
-    slAddHead(&list, ft);
-    dyStringFree(&type);
-    }
-slReverse(&list);
-return list;
 }

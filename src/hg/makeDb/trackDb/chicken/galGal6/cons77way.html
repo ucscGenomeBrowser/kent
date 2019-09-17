@@ -1,0 +1,824 @@
+<h2>Description</h2>
+<p>
+This track shows multiple alignments of 77 vertebrate species: 55 birds,
+10 reptiles (alligator, snake, frog) and 12 other species
+(fish, human, mouse, lamprey) and measurements of
+evolutionary conservation using
+two methods (<em>phastCons</em> and <em>phyloP</em>) from the
+<a href="http://compgen.cshl.edu/phast/" target=_BLANK>
+PHAST package</a>, for all 77 species.
+The multiple alignments were generated using multiz and
+other tools in the UCSC/<a href="http://www.bx.psu.edu/miller_lab/"
+target=_blank>Penn State Bioinformatics</a>
+comparative genomics alignment pipeline.
+Conserved elements identified by phastCons are also displayed in
+this track.
+</p>
+<p>
+PhastCons (which has been used in previous Conservation tracks) is a hidden
+Markov model-based method that estimates the probability that each
+nucleotide belongs to a conserved element, based on the multiple alignment.
+It considers not just each individual alignment column, but also its
+flanking columns.  By contrast, phyloP separately measures conservation at
+individual columns, ignoring the effects of their neighbors.  As a
+consequence, the phyloP plots have a less smooth appearance than the
+phastCons plots, with more &quot;texture&quot; at individual sites.  The two methods
+have different strengths and weaknesses.  PhastCons is sensitive to &quot;runs&quot;
+of conserved sites, and is therefore effective for picking out conserved
+elements.  PhyloP, on the other hand, is more appropriate for evaluating
+signatures of selection at particular nucleotides or classes of nucleotides
+(e.g., third codon positions, or first positions of miRNA target sites).
+</p>
+<p>
+Another important difference is that phyloP can measure acceleration
+(faster evolution than expected under neutral drift) as well as
+conservation (slower than expected evolution).  In the phyloP plots, sites
+predicted to be conserved are assigned positive scores (and shown in blue),
+while sites predicted to be fast-evolving are assigned negative scores (and
+shown in red).  The absolute values of the scores represent -log p-values
+under a null hypothesis of neutral evolution.  The phastCons scores, by
+contrast, represent probabilities of negative selection and range between 0
+and 1.
+</p>
+<p>
+Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
+missing data.
+</p>
+<p>
+See also: <a href="http://genomewiki.ucsc.edu/index.php/GalGal6_77-way_conservation_lastz_parameters"
+target=_blank>lastz parameters</a> and other details, and
+chain <a href="http://genomewiki.ucsc.edu/index.php/GalGal6_77-way_Genome_size_statistics"
+target=_blank>minimum score and gap</a> parameters used in these alignments.
+</p>
+
+<p>
+Missing sequence in the assemblies is highlighted in the track display
+by regions of yellow when zoomed out and Ns displayed at base
+level (see <em>Gap Annotation</em>, below). </p>
+<p>
+<blockquote><table border=1 cellpadding=4 bordercolor='#aaaaaa'>
+<tr><th>Organism</th><th>Species</th><th>Assembly name</th><th>browser or<br>NCBI source</th><th>alignment type</th></tr>
+<tr align=left><td>Chicken</td><td>Gallus gallus</td>
+    <td>Mar. 2018 (GRCg6a/galGal6)</td>
+    <td><a href="../cgi-bin/hgTracks?db=galGal6"
+    target=_blank>Mar. 2018 (GRCg6a/galGal6)</a></td>
+    <td>reference</td></tr>
+<tr align=left><td>Adelie penguin</td><td>Pygoscelis adeliae</td>
+    <td>Jun 2014 (ASM69910v1/pygAde1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/pygAde1/"
+    target=_blank>Jun 2014 (ASM69910v1/pygAde1)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>African clawed frog</td><td>Xenopus laevis</td>
+    <td>Aug. 2016 (Xenopus_laevis_v2/xenLae2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=xenLae2"
+    target=_blank>Aug. 2016 (Xenopus_laevis_v2/xenLae2)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>American alligator</td><td>Alligator mississippiensis</td>
+    <td>Aug. 2012 (allMis0.2/allMis1)</td>
+    <td><a href="../cgi-bin/hgTracks?db=allMis1"
+    target=_blank>Aug. 2012 (allMis0.2/allMis1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>American crow</td><td>Corvus brachyrhynchos</td>
+    <td>Jun 2014 (ASM69197v1/corBra1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/corBra1/"
+    target=_blank>Jun 2014 (ASM69197v1/corBra1)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>American flamingo</td><td>Phoenicopterus ruber ruber</td>
+    <td>May 2014 (ASM68726v1/phoRub1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/phoRub1/"
+    target=_blank>May 2014 (ASM68726v1/phoRub1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Anna's hummingbird</td><td>Calypte anna</td>
+    <td>Jun 2014 (ASM69908v1/calAnn1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/calAnn1/"
+    target=_blank>Jun 2014 (ASM69908v1/calAnn1)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>Arctic lamprey</td><td>Lethenteron camtschaticum</td>
+    <td>Sep 2013 (LetJap1.0/letCam1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/letCam1/"
+    target=_blank>Sep 2013 (LetJap1.0/letCam1)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Bald eagle</td><td>Haliaeetus leucocephalus</td>
+    <td>Aug 2014 (Haliaeetus_leucocephalus-4.0/halLeu1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/halLeu1/"
+    target=_blank>Aug 2014 (Haliaeetus_leucocephalus-4.0/halLeu1)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>Bar tailed trogon</td><td>Apaloderma vittatum</td>
+    <td>16 Jun 2014 (ASM70340v1/apaVit1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/apaVit1/"
+    target=_blank>16 Jun 2014 (ASM70340v1/apaVit1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Barn owl</td><td>Tyto alba</td>
+    <td>May 2014 (ASM68720v1/tytAlb1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/tytAlb1/"
+    target=_blank>May 2014 (ASM68720v1/tytAlb1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Brown roatelo</td><td>Mesitornis unicolor</td>
+    <td>Jun 2014 (ASM69576v1/mesUni1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/mesUni1/"
+    target=_blank>Jun 2014 (ASM69576v1/mesUni1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Budgerigar</td><td>Melopsittacus undulatus</td>
+    <td>Sep. 2011 (WUSTL v6.3/melUnd1)</td>
+    <td><a href="../cgi-bin/hgTracks?db=melUnd1"
+    target=_blank>Sep. 2011 (WUSTL v6.3/melUnd1)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>Burmese python</td><td>Python bivittatus</td>
+    <td>Sep. 2013 (Python_molurus_bivittatus-5.0.2/pytBiv1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/pytBiv1/"
+    target=_blank>Sep. 2013 (Python_molurus_bivittatus-5.0.2/pytBiv1)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Canary</td><td>Serinus canaria</td>
+    <td>15 Jan-2014 (SCA1/serCan1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/serCan1/"
+    target=_blank>15 Jan-2014 (SCA1/serCan1)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>Chinese alligator</td><td>Alligator sinensis</td>
+    <td>29 Aug 2013 (ASM45574v1/allSin1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/allSin1/"
+    target=_blank>29 Aug 2013 (ASM45574v1/allSin1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Chinese softshell turtle</td><td>Pelodiscus sinensis</td>
+    <td>Oct 2011 (PelSin_1.0/pelSin1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/pelSin1/"
+    target=_blank>Oct 2011 (PelSin_1.0/pelSin1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Chuck-will's-widow</td><td>Caprimulgus carolinensis</td>
+    <td>Jun 2014 (ASM70074v1/capCar1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/capCar1/"
+    target=_blank>Jun 2014 (ASM70074v1/capCar1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Collared flycatcher</td><td>Ficedula albicollis</td>
+    <td>Jun 2013 (FicAlb1.5/ficAlb2)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/ficAlb2/"
+    target=_blank>Jun 2013 (FicAlb1.5/ficAlb2)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>Common cuckoo</td><td>Cuculus canorus</td>
+    <td>Jun 2014 (ASM70932v1/cucCan1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/cucCan1/"
+    target=_blank>Jun 2014 (ASM70932v1/cucCan1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Crested ibis</td><td>Nipponia nippon</td>
+    <td>Jun 2014 (ASM70822v1/nipNip1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/nipNip1/"
+    target=_blank>Jun 2014 (ASM70822v1/nipNip1)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>Crowned crain</td><td>Balearica pavonina gibbericeps</td>
+    <td>Jun 2014 (ASM70989v1/balPav1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/balPav1/"
+    target=_blank>Jun 2014 (ASM70989v1/balPav1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Cuckoo roller</td><td>Leptosomus discolor</td>
+    <td>May 2014 (ASM69178v1/lepDis1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/lepDis1/"
+    target=_blank>May 2014 (ASM69178v1/lepDis1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Dalmatian pelican</td><td>Pelecanus crispus</td>
+    <td>May 2014 (ASM68737v1/pelCri1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/pelCri1/"
+    target=_blank>May 2014 (ASM68737v1/pelCri1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Downy woodpecker</td><td>Picoides pubescens</td>
+    <td>Jun 2014 (ASM69900v1/picPub1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/picPub1/"
+    target=_blank>Jun 2014 (ASM69900v1/picPub1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Emperor penguin</td><td>Aptenodytes forsteri</td>
+    <td>06 Jun 2014 (ASM69914v1/aptFor1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/aptFor1/"
+    target=_blank>06 Jun 2014 (ASM69914v1/aptFor1)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>Fugu</td><td>Takifugu rubripes</td>
+    <td>Oct. 2011 (FUGU5/fr3)</td>
+    <td><a href="../cgi-bin/hgTracks?db=fr3"
+    target=_blank>Oct. 2011 (FUGU5/fr3)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Garter snake</td><td>Thamnophis sirtalis</td>
+    <td>Jun. 2015 (Thamnophis_sirtalis-6.0/thaSir1)</td>
+    <td><a href="../cgi-bin/hgTracks?db=thaSir1"
+    target=_blank>Jun. 2015 (Thamnophis_sirtalis-6.0/thaSir1)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Golden eagle</td><td>Aquila chrysaetos canadensis</td>
+    <td>Oct. 2014 (aquChr-1.0.2/aquChr2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=aquChr2"
+    target=_blank>Oct. 2014 (aquChr-1.0.2/aquChr2)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>Great cormorant</td><td>Phalacrocorax carbo</td>
+    <td>Jun 2014 (ASM70892v1/phaCar1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/phaCar1/"
+    target=_blank>Jun 2014 (ASM70892v1/phaCar1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Green seaturtle</td><td>Chelonia mydas</td>
+    <td>Mar 2013 (CheMyd_1.0/cheMyd1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/cheMyd1/"
+    target=_blank>Mar 2013 (CheMyd_1.0/cheMyd1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Hoatzin</td><td>Opisthocomus hoazin</td>
+    <td>May 2014 (ASM69207v1/opiHoa1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/opiHoa1/"
+    target=_blank>May 2014 (ASM69207v1/opiHoa1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Hooded crow</td><td>Corvus cornix cornix</td>
+    <td>Aug 2014 (Hooded_Crow_genome/corCor1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/corCor1/"
+    target=_blank>Aug 2014 (Hooded_Crow_genome/corCor1)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>Houbara bustard</td><td>Chlamydotis undulata macqueenii</td>
+    <td>Jun 2014 (ASM69519v1/chlUnd1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/chlUnd1/"
+    target=_blank>Jun 2014 (ASM69519v1/chlUnd1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Human</td><td>Homo sapiens</td>
+    <td>Dec. 2013 (GRCh38/hg38)</td>
+    <td><a href="../cgi-bin/hgTracks?db=hg38"
+    target=_blank>Dec. 2013 (GRCh38/hg38)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Japanese eel</td><td>Anguilla japonica</td>
+    <td>18 Mar-2014 (japanese_eel_genome_v1 25_oct_2011_japonica_c401b400k25m200 sspacepremiumk3a02n24 extra.final.scaffolds/angJap1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/angJap1/"
+    target=_blank>18 Mar-2014 (japanese_eel_genome_v1 25_oct_2011_japonica_c401b400k25m200 sspacepremiumk3a02n24 extra.final.scaffolds/angJap1)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Japanese quail</td><td>Coturnix japonica</td>
+    <td>Mar. 2016 (Coturnix japonica 2.0/cotJap2)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/cotJap2/"
+    target=_blank>Mar. 2016 (Coturnix japonica 2.0/cotJap2)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Killdeer</td><td>Charadrius vociferus</td>
+    <td>Aug 2014 (ASM70802v2/chaVoc2)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/chaVoc2/"
+    target=_blank>Aug 2014 (ASM70802v2/chaVoc2)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>Lamprey</td><td>Petromyzon marinus</td>
+    <td>Dec. 2017 (Pmar_germline 1.0/petMar3)</td>
+    <td><a href="../cgi-bin/hgTracks?db=petMar3"
+    target=_blank>Dec. 2017 (Pmar_germline 1.0/petMar3)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Little egret</td><td>Egretta garzetta</td>
+    <td>May 2014 (ASM68718v1/egrGar1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/egrGar1/"
+    target=_blank>May 2014 (ASM68718v1/egrGar1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Lizard</td><td>Anolis carolinensis</td>
+    <td>May 2010 (Broad AnoCar2.0/anoCar2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=anoCar2"
+    target=_blank>May 2010 (Broad AnoCar2.0/anoCar2)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Mallard duck</td><td>Anas platyrhynchos</td>
+    <td>Apr 2013 (BGI_duck_1.0/anaPla1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/anaPla1/"
+    target=_blank>Apr 2013 (BGI_duck_1.0/anaPla1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Medaka</td><td>Oryzias latipes</td>
+    <td>Oct. 2005 (NIG/UT MEDAKA1/oryLat2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=oryLat2"
+    target=_blank>Oct. 2005 (NIG/UT MEDAKA1/oryLat2)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Medium ground finch</td><td>Geospiza fortis</td>
+    <td>Apr. 2012 (GeoFor_1.0/geoFor1)</td>
+    <td><a href="../cgi-bin/hgTracks?db=geoFor1"
+    target=_blank>Apr. 2012 (GeoFor_1.0/geoFor1)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>Mouse</td><td>Mus musculus</td>
+    <td>Dec. 2011 (GRCm38/mm10)</td>
+    <td><a href="../cgi-bin/hgTracks?db=mm10"
+    target=_blank>Dec. 2011 (GRCm38/mm10)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Nile tilapia</td><td>Oreochromis niloticus</td>
+    <td>Nov. 2016 (ASM185804v2/oreNil3)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/oreNil3/"
+    target=_blank>Nov. 2016 (ASM185804v2/oreNil3)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Northern carmine bee-eater</td><td>Merops nubicus</td>
+    <td>May 2014 (ASM69184v1/merNub1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/merNub1/"
+    target=_blank>May 2014 (ASM69184v1/merNub1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Northern fulmar</td><td>Fulmarus glacialis</td>
+    <td>May 2014 (ASM69083v1/fulGla1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/fulGla1/"
+    target=_blank>May 2014 (ASM69083v1/fulGla1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Ostrich</td><td>Struthio camelus australis</td>
+    <td>06 Jun-2014 (ASM69896v1/strCam1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/strCam1/"
+    target=_blank>06 Jun-2014 (ASM69896v1/strCam1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Painted turtle</td><td>Chrysemys picta bellii</td>
+    <td>Mar. 2014 (v3.0.3/chrPic2)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/chrPic2/"
+    target=_blank>Mar. 2014 (v3.0.3/chrPic2)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>Parrot</td><td>Amazona vittata</td>
+    <td>Jan. 2013 (AV1/amaVit1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/amaVit1/"
+    target=_blank>Jan. 2013 (AV1/amaVit1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Peregrine falcon</td><td>Falco peregrinus</td>
+    <td>Feb 2013 (F_peregrinus_v1.0/falPer1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/falPer1/"
+    target=_blank>Feb 2013 (F_peregrinus_v1.0/falPer1)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>Red crested turaco</td><td>Tauraco erythrolophus</td>
+    <td>Jun 2014 (ASM70936v1/tauEry1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/tauEry1/"
+    target=_blank>Jun 2014 (ASM70936v1/tauEry1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Red-legged seriema</td><td>Cariama cristata</td>
+    <td>May 2014 (ASM69053v1/carCri1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/carCri1/"
+    target=_blank>May 2014 (ASM69053v1/carCri1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Red-throated loon</td><td>Gavia stellata</td>
+    <td>May 2014 (ASM69087v1/gavSte1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/gavSte1/"
+    target=_blank>May 2014 (ASM69087v1/gavSte1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Rhinoceros hornbill</td><td>Buceros rhinoceros silvestris</td>
+    <td>Jun 2014 (ASM71030v1/bucRhi1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/bucRhi1/"
+    target=_blank>Jun 2014 (ASM71030v1/bucRhi1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Rifleman</td><td>Acanthisitta chloris</td>
+    <td>27 May 2014 (ASM69581v1/acaChl1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/acaChl1/"
+    target=_blank>27 May 2014 (ASM69581v1/acaChl1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Rock pigeon</td><td>Columba livia</td>
+    <td>Feb 2013 (Cliv_1.0/colLiv1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/colLiv1/"
+    target=_blank>Feb 2013 (Cliv_1.0/colLiv1)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>Saker falcon</td><td>Falco cherrug</td>
+    <td>Feb 2013 (F_cherrug_v1.0/falChe1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/falChe1/"
+    target=_blank>Feb 2013 (F_cherrug_v1.0/falChe1)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>Scarlet macaw</td><td>Ara macao</td>
+    <td>Jun 2013 (SMACv1.1/araMac1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/araMac1/"
+    target=_blank>Jun 2013 (SMACv1.1/araMac1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Speckled mousebird</td><td>Colius striatus</td>
+    <td>May 2014 (ASM69071v1/colStr1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/colStr1/"
+    target=_blank>May 2014 (ASM69071v1/colStr1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Spiny softshell turtle</td><td>Apalone spinifera</td>
+    <td>May 2013 (ASM38561v1/apaSpi1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/apaSpi1/"
+    target=_blank>May 2013 (ASM38561v1/apaSpi1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Stickleback</td><td>Gasterosteus aculeatus</td>
+    <td>Feb. 2006 (Broad/gasAcu1)</td>
+    <td><a href="../cgi-bin/hgTracks?db=gasAcu1"
+    target=_blank>Feb. 2006 (Broad/gasAcu1)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Sunbittern</td><td>Eurypyga helias</td>
+    <td>May 2014 (ASM69077v1/eurHel1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/eurHel1/"
+    target=_blank>May 2014 (ASM69077v1/eurHel1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Tetraodon</td><td>Tetraodon nigroviridis</td>
+    <td>Mar. 2007 (Genoscope 8.0/tetNig2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=tetNig2"
+    target=_blank>Mar. 2007 (Genoscope 8.0/tetNig2)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Tibetan frog</td><td>Nanorana parkeri</td>
+    <td>Mar. 2015 (BGI_ZX_2015/nanPar1)</td>
+    <td><a href="../cgi-bin/hgTracks?db=nanPar1"
+    target=_blank>Mar. 2015 (BGI_ZX_2015/nanPar1)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Tibetan ground jay</td><td>Pseudopodoces humilis</td>
+    <td>Jan 2013 (PseHum1.0/pseHum1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/pseHum1/"
+    target=_blank>Jan 2013 (PseHum1.0/pseHum1)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>Turkey</td><td>Meleagris gallopavo</td>
+    <td>Nov. 2014 (Turkey_5.0/melGal5)</td>
+    <td><a href="../cgi-bin/hgTracks?db=melGal5"
+    target=_blank>Nov. 2014 (Turkey_5.0/melGal5)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>White throated tinamou</td><td>Tinamus guttatus</td>
+    <td>Aug 2014 (ASM70537v2/tinGut2)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/tinGut2/"
+    target=_blank>Aug 2014 (ASM70537v2/tinGut2)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>White-tailed eagle</td><td>Haliaeetus albicilla</td>
+    <td>May 2014 (ASM69140v1/halAlb1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/halAlb1/"
+    target=_blank>May 2014 (ASM69140v1/halAlb1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>White-tailed tropicbird</td><td>Phaethon lepturus</td>
+    <td>May 2014 (ASM68728v1/phaLep1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/phaLep1/"
+    target=_blank>May 2014 (ASM68728v1/phaLep1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>White-throated sparrow</td><td>Zonotrichia albicollis</td>
+    <td>Apr 2013 (ASM38545v1/zonAlb1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/zonAlb1/"
+    target=_blank>Apr 2013 (ASM38545v1/zonAlb1)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>X. tropicalis</td><td>Xenopus tropicalis</td>
+    <td>Jul. 2016 (Xenopus_tropicalis_v9.1/xenTro9)</td>
+    <td><a href="../cgi-bin/hgTracks?db=xenTro9"
+    target=_blank>Jul. 2016 (Xenopus_tropicalis_v9.1/xenTro9)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Yellow-throated sandgrouse</td><td>Pterocles gutturalis</td>
+    <td>Jun 2014 (ASM69924v1/pteGut1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/pteGut1/"
+    target=_blank>Jun 2014 (ASM69924v1/pteGut1)</a></td>
+    <td>reciprocal best</td></tr>
+<tr align=left><td>Zebra finch</td><td>Taeniopygia guttata</td>
+    <td>Feb. 2013 (WashU taeGut324/taeGut2)</td>
+    <td><a href="../cgi-bin/hgTracks?db=taeGut2"
+    target=_blank>Feb. 2013 (WashU taeGut324/taeGut2)</a></td>
+    <td>syntenic</td></tr>
+<tr align=left><td>Zebra mbuna</td><td>Maylandia zebra</td>
+    <td>Mar 2012 (MetZeb1.1/mayZeb1)</td>
+    <td><a href="ftp://hgdownload.soe.ucsc.edu/gbdb/mayZeb1/"
+    target=_blank>Mar 2012 (MetZeb1.1/mayZeb1)</a></td>
+    <td>net</td></tr>
+<tr align=left><td>Zebrafish</td><td>Danio rerio</td>
+    <td>May 2017 (GRCz11/danRer11)</td>
+    <td><a href="../cgi-bin/hgTracks?db=danRer11"
+    target=_blank>May 2017 (GRCz11/danRer11)</a></td>
+    <td>net</td></tr>
+</table><br>
+<b>Table 1.</b> <em>Genome assemblies included in the 77-way Conservation track.</em>
+</blockquote></p>
+
+Downloads for data in this track are available:
+<ul>
+<li>
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/galGal6/multiz77way/">Multiz alignments</a> (MAF format), and phylogenetic trees
+<li>
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/galGal6/phyloP77way/">PhyloP conservation</a> (WIG format)
+<li>
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/galGal6/phastCons77way/">PhastCons conservation</a> (WIG format)
+</ul>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+The track configuration options allow the user to display the three different
+sets of alignments: all, birds, reptiles or vertebrate, individually or all
+simultaneously.
+In full and pack display modes, conservation scores are displayed as a
+<em>wiggle track</em> (histogram) in which the height reflects the
+value of the score.
+The conservation wiggles can be configured in a variety of ways to
+highlight different aspects of the displayed information.
+Click the <a href="../goldenPath/help/hgWiggleTrackHelp.html"
+target=_blank>Graph configuration help</a> link for an explanation
+of the configuration options.</p>
+<p>
+Pairwise alignments of each species to the $organism genome are
+displayed below the conservation histogram as a grayscale density plot (in
+pack mode) or as a wiggle (in full mode) that indicates alignment quality.
+In dense display mode, conservation is shown in grayscale using
+darker values to indicate higher levels of overall conservation
+as scored by phastCons. </p>
+<p>
+Checkboxes on the track configuration page allow selection of the
+species to include in the pairwise display.
+Configuration buttons are available to select all of the species
+(<em>Set all</em>), deselect all of the species (<em>Clear all</em>), or
+use the default settings (<em>Set defaults</em>).
+Note that excluding species from the pairwise display does not alter 
+the conservation score display.</p>
+<p>
+To view detailed information about the alignments at a specific
+position, zoom the display in to 30,000 or fewer bases, then click on
+the alignment.</p>
+
+<h3>Gap Annotation</h3>
+<p>
+The <em>Display chains between alignments</em> configuration option
+enables display of gaps between alignment blocks in the pairwise alignments in
+a manner similar to the Chain track display.  The following
+conventions are used:
+<ul>
+<li><b>Single line:</b> No bases in the aligned species. Possibly due to a
+lineage-specific insertion between the aligned blocks in the $organism genome
+or a lineage-specific deletion between the aligned blocks in the aligning
+species.
+<li><b>Double line:</b> Aligning species has one or more unalignable bases in
+the gap region. Possibly due to excessive evolutionary distance between
+species or independent indels in the region between the aligned blocks in both
+species.
+<li><b>Pale yellow coloring:</b> Aligning species has Ns in the gap region.
+Reflects uncertainty in the relationship between the DNA of both species, due
+to lack of sequence in relevant portions of the aligning species.
+</ul></p>
+
+<h3>Genomic Breaks</h3>
+<p>
+Discontinuities in the genomic context (chromosome, scaffold or region) of the
+aligned DNA in the aligning species are shown as follows:
+<ul>
+<li>
+<b>Vertical blue bar:</b> Represents a discontinuity that persists indefinitely
+on either side, <em>e.g.</em> a large region of DNA on either side of the bar
+comes from a different chromosome in the aligned species due to a large scale
+rearrangement.
+<li>
+<b>Green square brackets:</b> Enclose shorter alignments consisting of DNA from
+one genomic context in the aligned species nested inside a larger chain of
+alignments from a different genomic context. The alignment within the
+brackets may represent a short misalignment, a lineage-specific insertion of a
+transposon in the $organism genome that aligns to a paralogous copy somewhere
+else in the aligned species, or other similar occurrence.
+</ul></p>
+
+<h3>Base Level</h3>
+<p>
+When zoomed-in to the base-level display, the track shows the base
+composition of each alignment.
+The numbers and symbols on the Gaps
+line indicate the lengths of gaps in the $organism sequence at those
+alignment positions relative to the longest non-$organism sequence.
+If there is sufficient space in the display, the size of the gap is shown.
+If the space is insufficient and the gap size is a multiple of 3, a
+&quot;*&quot; is displayed; other gap sizes are indicated by &quot;+&quot;.</p>
+<p>
+Codon translation is available in base-level display mode if the
+displayed region is identified as a coding segment. To display this annotation,
+select the species for translation from the pull-down menu in the Codon
+Translation configuration section at the top of the page. Then, select one of
+the following modes:
+<ul>
+<li>
+<b>No codon translation:</b> The gene annotation is not used; the bases are
+displayed without translation.
+<li>
+<b>Use default species reading frames for translation:</b> The annotations from
+the genome displayed in the <em>Default species to establish reading frame</em>
+pull-down menu are used to translate all the aligned species present in the
+alignment.
+<li>
+<b>Use reading frames for species if available, otherwise no translation:</b>
+Codon translation is performed only for those species where the region is
+annotated as protein coding.
+<li><b>Use reading frames for species if available, otherwise use default species:</b>
+Codon translation is done on those species that are annotated as being protein
+coding over the aligned region using species-specific annotation; the remaining
+species are translated using the default species annotation.
+</ul></p>
+<p>
+Codon translation uses the following gene tracks as the basis for
+translation, depending on the species chosen (<b>Table 2</b>).
+
+<blockquote><table border=1 cellpadding=4 bordercolor="#aaaaaa">
+<tr align=left><td><b>Gene Track</b></td><td><b>Species</b></td></tr>
+<tr align=left><td>NCBI RefSeq Genes</td><td>Chicken, Japanese quail, Turkey, Medium ground finch, Zebra finch, Budgerigar, American alligator</td></tr>
+<tr align=left><td>Ensembl Genes v92</td><td>Mallard duck, Chinese softshell turtle</td></tr>
+<tr align=left><td>Xeno RefGene</td><td>Golden eagle, Painted turtle</td></tr>
+<tr align=left><td>no annotations</td><td>all others</td></tr>
+</table>
+<b>Table 2.</b> <em>Gene tracks used for codon translation.</em>
+</blockquote></p>
+
+<h2>Methods</h2>
+<p>
+Pairwise alignments with the $organism genome were generated for
+each species using lastz from repeat-masked genomic sequence.
+Pairwise alignments were then linked into chains using a dynamic programming
+algorithm that finds maximally scoring chains of gapless subsections
+of the alignments organized in a kd-tree.
+Please note the <a href="http://genomewiki.ucsc.edu/index.php/GalGal6_77-way_Genome_size_statistics"
+target=_blank>specific parameters</a>for the alignments.
+High-scoring chains were then placed along the genome, with
+gaps filled by lower-scoring chains, to produce an alignment net.
+For more information about the chaining and netting process
+for each species, see the description pages for the Chain and Net
+tracks.</p>
+<p>
+An additional filtering step was introduced in the generation of the 77-way
+conservation track to reduce the number of paralogs and pseudogenes from the
+high-quality assemblies and the suspect alignments from the low-quality
+assemblies:
+some of the pairwise alignments were filtered based on synteny;
+and others were filtered to retain only
+alignments of best quality in both the target and query (&quot;reciprocal
+best&quot;).  Note the indication in the table above for this filtering option.</p>
+<p>
+The resulting best-in-genome pairwise alignments
+were progressively aligned using multiz/autoMZ,
+following the tree topology diagrammed above, to produce multiple alignments.
+The multiple alignments were post-processed to
+add annotations indicating alignment gaps, genomic breaks,
+and base quality of the component sequences.
+The annotated multiple alignments, in MAF format, are available for
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/galGal6/multiz77way"
+target=_blank>bulk download</a>.
+An alignment summary table containing an entry for each
+alignment block in each species was generated to improve
+track display performance at large scales.
+Framing tables were constructed to enable
+visualization of codons in the multiple alignment display.</p>
+
+<h3> Phylogenetic Tree Model</h3>
+<p>
+Both <em>phastCons</em> and <em>phyloP</em> are phylogenetic methods that rely
+on a tree model containing the tree topology, branch lengths representing
+evolutionary distance at neutrally evolving sites, the background distribution
+of nucleotides, and a substitution rate matrix.
+The
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/galGal6/phastCons77way/galGal6.phastCons77way.mod"
+target=_blank>all species tree model</a> for this track was
+generated using the <em>phyloFit</em> program from the PHAST package
+(REV model, EM algorithm, medium precision) using multiple alignments of
+4-fold degenerate sites extracted from the 77-way alignment
+(msa_view).  The 4d sites were derived from the NCBI RefSeq gene set,
+filtered to select single-coverage long transcripts.
+</p>
+<p>
+This same tree model was used in the phyloP calculations, however their
+background frequencies were modified to maintain reversibility.
+The resulting tree model for
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/galGal6/phyloP77way/galGal6.phyloP77way.mod"
+target=_blank>all species</a>.
+</p>
+<h3> PhastCons Conservation </h3>
+<p>
+The phastCons program computes conservation scores based on a phylo-HMM, a
+type of probabilistic model that describes both the process of DNA
+substitution at each site in a genome and the way this process changes from
+one site to the next (Felsenstein and Churchill 1996, Yang 1995, Siepel and
+Haussler 2005).  PhastCons uses a two-state phylo-HMM, with a state for
+conserved regions and a state for non-conserved regions.  The value plotted
+at each site is the posterior probability that the corresponding alignment
+column was "generated" by the conserved state of the phylo-HMM.  These
+scores reflect the phylogeny (including branch lengths) of the species in
+question, a continuous-time Markov model of the nucleotide substitution
+process, and a tendency for conservation levels to be autocorrelated along
+the genome (i.e., to be similar at adjacent sites).  The general reversible
+(REV) substitution model was used.  Unlike many conservation-scoring programs,
+phastCons does not rely on a sliding window
+of fixed size; therefore, short highly-conserved regions and long moderately
+conserved regions can both obtain high scores.
+More information about
+phastCons can be found in Siepel <em>et al</em>. 2005.</p>
+<p>
+The phastCons parameters used were: expected-length=45,
+target-coverage=0.3, rho=0.3.</p>
+
+<h3> PhyloP Conservation </h3>
+<p>
+The phyloP program supports several different methods for computing
+p-values of conservation or acceleration, for individual nucleotides or
+larger elements
+(<a href="http://compgen.cshl.edu/phast/" target="_blank">
+http://compgen.cshl.edu/phast/</a>).
+Here it was used
+to produce separate scores at each base (--wig-scores option), considering
+all branches of the phylogeny rather than a particular subtree or lineage
+(i.e., the --subtree option was not used).  The scores were computed by
+performing a likelihood ratio test at each alignment column (--method LRT),
+and scores for both conservation and acceleration were produced (--mode CONACC).
+</p>
+<h3> Conserved Elements </h3>
+<p>
+The conserved elements were predicted by running phastCons with the
+--viterbi option.  The predicted elements are segments of the alignment
+that are likely to have been "generated" by the conserved state of the
+phylo-HMM. Each element is assigned a log-odds score equal to its log
+probability under the conserved model minus its log probability under the
+non-conserved model. The "score" field associated with this track contains
+transformed log-odds scores, taking values between 0 and 1000. (The scores
+are transformed using a monotonic function of the form a * log(x) + b.) The
+raw log odds scores are retained in the "name" field and can be seen on the
+details page or in the browser when the track's display mode is set to
+"pack" or "full".
+</p>
+
+<h2>Credits</h2>
+<p> This track was created using the following programs:
+<ul>
+<li> Alignment tools: lastz (formerly blastz) and multiz by Minmei Hou, Scott Schwartz and Webb
+Miller of the <a href="http://www.bx.psu.edu/miller_lab/"
+target=_blank>Penn State Bioinformatics Group</a>
+<li> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
+<li> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
+other programs in PHAST by
+<a href="http://siepellab.labsites.cshl.edu/"
+target=_blank>Adam Siepel</a> at Cold Spring Harbor Laboratory (original development
+done at the Haussler lab at UCSC).
+<li> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
+by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC
+<li> Tree image generator: phyloPng by Galt Barber, UCSC
+<li> Conservation track display: Kate Rosenbloom, Hiram Clawson (wiggle
+display), and Brian Raney (gap annotation and codon framing) at UCSC
+</ul>
+</p>
+<p>The phylogenetic tree is based on Murphy <em>et al</em>. (2001) and general
+consensus in the vertebrate phylogeny community as of March 2007.
+</p>
+
+<h2>References</h2>
+
+<h3>Phylo-HMMs, phastCons, and phyloP:</h3>
+<p>
+Felsenstein J, Churchill GA.
+<a href="https://academic.oup.com/mbe/article/13/1/93/1055515/A-Hidden-Markov-Model-approach-to-
+variation-among" target="_blank">A Hidden Markov Model approach to
+variation among sites in rate of evolution</a>.
+<em>Mol Biol Evol</em>. 1996 Jan;13(1):93-104.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/8583911" target="_blank">8583911</a>
+</p>
+
+<p>
+Pollard KS, Hubisz MJ, Rosenbloom KR, Siepel A.
+<a href="https://genome.cshlp.org/content/20/1/110.long" target="_blank">
+Detection of nonneutral substitution rates on mammalian phylogenies</a>.
+<em>Genome Res</em>. 2010 Jan;20(1):110-21.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/19858363" target="_blank">19858363</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2798823/" target="_blank">PMC2798823</a>
+</p>
+
+<p>
+Siepel A, Bejerano G, Pedersen JS, Hinrichs AS, Hou M, Rosenbloom K,
+Clawson H, Spieth J, Hillier LW, Richards S, <em>et al.</em>
+<a href="https://genome.cshlp.org/content/15/8/1034"
+target="_blank">Evolutionarily conserved elements in vertebrate, insect, worm,
+and yeast genomes</a>.
+<em>Genome Res</em>. 2005 Aug;15(8):1034-50.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/16024819" target="_blank">16024819</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1182216/" target="_blank">PMC1182216</a>
+</p>
+
+<p>
+Siepel A, Haussler D.
+<a href="http://compgen.cshl.edu/~acs/phylohmm.pdf"
+target="_blank">Phylogenetic Hidden Markov Models</a>.
+In: Nielsen R, editor. Statistical Methods in Molecular Evolution.
+New York: Springer; 2005. pp. 325-351.
+</p>
+
+<p>
+Yang Z.
+<a href="https://www.genetics.org/content/139/2/993"
+target="_blank">A space-time process model for the evolution of DNA
+sequences</a>.
+<em>Genetics</em>. 1995 Feb;139(2):993-1005.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/7713447" target="_blank">7713447</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1206396/" target="_blank">PMC1206396</a>
+</p>
+
+<h3>Chain/Net:</h3>
+<p>
+Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
+<a href="https://www.pnas.org/content/100/20/11484"
+target="_blank">Evolution's cauldron:
+duplication, deletion, and rearrangement in the mouse and human genomes</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/14500911" target="_blank">14500911</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC208784/" target="_blank">PMC208784</a>
+</p>
+
+<h3>Multiz:</h3>
+<p>
+Blanchette M, Kent WJ, Riemer C, Elnitski L, Smit AF, Roskin KM,
+Baertsch R, Rosenbloom K, Clawson H, Green ED, <em>et al.</em>
+<a href="https://genome.cshlp.org/content/14/4/708.abstract"
+target="_blank">Aligning multiple genomic sequences with the threaded blockset aligner</a>.
+<em>Genome Res</em>. 2004 Apr;14(4):708-15.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/15060014" target="_blank">15060014</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC383317/" target="_blank">PMC383317</a>
+</p>
+
+<h3>Lastz (formerly Blastz):</h3>
+<p>
+Chiaromonte F, Yap VB, Miller W.
+<a href="http://psb.stanford.edu/psb-online/proceedings/psb02/chiaromonte.pdf"
+target="_blank">Scoring pairwise genomic sequence alignments</a>.
+<em>Pac Symp Biocomput</em>. 2002:115-26.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">11928468</a>
+</p>
+
+<p>
+Harris RS.
+<a href="http://www.bx.psu.edu/~rsharris/rsharris_phd_thesis_2007.pdf"
+target="_blank">Improved pairwise alignment of genomic DNA</a>.
+<em>Ph.D. Thesis</em>. Pennsylvania State University, USA. 2007.
+</p>
+
+<p>
+Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC,
+Haussler D, Miller W.
+<a href="https://genome.cshlp.org/content/13/1/103.abstract"
+target="_blank">Human-mouse alignments with BLASTZ</a>.
+<em>Genome Res</em>. 2003 Jan;13(1):103-7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/12529312" target="_blank">12529312</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC430961/" target="_blank">PMC430961</a>
+</p>
+
+
+<h3>Phylogenetic Tree:</h3>
+<p>
+Murphy WJ, Eizirik E, O'Brien SJ, Madsen O, Scally M, Douady CJ, Teeling E,
+Ryder OA, Stanhope MJ, de Jong WW, Springer MS.
+<a href="https://science.sciencemag.org/content/294/5550/2348"
+target="_blank">Resolution of the early placental mammal radiation using Bayesian phylogenetics</a>.
+<em>Science</em>. 2001 Dec 14;294(5550):2348-51.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/11743200" target="_blank">11743200</a>
+</p>

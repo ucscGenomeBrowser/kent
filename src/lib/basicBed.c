@@ -20,6 +20,7 @@
 #include "rangeTree.h"
 #include "binRange.h"
 #include "asParse.h"
+#include "htmlColor.h"
 #include "basicBed.h"
 
 
@@ -1024,6 +1025,16 @@ lineFileClose(&lf);
 return hash;
 }
 
+void bedOutputRgb(FILE *f, unsigned int color)
+/*      Output a string: "r,g,b" for 24 bit number */
+{
+int colorIx = (int)color;
+struct rgbColor rgb = colorIxToRgb(colorIx);
+//fprintf(f, "%d,%d,%d", rgb.r, rgb.g, rgb.b);
+// FIXME: endian issue ??
+fprintf(f, "%d,%d,%d", rgb.b, rgb.g, rgb.r);
+}
+
 int bedParseRgb(char *itemRgb)
 /*      parse a string: "r,g,b" into three unsigned char values
         returned as 24 bit number, or -1 for failure */
@@ -1042,6 +1053,21 @@ if ((wordCount != 3) || (!isdigit(row[0][0]) ||
 return ( ((atoi(row[0]) & 0xff) << 16) |
         ((atoi(row[1]) & 0xff) << 8) |
         (atoi(row[2]) & 0xff) );
+}
+
+int bedParseColor(char *colorSpec)
+/* Parse an HTML color string, a  string of 3 comma-sep unsigned color values 0-255, 
+ * or a 6-digit hex string  preceded by #. 
+ * O/w return unsigned integer value.  Return -1 on error */
+{
+if (strchr(colorSpec,','))
+    return bedParseRgb(colorSpec);
+unsigned rgb;
+if (htmlColorForCode(colorSpec, &rgb))
+    return rgb;
+if (htmlColorForName(colorSpec, &rgb))
+    return rgb;
+return sqlUnsigned(colorSpec);
 }
 
 long long bedTotalSize(struct bed *bedList)
@@ -1367,7 +1393,7 @@ struct asObject *asStandard = NULL;
 if (numColumnsToCheck > 15)
     errAbort("There are only 15 standard BED columns defined and you have asked for %d.", numColumnsToCheck);
 if (numColumnsToCheck < 3)
-    errAbort("All BED files have at least the first 3 columns the same.");
+    errAbort("All BED files must have at least 3 columns. (Is it possible that you provided a chrom.sizes file instead of a BED file?)");
 char *asStandardText = bedAsDef(15,15);
 asStandard = asParseText(asStandardText);
 result = asCompareObjs("Yours", asYours, "BED Standard", asStandard, numColumnsToCheck, NULL, abortOnDifference);
@@ -1646,9 +1672,9 @@ if (as)
                 // assure count = #items in list; lightweight validation (better than none)
                 int ix = asColumnFindIx(as->columnList, asCol->linkedSizeName);
                 int count = sqlUnsigned(row[ix]);
-		if (count == 0)
+		if (count < 0)
                     lineFileAbort(lf, 
-                        "expecting positive number in count field for %s list, found %d", 
+                        "expecting nonnegative number in count field for %s list, found %d",
                                         asCol->name, asCol->fixedSize);
                 int itemCount = countSeparatedItems(row[i], ',');
                 if (count != itemCount)

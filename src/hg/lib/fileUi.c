@@ -144,8 +144,8 @@ if (foundFiles == NULL
         if (hIsBetaHost())
             {
             // NOTE: Force this case because beta may think it's downloads server is
-            //       "hgdownload.cse.ucsc.edu"
-            safef(cmd,sizeof(cmd),"rsync -n rsync://hgdownload-test.cse.ucsc.edu/goldenPath/"
+            //       "hgdownload.soe.ucsc.edu"
+            safef(cmd,sizeof(cmd),"rsync -n rsync://hgdownload-test.soe.ucsc.edu/goldenPath/"
                   "%s/%s/%s/beta/",  db, dir, subDir);
             }
         else
@@ -605,8 +605,8 @@ char *server = hDownloadsServer();
 char *subDir = "";
 if (hIsBetaHost())
     {
-    server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think
-    subDir = "/beta";                        // it's downloads server is "hgdownload.cse.ucsc.edu"
+    server = "hgdownload-test.soe.ucsc.edu"; // NOTE: Force this case because beta may think
+    subDir = "/beta";                        // it's downloads server is "hgdownload.soe.ucsc.edu"
     }
 if (!isUnrestricted)
     {
@@ -700,8 +700,8 @@ char *server = hDownloadsServer();
 char *subDir = "";
 if (hIsBetaHost())
     {
-    server = "hgdownload-test.cse.ucsc.edu"; // NOTE: Force this case because beta may think
-    subDir = "/beta";                        // it's downloads server is "hgdownload.cse.ucsc.edu"
+    server = "hgdownload-test.soe.ucsc.edu"; // NOTE: Force this case because beta may think
+    subDir = "/beta";                        // it's downloads server is "hgdownload.soe.ucsc.edu"
     }
 struct fileDb *oneFile = fileList;
 printf("<TBODY class='sortable sorting'>\n"); // 'sorting' is a fib but it conveniently greys

@@ -7,4 +7,4 @@ if [ "$#" -eq 0 ]; then
     exit 1
 fi
 
-sudo -u mysql rsync --progress -vltrz $2 rsync://hgdownload.cse.ucsc.edu/mysql/hg19/$1* /data/mysql/hg19/
+sudo -u mysql rsync --progress -vltrz $2 rsync://hgdownload.soe.ucsc.edu/mysql/hg19/$1* /data/mysql/hg19/

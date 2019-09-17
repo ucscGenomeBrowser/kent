@@ -3273,7 +3273,7 @@ const struct mdbObj *metadataForTable(char *db,struct trackDb *tdb,char *table)
 // Returns the metadata for a table.  NEVER FREE THIS STRUCT!
 {
 struct mdbObj *mdbObj = NULL;
-if (isHubTrack(tdb->track))
+if (isHubTrack(tdb->track) || isHubTrack(db)) // check is track is on a hub, or if database is hub
     return metadataForTableFromTdb(tdb); // FIXME: metadata setting in TDB soon to be obsolete
 
 // See of the mdbObj was already built

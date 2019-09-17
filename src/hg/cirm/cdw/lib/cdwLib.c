@@ -37,6 +37,7 @@
 #include "cdwLib.h"
 #include "trashDir.h"
 #include "wikiLink.h"
+#include "hgConfig.h"
 
 
 /* System globals - just a few ... for now.  Please seriously not too many more. */
@@ -247,6 +248,23 @@ if (email)
     }
 return email;
 }
+
+struct cdwUser *cdwCurrentUser(struct sqlConnection *conn)
+/* Look in a few places for the currently logged in user and return it or NULL */
+{
+char *userName = wikiLinkUserName();
+struct cdwUser *user = NULL;
+
+// for debugging, accept the userName on the cgiSpoof command line
+// instead of a cookie
+if (!cgiIsOnWeb() && userName == NULL)
+    userName = cgiOptionalString("userName");
+
+if (userName != NULL)
+    user = cdwUserFromUserName(conn, userName);
+return user;
+}
+
 
 struct cdwUser *cdwUserFromUserName(struct sqlConnection *conn, char* userName)
 /* Return user associated with that username or NULL if not found */
@@ -822,15 +840,14 @@ void cdwUpdateFileTags(struct sqlConnection *conn, long long fileId, struct dySt
 /* Update tags field in cdwFile with given value */
 {
 struct dyString *query = dyStringNew(0);
-sqlDyStringAppend(query, "update cdwFile set tags='");
-dyStringAppend(query, tags->string);
-dyStringPrintf(query, "' where id=%lld", fileId);
+sqlDyStringPrintf(query, "update cdwFile set tags='%s' ", tags->string);
+sqlDyStringPrintf(query, " where id=%lld", fileId);
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
 }
 
 struct cdwFile *cdwGetLocalFile(struct sqlConnection *conn, char *localAbsolutePath, 
-    char *symLinkMd5Sum)
+    char *givenMd5Sum)
 /* Get record of local file from database, adding it if it doesn't already exist.
  * Can make it a symLink rather than a copy in which case pass in valid MD5 sum
  * for symLinkM5dSum. */
@@ -873,16 +890,18 @@ cdwMakeFileNameAndPath(fileId, localAbsolutePath, cdwFile, cdwPath);
 char *md5;
 
 /* Do copy or symbolic linking of file into warehouse managed dir. */
-if (symLinkMd5Sum)
+if (givenMd5Sum)
     {
-    md5 = symLinkMd5Sum;
-    makeSymLink(localAbsolutePath, cdwPath);  
+    md5 = givenMd5Sum;
     }
 else
     {
-    copyFile(localAbsolutePath, cdwPath);
     md5 = md5HexForFile(localAbsolutePath);
     }
+copyFile(localAbsolutePath, cdwPath);
+touchFileFromFile(localAbsolutePath, cdwPath);
+chmod(cdwPath, 0444);
+replaceOriginalWithSymlink(localAbsolutePath, "", cdwPath);
 
 /* Update file record. */
 sqlSafef(query, sizeof(query), 
@@ -956,6 +975,7 @@ int cdwFileIdFromPathSuffix(struct sqlConnection *conn, char *suf)
 {
 char query[4096];
 int sufLen = strlen(suf);
+// This is a bit slow, on the order of 1 second.  -jk
 sqlSafef(query, sizeof(query), "SELECT cdwFile.id FROM cdwSubmitDir, cdwFile " 
     "WHERE cdwFile.submitDirId=cdwSubmitDir.id AND RIGHT(CONCAT_WS('/', cdwSubmitDir.url, submitFileName), %d)='%s' "
     "ORDER BY cdwFile.id DESC LIMIT 1;", sufLen, suf);
@@ -1247,7 +1267,7 @@ printf("Content-Type:text/html\r\n");
 printf("\r\n\r\n");
 puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
 	      "\"http://www.w3.org/TR/html4/loose.dtd\">");
-printf("<HTML><HEAD><TITLE>%s</TITLE>\n", "CIRM Data Warehouse");
+printf("<HTML><HEAD>\n%s<TITLE>%s</TITLE>\n", getCspMetaHeader(), "CIRM Data Warehouse");
 puts("<meta http-equiv='X-UA-Compatible' content='IE=Edge'>");
 
 // Use CIRM3 CSS for common look
@@ -1384,34 +1404,34 @@ void cdwValidFileUpdateDb(struct sqlConnection *conn, struct cdwValidFile *el, l
  * id. */
 {
 struct dyString *dy = newDyString(512);
-sqlDyStringAppend(dy, "update cdwValidFile set ");
+sqlDyStringPrintf(dy, "update cdwValidFile set ");
 // omit id and licensePlate fields - one autoupdates and the other depends on this
 // also omit fileId which also really can't change.
-dyStringPrintf(dy, " format='%s',", el->format);
-dyStringPrintf(dy, " outputType='%s',", el->outputType);
-dyStringPrintf(dy, " experiment='%s',", el->experiment);
-dyStringPrintf(dy, " replicate='%s',", el->replicate);
-dyStringPrintf(dy, " enrichedIn='%s',", el->enrichedIn);
-dyStringPrintf(dy, " ucscDb='%s',", el->ucscDb);
-dyStringPrintf(dy, " itemCount=%lld,", (long long)el->itemCount);
-dyStringPrintf(dy, " basesInItems=%lld,", (long long)el->basesInItems);
-dyStringPrintf(dy, " sampleCount=%lld,", (long long)el->sampleCount);
-dyStringPrintf(dy, " basesInSample=%lld,", (long long)el->basesInSample);
-dyStringPrintf(dy, " sampleBed='%s',", el->sampleBed);
-dyStringPrintf(dy, " mapRatio=%g,", el->mapRatio);
-dyStringPrintf(dy, " sampleCoverage=%g,", el->sampleCoverage);
-dyStringPrintf(dy, " depth=%g,", el->depth);
-dyStringPrintf(dy, " singleQaStatus=0,");
-dyStringPrintf(dy, " replicateQaStatus=0,");
-dyStringPrintf(dy, " part='%s',", el->part);
-dyStringPrintf(dy, " pairedEnd='%s',", el->pairedEnd);
-dyStringPrintf(dy, " qaVersion='%d',", el->qaVersion);
-dyStringPrintf(dy, " uniqueMapRatio=%g,", el->uniqueMapRatio);
-dyStringPrintf(dy, " lane='%s'", el->lane);
+sqlDyStringPrintf(dy, " format='%s',", el->format);
+sqlDyStringPrintf(dy, " outputType='%s',", el->outputType);
+sqlDyStringPrintf(dy, " experiment='%s',", el->experiment);
+sqlDyStringPrintf(dy, " replicate='%s',", el->replicate);
+sqlDyStringPrintf(dy, " enrichedIn='%s',", el->enrichedIn);
+sqlDyStringPrintf(dy, " ucscDb='%s',", el->ucscDb);
+sqlDyStringPrintf(dy, " itemCount=%lld,", (long long)el->itemCount);
+sqlDyStringPrintf(dy, " basesInItems=%lld,", (long long)el->basesInItems);
+sqlDyStringPrintf(dy, " sampleCount=%lld,", (long long)el->sampleCount);
+sqlDyStringPrintf(dy, " basesInSample=%lld,", (long long)el->basesInSample);
+sqlDyStringPrintf(dy, " sampleBed='%s',", el->sampleBed);
+sqlDyStringPrintf(dy, " mapRatio=%g,", el->mapRatio);
+sqlDyStringPrintf(dy, " sampleCoverage=%g,", el->sampleCoverage);
+sqlDyStringPrintf(dy, " depth=%g,", el->depth);
+sqlDyStringPrintf(dy, " singleQaStatus=0,");
+sqlDyStringPrintf(dy, " replicateQaStatus=0,");
+sqlDyStringPrintf(dy, " part='%s',", el->part);
+sqlDyStringPrintf(dy, " pairedEnd='%s',", el->pairedEnd);
+sqlDyStringPrintf(dy, " qaVersion='%d',", el->qaVersion);
+sqlDyStringPrintf(dy, " uniqueMapRatio=%g,", el->uniqueMapRatio);
+sqlDyStringPrintf(dy, " lane='%s'", el->lane);
 #if (CDWVALIDFILE_NUM_COLS != 24)
    #error "Please update this routine with new column"
 #endif
-dyStringPrintf(dy, " where id=%lld\n", (long long)id);
+sqlDyStringPrintf(dy, " where id=%lld\n", (long long)id);
 sqlUpdate(conn, dy->string);
 freeDyString(&dy);
 }
@@ -1491,22 +1511,7 @@ sqlSafef(query, sizeof(query),
 sqlUpdate(conn, query);
 }
 
-static char *mustReadSymlink(char *path, struct stat *sb)
-/* Read symlink or abort. FreeMem the returned value. */
-{
-ssize_t nbytes, bufsiz;
-// determine whether the buffer returned was truncated.
-bufsiz = sb->st_size + 1;
-char *symPath = needMem(bufsiz);
-nbytes = readlink(path, symPath, bufsiz);
-if (nbytes == -1) 
-    errnoAbort("readlink failure on symlink %s", path);
-if (nbytes == bufsiz)
-    errAbort("readlink returned buffer truncated\n");
-return symPath;
-}
-
-static int findSubmitSymlinkExt(char *submitFileName, char *submitDir, char **pPath, char **pLastPath, int *pSymlinkLevels)
+int findSubmitSymlinkExt(char *submitFileName, char *submitDir, char **pPath, char **pLastPath, int *pSymlinkLevels)
 /* Find the last symlink and real file in the chain from submitDir/submitFileName.
  * This is useful for when target of symlink in cdw/ gets renamed 
  * (e.g. license plate after passes validation), or removed (e.g. cdwReallyRemove* commands). 
@@ -1528,7 +1533,7 @@ while (TRUE)
 	break;
 	}
     if (lstat(path, &sb) == -1)
-	errnoAbort("stat failure on %s", path);
+	errnoAbort("lstat failure on %s", path);
     if ((sb.st_mode & S_IFMT) != S_IFLNK)
 	break;
 
@@ -1538,7 +1543,7 @@ while (TRUE)
 	errAbort("Too many symlinks followed: %d symlinks. Probably a symlink loop.", symlinkLevels);
 
     // read the symlink
-    char *symPath = mustReadSymlink(path, &sb);
+    char *symPath = mustReadSymlinkExt(path, &sb);
 
     // apply symPath to path
     char *newPath = mustPathRelativeToFile(path, symPath);
@@ -1571,7 +1576,8 @@ if (result == -1)  // path does not exist
     errAbort("path=[%s] does not exist following submitDir/submitFileName through symlinks.", path);
     }
 if (startsWith(cdwRootDir, path))
-    errAbort("Unexpected operation. The symlink %s points to %s. It should not point to a file already under cdwRoot %s", submitFileName, path, cdwRootDir);
+    errAbort("Unexpected operation. The symlink %s points to %s. It should not point to a file already under cdwRoot %s", 
+	submitFileName, path, cdwRootDir);
 freeMem(lastPath);
 return path;
 }
@@ -1584,55 +1590,11 @@ void replaceOriginalWithSymlink(char *submitFileName, char *submitDir, char *cdw
 char *path = testOriginalSymlink(submitFileName, submitDir);
 if (unlink(path) == -1)  // save space
     errnoAbort("unlink failure %s", path);
-if (symlink(cdwPath, path) == -1)  // replace with symlink
-    errnoAbort("symlink failure from %s to %s", path, cdwPath);
+makeSymLink(cdwPath, path);
 verbose(1, "%s converted to symlink to %s\n", path, cdwPath);
 freeMem(path);
 }
 
-
-
-void replaceOriginalWithSymlinkOrig(char *submitFileName, char *submitDir, char *cdwPath)
-/* For a file that was just copied, remove original and symlink to new one instead
- * to save space. Follows symlinks if any to the real file and replaces it with a symlink */
-{
-struct stat sb;
-
-char *path = mustExpandRelativePath(submitDir, submitFileName);
-
-int symlinkLevels = 0;
-while (TRUE)
-    {
-    if (lstat(path, &sb) == -1) 
-	errnoAbort("stat failure on %s", path);
-    if ((sb.st_mode & S_IFMT) != S_IFLNK)
-	break;
-
-    // follow the symlink
-    ++symlinkLevels;
-    if (symlinkLevels > 10)
-	errAbort("Too many symlinks followed: %d symlinks. Probably a symlink loop.", symlinkLevels);
-
-    // read the symlink
-    char *symPath = mustReadSymlink(path, &sb);
-
-    // apply symPath to path
-    char *newPath = mustPathRelativeToFile(path, symPath);
-    freeMem(path);
-    freeMem(symPath);
-    path = newPath;
-    }
-if ((sb.st_mode & S_IFMT) != S_IFREG)
-    errAbort("Expecting regular file. Followed symlinks to %s but it is not a regular file.", path);
-if (startsWith(cdwRootDir, path))
-    errAbort("Unexpected operation. The path %s should not point to a file under cdwRoot %s", path, cdwRootDir);
-if (unlink(path) == -1)  // save space
-    errnoAbort("unlink failure %s", path);
-if (symlink(cdwPath, path) == -1)  // replace with symlink
-    errnoAbort("symlink failure from %s to %s", path, cdwPath);
-verbose(1, "%s converted to symlink to %s\n", path, cdwPath);
-freeMem(path);
-}
 
 
 char *findSubmitSymlink(char *submitFileName, char *submitDir, char *oldPath)
@@ -1665,60 +1627,6 @@ freeMem(path);
 return lastPath;
 }
 
-
-char *findSubmitSymlinkOrig(char *submitFileName, char *submitDir, char *oldPath)
-/* Find the last symlink in the chain from submitDir/submitFileName.
- * This is useful for when target of symlink in cdw/ gets renamed 
- * (e.g. license plate after passes validation), or removed (e.g. cdwReallyRemove* commands). */
-{
-struct stat sb;
-char *lastPath = NULL;
-char *path = mustExpandRelativePath(submitDir, submitFileName);
-
-int symlinkLevels = 0;
-while (TRUE)
-    {
-    if (!fileExists(path))
-	{
-	warn("path=[%s] does not exist following submitDir/submitFileName through symlinks.", path);
-	return NULL;
-	}
-    if (lstat(path, &sb) == -1)
-	errnoAbort("stat failure on %s", path);
-    if ((sb.st_mode & S_IFMT) != S_IFLNK)
-	break;
-
-    // follow the symlink
-    ++symlinkLevels;
-    if (symlinkLevels > 10)
-	errAbort("Too many symlinks followed: %d symlinks. Probably a symlink loop.", symlinkLevels);
-
-    // read the symlink
-    char *symPath = mustReadSymlink(path, &sb);
-
-    // apply symPath to path
-    char *newPath = mustPathRelativeToFile(path, symPath);
-    freeMem(lastPath);
-    lastPath = path;
-    freeMem(symPath);
-    path = newPath;
-    }
-if ((sb.st_mode & S_IFMT) != S_IFREG)
-    errAbort("Expecting regular file. Followed symlinks to %s but it is not a regular file.", path);
-if (symlinkLevels < 1)
-    {
-    warn("Too few symlinks followed: %d symlinks. Where is the symlink created by cdwSubmit?", symlinkLevels);
-    return NULL;
-    }
-if (!sameString(path, oldPath))
-    {
-    warn("Found symlinks point to %s, expecting to find symlink pointing to old path %s", path, oldPath);
-    return NULL;
-    }
-
-freeMem(path);
-return lastPath;
-}
 
 void cdwReallyRemoveFile(struct sqlConnection *conn, char *submitDir, long long fileId, boolean unSymlinkOnly, boolean really)
 /* If unSymlinkOnly is NOT specified, removes all records of file from database and from Unix file system if 
@@ -1756,6 +1664,7 @@ if (really)
 	if (unlink(lastPath) == -1)  // drop about to be invalid symlink
 	    errnoAbort("unlink failure %s", lastPath);
 	copyFile(path, lastPath);
+	touchFileFromFile(path, lastPath);
 	chmod(lastPath, 0664);
 	freeMem(lastPath);
 	}
@@ -1865,12 +1774,12 @@ if (fchmod(fd, 0664) == -1)
 mustCloseFd(&fd);
 }
 
-void cdwBwaIndexPath(struct cdwAssembly *assembly, char indexPath[PATH_LEN])
-/* Fill in path to BWA index. */
+void cdwIndexPath(struct cdwAssembly *assembly, char indexPath[PATH_LEN])
+/* Fill in path to BWA/Bowtie index. */
 {
-safef(indexPath, PATH_LEN, "%s%s/bwaData/%s.fa", 
-    cdwValDataDir, assembly->ucscDb, assembly->ucscDb);
+safef(indexPath, PATH_LEN, "/dev/shm/btData/%s", assembly->ucscDb);
 }
+
 
 void cdwAsPath(char *format, char path[PATH_LEN])
 /* Convert something like "narrowPeak" in format to full path involving
@@ -1915,27 +1824,36 @@ void cdwAlignFastqMakeBed(struct cdwFile *ef, struct cdwAssembly *assembly,
     char *fastqPath, struct cdwValidFile *vf, FILE *bedF,
     double *retMapRatio,  double *retDepth,  double *retSampleCoverage, 
     double *retUniqueMapRatio, char *assay)
-/* Take a sample fastq and run bwa on it, and then convert that file to a bed. 
+/* Take a sample fastq, run the aligner on it and then convert that file to a bed. 
  * bedF and all the ret parameters can be NULL. */
 {
 // Figure out BWA index
 char genoFile[PATH_LEN];
-cdwBwaIndexPath(assembly, genoFile);
+cdwIndexPath(assembly, genoFile);
 
 // Trim reads if need be
 char trimmedFile[PATH_LEN];
 cdwTrimReadsForAssay(fastqPath, trimmedFile, assay);
 
-// Run BWA alignment
-char cmd[3*PATH_LEN], *saiName, *samName;
-saiName = cloneString(rTempName(cdwTempDir(), "cdwSample1", ".sai"));
-safef(cmd, sizeof(cmd), "bwa aln -t 3 %s %s > %s", genoFile, trimmedFile, saiName);
-mustSystem(cmd);
-
+char *samName;
 samName = cloneString(rTempName(cdwTempDir(), "ewdSample1", ".sam"));
-safef(cmd, sizeof(cmd), "bwa samse %s %s %s > %s", genoFile, saiName, trimmedFile, samName);
+
+char cmd[3*PATH_LEN];
+// We used to use bwa backtrack here ("bwa aln"), but this mode does not allow mmap indices
+// BWA mem allows preloaded mmap'ed indices, but it is very slow to start, like bowtie2
+// Also BWA mem and bowtie2 are local aligners, so their stats are very different and they do not seem
+// to have a "require 99% identity option", which is very, very strange.
+// So bowtie seemed like the best of both worlds, mmap and also global alignment
+// Max did various comparisons with 80 sample fastq files and the count of aligned reads were very very similar
+// for those files that have enough reads in them. Plots were in email to Jim/Clay.
+
+// -l 40 is seed length. Makes it a lot faster. Today's reads should be longer than 40 bp
+// -n 1 is the number of mismatches in the seed. lower this to 1 makes it a lot faster.
+// -mm activates mmap for the index, which is now in ramdisk
+// -S is for SAM output (so no more useless .sai temp files)
+// these options require a decently recent bowtie version, I used 1.2.2
+safef(cmd, sizeof(cmd), "bowtie -l 40 -n 1 --mm --threads 3 %s %s -S > %s", genoFile, trimmedFile, samName);
 mustSystem(cmd);
-remove(saiName);
 
 /* Scan sam file to calculate vf->mapRatio, vf->sampleCoverage and vf->depth. 
  * and also to produce little bed file for enrichment step. */
@@ -2196,6 +2114,8 @@ if (sameString(end, "1"))
     return "2";
 else if (sameString(end, "2"))
     return "1";
+else if (sameString(end, "cell_barcode") || sameString(end, "sample_barcode"))
+    return NULL;
 else
     {
     errAbort("Expecting 1 or 2, got %s in oppositeEnd", end);
@@ -2207,6 +2127,8 @@ struct cdwValidFile *cdwOppositePairedEnd(struct sqlConnection *conn, struct cdw
 /* Given one file of a paired end set of fastqs, find the file with opposite ends. */
 {
 char *otherEnd = cdwOppositePairedEndString(vf->pairedEnd);
+if (otherEnd == NULL)
+    return NULL;
 char query[1024];
 sqlSafef(query, sizeof(query), 
     "select cdwValidFile.* from cdwValidFile join cdwFile on cdwValidFile.fileId=cdwFile.id"
@@ -2645,6 +2567,83 @@ if (sameWord(rql->command, "count"))
     printf("%d\n", gMatchCount);
 }
 
+
+void cdwPrintSlRefList(struct slRef *results, struct slName *fieldNames, char *format, int limit)
+/* Print a linked list of results in ra, tsv, or csv format.  Each result should be a list of
+ * slPair key/values. */
+{
+int maxLimit = 10000;
+if (limit > maxLimit)
+    limit = maxLimit;
+int matchCount = 0;
+if (sameString(format, "csv"))
+    {
+    // Write csv header
+    struct slName *fieldName = fieldNames;
+    char *sep = "";
+    while (fieldName != NULL)
+        {
+        printf("%s%s", sep, fieldName->name);
+        sep = ",";
+        fieldName = fieldName->next;
+        }
+    printf("\n");
+    }
+if (sameString(format, "tsv"))
+    {
+    // Write tsv header
+    struct slName *fieldName = fieldNames;
+    char *sep = "";
+    printf("#");
+    while (fieldName != NULL)
+        {
+        printf("%s%s", sep, fieldName->name);
+        sep = "\t";
+        fieldName = fieldName->next;
+        }
+    printf("\n");
+    }
+
+struct slRef *result = results;
+while (result != NULL)
+    {
+    if (++matchCount > limit)
+        break;
+    struct slPair *keyval = result->val;
+    char *sep = "";
+    while (keyval != NULL)
+        {
+        char *val = keyval->val;
+        if (sameString(format, "ra") && !isEmpty(val))
+            printf("%s\t%s\n", keyval->name, val);
+        if (sameString(format, "csv"))
+            {
+            printf("%s", sep);
+            sep = ",";
+            val = emptyForNull(val);
+            // Check for embedded comma or existing quotes
+            if (strchr(val, ',') == NULL && strchr(val, '"') == NULL)
+                printf("%s", val);
+            else
+                {
+                printQuotedTsv(val);
+                }
+            }
+        if (sameString(format, "tsv"))
+            {
+            val = naForNull(val);
+            printf("%s%s", sep, val);
+            sep = "\t";
+            }
+        keyval = keyval->next;
+        }
+    printf("\n");
+    result = result->next;
+    }
+}
+
+#ifdef NOT_CURRENTLY_USED
+
 static struct dyString *getLoginBits(struct cart *cart)
 /* Get a little HTML fragment that has login/logout bit of menu */
 {
@@ -2652,25 +2651,25 @@ static struct dyString *getLoginBits(struct cart *cart)
 char *command = cartUsualString(cart, "cdwCommand", "home");
 char *sidString = cartSidUrlString(cart);
 char returnUrl[PATH_LEN*2];
-safef(returnUrl, sizeof(returnUrl), "/cgi-bin/cdwWebBrowse?cdwCommand=%s&%s",
+safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=%s&%s",
     command, sidString );
 char *encodedReturn = cgiEncode(returnUrl);
 
 /* Write a little html into loginBits */
 struct dyString *loginBits = dyStringNew(0);
-dyStringAppend(loginBits, "<li id=\"query\"><a href=\"");
+dyStringAppend(loginBits, "<a class=\"a-unstyled\" href=\"");
 char *userName = wikiLinkUserName();
 if (userName == NULL)
     {
     dyStringPrintf(loginBits, "../cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s&%s",
 	    encodedReturn, sidString);
-    dyStringPrintf(loginBits, "\">Login</a></li>");
+    dyStringPrintf(loginBits, "\"><span class=\"label label-login\">Login</span></a>");
     }
 else
     {
     dyStringPrintf(loginBits, "../cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s&%s",
 	    encodedReturn, sidString);
-    dyStringPrintf(loginBits, "\" id=\"logoutLink\">Logout %s</a></li>", userName);
+    dyStringPrintf(loginBits, "\" id=\"logoutLink\"><span class=\"label back-gray\">Logout %s</span></a>", userName);
 
     if (loginUseBasicAuth())
         wikiFixLogoutLinkWithJs();
@@ -2680,18 +2679,74 @@ else
 freez(&encodedReturn);
 return loginBits;
 }
+#endif
+
+char *cdwHeadTagDependencies(struct cart *cart, boolean makeAbsolute)
+/* Return page head dependencies string.  This is content that actually appears at the top
+ * of the page, in the head tag.  Optionally make links point to absolute URLs instead of relative. */
+{
+// page header dependencies html is in a stringified .h file
+struct dyString *dy = dyStringNew(4*1024);
+dyStringPrintf(dy, 
+#include "cdwHeadTagDependencies.h"
+       );
+
+char *headStr = cloneString(dy->string);
+if (!makeAbsolute)
+    return headStr;
+
+char *headStr2 = replaceChars(headStr, "../", "/");
+freez(&headStr);
+return headStr2;
+}
+
+char *cdwPageHeader(struct cart *cart, boolean makeAbsolute)
+/* Return page header string.  This is content that actually appears at the top
+ * of the page, like menu stuff.  Optionally make links point to absolute URLs instead of relative. */
+{
+// page header html is in a stringified .h file
+struct dyString *dy = dyStringNew(4*1024);
+dyStringPrintf(dy, 
+#include "cdwPageHeader.h"
+       );
+
+char *menubarStr = menuBarAddUiVars(dy->string, "/cgi-bin/cdw", cartSidUrlString(cart));
+if (!makeAbsolute)
+    return menubarStr;
+
+char *menubarStr2 = replaceChars(menubarStr, "../", "/");
+freez(&menubarStr);
+return menubarStr2;
+}
+
+char *cdwPageFooter(struct cart *cart, boolean makeAbsolute)
+/* Return page footer string.  This is content that appears in the page footer, like
+ * links to other institutions etc.  Optionally make any relative URLs into absolute
+ * URLs. */
+{
+// page footer html is in a stringified .h file
+struct dyString *dy = dyStringNew(4*1024);
+dyStringPrintf(dy, 
+#include "cdwPageFooter.h"
+    );
+
+char *menubarStr = menuBarAddUiVars(dy->string, "/cgi-bin/cdw", cartSidUrlString(cart));
+if (!makeAbsolute)
+    return menubarStr;
+
+char *menubarStr2 = replaceChars(menubarStr, "../", "/");
+freez(&menubarStr);
+return menubarStr2;
+}
 
 char *cdwLocalMenuBar(struct cart *cart, boolean makeAbsolute)
 /* Return menu bar string. Optionally make links in menubar to point to absolute URLs, not relative. */
 {
-struct dyString *loginBits = getLoginBits(cart);
-
 // menu bar html is in a stringified .h file
 struct dyString *dy = dyStringNew(4*1024);
 dyStringPrintf(dy, 
 #include "cdwNavBar.h"
-       , loginBits->string);
-
+        );
 
 char *menubarStr = menuBarAddUiVars(dy->string, "/cgi-bin/cdw", cartSidUrlString(cart));
 if (!makeAbsolute)

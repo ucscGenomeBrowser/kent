@@ -1,0 +1,835 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the thaSir1
+
+#########################################################################
+# photograph obtained
+#    (DONE - 2018-02-15 - Hiram)
+
+mkdir -p /hive/data/genomes/thaSir1/photo
+cd /hive/data/genomes/thaSir1/photo
+wget -O photoFile.jpg 'https://upload.wikimedia.org/wikipedia/commons/1/12/Thamnophis_sirtalis_%28Common_Garter_Snake%29.jpg'
+convert -quality 80 -sharpen 0 -normalize -geometry 400x400 photoFile.jpg Thamnophis_sirtalis.jpg
+
+cd /hive/data/genomes/thaSir1
+
+printf 'photoCreditURL\thttps://www.flickr.com/people/19731486@N07?rb=1
+photoCreditName Brian Gratwicke (Flickr)
+' > photoReference.txt
+
+   cat photoReference.txt
+photoCreditURL  https://www.flickr.com/people/19731486@N07?rb=1
+photoCreditName Brian Gratwicke (Flickr)
+
+#########################################################################
+#  Initial steps (DONE - 2018-03-12 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/thaSir1
+cd ~/kent/src/hg/makeDb/doc/thaSir1
+
+# best to use a most recent document with similar assembly structure
+# since it has the latest features and procedures:
+sed -e 's/petMar3/thaSir1/g; s/PetMar3/ThaSir1/g; s/DONE/TBD/g;' \
+    ../petMar3/initialBuild.txt > initialBuild.txt
+
+mkdir /hive/data/genomes/thaSir1/refseq
+cd /hive/data/genomes/thaSir1/refseq
+
+rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_other/Thamnophis_sirtalis/all_assembly_versions/GCF_001077635.1_Thamnophis_sirtalis-6.0/ ./
+
+# sent 527 bytes  received 1379603460 bytes  16927656.28 bytes/sec
+# total size is 1379432351  speedup is 1.00
+# real    1m21.027s
+
+# check assembly size for later reference:
+
+faSize G*0_genomic.fna.gz
+# 1424897867 bases (302274245 N's 1122623622 real 743820074 upper
+#	378803548 lower) in 7930 sequences in 1 files
+# Total size: mean 179684.5 sd 338299.0 min 880 (NW_013665609.1)
+#	max 3920154 (NW_013657680.1) median 26526
+# %26.58 masked total, %33.74 masked real
+
+# this information is from the top of
+#    thaSir1/refseq/GCF_001077635.1_Thamnophis_sirtalis-6.0_assembly_report.txt
+
+# Assembly name:  Thamnophis_sirtalis-6.0
+# Organism name:  Thamnophis sirtalis (snakes)
+# Isolate:  EDBJR-23777
+# Sex:  female
+# Taxid:          35019
+# BioSample:      SAMN03759628
+# BioProject:     PRJNA189551
+# Submitter:      The Genome Institute at Washington University School of Medicine (WUGSC)
+# Date:           2015-6-26
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# WGS project:    LFLD01
+# Assembly method: ALLPATHS-LG v. May 2015
+# Genome coverage: 72x
+# Sequencing technology: Illumina
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_001077635.2
+# RefSeq assembly accession: GCF_001077635.1
+# RefSeq assembly and GenBank assemblies identical: yes
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_001077645.2      GCF_001077645.1 Primary Assembly
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2018-03-12)
+    # arguments here are: <db> <clade> <trackDbDir> <assembly_report.txt>
+    cd /hive/data/genomes/thaSir1
+    $HOME/kent/src/hg/utils/automation/prepConfig.pl thaSir1 vertebrate \
+         reptiles ./refseq/*_assembly_report.txt > thaSir1.config.ra
+    # going to need a mitoAcc ?
+
+    # fixup commonName to: commonName Garter snake
+    # set mitoAcc to none, the refseq assembly did not have one
+    # reset orderKey to be correct for "Garter snake": 7000
+
+    # verify it looks sane
+    cat thaSir1.config.ra
+# config parameters for makeGenomeDb.pl:
+db thaSir1
+clade vertebrate
+genomeCladePriority 70
+scientificName Thamnophis sirtalis
+commonName Garter snake
+assemblyDate Jun. 2015
+assemblyLabel The Genome Institute at Washington University School of Medicine (WUGSC)
+assemblyShortLabel Thamnophis_sirtalis-6.0
+orderKey 7000
+mitoAcc notFound
+fastaFiles /hive/data/genomes/thaSir1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/thaSir1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir reptiles
+photoCreditURL  https://www.flickr.com/people/19731486@N07?rb=1
+photoCreditName Brian Gratwicke (Flickr)
+ncbiGenomeId 16688
+ncbiAssemblyId 472161
+ncbiAssemblyName Thamnophis_sirtalis-6.0
+ncbiBioProject 189551
+ncbiBioSample SAMN03759628
+genBankAccessionID GCF_001077635.1
+taxId 35019
+
+#############################################################################
+# setup UCSC named files (DONE - 2018-03-12 - Hiram)
+
+    mkdir /hive/data/genomes/thaSir1/ucsc
+    cd /hive/data/genomes/thaSir1/ucsc
+
+    # check for duplicate sequences:
+    time faToTwoBit -noMask ../refseq/G*0_genomic.fna.gz refseq.2bit
+    #  real    0m26.340s
+
+    twoBitDup refseq.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+    # the scripts creating the fasta here will be using this genbank.2bit file
+
+    # there is no assembly structure directory in the genbank release
+    # simply need to fix the contig names from .1 to v1
+
+    time zcat ../refseq/GCF_001077635.1_Thamnophis_sirtalis-6.0_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA//unplaced.scaf.fna.gz \
+       | sed -e 's/.1 Thamnophis.*/v1/;' | gzip -c > chrUn.fa.gz
+    # real    6m9.522s
+
+    # survey the gap structure:
+    twoBitInfo -nBed refseq.2bit stdout | gzip -c > refseq.N.bed.gz
+
+    zcat ../refseq/GCF_001077635.1_Thamnophis_sirtalis-6.0_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+       | sed -e 's/.1\t/v1\t/;' > chrUn.agp
+
+    # the AGP does not mark all the N's:
+    awk '$5 == "N"' chrUn.agp | ave -col=6 stdin | grep -w total
+# total 302196072.000000
+    zcat  refseq.N.bed.gz | awk '{print $3-$2}' | ave stdin | grep -w total
+# total 302274245.000000
+    calc 302274245 - 302196072
+# 302274245 - 302196072 = 78173.000000
+
+    # verify fasta and AGPs agree
+    time faToTwoBit chrUn.fa.gz test.2bit
+    # real    0m32.002s
+
+    time checkAgpAndFa chrUn.agp test.2bit 2>&1 | tail -4
+    # All AGP and FASTA entries agree - both files are valid
+    # real    0m11.384s
+
+    # and no sequence lost from original:
+    twoBitToFa test.2bit stdout | faSize stdin
+# 1424897867 bases (302274245 N's 1122623622 real 1122623622 upper 0 lower)
+#	in 7930 sequences in 1 files
+# Total size: mean 179684.5 sd 338299.0 min 880 (NW_013665609v1)
+#	max 3920154 (NW_013657680v1) median 26526
+# %0.00 masked total, %0.00 masked real
+    # original:
+# 1424897867 bases (302274245 N's 1122623622 real 743820074 upper
+#	378803548 lower) in 7930 sequences in 1 files
+
+    # no longer need these temporary 2bit files
+    rm refseq.2bit test.2bit refseq.N.bed.gz
+
+    # run up idKeys for later use for ucscToRefSeq and chromAlias
+
+    mkdir /hive/data/genomes/thaSir1/refseq/idKeys
+    cd /hive/data/genomes/thaSir1/refseq/idKeys
+    faToTwoBit \
+	../GCF_001077635.1_Thamnophis_sirtalis-6.0_genomic.fna.gz \
+	refseq.thaSir1.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` -twoBit=`pwd`/refseq.thaSir1.2bit \
+	refseqThaSir1) > do.log 2>&1
+    # real    7m41.207s
+    cat refseqThaSir1.keySignature.txt
+    # 7ee1e6311557786133154771c3da3ada
+
+#############################################################################
+#  Initial database build (DONE - 2018-03-12 - Hiram)
+
+    cd /hive/data/genomes/thaSir1
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp thaSir1.config.ra) > agp.log 2>&1
+    #  *** All done!  (through the 'agp' step)
+    # real    1m22.411s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db thaSir1.config.ra) > db.log 2>&1
+    # real    9m25.908s
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add thaSir1 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/thaSir1
+    ln -s `pwd`/thaSir1.unmasked.2bit /gbdb/thaSir1/thaSir1.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2018-03-12 - Hiram)
+    mkdir /hive/data/genomes/thaSir1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/thaSir1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/thaSir1/thaSir1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku thaSir1) > do.log 2>&1
+    # real    3m38.200s
+
+    cat fb.thaSir1.cpgIslandExtUnmasked.txt
+    # 18072438 bases of 1122701795 (1.610%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2018-03-12 - Hiram)
+    mkdir /hive/data/genomes/thaSir1/bed/cytoBand
+    cd /hive/data/genomes/thaSir1/bed/cytoBand
+    makeCytoBandIdeo.csh thaSir1
+
+##########################################################################
+# run up idKeys files for chromAlias (DONE - 2018-03-12 - Hiram)
+    mkdir /hive/data/genomes/thaSir1/bed/idKeys
+    cd /hive/data/genomes/thaSir1/bed/idKeys
+
+    time (doIdKeys.pl -twoBit=/hive/data/genomes/thaSir1/thaSir1.unmasked.2bit -buildDir=`pwd` thaSir1) > do.log 2>&1 &
+    # real    7m42.466s
+
+    cat thaSir1.keySignature.txt
+    #   7ee1e6311557786133154771c3da3ada
+
+##########################################################################
+# run up gapOverlap track (DONE - 2018-03-12 - Hiram)
+    mkdir /hive/data/genomes/thaSir1/bed/gapOverlap
+    cd /hive/data/genomes/thaSir1/bed/gapOverlap
+
+    time (doGapOverlap.pl thaSir1 \
+       -twoBit="/hive/data/genomes/thaSir1/thaSir1.unmasked.2bit" \
+           -buildDir=`pwd`) > do.log 2>&1
+    # real    14m16.065s
+
+    cat fb.thaSir1.gapOverlap.txt
+    # 813702 bases of 1424897867 (0.057%) in intersection
+
+##########################################################################
+# run up tandemDups track (DONE - 2018-03-15 - Hiram)
+    mkdir /hive/data/genomes/thaSir1/bed/tandemDups
+    cd /hive/data/genomes/thaSir1/bed/tandemDups
+
+    time (~/kent/src/hg/utils/automation/doTandemDup.pl thaSir1) > do.log 2>&1
+    # real    30m34.636s
+
+    cat fb.thaSir1.tandemDups.txt
+    # 31689590 bases of 1424897867 (2.224%) in intersection
+
+    bigBedInfo thaSir1.tandemDups.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 13
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 224,609
+# primaryDataSize: 6,499,638
+# primaryIndexSize: 160,696
+# zoomLevels: 6
+# chromCount: 4709
+# basesCovered: 421,569,139
+# meanDepth (of bases covered): 2.406379
+# minDepth: 1.000000
+# maxDepth: 109.000000
+# std of depth: 2.967056
+
+##########################################################################
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2018-03-12 - Hiram)
+    # the sequence here is working for a 'refseq' assembly
+    # beware of a chrM situation may be specific depending upon what is
+    # available in the assembly
+
+    # need the idKeys for the genbank sequence:
+    mkdir /hive/data/genomes/thaSir1/genbank/idKeys
+    faToTwoBit /hive/data/outside/ncbi/genomes/genbank/vertebrate_other/Thamnophis_sirtalis/all_assembly_versions/GCA_001077635.2_Thamnophis_sirtalis-6.0/GCA_001077635.2_Thamnophis_sirtalis-6.0_genomic.fna.gz \
+        genbank.thaSir1.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` -twoBit=`pwd`/genbank.thaSir1.2bit \
+	genbankThaSir1) > do.log 2>&1
+    # real    21m35.295s
+
+    cat genbankThaSir1.keySignature.txt
+    #  7ee1e6311557786133154771c3da3ada
+
+    mkdir /hive/data/genomes/thaSir1/bed/ucscToINSDC
+    cd /hive/data/genomes/thaSir1/bed/ucscToINSDC
+
+    join -t$'\t' ../idKeys/thaSir1.idKeys.txt \
+	../../genbank/idKeys/genbankThaSir1.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToINSDC.bed
+
+    join -t$'\t' ../idKeys/thaSir1.idKeys.txt \
+	../../refseq/idKeys/refseqThaSir1.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+
+    # should be same line counts throughout, only one for the RefSeq:
+    wc -l * ../../chrom.sizes
+    #	7930 ucscToINSDC.bed
+    #	7930 ucscToRefSeq.bed
+    #	7930 ../../chrom.sizes
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab thaSir1 ucscToINSDC stdin ucscToINSDC.bed
+    # should be the same for ucscToRefSeq:
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  14
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' \
+         | hgLoadSqlTab thaSir1 ucscToRefSeq stdin ucscToRefSeq.bed
+
+    # checkTableCoords should be silent
+    checkTableCoords thaSir1
+
+    # each should cover %100 entirely:
+    featureBits -countGaps thaSir1 ucscToINSDC
+    # 1424897867 bases of 1424897867 (100.000%) in intersection
+
+    featureBits -countGaps thaSir1 ucscToRefSeq
+    # 1424897867 bases of 1424897867 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2018-03-14 - Hiram)
+
+    mkdir /hive/data/genomes/thaSir1/bed/chromAlias
+    cd /hive/data/genomes/thaSir1/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' thaSir1 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' thaSir1 \
+        > ucsc.genbank.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+	> thaSir1.chromAlias.tab
+
+for t in refseq genbank
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t thaSir1.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 7930 =? 7930 OK
+# checking genbank: 7930 =? 7930 OK
+
+    hgLoadSqlTab thaSir1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        thaSir1.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2018-03-12 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/reptiles/thaSir1
+
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" thaSir1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
+#  175977 LFLD.1
+
+    # implies a rule: 'LFLD01[0-9]{5}p\[0-9]*(.1)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" thaSir1 | wc -l
+    # 175977
+
+    hgsql -N -e "select frag from gold;" thaSir1 \
+       | egrep -e 'LFLD01[0-9]{5}[0-9]*(.1)?' | wc -l
+    # 175977
+
+    hgsql -N -e "select frag from gold;" thaSir1 \
+       | egrep -v -e 'LFLD01[0-9]{5}[0-9]*(.1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/reptile/thaSir1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex LFLD01[0-9]{5}[0-9]*(.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box for these name patterns
+
+##########################################################################
+# running repeat masker (DONE - 2018-03-12 - Hiram)
+    mkdir /hive/data/genomes/thaSir1/bed/repeatMasker
+    cd /hive/data/genomes/thaSir1/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku thaSir1) > do.log 2>&1 &
+    # real    100m48.992s
+
+
+    egrep "bases|Total|masked" faSize.rmsk.txt \
+	| fold -w 75 -s  | sed -e 's/^/# /;'
+# 1424897867 bases (302274245 N's 1122623622 real 1060000477 upper 62623145 
+# lower) in 7930 sequences in 1 files
+# Total size: mean 179684.5 sd 338299.0 min 880 (NW_013665609v1) max 3920154 
+# (NW_013657680v1) median 26526
+# %4.39 masked total, %5.58 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;                                            *
+
+    time featureBits -countGaps thaSir1 rmsk
+    # 62634553 bases of 1424897867 (4.396%) in intersection
+    # real    0m8.743s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' thaSir1 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 62634553.000000
+    # real    0m5.735s
+
+##########################################################################
+# running simple repeat (DONE - 2018-03-12 - Hiram)
+
+    mkdir /hive/data/genomes/thaSir1/bed/simpleRepeat
+    cd /hive/data/genomes/thaSir1/bed/simpleRepeat
+    # using trf409 3 here a bit smaller genome (human == 6)
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409 3 thaSir1) > do.log 2>&1 &
+    # real    6m3.936s
+
+    cat fb.simpleRepeat
+    # 33580120 bases of 1122701795 (2.991%) in intersection
+
+    # adding this trfMask to the other masking
+    cd /hive/data/genomes/thaSir1
+
+    # when using the Window Masker result:
+    twoBitMask bed/windowMasker/thaSir1.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  thaSir1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # when using Rmsk results, add to rmsk after it is done:
+#    twoBitMask thaSir1.rmsk.2bit \
+#        -add bed/simpleRepeat/trfMask.bed thaSir1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    twoBitToFa thaSir1.2bit stdout | faSize stdin > faSize.thaSir1.2bit.txt
+    egrep "bases|Total|masked" faSize.thaSir1.2bit.txt \
+	| fold -w 78 -s  | sed -e 's/^/# /;'
+# 1424897867 bases (302274245 N's 1122623622 real 736577963 upper 386045659 
+# lower) in 7930 sequences in 1 files
+# Total size: mean 179684.5 sd 338299.0 min 880 (NW_013665609v1) max 3920154 
+# (NW_013657680v1) median 26526
+# %27.09 masked total, %34.39 masked real
+
+    # reset the symlink
+    rm /gbdb/thaSir1/thaSir1.2bit
+    ln -s `pwd`/thaSir1.2bit /gbdb/thaSir1/thaSir1.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2018-03-12 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/thaSir1/bed/microsat
+    cd /cluster/data/thaSir1/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed thaSir1 microsat microsat.bed
+    # Read 30214 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2018-03-12 - Hiram)
+
+    mkdir /hive/data/genomes/thaSir1/bed/windowMasker
+    cd /hive/data/genomes/thaSir1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev thaSir1) > do.log 2>&1
+    # real    156m2.988s
+
+    # Masking statistics
+    egrep "bases|Total|masked" faSize.thaSir1.cleanWMSdust.txt \
+	| fold -w 78 -s  | sed -e 's/^/# /;'
+# 1424897867 bases (302274245 N's 1122623622 real 736777531 upper 385846091 
+# lower) in 7930 sequences in 1 files
+# Total size: mean 179684.5 sd 338299.0 min 880 (NW_013665609v1) max 3920154 
+# (NW_013657680v1) median 26526
+# %27.08 masked total, %34.37 masked real
+
+    cat fb.thaSir1.rmsk.windowmaskerSdust.txt
+    # 55835996 bases of 1424897867 (3.919%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2018-03-13 - Hiram)
+    mkdir /hive/data/genomes/thaSir1/bed/cpgIslands
+    cd /hive/data/genomes/thaSir1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku thaSir1) > do.log 2>&1 &
+    # real    3m5.988s
+
+    cat fb.thaSir1.cpgIslandExt.txt
+    # 10394140 bases of 1122701795 (0.926%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2018-03-13 - Hiram)
+    mkdir /hive/data/genomes/thaSir1/bed/genscan
+    cd /hive/data/genomes/thaSir1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku thaSir1) > do.log 2>&1 &
+    # real    27m48.117s
+
+    cat fb.thaSir1.genscan.txt
+    # 26205234 bases of 1122701795 (2.334%) in intersection
+
+    cat fb.thaSir1.genscanSubopt.txt
+    # 27408024 bases of 1122701795 (2.441%) in intersection
+
+#############################################################################
+# augustus gene track (DONE - 2018-03-13 - Hiram)
+
+    mkdir /hive/data/genomes/thaSir1/bed/augustus
+    cd /hive/data/genomes/thaSir1/bed/augustus
+
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+     -species=chicken -dbHost=hgwdev -workhorse=hgwdev thaSir1) \
+	> do.log 2>&1 &
+    # real    70m5.863s
+
+    cat fb.thaSir1.augustusGene.txt
+    # 26140884 bases of 1122701795 (2.328%) in intersection
+
+##############################################################################
+# lastz/chain/net swap human/hg38 (DONE - 2018-03-14 - Hiram)
+
+    # alignment on hg38
+    cd /hive/data/genomes/hg38/bed/lastzThaSir1.2018-02-13
+    cat fb.hg38.chainThaSir1Link.txt
+    # 99838535 bases of 3049335806 (3.274%) in intersection
+
+    cat fb.hg38.chainSynThaSir1Link.txt
+    # 29432396 bases of 3049335806 (0.965%) in intersection
+
+    cat fb.hg38.chainRBestThaSir1Link.txt
+    # 66452884 bases of 3049335806 (2.179%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/thaSir1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/thaSir1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzThaSir1.2018-02-13/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1 &
+    #  real    16m52.956s
+
+    cat fb.thaSir1.chainHg38Link.txt
+    # 75915958 bases of 1122701795 (6.762%) in intersection
+
+    cat fb.thaSir1.chainSynHg38Link.txt
+    # 28865261 bases of 1122701795 (2.571%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` thaSir1 hg38)\
+	 > rbest.log 2>&1
+    # real    269m56.160s
+
+    cat fb.thaSir1.chainRBestHg38Link.txt
+    # 66545073 bases of 1122701795 (5.927%) in intersection
+
+##############################################################################
+# lastz/chain/net swap mouse/mm10 (DONE - 2018-03-13 - Hiram)
+
+    # original alignment to mm10
+    cd /hive/data/genomes/mm10/bed/lastzThaSir1.2018-03-13
+    cat fb.mm10.chainThaSir1Link.txt
+    #	78464036 bases of 2652783500 (2.958%) in intersection
+
+    cat fb.mm10.chainRBestThaSir1Link.txt
+    # 54099233 bases of 2652783500 (2.039%) in intersection
+
+    #	and for the swap
+    mkdir /hive/data/genomes/thaSir1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/thaSir1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 -syntenicNet \
+	/hive/data/genomes/mm10/bed/lastzThaSir1.2018-03-13/DEF \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+           -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1 &
+    #	real    11m28.892s
+
+    cat  fb.thaSir1.chainMm10Link.txt
+    #	63814138 bases of 1122701795 (5.684%) in intersection
+    cat fb.thaSir1.chainSynMm10Link.txt
+    # 20728394 bases of 1122701795 (1.846%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` thaSir1 mm10) \
+	> rbest.log 2>&1 &
+    # real    234m31.934s
+
+    cat fb.thaSir1.chainRBestMm10Link.txt
+    # 54778217 bases of 1122701795 (4.879%) in intersection
+
+##############################################################################
+# Create kluster run files (DONE - 2018-03-13 - Hiram)
+
+    # numerator is thaSir1 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap thaSir1 gap
+    # 302196072 bases of 1122701795 (26.917%) in intersection
+    #                     ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 1122701795 / 2861349177 \) \* 1024
+    #  ( 1122701795 / 2861349177 ) * 1024 = 401.784811
+
+    # ==> use -repMatch=400 according to size scaled down from 1024 for human.
+    #   and rounded to nearest 50
+    cd /hive/data/genomes/thaSir1
+    blat thaSir1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/thaSir1.11.ooc \
+        -repMatch=400
+    #   Wrote 29799 overused 11-mers to jkStuff/thaSir1.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    # there are no non-bridged gaps in this contig assembly
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' thaSir1 \
+        | sort -k7,7nr | ave -col=7 stdin
+# Q1 127644.000000
+# median 231535.000000
+# Q3 500000.000000
+# average 280957.457875
+# min 50429.000000
+# max 500000.000000
+# count 273
+
+    # minimum non-bridged gap is  50000
+#    gapToLift -verbose=2 -minGap=50000 thaSir1 jkStuff/nonBridged.lft \
+#       -bedFile=jkStuff/nonBridged.bed
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2018-03-19 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism             mrnaCnt   estCnt  refSeqCnt
+    # Thamnophis sirtalis     9       0       0
+
+    # edit src/lib/gbGenome.c to add thaSirNames definitions
+# static char *thaSirNames[] = {"Thamnophis sirtalis", NULL};
+#             . . .
+#     {"thaSir", thaSirNames},
+
+    git commit -m "Added thaSir1/Thamnophis sirtalis/Garter snake; refs #16028" src/lib/gbGenome.c
+    git push
+    make install-server
+
+    # edit etc/genbank.conf to add thaSir1 just after anoCar1
+
+# thaSir1 (Thamnophis sirtalis/Garter snake taxId 35019 GCF_001077635.1)
+#          7930 contigs
+thaSir1.serverGenome = /hive/data/genomes/thaSir1/thaSir1.2bit
+thaSir1.clusterGenome = /hive/data/genomes/thaSir1/thaSir1.2bit
+thaSir1.ooc = /hive/data/genomes/jkStuff/thaSir1.11.ooc
+thaSir1.lift = no
+thaSir1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+thaSir1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+thaSir1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+thaSir1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+thaSir1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+thaSir1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+# defaults yes: genbank.mrna.native.load genbank.mrna.native.loadDesc
+# yes: genbank.est.native.load refseq.mrna.native.load
+# yes: refseq.mrna.native.loadDesc refseq.mrna.xeno.load
+# yes: refseq.mrna.xeno.loadDesc
+# defaults no: genbank.mrna.xeno.load genbank.mrna.xeno.loadDesc
+# no: genbank.est.native.loadDesc genbank.est.xeno.load
+# no: genbank.est.xeno.loadDesc
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+thaSir1.downloadDir = thaSir1
+thaSir1.perChromTables = no
+# thaSir1.upstreamGeneTbl = ensGene
+
+    git commit -m \
+     'adding thaSir1 - Thamnophis sirtalis/Garter snake refs #16028' \
+	 etc/genbank.conf
+    # enable daily alignment and update of hgwdev
+    # add thaSir1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding thaSir1 to the update alignments refs #16028' etc/align.dbs etc/hgwdev.dbs
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # wait a couple days, the automatic daily runs of genbank will pick
+    # this up and get the initial run done
+
+#############################################################################
+# ncbiRefSeq (DONE - 2018-03-15 - Hiram)
+#       when assembly is from refseq, can run up this track, not so genbank
+
+    mkdir /hive/data/genomes/thaSir1/bed/ncbiRefSeq
+    cd /hive/data/genomes/thaSir1/bed/ncbiRefSeq
+ 
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Thamnophis_sirtalis \
+      GCF_001077635.1_Thamnophis_sirtalis-6.0 thaSir1) > do.log 2>&1
+    # real    2m49.739s
+
+    cat fb.ncbiRefSeq.thaSir1.txt
+    #  43026874 bases of 1122701795 (3.832%) in intersection
+
+    # interesting to intersect with refGene track
+    featureBits thaSir1 -enrichment ncbiRefSeq refGene
+
+#############################################################################
+#  BLATSERVERS ENTRY (DONE - 2018-03-14 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("thaSir1", "blat1c", "17902", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("thaSir1", "blat1c", "17903", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to NOTCH3 gene location as found by blat of the cDNA
+##  (DONE - 2018-03-14 - Hiram)
+## This gene works in concert with the FGF8/Wnt3a gradient to construct
+## the extended vertebrate with the 'somitogenesis clock'
+##  https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3394116/
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="NW_013657986v1:596051-618240"
+	where name="thaSir1";' hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2018-03-20 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # verify all required tables are present
+    ~/kent/src/hg/utils/automation/verifyBrowser.pl thaSir1
+# 58 tables in database thaSir1 - Garter snake, Thamnophis sirtalis
+# verified 58 tables, 0 extra tables, 9 optional tables
+# NCBI RefSeq genes     9 tables
+# 6 genbank tables found
+# verified 43 tables, 0 missing tables
+
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=thaSir1 -tableCoverage all.joiner
+    joinerCheck -database=thaSir1 -times all.joiner
+    joinerCheck -database=thaSir1 -keys all.joiner
+
+
+    cd /hive/data/genomes/thaSir1
+    time (makeDownloads.pl -workhorse=hgwdev thaSir1) > downloads.log 2>&1
+    #  real    11m32.203s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/thaSir1/pushQ
+    cd /hive/data/genomes/thaSir1/pushQ
+  time (makePushQSql.pl -redmineList thaSir1) > thaSir1.pushQ.sql 2> stderr.out
+    #  real    3m59.567s
+    # remove the tandemDups from the push
+    sed -i -e "/tandemDups/d" redmine.thaSir1.table.list
+    sed -i -e "/Tandem Dups/d" redmine.thaSir1.releaseLog.txt
+    sed -i -e "/gapOverlap/d" redmine.thaSir1.table.list
+    sed -i -e "/Gap Overlaps/d" redmine.thaSir1.releaseLog.txt
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: thaSir1 does not have seq
+    # WARNING: thaSir1 does not have extFile
+
+    ## there are warnings about the RBest and Syn chainNet tables, which we
+    ## are not interested in at this time.  They can be left out.
+
+    # verify the file listings are valid, should be no output to stderr:
+    cat redmine.thaSir1.file.list \
+        | while read L; do ls -ogL $L; done  > /dev/null
+
+    # to verify the database.table list is correct, should be the same
+    # line count for these two commands:
+    wc -l redmine.thaSir1.table.list
+    # 46 redmine.thaSir1.table.list
+    awk -F'.' '{
+printf "hgsql -N -e \"show table status like '"'"'%s'"'"';\" %s\n", $2, $1
+}' redmine.thaSir1.table.list | while read L; do eval $L; done | wc -l
+    # 46
+
+    # enter the path names to these files in the redmine issue to
+    # make QA Ready:
+    ls `pwd`/redmine*
+
+/hive/data/genomes/thaSir1/pushQ/redmine.thaSir1.file.list
+/hive/data/genomes/thaSir1/pushQ/redmine.thaSir1.releaseLog.txt
+/hive/data/genomes/thaSir1/pushQ/redmine.thaSir1.table.list
+
+#########################################################################

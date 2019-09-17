@@ -104,6 +104,16 @@ printf("<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1
      );
 }
 
+void webCirmPragmasEtc()
+/* Print out stuff similar to webPragmasEtc (don't cache us, character set, etc.), but
+ * use values appropriate for a more modern website (like CIRM). */
+{
+printf("\t\t<meta charset=\"windows-1252\">\n"   // Be nice to be utf-8, but that's a bigger issue to tackle
+    "\t\t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n"
+    "\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"
+    "\t\t<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->\n");
+}
+
 void webStartText()
 /* output the head for a text page */
 {
@@ -316,7 +326,7 @@ void webStart(struct cart *theCart, char *db, char *format, ...)
 {
 va_list args;
 va_start(args, format);
-webStartWrapper(theCart, db, format, args, TRUE, TRUE);
+webStartWrapper(theCart, db, format, args, TRUE, FALSE);
 va_end(args);
 }
 
@@ -455,7 +465,9 @@ if (hgGateway)
     {
     printf(
         #include "jWestHeader.h"
-               , csp, title);
+               , csp, title
+               , webTimeStampedLinkToResource("HGStyle.css", TRUE)
+               , webTimeStampedLinkToResource("jWest.css", TRUE));
     }
 else
     {
@@ -892,6 +904,9 @@ void getDbGenomeClade(struct cart *cart, char **retDb, char **retGenome,
 {
 boolean gotClade = hGotClade();
 *retDb = cgiOptionalString(dbCgiName);
+if (*retDb == NULL)  // if db is not in URL, but genome is, use it for db 
+    *retDb = cgiOptionalString(hgHubGenome);
+
 *retGenome = cgiOptionalString(orgCgiName);
 *retClade = cgiOptionalString(cladeCgiName);
 
@@ -1265,7 +1280,8 @@ char *linkFull = dyStringCannibalize(&linkWithTimestamp);
 char *link = linkFull;
 if (docRoot != NULL)
     {
-    link = cloneString(linkFull + strlen(docRoot) + 1);
+    struct dyString *relativeLink = dyStringCreate("../%s", linkFull + strlen(docRoot) + 1);
+    link = dyStringCannibalize(&relativeLink);
     freeMem(linkFull);
     }
 
@@ -1273,11 +1289,11 @@ if (wrapInHtml) // wrapped for christmas
     {
     struct dyString *wrapped = dyStringNew(0);
     if (js)
-        dyStringPrintf(wrapped,"<script type='text/javascript' SRC='../%s'></script>\n", link);
+        dyStringPrintf(wrapped,"<script type='text/javascript' SRC='%s'></script>\n", link);
     else if (style)
-        dyStringPrintf(wrapped,"<link rel='stylesheet' href='../%s' type='text/css'>\n", link);
+        dyStringPrintf(wrapped,"<link rel='stylesheet' href='%s' type='text/css'>\n", link);
     else // Will be image, since these are the only three choices allowed
-        dyStringPrintf(wrapped,"<IMG src='../%s' />\n", link);
+        dyStringPrintf(wrapped,"<IMG src='%s' />\n", link);
     freeMem(link);
     link = dyStringCannibalize(&wrapped);
     }
@@ -1420,7 +1436,7 @@ if(scriptName)
                     cartOptionalString(cart, "g")));
     if (track && cart && db &&
         (endsWith(scriptName, "hgc") || endsWith(scriptName, "hgTrackUi") ||
-         endsWith(scriptName, "hgGene")))
+         endsWith(scriptName, "hgGtexTrackSettings") || endsWith(scriptName, "hgGene")))
         {
         struct trackDb *tdb = hTrackDbForTrack(db, track);
         if (tdb)
@@ -1558,7 +1574,7 @@ if (thisNodeStr)   // if geo-mirroring is enabled
         int thisNode = sqlUnsigned(thisNodeStr);
         struct sqlConnection *centralConn = hConnectCentral();
         char *ipStr = cgiRemoteAddr();
-        int node = defaultNode(centralConn, ipStr);
+        int node = geoMirrorDefaultNode(centralConn, ipStr);
 
         // if our node is not the node that's closest.
         if (thisNode != node)

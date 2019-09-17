@@ -2245,7 +2245,7 @@ def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, annov
         trackDbFname = join(outDir, "trackDb.txt")
         writeVcfSummary(htmlFh, trackDbFname, cellInfo, annovarDir, maniFname, pipeline, tmpDir)
     #htmlFh.write("<h2>Dendrogram</h2>")
-    #htmlFh.write("<a href='http://hgwdev-ceisenhart.cse.ucsc.edu/~ceisenhart/radialDendrograms/cirm/quake/quakeBrainGeo1/sleuthGeneClusters2.html'>Link to dendrogram page</a>")
+    #htmlFh.write("<a href='http://hgwdev-ceisenhart.soe.ucsc.edu/~ceisenhart/radialDendrograms/cirm/quake/quakeBrainGeo1/sleuthGeneClusters2.html'>Link to dendrogram page</a>")
     # activate the collapser
     #htmlFh.write("""
 #<script>

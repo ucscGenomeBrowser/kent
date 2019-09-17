@@ -10,60 +10,63 @@
 #include "sqlNum.h"
 #include "jsonParse.h"
 
-static struct jsonElement *newJsonElement(jsonElementType type)
+static struct jsonElement *newJsonElementLm(jsonElementType type, struct lm *lm)
 // generic constructor for a jsonElement; callers fill in the appropriate value
 {
 struct jsonElement *ele;
-AllocVar(ele);
+if (lm)
+    lmAllocVar(lm, ele)
+else
+    AllocVar(ele);
 ele->type = type;
 return ele;
 }
 
-struct jsonElement *newJsonString(char *str)
+struct jsonElement *newJsonStringLm(char *str, struct lm *lm)
 {
-struct jsonElement *ele = newJsonElement(jsonString);
-ele->val.jeString = cloneString(str);
+struct jsonElement *ele = newJsonElementLm(jsonString, lm);
+ele->val.jeString = lm ? lmCloneString(lm, str) : cloneString(str);
 return ele;
 }
 
-struct jsonElement *newJsonBoolean(boolean val)
+struct jsonElement *newJsonBooleanLm(boolean val, struct lm *lm)
 {
-struct jsonElement *ele = newJsonElement(jsonBoolean);
+struct jsonElement *ele = newJsonElementLm(jsonBoolean, lm);
 ele->val.jeBoolean = val;
 return ele;
 }
 
-struct jsonElement *newJsonNumber(long val)
+struct jsonElement *newJsonNumberLm(long val, struct lm *lm)
 {
-struct jsonElement *ele = newJsonElement(jsonNumber);
+struct jsonElement *ele = newJsonElementLm(jsonNumber, lm);
 ele->val.jeNumber = val;
 return ele;
 }
 
-struct jsonElement *newJsonDouble(double val)
+struct jsonElement *newJsonDoubleLm(double val, struct lm *lm)
 {
-struct jsonElement *ele = newJsonElement(jsonDouble);
+struct jsonElement *ele = newJsonElementLm(jsonDouble, lm);
 ele->val.jeDouble = val;
 return ele;
 }
 
-struct jsonElement *newJsonObject(struct hash *h)
+struct jsonElement *newJsonObjectLm(struct hash *h, struct lm *lm)
 {
-struct jsonElement *ele = newJsonElement(jsonObject);
+struct jsonElement *ele = newJsonElementLm(jsonObject, lm);
 ele->val.jeHash = h;
 return ele;
 }
 
-struct jsonElement *newJsonList(struct slRef *list)
+struct jsonElement *newJsonListLm(struct slRef *list, struct lm *lm)
 {
-struct jsonElement *ele = newJsonElement(jsonList);
+struct jsonElement *ele = newJsonElementLm(jsonList, lm);
 ele->val.jeList = list;
 return ele;
 }
 
-struct jsonElement *newJsonNull()
+struct jsonElement *newJsonNullLm(struct lm *lm)
 {
-struct jsonElement *ele = newJsonElement(jsonNull);
+struct jsonElement *ele = newJsonElementLm(jsonNull, lm);
 ele->val.jeNull = NULL;
 return ele;
 }
@@ -76,12 +79,60 @@ if(h->type != jsonObject)
 hashReplace(h->val.jeHash, name, ele);
 }
 
-void jsonListAdd(struct jsonElement *list, struct jsonElement *ele)
+void jsonListCat(struct jsonElement *listA, struct jsonElement *listB)
+/* Add all values of listB to the end of listA. Neither listA nor listB can be NULL. */
+{
+if (!listA || !listB || listA->type != jsonList || listB->type != jsonList)
+    errAbort("jsonListMerge: both arguments must be non-NULL and have type jsonList");
+struct slRef *listAVals = jsonListVal(listA, "jsonListCat:listA");
+struct slRef *listBVals = jsonListVal(listB, "jsonListCat:listB");
+if (listAVals == NULL)
+    listA->val.jeList = listBVals;
+else
+    {
+    struct slRef *ref = listAVals;
+    while (ref && ref->next)
+        ref = ref->next;
+    ref->next = listBVals;
+    }
+}
+
+void jsonObjectMerge(struct jsonElement *objA, struct jsonElement *objB)
+/* Recursively merge fields of objB into objA.  Neither objA nor objB can be NULL.
+ * If objA and objB each have a list child with the same key then concatenate the lists.
+ * If objA and objB each have an object child with the same key then merge the object children.
+ * If objA and objB each have a child of some other type then objB's child replaces objA's child. */
+{
+if (!objA || !objB || objA->type != jsonObject || objB->type != jsonObject)
+    errAbort("jsonObjectMerge: both arguments must be non-NULL and have type jsonObject");
+struct hash *objAHash = jsonObjectVal(objA, "jsonObjectMerge:objA");
+struct hash *objBHash = jsonObjectVal(objB, "jsonObjectMerge:objB");
+struct hashCookie cookie = hashFirst(objBHash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    struct jsonElement *elA = hashFindVal(objAHash, hel->name);
+    struct jsonElement *elB = hel->val;
+    if (elA == NULL || elA->type != elB->type)
+        jsonObjectAdd(objA, hel->name, elB);
+    else if (elA->type == jsonObject)
+        jsonObjectMerge(elA, elB);
+    else if (elA->type == jsonList)
+        jsonListCat(elA, elB);
+    else
+        elA->val = elB->val;
+    }
+}
+
+void jsonListAddLm(struct jsonElement *list, struct jsonElement *ele, struct lm *lm)
 {
 if(list->type != jsonList)
     errAbort("jsonListAdd called on element with incorrect type (%d)", list->type);
 struct slRef *el;
-AllocVar(el);
+if (lm)
+    lmAllocVar(lm, el)
+else
+    AllocVar(el);
 el->val = ele;
 slAddHead(&list->val.jeList, el);
 }
@@ -106,7 +157,7 @@ if(str[*posPtr] != c)
 (*posPtr)++;
 }
 
-static char *getString(char *str, int *posPtr)
+static char *getStringLm(char *str, int *posPtr, struct lm *lm)
 {
 // read a double-quote delimited string; we handle backslash escaping.
 // returns allocated string.
@@ -164,24 +215,31 @@ for(i = 0;; i++)
     }
 *posPtr += i;
 getSpecificChar('"', str, posPtr);
-return dyStringCannibalize(&ds);
+if (lm)
+    {
+    char *str = lmCloneString(lm, ds->string);
+    dyStringFree(&ds);
+    return str;
+    }
+else
+    return dyStringCannibalize(&ds);
 }
 
-static struct jsonElement *jsonParseExpression(char *str, int *posPtr);
+static struct jsonElement *jsonParseExpressionLm(char *str, int *posPtr, struct lm *lm);
 
-static struct jsonElement *jsonParseObject(char *str, int *posPtr)
+static struct jsonElement *jsonParseObjectLm(char *str, int *posPtr, struct lm *lm)
 {
-struct hash *h = newHash(5);
+struct hash *h = hashNewLm(5, lm);
 getSpecificChar('{', str, posPtr);
 while(str[*posPtr] != '}')
     {
     // parse out a name : val pair
     skipLeadingSpacesWithPos(str, posPtr);
-    char *name = getString(str, posPtr);
+    char *name = getStringLm(str, posPtr, lm);
     skipLeadingSpacesWithPos(str, posPtr);
     getSpecificChar(':', str, posPtr);
     skipLeadingSpacesWithPos(str, posPtr);
-    hashAdd(h, name, jsonParseExpression(str, posPtr));
+    hashAdd(h, name, jsonParseExpressionLm(str, posPtr, lm));
     skipLeadingSpacesWithPos(str, posPtr);
     if(str[*posPtr] == ',')
         (*posPtr)++;
@@ -190,19 +248,22 @@ while(str[*posPtr] != '}')
     }
 skipLeadingSpacesWithPos(str, posPtr);
 getSpecificChar('}', str, posPtr);
-return newJsonObject(h);
+return newJsonObjectLm(h, lm);
 }
 
-static struct jsonElement *jsonParseList(char *str, int *posPtr)
+static struct jsonElement *jsonParseListLm(char *str, int *posPtr, struct lm *lm)
 {
 struct slRef *list = NULL;
 getSpecificChar('[', str, posPtr);
 while(str[*posPtr] != ']')
     {
     struct slRef *e;
-    AllocVar(e);
+    if (lm)
+        lmAllocVar(lm, e)
+    else
+        AllocVar(e);
     skipLeadingSpacesWithPos(str, posPtr);
-    e->val = jsonParseExpression(str, posPtr);
+    e->val = jsonParseExpressionLm(str, posPtr, lm);
     slAddHead(&list, e);
     skipLeadingSpacesWithPos(str, posPtr);
     if(str[*posPtr] == ',')
@@ -213,15 +274,15 @@ while(str[*posPtr] != ']')
 skipLeadingSpacesWithPos(str, posPtr);
 getSpecificChar(']', str, posPtr);
 slReverse(&list);
-return newJsonList(list);
+return newJsonListLm(list, lm);
 }
 
-static struct jsonElement *jsonParseString(char *str, int *posPtr)
+static struct jsonElement *jsonParseStringLm(char *str, int *posPtr, struct lm *lm)
 {
-return newJsonString(getString(str, posPtr));
+return newJsonStringLm(getStringLm(str, posPtr, lm), lm);
 }
 
-static struct jsonElement *jsonParseNumber(char *str, int *posPtr)
+static struct jsonElement *jsonParseNumberLm(char *str, int *posPtr, struct lm *lm)
 {
 int i;
 boolean integral = TRUE;
@@ -235,19 +296,19 @@ for(i = 0;; i++)
     else if(!c || (!isdigit(c) && c != '-'))
         break;
     }
-char *val = cloneStringZ(str + *posPtr, i);
+char val[i+1];
+safencpy(val, sizeof val, str + *posPtr, i);
 *posPtr += i;
 if(integral)
-    retVal = newJsonNumber(sqlLongLong(val));
+    retVal = newJsonNumberLm(sqlLongLong(val), lm);
 else
     {
     double d;
     if(sscanf(val, "%lf", &d))
-        retVal = newJsonDouble(d);
+        retVal = newJsonDoubleLm(d, lm);
     else
         errAbort("Invalid JSON Double: %s", val);
     }
-freez(&val);
 return retVal;
 }
 
@@ -262,7 +323,7 @@ return startsWith(firstWord, string) && !isalpha(string[strlen(firstWord)]);
 #define JSON_KEYWORD_FALSE "false"
 #define JSON_KEYWORD_NULL "null"
 
-static struct jsonElement *jsonParseKeyword(char *str, int *posPtr)
+static struct jsonElement *jsonParseKeywordLm(char *str, int *posPtr, struct lm *lm)
 /* If str+*posPtr starts with a keyword token (true, false, null), return a new
  * jsonElement for it; otherwise return NULL. */
 {
@@ -270,17 +331,17 @@ char *s = str + *posPtr;
 if (startsWithWordAlpha(JSON_KEYWORD_TRUE, s))
     {
     *posPtr += strlen(JSON_KEYWORD_TRUE);
-    return newJsonBoolean(TRUE);
+    return newJsonBooleanLm(TRUE, lm);
     }
 if (startsWithWordAlpha(JSON_KEYWORD_FALSE, s))
     {
     *posPtr += strlen(JSON_KEYWORD_FALSE);
-    return newJsonBoolean(FALSE);
+    return newJsonBooleanLm(FALSE, lm);
     }
 if (startsWithWordAlpha(JSON_KEYWORD_NULL, s))
     {
     *posPtr += strlen(JSON_KEYWORD_NULL);
-    return newJsonNull();
+    return newJsonNullLm(lm);
     }
 return NULL;
 }
@@ -288,20 +349,20 @@ return NULL;
 // Maximum number of characters from the current position to display in error message:
 #define MAX_LEN_FOR_ERROR 100
 
-static struct jsonElement *jsonParseExpression(char *str, int *posPtr)
+static struct jsonElement *jsonParseExpressionLm(char *str, int *posPtr, struct lm *lm)
 {
 skipLeadingSpacesWithPos(str, posPtr);
 char c = str[*posPtr];
 struct jsonElement *ele = NULL;
 if(c == '{')
-    return jsonParseObject(str, posPtr);
+    return jsonParseObjectLm(str, posPtr, lm);
 else if (c == '[')
-    return jsonParseList(str, posPtr);
+    return jsonParseListLm(str, posPtr, lm);
 else if (c == '"')
-    return jsonParseString(str, posPtr);
+    return jsonParseStringLm(str, posPtr, lm);
 else if (isdigit(c) || c == '-')
-    return jsonParseNumber(str, posPtr);
-else if ((ele = jsonParseKeyword(str, posPtr)) != NULL)
+    return jsonParseNumberLm(str, posPtr, lm);
+else if ((ele = jsonParseKeywordLm(str, posPtr, lm)) != NULL)
     return ele;
 else
     {
@@ -315,31 +376,25 @@ else
 return NULL;
 }
 
-struct jsonElement *jsonParse(char *str)
+struct jsonElement *jsonParseLm(char *str, struct lm *lm)
 {
 // parse string into an in-memory json representation
 int pos = 0;
-struct jsonElement *ele = jsonParseExpression(str, &pos);
+struct jsonElement *ele = jsonParseExpressionLm(str, &pos, lm);
 skipLeadingSpacesWithPos(str, &pos);
 if(str[pos])
     errAbort("Invalid JSON: unprocessed trailing string at position: %d: %s", pos, str + pos);
 return ele;
 }
 
-char *jsonStringEscape(char *inString)
-/* backslash escape a string for use in a double quoted json string.
- * More conservative than javaScriptLiteralEncode because
- * some json parsers complain if you escape & or ' */
+int jsonStringEscapeSize(char *inString)
+/* Return the size in bytes including terminal '\0' for escaped string. */
 {
-char c;
-int outSize = 0;
-char *outString, *out, *in;
-
 if (inString == NULL)
-    return(cloneString(""));
-
-/* Count up how long it will be */
-in = inString;
+    // Empty string
+    return 1;
+int outSize = 0;
+char *in = inString, c;
 while ((c = *in++) != 0)
     {
     switch(c)
@@ -360,13 +415,27 @@ while ((c = *in++) != 0)
             outSize += 1;
         }
     }
-outString = needMem(outSize+1);
+return outSize + 1;
+}
 
+void jsonStringEscapeBuf(char *inString, char *buf, size_t bufSize)
+/* backslash escape a string for use in a double quoted json string.
+ * More conservative than javaScriptLiteralEncode because
+ * some json parsers complain if you escape & or '.
+ * bufSize must be at least jsonStringEscapeSize(inString). */
+{
+if (inString == NULL)
+    {
+    // Empty string
+    buf[0] = 0;
+    return;
+    }
 /* Encode string */
-in = inString;
-out = outString;
+char *in = inString, *out = buf, c;
 while ((c = *in++) != 0)
     {
+    if (out - buf >= bufSize-1)
+        errAbort("jsonStringEscapeBuf: insufficient buffer size");
     switch(c)
         {
         case '\"':
@@ -394,80 +463,17 @@ while ((c = *in++) != 0)
         }
     }
 *out++ = 0;
+}
+
+char *jsonStringEscapeLm(char *inString, struct lm *lm)
+/* backslash escape a string for use in a double quoted json string.
+ * More conservative than javaScriptLiteralEncode because
+ * some json parsers complain if you escape & or ' */
+{
+int outSize = jsonStringEscapeSize(inString);
+char *outString = lm ? lmAlloc(lm, outSize) : needMem(outSize);
+jsonStringEscapeBuf(inString, outString, outSize);
 return outString;
-}
-
-void jsonFindNameRecurse(struct jsonElement *ele, char *jName, struct slName **pList)
-// Search the JSON tree recursively to find all the values associated to
-// the name, and add them to head of the list.  
-{
-switch (ele->type)
-    {
-    case jsonObject:
-        {
-        if(hashNumEntries(ele->val.jeHash))
-            {
-            struct hashEl *el, *list = hashElListHash(ele->val.jeHash);
-            slSort(&list, hashElCmp);
-            for (el = list; el != NULL; el = el->next)
-                {
-                struct jsonElement *val = el->val;
-                if sameString(el->name, jName)
-                    slNameAddHead(pList, jsonStringEscape(val->val.jeString));
-                jsonFindNameRecurse(val, jName, pList);
-                }
-            hashElFreeList(&list);
-            }
-        break;
-        }
-    case jsonList:
-        {
-        struct slRef *el;
-        if(ele->val.jeList)
-            {
-            for (el = ele->val.jeList; el != NULL; el = el->next)
-                {
-                struct jsonElement *val = el->val;
-                jsonFindNameRecurse(val, jName, pList);
-                }
-            }
-        break;
-        }
-    case jsonString:
-    case jsonBoolean:
-    case jsonNumber:
-    case jsonDouble:
-    case jsonNull:
-        {
-        break;
-        }
-    default:
-        {
-        errAbort("jsonFindNameRecurse; invalid type: %d", ele->type);
-        break;
-        }
-    }
-}
-
-struct slName *jsonFindName(struct jsonElement *json, char *jName)
-// Search the JSON tree to find all the values associated to the name
-// and add them to head of the list.  
-{
-struct slName *list = NULL;
-jsonFindNameRecurse(json, jName, &list);
-slReverse(&list);
-return list;
-}
-
-struct slName *jsonFindNameUniq(struct jsonElement *json, char *jName)
-// Search the JSON tree to find all the unique values associated to the name
-// and add them to head of the list. 
-{
-struct slName *list = NULL;
-jsonFindNameRecurse(json, jName, &list);
-slUniqify(&list, slNameCmp, slNameFree);
-slReverse(&list);
-return list;
 }
 
 void jsonElementRecurse(struct jsonElement *ele, char *name, boolean isLast,
@@ -554,9 +560,9 @@ switch (ele->type)
         }
     case jsonString:
         {
-	char *escaped = jsonStringEscape(ele->val.jeString);
+	char *escaped = jsonStringEscapeLm(ele->val.jeString, NULL);
 	fprintf(f, "\"%s\"",  escaped);
-	freez(&escaped);
+        freez(&escaped);
 	break;
 	}
     case jsonBoolean:

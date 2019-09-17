@@ -1,4 +1,6 @@
 #! /bin/tcsh
+source `which qaConfig.csh`
+
 echo "Content-Type:text/html"
 echo
 echo "<HTML>"
@@ -23,13 +25,13 @@ endif
 #echo "dbg: pair = $pair <br>"
 
 echo '<TITLE>Track UI on '`echo $srvr | sed "s/.ucsc.edu//" \
-  | sed "s/.cse//"`' </TITLE>'
+  | sed "s/.soe//"`' </TITLE>'
 echo "</HEAD>"
 echo 
 echo "<BODY>"
 echo
 echo '<H2>Track UI on '`echo $srvr | sed "s/.ucsc.edu//" \
-  | sed "s/.cse//"`'</H2>'
+  | sed "s/.soe//"`'</H2>'
 
 # echo "Hello.<br><br>"
 
@@ -43,7 +45,7 @@ foreach machine ( dev beta genome 1 2 3 4 5 6 7 8 )
       set node=genome
       set machine=RR
     else 
-      set node=hgw${machine}.cse 
+      set node=hgw${machine}.soe 
     endif
     echo '<A HREF="showTracks?srvr='$node'.ucsc.edu">'
   endif
@@ -72,7 +74,7 @@ set sql = "$sql"'order by priority;'
 
 #echo "$sql<br>"
 
-set grpraw = `/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta $recentDb -B --skip-column-names -e "$sql"`
+set grpraw = `/cluster/bin/$MACHTYPE/hgsql -h $sqlbeta $recentDb -B --skip-column-names -e "$sql"`
 set err = $status
 if ($err) then
     echo "error $err processing: $sql <br>"
@@ -106,7 +108,7 @@ end
 #echo "<br>"
 
 set sql = 'select name from dbDb where active = "1" and name not like "zoo%" order by orderKey;'
-set dblist = `/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta hgcentralbeta -B --skip-column-names -e "$sql"`
+set dblist = `/cluster/bin/$MACHTYPE/hgsql -h $sqlbeta hgcentralbeta -B --skip-column-names -e "$sql"`
 set err = $status
 if ($err) then
     echo "error $err processing: $sql <br>"
@@ -123,7 +125,7 @@ endif
 
 set sql = 'drop table gbjunk;'
 #echo "$sql<br>"
-/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"
+/cluster/bin/$MACHTYPE/hgsql -h $sqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"
 set err = $status
 if ($err) then
     # ignore this error, probably the table doesn't exist because it got cleaned up
@@ -144,9 +146,9 @@ set sql = "$sql"'shortLabel varchar(255));'
 #echo "$sql<br>"
 #echo "$user<br>"
 #echo "$pwd<br>"
-#echo "/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e '$sql'"
+#echo "/cluster/bin/$MACHTYPE/hgsql -h $sqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e '$sql'"
 
-/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"
+/cluster/bin/$MACHTYPE/hgsql -h $sqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"
 set err = $status
 if ($err) then
     echo "error $err processing: $sql <br>"
@@ -159,7 +161,7 @@ foreach db ( $dblist )
     set sql = 'select "'"$db"'", grp, tableName, shortLabel from trackDb '
     set sql = "$sql"'where grp not like "user" and grp not like "encode" and grp not like "x" '
     set sql = "$sql"'order by grp;'
-    /cluster/bin/$MACHTYPE/hgsql -h mysqlbeta $db -B --skip-column-names -e "$sql" >> $junkPath
+    /cluster/bin/$MACHTYPE/hgsql -h $sqlbeta $db -B --skip-column-names -e "$sql" >> $junkPath
     set err = $status
     if ($err) then
 	echo "error $err processing: $sql <br>"
@@ -170,7 +172,7 @@ end
 #echo "<br>"
 
 set sql = 'load data local infile "'"$junkPath"'" into table gbjunk;'
-/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta -u$user -p$pwd qapushq -e "$sql" 
+/cluster/bin/$MACHTYPE/hgsql -h $sqlbeta -u$user -p$pwd qapushq -e "$sql" 
 set err = $status
 if ($err) then
     echo "error $err processing: $sql <br>"
@@ -196,7 +198,7 @@ while ( $g <= $#grplabel  )
     set sql = 'select count(distinct shortLabel, ".", tableName) from gbjunk '
     set sql = "$sql"'where grp="'"$grpname[$g]"'" '
     #echo "$sql<br>"
-    set trkcount = `/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"`
+    set trkcount = `/cluster/bin/$MACHTYPE/hgsql -h $sqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"`
     set err = $status
     if ($err) then
 	echo "error $err processing: $sql <br>"
@@ -223,7 +225,7 @@ while ( $g <= $#grplabel  )
 	set sql = "$sql"'order by shortLabel '
 	set sql = "$sql"'limit '"$trkdone"', '"$trkchunk"
 	#echo "$sql<br>"
-	set trklist = `/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"`
+	set trklist = `/cluster/bin/$MACHTYPE/hgsql -h $sqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"`
 	set err = $status
 	if ($err) then
 	    echo "error $err processing: $sql <br>"
@@ -261,7 +263,7 @@ while ( $g <= $#grplabel  )
 	    set sql = "$sql"'and shortLabel="'"$shortLabel"'" '
 	    set sql = "$sql"'order by db;'
 	    #echo "$sql<br>"
-	    set datalist = `/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"`
+	    set datalist = `/cluster/bin/$MACHTYPE/hgsql -h $sqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"`
 	    set err = $status
 	    if ($err) then
 		echo "error $err processing: $sql <br>"
@@ -312,7 +314,7 @@ echo "<br>"
 
 set sql = 'drop table gbjunk;'
 #echo "$sql<br>"
-/cluster/bin/$MACHTYPE/hgsql -h mysqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"
+/cluster/bin/$MACHTYPE/hgsql -h $sqlbeta -u$user -p$pwd qapushq -B --skip-column-names -e "$sql"
 set err = $status
 if ($err) then
     echo "error $err processing: $sql <br>"

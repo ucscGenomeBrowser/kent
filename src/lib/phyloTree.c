@@ -232,6 +232,8 @@ replaceWhitespaceWithSpaces(string);
 char *ptr = string;
 tree = parseSubTree(&ptr);
 
+if (tree == NULL)
+    errAbort("expecting properly formatted tree");
 if (*ptr != ';')
     errAbort("expecting tree terminator ';', found '%s'", ptr);
 

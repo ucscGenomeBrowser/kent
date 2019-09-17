@@ -20,7 +20,7 @@ CREATE TABLE gwasCatalog (
     replSample longblob not null,	# Replication sample size
     region varchar(255) not null,	# Chromosome band / region of SNP
     genes longblob not null,	        # Reported Gene(s)
-    riskAllele varchar(255) not null,	# Strongest SNP-Risk Allele
+    riskAllele longblob not null,	# Strongest SNP-Risk Allele
     riskAlFreq varchar(255) not null,	# Risk Allele Frequency
     pValue varchar(255) not null,	# p-Value
     pValueDesc varchar(255) not null,	# p-Value Description

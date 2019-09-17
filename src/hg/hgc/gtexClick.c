@@ -141,5 +141,7 @@ if (gtexGeneBoxplot(gtexGene->geneId, gtexGene->name, version, doLogTransform, &
     printf("<img src = \"%s\" border=1><br>\n", pngTn.forHtml);
 printf("<br>");
 gtexPortalLink(gtexGene->geneId);
+hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
+gtexBodyMapLink();
 printTrackHtml(tdb);
 }

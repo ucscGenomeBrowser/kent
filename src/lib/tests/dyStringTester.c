@@ -52,7 +52,7 @@ char *str = mkString(len);
 dyStringPrintf(ds, "%s", str);
 if (ds->stringSize != len)
     {
-    fprintf(stderr, "dyString test %s failed: expected length of %d, got %d\n",
+    fprintf(stderr, "dyString test %s failed: expected length of %d, got %ld\n",
             id, len, ds->stringSize);
     errCount++;
     }

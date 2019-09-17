@@ -28,7 +28,9 @@
 #include "customFactory.h"
 #include "trashDir.h"
 #include "jsHelper.h"
+#include "botDelay.h"
 
+static boolean printSaveList = FALSE; // if this is true, we print to stderr the number of custom tracks saved
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -515,7 +517,7 @@ if (tdb->colorR != def->colorR || tdb->colorG != def->colorG || tdb->colorB != d
     fprintf(f, "\t%s='%d,%d,%d'", "color", tdb->colorR, tdb->colorG, tdb->colorB);
 hashMayRemove(tdb->settingsHash, "color");
 if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG
-	|| tdb->altColorB != tdb->altColorB)
+	|| tdb->altColorB != def->altColorB)
     fprintf(f, "\t%s='%d,%d,%d'", "altColor", tdb->altColorR, tdb->altColorG, tdb->altColorB);
 hashMayRemove(tdb->settingsHash, "altColor");
 
@@ -566,12 +568,9 @@ for (track = trackList; track != NULL; track = track->next)
     if (isNotEmpty(track->tdb->html))
         {
         /* write doc file in trash and add reference to the track line*/
-        if (!track->htmlFile)
-            {
-            static struct tempName tn;
-            trashDirFile(&tn, "ct", CT_PREFIX, ".html");
-            track->htmlFile = cloneString(tn.forCgi);
-            }
+        static struct tempName tn;
+        trashDirFile(&tn, "ct", CT_PREFIX, ".html");
+        track->htmlFile = cloneString(tn.forCgi);
         writeGulp(track->htmlFile, track->tdb->html, strlen(track->tdb->html));
         ctAddToSettings(track, "htmlFile", track->htmlFile);
         }
@@ -596,18 +595,15 @@ carefulClose(&f);
 void customTracksSaveCart(char *genomeDb, struct cart *cart, struct customTrack *ctList)
 /* Save custom tracks to trash file for database in cart */
 {
-char *ctFileName = NULL;
 char *ctFileVar = customTrackFileVar(cartString(cart, "db"));
 if (ctList)
     {
-    if (!customTracksExist(cart, &ctFileName))
-        {
-        /* expired custom tracks file */
-        static struct tempName tn;
-	trashDirFile(&tn, "ct", CT_PREFIX, ".bed");
-        ctFileName = tn.forCgi;
-        cartSetString(cart, ctFileVar, ctFileName);
-        }
+    static struct tempName tn;
+    trashDirFile(&tn, "ct", CT_PREFIX, ".bed");
+    char *ctFileName = tn.forCgi;
+    cartSetString(cart, ctFileVar, ctFileName);
+    if (printSaveList)
+        fprintf(stderr, "customTrack: saved %d in %s\n", slCount(ctList), ctFileName);
     customTracksSaveFile(genomeDb, ctList, ctFileName);
     }
 else
@@ -626,6 +622,7 @@ cgiDecode(fileName, fileNameDecoded, strlen(fileName));
 boolean result = 
     (endsWith(fileNameDecoded,".gz") || 
      endsWith(fileNameDecoded,".Z")  ||
+     endsWith(fileNameDecoded,".zip")  ||
      endsWith(fileNameDecoded,".bz2"));
 freeMem(fileNameDecoded);
 return result;
@@ -784,7 +781,7 @@ if (isNotEmpty(fileName))
             {
             /* unreadable file */
             struct dyString *ds = dyStringNew(0);
-            dyStringPrintf(ds, "Unrecognized binary data format in file %s", fileName);
+            dyStringPrintf(ds, "Unrecognized binary data format in file %s. You can only upload text files on this page. If you have a binary file, like bigBed, bigWig, BAM, etc, copy them to a webserver and paste the URL of the file into the text box here or create a track hub for them. For more details, our <a href='https://genome.ucsc.edu/goldenpath/help/hgTrackHubHelp.html#Hosting'>documentation</a> discusses where you can host binary files.", fileName);
             err = dyStringCannibalize(&ds);
             }
 	}
@@ -947,6 +944,22 @@ if (customTracksExist(cart, &ctFileName))
 
 /* merge new and old tracks */
 numAdded = slCount(newCts);
+if (numAdded)
+    {
+    fprintf(stderr, "customTrack: new %d from %s\n", numAdded, customText);
+    printSaveList = TRUE;
+    /* add penalty in relation to number of tracks created
+     * the delayFraction here is 0.25 as it is in hgTracks
+     * the enteredMainTime is 0 since this is not important here
+     * the warnMs and exitMs are set at 1,000,000 since we do *not* want
+     * any exit or warning here, and the return code issueBotWarning is ignored
+     * this is merely to accumulate penalty time.  The name "hgTracks" here
+     * is unimportant, it is not going to be used.  Other CGIs besides hgTracks
+     * will be calling here.
+     */
+    (void) earlyBotCheck(0, "hgTracks", (double)(numAdded + 1) * 0.25, 1000000, 1000000, "html");
+    }
+
 ctList = customTrackAddToList(ctList, newCts, &replacedCts, FALSE);
 for (ct = ctList; ct != NULL; ct = ct->next)
     if (trackDbSetting(ct->tdb, CT_UNPARSED))
@@ -955,7 +968,11 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         changedCt = TRUE;
         }
 if (newCts || removedCt || changedCt || ctConfigUpdate(ctFileName))
+    {
     customTracksSaveCart(genomeDb, cart, ctList);
+    // If all CTs have been removed then customTrackFileVar is also removed from cart, so optional:
+    ctFileName = cartOptionalString(cart, customTrackFileVar(genomeDb));
+    }
 
 if (cgiScriptName() && !endsWith(cgiScriptName(),"hgCustom"))
     {

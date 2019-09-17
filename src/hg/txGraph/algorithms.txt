@@ -1,7 +1,7 @@
 Hi Mark - here's a session with tracks representing most of the steps
 I've worked on so far for the known genes III stuff.
 
-http://hgwdev-kent.cse.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=Jimkent&hgS_otherUserSessionName=jkg
+http://hgwdev-kent.soe.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=Jimkent&hgS_otherUserSessionName=jkg
 
 The tracks with long labels that start with JKG are from the latest run of
 the pipeline.  These are near the bottom.  The other tracks are for

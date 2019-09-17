@@ -183,6 +183,7 @@ if (startsWithWord("bedGraph", tdb->type) ||
     startsWithWord("narrowPeak",tdb->type) ||
     startsWithWord("broadPeak",tdb->type) ||
     startsWithWord("gappedPeak",tdb->type) ||
+    startsWithWord("mathWig", tdb->type) ||
     startsWithWord("bigWig", tdb->type) ||
     startsWithWord("bed",tdb->type))
         return TRUE;

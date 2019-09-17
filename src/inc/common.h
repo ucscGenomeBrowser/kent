@@ -176,6 +176,9 @@
 #define uglyAbort errAbort /* debugging error abort. */
 #define uglyOut stdout /* debugging fprintf target. */
 
+unsigned long memCheckPoint();
+/* Return the amount of memory allocated since last called. */
+
 void *needMem(size_t size);
 /* Need mem calls abort if the memory allocation fails. The memory
  * is initialized to zero. */
@@ -548,7 +551,7 @@ boolean slNameInListUseCase(struct slName *list, char *string);
 
 void *slNameFind(void *list, char *string);
 /* Return first element of slName list (or any other list starting
- * with next/name fields) that matches string. */
+ * with next/name fields) that matches string. This is case insensitive. */
 
 int slNameFindIx(struct slName *list, char *string);
 /* Return index of first element of slName list (or any other
@@ -576,6 +579,13 @@ struct slName *slNameListFromString(char *s, char delimiter);
 
 #define slNameListFromComma(s) slNameListFromString(s, ',')
 /* Parse out comma-separated list. */
+
+struct slName *slNameListFromCommaEscaped(char *s);
+/* Return list of slNames gotten from parsing comma delimited string.
+ * The final comma is optional. a,b,c  and a,b,c, are equivalent
+ * for comma-delimited lists. To escape commas, put two in a row, 
+ * which eliminates the possibility for null names 
+ * (eg.  a,,b,c will parse to two elements a,b and c). */
 
 struct slName *slNameListFromStringArray(char *stringArray[], int arraySize);
 /* Return list of slNames from an array of strings of length arraySize.
@@ -784,6 +794,9 @@ int differentStringNullOk(char *a, char *b);
 #define isEmpty(string) ((string) == NULL || (string)[0] == 0)
 #define isNotEmpty(string) (! isEmpty(string))
 
+boolean isEmptyTextField(char *s);
+/* Recognize empty string or dot as empty text */
+
 int cmpStringsWithEmbeddedNumbers(const char *a, const char *b);
 /* Compare strings such as gene names that may have embedded numbers,
  * so that bmp4a comes before bmp14a */
@@ -882,7 +895,7 @@ char *strLower(char *s);
 #define tolowers(s) (void)strLower(s)
 /* Convert entire string to lower case */
 
-void replaceChar(char *s, char old, char new);
+void replaceChar(char *s, char oldc, char newc);
 /* Repace one char with another. Modifies original string. */
 
 char *replaceChars(char *string, char *oldStr, char *newStr);
@@ -983,10 +996,10 @@ char *skipBeyondDelimit(char *s,char delimit);
 /* Returns NULL or pointer to first char beyond one (or more contiguous) delimit char.
    If delimit is ' ' then skips beyond first patch of whitespace. */
 
-char *skipLeadingSpaces(char *s);
+char *skipLeadingSpaces(const char *s);
 /* Return first white space or NULL if none.. */
 
-char *skipToSpaces(char *s);
+char *skipToSpaces(const char *s);
 /* Return first white space. */
 
 int eraseTrailingSpaces(char *s);
@@ -1243,12 +1256,12 @@ int intAbs(int a);
 #define roundll(a) ((long long)((a)+0.5))
 /* Round floating point val to nearest long long. */
 
-#ifndef min
+#if !(defined(min) || defined(__cplusplus))
 #define min(a,b) ( (a) < (b) ? (a) : (b) )
 /* Return min of a and b. */
 #endif
 
-#ifndef max
+#if !(defined(max) || defined(__cplusplus))
 #define max(a,b) ( (a) > (b) ? (a) : (b) )
 /* Return max of a and b. */
 #endif
@@ -1405,6 +1418,9 @@ void safecat(char *buf, size_t bufSize, const char *src);
 
 void safencat(char *buf, size_t bufSize, const char *src, size_t n);
 /* append n characters from a string to a buffer, with bounds checking. */
+
+void safememset(char *buf, size_t bufSize, const char c, size_t n);
+/* Append a character to a buffer repeatedly, n times with bounds checking.*/
 
 char *naForNull(char *s);
 /* Return 'n/a' if s is NULL, otherwise s. */

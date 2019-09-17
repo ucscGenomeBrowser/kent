@@ -33,6 +33,6 @@ set db=`databaseAday.csh today`
 rm -f $outPath/$db
 checkMetaData.csh $db hgwbeta rr >> $outPath/$db
 echo "\n   details in \
-  http://genecats.cse.ucsc.edu/qa/test-results/metadata/details\n" \
+  http://genecats.soe.ucsc.edu/qa/test-results/metadata/details\n" \
   >> $outPath/$db
 cat $outPath/$db 

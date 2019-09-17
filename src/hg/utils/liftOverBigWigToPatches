@@ -1,0 +1,40 @@
+#!/bin/env tcsh
+
+# Convert bigWig to bedGraph, liftOver the bedGraph from regular chroms to patches,
+# clean up and concatenate the results and regenerate bigWig.
+
+set bigWigIn = $1
+set liftOverFile = $2
+set chromSizes = $3
+set bigWigOut = $4
+
+if ($bigWigOut == "" || $5 != "") then
+  echo "usage:"
+  echo "$0 input.bw mainToPatches.over.chain.gz chrom.sizes output.bw"
+  echo ""
+  echo "Convert input.bw to bedGraph, liftOver from main chromosomes to patches,"
+  echo "clean up and concatenate the results and convert to output.destDb.bw"
+  exit 1
+endif
+
+set tmpFile1 = `mktemp --tmpdir liftOverBigWig.XXXXXX`
+set tmpFile2 = `mktemp --tmpdir liftOverBigWig.XXXXXX`
+set tmpFile3 = `mktemp --tmpdir liftOverBigWig.XXXXXX`
+if ($status) exit
+
+bigWigToBedGraph $bigWigIn $tmpFile1
+if ($status) exit
+
+liftOver -multiple -noSerial $tmpFile1 $liftOverFile stdout /dev/null \
+| sort -k1,1 -k2n,2n \
+| bedRemoveOverlap stdin stdout \
+| bedGraphPack stdin $tmpFile2
+if ($status) exit
+
+sort -k1,1 -k2n,2n $tmpFile1 $tmpFile2 > $tmpFile3
+if ($status) exit
+
+bedGraphToBigWig $tmpFile3 $chromSizes $bigWigOut
+if ($status) exit
+
+rm $tmpFile1 $tmpFile2 $tmpFile3

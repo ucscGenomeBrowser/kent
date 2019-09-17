@@ -525,7 +525,8 @@ void showMainControlTable(struct sqlConnection *conn)
 {
 struct grp *selGroup;
 boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
-        isChromGraphCt = FALSE, isPal = FALSE, isArray = FALSE, isBam = FALSE, isVcf = FALSE, isHalSnake = FALSE, isLongTabix = FALSE;
+        isChromGraphCt = FALSE, isPal = FALSE, isArray = FALSE, isBam = FALSE, isVcf = FALSE, isHalSnake = FALSE,
+        isLongTabix = FALSE, isHic = FALSE;
 boolean gotClade = hGotClade();
 struct hTableInfo *hti = NULL;
 
@@ -589,7 +590,8 @@ hPrintf("<TABLE BORDER=0>\n");
         isPositional = htiIsPositional(hti);
         }
     isLongTabix = isLongTabixTable( curTable);
-    isBam = isBamTable( curTable);
+    isBam = isBamTable(curTable);
+    isHic = isHicTable(curTable);
     isVcf = isVcfTable(curTable, NULL);
     isWig = isWiggle(database, curTable);
     if (isBigWigTable(curTable))
@@ -625,7 +627,12 @@ if (curTrack == NULL)
 
 /* Region line */
 {
-char *regionType = cartUsualString(cart, hgtaRegionType, hgtaRegionTypeGenome);
+char *regionType;
+if (cartVarExists(cart, "hgFind.matches")) // coming back from a search
+    regionType = cartUsualString(cart, hgtaRegionType, hgtaRegionTypeRange);
+else
+    regionType = cartUsualString(cart, hgtaRegionType, hgtaRegionTypeGenome);
+
 char *range = cartUsualString(cart, hgtaRange, "");
 if (isPositional)
     {
@@ -730,7 +737,7 @@ hPrintf("</TD></TR>\n");
 }
 
 /* Composite track subtrack merge line. */
-boolean canSubtrackMerge = (curTrack && tdbIsComposite(curTrack) && !isBam && !isVcf && !isLongTabix);
+boolean canSubtrackMerge = (curTrack && tdbIsComposite(curTrack) && !isBam && !isVcf && !isLongTabix && !isHic);
 if (canSubtrackMerge)
     {
     hPrintf("<TR><TD><B>subtrack merge:</B>\n");
@@ -844,7 +851,7 @@ hPrintf("</TABLE>\n");
 /* Submit buttons. */
     {
     hPrintf("<BR>\n");
-    if (isWig || isBam || isVcf || isLongTabix)
+    if (isWig || isBam || isVcf || isLongTabix || isHic)
 	{
 	char *name;
 	extern char *maxOutMenu[];
@@ -864,7 +871,7 @@ hPrintf("</TABLE>\n");
 		" a very large file that contains the original data values (not"
 		" compressed into the wiggle format) -- see the Downloads page."
 		"</I><BR>", maxOutput);
-	else if (isBam || isVcf || isLongTabix)
+	else if (isBam || isVcf || isLongTabix || isHic)
 	    hPrintf(
 		"<I>Note: to return more than %s lines, change the filter setting"
 		" (above). Please consider downloading the entire data from our Download pages."
@@ -938,7 +945,7 @@ hPrintf(
   "<A HREF=\"../goldenPath/credits.html\">Credits</A> page for the list of "
   "contributors and usage restrictions associated with these data. "
   "All tables can be downloaded in their entirety from the "
-  "<A HREF=\"http://hgdownload.cse.ucsc.edu/downloads.html\""
+  "<A HREF=\"http://hgdownload.soe.ucsc.edu/downloads.html\""
   ">Sequence and Annotation Downloads</A> page."
    , getGenomeSpaceText()
    );

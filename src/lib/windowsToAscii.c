@@ -10,7 +10,7 @@ char *windowsToAscii(char *input)
 if (input == NULL)
     return NULL;
 
-iconv_t convType = iconv_open("ASCII//TRANSLIT", "WINDOWS-1250/");  
+iconv_t convType = iconv_open("ASCII//TRANSLIT", "WINDOWS-1250");  
 size_t inSize = strlen(input);
 size_t outSize = 1024;  
 char buffer[outSize];  
