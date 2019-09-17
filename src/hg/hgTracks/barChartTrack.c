@@ -29,10 +29,13 @@ struct barChartTrack
     char **categNames;          /* Category names  - derived from above */
     char **categLabels;         /* Category labels  - derived from above */
     struct rgbColor *colors;    /* Colors  for all categories */
-    struct hash *categoryFilter;  /* NULL out excluded factors */
+    struct hash *categoryFilter; /* NULL out excluded factors */
     int maxViewLimit;
 
     // dimensions for drawing
+    char *maxGraphSize;         /* optionally limit graph size (override semantic zoom)
+                                     small, medium, or large (default) */
+
     int squishHeight;           /* Height of item in squish mode (larger than typical) */
     int boxModelHeight;         /* Height of indicator box drawn under graph to show gene extent */
     int modelHeight;            /* Height of box drawn under graph with padding */
@@ -332,12 +335,13 @@ struct trackDb *tdb = tg->tdb;
 extras->doLogTransform = cartUsualBooleanClosestToHome(cart, tdb, FALSE, BAR_CHART_LOG_TRANSFORM, 
                                                 BAR_CHART_LOG_TRANSFORM_DEFAULT);
 extras->maxMedian = barChartUiMaxMedianScore(tdb);
-extras->noWhiteout = cartUsualBooleanClosestToHome(cart, tdb, FALSE, BAR_CHART_NO_WHITEOUT,
-                                                        BAR_CHART_NO_WHITEOUT_DEFAULT);
-extras->unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
-
+extras->noWhiteout = cartUsualBooleanClosestToHome(cart, tdb, FALSE, 
+                                                        BAR_CHART_NO_WHITEOUT, BAR_CHART_NO_WHITEOUT_DEFAULT);
 extras->maxViewLimit = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
                                 BAR_CHART_MAX_VIEW_LIMIT, BAR_CHART_MAX_VIEW_LIMIT_DEFAULT);
+extras->maxGraphSize = trackDbSettingClosestToHomeOrDefault(tdb, 
+                                BAR_CHART_MAX_GRAPH_SIZE, BAR_CHART_MAX_GRAPH_SIZE_DEFAULT);
+extras->unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
 
 /* Set barchart dimensions to draw.  For three window sizes */
 #define WIN_MAX_GRAPH 50000
@@ -362,14 +366,14 @@ extras->maxViewLimit = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE,
 
 int scale = (getCategoryCount(tg) < 15 ? 2 : 1);
 long winSize = virtWinBaseCount;
-if (winSize < WIN_MAX_GRAPH)
+if (winSize < WIN_MAX_GRAPH && sameString(extras->maxGraphSize, BAR_CHART_MAX_GRAPH_SIZE_LARGE))
     {
     extras->boxModelHeight = MAX_BAR_CHART_MODEL_HEIGHT;
     extras->barWidth = MAX_BAR_WIDTH * scale;
     extras->padding = MAX_GRAPH_PADDING;
     extras->maxHeight = MAX_GRAPH_HEIGHT;
     }
-else if (winSize < WIN_MED_GRAPH)
+else if (winSize < WIN_MED_GRAPH && differentString(extras->maxGraphSize, BAR_CHART_MAX_GRAPH_SIZE_SMALL))
     {
     extras->boxModelHeight = MED_BAR_CHART_MODEL_HEIGHT;
     extras->barWidth = MED_BAR_WIDTH * scale;
@@ -384,7 +388,6 @@ else
     extras->maxHeight = tl.fontHeight * 4;
     }
 extras->modelHeight =  extras->boxModelHeight + 3;
-
 extras->margin = 1;
 extras->squishHeight = tl.fontHeight - tl.fontHeight/2;
 
