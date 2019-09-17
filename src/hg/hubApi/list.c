@@ -779,15 +779,16 @@ replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
 hFreeConn(&conn);
 struct trackDb *tdbList = obtainTdb(NULL, db);
 struct jsonWrite *jw = apiStartOutput();
-jsonWriteString(jw, "genome", db);
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
+jsonWriteObjectStart(jw, db);
 freeMem(dataTime);
 struct trackDb *el = NULL;
 for (el = tdbList; el != NULL; el = el->next )
     {
     recursiveTrackList(jw, el, db);
     }
+jsonWriteObjectEnd(jw);
 apiFinishOutput(0, NULL, jw);
 }	/*	static void trackDbJsonOutput(char *db, FILE *f)	*/
 
