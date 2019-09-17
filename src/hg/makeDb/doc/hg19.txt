@@ -33610,3 +33610,11 @@ TMPDIR=/dev/shm
     # 2423781773 bases of 2936892733 (82.529%) in intersection
 
 #########################################################################
+2019-09-17: AVADA fulltext variants, Max
+cd /hive/data/genomes/hg19/bed/avada
+wget http://bejerano.stanford.edu/AVADA/avada_v1.00_2016.vcf.gz
+python ~/kent/src/hg/makeDb/avada/toBed.py > avada.bed
+bedToBigBed avada.bed /hive/data/genomes/hg19/chrom.sizes -as=${HOME}/kent/src/hg/makeDb/avada/avada.as -tab avada.bb -type=bed9+
+cd /gbdb/hg19/bbi
+ln -s /hive/data/genomes/hg19/bed/avada/avada.bb
+#########################################################################
