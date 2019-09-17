@@ -114,6 +114,23 @@ apiFinishOutput(0, NULL, jw);
 hDisconnectCentral(&conn);
 }
 
+static void bigFileChromInfoOutput(struct jsonWrite *jw,
+    struct trackDb *thisTrack, char *bigDataUrl)
+/* output the chromosome list for the bigDataUrl file */
+{
+struct bbiFile *bbi = bigFileOpen(thisTrack->type, bigDataUrl);
+struct bbiChromInfo *chrList = bbiChromList(bbi);
+slSort(chrList, chromInfoCmp);
+struct bbiChromInfo *el = chrList;
+jsonWriteNumber(jw, "chromCount", (long long)slCount(chrList));
+jsonWriteObjectStart(jw, "chromosomes");
+for ( ; el; el = el->next )
+    {
+    jsonWriteNumber(jw, el->name, (long long)el->size);
+    }
+jsonWriteObjectEnd(jw);	/* chromosomes */
+}
+
 static void hubChromInfoJsonOutput(FILE *f, char *hubUrl, char *genome)
 /* for given hubUrl list the chromosomes in the sequence for specified genome
  */
@@ -154,17 +171,7 @@ if (isNotEmpty(track))
 	apiErrAbort(err400, err400Msg, "failed to find specified track=%s in genome=%s for endpoint '/list/chromosomes'  given hubUrl='%s'", track, genome, hubUrl);
 
     char *bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
-    struct bbiFile *bbi = bigFileOpen(thisTrack->type, bigDataUrl);
-    struct bbiChromInfo *chrList = bbiChromList(bbi);
-    slSort(chrList, chromInfoCmp);
-    struct bbiChromInfo *el = chrList;
-    jsonWriteNumber(jw, "chromCount", (long long)slCount(chrList));
-    jsonWriteObjectStart(jw, "chromosomes");
-    for ( ; el; el = el->next )
-	{
-	jsonWriteNumber(jw, el->name, (long long)el->size);
-	}
-    jsonWriteObjectEnd(jw);	/* chromosomes */
+    bigFileChromInfoOutput(jw, thisTrack, bigDataUrl);
     }
 else
     {
@@ -245,8 +252,10 @@ else
     *splitTableName = sqlTableName;	/* return to caller */
     }
 
+if (! sqlTableExists(conn, sqlTableName))
+    returnChrom = NULL;
 /* may need to extend this in the future for other track types */
-if (sqlColumnExists(conn, sqlTableName, "chrom"))	/* standard bed tables */
+else if (sqlColumnExists(conn, sqlTableName, "chrom"))	/* standard bed tables */
     returnChrom = cloneString("chrom");
 else if (sqlColumnExists(conn, sqlTableName, "tName"))	/* track type psl */
     returnChrom = cloneString("tName");
@@ -254,7 +263,7 @@ else if (sqlColumnExists(conn, sqlTableName, "genoName"))	/* track type rmsk */
     returnChrom = cloneString("genoName");
 
 return returnChrom;
-}
+}	/*	static char *validChromName() */
 
 static long long bbiItemCount(char *bigDataUrl, char *type, char *indexFileOrUrl)
 /* check the bigDataUrl to see what the itemCount is there */
@@ -544,12 +553,24 @@ char *splitSqlTable = NULL;
 struct hTableInfo *tableInfo = NULL;
 char *chromName = NULL;
 char *table = cgiOptionalString("track");
+char *bigDataUrl = NULL;
+struct trackDb *thisTrack = NULL;
 struct sqlConnection *conn = hAllocConnMaybe(db);
 if (NULL == conn)
     apiErrAbort(err400, err400Msg, "can not find 'genome=%s' for endpoint '/list/chromosomes", db);
 
 if (table)
     chromName = validChromName(conn, db, table, &splitSqlTable, &tableInfo);
+
+/* given track can't find a chromName, maybe it is a bigDataUrl */
+if (table && ! chromName)
+    {
+    /* 'track' name in trackDb usually refers to a SQL 'table' */
+    struct trackDb *tdb = obtainTdb(NULL, db);
+    thisTrack = findTrackDb(table,tdb);
+    /* might have a bigDataUrl */
+    bigDataUrl = trackDbSetting(thisTrack, "bigDataUrl");
+    }
 
 /* in trackDb language: track == table */
 /* punting on split tables, just return chromInfo */
@@ -592,6 +613,15 @@ if (table && chromName && ! (tableInfo && tableInfo->isSplit) )
 	}
     else
 	apiErrAbort(err400, err400Msg, "track '%s' is not a position track, request table without chrom specification, genome: '%s'", table, db);
+    }
+else if (bigDataUrl)
+    {
+    struct jsonWrite *jw = apiStartOutput();
+    jsonWriteString(jw, "genome", db);
+    jsonWriteString(jw, "track", table);
+    jsonWriteString(jw, "bigDataUrl", bigDataUrl);
+    bigFileChromInfoOutput(jw, thisTrack, bigDataUrl);
+    apiFinishOutput(0, NULL, jw);
     }
 else if (table && !chromName)	/* only allowing position tables at this time */
 	apiErrAbort(err400, err400Msg, "track '%s' is not a position track, request table without chrom specification, genome: '%s'", table, db);
