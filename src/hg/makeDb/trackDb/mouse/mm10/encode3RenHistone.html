@@ -13,7 +13,7 @@ DNA sequences. </p>
 
 <h2> Display Conventions and Configuration </h2>
 <p>
-This track is a multi-view composite track that containing two data types
+This track is a multi-view composite track that contains two data types
 (<em>views</em>).  For each view, there are multiple subtracks that
 display individually on the browser.  Instructions for configuring multi-view
 tracks are <a href="/goldenPath/help/multiView.html" target=_blank>here</a>.
@@ -23,10 +23,13 @@ The views in this track are:
 enrichment</DD>
 <dt><em>Signal</em></dt><dd> Density graph of signal enrichment.</dd>
 </DL>
-<p>Peaks displayed in this track set are those present in both replicates, or observed in two 
-pseudoreplicates of the pooled peaks from both replicates (the "replicated peaks" files 
-from the ENCODE data portal).  Signals displayed in this track correspond to the "fold change 
-over control" files from merged replicates, reflecting the fold enrichment of ChIP signal over 
+<p>Peaks displayed in this track set are replicated peaks called with the 
+<a target="_blank" href="https://www.encodeproject.org/software/idr/">
+Irreproducible Discovery Rate</a> (IDR) framework</a> 
+These peaks are identical to those in the &quot;replicated peaks&quot; files 
+on the ENCODE data portal.  
+Signals displayed in this track correspond to the &quot;fold change 
+over control&quot; files from merged replicates, reflecting the fold enrichment of ChIP signal over 
 the input control. Data for individual replicates are available through the 
 <a target="_blank" href="https://www.encodeproject.org/">
 ENCODE portal</a>.
@@ -49,10 +52,12 @@ Tracks are colored by histone modification, as follows:
 <h2>Methods</h2>
 
 <h3>ChIP-seq data generation</h3>
-ChIP-seq experiments for all marks and tissues from E11.5 - P0 were performed as previously 
-described (PMID: 22763441). The ChIP-seq protocol was modified slightly for all E10.5 
-experiments due to the low amount of input ("micro" ChIP-seq). Detailed protocols for both 
-standard and micro ChIP-seq from the ENCODE project portal, at the links below. 
+ChIP-seq experiments for all marks and tissues from E11.5 - P0 were performed 
+described in Shen et. al 2012 (see References below). 
+The ChIP-seq protocol was modified slightly for all E10.5 
+experiments due to the low amount of input (&quot;micro&quot; ChIP-seq). 
+Detailed protocols for both standard and micro ChIP-seq are available from the ENCODE 
+project portal (see Data Access section, below).
 
 <ul>
 <li><i>Standard ChIP-seq (E11.5-P0)</i>
@@ -123,10 +128,27 @@ Coordination centers.</p>
 
 <h2>References</h2>
 <p>
-An atlas of dynamic chromatin landscapes in the developing mouse fetus
-Gorkin et al.  In Press, Nature. 
-(pre-print: doi: 
-<a target="_blank">https://doi.org/10.1101/166652)</p>
+Gorkin et al. An atlas of dynamic chromatin landscapes in the developing mouse fetus.
+Nature, In Press. (pre-print: doi: 
+<a target="_blank" href="https://doi.org/10.1101/166652">https://doi.org/10.1101/166652</a>)</p>
+
+<p>
+Sloan CA, Chan ET, Davidson JM, Malladi VS, Strattan JS, Hitz BC, Gabdank I, Narayanan AK, Ho M, Lee
+BT <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkv1160" target="_blank">
+ENCODE data at the ENCODE portal</a>.
+<em>Nucleic Acids Res</em>. 2016 Jan 4;44(D1):D726-32.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26527727" target="_blank">26527727</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4702836/" target="_blank">PMC4702836</a>
 </p>
-ENCODE data at the ENCODE portal. (PMID: 26527727)</p> 
+
+Shen Y, Yue F, McCleary DF, Ye Z, Edsall L, Kuan S, Wagner U, Dixon J, Lee L, Lobanenkov VV <em>et
+al</em>.
+<a href="https://doi.org/10.1038/nature11243" target="_blank">
+A map of the cis-regulatory sequences in the mouse genome</a>.
+<em>Nature</em>. 2012 Aug 2;488(7409):116-20.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/22763441" target="_blank">22763441</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4041622/" target="_blank">PMC4041622</a>
+</p>
+
 
