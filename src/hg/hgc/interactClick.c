@@ -265,7 +265,7 @@ char *setting = trackDbSetting(tdb, "interactMultiRegion");
 if (!setting || sameString(setting, "off"))
     return;
 int padding = 200;
-if (differentString(setting, "on"))
+if (differentString(setting, "on") && differentString(setting, "true"))
     padding = (int)strtol(setting, NULL, 10);
     
 if (inters->next == NULL && interactEndsOverlap(inters))
@@ -293,7 +293,7 @@ else
                 "virtShortDesc=%s&"
                 "multiRegionsBedUrl=%s&"
                 "%s=%s'>"
-            " multi-region browser view </a>(custom region mode)",
+            " multi-region view</a> (custom regions mode)",
                     name, cgiEncode(regionFile),
                     CT_CUSTOM_TEXT_VAR, cgiEncode(customText));
     if (isVirtMode)
@@ -305,6 +305,7 @@ else
     }
 printf("&nbsp;&nbsp;&nbsp;");
 printf("<a href=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>(Help)</a>\n");
+printf("<br>&nbsp;&nbsp;&nbsp;&nbsp;<i>Note: all interactions will display in &quot;pack&quot; mode</i>\n");
 }
 
 void doInteractRegionDetails(struct trackDb *tdb, struct interact *inter)

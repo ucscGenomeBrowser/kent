@@ -34,6 +34,12 @@ page, accessible via the &quot;Protein change and link to details&quot; at the t
 features are colored based on their evidence:
 </p>
 
+<p>In Sep 2019, suggested by Genomenom, we added a filter on all variants. From then on, we skip variants with more than 
+one nucleotide and MMCNT is 0 and where the variant is not an idel, meaning
+that for longer variants, only variants are shown that are explicitely
+mentioned in the papers. This makes the data more specific.
+</p>
+
 <p>
 <table>
   <thead>
@@ -71,11 +77,14 @@ a minimum number of articles for each kind of evidence.
 
 <h2>Methods</h2>
 
-The Mastermind Cited Variants file was <a target=_blank href="https://www.genomenon.com/cvr/">downloaded</a>,
+<p>The Mastermind Cited Variants file was <a target=_blank href="https://www.genomenon.com/cvr/">downloaded</a>,
 converted to BED format with scripts that are available in our 
 <a target=_blank href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/mastermind/">Git
 repository</a> and converted to a bigBed file with the UCSC genome browser tool
-bedToBigBed.
+bedToBigBed.</p>
+
+<p>This track is automatically updated two weeks after every Mastermind CVR release, which happens every three months.</p>
+
 
 <h2>Credits</h2>
 
