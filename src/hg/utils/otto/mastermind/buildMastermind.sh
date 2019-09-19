@@ -29,3 +29,11 @@ mv mastermindRelease.new.txt mastermindRelease.txt
 mv hg19/mastermind.new.bb hg19/mastermind.bb
 mv hg38/mastermind.new.bb hg38/mastermind.bb
 
+# build archive
+REL=`cat mastermindRelease.txt`
+ARCH=/hive/data/outside/otto/archive/mastermind
+mkdir -p $ARCH/$REL/{hg19,hg38}
+cp hg19/mastermind.bb $ARCH/$REL/hg19/
+cp hg38/mastermind.bb $ARCH/$REL/hg38/
+hgsql hg19 -e 'select * from trackDb where tableName="mastermind"' > $ARCH/$REL/hg19/trackDb.tab
+hgsql hg38 -e 'select * from trackDb where tableName="mastermind"' > $ARCH/$REL/hg38/trackDb.tab
