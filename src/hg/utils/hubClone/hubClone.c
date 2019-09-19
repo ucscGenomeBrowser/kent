@@ -198,6 +198,29 @@ if (errCatch->gotError)
 return hub;
 }
 
+FILE *createPathAndFile(char *path)
+/* if path contains parent directories that don't exist, create them first before opening file */
+{
+char *copy = cloneString(path);
+if (stringIn("/", copy))
+    {
+    chopSuffixAt(copy, '/');
+    makeDirs(copy);
+    // now make the real file
+    return mustOpen(path, "w");
+    }
+return mustOpen(path, "w");
+}
+
+void createWriteAndCloseFile(char *fileName, char *url, boolean useOneFile)
+/* Wrapper around a couple lines */
+{
+FILE *f;
+f = createPathAndFile(fileName);
+printOneFile(url, f, useOneFile);
+carefulClose(&f);
+}
+
 void hubClone(char *hubUrl)
 /* hubClone - Clone the hub text files to a local copy, fixing up bigDataUrls 
  * to remote locations if necessary. */
@@ -238,29 +261,26 @@ else
     if (genome == NULL)
         errAbort("error opening %s file", hub->genomesFile);
 
-    makeDirs(hubName);
     path = catTwoStrings(hubName, catTwoStrings("/", hubFileName));
-    f = mustOpen(path, "w");
-    printOneFile(hubUrl, f, oneFile);
-    carefulClose(&f);
+    createWriteAndCloseFile(path, hubUrl, oneFile);
 
     genomesUrl = trackHubRelativeUrl(hub->url, hub->genomesFile);
     genomesFileName = catTwoStrings(hubName, catTwoStrings("/", hub->genomesFile));
-    f = mustOpen(genomesFileName, "w");
-    printOneFile(genomesUrl, f, oneFile);
-    carefulClose(&f);
+    char *genomePath = cloneString(genomesFileName);
+    chopSuffixAt(genomePath, '/'); // used later for making the right directory structure
+
+    createWriteAndCloseFile(genomesFileName, genomesUrl, oneFile);
 
     for (; genome != NULL; genome = genome->next)
         {
         if (startsWith("_", genome->name)) // assembly hubs have a leading '_'
             genome->name += 1;
-        genomesDir = catTwoStrings(hubName, catTwoStrings("/", genome->name));
-        makeDirs(genomesDir);
+
+        // make correct directory strucutre
+        genomesDir = catTwoStrings(genomePath, catTwoStrings("/", genome->name));
         tdbFileName = strrchr(genome->trackDbFile, '/') + 1;
         tdbFilePath = catTwoStrings(genomesDir, catTwoStrings("/", tdbFileName));
-        f = mustOpen(tdbFilePath, "w");
-        printOneFile(genome->trackDbFile, f, oneFile);
-        carefulClose(&f);
+        createWriteAndCloseFile(tdbFilePath, genome->trackDbFile, oneFile);
         }
     }
 }

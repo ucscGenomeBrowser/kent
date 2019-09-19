@@ -5,7 +5,7 @@ all:: test0 listFunctions getFunctions listSchema getSequence wigData \
 	supportedTypes errorTests notSupported bugReports
 
 listFunctions: list01 list02 list03 list04 list05 list06 list07 list08 list09 \
-	list10 list11 list12 list13 list14 list15
+	list10 list11 list12 list13 list14 list15 list16
 
 getFunctions: test8 test9 test10 test11 test12 test13 test14 \
 	test15 test16 test19 test21 test26 test27 test28 \
@@ -140,6 +140,21 @@ list14: setOutput
 list15: setOutput
 	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/chromosomes?track=est;genome=ce4'\n"
 	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="ce4" -track="est" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# list chromosomes for a track that only has a bigDataUrl specification,
+#    no database table
+# testing /list/chromosomes?genome=equCab3&track=transMapEnsemblV5
+list16: setOutput
+	@printf "### $@ 'https://api-test.gi.ucsc.edu/list/chromosomes?track=transMapEnsemblV5;genome=equCab3'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="equCab3" -track="transMapEnsemblV5" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# ./hubApi track=gc5BaseBw genome=rheMac10
+
+list17: setOutput
+	@printf "### $@ 'https://api-test.gi.ucsc.edu/list/chromosomes?track=gc5BaseBw;genome=rheMac10'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="rheMac10" -track="gc5BaseBw" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 ##########################   getData functions  #############################
