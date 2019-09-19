@@ -14,7 +14,7 @@ class ContributorType(models.Model):
     def __str__(self):
         return self.short_name
     class Meta:
-       verbose_name = 'Wrangler contributor type'
+       verbose_name = 'x contributor type'
 
 class Contributor(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -53,7 +53,7 @@ class Species(models.Model):
      def __str__(self):
        return self.common_name
      class Meta:
-       verbose_name_plural = "wrangler species"
+       verbose_name_plural = 'x species'
 
 class Url(models.Model):
     short_name = models.CharField(unique=True, max_length=50)
@@ -63,7 +63,7 @@ class Url(models.Model):
     def __str__(self):
        return self.short_name
     class Meta:
-       verbose_name = 'Wrangler url'
+       verbose_name = 'x url'
 
 class File(models.Model):
     short_name = models.CharField(unique=True, max_length=80)
@@ -73,7 +73,7 @@ class File(models.Model):
     def __str__(self):
        return self.short_name
     class Meta:
-       verbose_name = 'Wrangler file'
+       verbose_name = 'x file'
 
 class ProjectState(models.Model):
     state = models.CharField(max_length=30, unique=True)
@@ -81,7 +81,7 @@ class ProjectState(models.Model):
     def __str__(self):
        return self.state
     class Meta:
-       verbose_name = 'Wrangler project state'
+       verbose_name = 'x project state'
 
 class OrganPart(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
@@ -93,7 +93,7 @@ class OrganPart(models.Model):
     def __str__(self):
         return self.short_name
     class Meta:
-       verbose_name = 'Wrangler organ part'
+       verbose_name = 'x organ part'
 
 class Organ(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
@@ -101,10 +101,12 @@ class Organ(models.Model):
     ontology_label = models.CharField(max_length=255, blank=True, null=True)
     description = models.CharField(max_length=255)
     comments = models.CharField(max_length=255, blank=True)
+    projects = models.ManyToManyField("Project", blank=True, through="project_organ",
+        related_name='projects_organ_relationship')
     def __str__(self):
         return self.short_name
     class Meta:
-       verbose_name = 'Wrangler organ'
+       verbose_name = 'x organ'
     
 class Disease(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
@@ -114,7 +116,7 @@ class Disease(models.Model):
     def __str__(self):
         return self.short_name
     class Meta:
-       verbose_name = 'Wrangler disease'
+       verbose_name = 'x disease'
 
 class Consent(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
@@ -123,7 +125,7 @@ class Consent(models.Model):
     def __str__(self):
         return self.short_name
     class Meta:
-       verbose_name = 'Wrangler consent'
+       verbose_name = 'x consent'
 
 class SampleType(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
@@ -132,7 +134,7 @@ class SampleType(models.Model):
     def __str__(self):
         return self.short_name
     class Meta:
-       verbose_name = 'Wrangler sample type'
+       verbose_name = 'x sample type'
 
 class AssayTech(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
@@ -142,7 +144,7 @@ class AssayTech(models.Model):
     def __str__(self):
         return self.short_name
     class Meta:
-       verbose_name = 'Wrangler assay tech'
+       verbose_name = 'x assay tech'
 
 class AssayType(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
@@ -152,7 +154,7 @@ class AssayType(models.Model):
     def __str__(self):
         return self.short_name
     class Meta:
-       verbose_name = 'Wrangler assay type'
+       verbose_name = 'x assay type'
 
 class Publication(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
@@ -163,7 +165,7 @@ class Publication(models.Model):
     def __str__(self):
         return self.short_name
     class Meta:
-       verbose_name = 'Wrangler publication'
+       verbose_name = 'x publication'
 
 class EffortType(models.Model):
     short_name = models.CharField(max_length=50, unique=True)
@@ -172,7 +174,7 @@ class EffortType(models.Model):
     def __str__(self):
         return self.short_name
     class Meta:
-       verbose_name = 'Wrangler effort type'
+       verbose_name = 'x effort type'
 
 class SoftwareDeveloper(models.Model):
     who = models.ForeignKey(Contributor, on_delete=models.PROTECT)
@@ -181,7 +183,7 @@ class SoftwareDeveloper(models.Model):
     def __str__(self):
         return self.who.__str__()
     class Meta:
-       verbose_name = 'Wrangler software developer'
+       verbose_name = 'x software developer'
 
 class Intern(models.Model):
     who = models.ForeignKey(Contributor, on_delete=models.PROTECT)
@@ -191,11 +193,10 @@ class Intern(models.Model):
     def __str__(self):
         return self.who.__str__()
     class Meta:
-       verbose_name = 'Wrangler intern'
+       verbose_name = 'x intern'
 
 class Wrangler(models.Model):
     who = models.ForeignKey(Contributor, on_delete=models.PROTECT)
-    favorite_site = models.URLField(null=True,blank=True)
     comments = models.CharField(max_length=255, blank=True)
     def __str__(self):
         return self.who.__str__()
@@ -206,7 +207,7 @@ class Project(models.Model):
     comments = models.CharField(max_length=255, blank=True)
     state_reached = models.ForeignKey(ProjectState, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="state_reached")
     stars = models.IntegerField(blank=True,validators=[MinValueValidator(1),MaxValueValidator(5)], default=3)
-    chat_url = models.URLField(blank=True, null=True)
+    git_ticket_url = models.URLField(blank=True, null=True)
     wrangler1 = models.ForeignKey(Wrangler, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="wrangler1");
     wrangler2 = models.ForeignKey(Wrangler, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="wrangler2");
     contacts = models.ManyToManyField(Contributor, blank=True, related_name="projcontacts")
@@ -222,6 +223,7 @@ class Project(models.Model):
     sheet_template = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
     sheet_template_date = models.DateField(blank=True, null=True, default=None)
     sheet_from_lab = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
+    shared_google_sheet  = models.URLField(blank=True, null=True, default=None)
     sheet_from_lab_date = models.DateField(blank=True, null=True, default=None)
     back_to_lab = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
     back_to_lab_date = models.DateField(blank=True, null=True, default=None)
@@ -229,7 +231,7 @@ class Project(models.Model):
     lab_review_date = models.DateField(blank=True, null=True, default=None)
     sheet_that_validated = models.FileField(upload_to="uploads/project", blank=True, null=True, default=None)
     sheet_validated_date = models.DateField(blank=True, null=True, default=None)
-    staging_area = models.URLField(blank=True, null=True)
+    staging_area = models.CharField(max_length=255,blank=True, default="")
     staging_area_date = models.DateField(blank=True, null=True, default=None)
     submit_date = models.DateField(blank=True, null=True, default=None)
     submit_comments = models.CharField(max_length=255, blank=True)
@@ -280,7 +282,7 @@ class Funder(models.Model):
     def __str__(self):
        return self.short_name
     class Meta:
-       verbose_name = 'Wrangler funder'
+       verbose_name = 'x funder'
 
 
 class Grant(models.Model):

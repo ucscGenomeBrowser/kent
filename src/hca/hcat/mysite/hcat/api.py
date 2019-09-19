@@ -1,26 +1,14 @@
-from django.template import loader
-from django.shortcuts import render,get_object_or_404
-from django.urls import reverse
-from django.views import generic
+
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 import json
-
 from .models import *
-
-# Create your views here (except API views go in api.py)
-
-def index(request):
-    a = []
-    for p in Project.objects.order_by("-id"):
-        j = {"short_name":p.short_name, "title":p.title}
-        a.append(j)
-    return HttpResponse(json.dumps(a), content_type="application/json")
 
 def api_index(request):
     objects = [Project, ProjectState, Contributor, Tracker, AssayTech, Disease, Organ]
     a = []
     for o in objects:
-        p = {"class": o.__name__, "count": o.objects.count()}
+        p = {"class": o.__name__.lower(), "count": o.objects.count()}
         a.append(p)
     return HttpResponse(json.dumps(a), content_type="application/json")
 
@@ -74,7 +62,8 @@ def serializable_organ(c):
     projects = []
     for p in c.projects.all():
          projects.append(p.short_name)
-    return {"short_name": c.short_name, "description": c.description, "projects":projects}
+    return {"short_name": c.short_name, "description": c.description, 
+        "ontology_id":c.ontology_id, "ontology_label":c.ontology_label,"projects":projects}
 
 def api_organ_list(request):
     a = []
@@ -82,6 +71,10 @@ def api_organ_list(request):
         c = serializable_organ(p)
         a.append(c)
     return HttpResponse(json.dumps(a), content_type="application/json")
+
+def api_organ_detail(request,short_name):
+   c = get_object_or_404(Organ, short_name=short_name)
+   return HttpResponse(json.dumps(serializable_organ(c)), content_type="application/json")
 
 def serializable_tracker(c):
     return {
@@ -128,11 +121,14 @@ def serializable_project(p):
     species = []
     for s in p.species.all():
         species.append(str(s))
+    techs = []
+    for t in p.assay_tech.all():
+        techs.append(str(t))
     return {
-        "short_name":p.short_name, "stars":p.stars, "cur_state": str(p.cur_state), 
+        "short_name":p.short_name, "stars":p.stars, "state_reached": str(p.state_reached), 
         "origin_name": p.origin_name, "title":p.title, 
         "wrangler1": str(p.wrangler1), "wrangler2": str(p.wrangler2), 
-        "species":species, "organs":organs, "contributors":contributors,
+        "species":species, "organs":organs, "assay_tech": techs, "contributors":contributors,
         "description":p.description, "submit_date":str(p.submit_date)}
     
 def api_project_list(request):
@@ -143,15 +139,6 @@ def api_project_list(request):
     return HttpResponse(json.dumps(a), content_type="application/json")
 
 
-class ProjectListView(generic.ListView):
-    template_name = 'hcat/project_list.html'
-    context_object_name = 'project_list'
-
-    def get_queryset(self):
-        return Project.objects.order_by("-id")[:100]
-    
-class ProjectDetailView(generic.DetailView):
-    model=Project
-    template_name = 'hcat/project_detail.html'
-    context_object_name = 'project'
-
+def api_project_detail(request,short_name):
+   c = get_object_or_404(Project, short_name=short_name)
+   return HttpResponse(json.dumps(serializable_project(c)), content_type="application/json")

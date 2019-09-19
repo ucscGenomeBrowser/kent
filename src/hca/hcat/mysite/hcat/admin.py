@@ -34,7 +34,7 @@ admin.site.register(Intern, InternAdmin)
 
 class WranglerAdmin(admin.ModelAdmin):
     autocomplete_fields = ['who']
-    list_display = ['who', 'favorite_site']
+    list_display = ['who', ]
 
 admin.site.register(Wrangler, WranglerAdmin)
 
@@ -91,7 +91,7 @@ class ProjectAdmin(admin.ModelAdmin):
     list_filter = ['species', 'effort', 'wrangler1', 'state_reached', 'assay_tech']
     inlines = [TrackerInline,]
     fieldsets = (
-        ('overall', { 'fields': (('short_name', 'state_reached', ), ('title', 'stars'), ('labs', 'consent'), ('chat_url'))}), 
+        ('overall', { 'fields': (('short_name', 'state_reached', ), ('title', 'stars'), ('labs', 'consent'), ('git_ticket_url'))}), 
 	('wrangling',  { 'fields': (
 		('wrangler1', 'wrangler2'), 
 		('cur_state', 'comments'),
@@ -105,6 +105,7 @@ class ProjectAdmin(admin.ModelAdmin):
 		('questionnaire_date', 'questionnaire_comments'),
 		('tAndC_date', 'tAndC_comments'),
 		('sheet_template_date', 'sheet_template', ),
+                ('shared_google_sheet'),
 		('sheet_from_lab_date', 'sheet_from_lab', ),
 		('back_to_lab_date', 'back_to_lab', ),
                 ('lab_review_date', 'lab_review_comments', ),

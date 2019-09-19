@@ -57,3 +57,23 @@
 	   was done manually and is incomplete.  I think I'd like wrangler help to
 	   do about 15 of these from when the ingest ui site seems to have lost track of
 	   the spreadsheets.
+0.7 - Put in a json API.  
+           <tuataraUrl>/api  - Gives you list of api entry points, 
+           <tuataraUrl>/api/project  - Gives you list of projects
+           <tuataraUrl>/api/contributor  - Gives you list of contributors
+           <tuataraUrl>/api/organ  - Gives you list of organ
+           <tuataraUrl>/api/disease  - Gives you list of diseases
+           <tuataraUrl>/api/tracker  - Gives you list of project post-submission tracking
+      Where I'm hoping tuataraUrl will be https://tuatara.data.humancellatlas.org,  but
+      at the moment it's http://hgwdev.gi.ucsc.edu:8123/
+	   Also Changes suggested by Will and Chris after putting in some of their
+      projects in particular:
+          - there's a "shared_google_sheet" url that they may use sometimes in place of
+	    the spreadsheet to/from lab fields.
+	  - the staging area is text instead of URL since S3 didn't work in URL
+	  - "chat url" is now called "git ticket url."  If we can figure out a way to
+	    start a git ticket when a project is started it'd save them some clicks.
+      Chris didn't like seeing "wrangler diseases" and the like, since the diseases really
+      weren't about the wranglers, so am prefixing the less public/more preliminary tables
+      with "x" instead of "wrangler"
+
