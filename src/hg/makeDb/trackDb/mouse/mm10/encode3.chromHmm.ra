@@ -16,6 +16,7 @@ group regulation
 labelOnFeature noDense
 bedPackDense on
 centerLabelsPack off
+exonNumbers off
 visibility pack
 
     track encode3RenChromHmmForebrainP0
