@@ -1,0 +1,42 @@
+#########################################################################
+# crispr whole genome (WORKING - 2019-07-03 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/crisprAll
+    cd /hive/data/genomes/hg38/bed/crisprAll
+
+    # the large shoulder argument will cause the entire genome to be scanned
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 -stop=ranges \
+    hg38 knownGene -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev-101 -bigClusterHub=ku \
+      -workhorse=hgwdev) > ranges.log 2>&1
+    # real    3m27.509s
+
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=guides -stop=guides \
+    hg38 knownGene -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > guides.log 2>&1
+    # real    13m30.089s
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=specScoreJobList -stop=specScores \
+    hg38 knownGene -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > specScores.log 2>&1
+# Completed: 3147278 of 3147278 jobs
+# CPU time in finished jobs:  301358514s 5022641.91m 83710.70h 3487.95d  9.556 y
+# IO & Wait Time:             153270388s 2554506.46m 42575.11h 1773.96d  4.860 y
+# Average job time:                 144s       2.41m     0.04h    0.00d
+# Longest finished job:             388s       6.47m     0.11h    0.00d
+# Submission to last job:        458446s    7640.77m   127.35h    5.31d
+
+    ### remember to get back to hgwdev to run this
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=effScores -stop=load \
+    hg38 knownGene -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > load.log 2>&1
+    # real    1085m38.773s
+
+#########################################################################
+
