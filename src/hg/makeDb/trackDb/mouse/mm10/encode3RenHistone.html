@@ -1,3 +1,14 @@
+<style>
+#histoneTable  th {
+    border-bottom: 2px solid #6678b1;
+}
+#histoneTable  td {
+    padding: 0 10px 0 10px;
+}
+.colorPatch {
+    width: 10px; 
+}
+</style>
 
 <h2>Description</h2>
 <p>
@@ -39,17 +50,37 @@ the input control. Data for individual replicates are available through the
 ENCODE portal</a>.
 </p>
 <p>
-Tracks are colored by histone modification, as follows:
-<ul>
-<li>H3K27me3 <span style='background-color: darkred;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> dark red
-<li>H3K9me3 <span style='background-color: red;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> light red
-<li>H3K4me3, <span style='background-color: darkblue;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> dark blue
-<li>H3K4me2 <span style='background-color: royalblue;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> royal blue
-<li>H3K4me1 <span style='background-color: lightblue;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> light blue
-<li>H3K36me3 <span style='background-color: gold;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> gold
-<li>H3K27ac <span style='background-color: darkgreen;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> dark green
-<li>H3K9ac <span style='background-color: lightgreen;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> light green
-</ul>
+Tracks are colored by histone modification. The table below list shows the assigned track color
+and the genomic region type and activity level characteristic of each modification.
+<table id="histoneTable" style="margin-left: 100px";>
+<thead>
+    <tr><th>Modification</th><th>&nbsp;</th><th colspan=2>Color</th><th>Regions</th><th>Activity Level</th></tr>
+</thead>
+<tr><td>  H3K4me3  </td><td></td>
+        <td class="colorPatch" style='background-color:darkblue;'></td><td> dark blue</td>
+            <td>  promoters </td><td>  active, poised  </td></tr>
+<tr><td>  H3K4me2  </td><td></td>
+        <td class="colorPatch" style='background-color:royalblue;'></td><td> royal blue</td>
+            <td>  promoters, enhancers  </td><td>  active, poised  </td></tr>
+<tr><td>  H3K4me1  </td><td></td><td 
+        class="colorPatch" style='background-color:lightblue;'></td><td> light blue </td>
+            <td>  enhancers  </td><td>  active, poised  </td></tr>
+<tr><td>  H3K27ac  </td><td></td>
+        <td class="colorPatch" style='background-color:darkgreen;'></td><td> dark green</td>
+            <td>  promoters, enhancers  </td><td>  active  </td></tr>
+<tr><td>  H3K9ac  </td><td></td>
+        <td class="colorPatch" style='background-color:lightgreen;'></td><td> light green</td>
+            <td>  promoters, enhancers  </td><td>  active  </td></tr>
+<tr><td>  H3K36me3 </td><td></td>
+        <td class="colorPatch" style='background-color:gold;'></td><td> gold</td>
+            <td>  exons</td><td>  active  </td></tr>
+<tr><td>  H3K27me3  </td><td></td>
+        <td class="colorPatch" style='background-color:darkred;'></td><td> dark red</td>
+            <td>  introns, intergenic  </td><td>  repressed  </td></tr>
+<tr><td>  H3K9me3  </td><td></td>
+        <td class="colorPatch" style='background-color:red;'></td><td> light red</td>
+            <td>  heterochromatin  </td><td>  repressed  </td></tr>
+</table>
 
 </p>
 
