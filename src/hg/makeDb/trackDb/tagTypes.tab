@@ -487,7 +487,7 @@ urls bigBed bed bigPsl genePred psl bigBarChart bigGenePred bigLolly
 useScore *
 view *
 viewLimits *
-viewLimitsMax bed bedGraph wig
+viewLimitsMax bed bedGraph wig bigWig
 viewUi *
 visibility *
 visibilityViewDefaults *
