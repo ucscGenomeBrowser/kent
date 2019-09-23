@@ -13,9 +13,8 @@ subGroup4 view View Peaks=Peaks Signal=Signal
 subGroup5 subtrackColor Color
 dimensions dimX=mark dimY=tissue dimA=age
 filterComposite dimA
-sortOrder tissue=+ mark=+ subtrackColor=+ age=+ view=+ 
+sortOrder tissue=+ mark=+ subtrackColor=+ age=+ view=-
 showSubtrackColorOnUi on
-priority 6
 dragAndDrop subTracks
 visibility full
 
@@ -379,7 +378,7 @@ visibility full
 
         track encode3Ren_forebrain_H3K4me2_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF184WOD.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K4me2 forebrn P0
         longLabel ChIP-seq peaks of forebrain H3K4me2 on day P0 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -1144,7 +1143,7 @@ visibility full
 
         track encode3Ren_forebrain_H3K9ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF673EKK.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K9ac forebrn P0
         longLabel ChIP-seq peaks of forebrain H3K9ac on day P0 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -1162,7 +1161,7 @@ visibility full
 
         track encode3Ren_forebrain_H3K4me1_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF172LKQ.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K4me1 forebrn P0
         longLabel ChIP-seq peaks of forebrain H3K4me1 on day P0 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -1261,7 +1260,7 @@ visibility full
 
         track encode3Ren_forebrain_H3K36me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF460OVN.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K36me3 forebrn P0
         longLabel ChIP-seq peaks of forebrain H3K36me3 on day P0 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -1738,7 +1737,7 @@ visibility full
 
         track encode3Ren_forebrain_H3K27me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF915VHI.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K27me3 forebrn P0
         longLabel ChIP-seq peaks of forebrain H3K27me3 on day P0 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -2242,7 +2241,7 @@ visibility full
 
         track encode3Ren_forebrain_H3K27ac_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF348JQQ.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K27ac forebrn P0
         longLabel ChIP-seq peaks of forebrain H3K27ac on day P0 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -2800,7 +2799,7 @@ visibility full
 
         track encode3Ren_forebrain_H3K4me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF022PPU.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K4me3 forebrn P0
         longLabel ChIP-seq peaks of forebrain H3K4me3 on day P0 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -3502,7 +3501,7 @@ visibility full
 
         track encode3Ren_forebrain_H3K9me3_P0
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF279LXD.bigBed
-        parent encode3RenHistonePeaks on
+        parent encode3RenHistonePeaks off
         shortLabel K9me3 forebrn P0
         longLabel ChIP-seq peaks of forebrain H3K9me3 on day P0 from ENCODE 3 (UCSD/Ren)
         type bigBed 6 +
@@ -5098,10 +5097,11 @@ visibility full
     parent encode3RenHistone
     shortLabel Histone Modification Signal
     view Signal
-    visibility full
     type bigWig
-    autoScale on 
-    maxHeightPixels 64:32:16
+    viewLimits 0:15
+    viewLimitsMax 0:132
+    maxHeightPixels 64:24:10
+    visibility full
 
         track encode3Ren_liver_H3K27me3_E12_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF361SUJ.bigWig
@@ -5501,7 +5501,7 @@ visibility full
 
         track encode3Ren_forebrain_H3K27ac_E15_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF440SCC.bigWig
-        parent encode3RenHistoneSignal off
+        parent encode3RenHistoneSignal on
         shortLabel K27ac forebrn 15
         longLabel ChIP-seq signal of embryonic forebrain H3K27ac on day E15.5 from ENCODE 3 (UCSD/Ren)
         type bigWig
@@ -5537,7 +5537,7 @@ visibility full
 
         track encode3Ren_forebrain_H3K4me1_E15_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF059NRZ.bigWig
-        parent encode3RenHistoneSignal off
+        parent encode3RenHistoneSignal on
         shortLabel K4me1 forebrn 15
         longLabel ChIP-seq signal of embryonic forebrain H3K4me1 on day E15.5 from ENCODE 3 (UCSD/Ren)
         type bigWig
@@ -5771,7 +5771,7 @@ visibility full
 
         track encode3Ren_forebrain_H3K4me2_E15_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF083ZPL.bigWig
-        parent encode3RenHistoneSignal off
+        parent encode3RenHistoneSignal on
         shortLabel K4me2 forebrn 15
         longLabel ChIP-seq signal of embryonic forebrain H3K4me2 on day E15.5 from ENCODE 3 (UCSD/Ren)
         type bigWig
@@ -5780,7 +5780,7 @@ visibility full
 
         track encode3Ren_forebrain_H3K4me3_E15_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF469CPH.bigWig
-        parent encode3RenHistoneSignal off
+        parent encode3RenHistoneSignal on
         shortLabel K4me3 forebrn 15
         longLabel ChIP-seq signal of embryonic forebrain H3K4me3 on day E15.5 from ENCODE 3 (UCSD/Ren)
         type bigWig
@@ -7904,7 +7904,7 @@ visibility full
 
         track encode3Ren_forebrain_H3K27me3_E15_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF848GOF.bigWig
-        parent encode3RenHistoneSignal off
+        parent encode3RenHistoneSignal on
         shortLabel K27me3 forebrn 15
         longLabel ChIP-seq signal of embryonic forebrain H3K27me3 on day E15.5 from ENCODE 3 (UCSD/Ren)
         type bigWig
@@ -8363,7 +8363,7 @@ visibility full
 
         track encode3Ren_forebrain_H3K36me3_E15_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF393XPO.bigWig
-        parent encode3RenHistoneSignal off
+        parent encode3RenHistoneSignal on
         shortLabel K36me3 forebrn 15
         longLabel ChIP-seq signal of embryonic forebrain H3K36me3 on day E15.5 from ENCODE 3 (UCSD/Ren)
         type bigWig
@@ -8867,7 +8867,7 @@ visibility full
 
         track encode3Ren_forebrain_H3K9me3_E15_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF718RMZ.bigWig
-        parent encode3RenHistoneSignal off
+        parent encode3RenHistoneSignal on
         shortLabel K9me3 forebrn 15
         longLabel ChIP-seq signal of embryonic forebrain H3K9me3 on day E15.5 from ENCODE 3 (UCSD/Ren)
         type bigWig
@@ -9299,7 +9299,7 @@ visibility full
 
         track encode3Ren_forebrain_H3K9ac_E15_Signal
         bigDataUrl /gbdb/mm10/encode3/histones/ENCFF391DVK.bigWig
-        parent encode3RenHistoneSignal off
+        parent encode3RenHistoneSignal on
         shortLabel K9ac forebrn 15
         longLabel ChIP-seq signal of embryonic forebrain H3K9ac on day E15.5 from ENCODE 3 (UCSD/Ren)
         type bigWig
