@@ -49,6 +49,23 @@ then
     installGeneReviewTables "hg38"  
     installGeneReviewTables "hg19"    
     installGeneReviewTables "hg18"
+    # now archive
+    for db in "hg18" "hg19" "hg38"
+    do
+        if [ ! -d ${WORKDIR}/archive/${db} ]; then
+            mkdir -p ${WORKDIR}/archive/${db}
+        fi
+        cd ${WORKDIR}/archive/${db}
+        mkdir ${today}
+        cd ${today}
+        printf "This directory contains a backup of the geneReviews track built on %s" "${today}" > README 
+        for i in `cat ${WORKDIR}/geneReviews.tables`
+        do
+            hgsql -Ne "show create table ${i}" ${db} > ${i}.sql
+            hgsql -Ne "select * from ${i}" ${db} | gzip >  ${i}.txt.gz
+        done
+    done
+    cd ${WORKDIR}/${today}
 
     rm -f ../lastUpdate
     cp -p NBKid_shortname_genesymbol.txt ../lastUpdate
