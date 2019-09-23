@@ -1538,10 +1538,8 @@ while(TRUE)
 	    warn("Strange http header on %s", url);
 	    return FALSE;
 	    }
-	if (sameString(code, "300")
-	 || sameString(code, "301")
+	if (sameString(code, "301")
 	 || sameString(code, "302")
-	 || sameString(code, "303")
 	 || sameString(code, "307")
 	 || sameString(code, "308")
 	   )
