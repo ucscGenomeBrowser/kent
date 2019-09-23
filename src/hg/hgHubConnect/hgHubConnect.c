@@ -387,10 +387,8 @@ void doValidateNewHub(char *hubUrl)
 struct dyString *cmd = dyStringNew(0);
 udcSetCacheTimeout(1);
 dyStringPrintf(cmd, "loader/hubCheck -htmlOut -noTracks %s", hubUrl);
-printf("<tr><td>");
-printf("running command: '%s'\n", cmd->string);
-printf("</td></tr></table>");
-printf("<div id=\"tracks\" class=\"hubTdbTree\" style=\"overflow: auto\"></div>");
+printf("</table>");
+printf("<div id=\"validateHubResult\" class=\"hubTdbTree\" style=\"overflow: auto\"></div>");
 FILE *f = popen(cmd->string, "r");
 if (f == NULL)
     errAbort("popen: error running command: \"%s\"", cmd->string);
@@ -402,7 +400,8 @@ while (fgets(buf, sizeof(buf), f))
     }
 if (pclose(f) == -1)
     errAbort("pclose: error for command \"%s\"", cmd->string);
-jsInline("hgCollection.init();");
+// the 'false' below prevents a few hub-search specific jstree configuration options
+jsInline("hubSearchTree.init(false);");
 dyStringFree(&cmd);
 }
 
@@ -1072,6 +1071,176 @@ for (hst = searchResults; hst != NULL; hst = hst->next)
 return hubOut;
 }
 
+static char *tdbOutputStructureLabelToId(struct tdbOutputStructure *tdbOut)
+/* Make an array name out of a tdbOutputStruct */
+{
+struct dyString *id = dyStringNew(0);
+dyStringPrintf(id, "%s", htmlEncode(dyStringContents(tdbOut->shortLabel)));
+if (tdbOut->childCount > 0)
+    {
+    dyStringPrintf(id, " (%d subtrack%s)", tdbOut->childCount,
+        tdbOut->childCount == 1 ? "" : "s");
+    }
+return dyStringCannibalize(&id);
+}
+
+static void printTdbOutputStructureToDyString(struct tdbOutputStructure *tdbOut, struct dyString *dy, char *arrayName)
+/* Print a tdbOutputStructure to a dyString*/
+{
+dyStringPrintf(dy, "trackData['%s'] = [", arrayName);
+
+if (tdbOut->childCount > 0)
+    {
+    struct dyString *subtrackDy = dyStringNew(0);
+    struct tdbOutputStructure *child = tdbOut->children;
+    while (child != NULL)
+        {
+        char *childId = tdbOutputStructureLabelToId(child);
+        dyStringPrintf(dy, "\n\t{\n\tid: '%s',\n\tparent: '%s',\n\t"
+            "li_attr: {nodetype:'track', configlink:'%s'},\n\ttext: \'%s ",
+            childId, arrayName, dyStringContents(child->configUrl), childId);
+        if (isNotEmpty(dyStringContents(child->metaTags)))
+            {
+            dyStringPrintf(dy, "<br><span class=\\'descriptionMatch\\'><em>Metadata: %s</em></span>",
+                htmlEncode(dyStringContents(child->metaTags)));
+            }
+        if (isNotEmpty(dyStringContents(child->descriptionMatch)))
+            {
+            dyStringPrintf(dy, "<br><span class=\\'descriptionMatch\\'><em>Description: %s</em></span>",
+                htmlEncode(dyStringContents(child->descriptionMatch)));
+            }
+        dyStringPrintf(dy, "\'");
+        if (child->childCount > 0)
+            {
+            dyStringPrintf(dy, ",\n\tchildren: true");
+            printTdbOutputStructureToDyString(child, subtrackDy, childId);
+            }
+        dyStringPrintf(dy, "\n\t},");
+        child = child->next;
+        }
+    dyStringPrintf(dy, "];\n");
+    if (isNotEmpty(dyStringContents(subtrackDy)))
+        dyStringPrintf(dy, "%s", subtrackDy->string);
+    }
+else
+    dyStringPrintf(dy, "];\n");
+}
+
+
+void printGenomeOutputStructureToDyString(struct genomeOutputStructure *genomeOut, struct dyString *dy, char *genomeNameId)
+/* Print a genomeOutputStructure to a dyString */
+{
+struct tdbOutputStructure *tdbOut = NULL;
+static  struct dyString *tdbArrayDy = NULL; // the dyString for all of the tdb objects
+static struct dyString *idString = NULL; // the special id of this track
+if (tdbArrayDy == NULL)
+    tdbArrayDy = dyStringNew(0);
+if (idString == NULL)
+    idString = dyStringNew(0);
+
+// The structure here is:
+// trackData[genome] = [{track 1 obj}, {track2 obj}, {track3 obj}, ... ]
+// trackData[track1] = [{search hit text}, {subtrack1 search hit}, {subtrack2 search hit}, ... ]
+//
+// if track1, track2, track3 are container tracks, then the recursive function
+// tdbOutputStructureToDystring creates the above trackData[track1] = [{}] for 
+// each of the containers, otherwise a single child of the genome is sufficient
+dyStringPrintf(dy, "trackData['%s'] = [", genomeNameId);
+if (genomeOut->tracks != NULL)
+    {
+    tdbOut = genomeOut->tracks;
+    while (tdbOut != NULL)
+        {
+        dyStringPrintf(idString, "%s", tdbOutputStructureLabelToId(tdbOut));
+        dyStringPrintf(dy, "\n\t{\n\t'id': '%s',\n\t'parent': '%s',\n\t"
+            "'li_attr': {'nodetype':'track', configlink: '%s'},\n\t'text': \'%s ",
+            idString->string, genomeNameId, dyStringContents(tdbOut->configUrl), idString->string);
+        if (isNotEmpty(dyStringContents(tdbOut->metaTags)))
+            {
+            dyStringPrintf(dy, "<br><span class=\\'descriptionMatch\\'><em>Metadata: %s</em></span>",
+                htmlEncode(dyStringContents(tdbOut->metaTags)));
+            }
+        if (isNotEmpty(dyStringContents(tdbOut->descriptionMatch)))
+            {
+            dyStringPrintf(dy, "<br><span class=\\'descriptionMatch\\'><em>Description: %s</em></span>",
+                htmlEncode(dyStringContents(tdbOut->descriptionMatch)));
+            }
+        dyStringPrintf(dy, "\'");
+
+        // above we took care of both non-heirarchical tracks and the top-level containers,
+        // now do container children, which also takes care of any deeper heirarchies
+        if (tdbOut->childCount > 0)
+            dyStringPrintf(dy, ",\n\t'children': true");
+        dyStringPrintf(dy, "\n\t},\n");
+
+        if (tdbOut->childCount > 0)
+            printTdbOutputStructureToDyString(tdbOut, tdbArrayDy, idString->string);
+        tdbOut = tdbOut->next;
+        dyStringClear(idString);
+        }
+    }
+dyStringPrintf(dy, "];\n"); // close off genome node
+dyStringPrintf(dy, "%s\n", tdbArrayDy->string);
+dyStringClear(tdbArrayDy);
+dyStringClear(idString);
+}
+
+void printHubOutputStructure(struct hubOutputStructure *hubOut, struct hubEntry *hubInfo)
+/* Convert a hubOutputStructure to a jstree-readable string */
+{
+struct dyString *dy = dyStringNew(0);
+// The leading '#' tells the javascript this is a 'root' node
+dyStringPrintf(dy, "trackData['#_%d'] = [", hubInfo->id);
+if (isNotEmpty(dyStringContents(hubOut->descriptionMatch)))
+    {
+    dyStringPrintf(dy, "{'id':'%d_descriptionMatchText','parent':'#_%d',"
+        "'state':{'opened': true},'text': 'Hub Description: "
+        "<span class=\"descriptionMatch\"><em>%s</em></span>'},",
+        hubInfo->id, hubInfo->id, dyStringContents(hubOut->descriptionMatch));
+    }
+struct genomeOutputStructure *genomeOut = hubOut->genomes;
+struct dyString *genomeDy = dyStringNew(0);
+if (genomeOut != NULL)
+    {
+    dyStringPrintf(dy, "{'id':'%d_assemblies', 'text':'%d Matching Assembl%s', 'parent':'#_%d', "
+        "'children':true, 'li_attr': {'state':{'opened': 'false'}}}];\n",
+        hubInfo->id, hubOut->genomeCount, hubOut->genomeCount == 1 ? "y" : "ies", hubInfo->id);
+    dyStringPrintf(dy, "trackData['%d_assemblies'] = [", hubInfo->id);
+
+    while (genomeOut != NULL)
+        {
+        char *assemblyName = htmlEncode(dyStringContents(genomeOut->shortLabel));
+        char genomeNameId[512];
+        safef(genomeNameId, sizeof(genomeNameId), "%d_%s", hubInfo->id, assemblyName);
+        dyStringPrintf(dy, "{'id': '%s', 'parent': '%d_assemblies', 'children': true, "
+            "'li_attr': {'assemblylink': '%s','nodetype': 'assembly'},"
+            "'text': \"%s",
+            genomeNameId, hubInfo->id, dyStringContents(genomeOut->assemblyLink), assemblyName);
+        if (genomeOut->trackCount > 0)
+            {
+            dyStringPrintf(dy, " (%d track%s) ", genomeOut->trackCount,
+                genomeOut->trackCount == 1 ? "" : "s");
+            }
+        if (isNotEmpty(dyStringContents(genomeOut->metaTags)))
+            {
+            dyStringPrintf(dy, "<br><span class='descriptionMatch'><em>%s</em></span>",
+                htmlEncode(dyStringContents(genomeOut->metaTags)));
+            }
+        if (isNotEmpty(dyStringContents(genomeOut->descriptionMatch)))
+            {
+            dyStringPrintf(dy, "<br><em>Assembly Description:</em> %s",
+                htmlEncode(dyStringContents(genomeOut->descriptionMatch)));
+            }
+        dyStringPrintf(dy, "\"},");
+        printGenomeOutputStructureToDyString(genomeOut, genomeDy, genomeNameId);
+        genomeOut = genomeOut->next;
+        }
+    }
+dyStringPrintf(dy, "];\n");
+dyStringPrintf(dy, "%s", genomeDy->string);
+jsInline(dy->string);
+dyStringClear(dy);
+}
 
 static void printOutputForHub(struct hubEntry *hubInfo, struct hubSearchText *hubSearchResult, int count)
 /* Given a hub's info and a structure listing the search hits within the hub, first print
@@ -1089,29 +1258,14 @@ outputPublicTableRow(hubInfo, count);
 if (hubSearchResult != NULL)
     {
     printf("</tbody></table>\n");
+    printf("<div class=\"hubTdbTree\">\n");
+    printf("<div id='tracks%d'></div>", hubInfo->id); // div for the jstree for this hub's search result(s)
+    printf("</div>\n");
     struct trackHub *hub = fetchTrackHub(hubInfo);
     struct hubOutputStructure *hubOut = buildHubSearchOutputStructure(hub, hubSearchResult);
     if (dyStringIsEmpty(hubOut->descriptionMatch) && (hubOut->genomes == NULL))
         return; // no detailed search results; hit must have been to hub short label or something   
-
-    printf("<div class=\"hubTdbTree\">\n");
-    printf("<ul>\n");
-    printf("<li>Search details ...\n<ul>\n");
-    if (isNotEmpty(dyStringContents(hubOut->descriptionMatch)))
-        printf("<li>Hub Description:&nbsp<span class='descriptionMatch'><em>%s</em></span></li>\n", dyStringContents(hubOut->descriptionMatch));
-
-    struct genomeOutputStructure *genomeOut = hubOut->genomes;
-    if (genomeOut != NULL)
-        {
-        printf("<li>%d Matching Assembl%s\n<ul>\n", hubOut->genomeCount, hubOut->genomeCount==1?"y":"ies");
-        while (genomeOut != NULL)
-            {
-            printSearchOutputForGenome(genomeOut);
-            genomeOut = genomeOut->next;
-            }
-        printf("</ul></li>\n");
-        }
-    printf("</ul></li></ul></div>\n");
+    printHubOutputStructure(hubOut, hubInfo);
     }
 }
 
@@ -1139,6 +1293,9 @@ udcSetDefaultDir(searchUdcDir);
 udcSetCacheTimeout(1<<30);
 struct hubEntry *hubList = NULL;
 struct hubEntry *hubInfo;
+long slTime;
+long printOutputForHubTime;
+boolean measureTiming = cartUsualBoolean(cart, "measureTiming", FALSE);
 if (hubsToPrint != NULL)
     {
     printHubListHeader();
@@ -1159,7 +1316,9 @@ if (hubsToPrint != NULL)
         slAddHead(&hubList, hubInfo);
         }
     slSort(&hubList, hubEntryCmp);
+    slTime = clock1000();
 
+    jsInline("trackData = [];\n");
     for (hubInfo = hubList; hubInfo != NULL; hubInfo = hubInfo->next)
         {
         struct hubSearchText *searchResult = NULL;
@@ -1170,6 +1329,9 @@ if (hubsToPrint != NULL)
         printOutputForHub(hubInfo, searchResult, count);
         count++;
         }
+    printOutputForHubTime = clock1000();
+    if (measureTiming)
+        printf("hgHubConnect: printOutputForHubTime before js execution: %lu millis<BR>\n", printOutputForHubTime - slTime);
     if (searchResultHash == NULL)
         printf("</tbody></table>\n");
     }
@@ -1494,7 +1656,6 @@ jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("hgHubConnect.js", NULL);
 webIncludeResourceFile("hgHubConnect.css");
 jsIncludeFile("jquery.cookie.js", NULL);
-jsIncludeFile("hgCollection.js", NULL);
 jsIncludeFile("spectrum.min.js", NULL);
 
 printf("<div id=\"hgHubConnectUI\"> <div id=\"description\"> \n");
@@ -1607,60 +1768,17 @@ cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 puts("</FORM>");
 printf("</div>\n");
 
-jsInline(
-"var hubSearchTree = (function() {\n"
-"    // Effectively global vars set by init\n"
-"    var treeDiv;        // Points to div we live in\n"
-"\n"
-"    function hubSearchTreeContextMenuHandler (node, callback) {\n"
-"        var nodeType = node.li_attr.nodetype;\n"
-"        if (nodeType == 'track') {\n"
-"            callback({\n"
-"               'openConfig': {\n"
-"                   'label' : 'Configure this track',\n"
-"                   'action' : function () {window.open(node.li_attr.configlink, '_blank'); }\n"
-"               }\n"
-"            });\n"
-"        }\n"
-"        else if (nodeType == 'assembly') {\n"
-"            callback({\n"
-"               'openConfig': {\n"
-"                   'label' : 'Open this assembly',\n"
-"                   'action' : function () {window.open(node.li_attr.assemblylink, '_blank'); }\n"
-"               }\n"
-"            });\n"
-"        }\n"
-"    }\n"
-"    function toggleExpansion(node, event) {\n"
-"       var ident = '#' + node.id;\n"
-"       if (event.type != 'contextmenu')\n"
-"           $(ident).jstree(true).toggle_node(node);\n"
-"       return false;\n"
-"    }\n" 
-"    function init() {\n"
-"       $.jstree.defaults.core.themes.icons = false;\n"
-"       $.jstree.defaults.core.themes.dots = true;\n"
-"       $.jstree.defaults.contextmenu.show_at_node = false;\n"
-"       $.jstree.defaults.contextmenu.items = hubSearchTreeContextMenuHandler\n"
-"       treeDiv=$('.hubTdbTree');\n"
-"       treeDiv.jstree({\n"
-"               'conditionalselect' : function (node, event) { toggleExpansion(node, event); },\n"
-"               'plugins' : ['conditionalselect', 'contextmenu'],\n"
-"               'core' : { dblclick_toggle: false }\n"
-"               });\n"
-"    }\n\n"
-"    return { init: init};\n\n"
-"}());\n"
-"\n"
-"$(function () {\n"
-"    hubSearchTree.init();\n"
+jsInline("$(function () {\n"
+"    console.time(\"init time\");\n"
+"    hubSearchTree.init(true);\n"
+"    console.timeEnd(\"init time\");\n"
 "});\n"
 );
 
 cartWebEnd();
 }
 
-char *excludeVars[] = {"Submit", "submit", "hc_one_url", 
+char *excludeVars[] = {"Submit", "submit", "hc_one_url", "validateHubUrl",
     hgHubCheckUrl, hgHubDoClear, hgHubDoDisconnect,hgHubDoRedirect, hgHubDataText, 
     hgHubConnectRemakeTrackHub, NULL};
 
