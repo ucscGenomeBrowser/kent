@@ -111,7 +111,7 @@ var hubSearchTree = (function() {
                     }
                 })
                 .on('select_node.jstree', function(e, data) {
-                    data.instance.open_node(data.node);
+                    $(e.target).instance.open_node(data.node);
                 }); // jstree
             }); // each div
         } else { // validating hub, no contextmenu and easier tree building
@@ -132,10 +132,3 @@ var hubSearchTree = (function() {
         init: init
     };
 }());
-
-$(function () {
-    console.time("init time");
-    // the parameter describes whether we have searched or are validating
-    hubSearchTree.init(false);
-    console.timeEnd("init time");
-});

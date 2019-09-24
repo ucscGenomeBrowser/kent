@@ -608,8 +608,7 @@ if (thisTrack)
 	freeMem(sqlTable);
 	sqlTable = cloneString(tableName);
 	}
-    if (trackDbSetting(thisTrack, "tableBrowser"))
-        protectedData = TRUE;
+    protectedData = protectedTrack(thisTrack);
     }
 else
     {
