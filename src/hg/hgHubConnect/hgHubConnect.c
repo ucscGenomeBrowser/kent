@@ -393,7 +393,6 @@ FILE *f = popen(cmd->string, "r");
 if (f == NULL)
     errAbort("popen: error running command: \"%s\"", cmd->string);
 char buf[1024];
-jsInline("trackData = [];");
 while (fgets(buf, sizeof(buf), f))
     {
     jsInlineF("%s", buf);
@@ -1318,7 +1317,6 @@ if (hubsToPrint != NULL)
     slSort(&hubList, hubEntryCmp);
     slTime = clock1000();
 
-    jsInline("trackData = [];\n");
     for (hubInfo = hubList; hubInfo != NULL; hubInfo = hubInfo->next)
         {
         struct hubSearchText *searchResult = NULL;
@@ -1371,6 +1369,8 @@ jsInline(
         "    }\n"
         "window.onload = lineUpCols();\n"
         );
+if (searchResultHash != NULL)
+    jsInline("hubSearchTree.init(true);\n");
 }
 
 
@@ -1672,6 +1672,10 @@ printf(
    );
 printf("</div>\n");
 
+// this variable is used by hub search and hub validate, initialize here so we don't
+// overwrite it unintentionally depending on which path the CGI takes
+jsInline("trackData = [];\n");
+
 getDbAndGenome(cart, &database, &organism, oldVars);
 
 char *survey = cfgOptionEnv("HGDB_HUB_SURVEY", "hubSurvey");
@@ -1767,13 +1771,6 @@ cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 
 puts("</FORM>");
 printf("</div>\n");
-
-jsInline("$(function () {\n"
-"    console.time(\"init time\");\n"
-"    hubSearchTree.init(true);\n"
-"    console.timeEnd(\"init time\");\n"
-"});\n"
-);
 
 cartWebEnd();
 }
