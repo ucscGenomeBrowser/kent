@@ -312,8 +312,7 @@ if (NULL == tdb)	/* might not be any trackDb */
 boolean isContainer = tdbIsComposite(tdb) || tdbIsCompositeView(tdb);
 
 boolean protectedData = FALSE;
-if (trackDbSetting(tdb, "tableBrowser"))
-    protectedData = TRUE;
+protectedData = protectedTrack(tdb);
 jsonWriteString(jw, "shortLabel", tdb->shortLabel);
 jsonWriteString(jw, "type", tdb->type);
 jsonWriteString(jw, "longLabel", tdb->longLabel);
@@ -333,7 +332,8 @@ if (tdb->settingsHash)
         {
         if (sameWord("track", hel->name))
             continue;	// already output in header
-        if (sameWord("tableBrowser", hel->name))
+        if (sameWord("tableBrowser", hel->name)
+		&& startsWithWord("off", (char*)hel->val))
             jsonWriteBoolean(jw, "protectedData", TRUE);
         else if (isEmpty((char *)hel->val))
             jsonWriteString(jw, hel->name, "empty");
@@ -501,7 +501,7 @@ long long itemCount = 0;
 if (bbi)
     {
     /* do not show itemCount for protected data */
-    if (! trackDbSetting(thisTrack, "tableBrowser"))
+    if (! protectedTrack(thisTrack))
 	{
 	char *indexFileOrUrl = hReplaceGbdb(trackDbSetting(thisTrack, "bigDataIndex"));
 	itemCount = bbiItemCount(bigDataUrl, thisTrack->type, indexFileOrUrl);
@@ -525,7 +525,7 @@ else
     asColumnCount = slCount(columnEl);
 
     /* do not show counts for protected data */
-    if (! trackDbSetting(thisTrack, "tableBrowser"))
+    if (! protectedTrack(thisTrack))
 	{
 	char query[2048];
 	sqlSafef(query, sizeof(query), "select count(*) from %s", splitTableName);
@@ -685,7 +685,7 @@ static long long dataItemCount(char *db, struct trackDb *tdb)
 long long itemCount = 0;
 if (trackHasNoData(tdb))	/* container 'tracks' have no data items */
     return itemCount;
-if (trackDbSetting(tdb, "tableBrowser"))	/* private data */
+if (protectedTrack(tdb))	/*	private data */
     return itemCount;
 if (sameWord("downloadsOnly", tdb->type))
     return itemCount;
@@ -750,7 +750,7 @@ if (! (trackLeavesOnly && isContainer) )
     {
     long long itemCount = 0;
     /* do not show counts for protected data or continers (== no items)*/
-    if (! (isContainer || trackDbSetting(tdb, "tableBrowser")))
+    if (! (isContainer || protectedTrack(tdb)))
 	itemCount = dataItemCount(db, tdb);
     jsonWriteObjectStart(jw, tdb->track);
     if (tdbIsComposite(tdb))
