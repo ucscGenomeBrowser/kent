@@ -1,19 +1,34 @@
+<style>
+#histoneTable  th {
+    border-bottom: 2px solid #6678b1;
+}
+#histoneTable  td {
+    padding: 0 10px 0 10px;
+}
+.colorPatch {
+    width: 10px; 
+}
+</style>
 
 <h2>Description</h2>
 <p>
 The ENCODE project has established an epigenomic resource for mammalian development,
 profiling a diverse panel of mouse tissues at eight developmental stages from 10.5 days post
-conception until birth.  This track set presents the results of a comprehensive study of chromatin
+conception until birth.</p>  
+<div><img border="1" src="../images/renMouseDev.png" style="margin-left: 100px;"></div>
+<p>
+This track set presents the results of a comprehensive study of chromatin
 state across these developmental stages, based on 1,128 ChiP-seq assays of 8 histone modifications 
 in 12 tissues.</p>
-<p>Histone modifications are post-translational chemical modifications (e.g. methylation, 
+<p>
+Histone modifications are post-translational chemical modifications (e.g. methylation, 
 acetylation) of histone proteins present in chromatin. Histone modifications are core 
 components of a cell's epigenome, and influence gene expression by modulating the activity of 
 DNA sequences. </p>
 
 <h2> Display Conventions and Configuration </h2>
 <p>
-This track is a multi-view composite track that containing two data types
+This track is a multi-view composite track that contains two data types
 (<em>views</em>).  For each view, there are multiple subtracks that
 display individually on the browser.  Instructions for configuring multi-view
 tracks are <a href="/goldenPath/help/multiView.html" target=_blank>here</a>.
@@ -23,36 +38,61 @@ The views in this track are:
 enrichment</DD>
 <dt><em>Signal</em></dt><dd> Density graph of signal enrichment.</dd>
 </DL>
-<p>Peaks displayed in this track set are those present in both replicates, or observed in two 
-pseudoreplicates of the pooled peaks from both replicates (the "replicated peaks" files 
-from the ENCODE data portal).  Signals displayed in this track correspond to the "fold change 
-over control" files from merged replicates, reflecting the fold enrichment of ChIP signal over 
+<p>Peaks displayed in this track set are replicated peaks called with the 
+<a target="_blank" href="https://www.encodeproject.org/software/idr/">
+Irreproducible Discovery Rate</a> (IDR) framework</a> 
+These peaks are identical to those in the &quot;replicated peaks&quot; files 
+on the ENCODE data portal.  
+Signals displayed in this track correspond to the &quot;fold change 
+over control&quot; files from merged replicates, reflecting the fold enrichment of ChIP signal over 
 the input control. Data for individual replicates are available through the 
 <a target="_blank" href="https://www.encodeproject.org/">
 ENCODE portal</a>.
 </p>
 <p>
-Tracks are colored by histone modification, as follows:
-<ul>
-<li>H3K27me3 <span style='background-color: darkred;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> dark red
-<li>H3K9me3 <span style='background-color: red;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> light red
-<li>H3K4me3, <span style='background-color: darkblue;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> dark blue
-<li>H3K4me2 <span style='background-color: royalblue;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> royal blue
-<li>H3K4me1 <span style='background-color: lightblue;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> light blue
-<li>H3K36me3 <span style='background-color: gold;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> gold
-<li>H3K27ac <span style='background-color: darkgreen;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> dark green
-<li>H3K9ac <span style='background-color: lightgreen;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> light green
-</ul>
+Tracks are colored by histone modification. The table below list shows the assigned track color
+and the genomic region type and activity level characteristic of each modification.
+<table id="histoneTable" style="margin-left: 100px";>
+<thead>
+    <tr><th>Modification</th><th>&nbsp;</th><th colspan=2>Color</th><th>Regions</th><th>Activity Level</th></tr>
+</thead>
+<tr><td>  H3K4me3  </td><td></td>
+        <td class="colorPatch" style='background-color:darkblue;'></td><td> dark blue</td>
+            <td>  promoters </td><td>  active, poised  </td></tr>
+<tr><td>  H3K4me2  </td><td></td>
+        <td class="colorPatch" style='background-color:royalblue;'></td><td> royal blue</td>
+            <td>  promoters, enhancers  </td><td>  active, poised  </td></tr>
+<tr><td>  H3K4me1  </td><td></td><td 
+        class="colorPatch" style='background-color:lightblue;'></td><td> light blue </td>
+            <td>  enhancers  </td><td>  active, poised  </td></tr>
+<tr><td>  H3K27ac  </td><td></td>
+        <td class="colorPatch" style='background-color:darkgreen;'></td><td> dark green</td>
+            <td>  promoters, enhancers  </td><td>  active  </td></tr>
+<tr><td>  H3K9ac  </td><td></td>
+        <td class="colorPatch" style='background-color:lightgreen;'></td><td> light green</td>
+            <td>  promoters, enhancers  </td><td>  active  </td></tr>
+<tr><td>  H3K36me3 </td><td></td>
+        <td class="colorPatch" style='background-color:gold;'></td><td> gold</td>
+            <td>  exons</td><td>  active  </td></tr>
+<tr><td>  H3K27me3  </td><td></td>
+        <td class="colorPatch" style='background-color:darkred;'></td><td> dark red</td>
+            <td>  introns, intergenic  </td><td>  repressed  </td></tr>
+<tr><td>  H3K9me3  </td><td></td>
+        <td class="colorPatch" style='background-color:red;'></td><td> light red</td>
+            <td>  heterochromatin  </td><td>  repressed  </td></tr>
+</table>
 
 </p>
 
 <h2>Methods</h2>
 
 <h3>ChIP-seq data generation</h3>
-ChIP-seq experiments for all marks and tissues from E11.5 - P0 were performed as previously 
-described (PMID: 22763441). The ChIP-seq protocol was modified slightly for all E10.5 
-experiments due to the low amount of input ("micro" ChIP-seq). Detailed protocols for both 
-standard and micro ChIP-seq from the ENCODE project portal, at the links below. 
+ChIP-seq experiments for all marks and tissues from E11.5 - P0 were performed 
+described in Shen et. al 2012 (see References below). 
+The ChIP-seq protocol was modified slightly for all E10.5 
+experiments due to the low amount of input (&quot;micro&quot; ChIP-seq). 
+Detailed protocols for both standard and micro ChIP-seq are available from the ENCODE 
+project portal (see Data Access section, below).
 
 <ul>
 <li><i>Standard ChIP-seq (E11.5-P0)</i>
@@ -123,10 +163,27 @@ Coordination centers.</p>
 
 <h2>References</h2>
 <p>
-An atlas of dynamic chromatin landscapes in the developing mouse fetus
-Gorkin et al.  In Press, Nature. 
-(pre-print: doi: 
-<a target="_blank">https://doi.org/10.1101/166652)</p>
+Gorkin et al. An atlas of dynamic chromatin landscapes in the developing mouse fetus.
+Nature, In Press. (pre-print: doi: 
+<a target="_blank" href="https://doi.org/10.1101/166652">https://doi.org/10.1101/166652</a>)</p>
+
+<p>
+Sloan CA, Chan ET, Davidson JM, Malladi VS, Strattan JS, Hitz BC, Gabdank I, Narayanan AK, Ho M, Lee
+BT <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkv1160" target="_blank">
+ENCODE data at the ENCODE portal</a>.
+<em>Nucleic Acids Res</em>. 2016 Jan 4;44(D1):D726-32.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26527727" target="_blank">26527727</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4702836/" target="_blank">PMC4702836</a>
 </p>
-ENCODE data at the ENCODE portal. (PMID: 26527727)</p> 
+
+Shen Y, Yue F, McCleary DF, Ye Z, Edsall L, Kuan S, Wagner U, Dixon J, Lee L, Lobanenkov VV <em>et
+al</em>.
+<a href="https://doi.org/10.1038/nature11243" target="_blank">
+A map of the cis-regulatory sequences in the mouse genome</a>.
+<em>Nature</em>. 2012 Aug 2;488(7409):116-20.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/22763441" target="_blank">22763441</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4041622/" target="_blank">PMC4041622</a>
+</p>
+
 

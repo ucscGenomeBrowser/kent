@@ -615,3 +615,14 @@ if (tdb)
 else
     return TRUE;	/* might be true */
 }
+
+boolean protectedTrack(struct trackDb *tdb)
+/* determine if track is off-limits protected data */
+{
+boolean ret = FALSE;
+
+char *tbOff = trackDbSetting(tdb, "tableBrowser");
+if (tbOff && startsWithWord("off", tbOff))
+        ret = TRUE;
+return ret;
+}

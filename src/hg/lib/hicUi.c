@@ -126,9 +126,6 @@ char *hicUiFetchDrawMode(struct cart *cart, struct trackDb *tdb)
 /* Return the current draw mode selection, or the default if none
  * has been selected. */
 {
-//char cartVar[1024];
-//safef(cartVar, sizeof(cartVar), "%s.%s", track, HIC_DRAW_MODE);
-//char* selected = cartNonemptyString(cart, cartVar);
 char *selected = cartOptionalStringClosestToHome(cart, tdb, FALSE, HIC_DRAW_MODE);
 if (    !sameOk(selected, HIC_DRAW_MODE_SQUARE) &&
         !sameOk(selected, HIC_DRAW_MODE_ARC) &&
@@ -161,9 +158,6 @@ char *hicUiFetchDrawColor(struct cart *cart, struct trackDb *tdb)
 /* Retrieve the HTML hex code for the color to draw the
  * track values in (e.g., #00ffa1) */
 {
-//char cartVar[1024];
-//safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_DRAW_COLOR);
-//char* selected = cartNonemptyString(cart, cartVar);
 char* selected = cartOptionalStringClosestToHome(cart, tdb, FALSE, HIC_DRAW_COLOR);
 if (selected == NULL)
     selected = HIC_DRAW_COLOR_DEFAULT;
@@ -179,9 +173,6 @@ char *hicUiFetchBgColor(struct cart *cart, struct trackDb *tdb)
 /* Retrieve the HTML hex code of the background color for the 
  * track.  This is the color associated with scores at or close to 0. */
 {
-//char cartVar[1024];
-//safef(cartVar, sizeof(cartVar), "%s.%s", track, HIC_DRAW_BG_COLOR);
-//char* selected = cartNonemptyString(cart, cartVar);
 char* selected = cartOptionalStringClosestToHome(cart, tdb, FALSE, HIC_DRAW_BG_COLOR);
 if (selected == NULL)
     selected = HIC_DRAW_BG_COLOR_DEFAULT;
@@ -198,9 +189,6 @@ double hicUiFetchMaxValue(struct cart *cart, struct trackDb *tdb)
  * its maximum intensity.  Any scores above this value will
  * share that same draw color. */
 {
-//char cartVar[1024];
-//safef(cartVar, sizeof(cartVar), "%s.%s", track, HIC_DRAW_MAX_VALUE);
-//return cartUsualDouble(cart, cartVar, HIC_DRAW_MAX_VALUE_DEFAULT);
 return cartUsualDoubleClosestToHome(cart, tdb, FALSE, HIC_DRAW_MAX_VALUE, HIC_DRAW_MAX_VALUE_DEFAULT);
 }
 
@@ -225,9 +213,6 @@ boolean hicUiFetchAutoScale(struct cart *cart, struct trackDb *tdb)
  * depending on the scores present in the window, or if it should stick to a
  * gradient based on the user's selected maximum value. */
 {
-//char cartVar[1024];
-//safef(cartVar, sizeof(cartVar), "%s.%s", track, HIC_DRAW_AUTOSCALE);
-//return cartUsualBoolean(cart, cartVar, TRUE);
 return cartUsualBooleanClosestToHome(cart, tdb, FALSE, HIC_DRAW_AUTOSCALE, TRUE);
 }
 
@@ -277,26 +262,10 @@ int i;//, first = 1;
 printf("</p><hr>\nMetadata from file header:<br>\n");
 printf("<div style='margin-left: 2em'>\n");
 printf("<label class='trackUiHicLabel'>Genome: %s\n<br></label>", trackMeta->fileAssembly);
-/*
-printf("<label class='trackUiHicLabel trackUiHicAttrToggle'>Attribute dictionary: <img height=10 src='../images/ab_down.gif'></label>");
-printf("<div class='trackUiHicHiddenAttributes'>\n");
-for (i=0; i<trackMeta->nAttributes-1; i+=2)
-    {
-    char *encodedKey = htmlEncode(trackMeta->attributes[i]);
-    char *encodedValue = htmlEncode(trackMeta->attributes[i+1]);
-    printf("%s%s = <pre>%s</pre>\n", first?"":"<br>", encodedKey, encodedValue);
-    first = 0;
-    }
-printf("</div>\n");
-jsInline("$('label.trackUiHicAttrToggle').click(function() {$('div.trackUiHicHiddenAttributes').toggle();});");
-*/
 char scriptline[2048];
 for (i=0; i<trackMeta->nAttributes-1; i+=2)
     {
-//    printf("<label class='trackUiHicLabelExpand trackUiHicAttrToggle%d'>%s</label><br>",// <img height=10 src='../images/ab_right.gif'></label>",
-//        i, htmlEncode(trackMeta->attributes[i]));
-    printf("<label class='trackUiHicLabelExpand trackUiHicAttrToggle%d'>%s <img src='%s' class='trackUiHicLabelArrow'></label><br>",// <img height=10 src='../images/ab_right.gif'></label>",
-        i, htmlEncode(trackMeta->attributes[i]), "../images/ab_right.gif");
+    printf("<label class='trackUiHicLabelExpand trackUiHicAttrToggle%d'>%s <img src='%s' class='trackUiHicLabelArrow'></label><br>", i, htmlEncode(trackMeta->attributes[i]), "../images/ab_right.gif");
     printf("<div class='trackUiHicHiddenAttributes hicAttr%d'>\n", i);
     printf("<pre>%s</pre>", htmlEncode(trackMeta->attributes[i+1]));
     printf("</div>\n");

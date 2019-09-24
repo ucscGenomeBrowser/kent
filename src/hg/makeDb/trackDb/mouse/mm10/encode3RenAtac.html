@@ -2,12 +2,14 @@
 
 The ENCODE project has established an epigenomic resource for mammalian development, 
 profiling a diverse panel of mouse tissues at eight developmental stages from 10.5 days 
-post conception until birth. 
+post conception until birth. </p>
+<div><img border="1" src="../images/renMouseDev.png" style="margin-left: 100px;"></div>
+<p>
 This track set presents the results of a comprehensive study of chromatin accessibility 
 across these developmental stages, based on 122 ATAC-seq assays in 12 tissues.</p>
 <p>
-ATAC-seq profiles &quot;open&quot; or &quot;accessible&quot; chromatin that is relatively devoid of packaging 
-nucleosome particles. 
+ATAC-seq profiles &quot;open&quot; or &quot;accessible&quot; chromatin that is relatively devoid 
+of packaging nucleosome particles. 
 This chromatin accesibility is characteristic of active and poised cis regulatory elements,
 and makes the underlying DNA more amenable to the binding of transcription factors,
 which can function in turn to recruit co-factors and influence transcriptional activity.</p>
@@ -26,8 +28,8 @@ enrichment</DD>
 </dl>
 <p>
 Peaks displayed in this track set are called on data merged between two biological replicates.
-Signals displayed in this track correspond to the &quot;fold change over background&quot; files from 
-merged replicates, reflecting the fold enrichment of ATAC signal over a background model. 
+Signals displayed in this track correspond to the &quot;fold change over background&quot; 
+files from merged replicates.
 Data for individual replicates are available through the ENCODE portal and the
 <a target="_blank" href="http://renlab.sdsc.edu/renlab_website//download/encode3-mouse-histone-atac/">Ren Lab Website</a>.</p>
 
@@ -35,8 +37,9 @@ Data for individual replicates are available through the ENCODE portal and the
 <p>
 <h3>ATAC-seq data generation</h3>
 <p>
-ATAC-seq was performed as described in Buenrostro et al. 2013 (below), with modifications 
-to optimize for frozen tissue. The complete ATAC-seq protocol is available via the ENCODE data portal 
+ATAC-seq was performed as described in Buenrostro et al. 2013 (see References below), 
+with modifications to optimize for frozen tissue. 
+The complete ATAC-seq protocol is available via the ENCODE data portal 
 <a target="_blank" href="https://www.encodeproject.org/documents/4a2fc974-f021-4f85-ba7a-bd401fe682d1/@@download/attachment/RenLab_ATACseq_protocol_20170130.pdf">here</a>.</p>
 
 <h3>ATAC-seq data processing</h3>
@@ -54,8 +57,8 @@ To produce a set of "replicated" ATAC-seq peaks for analysis, the peak calling s
 were performed for each pair of replicates independently as well as a pooled set of data 
 from both replicates. 
 The intersectBed tool from the bedtools v2.27.1 suite was used to identify a set of 
-replicated peaks which we define as the subset of peaks called in the pooled set, 
-were also present independently in both replicate peak call sets.</p>
+replicated peaks, defined as the subset of peaks from the pooled set that are
+present independently in both replicate peak call sets.</p>
 
 <h2>Data Access</h2>
 <p>
@@ -68,8 +71,25 @@ ATAC-seq experiments in this track were performed by the Ren Lab (UC San Diego/L
 
 <h2>References</h2>
 <p>
-Buenrostro et al. Transposition of native chromatin for fast and sensitive epigenomic profiling of open chromatin, DNA-binding proteins and nucleosome position. Nature Methods, 2013; PMID: 24097267.
+Buenrostro JD, Giresi PG, Zaba LC, Chang HY, Greenleaf WJ.
+<a href="http://dx.doi.org/10.1038/nmeth.2688" target="_blank">
+Transposition of native chromatin for fast and sensitive epigenomic profiling of open chromatin,
+DNA-binding proteins and nucleosome position</a>.
+<em>Nat Methods</em>. 2013 Dec;10(12):1213-8.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24097267" target="_blank">24097267</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3959825/" target="_blank">PMC3959825</a>
 </p>
 <p>
-Gorkin et al. An atlas of dynamic chromatin landscapes in the developing mouse fetus. Nature, In Press. (pre-print: doi: https://doi.org/10.1101/166652)
+Gorkin et al. An atlas of dynamic chromatin landscapes in the developing mouse fetus.
+Nature, In Press. (pre-print: doi: 
+<a target="_blank" href="https://doi.org/10.1101/166652">https://doi.org/10.1101/166652</a>)</p>
+<p>
+Sloan CA, Chan ET, Davidson JM, Malladi VS, Strattan JS, Hitz BC, Gabdank I, Narayanan AK, Ho M, Lee
+BT <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkv1160" target="_blank">
+ENCODE data at the ENCODE portal</a>.
+<em>Nucleic Acids Res</em>. 2016 Jan 4;44(D1):D726-32.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26527727" target="_blank">26527727</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4702836/" target="_blank">PMC4702836</a>
 </p>
+
