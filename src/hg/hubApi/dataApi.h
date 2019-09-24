@@ -218,6 +218,9 @@ boolean trackHasData(struct trackDb *tdb);
 
 #define trackHasNoData(tdb) (!trackHasData(tdb))
 
+boolean protectedTrack(struct trackDb *tdb);
+/* determine if track is off-limits protected data */
+
 /* ######################################################################### */
 /*  functions in getData.c */
 
