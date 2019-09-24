@@ -32,6 +32,7 @@ barChartDataUrl barChart bigBarChart
 #
 barChartLabel barChart bigBarChart
 barChartMetric barChart bigBarChart
+barChartMaxSize barChart bigBarChart
 barChartSampleUrl barChart bigBarChart
 barChartUnit barChart bigBarChart
 baseColorDefault *
