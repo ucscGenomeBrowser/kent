@@ -608,7 +608,7 @@ if (thisTrack)
 	freeMem(sqlTable);
 	sqlTable = cloneString(tableName);
 	}
-    protectedData = protectedTrack(thisTrack, sqlTable);
+    protectedData = protectedTrack(thisTrack);
     }
 else
     {
