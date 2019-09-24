@@ -143,5 +143,7 @@ struct slName *bigBedListExtraIndexes(struct bbiFile *bbi);
 int bbExtraFieldIndex(struct bbiFile *bbi, char* fieldName);
 /* return the index of a given extra field */
 
+int bbFieldIndex(struct bbiFile *bbi, char* fieldName);
+/* return the index of a given field. Return -1 if not found. */
 #endif /* BIGBED_H */
 
