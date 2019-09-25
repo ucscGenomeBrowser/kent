@@ -192,7 +192,7 @@ void tokenizerNotEnd(struct tokenizer *tkz)
 /* Squawk if at end. */
 {
 if (tkz->eof)
-    errAbort("Unexpected end of file");
+    errAbort("Unexpected end of input line %d of %s", tkz->lf->lineIx, tkz->lf->fileName);
 }
 
 char *tokenizerMustHaveNext(struct tokenizer *tkz)
@@ -200,7 +200,7 @@ char *tokenizerMustHaveNext(struct tokenizer *tkz)
 {
 char *s = tokenizerNext(tkz);
 if (s == NULL)
-    errAbort("Unexpected end of file");
+    errAbort("Unexpected end of input line %d of %s", tkz->lf->lineIx, tkz->lf->fileName);
 return s;
 }
 

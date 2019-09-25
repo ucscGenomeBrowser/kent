@@ -36,6 +36,9 @@ void fieldedTableFree(struct fieldedTable **pTable);
 struct fieldedRow *fieldedTableAdd(struct fieldedTable *table,  char **row, int rowSize, int id);
 /* Create a new row and add it to table.  Return row. */
 
+struct fieldedRow *fieldedTableAddHead(struct fieldedTable *table, char **row, int rowSize, int id);
+/* Create a new row and add it to start of table.  Return row. */
+
 struct fieldedTable *fieldedTableFromTabFile(char *fileName, char *url, char *requiredFields[], int requiredCount);
 /* Read table from tab-separated file with a #header line that defines the fields.  Ensures
  * all requiredFields (if any) are present.  The url is just used for error reporting and 
@@ -44,6 +47,11 @@ struct fieldedTable *fieldedTableFromTabFile(char *fileName, char *url, char *re
 
 void fieldedTableToTabFile(struct fieldedTable *table, char *fileName);
 /* Write out a fielded table back to file */
+
+void fieldedTableToTabFileWithId(struct fieldedTable *table, char *fileName, 
+    char *idField, int startId);
+/* Write out a fielded table back to file.  If idField is non-NULL it will be added
+ * to the start of each output line as a steadily incrementing integer starting with startId. */
 
 boolean fieldedTableColumnIsNumeric(struct fieldedTable *table, int fieldIx);
 /* Return TRUE if field has numeric values wherever non-null */
@@ -56,6 +64,9 @@ void fieldedTableSortOnField(struct fieldedTable *table, char *field, boolean do
 
 int fieldedTableMustFindFieldIx(struct fieldedTable *table, char *field);
 /* Find index of field in table's row.  Abort if field not found. */
+
+int fieldedTableFindFieldIx(struct fieldedTable *table, char *field);
+/* Return index of field in a table's row or -1 if not found */
 
 struct hash *fieldedTableIndex(struct fieldedTable *table, char *field);
 /* Return hash of fieldedRows keyed by values of given field */

@@ -27,12 +27,22 @@
 #include "bigBedFilter.h"
 #include "bigBedLabel.h"
 
+static unsigned getFieldNum(struct bbiFile *bbi, char *field)
+// get field number for field name in bigBed.  errAbort if field not found.
+{
+int fieldNum =  bbFieldIndex(bbi, field);
+if (fieldNum < 0)
+    errAbort("error building filter with field %s.  Field not found.", field);
+
+return fieldNum;
+}
+
 struct bigBedFilter *bigBedMakeNumberFilter(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field)
 /* Make a filter on this column if the trackDb or cart wants us to. */
 {
 struct bigBedFilter *ret = NULL;
 char *setting = trackDbSettingClosestToHome(tdb, filter);
-int fieldNum =  bbExtraFieldIndex(bbi, field) + 3;
+int fieldNum =  getFieldNum(bbi, field);
 if (setting)
     {
     struct asObject *as = bigBedAsOrDefault(bbi);
@@ -145,7 +155,7 @@ safef(filterType, sizeof filterType, "%s%s", field, FILTER_TYPE_NAME);
 char *typeValue = cartOrTdbString(cart, tdb, filterType, FILTERTEXT_WILDCARD);
 
 AllocVar(filter);
-filter->fieldNum =  bbExtraFieldIndex(bbi, field) + 3;
+filter->fieldNum =  getFieldNum(bbi, field);
 
 if (sameString(typeValue, FILTERTEXT_REGEXP) )
     {
@@ -170,7 +180,7 @@ safef(filterType, sizeof filterType, "%s%s", field, FILTER_TYPE_NAME);
 char *setting = cartOrTdbString(cart, tdb, filterType, FILTERBY_SINGLE);
 
 AllocVar(filter);
-filter->fieldNum =  bbExtraFieldIndex(bbi, field) + 3;
+filter->fieldNum =  getFieldNum(bbi, field);
 if (setting && (sameString(setting, FILTERBY_SINGLE_LIST) || sameString(setting, FILTERBY_MULTIPLE_LIST_OR)))
     filter->comparisonType = COMPARE_HASH_LIST_OR;
 else if (setting && sameString(setting, FILTERBY_MULTIPLE_LIST_AND))
@@ -417,6 +427,8 @@ int mouseOverIdx = bbExtraFieldIndex(bbi, mouseOverField);
 track->bbiFile = NULL;
 
 struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, track->tdb) ;
+if (filters)
+    labelTrackAsFiltered(track);
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     struct linkedFeatures *lf = NULL;

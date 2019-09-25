@@ -50,6 +50,161 @@
 
 <!-- ============= 2019 archived news ============= -->
 <a name="2019"></a>
+<a name="09172019"></a>
+<h2>Sep. 17, 2019 &nbsp;&nbsp; New GRC Incident track for Chicken (galGal6) and Zebrafish (danRer11)
+</h2>
+<p>
+We are pleased to announce the release of a GRC Incident track for both the Chicken
+(<a href="../cgi-bin/hgTrackUi?&db=galGal6&g=grcIncidentDb" target="_blank">galGal6</a>) and
+Zebrafish (<a href="../cgi-bin/hgTrackUi?&db=danRer11&g=grcIncidentDb" target="_blank">danRer11</a>)
+assemblies.
+These tracks show locations in the Chicken and Zebrafish assemblies where assembly problems
+have been noted or resolved, as reported by the
+<a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/index.shtml" target="_blank">
+Genome Reference Consortium (GRC)</a>.
+<ul>
+  <li> <a href="../cgi-bin/hgTracks?db=galGal6&hideTracks=1&grcIncidentDb=pack&refSeqComposite=squish&knownGene_sel=1&position=chr1%3A81414-19700000"
+  target="_blank">Chicken (galGal6) GRC Incident Database track</a></li>
+  <li> <a href="../cgi-bin/hgTracks?db=danRer11&hideTracks=1&grcIncidentDb=pack&refSeqComposite=squish&knownGene_sel=1"
+  target="_blank">Zebrafish (danRer11) GRC Incident Database track</a></li>
+</ul>
+</p>
+<p>
+Data for these tracks are extracted from the <a href="ftp://ftp.ncbi.nlm.nih.gov/pub/grc/"
+target="_blank">GRC incident database</a> from the specific species *_issues.gff3 file. The tracks are
+updated daily from the GRC server to incorporate new updates.
+</p>
+<p>
+Thanks to Hiram Clawson and Conner Powell for the development and release of these tracks.
+</p>
+
+<a name="090419"></a>
+<h2>Sep. 4, 2019 &nbsp;&nbsp; New Genome Browser: Rhesus, rheMac10 (<em>Macaca mulatta</em>)</h2>
+<p>
+A genome browser is now available for the rhesus monkey (<em>Macaca mulatta</em>) assembly 
+released in Feb. 2019 by the
+<a href="https://www.genome.wustl.edu/" 
+target="_blank">Genome Institute at Washington University School of Medicine</a> (Mmul_10).
+<h3>About the assembly:</h3>
+<ul>
+  <li><b>UCSC Genome Browser assembly ID:</b>  <a href="../../cgi-bin/hgGateway?db=rheMac10" 
+  target="_blank">rheMac10</a></li>
+  <li><b>Sequencing/Assembly provider ID:</b> <a href="https://www.genome.wustl.edu/">
+The Genome Institute at Washington University School of Medicine</a></li>
+  <li><b>Assembly date:</b> Feb. 2019</li>
+  <li><B>Accession ID:</B> GCF_003339765.1</li>
+  <li><B>NCBI Genome ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/genome/215"
+TARGET="_blank">215</A> (<em>Macaca mulatta</em>)</li>
+  <li><B>NCBI Assembly ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/assembly/2345051"
+TARGET="_blank">2345051</A></li>
+  <li><B>NCBI BioProject ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/bioproject/476474"
+TARGET="_blank">476474</A></li>
+  <li><B>NCBI BioSample ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/biosample/SAMN09435472"
+TARGET="_blank">SAMN09435472</A></li>
+  <li><b>Scaffold count: </b>2,979</li>
+  <li><b>Total size: </b>2,971,331,530</li>
+  <li><a href="../goldenPath/credits.html#rhesus_credits" 
+target="_blank" >Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+  <li><a href="../goldenPath/credits.html#rhesus_use" 
+target="_blank" >Data use conditions and restrictions</a></li>
+  <li><a href="../goldenPath/help/ftp.html" 
+target="_blank" >Rsync</a> and
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/rheMac10/" 
+target="_blank" >FTP</a></li>
+  <li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#rhesus"
+target="_blank" >Downloads page</a></li>
+</ul>
+</p>
+
+<a name="082819"></a>
+<h2>Aug. 28, 2019 &nbsp;&nbsp; Vertebrate Genomes Project assembly hub</h2>
+
+<p>
+The UCSC Genome Browser is proud to announce its <a href="https://hgdownload.soe.ucsc.edu/hubs/VGP/" 
+target="_blank">Vertebrate Genomes Project assembly hub</a>. The <a 
+href="https://vertebrategenomesproject.org/" target="_blank">Vertebrate Genomes Project (VGP)</a> 
+aims to generate near error-free reference genome assemblies of all 70,000 extant 
+vertebrate species.</p>
+
+<p>
+As of now, the <a href="https://hgdownload.soe.ucsc.edu/hubs/VGP/" 
+target="_blank">VGP assembly hub</a> includes 24 vertebrate assemblies. See our <a 
+href="https://hgdownload.soe.ucsc.edu/hubs/VGP/asmStatsVGP.html" 
+target="_blank">assembly statistics page</a> for specific information (gap counts, 
+masking percent, genome size, etc.) on each individual assembly. All assemblies have a 
+combination of Genome Browser generated data tracks, as well as external data. These include:</p>
+<ul>
+  <li>Augustus gene predictions on all assemblies, as well as imported NCBI gene predictions 
+when available.</li>
+  <li>A RefSeq mRNAs track which is generated in-house, mapping RefSeq mRNAs from various other 
+organisms to each individual assembly. This track includes origin mRNA species and gene names, 
+which may help to identify genes on the less annotated assemblies.</li>
+  <li>CpG island and GC percent tracks.</li>
+  <li>Repeat masking tracks by both RepeatMasker and WindowMasker + SDust.</li></ul>
+<p>
+These tracks also include individual track description pages with a summary of their contents 
+or results where applicable. Such as a summary of all RepeatMasker elements found in the 
+<a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/VGP/hub.txt&genome=hub_1489433_GCA_007474595.1_mLynCan4_v1.p&g=hub_1489433_repeatMasker" 
+target="_blank">Canada lynx</a> or gene count and genome coverage of NCBI genes for the 
+<a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/VGP/hub.txt&genome=hub_1489433_GCF_004115215.1_mOrnAna1.p.v1&g=hub_1489433_ncbiGene" 
+target="_blank">platypus</a>.</p>
+
+<p>
+All data are available from the UCSC download servers. For information on how to download 
+specific assembly data, refer to the assembly gateway page once the hub is connected. Here 
+is an example of the gateway page for the 
+<a href="../../cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/VGP/hub.txt&genome=GCA_004115265.2_mRhiFer1_v1.p" 
+target="_blank">greater horseshoe bat</a>. This page also includes information on starting 
+a local BLAT server for the assembly.</p>
+
+<p>
+We would like to thank the <a href="https://vertebrategenomesproject.org/" 
+target="_blank">Vertebrate Genomes Project</a> and the <a href="https://genome10k.soe.ucsc.edu/" 
+target="_blank">Genome 10k Project</a> for their sequencing efforts and making these genomes 
+available. We would also like to thank Hiram Clawson and Luis Nassar from the Genome Browser team 
+for the development and release of this assembly hub.</p>
+
+<a name="073119"></a>
+<h2>Jul. 31, 2019 &nbsp;&nbsp; New Genome Browser: Horse, equCab3 (<em>Equus caballus</em>)</h2>
+<p>
+A genome browser is now available for the <em>Equus caballus</em> assembly released in Jan. 2018 by the
+<a href="https://louisville.edu/medicine/" target="_blank"> University of Louisville</a> (EquCab3.0).
+<h3>About the assembly:</h3>
+<ul>
+  <li><b>UCSC Genome Browser assembly ID:</b>  <a href="../../cgi-bin/hgGateway?db=equCab3" 
+  target="_blank">equCab3</a></li>
+  <li><b>Sequencing/Assembly provider ID:</b> <a href="https://louisville.edu/medicine/">
+University of Louisville</a></li>
+  <li><b>Assembly date:</b> Jan. 2018</li>
+  <li><b>Accession ID:</b> GCF_002863925.1</li>
+  <li><b>NCBI Genome ID:</b> <a href="https://www.ncbi.nlm.nih.gov/genome/145"
+target="_blank">145</a> (<em>Equus caballus</em>)</li>
+  <li><b>NCBI Assembly ID:</b> <a href="https://www.ncbi.nlm.nih.gov/assembly/1512011"
+target="_blank">1512011</a></li>
+  <li><b>NCBI BioProject ID:</b> <a href="https://www.ncbi.nlm.nih.gov/bioproject/421018"
+target="_blank">421018</a></li>
+  <li><b>NCBI BioSample ID:</b> <a href="https://www.ncbi.nlm.nih.gov/biosample/SAMN02953672"
+target="_blank">SAMN02953672</a></li>
+  <li><b>Scaffold count: </b>4,701</li>
+  <li><b>Total size: </b>2,506,966,135</li>
+  <li><a href="../goldenPath/credits.html#horse_credits" 
+target="_blank" >Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+  <li><a href="../goldenPath/credits.html#horse_use" 
+target="_blank" >Data use conditions and restrictions</a></li>
+  <li><a href="../goldenPath/help/ftp.html" 
+target="_blank" >Rsync</a> and
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/equCab3/" 
+target="_blank" >FTP</a></li>
+  <li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#horse"
+target="_blank" >Downloads page</a></li>
+</ul>
+</p>
 
 <a name="071919"></a>
 <h2>Jul. 19, 2019 &nbsp;&nbsp; New GENCODE V31 gene tracks for human, hg19 and hg38</h2>

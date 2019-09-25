@@ -82,6 +82,22 @@ do
     old=$table"Old"
     hgsqlSwapTables $db $new $table $old -dropTable3
   done
+
+  # archive the data
+  if [ ! -d ${WORKDIR}/archive/${db} ]; then
+    mkdir -p ${WORKDIR}/archive/${db}
+  fi
+  cd ${WORKDIR}/archive/${db}
+  mkdir ${today}
+  cd ${today}
+  printf "This directory contains a backup of the OMIM track data tables built on %s\n" "${today}" > README
+  for i in `cat ${WORKDIR}/omim.tables`
+  do
+    hgsql --raw -Ne "show create table ${i}" ${db} > ${i}.sql
+    hgsql -Ne "select * from ${i}" ${db} | gzip >  ${i}.txt.gz
+  done
+  cd ${WORKDIR}/${today}
+
 done
 
 

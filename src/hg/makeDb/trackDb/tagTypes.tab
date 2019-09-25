@@ -32,6 +32,7 @@ barChartDataUrl barChart bigBarChart
 #
 barChartLabel barChart bigBarChart
 barChartMetric barChart bigBarChart
+barChartMaxSize barChart bigBarChart
 barChartSampleUrl barChart bigBarChart
 barChartUnit barChart bigBarChart
 baseColorDefault *
@@ -71,6 +72,7 @@ codingAnnoLabel_snp132CodingDbSnp bed
 codingAnnoLabel_snp134CodingDbSnp bed
 codingAnnotations bed
 collapseEmptySubtracks *
+hideEmptySubtracks *
 color *
 colorByStrand bigBed bed genePred
 colorChromDefault psl bigPsl
@@ -487,7 +489,7 @@ urls bigBed bed bigPsl genePred psl bigBarChart bigGenePred bigLolly
 useScore *
 view *
 viewLimits *
-viewLimitsMax bed bedGraph wig
+viewLimitsMax bed bedGraph wig bigWig
 viewUi *
 visibility *
 visibilityViewDefaults *

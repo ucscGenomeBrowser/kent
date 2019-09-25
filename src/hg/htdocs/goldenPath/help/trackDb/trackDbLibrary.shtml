@@ -4342,6 +4342,12 @@ For the complete bigInteract format definitions please see the
     </P>
 </DIV>
 
+<DIV class="interactMultiRegion"><span class="types bigInteract"></span>
+<div class="format"><code>interactMultiRegion &lt;true|padding&gt;</code></div>
+    <P>This setting causes a link to appear on the details page that appears when an interaction is clicked on. This link will generate a &quot;multi-region&quot; Genome Browser view of the interaction (or interaction cluster) endpoints. Use padding to specify non-default padding at the edges of each region.  The default value is 200 base pairs.
+    </P>
+</DIV>
+
 <DIV class="interact_example"><span class="types bigInteract"></span>
 <div class="format"><B>Example of an interact/bigInteract track</B></div>
     <pre>
@@ -4378,6 +4384,15 @@ For the complete bigBarChart format definitions please see the
     </P>
 </DIV>
 
+<DIV class="barChartMaxSize"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartMaxSize &lt;small/mediium/large&gt;</code></div>
+    <P>BarChart track display selects one of three sizes (small, medium, or large) to 
+        display barCharts, based on size of the genomic region in the current window.
+        For dense data, it is helpful to reduce the barChart sizes, even when in relatively
+        small genomic regions.  This setting limits the size of the largest barChart 
+        to the selected value.  When unset, the default value is &quot;large&quot;.
+    </P>
+</DIV>
 <DIV class="barChartMetric"><span class="types bigBarChart"></span>
 <div class="format"><code>barChartMetric &lt;metric&gt;</code></div>
     <P>This setting provides a label for details page information about the barChart values presented.

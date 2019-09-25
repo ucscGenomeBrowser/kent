@@ -142,36 +142,25 @@ else
 }
 
 boolean lsSnpPdbHasPdb(struct sqlConnection *conn, char *pdbId)
-/* determine if the specified PDB has any entries in LS-SNP */
+/* determine if the specified PDB has any entries in MuPIT (formerly LS-SNP) */
 {
-if (!sqlTableExists(conn, "lsSnpPdb"))
+if (!sqlTableExists(conn, "knownToMupit"))
     return FALSE;
 char query[256], buf[64];
-sqlSafef(query, sizeof(query), "SELECT chain FROM lsSnpPdb WHERE (pdbId = \"%s\")", pdbId);
+sqlSafef(query, sizeof(query), "SELECT value FROM knownToMupit WHERE value = \"%s\" limit 1", pdbId);
 return (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
 }
 
-static char *fmtParam(char sep, char *name, char *val)
-/* format a parameter to the URL; WARNING: static return */
-{
-static char param[64];
-safef(param, sizeof(param), "%c%s=%s", sep, name, val);
-return param;
-}
-
 char *lsSnpPdbGetUrlPdbSnp(char *pdbId, char *snpId)
-/* get LS-SNP/PDB URL for a particular PDB and/or SNP.  One or the two
+/* get MuPIT (formerly LS-SNP) URL for a particular PDB and/or SNP.  One or the two
  * ids maybe null */
 {
-char url[256], sep='?';
-safecpy(url, sizeof(url), "http://ls-snp.icm.jhu.edu/ls-snp-pdb/inquire");
+char url[256];
+safecpy(url, sizeof(url), "http://mupit.icm.jhu.edu/MuPIT_Interactive/?structure_id=");
 if (pdbId != NULL)
     {
-    safecat(url, sizeof(url), fmtParam(sep, "pdbId", pdbId));
-    sep = '&';
+    safecat(url, sizeof(url), pdbId);
     }
-if (snpId != NULL)
-    safecat(url, sizeof(url), fmtParam(sep, "snpId", snpId));
 return cloneString(url);
 }
 

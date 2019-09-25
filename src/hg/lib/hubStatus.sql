@@ -17,5 +17,6 @@ CREATE TABLE hubStatus (
     errorMessage longblob not null,	# If non-empty contains last error message from hub. If empty hub is ok.
     firstAdded varchar(255) not null,	# Time when hub was first added
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    INDEX(hubUrl(200))
 );

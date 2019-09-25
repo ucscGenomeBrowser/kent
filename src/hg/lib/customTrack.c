@@ -28,6 +28,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 #include "jsHelper.h"
+#include "botDelay.h"
 
 static boolean printSaveList = FALSE; // if this is true, we print to stderr the number of custom tracks saved
 
@@ -947,6 +948,16 @@ if (numAdded)
     {
     fprintf(stderr, "customTrack: new %d from %s\n", numAdded, customText);
     printSaveList = TRUE;
+    /* add penalty in relation to number of tracks created
+     * the delayFraction here is 0.25 as it is in hgTracks
+     * the enteredMainTime is 0 since this is not important here
+     * the warnMs and exitMs are set at 1,000,000 since we do *not* want
+     * any exit or warning here, and the return code issueBotWarning is ignored
+     * this is merely to accumulate penalty time.  The name "hgTracks" here
+     * is unimportant, it is not going to be used.  Other CGIs besides hgTracks
+     * will be calling here.
+     */
+    (void) earlyBotCheck(0, "hgTracks", (double)(numAdded + 1) * 0.25, 1000000, 1000000, "html");
     }
 
 ctList = customTrackAddToList(ctList, newCts, &replacedCts, FALSE);

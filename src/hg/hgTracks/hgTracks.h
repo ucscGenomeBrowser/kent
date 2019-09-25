@@ -59,6 +59,10 @@
 
 #define BIGBEDMAXIMUMITEMS 100000
 
+/* for botDelay call, 10 second for warning, 20 second for immediate exit */
+#define delayFraction   0.25
+extern long enteredMainTime;
+
 #include "lolly.h"
 
 struct track
@@ -265,6 +269,7 @@ struct track
     struct bbiSummaryElement *summary;  /* for bigBed */
     struct bbiSummaryElement *sumAll;   /* for bigBed */
     boolean drawLabelInBox;     /* draw labels into the features instead of next to them */
+    boolean drawLabelInBoxNotDense;    /* don't draw labels in dense mode, (needed only when drawLabelInBox set */
     
     struct track *nextWindow;   /* Same track in next window's track list. */
     struct track *prevWindow;   /* Same track in prev window's track list. */
@@ -1374,6 +1379,9 @@ boolean isCenterLabelsPackOff(struct track *track);
 boolean isCenterLabelIncluded(struct track *track);
 /* Center labels may be conditionally included */
 
+boolean doHideEmptySubtracks(struct track *track, char **multiBedFile, char **subtrackIdFile);
+/* Suppress display of empty subtracks. Initial support only for bed's. */
+
 Color maybeDarkerLabels(struct track *track, struct hvGfx *hvg, Color color);
 /* For tracks having light track display but needing a darker label */
 
@@ -1576,20 +1584,6 @@ void filterItems(struct track *tg, boolean (*filter)(struct track *tg, void *ite
                 char *filterType);
 /* Filter out items from track->itemList. */
 
-//#define REMOTE_TRACK_AJAX_CALLBACK
-#ifdef REMOTE_TRACK_AJAX_CALLBACK
-#define REMOTE_TRACK_HEIGHT (tl.fontHeight*2)
-
-boolean trackShouldUseAjaxRetrieval(struct track *track);
-/* Tracks with remote data sources should berendered via an ajax callback */
-
-#else//ifndef
-
-#define REMOTE_TRACK_HEIGHT 0
-#define trackShouldUseAjaxRetrieval(track)  FALSE
-
-#endif//ndef REMOTE_TRACK_AJAX_CALLBACK
-
 int gCmpPriority(const void *va, const void *vb);
 /* Compare groups based on priority. */
 
@@ -1607,6 +1601,9 @@ boolean isTypeBedLike(struct track *track);
 
 boolean isTypeUseItemNameAsKey(struct track *track);
 /* Check if track type is like expRatio and key is just item name. */
+
+boolean isTypeUseMapItemNameAsKey(struct track *track);
+/* Check if track type is like interact and uses map item name to link across multi regions */
 
 void setEMGeneTrack();
 /* Find the track for the gene table to use for exonMostly and geneMostly. */

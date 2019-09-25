@@ -472,10 +472,23 @@ hgsql -e 'delete from seqNcbiRefSeq where acc="NM_001143743.1";' bosTau9
     hgsql -N -e 'select chrom,name from ucscToINSDC;' bosTau9 \
         | sort -k1,1 > ucsc.genbank.tab
 
+    ### Adding Ensembl alias with v95 release, after idKeys made: 2019-01-16
+    join -t$'\t' ../idKeys/bosTau9.idKeys.txt \
+        ../../ens95/ensBosTau9.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToEns.bed
+    # Ensembl is missing a chrM sequence:
+    wc -l *.bed
+  2210 ucscToEns.bed
+  2211 ucscToINSDC.bed
+  2211 ucscToRefSeq.bed
+    cut -f1,4 ucscToEns.bed | sort > ucsc.ensembl.tab
+
     ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
 	> bosTau9.chromAlias.tab
 
-for t in refseq genbank
+for t in refseq genbank ensembl
 do
   c0=`cat ucsc.$t.tab | wc -l`
   c1=`grep $t bosTau9.chromAlias.tab | wc -l`
@@ -487,6 +500,7 @@ do
 done
 # checking refseq: 2211 =? 2211 OK
 # checking genbank: 2211 =? 2211 OK
+# checking ensembl: 2210 =? 2210 OK
 
     hgLoadSqlTab bosTau9 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         bosTau9.chromAlias.tab

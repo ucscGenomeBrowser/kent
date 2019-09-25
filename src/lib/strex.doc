@@ -1,0 +1,183 @@
+The strex language is a small string expression evaluation language.  
+This document describes its built in functions and operators:
+
++  - returns the concatenation of the surrounding strings or the addition of surrounding
+     numbers.  Will convert a number to a string in mixed expressions
+
+[index] - selects a character from string given an integer zero based index. As in Python
+       if index is negative it selects characters from the end of the string.  -1
+       corresponds to the last character of string, as 0 corresponds to first.
+       Returns empty string if index out of range.
+      
+between(prefix, string, suffix) - returns the part of string found between prefix and suffix
+   example:   between("abc", "01234abcHelloxyz56789", "xyz")  fetches just "Hello"
+   If there are multiple places the prefix occurs, it will choose the first one, and the
+   then the first place the suffix matches after that.  The biologist might think of it as
+   a text oriented PCR, though the primer prefix and suffixes are not included in the output.
+   The prefix "" corresponds to beginning of string and the suffix "" corresponds to end.
+   Returns empty string if nothing found.
+
+word(string, index)  - white space separated word from string of given 0 based index.
+   Returns empty string if index is too large.
+   A negative input will work much like an array index does,  with -1 selecting the
+   last word in the string.  Returns empty string if index out of range.
+
+chop(string, splitter, index) - chops apart string with splitter character. Returns 
+   string of given index.  Index can be negative as in split to pick off of end rather than start.
+   Returns empty string if index is too out of rnge.
+
+[start:end] - Use a colon in an array index to select a range of a string.  This follows 
+              Python conventions, where start is zero based and end is one past the end of 
+	      this string (or equivalently one based).  If start is left out the start of 
+	      the string is implied.  If end is left out the end of the string is emplied.  
+	      This leads to some curious but useful constructs such as these shown with an 
+	      example applied to the string "0123456789"
+	           [:3] = "012"       - first three characters of string
+		   [3:] = "3456789"    - everything past the first three characters
+		   [3:5] = "34"       - two characters from the fourth up through the fifth
+		   [5:3] = ""         - you get an empty string if the start is bigger than the end
+		   [3] = "3"          - the fourth character  (the fun of zero based indexes
+		   [-3] = "7"         - the third character from the end
+		   [-3:] = "789"      - last three characters of string
+		   [:-3] = "0123456"  - everything up to the last three
+	      Python actually goes further than this and allows a third, step, specification that
+	      strex has not implemented.  
+
+letter_range(string, start, end) - synonym for string[start:end]
+
+word_range(string, start, end) - returns subset of a space separated string corresponding to
+              the range defined by start/end.   As with letter_range and the array ranges, 
+              start is zero based and end is one past the end (or equivalently one based).
+	      Here are some examples:
+	          word_range("zero one   two three", 0, 1)  = "zero"
+		  word_range("zero one   two three", 0, 3)  = "zero one two three"
+	      Any ends larger than the number of words in the string return words to string end.
+	      To select until the end of the string by convention use the value 99999 for
+	      the end value.  
+	          word_range("zero one   two three", 2, 99999) = "two three"
+	      As with array ranges, start and end can have negative values with similar 
+	      results:
+	          word_range("zero one   two three", -2, 4) = "two three"
+		  word_range("zero one   two three", 0, -1) = "zero one two"
+	      Note that extra spacing between words one and two is not preserved in the output
+	      Use chop_range with ' ' as a splitter if this is not desirable.
+
+chop_range(string, splitter, start, end) - returns subset of a string delineated by splitter,
+              which should just be a single character
+
+untsv(string, index) - separate by tab. Synonym for separate(string, '\t', index)
+
+uncsv(string, index) - do comma separated value extraction of string. Includes quote escaping.
+
+trim(string) - returns copy of string with leading and trailing spaces removed
+
+strip(string, toRemove) - remove all occurrences of any character in toRemove from string
+
+tidy(prefix, string, suffix) - helps trim unwanted ends off of a string.  If prefix is present 
+             in the string, the prefix and everything before it will be cut off.  Blank prefixes 
+	     have no effect.  Similarly if the suffix is present in what is left of the string 
+	     after the prefix is trimmed, then the parts of the string from where the suffix 
+	     starts will be cut off. Blank suffixes have no effect.
+   example:   tidy("", "myreads.fastq.gz", ".gz")  
+   	      returns "myreads.fastq"
+   example:   tidy("", "myreads.fastq", ".gz")  
+   	      returns "myreads.fastq"
+   example:   tidy("my/", "deep/path/to/my/reads.fastq.gz", ".gz")  
+              returns "reads.fastq"
+   example:   tidy("my/", "deep/path/to/my/reads.fastq.gz", ".fastq")  
+              returns "reads"
+   example:   tidy("my/", "deep/path/to/your/reads.fastq.gz", ".fastq")  
+	      returns "deep/path/to/your/reads"
+
+upper(string) - returns all upper case version of string
+
+lower(string) - returns all lower case version of string
+
+md5(string) - returns an MD5 sum digest/hash of string. 
+
+symbol(prefix, string) - turn string into a computer usable symbol that starts with the given
+            prefix.  To create the rest of the symbol,  the string is mangled.  First the 
+	    spaces, tabs, and newlines are all turned into _ chars,  then any remaining 
+	    characters that aren't ascii letters or numerical digits are removed.  If the result
+	    is 32 characters or less it's used, but if it's longer it's converted into an MD5
+	    sum.
+
+replace(string, oldPart, newPart) - returns string with all instances of old replaced by new.
+	    The cases where either old or new are empty string are useful special cases.
+	    If new is "", then all instances of the old string will be deleted.
+            If old is "", then empty strings will be replaced by new strings, useful in setting
+	    a default value for a field.  
+               
+fix(string, target, newString) - similar to replace but works at the whole string level.
+            Returns string unchanged except for the case where string matches target exactly.
+	    In that case it returns newString instead.  The name "fix" comes from it
+	    being used generally to replace one constant, fixed, string with another.
+	    Also, a lot of the time when you do this it is to fix a small inconsistency
+	    in the metadata.  In general fix is faster to execute and quicker to type than
+	    replace and the effects are more specific.
+    example to help clean up minor variations in vocabulary
+            fix(fix(fix(fix( sex, "M","male"),  "F","female"),  "Male","male")  "Female","female")
+    example to give something a value if non is present
+	    fix(requiredField, "", "reasonable default value")
+
+pick(query ? key1:val1, key2:val2, ... keyN:valN, default:defaultVal)
+    Looks through keys for one that matches query, and returns associated value if
+    it finds it.  Otherwise it returns the empty string unless a default is specified.
+    The default key can appear in any position, but traditionally is last or first.
+    Can be used to apply different expressions to parsing in different conditions:
+         pick(species, "human" : ethnicity,  "mouse"  : strain,  default:"unknown")
+        
+(boolean ?  trueVal : falseVal)
+    This is the trinary conditional expression found in C, Python and many other languages.
+    If the boolean before the question mark is true, then the result is the trueVal before the
+    colon, otherwise it's the falseVal after the colon.  Empty strings and zeros as booleans are
+    considered false, other strings and numbers true.
+
+in(string, query) - returns true if query is a substring of string, false otherwise
+
+same(a, b) - returns true if the two arguments are the same, false otherwise
+
+starts_with(prefix, string) - returns true if string starts with prefix
+
+ends_with(string, suffix) - returns true if string ends with suffix
+
+or - logical or operation extended to strings and numbers.  
+     for logic - if any or-separated-values are true, return true, else false
+     for numbers - if any or-separated non-zero numbers exist, return first one else 0
+     for strings - if any or-separated non-empty strings exists, return first one else ""
+   In mixed operations result is converted to strings if strings are involved or
+   the values "" and "true" if no strings are involved.  
+   For the pure string case this can be useful for setting defaults as well.  For
+   instance presuming you might or might not have filled in values for the city or country
+   variables in the given expression that would return a location of some sort
+	   (city or country or "somewhere in the universe")
+   Note the parenthesis around the ors is good to have because of the very low
+   precedence of the logical operators.
+
+and - logical and operation extended to strings and numbers
+     for logic - if all and-separated-values are true, return true, else false
+     for numbers - if all numbers are non-zero return true else false
+     for strings - if all and-separated strings are nonempty, return true, else ""
+   In mixed operations result is converted to strings if strings are involved or
+   the values "" and "true" if no strings are involved.
+
+not - logical not.  Converts false, zero, and the empty string to true,  everything else to false
+
+now() - returns current time and date in ISO 1806 format using the variant that has the local
+        time and timezone,   for instance 2019-08-14T23:35:22-0700 for 11:35 pm in California
+	during daylight savings time.
+
+import("file.strex") - act as if the contents of file.strex, which should be a valid 
+        strex expression but one that can span multiple lines, were here instead of this
+	import expression.  This is useful for debugging and reusing complex expressions.
+	(You'll get line numbers from the file in the error message, which helps localize it.)
+
+warn("message")  - returns the input message with a scary warning prefix added.  Also will
+        send a warning message you see when running the strex program.  Usually this is
+	used as the default of a pick or something to put at the end of a long chain of
+	ors or conditionals when you don't want to do a hard error.
+
+error("message") - causes strex to stop processing with the given error message.
+        It will cause whatever program strex is embedded in to stop processing too
+	unless it is fancy enough to catch an exception.
+

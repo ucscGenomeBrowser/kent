@@ -110,6 +110,19 @@ priority 1.5
         subGroups set=b_ALL view=c_I
 
     track ghClusteredInteraction
+    release alpha
+    shortLabel Clustered Interactions
+    type bigInteract
+    interactDirectional clusterTarget
+    interactMultiRegion on
+    view d_I
+    url https://www.genecards.org/cgi-bin/carddisp.pl?gene=$<geneName>&keywords=$<geneHancerIdentifier>&prefilter=enhancers#enhancers
+    urlLabel Interaction in GeneCards
+    visibility pack
+    parent geneHancer
+
+    track ghClusteredInteraction
+    release beta,public
     shortLabel Clustered Interactions
     type bigInteract
     interactDirectional clusterTarget

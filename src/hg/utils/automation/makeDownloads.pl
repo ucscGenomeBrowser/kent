@@ -635,6 +635,7 @@ For more information about this assembly, please note the NCBI resources:
     https://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId
     https://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId
     https://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject
+    https://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample
 
 Files included in this directory (updated nightly):
 
@@ -729,7 +730,7 @@ For more information about this assembly, please note the NCBI resources:
     https://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId
     https://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId
     https://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject
-    https://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioSample
+    https://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample
 
 Files included in this directory:
 
@@ -937,7 +938,7 @@ For more information about this assembly, please note the NCBI resources:
     https://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId
     https://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId
     https://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject
-    https://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioSample
+    https://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample
 
 Repeats from RepeatMasker and Tandem Repeats Finder (with period
 of 12 or less) are shown in lower case; non-repeating sequence is

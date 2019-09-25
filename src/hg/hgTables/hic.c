@@ -180,16 +180,16 @@ int maxOut = bigFileMaxOutput();
 
 char *fileName = hicFileName(table, conn);
 struct hicMeta *fileInfo;
-char *errMsg = hicLoadHeader(fileName, &fileInfo);
+char *errMsg = hicLoadHeader(fileName, &fileInfo, database);
 if (errMsg != NULL)
     errAbort("%s", errMsg);
-
-char *norm = hicUiFetchNormalization(cart, table, fileInfo);
+struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
+char *norm = hicUiFetchNormalization(cart, tdb, fileInfo);
 
 for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     {
     struct interact *results = NULL, *result = NULL;
-    int res = hicUiFetchResolutionAsInt(cart, table, fileInfo, region->end-region->start);
+    int res = hicUiFetchResolutionAsInt(cart, tdb, fileInfo, region->end-region->start);
     char *errMsg = hicLoadData(fileInfo, res, norm, region->chrom, region->start, region->end,
             region->chrom, region->start, region->end, &results);
     if (errMsg != NULL)
@@ -227,7 +227,7 @@ static void addFilteredBedsOnRegion(char *fileName, struct region *region,
 /* Add relevant beds in reverse order to pBedList */
 {
 struct hicMeta *fileInfo = NULL;
-char *errMsg = hicLoadHeader(fileName, &fileInfo);
+char *errMsg = hicLoadHeader(fileName, &fileInfo, database);
 
 if (errMsg != NULL)
     {
@@ -235,8 +235,9 @@ if (errMsg != NULL)
     }
 else
     {
-    int res = hicUiFetchResolutionAsInt(cart, table, fileInfo, region->end-region->start);
-    char *norm = hicUiFetchNormalization(cart, table, fileInfo);
+    struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
+    int res = hicUiFetchResolutionAsInt(cart, tdb, fileInfo, region->end-region->start);
+    char *norm = hicUiFetchNormalization(cart, tdb, fileInfo);
 
     struct interact *results = NULL, *result = NULL;
     errMsg = hicLoadData(fileInfo, res, norm, region->chrom, region->start, region->end,
@@ -345,7 +346,7 @@ for (col = as->columnList; col != NULL; col = col->next)
 hPrintf("</TR>\n");
 
 struct hicMeta *fileInfo = NULL;
-char *errMsg = hicLoadHeader(fileName, &fileInfo);
+char *errMsg = hicLoadHeader(fileName, &fileInfo, database);
 
 if (errMsg != NULL)
     {

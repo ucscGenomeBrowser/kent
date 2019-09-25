@@ -58,5 +58,5 @@ void straw(std::string norm, std::string fname, int binsize, std::string chr1loc
 
 extern "C" char* Cstraw (char *norm, char *fname, int binsize, char *chr1loc, char *chr2loc, char *unit, int **xActual, int **yActual, double **counts, int *numRecords);
 
-extern "C" char *CstrawHeader (char *filename, char **genome, char ***chromNames, int *nChroms, char ***bpResolutions, int *nBpRes, char ***fragResolutions, int *nFragRes);
+extern "C" char *CstrawHeader (char *filename, char **genome, char ***chromNames, int **chromSizes, int *nChroms, char ***bpResolutions, int *nBpRes, char ***fragResolutions, int *nFragRes, char ***attributes, int *nAttributes);
 #endif

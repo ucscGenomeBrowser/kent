@@ -12,7 +12,7 @@ use warnings;
 my $argc = scalar(@ARGV);
 
 if ($argc != 1 ) {
-  printf STDERR "ucage: gpToIx.pl <genePred.gp> | sort -u > ix.txt\n";
+  printf STDERR "usage: gpToIx.pl <genePred.gp> | sort -u > ix.txt\n";
   printf STDERR "then run ixIxx on ix.txt:\n";
   printf STDERR " ixIxx ix.txt out.ix out.ixx\n";
   exit 255;

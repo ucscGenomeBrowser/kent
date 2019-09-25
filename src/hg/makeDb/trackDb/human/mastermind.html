@@ -34,6 +34,12 @@ page, accessible via the &quot;Protein change and link to details&quot; at the t
 features are colored based on their evidence:
 </p>
 
+<p>In Sep 2019, suggested by Genomenom, we added a filter on all variants. From then on, we skip 
+variants with more than one nucleotide and a MMCNT of 0 and where the variant is not an indel, 
+meaning that for longer variants, only variants are shown that are explicitly
+mentioned in the papers. This makes the data more specific.
+</p>
+
 <p>
 <table>
   <thead>
@@ -58,29 +64,32 @@ features are colored based on their evidence:
 </p>
 
 <p>
-The three numbers that are shown on the mouse over and the details page have the following meaning (MM=Mastermind):
+The three numbers that are shown on the mouse-over and the details page have the following meaning (MM=Mastermind):
 <ul>
     <li><b>MMCNT1</b>: cDNA-level exact matches. This is the number of articles that mention the variant at the nucleotide level in either the title/abstract or the full-text.
     <li><b>MMCNT2</b>: cDNA-level possible matches. This is the number of articles with nucleotide-level matches (from 1) plus articles with protein-level matches in which the publication did not specify the cDNA-level change, meaning they could be referring to this nucleotide-level variant but there is insufficient data in these articles to determine conclusively.
     <li><b>MMCNT3</b>: This is the number of articles citing any variant resulting in the same biological effect as this variant. This includes the articles from MMCNT1 and MMCNT2 plus articles with alternative cDNA-level variants that result in the same protein effect.
 </ul>
-On the track setting page one can filter on these scores under the display mode section by entering
+On the track settings page one can filter on these scores under the display mode section by entering
 a minimum number of articles for each kind of evidence.
 
 </p>
 
 <h2>Methods</h2>
 
-The Mastermind Cited Variants file was <a target=_blank href="https://www.genomenon.com/cvr/">downloaded</a>,
+<p>The Mastermind Cited Variants file was <a target=_blank href="https://www.genomenon.com/cvr/">downloaded</a>,
 converted to BED format with scripts that are available in our 
 <a target=_blank href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/mastermind/">Git
 repository</a> and converted to a bigBed file with the UCSC genome browser tool
-bedToBigBed.
+bedToBigBed.</p>
+
+<p>This track is automatically updated two weeks after every Mastermind CVR release, which happens every three months.</p>
+
 
 <h2>Credits</h2>
 
 <p>
-Thanks to Mark Kiel, Steve Schwartz and Clayton Wheeler from Genomenon for making this data available.
+Thanks to Mark Kiel, Steve Schwartz and Clayton Wheeler from Genomenon for making these data available.
 </p>
 
 <!-- <h2>References</h2> -->

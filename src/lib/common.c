@@ -1529,6 +1529,8 @@ if (isEmpty(haystack))
 if ((p = stringIn(start, haystack)) != NULL)
     {
     pos = p + strlen(start);
+    if (isEmpty(end))
+        return cloneString(pos);
     if ((p = stringIn(end, pos)) != NULL)
         {
         len = p - pos;

@@ -9,15 +9,19 @@
 struct hicMeta
 {
 char *filename;
-char *assembly;
-char **chromNames;
+char *fileAssembly;
 int nChroms;
-char **resolutions;
+char **chromNames;
+int *chromSizes;
 int nRes;
+char **resolutions;
+int nAttributes;
+char **attributes;
+char *ucscAssembly;
 struct hash *ucscToAlias; // Takes UCSC chrom names to names the underlying file recognizes
 };
 
-char *hicLoadHeader(char *filename, struct hicMeta **header);
+char *hicLoadHeader(char *filename, struct hicMeta **header, char *ucscAssembly);
 /* Create a hicMeta structure for the supplied Hi-C file.  If
  * the return value is non-NULL, it points to a string containing
  * an error message that explains why the retrieval failed. */
