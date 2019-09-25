@@ -4386,12 +4386,33 @@ struct subtrackConfigSettings
     };
 #define LARGE_COMPOSITE_CUTOFF 30
 
+static void printSubtrackListRadioButtons(char *parentTrack, int subCount, boolean displayAll)
+// Print radio buttons for all/select
+{
+printf("<B>List subtracks:&nbsp;");
+char javascript[JBUFSIZE];
+safef(javascript, sizeof(javascript),
+      "showOrHideSelectedSubtracks(true);");
+char buffer[SMALLBUF];
+if (subCount > LARGE_COMPOSITE_CUTOFF)
+    safef(buffer,SMALLBUF,"%s.displaySubtracks", parentTrack);
+else
+    safecpy(buffer,SMALLBUF,"displaySubtracks");
+cgiMakeOnEventRadioButtonWithClass(buffer, "selected", !displayAll, "allOrOnly", "click", javascript);
+puts("only selected/visible &nbsp;&nbsp;");
+safef(javascript, sizeof(javascript),
+      "showOrHideSelectedSubtracks(false);");
+cgiMakeOnEventRadioButtonWithClass(buffer, "all", displayAll, "allOrOnly", "click", javascript);
+printf("all</B>");
+if (subCount > 5)
+    printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
+}
+
 static void printSubtrackTableHeader(struct trackDb *parentTdb, struct slRef *subtrackRefList,
 				struct subtrackConfigSettings *settings)
 /* Print header of subtrack table, including classes describing display appearance and behavior.
 Return number of columns */
 {
-char buffer[SMALLBUF];
 boolean useDragAndDrop = settings->useDragAndDrop;
 sortOrder_t *sortOrder = settings->sortOrder;
 if (sortOrder != NULL)
@@ -4416,24 +4437,9 @@ else
     // NOTE: list subtrack radio buttons are inside tracklist table header if
     //       there are no sort columns.  The reason is to ensure spacing of lines
     //       column headers when the only column header is "Restricted Until"
-    printf("<TD colspan='%d'><B>List subtracks:&nbsp;", colspan);
-    char javascript[JBUFSIZE];
-    safef(javascript, sizeof(javascript),
-	  "showOrHideSelectedSubtracks(true);");
+    printf("<TD colspan='%d'>", colspan);
     int subCount = slCount(subtrackRefList);
-    if (subCount > LARGE_COMPOSITE_CUTOFF)
-	safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
-    else
-	safecpy(buffer,SMALLBUF,"displaySubtracks");
-    cgiMakeOnEventRadioButtonWithClass(buffer, "selected", !settings->displayAll, "allOrOnly", "click", javascript);
-
-    puts("only selected/visible &nbsp;&nbsp;");
-    safef(javascript, sizeof(javascript),
-	  "showOrHideSelectedSubtracks(false);");
-    cgiMakeOnEventRadioButtonWithClass(buffer, "all", settings->displayAll, "allOrOnly", "click", javascript);
-    printf("all</B>");
-    if (subCount > 5)
-	printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
+    printSubtrackListRadioButtons(parentTdb->track, subCount, settings->displayAll);
     puts("</TD>");
     columnCount = colspan;
     }
@@ -4958,6 +4964,7 @@ if (membersForAll->members[dimX] == NULL && membersForAll->members[dimY] == NULL
 return TRUE;
 }
 
+
 static void printSubtrackTable(struct trackDb *parentTdb, struct slRef *subtrackRefList,
 			    struct subtrackConfigSettings *settings, struct cart *cart)
 /* Print table of subtracks */
@@ -5004,14 +5011,14 @@ struct trackDb *subtrack;
 struct slRef *subtrackRef, *subtrackRefList = trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
 
 membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,NULL);
-sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
+sortOrder_t* sortOrder = sortOrderGet(cart, parentTdb);
 char *displaySubs = NULL;
 int subCount = slCount(subtrackRefList);
 if (subCount > LARGE_COMPOSITE_CUTOFF && membersForAll->dimensions != NULL)
     {
     // ignore displaySubtracks setting for large composites with a matrix as
     // matrix effectively shows all
-    safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
+    safef(buffer,SMALLBUF,"%s.displaySubtracks", parentTdb->track);
     displaySubs = cartUsualString(cart, buffer,"some"); // track specific defaults to only selected
     }
 else
@@ -5030,22 +5037,7 @@ if (sortOrder != NULL)
     // NOTE: list subtrack radio buttons are inside tracklist table header if
     //       there are no sort columns.  The reason is to ensure spacing of lines
     //       column headers when the only column header is "Restricted Until"
-    printf("<B>List subtracks:&nbsp;");
-    char javascript[JBUFSIZE];
-    safef(javascript, sizeof(javascript),
-	  "showOrHideSelectedSubtracks(true);");
-    if (subCount > LARGE_COMPOSITE_CUTOFF)
-	safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
-    else
-	safecpy(buffer,SMALLBUF,"displaySubtracks");
-    cgiMakeOnEventRadioButtonWithClass(buffer, "selected", !displayAll, "allOrOnly", "click", javascript);
-    puts("only selected/visible &nbsp;&nbsp;");
-    safef(javascript, sizeof(javascript),
-	  "showOrHideSelectedSubtracks(false);");
-    cgiMakeOnEventRadioButtonWithClass(buffer, "all", displayAll, "allOrOnly", "click", javascript);
-    printf("all</B>");
-    if (slCount(subtrackRefList) > 5)
-	printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
+    printSubtrackListRadioButtons(parentTdb->track, subCount, displayAll);
     if (membersHaveMatrix(membersForAll))
 	makeTopLink(parentTdb);
     printf("</td></tr></table>");
