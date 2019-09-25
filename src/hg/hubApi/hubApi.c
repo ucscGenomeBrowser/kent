@@ -248,7 +248,7 @@ if (jsonOutputArrays)
     dyStringAppend(extraDyFlags, ";jsonOutputArrays=1");
 char *extraFlags = dyStringCannibalize(&extraDyFlags);
 
-if (trackDbSetting(tdb, "tableBrowser"))
+if (protectedTrack(tdb))
     hPrintf("<li>%s : %s &lt;protected data&gt;</li>\n", tdb->track, tdb->type);
 else if (db)
     {
@@ -319,7 +319,7 @@ if (chromCount > 0 || itemCount > 0)
         safef(countsMessage, sizeof(countsMessage), " : %ld chroms : %ld count ", chromCount, itemCount);
     }
 
-if (trackDbSetting(tdb, "tableBrowser"))
+if (protectedTrack(tdb))
     hPrintf("    <li><b>%s</b>: %s protected data</li>\n", tdb->track, tdb->type);
 else if (isSupportedType(tdb->type))
     {
@@ -551,16 +551,15 @@ static void trackSettings(struct trackDb *tdb, struct hash *countTracks)
 /* process the settingsHash for a trackDb, recursive when subtracks */
 {
 hPrintf("    <li><ul>\n");
-boolean protectedData = FALSE;
-if (trackDbSetting(tdb, "tableBrowser"))
-    protectedData = TRUE;
+boolean protectedData = protectedTrack(tdb);
 struct hashEl *hel;
 struct hashCookie hc = hashFirst(tdb->settingsHash);
 while ((hel = hashNext(&hc)) != NULL)
     {
     if (sameWord("track", hel->name))
 	continue;	// already output in header
-    if (sameWord("tableBrowser", hel->name))
+    if (sameWord("tableBrowser", hel->name)
+		&& startsWithWord("off", (char*)hel->val))
 	hPrintf("    <li><b>protectedData</b>: 'true'</li>\n");
     else if (protectedData && sameWord("bigDataUrl", hel->name))
 	hPrintf("    <li><b>bigDataUrl</b>: &lt;protected data&gt;</li>\n");
@@ -677,9 +676,7 @@ boolean compositeContainer = tdbIsComposite(tdb);
 boolean compositeView = tdbIsCompositeView(tdb);
 boolean superChild = tdbIsSuperTrackChild(tdb);
 boolean depthSearch = cartUsualBoolean(cart, "depthSearch", FALSE);
-boolean protectedData = FALSE;
-if (trackDbSetting(tdb, "tableBrowser"))
-    protectedData = TRUE;
+boolean protectedData = protectedTrack(tdb);
 hashCountTrack(tdb, countTracks);
 
 if (compositeContainer)
