@@ -4571,8 +4571,12 @@ flatTrack->maxHeight = maxHeight;
 boolean doCollapseEmptySubtracks(struct track *track)
 /* Suppress display of empty subtracks. Initial support only for bed's. */
 {
-char *collapseEmptySubtracks = trackDbSetting(track->tdb, "collapseEmptySubtracks");
-return (collapseEmptySubtracks && sameWord(collapseEmptySubtracks, "on"));
+char *collapse = trackDbSetting(track->tdb, "hideEmptySubtracks");
+if (!collapse)
+    // previous syntax (not documented, but used by Regeneron)
+    collapse = trackDbSetting(track->tdb, "collapseEmptySubtracks");
+return (collapse && (sameWord(collapse, "on") ||
+                                        sameWord(collapse, "true")));
 }
 
 void makeActiveImage(struct track *trackList, char *psOutput)

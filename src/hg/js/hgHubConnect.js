@@ -90,7 +90,6 @@ var hubSearchTree = (function() {
         $.jstree.defaults.core.themes.dots = true;
         $.jstree.defaults.contextmenu.show_at_node = false;
         if (searching === true) {
-            console.log("special build");
             $.jstree.defaults.contextmenu.items = hubSearchTreeContextMenuHandler;
 
             $('div[id^="tracks"]').each(function(i, obj) {
@@ -109,13 +108,12 @@ var hubSearchTree = (function() {
                         },
                         'dbclick_toggle': false
                     }
-                })
-                .on('select_node.jstree', function(e, data) {
-                    $(e.target).instance.open_node(data.node);
+                });
+                $(treeDiv).on("select_node.jstree", function (e, data)  {
+                    $(e.target).jstree("open_node", data.node);
                 }); // jstree
             }); // each div
         } else { // validating hub, no contextmenu and easier tree building
-            console.log("regular trackData build");
             treeDiv = $('#validateHubResult');
             treeDiv.jstree({
                 'core' : {
@@ -124,7 +122,7 @@ var hubSearchTree = (function() {
                 }
             });
             treeDiv.on('select_node.jstree', function(e, data) {
-                    $(e.target).instance.open_node(data.node);
+                    $(e.target).jstree("open_node", data.node);
             });
         }
     } // init
