@@ -77,7 +77,7 @@ visibility pack
 
     track encode3RenChromHmmStomachP0
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmStomachP0.bb
-    parent encode3RenChromHmm on
+    parent encode3RenChromHmm off
     shortLabel cHMM stomach P0
     longLabel Chromatin state of day P0 stomach from ENCODE 3 (UCSD/Ren)
     subGroups tissue=stomach age=P0
@@ -140,7 +140,7 @@ visibility pack
 
     track encode3RenChromHmmFacialE12
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmFacialE12.bb
-    parent encode3RenChromHmm on
+    parent encode3RenChromHmm off
     shortLabel cHMM facial E12
     longLabel Chromatin state of embryonic day E12.5 facial from ENCODE 3 (UCSD/Ren)
     subGroups tissue=facial age=E12
@@ -329,14 +329,14 @@ visibility pack
 
     track encode3RenChromHmmStomachE14
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmStomachE14.bb
-    parent encode3RenChromHmm on
+    parent encode3RenChromHmm off
     shortLabel cHMM stomach E14
     longLabel Chromatin state of embryonic day E14.5 stomach from ENCODE 3 (UCSD/Ren)
     subGroups tissue=stomach age=E14
 
     track encode3RenChromHmmFacialE15
     bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmFacialE15.bb
-    parent encode3RenChromHmm on
+    parent encode3RenChromHmm off
     shortLabel cHMM facial E15
     longLabel Chromatin state of embryonic day E15.5 facial from ENCODE 3 (UCSD/Ren)
     subGroups tissue=facial age=E15

@@ -11,7 +11,7 @@ dimensions dimX=tissue dimY=age
 subGroup1 tissue Tissue forebrain=forebrain midbrain=midbrain hindbrain=hindbrain neural=neural facial=facial limb=limb heart=heart kidney=kidney lung=lung liver=liver stomach=stomach intestine=intestine
 subGroup2 age Age E10=E10.5 E11=E11.5 E12=E12.5 E13=E13.5 E14=E14.5 E15=E15.5 E16=E16.5 P0=P0
 subGroup3 view View peaks=Peaks signal=Signal
-sortOrder view=+ tissue=+ age=+
+sortOrder tissue=+ age=+ view=-
 group regulation
 visibility full
 
@@ -61,7 +61,7 @@ visibility full
 
         track encode3RenAtacPeakForebrainE11
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakForebrainE11.bb
-        parent encode3RenAtacPeaks on
+        parent encode3RenAtacPeaks off
         shortLabel ATAC forebrn E11
         longLabel Open chromatin ATAC-seq peaks from embryonic day E11.5 forebrain from ENCODE 3 (UCSD/Ren)
         subGroups view=peaks tissue=forebrain age=E11
@@ -89,7 +89,7 @@ visibility full
 
         track encode3RenAtacPeakForebrainE15
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakForebrainE15.bb
-        parent encode3RenAtacPeaks off
+        parent encode3RenAtacPeaks on
         shortLabel ATAC forebrn E15
         longLabel Open chromatin ATAC-seq peaks from embryonic day E15.5 forebrain from ENCODE 3 (UCSD/Ren)
         subGroups view=peaks tissue=forebrain age=E15
@@ -103,14 +103,14 @@ visibility full
 
         track encode3RenAtacPeakForebrainP0
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakForebrainP0.bb
-        parent encode3RenAtacPeaks on
+        parent encode3RenAtacPeaks off
         shortLabel ATAC forebrain P0
         longLabel Open chromatin ATAC-seq peaks from day P0 forebrain from ENCODE 3 (UCSD/Ren)
         subGroups view=peaks tissue=forebrain age=P0
 
         track encode3RenAtacPeakHeartE11
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHeartE11.bb
-        parent encode3RenAtacPeaks on
+        parent encode3RenAtacPeaks off
         shortLabel ATAC heart E11
         longLabel Open chromatin ATAC-seq peaks from embryonic day E11.5 heart from ENCODE 3 (UCSD/Ren)
         subGroups view=peaks tissue=heart age=E11
@@ -138,7 +138,7 @@ visibility full
 
         track encode3RenAtacPeakHeartE15
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHeartE15.bb
-        parent encode3RenAtacPeaks off
+        parent encode3RenAtacPeaks on
         shortLabel ATAC heart E15
         longLabel Open chromatin ATAC-seq peaks from embryonic day E15.5 heart from ENCODE 3 (UCSD/Ren)
         subGroups view=peaks tissue=heart age=E15
@@ -152,7 +152,7 @@ visibility full
 
         track encode3RenAtacPeakHeartP0
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHeartP0.bb
-        parent encode3RenAtacPeaks on
+        parent encode3RenAtacPeaks off
         shortLabel ATAC heart P0
         longLabel Open chromatin ATAC-seq peaks from day P0 heart from ENCODE 3 (UCSD/Ren)
         subGroups view=peaks tissue=heart age=P0
@@ -490,10 +490,11 @@ visibility full
     parent encode3RenAtac
     shortLabel ATAC-seq Signal
     view signal
-    visibility full
     type bigWig
     viewLimits 0:15
+    viewLimitsMax 0:119
     maxHeightPixels 64:32:16
+    visibility full
 
         track encode3RenAtacSignalFacialE11
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalFacialE11.bw
@@ -532,7 +533,7 @@ visibility full
 
         track encode3RenAtacSignalForebrainE11
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalForebrainE11.bw
-        parent encode3RenAtacSignal on
+        parent encode3RenAtacSignal off
         shortLabel ATAC forebrn E11
         longLabel Open chromatin ATAC-seq signal from embryonic day E11.5 forebrain from ENCODE 3 (UCSD/Ren)
         subGroups view=signal tissue=forebrain age=E11
@@ -560,7 +561,7 @@ visibility full
 
         track encode3RenAtacSignalForebrainE15
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalForebrainE15.bw
-        parent encode3RenAtacSignal off
+        parent encode3RenAtacSignal on
         shortLabel ATAC forebrn E15
         longLabel Open chromatin ATAC-seq signal from embryonic day E15.5 forebrain from ENCODE 3 (UCSD/Ren)
         subGroups view=signal tissue=forebrain age=E15
@@ -609,7 +610,7 @@ visibility full
 
         track encode3RenAtacSignalHeartE15
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalHeartE15.bw
-        parent encode3RenAtacSignal off
+        parent encode3RenAtacSignal on
         shortLabel ATAC heart E15
         longLabel Open chromatin ATAC-seq signal from embryonic day E15.5 heart from ENCODE 3 (UCSD/Ren)
         subGroups view=signal tissue=heart age=E15
@@ -623,7 +624,7 @@ visibility full
 
         track encode3RenAtacSignalHeartP0
         bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalHeartP0.bw
-        parent encode3RenAtacSignal on
+        parent encode3RenAtacSignal off
         shortLabel ATAC heart P0
         longLabel Open chromatin ATAC-seq signal from day P0 heart from ENCODE 3 (UCSD/Ren)
         subGroups view=signal tissue=heart age=P0
