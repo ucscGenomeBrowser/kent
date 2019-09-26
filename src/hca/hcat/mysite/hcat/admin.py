@@ -50,6 +50,11 @@ class ProjectStateAdmin(admin.ModelAdmin):
     
 admin.site.register(ProjectState, ProjectStateAdmin)
 
+class WranglingStateAdmin(admin.ModelAdmin):
+    list_display = ['state', 'description']
+    
+admin.site.register(WranglingState, WranglingStateAdmin)
+
 class EffortTypeAdmin(admin.ModelAdmin):
     list_display = ['short_name', 'description']
     
@@ -85,21 +90,22 @@ class ProjectAdmin(admin.ModelAdmin):
     search_fields = ['short_name', 'title']
     autocomplete_fields = ["contributors", "labs", 
     	"organ", "organ_part", "disease", "files",
-    	"species", "sample_type", "assay_type", "assay_tech", "publications", 
-	"grants", "files", "urls", "contacts", "responders"]
+    	"species", "sample_type", "assay_tech", "publications", 
+	"grants", "files", "urls", "contacts", ]
     list_display = ['short_name', 'stars', 'state_reached', 'wrangler1', 'submit_date',]
     list_filter = ['species', 'effort', 'wrangler1', 'state_reached', 'assay_tech']
     inlines = [TrackerInline,]
     fieldsets = (
         ('overall', { 'fields': (('short_name', 'state_reached', ), ('title', 'stars'), ('labs', 'consent'), ('git_ticket_url'))}), 
+        ('biosample',  { 'fields': (('species', 'sample_type'), ('organ', 'organ_part'), 'disease')}),
+        ('assay', { 'fields': (('assay_tech', 'cells_expected'))}),
+	('pubs, people, and pay', { 'fields': ('description', 'publications', 'contributors', 'grants')}),
 	('wrangling',  { 'fields': (
 		('wrangler1', 'wrangler2'), 
-		('cur_state', 'comments'),
+		('wrangling_state', 'comments'),
 		('effort', 'origin_name',),
 		('contacts', 'files'),
 		('first_contact_date', 'last_contact_date'),
-		'responders',
-		('first_response_date', 'last_response_date'),
 		)}),
 	('submission steps',  { 'fields': (
 		('questionnaire_date', 'questionnaire_comments'),
@@ -113,9 +119,6 @@ class ProjectAdmin(admin.ModelAdmin):
 		('staging_area_date', 'staging_area', ),
 		('submit_date', 'submit_comments', ),
 		)}),
-        ('biosample',  { 'fields': (('species', 'sample_type'), ('organ', 'organ_part'), 'disease')}),
-        ('assay', { 'fields': ('assay_type', 'assay_tech', 'cells_expected')}),
-	('pubs, people, and pay', { 'fields': ('description', 'publications', 'contributors', 'grants')}),
     )
 
 admin.site.register(Project, ProjectAdmin)
@@ -179,13 +182,6 @@ class AssayTechAdmin(admin.ModelAdmin):
     autocomplete_fields = ['projects']
 
 admin.site.register(AssayTech, AssayTechAdmin)
-
-class AssayTypeAdmin(admin.ModelAdmin):
-    search_fields = ["short_name", "description"]
-    list_display = ["short_name", "description"]
-    autocomplete_fields = ['projects']
-
-admin.site.register(AssayType, AssayTypeAdmin)
 
 class PublicationAdmin(admin.ModelAdmin):
     search_fields = ["short_name", "title"]
