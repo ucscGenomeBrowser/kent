@@ -3632,15 +3632,26 @@ for (;val!=NULL;val=val->next)
     }
 }
 
+char *extractFieldName(char *cartVariable, char *filterType)
+/* Extract field name from a filter cart variable.  Variables can either be
+ * <columnName>Filter* or <columnName>.Filter* */
+{
+char *field = cloneString(cartVariable);
+int ix = strlen(field) - strlen(filterType); 
+assert(ix > 1);
+field[ix] = '\0';
+if (field[ix - 1] == '.')
+    field[ix - 1] = '\0';
+
+return field;
+}
+
 filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct asObject *as, char *filterName, char *name)
 /* Build a filterBy_t structure from a <column>FilterValues statement. */
 {
 char *setting = trackDbSetting(tdb, filterName);
 char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting);
-char *field = cloneString(filterName);
-int ix = strlen(field) - strlen(FILTER_VALUES_NAME);
-assert(ix > 0);
-field[ix] = '\0';
+char *field = extractFieldName(filterName, FILTER_VALUES_NAME);
 
 filterBy_t *filterBy;
 AllocVar(filterBy);
@@ -3649,6 +3660,8 @@ filterBy->title = field; ///  title should come from AS file, or trackDb variabl
 struct asColumn *asCol = asColumnFind(as, field);
 if (asCol != NULL)
     filterBy->title = asCol->comment;
+else
+    errAbort("Building filter on field %s which is not in AS file.", field);
 filterBy->useIndex = FALSE;
 filterBy->slValues = slNameListFromCommaEscaped(value);
 chopUpValues(filterBy);
@@ -5884,10 +5897,7 @@ if (filterSettings)
             boolean isFloat = (strchr(setting,'.') != NULL);
 
             char *scoreName = cloneString(filter->name);
-            char *field = filter->name;   // No need to clone: will be thrown away at end of cycle
-            int ix = strlen(field) - strlen(FILTER_NUMBER_NAME);
-            assert(ix > 0);
-            field[ix] = '\0';
+            char *field = extractFieldName(filter->name, FILTER_NUMBER_NAME);
 
         #ifdef EXTRA_FIELDS_SUPPORT
             if (extras != NULL)
@@ -5910,6 +5920,8 @@ if (filterSettings)
                     if (!isFloat)
                         isFloat = asTypesIsFloating(asCol->lowType->type);
                     }
+                else 
+                    errAbort("Building filter on field %s which is not in AS file.", field);
                 }
         #endif///ndef EXTRA_FIELDS_SUPPORT
             // FIXME: Label munging should be localized to showScoreFilter()
@@ -5984,14 +5996,18 @@ void textFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb)
 struct slName *filter, *filterSettings = trackDbSettingsWildMatch(tdb, FILTER_TEXT_WILDCARD);
 if (filterSettings)
     {
+    struct sqlConnection *conn = NULL;
+    if (!isHubTrack(db))
+        conn = hAllocConnTrack(db, tdb);
     while ((filter = slPopHead(&filterSettings)) != NULL)
         {
         char *setting = trackDbSetting(tdb, filter->name);
         char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filter->name, setting);
-        char *field = cloneString(filter->name);
-        int ix = strlen(field) - strlen(FILTER_TEXT_NAME);
-        assert(ix > 0);
-        field[ix] = '\0';
+        char *field = extractFieldName(filter->name, FILTER_TEXT_NAME);
+        struct asObject *as = asForTdb(conn, tdb);
+        struct asColumn *asCol = asColumnFind(as, field);
+        if (asCol == NULL)
+            errAbort("Building filter on field %s which is not in AS file.", field);
 
         printf("<P><B>Filter items in '%s' field: ", field);
 

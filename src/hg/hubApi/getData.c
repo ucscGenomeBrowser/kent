@@ -255,6 +255,8 @@ char **columnNames = NULL;
 char **columnTypes = NULL;
 int *jsonTypes = NULL;
 struct asObject *as = asForTable(conn, splitSqlTable, tdb);
+if (! as)
+    apiErrAbort(err500, err500Msg, "can not find schema definition for table '%s', genome: '%s'", splitSqlTable, db);
 struct asColumn *columnEl = as->columnList;
 int asColumnCount = slCount(columnEl);
 int columnCount = tableColumns(conn, splitSqlTable, &columnNames, &columnTypes, &jsonTypes);
@@ -483,7 +485,7 @@ if (isNotEmpty(chrom))
     {
     chromSize = bbiChromSize(bbi, chrom);
     if (0 == chromSize)
-	apiErrAbort(err400, err400Msg, "can not find specified chrom=%s in bigBed file URL %s", chrom, bigDataUrl);
+	apiErrAbort(err400, err400Msg, "can not find specified chrom=%s in bigBed file URL '%s', track=%s genome=%s for endpoint '/getData/track' given hubUrl='%s'", chrom, bigDataUrl, track, genome, hubUrl);
     jsonWriteNumber(jw, "chromSize", (long long)chromSize);
     }
 else
@@ -508,6 +510,8 @@ jsonWriteString(jw, "trackType", thisTrack->type);
 if (allowedBigBedType(thisTrack->type))
     {
     struct asObject *as = bigBedAsOrDefault(bbi);
+    if (! as)
+	apiErrAbort(err500, err500Msg, "can not find schema definition for bigDataUrl '%s', track=%s genome: '%s' for endpoint '/getData/track' given hubUrl='%s'", bigDataUrl, track, genome, hubUrl);
     struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
     if (jsonOutputArrays || debug)
         bigColumnTypes(jw, fiList, as);
@@ -595,7 +599,6 @@ if (trackHasNoData(thisTrack))
 /* might be a big* track with no table */
 char *bigDataUrl = NULL;
 boolean tableTrack = TRUE;
-boolean protectedData = FALSE;
 
 if (thisTrack)
     {
@@ -608,13 +611,15 @@ if (thisTrack)
 	freeMem(sqlTable);
 	sqlTable = cloneString(tableName);
 	}
-    protectedData = protectedTrack(thisTrack);
     }
 else
     {
     freeMem(sqlTable);
     sqlTable = cloneString(track);
     }
+
+if (protectedTrack(thisTrack, sqlTable))
+	apiErrAbort(err403, err403Msg, "this data request: 'db=%s;track=%s' is protected data, see also: https://genome.ucsc.edu/FAQ/FAQdownloads.html#download40", db, track);
 
 struct hTableInfo *hti = hFindTableInfoWithConn(conn, NULL, sqlTable);
 
@@ -644,8 +649,6 @@ if (! hTableOrSplitExists(db, sqlTable))
     else
 	tableTrack = FALSE;
     }
-if (protectedData)
-	apiErrAbort(err403, err403Msg, "this data request: 'db=%s;track=%s' is protected data, see also: https://genome.ucsc.edu/FAQ/FAQdownloads.html#download40", db, track);
 
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "genome", db);
@@ -718,6 +721,8 @@ if ( uEnd > uStart )
 if (thisTrack && allowedBigBedType(thisTrack->type))
     {
     struct asObject *as = bigBedAsOrDefault(bbi);
+    if (! as)
+	apiErrAbort(err500, err500Msg, "can not find schema definition for bigDataUrl '%s', track=%s genome='%s' for endpoint '/getData/track'", bigDataUrl, track, db);
     struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
     if (jsonOutputArrays || debug)
         bigColumnTypes(jw, fiList, as);

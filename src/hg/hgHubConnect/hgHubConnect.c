@@ -1195,7 +1195,7 @@ if (isNotEmpty(dyStringContents(hubOut->descriptionMatch)))
     dyStringPrintf(dy, "{'id':'%d_descriptionMatchText','parent':'#_%d',"
         "'state':{'opened': true},'text': 'Hub Description: "
         "<span class=\"descriptionMatch\"><em>%s</em></span>'},",
-        hubInfo->id, hubInfo->id, dyStringContents(hubOut->descriptionMatch));
+        hubInfo->id, hubInfo->id, htmlEncode(dyStringContents(hubOut->descriptionMatch)));
     }
 struct genomeOutputStructure *genomeOut = hubOut->genomes;
 struct dyString *genomeDy = dyStringNew(0);

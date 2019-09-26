@@ -248,7 +248,7 @@ if (jsonOutputArrays)
     dyStringAppend(extraDyFlags, ";jsonOutputArrays=1");
 char *extraFlags = dyStringCannibalize(&extraDyFlags);
 
-if (protectedTrack(tdb))
+if (protectedTrack(tdb, tdb->track))
     hPrintf("<li>%s : %s &lt;protected data&gt;</li>\n", tdb->track, tdb->type);
 else if (db)
     {
@@ -319,7 +319,7 @@ if (chromCount > 0 || itemCount > 0)
         safef(countsMessage, sizeof(countsMessage), " : %ld chroms : %ld count ", chromCount, itemCount);
     }
 
-if (protectedTrack(tdb))
+if (protectedTrack(tdb, tdb->track))
     hPrintf("    <li><b>%s</b>: %s protected data</li>\n", tdb->track, tdb->type);
 else if (isSupportedType(tdb->type))
     {
@@ -551,7 +551,7 @@ static void trackSettings(struct trackDb *tdb, struct hash *countTracks)
 /* process the settingsHash for a trackDb, recursive when subtracks */
 {
 hPrintf("    <li><ul>\n");
-boolean protectedData = protectedTrack(tdb);
+boolean protectedData = protectedTrack(tdb, tdb->track);
 struct hashEl *hel;
 struct hashCookie hc = hashFirst(tdb->settingsHash);
 while ((hel = hashNext(&hc)) != NULL)
@@ -676,7 +676,7 @@ boolean compositeContainer = tdbIsComposite(tdb);
 boolean compositeView = tdbIsCompositeView(tdb);
 boolean superChild = tdbIsSuperTrackChild(tdb);
 boolean depthSearch = cartUsualBoolean(cart, "depthSearch", FALSE);
-boolean protectedData = protectedTrack(tdb);
+boolean protectedData = protectedTrack(tdb, tdb->track);
 hashCountTrack(tdb, countTracks);
 
 if (compositeContainer)
