@@ -546,7 +546,7 @@ cd kent/src/hg/makeDb/trackDb
     mv /hive/data/genomes/hg38/bed/gencodeV32 /hive/data/genomes/hg38/bed/gencodeV32pre
     # redo do above imports
 
-    for t in tables/* ; do cmp ../gencodeV32pre/$t $t > ; done
+    for t in tables/* ; do cmp ../gencodeV32pre/$t $t ; done
 
     Changes:
     wgEncodeGencode2wayConsPseudoV32.gp 
@@ -559,7 +559,7 @@ cd kent/src/hg/makeDb/trackDb
     diff ../gencodeV32pre/tables/wgEncodeGencodeAttrsV32.tab tables/wgEncodeGencodeAttrsV32.tab >pre-diffs/wgEncodeGencodeAttrsV32.diff
     diff ../gencodeV32pre/tables/wgEncodeGencodeTagV32.tab tables/wgEncodeGencodeTagV32.tab >pre-diffs/wgEncodeGencodeTagV32.diff
 
-    # wgEncodeGencodeAttrsV32: experimental conformation level changed on a few pseudo genes
-    # wgEncodeGencodeTagV32: pseudo_consens changed on a few pseudo genes.
+    # wgEncodeGencodeAttrsV32: experimental conformation level changed on a few pseudogenes
+    # wgEncodeGencodeTagV32: pseudo_consens changed on a few pseudogenes.
 
 #########################################################################
