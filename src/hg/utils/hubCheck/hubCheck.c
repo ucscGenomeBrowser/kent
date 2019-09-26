@@ -778,8 +778,7 @@ if (errCatch->gotError)
     {
     trackDbErrorCount += 1;
     retVal = 1;
-    if (!options->htmlOut)
-        dyStringPrintf(errors, "%s", errCatch->message->string);
+    trackDbErr(errors, errCatch->message->string, genome, tdb, options->htmlOut);
     }
 errCatchFree(&errCatch);
 

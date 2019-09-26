@@ -4384,6 +4384,15 @@ For the complete bigBarChart format definitions please see the
     </P>
 </DIV>
 
+<DIV class="barChartMaxSize"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartMaxSize &lt;small/mediium/large&gt;</code></div>
+    <P>BarChart track display selects one of three sizes (small, medium, or large) to 
+        display barCharts, based on size of the genomic region in the current window.
+        For dense data, it is helpful to reduce the barChart sizes, even when in relatively
+        small genomic regions.  This setting limits the size of the largest barChart 
+        to the selected value.  When unset, the default value is &quot;large&quot;.
+    </P>
+</DIV>
 <DIV class="barChartMetric"><span class="types bigBarChart"></span>
 <div class="format"><code>barChartMetric &lt;metric&gt;</code></div>
     <P>This setting provides a label for details page information about the barChart values presented.

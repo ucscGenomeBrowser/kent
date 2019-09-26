@@ -54,6 +54,8 @@
 #define err415Msg	"Unsupported track type"
 #define err429	429
 #define err429Msg	"Too Many Requests"
+#define err500	500
+#define err500Msg	"Internal Server Error"
 
 /* list of all potential arguments */
 #define argHubUrl	"hubUrl"
@@ -218,7 +220,7 @@ boolean trackHasData(struct trackDb *tdb);
 
 #define trackHasNoData(tdb) (!trackHasData(tdb))
 
-boolean protectedTrack(struct trackDb *tdb);
+boolean protectedTrack(struct trackDb *tdb, char *trackName);
 /* determine if track is off-limits protected data */
 
 /* ######################################################################### */
