@@ -204,8 +204,9 @@ struct slName *filterSettings = trackDbSettingsWildMatch(tdb, FILTER_NUMBER_WILD
 
 for(; filterSettings; filterSettings = filterSettings->next)
     {
-    char *fieldName = cloneString(filterSettings->name);
-    fieldName[strlen(fieldName) - sizeof FILTER_NUMBER_NAME + 1] = 0;
+    char *fieldName = extractFieldName(filterSettings->name, FILTER_NUMBER_NAME);
+    if (sameString(fieldName, "noScore"))
+        continue;
     if ((filter = bigBedMakeNumberFilter(cart, bbi, tdb, filterSettings->name, NULL, fieldName)) != NULL)
         slAddHead(&filters, filter);
     }
@@ -214,8 +215,7 @@ filterSettings = trackDbSettingsWildMatch(tdb, FILTER_TEXT_WILDCARD);
 
 for(; filterSettings; filterSettings = filterSettings->next)
     {
-    char *fieldName = cloneString(filterSettings->name);
-    fieldName[strlen(fieldName) - sizeof FILTER_TEXT_NAME + 1] = 0;
+    char *fieldName = extractFieldName(filterSettings->name, FILTER_TEXT_NAME);
     if ((filter = bigBedMakeFilterText(cart, bbi, tdb, filterSettings->name,  fieldName)) != NULL)
         slAddHead(&filters, filter);
     }
