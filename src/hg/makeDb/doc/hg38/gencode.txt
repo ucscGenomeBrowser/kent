@@ -559,7 +559,7 @@ cd kent/src/hg/makeDb/trackDb
     diff ../gencodeV32pre/tables/wgEncodeGencodeAttrsV32.tab tables/wgEncodeGencodeAttrsV32.tab >pre-diffs/wgEncodeGencodeAttrsV32.diff
     diff ../gencodeV32pre/tables/wgEncodeGencodeTagV32.tab tables/wgEncodeGencodeTagV32.tab >pre-diffs/wgEncodeGencodeTagV32.diff
 
-    # attrs: experimental conformation level changed on a few pseudo genes
-    # tag: pseudo_consens changed on a few pseudo genes.
+    # wgEncodeGencodeAttrsV32: experimental conformation level changed on a few pseudo genes
+    # wgEncodeGencodeTagV32: pseudo_consens changed on a few pseudo genes.
 
 #########################################################################
