@@ -14,8 +14,8 @@ mkdir -p hg19 hg38
 mkdir -p archive/$date
 hgsql hg19 -NB -e 'select alias, chrom from chromAlias where source = "refseq";' > hg19/chromAlias.tab
 hgsql hg38 -NB -e 'select alias, chrom from chromAlias where source = "refseq";' > hg38/chromAlias.tab
-wget 'https://mastermind.genomenon.com/cvr/download?build=grch37&format=csv' -O archive/$date/hg19.zip
-wget 'https://mastermind.genomenon.com/cvr/download?build=grch38&format=csv' -O archive/$date/hg38.zip
+wget -q 'https://mastermind.genomenon.com/cvr/download?build=grch37&format=csv' -O archive/$date/hg19.zip
+wget -q 'https://mastermind.genomenon.com/cvr/download?build=grch38&format=csv' -O archive/$date/hg38.zip
 unzip -o archive/$date/hg19.zip -d archive/$date
 unzip -o archive/$date/hg38.zip -d archive/$date
 python mastermindToBed.py hg19/chromAlias.tab archive/$date/mastermind_cited_variants_reference-*-grch37.csv hg19/mastermind.bed
@@ -31,9 +31,9 @@ mv hg38/mastermind.new.bb hg38/mastermind.bb
 
 # build archive
 REL=`cat mastermindRelease.txt`
-ARCH=/hive/data/outside/otto/archive/mastermind
-mkdir -p $ARCH/$REL/{hg19,hg38}
-cp hg19/mastermind.bb $ARCH/$REL/hg19/
-cp hg38/mastermind.bb $ARCH/$REL/hg38/
-hgsql hg19 -e 'select * from trackDb where tableName="mastermind"' > $ARCH/$REL/hg19/trackDb.tab
-hgsql hg38 -e 'select * from trackDb where tableName="mastermind"' > $ARCH/$REL/hg38/trackDb.tab
+ARCH=/hive/data/inside/archive
+mkdir -p $ARCH/{hg19,hg38}/mastermind/$REL
+cp hg19/mastermind.bb $ARCH/hg19/mastermind/$REL/
+cp hg38/mastermind.bb $ARCH/hg38/mastermind/$REL/
+hgsql hg19 -e 'select * from trackDb where tableName="mastermind"' > $ARCH/hg19/mastermind/$REL/trackDb.tab
+hgsql hg38 -e 'select * from trackDb where tableName="mastermind"' > $ARCH/hg38/mastermind/$REL/trackDb.tab
