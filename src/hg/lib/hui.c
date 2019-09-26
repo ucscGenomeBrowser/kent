@@ -5000,6 +5000,67 @@ printSubtrackTableFooter(subCount, settings);
 puts("</TABLE>");
 }
 
+boolean compositeHideEmptySubtracksSetting(struct trackDb *tdb, boolean *retDefault,
+                                        char **retMultiBedFile, char **retSubtrackIdFile)
+/* Parse hideEmptySubtracks setting
+ * Format:  hideEmptySubtracks on|default
+ *              or
+ *          hideEmptySubtracks on|default multiBed.bed subtrackIds.tab
+ * where multiBed.bed is a bed3Sources bigBed, generated with bedtools multiinter
+ *              post-processed by UCSC multiBed.pl tool
+ *      subtrackIds.tab is a tab-sep file: id subtrackName
+ *
+ * Return TRUE if set to true/on/default.  retDefault is TRUE if set default, o/w FALSE
+ */
+{
+if (!tdbIsComposite(tdb))
+    return FALSE;
+char *hideEmpties = trackDbSetting(tdb, SUBTRACK_HIDE_EMPTIES);
+if (!hideEmpties)
+    return FALSE;
+char *orig = cloneString(hideEmpties);
+char *words[3];
+int wordCount = chopByWhite(hideEmpties, words, ArraySize(words));
+char *mode = words[0];
+if (differentString(mode, "on") && differentString(mode, "true") &&
+    differentString(mode, "default"))
+        {
+        warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTIES, orig);
+        return FALSE;
+        }
+boolean deflt = sameString(mode, "default") ? TRUE : FALSE;
+if (retDefault)
+    *retDefault = deflt;
+
+if (wordCount == 1)
+    return TRUE;
+if (wordCount != 3)
+    {
+    warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTIES, orig);
+    return FALSE;
+    }
+// multi-bed specified (to speed display)
+if (retMultiBedFile)
+    *retMultiBedFile = cloneString(hReplaceGbdb(words[1]));
+if (retSubtrackIdFile)
+    *retSubtrackIdFile = cloneString(words[2]);
+return TRUE;
+}
+
+boolean compositeHideEmptySubtracks(struct cart *cart, struct trackDb *tdb,
+                                        char **retMutiBedFile, char **retSubtrackIdFile)
+/* Parse hideEmptySubtracks setting and check cart
+ * Return TRUE if we should hide empties
+ */
+{
+boolean deflt = FALSE;
+if (!compositeHideEmptySubtracksSetting(tdb, &deflt, retMutiBedFile, retSubtrackIdFile))
+    return FALSE;
+char buf[128];
+safef(buf, sizeof buf, "%s.%s", tdb->track, SUBTRACK_HIDE_EMPTIES);
+return cartUsualBoolean(cart, buf, deflt);
+}
+
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb)
 // Display list of subtracks and descriptions with checkboxes to control visibility and
 // possibly other nice things including links to schema and metadata and a release date.
@@ -5018,7 +5079,7 @@ if (subCount > LARGE_COMPOSITE_CUTOFF && membersForAll->dimensions != NULL)
     {
     // ignore displaySubtracks setting for large composites with a matrix as
     // matrix effectively shows all
-    safef(buffer,SMALLBUF,"%s.displaySubtracks", parentTdb->track);
+    safef(buffer, SMALLBUF,"%s.displaySubtracks", parentTdb->track);
     displaySubs = cartUsualString(cart, buffer,"some"); // track specific defaults to only selected
     }
 else
@@ -5026,6 +5087,15 @@ else
     displaySubs = cartUsualString(cart, "displaySubtracks", "all"); // browser wide defaults to all
     }
 boolean displayAll = sameString(displaySubs, "all");
+
+boolean hideSubtracksDefault;
+if (compositeHideEmptySubtracksSetting(parentTdb, &hideSubtracksDefault, NULL, NULL))
+    {
+    printf("<BR><B>Hide empty subtracks:</B> &nbsp;");
+    char buf[128];
+    safef(buf, sizeof buf, "%s.%s", parentTdb->track, SUBTRACK_HIDE_EMPTIES);
+    cgiMakeCheckBox(buf, hideSubtracksDefault);
+    }
 
 // Table wraps around entire list so that "Top" link can float to the correct place.
 cgiDown(0.7);

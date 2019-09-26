@@ -152,6 +152,9 @@ char *hTrackUiForTrack(char *trackName);
 // ie. subGroup1 subtrackColor Color; sortOrder subtrackColor=+ cellType=+
 #define SUBTRACK_COLOR_SUBGROUP "subtrackColor"
 
+// trackDb setting and cart/cgi var
+#define SUBTRACK_HIDE_EMPTIES   "hideEmptySubtracks"
+
 void netUi(struct trackDb *tdb);
 
 struct controlGrid
@@ -973,6 +976,13 @@ char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct tra
 	char *vocabType, char *label);
 /* If the parentTdb has an ENCODE controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to display it.  Return string is cloned. */
+
+boolean compositeHideEmptySubtracks(struct cart *cart, struct trackDb *tdb,
+                                        char **retMutiBedFile, char **retSubtrackIdFile);
+/* Parse hideEmptySubtracks setting and check cart
+ * Return TRUE if we should hide empties
+ */
+
 
 char *wgEncodeVocabLink(char *file,char *term,char *value,char *title, char *label,char *suffix);
 // returns allocated string of HTML link to ENCODE controlled vocabulary term
