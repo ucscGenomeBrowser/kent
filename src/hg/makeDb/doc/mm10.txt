@@ -18136,7 +18136,7 @@ TMPDIR=/dev/shm
     diff ../gencodeVM23pre/tables/wgEncodeGencodeAttrsVM23.tab tables/wgEncodeGencodeAttrsVM23.tab >pre-diffs/wgEncodeGencodeAttrsVM23.diff
     diff ../gencodeVM23pre/tables/wgEncodeGencodeTagVM23.tab tables/wgEncodeGencodeTagVM23.tab >pre-diffs/wgEncodeGencodeTagVM23.diff
 
-    # wgEncodeGencodeAttrsVM23: experimental conformation level changed on a few pseudogenes
+    # wgEncodeGencodeAttrsVM23: experimental confirmation level changed on a few pseudogenes
     # wgEncodeGencodeTagVM23: pseudo_consens changed on a few pseudogenes.
 
 
