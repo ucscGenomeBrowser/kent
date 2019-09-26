@@ -542,4 +542,24 @@ cd kent/src/hg/makeDb/trackDb
     # commit all
     # if pushing public: add ticket and MARK QA READY
 
+2019-08-30: repeat above for final release
+    mv /hive/data/genomes/hg38/bed/gencodeV32 /hive/data/genomes/hg38/bed/gencodeV32pre
+    # redo do above imports
+
+    for t in tables/* ; do cmp ../gencodeV32pre/$t $t > ; done
+
+    Changes:
+    wgEncodeGencode2wayConsPseudoV32.gp 
+    wgEncodeGencodeAttrsV32.tab
+    wgEncodeGencodePolyaV32.gp
+    wgEncodeGencodeTagV32.tab
+    only attrs and maybe tags matter to hgGene gencode
+
+    mkdir pre-diffs
+    diff ../gencodeV32pre/tables/wgEncodeGencodeAttrsV32.tab tables/wgEncodeGencodeAttrsV32.tab >pre-diffs/wgEncodeGencodeAttrsV32.diff
+    diff ../gencodeV32pre/tables/wgEncodeGencodeTagV32.tab tables/wgEncodeGencodeTagV32.tab >pre-diffs/wgEncodeGencodeTagV32.diff
+
+    # attrs: experimental conformation level changed on a few pseudo genes
+    # tag: pseudo_consens changed on a few pseudo genes.
+
 #########################################################################
