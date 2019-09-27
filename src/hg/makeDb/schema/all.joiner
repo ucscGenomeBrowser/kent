@@ -5498,6 +5498,7 @@ identifier knownGeneId dependency
     $kgDb.knownToHprd.name
     $kgDb.knownToLocusLink.name
     $kgDb.knownToPfam.name
+    $kgDb.knownToMupit.name
     $kgDb.knownToSuper.gene
     $kgDb.knownToTag.name
     $kgDb.knownToTreefam.name
@@ -5539,7 +5540,14 @@ identifier knownGeneId dependency
     hg19.knownGeneTxPep.name
     $kgDb.kg11ToKg12.newId exclude=
     $kgDb.knownAttrs.kgID
+    $kgDb.knownCds.name
 
+identifier knownGeneOld11Id dependency
+"Previous UCSC Gene build"
+    $kgDb.knownGeneOld11.name
+    $kgDb.kg10ToKg11.oldId full
+    $kgDb.kgXrefOld11.kgID full
+    
 identifier knownGeneOld10Id dependency
 "Previous UCSC Gene build"
     $kgDb.knownGeneOld10.name
@@ -6474,7 +6482,7 @@ identifier cgapAlias
     $gbd.cgapAlias.alias dupeOk
     $gbd,!hg16,!hg18,!hg19,!mm9,!mm10,!hg38.knownGene.name minCheck=0.50
     hg16.knownGene.name minCheck=0.05
-    hg18,hg19,hg38,mm9,mm10.kgXref.geneSymbol minCheck=0.70
+    hg18,hg19,hg38,mm9,mm10.kgXref.geneSymbol minCheck=0.65
 
 # SNP (Simple Nucleotide Polymorphism) Stuff
 
