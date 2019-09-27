@@ -584,5 +584,84 @@ awk '{print $2, $4}' fileCellAbTarget.tab | sed 's/\+.* / /' | sort | uniq | wc 
 # Yes, but only 8 out of 1000 experiments
 
 
+####################
+# Create multiBed index for large composite track
+# bed3+2 with source count and comma-sep list of sources
+#
+# (2019-04-11 kate)
 
+cd /hive/data/outside/encode3/tfbs/dac
+cd hg38
+mkdir multiBed
+cd multiBed
 
+mkdir beds
+cp ../peaks/*.bed.gz beds
+#cp ../peaks/*DQ.bed.gz beds
+cd beds
+
+# remove empty file (check on this later)
+rm ENCFF520CZS.bed.gz
+gunzip *.bed.gz
+foreach f (*.bed)
+    set e = $f:r
+    bedSort $e.bed $e.sorted.bed
+end
+
+cd ..
+# Make file list for multiIntersect
+awk '{print $1}' metadata.pruned.tsv | sed -e 's/^/beds\//' -e 's/$/.sorted.bed/' > \
+        multiBed/multiBed.files.txt
+
+wc -l multiBed/multiBed.files.txt
+# 1257 multiBed/multiBed.files.txt
+# remove header line
+
+# Make subtrack list for collapseEmptySubtracks
+awk -v table="encode3TfbsPk" 'NR>1 {OFS="\t"; print NR-2, table$1}' < metadata.pruned.tsv > \
+        multiBed/multiBedSources.tab
+ln -s `pwd`/multiBed/multiBedSources.tab /gbdb/hg38/encode3/tfbs
+
+cd multiBed
+
+# See Aaron Quinlan's posting in Biostars, describing multiIntersect Bed (bedtools multiinter)
+#  https://www.biostars.org/p/13516/
+set bedtools = /cluster/bin/bedtools
+(date; $bedtools/multiIntersectBed -header -i `cat multiBed.files.txt` > multiBed.bed; date) >&! multiInter.log &
+
+cat multiInter.log
+#Thu Apr 11 13:11:40 PDT 2019
+#Thu Apr 11 14:02:20 PDT 2019
+# ~50 minutes
+
+wc -l multiBed.bed
+37789354 multiBed.bed
+# ~37M rows
+
+# Reformat to UCSC-style
+grep -v chrEBV  multiBed.bed | perl multiBed.pl > multiBed.ucsc.bed
+# takes awhile (~30 mins)
+
+set sizes = /hive/data/genomes/hg38/chrom.sizes
+bedToBigBed -as=$HOME/kent/src/hg/lib/bed3Sources.as -type=bed3+2 multiBed.ucsc.bed $sizes \
+                        multiBed.bb
+ln -s `pwd`/multiBed.bb /gbdb/hg38/encode3/tfbs
+
+# create bigScoredPeaks for composite (switching from loaded tables)
+# TESTS
+
+cd ..
+mkdir bigScoredPeaks
+
+cat > makeBigs.csh << 'EOF'
+set files = "encode3TfbsPkENCFF512IAI encode3TfbsPkENCFF403BWK encode3TfbsPkENCFF389ULP encode3TfbsPkENCFF869YGK encode3TfbsPkENCFF193DQZ encode3TfbsPkENCFF765NAN"
+set sizes = /hive/data/genomes/hg38/chrom.sizes
+foreach f ($files)
+    echo $f
+    zcat scoredPeaks/$f.bed.gz > bigScoredPeaks/$f.bed
+    sort -k1,1 -k2,2n  bigScoredPeaks/$f.bed > bigScoredPeaks/$f.sorted.bed
+    bedToBigBed -as=$HOME/kent/src/hg/lib/bigNarrowPeak.as -type=bed6+4 \
+                        bigScoredPeaks/$f.sorted.bed $sizes bigScoredPeaks/$f.bb
+    ln -s `pwd`/bigScoredPeaks/$f.bb /gbdb/hg38/encode3/tfbs
+end
+'EOF'

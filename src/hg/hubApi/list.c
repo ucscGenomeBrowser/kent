@@ -312,8 +312,7 @@ if (NULL == tdb)	/* might not be any trackDb */
 boolean isContainer = tdbIsComposite(tdb) || tdbIsCompositeView(tdb);
 
 boolean protectedData = FALSE;
-if (trackDbSetting(tdb, "tableBrowser"))
-    protectedData = TRUE;
+protectedData = protectedTrack(tdb, tdb->track);
 jsonWriteString(jw, "shortLabel", tdb->shortLabel);
 jsonWriteString(jw, "type", tdb->type);
 jsonWriteString(jw, "longLabel", tdb->longLabel);
@@ -333,7 +332,8 @@ if (tdb->settingsHash)
         {
         if (sameWord("track", hel->name))
             continue;	// already output in header
-        if (sameWord("tableBrowser", hel->name))
+        if (sameWord("tableBrowser", hel->name)
+		&& startsWithWord("off", (char*)hel->val))
             jsonWriteBoolean(jw, "protectedData", TRUE);
         else if (isEmpty((char *)hel->val))
             jsonWriteString(jw, hel->name, "empty");
@@ -391,6 +391,8 @@ long long itemCount = bbiItemCount(bigDataUrl, thisTrack->type, indexFileOrUrl);
 outputTrackDbVars(jw, thisTrack, itemCount);
 
 struct asObject *as = bigBedAsOrDefault(bbi);
+if (! as)
+    apiErrAbort(err500, err500Msg, "can not find schema definition for bigDataUrl '%s', track=%s genome: '%s' for endpoint '/list/schema' given hubUrl='%s'", bigDataUrl, track, genome, hubUrl);
 struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
 bigColumnTypes(jw, fiList, as);
 
@@ -475,7 +477,7 @@ if (thisTrack && startsWith("big", thisTrack->type))
     if (bigDataUrl)
 	bbi = bigFileOpen(thisTrack->type, bigDataUrl);
     if (NULL == bbi)
-	apiErrAbort(err400, err400Msg, "failed to find bigDataUrl=%s for track=%s in database=%s for endpoint '/getData/schema'", bigDataUrl, track, db);
+	apiErrAbort(err400, err400Msg, "failed to find bigDataUrl=%s for track=%s in database=%s for endpoint '/list/schema'", bigDataUrl, track, db);
     }
 
 char *dataTime = sqlTableUpdate(conn, splitTableName);
@@ -501,7 +503,7 @@ long long itemCount = 0;
 if (bbi)
     {
     /* do not show itemCount for protected data */
-    if (! trackDbSetting(thisTrack, "tableBrowser"))
+    if (! protectedTrack(thisTrack, track))
 	{
 	char *indexFileOrUrl = hReplaceGbdb(trackDbSetting(thisTrack, "bigDataIndex"));
 	itemCount = bbiItemCount(bigDataUrl, thisTrack->type, indexFileOrUrl);
@@ -513,6 +515,8 @@ if (bbi)
     else
 	{
 	as = bigBedAsOrDefault(bbi);
+	if (! as)
+	    apiErrAbort(err500, err500Msg, "can not find schema definition for bigDataUrl '%s', track=%s genome: '%s' for endpoint '/list/schema'", bigDataUrl, track, db);
 	struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
 	bigColumnTypes(jw, fiList, as);
 	}
@@ -521,11 +525,13 @@ else
     {
     columnCount = tableColumns(conn, splitTableName, &columnNames, &columnTypes, &jsonTypes);
     as = asForTable(conn, splitTableName, thisTrack);
+    if (! as)
+	apiErrAbort(err500, err500Msg, "can not find schema definition for table '%s', track=%s genome: '%s' for endpoint '/list/schema'", splitTableName, track, db);
     columnEl = as->columnList;
     asColumnCount = slCount(columnEl);
 
     /* do not show counts for protected data */
-    if (! trackDbSetting(thisTrack, "tableBrowser"))
+    if (! protectedTrack(thisTrack, track))
 	{
 	char query[2048];
 	sqlSafef(query, sizeof(query), "select count(*) from %s", splitTableName);
@@ -685,7 +691,7 @@ static long long dataItemCount(char *db, struct trackDb *tdb)
 long long itemCount = 0;
 if (trackHasNoData(tdb))	/* container 'tracks' have no data items */
     return itemCount;
-if (trackDbSetting(tdb, "tableBrowser"))	/* private data */
+if (protectedTrack(tdb, tdb->track))	/*	private data */
     return itemCount;
 if (sameWord("downloadsOnly", tdb->type))
     return itemCount;
@@ -750,7 +756,7 @@ if (! (trackLeavesOnly && isContainer) )
     {
     long long itemCount = 0;
     /* do not show counts for protected data or continers (== no items)*/
-    if (! (isContainer || trackDbSetting(tdb, "tableBrowser")))
+    if (! (isContainer || protectedTrack(tdb, tdb->track)))
 	itemCount = dataItemCount(db, tdb);
     jsonWriteObjectStart(jw, tdb->track);
     if (tdbIsComposite(tdb))

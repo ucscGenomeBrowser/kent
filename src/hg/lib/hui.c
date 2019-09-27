@@ -3632,15 +3632,26 @@ for (;val!=NULL;val=val->next)
     }
 }
 
+char *extractFieldName(char *cartVariable, char *filterType)
+/* Extract field name from a filter cart variable.  Variables can either be
+ * <columnName>Filter* or <columnName>.Filter* */
+{
+char *field = cloneString(cartVariable);
+int ix = strlen(field) - strlen(filterType); 
+assert(ix > 1);
+field[ix] = '\0';
+if (field[ix - 1] == '.')
+    field[ix - 1] = '\0';
+
+return field;
+}
+
 filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct asObject *as, char *filterName, char *name)
 /* Build a filterBy_t structure from a <column>FilterValues statement. */
 {
 char *setting = trackDbSetting(tdb, filterName);
 char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting);
-char *field = cloneString(filterName);
-int ix = strlen(field) - strlen(FILTER_VALUES_NAME);
-assert(ix > 0);
-field[ix] = '\0';
+char *field = extractFieldName(filterName, FILTER_VALUES_NAME);
 
 filterBy_t *filterBy;
 AllocVar(filterBy);
@@ -3649,6 +3660,8 @@ filterBy->title = field; ///  title should come from AS file, or trackDb variabl
 struct asColumn *asCol = asColumnFind(as, field);
 if (asCol != NULL)
     filterBy->title = asCol->comment;
+else
+    errAbort("Building filter on field %s which is not in AS file.", field);
 filterBy->useIndex = FALSE;
 filterBy->slValues = slNameListFromCommaEscaped(value);
 chopUpValues(filterBy);
@@ -4386,12 +4399,33 @@ struct subtrackConfigSettings
     };
 #define LARGE_COMPOSITE_CUTOFF 30
 
+static void printSubtrackListRadioButtons(char *parentTrack, int subCount, boolean displayAll)
+// Print radio buttons for all/select
+{
+printf("<B>List subtracks:&nbsp;");
+char javascript[JBUFSIZE];
+safef(javascript, sizeof(javascript),
+      "showOrHideSelectedSubtracks(true);");
+char buffer[SMALLBUF];
+if (subCount > LARGE_COMPOSITE_CUTOFF)
+    safef(buffer,SMALLBUF,"%s.displaySubtracks", parentTrack);
+else
+    safecpy(buffer,SMALLBUF,"displaySubtracks");
+cgiMakeOnEventRadioButtonWithClass(buffer, "selected", !displayAll, "allOrOnly", "click", javascript);
+puts("only selected/visible &nbsp;&nbsp;");
+safef(javascript, sizeof(javascript),
+      "showOrHideSelectedSubtracks(false);");
+cgiMakeOnEventRadioButtonWithClass(buffer, "all", displayAll, "allOrOnly", "click", javascript);
+printf("all</B>");
+if (subCount > 5)
+    printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
+}
+
 static void printSubtrackTableHeader(struct trackDb *parentTdb, struct slRef *subtrackRefList,
 				struct subtrackConfigSettings *settings)
 /* Print header of subtrack table, including classes describing display appearance and behavior.
 Return number of columns */
 {
-char buffer[SMALLBUF];
 boolean useDragAndDrop = settings->useDragAndDrop;
 sortOrder_t *sortOrder = settings->sortOrder;
 if (sortOrder != NULL)
@@ -4416,24 +4450,9 @@ else
     // NOTE: list subtrack radio buttons are inside tracklist table header if
     //       there are no sort columns.  The reason is to ensure spacing of lines
     //       column headers when the only column header is "Restricted Until"
-    printf("<TD colspan='%d'><B>List subtracks:&nbsp;", colspan);
-    char javascript[JBUFSIZE];
-    safef(javascript, sizeof(javascript),
-	  "showOrHideSelectedSubtracks(true);");
+    printf("<TD colspan='%d'>", colspan);
     int subCount = slCount(subtrackRefList);
-    if (subCount > LARGE_COMPOSITE_CUTOFF)
-	safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
-    else
-	safecpy(buffer,SMALLBUF,"displaySubtracks");
-    cgiMakeOnEventRadioButtonWithClass(buffer, "selected", !settings->displayAll, "allOrOnly", "click", javascript);
-
-    puts("only selected/visible &nbsp;&nbsp;");
-    safef(javascript, sizeof(javascript),
-	  "showOrHideSelectedSubtracks(false);");
-    cgiMakeOnEventRadioButtonWithClass(buffer, "all", settings->displayAll, "allOrOnly", "click", javascript);
-    printf("all</B>");
-    if (subCount > 5)
-	printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
+    printSubtrackListRadioButtons(parentTdb->track, subCount, settings->displayAll);
     puts("</TD>");
     columnCount = colspan;
     }
@@ -4958,6 +4977,7 @@ if (membersForAll->members[dimX] == NULL && membersForAll->members[dimY] == NULL
 return TRUE;
 }
 
+
 static void printSubtrackTable(struct trackDb *parentTdb, struct slRef *subtrackRefList,
 			    struct subtrackConfigSettings *settings, struct cart *cart)
 /* Print table of subtracks */
@@ -4993,6 +5013,67 @@ printSubtrackTableFooter(subCount, settings);
 puts("</TABLE>");
 }
 
+boolean compositeHideEmptySubtracksSetting(struct trackDb *tdb, boolean *retDefault,
+                                        char **retMultiBedFile, char **retSubtrackIdFile)
+/* Parse hideEmptySubtracks setting
+ * Format:  hideEmptySubtracks on|default
+ *              or
+ *          hideEmptySubtracks on|default multiBed.bed subtrackIds.tab
+ * where multiBed.bed is a bed3Sources bigBed, generated with bedtools multiinter
+ *              post-processed by UCSC multiBed.pl tool
+ *      subtrackIds.tab is a tab-sep file: id subtrackName
+ *
+ * Return TRUE if set to true/on/default.  retDefault is TRUE if set default, o/w FALSE
+ */
+{
+if (!tdbIsComposite(tdb))
+    return FALSE;
+char *hideEmpties = trackDbSetting(tdb, SUBTRACK_HIDE_EMPTIES);
+if (!hideEmpties)
+    return FALSE;
+char *orig = cloneString(hideEmpties);
+char *words[3];
+int wordCount = chopByWhite(hideEmpties, words, ArraySize(words));
+char *mode = words[0];
+if (differentString(mode, "on") && differentString(mode, "true") &&
+    differentString(mode, "default"))
+        {
+        warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTIES, orig);
+        return FALSE;
+        }
+boolean deflt = sameString(mode, "default") ? TRUE : FALSE;
+if (retDefault)
+    *retDefault = deflt;
+
+if (wordCount == 1)
+    return TRUE;
+if (wordCount != 3)
+    {
+    warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTIES, orig);
+    return FALSE;
+    }
+// multi-bed specified (to speed display)
+if (retMultiBedFile)
+    *retMultiBedFile = cloneString(hReplaceGbdb(words[1]));
+if (retSubtrackIdFile)
+    *retSubtrackIdFile = cloneString(words[2]);
+return TRUE;
+}
+
+boolean compositeHideEmptySubtracks(struct cart *cart, struct trackDb *tdb,
+                                        char **retMutiBedFile, char **retSubtrackIdFile)
+/* Parse hideEmptySubtracks setting and check cart
+ * Return TRUE if we should hide empties
+ */
+{
+boolean deflt = FALSE;
+if (!compositeHideEmptySubtracksSetting(tdb, &deflt, retMutiBedFile, retSubtrackIdFile))
+    return FALSE;
+char buf[128];
+safef(buf, sizeof buf, "%s.%s", tdb->track, SUBTRACK_HIDE_EMPTIES);
+return cartUsualBoolean(cart, buf, deflt);
+}
+
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb)
 // Display list of subtracks and descriptions with checkboxes to control visibility and
 // possibly other nice things including links to schema and metadata and a release date.
@@ -5004,14 +5085,14 @@ struct trackDb *subtrack;
 struct slRef *subtrackRef, *subtrackRefList = trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
 
 membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,NULL);
-sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
+sortOrder_t* sortOrder = sortOrderGet(cart, parentTdb);
 char *displaySubs = NULL;
 int subCount = slCount(subtrackRefList);
 if (subCount > LARGE_COMPOSITE_CUTOFF && membersForAll->dimensions != NULL)
     {
     // ignore displaySubtracks setting for large composites with a matrix as
     // matrix effectively shows all
-    safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
+    safef(buffer, SMALLBUF,"%s.displaySubtracks", parentTdb->track);
     displaySubs = cartUsualString(cart, buffer,"some"); // track specific defaults to only selected
     }
 else
@@ -5019,6 +5100,15 @@ else
     displaySubs = cartUsualString(cart, "displaySubtracks", "all"); // browser wide defaults to all
     }
 boolean displayAll = sameString(displaySubs, "all");
+
+boolean hideSubtracksDefault;
+if (compositeHideEmptySubtracksSetting(parentTdb, &hideSubtracksDefault, NULL, NULL))
+    {
+    printf("<BR><B>Hide empty subtracks:</B> &nbsp;");
+    char buf[128];
+    safef(buf, sizeof buf, "%s.%s", parentTdb->track, SUBTRACK_HIDE_EMPTIES);
+    cgiMakeCheckBox(buf, hideSubtracksDefault);
+    }
 
 // Table wraps around entire list so that "Top" link can float to the correct place.
 cgiDown(0.7);
@@ -5030,22 +5120,7 @@ if (sortOrder != NULL)
     // NOTE: list subtrack radio buttons are inside tracklist table header if
     //       there are no sort columns.  The reason is to ensure spacing of lines
     //       column headers when the only column header is "Restricted Until"
-    printf("<B>List subtracks:&nbsp;");
-    char javascript[JBUFSIZE];
-    safef(javascript, sizeof(javascript),
-	  "showOrHideSelectedSubtracks(true);");
-    if (subCount > LARGE_COMPOSITE_CUTOFF)
-	safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
-    else
-	safecpy(buffer,SMALLBUF,"displaySubtracks");
-    cgiMakeOnEventRadioButtonWithClass(buffer, "selected", !displayAll, "allOrOnly", "click", javascript);
-    puts("only selected/visible &nbsp;&nbsp;");
-    safef(javascript, sizeof(javascript),
-	  "showOrHideSelectedSubtracks(false);");
-    cgiMakeOnEventRadioButtonWithClass(buffer, "all", displayAll, "allOrOnly", "click", javascript);
-    printf("all</B>");
-    if (slCount(subtrackRefList) > 5)
-	printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
+    printSubtrackListRadioButtons(parentTdb->track, subCount, displayAll);
     if (membersHaveMatrix(membersForAll))
 	makeTopLink(parentTdb);
     printf("</td></tr></table>");
@@ -5884,10 +5959,7 @@ if (filterSettings)
             boolean isFloat = (strchr(setting,'.') != NULL);
 
             char *scoreName = cloneString(filter->name);
-            char *field = filter->name;   // No need to clone: will be thrown away at end of cycle
-            int ix = strlen(field) - strlen(FILTER_NUMBER_NAME);
-            assert(ix > 0);
-            field[ix] = '\0';
+            char *field = extractFieldName(filter->name, FILTER_NUMBER_NAME);
 
         #ifdef EXTRA_FIELDS_SUPPORT
             if (extras != NULL)
@@ -5910,6 +5982,8 @@ if (filterSettings)
                     if (!isFloat)
                         isFloat = asTypesIsFloating(asCol->lowType->type);
                     }
+                else 
+                    errAbort("Building filter on field %s which is not in AS file.", field);
                 }
         #endif///ndef EXTRA_FIELDS_SUPPORT
             // FIXME: Label munging should be localized to showScoreFilter()
@@ -5984,14 +6058,18 @@ void textFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb)
 struct slName *filter, *filterSettings = trackDbSettingsWildMatch(tdb, FILTER_TEXT_WILDCARD);
 if (filterSettings)
     {
+    struct sqlConnection *conn = NULL;
+    if (!isHubTrack(db))
+        conn = hAllocConnTrack(db, tdb);
     while ((filter = slPopHead(&filterSettings)) != NULL)
         {
         char *setting = trackDbSetting(tdb, filter->name);
         char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filter->name, setting);
-        char *field = cloneString(filter->name);
-        int ix = strlen(field) - strlen(FILTER_TEXT_NAME);
-        assert(ix > 0);
-        field[ix] = '\0';
+        char *field = extractFieldName(filter->name, FILTER_TEXT_NAME);
+        struct asObject *as = asForTdb(conn, tdb);
+        struct asColumn *asCol = asColumnFind(as, field);
+        if (asCol == NULL)
+            errAbort("Building filter on field %s which is not in AS file.", field);
 
         printf("<P><B>Filter items in '%s' field: ", field);
 

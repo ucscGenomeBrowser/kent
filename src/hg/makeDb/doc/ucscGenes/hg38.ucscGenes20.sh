@@ -1063,12 +1063,12 @@ hgLoadSqlTab $db knownToMupit ~/kent/src/hg/lib/knownTo.sql knownToMupit.txt
     echo "wait" >> $gp.jobs
 
     time sh -x ./$gp.jobs > $gp.jobs.log 2>&1 &
-    # real    208m39.304s
+    # real    139m22.735s
 
     time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    #   real    5m34.850s
+    # real    4m45.035s
     time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    21m15.426s
+    # real    16m29.138s
 
     export mz=multiz100way
     export gp=knownGene
@@ -1076,72 +1076,21 @@ hgLoadSqlTab $db knownToMupit ~/kent/src/hg/lib/knownTo.sql knownToMupit.txt
     export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
     md5sum *.fa.gz > md5sum.txt
+    rm -f $pd/$gp.exonAA.fa.gz
+    rm -f $pd/$gp.exonNuc.fa.gz
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
-    ln -s `pwd`/md5sum.txt $pd/
 
     rm -rf exonAA exonNuc
-
-    ### need other gene track alignments also
-    # running up refGene
-    cd /hive/data/genomes/hg38/bed/multiz100way/pal
-    export mz=multiz100way
-    export gp=ncbiRefSeq
-    export db=hg38
-    export I=0
-    mkdir exonAA exonNuc
-    for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
-    do
-        I=`echo $I | awk '{print $1+1}'`
-	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/$C.exonNuc.fa.gz &"
-	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/$C.exonAA.fa.gz &"
-        if [ $I -gt 6 ]; then
-            echo "date"
-            echo "wait"
-            I=0
-        fi
-    done > $gp.jobs
-    echo "date" >> $gp.jobs
-    echo "wait" >> $gp.jobs
-
-    time sh -x $gp.jobs > $gp.jobs.log 2>&1
-    # real    126m0.688s
-
-    export mz=multiz100way
-    export gp=ncbiRefSeq
-    export db=hg38
-    time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    #   real    3m14.449s
-    time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    13m27.577s
-
-    du -hsc exonAA exonNuc $gp*.fa.gz
-# 3.1G    exonAA
-# 4.9G    exonNuc
-# 3.1G    ncbiRefSeq.multiz100way.exonAA.fa.gz
-# 4.9G    ncbiRefSeq.multiz100way.exonNuc.fa.gz
-
-    rm -rf exonAA exonNuc
-
-    # we're only distributing exons at the moment
-    export mz=multiz100way
-    export gp=ncbiRefSeq
-    export db=hg38
-    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
-    mkdir -p $pd
-    md5sum $gp.*.fa.gz >> md5sum.txt
-    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
-    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
-    ln -s `pwd`/md5sum.txt $pd/
 
     ### And knownCanonical
-    cd /hive/data/genomes/hg38/bed/multiz100way/pal
+    cd  $dir/pal
     export mz=multiz100way
     export gp=knownCanonical
     export db=hg38
     mkdir exonAA exonNuc knownCanonical
 
-    time cut -f1 ../../../chrom.sizes | while read C
+    time cut -f1 /cluster/data/hg38/chrom.sizes | while read C
     do
         echo $C 1>&2
 	hgsql hg38 -N -e "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$C'" > knownCanonical/$C.known.bed
@@ -1180,6 +1129,8 @@ hgLoadSqlTab $db knownToMupit ~/kent/src/hg/lib/knownTo.sql knownToMupit.txt
     export db=hg38
     export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
+    rm -f $pd/$gp.exonAA.fa.gz
+    rm -f $pd/$gp.exonNuc.fa.gz
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
     cd  $pd

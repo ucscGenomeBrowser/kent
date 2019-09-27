@@ -532,6 +532,24 @@ if (bbi)
 return NULL;
 }
 
+int bbFieldIndex(struct bbiFile *bbi, char* fieldName)
+/* return the index of a given field */
+{
+if (fieldName==NULL)
+    return -1;
+struct asObject *as = bigBedAsOrDefault(bbi);
+if (as == NULL)
+    return -1;
+
+// search for field name, return index if found
+struct asColumn *col = as->columnList;
+int ix = 0;
+for (;col != NULL;col=col->next, ix+=1)
+    if (sameString(col->name, fieldName))
+        return ix; 
+return -1;
+}
+
 int bbExtraFieldIndex(struct bbiFile *bbi, char* fieldName)
 /* return the index of a given extra field */
 {

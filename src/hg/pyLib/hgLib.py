@@ -480,6 +480,7 @@ def hgBotDelay(fraction=1.0):
         "Your IP has been blocked to keep this website responsive for other users. "
         "Please contact genome-www@soe.ucsc.edu to unblock your IP address. We can also help you obtain the data you need without "
         "web crawling. ", status=429, headers = {"Retry-after" : str(millis / 10)})
+        sys.stderr.write("hgLib.py hogExit\n")
         sys.exit(0)
 
     if millis>botDelayWarn:

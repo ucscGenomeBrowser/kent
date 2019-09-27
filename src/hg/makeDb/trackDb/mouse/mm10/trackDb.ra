@@ -3,7 +3,8 @@ include ../../refSeqComposite.ra
 
 include ../../crispr10K.ra
 
-include knownGene.ra 
+include knownGene.ra beta,public
+include knownGene.alpha.ra alpha
 
 # chainNet tracks
 include trackDb.gliresChainNet.ra

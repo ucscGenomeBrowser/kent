@@ -26,7 +26,7 @@ umask 002
 WORKDIR="/hive/data/outside/otto/isca"
 export WORKDIR
 #	this is where we are going to work 
-if [ ! -d "${WORKDIR}" ]; then echo "ERROR in ISCA release watch, Can not find the directory:
+if [ ! -d "${WORKDIR}" ]; then echo "ERROR in ISCA/ClinGen release watch, Can not find the directory:
     ${WORKDIR}" 
     exit 255
 fi
@@ -35,12 +35,10 @@ cd "${WORKDIR}"
 
 rm -f ftp.isca.rsp
 echo "user anonymous otto@soe.ucsc.edu
-cd /pub/dbVar/data/Homo_sapiens/by_study/nstd45_ClinGen_Curated_Dosage_Sensitivity_Map
-ls
-cd /pub/dbVar/data/Homo_sapiens/by_study/nstd101_ClinGen_Kaminsky_et_al_2011
-ls
-cd /pub/dbVar/data/Homo_sapiens/by_study/nstd37_ClinGen_Laboratory-Submitted
-ls
+cd /pub/dbVar/data/Homo_sapiens/by_study/gvf
+ls nstd45*
+ls nstd101*
+ls nstd37*
 bye" > ftp.isca.rsp
 
 #	reorganize results files
@@ -57,13 +55,14 @@ rm -f release.list
 ftp -n -v -i ftp.ncbi.nlm.nih.gov  < ftp.isca.rsp > ls.check
 
 #	fetch the release directory names from the ls.check result file
-grep "gvf" ls.check | sort > release.list
+grep "gvf.gz" ls.check | sort > release.list || echo "Error - no gvf files found"
+touch release.list
 chmod o+w release.list
 
 #	verify we are getting a proper list
 WC=`cat release.list | wc -l`
 if [ "${WC}" -lt 1 ]; then
-    echo "potential error in ISCA release watch,
+    echo "potential error in ISCA/ClinGen release watch,
 no gvf files found. Check ls.check in ${WORKDIR}" 
     cleanUpOnError
     exit 255
@@ -71,10 +70,16 @@ fi
 
 #	see if anything is changing, if so, email notify, download, and build
 diff prev.release.list release.list  >release.diff || true
+
 WC=`cat release.diff | wc -l`
 if [ "${WC}" -gt 1 ]; then
-    echo -e "New ISCO update noted at:\n" \
+    echo -e "New ISCA/ClinGen update noted at:\n" \
 "ftp://ftp.ncbi.nlm.nih.gov/pub/\n"`comm -13 prev.release.list release.list`"/" 
+
+    echo "Rebuilding liftUp files"
+    rm -f hg19.lift hg38.lift
+    hgsql -Ne 'select 0, ca.alias, size, ca.chrom, size from chromInfo ci join chromAlias ca on ci.chrom = ca.chrom where source = "refseq"' hg19 > hg19.lift
+    hgsql -Ne 'select 0, ca.alias, size, ca.chrom, size from chromInfo ci join chromAlias ca on ci.chrom = ca.chrom where source = "refseq"' hg38 > hg38.lift
 
     today=`date +%F`
     mkdir -p $today
@@ -97,7 +102,27 @@ if [ "${WC}" -gt 1 ]; then
 	hgsqlSwapTables hg38 $n $i $o -dropTable3
     done
 
+    # now archive
+    for db in "hg19" "hg38"
+    do
+        if [ ! -d ${WORKDIR}/archive/${db} ]; then
+            mkdir -p ${WORKDIR}/archive/${db}
+        fi
+        cd ${WORKDIR}/archive/${db}
+        mkdir ${today}
+        cd ${today}
+        printf "This directory contains a backup of the ISCA/ClinGen track data tables built on %s\n" "${today}" > README
+        for i in `cat ${WORKDIR}/isca.tables`
+        do
+            hgsql --raw -Ne "show create table ${i}" ${db} > ${i}.sql
+            hgsql -Ne "select * from ${i}" ${db} | gzip >  ${i}.txt.gz
+        done
+    done
+    cd ${WORKDIR}/${today}
+
     rm -f ../old.release.list
-    echo "ISCA Installed `date`" 
+    echo "ISCA/ClinGen Installed `date`"
+else
+    echo "No update"
 fi
 

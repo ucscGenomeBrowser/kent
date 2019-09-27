@@ -1,4 +1,4 @@
-table bed12wSeq
+table avada
 "Browser extensible data (12 fields) plus two sequences"
     (
     string chrom;      "Chromosome (or contig, scaffold, etc.)"

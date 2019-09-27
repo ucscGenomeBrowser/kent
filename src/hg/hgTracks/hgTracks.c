@@ -72,6 +72,7 @@
 #include "hex.h"
 #include <openssl/sha.h>
 #include "customComposite.h"
+//#include "bed3Sources.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -190,6 +191,7 @@ for (track = tracks; track != NULL; track = track->next)
     }
 return NULL;
 }
+
 
 int tgCmpPriority(const void *va, const void *vb)
 /* Compare to sort based on priority; use shortLabel as secondary sort key. */
@@ -4568,11 +4570,65 @@ setGlobalsFromWindow(windows); // first window
 flatTrack->maxHeight = maxHeight;
 }
 
-boolean doCollapseEmptySubtracks(struct track *track)
-/* Suppress display of empty subtracks. Initial support only for bed's. */
+boolean doHideEmptySubtracksNoMultiBed(struct cart *cart, struct track *track)
+/* TRUE if hideEmptySubtracks is enabled, but there is no multiBed */
 {
-char *collapseEmptySubtracks = trackDbSetting(track->tdb, "collapseEmptySubtracks");
-return (collapseEmptySubtracks && sameWord(collapseEmptySubtracks, "on"));
+char *multiBedFile = NULL;
+char *subtrackIdFile = NULL;
+boolean hideEmpties = compositeHideEmptySubtracks(cart, track->tdb, &multiBedFile, &subtrackIdFile);
+if (hideEmpties && (multiBedFile == NULL || subtrackIdFile == NULL))
+        return TRUE;
+return FALSE;
+}
+
+struct hash *getNonEmptySubtracks(struct track *track)
+{
+/* Support setting to suppress display of empty subtracks. 
+ * If multiBed is available, return hash with subtrack names as keys
+ */
+
+char *multiBedFile = NULL;
+char *subtrackIdFile = NULL;
+if (!compositeHideEmptySubtracks(cart, track->tdb, &multiBedFile, &subtrackIdFile))
+    return NULL;
+if (!multiBedFile)
+    return NULL;
+
+// load multiBed items in window
+// TODO: filters here ?
+// TODO:  protect against temporary network error ? */
+struct lm *lm = lmInit(0);
+struct bbiFile *bbi = bigBedFileOpen(multiBedFile);
+struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
+char *row[bbi->fieldCount];
+char startBuf[16], endBuf[16];
+struct hash *nonEmptySubtracksHash = hashNew(0);
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, row, ArraySize(row));
+    // TODO: do this in bed3Sources.c
+    char *idList = row[4];
+    struct slName *ids = slNameListFromComma(idList);
+    struct slName *id = NULL;
+    for (id = ids; id != NULL; id = id->next)
+        hashStore(nonEmptySubtracksHash, id->name);
+    // TODO: free some stuff ?
+    }
+
+// read file containing ids of subtracks 
+struct lineFile *lf = udcWrapShortLineFile(subtrackIdFile, NULL, 0); 
+char *words[2];
+while (lineFileChopNext(lf, words, sizeof words))
+    {
+    char *id = words[0];
+    char *name = words[1];
+    if (hashLookup(nonEmptySubtracksHash, id))
+        {
+        hashStore(nonEmptySubtracksHash, cloneString(name));
+        }
+    }
+lineFileClose(&lf);
+return nonEmptySubtracksHash;
 }
 
 void makeActiveImage(struct track *trackList, char *psOutput)
@@ -4798,17 +4854,20 @@ for (track = trackList; track != NULL; track = track->next)
         {
         struct track *subtrack;
         if (isCompositeInAggregate(track))
-            flatTracksAdd(&flatTracks,track,cart, orderedWiggles);
+            flatTracksAdd(&flatTracks, track, cart, orderedWiggles);
         else
             {
-            boolean doCollapse = doCollapseEmptySubtracks(track);
+            boolean doHideEmpties = doHideEmptySubtracksNoMultiBed(cart, track);
+                // If multibed was found, it has been used to suppress loading,
+                // and subtracks lacking items in window are already set hidden
             for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
                 {
                 if (!isSubtrackVisible(subtrack))
                     continue;
 
                 if (!isLimitedVisHiddenForAllWindows(subtrack) && 
-                        !(doCollapse && slCount(subtrack->items) == 0))
+                        !(doHideEmpties && slCount(subtrack->items) == 0))
+                        // Ignore subtracks with no items in window
                     {
                     flatTracksAdd(&flatTracks,subtrack,cart, orderedWiggles);
                     }
@@ -7245,6 +7304,28 @@ for (track = trackList; track != NULL; track = track->next)
 static pthread_mutex_t pfdMutex = PTHREAD_MUTEX_INITIALIZER;
 static struct paraFetchData *pfdList = NULL, *pfdRunning = NULL, *pfdDone = NULL, *pfdNeverStarted = NULL;
 
+static void checkHideEmptySubtracks(struct track *tg)
+/* Suppress queries on subtracks w/o data in window (identified from multiIntersect file) */
+{
+if (!tdbIsComposite(tg->tdb))
+    return;
+struct hash *nonEmptySubtracksHash = getNonEmptySubtracks(tg);
+if (!nonEmptySubtracksHash)
+    return;
+struct track *subtrack;
+for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if (!isSubtrackVisible(subtrack))
+        continue;
+    if (!hashLookup(nonEmptySubtracksHash, subtrack->track))
+        {
+        subtrack->loadItems = dontLoadItems;
+        subtrack->limitedVis = tvHide;
+        subtrack->limitedVisSet = TRUE;
+        }
+    }
+}
+
 static void *remoteParallelLoad(void *threadParam)
 /* Each thread loads tracks in parallel until all work is done. */
 {
@@ -7281,6 +7362,7 @@ while(1)
 	{
 	pfd->done = FALSE;
 	checkMaxWindowToDraw(pfd->track);
+	checkHideEmptySubtracks(pfd->track);
 	pfd->track->loadItems(pfd->track);
 	pfd->done = TRUE;
 	}
@@ -7925,6 +8007,8 @@ for (window=windows; window; window=window->next)
 		    lastTime = clock1000();
 
 		checkMaxWindowToDraw(track);
+
+		checkHideEmptySubtracks(track);     // TODO: Test with multi-window feature
 
 		checkIfWiggling(cart, track);
 

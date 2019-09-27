@@ -156,7 +156,7 @@ type bed 3
         mmcnt1Filter 0
         mmcnt2Filter 0
         mmcnt3Filter 0
-        dataVersion /gbdb/hg19/bbi/mastermindRelease.txt
+        dataVersion /gbdb/$D/bbi/mastermindRelease.txt
         parent varsInPubs
 
         track avada

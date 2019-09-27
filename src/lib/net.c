@@ -1463,7 +1463,7 @@ boolean netSkipHttpHeaderLinesWithRedirect(int sd, char *url, char **redirectedU
  * This is meant to be able work even with a re-passable stream handle,
  * e.g. can pass it to the pipes routines, which means we can't
  * attach a linefile since filling its buffer reads in more than just the http header.
- * Handles 300, 301, 302, 303, 307 http redirects by setting *redirectedUrl to
+ * Handles 300, 301, 302, 303, 307, 308 http redirects by setting *redirectedUrl to
  * the new location. */
 {
 char buf[2000];
@@ -1538,8 +1538,11 @@ while(TRUE)
 	    warn("Strange http header on %s", url);
 	    return FALSE;
 	    }
-	if (startsWith("30", code) && isdigit(code[2])
-	    && ((code[2] >= '0' && code[2] <= '3') || code[2] == '7') && code[3] == 0)
+	if (sameString(code, "301")
+	 || sameString(code, "302")
+	 || sameString(code, "307")
+	 || sameString(code, "308")
+	   )
 	    {
 	    redirect = TRUE;
 	    }
