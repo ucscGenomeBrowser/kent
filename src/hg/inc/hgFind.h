@@ -70,13 +70,19 @@ struct hgPos
      };
 
 
-void hgPositionsHelpHtml(char *organism, char *database);
+void hgPositionsHelpHtmlCart(struct cart *cart, char *organism, char *database);
 /* Display contents of dbDb.htmlPath for database, or print an HTML comment 
  * explaining what's missing. */
+#define hgPositionsHelpHtml(o, d) hgPositionsHelpHtmlCart(cart, o, d)
 
-char *hCarefulTrackOpenVis(char *db, char *trackName);
+char *hCarefulTrackOpenVisCart(struct cart *cart, char *db, char *trackName);
 /* If track is already in full mode, return full; otherwise, return
  * hTrackOpenVis. */
+#define hCarefulTrackOpenVis(d, t) hCarefulTrackOpenVisCart(cart, d, t)
+
+char *addHighlight(char *db, char *chrom, unsigned start, unsigned end);
+/* Return a string that can be assigned to the cart var addHighlight, to add a yellow highlight
+ * at db.chrom:start+1-end for search results. */
 
 #endif /* HGFIND_H */
 

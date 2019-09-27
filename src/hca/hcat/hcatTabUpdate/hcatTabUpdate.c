@@ -153,27 +153,29 @@ for (outIx=0; outIx<realFieldCount-1; ++outIx)
     {
     char *inTsv = projectRow[contactIx[outIx]];
     char *inVal = emptyForNull(cloneString(csvParseNext(&inTsv, scratch)));
-    outVals[outIx] = cloneString(csvEscapeToDyString(csvScratch, inVal));
+    outVals[outIx] = inVal;
     }
 outVals[outIx] = "lab contact";
 char *contactName = cloneString(outVals[0]);
 fieldedTableAdd(contributors, outVals, realFieldCount, 1);
 
-/* Unroll the contributors field  into further rows*/
-for (outIx=0; outIx<realFieldCount; ++outIx)
-    outVals[outIx] = "";	// Empty out all rows.
-int inContribIx = fieldedTableMustFindFieldIx(inProject, "contributors");
-int outContribIx = fieldedTableMustFindFieldIx(contributors, "?name");
-char *inTsv = projectRow[inContribIx];
-char *oneVal;
-while ((oneVal = csvParseNext(&inTsv, scratch)) != NULL)
+/* Unroll the contributors field  into further rows if it exists. */
+int inContribIx = fieldedTableFindFieldIx(inProject, "contributors");
+if (inContribIx >= 0)
     {
-    char *escaped = csvEscapeToDyString(csvScratch, oneVal);
-    if (differentString(escaped, contactName))  // We already got the contact as a contributor
+    for (outIx=0; outIx<realFieldCount; ++outIx)
+	outVals[outIx] = "";	// Empty out all rows.
+    int outContribIx = fieldedTableMustFindFieldIx(contributors, "?name");
+    char *inTsv = projectRow[inContribIx];
+    char *oneVal;
+    while ((oneVal = csvParseNext(&inTsv, scratch)) != NULL)
 	{
-	outVals[outContribIx] = escaped;
-	outVals[realFieldCount-1] = "contributor";
-	fieldedTableAdd(contributors, outVals, realFieldCount, contributors->rowCount+1);
+	if (differentString(oneVal, contactName))  // We already got the contact as a contributor
+	    {
+	    outVals[outContribIx] = oneVal;
+	    outVals[realFieldCount-1] = "contributor";
+	    fieldedTableAdd(contributors, outVals, realFieldCount, contributors->rowCount+1);
+	    }
 	}
     }
 dyStringFree(&csvScratch);
@@ -334,12 +336,14 @@ for (inIx=0; inIx<inFieldCount; ++inIx)
 	safef(nameBuf, sizeof(nameBuf), "@%s_id@hcat_efforttype@short_name@id", inName);
 	inName = cloneString(nameBuf);
 	}
+#ifdef TOO_FLAKEY
     else if (sameString("lab", inName))
         {
 	safef(nameBuf, sizeof(nameBuf), "%s",
 	    "@@lab@id@hcat_project_labs@project_id@lab_id@hcat_lab@short_name@id");
 	inName = cloneString(nameBuf);
 	}
+#endif /* TOO_FLAKEY */
     else if (sameString("publications", inName))
         {
 	safef(nameBuf, sizeof(nameBuf), "%s",
@@ -357,9 +361,13 @@ for (inIx=0; inIx<inFieldCount; ++inIx)
     }
 
 /* Add in contributors as a multi to multi field */
-outFields[outFieldCount] = "@@contributors@id@hcat_project_contributors@project_id@contributor_id@hcat_contributor@name@id";
-outRow[outFieldCount] = fieldedTableLookupNamedFieldInRow(inProject, "contributors", inRow);
-outFieldCount += 1;
+char *contributors = fieldedTableLookupNamedFieldInRow(inProject, "contributors", inRow);
+if (contributors != NULL)
+    {
+    outFields[outFieldCount] = "@@contributors@id@hcat_project_contributors@project_id@contributor_id@hcat_contributor@name@id";
+    outRow[outFieldCount] = contributors;
+    outFieldCount += 1;
+    }
 
 /* Add in contacts as a multi to multi field too */
 outFields[outFieldCount] = "@@contacts@id@hcat_project_contacts@project_id@contributor_id@hcat_contributor@name@id";
@@ -378,7 +386,6 @@ projectVocabField(inProject, inSample, "assay_tech", outDir,
 projectVocabField(inProject, inSample, "disease", outDir, 
     outFields, outRow, outFieldMax, &outFieldCount);
 
-uglyf("making project table with %d fields\n", outFieldCount);
 struct fieldedTable *outTable = fieldedTableNew("project", outFields, outFieldCount);
 outTable->startsSharp = inProject->startsSharp;
 fieldedTableAdd(outTable, outRow, outFieldCount, 2);
@@ -418,6 +425,7 @@ else
     return NULL;
 }
 
+#ifdef TOO_FLAKEY
 struct fieldedTable *makeLab(struct fieldedTable *inProject)
 /* If there's a lab field we make a lab table and seed it with the contacts. */
 {
@@ -426,7 +434,8 @@ if (labIx >= 0)
     {
     char **inRow = inProject->rowList->row;
     char *short_name = inRow[labIx];
-    char *contributors = fieldedTableLookupNamedFieldInRow(inProject, "contributors", inRow);
+    char *contributors = emptyForNull(fieldedTableLookupNamedFieldInRow(
+							    inProject, "contributors", inRow));
     char *institute = fieldedTableLookupNamedFieldInRow(inProject, "contact_institute", inRow);
     char labName[256];
     if (strlen(short_name) < 20)  // Unlikely to be unique, may cause trouble
@@ -446,6 +455,7 @@ if (labIx >= 0)
 else
     return NULL;
 }
+#endif /* TOO_FLAKEY */
 
 void hcatTabUpdate(char *inDir, char *outDir)
 /* hcatTabUpdate - take the tabToTabDir result of the geo/sra import.
@@ -457,7 +467,7 @@ void hcatTabUpdate(char *inDir, char *outDir)
 char *projectFile = "hcat_project.tsv";
 char inPath[PATH_LEN];
 safef(inPath, sizeof(inPath), "%s/%s", inDir, projectFile);
-char *projectRequired[] = {"short_name", "contact_name", "contributors"};
+char *projectRequired[] = {"short_name", "contact_name", };
 struct fieldedTable *inProject = fieldedTableFromTabFile(inPath, inPath, 
     projectRequired, ArraySize(projectRequired));
 
@@ -467,7 +477,7 @@ safef(inPath, sizeof(inPath), "%s/%s", inDir, sampleFile);
 char *sampleRequired[] = {"short_name",};
 struct fieldedTable *inSample = fieldedTableFromTabFile(inPath, inPath, 
     sampleRequired, ArraySize(sampleRequired));
-
+verbose(2, "Got %d fields %d rows in %s\n", inSample->fieldCount, inSample->rowCount, inPath);
 
 /* Make sure inProject table makes sense by having exactly one row */
 if (inProject->rowCount != 1)
@@ -483,6 +493,7 @@ char outPath[PATH_LEN];
 safef(outPath, sizeof(outPath), "%s/hcat_%s", outDir, "contributor.tsv");
 fieldedTableToTabFile(outContributor, outPath);
 
+#ifdef TOO_FLAKEY
 /* Make lab table if there is a lab field */
 struct fieldedTable *outLab = makeLab(inProject);
 if (outLab != NULL)
@@ -490,6 +501,7 @@ if (outLab != NULL)
     safef(outPath, sizeof(outPath), "%s/hcat_%s", outDir, "lab.tsv");
     fieldedTableToTabFile(outLab, outPath);
     }
+#endif /* TOO_FLAKEY */
 
 /* Make pubs table if there are pubs fields */
 struct fieldedTable *outPub = makePublication(inProject);

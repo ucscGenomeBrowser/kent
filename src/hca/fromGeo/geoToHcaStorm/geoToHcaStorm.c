@@ -170,10 +170,13 @@ void addContributorsToContacts(struct tagStorm *storm)
  * do here is turn the contact fields into comma separated value
  * lists. */
 {
-/* Get two key tags that better be there or we abort. */
+/* Get two key tags that better be there . */
 struct tagStanza *stanza = storm->forest;
-char *contributorCsv = tagMustFindVal(stanza, "series.contributor");
 char *contactNameCsv = tagMustFindVal(stanza, "series.contact_name");
+char *contributorCsv = tagFindVal(stanza, "series.contributor");
+
+if (contributorCsv == NULL)  // This is legit, but then we are done
+    return;
 
 /* Remove quotes from contactName */
 struct dyString *csvScratch = dyStringNew(0);
