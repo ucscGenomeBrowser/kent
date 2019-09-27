@@ -396,3 +396,28 @@ freeMem(fileName);
 hFreeConn(&conn);
 }
 
+void hicMainPageConfig(struct cart *cart, struct trackDb *tdb)
+/* Display Hi-C-specific track configuration options (resolution, normalization) on
+ * the main page. */
+{
+char *filename = trackDbSettingOrDefault(tdb, "bigDataUrl", NULL);
+struct hicMeta *meta = NULL;
+if (filename == NULL)
+    {
+    warn("Missing bigDataUrl setting for track %s", tdb->shortLabel);
+    return;
+    }
+char *errMsg = hicLoadHeader(filename, &meta, NULL);
+if (errMsg != NULL)
+    {
+    warn("Error fetching header for track %s: %s", tdb->shortLabel, errMsg);
+    return;
+    }
+hPrintf("<TR><TD><B>track options:</B> ");
+hPrintf("resolution ");
+hicUiResolutionDropDown(cart, tdb, meta);
+hPrintf("&nbsp;&nbsp;&nbsp;");
+hPrintf("score normalization ");
+hicUiNormalizationDropDown(cart, tdb, meta);
+hPrintf("</TD></TR>\n");
+}
