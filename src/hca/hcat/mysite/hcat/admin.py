@@ -45,15 +45,15 @@ class LabAdmin(admin.ModelAdmin):
 
 admin.site.register(Lab, LabAdmin)
 
-class ProjectStateAdmin(admin.ModelAdmin):
-    list_display = ['state', 'description']
+class ProjectStatusAdmin(admin.ModelAdmin):
+    list_display = ['status', 'description']
     
-admin.site.register(ProjectState, ProjectStateAdmin)
+admin.site.register(ProjectStatus, ProjectStatusAdmin)
 
-class WranglingStateAdmin(admin.ModelAdmin):
-    list_display = ['state', 'description']
+class WranglingStatusAdmin(admin.ModelAdmin):
+    list_display = ['status', 'description']
     
-admin.site.register(WranglingState, WranglingStateAdmin)
+admin.site.register(WranglingStatus, WranglingStatusAdmin)
 
 class EffortTypeAdmin(admin.ModelAdmin):
     list_display = ['short_name', 'description']
@@ -92,17 +92,17 @@ class ProjectAdmin(admin.ModelAdmin):
     	"organ", "organ_part", "disease", "files",
     	"species", "sample_type", "assay_tech", "publications", 
 	"grants", "files", "urls", "contacts", ]
-    list_display = ['short_name', 'stars', 'state_reached', 'wrangler1', 'submit_date',]
-    list_filter = ['species', 'effort', 'wrangler1', 'state_reached', 'assay_tech']
+    list_display = ['short_name', 'stars', 'status', 'primary_wrangler', 'submit_date',]
+    list_filter = ['species', 'effort', 'primary_wrangler', 'status', 'assay_tech']
     inlines = [TrackerInline,]
     fieldsets = (
-        ('overall', { 'fields': (('short_name', 'state_reached', ), ('title', 'stars'), ('labs', 'consent'), ('git_ticket_url'))}), 
+        ('overall', { 'fields': (('short_name', 'status', ), ('title', 'stars'), ('labs', 'consent'), ('git_ticket_url'))}), 
         ('biosample',  { 'fields': (('species', 'sample_type'), ('organ', 'organ_part'), 'disease')}),
         ('assay', { 'fields': (('assay_tech', 'cells_expected'))}),
 	('pubs, people, and pay', { 'fields': ('description', 'publications', 'contributors', 'grants')}),
 	('wrangling',  { 'fields': (
-		('wrangler1', 'wrangler2'), 
-		('wrangling_state', 'comments'),
+		('primary_wrangler', 'secondary_wrangler'), 
+		('wrangling_status', 'comments'),
 		('effort', 'origin_name',),
 		('contacts', 'files'),
 		('first_contact_date', 'last_contact_date'),

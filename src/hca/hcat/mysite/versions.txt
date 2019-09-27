@@ -76,12 +76,20 @@
       Chris didn't like seeing "wrangler diseases" and the like, since the diseases really
       weren't about the wranglers, so am prefixing the less public/more preliminary tables
       with "x" instead of "wrangler"
-0.8 - Changes made primarily from wrangler feedback
+0.8 - Changes made primarily from wrangler feedback.  In general this consisted of simplifying
+      things by removing tables or fields people didn't really want,  renaming things where the
+      meaning wasn't clear, not sharing contributor contact info beyond name.  This version does
+      not address any wrangler specific views but it should contain most of the database changes.
       - Removed responder fields from project since wranglers felt they weren't needed as 
         separate from the contacts fields.
       - Removed assay type fields and table.
-      - Added WranglingStage model and field as distinct from state_reached.
+      - Renamed state_reached to status and cur_state to wrangling_status.
+      - Added WranglingStatus model and field as distinct from overall ProjectStatus.
       - Moving wrangler sections to bottom of the project page.
+      - Changed "wrangler1" to "primary wrangler" and "wrangler2" to "secondary wrangler"
       - Made API only return name, projects, and labs from contributors since other info especially 
         contributors might want wranglers to have but not the web at large.
       - Made pubmed id and doi fields optional for publications
+      - It's not visible in code but in database I adjusted some tables to view only for wranglers
+        at their request including species.
+      - Buried Grant and Wrangler behind an x in the admin list since these are also seldom used.

@@ -5,7 +5,7 @@ import json
 from .models import *
 
 def api_index(request):
-    objects = [Project, ProjectState, Contributor, Tracker, AssayTech, Disease, Organ]
+    objects = [Project, ProjectStatus, Contributor, Tracker, AssayTech, Disease, Organ]
     a = []
     for o in objects:
         p = {"class": o.__name__.lower(), "count": o.objects.count()}
@@ -25,13 +25,13 @@ def api_assaytech_list(request):
         a.append(j)
     return HttpResponse(json.dumps(a), content_type="application/json")
 
-def serializable_project_state(p):
-    return {"state": p.state, "description": p.description}
+def serializable_project_status(p):
+    return {"status": p.status, "description": p.description}
 
-def api_projectstate_list(request):
+def api_projectstatus_list(request):
     a = []
-    for p in ProjectState.objects.order_by("id"):
-        j = serializable_project_state(p)
+    for p in ProjectStatus.objects.order_by("id"):
+        j = serializable_project_status(p)
         a.append(j)
     return HttpResponse(json.dumps(a), content_type="application/json")
 
@@ -127,9 +127,9 @@ def serializable_project(p):
     for t in p.assay_tech.all():
         techs.append(str(t))
     return {
-        "short_name":p.short_name, "stars":p.stars, "state_reached": str(p.state_reached), 
+        "short_name":p.short_name, "stars":p.stars, "status": str(p.status), 
         "origin_name": p.origin_name, "title":p.title, 
-        "wrangler1": str(p.wrangler1), "wrangler2": str(p.wrangler2), "contacts":contacts,
+        "primary_wrangler": str(p.primary_wrangler), "secondary_wrangler": str(p.secondary_wrangler), "contacts":contacts,
         "species":species, "organs":organs, "sample_type":sample_type,
         "assay_tech": techs, "contributors":contributors,
         "description":p.description, "comments":p.comments, "submit_date":str(p.submit_date)}

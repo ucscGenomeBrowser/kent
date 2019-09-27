@@ -99,25 +99,27 @@ class File(models.Model):
     class Meta:
        verbose_name = 'x file'
 
-class ProjectState(models.Model):
+class ProjectStatus(models.Model):
     """ High level project state.  Covers wrangling through analysis and interpretation """
-    state = models.CharField(max_length=30, unique=True)
+    status = models.CharField(max_length=30, unique=True)
     description = models.CharField(max_length=150)
     def __str__(self):
-       return self.state
+       return self.status
     class Meta:
-       verbose_name = 'x project state'
+       verbose_name = 'x project status'
+       verbose_name_plural = 'x project status'
 
-class WranglingState(models.Model):
+class WranglingStatus(models.Model):
     """ State within wrangling.  Covers from primary wrangler's first sight to successful 
     submission and perhaps through multiple updates
     """
-    state = models.CharField(max_length=30, unique=True)
+    status = models.CharField(max_length=30, unique=True)
     description = models.CharField(max_length=150)
     def __str__(self):
-       return self.state
+       return self.status
     class Meta:
-       verbose_name = 'x wrangling state'
+       verbose_name = 'x wrangling status'
+       verbose_name_plural = 'x wrangling status'
 
 class OrganPart(models.Model):
     """ This is an informal notion of something smaller than an organ.  Typically this
@@ -260,6 +262,8 @@ class Wrangler(models.Model):
     comments = models.CharField(max_length=255, blank=True)
     def __str__(self):
         return self.who.__str__()
+    class Meta:
+       verbose_name = 'x wrangler'
 
 class Project(models.Model):
     """ A project, like a lab, is a somewhat vague concept that is still useful to describe
@@ -270,13 +274,13 @@ class Project(models.Model):
     one of the public gene expression or sequencing databases.
     """
     short_name = models.CharField(max_length=80)
-    wrangling_state = models.ForeignKey(WranglingState, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="cur_state")
+    wrangling_status = models.ForeignKey(WranglingStatus, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     comments = models.CharField(max_length=255, blank=True)
-    state_reached = models.ForeignKey(ProjectState, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="state_reached")
+    status = models.ForeignKey(ProjectStatus, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="state_reached")
     stars = models.IntegerField(blank=True,validators=[MinValueValidator(1),MaxValueValidator(5)], default=3)
     git_ticket_url = models.URLField(blank=True, null=True)
-    wrangler1 = models.ForeignKey(Wrangler, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="wrangler1");
-    wrangler2 = models.ForeignKey(Wrangler, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="wrangler2");
+    primary_wrangler = models.ForeignKey(Wrangler, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="wrangler1");
+    secondary_wrangler = models.ForeignKey(Wrangler, blank=True, null=True, default=None, on_delete=models.SET_NULL, related_name="secondary_wrangler");
     contacts = models.ManyToManyField(Contributor, blank=True, related_name="projcontacts")
     first_contact_date = models.DateField(blank=True, null=True, default=None)
     last_contact_date = models.DateField(blank=True, null=True, default=None)
@@ -368,4 +372,6 @@ class Grant(models.Model):
     comments = models.CharField(max_length=255, blank=True)
     def __str__(self):
        return self.grant_title
+    class Meta:
+       verbose_name = 'x grant'
 
