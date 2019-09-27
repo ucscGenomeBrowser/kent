@@ -689,8 +689,6 @@ identifier refGeneRetro dependency
     hg19.ucscRetroInfo5.refSeq minCheck=0.96 exclude=noRefSeq
     hg38.ucscRetroInfo9.refSeq minCheck=0.96 exclude=noRefSeq
     mm9.ucscRetroInfo1.refSeq minCheck=0.96 exclude=noRefSeq
-    mm10.ucscRetroInfo2.refSeq minCheck=0.96 exclude=noRefSeq
-    mm10.ucscRetroInfo6.refSeq minCheck=0.96 exclude=noRefSeq
 
 identifier knownGeneRetro dependency
 "Link knownGene to ucscRetroInfo"
@@ -5534,11 +5532,12 @@ identifier knownGeneId dependency
     $kgDb,!mm10.kg6ToKg7.newId exclude=
     $kgDb,!mm10.kg7ToKg8.newId exclude=
     $kgDb,!mm10.kg8ToKg9.newId exclude=
-    $kgDb,!hg38.kg9ToKg10.newId exclude=
+    $kgDb,!hg38,!mm10.kg9ToKg10.newId exclude=
     $kgDb.kg10ToKg11.newId exclude=
     $kgDb,!hg16.kgTargetAli.qName full
     hg19.knownGeneTxMrna.name
     hg19.knownGeneTxPep.name
+    $kgDb.kg11ToKg12.newId exclude=
     $kgDb.knownAttrs.kgID
 
 identifier knownGeneOld10Id dependency
