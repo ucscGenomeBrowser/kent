@@ -664,7 +664,7 @@ if (errCatchStart(errCatch))
     // check that multiWigs have > 1 track
     if (tdbIsContainer(tdb) && slCount(tdb->subtracks) < 2)
         {
-        errAbort("container multiWig %s has only one subtrack. multiWigs must have more than subtrack", tdb->track);
+        errAbort("container multiWig %s has only one subtrack. multiWigs must have more than one subtrack", tdb->track);
         }
     }
 errCatchEnd(errCatch);
