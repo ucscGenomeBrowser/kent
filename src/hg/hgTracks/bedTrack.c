@@ -89,6 +89,9 @@ else if (tg->isBigBed)
     char startBuf[16], endBuf[16];
     struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, tg->tdb);
 
+    if (filters)
+        labelTrackAsFiltered(tg);
+
      if (tg->itemName == bedName && !trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
         tg->itemName = bigBedItemName;
 
