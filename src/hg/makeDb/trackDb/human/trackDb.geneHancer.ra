@@ -67,7 +67,7 @@ priority 1.5
         subGroups set=b_ALL view=a_GH
 
     track ghInteraction
-    release beta,public
+    release public
     shortLabel Interactions
     type bigInteract
     interactDirectional offsetTarget
@@ -80,7 +80,6 @@ priority 1.5
     parent geneHancer
 
     track ghInteraction
-    release alpha
     shortLabel Interactions
     type bigInteract
     interactDirectional offsetTarget
@@ -110,7 +109,6 @@ priority 1.5
         subGroups set=b_ALL view=c_I
 
     track ghClusteredInteraction
-    release alpha
     shortLabel Clustered Interactions
     type bigInteract
     interactDirectional clusterTarget
@@ -122,7 +120,7 @@ priority 1.5
     parent geneHancer
 
     track ghClusteredInteraction
-    release beta,public
+    release public
     shortLabel Clustered Interactions
     type bigInteract
     interactDirectional clusterTarget
