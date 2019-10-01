@@ -5107,7 +5107,8 @@ if (compositeHideEmptySubtracksSetting(parentTdb, &hideSubtracksDefault, NULL, N
     printf("<BR><B>Hide empty subtracks:</B> &nbsp;");
     char buf[128];
     safef(buf, sizeof buf, "%s.%s", parentTdb->track, SUBTRACK_HIDE_EMPTY);
-    cgiMakeCheckBox(buf, hideSubtracksDefault);
+    boolean doHideEmpties = compositeHideEmptySubtracks(cart, parentTdb, NULL, NULL);
+    cgiMakeCheckBox(buf, doHideEmpties);
     }
 
 // Table wraps around entire list so that "Top" link can float to the correct place.
