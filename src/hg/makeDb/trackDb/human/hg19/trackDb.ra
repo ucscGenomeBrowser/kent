@@ -2617,7 +2617,6 @@ origAssembly hg38
 # change these two to switch to the new refSeqComposite 2018-02
 #include trackDb.refGene.ra public
 include ../../refSeqComposite.ra
-include ../../crispr10K.ra alpha
 
 track ensGene override
 ensemblIdUrl https://grch37.ensembl.org/Homo_sapiens

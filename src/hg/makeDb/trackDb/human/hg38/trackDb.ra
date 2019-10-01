@@ -1,5 +1,4 @@
 include ../../refSeqComposite.ra
-include ../../crispr10K.ra alpha
 
 include barCharts.ra
 
@@ -594,8 +593,8 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra alpha
 
-include knownGene.ra beta,public
-include knownGene.alpha.ra alpha
+include knownGene.ra public
+include knownGene.alpha.ra alpha,beta
 
 include trackDb.100way.ra
 include trackDb.145way.ra alpha

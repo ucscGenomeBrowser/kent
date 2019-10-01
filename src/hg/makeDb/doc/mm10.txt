@@ -18119,6 +18119,25 @@ TMPDIR=/dev/shm
     # commit all
     # if pushing public: add ticket and MARK QA READY
 
-    # 
+2019-08-30: repeat above for final release
+    mv /hive/data/genomes/mm10/bed/gencodeVM23 /hive/data/genomes/mm10/bed/gencodeVM23pre
+    # redo do above imports
+
+    for t in tables/* ; do cmp ../gencodeVM23pre/$t $t ; done
+
+    Changes:
+    wgEncodeGencode2wayConsPseudoVM23.gp 
+    wgEncodeGencodeAttrsVM23.tab
+    wgEncodeGencodePolyaVM23.gp
+    wgEncodeGencodeTagVM23.tab
+    only attrs and maybe tags matter to hgGene gencode
+
+    mkdir pre-diffs
+    diff ../gencodeVM23pre/tables/wgEncodeGencodeAttrsVM23.tab tables/wgEncodeGencodeAttrsVM23.tab >pre-diffs/wgEncodeGencodeAttrsVM23.diff
+    diff ../gencodeVM23pre/tables/wgEncodeGencodeTagVM23.tab tables/wgEncodeGencodeTagVM23.tab >pre-diffs/wgEncodeGencodeTagVM23.diff
+
+    # wgEncodeGencodeAttrsVM23: experimental confirmation level changed on a few pseudogenes
+    # wgEncodeGencodeTagVM23: pseudo_consens changed on a few pseudogenes.
+
 
 #########################################################################

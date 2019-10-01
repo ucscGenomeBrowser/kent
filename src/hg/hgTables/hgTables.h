@@ -887,6 +887,10 @@ struct bed *hicGetFilteredBedsOnRegions(struct sqlConnection *conn,
         int *retFieldCount);
 /* Get list of beds from HIC, in all regions, that pass filtering. */
 
+void hicMainPageConfig(struct cart *cart, struct trackDb *tdb);
+/* Display Hi-C-specific track configuration options (resolution, normalization) on
+ * the main page. */
+
 /* VCF (Variant Call Format) stuff from vcf.c */
 
 extern char *vcfDataLineAutoSqlString;

@@ -45,6 +45,9 @@ char *hicUiFetchResolution(struct cart *cart, struct trackDb *tdb, struct hicMet
 /* Return the current resolution selection, or the default if none
  * has been selected. */
 
+void hicUiResolutionDropDown(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta);
+/* Draw a dropdown menu in HTML to select which binSize to use for fetching data */
+
 int hicUiFetchResolutionAsInt(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta, int windowSize);
 /* Return the current resolution selection as an integer.  If there is no selection, or if "Auto"
  * has been selected, return the largest available value that still partitions the window into at
@@ -55,6 +58,9 @@ char *hicUiFetchNormalization(struct cart *cart, struct trackDb *tdb, struct hic
  * has been selected.  Right now this is a hard-coded set specifically for
  * .hic files, but in the future this list might be dynamically determined by
  * the contents and format of the Hi-C file. */
+
+void hicUiNormalizationDropDown(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta);
+/* Draw a dropdown menu in HTML to select the normalization method to use. */
 
 char *hicUiFetchDrawMode(struct cart *cart, struct trackDb *tdb);
 /* Return the current draw mode selection, or the default if none

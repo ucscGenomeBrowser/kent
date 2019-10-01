@@ -37,15 +37,20 @@ if (!sanityCheck)
 return selected;
 }
 
-void hicUiNormalizationMenu(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
-/* Draw a menu to select the normalization method to use. */
+void hicUiNormalizationDropDown(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
 {
 char cartVar[1024];
-printf("<b>Score normalization:</b> ");
 char* selected = hicUiFetchNormalization(cart, tdb, meta);
 char *menu[] = {"NONE", "VC", "VC_SQRT", "KR"};
 safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_NORMALIZATION);
 cgiMakeDropList(cartVar, menu, 4, selected);
+}
+
+void hicUiNormalizationMenu(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
+/* Draw a menu to select the normalization method to use. */
+{
+printf("<b>Score normalization:</b> ");
+hicUiNormalizationDropDown(cart, tdb, meta);
 }
 
 char *hicUiFetchResolution(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
@@ -94,12 +99,10 @@ else
 return result;
 }
 
-void hicUiResolutionMenu(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
-/* Draw a menu to select which binSize to use for fetching data */
+void hicUiResolutionDropDown(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
 {
 char cartVar[1024];
 char autoscale[10] = "Auto";
-printf("<b>Resolution:</b> ");
 safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_RESOLUTION);
 char **menu = NULL;
 AllocArray(menu, meta->nRes+1);
@@ -118,7 +121,14 @@ for (i=1; i<meta->nRes+1; i++)
     }
 char *selected = hicUiFetchResolution(cart, tdb, meta);
 cgiMakeDropListWithVals(cartVar, menu, values, meta->nRes+1, selected);
-free(menu);
+freeMem(menu);
+}
+
+void hicUiResolutionMenu(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
+/* Draw a menu to select which binSize to use for fetching data */
+{
+printf("<b>Resolution:</b> ");
+hicUiResolutionDropDown(cart, tdb, meta);
 }
 
 
@@ -258,7 +268,7 @@ hicUiAddAutoScaleJS(cart, tdb->track);
 
 void hicUiFileDetails(struct hicMeta *trackMeta)
 {
-int i;//, first = 1;
+int i;
 printf("</p><hr>\nMetadata from file header:<br>\n");
 printf("<div style='margin-left: 2em'>\n");
 printf("<label class='trackUiHicLabel'>Genome: %s\n<br></label>", trackMeta->fileAssembly);
@@ -318,8 +328,6 @@ boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 puts("<p>");
 printf("Items are drawn in shades of the chosen color depending on score - scores above the "
         "chosen maximum are drawn at full intensity.</p><p>\n");
-//hicUiNormalizationMenu(cart, track, trackMeta);
-//puts("&nbsp;&nbsp;");
 hicUiMaxOptionsMenu(cart, tdb, TRUE);
 puts("</p><p>");
 hicUiDrawMenu(cart, tdb);

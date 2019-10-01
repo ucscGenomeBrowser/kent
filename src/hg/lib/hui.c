@@ -5875,7 +5875,7 @@ if (setting)
         colonPairToDoubles(setting,&minVal,&maxVal);
         getScoreFloatRangeFromCart(cart,tdb,parentLevel,scoreName,&minLimit,&maxLimit,
                                                                   &minVal,  &maxVal);
-        safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MIN);
+        safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, filterByRange ? _MIN:"");
         safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange ? "Minimum " : ""),
               htmlEncode(htmlTextStripTags(label)));
         cgiMakeDoubleVarWithLimits(varName,minVal, altLabel, 0,minLimit, maxLimit);
