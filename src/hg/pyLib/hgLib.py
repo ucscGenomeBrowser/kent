@@ -24,7 +24,7 @@ except:
     exit(0)
 
 # Imports from the Python 2.7 standard library
-# Please minimize global imports. Each library import can take up to 20msecs.
+# This is a CGI, not a WSGI - minimize global imports. Each library import can take up to 20msecs.
 import os, cgi, sys, logging, time
 
 from os.path import join, isfile, normpath, abspath, dirname, isdir, splitext
