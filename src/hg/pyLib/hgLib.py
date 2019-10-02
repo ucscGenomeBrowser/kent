@@ -20,7 +20,7 @@ try:
     import MySQLdb
 except:
     print("Installation error - could not load MySQLdb for Python. Please tell your system administrator to run " \
-        "one of these commands as root: 'yum install MySQL-python', 'apt-get install python-mysqldb' or 'pip install MySQL-python'.")
+        "one of these commands as root: 'yum install MySQL-python', 'apt-get install python-mysqldb' or 'pip install MySQL-python'. On a Python3 system, the command is usually 'sudo pip install mysqlclient'.")
     exit(0)
 
 # Imports from the Python 2.7 standard library
@@ -31,7 +31,11 @@ from os.path import join, isfile, normpath, abspath, dirname, isdir, splitext
 from collections import namedtuple
 
 # start to support both python2 and python3 
-from six.moves import http_cookies, urllib
+try:
+    from six.moves import http_cookies, urllib
+except:
+    print("The python package 'six' could not be loaded. It is included with the Genome Browser. "
+        "Check if cgi-bin/pyLib/six.py is present and can be run from python.")
 
 # activate debugging output output only on dev
 import platform
