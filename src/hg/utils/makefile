@@ -37,6 +37,7 @@ UTILS_APPLIST = \
 	gff3ToGenePred \
 	gff3ToPsl \
 	gtfToGenePred \
+	hicInfo \
 	hgvsToVcf \
 	hubCheck \
 	hubClone \

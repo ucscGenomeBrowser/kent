@@ -153,7 +153,7 @@ char *hTrackUiForTrack(char *trackName);
 #define SUBTRACK_COLOR_SUBGROUP "subtrackColor"
 
 // trackDb setting and cart/cgi var
-#define SUBTRACK_HIDE_EMPTIES   "hideEmptySubtracks"
+#define SUBTRACK_HIDE_EMPTY     "hideEmptySubtracks"
 
 void netUi(struct trackDb *tdb);
 

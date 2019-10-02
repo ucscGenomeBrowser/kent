@@ -23,6 +23,7 @@ visibility full
     shortLabel Histone Modification Peaks
     view Peaks
     visibility dense
+    scoreFilter 0
     type bigBed 6 +
 
         track encode3Ren_stomach_H3K36me3_E15

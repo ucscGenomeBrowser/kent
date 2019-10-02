@@ -361,7 +361,7 @@ for (;;)
         /* Parse out first word and decide what to do. */
         word = nextWord(&line);
         if (line == NULL)
-            errAbort("No value for %s line %d of %s", word, lf->lineIx, lf->fileName);
+            line = "";
         line = trimSpaces(line);
         trackDbUpdateOldTag(&word, &line);
         if (releaseTag && sameString(word, "release"))

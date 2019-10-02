@@ -72,7 +72,7 @@
 #include "hex.h"
 #include <openssl/sha.h>
 #include "customComposite.h"
-#include "bed3Sources.h"
+//#include "bed3Sources.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.

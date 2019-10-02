@@ -21,6 +21,7 @@ visibility full
     view peaks
     visibility dense
     spectrum on
+    scoreFilter 0
     minGrayLevel 2
     type bigBed 5
 

@@ -2,14 +2,19 @@ from django.template import loader
 from django.shortcuts import render,get_object_or_404
 from django.urls import reverse
 from django.views import generic
+from django.http import HttpResponse
+import json
 
 from .models import *
 
-# Create your views here.
+# Create your views here (except API views go in api.py)
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the hcat index.")
-
+    a = []
+    for p in Project.objects.order_by("-id"):
+        j = {"short_name":p.short_name, "title":p.title}
+        a.append(j)
+    return HttpResponse(json.dumps(a), content_type="application/json")
 
 class ProjectListView(generic.ListView):
     template_name = 'hcat/project_list.html'
