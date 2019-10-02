@@ -17,25 +17,22 @@ my:: compile
 	rm -f ${CGI_BIN_USER}/pyLib/hgLib.{py,pyc,pyo}
 	cp -p hgLib.py ${CGI_BIN_USER}/pyLib/hgLib.py
 	cp -p hgLib.pyo ${CGI_BIN_USER}/pyLib/hgLib.pyo
+	cp -p six.* ${CGI_BIN_USER}/pyLib/
 	
-	mkdir -p ${CGI_BIN_USER}/pyLib/MySQLdb
-
 beta:: compile
 	mkdir -p ${CGI_BIN_BETA}/pyLib/
 	rm -f ${CGI_BIN_BETA}/pyLib/hgLib.{py,pyc,pyo}
 	cp -p hgLib.py ${CGI_BIN_BETA}/pyLib/hgLib.py
 	cp -p hgLib.pyo ${CGI_BIN_BETA}/pyLib/hgLib.pyo
+	cp -p six.* ${CGI_BIN_USER}/pyLib/
 	
-	mkdir -p ${CGI_BIN_BETA}/pyLib/MySQLdb
-
 alpha:: compile
 	mkdir -p ${CGI_BIN}/pyLib/
 	rm -f ${CGI_BIN}/pyLib/hgLib.{py,pyc,pyo}
 	cp -p hgLib.py ${CGI_BIN}/pyLib/hgLib.py
 	cp -p hgLib.pyo ${CGI_BIN}/pyLib/hgLib.pyo
+	cp -p six.* ${CGI_BIN_USER}/pyLib/
 	
-	mkdir -p ${CGI_BIN}/pyLib/MySQLdb
-
 compile:
 	# byte-compile and strip all python source code to .pyo files
 	python2.7 -OO -m compileall ./
