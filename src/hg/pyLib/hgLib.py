@@ -20,7 +20,8 @@ try:
     import MySQLdb
 except:
     print("Installation error - could not load MySQLdb for Python. Please tell your system administrator to run " \
-        "one of these commands as root: 'yum install MySQL-python', 'apt-get install python-mysqldb' or 'pip install MySQL-python'. On a Python3 system, the command is usually 'sudo pip install mysqlclient'.")
+        "one of these commands as root: 'yum install MySQL-python', 'apt-get install python-mysqldb' or " \
+        "'pip install MySQL-python'. On a Python3 system, the command is usually 'sudo pip install mysqlclient'.")
     exit(0)
 
 # Imports from the Python 2.7 standard library
