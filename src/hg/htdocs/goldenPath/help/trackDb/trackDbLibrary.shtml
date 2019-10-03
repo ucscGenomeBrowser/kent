@@ -1437,7 +1437,7 @@ There are no extra options that can appear on the type bigInteract line.
     -->
 </DIV>
 
-<DIV class="cFilter"><span class="types bed"></span>
+<DIV class="cFilter"><span class="types bed bigBed"></span>
 <div class="format">
     <code>&lt;column&gt;.Filter [&lt;default integer&gt;]</code><BR> 
     <code>&lt;column&gt;.FilterByRange &lt;off/on&gt;</code><BR>
@@ -1448,7 +1448,7 @@ There are no extra options that can appear on the type bigInteract line.
     preselected filter value can be passed following the argument to enable the filter by 
     default.</P>
     <P>By default, the range of values for <code>&lt;column&gt;.Filter</code> is 0 to 1000. However, you 
-    can explicitly set the upper and lower limits of the filter by setting 
+    can explicitly set the upper and lower limits of the filter with 
     <code>&lt;column&gt;.FilterLimits</code>.</P>
     <P>The numeric filters will exclude items that fall below the setting. That is, a
     <code>&lt;column&gt;.Filter</code> of 800 will exclude all items with a score below 800. You can also 
@@ -1471,13 +1471,14 @@ There are no extra options that can appear on the type bigInteract line.
     score.Filter 300</pre>
     <P>In this second example, we are enabling filtering on the same field <code>score</code>, 
     however, we are passing the integer 300. This means that when the data is loaded, items with 
-    scores below 300 will be excluded by default.</P>
+    scores below 300 will be excluded by default. This value can then be modified in the track 
+    description page.</P>
     <pre>
     signal.Filter
     signal.FilterByRange on
     signal.FilterLimits 200:500</pre>
     <P>In this example, we are enabling numerical filtering on the field <code>signal</code>. 
-    Filter by range is also being enabled, allowed for filtering between interval values. Lastly 
+    Filter by range is also being enabled, allowing for filtering between interval values. Lastly 
     the filter limits are being modified to accept values between 200 and 500 as opposed to the 
     default 0 to 1000.</P>
     <pre>
@@ -1490,13 +1491,14 @@ There are no extra options that can appear on the type bigInteract line.
     Unknown
     7.0</pre>
     <P>This example looks at applying <code>&lt;column&gt;.Filter</code> to fields with 
-    non-numerical values. If the 4 data points above were filtered by 6: "5" item would be removed 
-    as it is less than the filter value. The "6 (Uncertain)" item should show up, as it would
-    be interpreted as "6". The "Unknown" item would be removed as it would be interpreted as 0.
-    The 7.0 item would appear as decimals are supported.</P>
+    non-numerical values. If the 4 data points above were filtered by 6: &quot;5&quot; item 
+    would be removed as it is less than the filter value. The &quot;6 (Uncertain)&quot; item 
+    should show up, as it would be interpreted as &quot;6&quot;. The &quot;Unknown&quot; item 
+    would be removed as it would be interpreted as 0. The 7.0 item would appear as 
+    decimals are supported.</P>
 </DIV>
 
-<DIV class="cFilterText"><span class="types bed"></span>
+<DIV class="FilterText"><span class="types bed bigBed"></span>
 <div class="format">
     <code>&lt;column&gt;.FilterText [&lt;default search string&gt;]</code><BR>
     </div>
@@ -1518,7 +1520,8 @@ There are no extra options that can appear on the type bigInteract line.
     geneName.FilterText BRCA</pre>
     <P>In this example, we are applying a default filter on the field <code>geneName</code> 
     so that only items with BRCA in the <code>geneName</code> are visible. This is equivalent to
-    a wildcard search of <code>*BRCA*</code> or a regexp search <code>.*BRCA.*</code>.</P>
+    a wildcard search of <code>*BRCA*</code> or a regexp search <code>.*BRCA.*</code>. The filter
+    term can be freely changed in the track description page.</P>
     <pre>
     geneName.FilterText</pre>
     <P>This example is enabling filtering on the same field as above, <code>geneName</code>,
@@ -1526,7 +1529,7 @@ There are no extra options that can appear on the type bigInteract line.
     will be present but no items will be filtered out when the hub is first loaded.</P>
 </DIV>
 
-<DIV class="cFilterValues"><span class="types bed"></span>
+<DIV class="FilterValues"><span class="types bed bigBed"></span>
 <div class="format">
     <code>&lt;column&gt;.FilterValues &lt;value1,value2,value3...&gt;</code><BR>
     </div>
@@ -1544,8 +1547,8 @@ There are no extra options that can appear on the type bigInteract line.
     <pre>
     scoreOddEven.FilterValues Odd,Even</pre>
     <P>In this simple example, we are applying <code>&lt;column&gt;.FilterValues</code>
-    to the <code>scoreOddEven</code> field, which designates either "Even" or "Odd". We can
-    then filter the data with a drop-down menu to just evens or odds.
+    to the <code>scoreOddEven</code> field, which designates either &quot;Even&quot; 
+    or &quot;Odd&quot;. We can then filter the data with a drop-down menu to just evens or odds.
     <pre>
     annotationType.FilterValues DNA-binding region,active site,beta strand,binding site,calcium-binding region</pre>
     <P>In this example the filter is being applied to multiple values in the 
