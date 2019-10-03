@@ -1482,6 +1482,7 @@ mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, track, FALSE,
                NULL, 0, 0, (revCmplDisp ? "Next item" : "Prev item"), buttonText);
 
 #ifdef IMAGEv2_SHORT_TOGGLE
+// LIKELY UNUSED
 char *label = (theImgBox ? track->longLabel : parentTrack->longLabel);
 int width = portWidth - (2 * arrowButtonWidth);
 int x = portX + arrowButtonWidth;
@@ -10349,5 +10350,12 @@ void labelTrackAsFiltered(struct track *tg)
 {
 char *oldLabel = tg->longLabel;
 tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
+
+struct trackDb *tdbComposite = tdbGetComposite(tg->tdb);
+if (tdbComposite != NULL)
+    {
+    oldLabel = tdbComposite->longLabel;
+    tdbComposite->longLabel = catTwoStrings(oldLabel, " (filter activated)");
+    }
 }
 
