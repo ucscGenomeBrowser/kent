@@ -4496,6 +4496,7 @@ if (
 || sameWord(type, "genePred")
 || sameWord(type, "gvf")
 || sameWord(type, "narrowPeak")
+|| sameWord(type, "bigNarrowPeak")
 || sameWord(type, "psl")
 || sameWord(type, "barChart")
 || sameWord(type, "bigBarChart")
@@ -5470,9 +5471,11 @@ if (withCenterLabels)
             {
             track->preDrawMultiRegion(track);
             }
+        y += flatTrack->maxHeight;
         }
 
     // now do the actual draw
+    y = yAfterRuler;
     for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         {
         int savey = y;
