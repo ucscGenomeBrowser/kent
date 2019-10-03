@@ -5471,9 +5471,11 @@ if (withCenterLabels)
             {
             track->preDrawMultiRegion(track);
             }
+        y += flatTrack->maxHeight;
         }
 
     // now do the actual draw
+    y = yAfterRuler;
     for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         {
         int savey = y;

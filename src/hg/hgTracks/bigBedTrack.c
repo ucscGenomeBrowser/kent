@@ -202,6 +202,17 @@ struct bigBedFilter *bigBedBuildFilters(struct cart *cart, struct bbiFile *bbi, 
 struct bigBedFilter *filters = NULL, *filter;
 struct slName *filterSettings = trackDbSettingsWildMatch(tdb, FILTER_NUMBER_WILDCARD);
 
+if ((filterSettings == NULL) && !trackDbSettingOn(tdb, "noScoreFilter"))
+    {
+    AllocVar(filter);
+    slAddHead(&filters, filter);
+    filter->fieldNum = 4;
+    filter->comparisonType = COMPARE_MORE;
+    char buffer[2048];
+    safef(buffer, sizeof buffer, "%s.scoreFilter", tdb->track);
+    filter->value1 = cartUsualDouble(cart, buffer, 0.0);
+    }
+
 for(; filterSettings; filterSettings = filterSettings->next)
     {
     char *fieldName = extractFieldName(filterSettings->name, FILTER_NUMBER_NAME);
