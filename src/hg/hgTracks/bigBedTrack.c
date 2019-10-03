@@ -438,10 +438,13 @@ int mouseOverIdx = bbExtraFieldIndex(bbi, mouseOverField);
 track->bbiFile = NULL;
 
 struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, track->tdb) ;
-if (filters || 
-    (tdbIsCompositeChild(track->tdb) && 
-        compositeHideEmptySubtracks(cart, tdbGetComposite(track->tdb), NULL, NULL)))
-            labelTrackAsFiltered(track);
+if (filters)
+   labelTrackAsFiltered(track);
+
+struct trackDb *parentTdb = tdbGetComposite(track->tdb);
+if (parentTdb && compositeHideEmptySubtracks(cart, parentTdb, NULL, NULL))
+    parentTdb->longLabel = labelAsFiltered(parentTdb->longLabel);
+
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     struct linkedFeatures *lf = NULL;

@@ -1569,3 +1569,13 @@ if (metadataInTdb)
 return NULL;
 }
 
+char *labelAsFiltered(char *label)
+/* add text to label to indicate filter is active */
+{
+#define FILTER_ACTIVATED " (filter activated)"
+if (stringIn(FILTER_ACTIVATED, label))
+    return label;
+return (catTwoStrings(label, FILTER_ACTIVATED));
+}
+
+
