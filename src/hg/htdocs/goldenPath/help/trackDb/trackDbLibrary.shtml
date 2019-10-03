@@ -4501,7 +4501,7 @@ For the complete bigBarChart format definitions please see the
 </DIV>
 
 <DIV class="barChartMaxSize"><span class="types bigBarChart"></span>
-<div class="format"><code>barChartMaxSize &lt;small/mediium/large&gt;</code></div>
+<div class="format"><code>barChartMaxSize &lt;small/medium/large&gt;</code></div>
     <P>BarChart track display selects one of three sizes (small, medium, or large) to 
         display barCharts, based on size of the genomic region in the current window.
         For dense data, it is helpful to reduce the barChart sizes, even when in relatively
@@ -4794,6 +4794,22 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     Browser image by directly dragging and dropping the displayed track data. Yet reordering subtracks
     in the Browser image in hgTracks will not be reflected back on the hgTrackUi configuration page.
     Note: This setting will not work correctly if 'container multiWig' is specified.</P>
+</DIV>
+
+<DIV class="hideEmptySubtracks"><span class="types compositeTrack"></span>
+<div class="format">
+        <code>hideEmptySubtracks &lt;on/default&gt; [multiBed.bb multiBedSources.tab]</code></div>
+    <P>When you have many subtracks in a composite track, it may be useful to limit the display
+    to only those with data in the current viewing window.  This track setting produces a
+    checkbox on the track configuration page allowing the user to enable or disable this feature.
+    if <code>default</code> is specified, the feature is on by default (the checkbox is checked).
+    </p>
+    <p>
+    For extremely large composites, especially those where each subtrack may be sparse,
+    substantial performance improvements can be had by supplying an index file of the 
+    intersections of items in all subtracks (&quot;multiBed&quot;).  This file, and an
+    accompanying sources file, are optional arguments to this setting.
+    Instructions for creating these files are at the MultiBed help page (TBD).
 </DIV>
 
 

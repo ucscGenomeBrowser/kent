@@ -33534,6 +33534,10 @@ EOF
 
     # commit all
 
+2019-08-30: repeat above for final release
+    mv /hive/data/genomes/hg19/bed/gencodeV32lift37 /hive/data/genomes/hg19/bed/gencodeV32lift37pre
+    # redo do above imports
+
 ##############################################################################
 # LASTZ human/hg19 Tree chimp/rheMac10 - (DONE - 2019-07-09 - Hiram)
     mkdir /hive/data/genomes/hg19/bed/lastzRheMac10.2019-07-09

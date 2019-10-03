@@ -5028,7 +5028,7 @@ boolean compositeHideEmptySubtracksSetting(struct trackDb *tdb, boolean *retDefa
 {
 if (!tdbIsComposite(tdb))
     return FALSE;
-char *hideEmpties = trackDbSetting(tdb, SUBTRACK_HIDE_EMPTIES);
+char *hideEmpties = trackDbSetting(tdb, SUBTRACK_HIDE_EMPTY);
 if (!hideEmpties)
     return FALSE;
 char *orig = cloneString(hideEmpties);
@@ -5038,7 +5038,7 @@ char *mode = words[0];
 if (differentString(mode, "on") && differentString(mode, "true") &&
     differentString(mode, "default"))
         {
-        warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTIES, orig);
+        warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTY, orig);
         return FALSE;
         }
 boolean deflt = sameString(mode, "default") ? TRUE : FALSE;
@@ -5049,14 +5049,14 @@ if (wordCount == 1)
     return TRUE;
 if (wordCount != 3)
     {
-    warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTIES, orig);
+    warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTY, orig);
     return FALSE;
     }
 // multi-bed specified (to speed display)
 if (retMultiBedFile)
     *retMultiBedFile = cloneString(hReplaceGbdb(words[1]));
 if (retSubtrackIdFile)
-    *retSubtrackIdFile = cloneString(words[2]);
+    *retSubtrackIdFile = cloneString(hReplaceGbdb(words[2]));
 return TRUE;
 }
 
@@ -5070,7 +5070,7 @@ boolean deflt = FALSE;
 if (!compositeHideEmptySubtracksSetting(tdb, &deflt, retMutiBedFile, retSubtrackIdFile))
     return FALSE;
 char buf[128];
-safef(buf, sizeof buf, "%s.%s", tdb->track, SUBTRACK_HIDE_EMPTIES);
+safef(buf, sizeof buf, "%s.%s", tdb->track, SUBTRACK_HIDE_EMPTY);
 return cartUsualBoolean(cart, buf, deflt);
 }
 
@@ -5106,8 +5106,9 @@ if (compositeHideEmptySubtracksSetting(parentTdb, &hideSubtracksDefault, NULL, N
     {
     printf("<BR><B>Hide empty subtracks:</B> &nbsp;");
     char buf[128];
-    safef(buf, sizeof buf, "%s.%s", parentTdb->track, SUBTRACK_HIDE_EMPTIES);
-    cgiMakeCheckBox(buf, hideSubtracksDefault);
+    safef(buf, sizeof buf, "%s.%s", parentTdb->track, SUBTRACK_HIDE_EMPTY);
+    boolean doHideEmpties = compositeHideEmptySubtracks(cart, parentTdb, NULL, NULL);
+    cgiMakeCheckBox(buf, doHideEmpties);
     }
 
 // Table wraps around entire list so that "Top" link can float to the correct place.
@@ -5875,7 +5876,7 @@ if (setting)
         colonPairToDoubles(setting,&minVal,&maxVal);
         getScoreFloatRangeFromCart(cart,tdb,parentLevel,scoreName,&minLimit,&maxLimit,
                                                                   &minVal,  &maxVal);
-        safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MIN);
+        safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, filterByRange ? _MIN:"");
         safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange ? "Minimum " : ""),
               htmlEncode(htmlTextStripTags(label)));
         cgiMakeDoubleVarWithLimits(varName,minVal, altLabel, 0,minLimit, maxLimit);
