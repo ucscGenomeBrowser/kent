@@ -1437,6 +1437,122 @@ There are no extra options that can appear on the type bigInteract line.
     -->
 </DIV>
 
+<DIV class="cFilter"><span class="types bed"></span>
+<div class="format">
+    <code>&lt;column&gt;.Filter [&lt;default integer&gt;]</code><BR> 
+    <code>&lt;column&gt;.FilterByRange &lt;off/on&gt;</code><BR>
+    <code>&lt;column&gt;.FilterLimits &lt;low&gt;[:&lt;high&gt;]</code><BR>
+    </div>
+    <P>There are a number of different filters available for bed data.<code> &lt;column&gt;.Filter </code>
+    is used for numerical data. It does not require any variables, however, a 
+    preselected filter value can be passed following the argument to enable the filter by 
+    default.</P>
+    <P>By default, the range of values for <code>&lt;column&gt;.Filter</code> is 0 to 1000. However, you 
+    can explicitly set the upper and lower limits of the filter by setting 
+    <code>&lt;column&gt;.FilterLimits</code>.</P>
+    <P>The numeric filters will exclude items that fall below the setting. That is, a
+    <code>&lt;column&gt;.Filter</code> of 800 will exclude all items with a score below 800. You can also 
+    filter values within a range, by including the <code>&lt;column&gt;.FilterByRange</code> setting. For 
+    example, a <code>&lt;column&gt;.Filter</code> range of 800-900 will include only items with scores at 
+    or above 800 and below 900. It is recommended that <code>&lt;column&gt;.FilterByRange</code> is used 
+    in combination with <code>&lt;column&gt;.FilterLimits</code> to set limit boundaries.</P>
+    <P><B>Notes:</B><ul>
+    <li><code>&lt;column&gt;.Filter</code> can be used multiple times with different fields</li>
+    <li>Both integers and decimals (floats) are supported</li>
+    <li>Any strings or non-numerical characters in a filter field will be treated as zeros</li>
+    <li>Fields that start with a numerical character, then have strings, will be treated
+    as the numerical character; with the string ignored (see example below)</li></ul></P>
+    <P><B>Examples:</B></P>
+    <pre>
+    score.Filter</pre>
+    <P>In this example, filtering is being enabled for the field <code>score</code>. No default 
+    value is being passed, so by default the filter is set to 0 (disabled).</P>
+    <pre>
+    score.Filter 300</pre>
+    <P>In this second example, we are enabling filtering on the same field <code>score</code>, 
+    however, we are passing the integer 300. This means that when the data is loaded, items with 
+    scores below 300 will be excluded by default.</P>
+    <pre>
+    signal.Filter
+    signal.FilterByRange on
+    signal.FilterLimits 200:500</pre>
+    <P>In this example, we are enabling numerical filtering on the field <code>signal</code>. 
+    Filter by range is also being enabled, allowed for filtering between interval values. Lastly 
+    the filter limits are being modified to accept values between 200 and 500 as opposed to the 
+    default 0 to 1000.</P>
+    <pre>
+    confidenceScore.Filter</pre>
+    <P><code>ConfidenceScore</code> example values:</P>
+   <pre>
+    confidenceScore
+    5
+    6 (Uncertain)
+    Unknown
+    7.0</pre>
+    <P>This example looks at applying <code>&lt;column&gt;.Filter</code> to fields with 
+    non-numerical values. If the 4 data points above were filtered by 6: "5" item would be removed 
+    as it is less than the filter value. The "6 (Uncertain)" item should show up, as it would
+    be interpreted as "6". The "Unknown" item would be removed as it would be interpreted as 0.
+    The 7.0 item would appear as decimals are supported.</P>
+</DIV>
+
+<DIV class="cFilterText"><span class="types bed"></span>
+<div class="format">
+    <code>&lt;column&gt;.FilterText [&lt;default search string&gt;]</code><BR>
+    </div>
+    <P>There are a number of different filters available for bed 
+    data. <code>&lt;column&gt;.FilterText</code> is used to enable text (string) searching 
+    on any field. It does not require any variables, however, a preselected filter value
+    can be passed following the argument to enable the filter by default.</P> 
+    <P><code>&lt;column&gt;.FilterText</code> will treat all fields as strings. That is to say,
+    it can be enabled on numerical fields, such as <code>chromStart</code>, to query coordinates 
+    <strong>as text</strong>.</P>
+    <P><code>&lt;column&gt;.FilterText</code> will enable two kinds of searching, wildcard and
+    regexp. By default, the wildcard option is enabled. This means that a search term with 
+    a wildcard (*) item on either end will match any number of additional characters before
+    and/or after the search term. The regexp option allows for searching with regular 
+    expression rules.</P>
+
+    <P><B>Examples:</B></P>
+    <pre>
+    geneName.FilterText BRCA</pre>
+    <P>In this example, we are applying a default filter on the field <code>geneName</code> 
+    so that only items with BRCA in the <code>geneName</code> are visible. This is equivalent to
+    a wildcard search of <code>*BRCA*</code> or a regexp search <code>.*BRCA.*</code>.</P>
+    <pre>
+    geneName.FilterText</pre>
+    <P>This example is enabling filtering on the same field as above, <code>geneName</code>,
+    however, it is not declaring a default search parameter. This means that the search box 
+    will be present but no items will be filtered out when the hub is first loaded.</P>
+</DIV>
+
+<DIV class="cFilterValues"><span class="types bed"></span>
+<div class="format">
+    <code>&lt;column&gt;.FilterValues &lt;value1,value2,value3...&gt;</code><BR>
+    </div>
+    <P>There are a number of different filters available for bed
+    data. <code>&lt;column&gt;.FilterValues</code> is used to enable filtering by 
+    specified values within a column or field. It requires at least one value.</P>
+    <P>Every individual value must be passed in a comma separated list. You will then
+    be able to select those values as categories; choosing to display only items that
+    belong to one, any, or at least one of the selected values.</P>
+    <P><B>Notes:</B><ul>
+    <li>Currently, all fields must be stated individually</li>
+    <li>Value names must match exactly</li></ul></P>
+
+    <P><B>Examples:</B></P>
+    <pre>
+    scoreOddEven.FilterValues Odd,Even</pre>
+    <P>In this simple example, we are applying <code>&lt;column&gt;.FilterValues</code>
+    to the <code>scoreOddEven</code> field, which designates either "Even" or "Odd". We can
+    then filter the data with a drop-down menu to just evens or odds.
+    <pre>
+    annotationType.FilterValues DNA-binding region,active site,beta strand,binding site,calcium-binding region</pre>
+    <P>In this example the filter is being applied to multiple values in the 
+    <code>annotationType</code> field. We can then select from these values, and display 
+    only items that match our selections.</P>
+</DIV>
+
 <DIV class="itemRgb"><span class="types bed bigBed bedDetail bedGraph bedLogR"></span>
 <div class="format"><code>itemRgb on</code></div>
     <P>In bed formats supporting 
