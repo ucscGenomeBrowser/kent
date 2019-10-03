@@ -92,8 +92,9 @@ else if (tg->isBigBed)
     if (filters)
        labelTrackAsFiltered(tg);
 
+    // also label parent composite track filtered
     struct trackDb *parentTdb = tdbGetComposite(tg->tdb);
-    if (parentTdb && compositeHideEmptySubtracks(cart, parentTdb, NULL, NULL))
+    if (parentTdb && (filters || compositeHideEmptySubtracks(cart, parentTdb, NULL, NULL)))
         parentTdb->longLabel = labelAsFiltered(parentTdb->longLabel);
 
      if (tg->itemName == bedName && !trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))

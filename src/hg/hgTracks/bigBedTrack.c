@@ -441,8 +441,9 @@ struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, track->tdb) ;
 if (filters)
    labelTrackAsFiltered(track);
 
+// also label parent composite track filtered
 struct trackDb *parentTdb = tdbGetComposite(track->tdb);
-if (parentTdb && compositeHideEmptySubtracks(cart, parentTdb, NULL, NULL))
+if (parentTdb && (filters || compositeHideEmptySubtracks(cart, parentTdb, NULL, NULL)))
     parentTdb->longLabel = labelAsFiltered(parentTdb->longLabel);
 
 for (bb = bbList; bb != NULL; bb = bb->next)
