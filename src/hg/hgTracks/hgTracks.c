@@ -10348,14 +10348,16 @@ if (cartOptionalString(cart, "udcTimeout"))
 void labelTrackAsFiltered(struct track *tg)
 /* add text to track long label to indicate filter is active */
 {
+#define FILTER_ACTIVATED " (filter activated)"
 char *oldLabel = tg->longLabel;
-tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
+tg->longLabel = catTwoStrings(oldLabel, FILTER_ACTIVATED);
 
 struct trackDb *tdbComposite = tdbGetComposite(tg->tdb);
 if (tdbComposite != NULL)
     {
     oldLabel = tdbComposite->longLabel;
-    tdbComposite->longLabel = catTwoStrings(oldLabel, " (filter activated)");
+    if (!stringIn(FILTER_ACTIVATED, oldLabel))
+        tdbComposite->longLabel = catTwoStrings(oldLabel, FILTER_ACTIVATED);
     }
 }
 
