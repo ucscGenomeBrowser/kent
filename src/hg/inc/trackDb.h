@@ -738,5 +738,9 @@ struct trackDb *trackDbHubCache(char *trackDbUrl, time_t time);
 
 boolean trackDbCacheOn();
 /* Check to see if we're caching trackDb contents. */
+
+char *labelAsFiltered(char *label);
+/* add text to label to indicate filter is active */
+
 #endif /* TRACKDB_H */
 

@@ -3255,6 +3255,8 @@ else if (startsWith(tdb->type, "bigLolly"))
     tdb->canPack = TRUE;
 else if (sameString(tdb->type, "bigChain"))
     tdb->canPack = TRUE;
+else if (sameString(tdb->type, "bigNarrowPeak"))
+    tdb->canPack = TRUE;
 
 // Don't bother with vis controls for downloadsOnly
 if (!tdbIsDownloadsOnly(tdb))

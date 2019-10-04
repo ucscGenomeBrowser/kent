@@ -439,7 +439,13 @@ track->bbiFile = NULL;
 
 struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, track->tdb) ;
 if (filters)
-    labelTrackAsFiltered(track);
+   labelTrackAsFiltered(track);
+
+// also label parent composite track filtered
+struct trackDb *parentTdb = tdbGetComposite(track->tdb);
+if (parentTdb && (filters || compositeHideEmptySubtracks(cart, parentTdb, NULL, NULL)))
+    parentTdb->longLabel = labelAsFiltered(parentTdb->longLabel);
+
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     struct linkedFeatures *lf = NULL;
