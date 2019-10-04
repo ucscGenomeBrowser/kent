@@ -31,7 +31,7 @@ alpha:: compile
 	rm -f ${CGI_BIN}/pyLib/hgLib.{py,pyc,pyo}
 	cp -p hgLib.py ${CGI_BIN}/pyLib/hgLib.py
 	cp -p hgLib.pyo ${CGI_BIN}/pyLib/hgLib.pyo
-	cp -p six.* ${CGI_BIN_USER}/pyLib/
+	cp -p six.* ${CGI_BIN}/pyLib/
 	
 compile:
 	# byte-compile and strip all python source code to .pyo files
