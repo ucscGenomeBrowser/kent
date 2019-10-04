@@ -87,10 +87,15 @@ else if (tg->isBigBed)
     struct bbiFile *bbi = fetchBbiForTrack(tg);
     char *bedRow[bbi->fieldCount];
     char startBuf[16], endBuf[16];
-    struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, tg->tdb);
 
+    struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, tg->tdb);
     if (filters)
-        labelTrackAsFiltered(tg);
+       labelTrackAsFiltered(tg);
+
+    // also label parent composite track filtered
+    struct trackDb *parentTdb = tdbGetComposite(tg->tdb);
+    if (parentTdb && (filters || compositeHideEmptySubtracks(cart, parentTdb, NULL, NULL)))
+        parentTdb->longLabel = labelAsFiltered(parentTdb->longLabel);
 
      if (tg->itemName == bedName && !trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
         tg->itemName = bigBedItemName;

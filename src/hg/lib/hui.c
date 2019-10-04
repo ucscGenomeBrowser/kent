@@ -5056,7 +5056,7 @@ if (wordCount != 3)
 if (retMultiBedFile)
     *retMultiBedFile = cloneString(hReplaceGbdb(words[1]));
 if (retSubtrackIdFile)
-    *retSubtrackIdFile = cloneString(words[2]);
+    *retSubtrackIdFile = cloneString(hReplaceGbdb(words[2]));
 return TRUE;
 }
 

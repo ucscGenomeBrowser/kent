@@ -1482,6 +1482,7 @@ mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, track, FALSE,
                NULL, 0, 0, (revCmplDisp ? "Next item" : "Prev item"), buttonText);
 
 #ifdef IMAGEv2_SHORT_TOGGLE
+// LIKELY UNUSED
 char *label = (theImgBox ? track->longLabel : parentTrack->longLabel);
 int width = portWidth - (2 * arrowButtonWidth);
 int x = portX + arrowButtonWidth;
@@ -4496,6 +4497,7 @@ if (
 || sameWord(type, "genePred")
 || sameWord(type, "gvf")
 || sameWord(type, "narrowPeak")
+|| sameWord(type, "bigNarrowPeak")
 || sameWord(type, "psl")
 || sameWord(type, "barChart")
 || sameWord(type, "bigBarChart")
@@ -5470,9 +5472,11 @@ if (withCenterLabels)
             {
             track->preDrawMultiRegion(track);
             }
+        y += flatTrack->maxHeight;
         }
 
     // now do the actual draw
+    y = yAfterRuler;
     for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         {
         int savey = y;
@@ -10345,6 +10349,6 @@ void labelTrackAsFiltered(struct track *tg)
 /* add text to track long label to indicate filter is active */
 {
 char *oldLabel = tg->longLabel;
-tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
+tg->longLabel = labelAsFiltered(oldLabel);
 }
 

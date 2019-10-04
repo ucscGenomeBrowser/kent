@@ -202,6 +202,17 @@ struct bigBedFilter *bigBedBuildFilters(struct cart *cart, struct bbiFile *bbi, 
 struct bigBedFilter *filters = NULL, *filter;
 struct slName *filterSettings = trackDbSettingsWildMatch(tdb, FILTER_NUMBER_WILDCARD);
 
+if ((filterSettings == NULL) && !trackDbSettingOn(tdb, "noScoreFilter"))
+    {
+    AllocVar(filter);
+    slAddHead(&filters, filter);
+    filter->fieldNum = 4;
+    filter->comparisonType = COMPARE_MORE;
+    char buffer[2048];
+    safef(buffer, sizeof buffer, "%s.scoreFilter", tdb->track);
+    filter->value1 = cartUsualDouble(cart, buffer, 0.0);
+    }
+
 for(; filterSettings; filterSettings = filterSettings->next)
     {
     char *fieldName = extractFieldName(filterSettings->name, FILTER_NUMBER_NAME);
@@ -428,7 +439,13 @@ track->bbiFile = NULL;
 
 struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, track->tdb) ;
 if (filters)
-    labelTrackAsFiltered(track);
+   labelTrackAsFiltered(track);
+
+// also label parent composite track filtered
+struct trackDb *parentTdb = tdbGetComposite(track->tdb);
+if (parentTdb && (filters || compositeHideEmptySubtracks(cart, parentTdb, NULL, NULL)))
+    parentTdb->longLabel = labelAsFiltered(parentTdb->longLabel);
+
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     struct linkedFeatures *lf = NULL;
