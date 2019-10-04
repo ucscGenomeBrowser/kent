@@ -19,7 +19,7 @@ barChartSampleUrl /gbdb/mm10/tabulamuris/clusters.tsv
 defaultLabelFields name2
 labelFields name2,name
 url2 https://cells.ucsc.edu/?ds=tabulamuris&gene=$$
-url2Label On UCSC Cell Browser
+url2Label On UCSC Cell Browser:
 bigDataUrl /gbdb/mm10/tabulamuris/barChart.bb
 html tabulaMuris
 parent tabulaMuris
