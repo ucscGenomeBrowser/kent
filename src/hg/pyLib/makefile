@@ -24,14 +24,14 @@ beta:: compile
 	rm -f ${CGI_BIN_BETA}/pyLib/hgLib.{py,pyc,pyo}
 	cp -p hgLib.py ${CGI_BIN_BETA}/pyLib/hgLib.py
 	cp -p hgLib.pyo ${CGI_BIN_BETA}/pyLib/hgLib.pyo
-	cp -p six.* ${CGI_BIN_USER}/pyLib/
+	cp -p six.* ${CGI_BIN_BETA}/pyLib/
 	
 alpha:: compile
 	mkdir -p ${CGI_BIN}/pyLib/
 	rm -f ${CGI_BIN}/pyLib/hgLib.{py,pyc,pyo}
 	cp -p hgLib.py ${CGI_BIN}/pyLib/hgLib.py
 	cp -p hgLib.pyo ${CGI_BIN}/pyLib/hgLib.pyo
-	cp -p six.* ${CGI_BIN_USER}/pyLib/
+	cp -p six.* ${CGI_BIN}/pyLib/
 	
 compile:
 	# byte-compile and strip all python source code to .pyo files
