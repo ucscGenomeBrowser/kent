@@ -1,0 +1,55 @@
+track rao2014Hic
+shortLabel Rao 2014 Hi-C
+longLabel Hi-C on 7 cell lines from Rao 2014
+type hic
+group regulation
+compositeTrack on
+
+track gm12878Insitu
+shortLabel GM12878 Hi-C
+longLabel In situ Hi-C Chromatin Structure on GM12878
+type hic
+parent rao2014Hic on
+bigDataUrl /gbdb/hg19/bbi/hic/GSE63525_GM12878_insitu_primary+replicate_combined.hic
+
+track hmecInsitu
+shortLabel HMEC Hi-C
+longLabel In situ Hi-C Chromatin Structure on HMEC
+type hic
+parent rao2014Hic off
+bigDataUrl /gbdb/hg19/bbi/hic/GSE63525_HMEC_combined.hic
+
+track huvecInsitu
+shortLabel HUVEC Hi-C
+longLabel In situ Hi-C Chromatin Structure on HUVEC
+type hic
+parent rao2014Hic off
+bigDataUrl /gbdb/hg19/bbi/hic/GSE63525_HUVEC_combined.hic
+
+track imr90Insitu
+shortLabel IMR90 Hi-C
+longLabel In situ Hi-C Chromatin Structure on IMR90
+type hic
+parent rao2014Hic off
+bigDataUrl /gbdb/hg19/bbi/hic/GSE63525_IMR90_combined.hic
+
+track k562Insitu
+shortLabel K562 Hi-C
+longLabel In situ Hi-C Chromatin Structure on K562
+type hic
+parent rao2014Hic off
+bigDataUrl /gbdb/hg19/bbi/hic/GSE63525_K562_combined.hic
+
+track kbm7Insitu
+shortLabel KBM7 Hi-C
+longLabel In situ Hi-C Chromatin Structure on KBM7
+type hic
+parent rao2014Hic off
+bigDataUrl /gbdb/hg19/bbi/hic/GSE63525_KBM7_combined.hic
+
+track nhekInsitu
+shortLabel NHEK Hi-C
+longLabel In situ Hi-C Chromatin Structure on NHEK
+type hic
+parent rao2014Hic off
+bigDataUrl /gbdb/hg19/bbi/hic/GSE63525_NHEK_combined.hic

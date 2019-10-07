@@ -711,3 +711,5 @@ include encode3.ra
 include wgEncodeReg.dev.ra alpha
 
 include platinumGenomes.ra
+
+include hic.ra
