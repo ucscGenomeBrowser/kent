@@ -3649,9 +3649,12 @@ return field;
 filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct asObject *as, char *filterName, char *name)
 /* Build a filterBy_t structure from a <column>FilterValues statement. */
 {
-char *setting = trackDbSetting(tdb, filterName);
-char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting);
 char *field = extractFieldName(filterName, FILTER_VALUES_NAME);
+char *setting = trackDbSetting(tdb, filterName);
+if (isEmpty(setting))
+    errAbort("FilterValues setting of field '%s' must have a value.", field);
+
+char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting);
 
 filterBy_t *filterBy;
 AllocVar(filterBy);
