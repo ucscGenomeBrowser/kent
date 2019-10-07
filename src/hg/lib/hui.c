@@ -5063,21 +5063,31 @@ if (retSubtrackIdFile)
 return TRUE;
 }
 
-boolean compositeHideEmptySubtracks(struct cart *cart, struct trackDb *childTdb,
-                                        char **retMutiBedFile, char **retSubtrackIdFile)
+boolean compositeHideEmptySubtracks(struct cart *cart, struct trackDb *tdb,
+                                        char **retMultiBedFile, char **retSubtrackIdFile)
+/* Parse hideEmptySubtracks setting and check cart
+ * Return TRUE if we should hide empties
+ */
+{
+boolean deflt = FALSE;
+if (!compositeHideEmptySubtracksSetting(tdb, &deflt, retMultiBedFile, retSubtrackIdFile))
+    return FALSE;
+char buf[128];
+safef(buf, sizeof buf, "%s.%s", tdb->track, SUBTRACK_HIDE_EMPTY);
+return cartUsualBoolean(cart, buf, deflt);
+}
+
+boolean compositeChildHideEmptySubtracks(struct cart *cart, struct trackDb *childTdb,
+                                        char **retMultiBedFile, char **retSubtrackIdFile)
 /* Parse hideEmptySubtracks setting and check cart
  * Return TRUE if we should hide empties
  */
 {
 struct trackDb *tdb = tdbGetComposite(childTdb);
-if (!parentTdb)
+if (!tdb)
     return FALSE;
-boolean deflt = FALSE;
-if (!compositeHideEmptySubtracksSetting(tdb, &deflt, retMutiBedFile, retSubtrackIdFile))
-    return FALSE;
-char buf[128];
-safef(buf, sizeof buf, "%s.%s", tdb->track, SUBTRACK_HIDE_EMPTY);
-return cartUsualBoolean(cart, buf, deflt);
+return compositeHideEmptySubtracks(cart, tdb, retMultiBedFile, retSubtrackIdFile);
+
 }
 
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb)
