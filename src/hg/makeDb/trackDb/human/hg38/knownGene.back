@@ -1,7 +1,7 @@
 
 track knownGene 
-shortLabel GENCODE v32
-longLabel  GENCODE v32 Comprehensive Transcript Set (only Basic displayed by default)
+shortLabel GENCODE v29
+longLabel  GENCODE v29 Comprehensive Transcript Set (only Basic displayed by default)
 group genes
 visibility pack
 priority 1
@@ -17,10 +17,10 @@ defaultLinkedTables kgXref
 intronGap 12
 html knownGene
 isGencode2 on
-bigGeneDataUrl /gbdb/hg38/knownGene32.bb
+bigGeneDataUrl /gbdb/hg38/knownGene29.bb
 pennantIcon p12 black http://genome.ucsc.edu/blog/patches/ "Includes annotations on GRCh38.p12 patch sequences"
 
-track knownGeneOld11
+track knownGeneOld10
 shortLabel Old UCSC Genes
 longLabel Previous Version of UCSC Genes
 group genes
@@ -28,12 +28,12 @@ visibility hide
 color 82,82,160
 type genePred
 hgsid on
-oldToNew kg11ToKg12
+oldToNew kg10ToKg11
 baseColorUseCds given
 baseColorDefault genomicCodons
 
-searchName knownGeneOld11
-searchTable knownGeneOld11
+searchName knownGeneOld10
+searchTable knownGeneOld10
 searchDescription Previous Version of UCSC Genes
 searchMethod fuzzy
 query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
