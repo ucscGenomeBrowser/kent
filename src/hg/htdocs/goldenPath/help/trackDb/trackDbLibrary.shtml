@@ -1456,17 +1456,21 @@ There are no extra options that can appear on the type bigInteract line.
     example, a <code>&lt;column&gt;.Filter</code> range of 800-900 will include only items with scores at 
     or above 800 and below 900. It is recommended that <code>&lt;column&gt;.FilterByRange</code> is used 
     in combination with <code>&lt;column&gt;.FilterLimits</code> to set limit boundaries.</P>
+    <P>The filter label will be the description of the field as specified by the autoSql (.as) file.
+    This label can be customized with the <code>&lt;column&gt;.Label</code> parameter.</P>
     <P><B>Notes:</B><ul>
     <li><code>&lt;column&gt;.Filter</code> can be used multiple times with different fields</li>
     <li>Both integers and decimals (floats) are supported</li>
     <li>Any strings or non-numerical characters in a filter field will be treated as zeros</li>
     <li>Fields that start with a numerical character, then have strings, will be treated
-    as the numerical character; with the string ignored (see example below)</li></ul></P>
+    as the numerical character; with the string ignored (see example below)</li>
+    <li>The default value of 0 if no argument is passed will filter out negative items in the column</li></ul></P>
     <P><B>Examples:</B></P>
     <pre>
     score.Filter</pre>
     <P>In this example, filtering is being enabled for the field <code>score</code>. No default 
-    value is being passed, so by default the filter is set to 0 (disabled).</P>
+    value is being passed, so by default the filter is set to 0. This means only negative values
+    will be filtered out.</P>
     <pre>
     score.Filter 300</pre>
     <P>In this second example, we are enabling filtering on the same field <code>score</code>, 
@@ -1498,12 +1502,12 @@ There are no extra options that can appear on the type bigInteract line.
     decimals are supported.</P>
 </DIV>
 
-<DIV class="FilterText"><span class="types bed bigBed"></span>
+<DIV class="FilterText"><span class="types bigBed"></span>
 <div class="format">
     <code>&lt;column&gt;.FilterText [&lt;default search string&gt;]</code><BR>
+    <code>&lt;column&gt;.FilterType &lt;wildcard/regexp&gt;</code><BR>
     </div>
-    <P>There are a number of different filters available for bed 
-    data. <code>&lt;column&gt;.FilterText</code> is used to enable text (string) searching 
+    <P><code>&lt;column&gt;.FilterText</code> is used to enable text (string) searching 
     on any field. It does not require any variables, however, a preselected filter value
     can be passed following the argument to enable the filter by default.</P> 
     <P><code>&lt;column&gt;.FilterText</code> will treat all fields as strings. That is to say,
@@ -1513,28 +1517,42 @@ There are no extra options that can appear on the type bigInteract line.
     regexp. By default, the wildcard option is enabled. This means that a search term with 
     a wildcard (*) item on either end will match any number of additional characters before
     and/or after the search term. The regexp option allows for searching with regular 
-    expression rules.</P>
+    expression rules. The optional parameter <code>&lt;column&gt;.FilterType</code> may
+    be passed to switch the default from wildcard to regexp.</P>
+    <P>The filter label will be the description of the field as specified by the autoSql (.as) file.
+    This label can be customized with the <code>&lt;column&gt;.Label</code> parameter.</P>
 
     <P><B>Examples:</B></P>
     <pre>
-    geneName.FilterText BRCA</pre>
+    geneName.FilterText *BRCA*</pre>
     <P>In this example, we are applying a default filter on the field <code>geneName</code> 
-    so that only items with BRCA in the <code>geneName</code> are visible. This is equivalent to
-    a wildcard search of <code>*BRCA*</code> or a regexp search <code>.*BRCA.*</code>. The filter
+    so that only items with BRCA in the <code>geneName</code> are visible. By default, this is 
+    a wildcard search of <code>*BRCA*</code> which is equivelant to
+    a regexp search <code>.*BRCA.*</code>. The filter
     term can be freely changed in the track description page.</P>
     <pre>
     geneName.FilterText</pre>
     <P>This example is enabling filtering on the same field as above, <code>geneName</code>,
     however, it is not declaring a default search parameter. This means that the search box 
     will be present but no items will be filtered out when the hub is first loaded.</P>
+    <pre>
+    geneName.FilterText \.1$
+    geneName.FilterType regexp</pre>
+    <P>
+    This example once again enables filtering on the same field, however it is declaring
+    regexp as the filter type and passing a regular expression to be applied by default. 
+    In this case, we are targeting all gene names that are version 1.</P>
 </DIV>
 
-<DIV class="FilterValues"><span class="types bed bigBed"></span>
+<DIV class="FilterValues"><span class="types bigBed"></span>
 <div class="format">
     <code>&lt;column&gt;.FilterValues &lt;value1,value2,value3...&gt;</code><BR>
+    <code>&lt;column&gt;.FilterType &lt;singleList/multipleListOr/multipleListAnd&gt;</code><BR>
     </div>
-    <P>There are a number of different filters available for bed
-    data. <code>&lt;column&gt;.FilterValues</code> is used to enable filtering by 
+    <P><code>&lt;column&gt;.FilterValues</code> is used to enable filtering by 
+    specified values within a column or field. It requires at least one value.</P>
+    <P>Every individual value must be passed in a comma separated list. You will then
+    be able to select those values as categories; choosing to display only items that
     specified values within a column or field. It requires at least one value.</P>
     <P>Every individual value must be passed in a comma separated list. You will then
     be able to select those values as categories; choosing to display only items that
@@ -1554,6 +1572,26 @@ There are no extra options that can appear on the type bigInteract line.
     <P>In this example the filter is being applied to multiple values in the 
     <code>annotationType</code> field. We can then select from these values, and display 
     only items that match our selections.</P>
+</DIV>
+
+<DIV class="Label"><span class="types bed bigBed"></span>
+<div class="format"><code>&lt;column&gt;.Label &lt;label&gt;</code></div>
+    <P>When a user clicks on a track item in the Browser image,	
+    the item detail page is shown. This setting specifies an
+    alternate label for the filter on that page. Without this
+    setting, the label will be the description of the field as 
+    specified by the autoSql (.as) file. Some of the parameters modified by
+    this are:</P>
+    <P><ul><li><code>&lt;column&gt;.Filter</code></li>
+    <li><code>&lt;column&gt;.FilterText</code></li>
+    <li><code>&lt;column&gt;.FilterValues</code></li></ul></P>
+    <P><B>Example:</B></P>
+    <pre>
+    strand.FilterText
+    strand.Label Strand</pre>
+    <P>In this example, we have a standard &quot;strand&quot; BED field with the default 
+    description &quot;+ or - for strand&quot;. We have enabled a filter and simplified
+    the label to just "Strand".</P>
 </DIV>
 
 <DIV class="itemRgb"><span class="types bed bigBed bedDetail bedGraph bedLogR"></span>
@@ -5576,9 +5614,6 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
 <div class="format"><code>htmlUrl</code></div>
     <P>Internal only &ndash; user does not set.
     Filled with user entered URL for track
-    description in hgCustom CGI.</P>
-</DIV>
-
 <DIV class="initialPos"><span class="types customTracks"></span>
 <div class="format"><code>initialPos</code></div>
     <P>Internal only &ndash; user does not set.
