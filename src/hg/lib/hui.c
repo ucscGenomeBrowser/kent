@@ -5063,12 +5063,15 @@ if (retSubtrackIdFile)
 return TRUE;
 }
 
-boolean compositeHideEmptySubtracks(struct cart *cart, struct trackDb *tdb,
+boolean compositeHideEmptySubtracks(struct cart *cart, struct trackDb *childTdb,
                                         char **retMutiBedFile, char **retSubtrackIdFile)
 /* Parse hideEmptySubtracks setting and check cart
  * Return TRUE if we should hide empties
  */
 {
+struct trackDb *tdb = tdbGetComposite(childTdb);
+if (!parentTdb)
+    return FALSE;
 boolean deflt = FALSE;
 if (!compositeHideEmptySubtracksSetting(tdb, &deflt, retMutiBedFile, retSubtrackIdFile))
     return FALSE;

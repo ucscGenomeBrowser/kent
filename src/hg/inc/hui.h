@@ -977,8 +977,8 @@ char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct tra
 /* If the parentTdb has an ENCODE controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to display it.  Return string is cloned. */
 
-boolean compositeHideEmptySubtracks(struct cart *cart, struct trackDb *tdb,
-                                        char **retMutiBedFile, char **retSubtrackIdFile);
+boolean compositeHideEmptySubtracks(struct cart *cart, struct trackDb *childTdb,
+                                        char **retMutiBedFile, char **retSubtrackIdFile)
 /* Parse hideEmptySubtracks setting and check cart
  * Return TRUE if we should hide empties
  */
