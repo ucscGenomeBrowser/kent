@@ -18141,3 +18141,66 @@ TMPDIR=/dev/shm
 
 
 #########################################################################
+# LASTZ Rat regenRn1 (DONE - 2019-09-12 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzRegenRn1.2019-09-12
+    cd /hive/data/genomes/mm10/bed/lastzRegenRn1.2019-09-12
+
+    printf '# rat vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Rat RegenRn1
+SEQ2_DIR=/hive/data/genomes/regenRn1/regenRn1.2bit
+SEQ2_LEN=/hive/data/genomes/regenRn1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=500
+
+BASE=/hive/data/genomes/mm10/bed/lastzRegenRn1.2019-09-12
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen -S mm10RegenRn1
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-noDbNameCheck -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-syntenicNet -chainMinScore=5000 -chainLinearGap=medium) > do.log 2>&1
+    #   real    185m22.610s
+
+
+    cat fb.mm10.chainRegenRn1Link.txt
+    #	1699005386 bases of 2652783500 (64.046%) in intersection
+    cat fb.mm10.chainSynRegenRn1Link.txt
+    #   1591231371 bases of 2652783500 (59.983%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` mm10 regenRn1) > rbest.log 2>&1 &
+    # real    516m24.464s
+
+    cat fb.mm10.chainRBest.RegenRn1.txt
+    # 1565180527 bases of 2652783500 (59.001%) in intersection
+
+    mkdir /hive/data/genomes/regenRn1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/regenRn1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzRegenRn1.2019-09-12/DEF \
+	-swap -syntenicNet -noDbNameCheck \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=5000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    94m19.060s
+
+    cat fb.regenRn1.chainMm10Link.txt
+    #   1634389849 bases of 2282482188 (71.606%) in intersection
+    cat fb.regenRn1.chainSynMm10Link.txt
+    #   1564752158 bases of 2282482188 (68.555%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` regenRn1 mm10) > rbest.log 2>&1
+    # real    488m25.471s
+
+    cat fb.regenRn1.chainRBest.Mm10.txt
+    # 1565313924 bases of 2282482188 (68.579%) in intersection
+
+##############################################################################
