@@ -2,20 +2,18 @@ track platinumGenomes
 compositeTrack on
 shortLabel Platinum Genomes
 longLabel Platinum genome variants
-group x
+group varRep
 dataVersion Release 2017-1.0
 configureByPopup off
 type vcfTabix
 html platinumGenomes
-
-# group varRep
 
 track platinumNA12877
 parent platinumGenomes
 shortLabel NA12877
 longLabel Platinum genome variant NA12877
 type vcfTabix
-group x
+group varRep
 visibility pack
 maxWindowToDraw 200000
 showHardyWeinberg on
@@ -28,7 +26,7 @@ parent platinumGenomes
 shortLabel NA12878
 longLabel Platinum genome variant NA12878
 type vcfTabix
-group x
+group varRep
 visibility pack
 maxWindowToDraw 200000
 showHardyWeinberg on
@@ -42,7 +40,7 @@ parent platinumGenomes
 shortLabel hybrid
 longLabel Platinum genome hybrid
 type vcfTabix
-group x
+group varRep
 visibility pack
 maxWindowToDraw 200000
 showHardyWeinberg on
