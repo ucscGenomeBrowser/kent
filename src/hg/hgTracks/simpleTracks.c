@@ -805,7 +805,7 @@ switch (vis)
 	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight)+1, TRUE, FALSE, vis);
         if (tdbIsCompositeChild(tg->tdb))
             {
-            boolean doHideEmpties = compositeHideEmptySubtracks(cart, tg->tdb->parent, NULL, NULL);
+            boolean doHideEmpties = compositeChildHideEmptySubtracks(cart, tg->tdb, NULL, NULL);
             if (isCenterLabelsPackOff(tg) && !doHideEmpties)
                 if (rows == 0)
                     rows = 1;   // compact pack mode, shows just side label

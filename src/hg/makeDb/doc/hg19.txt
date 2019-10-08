@@ -33614,11 +33614,30 @@ TMPDIR=/dev/shm
     # 2423781773 bases of 2936892733 (82.529%) in intersection
 
 #########################################################################
-2019-09-17: AVADA fulltext variants, Max
+# 2019-09-17: AVADA fulltext variants, Max
 cd /hive/data/genomes/hg19/bed/avada
 wget http://bejerano.stanford.edu/AVADA/avada_v1.00_2016.vcf.gz
 python ~/kent/src/hg/makeDb/avada/toBed.py > avada.bed
 bedToBigBed avada.bed /hive/data/genomes/hg19/chrom.sizes -as=${HOME}/kent/src/hg/makeDb/avada/avada.as -tab avada.bb -type=bed9+
 cd /gbdb/hg19/bbi
 ln -s /hive/data/genomes/hg19/bed/avada/avada.bb
+
+#########################################################################
+# Hi-C example track drawing from Rao 2014 - (DONE - 2019-10-07 - Jonathan)
+mkdir -p /hive/data/genomes/hg19/bed/hic
+cd /hive/data/genomes/hg19/bed/hic
+
+# Files are located on GEO at https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63525.  I grabbed the hic files
+# and used a subset of them (the combined files that haven't been filtered).
+wget ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE63nnn/GSE63525/suppl/GSE63525_GM12878_insitu_primary%2Breplicate_combined.hic
+wget ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE63nnn/GSE63525/suppl/GSE63525_HMEC_combined.hic
+wget ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE63nnn/GSE63525/suppl/GSE63525_HUVEC_combined.hic
+wget ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE63nnn/GSE63525/suppl/GSE63525_IMR90_combined.hic
+wget ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE63nnn/GSE63525/suppl/GSE63525_K562_combined.hic
+wget ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE63nnn/GSE63525/suppl/GSE63525_KBM7_combined.hic
+wget ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE63nnn/GSE63525/suppl/GSE63525_NHEK_combined.hic
+
+mkdir -p /gbdb/hg19/bbi/hic
+cd /gbdb/hg19/bbi/hic
+ln -s /hive/data/genomes/hg19/bed/hic/*.hic .
 #########################################################################

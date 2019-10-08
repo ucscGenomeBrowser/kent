@@ -1,0 +1,125 @@
+<p>
+<h2>Description</h2>
+These tracks provide heatmaps of chromatin folding data from in situ Hi-C and Micro-C XL experiments on
+the H1-hESC and HFFc6 cell lines (Krietenstein, 2019).  The data indicate how many interactions were
+detected between regions of the genome.  A high score between two regions suggests that they are probably
+in close proximity in 3D space within the nucleus of a cell.  In the track display, this is shown
+by a more intense color in the heatmap.
+</p><p>
+<h2>Display Conventions</h2>
+This is a composite track with data from experiments that compare two protocols on each of two cell lines.
+Individual subtrack settings can be adjusted by clicking the wrench next to the subtrack name, and all
+subtracks can be configured simultaneously using the track controls at the top of the page.  Note that some
+controls (specifically, resolution and normalization options) are only available in the subtrack-specific
+configuration.  The proximity data in these tracks are displayed as heatmaps, with high scores (and more
+intense colors) corresponding to closer proximity.
+</p><p>
+<h4>Draw modes</h4>
+There are three display methods available for Hi-C tracks: square, triangle, and arc.<br>
+<img src="https://hgwdev-jcasper.gi.ucsc.edu/images/hicDrawModes.png">
+</p><p>
+Square mode provides a traditional Hi-C display in which chromosome positions are mapped along the
+top-left-to-bottom-right diagonal, and interaction values are plotted on both sides of that diagonal to
+form a square.  The upper-left corner of the square corresponds to the left-most position of the
+window in view, while the bottom-right corner corresponds to the right-most position of the window.
+</p><p>
+The color shade at any point within the square shows the proximity score for two genomic regions:
+the region where a vertical line drawn from that point intersects with the diagonal, and the region where
+a horizontal line from that point intersects with the diagonal.  A point directly on the diagonal shows
+the score for how proximal a region is to itself (scores on the diagonal are usually quite high unless no
+data are available).  A point at the extreme bottom left of the square shows the score for how proximal the
+left-most position within the window is to the right-most position within the window.
+</p><p>
+In triangle mode, the display is quite similar to square except that only the top half of the square is
+drawn (eliminating the redundancy), and the image is rotated so that the diagonal of the square now lies
+on the horizontal axis.  This display consumes less vertical space in the image, although it may be more
+difficult to ascertain exactly which positions correspond to a point within the triangle.
+</p><p>
+In arc mode, simple arcs are drawn between the centers of interacting regions.  The color of each arc
+corresponds to the proximity score.  Self-interactions are not displayed.
+</p><p>
+<h4>Score normalization settings</h4>
+Score values for this type of display correspond to how close two genomic regions are in 3D space.  A
+high score indicates more links were formed between them in the experiment, which suggests that the regions
+are near to each other.  A low score suggests that the regions are farther apart.  High scores are displayed
+with a more intense color value; low scores are displayed in paler shades.
+</p><p>
+There are four score values available in this display: NONE, VC, VC_SQRT, and KR.  NONE provides raw,
+un-normalized counts for the number of interactions between regions.  VC, or Vanilla Coverage, normalization
+(Lieberman-Aiden <em>et al</em>., 2009) and the VC_SQRT variant normalize these count values based on the
+overall count values for each of the two interacting regions.  Knight-Ruiz, or KR, matrix balancing
+(Knight and Ruiz, 2013) provides an alternative normalization method where the row and column sums of the
+contact matrix equal 1.
+</p><p>
+Color intensity in the heatmap goes up to indicate higher scores, but eventually saturates at a maximum
+beyond which all scores share the same color intensity.  The value of this maximum score for saturation
+can be set manually by un-checking the "Auto-scale" box.  When the "Auto-scale" box is checked, it
+automatically sets the saturation maximum to be double (2x) the median score in the current display window.
+</p><p>
+<h4>Resolution settings</h4>
+The resolution for each track is measured in base pairs and represents the size of the bins into which
+proximity data are gathered.  The list of available resolutions ranges from 1kb to 10MB.  There is also
+an "Auto" setting, which attempts to use the coarsest resolution that still displays at least 5000 bins
+in the current window.
+</p><p>
+<h2>Methods</h2>
+Cells from the H1-hESC and HFFc6 cell lines were processed using two protocols and submitted to
+the 4D Nucleome Data Coordination and Integration Center (<a href="https://www.4dnucleome.org"
+target=_blank>4D Nucleome</a>).  The data from the experimental replicates were then combined
+to create a contact matrix for each cell line, which was then processed to create binary
+heatmap files like the .hic files used by this track.
+</p><p>
+The first protocol, in situ Hi-C, was published in 2014 as a technique for obtaining full-genome
+proximity data while keeping the cell nucleus intact (Rao <em>et al</em>., 2014). This method uses a restriction
+enzyme to cleave DNA before linking.  The second protocol, Micro-C XL, is an update to the Micro-C
+method of obtaining chromatin conformation data (Hsieh <em>et al</em>., 2016, Hsieh <em>et al</em>., 2015),
+and has largely supplanted the original.  Both the original Micro-C and the updated version are variants
+of Hi-C chromatin conformation capture that use micrococcal nuclease to segment the genome before linking.
+This results in data sets with resolution down to the nucleosome level.  The original Micro-C method had
+difficulty recovering higher order interactions, and the updated protocol makes use of additional
+cross-linking chemicals to address that issue.
+</p><p>
+We downloaded the .hic contact matrix files with the following accessions from the 4D Nucleome
+Data Portal:
+<a href="https://data.4dnucleome.org/files-processed/4DNFI18Q799K/" target="_blank">4DNFI18Q799K</a>,
+<a href="https://data.4dnucleome.org/files-processed/4DNFI2TK7L2F/" target="_blank">4DNFI2TK7L2F</a>,
+<a href="https://data.4dnucleome.org/files-processed/4DNFIFLJLIS5/" target="_blank">4DNFIFLJLIS5</a>,
+and <a href="https://data.4dnucleome.org/files-processed/4DNFIQYQWPF5/" target="_blank">4DNFIQYQWPF5</a>.
+The files are parsed for display using the <a href="https://github.com/aidenlab/straw"
+target="_blank">Straw</a> library from the <a href="http://aidenlab.org/" target="_blank">Aiden lab</a>
+at Baylor College of Medicine.
+</p><p>
+<h2>References</h2>
+Hsieh TS, Fudenberg G, Goloborodko A, Rando OJ.
+<a href="http://dx.doi.org/10.1038/nmeth.4025" target="_blank">
+Micro-C XL: assaying chromosome conformation from the nucleosome to the entire genome</a>.
+<em>Nat Methods</em>. 2016 Dec;13(12):1009-1011.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27723753" target="_blank">27723753</a>
+</p><p>
+Knight P, Ruiz D.
+<a href="https://doi.org/10.1093/imanum/drs019" target="_blank">
+A fast algorithm for matrix balancing</a>.
+<em>IMA J Numer Anal</em>. 2013 Jul;33(3):1029-1047.
+</p><p>
+Krietenstein N, Abraham S, Venev SV, Abdennur N, Gibcus J, Hsieh TS, Parsi KM, Yang L, Maehr R,
+Mirny LA <em>et al</em>.
+<a href="https://doi.org/10.1101/639922" target="_blank">
+Ultrastructural details of mammalian chromosome architecture</a>.
+<em>bioRxiv</em> 639922. Preprint.
+</p><p>
+Lieberman-Aiden E, van Berkum NL, Williams L, Imakaev M, Ragoczy T, Telling A, Amit I, Lajoie BR,
+Sabo PJ, Dorschner MO <em>et al</em>.
+<a href="http://www.sciencemag.org/cgi/pmidlookup?view=long&amp;pmid=19815776" target="_blank">
+Comprehensive mapping of long-range interactions reveals folding principles of the human genome</a>.
+<em>Science</em>. 2009 Oct 9;326(5950):289-93.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/19815776" target="_blank">19815776</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2858594/" target="_blank">PMC2858594</a>
+</p><p>
+Rao SS, Huntley MH, Durand NC, Stamenova EK, Bochkov ID, Robinson JT, Sanborn AL, Machol I, Omer AD,
+Lander ES <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(14)01497-4" target="_blank">
+A 3D map of the human genome at kilobase resolution reveals principles of chromatin looping</a>.
+<em>Cell</em>. 2014 Dec 18;159(7):1665-80.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25497547" target="_blank">25497547</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5635824/" target="_blank">PMC5635824</a>
+</p>

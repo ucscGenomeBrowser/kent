@@ -201,6 +201,8 @@ if ((filter = bigBedMakeNumberFilter(cart, bbi, tg->tdb, PVALUE_FILTER, NULL, "p
     slAddHead(&filters, filter);
 if ((filter = bigBedMakeNumberFilter(cart, bbi, tg->tdb, QVALUE_FILTER, NULL, "qValue")) != NULL)
     slAddHead(&filters, filter);
+if (filters || compositeChildHideEmptySubtracks(cart, tg->tdb, NULL, NULL))
+   labelTrackAsFiltered(tg);
 
 for (bb = bbList; bb != NULL; bb = bb->next)
     {

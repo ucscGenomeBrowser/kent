@@ -3649,9 +3649,12 @@ return field;
 filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct asObject *as, char *filterName, char *name)
 /* Build a filterBy_t structure from a <column>FilterValues statement. */
 {
-char *setting = trackDbSetting(tdb, filterName);
-char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting);
 char *field = extractFieldName(filterName, FILTER_VALUES_NAME);
+char *setting = trackDbSetting(tdb, filterName);
+if (isEmpty(setting))
+    errAbort("FilterValues setting of field '%s' must have a value.", field);
+
+char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting);
 
 filterBy_t *filterBy;
 AllocVar(filterBy);
@@ -5061,17 +5064,30 @@ return TRUE;
 }
 
 boolean compositeHideEmptySubtracks(struct cart *cart, struct trackDb *tdb,
-                                        char **retMutiBedFile, char **retSubtrackIdFile)
+                                        char **retMultiBedFile, char **retSubtrackIdFile)
 /* Parse hideEmptySubtracks setting and check cart
  * Return TRUE if we should hide empties
  */
 {
 boolean deflt = FALSE;
-if (!compositeHideEmptySubtracksSetting(tdb, &deflt, retMutiBedFile, retSubtrackIdFile))
+if (!compositeHideEmptySubtracksSetting(tdb, &deflt, retMultiBedFile, retSubtrackIdFile))
     return FALSE;
 char buf[128];
 safef(buf, sizeof buf, "%s.%s", tdb->track, SUBTRACK_HIDE_EMPTY);
 return cartUsualBoolean(cart, buf, deflt);
+}
+
+boolean compositeChildHideEmptySubtracks(struct cart *cart, struct trackDb *childTdb,
+                                        char **retMultiBedFile, char **retSubtrackIdFile)
+/* Parse hideEmptySubtracks setting and check cart
+ * Return TRUE if we should hide empties
+ */
+{
+struct trackDb *tdb = tdbGetComposite(childTdb);
+if (!tdb)
+    return FALSE;
+return compositeHideEmptySubtracks(cart, tdb, retMultiBedFile, retSubtrackIdFile);
+
 }
 
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb)

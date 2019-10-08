@@ -14,21 +14,21 @@ endif
 
 my:: compile 
 	mkdir -p ${CGI_BIN_USER}/pyLib/
-	rm -f ${CGI_BIN_USER}/pyLib/hgLib.{py,pyc,pyo}
+	rm -f ${CGI_BIN_USER}/pyLib/{hgLib.{py,pyc,pyo},six.*} 
 	cp -p hgLib.py ${CGI_BIN_USER}/pyLib/hgLib.py
 	cp -p hgLib.pyo ${CGI_BIN_USER}/pyLib/hgLib.pyo
 	cp -p six.* ${CGI_BIN_USER}/pyLib/
 	
 beta:: compile
 	mkdir -p ${CGI_BIN_BETA}/pyLib/
-	rm -f ${CGI_BIN_BETA}/pyLib/hgLib.{py,pyc,pyo}
+	rm -f ${CGI_BIN_BETA}/pyLib/{hgLib.{py,pyc,pyo},six.*} 
 	cp -p hgLib.py ${CGI_BIN_BETA}/pyLib/hgLib.py
 	cp -p hgLib.pyo ${CGI_BIN_BETA}/pyLib/hgLib.pyo
 	cp -p six.* ${CGI_BIN_BETA}/pyLib/
 	
 alpha:: compile
 	mkdir -p ${CGI_BIN}/pyLib/
-	rm -f ${CGI_BIN}/pyLib/hgLib.{py,pyc,pyo}
+	rm -f ${CGI_BIN}/pyLib/{hgLib.{py,pyc,pyo},six.*} 
 	cp -p hgLib.py ${CGI_BIN}/pyLib/hgLib.py
 	cp -p hgLib.pyo ${CGI_BIN}/pyLib/hgLib.pyo
 	cp -p six.* ${CGI_BIN}/pyLib/
