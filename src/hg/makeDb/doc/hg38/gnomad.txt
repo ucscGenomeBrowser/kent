@@ -1,0 +1,52 @@
+# gnomaAD for hg38
+# RM 21782
+
+# Genome Aggregation Database at the Broad
+# https://gnomad.broadinstitute.org
+
+# (2019-10-07 kate)
+
+# March 6, 2019: gnomAD 2.1.1
+
+mkdir vcf; cd vcf
+
+# hg38
+
+mkdir hg38; cd hg38
+mkdir -p /gbdb/hg38/gnomAD/vcf
+
+# Download from GRCh38 liftover section of downloads page:
+https://gnomad.broadinstitute.org/downloads#variants-grch38-liftover
+
+wget https://storage.googleapis.com/gnomad-public/release/2.1.1/README.txt
+
+# Exome variants
+
+# vcf
+# 85.31 GiB, MD5: cff8d0cfed50adc9211d1feaed2d4ca7
+wget https://storage.googleapis.com/gnomad-public/release/2.1.1/liftover_grch38/vcf/exomes/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgz >&! wget.exomes.log &
+
+du -sh *.bgz
+# 171G    gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgz
+
+md5sum gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgz
+# cff8d0cfed50adc9211d1feaed2d4ca7  gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgz
+
+ln -s `pwd`/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgz /gbdb/hg38/gnomAD/vcf/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.gz
+
+# index file
+wget https://storage.googleapis.com/gnomad-public/release/2.1.1/liftover_grch38/vcf/exomes/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgz.tbi
+
+ln -s `pwd`/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgz.tbi /gbdb/hg38/gnomAD/vcf/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.gz.tbi
+
+# Genomes Variants
+# 743.06 GiB, MD5: 83de3d5b52669f714e810d4fcf047c18
+wget https://storage.googleapis.com/gnomad-public/release/2.1.1/liftover_grch38/vcf/genomes/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.bgz >&! wget.genomes.log &
+ln -s `pwd`/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.bgz /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.gz
+
+wget https://storage.googleapis.com/gnomad-public/release/2.1.1/liftover_grch38/vcf/genomes/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.bgz.tbi
+ln -s `pwd`/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.bgz.tbi /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.gz.tbi
+
+#################
+Use/adapt trackDb and HTML from hg19 track
+
