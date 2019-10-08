@@ -658,6 +658,18 @@ skipInvalid yes
     cat fb.papAnu4.chainRBestMm10Link.txt
     # 874097827 bases of 2937004939 (29.762%) in intersection
 
+    # a download file was missing (DONE - 2019-03-29 - Hiram)
+    cd /hive/data/genomes/papAnu4/bed/lastz.mm10/axtChain
+
+    time netToAxt papAnu4.mm10.rbest.net.gz papAnu4.mm10.rbest.chain.gz \
+    /hive/data/genomes/papAnu4/papAnu4.2bit /hive/data/genomes/mm10/mm10.2bit stdout \
+    | axtSort stdin stdout \
+    | gzip -c > ../axtRBestNet/papAnu4.mm10.rbest.axt.gz
+
+    # real    10m29.580s
+    # user    9m16.998s
+    # sys     0m33.232s
+
 ##############################################################################
 # Create kluster run files (DONE - 2018-01-08 - Hiram)
 
