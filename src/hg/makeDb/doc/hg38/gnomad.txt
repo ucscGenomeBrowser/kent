@@ -26,6 +26,10 @@ wget https://storage.googleapis.com/gnomad-public/release/2.1.1/README.txt
 # 85.31 GiB, MD5: cff8d0cfed50adc9211d1feaed2d4ca7
 wget https://storage.googleapis.com/gnomad-public/release/2.1.1/liftover_grch38/vcf/exomes/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgz >&! wget.exomes.log &
 
+# from log: 20 minutes download time
+# --2019-10-07 16:40:48--  https://storage.googleapis.com/gnomad-public/release/2.1.1/liftover_grch38/vcf/exomes/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgz
+# 2019-10-07 17:00:52 (72.6 MB/s) - 'gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgz' saved [91604348731/91604348731]
+
 du -sh *.bgz
 # 171G    gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgz
 
@@ -42,6 +46,11 @@ ln -s `pwd`/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgz.tbi /gbdb/hg38/gn
 # Genomes Variants
 # 743.06 GiB, MD5: 83de3d5b52669f714e810d4fcf047c18
 wget https://storage.googleapis.com/gnomad-public/release/2.1.1/liftover_grch38/vcf/genomes/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.bgz >&! wget.genomes.log &
+
+# from log:  3 hrs download time
+#--2019-10-07 17:03:11--  https://storage.googleapis.com/gnomad-public/release/2.1.1/liftover_grch38/vcf/genomes/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.bgz
+# 2019-10-07 20:02:56 (70.6 MB/s) - 'gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.bgz' saved [797851733355/797851733355]
+
 ln -s `pwd`/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.bgz /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.gz
 
 wget https://storage.googleapis.com/gnomad-public/release/2.1.1/liftover_grch38/vcf/genomes/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.bgz.tbi
