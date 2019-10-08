@@ -6641,3 +6641,29 @@ ln -s /hive/data/outside/cosmic/hg38/v82/cosMutHg38V82.bb .
     featureBits -countGaps hg38 rmskJoinedCurrent
     # 2796899855 bases of 3209286105 (87.150%) in intersection
 #########################################################################
+# Hi-C Visualization based on Krietenstein 2019 (DONE - 2019-10-07 - Jonathan)
+mkdir -p /hive/data/genomes/hg38/bed/hic
+cd /hive/data/genomes/hg38/bed/hic
+
+# Files are located on 4D Nucleome (data.4dnucleome.org).  The URL for the paper on that
+# site is https://data.4dnucleome.org/publications/b13590b2-a341-4e5e-ad5e-72e233b32e9d/.
+# The four file IDs downloaded below are for contact matrix .hic files created for
+# different cell-line/protocol combinations
+wget 'https://data.4dnucleome.org/files-processed/4DNFI2TK7L2F/@@download/4DNFI2TK7L2F.hic' # H1-hESC Micro-C XL
+wget 'https://data.4dnucleome.org/files-processed/4DNFIQYQWPF5/@@download/4DNFIQYQWPF5.hic' # H1-hESC in situ
+wget 'https://data.4dnucleome.org/files-processed/4DNFI18Q799K/@@download/4DNFI18Q799K.hic' # HFFc6 Micro-C XL
+wget 'https://data.4dnucleome.org/files-processed/4DNFIFLJLIS5/@@download/4DNFIFLJLIS5.hic' # HFFc6 in situ
+
+printf "All files were downloaded from the 4D Nucleome Data Portal at data.4dnucleome.org.
+These are processed contact matrices from Krietenstein et al. (2019) Ultrastructural details
+of mammalian chromosme architecture. (https://www.biorxiv.org/content/10.1101/639922v1).
+
+4DNFI2TK7L2F.hic - Micro-C XL data set on H1-hESC
+4DNFIQYQWPF5.hic - in situ Hi-C data set on H1-hESC
+4DNFI18Q799K.hic - Micro-C  XL data set on HFFc6
+4DNFIFLJLIS5.hic - in situ Hi-C data set on HFFc6" > README.txt
+
+mkdir -p /gbdb/hg38/bbi/hic
+cd /gbdb/hg38/bbi/hic
+ln -s /hive/data/genomes/hg38/bed/hic/* .
+#########################################################################

@@ -1,0 +1,34 @@
+track hicAndMicroC
+shortLabel Hi-C and Micro-C
+longLabel Comparison of Micro-C and In situ Hi-C protocols in H1-hESC and HFFc6
+compositeTrack on
+group regulation
+type hic
+
+track h1hescMicroC
+shortLabel H1-hESC Micro-C
+longLabel Micro-C Chromatin Structure on H1-hESC
+type hic
+parent hicAndMicroC on
+bigDataUrl /gbdb/hg38/bbi/hic/4DNFI2TK7L2F.hic
+
+track h1hescInsitu
+shortLabel H1-hESC In situ
+longLabel In situ Hi-C Chromatin Structure on H1-hESC
+type hic
+parent hicAndMicroC off
+bigDataUrl /gbdb/hg38/bbi/hic/4DNFIQYQWPF5.hic
+
+track hffc6MicroC
+shortLabel HFFc6 Micro-C
+longLabel Micro-C Chromatin Structure on HFFc6
+type hic
+parent hicAndMicroC off
+bigDataUrl /gbdb/hg38/bbi/hic/4DNFI18Q799K.hic
+
+track hffc6Insitu
+shortLabel HFFc6 In situ
+longLabel In situ Hi-C Chromatin Structure on HFFc6
+type hic
+parent hicAndMicroC off
+bigDataUrl /gbdb/hg38/bbi/hic/4DNFIFLJLIS5.hic

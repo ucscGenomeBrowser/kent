@@ -710,6 +710,8 @@ include encode3.ra
 
 include wgEncodeReg.dev.ra alpha
 
+include hic.ra
+
 track gnomadVariants
 compositeTrack on
 shortLabel gnomAD Variants
@@ -739,5 +741,4 @@ html gnomad
     showHardyWeinberg on
     configureByPopup off
     bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.gz
-
 
