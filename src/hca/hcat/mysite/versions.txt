@@ -93,3 +93,7 @@
       - It's not visible in code but in database I adjusted some tables to view only for wranglers
         at their request including species.
       - Buried Grant and Wrangler behind an x in the admin list since these are also seldom used.
+      - Renaming AssayTech to CdnaLibraryPrep
+      - Making title field have more space
+      - Rearranging top part of Project details page in admin.
+      - See issues 1-5 for even more detail.
