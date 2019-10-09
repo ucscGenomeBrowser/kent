@@ -6,7 +6,7 @@ group varRep
 dataVersion Release 2017-1.0
 configureByPopup off
 type vcfTabix
-html platinumGenomes
+html ../platinumGenomes
 
 track platinumNA12877
 parent platinumGenomes
