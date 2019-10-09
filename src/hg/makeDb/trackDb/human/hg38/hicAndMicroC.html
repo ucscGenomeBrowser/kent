@@ -72,9 +72,12 @@ heatmap files like the .hic files used by this track.
 The first protocol, in situ Hi-C, was published in 2014 as a technique for obtaining full-genome
 proximity data while keeping the cell nucleus intact (Rao <em>et al</em>., 2014). This method uses a restriction
 enzyme to cleave DNA before linking.  The second protocol, Micro-C XL, is an update to the Micro-C
-method of obtaining chromatin conformation data (Hsieh <em>et al</em>., 2016).  In Micro-C XL, micrococcal
-nuclease is used to segment the genome before linking.  Micro-C XL also uses a secondary crosslinker
-in addition to formaldehyde to help preserve chromatin proximity.
+method of obtaining chromatin conformation data (Hsieh <em>et al</em>., 2016, Hsieh <em>et al</em>., 2015),
+and has largely supplanted the original.  Both the original Micro-C and the updated version are variants
+of Hi-C chromatin conformation capture that use micrococcal nuclease to segment the genome before linking.
+This results in data sets with resolution down to the nucleosome level.  The original Micro-C method had
+difficulty recovering higher order interactions, and the updated protocol makes use of additional
+cross-linking chemicals to address that issue.
 </p><p>
 We downloaded the .hic contact matrix files with the following accessions from the 4D Nucleome
 Data Portal:
