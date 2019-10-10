@@ -76,6 +76,8 @@ struct slName *el = newSlName("bed");
 slAddHead(&supportedTypes, el);
 el = newSlName("wig");
 slAddHead(&supportedTypes, el);
+el = newSlName("wigMaf");
+slAddHead(&supportedTypes, el);
 el = newSlName("broadPeak");
 slAddHead(&supportedTypes, el);
 el = newSlName("narrowPeak");

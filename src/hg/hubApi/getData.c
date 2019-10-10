@@ -201,7 +201,7 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
     struct chromInfo *ci = hGetChromInfo(db, chrom);
     jsonWriteNumber(jw, "start", (long long)0);
     jsonWriteNumber(jw, "end", (long long)ci->size);
-    if (tdb && startsWith("wig", tdb->type))
+    if (tdb && isWiggleDataTable(tdb->type))
 	{
 	if (jsonOutputArrays || debug)
 	    wigColumnTypes(jw);
@@ -224,7 +224,7 @@ else	/* fully specified chrom:start-end */
 	apiErrAbort(err400, err400Msg, "track '%s' is not a position track, request track without chrom and start,end specifications, genome: '%s'", track, db);
 
     jsonWriteString(jw, "chrom", chrom);
-    if (tdb && startsWith("wig", tdb->type))
+    if (tdb && isWiggleDataTable(tdb->type))
 	{
 	if (jsonOutputArrays || debug)
 	    wigColumnTypes(jw);
@@ -288,7 +288,7 @@ if (isEmpty(chrom))
 	    }
 	else
 	    sqlDyStringPrintf(query, "select * from %s", splitSqlTable);
-	if (tdb && startsWith("wig", tdb->type))
+	if (tdb && isWiggleDataTable(tdb->type))
             itemsDone += wigTableDataOutput(jw, db, splitSqlTable, chrom,
 		start, end, itemsDone);
 	else
@@ -415,7 +415,7 @@ if (itemCount >= maxItemsOutput)
 return itemCount;
 }	/*	static unsigned wigDataOutput(...) */
 
-static void wigData(struct jsonWrite *jw, struct bbiFile *bwf, char *chrom,
+static void bigWigData(struct jsonWrite *jw, struct bbiFile *bwf, char *chrom,
     unsigned start, unsigned end)
 /* output the data for a bigWig bbi file */
 {
@@ -540,7 +540,7 @@ else if (startsWith("bigWig", thisTrack->type))
     if (jsonOutputArrays || debug)
 	wigColumnTypes(jw);
     jsonWriteObjectStart(jw, track);
-    wigData(jw, bbi, chrom, uStart, uEnd);
+    bigWigData(jw, bbi, chrom, uStart, uEnd);
     jsonWriteObjectEnd(jw);
     }
 bbiFileClose(&bbi);
@@ -752,7 +752,7 @@ else if (thisTrack && startsWith("bigWig", thisTrack->type))
 	wigColumnTypes(jw);
 
     jsonWriteObjectStart(jw, track);
-    wigData(jw, bbi, chrom, uStart, uEnd);
+    bigWigData(jw, bbi, chrom, uStart, uEnd);
     jsonWriteObjectEnd(jw);
     bbiFileClose(&bbi);
     }
