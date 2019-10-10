@@ -221,9 +221,9 @@ test21: setOutput
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing genePred track
-#    /getData/track?genome=ce11&chrom=chrV&track=refGene&start=5231045&end=5241045
+#    /getData/track?genome=ce11&chrom=chrV&track=augustusGene&start=5231045&end=5241045
 test26: setOutput
-	@./jsonConsumer.pl -endpoint="/getData/track" -genome="ce11" -track="refGene"  -chrom="chrV" -start=5231045 -end=5241045 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome="ce11" -track="augustusGene"  -chrom="chrV" -start=5231045 -end=5241045 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing PSL track
