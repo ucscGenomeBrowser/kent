@@ -431,6 +431,8 @@ if (NULL == thisTrack)	/* OK to work with tables without trackDb definitions */
     if (! sqlTableExists(conn, track))
 	apiErrAbort(err400, err400Msg, "failed to find specified track=%s in genome=%s for endpoint '/list/schema'", track, db);
     }
+else if ( ! isSupportedType(thisTrack->type))
+    apiErrAbort(err415, err415Msg, "track type '%s' for track=%s not supported at this time", thisTrack->type, track);
 
 if (trackHasNoData(thisTrack))
     apiErrAbort(err400, err400Msg, "container track '%s' does not contain data, use the children of this container for data access", track);
@@ -477,19 +479,30 @@ if (thisTrack && startsWith("big", thisTrack->type))
     if (bigDataUrl)
 	bbi = bigFileOpen(thisTrack->type, bigDataUrl);
     if (NULL == bbi)
-	apiErrAbort(err400, err400Msg, "failed to find bigDataUrl=%s for track=%s in database=%s for endpoint '/list/schema'", bigDataUrl, track, db);
+	apiErrAbort(err400, err400Msg, "failed to find bigDataUrl=%s for track=%s type=%s in database=%s for endpoint '/list/schema'", bigDataUrl, track, thisTrack->type, db);
     }
 
-char *dataTime = sqlTableUpdate(conn, splitTableName);
-
-time_t dataTimeStamp = sqlDateToUnixTime(dataTime);
-replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "genome", db);
 jsonWriteString(jw, "track", track);
+
+time_t dataTimeStamp = 0;
+char *dataTime = NULL;
+
+if (bbi)
+    {
+    dataTimeStamp = bbiUpdateTime(bbi);
+    dataTime = sqlUnixTimeToDate(&dataTimeStamp, FALSE);
+    }
+else
+    {
+    dataTime = sqlTableUpdate(conn, splitTableName);
+    dataTimeStamp = sqlDateToUnixTime(dataTime);
+    }
+
+replaceChar(dataTime, ' ', 'T');	/* ISO 8601 */
 jsonWriteString(jw, "dataTime", dataTime);
 jsonWriteNumber(jw, "dataTimeStamp", (long long)dataTimeStamp);
-freeMem(dataTime);
 
 char **columnNames = NULL;
 char **columnTypes = NULL;
@@ -749,7 +762,7 @@ static void recursiveTrackList(struct jsonWrite *jw, struct trackDb *tdb,
  * recursive when subtracks exist
  */
 {
-boolean isContainer = tdbIsComposite(tdb) || tdbIsCompositeView(tdb);
+boolean isContainer = trackHasNoData(tdb);
 
 /* do *NOT* print containers when 'trackLeavesOnly' requested */
 if (! (trackLeavesOnly && isContainer) )

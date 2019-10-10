@@ -344,8 +344,11 @@ boolean allowedBigBedType(char *type)
  * add to this list as the big* bed-like supported types are expanded
  */
 {
-if (startsWithWord("bigBed", type) ||
+if (startsWithWord("bigBarChart", type) ||
+    startsWithWord("bigBed", type) ||
     startsWithWord("bigGenePred", type) ||
+    startsWithWord("bigInteract", type) ||
+    startsWithWord("bigLolly", type) ||
     startsWithWord("bigPsl", type)
    )
     return TRUE;
