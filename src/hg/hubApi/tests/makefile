@@ -5,13 +5,14 @@ all:: test0 listFunctions getFunctions listSchema getSequence wigData \
 	supportedTypes errorTests notSupported bugReports
 
 listFunctions: list01 list02 list03 list04 list05 list06 list07 list08 list09 \
-	list10 list11 list12 list13 list14 list15 list16
+	list10 list11 list12 list13 list14 list15 list16 list17 list18
 
 getFunctions: test8 test9 test10 test11 test12 test13 test14 \
 	test15 test16 test19 test21 test26 test27 test28 \
-	test29 test39 test40
+	test29 test39 test40 test41 test42 test43 test44
 
-listSchema: schema01 schema02 schema03 schema04 schema05 schema06 schema07
+listSchema: schema01 schema02 schema03 schema04 schema05 schema06 schema07 \
+	schema08
 
 getSequence: getSeq01 getSeq02 getSeq03 getSeq04 getSeq05
 
@@ -160,11 +161,16 @@ list16: setOutput
 	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="equCab3" -track="transMapEnsemblV5" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
-# ./hubApi track=gc5BaseBw genome=rheMac10
-
+# list chromosomes for a bigWig track=gc5BaseBw genome=rheMac10
 list17: setOutput
 	@printf "### $@ 'https://api-test.gi.ucsc.edu/list/chromosomes?track=gc5BaseBw;genome=rheMac10'\n"
 	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="rheMac10" -track="gc5BaseBw" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# list chromosomes for a wigMaf table track=multiz7way genome=hg38
+list18: setOutput
+	@printf "### $@ 'https://api-test.gi.ucsc.edu/list/chromosomes?track=multiz7way;genome=hg38'\n"
+	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="hg38" -track="multiz7way" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 ##########################   getData functions  #############################
@@ -267,6 +273,24 @@ test41: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track=mane -maxItemsOutput=5 -jsonOutputArrays | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
+# get data from wigMaf database table
+test42: setOutput
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?track=multiz7way;genome=hg38;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track=multiz7way -maxItemsOutput=5 -jsonOutputArrays | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# get data from wigMaf database table with chrom specified
+test43: setOutput
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?track=multiz7way;genome=hg38;jsonOutputArrays=1;maxItemsOutput=5;chrom=chr22'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track=multiz7way -maxItemsOutput=5 -jsonOutputArrays -chrom=chr22 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# get data from wigMaf database table with chrom and start,end specified
+test44: setOutput
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?track=multiz7way;genome=hg38;jsonOutputArrays=1;maxItemsOutput=5;chrom=chr21;start=20000000;end=30000000'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track=multiz7way -maxItemsOutput=5 -jsonOutputArrays -chrom=chr21 -start=20000000 -end=30000000 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
 ###############################################################################
 #  /getData/sequence testing
 ###############################################################################
@@ -339,6 +363,12 @@ schema06: setOutput
 schema07: setOutput
 	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/schema?track=gc5BaseBw;genome=ce11'\n"
 	@./jsonConsumer.pl -endpoint="/list/schema" -genome="ce11" -track=gc5BaseBw | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# list schema for wigMaf table type
+schema08: setOutput
+	@printf "### $@ 'https://api-test.gi.ucsc.edu/list/schema?track=multiz7way;genome=hg38'\n"
+	@./jsonConsumer.pl -endpoint="/list/schema" -genome="hg38" -track=multiz7way | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 ###############################################################################
