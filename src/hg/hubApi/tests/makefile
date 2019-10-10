@@ -9,10 +9,10 @@ listFunctions: list01 list02 list03 list04 list05 list06 list07 list08 list09 \
 
 getFunctions: test8 test9 test10 test11 test12 test13 test14 \
 	test15 test16 test19 test21 test26 test27 test28 \
-	test29 test39 test40 test41 test42 test43 test44
+	test29 test39 test40 test41 test42 test43 test44 test45 test46 test47
 
 listSchema: schema01 schema02 schema03 schema04 schema05 schema06 schema07 \
-	schema08
+	schema08 schema09
 
 getSequence: getSeq01 getSeq02 getSeq03 getSeq04 getSeq05
 
@@ -291,6 +291,24 @@ test44: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track=multiz7way -maxItemsOutput=5 -jsonOutputArrays -chrom=chr21 -start=20000000 -end=30000000 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
+# get data from bigLolly track
+test45: setOutput
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?track=BLCA;genome=hg38;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track=BLCA -maxItemsOutput=5 -jsonOutputArrays | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# get data from bigLolly track with chrom specified
+test46: setOutput
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?track=BLCA;genome=hg38;jsonOutputArrays=1;maxItemsOutput=5;chrom=chr22'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track=BLCA -maxItemsOutput=5 -jsonOutputArrays -chrom=chr22 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# get data from bigLolly track with chrom and start,end specified
+test47: setOutput
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?track=BLCA;genome=hg38;jsonOutputArrays=1;maxItemsOutput=5;chrom=chr21;start=20000000;end=30000000'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track=BLCA -maxItemsOutput=5 -jsonOutputArrays -chrom=chr21 -start=20000000 -end=30000000 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
 ###############################################################################
 #  /getData/sequence testing
 ###############################################################################
@@ -369,6 +387,12 @@ schema07: setOutput
 schema08: setOutput
 	@printf "### $@ 'https://api-test.gi.ucsc.edu/list/schema?track=multiz7way;genome=hg38'\n"
 	@./jsonConsumer.pl -endpoint="/list/schema" -genome="hg38" -track=multiz7way | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# list schema for bigLolly table type
+schema09: setOutput
+	@printf "### $@ 'https://api-test.gi.ucsc.edu/list/schema?track=BLCA;genome=hg38'\n"
+	@./jsonConsumer.pl -endpoint="/list/schema" -genome="hg38" -track=BLCA | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 ###############################################################################

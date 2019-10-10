@@ -86,6 +86,8 @@ el = newSlName("bigBed");
 slAddHead(&supportedTypes, el);
 el = newSlName("bigWig");
 slAddHead(&supportedTypes, el);
+el = newSlName("bigLolly");
+slAddHead(&supportedTypes, el);
 el = newSlName("bigNarrowPeak");
 slAddHead(&supportedTypes, el);
 el = newSlName("bigGenePred");
