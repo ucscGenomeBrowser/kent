@@ -66,9 +66,12 @@ list02: setOutput
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/tracks?genome=ce11 trackLeavesOnly=1
+# the grep " : {" will pick out just the track names to compare, so that
+# the changing genbank tables do not mess up the comparison, this will only
+# be comparing the track listing
 list03: setOutput
 	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/tracks?trackLeavesOnly=1;genome=ce11'\n"
-	@./jsonConsumer.pl -endpoint="/list/tracks" -genome="ce11" -trackLeavesOnly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -endpoint="/list/tracks" -genome="ce11" -trackLeavesOnly 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | grep " : {" | sort | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/chromosomes?genome=ce11
@@ -102,9 +105,12 @@ list08: setOutput
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/tracks?genome=ce11
+# the grep " : {" will pick out just the track names to compare, so that
+# the changing genbank tables do not mess up the comparison, this will only
+# be comparing the track listing
 list09: setOutput
 	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/hubApi/list/tracks?genome=ce11'\n"
-	@./jsonConsumer.pl -endpoint="/list/tracks" -genome="ce11" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@./jsonConsumer.pl -endpoint="/list/tracks" -genome="ce11" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | grep " : {" | sort | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # testing /list/chromosomes?genome=ce11&track=mrna SQL table name is all_mrna
