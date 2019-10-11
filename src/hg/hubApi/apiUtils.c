@@ -344,8 +344,11 @@ boolean allowedBigBedType(char *type)
  * add to this list as the big* bed-like supported types are expanded
  */
 {
-if (startsWithWord("bigBed", type) ||
+if (startsWithWord("bigBarChart", type) ||
+    startsWithWord("bigBed", type) ||
     startsWithWord("bigGenePred", type) ||
+    startsWithWord("bigInteract", type) ||
+    startsWithWord("bigLolly", type) ||
     startsWithWord("bigPsl", type)
    )
     return TRUE;
@@ -491,8 +494,6 @@ boolean isSupportedType(char *type)
 /* is given type in the supportedTypes list ? */
 {
 boolean ret = FALSE;
-if (startsWith("wigMaf", type))	/* not wigMaf at this time */
-    return ret;
 struct slName *el;
 for (el = supportedTypes; el; el = el->next)
     {
@@ -540,7 +541,7 @@ void outputSchema(struct trackDb *tdb, struct jsonWrite *jw,
 	    struct asColumn *columnEl)
 /* print out the SQL schema for this trackDb */
 {
-if (tdb && startsWith("wig", tdb->type))
+if (tdb && isWiggleDataTable(tdb->type))
     {
         wigColumnTypes(jw);
     }
@@ -649,4 +650,18 @@ else
 	}
     }
 return ret;
+}
+
+boolean isWiggleDataTable(char *type)
+/* is this a wiggle data track table */
+{
+if (startsWith("wig", type))
+    {
+    if (startsWith("wigMaf", type))
+	return FALSE;
+    else
+	return TRUE;
+    }
+else
+     return FALSE;
 }
