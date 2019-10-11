@@ -70,7 +70,7 @@ hashElFreeList(&list);
 char *fileTableFields = NULL;
 char *visibleFacetFields = NULL;
 #define FILEFIELDS "file_name,file_size,ucsc_db"
-#define FILEFACETFIELDS "species,assay,format,output,organ_anatomical_name,lab,data_set_id,biosample_cell_type,read_size,sample_label"
+#define FILEFACETFIELDS "species,assay,format,output,organ_anatomical_name,lab,data_set_id,biosample_cell_type,sample_label"
 
 struct dyString *printPopularTags(struct hash *hash, int maxSize)
 /* Get all hash elements, sorted by count, and print all the ones that fit */
