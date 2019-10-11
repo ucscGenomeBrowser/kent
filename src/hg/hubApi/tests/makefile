@@ -33,8 +33,7 @@ errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
 	err31 err32 err33 err34 err35 err36 err37 err38 err39 err40 \
 	err41 err42 err43 err44 err45 err46
 
-notSupported: notSup01 notSup02 notSup03 notSup04 notSup05 notSup06 \
-	notSup07 notSup08 notSup09 notSup10
+notSupported: notSup01 notSup02 notSup03 notSup07 notSup10
 
 bugReports: redmine23733 redmine24089a redmine24089b
 
@@ -1017,40 +1016,10 @@ notSup03: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg19 -track="hapmapLdPhCeu" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
-# request a track type that is not yet supported: bigBarChart
-notSup04: setOutput
-	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=gtexTranscExpr;genome=hg38'\n"
-	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track="gtexTranscExpr" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-
-# request a track type that is not yet supported: bigLolly
-notSup05: setOutput
-	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=allCancer;genome=hg38'\n"
-	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track="allCancer" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-
-# request a track type that is a container, not a data track
-notSup06: setOutput
-	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=gdcCancer;genome=hg38'\n"
-	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track="gdcCancer" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-
 # request chromosome list from a track that is a container, not a data track
 notSup07: setOutput
 	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=gdcCancer;genome=hg38'\n"
 	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome=hg38 -track="gdcCancer" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-
-# request chromosome list from a track that is a container, not a data track
-notSup08: setOutput
-	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=allCancer;genome=hg38'\n"
-	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome=hg38 -track="allCancer" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-
-# clonePos does not have an 'as' definiton in tableDescriptions
-notSup09: setOutput
-	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=clonePos;genome=hg19'\n"
-	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="hg19" -track="clonePos" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # hapmapLdPhCeu does not have an 'as' definiton in tableDescriptions
