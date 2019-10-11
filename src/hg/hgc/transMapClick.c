@@ -232,7 +232,7 @@ int bbFieldCount = bigBedIntervalToRow(bb, chrom, startBuf, endBuf, fields,
 if (bbFieldCount != BIGTRANSMAP_NUM_COLS)
     errAbort("expected %d fields in bigTransMap record, got %d in %s",
              BIGTRANSMAP_NUM_COLS, bbFieldCount, fileName);
-bag->psl = pslFromBigPsl(chrom, bb, 0, NULL, NULL); 
+bag->psl = pslFromBigPsl(chrom, bb, NULL, NULL); 
 bag->meta = bigTransMapLoad(fields);
 bag->srcSet = getGeneSrcSet(tdb);
 bag->srcDbIsActive = hDbIsActive(bag->meta->srcDb);

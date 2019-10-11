@@ -17,10 +17,12 @@
 
 
 /* the lolly colors */
+/*
 static int lollyPalette[] =
 {
 0x1f77b4, 0xff7f0e, 0x2ca02c, 0xd62728, 0x9467bd, 0x8c564b, 0xe377c2, 0x7f7f7f, 0xbcbd22, 0x17becf
 };
+*/
 
 struct lolly
 {
@@ -171,7 +173,9 @@ return a->height - b->height;
 void lollyLoadItems(struct track *tg)
 // load lollies from the data file
 {
+#ifdef NOTNOW
 struct lollyCartOptions *lollyCart = tg->lollyCart;
+boolean itemRgb = (trackDbSetting(tg->tdb, "itemRgb") != NULL);
 if (tg->visibility == tvSquish)
     {
     lollyCart->radius = 2;
@@ -188,6 +192,9 @@ unsigned lollyField = 5;  // we use the score field by default
 char *setting = trackDbSetting(tg->tdb, "lollyField");
 if (setting != NULL)
     lollyField = atoi(setting);
+
+if (lollyField >= bbi->fieldCount)
+    errAbort("lollyField is greater than the number of fields in bigBed.");
 
 double minVal = DBL_MAX, maxVal = -DBL_MAX;
 //double sumData = 0.0, sumSquares = 0.0;
@@ -218,7 +225,10 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     pop->val = val;
     pop->start = atoi(bedRow[1]);
     pop->end = atoi(bedRow[2]);
-    pop->name = cloneString(bedRow[3]);
+    if (bbi->fieldCount >= 4)
+        pop->name = cloneString(bedRow[3]);
+    if (bbi->fieldCount >= 9)
+        pop->color = atoi(bedRow[8]) | 0xff000000;
     count++;
     // sumData += val;
     // sumSquares += val * val;
@@ -241,17 +251,18 @@ int usableHeight = trackHeight - 2 * LOLLY_DIAMETER;
 for(pop = popList; pop; pop = pop->next)
     {
     pop->radius = lollyCart->radius;
-    pop->color = MG_RED;
     if (range == 0.0)
         {
         pop->height = usableHeight ;
-        pop->color = lollyPalette[0] | 0xff000000;
+        if (!itemRgb)
+            pop->color = lollyPalette[0] | 0xff000000;
         }
     else
         {
         pop->height = usableHeight * (pop->val  - lollyCart->lowerLimit) / range + LOLLY_DIAMETER;
         int colorIndex = floor(9.99 * (pop->val  - lollyCart->lowerLimit) / range );
-        pop->color = lollyPalette[colorIndex] | 0xff000000;
+        if (!itemRgb)
+            pop->color = lollyPalette[colorIndex] | 0xff000000;
         }
     }
 
@@ -285,6 +296,7 @@ for(pop = popList; pop; pop = pop->next)
 
 slSort(&popList, cmpHeight);
 tg->items = popList;
+#endif
 }
 
 static struct lollyCartOptions *lollyCartOptionsNew(struct cart *cart, struct trackDb *tdb, 

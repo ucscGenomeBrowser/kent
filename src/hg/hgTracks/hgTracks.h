@@ -459,6 +459,15 @@ struct positionMatch
  long virtEnd;
  };
 
+struct bigBedQueryInfo
+/* The results of a bigBedQuery. */
+{
+struct bigBedInterval *bbList;
+struct asObject *as;
+unsigned fieldCount;
+struct bigBedFilter *filters;
+};
+
 
 extern struct virtRegion *virtRegionList;
 extern struct virtChromRegionPos *virtChrom; // Array
@@ -824,12 +833,15 @@ struct linkedFeatures *bedMungToLinkedFeatures(struct bed **pBed, struct trackDb
 	int fieldCount, int scoreMin, int scoreMax, boolean useItemRgb);
 /* Convert bed to a linkedFeature, destroying bed in the process. */
 
-struct bigBedInterval *bigBedSelectRangeExt(struct track *track,
+struct bigBedQueryInfo *bigBedQuery(struct cart *cart, struct track *track,
 	char *chrom, int start, int end, struct lm *lm, int maxItems);
 /* Return list of intervals in range. */
 
+#define CALCMAXITEMS(track) min(BIGBEDMAXIMUMITEMS, maximumTrackItems(track))
+/*
 #define bigBedSelectRange(track, chrom, start, end, lm)  \
     bigBedSelectRangeExt(track, chrom,start, end, lm,  min(BIGBEDMAXIMUMITEMS, maximumTrackItems(track)))
+*/
 /* Return list of intervals in range. */
 
 void bigBedAddLinkedFeaturesFromExt(struct track *track,

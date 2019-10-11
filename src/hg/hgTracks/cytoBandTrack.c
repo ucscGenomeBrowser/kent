@@ -97,11 +97,12 @@ if (tg->isBigBed)
     struct lm *lm = lmInit(0);
     int start = 0;
     int end = hChromSize(database, chromName);
-    struct bigBedInterval *bb, *bbList = bigBedSelectRange(tg, chromName, start, end, lm);
+    struct bigBedInterval *bb;
+    struct bigBedQueryInfo *bbInfo = bigBedQuery(cart, tg, chromName, start, end, lm, CALCMAXITEMS(tg));
     char *bedRow[32];
     char startBuf[16], endBuf[16];
 
-    for (bb = bbList; bb != NULL; bb = bb->next)
+    for (bb = bbInfo->bbList; bb != NULL; bb = bb->next)
         {
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
         struct cytoBand *bed = cytoBandLoad(bedRow);

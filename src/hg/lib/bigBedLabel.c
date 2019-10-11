@@ -16,18 +16,18 @@
 #include "hui.h"
 #include "obscure.h"
 
-void bigBedLabelCalculateFields(struct cart *cart, struct trackDb *tdb, struct bbiFile *bbi,  struct slInt **labelColumns )
+void bigBedLabelCalculateFields(struct cart *cart, struct trackDb *tdb, struct asObject *as, unsigned fieldCount,  struct slInt **labelColumns )
 /* Figure out which fields are available to label a bigBed track. */
 {
 //struct bbiFile *bbi = fetchBbiForTrack(track);
-struct asObject *as = bigBedAsOrDefault(bbi);
+//struct asObject *as = bigBedAsOrDefault(bbi);
 struct slPair *labelList = buildFieldList(tdb, "labelFields",  as);
 
 if (labelList == NULL)
     {
     // There is no labelFields entry in the trackDb.
     // If there is a name, use it by default, otherwise no label by default 
-    if (bbi->fieldCount > 3)
+    if (fieldCount > 3)
         slAddHead(labelColumns, slIntNew(3));
     }
 else if (sameString(labelList->name, "none"))

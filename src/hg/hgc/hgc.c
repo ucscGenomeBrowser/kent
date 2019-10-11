@@ -2951,7 +2951,7 @@ if (start == end)
 
 boolean showEvery = sameString(item, "PrintAllSequences");
 boolean showAll = trackDbSettingOn(tdb, "showAll");
-unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
+//unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
 struct bigBedInterval *bb, *bbList = NULL;
 
 // If showAll is on, show all alignments with this qName, not just the
@@ -3012,7 +3012,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, 4);
     if (showEvery || sameString(bedRow[3], item))
 	{
-        struct psl *psl= pslFromBigPsl(chromName, bb, seqTypeField, NULL, NULL);
+        //struct psl *psl= pslFromBigPsl(chromName, bb, seqTypeField, NULL, NULL);
+        struct psl *psl= pslFromBigPsl(chromName, bb, NULL, NULL);
         slAddHead(&pslList, psl);
 	}
     }
@@ -7311,8 +7312,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 if (bb == NULL)
     errAbort("item %s not found in range %s:%d-%d in bigBed %s (%s)",
              acc, chrom, start, end, tdb->table, fileName);
-unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
-psl = pslFromBigPsl(seqName, bb, seqTypeField, &seq, &cdsString);
+//unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
+psl = pslFromBigPsl(seqName, bb, &seq, &cdsString);
 if (cdsString)
     genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
 
@@ -7371,8 +7372,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	break;
 	}
     }
-unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
-wholePsl = pslFromBigPsl(seqName, bb, seqTypeField, &seq, &cdsString);
+//unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
+wholePsl = pslFromBigPsl(seqName, bb, &seq, &cdsString);
 
 if (seq == NULL)
     {

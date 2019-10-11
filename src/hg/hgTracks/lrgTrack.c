@@ -19,8 +19,9 @@ static void lrgLoadItems(struct track *tg)
 /* Load LRGs in range, translate to linkedFeatures and store as tg->items. */
 {
 struct lm *lm = lmInit(0);
-struct bigBedInterval *bb, *bbList = bigBedSelectRange(tg, chromName, winStart, winEnd, lm);
-for (bb = bbList; bb != NULL; bb = bb->next)
+struct bigBedInterval *bb;
+struct bigBedQueryInfo *bbInfo = bigBedQuery(cart, tg, chromName, winStart, winEnd, lm, CALCMAXITEMS(tg));
+for (bb = bbInfo->bbList; bb != NULL; bb = bb->next)
     {
     char *lrgRow[LRG_NUM_COLS];
     char startBuf[16], endBuf[16];

@@ -1285,19 +1285,22 @@ AllocVar(head);
 
 struct lm *lm = lmInit(0);
 //struct bigBedInterval *bb, *bbList = bigBedSelectRangeExt(track, chrom, start, end, lm, maxItems);
-struct bigBedInterval *bb, *bbList = bigBedSelectRangeExt(track, chrom, 0, hChromSize(database,chromName), lm, maxItems);
+//struct bigBedInterval *bb, *bbList = bigBedSelectRangeExt(track, chrom, 0, hChromSize(database,chromName), lm, maxItems);
+struct bigBedInterval *bb;
+struct bigBedQueryInfo *bbInfo = bigBedQuery(cart, track, chrom, 0, hChromSize(database,chromName), lm, maxItems);
 
-struct bbiFile *bbi = fetchBbiForTrack(track);
-int seqTypeField =  0;
-if (sameString(track->tdb->type, "bigPsl"))
-    {
-    seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
-    }
-bbiFileClose(&bbi);
-for (bb = bbList; bb != NULL; bb = bb->next)
+//struct bbiFile *bbi = fetchBbiForTrack(track);
+//int seqTypeField =  0;
+//if (sameString(track->tdb->type, "bigPsl"))
+//    {
+//    seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
+//    }
+//bbiFileClose(&bbi);
+for (bb = bbInfo->bbList; bb != NULL; bb = bb->next)
     {
     char *seq, *cds;
-    struct psl *psl = pslFromBigPsl(chromName, bb, seqTypeField,  &seq, &cds); 
+    struct psl *psl = pslFromBigPsl(chromName, bb, &seq, &cds); 
+ //   struct psl *psl = pslFromBigPsl(chromName, bb, seqTypeField,  &seq, &cds); 
     unsigned *targetStart = psl->tStarts;
     unsigned *queryStart = psl->qStarts;
     unsigned *size = psl->blockSizes;

@@ -27,25 +27,27 @@
 #include "bigBedFilter.h"
 #include "bigBedLabel.h"
 
-static unsigned getFieldNum(struct bbiFile *bbi, char *field)
+static unsigned getFieldNum(struct asObject *as, char *field)
 // get field number for field name in bigBed.  errAbort if field not found.
 {
-int fieldNum =  bbFieldIndex(bbi, field);
+//int fieldNum =  bbFieldIndex(bbi, field);
+int fieldNum =  asColumnFindIx(as->columnList, field);
 if (fieldNum < 0)
     errAbort("error building filter with field %s.  Field not found.", field);
 
 return fieldNum;
 }
 
-struct bigBedFilter *bigBedMakeNumberFilter(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field)
+struct bigBedFilter *bigBedMakeNumberFilter(struct cart *cart, struct asObject *as, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field)
 /* Make a filter on this column if the trackDb or cart wants us to. */
 {
 struct bigBedFilter *ret = NULL;
 char *setting = trackDbSettingClosestToHome(tdb, filter);
-int fieldNum =  getFieldNum(bbi, field);
+//int fieldNum =  getFieldNum(bbi, field);
+int fieldNum =  getFieldNum(as, field);
 if (setting)
     {
-    struct asObject *as = bigBedAsOrDefault(bbi);
+    //struct asObject *as = bigBedAsOrDefault(bbi);
     // All this isFloat conditional code is here because the cart
     // variables used for floats are different than those used for ints
     // in ../lib/hui.c so we have to use the correct getScore*() routine
@@ -140,7 +142,7 @@ if (setting)
 return ret;
 }
 
-struct bigBedFilter *bigBedMakeFilterText(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filterName, char *field)
+struct bigBedFilter *bigBedMakeFilterText(struct cart *cart, struct asObject *as, struct trackDb *tdb, char *filterName, char *field)
 /* Add a bigBed filter using a trackDb filterText statement. */
 {
 struct bigBedFilter *filter;
@@ -155,7 +157,7 @@ safef(filterType, sizeof filterType, "%s%s", field, FILTER_TYPE_NAME);
 char *typeValue = cartOrTdbString(cart, tdb, filterType, FILTERTEXT_WILDCARD);
 
 AllocVar(filter);
-filter->fieldNum =  getFieldNum(bbi, field);
+filter->fieldNum =  getFieldNum(as, field);
 
 if (sameString(typeValue, FILTERTEXT_REGEXP) )
     {
@@ -171,7 +173,7 @@ else
 return filter;
 }
 
-struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *field, struct slName *choices)
+struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct asObject *as, struct trackDb *tdb, char *field, struct slName *choices)
 /* Add a bigBed filter using a trackDb filterBy statement. */
 {
 struct bigBedFilter *filter;
@@ -180,7 +182,7 @@ safef(filterType, sizeof filterType, "%s%s", field, FILTER_TYPE_NAME);
 char *setting = cartOrTdbString(cart, tdb, filterType, FILTERBY_SINGLE);
 
 AllocVar(filter);
-filter->fieldNum =  getFieldNum(bbi, field);
+filter->fieldNum =  getFieldNum(as, field);
 if (setting && (sameString(setting, FILTERBY_SINGLE_LIST) || sameString(setting, FILTERBY_MULTIPLE_LIST_OR)))
     filter->comparisonType = COMPARE_HASH_LIST_OR;
 else if (setting && sameString(setting, FILTERBY_MULTIPLE_LIST_AND))
@@ -196,7 +198,7 @@ for(; choices; choices = choices->next)
 return filter;
 }
 
-struct bigBedFilter *bigBedBuildFilters(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb)
+struct bigBedFilter *bigBedBuildFilters(struct cart *cart, struct asObject *as, struct trackDb *tdb)
 /* Build all the numeric and filterBy filters for a bigBed */
 {
 struct bigBedFilter *filters = NULL, *filter;
@@ -218,7 +220,7 @@ for(; filterSettings; filterSettings = filterSettings->next)
     char *fieldName = extractFieldName(filterSettings->name, FILTER_NUMBER_NAME);
     if (sameString(fieldName, "noScore"))
         continue;
-    if ((filter = bigBedMakeNumberFilter(cart, bbi, tdb, filterSettings->name, NULL, fieldName)) != NULL)
+    if ((filter = bigBedMakeNumberFilter(cart, as, tdb, filterSettings->name, NULL, fieldName)) != NULL)
         slAddHead(&filters, filter);
     }
 
@@ -227,7 +229,7 @@ filterSettings = trackDbSettingsWildMatch(tdb, FILTER_TEXT_WILDCARD);
 for(; filterSettings; filterSettings = filterSettings->next)
     {
     char *fieldName = extractFieldName(filterSettings->name, FILTER_TEXT_NAME);
-    if ((filter = bigBedMakeFilterText(cart, bbi, tdb, filterSettings->name,  fieldName)) != NULL)
+    if ((filter = bigBedMakeFilterText(cart, as, tdb, filterSettings->name,  fieldName)) != NULL)
         slAddHead(&filters, filter);
     }
 
@@ -237,7 +239,7 @@ for (;filterBy != NULL; filterBy = filterBy->next)
     {
     if (filterBy->slChoices && differentString(filterBy->slChoices->name, "All")) 
         {
-        if ((filter = bigBedMakeFilterBy(cart, bbi, tdb, filterBy->column, filterBy->slChoices)) != NULL)
+        if ((filter = bigBedMakeFilterBy(cart, as, tdb, filterBy->column, filterBy->slChoices)) != NULL)
             slAddHead(&filters, filter);
         }
     }
@@ -317,9 +319,9 @@ return TRUE;
 struct bbiFile *fetchBbiForTrack(struct track *track)
 /* Fetch bbiFile from track, opening it if it is not already open. */
 {
-struct bbiFile *bbi = track->bbiFile;
-if (bbi == NULL)
-    {
+//struct bbiFile *bbi = track->bbiFile;
+//if (bbi == NULL)
+ //   {
     char *fileName = NULL;
     if (track->parallelLoading) // do not use mysql during parallel fetch
 	{
@@ -340,53 +342,81 @@ if (bbi == NULL)
     #include "gbib.c"
     #endif
 
-    bbi = track->bbiFile = bigBedFileOpen(fileName);
-    }
+    //bbi = track->bbiFile = bigBedFileOpen(fileName);
+    struct bbiFile *bbi =  bigBedFileOpen(fileName);
+  //  }
 return bbi;
 }
 
-struct bigBedInterval *bigBedSelectRangeExt(struct track *track,
-	char *chrom, int start, int end, struct lm *lm, int maxItems)
-/* Return list of intervals in range. */
+static void generateTrackWarning(struct track *track, char *message)
 {
-struct bigBedInterval *result = NULL;
-/* protect against temporary network error */
+track->networkErrMsg = cloneString(message);
+track->drawItems = bigDrawWarning;
+track->totalHeight = bigWarnTotalHeight;
+}
+
+struct bigBedQueryInfo *bigBedQuery(struct cart *cart, struct track *track,
+	char *chrom, int start, int end, struct lm *lm, int maxItems)
+/* Return list of intervals in range. Generate warning message if
+ * cannot find the bigBed file or too many items in filter mode.
+ * Fills in summary levels if too many times and filtering is off.*/
+{
+struct bigBedQueryInfo *result = NULL;
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     struct bbiFile *bbi = fetchBbiForTrack(track);
-    result = bigBedIntervalQuery(bbi, chrom, start, end, maxItems + 1, lm);
-    if (slCount(result) > maxItems)
-	{
-	track->limitedVis = tvDense;
-	track->limitedVisSet = TRUE;
-	result = NULL;
-	AllocArray(track->summary, insideWidth);
-	if (bigBedSummaryArrayExtended(bbi, chrom, start, end, insideWidth, track->summary))
-	    {
-	    char *denseCoverage = trackDbSettingClosestToHome(track->tdb, "denseCoverage");
-	    if (denseCoverage != NULL)
-		{
-		double endVal = atof(denseCoverage);
-		if (endVal <= 0)
-		    {
-		    AllocVar(track->sumAll);
-		    *track->sumAll = bbiTotalSummary(bbi);
-		    }
-		}
-	    }
-	else
-	    freez(&track->summary);
-	}
-    bbiFileClose(&bbi);
-    track->bbiFile = NULL;
+    if (bbi != NULL)
+        {
+        struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, maxItems + 1, lm);
+        struct asObject *as = bigBedAsOrDefault(bbi);
+        struct bigBedFilter *filters = bigBedBuildFilters(cart, as, track->tdb);
+        if (filters)
+            labelTrackAsFiltered(track);
+
+        if (slCount(result) > maxItems)
+            {
+            if (filters)
+                generateTrackWarning(track,  "Too many items to filter in window.  Zoom in or turn off filters");
+            else // no filters, get summary levels
+                {
+                track->limitedVis = tvDense;
+                track->limitedVisSet = TRUE;
+                result = NULL;
+                AllocArray(track->summary, insideWidth);
+                if (bigBedSummaryArrayExtended(bbi, chrom, start, end, insideWidth, track->summary))
+                    {
+                    char *denseCoverage = trackDbSettingClosestToHome(track->tdb, "denseCoverage");
+                    if (denseCoverage != NULL)
+                        {
+                        double endVal = atof(denseCoverage);
+                        if (endVal <= 0)
+                            {
+                            AllocVar(track->sumAll);
+                            *track->sumAll = bbiTotalSummary(bbi);
+                            }
+                        }
+                    }
+                }
+            }
+        else
+            {
+            // success!
+            AllocVar(result);
+            result->bbList = bbList;
+            result->as = as;
+            result->filters = filters;
+            result->fieldCount = bbi->fieldCount;
+            bigBedLabelCalculateFields(cart, track->tdb, as, bbi->fieldCount, &track->labelColumns);
+            freez(&track->summary);
+            }
+        bbiFileClose(&bbi);
+        }
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
-    track->networkErrMsg = cloneString(errCatch->message->string);
-    track->drawItems = bigDrawWarning;
-    track->totalHeight = bigWarnTotalHeight;
+    generateTrackWarning(track, errCatch->message->string);
     result = NULL;
     }
 errCatchFree(&errCatch);
@@ -419,35 +449,44 @@ void bigBedAddLinkedFeaturesFromExt(struct track *track,
 {
 struct lm *lm = lmInit(0);
 struct trackDb *tdb = track->tdb;
-struct bigBedInterval *bb, *bbList = bigBedSelectRangeExt(track, chrom, start, end, lm, maxItems);
+//struct bigBedInterval *bb, *bbList = bigBedSelectRangeExt(track, chrom, start, end, lm, maxItems);
+struct bigBedQueryInfo *bbInfo = bigBedQuery(cart, track, chrom, start, end, lm, maxItems);
+struct bigBedInterval *bb;
 char *scoreFilter = cartOrTdbString(cart, track->tdb, "scoreFilter", NULL);
 char *mouseOverField = cartOrTdbString(cart, track->tdb, "mouseOverField", NULL);
 int minScore = 0;
 if (scoreFilter)
     minScore = atoi(scoreFilter);
 
-struct bbiFile *bbi = fetchBbiForTrack(track);
-int seqTypeField =  0;
-if (sameString(track->tdb->type, "bigPsl"))
-    {
-    seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
-    }
+#ifdef NOTNOW
+// also label parent composite track filtered
+struct trackDb *parentTdb = tdbGetComposite(track->tdb);
+if (parentTdb && (filters || compositeHideEmptySubtracks(cart, parentTdb, NULL, NULL)))
+    parentTdb->longLabel = labelAsFiltered(parentTdb->longLabel);
+#endif //NOTNOW
 
-int mouseOverIdx = bbExtraFieldIndex(bbi, mouseOverField);
+//struct bbiFile *bbi = fetchBbiForTrack(track);
+//int seqTypeField =  0;
+//if (sameString(track->tdb->type, "bigPsl"))
+ //   {
+  //  seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
+   // }
 
-track->bbiFile = NULL;
+//int mouseOverIdx = bbExtraFieldIndex(bbi, mouseOverField);
+int mouseOverIdx = asColumnFindIx(bbInfo->as->columnList, mouseOverField) - 3;
 
-struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, track->tdb) ;
-if (filters || compositeChildHideEmptySubtracks(cart, track->tdb, NULL, NULL))
-   labelTrackAsFiltered(track);
-
-for (bb = bbList; bb != NULL; bb = bb->next)
+//bigBedLabelCalculateFields(cart, track->tdb, bbInfo->as, bbInfo->fieldCount,  &track->labelColumns);
+//struct bigBedFilter *filters = bigBedBuildFilters(cart, bbInfo->as, track->tdb) ;
+//if (bbInfo->filters)
+ //   labelTrackAsFiltered(track);
+for (bb = bbInfo->bbList; bb != NULL; bb = bb->next)
     {
     struct linkedFeatures *lf = NULL;
     if (sameString(track->tdb->type, "bigPsl"))
 	{
 	char *seq, *cds;
-	struct psl *psl = pslFromBigPsl(chromName, bb, seqTypeField,  &seq, &cds); 
+	//struct psl *psl = pslFromBigPsl(chromName, bb, seqTypeField,  &seq, &cds); 
+	struct psl *psl = pslFromBigPsl(chromName, bb,   &seq, &cds); 
 	int sizeMul =  pslIsProtein(psl) ? 3 : 1;
 	boolean isXeno = 0;  // just affects grayIx
 	boolean nameGetsPos = FALSE; // we want the name to stay the name
@@ -462,10 +501,10 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     else
 	{
         char startBuf[16], endBuf[16];
-        char *bedRow[bbi->fieldCount];
+        char *bedRow[bbInfo->fieldCount];
 
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-        if (bigBedFilterInterval(bedRow, filters))
+        if (bigBedFilterInterval(bedRow, bbInfo->filters))
             {
             struct bed *bed = bedLoadN(bedRow, fieldCount);
             lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
@@ -492,7 +531,7 @@ lmCleanup(&lm);
 
 if (!trackDbSettingClosestToHomeOn(track->tdb, "linkIdInName"))
     track->itemName = bigLfItemName;
-bbiFileClose(&bbi);
+//bbiFileClose(&bbi);
 }
 
 

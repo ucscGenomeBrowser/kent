@@ -86,6 +86,6 @@ void bigPslOutput(struct bigPsl *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-struct psl  *pslFromBigPsl( char *chrom, struct bigBedInterval *bb,  int seqTypeField, char **seq, char **cds);
+struct psl  *pslFromBigPsl( char *chrom, struct bigBedInterval *bb,  char **seq, char **cds);
 /* build a psl from a bigPsl */
 #endif /* BIGPSL_H */

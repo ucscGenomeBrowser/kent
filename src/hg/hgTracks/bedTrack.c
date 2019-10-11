@@ -83,23 +83,31 @@ if (startsWith("bedTabix", tg->tdb->type ) || startsWith("longTabix", tg->tdb->t
 else if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
     struct lm *lm = lmInit(0);
-    struct bigBedInterval *bb, *bbList = bigBedSelectRange(tg, chromName, winStart, winEnd, lm);
-    struct bbiFile *bbi = fetchBbiForTrack(tg);
-    char *bedRow[bbi->fieldCount];
+    struct bigBedQueryInfo *bbInfo = bigBedQuery(cart, tg, chromName, winStart, winEnd, lm, CALCMAXITEMS(tg));
+    struct bigBedInterval *bb;
+    //struct bbiFile *bbi = fetchBbiForTrack(tg);
+    char *bedRow[bbInfo->fieldCount];
     char startBuf[16], endBuf[16];
 
-    struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, tg->tdb);
-    if (filters || compositeChildHideEmptySubtracks(cart, tg->tdb, NULL, NULL))
-       labelTrackAsFiltered(tg);
+    //struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, tg->tdb);
+    //if (filters)
+    //   labelTrackAsFiltered(tg);
+
+    // also label parent composite track filtered
+#ifdef NOTNOW
+    struct trackDb *parentTdb = tdbGetComposite(tg->tdb);
+    if (parentTdb && (filters || compositeHideEmptySubtracks(cart, parentTdb, NULL, NULL)))
+        parentTdb->longLabel = labelAsFiltered(parentTdb->longLabel);
 
      if (tg->itemName == bedName && !trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
         tg->itemName = bigBedItemName;
+#endif
 
-    bigBedLabelCalculateFields(cart, tg->tdb, bbi,  &tg->labelColumns);
-    for (bb = bbList; bb != NULL; bb = bb->next)
+    //bigBedLabelCalculateFields(cart, tg->tdb, bbInfo->as, bbInfo->fieldCount, &tg->labelColumns);
+    for (bb = bbInfo->bbList; bb != NULL; bb = bb->next)
         {
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-        if (!bigBedFilterInterval(bedRow, filters))
+        if (!bigBedFilterInterval(bedRow, bbInfo->filters))
             continue;
         bed = loader(bedRow);
         // FIXME BRANEY: either disable for all tracks with NUM_FIELDS > label field or better,
@@ -238,8 +246,8 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
-    struct bbiFile *bbi = fetchBbiForTrack(tg);
-    bigBedLabelCalculateFields(cart, tg->tdb, bbi,  &tg->labelColumns);
+    //struct bbiFile *bbi = fetchBbiForTrack(tg);
+    //bigBedLabelCalculateFields(cart, tg->tdb, bbi,  &tg->labelColumns);
     bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 9, &lfList);
     }
@@ -290,8 +298,8 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
-    struct bbiFile *bbi = fetchBbiForTrack(tg);
-    bigBedLabelCalculateFields(cart, tg->tdb, bbi,  &tg->labelColumns);
+    //struct bbiFile *bbi = fetchBbiForTrack(tg);
+    //bigBedLabelCalculateFields(cart, tg->tdb, jk,  &tg->labelColumns);
     bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 8, &lfList);
     }
@@ -490,8 +498,8 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
-    struct bbiFile *bbi = fetchBbiForTrack(tg);
-    bigBedLabelCalculateFields(cart, tg->tdb, bbi,  &tg->labelColumns);
+    //struct bbiFile *bbi = fetchBbiForTrack(tg);
+    //bigBedLabelCalculateFields(cart, tg->tdb, bbi,  &tg->labelColumns);
     bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 12, &lfList);
     }
