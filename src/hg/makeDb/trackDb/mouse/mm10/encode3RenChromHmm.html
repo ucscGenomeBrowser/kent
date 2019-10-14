@@ -2,7 +2,7 @@
 <p>
 The ENCODE project has established an epigenomic resource for mammalian development,
 profiling a diverse panel of mouse tissues at eight developmental stages from 10.5 days post
-conception until birth.<p>
+conception until birth.</p>
 <div><img border="1" src="../images/renMouseDev.png" style="margin-left: 100px;"></div>
 <p>
 This track set presents chromatin state annotations derived from ChIP-seq 
@@ -14,13 +14,16 @@ The chromHMM method was used to integrate ChIP-seq data from 8 histone
 modifications (H3K27ac, H3K27me3, H3K4me3, H3K4me2, H3K4me1, H3K9me3, H3K9ac, H3K36me3). 
 In total, fifteen chromatin states were used to segment the genome, and these states 
 were then grouped and colored to highlight predicted functional elements.</p>
+
 <p>
+The histone ChIP-seq data underlying this track are presented in the 
+<a target="_blank" href="../cgi-bin/hgTrackUi?db=mm10&g=encode3RenHistone">Histone Modifications</a> track.  </p>
 
 <h2> Display Conventions and Configuration </h2>
 <p>
 This track is a composite track that contains multiple subtracks. Each subtrack represents data 
-for a different tissue and age, and displays individually on the browser. 
-</p>
+for a different tissue and age, and displays individually on the browser. </p>
+
 <p>
 The fifteen states of the HMM, their associated segment color, and the candidate annotations 
 are as follows:
@@ -80,8 +83,8 @@ The resulting chromatin states fall into 4 broad functional classes:
 <p>
 This track set represents pooled chromatin state calls, 
 in which ChIP-seq for two biological replicates that were was pooled prior to 
-chromatin state segmentation. 
-<p>
+chromatin state segmentation.</p>
+
 <h2>Data Access</h2>
 <p>
 ChromHMM segmentation for individual and pooled replicates can be downloaded from the
