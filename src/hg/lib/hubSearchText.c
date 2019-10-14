@@ -11,7 +11,7 @@
 
 
 
-char *hubSearchTextCommaSepFieldNames = "hubUrl,db,track,textLength,text";
+char *hubSearchTextCommaSepFieldNames = "hubUrl,db,track,label,parents,textLength,text";
 
 /* definitions for textLength column */
 static char *values_textLength[] = {"Short", "Long", "Meta", NULL};
@@ -26,8 +26,9 @@ ret->hubUrl = row[0];
 ret->db = row[1];
 ret->track = row[2];
 ret->label = row[3];
-ret->textLength = sqlEnumParse(row[4], values_textLength, &valhash_textLength);
-ret->text = row[5];
+ret->parents = row[4];
+ret->textLength = sqlEnumParse(row[5], values_textLength, &valhash_textLength);
+ret->text = row[6];
 }
 
 struct hubSearchText *hubSearchTextLoadWithNull(char **row)
@@ -41,8 +42,9 @@ ret->hubUrl = cloneString(row[0]);
 ret->db = cloneString(row[1]);
 ret->track = cloneString(row[2]);
 ret->label = cloneString(row[3]);
-ret->textLength = sqlEnumParse(row[4], values_textLength, &valhash_textLength);
-ret->text = cloneString(row[5]);
+ret->parents = cloneString(row[4]);
+ret->textLength = sqlEnumParse(row[5], values_textLength, &valhash_textLength);
+ret->text = cloneString(row[6]);
 return ret;
 }
 
@@ -52,7 +54,7 @@ struct hubSearchText *hubSearchTextLoadAll(char *fileName)
 {
 struct hubSearchText *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -70,7 +72,7 @@ struct hubSearchText *hubSearchTextLoadAllByChar(char *fileName, char chopper)
 {
 struct hubSearchText *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -95,6 +97,7 @@ ret->hubUrl = sqlStringComma(&s);
 ret->db = sqlStringComma(&s);
 ret->track = sqlStringComma(&s);
 ret->label = sqlStringComma(&s);
+ret->parents = sqlStringComma(&s);
 ret->textLength = sqlEnumComma(&s, values_textLength, &valhash_textLength);
 ret->text = sqlStringComma(&s);
 *pS = s;
@@ -112,6 +115,7 @@ freeMem(el->hubUrl);
 freeMem(el->db);
 freeMem(el->track);
 freeMem(el->label);
+freeMem(el->parents);
 freeMem(el->text);
 freez(pEl);
 }
@@ -149,6 +153,10 @@ fprintf(f, "%s", el->label);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->parents);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
 sqlEnumPrint(f, el->textLength, values_textLength);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
@@ -159,6 +167,7 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
 
 /* Restrictions on the size of context chunks returned by getTextContext() */
 #define HST_MAXCONTEXTLENGTH 300
