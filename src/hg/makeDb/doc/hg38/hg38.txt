@@ -3645,9 +3645,9 @@ TMPDIR=/dev/shm
 
 _EOF_
 #############################################################################
-# LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 5/30/18 angie)
-# Redmine #13359 -- otto-mate To Do #17877
-# previously done 7/7/14, 9/9/16
+# LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 10/9/19 angie)
+# Redmine #13359, #24285 -- otto-mate To Do #17877
+# previously done 7/7/14, 9/9/16, 5/30/18
     set today = `date +%Y_%m_%d`
     mkdir -p /hive/data/genomes/hg38/bed/lrg/$today
     cd /hive/data/genomes/hg38/bed/lrg/$today
@@ -3658,7 +3658,7 @@ _EOF_
     ~/kent/src/hg/utils/automation/parseLrgXml.pl GRCh38
     genePredCheck lrgTranscriptsUnmapped.gp
 #Error: lrgTranscriptsUnmapped.gp:765: LRG_7t1 no exonFrame on CDS exon 46
-#checked: 917 failed: 1
+#checked: 1029 failed: 1
     # If there are complaints e.g. about exonFrame, look for inconsistencies in the
     # affected transcript's coding_region/coordinates vs. exon/intron info in xml.
     # Contact Variation team leader Fiona Cunningham @EBI to resolve in the background
@@ -3666,21 +3666,18 @@ _EOF_
     # psl).  We agreed to disagree about exon 46 of LRG_7t1 because that last coding exon
     # portion is only the stop codon.
 
-    # Filter out alts and patches not (yet) included in hg38:
-    mv lrg.bed lrg.allSeqs.bed
-    cut -f 1 ../../../chrom.sizes | grep -Fwf - lrg.allSeqs.bed > lrg.bed
+    # No longer necessary to filter out alt and fix patches since they have been added to hg38.
 
     # Load LRG regions:
     bedToBigBed lrg.bed /hive/data/genomes/hg38/chrom.sizes lrg.bb \
       -tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name
-    rm -f /gbdb/hg38/bbi/lrg.bb
-    ln -s `pwd`/lrg.bb /gbdb/hg38/bbi/lrg.bb
+    ln -sf `pwd`/lrg.bb /gbdb/hg38/bbi/lrg.bb
     hgBbiDbLink hg38 lrg /gbdb/hg38/bbi/lrg.bb
 
     # Map LRG fixed_annotation transcripts from LRG coords to hg38 coords (HT MarkD):
     lrgToPsl lrg.bed /hive/data/genomes/hg38/chrom.sizes lrg.psl
     pslCheck lrg.psl
-#checked: 802 failed: 0 errors: 0
+#checked: 919 failed: 0 errors: 0
     awk '{print $10 "\t" $11;}' lrg.psl > lrg.sizes
     genePredToFakePsl -chromSize=lrg.sizes placeholder \
       lrgTranscriptsUnmapped.gp lrgTranscriptsFakePsl.psl lrgTranscripts.cds
@@ -3689,7 +3686,7 @@ _EOF_
       lrgTranscriptsHg38.psl lrgTranscriptsHg38NoName2.gp
 #Warning: no CDS for LRG_163t1
 #Warning: no CDS for LRG_347t1
-    # It's OK if mrnaToGene complains about "no CDS" for a non-coding tx.
+    # It's OK if mrnaToGene complains about "no CDS" for a non-coding tx (RefSeq accession NR_*).
     grep -l NR_ LRG_163.xml LRG_347.xml
 #LRG_163.xml
 #LRG_347.xml

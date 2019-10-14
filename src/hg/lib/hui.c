@@ -3638,7 +3638,6 @@ char *extractFieldName(char *cartVariable, char *filterType)
 {
 char *field = cloneString(cartVariable);
 int ix = strlen(field) - strlen(filterType); 
-assert(ix > 1);
 field[ix] = '\0';
 if (field[ix - 1] == '.')
     field[ix - 1] = '\0';
@@ -3991,7 +3990,13 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
     {
     char settingString[4096];
     safef(settingString, sizeof settingString, "%s%s", filterBy->column, FILTER_TYPE_NAME);
-    char *setting = cartOrTdbString(cart, tdb, settingString, FILTERBY_MULTIPLE_LIST_AND);
+    char *setting = cartOrTdbString(cart, tdb, settingString, NULL);
+    if (setting == NULL)
+        {
+        safef(settingString, sizeof settingString, "%s.%s", filterBy->column, FILTER_TYPE_NAME);
+        setting = cartOrTdbString(cart, tdb, settingString, FILTERBY_MULTIPLE_LIST_AND);
+        }
+
     boolean isMultiple = sameString(setting, FILTERBY_MULTIPLE) ||sameString(setting, FILTERBY_MULTIPLE_LIST_OR) ||sameString(setting, FILTERBY_MULTIPLE_LIST_AND);
    
     puts("<TD>");
@@ -5957,15 +5962,11 @@ if (filterSettings)
     {
     puts("<BR>");
     struct slName *filter = NULL;
-#ifdef EXTRA_FIELDS_SUPPORT
-    struct extraField *extras = extraFieldsGet(db,tdb);
-#else///ifndef EXTRA_FIELDS_SUPPORT
     struct sqlConnection *conn = NULL;
     if (!isHubTrack(db))
         conn = hAllocConnTrack(db, tdb);
     struct asObject *as = asForTdb(conn, tdb);
     hFreeConn(&conn);
-#endif///ndef EXTRA_FIELDS_SUPPORT
 
     while ((filter = slPopHead(&filterSettings)) != NULL)
         {
@@ -5978,18 +5979,6 @@ if (filterSettings)
             char *scoreName = cloneString(filter->name);
             char *field = extractFieldName(filter->name, FILTER_NUMBER_NAME);
 
-        #ifdef EXTRA_FIELDS_SUPPORT
-            if (extras != NULL)
-                {
-                struct extraField *extra = extraFieldsFind(extras, field);
-                if (extra != NULL)
-                    { // Found label so replace field
-                    field = extra->label;
-                    if (!isFloat)
-                        isFloat = (extra->type == ftFloat);
-                    }
-                }
-        #else///ifndef EXTRA_FIELDS_SUPPORT
             if (as != NULL)
                 {
                 struct asColumn *asCol = asColumnFind(as, field);
@@ -6002,9 +5991,6 @@ if (filterSettings)
                 else 
                     errAbort("Building filter on field %s which is not in AS file.", field);
                 }
-        #endif///ndef EXTRA_FIELDS_SUPPORT
-            // FIXME: Label munging should be localized to showScoreFilter()
-            //  when that function is simplified
             char varName[256];
             char label[128];
             safef(varName, sizeof(varName), "%s%s", scoreName, _BY_RANGE);
@@ -6017,13 +6003,8 @@ if (filterSettings)
             }
         slNameFree(&filter);
         }
-#ifdef EXTRA_FIELDS_SUPPORT
-    if (extras != NULL)
-        extraFieldsFree(&extras);
-#else///ifndef EXTRA_FIELDS_SUPPORT
     if (as != NULL)
         asObjectFree(&as);
-#endif///ndef EXTRA_FIELDS_SUPPORT
     }
 if (count > 0)
     puts("</TABLE>");
@@ -6069,9 +6050,10 @@ return FALSE;
 }
 
 
-void textFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb)
+static int textFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb)
 /* Show all the text filters for this track. */
 {
+int count = 0;
 struct slName *filter, *filterSettings = trackDbSettingsWildMatch(tdb, FILTER_TEXT_WILDCARD);
 if (filterSettings)
     {
@@ -6088,6 +6070,7 @@ if (filterSettings)
         if (asCol == NULL)
             errAbort("Building filter on field %s which is not in AS file.", field);
 
+        count++;
         printf("<P><B>Filter items in '%s' field: ", field);
 
         char cgiVar[128];
@@ -6096,7 +6079,12 @@ if (filterSettings)
 
         char settingString[4096];
         safef(settingString, sizeof settingString, "%s%s", field, FILTER_TYPE_NAME);
-        setting = cartOrTdbString(cart, tdb, settingString, FILTERTEXT_WILDCARD);
+        setting = cartOrTdbString(cart, tdb, settingString, NULL);
+        if (setting == NULL)
+            {
+            safef(settingString, sizeof settingString, "%s.%s", field, FILTER_TYPE_NAME);
+            setting = cartOrTdbString(cart, tdb, settingString, FILTERTEXT_WILDCARD);
+            }
         safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,settingString);
         printf(" using ");
         printf("<SELECT name='%s'> ", cgiVar);
@@ -6106,6 +6094,8 @@ if (filterSettings)
         printf("</P>");
         }
     }
+
+return count;
 }
 
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title,
@@ -6121,7 +6111,8 @@ boolean isBoxOpened = FALSE;
 if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name, title) > 0)
     skipScoreFilter = TRUE;
 
-textFiltersShowAll(db, cart, tdb);
+if (textFiltersShowAll(db, cart, tdb))
+    skipScoreFilter = TRUE;
 
 // Add any multi-selects next
 filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
@@ -8947,113 +8938,6 @@ void printBbiUpdateTime(time_t *timep)
 {
     printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", sqlUnixTimeToDate(timep, FALSE));
 }
-
-#ifdef EXTRA_FIELDS_SUPPORT
-static struct extraField *asFieldsGet(char *db, struct trackDb *tdb)
-// returns the as style fields from a table or remote data file
-{
-struct extraField *asFields = NULL;
-struct sqlConnection *conn = hAllocConnTrack(db, tdb);
-struct asObject *as = asForTdb(conn, tdb);
-hFreeConn(&conn);
-if (as != NULL)
-    {
-    struct asColumn *asCol = as->columnList;
-    for (;asCol != NULL; asCol = asCol->next)
-        {
-        struct extraField *asField  = NULL;
-        AllocVar(asField);
-        asField->name = cloneString(asCol->name);
-        if (asCol->comment != NULL && strlen(asCol->comment) > 0)
-            asField->label = cloneString(asCol->comment);
-        else
-            asField->label = cloneString(asField->name);
-        asField->type = ftString; // default
-        if (asTypesIsInt(asCol->lowType->type))
-            asField->type = ftInteger;
-        else if (asTypesIsFloating(asCol->lowType->type))
-            asField->type = ftFloat;
-        slAddHead(&asFields,asField);
-        }
-    if (asFields != NULL)
-        slReverse(&asFields);
-    asObjectFree(&as);
-    }
-return asFields;
-}
-
-struct extraField *extraFieldsGet(char *db, struct trackDb *tdb)
-// returns any extraFields defined in trackDb
-{
-char *fields = trackDbSetting(tdb, "extraFields"); // showFileds pValue=P_Value qValue=qValue
-if (fields == NULL)
-    return asFieldsGet(db, tdb);
-
-char *field = NULL;
-struct extraField *extras = NULL;
-struct extraField *extra = NULL;
-while (NULL != (field  = cloneNextWord(&fields)))
-    {
-    AllocVar(extra);
-    extra->name = field;
-    extra->label = field; // defaults to name
-    char *equal = strchr(field,'=');
-    if (equal != NULL)
-        {
-        *equal = '\0';
-        extra->label = equal + 1;
-        assert(*(extra->label)!='\0');
-        }
-
-    extra->type = ftString;
-    if (*(extra->label) == '[')
-        {
-        if (startsWith("[i",extra->label))
-            extra->type = ftInteger;
-        else if (startsWith("[f",extra->label))
-            extra->type = ftFloat;
-        extra->label = strchr(extra->label,']');
-        assert(extra->label != NULL);
-        extra->label += 1;
-        }
-    // clone independently of 'field' and swap in blanks
-    extra->label = cloneString(strSwapChar(extra->label,'_',' '));
-    slAddHead(&extras,extra);
-    }
-
-if (extras != NULL)
-    slReverse(&extras);
-return extras;
-}
-
-struct extraField *extraFieldsFind(struct extraField *extras, char *name)
-// returns the extraField matching the name (case insensitive).  Note: slNameFind does NOT work.
-{
-struct extraField *extra = extras;
-for (; extra != NULL; extra = extra->next)
-    {
-    if (sameWord(name, extra->name))
-        break;
-    }
-return extra;
-}
-
-void extraFieldsFree(struct extraField **pExtras)
-// frees all mem for extraFields list
-{
-if (pExtras != NULL)
-    {
-    struct extraField *extra = NULL;
-    while (NULL != (extra  = slPopHead(pExtras)))
-        {
-        freeMem(extra->name);
-        freeMem(extra->label);
-        freeMem(extra);
-        }
-    *pExtras = NULL;
-    }
-}
-#endif///def EXTRA_FIELDS_SUPPORT
 
 static boolean tableDescriptionsExists(struct sqlConnection *conn)
 /* Cache flag for whether tableDescriptions exists in conn, in case we will need to
