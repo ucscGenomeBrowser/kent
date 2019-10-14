@@ -145,10 +145,26 @@ boolean found = FALSE;
 for(tdb=tdbList; tdb; tdb = tdb->next)
     {
     if (tdb->subtracks)
+        {
         found = findBigBedPosInTdbList(cart, db, tdbList->subtracks, term, hgp, hfs) || found;
+        continue;
+        }
+    if (startsWith("bigWig", tdb->type) || !startsWith("big", tdb->type))
+        continue;
 
+    // Which field(s) to search?  Look for searchIndex in search spec, then in trackDb for
+    // backwards compat.
+    char *indexField = NULL;
+    if (hfs)
+        indexField = hgFindSpecSetting(hfs, "searchIndex");
+    if (!indexField)
+        indexField = trackDbSetting(tdb, "searchIndex");
+    if (!indexField && !hfs)
+        continue;
+
+    // If !indexField but we do have a non-NULL hfs, then open file to see if it has a name index.
     char *fileName = trackDbSetting(tdb, "bigDataUrl");
-    if (!fileName)
+    if (!fileName && !trackHubDatabase(db))
 	{
 	struct sqlConnection *conn = hAllocConnTrack(db, tdb);
 	fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
@@ -167,13 +183,8 @@ for(tdb=tdbList; tdb; tdb = tdb->next)
     if (errCatch->gotError)
         continue;
 
-    // Which field(s) to search?  Look for searchIndex in search spec, then in trackDb for
-    // backwards compat.  If not found, but there is a name field with index, use that.
-    char *indexField = NULL;
-    if (hfs)
-        indexField = hgFindSpecSetting(hfs, "searchIndex");
-    if (!indexField)
-        indexField = trackDbSetting(tdb, "searchIndex");
+    // Now (since hfs is non-NULL) check the file to see if it has a name index if we
+    // don't already have indexField.
     if (!indexField)
         {
         struct slName *indexFields = bigBedListExtraIndexes(bbi);
@@ -182,7 +193,10 @@ for(tdb=tdbList; tdb; tdb = tdb->next)
         slNameFreeList(&indexFields);
         }
     if (!indexField)
+        {
+        bigBedFileClose(&bbi);
         continue;
+        }
 
     struct slName *indexList = slNameListFromString(indexField, ',');
     struct hgPos *posList1 = NULL, *posList2 = NULL;
