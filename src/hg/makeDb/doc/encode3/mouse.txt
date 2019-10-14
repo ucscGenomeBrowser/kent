@@ -1,0 +1,127 @@
+#########################
+# mm10 histone ChIP-seq from Ren lab
+# contact:  David Gorkin
+#
+# (2019-07-03 kate)
+#
+# Expecting 3 tracks:
+#       1. Large composite of ChIP-seq peaks and signal from various marks in various tissues at
+#               different embryonic stages, along with chromHMM for each mark/tissue/stage
+#               (chromHMM may be better as separate track)
+#
+#       2. ATAC-seq (open chromatin) for tissues/stages
+#
+#       3. Possible:  enhancer/gene interactions in interact format
+
+# RM #23693
+
+# Their hub: http://renlab.sdsc.edu/yanxiao/encode_trackhub/hub.txt
+
+# Download files listed in track hub
+
+wget http://renlab.sdsc.edu/yanxiao/encode_trackhub/mm10/trackDb.txt
+
+# winnow to just merged files:
+
+raToLines trackDb.txt stdout | grep Merge > trackDb.merge.lines
+wc -l trackDb.merge.lines
+# 1128
+
+linesToRa trackDb.merge.lines trackDb.merge.ra
+grep bigDataUrl trackDb.merge.ra | sed -e 's/bigDataUrl/wget/' -e 's/.proxy=true//' > wget.csh
+
+mkdir data
+cd data
+csh ../wget.csh >&! ../wget.log &
+
+ls *.bigBed | wc -l
+# 563
+# These are narrowPeak files, however they are configured in hub as bigBed 6 +
+# This config shows track colors (e.g. red for repressive, green for promoter), but
+# doesn't allow filtering on pValue, etc.
+
+# Use files as is from portal, we are not changing so no need to rename
+
+ln -s `pwd` /gbdb/mm10/encode3/histones
+
+###################
+# chromHMM data
+
+cd ..
+mkdir chromHmm
+cd chromHmm
+wget http://enhancer.sdsc.edu/enhancer_export/ENCODE/chromHMM/readme
+
+mkdir pooled
+cd pooled
+csh ../wget.csh >&! wget.log &
+
+ls *.bb | perl rename.pl > rename.txt
+cp rename.txt rename.csh
+# edit rename.csh to symlink files to /gbdb/mm10/encode3/chromHmm
+
+#################################################
+# ATAC-seq from Ren lab
+# (kate)
+
+# Download signals (.bw) and pooled peaks from Ren lab
+
+wget -r -A bw,pooled_peaks.narrowPeak http://renlab.sdsc.edu/yanxiao/encode_trackhub/mm10/atacseq
+
+mkdir lab
+# move files to lab dir
+
+# Reuse hub config
+#  http://renlab.sdsc.edu/yanxiao/encode_trackhub/
+
+wget http://renlab.sdsc.edu/yanxiao/encode_trackhub/mm10/trackDb.txt
+
+cp /hive/data/outside/encode3/mouse/chromHmm/tracks/rename.pl .
+
+# edit for this track.  Script will take file list and generate a trackDb and file rename/link script
+
+cd lab
+ls *.bw *.narrowPeak | perl ../rename.pl > ../rename.csh
+
+# oops, need to biggify the narrowPeaks (and zero out scores, some of which exceed 1000)
+
+set sizes = /hive/data/genomes/mm10/chrom.sizes
+foreach f (*.narrowPeak)
+    set d = $f:r
+    mv $f $d.narrowPeak.bad
+    awk 'OFS="\t" {$5 = 0; print}' < $d.narrowPeak.bad > $d.narrowPeak
+    bedToBigBed -type=bed6+4 -as=$HOME/kent/src/hg/lib/bigNarrowPeak.as $d.narrowPeak $sizes $d.bb
+end
+linesToRa trackDb.atac.lines trackDb.atac.ra
+
+cd ..
+mkdir /gbdb/mm10/encode3/atac
+csh rename.csh
+
+mv trackDb.atac.ra ~/kent/src/hg/makeDb/trackDb/mouse/mm10
+
+# edit for indents, add views
+
+#################################################
+# Update peak files, from Dave Gorkin at Ren Lab
+# Overlapping peaks merged, score field set
+# 09-09-2019
+
+mkdir lab2; cd lab2
+wget -A bed -r -nd http://enhancer.sdsc.edu/enhancer_export/ENCODE/for_ucsc/atac_pooled_peaks/
+
+# oops, they have decimal points in score.  Strip these.
+
+// biggify
+set sizes = /hive/data/genomes/mm10/chrom.sizes
+foreach f (*.bed)
+    set d = $f:r
+    sed 's/\..*//' < $d.bed > $d.fixed.bed
+    bedToBigBed -type=bed5 $d.fixed.bed $sizes $d.bb
+end
+
+# link to /gbdb
+rm /hive/data/gbdb/mm10/encode3/atac/*.bb
+csh rename2.bb.csh
+
+
