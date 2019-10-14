@@ -28,14 +28,14 @@ wgEncode 1
         track egPromoterRep
         shortLabel EPD Promoters (Rep)
         longLabel EPDnew promoters in replicated enhancer/gene associations from ENCODE 3 (UCSD/Ren)
-        bigDataUrl /gbdb/mm10/bbi/encode3RenInteractEpdPromoterRep.bb
+        bigDataUrl /gbdb/mm10/encode3/encode3RenInteractEpdPromoterRep.bb
         parent egPromoterView
         subGroups set=a_REP view=b_promoter
 
         track egPromoterAll
         shortLabel EPD Promoters (All)
         longLabel EPDnew promoters in all enhancer/gene associations from ENCODE 3 (UCSD/Ren)
-        bigDataUrl /gbdb/mm10/bbi/encode3RenInteractEpdPromoterAll.bb
+        bigDataUrl /gbdb/mm10/encode3/encode3RenInteractEpdPromoterAll.bb
         parent egPromoterView off
         subGroups set=b_ALL view=b_promoter
 
@@ -49,14 +49,14 @@ wgEncode 1
         track egEnhancerRep
         shortLabel Enhancers (Rep)
         longLabel Replicated enhancers in enhancer/gene map from ENCODE 3 (UCSD/Ren)
-        bigDataUrl /gbdb/mm10/bbi/encode3RenInteractEnhancerRep.bb
+        bigDataUrl /gbdb/mm10/encode3/encode3RenInteractEnhancerRep.bb
         parent egEnhancerView
         subGroups set=a_REP view=a_enhancer
 
         track egEnhancerAll
         shortLabel Enhancers (All)
         longLabel All enhancers in enhancer/gene map from ENCODE 3 (UCSD/Ren)
-        bigDataUrl /gbdb/mm10/bbi/encode3RenInteractEnhancerAll.bb
+        bigDataUrl /gbdb/mm10/encode3/encode3RenInteractEnhancerAll.bb
         parent egEnhancerView off
         subGroups set=b_ALL view=a_enhancer
 
@@ -75,14 +75,14 @@ wgEncode 1
         track egInteractionRep
         shortLabel Associations (Rep)
         longLabel Replicated associations between enhancers and gene promoters from ENCODE 3 (UCSD/Ren) and EPDnew
-        bigDataUrl /gbdb/mm10/bbi/encode3RenEnhancerPromoterInteractRep.bb
+        bigDataUrl /gbdb/mm10/encode3/encode3RenEnhancerPromoterInteractRep.bb
         parent egInteractionView
         subGroups set=a_REP view=c_interaction
 
         track egInteractionAll
         shortLabel Associations (All)
         longLabel All associations between enhancers and gene promoters from ENCODE 3 (UCSD/Ren) and EPDnew
-        bigDataUrl /gbdb/mm10/bbi/encode3RenEnhancerPromoterInteractAll.bb
+        bigDataUrl /gbdb/mm10/encode3/encode3RenEnhancerPromoterInteractAll.bb
         parent egInteractionView off
         subGroups set=b_ALL view=c_interaction
 
@@ -98,14 +98,14 @@ wgEncode 1
         track egClusteredInteractionRep
         shortLabel Interaction Clusters (Rep)
         longLabel Clustered replicated associations of enhancers and gene promoters from ENCODE 3 (UCSD/Ren) and EPDnew
-        bigDataUrl /gbdb/mm10/bbi/encode3RenEnhancerPromoterInteractRep.bb
+        bigDataUrl /gbdb/mm10/encode3/encode3RenEnhancerPromoterInteractRep.bb
         parent egClusteredInteractionView
         subGroups set=a_REP view=d_cluster
 
         track egClusteredInteractionAll
         shortLabel Interaction Clusters (All)
         longLabel Clustered all associations of enhancers and gene promoters from ENCODE 3 (UCSD/Ren) and EPDnew
-        bigDataUrl /gbdb/mm10/bbi/encode3RenEnhancerPromoterInteractAll.bb
+        bigDataUrl /gbdb/mm10/encode3/encode3RenEnhancerPromoterInteractAll.bb
         parent egClusteredInteractionView off
         subGroups set=b_ALL view=d_cluster
 
