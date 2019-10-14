@@ -2124,6 +2124,54 @@ for (;;)
 return recordCount;
 }
 
+int chopByCharRespectDoubleQuotes(char *in, char sep, char *outArray[], int outSize)
+/* Chop a string into sep delimited strings but honor double quotes */
+{
+int recordCount = 0;
+char c;
+boolean quoting = FALSE;
+for (;;)
+    {
+    if (outArray != NULL && recordCount >= outSize)
+        break;
+
+    // skip initial sep
+    while ((*in) == sep) ++in;
+    if (*in == 0)
+        break;
+
+    if (outArray != NULL)
+        outArray[recordCount] = in;
+    recordCount += 1;
+    quoting = FALSE;
+    for (;;)
+        {
+        if ((c = *in) == 0)
+            break;
+        if (quoting)
+            {
+            if (c == '"')
+                quoting = FALSE;
+            }
+        else
+            {
+            quoting = (c == '"');
+            if (c == sep)
+                break;
+            }
+        ++in;
+        }
+    if (*in == 0)
+        break;
+
+    // Tag end of word with zero
+    if (outArray != NULL)
+        *in = 0;
+    in += 1;
+    }
+return recordCount;
+}
+
 int chopByChar(char *in, char chopper, char *outArray[], int outSize)
 /* Chop based on a single character. */
 {
