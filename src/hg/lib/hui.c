@@ -4375,7 +4375,9 @@ labelMakeCheckBox(cart, correctTdb, "maf", "MAF if available", FALSE);
 labelMakeCheckBox(cart, correctTdb, "func", "Most severe functional impact on gene if any", FALSE);
 puts("<br>");
 scoreCfgUi(db, cart, leafTdb, name, "", 0, FALSE);
-puts("<br>");
+puts("For more information about the &quot;Interesting or anomalous properties&quot;, "
+     "see <a href='#ucscNotes'>below</a>.");
+puts("<br><br>");
 puts("<b>Minimum MAF:</b>");
 boolean parentLevel = isNameAtParentLevel(leafTdb, name);
 double minMaf = cartUsualDoubleClosestToHome(cart, leafTdb, parentLevel, "minMaf", 0.0);
