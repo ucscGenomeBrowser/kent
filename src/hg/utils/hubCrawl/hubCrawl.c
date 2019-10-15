@@ -177,6 +177,7 @@ if (hashLookup(visitedTracks, tdb->track) == NULL)
 
     // Write out lines for child tracks
     struct trackDb *subtrack = NULL;
+    subtrack = tdb->subtracks;
     while (subtrack != NULL)
         {
         trackHubCrawlTrack(subtrack, genome, hubUrl, dbName, searchFp, visitedTracks);
