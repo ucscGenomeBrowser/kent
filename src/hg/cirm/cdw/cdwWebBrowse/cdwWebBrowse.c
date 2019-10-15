@@ -70,7 +70,7 @@ hashElFreeList(&list);
 char *fileTableFields = NULL;
 char *visibleFacetFields = NULL;
 #define FILEFIELDS "file_name,file_size,ucsc_db"
-#define FILEFACETFIELDS "species,assay,format,output,organ_anatomical_name,lab,data_set_id,biosample_cell_type,read_size,sample_label"
+#define FILEFACETFIELDS "species,assay,format,output,organ_anatomical_name,lab,data_set_id,biosample_cell_type,sample_label"
 
 struct dyString *printPopularTags(struct hash *hash, int maxSize)
 /* Get all hash elements, sorted by count, and print all the ones that fit */
@@ -1180,7 +1180,6 @@ puts("The URLs are valid for one week.<p>\n");
 puts("To download the files:\n");
 puts("<ul>\n");
 puts("<li>With Firefox and <a href=\"https://addons.mozilla.org/en-US/firefox/addon/downthemall/\">DownThemAll</a>: Click Tools - DownThemAll! - Manager. Right click - Advanced - Import from file. Right-click - Select All. Right-click - Toogle All\n");
-puts("<li>With Chrome and <a href=\"https://chrome.google.com/webstore/detail/tab-save/lkngoeaeclaebmpkgapchgjdbaekacki\">TabToSave</a>: Click the T/S icon next to the URL bar, click the edit button at the bottom of the screen and paste the file contents\n");
 
 if (isPublicSite)
     {

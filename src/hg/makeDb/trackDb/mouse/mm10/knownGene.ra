@@ -1,7 +1,7 @@
 
 track knownGene 
-shortLabel GENCODE VM20
-longLabel  GENCODE VM20 Comprehensive Transcript Set (only Basic displayed by default)
+shortLabel GENCODE VM23
+longLabel  GENCODE VM23 Comprehensive Transcript Set (only Basic displayed by default)
 group genes
 visibility pack
 priority 1
@@ -16,9 +16,9 @@ baseColorDefault genomicCodons
 defaultLinkedTables kgXref
 intronGap 12
 isGencode2 on
-bigGeneDataUrl /gbdb/mm10/knownGeneM20.bb
+bigGeneDataUrl /gbdb/mm10/knownGeneM23.bb
 
-track knownGeneOld10
+track knownGeneOld11
 shortLabel Old UCSC Genes
 longLabel Previous Version of UCSC Genes
 group genes
@@ -26,13 +26,13 @@ visibility hide
 color 82,82,160
 type genePred
 hgsid on
-oldToNew kg10ToKg11
+oldToNew kg11ToKg12
 baseColorUseCds given
 baseColorDefault genomicCodons
 
-searchName knownGeneOld10
-searchTable knownGeneOld10
-searchDescription Previous Version of UCSC Genes
+searchName knownGeneOld11
+searchTable knownGeneOld11
+searchDescription Previous Version of GENCODE Genes
 searchMethod fuzzy
 query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
 searchPriority 3.53

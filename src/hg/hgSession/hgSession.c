@@ -40,6 +40,8 @@
 #include "trackHub.h"
 #include "errCatch.h"
 
+char *database = NULL;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -746,7 +748,7 @@ static void outDefaultTracks(struct cart *cart, struct dyString *dy)
 /* Output the default trackDb visibility for all tracks
  * in trackDb if the track is not mentioned in the cart. */
 {
-char *database = cartString(cart, "db");
+database = cartString(cart, "db");
 struct trackDb *tdb = NULL;
 // Some old sessions reference databases that are no longer present, and that triggers an errAbort
 // when calling hgTrackDb.  Just move on instead of errAborting.

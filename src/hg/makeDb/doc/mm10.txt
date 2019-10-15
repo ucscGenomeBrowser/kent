@@ -18221,19 +18221,30 @@ TMPDIR=/dev/shm
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev) > guides.log 2>&1
     # real    8m40.172s
+Completed: 100 of 100 jobs
+CPU time in finished jobs:      11503s     191.72m     3.20h    0.13d  0.000 y
+IO & Wait Time:                   254s       4.23m     0.07h    0.00d  0.000 y
+Average job time:                 118s       1.96m     0.03h    0.00d
+Longest finished job:             386s       6.43m     0.11h    0.00d
+Submission to last job:           387s       6.45m     0.11h    0.00d
 
     time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
        -continue=specScoreJobList -stop=specScores \
     mm10 knownGene -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev) > specScores.log 2>&1
-XXX - running - Tue Oct  8 15:49:19 PDT 2019
-# Completed: 3147278 of 3147278 jobs
-# CPU time in finished jobs:  301358514s 5022641.91m 83710.70h 3487.95d  9.556 y
-# IO & Wait Time:             153270388s 2554506.46m 42575.11h 1773.96d  4.860 y
-# Average job time:                 144s       2.41m     0.04h    0.00d
-# Longest finished job:             388s       6.47m     0.11h    0.00d
-# Submission to last job:        458446s    7640.77m   127.35h    5.31d
+Completed: 2947877 of 2947877 jobs
+CPU time in finished jobs:  262070681s 4367844.69m 72797.41h 3033.23d  8.310 y
+IO & Wait Time:               6243499s  104058.31m  1734.31h   72.26d  0.198 y
+Average job time:                  91s       1.52m     0.03h    0.00d
+Longest finished job:             217s       3.62m     0.06h    0.00d
+Submission to last job:        274925s    4582.08m    76.37h    3.18d
+
+# Number of specScores: 220282678
+
+# real    5619m9.026s
+# user    617m24.869s
+# sys     52m8.371s
 
     ### remember to get back to hgwdev to run this
     time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
@@ -18241,7 +18252,25 @@ XXX - running - Tue Oct  8 15:49:19 PDT 2019
     mm10 knownGene -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev) > load.log 2>&1
-    # real    1085m38.773s
+    # real    970m21.487s
+    # user    0m0.983s
+    # sys     0m2.219s
+
+# effScores:
+Completed: 27697 of 27697 jobs
+CPU time in finished jobs:   14348277s  239137.94m  3985.63h  166.07d  0.455 y
+IO & Wait Time:                150120s    2502.01m    41.70h    1.74d  0.005 y
+Average job time:                 523s       8.72m     0.15h    0.01d
+Longest finished job:            1966s      32.77m     0.55h    0.02d
+Submission to last job:         15067s     251.12m     4.19h    0.17d
+
+# offTargets:
+Completed: 147394 of 147394 jobs
+CPU time in finished jobs:    2213680s   36894.66m   614.91h   25.62d  0.070 y
+IO & Wait Time:               2663355s   44389.25m   739.82h   30.83d  0.084 y
+Average job time:                  33s       0.55m     0.01h    0.00d
+Longest finished job:              68s       1.13m     0.02h    0.00d
 
 #########################################################################
 
+# For ENCODE 3 tracks, see doc/encode3/mouse.txt

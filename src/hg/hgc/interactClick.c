@@ -11,6 +11,7 @@
 #include "customTrack.h"
 #include "trashDir.h"
 #include "hex.h"
+#include "jsHelper.h"
 #include <openssl/sha.h>
 
 #include "interact.h"
@@ -460,6 +461,12 @@ if (count > 1 || clusterMode)
     }
 
 //genericHeader(tdb, item);
+if (clusterMode && count > 1)
+    {
+    puts("<table>");
+    jsBeginCollapsibleSectionFontSize(cart, tdb->track, "clusterInteractions",
+                          "Show individual interactions in cluster", FALSE, "inherit");
+    }
 static struct interactPlusRow *ipr = NULL;
 for (ipr = iprs; ipr != NULL; ipr = ipr->next)
     {
@@ -476,6 +483,11 @@ for (ipr = iprs; ipr != NULL; ipr = ipr->next)
         }
     if (count > 1 && !isEmptyTextField(ipr->interact->name) && sameString(ipr->interact->name, item))
         printf("<hr>\n");
+    }
+if (clusterMode && count > 1)
+    {
+    jsEndCollapsibleSection();
+    puts("</table>");
     }
 }
 
