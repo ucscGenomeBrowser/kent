@@ -18204,7 +18204,7 @@ TMPDIR=/dev/shm
     # 1565313924 bases of 2282482188 (68.579%) in intersection
 
 ##############################################################################
-# crispr whole genome (WORKING - 2019-10-08 - Hiram)
+# crispr whole genome (DONE - 2019-10-08 - Hiram)
     mkdir /hive/data/genomes/mm10/bed/crisprAll
     cd /hive/data/genomes/mm10/bed/crisprAll
 
