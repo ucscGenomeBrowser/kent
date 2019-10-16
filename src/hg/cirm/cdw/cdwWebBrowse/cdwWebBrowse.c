@@ -1516,6 +1516,11 @@ fieldedTableFree(&table);
 void doAnalysisQuery(struct sqlConnection *conn)
 /* Print up query page */
 {
+if (cartNonemptyString(cart, "cdwQueryReset"))
+    {
+    cartRemovePrefix(cart, "cdwQuery");
+    }
+
 /* Do stuff that keeps us here after a routine submit */
 printf("Enter a SQL-like query below. ");
 printf("In the box after 'select' you can put in a list of tag names including wildcards. ");
@@ -1563,7 +1568,8 @@ char *format = cartUsualString(cart, formatVar, menu[0]);
 printf("  "); 
 cgiMakeDropList(formatVar, menu, ArraySize(menu), format);
 printf("  "); 
-printf("<input class='btn btn-secondary' type='submit' name='View' id='View' value='View'>\n");
+printf("<input class='btn btn-secondary' type='submit' name='cdwQueryView' id='View' value='View'>\n");
+printf("<input class='btn btn-secondary' type='submit' name='cdwQueryReset' id='View' value='Reset'>\n");
 printf("</FORM>\n\n");
 
 
@@ -1647,6 +1653,8 @@ if ((user == NULL) || (!user->isAdmin))
         }
     sqlDyStringPrintfFrag(sqlQuery, ")");
     }
+// limit
+sqlDyStringPrintfFrag(sqlQuery, " limit %d", limit);
 
 // Now to actually fetch the data!
 sr = sqlGetResult(conn, sqlQuery->string);
