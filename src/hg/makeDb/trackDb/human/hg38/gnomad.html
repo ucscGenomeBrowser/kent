@@ -10,6 +10,10 @@ pipeline and population annotations, see the following <a target="_blank"
 href="https://macarthurlab.org/2017/02/27/the-genome-aggregation-database-gnomad">blog post</a>
 and the 2.1.1 <a href="https://storage.googleapis.com/gnomad-public/release/2.1.1/README.txt"
 target="_blank">README</a>.</p>
+<p>
+All data here are based on the GRCh37/hg19 assembly.  This track displays the GRCh38/hg38 lift-over provided
+by gnomAD on their downloads site.
+</p>
 
 <h2>Display Conventions</h2>
   <dt></dt>
@@ -25,12 +29,17 @@ target="_blank">README</a>.</p>
 <p>
 The raw data can be explored interactively with the <a target="_blank" href="../cgi-bin/hgTables">
 Table Browser</a>, or the <a target="_blank" href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
-automated analysis, the genome annotation is stored in files that can be downloaded from our <a
+automated analysis, the data may be queried from our <a target="_blank" 
+href="/goldenPath/help/api.html">REST API</a>, and the genome annotations are stored in files that
+can be downloaded from our <a
 href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomad/" target="_blank">download server</a>, subject
-to the conditions set forth by the gnomAD consortium (see below).  
-Variant VCFs can be found in the vcf/ subdirectory.
-<br>
-Please refer to our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+to the conditions set forth by the gnomAD consortium (see below). Coverage values
+for the genome are in <a target="_blank" href="../goldenPath/help/bigWig.html">bigWig</a> files in
+the coverage/ subdirectory. Variant VCFs can be found in the vcf/ subdirectory.</p>
+<p>
+The data can also be found directly from the gnomAD <a target="_blank" 
+href="https://gnomad.broadinstitute.org/downloads">downloads page</a>. Please refer to
+our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
 target="_blank">mailing list archives</a> for questions, or our <a target="_blank"
 href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more information.</p>
 
@@ -45,10 +54,10 @@ href="https://opendatacommons.org/licenses/odbl/1.0/" target="_blank">ODC Open D
 <h2>References</h2>
 
 <p>
-Lek M, Karczewski KJ, Minikel EV, Samocha KE, Banks E, Fennell T, O'Donnell-Luria AH, Ware JS, Hill
-AJ, Cummings BB <em>et al</em>.
-<a href="https://www.nature.com/articles/nature19057" target="_blank">Analysis of protein-coding
-genetic variation in 60,706 humans</a>. <em>Nature</em>. 2016 Aug 17;536(7616):285-91.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>;
-PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
+Karczewski KJ, Francioli LC, Tiao G, Cummings BB, Alfoldi J, Wang Q, Collins RL, Laricchia KM,
+Ganna A, Birnbaum DP <em>et al</em>.
+<a target="_blank" href="https://www.biorxiv.org/content/10.1101/531210v3.full">Variation across 
+141,456 human exomes and genomes reveals the spectrum of loss-of-function intolerance across human 
+protein-coding genes</a>. doi: https://doi.org/10.1101/531210.
 </p>
+

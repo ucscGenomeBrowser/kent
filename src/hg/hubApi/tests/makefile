@@ -9,10 +9,11 @@ listFunctions: list01 list02 list03 list04 list05 list06 list07 list08 list09 \
 
 getFunctions: test8 test9 test10 test11 test12 test13 test14 \
 	test15 test16 test19 test21 test26 test27 test28 \
-	test29 test39 test40 test41 test42 test43 test44 test45 test46 test47
+	test29 test39 test40 test41 test42 test43 test44 test45 test46 test47 \
+	test48 test49 test50 test51 test52 test53 test54 test55 test56
 
 listSchema: schema01 schema02 schema03 schema04 schema05 schema06 schema07 \
-	schema08 schema09
+	schema08 schema09 schema10 schema11 schema12
 
 getSequence: getSeq01 getSeq02 getSeq03 getSeq04 getSeq05
 
@@ -32,8 +33,7 @@ errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
 	err31 err32 err33 err34 err35 err36 err37 err38 err39 err40 \
 	err41 err42 err43 err44 err45 err46
 
-notSupported: notSup01 notSup02 notSup03 notSup04 notSup05 notSup06 \
-	notSup07 notSup08 notSup09 notSup10
+notSupported: notSup01 notSup02 notSup03 notSup07 notSup10
 
 bugReports: redmine23733 redmine24089a redmine24089b
 
@@ -309,6 +309,60 @@ test47: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track=BLCA -maxItemsOutput=5 -jsonOutputArrays -chrom=chr21 -start=20000000 -end=30000000 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
+# get data from bigBarChart track
+test48: setOutput
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?track=gtexTranscExpr;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg19 -track=gtexTranscExpr -maxItemsOutput=5 -jsonOutputArrays | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# get data from bigBarChart track with chrom specified
+test49: setOutput
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?track=gtexTranscExpr;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5;chrom=chr22'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg19 -track=gtexTranscExpr -maxItemsOutput=5 -jsonOutputArrays -chrom=chr22 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# get data from bigBarChart track with chrom and start,end specified
+test50: setOutput
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?track=gtexTranscExpr;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5;chrom=chr21;start=20000000;end=30000000'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg19 -track=gtexTranscExpr -maxItemsOutput=5 -jsonOutputArrays -chrom=chr21 -start=20000000 -end=30000000 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# get data from bigInteract track
+test51: setOutput
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?track=geneHancerInteractions;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg19 -track=geneHancerInteractions -maxItemsOutput=5 -jsonOutputArrays | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# get data from bigInteract track with chrom specified
+test52: setOutput
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?track=geneHancerInteractions;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5;chrom=chr22'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg19 -track=geneHancerInteractions -maxItemsOutput=5 -jsonOutputArrays -chrom=chr22 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# get data from bigInteract track with chrom and start,end specified
+test53: setOutput
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?track=geneHancerInteractions;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5;chrom=chr21;start=20000000;end=30000000'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg19 -track=geneHancerInteractions -maxItemsOutput=5 -jsonOutputArrays -chrom=chr21 -start=20000000 -end=30000000 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# get data from clonePos track
+test54: setOutput
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?track=clonePos;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg19 -track=clonePos -maxItemsOutput=5 -jsonOutputArrays | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# get data from clonePos track with chrom specified
+test55: setOutput
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?track=clonePos;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5;chrom=chr22'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg19 -track=clonePos -maxItemsOutput=5 -jsonOutputArrays -chrom=chr22 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# get data from clonePos track with chrom and start,end specified
+test56: setOutput
+	@printf "### $@ ### 'https://api-test.gi.soe.ucsc.edu/getData/track?track=clonePos;genome=hg19;jsonOutputArrays=1;maxItemsOutput=5;chrom=chr21;start=20000000;end=30000000'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg19 -track=clonePos -maxItemsOutput=5 -jsonOutputArrays -chrom=chr21 -start=20000000 -end=30000000 | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
 ###############################################################################
 #  /getData/sequence testing
 ###############################################################################
@@ -393,6 +447,24 @@ schema08: setOutput
 schema09: setOutput
 	@printf "### $@ 'https://api-test.gi.ucsc.edu/list/schema?track=BLCA;genome=hg38'\n"
 	@./jsonConsumer.pl -endpoint="/list/schema" -genome="hg38" -track=BLCA | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# list schema for bigBarChart table type
+schema10: setOutput
+	@printf "### $@ 'https://api-test.gi.ucsc.edu/list/schema?track=gtexTranscExpr;genome=hg19'\n"
+	@./jsonConsumer.pl -endpoint="/list/schema" -genome="hg19" -track=gtexTranscExpr | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# list schema for bigInteract table type
+schema11: setOutput
+	@printf "### $@ 'https://api-test.gi.ucsc.edu/list/schema?track=geneHancerInteractions;genome=hg19'\n"
+	@./jsonConsumer.pl -endpoint="/list/schema" -genome="hg19" -track=geneHancerInteractions | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# list schema for clonePos table type
+schema12: setOutput
+	@printf "### $@ 'https://api-test.gi.ucsc.edu/list/schema?track=clonePos;genome=hg19'\n"
+	@./jsonConsumer.pl -endpoint="/list/schema" -genome="hg19" -track=clonePos | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 ###############################################################################
@@ -944,40 +1016,10 @@ notSup03: setOutput
 	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg19 -track="hapmapLdPhCeu" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
-# request a track type that is not yet supported: bigBarChart
-notSup04: setOutput
-	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=gtexTranscExpr;genome=hg38'\n"
-	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track="gtexTranscExpr" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-
-# request a track type that is not yet supported: bigLolly
-notSup05: setOutput
-	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=allCancer;genome=hg38'\n"
-	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track="allCancer" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-
-# request a track type that is a container, not a data track
-notSup06: setOutput
-	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/getData/track?track=gdcCancer;genome=hg38'\n"
-	@./jsonConsumer.pl -endpoint="/getData/track" -genome=hg38 -track="gdcCancer" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-
 # request chromosome list from a track that is a container, not a data track
 notSup07: setOutput
 	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=gdcCancer;genome=hg38'\n"
 	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome=hg38 -track="gdcCancer" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-
-# request chromosome list from a track that is a container, not a data track
-notSup08: setOutput
-	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=allCancer;genome=hg38'\n"
-	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome=hg38 -track="allCancer" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
-	@zdiff expected/$@.gz testOutput/$@.gz
-
-# clonePos does not have an 'as' definiton in tableDescriptions
-notSup09: setOutput
-	@printf "### $@ 'https://hgwdev-hiram.gi.ucsc.edu/list/chromosomes?track=clonePos;genome=hg19'\n"
-	@./jsonConsumer.pl -endpoint="/list/chromosomes" -genome="hg19" -track="clonePos" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 # hapmapLdPhCeu does not have an 'as' definiton in tableDescriptions
