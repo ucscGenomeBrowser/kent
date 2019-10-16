@@ -5,6 +5,7 @@ table hubSearchText
     string db; "Assembly name (UCSC format) for Assembly and Track descriptions, NULL for hub descriptions"
     string track; "Track name for track descriptions, NULL for others"
     string label; "Name to display in search results"
+    lstring parents; "Comma separated list of parent track of this track, NULL for others"
     enum ("Short", "Long", "Meta") textLength; "Length of text (short for labels, long for description pages, meta for metadata)"
     lstring text; "Description text"
     )

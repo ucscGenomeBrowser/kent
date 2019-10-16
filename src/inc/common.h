@@ -982,6 +982,9 @@ int chopByWhiteRespectDoubleQuotes(char *in, char *outArray[], int outSize);
  *   Fred "and Ethyl" results in word [Fred "and Ethyl"]
  * Special note "" is a valid, though empty word. */
 
+int chopByCharRespectDoubleQuotes(char *in, char sep, char *outArray[], int outSize);
+/* Chop a string into sep delimited strings but honor double quotes */
+
 int chopByChar(char *in, char chopper, char *outArray[], int outSize);
 /* Chop based on a single character. */
 

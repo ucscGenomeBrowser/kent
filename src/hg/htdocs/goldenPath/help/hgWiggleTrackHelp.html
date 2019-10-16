@@ -33,9 +33,19 @@ option displays the data using the parameters specified in the Vertical viewing 
 configure the graph to automatically scale to a range defined by the minimum and maximum data 
 points in the current view, select the &quot;Auto-scale to data view&quot; option. To keep the 
 y=0 value in view at all times when Auto-scale is selected, set &quot;Always include 
-zero&quot; to &quot;ON&quot;. When viewing signal tracks within a composite group use
-&quot;group auto-scale&quot; to enable having all tracks scaled against the one track
-in the group that has the highest maximum data points in the current view.</p>
+zero&quot; to &quot;ON&quot;.</p>
+<ul>
+  <li>When viewing signal tracks within a composite group use
+  &quot;group auto-scale&quot; to enable having all tracks scaled against the one track
+  in the group that has the highest maximum data points in the current view.
+  For example, below is a side-by-side image of two views of the same data from a selection
+  of cell lines within a composite of related RNA-seq experiments. On the left is the
+  original &quot;auto-scale to data view&quot; setting, where each track is auto-scaled
+  to appear at each track's highest value. And on the right is the new &quot;group
+  auto-scale&quot; setting for the same RNA-seq data where all tracks are scaled against
+  the one track in the region that has the highest value (67215 for IMR9 cell TAP + 1).<br>
+  <img src="../../images/groupAutoScale.png" width='600' alt="Auto-scale comparison"></li>
+</ul>
 <p> 
 <strong>Vertical viewing range (boxed in red)</strong>: The min and max values specify the vertical portion of 
 the graph that is displayed (default range is 30-70). These numbers can be used to set data 
