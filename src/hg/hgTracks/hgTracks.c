@@ -10345,6 +10345,12 @@ if (cartOptionalString(cart, "udcTimeout"))
     }
 }
 
+void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut)
+/* add text to track long label to indicate filter is active */
+{
+tg->longLabel = labelAsFilteredNumber(tg->longLabel, numOut);
+}
+
 void labelTrackAsFiltered(struct track *tg)
 /* add text to track long label to indicate filter is active */
 {

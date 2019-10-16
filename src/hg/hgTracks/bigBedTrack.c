@@ -420,12 +420,7 @@ void bigBedAddLinkedFeaturesFromExt(struct track *track,
 struct lm *lm = lmInit(0);
 struct trackDb *tdb = track->tdb;
 struct bigBedInterval *bb, *bbList = bigBedSelectRangeExt(track, chrom, start, end, lm, maxItems);
-char *scoreFilter = cartOrTdbString(cart, track->tdb, "scoreFilter", NULL);
 char *mouseOverField = cartOrTdbString(cart, track->tdb, "mouseOverField", NULL);
-int minScore = 0;
-if (scoreFilter)
-    minScore = atoi(scoreFilter);
-
 struct bbiFile *bbi = fetchBbiForTrack(track);
 int seqTypeField =  0;
 if (sameString(track->tdb->type, "bigPsl"))
@@ -438,9 +433,10 @@ int mouseOverIdx = bbExtraFieldIndex(bbi, mouseOverField);
 track->bbiFile = NULL;
 
 struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, track->tdb) ;
-if (filters || compositeChildHideEmptySubtracks(cart, track->tdb, NULL, NULL))
+if (compositeChildHideEmptySubtracks(cart, track->tdb, NULL, NULL))
    labelTrackAsFiltered(track);
 
+unsigned filtered = 0;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     struct linkedFeatures *lf = NULL;
@@ -474,7 +470,10 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	}
 
     if (lf == NULL)
+        {
+        filtered++;
         continue;
+        }
 
     lf->label = bigBedMakeLabel(track->tdb, track->labelColumns,  bb, chromName);
     if (sameString(track->tdb->type, "bigGenePred") || startsWith("genePred", track->tdb->type))
@@ -485,9 +484,12 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     char* mouseOver = restField(bb, mouseOverIdx);
     lf->mouseOver   = mouseOver; // leaks some memory, cloneString handles NULL ifself 
 
-    if (scoreFilter == NULL || lf->score >= minScore)
-	slAddHead(pLfList, lf);
+    slAddHead(pLfList, lf);
     }
+
+if (filtered)
+   labelTrackAsFilteredNumber(track, filtered);
+
 lmCleanup(&lm);
 
 if (!trackDbSettingClosestToHomeOn(track->tdb, "linkIdInName"))

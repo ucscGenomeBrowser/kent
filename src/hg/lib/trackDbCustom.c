@@ -1569,6 +1569,14 @@ if (metadataInTdb)
 return NULL;
 }
 
+char *labelAsFilteredNumber(char *label, unsigned numOut)
+/* add text to label to indicate filter is active */
+{
+char buffer[2048];
+safef(buffer, sizeof buffer, " (%d items filtered)", numOut);
+return catTwoStrings(label, buffer);
+}
+
 char *labelAsFiltered(char *label)
 /* add text to label to indicate filter is active */
 {
