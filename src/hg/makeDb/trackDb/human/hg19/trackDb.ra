@@ -926,7 +926,7 @@ hapmapPhase III
 codingAnnotations snp138CodingDbSnp,
 # Need to request new tag
 #codingAnnoLabel_snp138CodingDbSnp dbSNP
-priority 23.4
+priority 18.1
 
 track snp138Mult override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
@@ -944,7 +944,7 @@ chimpDb panTro4
 orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
-priority 23.2
+priority 12.1
 
 track snp138Common override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
@@ -954,7 +954,7 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 visibility hide
-priority 23.3
+priority 6.1
 
 track snp137Flagged
 shortLabel Flagged SNPs(137)
