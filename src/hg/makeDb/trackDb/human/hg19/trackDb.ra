@@ -2135,6 +2135,13 @@ type bed 3 .
     longLabel Illumina Human Omni1-Quad
     type bed 6 +
     priority 22
+    
+    track snpArrayIlluminaGDA
+    parent genotypeArrays
+    shortLabel Illumina GDA
+    longLabel Illumina GDA
+    type bed 6 +
+    priority 23
 
 track tfbsConsSites
 shortLabel TFBS Conserved

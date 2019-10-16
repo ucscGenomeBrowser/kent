@@ -33645,3 +33645,10 @@ mkdir -p /gbdb/hg19/bbi/hic
 cd /gbdb/hg19/bbi/hic
 ln -s /hive/data/genomes/hg19/bed/hic/*.hic .
 #########################################################################
+
+# Illumina GDA  (DONE braney 2019-10-16)
+cd /cluster/data/hg19/bed/gda
+wget "http://webdata.illumina.com.s3-website-us-east-1.amazonaws.com/downloads/productfiles/global-diversity-array/infinium-global-diversity-array-8-d1-csv.zip"
+unzip *.zip
+awk 'BEGIN {FS=","; OFS="\t"} { print "chr" $10, $11-1, $11, $2,0, $21,$4}' *.csv | sort -k1,1 -k2,2n | bedClip stdin /cluster/data/hg19/chrom.sizes gda.bed
+hgLoadSqlTab hg19 snpArrayIlluminaGDA gda.sql gda.bed
