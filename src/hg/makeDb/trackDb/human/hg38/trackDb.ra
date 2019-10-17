@@ -720,8 +720,9 @@ group varRep
 dataVersion Release 2.1.1
 configureByPopup off
 type vcfTabix
-pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19" 
+pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; New red
 html gnomad
+release alpha
 
     track gnomadGenomesVariants
     parent gnomadVariants
@@ -732,6 +733,7 @@ html gnomad
     showHardyWeinberg on
     configureByPopup off
     bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.gz
+    release alpha    
 
     track gnomadExomesVariants
     parent gnomadVariants
@@ -742,5 +744,6 @@ html gnomad
     showHardyWeinberg on
     configureByPopup off
     bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.gz
+    release alpha
 
 include platinumGenomes.ra
