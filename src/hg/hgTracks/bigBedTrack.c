@@ -421,7 +421,23 @@ struct lm *lm = lmInit(0);
 struct trackDb *tdb = track->tdb;
 struct bigBedInterval *bb, *bbList = bigBedSelectRangeExt(track, chrom, start, end, lm, maxItems);
 char *mouseOverField = cartOrTdbString(cart, track->tdb, "mouseOverField", NULL);
-struct bbiFile *bbi = fetchBbiForTrack(track);
+/* protect against temporary network error */
+struct bbiFile *bbi = NULL;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    bbi = fetchBbiForTrack(track);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    track->networkErrMsg = cloneString(errCatch->message->string);
+    track->drawItems = bigDrawWarning;
+    track->totalHeight = bigWarnTotalHeight;
+    return;
+    }
+errCatchFree(&errCatch);
+
 int seqTypeField =  0;
 if (sameString(track->tdb->type, "bigPsl"))
     {
