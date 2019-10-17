@@ -373,13 +373,13 @@ that genome will occur and any alignment scores representing less than a 20 bp r
 come back as no matches found.</p>
 
 <p>
-When you BLAT a sequence, the server reads the target (genome) and builds an index in memory of 
-all the 11-mer locations. These 11-mers &quot;tile&quot; the sequence as such:
+When you BLAT All a sequence, the server reads the target (genome) and builds an index in memory of 
+all the 11-mer locations, with an 11bp default stepSize. These 11-mers &quot;tile&quot; the sequence as such:
 
 <pre>
-ACTGACTGACT
- CTGACTGACTT
-  TGACTGACTTA
+TGGACAACATG
+           GCAAGAATCAG
+                      TCTCTACAGAA
 </pre></p>
 
 <p>
