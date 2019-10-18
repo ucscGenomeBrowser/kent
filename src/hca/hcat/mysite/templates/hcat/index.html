@@ -28,7 +28,7 @@
 		<div class="lightaccent">E8AA45</div>
 		<div class="background">f4f7f9</div>
 -->
-		<h1><img src="media/tuatu_smaller_blue.png" style="float:left;width:190px;height:190px;;padding: 10"> Tuatara: <span class="accent">pre</span>submission data tracking</h1>
+		<h2><img src="media/tuatu_smaller_blue.png" style="float:left;width:195px;height:195px;;padding-right: 20"> HCA Tuatara: <span class="accent">pre</span>submission data tracking</h2>
 
 		<h3>About</h3>
 		<p>Tuatara is a database to keep track of projects that the HCA is 
@@ -37,19 +37,20 @@
 		Tuatara is built on top of Python, Django, and a relational database that we hope will replace several spreadsheets.</p>
 
 		<h3>Access</h3>
-		<p>If you are interested in access to Tuatara through a prototypical web interface, please email clayfischer@ucsc.edu.  We will be rolling out broader access as we interate through feedback.</p>
+		<p>If you are interested in access to Tuatara through a <a href="admin">prototypical web interface</a>, please email clayfischer@ucsc.edu.  We will be rolling out broader access as we interate through feedback.</p>
 
 		<h3>API</h3>
-		<p>A <span class="accent">REST</span>ful API allows one to query for current status of projects. Combined with the tracker.data.humancellatlas.org API, a full dashboard can be built to show all data known and in progress. Not all data is available through the API due to GDPR constraints, but enough data to make informed decisions based on known projects is available.  Here's a list of the restful urls supported by the API:</p>
-		<p><a href="api">https://tuatara.data.humancellatlas.org/api</a> - lists all classes and the number of objects in each class</p>
-		<p><a href="api/project">https://tuatara.data.humancellatlas.org/api/project</a> - lists information on all projects</p>
-		<p><a href="api/project/HumanInnateLymphoidCells">https://tuatara.data.humancellatlas.org/api/project/[project short name]</a> - list info on project with given short name</p>
-		<p><a href="api/projectstatus">https://tuatara.data.humancellatlas.org/api/projectstatus</a> - List and describe values allowed in project.status field</p>
-		<p><a href="api/contributor">https://tuatara.data.humancellatlas.org/api/contributor</a> - List contributors to any project</p>
-		<p><a href="api/tracker">https://tuatara.data.humancellatlas.org/api/tracker</a> - Post-submission tracking of project</p>
-		<p><a href="api/cdnalibraryprep">https://tuatara.data.humancellatlas.org/api/cdnalibraryprep</a> - Types of single cell RNA sequencing assay</p>
-		<p><a href="api/disease">https://tuatara.data.humancellatlas.org/api/disease</a> - Diseases currently in any project.</p>
-		<p><a href="api/organ">https://tuatara.data.humancellatlas.org/api/organ</a> - Organs currently used in any project.</p>
+		<p>A <span class="accent">REST</span>ful API allows one to query for current status of projects. Combined with the tracker.data.humancellatlas.org API, a full dashboard can be built to show all data known and in progress. Not all data is available through the API due to GDPR constraints, but enough data to make informed decisions based on known projects is available.  Here's a list of the restful urls supported by the API:
+		<ul>
+		<li><a href="api">https://tuatara.data.humancellatlas.org/api</a> - lists all classes and the number of objects in each class
+		<li><a href="api/project">https://tuatara.data.humancellatlas.org/api/project</a> - lists information on all projects
+		<li><a href="api/project/HumanInnateLymphoidCells">https://tuatara.data.humancellatlas.org/api/project/[project short name]</a> - list info on project with short name
+		<li><a href="api/projectstatus">https://tuatara.data.humancellatlas.org/api/projectstatus</a> - List and describe values in project.status field
+		<li><a href="api/contributor">https://tuatara.data.humancellatlas.org/api/contributor</a> - List contributors to any project
+		<li><a href="api/tracker">https://tuatara.data.humancellatlas.org/api/tracker</a> - Post-submission tracking of project
+		<li><a href="api/cdnalibraryprep">https://tuatara.data.humancellatlas.org/api/cdnalibraryprep</a> - Types of single cell RNA sequencing assay
+		<li><a href="api/disease">https://tuatara.data.humancellatlas.org/api/disease</a> - Diseases currently in any project.
+		<li><a href="api/organ">https://tuatara.data.humancellatlas.org/api/organ</a> - Organs currently used in any project.
 		
 	</body>
 </html>
