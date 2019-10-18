@@ -192,6 +192,11 @@
 #       33 refMismatch
 #  4439534 revStrand
 
+    # 10/18/19: add subset tracks
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 152 $freqSourceOrder \
+       -buildDir=`pwd` -continue=bigBed -stop=install >& subsets.log &
+    tail -f subsets.log
+
 
 ##############################################################################
 # dbSnp153: dbSNP build 153 (DONE 9/19/19 angie)
@@ -406,6 +411,13 @@
 #    56491 refIsSingleton
 #       33 refMismatch
 #  4512600 revStrand
+
+    # 10/18/19: add subset tracks
+    # I added new commands to the bigBed and install steps of doBigDbSnp.pl,
+    # ran -debug and copy-pasted commands from the generated scripts.
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 152 $freqSourceOrder \
+       -buildDir=`pwd` -continue=bigBed -stop=install \
+       -debug
 
 
 ##############################################################################
