@@ -742,5 +742,7 @@ boolean trackDbCacheOn();
 char *labelAsFiltered(char *label);
 /* add text to label to indicate filter is active */
 
+char *labelAsFilteredNumber(char *label, unsigned number);
+/* add text to label to indicate filter is active */
 #endif /* TRACKDB_H */
 

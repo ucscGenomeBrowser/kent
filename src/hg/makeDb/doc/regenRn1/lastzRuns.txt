@@ -1,0 +1,269 @@
+#########################################################################
+# LASTZ rat/regenRn1 vs rabbit/oryCun2 - (DONE - 2019-10-11 - Hiram)
+    mkdir /hive/data/genomes/regenRn1/bed/lastzOryCun2.2019-10-11
+    cd /hive/data/genomes/regenRn1/bed/lastzOryCun2.2019-10-11
+
+    printf '# Rat vs. rabbit
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/regenRn1/regenRn1.2bit
+SEQ1_LEN=/hive/data/genomes/regenRn1/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=15
+
+# QUERY: rabbit oryCun2
+SEQ2_DIR=/hive/data/genomes/oryCun2/oryCun2.2bit
+SEQ2_LEN=/hive/data/genomes/oryCun2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=20
+
+BASE=/hive/data/genomes/regenRn1/bed/lastzOryCun2.2019-10-11
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku -noDbNameCheck \
+        -smallClusterHub=hgwdev -chainMinScore=3000 -chainLinearGap=medium \
+	-syntenicNet) > do.log 2>&1
+    # real    184m23.050s
+
+    cat fb.regenRn1.chainOryCun2Link.txt
+    # 586652448 bases of 2282482188 (25.702%) in intersection
+
+    cat fb.regenRn1.chainSynOryCun2Link.txt
+    # 539247828 bases of 2282482188 (23.625%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` regenRn1 oryCun2) > rbest.log 2>&1 &
+    # real    268m49.478s
+
+    cat fb.regenRn1.chainRBest.OryCun2.txt
+    # 558355463 bases of 2282482188 (24.463%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oryCun2/bed/blastz.regenRn1.swap
+    cd /hive/data/genomes/oryCun2/bed/blastz.regenRn1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/regenRn1/bed/lastzOryCun2.2019-10-11/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium -noDbNameCheck \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    34m44.321s
+
+    cat fb.oryCun2.chainRegenRn1Link.txt
+    # 594376030 bases of 2604023284 (22.825%) in intersection
+    cat fb.oryCun2.chainSynRegenRn1Link.txt
+    # 537850488 bases of 2604023284 (20.655%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` oryCun2 regenRn1) > rbest.log 2>&1
+    # real    287m55.750s
+
+    cat fb.oryCun2.chainRBest.RegenRn1.txt
+    # 557937174 bases of 2604023284 (21.426%) in intersection
+
+#########################################################################
+# LASTZ rat/regenRn1 vs pig/susScr11 - (DONE - 2019-10-14 - Hiram)
+    mkdir /hive/data/genomes/regenRn1/bed/lastzSusScr11.2019-10-14
+    cd /hive/data/genomes/regenRn1/bed/lastzSusScr11.2019-10-14
+
+    printf '# Rat vs. pig
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/regenRn1/regenRn1.2bit
+SEQ1_LEN=/hive/data/genomes/regenRn1/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: pig susScr11
+SEQ2_DIR=/hive/data/genomes/susScr11/susScr11.2bit
+SEQ2_LEN=/hive/data/genomes/susScr11/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=5
+
+BASE=/hive/data/genomes/regenRn1/bed/lastzSusScr11.2019-10-14
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku -noDbNameCheck \
+        -smallClusterHub=hgwdev -chainMinScore=3000 -chainLinearGap=medium \
+	-syntenicNet) > do.log 2>&1
+    # real    226m34.300s
+
+    cat fb.regenRn1.chainSusScr11Link.txt
+    # 642554959 bases of 2282482188 (28.152%) in intersection
+
+    cat fb.regenRn1.chainSynSusScr11Link.txt
+    # 606015870 bases of 2282482188 (26.551%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` regenRn1 susScr11) > rbest.log 2>&1 &
+    # real    224m31.973s
+
+    cat fb.regenRn1.chainRBest.SusScr11.txt
+    # 614448249 bases of 2282482188 (26.920%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/susScr11/bed/blastz.regenRn1.swap
+    cd /hive/data/genomes/susScr11/bed/blastz.regenRn1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/regenRn1/bed/lastzSusScr11.2019-10-14/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium -noDbNameCheck \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    43m19.318s
+
+    cat fb.susScr11.chainRegenRn1Link.txt
+    # 635932961 bases of 2472073034 (25.725%) in intersection
+    cat fb.susScr11.chainSynRegenRn1Link.txt
+    # 605094540 bases of 2472073034 (24.477%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` susScr11 regenRn1) > rbest.log 2>&1
+   # real    195m27.050s
+
+   cat fb.susScr11.chainRBest.RegenRn1.txt
+   # 613864682 bases of 2472073034 (24.832%) in intersection
+
+########################################################################
+ LASTZ rat/regenRn1 vs dog/canFam3 - (DONE - 2019-10-14 - Hiram)
+   mkdir /hive/data/genomes/regenRn1/bed/lastzCanFam3.2019-10-14
+   cd /hive/data/genomes/regenRn1/bed/lastzCanFam3.2019-10-14
+
+   printf '# Rat vs. dog
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/regenRn1/regenRn1.2bit
+SEQ1_LEN=/hive/data/genomes/regenRn1/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: dog canFam3
+SEQ2_DIR=/hive/data/genomes/canFam3/canFam3.2bit
+SEQ2_LEN=/hive/data/genomes/canFam3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=25
+
+BASE=/hive/data/genomes/regenRn1/bed/lastzCanFam3.2019-10-14
+TMPDIR=/dev/shm
+' > DEF
+
+   time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+       -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku -noDbNameCheck \
+       -smallClusterHub=hgwdev -chainMinScore=3000 -chainLinearGap=medium \
+       -syntenicNet) > do.log 2>&1
+   # real    219m7.084s
+
+   cat fb.regenRn1.chainCanFam3Link.txt
+   # 678205600 bases of 2282482188 (29.714%) in intersection
+
+   cat fb.regenRn1.chainSynCanFam3Link.txt
+   # 644550064 bases of 2282482188 (28.239%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` regenRn1 canFam3) > rbest.log 2>&1 &
+    # real    186m51.804s
+
+    cat fb.regenRn1.chainRBest.CanFam3.txt
+    # 651971618 bases of 2282482188 (28.564%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/canFam3/bed/blastz.regenRn1.swap
+    cd /hive/data/genomes/canFam3/bed/blastz.regenRn1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/regenRn1/bed/lastzCanFam3.2019-10-14/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium -noDbNameCheck \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    39m44.272s
+
+    cat fb.canFam3.chainRegenRn1Link.txt
+    # 672809905 bases of 2392715236 (28.119%) in intersection
+    cat fb.canFam3.chainSynRegenRn1Link.txt
+    # 642327040 bases of 2392715236 (26.845%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` canFam3 regenRn1) > rbest.log 2>&1
+    # real    162m51.212s
+
+    cat fb.canFam3.chainRBest.RegenRn1.txt
+    # 651196229 bases of 2392715236 (27.216%) in intersection
+
+#########################################################################
+ LASTZ rat/regenRn1 vs crab-eating macaque/macFas5 - (DONE - 2019-10-14 - Hiram)
+   mkdir /hive/data/genomes/regenRn1/bed/lastzMacFas5.2019-10-14
+   cd /hive/data/genomes/regenRn1/bed/lastzMacFas5.2019-10-14
+
+   printf '# Rat vs. crab-eating macaque
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/regenRn1/regenRn1.2bit
+SEQ1_LEN=/hive/data/genomes/regenRn1/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: crab-eating macaque macFas5
+SEQ2_DIR=/hive/data/genomes/macFas5/macFas5.2bit
+SEQ2_LEN=/hive/data/genomes/macFas5/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=25
+
+BASE=/hive/data/genomes/regenRn1/bed/lastzMacFas3.2019-10-14
+TMPDIR=/dev/shm
+' > DEF
+
+# note mistake in BASE directory name, changed directory name after
+# the run was complete, and the DEF file was altered to MacFas5
+# and the symlinks fixed in htdocs-hgdownload
+
+   time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+       -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku -noDbNameCheck \
+       -smallClusterHub=hgwdev -chainMinScore=3000 -chainLinearGap=medium \
+       -syntenicNet) > do.log 2>&1
+   # real    256m56.897s
+
+   cat fb.regenRn1.chainMacFas5Link.txt
+   # 815551694 bases of 2282482188 (35.731%) in intersection
+
+   cat fb.regenRn1.chainSynMacFas5Link.txt
+   # 774681241 bases of 2282482188 (33.940%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` regenRn1 macFas5) > rbest.log 2>&1 &
+    # real    282m53.369s
+
+    cat fb.regenRn1.chainRBest.MacFas5.txt
+    # 782563616 bases of 2282482188 (34.286%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/macFas5/bed/blastz.regenRn1.swap
+    cd /hive/data/genomes/macFas5/bed/blastz.regenRn1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/regenRn1/bed/lastzMacFas5.2019-10-14/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium -noDbNameCheck \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    55m38.846s
+
+    cat fb.macFas5.chainRegenRn1Link.txt
+    # 811540597 bases of 2803866698 (28.944%) in intersection
+    cat fb.macFas5.chainSynRegenRn1Link.txt
+    # 771643309 bases of 2803866698 (27.521%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` macFas5 regenRn1) > rbest.log 2>&1
+    # real    271m41.030s
+
+    cat fb.macFas5.chainRBest.RegenRn1.txt
+    # 781449190 bases of 2803866698 (27.870%) in intersection
+
+#########################################################################

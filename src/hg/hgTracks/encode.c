@@ -201,9 +201,10 @@ if ((filter = bigBedMakeNumberFilter(cart, bbi, tg->tdb, PVALUE_FILTER, NULL, "p
     slAddHead(&filters, filter);
 if ((filter = bigBedMakeNumberFilter(cart, bbi, tg->tdb, QVALUE_FILTER, NULL, "qValue")) != NULL)
     slAddHead(&filters, filter);
-if (filters || compositeChildHideEmptySubtracks(cart, tg->tdb, NULL, NULL))
+if (compositeChildHideEmptySubtracks(cart, tg->tdb, NULL, NULL))
    labelTrackAsFiltered(tg);
 
+unsigned filtered = 0;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
@@ -214,8 +215,14 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
         if (lf)
             slAddHead(&lfList, lf);
+        else 
+            filtered++;
         }
+    else
+        filtered++;
     }
+if (filtered)
+   labelTrackAsFilteredNumber(tg, filtered);
 
 slReverse(&lfList);
 slSort(&lfList, linkedFeaturesCmp);

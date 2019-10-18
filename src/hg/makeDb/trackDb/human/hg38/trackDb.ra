@@ -720,7 +720,7 @@ group varRep
 dataVersion Release 2.1.1
 configureByPopup off
 type vcfTabix
-pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19" 
+pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; New red
 html gnomad
 
     track gnomadGenomesVariants

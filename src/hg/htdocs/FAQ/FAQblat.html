@@ -24,6 +24,8 @@ results</a></li>
 <li><a href="#blat8">Using Blat for short sequences with maximum sensitivity</a></li>
 <li><a href="#blat9">Blat ALL genomes</a></li>
 <li><a href="#blat10">Blat ALL genomes: No matches found</a></li>
+<li><a href="#blat11">Approximating web-based Blat results using gfServer/gfClient</a></li>
+<li><a href="#blat12">Standalone or gfServer/gfClient result start positions off by one</a></li>
 
 </ul>
 <hr>
@@ -160,13 +162,17 @@ does not return matches to U nucleotides in the query sequence.</p>
 <h6>I'm setting up my own Blat server and would like to use the same parameter values that the 
 UCSC web-based Blat server uses.</h6> 
 <p>
-We almost always expect small differences between the hgBlat/gfServer and the 
+We almost always <strong>expect small differences</strong> between the hgBlat/gfServer and the 
 stand-alone, command-line Blat. The best matches can be found using pslReps and pslCDnaFilter 
 utilities. The web-based Blat is tuned permissively with a minimum cut-off score of 20, which will 
 display most of the alignments. We advise deciding which 
 filtering parameters make the most sense for the experiment or analysis. Often these settings will 
 be different and more stringent than those of the web-based Blat. With that in mind, use the 
-following settings to replicate the search results of the web-based Blat:</p>
+following settings to approximate the search results of the web-based Blat:</p>
+<p>
+<strong>Note:</strong> There are cases where the gfServer/gfClient approach provide a better
+approximation of web results than standalone Blat. See the <a href="#blat11">example below</a>
+for an overview of this process.</p>
 <p>
 <em>standalone Blat</em>:</p>
 <ul>
@@ -373,13 +379,13 @@ that genome will occur and any alignment scores representing less than a 20 bp r
 come back as no matches found.</p>
 
 <p>
-When you BLAT a sequence, the server reads the target (genome) and builds an index in memory of 
-all the 11-mer locations. These 11-mers &quot;tile&quot; the sequence as such:
+When you BLAT All a sequence, the server reads the target (genome) and builds an index in memory of 
+all the 11-mer locations, with an 11bp default stepSize. These 11-mers &quot;tile&quot; the sequence as such:
 
 <pre>
-ACTGACTGACT
- CTGACTGACTT
-  TGACTGACTTA
+TGGACAACATG
+           GCAAGAATCAG
+                      TCTCTACAGAA
 </pre></p>
 
 <p>
@@ -397,6 +403,54 @@ overlap (see stepsize in <a href="../goldenPath/help/blatSpec.html">BLAT specifi
 of which could bring the score below 20. In that case, BLAT All would report 2 &quot;hits&quot;, 
 but clicking into the assembly would report no matches. This most often occurs when there are 
 only a few (1-3) hits reported by BLAT All.</p>
+
+<a name="blat11"></a>
+<h2>Approximating web-based Blat results using gfServer/gfClient</h2>
+
+<p>
+Often times using the gfServer/gfClient provides a better approximation or even replicate of
+the web-based Blat results, which otherwise cannot be found using standalone Blat. This approach
+mimics the blat server used by the Genome Browser web-based Blat. The following example will show
+how to set up an hg19 gfServer, then make a query. First, download the appropriate utility for
+the operating system and give it executable permissions:</p>
+<pre>
+#For linux
+rsync -a rsync://hgdownload.soe.ucsc.edu/genome/admin/exe/linux.x86_64/blat/ ./
+#For MacOS
+rsync -a rsync://hgdownload.soe.ucsc.edu/genome/admin/exe/macOSX.x86_64/blat/ ./
+
+chmod +x gfServer gfClient blat
+</pre>
+<p>
+Next, download the appropriate .2bit genome (hg19 in this example), and run the gfServer
+utility with the web Blat parameters, designating the local machine and port 1234:</p>
+<pre>
+wget http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.2bit
+./gfServer start 127.0.0.1 1234 -stepSize=5 hg19.2bit
+</pre>
+<p>
+After a few moments, the gfServer will initialize and be ready to recieve queries. In order
+to approximate web Blat, we will use the gfClient with the following parameters, designating
+our input and output files.</p>
+<pre>
+./gfClient -minScore=20 -minIdentity=0 127.0.0.1 1234 . input.fa out.psl
+</pre>
+<p>The output file <code>out.psl</code> should have results very similar to web-based Blat.</p>
+
+<a name="blat12"></a>
+<h2>Standalone or gfServer/gfClient result start positions off by one</h2>
+<h6>My standalone Blat results or gfServer/gfClient Blat results have a start
+position that is one less that what I see on web Blat results</h6>
+<p>
+This is due to how we store internal coordinates in the Genome Browser. The default
+Blat <strong>Output type</strong> of <strong>hyperlink</strong> shows results in our
+internal coordinate data structure. These internal coordinates have a zero-based start
+and a one-based end. See the following <a target="_blank" href="/FAQ/FAQtracks#tracks1"
+>FAQ entry</a> for more information.</p>
+<p>
+If the <strong>Output type</strong> is changed to <strong>psl</strong> on web Blat, the same
+zero-based half open coordinate results will be seen as the standalone Blat and gfServer/gfClient 
+procedures.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
 </body>

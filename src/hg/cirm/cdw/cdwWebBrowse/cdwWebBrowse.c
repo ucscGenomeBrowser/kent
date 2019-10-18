@@ -283,6 +283,7 @@ struct slName *el;
 static char *outputFields[] = {"tag", "value"};
 struct fieldedTable *table = fieldedTableNew("File Tags", outputFields,ArraySize(outputFields));
 int fieldIx = 0;
+char *accession = NULL;
 for (el = list; el != NULL; el = el->next)
     {
     char *outRow[2];
@@ -297,6 +298,14 @@ for (el = list; el != NULL; el = el->next)
 	    {
 	    char link[1024];
 	    safef(link, sizeof(link), "%s <a href='cdwGetFile?acc=%s'>download</a>", outRow[1], outRow[1]);
+	    accession = cloneString(outRow[1]);
+	    outRow[1] = cloneString(link);
+	    }
+	// add a link to the submit_file_name row
+	if (sameWord(el->name, "submit_file_name"))
+	    {
+	    char link[1024];
+	    safef(link, sizeof(link), "%s <a href='cdwGetFile?acc=%s&useSubmitFname=1'>download</a>", outRow[1], accession);
 	    outRow[1] = cloneString(link);
 	    }
 	fieldedTableAdd(table, outRow, 2, fieldIx);
@@ -311,6 +320,7 @@ struct hash *outputWrappers = hashNew(0);
 hashAdd(outputWrappers, "tag", wrapTagField);
 webSortableFieldedTable(cart, table, returnUrl, "cdwOneFile", 0, outputWrappers, NULL);
 fieldedTableFree(&table);
+freeMem(accession);
 }
 
 char *unquotedCartString(struct cart *cart, char *varName)

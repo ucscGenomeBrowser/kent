@@ -1662,6 +1662,9 @@ void genericDrawNextItem(struct track *tg, void *item, struct hvGfx *hvg, int xO
 struct spaceSaver *findSpaceSaver(struct track *tg, enum trackVisibility vis);
 /* Find SpaceSaver in list. Return spaceSaver found or NULL. */
 
+void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut);
+/* add text to track long label to indicate filter is active and how many items were deleted */
+
 void labelTrackAsFiltered(struct track *tg);
 /* add text to track long label to indicate filter is active */
 

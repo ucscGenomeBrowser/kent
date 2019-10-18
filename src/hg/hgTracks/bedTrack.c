@@ -89,18 +89,22 @@ else if (tg->isBigBed)
     char startBuf[16], endBuf[16];
 
     struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, tg->tdb);
-    if (filters || compositeChildHideEmptySubtracks(cart, tg->tdb, NULL, NULL))
+    if (compositeChildHideEmptySubtracks(cart, tg->tdb, NULL, NULL))
        labelTrackAsFiltered(tg);
 
      if (tg->itemName == bedName && !trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
         tg->itemName = bigBedItemName;
 
     bigBedLabelCalculateFields(cart, tg->tdb, bbi,  &tg->labelColumns);
+    unsigned filtered = 0;
     for (bb = bbList; bb != NULL; bb = bb->next)
         {
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
         if (!bigBedFilterInterval(bedRow, filters))
+            {
+            filtered++;
             continue;
+            }
         bed = loader(bedRow);
         // FIXME BRANEY: either disable for all tracks with NUM_FIELDS > label field or better,
         // fix how label is stored so it doesn't trash custom bed field
@@ -110,6 +114,8 @@ else if (tg->isBigBed)
 
         slAddHead(&list, bed);
         }
+    if (filtered)
+       labelTrackAsFilteredNumber(tg, filtered);
     lmCleanup(&lm);
     }
 else
