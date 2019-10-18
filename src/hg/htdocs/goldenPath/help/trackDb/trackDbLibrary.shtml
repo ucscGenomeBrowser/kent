@@ -1457,14 +1457,22 @@ There are no extra options that can appear on the type bigInteract line.
     or above 800 and below 900. It is recommended that <code>&lt;column&gt;.FilterByRange</code> is used 
     in combination with <code>&lt;column&gt;.FilterLimits</code> to set limit boundaries.</P>
     <P>The filter label will be the description of the field as specified by the autoSql (.as) file.
-    This label can be customized with the <code>&lt;column&gt;.Label</code> parameter.</P>
+    This label can be customized with the <code>&lt;column&gt;.Label</code> parameter.
+    See the bigBed help page and <a target="_blank" 
+    href="/goldenPath/help/bigBed.html#Ex3">example 3</a> for more information about creating
+    unique .as files for bigBed data.</P>
     <P><B>Notes:</B><ul>
-    <li><code>&lt;column&gt;.Filter</code> can be used multiple times with different fields</li>
+    <li><code>&lt;column&gt;.Filter</code> can be used multiple times with different columns</li>
     <li>Both integers and decimals (floats) are supported</li>
-    <li>Any strings or non-numerical characters in a filter field will be treated as zeros</li>
-    <li>Fields that start with a numerical character, then have strings, will be treated
-    as the numerical character; with the string ignored (see example below)</li>
-    <li>The default value of 0 if no argument is passed will filter out negative items in the column</li></ul></P>
+    <li>Any column values that start with non-numerical characters will be treated as zeros</li>
+    <li>Column values that start with a number followed by non-numerical characters will be 
+    treated as only the number; the non-numerical characters (and any numbers that follow them) 
+    will be ignored (see example below)</li>
+    <li>If a column contains negative values, then the default filter value of 0 will filter out 
+    items with negative values. If that is not the desired behavior then you should specify a value</li>
+    <li>By default, all bed tracks that are at least bed5 will have a score filter. Enabling any of the
+    <code>&lt;column&gt;.Filter*</code> filter settings will disable that default filter</li></ul></P>
+
     <P><B>Examples:</B></P>
     <pre>
     score.Filter</pre>
@@ -1486,20 +1494,22 @@ There are no extra options that can appear on the type bigInteract line.
     the filter limits are being modified to accept values between 200 and 500 as opposed to the 
     default 0 to 1000.</P>
     <pre>
-    confidenceScore.Filter</pre>
-    <P><code>ConfidenceScore</code> example values:</P>
+    confidenceScore.Filter 6</pre>
+    <P>Example values in the <code>confidenceScore</code> column:</P>
    <pre>
-    confidenceScore
     5
     6 (Uncertain)
     Unknown
-    7.0</pre>
-    <P>This example looks at applying <code>&lt;column&gt;.Filter</code> to fields with 
-    non-numerical values. If the 4 data points above were filtered by 6: &quot;5&quot; item 
-    would be removed as it is less than the filter value. The &quot;6 (Uncertain)&quot; item 
-    should show up, as it would be interpreted as &quot;6&quot;. The &quot;Unknown&quot; item 
-    would be removed as it would be interpreted as 0. The 7.0 item would appear as 
-    decimals are supported.</P>
+    7.0</pre>	
+    <P>This example applies <code>&lt;column&gt;.Filter</code> to values in the
+    column named <code>confidenceScore</code> containing some non-numerical values.
+    If items with the four values above were filtered with a minimum value of 6:
+    <P>
+    <code>5</code> - item would be removed as it is less than the filter value<br>
+    <code>6 (Uncertain)</code> - item should show up, as it would be interpreted as
+    &quot;6&quot;<br>
+    <code>Unknown</code> - item would be removed as it would be interpreted as 0<br>
+    <code>7.0</code> - item would appear as decimals are supported</P>
 </DIV>
 
 <DIV class="FilterText"><span class="types bigBed"></span>
@@ -1507,41 +1517,48 @@ There are no extra options that can appear on the type bigInteract line.
     <code>&lt;column&gt;.FilterText [&lt;default search string&gt;]</code><BR>
     <code>&lt;column&gt;.FilterType &lt;wildcard/regexp&gt;</code><BR>
     </div>
-    <P><code>&lt;column&gt;.FilterText</code> is used to enable text (string) searching 
-    on any field. It does not require any variables, however, a preselected filter value
+    <P><code>&lt;column&gt;.FilterText</code> is used to enable text searching on values in the 
+    column It does not require any variables, however, a preselected filter value
     can be passed following the argument to enable the filter by default.</P> 
-    <P><code>&lt;column&gt;.FilterText</code> will treat all fields as strings. That is to say,
-    it can be enabled on numerical fields, such as <code>chromStart</code>, to query coordinates 
-    <strong>as text</strong>.</P>
     <P><code>&lt;column&gt;.FilterText</code> will enable two kinds of searching, wildcard and
     regexp. By default, the wildcard option is enabled. This means that a search term with 
     a wildcard (*) item on either end will match any number of additional characters before
-    and/or after the search term. The regexp option allows for searching with regular 
-    expression rules. The optional parameter <code>&lt;column&gt;.FilterType</code> may
-    be passed to switch the default from wildcard to regexp.</P>
+    and/or after the search term. The regexp option allows for searching with <a target="_blank"
+    href="https://en.wikipedia.org/wiki/Regular_expression#POSIX_basic_and_extended">regular 
+    expression rules</a>. The optional settings <code>&lt;column&gt;.FilterType</code> may
+    be added to switch the default from wildcard to regexp.</P>
     <P>The filter label will be the description of the field as specified by the autoSql (.as) file.
-    This label can be customized with the <code>&lt;column&gt;.Label</code> parameter.</P>
-
+    This label can be customized with the <code>&lt;column&gt;.FilterLabel</code> parameter.
+    See the bigBed help page and <a target="_blank" 
+    href="/goldenPath/help/bigBed.html#Ex3">example 3</a> for more information about creating 
+    unique .as files for bigBed data.</P>
+    <P><B>Notes:</B><ul>
+    <li><code>&lt;column&gt;.FilterText</code> will treat all fields as strings. That is to say,
+    it can be enabled on entirely numerical fields, such as <code>chromStart</code>, if one is 
+    looking to filter numerical values <strong>as text</strong></li>
+    <li>By default, all bed tracks that are at least bed5 will have a score filter. Enabling any of the
+    <code>&lt;column&gt;.Filter*</code> filter settings will disable that default filter</li></ul></P>
     <P><B>Examples:</B></P>
     <pre>
     geneName.FilterText *BRCA*</pre>
     <P>In this example, we are applying a default filter on the field <code>geneName</code> 
     so that only items with BRCA in the <code>geneName</code> are visible. By default, this is 
     a wildcard search of <code>*BRCA*</code> which is equivelant to
-    a regexp search <code>.*BRCA.*</code>. The filter
-    term can be freely changed in the track description page.</P>
+    a regexp search <code>.*BRCA.*</code>. The filter term can be freely changed in the track 
+    setting page allowing users to filter on other values in the <code>geneName</code> field.</P>
     <pre>
     geneName.FilterText</pre>
     <P>This example is enabling filtering on the same field as above, <code>geneName</code>,
     however, it is not declaring a default search parameter. This means that the search box 
-    will be present but no items will be filtered out when the hub is first loaded.</P>
+    will be present but no <code>geneName</code> items will be filtered out of the data 
+    unless the user specifies a value.</P>
     <pre>
     geneName.FilterText \.1$
     geneName.FilterType regexp</pre>
     <P>
-    This example once again enables filtering on the same field, however it is declaring
+    This example once again enables filtering on the same field, however, it is declaring
     regexp as the filter type and passing a regular expression to be applied by default. 
-    In this case, we are targeting all gene names that are version 1.</P>
+    In this case, we are targeting all <code>geneName</code> items that are version 1.</P>
 </DIV>
 
 <DIV class="FilterValues"><span class="types bigBed"></span>
@@ -1550,32 +1567,59 @@ There are no extra options that can appear on the type bigInteract line.
     <code>&lt;column&gt;.FilterType &lt;singleList/multipleListOr/multipleListAnd&gt;</code><BR>
     </div>
     <P><code>&lt;column&gt;.FilterValues</code> is used to enable filtering by 
-    specified values within a column or field. It requires at least one value.</P>
+    specified values within a column. It requires at least one value.</P>
     <P>Every individual value must be passed in a comma separated list. You will then
-    be able to select those values as categories; choosing to display only items that
-    specified values within a column or field. It requires at least one value.</P>
-    <P>Every individual value must be passed in a comma separated list. You will then
-    be able to select those values as categories; choosing to display only items that
+    be able to select those values as categories, choosing to display only items that
     belong to one, any, or at least one of the selected values.</P>
+    <P>In order to choose the default selection behavior, the optional paramter
+    <code>column.FilterType</code> may be used. If this parameter is not passed,
+    by default the selection will be set to &quot;one or more match&quot; which is the same
+    as having <code>column.FilterType multipleListOr</code>. In order to remove
+    the option to select multiple categories, requiring only a single selection, 
+    <code>singleList</code> can be passed instead. The final option,
+    <code>multipleListAnd</code> will set the default to only show items in which
+    all the selected categories are present.</P>
+    <P>The name of the item that shows up in the dropdown menu may also be changed from
+    the actual category it matches in the data. This can be helpful in scenarios where
+    the matching category has a long or descriptive entry. In order to enable this 
+    abbreviation, you would pass the menu name, followed by a pipe, then the name
+    of the category in in the data. E.x. <code>AML|Acute Myeloid Leukemia</code>. 
+    See example below for more information.</P>
     <P><B>Notes:</B><ul>
-    <li>Currently, all fields must be stated individually</li>
-    <li>Value names must match exactly</li></ul></P>
-
+    <li>Currently, all values must be stated individually</li>
+    <li>Value names must match exactly</li>
+    <li>By default, all bed tracks that are at least bed5 will have a score filter. Enabling any of the
+    <code>&lt;column&gt;.Filter*</code> filter settings will disable that default filter</li></ul></P>
     <P><B>Examples:</B></P>
     <pre>
-    scoreOddEven.FilterValues Odd,Even</pre>
+    OddEven.FilterValues Odd,Even</pre>
     <P>In this simple example, we are applying <code>&lt;column&gt;.FilterValues</code>
-    to the <code>scoreOddEven</code> field, which designates either &quot;Even&quot; 
-    or &quot;Odd&quot;. We can then filter the data with a drop-down menu to just evens or odds.
+    to the <code>OddEven</code> field, which designates either &quot;Even&quot; 
+    or &quot;Odd&quot;. We can then filter the data using the <code>OddEven</code> 
+    field with a drop-down menu displayed on the track controls page to just evens or odds.
+    <pre>
+    OddEven.FilterValues Odd,Even
+    OddEven.FilterType singleList</pre>
+    <P>In this follow up example, we are passing the <code>column.FilterType singleList</code>
+    parameter, which means that only one item in the <code>OddEven</code> field can be 
+    chosen, in this case &quot;Odd&quot; or &quot;Even&quot;. This removes the default that 
+    allows multiple selections</P>
     <pre>
     annotationType.FilterValues DNA-binding region,active site,beta strand,binding site,calcium-binding region</pre>
     <P>In this example the filter is being applied to multiple values in the 
-    <code>annotationType</code> field. We can then select from these values, and display 
-    only items that match our selections.</P>
+    <code>annotationType</code> field. We can then select from these values in the 
+    <code>annotationType</code> field with a drop-down menu displayed on the track settings page, 
+    and display only items that match our selections.</P>
+    <pre>
+    annotationType.FilterValues DNA-BR|DNA-binding region,AS|active site,BS|beta strand,BSi|binding site</pre>
+    <P>In this follow up to the previous question, we have changed the name of the items that
+    show up in the drop down menu by supplied a shoter alternative followed by a pipe. This means
+    that if we wanted to only see items with <code>annotationType</code> of 
+    <code>DNA-binding region</code>, we would select <strong>DNA-BR</strong> from the menu.</P>
 </DIV>
 
-<DIV class="Label"><span class="types bed bigBed"></span>
-<div class="format"><code>&lt;column&gt;.Label &lt;label&gt;</code></div>
+<DIV class="FilterLabel"><span class="types bed bigBed"></span>
+<div class="format"><code>&lt;column&gt;.FilterLabel &lt;label&gt;</code></div>
     <P>When a user clicks on a track item in the Browser image,	
     the item detail page is shown. This setting specifies an
     alternate label for the filter on that page. Without this
@@ -1587,11 +1631,11 @@ There are no extra options that can appear on the type bigInteract line.
     <li><code>&lt;column&gt;.FilterValues</code></li></ul></P>
     <P><B>Example:</B></P>
     <pre>
-    strand.FilterText
-    strand.Label Strand</pre>
+    strand.FilterValues +,-
+    strand.FilterLabel Strand (Orientation)</pre>
     <P>In this example, we have a standard &quot;strand&quot; BED field with the default 
     description &quot;+ or - for strand&quot;. We have enabled a filter and simplified
-    the label to just "Strand".</P>
+    the label to just "Strand (Orientation)".</P>
 </DIV>
 
 <DIV class="itemRgb"><span class="types bed bigBed bedDetail bedGraph bedLogR"></span>
