@@ -722,7 +722,6 @@ configureByPopup off
 type vcfTabix
 pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; New red
 html gnomad
-release alpha
 
     track gnomadGenomesVariants
     parent gnomadVariants
@@ -733,7 +732,6 @@ release alpha
     showHardyWeinberg on
     configureByPopup off
     bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.gz
-    release alpha    
 
     track gnomadExomesVariants
     parent gnomadVariants
@@ -744,6 +742,5 @@ release alpha
     showHardyWeinberg on
     configureByPopup off
     bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.gz
-    release alpha
 
 include platinumGenomes.ra
