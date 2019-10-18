@@ -39,13 +39,10 @@ def serializable_contributor(c):
     projects = []
     for p in c.projects.all():
          projects.append(p.short_name)
-    labs = []
-    for p in c.labs.all():
-         labs.append(p.short_name)
-    return {"name": c.name, "projects":projects, "labs":labs}
-    #projects = models.ManyToManyField("Project", blank=True, through="project_contributors")
-    #labs = models.ManyToManyField("Lab", blank=True, through="lab_contributors")
-    #grants = models.ManyToManyField("Grant", blank=True, through="grant_funded_contributors")
+    #labs = []
+    #for p in c.labs.all():
+    #     labs.append(p.short_name)
+    return {"name": c.name, "projects":projects}
 
 def api_contributor_list(request):
     a = []
