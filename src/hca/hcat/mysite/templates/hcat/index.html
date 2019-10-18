@@ -32,21 +32,21 @@
 		<h2>Tuatara: <span class="accent">pre</span>submission data tracking</h2>
 
 		<h3>About</h3>
-		<p>Suppose someone had a question about the data roadmap, "<span class="gray-medium">What is the current status of single nuclei-seq? I'd like to know when we can expect it so I can prioritize pipeline development, and from who so I can read papers from the labs.</span>"</p>
-		<p>Spreadsheets are typically used to track things, but they have some drawbacks. Using a relational database allows us to expand the tracking as necessary.</p>
-		<p>Tuatara is built with Django as an interface to this relationship database. An administrative layer over the database allows the brokering groups to maintain the relational tables.</p>
-		<p>Programmatic access to the database through a RESTful API is available to make Tuatara more useful to others.</p>
+		<p>Tuatara is a database to keep track of projects that the HCA is 
+		integrating or interested in integrating into the Atlas.  It can answer data 
+		roadmap questions like "<span class="gray-medium">What is the current status of single nuclei-seq? I'd like to know when we can expect it so I can prioritize pipeline development, and from who so I can read papers from the labs.</span>"
+		Tuatara is built on top of Python, Django, and a relational database that we hope will replace several spreadsheets.</p>
 
 		<h3>Access</h3>
-		<p>If you are interested in access to the administratic interface, please email clayfischer@ucsc.edu</p>
-		<p>We will be rolling out broader access as we interate through feedback.</p>
+		<p>If you are interested in access to Tuatara through a prototypical web interface, please email clayfischer@ucsc.edu.  We will be rolling out broader access as we interate through feedback.</p>
 
 		<h3>API</h3>
 		<p>A <span class="accent">REST</span>ful API allows one to query for current status of projects. Combined with the tracker.data.humancellatlas.org API, a full dashboard can be built to show all data known and in progress. Not all data is available through the API due to GDPR constraints, but enough data to make informed decisions based on known projects is available.</p>
-		<p>tuatara.data.humancellatlas.org/api</p>
-		<p>tuatara.data.humancellatlas.org/api/project</p>
-		<p>tuatara.data.humancellatlas.org/api/projectstatus</p>
-		<p>tuatara.data.humancellatlas.org/api/contributor</p>
+		<p><a href="api">https://tuatara.data.humancellatlas.org/api</a> - lists all classes and the number of objects in each class</p>
+		<p><a href="api/project">https://tuatara.data.humancellatlas.org/api/project</a> - lists information on all projects</p>
+		<p><a href="api/project/HumanInnateLymphoidCells">https://tuatara.data.humancellatlas.org/api/project/[project short name]</a> - list info on project with given short name</p>
+		<p><a href="api/projectstatus">https://tuatara.data.humancellatlas.org/api/projectstatus</a> - List and describe values allowed in the project.status field</p>
+		<p><a href="api/contributor">https://tuatara.data.humancellatlas.org/api/contributor</a> - List contributors to any project</p>
 		<p>tuatara.data.humancellatlas.org/api/tracker</p>
 		<p>tuatara.data.humancellatlas.org/api/cdnalibraryprep</p>
 		<p>tuatara.data.humancellatlas.org/api/disease</p>
