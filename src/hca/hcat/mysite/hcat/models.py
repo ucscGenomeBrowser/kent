@@ -227,7 +227,7 @@ class CdnaLibraryPrep(models.Model):
     def __str__(self):
         return self.short_name
     class Meta:
-       verbose_name = 'x assay tech'
+       verbose_name = 'x cDNA library prep'
 
 class Publication(models.Model):
     """ Most often a publication is an article in a scientific journal. """

@@ -10,11 +10,9 @@ from .models import *
 # Create your views here (except API views go in api.py)
 
 def index(request):
-    a = []
-    for p in Project.objects.order_by("-id"):
-        j = {"short_name":p.short_name, "title":p.title}
-        a.append(j)
-    return HttpResponse(json.dumps(a), content_type="application/json")
+    template = loader.get_template('hcat/index.html')
+    context = {}
+    return HttpResponse(template.render(context,request))
 
 class ProjectListView(generic.ListView):
     template_name = 'hcat/project_list.html'

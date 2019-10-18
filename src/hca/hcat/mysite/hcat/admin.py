@@ -94,7 +94,7 @@ class TrackerInline(admin.TabularInline):
     can_delete = False
 
 class ProjectAdmin(admin.ModelAdmin):
-    search_fields = ['short_name', 'title', 'tags']
+    search_fields = ['short_name', 'title', 'description']
     autocomplete_fields = ["contributors", "labs", 
     	"organ", "organ_part", "disease", 
     	"species", "sample_type", "cdna_library_prep", "publications", 

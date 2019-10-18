@@ -1,0 +1,57 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<style>
+			body		{ font-size: 1.0em; font-family: arial, sans-serif; color: #333333; width: 800px; }
+			.color 		{ color: #1C7CC7;} /* pastel blue */
+			.colortwo 	{ color: #0F78CA;} /* very slightly more blue */
+			.secondary 	{ color: #00D0F4;} /* very bright blue */
+			.hover 		{ color: #2DAFD7;} /* slightly gray blue */
+			.accent		{ color: #CF912C;} /* brown, slight orange hue */
+			.lightaccent 	{ color: #E8AA45; } /* slightly brighter than dark accent */
+			.background	{ background-color: #f4f7f9; }
+			.gray-darkest { color: #333333; }
+			.gray-dark { color: #666666; }
+			.gray-medium { color: #999999; }
+			.gray-light { color: #CCCCCC; }
+			.gray-lightest { color: #EAEAEA; }
+			h3		{ color: #2DAFD7; border-bottom: 1px solid #cccccc; width: 800px; }
+		</style>
+	</head>
+	<body>
+<img src="media/logo.jpg" />
+<!--
+		<div class="color">1C7CC7</div>
+		<div class="colortwo">0F78CA</div>
+		<div class="secondary">00D0F4</div>
+		<div class="hover">2DAFD7</div>
+		<div class="accent">CF912C</div>
+		<div class="lightaccent">E8AA45</div>
+		<div class="background">f4f7f9</div>
+-->
+		<h2>Tuatara: <span class="accent">pre</span>submission data tracking</h2>
+
+		<h3>About</h3>
+		<p>Suppose someone had a question about the data roadmap, "<span class="gray-medium">What is the current status of single nuclei-seq? I'd like to know when we can expect it so I can prioritize pipeline development, and from who so I can read papers from the labs.</span>"</p>
+		<p>Spreadsheets are typically used to track things, but they have some drawbacks. Using a relational database allows us to expand the tracking as necessary.</p>
+		<p>Tuatara is built with Django as an interface to this relationship database. An administrative layer over the database allows the brokering groups to maintain the relational tables.</p>
+		<p>Programmatic access to the database through a RESTful API is available to make Tuatara more useful to others.</p>
+
+		<h3>Access</h3>
+		<p>If you are interested in access to the administratic interface, please email clayfischer@ucsc.edu</p>
+		<p>We will be rolling out broader access as we interate through feedback.</p>
+
+		<h3>API</h3>
+		<p>A <span class="accent">REST</span>ful API allows one to query for current status of projects. Combined with the tracker.data.humancellatlas.org API, a full dashboard can be built to show all data known and in progress. Not all data is available through the API due to GDPR constraints, but enough data to make informed decisions based on known projects is available.</p>
+		<p>tuatara.data.humancellatlas.org/api</p>
+		<p>tuatara.data.humancellatlas.org/api/project</p>
+		<p>tuatara.data.humancellatlas.org/api/projectstatus</p>
+		<p>tuatara.data.humancellatlas.org/api/contributor</p>
+		<p>tuatara.data.humancellatlas.org/api/tracker</p>
+		<p>tuatara.data.humancellatlas.org/api/cdnalibraryprep</p>
+		<p>tuatara.data.humancellatlas.org/api/disease</p>
+		<p>tuatara.data.humancellatlas.org/api/organ</p>
+		
+	</body>
+</html>
+
