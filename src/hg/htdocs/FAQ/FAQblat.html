@@ -430,7 +430,7 @@ wget http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.2bit
 </pre>
 <p>
 After a few moments, the gfServer will initialize and be ready to recieve queries. In order
-to apporximate web Blat we will us the gfClient with the following parameters, designating
+to approximate web Blat, we will use the gfClient with the following parameters, designating
 our input and output files.</p>
 <pre>
 ./gfClient -minScore=20 -minIdentity=0 127.0.0.1 1234 . input.fa out.psl
@@ -439,17 +439,17 @@ our input and output files.</p>
 
 <a name="blat12"></a>
 <h2>Standalone or gfServer/gfClient result start positions off by one</h2>
-<h6>My standalone Blat results or gfServer/gfClient blat results have a start
-position that is one less that what I see on web blat results</h6>
+<h6>My standalone Blat results or gfServer/gfClient Blat results have a start
+position that is one less that what I see on web Blat results</h6>
 <p>
 This is due to how we store internal coordinates in the Genome Browser. The default
-blat <strong>Output type</strong> of <strong>hyperlink</strong> shows results in our
+Blat <strong>Output type</strong> of <strong>hyperlink</strong> shows results in our
 internal coordinate data structure. These internal coordinates have a zero-based start
 and a one-based end. See the following <a target="_blank" href="/FAQ/FAQtracks#tracks1"
 >FAQ entry</a> for more information.</p>
 <p>
-If the <strong>Output type</strong> is changed to <strong>psl</strong> on web blat, the same
-zero-based half open coordinate results will be seen as the standalone blat and gfServer/gfClient 
+If the <strong>Output type</strong> is changed to <strong>psl</strong> on web Blat, the same
+zero-based half open coordinate results will be seen as the standalone Blat and gfServer/gfClient 
 procedures.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
