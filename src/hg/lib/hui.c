@@ -5125,7 +5125,9 @@ boolean displayAll = sameString(displaySubs, "all");
 boolean hideSubtracksDefault;
 if (compositeHideEmptySubtracksSetting(parentTdb, &hideSubtracksDefault, NULL, NULL))
     {
-    printf("<BR><B>Hide empty subtracks:</B> &nbsp;");
+    char *hideLabel = "Hide empty subtracks";
+    hideLabel = trackDbSettingOrDefault(parentTdb, SUBTRACK_HIDE_EMPTY_LABEL, hideLabel);
+    printf("<BR><B>%s:</B> &nbsp;", hideLabel);
     char buf[128];
     safef(buf, sizeof buf, "%s.%s", parentTdb->track, SUBTRACK_HIDE_EMPTY);
     boolean doHideEmpties = compositeHideEmptySubtracks(cart, parentTdb, NULL, NULL);

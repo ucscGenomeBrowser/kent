@@ -4891,12 +4891,20 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     </p>
     <p>
     For extremely large composites, especially those where each subtrack may be sparse,
-    substantial performance improvements can be had by supplying an index file of the 
+    substantial performance improvements can be gained by creating an index file of the 
     intersections of items in all subtracks (&quot;multiBed&quot;).  This file, and an
     accompanying sources file, are optional arguments to this setting.
     Instructions for creating these files are at the MultiBed help page (TBD).
 </DIV>
-
+<DIV class="hideEmptySubtracksLabel"><span class="types compositeTrack"></span>
+<div class="format">
+        <code>hideEmptySubtracks &lt;label&gt;</code></div>
+    <P>This setting is used in conjunction with the <code>hideEmptySubtracks</code> setting
+    to customize the label preceding the selection checkbox on the track configuration page.
+    Default wording is &quot;Hide empty subtracks&quot;.  Custom wording is useful to distinguish
+    affected tracks in multi-view composites (e.g. &quot;Hide empty Peaks subtracks&quot;).
+    </p>
+</DIV>
 
 <DIV class="compositeTrack_example"><span class="types compositeTrack"></span>
 <div class="format"><B>Example of a Composite track</B></div>
