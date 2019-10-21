@@ -177,7 +177,12 @@ struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, 
 struct bigBedFilter *filter;
 char filterType[4096];
 safef(filterType, sizeof filterType, "%s%s", field, FILTER_TYPE_NAME);
-char *setting = cartOrTdbString(cart, tdb, filterType, FILTERBY_SINGLE);
+char *setting = cartOrTdbString(cart, tdb, filterType, NULL);
+if (setting == NULL)
+    {
+    safef(filterType, sizeof filterType, "%s.%s", field, FILTER_TYPE_NAME);
+    setting = cartOrTdbString(cart, tdb, filterType, FILTERBY_SINGLE);
+    }
 
 AllocVar(filter);
 filter->fieldNum =  getFieldNum(bbi, field);
