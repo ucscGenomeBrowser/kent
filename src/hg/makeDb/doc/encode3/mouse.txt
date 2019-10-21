@@ -44,6 +44,37 @@ ls *.bigBed | wc -l
 
 ln -s `pwd` /gbdb/mm10/encode3/histones
 
+#######################
+# Create multiBed file for hideEmptySubtracks feature
+
+# Create file mapping tracks to files
+raToTab $HOME/kent/src/hg/makeDb/trackDb/mouse/mm10/encode3.histone.ra \
+        -cols=track,bigDataUrl stdout | grep bigBed > encode3RenHistonePeaks.tracks.txt
+wc -l encode3RenHistonePeaks.tracks.txt
+# 563 encode3RenHistonePeaks.tracks.txt
+
+# Assign id 1-N to each subtrack
+awk '{print NR, "\t", $1}' < encode3RenHistonePeaks.tracks.txt > \
+                                encode3RenHistonePeaks.multiBedSources.tab
+
+# Create multibed file
+
+cut -f 2 encode3RenHistonePeaks.tracks.txt |  \
+                sed -e 's^.*/^^' -e 's/bigBed/bed/' > encode3RenHistonePeaks.files.txt
+cd data/peakBeds
+bedtools multiinter -i `cat ../../encode3RenHistonePeaks.files.txt` | \
+                                cut -f 1-5 > \
+                                         ../../encode3RenHistonePeaks.multiBed.bed
+
+cd ../..
+bedToBigBed -as=$HOME/kent/src/hg/lib/bed3Sources.as -type=bed3+2 \
+            encode3RenHistonePeaks.multiBed.bed /hive/data/genomes/mm10/chrom.sizes \
+                encode3RenHistonePeaks.multiBed.bb
+# 12 mins elapsed
+
+ln -s `pwd`/encode3RenHistonePeaks.multiBed.bb /gbdb/mm10/encode3/histones/multiBed.bb
+ln -s `pwd`/encode3RenHistonePeaks.multiBedSources.tab /gbdb/mm10/encode3/histones/multiBedSources.tab
+
 ###################
 # chromHMM data
 
