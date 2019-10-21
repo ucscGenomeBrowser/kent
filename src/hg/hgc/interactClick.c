@@ -298,15 +298,20 @@ else
                     name, cgiEncode(regionFile),
                     CT_CUSTOM_TEXT_VAR, cgiEncode(customText));
     if (isVirtMode)
+        {
         printf(" or "
                 "<a href='hgTracks?"
                     "virtMode=0&"
                     "virtModeType=default'>"
                 " normal browser view</a>");
+        }
+    else
+        {
+        printf("&nbsp;&nbsp;&nbsp;");
+        printf("<a href=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>(Help)</a>\n");
+        printf("<br>&nbsp;&nbsp;&nbsp;&nbsp;<i>Note: all interactions will display in &quot;pack&quot; mode</i>\n");
+        }
     }
-printf("&nbsp;&nbsp;&nbsp;");
-printf("<a href=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>(Help)</a>\n");
-printf("<br>&nbsp;&nbsp;&nbsp;&nbsp;<i>Note: all interactions will display in &quot;pack&quot; mode</i>\n");
 }
 
 void doInteractRegionDetails(struct trackDb *tdb, struct interact *inter)
