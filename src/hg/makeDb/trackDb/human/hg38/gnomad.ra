@@ -4,14 +4,14 @@
 track gnomadVariants
 superTrack on
 shortLabel gnomAD Variants
-longLabel Genome Aggregation Database (gnomAD) - Genome and Exome Variants
+longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
 group varRep
 html gnomad
 pennantIcon New red ../goldenPath/help/newsarch.html Released soon
 
     track gnomadGenomesVariantsV3
     parent gnomadVariants
-    shortLabel gnomAD Variants
+    shortLabel gnomAD v3
     longLabel Genome Aggregation Database (gnomAD) Genome Variants v3
     dataVersion Release 3.0 (October 16, 2019)
     type vcfTabix
@@ -26,8 +26,8 @@ pennantIcon New red ../goldenPath/help/newsarch.html Released soon
     track gnomadVariantsV2
     parent gnomadVariants 
     compositeTrack on
-    shortLabel gAD Variants V2
-    longLabel Genome Aggregation Database (gnomAD) - Genome and Exome Variants v2.1
+    shortLabel gnomAD v2
+    longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants v2.1
     type vcfTabix
     showHardyWeinberg on
     configureByPopup off
@@ -40,14 +40,14 @@ pennantIcon New red ../goldenPath/help/newsarch.html Released soon
 
         track gnomadGenomesVariantsV2
         parent gnomadVariantsV2 on
-        shortLabel gAD Genom Vars v2
+        shortLabel gnomAD Genome v2
         longLabel Genome Aggregation Database (gnomAD) Genome Variants v2.1
         bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.gz
         priority 1
 
         track gnomadExomesVariants
         parent gnomadVariantsV2 on
-        shortLabel gAD Exome Vars v2
+        shortLabel gnomAD Exome v2
         longLabel Genome Aggregation Database (gnomAD) Exome Variants v2.1
         bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.gz
         priority 2
