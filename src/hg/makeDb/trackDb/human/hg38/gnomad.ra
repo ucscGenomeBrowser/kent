@@ -45,7 +45,7 @@ pennantIcon New red ../goldenPath/help/newsarch.html Released soon
         bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.gz
         priority 1
 
-        track gnomadExomesVariants
+        track gnomadExomesVariantsV2
         parent gnomadVariantsV2 on
         shortLabel gnomAD Exome v2
         longLabel Genome Aggregation Database (gnomAD) Exome Variants v2.1
