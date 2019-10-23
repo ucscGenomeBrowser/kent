@@ -712,42 +712,6 @@ include wgEncodeReg.dev.ra alpha
 
 include hic.ra
 
-track gnomadVariants
-compositeTrack on
-shortLabel gnomAD Variants
-longLabel Genome Aggregation Database (gnomAD) - Genome and Exome Variants
-type vcfTabix
-group varRep
-showHardyWeinberg on
-configureByPopup off
-maxWindowToDraw 200000
-pennantIcon New red
-html gnomad
-
-    track gnomadGenomesVariantsV3
-    parent gnomadVariants on
-    shortLabel gnomAD Variants
-    longLabel Genome Aggregation Database (gnomAD) Genome Variants v3
-    dataVersion Release 3.0 (October 16, 2019)
-    bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r3.0.sites.vcf.gz
-    priority 1
-
-    track gnomadGenomesVariantsV2
-    parent gnomadVariants off
-    shortLabel gAD Genom Vars v2
-    longLabel Genome Aggregation Database (gnomAD) Genome Variants v2.1
-    dataVersion Release 2.1.1 (March 6, 2019)
-    pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; New red
-    bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.gz
-    priority 2
-
-    track gnomadExomesVariants
-    parent gnomadVariants off
-    shortLabel gAD Exome Vars v2
-    longLabel Genome Aggregation Database (gnomAD) Exome Variants v2.1
-    dataVersion Release 2.1.1 (March 6, 2019)
-    pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; New red
-    bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.gz
-    priority 3
+include gnomad.ra
 
 include platinumGenomes.ra
