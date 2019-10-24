@@ -275,4 +275,8 @@ void aaToAbbr(char aa, char *abbrBuf, size_t abbrBufSize);
 void trimRefAlt(char *ref, char *alt, uint *pStart, uint *pEnd, int *pRefLen, int *pAltLen);
 /* If ref and alt have identical bases at beginning and/or end, trim those & update all params. */
 
+void trimRefAltLeft(char *ref, char *alt, uint *pStart, uint *pEnd, int *pRefLen, int *pAltLen);
+/* If ref and alt have identical bases at beginning and/or end, trim those starting on the right
+ * so we get the leftmost representation & update all params. */
+
 #endif /* DNAUTIL_H */

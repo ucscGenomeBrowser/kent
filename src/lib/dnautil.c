@@ -1212,20 +1212,39 @@ for (ix = 0;  ix < ArraySize(aminoAcidTable);  ix++)
 safef(abbrBuf, abbrBufSize, "?%c?", aa);
 }
 
-void trimRefAlt(char *ref, char *alt, uint *pStart, uint *pEnd, int *pRefLen, int *pAltLen)
+void trimRefAltDir(char *ref, char *alt, uint *pStart, uint *pEnd, int *pRefLen, int *pAltLen,
+                   boolean leftJustify)
 /* If ref and alt have identical bases at beginning and/or end, trim those & update all params. */
 {
-int trimStart = 0;
-while (ref[trimStart] != '\0' && alt[trimStart] != '\0' && ref[trimStart] == alt[trimStart])
-    trimStart++;
+int trimStart = 0, trimEnd = 0;
 int refLen = strlen(ref);
 int altLen = strlen(alt);
-int iR = refLen - 1, iA = altLen - 1, trimEnd = 0;
-while (iR >= trimStart && iA >= trimStart && ref[iR] == alt[iA])
+if (leftJustify)
     {
-    iR--;
-    iA--;
-    trimEnd++;
+    // first trim end, then start
+    while (refLen > 0 && altLen > 0 && ref[refLen-1] == alt[altLen-1])
+        {
+        (*pEnd)--;
+        refLen--;
+        altLen--;
+        ref[refLen] = 0;
+        alt[altLen] = 0;
+        }
+    while (ref[trimStart] != '\0' && alt[trimStart] != '\0' && ref[trimStart] == alt[trimStart])
+        trimStart++;
+    }
+else
+    {
+    // first trim start, then end
+    while (ref[trimStart] != '\0' && alt[trimStart] != '\0' && ref[trimStart] == alt[trimStart])
+        trimStart++;
+    int iR = refLen - 1, iA = altLen - 1;
+    while (iR >= trimStart && iA >= trimStart && ref[iR] == alt[iA])
+        {
+        iR--;
+        iA--;
+        trimEnd++;
+        }
     }
 if (trimEnd)
     {
@@ -1245,4 +1264,17 @@ if (trimStart)
     }
 *pRefLen = refLen;
 *pAltLen = altLen;
+}
+
+void trimRefAlt(char *ref, char *alt, uint *pStart, uint *pEnd, int *pRefLen, int *pAltLen)
+/* If ref and alt have identical bases at beginning and/or end, trim those & update all params. */
+{
+trimRefAltDir(ref, alt, pStart, pEnd, pRefLen, pAltLen, FALSE);
+}
+
+void trimRefAltLeft(char *ref, char *alt, uint *pStart, uint *pEnd, int *pRefLen, int *pAltLen)
+/* If ref and alt have identical bases at beginning and/or end, trim those starting on the right
+ * so we get the leftmost representation & update all params. */
+{
+trimRefAltDir(ref, alt, pStart, pEnd, pRefLen, pAltLen, TRUE);
 }
