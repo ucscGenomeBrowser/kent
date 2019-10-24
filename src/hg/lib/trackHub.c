@@ -845,6 +845,7 @@ else
                   startsWithWord("bigBarChart", type) ||
                   startsWithWord("bigInteract", type) ||
                   startsWithWord("hic", type) ||
+                  startsWithWord("bigDbSnp", type) ||
                   startsWithWord("bam", type)))
                     {
                     errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,

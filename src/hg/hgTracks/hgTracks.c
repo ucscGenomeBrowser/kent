@@ -6170,35 +6170,17 @@ else if (sameString(type, "bigWig"))
     tg->bbiFile = ct->bbiFile;
     tg->nextItemButtonable = FALSE;
     }
-else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") ||
-        sameString(type, "bigNarrowPeak") || sameString(type, "bigPsl") ||
-        sameString(type, "bigMaf")|| sameString(type, "bigChain") ||
-        sameString(type, "bigLolly") || 
-        sameString(type, "bigBarChart") || sameString(type, "bigInteract"))
+else if (startsWith("big", type))
     {
     struct bbiFile *bbi = ct->bbiFile;
 
     /* Find field counts, and from that revise the tdb->type to be more complete. */
     char extra = (bbi->fieldCount > bbi->definedFieldCount ? '+' : '.');
     char typeBuf[64];
-    if (sameString(type, "bigGenePred"))
-	safef(typeBuf, sizeof(typeBuf), "bigGenePred");
-    else if (sameString(type, "bigNarrowPeak"))
-	safef(typeBuf, sizeof(typeBuf), "bigNarrowPeak");
-    else if (sameString(type, "bigChain"))
-	safef(typeBuf, sizeof(typeBuf), "bigChain");
-    else if (sameString(type, "bigMaf"))
-	safef(typeBuf, sizeof(typeBuf), "bigMaf");
-    else if (sameString(type, "bigPsl"))
-	safef(typeBuf, sizeof(typeBuf), "bigPsl");
-    else if (sameString(type, "bigBarChart"))
-	safef(typeBuf, sizeof(typeBuf), "bigBarChart");
-    else if (sameString(type, "bigLolly"))
-	safef(typeBuf, sizeof(typeBuf), "bigLolly");
-    else if (sameString(type, "bigInteract"))
-	safef(typeBuf, sizeof(typeBuf), "bigInteract");
-    else
+    if (startsWithWord("bigBed", type))
 	safef(typeBuf, sizeof(typeBuf), "bigBed %d %c", bbi->definedFieldCount, extra);
+    else
+	safecpy(typeBuf, sizeof(typeBuf), type);
     tdb->type = cloneString(typeBuf);
 
     /* Finish wrapping track around tdb. */
@@ -7250,13 +7232,8 @@ static boolean isTrackForParallelLoad(struct track *track)
 /* Is this a track that should be loaded in parallel ? */
 {
 char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
-return (startsWithWord("bigWig"  , track->tdb->type)
+return (startsWith("big", track->tdb->type)
      || startsWithWord("mathWig"  , track->tdb->type)
-     || startsWithWord("bigBed"  , track->tdb->type)
-     || startsWithWord("bigPsl"  , track->tdb->type)
-     || startsWithWord("bigNarrowPeak"  , track->tdb->type)
-     || startsWithWord("bigGenePred"  , track->tdb->type)
-     || startsWithWord("bigChain"  , track->tdb->type)
      || startsWithWord("bam"     , track->tdb->type)
      || startsWithWord("halSnake", track->tdb->type)
      || startsWithWord("bigLolly", track->tdb->type)

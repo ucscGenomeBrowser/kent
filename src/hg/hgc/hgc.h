@@ -497,6 +497,9 @@ void doGtexGeneExpr(struct trackDb *tdb, char *item);
 void doGtexEqtlDetails(struct trackDb *tdb, char *item);
 /* Details of GTEx eQTL item */
 
+void doBigDbSnp(struct trackDb *tdb, char *rsId);
+/* Show details for bigDbSnp item. */
+
 void printAddWbr(char *text, int distance);
 /* a crazy hack for firefox/mozilla that is unable to break long words in tables
  * We need to add a <wbr> tag every x characters in the text to make text breakable.
@@ -512,6 +515,9 @@ int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int 
 // Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
 // sr may be null for bigBeds.
 // Returns number of extra fields actually printed.
+
+struct slPair *parseDetailsTablUrls(struct trackDb *tdb);
+/* Parse detailsTabUrls setting string into an slPair list of {offset column name, fileOrUrl} */
 
 #define NUCCORE_SEARCH "https://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
 

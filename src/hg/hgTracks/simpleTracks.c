@@ -14032,6 +14032,12 @@ else if (sameWord(type, "bigGenePred"))
     words[1] = "12";
     bigBedMethods(track, tdb, wordCount, words);
     }
+else if (sameWord(type, "bigDbSnp"))
+    {
+    tdb->canPack = TRUE;
+    track->isBigBed = TRUE;
+    bigDbSnpMethods(track);
+    }
 else if (sameWord(type, "bedGraph"))
     {
     bedGraphMethods(track, tdb, wordCount, words);

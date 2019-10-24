@@ -26,6 +26,7 @@
 #include "bigPsl.h"
 #include "bigBedFilter.h"
 #include "bigBedLabel.h"
+#include "variation.h"
 
 static unsigned getFieldNum(struct bbiFile *bbi, char *field)
 // get field number for field name in bigBed.  errAbort if field not found.
@@ -476,6 +477,13 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	lf->extra = seq;
 	lf->cds = cds;
 	}
+    else if (sameString(tdb->type, "bigDbSnp"))
+        {
+        // bigDbSnp does not have a score field, but I want to compute the freqSourceIx from
+        // trackDb and settings one time instead of for each item, so I'm overloading scoreMin.
+        int freqSourceIx = scoreMin;
+        lf = lfFromBigDbSnp(tdb, bb, filters, freqSourceIx);
+        }
     else
 	{
         char startBuf[16], endBuf[16];
@@ -496,15 +504,18 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         continue;
         }
 
-    lf->label = bigBedMakeLabel(track->tdb, track->labelColumns,  bb, chromName);
+    if (lf->label == NULL)
+        lf->label = bigBedMakeLabel(track->tdb, track->labelColumns,  bb, chromName);
     if (sameString(track->tdb->type, "bigGenePred") || startsWith("genePred", track->tdb->type))
         {
         lf->original = genePredFromBigGenePred(chromName, bb); 
         }
 
-    char* mouseOver = restField(bb, mouseOverIdx);
-    lf->mouseOver   = mouseOver; // leaks some memory, cloneString handles NULL ifself 
-
+    if (lf->mouseOver == NULL)
+        {
+        char* mouseOver = restField(bb, mouseOverIdx);
+        lf->mouseOver   = mouseOver; // leaks some memory, cloneString handles NULL ifself 
+        }
     slAddHead(pLfList, lf);
     }
 
