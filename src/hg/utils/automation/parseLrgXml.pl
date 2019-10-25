@@ -105,6 +105,10 @@ sub parseOneLrg {
   # watch out for stray tab chars:
   $lrgSource =~ s/^\s*(.*?)\s*$/$1/;
   $lrgSourceUrl =~ s/^\s*(.*?)\s*$/$1/;
+  # watch out for URLs that are just hostnames (no protocol)
+  if ($lrgSourceUrl !~ /^\w+:\/\//) {
+    $lrgSourceUrl = "http://" . $lrgSourceUrl;
+  }
   my $creationDate = $dom->findvalue('/lrg/fixed_annotation/creation_date');
 
   foreach my $refMapping (@refMappings) {
