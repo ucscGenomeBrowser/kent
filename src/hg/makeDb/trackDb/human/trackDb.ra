@@ -83,7 +83,7 @@ type bigBed 12 +
 noScoreFilter .
 urlLabel Link to LRG report: 
 url ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml
-urls hgncId="http://www.genenames.org/data/hgnc_data.php?hgnc_id=$$" ncbiAcc="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+urls hgncId="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" ncbiAcc="https://www.ncbi.nlm.nih.gov/nuccore/$$"
 baseColorDefault diffBases
 baseColorUseSequence lrg
 indelDoubleInsert on
