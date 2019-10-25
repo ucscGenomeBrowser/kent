@@ -3645,7 +3645,7 @@ TMPDIR=/dev/shm
 
 _EOF_
 #############################################################################
-# LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 10/9/19 angie)
+# LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 10/25/19 angie)
 # Redmine #13359, #24285 -- otto-mate To Do #17877
 # previously done 7/7/14, 9/9/16, 5/30/18
     set today = `date +%Y_%m_%d`
