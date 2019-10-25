@@ -232,9 +232,7 @@ char *t = cloneString(type);
 char *s = firstWordInLine(t);
 boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
                    sameString("bed", s) || sameString("genePred", s) ||
-		   sameString("bigBed", s) || sameString("makeItems", s) ||
-		   sameString("bigMaf", s) || sameString("bigGenePred", s) || 
-		   sameString("bigBarChart", s) || sameString("bigGenePred", s) || 
+		   sameString("makeItems", s) ||
                    sameString("expRatio", s) || sameString("wigMaf", s) ||
                    sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||
@@ -244,7 +242,8 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
 		   sameString("narrowPeak", s) || sameString("broadPeak", s) || 
                    sameString("bigLolly", s) || 
                    sameString("peptideMapping", s) || sameString("barChart", s) ||
-                   sameString("interact", s) || sameString("bigInteract", s)
+                   sameString("interact", s) ||
+                   (!startsWithWord("bigWig", s) && startsWith("big", s))
                    );
 freeMem(t);
 return canPack;
@@ -692,18 +691,25 @@ assert(type != NULL);
 
 if(startsWith("wigMaf", type) || startsWith("bigMaf", type))
     cType = cfgWigMaf;
-else if(startsWith("wig", type))
+else if(startsWith("wig", type) || startsWith("mathWig", type) || startsWith("bigWig", type) ||
+        startsWith("bedGraph", type) || startsWith("bamWig", type))
     cType = cfgWig;
 else if(startsWith("bigGenePred", type))
     cType = cfgGenePred;
-else if(startsWith("mathWig", type))
-    cType = cfgWig;
-else if(startsWith("bigWig", type))
-    cType = cfgWig;
+else if(startsWith("chain",type) || startsWith("bigChain",type))
+    cType = cfgChain;
+else if (startsWith("psl", type) || startsWith("bigPsl", type))
+    cType = cfgPsl;
+else if (sameWord("barChart", type) || sameWord("bigBarChart", type))
+    cType = cfgBarChart;
+else if (sameWord("interact", type) || sameWord("bigInteract", type))
+    cType = cfgInteract;
+else if (startsWith("bigLolly", type))
+    cType = cfgLollipop;
+else if (sameWord("bigDbSnp", type))
+    cType = cfgBigDbSnp;
 else if(startsWith("longTabix", type))
     cType = cfgLong;
-else if(startsWith("bedGraph", type))
-    cType = cfgWig;
 else if (startsWith("netAlign", type)
      || startsWith("net", tdb->track)) // SPECIAL CASE from hgTrackUi which might not be needed
     cType = cfgNetAlign;
@@ -721,11 +727,13 @@ else if (startsWithWord("genePred",type)
 else if (sameWord("bedLogR",type)
      ||  sameWord("peptideMapping", type))
     cType = cfgBedScore;
-else if (startsWith("bed ", type) || startsWith("bigBed", type) || startsWith("bedDetail", type))
+// This is a catch-all for big* types that are not special-cased above.  big* types after this
+// point are assumed to be flavors of bigBed.
+else if (startsWith("bed ", type) || startsWith("big", type) || startsWith("bedDetail", type))
     {
     if (trackDbSetting(tdb, "bedFilter") != NULL)
         cType = cfgBedFilt;
-    else
+    else if (!startsWith("big", type) || startsWith("bigBed", type))
         {
         char *words[3];
         int wordCount = chopLine(cloneString( type), words);
@@ -745,25 +753,15 @@ else if (startsWith("bed ", type) || startsWith("bigBed", type) || startsWith("b
 		cType = cfgNone;
 	    }
 	}
+    else
+        cType = cfgBedScore;
     }
-else if(startsWith("chain",type) || startsWith("bigChain",type))
-    cType = cfgChain;
-else if (startsWith("bamWig", type))
-    cType = cfgWig;
 else if (startsWith("bam", type))
     cType = cfgBam;
-else if (startsWith("psl", type) || startsWith("bigPsl", type))
-    cType = cfgPsl;
 else if (sameWord("vcfTabix",type) || sameWord("vcf", type))
     cType = cfgVcf;
 else if (sameWord("halSnake",type))
     cType = cfgSnake;
-else if (sameWord("barChart", type) || sameWord("bigBarChart", type))
-    cType = cfgBarChart;
-else if (sameWord("interact", type) || sameWord("bigInteract", type))
-    cType = cfgInteract;
-else if (startsWith("bigLolly", type))
-    cType = cfgLollipop;
 else if (sameWord("hic", type))
     cType = cfgHic;
 // TODO: Only these are configurable so far

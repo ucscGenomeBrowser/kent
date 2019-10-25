@@ -129,6 +129,74 @@
 # *** All done !  (through the 'install' step)  Elapsed time: 449m6s
 # *** Steps were performed in /hive/data/outside/dbSNP/152/bigDbSnp.2019-09-17
 
+    # 10/8/19: count up how many variants have freq counts for each project
+    cut -f 4 dbSnp152Details.tab \
+    | perl -wne 'chomp; next unless $_; @w = split ",";
+        if ($w[0]) { print "1000Genomes\n" }
+        if ($w[1]) { print "GnomAD_exomes\n"; }
+        if ($w[2]) { print "TOPMED\n" }
+        if ($w[3]) { print "ExAC\n" }
+        if ($w[4]) { print "GnomAD\n" }
+        if ($w[5]) { print "GoESP\n" }
+        if ($w[6]) { print "ALSPAC\n" }
+        if ($w[7]) { print "TWINSUK\n" }
+        if ($w[8]) { print "Estonian\n" }' \
+    | sort | uniq -c | sort -nr
+#437624857 TOPMED
+#234158623 GnomAD
+#84743526 1000Genomes
+#44887599 TWINSUK
+#44887599 ALSPAC
+#31397792 Estonian
+#11721224 GnomAD_exomes
+#8854021 ExAC
+#1973787 GoESP
+
+    # 10/11/19: count up how many instances of each type of ucscNote:
+    cut -f 15 hg19.dbSnp152.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
+#   10680 altIsAmbiguous
+#    4808 classMismatch
+#  409132 clinvar
+#  106941 clusterError
+#12757487 commonAll
+#18901486 commonSome
+#  823424 diffMajor
+#    7635 freqIsAmbiguous
+#   23027 freqNotRefAlt
+#  555144 multiMap
+#99618012 overlapDiffClass
+#14790469 overlapSameClass
+#     101 refIsAmbiguous
+# 2933684 refIsMinor
+#  150892 refIsRare
+#   45618 refIsSingleton
+#       4 refMismatch
+# 3761191 revStrand
+    cut -f 15 hg38.dbSnp152.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
+#    10807 altIsAmbiguous
+#     5103 classMismatch
+#   408665 clinvar
+#    94310 clusterError
+# 13027110 commonAll
+# 19258751 commonSome
+#   836327 diffMajor
+#     7736 freqIsAmbiguous
+#    36306 freqNotRefAlt
+#   130175 multiMap
+#102260850 overlapDiffClass
+# 15075710 overlapSameClass
+#      110 refIsAmbiguous
+#  3033691 refIsMinor
+#   189809 refIsRare
+#    63804 refIsSingleton
+#       33 refMismatch
+#  4439534 revStrand
+
+    # 10/18/19: add subset tracks
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 152 $freqSourceOrder \
+       -buildDir=`pwd` -continue=bigBed -stop=install >& subsets.log &
+    tail -f subsets.log
+
 
 ##############################################################################
 # dbSnp153: dbSNP build 153 (DONE 9/19/19 angie)
@@ -274,6 +342,82 @@
     tail -f do.log
 # *** All done !  (through the 'install' step)  Elapsed time: 491m30s
 # *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-09-19
+
+    # 10/8/19: count up how many variants have freq counts for each project
+    cut -f 4 dbSnp153Details.tab \
+    | perl -wne 'chomp; next unless $_; @w = split ",";
+        if ($w[0]) { print "1000Genomes\n" }
+        if ($w[1]) { print "GnomAD_exomes\n"; }
+        if ($w[2]) { print "TOPMED\n" }
+        if ($w[3]) { print "ExAC\n" }
+        if ($w[4]) { print "PAGE_STUDY\n" }
+        if ($w[5]) { print "GnomAD\n" }
+        if ($w[6]) { print "GoESP\n" }
+        if ($w[7]) { print "Estonian\n" }
+        if ($w[8]) { print "ALSPAC\n" }
+        if ($w[9]) { print "TWINSUK\n" }
+        if ($w[10]) { print "NorthernSweden\n" }
+        if ($w[11]) { print "Vietnamese\n" }' \
+    | sort | uniq -c | sort -nr
+#437625009 TOPMED
+#211192420 GnomAD
+#84744375 1000Genomes
+#44888383 TWINSUK
+#44888383 ALSPAC
+#31397940 Estonian
+#16351632 NorthernSweden
+#12283940 GnomAD_exomes
+#10004052 Vietnamese
+#8854128 ExAC
+#1973841 GoESP
+#1323033 PAGE_STUDY
+
+    # 10/11/19: count up how many instances of each type of ucscNote:
+    cut -f 15 hg19.dbSnp153.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
+#    10747 altIsAmbiguous
+#     5701 classMismatch
+#   454656 clinvar
+#   113678 clusterError
+# 12178426 commonAll
+# 20534330 commonSome
+#  3522349 diffMajor
+#     7649 freqIsAmbiguous
+#    25413 freqNotRefAlt
+#   561309 multiMap
+#106940656 overlapDiffClass
+# 16890303 overlapSameClass
+#      101 refIsAmbiguous
+# 16032028 refIsMinor
+#   142937 refIsRare
+#    44382 refIsSingleton
+#        4 refMismatch
+#  3813390 revStrand
+    cut -f 15 hg38.dbSnp153.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
+#    10873 altIsAmbiguous
+#     5864 classMismatch
+#   453954 clinvar
+#   126973 clusterError
+# 12430253 commonAll
+# 20893174 commonSome
+#  3573503 diffMajor
+#     7749 freqIsAmbiguous
+#    39038 freqNotRefAlt
+#   132015 multiMap
+#109838613 overlapDiffClass
+# 17228657 overlapSameClass
+#      111 refIsAmbiguous
+# 16277729 refIsMinor
+#   166192 refIsRare
+#    56491 refIsSingleton
+#       33 refMismatch
+#  4512600 revStrand
+
+    # 10/18/19: add subset tracks
+    # I added new commands to the bigBed and install steps of doBigDbSnp.pl,
+    # ran -debug and copy-pasted commands from the generated scripts.
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 152 $freqSourceOrder \
+       -buildDir=`pwd` -continue=bigBed -stop=install \
+       -debug
 
 
 ##############################################################################
