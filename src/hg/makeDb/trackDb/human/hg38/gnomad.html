@@ -1,8 +1,16 @@
 <h2>Description</h2>
 <p>
-The gnomAD tracks show variants from 125,748  exomes and 15,708 whole genomes from 141,456 unrelated 
-individuals sequenced as part of various population-genetic and disease-specific <a target="_blank"
-href="https://gnomad.broadinstitute.org/about">studies</a> collected by the <a target="_blank"
+The gnomAD v3 track shows variants from 71,702 whole genomes (and no exomes), all mapped to the 
+GRCh38/hg38 reference sequence. Most of the genomes from v2 are included in v3. For more detailed 
+information on gnomAD v3, see the related <a target="_blank" 
+href="https://macarthurlab.org/2019/10/16/gnomad-v3-0/">blog post</a>.</p>
+
+<p>
+The gnomAD v2 tracks show variants from 125,748 exomes and 15,708 whole genomes, all mapped to 
+the GRCh37/hg19 reference sequence and lifted to the GRCh38/hg38 assembly. The data originate 
+from 141,456 unrelated individuals sequenced as part of various population-genetic and 
+disease-specific <a target="_blank" href="https://gnomad.broadinstitute.org/about">studies</a> 
+collected by the <a target="_blank" 
 href="https://gnomad.broadinstitute.org/">Genome Aggregation Database (gnomAD)</a>, release 2.1.1.
 Raw data from all studies have been reprocessed through a unified pipeline and jointly
 variant-called to increase consistency across projects. For more information on the processing
@@ -11,9 +19,12 @@ href="https://macarthurlab.org/2017/02/27/the-genome-aggregation-database-gnomad
 and the 2.1.1 <a href="https://storage.googleapis.com/gnomad-public/release/2.1.1/README.txt"
 target="_blank">README</a>.</p>
 <p>
-All data here are based on the GRCh37/hg19 assembly.  This track displays the GRCh38/hg38 lift-over provided
-by gnomAD on their downloads site.
+gnomAD v2 data are based on the GRCh37/hg19 assembly. These tracks display the 
+GRCh38/hg38 lift-over provided by gnomAD on their downloads site.
 </p>
+<p>
+For questions on the gnomAD data, also see the <a target="_blank" 
+href="https://gnomad.broadinstitute.org/faq">gnomAD FAQ</a>.</p>
 
 <h2>Display Conventions</h2>
   <dt></dt>
@@ -32,7 +43,7 @@ Table Browser</a>, or the <a target="_blank" href="../cgi-bin/hgIntegrator">Data
 automated analysis, the data may be queried from our <a target="_blank" 
 href="/goldenPath/help/api.html">REST API</a>, and the genome annotations are stored in files that
 can be downloaded from our <a
-href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomad/" target="_blank">download server</a>, subject
+href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/" target="_blank">download server</a>, subject
 to the conditions set forth by the gnomAD consortium (see below). Coverage values
 for the genome are in <a target="_blank" href="../goldenPath/help/bigWig.html">bigWig</a> files in
 the coverage/ subdirectory. Variant VCFs can be found in the vcf/ subdirectory.</p>
@@ -60,4 +71,11 @@ Ganna A, Birnbaum DP <em>et al</em>.
 141,456 human exomes and genomes reveals the spectrum of loss-of-function intolerance across human 
 protein-coding genes</a>. doi: https://doi.org/10.1101/531210.
 </p>
-
+<p>
+Lek M, Karczewski KJ, Minikel EV, Samocha KE, Banks E, Fennell T, O'Donnell-Luria AH, Ware JS, Hill
+AJ, Cummings BB <em>et al</em>.
+<a href="https://www.nature.com/articles/nature19057" target="_blank">Analysis of protein-coding
+genetic variation in 60,706 humans</a>. <em>Nature</em>. 2016 Aug 17;536(7616):285-91.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
+</p>

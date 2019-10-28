@@ -417,6 +417,7 @@ enum wiggleScaleOptEnum wigFetchAutoScaleWithCart(struct cart *theCart, struct t
 {
 char *autoString = wiggleScaleEnumToString(wiggleScaleAuto);
 char *manualString = wiggleScaleEnumToString(wiggleScaleManual);
+char *cumulativeString = wiggleScaleEnumToString(wiggleScaleCumulative);
 char *Default = manualString;
 char *notDefault = autoString;
 boolean parentLevel = isNameAtParentLevel(tdb,name);
@@ -432,6 +433,13 @@ if (!autoScale) /*      if nothing from the Cart, check trackDb/settings */
     char * tdbDefault = trackDbSettingClosestToHomeOrDefault(tdb, AUTOSCALE, "NONE");
     if (sameWord(tdbDefault,"on"))
 	autoScale = cloneString(autoString);
+    else if (sameWord(tdbDefault,"group"))
+        {
+        if (parentLevel)
+            autoScale = cloneString(cumulativeString);
+        else
+            autoScale = cloneString(autoString);
+        }
     else if (sameWord(tdbDefault,"off"))
 	autoScale = cloneString(manualString);
     else

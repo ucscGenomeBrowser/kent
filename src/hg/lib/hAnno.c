@@ -82,6 +82,10 @@ static struct asObject *asObjectFromFields(char *name, struct sqlFieldInfo *fiel
                                            boolean skipBin)
 /* Make autoSql text from SQL fields and pass it to asParse. */
 {
+// If name is db.table, skip the db.:
+char *dot = strchr(name, '.');
+if (dot)
+    name = dot + 1;
 struct dyString *dy = dyStringCreate("table %s\n"
 				     "\"Column names grabbed from mysql\"\n"
 				     "    (\n", name);

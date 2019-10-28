@@ -153,7 +153,9 @@ char *hTrackUiForTrack(char *trackName);
 #define SUBTRACK_COLOR_SUBGROUP "subtrackColor"
 
 // trackDb setting and cart/cgi var
-#define SUBTRACK_HIDE_EMPTY     "hideEmptySubtracks"
+#define SUBTRACK_HIDE_EMPTY       "hideEmptySubtracks"
+// trackDb setting
+#define SUBTRACK_HIDE_EMPTY_LABEL "hideEmptySubtracksLabel"
 
 void netUi(struct trackDb *tdb);
 
@@ -1519,5 +1521,11 @@ void printDataVersion(char *database, struct trackDb *tdb);
 char *extractFieldName(char *cartVariable, char *filterType);
 /* Extract field name from a filter cart variable.  Variables can either be
  * <columnName>Filter* or <columnName>.Filter* */
+
+void labelMakeCheckBox(struct cart *cart, struct trackDb *tdb, char *sym, char *desc,
+                       boolean defaultOn);
+/* add a checkbox for the user to select a component of a label (e.g. ID, name, other info).
+ * NOTE: This does not have a track name argument, so the correct tdb must be passed in:
+ * if setting is at composite level, then pass in composite tdb, likewise for view. */
 
 #endif /* HUI_H */

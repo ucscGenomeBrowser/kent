@@ -712,35 +712,6 @@ include wgEncodeReg.dev.ra alpha
 
 include hic.ra
 
-track gnomadVariants
-compositeTrack on
-shortLabel gnomAD Variants
-longLabel Genome Aggregation Database (gnomAD) - Genome and Exome Variants
-group varRep
-dataVersion Release 2.1.1
-configureByPopup off
-type vcfTabix
-pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"; New red
-html gnomad
-
-    track gnomadGenomesVariants
-    parent gnomadVariants
-    shortLabel gnomAD Genome Variants
-    longLabel Genome Aggregation Database (gnomAD) Genome Variants
-    visibility pack
-    maxWindowToDraw 200000
-    showHardyWeinberg on
-    configureByPopup off
-    bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.gz
-
-    track gnomadExomesVariants
-    parent gnomadVariants
-    shortLabel gnomAD Exome Variants
-    longLabel Genome Aggregation Database (gnomAD) Exome Variants
-    visibility pack
-    maxWindowToDraw 200000
-    showHardyWeinberg on
-    configureByPopup off
-    bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.gz
+include gnomad.ra
 
 include platinumGenomes.ra

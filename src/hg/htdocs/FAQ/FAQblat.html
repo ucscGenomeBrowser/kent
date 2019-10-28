@@ -357,7 +357,8 @@ belong to.
 Selecting the "Search ALL" 
 checkbox above the Genome drop-down list allows you to search the genomes
 of the default assemblies for all of our organisms. It also searches any attached hubs' 
-Blat servers, meaning you can search your user-generated assembly hubs. The results page displays an ordered list 
+Blat servers, meaning you can search your user-generated assembly hubs. The results page 
+displays an ordered list 
 of all our organisms and their homology with your query sequence. The results are ordered 
 so that the organism with the best alignment score is at the top, indicating which region(s) 
 of that organism has the greatest homology with your query sequence.
@@ -372,15 +373,16 @@ you will be taken to a new page displaying various locations and scores of seque
 no matches</h6>
 
 <p>
-In the Blat All results page, the "Hits" column does not represent alignments, instead it reports 
+In the Blat ALL results page, the "Hits" column does not represent alignments, instead it reports 
 tile hits. Tile hits are 11 base kmer matches found in the target, which do not necessarily 
 represent successful alignments. When one clicks the 'Assembly' link a full BLAT alignment for 
 that genome will occur and any alignment scores representing less than a 20 bp result will 
 come back as no matches found.</p>
 
 <p>
-When you BLAT All a sequence, the server reads the target (genome) and builds an index in memory of 
-all the 11-mer locations, with an 11bp default stepSize. These 11-mers &quot;tile&quot; the sequence as such:
+When you submit a sequence to the BLAT ALL utility, the sequence is compared to an index in the 
+server. The index has been built from the target genome, with an 11bp default stepSize.
+These 11-mers &quot;tile&quot; the sequence as such:
 
 <pre>
 TGGACAACATG
@@ -391,7 +393,7 @@ TGGACAACATG
 <p>
 After the index is built, the first step of alignment is to read the query (search) sequence, 
 extract all the 11-mers, and look those up in the genome 11-mer index currently in memory. 
-Matches found there represent the initial &quot;hits&quot; you see in the Blat All results page. 
+Matches found there represent the initial &quot;hits&quot; you see in the Blat ALL results page. 
 The next step is to look for hits that overlap or fall within a certain distance of each other, 
 and attempt to align the sequences between the hit locations in target and query.</p>
 
@@ -400,17 +402,17 @@ For example, if two 11-base tile hits align perfectly, it would result in a scor
 above the minimum required score of 20 (see <a href="#blat9">BLAT ALL genomes</a>), and would be 
 reported as an alignment. However, there are penalties for gaps and mismatches, as well as potential 
 overlap (see stepsize in <a href="../goldenPath/help/blatSpec.html">BLAT specifications</a>), all 
-of which could bring the score below 20. In that case, BLAT All would report 2 &quot;hits&quot;, 
+of which could bring the score below 20. In that case, BLAT ALL would report 2 &quot;hits&quot;, 
 but clicking into the assembly would report no matches. This most often occurs when there are 
-only a few (1-3) hits reported by BLAT All.</p>
+only a few (1-3) hits reported by BLAT ALL.</p>
 
 <a name="blat11"></a>
-<h2>Approximating web-based Blat results using gfServer/gfClient</h2>
+<h2>Approximating web-based BLAT results using gfServer/gfClient</h2>
 
 <p>
 Often times using the gfServer/gfClient provides a better approximation or even replicate of
-the web-based Blat results, which otherwise cannot be found using standalone Blat. This approach
-mimics the blat server used by the Genome Browser web-based Blat. The following example will show
+the web-based BLAT results, which otherwise cannot be found using standalone BLAT. This approach
+mimics the blat server used by the Genome Browser web-based BLAT. The following example will show
 how to set up an hg19 gfServer, then make a query. First, download the appropriate utility for
 the operating system and give it executable permissions:</p>
 <pre>
@@ -423,33 +425,33 @@ chmod +x gfServer gfClient blat
 </pre>
 <p>
 Next, download the appropriate .2bit genome (hg19 in this example), and run the gfServer
-utility with the web Blat parameters, designating the local machine and port 1234:</p>
+utility with the web BLAT parameters, designating the local machine and port 1234:</p>
 <pre>
 wget http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.2bit
 ./gfServer start 127.0.0.1 1234 -stepSize=5 hg19.2bit
 </pre>
 <p>
 After a few moments, the gfServer will initialize and be ready to recieve queries. In order
-to approximate web Blat, we will use the gfClient with the following parameters, designating
+to approximate web BLAT, we will use the gfClient with the following parameters, designating
 our input and output files.</p>
 <pre>
 ./gfClient -minScore=20 -minIdentity=0 127.0.0.1 1234 . input.fa out.psl
 </pre>
-<p>The output file <code>out.psl</code> should have results very similar to web-based Blat.</p>
+<p>The output file <code>out.psl</code> should have results very similar to web-based BLAT.</p>
 
 <a name="blat12"></a>
 <h2>Standalone or gfServer/gfClient result start positions off by one</h2>
-<h6>My standalone Blat results or gfServer/gfClient Blat results have a start
-position that is one less that what I see on web Blat results</h6>
+<h6>My standalone BLAT results or gfServer/gfClient BLAT results have a start
+position that is one less that what I see on web BLAT results</h6>
 <p>
 This is due to how we store internal coordinates in the Genome Browser. The default
-Blat <strong>Output type</strong> of <strong>hyperlink</strong> shows results in our
+BLAT <strong>Output type</strong> of <strong>hyperlink</strong> shows results in our
 internal coordinate data structure. These internal coordinates have a zero-based start
 and a one-based end. See the following <a target="_blank" href="/FAQ/FAQtracks#tracks1"
 >FAQ entry</a> for more information.</p>
 <p>
-If the <strong>Output type</strong> is changed to <strong>psl</strong> on web Blat, the same
-zero-based half open coordinate results will be seen as the standalone Blat and gfServer/gfClient 
+If the <strong>Output type</strong> is changed to <strong>psl</strong> on web BLAT, the same
+zero-based half open coordinate results will be seen as the standalone BLAT and gfServer/gfClient 
 procedures.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
