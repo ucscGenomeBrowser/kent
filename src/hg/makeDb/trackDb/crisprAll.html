@@ -119,7 +119,9 @@ Flanking sequences were extracted from the genome and input for Crispor
 efficiency scoring, available from the <a
 href="http://crispor.tefor.net/downloads/">Crispor downloads page</a>, which
 includes the Doench 2016, Moreno-Mateos 2015 and Bae
-2014 algorithms, among others. Note that the Doench 2016 scores were updated by
+2014 algorithms, among others.</p>
+<p>
+Note that the Doench 2016 scores were updated by
 the Broad institute in 2017 ("Azimuth" update). As a result, earlier versions of
 the track show the old Doench 2016 scores and this version of the track shows new
 Doench 2016 scores. Old and new scores are almost identical, they are
@@ -131,16 +133,22 @@ the new scores. Crispor.org can display both scores and many more with the
 <H2>Data Access</H2>
 <p>
 Positional data can be explored interactively with the 
-<a href="../cgi-bin/hgTables?db=hg19&hgta_track=crisprAllTargets&hgta_regionType=range">Table Browser</a>.
-For genome-wide data or automated analysis, CRISPR genome annotations can be downloaded from
+<a href="../cgi-bin/hgTables?db=${db}&hgta_track=crisprAllTargets&hgta_regionType=range">Table Browser</a>.
+For small programmatic positional queries, the track can be accessed using our 
+<a href="/goldenPath/help/api.html">REST API</a>. For genome-wide data or 
+automated analysis, CRISPR genome annotations can be downloaded from
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/crisprAll/" target="_blank">our download server</a>
-as a bigBedFile. The files for this track are called <tt>crispr.bb</tt>, which lists positions and
+as a bigBedFile.</p>
+<p>
+The files for this track are called <tt>crispr.bb</tt>, which lists positions and
 scores, and <tt>crisprDetails.tab</tt>, which has information about off-target matches. Individual
 regions or whole genome annotations can be obtained using our tool <tt>bigBedToBed</tt>,
 which can be compiled from the source code or downloaded as a pre-compiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool
-can also be used to obtain only features within a given range, e.g. <tt>bigBedToBed
+can also be used to obtain only features within a given range, e.g.</p>
+<p>
+<tt>bigBedToBed
 http://hgdownload.soe.ucsc.edu/gbdb/${db}/${track}/crispr.bb -chrom=chr21
 -start=0 -end=1000000 stdout</tt> </p>
 
