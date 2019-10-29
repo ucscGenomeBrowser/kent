@@ -17,6 +17,7 @@ defaultLinkedTables kgXref
 intronGap 12
 isGencode2 on
 bigGeneDataUrl /gbdb/mm10/knownGeneM23.bb
+pennantIcon Updated red ../goldenPath/newsarch.html#101619 All GENCODE V23 released October 16, 2019
 
 track knownGeneOld11
 shortLabel Old UCSC Genes
