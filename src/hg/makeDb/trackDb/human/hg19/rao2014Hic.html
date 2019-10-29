@@ -1,98 +1,103 @@
 <p>
 <h2>Description</h2>
 These tracks provide heatmaps of chromatin folding data from in situ Hi-C experiments on
-the following seven cell lines: GM12878, K562, IMR90, HMEC, NHEK, HUVEC, and KBM7 (Rao <em>et al</em>.,
-2014).  Two other cell lines were also part of this project, but are not included in this track:
-CH12-LX (mouse B-lymphoblasts) and HeLa (the Henrietta Lacks tumor cell line).
+the following seven cell lines: GM12878, K562, IMR90, HMEC, NHEK, HUVEC, and KBM7 (Rao <em>et
+al</em>., 2014). Two other cell lines were also part of this project, but are not included in this
+track: CH12-LX (mouse B-lymphoblasts) and HeLa (the Henrietta Lacks tumor cell line).
 </p><p>
-The data indicate how many interactions were detected between regions of the genome.  A high score between
-two regions suggests that they are probably in close proximity in 3D space within the nucleus of a
-cell.  In the track display, this is shown by a more intense color in the heatmap.
+The data indicate how many interactions were detected between regions of the genome. A high score
+between two regions suggests that they are probably in close proximity in 3D space within the
+nucleus of a cell. In the track display, this is shown by a more intense color in the heatmap.
 </p><p>
 <h2>Display Conventions</h2>
-This is a composite track with data from seven cell lines.  Individual subtrack settings can be adjusted
-by clicking the wrench next to the subtrack name, and all subtracks can be configured simultaneously
-using the track controls at the top of the page.  Note that some controls (specifically, resolution
-and normalization options) are only available in the subtrack-specific configuration.  The proximity
-data in these tracks are displayed as heatmaps, with high scores (and more intense colors) corresponding
-to closer proximity.
+This is a composite track with data from seven cell lines. Individual subtrack settings can be
+adjusted by clicking the wrench next to the subtrack name, and all subtracks can be configured
+simultaneously using the track controls at the top of the page. Note that some controls
+(specifically, resolution and normalization options) are only available in the subtrack-specific
+configuration. The proximity data in these tracks are displayed as heatmaps, with high scores (and
+more intense colors) corresponding to closer proximity.
 </p><p>
 <h4>Draw modes</h4>
 There are three display methods available for Hi-C heatmaps: square, triangle, and arc.<br>
 <img src="../images/hicDrawModes.png">
 </p><p>
 Square mode provides a traditional Hi-C display in which chromosome positions are mapped along the
-top-left-to-bottom-right diagonal, and interaction values are plotted on both sides of that diagonal to
-form a square.  The upper-left corner of the square corresponds to the left-most position of the
+top-left-to-bottom-right diagonal, and interaction values are plotted on both sides of that diagonal
+to form a square. The upper-left corner of the square corresponds to the left-most position of the
 window in view, while the bottom-right corner corresponds to the right-most position of the window.
 </p><p>
 The color shade at any point within the square shows the proximity score for two genomic regions:
-the region where a vertical line drawn from that point intersects with the diagonal, and the region where
-a horizontal line from that point intersects with the diagonal.  A point directly on the diagonal shows
-the score for how proximal a region is to itself (scores on the diagonal are usually quite high unless no
-data are available).  A point at the extreme bottom left of the square shows the score for how proximal the
-left-most position within the window is to the right-most position within the window.
+the region where a vertical line drawn from that point intersects with the diagonal, and the region
+where a horizontal line from that point intersects with the diagonal. A point directly on the
+diagonal shows the score for how proximal a region is to itself (scores on the diagonal are usually
+quite high unless no data are available). A point at the extreme bottom left of the square shows the
+score for how proximal the left-most position within the window is to the right-most position within
+the window.
 </p><p>
-In triangle mode, the display is quite similar to square except that only the top half of the square is
-drawn (eliminating the redundancy), and the image is rotated so that the diagonal of the square now lies
-on the horizontal axis.  This display consumes less vertical space in the image, although it may be more
-difficult to ascertain exactly which positions correspond to a point within the triangle.
+In triangle mode, the display is quite similar to square except that only the top half of the square
+is drawn (eliminating the redundancy), and the image is rotated so that the diagonal of the square
+now lies on the horizontal axis. This display consumes less vertical space in the image, although it
+may be more difficult to ascertain exactly which positions correspond to a point within the
+triangle.
 </p><p>
-In arc mode, simple arcs are drawn between the centers of interacting regions.  The color of each arc
-corresponds to the proximity score.  Self-interactions are not displayed.
+In arc mode, simple arcs are drawn between the centers of interacting regions. The color of each arc
+corresponds to the proximity score. Self-interactions are not displayed.
 </p><p>
 <h4>Score normalization settings</h4>
-Score values for this type of display correspond to how close two genomic regions are in 3D space.  A
-high score indicates more links were formed between them in the experiment, which suggests that the regions
-are near to each other.  A low score suggests that the regions are farther apart.  High scores are displayed
-with a more intense color value; low scores are displayed in paler shades.
+Score values for this type of display correspond to how close two genomic regions are in 3D space. A
+high score indicates more links were formed between them in the experiment, which suggests that the
+regions are near to each other. A low score suggests that the regions are farther apart. High scores
+are displayed with a more intense color value; low scores are displayed in paler shades.
 </p><p>
-There are four score values available in this display: NONE, VC, VC_SQRT, and KR.  NONE provides raw,
-un-normalized counts for the number of interactions between regions.  VC, or Vanilla Coverage, normalization
-(Lieberman-Aiden <em>et al</em>., 2009) and the VC_SQRT variant normalize these count values based on the
-overall count values for each of the two interacting regions.  Knight-Ruiz, or KR, matrix balancing
-(Knight and Ruiz, 2013) provides an alternative normalization method where the row and column sums of the
-contact matrix equal 1.
+There are four score values available in this display: NONE, VC, VC_SQRT, and KR. NONE provides raw,
+un-normalized counts for the number of interactions between regions. VC, or Vanilla Coverage,
+normalization (Lieberman-Aiden <em>et al</em>., 2009) and the VC_SQRT variant normalize these count
+values based on the overall count values for each of the two interacting regions. Knight-Ruiz, or
+KR, matrix balancing (Knight and Ruiz, 2013) provides an alternative normalization method where the
+row and column sums of the contact matrix equal 1.
 </p><p>
-Color intensity in the heatmap goes up to indicate higher scores, but eventually saturates at a maximum
-beyond which all scores share the same color intensity.  The value of this maximum score for saturation
-can be set manually by un-checking the "Auto-scale" box.  When the "Auto-scale" box is checked, it
-automatically sets the saturation maximum to be double (2x) the median score in the current display window.
+Color intensity in the heatmap goes up to indicate higher scores, but eventually saturates at a
+maximum beyond which all scores share the same color intensity. The value of this maximum score for
+saturation can be set manually by un-checking the &quot;Auto-scale&quot; box. When the
+&quot;Auto-scale&quot; box is checked, it automatically sets the saturation maximum to be double 
+(2x) the median score in the current display window.
 </p><p>
 <h4>Resolution settings</h4>
-The resolution for each track is measured in base pairs and represents the size of the bins into which
-proximity data are gathered.  The list of available resolutions ranges from 1kb to 10Mb.  There is also
-an "Auto" setting, which attempts to use the coarsest resolution that still displays at least 5000 bins
-in the current window.
+The resolution for each track is measured in base pairs and represents the size of the bins into
+which proximity data are gathered. The list of available resolutions ranges from 1kb to 10Mb. There
+is also an &quot;Auto&quot; setting, which attempts to use the coarsest resolution that still
+displays at least 5000 bins in the current window.
 </p><p>
 <h2>Methods</h2>
 The protocol described in this paper, in situ Hi-C, is a refinement of an earlier method
-originally called Hi-C and now referred to as dilution Hi-C.  Both methods involve cross-linking
-DNA with formaldehyde, cleaving it with a restriction enzyme, forming local bonds between the cleaved
-DNA ends, and sequencing the resulting junctions.  The primary refinement for in situ Hi-C is that it keeps
-cell nuclei intact during cross-linking, which reduces the number of spurious contacts in the resulting
-contact matrix.  The protocol also takes less time (3 days instead of 7) and can make use of
-higher-resolution restriction enzymes.
+originally called Hi-C and now referred to as dilution Hi-C. Both methods involve cross-linking DNA
+with formaldehyde, cleaving it with a restriction enzyme, forming local bonds between the cleaved
+DNA ends, and sequencing the resulting junctions. The primary refinement for in situ Hi-C is that it
+keeps cell nuclei intact during cross-linking, which reduces the number of spurious contacts in the
+resulting contact matrix. The protocol also takes less time (3 days instead of 7) and can make use
+of higher-resolution restriction enzymes.
 </p><p>
-The cell lines in this paper were processed using the in situ Hi-C protocol to produce contact matrices
-in the <a href="https://github.com/aidenlab/juicer/wiki/Data#hic-files" target="_blank">.hic format</a>.  We
-downloaded a subset of those files from the GEO repository at <a
-href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63525" target="_blank"
->https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63525</a>.  The files used for this track are the
-"combined.hic" files, which combine the results from multiple experimental replicates without imposing
-a cutoff on the data values. The files are parsed for display using the <a href="https://github.com/aidenlab/straw"
-target="_blank">Straw</a> library from the <a href="http://aidenlab.org/" target="_blank">Aiden lab</a>
-at <a href="https://www.bcm.edu" target="_blank">Baylor College of Medicine</a>.
+The cell lines in this paper were processed using the in situ Hi-C protocol to produce contact
+matrices in the <a href="https://github.com/aidenlab/juicer/wiki/Data#hic-files"
+target="_blank">.hic format</a>. We downloaded a subset of those files from the GEO repository at
+<a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63525"
+target="_blank">https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE63525</a>. The files used for
+this track are the &quot;combined.hic&quot; files, which combine the results from multiple
+experimental replicates without imposing a cutoff on the data values. The files are parsed for
+display using the <a href="https://github.com/aidenlab/straw" target="_blank">Straw</a> library from
+the <a href="http://aidenlab.org/" target="_blank">Aiden lab</a> at <a href="https://www.bcm.edu"
+target="_blank">Baylor College of Medicine</a>.
 </p><p>
 <h2>Data Access</h2>
 The data for this track can be explored interactively with the Table Browser in the
 <a href="../goldenPath/help/interact.html">interact</a> format.  Direct access to the
 raw data files in .hic format can be obtained from GEO at the URL provided in the Methods section or
-from our own <a href="https://hgdownload.soe.ucsc.edu/downloads.html#gbdb" target="_blank">download server</a>.
+from our own <a href="https://hgdownload.soe.ucsc.edu/downloads.html#gbdb"
+target="_blank">download server</a>.
 The following files for this track can be found in the /gbdb/hg19/hic/ subdirectory:
 GSE63525_GM12878_insitu_primary+replicate_combined.hic, GSE63525_HUVEC_combined.hic,
 GSE63525_K562_combined.hic, GSE63525_NHEK_combined.hic, GSE63525_HMEC_combined.hic,
-GSE63525_IMR90_combined.hic, and GSE63525_KBM7_combined.hic.  Details on working with .hic files
+GSE63525_IMR90_combined.hic, and GSE63525_KBM7_combined.hic. Details on working with .hic files
 can be found at <a href="https://www.aidenlab.org/documentation.html"
 target="_blank">https://www.aidenlab.org/documentation.html</a>.
 </p><p>
