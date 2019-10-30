@@ -801,27 +801,32 @@ if (tdbOut == NULL)
     tdbOut->descriptionMatch = dyStringNew(0);
     tdbOut->configUrl = dyStringNew(0);
     dyStringPrintf(tdbOut->shortLabel, "%s", hst->label);
-
+    char *hubId = hubNameFromUrl(hub->url);
     if (isNotEmpty(hst->parents))
         {
         // hst->parents is a comma-sep list like "track1","track1Label","track2","track2Label"
         int i;
         int parentCount;
+        int parentTypesCount;
         char *parentTrack = NULL;
         char *parentLabel = NULL;
         char *parentTrackLabels[16]; // 2 slots per parent, can tracks nest more than 8 deep?
+        char *parentTypes[16]; // the types of parents, "comp", "super", "view", "other" for each track in parentTrackLabels
         struct tdbOutputStructure *parentTdbOut = NULL;
         struct tdbOutputStructure *savedParent = NULL;
 
         parentCount = chopByCharRespectDoubleQuotes(cloneString(hst->parents), ',', parentTrackLabels, sizeof(parentTrackLabels));
+        parentTypesCount = chopCommas(cloneString(hst->parentTypes), parentTypes);
         if (parentCount == 0 || parentCount % 2 != 0)
             {
             errAbort("error parsing hubSearchText->parents for %s.%s in hub: '%s'",
                 genomeOut->genomeName, hst->track, hub->url);
             }
-        dyStringPrintf(tdbOut->configUrl, "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s&hgsid=%s&%s",
-            hub->url, genomeOut->genomeName, parentTrackLabels[0], cartSessionId(cart),
-            genomeOut->positionString);
+        if (parentTypesCount != (parentCount / 2))
+            {
+            errAbort("error parsing hubSearchText->parentTypes: '%s' for %s.%s in hub: '%s'",
+                hst->parentTypes, genomeOut->genomeName, hst->track, hub->url);
+            }
 
         boolean foundParent = FALSE;
         boolean doAddSaveParent = FALSE;
@@ -829,8 +834,47 @@ if (tdbOut == NULL)
             {
             parentTrack = stripEnclosingDoubleQuotes(cloneString(parentTrackLabels[i]));
             parentLabel = stripEnclosingDoubleQuotes(cloneString(parentTrackLabels[i+1]));
+            // wait until the first valid trackui page for the track hit
+            if (isEmpty(dyStringContents(tdbOut->configUrl)) && sameString(parentTypes[i/2], "comp"))
+                {
+                dyStringPrintf(tdbOut->configUrl, "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s_%s&hgsid=%s&%s",
+                    hub->url, genomeOut->genomeName, hubId, parentTrack, cartSessionId(cart),
+                    genomeOut->positionString);
+                }
+            else if (isEmpty(dyStringContents(tdbOut->configUrl)) && sameString(parentTypes[i/2], "super"))
+                {
+                dyStringPrintf(tdbOut->configUrl, "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s_%s&hgsid=%s&%s",
+                    hub->url, genomeOut->genomeName, hubId, hst->track, cartSessionId(cart),
+                    genomeOut->positionString);
+                }
             parentTdbOut = hashFindVal(genomeOut->tdbOutHash, parentTrack);
-            if (parentTdbOut != NULL)
+            if (parentTdbOut == NULL)
+                {
+                AllocVar(parentTdbOut);
+                parentTdbOut->shortLabel = dyStringNew(0);
+                parentTdbOut->metaTags = dyStringNew(0);
+                parentTdbOut->descriptionMatch = dyStringNew(0);
+                parentTdbOut->configUrl = dyStringNew(0);
+                // views will be in the parent list, but the &g parameter to trackUi should be the view's parent
+                if (sameString(parentTypes[(i/2)], "view"))
+                    dyStringPrintf(parentTdbOut->configUrl,
+                        "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s_%s&hgsid=%s&%s",
+                        hub->url, genomeOut->genomeName, hubId, stripEnclosingDoubleQuotes(parentTrackLabels[(i/2)+2]), cartSessionId(cart), genomeOut->positionString);
+                else // everything else has the correct &g param
+                    dyStringPrintf(parentTdbOut->configUrl,
+                        "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s_%s&hgsid=%s&%s",
+                        hub->url, genomeOut->genomeName, hubId, parentTrack, cartSessionId(cart), genomeOut->positionString);
+                dyStringPrintf(parentTdbOut->shortLabel, "%s", parentLabel);
+                parentTdbOut->childCount += 1;
+                if (savedParent)
+                    slAddHead(&(parentTdbOut->children), savedParent);
+                else
+                    slAddHead(&(parentTdbOut->children), tdbOut);
+                savedParent = parentTdbOut;
+                doAddSaveParent = TRUE;
+                hashAdd(genomeOut->tdbOutHash, parentTrack, parentTdbOut);
+                }
+            else
                 {
                 foundParent = TRUE; // don't add this track to the genomeOut->tracks hash again
                 if (savedParent && doAddSaveParent)
@@ -846,26 +890,6 @@ if (tdbOut == NULL)
                 savedParent = parentTdbOut;
                 doAddSaveParent = FALSE;
                 }
-            else
-                {
-                AllocVar(parentTdbOut);
-                parentTdbOut->shortLabel = dyStringNew(0);
-                parentTdbOut->metaTags = dyStringNew(0);
-                parentTdbOut->descriptionMatch = dyStringNew(0);
-                parentTdbOut->configUrl = dyStringNew(0);
-                dyStringPrintf(tdbOut->configUrl,
-                    "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s&hgsid=%s&%s",
-                    hub->url, genomeOut->genomeName, parentTrack, cartSessionId(cart), genomeOut->positionString);
-                dyStringPrintf(parentTdbOut->shortLabel, "%s", parentLabel);
-                parentTdbOut->childCount += 1;
-                if (savedParent)
-                    slAddHead(&(parentTdbOut->children), savedParent);
-                else
-                    slAddHead(&(parentTdbOut->children), tdbOut);
-                savedParent = parentTdbOut;
-                doAddSaveParent = TRUE;
-                hashAdd(genomeOut->tdbOutHash, parentTrack, parentTdbOut);
-                }
             }
         if (!foundParent)
             {
@@ -874,8 +898,8 @@ if (tdbOut == NULL)
         }
     else
         {
-        dyStringPrintf(tdbOut->configUrl, "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s&hgsid=%s&%s",
-            hub->url, genomeOut->genomeName, hst->track, cartSessionId(cart),
+        dyStringPrintf(tdbOut->configUrl, "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s_%s&hgsid=%s&%s",
+            hub->url, genomeOut->genomeName, hubId, hst->track, cartSessionId(cart),
             genomeOut->positionString);
         slAddHead(&(genomeOut->tracks), tdbOut);
         }

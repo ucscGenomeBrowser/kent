@@ -23,9 +23,10 @@ struct hubSearchText
     char *db;	/* Assembly name (UCSC format) for Assembly and Track descriptions, NULL for hub descriptions */
     char *track;	/* Track name for track descriptions, NULL for others */
     char *label;	/* Name to display in search results */
-    char *parents;	/* Comma separated list of parent track of this track, NULL for others */
     enum hubSearchTextTextLength textLength;	/* Length of text (short for labels, long for description pages, meta for metadata) */
     char *text;	/* Description text */
+    char *parents;	/* Comma separated list of parent track of this track, NULL for others */
+    char *parentTypes; /* Comma separated list of parent track types */
     };
 
 void hubSearchTextStaticLoadWithNull(char **row, struct hubSearchText *ret);

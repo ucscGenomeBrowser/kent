@@ -99,6 +99,7 @@ if (hashLookup(visitedTracks, tdb->track) == NULL)
 
     struct hubSearchText *trackHst = NULL;
     struct dyString *csParents = dyStringNew(0);
+    struct dyString *csParentTypes = dyStringNew(0);
     AllocVar(trackHst);
     trackHst->hubUrl = cloneString(hubUrl);
     trackHst->db = cloneString(dbName);
@@ -119,11 +120,28 @@ if (hashLookup(visitedTracks, tdb->track) == NULL)
             dyStringPrintf(csParents, "%s", htmlEncode(ptdb->track));
         dyStringPrintf(csParents, "\"");
 
+        // now fill in the type of the parent, "comp" for composite/multiWig (ie valid trackUi page),
+        // "super" for super track, and "view" for view, "other" for everything else.
+        // these are used by hgHubConnect for printing the correct links to track ui pages
+        // for search results
+        if (tdbIsComposite(ptdb) || trackDbLocalSetting(ptdb, "container"))
+            dyStringPrintf(csParentTypes, "comp");
+        else if (tdbIsSuper(ptdb))
+            dyStringPrintf(csParentTypes, "super");
+        else if (tdbIsCompositeView(ptdb))
+            dyStringPrintf(csParentTypes, "view");
+        else // handle any extra
+            dyStringPrintf(csParentTypes, "other");
+
         if (ptdb->parent != NULL)
+            {
             dyStringPrintf(csParents, ",");
+            dyStringPrintf(csParentTypes, ",");
+            }
         ptdb = ptdb->parent;
         }
     trackHst->parents = dyStringCannibalize(&csParents);
+    trackHst->parentTypes = dyStringCannibalize(&csParentTypes);
     if (isNotEmpty(tdb->longLabel))
         {
         trackHst->label = cloneString(tdb->longLabel);
@@ -177,11 +195,9 @@ if (hashLookup(visitedTracks, tdb->track) == NULL)
 
     // Write out lines for child tracks
     struct trackDb *subtrack = NULL;
-    subtrack = tdb->subtracks;
-    while (subtrack != NULL)
+    for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
         {
         trackHubCrawlTrack(subtrack, genome, hubUrl, dbName, searchFp, visitedTracks);
-        subtrack = subtrack->next;
         }
     }
 }
@@ -205,6 +221,7 @@ else
     safef(label, sizeof(label), "%s", trackHubSkipHubName(genome->name));
 genomeHst->label = cloneString(label);
 genomeHst->parents = cloneString("");
+genomeHst->parentTypes = cloneString("");
 genomeHst->textLength = hubSearchTextShort;
 genomeHst->text = cloneString(trackHubSkipHubName(genome->name));
 hubSearchTextTabOut(genomeHst, searchFp);
@@ -284,9 +301,10 @@ hubHst->hubUrl = cloneString(hub->url);
 hubHst->db = cloneString("");
 hubHst->track = cloneString("");
 hubHst->label = cloneString("");
-hubHst->parents = cloneString("");
 hubHst->textLength = hubSearchTextShort;
 hubHst->text = cloneString(hub->shortLabel);
+hubHst->parents = cloneString("");
+hubHst->parentTypes = cloneString("");
 hubSearchTextTabOut(hubHst, searchFp);
 
 hubHst->text = cloneString(hub->longLabel);
