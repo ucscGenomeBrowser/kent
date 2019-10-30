@@ -107,7 +107,7 @@ char *hicLoadData(struct hicMeta *fileInfo, int resolution, char *normalization,
  * and the return value (if non-NULL) is the text of any error message encountered by the underlying
  * Straw library. */
 {
-int *x, *y, numRecords;
+int *x, *y, numRecords=0;
 double *counts;
 
 if (!fileInfo)
