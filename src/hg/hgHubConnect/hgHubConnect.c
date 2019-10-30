@@ -431,7 +431,7 @@ if (hubUrl == NULL)
     printf("<tr><td>Enter URL to hub to check settings</td></tr> \n");
 else
     doValidateNewHub(hubUrl);
-printf("</table>");
+printf("</table></div>");
 
 jsOnEventById("click", "hubValidateButton",
     "var validateText = document.getElementById('validateHubUrl');"
