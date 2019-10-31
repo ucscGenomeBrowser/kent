@@ -313,6 +313,12 @@ struct symbolDesc ucscNotesDesc[] =
       "Variation class/type is inconsistent with alleles mapped to this genome assembly." },
     { bdsClinvar,
       "Variant is in ClinVar." },
+    { bdsClinvarBenign,
+      "Variant is in ClinVar with clinical significance of benign and/or likely benign." },
+    { bdsClinvarConflicting,
+      "Variant is in ClinVar with reports of both benign and pathogenic significance." },
+    { bdsClinvarPathogenic,
+      "Variant is in ClinVar with clinical significance of pathogenic and/or likely pathogenic." },
     { bdsClusterError,
       "This variant has the same start, end and class as another variant; "
       "they probably should have been merged into one variant." },
@@ -336,6 +342,12 @@ struct symbolDesc ucscNotesDesc[] =
       "This variant overlaps another variant with a different type/class." },
     { bdsOverlapSameClass,
       "This variant overlaps another with the same type/class but different start/end." },
+    { bdsRareAll,
+      "Variant is \"rare\", i.e. has a Minor Allele Frequency of less than 1% "
+      "in all projects reporting frequencies, or has been reported without frequency data." },
+    { bdsRareSome,
+      "Variant is \"rare\", i.e. has a Minor Allele Frequency of less than 1% "
+      "in some, but not all, projects reporting frequencies." },
     { bdsRefIsAmbiguous,
       "The reference genome allele "
       "contains an IUPAC ambiguous base (e.g. 'R' for 'A or G')." },

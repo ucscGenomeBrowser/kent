@@ -189,6 +189,24 @@ Some are purely informational:
     <td>Variant is in ClinVar.</td>
   </tr>
   <tr>
+    <td>clinvarBenign</td>
+    <td class="number">143844</td>
+    <td class="number">143696</td>
+    <td>Variant is in ClinVar with clinical significance of benign and/or likely benign.</td>
+  </tr>
+  <tr>
+    <td>clinvarConflicting</td>
+    <td class="number">7932</td>
+    <td class="number">7950</td>
+    <td>Variant is in ClinVar with reports of both benign and pathogenic significance.</td>
+  </tr>
+  <tr>
+    <td>clinvarPathogenic</td>
+    <td class="number">96242</td>
+    <td class="number">95262</td>
+    <td>Variant is in ClinVar with clinical significance of pathogenic and/or likely pathogenic.</td>
+  </tr>
+  <tr>
     <td>commonAll</td>
     <td class="number">12178426</td>
     <td class="number">12430253</td>
@@ -219,6 +237,21 @@ Some are purely informational:
     <td class="number">16890303</td>
     <td class="number">17228657</td>
     <td>This variant overlaps another with the same type/class but different start/end.</td>
+  </tr>
+  <tr>
+    <td>rareAll</td>
+    <td class="number">662571654</td>
+    <td class="number">681626796</td>
+    <td>Variant is "rare", i.e. has a Minor Allele Frequency of less than 1%
+      in all projects reporting frequencies, or has been reported without frequency data.</td>
+  </tr>
+  <tr>
+    <td>rareSome</td>
+    <td class="number">670927558</td>
+    <td class="number">690089717</td>
+    <td>Variant is "rare", i.e. has a Minor Allele Frequency of less than 1%
+      in some, but not all, projects reporting frequencies, or has been reported without
+      frequency data.</td>
   </tr>
   <tr>
     <td>revStrand</td>
@@ -352,9 +385,8 @@ target=_blank>dbSnpDetails.as</a> schema).
 <h2>Data Access</h2>
 <p>
 The raw data underlying the UCSC Genome Browser track can be explored interactively with the
-<a href="../../cgi-bin/hgTables" target=_blank>Table Browser</a>,
-<a href="../../cgi-bin/hgIntegrator" target=_blank>Data Integrator</a>,
-or <a href="../../cgi-bin/hgVai" target=_blank>Variant Annotation Integrator</a>.
+<a href="../../cgi-bin/hgTables" target=_blank>Table Browser</a> or
+<a href="../../cgi-bin/hgIntegrator" target=_blank>Data Integrator</a>.
 For automated analysis, the track data files can be downloaded from the downloads server for
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/" target=_blank>hg38</a> and
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/snp/" target=_blank>hg19</a>

@@ -270,12 +270,14 @@ if (isNotEmpty(ucscNotes))
     puts("<p>Interesting or anomalous conditions noted by UCSC:</b><br>");
     puts("<ul>");
     boolean isCommonAll = (stringIn(bdsCommonAll, ucscNotes) != NULL);
+    boolean isRareAll = (stringIn(bdsRareAll, ucscNotes) != NULL);
     struct slName *note, *noteList = slNameListFromComma(ucscNotes);
     for (note = noteList;  note != NULL;  note = note->next)
         {
         // When commonAll is true, commonSome is also true but not informative,
-        // so skip commonSome if commonAll is true.
-        if (! (isCommonAll && sameString(note->name, bdsCommonSome)))
+        // so skip commonSome if commonAll is true.  Likewise for rareAll & rareSome.
+        if (! ((isCommonAll && sameString(note->name, bdsCommonSome)) ||
+               (isRareAll && sameString(note->name, bdsRareSome))))
             {
             char *desc = bigDbSnpDescribeUcscNote(note->name);
             printf("<li>%s\n", desc ? desc : note->name);
