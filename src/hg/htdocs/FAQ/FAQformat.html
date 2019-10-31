@@ -105,9 +105,12 @@ The first three required BED fields are: </p>
   The first base in a chromosome is numbered 0.</li>
   <li>
   <strong>chromEnd</strong> - The ending position of the feature in the chromosome or scaffold. The 
-  <em>chromEnd</em> base is not included in the display of the feature. For example, the first 100 
-  bases of a chromosome are defined as <em>chromStart=0, chromEnd=100</em>, and span the bases 
-  numbered 0-99.</li>
+  <em>chromEnd</em> base is not included in the display of the feature, however,
+  the number in <a href="FAQtracks#tracks1">position format</a> will be represented. For example,
+  the first 100 bases of chromosome 1 are defined as <em>chrom=1, chromStart=0, chromEnd=100</em>,
+  and span the bases numbered 0-99 in our software (not 0-100), but will represent the
+  position notation chr1:1-100. Read more
+  <a href="http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/">here</a>.</li>
 </ol>
 <p>The 9 additional optional BED fields are:</p>
 <ol start=4>

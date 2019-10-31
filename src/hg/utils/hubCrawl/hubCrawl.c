@@ -83,82 +83,121 @@ return withoutExtraSpaces;
 }
 
 
-void trackHubCrawlTrack(struct trackDb *tdbList, struct trackHubGenome *genome, char *hubUrl,
+void trackHubCrawlTrack(struct trackDb *tdb, struct trackHubGenome *genome, char *hubUrl,
         char *dbName, FILE *searchFp, struct hash *visitedTracks)
 /* Given a trackDb and the hub genome it comes from, write out hubSearchText lines for all of
  * the tracks in that trackDb */
 {
-struct trackDb *tdb = tdbList;
-for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+if (hashLookup(visitedTracks, tdb->track) == NULL)
     {
-    if (hashLookup(visitedTracks, tdb->track) == NULL)
+    // Visit parent first, so that any parent HTML description is loaded before handling this
+    // track.  Otherwise we could write out the HTML description of this track without knowing
+    // that it's identical to the parent's.
+    hashStore(visitedTracks, tdb->track);
+    if (tdb->parent != NULL)
+        trackHubCrawlTrack(tdb->parent, genome, hubUrl, dbName, searchFp, visitedTracks);
+
+    struct hubSearchText *trackHst = NULL;
+    struct dyString *csParents = dyStringNew(0);
+    struct dyString *csParentTypes = dyStringNew(0);
+    AllocVar(trackHst);
+    trackHst->hubUrl = cloneString(hubUrl);
+    trackHst->db = cloneString(dbName);
+    trackHst->track = cloneString(trackHubSkipHubName(tdb->track));
+    struct trackDb *ptdb = tdb->parent;
+    while (ptdb != NULL)
         {
-        // Visit parent first, so that any parent HTML description is loaded before handling this
-        // track.  Otherwise we could write out the HTML description of this track without knowing
-        // that it's identical to the parent's.
-        if (tdb->parent != NULL)
-            trackHubCrawlTrack(tdb->parent, genome, hubUrl, dbName, searchFp, visitedTracks);
+        // start with track
+        dyStringPrintf(csParents, "\"%s\",", htmlEncode(trackHubSkipHubName(ptdb->track)));
 
-        hashStore(visitedTracks, tdb->track);
-        struct hubSearchText *trackHst = NULL;
-        AllocVar(trackHst);
-        trackHst->hubUrl = cloneString(hubUrl);
-        trackHst->db = cloneString(dbName);
-        trackHst->track = cloneString(trackHubSkipHubName(tdb->track));
+        // now add the label, which may just be the track name again
+        dyStringPrintf(csParents, "\"");
         if (isNotEmpty(tdb->longLabel))
-            {
-            trackHst->label = cloneString(tdb->longLabel);
-            }
+            dyStringPrintf(csParents, "%s", htmlEncode(ptdb->longLabel));
         else if (isNotEmpty(tdb->shortLabel))
-            {
-            trackHst->label = cloneString(tdb->shortLabel);
-            }
+            dyStringPrintf(csParents, "%s", htmlEncode(ptdb->shortLabel));
         else
-            trackHst->label = cloneString(trackHubSkipHubName(tdb->track));
+            dyStringPrintf(csParents, "%s", htmlEncode(ptdb->track));
+        dyStringPrintf(csParents, "\"");
 
-        trackHst->textLength = hubSearchTextShort;
-        trackHst->text = cloneString(trackHubSkipHubName(tdb->track));
+        // now fill in the type of the parent, "comp" for composite/multiWig (ie valid trackUi page),
+        // "super" for super track, and "view" for view, "other" for everything else.
+        // these are used by hgHubConnect for printing the correct links to track ui pages
+        // for search results
+        if (tdbIsComposite(ptdb) || trackDbLocalSetting(ptdb, "container"))
+            dyStringPrintf(csParentTypes, "comp");
+        else if (tdbIsSuper(ptdb))
+            dyStringPrintf(csParentTypes, "super");
+        else if (tdbIsCompositeView(ptdb))
+            dyStringPrintf(csParentTypes, "view");
+        else // handle any extra
+            dyStringPrintf(csParentTypes, "other");
+
+        if (ptdb->parent != NULL)
+            {
+            dyStringPrintf(csParents, ",");
+            dyStringPrintf(csParentTypes, ",");
+            }
+        ptdb = ptdb->parent;
+        }
+    trackHst->parents = dyStringCannibalize(&csParents);
+    trackHst->parentTypes = dyStringCannibalize(&csParentTypes);
+    if (isNotEmpty(tdb->longLabel))
+        {
+        trackHst->label = cloneString(tdb->longLabel);
+        }
+    else if (isNotEmpty(tdb->shortLabel))
+        {
+        trackHst->label = cloneString(tdb->shortLabel);
+        }
+    else
+        trackHst->label = cloneString(trackHubSkipHubName(tdb->track));
+
+    trackHst->textLength = hubSearchTextShort;
+    trackHst->text = cloneString(trackHubSkipHubName(tdb->track));
+    hubSearchTextTabOut(trackHst, searchFp);
+
+    if (isNotEmpty(tdb->shortLabel))
+        {
+        trackHst->text = cloneString(tdb->shortLabel);
         hubSearchTextTabOut(trackHst, searchFp);
+        }
+    if (isNotEmpty(tdb->longLabel))
+        {
+        trackHst->text = cloneString(tdb->longLabel);
+        hubSearchTextTabOut(trackHst, searchFp);
+        }
 
-        if (isNotEmpty(tdb->shortLabel))
+    trackHubAddOneDescription(genome->trackDbFile, tdb);
+    if (isNotEmpty(tdb->html))
+        {
+        // In theory we could compare the html setting fields (the URLs for the track descriptions)
+        // instead of the descriptions themselves, but that would falter if a remote server was set
+        // up to return the same description page for a variety of URLs (it's happened).
+        if (tdb->parent == NULL || tdb->parent->html == NULL || differentString(tdb->html, tdb->parent->html))
             {
-            trackHst->text = cloneString(tdb->shortLabel);
+            trackHst->textLength = hubSearchTextLong;
+            trackHst->text = cleanHubHtml(tdb->html);
             hubSearchTextTabOut(trackHst, searchFp);
             }
-        if (isNotEmpty(tdb->longLabel))
-            {
-            trackHst->text = cloneString(tdb->longLabel);
-            hubSearchTextTabOut(trackHst, searchFp);
-            }
+        }
 
-        trackHubAddOneDescription(genome->trackDbFile, tdb);
-        if (isNotEmpty(tdb->html))
-            {
-            // In theory we could compare the html setting fields (the URLs for the track descriptions)
-            // instead of the descriptions themselves, but that would falter if a remote server was set
-            // up to return the same description page for a variety of URLs (it's happened).
-            if (tdb->parent == NULL || tdb->parent->html == NULL || differentString(tdb->html, tdb->parent->html))
-                {
-                trackHst->textLength = hubSearchTextLong;
-                trackHst->text = cleanHubHtml(tdb->html);
-                hubSearchTextTabOut(trackHst, searchFp);
-                }
-            }
+    // memory leak ditching metadata pairs.  slPairFreeValsAndList would fix that.
+    trackHst->textLength = hubSearchTextMeta;
+    trackHst->text = (char *) needMem(4096);
+    struct slPair *metaPairs = trackDbMetaPairs(tdb);
+    while (metaPairs != NULL)
+        {
+        safef(trackHst->text, 4096, "%s: %s", metaPairs->name, (char *) metaPairs->val);
+        hubSearchTextTabOut(trackHst, searchFp);
+        metaPairs = metaPairs->next;
+        }
 
-        // memory leak ditching metadata pairs.  slPairFreeValsAndList would fix that.
-        trackHst->textLength = hubSearchTextMeta;
-        trackHst->text = (char *) needMem(4096);
-        struct slPair *metaPairs = trackDbMetaPairs(tdb);
-        while (metaPairs != NULL)
-            {
-            safef(trackHst->text, 4096, "%s: %s", metaPairs->name, (char *) metaPairs->val);
-            hubSearchTextTabOut(trackHst, searchFp);
-            metaPairs = metaPairs->next;
-            }
-
-        // Write out lines for child tracks
-        if (tdb->subtracks != NULL)
-            trackHubCrawlTrack(tdb->subtracks, genome, hubUrl, dbName, searchFp, visitedTracks);
+    // Write out lines for child tracks
+    struct trackDb *subtrack = NULL;
+    for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
+        {
+        trackHubCrawlTrack(subtrack, genome, hubUrl, dbName, searchFp, visitedTracks);
         }
     }
 }
@@ -181,6 +220,8 @@ else if (isNotEmpty(genome->organism))
 else
     safef(label, sizeof(label), "%s", trackHubSkipHubName(genome->name));
 genomeHst->label = cloneString(label);
+genomeHst->parents = cloneString("");
+genomeHst->parentTypes = cloneString("");
 genomeHst->textLength = hubSearchTextShort;
 genomeHst->text = cloneString(trackHubSkipHubName(genome->name));
 hubSearchTextTabOut(genomeHst, searchFp);
@@ -222,7 +263,11 @@ tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
 trackHubPolishTrackNames(hub, tdbList);
 
 struct hash *visitedTracks = newHash(5);
-trackHubCrawlTrack(tdbList, genome, hub->url, genomeHst->db, searchFp, visitedTracks);
+struct trackDb *tdb = NULL;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    trackHubCrawlTrack(tdb, genome, hub->url, genomeHst->db, searchFp, visitedTracks);
+    }
 }
 
 
@@ -258,6 +303,8 @@ hubHst->track = cloneString("");
 hubHst->label = cloneString("");
 hubHst->textLength = hubSearchTextShort;
 hubHst->text = cloneString(hub->shortLabel);
+hubHst->parents = cloneString("");
+hubHst->parentTypes = cloneString("");
 hubSearchTextTabOut(hubHst, searchFp);
 
 hubHst->text = cloneString(hub->longLabel);

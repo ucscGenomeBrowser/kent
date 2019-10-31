@@ -29,6 +29,12 @@ struct trackDb;         // forward definition for use in cart.h
 // Forward definitions
 struct tdbExtras;
 
+// A structure to keep track of our min and max values if we're a wig 
+struct minMax 
+{
+    double min, max;
+};
+
 struct trackDb
 /* This describes an annotation track. */
     {
@@ -432,6 +438,7 @@ typedef enum _eCfgType
     cfgInteract =15,
     cfgLollipop =16,
     cfgHic      =17,
+    cfgBigDbSnp =19,
     cfgUndetermined // Not specifically denied, but not determinable in lib code
     } eCfgType;
 
@@ -592,6 +599,9 @@ struct tdbExtras
 
     // Developer: please add your useful data that is costly to calculate/retrieve more than once
     struct hash *membersHash;
+
+    // keep track of our children's min and max if we're scaling over all of them
+    struct minMax *minMax;
     };
 
 void tdbExtrasFree(struct tdbExtras **pTdbExtras);
@@ -647,15 +657,7 @@ INLINE boolean tdbIsBigBed(struct trackDb *tdb)
 // Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed.
 {
 // TODO: replace with table lookup  (same as bigBedFind ?)
-return startsWithWord("bigBed", tdb->type) || 
-        startsWithWord("bigGenePred", tdb->type) || 
-        startsWithWord("bigMaf", tdb->type) || 
-        startsWithWord("bigPsl", tdb->type) || 
-        startsWithWord("bigNarrowPeak", tdb->type) || 
-        startsWithWord("bigBarChart", tdb->type) || 
-        startsWithWord("bigInteract", tdb->type) || 
-        startsWithWord("bigLolly", tdb->type) || 
-        startsWithWord("bigChain", tdb->type);
+return (!startsWithWord("bigWig", tdb->type) && startsWith("big", tdb->type));
 }
 
 INLINE boolean tdbIsBigWig(struct trackDb *tdb)
@@ -729,5 +731,11 @@ struct trackDb *trackDbHubCache(char *trackDbUrl, time_t time);
 
 boolean trackDbCacheOn();
 /* Check to see if we're caching trackDb contents. */
+
+char *labelAsFiltered(char *label);
+/* add text to label to indicate filter is active */
+
+char *labelAsFilteredNumber(char *label, unsigned number);
+/* add text to label to indicate filter is active */
 #endif /* TRACKDB_H */
 

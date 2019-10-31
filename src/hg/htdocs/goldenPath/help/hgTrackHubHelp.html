@@ -43,6 +43,8 @@
   <li>
   <a href="hubQuickStartAssembly.html" target="_blank">Quick Start Guide to Assembly Hubs with 
   Blat</a></li> 
+  <li><a href="hubQuickStartSearch.html" target="_blank">Quick Start Guide to Searchable Track 
+  Hubs</a></li>
 </ul> 
 <div> 
 <form name="googleForm1" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/goldenPath/help';"> 
@@ -207,6 +209,10 @@ complexity of the data sets, a track hub can typically be set up in a day or two
 easiest to run the command-line data formatting programs in a Linux programming environment, 
 although it's possible to manipulate smaller data sets using Mac OS-X as well.</p>
 <p>
+<b>Note:</b> there is now a <code>useOneFile on</code> hub setting that allows the hub
+properties to be specified in a single file. More information about this setting can be found on the
+<a href="./hgTracksHelp.html#UseOneFile" target="_blank">Genome Browser User Guide</a>.</p>
+<p>
 <strong><em>Example 1:</em></strong> Directory hierarchy for a hub containing DNase and RNAseq data 
 for the hg18 and hg19 human genome assemblies. The hg18/ and hg19/ subdirectories contain the 
 assembly-specific data files.</p>
@@ -350,6 +356,10 @@ for more information.</p>
 Create a track hub directory in an Internet-accessible location on your web or ftp server. This 
 directory will contain the hub.txt and genomes.txt files that define properties of the track hub and
 a subdirectory for each of the genome assemblies covered by the hub track data.</p>
+<p>
+<b>Note:</b> there is now a <code>useOneFile on</code> hub setting that allows the hub
+properties to be specified in a single file. More information about this setting can be found on the
+<a href="./hgTracksHelp.html#UseOneFile" target="_blank">Genome Browser User Guide</a>.</p>
 <hr>
 <p>
 <strong>Step 3. Place the track data files in an Internet-accessible location</strong><br> 

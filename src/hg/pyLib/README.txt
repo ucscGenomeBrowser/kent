@@ -5,9 +5,9 @@ features and uses the python2 in the hash bang line, so it will use whatever
 python2 version is available (2.7 on genome-asia/genome-euro and 2.6 on the RR, 
 at the time of writing).
 
-The directory is called pyLib because in the future, other libraries can be
-copied into this directory, it is likely that we will need more libraries, not
-only hgLib.py.
+To make the library work on python3, it uses six, which is included, as it is not
+part of the standard library and a short 900+ lines module and also under a public
+domain license.
 
 hgLib.py includes various pieces of code ported from kent source hg/lib, like
 the bottleneck client, cart parsing, mysql functions, etc.

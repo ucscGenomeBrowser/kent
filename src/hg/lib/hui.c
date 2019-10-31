@@ -50,6 +50,7 @@
 #include "interactUi.h"
 #include "interact.h"
 #include "hicUi.h"
+#include "bigDbSnp.h"
 #include "customComposite.h"
 #include "trackVersion.h"
 #include "hubConnect.h"
@@ -1667,6 +1668,13 @@ cgiMakeDropList(var, wiggleYLineMarkOptions, ArraySize(wiggleYLineMarkOptions),
 
 /****** Options for the wiggle track AutoScale *******/
 
+static char *wiggleScaleOptionsParent[] = 
+    {
+    "use vertical viewing range setting",
+    "auto-scale to data view",
+    "group auto-scale"
+    };
+
 static char *wiggleScaleOptions[] = 
     {
     "use vertical viewing range setting",
@@ -1676,7 +1684,7 @@ static char *wiggleScaleOptions[] =
 enum wiggleScaleOptEnum wiggleScaleStringToEnum(char *string)
 /* Convert from string to enum representation. */
 {
-int x = stringIx(string, wiggleScaleOptions);
+int x = stringIx(string, wiggleScaleOptionsParent);
 if (x < 0)
     errAbort("hui::wiggleScaleStringToEnum() - Unknown option %s", string);
 return x;
@@ -1685,7 +1693,14 @@ return x;
 char *wiggleScaleEnumToString(enum wiggleScaleOptEnum x)
 /* Convert from enum to string representation. */
 {
-return wiggleScaleOptions[x];
+return wiggleScaleOptionsParent[x];
+}
+
+void wiggleScaleDropDownParent(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, wiggleScaleOptionsParent, ArraySize(wiggleScaleOptionsParent),
+    curVal);
 }
 
 void wiggleScaleDropDown(char *var, char *curVal)
@@ -3618,15 +3633,28 @@ for (;val!=NULL;val=val->next)
     }
 }
 
+char *extractFieldName(char *cartVariable, char *filterType)
+/* Extract field name from a filter cart variable.  Variables can either be
+ * <columnName>Filter* or <columnName>.Filter* */
+{
+char *field = cloneString(cartVariable);
+int ix = strlen(field) - strlen(filterType); 
+field[ix] = '\0';
+if (field[ix - 1] == '.')
+    field[ix - 1] = '\0';
+
+return field;
+}
+
 filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct asObject *as, char *filterName, char *name)
 /* Build a filterBy_t structure from a <column>FilterValues statement. */
 {
+char *field = extractFieldName(filterName, FILTER_VALUES_NAME);
 char *setting = trackDbSetting(tdb, filterName);
+if (isEmpty(setting))
+    errAbort("FilterValues setting of field '%s' must have a value.", field);
+
 char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting);
-char *field = cloneString(filterName);
-int ix = strlen(field) - strlen(FILTER_VALUES_NAME);
-assert(ix > 0);
-field[ix] = '\0';
 
 filterBy_t *filterBy;
 AllocVar(filterBy);
@@ -3635,6 +3663,8 @@ filterBy->title = field; ///  title should come from AS file, or trackDb variabl
 struct asColumn *asCol = asColumnFind(as, field);
 if (asCol != NULL)
     filterBy->title = asCol->comment;
+else
+    errAbort("Building filter on field %s which is not in AS file.", field);
 filterBy->useIndex = FALSE;
 filterBy->slValues = slNameListFromCommaEscaped(value);
 chopUpValues(filterBy);
@@ -3921,6 +3951,21 @@ if (filterBy->styleFollows)
 printf(">%s</OPTION>\n",label);
 }
 
+static boolean filterByColumnIsMultiple(struct cart *cart, struct trackDb *tdb, char *column)
+{
+char settingString[4096];
+safef(settingString, sizeof settingString, "%s%s", column, FILTER_TYPE_NAME);
+char *setting = cartOrTdbString(cart, tdb, settingString, NULL);
+if (setting == NULL)
+    {
+    safef(settingString, sizeof settingString, "%s.%s", column, FILTER_TYPE_NAME);
+    setting = cartOrTdbString(cart, tdb, settingString, FILTERBY_MULTIPLE_LIST_AND);
+    }
+return (sameString(setting, FILTERBY_MULTIPLE) ||
+        sameString(setting, FILTERBY_MULTIPLE_LIST_OR) ||
+        sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
+}
+
 void filterBySetCfgUiGuts(struct cart *cart, struct trackDb *tdb,
 		      filterBy_t *filterBySet, boolean onOneLine,
 		      char *filterTypeTitle, char *selectIdPrefix, char *allLabel, char *prefix)
@@ -3935,7 +3980,7 @@ if (count == 1)
     puts("<TABLE cellpadding=3><TR valign='top'>");
 else
     printf("<B>%s items by:</B> (select multiple categories and items - %s)"
-	   "<TABLE cellpadding=3><TR valign='top'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
+	   "<TABLE cellpadding=3><TR valign='bottom'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
 
 if (tdbIsBigBed(tdb))
     {
@@ -3956,17 +4001,13 @@ if (cartOptionalString(cart, "ajax") == NULL)
     jsIncludeFile("ddcl.js",NULL);
     }
 
-int ix=0;
-for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
+// TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
+
+for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next)
     {
-    char settingString[4096];
-    safef(settingString, sizeof settingString, "%s%s", filterBy->column, FILTER_TYPE_NAME);
-    char *setting = cartOrTdbString(cart, tdb, settingString, FILTERBY_MULTIPLE_LIST_AND);
-    boolean isMultiple = sameString(setting, FILTERBY_MULTIPLE) ||sameString(setting, FILTERBY_MULTIPLE_LIST_OR) ||sameString(setting, FILTERBY_MULTIPLE_LIST_AND);
-   
     puts("<TD>");
     char selectStatement[4096];
-    if (isMultiple)
+    if (filterByColumnIsMultiple(cart, tdb, filterBy->column))
         safef(selectStatement, sizeof selectStatement, " (select multiple items - %s)", FILTERBY_HELP_LINK);
     else
         selectStatement[0] = 0;
@@ -3974,10 +4015,17 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
 	printf("<B>%s by %s</B>%s",filterTypeTitle,filterBy->title,selectStatement);
     else
 	printf("<B>%s</B>",filterBy->title);
-    printf("<BR>\n");
-
-    if (isMultiple && tdbIsBigBed(tdb))
+    puts("</TD>");
+    }
+puts("</tr><tr>");
+for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next)
+    {
+    puts("<td>");
+    if (filterByColumnIsMultiple(cart, tdb, filterBy->column) && tdbIsBigBed(tdb))
         {
+        char settingString[4096];
+        safef(settingString, sizeof settingString, "%s%s", filterBy->column, FILTER_TYPE_NAME);
+        char *setting = cartOrTdbString(cart, tdb, settingString, FILTERBY_MULTIPLE_LIST_AND);
         char cartSettingString[4096];
         safef(cartSettingString, sizeof cartSettingString, "%s.%s", prefix, settingString);
         printf("<div class='advanced' style='display:none'><b>Match if  ");
@@ -3986,11 +4034,16 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
         cgiMakeRadioButton(cartSettingString, FILTERBY_MULTIPLE_LIST_OR, sameString(setting, FILTERBY_MULTIPLE_LIST_OR));
         printf(" one or more match</b></div> ");
         }
-    // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
-
+    puts("</td>");
+    }
+puts("</tr><tr>");
+int ix=0;
+for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next, ix++)
+    {
+    puts("<td>");
     // value is always "All", even if label is different, to simplify javascript code
     int valIx = 0;
-    if (isMultiple)
+    if (filterByColumnIsMultiple(cart, tdb, filterBy->column))
         {
         printf( "<SELECT id='%s%d' name='%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n", selectIdPrefix,ix,filterBy->htmlName);
         printf("<OPTION%s value=\"All\">%s</OPTION>\n", (filterByAllChosen(filterBy)?" SELECTED":""), allLabel);
@@ -4038,8 +4091,9 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
 	    }
 	printf(">%s</OPTION>\n",label);
 	}
+    printf("</SELECT>\n");
+    puts("</td>");
     }
-printf("</SELECT>\n");
 
 puts("</TR></TABLE>");
 }
@@ -4250,6 +4304,90 @@ printf("</TABLE>");
 cfgEndBox(boxed);
 }
 
+void labelMakeCheckBox(struct cart *cart, struct trackDb *tdb, char *sym, char *desc,
+                       boolean defaultOn)
+/* add a checkbox for the user to select a component of a label (e.g. ID, name, other info).
+ * NOTE: This does not have a track name argument, so the correct tdb must be passed in:
+ * if setting is at composite level, then pass in composite tdb, likewise for view. */
+{
+char suffix[512];
+safef(suffix, sizeof(suffix), "label.%s", sym);
+boolean option = cartUsualBooleanClosestToHome(cart, tdb, FALSE, suffix, defaultOn);
+char cartVar[1024];
+safef(cartVar, sizeof cartVar, "%s.%s", tdb->track, suffix);
+cgiMakeCheckBox(cartVar, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", desc);
+}
+
+static void freqSourceSelect(struct cart *cart, struct trackDb *tdb, char *name)
+/* Make a select input for preferred source of allele frequencies from
+ * trackDb setting freqSourceOrder. */
+{
+char *freqSourceOrder = cloneString(trackDbSetting(tdb, "freqSourceOrder"));
+if (isEmpty(freqSourceOrder))
+    return;
+int fsCount = countSeparatedItems(freqSourceOrder, ',');
+char *menu[fsCount];
+chopCommas(freqSourceOrder, menu);
+boolean parentLevel = isNameAtParentLevel(tdb, name);
+char *freqProj = cartOptionalStringClosestToHome(cart, tdb, parentLevel, "freqProj");
+puts("<b>Frequency source/project to use for Minor Allele Frequency (MAF):</b>");
+char cartVar[1024];
+safef(cartVar, sizeof cartVar, "%s.freqProj", name);
+cgiMakeDropList(cartVar, menu, ArraySize(menu), freqProj);
+puts("<br>");
+}
+
+static struct trackDb *tdbOrAncestorByName(struct trackDb *tdb, char *name)
+/* For reasons Angie cannot fathom, if a composite or view is passed to cfgByCfgType then
+ * cfgByCfgType passes a leaf subtrack to its callees like bigDbSnpCfgUi.  That is why we
+ * see so many calls to isNameAtParentLevel, which returns true if the tdb was originally
+ * at the composite or view level, which we can only tell by comparing with the original track name.
+ * labelMakeCheckBox, called by many handlers in hgTrackUi that must be always top-level
+ * (or have a special handler that bypasses cfgByCfgType like refSeqComposite),
+ * is blissfully unaware of this.  It uses the same tdb for looking in cart ClosestToHome
+ * and for making the HTML element's cart var name, trusting that the correct tdb has been
+ * handed to it.
+ * So in order for a callee of cfgByCfgType to call labelMakeCheckBox with the correct tdb,
+ * we need to walk back up comparing name like isNameAtParentLevel does.
+ * If name doesn't match tdb or any of its ancestors then this returns NULL. */
+{
+struct trackDb *correctTdb;
+for (correctTdb = tdb;  correctTdb != NULL;  correctTdb = correctTdb->parent)
+    if (startsWithWordByDelimiter(correctTdb->track, '.', name))
+        return correctTdb;
+return NULL;
+}
+
+void bigDbSnpCfgUi(char *db, struct cart *cart, struct trackDb *leafTdb, char *name, char *title,
+                   boolean boxed)
+/* UI for bigDbSnp a.k.a. "dbSNP 2.0". */
+{
+boxed = cfgBeginBoxAndTitle(leafTdb, boxed, title);
+freqSourceSelect(cart, leafTdb, name);
+puts("<br>");
+puts("<b>Label:</b>");
+struct trackDb *correctTdb = tdbOrAncestorByName(leafTdb, name);
+labelMakeCheckBox(cart, correctTdb, "rsId", "rs# identifier", TRUE);
+labelMakeCheckBox(cart, correctTdb, "refAlt", "reference/alternate allele", TRUE);
+labelMakeCheckBox(cart, correctTdb, "majMin", "major/minor allele", FALSE);
+labelMakeCheckBox(cart, correctTdb, "maf", "MAF if available", FALSE);
+labelMakeCheckBox(cart, correctTdb, "func", "Most severe functional impact on gene if any", FALSE);
+puts("<br>");
+scoreCfgUi(db, cart, leafTdb, name, "", 0, FALSE);
+puts("For more information about the &quot;Interesting or anomalous properties&quot;, "
+     "see <a href='#ucscNotes'>below</a>.");
+puts("<br><br>");
+puts("<b>Minimum MAF:</b>");
+boolean parentLevel = isNameAtParentLevel(leafTdb, name);
+double minMaf = cartUsualDoubleClosestToHome(cart, leafTdb, parentLevel, "minMaf", 0.0);
+char cartVar[1024];
+safef(cartVar, sizeof cartVar, "%s.minMaf", name);
+cgiMakeDoubleVarWithLimits(cartVar, minMaf, "MAF", 0, 0.0, 0.5);
+puts("range: 0.0 - 0.5");
+cfgEndBox(boxed);
+}
+
 void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix,
 	      char *title, boolean boxed)
 // Methods for putting up type specific cfgs used by composites/subtracks in hui.c
@@ -4331,6 +4469,8 @@ switch(cType)
                         break;
     case cfgHic:        hicCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
+    case cfgBigDbSnp:   bigDbSnpCfgUi(db, cart, tdb, prefix, title, boxed);
+                        break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ",
 			     cType);
 			break;
@@ -4372,12 +4512,33 @@ struct subtrackConfigSettings
     };
 #define LARGE_COMPOSITE_CUTOFF 30
 
+static void printSubtrackListRadioButtons(char *parentTrack, int subCount, boolean displayAll)
+// Print radio buttons for all/select
+{
+printf("<B>List subtracks:&nbsp;");
+char javascript[JBUFSIZE];
+safef(javascript, sizeof(javascript),
+      "showOrHideSelectedSubtracks(true);");
+char buffer[SMALLBUF];
+if (subCount > LARGE_COMPOSITE_CUTOFF)
+    safef(buffer,SMALLBUF,"%s.displaySubtracks", parentTrack);
+else
+    safecpy(buffer,SMALLBUF,"displaySubtracks");
+cgiMakeOnEventRadioButtonWithClass(buffer, "selected", !displayAll, "allOrOnly", "click", javascript);
+puts("only selected/visible &nbsp;&nbsp;");
+safef(javascript, sizeof(javascript),
+      "showOrHideSelectedSubtracks(false);");
+cgiMakeOnEventRadioButtonWithClass(buffer, "all", displayAll, "allOrOnly", "click", javascript);
+printf("all</B>");
+if (subCount > 5)
+    printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
+}
+
 static void printSubtrackTableHeader(struct trackDb *parentTdb, struct slRef *subtrackRefList,
 				struct subtrackConfigSettings *settings)
 /* Print header of subtrack table, including classes describing display appearance and behavior.
 Return number of columns */
 {
-char buffer[SMALLBUF];
 boolean useDragAndDrop = settings->useDragAndDrop;
 sortOrder_t *sortOrder = settings->sortOrder;
 if (sortOrder != NULL)
@@ -4402,24 +4563,9 @@ else
     // NOTE: list subtrack radio buttons are inside tracklist table header if
     //       there are no sort columns.  The reason is to ensure spacing of lines
     //       column headers when the only column header is "Restricted Until"
-    printf("<TD colspan='%d'><B>List subtracks:&nbsp;", colspan);
-    char javascript[JBUFSIZE];
-    safef(javascript, sizeof(javascript),
-	  "showOrHideSelectedSubtracks(true);");
+    printf("<TD colspan='%d'>", colspan);
     int subCount = slCount(subtrackRefList);
-    if (subCount > LARGE_COMPOSITE_CUTOFF)
-	safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
-    else
-	safecpy(buffer,SMALLBUF,"displaySubtracks");
-    cgiMakeOnEventRadioButtonWithClass(buffer, "selected", !settings->displayAll, "allOrOnly", "click", javascript);
-
-    puts("only selected/visible &nbsp;&nbsp;");
-    safef(javascript, sizeof(javascript),
-	  "showOrHideSelectedSubtracks(false);");
-    cgiMakeOnEventRadioButtonWithClass(buffer, "all", settings->displayAll, "allOrOnly", "click", javascript);
-    printf("all</B>");
-    if (subCount > 5)
-	printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
+    printSubtrackListRadioButtons(parentTdb->track, subCount, settings->displayAll);
     puts("</TD>");
     columnCount = colspan;
     }
@@ -4944,6 +5090,7 @@ if (membersForAll->members[dimX] == NULL && membersForAll->members[dimY] == NULL
 return TRUE;
 }
 
+
 static void printSubtrackTable(struct trackDb *parentTdb, struct slRef *subtrackRefList,
 			    struct subtrackConfigSettings *settings, struct cart *cart)
 /* Print table of subtracks */
@@ -4979,6 +5126,80 @@ printSubtrackTableFooter(subCount, settings);
 puts("</TABLE>");
 }
 
+boolean compositeHideEmptySubtracksSetting(struct trackDb *tdb, boolean *retDefault,
+                                        char **retMultiBedFile, char **retSubtrackIdFile)
+/* Parse hideEmptySubtracks setting
+ * Format:  hideEmptySubtracks on|default
+ *              or
+ *          hideEmptySubtracks on|default multiBed.bed subtrackIds.tab
+ * where multiBed.bed is a bed3Sources bigBed, generated with bedtools multiinter
+ *              post-processed by UCSC multiBed.pl tool
+ *      subtrackIds.tab is a tab-sep file: id subtrackName
+ *
+ * Return TRUE if set to true/on/default.  retDefault is TRUE if set default, o/w FALSE
+ */
+{
+if (!tdbIsComposite(tdb))
+    return FALSE;
+char *hideEmpties = trackDbSetting(tdb, SUBTRACK_HIDE_EMPTY);
+if (!hideEmpties)
+    return FALSE;
+char *orig = cloneString(hideEmpties);
+char *words[3];
+int wordCount = chopByWhite(hideEmpties, words, ArraySize(words));
+char *mode = words[0];
+if (differentString(mode, "on") && differentString(mode, "true") &&
+    differentString(mode, "default"))
+        {
+        warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTY, orig);
+        return FALSE;
+        }
+boolean deflt = sameString(mode, "default") ? TRUE : FALSE;
+if (retDefault)
+    *retDefault = deflt;
+
+if (wordCount == 1)
+    return TRUE;
+if (wordCount != 3)
+    {
+    warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTY, orig);
+    return FALSE;
+    }
+// multi-bed specified (to speed display)
+if (retMultiBedFile)
+    *retMultiBedFile = cloneString(hReplaceGbdb(words[1]));
+if (retSubtrackIdFile)
+    *retSubtrackIdFile = cloneString(hReplaceGbdb(words[2]));
+return TRUE;
+}
+
+boolean compositeHideEmptySubtracks(struct cart *cart, struct trackDb *tdb,
+                                        char **retMultiBedFile, char **retSubtrackIdFile)
+/* Parse hideEmptySubtracks setting and check cart
+ * Return TRUE if we should hide empties
+ */
+{
+boolean deflt = FALSE;
+if (!compositeHideEmptySubtracksSetting(tdb, &deflt, retMultiBedFile, retSubtrackIdFile))
+    return FALSE;
+char buf[128];
+safef(buf, sizeof buf, "%s.%s", tdb->track, SUBTRACK_HIDE_EMPTY);
+return cartUsualBoolean(cart, buf, deflt);
+}
+
+boolean compositeChildHideEmptySubtracks(struct cart *cart, struct trackDb *childTdb,
+                                        char **retMultiBedFile, char **retSubtrackIdFile)
+/* Parse hideEmptySubtracks setting and check cart
+ * Return TRUE if we should hide empties
+ */
+{
+struct trackDb *tdb = tdbGetComposite(childTdb);
+if (!tdb)
+    return FALSE;
+return compositeHideEmptySubtracks(cart, tdb, retMultiBedFile, retSubtrackIdFile);
+
+}
+
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb)
 // Display list of subtracks and descriptions with checkboxes to control visibility and
 // possibly other nice things including links to schema and metadata and a release date.
@@ -4990,14 +5211,14 @@ struct trackDb *subtrack;
 struct slRef *subtrackRef, *subtrackRefList = trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
 
 membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,NULL);
-sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
+sortOrder_t* sortOrder = sortOrderGet(cart, parentTdb);
 char *displaySubs = NULL;
 int subCount = slCount(subtrackRefList);
 if (subCount > LARGE_COMPOSITE_CUTOFF && membersForAll->dimensions != NULL)
     {
     // ignore displaySubtracks setting for large composites with a matrix as
     // matrix effectively shows all
-    safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
+    safef(buffer, SMALLBUF,"%s.displaySubtracks", parentTdb->track);
     displaySubs = cartUsualString(cart, buffer,"some"); // track specific defaults to only selected
     }
 else
@@ -5005,6 +5226,18 @@ else
     displaySubs = cartUsualString(cart, "displaySubtracks", "all"); // browser wide defaults to all
     }
 boolean displayAll = sameString(displaySubs, "all");
+
+boolean hideSubtracksDefault;
+if (compositeHideEmptySubtracksSetting(parentTdb, &hideSubtracksDefault, NULL, NULL))
+    {
+    char *hideLabel = "Hide empty subtracks";
+    hideLabel = trackDbSettingOrDefault(parentTdb, SUBTRACK_HIDE_EMPTY_LABEL, hideLabel);
+    printf("<BR><B>%s:</B> &nbsp;", hideLabel);
+    char buf[128];
+    safef(buf, sizeof buf, "%s.%s", parentTdb->track, SUBTRACK_HIDE_EMPTY);
+    boolean doHideEmpties = compositeHideEmptySubtracks(cart, parentTdb, NULL, NULL);
+    cgiMakeCheckBox(buf, doHideEmpties);
+    }
 
 // Table wraps around entire list so that "Top" link can float to the correct place.
 cgiDown(0.7);
@@ -5016,22 +5249,7 @@ if (sortOrder != NULL)
     // NOTE: list subtrack radio buttons are inside tracklist table header if
     //       there are no sort columns.  The reason is to ensure spacing of lines
     //       column headers when the only column header is "Restricted Until"
-    printf("<B>List subtracks:&nbsp;");
-    char javascript[JBUFSIZE];
-    safef(javascript, sizeof(javascript),
-	  "showOrHideSelectedSubtracks(true);");
-    if (subCount > LARGE_COMPOSITE_CUTOFF)
-	safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
-    else
-	safecpy(buffer,SMALLBUF,"displaySubtracks");
-    cgiMakeOnEventRadioButtonWithClass(buffer, "selected", !displayAll, "allOrOnly", "click", javascript);
-    puts("only selected/visible &nbsp;&nbsp;");
-    safef(javascript, sizeof(javascript),
-	  "showOrHideSelectedSubtracks(false);");
-    cgiMakeOnEventRadioButtonWithClass(buffer, "all", displayAll, "allOrOnly", "click", javascript);
-    printf("all</B>");
-    if (slCount(subtrackRefList) > 5)
-	printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
+    printSubtrackListRadioButtons(parentTdb->track, subCount, displayAll);
     if (membersHaveMatrix(membersForAll))
 	makeTopLink(parentTdb);
     printf("</td></tr></table>");
@@ -5216,7 +5434,7 @@ struct dyString *dy = dyStringNew(1024);
 dyStringPrintf(dy, "  $(\"[name='%s.autoScale']\").change(function()\n", name);
 dyStringPrintf(dy, "  {\n");
 dyStringPrintf(dy, "  val= $(this).find(':selected').val(); \n");
-dyStringPrintf(dy, "  if (val==\"auto-scale to data view\")\n");
+dyStringPrintf(dy, "  if (val!=\"use vertical viewing range setting\")\n");
 dyStringPrintf(dy, "     {\n");
 dyStringPrintf(dy, "     $(\"[name='%s.minY']\")[0].disabled=true;\n", name);
 dyStringPrintf(dy, "     $(\"[name='%s.maxY']\")[0].disabled=true;\n", name);
@@ -5361,7 +5579,10 @@ puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Data view scaling:</th><td align=left colspan=3>");
 safef(option, sizeof(option), "%s.%s", name, AUTOSCALE );
-wiggleScaleDropDown(option, autoScale);
+if (parentLevel && !tdbIsMultiTrack(tdb->parent))
+    wiggleScaleDropDownParent(option, autoScale);
+else
+    wiggleScaleDropDown(option, autoScale);
 wiggleScaleDropDownJavascript(name);
 safef(option, sizeof(option), "%s.%s", name, ALWAYSZERO);
 printf("Always include zero:&nbsp");
@@ -5783,7 +6004,7 @@ if (setting)
         colonPairToDoubles(setting,&minVal,&maxVal);
         getScoreFloatRangeFromCart(cart,tdb,parentLevel,scoreName,&minLimit,&maxLimit,
                                                                   &minVal,  &maxVal);
-        safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MIN);
+        safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, filterByRange ? _MIN:"");
         safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange ? "Minimum " : ""),
               htmlEncode(htmlTextStripTags(label)));
         cgiMakeDoubleVarWithLimits(varName,minVal, altLabel, 0,minLimit, maxLimit);
@@ -5848,15 +6069,11 @@ if (filterSettings)
     {
     puts("<BR>");
     struct slName *filter = NULL;
-#ifdef EXTRA_FIELDS_SUPPORT
-    struct extraField *extras = extraFieldsGet(db,tdb);
-#else///ifndef EXTRA_FIELDS_SUPPORT
     struct sqlConnection *conn = NULL;
     if (!isHubTrack(db))
         conn = hAllocConnTrack(db, tdb);
     struct asObject *as = asForTdb(conn, tdb);
     hFreeConn(&conn);
-#endif///ndef EXTRA_FIELDS_SUPPORT
 
     while ((filter = slPopHead(&filterSettings)) != NULL)
         {
@@ -5867,23 +6084,8 @@ if (filterSettings)
             boolean isFloat = (strchr(setting,'.') != NULL);
 
             char *scoreName = cloneString(filter->name);
-            char *field = filter->name;   // No need to clone: will be thrown away at end of cycle
-            int ix = strlen(field) - strlen(FILTER_NUMBER_NAME);
-            assert(ix > 0);
-            field[ix] = '\0';
+            char *field = extractFieldName(filter->name, FILTER_NUMBER_NAME);
 
-        #ifdef EXTRA_FIELDS_SUPPORT
-            if (extras != NULL)
-                {
-                struct extraField *extra = extraFieldsFind(extras, field);
-                if (extra != NULL)
-                    { // Found label so replace field
-                    field = extra->label;
-                    if (!isFloat)
-                        isFloat = (extra->type == ftFloat);
-                    }
-                }
-        #else///ifndef EXTRA_FIELDS_SUPPORT
             if (as != NULL)
                 {
                 struct asColumn *asCol = asColumnFind(as, field);
@@ -5893,10 +6095,9 @@ if (filterSettings)
                     if (!isFloat)
                         isFloat = asTypesIsFloating(asCol->lowType->type);
                     }
+                else 
+                    errAbort("Building filter on field %s which is not in AS file.", field);
                 }
-        #endif///ndef EXTRA_FIELDS_SUPPORT
-            // FIXME: Label munging should be localized to showScoreFilter()
-            //  when that function is simplified
             char varName[256];
             char label[128];
             safef(varName, sizeof(varName), "%s%s", scoreName, _BY_RANGE);
@@ -5909,13 +6110,8 @@ if (filterSettings)
             }
         slNameFree(&filter);
         }
-#ifdef EXTRA_FIELDS_SUPPORT
-    if (extras != NULL)
-        extraFieldsFree(&extras);
-#else///ifndef EXTRA_FIELDS_SUPPORT
     if (as != NULL)
         asObjectFree(&as);
-#endif///ndef EXTRA_FIELDS_SUPPORT
     }
 if (count > 0)
     puts("</TABLE>");
@@ -5961,21 +6157,27 @@ return FALSE;
 }
 
 
-void textFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb)
+static int textFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb)
 /* Show all the text filters for this track. */
 {
+int count = 0;
 struct slName *filter, *filterSettings = trackDbSettingsWildMatch(tdb, FILTER_TEXT_WILDCARD);
 if (filterSettings)
     {
+    struct sqlConnection *conn = NULL;
+    if (!isHubTrack(db))
+        conn = hAllocConnTrack(db, tdb);
     while ((filter = slPopHead(&filterSettings)) != NULL)
         {
         char *setting = trackDbSetting(tdb, filter->name);
         char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filter->name, setting);
-        char *field = cloneString(filter->name);
-        int ix = strlen(field) - strlen(FILTER_TEXT_NAME);
-        assert(ix > 0);
-        field[ix] = '\0';
+        char *field = extractFieldName(filter->name, FILTER_TEXT_NAME);
+        struct asObject *as = asForTdb(conn, tdb);
+        struct asColumn *asCol = asColumnFind(as, field);
+        if (asCol == NULL)
+            errAbort("Building filter on field %s which is not in AS file.", field);
 
+        count++;
         printf("<P><B>Filter items in '%s' field: ", field);
 
         char cgiVar[128];
@@ -5984,7 +6186,12 @@ if (filterSettings)
 
         char settingString[4096];
         safef(settingString, sizeof settingString, "%s%s", field, FILTER_TYPE_NAME);
-        setting = cartOrTdbString(cart, tdb, settingString, FILTERTEXT_WILDCARD);
+        setting = cartOrTdbString(cart, tdb, settingString, NULL);
+        if (setting == NULL)
+            {
+            safef(settingString, sizeof settingString, "%s.%s", field, FILTER_TYPE_NAME);
+            setting = cartOrTdbString(cart, tdb, settingString, FILTERTEXT_WILDCARD);
+            }
         safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,settingString);
         printf(" using ");
         printf("<SELECT name='%s'> ", cgiVar);
@@ -5994,6 +6201,8 @@ if (filterSettings)
         printf("</P>");
         }
     }
+
+return count;
 }
 
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title,
@@ -6009,7 +6218,8 @@ boolean isBoxOpened = FALSE;
 if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name, title) > 0)
     skipScoreFilter = TRUE;
 
-textFiltersShowAll(db, cart, tdb);
+if (textFiltersShowAll(db, cart, tdb))
+    skipScoreFilter = TRUE;
 
 // Add any multi-selects next
 filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
@@ -8800,14 +9010,10 @@ else if (startsWith("big", tdb->type))
     char *bbiFileName = bbiNameFromSettingOrTable(tdb, conn, tableName);
     hFreeConn(&conn);
     struct bbiFile *bbi = NULL;
-    if (startsWith("bigBed", tdb->type) || sameString("bigBarChart", tdb->type) 
-        || sameString("bigMaf", tdb->type) || sameString("bigPsl", tdb->type)
-        || sameString("bigChain", tdb->type) || sameString("bigGenePred", tdb->type)
-        || startsWith("bigLolly", tdb->type)
-        || sameString("bigInteract", tdb->type))
-	bbi = bigBedFileOpen(bbiFileName);
-    else if (startsWith("bigWig", tdb->type))
+    if (startsWith("bigWig", tdb->type))
 	bbi = bigWigFileOpen(bbiFileName);
+    else
+	bbi = bigBedFileOpen(bbiFileName);
     time_t timep = 0;
     if (bbi)
 	{
@@ -8835,113 +9041,6 @@ void printBbiUpdateTime(time_t *timep)
 {
     printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", sqlUnixTimeToDate(timep, FALSE));
 }
-
-#ifdef EXTRA_FIELDS_SUPPORT
-static struct extraField *asFieldsGet(char *db, struct trackDb *tdb)
-// returns the as style fields from a table or remote data file
-{
-struct extraField *asFields = NULL;
-struct sqlConnection *conn = hAllocConnTrack(db, tdb);
-struct asObject *as = asForTdb(conn, tdb);
-hFreeConn(&conn);
-if (as != NULL)
-    {
-    struct asColumn *asCol = as->columnList;
-    for (;asCol != NULL; asCol = asCol->next)
-        {
-        struct extraField *asField  = NULL;
-        AllocVar(asField);
-        asField->name = cloneString(asCol->name);
-        if (asCol->comment != NULL && strlen(asCol->comment) > 0)
-            asField->label = cloneString(asCol->comment);
-        else
-            asField->label = cloneString(asField->name);
-        asField->type = ftString; // default
-        if (asTypesIsInt(asCol->lowType->type))
-            asField->type = ftInteger;
-        else if (asTypesIsFloating(asCol->lowType->type))
-            asField->type = ftFloat;
-        slAddHead(&asFields,asField);
-        }
-    if (asFields != NULL)
-        slReverse(&asFields);
-    asObjectFree(&as);
-    }
-return asFields;
-}
-
-struct extraField *extraFieldsGet(char *db, struct trackDb *tdb)
-// returns any extraFields defined in trackDb
-{
-char *fields = trackDbSetting(tdb, "extraFields"); // showFileds pValue=P_Value qValue=qValue
-if (fields == NULL)
-    return asFieldsGet(db, tdb);
-
-char *field = NULL;
-struct extraField *extras = NULL;
-struct extraField *extra = NULL;
-while (NULL != (field  = cloneNextWord(&fields)))
-    {
-    AllocVar(extra);
-    extra->name = field;
-    extra->label = field; // defaults to name
-    char *equal = strchr(field,'=');
-    if (equal != NULL)
-        {
-        *equal = '\0';
-        extra->label = equal + 1;
-        assert(*(extra->label)!='\0');
-        }
-
-    extra->type = ftString;
-    if (*(extra->label) == '[')
-        {
-        if (startsWith("[i",extra->label))
-            extra->type = ftInteger;
-        else if (startsWith("[f",extra->label))
-            extra->type = ftFloat;
-        extra->label = strchr(extra->label,']');
-        assert(extra->label != NULL);
-        extra->label += 1;
-        }
-    // clone independently of 'field' and swap in blanks
-    extra->label = cloneString(strSwapChar(extra->label,'_',' '));
-    slAddHead(&extras,extra);
-    }
-
-if (extras != NULL)
-    slReverse(&extras);
-return extras;
-}
-
-struct extraField *extraFieldsFind(struct extraField *extras, char *name)
-// returns the extraField matching the name (case insensitive).  Note: slNameFind does NOT work.
-{
-struct extraField *extra = extras;
-for (; extra != NULL; extra = extra->next)
-    {
-    if (sameWord(name, extra->name))
-        break;
-    }
-return extra;
-}
-
-void extraFieldsFree(struct extraField **pExtras)
-// frees all mem for extraFields list
-{
-if (pExtras != NULL)
-    {
-    struct extraField *extra = NULL;
-    while (NULL != (extra  = slPopHead(pExtras)))
-        {
-        freeMem(extra->name);
-        freeMem(extra->label);
-        freeMem(extra);
-        }
-    *pExtras = NULL;
-    }
-}
-#endif///def EXTRA_FIELDS_SUPPORT
 
 static boolean tableDescriptionsExists(struct sqlConnection *conn)
 /* Cache flag for whether tableDescriptions exists in conn, in case we will need to

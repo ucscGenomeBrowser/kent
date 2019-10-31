@@ -11,6 +11,8 @@ CREATE TABLE hubSearchText (
     label varchar(255),	# Name to display in search results
     textLength enum("Short", "Long", "Meta"),	# Length of text (short for labels, long for description pages, meta for metadata)
     text longtext,	# Description text
+    parents longblob,	# Comma separated list of parent track of this track, NULL for others
+    parentTypes longblob, # Comma separated list of parent track types
               #Indices
     KEY (textLength),
     INDEX (track),

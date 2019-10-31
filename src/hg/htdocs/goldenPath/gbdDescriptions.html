@@ -13,7 +13,7 @@
 <span class="gbsWarnText">This page was retired long ago when the table descriptions
 for the annotation database stopped being updated.</span> To retrieve the schemas
 for tables underlying the Genome Browser annotation tracks one can use the Table Browser
-using the &quot;describe table schema&quot; button.</p>
+using the &quot;describe table schema&quot; button or the REST API.</p>
 
 <h2>refFlat example</h2>
 <p>
@@ -44,9 +44,10 @@ using the &quot;describe table schema&quot; button.</p>
 The text for this entry is deprecated. Please use the below
 Table Browser method to access this information.</p>
 
-<h2>Current method to use Table Browser with refFlat example</h2>
+<h2>Current method to use Table Browser or API with refFlat example</h2>
 <p>
-<span class="gbsWarnText">Here is the current way to retrieve table descriptions.</span></p>
+<h3>Table Browser</h3>
+<span class="gbsWarnText">Here is the current way to retrieve table descriptions with the Table Browser.</span></p>
 
 <ol>
   <li>
@@ -71,8 +72,19 @@ Table Browser method to access this information.</p>
 <p>
 For more information on using the Table Browser, see the  <a href="help/hgTablesHelp.html"
 target="_blank">Table Browser User's Guide</a>.</p>
+
+<h3>API</h3>
+<span class="gbsWarnText">Here is the current way to retrieve table descriptions with the API.</span></p>
 <p>
-There are also links to our source code in <a href="http://genome-source.soe.ucsc.edu/gitlist/kent.git/tree/master/src/hg/lib"
+You can also access table schema information in JSON notation using our
+<a href="help/api.html#Practical_examples" target="_blank">API</a>
+with a query such as the following:</p>
+<p>
+<a href="http://api.genome.ucsc.edu/list/schema?genome=hg38;track=refFlat">http://api.genome.ucsc.edu/list/schema?genome=hg38;track=refFlat</a></p>
+<p>
+Please note the response will be in JSON notation and may need parsing to interpret.</p>
+<p>
+ There are also links to our source code in <a href="http://genome-source.soe.ucsc.edu/gitlist/kent.git/tree/master/src/hg/lib"
 target="_blank">src/hg/lib</a> to discover the autoSql files (.as) that define our tables.
 Here is an example link to the refFlat.as file: <a href=" http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/refFlat.as"
 target="_blank">http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/refFlat.as</a></p>

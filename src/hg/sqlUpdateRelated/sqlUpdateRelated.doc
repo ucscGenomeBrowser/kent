@@ -1,0 +1,113 @@
+This utility, sqlUpdateRelated, was developed as a bridge between a database with 
+foreign keys and relationship tables and our usual local universe of tab-separated-files.
+It takes as input a series of tab-separated files, with the fields that involve foreign
+keys including some extra @ signs in their labels on the first line.  The output is
+an update to the database done in a fairly careful and controlled fashion.  This output
+generally will involve more fields and more tables than in the input.
+
+FOREIGN KEYS in a table
+
+Consider the case of a foreign key.  In the database you might have a table
+that looks like so
+
+table shoe_types
+#id value
+1   sandles
+2   sneakers
+3   loafers
+
+table shoe
+#id  type_id	name
+1   2	soft soul sneakers
+2   1	havaina luxury thongs
+3   3	urban polish 
+
+We'd like to be able to specify new data for these two related tables with
+something like:
+
+#type	name
+sneakers    soft sole sneakers
+sandles	havaina luxury thongs
+loafers	urban polish
+
+We'd like to do this, because hey, we aren't in the database, we don't know what all the id's are,
+and also one table is easir to write than two.  With sqlUpdateRelated it's not quite as simple, but not much harder.  We just have to encode a little info about the foreign key relationship in the
+field name, which we do with @ signs:
+
+
+#@type_id@shoe_types@value@id	name
+sneakers    soft sole sneakers
+sandles	havaina luxury thongs
+loafers	urban polish
+
+The foreign key field starts with a single @ sign so we know it's not a normal field.
+The remaining @ signs delimit the following parts of the extended field name:
+    1 - field name in the main table
+    2 - name of foreign table
+    3 - field to look up in the foreign table
+    4 - primary key (to output in main table in place of value in #3) in foreign table.
+
+MULTIPLE-MULTIPLE RELATIONSHIPS
+
+The case for handling multiple-multiple relationships is even more complicated because
+rather than just looking up a key to use in place of a more descriptive name,  you have
+to do multiple lookups and in the end update the relationship table as well as the main
+table.   We need even more @'s to do this.    Consider the case where we are trying to
+track labs and people. Since people *can* belong to more than one lab,  and labs generally
+have more than one person in them,  it is a multi=multi relationship.  We might represent it
+in the database as so
+
+table people
+#id name email
+1   Jane Doe    janedoe@gmail.com
+2   Jim Kent    jimkent@ucsc.edu
+3   Joe Postdoc igottaphd@yahoo.com
+
+table lab
+#id lab_name   institution
+1   kent_lab_gi UC Santa Cruz
+2   doe_lab_cte California Institute of Technology
+
+table lab_people_relationship
+#id lab_id  people_id
+1   1	2
+2   1	3
+3   2	1
+3   2	3
+
+Figuring all the little numbers to put in the lab_people_relationship table is again
+not something that can be done outside of code that is actually loading the database,
+but we want a generic loader.  So,  more @ signs to the rescue.  We'll construct
+fields that look like so:
+    @@lab_members@id@lab_people_relationship@lab_id@people_id@people@email@id
+Where the initial @@ marks it as a multi-multi field, and the @ separated values are:
+    1 - nativeFieldName - name you'd like to assign to multi-multi field (it isn't actually in db)
+    2 - nativeKeyName - the field containing the primary key in the main table
+    3 - relationalTable - the name of the relational table
+    4 - relationalNativeField - the name of the field that keys into main table in relational table
+    5 - relationalForeignField - the field that keys into foreign table in relational table
+    6 - foreignTable - the foreign table
+    7 - foreignFindName = the field to search in the foreign table
+    8 - foreignKeyName = the primary key field in the foreign table
+
+We could update the lab table then like so:
+
+#lab_name   institution	@@lab_members@id@lab_people_relationship@lab_id@people_id@people@email@id
+kent_lab_gi UC Santa Cruz	jimkent@ucsc.edu,igottaphd@yahoo.com
+doe_lab_cte California Institute of Technology	janedoe@gmail.com,igottaphd@yahoo.com
+
+There are enough @'s that it is a bit awkward to remember them all and their order, but
+at least the program will check that the tables and fields all exist for you before
+proceeding which catches most mixups.
+
+CONDITIONAL UPDATES
+
+There's many times when you only want to insert a new row in the database if it doesn't
+already exist.  For this purpose we just need to put a ? in front of some unique field name.
+In the above example,  we might alter the first label slightly to get this effect, changing
+lab_name into ?lab_name.   In this case the lab (and the relationship) table would only be
+updated for labs that did not already exist.
+
+EXAMPLES
+
+Please see the tests subdirectory and the doTest.csh script for an example.

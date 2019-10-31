@@ -1,0 +1,2473 @@
+[
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "project_uuid": "8938f852-d873-480d-a9c8-873075ba873e",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T14:19:56Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [],
+      "primary_bundle_count": 0.0,
+      "primary_bundle_type_counter": {},
+      "primary_state": "NOT_EXPECTED",
+      "project_uuid": "8938f852-d873-480d-a9c8-873075ba873e",
+      "species": [],
+      "updated_at": "2019-09-12T14:19:56Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 0.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 0.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "8938f852-d873-480d-a9c8-873075ba873e",
+      "updated_at": "2019-09-12T14:19:56Z"
+    },
+    "ingest-info": {
+      "data_curator": "Enrique,,Sapena-Ventura; ",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_investigator": "Menna,,Clatworthy; Sam,,Behjati; Muzlifah,,Haniffa; Sarah,,Teichmann; ",
+      "primary_state": "INCOMPLETE",
+      "project_short_name": "KidneySingleCellAtlas",
+      "project_title": "Spatio-temporal immune zonation of the human kidney",
+      "project_uuid": "8938f852-d873-480d-a9c8-873075ba873e",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 0.0,
+      "submission_date": "2019-08-11T21:04:00.248Z",
+      "submission_id": "5d5082c01a249400085abd87",
+      "submission_status": "Processing",
+      "updated_at": "2019-09-12T14:19:56Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "8938f852-d873-480d-a9c8-873075ba873e",
+      "updated_at": "2019-09-12T14:19:56Z"
+    },
+    "project-info": {
+      "analysis_state": "INCOMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "INCOMPLETE",
+      "project_state": "INCOMPLETE",
+      "project_uuid": "8938f852-d873-480d-a9c8-873075ba873e",
+      "updated_at": "2019-09-12T14:19:56Z"
+    },
+    "project_uuid": "8938f852-d873-480d-a9c8-873075ba873e"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "COMPLETE",
+      "failed_workflows": 354.0,
+      "optimus_v1.3.2": 371.0,
+      "project_uuid": "f8aa201c-4ff1-45a4-890e-840d63459ca2",
+      "succeeded_workflows": 17.0,
+      "total_workflows": 371.0,
+      "updated_at": "2019-09-12T14:19:59Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 10.0,
+      "analysis_state": "COMPLETE",
+      "library_construction_methods": [
+        "10x 3' v2 sequencing",
+        "smart-seq paired-end"
+      ],
+      "primary_bundle_count": 371.0,
+      "primary_bundle_type_counter": {
+        "10x 3' v2 sequencing homo sapiens": 4.0,
+        "10x 3' v2 sequencing mus musculus": 6.0,
+        "smart-seq paired-end homo sapiens": 361.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "f8aa201c-4ff1-45a4-890e-840d63459ca2",
+      "species": [
+        "homo sapiens",
+        "mus musculus"
+      ],
+      "updated_at": "2019-09-12T14:19:59Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 10.0,
+      "aws_primary_bundle_count": 371.0,
+      "gcp_analysis_bundle_count": 10.0,
+      "gcp_primary_bundle_count": 371.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "f8aa201c-4ff1-45a4-890e-840d63459ca2",
+      "updated_at": "2019-09-12T14:19:59Z"
+    },
+    "ingest-info": {
+      "data_curator": "Mallory,Ann,Freeberg; ",
+      "library_construction_methods": [
+        "10x 3' v2 sequencing",
+        "smart-seq"
+      ],
+      "primary_investigator": "N/A",
+      "primary_state": "COMPLETE",
+      "project_short_name": "HumanColonicMesenchymeIBD",
+      "project_title": "Structural Remodeling of the Human Colonic Mesenchyme in Inflammatory Bowel Disease",
+      "project_uuid": "f8aa201c-4ff1-45a4-890e-840d63459ca2",
+      "species": [
+        "homo sapiens",
+        "mus musculus"
+      ],
+      "submission_bundles_exported_count": 371.0,
+      "submission_date": "2019-07-26T14:44:12.934Z",
+      "submission_id": "5d3b11bc9be88c0008a9d744",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:19:59Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 4.0,
+      "analysis_state": "INCOMPLETE",
+      "cell_count": 43613.0,
+      "project_uuid": "f8aa201c-4ff1-45a4-890e-840d63459ca2",
+      "updated_at": "2019-09-12T14:19:59Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "INCOMPLETE",
+      "primary_state": "COMPLETE",
+      "project_state": "INCOMPLETE",
+      "project_uuid": "f8aa201c-4ff1-45a4-890e-840d63459ca2",
+      "updated_at": "2019-09-12T14:19:59Z"
+    },
+    "project_uuid": "f8aa201c-4ff1-45a4-890e-840d63459ca2"
+  },
+  {
+    "analysis-info": {
+      "aborted_workflows": 6.0,
+      "analysis_state": "COMPLETE",
+      "failed_workflows": 5.0,
+      "optimus_v1.1.0": 17.0,
+      "optimus_v1.3.1": 7.0,
+      "optimus_v1.3.2": 1.0,
+      "project_uuid": "c4077b3c-5c98-4d26-a614-246d12c2e5d7",
+      "succeeded_workflows": 14.0,
+      "total_workflows": 25.0,
+      "updated_at": "2019-09-12T14:18:10Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 7.0,
+      "analysis_state": "COMPLETE",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_bundle_count": 7.0,
+      "primary_bundle_type_counter": {
+        "10x v2 sequencing homo sapiens": 7.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "c4077b3c-5c98-4d26-a614-246d12c2e5d7",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T14:18:10Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 7.0,
+      "aws_primary_bundle_count": 7.0,
+      "gcp_analysis_bundle_count": 7.0,
+      "gcp_primary_bundle_count": 7.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "c4077b3c-5c98-4d26-a614-246d12c2e5d7",
+      "updated_at": "2019-09-12T14:18:10Z"
+    },
+    "ingest-info": {
+      "data_curator": "Mallory,Ann,Freeberg; Danielle,,Welter; ",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_investigator": "Kerstin,B,Meyer; Sarah,A,Teichmann; Oliver,,Stegle; ",
+      "primary_state": "COMPLETE",
+      "project_short_name": "Tissue stability",
+      "project_title": "Ischaemic sensitivity of human tissue by single cell RNA seq",
+      "project_uuid": "c4077b3c-5c98-4d26-a614-246d12c2e5d7",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 7.0,
+      "submission_date": "2019-05-15T18:30:12.902Z",
+      "submission_id": "5cdc5ab4d96dad000859cebf",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:18:10Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 7.0,
+      "analysis_state": "COMPLETE",
+      "cell_count": 73515.0,
+      "project_uuid": "c4077b3c-5c98-4d26-a614-246d12c2e5d7",
+      "updated_at": "2019-09-12T14:18:10Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "COMPLETE",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "c4077b3c-5c98-4d26-a614-246d12c2e5d7",
+      "updated_at": "2019-09-12T14:18:10Z"
+    },
+    "project_uuid": "c4077b3c-5c98-4d26-a614-246d12c2e5d7"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "optimus_v1.2.0": 2.0,
+      "project_uuid": "28ef60e5-1a4b-408f-8ac4-0e454304d8a6",
+      "succeeded_workflows": 2.0,
+      "total_workflows": 2.0,
+      "updated_at": "2019-08-28T04:19:59Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [],
+      "primary_bundle_count": 0.0,
+      "primary_state": "NOT_EXPECTED",
+      "project_uuid": "28ef60e5-1a4b-408f-8ac4-0e454304d8a6",
+      "species": [],
+      "updated_at": "2019-08-28T04:19:59Z"
+    },
+    "dss-info": {
+      "analysis_state": "INCOMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 0.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 0.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "28ef60e5-1a4b-408f-8ac4-0e454304d8a6",
+      "updated_at": "2019-08-28T04:19:59Z"
+    },
+    "ingest-info": {
+      "data_curator": "Mallory,Ann,Freeberg; ",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_investigator": "Barbara,,Treutlein; ",
+      "primary_state": "COMPLETE",
+      "project_short_name": "demo HPSI human cerebral organoids",
+      "project_title": "demo - Assessing the relevance of organoids to model inter-individual variation",
+      "project_uuid": "28ef60e5-1a4b-408f-8ac4-0e454304d8a6",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 2.0,
+      "submission_date": "2019-06-20T10:36:13.070Z",
+      "submission_id": "5d0b619d88fa640008afc1d8",
+      "submission_status": "Complete",
+      "updated_at": "2019-08-28T04:19:59Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "28ef60e5-1a4b-408f-8ac4-0e454304d8a6",
+      "updated_at": "2019-08-28T04:19:59Z"
+    },
+    "project-info": {
+      "analysis_state": "INCOMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "INCOMPLETE",
+      "project_uuid": "28ef60e5-1a4b-408f-8ac4-0e454304d8a6",
+      "updated_at": "2019-08-28T04:19:59Z"
+    },
+    "project_uuid": "28ef60e5-1a4b-408f-8ac4-0e454304d8a6"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "project_uuid": "8c3c290d-dfff-4553-8868-54ce45f4ba7f",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T14:19:32Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [
+        "smart-seq2 paired-end"
+      ],
+      "primary_bundle_count": 6639.0,
+      "primary_bundle_type_counter": {
+        "smart-seq2 paired-end mus musculus": 6639.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "8c3c290d-dfff-4553-8868-54ce45f4ba7f",
+      "species": [
+        "mus musculus"
+      ],
+      "updated_at": "2019-09-12T14:19:32Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 6639.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 6639.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "8c3c290d-dfff-4553-8868-54ce45f4ba7f",
+      "updated_at": "2019-09-12T14:19:32Z"
+    },
+    "ingest-info": {
+      "data_curator": "Mallory,Ann,Freeberg; Danielle,,Welter; ",
+      "library_construction_methods": [
+        "smart-seq2"
+      ],
+      "primary_investigator": "N/A",
+      "primary_state": "COMPLETE",
+      "project_short_name": "Mouse Melanoma",
+      "project_title": "Melanoma infiltration of stromal and immune cells",
+      "project_uuid": "8c3c290d-dfff-4553-8868-54ce45f4ba7f",
+      "species": [
+        "mus musculus"
+      ],
+      "submission_bundles_exported_count": 6639.0,
+      "submission_date": "2019-05-14T10:52:22.129Z",
+      "submission_id": "5cda9de6d96dad00085796b9",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:19:32Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "8c3c290d-dfff-4553-8868-54ce45f4ba7f",
+      "updated_at": "2019-09-12T14:19:32Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "8c3c290d-dfff-4553-8868-54ce45f4ba7f",
+      "updated_at": "2019-09-12T14:19:32Z"
+    },
+    "project_uuid": "8c3c290d-dfff-4553-8868-54ce45f4ba7f"
+  },
+  {
+    "analysis-info": {
+      "aborted_workflows": 2.0,
+      "analysis_state": "COMPLETE",
+      "failed_workflows": 8.0,
+      "optimus_v1.3.3": 52.0,
+      "optimus_v1.3.4": 4.0,
+      "optimus_v1.3.5": 1.0,
+      "project_uuid": "abe1a013-af7a-45ed-8c26-f3793c24a1f4",
+      "succeeded_workflows": 47.0,
+      "total_workflows": 57.0,
+      "updated_at": "2019-09-12T14:21:03Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 47.0,
+      "analysis_state": "COMPLETE",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_bundle_count": 47.0,
+      "primary_bundle_type_counter": {
+        "10x v2 sequencing homo sapiens": 47.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "abe1a013-af7a-45ed-8c26-f3793c24a1f4",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T14:21:03Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 47.0,
+      "aws_primary_bundle_count": 94.0,
+      "gcp_analysis_bundle_count": 47.0,
+      "gcp_primary_bundle_count": 94.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "abe1a013-af7a-45ed-8c26-f3793c24a1f4",
+      "updated_at": "2019-09-12T14:21:03Z"
+    },
+    "ingest-info": {
+      "data_curator": "Enrique,,Sapena-Ventura; ",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_investigator": "Menna,,Clatworthy; Sam,,Behjati; Muzlifah,,Haniffa; Sarah,,Teichmann; ",
+      "primary_state": "COMPLETE",
+      "project_short_name": "KidneySingleCellAtlas",
+      "project_title": "Spatio-temporal immune zonation of the human kidney",
+      "project_uuid": "abe1a013-af7a-45ed-8c26-f3793c24a1f4",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 47.0,
+      "submission_date": "2019-08-12T13:27:06.785Z",
+      "submission_id": "5d51692a1a249400085ac36a",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:21:03Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "INCOMPLETE",
+      "cell_count": 0.0,
+      "project_uuid": "abe1a013-af7a-45ed-8c26-f3793c24a1f4",
+      "updated_at": "2019-09-12T14:21:03Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "INCOMPLETE",
+      "primary_state": "COMPLETE",
+      "project_state": "INCOMPLETE",
+      "project_uuid": "abe1a013-af7a-45ed-8c26-f3793c24a1f4",
+      "updated_at": "2019-09-12T14:21:03Z"
+    },
+    "project_uuid": "abe1a013-af7a-45ed-8c26-f3793c24a1f4"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "project_uuid": "f81efc03-9f56-4354-aabb-6ce819c3d414",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T14:18:40Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [
+        "cite-seq"
+      ],
+      "primary_bundle_count": 3.0,
+      "primary_bundle_type_counter": {
+        "cite-seq homo sapiens": 3.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "f81efc03-9f56-4354-aabb-6ce819c3d414",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T14:18:40Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 3.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 3.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "f81efc03-9f56-4354-aabb-6ce819c3d414",
+      "updated_at": "2019-09-12T14:18:40Z"
+    },
+    "ingest-info": {
+      "data_curator": "William,G,Sullivan; ",
+      "library_construction_methods": [
+        "cite-seq"
+      ],
+      "primary_investigator": "Rahul,,Satija; ",
+      "primary_state": "COMPLETE",
+      "project_short_name": "Multiplexed scRNA-seq with barcoded antibodies",
+      "project_title": "Cell hashing with barcoded antibodies enables multiplexing and doublet detection for single cell genomics",
+      "project_uuid": "f81efc03-9f56-4354-aabb-6ce819c3d414",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 3.0,
+      "submission_date": "2019-05-17T14:54:41.260Z",
+      "submission_id": "5cdecb31a129310008b599a3",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:18:40Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "f81efc03-9f56-4354-aabb-6ce819c3d414",
+      "updated_at": "2019-09-12T14:18:40Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "f81efc03-9f56-4354-aabb-6ce819c3d414",
+      "updated_at": "2019-09-12T14:18:40Z"
+    },
+    "project_uuid": "f81efc03-9f56-4354-aabb-6ce819c3d414"
+  },
+  {
+    "analysis-info": {
+      "aborted_workflows": 2.0,
+      "analysis_state": "COMPLETE",
+      "failed_workflows": 13.0,
+      "optimus_v1.1.0": 18.0,
+      "optimus_v1.2.0": 2.0,
+      "optimus_v1.3.1": 6.0,
+      "optimus_v1.3.2": 1.0,
+      "project_uuid": "005d611a-14d5-4fbf-846e-571a1f874f70",
+      "succeeded_workflows": 12.0,
+      "total_workflows": 27.0,
+      "updated_at": "2019-09-12T14:18:08Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 6.0,
+      "analysis_state": "COMPLETE",
+      "library_construction_methods": [
+        "10x v2 sequencing paired-end"
+      ],
+      "primary_bundle_count": 6.0,
+      "primary_bundle_type_counter": {
+        "10x v2 sequencing paired-end homo sapiens": 6.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "005d611a-14d5-4fbf-846e-571a1f874f70",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T14:18:08Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 6.0,
+      "aws_primary_bundle_count": 6.0,
+      "gcp_analysis_bundle_count": 6.0,
+      "gcp_primary_bundle_count": 6.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "005d611a-14d5-4fbf-846e-571a1f874f70",
+      "updated_at": "2019-09-12T14:18:08Z"
+    },
+    "ingest-info": {
+      "data_curator": "Mallory,Ann,Freeberg; ",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_investigator": "Barbara,,Treutlein; ",
+      "primary_state": "COMPLETE",
+      "project_short_name": "HPSI human cerebral organoids",
+      "project_title": "Assessing the relevance of organoids to model inter-individual variation",
+      "project_uuid": "005d611a-14d5-4fbf-846e-571a1f874f70",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 6.0,
+      "submission_date": "2019-05-15T09:35:57.609Z",
+      "submission_id": "5cdbdd7dd96dad0008592f28",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:18:08Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 6.0,
+      "analysis_state": "COMPLETE",
+      "cell_count": 156936.0,
+      "project_uuid": "005d611a-14d5-4fbf-846e-571a1f874f70",
+      "updated_at": "2019-09-12T14:18:08Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "COMPLETE",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "005d611a-14d5-4fbf-846e-571a1f874f70",
+      "updated_at": "2019-09-12T14:18:08Z"
+    },
+    "project_uuid": "005d611a-14d5-4fbf-846e-571a1f874f70"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "project_uuid": "e0009214-c0a0-4a7b-96e2-d6a83e966ce0",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T13:42:35Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [
+        "smart-seq2 paired-end"
+      ],
+      "primary_bundle_count": 99840.0,
+      "primary_bundle_type_counter": {
+        "smart-seq2 paired-end mus musculus": 99840.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "e0009214-c0a0-4a7b-96e2-d6a83e966ce0",
+      "species": [
+        "mus musculus"
+      ],
+      "updated_at": "2019-09-12T13:42:35Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 99840.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 99840.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "e0009214-c0a0-4a7b-96e2-d6a83e966ce0",
+      "updated_at": "2019-09-12T13:42:35Z"
+    },
+    "ingest-info": {
+      "data_curator": "Christopher,,Villarreal; ",
+      "library_construction_methods": [
+        "smart-seq2"
+      ],
+      "primary_investigator": "Spyros,,Darmanis; ",
+      "primary_state": "COMPLETE",
+      "project_short_name": "Tabula Muris",
+      "project_title": "Tabula Muris: Transcriptomic characterization of 20 organs and tissues from Mus musculus at single cell resolution",
+      "project_uuid": "e0009214-c0a0-4a7b-96e2-d6a83e966ce0",
+      "species": [
+        "mus musculus"
+      ],
+      "submission_bundles_exported_count": 99840.0,
+      "submission_date": "2019-07-09T19:40:16.966Z",
+      "submission_id": "5d24eda088fa640008b02b26",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T13:42:35Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "e0009214-c0a0-4a7b-96e2-d6a83e966ce0",
+      "updated_at": "2019-09-12T13:42:35Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "e0009214-c0a0-4a7b-96e2-d6a83e966ce0",
+      "updated_at": "2019-09-12T13:42:35Z"
+    },
+    "project_uuid": "e0009214-c0a0-4a7b-96e2-d6a83e966ce0"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "project_uuid": "82c1d3d0-0db7-452f-a22d-5cf22eec768f",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T14:19:57Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [],
+      "primary_bundle_count": 0.0,
+      "primary_bundle_type_counter": {},
+      "primary_state": "NOT_EXPECTED",
+      "project_uuid": "82c1d3d0-0db7-452f-a22d-5cf22eec768f",
+      "species": [],
+      "updated_at": "2019-09-12T14:19:57Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 0.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 0.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "82c1d3d0-0db7-452f-a22d-5cf22eec768f",
+      "updated_at": "2019-09-12T14:19:57Z"
+    },
+    "ingest-info": {
+      "data_curator": "Enrique,,Sapena-Ventura; ",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_investigator": "Menna,,Clatworthy; Sam,,Behjati; Muzlifah,,Haniffa; Sarah,,Teichmann; ",
+      "primary_state": "INCOMPLETE",
+      "project_short_name": "KidneySingleCellAtlas",
+      "project_title": "Spatio-temporal immune zonation of the human kidney",
+      "project_uuid": "82c1d3d0-0db7-452f-a22d-5cf22eec768f",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 96.0,
+      "submission_date": "2019-08-09T15:22:18.248Z",
+      "submission_id": "5d4d8faa1a249400085ab58b",
+      "submission_status": "Processing",
+      "updated_at": "2019-09-12T14:19:57Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "82c1d3d0-0db7-452f-a22d-5cf22eec768f",
+      "updated_at": "2019-09-12T14:19:57Z"
+    },
+    "project-info": {
+      "analysis_state": "INCOMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "INCOMPLETE",
+      "project_state": "INCOMPLETE",
+      "project_uuid": "82c1d3d0-0db7-452f-a22d-5cf22eec768f",
+      "updated_at": "2019-09-12T14:19:57Z"
+    },
+    "project_uuid": "82c1d3d0-0db7-452f-a22d-5cf22eec768f"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "project_uuid": "ae71be1d-ddd8-4feb-9bed-24c3ddb6e1ad",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T14:18:39Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [
+        "smart-seq2"
+      ],
+      "primary_bundle_count": 3514.0,
+      "primary_bundle_type_counter": {
+        "smart-seq2 homo sapiens": 3514.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "ae71be1d-ddd8-4feb-9bed-24c3ddb6e1ad",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T14:18:39Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 3514.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 3514.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "ae71be1d-ddd8-4feb-9bed-24c3ddb6e1ad",
+      "updated_at": "2019-09-12T14:18:39Z"
+    },
+    "ingest-info": {
+      "data_curator": "Mallory,Ann,Freeberg; Laura,,Huerta; Anja,,Fullgrabe; ",
+      "library_construction_methods": [
+        "smart-seq2"
+      ],
+      "primary_investigator": "N/A",
+      "primary_state": "COMPLETE",
+      "project_short_name": "Healthy and type 2 diabetes pancreas",
+      "project_title": "Single-cell RNA-seq analysis of human pancreas from healthy individuals and type 2 diabetes patients",
+      "project_uuid": "ae71be1d-ddd8-4feb-9bed-24c3ddb6e1ad",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 3515.0,
+      "submission_date": "2019-05-14T09:16:07.217Z",
+      "submission_id": "5cda8757d96dad000856d2ae",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:18:39Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "ae71be1d-ddd8-4feb-9bed-24c3ddb6e1ad",
+      "updated_at": "2019-09-12T14:18:39Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "ae71be1d-ddd8-4feb-9bed-24c3ddb6e1ad",
+      "updated_at": "2019-09-12T14:18:39Z"
+    },
+    "project_uuid": "ae71be1d-ddd8-4feb-9bed-24c3ddb6e1ad"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "COMPLETE",
+      "project_uuid": "cddab57b-6868-4be4-806f-395ed9dd635a",
+      "smartseq2_v2.3.0": 2544.0,
+      "smartseq2_v2.4.0": 59.0,
+      "succeeded_workflows": 2603.0,
+      "total_workflows": 2603.0,
+      "updated_at": "2019-09-12T14:19:15Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 2544.0,
+      "analysis_state": "COMPLETE",
+      "library_construction_methods": [
+        "smart-seq2 paired-end"
+      ],
+      "primary_bundle_count": 2544.0,
+      "primary_bundle_type_counter": {
+        "smart-seq2 paired-end homo sapiens": 2544.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "cddab57b-6868-4be4-806f-395ed9dd635a",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T14:19:15Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 2544.0,
+      "aws_primary_bundle_count": 2544.0,
+      "gcp_analysis_bundle_count": 2544.0,
+      "gcp_primary_bundle_count": 2544.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "cddab57b-6868-4be4-806f-395ed9dd635a",
+      "updated_at": "2019-09-12T14:19:15Z"
+    },
+    "ingest-info": {
+      "data_curator": "Laura,,Huerta; Matthew,,Green; ",
+      "library_construction_methods": [
+        "smart-seq2"
+      ],
+      "primary_investigator": "N/A",
+      "primary_state": "COMPLETE",
+      "project_short_name": "Single cell transcriptome analysis of human pancreas",
+      "project_title": "Single cell transcriptome analysis of human pancreas reveals transcriptional signatures of aging and somatic mutation patterns.",
+      "project_uuid": "cddab57b-6868-4be4-806f-395ed9dd635a",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 2544.0,
+      "submission_date": "2019-05-10T14:20:20.975Z",
+      "submission_id": "5cd588a4d96dad00085634a2",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:19:15Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 2544.0,
+      "analysis_state": "COMPLETE",
+      "cell_count": 2544.0,
+      "project_uuid": "cddab57b-6868-4be4-806f-395ed9dd635a",
+      "updated_at": "2019-09-12T14:19:15Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "COMPLETE",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "cddab57b-6868-4be4-806f-395ed9dd635a",
+      "updated_at": "2019-09-12T14:19:15Z"
+    },
+    "project_uuid": "cddab57b-6868-4be4-806f-395ed9dd635a"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "COMPLETE",
+      "failed_workflows": 2.0,
+      "project_uuid": "2043c65a-1cf8-4828-a656-9e247d4e64f1",
+      "smartseq2_v2.3.0": 1735.0,
+      "smartseq2_v2.4.0": 3.0,
+      "succeeded_workflows": 1736.0,
+      "total_workflows": 1738.0,
+      "updated_at": "2019-09-12T14:19:15Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 1733.0,
+      "analysis_state": "COMPLETE",
+      "library_construction_methods": [
+        "smart-seq2 paired-end"
+      ],
+      "primary_bundle_count": 1733.0,
+      "primary_bundle_type_counter": {
+        "smart-seq2 paired-end homo sapiens": 1733.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "2043c65a-1cf8-4828-a656-9e247d4e64f1",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T14:19:16Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 1733.0,
+      "aws_primary_bundle_count": 1733.0,
+      "gcp_analysis_bundle_count": 1733.0,
+      "gcp_primary_bundle_count": 1733.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "2043c65a-1cf8-4828-a656-9e247d4e64f1",
+      "updated_at": "2019-09-12T14:19:16Z"
+    },
+    "ingest-info": {
+      "data_curator": "Laura,,Huerta; Matthew,,Green; ",
+      "library_construction_methods": [
+        "smart-seq2"
+      ],
+      "primary_investigator": "N/A",
+      "primary_state": "COMPLETE",
+      "project_short_name": "Single cell RNAseq characterization of cell types produced over time in an in vitro model of human inhibitory interneuron differentiation.",
+      "project_title": "Single-cell RNA-seq analysis  throughout a 125-day differentiation protocol that converted H1 human embryonic stem cells to a variety of ventrally-derived cell types.",
+      "project_uuid": "2043c65a-1cf8-4828-a656-9e247d4e64f1",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 1733.0,
+      "submission_date": "2019-05-14T18:04:52.112Z",
+      "submission_id": "5cdb0344d96dad000858fff4",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:19:15Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 1733.0,
+      "analysis_state": "COMPLETE",
+      "cell_count": 1733.0,
+      "project_uuid": "2043c65a-1cf8-4828-a656-9e247d4e64f1",
+      "updated_at": "2019-09-12T14:19:16Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "COMPLETE",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "2043c65a-1cf8-4828-a656-9e247d4e64f1",
+      "updated_at": "2019-09-12T14:19:16Z"
+    },
+    "project_uuid": "2043c65a-1cf8-4828-a656-9e247d4e64f1"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "project_uuid": "027c51c6-0719-469f-a7f5-640fe57cbece",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T14:18:28Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [
+        "indrop paired-end"
+      ],
+      "primary_bundle_count": 7.0,
+      "primary_bundle_type_counter": {
+        "indrop paired-end homo sapiens": 7.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "027c51c6-0719-469f-a7f5-640fe57cbece",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T14:18:28Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 7.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 7.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "027c51c6-0719-469f-a7f5-640fe57cbece",
+      "updated_at": "2019-09-12T14:18:28Z"
+    },
+    "ingest-info": {
+      "data_curator": "Parisa,, Nejad; ",
+      "library_construction_methods": [
+        "indrop"
+      ],
+      "primary_investigator": "Benjamin,D,Humphreys; ",
+      "primary_state": "COMPLETE",
+      "project_short_name": "Kidney biopsy scRNA-seq",
+      "project_title": "Single Cell Transcriptomics of a Human Kidney Allograft Biopsy Defines a Diverse Inflammatory Response",
+      "project_uuid": "027c51c6-0719-469f-a7f5-640fe57cbece",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 7.0,
+      "submission_date": "2019-05-16T08:36:15.082Z",
+      "submission_id": "5cdd20ffd96dad00085b0ff7",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:18:28Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "027c51c6-0719-469f-a7f5-640fe57cbece",
+      "updated_at": "2019-09-12T14:18:28Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "027c51c6-0719-469f-a7f5-640fe57cbece",
+      "updated_at": "2019-09-12T14:18:28Z"
+    },
+    "project_uuid": "027c51c6-0719-469f-a7f5-640fe57cbece"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "project_uuid": "a29952d9-925e-40f4-8a1c-274f118f1f51",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T14:19:01Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [
+        "mars-seq paired-end"
+      ],
+      "primary_bundle_count": 25.0,
+      "primary_bundle_type_counter": {
+        "mars-seq paired-end homo sapiens": 25.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "a29952d9-925e-40f4-8a1c-274f118f1f51",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T14:19:01Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 25.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 25.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "a29952d9-925e-40f4-8a1c-274f118f1f51",
+      "updated_at": "2019-09-12T14:19:01Z"
+    },
+    "ingest-info": {
+      "data_curator": "Matthew,,Green; ",
+      "library_construction_methods": [
+        "mars-seq"
+      ],
+      "primary_investigator": "N/A",
+      "primary_state": "COMPLETE",
+      "project_short_name": "BM_PC",
+      "project_title": "Bone marrow plasma cells from hip replacement surgeries",
+      "project_uuid": "a29952d9-925e-40f4-8a1c-274f118f1f51",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 25.0,
+      "submission_date": "2019-05-16T08:31:09.281Z",
+      "submission_id": "5cdd1fcdd96dad00085af1ae",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:19:01Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "a29952d9-925e-40f4-8a1c-274f118f1f51",
+      "updated_at": "2019-09-12T14:19:01Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "a29952d9-925e-40f4-8a1c-274f118f1f51",
+      "updated_at": "2019-09-12T14:19:01Z"
+    },
+    "project_uuid": "a29952d9-925e-40f4-8a1c-274f118f1f51"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "COMPLETE",
+      "optimus_v1.3.1": 9.0,
+      "project_uuid": "091cf39b-01bc-42e5-9437-f419a66c8a45",
+      "succeeded_workflows": 9.0,
+      "total_workflows": 9.0,
+      "updated_at": "2019-09-12T14:19:52Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 9.0,
+      "analysis_state": "COMPLETE",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_bundle_count": 9.0,
+      "primary_bundle_type_counter": {
+        "10x v2 sequencing homo sapiens": 9.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "091cf39b-01bc-42e5-9437-f419a66c8a45",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T14:19:52Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 9.0,
+      "aws_primary_bundle_count": 9.0,
+      "gcp_analysis_bundle_count": 9.0,
+      "gcp_primary_bundle_count": 9.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "091cf39b-01bc-42e5-9437-f419a66c8a45",
+      "updated_at": "2019-09-12T14:19:52Z"
+    },
+    "ingest-info": {
+      "data_curator": "Parisa,, Nejad; ",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_investigator": "Dana,, Pe'er; ",
+      "primary_state": "COMPLETE",
+      "project_short_name": "Human Hematopoietic Profiling",
+      "project_title": "Profiling of CD34+ cells from human bone marrow to understand hematopoiesis",
+      "project_uuid": "091cf39b-01bc-42e5-9437-f419a66c8a45",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 9.0,
+      "submission_date": "2019-07-18T21:12:36.392Z",
+      "submission_id": "5d30e0c49be88c0008a9b236",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:19:52Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 9.0,
+      "analysis_state": "COMPLETE",
+      "cell_count": 41331.0,
+      "project_uuid": "091cf39b-01bc-42e5-9437-f419a66c8a45",
+      "updated_at": "2019-09-12T14:19:52Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "COMPLETE",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "091cf39b-01bc-42e5-9437-f419a66c8a45",
+      "updated_at": "2019-09-12T14:19:52Z"
+    },
+    "project_uuid": "091cf39b-01bc-42e5-9437-f419a66c8a45"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "failed_workflows": 1733.0,
+      "project_uuid": "4129d036-67b9-4981-9d6d-3aaa235236d5",
+      "smartseq2_v2.2.0": 1733.0,
+      "total_workflows": 1733.0,
+      "updated_at": "2019-08-28T04:17:53Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [],
+      "primary_bundle_count": 0.0,
+      "primary_state": "NOT_EXPECTED",
+      "project_uuid": "4129d036-67b9-4981-9d6d-3aaa235236d5",
+      "species": [],
+      "updated_at": "2019-08-28T04:17:53Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 0.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 0.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "4129d036-67b9-4981-9d6d-3aaa235236d5",
+      "updated_at": "2019-08-28T04:17:53Z"
+    },
+    "ingest-info": {
+      "data_curator": "Laura,,Huerta; Matthew,,Green; ",
+      "library_construction_methods": [
+        "smart-seq2"
+      ],
+      "primary_investigator": "N/A",
+      "primary_state": "COMPLETE",
+      "project_short_name": "Single cell RNAseq characterization of cell types produced over time in an in vitro model of human inhibitory interneuron differentiation.",
+      "project_title": "Single-cell RNA-seq analysis  throughout a 125-day differentiation protocol that converted H1 human embryonic stem cells to a variety of ventrally-derived cell types.",
+      "project_uuid": "4129d036-67b9-4981-9d6d-3aaa235236d5",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 1733.0,
+      "submission_date": "2019-05-10T00:12:04.533Z",
+      "submission_id": "5cd4c1d4d96dad0008560bcc",
+      "submission_status": "Complete",
+      "updated_at": "2019-08-28T04:17:53Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "4129d036-67b9-4981-9d6d-3aaa235236d5",
+      "updated_at": "2019-08-28T04:17:53Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "4129d036-67b9-4981-9d6d-3aaa235236d5",
+      "updated_at": "2019-08-28T04:17:53Z"
+    },
+    "project_uuid": "4129d036-67b9-4981-9d6d-3aaa235236d5"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "failed_workflows": 5.0,
+      "optimus_v1.3.0": 5.0,
+      "project_uuid": "124869b5-6032-49a0-9cef-e04912f07ee0",
+      "total_workflows": 5.0,
+      "updated_at": "2019-08-28T04:19:59Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [],
+      "primary_bundle_count": 0.0,
+      "primary_state": "NOT_EXPECTED",
+      "project_uuid": "124869b5-6032-49a0-9cef-e04912f07ee0",
+      "species": [],
+      "updated_at": "2019-08-28T04:19:59Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 0.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 0.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "124869b5-6032-49a0-9cef-e04912f07ee0",
+      "updated_at": "2019-08-28T04:19:59Z"
+    },
+    "ingest-info": {
+      "data_curator": "William,G,Sullivan; ",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_investigator": "Sonya,A,MacParland; Gary,D,Bader; Ian,D,McGilvray; ",
+      "primary_state": "COMPLETE",
+      "project_short_name": "SingleCellLiverLandscape",
+      "project_title": "Dissecting the human liver cellular landscape by single cell RNA-seq reveals novel intrahepatic monocyte/ macrophage populations",
+      "project_uuid": "124869b5-6032-49a0-9cef-e04912f07ee0",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 5.0,
+      "submission_date": "2019-06-28T19:57:19.260Z",
+      "submission_id": "5d16711f88fa640008afe0d4",
+      "submission_status": "Complete",
+      "updated_at": "2019-08-28T04:19:58Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "124869b5-6032-49a0-9cef-e04912f07ee0",
+      "updated_at": "2019-08-28T04:19:59Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "124869b5-6032-49a0-9cef-e04912f07ee0",
+      "updated_at": "2019-08-28T04:19:59Z"
+    },
+    "project_uuid": "124869b5-6032-49a0-9cef-e04912f07ee0"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "INCOMPLETE",
+      "project_uuid": "47382634-bd80-4472-b6ae-928351bb3fe5",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T14:20:02Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_bundle_count": 5.0,
+      "primary_bundle_type_counter": {
+        "10x v2 sequencing homo sapiens": 5.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "47382634-bd80-4472-b6ae-928351bb3fe5",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T14:20:02Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 10.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 10.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "47382634-bd80-4472-b6ae-928351bb3fe5",
+      "updated_at": "2019-09-12T14:20:02Z"
+    },
+    "ingest-info": {
+      "data_curator": "Marion,F,Shadbolt; ",
+      "library_construction_methods": [],
+      "primary_investigator": "Jane,C,Sowden; Trevor,D,Lamb; Peng-Yuna,,Wang; Alex,W,Hewitt; Mark,C,Gillies; Joseph,E,Powell; Raymond,CB,Wong; ",
+      "primary_state": "COMPLETE",
+      "project_short_name": "WongAdultRetina",
+      "project_title": "A single-cell transcriptome atlas of the adult human retina",
+      "project_uuid": "47382634-bd80-4472-b6ae-928351bb3fe5",
+      "species": [],
+      "submission_bundles_exported_count": 5.0,
+      "submission_date": "2019-09-09T12:45:30.723Z",
+      "submission_id": "5d76496aaa252400084a0a6c",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:20:02Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "47382634-bd80-4472-b6ae-928351bb3fe5",
+      "updated_at": "2019-09-12T14:20:02Z"
+    },
+    "project-info": {
+      "analysis_state": "INCOMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "INCOMPLETE",
+      "project_uuid": "47382634-bd80-4472-b6ae-928351bb3fe5",
+      "updated_at": "2019-09-12T14:20:02Z"
+    },
+    "project_uuid": "47382634-bd80-4472-b6ae-928351bb3fe5"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "optimus_v1.2.0": 2.0,
+      "project_uuid": "8e7a78bd-5082-4fa8-9acf-a732f3dbac1e",
+      "succeeded_workflows": 2.0,
+      "total_workflows": 2.0,
+      "updated_at": "2019-08-28T04:19:58Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [],
+      "primary_bundle_count": 0.0,
+      "primary_state": "NOT_EXPECTED",
+      "project_uuid": "8e7a78bd-5082-4fa8-9acf-a732f3dbac1e",
+      "species": [],
+      "updated_at": "2019-08-28T04:19:58Z"
+    },
+    "dss-info": {
+      "analysis_state": "INCOMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 0.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 0.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "8e7a78bd-5082-4fa8-9acf-a732f3dbac1e",
+      "updated_at": "2019-08-28T04:19:58Z"
+    },
+    "ingest-info": {
+      "data_curator": "Mallory,Ann,Freeberg; ",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_investigator": "Barbara,,Treutlein; ",
+      "primary_state": "COMPLETE",
+      "project_short_name": "demo HPSI human cerebral organoids",
+      "project_title": "demo - Assessing the relevance of organoids to model inter-individual variation",
+      "project_uuid": "8e7a78bd-5082-4fa8-9acf-a732f3dbac1e",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 2.0,
+      "submission_date": "2019-06-19T07:28:50.924Z",
+      "submission_id": "5d09e43288fa640008afbc51",
+      "submission_status": "Complete",
+      "updated_at": "2019-08-28T04:19:58Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "8e7a78bd-5082-4fa8-9acf-a732f3dbac1e",
+      "updated_at": "2019-08-28T04:19:58Z"
+    },
+    "project-info": {
+      "analysis_state": "INCOMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "INCOMPLETE",
+      "project_uuid": "8e7a78bd-5082-4fa8-9acf-a732f3dbac1e",
+      "updated_at": "2019-08-28T04:19:58Z"
+    },
+    "project_uuid": "8e7a78bd-5082-4fa8-9acf-a732f3dbac1e"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "project_uuid": "a9c022b4-c771-4468-b769-cabcf9738de3",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T14:18:05Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [
+        "dronc-seq paired-end",
+        "drop-seq paired-end"
+      ],
+      "primary_bundle_count": 22.0,
+      "primary_bundle_type_counter": {
+        "dronc-seq paired-end homo sapiens": 11.0,
+        "drop-seq paired-end homo sapiens": 11.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "a9c022b4-c771-4468-b769-cabcf9738de3",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T14:18:06Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 22.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 22.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "a9c022b4-c771-4468-b769-cabcf9738de3",
+      "updated_at": "2019-09-12T14:18:05Z"
+    },
+    "ingest-info": {
+      "data_curator": "Parisa,, Nejad; ",
+      "library_construction_methods": [
+        "dronc-seq",
+        "drop-seq"
+      ],
+      "primary_investigator": "Anindita,, Basu; Sebastian,, Pott; ",
+      "primary_state": "COMPLETE",
+      "project_short_name": "Drop-seq, DroNc-seq, Fluidigm C1 Comparison",
+      "project_title": "Comparison, calibration, and benchmarking of high-throughput single cell RNA-Seq techniques for unbiased cell-type classification",
+      "project_uuid": "a9c022b4-c771-4468-b769-cabcf9738de3",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 22.0,
+      "submission_date": "2019-05-15T13:54:18.039Z",
+      "submission_id": "5cdc1a0ad96dad0008593264",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:18:05Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "a9c022b4-c771-4468-b769-cabcf9738de3",
+      "updated_at": "2019-09-12T14:18:05Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "a9c022b4-c771-4468-b769-cabcf9738de3",
+      "updated_at": "2019-09-12T14:18:06Z"
+    },
+    "project_uuid": "a9c022b4-c771-4468-b769-cabcf9738de3"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "COMPLETE",
+      "failed_workflows": 1.0,
+      "optimus_v1.3.2": 128.0,
+      "project_uuid": "cc95ff89-2e68-4a08-a234-480eca21ce79",
+      "succeeded_workflows": 127.0,
+      "total_workflows": 128.0,
+      "updated_at": "2019-09-12T14:19:58Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 127.0,
+      "analysis_state": "COMPLETE",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_bundle_count": 127.0,
+      "primary_bundle_type_counter": {
+        "10x v2 sequencing homo sapiens": 127.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "cc95ff89-2e68-4a08-a234-480eca21ce79",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T14:19:58Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 127.0,
+      "aws_primary_bundle_count": 127.0,
+      "gcp_analysis_bundle_count": 127.0,
+      "gcp_primary_bundle_count": 127.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "cc95ff89-2e68-4a08-a234-480eca21ce79",
+      "updated_at": "2019-09-12T14:19:58Z"
+    },
+    "ingest-info": {
+      "data_curator": "Mallory,Ann,Freeberg; Danielle,,Welter; ",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_investigator": "N/A",
+      "primary_state": "COMPLETE",
+      "project_short_name": "1M Immune Cells",
+      "project_title": "Census of Immune Cells",
+      "project_uuid": "cc95ff89-2e68-4a08-a234-480eca21ce79",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 127.0,
+      "submission_date": "2019-07-03T08:31:02.873Z",
+      "submission_id": "5d1c67c688fa640008aff7cc",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:19:58Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 127.0,
+      "analysis_state": "COMPLETE",
+      "cell_count": 782859.0,
+      "project_uuid": "cc95ff89-2e68-4a08-a234-480eca21ce79",
+      "updated_at": "2019-09-12T14:19:58Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "COMPLETE",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "cc95ff89-2e68-4a08-a234-480eca21ce79",
+      "updated_at": "2019-09-12T14:19:58Z"
+    },
+    "project_uuid": "cc95ff89-2e68-4a08-a234-480eca21ce79"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "INCOMPLETE",
+      "project_uuid": "74b6d569-3b11-42ef-b6b1-a0454522b4a0",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T14:19:31Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_bundle_count": 5459.0,
+      "primary_bundle_type_counter": {
+        "10x v2 sequencing mus musculus": 5459.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "74b6d569-3b11-42ef-b6b1-a0454522b4a0",
+      "species": [
+        "mus musculus"
+      ],
+      "updated_at": "2019-09-12T14:19:31Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 5459.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 5459.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "74b6d569-3b11-42ef-b6b1-a0454522b4a0",
+      "updated_at": "2019-09-12T14:19:31Z"
+    },
+    "ingest-info": {
+      "data_curator": "William,G,Sullivan; ",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_investigator": "N/A",
+      "primary_state": "COMPLETE",
+      "project_short_name": "1M Neurons",
+      "project_title": "1.3 Million Brain Cells from E18 Mice",
+      "project_uuid": "74b6d569-3b11-42ef-b6b1-a0454522b4a0",
+      "species": [
+        "mus musculus"
+      ],
+      "submission_bundles_exported_count": 5459.0,
+      "submission_date": "2019-05-16T16:09:22.678Z",
+      "submission_id": "5cdd8b32d96dad0007e5a0ed",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:19:31Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "74b6d569-3b11-42ef-b6b1-a0454522b4a0",
+      "updated_at": "2019-09-12T14:19:31Z"
+    },
+    "project-info": {
+      "analysis_state": "INCOMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "INCOMPLETE",
+      "project_uuid": "74b6d569-3b11-42ef-b6b1-a0454522b4a0",
+      "updated_at": "2019-09-12T14:19:31Z"
+    },
+    "project_uuid": "74b6d569-3b11-42ef-b6b1-a0454522b4a0"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "project_uuid": "2b665444-8bef-4df2-8042-2e7b0f4c47b8",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T14:20:24Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [
+        "10x 3' v1 sequencing"
+      ],
+      "primary_bundle_count": 2432.0,
+      "primary_bundle_type_counter": {
+        "10x 3' v1 sequencing mus musculus": 2432.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "2b665444-8bef-4df2-8042-2e7b0f4c47b8",
+      "species": [
+        "mus musculus"
+      ],
+      "updated_at": "2019-09-12T14:20:24Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 2432.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 2432.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "2b665444-8bef-4df2-8042-2e7b0f4c47b8",
+      "updated_at": "2019-09-12T14:20:24Z"
+    },
+    "ingest-info": {
+      "data_curator": "Sapena-Ventura,,Enrique; ",
+      "library_construction_methods": [
+        "10x 3' v1 sequencing"
+      ],
+      "primary_investigator": "Wolf,,Reik; Shankar,,Srinivas; Benjamin,D,Simons; Jennifer,,Nichols; John,C,Marioni; Berthold,,G\u00f6ttgens; ",
+      "primary_state": "INCOMPLETE",
+      "project_short_name": "MouseGastrulationAtlas",
+      "project_title": "A single-cell molecular map of mouse gastrulation and early organogenesis",
+      "project_uuid": "2b665444-8bef-4df2-8042-2e7b0f4c47b8",
+      "species": [
+        "mus musculus"
+      ],
+      "submission_bundles_exported_count": 2432.0,
+      "submission_date": "2019-08-08T08:27:49.287Z",
+      "submission_id": "5d4bdd051a249400085a6fc7",
+      "submission_status": "Processing",
+      "updated_at": "2019-09-12T14:20:24Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "2b665444-8bef-4df2-8042-2e7b0f4c47b8",
+      "updated_at": "2019-09-12T14:20:24Z"
+    },
+    "project-info": {
+      "analysis_state": "INCOMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "INCOMPLETE",
+      "project_state": "INCOMPLETE",
+      "project_uuid": "2b665444-8bef-4df2-8042-2e7b0f4c47b8",
+      "updated_at": "2019-09-12T14:20:24Z"
+    },
+    "project_uuid": "2b665444-8bef-4df2-8042-2e7b0f4c47b8"
+  },
+  {
+    "analysis-info": {
+      "aborted_workflows": 6.0,
+      "analysis_state": "COMPLETE",
+      "failed_workflows": 179.0,
+      "optimus_v1.1.0": 61.0,
+      "optimus_v1.2.0": 19.0,
+      "optimus_v1.3.1": 41.0,
+      "optimus_v1.3.2": 17.0,
+      "optimus_v1.3.3": 8.0,
+      "project_uuid": "f83165c5-e2ea-4d15-a5cf-33f3550bffde",
+      "smartseq2_v2.3.0": 7598.0,
+      "smartseq2_v2.4.0": 79.0,
+      "succeeded_workflows": 7638.0,
+      "total_workflows": 7823.0,
+      "updated_at": "2019-09-12T13:22:51Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 7628.0,
+      "analysis_state": "COMPLETE",
+      "library_construction_methods": [
+        "10x v2 sequencing",
+        "smart-seq2 paired-end"
+      ],
+      "primary_bundle_count": 7628.0,
+      "primary_bundle_type_counter": {
+        "10x v2 sequencing homo sapiens": 31.0,
+        "smart-seq2 paired-end homo sapiens": 7597.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "f83165c5-e2ea-4d15-a5cf-33f3550bffde",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T13:22:51Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 7628.0,
+      "aws_primary_bundle_count": 7628.0,
+      "gcp_analysis_bundle_count": 7628.0,
+      "gcp_primary_bundle_count": 7628.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "f83165c5-e2ea-4d15-a5cf-33f3550bffde",
+      "updated_at": "2019-09-12T13:22:51Z"
+    },
+    "ingest-info": {
+      "data_curator": "Mallory,Ann,Freeberg; Zinaida, A, Perova; Anja,,Fullgrabe; ",
+      "library_construction_methods": [
+        "10x v2 sequencing",
+        "smart-seq2"
+      ],
+      "primary_investigator": "Sarah,A,Teichmann; ",
+      "primary_state": "COMPLETE",
+      "project_short_name": "Fetal/Maternal Interface",
+      "project_title": "Reconstructing the human first trimester fetal-maternal interface using single cell transcriptomics",
+      "project_uuid": "f83165c5-e2ea-4d15-a5cf-33f3550bffde",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 7628.0,
+      "submission_date": "2019-05-15T13:59:38.567Z",
+      "submission_id": "5cdc1b4ad96dad0008593302",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T13:22:51Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 7628.0,
+      "analysis_state": "COMPLETE",
+      "cell_count": 546183.0,
+      "project_uuid": "f83165c5-e2ea-4d15-a5cf-33f3550bffde",
+      "updated_at": "2019-09-12T13:22:51Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "COMPLETE",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "f83165c5-e2ea-4d15-a5cf-33f3550bffde",
+      "updated_at": "2019-09-12T13:22:51Z"
+    },
+    "project_uuid": "f83165c5-e2ea-4d15-a5cf-33f3550bffde"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "project_uuid": "90bd6933-40c0-48d4-8d76-778c103bf545",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T14:18:54Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [
+        "smart-seq2"
+      ],
+      "primary_bundle_count": 2244.0,
+      "primary_bundle_type_counter": {
+        "smart-seq2 homo sapiens": 2244.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "90bd6933-40c0-48d4-8d76-778c103bf545",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T14:18:54Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 2244.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 2244.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "90bd6933-40c0-48d4-8d76-778c103bf545",
+      "updated_at": "2019-09-12T14:18:54Z"
+    },
+    "ingest-info": {
+      "data_curator": "Mallory,Ann,Freeberg; Laura,,Huerta; ",
+      "library_construction_methods": [
+        "smart-seq2"
+      ],
+      "primary_investigator": "N/A",
+      "primary_state": "COMPLETE",
+      "project_short_name": "CD4+ cytotoxic T lymphocytes",
+      "project_title": "Precursors of human CD4+ cytotoxic T lymphocytes identified by single-cell transcriptome analysis",
+      "project_uuid": "90bd6933-40c0-48d4-8d76-778c103bf545",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 2244.0,
+      "submission_date": "2019-05-16T13:57:24.265Z",
+      "submission_id": "5cdd6c44d96dad0007e3cc8f",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:18:54Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "90bd6933-40c0-48d4-8d76-778c103bf545",
+      "updated_at": "2019-09-12T14:18:54Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "90bd6933-40c0-48d4-8d76-778c103bf545",
+      "updated_at": "2019-09-12T14:18:54Z"
+    },
+    "project_uuid": "90bd6933-40c0-48d4-8d76-778c103bf545"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "project_uuid": "577c946d-6de5-4b55-a854-cd3fde40bff2",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T14:20:01Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [
+        "10x 5' v2 sequencing paired-end"
+      ],
+      "primary_bundle_count": 6.0,
+      "primary_bundle_type_counter": {
+        "10x 5' v2 sequencing paired-end homo sapiens": 6.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "577c946d-6de5-4b55-a854-cd3fde40bff2",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T14:20:01Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 6.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 6.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "577c946d-6de5-4b55-a854-cd3fde40bff2",
+      "updated_at": "2019-09-12T14:20:01Z"
+    },
+    "ingest-info": {
+      "data_curator": "Parisa,,Nejad; ",
+      "library_construction_methods": [
+        "10x 5' v2 sequencing"
+      ],
+      "primary_investigator": "Benjamin,D,Humphreys; ",
+      "primary_state": "COMPLETE",
+      "project_short_name": "Diabetic Nephropathy snRNA-seq",
+      "project_title": "The Single Cell Transcriptomic Landscape of Early Human Diabetic Nephropathy",
+      "project_uuid": "577c946d-6de5-4b55-a854-cd3fde40bff2",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 6.0,
+      "submission_date": "2019-09-04T18:59:04.675Z",
+      "submission_id": "5d70097870c279000835d6ef",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:20:01Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "577c946d-6de5-4b55-a854-cd3fde40bff2",
+      "updated_at": "2019-09-12T14:20:01Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "577c946d-6de5-4b55-a854-cd3fde40bff2",
+      "updated_at": "2019-09-12T14:20:01Z"
+    },
+    "project_uuid": "577c946d-6de5-4b55-a854-cd3fde40bff2"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "project_uuid": "008e40e8-66ae-43bb-951c-c073a2fa6774",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T14:19:52Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [
+        "10x 3' v3 sequencing"
+      ],
+      "primary_bundle_count": 38.0,
+      "primary_bundle_type_counter": {
+        "10x 3' v3 sequencing homo sapiens": 38.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "008e40e8-66ae-43bb-951c-c073a2fa6774",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T14:19:52Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 38.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 38.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "008e40e8-66ae-43bb-951c-c073a2fa6774",
+      "updated_at": "2019-09-12T14:19:52Z"
+    },
+    "ingest-info": {
+      "data_curator": "Zinaida,A,Perova; ",
+      "library_construction_methods": [
+        "10x 3' v3 sequencing"
+      ],
+      "primary_investigator": "Sten,,Linnarsson; ",
+      "primary_state": "COMPLETE",
+      "project_short_name": "HDCA-Sweden-10x",
+      "project_title": "HDCA project: single cell transcriptomics",
+      "project_uuid": "008e40e8-66ae-43bb-951c-c073a2fa6774",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 38.0,
+      "submission_date": "2019-07-12T13:19:59.913Z",
+      "submission_id": "5d2888ff88fa640008b669b6",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:19:52Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "008e40e8-66ae-43bb-951c-c073a2fa6774",
+      "updated_at": "2019-09-12T14:19:52Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "008e40e8-66ae-43bb-951c-c073a2fa6774",
+      "updated_at": "2019-09-12T14:19:52Z"
+    },
+    "project_uuid": "008e40e8-66ae-43bb-951c-c073a2fa6774"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "project_uuid": "224e9127-b4d3-476f-91c5-11d981aa2e1a",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T14:19:56Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [],
+      "primary_bundle_count": 0.0,
+      "primary_bundle_type_counter": {},
+      "primary_state": "NOT_EXPECTED",
+      "project_uuid": "224e9127-b4d3-476f-91c5-11d981aa2e1a",
+      "species": [],
+      "updated_at": "2019-09-12T14:19:56Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 0.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 0.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "224e9127-b4d3-476f-91c5-11d981aa2e1a",
+      "updated_at": "2019-09-12T14:19:56Z"
+    },
+    "ingest-info": {
+      "data_curator": "Enrique,,Sapena-Ventura; ",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_investigator": "Menna,,Clatworthy; Sam,,Behjati; Muzlifah,,Haniffa; Sarah,,Teichmann; ",
+      "primary_state": "INCOMPLETE",
+      "project_short_name": "KidneySingleCellAtlas",
+      "project_title": "Spatio-temporal immune zonation of the human kidney",
+      "project_uuid": "224e9127-b4d3-476f-91c5-11d981aa2e1a",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 0.0,
+      "submission_date": "2019-08-09T10:34:44.285Z",
+      "submission_id": "5d4d4c441a249400085ab37d",
+      "submission_status": "Processing",
+      "updated_at": "2019-09-12T14:19:56Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "224e9127-b4d3-476f-91c5-11d981aa2e1a",
+      "updated_at": "2019-09-12T14:19:56Z"
+    },
+    "project-info": {
+      "analysis_state": "INCOMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "INCOMPLETE",
+      "project_state": "INCOMPLETE",
+      "project_uuid": "224e9127-b4d3-476f-91c5-11d981aa2e1a",
+      "updated_at": "2019-09-12T14:19:56Z"
+    },
+    "project_uuid": "224e9127-b4d3-476f-91c5-11d981aa2e1a"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "project_uuid": "5e6c0ede-5648-4b0e-83ce-4644c437b4c0",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T14:17:54Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [],
+      "primary_bundle_count": 0.0,
+      "primary_bundle_type_counter": {},
+      "primary_state": "NOT_EXPECTED",
+      "project_uuid": "5e6c0ede-5648-4b0e-83ce-4644c437b4c0",
+      "species": [],
+      "updated_at": "2019-09-12T14:17:54Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 0.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 0.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "5e6c0ede-5648-4b0e-83ce-4644c437b4c0",
+      "updated_at": "2019-09-12T14:17:54Z"
+    },
+    "ingest-info": {
+      "data_curator": "Laura,,Huerta; Matthew,,Green; ",
+      "library_construction_methods": [
+        "full length single cell rna sequencing"
+      ],
+      "primary_investigator": "N/A",
+      "primary_state": "COMPLETE",
+      "project_short_name": "Single cell transcriptome analysis of human pancreas",
+      "project_title": "Single cell transcriptome analysis of human pancreas reveals transcriptional signatures of aging and somatic mutation patterns.",
+      "project_uuid": "5e6c0ede-5648-4b0e-83ce-4644c437b4c0",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 2544.0,
+      "submission_date": "2019-05-10T15:22:38.708Z",
+      "submission_id": "5cd5973ed96dad00085668cb",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:17:54Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "5e6c0ede-5648-4b0e-83ce-4644c437b4c0",
+      "updated_at": "2019-09-12T14:17:54Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "5e6c0ede-5648-4b0e-83ce-4644c437b4c0",
+      "updated_at": "2019-09-12T14:17:54Z"
+    },
+    "project_uuid": "5e6c0ede-5648-4b0e-83ce-4644c437b4c0"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "INCOMPLETE",
+      "project_uuid": "4a95101c-9ffc-4f30-a809-f04518a23803",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T14:20:02Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_bundle_count": 16.0,
+      "primary_bundle_type_counter": {
+        "10x v2 sequencing homo sapiens": 16.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "4a95101c-9ffc-4f30-a809-f04518a23803",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T14:20:02Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 16.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 16.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "4a95101c-9ffc-4f30-a809-f04518a23803",
+      "updated_at": "2019-09-12T14:20:02Z"
+    },
+    "ingest-info": {
+      "data_curator": "N/A",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_investigator": "Donna,L,Farber; Peter,A,Sims; ",
+      "primary_state": "COMPLETE",
+      "project_short_name": "HumanTissueTcellActivation",
+      "project_title": "A single-cell reference map of transcriptional states for human blood and tissue T cell activation",
+      "project_uuid": "4a95101c-9ffc-4f30-a809-f04518a23803",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 16.0,
+      "submission_date": "2019-09-09T19:54:25.804Z",
+      "submission_id": "5d76adf1aa252400084a0d37",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:20:02Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "4a95101c-9ffc-4f30-a809-f04518a23803",
+      "updated_at": "2019-09-12T14:20:02Z"
+    },
+    "project-info": {
+      "analysis_state": "INCOMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "INCOMPLETE",
+      "project_uuid": "4a95101c-9ffc-4f30-a809-f04518a23803",
+      "updated_at": "2019-09-12T14:20:02Z"
+    },
+    "project_uuid": "4a95101c-9ffc-4f30-a809-f04518a23803"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "project_uuid": "f86f1ab4-1fbb-4510-ae35-3ffd752d4dfc",
+      "total_workflows": 0.0,
+      "updated_at": "2019-09-12T14:19:51Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [
+        "indrop paired-end"
+      ],
+      "primary_bundle_count": 19.0,
+      "primary_bundle_type_counter": {
+        "indrop paired-end homo sapiens": 13.0,
+        "indrop paired-end mus musculus": 6.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "f86f1ab4-1fbb-4510-ae35-3ffd752d4dfc",
+      "species": [
+        "homo sapiens",
+        "mus musculus"
+      ],
+      "updated_at": "2019-09-12T14:19:51Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 19.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 19.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "f86f1ab4-1fbb-4510-ae35-3ffd752d4dfc",
+      "updated_at": "2019-09-12T14:19:51Z"
+    },
+    "ingest-info": {
+      "data_curator": "Mallory,Ann,Freeberg; ",
+      "library_construction_methods": [
+        "indrop"
+      ],
+      "primary_investigator": "N/A",
+      "primary_state": "COMPLETE",
+      "project_short_name": "HumanMousePancreas",
+      "project_title": "A Single-Cell Transcriptomic Map of the Human and Mouse Pancreas Reveals Inter- and Intra-cell Population Structure",
+      "project_uuid": "f86f1ab4-1fbb-4510-ae35-3ffd752d4dfc",
+      "species": [
+        "homo sapiens",
+        "mus musculus"
+      ],
+      "submission_bundles_exported_count": 19.0,
+      "submission_date": "2019-07-04T13:38:36.468Z",
+      "submission_id": "5d1e015c88fa640008b0009d",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:19:51Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "f86f1ab4-1fbb-4510-ae35-3ffd752d4dfc",
+      "updated_at": "2019-09-12T14:19:51Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "f86f1ab4-1fbb-4510-ae35-3ffd752d4dfc",
+      "updated_at": "2019-09-12T14:19:51Z"
+    },
+    "project_uuid": "f86f1ab4-1fbb-4510-ae35-3ffd752d4dfc"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "COMPLETE",
+      "failed_workflows": 354.0,
+      "optimus_v1.3.2": 371.0,
+      "project_uuid": "f8aa201c-4ff1-45a4-890e-840d63459ca2",
+      "succeeded_workflows": 17.0,
+      "total_workflows": 371.0,
+      "updated_at": "2019-09-12T14:19:59Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 10.0,
+      "analysis_state": "COMPLETE",
+      "library_construction_methods": [
+        "10x 3' v2 sequencing",
+        "smart-seq paired-end"
+      ],
+      "primary_bundle_count": 371.0,
+      "primary_bundle_type_counter": {
+        "10x 3' v2 sequencing homo sapiens": 4.0,
+        "10x 3' v2 sequencing mus musculus": 6.0,
+        "smart-seq paired-end homo sapiens": 361.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "f8aa201c-4ff1-45a4-890e-840d63459ca2",
+      "species": [
+        "homo sapiens",
+        "mus musculus"
+      ],
+      "updated_at": "2019-09-12T14:19:59Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 10.0,
+      "aws_primary_bundle_count": 371.0,
+      "gcp_analysis_bundle_count": 10.0,
+      "gcp_primary_bundle_count": 371.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "f8aa201c-4ff1-45a4-890e-840d63459ca2",
+      "updated_at": "2019-09-12T14:19:59Z"
+    },
+    "ingest-info": {
+      "data_curator": "Mallory,Ann,Freeberg; ",
+      "library_construction_methods": [
+        "10x 3' v2 sequencing",
+        "smart-seq"
+      ],
+      "primary_investigator": "N/A",
+      "primary_state": "COMPLETE",
+      "project_short_name": "HumanColonicMesenchymeIBD",
+      "project_title": "Structural Remodeling of the Human Colonic Mesenchyme in Inflammatory Bowel Disease",
+      "project_uuid": "f8aa201c-4ff1-45a4-890e-840d63459ca2",
+      "species": [
+        "homo sapiens",
+        "mus musculus"
+      ],
+      "submission_bundles_exported_count": 371.0,
+      "submission_date": "2019-07-26T14:44:12.934Z",
+      "submission_id": "5d3b11bc9be88c0008a9d744",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:19:59Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 4.0,
+      "analysis_state": "INCOMPLETE",
+      "cell_count": 43613.0,
+      "project_uuid": "f8aa201c-4ff1-45a4-890e-840d63459ca2",
+      "updated_at": "2019-09-12T14:19:59Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "INCOMPLETE",
+      "primary_state": "COMPLETE",
+      "project_state": "INCOMPLETE",
+      "project_uuid": "f8aa201c-4ff1-45a4-890e-840d63459ca2",
+      "updated_at": "2019-09-12T14:19:59Z"
+    },
+    "project_uuid": "f8aa201c-4ff1-45a4-890e-840d63459ca2"
+  },
+  {
+    "analysis-info": {
+      "aborted_workflows": 6.0,
+      "analysis_state": "COMPLETE",
+      "failed_workflows": 5.0,
+      "optimus_v1.1.0": 17.0,
+      "optimus_v1.3.1": 7.0,
+      "optimus_v1.3.2": 1.0,
+      "project_uuid": "c4077b3c-5c98-4d26-a614-246d12c2e5d7",
+      "succeeded_workflows": 14.0,
+      "total_workflows": 25.0,
+      "updated_at": "2019-09-12T14:18:10Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 7.0,
+      "analysis_state": "COMPLETE",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_bundle_count": 7.0,
+      "primary_bundle_type_counter": {
+        "10x v2 sequencing homo sapiens": 7.0
+      },
+      "primary_state": "COMPLETE",
+      "project_uuid": "c4077b3c-5c98-4d26-a614-246d12c2e5d7",
+      "species": [
+        "homo sapiens"
+      ],
+      "updated_at": "2019-09-12T14:18:10Z"
+    },
+    "dss-info": {
+      "analysis_state": "COMPLETE",
+      "aws_analysis_bundle_count": 7.0,
+      "aws_primary_bundle_count": 7.0,
+      "gcp_analysis_bundle_count": 7.0,
+      "gcp_primary_bundle_count": 7.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "c4077b3c-5c98-4d26-a614-246d12c2e5d7",
+      "updated_at": "2019-09-12T14:18:10Z"
+    },
+    "ingest-info": {
+      "data_curator": "Mallory,Ann,Freeberg; Danielle,,Welter; ",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_investigator": "Kerstin,B,Meyer; Sarah,A,Teichmann; Oliver,,Stegle; ",
+      "primary_state": "COMPLETE",
+      "project_short_name": "Tissue stability",
+      "project_title": "Ischaemic sensitivity of human tissue by single cell RNA seq",
+      "project_uuid": "c4077b3c-5c98-4d26-a614-246d12c2e5d7",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 7.0,
+      "submission_date": "2019-05-15T18:30:12.902Z",
+      "submission_id": "5cdc5ab4d96dad000859cebf",
+      "submission_status": "Complete",
+      "updated_at": "2019-09-12T14:18:10Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 7.0,
+      "analysis_state": "COMPLETE",
+      "cell_count": 73515.0,
+      "project_uuid": "c4077b3c-5c98-4d26-a614-246d12c2e5d7",
+      "updated_at": "2019-09-12T14:18:10Z"
+    },
+    "project-info": {
+      "analysis_state": "COMPLETE",
+      "matrix_state": "COMPLETE",
+      "primary_state": "COMPLETE",
+      "project_state": "COMPLETE",
+      "project_uuid": "c4077b3c-5c98-4d26-a614-246d12c2e5d7",
+      "updated_at": "2019-09-12T14:18:10Z"
+    },
+    "project_uuid": "c4077b3c-5c98-4d26-a614-246d12c2e5d7"
+  },
+  {
+    "analysis-info": {
+      "analysis_state": "NOT_EXPECTED",
+      "optimus_v1.2.0": 2.0,
+      "project_uuid": "28ef60e5-1a4b-408f-8ac4-0e454304d8a6",
+      "succeeded_workflows": 2.0,
+      "total_workflows": 2.0,
+      "updated_at": "2019-08-28T04:19:59Z"
+    },
+    "azul-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "library_construction_methods": [],
+      "primary_bundle_count": 0.0,
+      "primary_state": "NOT_EXPECTED",
+      "project_uuid": "28ef60e5-1a4b-408f-8ac4-0e454304d8a6",
+      "species": [],
+      "updated_at": "2019-08-28T04:19:59Z"
+    },
+    "dss-info": {
+      "analysis_state": "INCOMPLETE",
+      "aws_analysis_bundle_count": 0.0,
+      "aws_primary_bundle_count": 0.0,
+      "gcp_analysis_bundle_count": 0.0,
+      "gcp_primary_bundle_count": 0.0,
+      "primary_state": "COMPLETE",
+      "project_uuid": "28ef60e5-1a4b-408f-8ac4-0e454304d8a6",
+      "updated_at": "2019-08-28T04:19:59Z"
+    },
+    "ingest-info": {
+      "data_curator": "Mallory,Ann,Freeberg; ",
+      "library_construction_methods": [
+        "10x v2 sequencing"
+      ],
+      "primary_investigator": "Barbara,,Treutlein; ",
+      "primary_state": "COMPLETE",
+      "project_short_name": "demo HPSI human cerebral organoids",
+      "project_title": "demo - Assessing the relevance of organoids to model inter-individual variation",
+      "project_uuid": "28ef60e5-1a4b-408f-8ac4-0e454304d8a6",
+      "species": [
+        "homo sapiens"
+      ],
+      "submission_bundles_exported_count": 2.0,
+      "submission_date": "2019-06-20T10:36:13.070Z",
+      "submission_id": "5d0b619d88fa640008afc1d8",
+      "submission_status": "Complete",
+      "updated_at": "2019-08-28T04:19:59Z"
+    },
+    "matrix-info": {
+      "analysis_bundle_count": 0.0,
+      "analysis_state": "NOT_EXPECTED",
+      "cell_count": 0.0,
+      "project_uuid": "28ef60e5-1a4b-408f-8ac4-0e454304d8a6",
+      "updated_at": "2019-08-28T04:19:59Z"
+    },
+    "project-info": {
+      "analysis_state": "INCOMPLETE",
+      "matrix_state": "NOT_EXPECTED",
+      "primary_state": "COMPLETE",
+      "project_state": "INCOMPLETE",
+      "project_uuid": "28ef60e5-1a4b-408f-8ac4-0e454304d8a6",
+      "updated_at": "2019-08-28T04:19:59Z"
+    },
+    "project_uuid": "28ef60e5-1a4b-408f-8ac4-0e454304d8a6"
+  }
+]

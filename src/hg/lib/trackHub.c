@@ -50,6 +50,7 @@
 #include "customComposite.h"
 #include "interactUi.h"
 #include "bedTabix.h"
+#include "hic.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -765,9 +766,14 @@ expandOneUrl(tdb->settingsHash, genome->trackDbFile, "barChartMatrixUrl");
 
 struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName)
 /* Return trackHubGenome of given name associated with hub.  Return NULL if no
- * such genome. */
+ * such genome.  Check genomeName without hub prefix to see if this hub
+ * is attached to an assembly hub.*/
 {
-return hashFindVal(hub->genomeHash, genomeName);
+struct trackHubGenome *ret = hashFindVal(hub->genomeHash, genomeName);
+
+if (ret == NULL)
+    ret = hashFindVal(hub->genomeHash, hubConnectSkipHubPrefix(genomeName));
+return ret;
 }
 
 static void requireBarChartBars(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb)
@@ -838,6 +844,8 @@ else
                   startsWithWord("bigLolly", type) ||
                   startsWithWord("bigBarChart", type) ||
                   startsWithWord("bigInteract", type) ||
+                  startsWithWord("hic", type) ||
+                  startsWithWord("bigDbSnp", type) ||
                   startsWithWord("bam", type)))
                     {
                     errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
@@ -1247,6 +1255,13 @@ if (relativeUrl != NULL)
             errAbort("HAL close error: %s", errString);
         }
 #endif
+    else if (startsWithWord("hic", type))
+        {
+        struct hicMeta *header;
+        char *errString = hicLoadHeader(bigDataUrl, &header, NULL);
+        if (errString != NULL)
+            errAbort("hic file error: %s", errString);
+        }
     else
         errAbort("unrecognized type %s in genome %s track %s", type, genome->name, tdb->track);
     freez(&bigDataUrl);

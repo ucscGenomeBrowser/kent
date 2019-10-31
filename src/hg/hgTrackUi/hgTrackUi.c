@@ -50,6 +50,7 @@
 #include "genbank.h"
 #include "botDelay.h"
 #include "customComposite.h"
+#include "hicUi.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -945,22 +946,12 @@ for (i = 0; i < oregannoTypeSize; i++)
     }
 }
 
-void labelMakeCheckBox(struct trackDb *tdb, char *sym, char *desc, boolean dflt)
-/* add a checkbox use to choose labels to enable. */
-{
-char varName[64];
-safef(varName, sizeof(varName), "%s.label.%s", tdb->track, sym);
-boolean option = cartUsualBoolean(cart, varName, dflt);
-cgiMakeCheckBox(varName, option);
-printf(" %s&nbsp;&nbsp;&nbsp;", desc);
-}
-
 void gvIdControls (struct trackDb *tdb)
 /* print the controls for the label choice */
 {
 printf("<B>Label:</B> ");
-labelMakeCheckBox(tdb, "hgvs", "HGVS name", FALSE);
-labelMakeCheckBox(tdb, "common", "Common name", FALSE);
+labelMakeCheckBox(cart, tdb, "hgvs", "HGVS name", FALSE);
+labelMakeCheckBox(cart, tdb, "common", "Common name", FALSE);
 printf("<BR>\n");
 }
 
@@ -1663,17 +1654,17 @@ safef(varName, sizeof(varName), "%s.label", tdb->track);
 printf("<BR><B>Include Entries of:</B> ");
 printf("<UL>\n");
 printf("<LI>");
-labelMakeCheckBox(tdb, "class1", "Phenotype map key 1: the disorder has been placed on the map based on its association with a gene, but the underlying defect is not known.", TRUE);
+labelMakeCheckBox(cart, tdb, "class1", "Phenotype map key 1: the disorder has been placed on the map based on its association with a gene, but the underlying defect is not known.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "class2", "Phenotype map key 2: the disorder has been placed on the map by linkage; no mutation has been found.", TRUE);
+labelMakeCheckBox(cart, tdb, "class2", "Phenotype map key 2: the disorder has been placed on the map by linkage; no mutation has been found.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "class3", "Phenotype map key 3: the molecular basis for the disorder is known; a mutation has been found in the gene.", TRUE);
+labelMakeCheckBox(cart, tdb, "class3", "Phenotype map key 3: the molecular basis for the disorder is known; a mutation has been found in the gene.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "class4", "Phenotype map key 4: a contiguous gene deletion or duplication syndrome; multiple genes are deleted or duplicated causing the phenotype.", TRUE);
+labelMakeCheckBox(cart, tdb, "class4", "Phenotype map key 4: a contiguous gene deletion or duplication syndrome; multiple genes are deleted or duplicated causing the phenotype.", TRUE);
 
 // removed the "others" option for the time being
 //printf("<LI>");
-//labelMakeCheckBox(tdb, "others", "Others: no associated OMIM phenotype map key info available.", TRUE);
+//labelMakeCheckBox(cart, tdb, "others", "Others: no associated OMIM phenotype map key info available.", TRUE);
 printf("</UL>");
 }
 
@@ -1685,15 +1676,15 @@ safef(varName, sizeof(varName), "%s.label", tdb->track);
 printf("<BR><B>Include Entries of:</B> ");
 printf("<UL>\n");
 printf("<LI>");
-labelMakeCheckBox(tdb, "class1", "Phenotype map key 1: the disorder has been placed on the map based on its association with a gene, but the underlying defect is not known.", TRUE);
+labelMakeCheckBox(cart, tdb, "class1", "Phenotype map key 1: the disorder has been placed on the map based on its association with a gene, but the underlying defect is not known.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "class2", "Phenotype map key 2: the disorder has been placed on the map by linkage; no mutation has been found.", TRUE);
+labelMakeCheckBox(cart, tdb, "class2", "Phenotype map key 2: the disorder has been placed on the map by linkage; no mutation has been found.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "class3", "Phenotype map key 3: the molecular basis for the disorder is known; a mutation has been found in the gene.", TRUE);
+labelMakeCheckBox(cart, tdb, "class3", "Phenotype map key 3: the molecular basis for the disorder is known; a mutation has been found in the gene.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "class4", "Phenotype map key 4: a contiguous gene deletion or duplication syndrome; multiple genes are deleted or duplicated causing the phenotype.", TRUE);
+labelMakeCheckBox(cart, tdb, "class4", "Phenotype map key 4: a contiguous gene deletion or duplication syndrome; multiple genes are deleted or duplicated causing the phenotype.", TRUE);
 printf("<LI>");
-labelMakeCheckBox(tdb, "others", "Others: no associated OMIM phenotype map key info available.", TRUE);
+labelMakeCheckBox(cart, tdb, "others", "Others: no associated OMIM phenotype map key info available.", TRUE);
 printf("</UL>");
 }
 
@@ -1722,17 +1713,17 @@ hFreeConn(&conn);
 boolean isGencode = trackDbSettingOn(tdb, "isGencode") || trackDbSettingOn(tdb, "isGencode2");
 
 printf("<B>Label:</B> ");
-labelMakeCheckBox(tdb, "gene", "gene symbol", FALSE);
+labelMakeCheckBox(cart, tdb, "gene", "gene symbol", FALSE);
 if (isGencode)
-    labelMakeCheckBox(tdb, "gencodeId", "GENCODE Transcript ID", FALSE);
-labelMakeCheckBox(tdb, "kgId", "UCSC Known Gene ID", FALSE);
-labelMakeCheckBox(tdb, "prot", "UniProt Display ID", FALSE);
+    labelMakeCheckBox(cart, tdb, "gencodeId", "GENCODE Transcript ID", FALSE);
+labelMakeCheckBox(cart, tdb, "kgId", "UCSC Known Gene ID", FALSE);
+labelMakeCheckBox(cart, tdb, "prot", "UniProt Display ID", FALSE);
 
 if (omimAvail != NULL)
     {
     char sym[32];
     safef(sym, sizeof(sym), "omim%s", cartString(cart, "db"));
-    labelMakeCheckBox(tdb, sym, "OMIM ID", FALSE);
+    labelMakeCheckBox(cart, tdb, sym, "OMIM ID", FALSE);
     }
 printf("<BR>\n");
 }
@@ -1790,8 +1781,8 @@ void omimGene2IdConfig(struct trackDb *tdb)
 /* Put up gene ID track controls */
 {
 printf("<B>Label:</B> ");
-labelMakeCheckBox(tdb, "omimId", "OMIM ID", FALSE);
-labelMakeCheckBox(tdb, "gene", "gene symbol", FALSE);
+labelMakeCheckBox(cart, tdb, "omimId", "OMIM ID", FALSE);
+labelMakeCheckBox(cart, tdb, "gene", "gene symbol", FALSE);
 
 printf("<BR>\n");
 }
@@ -1850,8 +1841,8 @@ void rgdGene2UI(struct trackDb *tdb)
 {
 /* Put up label line  - boxes for gene and accession. */
 printf("<B>Label:</B> ");
-labelMakeCheckBox(tdb, "gene", "gene", FALSE);
-labelMakeCheckBox(tdb, "acc", "accession", FALSE);
+labelMakeCheckBox(cart, tdb, "gene", "gene", FALSE);
+labelMakeCheckBox(cart, tdb, "acc", "accession", FALSE);
 printf("<BR>\n");
 
 baseColorDrawOptDropDown(cart, tdb);
@@ -1877,13 +1868,13 @@ if (tdb->parent == NULL)
 
     /* Put up label line  - boxes for gene, accession or maybe OMIM. */
     printf("<BR><B>Label:</B> ");
-    labelMakeCheckBox(tdb, "gene", "gene", TRUE);
-    labelMakeCheckBox(tdb, "acc", "accession", FALSE);
+    labelMakeCheckBox(cart, tdb, "gene", "gene", TRUE);
+    labelMakeCheckBox(cart, tdb, "acc", "accession", FALSE);
     if (omimAvail != 0)
         {
         char sym[32];
         safef(sym, sizeof(sym), "omim%s", cartString(cart, "db"));
-        labelMakeCheckBox(tdb, sym, "OMIM ID", FALSE);
+        labelMakeCheckBox(cart, tdb, sym, "OMIM ID", FALSE);
         }
     printf("<BR>\n");
     }
@@ -1902,11 +1893,11 @@ void transMapUI(struct trackDb *tdb)
 {
 // FIXME: this can be deleted once table-based transMap is no longer supported.
 printf("<B>Label:</B> ");
-labelMakeCheckBox(tdb, "orgCommon", "common name", FALSE);
-labelMakeCheckBox(tdb, "orgAbbrv", "organism abbreviation", FALSE);
-labelMakeCheckBox(tdb, "db", "assembly database", FALSE);
-labelMakeCheckBox(tdb, "gene", "gene", FALSE);
-labelMakeCheckBox(tdb, "acc", "accession", FALSE);
+labelMakeCheckBox(cart, tdb, "orgCommon", "common name", FALSE);
+labelMakeCheckBox(cart, tdb, "orgAbbrv", "organism abbreviation", FALSE);
+labelMakeCheckBox(cart, tdb, "db", "assembly database", FALSE);
+labelMakeCheckBox(cart, tdb, "gene", "gene", FALSE);
+labelMakeCheckBox(cart, tdb, "acc", "accession", FALSE);
 
 baseColorDrawOptDropDown(cart, tdb);
 indelShowOptions(cart, tdb);
@@ -1916,8 +1907,8 @@ void retroGeneUI(struct trackDb *tdb)
 /* Put up retroGene-specific controls */
 {
 printf("<B>Label:</B> ");
-labelMakeCheckBox(tdb, "gene", "gene", FALSE);
-labelMakeCheckBox(tdb, "acc", "accession", FALSE);
+labelMakeCheckBox(cart, tdb, "gene", "gene", FALSE);
+labelMakeCheckBox(cart, tdb, "acc", "accession", FALSE);
 
 baseColorDrawOptDropDown(cart, tdb);
 }
@@ -1928,8 +1919,8 @@ void ncbiRefSeqUI(struct trackDb *tdb)
 char varName[256];
 safef(varName, sizeof(varName), "%s.label", tdb->track);
 printf("<br><b>Label:</b> ");
-labelMakeCheckBox(tdb, "gene", "gene symbol", TRUE);
-labelMakeCheckBox(tdb, "acc", "accession", FALSE);
+labelMakeCheckBox(cart, tdb, "gene", "gene symbol", TRUE);
+labelMakeCheckBox(cart, tdb, "acc", "accession", FALSE);
 struct sqlConnection *conn = hAllocConn(database);
 boolean omimAvail = sqlQuickNum(conn,
                                 NOSQLINJ"select 1 from ncbiRefSeqLink where omimId != 0 limit 1");
@@ -1937,7 +1928,7 @@ if (omimAvail)
     {
     char sym[32];
     safef(sym, sizeof(sym), "omim%s", cartString(cart, "db"));
-    labelMakeCheckBox(tdb, sym, "OMIM ID", FALSE);
+    labelMakeCheckBox(cart, tdb, sym, "OMIM ID", FALSE);
     }
 hFreeConn(&conn);
 }
@@ -3013,6 +3004,8 @@ else if (sameString(track, "lrg"))
     lrgCfgUi(cart, tdb, tdb->track, NULL, boxed);
 else if (sameString(track, "lrgTranscriptAli"))
     lrgTranscriptAliCfgUi(cart, tdb, tdb->track, NULL, boxed);
+else if (startsWithWord("hic", tdb->type) && tdbIsComposite(tdb))
+    hicCfgUiComposite(cart, tdb, tdb->track, NULL, boxed); // Some hic options aren't available at this level
 else if (tdb->type != NULL)
     {   // NOTE for developers: please avoid special cases and use cfgTypeFromTdb//cfgByCfgType()
         //  When you do, then multi-view cfg and subtrack cfg will work.
@@ -3246,11 +3239,9 @@ else if (sameString(tdb->track, WIKI_TRACK_TABLE))
     tdb->canPack = TRUE;
 else if (sameString(tdb->type, "halSnake"))
     tdb->canPack = TRUE;
-else if (sameString(tdb->type, "bigPsl"))
+else if (!startsWith("bigWig", tdb->type) && startsWith("big", tdb->type))
     tdb->canPack = TRUE;
-else if (startsWith(tdb->type, "bigLolly"))
-    tdb->canPack = TRUE;
-else if (sameString(tdb->type, "bigChain"))
+else if (sameString(tdb->type, "bigNarrowPeak"))
     tdb->canPack = TRUE;
 
 // Don't bother with vis controls for downloadsOnly

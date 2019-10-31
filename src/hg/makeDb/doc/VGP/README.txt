@@ -72,8 +72,8 @@ After the hubs were finished building successfully,
 The scripts in VGP/ucscNames  build the necessary
 index.html pages and the genomes.txt file:
 
-./mkHubIndex.pl > hubIndex.html
-chmod 775 hubIndex.html
+./mkHubIndex.pl > index.html
+chmod 775 index.html
 
 ./mkAsmStats.pl > asmStatsVGP.html
 chmod 775 asmStatsVGP.html
@@ -104,5 +104,5 @@ shortLabel VGP
 longLabel Vertebrate Genome Project assemblies
 genomesFile genomes.txt
 email hclawson@ucsc.edu
-descriptionUrl hubIndex.html
+descriptionUrl index.html
 

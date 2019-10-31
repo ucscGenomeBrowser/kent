@@ -5,7 +5,7 @@
 #ifndef HUBSEARCHTEXT_H
 #define HUBSEARCHTEXT_H
 
-#define HUBSEARCHTEXT_NUM_COLS 6
+#define HUBSEARCHTEXT_NUM_COLS 7
 
 extern char *hubSearchTextCommaSepFieldNames;
 
@@ -25,6 +25,8 @@ struct hubSearchText
     char *label;	/* Name to display in search results */
     enum hubSearchTextTextLength textLength;	/* Length of text (short for labels, long for description pages, meta for metadata) */
     char *text;	/* Description text */
+    char *parents;	/* Comma separated list of parent track of this track, NULL for others */
+    char *parentTypes; /* Comma separated list of parent track types */
     };
 
 void hubSearchTextStaticLoadWithNull(char **row, struct hubSearchText *ret);

@@ -23,6 +23,7 @@
 <h6><a href="#Download">Downloading genome data</a></h6> 
 <h6><a href="#CustomTracks">Creating and managing custom annotation tracks</a></h6> 
 <h6><a href="#TrackHubs">Getting started on Track Hubs</a></h6> 
+<h6><a href="#UseOneFile">Do Track Hubs require directories for the data?</a></h6>
 <hr>
 <form name="googleForm1" method="get" action="http://www.google.com/search" onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/goldenPath/help';">
   <p> 
@@ -1265,9 +1266,9 @@ servers, hgdownload and hgdownload-euro.</p>
     directories available for download. If the data you wish to download pre-dates the assembly
     versions listed, look for the data on our
     <a href="http://hgdownload.soe.ucsc.edu/downloads.html" target="_blank">Downloads</a> page.</dd>
-  <dt>Via the JSON API:</dt>
+  <dt>Via the REST API:</dt>
   <dd>
-    The <a href='./api.html' target=_blank>JSON API</a> can be used to query both annotation
+    The <a href='./api.html' target=_blank>REST API</a> can be used to query both annotation
     and sequence data from any UCSC genome assembly or hub.</dd>
 </dl>		
 
@@ -1385,8 +1386,76 @@ and share their own track hubs.</p>
 For information on using the Track Hub features, refer to the <a href="hgTrackHubHelp.html">Genome 
 Browser Track Hub User Guide</a>. For specific information on configuring your trackDb.txt file, 
 refer to the <a href="trackDb/trackDbHub.html">Track Database Definition Document</a>. See also the 
-<a href="hubQuickStart.html" target="_blank">Basic Hub Quick Start Guide</a> and 
+<a href="hubQuickStart.html" target="_blank">Basic Hub Quick Start Guide</a>, 
 <a href="hubQuickStartGroups.html" target="_blank">Quick Start Guide to Organizing Track Hubs into 
-Groupings</a>.</p>
+Groupings</a>, <a href="hubQuickStartAssembly.html" target="_blank">Quick Start Guide to Assembly Hubs</a> and <a href="hubQuickStartSearch.html" target="_blank">Quick Start Guide to Searchable Track Hubs</a>.</p>
+
+<a name="UseOneFile"></a>
+<h2>Do Track Hubs require directories for the data?</h2>
+<p>
+Historically, a hub needed a set of text files to specify properties for a track hub and each of
+the data tracks within the hub. The track hub settings were stored in a three file structure:
+hub.txt, genomes.txt, and trackDb.txt</p>
+<pre>
+myHub/          - directory containing track hub files
+* hub.txt       - a short description of hub properties
+* genomes.txt   - list of genome assemblies included in the hub data
+* hg19/         - directory of data for the hg19 (GRCh37) human assembly
+** trackDb.txt  - display properties for tracks in this directory
+</pre>
+<p>
+Now, there is a trackDb option to have your entire track hub inside of one file,
+<code>useOneFile on</code>. Adding the <code>useOneFile on</code> line to the hub.txt section of the
+file allows the contents of all three files to be referenced inside of one file. The order of the
+file contents is essential and needs to be in the following order to work: hub.txt, genomes.txt,
+then trackDb.txt.
+</p>
+<pre>
+hub myExampleHub
+shortLabel Example Hub
+longLabel Example Hub for useOneFile option
+useOneFile on
+email genome-www@soe.ucsc.edu
+
+genome hg19
+
+track vcfExample
+shortLabel VCF example
+longLabel VCF: 1000 Genomes phase 1 interim SNVs
+visibility pack
+type vcfTabix
+maxWindowToDraw 200000
+bigDataUrl http://genome.ucsc.edu/goldenPath/help/examples/vcfExample.vcf.gz
+
+track bamExample
+shortLabel BAM example
+longLabel Bam: 1000 Genomes read alignments (individual NA12878)
+visibility squish
+type bam
+pairSearchRange 10000
+bamColorMode grey
+maxWindowToDraw 200000
+bigDataUrl http://genome.ucsc.edu/goldenPath/help/examples/bamExample.bam
+</pre>
+<p>
+The hub above can be accessed using the following URL to the single file,
+<a href="./examples/hubExamples/hubUseOneFile/singleFileHubExample.txt"
+target="_blank">singleFileHubExample.txt</a>.</p>
+<h3>Limitations</h3>
+<p>
+Unfortunately, the <code>useOneFile on</code> setting limits the hub to one assembly. The
+<code>useOneFile on</code> setting works by having the genomes.txt file point to only one
+trackDb.txt file, which is the file itself. Although this method limits you to one genome assembly,
+using the setting grants the advantage of not embedding file names in the hub architecture. So a
+simple name change to a hub file will no longer require editing the contents inside the hub.txt and
+genomes.txt files.</p>
+<h3>Converting an existing Track Hub to one file</h3>
+<p>
+Converting an existing track hub to use the new setting does not require much editing. Simply
+concatenate the three files into one, with the contents of hub.txt, genomes.txt, and trackDb.txt, in
+that order. Using the URL to the single file on the
+<a href="../../cgi-bin/hgHubConnect?#unlistedHubs">My Hubs</a> page will allow you to view your
+track hub.</p>
+
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

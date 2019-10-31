@@ -1,0 +1,962 @@
+# ATAC-Seq from Bing Ren's lab (ENCODE 3)
+
+track encode3RenAtac
+parent encode3Reg
+compositeTrack on
+longLabel Open chromatin in embryonic tissue (12 tissues, 8 ages) from ATAC-seq by ENCODE 3 (UCSD/Ren)
+shortLabel Open Chromatin
+type bed 3
+dragAndDrop subTracks
+dimensions dimX=tissue dimY=age
+subGroup1 tissue Tissue forebrain=forebrain midbrain=midbrain hindbrain=hindbrain neural=neural facial=facial limb=limb heart=heart kidney=kidney lung=lung liver=liver stomach=stomach intestine=intestine
+subGroup2 age Age E10=E10.5 E11=E11.5 E12=E12.5 E13=E13.5 E14=E14.5 E15=E15.5 E16=E16.5 P0=P0
+subGroup3 view View peaks=Peaks signal=Signal
+sortOrder tissue=+ age=+ view=-
+group regulation
+visibility full
+
+    track encode3RenAtacPeaks
+    parent encode3RenAtac
+    shortLabel ATAC-seq Peaks
+    view peaks
+    visibility dense
+    spectrum on
+    scoreFilter 0
+    minGrayLevel 2
+    type bigBed 5
+
+        track encode3RenAtacPeakFacialE11
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakFacialE11.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC facial E11
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E11.5 facial from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=facial age=E11
+
+        track encode3RenAtacPeakFacialE12
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakFacialE12.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC facial E12
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E12.5 facial from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=facial age=E12
+
+        track encode3RenAtacPeakFacialE13
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakFacialE13.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC facial E13
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E13.5 facial from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=facial age=E13
+
+        track encode3RenAtacPeakFacialE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakFacialE14.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC facial E14
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E14.5 facial from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=facial age=E14
+
+        track encode3RenAtacPeakFacialE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakFacialE15.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC facial E15
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E15.5 facial from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=facial age=E15
+
+        track encode3RenAtacPeakForebrainE11
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakForebrainE11.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC forebrn E11
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E11.5 forebrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=forebrain age=E11
+
+        track encode3RenAtacPeakForebrainE12
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakForebrainE12.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC forebrn E12
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E12.5 forebrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=forebrain age=E12
+
+        track encode3RenAtacPeakForebrainE13
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakForebrainE13.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC forebrn E13
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E13.5 forebrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=forebrain age=E13
+
+        track encode3RenAtacPeakForebrainE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakForebrainE14.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC forebrn E14
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E14.5 forebrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=forebrain age=E14
+
+        track encode3RenAtacPeakForebrainE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakForebrainE15.bb
+        parent encode3RenAtacPeaks on
+        shortLabel ATAC forebrn E15
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E15.5 forebrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=forebrain age=E15
+
+        track encode3RenAtacPeakForebrainE16
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakForebrainE16.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC forebrn E16
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E16.5 forebrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=forebrain age=E16
+
+        track encode3RenAtacPeakForebrainP0
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakForebrainP0.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC forebrain P0
+        longLabel Open chromatin ATAC-seq peaks from day P0 forebrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=forebrain age=P0
+
+        track encode3RenAtacPeakHeartE11
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHeartE11.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC heart E11
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E11.5 heart from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=heart age=E11
+
+        track encode3RenAtacPeakHeartE12
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHeartE12.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC heart E12
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E12.5 heart from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=heart age=E12
+
+        track encode3RenAtacPeakHeartE13
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHeartE13.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC heart E13
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E13.5 heart from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=heart age=E13
+
+        track encode3RenAtacPeakHeartE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHeartE14.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC heart E14
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E14.5 heart from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=heart age=E14
+
+        track encode3RenAtacPeakHeartE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHeartE15.bb
+        parent encode3RenAtacPeaks on
+        shortLabel ATAC heart E15
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E15.5 heart from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=heart age=E15
+
+        track encode3RenAtacPeakHeartE16
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHeartE16.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC heart E16
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E16.5 heart from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=heart age=E16
+
+        track encode3RenAtacPeakHeartP0
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHeartP0.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC heart P0
+        longLabel Open chromatin ATAC-seq peaks from day P0 heart from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=heart age=P0
+
+        track encode3RenAtacPeakHindbrainE11
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHindbrainE11.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC hindbrn E11
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E11.5 hindbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=hindbrain age=E11
+
+        track encode3RenAtacPeakHindbrainE12
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHindbrainE12.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC hindbrn E12
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E12.5 hindbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=hindbrain age=E12
+
+        track encode3RenAtacPeakHindbrainE13
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHindbrainE13.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC hindbrn E13
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E13.5 hindbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=hindbrain age=E13
+
+        track encode3RenAtacPeakHindbrainE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHindbrainE14.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC hindbrn E14
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E14.5 hindbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=hindbrain age=E14
+
+        track encode3RenAtacPeakHindbrainE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHindbrainE15.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC hindbrn E15
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E15.5 hindbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=hindbrain age=E15
+
+        track encode3RenAtacPeakHindbrainE16
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHindbrainE16.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC hindbrn E16
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E16.5 hindbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=hindbrain age=E16
+
+        track encode3RenAtacPeakHindbrainP0
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakHindbrainP0.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC hindbrain P0
+        longLabel Open chromatin ATAC-seq peaks from day P0 hindbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=hindbrain age=P0
+
+        track encode3RenAtacPeakIntestineE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakIntestineE14.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC intestn E14
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E14.5 intestine from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=intestine age=E14
+
+        track encode3RenAtacPeakIntestineE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakIntestineE15.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC intestn E15
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E15.5 intestine from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=intestine age=E15
+
+        track encode3RenAtacPeakIntestineE16
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakIntestineE16.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC intestn E16
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E16.5 intestine from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=intestine age=E16
+
+        track encode3RenAtacPeakIntestineP0
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakIntestineP0.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC intestine P0
+        longLabel Open chromatin ATAC-seq peaks from day P0 intestine from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=intestine age=P0
+
+        track encode3RenAtacPeakKidneyE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakKidneyE14.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC kidney E14
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E14.5 kidney from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=kidney age=E14
+
+        track encode3RenAtacPeakKidneyE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakKidneyE15.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC kidney E15
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E15.5 kidney from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=kidney age=E15
+
+        track encode3RenAtacPeakKidneyE16
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakKidneyE16.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC kidney E16
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E16.5 kidney from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=kidney age=E16
+
+        track encode3RenAtacPeakKidneyP0
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakKidneyP0.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC kidney P0
+        longLabel Open chromatin ATAC-seq peaks from day P0 kidney from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=kidney age=P0
+
+        track encode3RenAtacPeakLimbE11
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLimbE11.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC limb E11
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E11.5 limb from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=limb age=E11
+
+        track encode3RenAtacPeakLimbE12
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLimbE12.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC limb E12
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E12.5 limb from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=limb age=E12
+
+        track encode3RenAtacPeakLimbE13
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLimbE13.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC limb E13
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E13.5 limb from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=limb age=E13
+
+        track encode3RenAtacPeakLimbE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLimbE14.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC limb E14
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E14.5 limb from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=limb age=E14
+
+        track encode3RenAtacPeakLimbE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLimbE15.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC limb E15
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E15.5 limb from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=limb age=E15
+
+        track encode3RenAtacPeakLiverE11
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLiverE11.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC liver E11
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E11.5 liver from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=liver age=E11
+
+        track encode3RenAtacPeakLiverE12
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLiverE12.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC liver E12
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E12.5 liver from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=liver age=E12
+
+        track encode3RenAtacPeakLiverE13
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLiverE13.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC liver E13
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E13.5 liver from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=liver age=E13
+
+        track encode3RenAtacPeakLiverE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLiverE14.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC liver E14
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E14.5 liver from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=liver age=E14
+
+        track encode3RenAtacPeakLiverE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLiverE15.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC liver E15
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E15.5 liver from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=liver age=E15
+
+        track encode3RenAtacPeakLiverE16
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLiverE16.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC liver E16
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E16.5 liver from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=liver age=E16
+
+        track encode3RenAtacPeakLiverP0
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLiverP0.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC liver P0
+        longLabel Open chromatin ATAC-seq peaks from day P0 liver from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=liver age=P0
+
+        track encode3RenAtacPeakLungE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLungE14.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC lung E14
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E14.5 lung from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=lung age=E14
+
+        track encode3RenAtacPeakLungE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLungE15.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC lung E15
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E15.5 lung from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=lung age=E15
+
+        track encode3RenAtacPeakLungE16
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLungE16.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC lung E16
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E16.5 lung from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=lung age=E16
+
+        track encode3RenAtacPeakLungP0
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakLungP0.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC lung P0
+        longLabel Open chromatin ATAC-seq peaks from day P0 lung from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=lung age=P0
+
+        track encode3RenAtacPeakMidbrainE11
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakMidbrainE11.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC midbrain E11
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E11.5 midbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=midbrain age=E11
+
+        track encode3RenAtacPeakMidbrainE12
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakMidbrainE12.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC midbrain E12
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E12.5 midbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=midbrain age=E12
+
+        track encode3RenAtacPeakMidbrainE13
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakMidbrainE13.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC midbrain E13
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E13.5 midbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=midbrain age=E13
+
+        track encode3RenAtacPeakMidbrainE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakMidbrainE14.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC midbrain E14
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E14.5 midbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=midbrain age=E14
+
+        track encode3RenAtacPeakMidbrainE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakMidbrainE15.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC midbrain E15
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E15.5 midbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=midbrain age=E15
+
+        track encode3RenAtacPeakMidbrainE16
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakMidbrainE16.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC midbrain E16
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E16.5 midbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=midbrain age=E16
+
+        track encode3RenAtacPeakMidbrainP0
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakMidbrainP0.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC midbrain P0
+        longLabel Open chromatin ATAC-seq peaks from day P0 midbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=midbrain age=P0
+
+        track encode3RenAtacPeakNeuralE11
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakNeuralE11.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC neural E11
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E11.5 neural from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=neural age=E11
+
+        track encode3RenAtacPeakNeuralE12
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakNeuralE12.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC neural E12
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E12.5 neural from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=neural age=E12
+
+        track encode3RenAtacPeakNeuralE13
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakNeuralE13.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC neural E13
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E13.5 neural from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=neural age=E13
+
+        track encode3RenAtacPeakNeuralE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakNeuralE14.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC neural E14
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E14.5 neural from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=neural age=E14
+
+        track encode3RenAtacPeakNeuralE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakNeuralE15.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC neural E15
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E15.5 neural from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=neural age=E15
+
+        track encode3RenAtacPeakStomachE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakStomachE14.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC stomach E14
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E14.5 stomach from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=stomach age=E14
+
+        track encode3RenAtacPeakStomachE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakStomachE15.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC stomach E15
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E15.5 stomach from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=stomach age=E15
+
+        track encode3RenAtacPeakStomachE16
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakStomachE16.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC stomach E16
+        longLabel Open chromatin ATAC-seq peaks from embryonic day E16.5 stomach from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=stomach age=E16
+
+        track encode3RenAtacPeakStomachP0
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacPeakStomachP0.bb
+        parent encode3RenAtacPeaks off
+        shortLabel ATAC stomach P0
+        longLabel Open chromatin ATAC-seq peaks from day P0 stomach from ENCODE 3 (UCSD/Ren)
+        subGroups view=peaks tissue=stomach age=P0
+
+    track encode3RenAtacSignal
+    parent encode3RenAtac
+    shortLabel ATAC-seq Signal
+    view signal
+    type bigWig
+    viewLimits 0:15
+    viewLimitsMax 0:119
+    maxHeightPixels 64:32:16
+    visibility full
+
+        track encode3RenAtacSignalFacialE11
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalFacialE11.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC facial E11
+        longLabel Open chromatin ATAC-seq signal from embryonic day E11.5 facial from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=facial age=E11
+
+        track encode3RenAtacSignalFacialE12
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalFacialE12.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC facial E12
+        longLabel Open chromatin ATAC-seq signal from embryonic day E12.5 facial from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=facial age=E12
+
+        track encode3RenAtacSignalFacialE13
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalFacialE13.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC facial E13
+        longLabel Open chromatin ATAC-seq signal from embryonic day E13.5 facial from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=facial age=E13
+
+        track encode3RenAtacSignalFacialE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalFacialE14.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC facial E14
+        longLabel Open chromatin ATAC-seq signal from embryonic day E14.5 facial from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=facial age=E14
+
+        track encode3RenAtacSignalFacialE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalFacialE15.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC facial E15
+        longLabel Open chromatin ATAC-seq signal from embryonic day E15.5 facial from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=facial age=E15
+
+        track encode3RenAtacSignalForebrainE11
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalForebrainE11.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC forebrn E11
+        longLabel Open chromatin ATAC-seq signal from embryonic day E11.5 forebrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=forebrain age=E11
+
+        track encode3RenAtacSignalForebrainE12
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalForebrainE12.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC forebrn E12
+        longLabel Open chromatin ATAC-seq signal from embryonic day E12.5 forebrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=forebrain age=E12
+
+        track encode3RenAtacSignalForebrainE13
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalForebrainE13.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC forebrn E13
+        longLabel Open chromatin ATAC-seq signal from embryonic day E13.5 forebrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=forebrain age=E13
+
+        track encode3RenAtacSignalForebrainE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalForebrainE14.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC forebrn E14
+        longLabel Open chromatin ATAC-seq signal from embryonic day E14.5 forebrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=forebrain age=E14
+
+        track encode3RenAtacSignalForebrainE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalForebrainE15.bw
+        parent encode3RenAtacSignal on
+        shortLabel ATAC forebrn E15
+        longLabel Open chromatin ATAC-seq signal from embryonic day E15.5 forebrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=forebrain age=E15
+
+        track encode3RenAtacSignalForebrainE16
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalForebrainE16.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC forebrn E16
+        longLabel Open chromatin ATAC-seq signal from embryonic day E16.5 forebrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=forebrain age=E16
+
+        track encode3RenAtacSignalForebrainP0
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalForebrainP0.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC forebrain P0
+        longLabel Open chromatin ATAC-seq signal from day P0 forebrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=forebrain age=P0
+
+        track encode3RenAtacSignalHeartE11
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalHeartE11.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC heart E11
+        longLabel Open chromatin ATAC-seq signal from embryonic day E11.5 heart from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=heart age=E11
+
+        track encode3RenAtacSignalHeartE12
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalHeartE12.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC heart E12
+        longLabel Open chromatin ATAC-seq signal from embryonic day E12.5 heart from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=heart age=E12
+
+        track encode3RenAtacSignalHeartE13
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalHeartE13.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC heart E13
+        longLabel Open chromatin ATAC-seq signal from embryonic day E13.5 heart from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=heart age=E13
+
+        track encode3RenAtacSignalHeartE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalHeartE14.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC heart E14
+        longLabel Open chromatin ATAC-seq signal from embryonic day E14.5 heart from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=heart age=E14
+
+        track encode3RenAtacSignalHeartE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalHeartE15.bw
+        parent encode3RenAtacSignal on
+        shortLabel ATAC heart E15
+        longLabel Open chromatin ATAC-seq signal from embryonic day E15.5 heart from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=heart age=E15
+
+        track encode3RenAtacSignalHeartE16
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalHeartE16.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC heart E16
+        longLabel Open chromatin ATAC-seq signal from embryonic day E16.5 heart from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=heart age=E16
+
+        track encode3RenAtacSignalHeartP0
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalHeartP0.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC heart P0
+        longLabel Open chromatin ATAC-seq signal from day P0 heart from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=heart age=P0
+
+        track encode3RenAtacSignalHindbrainE11
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalHindbrainE11.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC hindbrn E11
+        longLabel Open chromatin ATAC-seq signal from embryonic day E11.5 hindbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=hindbrain age=E11
+
+        track encode3RenAtacSignalHindbrainE12
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalHindbrainE12.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC hindbrn E12
+        longLabel Open chromatin ATAC-seq signal from embryonic day E12.5 hindbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=hindbrain age=E12
+
+        track encode3RenAtacSignalHindbrainE13
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalHindbrainE13.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC hindbrn E13
+        longLabel Open chromatin ATAC-seq signal from embryonic day E13.5 hindbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=hindbrain age=E13
+
+        track encode3RenAtacSignalHindbrainE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalHindbrainE14.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC hindbrn E14
+        longLabel Open chromatin ATAC-seq signal from embryonic day E14.5 hindbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=hindbrain age=E14
+
+        track encode3RenAtacSignalHindbrainE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalHindbrainE15.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC hindbrn E15
+        longLabel Open chromatin ATAC-seq signal from embryonic day E15.5 hindbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=hindbrain age=E15
+
+        track encode3RenAtacSignalHindbrainE16
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalHindbrainE16.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC hindbrn E16
+        longLabel Open chromatin ATAC-seq signal from embryonic day E16.5 hindbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=hindbrain age=E16
+
+        track encode3RenAtacSignalHindbrainP0
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalHindbrainP0.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC hindbrain P0
+        longLabel Open chromatin ATAC-seq signal from day P0 hindbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=hindbrain age=P0
+
+        track encode3RenAtacSignalIntestineE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalIntestineE14.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC intestn E14
+        longLabel Open chromatin ATAC-seq signal from embryonic day E14.5 intestine from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=intestine age=E14
+
+        track encode3RenAtacSignalIntestineE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalIntestineE15.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC intestn E15
+        longLabel Open chromatin ATAC-seq signal from embryonic day E15.5 intestine from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=intestine age=E15
+
+        track encode3RenAtacSignalIntestineE16
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalIntestineE16.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC intestn E16
+        longLabel Open chromatin ATAC-seq signal from embryonic day E16.5 intestine from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=intestine age=E16
+
+        track encode3RenAtacSignalIntestineP0
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalIntestineP0.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC intestine P0
+        longLabel Open chromatin ATAC-seq signal from day P0 intestine from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=intestine age=P0
+
+        track encode3RenAtacSignalKidneyE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalKidneyE14.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC kidney E14
+        longLabel Open chromatin ATAC-seq signal from embryonic day E14.5 kidney from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=kidney age=E14
+
+        track encode3RenAtacSignalKidneyE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalKidneyE15.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC kidney E15
+        longLabel Open chromatin ATAC-seq signal from embryonic day E15.5 kidney from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=kidney age=E15
+
+        track encode3RenAtacSignalKidneyE16
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalKidneyE16.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC kidney E16
+        longLabel Open chromatin ATAC-seq signal from embryonic day E16.5 kidney from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=kidney age=E16
+
+        track encode3RenAtacSignalKidneyP0
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalKidneyP0.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC kidney P0
+        longLabel Open chromatin ATAC-seq signal from day P0 kidney from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=kidney age=P0
+
+        track encode3RenAtacSignalLimbE11
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalLimbE11.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC limb E11
+        longLabel Open chromatin ATAC-seq signal from embryonic day E11.5 limb from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=limb age=E11
+
+        track encode3RenAtacSignalLimbE12
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalLimbE12.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC limb E12
+        longLabel Open chromatin ATAC-seq signal from embryonic day E12.5 limb from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=limb age=E12
+
+        track encode3RenAtacSignalLimbE13
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalLimbE13.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC limb E13
+        longLabel Open chromatin ATAC-seq signal from embryonic day E13.5 limb from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=limb age=E13
+
+        track encode3RenAtacSignalLimbE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalLimbE14.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC limb E14
+        longLabel Open chromatin ATAC-seq signal from embryonic day E14.5 limb from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=limb age=E14
+
+        track encode3RenAtacSignalLimbE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalLimbE15.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC limb E15
+        longLabel Open chromatin ATAC-seq signal from embryonic day E15.5 limb from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=limb age=E15
+
+        track encode3RenAtacSignalLiverE11
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalLiverE11.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC liver E11
+        longLabel Open chromatin ATAC-seq signal from embryonic day E11.5 liver from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=liver age=E11
+
+        track encode3RenAtacSignalLiverE12
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalLiverE12.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC liver E12
+        longLabel Open chromatin ATAC-seq signal from embryonic day E12.5 liver from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=liver age=E12
+
+        track encode3RenAtacSignalLiverE13
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalLiverE13.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC liver E13
+        longLabel Open chromatin ATAC-seq signal from embryonic day E13.5 liver from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=liver age=E13
+
+        track encode3RenAtacSignalLiverE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalLiverE14.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC liver E14
+        longLabel Open chromatin ATAC-seq signal from embryonic day E14.5 liver from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=liver age=E14
+
+        track encode3RenAtacSignalLiverE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalLiverE15.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC liver E15
+        longLabel Open chromatin ATAC-seq signal from embryonic day E15.5 liver from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=liver age=E15
+
+        track encode3RenAtacSignalLiverE16
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalLiverE16.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC liver E16
+        longLabel Open chromatin ATAC-seq signal from embryonic day E16.5 liver from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=liver age=E16
+
+        track encode3RenAtacSignalLiverP0
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalLiverP0.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC liver P0
+        longLabel Open chromatin ATAC-seq signal from day P0 liver from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=liver age=P0
+
+        track encode3RenAtacSignalLungE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalLungE14.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC lung E14
+        longLabel Open chromatin ATAC-seq signal from embryonic day E14.5 lung from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=lung age=E14
+
+        track encode3RenAtacSignalLungE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalLungE15.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC lung E15
+        longLabel Open chromatin ATAC-seq signal from embryonic day E15.5 lung from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=lung age=E15
+
+        track encode3RenAtacSignalLungE16
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalLungE16.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC lung E16
+        longLabel Open chromatin ATAC-seq signal from embryonic day E16.5 lung from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=lung age=E16
+
+        track encode3RenAtacSignalLungP0
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalLungP0.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC lung P0
+        longLabel Open chromatin ATAC-seq signal from day P0 lung from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=lung age=P0
+
+        track encode3RenAtacSignalMidbrainE11
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalMidbrainE11.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC midbrain E11
+        longLabel Open chromatin ATAC-seq signal from embryonic day E11.5 midbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=midbrain age=E11
+
+        track encode3RenAtacSignalMidbrainE12
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalMidbrainE12.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC midbrain E12
+        longLabel Open chromatin ATAC-seq signal from embryonic day E12.5 midbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=midbrain age=E12
+
+        track encode3RenAtacSignalMidbrainE13
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalMidbrainE13.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC midbrain E13
+        longLabel Open chromatin ATAC-seq signal from embryonic day E13.5 midbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=midbrain age=E13
+
+        track encode3RenAtacSignalMidbrainE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalMidbrainE14.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC midbrain E14
+        longLabel Open chromatin ATAC-seq signal from embryonic day E14.5 midbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=midbrain age=E14
+
+        track encode3RenAtacSignalMidbrainE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalMidbrainE15.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC midbrain E15
+        longLabel Open chromatin ATAC-seq signal from embryonic day E15.5 midbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=midbrain age=E15
+
+        track encode3RenAtacSignalMidbrainE16
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalMidbrainE16.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC midbrain E16
+        longLabel Open chromatin ATAC-seq signal from embryonic day E16.5 midbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=midbrain age=E16
+
+        track encode3RenAtacSignalMidbrainP0
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalMidbrainP0.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC midbrain P0
+        longLabel Open chromatin ATAC-seq signal from day P0 midbrain from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=midbrain age=P0
+
+        track encode3RenAtacSignalNeuralE11
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalNeuralE11.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC neural E11
+        longLabel Open chromatin ATAC-seq signal from embryonic day E11.5 neural from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=neural age=E11
+
+        track encode3RenAtacSignalNeuralE12
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalNeuralE12.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC neural E12
+        longLabel Open chromatin ATAC-seq signal from embryonic day E12.5 neural from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=neural age=E12
+
+        track encode3RenAtacSignalNeuralE13
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalNeuralE13.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC neural E13
+        longLabel Open chromatin ATAC-seq signal from embryonic day E13.5 neural from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=neural age=E13
+
+        track encode3RenAtacSignalNeuralE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalNeuralE14.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC neural E14
+        longLabel Open chromatin ATAC-seq signal from embryonic day E14.5 neural from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=neural age=E14
+
+        track encode3RenAtacSignalNeuralE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalNeuralE15.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC neural E15
+        longLabel Open chromatin ATAC-seq signal from embryonic day E15.5 neural from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=neural age=E15
+
+        track encode3RenAtacSignalStomachE14
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalStomachE14.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC stomach E14
+        longLabel Open chromatin ATAC-seq signal from embryonic day E14.5 stomach from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=stomach age=E14
+
+        track encode3RenAtacSignalStomachE15
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalStomachE15.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC stomach E15
+        longLabel Open chromatin ATAC-seq signal from embryonic day E15.5 stomach from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=stomach age=E15
+
+        track encode3RenAtacSignalStomachE16
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalStomachE16.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC stomach E16
+        longLabel Open chromatin ATAC-seq signal from embryonic day E16.5 stomach from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=stomach age=E16
+
+        track encode3RenAtacSignalStomachP0
+        bigDataUrl /gbdb/mm10/encode3/atac/encode3RenAtacSignalStomachP0.bw
+        parent encode3RenAtacSignal off
+        shortLabel ATAC stomach P0
+        longLabel Open chromatin ATAC-seq signal from day P0 stomach from ENCODE 3 (UCSD/Ren)
+        subGroups view=signal tissue=stomach age=P0
+
+

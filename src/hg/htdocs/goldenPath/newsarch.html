@@ -51,6 +51,290 @@
 <!-- ============= 2019 archived news ============= -->
 <a name="2019"></a>
 
+<a name="102819"></a>
+<h2>Oct. 28, 2019 &nbsp;&nbsp; gnomAD data now available on human (GRCh38/hg38) assembly</h2>
+<p>
+We are pleased to announce the new <a target="_blank" 
+href="../cgi-bin/hgTrackUi?db=hg38&c=chr22&g=gnomadVariants">gnomAD Variants super-track</a>
+for the Human (GRCh38/hg38) assembly. This super-track currently includes <strong>gnomAD v3</strong>
+and <strong>gnomAD v2</strong>.</p>
+<p>
+<a target="_blank" 
+href="../cgi-bin/hgTrackUi?db=hg38&c=chr22&g=gnomadGenomesVariantsV3"><strong>gnomAD v3</strong></a>
+contains variants from 71,702 whole genomes (and no exomes), all mapped to the GRCh38/hg38
+reference sequence. For more information on gnomAD v3, see the following
+<a target="_blank" href="https://macarthurlab.org/2019/10/16/gnomad-v3-0/">blog post</a>.</p>
+<p>
+<a target="_blank"  
+href="../cgi-bin/hgTrackUi?db=hg38&c=chr22&g=gnomadVariantsV2"><strong>gnomAD v2</strong></a>
+is a composite of gnomAD Genome and Exome Variants v2.1. These two tracks contain variants from
+125,748 exomes and 15,708 whole genomes, all mapped to the GRCh37/hg19 reference sequence and
+lifted to the GRCh38/hg38 assembly. For more information on gnomAD v2.1, see the following
+<a target="_blank" href="https://macarthurlab.org/2018/10/17/gnomad-v2-1/">blog post</a>.</p> 
+<p>
+Additional information, display conventions, and data access can be found on the
+<a target="_blank" 
+href="../cgi-bin/hgTrackUi?db=hg38&c=chr22&g=gnomadVariants">track description page</a>.<p>
+<p>
+We would like to thank the <a target="_blank" 
+href="https://gnomad.broadinstitute.org/about">Genome Aggregation Database Consortium</a>
+for making these data available. We would also like to thank Kate Rosenbloom,
+Angie Hinrichs, and Lou Nassar for their work on this release.</p>
+
+<a name="102519a"></a>
+<h2>Oct. 25, 2019 &nbsp;&nbsp; New Illumina Global Diversity Array for human (GRCh37/hg19)</h2>
+<p>
+We are pleased to announce the release of the
+<a href="../cgi-bin/hgTrackUi?db=hg19&c=chrX&g=genotypeArrays" target="_blank">Illumina Global
+Diversity Array</a> (GDA) for human (GRCh37/hg19). This track is included in the SNP/CNV composite
+track under the Variation group.</p>
+<p>
+The
+<a href="https://www.illumina.com/products/by-type/microarray-kits/infinium-global-diversity.html"
+target="_blank">Global Diversity Array-8</a> v1.0 BeadChip includes coverage of the ACMG 59-gene
+clinical research variants and multi-ethnic, genome-wide content. The GDA is the commercial version
+of the array chosen by the <a href="https://allofus.nih.gov/" target="_blank">All of Us</a> Research
+Program and is designed to capture a wider range of the world's populationsthan traditional
+microarrays.</p>
+<p>
+We would like to thank Jay Kaufman and John Picuri at Illumina for providing the data. We would also
+like to thank Brian Raney and Jairo Navarro at UCSC for creating and reviewing the tracks for hg19.
+</p>
+
+<a name="102519b"></a>
+<h2>Oct. 25, 2019 &nbsp;&nbsp; New Hi-C heatmap tracks</h2>
+<p>
+We are pleased to announce two new Hi-C heatmap tracks now available on the Genome Browser for hg19
+and hg38. They can be configured as square, triangular, or arc interactions. These heatmaps will 
+soon be available to visualize custom data for Chromosome Conformation Capture (3C), Hi-C, and other 
+high-density interaction based sequencing methods. This feature will be the next evolution of our
+support for 3C sequencing data, following the popular <a href=#081018>Interact format 
+used in GeneHancer</a>, which was made for low-density interactions. 
+<ul>
+<li>
+<a href="../cgi-bin/hgTracks?db=hg19&hideTracks=1&knownGene=pack&rao2014Hic=full" target="_blank">Hi-C Heatmap Track on hg19</a></li>
+<li>
+<a href="../cgi-bin/hgTracks?db=hg38&hideTracks=1&knownGene=pack&hicAndMicroC=full" target="_blank">Hi-C Heatmap Track on hg38</a></li></ul>
+
+<p class="text-center">
+  <img class='text-center' src="../images/hicExample.png" width='600' alt="Example of a Hi-C Track">
+</p>
+
+<a name="102419"></a>
+<h2>Oct. 24, 2019 &nbsp;&nbsp; New Platinum Genomes VCF Track</h2>
+<p>
+We are pleased to announce the new Platinum Genomes VCF Tracks. These variant tracks 
+offer deeply sequenced and validated VCFs on both hg19 and hg38. This data was derived from
+consensus analysis of a 17-member family pedigree to reduce potential error.
+You can view the tracks below:</p>
+<ul>
+<li>
+<a href="../cgi-bin/hgTracks?db=hg19&hideTracks=1&knownGene=pack&platinumGenomes=pack" target="_blank">Platinum Genomes Track on hg19</a></li>
+<li>
+<a href="../cgi-bin/hgTracks?db=hg38&hideTracks=1&knownGene=pack&platinumGenomes=pack" target="_blank">Platinum Genomes Track on hg38</a></li></ul> 
+
+
+<a name="101619"></a>
+<h2>Oct. 16, 2019 &nbsp;&nbsp; New GENCODE Genes tracks for human (V32) and mouse (VM23)</h2>
+<p>
+We are pleased to announce the release of updated GENCODE Genes annotation tracks for both the
+<a href="../cgi-bin/hgTracks?db=hg38&g=knownGene" target="_blank">hg38/GRCh38</a> and 
+<a href="../cgi-bin/hgTracks?db=mm10&g=knownGene" target="_blank">mm10/GRCm38</a> assemblies
+corresponding to the
+<a href="http://www.ensembl.info/2019/09/26/ensembl-98-has-been-released/" target="_blank">
+Ensembl 98</a> release.</p>
+
+<p>
+The following table provides statistics for the 
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=knownGene" target="_blank">human V32</a> and 
+<a href="../cgi-bin/hgTrackUi?db=mm10&g=knownGene" target="_blank">mouse VM23</a> releases derived
+from the GTF files that contain annotations only on the main chromosomes. More information on how
+these statistics were generated can be found on the
+<a href="https://www.gencodegenes.org/" target="_blank">GENCODE site</a>.
+
+<div align="center">
+<table class="stdTbl">
+ <tr><th>Genes &amp; Transcripts</th><th>human V32 Release Stats</th><th>mouse V23 Release Stats</th></tr>
+ <tr><th>Protein-coding Genes</th><td style="text-align:center">19,965</td><td style="text-align:center">21,849</td></tr>
+ <tr><th>Protein-coding transcripts</th><td style="text-align:center">83,986</td><td style="text-align:center">59,188</td></tr>
+ <tr><th>Long non-coding RNA genes</th><td style="text-align:center">17,910</td><td style="text-align:center">13,201</td></tr>
+ <tr><th>Small non-coding RNA genes</th><td style="text-align:center">7,576</td><td style="text-align:center">6,108</td></tr>
+ <tr><th>Psuedogenes</th><td style="text-align:center">14,749</td><td style="text-align:center">13,681</td></tr>
+</table></div>
+
+<p>
+More details about these new GENCODE Genes tracks can be found on the respective GENCODE description pages.
+We would like to thank the GENCODE team and thank Brian Raney, Mark Diekhans, Jairo Navarro, and
+Conner Powell at UCSC for their work on this track.</p>
+
+<a name="101119"></a>
+<h2>Oct. 11, 2019 &nbsp;&nbsp; New "group auto-scale" option</h2>
+<p>
+A new &quot;group auto-scale&quot; option is now available for signal tracks
+collected together in composites. The original auto-scale setting, which is still
+available, acts to auto-scale each track individually inside a composite group.
+With the new &quot;group auto-scale&quot; setting, all of the tracks within the
+composite will scale to the track with the highest auto-scale value viewed in the region.</p>
+<p>
+For example, below is a side-by-side image of two views of the same data from
+a selection of cell lines within a composite of related RNA-seq experiments. On
+the left is the original &quot;auto-scale to data view&quot; setting, where each track is
+auto-scaled to appear at each track's highest value. And on the right is
+the new &quot;group auto-scale&quot; setting for the same RNA-seq data where all tracks
+are scaled against the one track in the region that has the highest value
+(67215 for IMR9 cell TAP + 1).</p>
+<p class="text-center">
+  <img class='text-center' src="../images/groupAutoScale.png" width='600' alt="Auto-scale comparison">
+</p>
+<p>
+While the original auto-scale setting on the left has the advantage of showing any
+available data calibrated to each track's maximum, the new &quot;group auto-scale&quot;
+setting on the right quickly draws attention to the track with the highest signal
+within the composite group.</p>
+<p>
+The new setting can be found for signal tracks within a composite group
+under the &quot;Data view scaling:&quot; options.
+<p class="text-center">
+  <img class='text-center' src="../images/groupAutoSetting.png" width='400' alt="Scaling options">
+</p>
+
+<a name="100919"></a>
+<h2>Oct. 9, 2019 &nbsp;&nbsp; Expanded CRISPR track released for human (hg38/GRCh38)</h2>
+<p>
+We are pleased to announce the release of an expanded
+ <a href="../cgi-bin/hgTracks?db=hg38&hideTracks=1&knownGene=pack&crisprAllTargets=pack&position=chr7:116397500-116398000" target="_blank">CRISPR Targets track</a> for the human
+hg38/GRCh38 assembly. This track shows the DNA sequences targetable by CRISPR RNA guides
+using the Cas9 enzyme from S. pyogenes (PAM: NGG) over the entire human genome. CRISPR target
+sites were annotated with predicted specificity (off-target effects) and predicted efficiency
+(on-target cleavage) by various algorithms through the tool
+<a href="http://crispor.tefor.net/" target="_blank">CRISPOR</a>. The target sequence of the guide
+is shown with a thick (exon) bar. The PAM motif match (NGG) is shown with a thinner bar. 
+</p>
+<p class="text-center">
+  <img class='text-center' src="../images/crisperAllTargetsHg38.png" width='800' alt="CrisprAllTargets track">
+</p>
+
+<p>
+We would like to thank Maximilian Haeussler, Hiram Clawson, and Conner Powell for their effort
+creating and releasing this data track.</p>
+
+<a name="09172019"></a>
+<h2>Sep. 17, 2019 &nbsp;&nbsp; New GRC Incident track for Chicken (galGal6) and Zebrafish (danRer11)
+</h2>
+<p>
+We are pleased to announce the release of a GRC Incident track for both the Chicken
+(<a href="../cgi-bin/hgTrackUi?&db=galGal6&g=grcIncidentDb" target="_blank">galGal6</a>) and
+Zebrafish (<a href="../cgi-bin/hgTrackUi?&db=danRer11&g=grcIncidentDb" target="_blank">danRer11</a>)
+assemblies.
+These tracks show locations in the Chicken and Zebrafish assemblies where assembly problems
+have been noted or resolved, as reported by the
+<a href="https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/index.shtml" target="_blank">
+Genome Reference Consortium (GRC)</a>.
+<ul>
+  <li> <a href="../cgi-bin/hgTracks?db=galGal6&hideTracks=1&grcIncidentDb=pack&refSeqComposite=squish&knownGene_sel=1&position=chr1%3A81414-19700000"
+  target="_blank">Chicken (galGal6) GRC Incident Database track</a></li>
+  <li> <a href="../cgi-bin/hgTracks?db=danRer11&hideTracks=1&grcIncidentDb=pack&refSeqComposite=squish&knownGene_sel=1"
+  target="_blank">Zebrafish (danRer11) GRC Incident Database track</a></li>
+</ul>
+</p>
+<p>
+Data for these tracks are extracted from the <a href="ftp://ftp.ncbi.nlm.nih.gov/pub/grc/"
+target="_blank">GRC incident database</a> from the specific species *_issues.gff3 file. The tracks are
+updated daily from the GRC server to incorporate new updates.
+</p>
+<p>
+Thanks to Hiram Clawson and Conner Powell for the development and release of these tracks.
+</p>
+
+<a name="090419"></a>
+<h2>Sep. 4, 2019 &nbsp;&nbsp; New Genome Browser: Rhesus, rheMac10 (<em>Macaca mulatta</em>)</h2>
+<p>
+A genome browser is now available for the rhesus monkey (<em>Macaca mulatta</em>) assembly 
+released in Feb. 2019 by the
+<a href="https://www.genome.wustl.edu/" 
+target="_blank">Genome Institute at Washington University School of Medicine</a> (Mmul_10).
+<h3>About the assembly:</h3>
+<ul>
+  <li><b>UCSC Genome Browser assembly ID:</b>  <a href="../../cgi-bin/hgGateway?db=rheMac10" 
+  target="_blank">rheMac10</a></li>
+  <li><b>Sequencing/Assembly provider ID:</b> <a href="https://www.genome.wustl.edu/">
+The Genome Institute at Washington University School of Medicine</a></li>
+  <li><b>Assembly date:</b> Feb. 2019</li>
+  <li><B>Accession ID:</B> GCF_003339765.1</li>
+  <li><B>NCBI Genome ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/genome/215"
+TARGET="_blank">215</A> (<em>Macaca mulatta</em>)</li>
+  <li><B>NCBI Assembly ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/assembly/2345051"
+TARGET="_blank">2345051</A></li>
+  <li><B>NCBI BioProject ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/bioproject/476474"
+TARGET="_blank">476474</A></li>
+  <li><B>NCBI BioSample ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/biosample/SAMN09435472"
+TARGET="_blank">SAMN09435472</A></li>
+  <li><b>Scaffold count: </b>2,979</li>
+  <li><b>Total size: </b>2,971,331,530</li>
+  <li><a href="../goldenPath/credits.html#rhesus_credits" 
+target="_blank" >Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+  <li><a href="../goldenPath/credits.html#rhesus_use" 
+target="_blank" >Data use conditions and restrictions</a></li>
+  <li><a href="../goldenPath/help/ftp.html" 
+target="_blank" >Rsync</a> and
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/rheMac10/" 
+target="_blank" >FTP</a></li>
+  <li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#rhesus"
+target="_blank" >Downloads page</a></li>
+</ul>
+</p>
+
+<a name="082819"></a>
+<h2>Aug. 28, 2019 &nbsp;&nbsp; Vertebrate Genomes Project assembly hub</h2>
+
+<p>
+The UCSC Genome Browser is proud to announce its <a href="https://hgdownload.soe.ucsc.edu/hubs/VGP/" 
+target="_blank">Vertebrate Genomes Project assembly hub</a>. The <a 
+href="https://vertebrategenomesproject.org/" target="_blank">Vertebrate Genomes Project (VGP)</a> 
+aims to generate near error-free reference genome assemblies of all 70,000 extant 
+vertebrate species.</p>
+
+<p>
+As of now, the <a href="https://hgdownload.soe.ucsc.edu/hubs/VGP/" 
+target="_blank">VGP assembly hub</a> includes 24 vertebrate assemblies. See our <a 
+href="https://hgdownload.soe.ucsc.edu/hubs/VGP/asmStatsVGP.html" 
+target="_blank">assembly statistics page</a> for specific information (gap counts, 
+masking percent, genome size, etc.) on each individual assembly. All assemblies have a 
+combination of Genome Browser generated data tracks, as well as external data. These include:</p>
+<ul>
+  <li>Augustus gene predictions on all assemblies, as well as imported NCBI gene predictions 
+when available.</li>
+  <li>A RefSeq mRNAs track which is generated in-house, mapping RefSeq mRNAs from various other 
+organisms to each individual assembly. This track includes origin mRNA species and gene names, 
+which may help to identify genes on the less annotated assemblies.</li>
+  <li>CpG island and GC percent tracks.</li>
+  <li>Repeat masking tracks by both RepeatMasker and WindowMasker + SDust.</li></ul>
+<p>
+These tracks also include individual track description pages with a summary of their contents 
+or results where applicable. Such as a summary of all RepeatMasker elements found in the 
+<a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/VGP/hub.txt&genome=hub_1489433_GCA_007474595.1_mLynCan4_v1.p&g=hub_1489433_repeatMasker" 
+target="_blank">Canada lynx</a> or gene count and genome coverage of NCBI genes for the 
+<a href="https://genome.ucsc.edu/cgi-bin/hgTrackUi?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/VGP/hub.txt&genome=hub_1489433_GCF_004115215.1_mOrnAna1.p.v1&g=hub_1489433_ncbiGene" 
+target="_blank">platypus</a>.</p>
+
+<p>
+All data are available from the UCSC download servers. For information on how to download 
+specific assembly data, refer to the assembly gateway page once the hub is connected. Here 
+is an example of the gateway page for the 
+<a href="../../cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/VGP/hub.txt&genome=GCA_004115265.2_mRhiFer1_v1.p" 
+target="_blank">greater horseshoe bat</a>. This page also includes information on starting 
+a local BLAT server for the assembly.</p>
+
+<p>
+We would like to thank the <a href="https://vertebrategenomesproject.org/" 
+target="_blank">Vertebrate Genomes Project</a> and the <a href="https://genome10k.soe.ucsc.edu/" 
+target="_blank">Genome 10k Project</a> for their sequencing efforts and making these genomes 
+available. We would also like to thank Hiram Clawson and Luis Nassar from the Genome Browser team 
+for the development and release of this assembly hub.</p>
+
 <a name="073119"></a>
 <h2>Jul. 31, 2019 &nbsp;&nbsp; New Genome Browser: Horse, equCab3 (<em>Equus caballus</em>)</h2>
 <p>

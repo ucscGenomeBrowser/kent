@@ -382,6 +382,10 @@ touch /data/mysql/hgFixed/refLink.MYI /data/mysql/hgFixed/refLink.MYD /data/mysq
 # table into the rsync, refs #18778
 touch /data/mysql/hg19/wgEncodeRegTfbsClusteredInputsV3.{frm,MYI,MYD}
 
+# Oct 2019: hg38 does not work if /data/mysql/hg38/knownAttrs is not present, so force this
+# table into the rsync, refs #24398
+touch /data/mysql/hg38/knownAttrs.{frm,MYI,MYD}
+
 # Jun 2017: An Ubuntu security update in early 2017 deactivated LOAD DATA in Mysql
 # so we are switching it back on
 if grep -q secure-file-priv /etc/mysql/my.cnf; then

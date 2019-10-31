@@ -72,6 +72,7 @@
 #include "hex.h"
 #include <openssl/sha.h>
 #include "customComposite.h"
+//#include "bed3Sources.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -190,6 +191,7 @@ for (track = tracks; track != NULL; track = track->next)
     }
 return NULL;
 }
+
 
 int tgCmpPriority(const void *va, const void *vb)
 /* Compare to sort based on priority; use shortLabel as secondary sort key. */
@@ -420,41 +422,6 @@ freeMem(encodedMapName);
 return(cloneString(buf));
 }
 
-#ifdef REMOTE_TRACK_AJAX_CALLBACK
-static boolean trackUsesRemoteData(struct track *track)
-/* returns TRUE is this track has a remote datasource */
-{
-if (!IS_KNOWN(track->remoteDataSource))
-    {
-    SET_TO_NO(track->remoteDataSource);
-    //if (track->bbiFile != NULL)   // FIXME: Chicken or the egg. bigWig/bigBed "bbiFile" filled
-    //                              //        in by loadItems, but we don't want to load items.
-    //    {
-    //    if (!startsWith("/gbdb/",track->bbiFile->fileName))
-    //        SET_TO_YES(track->remoteDataSource);
-    //    }
-    if (startsWithWord("bigWig",track->tdb->type) || startsWithWord("bigBed",track->tdb->type) ||
-	startsWithWord("halSnake",track->tdb->type) ||
-	startsWithWord("pslSnake",track->tdb->type) ||
-	startsWithWord("bigPsl",track->tdb->type) ||
-	startsWithWord("bigGenePred",track->tdb->type) ||
-	startsWithWord("bigChain",track->tdb->type) ||
-	startsWithWord("bigMaf",track->tdb->type) ||
-	startsWithWord("bam",track->tdb->type) || startsWithWord("vcfTabix", track->tdb->type))
-        {
-        SET_TO_YES(track->remoteDataSource);
-        }
-    }
-return IS_YES(track->remoteDataSource);
-}
-
-boolean trackShouldUseAjaxRetrieval(struct track *track)
-/* Tracks with remote data sources should berendered via an ajax callback */
-{
-return (theImgBox && !trackImgOnly && trackUsesRemoteData(track));
-}
-#endif///def REMOTE_TRACK_AJAX_CALLBACK
-
 static boolean isCompositeInAggregate(struct track *track)
 // Check to see if this is a custom composite in aggregate mode.
 {
@@ -496,9 +463,6 @@ static int trackPlusLabelHeight(struct track *track, int fontHeight)
 /* Return the sum of heights of items in this track (or subtrack as it may be)
  * and the center label(s) above the items (if any). */
 {
-if (trackShouldUseAjaxRetrieval(track))
-    return REMOTE_TRACK_HEIGHT;
-
 enum trackVisibility vis = limitVisibility(track);
 int y = track->totalHeight(track, vis);
 if (isCenterLabelIncluded(track))
@@ -1518,6 +1482,7 @@ mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, track, FALSE,
                NULL, 0, 0, (revCmplDisp ? "Next item" : "Prev item"), buttonText);
 
 #ifdef IMAGEv2_SHORT_TOGGLE
+// LIKELY UNUSED
 char *label = (theImgBox ? track->longLabel : parentTrack->longLabel);
 int width = portWidth - (2 * arrowButtonWidth);
 int x = portX + arrowButtonWidth;
@@ -4532,6 +4497,7 @@ if (
 || sameWord(type, "genePred")
 || sameWord(type, "gvf")
 || sameWord(type, "narrowPeak")
+|| sameWord(type, "bigNarrowPeak")
 || sameWord(type, "psl")
 || sameWord(type, "barChart")
 || sameWord(type, "bigBarChart")
@@ -4551,7 +4517,7 @@ return FALSE;
 }
 
 boolean isTypeUseItemNameAsKey(struct track *track)
-/* Check if track type is like expRatio and key is just item name. */
+/* Check if track type is like expRatio and key is just item name, to link across multi regions */
 {
 char *typeLine = track->tdb->type, *words[8], *type;
 int wordCount;
@@ -4566,6 +4532,22 @@ if (sameWord(type, "expRatio"))
     // track is like expRatio, needs one row per item
     return TRUE;
     }
+return FALSE;
+}
+
+boolean isTypeUseMapItemNameAsKey(struct track *track)
+/* Check if track type is like interact and uses map item name to link across multi regions */
+{
+char *typeLine = track->tdb->type, *words[8], *type;
+int wordCount;
+if (typeLine == NULL)
+    return FALSE;
+wordCount = chopLine(cloneString(typeLine), words);
+if (wordCount <= 0)
+    return FALSE;
+type = words[0];
+if (sameWord(type, "interact") || sameWord(type, "bigInteract"))
+        return TRUE;
 return FALSE;
 }
 
@@ -4590,11 +4572,65 @@ setGlobalsFromWindow(windows); // first window
 flatTrack->maxHeight = maxHeight;
 }
 
-boolean doCollapseEmptySubtracks(struct track *track)
-/* Suppress display of empty subtracks. Initial support only for bed's. */
+boolean doHideEmptySubtracksNoMultiBed(struct cart *cart, struct track *track)
+/* TRUE if hideEmptySubtracks is enabled, but there is no multiBed */
 {
-char *collapseEmptySubtracks = trackDbSetting(track->tdb, "collapseEmptySubtracks");
-return (collapseEmptySubtracks && sameWord(collapseEmptySubtracks, "on"));
+char *multiBedFile = NULL;
+char *subtrackIdFile = NULL;
+boolean hideEmpties = compositeHideEmptySubtracks(cart, track->tdb, &multiBedFile, &subtrackIdFile);
+if (hideEmpties && (multiBedFile == NULL || subtrackIdFile == NULL))
+        return TRUE;
+return FALSE;
+}
+
+struct hash *getNonEmptySubtracks(struct track *track)
+{
+/* Support setting to suppress display of empty subtracks. 
+ * If multiBed is available, return hash with subtrack names as keys
+ */
+
+char *multiBedFile = NULL;
+char *subtrackIdFile = NULL;
+if (!compositeHideEmptySubtracks(cart, track->tdb, &multiBedFile, &subtrackIdFile))
+    return NULL;
+if (!multiBedFile)
+    return NULL;
+
+// load multiBed items in window
+// TODO: filters here ?
+// TODO:  protect against temporary network error ? */
+struct lm *lm = lmInit(0);
+struct bbiFile *bbi = bigBedFileOpen(multiBedFile);
+struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
+char *row[bbi->fieldCount];
+char startBuf[16], endBuf[16];
+struct hash *nonEmptySubtracksHash = hashNew(0);
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, row, ArraySize(row));
+    // TODO: do this in bed3Sources.c
+    char *idList = row[4];
+    struct slName *ids = slNameListFromComma(idList);
+    struct slName *id = NULL;
+    for (id = ids; id != NULL; id = id->next)
+        hashStore(nonEmptySubtracksHash, id->name);
+    // TODO: free some stuff ?
+    }
+
+// read file containing ids of subtracks 
+struct lineFile *lf = udcWrapShortLineFile(subtrackIdFile, NULL, 0); 
+char *words[2];
+while (lineFileChopNext(lf, words, sizeof words))
+    {
+    char *id = words[0];
+    char *name = words[1];
+    if (hashLookup(nonEmptySubtracksHash, id))
+        {
+        hashStore(nonEmptySubtracksHash, cloneString(name));
+        }
+    }
+lineFileClose(&lf);
+return nonEmptySubtracksHash;
 }
 
 void makeActiveImage(struct track *trackList, char *psOutput)
@@ -4820,17 +4856,20 @@ for (track = trackList; track != NULL; track = track->next)
         {
         struct track *subtrack;
         if (isCompositeInAggregate(track))
-            flatTracksAdd(&flatTracks,track,cart, orderedWiggles);
+            flatTracksAdd(&flatTracks, track, cart, orderedWiggles);
         else
             {
-            boolean doCollapse = doCollapseEmptySubtracks(track);
+            boolean doHideEmpties = doHideEmptySubtracksNoMultiBed(cart, track);
+                // If multibed was found, it has been used to suppress loading,
+                // and subtracks lacking items in window are already set hidden
             for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
                 {
                 if (!isSubtrackVisible(subtrack))
                     continue;
 
                 if (!isLimitedVisHiddenForAllWindows(subtrack) && 
-                        !(doCollapse && slCount(subtrack->items) == 0))
+                        !(doHideEmpties && slCount(subtrack->items) == 0))
+                        // Ignore subtracks with no items in window
                     {
                     flatTracksAdd(&flatTracks,subtrack,cart, orderedWiggles);
                     }
@@ -5000,8 +5039,6 @@ if (theImgBox)
             int order = flatTrack->order;
             curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,
                                                isCenterLabelIncluded(track),order);
-            if (trackShouldUseAjaxRetrieval(track))
-                imgTrackMarkForAjaxRetrieval(curImgTrack,TRUE);
             }
         }
     }
@@ -5187,36 +5224,32 @@ if (withLeftLabels)
                                                    sliceOffsetX[stSide],sliceOffsetY);
             (void) sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
-        if (trackShouldUseAjaxRetrieval(track))
-            y += REMOTE_TRACK_HEIGHT;
-        else
-            {
-            boolean doWiggle = cartOrTdbBoolean(cart, track->tdb, "doWiggle" , FALSE);
-            if (doWiggle)
-                track->drawLeftLabels = wigLeftLabels;
-        #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
-            if (theImgBox && track->limitedVis != tvDense)
-                y += sliceHeight;
-            else
-        #endif ///def IMAGEv2_NO_LEFTLABEL_ON_FULL
-		{
-		setGlobalsFromWindow(windows); // use GLOBALS from first window
-		int ynew = 0;
-		/* rmskJoined tracks are non-standard in FULL mode
-		   they are just their track height, not per-item height
-                 */
-		if (startsWith("rmskJoined", track->track))
-		    ynew = flatTrack->maxHeight + y;
-		else
-		    ynew = doLeftLabels(track, hvgSide, font, y);
 
-		y += flatTrack->maxHeight;
-		if ((ynew - y) > flatTrack->maxHeight)
-		    { // TODO should be errAbort?
-		    warn("doLeftLabels(y=%d) returned new y value %d that is too high - should be %d at most.",
-			y, ynew, flatTrack->maxHeight);
-		    }
-		}
+        boolean doWiggle = cartOrTdbBoolean(cart, track->tdb, "doWiggle" , FALSE);
+        if (doWiggle)
+            track->drawLeftLabels = wigLeftLabels;
+    #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
+        if (theImgBox && track->limitedVis != tvDense)
+            y += sliceHeight;
+        else
+    #endif ///def IMAGEv2_NO_LEFTLABEL_ON_FULL
+            {
+            setGlobalsFromWindow(windows); // use GLOBALS from first window
+            int ynew = 0;
+            /* rmskJoined tracks are non-standard in FULL mode
+               they are just their track height, not per-item height
+             */
+            if (startsWith("rmskJoined", track->track))
+                ynew = flatTrack->maxHeight + y;
+            else
+                ynew = doLeftLabels(track, hvgSide, font, y);
+
+            y += flatTrack->maxHeight;
+            if ((ynew - y) > flatTrack->maxHeight)
+                { // TODO should be errAbort?
+                warn("doLeftLabels(y=%d) returned new y value %d that is too high - should be %d at most.",
+                    y, ynew, flatTrack->maxHeight);
+                }
             }
         }
     }
@@ -5384,16 +5417,10 @@ if (withCenterLabels)
                                                                             clNowSeen : clNotSeen);
 		}
             }
-        if (trackShouldUseAjaxRetrieval(track))
-	    {
-            y += REMOTE_TRACK_HEIGHT;
-	    }
-        else
-	    {
-	    int savey = y; // GALT
-            y = doCenterLabels(track, track, hvg, font, y, fullInsideWidth); // calls track height
-	    y = savey + flatTrack->maxHeight;
-	    }
+
+        int savey = y; // GALT
+        y = doCenterLabels(track, track, hvg, font, y, fullInsideWidth); // calls track height
+        y = savey + flatTrack->maxHeight;
         }
     hvGfxUnclip(hvg);
 
@@ -5410,20 +5437,58 @@ if (withCenterLabels)
     y = yAfterRuler;
     if (measureTiming)
         lastTime = clock1000();
+
+    // first do predraw
     for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         {
         track = flatTrack->track;
 
-	// parallelize more this?:
-	
-        //ORIG if (track->limitedVis == tvHide)
+	if (isLimitedVisHiddenForAllWindows(track))
+            continue;
+
+        struct track *winTrack;
+
+        // do preDraw
+        if (track->preDrawItems)
+            {
+            for (window=windows, winTrack=track; window; window=window->next, winTrack=winTrack->nextWindow)
+                {
+                setGlobalsFromWindow(window);
+                if (winTrack->limitedVis == tvHide)
+                    {
+                    warn("Draw tracks skipping %s because winTrack->limitedVis=hide", winTrack->track);
+                    continue;
+                    }
+                if (insideWidth >= 1)  // do not try to draw if width < 1.
+                    {
+                    doPreDrawItems(winTrack, hvg, font, y, &lastTime);
+                    }
+                }
+            }
+
+        setGlobalsFromWindow(windows); // first window
+        // do preDrawMultiRegion across all windows, e.g. wig autoScale
+        if (track->preDrawMultiRegion)
+            {
+            track->preDrawMultiRegion(track);
+            }
+        y += flatTrack->maxHeight;
+        }
+
+    // now do the actual draw
+    y = yAfterRuler;
+    for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
+        {
+        int savey = y;
+        struct track *winTrack;
+        track = flatTrack->track;
 	if (isLimitedVisHiddenForAllWindows(track))
             continue;
 
         int centerLabelHeight = (isCenterLabelIncluded(track) ? fontHeight : 0);
         int yStart = y + centerLabelHeight;
-        // ORIG int yEnd   = y + trackPlusLabelHeight(track, fontHeight);
 	int yEnd   = y + flatTrack->maxHeight;
+
         if (theImgBox)
             {
             // data slice of tracks
@@ -5438,57 +5503,24 @@ if (withCenterLabels)
                 (void) sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
                 }
             }
-        if (trackShouldUseAjaxRetrieval(track))
-            y += REMOTE_TRACK_HEIGHT;
-        else
-	    {
-	    int savey = y;
-	    struct track *winTrack;
-
-	    // do preDraw
-	    if (track->preDrawItems)
-		{
-		for (window=windows, winTrack=track; window; window=window->next, winTrack=winTrack->nextWindow)
-		    {
-		    setGlobalsFromWindow(window);
-		    if (winTrack->limitedVis == tvHide)
-			{
-			warn("Draw tracks skipping %s because winTrack->limitedVis=hide", winTrack->track);
-			continue;
-			}
-		    if (insideWidth >= 1)  // do not try to draw if width < 1.
-			{
-			doPreDrawItems(winTrack, hvg, font, y, &lastTime);
-			}
-		    }
-		}
-
-	    setGlobalsFromWindow(windows); // first window
-	    // do preDrawMultiRegion across all windows, e.g. wig autoScale
-	    if (track->preDrawMultiRegion)
-		{
-		track->preDrawMultiRegion(track);
-		}
-
-	    // doDrawItems
-	    for (window=windows, winTrack=track; window; window=window->next, winTrack=winTrack->nextWindow)
-		{
-		setGlobalsFromWindow(window);
-		if (winTrack->limitedVis == tvHide)
-		    {
-		    warn("Draw tracks skipping %s because winTrack->limitedVis=hide", winTrack->track);
-		    continue;
-		    }
-		if (insideWidth >= 1)  // do not try to draw if width < 1.
-		    {
-		    int ynew = doDrawItems(winTrack, hvg, font, y, &lastTime);
-		    if ((ynew-y) > flatTrack->maxHeight)  // so compiler does not complain ynew is not used.
-			errAbort("oops track too high!");
-		    }
-		}
-	    setGlobalsFromWindow(windows); // first window
-	    y = savey + flatTrack->maxHeight;
-	    }
+        // doDrawItems
+        for (window=windows, winTrack=track; window; window=window->next, winTrack=winTrack->nextWindow)
+            {
+            setGlobalsFromWindow(window);
+            if (winTrack->limitedVis == tvHide)
+                {
+                warn("Draw tracks skipping %s because winTrack->limitedVis=hide", winTrack->track);
+                continue;
+                }
+            if (insideWidth >= 1)  // do not try to draw if width < 1.
+                {
+                int ynew = doDrawItems(winTrack, hvg, font, y, &lastTime);
+                if ((ynew-y) > flatTrack->maxHeight)  // so compiler does not complain ynew is not used.
+                    errAbort("oops track too high!");
+                }
+            }
+        setGlobalsFromWindow(windows); // first window
+        y = savey + flatTrack->maxHeight;
 
         if (theImgBox && tdbIsCompositeChild(track->tdb) &&
                 (track->limitedVis == tvDense ||
@@ -5530,9 +5562,7 @@ if (withLeftLabels)
             (void) sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
 
-        if (trackShouldUseAjaxRetrieval(track))
-            y += REMOTE_TRACK_HEIGHT;
-        else if (track->drawLeftLabels != NULL)
+        if (track->drawLeftLabels != NULL)
 	    {
 	    setGlobalsFromWindow(windows);
             y = doOwnLeftLabels(track, hvgSide, font, y);
@@ -6139,46 +6169,24 @@ else if (sameString(type, "bigWig"))
     tg = trackFromTrackDb(tdb);
     tg->bbiFile = ct->bbiFile;
     tg->nextItemButtonable = FALSE;
-    if (trackShouldUseAjaxRetrieval(tg))
-        tg->loadItems = dontLoadItems;
     }
-else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") ||
-        sameString(type, "bigNarrowPeak") || sameString(type, "bigPsl") ||
-        sameString(type, "bigMaf")|| sameString(type, "bigChain") ||
-        sameString(type, "bigLolly") || 
-        sameString(type, "bigBarChart") || sameString(type, "bigInteract"))
+else if (startsWith("big", type))
     {
     struct bbiFile *bbi = ct->bbiFile;
 
     /* Find field counts, and from that revise the tdb->type to be more complete. */
     char extra = (bbi->fieldCount > bbi->definedFieldCount ? '+' : '.');
     char typeBuf[64];
-    if (sameString(type, "bigGenePred"))
-	safef(typeBuf, sizeof(typeBuf), "bigGenePred");
-    else if (sameString(type, "bigNarrowPeak"))
-	safef(typeBuf, sizeof(typeBuf), "bigNarrowPeak");
-    else if (sameString(type, "bigChain"))
-	safef(typeBuf, sizeof(typeBuf), "bigChain");
-    else if (sameString(type, "bigMaf"))
-	safef(typeBuf, sizeof(typeBuf), "bigMaf");
-    else if (sameString(type, "bigPsl"))
-	safef(typeBuf, sizeof(typeBuf), "bigPsl");
-    else if (sameString(type, "bigBarChart"))
-	safef(typeBuf, sizeof(typeBuf), "bigBarChart");
-    else if (sameString(type, "bigLolly"))
-	safef(typeBuf, sizeof(typeBuf), "bigLolly");
-    else if (sameString(type, "bigInteract"))
-	safef(typeBuf, sizeof(typeBuf), "bigInteract");
-    else
+    if (startsWithWord("bigBed", type))
 	safef(typeBuf, sizeof(typeBuf), "bigBed %d %c", bbi->definedFieldCount, extra);
+    else
+	safecpy(typeBuf, sizeof(typeBuf), type);
     tdb->type = cloneString(typeBuf);
 
     /* Finish wrapping track around tdb. */
     tg = trackFromTrackDb(tdb);
     tg->bbiFile = bbi;
     tg->nextItemButtonable = TRUE;
-    if (trackShouldUseAjaxRetrieval(tg))
-        tg->loadItems = dontLoadItems;
     }
 else if (sameString(type, "bedGraph"))
     {
@@ -6258,8 +6266,6 @@ else if (sameString(type, "bam"))
     tg = trackFromTrackDb(tdb);
     tg->customPt = ct;
     bamMethods(tg);
-    if (trackShouldUseAjaxRetrieval(tg))
-        tg->loadItems = dontLoadItems;
     tg->mapItemName = ctMapItemName;
     }
 else if (sameString(type, "vcfTabix"))
@@ -6267,8 +6273,6 @@ else if (sameString(type, "vcfTabix"))
     tg = trackFromTrackDb(tdb);
     tg->customPt = ct;
     vcfTabixMethods(tg);
-    if (trackShouldUseAjaxRetrieval(tg))
-        tg->loadItems = dontLoadItems;
     tg->mapItemName = ctMapItemName;
     }
 else if (sameString(type, "vcf"))
@@ -6352,19 +6356,6 @@ char *pos = NULL;
 struct slName *bl = NULL;
 
 ctList = customTracksParseCart(database, cart, &browserLines, &ctFileName);
-#ifdef NOT
-/* this is the incorrect location for this to be done.  This is actually
- * counting all custom tracks whether they are new or not.  Every view of
- * the tracks adds to the penalty.
- */
-if (slCount(ctList) > 0) {
-  int trackCount = slCount(ctList);
-  /* add penalty in relation to number of tracks created, and adjust
-   * exitMs accordingly so that it will not hogExit at this time
-   */
-  (void) earlyBotCheck(enteredMainTime, "hgTracks", (double)(trackCount + 1) * delayFraction, warnMs, (trackCount + 1)*exitMs);
-}
-#endif
 
 for (bl = browserLines; bl != NULL; bl = bl->next)
     {
@@ -7241,13 +7232,8 @@ static boolean isTrackForParallelLoad(struct track *track)
 /* Is this a track that should be loaded in parallel ? */
 {
 char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
-return (startsWithWord("bigWig"  , track->tdb->type)
+return (startsWith("big", track->tdb->type)
      || startsWithWord("mathWig"  , track->tdb->type)
-     || startsWithWord("bigBed"  , track->tdb->type)
-     || startsWithWord("bigPsl"  , track->tdb->type)
-     || startsWithWord("bigNarrowPeak"  , track->tdb->type)
-     || startsWithWord("bigGenePred"  , track->tdb->type)
-     || startsWithWord("bigChain"  , track->tdb->type)
      || startsWithWord("bam"     , track->tdb->type)
      || startsWithWord("halSnake", track->tdb->type)
      || startsWithWord("bigLolly", track->tdb->type)
@@ -7299,6 +7285,28 @@ for (track = trackList; track != NULL; track = track->next)
 static pthread_mutex_t pfdMutex = PTHREAD_MUTEX_INITIALIZER;
 static struct paraFetchData *pfdList = NULL, *pfdRunning = NULL, *pfdDone = NULL, *pfdNeverStarted = NULL;
 
+static void checkHideEmptySubtracks(struct track *tg)
+/* Suppress queries on subtracks w/o data in window (identified from multiIntersect file) */
+{
+if (!tdbIsComposite(tg->tdb))
+    return;
+struct hash *nonEmptySubtracksHash = getNonEmptySubtracks(tg);
+if (!nonEmptySubtracksHash)
+    return;
+struct track *subtrack;
+for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if (!isSubtrackVisible(subtrack))
+        continue;
+    if (!hashLookup(nonEmptySubtracksHash, subtrack->track))
+        {
+        subtrack->loadItems = dontLoadItems;
+        subtrack->limitedVis = tvHide;
+        subtrack->limitedVisSet = TRUE;
+        }
+    }
+}
+
 static void *remoteParallelLoad(void *threadParam)
 /* Each thread loads tracks in parallel until all work is done. */
 {
@@ -7335,6 +7343,7 @@ while(1)
 	{
 	pfd->done = FALSE;
 	checkMaxWindowToDraw(pfd->track);
+	checkHideEmptySubtracks(pfd->track);
 	pfd->track->loadItems(pfd->track);
 	pfd->done = TRUE;
 	}
@@ -7980,6 +7989,8 @@ for (window=windows; window; window=window->next)
 
 		checkMaxWindowToDraw(track);
 
+		checkHideEmptySubtracks(track);     // TODO: Test with multi-window feature
+
 		checkIfWiggling(cart, track);
 
 		if (!loadHack)
@@ -8322,7 +8333,15 @@ if (!hideControls)
 	    safef(buf, sizeof buf, "%s:%ld-%ld", virtChromName, virtWinStart+1, virtWinEnd);
 	
 	position = cloneString(buf);
-	hPrintf("<span class='positionDisplay' id='positionDisplay' title='click to copy position to input box'>%s</span>", addCommasToPos(database, position));
+        char *pressedClass = "", *showVirtRegions = "";
+        if (differentString(virtModeType, "default"))
+            {
+            pressedClass = "pressed";
+            showVirtRegions = "show multi-region position ranges and ";
+            }
+	hPrintf("<span class='positionDisplay %s' id='positionDisplay' "
+                "title='click to %s copy position to input box'>%s</span>", 
+                        pressedClass, showVirtRegions, addCommasToPos(database, position));
 	hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", buf);
 	sprintLongWithCommas(buf, virtWinEnd - virtWinStart);
 	hPrintf(" <span id='size'>%s</span> bp. ", buf);
@@ -8502,15 +8521,17 @@ if (!hideControls)
     hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
     hPrintf(" ");
 
-    hButtonWithOnClick("hgTracksConfigMultiRegionPage",
-	"multi-region", "Configure multi-region display options", "popUpHgt.hgTracks('multi-region config'); return false;");
+    hButtonMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", 
+                        "Configure multi-region display options", 
+                        "popUpHgt.hgTracks('multi-region config'); return false;", virtMode);
     hPrintf(" ");
 
     if (!hIsGsidServer())
         {
-        hButtonWithMsg("hgt.toggleRevCmplDisp", "reverse",
-                       revCmplDisp ? "Show forward strand at this location"
-                                   : "Show reverse strand at this location");
+        hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
+                               revCmplDisp ? "Show forward strand at this location"
+                                           : "Show reverse strand at this location",
+                               NULL, revCmplDisp);
         hPrintf(" ");
         }
 
@@ -10028,7 +10049,7 @@ hPrintf("<tr><td> zoom in 1.5x</td><td class=\"hotkey\">ctrl+i</td> <td> configu
 hPrintf("<tr><td> zoom in 3x</td><td class=\"hotkey\">i</td>        <td> reverse</td><td class=\"hotkey\">r then v</td>                    </tr>\n");
 hPrintf("<tr><td> zoom in 10x</td><td class=\"hotkey\">I</td>       <td> resize</td><td class=\"hotkey\">r then s</td>                     </tr>\n");
 hPrintf("<tr><td> zoom in base level</td><td class=\"hotkey\">b</td><td> refresh</td><td class=\"hotkey\">r then f</td>                    </tr>\n");
-hPrintf("<tr><td> zoom out 1.5x</td><td class=\"hotkey\">ctrl+k</td><td>view chrom names</td><td class=\"hotkey\">v then s</td><td></td><td class='hotkey'></td>              </tr>\n");
+hPrintf("<tr><td> zoom out 1.5x</td><td class=\"hotkey\">ctrl+k</td><td> view chrom names</td><td class=\"hotkey\">v then s</td><td class='hotkey'></td>              </tr>\n");
 hPrintf("<tr><td> zoom out 3x</td><td class=\"hotkey\">k</td>");
 if (gotExtTools)
     hPrintf("<td>send to external tool</td><td class=\"hotkey\">s then t</td>");
@@ -10301,10 +10322,20 @@ if (cartOptionalString(cart, "udcTimeout"))
     }
 }
 
+void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut)
+/* add text to track long label to indicate filter is active */
+{
+tg->longLabel = labelAsFilteredNumber(tg->longLabel, numOut);
+}
+
 void labelTrackAsFiltered(struct track *tg)
 /* add text to track long label to indicate filter is active */
 {
-char *oldLabel = tg->longLabel;
-tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
+tg->longLabel = labelAsFiltered(tg->longLabel);
+
+// also label parent composite track filtered
+struct trackDb *parentTdb = tdbGetComposite(tg->tdb);
+if (parentTdb)
+    parentTdb->longLabel = labelAsFiltered(parentTdb->longLabel);
 }
 

@@ -414,6 +414,11 @@ are described below along with settings specific to their types.</P>
     <div class="format"> <code class="level-full">barChartLabel &lt;label&gt;</code>
     </div>
 </td></tr>
+<tr valign=top><td class="barChartMaxSize"><a name="barChartMaxSize"></a>
+        <img class='toggle detail'>
+    <div class="format"><code class="level-new">barChartMaxSize &lt;small/medium/large&gt;</code>
+    </div>
+</td></tr>
 <tr valign=top><td class="barChartMetric"><a name="barChartMetric"></a> <img class='toggle detail'>
     <div class="format"> <code class="level-full">barChartMetric &lt;metric&gt;</code>
     </div>
@@ -531,6 +536,32 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="labelSeparator"><A name="labelSeparator"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">labelSeparator &lt;text&gt;</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="cFilter"><A name="cFilter"></A>
+            <A name="column.Filter"></A>
+            <A name="column.FilterLimits"></A>
+            <A name="column.FilterByRange"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-new">&lt;column&gt;.Filter [&lt;default integer&gt;]</code><BR>
+            <span class="FilterByRange"><code class="level-new">&lt;column&gt;.FilterByRange &lt;off/on&gt;</code></span><BR>
+            <span class="FilterLimits"><code class="level-new">&lt;column&gt;.FilterLimits &lt;low&gt;[:&lt;high&gt;]</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="FilterText"><A name="FilterText"></A>
+            <A name="column.FilterText"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-new">&lt;column&gt;.FilterText [&lt;default search string&gt;]</code><BR>
+            <span class="FilterType"><code class="level-new">&lt;column&gt;.FilterType &lt;wildcard/regexp&gt;</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="FilterValues"><A name="FilterValues"></A>
+            <A name="column.FilterType"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-new">&lt;column&gt;.FilterValues &lt;value1,value2,value3...&gt;</code><BR>
+            <span class="FilterType"><code class="level-new">&lt;column&gt;.FilterType &lt;singleList/multipleListOr/multipleListAnd&gt;</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="FilterLabel"><A name="FilterLabel"></A>
+            <A name="column.FilterLabel"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-new">&lt;column&gt;.FilterLabel &lt;label&gt;</code></div>
+    </TD></TR>
 </TABLE>
 
 <TABLE class="settingsTable" id="Item_or_Region_Track_Settings_-_less_frequent">
@@ -647,6 +678,10 @@ are described below along with settings specific to their types.</P>
 </td></tr>
 <tr valign=top><td class="interactUp"><a name="interactUp"></a> <img class='toggle detail'>
     <div class="format"> <code class="level-full">interactUp &lt;true/false&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="interactMultiRegion"><a name="interactMultiRegion"></a> <img class='toggle detail'>
+    <div class="format"> <code class="level-new">interactMultiRegion &lt;true/padding&gt;</code>
     </div>
 </td></tr>
 
@@ -975,6 +1010,16 @@ hierarchical containers:
     </TD></TR>
     <TR VALIGN=TOP><TD class="dragAndDrop"><A name="dragAndDrop"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">dragAndDrop subTracks</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="hideEmptySubtracks"><A name="hideEmptySubtracks"></A>
+                <IMG class='toggle detail'>
+        <div class="format">
+        <code class="level-new">hideEmptySubtracks &lt;on/default&gt; [multiBed.bb multiBedSources.tab]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="hideEmptySubtracksLabel"><A name="hideEmptySubtracksLabel"></A>
+                <IMG class='toggle detail'>
+        <div class="format">
+        <code class="level-new">hideEmptySubtracksLabel &lt;label&gt;</code></div>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="compositeTrack_example">
         <IMG class='toggle detail'>

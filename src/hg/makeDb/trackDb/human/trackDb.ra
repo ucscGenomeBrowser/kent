@@ -83,7 +83,7 @@ type bigBed 12 +
 noScoreFilter .
 urlLabel Link to LRG report: 
 url ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml
-urls hgncId="http://www.genenames.org/data/hgnc_data.php?hgnc_id=$$" ncbiAcc="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+urls hgncId="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" ncbiAcc="https://www.ncbi.nlm.nih.gov/nuccore/$$"
 baseColorDefault diffBases
 baseColorUseSequence lrg
 indelDoubleInsert on
@@ -156,8 +156,23 @@ type bed 3
         mmcnt1Filter 0
         mmcnt2Filter 0
         mmcnt3Filter 0
-        dataVersion /gbdb/hg19/bbi/mastermindRelease.txt
+        dataVersion /gbdb/$D/bbi/mastermindRelease.txt
         parent varsInPubs
+
+        track avada
+        shortLabel Avada Variants
+        longLabel Avada Variants extracted from full text publications
+        visibility dense
+        type bigBed 9 +
+        #urls url=https://mastermind.genomenon.com/detail?disease=all%20diseases&$$
+        bigDataUrl /gbdb/$D/bbi/avada.bb
+        noScoreFilter on
+        exonNumbers off
+        #mouseOverField _mouseOver
+        #itemRgb on
+        dataVersion release 1
+        parent varsInPubs
+        urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
 track caseControl
 compositeTrack on
@@ -1580,6 +1595,75 @@ macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp151CodingDbSnp,
 priority 6.9
+
+track dbSnp152
+shortLabel All dbSNP (152)
+longLabel Short Genetic Variants from dbSNP release 152
+bigDataUrl /gbdb/$D/snp/dbSnp152.bb
+detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp152Details.tab.gz
+group varRep
+visibility dense
+url https://www.ncbi.nlm.nih.gov/snp/$$
+urlLabel dbSNP: 
+type bigDbSnp
+freqSourceOrder 1000Genomes,GnomAD_exomes,TOPMED,GnomAD,ExAC,GoESP,ALSPAC,TWINSUK,Estonian
+maxWindowToDraw 1000000
+classFilterValues snv,mnv,ins,del,delins,identity
+classFilterType multipleListOr
+ucscNotesFilterValues |(nothing noted),classMismatch|Variant class/type is inconsistent with allele sizes,clinvar|Present in ClinVar,clusterError|Overlaps a variant with the same type/class and position,commonAll|MAF >= 1% in all projects that report frequencies,commonSome|MAF >= 1% in at least one project that reports frequencies,delMismatch|Deleted sequence mismatches genomic reference sequence,diffMajor|Different projects report different major alleles,multiMap|Variant is placed in more than one genomic position,overlapDiffClass|Variant overlaps other variant(s) of different type/class,overlapSameClass|Variant overlaps other variant(s) of same type/class but different position,refIsMinor|Genomic reference allele is minor allele in at least one project that reports frequencies,refIsRare|Genomic reference allele frequency is <1% in at least one project,refIsSingleton|Genomic reference frequency is 0 in all projects reporting frequencies,revStrand|Variant maps to opposite strand relative to dbSNP's preferred top-level placement
+ucscNotesFilterType multipleListOr
+maxFuncImpactFilterValues 0|(not annotated),0865|frameshift,1587|stop_gained,1574|splice_acceptor_variant,1575|splice_donor_variant,1821|inframe_insertion,1583|missense_variant,1590|terminator_codon_variant,1819|synonymous_variant,1580|coding_sequence_variant,1623|5_prime_UTR_variant,1624|3_prime_UTR_variant,1619|nc_transcript_variant,2153|genic_upstream_transcript_variant,1986|upstream_transcript_variant,2152|genic_downstream_transcript_variant,1987|downstream_transcript_variant,1627|intron_variant
+maxFuncImpactFilterType multipleListOr
+priority 6.8
+
+track dbSnp153Composite
+compositeTrack on
+shortLabel dbSNP 153
+longLabel Short Genetic Variants from dbSNP release 153
+detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp153Details.tab.gz
+group varRep
+visibility pack
+url https://www.ncbi.nlm.nih.gov/snp/$$
+urlLabel dbSNP: 
+type bigDbSnp
+freqSourceOrder 1000Genomes,GnomAD_exomes,TOPMED,ExAC,PAGE_STUDY,GnomAD,GoESP,Estonian,ALSPAC,TWINSUK,NorthernSweden,Vietnamese
+classFilterValues snv,mnv,ins,del,delins,identity
+classFilterType multipleListOr
+ucscNotesFilterValues |(nothing noted),classMismatch|Variant class/type is inconsistent with allele sizes,clinvar|Present in ClinVar,clusterError|Overlaps a variant with the same type/class and position,commonAll|MAF >= 1% in all projects that report frequencies,commonSome|MAF >= 1% in at least one project that reports frequencies,delMismatch|Deleted sequence mismatches genomic reference sequence,diffMajor|Different projects report different major alleles,multiMap|Variant is placed in more than one genomic position,overlapDiffClass|Variant overlaps other variant(s) of different type/class,overlapSameClass|Variant overlaps other variant(s) of same type/class but different position,refIsMinor|Genomic reference allele is minor allele in at least one project that reports frequencies,refIsRare|Genomic reference allele frequency is <1% in at least one project,refIsSingleton|Genomic reference frequency is 0 in all projects reporting frequencies,revStrand|Variant maps to opposite strand relative to dbSNP's preferred top-level placement
+#'
+ucscNotesFilterType multipleListOr
+maxFuncImpactFilterValues 0|(not annotated),0865|frameshift,1587|stop_gained,1574|splice_acceptor_variant,1575|splice_donor_variant,1821|inframe_insertion,1583|missense_variant,1590|terminator_codon_variant,1819|synonymous_variant,1580|coding_sequence_variant,1623|5_prime_UTR_variant,1624|3_prime_UTR_variant,1619|nc_transcript_variant,2153|genic_upstream_transcript_variant,1986|upstream_transcript_variant,2152|genic_downstream_transcript_variant,1987|downstream_transcript_variant,1627|intron_variant
+maxFuncImpactFilterType multipleListOr
+priority 0.8
+
+    track dbSnp153Common
+    parent dbSnp153Composite on
+    shortLabel Common dbSNP (153)
+    longLabel Common (1000 Genomes Phase 3 MAF >= 1%) Short Genetic Variants from dbSNP Release 153
+    bigDataUrl /gbdb/$D/snp/dbSnp153Common.bb
+    priority 1
+
+    track dbSnp153ClinVar
+    parent dbSnp153Composite
+    shortLabel ClinVar dbSNP (153)
+    longLabel Short Genetic Variants from dbSNP Release 153 Included in ClinVar
+    bigDataUrl /gbdb/$D/snp/dbSnp153ClinVar.bb
+    priority 2
+
+    track dbSnp153Mult
+    parent dbSnp153Composite
+    shortLabel Mult. dbSNP (153)
+    longLabel Short Genetic Variants from dbSNP Release 153 That Map to Multiple Genomic Loci
+    bigDataUrl /gbdb/$D/snp/dbSnp153Mult.bb
+    priority 3
+
+    track dbSnp153
+    parent dbSnp153Composite
+    shortLabel All dbSNP (153)
+    longLabel All Short Genetic Variants from dbSNP Release 153
+    bigDataUrl /gbdb/$D/snp/dbSnp153.bb
+    maxWindowToDraw 1000000
+    priority 4
 
 track hgdpGeo
 shortLabel HGDP Allele Freq
@@ -5123,6 +5207,23 @@ termRegex rs[0-9]+
 searchPriority 12.950
 padding 250
 
+searchTable dbSnp152
+searchMethod exact
+searchType bigBed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.949
+padding 100
+
+searchTable dbSnp153
+searchMethod exact
+searchType bigBed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.948
+padding 100
+
+
 include cloneEnd.trackDb.ra
 
 track spMut override
@@ -5143,3 +5244,16 @@ termRegex nssv[0-9]+
 searchType bed
 searchPriority 50
 
+track epdNewPromoter
+release alpha
+shortLabel EPDnew Promoter
+longLabel Human promoters from EPDnew version 0006
+type bigBed 8
+bigDataUrl /gbdb/$D/bbi/epdNewHuman006.$D.bb
+dataVersion EPDNew Version 0006 (May 6, 2018)
+group expression
+url https://epd.epfl.ch/cgi-bin/get_doc?db=mmEpdNew&format=genome&entry=$$
+urlLabel EPDnew promoter:
+color 23,37,187
+visibility hide
+pennantIcon New red

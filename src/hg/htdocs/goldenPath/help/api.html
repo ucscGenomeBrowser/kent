@@ -1,31 +1,43 @@
 <!DOCTYPE html>
-<!--#set var="TITLE" value="JSON API data interface" -->
+<!--#set var="TITLE" value="REST API data interface" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!-- Relative paths to support mirror sites with non-standard GB docs install -->
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<h1>JSON API data interface</h1>
+<h1>REST API data interface</h1>
 
 <h2>Contents</h2>
 
-<h6><a href="#Intro">What is JSON data?</a></h6>
+<h6><a href="#REST">What is REST?</a></h6>
+<h6><a href="#Intro">What is JSON output data?</a></h6>
 <h6><a href="#Access">What is the access URL?</a></h6>
 <h6><a href="#Return">What type of data can be accessed?</a></h6>
 <h6><a href="#Endpoint">Endpoint functions</a></h6>
 <h6><a href="#Parameters">Parameters to endpoint functions</a></h6>
 <h6><a href="#Parameter_use">Required and optional parameters</a></h6>
 <h6><a href="#Track_types">Supported track types</a></h6>
+<h6><a href="#Mirrors">Using the API on mirrors and local installations</a></h6>
 <h6><a href="#list_examples">Example data access, list functions</a></h6>
 <h6><a href="#getData_examples">Example data access, getData functions</a></h6>
 <h6><a href="#Error_examples">Error return examples</a></h6>
 <h6><a href="#Practical_examples">Practical examples</a></h6>
 
+<!-- ========== What is REST? ============================== -->
+<a id="REST"></a>
+<h2>What is REST?</h2>
+<p>
+REST is an acronym for REpresentational State Transfer. It states architectural guidelines for how 
+an API will operate. See also: <a target="_blank" href="https://restfulapi.net/">Principles
+of REST</a>
+</p>
+
 <!-- ========== What is JSON data? ============================== -->
 <a id="Intro"></a>
-<h2>What is JSON data?</h2>
+<h2>What is JSON output data?</h2>
 <p>
-JSON data is a data transfer syntax from a data provider to a data consumer.
+The REST API returns data in JSON format. JSON data is a data transfer 
+syntax from a data provider to a data consumer.
 See also: <a href="https://www.w3schools.com/js/js_json_intro.asp"
 target=_blank>JSON Introduction</a>
 </p>
@@ -179,6 +191,29 @@ Any extra parameters not allowed in a function will be flagged as an error.
 <li>(Work is underway to support additional track types)</li>
 </ul>
 </p>
+
+<!-- ========== API on mirrors and local installations ======================= -->
+<a id="Mirrors"></a>
+<h2>Using the API on mirrors and local installations</h2>
+<p>
+In order to access the API from a <a href='/mirror.html' target=_blank>mirror installation</a>
+or one of the UCSC official mirrors, the complete URL with the cgi-bin should be used:</p>
+
+<ul>
+<li><strong>Europe</strong>: https://genome-euro.ucsc.edu/cgi-bin/hubApi/</li>
+<li><strong>Asia</strong>: https://genome-asia.ucsc.edu/cgi-bin/hubApi/<li>
+<li><strong>Mirror installation</strong>: https://your.server.edu/cgi-bin/hubApi/</li>
+</ul>
+
+<p>
+The URL can then be passed any of the functions described in this page:</p>
+
+<ul>
+<li><a href='https://genome-euro.ucsc.edu/cgi-bin/hubApi/list/publicHubs' target=_blank>list public hubs</a> -
+<b>https://genome-euro.ucsc.edu/cgi-bin/hubApi/list/publicHubs</b></li>
+<li><a href='https://genome-asia.ucsc.edu/cgi-bin/hubApi/list/ucscGenomes' target=_blank>list UCSC database genomes</a> -
+<b>https://genome-asia.ucsc.edu/cgi-bin/hubApi/list/ucscGenomes</b></li>
+</ul>
 
 <!-- ========== Example data access ======================= -->
 <a id="list_examples"></a>

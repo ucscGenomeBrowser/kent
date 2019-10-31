@@ -1,0 +1,95 @@
+0.1 - Got Django 2.1 admin running on hgwdev and proof of concept that
+      the multiple selects on many-to-many fields work there.  Made
+      basic Contributor, Lab, Project, Grant tables and a few of the
+      biologically relevant tables in first draft.  Showed to Clay.
+0.2 - Went through Clay's wish list and got through about 3/4 of the
+      stuff we have control over.  There's lots of tables for things
+      like organs, assays, and project state.  The controlled vocabs
+      are managed by a separate table for the vocab in question that
+      the wranglers can extend.  People can put comments on most things.
+0.3 - Figured out how to set up file uploads so that people can download
+      a file after it's uploaded.  Used this for holding the excel
+      spreadsheets and other key files for wranglers.  Got through
+      the other 1/4 of Clay's wish list.  Polished up the project
+      details page a bit to condense it again with all the recent
+      additions.  Changing 'vocab' to 'wrangler' as a prefix for the
+      tables most people should ignore, and figured out how to do 
+      this without changing the table names.
+0.4 - Adding a bunch of date fields in project, and a specific comment
+      field for the submission.  Refining state names and adding more so can 
+      show project as it goes through analysis a bit.  Breaking now huge
+      wrangling section into three:  wrangling, submission steps, post-submission.
+          tech note:
+      Django migration gets easily confused around multi-to-multi tables 
+      that are reflected so as to appear on both tables being related.  
+      I've had to do pretty painful patches two or three times now.  :-(   
+      I'll probably figure out the pattern though.  
+0.5 - Changes done largely in response to feedback from the wranglers and Max.
+      These include
+         - Making the comments simple text fields rather than many-to-many relations 
+	   with a hcat_comment table.
+	 - Making a wrangler table, to add more info without burdening contributor.
+	   This should also make it simpler to filter by wrangler. 
+	 - Made some fields in the lab optional.
+	 - You can filter projects by wrangler1.
+	 - Added chat url to overall section
+	 - Added a new submission step - assigned to curator
+	 - The contributor role is now a key into a vocab table.  There's roles defined
+	   for program officer (Jonah), pipeliner (Tim), analyst (Jing Zhu and Max),
+	   lab contact (not enough), PI (too many), intern (just enough) with parenthetical
+	   remarks addressed to our test database.
+	 - The submission steps section is changed to be date first, and a few have been
+	   renamed, notably curation.
+      In anticipation of working with interns I made an Intern object similar to the 
+      Wrangler one.  I also added SoftwareDeveloper while I was in there.
+0.6 - Changes largely done to integrate in existing datasets and info from Parth's 
+      project tracker, a nice tool at https://tracker.data.humancellatlas.org,
+      that tracks bundles and matrix cell counts.   Table is hcat_tracker. Visible changes include
+         - 22 new projects (we only had 2 of the already submitted ones before)
+	 - New "Tracking after submission" object in the admin.  This has most of
+	   the nonredundant fields from Parth's tracker that weren't already in the
+	   "Projects" part.  The list display shows mostly bundle counts and if it
+	   has a matrix computed an actual number of cells!
+	 - The "post-submit" section of the project details page is gone, and replaced
+	   with a section now at the bottom called "post-submission tracking - bundles and cells"
+	   which is just an inline non-editable view of the tracker info.
+	 - Note that the import of both project descriptions and validated spreadsheets
+	   was done manually and is incomplete.  I think I'd like wrangler help to
+	   do about 15 of these from when the ingest ui site seems to have lost track of
+	   the spreadsheets.
+0.7 - Put in a json API.  
+           <tuataraUrl>/api  - Gives you list of api entry points, 
+           <tuataraUrl>/api/project  - Gives you list of projects
+           <tuataraUrl>/api/contributor  - Gives you list of contributors
+           <tuataraUrl>/api/organ  - Gives you list of organ
+           <tuataraUrl>/api/disease  - Gives you list of diseases
+           <tuataraUrl>/api/tracker  - Gives you list of project post-submission tracking
+      Where I'm hoping tuataraUrl will be https://tuatara.data.humancellatlas.org,  but
+      at the moment it's http://hgwdev.gi.ucsc.edu:8123/
+	   Also Changes suggested by Will and Chris after putting in some of their
+      projects in particular:
+          - there's a "shared_google_sheet" url that they may use sometimes in place of
+	    the spreadsheet to/from lab fields.
+	  - the staging area is text instead of URL since S3 didn't work in URL
+	  - "chat url" is now called "git ticket url."  If we can figure out a way to
+	    start a git ticket when a project is started it'd save them some clicks.
+      Chris didn't like seeing "wrangler diseases" and the like, since the diseases really
+      weren't about the wranglers, so am prefixing the less public/more preliminary tables
+      with "x" instead of "wrangler"
+0.8 - Changes made primarily from wrangler feedback.  In general this consisted of simplifying
+      things by removing tables or fields people didn't really want,  renaming things where the
+      meaning wasn't clear, not sharing contributor contact info beyond name.  This version does
+      not address any wrangler specific views but it should contain most of the database changes.
+      - Removed responder fields from project since wranglers felt they weren't needed as 
+        separate from the contacts fields.
+      - Removed assay type fields and table.
+      - Renamed state_reached to status and cur_state to wrangling_status.
+      - Added WranglingStatus model and field as distinct from overall ProjectStatus.
+      - Moving wrangler sections to bottom of the project page.
+      - Changed "wrangler1" to "primary wrangler" and "wrangler2" to "secondary wrangler"
+      - Made API only return name, projects, and labs from contributors since other info especially 
+        contributors might want wranglers to have but not the web at large.
+      - Made pubmed id and doi fields optional for publications
+      - It's not visible in code but in database I adjusted some tables to view only for wranglers
+        at their request including species.
+      - Buried Grant and Wrangler behind an x in the admin list since these are also seldom used.

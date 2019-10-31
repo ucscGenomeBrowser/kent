@@ -2794,6 +2794,13 @@ static boolean bigGenePredRecognizer(struct customFactory *fac,
 return (sameType(type, "bigGenePred"));
 }
 
+static boolean bigDbSnpRecognizer(struct customFactory *fac, struct customPp *cpp, char *type,
+                                  struct customTrack *track)
+/* Return TRUE if looks like we're handling a bigDbSnp track */
+{
+return (sameType(type, "bigDbSnp"));
+}
+
 static boolean bigBedRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
@@ -2973,6 +2980,15 @@ static struct customFactory bigInteractFactory =
     "bigInteract",
     bigInteractRecognizer,
     bigInteractLoader
+    };
+
+static struct customFactory bigDbSnpFactory =
+/* Factory for bigDbSnp tracks */
+    {
+    NULL,
+    "bigDbSnp",
+    bigDbSnpRecognizer,
+    bigBedLoader,
     };
 
 static struct customFactory bigBedFactory =
@@ -3472,6 +3488,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &longTabixFactory);
     slAddTail(&factoryList, &bigChainFactory);
     slAddTail(&factoryList, &bigMafFactory);
+    slAddTail(&factoryList, &bigDbSnpFactory);
     slAddTail(&factoryList, &bigBedFactory);
     slAddTail(&factoryList, &bedGraphFactory);
     slAddTail(&factoryList, &microarrayFactory);

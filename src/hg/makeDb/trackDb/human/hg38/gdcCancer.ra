@@ -1,6 +1,6 @@
 track gdcCancer
-shortLabel GDC Cancer
-longLabel GDC Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
+shortLabel TCGA Pan-Cancer
+longLabel TCGA Pan-Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
 compositeTrack on
 group phenDis
 type bigLolly 12 + 
@@ -10,12 +10,11 @@ project_idFilterType multipleListOr
 genderFilterValues male,female
 genderFilterType multipleListOr
 maxItems 500000
-pennantIcon New red ../goldenPath/newsarch.html#062019 "Released Jun. 20, 2019"
 
 track allCancer
 parent gdcCancer on
 shortLabel All Cancers
-longLabel All GDC Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
+longLabel All TCGA Pan-Cancer mutations: 33 TCGA Cancer Projects Summary (Pan-Can 33)
 group phenDis
 type bigLolly 12 + 
 lollyField 13

@@ -116,6 +116,7 @@ UCSC_APPS = \
 	ccCp \
 	convolve \
 	detab \
+	dnsInfo \
 	faFlyBaseToUcsc \
 	faGapLocs \
 	faGapSizes \
@@ -268,6 +269,5 @@ BAD_DIRS= \
 	geneStarts \
 	jimgrep \
 	jkShell \
-	dnsInfo \
 	wigAsciiToBinary \
 	cCp

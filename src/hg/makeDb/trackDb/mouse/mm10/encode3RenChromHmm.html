@@ -2,74 +2,132 @@
 <p>
 The ENCODE project has established an epigenomic resource for mammalian development,
 profiling a diverse panel of mouse tissues at eight developmental stages from 10.5 days post
-conception until birth. 
-This track set presents chromatin state annotations derived from ChIP-seq of histone modifications 
-performed by the Ren lab as part of the ENCODE phase 3 project. 
+conception until birth.</p>
+<div><img border="1" src="../images/renMouseDev.png" style="margin-left: 100px;"></div>
+<p>
+This track set presents chromatin state annotations derived from ChIP-seq 
+of histone modifications performed by the 
+<a target="_blank" href="http://renlab.sdsc.edu/renlab_website//">laboratory of Bing Ren</a> 
+as part of the ENCODE Consortium, phase 3.</p>
+<p>
 The chromHMM method was used to integrate ChIP-seq data from 8 histone 
 modifications (H3K27ac, H3K27me3, H3K4me3, H3K4me2, H3K4me1, H3K9me3, H3K9ac, H3K36me3). 
 In total, fifteen chromatin states were used to segment the genome, and these states 
-were then grouped and colored to highlight predicted functional elements.
+were then grouped and colored to highlight predicted functional elements.</p>
+
 <p>
+The histone ChIP-seq data underlying this track are presented in the 
+<a target="_blank" href="../cgi-bin/hgTrackUi?db=mm10&g=encode3RenHistone">Histone Modifications</a> track.  </p>
 
 <h2> Display Conventions and Configuration </h2>
 <p>
 This track is a composite track that contains multiple subtracks. Each subtrack represents data 
-for a different cell type and displays individually on the browser. 
-Instructions for configuring tracks with multiple subtracks are here. 
+for a different tissue and age, and displays individually on the browser. </p>
+
+<p>
 The fifteen states of the HMM, their associated segment color, and the candidate annotations 
 are as follows:
 
 <ul>
-<li>State 1 - Dark Green - Promoter, Active (Pr-A) 
-<li> State 2 - Light Green - Promoter, Weak (Pr-W) 
-<li> State 3 - Light Grey - Promoter, Bivalent (Pr-B) 
-<li> State 4 - Green - Promoter, Flanking Region (Pr-F)
-<li> State 5 - Bright Yellow - Enhancer, Strong TSS-distal (En-Sd)  
-<li> State 6 - Bright Yellow - Enhancer, Strong TSS-proximal (En-Sp)   
-<li> State 7 - Light Yellow - Enhancer, Weak (En-W)
-<li> State 8 - Dark Grey - Enhancer, Poised TSS-distal (En-Pd)  
-<li> State 9 - Dark Grey - Enhancer, Poised TSS-proximal (En-Pp)  
-<li> State 10 - Dark Blue - Transcription, Strong (Tr-S)
-<li> State 11 - Royal Blue - Transcription, Permissive (Tr-P)
-<li> State 12 - Light Blue - Transcription, Initiation (Tr-I)
-<li> State 13 - Salmon  - Heterochromatin, Polycomb-associated (Hc-P)
-<li> State 14 -  Pink  - Heterochromatin, H3K9me3-associated (Hc-H)
-<li> State 15 - White - No significant signal (Ns)
+<li>State 1 - <span style="background-color: darkgreen">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                Dark Green - Promoter, Active (Pr-A) 
+<li>State 2 - <span style="background-color: lightgreen">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                Light Green - Promoter, Weak (Pr-W) 
+<li>State 3 - <span style="background-color: lightgrey">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                Light Grey - Promoter, Bivalent (Pr-B) 
+<li>State 4 - <span style="background-color: green">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                Green - Promoter, Flanking Region (Pr-F)
+<li>State 5 - <span style="background-color: yellow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                Bright Yellow - Enhancer, Strong TSS-distal (En-Sd)  
+<li>State 6 - <span style="background-color: yellow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                Bright Yellow - Enhancer, Strong TSS-proximal (En-Sp)   
+<li>State 7 - <span style="background-color: lightyellow; border-style: solid; border-width: .05em;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                Light Yellow - Enhancer, Weak (En-W)
+<li>State 8 - <span style="background-color: darkgrey">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                Dark Grey - Enhancer, Poised TSS-distal (En-Pd)  
+<li>State 9 - <span style="background-color: darkgrey">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                Dark Grey - Enhancer, Poised TSS-proximal (En-Pp)  
+<li>State 10 - <span style="background-color: darkblue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                Dark Blue - Transcription, Strong (Tr-S)
+<li>State 11 - <span style="background-color: royalblue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                Royal Blue - Transcription, Permissive (Tr-P)
+<li>State 12 - <span style="background-color: lightblue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                Light Blue - Transcription, Initiation (Tr-I)
+<li>State 13 - <span style="background-color: salmon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                State 13 - Salmon  - Heterochromatin, Polycomb-associated (Hc-P)
+<li>State 14 - <span style="background-color: pink">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                Pink  - Heterochromatin, H3K9me3-associated (Hc-H)
+<li>State 15 - <span style="background-color: white; border-style: solid; border-width: .05em;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                White - No significant signal (Ns)
 </ul>
+</p>
+<p>
+This track is configured by default to &quot;pack&quot; display mode with the state labels
+displayed.  
+To display without labels, switch the track to &quot;dense&quot; display mode.
+</p>
 
 <h2>Methods</h2>
 
-To leverage the chromatin state information captured by combinatorial patterns of histone 
-modifications we applied ChromHMM to ChIP-seq data from 8 histone modifications, deriving 
-a 15-state model that shows near-perfect consistency between biological replicates and general 
-agreement with previously published models. Each state was assigned a descriptive label based 
-on its genomic distribution and similarity to known chromatin signatures. 
-The resulting chromatin states into 4 broad functional classes: promoter states, enhancer states, 
-transcriptional states, and heterochromatic states. The states were then used to segment the 
-genome in each tissue and stage. This track sets represents pooled chromatin state calls, 
-in which ChIP-seq for two biological replicates was pooled prior to chromatin state segmentation. 
+To leverage chromatin state information captured by patterns of histone 
+modifications, ChromHMM analysis was applied to ChIP-seq data from 8 histone modifications, 
+producing a 15-state model that shows high consistency between biological replicates 
+and general agreement with previously published models.
+The states were then used to segment the genome in each tissue and stage. 
+</p>
+<p>
+Each state was assigned a descriptive label based on its genomic distribution 
+and similarity to known chromatin signatures.
+The resulting chromatin states fall into 4 broad functional classes: 
+<em>promoter</em>, <em>enhancer</em>, <em>transcriptional</em>, and <em>heterochromatic</em>.</p>
+<p>
+This track set represents pooled chromatin state calls, 
+in which ChIP-seq for two biological replicates that were was pooled prior to 
+chromatin state segmentation.</p>
 
 <h2>Data Access</h2>
-
-ChromHMM segmentation for individual and pooled replicates can be found at the Ren Lab website, 
-<a target="_blank" href="http://renlab.sdsc.edu/renlab_website//download/encode3-mouse-histone-atac/. The underlying ChIP-seq data are publicly available through the ENCODE portal (https://www.encodeproject.org/), and can be directly accessed using the link below: https://www.encodeproject.org/search/?type=Experiment&status=released&assay_slims=DNA+binding&award.rfa=ENCODE3&lab.title=Bing+Ren%2C+UCSD&limit=all">
+<p>
+ChromHMM segmentation for individual and pooled replicates can be downloaded from the
+Ren Lab
+<a target="_blank" href="http://renlab.sdsc.edu/renlab_website//download/encode3-mouse-histone-atac/">
+ENCODE3 mouse histone and ATAC-seq paper supplementary data</a> page.
+The underlying ChIP-seq data are publicly available from the
+<a target="_blank" href="https://www.encodeproject.org/">ENCODE portal</a>, 
+and can be directly accessed
+<a target="_blank" href="https://www.encodeproject.org/search/?type=Experiment&status=released&assay_slims=DNA+binding&award.rfa=ENCODE3&lab.title=Bing+Ren%2C+UCSD&limit=all">
 here</a>.
 
 <h2>Credits</h2>
 
-<p>Histone ChIP-seq experiments in this track were performed by the Ren Lab 
-(UC San Diego/Ludwig Institute for Cancer Research) as part of the ENCODE Consortium (phase 3). 
-The raw data were processed by uniform pipelines provided by the ENCODE Analysis and Data 
-Coordination centers. The chromHMM annotations were generated by Dr. Iros Barozzi and 
-colleagues in the Environmental Genomics and Systems Biology Division at the Lawrence 
-Berkeley National Laboratory.</p>
+<p>
+Thanks to Iros Barozzi and colleagues in the 
+<a target="_blank" href="https://biosciences.lbl.gov/divisions/egsb/">Environmental Genomics and Systems Biology Division</a>
+at the Lawrence Berkeley National Laboratory for generating the chromHmm analysis and to
+David Gorkin and Yanxiao Zhang at the Ren lab (UCSD/Ludwig Institute for Cancer Research)
+for providing these data and assisting with track development at UCSC.</p>
 
 <h2>References</h2>
 
 <p>
-An atlas of dynamic chromatin landscapes in the developing mouse fetus
-Gorkin et al.  In Press Submitted, Nature. (pre-print: doi: https://doi.org/10.1101/166652)<p>
-
+Gorkin et al. An atlas of dynamic chromatin landscapes in the developing mouse fetus.
+Nature, In Press. (pre-print: doi: 
+<a target="_blank" href="https://doi.org/10.1101/166652">https://doi.org/10.1101/166652</a>)</p>
 <p>
-ChromHMM: automating chromatin-state discovery and characterization
-Ernst and Kellis, Nature Methods, 2012. PMID: 22373907</p>
+
+Ernst J, Kellis M.
+<a href="http://dx.doi.org/10.1038/nmeth.1906" target="_blank">
+ChromHMM: automating chromatin-state discovery and characterization</a>.
+<em>Nat Methods</em>. 2012 Feb 28;9(3):215-6.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/22373907" target="_blank">22373907</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3577932/" target="_blank">PMC3577932</a>
+</p>
+<p>
+Sloan CA, Chan ET, Davidson JM, Malladi VS, Strattan JS, Hitz BC, Gabdank I, Narayanan AK, Ho M, Lee
+BT <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkv1160" target="_blank">
+ENCODE data at the ENCODE portal</a>.
+<em>Nucleic Acids Res</em>. 2016 Jan 4;44(D1):D726-32.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26527727" target="_blank">26527727</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4702836/" target="_blank">PMC4702836</a>
+</p>
+

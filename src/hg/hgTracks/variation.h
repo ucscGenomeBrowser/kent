@@ -34,6 +34,7 @@
 #include "cnpLocke.h"
 #include "cnpSharpSample.h"
 #include "cnpSharpCutoff.h"
+#include "bigBedFilter.h"
 #include "hgTracks.h"
 
 /****** snpMap *******/
@@ -275,5 +276,14 @@ Color delHindsColor(struct track *tg, void *item, struct hvGfx *hvg);
 
 void delHindsMethods(struct track *tg);
 /* methods for delHinds */
+
+/***** bigDbSnp *****/
+
+struct linkedFeatures *lfFromBigDbSnp(struct trackDb *tdb, struct bigBedInterval *bb,
+                                      struct bigBedFilter *filters, int freqSourceIx);
+/* Convert one bigDbSnp item to a linkedFeatures for drawing if it passes filter, else NULL. */
+
+void bigDbSnpMethods(struct track *track);
+/* Special load and draw hooks for type bigDbSnp. */
 
 #endif

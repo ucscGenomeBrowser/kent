@@ -26,13 +26,24 @@
 #include "bigPsl.h"
 #include "bigBedFilter.h"
 #include "bigBedLabel.h"
+#include "variation.h"
+
+static unsigned getFieldNum(struct bbiFile *bbi, char *field)
+// get field number for field name in bigBed.  errAbort if field not found.
+{
+int fieldNum =  bbFieldIndex(bbi, field);
+if (fieldNum < 0)
+    errAbort("error building filter with field %s.  Field not found.", field);
+
+return fieldNum;
+}
 
 struct bigBedFilter *bigBedMakeNumberFilter(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field)
 /* Make a filter on this column if the trackDb or cart wants us to. */
 {
 struct bigBedFilter *ret = NULL;
 char *setting = trackDbSettingClosestToHome(tdb, filter);
-int fieldNum =  bbExtraFieldIndex(bbi, field) + 3;
+int fieldNum =  getFieldNum(bbi, field);
 if (setting)
     {
     struct asObject *as = bigBedAsOrDefault(bbi);
@@ -145,7 +156,7 @@ safef(filterType, sizeof filterType, "%s%s", field, FILTER_TYPE_NAME);
 char *typeValue = cartOrTdbString(cart, tdb, filterType, FILTERTEXT_WILDCARD);
 
 AllocVar(filter);
-filter->fieldNum =  bbExtraFieldIndex(bbi, field) + 3;
+filter->fieldNum =  getFieldNum(bbi, field);
 
 if (sameString(typeValue, FILTERTEXT_REGEXP) )
     {
@@ -167,10 +178,15 @@ struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, 
 struct bigBedFilter *filter;
 char filterType[4096];
 safef(filterType, sizeof filterType, "%s%s", field, FILTER_TYPE_NAME);
-char *setting = cartOrTdbString(cart, tdb, filterType, FILTERBY_SINGLE);
+char *setting = cartOrTdbString(cart, tdb, filterType, NULL);
+if (setting == NULL)
+    {
+    safef(filterType, sizeof filterType, "%s.%s", field, FILTER_TYPE_NAME);
+    setting = cartOrTdbString(cart, tdb, filterType, FILTERBY_SINGLE);
+    }
 
 AllocVar(filter);
-filter->fieldNum =  bbExtraFieldIndex(bbi, field) + 3;
+filter->fieldNum =  getFieldNum(bbi, field);
 if (setting && (sameString(setting, FILTERBY_SINGLE_LIST) || sameString(setting, FILTERBY_MULTIPLE_LIST_OR)))
     filter->comparisonType = COMPARE_HASH_LIST_OR;
 else if (setting && sameString(setting, FILTERBY_MULTIPLE_LIST_AND))
@@ -192,10 +208,22 @@ struct bigBedFilter *bigBedBuildFilters(struct cart *cart, struct bbiFile *bbi, 
 struct bigBedFilter *filters = NULL, *filter;
 struct slName *filterSettings = trackDbSettingsWildMatch(tdb, FILTER_NUMBER_WILDCARD);
 
+if ((filterSettings == NULL) && !trackDbSettingOn(tdb, "noScoreFilter"))
+    {
+    AllocVar(filter);
+    slAddHead(&filters, filter);
+    filter->fieldNum = 4;
+    filter->comparisonType = COMPARE_MORE;
+    char buffer[2048];
+    safef(buffer, sizeof buffer, "%s.scoreFilter", tdb->track);
+    filter->value1 = cartUsualDouble(cart, buffer, 0.0);
+    }
+
 for(; filterSettings; filterSettings = filterSettings->next)
     {
-    char *fieldName = cloneString(filterSettings->name);
-    fieldName[strlen(fieldName) - sizeof FILTER_NUMBER_NAME + 1] = 0;
+    char *fieldName = extractFieldName(filterSettings->name, FILTER_NUMBER_NAME);
+    if (sameString(fieldName, "noScore"))
+        continue;
     if ((filter = bigBedMakeNumberFilter(cart, bbi, tdb, filterSettings->name, NULL, fieldName)) != NULL)
         slAddHead(&filters, filter);
     }
@@ -204,8 +232,7 @@ filterSettings = trackDbSettingsWildMatch(tdb, FILTER_TEXT_WILDCARD);
 
 for(; filterSettings; filterSettings = filterSettings->next)
     {
-    char *fieldName = cloneString(filterSettings->name);
-    fieldName[strlen(fieldName) - sizeof FILTER_TEXT_NAME + 1] = 0;
+    char *fieldName = extractFieldName(filterSettings->name, FILTER_TEXT_NAME);
     if ((filter = bigBedMakeFilterText(cart, bbi, tdb, filterSettings->name,  fieldName)) != NULL)
         slAddHead(&filters, filter);
     }
@@ -399,13 +426,24 @@ void bigBedAddLinkedFeaturesFromExt(struct track *track,
 struct lm *lm = lmInit(0);
 struct trackDb *tdb = track->tdb;
 struct bigBedInterval *bb, *bbList = bigBedSelectRangeExt(track, chrom, start, end, lm, maxItems);
-char *scoreFilter = cartOrTdbString(cart, track->tdb, "scoreFilter", NULL);
 char *mouseOverField = cartOrTdbString(cart, track->tdb, "mouseOverField", NULL);
-int minScore = 0;
-if (scoreFilter)
-    minScore = atoi(scoreFilter);
+/* protect against temporary network error */
+struct bbiFile *bbi = NULL;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    bbi = fetchBbiForTrack(track);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    track->networkErrMsg = cloneString(errCatch->message->string);
+    track->drawItems = bigDrawWarning;
+    track->totalHeight = bigWarnTotalHeight;
+    return;
+    }
+errCatchFree(&errCatch);
 
-struct bbiFile *bbi = fetchBbiForTrack(track);
 int seqTypeField =  0;
 if (sameString(track->tdb->type, "bigPsl"))
     {
@@ -417,6 +455,10 @@ int mouseOverIdx = bbExtraFieldIndex(bbi, mouseOverField);
 track->bbiFile = NULL;
 
 struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, track->tdb) ;
+if (compositeChildHideEmptySubtracks(cart, track->tdb, NULL, NULL))
+   labelTrackAsFiltered(track);
+
+unsigned filtered = 0;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     struct linkedFeatures *lf = NULL;
@@ -435,6 +477,13 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	lf->extra = seq;
 	lf->cds = cds;
 	}
+    else if (sameString(tdb->type, "bigDbSnp"))
+        {
+        // bigDbSnp does not have a score field, but I want to compute the freqSourceIx from
+        // trackDb and settings one time instead of for each item, so I'm overloading scoreMin.
+        int freqSourceIx = scoreMin;
+        lf = lfFromBigDbSnp(tdb, bb, filters, freqSourceIx);
+        }
     else
 	{
         char startBuf[16], endBuf[16];
@@ -450,20 +499,29 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	}
 
     if (lf == NULL)
+        {
+        filtered++;
         continue;
+        }
 
-    lf->label = bigBedMakeLabel(track->tdb, track->labelColumns,  bb, chromName);
+    if (lf->label == NULL)
+        lf->label = bigBedMakeLabel(track->tdb, track->labelColumns,  bb, chromName);
     if (sameString(track->tdb->type, "bigGenePred") || startsWith("genePred", track->tdb->type))
         {
         lf->original = genePredFromBigGenePred(chromName, bb); 
         }
 
-    char* mouseOver = restField(bb, mouseOverIdx);
-    lf->mouseOver   = mouseOver; // leaks some memory, cloneString handles NULL ifself 
-
-    if (scoreFilter == NULL || lf->score >= minScore)
-	slAddHead(pLfList, lf);
+    if (lf->mouseOver == NULL)
+        {
+        char* mouseOver = restField(bb, mouseOverIdx);
+        lf->mouseOver   = mouseOver; // leaks some memory, cloneString handles NULL ifself 
+        }
+    slAddHead(pLfList, lf);
     }
+
+if (filtered)
+   labelTrackAsFilteredNumber(track, filtered);
+
 lmCleanup(&lm);
 
 if (!trackDbSettingClosestToHomeOn(track->tdb, "linkIdInName"))

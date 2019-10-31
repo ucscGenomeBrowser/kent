@@ -1,5 +1,4 @@
 include ../../refSeqComposite.ra
-include ../../crispr10K.ra alpha
 
 include barCharts.ra
 
@@ -7,8 +6,7 @@ include hoffMap.ra
 
 include cancerExpr.ra
 
-include mane.ra beta,public
-include mane.alpha.ra  alpha
+include mane.ra
 
 include gdcCancer.ra
 
@@ -712,4 +710,8 @@ include encode3.ra
 
 include wgEncodeReg.dev.ra alpha
 
+include hic.ra
 
+include gnomad.ra
+
+include platinumGenomes.ra

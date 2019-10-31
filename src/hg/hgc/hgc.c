@@ -1479,7 +1479,7 @@ int extraFieldsStart(struct trackDb *tdb, int fieldCount, struct asObject *as)
 int start = 0;
 char *type = cloneString(tdb->type);
 char *word = nextWord(&type);
-if (word && (sameWord(word,"bed") || sameWord(word,"bigBed") || sameWord(word,"bigGenePred") || sameWord(word,"bigPsl")  || sameWord(word,"bigBarChart")|| sameWord(word,"bigLolly")))
+if (word && (sameWord(word,"bed") || startsWith("big", word)))
     {
     if (NULL != (word = nextWord(&type)))
         start = sqlUnsigned(word);
@@ -4288,6 +4288,10 @@ else if (wordCount > 0)
 	{
 	int num = 12;
         genericBigBedClick(conn, tdb, item, start, end, num);
+	}
+    else if (sameString(type, "bigDbSnp") )
+	{
+        doBigDbSnp(tdb, item);
 	}
     else if (sameString(type, "interaction") )
 	{
@@ -18511,64 +18515,23 @@ if (sqlTableExists(conn, gcTable))
     }
 }
 
-static void printLsSnpPdb(struct sqlConnection *conn, char *pdbId, char *snpId)
-/* generate LS-SNP and chimera links for a PDB id */
+static void checkForMupit(struct sqlConnection *conn, struct trackDb *tdb, int start)
+/* Print a link to MuPIT if the item is in the mupitRanges table */
 {
-char *lsSnpUrl = lsSnpPdbGetUrlPdbSnp(pdbId, snpId);
-struct tempName chimerax;
-lsSnpPdbChimeraSnpAnn(conn, pdbId, snpId, &chimerax);
-printf("<TD>%s<TD>%s<TD><A HREF=\"%s\" target=_blank>LS-SNP</A><td class=\"hgcLsSnpSep\"><A HREF=\"%s\">Chimera</A>\n",
-       pdbId, lsSnpPdbChimeraGetStructType(conn, pdbId),
-       lsSnpUrl, chimerax.forHtml);
-freeMem(lsSnpUrl);
-}
-
-static void printLsSnpMappings(struct sqlConnection *conn, struct slName *pdbIds,
-			       char *snpTrack, char *snpId)
-/* Print lsSnp mappings. */
-{
-jsBeginCollapsibleSection(cart, snpTrack, "lsSnp", "Mappings to PDB protein structures", FALSE);
-printf("<TABLE class=\"hgcLsSnp\">\n");
-printf("<TBODY>\n");
-int numPdbs = slCount(pdbIds);
-// limit column groups if just one row
-int numCols = (numPdbs < 3) ? numPdbs : 3;
-int iCol = 0;
-struct slName *pdbId;
-for (pdbId = pdbIds; pdbId != NULL; pdbId = pdbId->next)
+if (sqlTableExists(conn, "mupitRanges"))
     {
-    if (iCol == 0)
-        printf("<TR>\n");
-    printLsSnpPdb(conn, pdbId->name, snpId);
-    iCol++;
-    if (iCol == numCols)
+    struct sqlResult *sr = hRangeQuery(conn, "mupitRanges", seqName, start, start+1, NULL, NULL);
+    char **row = NULL;
+    if ((row = sqlNextRow(sr)) != NULL)
         {
-        printf("</TR>\n");
-        iCol = 0;
+        int mupitPosition = start + 1; // mupit uses 1-based coords
+        printf("<TR><TD colspan=2><B>");
+        if (sameString(database, "hg19"))
+            printf("<A HREF=\"http://hg19.cravat.us/MuPIT_Interactive/?gm=%s:%d\">", seqName, mupitPosition);
+        else if (sameString(database, "hg38"))
+            printf("<A HREF=\"http://mupit.icm.jhu.edu/MuPIT_Interactive/?gm=%s:%d\">", seqName, mupitPosition);
+        printf("MuPIT Structure</A></B></TD></TR>\n");
         }
-    }
-if (iCol != 0)
-    {
-    // fill in last row
-    for (; iCol < numCols; iCol++)
-        printf("<TD colspan=4 class=\"hgcLsSnpSep\">\n");
-    printf("</TR>\n");
-    }
-printf("</TBODY>\n");
-printf("</TABLE>\n");
-printf("<A href=\"../goldenPath/help/chimera.html\" TARGET=_blank>Chimera help</A>\n");
-jsEndCollapsibleSection();
-}
-
-static void checkForLsSnpMappings(struct sqlConnection *conn, char *snpTrack, char *snpId)
-/* check if this SNP is mapped to any protein by LS-SNP, and if so print
-* the information. */
-{
-struct slName *pdbIds = lsSnpPdbChimeraGetSnpPdbs(conn, snpId);
-if (pdbIds != NULL)
-    {
-    printLsSnpMappings(conn, pdbIds, snpTrack, snpId);
-    slFreeList(&pdbIds);
     }
 }
 
@@ -18639,7 +18602,7 @@ puts("<TABLE>");
 checkForGwasCatalog(conn, tdb, itemName);
 checkForHgdpGeo(conn, tdb, itemName, start);
 checkForHapmap(conn, tdb, itemName);
-checkForLsSnpMappings(conn, tdb->track, itemName);
+checkForMupit(conn, tdb, start);
 printSnpAlignment(tdb, snpAlign, version);
 puts("</TABLE>");
 printTrackHtml(tdb);
@@ -21384,6 +21347,8 @@ else if (sameWord(type, "bigPsl"))
     genericBigPslClick(NULL, ct->tdb, item, start, end);
 else if (sameWord(type, "bigMaf"))
     genericMafClick(NULL, ct->tdb, item, start);
+else if (sameWord(type, "bigDbSnp"))
+    doBigDbSnp(ct->tdb, item);
 else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred"))
     bigBedCustomClick(ct->tdb);
 else if (sameWord(type, "bigBarChart") || sameWord(type, "barChart"))

@@ -262,6 +262,45 @@ TABLE.hgcLsSnp TR, TABLE.hgcLsSnp TD {
     padding-right: 5px;
 }
 
+
+/* hgTrackUi page formatting */
+label.trackUiHicLabel
+{
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+label.trackUiHicLabelExpand
+{
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+img.trackUiHicLabelArrow
+{
+    transform: rotate(0deg);
+    max-width: 9px;
+}
+
+img.trackUiHicLabelArrow.open
+{
+    transform: rotate(90deg);
+}
+
+div.trackUiHicHiddenAttributes
+{
+    font-size: 0.9em;
+    display: none;
+    max-height: 10em;
+    max-width: 60em;
+    overflow: scroll;
+    background-color: white;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    border: solid;
+    border-width: thin;
+}
+
 /* hgTracks config page groups list */
 TABLE.groupLists { background-color: #FFFEE8; width: 50em; }
 TABLE.groupLists TR:not(.blueToggleBar):not(.noData) TD { border: 1px solid; }
@@ -269,6 +308,7 @@ TABLE.groupLists TR:not(.blueToggleBar):not(.noData) TD { border: 1px solid; }
 /* for displaying a basic table - need to condense these to all just the .stdTbl class */
 table.chainTbl, .descTbl, .stdTbl {border-collapse: collapse;}
 table.chainTbl td, .descTbl td, .descTbl th, .stdTbl td, .stdTbl th {border: 1px solid #666; padding: 5px;}
+table.descTbl td.number { text-align: right; }
 
 /* --------------- Newer UI 2.0 styles --------------- */
 .ghost { background-color: #EEEEEE; }
@@ -364,6 +404,7 @@ div.loading { position: absolute; opacity: 0.75; z-index: 15;
 
 /* The are for sortable tables */
 table.subtracks { overflow: visible; white-space: nowrap; border: 1px solid #FFFEE8; }
+table.subtracks table { white-space: normal; }
 tr.sortable { background-color: #FCECC0; }
 th.sortable { color: #0000FF; }
 th:hover.sortable { background-color: #CCFFCC; cursor: pointer; }
@@ -409,10 +450,25 @@ input.disabled  { opacity: 0.5; filters.alpha.opacity:50;  }
 span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 
 .positionDisplay {
-		display: inline-block;
-        padding: 5px; 
-        border: lightgray 1px solid;
+    display: inline-block;
+    padding: 5px;
+    border: lightgray 1px solid;
 }
+
+.positionDisplay:hover {
+    cursor: default;
+}
+
+.positionDisplay.pressed {
+    background: #ebf0ff;
+    webkit-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    moz-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+    border-radius: 4px;
+}
+
+
 
 .positionInput {
         padding: 7px; -moz-border-radius: 3px; border-radius: 3px;
@@ -799,3 +855,13 @@ table.sessionTable tbody tr:hover{
 a:link img.sessionThumbnail {
   padding: 5px;
 }
+
+input[type="submit"].pressed {
+    background: #d0dcff; 
+    webkit-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    moz-box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+    border-radius: 4px;
+}
+

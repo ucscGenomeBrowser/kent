@@ -47,7 +47,6 @@
 #define NONEXHAUSTIVE_SEARCH_LIMIT 500
 #define EXHAUSTIVE_SEARCH_REQUIRED  -1
 
-extern struct cart *cart;
 char *hgAppName = "";
 
 /* alignment tables to check when looking for mrna alignments */
@@ -511,7 +510,9 @@ static struct hgPosTable *addKnownGeneTable(char *db, struct hgPositions *hgp)
 {
 struct hgPosTable *table;
 AllocVar(table);
-if (hTableExists(db, "kgProtMap2"))
+if (hTableExists(db, "knownAttrs"))
+    table->description = cloneString("Gencode Genes");
+else if (hTableExists(db, "kgProtMap2"))
     table->description = cloneString("UCSC Genes");
 else
     table->description = cloneString("Known Genes");
@@ -1191,7 +1192,7 @@ static void mrnaHtmlOnePos(struct hgPosTable *table, struct hgPos *pos, FILE *f)
 fprintf(f, "%s", pos->description);
 }
 
-char *hCarefulTrackOpenVis(char *db, char *trackName)
+char *hCarefulTrackOpenVisCart(struct cart *cart, char *db, char *trackName)
 /* If track is already in full mode, return full; otherwise, return
  * hTrackOpenVis. */
 {
@@ -1224,7 +1225,7 @@ if (sqlTableExists(conn, table))
 return pslList;
 }
 
-static void addPslResultToHgp(struct hgPositions *hgp, char *db, char *tableName,
+static void addPslResultToHgp(struct cart *cart, struct hgPositions *hgp, char *db, char *tableName,
 			      char *shortLabel, char *acc, struct psl *pslList)
 
 /* Create an hgPosTable for the given psl search results, and add it to hgp->tableList. */
@@ -1258,7 +1259,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     pos->browserName = cloneString(psl->qName);
     dyStringPrintf(dy, "<A HREF=\"%s%cposition=%s&%s=%s",
 		   hgAppName, hgAppCombiner, hgPosBrowserRange(pos, NULL),
-		   trackName, hCarefulTrackOpenVis(db, trackName));
+		   trackName, hCarefulTrackOpenVisCart(cart, db, trackName));
     if (ui != NULL)
 	dyStringPrintf(dy, "&%s", ui);
     dyStringPrintf(dy, "%s\">", hgp->extraCgi);
@@ -1275,7 +1276,7 @@ slReverse(&table->posList);
 freeDyString(&dy);
 }
 
-static boolean findMrnaPos(char *db, char *acc,  struct hgPositions *hgp)
+static boolean findMrnaPos(struct cart *cart, char *db, char *acc,  struct hgPositions *hgp)
 /* Find MRNA or EST position(s) from accession number.
  * Look to see if it's an mRNA or EST.  Fill in hgp and return
  * TRUE if it is, otherwise return FALSE. */
@@ -1341,7 +1342,7 @@ while ((tableName = *tables++) != NULL)
     if (pslList == NULL)
 	continue;
     gotResults = TRUE;
-    addPslResultToHgp(hgp, db, tableName, label, acc, pslList);
+    addPslResultToHgp(cart, hgp, db, tableName, label, acc, pslList);
     if (!sameString(tableName, "intronEst"))
 	/* for speed -- found proper table, so don't need to look farther */
 	break;
@@ -1683,7 +1684,7 @@ if (alignCount > 0)
               aligns ?  "A" : "Una");
         char *acc = table->posList->name;
         struct psl *pslList = getPslFromTable(conn, hgp->database, mrnaTable, acc);
-        addPslResultToHgp(hgp, hgp->database, mrnaTable, shortLabel, acc, pslList);
+        addPslResultToHgp(cart, hgp, hgp->database, mrnaTable, shortLabel, acc, pslList);
         if (hgp->tableList)
             alignCount = slCount(hgp->tableList->posList);
         else 
@@ -1707,7 +1708,7 @@ freeDyString(&dy);
 return alignCount;
 }
 
-static boolean findMrnaKeys(char *db, struct hgFindSpec *hfs,
+static boolean findMrnaKeys(struct cart *cart, char *db, struct hgFindSpec *hfs,
 			    char *keys, int limitResults, struct hgPositions *hgp)
 /* Find mRNA that has keyword in one of its fields. */
 {
@@ -2405,7 +2406,7 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 	if (!tdb)
             errAbort("no track for table \"%s\" found via a findSpec", tableName);
 	char *trackName = tdb->track;
-	char *vis = hCarefulTrackOpenVis(db, trackName);
+	char *vis = hCarefulTrackOpenVisCart(cart, db, trackName);
 	boolean excludeTable = FALSE;
         if(!containerDivPrinted)
             {
@@ -2667,7 +2668,7 @@ return sameString(hfs->searchType, "bigBed")
     || sameString(hfs->searchType, "bigGenePred");
 }
 
-static boolean findBigBed(char *db, struct hgFindSpec *hfs, char *spec,
+static boolean findBigBed(struct cart *cart, char *db, struct hgFindSpec *hfs, char *spec,
 			    struct hgPositions *hgp)
 /* Look up items in bigBed  */
 {
@@ -2676,7 +2677,8 @@ struct trackDb *tdb = tdbFindOrCreate(db, NULL, hfs->searchTable);
 return findBigBedPosInTdbList(cart, db, tdb, spec, hgp, hfs);
 }
 
-static boolean searchSpecial(char *db, struct hgFindSpec *hfs, char *term, int limitResults,
+static boolean searchSpecial(struct cart *cart,
+                             char *db, struct hgFindSpec *hfs, char *term, int limitResults,
 			     struct hgPositions *hgp, boolean relativeFlag,
 			     int relStart, int relEnd, boolean *retFound)
 /* Handle searchTypes for which we have special code.  Return true if 
@@ -2706,7 +2708,7 @@ else if (sameString(hfs->searchType, "refGene"))
     }
 else if (isBigFileFind(hfs))
     {
-    found = findBigBed(db, hfs, term, hgp);
+    found = findBigBed(cart, db, hfs, term, hgp);
     }
 else if (sameString(hfs->searchType, "cytoBand"))
     {
@@ -2735,11 +2737,11 @@ else if (sameString(hfs->searchType, "gold"))
     }
 else if (sameString(hfs->searchType, "mrnaAcc"))
     {
-    found = findMrnaPos(db, term, hgp);
+    found = findMrnaPos(cart, db, term, hgp);
     }
 else if (sameString(hfs->searchType, "mrnaKeyword"))
     {
-    found = findMrnaKeys(db, hfs, upcTerm, limitResults, hgp);
+    found = findMrnaKeys(cart, db, hfs, upcTerm, limitResults, hgp);
     }
 else if (sameString(hfs->searchType, "sgdGene"))
     {
@@ -2796,9 +2798,9 @@ if (xrefList == NULL && hgFindSpecSetting(hfs, "searchBoth") != NULL)
 return(xrefList);
 }
 
-static char *addHighlight(struct cart *cart, char *db, char *chrom, unsigned start, unsigned end)
-/* Add the given region to the existing value of the cart variable highlight.
- * Return new value for highlight, or NULL if no change is necessary (already highlighted). */
+char *addHighlight(char *db, char *chrom, unsigned start, unsigned end)
+/* Return a string that can be assigned to the cart var addHighlight, to add a yellow highlight
+ * at db.chrom:start+1-end for search results. */
 {
 char *color = "fcfcac";
 struct dyString *dy = dyStringCreate("%s.%s:%u-%u#%s", db, chrom, start+1, end, color);
@@ -2885,7 +2887,7 @@ for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
 	else if (padding > 0 && !multiTerm)
 	    {
             // highlight the item bases to distinguish from padding
-            pos->highlight = addHighlight(cart, db, pos->chrom, pos->chromStart, pos->chromEnd);
+            pos->highlight = addHighlight(db, pos->chrom, pos->chromStart, pos->chromEnd);
 	    int chromSize = hChromSize(db, pos->chrom);
 	    pos->chromStart -= padding;
 	    pos->chromEnd   += padding;
@@ -2906,7 +2908,8 @@ slFreeList(&tableList);
 return(found);
 }
 
-boolean hgFindUsingSpec(char *db, struct hgFindSpec *hfs, char *term, int limitResults,
+static boolean hgFindUsingSpec(struct cart *cart,
+                        char *db, struct hgFindSpec *hfs, char *term, int limitResults,
 			struct hgPositions *hgp, boolean relativeFlag,
 			int relStart, int relEnd, boolean multiTerm)
 /* Perform the search described by hfs on term.  If successful, put results
@@ -2933,7 +2936,8 @@ if ((!(sameString(hfs->searchType, "mrnaKeyword") || sameString(hfs->searchType,
         return(FALSE);
     }
 
-if (isNotEmpty(hfs->searchType) && searchSpecial(db, hfs, term, limitResults, hgp, relativeFlag,
+if (isNotEmpty(hfs->searchType) && searchSpecial(cart,
+                                                 db, hfs, term, limitResults, hgp, relativeFlag,
 						 relStart, relEnd, &found))
     return(found);
 
@@ -3100,7 +3104,7 @@ else
     if (hfs == NULL)
 	hfs = hfsFind(longList, search);
     if (hfs != NULL)
-	foundIt = hgFindUsingSpec(db, hfs, term, limitResults, hgp, FALSE, 0,0, FALSE);
+	foundIt = hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, FALSE, 0,0, FALSE);
     else
 	warn("Unrecognized singleSearch=%s in URL", search);
     }
@@ -3154,7 +3158,7 @@ if (hgvs)
         singlePos(hgp, "HGVS", NULL, trackTable, term, "",
                   mapping->chrom, mapping->chromStart-padding, mapping->chromEnd+padding);
         // highlight the mapped bases to distinguish from padding
-        hgp->tableList->posList->highlight = addHighlight(cart, db, mapping->chrom,
+        hgp->tableList->posList->highlight = addHighlight(db, mapping->chrom,
                                                           mapping->chromStart, mapping->chromEnd);
         foundIt = TRUE;
         }
@@ -3283,7 +3287,7 @@ else if (!matchesHgvs(cart, db, term, hgp))
 	hgFindSpecGetAllSpecs(db, &shortList, &longList);
     for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
 	{
-	if (hgFindUsingSpec(db, hfs, term, limitResults, hgp, relativeFlag, relStart, relEnd,
+	if (hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, relativeFlag, relStart, relEnd,
 			    multiTerm))
 	    {
 	    done = TRUE;
@@ -3295,7 +3299,7 @@ else if (!matchesHgvs(cart, db, term, hgp))
 	{
 	for (hfs = longList;  hfs != NULL;  hfs = hfs->next)
 	    {
-	    hgFindUsingSpec(db, hfs, term, limitResults, hgp, relativeFlag, relStart, relEnd,
+	    hgFindUsingSpec(cart, db, hfs, term, limitResults, hgp, relativeFlag, relStart, relEnd,
 			    multiTerm);
 	    }
 	/* Lowe lab additions -- would like to replace these with specs, but 
@@ -3340,7 +3344,7 @@ return hgp;
 }
 
 
-void hgPositionsHelpHtml(char *organism, char *database)
+void hgPositionsHelpHtmlCart(struct cart *cart, char *organism, char *database)
 /* Display contents of dbDb.htmlPath for database, or print an HTML comment 
  * explaining what's missing. */
 {

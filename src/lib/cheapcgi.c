@@ -1494,26 +1494,40 @@ safef(javascript, sizeof javascript,
 cgiMakeOnClickButton(id, javascript, " Clear ");
 }
 
-void cgiMakeButtonWithMsg(char *name, char *value, char *msg)
-/* Make 'submit' type button. Display msg on mouseover, if present*/
+void cgiMakeSubmitButtonMaybePressed(char *name, char *value, char *msg, 
+                char *onClick, boolean pressed)
+/* Make 'submit' type button, with optional messsage and onclick javascript.
+   Set styling to indicate whether button has been pressed (for buttons that change browser mode).
+ */
 {
 printf("<input type='submit' name='%s' id='%s' value='%s'",
         name, name, value);
+if (pressed)
+    printf(" class='pressed'");
 if (msg)
     printf(" title='%s'", msg);
 printf(">");
+if (onClick)
+    jsOnEventById("click", name, onClick);
+}
+
+void cgiMakeButtonWithMsg(char *name, char *value, char *msg)
+/* Make 'submit' type button. Display msg on mouseover, if present*/
+{
+cgiMakeSubmitButtonMaybePressed(name, value, msg, NULL, FALSE);
+}
+
+void cgiMakeOnClickSubmitButton(char *command, char *name, char *value)
+/* Make submit button with both variable name and value with client side
+ * onClick (java)script. */
+{
+cgiMakeSubmitButtonMaybePressed(name, value, NULL, command, FALSE);
 }
 
 void cgiMakeButtonWithOnClick(char *name, char *value, char *msg, char *onClick)
 /* Make 'submit' type button, with onclick javascript */
 {
-printf("<input type='submit' name='%s' id='%s' value='%s'",
-        name, name, value);
-if (msg)
-    printf(" title='%s'", msg);
-printf(">");
-
-jsOnEventById("click", name, onClick);
+cgiMakeSubmitButtonMaybePressed(name, value, msg, onClick, FALSE);
 }
 
 void cgiMakeButton(char *name, char *value)
@@ -1527,15 +1541,6 @@ void cgiMakeOnClickButton(char *id, char *command, char *value)
 {
 printf("<INPUT TYPE='button' id='%s' VALUE=\"%s\">", id, value);
 jsOnEventById("click", id, command);
-}
-
-void cgiMakeOnClickSubmitButton(char *command, char *name, char *value)
-/* Make submit button with both variable name and value with client side
- * onClick (java)script. */
-{
-printf("<INPUT TYPE=SUBMIT NAME='%s' id='%s' VALUE=\"%s\">",
-       name, name, value);
-jsOnEventById("click", name, command);
 }
 
 void cgiMakeOptionalButton(char *name, char *value, boolean disabled)

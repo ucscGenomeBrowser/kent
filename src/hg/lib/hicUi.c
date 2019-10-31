@@ -12,15 +12,16 @@
 #include "Cstraw.h"
 #include "regexHelper.h"
 #include "obscure.h"
+#include "htmshell.h"
 
-char *hicUiFetchNormalization(struct cart *cart, char *track, struct hicMeta *meta)
+char *hicUiFetchNormalization(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
 /* Return the current normalization selection, or the default if none
  * has been selected.  Right now this is a hard-coded set specifically for
  * .hic files, but in the future this list might be dynamically determined by
  * the contents and format of the Hi-C file. */
 {
 char cartVar[1024];
-safef(cartVar, sizeof(cartVar), "%s.%s", track, HIC_NORMALIZATION);
+safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_NORMALIZATION);
 char *selected = cartNonemptyString(cart, cartVar);
 char *menu[] = {"NONE", "VC", "VC_SQRT", "KR"};
 int i, sanityCheck = 0;
@@ -36,23 +37,28 @@ if (!sanityCheck)
 return selected;
 }
 
-void hicUiNormalizationMenu(struct cart *cart, char *track, struct hicMeta *meta)
-/* Draw a menu to select the normalization method to use. */
+void hicUiNormalizationDropDown(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
 {
 char cartVar[1024];
-printf("<b>Score normalization:</b> ");
-char* selected = hicUiFetchNormalization(cart, track, meta);
+char* selected = hicUiFetchNormalization(cart, tdb, meta);
 char *menu[] = {"NONE", "VC", "VC_SQRT", "KR"};
-safef(cartVar, sizeof(cartVar), "%s.%s", track, HIC_NORMALIZATION);
+safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_NORMALIZATION);
 cgiMakeDropList(cartVar, menu, 4, selected);
 }
 
-char *hicUiFetchResolution(struct cart *cart, char *track, struct hicMeta *meta)
+void hicUiNormalizationMenu(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
+/* Draw a menu to select the normalization method to use. */
+{
+printf("<b>Score normalization:</b> ");
+hicUiNormalizationDropDown(cart, tdb, meta);
+}
+
+char *hicUiFetchResolution(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
 /* Return the current resolution selection, or the default if none
  * has been selected. */
 {
 char cartVar[1024];
-safef(cartVar, sizeof(cartVar), "%s.%s", track, HIC_RESOLUTION);
+safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_RESOLUTION);
 char *selected = cartNonemptyString(cart, cartVar);
 int sanityCheck = sameOk(selected, "Auto");
 int i;
@@ -66,40 +72,45 @@ if (!sanityCheck)
 return selected;
 }
 
-int hicUiFetchResolutionAsInt(struct cart *cart, char *track, struct hicMeta *meta, int windowSize)
+int hicUiFetchResolutionAsInt(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta, int windowSize)
 /* Return the current resolution selection as an integer.  If there is no selection, or if "Auto"
  * has been selected, return the largest available value that still partitions the window into at
- * least 5000 bins. */
+ * least 500 bins. */
 {
-char *resolutionString = hicUiFetchResolution(cart, track, meta);
+char *resolutionString = hicUiFetchResolution(cart, tdb, meta);
 int result;
-if (sameString(resolutionString, "Auto"))
+if (sameOk(resolutionString, "Auto"))
     {
-    int idealRes = windowSize/5000;
-    char *autoRes = meta->resolutions[meta->nRes-1];
-    int i;
+    int idealRes = windowSize/500;
+    int autoRes = atoi(meta->resolutions[meta->nRes-1]);
+    int smallestRes = autoRes; // in case the ideal resolution is smaller than anything available
+    int i, success = 0;
     for (i=meta->nRes-1; i>= 0; i--)
         {
-        if (atoi(meta->resolutions[i]) < idealRes)
+        int thisRes = atoi(meta->resolutions[i]);
+        if (thisRes < smallestRes)
+            smallestRes = thisRes; // not sure about the sort order of the list
+        if (thisRes < idealRes && thisRes >= autoRes)
             {
-            autoRes = meta->resolutions[i];
-            break;
+            autoRes = thisRes;
+            success = 1;
             }
         }
-    result = atoi(autoRes);
+    if (success)
+        result = autoRes;
+    else
+        result = smallestRes;
     }
 else
     result = atoi(resolutionString);
 return result;
 }
 
-void hicUiResolutionMenu(struct cart *cart, char *track, struct hicMeta *meta)
-/* Draw a menu to select which binSize to use for fetching data */
+void hicUiResolutionDropDown(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
 {
 char cartVar[1024];
 char autoscale[10] = "Auto";
-printf("<b>Resolution:</b> ");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, HIC_RESOLUTION);
+safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_RESOLUTION);
 char **menu = NULL;
 AllocArray(menu, meta->nRes+1);
 char **values = NULL;
@@ -115,19 +126,24 @@ for (i=1; i<meta->nRes+1; i++)
     menu[i] = cloneString(buffer);
     values[i] = cloneString(meta->resolutions[i-1]);
     }
-char *selected = hicUiFetchResolution(cart, track, meta);
+char *selected = hicUiFetchResolution(cart, tdb, meta);
 cgiMakeDropListWithVals(cartVar, menu, values, meta->nRes+1, selected);
-free(menu);
+freeMem(menu);
+}
+
+void hicUiResolutionMenu(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
+/* Draw a menu to select which binSize to use for fetching data */
+{
+printf("<b>Resolution:</b> ");
+hicUiResolutionDropDown(cart, tdb, meta);
 }
 
 
-char *hicUiFetchDrawMode(struct cart *cart, char *track)
+char *hicUiFetchDrawMode(struct cart *cart, struct trackDb *tdb)
 /* Return the current draw mode selection, or the default if none
  * has been selected. */
 {
-char cartVar[1024];
-safef(cartVar, sizeof(cartVar), "%s.%s", track, HIC_DRAW_MODE);
-char* selected = cartNonemptyString(cart, cartVar);
+char *selected = cartOptionalStringClosestToHome(cart, tdb, FALSE, HIC_DRAW_MODE);
 if (    !sameOk(selected, HIC_DRAW_MODE_SQUARE) &&
         !sameOk(selected, HIC_DRAW_MODE_ARC) &&
         !sameOk(selected, HIC_DRAW_MODE_TRIANGLE) )
@@ -138,7 +154,7 @@ return selected;
 }
 
 
-void hicUiDrawMenu(struct cart *cart, char *track)
+void hicUiDrawMenu(struct cart *cart, struct trackDb *tdb)
 /* Draw the list of draw mode options for Hi-C tracks.  Square is the
  * standard square-shaped heatmap with the chromosome position axis on
  * a diagonal from top left to bottom right.  Triangle is the top half
@@ -148,20 +164,18 @@ void hicUiDrawMenu(struct cart *cart, char *track)
 {
 char cartVar[1024];
 printf("<b>Draw mode:</b> ");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, HIC_DRAW_MODE);
+safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_DRAW_MODE);
 char *menu[] = {HIC_DRAW_MODE_SQUARE, HIC_DRAW_MODE_TRIANGLE, HIC_DRAW_MODE_ARC};
-char* selected = hicUiFetchDrawMode(cart, track);
+char* selected = hicUiFetchDrawMode(cart, tdb);
 cgiMakeDropList(cartVar, menu, 3, selected);
 }
 
 
-char *hicUiFetchDrawColor(struct cart *cart, char *track)
+char *hicUiFetchDrawColor(struct cart *cart, struct trackDb *tdb)
 /* Retrieve the HTML hex code for the color to draw the
  * track values in (e.g., #00ffa1) */
 {
-char cartVar[1024];
-safef(cartVar, sizeof(cartVar), "%s.%s", track, HIC_DRAW_COLOR);
-char* selected = cartNonemptyString(cart, cartVar);
+char* selected = cartOptionalStringClosestToHome(cart, tdb, FALSE, HIC_DRAW_COLOR);
 if (selected == NULL)
     selected = HIC_DRAW_COLOR_DEFAULT;
 const char *colorExpr ="^#[0-9a-fA-F]{6}$";
@@ -172,13 +186,11 @@ if (!regexMatch(selected, colorExpr))
 return selected;
 }
 
-char *hicUiFetchBgColor(struct cart *cart, char *track)
+char *hicUiFetchBgColor(struct cart *cart, struct trackDb *tdb)
 /* Retrieve the HTML hex code of the background color for the 
  * track.  This is the color associated with scores at or close to 0. */
 {
-char cartVar[1024];
-safef(cartVar, sizeof(cartVar), "%s.%s", track, HIC_DRAW_BG_COLOR);
-char* selected = cartNonemptyString(cart, cartVar);
+char* selected = cartOptionalStringClosestToHome(cart, tdb, FALSE, HIC_DRAW_BG_COLOR);
 if (selected == NULL)
     selected = HIC_DRAW_BG_COLOR_DEFAULT;
 const char *colorExpr ="^#[0-9a-fA-F]{6}$";
@@ -189,14 +201,12 @@ if (!regexMatch(selected, colorExpr))
 return selected;
 }
 
-double hicUiFetchMaxValue(struct cart *cart, char *track)
+double hicUiFetchMaxValue(struct cart *cart, struct trackDb *tdb)
 /* Retrieve the score value at which the draw color reaches its
  * its maximum intensity.  Any scores above this value will
  * share that same draw color. */
 {
-char cartVar[1024];
-safef(cartVar, sizeof(cartVar), "%s.%s", track, HIC_DRAW_MAX_VALUE);
-return cartUsualDouble(cart, cartVar, HIC_DRAW_MAX_VALUE_DEFAULT);
+return cartUsualDoubleClosestToHome(cart, tdb, FALSE, HIC_DRAW_MAX_VALUE, HIC_DRAW_MAX_VALUE_DEFAULT);
 }
 
 
@@ -215,24 +225,22 @@ jsInline(dyStringContents(new));
 dyStringFree(&new);
 }
 
-boolean hicUiFetchAutoScale(struct cart *cart, char *track)
+boolean hicUiFetchAutoScale(struct cart *cart, struct trackDb *tdb)
 /* Returns whether the track is configured to automatically scale its color range
  * depending on the scores present in the window, or if it should stick to a
  * gradient based on the user's selected maximum value. */
 {
-char cartVar[1024];
-safef(cartVar, sizeof(cartVar), "%s.%s", track, HIC_DRAW_AUTOSCALE);
-return cartUsualBoolean(cart, cartVar, TRUE);
+return cartUsualBooleanClosestToHome(cart, tdb, FALSE, HIC_DRAW_AUTOSCALE, TRUE);
 }
 
 
-void hicUiColorMenu(struct cart *cart, char *track)
+void hicUiColorMenu(struct cart *cart, struct trackDb *tdb)
 /* Draw the menu inputs associated with selecting draw colors for the track. */
 {
 char cartVar[1024];
 printf("<b>Color:</b> ");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, HIC_DRAW_COLOR);
-char* selected = hicUiFetchDrawColor(cart, track);
+safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_DRAW_COLOR);
+char* selected = hicUiFetchDrawColor(cart, tdb);
 printf("<input type='color' name='%s' value='%s' />\n", cartVar, selected);
 
 // Leaving out background color options for now.  We'll see if this option is requested.
@@ -244,23 +252,46 @@ printf("<input type='color' name='%s' value='%s' />\n", cartVar, selected);
 */
 }
 
-void hicUiMaxOptionsMenu(struct cart *cart, char *track)
+void hicUiMaxOptionsMenu(struct cart *cart, struct trackDb *tdb, boolean isComposite)
 /* Draw the menu inputs associated with selecting whether the track should automatically
  * scale its color gradient based on the scores present in the view window, or whether it
  * should stick to a gradient based on a user-selected maximum score. */
 {
 char cartVar[1024];
-safef(cartVar, sizeof(cartVar), "%s.%s", track, HIC_DRAW_MAX_VALUE);
-double currentMax = hicUiFetchMaxValue(cart, track);
-printf("<span id='hicMaxText'><b>Maximum:</b></span> ");
+safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_DRAW_MAX_VALUE);
+double currentMax = hicUiFetchMaxValue(cart, tdb);
+printf("<span id='hicMaxText'><b>%sMaximum:</b></span> ", isComposite ? "Score " : "");
 cgiMakeDoubleVar(cartVar, currentMax, 6);
 
 printf("&nbsp;&nbsp;<b>Auto-scale:</b> ");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, HIC_DRAW_AUTOSCALE);
-boolean autoscaleChecked = hicUiFetchAutoScale(cart, track);
+safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_DRAW_AUTOSCALE);
+boolean autoscaleChecked = hicUiFetchAutoScale(cart, tdb);
 cgiMakeCheckBox(cartVar, autoscaleChecked);
 
-hicUiAddAutoScaleJS(cart, track);
+hicUiAddAutoScaleJS(cart, tdb->track);
+}
+
+
+
+void hicUiFileDetails(struct hicMeta *trackMeta)
+{
+int i;
+printf("</p><hr>\nMetadata from file header:<br>\n");
+printf("<div style='margin-left: 2em'>\n");
+printf("<label class='trackUiHicLabel'>Genome: %s\n<br></label>", trackMeta->fileAssembly);
+char scriptline[2048];
+for (i=0; i<trackMeta->nAttributes-1; i+=2)
+    {
+    printf("<label class='trackUiHicLabelExpand trackUiHicAttrToggle%d'>%s <img src='%s' class='trackUiHicLabelArrow'></label><br>", i, htmlEncode(trackMeta->attributes[i]), "../images/ab_right.gif");
+    printf("<div class='trackUiHicHiddenAttributes hicAttr%d'>\n", i);
+    printf("<pre>%s</pre>", htmlEncode(trackMeta->attributes[i+1]));
+    printf("</div>\n");
+    
+    safef(scriptline, sizeof(scriptline), "$('label.trackUiHicAttrToggle%d').click(function() {$(this).children('img').toggleClass('open'); $('div.hicAttr%d').toggle();});", i, i);
+    jsInline(scriptline);
+    }
+printf("</div>\n");
+printf("<p>For questions concerning the content of a file's metadata header, please contact the file creator.</p>\n");
 }
 
 void hicCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track,
@@ -280,15 +311,36 @@ if (errMsg != NULL)
 puts("<p>");
 printf("Items are drawn in shades of the chosen color depending on score - scores above the "
         "chosen maximum are drawn at full intensity.</p><p>\n");
-hicUiNormalizationMenu(cart, track, trackMeta);
+hicUiNormalizationMenu(cart, tdb, trackMeta);
 puts("&nbsp;&nbsp;");
-hicUiMaxOptionsMenu(cart, track);
+hicUiMaxOptionsMenu(cart, tdb, FALSE);
 
 puts("</p><p>");
-hicUiDrawMenu(cart, track);
+hicUiDrawMenu(cart, tdb);
 puts("&nbsp;&nbsp;");
-hicUiResolutionMenu(cart, track, trackMeta);
+hicUiResolutionMenu(cart, tdb, trackMeta);
 puts("&nbsp;&nbsp;");
-hicUiColorMenu(cart, track);
+hicUiColorMenu(cart, tdb);
+puts("</p><p>\n");
+hicUiFileDetails(trackMeta);
+cfgEndBox(boxed);
+}
+
+void hicCfgUiComposite(struct cart *cart, struct trackDb *tdb, char *track,
+                        char *title, boolean boxed)
+/* Draw the (empty) list of track configuration options for a composite of Hi-C tracks */
+{
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
+
+puts("<p>");
+printf("Items are drawn in shades of the chosen color depending on score - scores above the "
+        "chosen maximum are drawn at full intensity.</p><p>\n");
+hicUiMaxOptionsMenu(cart, tdb, TRUE);
+puts("</p><p>");
+hicUiDrawMenu(cart, tdb);
+puts("&nbsp;&nbsp;");
+hicUiColorMenu(cart, tdb);
+puts("</p><p>\n");
+puts("Subtracks below have additional file-specific configuration options for resolution and normalization.\n</p>");
 cfgEndBox(boxed);
 }

@@ -510,3 +510,56 @@ cd kent/src/hg/makeDb/trackDb
     # if pushing public, add ticket and MARK QA READY
 
 #########################################################################
+2019-08-30: import of UCSC GENCODE group processing of GENCODE V32 (markd)
+    # PRE-RELEASE
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg38/bed/gencodeV32
+    pushd /hive/data/genomes/hg38/bed/gencodeV32
+
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg38 32 98 'Sept 2019'
+
+    # If being pushed public, update 'Release Notes' in
+    # human/hg38/wgEncodeGencodeSuper.html
+
+    # edit human/hg38/trackDb.gencode.ra to add new .ra file include
+    make DBS=hg38
+
+    ## only if being pushed to RR:
+    # edit all.joiner to add ~/tmp/gencodeV32.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg38/bed/gencodeV32
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+    # if pushing public: add ticket and MARK QA READY
+
+2019-08-30: repeat above for final release
+    mv /hive/data/genomes/hg38/bed/gencodeV32 /hive/data/genomes/hg38/bed/gencodeV32pre
+    # redo do above imports
+
+    for t in tables/* ; do cmp ../gencodeV32pre/$t $t ; done
+
+    Changes:
+    wgEncodeGencode2wayConsPseudoV32.gp 
+    wgEncodeGencodeAttrsV32.tab
+    wgEncodeGencodePolyaV32.gp
+    wgEncodeGencodeTagV32.tab
+    only attrs and maybe tags matter to hgGene gencode
+
+    mkdir pre-diffs
+    diff ../gencodeV32pre/tables/wgEncodeGencodeAttrsV32.tab tables/wgEncodeGencodeAttrsV32.tab >pre-diffs/wgEncodeGencodeAttrsV32.diff
+    diff ../gencodeV32pre/tables/wgEncodeGencodeTagV32.tab tables/wgEncodeGencodeTagV32.tab >pre-diffs/wgEncodeGencodeTagV32.diff
+
+    # wgEncodeGencodeAttrsV32: experimental conformation level changed on a few pseudogenes
+    # wgEncodeGencodeTagV32: pseudo_consens changed on a few pseudogenes.
+
+#########################################################################

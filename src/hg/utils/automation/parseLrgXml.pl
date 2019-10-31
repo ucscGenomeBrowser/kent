@@ -105,6 +105,10 @@ sub parseOneLrg {
   # watch out for stray tab chars:
   $lrgSource =~ s/^\s*(.*?)\s*$/$1/;
   $lrgSourceUrl =~ s/^\s*(.*?)\s*$/$1/;
+  # watch out for URLs that are just hostnames (no protocol)
+  if ($lrgSourceUrl !~ /^\w+:\/\//) {
+    $lrgSourceUrl = "http://" . $lrgSourceUrl;
+  }
   my $creationDate = $dom->findvalue('/lrg/fixed_annotation/creation_date');
 
   foreach my $refMapping (@refMappings) {
@@ -114,7 +118,7 @@ sub parseOneLrg {
     if ($seq eq 'unlocalized') {
       $seq = "Un";
     }
-    if ($mapType eq 'haplotype' || $mapType eq 'patch') {
+    if ($mapType eq 'haplotype' || $mapType eq 'fix_patch' || $mapType eq 'novel_patch') {
       my $gbAcc = $refMapping->findvalue('@other_id_syn');
       $gbAcc =~ m/^[A-Z]+\d+\.\d+$/ || die "$xmlIn: $assemblyPrefix has $mapType mapping with " .
         "other_id_syn='$gbAcc', expecting versioned GenBank acc (e.g. 'KI270850.1').";
@@ -134,7 +138,7 @@ sub parseOneLrg {
         # NOTE: as of 5/30/18, there are no mappings to hg19 or hg38 seqs with the suffix _random,
         # so I'm not sure what those would look like in the XML.  This could cause us to lose
         # mappings to the _random sequences, *if* any are added in the future.
-        my $suffix = ($mapType eq 'haplotype' ? 'alt' : 'fix');
+        my $suffix = (($mapType eq 'haplotype' || $mapType eq 'novel_patch') ? 'alt' : 'fix');
         $seq .= "_${gbAcc}_$suffix";
       }
     }
