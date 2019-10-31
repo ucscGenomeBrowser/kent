@@ -19,11 +19,11 @@ def parseArgs():
         %prog -i test.bed -o test.ucsc.bed -g hg19
         %prog -g mm10 --get
         %prog -i test2.bed -o test2.ucsc.bed -a mm10.chromAlias.tsv
-        cat test.bed | %prog -a mm10.chromAlias.tsv > test.ucsc.edb
+        cat test.bed | %prog -a mm10.chromAlias.tsv > test.ucsc.bed
     """)
 
-    parser.add_option("-g", "--genomeDb", dest="db", action="store", help="a UCSC assembly ID, like hg19, mm10 or similar. Not required if -a is used.")
-    parser.add_option("-a", "--chromAlias", dest="aliasFname", action="store", help="a UCSC chromAlias table in tab-sep format.")
+    parser.add_option("-g", "--genomeDb", dest="db", action="store", help="a UCSC assembly ID, like hg19, hg38 or similar. Not required if -a is used. ")
+    parser.add_option("-a", "--chromAlias", dest="aliasFname", action="store", help="a UCSC chromAlias table in tab-sep format. The alias tables for hg19 or hg38 are hardcoded in the script, they do not require a chromAlias table..")
     parser.add_option("-i", "--in", dest="inFname", action="store", help="input filename, default: /dev/stdin")
     parser.add_option("-o", "--out", dest="outFname", action="store", help="output filename, default: /dev/stdout")
     parser.add_option("", "--get", dest="doDownload", action="store_true", help="download a chrom alias table from UCSC for --genomeDb into the current directory and exit")
