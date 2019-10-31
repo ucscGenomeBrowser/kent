@@ -344,7 +344,7 @@ struct symbolDesc ucscNotesDesc[] =
       "This variant overlaps another with the same type/class but different start/end." },
     { bdsRareAll,
       "Variant is \"rare\", i.e. has a Minor Allele Frequency of less than 1% "
-      "in all projects reporting frequencies, or has been reported without frequency data." },
+      "in all projects reporting frequencies, or has no frequency data." },
     { bdsRareSome,
       "Variant is \"rare\", i.e. has a Minor Allele Frequency of less than 1% "
       "in some, but not all, projects reporting frequencies." },
