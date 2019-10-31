@@ -1,0 +1,151 @@
+#!/usr/bin/env python
+import logging, optparse, gzip
+from sys import stdin, stdout, stderr, exit
+try:
+    from urllib.request import urlopen # py2
+except ImportError:
+    from urllib2 import urlopen # py3
+try:
+    from cStringIO import StringIO # py2
+except ImportError:
+    from io import StringIO # py3
+
+# ==== functions =====
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("""usage: %prog [options] filename - change NCBI or Ensembl chromosome names to UCSC names using the chromAlias table of the genome browser.
+
+    Examples:
+        %prog -i test.bed -o test.ucsc.bed -g hg19
+        %prog -g mm10 --get
+        %prog -i test2.bed -o test2.ucsc.bed -a mm10.chromAlias.tsv
+        cat test.bed | %prog -a mm10.chromAlias.tsv > test.ucsc.bed
+    """)
+
+    parser.add_option("-g", "--genomeDb", dest="db", action="store", help="a UCSC assembly ID, like hg19, hg38 or similar. Not required if -a is used. ")
+    parser.add_option("-a", "--chromAlias", dest="aliasFname", action="store", help="a UCSC chromAlias table in tab-sep format. The alias tables for hg19 or hg38 are hardcoded in the script, they do not require a chromAlias table..")
+    parser.add_option("-i", "--in", dest="inFname", action="store", help="input filename, default: /dev/stdin")
+    parser.add_option("-o", "--out", dest="outFname", action="store", help="output filename, default: /dev/stdout")
+    parser.add_option("", "--get", dest="doDownload", action="store_true", help="download a chrom alias table from UCSC for --genomeDb into the current directory and exit")
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    #parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+    (options, args) = parser.parse_args()
+
+    if options.db is None and options.aliasFname is None:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+    return args, options
+
+# ----------- main --------------
+def splitLines(ifh):
+    " yield (chromName, restOfLine) for all lines of ifh "
+    sep = -1
+    #if (sys.version_info > (3, 0)):
+    lineNo = 0
+    for line in ifh:
+        if sep==-1:
+            if "\t" in line:
+                sep = "\t"
+            else:
+                sep = None # = split on any whitespace, consec. whitespc counts as one
+        chrom, rest = line.split(sep, 1)
+        lineNo += 1
+        yield lineNo, sep, chrom, rest
+
+def parseAlias(fname):
+    " parse tsv file with at least two columns, orig chrom name and new chrom name "
+    toUcsc = {}
+    for line in open(fname):
+        if line.startswith("alias"):
+            continue
+        row = line.rstrip("\n").split("\t")
+        toUcsc[row[0]] = row[1]
+    return toUcsc
+
+def chromFixer(db, aliasFname, ifh, ofh):
+    " convert the first column to UCSC-style chrom names "
+    if aliasFname is None:
+        toUcsc = aliasData[db]
+    else:
+        toUcsc = parseAlias(aliasFname)
+
+    ucscChroms = set(toUcsc.values())
+
+    mtSkipCount = 0
+    for lineNo, sep, chrom, rest in splitLines(ifh):
+        # just pass through any UCSC chrom names
+        if chrom in ucscChroms:
+            ucscChrom = chrom
+        else:
+            if db=="hg19" and (chrom=="MT" or chrom=="M"):
+                mtSkipCount += 1
+                continue
+
+            ucscChrom = toUcsc.get(chrom)
+            if ucscChrom is None:
+                logging.error("line %d: chrom name %s is not in chromAlias table" % (lineNo, repr(chrom)))
+                exit(1)
+                continue
+
+        ofh.write(ucscChrom)
+        ofh.write(sep)
+        ofh.write(rest)
+
+    if mtSkipCount!=0:
+        stderr.write("%d features were skipped because they were located on the M or MT chromosome. hg19 includes an older version of the mitochondrial genome and these features cannot be mapped\n" % mtSkipCount)
+
+def patchScript(fnameStr, outFname):
+    " read alias tables from fnameStr, put into this script and write patched script to outFname "
+    aliasData = {}
+    for fname in fnameStr.split(","):
+        db = fname.split(".")[0]
+        print("Reading alias table for %s: %s" % (db, fname))
+        aliasData[db] = parseAlias(fname)
+
+    myFname = __file__
+    newScript = open(myFname).read().replace("#ALIASDATA#", "aliasData = "+repr(aliasData))
+    open(outFname, "w").write(newScript)
+    print("Patched script written to "+outFname)
+    exit(0)
+
+def download(db):
+    url = "http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/chromAlias.txt.gz" % db
+    gzData = urlopen(url).read()
+    data = gzip.GzipFile(fileobj=StringIO.StringIO(gzData)).read()
+    outFname = db+".chromAlias.tsv"
+    open(outFname, "w").write(data)
+    print("Wrote %s" % outFname)
+    exit(0)
+
+def main():
+    args, options = parseArgs()
+
+    db = options.db
+    aliasFname = options.aliasFname
+    inFname = options.inFname
+    outFname = options.outFname
+
+    if db=="build":
+        patchScript(aliasFname, outFname)
+    if options.doDownload:
+        download(db)
+
+    if inFname is None:
+        ifh = stdin
+    else:
+        ifh = open(inFname)
+
+    if outFname is None:
+        ofh = stdout
+    else:
+        ofh = open(outFname, "w")
+
+    chromFixer(db, aliasFname, ifh, ofh)
+
+#ALIASDATA#
+main()
