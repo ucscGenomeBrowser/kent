@@ -4327,14 +4327,27 @@ char *freqSourceOrder = cloneString(trackDbSetting(tdb, "freqSourceOrder"));
 if (isEmpty(freqSourceOrder))
     return;
 int fsCount = countSeparatedItems(freqSourceOrder, ',');
+char *values[fsCount];
+chopCommas(freqSourceOrder, values);
 char *menu[fsCount];
-chopCommas(freqSourceOrder, menu);
+int i;
+for (i = 0; i < fsCount;  i++)
+    {
+    // Change label of GnomAD to "GnomAD genomes" for clarity when "GnomAD_exomes" is present.
+    if (sameString(values[i], "GnomAD") && stringIx("GnomAD_exomes", values) >= 0)
+        menu[i] = "GnomAD genomes";
+    else
+        {
+        menu[i] = cloneString(values[i]);
+        strSwapChar(menu[i], '_', ' ');
+        }
+    }
 boolean parentLevel = isNameAtParentLevel(tdb, name);
 char *freqProj = cartOptionalStringClosestToHome(cart, tdb, parentLevel, "freqProj");
 puts("<b>Frequency source/project to use for Minor Allele Frequency (MAF):</b>");
 char cartVar[1024];
 safef(cartVar, sizeof cartVar, "%s.freqProj", name);
-cgiMakeDropList(cartVar, menu, ArraySize(menu), freqProj);
+cgiMakeDropListWithVals(cartVar, menu, values, ArraySize(menu), freqProj);
 puts("<br>");
 }
 
