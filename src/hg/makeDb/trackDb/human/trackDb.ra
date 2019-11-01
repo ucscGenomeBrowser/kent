@@ -5235,7 +5235,31 @@ termRegex rs[0-9]+
 searchPriority 12.949
 padding 100
 
+searchTable dbSnp153Common
+searchMethod exact
+searchType bigBed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.945
+padding 100
+
+searchTable dbSnp153ClinVar
+searchMethod exact
+searchType bigBed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.946
+padding 100
+
 searchTable dbSnp153
+searchMethod exact
+searchType bigBed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.947
+padding 100
+
+searchTable dbSnp153Mult
 searchMethod exact
 searchType bigBed
 semiShortCircuit 1
