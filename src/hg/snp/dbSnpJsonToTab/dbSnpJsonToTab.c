@@ -804,6 +804,8 @@ if (props->freqSourceCount > 0)
     lmAllocArray(lm, bds->minorAllele, props->freqSourceCount);
     lmAllocArray(lm, bds->minorAlleleFreq, props->freqSourceCount);
     char *firstMajorAllele = NULL;
+    boolean refIsMinor = FALSE;
+    boolean diffMajor = FALSE;
     int sIx;
     for (sIx = 0;  sIx < props->freqSourceCount;  sIx++)
         {
@@ -820,14 +822,18 @@ if (props->freqSourceCount > 0)
                 }
             char *majorAllele = bds->majorAllele[sIx];
             if (differentString(bds->ref, majorAllele))
-                dyStringAppend(dyUcscNotes, bdsRefIsMinor ",");
+                refIsMinor = TRUE;
             if (firstMajorAllele == NULL)
                 firstMajorAllele = majorAllele;
             else if (majorAllele != NULL &&
                      differentString(firstMajorAllele, majorAllele))
-                dyStringAppend(dyUcscNotes, bdsDiffMajor ",");
+                diffMajor = TRUE;
             }
         }
+    if (refIsMinor)
+        dyStringAppend(dyUcscNotes, bdsRefIsMinor ",");
+    if (diffMajor)
+        dyStringAppend(dyUcscNotes, bdsDiffMajor ",");
     }
 }
 
