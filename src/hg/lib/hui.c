@@ -5592,10 +5592,7 @@ puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Data view scaling:</th><td align=left colspan=3>");
 safef(option, sizeof(option), "%s.%s", name, AUTOSCALE );
-if (parentLevel && !tdbIsMultiTrack(tdb->parent))
-    wiggleScaleDropDownParent(option, autoScale);
-else
-    wiggleScaleDropDown(option, autoScale);
+wiggleScaleDropDownParent(option, autoScale);
 wiggleScaleDropDownJavascript(name);
 safef(option, sizeof(option), "%s.%s", name, ALWAYSZERO);
 printf("Always include zero:&nbsp");
