@@ -434,12 +434,7 @@ if (!autoScale) /*      if nothing from the Cart, check trackDb/settings */
     if (sameWord(tdbDefault,"on"))
 	autoScale = cloneString(autoString);
     else if (sameWord(tdbDefault,"group"))
-        {
-        if (parentLevel)
-            autoScale = cloneString(cumulativeString);
-        else
-            autoScale = cloneString(autoString);
-        }
+        autoScale = cloneString(cumulativeString);
     else if (sameWord(tdbDefault,"off"))
 	autoScale = cloneString(manualString);
     else
