@@ -3646,6 +3646,19 @@ if (field[ix - 1] == '.')
 return field;
 }
 
+static char *getLabelSetting(struct cart *cart, struct trackDb *tdb, char *field)
+{
+char labelSetting[4096];
+safef(labelSetting, sizeof labelSetting, "%s%s", field, FILTER_LABEL_NAME);
+char *trackDbLabel = cartOrTdbString(cart, tdb, labelSetting, NULL);
+if (trackDbLabel == NULL)
+    {
+    safef(labelSetting, sizeof labelSetting, "%s.%s", field, FILTER_LABEL_NAME);
+    trackDbLabel = cartOrTdbString(cart, tdb, labelSetting, NULL);
+    }
+return trackDbLabel;
+}
+
 filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct asObject *as, char *filterName, char *name)
 /* Build a filterBy_t structure from a <column>FilterValues statement. */
 {
@@ -3665,6 +3678,9 @@ if (asCol != NULL)
     filterBy->title = asCol->comment;
 else
     errAbort("Building filter on field %s which is not in AS file.", field);
+char *trackDbLabel = getLabelSetting(cart, tdb, field);
+if (trackDbLabel)
+    filterBy->title = trackDbLabel;
 filterBy->useIndex = FALSE;
 filterBy->slValues = slNameListFromCommaEscaped(value);
 chopUpValues(filterBy);
@@ -6095,6 +6111,7 @@ if (filterSettings)
 
             char *scoreName = cloneString(filter->name);
             char *field = extractFieldName(filter->name, FILTER_NUMBER_NAME);
+            char *trackDbLabel = getLabelSetting(cart, tdb, field);
 
             if (as != NULL)
                 {
@@ -6109,10 +6126,15 @@ if (filterSettings)
                     errAbort("Building filter on field %s which is not in AS file.", field);
                 }
             char varName[256];
-            char label[128];
+            char labelBuf[1024];
+            char *label = labelBuf;
             safef(varName, sizeof(varName), "%s%s", scoreName, _BY_RANGE);
             boolean filterByRange = trackDbSettingClosestToHomeOn(tdb, varName);
-            safef(label, sizeof(label),"%s%s", filterByRange ? "": "Minimum ", field);
+
+            if (trackDbLabel)
+                label = trackDbLabel;
+            else
+                safef(labelBuf, sizeof(labelBuf),"%s%s", filterByRange ? "": "Minimum ", field);
 
             showScoreFilter(cart,tdb,opened,boxed,parentLevel,name,title,label,scoreName,isFloat);
             freeMem(scoreName);
