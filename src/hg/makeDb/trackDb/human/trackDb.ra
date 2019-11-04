@@ -3561,16 +3561,38 @@ compositeTrack on
         urls case_id=https://portal.gdc.cancer.gov/cases/$$
         parent cancerMutations
 
-track lovd
+track lovdComp
 shortLabel LOVD Variants
 longLabel Leiden Open Variation Database Public Variants
 group phenDis
 visibility hide
+compositeTrack on
 type bedDetail 6
-url http://varcache.lovd.nl/redirect/$$
-urlLabel Link to LOVD:
-tableBrowser off lovd
-noScoreFilter on
+
+        track lovdShort
+        shortLabel LOVD Variants <= 100bp
+        longLabel Leiden Open Variation Database, short <=100bp variants
+        group phenDis
+        visibility hide
+        type bedDetail 6
+        url http://varcache.lovd.nl/redirect/$$
+        urlLabel Link to LOVD:
+        tableBrowser off lovd
+        noScoreFilter on
+        parent lovdComp
+
+        track lovdLong
+        shortLabel LOVD Variants > 100bp
+        longLabel Leiden Open Variation Database Public Variants, long >100bp variants
+        group phenDis
+        visibility hide
+        type bedDetail 6
+        url http://varcache.lovd.nl/redirect/$$
+        urlLabel Link to LOVD:
+        tableBrowser off lovd
+        noScoreFilter on
+        parent lovdComp
+
 
 track hgmd
 shortLabel HGMD Variants
