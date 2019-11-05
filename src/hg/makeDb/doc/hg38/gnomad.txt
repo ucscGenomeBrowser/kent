@@ -59,3 +59,30 @@ ln -s `pwd`/gnomad.genomes.r2.1.1.sites.liftover_grch38.vcf.bgz.tbi /gbdb/hg38/g
 #################
 Use/adapt trackDb and HTML from hg19 track
 
+#################
+# Add V3.  Native hg38 analysis (not lifted)
+# Released 10/16/2019 by MacArthur lab, announced here:
+# https://macarthurlab.org/2019/10/16/gnomad-v3-0/
+# (2019-10-21 kate)
+
+mkdir /hive/data/outside/gnomAD.3
+cd /hive/data/outside/gnomAD.3
+
+wget https://storage.googleapis.com/gnomad-public/release/3.0/vcf/genomes/gnomad.genomes.r3.0.sites.vcf.bgz.tbi
+
+ln -s `pwd`/gnomad.genomes.r3.0.sites.vcf.bgz.tbi /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r3.0.sites.vcf.gz.tbi
+
+(date; wget https://storage.googleapis.com/gnomad-public/release/3.0/vcf/genomes/gnomad.genomes.r3.0.sites.vcf.bgz; date) >&! wget.genomes.log &
+
+#Mon Oct 21 11:26:58 PDT 2019
+#Mon Oct 21 12:27:14 PDT 2019
+#    ~1 hr
+
+md5sum gnomad.genomes.r3.0.sites.vcf.bgz
+
+ln -s `pwd`/gnomad.genomes.r3.0.sites.vcf.bgz /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r3.0.sites.vcf.gz
+
+
+
+
+
