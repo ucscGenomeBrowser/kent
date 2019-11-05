@@ -108,7 +108,9 @@ def patchScript(fnameStr, outFname):
         aliasData[db] = parseAlias(fname)
 
     myFname = __file__
-    newScript = open(myFname).read().replace("#ALIASDATA#", "aliasData = "+repr(aliasData))
+    oldScript = open(myFname).read()
+    assert("#ALIASDATA#" in oldScript)
+    newScript = oldScript.replace("#ALIASDATA#", "aliasData = "+repr(aliasData))
     open(outFname, "w").write(newScript)
     print("Patched script written to "+outFname)
     exit(0)
