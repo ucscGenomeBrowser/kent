@@ -92,13 +92,16 @@ rs# identifier assigned by dbSNP,
 reference/alternate alleles,
 major/minor alleles (when available) and
 minor allele frequency (when available).
-Allele frequencies are reported independently by twelve projects, as described by dbSNP:
+Allele frequencies are reported independently by twelve projects:
   <ul>
     <li><a href="https://www.internationalgenome.org/" target=_blank>1000Genomes</a>:
-      The 1000 Genomes dataset contains data for 2,504 individuals from 26 populations.
+      The 1000 Genomes Phase 3 dataset contains data for 2,504 individuals from 26 populations.
     </li>
-    <li><a href="https://gnomad.broadinstitute.org/" target=_blank>GnomAD_exomes</a>:
-      The GnomAD exome data set (release v2.1).
+    <li><a href="https://gnomad.broadinstitute.org/" target=_blank>GnomAD exomes</a>:
+      The gnomAD
+      <a href="https://macarthurlab.org/2018/10/17/gnomad-v2-1/" target=_blank>v2.1</a>
+      exome dataset comprises a total of 16 million SNVs and 1.2 million indels from 125,748 exomes
+      in 14 populations.
     </li>
     <li><a href="https://www.nhlbiwgs.org/" target=_blank>TOPMED</a>:
       The TOPMED dataset contains phase 3 data from freeze 5 panel that include over 60,000
@@ -110,15 +113,15 @@ Allele frequencies are reported independently by twelve projects, as described b
       sequenced as part of various disease-specific and population genetic studies.
       Individuals affected by severe pediatric disease have been removed.
     </li>
-    <li><a href="https://www.pagestudy.org/" target=_blank>PAGE_STUDY</a>:
+    <li><a href="https://www.pagestudy.org/" target=_blank>PAGE STUDY</a>:
       The PAGE Study: How Genetic Diversity Improves Our Understanding of the Architecture of
       Complex Traits.
     </li>
-    <li><a href="https://gnomad.broadinstitute.org/" target=_blank>GnomAD</a>:
-      gnomAD v2.1 comprises a total of 16mln SNVs and 1.2mln indels from 125,748 exomes,
-      and 229mln SNVs and 33mln indels from 15,708 genomes. In addition to the 7 populations
-      already present in gnomAD 2.0.2, this release now breaks down the non-Finnish Europeans
-      and East Asian populations further into sub-populations.
+    <li><a href="https://gnomad.broadinstitute.org/" target=_blank>GnomAD genomes</a>:
+      The gnomAD
+      <a href="https://macarthurlab.org/2018/10/17/gnomad-v2-1/" target=_blank>v2.1</a>
+      genome dataset includes 229 million SNVs and 33 million indels from 15,708 genomes
+      in 9 populations.
     </li>
     <li><a href="https://esp.gs.washington.edu/" target=_blank>GoESP</a>:
       The NHLBI Grand Opportunity Exome Sequencing Project (GO-ESP) dataset contains 6503 samples
@@ -138,7 +141,7 @@ Allele frequencies are reported independently by twelve projects, as described b
       The UK10K - TwinsUK project contains 1854 samples from the
       <a href="http://www.twinsuk.ac.uk/" target=_blank>Department of Twin Research and
       Genetic Epidemiology (DTR)</a>.
-      The dataset contains data obtained from the 11,000 identical and non-identical twins
+      The DTR dataset contains data obtained from the 11,000 identical and non-identical twins
       between the ages of 16 and 85 years old.
     </li>
     <li><a href="https://swefreq.nbis.se/dataset/SweGen" target=_blank>NorthernSweden</a>:
@@ -149,7 +152,8 @@ Allele frequencies are reported independently by twelve projects, as described b
       no diagnosed cancer.
     </li>
     <li><a href="https://genomes.vn" target=_blank>Vietnamese</a>:
-      A Vietnamese Genetic Variation Database.
+      The Vietnamese Genetic Variation Database includes about 25 million variants (SNVs and indels)
+      from 406 genomes and 305 exomes of unrelated healthy Kinh Vietnamese (KHV) people.
     </li>
   </ul>
 The project from which to take allele frequency data defaults to 1000 Genomes
@@ -180,13 +184,31 @@ and may be useful to include or exclude affected variants.
 Some are purely informational:
 </p>
 <table class="descTbl">
-  <tr><th>keyword in data file (dbSnp152.bb)</th>
+  <tr><th>keyword in data file (dbSnp153.bb)</th>
     <th># in hg19</th><th># in hg38</th><th>description</th></tr>
   <tr>
     <td>clinvar</td>
     <td class="number">454656</td>
     <td class="number">453954</td>
     <td>Variant is in ClinVar.</td>
+  </tr>
+  <tr>
+    <td>clinvarBenign</td>
+    <td class="number">143844</td>
+    <td class="number">143696</td>
+    <td>Variant is in ClinVar with clinical significance of benign and/or likely benign.</td>
+  </tr>
+  <tr>
+    <td>clinvarConflicting</td>
+    <td class="number">7932</td>
+    <td class="number">7950</td>
+    <td>Variant is in ClinVar with reports of both benign and pathogenic significance.</td>
+  </tr>
+  <tr>
+    <td>clinvarPathogenic</td>
+    <td class="number">96242</td>
+    <td class="number">95262</td>
+    <td>Variant is in ClinVar with clinical significance of pathogenic and/or likely pathogenic.</td>
   </tr>
   <tr>
     <td>commonAll</td>
@@ -221,6 +243,20 @@ Some are purely informational:
     <td>This variant overlaps another with the same type/class but different start/end.</td>
   </tr>
   <tr>
+    <td>rareAll</td>
+    <td class="number">662571654</td>
+    <td class="number">681626796</td>
+    <td>Variant is "rare", i.e. has a Minor Allele Frequency of less than 1%
+      in all projects reporting frequencies, or has no frequency data.</td>
+  </tr>
+  <tr>
+    <td>rareSome</td>
+    <td class="number">670927558</td>
+    <td class="number">690089717</td>
+    <td>Variant is "rare", i.e. has a Minor Allele Frequency of less than 1%
+      in some, but not all, projects reporting frequencies, or has no frequency data.</td>
+  </tr>
+  <tr>
     <td>revStrand</td>
     <td class="number">3813390</td>
     <td class="number">4512600</td>
@@ -233,7 +269,7 @@ Some are purely informational:
 while others may indicate that the reference genome contains a rare variant or sequencing issue:
 </p>
 <table class="descTbl">
-  <tr><th>keyword in data file (dbSnp152.bb)</th>
+  <tr><th>keyword in data file (dbSnp153.bb)</th>
     <th># in hg19</th><th># in hg38</th><th>description</th></tr>
   <tr>
     <td>refIsAmbiguous</td>
@@ -274,7 +310,7 @@ while others may indicate that the reference genome contains a rare variant or s
 and others may indicate an anomaly or problem with the variant data:
 </p>
 <table class="descTbl">
-  <tr><th>keyword in data file (dbSnp152.bb)</th>
+  <tr><th>keyword in data file (dbSnp153.bb)</th>
     <th># in hg19</th><th># in hg38</th><th>description</th></tr>
   <tr>
     <td>altIsAmbiguous</td>
@@ -352,9 +388,8 @@ target=_blank>dbSnpDetails.as</a> schema).
 <h2>Data Access</h2>
 <p>
 The raw data underlying the UCSC Genome Browser track can be explored interactively with the
-<a href="../../cgi-bin/hgTables" target=_blank>Table Browser</a>,
-<a href="../../cgi-bin/hgIntegrator" target=_blank>Data Integrator</a>,
-or <a href="../../cgi-bin/hgVai" target=_blank>Variant Annotation Integrator</a>.
+<a href="../../cgi-bin/hgTables" target=_blank>Table Browser</a> or
+<a href="../../cgi-bin/hgIntegrator" target=_blank>Data Integrator</a>.
 For automated analysis, the track data files can be downloaded from the downloads server for
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/" target=_blank>hg38</a> and
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/snp/" target=_blank>hg19</a>

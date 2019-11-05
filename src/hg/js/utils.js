@@ -1157,6 +1157,8 @@ function parsePosition(position)
 function parsePositionWithDb(position)
 // Parse db.chr:start-end string into a db, chrom, start, end object
 // Also supports be db.chr:start-end#color string
+// Doesn't work right with db's with '.'s in them.  Is this ever
+// used when the db isn't the same one as getDb() would return?
 {
     var out = {};
     var parts = position.split(".");

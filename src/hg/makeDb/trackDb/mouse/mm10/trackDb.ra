@@ -375,6 +375,9 @@ hapClusterHeight 78
 hapClusterEnabled off
 maxWindowToDraw 1000000
 
+track crisprAllTargets override
+pennantIcon New red ../goldenPath/newsarch.html#110519 Released Nov. 5, 2019
+
 track nestedRepeats override
 group varRep
 priority 10

@@ -90,6 +90,7 @@ indelDoubleInsert on
 indelQueryInsert on
 showDiffBasesAllScales .
 color 72,167,38
+pennantIcon Updated red ../goldenPath/newsarch.html#103119 "updated Oct. 31, 2019"
 
 track gad
 shortLabel GAD View
@@ -1629,7 +1630,26 @@ type bigDbSnp
 freqSourceOrder 1000Genomes,GnomAD_exomes,TOPMED,ExAC,PAGE_STUDY,GnomAD,GoESP,Estonian,ALSPAC,TWINSUK,NorthernSweden,Vietnamese
 classFilterValues snv,mnv,ins,del,delins,identity
 classFilterType multipleListOr
-ucscNotesFilterValues |(nothing noted),classMismatch|Variant class/type is inconsistent with allele sizes,clinvar|Present in ClinVar,clusterError|Overlaps a variant with the same type/class and position,commonAll|MAF >= 1% in all projects that report frequencies,commonSome|MAF >= 1% in at least one project that reports frequencies,delMismatch|Deleted sequence mismatches genomic reference sequence,diffMajor|Different projects report different major alleles,multiMap|Variant is placed in more than one genomic position,overlapDiffClass|Variant overlaps other variant(s) of different type/class,overlapSameClass|Variant overlaps other variant(s) of same type/class but different position,refIsMinor|Genomic reference allele is minor allele in at least one project that reports frequencies,refIsRare|Genomic reference allele frequency is <1% in at least one project,refIsSingleton|Genomic reference frequency is 0 in all projects reporting frequencies,revStrand|Variant maps to opposite strand relative to dbSNP's preferred top-level placement
+ucscNotesFilterValues \
+        classMismatch|Variant class/type is inconsistent with allele sizes,\
+        clinvar|Present in ClinVar,\
+        clinvarBenign|ClinVar significance of benign and/or likely benign,\
+        clinvarConflicting|ClinVar includes both benign and pathogenic reports,\
+        clinvarPathogenic|ClinVar significance of pathogenic and/or likely pathogenic,\
+        clusterError|Overlaps a variant with the same type/class and position,\
+        commonAll|MAF >= 1% in all projects that report frequencies,\
+        commonSome|MAF >= 1% in at least one project that reports frequencies,\
+        delMismatch|Deleted sequence mismatches genomic reference sequence,\
+        diffMajor|Different projects report different major alleles,\
+        multiMap|Variant is placed in more than one genomic position,\
+        overlapDiffClass|Variant overlaps other variant(s) of different type/class,\
+        overlapSameClass|Variant overlaps other variant(s) of same type/class but different position,\
+        rareAll|MAF < 1% in all projects that report frequencies (or no frequency data),\
+        rareSome|MAF < 1% in at least one project that reports frequencies,\
+        refIsMinor|Reference genome allele is minor allele in at least one project that reports frequencies,\
+        refIsRare|Reference genome allele frequency is <1% in at least one project,\
+        refIsSingleton|Reference genome frequency is 0 in all projects that report frequencies,\
+        revStrand|Variant maps to opposite strand relative to dbSNP's preferred top-level placement
 #'
 ucscNotesFilterType multipleListOr
 maxFuncImpactFilterValues 0|(not annotated),0865|frameshift,1587|stop_gained,1574|splice_acceptor_variant,1575|splice_donor_variant,1821|inframe_insertion,1583|missense_variant,1590|terminator_codon_variant,1819|synonymous_variant,1580|coding_sequence_variant,1623|5_prime_UTR_variant,1624|3_prime_UTR_variant,1619|nc_transcript_variant,2153|genic_upstream_transcript_variant,1986|upstream_transcript_variant,2152|genic_downstream_transcript_variant,1987|downstream_transcript_variant,1627|intron_variant
@@ -3542,8 +3562,9 @@ compositeTrack on
         parent cancerMutations
 
 track lovd
-shortLabel LOVD Variants
-longLabel Leiden Open Variation Database Public Variants
+release public
+shortLabel LOVD Variants <= 100bp
+longLabel Leiden Open Variation Database, short <=100bp variants
 group phenDis
 visibility hide
 type bedDetail 6
@@ -3551,6 +3572,42 @@ url http://varcache.lovd.nl/redirect/$$
 urlLabel Link to LOVD:
 tableBrowser off lovd
 noScoreFilter on
+
+track lovdComp
+release alpha
+shortLabel LOVD Variants
+longLabel Leiden Open Variation Database Public Variants
+group phenDis
+visibility hide
+compositeTrack on
+type bedDetail 6
+
+        track lovdShort
+        release alpha
+        shortLabel LOVD Variants <= 100bp
+        longLabel Leiden Open Variation Database, short <=100bp variants
+        group phenDis
+        visibility hide
+        type bedDetail 6
+        url http://varcache.lovd.nl/redirect/$$
+        urlLabel Link to LOVD:
+        tableBrowser off lovd
+        noScoreFilter on
+        parent lovdComp
+
+        track lovdLong
+        release alpha
+        shortLabel LOVD Variants > 100bp
+        longLabel Leiden Open Variation Database Public Variants, long >100bp variants
+        group phenDis
+        visibility hide
+        type bedDetail 6
+        url http://varcache.lovd.nl/redirect/$$
+        urlLabel Link to LOVD:
+        tableBrowser off lovd
+        noScoreFilter on
+        parent lovdComp
+
 
 track hgmd
 shortLabel HGMD Variants
@@ -5215,7 +5272,31 @@ termRegex rs[0-9]+
 searchPriority 12.949
 padding 100
 
+searchTable dbSnp153Common
+searchMethod exact
+searchType bigBed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.945
+padding 100
+
+searchTable dbSnp153ClinVar
+searchMethod exact
+searchType bigBed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.946
+padding 100
+
 searchTable dbSnp153
+searchMethod exact
+searchType bigBed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.947
+padding 100
+
+searchTable dbSnp153Mult
 searchMethod exact
 searchType bigBed
 semiShortCircuit 1

@@ -51,6 +51,74 @@
 <!-- ============= 2019 archived news ============= -->
 <a name="2019"></a>
 
+<a name="110519"></a>
+<h2>Nov. 5, 2019 &nbsp;&nbsp; Expanded CRISPR track released for mouse (GRCm38/mm10)</h2>
+<p>
+We are pleased to announce the release of an expanded
+ <a href="../cgi-bin/hgTracks?db=mm10&hideTracks=1&knownGene=pack&crisprAllTargets=pack&position=chr1:11186551-11186838" target="_blank">CRISPR Targets track</a> for the mouse (GRCm38/mm10)
+assembly. This track shows the DNA sequences targetable by CRISPR RNA guides
+using the Cas9 enzyme from S. pyogenes (PAM: NGG) over the entire mouse genome. CRISPR target
+sites were annotated with predicted specificity (off-target effects) and predicted efficiency
+(on-target cleavage) by various algorithms through the tool
+<a href="http://crispor.tefor.net/" target="_blank">CRISPOR</a>. The target sequence of the guide
+is shown with a thick (exon) bar. The PAM motif match (NGG) is shown with a thinner bar.
+</p>
+<p class="text-center">
+  <img class='text-center' src="../images/mm10CrisprAll.png" width='800' alt="CrisprAllTargets track">
+</p>
+
+<p>
+We would like to thank Maximilian Haeussler, Hiram Clawson, and Lou Nassar for their effort
+creating and releasing this data track.</p>
+
+<a name="110119"></a>
+<h2>Nov. 1, 2019 &nbsp;&nbsp; New ENCODE 3 Regulation super-track set available on mouse (GRCm38/mm10) assembly</h2>
+<p>
+We are pleased to announce the new <a target="_blank" 
+href="../cgi-bin/hgTrackUi?db=mm10&g=encode3Reg">ENCODE 3 Regulation super-track</a>
+for the mouse (GRCm38/mm10) assembly. The <a target="_blank" href="https://www.genome.gov/Funded-Programs-Projects/ENCODE-Project-ENCyclopedia-Of-DNA-Elements">ENCODE project</a> 
+has established an epigenomic resource for mammalian development, profiling a diverse panel of
+mouse tissues at eight developmental stages from 10.5 days post conception until birth. The ENCODE
+3 Regulation super-track is composed of the three following composite tracks:
+<ul>
+  <li> <a target="_blank" href="../cgi-bin/hgTrackUi?db=mm10&g=encode3RenChromHmm">Chromatin State</a> - 
+  presents chromatin state annotations derived from ChIP-seq of histone modifications.</li>
+  <li> <a target="_blank" href="../cgi-bin/hgTrackUi?db=mm10&g=encode3RenHistone">Histone Modifications</a> -
+  presents the results of a comprehensive study of chromatin state across these developmental
+  stages, based on 1,128 ChiP-seq assays of 8 histone modifications in 12 tissues.</li>
+  <li> <a target="_blank" href="../cgi-bin/hgTrackUi?db=mm10&g=encode3RenAtac">Open Chromatin</a> -
+  presents the results of a comprehensive study of chromatin accessibility across these
+  developmental stages, based on 122 ATAC-seq assays in 12 tissues.</li>
+</ul></p>
+<p class="text-center">
+  <img class='text-center' src="../images/enR.png" width='700' alt="Example of the ENCODE 3 Regulation supertrack">
+</p>
+
+<p>
+Thanks to David Gorkin and Yanxiao Zhang at the <a target="_blank"
+href="http://renlab.sdsc.edu/renlab_website//">Ren lab (UCSD/Ludwig Institute for Cancer Research)</a>
+and Iros Barozzi of the <a target="_blank" 
+href="https://biosciences.lbl.gov/divisions/egsb/">Environmental Genomics and Systems Biology Division</a>
+at the Lawrence Berkeley National Laboratory for providing this data and assisting with track
+development at UCSC. We would also like to thank Kate Rosenbloom, Conner Powell and the UCSC Genome
+Browser team for their efforts on this release.
+</p>
+
+<a name="103119"></a>
+<h2>Oct. 31, 2019 &nbsp;&nbsp; Locus Reference Genomic (LRG) update for human</h2>
+<p>
+We are pleased to announce an update to the Locus Reference Genomic (LRG) regions track for human,
+(<a href="../../cgi-bin/hgTrackUi?db=hg19&c=chrX&g=lrg" target="_blank">GRCh37/hg19</a>) and
+<a href="../../cgi-bin/hgTrackUi?db=hg38&c=chrX&g=lrg" target="_blank">(GRCh38/hg38)</a>. Each LRG
+record also includes at least one stable transcript on which variants may be reported. These
+transcripts appear in the LRG Transcripts track in the Gene and Gene Predictions track section.</p>
+<p>
+This track was produced at UCSC using <a href="ftp://ftp.ebi.ac.uk/pub/databases/lrgex/"
+target="_blank">LRG XML files</a>. Thanks to
+<a href="http://www.lrg-sequence.org/documentation/lrg-collaborators/"
+target="_blank">LRG collaborators</a> for making these data available. We would also like to thank
+Angie Hinrichs and Jairo Navarro for creating and releasing these tracks.</p>
+
 <a name="102819"></a>
 <h2>Oct. 28, 2019 &nbsp;&nbsp; gnomAD data now available on human (GRCh38/hg38) assembly</h2>
 <p>
@@ -9240,7 +9308,7 @@ chrY:57443438-57772954. These sequences were taken from the corresponding region
 chromosome and are exact duplications of the X chromosome sequences.</p> 
 <p> 
 For further information on NCBI Build 36.1, see the NCBI 
-<a href="https://www.ncbi.nlm.nih.gov/genome/guide/human/release_notes.html" 
+<a href="https://www.ncbi.nlm.nih.gov/mapview/stats/BuildStats.cgi?taxid=9606&build=36&ver=1" 
 target="_blank">Build 36.1 release notes</a>.</p> 
 <p> 
 Bulk downloads of the data are available from the UCSC downloads server via 
@@ -9490,7 +9558,7 @@ version mm7), is now available in the UCSC Genome Browser.</p>
 The Build 35 assembly includes approximately 2.6 Gb of sequence, of which about 2.2 Gb is finished 
 sequence. Chromosomes 2, 4, 11 and X are finished in this build. To review in-depth statistics on 
 the assembly, see the NCBI 
-<a href="https://www.ncbi.nlm.nih.gov/genome/guide/mouse/contig/Build35.html" 
+<a href="https://www.ncbi.nlm.nih.gov/genome/guide/mouse/release_notes.html" 
 target="_blank">Build 35 Data</a> web page. Please note that the UCSC mm7 database contains only the
 reference strain C57BL/6J.</p> 
 <p> 
@@ -9857,7 +9925,7 @@ server</a>.</p>
 The Build 34 assembly has an assembled length of approximately 2.6 Gb, of which about 1.9 Gb is 
 finished sequence. Chromosomes 2, 4, 11 and X are finished in this build. To review in-depth 
 statistics on the assembly, see the NCBI 
-<a href="https://www.ncbi.nlm.nih.gov/genome/guide/mouse/contig/Build34.html" 
+<a href="www.ncbi.nlm.nih.gov/genome/guide/mouse/release_notes.html" 
 target="_blank">Build 34 Data</a> web page. NOTE: In the Genome Browser mm6 assembly, chrY_random 
 erroneously contains a region duplicated from chrY. For more information about this issue, see the 
 Genome Browser <a href="../FAQ/FAQdownloads.html#download30">FAQ</a>. Please also note that the 
@@ -11151,7 +11219,7 @@ release.</p>
 <a name="101703a"></a>
 <h2>Oct. 17, 2003 &nbsp;&nbsp; UCSC Table Browser enhancements</h2> 
 <p> 
-The UCSC <a href="../cgi-bin/hgText">Table Browser</a> is an excellent tool for retrieving and 
+The UCSC <a href="../cgi-bin/hgTables">Table Browser</a> is an excellent tool for retrieving and 
 searching the data underlying the Genome Browser. We've recently added some new features to the 
 Table Browser to make it even easier to query and download data.</p> 
 <p> 
@@ -11530,7 +11598,7 @@ displayed in the browser.</p>
 -- Numerous enhancements to the table browser that allow the user to conduct more complex and 
 specific searches. New features include support for intersections of tracks, a new summary 
 statistics output format, and the ability to output query results as a custom annotation track that 
-can be viewed in the Genome Browser. The new <a href="help/hgTextHelp.html" target="_blank">Table 
+can be viewed in the Genome Browser. The new <a href="help/hgTablesHelp.html" target="_blank">Table 
 Browser User's Guide</a> contains a detailed description of the new features and provides a wealth 
 of information and examples for conducting various types of searches on the database tables.</p> 
 <p>
@@ -11775,7 +11843,7 @@ now functional.</p>
 We're pleased to announce the pre-release of a browser for human genome assembly Build 30 from NCBI 
 (UCSC version hg12). This assembly was produced at NCBI based on sequence information submitted into
 GenBank as of Jun. 28, 2002. Build 30 release notes and statistics will soon be available from the 
-<a href="https://www.ncbi.nlm.nih.gov/genome/guide/human/" target="_blank">NCBI web site</a>.</p>  
+<a href="https://www.ncbi.nlm.nih.gov/" target="_blank">NCBI web site</a>.</p>  
 <p> 
 Build 30 is an excellent high-quality assembly. It contains nearly 87% finished sequence, and 
 94%-97% coverage. The sequence coverage of this build is much higher than in previous releases, and 
@@ -11842,9 +11910,7 @@ server</a>.</p>
 We've just released a browser and BLAT server on the latest Build 29 human genome assembly from NCBI
 (UCSC version hg11). This assembly is based on sequence information submitted into GenBank as of 
 Apr. 5 2002. As with the Dec. 2001 (hg10) release, this assembly was produced at NCBI rather than at
-UCSC. Consult NCBI's <a href="https://www.ncbi.nlm.nih.gov/genome/guide/human/release_notes.html" 
-target="_blank">Build 29 release notes</a> and 
-<a href="https://www.ncbi.nlm.nih.gov/genome/guide/human/HsStats.html" target="_blank">statistics</a>
+UCSC. Consult NCBI's Build 29 release notes and statistics
 for more information about this release. This assembly contains nearly 75% finished sequence. 
 Currently, the human genome project appears to be on track to achieve the goal of finishing at least
 95% of the human genome (using Bermuda standards) by Apr. 2003.</p> 

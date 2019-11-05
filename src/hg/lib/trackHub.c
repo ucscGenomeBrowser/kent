@@ -1208,7 +1208,8 @@ if (relativeUrl != NULL)
     else if (startsWithWord("bigNarrowPeak", type) || startsWithWord("bigBed", type) ||
                 startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)||
                 startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) ||
-                startsWithWord("bigBarChart", type) || startsWithWord("bigInteract", type))
+                startsWithWord("bigBarChart", type) || startsWithWord("bigInteract", type) ||
+                startsWithWord("bigLolly", type))
         {
         /* Just open and close to verify file exists and is correct type. */
         struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);

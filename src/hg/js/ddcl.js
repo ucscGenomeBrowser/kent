@@ -200,7 +200,7 @@ var ddcl = {
         // Defaults
         var myFirstIsAll = true;
         var myNoneIsAll  = false;
-        var myIcon       = null;
+        var myIcon       = $(obj).hasClass('filterBy') ? {} : null;
         var myEmptyText  = 'Select...';
         var myClose      = 'close&nbsp;&nbsp;';
         var myDropHeight = filterByMaxHeight(obj);

@@ -2264,25 +2264,31 @@ There are no extra options that can appear on the type bigInteract line.
 
 <DIV class="alwaysZero"><span class="types wig bedGraph bigWig"></span>
 <div class="format"><code>alwaysZero  &lt;off/on&gt;</code></div>
-    <P>When autoScale is set to "on" in the signal track, 
+    <P>When autoScale is set to "on" or "group" in the signal track, 
     additionally setting <code>alwaysZero</code> to "on" will ensure that the y=0
     value will be in view at all times. Default: off.
     </P>
 </DIV>
 
 <DIV class="autoScale"><span class="types wig bigWig bedGraph"></span>
-<div class="format"><code>autoScale &lt;off/on&gt;</code></div>
+<div class="format"><code>autoScale &lt;off/on/group&gt;</code></div>
     <P>The graph of the
-    data displayed in the Browser image is usually scaled on the y
-    axis in absolute coordinates.  However, you can display the data
-    in autoScale which will ensure that the high score in the current
-    viewing window will peak at the top of the graph.  Like most graph settings, 
+    data displayed in the Browser image is usually scaled on the y-axis 
+    in absolute coordinates.  However, you can display the data
+    in two types of autoScale which will ensure either that the high score in the current
+    viewing window will peak at the top of the graph, or that all tracks in a 
+    composite will be scaled according to the highest point in the viewing 
+    window of any visible tracks in the same composite.  Like most graph settings, 
     this is configurable by the user.  Setting it to "<code>on</code>" in trackDb will default 
-    the track to <code>autoScale</code>. Default: off.</P>
-    <P>NOTE: this option
-    should be avoided if it will lead to display regions in which a low signal
+    the track to <code>auto-scale to data view</code>.
+    Setting it to "<code>group</code>" in trackDb will default 
+    the track to <code>group auto-scale</code>. The default is 
+    "<code>off</code>" which will set the track to <code>use vertical viewing 
+    range setting</code>.</P>
+    <P>NOTE: These options can be misleading if a noisy, low signal
     erroneously appears as significant because there is no high signal in the
-    view window.</P>
+    view window. The "<code>group</code>" option only applies to composite 
+    bigWig tracks.</P>
     <P><B>Example:</B></P>
     <pre>   autoScale on</pre>
 </DIV>

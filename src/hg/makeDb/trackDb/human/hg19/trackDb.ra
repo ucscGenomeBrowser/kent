@@ -8,7 +8,6 @@ bigDataUrl /gbdb/hg19/dgv/dgvGold.bb
 type bigBed 12 +
 url http://dgv.tcag.ca/gb2/gbrowse_details/dgv2_hg19?ref=$S;start=${;end=$};name=$$;class=Sequence
 searchIndex name
-pennantIcon New red ../goldenPath/newsarch.html#070119  Released Jul. 1, 2019
 
 
 searchTable dgvGold

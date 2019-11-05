@@ -804,6 +804,8 @@ if (props->freqSourceCount > 0)
     lmAllocArray(lm, bds->minorAllele, props->freqSourceCount);
     lmAllocArray(lm, bds->minorAlleleFreq, props->freqSourceCount);
     char *firstMajorAllele = NULL;
+    boolean refIsMinor = FALSE;
+    boolean diffMajor = FALSE;
     int sIx;
     for (sIx = 0;  sIx < props->freqSourceCount;  sIx++)
         {
@@ -820,14 +822,18 @@ if (props->freqSourceCount > 0)
                 }
             char *majorAllele = bds->majorAllele[sIx];
             if (differentString(bds->ref, majorAllele))
-                dyStringAppend(dyUcscNotes, bdsRefIsMinor ",");
+                refIsMinor = TRUE;
             if (firstMajorAllele == NULL)
                 firstMajorAllele = majorAllele;
             else if (majorAllele != NULL &&
                      differentString(firstMajorAllele, majorAllele))
-                dyStringAppend(dyUcscNotes, bdsDiffMajor ",");
+                diffMajor = TRUE;
             }
         }
+    if (refIsMinor)
+        dyStringAppend(dyUcscNotes, bdsRefIsMinor ",");
+    if (diffMajor)
+        dyStringAppend(dyUcscNotes, bdsDiffMajor ",");
     }
 }
 
@@ -952,6 +958,40 @@ for (i = 0;  i < bds->altCount;  i++)
     }
 }
 
+static void addClinVarSigs(struct dyString *dyUcscNotes, struct sharedProps *props)
+/* If clinVarSigs indicate benign, pathogenic, or both (conflicting), add ucscNote. */
+{
+boolean isBenign = FALSE, isPathogenic = FALSE;
+struct slName *sig;
+for (sig = props->clinVarSigs;  sig != NULL;  sig = sig->next)
+    {
+    if (sameString(sig->name, "likely-benign") ||
+             sameString(sig->name, "benign") ||
+             sameString(sig->name, "benign-likely-benign"))
+        {
+        isBenign = TRUE;
+        }
+    else if (sameString(sig->name, "pathogenic") ||
+             sameString(sig->name, "likely-pathogenic") ||
+             sameString(sig->name, "pathogenic-likely-pathogenic"))
+        {
+        isPathogenic = TRUE;
+        }
+    else if (sameString(sig->name, "conflicting-interpretations-of-pathogenicity"))
+        {
+        isBenign = TRUE;
+        isPathogenic = TRUE;
+        break;
+        }
+    }
+if (isBenign && isPathogenic)
+    dyStringAppend(dyUcscNotes, bdsClinvarConflicting ",");
+else if (isBenign)
+    dyStringAppend(dyUcscNotes, bdsClinvarBenign ",");
+else if (isPathogenic)
+    dyStringAppend(dyUcscNotes, bdsClinvarPathogenic ",");
+}
+
 static boolean delMismatchesGenome(struct bigDbSnp *bds, struct seqWindow *seqWin)
 /* Return TRUE if bds->ref (spdi del) does not match assembly sequence at bds coords.
  * Sometimes the genome has an N and dbSNP has a more specific IUPAC character.
@@ -1034,11 +1074,19 @@ if (props->class != bigDbSnpClassFromAlleles(bds))
     dyStringAppend(dyUcscNotes, bdsClassMismatch ",");
 if (props->clinVarAccs != NULL)
     dyStringAppend(dyUcscNotes, bdsClinvar ",");
+addClinVarSigs(dyUcscNotes, props);
 if (props->commonCount > 0)
     {
     dyStringAppend(dyUcscNotes, bdsCommonSome ",");
     if (props->rareCount == 0)
         dyStringAppend(dyUcscNotes, bdsCommonAll ",");
+    else
+        dyStringAppend(dyUcscNotes, bdsRareSome ",");
+    }
+else if (props->rareCount > 0 || props->freqSourceCount == 0)
+    {
+    dyStringAppend(dyUcscNotes, bdsRareSome ",");
+    dyStringAppend(dyUcscNotes, bdsRareAll ",");
     }
 if (isRc)
     dyStringAppend(dyUcscNotes, bdsRevStrand ",");
