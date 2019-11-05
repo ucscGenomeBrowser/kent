@@ -427,10 +427,16 @@ var subCfg = { // subtrack config module.
                     visText = 'full';
                 var children = subCfg.visChildrenFind(parentObj);
                 $(children).each(function (i) {
+                    // no hide in subtracks
+                    if (parentVis === 0)
+                        {
+                        visText = 'dense';
+                        parentVis = 1;
+                        }
                     if ($(this).hasClass('fauxInput')) {
                         $(this).text(visText);
                     } else {
-                        $(this).attr('selectedIndex',parentVis);
+                        $(this).attr('selectedIndex',parentVis - 1); 
                         subCfg.clearChange(this);
                     }
                 });
@@ -642,9 +648,9 @@ var subCfg = { // subtrack config module.
         var selectHtml  = "<SELECT name='"+subtrack+"' class='normalText subVisDD "+view+"'";
             selectHtml += " style='width:70px;'>";
         var selected = $(obj).text();
-        var visibilities = ['hide','dense','squish','pack','full'];
+        var visibilities = ['dense','squish','pack','full'];
         if (subCfg.canPack === false)
-            visibilities = ['hide','dense','full'];
+            visibilities = ['dense','full'];
         $(visibilities).each( function (ix) {
              selectHtml += "<OPTION"+(visibilities[ix] === selected ? " SELECTED":"")+">";
              selectHtml += visibilities[ix]+"</OPTION>";

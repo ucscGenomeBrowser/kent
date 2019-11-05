@@ -4821,6 +4821,13 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	{
 	printf("</TD><TD>"); // An extra column for subVis/wrench so dragAndDrop works
 	enum trackVisibility vis = tdbVisLimitedByAncestors(cart,subtrack,FALSE,FALSE);
+/*
+        if (vis == tvHide)
+            // hide is handled with checkbox, not vis dropdown
+            {
+            vis = tvDense;
+            }
+*/
 	char *view = NULL;
 	if (membersForAll->members[dimV] && membership !=NULL
 	&& -1 != (ix = stringArrayIx(membersForAll->members[dimV]->groupTag, membership->subgroups,
@@ -4834,7 +4841,10 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	    safef(classList,sizeof(classList),"clickable fauxInput%s subVisDD",
 			    (visibleCB ? "":" disabled"));
 	#define SUBTRACK_CFG_VIS "<div id='%s_faux' class='%s' style='width:65px;'>%s</div>\n"
-	printf(SUBTRACK_CFG_VIS,subtrack->track,classList,hStringFromTv(vis));
+        char *visText = "select";
+        if (vis != tvHide)
+            visText = hStringFromTv(vis);
+	printf(SUBTRACK_CFG_VIS, subtrack->track, classList, visText);
 	char id[256];
 	safef(id, sizeof id, "%s_faux", subtrack->track);
 	jsOnEventByIdF("click", id, "return subCfg.replaceWithVis(this,\"%s\",true);", subtrack->track);
