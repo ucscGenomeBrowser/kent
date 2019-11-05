@@ -615,7 +615,7 @@ for (spdiB = spdiBList, obs = obsList;
     }
 }
 
-static struct spdiBed *maybeTrimSpdi(struct spdiBed *spdiB, struct lm *lm)
+static struct spdiBed *trimSpdi(struct spdiBed *spdiB, struct lm *lm)
 /* Return a new spdiBed that is the minimal representation of spdiB. */
 {
 struct spdiBed *spdiBTrim = spdiBedNewLm(spdiB->chrom, spdiB->chromStart,
@@ -655,7 +655,20 @@ for (sIx = 0;  sIx < props->freqSourceCount;  sIx++)
             // First trim ref and alt to their minimal version for indelShift to work with.
             // There may be nothing to trim because they're usually minimal already and
             // stringIn catches false positive like A/TAAC, and that's fine.
-            struct spdiBed *spdiBTrim = maybeTrimSpdi(spdiB, lm);
+            struct spdiBed *spdiBTrim = trimSpdi(spdiB, lm);
+            if (differentString(spdiB->del, spdiB->ins) &&
+                differentString(spdiB->del, spdiBTrim->del))
+                {
+                // Sometimes freq alleles are neither minimal nor shiftable.  If not minimal,
+                // make it minimal in case it was neither.  Don't do this to ref allele SPDI
+                // because it will always trim to ""/"".  It is handled in checkSpdisAfterExpansion.
+                changed = TRUE;
+                spdiB->chromStart = spdiBTrim->chromStart;
+                spdiB->chromEnd = spdiBTrim->chromEnd;
+                spdiB->del = spdiBTrim->del;
+                spdiB->ins = spdiBTrim->ins;
+                obs->allele = spdiB->ins;
+                }
             // If possible, expand the minimal representation to full SPDI range.
             struct seqWindow *seqWin = getChromSeq(ncToSeqWin, spdiB->chrom, ncToTwoBitChrom);
             if (seqWin == NULL)
@@ -946,7 +959,7 @@ for (i = 0;  i < bds->altCount;  i++)
         // There may be nothing to trim because they're usually minimal already and
         // stringIn catches false positive like A/TAAC, and that's fine.
         struct spdiBed *spdiB = spdiBedNewLm(bds->chrom, bds->chromStart, bds->ref, alt, lm);
-        struct spdiBed *spdiBTrim = maybeTrimSpdi(spdiB, lm);
+        struct spdiBed *spdiBTrim = trimSpdi(spdiB, lm);
 
         maybeExpandRange(spdiBTrim, seqWin, spdiB, NULL, lm);
         if (spdiB->chromStart != bds->chromStart || spdiB->chromEnd != bds->chromEnd)
