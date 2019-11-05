@@ -642,9 +642,9 @@ var subCfg = { // subtrack config module.
         var selectHtml  = "<SELECT name='"+subtrack+"' class='normalText subVisDD "+view+"'";
             selectHtml += " style='width:70px;'>";
         var selected = $(obj).text();
-        var visibilities = ['hide','dense','squish','pack','full'];
+        var visibilities = ['dense','squish','pack','full'];
         if (subCfg.canPack === false)
-            visibilities = ['hide','dense','full'];
+            visibilities = ['dense','full'];
         $(visibilities).each( function (ix) {
              selectHtml += "<OPTION"+(visibilities[ix] === selected ? " SELECTED":"")+">";
              selectHtml += visibilities[ix]+"</OPTION>";
@@ -675,17 +675,17 @@ var subCfg = { // subtrack config module.
                 $(this).unbind('blur');
                 $(this).unbind('click');
             }
-            if (this.selectedIndex === 0) { // setting to hide so uncheck and disable.
+            //if (this.selectedIndex === 0) { // setting to hide so uncheck and disable.
                 // Easiest is to uncheck subCB and reset vis
                 //    so that the reverse action makes sense
-                var subCb = normed($("input[name='" + this.name + "_sel']"));
-                if (subCb) {
-                    subCfg.checkOneSubtrack(subCb,false,true);
-                    subCfg.inheritSetting(this,true);
-                } else {
-                    warn('DEBUG: Cant find subCB for ' + this.name);
-                }
-            } else {
+                //var subCb = normed($("input[name='" + this.name + "_sel']"));
+                //if (subCb) {
+                    //subCfg.checkOneSubtrack(subCb,false,true);
+                    //subCfg.inheritSetting(this,true);
+                //} else {
+                    //warn('DEBUG: Cant find subCB for ' + this.name);
+                //}
+            //} else {
                 subCfg.markChange(e,this);
                 // If made visible, be sure to make composite visible
                 // But do NOT turn composite from hide to full, since it will turn on other subs
@@ -698,7 +698,7 @@ var subCfg = { // subtrack config module.
                             visTriggersHiddenSelect(visDD);
                     }
                 }
-            }
+            //}
         });
     },
 
@@ -710,17 +710,48 @@ var subCfg = { // subtrack config module.
             return false;
         }
         var subFaux = normed($(tr).find('div.subVisDD'));
+
         if (subFaux) {
-            if (setTo === true)
-                $(subFaux).removeClass('disabled');
-            else
-                $(subFaux).addClass('disabled');
+            // this is the handling for a faux visibility selector
+            var fauxEl = $(subFaux);
+            if (setTo === true) {
+                // if there is an old saved visibility, use it
+                var prevVis = fauxEl.attr("data-prev-vis");
+                if (prevVis)
+                    fauxEl.text(prevVis);
+                // = if the attr is not set, use the existing value in the element as the default
+                //else
+                    //fauxEl.text("pack"); // is it a good idea to default to pack ?
+                fauxEl.removeClass('disabled');
+            }
+            else {
+                // set the faux visibility indicator to "hide" if the track is disabled
+                fauxEl.attr("data-prev-vis", fauxEl.text());
+                fauxEl.text("hide");
+                fauxEl.addClass('disabled');
+            }
         } else {
+            // this is the default case, for a normal, non-faux dropdown
             var subVis = normed($(tr).find('select.subVisDD'));
             if (subVis) {
                 $(subVis).attr('disabled',!setTo);
+                var subVisEl = $(subVis);
+                if (setTo === true) {
+                    subVisEl.find("option:selected").remove(); // remove the 'hide' entry
+                    var prevVal = subVisEl.attr("data-prev-vis");
+                    if (!prevVal)
+                        prevVal = "pack"; // is this OK, to default to pack?
+                    subVisEl.val(prevVal);
+                } else {
+                    //subVisEl.find("option[value='hide']").remove();
+                    subVisEl.attr("data-prev-vis", subVisEl.val());
+                    subVisEl.append("<OPTION SELECTED>hide</OPTION>"); // add the hide element and select it
+                    subVisEl.val("hide");
+                    // set the dropdown to "hide" if the track is disabled
+                }
             }
         }
+
         var wrench = normed($(tr).find('span.clickable'));
         if (wrench) {
             if (setTo === true)
@@ -743,8 +774,10 @@ var subCfg = { // subtrack config module.
         }
 
         if ($(cfg).css('display') === 'none') {
-            if ($(wrench).hasClass('disabled'))
+            if ($(wrench).hasClass('disabled')) {
+                alert("Please make this subtrack visible first, then click the 'Configure' link.");
                 return;
+            }
             // Don't allow if this composite is not enabled!
             // find the cb
             var tr = $(cfg).parents('tr').first();
@@ -827,11 +860,11 @@ var subCfg = { // subtrack config module.
         });
 
         // SubCBs will may enable/diable vis/wrench and will be flagged on change
-        var subCbs = $('input.subCB');
-        $(subCbs).change( function (e) {
-            subCfg.enableCfg(this, (this.checked && !isFauxDisabled(this, true)));
-            subCfg.markChange(e,this);
-        });
+        //var subCbs = $('input.subCB');
+        //$(subCbs).change( function (e) {
+            //subCfg.enableCfg(this, (this.checked && !isFauxDisabled(this, true)));
+            //subCfg.markChange(e,this);
+        //});
 
         // iterate through views
         var viewVis = $('select.viewDD');

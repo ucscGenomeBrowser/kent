@@ -4976,8 +4976,8 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	if (cType != cfgNone)  // make a wrench
 	    {
 	    safef(id, sizeof id, "%s_toggle", subtrack->track);
-	    #define SUBTRACK_CFG_WRENCH "<span id='%s' class='clickable%s' " \
-					"title='Configure this subtrack'><img src='../images/wrench.png'></span>\n"
+	    #define SUBTRACK_CFG_WRENCH "<span id='%s' style='text-decoration: underline; color:#121E9A' class='clickable%s' " \
+					"title='Configure this subtrack'><img style='vertical-align:middle' src='../images/round_build_black_18dp.png'>Configure</span>\n"
 	    printf(SUBTRACK_CFG_WRENCH,id,(visibleCB ? "":" disabled"));
 	    jsOnEventByIdF("click", id, "return subCfg.cfgToggle(this,\"%s\");", subtrack->track);
 	    }

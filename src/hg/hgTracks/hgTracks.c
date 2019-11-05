@@ -8457,7 +8457,7 @@ if (!hideControls)
             tl.picWidth, 27);
 #ifndef USE_NAVIGATION_LINKS
     hPrintf("<TD COLSPAN=6 ALIGN=left NOWRAP>");
-    hPrintf("move start<BR>");
+    //hPrintf("move start<BR>");
     hButtonWithOnClick("hgt.dinkLL", " < ", "move start position to the left",
                        "return imageV2.navigateButtonClick(this);");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
@@ -8466,18 +8466,14 @@ if (!hideControls)
     hPrintf("</TD>");
     hPrintf("<td width='30'>&nbsp;</td>\n");
 #endif//ndef USE_NAVIGATION_LINKS
-    hPrintf("<TD class='infoText' COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
-    hWrites("Click on a feature for details. ");
-    hWrites("Click or drag in the base position track to zoom in. ");
-    hWrites("Click side bars for track options. ");
-    hWrites("Drag side bars or labels up or down to reorder tracks. ");
-    hWrites("Drag tracks left or right to new position. ");
-    hWrites("Press \"?\" for keyboard shortcuts. ");
+    hPrintf("<TD class='infoText' COLSPAN=15 style=\"white-space:normal; font-size:13px\">"); // allow this text to wrap
+    hWrites("Unsure how to use the Genome Browser? ");
+    hWrites("Have a look at our <a href='../goldenPath/help/hgTracksHelp.html#FineTuning'>Tutorial</a>");
     hPrintf("</TD>");
 #ifndef USE_NAVIGATION_LINKS
     hPrintf("<td width='30'>&nbsp;</td>\n");
     hPrintf("<TD COLSPAN=6 ALIGN=right NOWRAP>");
-    hPrintf("move end<BR>");
+    //hPrintf("move end<BR>");
     hButtonWithOnClick("hgt.dinkRL", " < ", "move end position to the left",
                        "return imageV2.navigateButtonClick(this);");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
@@ -8560,11 +8556,8 @@ if (!hideControls)
                            "return vis.expandAllGroups(false)");
         hPrintf("</td>");
 
-        hPrintf("<td colspan='%d' class='infoText' align='CENTER' nowrap>"
-                "Use drop-down controls below and press refresh to alter tracks "
-                "displayed.<BR>"
-                "Tracks with lots of items will automatically be displayed in "
-                "more compact modes.</td>\n", MAX_CONTROL_COLUMNS - 2);
+        hPrintf("<td colspan='%d' class='infoText' align='CENTER' nowrap style='font-size:13px'>"
+                "To activate a track, use drop-downs below and click refresh.", MAX_CONTROL_COLUMNS - 2);
 
         hPrintf("<td align='right'>");
         hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups",
