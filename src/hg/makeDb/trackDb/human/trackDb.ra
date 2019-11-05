@@ -1673,7 +1673,7 @@ priority 0.8
     track dbSnp153Mult
     parent dbSnp153Composite
     shortLabel Mult. dbSNP (153)
-    longLabel Short Genetic Variants from dbSNP Release 153 That Map to Multiple Genomic Loci
+    longLabel Short Genetic Variants from dbSNP Release 153 that Map to Multiple Genomic Loci
     bigDataUrl /gbdb/$D/snp/dbSnp153Mult.bb
     priority 3
 
