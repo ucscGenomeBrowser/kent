@@ -105,7 +105,7 @@ UTILS_APPLIST = \
 	wigCorrelate \
 	wigToBigWig \
 	wordLine \
-	chromFixer
+	chromToUcsc
 
 # list of utilities to build of interest only at UCSC
 
