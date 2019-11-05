@@ -50,6 +50,7 @@
 #include "interactUi.h"
 #include "interact.h"
 #include "hicUi.h"
+#include "bigDbSnp.h"
 #include "customComposite.h"
 #include "trackVersion.h"
 #include "hubConnect.h"
@@ -3645,6 +3646,19 @@ if (field[ix - 1] == '.')
 return field;
 }
 
+static char *getLabelSetting(struct cart *cart, struct trackDb *tdb, char *field)
+{
+char labelSetting[4096];
+safef(labelSetting, sizeof labelSetting, "%s%s", field, FILTER_LABEL_NAME);
+char *trackDbLabel = cartOrTdbString(cart, tdb, labelSetting, NULL);
+if (trackDbLabel == NULL)
+    {
+    safef(labelSetting, sizeof labelSetting, "%s.%s", field, FILTER_LABEL_NAME);
+    trackDbLabel = cartOrTdbString(cart, tdb, labelSetting, NULL);
+    }
+return trackDbLabel;
+}
+
 filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct asObject *as, char *filterName, char *name)
 /* Build a filterBy_t structure from a <column>FilterValues statement. */
 {
@@ -3664,6 +3678,9 @@ if (asCol != NULL)
     filterBy->title = asCol->comment;
 else
     errAbort("Building filter on field %s which is not in AS file.", field);
+char *trackDbLabel = getLabelSetting(cart, tdb, field);
+if (trackDbLabel)
+    filterBy->title = trackDbLabel;
 filterBy->useIndex = FALSE;
 filterBy->slValues = slNameListFromCommaEscaped(value);
 chopUpValues(filterBy);
@@ -3950,6 +3967,21 @@ if (filterBy->styleFollows)
 printf(">%s</OPTION>\n",label);
 }
 
+static boolean filterByColumnIsMultiple(struct cart *cart, struct trackDb *tdb, char *column)
+{
+char settingString[4096];
+safef(settingString, sizeof settingString, "%s%s", column, FILTER_TYPE_NAME);
+char *setting = cartOrTdbString(cart, tdb, settingString, NULL);
+if (setting == NULL)
+    {
+    safef(settingString, sizeof settingString, "%s.%s", column, FILTER_TYPE_NAME);
+    setting = cartOrTdbString(cart, tdb, settingString, FILTERBY_MULTIPLE_LIST_AND);
+    }
+return (sameString(setting, FILTERBY_MULTIPLE) ||
+        sameString(setting, FILTERBY_MULTIPLE_LIST_OR) ||
+        sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
+}
+
 void filterBySetCfgUiGuts(struct cart *cart, struct trackDb *tdb,
 		      filterBy_t *filterBySet, boolean onOneLine,
 		      char *filterTypeTitle, char *selectIdPrefix, char *allLabel, char *prefix)
@@ -3964,7 +3996,7 @@ if (count == 1)
     puts("<TABLE cellpadding=3><TR valign='top'>");
 else
     printf("<B>%s items by:</B> (select multiple categories and items - %s)"
-	   "<TABLE cellpadding=3><TR valign='top'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
+	   "<TABLE cellpadding=3><TR valign='bottom'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
 
 if (tdbIsBigBed(tdb))
     {
@@ -3985,23 +4017,13 @@ if (cartOptionalString(cart, "ajax") == NULL)
     jsIncludeFile("ddcl.js",NULL);
     }
 
-int ix=0;
-for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
-    {
-    char settingString[4096];
-    safef(settingString, sizeof settingString, "%s%s", filterBy->column, FILTER_TYPE_NAME);
-    char *setting = cartOrTdbString(cart, tdb, settingString, NULL);
-    if (setting == NULL)
-        {
-        safef(settingString, sizeof settingString, "%s.%s", filterBy->column, FILTER_TYPE_NAME);
-        setting = cartOrTdbString(cart, tdb, settingString, FILTERBY_MULTIPLE_LIST_AND);
-        }
+// TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
 
-    boolean isMultiple = sameString(setting, FILTERBY_MULTIPLE) ||sameString(setting, FILTERBY_MULTIPLE_LIST_OR) ||sameString(setting, FILTERBY_MULTIPLE_LIST_AND);
-   
+for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next)
+    {
     puts("<TD>");
     char selectStatement[4096];
-    if (isMultiple)
+    if (filterByColumnIsMultiple(cart, tdb, filterBy->column))
         safef(selectStatement, sizeof selectStatement, " (select multiple items - %s)", FILTERBY_HELP_LINK);
     else
         selectStatement[0] = 0;
@@ -4009,10 +4031,17 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
 	printf("<B>%s by %s</B>%s",filterTypeTitle,filterBy->title,selectStatement);
     else
 	printf("<B>%s</B>",filterBy->title);
-    printf("<BR>\n");
-
-    if (isMultiple && tdbIsBigBed(tdb))
+    puts("</TD>");
+    }
+puts("</tr><tr>");
+for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next)
+    {
+    puts("<td>");
+    if (filterByColumnIsMultiple(cart, tdb, filterBy->column) && tdbIsBigBed(tdb))
         {
+        char settingString[4096];
+        safef(settingString, sizeof settingString, "%s%s", filterBy->column, FILTER_TYPE_NAME);
+        char *setting = cartOrTdbString(cart, tdb, settingString, FILTERBY_MULTIPLE_LIST_AND);
         char cartSettingString[4096];
         safef(cartSettingString, sizeof cartSettingString, "%s.%s", prefix, settingString);
         printf("<div class='advanced' style='display:none'><b>Match if  ");
@@ -4021,11 +4050,16 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
         cgiMakeRadioButton(cartSettingString, FILTERBY_MULTIPLE_LIST_OR, sameString(setting, FILTERBY_MULTIPLE_LIST_OR));
         printf(" one or more match</b></div> ");
         }
-    // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
-
+    puts("</td>");
+    }
+puts("</tr><tr>");
+int ix=0;
+for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next, ix++)
+    {
+    puts("<td>");
     // value is always "All", even if label is different, to simplify javascript code
     int valIx = 0;
-    if (isMultiple)
+    if (filterByColumnIsMultiple(cart, tdb, filterBy->column))
         {
         printf( "<SELECT id='%s%d' name='%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n", selectIdPrefix,ix,filterBy->htmlName);
         printf("<OPTION%s value=\"All\">%s</OPTION>\n", (filterByAllChosen(filterBy)?" SELECTED":""), allLabel);
@@ -4073,8 +4107,9 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next, ix++)
 	    }
 	printf(">%s</OPTION>\n",label);
 	}
+    printf("</SELECT>\n");
+    puts("</td>");
     }
-printf("</SELECT>\n");
 
 puts("</TR></TABLE>");
 }
@@ -4285,6 +4320,103 @@ printf("</TABLE>");
 cfgEndBox(boxed);
 }
 
+void labelMakeCheckBox(struct cart *cart, struct trackDb *tdb, char *sym, char *desc,
+                       boolean defaultOn)
+/* add a checkbox for the user to select a component of a label (e.g. ID, name, other info).
+ * NOTE: This does not have a track name argument, so the correct tdb must be passed in:
+ * if setting is at composite level, then pass in composite tdb, likewise for view. */
+{
+char suffix[512];
+safef(suffix, sizeof(suffix), "label.%s", sym);
+boolean option = cartUsualBooleanClosestToHome(cart, tdb, FALSE, suffix, defaultOn);
+char cartVar[1024];
+safef(cartVar, sizeof cartVar, "%s.%s", tdb->track, suffix);
+cgiMakeCheckBox(cartVar, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", desc);
+}
+
+static void freqSourceSelect(struct cart *cart, struct trackDb *tdb, char *name)
+/* Make a select input for preferred source of allele frequencies from
+ * trackDb setting freqSourceOrder. */
+{
+char *freqSourceOrder = cloneString(trackDbSetting(tdb, "freqSourceOrder"));
+if (isEmpty(freqSourceOrder))
+    return;
+int fsCount = countSeparatedItems(freqSourceOrder, ',');
+char *values[fsCount];
+chopCommas(freqSourceOrder, values);
+char *menu[fsCount];
+int i;
+for (i = 0; i < fsCount;  i++)
+    {
+    // Change label of GnomAD to "GnomAD genomes" for clarity when "GnomAD_exomes" is present.
+    if (sameString(values[i], "GnomAD") && stringIx("GnomAD_exomes", values) >= 0)
+        menu[i] = "GnomAD genomes";
+    else
+        {
+        menu[i] = cloneString(values[i]);
+        strSwapChar(menu[i], '_', ' ');
+        }
+    }
+boolean parentLevel = isNameAtParentLevel(tdb, name);
+char *freqProj = cartOptionalStringClosestToHome(cart, tdb, parentLevel, "freqProj");
+puts("<b>Frequency source/project to use for Minor Allele Frequency (MAF):</b>");
+char cartVar[1024];
+safef(cartVar, sizeof cartVar, "%s.freqProj", name);
+cgiMakeDropListWithVals(cartVar, menu, values, ArraySize(menu), freqProj);
+puts("<br>");
+}
+
+static struct trackDb *tdbOrAncestorByName(struct trackDb *tdb, char *name)
+/* For reasons Angie cannot fathom, if a composite or view is passed to cfgByCfgType then
+ * cfgByCfgType passes a leaf subtrack to its callees like bigDbSnpCfgUi.  That is why we
+ * see so many calls to isNameAtParentLevel, which returns true if the tdb was originally
+ * at the composite or view level, which we can only tell by comparing with the original track name.
+ * labelMakeCheckBox, called by many handlers in hgTrackUi that must be always top-level
+ * (or have a special handler that bypasses cfgByCfgType like refSeqComposite),
+ * is blissfully unaware of this.  It uses the same tdb for looking in cart ClosestToHome
+ * and for making the HTML element's cart var name, trusting that the correct tdb has been
+ * handed to it.
+ * So in order for a callee of cfgByCfgType to call labelMakeCheckBox with the correct tdb,
+ * we need to walk back up comparing name like isNameAtParentLevel does.
+ * If name doesn't match tdb or any of its ancestors then this returns NULL. */
+{
+struct trackDb *correctTdb;
+for (correctTdb = tdb;  correctTdb != NULL;  correctTdb = correctTdb->parent)
+    if (startsWithWordByDelimiter(correctTdb->track, '.', name))
+        return correctTdb;
+return NULL;
+}
+
+void bigDbSnpCfgUi(char *db, struct cart *cart, struct trackDb *leafTdb, char *name, char *title,
+                   boolean boxed)
+/* UI for bigDbSnp a.k.a. "dbSNP 2.0". */
+{
+boxed = cfgBeginBoxAndTitle(leafTdb, boxed, title);
+freqSourceSelect(cart, leafTdb, name);
+puts("<br>");
+puts("<b>Label:</b>");
+struct trackDb *correctTdb = tdbOrAncestorByName(leafTdb, name);
+labelMakeCheckBox(cart, correctTdb, "rsId", "rs# identifier", TRUE);
+labelMakeCheckBox(cart, correctTdb, "refAlt", "reference/alternate allele", TRUE);
+labelMakeCheckBox(cart, correctTdb, "majMin", "major/minor allele", FALSE);
+labelMakeCheckBox(cart, correctTdb, "maf", "MAF if available", FALSE);
+labelMakeCheckBox(cart, correctTdb, "func", "Most severe functional impact on gene if any", FALSE);
+puts("<br>");
+scoreCfgUi(db, cart, leafTdb, name, "", 0, FALSE);
+puts("For more information about the &quot;Interesting or anomalous properties&quot;, "
+     "see <a href='#ucscNotes'>below</a>.");
+puts("<br><br>");
+puts("<b>Minimum MAF:</b>");
+boolean parentLevel = isNameAtParentLevel(leafTdb, name);
+double minMaf = cartUsualDoubleClosestToHome(cart, leafTdb, parentLevel, "minMaf", 0.0);
+char cartVar[1024];
+safef(cartVar, sizeof cartVar, "%s.minMaf", name);
+cgiMakeDoubleVarWithLimits(cartVar, minMaf, "MAF", 0, 0.0, 0.5);
+puts("range: 0.0 - 0.5");
+cfgEndBox(boxed);
+}
+
 void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix,
 	      char *title, boolean boxed)
 // Methods for putting up type specific cfgs used by composites/subtracks in hui.c
@@ -4365,6 +4497,8 @@ switch(cType)
 			scoreCfgUi(db, cart,tdb,prefix,title,1000,boxed);
                         break;
     case cfgHic:        hicCfgUi(db,cart,tdb,prefix,title,boxed);
+                        break;
+    case cfgBigDbSnp:   bigDbSnpCfgUi(db, cart, tdb, prefix, title, boxed);
                         break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ",
 			     cType);
@@ -5474,10 +5608,7 @@ puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Data view scaling:</th><td align=left colspan=3>");
 safef(option, sizeof(option), "%s.%s", name, AUTOSCALE );
-if (parentLevel && !tdbIsMultiTrack(tdb->parent))
-    wiggleScaleDropDownParent(option, autoScale);
-else
-    wiggleScaleDropDown(option, autoScale);
+wiggleScaleDropDownParent(option, autoScale);
 wiggleScaleDropDownJavascript(name);
 safef(option, sizeof(option), "%s.%s", name, ALWAYSZERO);
 printf("Always include zero:&nbsp");
@@ -5980,6 +6111,7 @@ if (filterSettings)
 
             char *scoreName = cloneString(filter->name);
             char *field = extractFieldName(filter->name, FILTER_NUMBER_NAME);
+            char *trackDbLabel = getLabelSetting(cart, tdb, field);
 
             if (as != NULL)
                 {
@@ -5994,10 +6126,15 @@ if (filterSettings)
                     errAbort("Building filter on field %s which is not in AS file.", field);
                 }
             char varName[256];
-            char label[128];
+            char labelBuf[1024];
+            char *label = labelBuf;
             safef(varName, sizeof(varName), "%s%s", scoreName, _BY_RANGE);
             boolean filterByRange = trackDbSettingClosestToHomeOn(tdb, varName);
-            safef(label, sizeof(label),"%s%s", filterByRange ? "": "Minimum ", field);
+
+            if (trackDbLabel)
+                label = trackDbLabel;
+            else
+                safef(labelBuf, sizeof(labelBuf),"%s%s", filterByRange ? "": "Minimum ", field);
 
             showScoreFilter(cart,tdb,opened,boxed,parentLevel,name,title,label,scoreName,isFloat);
             freeMem(scoreName);
@@ -8905,14 +9042,10 @@ else if (startsWith("big", tdb->type))
     char *bbiFileName = bbiNameFromSettingOrTable(tdb, conn, tableName);
     hFreeConn(&conn);
     struct bbiFile *bbi = NULL;
-    if (startsWith("bigBed", tdb->type) || sameString("bigBarChart", tdb->type) 
-        || sameString("bigMaf", tdb->type) || sameString("bigPsl", tdb->type)
-        || sameString("bigChain", tdb->type) || sameString("bigGenePred", tdb->type)
-        || startsWith("bigLolly", tdb->type)
-        || sameString("bigInteract", tdb->type))
-	bbi = bigBedFileOpen(bbiFileName);
-    else if (startsWith("bigWig", tdb->type))
+    if (startsWith("bigWig", tdb->type))
 	bbi = bigWigFileOpen(bbiFileName);
+    else
+	bbi = bigBedFileOpen(bbiFileName);
     time_t timep = 0;
     if (bbi)
 	{

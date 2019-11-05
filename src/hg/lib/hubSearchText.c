@@ -11,7 +11,7 @@
 
 
 
-char *hubSearchTextCommaSepFieldNames = "hubUrl,db,track,label,parents,textLength,text";
+char *hubSearchTextCommaSepFieldNames = "hubUrl,db,track,label,textLength,text,parents,parentTypes";
 
 /* definitions for textLength column */
 static char *values_textLength[] = {"Short", "Long", "Meta", NULL};
@@ -26,9 +26,10 @@ ret->hubUrl = row[0];
 ret->db = row[1];
 ret->track = row[2];
 ret->label = row[3];
-ret->parents = row[4];
-ret->textLength = sqlEnumParse(row[5], values_textLength, &valhash_textLength);
-ret->text = row[6];
+ret->textLength = sqlEnumParse(row[4], values_textLength, &valhash_textLength);
+ret->text = row[5];
+ret->parents = row[6];
+ret->parentTypes = row[7];
 }
 
 struct hubSearchText *hubSearchTextLoadWithNull(char **row)
@@ -42,9 +43,10 @@ ret->hubUrl = cloneString(row[0]);
 ret->db = cloneString(row[1]);
 ret->track = cloneString(row[2]);
 ret->label = cloneString(row[3]);
-ret->parents = cloneString(row[4]);
-ret->textLength = sqlEnumParse(row[5], values_textLength, &valhash_textLength);
-ret->text = cloneString(row[6]);
+ret->textLength = sqlEnumParse(row[4], values_textLength, &valhash_textLength);
+ret->text = cloneString(row[5]);
+ret->parents = cloneString(row[6]);
+ret->parentTypes = cloneString(row[7]);
 return ret;
 }
 
@@ -54,7 +56,7 @@ struct hubSearchText *hubSearchTextLoadAll(char *fileName)
 {
 struct hubSearchText *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileRow(lf, row))
     {
@@ -72,7 +74,7 @@ struct hubSearchText *hubSearchTextLoadAllByChar(char *fileName, char chopper)
 {
 struct hubSearchText *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -97,9 +99,10 @@ ret->hubUrl = sqlStringComma(&s);
 ret->db = sqlStringComma(&s);
 ret->track = sqlStringComma(&s);
 ret->label = sqlStringComma(&s);
-ret->parents = sqlStringComma(&s);
 ret->textLength = sqlEnumComma(&s, values_textLength, &valhash_textLength);
 ret->text = sqlStringComma(&s);
+ret->parents = sqlStringComma(&s);
+ret->parentTypes = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -115,8 +118,9 @@ freeMem(el->hubUrl);
 freeMem(el->db);
 freeMem(el->track);
 freeMem(el->label);
-freeMem(el->parents);
 freeMem(el->text);
+freeMem(el->parents);
+freeMem(el->parentTypes);
 freez(pEl);
 }
 
@@ -153,15 +157,19 @@ fprintf(f, "%s", el->label);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->parents);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
 sqlEnumPrint(f, el->textLength, values_textLength);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->text);
+if (sep == ',') fputc('"',f);
+fputc(sep, f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->parents);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->parentTypes);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

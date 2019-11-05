@@ -297,3 +297,193 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+struct symbolDesc
+{
+    char *symbol;
+    char *description;
+};
+
+struct symbolDesc ucscNotesDesc[] =
+    {
+    { bdsAltIsAmbiguous,
+      "At least one alternate allele "
+      "contains an IUPAC ambiguous base (e.g. 'R' for 'A or G')." },
+    { bdsClassMismatch,
+      "Variation class/type is inconsistent with alleles mapped to this genome assembly." },
+    { bdsClinvar,
+      "Variant is in ClinVar." },
+    { bdsClinvarBenign,
+      "Variant is in ClinVar with clinical significance of benign and/or likely benign." },
+    { bdsClinvarConflicting,
+      "Variant is in ClinVar with reports of both benign and pathogenic significance." },
+    { bdsClinvarPathogenic,
+      "Variant is in ClinVar with clinical significance of pathogenic and/or likely pathogenic." },
+    { bdsClusterError,
+      "This variant has the same start, end and class as another variant; "
+      "they probably should have been merged into one variant." },
+    { bdsCommonAll,
+      "Variant is \"common\", i.e. has a Minor Allele Frequency of at least 1% "
+      "in all projects reporting frequencies." },
+    { bdsCommonSome,
+      "Variant is \"common\", i.e. has a Minor Allele Frequency of at least 1% "
+      "in some, but not all, projects reporting frequencies." },
+    { bdsDiffMajor,
+      "Different frequency sources have different major alleles "
+      "(see table of allele frequencies above)." },
+    { bdsFreqIsAmbiguous,
+      "At least one allele reported by at least one project "
+      "contains an IUPAC ambiguous base (e.g. 'R' for 'A or G')." },
+    { bdsFreqNotRefAlt,
+      "The reference genome allele is not the major allele in at least one project." },
+    { bdsMultiMap,
+      "This variant has been mapped to more than one distinct genomic location." },
+    { bdsOverlapDiffClass,
+      "This variant overlaps another variant with a different type/class." },
+    { bdsOverlapSameClass,
+      "This variant overlaps another with the same type/class but different start/end." },
+    { bdsRareAll,
+      "Variant is \"rare\", i.e. has a Minor Allele Frequency of less than 1% "
+      "in all projects reporting frequencies, or has no frequency data." },
+    { bdsRareSome,
+      "Variant is \"rare\", i.e. has a Minor Allele Frequency of less than 1% "
+      "in some, but not all, projects reporting frequencies." },
+    { bdsRefIsAmbiguous,
+      "The reference genome allele "
+      "contains an IUPAC ambiguous base (e.g. 'R' for 'A or G')." },
+    { bdsRefIsMinor,
+      "The reference genome allele is not the major allele in at least one project." },
+    { bdsRefIsRare,
+      "The reference genome allele is rare (i.e. allele frequency < 1%)." },
+    { bdsRefIsSingleton,
+      "The reference genome allele has never been observed "
+      "in a population sequencing project reporting frequencies." },
+    { bdsRefMismatch,
+      "The reference genome allele reported by dbSNP differs from the GenBank assembly sequence." },
+    { bdsRevStrand,
+      "The orientation of the currently viewed reference genome sequence is different from "
+      "the orientation of dbSNP's preferred assembly; alleles are "
+      "presented on the forward strand of the currently viewed reference sequence." },
+    };
+
+char *bigDbSnpDescribeUcscNote(char *ucscNote)
+/* Return a string describing ucscNote, unless it is unrecognized in which case return NULL.
+ * Do not free returned value. */
+{
+int i;
+for (i = 0;  i < ArraySize(ucscNotesDesc);  i++)
+    {
+    if (sameString(ucscNote, ucscNotesDesc[i].symbol))
+        return ucscNotesDesc[i].description;
+    }
+return NULL;
+}
+
+char *bigDbSnpClassToString(enum bigDbSnpClass class)
+/* Return the string version of enum bigDbSnpClass.  Do not free result. */
+{
+char *string = NULL;
+switch (class)
+    {
+    case bigDbSnpSnv:
+        string = "snv";
+        break;
+    case bigDbSnpMnv:
+        string = "mnv";
+        break;
+    case bigDbSnpIns:
+        string = "ins";
+        break;
+    case bigDbSnpDel:
+        string = "del";
+        break;
+    case bigDbSnpDelins:
+        string = "delins";
+        break;
+    case bigDbSnpIdentity:
+        string = "identity";
+        break;
+    default:
+        errAbort("bigDbSnpClassToString: unrecognized value %d", (int)class);
+    }
+return string;
+}
+
+static boolean abbrevNRepeat(char *allele, int n, char *buf, size_t bufLen)
+/* If allele is an N-base repeat, and a shorter representation fits in buf, return TRUE. */
+{
+boolean canAbbrev = FALSE;
+int len = strlen(allele);
+int minAbbrevLen = max(n*2, n+4);
+if (len >= minAbbrevLen && bufLen >= minAbbrevLen)
+    {
+    int reps = 1;
+    int i;
+    for (i = n;  i < len;  i++)
+        {
+        if (allele[i] != allele[i-n])
+            break;
+        if (i % n == n-1)
+            reps++;
+        }
+    if (i >= minAbbrevLen)
+        {
+        // End of repeating section; are there enough repeats to make the notation shorter?
+        char repeatUnit[n+1];
+        safencpy(repeatUnit, sizeof repeatUnit, allele, n);
+        int abbrevLen = snprintf(buf, bufLen, "(%s)%d", repeatUnit, reps);
+        // Does the rest of the sequence start with a different repeat?
+        char *bufRest = buf+abbrevLen;
+        size_t bufRestLen = bufLen - abbrevLen;
+        char *alRest = allele + (reps * n);
+        if (bufRestLen > 5 && abbrevNRepeat(alRest, n, bufRest, bufRestLen))
+            abbrevLen = strlen(buf);
+        else
+            abbrevLen += snprintf(bufRest, bufRestLen, "%s", alRest);
+        if (abbrevLen < bufLen)
+            canAbbrev = TRUE;
+        else
+            buf[0] = '\0';
+        }
+    }
+return canAbbrev;
+}
+
+char *bigDbSnpAbbrevAllele(char *allele, char *buf, size_t bufLen)
+/* If allele can be abbreviated to something shorter than itself that fits in buf,
+ * and doesn't end up with a tiny bit of abbreviation followed by a bunch of unabbreviated
+ * sequence, then put the abbreviation in buf and return buf; otherwise return allele.
+ * If allele is the empty string, returns "-" (in buf). */
+{
+if (isEmpty(allele))
+    {
+    safecpy(buf, bufLen, "-");
+    return buf;
+    }
+char *abbrev = allele;
+int maxN = (bufLen - 3) / 2;
+int n;
+for (n = 1; n <= maxN; n++)
+    {
+    if (abbrevNRepeat(allele, n, buf, bufLen))
+        {
+        abbrev = buf;
+        break;
+        }
+    }
+if (abbrev == buf)
+    {
+    int alLen = strlen(buf);
+    char *abbrevEnd = strrchr(buf, ')');
+    if (abbrevEnd == NULL)
+        errAbort("bigDbSnpAbbrevAllele: expect abbreviated allele '%s' to contain at least one ')'",
+                 buf);
+    int abbrevLen = abbrevEnd + 1 - buf;
+    if (abbrevLen < alLen>>2)
+        {
+        // Never mind, the abbreviated portion is much smaller than the unabbreviated portion.
+        abbrev = allele;
+        }
+    }
+return abbrev;
+}

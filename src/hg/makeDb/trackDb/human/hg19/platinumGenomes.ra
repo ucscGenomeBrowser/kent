@@ -7,6 +7,7 @@ dataVersion Release 2017-1.0
 configureByPopup off
 type vcfTabix
 html ../platinumGenomes
+pennantIcon New red ../goldenPath/newsarch.html#102419 Platinum Genome VCFs release Oct. 24, 2019
 
 track platinumNA12877
 parent platinumGenomes
@@ -35,15 +36,15 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
 bigDataUrl /gbdb/hg19/platinumGenomes/NA12878.vcf.gz
 
 
-track platinumHybrid
-parent platinumGenomes
-shortLabel hybrid
-longLabel Platinum genome hybrid
-type vcfTabix
-group varRep
-visibility pack
-maxWindowToDraw 200000
-showHardyWeinberg on
-configureByPopup off
-chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
-bigDataUrl /gbdb/hg19/platinumGenomes/hg19.hybrid.vcf.gz
+    track platinumHybrid
+    parent platinumGenomes
+    shortLabel hybrid
+    longLabel Platinum genome hybrid
+    type vcfTabix
+    group varRep
+    visibility pack
+    maxWindowToDraw 200000
+    showHardyWeinberg on
+    configureByPopup off
+    chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
+    bigDataUrl /gbdb/hg19/platinumGenomes/hg19.hybrid.vcf.gz

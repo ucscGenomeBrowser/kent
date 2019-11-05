@@ -20,6 +20,7 @@
 #define FILTER_TEXT_NAME      "FilterText"
 #define FILTER_VALUES_NAME    "FilterValues"
 #define FILTER_TYPE_NAME      "FilterType"
+#define FILTER_LABEL_NAME     "FilterLabel"
 #define FILTER_NUMBER_WILDCARD    "*" FILTER_NUMBER_NAME
 #define FILTER_TEXT_WILDCARD      "*" FILTER_TEXT_NAME
 #define FILTER_VALUES_WILDCARD    "*" FILTER_VALUES_NAME

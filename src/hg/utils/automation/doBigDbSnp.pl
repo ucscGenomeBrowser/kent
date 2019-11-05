@@ -519,7 +519,7 @@ done
 _EOF_
                   );
   $bossScript->execute();
-} # doBigBed
+} # doCheck
 
 
 #########################################################################
@@ -527,7 +527,35 @@ _EOF_
 sub doBigBed {
   my $runDir = $buildDir;
 
-  my $whatItDoes = "It runs bedToBigBed on merged & checked bigDbSnp files.";
+  # Helper script to make Mult, Common and ClinVar subsets and convert to bigBed for one db.
+  my $makeSubsetsScript = "$runDir/makeSubsets.sh";
+  my $fh = HgAutomate::mustOpen(">$makeSubsetsScript");
+  print $fh <<_EOF_
+#!/bin/bash
+set -beEu -o pipefail
+db=\$1
+time $Bin/categorizeBigDbSnp.pl \$db \$db.$outRoot.checked.bigDbSnp
+pids=""
+for subset in Mult Common ClinVar; do
+  time bedToBigBed -tab -as=\$HOME/kent/src/hg/lib/bigDbSnp.as -type=bed4+ -extraIndex=name \\
+            \$db.\$subset.bigDbSnp /hive/data/genomes/\$db/chrom.sizes \$db.$outRoot.\$subset.bb &
+  pids+=" \$!";
+done
+for pid in \$pids; do
+  if wait \$pid; then
+    echo pid \$pid done
+  else
+    echo pid \$pid FAILED
+    exit 1
+  fi
+done
+_EOF_
+    ;
+  close($fh);
+  system("chmod a+x $makeSubsetsScript") == 0 || die "Unable to chmod $makeSubsetsScript";
+
+  my $whatItDoes = "It runs bedToBigBed on merged & checked bigDbSnp files and makes ".
+        "Mult, Common and ClinVar subsets.";
   my $bossScript = newBash HgRemoteScript("$runDir/doBigBed.sh", $workhorse,
                                           $runDir, $whatItDoes);
 
@@ -539,8 +567,8 @@ _EOF_
     $bossScript->add(<<_EOF_
 time bedToBigBed -tab -as=\$HOME/kent/src/hg/lib/bigDbSnp.as -type=bed4+ -extraIndex=name \\
             $db.$outRoot.checked.bigDbSnp /hive/data/genomes/$db/chrom.sizes $db.$outRoot.bb &
-
-echo \$!
+pids+=" \$!"
+$makeSubsetsScript $db &
 pids+=" \$!"
 _EOF_
                     );
@@ -566,12 +594,15 @@ sub doInstall {
   my $runDir = $buildDir;
 
   my $whatItDoes = "It installs files in /gbdb.";
-  my $bossScript = new HgRemoteScript("$runDir/doInstall.csh", $workhorse,
+  my $bossScript = newBash HgRemoteScript("$runDir/doInstall.sh", $workhorse,
 				      $runDir, $whatItDoes);
 
   foreach my $db (@dbList) {
     $bossScript->add(<<_EOF_
 ln -sf $buildDir/$db.$outRoot.bb /gbdb/$db/snp/$outRoot.bb
+for subset in Mult Common ClinVar; do
+  ln -sf $buildDir/$db.$outRoot.\$subset.bb /gbdb/$db/snp/${outRoot}\$subset.bb
+done
 _EOF_
                     );
   }

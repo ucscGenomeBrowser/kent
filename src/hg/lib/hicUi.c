@@ -75,24 +75,31 @@ return selected;
 int hicUiFetchResolutionAsInt(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta, int windowSize)
 /* Return the current resolution selection as an integer.  If there is no selection, or if "Auto"
  * has been selected, return the largest available value that still partitions the window into at
- * least 5000 bins. */
+ * least 500 bins. */
 {
 char *resolutionString = hicUiFetchResolution(cart, tdb, meta);
 int result;
-if (sameString(resolutionString, "Auto"))
+if (sameOk(resolutionString, "Auto"))
     {
-    int idealRes = windowSize/5000;
-    char *autoRes = meta->resolutions[meta->nRes-1];
-    int i;
+    int idealRes = windowSize/500;
+    int autoRes = atoi(meta->resolutions[meta->nRes-1]);
+    int smallestRes = autoRes; // in case the ideal resolution is smaller than anything available
+    int i, success = 0;
     for (i=meta->nRes-1; i>= 0; i--)
         {
-        if (atoi(meta->resolutions[i]) < idealRes)
+        int thisRes = atoi(meta->resolutions[i]);
+        if (thisRes < smallestRes)
+            smallestRes = thisRes; // not sure about the sort order of the list
+        if (thisRes < idealRes && thisRes >= autoRes)
             {
-            autoRes = meta->resolutions[i];
-            break;
+            autoRes = thisRes;
+            success = 1;
             }
         }
-    result = atoi(autoRes);
+    if (success)
+        result = autoRes;
+    else
+        result = smallestRes;
     }
 else
     result = atoi(resolutionString);

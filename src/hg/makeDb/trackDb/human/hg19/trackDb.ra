@@ -8,7 +8,6 @@ bigDataUrl /gbdb/hg19/dgv/dgvGold.bb
 type bigBed 12 +
 url http://dgv.tcag.ca/gb2/gbrowse_details/dgv2_hg19?ref=$S;start=${;end=$};name=$$;class=Sequence
 searchIndex name
-pennantIcon New red ../goldenPath/newsarch.html#070119  Released Jul. 1, 2019
 
 
 searchTable dgvGold
@@ -1951,6 +1950,7 @@ visibility hide
 noScoreFilter .
 noInherit on
 type bed 3 .
+pennantIcon Updated red ../goldenPath/newsarch.html#102519  Illumina GDA released Oct. 25, 2019
 
     track snpArrayAffy6
     parent genotypeArrays

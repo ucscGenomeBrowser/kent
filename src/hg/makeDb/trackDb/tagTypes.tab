@@ -43,7 +43,7 @@ baseQualRange bam
 bedFilter bed
 bedNameLabel bed barChart bigBarChart bigBed
 bedPackDense bed bigBed
-bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr bigInteract bigChain bigGenePred bigLolly bigNarrowPeak hic
+bigDataUrl customTracks big* bam vcfTabix halSnake gtexTranscExpr hic
 bigGeneDataUrl genePred
 blastRef psl bigPsl
 boxedCfg *
@@ -94,9 +94,9 @@ dbPrefixUrls bigBed bed bigPsl genePred psl
 dbPrefixLabels bigBed bed bigPsl genePred psl
 dbProfile *
 dbTrackType customTracks
-detailsTabUrls bigBed bigGenePred bigPsl
+detailsTabUrls big*
 defaultGeneTracks bed
-defaultLabelFields bigBed bigPsl bigGenePred bigBarChart
+defaultLabelFields big*
 defaultMaf wigMaf
 defaultMaxWeight bed
 defaultLinkedTables genePred
@@ -134,6 +134,7 @@ filterComposite *
 filterTopScorers bed5FloatScoreWithFdr bed5FloatScore
 firstItemPos customTracks
 frames wigMaf
+freqSourceOrder bigDbSnp
 forceFirstCharLowerCase wigMaf
 ensemblTranscriptIdUrl genePred
 ensemblGeneIdUrl genePred
@@ -245,7 +246,7 @@ lfPslTable bed
 linesAt chromGraph
 linkDataUrl  bigChain
 linkIdInName bed bigBed
-labelFields bigBed bigPsl bigGenePred bigBarChart bigInteract
+labelFields big*
 labelOnFeature bed bigBed
 labelSeparator bigBed bigPsl bigGenePred
 lollipopField bigBed bigLolly
@@ -268,7 +269,7 @@ maxHeightPixels *
 maxItems *
 maxLimit *
 maxScore broadPeak narrowPeak
-maxWindowToDraw bam rmsk joinedRmsk bed narrowPeak broadPeak bigWig bedlogR genepred vcf vcfTabix factorSource
+maxWindowToDraw bam big* rmsk joinedRmsk bed narrowPeak broadPeak bedlogR genepred vcf vcfTabix factorSource
 maxWindowToQuery bigWig bed bedlogR
 metadata *
 mouseOverField bigBed bigPsl

@@ -1522,4 +1522,10 @@ char *extractFieldName(char *cartVariable, char *filterType);
 /* Extract field name from a filter cart variable.  Variables can either be
  * <columnName>Filter* or <columnName>.Filter* */
 
+void labelMakeCheckBox(struct cart *cart, struct trackDb *tdb, char *sym, char *desc,
+                       boolean defaultOn);
+/* add a checkbox for the user to select a component of a label (e.g. ID, name, other info).
+ * NOTE: This does not have a track name argument, so the correct tdb must be passed in:
+ * if setting is at composite level, then pass in composite tdb, likewise for view. */
+
 #endif /* HUI_H */

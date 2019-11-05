@@ -28722,7 +28722,7 @@ cp clinvarCnv.bb /hive/data/genomes/hg19/bed/clinvar/
 
 _EOF_
 #########################################################################
-# LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 10/10/19 angie)
+# LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 10/25/19 angie)
 # Redmine #13359, #24285 -- otto-mate To Do #17877
 # previously done 7/7/14, 9/9/16, 5/30/18
     screen -S lrg -t lrg

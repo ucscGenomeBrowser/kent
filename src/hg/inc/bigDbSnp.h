@@ -85,6 +85,9 @@ void bigDbSnpOutput(struct bigDbSnp *el, FILE *f, char sep, char lastSep);
 #define bdsAltIsAmbiguous "altIsAmbiguous"
 #define bdsClassMismatch "classMismatch"
 #define bdsClinvar "clinvar"
+#define bdsClinvarBenign "clinvarBenign"
+#define bdsClinvarConflicting "clinvarConflicting"
+#define bdsClinvarPathogenic "clinvarPathogenic"
 #define bdsClusterError "clusterError"
 #define bdsCommonAll "commonAll"
 #define bdsCommonSome "commonSome"
@@ -94,11 +97,26 @@ void bigDbSnpOutput(struct bigDbSnp *el, FILE *f, char sep, char lastSep);
 #define bdsMultiMap "multiMap"
 #define bdsOverlapDiffClass "overlapDiffClass"
 #define bdsOverlapSameClass "overlapSameClass"
+#define bdsRareAll "rareAll"
+#define bdsRareSome "rareSome"
 #define bdsRefIsAmbiguous "refIsAmbiguous"
 #define bdsRefIsMinor "refIsMinor"
 #define bdsRefIsRare "refIsRare"
 #define bdsRefIsSingleton "refIsSingleton"
 #define bdsRefMismatch "refMismatch"
 #define bdsRevStrand "revStrand"
+
+char *bigDbSnpDescribeUcscNote(char *ucscNote);
+/* Return a string describing ucscNote, unless it is unrecognized in which case return NULL.
+ * Do not free returned value. */
+
+char *bigDbSnpClassToString(enum bigDbSnpClass class);
+/* Return the string version of enum bigDbSnpClass.  Do not free result. */
+
+char *bigDbSnpAbbrevAllele(char *allele, char *buf, size_t bufLen);
+/* If allele can be abbreviated to something shorter than itself that fits in buf,
+ * and doesn't end up with a tiny bit of abbreviation followed by a bunch of unabbreviated
+ * sequence, then put the abbreviation in buf and return buf; otherwise return allele.
+ * If allele is the empty string, returns "-" (in buf). */
 
 #endif /* BIGDBSNP_H */

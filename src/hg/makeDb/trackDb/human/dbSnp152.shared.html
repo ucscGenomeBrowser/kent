@@ -1,0 +1,324 @@
+<h2>Interpreting and Configuring the Graphical Display</h2>
+<p>
+SNVs and pure deletions are displayed as boxes covering the affected base(s).
+Pure insertions are drawn as single-pixel tickmarks between
+the base before and the base after the insertion.
+</p><p>
+Insertions and/or deletions in repetitive regions may be represented by a half-height box
+showing uncertainty in placement, followed by a full-height box showing the number of deleted
+bases, or a full-height tickmark to indicate an insertion.
+When an insertion or deletion falls in a repetitive region, the placement may be ambiguous.
+For example, if the reference genome contains "TAAAG" but some
+individuals have "TAAG" at the same location, then the variant is a deletion of a single
+A relative to the reference genome.
+However, which A was deleted?  There is no way to tell whether the first, second or third A
+was removed.
+Different variant mapping tools may place the deletion at different bases in the reference genome.
+In order to reduce errors in merging variant calls made with different left vs. right biases,
+dbSNP made a major change in its representation of deletion/insertion variants in build 152.
+Now, instead of assigning a single-base genomic location at one of the A's,
+dbSNP expands the coordinates to encompass the whole repetitive region,
+so the variant is represented as a deletion of 3 A's combined with an insertion of 2 A's.
+In the track display, there will be a half-height box covering the first two A's,
+followed by a full-height box covering the third A, in order to show a net loss of one base
+but an uncertain placement within the three A's.
+</p>
+<p>
+Variants are colored according to functional effect on genes annotated by dbSNP.
+Protein-altering variants and splice site variants are
+red,
+synonymous codon variants are
+green,
+and non-coding transcript or Untranslated Region (UTR) variants are
+blue.
+</p>
+<p>
+On the track controls page, several variant properties can be included or excluded from
+the item labels:
+rs# identifier assigned by dbSNP,
+reference/alternate alleles,
+major/minor alleles (when available) and
+minor allele frequency (when available).
+Allele frequencies are reported independently by nine projects, as described by dbSNP:
+  <ul>
+    <li><a href="https://www.internationalgenome.org/" target=_blank>1000Genomes</a>:
+      The 1000 Genomes dataset contains data for 2,504 individuals from 26 populations.
+    </li>
+    <li><a href="https://gnomad.broadinstitute.org/" target=_blank>GnomAD_exomes</a>:
+      The GnomAD exome data set (release v2.1).
+    </li>
+    <li><a href="https://www.nhlbiwgs.org/" target=_blank>TOPMED</a>:
+      The TOPMED dataset contains phase 3 data from freeze 5 panel that include over 60,000
+      individuals. The approximate ethnic breakdown is European(52%), African (31%),
+      Hispanic or Latino (10%), and East Asian (7%) ancestry.
+    </li>
+    <li><a href="https://gnomad.broadinstitute.org/" target=_blank>GnomAD</a>:
+      gnomAD v2.1 comprises a total of 16mln SNVs and 1.2mln indels from 125,748 exomes,
+      and 229mln SNVs and 33mln indels from 15,708 genomes. In addition to the 7 populations
+      already present in gnomAD 2.0.2, this release now breaks down the non-Finnish Europeans
+      and East Asian populations further into sub-populations.
+    </li>
+    <li><a href="http://exac.broadinstitute.org/" target=_blank>ExAC</a>:
+      The Exome Aggregation Consortium (ExAC) dataset contains 60,706 unrelated individuals
+      sequenced as part of various disease-specific and population genetic studies.
+      Individuals affected by severe pediatric disease have been removed.
+    </li>
+    <li><a href="https://esp.gs.washington.edu/" target=_blank>GoESP</a>:
+      The NHLBI Grand Opportunity Exome Sequencing Project (GO-ESP) dataset contains 6503 samples
+      drawn from multiple ESP cohorts and represents all of the ESP exome variant data.
+    </li>
+    <li><a href="http://www.bris.ac.uk/alspac/participants/genome/" target=_blank>ALSPAC</a>:
+      The UK10K - Avon Longitudinal Study of Parents and Children project contains 1927 sample
+      including individuals obtained from the
+      <a href="http://www.bristol.ac.uk/alspac/" target=_blank>ALSPAC population</a>.
+      This population contains more than 14,000 mothers enrolled during pregnancy in 1991 and 1992.
+    </li>
+    <li><a href="https://twinsuk.ac.uk/" target=_blank>TWINSUK</a>:
+      The UK10K - TwinsUK project contains 1854 samples from the
+      <a href="http://www.twinsuk.ac.uk/" target=_blank>Department of Twin Research and
+      Genetic Epidemiology (DTR)</a>.
+      The dataset contains data obtained from the 11,000 identical and non-identical twins
+      between the ages of 16 and 85 years old.
+    </li>
+    <li><a href="https://www.geenivaramu.ee/en" target=_blank>Estonian</a>:
+      Genetic variation in the Estonian population: pharmacogenomics study of
+      adverse drug effects using electronic health records.
+    </li>
+  </ul>
+The project from which to take allele frequency data defaults to 1000 Genomes
+but can be set to any of those projects.
+</p>
+<p>
+Using the track controls, variants can be filtered by
+
+  <ul>
+    <li>minimum minor allele frequency (MAF)
+    </li>
+    <li>variation class/type (e.g. SNV, insertion, deletion)
+    </li>
+    <li>functional effect on a gene (e.g. synonymous, frameshift, intron, upstream)
+    </li>
+    <li>assorted features and anomalies noted by UCSC during processing of dbSNP's data.
+    </li>
+  </ul>
+</p>
+
+<a name="ucscNotes">
+<h3>Interesting and anomalous conditions noted by UCSC</h3>
+<p>
+While processing the information downloaded from dbSNP,
+UCSC annotates some properties of interest.
+These are noted on the item details page,
+and may be useful to include or exclude affected variants.
+Some are purely informational:
+</p>
+<table class="descTbl">
+  <tr><th>keyword in data file (dbSnp152.bb)</th>
+    <th># in hg19</th><th># in hg38</th><th>description</th></tr>
+  <tr>
+    <td>clinvar</td>
+    <td class="number">409132</td>
+    <td class="number">408665</td>
+    <td>Variant is in ClinVar.</td>
+  </tr>
+  <tr>
+    <td>commonAll</td>
+    <td class="number">12757487</td>
+    <td class="number">13027110</td>
+    <td>Variant is "common", i.e. has a Minor Allele Frequency of at least 1% in all
+      projects reporting frequencies.</td>
+  </tr>
+  <tr>
+    <td>commonSome</td>
+    <td class="number">18901486</td>
+    <td class="number">19258751</td>
+    <td>Variant is "common", i.e. has a Minor Allele Frequency of at least 1% in some, but not all,
+      projects reporting frequencies.</td>
+  </tr>
+  <tr>
+    <td>diffMajor</td>
+    <td class="number">823424</td>
+    <td class="number">836327</td>
+    <td>Different frequency sources have different major alleles.</td>
+  </tr>
+  <tr>
+    <td>overlapDiffClass</td>
+    <td class="number">99618012</td>
+    <td class="number">102260850</td>
+    <td>This variant overlaps another variant with a different type/class.</td>
+  </tr>
+  <tr>
+    <td>overlapSameClass</td>
+    <td class="number">14790469</td>
+    <td class="number">15075710</td>
+    <td>This variant overlaps another with the same type/class but different start/end.</td>
+  </tr>
+  <tr>
+    <td>revStrand</td>
+    <td class="number">3761191</td>
+    <td class="number">4439534</td>
+    <td>The orientation of the currently viewed reference genome sequence is different from
+      the orientation of dbSNP's preferred top-level assembly sequence;
+      alleles are presented on the forward strand of the currently viewed reference sequence.</td>
+  </tr>
+</table>
+<p>
+while others may indicate that the reference genome contains a rare variant or sequencing issue:
+</p>
+<table class="descTbl">
+  <tr><th>keyword in data file (dbSnp152.bb)</th>
+    <th># in hg19</th><th># in hg38</th><th>description</th></tr>
+  <tr>
+    <td>refIsAmbiguous</td>
+    <td class="number">101</td>
+    <td class="number">110</td>
+    <td>The reference genome allele contains an IUPAC ambiguous base
+      (e.g. 'R' for 'A or G', or 'N' for 'any base').</td>
+  </tr>
+  <tr>
+    <td>refIsMinor</td>
+    <td class="number">2933684</td>
+    <td class="number">3033691</td>
+    <td>The reference genome allele is not the major allele in at least one project.</td>
+  </tr>
+  <tr>
+    <td>refIsRare</td>
+    <td class="number">150892</td>
+    <td class="number">189809</td>
+    <td>The reference genome allele is rare (i.e. allele frequency < 1%).</td>
+  </tr>
+  <tr>
+    <td>refIsSingleton</td>
+    <td class="number">45618</td>
+    <td class="number">63804</td>
+    <td>The reference genome allele has never been observed in a population sequencing project
+      reporting frequencies.</td>
+  </tr>
+  <tr>
+    <td>refMismatch</td>
+    <td class="number">4</td>
+    <td class="number">33</td>
+    <td>The reference genome allele reported by dbSNP differs from the GenBank assembly sequence.
+      This is very rare and in all cases observed so far, the GenBank assembly has an 'N'
+      while the RefSeq assembly used by dbSNP has a less ambiguous character such as 'R'.</td>
+  </tr>
+</table>
+<p>
+and others may indicate an anomaly or problem with the variant data:
+</p>
+<table class="descTbl">
+  <tr><th>keyword in data file (dbSnp152.bb)</th>
+    <th># in hg19</th><th># in hg38</th><th>description</th></tr>
+  <tr>
+    <td>altIsAmbiguous</td>
+    <td class="number">10680</td>
+    <td class="number">10807</td>
+    <td>At least one alternate allele contains an IUPAC ambiguous base (e.g. 'R' for 'A or G').
+      For alleles containing more than one ambiguous base, this may create a
+      combinatoric explosion of possible alleles.</td>
+  </tr>
+  <tr>
+    <td>classMismatch</td>
+    <td class="number">4808</td>
+    <td class="number">5103</td>
+    <td>Variation class/type is inconsistent with alleles mapped to this genome assembly.</td>
+  </tr>
+  <tr>
+    <td>clusterError</td>
+    <td class="number">106941</td>
+    <td class="number">94310</td>
+    <td>This variant has the same start, end and class as another variant;
+      they probably should have been merged into one variant.</td>
+  </tr>
+  <tr>
+    <td>freqIsAmbiguous</td>
+    <td class="number">7635</td>
+    <td class="number">7636</td>
+    <td>At least one allele reported by at least one project that reports frequencies
+      contains an IUPAC ambiguous base.</td>
+  </tr>
+  <tr>
+    <td>freqNotRefAlt</td>
+    <td class="number">23027</td>
+    <td class="number">36306</td>
+    <td>At least one allele reported by at least one project that reports frequencies
+      does not match any of the reference or alternate alleles listed by dbSNP.</td>
+  </tr>
+  <tr>
+    <td>multiMap</td>
+    <td class="number">555144</td>
+    <td class="number">130175</td>
+    <td>This variant has been mapped to more than one distinct genomic location.</td>
+  </tr>
+</table>
+
+
+<h2>Data Sources and Methods</h2>
+<p>
+dbSNP has collected genetic variant reports from researchers worldwide for 
+<a href="https://ncbiinsights.ncbi.nlm.nih.gov/2019/10/07/dbsnp-celebrates-20-years/"
+   target=_blank>over 20 years</a>.
+Since the advent of next-generation sequencing methods and the population sequencing efforts
+that they enable, dbSNP has grown exponentially, requiring a new data schema, computational pipeline,
+web infrastructure, and download files.
+(Holmes <em>et al.</em>)
+The same challenges of exponential growth affected UCSC's presentation of dbSNP variants,
+so we have taken the opportunity to change our internal representation and import pipeline.
+Most notably, flanking sequences are no longer provided by dbSNP,
+since most submissions have been genomic variant calls in VCF format as opposed to
+independent sequences.
+</p>
+<p>
+We downloaded dbSNP's JSON files available from
+<a href="ftp://ftp.ncbi.nlm.nih.gov/snp/archive/b152/JSON/"
+target=_blank>ftp://ftp.ncbi.nlm.nih.gov/snp/archive/b152/JSON/</a>,
+extracted a subset of the information about each variant, and collated
+it into a bigBed file using the
+<a href="https://genome-source.gi.ucsc.edu/gitlist/kent.git/blob/master/src/hg/lib/bigDbSnp.as"
+target=_blank>bigDbSnp.as</a> schema with the information
+necessary for filtering and displaying the variants,
+as well as a separate file containing more detailed information to be
+displayed on each variant's details page
+(<a href="https://genome-source.gi.ucsc.edu/gitlist/kent.git/blob/master/src/hg/lib/dbSnpDetails.as"
+target=_blank>dbSnpDetails.as</a> schema).
+
+<h2>Data Access</h2>
+<p>
+The raw data underlying the UCSC Genome Browser track can be explored interactively with the
+<a href="../../cgi-bin/hgTables" target=_blank>Table Browser</a>,
+<a href="../../cgi-bin/hgIntegrator" target=_blank>Data Integrator</a>,
+or <a href="../../cgi-bin/hgVai" target=_blank>Variant Annotation Integrator</a>.
+For automated analysis, the track data files can be downloaded from the downloads server for
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/" target=_blank>hg38</a> and
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/snp/" target=_blank>hg19</a>
+(dbSnp152.bb); the detailed variant properties can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hgFixed/dbSnp/" target=_blank>hgFixed</a>
+(dbSnp152Details.tab.gz).
+</p><p>
+Please refer to our
+<A HREF="https://groups.google.com/a/soe.ucsc.edu/forum/?hl=en&fromgroups#!search/download+snps"
+target=_blank>mailing list archives</a>
+for questions and example queries, or our
+<a HREF="../FAQ/FAQdownloads.html#download36" target=_blank>Data Access FAQ</a>
+for more information.
+</p>
+
+<h2>References</h2>
+
+<p>
+https://www.biorxiv.org/content/10.1101/537449v3.full
+</p>
+
+<p>
+https://www.ncbi.nlm.nih.gov/pubmed/30395293
+PMC: PMC6323993
+</p>
+
+<p>
+Sherry ST, Ward MH, Kholodov M, Baker J, Phan L, Smigielski EM, Sirotkin K.
+<a HREF="https://academic.oup.com/nar/article/29/1/308/1116004/dbSNP-the-NCBI-database-of-
+genetic-variation" target="_blank">dbSNP: the NCBI database of genetic variation</a>.
+<em>Nucleic Acids Res</em>. 2001 Jan 1;29(1):308-11.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/11125122" target="_blank">11125122</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC29783/" target="_blank">PMC29783</a>
+</p>
