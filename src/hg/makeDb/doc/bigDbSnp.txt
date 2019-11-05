@@ -199,7 +199,7 @@
 
 
 ##############################################################################
-# dbSnp153: dbSNP build 153 (DONE 9/19/19 angie)
+# dbSnp153: dbSNP build 153 (DONE 11/4/19 angie)
 
     topDir=/hive/data/outside/dbSNP/153
     mkdir -p $topDir/json
@@ -330,12 +330,13 @@
 
     # 9/19/19: and again after changing doBigDbSnp.pl to have args & wait on specific pids:
     # 10/30/19: and again after adding new ucscNotes (#23283).
+    # 11/4/19: and again after finding that refIsMinor & diffMajor could be appended multiple times
     topDir=/hive/data/outside/dbSNP/153
     freqSourceOrder=1000Genomes,GnomAD_exomes,TOPMED,ExAC,PAGE_STUDY,GnomAD,GoESP,Estonian,ALSPAC,TWINSUK,NorthernSweden,Vietnamese
     # Run doBigDbSnp.pl (first with -debug to make runDir):
     $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 153 $freqSourceOrder -debug
-# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-10-30
-    cd /hive/data/outside/dbSNP/153/bigDbSnp.2019-10-30
+# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-04
+    cd /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-04
     # Link to ../bigDbSnp.2019-08-07/split, -continue convert to avoid re-splitting (the slowest part of the process):
     rmdir split
     ln -s ../bigDbSnp.2019-08-07/split split
@@ -343,11 +344,10 @@
       -buildDir=`pwd` -continue convert -stop install \
       >& do.log &
     tail -f do.log
-# *** All done !  (through the 'install' step)  Elapsed time: 472m19s
-# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-10-30
+# *** All done !  (through the 'install' step)  Elapsed time: 525m19s
+# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-04
 
     # count up how many variants have freq counts for each project
-#TODO
     cut -f 4 dbSnp153Details.tab \
     | perl -wne 'chomp; next unless $_; @w = split ",";
         if ($w[0]) { print "1000Genomes\n" }
@@ -387,7 +387,7 @@
 #   113678 clusterError
 # 12178426 commonAll
 # 20534330 commonSome
-#  3522349 diffMajor
+#  1378125 diffMajor
 #     7649 freqIsAmbiguous
 #    25413 freqNotRefAlt
 #   561309 multiMap
@@ -396,7 +396,7 @@
 #662571654 rareAll
 #670927558 rareSome
 #      101 refIsAmbiguous
-# 16032028 refIsMinor
+#  3277722 refIsMinor
 #   142937 refIsRare
 #    44382 refIsSingleton
 #        4 refMismatch
@@ -411,7 +411,7 @@
 #   126973 clusterError
 # 12430253 commonAll
 # 20893174 commonSome
-#  3573503 diffMajor
+#  1399317 diffMajor
 #     7749 freqIsAmbiguous
 #    39038 freqNotRefAlt
 #   132015 multiMap
@@ -420,7 +420,7 @@
 #681626796 rareAll
 #690089717 rareSome
 #      111 refIsAmbiguous
-# 16277729 refIsMinor
+#  3364788 refIsMinor
 #   166192 refIsRare
 #    56491 refIsSingleton
 #       33 refMismatch
