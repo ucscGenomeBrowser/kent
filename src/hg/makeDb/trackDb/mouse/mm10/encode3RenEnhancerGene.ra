@@ -5,7 +5,7 @@ html encode3RenEnhancerGene
 compositeTrack on
 shortLabel ENC+EPD Enhc/Gene
 longLabel Enhancer/gene map from ENCODE 3 (UCSD/Ren) with promoters from EPDnew
-subGroup1 view View a_enhancer=Enhancers b_promoter=Promoters c_interaction=Associations d_cluster=Association_Clusters
+subGroup1 view View a_enhancer=Enhancers b_promoter=Promoters c_interaction=Interactions d_cluster=Interaction_Clusters
 subGroup2 set Set a_REP=Replicated b_ALL=All
 sortOrder set=+ view=+
 dimensions dimX=set dimY=view
