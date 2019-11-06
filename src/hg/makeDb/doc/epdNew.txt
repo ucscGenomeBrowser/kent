@@ -1,0 +1,51 @@
+# Eukaryotic Promoter Database (EPD)
+#       at Swiss Bioinformatic Institute
+# Contact:  Phillipe Bucher
+
+# Tracks for human (hg19, hg38) and mouse (mm10)
+# Coding and non-coding subtracks (except for hg19, just coding)
+
+# Note: there is a public hub including supporting annotations and many more genomes
+
+#(2019-11-05 kate)
+
+##########################################################
+# Get lastest human annotations
+
+# version 006, 6/16/18
+
+mkdir human006
+cd human006
+wget ftp://ccg.epfl.ch/epdnew/H_sapiens/006/\*
+mkdir db
+cd db
+wget ftp://ccg.epfl.ch/epdnew/H_sapiens/006/db/\*
+cd ..
+ln -s `pwd`/Hs_EPDnew_006_hg19.bb /gbdb/hg19/bbi/epdNewHuman006.hg19.bb
+ln -s `pwd`/Hs_EPDnew_006_hg38.bb /gbdb/hg38/bbi/epdNewHuman006.hg38.bb
+
+# and non-coding
+cd ..
+mkdir humanNc001
+cd humanNc001
+wget ftp://ccg.epfl.ch/epdnew/human_nc/001/\*
+cd ..
+ln -s `pwd`/HsNC_EPDnew_001_hg38.bb /gbdb/hg38/bbi/epdNewHumanNc001.hg38.bb
+
+##########################################################
+# Get latest mouse annotations
+
+# 003
+
+mkdir mouse003
+cd mouse003
+wget ftp://ccg.epfl.ch/epdnew/M_musculus/003/\*
+ln -s `pwd`/Mm_EPDnew_003_mm10.bb /gbdb/mm10/bbi/epdNewMouse003.mm10.bb
+
+cd ..
+mkdir mouseNc001
+cd mouseNc001
+wget ftp://ccg.epfl.ch/epdnew/mouse_nc/001/\*
+ln -s `pwd`/MmNC_EPDnew_001_mm10.bb /gbdb/mm10/bbi/epdNewMouseNc001.mm10.bb
+
+

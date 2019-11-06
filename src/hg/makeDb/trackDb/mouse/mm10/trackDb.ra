@@ -408,3 +408,37 @@ bigDataUrl /gbdb/$D/uniprot/unipMut.bb
 include trackDb.encode3.ra
 include encode3RenEnhancerGene.ra
 
+track epdNew
+compositeTrack on
+release alpha
+shortLabel EPDnew Promoters
+longLabel Promoters from EPDnew
+html ../../epdNewPromoter
+type bigBed 8
+group regulation
+visibility hide
+urlLabel EPDnew link:
+bedNameLabel Promoter ID
+exonArrows on
+pennantIcon New red
+
+    track epdNewPromoter
+    shortLabel EPDnew v6
+    longLabel Promoters from EPDnew mouse version 003
+    parent epdNew on
+    bigDataUrl /gbdb/$D/bbi/epdNewMouse003.$D.bb
+    dataVersion EPDNew Mouse Version 003 (June 2018)
+    url https://epd.epfl.ch/cgi-bin/get_doc?db=mmEpdNew&format=genome&entry=$$
+    color 50,50,200
+    priority 1
+
+    track epdNewPromoterNonCoding
+    shortLabel EPDnew NC v1
+    longLabel ncRNA promoters from EPDnewNC mouse version 001
+    parent epdNew on
+    bigDataUrl /gbdb/$D/bbi/epdNewMouseNc001.$D.bb
+    dataVersion EPDNewNC Mouse Version 001 (August 2019)
+    url https://epd.epfl.ch/cgi-bin/get_doc?db=mmNCEpdNew&format=genome&entry=$$
+    color 180,0,134
+    priority 2
+
