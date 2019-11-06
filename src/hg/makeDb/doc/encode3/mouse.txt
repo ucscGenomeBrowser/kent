@@ -1,4 +1,10 @@
 #########################
+# ENCODE3 mouse
+
+mkdir -p /hive/data/encode3/mouse
+cd /hive/data/encode3/mouse
+
+#########################
 # mm10 histone ChIP-seq from Ren lab
 # contact:  David Gorkin
 #
@@ -16,6 +22,9 @@
 # RM #23693
 
 # Their hub: http://renlab.sdsc.edu/yanxiao/encode_trackhub/hub.txt
+
+mkdir histones
+cd histones
 
 # Download files listed in track hub
 
@@ -86,6 +95,9 @@ wget http://enhancer.sdsc.edu/enhancer_export/ENCODE/chromHMM/readme
 mkdir pooled
 cd pooled
 csh ../wget.csh >&! wget.log &
+
+# make trackDb and rename script
+ln -s  /cluster/home/kate/kent/src/hg/makeDb/outside/encode3/mouse/makeChromHmmTrackDb.pl rename.pl
 
 ls *.bb | perl rename.pl > rename.txt
 cp rename.txt rename.csh
@@ -161,7 +173,10 @@ csh rename2.bb.csh
 
 # (kate July 2019)
 
-#################
+cd /hive/data/encode3/mouse
+mkdir interact
+cd interact
+
 # Download spreadsheet from Dropbox copy provided by Dave Gorkin
 # https://www.dropbox.com/s/ksxt9k2dh46k2ya/Gorkin_Ren_tableS5-11.xlsx?dl=0
 
@@ -195,7 +210,7 @@ wget ftp://ccg.epfl.ch/epdnew/M_musculus/current/Mm_EPDnew.bed
 # NOTE: file contains 1 or more promoters per gene.
 # Based on conversations with provider (Philip Bucher), we will merge into a single promoter region
 
-wc -l Mmn_EPDnew.bed
+wc -l Mm_EPDnew.bed
 # 25111
 
 sed 's/_.*900 / 900 /' MM_EPDnew.bed > promoters.temp.bed
@@ -210,6 +225,7 @@ wc -l promoters.bed
 #################
 # Create interact file from interactions and promoters files
 
+ln -s /cluster/home/kate/kent/src/hg/makeDb/outside/encode3/mouse/makeInteract.pl .
 perl makeInteract.pl enhancerGene.rep1.txt MM_EPDnew.bed cross_references.txt >&! errors.txt
 
 # strip first two lines from enhancerGene file to make map.rep1.txt
@@ -254,14 +270,6 @@ cd gbdb
 ln -s `pwd`/epdPromoters3.bb /gbdb/mm10/bbi
 cd ..
 
-
-# old
-#hgLoadBed mm10 -noSort -noBin -type=bed5+13 \
-        #-sqlTable=/cluster/home/kate/kent/src/hg/lib/interact.sql -renameSqlTable \
-            #encode3EnhancerPromoter enhancerGeneInteract.bed
-            #encode3RenEnhancerGeneInteract enhancerGeneInteract.bed
-
-
 # merge replicates, stripping extra columns, adding a column for count.  
 
 # export from spreadsheet.  Trim empty lines.  dos2unix.  tr \m's to \n's.
@@ -270,6 +278,7 @@ wc -l map.*
   33301 map.rep2.txt
   21142 map.replicated.txt
 
+ln -s /cluster/home/kate/kent/src/hg/makeDb/outside/encode3/mouse/mergeInteractReps.pl mergeReps.pl
 perl mergeReps.pl map.rep1.txt map.rep2.txt | bedSort stdin map.merged.txt
 
 mkdir out
