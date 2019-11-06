@@ -715,3 +715,38 @@ include hic.ra
 include gnomad.ra
 
 include platinumGenomes.ra
+
+track epdNew
+compositeTrack on
+release alpha
+shortLabel EPDnew Promoters
+longLabel Promoters from EPDnew
+html ../../epdNewPromoter
+type bigBed 8
+group expression
+visibility hide
+urlLabel EPDnew link:
+bedNameLabel Promoter ID
+exonArrows on
+pennantIcon New red
+
+    track epdNewPromoter
+    shortLabel EPDnew v6
+    longLabel Promoters from EPDnew human version 006
+    parent epdNew on
+    bigDataUrl /gbdb/$D/bbi/epdNewHuman006.$D.bb
+    dataVersion EPDNew Human Version 006 (May 2018)
+    url https://epd.epfl.ch/cgi-bin/get_doc?db=hgEpdNew&format=genome&entry=$$
+    color 50,50,200
+    priority 1
+
+    track epdNewPromoterNonCoding
+    shortLabel EPDnew NC v1
+    longLabel ncRNA promoters from EPDnewNC human version 001
+    parent epdNew on
+    bigDataUrl /gbdb/$D/bbi/epdNewHumanNc001.$D.bb
+    dataVersion EPDNewNC Human Version 001 (April 2019)
+    url https://epd.epfl.ch/cgi-bin/get_doc?db=hsNCEpdNew&format=genome&entry=$$
+    color 180,0,134
+    priority 2
+
