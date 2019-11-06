@@ -2643,7 +2643,6 @@ include platinumGenomes.ra
 include hic.ra
 
 track epdNew
-release alpha
 shortLabel EPDnew Promoters
 longLabel Promoters from EPDnew human version 006
 html ../../epdNewPromoter

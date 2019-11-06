@@ -410,7 +410,6 @@ include encode3RenEnhancerGene.ra
 
 track epdNew
 compositeTrack on
-release alpha
 shortLabel EPDnew Promoters
 longLabel Promoters from EPDnew
 html ../../epdNewPromoter
