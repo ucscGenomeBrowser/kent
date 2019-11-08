@@ -2087,7 +2087,7 @@ for (track = trackList; track != NULL; track = track->next)
     }
 }
 
-static void logTrackVisibilities (char *hgsid, struct track *trackList)
+static void logTrackVisibilities (char *hgsid, struct track *trackList, char *position)
 /* log visibile tracks and hgsid */
 {
 struct dyString *dy = newDyString(1024);
@@ -2110,6 +2110,7 @@ for(ptr=begin; ((ptr = strchr(ptr, ',')) != NULL); ptr++)
 	}
     }
 fprintf(stderr, "trackLog %d %s %s %s\n", count++, database, hgsid, begin);
+fprintf(stderr, "trackLog position %s %s %s\n",  database, hgsid, position);
 
 dyStringFree(&dy);
 }
@@ -7839,7 +7840,7 @@ for (track = trackList; track != NULL; track = track->next)
 
 
 if (sameString(cfgOptionDefault("trackLog", "off"), "on"))
-    logTrackVisibilities(cartSessionId(cart), trackList);
+    logTrackVisibilities(cartSessionId(cart), trackList, position);
 
 
 /////////////////

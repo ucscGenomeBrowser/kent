@@ -1875,8 +1875,108 @@ done
     cd /hive/data/genomes/hg38/bed/multiz30way/pal
     cat ../species.list | tr '[ ]' '[\n]' > order.list
 
-    # this for loop can take hours on a high contig count assembly
-    # it is just fine on human/hg38, just a few seconds
+    ### knownCanonical with full CDS
+    cd /hive/data/genomes/hg38/bed/multiz30way/pal
+    export mz=multiz30way
+    export gp=knownCanonical
+    export db=hg38
+    mkdir exonAA exonNuc knownCanonical
+
+    time cut -f1 ../../../chrom.sizes | while read C
+    do
+        echo $C 1>&2
+	hgsql hg38 -N -e "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$C'" > knownCanonical/$C.known.bed
+    done
+
+    ls knownCanonical/*.known.bed | while read F
+    do
+      if [ -s $F ]; then
+         echo $F | sed -e 's#knownCanonical/##; s/.known.bed//'
+      fi
+    done | while read C
+    do
+	echo "date"
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -noTrans $db $mz knownGene order.list stdout | \
+	    gzip -c > protNuc/$C.protNuc.fa.gz"
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed $db $mz knownGene order.list stdout | \
+	    gzip -c > protAA/$C.protAA.fa.gz"
+    done > $gp.$mz.prot.jobs
+
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 
+    # 267m58.813s
+
+    rm *.known.bed
+    export mz=multiz30way
+    export gp=knownCanonical
+    export db=hg38
+    zcat protAA/c*.gz | gzip -c > $gp.$mz.protAA.fa.gz &
+    zcat protNuc/c*.gz | gzip -c > $gp.$mz.protNuc.fa.gz &
+    # about 6 minutes
+
+    ### knownCanonical broken up by exon
+    cd /hive/data/genomes/hg38/bed/multiz100way/pal
+    export mz=multiz100way
+    export gp=knownCanonical
+    export db=hg38
+    mkdir exonAA exonNuc knownCanonical
+
+    time cut -f1 ../../../chrom.sizes | while read C
+    do
+        echo $C 1>&2
+	hgsql hg38 -N -e "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$C'" > knownCanonical/$C.known.bed
+    done
+    #   real    0m15.897s
+
+    ls knownCanonical/*.known.bed | while read F
+    do
+      if [ -s $F ]; then
+         echo $F | sed -e 's#knownCanonical/##; s/.known.bed//'
+      fi
+    done | while read C
+    do
+	echo "date"
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons -noTrans $db $mz knownGene order.list stdout | \
+	    gzip -c > exonNuc/$C.exonNuc.fa.gz"
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons $db $mz knownGene order.list stdout | \
+	    gzip -c > exonAA/$C.exonAA.fa.gz"
+    done > $gp.$mz.jobs
+
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 
+    # 267m58.813s
+
+    rm *.known.bed
+    export mz=multiz30way
+    export gp=knownCanonical
+    export db=hg38
+    zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz &
+    zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz &
+    # about 6 minutes
+
+    rm -rf exonAA exonNuc
+
+    export mz=multiz100way
+    export gp=knownCanonical
+    export db=hg38
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/$gp.$mz.protAA.fa.gz $pd/$gp.protAA.fa.gz
+    ln -s `pwd`/$gp.$mz.protNuc.fa.gz $pd/$gp.protNuc.fa.gz
+    cd  $pd
+    md5sum *.fa.gz > md5sum.txt
+
+    rm -rf exonAA exonNuc
+
+    export mz=multiz30way
+    export gp=knownCanonical
+    export db=hg38
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+    # knownGene
     export mz=multiz30way
     export gp=knownGene
     export db=hg38
@@ -1922,10 +2022,12 @@ done
     export db=hg38
     export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
-    md5sum *.fa.gz > md5sum.txt
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
     ln -s `pwd`/md5sum.txt $pd/
+
+    cd  $pd
+    md5sum *.fa.gz > md5sum.txt
 
     rm -rf exonAA exonNuc
 

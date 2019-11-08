@@ -2,8 +2,8 @@ kentSrc = ../..
 include ../../inc/common.mk
 
 compile:
-	python chromToUcsc -g build -a hg19.chromAlias.tsv,hg38.chromAlias.tsv -o ${BINDIR}/chromToUcsc
-	chmod a+x ${BINDIR}/chromToUcsc
+	python chromToUcsc -g build -a hg19.chromAlias.tsv,hg38.chromAlias.tsv -o ${DESTBINDIR}/chromToUcsc
+	chmod a+x ${DESTBINDIR}/chromToUcsc
 
 clean:
 	true

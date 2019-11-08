@@ -5987,6 +5987,8 @@ if (min)
     {                                                // name is always {filterName}Min
     safef(scoreLimitName, sizeof(scoreLimitName), "%s%s", scoreName, _MIN);
     deMin = cartOptionalStringClosestToHome(cart, tdb,parentLevel,scoreLimitName);
+    if (deMin == NULL)
+        deMin = cartOptionalStringClosestToHome(cart, tdb,parentLevel,scoreName);
     if (deMin != NULL)
         *min = strtod(deMin,NULL);
     }
@@ -6004,7 +6006,7 @@ if (max && limitMin
 
 static boolean showScoreFilter(struct cart *cart, struct trackDb *tdb, boolean *opened,
                                boolean boxed, boolean parentLevel,char *name, char *title,
-                               char *label, char *scoreName, boolean isFloat)
+                               char *label, char *scoreName)
 // Shows a score filter control with minimum value and optional range
 {
 char *setting = trackDbSetting(tdb, scoreName);
@@ -6021,63 +6023,31 @@ if (setting)
     char altLabel[256];
     safef(varName, sizeof(varName), "%s%s", scoreName, _BY_RANGE);
     boolean filterByRange = trackDbSettingClosestToHomeOn(tdb, varName);
-    // NOTE: could determine isFloat = (strchr(setting,'.') != NULL);
-    //       However, historical trackDb settings of pValueFilter did not always contain '.'
-    if (isFloat)
+    double minLimit=NO_VALUE,maxLimit=NO_VALUE;
+    double minVal=minLimit,maxVal=maxLimit;
+    colonPairToDoubles(setting,&minVal,&maxVal);
+    getScoreFloatRangeFromCart(cart,tdb,parentLevel,scoreName,&minLimit,&maxLimit,
+                                                              &minVal,  &maxVal);
+    safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, filterByRange ? _MIN:"");
+    safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange ? "Minimum " : ""),
+          htmlEncode(htmlTextStripTags(label)));
+    cgiMakeDoubleVarWithLimits(varName,minVal, altLabel, 0,minLimit, maxLimit);
+    if (filterByRange)
         {
-        double minLimit=NO_VALUE,maxLimit=NO_VALUE;
-        double minVal=minLimit,maxVal=maxLimit;
-        colonPairToDoubles(setting,&minVal,&maxVal);
-        getScoreFloatRangeFromCart(cart,tdb,parentLevel,scoreName,&minLimit,&maxLimit,
-                                                                  &minVal,  &maxVal);
-        safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, filterByRange ? _MIN:"");
-        safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange ? "Minimum " : ""),
-              htmlEncode(htmlTextStripTags(label)));
-        cgiMakeDoubleVarWithLimits(varName,minVal, altLabel, 0,minLimit, maxLimit);
-        if (filterByRange)
-            {
-            printf("<TD align='left'>to<TD align='left'>");
-            safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MAX);
-            safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Maximum ":""), label);
-            cgiMakeDoubleVarWithLimits(varName,maxVal, altLabel, 0,minLimit, maxLimit);
-            }
-        safef(altLabel, sizeof(altLabel), "%s", (filterByRange?"": "colspan=3"));
-        if (minLimit != NO_VALUE && maxLimit != NO_VALUE)
-            printf("<TD align='left'%s> (%g to %g)",altLabel,minLimit, maxLimit);
-        else if (minLimit != NO_VALUE)
-            printf("<TD align='left'%s> (minimum %g)",altLabel,minLimit);
-        else if (maxLimit != NO_VALUE)
-            printf("<TD align='left'%s> (maximum %g)",altLabel,maxLimit);
-        else
-            printf("<TD align='left'%s",altLabel);
+        printf("<TD align='left'>to<TD align='left'>");
+        safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MAX);
+        safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Maximum ":""), label);
+        cgiMakeDoubleVarWithLimits(varName,maxVal, altLabel, 0,minLimit, maxLimit);
         }
+    safef(altLabel, sizeof(altLabel), "%s", (filterByRange?"": "colspan=3"));
+    if (minLimit != NO_VALUE && maxLimit != NO_VALUE)
+        printf("<TD align='left'%s> (%g to %g)",altLabel,minLimit, maxLimit);
+    else if (minLimit != NO_VALUE)
+        printf("<TD align='left'%s> (minimum %g)",altLabel,minLimit);
+    else if (maxLimit != NO_VALUE)
+        printf("<TD align='left'%s> (maximum %g)",altLabel,maxLimit);
     else
-        {
-        int minLimit=NO_VALUE,maxLimit=NO_VALUE;
-        int minVal=minLimit,maxVal=maxLimit;
-        colonPairToInts(setting,&minVal,&maxVal);
-        getScoreIntRangeFromCart(cart,tdb,parentLevel,scoreName,&minLimit,&maxLimit,
-                                                                &minVal,  &maxVal);
-        safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, filterByRange ? _MIN:"");
-        safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Minimum ":""), label);
-        cgiMakeIntVarWithLimits(varName,minVal, altLabel, 0,minLimit, maxLimit);
-        if (filterByRange)
-            {
-            printf("<TD align='left'>to<TD align='left'>");
-            safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MAX);
-            safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Maximum ":""), label);
-            cgiMakeIntVarWithLimits(varName,maxVal, altLabel, 0,minLimit, maxLimit);
-            }
-        safef(altLabel, sizeof(altLabel), "%s", (filterByRange?"": "colspan=3"));
-        if (minLimit != NO_VALUE && maxLimit != NO_VALUE)
-            printf("<TD align='left'%s> (%d to %d)",altLabel,minLimit, maxLimit);
-        else if (minLimit != NO_VALUE)
-            printf("<TD align='left'%s> (minimum %d)",altLabel,minLimit);
-        else if (maxLimit != NO_VALUE)
-            printf("<TD align='left'%s> (maximum %d)",altLabel,maxLimit);
-        else
-            printf("<TD align='left'%s",altLabel);
-        }
+        printf("<TD align='left'%s",altLabel);
     puts("</TR>");
     return TRUE;
     }
@@ -6105,10 +6075,6 @@ if (filterSettings)
         {
         if (differentString(filter->name,NO_SCORE_FILTER))
             {
-            // Determine floating point or integer
-            char *setting = trackDbSetting(tdb, filter->name);
-            boolean isFloat = (strchr(setting,'.') != NULL);
-
             char *scoreName = cloneString(filter->name);
             char *field = extractFieldName(filter->name, FILTER_NUMBER_NAME);
             char *trackDbLabel = getLabelSetting(cart, tdb, field);
@@ -6119,8 +6085,6 @@ if (filterSettings)
                 if (asCol != NULL)
                     { // Found label so replace field
                     field = asCol->comment;
-                    if (!isFloat)
-                        isFloat = asTypesIsFloating(asCol->lowType->type);
                     }
                 else 
                     errAbort("Building filter on field %s which is not in AS file.", field);
@@ -6136,7 +6100,7 @@ if (filterSettings)
             else
                 safef(labelBuf, sizeof(labelBuf),"%s%s", filterByRange ? "": "Minimum ", field);
 
-            showScoreFilter(cart,tdb,opened,boxed,parentLevel,name,title,label,scoreName,isFloat);
+            showScoreFilter(cart,tdb,opened,boxed,parentLevel,name,title,label,scoreName);
             freeMem(scoreName);
             count++;
             }
@@ -6768,11 +6732,11 @@ void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *t
 boolean parentLevel = isNameAtParentLevel(tdb,name);
 boolean opened = FALSE;
 showScoreFilter(cart,tdb,&opened,boxed,parentLevel,name,title,
-                "Minimum Signal value",     SIGNAL_FILTER,TRUE);
+                "Minimum Signal value",     SIGNAL_FILTER);
 showScoreFilter(cart,tdb,&opened,boxed,parentLevel,name,title,
-                "Minimum P-Value (<code>-log<sub>10</sub></code>)",PVALUE_FILTER,TRUE);
+                "Minimum P-Value (<code>-log<sub>10</sub></code>)",PVALUE_FILTER);
 showScoreFilter(cart,tdb,&opened,boxed,parentLevel,name,title,
-                "Minimum Q-Value (<code>-log<sub>10</sub></code>)",QVALUE_FILTER,TRUE);
+                "Minimum Q-Value (<code>-log<sub>10</sub></code>)",QVALUE_FILTER);
 
 char *setting = trackDbSettingClosestToHomeOrDefault(tdb, SCORE_FILTER,NULL);//"0:1000");
 if (setting)
