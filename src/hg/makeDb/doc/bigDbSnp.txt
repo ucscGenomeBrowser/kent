@@ -331,12 +331,13 @@
     # 9/19/19: and again after changing doBigDbSnp.pl to have args & wait on specific pids:
     # 10/30/19: and again after adding new ucscNotes (#23283).
     # 11/4/19: and again after finding that refIsMinor & diffMajor could be appended multiple times
+    # 11/7/19: and again after finding that some cases of freqNotRefAlt are VCF normalization probs
     topDir=/hive/data/outside/dbSNP/153
     freqSourceOrder=1000Genomes,GnomAD_exomes,TOPMED,ExAC,PAGE_STUDY,GnomAD,GoESP,Estonian,ALSPAC,TWINSUK,NorthernSweden,Vietnamese
     # Run doBigDbSnp.pl (first with -debug to make runDir):
     $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 153 $freqSourceOrder -debug
-# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-04
-    cd /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-04
+# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-07
+    cd /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-07
     # Link to ../bigDbSnp.2019-08-07/split, -continue convert to avoid re-splitting (the slowest part of the process):
     rmdir split
     ln -s ../bigDbSnp.2019-08-07/split split
@@ -344,8 +345,8 @@
       -buildDir=`pwd` -continue convert -stop install \
       >& do.log &
     tail -f do.log
-# *** All done !  (through the 'install' step)  Elapsed time: 525m19s
-# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-04
+# *** All done !  (through the 'install' step)  Elapsed time: 504m48s
+# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-07
 
     # count up how many variants have freq counts for each project
     cut -f 4 dbSnp153Details.tab \
@@ -387,18 +388,18 @@
 #   113678 clusterError
 # 12178426 commonAll
 # 20534330 commonSome
-#  1378125 diffMajor
+#  1377402 diffMajor
 #     7649 freqIsAmbiguous
-#    25413 freqNotRefAlt
+#    16950 freqNotRefAlt
 #   561309 multiMap
 #106940656 overlapDiffClass
 # 16890303 overlapSameClass
 #662571654 rareAll
 #670927558 rareSome
 #      101 refIsAmbiguous
-#  3277722 refIsMinor
-#   142937 refIsRare
-#    44382 refIsSingleton
+#  3269451 refIsMinor
+#   135265 refIsRare
+#    36709 refIsSingleton
 #        4 refMismatch
 #  3813390 revStrand
     cut -f 15 hg38.dbSnp153.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
@@ -411,18 +412,18 @@
 #   126973 clusterError
 # 12430253 commonAll
 # 20893174 commonSome
-#  1399317 diffMajor
+#  1398591 diffMajor
 #     7749 freqIsAmbiguous
-#    39038 freqNotRefAlt
+#    30615 freqNotRefAlt
 #   132015 multiMap
 #109838613 overlapDiffClass
 # 17228657 overlapSameClass
 #681626796 rareAll
 #690089717 rareSome
 #      111 refIsAmbiguous
-#  3364788 refIsMinor
-#   166192 refIsRare
-#    56491 refIsSingleton
+#  3356557 refIsMinor
+#   158562 refIsRare
+#    48859 refIsSingleton
 #       33 refMismatch
 #  4512600 revStrand
 
