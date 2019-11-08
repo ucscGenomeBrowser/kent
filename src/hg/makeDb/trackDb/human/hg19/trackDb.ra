@@ -2641,3 +2641,19 @@ include wgEncodeReg.dev.ra alpha
 include platinumGenomes.ra
 
 include hic.ra
+
+track epdNew
+shortLabel EPDnew Promoters
+longLabel Promoters from EPDnew human version 006
+html ../../epdNewPromoter
+type bigBed 8
+bigDataUrl /gbdb/$D/bbi/epdNewHuman006.$D.bb
+group expression
+bedNameLabel Promoter ID
+url https://epd.epfl.ch/cgi-bin/get_doc?db=mmEpdNew&format=genome&entry=$$
+urlLabel EPDnew link:
+color 50,50,200
+exonArrows on
+dataVersion EPDNew Version 006 (May 2018)
+visibility hide
+pennantIcon New red
