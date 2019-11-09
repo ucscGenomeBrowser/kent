@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser hic Track Format" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<h1>hic Track Format</h1>
+<p>
+<a href="https://github.com/aidenlab/juicer/wiki/Data/#hic-files" target="_blank">Hic format</a>
+is an indexed binary format designed to permit fast random access to contact matrix heatmaps.  The
+format was designed by the <a href="https://www.aidenlab.org/" target="_blank">Aiden Lab</a>
+at <a href="https://www.bcm.edu/" target="_blank">Baylor College of Medicine</a>.  
+</p><p>
+The format is used for displaying chromatin conformation data in the browser.  After running a
+chromatin conformation experiment like in situ Hi-C, researchers can pass their results through
+the <a href="https://github.com/aidenlab/juicer/wiki" target="_blank">Juicer</a> pipeline to produce
+a hic file and place that file in a web-accessible space.  Due to the large size of many of these
+files, UCSC is not able to support direct upload via our Custom Track interface.  UCSC does,
+however, temporarily cache the accessed portions of the files to speed up interactive display.
+If you do not have access to a web-accessible server and need hosting space for your VCF files,
+please see the <a href="hgTrackHubHelp.html#Hosting">Hosting</a> section of the Track Hub Help
+documentation.</p>
+
+<p>The UCSC tools currently support hic versions 6-8.</p>
+
+<h2>Generating a hic track</h2>
+<p>
+The typical workflow for generating a hic custom track is this:</p>
+<ol>
+  <li>
+  Prepare your data by processing it with the <a href= "https://github.com/aidenlab/juicer/wiki"
+  target="_blank">Juicer</a> pipeline to create a file in the hic format.
+  </li>
+  <li>
+  Move the hic file (<em>my.hic</em>) to an http, https, or ftp location.</li>
+  <li>
+  Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a single 
+  <a href="hgTracksHelp.html#TRACK">track line</a>. The basic version of the track line will look 
+  something like this:
+  <pre><code>track type=hic name="My HIC" bigDataUrl=<em>http://myorg.edu/mylab/my.hic</em></code></pre>
+  </li>
+  <li>
+  Paste the custom track line into the text box in the <a href="../../cgi-bin/hgCustom" 
+  target="_blank">custom track management page</a>, click &quot;submit&quot; and view in the Genome 
+  Browser.</li>
+</ol>
+
+<h2>Parameters for hic custom track definition lines</h2>
+<p>
+All options are placed in a single line separated by spaces (lines are broken only for readability 
+here):</p>
+<pre><code><strong>track type=hic bigDataUrl=</strong><em>http://...</em>
+    <strong>name=</strong><em>track_label</em>
+    <strong>description=</strong><em>center_label</em> 
+    <strong>visibility=</strong><em>display_mode</em>
+    <strong>priority=</strong><em>priority</em>
+    <strong>db=</strong><em>db</em></code></pre>
+<p>
+Note if you copy/paste the above example, you must remove the line breaks.
+Click <a href="examples/hicExample.txt">here</a> for a text version that you can paste 
+without editing.</p>
+<p>
+The track type and bigDataUrl are REQUIRED:</p>
+<pre><code><strong>type=hic bigDataUrl=</strong><em>http://myorg.edu/mylab/my.hic</em></strong> </code></pre>
+<p>
+The remaining settings are OPTIONAL:</p>
+<pre><code><strong>name            </strong><em>track label                </em> # default is "User Track"
+<strong>description     </strong><em>center label               </em> # default is "User Supplied Track"
+<strong>visibility      </strong><em>full|dense|hide            </em> # default is hide (will also take numeric values 4|1|0)
+<strong>priority        </strong><em>N                          </em> # default is 100
+<strong>db              </strong><em>genome database            </em> # e.g. hg19 for Human Feb. 2009 (GRCh37) </code></pre>
+Note that hic tracks currently only support the full, dense, and hide visibility modes.
+The <a target="_blank" href="hgHicTrackHelp.html">hic track configuration</a> help page
+describes the hic track configuration page options.</p>
+
+<h3>Example #1</h3>
+<p>
+In this example, you will create a custom track for a hic file that is already on a public 
+server &mdash; data from an in situ Hi-C experiment on the HMEC cell line from the following paper,
+mapped to the hg19 assembly:</p>
+<p>
+Rao SS, Huntley MH, Durand NC, Stamenova EK, Bochkov ID, Robinson JT, Sanborn AL, Machol I, Omer AD,
+Lander ES <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(14)01497-4" target="_blank">
+A 3D map of the human genome at kilobase resolution reveals principles of chromatin looping</a>.
+<em>Cell</em>. 2014 Dec 18;159(7):1665-80.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25497547" target="_blank">25497547</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5635824/" target="_blank">PMC5635824</a>
+</p>
+<p>
+The line breaks inserted here for readability must be removed before submitting the track line:</p>
+<pre><code>browser position chr21:33,034,804-33,037,719
+track type=hic name="hic Example One" description="hic Ex. 1: in situ Hi-C on HMEC"
+    db=hg19 visibility=dense
+    bigDataUrl=http://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/hic/GSE63525_HMEC_combined.hic</code></pre>
+<p>
+The &quot;browser&quot; line above is used to view a small region of chromosome 21.</p>
+<p>
+Note if you copy/paste the above example, you must remove the line breaks (or, click 
+<a href="examples/hicExampleOne.txt">here</a> for a text version that you can paste without 
+editing).</p>
+<p>
+Paste the &quot;browser&quot; line and &quot;track&quot; line into the 
+<a href="../../cgi-bin/hgCustom" target="_blank">custom track management page</a> for the human 
+assembly hg19 (Feb. 2009), then click the &quot;submit&quot; button. On the following page, click 
+the &quot;chr21&quot; link in the custom track listing to view the hic track in the Genome 
+Browser.</p>
+
+<h3>Example #2</h3>
+<p>
+In this example, you will load a hub that has hic data described in a hub's trackDb.txt file.
+First, navigate to the <a href="hubQuickStart.html" target="_blank">Basic Hub Quick Start Guide</a>
+and review an introduction to hubs.</p>
+<p>
+Visualizing hic files in hubs involves creating three text files: <em>hub.txt</em>, 
+<em>genomes.txt</em>, and <em>trackDb.txt</em>. The browser is passed a URL to the top-level 
+<em>hub.txt</em> file that points to the related <em>genomes.txt</em> and <em>trackDb.txt</em> 
+files. The <em>trackDb.txt</em> file contains stanzas for each track that outlines the details 
+and type of each track to display, such as these lines for a hic file located at the bigDataUrl 
+location:</p>
+<pre><code>track hic1
+bigDataUrl http://http://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/hic/GSE63525_GM12878_insitu_primary+replicate_combined.hic
+shortLabel hic example
+longLabel This hic file shows in situ Hi-C data from Rao et al. (2014) on the GM12878 cell line
+type hic
+visibility dense</code></pre>
+<p>
+<b>Note:</b> there is now a <code>useOneFile on</code> hub setting that allows the hub
+properties to be specified in a single file. More information about this setting can be found on the
+<a href="./hgTracksHelp.html#UseOneFile" target="_blank">Genome Browser User Guide</a>.</p>
+<p>
+Here is a direct link to the <em><a href="examples/hubDirectory/hg19/trackDb.txt" 
+target="_blank">trackDb.txt</a></em> file to see more information about this example hub, and below 
+is a direct link to visualize the hub in the browser, where this example hic file displays in dense 
+mode alongside the other tracks in this hub. You can find more Track Hub hic display options on the 
+<a href="trackDb/trackDbHub.html#hic" target="_blank">Track Database (trackDb) Definition 
+Document</a> page.</p>
+<pre><code><a href="../../cgi-bin/hgTracks?db=hg19&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt"
+target="_blank">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt</a> </code></pre>
+
+<h2>Sharing Your Data with Others</h2>
+<p>
+If you would like to share your hic data track with a colleague, there are a couple of options.
+One method is to load your data track into the UCSC Genome Browser and then create a saved session
+by following the instructions <a href="https://hgwdev-jcasper.gi.ucsc.edu/goldenPath/help/hgSessionHelp.html#Create">here</a>.
+If you are looking for a more automated method of sharing data, you may be interested to learn how to create
+a direct URL that loads custom data files.  For a demonstration of this, see <strong>Example 6</strong> on the
+<a href="customTrack.html#SHARE">custom tracks</a> page.</p>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
