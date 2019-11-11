@@ -139,9 +139,7 @@ char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting
 if (isEmpty(value)) 
     return NULL;
 
-char filterType[4096];
-safef(filterType, sizeof filterType, "%s%s", field, FILTER_TYPE_NAME);
-char *typeValue = cartOrTdbString(cart, tdb, filterType, FILTERTEXT_WILDCARD);
+char *typeValue = getFilterType(cart, tdb, field, FILTERTEXT_WILDCARD);
 
 AllocVar(filter);
 filter->fieldNum =  getFieldNum(bbi, field);
@@ -164,14 +162,7 @@ struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, 
 /* Add a bigBed filter using a trackDb filterBy statement. */
 {
 struct bigBedFilter *filter;
-char filterType[4096];
-safef(filterType, sizeof filterType, "%s%s", field, FILTER_TYPE_NAME);
-char *setting = cartOrTdbString(cart, tdb, filterType, NULL);
-if (setting == NULL)
-    {
-    safef(filterType, sizeof filterType, "%s.%s", field, FILTER_TYPE_NAME);
-    setting = cartOrTdbString(cart, tdb, filterType, FILTERBY_SINGLE);
-    }
+char *setting = getFilterType(cart, tdb, field,  FILTERBY_SINGLE);
 
 AllocVar(filter);
 filter->fieldNum =  getFieldNum(bbi, field);
@@ -194,9 +185,9 @@ struct bigBedFilter *bigBedBuildFilters(struct cart *cart, struct bbiFile *bbi, 
 /* Build all the numeric and filterBy filters for a bigBed */
 {
 struct bigBedFilter *filters = NULL, *filter;
-struct slName *filterSettings = trackDbSettingsWildMatch(tdb, FILTER_NUMBER_WILDCARD);
+struct trackDbFilter *tdbFilters = tdbGetTrackNumFilters(tdb);
 
-if ((filterSettings == NULL) && !trackDbSettingOn(tdb, "noScoreFilter"))
+if ((tdbFilters == NULL) && !trackDbSettingOn(tdb, "noScoreFilter"))
     {
     AllocVar(filter);
     slAddHead(&filters, filter);
@@ -207,21 +198,17 @@ if ((filterSettings == NULL) && !trackDbSettingOn(tdb, "noScoreFilter"))
     filter->value1 = cartUsualDouble(cart, buffer, 0.0);
     }
 
-for(; filterSettings; filterSettings = filterSettings->next)
+for(; tdbFilters; tdbFilters = tdbFilters->next)
     {
-    char *fieldName = extractFieldName(filterSettings->name, FILTER_NUMBER_NAME);
-    if (sameString(fieldName, "noScore"))
-        continue;
-    if ((filter = bigBedMakeNumberFilter(cart, bbi, tdb, filterSettings->name, NULL, fieldName)) != NULL)
+    if ((filter = bigBedMakeNumberFilter(cart, bbi, tdb, tdbFilters->name, NULL, tdbFilters->fieldName)) != NULL)
         slAddHead(&filters, filter);
     }
 
-filterSettings = trackDbSettingsWildMatch(tdb, FILTER_TEXT_WILDCARD);
+tdbFilters = tdbGetTrackTextFilters(tdb);
 
-for(; filterSettings; filterSettings = filterSettings->next)
+for(; tdbFilters; tdbFilters = tdbFilters->next)
     {
-    char *fieldName = extractFieldName(filterSettings->name, FILTER_TEXT_NAME);
-    if ((filter = bigBedMakeFilterText(cart, bbi, tdb, filterSettings->name,  fieldName)) != NULL)
+    if ((filter = bigBedMakeFilterText(cart, bbi, tdb, tdbFilters->name,  tdbFilters->fieldName)) != NULL)
         slAddHead(&filters, filter);
     }
 

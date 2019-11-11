@@ -85,6 +85,7 @@ struct trackDb
     struct tdbExtras *tdbExtras;// This struct allows storing extra values which may be used
                                 // multiple times within a single cgi. An example is the metadata
                                 // looked up once in the metaDb and used again and again.
+    boolean isNewFilterType;    // are we using the new filter variables on this track
     };
 
 #define FOLDER_MASK                      0x10

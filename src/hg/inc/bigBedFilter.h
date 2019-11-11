@@ -16,15 +16,25 @@
 #define FILTERTEXT_REGEXP          "regexp"
 
 /* cart and tdb variables */
-#define FILTER_NUMBER_NAME    "Filter"
-#define FILTER_TEXT_NAME      "FilterText"
-#define FILTER_VALUES_NAME    "FilterValues"
-#define FILTER_TYPE_NAME      "FilterType"
+#define FILTER_NUMBER_NAME_LOW    "filter"
+#define FILTER_TEXT_NAME_LOW      "filterText"
+#define FILTER_VALUES_NAME_LOW    "filterValues"
+#define FILTER_TYPE_NAME_LOW      "filterType"
+#define FILTER_LABEL_NAME_LOW     "filterLabel"
+#define FILTER_NUMBER_WILDCARD_LOW    FILTER_NUMBER_NAME_LOW ".*"
+#define FILTER_TEXT_WILDCARD_LOW      FILTER_TEXT_NAME_LOW ".*"
+#define FILTER_VALUES_WILDCARD_LOW    FILTER_VALUES_NAME_LOW ".*"
+#define FILTER_TYPE_WILDCARD_LOW      FILTER_TYPE_NAME_LOW ".*"
+
+#define FILTER_NUMBER_NAME_CAP    "Filter"
+#define FILTER_TEXT_NAME_CAP      "FilterText"
+#define FILTER_VALUES_NAME_CAP    "FilterValues"
+#define FILTER_TYPE_NAME_CAP      "FilterType"
 #define FILTER_LABEL_NAME     "FilterLabel"
-#define FILTER_NUMBER_WILDCARD    "*" FILTER_NUMBER_NAME
-#define FILTER_TEXT_WILDCARD      "*" FILTER_TEXT_NAME
-#define FILTER_VALUES_WILDCARD    "*" FILTER_VALUES_NAME
-#define FILTER_TYPE_WILDCARD      "*" FILTER_TYPE_NAME
+#define FILTER_NUMBER_WILDCARD_CAP    "*" FILTER_NUMBER_NAME_CAP
+#define FILTER_TEXT_WILDCARD_CAP      "*" FILTER_TEXT_NAME_CAP
+#define FILTER_VALUES_WILDCARD_CAP    "*" FILTER_VALUES_NAME_CAP
+#define FILTER_TYPE_WILDCARD_CAP      "*" FILTER_TYPE_NAME_CAP
 
 struct bigBedFilter
 /* Filter on a field in a bigBed file. */
@@ -39,6 +49,16 @@ regex_t regEx;
 char *wildCardString;
 };
 
+struct trackDbFilter
+/* a bigBed filter in trackDb. */
+{
+struct trackDbFilter *next;
+char *name;        /* the actual trackDb variable */
+char *fieldName;   /* the field it applies to */
+char *setting;     /* the setting of the trackDb variable */
+};
+
+
 struct bigBedFilter *bigBedMakeNumberFilter(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field);
 /* Add a bigBed filter using a trackDb filterBy statement. */
 
@@ -47,5 +67,17 @@ boolean bigBedFilterInterval(char **bedRow, struct bigBedFilter *filters);
 
 struct bigBedFilter *bigBedBuildFilters(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb) ;
 /* Build all the numeric and filterBy filters for a bigBed */
+
+struct trackDbFilter *tdbGetTrackNumFilters( struct trackDb *tdb);
+// get the number filters out of trackDb
+
+struct trackDbFilter *tdbGetTrackTextFilters( struct trackDb *tdb);
+// get the text filters out of trackDb
+
+struct trackDbFilter *tdbGetTrackFilterByFilters( struct trackDb *tdb);
+// get the values filters out of trackDb
+
+char *getFilterType(struct cart *cart, struct trackDb *tdb, char *field, char *def);
+// figure out how the trackDb is specifying the FILTER_TYPE variable and return its setting
 
 #endif /* BIGBEDFILTER_H */
