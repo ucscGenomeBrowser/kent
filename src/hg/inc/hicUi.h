@@ -20,7 +20,7 @@
 #define HIC_DRAW_MODE_TRIANGLE      "triangle"
 #define HIC_DRAW_MODE_SQUARE        "square"
 #define HIC_DRAW_MODE_ARC           "arc"
-#define HIC_DRAW_MODE_DEFAULT       HIC_DRAW_MODE_SQUARE
+#define HIC_DRAW_MODE_DEFAULT       HIC_DRAW_MODE_TRIANGLE
 #define HIC_NORMALIZATION           "normalization"
 #define HIC_RESOLUTION              "resolution"
 #define HIC_DRAW_AUTOSCALE          "autoscale"

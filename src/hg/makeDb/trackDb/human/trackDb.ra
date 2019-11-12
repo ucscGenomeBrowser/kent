@@ -5329,16 +5329,3 @@ termRegex nssv[0-9]+
 searchType bed
 searchPriority 50
 
-track epdNewPromoter
-release alpha
-shortLabel EPDnew Promoter
-longLabel Human promoters from EPDnew version 0006
-type bigBed 8
-bigDataUrl /gbdb/$D/bbi/epdNewHuman006.$D.bb
-dataVersion EPDNew Version 0006 (May 6, 2018)
-group expression
-url https://epd.epfl.ch/cgi-bin/get_doc?db=mmEpdNew&format=genome&entry=$$
-urlLabel EPDnew promoter:
-color 23,37,187
-visibility hide
-pennantIcon New red

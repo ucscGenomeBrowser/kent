@@ -177,6 +177,7 @@
     <A onclick="return jumpTo(this);" HREF="#">factorSource</A>,
     <A onclick="return jumpTo(this);" HREF="#">genePred</A>,
     <A onclick="return jumpTo(this);" HREF="#">gvf</A>,
+    <A onclick="return jumpTo(this);" HREF="#">hic</A>,
     <A onclick="return jumpTo(this);" HREF="#">ld2</A>,
     <A onclick="return jumpTo(this);" HREF="#">narrowPeak</A>,
     <A onclick="return jumpTo(this);" HREF="#">netAlign</A>,
@@ -214,6 +215,7 @@
     <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigWig</A>,
     <A onclick="return jumpTo(this);" HREF="#">halSnake</A>,
+    <A onclick="return jumpTo(this);" HREF="#">hic</A>,
     <A onclick="return jumpTo(this);" HREF="#">vcfTabix</A>,
     <P>Detailed descriptions of each type can be found
     below.  In many cases the type setting includes additional
@@ -354,7 +356,7 @@
     <P>The location of a remote data file containing the chain link data.</P>
 </DIV>
 
-<DIV class="bigDataUrl"><span class="types bigBarChart bigBed bigChain bigInteract bigMaf bigPsl bigWig bam vcfTabix"></span>
+<DIV class="bigDataUrl"><span class="types bigBarChart bigBed bigChain bigInteract bigMaf bigPsl bigWig bam hic vcfTabix"></span>
 <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
     <P class="isRequired">Required: <span class="red">For Hubs</span></P>
     <P>The location of a remote data file containing the bulk of the data for the track.
@@ -1097,6 +1099,13 @@ There are no extra options that can appear on the type bigBarChart line.
     <code>type bigInteract</code></div>
 There are no extra options that can appear on the type bigInteract line.
 </DIV>
+
+<DIV class="hic"><span class="types hic"></span>
+<div class="format">
+    <code>type hic</code></div>
+There are no extra options that can appear on the type hic line.
+</DIV>
+
 
 <DIV class="bed_flavors"><span class="types bed5FloatScore bedRnaElements broadPeak coloredExon gvf ld2 narrowPeak peptideMapping"></span>
 <div class="format">
@@ -4565,6 +4574,30 @@ For the complete bigInteract format definitions please see the
     bigDataUrl http://...
     </pre>
 </div>
+
+<!-- - - - - - - - hic settings - - - - - - - -->
+<DIV class="hic_intro">
+<H3>hic: Hi-C contact matrices</H3>
+    <P>
+    The hic track type is for displaying chromatin-chromatin interaction data via heat
+maps.  Currently this track type supports one file format: the .hic file format created
+by the <a href="https://www.aidenlab.org" target="_blank">Aiden Lab</a> at <a target="_blank"
+href="https://www.bcm.edu">Baylor College of Medicine</a>.  This is an indexed
+binary format that supports remote access, so the file can be hosted on any web accessible
+server and displayed at UCSC.
+For more information on the .hic file format, see the documentation on <a target="_blank"
+href="https://github.com/aidenlab/juicer/wiki/Data">github</a>.</p>
+</DIV>
+
+<DIV class="hic_example"><span class="types hic"></span>
+<div class="format"><B>Example of a hic track</B></div>
+    <pre>
+    track myHiCData
+    type hic
+    bigDataUrl http://...
+    </pre>
+</div>
+
 
 <!-- - - - - - - - bigBarChart settings - - - - - - - -->
 <DIV class="bigBarChart_intro">

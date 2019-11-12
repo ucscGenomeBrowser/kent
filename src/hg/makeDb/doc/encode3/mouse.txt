@@ -1,4 +1,10 @@
 #########################
+# ENCODE3 mouse
+
+mkdir -p /hive/data/encode3/mouse
+cd /hive/data/encode3/mouse
+
+#########################
 # mm10 histone ChIP-seq from Ren lab
 # contact:  David Gorkin
 #
@@ -16,6 +22,9 @@
 # RM #23693
 
 # Their hub: http://renlab.sdsc.edu/yanxiao/encode_trackhub/hub.txt
+
+mkdir histones
+cd histones
 
 # Download files listed in track hub
 
@@ -86,6 +95,9 @@ wget http://enhancer.sdsc.edu/enhancer_export/ENCODE/chromHMM/readme
 mkdir pooled
 cd pooled
 csh ../wget.csh >&! wget.log &
+
+# make trackDb and rename script
+ln -s  /cluster/home/kate/kent/src/hg/makeDb/outside/encode3/mouse/makeChromHmmTrackDb.pl rename.pl
 
 ls *.bb | perl rename.pl > rename.txt
 cp rename.txt rename.csh
@@ -161,7 +173,10 @@ csh rename2.bb.csh
 
 # (kate July 2019)
 
-#################
+cd /hive/data/encode3/mouse
+mkdir interact
+cd interact
+
 # Download spreadsheet from Dropbox copy provided by Dave Gorkin
 # https://www.dropbox.com/s/ksxt9k2dh46k2ya/Gorkin_Ren_tableS5-11.xlsx?dl=0
 
@@ -178,6 +193,7 @@ head -1 enhancerGene.rep1.txt
 # The SCC field will be basis of score.  It ranges from .25 to 1.0
 
 # strip trailing empty lines (from bad XLS export)
+# strip first two lines from enhancerGene file to make map.rep1.txt
 
 #################
 # Download promoters from EPDnew (rec from JK)
@@ -195,7 +211,7 @@ wget ftp://ccg.epfl.ch/epdnew/M_musculus/current/Mm_EPDnew.bed
 # NOTE: file contains 1 or more promoters per gene.
 # Based on conversations with provider (Philip Bucher), we will merge into a single promoter region
 
-wc -l Mmn_EPDnew.bed
+wc -l Mm_EPDnew.bed
 # 25111
 
 sed 's/_.*900 / 900 /' MM_EPDnew.bed > promoters.temp.bed
@@ -209,6 +225,73 @@ wc -l promoters.bed
 
 #################
 # Create interact file from interactions and promoters files
+
+# merge replicates, stripping extra columns, adding a column for count.  
+
+# export from spreadsheet.  Trim empty lines.  dos2unix.  tr \m's to \n's.
+wc -l map.*
+  31964 map.rep1.txt
+  33301 map.rep2.txt
+  21142 map.replicated.txt
+
+ln -s /cluster/home/kate/kent/src/hg/makeDb/outside/encode3/mouse/mergeInteractReps.pl mergeReps.pl
+perl mergeReps.pl map.rep1.txt map.rep2.txt | bedSort stdin map.merged.txt
+
+ln -s /cluster/home/kate/kent/src/hg/makeDb/outside/encode3/mouse/makeInteract.pl .
+mkdir out
+perl makeInteract.pl map.merged.txt MM_EPDnew.bed cross_references.txt out/ >&! makeInteract.log
+
+head makeInteract.log
+#Creating output files in directory out//
+#ERROR: Rejecting promoter for Apoo ENSMUSG00000049233
+                                    #on chr13 (chrX|94367074|94367134|+|237,177,32)
+#Found 41941 interactions with promoters, 1649 with missing promoters
+#RESCUES: 295
+#ENSMUSG00000036097 Slf2
+#ENSMUSG00000098306 Kiss1
+#...
+#MISSING PROMOTERS: 328
+#Gpbar1
+#Cacng6
+#Fev
+#..
+
+bedSort out/enhancers.all.bed out/enhancers.all.sorted.bed
+bedSort out/enhancers.rep.bed out/enhancers.rep.sorted.bed
+
+# why needed ???
+bedSort out/interactions.all.bed out/interactions.all.sorted.bed
+bedSort out/interactions.rep.bed out/interactions.rep.sorted.bed
+
+# biggify
+set sizes = /hive/data/genomes/mm10/chrom.sizes
+bedToBigBed -type=bed5+14 -as=enhancerPromoterInteract.as out/interactions.all.sorted.bed \
+                  $sizes gbdb/encode3EnhancerPromoterInteractAll.bb
+bedToBigBed -type=bed5+14 -as=enhancerPromoterInteract.as out/interactions.rep.sorted.bed \
+                  $sizes gbdb/encode3EnhancerPromoterInteractRep.bb
+
+# TODO: add more fields
+bedToBigBed -type=bed9 out/promoters.all.bed \
+                $sizes gbdb/epdPromoterAll.bb
+bedToBigBed -type=bed9 out/promoters.rep.bed \
+                $sizes gbdb/epdPromoterRep.bb
+
+bedToBigBed -type=bed4 out/enhancers.all.sorted.bed \
+                $sizes gbdb/encode3EnhancerAll.bb
+bedToBigBed -type=bed4 out/enhancers.rep.sorted.bed \
+                $sizes gbdb/encode3EnhancerRep.bb
+cd gbdb
+foreach f (epdPromoterAll epdPromoterRep encode3EnhancerAll encode3EnhancerRep encode3EnhancerPromoterInteractAll encode3EnhancerPromoterInteractRep)
+    ln -s `pwd`/$f.bb /gbdb/mm10/bbi
+end
+
+cd gbdb
+ln -s `pwd`/epdPromoters3.bb /gbdb/mm10/bbi
+
+# NOTE: Renamed .bb files to prefix w/ encode3Ren/encode3RenInteract
+
+#########################
+# old  stuff
 
 perl makeInteract.pl enhancerGene.rep1.txt MM_EPDnew.bed cross_references.txt >&! errors.txt
 
@@ -253,58 +336,3 @@ bedToBigBed -type=bed9 epdPromoters3.bed \
 cd gbdb
 ln -s `pwd`/epdPromoters3.bb /gbdb/mm10/bbi
 cd ..
-
-
-# old
-#hgLoadBed mm10 -noSort -noBin -type=bed5+13 \
-        #-sqlTable=/cluster/home/kate/kent/src/hg/lib/interact.sql -renameSqlTable \
-            #encode3EnhancerPromoter enhancerGeneInteract.bed
-            #encode3RenEnhancerGeneInteract enhancerGeneInteract.bed
-
-
-# merge replicates, stripping extra columns, adding a column for count.  
-
-# export from spreadsheet.  Trim empty lines.  dos2unix.  tr \m's to \n's.
-wc -l map.*
-  31964 map.rep1.txt
-  33301 map.rep2.txt
-  21142 map.replicated.txt
-
-perl mergeReps.pl map.rep1.txt map.rep2.txt | bedSort stdin map.merged.txt
-
-mkdir out
-perl makeInteract.pl map.merged.txt MM_EPDnew.bed cross_references.txt out/ >&! makeInteract.log
-bedSort out/enhancers.all.bed out/enhancers.all.sorted.bed
-bedSort out/enhancers.rep.bed out/enhancers.rep.sorted.bed
-
-# why needed ???
-bedSort out/interactions.all.bed out/interactions.all.sorted.bed
-bedSort out/interactions.rep.bed out/interactions.rep.sorted.bed
-
-# biggify
-set sizes = /hive/data/genomes/mm10/chrom.sizes
-bedToBigBed -type=bed5+14 -as=enhancerPromoterInteract.as out/interactions.all.sorted.bed \
-                  $sizes gbdb/encode3EnhancerPromoterInteractAll.bb
-bedToBigBed -type=bed5+14 -as=enhancerPromoterInteract.as out/interactions.rep.sorted.bed \
-                  $sizes gbdb/encode3EnhancerPromoterInteractRep.bb
-
-# TODO: add more fields
-bedToBigBed -type=bed9 out/promoters.all.bed \
-                $sizes gbdb/epdPromoterAll.bb
-bedToBigBed -type=bed9 out/promoters.rep.bed \
-                $sizes gbdb/epdPromoterRep.bb
-
-bedToBigBed -type=bed4 out/enhancers.all.sorted.bed \
-                $sizes gbdb/encode3EnhancerAll.bb
-bedToBigBed -type=bed4 out/enhancers.rep.sorted.bed \
-                $sizes gbdb/encode3EnhancerRep.bb
-cd gbdb
-foreach f (epdPromoterAll epdPromoterRep encode3EnhancerAll encode3EnhancerRep encode3EnhancerPromoterInteractAll encode3EnhancerPromoterInteractRep)
-    ln -s `pwd`/$f.bb /gbdb/mm10/bbi
-end
-
-cd gbdb
-ln -s `pwd`/epdPromoters3.bb /gbdb/mm10/bbi
-
-# NOTE: Renamed .bb files to prefix w/ encode3Ren/encode3RenInteract
-

@@ -62,40 +62,12 @@ char *setting = trackDbSettingClosestToHome(tdb, filter);
 int fieldNum =  getFieldNum(bbi, field);
 if (setting)
     {
-    struct asObject *as = bigBedAsOrDefault(bbi);
-    // All this isFloat conditional code is here because the cart
-    // variables used for floats are different than those used for ints
-    // in ../lib/hui.c so we have to use the correct getScore*() routine
-    // to access them..    We're doomed.
-    boolean isFloat = FALSE;
-    struct asColumn *asCol = asColumnFind(as, field);
-    if (asCol != NULL)
-        isFloat = asTypesIsFloating(asCol->lowType->type);
     boolean invalid = FALSE;
     double minValueTdb = 0,maxValueTdb = NO_VALUE;
     double minLimit=NO_VALUE,maxLimit=NO_VALUE,min = minValueTdb,max = maxValueTdb;
-    if (!isFloat)
-        {
-        int minValueTdbInt = 0,maxValueTdbInt = NO_VALUE;
-        colonPairToInts(setting,&minValueTdbInt,&maxValueTdbInt);
-        int minLimitInt=NO_VALUE,maxLimitInt=NO_VALUE,minInt=minValueTdbInt,maxInt=maxValueTdbInt;
-        colonPairToInts(defaultLimits,&minLimitInt,&maxLimitInt);
-        getScoreIntRangeFromCart(cart,tdb,FALSE,filter,&minLimitInt,&maxLimitInt,&minInt,&maxInt);
-
-        // copy all the ints over to the doubles (sigh)
-        min = minInt;
-        max = maxInt;
-        minLimit = minLimitInt;
-        maxLimit = maxLimitInt;
-        minValueTdb = minValueTdbInt;
-        maxValueTdb = maxValueTdbInt;
-        }
-    else
-        {
-        colonPairToDoubles(setting,&minValueTdb,&maxValueTdb);
-        colonPairToDoubles(defaultLimits,&minLimit,&maxLimit);
-        getScoreFloatRangeFromCart(cart,tdb,FALSE,filter,&minLimit,&maxLimit,&min,&max);
-        }
+    colonPairToDoubles(setting,&minValueTdb,&maxValueTdb);
+    colonPairToDoubles(defaultLimits,&minLimit,&maxLimit);
+    getScoreFloatRangeFromCart(cart,tdb,FALSE,filter,&minLimit,&maxLimit,&min,&max);
     if ((int)minLimit != NO_VALUE || (int)maxLimit != NO_VALUE)
         {
         // assume tdb default values within range!
@@ -167,9 +139,7 @@ char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting
 if (isEmpty(value)) 
     return NULL;
 
-char filterType[4096];
-safef(filterType, sizeof filterType, "%s%s", field, FILTER_TYPE_NAME);
-char *typeValue = cartOrTdbString(cart, tdb, filterType, FILTERTEXT_WILDCARD);
+char *typeValue = getFilterType(cart, tdb, field, FILTERTEXT_WILDCARD);
 
 AllocVar(filter);
 filter->fieldNum =  getFieldNum(bbi, field);
@@ -192,14 +162,7 @@ struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, 
 /* Add a bigBed filter using a trackDb filterBy statement. */
 {
 struct bigBedFilter *filter;
-char filterType[4096];
-safef(filterType, sizeof filterType, "%s%s", field, FILTER_TYPE_NAME);
-char *setting = cartOrTdbString(cart, tdb, filterType, NULL);
-if (setting == NULL)
-    {
-    safef(filterType, sizeof filterType, "%s.%s", field, FILTER_TYPE_NAME);
-    setting = cartOrTdbString(cart, tdb, filterType, FILTERBY_SINGLE);
-    }
+char *setting = getFilterType(cart, tdb, field,  FILTERBY_SINGLE);
 
 AllocVar(filter);
 filter->fieldNum =  getFieldNum(bbi, field);
@@ -222,9 +185,9 @@ struct bigBedFilter *bigBedBuildFilters(struct cart *cart, struct bbiFile *bbi, 
 /* Build all the numeric and filterBy filters for a bigBed */
 {
 struct bigBedFilter *filters = NULL, *filter;
-struct slName *filterSettings = trackDbSettingsWildMatch(tdb, FILTER_NUMBER_WILDCARD);
+struct trackDbFilter *tdbFilters = tdbGetTrackNumFilters(tdb);
 
-if ((filterSettings == NULL) && !trackDbSettingOn(tdb, "noScoreFilter"))
+if ((tdbFilters == NULL) && !trackDbSettingOn(tdb, "noScoreFilter"))
     {
     AllocVar(filter);
     slAddHead(&filters, filter);
@@ -235,21 +198,17 @@ if ((filterSettings == NULL) && !trackDbSettingOn(tdb, "noScoreFilter"))
     filter->value1 = cartUsualDouble(cart, buffer, 0.0);
     }
 
-for(; filterSettings; filterSettings = filterSettings->next)
+for(; tdbFilters; tdbFilters = tdbFilters->next)
     {
-    char *fieldName = extractFieldName(filterSettings->name, FILTER_NUMBER_NAME);
-    if (sameString(fieldName, "noScore"))
-        continue;
-    if ((filter = bigBedMakeNumberFilter(cart, bbi, tdb, filterSettings->name, NULL, fieldName)) != NULL)
+    if ((filter = bigBedMakeNumberFilter(cart, bbi, tdb, tdbFilters->name, NULL, tdbFilters->fieldName)) != NULL)
         slAddHead(&filters, filter);
     }
 
-filterSettings = trackDbSettingsWildMatch(tdb, FILTER_TEXT_WILDCARD);
+tdbFilters = tdbGetTrackTextFilters(tdb);
 
-for(; filterSettings; filterSettings = filterSettings->next)
+for(; tdbFilters; tdbFilters = tdbFilters->next)
     {
-    char *fieldName = extractFieldName(filterSettings->name, FILTER_TEXT_NAME);
-    if ((filter = bigBedMakeFilterText(cart, bbi, tdb, filterSettings->name,  fieldName)) != NULL)
+    if ((filter = bigBedMakeFilterText(cart, bbi, tdb, tdbFilters->name,  tdbFilters->fieldName)) != NULL)
         slAddHead(&filters, filter);
     }
 
