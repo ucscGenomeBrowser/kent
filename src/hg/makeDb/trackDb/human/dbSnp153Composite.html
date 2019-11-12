@@ -21,7 +21,7 @@ including alternate haplotype and fix patch sequences (not
 all of which are included in UCSC's hg19).
 </p>
 <p>
-This track includes four subtracks:
+This track includes four subtracks of variants:
   <ul>
     <li><b>All dbSNP (153)</b>: the entire set (683 million for hg19, 702 million for hg38)
     </li>
@@ -48,6 +48,13 @@ This track includes four subtracks:
         </li>
       </ul>
     </li>
+  </ul>
+</p>
+<p>
+A fifth subtrack highlights coordinate ranges to which dbSNP mapped a variant but with genomic
+coordinates that are not self-consistent, i.e. different coordinate ranges were provided when describing different alleles, which can occur due to a bug with mapping variants from one assembly sequence to another when there is an indel difference between the assembly sequences:
+  <ul>
+    <li><b>Map Err (153)</b>: around 120 thousand for hg19 and 149 thousand for hg38.
   </ul>
 </p>
 
@@ -190,14 +197,14 @@ Some are purely informational:
     <th># in hg19</th><th># in hg38</th><th>description</th></tr>
   <tr>
     <td>clinvar</td>
-    <td class="number">454656</td>
-    <td class="number">453954</td>
+    <td class="number">454674</td>
+    <td class="number">453990</td>
     <td>Variant is in ClinVar.</td>
   </tr>
   <tr>
     <td>clinvarBenign</td>
-    <td class="number">143844</td>
-    <td class="number">143696</td>
+    <td class="number">143860</td>
+    <td class="number">143730</td>
     <td>Variant is in ClinVar with clinical significance of benign and/or likely benign.</td>
   </tr>
   <tr>
@@ -214,54 +221,54 @@ Some are purely informational:
   </tr>
   <tr>
     <td>commonAll</td>
-    <td class="number">12178426</td>
-    <td class="number">12430253</td>
+    <td class="number">12184226</td>
+    <td class="number">12438325</td>
     <td>Variant is "common", i.e. has a Minor Allele Frequency of at least 1% in all
       projects reporting frequencies.</td>
   </tr>
   <tr>
     <td>commonSome</td>
-    <td class="number">20534330</td>
-    <td class="number">20893174</td>
+    <td class="number">20540882</td>
+    <td class="number">20902602</td>
     <td>Variant is "common", i.e. has a Minor Allele Frequency of at least 1% in some, but not all,
       projects reporting frequencies.</td>
   </tr>
   <tr>
     <td>diffMajor</td>
-    <td class="number">1377402</td>
-    <td class="number">1398591</td>
+    <td class="number">1377817</td>
+    <td class="number">1399094</td>
     <td>Different frequency sources have different major alleles.</td>
   </tr>
   <tr>
     <td>overlapDiffClass</td>
-    <td class="number">106940656</td>
-    <td class="number">109838613</td>
+    <td class="number">107003090</td>
+    <td class="number">109991096</td>
     <td>This variant overlaps another variant with a different type/class.</td>
   </tr>
   <tr>
     <td>overlapSameClass</td>
-    <td class="number">16890303</td>
-    <td class="number">17228657</td>
+    <td class="number">16910407</td>
+    <td class="number">17281744</td>
     <td>This variant overlaps another with the same type/class but different start/end.</td>
   </tr>
   <tr>
     <td>rareAll</td>
-    <td class="number">662571654</td>
-    <td class="number">681626796</td>
+    <td class="number">662595470</td>
+    <td class="number">681685476</td>
     <td>Variant is "rare", i.e. has a Minor Allele Frequency of less than 1%
       in all projects reporting frequencies, or has no frequency data.</td>
   </tr>
   <tr>
     <td>rareSome</td>
-    <td class="number">670927558</td>
-    <td class="number">690089717</td>
+    <td class="number">670952126</td>
+    <td class="number">690149753</td>
     <td>Variant is "rare", i.e. has a Minor Allele Frequency of less than 1%
       in some, but not all, projects reporting frequencies, or has no frequency data.</td>
   </tr>
   <tr>
     <td>revStrand</td>
-    <td class="number">3813390</td>
-    <td class="number">4512600</td>
+    <td class="number">3813467</td>
+    <td class="number">4532270</td>
     <td>Alleles are displayed on the + strand at the current position.
       dbSNP's alleles are displayed on the + strand of a different assembly sequence,
       so dbSNP's variant page shows alleles that are reverse-complemented with respect to
@@ -283,20 +290,20 @@ while others may indicate that the reference genome contains a rare variant or s
   </tr>
   <tr>
     <td>refIsMinor</td>
-    <td class="number">3269451</td>
-    <td class="number">3356557</td>
+    <td class="number">3271878</td>
+    <td class="number">3360159</td>
     <td>The reference genome allele is not the major allele in at least one project.</td>
   </tr>
   <tr>
     <td>refIsRare</td>
-    <td class="number">135265</td>
-    <td class="number">158562</td>
+    <td class="number">136452</td>
+    <td class="number">160723</td>
     <td>The reference genome allele is rare (i.e. allele frequency < 1%).</td>
   </tr>
   <tr>
     <td>refIsSingleton</td>
-    <td class="number">36709</td>
-    <td class="number">48859</td>
+    <td class="number">37783</td>
+    <td class="number">50865</td>
     <td>The reference genome allele has never been observed in a population sequencing project
       reporting frequencies.</td>
   </tr>
@@ -317,43 +324,43 @@ and others may indicate an anomaly or problem with the variant data:
     <th># in hg19</th><th># in hg38</th><th>description</th></tr>
   <tr>
     <td>altIsAmbiguous</td>
-    <td class="number">10747</td>
-    <td class="number">10873</td>
+    <td class="number">10754</td>
+    <td class="number">10880</td>
     <td>At least one alternate allele contains an IUPAC ambiguous base (e.g. 'R' for 'A or G').
       For alleles containing more than one ambiguous base, this may create a
       combinatoric explosion of possible alleles.</td>
   </tr>
   <tr>
     <td>classMismatch</td>
-    <td class="number">5701</td>
-    <td class="number">5864</td>
+    <td class="number">5995</td>
+    <td class="number">6206</td>
     <td>Variation class/type is inconsistent with alleles mapped to this genome assembly.</td>
   </tr>
   <tr>
     <td>clusterError</td>
-    <td class="number">113678</td>
-    <td class="number">126973</td>
+    <td class="number">114685</td>
+    <td class="number">128109</td>
     <td>This variant has the same start, end and class as another variant;
       they probably should have been merged into one variant.</td>
   </tr>
   <tr>
     <td>freqIsAmbiguous</td>
-    <td class="number">7649</td>
-    <td class="number">7749</td>
+    <td class="number">7656</td>
+    <td class="number">7756</td>
     <td>At least one allele reported by at least one project that reports frequencies
       contains an IUPAC ambiguous base.</td>
   </tr>
   <tr>
     <td>freqNotRefAlt</td>
-    <td class="number">16950</td>
-    <td class="number">30615</td>
+    <td class="number">17684</td>
+    <td class="number">32150</td>
     <td>At least one allele reported by at least one project that reports frequencies
       does not match any of the reference or alternate alleles listed by dbSNP.</td>
   </tr>
   <tr>
     <td>multiMap</td>
-    <td class="number">561309</td>
-    <td class="number">132015</td>
+    <td class="number">562157</td>
+    <td class="number">132051</td>
     <td>This variant has been mapped to more than one distinct genomic location.</td>
   </tr>
 </table>

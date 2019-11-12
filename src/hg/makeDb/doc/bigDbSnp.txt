@@ -199,7 +199,7 @@
 
 
 ##############################################################################
-# dbSnp153: dbSNP build 153 (DONE 11/4/19 angie)
+# dbSnp153: dbSNP build 153 (DONE 11/8/19 angie)
 
     topDir=/hive/data/outside/dbSNP/153
     mkdir -p $topDir/json
@@ -332,12 +332,13 @@
     # 10/30/19: and again after adding new ucscNotes (#23283).
     # 11/4/19: and again after finding that refIsMinor & diffMajor could be appended multiple times
     # 11/7/19: and again after finding that some cases of freqNotRefAlt are VCF normalization probs
+    # 11/8/19: and again after adding badCoords.bed and warnings output files
     topDir=/hive/data/outside/dbSNP/153
     freqSourceOrder=1000Genomes,GnomAD_exomes,TOPMED,ExAC,PAGE_STUDY,GnomAD,GoESP,Estonian,ALSPAC,TWINSUK,NorthernSweden,Vietnamese
     # Run doBigDbSnp.pl (first with -debug to make runDir):
     $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 153 $freqSourceOrder -debug
-# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-07
-    cd /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-07
+# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-08
+    cd /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-08
     # Link to ../bigDbSnp.2019-08-07/split, -continue convert to avoid re-splitting (the slowest part of the process):
     rmdir split
     ln -s ../bigDbSnp.2019-08-07/split split
@@ -346,7 +347,7 @@
       >& do.log &
     tail -f do.log
 # *** All done !  (through the 'install' step)  Elapsed time: 504m48s
-# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-07
+# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-08
 
     # count up how many variants have freq counts for each project
     cut -f 4 dbSnp153Details.tab \
@@ -379,53 +380,54 @@
 
     # count up how many instances of each type of ucscNote:
     cut -f 15 hg19.dbSnp153.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
-#    10747 altIsAmbiguous
-#     5701 classMismatch
-#   454656 clinvar
-#   143844 clinvarBenign
+#    10754 altIsAmbiguous
+#     5995 classMismatch
+#   454674 clinvar
+#   143860 clinvarBenign
 #     7932 clinvarConflicting
 #    96242 clinvarPathogenic
-#   113678 clusterError
-# 12178426 commonAll
-# 20534330 commonSome
-#  1377402 diffMajor
-#     7649 freqIsAmbiguous
-#    16950 freqNotRefAlt
-#   561309 multiMap
-#106940656 overlapDiffClass
-# 16890303 overlapSameClass
-#662571654 rareAll
-#670927558 rareSome
+#   114685 clusterError
+# 12184226 commonAll
+# 20540882 commonSome
+#  1377817 diffMajor
+#     7656 freqIsAmbiguous
+#    17684 freqNotRefAlt
+#   562157 multiMap
+#107003090 overlapDiffClass
+# 16910407 overlapSameClass
+#662595470 rareAll
+#670952126 rareSome
 #      101 refIsAmbiguous
-#  3269451 refIsMinor
-#   135265 refIsRare
-#    36709 refIsSingleton
+#  3271878 refIsMinor
+#   136452 refIsRare
+#    37783 refIsSingleton
 #        4 refMismatch
-#  3813390 revStrand
+#  3813467 revStrand
+
     cut -f 15 hg38.dbSnp153.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
-#    10873 altIsAmbiguous
-#     5864 classMismatch
-#   453954 clinvar
-#   143696 clinvarBenign
-#     7950 clinvarConflicting
-#    95262 clinvarPathogenic
-#   126973 clusterError
-# 12430253 commonAll
-# 20893174 commonSome
-#  1398591 diffMajor
-#     7749 freqIsAmbiguous
-#    30615 freqNotRefAlt
-#   132015 multiMap
-#109838613 overlapDiffClass
-# 17228657 overlapSameClass
-#681626796 rareAll
-#690089717 rareSome
-#      111 refIsAmbiguous
-#  3356557 refIsMinor
-#   158562 refIsRare
-#    48859 refIsSingleton
-#       33 refMismatch
-#  4512600 revStrand
+#  10880 altIsAmbiguous
+#   6206 classMismatch
+# 453990 clinvar
+# 143730 clinvarBenign
+#   7950 clinvarConflicting
+#  95262 clinvarPathogenic
+# 128109 clusterError
+#12438325 commonAll
+#20902602 commonSome
+#1399094 diffMajor
+#   7756 freqIsAmbiguous
+#  32150 freqNotRefAlt
+# 132051 multiMap
+#109991096 overlapDiffClass
+#17281744 overlapSameClass
+#681685476 rareAll
+#690149753 rareSome
+#    111 refIsAmbiguous
+#3360159 refIsMinor
+# 160723 refIsRare
+#  50865 refIsSingleton
+#     33 refMismatch
+#4532270 revStrand
 
 
 ##############################################################################
