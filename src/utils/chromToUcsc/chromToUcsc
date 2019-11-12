@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import logging, optparse, gzip
-from sys import stdin, stdout, stderr, exit
+from sys import stdin, stdout, stderr, exit, modules
 try:
     from urllib.request import urlopen # py2
 except ImportError:
@@ -8,7 +8,7 @@ except ImportError:
 try:
     from cStringIO import StringIO # py2
 except ImportError:
-    from io import StringIO # py3
+    from io import BytesIO # py3
 
 # ==== functions =====
 def parseArgs():
@@ -23,7 +23,7 @@ def parseArgs():
     """)
 
     parser.add_option("-g", "--genomeDb", dest="db", action="store", help="a UCSC assembly ID, like hg19, hg38 or similar. Not required if -a is used. ")
-    parser.add_option("-a", "--chromAlias", dest="aliasFname", action="store", help="a UCSC chromAlias table in tab-sep format. The alias tables for hg19 or hg38 are hardcoded in the script, they do not require a chromAlias table..")
+    parser.add_option("-a", "--chromAlias", dest="aliasFname", action="store", help="a UCSC chromAlias table in tab-sep format. The alias tables for hg19 or hg38 are hardcoded in the script, they do not require a chromAlias table.")
     parser.add_option("-i", "--in", dest="inFname", action="store", help="input filename, default: /dev/stdin")
     parser.add_option("-o", "--out", dest="outFname", action="store", help="output filename, default: /dev/stdout")
     parser.add_option("", "--get", dest="doDownload", action="store_true", help="download a chrom alias table from UCSC for --genomeDb into the current directory and exit")
@@ -118,7 +118,13 @@ def patchScript(fnameStr, outFname):
 def download(db):
     url = "http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/chromAlias.txt.gz" % db
     gzData = urlopen(url).read()
-    data = gzip.GzipFile(fileobj=StringIO.StringIO(gzData)).read()
+
+    if 'cStringIO' in modules:
+        data = StringIO(gzData)
+    else:
+        data = BytesIO(gzData)
+    
+    data = gzip.GzipFile(fileobj=data).read().decode()
     outFname = db+".chromAlias.tsv"
     open(outFname, "w").write(data)
     print("Wrote %s" % outFname)
