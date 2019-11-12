@@ -421,6 +421,11 @@ if (sp == NULL)
     if (profileName == NULL)
         errAbort("can't find database %s in hg.conf, should have a default named \"db\"",
                  database);
+    else if (sameWord(profileName, "backupcentral"))
+        errAbort("can't find profile %s in hg.conf. This error most likely indicates that the "
+            "Genome Browser could not connect to MySQL/MariaDB. Either the databases server is not running"
+            "or the database connection socket indicated in hg.conf is not the one used by your server.", 
+            profileName);
     else if (database == NULL)
         errAbort("can't find profile %s in hg.conf", profileName);
     else

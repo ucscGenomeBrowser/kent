@@ -1518,10 +1518,6 @@ void printDataVersion(char *database, struct trackDb *tdb);
 /* If this annotation has a dataVersion setting, print it.
  * check hgFixed.trackVersion, meta data and trackDb 'dataVersion'. */
 
-char *extractFieldName(char *cartVariable, char *filterType);
-/* Extract field name from a filter cart variable.  Variables can either be
- * <columnName>Filter* or <columnName>.Filter* */
-
 void labelMakeCheckBox(struct cart *cart, struct trackDb *tdb, char *sym, char *desc,
                        boolean defaultOn);
 /* add a checkbox for the user to select a component of a label (e.g. ID, name, other info).
