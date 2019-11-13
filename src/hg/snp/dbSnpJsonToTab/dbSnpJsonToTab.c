@@ -33,10 +33,11 @@ errAbort(
   "  outRoot.<assembly>.bigDbSnp: BED4+ for main dbSNP track in each assembly in assemblyList\n"
   "                               (final columns need to be added later by bedJoinTabOffset)\n"
   "  outRootDetails.tab: tab-separated allele frequency counts and other details (for bedJoinTabOffset)\n"
+  "  outRoot.<assembly>.badCoords.bed: plain BED4 with range of inconsistent SPDI coords\n"
   "Additional files are written out for error reporting:\n"
-  "  outRootFailed.json: lines of JSON input that encountered an error, for debugging/reprocessing\n"
   "  outRootMerged.tab: two columns, obsolete dbSNP rs# ID and current rs# ID\n"
-  "  outRootErrors.tab: lines of error info\n"
+  "  outRootErrors.tab: lines of error info for rejected JSON objects\n"
+  "  outRootWarnings.tab: warnings to report to dbSNP for rejected mappings or frequencies\n"
   "\n"
   "\n"
   "options:\n"
@@ -72,9 +73,9 @@ struct outStreams
 /* Container for various output files that are not assembly-specific */
     {
     FILE *details;    // outRootDetails.tab
-    FILE *failJson;   // outRootFailed.json
     FILE *merged;     // outRootMerged.tab
     FILE *err;        // outRootErrors.tab
+    FILE *warn;       // outRootWarnings.tab
     };
 
 static FILE *openOutFile(char *format, char *outRoot)
@@ -92,9 +93,9 @@ static struct outStreams *outStreamsOpen(char *outRoot)
 struct outStreams *outStreams;
 AllocVar(outStreams);
 outStreams->details = openOutFile("%sDetails.tab", outRoot);
-outStreams->failJson = openOutFile("%sFailed.json", outRoot);
 outStreams->merged = openOutFile("%sMerged.tab", outRoot);
 outStreams->err = openOutFile("%sErrors.tab", outRoot);
+outStreams->warn = openOutFile("%sWarnings.tab", outRoot);
 return outStreams;
 }
 
@@ -105,9 +106,9 @@ if (*pOutStreams != NULL)
     {
     struct outStreams *outStreams = *pOutStreams;
     carefulClose(&outStreams->details);
-    carefulClose(&outStreams->failJson);
     carefulClose(&outStreams->merged);
     carefulClose(&outStreams->err);
+    carefulClose(&outStreams->warn);
     freez(pOutStreams);
     }
 }
@@ -190,12 +191,9 @@ return TRUE;
 }
 
 static struct spdiBed *parseSpdis(struct slRef *spdiList, char *name, struct lm *lm)
-/* Make sure that all SPDI objects have the consistent seq_id, deleted_sequence and position. */
+/* Transform a list of SPDI JSON objects into a list of spdiBed. errAbort on invalid values. */
 {
 struct spdiBed *spdiBList = NULL;
-char *firstSeq = NULL;
-int firstPos = -1;
-char *firstDel = NULL;
 struct slRef *spdiRef;
 for (spdiRef = spdiList;  spdiRef != NULL;  spdiRef = spdiRef->next)
     {
@@ -216,29 +214,39 @@ for (spdiRef = spdiList;  spdiRef != NULL;  spdiRef = spdiRef->next)
         errAbort("Invalid deleted_sequence '%s' in spdi for %s", del, name);
     if (! seqIsNucleotide(ins))
         errAbort("Invalid inserted_sequence '%s' in spdi for %s", ins, name);
-    if (firstSeq == NULL)
-        {
-        // First spdi
-        firstSeq = seq;
-        firstDel = del;
-        firstPos = pos;
-        }
-    else
-        {
-        if (differentString(firstSeq, seq))
-            errAbort("Mismatching seq_id ('%s' vs '%s') in spdis for %s",
-                     firstSeq, seq, name);
-        if (differentString(firstDel, del))
-            errAbort("Mismatching deleted sequence ('%s' vs '%s') in %s spdis for %s",
-                     firstDel, del, seq, name);
-        if (firstPos != pos)
-            errAbort("Mismatching position (%d vs %d) in %s spdis for %s",
-                     firstPos, pos, seq, name);
-        }
     slAddHead(&spdiBList, spdiBedNewLm(seq, pos, del, ins, lm));
     }
 slReverse(&spdiBList);
 return spdiBList;
+}
+
+static boolean spdiBedListSameRef(struct spdiBed *spdiBList, char *rsId)
+/* Return TRUE if all spdiBed objects have the same chrom, chromStart and del.
+ * errAbort if diff chrom, return FALSE for diff start/del. */
+{
+if (spdiBList && spdiBList->next)
+    {
+    struct spdiBed *spdiB;
+    for (spdiB = spdiBList->next;  spdiB != NULL;  spdiB = spdiB->next)
+        {
+        if (differentString(spdiBList->chrom, spdiB->chrom))
+            errAbort("Mismatching SPDI seq ('%s' vs '%s') for %s",
+                     spdiBList->chrom, spdiB->chrom, rsId);
+        if (spdiBList->chromStart != spdiB->chromStart)
+            {
+            warn("Mismatching SPDI pos (%s: %d vs %d) for %s",
+                 spdiB->chrom, spdiBList->chromStart, spdiB->chromStart, rsId);
+            return FALSE;
+            }
+        if (differentString(spdiBList->del, spdiB->del))
+            {
+            warn("Mismatching SPDI del (%s:%d: '%s' vs '%s') for %s",
+                 spdiB->chrom, spdiB->chromStart, spdiBList->del, spdiB->del, rsId);
+            return FALSE;
+            }
+        }
+    }
+return TRUE;
 }
 
 static enum bigDbSnpClass varTypeToClass(char *varType)
@@ -1262,6 +1270,11 @@ struct spdiBed *spdiBList = parseSpdis(allSpdiRef, props->name, lm);
 if (!sameString(bds->chrom, spdiBList->chrom))
     errAbort("seq_id mismatch: placement has '%s' but spdi has '%s for %s'",
              bds->chrom, spdiBList->chrom, props->name);
+if (! spdiBedListSameRef(spdiBList, props->name))
+    {
+    // Bad coords/alleles for this placement (usually due to mapping bug) -- don't proceed.
+    return NULL;
+    }
 bds->chromStart = spdiBList->chromStart;
 bds->chromEnd = spdiBList->chromEnd;
 bds->name = props->name;
@@ -1614,14 +1627,6 @@ dyStringAppendC(dy, '\n');
 fputs(dy->string, outPropsF);
 }
 
-static void dumpLineToFile(char *line, FILE *jsonF)
-/* Write line to jsonF, making sure it ends in \n. */
-{
-fputs(line, jsonF);
-if (line[strlen(line)-1] != '\n')
-    fputc('\n', jsonF);
-}
-
 static void updateSeqIsRc(struct slRef *placements, struct lm *lm)
 /* Note is_aln_opposite_orientation flag for each mapped sequence, regardless of whether it's
  * in the assembly that we're working on; later we can look up sequences from freq reports. */
@@ -1654,6 +1659,7 @@ struct perAssembly
     char *placementPath;         // jsonQuery path to placements on assembly
     char *plIsTopLevelPath;      // jsonQuery path to find whether placement is top level in assembly
     FILE *outF;                  // bigDbSnp output file
+    FILE *outBad;                // buggy coords BED4 output file
     };
 
 static void perAssemblyFree(struct perAssembly **pPa)
@@ -1707,6 +1713,26 @@ char *chrom = hashFindVal(ncGrcToChrom, ncGrc);
 return chrom ? chrom : refSeqAcc;
 }
 
+static void writeBadCoords(struct jsonElement *pl, char *rsId, char *assembly, FILE *outBad,
+                           struct lm *lm)
+/* Write BED4 with range encompassing inconsistent SPDI coords. */
+{
+struct slRef *allSpdiRef = jsonQueryElement(pl, "placement", "alleles[*].allele.spdi", lm);
+struct spdiBed *spdiBList = parseSpdis(allSpdiRef, rsId, lm);
+char *chrom = getChrom(spdiBList->chrom, assembly);
+uint minChromStart = BIGNUM;
+uint maxChromEnd = 0;
+struct spdiBed *spdiB;
+for (spdiB = spdiBList;  spdiB != NULL;  spdiB = spdiB->next)
+    {
+    if (spdiB->chromStart < minChromStart)
+        minChromStart = spdiB->chromStart;
+    if (spdiB->chromEnd > maxChromEnd)
+        maxChromEnd = spdiB->chromEnd;
+    }
+fprintf(outBad, "%s\t%u\t%u\t%s\n", chrom, minChromStart, maxChromEnd, rsId);
+}
+
 static void parseDbSnpJson(char *line, struct perAssembly *assemblyProps,
                            struct outStreams *outStreams)
 /* Each line of dbSNP's file contains one JSON blob describing an rs# variant.  Parse JSON,
@@ -1758,22 +1784,28 @@ for (ap = assemblyProps;  ap != NULL;  ap = ap->next)
                 writeMerged(top, outStreams->merged, lm);
                 }
             bds = parsePlacement(pl, props, multiMapper, dyScratch, lm);
-            bds->chrom = getChrom(bds->chrom, ap->name);
-            bigDbSnpTabOut(bds, ap->outF);
-            // Prevent stale bds in errCatch below:
-            bds = NULL;
+            if (bds)
+                {
+                bds->chrom = getChrom(bds->chrom, ap->name);
+                bigDbSnpTabOut(bds, ap->outF);
+                // Prevent stale bds in errCatch below:
+                bds = NULL;
+                }
+            else
+                {
+                writeBadCoords(pl, props->name, ap->name, ap->outBad, lm);
+                }
             }
         }
     errCatchEnd(errCatch);
     if (errCatch->gotError)
         {
-        dumpLineToFile(line, outStreams->failJson);
         char *rsId = jsonQueryString(top, "top", "refsnp_id", lm);
         char *seqId = bds ? bds->chrom : "NOSEQ";
         fprintf(outStreams->err, "%s\t%s\t%s", rsId, seqId, errCatch->message->string);
         }
     else if (isNotEmpty(errCatch->message->string))
-        warn("%s", errCatch->message->string);
+        fprintf(outStreams->warn, "%s", errCatch->message->string);
     errCatchFree(&errCatch);
     }
 dyStringFree(&dyScratch);
@@ -1820,6 +1852,7 @@ for (assembly = assemblies;  assembly != NULL;  assembly = assembly->next)
     char prefix[2048];
     safef(prefix, sizeof prefix, "%s.%s", outRoot, assembly->name);
     ap->outF = openOutFile("%s.bigDbSnp", prefix);
+    ap->outBad = openOutFile("%s.badCoords.bed", prefix);
     slAddHead(&assemblyProps, ap);
     }
 return assemblyProps;

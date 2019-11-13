@@ -1621,16 +1621,24 @@ track dbSnp153Composite
 compositeTrack on
 shortLabel dbSNP 153
 longLabel Short Genetic Variants from dbSNP release 153
+type bigBed 4
 detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp153Details.tab.gz
 group varRep
 visibility pack
 url https://www.ncbi.nlm.nih.gov/snp/$$
 urlLabel dbSNP: 
-type bigDbSnp
-freqSourceOrder 1000Genomes,GnomAD_exomes,TOPMED,ExAC,PAGE_STUDY,GnomAD,GoESP,Estonian,ALSPAC,TWINSUK,NorthernSweden,Vietnamese
-classFilterValues snv,mnv,ins,del,delins,identity
-classFilterType multipleListOr
-ucscNotesFilterValues \
+priority 0.8
+
+    track dbSnp153ViewVariants
+    view variants
+    parent dbSnp153Composite
+    shortLabel Variants
+    visibility pack
+    type bigDbSnp
+    freqSourceOrder 1000Genomes,GnomAD_exomes,TOPMED,ExAC,PAGE_STUDY,GnomAD,GoESP,Estonian,ALSPAC,TWINSUK,NorthernSweden,Vietnamese
+    classFilterValues snv,mnv,ins,del,delins,identity
+    classFilterType multipleListOr
+    ucscNotesFilterValues \
         altIsAmbiguous|Alternate allele contains IUPAC ambiguous base(s),\
         classMismatch|Variant class/type is inconsistent with allele sizes,\
         clinvar|Present in ClinVar,\
@@ -1655,39 +1663,69 @@ ucscNotesFilterValues \
         refMismatch|Reference allele mismatches reference genome sequence,\
         revStrand|Variant maps to opposite strand relative to dbSNP's preferred top-level placement
 #'
-ucscNotesFilterType multipleListOr
-maxFuncImpactFilterValues 0|(not annotated),0865|frameshift,1587|stop_gained,1574|splice_acceptor_variant,1575|splice_donor_variant,1821|inframe_insertion,1583|missense_variant,1590|terminator_codon_variant,1819|synonymous_variant,1580|coding_sequence_variant,1623|5_prime_UTR_variant,1624|3_prime_UTR_variant,1619|nc_transcript_variant,2153|genic_upstream_transcript_variant,1986|upstream_transcript_variant,2152|genic_downstream_transcript_variant,1987|downstream_transcript_variant,1627|intron_variant
-maxFuncImpactFilterType multipleListOr
-priority 0.8
+    ucscNotesFilterType multipleListOr
+    maxFuncImpactFilterValues 0|(not annotated),\
+        0865|frameshift,\
+        1587|stop_gained,\
+        1574|splice_acceptor_variant,\
+        1575|splice_donor_variant,\
+        1821|inframe_insertion,\
+        1583|missense_variant,\
+        1590|terminator_codon_variant,\
+        1819|synonymous_variant,\
+        1580|coding_sequence_variant,\
+        1623|5_prime_UTR_variant,\
+        1624|3_prime_UTR_variant,\
+        1619|nc_transcript_variant,\
+        2153|genic_upstream_transcript_variant,\
+        1986|upstream_transcript_variant,\
+        2152|genic_downstream_transcript_variant,\
+        1987|downstream_transcript_variant,\
+        1627|intron_variant
+    maxFuncImpactFilterType multipleListOr
 
-    track dbSnp153Common
-    parent dbSnp153Composite on
-    shortLabel Common dbSNP (153)
-    longLabel Common (1000 Genomes Phase 3 MAF >= 1%) Short Genetic Variants from dbSNP Release 153
-    bigDataUrl /gbdb/$D/snp/dbSnp153Common.bb
-    priority 1
+        track dbSnp153Common
+        parent dbSnp153ViewVariants on
+        shortLabel Common dbSNP (153)
+        longLabel Common (1000 Genomes Phase 3 MAF >= 1%) Short Genetic Variants from dbSNP Release 153
+        bigDataUrl /gbdb/$D/snp/dbSnp153Common.bb
+        priority 1
 
-    track dbSnp153ClinVar
+        track dbSnp153ClinVar
+        parent dbSnp153ViewVariants
+        shortLabel ClinVar dbSNP (153)
+        longLabel Short Genetic Variants from dbSNP Release 153 Included in ClinVar
+        bigDataUrl /gbdb/$D/snp/dbSnp153ClinVar.bb
+        priority 2
+
+        track dbSnp153Mult
+        parent dbSnp153ViewVariants
+        shortLabel Mult. dbSNP (153)
+        longLabel Short Genetic Variants from dbSNP Release 153 that Map to Multiple Genomic Loci
+        bigDataUrl /gbdb/$D/snp/dbSnp153Mult.bb
+        priority 3
+
+        track dbSnp153
+        parent dbSnp153ViewVariants
+        shortLabel All dbSNP (153)
+        longLabel All Short Genetic Variants from dbSNP Release 153
+        bigDataUrl /gbdb/$D/snp/dbSnp153.bb
+        maxWindowToDraw 1000000
+        priority 4
+
+    track dbSnp153ViewErrs
     parent dbSnp153Composite
-    shortLabel ClinVar dbSNP (153)
-    longLabel Short Genetic Variants from dbSNP Release 153 Included in ClinVar
-    bigDataUrl /gbdb/$D/snp/dbSnp153ClinVar.bb
-    priority 2
+    view errs
+    shortLabel Mapping Errors
+    visibility pack
 
-    track dbSnp153Mult
-    parent dbSnp153Composite
-    shortLabel Mult. dbSNP (153)
-    longLabel Short Genetic Variants from dbSNP Release 153 that Map to Multiple Genomic Loci
-    bigDataUrl /gbdb/$D/snp/dbSnp153Mult.bb
-    priority 3
-
-    track dbSnp153
-    parent dbSnp153Composite
-    shortLabel All dbSNP (153)
-    longLabel All Short Genetic Variants from dbSNP Release 153
-    bigDataUrl /gbdb/$D/snp/dbSnp153.bb
-    maxWindowToDraw 1000000
-    priority 4
+        track dbSnp153BadCoords
+        parent dbSnp153ViewErrs
+        shortLabel Map Err dbSnp (153)
+        longLabel Mappings with Inconsistent Coordinates from dbSNP 153
+        bigDataUrl /gbdb/$D/snp/dbSnp153BadCoords.bb
+        type bigBed 4
+        priority 5
 
 track hgdpGeo
 shortLabel HGDP Allele Freq
