@@ -16,17 +16,16 @@ def parseArgs():
     parser = optparse.OptionParser("""usage: %prog [options] filename - change NCBI or Ensembl chromosome names to UCSC names using the chromAlias table of the genome browser.
 
     Examples:
-        %prog -i test.bed -o test.ucsc.bed -g hg19
-        %prog -g mm10 --get
-        %prog -i test2.bed -o test2.ucsc.bed -a mm10.chromAlias.tsv
+        %prog -g hg19 --get
+        %prog -i test2.bed -o test2.ucsc.bed -a hg19.chromAlias.tsv -g hg19
         cat test.bed | %prog -a mm10.chromAlias.tsv > test.ucsc.bed
     """)
 
-    parser.add_option("-g", "--genomeDb", dest="db", action="store", help="a UCSC assembly ID, like hg19, hg38 or similar. Not required if -a is used. ")
-    parser.add_option("-a", "--chromAlias", dest="aliasFname", action="store", help="a UCSC chromAlias table in tab-sep format. The alias tables for hg19 or hg38 are hardcoded in the script, they do not require a chromAlias table..")
+    parser.add_option("", "--get", dest="doDownload", action="store_true", help="download a chrom alias table from UCSC for --genomeDb into the current directory and exit")
+    parser.add_option("-a", "--chromAlias", dest="aliasFname", action="store", help="a UCSC chromAlias table in tab-sep format. The alias tables for hg19 or hg38 are hardcoded in the script, they do not require a chromAlias table. Use the -g option for those.")
+    parser.add_option("-g", "--genomeDb", dest="db", action="store", help="a UCSC assembly ID, like hg19. Not required. Activates assembly-specific warning messages, only for hg19 right now.")
     parser.add_option("-i", "--in", dest="inFname", action="store", help="input filename, default: /dev/stdin")
     parser.add_option("-o", "--out", dest="outFname", action="store", help="output filename, default: /dev/stdout")
-    parser.add_option("", "--get", dest="doDownload", action="store_true", help="download a chrom alias table from UCSC for --genomeDb into the current directory and exit")
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
     #parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
     (options, args) = parser.parse_args()
@@ -67,12 +66,9 @@ def parseAlias(fname):
         toUcsc[row[0]] = row[1]
     return toUcsc
 
-def chromFixer(db, aliasFname, ifh, ofh):
+def chromToUcsc(db, aliasFname, ifh, ofh):
     " convert the first column to UCSC-style chrom names "
-    if aliasFname is None:
-        toUcsc = aliasData[db]
-    else:
-        toUcsc = parseAlias(aliasFname)
+    toUcsc = parseAlias(aliasFname)
 
     ucscChroms = set(toUcsc.values())
 
@@ -97,23 +93,7 @@ def chromFixer(db, aliasFname, ifh, ofh):
         ofh.write(rest)
 
     if mtSkipCount!=0:
-        stderr.write("%d features were skipped because they were located on the M or MT chromosome. hg19 includes an older version of the mitochondrial genome and these features cannot be mapped\n" % mtSkipCount)
-
-def patchScript(fnameStr, outFname):
-    " read alias tables from fnameStr, put into this script and write patched script to outFname "
-    aliasData = {}
-    for fname in fnameStr.split(","):
-        db = fname.split(".")[0]
-        print("Reading alias table for %s: %s" % (db, fname))
-        aliasData[db] = parseAlias(fname)
-
-    myFname = __file__
-    oldScript = open(myFname).read()
-    assert("#ALIASDATA#" in oldScript)
-    newScript = oldScript.replace("#ALIASDATA#", "aliasData = "+repr(aliasData))
-    open(outFname, "w").write(newScript)
-    print("Patched script written to "+outFname)
-    exit(0)
+        stderr.write("%d features were skipped because they were located on the M or MT chromosome. hg19 includes an older version of the mitochondrial genome and these features cannot be mapped yet.\n" % mtSkipCount)
 
 def download(db):
     url = "http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/chromAlias.txt.gz" % db
@@ -132,8 +112,10 @@ def main():
     inFname = options.inFname
     outFname = options.outFname
 
-    if db=="build":
-        patchScript(aliasFname, outFname)
+    if aliasFname is None:
+        logging.error("You need to provide an alias table with the -a option")
+        exit(1)
+
     if options.doDownload:
         download(db)
 
@@ -147,7 +129,6 @@ def main():
     else:
         ofh = open(outFname, "w")
 
-    chromFixer(db, aliasFname, ifh, ofh)
+    chromToUcsc(db, aliasFname, ifh, ofh)
 
-#ALIASDATA#
 main()
