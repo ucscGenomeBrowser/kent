@@ -14,13 +14,12 @@ at <a href="https://www.bcm.edu/" target="_blank">Baylor College of Medicine</a>
 </p><p>
 The format is used for displaying chromatin conformation data in the browser.  After running a
 chromatin conformation experiment like in situ Hi-C, researchers can pass their results through
-the <a href="https://github.com/aidenlab/juicer/wiki" target="_blank">Juicer</a> pipeline to produce
-a hic file and place that file in a web-accessible space.  Due to the large size of many of these
-files, UCSC is not able to support direct upload via our Custom Track interface.  UCSC does,
-however, temporarily cache the accessed portions of the files to speed up interactive display.
-If you do not have access to a web-accessible server and need hosting space for your VCF files,
-please see the <a href="hgTrackHubHelp.html#Hosting">Hosting</a> section of the Track Hub Help
-documentation.</p>
+the <a href="https://github.com/aidenlab/juicer/wiki" target="_blank">Juicer</a> pipeline to 
+produce a hic file. Due to the large size of many of these files, UCSC is not able to support
+direct upload via our Custom Track interface. Instead, users should place their Hic files in a 
+web-accessible space and enter the URL as a bigDataUrl. If you do not have access to a 
+web-accessible server and need hosting space for your Hic files, please see the 
+<a href="hgTrackHubHelp.html#Hosting">Hosting</a> section of the Track Hub Help documentation.</p>
 
 <p>The UCSC tools currently support hic versions 6-8.</p>
 
@@ -54,7 +53,6 @@ here):</p>
     <strong>name=</strong><em>track_label</em>
     <strong>description=</strong><em>center_label</em> 
     <strong>visibility=</strong><em>display_mode</em>
-    <strong>priority=</strong><em>priority</em>
     <strong>db=</strong><em>db</em></code></pre>
 <p>
 Note if you copy/paste the above example, you must remove the line breaks.
@@ -68,7 +66,6 @@ The remaining settings are OPTIONAL:</p>
 <pre><code><strong>name            </strong><em>track label                </em> # default is "User Track"
 <strong>description     </strong><em>center label               </em> # default is "User Supplied Track"
 <strong>visibility      </strong><em>full|dense|hide            </em> # default is hide (will also take numeric values 4|1|0)
-<strong>priority        </strong><em>N                          </em> # default is 100
 <strong>db              </strong><em>genome database            </em> # e.g. hg19 for Human Feb. 2009 (GRCh37) </code></pre>
 <p>Note that hic tracks currently only support the full, dense, and hide visibility modes.
 The <a target="_blank" href="hgHicTrackHelp.html">hic track configuration</a> help page
@@ -77,8 +74,24 @@ describes the hic track configuration page options.</p>
 <h3>Example #1</h3>
 <p>
 In this example, you will create a custom track for a hic file that is already on a public 
-server &mdash; data from an in situ Hi-C experiment on the HMEC cell line from the following paper,
-mapped to the hg19 assembly:</p>
+internet server &mdash; data from an in situ Hi-C experiment on the HMEC cell line
+mapped to the hg19 assembly. Data cited at the bottom.</p>
+<p>
+The line breaks inserted in the track line for readability must be removed before submitting 
+this entry as a Custom Track. Click <a href="examples/hicExampleOne.txt">here</a> for a 
+text version you can paste without editing. The &quot;browser&quot; line above is used set 
+the default view to a region of chromosome 21.</p>
+<pre><code>browser position chr21:32,000,000-35,000,000
+track type=hic name="hic Example One" description="hic Ex. 1: in situ Hi-C on HMEC"
+    db=hg19 visibility=dense
+    bigDataUrl=http://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/hic/GSE63525_HMEC_combined.hic</code></pre>
+<p>
+Paste the &quot;browser&quot; line and &quot;track&quot; line into the 
+<a href="../../cgi-bin/hgCustom" target="_blank">custom track management page</a> for the human 
+assembly hg19 (Feb. 2009), then click the &quot;submit&quot; button. On the following page, click 
+the &quot;chr21&quot; link in the custom track listing to view the hic track in the Genome 
+Browser.</p>
+
 <p>
 Rao SS, Huntley MH, Durand NC, Stamenova EK, Bochkov ID, Robinson JT, Sanborn AL, Machol I, Omer AD,
 Lander ES <em>et al</em>.
@@ -88,24 +101,6 @@ A 3D map of the human genome at kilobase resolution reveals principles of chroma
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25497547" target="_blank">25497547</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5635824/" target="_blank">PMC5635824</a>
 </p>
-<p>
-The line breaks inserted here for readability must be removed before submitting the track line:</p>
-<pre><code>browser position chr21:33,034,804-33,037,719
-track type=hic name="hic Example One" description="hic Ex. 1: in situ Hi-C on HMEC"
-    db=hg19 visibility=dense
-    bigDataUrl=http://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/hic/GSE63525_HMEC_combined.hic</code></pre>
-<p>
-The &quot;browser&quot; line above is used to view a small region of chromosome 21.</p>
-<p>
-Note if you copy/paste the above example, you must remove the line breaks (or, click 
-<a href="examples/hicExampleOne.txt">here</a> for a text version that you can paste without 
-editing).</p>
-<p>
-Paste the &quot;browser&quot; line and &quot;track&quot; line into the 
-<a href="../../cgi-bin/hgCustom" target="_blank">custom track management page</a> for the human 
-assembly hg19 (Feb. 2009), then click the &quot;submit&quot; button. On the following page, click 
-the &quot;chr21&quot; link in the custom track listing to view the hic track in the Genome 
-Browser.</p>
 
 <h3>Example #2</h3>
 <p>

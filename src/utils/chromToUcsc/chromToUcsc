@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import logging, optparse, gzip
-from sys import stdin, stdout, stderr, exit
+from sys import stdin, stdout, stderr, exit, modules
 try:
     from urllib.request import urlopen # py2
 except ImportError:
@@ -8,7 +8,7 @@ except ImportError:
 try:
     from cStringIO import StringIO # py2
 except ImportError:
-    from io import StringIO # py3
+    from io import BytesIO # py3
 
 # ==== functions =====
 def parseArgs():
@@ -27,7 +27,6 @@ def parseArgs():
     parser.add_option("-i", "--in", dest="inFname", action="store", help="input filename, default: /dev/stdin")
     parser.add_option("-o", "--out", dest="outFname", action="store", help="output filename, default: /dev/stdout")
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
-    #parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
     (options, args) = parser.parse_args()
 
     if options.db is None and options.aliasFname is None:
@@ -98,7 +97,13 @@ def chromToUcsc(db, aliasFname, ifh, ofh):
 def download(db):
     url = "http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/chromAlias.txt.gz" % db
     gzData = urlopen(url).read()
-    data = gzip.GzipFile(fileobj=StringIO.StringIO(gzData)).read()
+
+    if 'cStringIO' in modules:
+        data = StringIO(gzData)
+    else:
+        data = BytesIO(gzData)
+    
+    data = gzip.GzipFile(fileobj=data).read().decode()
     outFname = db+".chromAlias.tsv"
     open(outFname, "w").write(data)
     print("Wrote %s" % outFname)

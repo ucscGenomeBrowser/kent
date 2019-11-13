@@ -233,15 +233,18 @@ cut -f1-15  \$outRoot.$grc.bigDbSnp \\
 | sort -k1,1 -k2n,2n \\
 | bzip2 \\
   > \$outRoot.$db.sorted.bigDbSnp.bz2
+sort -k1,1 -k2n,2n \$outRoot.$grc.badCoords.bed \\
+| bzip2 \\
+  > \$outRoot.$db.sorted.badCoords.bed.bz2
 EOF
       ;
   }
   print $fh <<EOF
 
 sort \${outRoot}Details.tab | bzip2 > \${outRoot}Details.tab.bz2
-sort -u \${outRoot}Failed.json | bzip2 > \${outRoot}Failed.json.bz2
 sort \${outRoot}Errors.tab | bzip2 > \${outRoot}Errors.tab.bz2
 sort \${outRoot}Merged.tab | bzip2 > \${outRoot}Merged.tab.bz2
+sort \${outRoot}Warnings.tab | bzip2 > \${outRoot}Warnings.tab.bz2
 
 popd
 
@@ -335,20 +338,6 @@ EOF
   close($fh);
   system("chmod a+x $sortMergeBzScript") == 0 || die "Unable to chmod $sortMergeBzScript";
 
-  my $uniqBzScript = "$runDir/uniqBz.sh";
-  $fh = HgAutomate::mustOpen(">$uniqBzScript");
-  print $fh <<EOF
-#!/bin/bash
-set -beEu -o pipefail
-bzList=\$1
-outFile=\$2
-
-bzcat \$(cat \$bzList) | uniq | bzip2 > \$outFile
-EOF
-    ;
-  close($fh);
-  system("chmod a+x $uniqBzScript") == 0 || die "Unable to chmod $uniqBzScript";
-
   my $whatItDoes = "It merge-sorts the results from split-up JSON files into per-chromosome files.";
   my $bossScript = newBash HgRemoteScript("$runDir/doMergeToChrom.sh", $smallClusterHub,
                                           $runDir, $whatItDoes);
@@ -359,17 +348,26 @@ EOF
 for jsonFile in \$(ls -1S $jsonDir/refsnp-{chr*,other}.json.bz2); do
     prefix=\$(basename \$jsonFile .json.bz2)
     echo \$prefix
-    ls -1S $buildDir/splitProcessed/\$prefix/\$prefix??.hg19.* > \$prefix.hg19.list
-    ls -1S $buildDir/splitProcessed/\$prefix/\$prefix??.hg38.* > \$prefix.hg38.list
+_EOF_
+                  );
+  foreach my $db (@dbList) {
+    $bossScript->add(<<_EOF_
+    ls -1S $buildDir/splitProcessed/\$prefix/\$prefix??.$db.*bigDbSnp* > \$prefix.$db.bigDbSnp.list
+    ls -1S $buildDir/splitProcessed/\$prefix/\$prefix??.$db.*badCoords* > \$prefix.$db.badCoords.list
+_EOF_
+                    );
+  }
+  my $dbListStr = join(',', @dbList);
+  $bossScript->add(<<_EOF_
     ls -1S $buildDir/splitProcessed/\$prefix/\$prefix??Details.* > \$prefix.details.list
     ls -1S $buildDir/splitProcessed/\$prefix/\$prefix??Errors.* > \$prefix.errors.list
-    ls -1S $buildDir/splitProcessed/\$prefix/\$prefix??Failed.* > \$prefix.failed.list
     ls -1S $buildDir/splitProcessed/\$prefix/\$prefix??Merged.* > \$prefix.merged.list
+    ls -1S $buildDir/splitProcessed/\$prefix/\$prefix??Warnings.* > \$prefix.warnings.list
 done
 
 cp /dev/null jobList
-for list in *.{hg19,hg38}.list; do
-    prefix=\$(basename \$list .list)
+for list in *.{$dbListStr}.bigDbSnp.list; do
+    prefix=\$(basename \$list .bigDbSnp.list)
     echo "./sortMergeBzBed.sh {check in line+ \$PWD/\$list} {check out line+ $outDir/\$prefix.bigDbSnp}" >> jobList
 done
 for list in *.details.list; do
@@ -377,17 +375,13 @@ for list in *.details.list; do
     echo "./sortMergeBz.sh {check in line+ \$PWD/\$list} {check out line+ $outDir/\$prefix.tab}" >> jobList
 done
 # OK for these to be empty (check out line instead of line+):
-for list in *.errors.list; do
+for list in *.{$dbListStr}.badCoords.list; do
+    prefix=\$(basename \$list .badCoords.list)
+    echo "./sortMergeBzBed.sh {check in line+ \$PWD/\$list} {check out line $outDir/\$prefix.badCoords.bed}" >> jobList
+done
+for list in *.errors.list *.merged.list *.warnings.list; do
     prefix=\$(basename \$list .list)
     echo "./sortMergeBz.sh {check in line+ \$PWD/\$list} {check out line $outDir/\$prefix.tab}" >> jobList
-done
-for list in *.merged.list; do
-    prefix=\$(basename \$list .list)
-    echo "./sortMergeBz.sh {check in line+ \$PWD/\$list} {check out line $outDir/\$prefix.tab}" >> jobList
-done
-for list in *.failed.list; do
-    prefix=\$(basename \$list .list)
-    echo "./uniqBz.sh {check in line+ \$PWD/\$list} {check out exists+ $outDir/\$prefix.json.bz2}" >> jobList
 done
 $paraRun;
 _EOF_
@@ -408,14 +402,42 @@ sub doMergeChroms {
                                           $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-# Merge all chroms' *Merged.tab to the final Merged.tab file in background
+# Merge all chroms' *Merged.tab to the final Merged.tab file in background,
+# likewise for errors, warnings, and badCoords which should all be relatively small and quick.
+pids=""
 time sort --merge -u $inDir/*.merged.tab > ${outRoot}Merged.tab &
+pids+=" \$!"
+time sort --merge -u $inDir/*.errors.tab > ${outRoot}Errors.tab &
+pids+=" \$!"
+time sort --merge -u $inDir/*.warnings.tab > ${outRoot}Warnings.tab &
+pids+=" \$!"
+_EOF_
+  );
+  foreach my $db (@dbList) {
+    $bossScript->add(<<_EOF_
+(time sort --merge -k1,1 -k2n,2n $inDir/*.$db.badCoords.bed | uniq > $db.$outRoot.badCoords.bed) &
+pids+=" \$!"
+_EOF_
+                    );
+  }
+  $bossScript->add(<<_EOF_
 
 # Merge all chroms' *Details.tab to the final Details.tab file
 time sort --merge -u $inDir/*.details.tab > ${outRoot}Details.tab
 
-# Compress Details.tab with bgzip in background.  For now, leave original file uncompressed.
+for pid in \$pids; do
+  if wait \$pid; then
+    echo pid \$pid done
+  else
+    echo pid \$pid FAILED
+    exit 1
+  fi
+done
+
+# Compress & index Details.tab with bgzip in background.  Leave original file uncompressed for
+# bedJoinTabOffset.
 time bgzip -iI ${outRoot}Details.tab.gz.gzi -c ${outRoot}Details.tab > ${outRoot}Details.tab.gz &
+pids=\$!
 
 # parallel job of bedJoinTabOffset on each chrom's .bigDbSnp and ${outRoot}Details.tab
 # bedJoinTabOffset builds a massive hash in memory (file offsets of >650M lines of Details),
@@ -426,13 +448,11 @@ time (ls -1S $inDir/refsnp-*.*.bigDbSnp |
 
 # Now mergeSort all chrom's data together.  Don't use sort -u because with -k it only
 # compares keys, not the whole line.
-pids=""
 _EOF_
   );
   foreach my $db (@dbList) {
     $bossScript->add(<<_EOF_
 (time sort --merge -k1,1 -k2n,2n joined/*.$db.bigDbSnp | uniq > $db.$outRoot.bigDbSnp) &
-echo \$!
 pids+=" \$!"
 _EOF_
                     );
@@ -567,6 +587,8 @@ _EOF_
     $bossScript->add(<<_EOF_
 time bedToBigBed -tab -as=\$HOME/kent/src/hg/lib/bigDbSnp.as -type=bed4+ -extraIndex=name \\
             $db.$outRoot.checked.bigDbSnp /hive/data/genomes/$db/chrom.sizes $db.$outRoot.bb &
+time bedToBigBed -tab -type=bed4 -extraIndex=name \\
+            $db.$outRoot.badCoords.bed /hive/data/genomes/$db/chrom.sizes $db.${outRoot}BadCoords.bb &
 pids+=" \$!"
 $makeSubsetsScript $db &
 pids+=" \$!"
@@ -603,6 +625,7 @@ ln -sf $buildDir/$db.$outRoot.bb /gbdb/$db/snp/$outRoot.bb
 for subset in Mult Common ClinVar; do
   ln -sf $buildDir/$db.$outRoot.\$subset.bb /gbdb/$db/snp/${outRoot}\$subset.bb
 done
+ln -sf $buildDir/$db.${outRoot}BadCoords.bb /gbdb/$db/snp/${outRoot}BadCoords.bb
 _EOF_
                     );
   }
