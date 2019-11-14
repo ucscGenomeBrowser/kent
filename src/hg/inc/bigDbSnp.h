@@ -95,6 +95,7 @@ void bigDbSnpOutput(struct bigDbSnp *el, FILE *f, char sep, char lastSep);
 #define bdsFreqIsAmbiguous "freqIsAmbiguous"
 #define bdsFreqNotRefAlt "freqNotRefAlt"
 #define bdsMultiMap "multiMap"
+#define bdsOtherMapErr "otherMapErr"
 #define bdsOverlapDiffClass "overlapDiffClass"
 #define bdsOverlapSameClass "overlapSameClass"
 #define bdsRareAll "rareAll"

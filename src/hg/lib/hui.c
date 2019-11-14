@@ -3721,6 +3721,8 @@ filterBy_t *filterByValues(struct trackDb *tdb, struct cart *cart, struct trackD
 /* Build a filterBy_t list from tdb variables of the form *FilterValues */
 {
 struct asObject *as = asForTdb(NULL, tdb);
+if (as == NULL)
+    errAbort("Unable to get autoSql for %s", name);
 filterBy_t *filterByList = NULL, *filter;
 struct trackDbFilter *fieldFilter;
 while ((fieldFilter = slPopHead(&trackDbFilters)) != NULL)
