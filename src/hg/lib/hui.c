@@ -3656,6 +3656,25 @@ if (field[ix - 1] == '.')
 return field;
 }
 
+static char *getFilterValueDefaultsSetting(struct cart *cart, struct trackDb *tdb, char *field)
+// grab the default setting for a filterValues statement
+{
+char defaultsSetting[4096];
+safef(defaultsSetting, sizeof defaultsSetting, "%s.%s", FILTER_VALUES_DEFAULT_NAME_LOW, field);
+char *defaults = cartOrTdbString(cart, tdb, defaultsSetting, NULL);
+if (defaults == NULL)
+    {
+    safef(defaultsSetting, sizeof defaultsSetting, "%s.%s", field, FILTER_VALUES_DEFAULT_NAME_CAP);
+    defaults = cartOrTdbString(cart, tdb, defaultsSetting, NULL);
+    }
+if (defaults == NULL)
+    {
+    safef(defaultsSetting, sizeof defaultsSetting, "%s%s", field, FILTER_VALUES_DEFAULT_NAME_CAP);
+    defaults = cartOrTdbString(cart, tdb, defaultsSetting, NULL);
+    }
+return defaults;
+}
+
 static char *getLabelSetting(struct cart *cart, struct trackDb *tdb, char *field)
 {
 char labelSetting[4096];
@@ -3708,6 +3727,12 @@ if (cart != NULL)
         filterBy->slChoices = cartOptionalSlNameList(cart,filterBy->htmlName);
         freeMem(filterBy->htmlName);
         }
+    }
+
+if (filterBy->slChoices == NULL)  // no settings in cart, initialize from trackDb
+    {
+    char *setting = getFilterValueDefaultsSetting(cart, tdb, field);
+    filterBy->slChoices = slNameListFromCommaEscaped(setting);
     }
 
 struct dyString *dy = newDyString(128);
