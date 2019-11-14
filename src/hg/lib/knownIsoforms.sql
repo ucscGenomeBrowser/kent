@@ -8,5 +8,6 @@ CREATE TABLE knownIsoforms (
     clusterId int not null,	# Unique id for transcript cluster (aka gene)
     transcript varchar(255) not null,	# Corresponds to name in knownGene table, transcript in knownCanonical
               #Indices
+    UNIQUE KEY `transcript` (`transcript`),
     INDEX(clusterId)
 );

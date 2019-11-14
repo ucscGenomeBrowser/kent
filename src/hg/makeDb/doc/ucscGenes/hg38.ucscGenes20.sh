@@ -157,7 +157,7 @@ hgLoadSqlTab -notOnServer $tempDb knownAttrs $kent/src/hg/lib/knownAttrs.sql kno
 
 sort kgColor.tab | uniq | hgLoadSqlTab -notOnServer $tempDb kgColor $kent/src/hg/lib/kgColor.sql stdin
  
-hgLoadSqlTab -notOnServer $tempDb knownIsoforms $kent/src/hg/lib/knownIsoforms.sql knownIsoforms.tab
+sort knownIsoforms.tab | uniq | hgLoadSqlTab -notOnServer $tempDb knownIsoforms $kent/src/hg/lib/knownIsoforms.sql stdin
 
 hgLoadSqlTab -notOnServer $tempDb kgXref $kent/src/hg/lib/kgXref.sql kgXref.tab
 
