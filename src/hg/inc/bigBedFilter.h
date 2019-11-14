@@ -30,7 +30,7 @@
 #define FILTER_TEXT_NAME_CAP      "FilterText"
 #define FILTER_VALUES_NAME_CAP    "FilterValues"
 #define FILTER_TYPE_NAME_CAP      "FilterType"
-#define FILTER_LABEL_NAME     "FilterLabel"
+#define FILTER_LABEL_NAME_CAP     "FilterLabel"
 #define FILTER_NUMBER_WILDCARD_CAP    "*" FILTER_NUMBER_NAME_CAP
 #define FILTER_TEXT_WILDCARD_CAP      "*" FILTER_TEXT_NAME_CAP
 #define FILTER_VALUES_WILDCARD_CAP    "*" FILTER_VALUES_NAME_CAP

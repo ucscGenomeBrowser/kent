@@ -349,6 +349,13 @@
 # *** All done !  (through the 'install' step)  Elapsed time: 504m48s
 # *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-08
 
+    # 11/12/19: Add new ucscNote otherMapErr by re-running from check onward.
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 153 $freqSourceOrder \
+      -buildDir=`pwd` -continue check -stop install \
+      >& check.log &
+    tail -f check.log
+# *** All done !  (through the 'install' step)  Elapsed time: 172m35s
+
     # count up how many variants have freq counts for each project
     cut -f 4 dbSnp153Details.tab \
     | perl -wne 'chomp; next unless $_; @w = split ",";
@@ -379,7 +386,7 @@
 #1323033 PAGE_STUDY
 
     # count up how many instances of each type of ucscNote:
-    cut -f 15 hg19.dbSnp153.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
+    time cut -f 15 hg19.dbSnp153.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
 #    10754 altIsAmbiguous
 #     5995 classMismatch
 #   454674 clinvar
@@ -393,6 +400,7 @@
 #     7656 freqIsAmbiguous
 #    17684 freqNotRefAlt
 #   562157 multiMap
+#   113416 otherMapErr
 #107003090 overlapDiffClass
 # 16910407 overlapSameClass
 #662595470 rareAll
@@ -403,8 +411,11 @@
 #    37783 refIsSingleton
 #        4 refMismatch
 #  3813467 revStrand
+    # Check count of rs's with at least one bad mapping:
+    grep otherMapErr hg19.dbSnp153.checked.bigDbSnp | cut -f 4 | sort -u | wc -l
+#54871
 
-    cut -f 15 hg38.dbSnp153.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
+    time cut -f 15 hg38.dbSnp153.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
 #  10880 altIsAmbiguous
 #   6206 classMismatch
 # 453990 clinvar
@@ -418,6 +429,7 @@
 #   7756 freqIsAmbiguous
 #  32150 freqNotRefAlt
 # 132051 multiMap
+# 203580 otherMapErr
 #109991096 overlapDiffClass
 #17281744 overlapSameClass
 #681685476 rareAll
@@ -428,6 +440,9 @@
 #  50865 refIsSingleton
 #     33 refMismatch
 #4532270 revStrand
+    # Check count of rs's with at least one bad mapping:
+    grep otherMapErr hg38.dbSnp153.checked.bigDbSnp | cut -f 4 | sort -u | wc -l
+#86258
 
 
 ##############################################################################
