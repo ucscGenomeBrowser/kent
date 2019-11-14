@@ -1621,8 +1621,7 @@ track dbSnp153Composite
 compositeTrack on
 shortLabel dbSNP 153
 longLabel Short Genetic Variants from dbSNP release 153
-type bigBed 4
-detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp153Details.tab.gz
+type bed3
 group varRep
 visibility pack
 url https://www.ncbi.nlm.nih.gov/snp/$$
@@ -1636,6 +1635,7 @@ priority 0.8
     shortLabel Variants
     visibility pack
     type bigDbSnp
+    detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp153Details.tab.gz
     freqSourceOrder 1000Genomes,GnomAD_exomes,TOPMED,ExAC,PAGE_STUDY,GnomAD,GoESP,Estonian,ALSPAC,TWINSUK,NorthernSweden,Vietnamese
     classFilterValues snv,mnv,ins,del,delins,identity
     classFilterType multipleListOr
