@@ -15,34 +15,22 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "checkBigDbSnp - Add ucscNotes for overlapping items and look for clustering errors\n"
+  "checkBigDbSnp - Add ucscNotes for overlapping items, clustering errors, mapping errors\n"
   "usage:\n"
   "   checkBigDbSnp hgNN.dbSnpMMM.bigDbSnp hgNN.2bit hgNN.dbSnpMMM.checked.bigDbSnp\n"
-//  "\n"
-//  "options:\n"
-//  "   -xxx=XXX\n"
+  "\n"
+  "options:\n"
+  "   -mapErrIds=file.txt    file.txt contains one rs# ID per line that had a mapping error.\n"
+  "                          Add note otherSeqMapErr if current rs is found in file.\n"
+  "\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
-   {NULL, 0},
+    {"mapErrIds", OPTION_STRING},
+    {NULL, 0},
 };
-
-//#*** Not sure if we need to cache chrom sequence anymore...
-static void cacheChromSeq(struct seqWindow **pSeqWin, char *chrom, char *twoBitFile)
-/* Set seqWin to cover chrom, if it doesn't already. */
-{
-if (*pSeqWin == NULL || differentString(chrom, (*pSeqWin)->seqName))
-    {
-    verbose(2, "Caching %s...", chrom);
-    if (verboseLevel() >= 2)
-        fflush(stderr);
-    twoBitSeqWindowFree(pSeqWin);
-    *pSeqWin = twoBitSeqWindowNew(twoBitFile, chrom, 0, 0);
-    verbose(2, "(%d bases)\n", (*pSeqWin)->end - (*pSeqWin)->start);
-    }
-}
 
 static boolean bigDbSnpOverlap(struct bigDbSnp *a, struct bigDbSnp *b)
 /* Return TRUE if a and b overlap; special treatment for 0-length insertions. */
@@ -68,8 +56,19 @@ if (bIsIns)
 return (aStart < bEnd && bStart < aEnd);
 }
 
+static void checkMapErrIds(struct bigDbSnp *bds, struct hash *mapErrIdHash)
+/* If rs# ID is found in mapErrIdHash, add ucscNote otherMapErr. */
+{
+if (hashIntValDefault(mapErrIdHash, bds->name, 0))
+    {
+    struct dyString *dy = dyStringCreate("%s%s,", bds->ucscNotes, bdsOtherMapErr);
+    freeMem(bds->ucscNotes);
+    bds->ucscNotes = dyStringCannibalize(&dy);
+    }
+}
+
 static void queueAdd(struct bigDbSnp **pQ, struct bigDbSnp *item)
-/* Add item to FIFO queue of overlapping items */
+/* Add item to FIFO queue of overlapping items. */
 {
 // slAddTail is not the fastest, but I expect the Q to be empty most of the time, and to very
 // rarely have more than 3 items.
@@ -150,12 +149,39 @@ for (bds = bdsList;  bds != newItem;  bds = bds->next)
     }
 }
 
+struct hash *maybeReadMapErrIds()
+/* If -mapErrIds was given, open the file and read rs# IDs into a hash. */
+{
+struct hash *mapErrIdHash = NULL;
+char *mapErrIds = optionVal("mapErrIds", NULL);
+if (mapErrIds)
+    {
+    struct lineFile *lf = lineFileOpen(mapErrIds, TRUE);
+    char *line = NULL;
+    mapErrIdHash = hashNew(18);
+    while (lineFileNextReal(lf, &line))
+        {
+        if (!startsWith("rs", line))
+            lineFileAbort(lf, "-mapErrIds: expected one rs# ID per line, got '%s'", line);
+        char *p;
+        for (p = line+2;  *p != 0;  p++)
+            {
+            if (! isdigit(*p))
+                lineFileAbort(lf, "-mapErrIds: expected one rs# ID per line, got '%s'", line);
+            }
+        hashAddInt(mapErrIdHash, line, 1);
+        }
+    lineFileClose(&lf);
+    }
+return mapErrIdHash;
+}
+
 void checkBigDbSnp(char *bigDbSnpFile, char *twoBitFile, char *outFile)
 /* checkBigDbSnp - Flag overlapping items and look for clustering errors. */
 {
 struct lineFile *lf = lineFileOpen(bigDbSnpFile, TRUE);
 FILE *outF = mustOpen(outFile, "w");
-struct seqWindow *seqWin = NULL;
+struct hash *mapErrIdHash = maybeReadMapErrIds();
 struct bigDbSnp *overlapQueue = NULL;
 struct dyString *dy = dyStringNew(0);
 char *line;
@@ -166,8 +192,8 @@ while (lineFileNextReal(lf, &line))
     lineFileExpectWords(lf, BIGDBSNP_NUM_COLS, wordCount);
     struct bigDbSnp *bds = bigDbSnpLoad(row);
 
-    //#*** Not sure if we need to cache chrom sequence anymore...
-    cacheChromSeq(&seqWin, bds->chrom, twoBitFile);
+    if (mapErrIdHash)
+        checkMapErrIds(bds, mapErrIdHash);
 
     // check for overlapping items
     queueFlush(&overlapQueue, bds, outF);
@@ -176,7 +202,6 @@ while (lineFileNextReal(lf, &line))
     }
 queueFlush(&overlapQueue, NULL, outF);
 lineFileClose(&lf);
-twoBitSeqWindowFree(&seqWin);
 carefulClose(&outF);
 }
 

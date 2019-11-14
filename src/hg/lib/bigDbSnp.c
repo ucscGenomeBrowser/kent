@@ -338,6 +338,8 @@ struct symbolDesc ucscNotesDesc[] =
       "The reference genome allele is not the major allele in at least one project." },
     { bdsMultiMap,
       "This variant has been mapped to more than one distinct genomic location." },
+    { bdsOtherMapErr,
+      "Another mapping of this variant has illegal coordinates implying indel mapping error." },
     { bdsOverlapDiffClass,
       "This variant overlaps another variant with a different type/class." },
     { bdsOverlapSameClass,

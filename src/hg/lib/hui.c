@@ -3659,11 +3659,16 @@ return field;
 static char *getLabelSetting(struct cart *cart, struct trackDb *tdb, char *field)
 {
 char labelSetting[4096];
-safef(labelSetting, sizeof labelSetting, "%s%s", field, FILTER_LABEL_NAME);
+safef(labelSetting, sizeof labelSetting, "%s.%s", FILTER_LABEL_NAME_LOW, field);
 char *trackDbLabel = cartOrTdbString(cart, tdb, labelSetting, NULL);
 if (trackDbLabel == NULL)
     {
-    safef(labelSetting, sizeof labelSetting, "%s.%s", field, FILTER_LABEL_NAME);
+    safef(labelSetting, sizeof labelSetting, "%s.%s", field, FILTER_LABEL_NAME_CAP);
+    trackDbLabel = cartOrTdbString(cart, tdb, labelSetting, NULL);
+    }
+if (trackDbLabel == NULL)
+    {
+    safef(labelSetting, sizeof labelSetting, "%s%s", field, FILTER_LABEL_NAME_CAP);
     trackDbLabel = cartOrTdbString(cart, tdb, labelSetting, NULL);
     }
 return trackDbLabel;
@@ -3716,6 +3721,8 @@ filterBy_t *filterByValues(struct trackDb *tdb, struct cart *cart, struct trackD
 /* Build a filterBy_t list from tdb variables of the form *FilterValues */
 {
 struct asObject *as = asForTdb(NULL, tdb);
+if (as == NULL)
+    errAbort("Unable to get autoSql for %s", name);
 filterBy_t *filterByList = NULL, *filter;
 struct trackDbFilter *fieldFilter;
 while ((fieldFilter = slPopHead(&trackDbFilters)) != NULL)
@@ -4000,6 +4007,7 @@ else
     printf("<B>%s items by:</B> (select multiple categories and items - %s)"
 	   "<TABLE cellpadding=3><TR valign='bottom'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
 
+#ifdef ADVANCED_BUTTON
 if (tdbIsBigBed(tdb))
     {
     char varName[1024];
@@ -4009,6 +4017,7 @@ if (tdbIsBigBed(tdb))
     printf("<BR>");
     jsInlineF("$(function () { advancedSearchOnChange('%s'); });\n", varName);
     }
+#endif // ADVANCED_BUTTON
 
 
 filterBy_t *filterBy = NULL;
@@ -4043,8 +4052,9 @@ for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next)
         {
         char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_MULTIPLE_LIST_AND);
         char cartSettingString[4096];
-        safef(cartSettingString, sizeof cartSettingString, "%s.%s.%s", prefix, filterBy->column, FILTER_TYPE_NAME_CAP);
-        printf("<div class='advanced' style='display:none'><b>Match if  ");
+        safef(cartSettingString, sizeof cartSettingString, "%s.%s.%s", prefix,FILTER_TYPE_NAME_LOW, filterBy->column);
+        printf("<div ><b>Match if  ");
+        // ADVANCED BUTTON printf("<div class='advanced' style='display:none'><b>Match if  ");
         cgiMakeRadioButton(cartSettingString, FILTERBY_MULTIPLE_LIST_AND, sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
         printf(" all ");
         cgiMakeRadioButton(cartSettingString, FILTERBY_MULTIPLE_LIST_OR, sameString(setting, FILTERBY_MULTIPLE_LIST_OR));
@@ -6235,12 +6245,12 @@ safef(settingString, sizeof settingString, "%s.%s", FILTER_TYPE_NAME_LOW, field)
 char *setting = cartOrTdbString(cart, tdb, settingString, NULL);
 if (setting == NULL)
     {
-    safef(settingString, sizeof settingString, "%s%s", field, FILTER_TYPE_NAME_CAP);
+    safef(settingString, sizeof settingString, "%s.%s", field, FILTER_TYPE_NAME_CAP);
     setting = cartOrTdbString(cart, tdb, settingString, NULL);
     }
 if (setting == NULL)
     {
-    safef(settingString, sizeof settingString, "%s.%s", field, FILTER_TYPE_NAME_CAP);
+    safef(settingString, sizeof settingString, "%s%s", field, FILTER_TYPE_NAME_CAP);
     setting = cartOrTdbString(cart, tdb, settingString, def);
     }
 return setting;
@@ -6275,7 +6285,7 @@ if (trackDbFilters)
         cgiMakeTextVar(cgiVar, value, 45);
 
         char *setting = getFilterType(cart, tdb, filter->fieldName, FILTERTEXT_WILDCARD);
-        safef(cgiVar,sizeof(cgiVar),"%s.%s.%s",tdb->track,filter->fieldName, FILTER_TYPE_NAME_CAP);
+        safef(cgiVar,sizeof(cgiVar),"%s.%s.%s",tdb->track,FILTER_TYPE_NAME_LOW, filter->fieldName);
         printf(" using ");
         printf("<SELECT name='%s'> ", cgiVar);
         printf("<OPTION %s>%s</OPTION>", sameString(setting, FILTERTEXT_WILDCARD) ? "SELECTED" : "",  FILTERTEXT_WILDCARD );

@@ -515,13 +515,20 @@ sub doCheck {
   my $bossScript = newBash HgRemoteScript("$runDir/doCheck.sh", $workhorse,
                                           $runDir, $whatItDoes);
 
+  foreach my $db (@dbList) {
+    $bossScript->add(<<_EOF_
+cut -f 4 $db.$outRoot.badCoords.bed | sort -u > $db.badCoords.ids.txt
+_EOF_
+                    );
+  }
   $bossScript->add(<<_EOF_
 pids=""
 _EOF_
                   );
   foreach my $db (@dbList) {
     $bossScript->add(<<_EOF_
-time checkBigDbSnp $db.$outRoot.bigDbSnp $HgAutomate::clusterData/$db/$db.2bit $db.$outRoot.checked.bigDbSnp &
+time checkBigDbSnp -mapErrIds=$db.badCoords.ids.txt \\
+       $db.$outRoot.bigDbSnp $HgAutomate::clusterData/$db/$db.2bit $db.$outRoot.checked.bigDbSnp &
 echo \$!
 pids+=" \$!"
 _EOF_
@@ -587,6 +594,7 @@ _EOF_
     $bossScript->add(<<_EOF_
 time bedToBigBed -tab -as=\$HOME/kent/src/hg/lib/bigDbSnp.as -type=bed4+ -extraIndex=name \\
             $db.$outRoot.checked.bigDbSnp /hive/data/genomes/$db/chrom.sizes $db.$outRoot.bb &
+pids+=" \$!"
 time bedToBigBed -tab -type=bed4 -extraIndex=name \\
             $db.$outRoot.badCoords.bed /hive/data/genomes/$db/chrom.sizes $db.${outRoot}BadCoords.bb &
 pids+=" \$!"
