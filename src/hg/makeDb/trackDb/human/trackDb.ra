@@ -1621,7 +1621,7 @@ track dbSnp153Composite
 compositeTrack on
 shortLabel dbSNP 153
 longLabel Short Genetic Variants from dbSNP release 153
-type bed3
+type bed 3
 group varRep
 visibility pack
 url https://www.ncbi.nlm.nih.gov/snp/$$
