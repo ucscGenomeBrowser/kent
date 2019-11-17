@@ -2,7 +2,7 @@ track wgEncodeGencodeV33
 compositeTrack on
 superTrack wgEncodeGencodeSuper pack
 shortLabel All GENCODE V33
-longLabel All GENCODE annotations from V33 (Ensembl 40)
+longLabel All GENCODE annotations from V33 (Ensembl 99)
 group genes
 dragAndDrop subTracks
 priority 34.172
@@ -74,7 +74,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV33
         subTrack wgEncodeGencodeV33ViewGenes on
         shortLabel Basic
         subGroups view=aGenes name=Basic
-        longLabel Basic Gene Annotation Set from GENCODE Version 33 (Ensembl 40)
+        longLabel Basic Gene Annotation Set from GENCODE Version 33 (Ensembl 99)
         type genePred
         priority 1
 
@@ -83,7 +83,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV33
         subTrack wgEncodeGencodeV33ViewGenes off
         subGroups view=aGenes name=Comprehensive
         shortLabel Comprehensive
-        longLabel Comprehensive Gene Annotation Set from GENCODE Version 33 (Ensembl 40)
+        longLabel Comprehensive Gene Annotation Set from GENCODE Version 33 (Ensembl 99)
         type genePred
         priority 2
 
@@ -92,7 +92,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV33
         subTrack wgEncodeGencodeV33ViewGenes on
         subGroups view=aGenes name=Pseudogenes
         shortLabel Pseudogenes
-        longLabel Pseudogene Annotation Set from GENCODE Version 33 (Ensembl 40)
+        longLabel Pseudogene Annotation Set from GENCODE Version 33 (Ensembl 99)
         type genePred
         color 255,51,255
         priority 3
@@ -110,7 +110,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV33
         subTrack wgEncodeGencodeV33View2Way off
         subGroups view=b2-way name=yTwo-way
         shortLabel 2-way Pseudogenes
-        longLabel 2-way Pseudogene Annotation Set from GENCODE Version 33 (Ensembl 40)
+        longLabel 2-way Pseudogene Annotation Set from GENCODE Version 33 (Ensembl 99)
         type genePred
         color 255,51,255
         priority 4
@@ -128,7 +128,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV33
         subTrack wgEncodeGencodeV33ViewPolya off
         subGroups view=cPolya name=zPolyA
         shortLabel PolyA
-        longLabel PolyA Transcript Annotation Set from GENCODE Version 33 (Ensembl 40)
+        longLabel PolyA Transcript Annotation Set from GENCODE Version 33 (Ensembl 99)
         type genePred
         color 0,0,0
         priority 5
