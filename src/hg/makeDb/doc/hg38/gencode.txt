@@ -595,15 +595,3 @@ cd kent/src/hg/makeDb/trackDb
     # commit all
 
 #########################################################################
-
-if fgrep Error: check/joiner.out ; then false;  else true; fi
-Error: 6 of 20572 elements (0.029%) of hg38.wgEncodeGencodePseudoGeneV33.name are not in key wgEncodeGencodeAttrsV33.transcriptId line 2645 of /cluster/home/markd/kent/src/hg/makeDb/schema/all.joiner
-Error: 857 of 226969 elements (0.378%) of hg38.wgEncodeGencodeCompV33.name are not in key wgEncodeGencodeAttrsV33.transcriptId line 2640 of /cluster/home/markd/kent/src/hg/makeDb/schema/all.joiner
-Error: 703 of 100360 elements (0.700%) of hg38.wgEncodeGencodeBasicV33.name are not in key wgEncodeGencodeAttrsV33.transcriptId line 2635 of /cluster/home/markd/kent/src/hg/makeDb/schema/all.joiner
-Error: 703 of 100360 elements (0.700%) of hg38.wgEncodeGencodeBasicV33.name are not in key wgEncodeGencodeAttrsV33.transcriptId line 2635 of /cluster/home/markd/kent/src/hg/makeDb/schema/all.joiner
-Error: 857 of 226969 elements (0.378%) of hg38.wgEncodeGencodeCompV33.name are not in key wgEncodeGencodeAttrsV33.transcriptId line 2640 of /cluster/home/markd/kent/src/hg/makeDb/schema/all.joiner
-Error: 6 of 20572 elements (0.029%) of hg38.wgEncodeGencodePseudoGeneV33.name are not in key wgEncodeGencodeAttrsV33.transcriptId line 2645 of /cluster/home/markd/kent/src/hg/makeDb/schema/all.joiner
-make: *** [joinerCheck] Error 1
-
-Error: 857 of 226969 elements (0.378%) of hg38.wgEncodeGencodeCompV33.name are not in key wgEncodeGencodeAttrsV33.transcriptId line 2640 of /cluster/home/markd/kent/src/hg/makeDb/schema/all.joiner
-hgsql  hg38 -Ne 'select name from wgEncodeGencodeCompV33 where name not in  (select transcriptId  from wgEncodeGencodeAttrsV33)' >~/tmp/comp.ids
