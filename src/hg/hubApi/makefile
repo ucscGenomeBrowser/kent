@@ -25,4 +25,4 @@ my::
 	if [ -d ${cgiApi} ]; then rm -f ${cgiApi}/$A; cp -p ${CGI_BIN_USER}/$A ${cgiApi}/$A; fi
 
 test::
-	cd tests && make test
+	cd tests && ${MAKE} test

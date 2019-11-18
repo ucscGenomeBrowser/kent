@@ -14,6 +14,110 @@ searchTable dgvGold
 searchType bigBed
 searchDescription DGV Gold Variants
 
+track problematic
+shortLabel Problematic Regions
+longLabel Problematic Regions for NGS or Sanger sequencing or very variable regions
+compositeTrack on
+group map
+visibility hide
+type bigBed 3 +
+release alpha
+
+    track getRmNgsDeadZone
+    shortLabel NBCI NGS Dead Zone
+    longLabel NCBI Get-RM NGS Dead Zone
+    type bigBed 3 +
+    bigDataUrl /gbdb/hg19/bbi/special/deadZone.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    track getRmSangerDeadZone
+    shortLabel NBCI Sanger Dead Zone
+    longLabel NCBI Get-RM Sanger Dead Zone
+    type bigBed 3 +
+    bigDataUrl /gbdb/hg19/bbi/special/sangerDeadZone.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    track getRmNgsProblemLow
+    shortLabel NBCI NGS Problem Low Stringency
+    longLabel NCBI Get-RM NGS Problem List, Low Stringency
+    type bigBed 3 +
+    bigDataUrl /gbdb/hg19/bbi/special/ngsProblemLow.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    track getRmNgsProblemHigh
+    shortLabel NBCI NGS Problem High Stringency
+    longLabel NCBI Get-RM NGS Problem List, High Stringency
+    type bigBed 3 +
+    bigDataUrl /gbdb/hg19/bbi/special/ngsProblemHigh.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    /gbdb/hg19/bbi/special/filterABQD.bb         /gbdb/hg19/bbi/special/filterHapNoVar.bb
+    /gbdb/hg19/bbi/special/filterAlign.bb        /gbdb/hg19/bbi/special/filterMap.bb
+    /gbdb/hg19/bbi/special/filterConflicting.bb  /gbdb/hg19/bbi/special/filterSSE.bb
+    /gbdb/hg19/bbi/special/filterCov.bb          /gbdb/hg19/bbi/special/filterlt2Datasets.bb
+
+    track filterABQD
+    shortLabel GIAB abnorm all bal
+    longLabel Genome-in-a-bottle: Calls with abnormal allele balance
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/special/filterABQD.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    track filterAlign
+    shortLabel GIAB align probl
+    longLabel Genome-in-a-bottle: Calls with evidence of local alignment problems like clipped reads
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/special/filterAlign.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    track filterConflicting
+    shortLabel GIAB confl genot
+    longLabel Genome-in-a-bottle: Calls with unresolved conflicting genotypes after arbitration
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/special/filterConflicting.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    track filterHapNoVar
+    shortLabel GIAB hapl var
+    longLabel Genome-in-a-bottle: HaplotypeCaller makes no call and UnifiedGenotyper makes a variant call
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/special/filterHapNoVar.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    track filterMap
+    shortLabel GIAB filter map
+    longLabel Genome-in-a-bottle: calls with low mapping quality or high coverage
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/special/filterMap.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    track filterSSE
+    shortLabel GIAB filter SSE
+    longLabel Genome-in-a-bottle: calls with evidence of systematic sequencing errors 
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/special/filterSSE.bb
+    visibility dense
+    parent problematic
+    release alpha
+
 track cosmicRegions
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer V82
