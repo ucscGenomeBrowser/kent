@@ -11,11 +11,11 @@
 
 <h1>Manual installation of the UCSC Genome Browser on a Unix server</h1>
 <h2>Contents</h2>
+<h6><a href='#overview-of-the-genome-browser-directories-and-databases'>Overview of the Genome Browser directories and databases</a></h6>
 <h6><a href='#software-requirements'>Software Requirements</a></h6>
 <h6><a href='#hardware-and-disk-space-requirements'>Hardware and disk space requirements</a></h6>
-<h6><a href='#overview-of-the-genome-browser-directories-and-databases'>Overview of the Genome Browser directories and databases</a></h6>
 <h6><a href='#installing-the-ucsc-genome-browser'>Installing the UCSC Genome browser</a></h6>
-<h6><a href='#mysql-setup'>MySQL (MariaDB) Setup</a></h6>
+<h6><a href='#mysql-setup'>MySQL Setup</a></h6>
 <h6><a href='#adding-a-custom-genome-to-the-browser'>Adding a custom genome to the browser</a></h6>
 <h6><a href='#modifying-the-source-code'>Modifying the source code</a></h6>
 <h6><a href='#custom-track-database'>Custom Track Database</a></h6>
@@ -25,14 +25,78 @@
 <h6><a href='#adding-tracks-to-the-browser'>Adding tracks to the browser</a></h6>
 <h6><a href='#the-udc-local-cache-directory'>The UDC local cache directory</a></h6>
 <h6><a href='#activating-cram-support-for-the-genome-browser'>Activating CRAM support for the Genome Browser.</a></h6>
+<a name='overview-of-the-genome-browser-directories-and-databases'></a>
+<h2>Overview of the Genome Browser directories and databases</h2>
+
+<p>
+The genome browser requires only Apache and MySQL and uses these directories:
+</p>
+
+<ul>
+<li>static html files: we typically keep them under /usr/local/apache/htdocs and
+configure Apache to load them from there, to avoid conflicts with the
+Linux distribution’s default location /var/www/html</li>
+<li>MySQL databases: most of them are read-only, except the <code>hgcentral</code> database
+which is read-write. Most linux distributions keep these under /var/lib/mysql</li>
+<li>static genome data files in /gbdb/</li>
+<li>binary CGI programs that generate images from the MySQL and /gbdb files and
+write them into the <code>trash</code> directory (see below). We modify our Apache
+config to load CGIs from /usr/local/apache/cgi-bin, so as to not conflict
+with the default directory of the Linux distribution</li>
+<li>a directory for temp files called <code>trash</code>, located in the parent directory of the
+CGI programs, usually /usr/local/apache/trash</li>
+<li>a small text file hg.conf in the same directory as the CGI programs, with
+information on how to connect to MySQL, the location of the other directories
+and various other settings, on our machines the location of this file is
+/usr/local/apache/cgi-bin/hg.conf</li>
+<li>uploaded custom data gets written by the CGI programs into MySQL databases in
+the database <code>customtrash</code> and also into files under /usr/local/apache/trash
+which is symlinked from /usr/local/apache/htdocs/trash so these files are
+accessible to Apache.</li>
+</ul>
+
+<p>
+When a web browser requests a Genome Browser page, typically /cgi-bin/hgTracks,
+Apache executes this CGI program. The programs then read information about how to
+connect to MySQL using the file hg.conf, connects to MySQL, reads the
+installed genome assemblies and the current user session from the MySQL database
+hgcentral. For each genome assembly, there is a separate MySQL database (e.g. 
+hg38). Some types of data (e.g. raw genome sequences) are kept as indexed
+binary files outside of MySQL, they are located in /gbdb, e.g. /gbdb/hg38. The
+location of the /gbdb directory can be changed with a setting in hg.conf. Some
+types of data are not specific for a genome, these are kept in the MySQL
+databases hgFixed, proteome and visiGene.
+</p>
+
+<p>
+We strongly recommend to follow the default locations, and to place our CGI
+programs in <code>/usr/local/apache/cgi-bin</code>. The htdocs root directory for html
+files should then be in /usr/local/apache/htdocs. All Genome Browser
+components called from Apache get their settings from the central configuration
+file <code>/usr/local/apache/cgi-bin/hg.conf</code>. Among others, the location and the
+username/password for the MySQL server is specified there.
+</p>
+
+<p>
+To load data into the genome browser databases, you need a command line tool
+like hgLoadBed. These tools are distributed separately from the CGI programs.
+Some tools create only MySQL tables, others write into a /gbdb subdirectory.
+Most of them require a configuration file ~/.hg.conf in your home directory
+with the MySQL connection information, like server name, username and password.
+The data loading is done from the Unix command line and not dependent on the
+CGI programs that create the Genome Browser graphics.
+</p>
+
 <a name='software-requirements'></a>
 <h2>Software Requirements</h2>
+
+<p>
+To run our provided binaries:
+</p>
 
 <ul>
 <li>Linux/Ubuntu/CentOS/Unix/MacOSX operating system</li>
 <li>Apache2.x - http web server - <a href='http://httpd.apache.org/' title=''>http://httpd.apache.org/</a></li>
-<li>gnu gcc - C code development system - <a href='http://www.gnu.org/software/gcc/' title=''>http://www.gnu.org/software/gcc/</a></li>
-<li>gnu make - <a href='http://www.gnu.org/software/make/' title=''>http://www.gnu.org/software/make/</a></li>
 <li>MySQL development system and libraries - <a href='http://dev.mysql.com/' title=''>http://dev.mysql.com/</a></li>
 <li>libpng runtime and development packages - <a href='http://www.libpng.org/' title=''>http://www.libpng.org/</a></li>
 <li>libssl runtime and development packages - <a href='http://www.openssl.org/' title=''>http://www.openssl.org/</a></li>
@@ -40,16 +104,25 @@
 </ul>
 
 <p>
+If you want to make modifications to our software, you need to compile it:
+</p>
+
+<ul>
+<li>gnu gcc - C code development system - <a href='http://www.gnu.org/software/gcc/' title=''>http://www.gnu.org/software/gcc/</a></li>
+<li>gnu make - <a href='http://www.gnu.org/software/make/' title=''>http://www.gnu.org/software/make/</a></li>
+</ul>
+
+<p>
 Optional:
 </p>
 
 <ul>
-<li>&#39;ghostscript&#39; ps to pdf converter - <a href='http://ghostscript.com' title=''>http://ghostscript.com</a></li>
-<li>&#39;git&#39; source code management: <a href='http://git-scm.com/downloads' title=''>http://git-scm.com/downloads</a></li>
-<li>&#39;gmt&#39; map plotting tools <a href='http://www.soest.hawaii.edu/gmt/' title=''>http://www.soest.hawaii.edu/gmt/</a></li>
-<li>&#39;pstack&#39; for stack traces</li>
-<li>&#39;R&#39; for the GTex track</li>
-<li>&#39;python-mysqldb&#39; for the gene interactions track</li>
+<li> ps to pdf converter - <a href='http://ghostscript.com' title=''>http://ghostscript.com</a></li>
+<li> source code management: <a href='http://git-scm.com/downloads' title=''>http://git-scm.com/downloads</a></li>
+<li> map plotting tools <a href='http://www.soest.hawaii.edu/gmt/' title=''>http://www.soest.hawaii.edu/gmt/</a></li>
+<li> for stack traces</li>
+<li> for the GTex track</li>
+<li> for the gene interactions track (python2)</li>
 </ul>
 
 <p>
@@ -85,10 +158,7 @@ Annotation database size differs a lot between the assemblies: The full size
 of the hg19 database in 2016 is 6 TB, for ce2 it is 5GB. It also depends on
 the tracks: The size of the hg19 annotations can be reduced to 2TB if you
 do not download any ENCODE tracks. The size of only the main gene and SNP
-annotations is around 5GB for hg19 and hg38. To increase download speeds, there are two download
-servers available; <a href="ftp://hgdownload.soe.ucsc.edu/" target="_blank">hgdownload</a> located
-in North America and
-<a href="ftp://hgdownload-euro.soe.ucsc.edu/" target="_blank">hgdownload-euro</a> located in Europe.
+annotations is around 5GB for hg19 and hg38.
 </p>
 
 <p>
@@ -100,12 +170,11 @@ particular assembly:
 <pre><code>rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/gbdb/ | egrep &quot;Number of files:|total size is&quot;</code></pre>
 
 <p>
-For example, to get the size of all of the files for hg19, you would use either of the following
-commands:
+For example, to get the size of all of the files for hg19, you would
+use the following command:
 </p>
 
 <pre><code>rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/gbdb/hg19/ | egrep &quot;Number of files:|total size is&quot;</code></pre>
-<pre><code>rsync -hna --stats rsync://hgdownload-euro.soe.ucsc.edu/gbdb/hg19/ | egrep &quot;Number of files:|total size is&quot;</code></pre>
 
 <p>
 After running that command, you should see output like this:
@@ -115,41 +184,23 @@ After running that command, you should see output like this:
 total size is 6515.70G  speedup is 5181080.38 (DRY RUN)</code></pre>
 
 <p>
-The next commands will give you the size of the entire mySQL database,
+The next command will give you the size of the entire mySQL database,
 but can be changed to get the size for a particular assembly:
 </p>
 
 <pre><code>rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/mysql/ | egrep &quot;Number of files:|total size is&quot;</code></pre>
-<pre><code>rsync -hna --stats rsync://hgdownload-euro.soe.ucsc.edu/mysql/ | egrep &quot;Number of files:|total size is&quot;</code></pre>
-
-<a name='overview-of-the-genome-browser-directories-and-databases'></a>
-<h2>Overview of the Genome Browser directories and databases</h2>
-
-<p>
-We strongly recommend to place our CGI programs in <code>/usr/local/apache/cgi-bin</code>. The htdocs root directory
-for html files should then be in /usr/local/apache/htdocs. All Genome Browser components
-called from Apache get their settings from the central configuration file <code>/usr/local/apache/cgi-bin/hg.conf</code>.
-Among others, the location and the username/password for the MySQL server is specified there.
-</p>
-
-<p>
-When a web browser requests a Genome Browser page, typically
-/cgi-bin/hgTracks, Apache executes this CGI program. The programs then read
-information about the installed genome assemblies and the current user session
-from the database hgcentral. For each genome assembly, there is a separate MySQL
-database (e.g. hg38). Some types of data are kept as indexed binary files outside of
-MySQL, they are located in /gbdb, e.g. /gbdb/hg38. The location of the /gbdb
-directory can be changed with a setting in hg.conf. Some types of data are not specific
-for a genome, these are kept in the MySQL databases hgFixed, proteome and visiGene.
-</p>
-
-<p>
-To load data into the genome browser databases, you need a configuration file ~/.hg.conf
-in your home directory with the MySQL username/password and one of the loader programs, e.g. hgLoadBed.
-</p>
 
 <a name='installing-the-ucsc-genome-browser'></a>
 <h2>Installing the UCSC Genome browser</h2>
+
+<p>
+Note: we offer Genome-Browser-in-a-Box (GBIB), a fully configured virtual
+machine image that can be converted for VirtualBox, VMWare, Hyper-V and other
+popular environments. We also offer Genome-Browser-in-the-Cloud (GBIC) an
+shell script that installs a genome browser in most main Linux distributions
+(Most Debian and Redhat-based ones, like Ubuntu and CentOS).
+See https://hgwdev-max.gi.ucsc.edu/goldenPath/help/mirror.html
+</p>
 
 <p>
 Scripts to perform all of the functions below can be found in
@@ -166,14 +217,14 @@ Apache web server is installed and working, http://localhost/
 provides the Apache default home page from your machine
 NOTE: The browser static html web pages require the Apache
 XBitHack option to be enabled to allow SSI <code>html</code> statements to function.
-Add &#39;Options +Includes&#39; for your html directory, your
+Add  for your html directory, your
 httpd.conf file entry looks like:
 </p>
 
-<pre><code>XBitHack on
-&lt;Directory /usr/local/apache/htdocs&gt;
-Options +Includes
-&lt;/Directory&gt;</code></pre>
+<pre><code> XBitHack on
+ &lt;Directory /usr/local/apache/htdocs&gt;
+ Options +Includes
+ &lt;/Directory&gt;</code></pre>
 
 <p>
 You can test your Apache cgi-bin/ directory by copying the script src/product/scripts/printEnv.pl into it.
@@ -182,9 +233,7 @@ You can test your Apache cgi-bin/ directory by copying the script src/product/sc
 MySQL database is installed and working
 </p>
 
-<p>
-mysql -u browser -pgenome -e &#39;show tables;&#39; mysql
-</p>
+<pre><code>mysql -u browser -pgenome -e &#39;show tables;&#39; mysql</code></pre>
 
 <p>
 MySQL can be run from the command line, and
@@ -224,7 +273,7 @@ export WEBROOT</code></pre>
 <p>
 The browser WEB pages and cgi-bin binaries expect these
 two directories to be next to each other in ${WEBROOT}
-since referrals in html are often: &quot;../cgi-bin&quot;
+since referrals in html are often: 
 </p>
 
 <p>
@@ -262,7 +311,7 @@ chmod 755 ${WEBROOT}/cgi-bin</code></pre>
 
 <p>
 (this chmod 755 will prevent suexec failures that are indicated
-by &quot;Premature end of script headers&quot; errors in the Apache
+by  errors in the Apache
 error_log. Your cgi binaries should also be 755 permissions.)
 </p>
 
@@ -272,7 +321,7 @@ ln -s ${WEBROOT}/trash  ${WEBROOT}/html/trash</code></pre>
 
 <p>
 The browser creates .png (and other) files in the trash directory.
-The &#39;chmod 777&#39; allows the Apache WEB server to write into
+The  allows the Apache WEB server to write into
 that directory.
 </p>
 
@@ -286,15 +335,13 @@ Download static WEB page content:
 See also: src/product/scripts/updateHtml.sh
 </p></li>
 <li><p>
-Copy CGI binaries: This set of binaries are for x86_64 types of Linux machines. Both rsync commands
-accomplish the same task, querying either the North American or European download server.
+Copy CGI binaries: This set of binaries are for x86_64 types of Linux machines.
 If you need to instead build binaries for your platform,
 follow the instructions in: README.building.source
 See also: src/product/scripts/kentSrcUpdate.sh
 </p>
 
-<pre><code>rsync -avP rsync://hgdownload.soe.ucsc.edu/cgi-bin/ ${WEBROOT}/cgi-bin/</code></pre>
-<pre><code>rsync -avP rsync://hgdownload-euro.soe.ucsc.edu/cgi-bin/ ${WEBROOT}/cgi-bin/</code></pre></li>
+<pre><code>rsync -avP rsync://hgdownload.soe.ucsc.edu/cgi-bin/ ${WEBROOT}/cgi-bin/</code></pre></li>
 <li><p>
 Create hgcentral database and tables. This is the primary gateway
 database that allows the browser to find specific organism
@@ -309,7 +356,7 @@ mysql -u browser -pgenome hgcentral &lt; hgcentral.sql</code></pre>
 Please note, it is possible to create alternative hgcentral
 databases. For example, for test purposes. In this
 case use a unique name for the hgcentral database, such
-as &quot;hgcentraltest&quot;, and it can be specified in the hg.conf
+as , and it can be specified in the hg.conf
 file as mentioned in the next step. To create a second copy
 of the hgcentral database:
 </p>
@@ -349,31 +396,28 @@ See also: README.mysql.setup
 </p></li>
 <li><p>
 Load databases of interest. See also: README.QuickStart
-</p>
+</p></li>
+</ol>
 
-<p>
-src/product/scripts/activeDbList.sh
+<pre><code>src/product/scripts/activeDbList.sh
 src/product/scripts/minimal.db.list.txt
 src/product/scripts/loadDb.sh
-</p>
 
-<p>
 And discussion in scripts/README about whether you can use directly
 the MySQL binary database files, or if you need to download goldenPath
 database text dumps and load them into the database.
-</p>
 
-<p>
 An alternative to loading the database tables from text files,
-is to directly rsync the MySQL tables themselves from either the North American or European download
-servers and place them in your MySQL /var/ directory. These tables are much larger than the text
-files due to the sizes of indexes created during a table load, but it can save a lot of time since
-the data loading step is quite computationally intensive. Typical rsync commands for an entire
-database (e.g. ce4) would be something like:
-</p>
+is to directly rsync the MySQL tables themselves and place them
+in your MySQL /var/ directory.  These tables are much larger
+than the text files due to the sizes of indexes created during a
+table load, but it can save a lot of time since the data loading
+step is quite compute intensive.  A typical rsync command for an
+entire database (e.g. ce4) would be something like:
 
-<pre><code>rsync -avP --delete --max-delete=20 rsync://hgdownload.soe.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/</code></pre>
-<pre><code>rsync -avP --delete --max-delete=20 rsync://hgdownload-euro.soe.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/</code></pre></li>
+    rsync -avP --delete --max-delete=20 rsync://hgdownload.soe.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/</code></pre>
+
+<ol>
 <li><p>
 Download extra databases to work with a full genome assembly
 such as human/hg38: hgFixed go140213 proteins140122 sp140122
@@ -381,15 +425,19 @@ Construct symlinks in your MySQL data directory to use database
 names: go proteome uniProt for these database directories:
 </p>
 
-<pre><code>$ ls -og proteome go uniProt
-lrwxrwxrwx 1  8 Feb 26 11:39 go -&gt; go140213
+<p>
+$ ls -og proteome go uniProt
+lrwxrwxrwx 1 8 Feb 26 11:39 go -&gt; go140213
 lrwxrwxrwx 1 14 Mar 27 12:01 proteome -&gt; proteins140122
-lrwxrwxrwx 1  8 Mar 27 12:01 uniProt -&gt; sp140122
+lrwxrwxrwx 1 8 Mar 27 12:01 uniProt -&gt; sp140122
+</p>
 
+<p>
 $ ls -ld go140213 proteins140122 sp140122
-drwx------ 2 mysql mysql 4096 Feb 26 10:57 go140213
-drwx------ 2 mysql mysql 4096 Aug 19 08:08 proteins140122
-drwx------ 2 mysql mysql 4096 Mar 26 13:01 sp140122</code></pre>
+drwx—— 2 mysql mysql 4096 Feb 26 10:57 go140213
+drwx—— 2 mysql mysql 4096 Aug 19 08:08 proteins140122
+drwx—— 2 mysql mysql 4096 Mar 26 13:01 sp140122
+</p>
 
 <p>
 These file names are data stamped YYMMDD to indicate changes
@@ -405,46 +453,43 @@ scripts/fetchMinimalGbdb.sh
 <li><p>
 The browser should now appear at the URL:
 http://localhost/
-</p>
-
-<p>
-Check your Apache error_log file for hints to solving problems.
 </p></li>
-<li><p>
-BLAT server setup: The blatServers table in the database hgcentral needs to
-have a fully qualified host name specified in the &#39;host&#39; column.
-</p>
+</ol>
 
-<p>
-Educational and non-profit institutions are allowed to use
-blat free of charge. Commercial installations of the browser
-require a license for blat. See also: <a href='http://kentinformatics.com/index.html' title=''>http://kentinformatics.com/index.html</a>
-and: <a href='http://genome.ucsc.edu/license/' title=''>http://genome.ucsc.edu/license/</a>
-In the source tree: src/gfServer/README.blat
-</p></li>
-<li><p>
-Useful links:
-</p>
+<pre><code>Check your Apache error_log file for hints to solving problems.</code></pre>
 
-<p>
-<a href='http://genomewiki.ucsc.edu/index.php/Category:Mirror_Site_FAQ' title=''>http://genomewiki.ucsc.edu/index.php/Category:Mirror_Site_FAQ</a>
-</p>
+<ol>
+<li>BLAT server setup: The blatServers table in the database hgcentral needs to
+have a fully qualified host name specified in the  column.</li>
+</ol>
 
-<p>
+<pre><code>Educational and non-profit institutions are allowed to use
+blat free of charge.  Commercial installations of the browser
+require a license for blat.  See also: &lt;http://kentinformatics.com/index.html&gt;
+and: &lt;http://genome.ucsc.edu/license/&gt;
+In the source tree: src/gfServer/README.blat</code></pre>
+
+<ol>
+<li>Useful links:</li>
+</ol>
+
+<pre><code>&lt;http://genomewiki.ucsc.edu/index.php/Category:Mirror_Site_FAQ&gt;
+
 There are numerous README files in the source tree on
 a variety of specific subjects, e.g.:
-</p>
 
-<pre><code>./src/README
-./src/product/README.*
-./src/hg/makeDb/trackDB/README
-./src/hg/makeDb/doc/make*.txt</code></pre></li>
+    ./src/README
+    ./src/product/README.*
+    ./src/hg/makeDb/trackDB/README
+    ./src/hg/makeDb/doc/make*.txt</code></pre>
+
+<ol>
 <li><p>
 Apache configuration:
 </p>
 
 <p>
-To lock down your trash directory from scanning via &quot;indexes&quot;
+To lock down your trash directory from scanning via 
 enter the following in your httpd.conf:
 </p>
 
@@ -457,35 +502,27 @@ Allow from all
 
 <p>
 The specified directory name is your apache: DocumentRoot/trash
-e.g. /usr/local/apache/htdocs/trash
+e.g. /usr/local/apache/htdocs/trash
 </p></li>
 </ol>
 
 <a name='mysql-setup'></a>
-<h2>MySQL (MariaDB) Setup</h2>
-<p>
-The UCSC Genome Browser uses MariaDB as the backend database server. MariaDB is a
-community-developed, commercially supported fork of the MySQL relational database management system,
-intended to remain free and open-source software under the GNU General Public License.You must have
-MariaDb (MySQL) client libraries installed on your computer. You can read more about MariaDB on the
-<a href="https://mariadb.org/">MariaDB site</a>. We will often state 'MySQL' even though we are
-referring to 'MariaDB'. 
+<h2>MySQL Setup</h2>
 
-</p>
 <ol>
 <li><p>
-Enable &quot;LOAD DATA LOCAL INFILE&quot;:
+Enable :
 </p>
 
 <p>
 Set these in /etc/my.cnf or /etc/mysql/my.cnf:
 </p>
 
-<pre><code>[mysqld]
-local-infile=1
+<pre><code> [mysqld]
+ local-infile=1
 
-[client]
-local-infile=1</code></pre></li>
+ [client]
+ local-infile=1</code></pre></li>
 <li><p>
 MySQL Storage Engine:
 </p>
@@ -500,8 +537,8 @@ However the myisam engine should be used with the UCSC Genome Browser.
 Set it in /etc/my.cnf or /etc/mysql/my.cnf:
 </p>
 
-<pre><code>[mysqld]
-default-storage-engine=MYISAM</code></pre>
+<pre><code> [mysqld]
+ default-storage-engine=MYISAM</code></pre>
 
 <p>
 Always restart your mysql server after making changes to these
@@ -519,8 +556,8 @@ genome databases. The browser CGI binaries
 require read-only access to the genome databases.</li>
 <li>A MySQL user that has write permissions to one database.
 The CGI binaries require write permissions to one particular
-database (hgcentral) for maintaining user&#39;s cart information to
-store the user&#39;s browser cookie settings.</li>
+database (hgcentral) for maintaining user’s cart information to
+store the user’s browser cookie settings.</li>
 <li>A MySQL user that has general write permissions to all
 browser and genome databases to be used by developers</li>
 </ol>
@@ -534,13 +571,13 @@ the text file: $WEBROOT/cgi-bin/hg.conf
 Developers of the browser databases obtain their MySQL identities
 from a text file in their home directory: ~/.hg.conf
 Note the initial dot in the name: .hg.conf
-This file in a user&#39;s directory will specify a higher-privileged user
+This file in a user’s directory will specify a higher-privileged user
 to allow read/write access to the MySQL databases.
 This file must be set to mode 600 to provide security of the user
 and password to the database:
 </p>
 
-<pre><code>$ chmod 600 ~/.hg.conf</code></pre>
+<pre><code> $ chmod 600 ~/.hg.conf</code></pre>
 
 <p>
 All kent source code commands use this file to access the MySQL
@@ -561,7 +598,7 @@ You can execute that script to set up these example users.
 </p>
 
 <p>
-An example full read/write access user: &quot;browser&quot;, is created with
+An example full read/write access user: , is created with
 the following procedure.
 </p>
 
@@ -571,17 +608,17 @@ has access to the mysql database. You should be able
 to perform the following:
 </p>
 
-<pre><code>$ export SQL_PASSWORD=mysql_root_password
-$ mysql -u root -p${SQL_PASSWORD} -e &quot;show tables;&quot; mysql</code></pre>
+<pre><code> $ export SQL_PASSWORD=mysql_root_password
+ $ mysql -u root -p${SQL_PASSWORD} -e &quot;show tables;&quot; mysql</code></pre>
 
 <p>
-Create a MySQL user called &quot;browser&quot; with password
-&quot;genome&quot; and give access to selected MySQL commands
+Create a MySQL user called  with password
+ and give access to selected MySQL commands
 for the following list of databases. When you add other
 databases, you will need to add these permissions to your
 databases. This procedure of adding permissions specifically
 for a set list of databases is a more secure method than allowing
-the MySQL &quot;browser&quot; user to have access to any database.
+the MySQL  user to have access to any database.
 </p>
 
 <p>
@@ -589,63 +626,63 @@ the MySQL &quot;browser&quot; user to have access to any database.
 ( FILE, CREATE, DROP, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES on ${DB}.* )
 </p>
 
-<pre><code>for DB in cb1 hgcentral hgFixed hg38 proteins140122 sp140122 go140213 uniProt go proteome
-do
-    mysql -u root -p${SQL_PASSWORD} -e &quot;GRANT SELECT, INSERT, UPDATE, DELETE, \
-    FILE, CREATE, DROP, ALTER, CREATE TEMPORARY TABLES on ${DB}.* \
-    TO browser@localhost \
-    IDENTIFIED BY &#39;genome&#39;;&quot; mysql
-done</code></pre>
+<pre><code> for DB in cb1 hgcentral hgFixed hg38 proteins140122 sp140122 go140213 uniProt go proteome
+ do
+     mysql -u root -p${SQL_PASSWORD} -e &quot;GRANT SELECT, INSERT, UPDATE, DELETE, \
+     FILE, CREATE, DROP, ALTER, CREATE TEMPORARY TABLES on ${DB}.* \
+     TO browser@localhost \
+     IDENTIFIED BY &#39;genome&#39;;&quot; mysql
+ done</code></pre>
 
 <p>
 The above granted permissions are recommended for browser developers.
 The WEB browser CGI binaries need SELECT, INSERT and CREATE TEMPORARY
 TABLES permissions. For example, you should create a special user for
-the browser genome databases only. In this example, user: &quot;readonly&quot;
-with password: &quot;access&quot;
+the browser genome databases only. In this example, user: 
+with password: 
 </p>
 
-<pre><code>for DB in cb1 hgcentral hgFixed hg38 proteins140122 sp140122 go140213 uniProt go
- proteome
-do
-    mysql -u root -p${SQL_PASSWORD} -e &quot;GRANT SELECT \
-        on ${DB}.* TO \
-        readonly@localhost IDENTIFIED BY &#39;access&#39;;&quot; mysql
-done</code></pre>
+<pre><code> for DB in cb1 hgcentral hgFixed hg38 proteins140122 sp140122 go140213 uniProt go
+  proteome
+ do
+     mysql -u root -p${SQL_PASSWORD} -e &quot;GRANT SELECT \
+         on ${DB}.* TO \
+         readonly@localhost IDENTIFIED BY &#39;access&#39;;&quot; mysql
+ done</code></pre>
 
 <p>
 Create a database to hold temporary tables:
 </p>
 
-<pre><code>mysql -u root -p${SQL_PASSWORD} -e &quot;create database hgTemp&quot;
+<pre><code> mysql -u root -p${SQL_PASSWORD} -e &quot;create database hgTemp&quot;
 
-mysql -u root -p${SQL_PASSWORD} -e &quot;GRANT SELECT, INSERT, \
-    CREATE TEMPORARY TABLES \
-    on hgTemp.* TO \
-    readonly@localhost IDENTIFIED BY &#39;access&#39;;&quot; mysql</code></pre>
+ mysql -u root -p${SQL_PASSWORD} -e &quot;GRANT SELECT, INSERT, \
+     CREATE TEMPORARY TABLES \
+     on hgTemp.* TO \
+     readonly@localhost IDENTIFIED BY &#39;access&#39;;&quot; mysql</code></pre>
 
 <p>
 A third MySQL user should be created with read-write access to only
-the hgcentral database. For example, a user: &quot;readwrite&quot;
-with password: &quot;update&quot;
+the hgcentral database. For example, a user: 
+with password: 
 </p>
 
-<pre><code>for DB in hgcentral
-do
-    mysql -u root -p${SQL_PASSWORD} -e &quot;GRANT SELECT, INSERT, UPDATE, DELETE, \
-        CREATE, DROP, ALTER on ${DB}.* TO readwrite@localhost \
-        IDENTIFIED BY &#39;update&#39;;&quot; mysql
-done</code></pre>
+<pre><code> for DB in hgcentral
+ do
+     mysql -u root -p${SQL_PASSWORD} -e &quot;GRANT SELECT, INSERT, UPDATE, DELETE, \
+         CREATE, DROP, ALTER on ${DB}.* TO readwrite@localhost \
+         IDENTIFIED BY &#39;update&#39;;&quot; mysql
+ done</code></pre>
 
 <p>
 The cgi-bin binaries obtain their MySQL identities from
 the hg.conf file in the cgi-bin directory. The file in this
 directory: src/product/ex.hg.conf
-demonstrates the use of the &quot;readonly&quot; user for genome database
-access and the &quot;readwrite&quot; user for hgcentral database access.
+demonstrates the use of the  user for genome database
+access and the  user for hgcentral database access.
 </p></li>
 <li><p>
-The hgsql command: Developers can access the browser databases via the &#39;hgsql&#39;
+The hgsql command: Developers can access the browser databases via the 
 command which can be built in the source-tree at:
 </p>
 
@@ -654,8 +691,8 @@ kent/src/hg/hgsql/
 </p>
 
 <p>
-This &#39;hgsql&#39; command provides a convenient front-end to
-the standard &#39;mysql&#39; command by reading the user&#39;s ~/.hg.conf
+This  command provides a convenient front-end to
+the standard  command by reading the user’s ~/.hg.conf
 file to provide access to the browser databases with the
 appropriate identity. Each user creates a ~/.hg.conf file
 (same format as the above mentioned cgi-bin/hg.conf file)
@@ -670,23 +707,23 @@ databases.
 </p>
 
 <p>
-The above example hg.conf could be used as a user&#39;s ~/.hg.conf
+The above example hg.conf could be used as a user’s ~/.hg.conf
 file with the change of db.user, db.password, central.user,
 and central.password to be the fully permitted read-write user:
 </p>
 
-<pre><code>db.user=browser
-db.password=genome
-central.user=browser
-central.password=genome
-central.db=hgcentral</code></pre>
+<pre><code> db.user=browser
+ db.password=genome
+ central.user=browser
+ central.password=genome
+ central.db=hgcentral</code></pre>
 
 <p>
 To test this access with your ~/.hg.conf file in place:
 </p>
 
-<pre><code>hgsql -e &quot;show tables;&quot; hgcentral
-hgsql -e &quot;show grants;&quot; hgcentral</code></pre></li>
+<pre><code> hgsql -e &quot;show tables;&quot; hgcentral
+ hgsql -e &quot;show grants;&quot; hgcentral</code></pre></li>
 <li><p>
 Configuring MySQL SSL connections:
 </p>
@@ -696,42 +733,42 @@ MySQL is typically compiled with SSL capability from OpenSSL or yaSSL.
 To see if your server supports ssl, login to mysql and run this command:
 </p>
 
-<pre><code>mysql&gt; show variables like &#39;%ssl%&#39;;
-+---------------+----------+
-| Variable_name | Value    |
-+---------------+----------+
-| have_openssl  | DISABLED |
-| have_ssl      | DISABLED |
-| ssl_ca        |          |
-| ssl_capath    |          |
-| ssl_cert      |          |
-| ssl_cipher    |          |
-| ssl_crl       |          |
-| ssl_crlpath   |          |
-| ssl_key       |          |
-+---------------+----------+</code></pre>
+<pre><code> mysql&gt; show variables like &#39;%ssl%&#39;;
+ +---------------+----------+
+ | Variable_name | Value    |
+ +---------------+----------+
+ | have_openssl  | DISABLED |
+ | have_ssl      | DISABLED |
+ | ssl_ca        |          |
+ | ssl_capath    |          |
+ | ssl_cert      |          |
+ | ssl_cipher    |          |
+ | ssl_crl       |          |
+ | ssl_crlpath   |          |
+ | ssl_key       |          |
+ +---------------+----------+</code></pre>
 
 <p>
 If your mysql was compiled with SSL support, which is true of virtually all mysql packages
 being provided today, you can easily enable SSL by adding settings to /etc/my.cnf:
 </p>
 
-<pre><code>-------
-my.cnf:
--------
+<pre><code> -------
+ my.cnf:
+ -------
 
-[mysqld]
-ssl
-ssl-key=/somepath/server-key.pem
-ssl-cert=/somepath/server-cert.pem
-ssl-ca=/somepath/ca.pem
-ssl-capath=/somepath/
-ssl-cipher=DHE-RSA-AES256-SHA:AES128-SHA
-# mysql 5.6.3 or later
-ssl-crl=/someCrlPath/some-crl.pem
-ssl-crlpath=/someCrlPath/
-# mysql5.7 or later require all connections to be encrypted
-require_secure_transport server </code></pre>
+ [mysqld]
+ ssl
+ ssl-key=/somepath/server-key.pem
+ ssl-cert=/somepath/server-cert.pem
+ ssl-ca=/somepath/ca.pem
+ ssl-capath=/somepath/
+ ssl-cipher=DHE-RSA-AES256-SHA:AES128-SHA
+ # mysql 5.6.3 or later
+ ssl-crl=/someCrlPath/some-crl.pem
+ ssl-crlpath=/someCrlPath/
+ # mysql5.7 or later require all connections to be encrypted
+ require_secure_transport server </code></pre>
 
 <p>
 After making changes to my.cnf, be sure to restart your mysqld service.
@@ -794,7 +831,7 @@ The cipher setting is a colon-separated list of SSL ciphers that are supported.
 
 <p>
 The security files like certs etc. that are specified in the above settings
-must be readable by the unix account that mysqld runs under, default is &quot;mysql&quot;.
+must be readable by the unix account that mysqld runs under, default is .
 </p>
 
 <p>
@@ -804,7 +841,7 @@ SELinux or apparmor may block access to certain locations.
 
 <p>
 yaSSL, which is still often used with the MySQL Community Edition,
-expects keys to be in the PKCS #1 format and doesn&#39;t support the PKCS #8 format used by OpenSSL 1.0 and newer.
+expects keys to be in the PKCS #1 format and doesn’t support the PKCS #8 format used by OpenSSL 1.0 and newer.
 You can convert the key to the old format using openssl rsa:
 openssl rsa -in key_in_pkcs1_or_pkcs8.pem -out key_in_pkcs1.pem
 </p>
@@ -813,13 +850,13 @@ openssl rsa -in key_in_pkcs1_or_pkcs8.pem -out key_in_pkcs1.pem
 yaSSL requires that all components of the CA certificate tree be contained within a single CA certificate file
 and that each certificate in the file has a unique SubjectName value.
 To work around this limitation, concatenate the individual certificate files comprising the certificate tree
-into a new file and specify that file as the value of the --ssl-ca option.
+into a new file and specify that file as the value of the –ssl-ca option.
 For example,
 </p>
 
-<pre><code>cd my-certs-dir
-cat ca-cert.pem server-cert.pem (etc) &gt; yaSSL-ca-cert.pem
-chmod +r yaSSL-ca-cert.pem</code></pre>
+<pre><code> cd my-certs-dir
+ cat ca-cert.pem server-cert.pem (etc) &gt; yaSSL-ca-cert.pem
+ chmod +r yaSSL-ca-cert.pem</code></pre>
 
 <p>
 Now use my-certs-dir/yaSSL-ca-cert.pem for certificate authority (ca) for clients.
@@ -829,22 +866,22 @@ Now use my-certs-dir/yaSSL-ca-cert.pem for certificate authority (ca) for client
 These are the SSL settings which can be placed into your hg.conf for CGIs or .hg.conf for utility programs:
 </p>
 
-<pre><code>db.key=/sompath/someuser-key.pem
-db.cert=/sompath/someuser-cert.pem
-db.ca=/somepath/ca.pem
-db.caPath=/somepath
-db.crl=/someCrlPath/some-crl.pem
-db.crlPath=/someCrlPath/
-db.verifyServerCert=1
-db.cipher=DHE-RSA-AES256-SHA:AES128-SHA</code></pre>
+<pre><code> db.key=/sompath/someuser-key.pem
+ db.cert=/sompath/someuser-cert.pem
+ db.ca=/somepath/ca.pem
+ db.caPath=/somepath
+ db.crl=/someCrlPath/some-crl.pem
+ db.crlPath=/someCrlPath/
+ db.verifyServerCert=1
+ db.cipher=DHE-RSA-AES256-SHA:AES128-SHA</code></pre>
 
 <p>
-The key and certificate for &quot;someuser&quot; above are signed by a ca.
+The key and certificate for  above are signed by a ca.
 </p>
 
 <p>
 The verifyServerCert setting if it exists tells the client
-to verify that the CN field in the server&#39;s cert matches the
+to verify that the CN field in the server’s cert matches the
 hostname to which it is connecting. This prevents Man-In-the-Middle attacks.
 </p>
 
@@ -853,7 +890,7 @@ The caPath and crlPath options only work with OpenSSL.
 </p>
 
 <p>
-The example shows the most common use for the profile &quot;db&quot;.
+The example shows the most common use for the profile .
 But the SSL settings work with any profile in the hg.conf file.
 </p>
 
@@ -867,28 +904,28 @@ Configuring SSL requirements for mysql user accounts:
 </p>
 
 <p>
-You can tell mysql to require SSL for a user&#39;s account like this:
+You can tell mysql to require SSL for a user’s account like this:
 </p>
 
-<pre><code>GRANT ALL PRIVILEGES ON *.* TO &#39;someuser&#39;@&#39;%&#39;
-  REQUIRE SSL;</code></pre>
+<pre><code> GRANT ALL PRIVILEGES ON *.* TO &#39;someuser&#39;@&#39;%&#39;
+   REQUIRE SSL;</code></pre>
 
 <p>
-You can tell mysql to use SSL for a user&#39;s account and to
+You can tell mysql to use SSL for a user’s account and to
 further require the client to use their key and x509 certificate to connect by saying:
 </p>
 
-<pre><code>GRANT ALL PRIVILEGES ON *.* TO &#39;someuser&#39;@&#39;%&#39;
-  REQUIRE x509;</code></pre>
+<pre><code> GRANT ALL PRIVILEGES ON *.* TO &#39;someuser&#39;@&#39;%&#39;
+   REQUIRE x509;</code></pre>
 
 <p>
 There are more-specific requirements that may be added:
 </p>
 
-<pre><code>GRANT ALL PRIVILEGES ON *.* TO &#39;someuser&#39;@&#39;%&#39;
-  REQUIRE SUBJECT &#39;/C=US/ST=CA/L=Santa Cruz/O=YourCompany/OU=YourDivision/CN=someuser/emailAddress=someuser@YourCompany.com&#39;
-      AND ISSUER  &#39;/C=US/ST=CA/L=Santa Cruz/O=YourCompany/OU=YourDivision/CN=YourCompanyCA/emailAddress=admin@YourCompany.com&#39;
-      AND CIPHER  &#39;DHE-RSA-AES256-SHA&#39;;</code></pre>
+<pre><code> GRANT ALL PRIVILEGES ON *.* TO &#39;someuser&#39;@&#39;%&#39;
+   REQUIRE SUBJECT &#39;/C=US/ST=CA/L=Santa Cruz/O=YourCompany/OU=YourDivision/CN=someuser/emailAddress=someuser@YourCompany.com&#39;
+       AND ISSUER  &#39;/C=US/ST=CA/L=Santa Cruz/O=YourCompany/OU=YourDivision/CN=YourCompanyCA/emailAddress=admin@YourCompany.com&#39;
+       AND CIPHER  &#39;DHE-RSA-AES256-SHA&#39;;</code></pre>
 
 <p>
 You can see the cert details like this:
@@ -901,9 +938,7 @@ from the CN of the user and server certs.
 </p>
 
 <p>
-Further MySQL SSL documentation is available from
-<a href='https://dev.mysql.com/doc/refman/5.6/en/using-encrypted-connections.html' target="_blank" 
-title=''>https://dev.mysql.com/doc/refman/5.6/en/using-encrypted-connections.html<a/>
+Further MySQL SSL documentation is available from <a href='https://dev.mysql.com/doc/refman/5.6/en/ssl-connections.html' title=''>https://dev.mysql.com/doc/refman/5.6/en/ssl-connections.html</a>
 </p></li>
 </ol>
 
@@ -937,11 +972,10 @@ Create an empty hgcentral database:
 
 <p>
 Load all tables into the hgcentral database.
-Copy all the mysql data files from either the North American or European download server
+Copy all the mysql data files from
 </p>
 
 <pre><code>rsync -avP rsync://hgdownload.soe.ucsc.edu/mysql/hgcentral/ .</code></pre>
-<pre><code>rsync -avP rsync://hgdownload-euro.soe.ucsc.edu/mysql/hgcentral/ .</code></pre>
 
 <p>
 directly into the MySQL data area for your hgcentral database.
@@ -954,7 +988,6 @@ text file dump of these tables from:
 </p>
 
 <pre><code>rsync -avP rsync://hgdownload.soe.ucsc.edu/genome/admin/hgcentral.sql .</code></pre>
-<pre><code>rsync -avP rsync://hgdownload-euro.soe.ucsc.edu/genome/admin/hgcentral.sql .</code></pre>
 
 <p>
 And then six tables for the latest human database.
@@ -975,19 +1008,18 @@ Start with an empty database, for example hg18:
 <pre><code>hgsql -e &quot;create database hg18;&quot; mysql</code></pre>
 
 <p>
-Again, copy the MySQL files directly from one of the download servers, for example, hg18:
+Again, copy the MySQL files directly from the download
+server, for example hg18:
 </p>
 
 <pre><code>rsync -avP rsync://hgdownload.soe.ucsc.edu/mysql/hg18/ .</code></pre>
-<pre><code>rsync -avP rsync://hgdownload-euro.soe.ucsc.edu/mysql/hg18/ .</code></pre>
 
 <p>
-(beware, this is several TB of data) into your MySQL data area. Or load these tables from the text
-SQL dumps from:
+(beware, this is several TB of data) into your MySQL data area. Or load these tables from the text SQL
+dumps from:
 </p>
 
 <pre><code>rsync -avP rsync://hgdownload.soe.ucsc.edu/goldenPath/hg18/database/ .</code></pre>
-<pre><code>rsync -avP rsync://hgdownload-euro.soe.ucsc.edu/goldenPath/hg18/database/ .</code></pre>
 
 <p>
 (beware, this is several TB of data)
@@ -1032,7 +1064,7 @@ undocumented way to solve your problem.
 
 <p>
 If you need to change the code, make sure to isolate your changes into a
-single function, if possible. Using git, merge your branch into our &quot;beta&quot;
+single function, if possible. Using git, merge your branch into our 
 branch, ideally for every release, then recompile. If your changes could be
 useful for someone else, and you are getting tired of updating them to keep up
 with our changing code base, consider submitting them as a pull request, so we
@@ -1068,7 +1100,7 @@ Summary configuration
 <ul>
 <li>database loader binaries hgLoadBed, hgLoadWiggle and wigEncode are
 installed in /cgi-bin/loader/ - these are installed via the normal
-&#39;make cgi&#39; in the source tree kent/src/hg/ directory.</li>
+ in the source tree kent/src/hg/ directory.</li>
 <li>an empty customTrash database has been created on the MySQL host -
 create this manually once, the MySQL host name is a configuration
 item, the database name customTrash is not a configuration item</li>
@@ -1094,7 +1126,7 @@ host that usually serves up the assembly databases or the hgcentral
 database. It is not required that the custom track database be on a
 separate MySQL server. The specification of the host machine is placed
 in the /cgi-bin/hg.conf file, for example a host machine called
-&quot;ctdbhost&quot;:
+:
 </p>
 
 <p>
@@ -1115,10 +1147,10 @@ The following items must be specified in /cgi-bin/hg.conf to enable this
 function:
 </p>
 
-<pre><code>customTracks.host=ctdbhost
-customTracks.user=ctdbuser
-customTracks.password=ctdbpasswd
-customTracks.useAll=yes</code></pre>
+<pre><code> customTracks.host=ctdbhost
+ customTracks.user=ctdbuser
+ customTracks.password=ctdbpasswd
+ customTracks.useAll=yes</code></pre>
 
 <p>
 Establish this user account and password in MySQL with db and user
@@ -1130,16 +1162,16 @@ Select, Insert, Update, Delete, Create, Drop, Alter, Index
 for example with your MySQL root user account:
 </p>
 
-<pre><code>hgsql -hctdbhost -uroot -p -e \
-    &quot;GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX&quot; \
-    on customTrash.* TO ctdbuser@yourWebHost IDENTIFIED by &#39;ctdbpasswd&#39;;&quot; mysql</code></pre>
+<pre><code> hgsql -hctdbhost -uroot -p -e \
+     &quot;GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX&quot; \
+     on customTrash.* TO ctdbuser@yourWebHost IDENTIFIED by &#39;ctdbpasswd&#39;;&quot; mysql</code></pre>
 
 <p>
 Optionally, a temporary read-write directory used during database
 loading can be specified:
 </p>
 
-<pre><code>customTracks.tmpdir=/data/tmp</code></pre>
+<pre><code> customTracks.tmpdir=/data/tmp</code></pre>
 
 <p>
 The default for this is /data/tmp and should be created with
@@ -1153,10 +1185,10 @@ Database loaders:
 <p>
 The database loaders used to load custom tracks are the standard loader
 commands found in the source tree, hgLoadBed, hgLoadWiggle and
-wigEncode. They are installed into /cgi-bin/loader/ with a &#39;make cgi&#39;
+wigEncode. They are installed into /cgi-bin/loader/ with a 
 from the source tree directory kent/src/hg/ These loaders are used by
 the cgi binaries hgCustom, hgTracks, and hgTables to load custom tracks
-into the database. They are operated in an exec&#39;d pipeline fashion, the
+into the database. They are operated in an exec’d pipeline fashion, the
 code details can be see in src/hg/lib/customFactory.c
 </p></li>
 <li><p>
@@ -1172,16 +1204,16 @@ of your normal .hg.conf file but with a different host/username/password
 specified:
 </p>
 
-<pre><code>db.host=ctdbhost
-db.user=ctdbuser
-db.password=ctdbpasswd
-central.db=hgcentral</code></pre>
+<pre><code> db.host=ctdbhost
+ db.user=ctdbuser
+ db.password=ctdbpasswd
+ central.db=hgcentral</code></pre>
 
 <p>
 Remember to set the privileges on this hg.conf file at 600:
 </p>
 
-<pre><code>chmod 600 $HOME/.ct.hg.conf</code></pre>
+<pre><code> chmod 600 $HOME/.ct.hg.conf</code></pre>
 
 <p>
 To enable the use of this file for subsequent command line operations,
@@ -1189,14 +1221,14 @@ set the environment variable HGDB_CONF to point to this file, for
 example in the bash shell:
 </p>
 
-<pre><code>export HGDB_CONF=$HOME/.ct.hg.conf</code></pre>
+<pre><code> export HGDB_CONF=$HOME/.ct.hg.conf</code></pre>
 
 <p>
 With that in place, you can examine the contents of the customTrash
 database:
 </p>
 
-<pre><code>hgsql -e &quot;show tables;&quot; customTrash</code></pre>
+<pre><code> hgsql -e &quot;show tables;&quot; customTrash</code></pre>
 
 <p>
 This unique hg.conf file will also be used by the cleaner command
@@ -1218,7 +1250,7 @@ their temporary files from /data/tmp This /data/tmp directory can be
 kept clean with, for example, an hourly cron job that performs:
 </p>
 
-<pre><code>find /data/tmp -type f -amin +10 -exec rm -f {} \;</code></pre>
+<pre><code> find /data/tmp -type f -amin +10 -exec rm -f {} \;</code></pre>
 
 <p>
 This would remove any file not accessed in the past 10 minutes.
@@ -1231,18 +1263,18 @@ record of items cleaned to enable later analysis of custom track
 database usage statistics:
 </p>
 
-<pre><code>#!/bin/sh
+<pre><code> #!/bin/sh
 
-DS=`date &quot;+%Y-%m-%d&quot;`
-YYYY=`date &quot;+%Y&quot;`
-MM=`date &quot;+%m&quot;`
-export DS YYYY MM
+ DS=`date &quot;+%Y-%m-%d&quot;`
+ YYYY=`date &quot;+%Y&quot;`
+ MM=`date &quot;+%m&quot;`
+ export DS YYYY MM
 
-mkdir -p /data/trashLog/ctdbhost/${YYYY}/${MM}
-RESULT=&quot;/data/trashLog/ctdbhost/${YYYY}/${MM}/${DS}.txt&quot;
-export RESULT
+ mkdir -p /data/trashLog/ctdbhost/${YYYY}/${MM}
+ RESULT=&quot;/data/trashLog/ctdbhost/${YYYY}/${MM}/${DS}.txt&quot;
+ export RESULT
 
-/cluster/bin/x86_64/dbTrash -age=48 -drop -verbose=2 &gt; ${RESULT} 2&gt;&amp;1</code></pre>
+ /cluster/bin/x86_64/dbTrash -age=48 -drop -verbose=2 &gt; ${RESULT} 2&gt;&amp;1</code></pre>
 
 <p>
 Running this once a day will remove any tables not accessed within the
@@ -1256,10 +1288,10 @@ one to implement an 8 hour expiration time on most files, the second to
 implement a 48 hour expiration time on custom track files:
 </p>
 
-<pre><code>find /trash \! \( -regex &quot;/trash/ct/.*&quot; -or -regex &quot;/trash/hgSs/.*&quot; \) \
-    -type f -amin +480 -exec rm -f {} \;
-find /trash \( -regex &quot;/trash/ct/.*&quot; -or -regex &quot;/trash/hgSs/.*&quot; \) \
-    -type f -amin +2880 -exec rm -f {} \;</code></pre></li>
+<pre><code> find /trash \! \( -regex &quot;/trash/ct/.*&quot; -or -regex &quot;/trash/hgSs/.*&quot; \) \
+     -type f -amin +480 -exec rm -f {} \;
+ find /trash \( -regex &quot;/trash/ct/.*&quot; -or -regex &quot;/trash/hgSs/.*&quot; \) \
+     -type f -amin +2880 -exec rm -f {} \;</code></pre></li>
 <li><p>
 metaInfo and history
 </p>
@@ -1286,7 +1318,7 @@ files, at the time of adding the configuration items to
 versions upon their next use by the user. Therefore, to enable this
 function on the round-robin WEB servers, we will need to do the update
 to /cgi-bin/hg.conf in as much a simultaneous manner as possible.
-Perhaps something like a shell script to do eight background rsync&#39;s all
+Perhaps something like a shell script to do eight background rsync’s all
 at the same time.
 </p></li>
 <li><p>
@@ -1357,7 +1389,7 @@ for example hgTracks:
 <pre><code>kent/src/hg/hgTracks</code></pre>
 
 <p>
-In this directory, run a &#39;make compile&#39; to produce a binary that
+In this directory, run a  to produce a binary that
 is left in this directory. This binary can be run from the command
 line:
 </p>
@@ -1383,10 +1415,10 @@ that a CGI binary would normally see.
 <p>
 To prepare the binaries for operation under a debugger, go to
 the src/inc directory and edit the common.mk configuration file.
-Change &quot;COPT=-O&quot; to read: &quot;COPT=-g&quot;
-GNU gcc will allow &quot;-O&quot; with &quot;-g&quot;, and some bugs will only exhibit
+Change  to read: 
+GNU gcc will allow  with , and some bugs will only exhibit
 themselves with -O on. However the optimizations with -O can
-sometimes confuse the debugger&#39;s sense of location due to
+sometimes confuse the debugger’s sense of location due to
 optimization rearrangement of code.
 Also eliminate the -Wuninitialized option from the HG_WARN definition
 to avoid constant warnings about that being incompatible with -g.
@@ -1404,7 +1436,7 @@ make compile</code></pre>
 
 <p>
 The hgTracks binary will now have all symbol information in it and
-it can be operated under a debugger such as ddd (or gdb, etc...).
+it can be operated under a debugger such as ddd (or gdb, etc…).
 </p>
 
 <p>
@@ -1418,7 +1450,7 @@ http://<code>html</code>/cgi-bin/cartDump
 <p>
 This will display all environment variables in effect at the time
 of the crash. Most of the track display options that are marked
-as &quot;hide&quot; can be ignored. That is their default setting already.
+as  can be ignored. That is their default setting already.
 The important ones are the db, position, and specific options for
 the track under consideration. The command line can be formatted
 just as if it was a URL string. For example:
@@ -1468,13 +1500,12 @@ hPrintf(&quot;
 
 
 <p>
-<code>tex</code>&quot;,
-getScriptName(), cartUsualString(cart, &quot;formMethod&quot;, &quot;POST&quot;));
+<code>tex</code>formMethodPOST&quot;));
 </p>
 
 <p>
 If you add &amp;formMethod=GET and a subsequently fetched form is still
-posting, you might need to alter the &quot;&lt;FORM...&quot; statement to use the
+posting, you might need to alter the  statement to use the
 cartUsualString.
 </p>
 
@@ -1485,7 +1516,7 @@ FireFox, so after debugging hgTables, you will probably want to add
 </p>
 
 <p>
-One thing that does not work with GET is &quot;upload file&quot; inputs.
+One thing that does not work with GET is  inputs.
 </p>
 
 <a name='local-git-repository'></a>
@@ -1532,9 +1563,9 @@ the browser. To create a beta tracking branch:
 git checkout -t -b beta origin/beta</code></pre>
 
 <p>
-The -b creates a local branch with name &quot;beta&quot;, and checks it out.
-The -t makes it a tracking branch, so that &#39;git pull&#39; brings in updates from
-origin/beta, the &quot;real&quot; beta branch in our public central read-only repository.
+The -b creates a local branch with name , and checks it out.
+The -t makes it a tracking branch, so that  brings in updates from
+origin/beta, the  beta branch in our public central read-only repository.
 </p>
 
 <p>
@@ -1568,7 +1599,7 @@ bigWig or bigBed data via custom track bigDataUrl.
 </p>
 
 <p>
-One must add the setting &quot;httpProxy&quot;, &quot;httpsProxy&quot;, &quot;ftpProxy&quot; to hg.conf
+One must add the setting , ,  to hg.conf
 </p>
 
 <p>
@@ -1589,7 +1620,7 @@ httpsProxy=http://user:password@someProxyServer:3128
 <p>
 where user and password may need URL-encoding
 if they contain special characters such as
-&quot;:&quot; and &quot;@&quot;.
+ and .
 </p>
 
 <p>
@@ -1647,8 +1678,8 @@ Built from track specifications in your trackDb.ra file.
 Please note the description of trackDb.ra entries in the
 source tree: src/hg/makeDb/trackDb/README
 The correspondence between the database table and the trackDb.ra
-definition is in the name used on the &#39;track&#39; line in the
-trackDb.ra file. Your database table name is used on the &#39;track&#39;
+definition is in the name used on the  line in the
+trackDb.ra file. Your database table name is used on the 
 definition line.</li>
 </ol>
 
@@ -1692,7 +1723,7 @@ hundreds of utilities, 345 at last count, that are not needed
 for ordinary browser development. In most cases a developer will
 need only a couple of the loaders and utilities. Since the libraries
 were built for the CGI binaries, to build any utility or
-loader, simply go into its directory and run a &#39;make&#39;
+loader, simply go into its directory and run a 
 </p>
 
 <p>
@@ -1714,7 +1745,7 @@ src/hg/makeDb/hgFindSpec/
 src/hg/makeDb/hgLoadBed/</code></pre>
 
 <p>
-And run a &#39;make&#39; in each one. The resulting binary is placed
+And run a  in each one. The resulting binary is placed
 in: \(HOME/bin/\)MACHTYPE
 This binary directory should be in your PATH, or make this directory
 be a symlink to some binary directory that is in your PATH
@@ -1760,10 +1791,10 @@ This loads your local specific table trackDb_localTracks in the database.
 This name trackDb_localTracks is not special, just different than
 the ordinary trackDb table. It should have some meaning to anyone
 in your environment and not be the same name as any UCSC database
-table. The two &#39;.&#39; arguments in the command above refer
+table. The two  arguments in the command above refer
 to directory names. Since you have no hierarchy of levels in this
 single directory, unlike in the source tree trackDb hierarchy, the
-&#39;.&#39; arguments refer to the current directory.
+ arguments refer to the current directory.
 </p>
 
 <p>
@@ -1794,7 +1825,7 @@ Older instructions about building the source tree remain valid:
 
 <p>
 If you really do want to build all the utilities and all database
-loaders, perform the following &#39;make&#39; commands in your source tree:
+loaders, perform the following  commands in your source tree:
 </p>
 
 <pre><code>cd src
@@ -1808,7 +1839,7 @@ make</code></pre>
 <p>
 This builds everything cleanly, all CGI binaries, all database
 loaders, all utilities. Perform this sequence each time you
-do a &#39;git pull&#39; on your source tree. The &#39;make clean&#39; step
+do a  on your source tree. The  step
 is especially important since the makefile hierarchy does not
 have built in dependencies and will not rebuild items that
 depend upon each other. The traditional dependency on the
@@ -1865,7 +1896,7 @@ On some systems this directory is called cgi-bin/.
 <p>
 The UCSC Genome Browser is capable of displaying tracks from both the BAM and
 CRAM file formats. While BAM tracks provide all of the required data within
-the file, however, CRAM tracks depend on external &quot;reference sequence&quot; files
+the file, however, CRAM tracks depend on external  files
 (see http://www.ebi.ac.uk/ena/software/cram-toolkit for more information about
 the CRAM format). A bit of information on how the Browser works with these
 files is included below. For installation instructions, skip to the numbered
@@ -1907,8 +1938,8 @@ Add the hg.conf setting cramRef. The value should be the path (relative
 or absolute) to a directory where CRAM reference sequences are stored.
 </p></li>
 <li><p>
-Inside the cramRef directory create subdirectories called &quot;pending&quot; and
-&quot;error&quot;. The apache user must have read/write permissions for the pending/
+Inside the cramRef directory create subdirectories called  and
+. The apache user must have read/write permissions for the pending/
 directory, and at least read permissions for the cramRef/ and error/
 directories.<br/>If you plan to manually load all CRAM reference sequences for your tracks into
 the cramRef directory, track support is now complete. If you prefer to
