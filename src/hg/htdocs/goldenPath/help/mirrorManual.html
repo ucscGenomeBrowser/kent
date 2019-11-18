@@ -35,7 +35,7 @@ The genome browser requires only Apache and MySQL and uses these directories:
 <ul>
 <li>static html files: we typically keep them under /usr/local/apache/htdocs and
 configure Apache to load them from there, to avoid conflicts with the
-Linux distribution’s default location /var/www/html</li>
+Linux distribution's default location /var/www/html</li>
 <li>MySQL databases: most of them are read-only, except the <code>hgcentral</code> database
 which is read-write. Most linux distributions keep these under /var/lib/mysql</li>
 <li>static genome data files in /gbdb/</li>
@@ -60,9 +60,9 @@ When a web browser requests a Genome Browser page, typically /cgi-bin/hgTracks,
 Apache executes this CGI program. The programs then read information about how to
 connect to MySQL using the file hg.conf, connects to MySQL, reads the
 installed genome assemblies and the current user session from the MySQL database
-hgcentral. For each genome assembly, there is a separate MySQL database (e.g. 
-hg38). Some types of data (e.g. raw genome sequences) are kept as indexed
-binary files outside of MySQL, they are located in /gbdb, e.g. /gbdb/hg38. The
+hgcentral. For each genome assembly, there is a separate MySQL database (e.g. hg38). Some types of
+data (e.g. raw genome sequences) are kept as indexed
+binary files outside of MySQL, they are located in /gbdb, e.g. /gbdb/hg38. The
 location of the /gbdb directory can be changed with a setting in hg.conf. Some
 types of data are not specific for a genome, these are kept in the MySQL
 databases hgFixed, proteome and visiGene.
