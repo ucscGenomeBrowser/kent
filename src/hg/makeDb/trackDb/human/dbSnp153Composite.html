@@ -347,11 +347,29 @@ and others may indicate an anomaly or problem with the variant data:
       they probably should have been merged into one variant.</td>
   </tr>
   <tr>
+    <td>freqIncomplete</td>
+    <td class="number">3922</td>
+    <td class="number">4673</td>
+    <td>At least one project reported counts for only one allele which implies that at
+      least one allele is missing from the report;
+      that project's frequency data are ignored.</td>
+  </tr>
+  <tr>
     <td>freqIsAmbiguous</td>
     <td class="number">7656</td>
     <td class="number">7756</td>
     <td>At least one allele reported by at least one project that reports frequencies
       contains an IUPAC ambiguous base.</td>
+  </tr>
+  <tr>
+    <td>freqNotMapped</td>
+    <td class="number">2685</td>
+    <td class="number">6590</td>
+    <td>At least one project reported allele frequencies relative to a different assembly;
+      However, dbSNP does not include a mapping of this variant to that assembly, which
+      implies a problem with mapping the variant across assemblies.  The mapping on this
+      assembly may have an issue; evaluate carefully vs. original submissions, which you
+      can view by clicking through to dbSNP above.</td>
   </tr>
   <tr>
     <td>freqNotRefAlt</td>
@@ -376,6 +394,7 @@ and others may indicate an anomaly or problem with the variant data:
       having legal coordinates, there may still be an issue with this mapping's
       coordinates and alleles; you may want to click through to dbSNP to compare
       the initial submission's coordinates and alleles.
+      In hg19, 55453 distinct rs IDs are affected; in hg38, 86636.
   </tr>
 </table>
 
