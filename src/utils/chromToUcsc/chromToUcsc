@@ -117,12 +117,12 @@ def main():
     inFname = options.inFname
     outFname = options.outFname
 
+    if options.doDownload:
+        download(db)
+
     if aliasFname is None:
         logging.error("You need to provide an alias table with the -a option")
         exit(1)
-
-    if options.doDownload:
-        download(db)
 
     if inFname is None:
         ifh = stdin

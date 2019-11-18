@@ -13,4 +13,4 @@ clean::
 	rm -f ${O} ${MACHTYPE}/cdwlib.a
 
 cdwWebBrowse::
-	make && cd ../cdwWebBrowse && make && cd ../lib
+	${MAKE} && cd ../cdwWebBrowse && ${MAKE} && cd ../lib
