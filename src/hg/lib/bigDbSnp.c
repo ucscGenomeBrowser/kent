@@ -331,9 +331,14 @@ struct symbolDesc ucscNotesDesc[] =
     { bdsDiffMajor,
       "Different frequency sources have different major alleles "
       "(see table of allele frequencies above)." },
+    { bdsFreqIncomplete,
+      "At least one project's frequency data is incomplete (only one allele reported)." },
     { bdsFreqIsAmbiguous,
       "At least one allele reported by at least one project "
       "contains an IUPAC ambiguous base (e.g. 'R' for 'A or G')." },
+    { bdsFreqNotMapped,
+      "At least one project reported frequencies on a different assembly, for which dbSNP does not "
+      "provide a mapping.  The mapping on this assembly may have an issue." },
     { bdsFreqNotRefAlt,
       "The reference genome allele is not the major allele in at least one project." },
     { bdsMultiMap,
