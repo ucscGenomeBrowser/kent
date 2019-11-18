@@ -1650,7 +1650,9 @@ priority 0.8
         commonAll|MAF >= 1% in all projects that report frequencies,\
         commonSome|MAF >= 1% in at least one project that reports frequencies,\
         diffMajor|Different projects report different major alleles,\
+        freqIncomplete|Frequency reported with incomplete allele data,\
         freqIsAmbiguous|Frequency reported for allele with IUPAC ambiguous base(s),\
+        freqNotMapped|Frequency reported on different assembly but not mapped by dbSNP,\
         freqNotRefAlt|Reference genome allele is not major allele in at least one project,\
         multiMap|Variant is placed in more than one genomic position,\
         otherMapErr|Another mapping of this variant has illegal coords (indel mapping error?),\

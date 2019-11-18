@@ -199,7 +199,7 @@
 
 
 ##############################################################################
-# dbSnp153: dbSNP build 153 (DONE 11/8/19 angie)
+# dbSnp153: dbSNP build 153 (DONE 11/18/19 angie)
 
     topDir=/hive/data/outside/dbSNP/153
     mkdir -p $topDir/json
@@ -333,12 +333,13 @@
     # 11/4/19: and again after finding that refIsMinor & diffMajor could be appended multiple times
     # 11/7/19: and again after finding that some cases of freqNotRefAlt are VCF normalization probs
     # 11/8/19: and again after adding badCoords.bed and warnings output files
+    # 11/15/19: and again after adding ucscNotes freqIncomplete, freqNotMapped
     topDir=/hive/data/outside/dbSNP/153
     freqSourceOrder=1000Genomes,GnomAD_exomes,TOPMED,ExAC,PAGE_STUDY,GnomAD,GoESP,Estonian,ALSPAC,TWINSUK,NorthernSweden,Vietnamese
     # Run doBigDbSnp.pl (first with -debug to make runDir):
     $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 153 $freqSourceOrder -debug
-# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-08
-    cd /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-08
+# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-15
+    cd /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-15
     # Link to ../bigDbSnp.2019-08-07/split, -continue convert to avoid re-splitting (the slowest part of the process):
     rmdir split
     ln -s ../bigDbSnp.2019-08-07/split split
@@ -346,15 +347,8 @@
       -buildDir=`pwd` -continue convert -stop install \
       >& do.log &
     tail -f do.log
-# *** All done !  (through the 'install' step)  Elapsed time: 504m48s
-# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-08
-
-    # 11/12/19: Add new ucscNote otherMapErr by re-running from check onward.
-    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 153 $freqSourceOrder \
-      -buildDir=`pwd` -continue check -stop install \
-      >& check.log &
-    tail -f check.log
-# *** All done !  (through the 'install' step)  Elapsed time: 172m35s
+# *** All done !  (through the 'install' step)  Elapsed time: 545m26s
+# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-15
 
     # count up how many variants have freq counts for each project
     cut -f 4 dbSnp153Details.tab \
@@ -387,59 +381,71 @@
 
     # count up how many instances of each type of ucscNote:
     time cut -f 15 hg19.dbSnp153.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
-#    10754 altIsAmbiguous
-#     5995 classMismatch
-#   454674 clinvar
-#   143860 clinvarBenign
+#    10755 altIsAmbiguous
+#     5998 classMismatch
+#   454678 clinvar
+#   143864 clinvarBenign
 #     7932 clinvarConflicting
 #    96242 clinvarPathogenic
-#   114685 clusterError
-# 12184226 commonAll
-# 20540882 commonSome
-#  1377817 diffMajor
+#   114686 clusterError
+# 12184520 commonAll
+# 20541189 commonSome
+#  1377831 diffMajor
+#     3922 freqIncomplete
 #     7656 freqIsAmbiguous
-#    17684 freqNotRefAlt
-#   562157 multiMap
-#   113416 otherMapErr
-#107003090 overlapDiffClass
-# 16910407 overlapSameClass
-#662595470 rareAll
-#670952126 rareSome
+#     2685 freqNotMapped
+#    17693 freqNotRefAlt
+#   562180 multiMap
+#   114094 otherMapErr
+#107015340 overlapDiffClass
+# 16915237 overlapSameClass
+#662601770 rareAll
+#670958439 rareSome
 #      101 refIsAmbiguous
-#  3271878 refIsMinor
-#   136452 refIsRare
-#    37783 refIsSingleton
+#  3272115 refIsMinor
+#   136546 refIsRare
+#    37831 refIsSingleton
 #        4 refMismatch
-#  3813467 revStrand
+#  3813702 revStrand
+#real    34m57.796s
+#user    47m49.283s
+#sys     4m29.442s
+
     # Check count of rs's with at least one bad mapping:
     grep otherMapErr hg19.dbSnp153.checked.bigDbSnp | cut -f 4 | sort -u | wc -l
-#54871
+#55453
 
     time cut -f 15 hg38.dbSnp153.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
-#  10880 altIsAmbiguous
-#   6206 classMismatch
-# 453990 clinvar
-# 143730 clinvarBenign
-#   7950 clinvarConflicting
-#  95262 clinvarPathogenic
-# 128109 clusterError
-#12438325 commonAll
-#20902602 commonSome
-#1399094 diffMajor
-#   7756 freqIsAmbiguous
-#  32150 freqNotRefAlt
-# 132051 multiMap
-# 203580 otherMapErr
-#109991096 overlapDiffClass
-#17281744 overlapSameClass
-#681685476 rareAll
-#690149753 rareSome
-#    111 refIsAmbiguous
-#3360159 refIsMinor
-# 160723 refIsRare
-#  50865 refIsSingleton
-#     33 refMismatch
-#4532270 revStrand
+#    10888 altIsAmbiguous
+#     6216 classMismatch
+#   453996 clinvar
+#   143736 clinvarBenign
+#     7950 clinvarConflicting
+#    95262 clinvarPathogenic
+#   128306 clusterError
+# 12438654 commonAll
+# 20902943 commonSome
+#  1399109 diffMajor
+#     4673 freqIncomplete
+#     7756 freqIsAmbiguous
+#     6590 freqNotMapped
+#    32169 freqNotRefAlt
+#   132123 multiMap
+#   204219 otherMapErr
+#110007681 overlapDiffClass
+# 17291287 overlapSameClass
+#681696398 rareAll
+#690160687 rareSome
+#      111 refIsAmbiguous
+#  3360434 refIsMinor
+#   160826 refIsRare
+#    50926 refIsSingleton
+#       33 refMismatch
+#  4532511 revStrand
+#real    36m36.972s
+#user    49m41.817s
+#sys     4m43.806s
+
     # Check count of rs's with at least one bad mapping:
     grep otherMapErr hg38.dbSnp153.checked.bigDbSnp | cut -f 4 | sort -u | wc -l
 #86258
