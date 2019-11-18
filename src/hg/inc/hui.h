@@ -153,7 +153,9 @@ char *hTrackUiForTrack(char *trackName);
 #define SUBTRACK_COLOR_SUBGROUP "subtrackColor"
 
 // trackDb setting and cart/cgi var
-#define SUBTRACK_HIDE_EMPTIES   "hideEmptySubtracks"
+#define SUBTRACK_HIDE_EMPTY       "hideEmptySubtracks"
+// trackDb setting
+#define SUBTRACK_HIDE_EMPTY_LABEL "hideEmptySubtracksLabel"
 
 void netUi(struct trackDb *tdb);
 
@@ -977,12 +979,18 @@ char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct tra
 /* If the parentTdb has an ENCODE controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to display it.  Return string is cloned. */
 
+
 boolean compositeHideEmptySubtracks(struct cart *cart, struct trackDb *tdb,
-                                        char **retMutiBedFile, char **retSubtrackIdFile);
+                                        char **retMultiBedFile, char **retSubtrackIdFile);
 /* Parse hideEmptySubtracks setting and check cart
  * Return TRUE if we should hide empties
  */
 
+boolean compositeChildHideEmptySubtracks(struct cart *cart, struct trackDb *childTdb,
+                                        char **retMultiBedFile, char **retSubtrackIdFile);
+/* Parse hideEmptySubtracks setting and check cart
+ * Return TRUE if we should hide empties
+ */
 
 char *wgEncodeVocabLink(char *file,char *term,char *value,char *title, char *label,char *suffix);
 // returns allocated string of HTML link to ENCODE controlled vocabulary term
@@ -1510,8 +1518,10 @@ void printDataVersion(char *database, struct trackDb *tdb);
 /* If this annotation has a dataVersion setting, print it.
  * check hgFixed.trackVersion, meta data and trackDb 'dataVersion'. */
 
-char *extractFieldName(char *cartVariable, char *filterType);
-/* Extract field name from a filter cart variable.  Variables can either be
- * <columnName>Filter* or <columnName>.Filter* */
+void labelMakeCheckBox(struct cart *cart, struct trackDb *tdb, char *sym, char *desc,
+                       boolean defaultOn);
+/* add a checkbox for the user to select a component of a label (e.g. ID, name, other info).
+ * NOTE: This does not have a track name argument, so the correct tdb must be passed in:
+ * if setting is at composite level, then pass in composite tdb, likewise for view. */
 
 #endif /* HUI_H */

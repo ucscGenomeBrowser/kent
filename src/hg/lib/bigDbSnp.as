@@ -1,0 +1,21 @@
+table bigDbSnp
+"Variant summary data extracted from dbSNP, 2019 and later"
+    (
+    string   chrom;            "Reference sequence chromosome or scaffold"
+    uint     chromStart;       "Start position in chrom"
+    uint     chromEnd;         "End position in chrom"
+    string   name;             "dbSNP Reference SNP (rs) identifier"
+    lstring  ref;              "Reference allele; usually major allele, but may be minor allele"
+    int      altCount;         "Number of alternate alleles (usually 1)"
+    lstring[altCount]  alts;   "Alternate (non-reference) alleles; may include major allele"
+    uint     shiftBases;       "Bases by which an indel placement could be shifted left or right (display shows thin line over uncertain region, shifts minimal representation right)"
+    int      freqSourceCount;  "Number of projects reporting frequencies in current dbSNP build"
+    double[freqSourceCount] minorAlleleFreq;  "Minor allele frequency, i.e. second highest allele frequency, from each frequency source; NaN if no data from project"
+    lstring[freqSourceCount] majorAllele;     "Allele most frequently observed by each source"
+    lstring[freqSourceCount] minorAllele;     "Allele second most frequently observed by each source"
+    uint     maxFuncImpact;    "Sequence Ontology (SO) ID number for greatest functional impact on gene; 0 if no SO terms are annotated"
+    enum(snv, mnv, ins, del, delins, identity) class;  "Variation class/type"
+    lstring  ucscNotes;        "Interesting or anomalous properties noted by UCSC"
+    bigint _dataOffset;        "Offset into bigDbSnpDetails file for line with more info"
+    int _dataLen;              "Length of line in bigDbSnpDetails"
+    )

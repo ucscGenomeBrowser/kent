@@ -205,12 +205,10 @@ else if (sameWord(name, "_crisprOfftargets"))
     extFieldCrisprOfftargets(val, extraFields);
 }
 
-static void seekAndPrintTable(char *url, off_t offset, struct slPair *extraFields)
+static void seekAndPrintTable(char *detailsUrl, off_t offset, struct slPair *extraFields)
 /* seek to 0 at url, get headers, then seek to offset, read tab-sep fields and output 
  * (extraFields are needed for some special field handlers) */
 {
-char *detailsUrl = hReplaceGbdb(replaceChars(url, "$db", database));
-
 // open the URL
 struct lineFile *lf = lineFileUdcMayOpen(detailsUrl, TRUE);
 if (lf==NULL)
@@ -270,7 +268,28 @@ for (i=0; i<fieldCount; i++)
 printf("</table>\n");
 
 lineFileClose(&lf);
-freez(&detailsUrl);
+}
+
+struct slPair *parseDetailsTablUrls(struct trackDb *tdb)
+/* Parse detailsTabUrls setting string into an slPair list of {offset column name, fileOrUrl} */
+{
+char *detailsUrlsStr = trackDbSetting(tdb, "detailsTabUrls");
+if (!detailsUrlsStr)
+    return NULL;
+
+struct slPair *detailsUrls = slPairListFromString(detailsUrlsStr, TRUE);
+if (!detailsUrls)
+    {
+    printf("Problem when parsing trackDb setting detailsTabUrls<br>\n");
+    printf("Expected: a space-separated key=val list, like 'fieldName1=URL1 fieldName2=URL2'<br>\n");
+    printf("But got: '%s'<br>", detailsUrlsStr);
+    return NULL;
+    }
+struct slPair *pair;
+for (pair = detailsUrls;  pair != NULL;  pair = pair->next)
+    pair->val = hReplaceGbdb(replaceChars(pair->val, "$db", database));
+
+return detailsUrls;
 }
 
 static void printAllExternalExtraFields(struct trackDb *tdb, struct slPair *extraFields)
@@ -279,20 +298,7 @@ static void printAllExternalExtraFields(struct trackDb *tdb, struct slPair *extr
  * from the external tab-sep file */
 
 {
-char *detailsUrlsStr = trackDbSetting(tdb, "detailsTabUrls");
-if (!detailsUrlsStr)
-    return;
-
-struct slPair *detailsUrls = slPairListFromString(detailsUrlsStr, TRUE);
-if (!detailsUrls)
-    {
-    printf("Problem when parsing trackDb setting detailsTabUrls<br>\n");
-    printf("Expected: a space-separated key=val list, like 'fieldName1=URL1 fieldName2=URL2'<br>\n");
-    printf("But got: '%s'<br>", detailsUrlsStr);
-    return;
-    }
-
-struct slPair *pair;
+struct slPair *detailsUrls = parseDetailsTablUrls(tdb), *pair;
 for (pair = detailsUrls; pair != NULL; pair = pair->next)
     {
     char *fieldName = pair->name;

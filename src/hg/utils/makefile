@@ -23,6 +23,7 @@ UTILS_APPLIST = \
 	bedToPsl \
 	bedWeedOverlapping \
 	bedMergeAdjacent \
+	bedPartition \
 	bigMafToMaf \
 	bigPslToPsl \
 	binFromRange \
@@ -37,6 +38,7 @@ UTILS_APPLIST = \
 	gff3ToGenePred \
 	gff3ToPsl \
 	gtfToGenePred \
+	hicInfo \
 	hgvsToVcf \
 	hubCheck \
 	hubClone \
@@ -87,6 +89,7 @@ DIRS = ${buildRefresh} \
 
 TEST_DIRS = \
 	bedMergeAdjacent \
+	bedPartition \
 	genePredFilter \
 	genePredToProt \
 	gff3ToGenePred \

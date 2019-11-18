@@ -805,7 +805,7 @@ switch (vis)
 	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight)+1, TRUE, FALSE, vis);
         if (tdbIsCompositeChild(tg->tdb))
             {
-            boolean doHideEmpties = compositeHideEmptySubtracks(cart, tg->tdb->parent, NULL, NULL);
+            boolean doHideEmpties = compositeChildHideEmptySubtracks(cart, tg->tdb, NULL, NULL);
             if (isCenterLabelsPackOff(tg) && !doHideEmpties)
                 if (rows == 0)
                     rows = 1;   // compact pack mode, shows just side label
@@ -1530,21 +1530,25 @@ spreadAlignString(hvg, x, y, width, height, color, font, s,
 
 boolean scaledBoxToPixelCoords(int chromStart, int chromEnd, double scale, int xOff, int *pX1, int *pX2)
 /* Convert chrom coordinates to pixels. Clip to window to prevent integer overflow.
- * For special case of a SNP insert location with width==0, set width=1.
+ * For special case of a SNP insert location with item width==0, set pixel width=1 and include
+ * insertions at window boundaries.
  * Returns FALSE if it does not intersect the window, or if it would have a negative width. */
 {
+// Treat 0-length insertions a little differently: include insertions at boundary of window
+// and make them 1 pixel wide.
+boolean isIns = (chromStart == chromEnd);
 if (chromEnd < chromStart) // Invalid coordinates
     return FALSE;  // Ignore.
-if (chromStart == chromEnd) // SNP insert position
-    ++chromEnd; // set width to 1
-if (chromStart >= winEnd || winStart >= chromEnd)  // overlaps window?
+if (chromStart > winEnd || winStart > chromEnd ||
+    (!isIns && chromStart == winEnd) ||
+    (!isIns && chromEnd == winStart))  // doesn't overlap window?
     return FALSE; // nothing to do
 if (chromStart < winStart) // clip to part overlapping window
     chromStart = winStart;
 if (chromEnd > winEnd)     // which prevents x1,x2 from overflowing when zooming-in makes scale large.
     chromEnd = winEnd;
 *pX1 = round((double)(chromStart-winStart)*scale) + xOff;
-*pX2 = round((double)(chromEnd-winStart)*scale) + xOff;
+*pX2 = isIns ? (*pX1 + 1) : round((double)(chromEnd-winStart)*scale) + xOff;
 return TRUE;
 }
 
@@ -14027,6 +14031,12 @@ else if (sameWord(type, "bigGenePred"))
     wordCount++;
     words[1] = "12";
     bigBedMethods(track, tdb, wordCount, words);
+    }
+else if (sameWord(type, "bigDbSnp"))
+    {
+    tdb->canPack = TRUE;
+    track->isBigBed = TRUE;
+    bigDbSnpMethods(track);
     }
 else if (sameWord(type, "bedGraph"))
     {

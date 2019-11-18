@@ -104,7 +104,8 @@ UTILS_APPLIST = \
 	twoBitToFa \
 	wigCorrelate \
 	wigToBigWig \
-	wordLine
+	wordLine \
+	chromToUcsc
 
 # list of utilities to build of interest only at UCSC
 

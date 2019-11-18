@@ -37,15 +37,20 @@ if (!sanityCheck)
 return selected;
 }
 
-void hicUiNormalizationMenu(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
-/* Draw a menu to select the normalization method to use. */
+void hicUiNormalizationDropDown(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
 {
 char cartVar[1024];
-printf("<b>Score normalization:</b> ");
 char* selected = hicUiFetchNormalization(cart, tdb, meta);
 char *menu[] = {"NONE", "VC", "VC_SQRT", "KR"};
 safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_NORMALIZATION);
 cgiMakeDropList(cartVar, menu, 4, selected);
+}
+
+void hicUiNormalizationMenu(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
+/* Draw a menu to select the normalization method to use. */
+{
+printf("<b>Score normalization:</b> ");
+hicUiNormalizationDropDown(cart, tdb, meta);
 }
 
 char *hicUiFetchResolution(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
@@ -70,36 +75,41 @@ return selected;
 int hicUiFetchResolutionAsInt(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta, int windowSize)
 /* Return the current resolution selection as an integer.  If there is no selection, or if "Auto"
  * has been selected, return the largest available value that still partitions the window into at
- * least 5000 bins. */
+ * least 500 bins. */
 {
 char *resolutionString = hicUiFetchResolution(cart, tdb, meta);
 int result;
-if (sameString(resolutionString, "Auto"))
+if (sameOk(resolutionString, "Auto"))
     {
-    int idealRes = windowSize/5000;
-    char *autoRes = meta->resolutions[meta->nRes-1];
-    int i;
+    int idealRes = windowSize/500;
+    int autoRes = atoi(meta->resolutions[meta->nRes-1]);
+    int smallestRes = autoRes; // in case the ideal resolution is smaller than anything available
+    int i, success = 0;
     for (i=meta->nRes-1; i>= 0; i--)
         {
-        if (atoi(meta->resolutions[i]) < idealRes)
+        int thisRes = atoi(meta->resolutions[i]);
+        if (thisRes < smallestRes)
+            smallestRes = thisRes; // not sure about the sort order of the list
+        if (thisRes < idealRes && thisRes >= autoRes)
             {
-            autoRes = meta->resolutions[i];
-            break;
+            autoRes = thisRes;
+            success = 1;
             }
         }
-    result = atoi(autoRes);
+    if (success)
+        result = autoRes;
+    else
+        result = smallestRes;
     }
 else
     result = atoi(resolutionString);
 return result;
 }
 
-void hicUiResolutionMenu(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
-/* Draw a menu to select which binSize to use for fetching data */
+void hicUiResolutionDropDown(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
 {
 char cartVar[1024];
 char autoscale[10] = "Auto";
-printf("<b>Resolution:</b> ");
 safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_RESOLUTION);
 char **menu = NULL;
 AllocArray(menu, meta->nRes+1);
@@ -118,7 +128,14 @@ for (i=1; i<meta->nRes+1; i++)
     }
 char *selected = hicUiFetchResolution(cart, tdb, meta);
 cgiMakeDropListWithVals(cartVar, menu, values, meta->nRes+1, selected);
-free(menu);
+freeMem(menu);
+}
+
+void hicUiResolutionMenu(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
+/* Draw a menu to select which binSize to use for fetching data */
+{
+printf("<b>Resolution:</b> ");
+hicUiResolutionDropDown(cart, tdb, meta);
 }
 
 
@@ -258,7 +275,7 @@ hicUiAddAutoScaleJS(cart, tdb->track);
 
 void hicUiFileDetails(struct hicMeta *trackMeta)
 {
-int i;//, first = 1;
+int i;
 printf("</p><hr>\nMetadata from file header:<br>\n");
 printf("<div style='margin-left: 2em'>\n");
 printf("<label class='trackUiHicLabel'>Genome: %s\n<br></label>", trackMeta->fileAssembly);
@@ -318,8 +335,6 @@ boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 puts("<p>");
 printf("Items are drawn in shades of the chosen color depending on score - scores above the "
         "chosen maximum are drawn at full intensity.</p><p>\n");
-//hicUiNormalizationMenu(cart, track, trackMeta);
-//puts("&nbsp;&nbsp;");
 hicUiMaxOptionsMenu(cart, tdb, TRUE);
 puts("</p><p>");
 hicUiDrawMenu(cart, tdb);

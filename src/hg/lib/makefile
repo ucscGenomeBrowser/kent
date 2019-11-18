@@ -13,7 +13,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     baseMaskCommon.o bdgpExprLink.o bdgpGeneInfo.o \
     bed.o bed5FloatScore.o bed5Pval.o bed6FloatScore.o  bed8Attrs.o bed12Source.o \
     bed12wSeq.o bedCart.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bigBedFind.o bigBedLabel.o \
-    bigGenePred.o bigPsl.o bigTransMap.o bioImage.o \
+    bigDbSnp.o bigGenePred.o bigPsl.o bigTransMap.o bioImage.o \
     blastTab.o blastzNet.o blatServers.o borf.o borkPseudoHom.o botDelay.o\
     cart.o cartDb.o cartJson.o cartTrackDb.o cdsEvidence.o cdsOrtho.o cdsPick.o cdsSpec.o \
     ccdsInfo.o ccdsNotes.o ccdsGeneMap.o celeraCoverage.o \
@@ -28,7 +28,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o customComposite.o \
     bedDetail.o cgiApoptosis.o customAdjacency.o \
     customFactory.o customPp.o customTrack.o cutter.o cv.o cytoBand.o \
-    dbDb.o dbRIP.o dbSnpRs.o defaultDb.o delConrad2.o delHinds2.o \
+    dbDb.o dbRIP.o dbSnpDetails.o dbSnpRs.o defaultDb.o delConrad2.o delHinds2.o \
     dgv.o dgvPlus.o dless.o dnaMotifSql.o dnaMarkovSql.o dnaProbe.o \
     dv.o dvBed.o dvXref2.o \
     easyGene.o ec.o ecCode.o ecAttribute.o ecAttributeCode.o \

@@ -551,3 +551,5 @@ for db, tableName, tmpFname, finalFname in tmpFnames:
 for db, tableName, tmpFname, finalFname in tmpFnames:
     cmd = "hgBbiDbLink %s %s /gbdb/%s/bbi/clinvar/%s.bb" % (db, tableName, db, tableName)
     mustRun(cmd)
+
+print("ClinVar update end: OK")

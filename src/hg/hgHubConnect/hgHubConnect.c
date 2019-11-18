@@ -169,7 +169,7 @@ for(; genome; genome = genome->next)
     if (charCount == 0 || (charCount+strlen(trimmedName)<=GENLISTWIDTH))
         { 
         if (withLink)
-            dyStringPrintf(dyShortHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s'>%s</a>" , genome->name, hubUrl, genome->name, shortName);
+            dyStringPrintf(dyShortHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s&position=lastDbPos'>%s</a>" , genome->name, hubUrl, genome->name, shortName);
         else
             dyStringPrintf(dyShortHtml,"%s" , shortName);
         dyStringPrintf(dyShortHtml,", ");
@@ -180,7 +180,7 @@ for(; genome; genome = genome->next)
 
     // always append to dyHtml
     if (withLink)
-        dyStringPrintf(dyHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s'>%s</a>" , genome->name, hubUrl, genome->name, trimmedName);
+        dyStringPrintf(dyHtml,"<a title='Connect hub and open the %s assembly' href='hgTracks?hubUrl=%s&genome=%s&position=lastDbPos'>%s</a>" , genome->name, hubUrl, genome->name, trimmedName);
     else
         dyStringPrintf(dyHtml,"%s" , trimmedName);
 
@@ -431,7 +431,7 @@ if (hubUrl == NULL)
     printf("<tr><td>Enter URL to hub to check settings</td></tr> \n");
 else
     doValidateNewHub(hubUrl);
-printf("</table>");
+printf("</table></div>");
 
 jsOnEventById("click", "hubValidateButton",
     "var validateText = document.getElementById('validateHubUrl');"
@@ -749,70 +749,6 @@ printGenomeList(hubInfo->hubUrl, dbListNames, count, hubHasNoError);
 printf("</tr>\n");
 }
 
-
-void printSearchOutputForTrack(struct tdbOutputStructure *tdbOut)
-/* Write out a <li> entry for a search hit on a track, along with a nested
- * <ul> for any included hits to subtracks */
-{
-printf("<li configLink='%s' nodeType='track'>\n", dyStringContents(tdbOut->configUrl));
-printf("%s", dyStringContents(tdbOut->shortLabel));
-if (tdbOut->childCount > 0)
-    printf(" (%d subtrack%s)", tdbOut->childCount, tdbOut->childCount==1?"":"s");
-if (isNotEmpty(dyStringContents(tdbOut->metaTags)))
-    {
-    printf("<br><span class='descriptionMatch'><em>Metadata: %s</em></span>\n", dyStringContents(tdbOut->metaTags));
-    }
-if (isNotEmpty(dyStringContents(tdbOut->descriptionMatch)))
-    {
-    printf("<br><span class='descriptionMatch'><em>Description: %s</em></span>\n", dyStringContents(tdbOut->descriptionMatch));
-    }
-if (tdbOut->children != NULL)
-    {
-    struct tdbOutputStructure *child = tdbOut->children;
-    printf("<ul>\n");
-    while (child != NULL)
-        {
-        printSearchOutputForTrack(child);
-        child = child->next;
-        }
-    printf("</ul>\n");
-    }
-printf("</li>\n");
-}
-
-
-void printSearchOutputForGenome(struct genomeOutputStructure *genomeOut)
-/* Write out a chunk of search results for a genome as a <li>, with a nested ul
- * element for hits to tracks within that genome */
-{
-printf("<li assemblyLink='%s' nodeType='assembly'>%s",
-        dyStringContents(genomeOut->assemblyLink), dyStringContents(genomeOut->shortLabel));
-if (genomeOut->trackCount > 0)
-    printf(" (%d track%s)", genomeOut->trackCount, genomeOut->trackCount==1?"":"s");
-
-if (isNotEmpty(dyStringContents(genomeOut->metaTags)))
-    {
-    printf("<br><span class='descriptionMatch'><em>%s</em></span>\n", dyStringContents(genomeOut->metaTags));
-    }
-if (isNotEmpty(dyStringContents(genomeOut->descriptionMatch)))
-    {
-    printf("<br>\n<em>Assembly Description:</em> %s\n", dyStringContents(genomeOut->descriptionMatch));
-    }
-if (genomeOut->tracks != NULL)
-    {
-    printf("<ul>\n");
-    struct tdbOutputStructure *tdbOut = genomeOut->tracks;
-    while (tdbOut != NULL)
-        {
-        printSearchOutputForTrack(tdbOut);
-        tdbOut = tdbOut->next;
-        }
-    printf("</ul>\n");
-    }
-printf("</li>\n");
-}
-
-
 struct trackHub *fetchTrackHub(struct hubEntry *hubInfo)
 /* Fetch the hub structure for a public hub, trapping the error
  * if the hub cannot be reached */
@@ -834,105 +770,6 @@ errCatchFree(&errCatch);
 return hub;
 }
 
-
-struct tdbOutputStructure *addOrUpdateTrackOut(char *track, struct genomeOutputStructure *genomeOut,
-        struct hash *tdbHash, struct trackHub *hub)
-/* If an output structure already exists for the track within genomeOut, return that.  Otherwise,
- * create one for it and add it to genomeOut.  Any missing parent tracks are also added at
- * the same time.
- * tdbHash takes track names to the struct trackDb * for that track */
-{
-struct tdbOutputStructure *tdbOut = hashFindVal(genomeOut->tdbOutHash, track);
-if (tdbOut == NULL)
-    {
-    genomeOut->trackCount++;
-    AllocVar(tdbOut);
-    tdbOut->shortLabel = dyStringNew(0);
-    tdbOut->metaTags = dyStringNew(0);
-    tdbOut->descriptionMatch = dyStringNew(0);
-    tdbOut->configUrl = dyStringNew(0);
-    struct trackDb *trackInfo = (struct trackDb *) hashFindVal(tdbHash, track);
-    if (trackInfo == NULL)
-        {
-        // Some tracks are prefixed with the hub name; try that
-        char withHubName[4096];
-        safef(withHubName, sizeof(withHubName), "%s_%s", hub->name, track);
-        trackInfo = hashFindVal(tdbHash, withHubName);
-        if (trackInfo == NULL)
-            {
-            warn("Error: Unable to locate info for matching track '%s'.  Skipping ...\n", withHubName);
-            return NULL;
-            }
-        }
-    if (isNotEmpty(trackInfo->longLabel))
-        dyStringPrintf(tdbOut->shortLabel, "%s", trackInfo->longLabel);
-    else if (isNotEmpty(trackInfo->shortLabel))
-        dyStringPrintf(tdbOut->shortLabel, "%s", trackInfo->shortLabel);
-    else
-        dyStringPrintf(tdbOut->shortLabel, "%s", trackHubSkipHubName(trackInfo->track));
-
-    if (tdbIsCompositeView(trackInfo) || tdbIsCompositeChild(trackInfo))
-        {
-        struct trackDb *parentTdb = tdbGetComposite(trackInfo);
-        dyStringPrintf(tdbOut->configUrl, "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s&hgsid=%s&%s", hub->url,
-                genomeOut->genomeName, parentTdb->track, cartSessionId(cart), genomeOut->positionString);
-        }
-    else
-        {
-        dyStringPrintf(tdbOut->configUrl, "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s&hgsid=%s&%s", hub->url,
-                genomeOut->genomeName, trackInfo->track, cartSessionId(cart), genomeOut->positionString);
-        }
-
-    if (trackInfo->parent != NULL)
-        {
-        struct trackDb *parent = trackInfo->parent;
-        struct tdbOutputStructure *parentOut = addOrUpdateTrackOut(parent->track, genomeOut, tdbHash, hub);
-        if (parentOut != NULL)
-            {
-            // addOrUpdateTrackOut only returns NULL if it can't find the parent here.
-            // This probably means the trackDb is corrupted, which should have already
-            // generated a fatal error.  All the same ...
-            slAddTail(&(parentOut->children), tdbOut);
-            parentOut->childCount++;
-            }
-        else
-            {
-            // If we can't find the track's rightful parent, we can't report its position
-            // in the track hierarchy accurately.  Time to abort.  A warning will already
-            // have been generated by addOrUpdateTrackOut(parent) failing.
-            return NULL;
-            }
-        }
-    else
-        // No parent track, so add it to the root level track list for output
-        slAddTail(&(genomeOut->tracks), tdbOut);
-    hashAdd(genomeOut->tdbOutHash, track, tdbOut);
-    }
-return tdbOut;
-}
-
-
-void buildTdbHash(struct hash *tdbHash, struct trackDb *tdbList)
-/* Recursively add all tracks from tdbList to the hash (indexed by track),
- * along with all parents and children of those tracks */
-{
-struct trackDb *tdb = tdbList;
-while (tdb != NULL)
-    {
-    hashAdd(tdbHash, tdb->track, tdb);
-    if (tdb->subtracks != NULL)
-        buildTdbHash(tdbHash, tdb->subtracks);
-    if (tdb->parent != NULL)
-        {
-        // supertracks might be omitted from tdbList, but are still referred to by parent links
-        if (hashFindVal(tdbHash, tdb->parent->track) == NULL)
-            hashAdd(tdbHash, tdb->parent->track, tdb->parent);
-        }
-    tdb = tdb->next;
-    }
-}
-
-
 char *getPositionStringForDb(struct trackHubGenome *genome)
 {
 char positionVar[1024];
@@ -951,6 +788,126 @@ return position;
 }
 
 
+struct tdbOutputStructure *hstToTdbOutput(struct hubSearchText *hst, struct genomeOutputStructure *genomeOut, struct trackHub *hub)
+/* Convert a hubSearchText entry to a (list of) tdbOutputStructure(s) */
+{
+struct tdbOutputStructure *tdbOut = hashFindVal(genomeOut->tdbOutHash, hst->track);
+if (tdbOut == NULL)
+    {
+    genomeOut->trackCount++;
+    AllocVar(tdbOut);
+    tdbOut->shortLabel = dyStringNew(0);
+    tdbOut->metaTags = dyStringNew(0);
+    tdbOut->descriptionMatch = dyStringNew(0);
+    tdbOut->configUrl = dyStringNew(0);
+    dyStringPrintf(tdbOut->shortLabel, "%s", hst->label);
+    char *hubId = hubNameFromUrl(hub->url);
+    if (isNotEmpty(hst->parents))
+        {
+        // hst->parents is a comma-sep list like "track1","track1Label","track2","track2Label"
+        int i;
+        int parentCount;
+        int parentTypesCount;
+        char *parentTrack = NULL;
+        char *parentLabel = NULL;
+        char *parentTrackLabels[16]; // 2 slots per parent, can tracks nest more than 8 deep?
+        char *parentTypes[16]; // the types of parents, "comp", "super", "view", "other" for each track in parentTrackLabels
+        struct tdbOutputStructure *parentTdbOut = NULL;
+        struct tdbOutputStructure *savedParent = NULL;
+
+        parentCount = chopByCharRespectDoubleQuotes(cloneString(hst->parents), ',', parentTrackLabels, sizeof(parentTrackLabels));
+        parentTypesCount = chopCommas(cloneString(hst->parentTypes), parentTypes);
+        if (parentCount == 0 || parentCount % 2 != 0)
+            {
+            errAbort("error parsing hubSearchText->parents for %s.%s in hub: '%s'",
+                genomeOut->genomeName, hst->track, hub->url);
+            }
+        if (parentTypesCount != (parentCount / 2))
+            {
+            errAbort("error parsing hubSearchText->parentTypes: '%s' for %s.%s in hub: '%s'",
+                hst->parentTypes, genomeOut->genomeName, hst->track, hub->url);
+            }
+
+        boolean foundParent = FALSE;
+        boolean doAddSaveParent = FALSE;
+        for (i = 0; i < parentCount; i += 2)
+            {
+            parentTrack = stripEnclosingDoubleQuotes(cloneString(parentTrackLabels[i]));
+            parentLabel = stripEnclosingDoubleQuotes(cloneString(parentTrackLabels[i+1]));
+            // wait until the first valid trackui page for the track hit
+            if (isEmpty(dyStringContents(tdbOut->configUrl)) && sameString(parentTypes[i/2], "comp"))
+                {
+                dyStringPrintf(tdbOut->configUrl, "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s_%s&hgsid=%s&%s",
+                    hub->url, genomeOut->genomeName, hubId, parentTrack, cartSessionId(cart),
+                    genomeOut->positionString);
+                }
+            else if (isEmpty(dyStringContents(tdbOut->configUrl)) && sameString(parentTypes[i/2], "super"))
+                {
+                dyStringPrintf(tdbOut->configUrl, "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s_%s&hgsid=%s&%s",
+                    hub->url, genomeOut->genomeName, hubId, hst->track, cartSessionId(cart),
+                    genomeOut->positionString);
+                }
+            parentTdbOut = hashFindVal(genomeOut->tdbOutHash, parentTrack);
+            if (parentTdbOut == NULL)
+                {
+                AllocVar(parentTdbOut);
+                parentTdbOut->shortLabel = dyStringNew(0);
+                parentTdbOut->metaTags = dyStringNew(0);
+                parentTdbOut->descriptionMatch = dyStringNew(0);
+                parentTdbOut->configUrl = dyStringNew(0);
+                // views will be in the parent list, but the &g parameter to trackUi should be the view's parent
+                if (sameString(parentTypes[(i/2)], "view"))
+                    dyStringPrintf(parentTdbOut->configUrl,
+                        "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s_%s&hgsid=%s&%s",
+                        hub->url, genomeOut->genomeName, hubId, stripEnclosingDoubleQuotes(parentTrackLabels[(i/2)+2]), cartSessionId(cart), genomeOut->positionString);
+                else // everything else has the correct &g param
+                    dyStringPrintf(parentTdbOut->configUrl,
+                        "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s_%s&hgsid=%s&%s",
+                        hub->url, genomeOut->genomeName, hubId, parentTrack, cartSessionId(cart), genomeOut->positionString);
+                dyStringPrintf(parentTdbOut->shortLabel, "%s", parentLabel);
+                parentTdbOut->childCount += 1;
+                if (savedParent)
+                    slAddHead(&(parentTdbOut->children), savedParent);
+                else
+                    slAddHead(&(parentTdbOut->children), tdbOut);
+                savedParent = parentTdbOut;
+                doAddSaveParent = TRUE;
+                hashAdd(genomeOut->tdbOutHash, parentTrack, parentTdbOut);
+                }
+            else
+                {
+                foundParent = TRUE; // don't add this track to the genomeOut->tracks hash again
+                if (savedParent && doAddSaveParent)
+                    {
+                    parentTdbOut->childCount += 1;
+                    slAddHead(&(parentTdbOut->children), savedParent);
+                    }
+                else if (!savedParent)
+                    {
+                    parentTdbOut->childCount += 1;
+                    slAddHead(&(parentTdbOut->children), tdbOut);
+                    }
+                savedParent = parentTdbOut;
+                doAddSaveParent = FALSE;
+                }
+            }
+        if (!foundParent)
+            {
+            slAddHead(&(genomeOut->tracks), parentTdbOut);
+            }
+        }
+    else
+        {
+        dyStringPrintf(tdbOut->configUrl, "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s_%s&hgsid=%s&%s",
+            hub->url, genomeOut->genomeName, hubId, hst->track, cartSessionId(cart),
+            genomeOut->positionString);
+        slAddHead(&(genomeOut->tracks), tdbOut);
+        }
+    hashAdd(genomeOut->tdbOutHash, hst->track, tdbOut);
+    }
+return tdbOut;
+}
+
 struct hubOutputStructure *buildHubSearchOutputStructure(struct trackHub *hub,
         struct hubSearchText *searchResults)
 /* Build a structure that contains the data for writing out the hub search results for this hub */
@@ -962,7 +919,6 @@ hubOut->metaTags = dyStringNew(0);
 hubOut->descriptionMatch = dyStringNew(0);
 hubOut->genomeOutHash = newHash(5);
 
-struct hash *tdbHashHash = newHash(5);  // takes genome names to trackDb hashes
 
 struct hubSearchText *hst = NULL;
 for (hst = searchResults; hst != NULL; hst = hst->next)
@@ -1041,18 +997,7 @@ for (hst = searchResults; hst != NULL; hst = hst->next)
     if (isNotEmpty(hst->track))
         {
         // Time to add a track! (or add info to one, maybe)
-        struct hash *tdbHash = (struct hash *) hashFindVal(tdbHashHash, db);
-        if (tdbHash == NULL)
-            {
-            tdbHash = newHash(5);
-            hashAdd(tdbHashHash, db, tdbHash);
-            struct trackDb *tdbList = trackHubTracksForGenome(hub, genome);
-            tdbList = trackDbLinkUpGenerations(tdbList);
-            tdbList = trackDbPolishAfterLinkup(tdbList, db);
-            trackHubPolishTrackNames(hub, tdbList);
-            buildTdbHash(tdbHash, tdbList);
-            }
-        struct tdbOutputStructure *tdbOut = addOrUpdateTrackOut(hst->track, genomeOut, tdbHash, hub);
+        struct tdbOutputStructure *tdbOut = hstToTdbOutput(hst, genomeOut, hub);
         if (tdbOut != NULL)
             {
             if (hst->textLength == hubSearchTextLong)
@@ -1084,7 +1029,7 @@ return dyStringCannibalize(&id);
 }
 
 static void printTdbOutputStructureToDyString(struct tdbOutputStructure *tdbOut, struct dyString *dy, char *arrayName)
-/* Print a tdbOutputStructure to a dyString*/
+/* Print a tdbOutputStructure to a dyString, recursive for subtracks. */
 {
 dyStringPrintf(dy, "trackData['%s'] = [", arrayName);
 
@@ -1125,9 +1070,14 @@ else
     dyStringPrintf(dy, "];\n");
 }
 
-
 void printGenomeOutputStructureToDyString(struct genomeOutputStructure *genomeOut, struct dyString *dy, char *genomeNameId)
-/* Print a genomeOutputStructure to a dyString */
+/* Print a genomeOutputStructure to a dyString. The structure here is:
+ * trackData[genome] = [{track 1 obj}, {track2 obj}, {track3 obj}, ... ]
+ * trackData[track1] = [{search hit text}, {subtrack1 obj}, {subtrack2 obj}, ... ]
+ *
+ * if track1, track2, track3 are container tracks, then the recursive function
+ * tdbOutputStructureToDystring creates the above trackData[track1] = [{}] for
+ * each of the containers, otherwise a single child of the genome is sufficient */
 {
 struct tdbOutputStructure *tdbOut = NULL;
 static  struct dyString *tdbArrayDy = NULL; // the dyString for all of the tdb objects
@@ -1137,17 +1087,11 @@ if (tdbArrayDy == NULL)
 if (idString == NULL)
     idString = dyStringNew(0);
 
-// The structure here is:
-// trackData[genome] = [{track 1 obj}, {track2 obj}, {track3 obj}, ... ]
-// trackData[track1] = [{search hit text}, {subtrack1 search hit}, {subtrack2 search hit}, ... ]
-//
-// if track1, track2, track3 are container tracks, then the recursive function
-// tdbOutputStructureToDystring creates the above trackData[track1] = [{}] for 
-// each of the containers, otherwise a single child of the genome is sufficient
 dyStringPrintf(dy, "trackData['%s'] = [", genomeNameId);
 if (genomeOut->tracks != NULL)
     {
     tdbOut = genomeOut->tracks;
+    slReverse(&tdbOut);
     while (tdbOut != NULL)
         {
         dyStringPrintf(idString, "%s", tdbOutputStructureLabelToId(tdbOut));
@@ -1181,11 +1125,16 @@ if (genomeOut->tracks != NULL)
 dyStringPrintf(dy, "];\n"); // close off genome node
 dyStringPrintf(dy, "%s\n", tdbArrayDy->string);
 dyStringClear(tdbArrayDy);
-dyStringClear(idString);
 }
 
 void printHubOutputStructure(struct hubOutputStructure *hubOut, struct hubEntry *hubInfo)
-/* Convert a hubOutputStructure to a jstree-readable string */
+/* Convert a hubOutputStructure to a jstree-readable string. This function forms the root
+ * node for each hub search tree, whose children are the hub description match and each individual
+ * genome node. A simplified structure is:
+ * trackData['#_hubId'] = [{id:'descriptionMatch',...},{id:'assembly1',...},...]
+ *
+ * The id's become new "trackData[id]" entries with their own arrays later if they have
+ * sub-trees (via printGenomeOutputStructureToDyString() and printTdbOutputStructureToDyString(). */
 {
 struct dyString *dy = dyStringNew(0);
 // The leading '#' tells the javascript this is a 'root' node

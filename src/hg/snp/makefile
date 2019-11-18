@@ -1,5 +1,5 @@
 
-SNP_DIRS=snpLoad snpMask snpValid
+SNP_DIRS=snpLoad snpMask snpValid dbSnpJsonToTab checkBigDbSnp
 
 all::
 	@for D in ${SNP_DIRS} x; do \

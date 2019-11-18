@@ -223,6 +223,9 @@ boolean trackHasData(struct trackDb *tdb);
 boolean protectedTrack(struct trackDb *tdb, char *trackName);
 /* determine if track is off-limits protected data */
 
+boolean isWiggleDataTable(char *type);
+/* is this a wiggle data track table */
+
 /* ######################################################################### */
 /*  functions in getData.c */
 

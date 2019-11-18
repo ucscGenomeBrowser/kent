@@ -16,6 +16,9 @@ filterComposite dimA
 sortOrder tissue=+ mark=+ subtrackColor=+ age=+ view=-
 showSubtrackColorOnUi on
 dragAndDrop subTracks
+# Deferring this feature until issues fixed.  RM #23365
+#hideEmptySubtracks on /gbdb/mm10/encode3/histones/multiBed.bb /gbdb/mm10/encode3/histones/multiBedSources.tab
+#hideEmptySubtracksLabel Hide Peak subtracks with no data in the viewing window
 visibility full
 
     track encode3RenHistonePeaks
@@ -23,6 +26,7 @@ visibility full
     shortLabel Histone Modification Peaks
     view Peaks
     visibility dense
+    scoreFilter 0
     type bigBed 6 +
 
         track encode3Ren_stomach_H3K36me3_E15

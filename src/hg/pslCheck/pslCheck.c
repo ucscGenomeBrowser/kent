@@ -7,6 +7,7 @@
 #include "jksql.h"
 #include "sqlNum.h"
 #include "chromInfo.h"
+#include "errCatch.h"
 #include "verbose.h"
 
 
@@ -21,6 +22,7 @@ static struct optionSpec optionSpecs[] =
     {"querySizes", OPTION_STRING},
     {"pass", OPTION_STRING},
     {"fail", OPTION_STRING},
+    {"filter", OPTION_BOOLEAN},
     {"ignoreQUniq", OPTION_BOOLEAN},
     {"skipInsertCounts", OPTION_BOOLEAN},
     {NULL, 0}
@@ -29,6 +31,7 @@ static char *db = NULL;
 static boolean protCheck = FALSE;
 static boolean quiet = FALSE;
 static boolean noCountCheck = FALSE;
+static boolean filter = FALSE;
 static char *passFile = NULL;
 static char *failFile = NULL;
 static boolean ignoreQUniq = FALSE;
@@ -56,6 +59,8 @@ errAbort(
   "    the total size of the alignment blocks\n"
   "   -pass=pslFile - write PSLs without errors to this file\n"
   "   -fail=pslFile - write PSLs with errors to this file\n"
+  "   -filter - use program as a filter, with -pass and/or -fail, don't error exit\n"
+  "    on problems, but do report them.\n"
   "   -targetSizes=sizesFile - tab file with columns of target and size.\n"
   "    If specified, psl is check to have a valid target and target\n"
   "    coordinates.\n"
@@ -123,6 +128,52 @@ if (ignoreQUniq)
     }
 else
     return qName;
+}
+
+static void printErrRow(int numColumns, char** row)
+/* print a row, which might not be a valid PSL, for error reporting */
+{
+int i;
+for (i = 0; i < numColumns; i++)
+    fprintf(stderr, "\t%s", row[i]);
+fprintf(stderr, "\n");
+}
+
+static struct psl *parsePsl(char *fileTblName, int lineNum,
+                            int numColumns, char** row)
+/*
+ * Parse a PSL.  If an error occurs, report and count it and return NULL.
+ */
+{
+if (!((numColumns == PSL_NUM_COLS) || (numColumns == PSLX_NUM_COLS)))
+    {
+    fprintf(stderr, "Error: wrong number of columns in PSL: %d, expected %d or %d: %s:%d\n",
+            numColumns, PSL_NUM_COLS, PSLX_NUM_COLS, fileTblName, lineNum);
+    printErrRow(numColumns, row);
+    errCount += 1;
+    failCount += 1;
+    return NULL;
+    }
+struct errCatch *errCatch = errCatchNew();
+struct psl *psl = NULL;
+if (errCatchStart(errCatch))
+    {
+    if (numColumns == PSL_NUM_COLS)
+        psl = pslLoad(row);
+    else
+        psl = pslxLoad(row);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    fprintf(stderr, "Error: parsing of PSL failed: %s: %s:%d\n",
+            trimSpaces(errCatch->message->string), fileTblName, lineNum);
+    printErrRow(numColumns, row);
+    errCount += 1;
+    failCount += 1;
+    }
+errCatchFree(&errCatch);
+return psl;
 }
 
 static int checkSize(struct psl *psl, char *pslDesc, char *sizeDesc,
@@ -210,12 +261,17 @@ static void checkPslFile(char *fileName, unsigned opts, FILE *errFh,
 /* Check one psl file */
 {
 struct lineFile *lf = pslFileOpen(fileName);
-struct psl *psl;
+char *row[2*PSLX_NUM_COLS];   // allow extra
+int numColumns;
 
-while ((psl = pslNext(lf)) != NULL)
+while ((numColumns = lineFileChopCharNext(lf, '\t', row, ArraySize(row))) > 0)
     {
-    checkPsl(lf, NULL, opts, psl, errFh, passFh, failFh);
-    pslFree(&psl);
+    struct psl *psl = parsePsl(lf->fileName, lf->lineEnd, numColumns, row);
+    if (psl != NULL)
+        {
+        checkPsl(lf, NULL, opts, psl, errFh, passFh, failFh);
+        pslFree(&psl);
+        }
     }
 lineFileClose(&lf);
 }
@@ -227,13 +283,19 @@ static void checkPslTbl(struct sqlConnection *conn, char *tbl, unsigned opts, FI
 char query[1024], **row;
 sqlSafef(query, sizeof(query), "select * from %s", tbl);
 struct sqlResult *sr = sqlGetResult(conn, query);
+int numColumns = sqlCountColumns(sr);
+int rowNum = 0;
 int rowOff = (sqlFieldColumn(sr, "bin") >= 0) ? 1 : 0;
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct psl *psl = pslLoad(row+rowOff);
-    checkPsl(NULL, tbl, opts, psl, errFh, passFh, failFh);
-    pslFree(&psl);
+    rowNum++;
+    struct psl *psl = parsePsl(tbl, rowNum, numColumns-rowOff, row+rowOff);
+    if (psl != NULL)
+        {
+        checkPsl(NULL, tbl, opts, psl, errFh, passFh, failFh);
+        pslFree(&psl);
+        }
     }
 sqlFreeResult(&sr);
 }
@@ -280,6 +342,7 @@ noCountCheck = optionExists("noCountCheck");
 quiet = optionExists("quiet");
 passFile = optionVal("pass", NULL);
 failFile = optionVal("fail", NULL);
+filter = optionExists("filter");
 ignoreQUniq = optionExists("ignoreQUniq");
 skipInsertCounts = optionExists("skipInsertCounts");
 struct sqlConnection *conn = NULL;
@@ -295,5 +358,5 @@ if (optionExists("querySizes"))
 checkFilesTbls(conn, argc-1, argv+1);
 sqlDisconnect(&conn);
 verbose(1, "checked: %d failed: %d errors: %d\n", chkCount, failCount, errCount);
-return ((errCount == 0) ? 0 : 1);
+return (((errCount == 0) || filter) ? 0 : 1);
 }

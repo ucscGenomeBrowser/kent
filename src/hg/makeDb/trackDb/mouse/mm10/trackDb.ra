@@ -3,8 +3,7 @@ include ../../refSeqComposite.ra
 
 include ../../crispr10K.ra
 
-include knownGene.ra beta,public
-include knownGene.alpha.ra alpha
+include knownGene.ra
 
 # chainNet tracks
 include trackDb.gliresChainNet.ra
@@ -94,32 +93,38 @@ priority 12
 track snp138 override
 group varRep
 priority 5
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
 
 track snp138Common override
 group varRep
 priority 8
 snpSeqFile /gbdb/mm10/snp/snp138.fa
 visibility hide
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
 
 track snp138Mult override
 group varRep
 priority 13
 snpSeqFile /gbdb/mm10/snp/snp138.fa
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
 
 track snp137Common override
 group varRep
 priority 9
 snpSeqFile /gbdb/mm10/snp/snp137.fa
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
 
 track snp137Mult override
 group varRep
 priority 14
 snpSeqFile /gbdb/mm10/snp/snp137.fa
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
 
 track snp137 override
 group varRep
 priority 6
 snpSeqFile /gbdb/mm10/snp/snp137.fa
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?do_not_redirect&rs=$$
 
 track ucscRetroAli2
 shortLabel Retroposed Genes
@@ -370,6 +375,9 @@ hapClusterHeight 78
 hapClusterEnabled off
 maxWindowToDraw 1000000
 
+track crisprAllTargets override
+pennantIcon New red ../goldenPath/newsarch.html#110519 Released Nov. 5, 2019
+
 track nestedRepeats override
 group varRep
 priority 10
@@ -399,4 +407,37 @@ bigDataUrl /gbdb/$D/uniprot/unipMut.bb
 
 include trackDb.encode3.ra
 include encode3RenEnhancerGene.ra
+
+track epdNew
+compositeTrack on
+shortLabel EPDnew Promoters
+longLabel Promoters from EPDnew
+html ../../epdNewPromoter
+type bigBed 8
+group regulation
+visibility hide
+urlLabel EPDnew link:
+bedNameLabel Promoter ID
+exonArrows on
+pennantIcon New red
+
+    track epdNewPromoter
+    shortLabel EPDnew v6
+    longLabel Promoters from EPDnew mouse version 003
+    parent epdNew on
+    bigDataUrl /gbdb/$D/bbi/epdNewMouse003.$D.bb
+    dataVersion EPDNew Mouse Version 003 (June 2018)
+    url https://epd.epfl.ch/cgi-bin/get_doc?db=mmEpdNew&format=genome&entry=$$
+    color 50,50,200
+    priority 1
+
+    track epdNewPromoterNonCoding
+    shortLabel EPDnew NC v1
+    longLabel ncRNA promoters from EPDnewNC mouse version 001
+    parent epdNew on
+    bigDataUrl /gbdb/$D/bbi/epdNewMouseNc001.$D.bb
+    dataVersion EPDNewNC Mouse Version 001 (August 2019)
+    url https://epd.epfl.ch/cgi-bin/get_doc?db=mmNCEpdNew&format=genome&entry=$$
+    color 180,0,134
+    priority 2
 

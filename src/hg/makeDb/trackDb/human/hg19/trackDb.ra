@@ -8,12 +8,115 @@ bigDataUrl /gbdb/hg19/dgv/dgvGold.bb
 type bigBed 12 +
 url http://dgv.tcag.ca/gb2/gbrowse_details/dgv2_hg19?ref=$S;start=${;end=$};name=$$;class=Sequence
 searchIndex name
-pennantIcon New red ../goldenPath/newsarch.html#070119  Released Jul. 1, 2019
 
 
 searchTable dgvGold
 searchType bigBed
 searchDescription DGV Gold Variants
+
+track problematic
+shortLabel Problematic Regions
+longLabel Problematic Regions for NGS or Sanger sequencing or very variable regions
+compositeTrack on
+group map
+visibility hide
+type bigBed 3 +
+release alpha
+
+    track getRmNgsDeadZone
+    shortLabel NBCI NGS Dead Zone
+    longLabel NCBI Get-RM NGS Dead Zone
+    type bigBed 3 +
+    bigDataUrl /gbdb/hg19/bbi/special/deadZone.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    track getRmSangerDeadZone
+    shortLabel NBCI Sanger Dead Zone
+    longLabel NCBI Get-RM Sanger Dead Zone
+    type bigBed 3 +
+    bigDataUrl /gbdb/hg19/bbi/special/sangerDeadZone.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    track getRmNgsProblemLow
+    shortLabel NBCI NGS Problem Low Stringency
+    longLabel NCBI Get-RM NGS Problem List, Low Stringency
+    type bigBed 3 +
+    bigDataUrl /gbdb/hg19/bbi/special/ngsProblemLow.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    track getRmNgsProblemHigh
+    shortLabel NBCI NGS Problem High Stringency
+    longLabel NCBI Get-RM NGS Problem List, High Stringency
+    type bigBed 3 +
+    bigDataUrl /gbdb/hg19/bbi/special/ngsProblemHigh.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    /gbdb/hg19/bbi/special/filterABQD.bb         /gbdb/hg19/bbi/special/filterHapNoVar.bb
+    /gbdb/hg19/bbi/special/filterAlign.bb        /gbdb/hg19/bbi/special/filterMap.bb
+    /gbdb/hg19/bbi/special/filterConflicting.bb  /gbdb/hg19/bbi/special/filterSSE.bb
+    /gbdb/hg19/bbi/special/filterCov.bb          /gbdb/hg19/bbi/special/filterlt2Datasets.bb
+
+    track filterABQD
+    shortLabel GIAB abnorm all bal
+    longLabel Genome-in-a-bottle: Calls with abnormal allele balance
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/special/filterABQD.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    track filterAlign
+    shortLabel GIAB align probl
+    longLabel Genome-in-a-bottle: Calls with evidence of local alignment problems like clipped reads
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/special/filterAlign.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    track filterConflicting
+    shortLabel GIAB confl genot
+    longLabel Genome-in-a-bottle: Calls with unresolved conflicting genotypes after arbitration
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/special/filterConflicting.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    track filterHapNoVar
+    shortLabel GIAB hapl var
+    longLabel Genome-in-a-bottle: HaplotypeCaller makes no call and UnifiedGenotyper makes a variant call
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/special/filterHapNoVar.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    track filterMap
+    shortLabel GIAB filter map
+    longLabel Genome-in-a-bottle: calls with low mapping quality or high coverage
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/special/filterMap.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    track filterSSE
+    shortLabel GIAB filter SSE
+    longLabel Genome-in-a-bottle: calls with evidence of systematic sequencing errors 
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/special/filterSSE.bb
+    visibility dense
+    parent problematic
+    release alpha
 
 track cosmicRegions
 shortLabel COSMIC Regions
@@ -926,7 +1029,7 @@ hapmapPhase III
 codingAnnotations snp138CodingDbSnp,
 # Need to request new tag
 #codingAnnoLabel_snp138CodingDbSnp dbSNP
-priority 23.4
+priority 18.1
 
 track snp138Mult override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
@@ -944,7 +1047,7 @@ chimpDb panTro4
 orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
-priority 23.2
+priority 12.1
 
 track snp138Common override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
@@ -954,7 +1057,7 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 visibility hide
-priority 23.3
+priority 6.1
 
 track snp137Flagged
 shortLabel Flagged SNPs(137)
@@ -1951,6 +2054,7 @@ visibility hide
 noScoreFilter .
 noInherit on
 type bed 3 .
+pennantIcon Updated red ../goldenPath/newsarch.html#102519  Illumina GDA released Oct. 25, 2019
 
     track snpArrayAffy6
     parent genotypeArrays
@@ -2135,6 +2239,13 @@ type bed 3 .
     longLabel Illumina Human Omni1-Quad
     type bed 6 +
     priority 22
+    
+    track snpArrayIlluminaGDA
+    parent genotypeArrays
+    shortLabel Illumina GDA
+    longLabel Illumina GDA
+    type bed 6 +
+    priority 23
 
 track tfbsConsSites
 shortLabel TFBS Conserved
@@ -2617,7 +2728,6 @@ origAssembly hg38
 # change these two to switch to the new refSeqComposite 2018-02
 #include trackDb.refGene.ra public
 include ../../refSeqComposite.ra
-include ../../crispr10K.ra alpha
 
 track ensGene override
 ensemblIdUrl https://grch37.ensembl.org/Homo_sapiens
@@ -2632,5 +2742,22 @@ include encode3.ra
 
 include wgEncodeReg.dev.ra alpha
 
+include platinumGenomes.ra
 
+include hic.ra
 
+track epdNew
+shortLabel EPDnew Promoters
+longLabel Promoters from EPDnew human version 006
+html ../../epdNewPromoter
+type bigBed 8
+bigDataUrl /gbdb/$D/bbi/epdNewHuman006.$D.bb
+group expression
+bedNameLabel Promoter ID
+url https://epd.epfl.ch/cgi-bin/get_doc?db=mmEpdNew&format=genome&entry=$$
+urlLabel EPDnew link:
+color 50,50,200
+exonArrows on
+dataVersion EPDNew Version 006 (May 2018)
+visibility hide
+pennantIcon New red

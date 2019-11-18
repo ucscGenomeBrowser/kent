@@ -1482,6 +1482,7 @@ mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, track, FALSE,
                NULL, 0, 0, (revCmplDisp ? "Next item" : "Prev item"), buttonText);
 
 #ifdef IMAGEv2_SHORT_TOGGLE
+// LIKELY UNUSED
 char *label = (theImgBox ? track->longLabel : parentTrack->longLabel);
 int width = portWidth - (2 * arrowButtonWidth);
 int x = portX + arrowButtonWidth;
@@ -2086,7 +2087,7 @@ for (track = trackList; track != NULL; track = track->next)
     }
 }
 
-static void logTrackVisibilities (char *hgsid, struct track *trackList)
+static void logTrackVisibilities (char *hgsid, struct track *trackList, char *position)
 /* log visibile tracks and hgsid */
 {
 struct dyString *dy = newDyString(1024);
@@ -2109,6 +2110,7 @@ for(ptr=begin; ((ptr = strchr(ptr, ',')) != NULL); ptr++)
 	}
     }
 fprintf(stderr, "trackLog %d %s %s %s\n", count++, database, hgsid, begin);
+fprintf(stderr, "trackLog position %s %s %s\n",  database, hgsid, position);
 
 dyStringFree(&dy);
 }
@@ -4496,6 +4498,7 @@ if (
 || sameWord(type, "genePred")
 || sameWord(type, "gvf")
 || sameWord(type, "narrowPeak")
+|| sameWord(type, "bigNarrowPeak")
 || sameWord(type, "psl")
 || sameWord(type, "barChart")
 || sameWord(type, "bigBarChart")
@@ -5470,9 +5473,11 @@ if (withCenterLabels)
             {
             track->preDrawMultiRegion(track);
             }
+        y += flatTrack->maxHeight;
         }
 
     // now do the actual draw
+    y = yAfterRuler;
     for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         {
         int savey = y;
@@ -6166,35 +6171,17 @@ else if (sameString(type, "bigWig"))
     tg->bbiFile = ct->bbiFile;
     tg->nextItemButtonable = FALSE;
     }
-else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") ||
-        sameString(type, "bigNarrowPeak") || sameString(type, "bigPsl") ||
-        sameString(type, "bigMaf")|| sameString(type, "bigChain") ||
-        sameString(type, "bigLolly") || 
-        sameString(type, "bigBarChart") || sameString(type, "bigInteract"))
+else if (startsWith("big", type))
     {
     struct bbiFile *bbi = ct->bbiFile;
 
     /* Find field counts, and from that revise the tdb->type to be more complete. */
     char extra = (bbi->fieldCount > bbi->definedFieldCount ? '+' : '.');
     char typeBuf[64];
-    if (sameString(type, "bigGenePred"))
-	safef(typeBuf, sizeof(typeBuf), "bigGenePred");
-    else if (sameString(type, "bigNarrowPeak"))
-	safef(typeBuf, sizeof(typeBuf), "bigNarrowPeak");
-    else if (sameString(type, "bigChain"))
-	safef(typeBuf, sizeof(typeBuf), "bigChain");
-    else if (sameString(type, "bigMaf"))
-	safef(typeBuf, sizeof(typeBuf), "bigMaf");
-    else if (sameString(type, "bigPsl"))
-	safef(typeBuf, sizeof(typeBuf), "bigPsl");
-    else if (sameString(type, "bigBarChart"))
-	safef(typeBuf, sizeof(typeBuf), "bigBarChart");
-    else if (sameString(type, "bigLolly"))
-	safef(typeBuf, sizeof(typeBuf), "bigLolly");
-    else if (sameString(type, "bigInteract"))
-	safef(typeBuf, sizeof(typeBuf), "bigInteract");
-    else
+    if (startsWithWord("bigBed", type))
 	safef(typeBuf, sizeof(typeBuf), "bigBed %d %c", bbi->definedFieldCount, extra);
+    else
+	safecpy(typeBuf, sizeof(typeBuf), type);
     tdb->type = cloneString(typeBuf);
 
     /* Finish wrapping track around tdb. */
@@ -7246,13 +7233,8 @@ static boolean isTrackForParallelLoad(struct track *track)
 /* Is this a track that should be loaded in parallel ? */
 {
 char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
-return (startsWithWord("bigWig"  , track->tdb->type)
+return (startsWith("big", track->tdb->type)
      || startsWithWord("mathWig"  , track->tdb->type)
-     || startsWithWord("bigBed"  , track->tdb->type)
-     || startsWithWord("bigPsl"  , track->tdb->type)
-     || startsWithWord("bigNarrowPeak"  , track->tdb->type)
-     || startsWithWord("bigGenePred"  , track->tdb->type)
-     || startsWithWord("bigChain"  , track->tdb->type)
      || startsWithWord("bam"     , track->tdb->type)
      || startsWithWord("halSnake", track->tdb->type)
      || startsWithWord("bigLolly", track->tdb->type)
@@ -7858,7 +7840,7 @@ for (track = trackList; track != NULL; track = track->next)
 
 
 if (sameString(cfgOptionDefault("trackLog", "off"), "on"))
-    logTrackVisibilities(cartSessionId(cart), trackList);
+    logTrackVisibilities(cartSessionId(cart), trackList, position);
 
 
 /////////////////
@@ -10341,10 +10323,20 @@ if (cartOptionalString(cart, "udcTimeout"))
     }
 }
 
+void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut)
+/* add text to track long label to indicate filter is active */
+{
+tg->longLabel = labelAsFilteredNumber(tg->longLabel, numOut);
+}
+
 void labelTrackAsFiltered(struct track *tg)
 /* add text to track long label to indicate filter is active */
 {
-char *oldLabel = tg->longLabel;
-tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
+tg->longLabel = labelAsFiltered(tg->longLabel);
+
+// also label parent composite track filtered
+struct trackDb *parentTdb = tdbGetComposite(tg->tdb);
+if (parentTdb)
+    parentTdb->longLabel = labelAsFiltered(parentTdb->longLabel);
 }
 

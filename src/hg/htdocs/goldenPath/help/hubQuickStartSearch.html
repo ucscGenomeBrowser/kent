@@ -8,24 +8,31 @@
 <h1>Searchable Track Hub Quick Start Guide</h1> 
 <p>
 Track Hubs are a method of displaying remotely-hosted annotation data quickly and flexibly on any 
-UCSC assembly or remotely-hosted sequence with Assembly Hubs. Making your annotation data searchable
+UCSC assembly or remotely-hosted sequence. Making your annotation data searchable
 is an important improvement to the usability of your hub, especially if your annotations are not
 otherwise represented on the Browser. This Quick Start Guide will
-go through making a searchable track hub from a GFF3 file, converting to a genePred, bed, and 
+go through making a searchable track hub from a GFF3 file; converting to a genePred, bed, and 
 bigBed, then creating a trix search index file. This example will be made with the new 
-"useOneFile" feature to avoid any need for separate genome.txt and trackDb.txt files.</p>
+<a href="hgTracksHelp.html#UseOneFile">"useOneFile"</a> feature to avoid any need for separate
+genome.txt and trackDb.txt files.</p>
 <p>
-<strong>STEP 1: Downloads</strong> In a publicly-accessible directory (such as a university server, 
-CyVerse, or GitHub) copy the hub.txt file using the following command:
-<pre><code>wget http://genome.ucsc.edu/goldenPath/help/examples/ADD PATH HERE/</code></pre>
+<h3>STEP 1: Downloads</h3> 
 <p>
-Alternatively, you can use curl or copy and paste the hub.txt file manually in a text editor:<br>
-<pre><code>curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/PATH</code></pre>
-Download some example gene data from Gencode:
-<pre><code>wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.basic.annotation.gff3.gz</code></pre>
+Gather our settings and data files in a publicly-accessible directory (such as a university 
+web-server, <a href="https://de.cyverse.org/de" target="_blank">CyVerse</a>, or 
+<a href="https://github.com" target="_blank">Github</a>). For more information on this, please see the
+<a href="hgTrackHubHelp.html#Hosting">hosting guide</a>.</p>
 <p>
-Finally, you will need to download four Genome Browser utilities to convert the GFF3 file to a 
-binary indexed bigBed format and run the search index command.</p>
+Copy the <a href="examples/hubExamples/hubSearchable/hub.txt">hub.txt</a> file using
+ <code>wget</code>, <code>curl</code>, or copy-paste:
+<pre><code>wget http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubSearchable/hub.txt</code></pre></p>
+<p>
+Download some example GFF3 data from Gencode. This file happens to be long non-coding RNAs (lncRNAs):
+<pre><code>wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_32/gencode.v32.long_noncoding_RNAs.gff3.gz</code></pre></p>
+<p>
+Next, you will need to download four Genome Browser utilities to convert the GFF3 file to 
+bigBed format and run the search index command. Similar commands exist to convert other file types.
+These are operating system specific:
 <table>
   <tr>
     <th>Utility Name</th>
@@ -34,68 +41,103 @@ binary indexed bigBed format and run the search index command.</p>
   </tr>
   <tr>
     <td>gff3ToGenePred</td>
-    <td><a href="http://hgdownload.soe.ucsc.edu/admin/exe/macOSX.x86_64/gff3ToGenePred">MacOS Download</a></td>
-    <td><a href="http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/gff3ToGenePred">Linux Download</a></td>
+    <td style="text-align:center"><a href="http://hgdownload.soe.ucsc.edu/admin/exe/macOSX.x86_64/gff3ToGenePred">Download</a></td>
+    <td style="text-align:center"style="text-align:center"><a href="http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/gff3ToGenePred">Download</a></td>
   </tr>
   <tr>
     <td>genePredToBed</td>
-    <td><a href="http://hgdownload.soe.ucsc.edu/admin/exe/macOSX.x86_64/genePredToBed">MacOS Download</a></td>
-    <td><a href="http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/genePredToBed">Linux Download</a></td>
+    <td style="text-align:center"><a href="http://hgdownload.soe.ucsc.edu/admin/exe/macOSX.x86_64/genePredToBed">Download</a></td>
+    <td style="text-align:center"><a href="http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/genePredToBed">Download</a></td>
   </tr>
   <tr>
     <td>bedToBigBed</td>
-    <td><a href="http://hgdownload.soe.ucsc.edu/admin/exe/macOSX.x86_64/bedToBigBed">MacOS Download</a></td>
-    <td><a href="http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bedToBigBed">Linux Download</a></td>
+    <td style="text-align:center"><a href="http://hgdownload.soe.ucsc.edu/admin/exe/macOSX.x86_64/bedToBigBed">Download</a></td>
+    <td style="text-align:center"><a href="http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bedToBigBed">Download</a></td>
   </tr>
   <tr>
     <td>IxIxx</td>
-    <td><a href="http://hgdownload.soe.ucsc.edu/admin/exe/macOSX.x86_64/ixIxx">MacOS Download</a></td>
-    <td><a href="http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/ixIxx">Linux Download</a></td>
+    <td style="text-align:center"><a href="http://hgdownload.soe.ucsc.edu/admin/exe/macOSX.x86_64/ixIxx">Download</a></td>
+    <td style="text-align:center"><a href="http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/ixIxx">Download</a></td>
   </tr>
 </table>
+</p>
+<h3>STEP 2: Format Data</h3> 
+<p>
+In order to format the data, you will need to run a command to make those commands executable:</p>
+<pre><code>chmod +x gff3ToGenePred genePredToBed bedToBigBed IxIxx</code></pre>
 
 <p>
-<strong>STEP 2: Format Data</strong> 
-In order to format the data, you will need to run a command to make those commands executable.
-<pre><code>chmod +x gff3ToGenePred genePredToBed bedToBigBed IxIxx</code></pre>
-gene symbol instead of ID number, and sorting by chromosome and position.
-<pre><code>gff3ToGenePred -geneNameAttr=gene_name gencode.v31.basic.annotation.gff3.gz stdout \
-| sort -k2,2 -k4n,4n > gencode.v31.basic.genePred </code></pre>
+Then run the first conversion from GFF3 to genePred, making sure to include
+<code>-geneNameAttr=gene_name</code> so that gene symbol is used as the name2 instead of
+ID number, and sorting by chromosome and position:</p>
+<pre><code>gff3ToGenePred -geneNameAttr=gene_name gencode.v32.long_noncoding_RNAs.gff3.gz stdout | sort -k2,2 -k4n,4n > gencode.v32.lncRNAs.genePred</code></pre>
 
-Convert that genePred file to a bed file with the following command:
-<pre><code>genePredToBed gencode.v31.basic.genePred gencode.v31.basic.bed</code></pre>
+<p>
+Convert that genePred file to a bed file:</p>
+<pre><code>genePredToBed gencode.v32.lncRNAs.genePred gencode.v32.lncRNAs.bed</code></pre>
 
-Compress and index that bed file into a bigBed format, adding the extraIndex to allow name 
-(gene symbol) searches:
-<pre><code>bedToBigBed -extraIndex=name gencode.v31.basic.bedSorted  https://genome.ucsc.edu/goldenPath/help/hg38.chrom.sizes gencode.v31.basic.bb</code></pre>
+<p>
+Compress and index that bed file into a bigBed format, adding the 
+<strong><code>-extraIndex=name</code></strong> to allow EnstID searches:</p>
+<pre><code>bedToBigBed -extraIndex=name gencode.v32.lncRNAs.bed https://genome.ucsc.edu/goldenPath/help/hg38.chrom.sizes gencode.v32.lncRNAs.bb</code></pre>
+<p>
+If you would like to stop here, you will be able to display your bigBed hub and search for the
+names that were indexed into the bigBed file (EnstID). You will not be able to use the 
+<code>searchIndex</code> and <code>searchTrix</code> trackDb setting, which require creating a
+key and value search index for your file as shown below.</p>
 
-<strong>STEP 3: Create Search Index</strong> 
-This step is only neccesary if you want to link your annotation names to anything other that 
-what was mentioned in the extraIndex command, in this case name (gene symbol).
-We will make an index file which will link one identifier in the file with search terms
-composed of gene IDs and partial versions of the gene symbols. This is the input file for the
-search indexing command:
-<pre><code>cat gencode.v31.basic.genePred | awk '{print $1, " " substr ($12, 0, 3), substr ($12, 0, 4), substr ($12, 0, 5), substr ($12, 0, 6), substr ($12, 0, 7), substr ($12, 0, 8)}' > index.txt</code></pre>
-To examine this file or to skip this step, you can click the following link. Note that the first
-word is the key referenced in the bed file and the following terms are associated values that 
-you want to be searchable to the location of the key.
-<a href="PATH TO index.txt">index.txt</a>
-Finally you will make the index file (.ix) and the index of that index (.ixx) which helps the
-return search results quickly even in large files.
-<pre><code>ixIxx index.txt out.ix out.ixx</code></pre>
+<h3>STEP 3: Create Search Index</h3> 
+<p>
+If you want to link your annotation names to anything other than
+the field referrenced in the <code>-extraIndex</code> command, you will need to make and index 
+file. We will make an input file which will link one identifier (EnstID)
+with search terms composed of gene symbols and EnstIDs. Below is one example of a command to 
+create an input file for the search indexing command:</p>
+<pre><code>cat gencode.v32.lncRNAs.genePred | awk '{print $1, $12, $1}' > input.txt</code></pre>
+<p>
+To examine or download that file, you can click
+<a href="examples/hubExamples/hubSearchable/in.txt">
+here</a>. Note that the first word is the key referenced in the BED file and the following 
+search terms are associated aliases will be searchable to the location of the key.
+These search terms are case insensitive and allow partial word searches.</p>
+<p>
+Finally you will make the index file (.ix) and the index of that index (.ixx) which helps the 
+search run quickly even in large files.</p>
+<pre><code>ixIxx input.txt out.ix out.ixx</code></pre>
 
-<strong>STEP 4: View and Search</strong> Enter the URL to your hub on the My Hubs tab of the 
+<h3>STEP 4: View and Search</h3> 
+<p>
+Enter the URL to your hub on the My Hubs tab of the 
 <a href="../../cgi-bin/hgHubConnect#unlistedHubs">Track Data Hubs</a> page. Alternately, you can
-enter your hub.txt URL in the following URL:
-LINK
-If you would like to look at an already-made example, click the following link:
-LINK
+enter your hub.txt URL in the following web address:</p>
+<pre><code>genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=<strong>YourUrlHere</strong></code></pre>
+<p>
+If you would like to look at an already-made example, click the following link which includes
+<code>hideTracks=1</code> to hide other tracks. After the link is a picture of what the hub 
+should look like:</p>
+<pre><code><a href="../../cgi-bin/hgTracks?db=hg19&hideTracks=1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubSearchable/hub.txt">https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hideTracks=1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubSearchable/hub.txt</a></code></pre>
 
-IMAGE
+<p class='text-center'>
+  <img class='text-center' src="../../images/defaultViewSearchTracks.png" 
+  alt="A display of the Searchable hub track" width="1000" height="70"> 
+</p>
 
-Once your hub displays, you should be able to type in a gene symbol or Enst ID and scroll down the results
-page until you see your search results. 
+<p>Once your hub displays, you should be able to type in a gene symbol or Enst ID and scroll down the results
+page until you see your search results.</p> 
 
+<p class='text-center'>
+  <img class='text-center' src="../../images/searchingFAM87b.png" 
+  alt="Typing a search term in the search box" width="1000" height="70"> 
+  <p class='gbsCaption text-center'>You can type your search term (fam87b) in the box above 
+  the ideogram and press <button>go</button>. Note that it is not case sensitive. Scrolling to
+  the bottom of the search results page, you will see your searchable hub keyword that was linked
+  with your search term. Clicking into it will bring you to the position of your search term.</p>
+</p>
+
+<p class='text-center'>
+  <img class='text-center' src="../../images/fam87bSearchOutput.png" alt="Search hit for fam87b" width="608" height="105">
+  <img class='text-center' src="../../images/FAM87bSearchResult.png" alt="Search results for fam87b" width="1000" height="70">
+</p>
 
 <p>
 If you are having problems, be sure all your files are publicly-accessible and that your server
@@ -103,30 +145,27 @@ accepts byte-ranges. You can check using the following  command to verify &quot;
 <pre><code>curl -IL http://yourURL/hub.txt</code></pre>
 
 <p>
-Note that the Browser waits 5 minutes before checking for any changes to these files. <strong>When 
+Note that the Browser waits 5 minutes before checking for any changes to these files. When 
 editing hub.txt, genomes.txt,and trackDb.txt, you can shorten this delay by adding 
-<code>udcTimeout=1</code> to your URL.</strong> For more information, see the 
+<code>udcTimeout=1</code> to your URL. For more information, see the 
 <a href="hgTrackHubHelp.html#Debug" target="_blank">Debugging and Updating Track Hubs</a> section of
 the <a href="hgTrackHubHelp.html" target="_blank">Track Hub User Guide</a>.</p>
 <p>
-<strong>For more detailed instructions on setting up a hub, refer to the 
-<a href="hgTrackHubHelp.html#Setup" target="_blank">Setting Up Your Own Track Hub</a> section of the
-Track Hub User Guide.</strong>
-
 
 <!-- ========== hub.txt ============================== -->
 <a name="hub.txt"></a>
 <h2>Understanding hub.txt with useOneFile</h2>
 <p>
 The hub.txt file is a configuration file with names, descriptions, and paths to other files,
-The example below uses the setting "useOneFile on" to indicate that all the settings and paths
+The example below uses the setting <code>useOneFile on</code> to indicate that all the settings and paths
 appear in only the hub.txt file as opposed to having two additional settings files (genome.txt and
-trackDb.txt).</p>
-</br>
+trackDb.txt). To see the actual hub.txt file for the above example, click 
+<a href="examples/hubExamples/hubSearchable/hub.txt">here</a>.</p>
 <p>
 The most important settings to make the hub searchable appear in the third section, in what would
-formerly be the trackDb.txt files. The settings searchIndex and searchTrix indicate which fields
-are indexed in the bigBed file and where to find the .ix file respectively.</p>
+formerly be the trackDb.txt file. The <code>searchIndex</code> and <code>searchTrix</code> 
+indicate which fields are indexed in the bigBed file and where to find the .ix file respectively.
+</p>
 
 <pre><code><strong>hub</strong> <em>MyHubsNameWithoutSpaces</em>
 <strong>shortLabel</strong> <em>My Hub's Name</em>
@@ -135,9 +174,9 @@ are indexed in the bigBed file and where to find the .ix file respectively.</p>
 <strong>email</strong> <em>myEmail@address</em>
 <strong>descriptionUrl</strong> <em>aboutMyHub.html</em>
 <strong>useOneFile</strong> <em>on</em>
-<br>
+
 <strong>genome</strong> <em>assembly_database_2</em>
-<br>
+
 <strong>track</strong> <em>uniqueNameNoSpacesOrDots</em>
 <strong>type</strong> <em>track_type</em>
 <strong>bigDataUrl</strong> <em>track_data_url</em>
@@ -145,23 +184,27 @@ are indexed in the bigBed file and where to find the .ix file respectively.</p>
 <strong>longLabel</strong> <em>long label up to 80 chars</em>
 <strong>visibiltiy</strong> <em>hide/dense/squish/pack/full</em>
 <strong>searchIndex</strong> <em>field,field2</em>
-<strong>searchTrix</strong> <em>path to .ix file</em>
-
+<strong>searchTrix</strong> <em>path/to/.ix/file</em>
+</pre></code>
 
 <h2>Additional Resources</h2>
 <ul>
   <li>
   <strong><a href="hgTrackHubHelp.html" target="_blank">Track Hub User
-Guide</a></strong></li> 
+Guide</a></strong></li>
   <li>
-  <strong><a href="trackDb/trackDbHub.html" target="_blank">Track Database (trackDb) Definition 
-  Document</a></strong></li> 
+  <strong><a href="hgTrackHubHelp.html#UseOneFile" target="_blank">Guide To useOneFile setting</a></strong></li>
   <li>
-  <strong><a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs" target="_blank">Assembly Hubs
-   Wiki</a></strong></li>
+  <a href="trix.html" target="_blank">Search file .ix documentation</li>
   <li>
-  <strong><a href="http://genomewiki.ucsc.edu/index.php/Public_Hub_Guidelines"
-  target="_blank">Public Hub Guidelines Wiki</a></strong></li>
+  <a href="https://groups.google.com/a/soe.ucsc.edu/d/msg/genome/MUFeQDLgEpk/2I1yYVOaCSYJ" 
+  target="_blank">Mailing list question with searchable Track Hub</a></li>
+  <li>
+  <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!msg/genome/1ZWq30-89fw/JXzvb99Q5VQJ"
+   target="_blank">Mailing list question with searchable Custom Tracks</a></li>
+  <li>
+  <strong><a href="trackDb/trackDbHub.html#searchTrix" target="_blank">Track Database (trackDb) searchTrix 
+  Definition</a></strong></li> 
   <li>
   <strong><a href="hubQuickStartGroups.html" target="_blank">Quick Start Guide to Organizing Track 
   Hubs into Groupings</a></strong></li>

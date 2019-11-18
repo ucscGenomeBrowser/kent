@@ -308,6 +308,7 @@ TABLE.groupLists TR:not(.blueToggleBar):not(.noData) TD { border: 1px solid; }
 /* for displaying a basic table - need to condense these to all just the .stdTbl class */
 table.chainTbl, .descTbl, .stdTbl {border-collapse: collapse;}
 table.chainTbl td, .descTbl td, .descTbl th, .stdTbl td, .stdTbl th {border: 1px solid #666; padding: 5px;}
+table.descTbl td.number { text-align: right; }
 
 /* --------------- Newer UI 2.0 styles --------------- */
 .ghost { background-color: #EEEEEE; }
@@ -403,6 +404,7 @@ div.loading { position: absolute; opacity: 0.75; z-index: 15;
 
 /* The are for sortable tables */
 table.subtracks { overflow: visible; white-space: nowrap; border: 1px solid #FFFEE8; }
+table.subtracks table { white-space: normal; }
 tr.sortable { background-color: #FCECC0; }
 th.sortable { color: #0000FF; }
 th:hover.sortable { background-color: #CCFFCC; cursor: pointer; }

@@ -111,6 +111,7 @@ used as a ready reference.</P>
         <LI><A HREF="#snp">snp</A>: Short genetic variants from dbSNP</LI>
         <LI><A HREF="#bigBarChart">barChart/bigBarChart</A>: Categorical values over a region</LI>
         <LI><A HREF="#bigInteract">interact/bigInteract</A>: Pairwise interactions</LI>
+        <LI><A HREF="#hic">hic</A>: Hi-C contact matrices</LI>
         <LI><A HREF="#rareTypes">Specialize or rarely used</A>:<BR>
             <A HREF="#altGraphX">altGraphX</A>,
             <A HREF="#bedDetail">bedDetail</A>,
@@ -373,6 +374,35 @@ are described below along with the settings specific to their types.</P>
             <code>&lt;column&gt;FilterByRange &lt;off/on&gt;</code>
             </div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="filter"><A name="filter">
+            <A name="filter.fieldName"></A>
+            <A name="filterLimits.fieldName"></A>
+            <A name="filterByRange.fieldName"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code>filter.&lt;fieldName&gt; [&lt;default integer&gt;]</code><BR>
+            <code>filterByRange.&lt;fieldName&gt; &lt;off/on&gt;</code><BR>
+            <code>filterLimits.&lt;fieldName&gt; &lt;low&gt;[:&lt;high&gt;]</code><BR>
+            </div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="filterText"><A name="filterText">
+            <A name="FilterText.fieldName"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code>filterText.&lt;fieldName&gt; [&lt;default search string&gt;]</code><BR>
+            <code>filterType.&lt;fieldName&gt; &lt;wildcard/regexp&gt;</code><BR>
+            </div>
+    <TR VALIGN=TOP><TD class="filterValues"><A name="filterValues">
+            <A name="filterValues.fieldName"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code>filterValues.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
+            <code>filterValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
+            <code>filterType.&lt;fieldName&gt; &lt;singleList/multipleListOr/multipleListAnd&gt;</code><BR>
+            </div>
+    <TR VALIGN=TOP><TD class="filterLabel"><A name="filterLabel">
+            <A name="filterLabel.fieldName"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code>filterLabel.&lt;fieldName&gt; &lt;label&gt;</code><BR>
+            </div>
+    </TD></TR>
     <TR VALIGN=TOP><TD class="filterBy"><A name="filterBy"></A><IMG class='toggle detail'>
         <div class="format"><code>filterBy &lt;field1:title=[+]opt1a...&gt;
                                            [field2:title=[+]opt2a...]</code></div>
@@ -518,7 +548,7 @@ are described below along with the settings specific to their types.</P>
         <div class="format"><code>alwaysZero  &lt;off/on&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="autoScale"><A name="autoScale"></A><IMG class='toggle detail'>
-        <div class="format"><code>autoScale &lt;off/on&gt;</code></div>
+        <div class="format"><code>autoScale &lt;off/on/group&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
         <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
@@ -801,15 +831,6 @@ are described below along with the settings specific to their types.</P>
 <br><br>
 
 <a name="bigInteract"></a>
-<style>
-.dot {
-    display: inline-block; 
-    height: 10px; 
-    width: 10px; 
-    margin-right: 2px;
-    border-radius: 50%;
-}
-</style>
 <table class="settingsTable" id="bigInteract">
 <thead><tr><td><div ID="bigInteract_intro" class="intro"></div></td></tr></thead>
 <tr valign=top><th><img class='toggle oneSection'>
@@ -843,6 +864,25 @@ are described below along with the settings specific to their types.</P>
 </td></tr>
 <tr class="examples" valign=top><td class="interact_example"><img class='toggle detail'>
     <div class="format"><b>Example of a bigInteract track</b></div>
+</td></tr>
+</table>
+<br><br>
+
+<a name="hic"></a>
+<table class="settingsTable" id="hic">
+<thead><tr><td><div ID="hic_intro" class="intro"></div></td></tr></thead>
+<tr valign=top><th><img class='toggle oneSection'>
+    &nbsp;hic - Hi-C contact matrices
+</th></tr>
+<tr valign=top><td class="hic"><img class='toggle detail'>
+    <div class="format"> <code>type hic</code></div>
+</td></tr>
+<tr valign=top><td class="bigDataUrl"><img class='toggle detail'>
+    <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code>
+    </div>
+</td></tr>
+<tr class="examples" valign=top><td class="hic_example"><img class='toggle detail'>
+    <div class="format"><b>Example of a hic track</b></div>
 </td></tr>
 </table>
 <br><br>
@@ -1507,6 +1547,17 @@ hierarchical containers:
     <TR VALIGN=TOP><TD class="dragAndDrop"><A name="dragAndDrop"></A><IMG class='toggle detail'>
         <div class="format"><code>dragAndDrop subTracks</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="hideEmptySubtracks"><A name="hideEmptySubtracks"></A>
+                <IMG class='toggle detail'>
+        <div class="format">
+        <code>hideEmptySubtracks &lt;on/default&gt; [multiBed.bb multiBedSources.tab]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="hideEmptySubtracksLabel"><A name="hideEmptySubtracksLabel"></A>
+                <IMG class='toggle detail'>
+        <div class="format">
+        <code>hideEmptySubtracksLabel &lt;label&gt;</code></div>
+    </TD></TR>
+
     <TR class="examples" VALIGN=TOP><TD class="compositeTrack_example">
         <IMG class='toggle detail'>
         <div class="format"><B>Example of a Composite track:</B></div>

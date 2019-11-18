@@ -11,7 +11,7 @@
 
 
 
-char *hubSearchTextCommaSepFieldNames = "hubUrl,db,track,textLength,text";
+char *hubSearchTextCommaSepFieldNames = "hubUrl,db,track,label,textLength,text,parents,parentTypes";
 
 /* definitions for textLength column */
 static char *values_textLength[] = {"Short", "Long", "Meta", NULL};
@@ -28,6 +28,8 @@ ret->track = row[2];
 ret->label = row[3];
 ret->textLength = sqlEnumParse(row[4], values_textLength, &valhash_textLength);
 ret->text = row[5];
+ret->parents = row[6];
+ret->parentTypes = row[7];
 }
 
 struct hubSearchText *hubSearchTextLoadWithNull(char **row)
@@ -43,6 +45,8 @@ ret->track = cloneString(row[2]);
 ret->label = cloneString(row[3]);
 ret->textLength = sqlEnumParse(row[4], values_textLength, &valhash_textLength);
 ret->text = cloneString(row[5]);
+ret->parents = cloneString(row[6]);
+ret->parentTypes = cloneString(row[7]);
 return ret;
 }
 
@@ -52,7 +56,7 @@ struct hubSearchText *hubSearchTextLoadAll(char *fileName)
 {
 struct hubSearchText *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[8];
 
 while (lineFileRow(lf, row))
     {
@@ -70,7 +74,7 @@ struct hubSearchText *hubSearchTextLoadAllByChar(char *fileName, char chopper)
 {
 struct hubSearchText *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[8];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -97,6 +101,8 @@ ret->track = sqlStringComma(&s);
 ret->label = sqlStringComma(&s);
 ret->textLength = sqlEnumComma(&s, values_textLength, &valhash_textLength);
 ret->text = sqlStringComma(&s);
+ret->parents = sqlStringComma(&s);
+ret->parentTypes = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -113,6 +119,8 @@ freeMem(el->db);
 freeMem(el->track);
 freeMem(el->label);
 freeMem(el->text);
+freeMem(el->parents);
+freeMem(el->parentTypes);
 freez(pEl);
 }
 
@@ -155,10 +163,19 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->text);
 if (sep == ',') fputc('"',f);
+fputc(sep, f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->parents);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->parentTypes);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
 
 /* Restrictions on the size of context chunks returned by getTextContext() */
 #define HST_MAXCONTEXTLENGTH 300

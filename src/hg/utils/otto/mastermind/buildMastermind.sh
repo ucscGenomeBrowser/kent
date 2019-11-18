@@ -42,3 +42,4 @@ cp archive/$date/LICENSE.pdf $ARCH/hg38/mastermind/$REL/
 echo "These file were derived from Genomenom CVR, see https://www.genomenon.com/cvr/" > $ARCH/hg19/mastermind/$REL/README.txt
 echo "See the UCSC track help page for details on update frequency and source code." >> $ARCH/hg19/mastermind/$REL/README.txt
 cp $ARCH/hg19/mastermind/$REL/README.txt $ARCH/hg38/mastermind/$REL/README.txt
+echo "Mastermind done"

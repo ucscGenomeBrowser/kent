@@ -1,15 +1,71 @@
 % Manual installation of the UCSC Genome Browser on a Unix server
 
+# Overview of the Genome Browser directories and databases
+
+The genome browser requires only Apache and MySQL and uses these directories:
+
+- static html files: we typically keep them under /usr/local/apache/htdocs and
+  configure Apache to load them from there, to avoid conflicts with the 
+  Linux distribution's default location /var/www/html
+- MySQL databases: most of them are read-only, except the `hgcentral` database
+  which is read-write. Most linux distributions keep these under /var/lib/mysql
+- static genome data files in /gbdb/
+- binary CGI programs that generate images from the MySQL and /gbdb files and
+  write them into the `trash` directory (see below). We modify our Apache
+  config to load CGIs from /usr/local/apache/cgi-bin, so as to not conflict
+  with the default directory of the Linux distribution
+- a directory for temp files called `trash`, located in the parent directory of the
+  CGI programs, usually /usr/local/apache/trash
+- a small text file hg.conf in the same directory as the CGI programs, with
+  information on how to connect to MySQL, the location of the other directories
+  and various other settings, on our machines the location of this file is
+  /usr/local/apache/cgi-bin/hg.conf
+- uploaded custom data gets written by the CGI programs into MySQL databases in
+  the database `customtrash` and also into files under /usr/local/apache/trash
+  which is symlinked from /usr/local/apache/htdocs/trash so these files are
+  accessible to Apache.
+
+When a web browser requests a Genome Browser page, typically /cgi-bin/hgTracks,
+Apache executes this CGI program. The programs then read information about how to 
+connect to MySQL using the file hg.conf, connects to MySQL, reads the
+installed genome assemblies and the current user session from the MySQL database
+hgcentral. For each genome assembly, there is a separate MySQL database (e.g. 
+hg38). Some types of data (e.g. raw genome sequences) are kept as indexed
+binary files outside of MySQL, they are located in /gbdb, e.g. /gbdb/hg38. The
+location of the /gbdb directory can be changed with a setting in hg.conf. Some
+types of data are not specific for a genome, these are kept in the MySQL
+databases hgFixed, proteome and visiGene.
+
+We strongly recommend to follow the default locations, and to place our CGI
+programs in `/usr/local/apache/cgi-bin`.  The htdocs root directory for html
+files should then be in /usr/local/apache/htdocs.  All Genome Browser
+components called from Apache get their settings from the central configuration
+file `/usr/local/apache/cgi-bin/hg.conf`.  Among others, the location and the
+username/password for the MySQL server is specified there.
+
+To load data into the genome browser databases, you need a command line tool
+like hgLoadBed.  These tools are distributed separately from the CGI programs.
+Some tools create only MySQL tables, others write into a /gbdb subdirectory.
+Most of them require a configuration file ~/.hg.conf in your home directory
+with the MySQL connection information, like server name, username and password.
+The data loading is done from the Unix command line and not dependent on the
+CGI programs that create the Genome Browser graphics.
+
 # Software Requirements
+
+To run our provided binaries:
 
 * Linux/Ubuntu/CentOS/Unix/MacOSX operating system
 * Apache2.x - http web server - <http://httpd.apache.org/>
-* gnu gcc - C code development system - <http://www.gnu.org/software/gcc/>
-* gnu make - <http://www.gnu.org/software/make/>
 * MySQL development system and libraries - <http://dev.mysql.com/>
 * libpng runtime and development packages - <http://www.libpng.org/>
 * libssl runtime and development packages - <http://www.openssl.org/>
 * Universally Unique Identifier library - <http://e2fsprogs.sourceforge.net/>
+
+If you want to make modifications to our software, you need to compile it:
+
+* gnu gcc - C code development system - <http://www.gnu.org/software/gcc/>
+* gnu make - <http://www.gnu.org/software/make/>
 
 Optional:
 
@@ -18,7 +74,7 @@ Optional:
 * 'gmt' map plotting tools <http://www.soest.hawaii.edu/gmt/>
 * 'pstack' for stack traces
 * 'R' for the GTex track
-* 'python-mysqldb' for the gene interactions track
+* 'python-mysqldb' for the gene interactions track (python2)
 
 It is best to install these packages with your standard operating
 system package management tools:
@@ -64,26 +120,14 @@ but can be changed to get the size for a particular assembly:
   
     rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/mysql/ | egrep "Number of files:|total size is"
 
-# Overview of the Genome Browser directories and databases
-
-We strongly recommend to place our CGI programs in `/usr/local/apache/cgi-bin`. The htdocs root directory
-for html files should then be in /usr/local/apache/htdocs.  All Genome Browser components
-called from Apache get their settings from the central configuration file `/usr/local/apache/cgi-bin/hg.conf`.
-Among others, the location and the username/password for the MySQL server is specified there.
-
-When a web browser requests a Genome Browser page, typically
-/cgi-bin/hgTracks, Apache executes this CGI program. The programs then read
-information about the installed genome assemblies and the current user session
-from the database hgcentral. For each genome assembly, there is a separate MySQL
-database (e.g. hg38). Some types of data are kept as indexed binary files outside of 
-MySQL, they are located in /gbdb, e.g. /gbdb/hg38. The location of the /gbdb 
-directory can be changed with a setting in hg.conf. Some types of data are not specific 
-for a genome, these are kept in the MySQL databases hgFixed, proteome and visiGene.
-
-To load data into the genome browser databases, you need a configuration file ~/.hg.conf 
-in your home directory with the MySQL username/password and one of the loader programs, e.g. hgLoadBed.
-
 # Installing the UCSC Genome browser
+
+Note: we offer Genome-Browser-in-a-Box (GBIB), a fully configured virtual
+machine image that can be converted for VirtualBox, VMWare, Hyper-V and other
+popular environments.  We also offer Genome-Browser-in-the-Cloud (GBIC) an
+shell script that installs a genome browser in most main Linux distributions
+(Most Debian and Redhat-based ones, like Ubuntu and CentOS). 
+See https://hgwdev-max.gi.ucsc.edu/goldenPath/help/mirror.html
 
 Scripts to perform all of the functions below can be found in
 the directory here: src/products/scripts/

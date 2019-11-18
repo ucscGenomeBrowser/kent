@@ -1,5 +1,6 @@
 track chainNetHg19 override
 chainMinScore 5000
+shortLabel $o_db Chain/Net
 
 track chainNetHg38 override
 matrix 16 100,-174,-43,-144,-174,93,-176,-43,-43,-176,93,-174,-144,-43,-174,100

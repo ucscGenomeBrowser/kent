@@ -7,13 +7,24 @@ conception until birth.</p>
 <div><img border="1" src="../images/renMouseDev.png" style="margin-left: 100px;"></div>
 <p>
 This track set presents enhancer-promoter interactions
-predicted from enhancer-associated chromatin signals and gene expression across tissue stages,
-based on histone modification (ChIP-seq), chromatin accessibility (ATAC-seq) 
+predicted from correlation of enhancer-associated chromatin signals and gene expression 
+across tissue stages, based on histone modification (ChIP-seq)
 and transcription (RNA-seq) assays and analysis performed by the ENCODE project.</p>
+
 <p>
-The promoter annotation in this track was obtained from the 
+Data underlying this track are presented in the 
+<a target="_blank" href="../cgi-bin/hgTrackUi?db=mm10&g=encode3RenHistone">Histone Modifications</a> and
+<a target="_blank" href="../cgi-bin/hgTrackUi?db=mm10&g=encode3RenHistone">Chromatin State</a>
+tracks, part of the 
+<a target="_blank" href="../cgi-bin/hgTrackUi?db=mm10&g=encode3Reg">ENCODE Regulation</a> supertrack.</p>
+<p>
+The promoters presented in this track were derived from experimentally validated promoters 
+provided by the
 <a target="_blank" href="https://epd.epfl.ch/EPDnew_database.php">
 Eukaryotic Promoter Database</a> (EPDNew).
+A more complete presentation of this annotation can be found in the
+<a target="_blank" href="../cgi-bin/hgTrackUi?db=mm10&g=epdNew">EPDnew Promoters</a> track.
+</p>
 
 <h2> Display Conventions and Configuration </h2>
 <p>
@@ -21,10 +32,10 @@ Eukaryotic Promoter Database</a> (EPDNew).
 This track is a multi-view composite track containing four data types
 (<em>views</em>):
 <ul>
-<li>Enhancer elements</li>
-<li>Promoter regions</li>
-<li>Interactions between enhancers and gene promoter</li>
-<li>Clustered interactions, by promoter or enhancer</li>
+<li>Putative enhancer elements</li>
+<li>Gene promoters</li>
+<li>Predicted interactions between enhancers and gene</li>
+<li>Clustered interactions, by gene or enhancer</li>
 </ul>
 <p>
 For each view, there is a choice of two subtracks to display individually on the browser;
@@ -36,14 +47,21 @@ tracks are <a href="/goldenPath/help/multiView.html" target=_blank>here</a>.</p>
 <p>
 The display aims to improve distinguishing genes and their interactions by coloring
 successive genes in different colors.  All interactions with a gene are colored the
-same as the gene.</p>
+same as the gene promoter.</p>
+<p>
+The promoter display follows EPD conventions; the &quot;thin&quot; part of the item
+represents the 49 bp upstream of the annotated transcription start site (TSS) whereas 
+the &quot;thick&quot; part represents the TSS plus 10 bp downstream. 
+The relative position of the thick and thin parts define the orientation of the promoter.</p>
 
 <h2>Methods</h2>
+<h3>Enhancers</h3>
 <p>
 Strong enhancer calls from ChromHMM were merged and filtered to produce a set 
 of 66,556 putative strong TSS-distal enhancers across all tissues and developmental stages, 
 and H3K27ac signals at these regions were quantified using uniquely aligned, 
 de-duplicated ChIP-seq reads.</p>
+<h3>Enhancer/Gene Map</h3>
 <p>
 Topologically associated domains (TAD's) identified in mouse ES-cells (Dixon et al.) were 
 then used to constrain enhancer/gene associations.
@@ -57,32 +75,60 @@ were retained.
 </p>
 <p>
 Two maps were independently derived from two biological replicates of ChIP-seq and RNA-seq data.
-The "All" dataset contains significant interactions present in either biological replicate. 
-The "Replicated" dataset contains significant interactions present in both
-</p>
+The &quot;All&quot; dataset contains significant interactions present in either biological replicate. 
+The &quot;Replicated&quot; dataset contains significant interactions present in both
+Detailed methods can be found in Gorkin et al, in References below.
 <p>
-Detailed methods can be found in Gorkin et al. An atlas of dynamic chromatin landscapes in the developing mouse fetus. Nature, In Press. (pre-print: doi: https://doi.org/10.1101/166652)
+<h3>Promoters and Interactions</h3>
 <p>
+The Promoter subtrack was generated at UCSC. EPDnew mouse promoter release 003 (June 2018) was 
+obtained from obtained from the
+<a target="_blank" href="https://epd.epfl.ch/EPDnew_database.php">
+Eukaryotic Promoter Database</a>,
+and filtered to contain only promoters appearing in the Enhancer/Gene maps.</p>
+<p>
+The Interactions view was generated at UCSC from the Enhancer/Gene maps by linking the enhancers 
+to promoter regions based on the EPDnew promoters. 
+Multiple promoters for a single gene
+were merged into a single region covering the range of all promoters.</p>
 
 <h2>Data Access</h2>
-Histone ChIP-seq, RNA-seq, and ATAC-seq data underlying this annotation are available from the
-ENCODE portal.
-
-https://www.encodeproject.org/search/?type=OrganismDevelopmentSeries&internal_tags=MouseDevSeries&status=released&assembly=mm10&related_datasets.assay_term_name=RNA-seq&lab.title=Barbara+Wold%2C+Caltech
+<p>
+Histone ChIP-seq and RNA-seq data underlying this annotation are available from the
+<a target="_blank" href="https://www.encodeproject.org/search/?type=OrganismDevelopmentSeries&internal_tags=MouseDevSeries&status=released&assembly=mm10"> ENCODE portal</a>.</p>
+<p>
+The EPDnew promoters for mouse can be downloaded from the <a target=_"blank" href="ftp://ccg.epfl.ch/epdnew/M_musculus/003/">EPD FTP site</a>,
 
 <h2>Credits</h2>
-
-David Gorkin
-Iros Barozzi
-Yanxiao Zhang
-Yuan Zhao
+<p>
+Thanks to Iros Barozzi and colleagues in the
+<a target="_blank" href="https://biosciences.lbl.gov/divisions/egsb/">Environmental Genomics and Systems Biology Division</a>
+at the Lawrence Berkeley National Laboratory for generating the enhancer/gene association analysis and to
+David Gorkin and Yanxiao Zhang at the Ren lab (UCSD/Ludwig Institute for Cancer Research)
+for providing these data and assisting with track development at UCSC.</p>
 
 <h2>References</h2>
 <p>
-An atlas of dynamic chromatin landscapes in the developing mouse fetus
-Gorkin et al.  In Press, Nature. 
-(pre-print: doi: 
-<a target="_blank">https://doi.org/10.1101/166652)</p>
+Gorkin et al. An atlas of dynamic chromatin landscapes in the developing mouse fetus.
+Nature, In Press. (pre-print: doi:
+<a target="_blank" href="https://doi.org/10.1101/166652">https://doi.org/10.1101/166652</a>)</p>
+
+Sloan CA, Chan ET, Davidson JM, Malladi VS, Strattan JS, Hitz BC, Gabdank I, Narayanan AK, Ho M, Lee
+BT <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkv1160" target="_blank">
+ENCODE data at the ENCODE portal</a>.
+<em>Nucleic Acids Res</em>. 2016 Jan 4;44(D1):D726-32.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26527727" target="_blank">26527727</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4702836/" target="_blank">PMC4702836</a>
+</p>
+
+<p>
+Dreos R, Ambrosini G, Groux R, Cavin P&#233;rier R, Bucher P.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkw1069" target="_blank">
+The eukaryotic promoter database in its 30th year: focus on non-vertebrate organisms</a>.
+<em>Nucleic Acids Res</em>. 2017 Jan 4;45(D1):D51-D55.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27899657" target="_blank">27899657</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5210552/" target="_blank">PMC5210552</a>
 </p>
 
 <p>
@@ -93,4 +139,5 @@ Topological domains in mammalian genomes identified by analysis of chromatin int
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/22495300" target="_blank">22495300</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3356448/" target="_blank">PMC3356448</a>
 </p>
+
 

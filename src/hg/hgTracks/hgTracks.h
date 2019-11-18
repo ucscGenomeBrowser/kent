@@ -677,6 +677,12 @@ double scaleForPixels(double pixelWidth);
 /* Return what you need to multiply bases by to
  * get to scale of pixel coordinates. */
 
+boolean scaledBoxToPixelCoords(int chromStart, int chromEnd, double scale, int xOff,
+                               int *pX1, int *pX2);
+/* Convert chrom coordinates to pixels. Clip to window to prevent integer overflow.
+ * For special case of a SNP insert location with width==0, set width=1.
+ * Returns FALSE if it does not intersect the window, or if it would have a negative width. */
+
 void drawScaledBox(struct hvGfx *hvg, int chromStart, int chromEnd,
 	double scale, int xOff, int y, int height, Color color);
 /* Draw a box scaled from chromosome to window coordinates.
@@ -1661,6 +1667,9 @@ void genericDrawNextItem(struct track *tg, void *item, struct hvGfx *hvg, int xO
 
 struct spaceSaver *findSpaceSaver(struct track *tg, enum trackVisibility vis);
 /* Find SpaceSaver in list. Return spaceSaver found or NULL. */
+
+void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut);
+/* add text to track long label to indicate filter is active and how many items were deleted */
 
 void labelTrackAsFiltered(struct track *tg);
 /* add text to track long label to indicate filter is active */

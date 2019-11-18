@@ -145,7 +145,8 @@ hgMapToGene -type=psl -tempDb=$tempDb $db all_mrna knownGene knownToMrnaSingle
 
 makeGencodeKnownGene $db $tempDb $GENCODE_VERSION txToAcc.tab
 
-hgsql $tempDb -Ne "select k.name, g.geneId, g.geneStatus, g.geneType,g.transcriptName,g.transcriptType,g.transcriptStatus, g.havanaGeneId,  g.ccdsId, g.level, g.transcriptClass from knownGene k, $db.wgEncodeGencodeAttrs$GENCODE_VERSION g where k.alignID=g.transcriptId" | sort | uniq > knownAttrs.tab
+hgsql $tempDb -Ne "select k.name, g.geneId, g.geneStatus, g.geneType,g.transcriptName,g.transcriptType,g.transcriptStatus, g.havanaGeneId,  g.ccdsId, g.level, g.transcriptClass from knownGene k, $db.wgEncodeGencodeAttrs$GENCODE_VERSION g where k.name=g.transcriptId" | sort | uniq > knownAttrs.tab
+
 hgLoadSqlTab -notOnServer $tempDb knownAttrs $kent/src/hg/lib/knownAttrs.sql knownAttrs.tab
 
 #tawk '$4=="new" {print $3}' oldToNew.tab | sort > new.txt
@@ -156,7 +157,7 @@ hgLoadSqlTab -notOnServer $tempDb knownAttrs $kent/src/hg/lib/knownAttrs.sql kno
 
 sort kgColor.tab | uniq | hgLoadSqlTab -notOnServer $tempDb kgColor $kent/src/hg/lib/kgColor.sql stdin
  
-hgLoadSqlTab -notOnServer $tempDb knownIsoforms $kent/src/hg/lib/knownIsoforms.sql knownIsoforms.tab
+sort knownIsoforms.tab | uniq | hgLoadSqlTab -notOnServer $tempDb knownIsoforms $kent/src/hg/lib/knownIsoforms.sql stdin
 
 hgLoadSqlTab -notOnServer $tempDb kgXref $kent/src/hg/lib/kgXref.sql kgXref.tab
 
@@ -212,8 +213,10 @@ hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from hgFixed.refLink" $
 hgMapToGene -tempDb=$tempDb $db refGene knownGene knownToLocusLink -lookup=refToLl.txt
 knownToVisiGene $tempDb -probesDb=$db
 
-awk '{OFS="\t"} {print $2,$1}' tmp1 | sort > knownToEnsembl.tab
-tawk '{print $2,$1}' tmp1 | sort > knownToGencode${GENCODE_VERSION}.tab
+awk '{OFS="\t"} {print $4,$4}' ucscGenes.bed | sort > knownToEnsembl.tab
+cp knownToEnsembl.tab knownToGencode${GENCODE_VERSION}.tab
+#awk '{OFS="\t"} {print $2,$1}' tmp1 | sort > knownToEnsembl.tab
+#tawk '{print $2,$1}' tmp1 | sort > knownToGencode${GENCODE_VERSION}.tab
 hgLoadSqlTab -notOnServer $tempDb  knownToEnsembl  $kent/src/hg/lib/knownTo.sql  knownToEnsembl.tab
 hgLoadSqlTab -notOnServer $tempDb  knownToGencode${GENCODE_VERSION}  $kent/src/hg/lib/knownTo.sql  knownToGencode${GENCODE_VERSION}.tab
 
@@ -934,30 +937,17 @@ hgLoadBlastTab $fishDb $blastTab run.$fishDb.$tempDb/recipBest.tab
 
 # Do synteny on mouse/human/rat
 synBlastp.csh $xdb $db
-#old number of unique query values: 45399
-#old number of unique target values 22999
-#new number of unique query values: 42015
-#new number of unique target values 22470
+# old number of unique query values: 61250
+# old number of unique target values 27574
+# new number of unique query values: 52518
+# new number of unique target values 25367
 
 synBlastp.csh $ratDb $db ensGene knownGene
-#old number of unique query values:  27888  
-#old number of unique target values  18988  
-#new number of unique query values:  24530  
-#new number of unique target values  18411  
+# old number of unique query values: 28159
+# old number of unique target values 19155
+# new number of unique query values: 23777
+# new number of unique target values 17885
 
-
-# need to generate multiz downloads
-#/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz46way/alignments/knownCanonical.exonAA.fa.gz
-#/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz46way/alignments/knownCanonical.exonNuc.fa.gz
-#/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz46way/alignments/knownGene.exonAA.fa.gz
-#/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz46way/alignments/knownGene.exonNuc.fa.gz
-#/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz46way/alignments/md5sum.txt
-
-echo
-echo "see the bottom of the script for details about knownToWikipedia"
-echo
-# Clean up
-rm -r run.*/out
 
 # Last step in setting up isPCR: after the new UCSC Genes with the new Known Gene isPcr
 # is released, take down the old isPcr gfServer  

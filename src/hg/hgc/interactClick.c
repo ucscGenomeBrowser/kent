@@ -11,6 +11,7 @@
 #include "customTrack.h"
 #include "trashDir.h"
 #include "hex.h"
+#include "jsHelper.h"
 #include <openssl/sha.h>
 
 #include "interact.h"
@@ -297,15 +298,20 @@ else
                     name, cgiEncode(regionFile),
                     CT_CUSTOM_TEXT_VAR, cgiEncode(customText));
     if (isVirtMode)
+        {
         printf(" or "
                 "<a href='hgTracks?"
                     "virtMode=0&"
                     "virtModeType=default'>"
                 " normal browser view</a>");
+        }
+    else
+        {
+        printf("&nbsp;&nbsp;&nbsp;");
+        printf("<a href=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>(Help)</a>\n");
+        printf("<br>&nbsp;&nbsp;&nbsp;&nbsp;<i>Note: all interactions will display in &quot;pack&quot; mode</i>\n");
+        }
     }
-printf("&nbsp;&nbsp;&nbsp;");
-printf("<a href=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>(Help)</a>\n");
-printf("<br>&nbsp;&nbsp;&nbsp;&nbsp;<i>Note: all interactions will display in &quot;pack&quot; mode</i>\n");
 }
 
 void doInteractRegionDetails(struct trackDb *tdb, struct interact *inter)
@@ -459,7 +465,12 @@ if (count > 1 || clusterMode)
     printf("</p>");
     }
 
-//genericHeader(tdb, item);
+if (count > 1)
+    {
+    puts("<table>");
+    jsBeginCollapsibleSectionFontSize(cart, tdb->track, "interactions",
+                          "Show individual interactions", FALSE, "inherit");
+    }
 static struct interactPlusRow *ipr = NULL;
 for (ipr = iprs; ipr != NULL; ipr = ipr->next)
     {
@@ -476,6 +487,11 @@ for (ipr = iprs; ipr != NULL; ipr = ipr->next)
         }
     if (count > 1 && !isEmptyTextField(ipr->interact->name) && sameString(ipr->interact->name, item))
         printf("<hr>\n");
+    }
+if (count > 1)
+    {
+    jsEndCollapsibleSection();
+    puts("</table>");
     }
 }
 
