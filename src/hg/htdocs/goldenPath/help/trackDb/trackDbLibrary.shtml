@@ -1603,15 +1603,16 @@ There are no extra options that can appear on the type hic line.
     <P>You can also choose which values to have selected by default using the
     <code>filterValuesDefault.&lt;fieldName&gt;</code> parameter. It can take a comma separated
     list just like <code>filterValues.&lt;fieldName&gt;</code>, and any items included will be
-    automatically selected. Not that the values need to be present in both settings.</P> 
-    <P>The name of the item that shows up in the dropdown menu may also be changed from
-    the actual category it matches in the data. This can be helpful in scenarios where
-    the matching category has a long or descriptive entry. In order to enable this 
-    abbreviation, you would pass the menu name, followed by a pipe, then the name
-    of the category in the data. E.x. <code>AML|Acute Myeloid Leukemia</code>. The format is as 
-    follows:</P>
-    <pre>filterValues.fieldName alternativeName1|fieldValue1,alternativeName2|fieldValue2...</pre> 
-    <P>See example below for more information.</P>
+    automatically selected. Not that the values need to be present in both settings.</P>  
+    <P>The values in the menu shown to the user can be configured,
+    they can be different from the data in the bigBed field. This can be helpful when the data values are
+    written in short form, but you want a longer more descriptive name to show up in the UI.
+    The format for this substitution is as follows:</P>
+    <pre>filterValues.fieldName fieldValue1|alternativeName1,fieldValue2|alternativeName2...</pre>
+    <P>E.g. if the value in the bigBed field is <code>AML</code>, a setting 
+    like <code>Acute Myeloid Leukemia|AML</code> will show <code>Acute Myeloid Leukemia</code> 
+    in the user interface but will lead to the value <code>AML</code> being searched in the bigBed 
+    field. See example below for more information.</P>
     <P><B>Notes:</B><ul>
     <li>Currently, all values must be stated individually</li>
     <li>Value names must match exactly</li>
@@ -1642,7 +1643,7 @@ There are no extra options that can appear on the type hic line.
     parameter as well. Now the default filter when the hub is loaded will have the Odd value
     preselected.</P>
     <pre>
-    filterValues.annotationType DNA-binding region,active site,beta strand,binding site,calcium-binding region</pre>
+    filterValues.annotationType DNA-BR,AS,BS,BSi</pre>
     <P>In this example the filter is being applied to multiple values in the 
     <code>annotationType</code> field. We can then select from these values in the 
     <code>annotationType</code> field with a drop-down menu displayed on the track settings page, 
@@ -1651,10 +1652,9 @@ There are no extra options that can appear on the type hic line.
     <pre>
     filterValues.annotationType DNA-BR|DNA-binding region,AS|active site,BS|beta strand,BSi|binding site</pre>
     <P>In this follow up to the previous question, we have changed the name of the items that
-    show up in the drop down menu by supplying an alternative name followed by a pipe, and then 
-    the value name found in the <code>annotationType</code> field. This means
+    show up in the drop down menu to be more descriptive than the dense file format values. This means
     that if we wanted to only see items with <code>annotationType</code> of 
-    <code>DNA-binding region</code>, we would select <strong>DNA-BR</strong> from the menu.</P>
+    <code>DNA-BR</code>, we would select <code>DNA-binding region</code> from the intercace menu.</P>
 </DIV>
 
 <DIV class="filterLabel"><span class="types bed bigBed"></span>
