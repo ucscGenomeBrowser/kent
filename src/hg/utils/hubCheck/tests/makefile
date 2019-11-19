@@ -3,7 +3,7 @@ include ../../../../inc/common.mk
 
 hubCheck = ${DESTBINDIR}/hubCheck
 
-test:: one two
+test:: one two errors
 	${MAKE} clean
 
 one:	mkout
@@ -13,6 +13,10 @@ one:	mkout
 two:	mkout
 	-${hubCheck} input/hub2.txt > output/output2.txt 2> /dev/null
 	diff expected/output2.txt output/output2.txt
+
+errors:	mkout
+	-${hubCheck} input/manyErrorsHub.txt > output/manyErrors.output.txt 2>/dev/null
+	diff expected/manyErrors.output.txt output/manyErrors.output.txt
 
 mkout::
 	@mkdir -p output
