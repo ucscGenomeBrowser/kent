@@ -156,6 +156,8 @@ struct sharedProps
     enum soTerm maxFuncImpact;        // {codingNonSyn, splice, codingSyn, intron, upstream, downstream, intergenic}
     int commonCount;                  // Number of projects reporting minor allele freq >= 1%
     int rareCount;                    // Number of projects reporting minor allele freq < 1%
+    boolean freqIncomplete;           // At least one project provided no alt allele (only del==ins)
+    boolean freqNotMapped;            // At least one project's report was not mapped to own asmbly
     };
 
 struct spdiBed *spdiBedNewLm(char *seq, int pos, char *del, char *ins, struct lm *lm)
@@ -424,6 +426,7 @@ if (obsList != NULL)
     struct slName *unorderedSourceList = NULL;
     int maxSampleCount = 0;
     int biggestSourceIx = 0;
+    int validCount = 0;
     struct slRef *obsRef;
     for (obsRef = obsList;  obsRef != NULL;  obsRef = obsRef->next)
         {
@@ -432,29 +435,44 @@ if (obsList != NULL)
         struct spdiBed *spdiB = NULL;
         struct alObs *obs = parseAlObs(obsEl, &source, &spdiB, lm);
         int ix = freqSourceToIx(source, &unorderedSourceList, lm);
-        slAddHead(&props->freqSourceSpdis[ix], spdiB);
-        slAddHead(&props->freqSourceObs[ix], obs);
         props->freqIsRc[ix] = hashIntValDefault(seqIsRc, spdiB->chrom, -1);
-        if (props->freqIsRc[ix] < 0)
-            errAbort("parseFrequencies: Unknown orientation for %s seq_id %s",
-                     rsId, spdiB->chrom);
-        if (obs->totalCount > maxSampleCount)
+        if (props->freqIsRc[ix] >= 0)
             {
-            maxSampleCount = obs->totalCount;
-            biggestSourceIx = ix;
+            slAddHead(&props->freqSourceSpdis[ix], spdiB);
+            slAddHead(&props->freqSourceObs[ix], obs);
+            if (obs->totalCount > maxSampleCount)
+                {
+                maxSampleCount = obs->totalCount;
+                biggestSourceIx = ix;
+                }
+            validCount++;
             }
+        else
+            props->freqNotMapped = TRUE;
         }
-    if (!freqSourceOrder)
-        props->freqSourceCount = slCount(unorderedSourceList);
-    int ix;
-    for (ix = 0;  ix < props->freqSourceCount; ix++)
+    if (props->freqNotMapped)
+        warn("Frequency report not mapped to own assembly for %s", props->name);
+    if (validCount > 0)
         {
-        slReverse(&props->freqSourceSpdis[ix]);
-        slReverse(&props->freqSourceObs[ix]);
+        if (!freqSourceOrder)
+            props->freqSourceCount = slCount(unorderedSourceList);
+        int ix;
+        for (ix = 0;  ix < props->freqSourceCount; ix++)
+            {
+            slReverse(&props->freqSourceSpdis[ix]);
+            slReverse(&props->freqSourceObs[ix]);
+            }
+        addMissingRefAllele(props, rsId, lm);
+        checkFreqSourceObs(props, rsId);
+        props->biggestSourceIx = biggestSourceIx;
         }
-    addMissingRefAllele(props, rsId, lm);
-    checkFreqSourceObs(props, rsId);
-    props->biggestSourceIx = biggestSourceIx;
+    else
+        {
+        props->freqSourceCount = 0;
+        props->freqSourceSpdis = NULL;
+        props->freqSourceObs = NULL;
+        props->freqIsRc = NULL;
+        }
     }
 }
 
@@ -819,9 +837,20 @@ for (obs = props->freqSourceObs[sourceIx];  obs != NULL;  obs = obs->next)
 if (totalCount > 0)
     {
     if (majorAlleleCount < 0)
-        errAbort("no major allele observed despite nonzero totalCount...?");
+        errAbort("no allele observed despite nonzero totalCount...?");
     if (minorAlleleCount < 0)
-        errAbort("no minor allele observed... what should the minorAllele value be??");
+        {
+        // Allele and count are provided for only one allele -- inferring the other allele
+        // would be dicey, so just add a note and erase the freq data from this source and
+        // return NaN.
+        props->freqIncomplete = TRUE;
+        props->freqSourceSpdis[sourceIx] = NULL;
+        props->freqSourceObs[sourceIx] = NULL;
+        *retMajorAllele = NULL;
+        *retMinorAllele = NULL;
+        warn("Incomplete freq data from source %d for %s", sourceIx, props->name);
+        return NAN;
+        }
     }
 *retMajorAllele = lmCloneString(lm, majorAllele);
 *retMinorAllele = lmCloneString(lm, minorAllele);
@@ -872,6 +901,24 @@ if (props->freqSourceCount > 0)
                 props->commonCount++;
             else
                 props->rareCount++;
+            }
+        }
+    if (props->freqIncomplete)
+        {
+        // At least one freq project was erased due to incomplete data.  If it was the only
+        // project with any data, set props->freqSourceCount to 0 (no freq data).
+        int sIx;
+        boolean gotFreq = FALSE;
+        for (sIx = 0;  sIx < props->freqSourceCount;  sIx++)
+            {
+            if (isfinite(props->freqSourceMaf[sIx]))
+                gotFreq = TRUE;
+            }
+        if (!gotFreq)
+            {
+            props->freqSourceCount = 0;
+            props->freqSourceMajorAl = NULL;
+            props->freqSourceMinorAl = NULL;
             }
         }
     }
@@ -1210,6 +1257,10 @@ else if (props->rareCount > 0 || props->freqSourceCount == 0)
     dyStringAppend(dyUcscNotes, bdsRareSome ",");
     dyStringAppend(dyUcscNotes, bdsRareAll ",");
     }
+if (props->freqIncomplete)
+    dyStringAppend(dyUcscNotes, bdsFreqIncomplete ",");
+if (props->freqNotMapped)
+    dyStringAppend(dyUcscNotes, bdsFreqNotMapped ",");
 if (isRc)
     dyStringAppend(dyUcscNotes, bdsRevStrand ",");
 if (isMultiMapper)

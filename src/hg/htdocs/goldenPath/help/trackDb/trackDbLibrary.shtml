@@ -1608,8 +1608,10 @@ There are no extra options that can appear on the type hic line.
     the actual category it matches in the data. This can be helpful in scenarios where
     the matching category has a long or descriptive entry. In order to enable this 
     abbreviation, you would pass the menu name, followed by a pipe, then the name
-    of the category in in the data. E.x. <code>AML|Acute Myeloid Leukemia</code>. 
-    See example below for more information.</P>
+    of the category in the data. E.x. <code>AML|Acute Myeloid Leukemia</code>. The format is as 
+    follows:</P>
+    <pre>filterValues.fieldName alternativeName1|fieldValue1,alternativeName2|fieldValue2...</pre> 
+    <P>See example below for more information.</P>
     <P><B>Notes:</B><ul>
     <li>Currently, all values must be stated individually</li>
     <li>Value names must match exactly</li>
@@ -1631,7 +1633,7 @@ There are no extra options that can appear on the type hic line.
     <P>In this follow up example, we are passing the <code>filterType.fieldName singleList</code>
     parameter, which means that only one item in the <code>OddEven</code> field can be 
     chosen, in this case &quot;Odd&quot; or &quot;Even&quot;. This removes the default that 
-    allows multiple selections</P>
+    allows multiple selections.</P>
     <pre>
     filterValues.OddEven Odd,Even
     filterType.OddEven singleList
@@ -1644,11 +1646,13 @@ There are no extra options that can appear on the type hic line.
     <P>In this example the filter is being applied to multiple values in the 
     <code>annotationType</code> field. We can then select from these values in the 
     <code>annotationType</code> field with a drop-down menu displayed on the track settings page, 
-    and display only items that match our selections.</P>
+    and display only items that match our selections. The selection choices will let us match
+    one, all, or any combination of the supplied values.</P>
     <pre>
-    annotationType.FilterValues DNA-BR|DNA-binding region,AS|active site,BS|beta strand,BSi|binding site</pre>
+    filterValues.annotationType DNA-BR|DNA-binding region,AS|active site,BS|beta strand,BSi|binding site</pre>
     <P>In this follow up to the previous question, we have changed the name of the items that
-    show up in the drop down menu by supplying a shorter alternative followed by a pipe. This means
+    show up in the drop down menu by supplying an alternative name followed by a pipe, and then 
+    the value name found in the <code>annotationType</code> field. This means
     that if we wanted to only see items with <code>annotationType</code> of 
     <code>DNA-binding region</code>, we would select <strong>DNA-BR</strong> from the menu.</P>
 </DIV>

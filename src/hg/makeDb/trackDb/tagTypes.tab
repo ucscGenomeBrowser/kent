@@ -400,6 +400,7 @@ sGroup_Zaire(DRC)_1976-7 wigMaf
 *Filter bed narrowPeak broadPeak
 *FilterLimits bed narrowPeak broadPeak
 *FilterByRange bed narrowPeak broadPeak
+*FilterLabel bed narrowPeak broadPeak big*
 scoreFilter broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed bigPsl
 scoreFilterByRange bed peptideMapping bigBed bigPsl
 scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed bigPsl
