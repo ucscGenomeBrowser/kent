@@ -21328,7 +21328,7 @@ else if (sameWord(type, "bigInteract") || sameWord(type, "interact"))
     doInteractDetails(ct->tdb, item);
 else if (sameWord(type, "bam"))
     doBamDetails(ct->tdb, itemName);
-else if (sameWord(type, "vcfTabix"))
+else if (sameWord(type, "vcfTabix") || sameWord(type, "vcfPhasedTrio"))
     doVcfTabixDetails(ct->tdb, itemName);
 else if (sameWord(type, "vcf"))
     doVcfDetails(ct->tdb, itemName);
@@ -26730,7 +26730,8 @@ else if (startsWith("snake", trackHubSkipHubName(table)))
     {
     doSnakeClick(tdb, item);
     }
-else if (tdb != NULL && startsWithWord("vcfTabix", tdb->type))
+else if (tdb != NULL &&
+        (startsWithWord("vcfTabix", tdb->type) || sameWord("vcfPhasedTrio", tdb->type)))
     {
     doVcfTabixDetails(tdb, item);
     }

@@ -384,6 +384,113 @@ cgiMakeDoubleVarInRange(varName, cartMinFreq, "minor allele frequency between 0.
 puts("<BR>");
 }
 
+static struct slPair *vcfPhasedGetSamplesFromTdb(struct trackDb *tdb, boolean hideOtherSamples)
+/* Get the different VCF Phased Trio setings out of trackDb onto a list */
+{
+// cloneString here because we will be munging the result if there are alternate labels
+char *childSampleMaybeAlias = cloneString(trackDbLocalSetting(tdb, VCF_PHASED_CHILD_SAMPLE_SETTING));
+char *parentSamplesMaybeAlias = cloneString(trackDbLocalSetting(tdb, VCF_PHASED_PARENTS_SAMPLE_SETTING));
+char *samples[VCF_PHASED_MAX_OTHER_SAMPLES+1]; // for now only allow at most two parents
+int numOthers = 0;
+if (parentSamplesMaybeAlias && !hideOtherSamples)
+    {
+    numOthers = chopCommas(cloneString(parentSamplesMaybeAlias), samples);
+    if (numOthers > VCF_PHASED_MAX_OTHER_SAMPLES)
+        {
+        warn("More than %d other samples specified for phased trio", VCF_PHASED_MAX_OTHER_SAMPLES);
+        numOthers = VCF_PHASED_MAX_OTHER_SAMPLES;
+        }
+    // shove child into middle of array, and if there are two parents, scoot the second one to the end
+    int lastParentIx = VCF_PHASED_MAX_OTHER_SAMPLES - 1;
+    if (samples[lastParentIx] != NULL)
+        samples[VCF_PHASED_MAX_OTHER_SAMPLES] = cloneString(samples[lastParentIx]);
+    samples[lastParentIx] = cloneString(childSampleMaybeAlias);
+    }
+else
+    samples[0] = cloneString(childSampleMaybeAlias);
+
+boolean gotAlias = strchr(samples[0], '|') != NULL; // default to whatever is first
+struct slPair *ret = NULL;
+int i;
+for (i = 0; i < numOthers+1; i++)
+    {
+    char *val = strchr(samples[i], '|');
+    boolean foundAlias = val != NULL;
+    if (val != NULL)
+        {
+        if (foundAlias != gotAlias)
+            errAbort("Either all samples have aliases or none.");
+        else
+            *val++ = 0;
+        }
+    char *name = samples[i];
+    struct slPair *temp = slPairNew(cloneString(name), cloneString(val));
+    slAddHead(&ret, temp);
+    }
+slReverse(&ret);
+return ret;
+}
+
+struct slPair *vcfPhasedGetSampleOrder(struct cart *cart, struct trackDb *tdb)
+/* Parse out a trio sample order from either trackDb or the cart */
+{
+char sampleOrderVar[1028],hideParentsVar[1028];
+safef(sampleOrderVar, sizeof(sampleOrderVar), "%s.%s", tdb->track, VCF_PHASED_SAMPLE_ORDER_VAR);
+safef(hideParentsVar, sizeof(hideParentsVar), "%s.%s", tdb->track, VCF_PHASED_HIDE_OTHER_VAR);
+boolean hideOtherSamples = cartUsualBoolean(cart, hideParentsVar, FALSE);
+char *cartOrder = cartOptionalString(cart, sampleOrderVar);
+struct slPair *tdbOrder = vcfPhasedGetSamplesFromTdb(tdb,hideOtherSamples);
+if (cartOrder != NULL && !hideOtherSamples)
+    {
+    struct slName *name;
+    struct slName *fromCart = slNameListFromComma(cartOrder);
+    struct slPair *ret = NULL;
+    for (name = fromCart; name != NULL; name = name->next)
+        {
+        struct slPair *temp = slPairFind(tdbOrder, name->name);
+        slAddHead(&ret, temp);
+        }
+    slReverse(ret);
+    return ret;
+    }
+else
+    return tdbOrder;
+}
+
+static boolean hasSampleAliases(struct trackDb *tdb)
+/* Check whether trackDb has aliases for the sample names  */
+{
+struct slPair *nameVals = vcfPhasedGetSamplesFromTdb(tdb,FALSE);
+return nameVals->val != NULL;
+}
+
+static void vcfCfgPhasedTrioUi(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff, char *name)
+/* Put up the phased trio specific config settings */
+{
+if (hasSampleAliases(tdb))
+    {
+    printf("<b>Label samples by:</b>");
+    char defaultLabel[1024], aliasLabel[1024];
+    safef(defaultLabel, sizeof(defaultLabel), "%s.%s", tdb->track, VCF_PHASED_DEFAULT_LABEL_VAR);
+    safef(aliasLabel, sizeof(aliasLabel), "%s.%s", tdb->track, VCF_PHASED_ALIAS_LABEL_VAR);
+    boolean isDefaultChecked = cartUsualBoolean(cart, defaultLabel, TRUE);
+    boolean isAliasChecked = cartUsualBoolean(cart, aliasLabel, FALSE);
+    cgiMakeCheckBox(defaultLabel, isDefaultChecked);
+    printf("VCF file sample names &nbsp;");
+    cgiMakeCheckBox(aliasLabel, isAliasChecked);
+    printf("aliases");
+    printf("<br>");
+    }
+if (trackDbSetting(tdb,VCF_PHASED_PARENTS_SAMPLE_SETTING))
+    {
+    printf("<b>Hide parent/other sample(s)");
+    char hideVarName[1024];
+    safef(hideVarName, sizeof(hideVarName), "%s.%s", tdb->track, VCF_PHASED_HIDE_OTHER_VAR);
+    boolean hidingOtherSamples = cartUsualBoolean(cart, hideVarName, FALSE);
+    cgiMakeCheckBox(hideVarName, hidingOtherSamples);
+    }
+}
+
 void vcfCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* VCF: Variant Call Format.  redmine #3710 */
 {
@@ -393,10 +500,14 @@ struct vcfFile *vcff = vcfHopefullyOpenHeader(cart, tdb);
 if (vcff != NULL)
     {
     boolean parentLevel = isNameAtParentLevel(tdb, name);
-    if (vcff->genotypeCount > 1)
+    if (vcff->genotypeCount > 1 && !sameString(tdb->type, "vcfPhasedTrio"))
 	{
 	vcfCfgHapCluster(cart, tdb, vcff, name, parentLevel);
 	}
+    if (sameString(tdb->type, "vcfPhasedTrio"))
+        {
+        vcfCfgPhasedTrioUi(cart, tdb, vcff, name);
+        }
     if (differentString(tdb->track,"evsEsp6500"))
         {
         puts("<H3>Filters</H3>");

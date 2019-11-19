@@ -14133,6 +14133,10 @@ else if (sameWord(type, "halSnake"))
     halSnakeMethods(track, tdb, wordCount, words);
     }
 #endif
+else if (sameWord(type, "vcfPhasedTrio"))
+    {
+    vcfPhasedMethods(track);
+    }
 else if (sameWord(type, "vcfTabix"))
     {
     vcfTabixMethods(track);

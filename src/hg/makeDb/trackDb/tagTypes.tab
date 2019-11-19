@@ -44,7 +44,7 @@ baseQualRange bam
 bedFilter bed
 bedNameLabel bed barChart bigBarChart bigBed
 bedPackDense bed bigBed
-bigDataUrl customTracks big* bam vcfTabix halSnake gtexTranscExpr hic
+bigDataUrl customTracks big* bam vcfTabix halSnake gtexTranscExpr hic vcfPhasedTrio
 bigGeneDataUrl genePred
 blastRef psl bigPsl
 boxedCfg *
@@ -336,6 +336,8 @@ release *
 refUrl bam
 ucscRetroInfo psl bigPsl
 ucscRetroParentTables *
+vcfChildSample vcfPhasedTrio
+vcfParentSamples vcfPhasedTrio
 sGroup_Afrotheria wigMaf
 sGroup_Aves wigMaf
 sGroup_bird wigMaf

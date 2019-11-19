@@ -44,11 +44,22 @@
 #define VCF_MIN_ALLELE_FREQ_VAR "minFreq"
 #define VCF_DEFAULT_MIN_ALLELE_FREQ 0.0
 
+#define VCF_PHASED_CHILD_SAMPLE_SETTING "vcfChildSample"
+#define VCF_PHASED_PARENTS_SAMPLE_SETTING "vcfParentSamples"
+#define VCF_PHASED_SAMPLE_ORDER_VAR "vcfSampleOrder"
+#define VCF_PHASED_MAX_OTHER_SAMPLES 2
+#define VCF_PHASED_DEFAULT_LABEL_VAR "doDefaultLabel"
+#define VCF_PHASED_ALIAS_LABEL_VAR "doAliasLabel"
+#define VCF_PHASED_HIDE_OTHER_VAR "hideParents"
+
 void vcfCfgHaplotypeCenter(struct cart *cart, struct trackDb *tdb, char *track,
 			   boolean parentLevel, struct vcfFile *vcff,
 			   char *thisName, char *thisChrom, int thisPos, char *formName);
 /* If vcff has genotype data, show status and controls for choosing the center variant
  * for haplotype clustering/sorting in hgTracks. */
+
+struct slPair *vcfPhasedGetSampleOrder(struct cart *cart, struct trackDb *tdb);
+/* Parse out a trio sample order from trackDb */
 
 void vcfCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
 /* Complete track controls for VCF. */

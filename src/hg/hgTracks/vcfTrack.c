@@ -6,6 +6,7 @@
 #include "common.h"
 #include "bigWarn.h"
 #include "dystring.h"
+#include "rainbow.h"
 #include "errCatch.h"
 #include "hacTree.h"
 #include "hdb.h"
@@ -18,7 +19,7 @@
 #include "vcfUi.h"
 #include "knetUdc.h"
 #include "udc.h"
-
+#include "memgfx.h"
 
 static boolean getMinQual(struct trackDb *tdb, double *retMinQual)
 /* Return TRUE and set retMinQual if cart contains minimum QUAL filter */
@@ -161,6 +162,31 @@ if (gotInfo)
 return FALSE;
 }
 
+static void filterRefOnlyAlleles(struct vcfFile *vcff, struct trackDb *tdb)
+/* Drop items from VCF that don't differ from the reference for any of the
+ * samples specified in trackDb */
+{
+struct vcfRecord *rec, *nextRecord, *retList = NULL;
+const struct vcfGenotype *gt;
+
+struct slPair *sample, *sampleOrder = vcfPhasedGetSampleOrder(cart, tdb);
+for (rec = vcff->records; rec != NULL; rec = nextRecord)
+    {
+    nextRecord = rec->next;
+    boolean allRef = TRUE;
+    for (sample = sampleOrder; sample != NULL; sample = sample->next)
+        {
+        gt = vcfRecordFindGenotype(rec, sample->name);
+        if (gt && !(gt->hapIxA == 0 && gt->hapIxB == 0) )
+            allRef = FALSE;
+        }
+    if (!allRef)
+        slAddHead(&retList, rec);
+    }
+slReverse(&retList);
+vcff->records = retList;
+}
+
 static void filterRecords(struct vcfFile *vcff, struct trackDb *tdb)
 /* If a filter is specified in the cart, remove any records that don't pass filter. */
 {
@@ -197,17 +223,29 @@ struct pgSnpVcfStartEnd
 
 static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff, struct trackDb *tdb)
 /* Convert vcff's records to pgSnp; don't free vcff until you're done with pgSnp
- * because it contains pointers into vcff's records' chrom. */
+ * because it contains pointers into vcff's records' chrom. If the trackDb setting
+ * sampleName is present, then check whether all the records are phased or not */
 {
 struct pgSnp *pgsList = NULL;
 struct vcfRecord *rec;
 int maxLen = 33;
 int maxAlCount = 5;
+struct slPair *sample = NULL, *phasedSamples = NULL;
+if (sameString(tdb->type, "vcfPhasedTrio"))
+    phasedSamples = vcfPhasedGetSampleOrder(cart, tdb);
+
+vcff->allPhased = TRUE;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     {
     struct pgSnpVcfStartEnd *psvs = needMem(sizeof(*psvs));
     psvs->vcfStart = vcfRecordTrimIndelLeftBase(rec);
     psvs->vcfEnd = vcfRecordTrimAllelesRight(rec);
+    for (sample = phasedSamples; sample != NULL; sample = sample->next)
+        {
+        const struct vcfGenotype *gt = vcfRecordFindGenotype(rec, sample->name);
+        if (!gt->isPhased)
+            vcff->allPhased = FALSE;
+        }
     struct pgSnp *pgs = pgSnpFromVcfRecord(rec);
     memcpy(&(psvs->pgs), pgs, sizeof(*pgs));
     pgs = (struct pgSnp *)psvs; // leak mem
@@ -1554,6 +1592,549 @@ pgSnpMapItem(tg, hvg, item, itemName, mapItemName, psvs->vcfStart, psvs->vcfEnd,
 	     x, y, width, height);
 }
 
+static void vcfPhasedLoadItems(struct track *tg)
+/* Load up one individuals phased genotypes in window */
+{
+char *fileOrUrl = NULL;
+char *tbiFileOrUrl = trackDbSetting(tg->tdb, "bigDataIndex"); // unrelated to mysql
+
+/* Figure out url or file name. */
+if (tg->parallelLoading)
+    {
+    /* do not use mysql during parallel-fetch load */
+    fileOrUrl = trackDbSetting(tg->tdb, "bigDataUrl");
+    }
+else
+    {
+    struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
+    fileOrUrl = bbiNameFromSettingOrTableChrom(tg->tdb, conn, tg->table, chromName);
+    hFreeConn(&conn);
+    }
+
+if (isEmpty(fileOrUrl))
+    return;
+int vcfMaxErr = -1;
+struct vcfFile *vcff = NULL;
+
+/* protect against temporary network error */
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    vcff = vcfTabixFileAndIndexMayOpen(fileOrUrl, tbiFileOrUrl, chromName, winStart, winEnd, vcfMaxErr, -1);
+    if (vcff != NULL)
+        {
+        filterRecords(vcff, tg->tdb);
+        filterRefOnlyAlleles(vcff, tg->tdb); // remove items that don't differ from reference
+
+        // TODO: in multi-region mode, different windows end up with different sets of variants where
+        // all are phased or not, which throws off track heights in each window. Similar to hapCluster
+        // mode, just switch to pgSnp view when in multi-region for now.
+        if (slCount(windows) > 1 || tg->visibility == tvDense)
+            pgSnpMethods(tg);
+        tg->items = vcfFileToPgSnp(vcff, tg->tdb);
+            // pgSnp bases coloring/display decision on count of items:
+        tg->extraUiData = vcff;
+        tg->customInt = slCount(tg->items);
+        // Don't vcfFileFree here -- we are using its string pointers!
+        }
+    else
+        {
+        if (tbiFileOrUrl)
+            errAbort("Unable to open VCF file/URL '%s' with tabix index '%s'", fileOrUrl, tbiFileOrUrl);
+        else
+            errAbort("Unable to open VCF file/URL '%s'", fileOrUrl);
+        }
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError || vcff == NULL)
+    {
+    if (isNotEmpty(errCatch->message->string))
+        tg->networkErrMsg = cloneString(errCatch->message->string);
+        tg->drawItems = bigDrawWarning;
+        tg->totalHeight = bigWarnTotalHeight;
+    }
+errCatchFree(&errCatch);
+}
+
+static void vcfPhasedAddMapBox(struct hvGfx *hvg, struct vcfRecord *rec, struct pgSnpVcfStartEnd *psvs, char *text, int x, int y, int width, int height, struct track *track)
+// Add mapbox for a tick in the vcfPhased track
+{
+mapBoxHgcOrHgGene(hvg, psvs->vcfStart, psvs->vcfEnd, x, y, width, height, track->track, rec->name, text, NULL, TRUE, NULL);
+}
+
+struct hapDistanceMatrixCell
+{
+/* The pair of alleles and how distant they are */
+    struct hapDistanceMatrixCell *next;
+    char *sampleId; // name of this sample
+    char *otherId; // name of other sample
+    short alleleIx; // index into vcfRecord->genotypes
+    short otherAlleleIx; // index into vcfRecord->genotypes for other sample
+    double dist;   // distance between this sample/allele and another sample/allele
+};
+
+struct hapDistanceMatrix
+{
+/* A row of hapDistanceMatrixCells, which store the distance computed by cwaDistance()
+ * between two different alleles */
+    struct hapDistanceMatrix *next; // next row in matrix
+    char *sampleId;  // name of this sample
+    short alleleIx; // allele id of this sample, 0 or 1
+    struct hapDistanceMatrixCell *row;  // a row of cwaDistance scores
+};
+
+static int hapDistanceMatrixCellCmp(const void *item1, const void *item2)
+{
+const struct hapDistanceMatrixCell *cell1 = *(struct hapDistanceMatrixCell **)item1;
+const struct hapDistanceMatrixCell *cell2 = *(struct hapDistanceMatrixCell **)item2;
+return cell1->dist > cell2->dist;
+}
+
+static struct hapDistanceMatrixCell *findClosestChildAlleleToParent(char *parent, char *child,
+                                struct hapDistanceMatrix *matrix)
+/* Get all cells belonging to a certain parent onto a list and sort by distance */
+{
+struct hapDistanceMatrix *vec = NULL;
+struct hapDistanceMatrixCell *cellList = NULL, *cell = NULL;
+for (vec = matrix; vec != NULL; vec = vec->next)
+    {
+    for (cell = vec->row; cell != NULL; cell = cell->next)
+        {
+        if (sameString(cell->sampleId, parent))
+            {
+            struct hapDistanceMatrixCell *tmp = needMem(sizeof(struct hapDistanceMatrixCell));
+            tmp->next = NULL;
+            tmp->sampleId = cloneString(cell->sampleId);
+            tmp->alleleIx = cell->alleleIx;
+            tmp->otherId = cloneString(vec->sampleId);
+            tmp->otherAlleleIx = vec->alleleIx;
+            tmp->dist = cell->dist;
+            slAddHead(&cellList, tmp);
+            }
+        }
+    }
+slSort(&cellList, hapDistanceMatrixCellCmp);
+return cellList;
+}
+
+static unsigned short toggleShort(unsigned short s)
+/* Add or subtract one */
+{
+return s & 1 ? s - 1 : s + 1;
+}
+
+static void fillOutHapOrder(unsigned short *hapOrder, unsigned short hapCount, struct hapDistanceMatrixCell *c1, struct hapDistanceMatrixCell *c2)
+/* Assign indices to hapOrder in the order we should draw the alleles. Allows for the second parent
+ * cell to be NULL */
+{
+if (c1 == NULL)
+    errAbort("Error: fillOutHapOrder passed NULL parent");
+int numSamplesToDraw = hapCount / 2;
+int i;
+for (i = 0; i < numSamplesToDraw; i++)
+    {
+    short hapIx = 2*i;
+    if (i == 0) // top set of lines
+        {
+        hapOrder[hapIx] = toggleShort(c1->alleleIx);
+        hapOrder[hapIx+1] = c1->alleleIx;
+        }
+    else if (i + 1 == numSamplesToDraw) // last set of lines
+        {
+        if (c2)
+            {
+            hapOrder[hapIx] = c2->alleleIx;
+            hapOrder[hapIx+1] = toggleShort(c2->alleleIx);
+            }
+        else
+            {
+            hapOrder[hapIx] = c1->otherAlleleIx;
+            hapOrder[hapIx+1] = toggleShort(c1->otherAlleleIx);
+            }
+        }
+    else // orient based on above and below
+        {
+        hapOrder[hapIx] = c1->otherAlleleIx;
+        hapOrder[hapIx+1] = c2->otherAlleleIx;
+        }
+    }
+}
+
+static void setHapOrderFromMatrix(unsigned short *hapOrder, unsigned short hapCount,
+                                struct hapDistanceMatrix *matrix, struct hapCluster **hapArray,
+                                struct vcfFile *vcff, char *childName, char **sampleDrawOrder)
+/* Given a matrix where each row is an allele of the child, and each column
+ * is the distance from the child allele to a parent allele, fill out the order
+ * in which the haplotypes will be drawn. The order are the indexes into rec->genotypes. */
+{
+char *parentNames[(hapCount/2) - 1];
+struct hapDistanceMatrixCell *c1 = NULL;
+struct hapDistanceMatrixCell *c2 = NULL;
+int i, ix = 0;
+if (hapCount > 2) // is there a trio or at least part of one?
+    {
+    for (i = 0; i < hapCount/2 ; i++)
+        if (!sameString(sampleDrawOrder[i], childName))
+            parentNames[ix++] = sampleDrawOrder[i];
+
+    // For a parent/child combo, find the most likely set of transmitted
+    // alleles. Depending on the number of variants in the window and the
+    // haplotypes in question, both parents can tie as the person who
+    // contributed a given allele
+    c1 = findClosestChildAlleleToParent(parentNames[0], childName, matrix);
+    c2 = findClosestChildAlleleToParent(parentNames[1], childName, matrix); // NULL if only one parent
+    if (c1 && c2)
+        {
+        if (c1->otherAlleleIx == c2->otherAlleleIx)
+            {
+            // first choose the lowest score, if a tie then just advance c1
+            if (c1->dist >= c2->dist)
+                {
+                while (c1->dist >= c2->dist && c1->otherAlleleIx == c2->otherAlleleIx)
+                    c1 = c1->next;
+                }
+            else
+                {
+                while (c1->dist < c2->dist && c1->otherAlleleIx == c2->otherAlleleIx)
+                    c2 = c2->next;
+                }
+            }
+        }
+    fillOutHapOrder(hapOrder, hapCount, c1, c2);
+    }
+else
+    {
+    hapOrder[0] = matrix->alleleIx;
+    hapOrder[1] = matrix->next->alleleIx;
+    }
+}
+
+static void assignHapArrayIx(short *ret, struct hapCluster **hapArray, struct vcfFile *vcff, char *sample, boolean doChild)
+{
+int i;
+struct vcfRecord *rec = vcff->records;
+int ix = 0; // index into ret
+for (i = 0; i < slCount(hapArray); i++)
+    {
+    struct hapCluster *hc = hapArray[i];
+    struct vcfGenotype *gt = &(rec->genotypes[hc->gtHapIx >> 1]);
+    if (!doChild && !sameString(gt->id, sample))
+        ret[ix++] = i;
+    else if (doChild && sameString(gt->id, sample))
+        ret[ix++] = i;
+    }
+}
+
+static struct hapDistanceMatrix *fillOutDistanceMatrix(struct hapCluster **hapArray, struct vcfFile *vcff, char *sample, struct cwaExtraData *helper, int gtCount)
+{
+short parGtCount = (gtCount - 1) * 2;
+int i,j;
+struct vcfRecord *rec = vcff->records;
+struct hapDistanceMatrix *matrix = NULL;
+short childHapArrayIndices[2];
+short parentHapArrayIndices[parGtCount];
+assignHapArrayIx(childHapArrayIndices, hapArray, vcff, sample, TRUE);
+assignHapArrayIx(parentHapArrayIndices, hapArray, vcff, sample, FALSE);
+for (i = 0; i < 2; i++)
+    {
+    struct hapDistanceMatrix *row = needMem(sizeof(struct hapDistanceMatrix));
+    struct hapCluster *hcChild = hapArray[childHapArrayIndices[i]];
+    struct vcfGenotype *gt = &(rec->genotypes[hcChild->gtHapIx >> 1]);
+    row->row = NULL;
+    row->sampleId = cloneString(gt->id);
+    row->alleleIx = hcChild->gtHapIx;
+    for (j = 0; j < parGtCount; j++)
+        {
+        struct hapDistanceMatrixCell *cell = needMem(sizeof(struct hapDistanceMatrixCell));
+        struct hapCluster *hcParent = hapArray[parentHapArrayIndices[j]];
+        struct vcfGenotype *parGt = &(rec->genotypes[hcParent->gtHapIx >> 1]);
+        cell->sampleId = cloneString(parGt->id);
+        cell->alleleIx = hcParent->gtHapIx;
+        cell->dist = cwaDistance((struct slList *)hcChild, (struct slList *)hcParent, helper);
+        slAddHead(&(row->row), cell);
+        }
+    slAddHead(&matrix, row);
+    }
+return matrix;
+}
+
+unsigned short *computeHapDist(struct vcfFile *vcff, int centerIx, int startIx, int endIx, char *sample, int gtCount, char **sampleDrawOrder)
+// similar to clusterHaps(), but instead of making a hacTree at the end, call cwaDistance
+// on each of the pairs in hapArray to make a distance matrix, then compute a hapOrder from that
+{
+double alpha = 0.5;
+struct lm *lm = lmInit(0);
+struct cwaExtraData helper = { centerIx-startIx, endIx-startIx, alpha, lm };
+struct hapCluster **hapArray = lmAlloc(lm, sizeof(struct hapCluster *) * gtCount * 2);
+int i;
+for (i=0;  i < 2 * gtCount;  i++)
+    {
+    hapArray[i] = lmHapCluster(&helper);
+    if (i > 0)
+        hapArray[i-1]->next = hapArray[i];
+    }
+struct vcfRecord *rec;
+int varIx;
+boolean haveHaploid;
+for (varIx = 0, rec = vcff->records;  rec != NULL && varIx < endIx;  varIx++, rec = rec->next)
+    {
+    if (varIx < startIx)
+        continue;
+    int countIx = varIx - startIx;
+    int gtIx;
+    for (gtIx=0;  gtIx < gtCount;  gtIx++)
+        {
+        // VCF may contain genotypes other than the few we are interested, so sampleDrawOrder[gtIx]
+        // may not be the right index in rec->genotypes we want, look it up here
+        const struct vcfGenotype *gt = vcfRecordFindGenotype(rec, sampleDrawOrder[gtIx]);
+        int ix = stringArrayIx(sampleDrawOrder[gtIx], vcff->genotypeIds, vcff->genotypeCount);
+        struct hapCluster *c1 = hapArray[gtIx];
+        struct hapCluster *c2 = hapArray[gtCount + gtIx]; // hardwired ploidy=2
+        c1->gtHapIx = ix << 1;
+        c1->leafCount = 1;
+        if (gt->isPhased || gt->isHaploid || (gt->hapIxA == gt->hapIxB))
+            {
+            // first haplotype's counts:
+            if (gt->hapIxA < 0)
+                c1->unkCounts[countIx] = 1;
+            else if (gt->hapIxA == 0)
+                c1->refCounts[countIx] = 1;
+            if (gt->isHaploid)
+                haveHaploid = TRUE;
+            else
+                {
+                // got second haplotype, fill in its counts:
+                c2->gtHapIx = (ix << 1) | 1;
+                c2->leafCount = 1;
+                if (gt->hapIxB < 0)
+                    c2->unkCounts[countIx] = 1;
+                else if (gt->hapIxB == 0)
+                    c2->refCounts[countIx] = 1;
+                }
+            }
+        else
+            {
+            // Missing data or unphased heterozygote, don't use haplotype info for clustering
+            c2->gtHapIx = (ix << 1) | 1;
+            c2->leafCount = 1;
+            c1->unkCounts[countIx] = c2->unkCounts[countIx] = 1;
+            }
+        }
+    if (haveHaploid)
+        {
+        // Some array items will have an empty cluster for missing hap2 --
+        // trim those from the linked list.
+        struct hapCluster *c = hapArray[0];
+        while (c != NULL && c->next != NULL)
+            {
+            if (c->next->leafCount == 0)
+                c->next = c->next->next;
+            else
+                c = c->next;
+            }
+        }
+    }
+
+// now fill out a distance matrix based on the cwaDistance between all the pairs in hapArray
+struct hapDistanceMatrix *hapDistMatrix = fillOutDistanceMatrix(hapArray, vcff, sample, &helper, gtCount);
+unsigned short hapCount = 2 * gtCount;
+unsigned short *hapOrder = needMem(sizeof(unsigned short) * hapCount);
+setHapOrderFromMatrix(hapOrder, hapCount, hapDistMatrix, hapArray, vcff, sample, sampleDrawOrder);
+return hapOrder;
+}
+
+#define VCFPHASED_UNPHASED_COLOR MG_RED
+
+
+void vcfPhasedDrawOneRecord(struct track *track, struct hvGfx *hvg, struct vcfRecord *rec, void *item,
+                            unsigned short *gtHapOrder, int gtHapCount, int xOff, int yOffsets[],
+                            char *sampleOrder[], double scale)
+// Draw a record's haplotypes on the appropriate lines
+{
+int i;
+int x1 = round((double)(rec->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)(rec->chromEnd-winStart)*scale) + xOff;
+struct pgSnpVcfStartEnd *psvs = (struct pgSnpVcfStartEnd *)item;
+int w = x2-x1;
+if (w < 1)
+    w = 1;
+int tickHeight = track->itemHeight(track, track->items);
+for (i = 0; i < gtHapCount ; i++)
+    {
+    struct vcfGenotype *gt = &(rec->genotypes[gtHapOrder[i] >> 1]);
+    int nameIx = stringArrayIx(gt->id, sampleOrder, track->customInt);
+    struct dyString *mouseover = dyStringNew(0);
+    if (gt->isPhased || (gt->hapIxA == 1 && gt->hapIxB == 1)) // if phased or homozygous alt
+        {
+        int alIx = gtHapOrder[i] & 1 ? gt->hapIxB : gt->hapIxA;
+        int tickColor = MG_BLACK;
+        dyStringPrintf(mouseover, "%s ", gt->id);
+        if (alIx != 0) // non-reference allele
+            {
+            if (i > 1 && i < 4) // we're drawing child ticks
+                {
+                dyStringPrintf(mouseover, "allele: %s", rec->alleles[alIx]);
+                }
+            else
+                {
+                dyStringPrintf(mouseover, "%s allele: %s", i == 0 || i == 5 ? "untransmitted" : "transmitted", rec->alleles[alIx]);
+                }
+            int y = yOffsets[i] - (tickHeight/2);
+            hvGfxBox(hvg, x1, y, w, tickHeight, tickColor);
+            vcfPhasedAddMapBox(hvg, rec, psvs, mouseover->string, x1, y, w, tickHeight, track);
+            }
+        }
+    else if (gt->hapIxA != 0 || gt->hapIxB != 0)// draw the tick between the two haplotype lines
+        {
+        int yMid = ((yOffsets[2*nameIx] + yOffsets[(2*nameIx)+1]) / 2); // midpoint of two haplotype lines
+        hvGfxBox(hvg, x1, yMid - (tickHeight / 2), w, tickHeight, VCFPHASED_UNPHASED_COLOR);
+        dyStringPrintf(mouseover, "%s Unphased genotype: %s/%s", gt->id, rec->alleles[0], rec->alleles[1]);
+        vcfPhasedAddMapBox(hvg, rec, psvs, mouseover->string, x1, yMid, w, tickHeight, track);
+        }
+    }
+}
+
+static void vcfPhasedAddLabel(struct track *track, struct hvGfx *hvg, char *label, int trackY, int labelY, MgFont *font, Color color)
+// Add a VCF Sample name to the left label of the haplotype representation
+{
+int clipXBak, clipYBak, clipWidthBak, clipHeightBak;
+struct hvGfx *hvgLL = (hvgSide != NULL) ? hvgSide : hvg;
+hvGfxGetClip(hvgLL, &clipXBak, &clipYBak, &clipWidthBak, &clipHeightBak);
+hvGfxUnclip(hvgLL);
+hvGfxSetClip(hvgLL, leftLabelX, trackY, leftLabelWidth, track->height);
+
+hvGfxTextRight(hvgLL, leftLabelX, labelY, leftLabelWidth, track->lineHeight, color,
+    font, label);
+
+// Restore the prior clipping:
+hvGfxUnclip(hvgLL);
+hvGfxSetClip(hvgLL, clipXBak, clipYBak, clipWidthBak, clipHeightBak);
+}
+
+static void vcfPhasedSetupHaplotypesLines(struct track *track, struct hvGfx *hvg, int xOff,
+                            int yOff, int width, int *retYOffsets, struct slPair *sampleNames,
+                            MgFont *font)
+/* Setup the background for drawing the ticks, the two haplotype lines for each sample, and the
+ * transparent gray box to help distinguish between consecutive samples */
+{
+int sampleHeight = round(track->height / track->customInt);
+double yHap1 = track->lineHeight; // relative offset of first haplotype line
+double yHap2 = sampleHeight - track->lineHeight; // relative offset of second line
+struct slPair *name;
+int i, y1, y2;
+struct rgbColor yellow = lightRainbowAtPos(0.2);
+int transYellow = MAKECOLOR_32_A(yellow.r, yellow.g, yellow.b, 100);
+
+char defaultLabelVar[1024], aliasLabelVar[1024];
+safef(defaultLabelVar, sizeof(defaultLabelVar), "%s.%s", track->track, VCF_PHASED_DEFAULT_LABEL_VAR);
+safef(aliasLabelVar, sizeof(aliasLabelVar), "%s.%s", track->track, VCF_PHASED_ALIAS_LABEL_VAR);
+boolean useDefaultLabel = cartUsualBoolean(cart, defaultLabelVar, TRUE);
+boolean useAliasLabel = cartUsualBoolean(cart, aliasLabelVar, FALSE);
+
+for (name = sampleNames, i = 0; name != NULL; name = name->next, i++)
+    {
+    y1 = yOff + yHap1 + (i * sampleHeight);
+    y2 = yOff + yHap2 + (i * sampleHeight);
+    retYOffsets[2*i] = y1;
+    retYOffsets[(2*i) + 1] = y2;
+    // make the background of every other lane light yellow, but only when NOT doing PDF/EPS output
+    if ((hvg->pixelBased && i & 1))
+        {
+        hvGfxBox(hvg, xOff, y1-(track->lineHeight), width, (y2 + track->lineHeight) - (y1-track->lineHeight), transYellow);
+        }
+    hvGfxLine(hvg, xOff, y1, xOff+width, y1, MG_BLACK);
+    hvGfxLine(hvg, xOff, y2, xOff+width, y2, MG_BLACK);
+    struct dyString *label = dyStringNew(0);
+    dyStringPrintf(label, "%s%s%s",
+        useDefaultLabel ? name->name : "",
+        useDefaultLabel && useAliasLabel ? "/" : "",
+        useAliasLabel ? (char *)name->val : "");
+    vcfPhasedAddLabel(track, hvg, label->string, yOff, round(((y1 + y2) / 2) - (track->lineHeight / 2)), font, MG_BLACK);
+    }
+}
+
+static void vcfPhasedDrawItems(struct track *track, int seqStart, int seqEnd,
+			      struct hvGfx *hvg, int xOff, int yOff, int width,
+			      MgFont *font, Color color, enum trackVisibility vis)
+/* Split samples' chromosomes (haplotypes), cluster them by parents, and
+ * draw them all along a line representing each chromosome*/
+{
+struct vcfFile *vcff = track->extraUiData;
+if (vcff->records == NULL)
+    return;
+
+const double scale = scaleForPixels(width);
+struct slPair *pair, *sampleNames = vcfPhasedGetSampleOrder(cart, track->tdb);
+int gtCount = slCount(sampleNames);
+int yOffsets[gtCount * 2]; // y offsets of each haplotype line
+char *sampleOrder[gtCount]; // order of sampleName lines
+int i;
+for (pair = sampleNames, i = 0; pair != NULL && i < gtCount; pair = pair->next, i++)
+    sampleOrder[i] = pair->name;
+// child sample is required to be in the middle/bottom of the trio
+char *childSample = gtCount > 2 ? sampleOrder[1] : sampleOrder[0];
+
+// set up the "haplotype" lines and the transparent yellow box to delineate samples
+vcfPhasedSetupHaplotypesLines(track, hvg, xOff, yOff, width, yOffsets, sampleNames, font);
+
+// sort the variants by haplotype then draw ticks
+int nRecords = slCount(vcff->records);
+int centerIx = getCenterVariantIx(track, seqStart, seqEnd, vcff->records);
+int startIx = 0;
+int endIx = nRecords;
+unsigned short *hapOrder = computeHapDist(vcff, centerIx, startIx, endIx, childSample, gtCount, sampleOrder);
+struct vcfRecord *rec = NULL;
+struct slList *item = NULL;
+for (rec = vcff->records, item = track->items; rec != NULL && item != NULL; rec = rec->next, item = item->next)
+    {
+    vcfPhasedDrawOneRecord(track, hvg, rec, item, hapOrder, gtCount * 2, xOff, yOffsets, sampleOrder, scale);
+    }
+}
+
+static int vcfPhasedItemHeight(struct track *tg, void *item)
+{
+return tg->heightPer;
+}
+
+int vcfPhasedTrackHeight(struct track *tg, enum trackVisibility vis)
+{
+const struct vcfFile *vcff = tg->extraUiData;
+// when doing composite track height, vcfPhasedLoadItems won't have been called yet!
+if (!vcff || vcff->records == NULL)
+    return 0;
+int totalSamples = slCount(vcfPhasedGetSampleOrder(cart, tg->tdb));
+tg->lineHeight = tl.fontHeight + 1;
+tg->heightPer = tl.fontHeight;
+// if all variants in view are phased, then 3 lines per sample,
+// else 4 lines. The extra 2 is for clear separation
+int heightPerSample;
+if (vcff->allPhased)
+    heightPerSample = (3 * tg->lineHeight) + 2;
+else
+    heightPerSample = (4 * tg->lineHeight) + 2;
+tg->height = totalSamples * heightPerSample;
+tg->itemHeight = vcfPhasedItemHeight;
+// custom int is reserved for doing pgSnp coloring but as far as I can tell is
+// never actually used?
+tg->customInt = totalSamples;
+return tg->height;
+}
+
+void vcfPhasedMethods(struct track *track)
+/* Load items from a VCF of one individuals phased genotypes */
+{
+knetUdcInstall();
+pgSnpMethods(track);
+track->drawItems = vcfPhasedDrawItems;
+// Disinherit next/prev flag and methods since we don't support next/prev:
+track->nextExonButtonable = FALSE;
+track->nextPrevExon = NULL;
+track->nextPrevItem = NULL;
+track->loadItems = vcfPhasedLoadItems;
+track->totalHeight = vcfPhasedTrackHeight;
+track->itemName = vcfHapClusterTrackName;
+track->mapsSelf = TRUE;
+}
 
 
 static void vcfTabixLoadItems(struct track *tg)

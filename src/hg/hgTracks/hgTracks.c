@@ -6284,6 +6284,13 @@ else if (sameString(type, "vcfTabix"))
     vcfTabixMethods(tg);
     tg->mapItemName = ctMapItemName;
     }
+else if (sameString(type, "vcfPhasedTrio"))
+    {
+    tg = trackFromTrackDb(tdb);
+    tg->customPt = ct;
+    vcfPhasedMethods(tg);
+    tg->mapItemName = ctMapItemName;
+    }
 else if (sameString(type, "vcf"))
     {
     tg = trackFromTrackDb(tdb);

@@ -99,6 +99,7 @@ struct vcfFile
     struct vcfInfoDef *filterDefs;	// Header's definitions of FILTER column failure codes
     struct vcfInfoDef *altDefs;	// Header's defs of symbolic alternate alleles (e.g. DEL, INS)
     struct vcfInfoDef *gtFormatDefs;	// Header's defs of GENOTYPE compnts. listed in FORMAT col.
+    bool allPhased;         // True if all record->genotypes have been phased
     int genotypeCount;		// Number of optional genotype columns described in header
     char **genotypeIds;		// Array of optional genotype column names described in header
     struct vcfRecord *records;	// VCF data rows, sorted by position

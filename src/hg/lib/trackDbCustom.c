@@ -758,7 +758,7 @@ else if (startsWith("bed ", type) || startsWith("big", type) || startsWith("bedD
     }
 else if (startsWith("bam", type))
     cType = cfgBam;
-else if (sameWord("vcfTabix",type) || sameWord("vcf", type))
+else if (sameWord("vcfPhasedTrio", type) || sameWord("vcfTabix",type) || sameWord("vcf", type))
     cType = cfgVcf;
 else if (sameWord("halSnake",type))
     cType = cfgSnake;

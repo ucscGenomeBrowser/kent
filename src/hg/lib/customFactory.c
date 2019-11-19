@@ -36,6 +36,7 @@
 #include "bigBed.h"
 #include "hgBam.h"
 #include "vcf.h"
+#include "vcfUi.h"
 #include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
@@ -3062,7 +3063,7 @@ static boolean vcfTabixRecognizer(struct customFactory *fac, struct customPp *cp
 				  struct customTrack *track)
 /* Return TRUE if looks like we're handling a vcfTabix track */
 {
-return (sameType(type, "vcfTabix"));
+return (sameType(type, "vcfTabix") || sameType(type, "vcfPhasedTrio"));
 }
 
 static struct customTrack *vcfTabixLoader(struct customFactory *fac, struct hash *chromHash,
@@ -3079,6 +3080,14 @@ struct dyString *dyErr = dyStringNew(0);
 checkAllowedBigDataUrlProtocols(bigDataUrl);
 if (bigDataIndexUrl)
     checkAllowedBigDataUrlProtocols(bigDataIndexUrl);
+
+boolean isVcfPhasedTrio = sameString(hashFindVal(settings,"type"),"vcfPhasedTrio");
+if (isVcfPhasedTrio)
+    {
+    char *reqSampleName = hashFindVal(settings, VCF_PHASED_CHILD_SAMPLE_SETTING);
+    if (reqSampleName == NULL)
+        errAbort("Missing required setting '%s' from track line", VCF_PHASED_CHILD_SAMPLE_SETTING);
+    }
 
 if (doExtraChecking)
     {
@@ -3102,7 +3111,10 @@ if (doExtraChecking)
     }
 if (isNotEmpty(dyErr->string))
     track->networkErrMsg = dyStringCannibalize(&dyErr);
-track->dbTrackType = cloneString("vcfTabix");
+if (isVcfPhasedTrio)
+    track->dbTrackType = cloneString("vcfPhasedTrio");
+else
+    track->dbTrackType = cloneString("vcfTabix");
 return track;
 }
 
@@ -4267,7 +4279,12 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	    if (dbTrack && oneTrack->dbTrackType != NULL)
 		ctAddToSettings(track, "dbTrackType", oneTrack->dbTrackType);
             if (!trackDbSetting(track->tdb, "inputType"))
-                ctAddToSettings(track, "inputType", fac->name);
+                {
+                if (sameString(oneTrack->tdb->type, "vcfPhasedTrio"))
+                    ctAddToSettings(track, "inputType", "vcfPhasedTrio");
+                else
+                    ctAddToSettings(track, "inputType", fac->name);
+                }
             if (dataUrl)
 		ctAddToSettings(track, "dataUrl", dataUrl);
             if (!ctGenome(track) && ctDb)

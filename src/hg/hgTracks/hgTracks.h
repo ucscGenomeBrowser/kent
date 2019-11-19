@@ -1023,6 +1023,9 @@ void mafMethods(struct track *tg);
 void bamMethods(struct track *track);
 /* Methods for BAM alignment files. */
 
+void vcfPhasedMethods(struct track *track);
+/* Load items from a VCF of one individuals phased genotypes */
+
 void vcfTabixMethods(struct track *track);
 /* Methods for Variant Call Format compressed & indexed by tabix. */
 
