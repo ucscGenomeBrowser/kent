@@ -1668,6 +1668,7 @@ priority 0.8
         revStrand|Variant maps to opposite strand relative to dbSNP's preferred top-level placement
 #'
     ucscNotesFilterType multipleListOr
+    maxFuncImpactFilterLabel Greatest functional impact on gene
     maxFuncImpactFilterValues 0|(not annotated),\
         0865|frameshift,\
         1587|stop_gained,\
