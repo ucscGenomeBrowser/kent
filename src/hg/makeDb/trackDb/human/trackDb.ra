@@ -3633,6 +3633,7 @@ group phenDis
 visibility hide
 compositeTrack on
 type bedDetail 6
+html lovdComp
 
         track lovdShort
         release alpha
