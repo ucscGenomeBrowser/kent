@@ -199,7 +199,8 @@ To create your own hub you will need:</p>
   a set of text files that specify properties for the track hub and for each of the data tracks 
   within it</li>
   <li>
-  a twoBit file with your sequence if you are setting up an assembly hub.</li>
+  a twoBit file with your sequence if you are setting up an assembly hub. Note that the allowed
+  characters in sequence names are [A-Za-z_0-9_.-]</li>
   <li>
   an Internet-enabled web server or ftp server </li>
   <!--Question: do we have some general minimum requirements for this?-->
@@ -678,9 +679,12 @@ The Genome Browser supports searching for items within bigBed tracks in track da
 this behavior you have to add an index to the bigBed file when you initially create the the bigBed 
 file from the bed file input. Indices are usually created on the name field of the bed, but can be 
 created on any field of the bed. Free-text searches can also be enabled by creating a 
-<a href="trix.html">TRIX index file</a> that maps id's in the track to free-text metadata.</p>
+<a href="trix.html">TRIX index file</a> that maps id's in the track to free-text metadata. Further
+intructions can be found in the <a href="hubQuickStartSearch.html">Searchable Hub Quick Start 
+Guide</a>.</p>
 <p>
-See the searchIndex and searchTrix fields in the Hub Track Database Definition document for 
+See the searchIndex and searchTrix fields in the <a href="trackDb/trackDbHub.html">Hub Track 
+Database Definition document</a> for 
 information on how to set up your bigBed to enable searching. The searchIndex setting requires
 the input BED data to be case-senstive sorted (<code>sort -k1,1 -k2,2n</code>). You can use
 either the example UNIX <code>sort</code> command or the <code>bedSort</code> utility available
