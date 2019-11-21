@@ -7242,30 +7242,36 @@ static void getCdsStartAndStop(struct sqlConnection *conn, char *acc, char *trac
 			       uint *retCdsStart, uint *retCdsEnd)
 /* Get cds start and stop, if available */
 {
-char query[256];
-if (sqlTableExists(conn, gbCdnaInfoTable))
+struct trackDb *tdb = hashMustFindVal(trackHash, trackTable);
+// Note: this variable was previously named cdsTable but unfortunately the
+// hg/(inc|lib)/genbank.[hc] code uses the global var cdsTable!
+char *tdbCdsTable = trackDbSetting(tdb, "cdsTable");
+if (isEmpty(tdbCdsTable) && startsWith("ncbiRefSeq", trackTable))
+    tdbCdsTable = "ncbiRefSeqCds";
+if (isNotEmpty(tdbCdsTable) && hTableExists(database, tdbCdsTable))
     {
-    sqlSafef(query, sizeof query, "select cds from %s where acc = '%s'", gbCdnaInfoTable, acc);
+    char query[256];
+    sqlSafef(query, sizeof(query), "select cds from %s where id = '%s'", tdbCdsTable, acc);
+    char *cdsString = sqlQuickString(conn, query);
+    if (isNotEmpty(cdsString))
+        genbankParseCds(cdsString, retCdsStart, retCdsEnd);
+    }
+else if (sqlTableExists(conn, gbCdnaInfoTable))
+    {
+    char accChopped[512];
+    safecpy(accChopped, sizeof(accChopped), acc);
+    chopSuffix(accChopped);
+    char query[256];
+    sqlSafef(query, sizeof query, "select cds from %s where acc = '%s'",
+             gbCdnaInfoTable, accChopped);
     char *cdsId = sqlQuickString(conn, query);
     if (isNotEmpty(cdsId))
-	{
+        {
         sqlSafef(query, sizeof query, "select name from %s where id = '%s'", cdsTable, cdsId);
-	char *cdsString = sqlQuickString(conn, query);
-	if (isNotEmpty(cdsString))
-	    genbankParseCds(cdsString, retCdsStart, retCdsEnd);
-	}
-    }
-else
-    {
-    struct trackDb *tdb = hashMustFindVal(trackHash, trackTable);
-    char *cdsTable = trackDbSetting(tdb, "cdsTable");
-    if (isNotEmpty(cdsTable) && hTableExists(database, cdsTable))
-	{
-	sqlSafef(query, sizeof(query), "select cds from %s where id = '%s'", cdsTable, acc);
-	char *cdsString = sqlQuickString(conn, query);
-	if (isNotEmpty(cdsString))
-	    genbankParseCds(cdsString, retCdsStart, retCdsEnd);
-	}
+        char *cdsString = sqlQuickString(conn, query);
+        if (isNotEmpty(cdsString))
+            genbankParseCds(cdsString, retCdsStart, retCdsEnd);
+        }
     }
 }
 
@@ -7438,15 +7444,16 @@ safef(accChopped, sizeof(accChopped), "%s",acc);
 chopSuffix(accChopped);
 
 aliTable = cartString(cart, "aliTable");
+char *accForTitle = startsWith("ncbiRefSeq", aliTable) ? acc : accChopped;
 char title[1024];
-safef(title, sizeof title, "%s vs Genomic [%s]", accChopped, aliTable);
+safef(title, sizeof title, "%s vs Genomic [%s]", accForTitle, aliTable);
 htmlFramesetStart(title);
 
 /* Get some environment vars. */
 start = cartInt(cart, "o");
 
 conn = hAllocConn(database);
-getCdsStartAndStop(conn, accChopped, aliTable, &cdsStart, &cdsEnd);
+getCdsStartAndStop(conn, acc, aliTable, &cdsStart, &cdsEnd);
 
 /* Look up alignments in database */
 if (!hFindSplitTable(database, seqName, aliTable, table, sizeof table, &hasBin))
@@ -7528,12 +7535,13 @@ chopSuffix(accChopped);
 aliTable = cartString(cart, "aliTable");
 start = cartInt(cart, "o");
 
+char *accForTitle = startsWith("ncbiRefSeq", aliTable) ? acc : accChopped;
 char title[1024];
-safef(title, sizeof title, "%s vs Genomic [%s]", accChopped, aliTable);
+safef(title, sizeof title, "%s vs Genomic [%s]", accForTitle, aliTable);
 htmlFramesetStart(title);
 
 conn = hAllocConn(database);
-getCdsStartAndStop(conn, accChopped, aliTable, &cdsStart, &cdsEnd);
+getCdsStartAndStop(conn, acc, aliTable, &cdsStart, &cdsEnd);
 
 if (startsWith("user", aliTable))
     {
