@@ -32738,9 +32738,9 @@ TMPDIR=/dev/shm
     # 2018-05-01 markd
     # fix bug in wgEncodeGencodeEntrezGeneV28lift37 with change in gencodeLoad.mk.  Reload the table.
     mkdir -p /hive/data/genomes/hg19/bed/gencodeV28lift37
-    rm tables/wgEncodeGencodeEntrezGeneV28lift37.tab 
+    rm tables/wgEncodeGencodeEntrezGeneV28lift37.tab
     (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.3.out&
-                                                                                 
+
 
 #########################################################################
 # DBSNP B151 / SNP151 (DONE 4/16/18 angie)
@@ -33131,12 +33131,12 @@ EOF
 
     # Contained invalid biotype for one transcript (ENST00000649475.1_1), fix for now
     cd data/release_29lift37
-    mv gencode.v29lift37.annotation.gff3.gz  gencode.v29lift37.annotation.orig.gff3.gz 
+    mv gencode.v29lift37.annotation.gff3.gz  gencode.v29lift37.annotation.orig.gff3.gz
     zcat gencode.v29lift37.annotation.orig.gff3.gz | sed -e 's/lincrna/lincRNA/g' | gzip -c>  gencode.v29lift37.annotation.gff3.gz
     cd ../..
     (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.2.out&
 
-    
+
     # compare tables from previous release to see if number changed makes
     # sense.  Results are in gencode-cmp.tsv
 
@@ -33336,7 +33336,7 @@ wget 'https://mastermind.genomenon.com/cvr/download?format=csv' -O - > mastermin
 unzip mastermind.2018.11.26.csv.zip
 mv mastermind_cited_variants_reference-2018.11.26-csv/ 2018-11-26
 hgsql hg19 -NB -e 'select alias, chrom from chromAlias where source = "refseq";' > chromAlias.tab
-python ~/kent/src/hg/makeDb/mastermind/mastermindToBed.py 2018-11-26/mastermind_cited_variants_reference-2018.11.26.csv 
+python ~/kent/src/hg/makeDb/mastermind/mastermindToBed.py 2018-11-26/mastermind_cited_variants_reference-2018.11.26.csv
 bedSort mastermind.bed mastermind.bed
 bedToBigBed -type=bed9+ -as=~/kent/src/hg/makeDb/mastermind/mastermind.as -tab mastermind.bed /hive/data/genomes/hg19/chrom.sizes  mastermind.bb
 ln -s `pwd`/mastermind.bb /gbdb/hg19/bbi/mastermind.bb
@@ -33652,3 +33652,65 @@ wget "http://webdata.illumina.com.s3-website-us-east-1.amazonaws.com/downloads/p
 unzip *.zip
 awk 'BEGIN {FS=","; OFS="\t"} { print "chr" $10, $11-1, $11, $2,0, $21,$4}' *.csv | sort -k1,1 -k2,2n | bedClip stdin /cluster/data/hg19/chrom.sizes gda.bed
 hgLoadSqlTab hg19 snpArrayIlluminaGDA gda.sql gda.bed
+
+#########################################################################
+# ncbiRefSeq.p13 update (DONE - 2019-11-21 - Hiram)
+
+    mkdir /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2019-11-21
+    cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2019-11-21
+
+    # running step wise just to be careful
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Homo_sapiens \
+      GCF_000001405.25_GRCh37.p13 hg19) > download.log 2>&1
+    # real    2m27.137s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Homo_sapiens \
+      GCF_000001405.25_GRCh37.p13 hg19) > process.log 2>&1
+    # real    2m9.450s
+
+    ### BEFORE loading this updated table
+    cat fb.ncbiRefSeq.hg19.txt
+    #  85414465 bases of 2991694177 (2.855%) in intersection
+
+    featureBits -enrichment hg19 refGene ncbiRefSeq
+ # refGene 3.002%, ncbiRefSeq 2.855%, both 2.690%, cover 89.59%, enrich 31.38x
+
+    featureBits -enrichment hg19 ncbiRefSeq refGene
+ # ncbiRefSeq 2.855%, refGene 3.002%, both 2.690%, cover 94.21%, enrich 31.38x
+
+    featureBits -enrichment hg19 ncbiRefSeqCurated refGene
+ # ncbiRefSeqCurated 2.855%, refGene 3.002%, both 2.690%, cover 94.21%, enrich 31.38x
+
+    featureBits -enrichment hg19 refGene ncbiRefSeqCurated
+ # refGene 3.002%, ncbiRefSeqCurated 2.855%, both 2.690%, cover 89.59%, enrich 31.38x
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Homo_sapiens \
+      GCF_000001405.25_GRCh37.p13 hg19) > load.log 2>&1
+    # real    0m21.982s
+
+    ### AFTER loading this updated table
+    cat fb.ncbiRefSeq.hg19.txt
+    # 93708953 bases of 2991694177 (3.132%) in intersection
+
+    featureBits -enrichment hg19 refGene ncbiRefSeq
+ # refGene 3.002%, ncbiRefSeq 3.132%, both 2.983%, cover 99.35%, enrich 31.72x
+
+    featureBits -enrichment hg19 ncbiRefSeq refGene
+ # ncbiRefSeq 3.132%, refGene 3.002%, both 2.983%, cover 95.23%, enrich 31.72x
+
+    featureBits -enrichment hg19 ncbiRefSeqCurated refGene
+ # ncbiRefSeqCurated 3.132%, refGene 3.002%, both 2.983%, cover 95.23%, enrich 31.72x
+
+    featureBits -enrichment hg19 refGene ncbiRefSeqCurated
+ # refGene 3.002%, ncbiRefSeqCurated 3.132%, both 2.983%, cover 99.35%, enrich 31.72x
+
+#########################################################################
