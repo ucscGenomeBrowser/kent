@@ -1452,7 +1452,8 @@ There are no extra options that can appear on the type hic line.
     <code>filterByRange.&lt;fieldName&gt; &lt;off/on&gt;</code><BR>
     <code>filterLimits.&lt;fieldName&gt; &lt;low&gt;[:&lt;high&gt;]</code><BR>
     </div>
-    <P>There are a number of different filters available for bed data.
+    <P>There are a number of different filters available for bed data, see the 
+    <a href="../hubQuickStartFilter.html">filter overview</a>.
     <code> filter.&lt;fieldName&gt; </code> is used for numerical data. It does not 
     require any variables, however, a preselected filter value can be passed 
     following the argument to enable the filter by default.</P>
@@ -1535,7 +1536,9 @@ There are no extra options that can appear on the type hic line.
     <code>filterText.&lt;fieldName&gt; [&lt;default search string&gt;]</code><BR>
     <code>filterType.&lt;fieldName&gt; &lt;wildcard/regexp&gt;</code><BR>
     </div>
-    <P><code>filterText.&lt;fieldName&gt;</code> is used to enable text searching on values in the 
+    <P>There are a number of different filters available for bed data, see the 
+    <a href="../hubQuickStartFilter.html">filter overview</a>.
+    <code>filterText.&lt;fieldName&gt;</code> is used to enable text searching in the 
     specified fieldName. It does not require any variables, however, a preselected filter value
     can be passed following the argument to enable the filter by default.</P> 
     <P><code>filterText.&lt;fieldName&gt;</code> will enable two kinds of searching, wildcard and
@@ -1587,24 +1590,33 @@ There are no extra options that can appear on the type hic line.
     <code>filterValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
     <code>filterType.&lt;fieldName&gt; &lt;singleList/multipleListOr/multipleListAnd&gt;</code><BR>
     </div>
-    <P><code>filterValues.&lt;fieldName&gt;</code> is used to enable filtering by 
-    specified values within a field/column. It requires at least one value.</P>
-    <P>Every individual value must be passed in a comma separated list. You will then
-    be able to select those values as categories, choosing to display only items that
-    belong to one, any, or at least one of the selected values.</P>
-    <P>In order to choose the default selection behavior, the optional paramter
+    <P>There are a number of different filters available for bed data, see the 
+    <a href="../hubQuickStartFilter.html">filter overview</a>. 
+    <code>filterValues.&lt;fieldName&gt;</code> is used to enable filtering by 
+    specified values within a field. It can be used on fields that can contain
+    one text value or a list of comma-separated values of text, like "classA,classB".
+    Usually these are category names.
+    The option requires at least one value to filter on.</P>
+    <P>Every individual possible value that can ever occur in the field must be
+    passed in a comma separated list. You will then be able to select those
+    values as categories, choosing to display only items that
+    belong to one, any, or at least one of the selected values. By default, the user
+    can select multiple values from this list, and the filter lets pass any features
+    with at least one of these values (multipleListOr)</P>.
+    <P>In order to choose the default selection behavior, the optional parameter
     <code>filterType.&lt;fieldName&gt;</code> may be used. If this parameter is not passed,
     by default the selection will be set to &quot;one or more match&quot; which is the same
-    as having <code>filterType.fieldName multipleListOr</code>. In order to remove
-    the option to select multiple categories, requiring only a single selection, 
+    as having <code>filterType.fieldName multipleListOr</code>. If the user should
+    only be able to select a single value, 
     <code>singleList</code> can be passed instead. The final option,
-    <code>multipleListAnd</code> will set the default to only show items in which
-    all the selected categories are present.</P>
+    <code>multipleListAnd</code> means that the user can select multiple categories,
+    but the filter will let pass only features where all of these categories are present.
+    </P>
     <P>You can also choose which values to have selected by default using the
     <code>filterValuesDefault.&lt;fieldName&gt;</code> parameter. It can take a comma separated
     list just like <code>filterValues.&lt;fieldName&gt;</code>, and any items included will be
     automatically selected. Not that the values need to be present in both settings.</P>  
-    <P>The values in the menu shown to the user can be configured,
+    <P>The labels in the menu shown to the user can be configured,
     they can be different from the data in the bigBed field. This can be helpful when the data values are
     written in short form, but you want a longer more descriptive name to show up in the UI.
     The format for this substitution is as follows:</P>
@@ -1612,7 +1624,7 @@ There are no extra options that can appear on the type hic line.
     <P>E.g. if the value in the bigBed field is <code>AML</code>, a setting 
     like <code>Acute Myeloid Leukemia|AML</code> will show <code>Acute Myeloid Leukemia</code> 
     in the user interface but will lead to the value <code>AML</code> being searched in the bigBed 
-    field. See example below for more information.</P>
+    field. This can reduce the size of the bigBed file a lot. See example below for more information.</P>
     <P><B>Notes:</B><ul>
     <li>Currently, all values must be stated individually</li>
     <li>Value names must match exactly</li>
@@ -1627,7 +1639,8 @@ There are no extra options that can appear on the type hic line.
     <P>In this simple example, we are applying <code>filterValues.&lt;fieldName&gt;</code>
     to the <code>OddEven</code> field, which designates either &quot;Even&quot; 
     or &quot;Odd&quot;. We can then filter the data using the <code>OddEven</code> 
-    field with a drop-down menu displayed on the track controls page to just evens or odds.</P>
+    field with a drop-down menu displayed on the track controls page to just evens or odds. 
+    As there is no filterType, the user can also show both evens and odds at the same time.</P>
     <pre>
     filterValues.OddEven Odd,Even
     filterType.OddEven singleList</pre>
@@ -1650,11 +1663,11 @@ There are no extra options that can appear on the type hic line.
     and display only items that match our selections. The selection choices will let us match
     one, all, or any combination of the supplied values.</P>
     <pre>
-    filterValues.annotationType DNA-BR|DNA-binding region,AS|active site,BS|beta strand,BSi|binding site</pre>
+    filterValues.annotationType DNA-binding region|DNA-BR,active site|AS,beta strand|BS,binding site|Bsi</pre>
     <P>In this follow up to the previous question, we have changed the name of the items that
     show up in the drop down menu to be more descriptive than the dense file format values. This means
     that if we wanted to only see items with <code>annotationType</code> of 
-    <code>DNA-BR</code>, we would select <code>DNA-binding region</code> from the intercace menu.</P>
+    <code>DNA-BR</code>, we would select <code>DNA-binding region</code> from the interface menu.</P>
 </DIV>
 
 <DIV class="filterLabel"><span class="types bed bigBed"></span>
