@@ -200,14 +200,14 @@ Some are purely informational:
     <th># in hg19</th><th># in hg38</th><th>description</th></tr>
   <tr>
     <td>clinvar</td>
-    <td class="number">454674</td>
-    <td class="number">453990</td>
+    <td class="number">454678</td>
+    <td class="number">453996</td>
     <td>Variant is in ClinVar.</td>
   </tr>
   <tr>
     <td>clinvarBenign</td>
-    <td class="number">143860</td>
-    <td class="number">143730</td>
+    <td class="number">143864</td>
+    <td class="number">143736</td>
     <td>Variant is in ClinVar with clinical significance of benign and/or likely benign.</td>
   </tr>
   <tr>
@@ -224,54 +224,54 @@ Some are purely informational:
   </tr>
   <tr>
     <td>commonAll</td>
-    <td class="number">12184226</td>
-    <td class="number">12438325</td>
+    <td class="number">12184521</td>
+    <td class="number">12438655</td>
     <td>Variant is "common", i.e. has a Minor Allele Frequency of at least 1% in all
       projects reporting frequencies.</td>
   </tr>
   <tr>
     <td>commonSome</td>
-    <td class="number">20540882</td>
-    <td class="number">20902602</td>
+    <td class="number">20541190</td>
+    <td class="number">20902944</td>
     <td>Variant is "common", i.e. has a Minor Allele Frequency of at least 1% in some, but not all,
       projects reporting frequencies.</td>
   </tr>
   <tr>
     <td>diffMajor</td>
-    <td class="number">1377817</td>
-    <td class="number">1399094</td>
+    <td class="number">1377831</td>
+    <td class="number">1399109</td>
     <td>Different frequency sources have different major alleles.</td>
   </tr>
   <tr>
     <td>overlapDiffClass</td>
-    <td class="number">107003090</td>
-    <td class="number">109991096</td>
+    <td class="number">107015341</td>
+    <td class="number">110007682</td>
     <td>This variant overlaps another variant with a different type/class.</td>
   </tr>
   <tr>
     <td>overlapSameClass</td>
-    <td class="number">16910407</td>
-    <td class="number">17281744</td>
+    <td class="number">16915239</td>
+    <td class="number">17291289</td>
     <td>This variant overlaps another with the same type/class but different start/end.</td>
   </tr>
   <tr>
     <td>rareAll</td>
-    <td class="number">662595470</td>
-    <td class="number">681685476</td>
+    <td class="number">662601770</td>
+    <td class="number">681696398</td>
     <td>Variant is "rare", i.e. has a Minor Allele Frequency of less than 1%
       in all projects reporting frequencies, or has no frequency data.</td>
   </tr>
   <tr>
     <td>rareSome</td>
-    <td class="number">670952126</td>
-    <td class="number">690149753</td>
+    <td class="number">670958439</td>
+    <td class="number">690160687</td>
     <td>Variant is "rare", i.e. has a Minor Allele Frequency of less than 1%
       in some, but not all, projects reporting frequencies, or has no frequency data.</td>
   </tr>
   <tr>
     <td>revStrand</td>
-    <td class="number">3813467</td>
-    <td class="number">4532270</td>
+    <td class="number">3813702</td>
+    <td class="number">4532511</td>
     <td>Alleles are displayed on the + strand at the current position.
       dbSNP's alleles are displayed on the + strand of a different assembly sequence,
       so dbSNP's variant page shows alleles that are reverse-complemented with respect to
@@ -293,20 +293,20 @@ while others may indicate that the reference genome contains a rare variant or s
   </tr>
   <tr>
     <td>refIsMinor</td>
-    <td class="number">3271878</td>
-    <td class="number">3360159</td>
+    <td class="number">3272116</td>
+    <td class="number">3360435</td>
     <td>The reference genome allele is not the major allele in at least one project.</td>
   </tr>
   <tr>
     <td>refIsRare</td>
-    <td class="number">136452</td>
-    <td class="number">160723</td>
+    <td class="number">136547</td>
+    <td class="number">160827</td>
     <td>The reference genome allele is rare (i.e. allele frequency < 1%).</td>
   </tr>
   <tr>
     <td>refIsSingleton</td>
-    <td class="number">37783</td>
-    <td class="number">50865</td>
+    <td class="number">37832</td>
+    <td class="number">50927</td>
     <td>The reference genome allele has never been observed in a population sequencing project
       reporting frequencies.</td>
   </tr>
@@ -327,22 +327,22 @@ and others may indicate an anomaly or problem with the variant data:
     <th># in hg19</th><th># in hg38</th><th>description</th></tr>
   <tr>
     <td>altIsAmbiguous</td>
-    <td class="number">10754</td>
-    <td class="number">10880</td>
+    <td class="number">10755</td>
+    <td class="number">10888</td>
     <td>At least one alternate allele contains an IUPAC ambiguous base (e.g. 'R' for 'A or G').
       For alleles containing more than one ambiguous base, this may create a
       combinatoric explosion of possible alleles.</td>
   </tr>
   <tr>
     <td>classMismatch</td>
-    <td class="number">5995</td>
-    <td class="number">6206</td>
+    <td class="number">5998</td>
+    <td class="number">6216</td>
     <td>Variation class/type is inconsistent with alleles mapped to this genome assembly.</td>
   </tr>
   <tr>
     <td>clusterError</td>
-    <td class="number">114685</td>
-    <td class="number">128109</td>
+    <td class="number">114826</td>
+    <td class="number">128306</td>
     <td>This variant has the same start, end and class as another variant;
       they probably should have been merged into one variant.</td>
   </tr>
@@ -373,28 +373,28 @@ and others may indicate an anomaly or problem with the variant data:
   </tr>
   <tr>
     <td>freqNotRefAlt</td>
-    <td class="number">17684</td>
-    <td class="number">32150</td>
+    <td class="number">17694</td>
+    <td class="number">32170</td>
     <td>At least one allele reported by at least one project that reports frequencies
       does not match any of the reference or alternate alleles listed by dbSNP.</td>
   </tr>
   <tr>
     <td>multiMap</td>
-    <td class="number">562157</td>
-    <td class="number">132051</td>
+    <td class="number">562180</td>
+    <td class="number">132123</td>
     <td>This variant has been mapped to more than one distinct genomic location.</td>
   </tr>
   <tr>
     <td>otherMapErr</td>
-    <td class="number">113416</td>
-    <td class="number">203580</td>
+    <td class="number">114095</td>
+    <td class="number">204219</td>
     <td>At least one other mapping of this variant has erroneous coordinates.
       The mapping(s) with erroneous coordinates are excluded from this track
       and are included in the Map Err subtrack.  Sometimes despite this mapping
       having legal coordinates, there may still be an issue with this mapping's
       coordinates and alleles; you may want to click through to dbSNP to compare
       the initial submission's coordinates and alleles.
-      In hg19, 55453 distinct rs IDs are affected; in hg38, 86636.
+      In hg19, 55454 distinct rs IDs are affected; in hg38, 86636.
   </tr>
 </table>
 
