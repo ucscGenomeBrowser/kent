@@ -59,11 +59,6 @@ release alpha
     parent problematic
     release alpha
 
-    /gbdb/hg19/bbi/special/filterABQD.bb         /gbdb/hg19/bbi/special/filterHapNoVar.bb
-    /gbdb/hg19/bbi/special/filterAlign.bb        /gbdb/hg19/bbi/special/filterMap.bb
-    /gbdb/hg19/bbi/special/filterConflicting.bb  /gbdb/hg19/bbi/special/filterSSE.bb
-    /gbdb/hg19/bbi/special/filterCov.bb          /gbdb/hg19/bbi/special/filterlt2Datasets.bb
-
     track filterABQD
     shortLabel GIAB abnorm all bal
     longLabel Genome-in-a-bottle: Calls with abnormal allele balance
@@ -114,6 +109,15 @@ release alpha
     longLabel Genome-in-a-bottle: calls with evidence of systematic sequencing errors 
     type bigBed 3
     bigDataUrl /gbdb/hg19/bbi/special/filterSSE.bb
+    visibility dense
+    parent problematic
+    release alpha
+
+    track comments
+    shortLabel Comments
+    longLabel UCSC FAQ comments on assembly structure
+    type bigBed 9
+    bigDataUrl /gbdb/hg19/bbi/special/comments.bb
     visibility dense
     parent problematic
     release alpha
