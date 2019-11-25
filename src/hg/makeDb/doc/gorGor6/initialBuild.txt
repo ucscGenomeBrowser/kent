@@ -87,6 +87,9 @@ faSize G*0_genomic.fna.gz
 commonName Western lowland gorilla
 to
 commonName Gorilla 
+orderKey 23180 
+to
+orderKey 7680 
 
     # compare with previous version to see if it is sane:
     diff gorGor6.config.ra ../gorGor5/gorGor5.config.ra
@@ -102,7 +105,7 @@ commonName Gorilla
 assemblyDate Aug. 2019
 assemblyLabel University of Washington
 assemblyShortLabel Kamilah_GGO_v0
-orderKey 23180
+orderKey 7680
 # mitochondrial sequence included in refseq release
 # mitoAcc NC_011120.1
 mitoAcc none
@@ -321,11 +324,10 @@ chrX    66519024        66677016        chrX:66519025-66677016  1000    +      6
     time (~/kent/src/hg/utils/automation/doTandemDup.pl \
   -twoBit=/hive/data/genomes/gorGor6/gorGor6.unmasked.2bit gorGor6) \
         > do.log 2>&1 &
-XXX - running - Tue Nov 19 13:30:00 PST 2019
-    # real    225m10.394s
+    # real    188m34.598s
 
     cat fb.gorGor6.tandemDups.txt
-    # 81485851 bases of 2971331530 (2.742%) in intersection
+    # 155315479 bases of 3044872214 (5.101%) in intersection
 
     bigBedInfo gorGor6.tandemDups.bb | sed -e 's/^/#  /;'
 #  version: 4
@@ -334,16 +336,16 @@ XXX - running - Tue Nov 19 13:30:00 PST 2019
 #  isCompressed: yes
 #  isSwapped: 0
 #  extraIndexCount: 0
-#  itemCount: 1,431,488
-#  primaryDataSize: 37,737,612
-#  primaryIndexSize: 176,456
+#  itemCount: 2,822,307
+#  primaryDataSize: 72,710,994
+#  primaryIndexSize: 292,560
 #  zoomLevels: 9
-#  chromCount: 2756
-#  basesCovered: 1,568,894,232
-#  meanDepth (of bases covered): 8.122557
+#  chromCount: 5335
+#  basesCovered: 1,635,503,835
+#  meanDepth (of bases covered): 14.396921
 #  minDepth: 1.000000
-#  maxDepth: 314.000000
-#  std of depth: 13.438018
+#  maxDepth: 381.000000
+#  std of depth: 29.341113
 
 #########################################################################
 # ucscToINSDC and ucscToRefSeq table/track (DONE - 2019-11-19 - Hiram)
@@ -506,25 +508,26 @@ searchPriority 8
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku gorGor6) > do.log 2>&1
-XXX - running - Tue Nov 19 13:32:54 PST 2019
-    # real    500m43.380s
+    # real    415m10.888s
 
     cat faSize.rmsk.txt
-# 2971331530 bases (34438805 N's 2936892725 real 1399379596 upper
-#	1537513129 lower) in 2939 sequences in 1 files
-# Total size: mean 1011000.9 sd 12006707.4 min 217 (chrUn_NW_021162293v1)
-#	max 223616942 (chr1) median 26547
-# %51.74 masked total, %52.35 masked real
+# 3044872214 bases (45844299 N's 2999027915 real 1492721019 upper
+#	1506306896 lower) in 5486 sequences in 1 files
+# Total size: mean 555025.9 sd 8254410.8 min 202 (chrUn_NW_022154607v1)
+#	max 219763114 (chr1) median 29244
+# %49.47 masked total, %50.23 masked real
 
     egrep -i "versi|relea" do.log
 # RepeatMasker version development-$Id: RepeatMasker,v 1.332 2017/04/17 19:01:11 rhubley Exp $
-#    February 01 2017 (open-4-0-8) 1.332 version of RepeatMasker
+# grep version of RepeatMasker$ /hive/data/staging/data/RepeatMasker/RepeatMasker
+# February 01 2017 (open-4-0-8) 1.332 version of RepeatMasker
+# grep RELEASE /hive/data/staging/data/RepeatMasker/Libraries/RepeatMaskerLib.embl
 # CC    Dfam_Consensus RELEASE 20181026;                            *
-# CC    RepBase RELEASE 20181026;         
+# CC    RepBase RELEASE 20181026;                                   *
 
     time featureBits -countGaps gorGor6 rmsk
-    # 1537510421 bases of 2971331530 (51.745%) in intersection
-    # real    0m40.763s
+    # 1506305481 bases of 3044872214 (49.470%) in intersection
+    # real    0m41.857s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the faSize count above
@@ -533,23 +536,21 @@ XXX - running - Tue Nov 19 13:32:54 PST 2019
     # faster way to get the same result on high contig count assemblies:
     time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' gorGor6 \
         | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
-    # total 1537510421.000000
-    # real    0m24.256s
+    # total 1506305481.000000
+    # real    0m22.271s
 
 ##########################################################################
-# running simple repeat (TBD - 2019-11-19 - Hiram)
-
+# running simple repeat (DONE - 2019-11-19 - Hiram)
 
     mkdir /hive/data/genomes/gorGor6/bed/simpleRepeat
     cd /hive/data/genomes/gorGor6/bed/simpleRepeat
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         -trf409=6 gorGor6) > do.log 2>&1
-XXX - running - Tue Nov 19 13:33:49 PST 2019
-    # real    933m29.936s
+    # real    243m33.198s
 
     cat fb.simpleRepeat
-    # 158143361 bases of 2936892733 (5.385%) in intersection
+    # 260449789 bases of 2999027915 (8.684%) in intersection
 
     cd /hive/data/genomes/gorGor6
     # using the Window Masker result:
@@ -564,17 +565,17 @@ XXX - running - Tue Nov 19 13:33:49 PST 2019
     #   you can safely ignore the warning about fields >= 13
     twoBitToFa gorGor6.2bit stdout | faSize stdin > faSize.gorGor6.2bit.txt
     cat faSize.gorGor6.2bit.txt
-# 2971331530 bases (34438805 N's 2936892725 real 1397548789 upper
-#	1539343936 lower) in 2939 sequences in 1 files
-# Total size: mean 1011000.9 sd 12006707.4 min 217 (chrUn_NW_021162293v1)
-#	max 223616942 (chr1) median 26547
-# %51.81 masked total, %52.41 masked real
+# 3044872214 bases (45844299 N's 2999027915 real 1490817836 upper
+#	1508210079 lower) in 5486 sequences in 1 files
+# Total size: mean 555025.9 sd 8254410.8 min 202 (chrUn_NW_022154607v1)
+#	max 219763114 (chr1) median 29244
+# %49.53 masked total, %50.29 masked real
 
     rm /gbdb/gorGor6/gorGor6.2bit
     ln -s `pwd`/gorGor6.2bit /gbdb/gorGor6/gorGor6.2bit
 
 #########################################################################
-# CREATE MICROSAT TRACK (TBD - 2019-07-02 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2019-11-20 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/gorGor6/bed/microsat
     cd /cluster/data/gorGor6/bed/microsat
@@ -583,91 +584,95 @@ XXX - running - Tue Nov 19 13:33:49 PST 2019
        ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
     hgLoadBed gorGor6 microsat microsat.bed
-    # Read 32040 elements of size 4 from microsat.bed
+    # Read 27700 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2019-11-19 - Hiram)
+## WINDOWMASKER (DONE - 2019-11-19 - Hiram)
 
     mkdir /hive/data/genomes/gorGor6/bed/windowMasker
     cd /hive/data/genomes/gorGor6/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev gorGor6) > do.log 2>&1
-    # real    111m14.660s
+    # real    115m21.931s
 
     # Masking statistics
     cat faSize.gorGor6.cleanWMSdust.txt
-# 2971331530 bases (34438805 N's 2936892725 real 1792976685 upper
-#	1143916040 lower) in 2939 sequences in 1 files
-# Total size: mean 1011000.9 sd 12006707.4 min 217 (chrUn_NW_021162293v1)
-#	max 223616942 (chr1) median 26547
-# %38.50 masked total, %38.95 masked real
+# 3044872214 bases (45844299 N's 2999027915 real 1771826758 upper
+#	1227201157 lower) in 5486 sequences in 1 files
+# Total size: mean 555025.9 sd 8254410.8 min 202 (chrUn_NW_022154607v1)
+#	max 219763114 (chr1) median 29244
+# %40.30 masked total, %40.92 masked real
 
     cat fb.gorGor6.rmsk.windowmaskerSdust.txt
-    # 909614480 bases of 2971331530 (30.613%) in intersection
+    # 879562979 bases of 3044872214 (28.887%) in intersection
 
 ##########################################################################
-# cpgIslands - (TBD - 2019-07-02 - Hiram)
+# cpgIslands - (DONE - 2019-11-20 - Hiram)
     mkdir /hive/data/genomes/gorGor6/bed/cpgIslands
     cd /hive/data/genomes/gorGor6/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku gorGor6) > do.log 2>&1
-    # real    3m51.796s
+    # real    4m0.657s
 
     cat fb.gorGor6.cpgIslandExt.txt
-    # 21622534 bases of 2936892733 (0.736%) in intersection
+    # 20339043 bases of 2999027915 (0.678%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2019-07-02 - Hiram)
+# genscan - (DONE - 2019-11-20 - Hiram)
     mkdir /hive/data/genomes/gorGor6/bed/genscan
     cd /hive/data/genomes/gorGor6/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku gorGor6) > do.log 2>&1
-    # real    134m51.892s
+    # real    100m37.264s
 
     cat fb.gorGor6.genscan.txt
-    # 53848328 bases of 2936892733 (1.834%) in intersection
+    # 51534246 bases of 2999027915 (1.718%) in intersection
 
     cat fb.gorGor6.genscanSubopt.txt
-    # 52550217 bases of 2936892733 (1.789%) in intersection
+    # 53019930 bases of 2999027915 (1.768%) in intersection
 
 #########################################################################
-# Create kluster run files (TBD - 2019-11-19 - Hiram)
+# Create kluster run files (DONE - 2019-11-20 - Hiram)
 
     # numerator is gorGor6 gapless bases "real" as reported by:
     featureBits -noRandom -noHap gorGor6 gap
-    # 32449617 bases of 2821543288 (1.150%) in intersection
+    # 41796384 bases of 2715375767 (1.539%) in intersection
     #                      ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 2821543288 / 2861349177 \) \* 1024
-    #  ( 2821543288 / 2861349177 ) * 1024 = 1009.754542
+    calc \( 2715375767 / 2861349177 \) \* 1024
+    #  ( 2715375767 / 2861349177 ) * 1024 = 971.760038
 
-    # ==> use -repMatch=350 according to size scaled down from 1024 for human.
+    # ==> use -repMatch=950 according to size scaled down from 1024 for human.
     #   and rounded down to nearest 50
     cd /hive/data/genomes/gorGor6
-    blat gorGor6.2bit \
+    time blat gorGor6.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/gorGor6.11.ooc \
-        -repMatch=1000
-    #   Wrote 31768 overused 11-mers to jkStuff/gorGor6.11.ooc
-    # rheMac8 at repMatch=900:
-    #   Wrote 43065 overused 11-mers to jkStuff/rheMac8.11.ooc
+        -repMatch=950
+    #   Wrote 39217 overused 11-mers to jkStuff/gorGor6.11.ooc
+
+    # gorGor5 at repMatch=1100:
+    #   Wrote 31384 overused 11-mers to jkStuff/gorGor5.11.ooc
+    # gorGor4 at repMatch=1000:
+    # Wrote 32028 overused 11-mers to jkStuff/gorGor4.11.ooc
 
     #   check non-bridged gaps to see what the typical size is:
     hgsql -N \
         -e 'select * from gap where bridge="no" order by size;' gorGor6 \
         | sort -k7,7nr | ave -col=7 stdin
     # min 100.000000
-    # max 1000000.000000
+    # max 100.000000
+    # they are all 100 sized, 220 gaps
 
     # minimum gap size is 100 and produces a reasonable number of lifts
     gapToLift -verbose=2 -minGap=100 gorGor6 jkStuff/gorGor6.nonBridged.lft \
         -bedFile=jkStuff/gorGor6.nonBridged.bed
     wc -l jkStuff/gorGor6.nonBri*
-    # 2979 jkStuff/gorGor6.nonBridged.bed
-    # 2979 jkStuff/gorGor6.nonBridged.lft
+    #	5706 jkStuff/gorGor6.nonBridged.bed
+    #	5706 jkStuff/gorGor6.nonBridged.lft
 
 ########################################################################
 # lastz/chain/net swap human/hg38 (TBD - 2019-07-03 - Hiram)
@@ -773,41 +778,49 @@ XXX - running - Tue Nov 19 13:33:49 PST 2019
     # 2423781773 bases of 2936892733 (82.529%) in intersection
 
 ##############################################################################
-# GENBANK AUTO UPDATE (TBD - 2019-07-03 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2019-11-20 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
-    # #organism       mrnaCnt estCnt  refSeqCnt
-    # Macaca mulatta  381495  60276   5820
+    # organism       mrnaCnt estCnt  refSeqCnt
+    # Gorilla 1       0       0
+    # Gorilla gorilla 617     30      95
+    # Gorilla gorilla gorilla 4       0       0
+
+    # that single 'Gorilla' name is a new one, adding that to
+    # the list of Gorilla names in src/lib/gbGenome.c
 
     # edit etc/genbank.conf to add gorGor6 just before galGal5
 
-# gorGor6 Macaca mulatta (rhesus) (refseq assembly GCF_003339765.1)
+# Gorilla - refseq assembly: GCF_008122165.1
 gorGor6.serverGenome = /hive/data/genomes/gorGor6/gorGor6.2bit
 gorGor6.ooc = /hive/data/genomes/gorGor6/jkStuff/gorGor6.11.ooc
 gorGor6.lift = /hive/data/genomes/gorGor6/jkStuff/gorGor6.nonBridged.lft
 gorGor6.perChromTables = no
-gorGor6.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
-gorGor6.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
-gorGor6.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
-gorGor6.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
-gorGor6.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
-gorGor6.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+gorGor6.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+gorGor6.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+gorGor6.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+gorGor6.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+gorGor6.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+gorGor6.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
 gorGor6.downloadDir = gorGor6
-# DO NOT NEED genbank.mrna.xeno except for human, mouse(and in this case rhesus)
-gorGor6.refseq.mrna.native.load  = yes
-gorGor6.refseq.mrna.xeno.load  = yes
-gorGor6.upstreamGeneTbl = refGene
+# default yes refseq.mrna.native refseq.mrna.xeno genbank.mrna.native
+# default yes genbank.est.native
+# default no genbank.mrna.xeno genbank.est.xeno
 
     # verify the files specified exist before checking in the file:
   grep ^gorGor6 etc/genbank.conf | grep hive | awk '{print $NF}' | xargs ls -og
-# -rw-rw-r-- 1    127080 Jul  1 11:03 /hive/data/genomes/gorGor6/jkStuff/gorGor6.11.ooc
-# -rw-rw-r-- 1    177516 Jul  1 13:16 /hive/data/genomes/gorGor6/jkStuff/gorGor6.nonBridged.lft
-# -rw-rw-r-- 1 775334369 Jul  2 07:48 /hive/data/genomes/gorGor6/gorGor6.2bit
+# -rw-rw-r-- 1 792944027 Nov 20 10:59 /hive/data/genomes/gorGor6/gorGor6.2bit
+# -rw-rw-r-- 1    156876 Nov 20 11:06 /hive/data/genomes/gorGor6/jkStuff/gorGor6.11.ooc
+# -rw-rw-r-- 1    333597 Nov 20 11:08 /hive/data/genomes/gorGor6/jkStuff/gorGor6.nonBridged.lft
 
-    git commit -m "Added gorGor6 rhesus/Macaca mulatta; refs #23771" etc/genbank.conf
+    git commit -m "Added gorGor6 gorilla; refs #24524" etc/genbank.conf src/lib/gbGenome.c
     git push
+
+    # update the binaries due to the update in lib/src/gbGenome.c
+    make install-server
+
     # update /cluster/data/genbank/:
     make etc-update
 
@@ -815,9 +828,8 @@ gorGor6.upstreamGeneTbl = refGene
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add gorGor6 to:
-    #   etc/hgwdev.dbs
-    git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added gorGor6 - rhesus/Macaca mulatta refs #23771" etc/hgwdev.dbs
+    #   etc/hgwdev.dbs etc/align.dbs
+    git commit -m "Added gorGor6 - gorilla refs #24524" etc/hgwdev.dbs etc/align.dbs
     git push
     make etc-update
 
@@ -825,20 +837,20 @@ gorGor6.upstreamGeneTbl = refGene
     # appear
 
 #############################################################################
-# augustus gene track (TBD - 2019-07-02 - Hiram)
+# augustus gene track (DONE - 2019-11-20 - Hiram)
 
     mkdir /hive/data/genomes/gorGor6/bed/augustus
     cd /hive/data/genomes/gorGor6/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev gorGor6) > do.log 2>&1
-    # real    129m48.296s
+    # real    139m55.244s
 
     cat fb.gorGor6.augustusGene.txt
-    # 50002729 bases of 2936892733 (1.703%) in intersection
+    # 55005426 bases of 2999027915 (1.834%) in intersection
 
 #########################################################################
-# ncbiRefSeq (TBD - 2019-07-02 - Hiram)
+# ncbiRefSeq (DONE - 2019-11-20 - Hiram)
 
     mkdir /hive/data/genomes/gorGor6/bed/ncbiRefSeq
     cd /hive/data/genomes/gorGor6/bed/ncbiRefSeq
@@ -846,29 +858,31 @@ gorGor6.upstreamGeneTbl = refGene
     time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
       -bigClusterHub=ku -dbHost=hgwdev \
       -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_mammalian Macaca_mulatta \
-      GCF_003339765.1_Mmul_10 gorGor6) > download.log 2>&1
-    # real    2m3.842s
+      refseq vertebrate_mammalian Gorilla_gorilla \
+      GCF_008122165.1_Kamilah_GGO_v0 gorGor6) > download.log 2>&1
+    # real    1m37.523s
 
     time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
       -continue=process -bigClusterHub=ku -dbHost=hgwdev \
       -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_mammalian Macaca_mulatta \
-      GCF_003339765.1_Mmul_10 gorGor6) > process.log 2>&1
-    # real    2m6.030s
+      refseq vertebrate_mammalian Gorilla_gorilla \
+      GCF_008122165.1_Kamilah_GGO_v0 gorGor6) > process.log 2>&1
+    # real    2m9.450s
 
     time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
       -continue=load -bigClusterHub=ku -dbHost=hgwdev \
       -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_mammalian Macaca_mulatta \
-      GCF_003339765.1_Mmul_10 gorGor6) > load.log 2>&1
-    # real    0m27.175s
+      refseq vertebrate_mammalian Gorilla_gorilla \
+      GCF_008122165.1_Kamilah_GGO_v0 gorGor6) > load.log 2>&1
+    # real    0m21.982s
 
     cat fb.ncbiRefSeq.gorGor6.txt
-    #  92462016 bases of 2936892733 (3.148%) in intersection
+    #  74279781 bases of 2999027915 (2.477%) in intersection
 
     # add: include ../../refSeqComposite.ra alpha
-    # to the rhesus/gorGor6/trackDb.ra to turn on the track in the browser
+    # to the gorilla/gorGor6/trackDb.ra to turn on the track in the browser
+
+    # XXX 2019-11-20 - ready for this after genbank runs
 
     featureBits -enrichment gorGor6 refGene ncbiRefSeq 
  # refGene 0.402%, ncbiRefSeq 3.148%, both 0.402%, cover 99.90%, enrich 31.73x
@@ -882,45 +896,142 @@ gorGor6.upstreamGeneTbl = refGene
  # refGene 0.402%, ncbiRefSeqCurated 0.401%, both 0.400%, cover 99.33%, enrich 247.79x
 
 #########################################################################
-# LIFTOVER TO rheMac8 (TBD - 2019-07-02 - Hiram)
+# LIFTOVER TO gorGor5 (DONE - 2019-11-20 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/gorGor6/bed/blat.rheMac8.2019-07-02
-    cd /hive/data/genomes/gorGor6/bed/blat.rheMac8.2019-07-02
+    mkdir /hive/data/genomes/gorGor6/bed/blat.gorGor5.2019-11-20
+    cd /hive/data/genomes/gorGor6/bed/blat.gorGor5.2019-11-20
     doSameSpeciesLiftOver.pl -verbose=2 \
         -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/gorGor6/jkStuff/gorGor6.11.ooc \
-         gorGor6 rheMac8
+         gorGor6 gorGor5
     time (doSameSpeciesLiftOver.pl -verbose=2 \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/gorGor6/jkStuff/gorGor6.11.ooc \
-         gorGor6 rheMac8) > doLiftOverToRheMac8.log 2>&1
-    # real    268m29.927s
+         gorGor6 gorGor5) > doLiftOverToGorGor5.log 2>&1
+    # real    936m35.524s
 
-    # see if the liftOver menus function in the browser from gorGor6 to rheMac8
+    # see if the liftOver menus function in the browser from gorGor6 to gorGor5
 
 #########################################################################
-#  BLATSERVERS ENTRY (TBD - 2019-07-09 - Hiram)
+# LIFTOVER TO gorGor4 (DONE - 2019-11-20 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/gorGor6/bed/blat.gorGor4.2019-11-20
+    cd /hive/data/genomes/gorGor6/bed/blat.gorGor4.2019-11-20
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/gorGor6/jkStuff/gorGor6.11.ooc \
+         gorGor6 gorGor4
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/gorGor6/jkStuff/gorGor6.11.ooc \
+         gorGor6 gorGor4) > doLiftOverToGorGor4.log 2>&1
+    # real    654m46.645s
+
+    # see if the liftOver menus function in the browser from gorGor6 to gorGor4
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2019-11-20 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("gorGor6", "blat1a", "17898", "1", "0"); \
+	VALUES ("gorGor6", "blat1c", "17914", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("gorGor6", "blat1a", "17899", "0", "1");' \
+	VALUES ("gorGor6", "blat1c", "17915", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
-## reset default position to same as rheMac8
-##  (TBD - 2019-07-09 - Hiram)
+## reset default position similar to gorGor5 found via blat of NR_046473.1 mRNA
+##  (DONE - 2019-11-20 - Hiram)
 
     # as found from the galGal5 to gorGor6 liftOver
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr3:70672926-70708108"
+    hgsql -e 'update dbDb set defaultPos="chr14:81559118-81601404"
 	where name="gorGor6";' hgcentraltest
 
+##############################################################################
+# crispr whole genome (DONE - 2019-11-20 - Hiram)
+    mkdir /hive/data/genomes/gorGor6/bed/crisprAll
+    cd /hive/data/genomes/gorGor6/bed/crisprAll
+
+    # the large shoulder argument will cause the entire genome to be scanned
+    # this takes a while for a new genome to get the bwa indexing done
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 -stop=ranges \
+    gorGor6 ncbiRefSeq -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > ranges.log 2>&1
+    # real    72m58.740s
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=guides -stop=specScores gorGor6 ncbiRefSeq \
+	-shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > specScores.log 2>&1
+XXX - running - Thu Nov 21 08:09:23 PST 2019
+
+    cat guides/run.time | sed -e 's/^/# /;'
+# Completed: 100 of 100 jobs
+# CPU time in finished jobs:      12309s     205.15m     3.42h    0.14d  0.000 y
+# IO & Wait Time:                   290s       4.83m     0.08h    0.00d  0.000 y
+# Average job time:                 126s       2.10m     0.03h    0.00d
+# Longest finished job:             380s       6.33m     0.11h    0.00d
+# Submission to last job:           386s       6.43m     0.11h    0.00d
+
+    cat specScores/run.time | sed -e 's/^/# /;'
+    # real    8m40.172s
+    Completed: 100 of 100 jobs
+CPU time in finished jobs:      11503s     191.72m     3.20h    0.13d  0.000 y
+IO & Wait Time:                   254s       4.23m     0.07h    0.00d  0.000 y
+Average job time:                 118s       1.96m     0.03h    0.00d
+Longest finished job:             386s       6.43m     0.11h    0.00d
+Submission to last job:           387s       6.45m     0.11h    0.00d
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=specScoreJobList -stop=specScores \
+    gorGor6 ncbiRefSeq -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > specScores.log 2>&1
+Completed: 2947877 of 2947877 jobs
+CPU time in finished jobs:  262070681s 4367844.69m 72797.41h 3033.23d  8.310 y
+IO & Wait Time:               6243499s  104058.31m  1734.31h   72.26d  0.198 y
+Average job time:                  91s       1.52m     0.03h    0.00d
+Longest finished job:             217s       3.62m     0.06h    0.00d
+Submission to last job:        274925s    4582.08m    76.37h    3.18d
+
+# Number of specScores: 220282678
+
+# real    5619m9.026s
+# user    617m24.869s
+# sys     52m8.371s
+
+    ### remember to get back to hgwdev to run this
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=effScores -stop=load \
+    gorGor6 ncbiRefSeq -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > load.log 2>&1
+    # real    970m21.487s
+    # user    0m0.983s
+    # sys     0m2.219s
+
+# effScores:
+Completed: 27697 of 27697 jobs
+CPU time in finished jobs:   14348277s  239137.94m  3985.63h  166.07d  0.455 y
+IO & Wait Time:                150120s    2502.01m    41.70h    1.74d  0.005 y
+Average job time:                 523s       8.72m     0.15h    0.01d
+Longest finished job:            1966s      32.77m     0.55h    0.02d
+Submission to last job:         15067s     251.12m     4.19h    0.17d
+
+# offTargets:
+Completed: 147394 of 147394 jobs
+CPU time in finished jobs:    2213680s   36894.66m   614.91h   25.62d  0.070 y
+IO & Wait Time:               2663355s   44389.25m   739.82h   30.83d  0.084 y
+Average job time:                  33s       0.55m     0.01h    0.00d
+Longest finished job:              68s       1.13m     0.02h    0.00d
+
 #########################################################################
-# crispr 10K shoulders (TBD - 2018-10-16 - Hiram)
+# crispr ALL (TBD - 2018-10-16 - Hiram)
     # working on this script, adding the indexFa step:
     time (~/kent/src/hg/utils/automation/doCrispr.pl \
 	-stop=indexFa -buildDir=`pwd` -smallClusterHub=ku gorGor6 ncbiRefSeq) \
@@ -959,7 +1070,7 @@ gorGor6.upstreamGeneTbl = refGene
     # real    307m41.143s
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2019-07-03,08-30 - Hiram)
+# all.joiner update, downloads and in pushQ - (WORKING - 2019-11-20 - Hiram)
 xyz
     cd $HOME/kent/src/hg/makeDb/schema
     # verify all the business is done for release
@@ -971,11 +1082,12 @@ xyz
     joinerCheck -database=gorGor6 -keys all.joiner
 
     # when clean, check in:
-    git commit -m 'adding rules for gorGor6 and regenRn0 refs #23771 #21578' all.joiner
+    git commit -m 'adding rules for gorGor6 refs #24524' all.joiner
     git push
     # run up a 'make alpha' in hg/hgTables to get this all.joiner file
     # into the hgwdev/genome-test system
 
+XXX - continue here when ready
     cd /hive/data/genomes/gorGor6
     time (makeDownloads.pl gorGor6) > downloads.log 2>&1
     #  real    17m47.024s
