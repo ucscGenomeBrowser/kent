@@ -387,7 +387,6 @@ void doValidateNewHub(char *hubUrl)
 struct dyString *cmd = dyStringNew(0);
 udcSetCacheTimeout(1);
 dyStringPrintf(cmd, "loader/hubCheck -htmlOut -noTracks %s", hubUrl);
-printf("</table>");
 printf("<div id=\"validateHubResult\" class=\"hubTdbTree\" style=\"overflow: auto\"></div>");
 FILE *f = popen(cmd->string, "r");
 if (f == NULL)
@@ -404,18 +403,22 @@ jsInline("hubSearchTree.init(false);");
 dyStringFree(&cmd);
 }
 
-void hgHubConnectValidateNewHub()
+void hgHubConnectDeveloperMode()
 {
 // put out the top of our page
 char *hubUrl = cartOptionalString(cart, "validateHubUrl");
-printf("<div id=\"validateHub\" class=\"hubList\"> \n"
-    "<table id=\"validateHub\"> \n"
-    "<thead><tr> \n");
-printf("<th colspan=\"6\" id=\"addHubBar\"><label for=\"validateHubUrl\">URL:</label> \n");
+boolean doHubValidate = cartVarExists(cart, hgHubDoHubCheck);
+
+// the outer div for all the elements in the tab
+printf("\n<div id=\"hubDeveloper\" class=\"hubList\">\n");
+
+// the row to enter in the url and the button and settings to validate/load
+printf("<div class=\"addHubBar roundCorners\" id=\"validateHubUrlRow\">\n");
+printf("<label for=\"validateHubUrl\"><b>URL:</b></label>\n");
 if (hubUrl != NULL)
     {
-	printf("<input name=\"validateText\" id=\"validateHubUrl\" class=\"hubField\" "
-	    "type=\"text\" size=\"65\" value=\"%s\"> \n", hubUrl);
+    printf("<input name=\"validateText\" id=\"validateHubUrl\" class=\"hubField\" "
+        "type=\"text\" size=\"65\" value=\"%s\"> \n", hubUrl);
     }
 else
     {
@@ -423,23 +426,77 @@ else
         "type=\"text\" size=\"65\"> \n");
     }
 printf("<input name=\"hubValidateButton\" id='hubValidateButton' "
-    "class=\"hubField\" type=\"button\" value=\"Validate Hub\">\n"
-    "</th> \n"
-    "</tr> \n");
+    "class=\"hubField\" type=\"button\" value=\"Check Hub settings\">\n");
+printf(" or \n");
+printf("<input name=\"hubLoadMaybeTiming\" id='hubLoadMaybeTiming' "
+    "class=\"hubField\" type=\"button\" value=\"Load Hub\">\n");
+printf("</div>\n"); // validateHubUrlRow div
 
-if (hubUrl == NULL)
-    printf("<tr><td>Enter URL to hub to check settings</td></tr> \n");
-else
+printf("<div id=\"extraSettingsContainer\" class=\"addHubBar\">\n");
+printf("<img id=\"advancedSettingsButton\" src=\"../images/add_sm.gif\">\n");
+printf("Advanced Settings");
+
+char *measureTiming = cartCgiUsualString(cart, "measureTiming", NULL);
+char *udcTimeout = cartCgiUsualString(cart, "udcTimeout", NULL);
+
+printf("<div id=\"extraSettingsList\" style=\"display: none\">\n");
+printf("<ul style=\"list-style-type:none\">\n<li>\n");
+// measureTiming first
+printf("<input name=\"addMeasureTiming\" id=\"addMeasureTiming\" "
+    "class=\"hubField\" type=\"checkbox\" %s>", measureTiming != NULL ? "checked": "");
+printf("<label for=\"addMeasureTiming\">Display load times</label>\n");
+
+// and a tooltip explaining this checkbox
+printf("<div class=\"tooltip\"> (?)\n");
+printf("<span class=\"tooltiptext\">"
+    "Checking this box shows the timing measurements below the Genome Browser image. "
+    "Useful for determining slowdowns to loading or drawing tracks."
+    "</span>\n");
+printf("</div></li>\n"); // tooltip div
+
+printf("<li>\n");
+// udcTimeout enable/disable
+printf("<input name=\"disableUdcTimeout\" id=\"disableUdcTimeout\" "
+    "class=\"hubField\" type=\"checkbox\" %s >", udcTimeout != NULL ? "checked" : "");
+printf("<label for=\"disableUdcTimeout\">Enable hub refresh</label>\n");
+// add a tooltip explaining these checkboxes
+printf("<div class=\"tooltip\"> (?)\n");
+printf("<span class=\"tooltiptext\">"
+    "Checking this box changes the cache expiration time (default of 5 minutes) "
+    "and allows the Genome Browser to reload Hub configuration files with each refresh."
+    "</span>\n");
+printf("</div></li>\n"); // tooltip div
+printf("</ul>\n");
+printf("</div>\n"); // extraSettingsList div
+printf("</div>\n"); // extraSettingsContainer div
+
+if (hubUrl != NULL && doHubValidate)
     doValidateNewHub(hubUrl);
-printf("</table></div>");
+else
+    printf("<div id=\"hubDeveloperInstructions\">Enter URL to hub to check configuration settings "
+        "or load hub </div> \n");
+printf("</div>"); // hubDeveloper div
 
 jsOnEventById("click", "hubValidateButton",
     "var validateText = document.getElementById('validateHubUrl');"
     "validateText.value=$.trim(validateText.value);"
     "if(validateUrl($('#validateHubUrl').val())) { "
     " document.validateHubForm.elements['validateHubUrl'].value=validateText.value;"
+    " document.validateHubForm.elements['" hgHubDoHubCheck "'].value='on';"
     " document.validateHubForm.submit(); return true; }"
     "else { return false; }"
+    );
+jsOnEventById("click", "hubLoadMaybeTiming",
+    "var validateText = document.getElementById('validateHubUrl');"
+    "var udcTimeout = document.getElementById('disableUdcTimeout').checked === true;"
+    "var doMeasureTiming = document.getElementById('addMeasureTiming').checked === true;"
+    "validateText.value=$.trim(validateText.value);"
+    "if(validateUrl($('#validateHubUrl').val())) {"
+    "   loc = \"../cgi-bin/hgTracks?&hgHub_do_firstDb=on\" + \"&hubUrl=\" + validateText.value;"
+    "   if (doMeasureTiming) { loc += \"&measureTiming=1\";} else { loc += \"&measureTiming=[]\"; }"
+    "   if (udcTimeout) { loc += \"&udcTimeout=5\"; } else { loc += \"&udcTimeout=[]\"; }"
+    "   window.location.href=loc; "
+    "} else { return false; }"
     );
 }
 
@@ -611,6 +668,7 @@ void printSearchTerms(char *hubSearchTerms)
 printf("Displayed list <B>restricted by search terms:</B> %s\n", hubSearchTerms);
 puts("<input name=\"hubDeleteSearchButton\" id='hubDeleteSearchButton' "
         "class=\"hubField\" type=\"button\" value=\"Show All Hubs\">\n");
+
 jsOnEventById("click", "hubDeleteSearchButton",
         "document.searchHubForm.elements['hubSearchTerms'].value='';"
         "document.searchHubForm.elements['hubDbFilter'].value='';"
@@ -1607,6 +1665,7 @@ webIncludeResourceFile("hgHubConnect.css");
 jsIncludeFile("jquery.cookie.js", NULL);
 jsIncludeFile("spectrum.min.js", NULL);
 
+boolean doHubDevMode = cfgOptionBooleanDefault("hgHubConnect.validateHub", FALSE);
 printf("<div id=\"hgHubConnectUI\"> <div id=\"description\"> \n");
 printf(
     "<P>Track data hubs are collections of external tracks that can be imported into the UCSC Genome Browser. "
@@ -1620,6 +1679,25 @@ printf(
     " UCSC is not responsible for their content.</B></P>"
    );
 printf("</div>\n");
+if (doHubDevMode)
+    {
+    printf("<div id=\"developerModeDescription\" style=\"display:none\"> \n");
+    printf("<p>Check the configuration settings for a hub, including the settings "
+        "in the hub.txt, genomes.txt, and trackDb.txt files. If there are errors in the hub "
+        "setup, a heirarchal tree of tracks is presented with the errors in red text. A hub "
+        "with no errors still has the tree present but needs to be clicked to be expanded to "
+        " explore the track heirarchy.</p>\n"
+        "<p>Also present are buttons to load the hub with track timing measuring turned on "
+        "in order to profile slow loading tracks, and an option to disable the track caching "
+        "mechanism so the Genome Browser picks up changes to the configuration files or "
+        "track data files. For more information on making track hubs, please see the following links: \n "
+        "<ul>\n"
+        "<li><a href=\"../goldenPath/help/trackDb/trackDbHub.html\">Track Hub Settings</a></li> \n"
+        "<li><a href=\"../goldenPath/help/hgTrackHubHelp#Hosting\">Where to host your track hub</a></li> \n"
+        "</ul> \n"
+        "</div>\n "
+        );
+    }
 
 // this variable is used by hub search and hub validate, initialize here so we don't
 // overwrite it unintentionally depending on which path the CGI takes
@@ -1682,11 +1760,13 @@ cartSaveSession(cart);
 puts("</FORM>");
 
 // this is the form for the validate button
-boolean doValidate = cfgOptionBooleanDefault("hgHubConnect.validateHub", FALSE);
-if (doValidate)
+if (doHubDevMode)
     {
     printf("<FORM ACTION=\"%s\" NAME=\"validateHubForm\">\n",  "../cgi-bin/hgHubConnect");
     cgiMakeHiddenVar("validateHubUrl", "");
+    // allows saving the old url in the search bar but not run hubCheck on it right away
+    // mostly for when you come back to hgHubConnect after just looking at hgTracks
+    cgiMakeHiddenVar(hgHubDoHubCheck, "off");
     cartSaveSession(cart);
     puts("</FORM>");
     }
@@ -1697,16 +1777,45 @@ cartSaveSession(cart);
 
 // we have two tabs for the public and unlisted hubs
 printf("<div id=\"tabs\">"
-       "<ul> <li><a href=\"#publicHubs\">Public Hubs</a></li>"
-       "<li><a href=\"#unlistedHubs\">My Hubs</a></li> ");
-if (doValidate) // put up the validate tab if hg.conf statement present
-    printf("<li><a href=\"#validateHub\">Validate Hub</a></li>");
+       "<ul> <li><a class=\"defaultDesc\" href=\"#publicHubs\">Public Hubs</a></li>"
+       "<li><a class=\"defaultDesc\" href=\"#unlistedHubs\">My Hubs</a></li> ");
+if (doHubDevMode) // put up the validate tab if hg.conf statement present
+    printf("<li><a class=\"hubDeveloperDesc\" href=\"#hubDeveloper\">Hub Development</a></li>");
 printf("</ul> ");
 
 struct hash *publicHash = hgHubConnectPublic();
 hgHubConnectUnlisted(hubList, publicHash);
-if (doValidate)
-    hgHubConnectValidateNewHub();
+if (doHubDevMode)
+    hgHubConnectDeveloperMode();
+// add the event listener for toggling the right description text
+jsInline(
+    "var oldDesc = document.getElementById('description');\n"
+    "var newDesc = document.getElementById('developerModeDescription');\n"
+    "if (location.hash === \"#hubDeveloper\") {\n"
+    "   toggleTwoDivs(newDesc, oldDesc);\n"
+    "}\n"
+    "window.addEventListener('hashchange', function() {\n"
+    "   if (location.hash === \"#hubDeveloper\") {"
+    "       toggleTwoDivs(newDesc, oldDesc);\n"
+    "   } else {\n"
+    "       toggleTwoDivs(oldDesc, newDesc);\n"
+    "   }\n"
+    "});\n"
+    "var plusButton = document.getElementById('advancedSettingsButton');\n"
+    "plusButton.addEventListener('click', function() {\n"
+    "   var advancedSettingsDiv = document.getElementById('extraSettingsContainer');\n"
+    "   var extraSettingsList = document.getElementById('extraSettingsList');\n"
+    "   if (extraSettingsList.style.display != 'none') {\n"
+    "       extraSettingsList.style.display = 'none';\n"
+    "       imgTag = advancedSettingsDiv.getElementsByTagName('img')[0];\n"
+    "       imgTag.src = \"../images/add_sm.gif\";\n"
+    "   } else {\n"
+    "       extraSettingsList.style.display = 'block';\n"
+    "       imgTag = advancedSettingsDiv.getElementsByTagName('img')[0];\n"
+    "       imgTag.src = \"../images/remove_sm.gif\";\n"
+    "   }\n"
+    "});"
+    );
 printf("</div>");
 
 printf("<div class=\"tabFooter\">");
@@ -1724,7 +1833,7 @@ printf("</div>\n");
 cartWebEnd();
 }
 
-char *excludeVars[] = {"Submit", "submit", "hc_one_url", "validateHubUrl",
+char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubDoHubCheck,
     hgHubCheckUrl, hgHubDoClear, hgHubDoDisconnect,hgHubDoRedirect, hgHubDataText, 
     hgHubConnectRemakeTrackHub, NULL};
 

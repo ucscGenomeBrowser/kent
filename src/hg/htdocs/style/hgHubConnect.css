@@ -50,3 +50,69 @@
 
 .hubError {color: #F00000;}
 
+// hub developer tab settings
+#hubDeveloper {
+    width: 1000px;
+}
+
+#hubDeveloperInstructions {
+    width: 1000px;
+    text-align: center;
+}
+
+.roundCorners {
+    -webkit-border-top-left-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-right-radius: 5px;
+}
+
+.addHubBar {
+    width: 1000px;
+    background-color: #bfbfb2;
+    line-height: 2.3em;
+    padding: 2px 8px;
+    text-align: left;
+    height: auto;
+}
+
+
+#extraSettingsContainer {
+    display: inline-block;
+    line-height: 1.5em;
+    position: relative;
+    vertical-align: middle;
+}
+
+#extraSettingsContainer > img {
+    vertical-align: middle;
+    height: 18;
+    cursor: pointer;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    background-color: lightgray;
+    text-align: center;
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    width: 220px;
+    padding: 5px;
+    left: 105%;
+    transition: opacity .6s;
+    line-height: 1em;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: .9;
+}
