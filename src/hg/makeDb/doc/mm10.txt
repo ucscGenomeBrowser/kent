@@ -18309,4 +18309,70 @@ Longest finished job:              68s       1.13m     0.02h    0.00d
     # commit all
     # if pushing public: add ticket and MARK QA READY
 
-#########################################################################
+##############################################################################
+# LASTZ Gorilla gorGor6 (DONE - 2019-11-20 - Hiram)
+    #	establish a screen to control this job
+    screen -S mm10gorGor6
+    mkdir /hive/data/genomes/mm10/bed/lastzGorGor6.2019-11-20
+    cd /hive/data/genomes/mm10/bed/lastzGorGor6.2019-11-20
+
+    printf '# mouse vs. gorilla
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=1
+
+# QUERY: gorilla gorGor6
+SEQ2_DIR=/hive/data/genomes/gorGor6/gorGor6.2bit
+SEQ2_LEN=/hive/data/genomes/gorGor6/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=130
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzGorGor6.2019-11-20
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #	real    518m27.777s
+
+    cat fb.mm10.chainGorGor6Link.txt
+    #	929953885 bases of 2652783500 (35.056%) in intersection
+    cat fb.mm10.chainSynGorGor6Link.txt
+    #   882047357 bases of 2652783500 (33.250%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load  mm10 gorGor6 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    270m54.749s
+
+    cat fb.mm10.chainRBest.GorGor6.txt
+    # 885135149 bases of 2652783500 (33.366%) in intersection
+
+    mkdir /hive/data/genomes/gorGor6/bed/blastz.mm10.swap
+    cd /hive/data/genomes/gorGor6/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzGorGor6.2019-11-20/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    72m34.088s
+
+    cat fb.gorGor6.chainMm10Link.txt
+    #	1017872526 bases of 2999027915 (33.940%) in intersection
+    cat fb.gorGor6.chainSynMm10Link.txt
+    #    880983055 bases of 2999027915 (29.376%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev gorGor6 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    237m38.959s
+
+    cat fb.gorGor6.chainRBest.Mm10.txt
+    # 883663662 bases of 2999027915 (29.465%) in intersection
+
+##############################################################################
