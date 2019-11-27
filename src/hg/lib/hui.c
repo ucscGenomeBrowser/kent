@@ -7656,7 +7656,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
             if (firstOpened == -1)
                 {
                 safef(varName, sizeof(varName), "%s.showCfg", matchedViewTracks[ix]->track);
-                if (cartUsualBoolean(cart,varName,FALSE)) // No need for closestToHome: view level
+                if (cartOrTdbBoolean(cart, matchedViewTracks[ix], "showCfg", FALSE))
                     firstOpened = ix;
                 }
             makeCfgRows = TRUE;
