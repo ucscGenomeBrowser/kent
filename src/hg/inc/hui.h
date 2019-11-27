@@ -1524,4 +1524,7 @@ void labelMakeCheckBox(struct cart *cart, struct trackDb *tdb, char *sym, char *
  * NOTE: This does not have a track name argument, so the correct tdb must be passed in:
  * if setting is at composite level, then pass in composite tdb, likewise for view. */
 
+int defaultFieldLocation(char *field);
+/* Sometimes we get bigBed filters with field names that are not in the AS file.  
+ * Try to guess what the user means. */
 #endif /* HUI_H */

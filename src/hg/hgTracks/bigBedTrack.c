@@ -28,26 +28,12 @@
 #include "bigBedLabel.h"
 #include "variation.h"
 
-static int fixedField(char *field)
-// sometimes we get bigBeds with the wrong field names.  Try to guess what the user means
-{
-if (sameString("score", field))
-    return 4;
-if (sameString("signalValue", field))
-    return 6;
-if (sameString("pValue", field))
-    return 7;
-if (sameString("qValue", field))
-    return 8;
-return -1;
-}
-
 static unsigned getFieldNum(struct bbiFile *bbi, char *field)
 // get field number for field name in bigBed.  errAbort if field not found.
 {
 int fieldNum =  bbFieldIndex(bbi, field);
 if (fieldNum < 0)
-    fieldNum = fixedField(field);
+    fieldNum = defaultFieldLocation(field);
 if (fieldNum < 0)
     errAbort("error building filter with field %s.  Field not found.", field);
 
