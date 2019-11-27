@@ -7613,7 +7613,6 @@ static boolean hCompositeDisplayViewDropDowns(char *db, struct cart *cart, struc
 // UI for composite view drop down selections.
 {
 int ix;
-char varName[SMALLBUF];
 char classes[SMALLBUF];
 char javascript[JBUFSIZE];
 char id[256];
@@ -7655,7 +7654,6 @@ for (ix = 0; ix < membersOfView->count; ix++)
             {
             if (firstOpened == -1)
                 {
-                safef(varName, sizeof(varName), "%s.showCfg", matchedViewTracks[ix]->track);
                 if (cartOrTdbBoolean(cart, matchedViewTracks[ix], "showCfg", FALSE))
                     firstOpened = ix;
                 }
@@ -7684,6 +7682,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
             printf("<B>%s</B>",membersOfView->titles[ix]);
         puts("</TD>");
 
+        char varName[SMALLBUF];
         safef(varName, sizeof(varName), "%s", matchedViewTracks[ix]->track);
         enum trackVisibility tv = hTvFromString(cartUsualString(cart,varName,
                                       hStringFromTv(visCompositeViewDefault(parentTdb,viewName))));
