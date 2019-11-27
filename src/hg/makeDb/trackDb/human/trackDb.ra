@@ -1735,6 +1735,7 @@ priority 0.8
         longLabel Mappings with Inconsistent Coordinates from dbSNP 153
         bigDataUrl /gbdb/$D/snp/dbSnp153BadCoords.bb
         type bigBed 4
+        color 100,100,100
         priority 5
 
 track hgdpGeo
