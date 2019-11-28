@@ -12283,11 +12283,10 @@ TMPDIR=/dev/shm
     # 809332351 bases of 3095998939 (26.141%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` hg38 regenRn1) > rbest.log 2>&1 &
-XXX - running - Fri Sep 13 11:41:44 PDT 2019
-    # real    328m4.069s
+    # real    261m19.645s
 
     cat fb.hg38.chainRBest.RegenRn1.txt
-    # 857127621 bases of 3095998939 (27.685%) in intersection
+    # 792532873 bases of 3095998939 (25.599%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/regenRn1/bed/blastz.hg38.swap
@@ -12306,11 +12305,10 @@ XXX - running - Fri Sep 13 11:41:44 PDT 2019
     # 788025130 bases of 2282482188 (34.525%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` regenRn1 hg38) > rbest.log 2>&1
-XXX - running - Fri Sep 13 12:07:31 PDT 2019
-    # real    300m30.411s
+    # real    300m50.570s
 
     cat fb.regenRn1.chainRBest.Hg38.txt
-    # 858923025 bases of 2534810853 (33.885%) in intersection
+    # 793987134 bases of 2282482188 (34.786%) in intersection
 
 #########################################################################
 # LASTZ human/hg38 Gorilla/gorGor6 - (DONE - 2019-11-20 - Hiram)
@@ -12391,7 +12389,82 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` gorGor6 hg38) \
        > rbest.log 2>&1
-XXX - running - Tue Nov 26 11:55:51 PST 2019
-    # real    125m35.459s
+    # real    62m14.470s
 
-###########################################################################
+    cat fb.gorGor6.chainRBest.Hg38.txt
+    # 2697792568 bases of 2999027915 (89.956%) in intersection
+
+#############################################################################
+# LASTZ human/hg38 vs. Chinese hamster CHO-K1 cell line/regenCho1
+#	(DONE - 2019-11-26 - Hiram)
+
+    mkdir /hive/data/genomes/hg38/bed/lastzRegenCho1.2019-11-26
+    cd /hive/data/genomes/hg38/bed/lastzRegenCho1.2019-11-26
+
+    printf '# human vs Chinese hamster ovary CHO-K1 cell line
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_M=254
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=20
+SEQ1_LAP=10000
+
+# QUERY: Chinese hamster ovary CHO-K1 cell line regenCho1
+SEQ2_DIR=/hive/data/genomes/regenCho1/regenCho1.2bit
+SEQ2_LEN=/hive/data/genomes/regenCho1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzRegenCho1.2019-11-26
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > do.log 2>&1
+    # real    376m47.828s
+
+    cat fb.hg38.chainRegenCho1Link.txt
+    # 979733899 bases of 3095998939 (31.645%) in intersection
+    cat fb.hg38.chainSynRegenCho1Link.txt
+    # 917104031 bases of 3095998939 (29.622%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	hg38 regenCho1) > rbest.log 2>&1 &
+    # real    259m42.688s
+
+    cat fb.hg38.chainRBest.RegenCho1.txt
+    # 901006295 bases of 3095998939 (29.102%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/regenCho1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/regenCho1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzRegenCho1.2019-11-26/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > swap.log 2>&1
+    #  real    79m18.904s
+
+    cat fb.regenCho1.chainHg38Link.txt
+    # 956720146 bases of 2266312740 (42.215%) in intersection
+    cat fb.regenCho1.chainSynHg38Link.txt
+    # 895755077 bases of 2266312740 (39.525%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	regenCho1 hg38) > rbest.log 2>&1 &
+    # real    289m24.440s
+
+    cat fb.regenCho1.chainRBest.Hg38.txt
+    # 902782523 bases of 2266312740 (39.835%) in intersection
+
+#########################################################################

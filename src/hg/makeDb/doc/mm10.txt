@@ -18376,3 +18376,70 @@ TMPDIR=/dev/shm
     # 883663662 bases of 2999027915 (29.465%) in intersection
 
 ##############################################################################
+# LASTZ Chinese hamster ovary cell line CHO-K1  regenCho1
+#	(DONE - 2019-11-26 - Hiram)
+    #	establish a screen to control this job
+    mkdir /hive/data/genomes/mm10/bed/lastzRegenCho1.2019-11-26
+    cd /hive/data/genomes/mm10/bed/lastzRegenCho1.2019-11-26
+
+    printf '# Chinese hamster ovary cell line vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Chinese hamster ovary cell line CHO-K1  regenCho1
+SEQ2_DIR=/hive/data/genomes/regenCho1/regenCho1.2bit
+SEQ2_LEN=/hive/data/genomes/regenCho1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzRegenCho1.2019-11-26
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-noDbNameCheck -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #	real    340m52.020s
+
+    cat fb.mm10.chainRegenCho1Link.txt
+    #	1525566783 bases of 2652783500 (57.508%) in intersection
+    cat fb.mm10.chainSynRegenCho1Link.txt
+    #   1410851403 bases of 2652783500 (53.184%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm10 regenCho1 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    #	real    664m46.970s
+
+    cat fb.mm10.chainRBest.RegenCho1.txt
+    # 1395524606 bases of 2652783500 (52.606%) in intersection
+
+    mkdir /hive/data/genomes/regenCho1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/regenCho1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzRegenCho1.2019-11-26/DEF \
+	-noDbNameCheck -swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    101m20.296s
+
+    cat fb.regenCho1.chainMm10Link.txt
+    #	1522181082 bases of 2266312740 (67.166%) in intersection
+    cat fb.regenCho1.chainSynMm10Link.txt
+    #   1397889394 bases of 2266312740 (61.681%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev regenCho1 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    660m29.571s
+
+    cat fb.regenCho1.chainRBest.Mm10.txt
+    # 1396267649 bases of 2266312740 (61.610%) in intersection
+
+##############################################################################
