@@ -668,14 +668,22 @@ searchPriority 8
     cd /hive/data/genomes/regenCho1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku regenCho1) > do.log 2>&1
-XXX - running - Tue Nov 26 10:15:46 PST 2019
     # real    126m0.077s
 
+    # three jobs failed on the ku run, finished on hgwdev manually:
+# ./runGsBig.2M.csh ss1415 000 gtf/000/ss1415.gtf pep/000/ss1415.pep subopt/000/ss1415.bed
+# ./runGsBig.2M.csh ss100006 000 gtf/000/ss100006.gtf pep/000/ss100006.pep subopt/000/ss100006.bed
+# ./runGsBig.2M.csh ss5358 000 gtf/000/ss5358.gtf pep/000/ss5358.pep subopt/000/ss5358.bed
+
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku regenCho1) > makeBed.log 2>&1
+    # real    1m14.506s
+
     cat fb.regenCho1.genscan.txt
-    # 54712419 bases of 2534810853 (2.158%) in intersection
+    # 55358798 bases of 2266312740 (2.443%) in intersection
 
     cat fb.regenCho1.genscanSubopt.txt
-    # 56830306 bases of 2534810853 (2.242%) in intersection
+    # 58714924 bases of 2266312740 (2.591%) in intersection
 
 #########################################################################
 # Create kluster run files (TBD - 2019-06-29 - Hiram)
@@ -716,71 +724,73 @@ XXX - running - Tue Nov 26 10:15:46 PST 2019
     #	7832 jkStuff/nonBridged.lift
 
 ########################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2019-11-25 - Hiram)
+# lastz/chain/net swap human/hg38 (DONE - 2019-11-26 - Hiram)
     # original alignment
-    cd /hive/data/genomes/hg38/bed/lastzRegenCho1.2019-11-25
+    cd /hive/data/genomes/hg38/bed/lastzRegenCho1.2019-11-26
 
     cat fb.hg38.chainRegenCho1Link.txt
-    # 154079940 bases of 3095998939 (4.977%) in intersection
+    # 979733899 bases of 3095998939 (31.645%) in intersection
     cat fb.hg38.chainSynRegenCho1Link.txt
-    # 95877644 bases of 3095998939 (3.097%) in intersection
+    # 917104031 bases of 3095998939 (29.622%) in intersection
     cat fb.hg38.chainRBest.RegenCho1.txt
-    # 106665747 bases of 3095998939 (3.445%) in intersection
+    # 901006295 bases of 3095998939 (29.102%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/regenCho1/bed/blastz.hg38.swap
     cd /hive/data/genomes/regenCho1/bed/blastz.hg38.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzRegenCho1.2019-11-25/DEF \
-        -swap -chainMinScore=5000 -chainLinearGap=loose \
+      /hive/data/genomes/hg38/bed/lastzRegenCho1.2019-11-26/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > swap.log 2>&1
-    #  real    9m45.514s
+            -noDbNameCheck -syntenicNet) > swap.log 2>&1
+    #  real    79m18.904s
 
     cat fb.regenCho1.chainHg38Link.txt
-    # 120955955 bases of 1055588482 (11.459%) in intersection
-
+    # 956720146 bases of 2266312740 (42.215%) in intersection
     cat fb.regenCho1.chainSynHg38Link.txt
-    # 92597630 bases of 1055588482 (8.772%) in intersection
+    # 895755077 bases of 2266312740 (39.525%) in intersection
 
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` regenCho1 hg38) > rbest.log 2>&1 &
-    # real    139m24.408s
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	regenCho1 hg38) > rbest.log 2>&1 &
+    # real    289m24.440s
 
     cat fb.regenCho1.chainRBest.Hg38.txt
-    # 106294585 bases of 1055588482 (10.070%) in intersection
+    # 902782523 bases of 2266312740 (39.835%) in intersection
 
 #########################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2019-11-25 - Hiram)
+# lastz/chain/net swap mouse/mm10 (DONE - 2019-11-26 - Hiram)
 
     # original alignment
-    cd /hive/data/genomes/mm10/bed/lastzRegenCho1.2019-11-25
-    cat fb.mm10.chainRegenCho1Link.txt
-    # 101151132 bases of 2652783500 (3.813%) in intersection
-    cat fb.mm10.chainSynRegenCho1Link.txt
-    # 70707720 bases of 2652783500 (2.665%) in intersection
-    cat fb.mm10.chainRBest.RegenCho1.txt 
-    # 79649474 bases of 2652783500 (3.002%) in intersection
+    cd /hive/data/genomes/mm10/bed/lastzRegenCho1.2019-11-26
 
-    # and for the swap:
+    cat fb.mm10.chainRegenCho1Link.txt
+    #	1525566783 bases of 2652783500 (57.508%) in intersection
+    cat fb.mm10.chainSynRegenCho1Link.txt
+    #   1410851403 bases of 2652783500 (53.184%) in intersection
+    cat fb.mm10.chainRBest.RegenCho1.txt
+    # 1395524606 bases of 2652783500 (52.606%) in intersection
+
     mkdir /hive/data/genomes/regenCho1/bed/blastz.mm10.swap
     cd /hive/data/genomes/regenCho1/bed/blastz.mm10.swap
-
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/mm10/bed/lastzRegenCho1.2019-11-25/DEF \
-        -swap -chainMinScore=5000 -chainLinearGap=loose \
-          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > swap.log 2>&1
-    #  real    6m41.043s
+	/hive/data/genomes/mm10/bed/lastzRegenCho1.2019-11-26/DEF \
+	-noDbNameCheck -swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    101m20.296s
 
     cat fb.regenCho1.chainMm10Link.txt
-    # 88539346 bases of 1055588482 (8.388%) in intersection
+    #	1522181082 bases of 2266312740 (67.166%) in intersection
+    cat fb.regenCho1.chainSynMm10Link.txt
+    #   1397889394 bases of 2266312740 (61.681%) in intersection
 
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` regenCho1 mm10) > rbest.log 2>&1 &
-    # real    94m11.007s
+    time (doRecipBest.pl -load -workhorse=hgwdev regenCho1 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    660m29.571s
 
     cat fb.regenCho1.chainRBest.Mm10.txt
-    # 79474812 bases of 1055588482 (7.529%) in intersection
+    # 1396267649 bases of 2266312740 (61.610%) in intersection
 
 ##############################################################################
 # GENBANK AUTO UPDATE (DONE - 2019-11-26 - Hiram)
@@ -840,17 +850,16 @@ regenCho1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCD
     # appear
 
 #############################################################################
-# augustus gene track (TBD - 2019-06-29 - Hiram)
+# augustus gene track (DONE - 2019-11-26 - Hiram)
     mkdir /hive/data/genomes/regenCho1/bed/augustus
     cd /hive/data/genomes/regenCho1/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev regenCho1) > do.log 2>&1
-XXX - running - Tue Nov 26 10:15:46 PST 2019
-    # real    194m56.414s
+    # real    219m51.368s
 
     cat fb.regenCho1.augustusGene.txt
-    # 48867584 bases of 2534810853 (1.928%) in intersection
+    # 50452718 bases of 2266312740 (2.226%) in intersection
 
 #########################################################################
 # ncbiRefSeq (TBD - 2019-11-25 - Hiram)
@@ -918,15 +927,37 @@ XXX - running - Tue Nov 26 10:15:46 PST 2019
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/regenCho1/jkStuff/regenCho1.11.ooc \
          regenCho1 criGriChoV2) > doLiftOverToRn6.log 2>&1
-XXX - running - Tue Nov 26 10:21:21 PST 2019
-    # about 3 hours 20 minutes
+    # real    523m38.199s
 
-    # see if the liftOver menus function in the browser from regenCho1 to galGal5
+    # see if the liftOver menus function in the browser from regenCho1
+    # to criGriChoV2
 
     # would like to see this as a track:
-    time chainToPsl regenCho1ToRn6.over.chain.gz ../../chrom.sizes \
-   /hive/data/genomes/rn6/chrom.sizes ../../regenCho1.2bit \
-   /hive/data/genomes/rn6/regenCho1.2bit regenCho1ToRn6.psl
+    # not actually using this psl file
+    time chainToPsl regenCho1ToCriGriChoV2.over.chain.gz ../../chrom.sizes \
+   /hive/data/genomes/criGriChoV2/chrom.sizes ../../regenCho1.2bit \
+   /hive/data/genomes/criGriChoV2/criGriChoV2.2bit regenCho1ToCriGriChoV2.psl
+
+    # this net track is loaded
+chainSort regenCho1ToCriGriChoV2.over.chain.gz stdout \
+   | chainPreNet stdin \
+   /hive/data/genomes/regenCho1/chrom.sizes \
+   /hive/data/genomes/criGriChoV2/chrom.sizes stdout \
+     | chainNet stdin -minSpace=1 /hive/data/genomes/regenCho1/chrom.sizes \
+        /hive/data/genomes/criGriChoV2/chrom.sizes stdout /dev/null \
+        | netSyntenic stdin noClass.net
+
+netClass -verbose=0 -noAr noClass.net regenCho1 criGriChoV2 regenCho1.criGriChoV2.net
+
+netFilter -minGap=10 regenCho1.criGriChoV2.net \
+    | hgLoadNet -verbose=0 regenCho1 netCriGriChoV2 stdin
+
+
+Got 7812 chroms in /hive/data/genomes/regenCho1/chrom.sizes, 8265 in /hive/data/genomes/criGriChoV2/chrom.sizes
+Finishing nets
+writing stdout
+writing /dev/null
+memory usage 168030208, utime 102 s/100, stime 9
 
 #########################################################################
 #  BLATSERVERS ENTRY (TBD - 2019-11-25 - Hiram)
@@ -958,7 +989,6 @@ XXX - running - Tue Nov 26 10:21:21 PST 2019
     time (~/kent/src/hg/utils/automation/doCrispr.pl \
    -stop=indexFa -buildDir=`pwd` -smallClusterHub=ku regenCho1 augustusGene) \
 	> indexFa.log 2>&1
-XXX - running - Tue Jul  2 11:09:39 PDT 2019
     # real    23m26.694s
 
     # the large shoulder argument will cause the entire genome to be scanned
