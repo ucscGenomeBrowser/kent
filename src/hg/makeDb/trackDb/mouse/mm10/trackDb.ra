@@ -419,7 +419,7 @@ visibility hide
 urlLabel EPDnew link:
 bedNameLabel Promoter ID
 exonArrows on
-pennantIcon New red
+pennantIcon New red ../goldenPath/newsarch.html#112719a Track Released Nov. 27, 2019
 
     track epdNewPromoter
     shortLabel EPDnew v6
