@@ -1126,3 +1126,13 @@ hgLoadSqlTab $db knownToMupit ~/kent/src/hg/lib/knownTo.sql knownToMupit.txt
     cd  $pd
     md5sum *.fa.gz > md5sum.txt
    
+
+#myGene2
+mkdir $dir/myGene2
+cd $dir/myGene2
+
+# copy list of genes from https://mygene2.org/MyGene2/genes 
+awk '{print $1}' | sort > genes.lst
+hgsql hg38 -Ne "select geneSymbol, kgId from kgXref" | sort > ids.txt
+join genes.lst  ids.txt | awk '{print $2,$1}' | sort > knownToMyGene2.txt
+hgLoadSqlTab $db knownToMyGene2 ~/kent/src/hg/lib/knownTo.sql knownToMyGene2.txt
