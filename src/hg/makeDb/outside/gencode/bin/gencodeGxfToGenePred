@@ -21,6 +21,8 @@ The chains can be generated with
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument("--verbose", dest="verbose", action="store_true", default=False,
                         help="verbose output for debugging")
+    parser.add_argument("--warnAndContinue", dest="warnAndContinue", action="store_true", default=False,
+                        help="output warning on invalid GFF3 entries and continue")
     parser.add_argument("--unmapped", dest="unmappedGenePred", action="store", default=None,
                         help="output genepred of annotations that couldn't be mapped to UCSC chromosomes to this file")
     parser.add_argument("inGxf",
@@ -32,11 +34,13 @@ The chains can be generated with
     return parser.parse_args()
 
 
-def convert(inGxf, liftFile, outGenePred, unmappedGenePred, verbose):
+def convert(inGxf, liftFile, outGenePred, unmappedGenePred, verbose, warnAndContinue):
     # Need to ignore GTF groups formed with only gene records
     # Need to update transcript id if it's for of the PAR hacked ids
     if inGxf.find(".gff3") > 0:
         toGenePredCmd = ["gff3ToGenePred", "-geneNameAttr=gene_name", "-rnaNameAttr=transcript_id", inGxf, "stdout"]
+        if warnAndContinue:
+            toGenePredCmd.append("-warnAndContinue")
     else:
         toGenePredCmd = ["gtfToGenePred", "-genePredExt", "-geneNameAsName2", "-ignoreGroupsWithoutExons", inGxf, "stdout"]
 
@@ -52,7 +56,7 @@ def convert(inGxf, liftFile, outGenePred, unmappedGenePred, verbose):
 
 def gencodeGxfToGenePred(opts):
     convert(opts.inGxf, opts.ensemblToUcscChain, opts.outGenePred, opts.unmappedGenePred,
-            opts.verbose)
+            opts.verbose, opts.warnAndContinue)
 
 
 gencodeGxfToGenePred(parseArgs())
