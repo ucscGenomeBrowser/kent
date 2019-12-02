@@ -417,6 +417,7 @@ sepFields bigBed bigPsl bigGenePred
 shortLabel *
 showCdsAllScales psl bigPsl
 showCdsMaxZoom psl bigPsl
+showCfg *
 showDiffBasesAllScales *
 showDiffBasesMaxZoom *
 showHardyWeinberg vcf vcfTabix

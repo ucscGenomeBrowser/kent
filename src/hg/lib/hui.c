@@ -6171,6 +6171,23 @@ struct trackDbFilter *tdbGetTrackFilterByFilters( struct trackDb *tdb)
 return tdbGetTrackFilters( tdb, FILTER_VALUES_WILDCARD_LOW, FILTER_VALUES_NAME_LOW, FILTER_VALUES_WILDCARD_CAP, FILTER_VALUES_NAME_CAP);
 }
 
+int defaultFieldLocation(char *field)
+/* Sometimes we get bigBed filters with field names that are not in the AS file.  
+ * Try to guess what the user means. */
+{
+if (sameString("score", field))
+    return 4;
+if (sameString("signal", field))
+    return 6;
+if (sameString("signalValue", field))
+    return 6;
+if (sameString("pValue", field))
+    return 7;
+if (sameString("qValue", field))
+    return 8;
+return -1;
+}
+
 static int numericFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb, boolean *opened,
                                  boolean boxed, boolean parentLevel,char *name, char *title)
 // Shows all *Filter style filters.  Note that these are in random order and have no graceful title
@@ -6200,7 +6217,7 @@ if (trackDbFilters)
                 { // Found label so replace field
                 field = asCol->comment;
                 }
-            else 
+            else if (defaultFieldLocation(field) < 0)
                 errAbort("Building filter on field %s which is not in AS file.", field);
             }
         char labelBuf[1024];
@@ -7613,7 +7630,6 @@ static boolean hCompositeDisplayViewDropDowns(char *db, struct cart *cart, struc
 // UI for composite view drop down selections.
 {
 int ix;
-char varName[SMALLBUF];
 char classes[SMALLBUF];
 char javascript[JBUFSIZE];
 char id[256];
@@ -7655,8 +7671,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
             {
             if (firstOpened == -1)
                 {
-                safef(varName, sizeof(varName), "%s.showCfg", matchedViewTracks[ix]->track);
-                if (cartUsualBoolean(cart,varName,FALSE)) // No need for closestToHome: view level
+                if (cartOrTdbBoolean(cart, matchedViewTracks[ix], "showCfg", FALSE))
                     firstOpened = ix;
                 }
             makeCfgRows = TRUE;
@@ -7684,6 +7699,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
             printf("<B>%s</B>",membersOfView->titles[ix]);
         puts("</TD>");
 
+        char varName[SMALLBUF];
         safef(varName, sizeof(varName), "%s", matchedViewTracks[ix]->track);
         enum trackVisibility tv = hTvFromString(cartUsualString(cart,varName,
                                       hStringFromTv(visCompositeViewDefault(parentTdb,viewName))));
