@@ -173,7 +173,8 @@ type bed 3
         #itemRgb on
         dataVersion release 1
         parent varsInPubs
-        urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" doi="https://doi.org/$$"
+        mouseOverField _mouseOver
 
 track caseControl
 compositeTrack on
