@@ -119,6 +119,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         idXref hgFixed.refLink mrnaAcc name
         dataVersion 
         priority 9
+        baseColorUseCds given
         baseColorDefault genomicCodons
 
 searchName ncbiRefSeqCuratedName2
