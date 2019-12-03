@@ -23,6 +23,8 @@ def parseArgs():
                 "Default will use 'medline' relative to ~/.pubConf directory.", default="medline")
     parser.add_option("", "--pmidIdx", dest="pmidColIdx", action="store", type="int",
             help="field with PMID, default is last field", default=-1)
+    parser.add_option("", "--geneIdx", dest="geneIdx", action="store", type="int",
+            help="field with gene, default is no gene field", default=None)
     (options, args) = parser.parse_args()
 
     if args==[]:
@@ -53,10 +55,12 @@ def main():
 
     inBedFname, outBedFname = args
     pmidColIdx = int(options.pmidColIdx)
+    geneIdx = options.geneIdx
 
     ofh = open(outBedFname, "w")
 
     artCache = {}
+    gene = None
 
     lCount = 0
     for line in open(inBedFname):
@@ -68,6 +72,10 @@ def main():
 
         row = line.rstrip("\n").split("\t")
         pmid = row[pmidColIdx]
+
+        if geneIdx:
+            gene = row[geneIdx]
+
         if pmid in artCache:
             artInfo = artCache[pmid] # saves a little time
         else:
@@ -88,7 +96,12 @@ def main():
         newRow.append(artInfo["doi"])
         newRow.append(shortenString(artInfo["abstract"], maxLen=10000))
 
-        mouseOver = row[3]+" in:"+firstAuthor(artInfo["authors"])+ " "+ str(artInfo["year"]) + " - " + \
+        if gene:
+            prefix = gene+ ":"+row[3]
+        else:
+            prefix = row[3]
+
+        mouseOver = prefix + " in: "+firstAuthor(artInfo["authors"])+ " "+ str(artInfo["year"]) + " - " + \
             shortenString(artInfo["title"], maxLen=150, onlyFirst=True)
         newRow.append(mouseOver)
 

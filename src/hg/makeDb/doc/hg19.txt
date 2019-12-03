@@ -33624,7 +33624,7 @@ wget http://bejerano.stanford.edu/AVADA/avada_v1.00_2016.vcf.gz
 python ~/kent/src/hg/makeDb/avada/toBed.py > avada.bed
 cat avada.bed | sort -k10 > avada.s.bed
 cp /hive/data/inside/pubs/text/medline/articles.db /dev/shm/max/
-bedAppendPaperInfo avada.s.bed avadaPapers.bed  --db /dev/shm/max
+bedAppendPaperInfo avada.s.bed avadaPapers.bed  --db /dev/shm/max --geneIdx=9
 bedSort avadaPapers.bed avadaPapers.bed
 bedToBigBed avadaPapers.bed /hive/data/genomes/hg19/chrom.sizes -as=${HOME}/kent/src/hg/makeDb/avada/avada.as  -tab avada.bb -type=bed9+   
 rm /dev/shm/max/articles.db
