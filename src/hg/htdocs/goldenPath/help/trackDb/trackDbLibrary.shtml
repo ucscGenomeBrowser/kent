@@ -1452,9 +1452,9 @@ There are no extra options that can appear on the type hic line.
     <code>filterByRange.&lt;fieldName&gt; &lt;off/on&gt;</code><BR>
     <code>filterLimits.&lt;fieldName&gt; &lt;low&gt;[:&lt;high&gt;]</code><BR>
     </div>
-    <P>There are a number of different filters available for bed data, see the 
-    <a href="../hubQuickStartFilter.html">filter overview</a>.
-    <code> filter.&lt;fieldName&gt; </code> is used for numerical data. It does not 
+    <P>There are a number of different filters available for bed data, see also the
+    <a href="../hubQuickStartFilter.html">filters quick start guide</a>.</P>
+    <P><code> filter.&lt;fieldName&gt; </code> is used for numerical data. It does not 
     require any variables, however, a preselected filter value can be passed 
     following the argument to enable the filter by default.</P>
     <P>By default, the range of values for <code>filter.&lt;fieldName&gt;</code> is 0 to 1000. 
@@ -1536,9 +1536,9 @@ There are no extra options that can appear on the type hic line.
     <code>filterText.&lt;fieldName&gt; [&lt;default search string&gt;]</code><BR>
     <code>filterType.&lt;fieldName&gt; &lt;wildcard/regexp&gt;</code><BR>
     </div>
-    <P>There are a number of different filters available for bed data, see the 
-    <a href="../hubQuickStartFilter.html">filter overview</a>.
-    <code>filterText.&lt;fieldName&gt;</code> is used to enable text searching in the 
+    <P>There are a number of different filters available for bed data, see also the
+    <a href="../hubQuickStartFilter.html">filters quick start guide</a>.</P>
+    <P><code>filterText.&lt;fieldName&gt;</code> is used to enable text searching in the 
     specified fieldName. It does not require any variables, however, a preselected filter value
     can be passed following the argument to enable the filter by default.</P> 
     <P><code>filterText.&lt;fieldName&gt;</code> will enable two kinds of searching, wildcard and
@@ -1590,9 +1590,9 @@ There are no extra options that can appear on the type hic line.
     <code>filterValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
     <code>filterType.&lt;fieldName&gt; &lt;singleList/multipleListOr/multipleListAnd&gt;</code><BR>
     </div>
-    <P>There are a number of different filters available for bed data, see the 
-    <a href="../hubQuickStartFilter.html">filter overview</a>. 
-    <code>filterValues.&lt;fieldName&gt;</code> is used to enable filtering by 
+    <P>There are a number of different filters available for bed data, see also the 
+    <a href="../hubQuickStartFilter.html">filters quick start guide</a>.</P> 
+    <P><code>filterValues.&lt;fieldName&gt;</code> is used to enable filtering by 
     specified values within a field. It can be used on fields that can contain
     one text value or a list of comma-separated values of text, like "classA,classB".
     Usually these are category names.
@@ -1601,23 +1601,23 @@ There are no extra options that can appear on the type hic line.
     passed in a comma separated list. You will then be able to select those
     values as categories, choosing to display only items that
     belong to one, any, or at least one of the selected values. By default, the user
-    can select multiple values from this list, and the filter lets pass any features
-    with at least one of these values (multipleListOr)</P>.
+    can select multiple values from this list and the filter lets pass any features
+    with at least one of these values (<code>multipleListOr</code>).</P>
     <P>In order to choose the default selection behavior, the optional parameter
     <code>filterType.&lt;fieldName&gt;</code> may be used. If this parameter is not passed,
     by default the selection will be set to &quot;one or more match&quot; which is the same
     as having <code>filterType.fieldName multipleListOr</code>. If the user should
     only be able to select a single value, 
     <code>singleList</code> can be passed instead. The final option,
-    <code>multipleListAnd</code> means that the user can select multiple categories,
+    <code>multipleListAnd</code>, means that the user can select multiple categories,
     but the filter will let pass only features where all of these categories are present.
     </P>
     <P>You can also choose which values to have selected by default using the
     <code>filterValuesDefault.&lt;fieldName&gt;</code> parameter. It can take a comma separated
     list just like <code>filterValues.&lt;fieldName&gt;</code>, and any items included will be
     automatically selected. Not that the values need to be present in both settings.</P>  
-    <P>The labels in the menu shown to the user can be configured,
-    they can be different from the data in the bigBed field. This can be helpful when the data values are
+    <P>The labels in the menu shown to the user can be configured to display a different name/label
+    than the one present in the bigBed field. This can be helpful when the data values are
     written in short form, but you want a longer more descriptive name to show up in the UI.
     The format for this substitution is as follows:</P>
     <pre>filterValues.fieldName fieldValue1|alternativeName1,fieldValue2|alternativeName2...</pre>
@@ -1663,7 +1663,7 @@ There are no extra options that can appear on the type hic line.
     and display only items that match our selections. The selection choices will let us match
     one, all, or any combination of the supplied values.</P>
     <pre>
-    filterValues.annotationType DNA-binding region|DNA-BR,active site|AS,beta strand|BS,binding site|Bsi</pre>
+    filterValues.annotationType DNA-BR|DNA-binding region,AS|active site,BS|beta strand,BSi|binding site</pre>
     <P>In this follow up to the previous question, we have changed the name of the items that
     show up in the drop down menu to be more descriptive than the dense file format values. This means
     that if we wanted to only see items with <code>annotationType</code> of 
