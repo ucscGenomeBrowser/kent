@@ -115,7 +115,6 @@ class GencodeGxfToAttrs(object):
         for trans in self.transcripts.values():
             trans.tags |= self.geneTags[trans.geneId]
 
-
     def _assignFunction(self, trans):
         # convert and report unknown biotypes, only report once
         try:

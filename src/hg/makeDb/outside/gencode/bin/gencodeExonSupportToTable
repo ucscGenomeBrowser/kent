@@ -2,7 +2,6 @@
 
 import sys
 import os
-import re
 myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
 sys.path.append(os.path.join(myBinDir, "../lib"))
 sys.path.append(os.path.expanduser("~markd/compbio/code/pycbio/lib"))
@@ -31,7 +30,6 @@ The chains can be generated with
 
 def convert(liftFile, exonSupportIn, exonSupportTab, verbose):
     tawkCmd = ('awk', '-v', 'FS=\\t', '-v', 'OFS=\\t')
-    cmd = []
 
     # ENST00000431238.1	Q9I922.1	Uniprot/SWISSPROT	ENSE00001650387.1	chrX:172682-172712
 

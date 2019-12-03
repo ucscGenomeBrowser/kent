@@ -3,7 +3,12 @@ Declarations and operations on biotypes.  Used in ensuring that
 all biotypes are can be mapped to a reduced set for coloring and
 selection in the browser.
 """
+from pycbio.sys import pycbioRaiseFrom
 from pycbio.sys.symEnum import SymEnum, SymEnumValue, auto
+
+
+class GencodeGenesException(Exception):
+    pass
 
 class BioType(SymEnum):
     overlapping_ncRNA_3prime = SymEnumValue(auto(), "3prime_overlapping_ncRNA")
@@ -61,6 +66,7 @@ class BioType(SymEnum):
     unitary_pseudogene = auto()
     unprocessed_pseudogene = auto()
     vaultRNA = auto()
+
 
 GencodeFunction = SymEnum("GencodeFunction", ("pseudo", "coding", "nonCoding", "other"))
 
@@ -120,7 +126,7 @@ bioTypesPseudo = frozenset([BioType.IG_J_pseudogene,
                             BioType.translated_unprocessed_pseudogene,
                             ])
 
-assert((len(bioTypesCoding)+len(bioTypesNonCoding)+len(bioTypesOther)+len(bioTypesPseudo)) == len(list(BioType)))
+assert((len(bioTypesCoding) + len(bioTypesNonCoding) + len(bioTypesOther) + len(bioTypesPseudo)) == len(list(BioType)))
 
 bioTypesTR = frozenset((BioType.TR_C_gene,
                         BioType.TR_D_gene,
