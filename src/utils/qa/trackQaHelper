@@ -1,0 +1,166 @@
+#!/bin/bash
+#TrackQaHelper guides some of the processes for QA.
+#Written by Daniel Schmelter 7/5/19
+
+echo ""
+echo "Welcome to trackQA helper!"
+echo "-------------------------------------------"
+# Check track Description
+#input path of html file
+echo "Step 1: Spellcheck and htmlCheck, no output is good (unfortunately)"
+read -p "Do you wish to run spell check on the track HTML (y/n)?" yn #could be condensed into yn7
+if [ "$yn" != "${yn#[Yy]}" ] ; then
+   read -p "Please enter the path of the html file (in trackDb)" htmlPath
+   #Spell check, html check
+   aspell check $htmlPath
+   echo "Spell check completed!"
+   echo ""
+   sleep 2
+   echo "Step 2.1: Comensing htmlCheck checkLinks"
+   htmlCheck checkLinks $htmlPath 2>&1 >/dev/null | grep -v 'db\|getaddr\|hgTables'
+   echo ""
+   echo "Step 2.2: htmlCheck validate, checks tags and tables"
+   htmlCheck validate $htmlPath 2>&1 >/dev/null | grep -v BODY
+fi
+echo ""
+
+#Push to Tables Beta
+#Input Tables
+read -p "Do you have tables to push to beta (y/n)?" yn2
+if [ "$yn2" != "${yn2#[Yy]}" ] ; then
+   echo "Step 3: Pushing tables and files to beta"
+   read -p "Please input your db: " db
+   read -p "Please input a file path to your table list: " tableList
+   echo "Thank you. These will now be pushed to beta"
+   bigPush.sh $db $tableList 
+fi
+echo ""
+
+#Push Gbdb files to beta
+#Ask and push gbDb files to beta 
+read -p "Do you need to push any gbDb files to beta (y/n)?" yn3
+if [ "$yn3" != "${yn3#[Yy]}" ] ; then
+   sudo gbdbPush
+fi
+
+echo ""
+
+#Make beta
+read -p "Want to make beta (y/n)?" yn4
+if [ "$yn4" != "${yn4#[Yy]}" ] ; then
+   if [ -z "$db" ] ; then
+         read -p "Please input your db" db
+   fi
+   echo "Making beta for your db"
+   sleep 2
+   cd /cluster/home/$USER/kent/src/hg/makeDb/trackDb
+   make beta DBS=$db
+fi
+echo ""
+
+#Run QAgbTracks, Only works on Tables
+read -p "Would you like to run qaGbTracks and joinerCheck on the tables (y/n)?" yn5
+if [ "$yn5" != "${yn5#[Yy]}" ] ; then
+   echo "Step 4: Run qaGbTracks and joinerCheck scripts on the tables"
+   if [ -z "$db" ] ; then
+      read -p "Please input your db" db
+   fi
+   if [ -z "$tableList" ] ; then
+      read -p "Please input your tableList file path: "  tableList
+   fi
+   cd ~/trackQA
+   cat $tableList | while read $table; do echo $tabe; qaGbTracks $db $table $table; done
+   #Review script output
+   echo "Step 5: Review script output"
+   echo "Database	Table	Type	Row count	featureBits	Overlap with gap	Errors"
+   cat ~/trackQA/*.summary
+   cat ~/trackQA/*.log | grep -B1 ERROR
+   echo "Apologies for that chaos"
+   sleep 2
+fi
+echo ""
+
+#Test the API
+echo "The API only works on barChart, bed, bigBed, bigNarrowPeak,
+bigWig, chain, genePred, interact, narrowPeak, peptideMapping, 
+psl, rmsk - repeat masker, wig"
+read -p "Would you like to test the API, note bigGePred doesnt' work (y/n)?" yn6
+if [ "$yn6" != "${yn6#[Yy]}" ] ; then
+   if [ -z "$db" ] ; then
+      read -p "Please input your db" db
+   fi
+   read -p "Please enter the url name or shortLabel of the file: " trackName
+   echo "Go to the following link:"
+   echo "http://api.genome.ucsc.edu/getData/track?genome=$db;track=$trackName;maximumItemsOutput=2"
+fi
+
+
+#Test Data Integrator and GBIB
+echo "Check DI and GBIB"
+
+#check TB schema table descriptions
+read -p "Would you like to check the track description and Table schema (y/n)?" yn7
+if [ "$yn7" != "${yn7#[Yy]}" ] ; then
+   echo "Please check tableDescriptions on beta"
+   if [ -z "$db" ] ; then
+         read -p "Please input your db" db
+   fi
+   if [ -z "$trackName" ] ; then
+         read -p "Please input your trackName from URL: " trackName
+   fi
+   echo "Go to the following link and look at 
+      \nrow count \nupdate time \nformat description \ncolumn descriptions"
+   echo "https://hgwbeta.soe.ucsc.edu/cgi-bin/hgTables?db=$db&hgta_track=$trackName&hgta_doSchema=describe+table+schema"
+   echo "Go to the following link and read the description: "
+   echo "https://hgwbeta.soe.ucsc.edu/cgi-bin/hgTrackUi?g=$trackName"
+fi
+
+#BETA COMPLETED
+echo " If the previous steps are done, then BETA QA is completed!!"
+
+#Check release tags and make public
+echo "Ready for RR?"
+read -p "Modify Release tags manually, push files/tables, make (y/n)?" yn8
+if [ "$yn8" != "${yn8#[Yy]}" ] ; then
+   echo "Please check and modify release tags for RR release MANUALLY"
+   echo "Add pennantIcon saying that the track is new or updated"
+   if [ -z "$db" ] ; then
+         read -p "Please input your db" db
+   fi
+   read -p "Are the release tags set for RR release (y/n)? make alpha and beta" yn10
+   if [ "$yn1-" != "${yn10#[Yy]}" ] ; then
+      cd /cluster/home/$USER/kent/src/hg/makeDb/trackDb
+      make alpha DBS=$db
+      make beta DBS=$db
+   fi
+   echo ""
+   echo "Send push request for Tables or GbDb files to the RR"
+   echo ""
+   echo "Send a make public warning for hg19, hg38, and mm10"
+   echo "Making public $db"
+   echo "<EOM>"
+   read -p "Ready to make public (y/n)?" yn9
+   if [ "$yn9" != "${yn9#[Yy]}" ] ; then
+      cd /cluster/home/$USER/kent/src/hg/makeDb/trackDb
+      make public DBS=$db
+      if [ -z "$trackName" ] ; then
+         read -p "Please input your trackName from URL: " trackName
+      fi
+      echo "Check beta public at the following link: "
+      echo "https://hgwbeta-public.soe.ucsc.edu/cgi-bin/hgTrackUi?g=$trackName"
+      sleep 5
+      echo "Send push trackDb and Friends Push request"
+   fi
+fi
+
+
+
+#Check download files (after the release?) Broken?
+echo "Check download files in the cue at this directory: "
+echo "/usr/local/apache/htdocs-hgdownload/goldenPath/*"
+
+
+#Prepare push requests to RR
+echo "Push request tables, gbdb files, and trackDb n friends"
+echo "Auto generated push requests still to come"
+

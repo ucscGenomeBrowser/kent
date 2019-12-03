@@ -1,0 +1,29 @@
+# This script takes in a line from the hubPublicCheck cron and updates the hubPublic
+# Tables on Dev, Beta, and RR
+echo ""
+echo "Caution, this script will update hubPublic on Dev, Beta, and RR"
+echo ""
+sleep 1
+read -p 'Enter Update line from hubPublicCheck cronJob : ' UPDATE
+echo $UPDATE > hubTemp.txt #cat hubTemp.txt
+URL=`cut -d'"' -f4 hubTemp.txt` #echo $URL
+rm hubTemp.txt
+
+hgsql -e "select * from hubPublic where hubUrl like '$URL'\G" hgcentraltest
+hgsql -e "$UPDATE" hgcentraltest
+hgsql -e "select * from hubPublic where hubUrl like '$URL'\G" hgcentraltest
+echo ""
+echo "Dev changed, 15s to verify before beta"
+sleep 15 
+hgsql -h hgwbeta -e "select * from hubPublic where hubUrl like '$URL'\G" hgcentralbeta
+hgsql -h hgwbeta -e "$UPDATE" hgcentralbeta
+hgsql -h hgwbeta -e "select * from hubPublic where hubUrl like '$URL'\G" hgcentralbeta
+echo ""
+echo "Beta changed, 16 to verify before RR"
+sleep 16
+hgsql -h genome-centdb -e "select * from hubPublic where hubUrl like '$URL'\G" hgcentral
+hgsql -h genome-centdb -e "$UPDATE" hgcentral
+hgsql -h genome-centdb -e "select * from hubPublic where hubUrl like '$URL'\G" hgcentral
+echo ""
+echo "RR changed, please visit http://genome.ucsc.edu/cgi-bin/hgHubConnect?"
+
