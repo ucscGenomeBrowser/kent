@@ -1632,7 +1632,7 @@ priority 0.8
     view variants
     parent dbSnp153Composite
     shortLabel Variants
-    visibility pack
+    visibility dense
     type bigDbSnp
     detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp153Details.tab.gz
     freqSourceOrder 1000Genomes,GnomAD_exomes,TOPMED,ExAC,PAGE_STUDY,GnomAD,GoESP,Estonian,ALSPAC,TWINSUK,NorthernSweden,Vietnamese
@@ -1698,7 +1698,7 @@ priority 0.8
         priority 1
 
         track dbSnp153ClinVar
-        parent dbSnp153ViewVariants
+        parent dbSnp153ViewVariants off
         subGroups view=variants
         shortLabel ClinVar dbSNP (153)
         longLabel Short Genetic Variants from dbSNP Release 153 Included in ClinVar
@@ -1706,7 +1706,7 @@ priority 0.8
         priority 2
 
         track dbSnp153Mult
-        parent dbSnp153ViewVariants
+        parent dbSnp153ViewVariants off
         subGroups view=variants
         shortLabel Mult. dbSNP (153)
         longLabel Short Genetic Variants from dbSNP Release 153 that Map to Multiple Genomic Loci
@@ -1714,7 +1714,7 @@ priority 0.8
         priority 3
 
         track dbSnp153
-        parent dbSnp153ViewVariants
+        parent dbSnp153ViewVariants off
         subGroups view=variants
         shortLabel All dbSNP (153)
         longLabel All Short Genetic Variants from dbSNP Release 153
@@ -1726,10 +1726,10 @@ priority 0.8
     parent dbSnp153Composite
     view errs
     shortLabel Mapping Errors
-    visibility pack
+    visibility dense
 
         track dbSnp153BadCoords
-        parent dbSnp153ViewErrs
+        parent dbSnp153ViewErrs off
         subGroups view=errs
         shortLabel Map Err dbSnp (153)
         longLabel Mappings with Inconsistent Coordinates from dbSNP 153
