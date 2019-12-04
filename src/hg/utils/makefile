@@ -60,6 +60,7 @@ USER_APP_SCRIPTS = \
 	vai.pl
 
 SCRIPT_FILES = \
+	archiveTracks.sh \
 	dbNsfpToBed.pl \
 	dumpDb.pl \
 	mergeOverlapBed4.pl \
