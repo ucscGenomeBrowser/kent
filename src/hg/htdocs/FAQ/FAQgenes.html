@@ -22,6 +22,7 @@
 		    "GENCODE" and "All GENCODE" tracks?</a></li>
 <li><a href="#gencode">What is the difference between GENCODE comprehensive and basic?</a></li>
 <li><a href="#ncbiRefseq">What is the difference between "NCBI RefSeq" and "UCSC RefSeq"?</a></li>
+<li><a href="#report">How shall I report a gene transcript in a manuscript?</a></li>
 <li><a href="#ccds">What is CCDS?</a></li>
 <li><a href="#justsingle">How can I show a single transcript per gene?</a></li>
 <li><a href="#singledownload">How can I download a file with a single transcript per gene?</a></li>
@@ -331,14 +332,40 @@ subtrack makes the problematic region very clear with double lines
 indicating unalignable transcript sequence.
 </p>
 
-<p> 
-When reporting results as RefSeq coordinates, e.g. as HGVS, in research
-articles, please specify the RefSeq annotation release and also the 
-RefSeq transcript ID with version (e.g. NM_012309.4 not NM_012309).
-Different RefSeq transcript versions have different sequence (for example,
-more sequence may be added to the UTRs or even the CDS), and so the transcript coordinates
-often change from one version to the next.
+<a name="report"></a>
+<h6>How shall I report a gene transcript in a manuscript?</h6>
+
+<p>
+When reporting on GENCODE/Ensembl transcripts, please specify the ENST
+identifier. It is often helpful to also specify the Ensembl release, 
+which is shown on the details page, when you click onto a transcript.
 </p>
+
+<p>
+When reporting RefSeq transcripts, e.g. in HGVS, prefer the "NCBI RefSeq" track
+over the "UCSC RefSeq track".  Please specify the RefSeq transcript ID and
+also the RefSeq annotation release.
+</p>
+
+<ul>
+<li>The RefSeq transcript ID is the sequence of the transcript, the NM_xxxxx.y
+accession. The version is separated with a dot.  Different RefSeq transcript
+versions have different sequences (for example, more sequence may be added to
+the UTRs or even the CDS), and so the transcript coordinates can change from
+one version to the next, which is why reporting the version of the transcript
+is helpful for readers, e.g. report NM_012309.4, not NM_012309.
+<li>The RefSeq annotation release captures the mapping of all transcript
+sequences to the genome.  It is shown on our transcript details page, when you
+click a transcript. It looks like "Annotation Release 105 (2017-04-01)".  The
+most important part is the "Annotation Release" number, e.g. "105". The date is
+NCBI's release date. Shown below this line is the date when UCSC imported the
+data, which is not relevant for manuscripts. Note that an "Annotation release"
+is not a "RefSeq release" , a "RefSeq release" is only about sequences, not
+their mapping to the genome. NCBI provides a list of 
+<a href="https://www.ncbi.nlm.nih.gov/genome/annotation_euk/all/"
+    target=_blank>all current annotation releases</a>. The first annotation
+    release for every genome is usually "100".
+</ul>
 
 <a name="ccds"></a>
 <h6>What is CCDS?</h6>
