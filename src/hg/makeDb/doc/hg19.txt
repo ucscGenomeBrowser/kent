@@ -33719,3 +33719,7 @@ hgLoadSqlTab hg19 snpArrayIlluminaGDA gda.sql gda.bed
  # refGene 3.002%, ncbiRefSeqCurated 3.132%, both 2.983%, cover 99.35%, enrich 31.72x
 
 #########################################################################
+# CADD (DONE - 2019-12-05 - Max)
+wget https://krishna.gs.washington.edu/download/CADD/bigWig/CADD_GRCh37-v1.4.bw -O /hive/data/genomes/hg19/bed/cadd/CADD-v1.4.bw
+ln -s /hive/data/genomes/hg19/bed/cadd/CADD-v1.4.bw /gbdb/hg19/bbi/CADD-v1.4.bw
+#########################################################################
