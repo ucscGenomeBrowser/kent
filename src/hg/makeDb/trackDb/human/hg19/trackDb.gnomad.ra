@@ -295,3 +295,25 @@ release alpha
     bigDataUrl /gbdb/hg19/gnomAD/pLI/misZ.bb
     parent gnomadPLI
     release alpha
+
+    track pliByGene
+    shortLabel Gene LoF
+    longLabel LoF Constrained Metrics By Gene
+    type bigBed 8 +
+    useScore on
+    mouseOverField pLoF
+    searchIndex name,transcript
+    bigDataUrl /gbdb/hg19/gnomAD/pLI/pliByGene.bb
+    parent gnomadPLI
+    release alpha
+
+    track pliByTranscript
+    shortLabel Transcript LoF
+    longLabel LoF Constrained Metrics By Transcript
+    type bigBed 8 +
+    useScore on
+    mouseOverField pLoF
+    searchIndex name,transcript
+    bigDataUrl /gbdb/hg19/gnomAD/pLI/pliByTranscript.bb
+    parent gnomadPLI
+    release alpha
