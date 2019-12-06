@@ -510,6 +510,7 @@ sub doSequence {
   my $twoBitFile = "$buildDir/download/$asmId.2bit";
   my $otherChrParts = 0;  # to see if this is unplaced scaffolds only
   my $primaryAssembly = "$buildDir/download/${asmId}_assembly_structure/Primary_Assembly";
+  my $partsDone = 0;
 
   ###########  Assembled chromosomes  ################
   my $chr2acc = "$primaryAssembly/assembled_chromosomes/chr2acc";
@@ -519,6 +520,7 @@ sub doSequence {
     my $agpOutput = "$runDir/$asmId.chr.agp.gz";
     my $agpNames = "$runDir/$asmId.chr.names";
     my $fastaOut = "$runDir/$asmId.chr.fa.gz";
+    $partsDone += 1;
     if (needsUpdate($chr2acc, $agpOutput)) {
       compositeAgp($chr2acc, $agpSource, $agpOutput, $agpNames);
       `touch -r $chr2acc $agpOutput`;
@@ -537,6 +539,7 @@ sub doSequence {
     my $agpOutput = "$runDir/$asmId.unlocalized.agp.gz";
     my $agpNames = "$runDir/$asmId.unlocalized.names";
     my $fastaOut = "$runDir/$asmId.unlocalized.fa.gz";
+    $partsDone += 1;
     if (needsUpdate($chr2scaf, $agpOutput)) {
       unlocalizedAgp($chr2scaf, $agpSource, $agpOutput, $agpNames);
       `touch -r $chr2scaf $agpOutput`;
@@ -554,6 +557,7 @@ sub doSequence {
     $chrPrefix = "chrUn_" if ($otherChrParts);
     my $agpOutput = "$runDir/$asmId.unplaced.agp.gz";
     my $agpNames = "$runDir/$asmId.unplaced.names";
+    $partsDone += 1;
 
     if (needsUpdate($unplacedScafAgp, $agpOutput)) {
       unplacedAgp($unplacedScafAgp, $agpOutput, $agpNames, $chrPrefix);
@@ -574,6 +578,7 @@ sub doSequence {
     my $agpOutput = "$runDir/$asmId.nonNucChr.agp.gz";
     my $agpNames = "$runDir/$asmId.nonNucChr.names";
     my $fastaOut = "$runDir/$asmId.nonNucChr.fa.gz";
+    $partsDone += 1;
     if (needsUpdate($nonNucChr2acc, $agpOutput)) {
       compositeAgp($nonNucChr2acc, $agpSource, $agpOutput, $agpNames);
       `touch -r $nonNucChr2acc $agpOutput`;
@@ -590,6 +595,7 @@ sub doSequence {
     my $agpOutput = "$runDir/$asmId.nonNucUnlocalized.agp.gz";
     my $agpNames = "$runDir/$asmId.nonNucUnlocalized.names";
     my $fastaOut = "$runDir/$asmId.nonNucUnlocalized.fa.gz";
+    $partsDone += 1;
     if (needsUpdate($nonNucChr2scaf, $agpOutput)) {
       compositeAgp($nonNucChr2scaf, $agpSource, $agpOutput, $agpNames);
       `touch -r $nonNucChr2scaf $agpOutput`;
@@ -600,8 +606,6 @@ sub doSequence {
     }
   }
 
-### XXX TO BE DONE - construct sequence when no AGP files exist
-
   $bossScript->add(<<_EOF_
 export asmId="$asmId"
 
@@ -611,6 +615,23 @@ if [ -s ../\$asmId.chrom.sizes ]; then
   exit 0
 fi
 
+_EOF_
+  );
+
+### construct sequence when no AGP files exist
+  if (0 == $partsDone) {
+printf STDERR "creating fake AGP\n";
+    $bossScript->add(<<_EOF_
+twoBitToFa ../download/\$asmId.2bit stdout | sed -e "s/\\.\\([0-9]\\+\\)/v\\1/;" | gzip -c > \$asmId.fa.gz
+hgFakeAgp -minContigGap=1 -minScaffoldGap=50000 \$asmId.fa.gz stdout | gzip -c > \$asmId.fake.agp.gz
+zgrep "^>" \$asmId.fa.gz | sed -e 's/>//;' | sed -e 's/\\(.*\\)/\\1 \\1/;' | sed -e 's/v\\([0-9]\\+\\)/.\\1/;' | awk '{printf "%s\\t%s\\n", \$2, \$1}' > \$asmId.fake.names
+_EOF_
+    );
+} else {
+printf STDERR "partsDone: %d\n", $partsDone;
+  }
+
+  $bossScript->add(<<_EOF_
 zcat *.agp.gz | gzip > ../\$asmId.agp.gz
 faToTwoBit *.fa.gz ../\$asmId.2bit
 faToTwoBit -noMask *.fa.gz ../\$asmId.unmasked.2bit
@@ -892,6 +913,9 @@ export buildDir=$buildDir
 
 if [ \$buildDir/\$asmId.2bit -nt \$asmId.allGaps.bb ]; then
   twoBitInfo -nBed ../../\$asmId.2bit stdout | awk '{printf "%s\\t%d\\t%d\\t%d\\t%d\\t+\\n", \$1, \$2, \$3, NR, \$3-\$2}' > \$asmId.allGaps.bed
+  if [ ! -s \$asmId.allGaps.bed ]; then
+    exit 0
+  fi
   if [ -s ../assemblyGap/\$asmId.gap.bb ]; then
     bigBedToBed ../assemblyGap/\$asmId.gap.bb \$asmId.gap.bed
     # verify the 'all' gaps should include the gap track items
