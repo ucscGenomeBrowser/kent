@@ -23,15 +23,15 @@ NC_000009.12:g.133255445_133255447del
 # HGVS UTR3 coords are relative to cdsEnd which is 1090 for NM_020469.2.
 # Subtracting 1090, the c. coords of the repeat region are (1-based) 220 - 229.
 # This actually needs to be shifted right one base because there is a C after all the CACA:
-NM_020469.2:c.*229_*230insCA
+NM_020469.3:c.*229_*230insCA
 # This is properly right-shifted on NM_020469.2, so due to strand-swapping it is
 # already left-shifted on the genome and does not need to be left-shifted for VCF:
-NM_020469.2:c.*230_*231insAC
+NM_020469.3:c.*230_*231insAC
 # But somebody might forego right-alignment on NM_020469.2, meaning we would
 # need to left-shift on the genome for VCF:
-NM_020469.2:c.*221_*222insCA
-NM_020469.2:c.*220_*221insAC
-NM_020469.2:c.*219_*220insCA
+NM_020469.3:c.*221_*222insCA
+NM_020469.3:c.*220_*221insAC
+NM_020469.3:c.*219_*220insCA
 
 # Try indels at (or shiftable to) the beginning of a chrom.  chr9 begins with Ns.
 # What are the proper HGVS coordinates for insertion at the beginning of a sequence?
