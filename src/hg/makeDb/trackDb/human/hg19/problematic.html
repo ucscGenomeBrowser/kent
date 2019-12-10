@@ -1,0 +1,57 @@
+<h2>Description</h2>
+
+<p>
+This track shows genomic regions known to cause artefacts for common sequencing analyses, 
+like alignment, variant or peak calling. Its subtracks were imported from
+from <a href="https://www.ncbi.nlm.nih.gov/variation/tools/get-rm/" target=_blank>NCBI Get-RM</a>, 
+<a href="https://www.nist.gov/programs-projects/genome-bottle" target=_blank>Genome-in-a-Bottle</a>
+and from Anshul Kundaje's <a href="https://github.com/Boyle-Lab/Blacklist/blob/master/lists/hg19-blacklist-README.pdf" target=_blank>ENCODE Blacklist</a>.
+</p>
+
+<p>
+The only exception is the "UCSC FAQ notes", the track was typed manually, based on
+the Genome Browser's assembly description, our FAQs and NCBI RefSeq "other" annotations.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+The UCSC FAQ notes track has a mouse over description, all other tracks have at most a name field, which 
+can be shown in pack mode. The tracks are usually kept in dense mode.
+</p>
+
+<H2>Data access</H2>
+<p>
+The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+
+<p>
+For automated download and analysis, the genome annotation is stored in bigBeds files that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/special/" target="_blank">our download server</a>.
+Individual
+regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool
+can also be used to obtain only features within a given range, e.g. 
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/special/deadZone.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+</p>
+
+<h2>Methods</h2>
+
+<p>
+Files were downloaded from the respective databases and converted to bigBed format.
+The procedure is documented in our
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19.txt"
+target="_blank">hg19 makeDoc file</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+?
+</p>
+
+<h2>References</h2>
+?

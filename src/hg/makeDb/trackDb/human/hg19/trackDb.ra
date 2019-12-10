@@ -17,11 +17,34 @@ searchDescription DGV Gold Variants
 track problematic
 shortLabel Problematic Regions
 longLabel Problematic Regions for NGS or Sanger sequencing or very variable regions
-compositeTrack on
+superTrack on
+hideEmptySubtracks on
 group map
 visibility hide
 type bigBed 3 +
 release alpha
+
+
+    track comments
+    shortLabel Comments
+    longLabel UCSC FAQ comments on assembly structure
+    type bigBed 9 +
+    bigDataUrl /gbdb/hg19/bbi/special/comments.bb
+    visibility dense
+    parent problematic
+    release alpha
+    priority 1
+    mouseOverField note
+
+    track encBlacklist
+    shortLabel ENCODE Blacklist
+    longLabel ENCODE Blacklist
+    type bigBed 4
+    bigDataUrl /gbdb/hg19/bbi/special/encBlacklist.bb
+    visibility dense
+    parent problematic
+    release alpha
+    priority 2
 
     track getRmNgsDeadZone
     shortLabel NBCI NGS Dead Zone
@@ -31,6 +54,7 @@ release alpha
     visibility dense
     parent problematic
     release alpha
+    priority 3
 
     track getRmSangerDeadZone
     shortLabel NBCI Sanger Dead Zone
@@ -40,6 +64,7 @@ release alpha
     visibility dense
     parent problematic
     release alpha
+    priority 4
 
     track getRmNgsProblemLow
     shortLabel NBCI NGS Problem Low Stringency
@@ -49,6 +74,7 @@ release alpha
     visibility dense
     parent problematic
     release alpha
+    priority 5
 
     track getRmNgsProblemHigh
     shortLabel NBCI NGS Problem High Stringency
@@ -58,51 +84,7 @@ release alpha
     visibility dense
     parent problematic
     release alpha
-
-    track filterABQD
-    shortLabel GIAB abnorm all bal
-    longLabel Genome-in-a-bottle: Calls with abnormal allele balance
-    type bigBed 3
-    bigDataUrl /gbdb/hg19/bbi/special/filterABQD.bb
-    visibility dense
-    parent problematic
-    release alpha
-
-    track filterAlign
-    shortLabel GIAB align probl
-    longLabel Genome-in-a-bottle: Calls with evidence of local alignment problems like clipped reads
-    type bigBed 3
-    bigDataUrl /gbdb/hg19/bbi/special/filterAlign.bb
-    visibility dense
-    parent problematic
-    release alpha
-
-    track filterConflicting
-    shortLabel GIAB confl genot
-    longLabel Genome-in-a-bottle: Calls with unresolved conflicting genotypes after arbitration
-    type bigBed 3
-    bigDataUrl /gbdb/hg19/bbi/special/filterConflicting.bb
-    visibility dense
-    parent problematic
-    release alpha
-
-    track filterHapNoVar
-    shortLabel GIAB hapl var
-    longLabel Genome-in-a-bottle: HaplotypeCaller makes no call and UnifiedGenotyper makes a variant call
-    type bigBed 3
-    bigDataUrl /gbdb/hg19/bbi/special/filterHapNoVar.bb
-    visibility dense
-    parent problematic
-    release alpha
-
-    track filterMap
-    shortLabel GIAB filter map
-    longLabel Genome-in-a-bottle: calls with low mapping quality or high coverage
-    type bigBed 3
-    bigDataUrl /gbdb/hg19/bbi/special/filterMap.bb
-    visibility dense
-    parent problematic
-    release alpha
+    priority 6
 
     track filterSSE
     shortLabel GIAB filter SSE
@@ -112,15 +94,57 @@ release alpha
     visibility dense
     parent problematic
     release alpha
+    priority 7
 
-    track comments
-    shortLabel Comments
-    longLabel UCSC FAQ comments on assembly structure
-    type bigBed 9
-    bigDataUrl /gbdb/hg19/bbi/special/comments.bb
+    track filterHapNoVar
+    shortLabel GIAB hapl var
+    longLabel Genome-in-a-bottle: HaplotypeCaller makes no call and UnifiedGenotyper makes a variant call
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/special/filterHapNoVar.bb
     visibility dense
     parent problematic
     release alpha
+    priority 9
+
+    track filterMap
+    shortLabel GIAB filter map
+    longLabel Genome-in-a-bottle: calls with low mapping quality or high coverage
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/special/filterMap.bb
+    visibility dense
+    parent problematic
+    release alpha
+    priority 10
+
+    track filterABQD
+    shortLabel GIAB abnorm all bal
+    longLabel Genome-in-a-bottle: Calls with abnormal allele balance
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/special/filterABQD.bb
+    visibility dense
+    parent problematic
+    release alpha
+    priority 11
+
+    track filterAlign
+    shortLabel GIAB align probl
+    longLabel Genome-in-a-bottle: Calls with evidence of local alignment problems like clipped reads
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/special/filterAlign.bb
+    visibility dense
+    parent problematic
+    release alpha
+    priority 12
+
+    track filterConflicting
+    shortLabel GIAB confl genot
+    longLabel Genome-in-a-bottle: Calls with unresolved conflicting genotypes after arbitration
+    type bigBed 3
+    bigDataUrl /gbdb/hg19/bbi/special/filterConflicting.bb
+    visibility dense
+    parent problematic
+    release alpha
+    priority 13
 
 track cosmicRegions
 shortLabel COSMIC Regions
