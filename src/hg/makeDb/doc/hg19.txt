@@ -32573,11 +32573,13 @@ csh $bin/getxEqtlLoadTissues.csh UCSC_output >&! loadTissuesV2.log &
 # and color conventions.
 
 ###########################################################################
+# HGMD (updated 12/10/19 max)
 # HGMD (updated 01/25/18 max)
 # got hgmd 2017 from Frank Schacherer Frank.Schacherer@qiagen.com and Rupert Yip Rupert.Yip@qiagen.com
 # see also the file hg38/hgmd.txt
+year=2019
 cd /hive/data/genomes/hg19/bed/hgmd
-cat /hive/data/outside/hgmd/2017.4-hgmd-public.tsv | grep -v \# | tawk '{if ($5=="I") {start=$4-1; end=$4+1; col="100,100,100"} else if ($5=="D") {start=$4-1; end=$4; col="170,170,170"} else {start=$4-1; end=$4; col="0,0,0"}; print "chr"$3,start,end,$2":"$1,0,".",start,end,col,$2,$1,$5}' | sed -e 's/M$/substitution/' | sed -e 's/I$/insertion (between the two basepairs, sequence not provided by HGMD)/' | sed -e 's/D$/deletion (endpoint not provided by HGMD)/' | sed -e 's/X$/insertion-deletion (endpoint not provided by HGMD)/' | sed -e 's/R$/regulatory variant/' | sed -e 's/S$/splicing variant/' | sort -k1,1 -k2,2n > hgmd.bed
+cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg19.tsv | grep -v \# | tawk '{if ($5=="I") {start=$4-1; end=$4+1; col="100,100,100"} else if ($5=="D") {start=$4-1; end=$4; col="170,170,170"} else {start=$4-1; end=$4; col="0,0,0"}; print "chr"$3,start,end,$2":"$1,0,".",start,end,col,$2,$1,$5}' | sed -e 's/M$/substitution/' | sed -e 's/I$/insertion (between the two basepairs, sequence not provided by HGMD)/' | sed -e 's/D$/deletion (endpoint not provided by HGMD)/' | sed -e 's/X$/insertion-deletion (endpoint not provided by HGMD)/' | sed -e 's/R$/regulatory variant/' | sed -e 's/S$/splicing variant/' | sort -k1,1 -k2,2n > hgmd.bed
 bedToBigBed hgmd.bed /hive/data/genomes/hg19/chrom.sizes hgmd.bb -type=bed9+ -as=hgmd.as -tab
 ln -s /hive/data/genomes/hg19/bed/hgmd/hgmd.bb /gbdb/hg19/bbi/hgmd.bb
 hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
@@ -33723,3 +33725,85 @@ hgLoadSqlTab hg19 snpArrayIlluminaGDA gda.sql gda.bed
 wget https://krishna.gs.washington.edu/download/CADD/bigWig/CADD_GRCh37-v1.4.bw -O /hive/data/genomes/hg19/bed/cadd/CADD-v1.4.bw
 ln -s /hive/data/genomes/hg19/bed/cadd/CADD-v1.4.bw /gbdb/hg19/bbi/CADD-v1.4.bw
 #########################################################################
+
+#########################################################################
+# gnomAD 2 pLI and other loss of function metrics (DONE - 2019-12-10 - Chris)
+
+### hg19 gnomad v2.1.1 gene/transcript constraint data ###
+cd /hive/data/outside/gnomAD.2/
+mkdir constraint
+cd constraint
+
+# use gsutil to copy files:
+gsutil cp gs://gnomad-public/release/2.1.1/constraint/*.txt.bgz .
+Copying gs://gnomad-public/release/2.1.1/constraint/gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz...
+Copying gs://gnomad-public/release/2.1.1/constraint/gnomad.v2.1.1.lof_metrics.by_transcript.txt.bgz...
+Copying gs://gnomad-public/release/2.1.1/constraint/gnomad.v2.1.1.lof_metrics.downsamplings.txt.bgz...
+| [3 files][205.6 MiB/205.6 MiB]
+Operation completed over 3 objects/205.6 MiB.
+
+transcriptFile=gnomad.v2.1.1.lof_metrics.by_transcript.txt.bgz
+geneFile=gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz
+
+hgsql -Ne "select name from wgEncodeGencodeCompV19" hg19 | tr '.' '\t' | cut -f1 > hg19.gencodeV19.transcripts
+cut -f11 pliByGene.bed | sort > pliByGene.transcripts
+cut -f11 pliByTranscripts.bed | sort > pliByTranscripts.transcripts
+wc -l *.transcripts
+# 189020 hg19.gencodeV19.transcripts
+#  19704 pliByGene.transcripts
+#  80950 pliByTranscripts.transcripts
+# 289674 total
+
+# check that v19 has all the transcripts:
+comm -12 hg19.gencodeV19.transcripts pliByGene.transcripts | wc -l
+19704
+comm -12 hg19.gencodeV19.transcripts pliByTranscripts.transcripts | wc -l
+80950
+rm hg19.gencodeV19.transcripts
+
+# ok safe to use v19 exon boundaries, just need to drop the version numbers:
+hgsql -Ne "select * from wgEncodeGencodeCompV19" hg19 | cut -f2- | genePredToBed | sed -Ee 's/\.[0-9]+//' | sort -k4 > hg19.gencodeCompV19.bed12
+
+gzip -cd $geneFile | tail -n +2 \
+    | tawk '{print $75,$76,$77,$64,$65,$1,$2,$3,$4,$5,$33,$12,$13,$14,$32,$17,$20,$21,$24,$25,$26,$27,$28,$29,$30}' \
+    | sort -k7 | join -t $'\t' -1 4 -2 7 hg19.gencodeCompV19.bed12 - \
+    | ./combine.awk -v doTranscripts=false 2>genes.chromMismatches \
+    | sort -k1,1 -k2,2n > pliByGene.bed
+
+gzip -cd $transcriptFile | tail -n +2 \
+    | tawk '{print $76,$77,$78,$65,$66,$1,$2,$4,$5,$6,$34,$13,$14,$15,$33,$18,$21,$22,$25,$26,$27,$28,$29,$30,$31}' \
+    | sort -k7 | join -t $'\t' -1 4 -2 7 hg19.gencodeCompV19.bed12 - \
+    | ./combine.awk -v doTranscripts=true 2>transcripts.chromMismatches \
+    | sort -k1,1 -k2,2n > pliByTranscript.bed
+
+# make .as file:
+#  table pliMetrics
+#  "bed12+5 for displaying gnomAD haploinsufficiency prediction scores"
+#      (
+#      string chrom;      "Reference sequence chromosome or scaffold"
+#      uint   chromStart; "Start position in chromosome"
+#      uint   chromEnd;   "End position in chromosome"
+#      string name;       "ENST or ENSG Name"
+#      uint   score;      "pLI score between 0-1000"
+#      char[1] strand;    "strand of transcript"
+#      uint thickStart;   "Start of where display is thick"
+#      uint thickEnd;     "End of where display should be thick"
+#      uint itemRgb;    "Color of item"
+#      int blockCount;   "Number of exons"
+#      int[blockCount] blockSizes;  "Size of each exon"
+#      int[blockCount] blockStarts; "0-based start position of each exon"
+#      string _mouseOver;  "Mouseover label"
+#      string geneName;   "Associated Gene symbol"
+#      string synonymous; "Synonymous metrics"
+#      string missense;   "Missense metrics"
+#      string pLoF;       "Predicted Loss of Function metrics
+#      )
+
+sizes=/hive/data/genomes/hg19/chrom.sizes
+bedToBigBed -type=bed12+5 -as=pliMetrics.as -tab -extraIndex=name,geneName pliByGene.bed $sizes pliByGene.bb
+bedToBigBed -type=bed12+5 -as=pliMetrics.as -tab -extraIndex=name,geneName pliByTranscript.bed $sizes pliByTranscript.bb
+cd /gbdb/hg19/gnomAD/pLI/
+ln -s /hive/data/outside/gnomAD.2/constraint/pliByGene.bb
+ln -s /hive/data/outside/gnomAD.2/constraint/pliByTranscript.bb
+#########################################################################
+

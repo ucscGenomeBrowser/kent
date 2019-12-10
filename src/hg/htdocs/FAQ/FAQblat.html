@@ -105,7 +105,10 @@ per chromosome are returned.
 To find all matches for repetitive sequences with the online version of Blat, you can add more flanking sequence to your 
 query. If this is not possible, the only alternative is to download the executables of Blat and the 
 .2bit file of a genome to your own machine and use BLAT on the command line. See 
-<a href="#blat3">Downloading BLAT source and documentation</a> for more information.</p>
+<a href="#blat3">Downloading BLAT source and documentation</a> for more information. 
+When using the command line version of BLAT, you can set the repMatch option to a large value
+to try to improve finding matches in repetitive regions and do not
+use one of the default 11.ooc masking files.</p>
 
 <a name="blat1c"></a>
 <h2>Blat or In-Silico PCR finds multiple matches such as chr_alt or chr_fix even though only one is expected</h2>

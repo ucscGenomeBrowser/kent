@@ -271,49 +271,39 @@ bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.exomes.coverage.depth100.bw
 priority 9
 
 track gnomadPLI
-shortLabel gnomAD pLI/Missense Scores
-longLabel gnomAD pLI scores and Missense Constrained Z-Scores
+shortLabel gnomAD pLoF Metrics
+longLabel gnomAD predicted loss of function metrics
 compositeTrack On
 group varRep
-type bigBed 5
+type bigBed 12 +
 release alpha
-
-    track pLI
-    shortLabel Gene pLI Scores
-    longLabel pLI Scores for Genomic Region
-    type bigBed 5
-    useScore on
-    bigDataUrl /gbdb/hg19/gnomAD/pLI/pLI.bb
-    parent gnomadPLI
-    release alpha
-
-    track misZ
-    shortLabel Gene Missense Z-Scores
-    longLabel Missense Constrained Region Z-Scores
-    type bigBed 5
-    useScore on
-    bigDataUrl /gbdb/hg19/gnomAD/pLI/misZ.bb
-    parent gnomadPLI
-    release alpha
 
     track pliByGene
     shortLabel Gene LoF
     longLabel LoF Constrained Metrics By Gene
-    type bigBed 8 +
+    type bigBed 12 +
     useScore on
-    mouseOverField pLoF
-    searchIndex name,transcript
+    mouseOverField _mouseOver
+    itemRgb on
+    searchIndex name,geneName
     bigDataUrl /gbdb/hg19/gnomAD/pLI/pliByGene.bb
+    url https://gnomad.broadinstitute.org/gene/$$?dataset=gnomad_r2_1
+    urlLabel View this Gene on the gnomAD browser
+    labelFields name,geneName
     parent gnomadPLI
     release alpha
 
     track pliByTranscript
     shortLabel Transcript LoF
     longLabel LoF Constrained Metrics By Transcript
-    type bigBed 8 +
+    type bigBed 12 +
     useScore on
-    mouseOverField pLoF
-    searchIndex name,transcript
+    mouseOverField _mouseOver
+    itemRgb on
+    searchIndex name,geneName
     bigDataUrl /gbdb/hg19/gnomAD/pLI/pliByTranscript.bb
+    url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r2_1
+    urlLabel View this Transcript on the gnomAD browser
+    labelFields name,geneName
     parent gnomadPLI
     release alpha
