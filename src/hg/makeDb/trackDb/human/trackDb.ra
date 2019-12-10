@@ -1712,7 +1712,7 @@ priority 0.8
         track dbSnp153Common
         parent dbSnp153ViewVariants on
         subGroups view=variants
-        shortLabel Common dbSNP (153)
+        shortLabel Common dbSNP(153)
         longLabel Common (1000 Genomes Phase 3 MAF >= 1%) Short Genetic Variants from dbSNP Release 153
         bigDataUrl /gbdb/$D/snp/dbSnp153Common.bb
         priority 1
@@ -1720,7 +1720,7 @@ priority 0.8
         track dbSnp153ClinVar
         parent dbSnp153ViewVariants off
         subGroups view=variants
-        shortLabel ClinVar dbSNP (153)
+        shortLabel ClinVar dbSNP(153)
         longLabel Short Genetic Variants from dbSNP Release 153 Included in ClinVar
         bigDataUrl /gbdb/$D/snp/dbSnp153ClinVar.bb
         priority 2
@@ -1728,7 +1728,7 @@ priority 0.8
         track dbSnp153Mult
         parent dbSnp153ViewVariants off
         subGroups view=variants
-        shortLabel Mult. dbSNP (153)
+        shortLabel Mult. dbSNP(153)
         longLabel Short Genetic Variants from dbSNP Release 153 that Map to Multiple Genomic Loci
         bigDataUrl /gbdb/$D/snp/dbSnp153Mult.bb
         priority 3
@@ -1736,7 +1736,7 @@ priority 0.8
         track dbSnp153
         parent dbSnp153ViewVariants off
         subGroups view=variants
-        shortLabel All dbSNP (153)
+        shortLabel All dbSNP(153)
         longLabel All Short Genetic Variants from dbSNP Release 153
         bigDataUrl /gbdb/$D/snp/dbSnp153.bb
         maxWindowToDraw 1000000
@@ -1751,7 +1751,7 @@ priority 0.8
         track dbSnp153BadCoords
         parent dbSnp153ViewErrs off
         subGroups view=errs
-        shortLabel Map Err dbSnp (153)
+        shortLabel Map Err dbSnp(153)
         longLabel Mappings with Inconsistent Coordinates from dbSNP 153
         bigDataUrl /gbdb/$D/snp/dbSnp153BadCoords.bb
         type bigBed 4
