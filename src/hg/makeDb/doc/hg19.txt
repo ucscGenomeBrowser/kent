@@ -33326,11 +33326,17 @@ TMPDIR=/dev/shm
     # 2641865423 bases of 3043444524 (86.805%) in intersection
 
 ##############################################################################
-# addition of HGMD-restricted subset, Max, Jan 29 2019
-cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2018-10-01/
-cat /hive/data/outside/hgmd/2018.4-hgmd-public_hg38.tsv | cut -f7 | sort -u > hgmdTranscripts.txt
-zcat process/hg19.curated.gp.gz | fgrep -f hgmdTranscripts.txt - > hgmd.curated.gp
+# addition of HGMD-restricted subset, Max, Jan 29 2019, updated Dec 10 2019
+cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2019-11-21/
+year=2019
+#cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg38.tsv | cut -f7 | sort -u > hgmdTranscripts.txt
+# change in 2019: ignore the version numbers, otherwise only 1815 transcripts left, big update by HGMD in 2019
+# adding "." so NM_123 doesn't match NM_123123
+cat /hive/data/outside/hgmd/$year.4-hgmd-public_hg38.tsv | cut -f7 | cut -d. -f1 | sort -u | awk '{print $1"."}' > hgmdTranscripts.txt
+cat process/hg19.curated.gp | fgrep -f hgmdTranscripts.txt - > hgmd.curated.gp
 hgLoadGenePred -genePredExt hg19 ncbiRefSeqHgmd hgmd.curated.gp
+$ wc -l hgmd.curated.gp 
+7965 hgmd.curated.gp
 #############################################################################
 # genomenom mastermind track, Max, Feb 2019
 cd /hive/data/genomes/hg19/bed/mastermind/

@@ -7242,10 +7242,10 @@ static void getCdsStartAndStop(struct sqlConnection *conn, char *acc, char *trac
 			       uint *retCdsStart, uint *retCdsEnd)
 /* Get cds start and stop, if available */
 {
-struct trackDb *tdb = hashMustFindVal(trackHash, trackTable);
+struct trackDb *tdb = hashFindVal(trackHash, trackTable);
 // Note: this variable was previously named cdsTable but unfortunately the
 // hg/(inc|lib)/genbank.[hc] code uses the global var cdsTable!
-char *tdbCdsTable = trackDbSetting(tdb, "cdsTable");
+char *tdbCdsTable = tdb ? trackDbSetting(tdb, "cdsTable") : NULL;
 if (isEmpty(tdbCdsTable) && startsWith("ncbiRefSeq", trackTable))
     tdbCdsTable = "ncbiRefSeqCds";
 if (isNotEmpty(tdbCdsTable) && hTableExists(database, tdbCdsTable))
