@@ -407,7 +407,7 @@ sub readAltPlacement($$) {
     printf STDERR "# warning: name longer than 31 characters: '%s'\n# in: '%s'\n", $ucscName, $altPlacementFile if (length($ucscName) > 31);
   }
   close (AP);
-}
+}	#	sub readAltPlacement($$)
 
 #########################################################################
 ### process one of the alternate AGP files, changing names via the nameHash
@@ -428,7 +428,7 @@ sub processAltAgp($$$) {
     printf $fh "\n";
   }
   close (AG);
-}
+}	#	sub processAltAgp($$$)
 
 #########################################################################
 ### process one of the alternate FASTA files, changing names via the nameHash
@@ -450,7 +450,7 @@ sub processAltFasta($$$) {
     }
   }
   close (FF);
-}
+}	#	sub processAltFasta($$$)
 
 #########################################################################
 # there are alternate sequences, process their multiple AGP and FASTA files
@@ -495,7 +495,7 @@ sub altSequences($) {
   }
   close (FH);
   close (FA);
-}
+}	#	sub altSequences($)
 
 #########################################################################
 # process NCBI unplaced AGP file, perhaps translate into UCSC naming scheme
@@ -788,7 +788,18 @@ if [ "\$checkAgp" != "All AGP and FASTA entries agree - both files are valid" ];
 fi
 join -t\$'\\t' <(sort ../\$asmId.chrom.sizes) <(sort \${asmId}*.names) | awk '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$3,\$2,\$1,\$2}' > \$asmId.ncbiToUcsc.lift
 join -t\$'\\t' <(sort ../\$asmId.chrom.sizes) <(sort \${asmId}*.names) | awk '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$1,\$2,\$3,\$2}' > \$asmId.ucscToNcbi.lift
-
+export c0=`cat \$asmId.ncbiToUcsc.lift | wc -l`
+export c1=`cat \$asmId.ucscToNcbi.lift | wc -l`
+export c2=`cat ../\$asmId.chrom.sizes | wc -l`
+# verify all names are accounted for
+if [ "\$c0" -ne "\$c2 ]; then
+  printf "# ERROR: not all names accounted for in \$asmId.ncbiToUcsc.lift" 1>&2
+  exit 255
+fi
+if [ "\$c1" -ne "\$c2 ]; then
+  printf "# ERROR: not all names accounted for in \$asmId.ucscToNcbi.lift" 1>&2
+  exit 255
+fi
 twoBitToFa ../\$asmId.2bit stdout | faCount stdin | gzip -c > \$asmId.faCount.txt.gz
 touch -r ../\$asmId.2bit \$asmId.faCount.txt.gz
 zgrep -P "^total\t" \$asmId.faCount.txt.gz > \$asmId.faCount.signature.txt
