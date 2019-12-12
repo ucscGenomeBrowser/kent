@@ -383,7 +383,119 @@ sub unlocalizedFasta($$$) {
   close(FA);
 }	# sub unlocalizedFasta($$$)
 
-### XXX TO BE DONE - process alternate haplotypes via alt.scaf.agp.gz
+#########################################################################
+# read alt_scaffold_placement file, return name correspondence in
+# given hash pointer
+sub readAltPlacement($$) {
+  my ($altPlacementFile, $accToChr) = @_;
+  open (AP, "<$altPlacementFile") or die "can not read $altPlacementFile";
+  while (my $line = <AP>) {
+    chomp $line;
+    next if ($line =~ m/^#/);
+    my ($alt_asm_name, $prim_asm_name, $alt_scaf_name, $alt_scaf_acc, $parent_type, $parent_name, $parent_acc, $region_name, $ori, $alt_scaf_start, $alt_scaf_stop, $parent_start, $parent_stop, $alt_start_tail, $alt_stop_tail) = split('\t', $line);
+    my $acc = $alt_scaf_acc;
+    $alt_scaf_acc = $acc;
+    my $ucscName = $acc;
+    if ($ucscNames) {
+      $alt_scaf_acc =~ s/\./v/;
+      $ucscName = sprintf("chr%s_%s_alt", $parent_name, $alt_scaf_acc);
+      if ( $prim_asm_name ne "Primary Assembly" ) {
+        $ucscName = sprintf("%s_alt", $alt_scaf_acc);
+      }
+    }
+    $accToChr->{$acc} = $ucscName;
+    printf STDERR "# warning: name longer than 31 characters: '%s'\n# in: '%s'\n", $ucscName, $altPlacementFile if (length($ucscName) > 31);
+  }
+  close (AP);
+}
+
+#########################################################################
+### process one of the alternate AGP files, changing names via the nameHash
+### and writing to the given fileHandle (fh)
+sub processAltAgp($$$) {
+  my ($agpFile, $nameHash, $fh) = @_;
+  open (AG, "zcat $agpFile|") or die "can not read $agpFile";
+  while (my $line = <AG>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my (@a) = split('\t', $line);
+    my $ncbiAcc = $a[0];
+    my $ucscName = $nameHash->{$ncbiAcc};
+    printf $fh "%s", $ucscName;  # begin AGP line with accession nam
+    for (my $i = 1; $i < scalar(@a); ++$i) {  # the reset of the AGP line
+      printf $fh "\t%s", $a[$i];
+    }
+    printf $fh "\n";
+  }
+  close (AG);
+}
+
+#########################################################################
+### process one of the alternate FASTA files, changing names via the nameHash
+### and writing to the given fileHandle (fh)
+
+sub processAltFasta($$$) {
+  my ($faFile, $nameHash, $fh) = @_;
+  open (FF, "zcat $faFile|") or die "can not read $faFile";
+  while (my $line = <FF>) {
+    if ($line =~ m/^>/) {
+      chomp $line;
+      $line =~ s/^>//;
+      $line =~ s/ .*//;
+      die "ERROR: can not find accession $line in nameHash" if (! exists($nameHash->{$line}));
+      my $ucscName = $nameHash->{$line};
+      printf $fh ">%s\n", $ucscName;
+    } else {
+      print $fh $line;
+    }
+  }
+  close (FF);
+}
+
+#########################################################################
+# there are alternate sequences, process their multiple AGP and FASTA files
+# into single AGP and FASTA files
+sub altSequences($) {
+  my $runDir = "$buildDir/sequence";
+  my ($assemblyStructure) = @_;
+  # construct the name correspondence hash #################################
+  my %accToChr;	# hash for accession name to browser chromosome name
+  open (FH, "find -L '${assemblyStructure}' -type f | grep '/alt_scaffolds/alt_scaffold_placement.txt'|") or die "can not find alt_scaffolds in ${assemblyStructure}";;
+  while (my $line = <FH>) {
+   chomp $line;
+###   printf "%s\n", $line;
+   readAltPlacement($line, \%accToChr);
+  }
+  close (FH);
+  # and write to alt.names
+  open (AN, ">$runDir/$asmId.alt.names");
+  foreach my $acc (sort keys %accToChr) {
+    printf AN "%s\t%s\n", $accToChr{$acc}, $acc;
+  }
+  close (AN);
+  # process the AGP files, writing the agpOutput file ######################
+  my $agpOutput = "$runDir/$asmId.alt.agp.gz";
+  open (AGP, "|gzip -c > $agpOutput") or die "can not write to $agpOutput";
+  open (FH, "find -L '${assemblyStructure}' -type f | grep '/alt_scaffolds/AGP/alt.scaf.agp.gz'|") or die "can not find alt.scaf.agp.gz in ${assemblyStructure}";;
+  while (my $agpFile = <FH>) {
+    chomp $agpFile;
+    processAltAgp($agpFile, \%accToChr, \*AGP);
+    printf STDERR "%s\n", $agpFile;
+  }
+  close (FH);
+  close (AGP);
+  # process the FASTA files, writing the fastaOut file ######################
+  my $fastaOut = "$runDir/$asmId.alt.fa.gz";
+  open (FA, "|gzip -c > $fastaOut") or die "can not write to $fastaOut";
+  open (FH, "find -L '${assemblyStructure}' -type f | grep '/alt_scaffolds/FASTA/alt.scaf.fna.gz'|") or die "can not find alt.scaf.fna.gz in ${assemblyStructure}";;
+  while (my $faFile = <FH>) {
+    chomp $faFile;
+    processAltFasta($faFile, \%accToChr, \*FA);
+    printf STDERR "%s\n", $faFile;
+  }
+  close (FH);
+  close (FA);
+}
 
 #########################################################################
 # process NCBI unplaced AGP file, perhaps translate into UCSC naming scheme
@@ -548,6 +660,16 @@ sub doSequence {
       unlocalizedFasta($chr2scaf, $twoBitFile, $fastaOut);
       `touch -r $twoBitFile $fastaOut`;
     }
+  }
+
+  ###########  alternate sequences  ##############
+  my $assemblyStructure = "$buildDir/download/${asmId}_assembly_structure";
+  my $altCount = `find -L "${assemblyStructure}" -type f | grep "/alt_scaffolds/alt_scaffold_placement.txt" | wc -l`;
+  chomp $altCount;
+  if ($altCount > 0) {
+    $partsDone += 1;
+    ++$otherChrParts;
+    altSequences($assemblyStructure);
   }
 
   ###########  unplaced sequence  ################
