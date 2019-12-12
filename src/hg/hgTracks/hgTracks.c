@@ -6970,7 +6970,7 @@ for (track = trackList; track != NULL; track = track->next)
         }
 
     // now deal with composite track children
-    if (tdbIsComposite(track->tdb))
+    if (tdbIsComposite(track->tdb) || tdbIsMultiTrack(track->tdb))
         {
         char *usedThis = buffer;
 
@@ -7010,7 +7010,11 @@ for (track = trackList; track != NULL; track = track->next)
                     cartRemove(cart, trackHubSkipHubName(subtrack->track)); // remove the undecorated version
                 }
             else if (hideKids && isSubtrackVisible(subtrack))
+                {
                 cartSetString(cart, buffer, "0");
+                subtrack->subTrackVis = tvHide;
+                subtrack->subTrackVisSet = TRUE;
+                }
             }
         }
     }
