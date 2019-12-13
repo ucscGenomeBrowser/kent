@@ -175,6 +175,7 @@ Color chromColor[CHROM_COLORS+1];
 
 /* Have the 3 shades of 8 chromosome colors been allocated? */
 boolean chromosomeColorsMade = FALSE;
+boolean doPliColors = FALSE;
 /* have the 10 scaffold colors been allocated */
 static boolean scafColorsMade = FALSE;
 
@@ -4791,6 +4792,10 @@ else
     genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
 	    font, color, vis);
     }
+
+// put up the color key for the gnomAD pLI track
+if (startsWith("pliBy", tg->track))
+    doPliColors = TRUE;
 }
 
 void incRange(UBYTE *start, int size)
