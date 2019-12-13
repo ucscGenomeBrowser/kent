@@ -369,7 +369,7 @@ void doBigDbSnp(struct trackDb *tdb, char *rsId)
 {
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-char *fileOrUrl = trackDbSetting(tdb, "bigDataUrl");
+char *fileOrUrl = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 if (isEmpty(fileOrUrl))
     errAbort("bigDbSnpClick: trackDb is missing bigDataUrl setting");
 struct bbiFile *bbi = bigBedFileOpen(fileOrUrl);
