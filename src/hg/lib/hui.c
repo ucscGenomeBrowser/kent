@@ -2492,6 +2492,8 @@ if (vis == tvHide)
 
 safef(objName, sizeof(objName), "%s_sel", subtrack->track);
 setting = cartOptionalString(cart, objName);
+if (setting == NULL)
+    setting = cartOptionalString(cart, trackHubSkipHubName(objName));
 if (setting != NULL)
     {
     if (sameWord("on",setting)) // ouch! cartUsualInt was interpreting "on" as 0, which was bad bug!

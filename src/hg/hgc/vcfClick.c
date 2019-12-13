@@ -324,6 +324,34 @@ static void ignoreEm(char *format, va_list args)
 {
 }
 
+static int genotypeIndex(int h0Ix, int h1Ix)
+/* Return the index in a linear array of distinct genotypes, given two 0-based allele indexes.
+ * This follows the following convention used by GnomAD (GATK?), that has the advantage that
+ * gt indexes of small numbers don't change as the number of alleles increases, and also matches
+ * the ref/ref, ref/alt, alt/alt convention for biallelic variants:
+ * 0/0,
+ * 0/1, 1/1,
+ * 0/2, 1/2, 2/2,
+ * 0/3, 1/3, 2/3, 3/3,
+ * ... */
+{
+// Note that in that scheme, h0Ix <= h1Ix; if h0Ix > h1Ix, swap them.
+if (h0Ix > h1Ix)
+    {
+    int tmp = h0Ix;
+    h0Ix = h1Ix;
+    h1Ix = tmp;
+    }
+return (h1Ix * (h1Ix+1) / 2) + h0Ix;
+}
+
+static int genotypeArraySize(int alleleCount)
+/* Return the number of distinct genotypes given the number of alleles.  That is the same as the
+ * array index of the first genotype that would follow for alleleCount+1. */
+{
+return genotypeIndex(0, alleleCount + 1);
+}
+
 static void vcfGenotypesDetails(struct vcfRecord *rec, struct trackDb *tdb, char **displayAls)
 /* Print summary of allele and genotype frequency, plus collapsible section
  * with table of genotype details. */
@@ -336,78 +364,87 @@ puts("<TABLE>");
 pushWarnHandler(ignoreEm);
 vcfParseGenotypes(rec);
 popWarnHandler();
-// Tally genotypes and alleles for summary:
-int refs = 0, alts = 0, unks = 0;
-int refRefs = 0, refAlts = 0, altAlts = 0, gtUnk = 0, gtOther = 0, phasedGts = 0;
+// Tally genotypes and alleles for summary, adding 1 to rec->alleleCount to represent missing data:
+int alCounts[rec->alleleCount + 1];
+zeroBytes(alCounts, sizeof alCounts);
+int numGenotypes = genotypeArraySize(rec->alleleCount + 1);
+int gtCounts[numGenotypes];
+zeroBytes(gtCounts, sizeof gtCounts);
+int phasedGts = 0, diploidCount = 0;
 int i;
 for (i = 0;  i < vcff->genotypeCount;  i++)
     {
     struct vcfGenotype *gt = &(rec->genotypes[i]);
     if (gt->isPhased)
 	phasedGts++;
-    if (gt->hapIxA == 0)
-	refs++;
-    else if (gt->hapIxA > 0)
-	alts++;
-    else
-	unks++;
+    int hapIxA = gt->hapIxA;
+    if (hapIxA < 0)
+        hapIxA = rec->alleleCount;
+    alCounts[hapIxA]++;
     if (!gt->isHaploid)
 	{
-	if (gt->hapIxB == 0)
-	    refs++;
-	else if (gt->hapIxB > 0)
-	    alts++;
-	else
-	    unks++;
-	if (gt->hapIxA == 0 && gt->hapIxB == 0)
-	    refRefs++;
-	else if (gt->hapIxA == 1 && gt->hapIxB == 1)
-	    altAlts++;
-	else if ((gt->hapIxA == 1 && gt->hapIxB == 0) ||
-		 (gt->hapIxA == 0 && gt->hapIxB == 1))
-	    refAlts++;
-	else if (gt->hapIxA < 0 || gt->hapIxB < 0)
-	    gtUnk++;
-	else
-	    gtOther++;
-	}
+        diploidCount++;
+        int hapIxB = gt->hapIxB;
+        if (hapIxB < 0)
+            hapIxB = rec->alleleCount;
+        alCounts[hapIxB]++;
+        gtCounts[genotypeIndex(hapIxA, hapIxB)]++;
+        }
     }
 printf("<B>Genotype count:</B> %d", vcff->genotypeCount);
-if (differentString(seqName, "chrY"))
-    printf(" (%d phased)", phasedGts);
-else
+if (sameString(seqName, "chrY"))
     printf(" (haploid)");
+else if (sameString(seqName, "chrX"))
+    printf(" (%d phased, %d diploid, %d haploid)", phasedGts, diploidCount,
+           vcff->genotypeCount - diploidCount);
+else
+    printf(" (%d phased)", phasedGts);
 puts("<BR>");
-int totalAlleles = refs + alts + unks;
-double refAf = (double)refs/totalAlleles;
-double altAf = (double)alts/totalAlleles;
-printf("<B>Alleles:</B> %s: %d (%.3f%%); %s: %d (%.3f%%)",
-       displayAls[0], refs, 100*refAf, displayAls[1], alts, 100*altAf);
-if (unks > 0)
-    printf("; unknown: %d (%.3f%%)", unks, 100 * (double)unks/totalAlleles);
-puts("<BR>");
-// Should be a better way to detect haploid chromosomes than comparison with "chrY":
-if (vcff->genotypeCount > 1 && differentString(seqName, "chrY"))
+int totalAlleles = vcff->genotypeCount + diploidCount;
+double refAf = (double)alCounts[0]/totalAlleles;
+printf("<B>Alleles:</B> %s: %d (%.3f%%)", displayAls[0], alCounts[0], 100*refAf);
+for (i = 1;  i < rec->alleleCount;  i++)
     {
-    printf("<B>Genotypes:</B> %s/%s: %d (%.3f%%); %s/%s: %d (%.3f%%); %s/%s: %d (%.3f%%)",
-	   displayAls[0], displayAls[0], refRefs, 100*(double)refRefs/vcff->genotypeCount,
-	   displayAls[0], displayAls[1], refAlts, 100*(double)refAlts/vcff->genotypeCount,
-	   displayAls[1], displayAls[1], altAlts, 100*(double)altAlts/vcff->genotypeCount);
-    if (gtUnk > 0)
-	printf("; unknown: %d (%.3f%%)", gtUnk, 100*(double)gtUnk/vcff->genotypeCount);
-    if (gtOther > 0)
-	printf("; other: %d (%.3f%%)", gtOther, 100*(double)gtOther/vcff->genotypeCount);
+    double altAf = (double)alCounts[i]/totalAlleles;
+    printf("; %s: %d (%.3f%%)", displayAls[i], alCounts[i], 100*altAf);
+    }
+if (alCounts[rec->alleleCount] > 0)
+    printf("; unknown: %d (%.3f%%)", alCounts[rec->alleleCount],
+           100 * (double)alCounts[rec->alleleCount]/totalAlleles);
+puts("<BR>");
+if (vcff->genotypeCount > 1 && diploidCount > 0)
+    {
+    printf("<B>Genotypes:</B> %s/%s: %d (%.3f%%)",
+	   displayAls[0], displayAls[0], gtCounts[0], 100*(double)gtCounts[0]/diploidCount);
+    for (i = 1;  i < rec->alleleCount + 1;  i++)
+        {
+        int j;
+        for (j = 0;  j <= i;  j++)
+            {
+            int gtIx = genotypeIndex(j, i);
+            if (gtCounts[gtIx] > 0)
+                {
+                char *alJ = (j == rec->alleleCount) ? "?" : displayAls[j];
+                char *alI = (i == rec->alleleCount) ? "?" : displayAls[i];
+                printf("; %s/%s: %d (%.3f%%)", alJ, alI, gtCounts[gtIx],
+                       100*(double)gtCounts[gtIx]/diploidCount);
+                }
+            }
+        }
     printf("<BR>\n");
     if (rec->alleleCount == 2)
 	{
 	boolean showHW = cartOrTdbBoolean(cart, tdb, VCF_SHOW_HW_VAR, FALSE);
 	if (showHW)
+            {
+            double altAf = (double)alCounts[1]/totalAlleles;
 	    printf("<B><A HREF=\"http://en.wikipedia.org/wiki/Hardy%%E2%%80%%93Weinberg_principle\" "
 		   "TARGET=_BLANK>Hardy-Weinberg equilibrium</A>:</B> "
 		   "P(%s/%s) = %.3f%%; P(%s/%s) = %.3f%%; P(%s/%s) = %.3f%%<BR>",
 		   displayAls[0], displayAls[0], 100*refAf*refAf,
 		   displayAls[0], displayAls[1], 100*2*refAf*altAf,
 		   displayAls[1], displayAls[1], 100*altAf*altAf);
+            }
 	}
     }
 puts("<BR>");
