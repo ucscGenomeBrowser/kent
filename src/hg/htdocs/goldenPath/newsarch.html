@@ -50,6 +50,111 @@
 
 <!-- ============= 2019 archived news ============= -->
 <a name="2019"></a>
+<a name="121319"></a>
+<h2>Dec. 13, 2019 &nbsp;&nbsp; New dbSNP pipeline: dbSNP b153 release, bigDbSnp track type</h2>
+<p>
+We are pleased to announce a new dbSNP pipeline, along with the first new dataset: dbSNP 
+b153 for <a target="_blank" href="../../cgi-bin/hgTrackUi?db=hg19&g=dbSnp153Composite">hg19</a> 
+and <a target="_blank" href="../../cgi-bin/hgTrackUi?db=hg38&g=dbSnp153Composite">hg38</a>.</p>
+<p> 
+dbSNP has seen an <a target="_blank" 
+href="https://ncbiinsights.ncbi.nlm.nih.gov/2018/07/02/dbsnp-database-doubles-size-twice-13-months/">
+explosive growth</a> in recent releases, from roughly 324 million variants in <a target="_blank"
+href="https://ncbiinsights.ncbi.nlm.nih.gov/2017/05/08/dbsnps-human-build-150-has-doubled-the-amount-of-refsnp-records/">
+build 150</a>, to over 700 million variants in the latest build b153. In an effort to continue 
+providing efficient access to this data, dbSNP has redesigned their <a target="_blank" 
+href="https://ncbiinsights.ncbi.nlm.nih.gov/2017/07/07/dbsnp-redesign-supports-future-data-expansion/">
+architecture and data flow</a>. We have also taken this opportunity to redesign our dbSNP 
+ingestion pipeline. Below is a short summary of the UCSC changes brought forth by both 
+dbSNP's redesign, as well as UCSC's new pipeline.</p>
+<ul>
+  <li>New track type bigDbSnp</li>
+  <li>Expanded dbSNP track composition</li>
+  <li>New UCSC annotation of dbSNP data termed <b>UCSC Notes</b></li>
+  <li>dbSNP data will now be a bigBed file download (see Data Access below)</li>
+</ul>
+
+<h3>bigDbSnp and dbSNP v153</h3>
+<p>
+&quot;SNPs&quot; tracks were previously based on related mysql database tables, but the new 
+bigDbSnp format is a bigBed file with extra columns that contains all necessary information 
+to display the variant. An accompanying dbSnpDetails file contains additional data displayed 
+in the item details page. Schemas are available for both <a target="_blank" 
+href="https://genome-source.gi.ucsc.edu/gitlist/kent.git/blob/master/src/hg/lib/bigDbSnp.as">
+bigDbSnp</a> and <a target="_blank" 
+href="https://genome-source.gi.ucsc.edu/gitlist/kent.git/blob/master/src/hg/lib/dbSnpDetails.as">
+dbSnpDetails</a>.</p>
+<p>
+dbSNP's redesign includes an important change to the representation of insertion/deletion 
+variants (indels) in repetitive regions.  Rather than annotating the minimal representation 
+of the indel on the genome, dbSNP now expands the reference and alternate alleles to cover 
+the entire repetitive region on the genome.  Accordingly, we display the newly expanded regions, 
+but use thin and thick lines to indicate the region of uncertain placement and the minimal size.  
+For example, when there is a deletion of one base in a range of three identical bases, we draw 
+a thin rectangle over the first two bases to show that there is uncertain placement, and a thick 
+rectangle over the last base to show that one base is deleted from the range. Some indel variants 
+have multiple alternate alleles. You may notice some thick but gray rectangles when there are 
+deletion alleles of different sizes.</p>
+<p>
+Below is an image from an <a target="_blank" href="https://genome.ucsc.edu/s/Lou/hg38DbSnpNews">
+example session</a> which displays an instance of this new visualization. In a repetitive region 
+with 11 As, the previous dbSNP track, dbSNP 151, displays three variants (blue). Two of them 
+include a single base insertion, but are arbitrarily placed one base apart from each other. 
+There is also a single-base deletion. In release 153, dbSNP has clustered them into a single 
+variant spanning the 11 As on the genome. We indicate the uncertainty of placement within the 
+11 As with a thin line across the entire repeat, and a thick gray rectangle over the final 
+base to indicate that one base may be deleted (orange). At the right end there is a tall 
+line to indicate an insertion(s).</p>
+
+<p class="text-center">
+  <img class='text-center' src="../images/bigDbSnpNewsArch.png"  width='80%'alt="Example of 
+new bigDbSnp display">
+</p>
+
+<h3>Track Composition</h3>
+<p>
+dbSNP b153 is composed of 5 subtracks. Four of these closely correlate to our previous 
+SNP releases; a new subtrack displays mappings with inconsistent coordinates in dbSNP 
+download files:</p>
+<ul>
+  <li>Common dbSNP(153) - Common (1000 Genomes Phase 3 MAF >= 1%) variants</li>
+  <li>ClinVar dbSNP(153) - Variants included in ClinVar</li>
+  <li>Mult. dbSNP(153) - Variants that that map to multiple genomic loci</li>
+  <li>All dbSNP(153) - All variants in dbSNP release</li>
+  <li>Map Err dbSnp(153) - Mappings with inconsistent coordinates</li>
+</ul>
+
+<h3>UCSC Notes</h3>
+<p>
+While processing the information downloaded from dbSNP, UCSC annotates some properties of 
+interest. These are noted on the item details page, and may be used to include or exclude 
+affected variants. These UCSC notes (currently 26) can be divided into three categories:</p>
+<ul>
+  <li>Information about ClinVar status, allele frequencies reported by twelve projects, and 
+the presence of other variants at the same genomic position</li>
+  <li>Notes about rare variants or ambiguous nucleotides in the reference genome</li>
+  <li>Indicators that allele frequency data might be incomplete and/or mapping variants across 
+different assemblies had issues with indel differences between assemblies</li>
+</ul>
+
+<h3>Data Access</h3>
+<p>
+With the bigDbSnp format, this data will no longer be available as a database table dump. The 
+complete data can be found across two separate files in our download server, a bigBed file 
+(bigDbSnp) for <a target="_blank" href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/snp/">hg19</a> 
+and <a target="_blank" href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/">hg38</a>, and a 
+<a target="_blank" href="http://hgdownload.soe.ucsc.edu/gbdb/hgFixed/dbSnp/">shared secondary 
+details file</a> which holds additional variant details.<p>
+<p>
+Additional information including visibility display, a complete list of UCSC notes, and a methods 
+section can be found in the <a target="_blank" 
+href="../../cgi-bin/hgTrackUi?db=hg38&g=dbSnp153Composite">track description 
+page</a>.</p>
+<p>
+We would like to thanks the dbSNP group at NCBI for providing access to these data. We would 
+also like to thank Angie Hinrichs and the UCSC Genome Browser team for their efforts on this
+release.</p>
+
 <a name="112719a"></a>
 <h2>Nov. 27, 2019 &nbsp;&nbsp; New EPD TSS track for human and mouse</h2>
 <p>
