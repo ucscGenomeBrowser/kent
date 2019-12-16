@@ -282,7 +282,6 @@ release alpha
     shortLabel Gene LoF
     longLabel LoF Constrained Metrics By Gene
     type bigBed 12 +
-    useScore on
     mouseOverField _mouseOver
     itemRgb on
     searchIndex name,geneName
@@ -290,6 +289,9 @@ release alpha
     url https://gnomad.broadinstitute.org/gene/$$?dataset=gnomad_r2_1
     urlLabel View this Gene on the gnomAD browser
     labelFields name,geneName
+    #filter._pli 0:1
+    #filterLabel._pli Show only items between this pLI range
+    #filterByRange._pli on
     parent gnomadPLI
     release alpha
 
@@ -297,7 +299,6 @@ release alpha
     shortLabel Transcript LoF
     longLabel LoF Constrained Metrics By Transcript
     type bigBed 12 +
-    useScore on
     mouseOverField _mouseOver
     itemRgb on
     searchIndex name,geneName
@@ -305,5 +306,8 @@ release alpha
     url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r2_1
     urlLabel View this Transcript on the gnomAD browser
     labelFields name,geneName
+    #filter._pli 0:1
+    #filterLabel._pli Show only items between this pLI range
+    #filterByRange._pli on
     parent gnomadPLI
     release alpha
