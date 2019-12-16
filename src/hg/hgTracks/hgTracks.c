@@ -8552,6 +8552,22 @@ if (!hideControls)
         hPrintf("<B>Chromosome Color Key:</B><BR> ");
         hPrintf("<IMG SRC = \"../images/new_colorchrom.gif\" BORDER=1 WIDTH=596 HEIGHT=18 ><BR>\n");
         }
+    if (doPliColors)
+        {
+        hPrintf("<B>pLI Color Key:</B><BR> ");
+        hPrintf("<table style=\"border: 1px solid black\"><tr>\n");
+        hPrintf("<td style=\"background-color:rgb(0,244,153)\">&lt; .1</td>\n");
+        hPrintf("<td style=\"background-color:rgb(74,240,94)\">&lt; .2</td>\n");
+        hPrintf("<td style=\"background-color:rgb(127,233,58)\">&lt; .3</td>\n");
+        hPrintf("<td style=\"background-color:rgb(165,224,26)\">&lt; .4</td>\n");
+        hPrintf("<td style=\"background-color:rgb(191,210,22)\">&lt; .5</td>\n");
+        hPrintf("<td style=\"background-color:rgb(210,191,13)\">&lt; .6</td>\n");
+        hPrintf("<td style=\"background-color:rgb(224,165,8)\">&lt; .7</td>\n");
+        hPrintf("<td style=\"background-color:rgb(233,127,5)\">&lt; .8</td>\n");
+        hPrintf("<td style=\"background-color:rgb(240,74,3)\">&lt; .9</td>\n");
+        hPrintf("<td style=\"background-color:rgb(244,0,2)\">&lt; 1</td>\n");
+        hPrintf("</tr></table>\n");
+        }
 
     if (showTrackControls)
 	{

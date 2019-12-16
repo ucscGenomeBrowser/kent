@@ -586,6 +586,7 @@ extern Color shadesOfRedOnYellow[EXPR_DATA_SHADES];
 extern Color shadesOfBlueOnYellow[EXPR_DATA_SHADES];
 
 extern boolean chromosomeColorsMade; /* Have the 3 shades of 8 chromosome colors been allocated? */
+extern boolean doPliColors; /* Put up the color legend for the gnomAD pLI track */
 extern boolean exprBedColorsMade; /* Have the shades of Green, Red, and Blue been allocated? */
 extern int maxRGBShade;
 

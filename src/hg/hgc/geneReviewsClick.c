@@ -10,12 +10,28 @@ void doGeneReviews(struct trackDb *tdb, char *itemName)
 /* generate the detail page for geneReviews */
 {
 struct sqlConnection *conn = hAllocConn(database);
-//char *table = tdb->table;
+char *table = tdb->table;
 int start = cartInt(cart, "o");
 int num = 4;
 
  genericHeader(tdb, itemName);
- genericBedClick(conn, tdb, itemName, start, num);
+ //removed genericBedClick(conn, tdb, itemName, start, num) and copied from there this more customized code
+
+ char query[512];
+ char **row;
+ struct bed *bed;
+ boolean hasBin = TRUE;
+ struct sqlResult *sr;
+
+ sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+	    table, itemName, seqName, start);
+ sr = sqlGetResult(conn, query);
+ while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row+hasBin, num);
+    printf("<B>Link to Gene Review:</B> <a href='https://www.ncbi.nlm.nih.gov/books/NBK1116/?term=%s' target=_blank>%s</a><BR>\n", bed->name, bed->name);
+    printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL, TRUE, bed->name);
+    }
  prGeneReviews(conn, itemName);
  printf("<BR>");
  printTrackHtml(tdb);

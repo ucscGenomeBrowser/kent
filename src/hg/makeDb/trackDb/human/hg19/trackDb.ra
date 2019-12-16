@@ -235,6 +235,52 @@ track gwasCatalog override
 snpTable snp144
 snpVersion 144
 
+track liftHg38
+shortLabel hg38 Mapping
+longLabel hg38 Mappings: UCSC LiftOver and NCBI ReMap
+group map
+visibility hide
+priority 499
+type chain
+compositeTrack on
+release alpha
+
+        track liftOverHg38
+        shortLabel UCSC liftOver to hg38
+        longLabel UCSC liftOver alignments to hg38
+        priority 1
+        type chain hg38
+        matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+        matrixHeader A, C, G, T
+        otherDb hg38
+        chainMinScore 3000
+        chainLinearGap medium
+        parent liftHg38
+
+        track chainHg38ReMap
+        shortLabel NCBI ReMap hg38
+        longLabel NCBI ReMap alignments to hg38/GRCh38
+        priority 2
+        type chain hg38
+        matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+        matrixHeader A, C, G, T
+        otherDb hg38
+        chainMinScore 3000
+        chainLinearGap medium
+        parent liftHg38
+
+        track chainHg38ReMapAxtChain
+        shortLabel ReMap + axtChain hg38
+        longLabel NCBI ReMap alignments to hg38/GRCh38, joined by axtChain
+        priority 3
+        type chain hg38
+        matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+        matrixHeader A, C, G, T
+        otherDb hg38
+        chainMinScore 3000
+        chainLinearGap medium
+        parent liftHg38
+
 track ucscRetroAli5
 shortLabel Retroposed Genes
 longLabel Retroposed Genes V5, Including Pseudogenes
