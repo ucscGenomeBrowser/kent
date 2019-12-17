@@ -23,7 +23,6 @@
 <hr>
 <p>
 <strong>Other resources:</strong>
-<td>
   <ul><strong>
     <li><a class="toc" href="http://genome.ucsc.edu/blog/genome-browser-in-a-box-gbib-origins/" 
      target="_blank">UCSC blog post about GBiB</a></li>
@@ -282,6 +281,15 @@ The above commands will rsync all of the files at the UCSC hgdownload server in 
 that start with wgEncodeGencode to your GBiB into the hg19 directory. There are some supporting
 files in a hgFixed directory, such as for the publication tracks, that could be mirrored with such
 commands.</p>
+<p>
+Here is another example for hg38 where the following commands would download all the supporting
+encRegTfbs and factorbook tables for the Transcription Factor ChIP-seq Clusters track:
+<pre>
+<code>sudo rsync hgdownload.soe.ucsc.edu::mysql/hg38/encRegTfbs* /data/mysql/hg38/.</code>
+</pre>
+<pre>
+<code>sudo rsync hgdownload.soe.ucsc.edu::mysql/hg38/factor* /data/mysql/hg38/.</code>
+</pre>
 <p>
 You can also download gbdb files in this manner.
 <pre>
