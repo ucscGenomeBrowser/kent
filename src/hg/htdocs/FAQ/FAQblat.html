@@ -91,13 +91,15 @@ the In-Silico PCR tool is more sensitive and should be preferred for pairs of pr
 Another problematic case are sequences in repeats, as BLAT skips the most repetitive 
 parts of the query and also limits the number of best matches it finds.
 The online version of Blat masks 11mers from the query that occur more than 1024 times in the 
-genome and also stops searching once it has found a certain number of optimal matches on a chromosome.
-This is done to improve speed, but can result in missed hits when you are searching for 
-sequences in repeats. In these cases, a small subset of matches is found and these
-are only part of all optimal matches in the genome. Often, you can use the self-chain track to 
-find the other matches, but only if the other matches are long enough. You can always work around
-this limitation but adding more flanking sequence to your query, to make the query unique enough.
-You can check whether any sequence is indeed present at a particular location 
+genome and also stops searching once it has found a certain number of matches on a chromosome
+(repMatch, this is set to 100 on our BLAT web servers).  This is done to
+improve speed, but can result in missed hits when you are searching for
+sequences in repeats. In these cases, a small subset of matches is found and
+these are only part of all optimal matches in the genome. Often, you can use
+the self-chain track to find the other matches, but only if the other matches
+are long enough. You can always work around this limitation but adding more
+flanking sequence to your query, to make the query unique enough.  You can
+check whether any sequence is indeed present at a particular location 
 by using the <a href="../cgi-bin/hgTrackUi?db=hg38&g=oligoMatch">"Short match" track</a>. 
 </p>
 
@@ -105,7 +107,8 @@ by using the <a href="../cgi-bin/hgTrackUi?db=hg38&g=oligoMatch">"Short match" t
 If your input sequence is not one of the very repetitive sequences, but still
 present a few dozen times on a chromosome, note that Blat results are limited
 to 16 results per chromosome strand. This means that at most 32 locations
-per chromosome are returned.
+per chromosome are returned. The returned results are not necessarily the 
+highest-scoring ones.
 </p>
 <p>
 To find all matches for repetitive sequences with the online version of Blat, you can add more flanking sequence to your 

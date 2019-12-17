@@ -910,6 +910,20 @@ for (childFp = child->posList; childFp != NULL; childFp = childFp->next)
 static boolean isFilter(char *name)
 /* Check to see if this is one of the filter variables that have arbitrary initial strings. */
 {
+if (startsWith("filter.", name))
+    return TRUE;
+if (startsWith("filterValues.", name))
+    return TRUE;
+if (startsWith("filterType.", name))
+    return TRUE;
+if (startsWith("filterLimits.", name))
+    return TRUE;
+if (startsWith("filterLabel.", name))
+    return TRUE;
+if (startsWith("filterByRange.", name))
+    return TRUE;
+if (startsWith("filterText.", name))
+    return TRUE;
 if (endsWith(name, "Filter"))
     return TRUE;
 if (endsWith(name, "FilterValues"))
