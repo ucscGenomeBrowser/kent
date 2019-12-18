@@ -752,6 +752,9 @@ void indelEnabled(struct cart *cart, struct trackDb *tdb, float basesPerPixel,
 /* Query cart & trackDb to determine what indel display (if any) is enabled. Set
  * basesPerPixel to -1.0 to disable check for zoom level.  */
 
+void bamAddBaseAndIndelSettings(struct trackDb *tdb);
+/* Unless already set in tdb, add settings to enable base-level differences and indel display. */
+
 /*** Some Stuff for the base position (ruler) controls ***/
 
 #define ZOOM_1PT5X      "1.5x"
