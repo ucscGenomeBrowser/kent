@@ -39,7 +39,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s001 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain cavPor2
         otherDb cavPor2
 
@@ -87,7 +87,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s005a clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain dipOrd1
         otherDb dipOrd1
 
@@ -119,7 +119,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s008 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain hetGla1
         otherDb hetGla1
 
@@ -167,7 +167,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s013 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain mm9
         otherDb mm9
 
@@ -175,7 +175,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s014 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain mm8
         otherDb mm8
 
@@ -183,7 +183,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s015 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain mm7
         otherDb mm7
 
@@ -191,7 +191,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s016 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain mm6
         otherDb mm6
 
@@ -215,7 +215,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s019 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain ochPri2
         otherDb ochPri2
 
@@ -263,7 +263,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s025 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain rn5
         otherDb rn5
 
@@ -279,7 +279,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s027 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain rn3
         otherDb rn3
 
@@ -287,7 +287,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s028 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain rn2
         otherDb rn2
 
@@ -303,7 +303,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s030 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain speTri1
         otherDb speTri1
 
@@ -351,7 +351,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s036 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain canFam1
         otherDb canFam1
 
@@ -359,7 +359,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s037 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain canFamPoodle1
         otherDb canFamPoodle1
 
@@ -391,7 +391,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s040 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain felCat4
         otherDb felCat4
 
@@ -399,7 +399,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s041 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain felCat3
         otherDb felCat3
 
@@ -495,7 +495,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s052 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain bosTau7
         otherDb bosTau7
 
@@ -503,7 +503,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s053 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain bosTau6
         otherDb bosTau6
 
@@ -511,7 +511,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s054 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain bosTau5
         otherDb bosTau5
 
@@ -519,7 +519,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s055 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain bosTau4
         otherDb bosTau4
 
@@ -527,7 +527,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s056 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain bosTau3
         otherDb bosTau3
 
@@ -535,7 +535,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s057 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain bosTauMd3
         otherDb bosTauMd3
 
@@ -543,7 +543,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s058 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain bosTau2
         otherDb bosTau2
 
@@ -551,7 +551,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s059 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain bosTau1
         otherDb bosTau1
 
@@ -615,7 +615,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s065c clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain oviAri1
         otherDb oviAri1
 
@@ -647,7 +647,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s070 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain susScr3
         otherDb susScr3
 
@@ -655,7 +655,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s071 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain susScr2
         otherDb susScr2
 
@@ -663,7 +663,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s072 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain susScr1
         otherDb susScr1
 
@@ -679,7 +679,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s074 clade=c02
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain turTru1
         otherDb turTru1
 
@@ -751,7 +751,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s083 clade=c03
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain myoLuc1
         otherDb myoLuc1
 
@@ -815,7 +815,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s091 clade=c04
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain eriEur1
         otherDb eriEur1
 
@@ -839,7 +839,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s094 clade=c04
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain sorAra1
         otherDb sorAra1
 
@@ -871,7 +871,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s096c clade=c05
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain equCab1
         otherDb equCab1
 
@@ -903,7 +903,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s101 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain dasNov2
         otherDb dasNov2
 
@@ -911,7 +911,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s102 clade=c06
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain dasNov1
         otherDb dasNov1
 
@@ -959,7 +959,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s108 clade=c07
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain loxAfr2
         otherDb loxAfr2
 
@@ -967,7 +967,7 @@ priority 8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=s109 clade=c07
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain loxAfr1
         otherDb loxAfr1
 
@@ -1013,7 +1013,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s001 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign cavPor2 chainCavPor2
         otherDb cavPor2
 
@@ -1061,7 +1061,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s005a clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign dipOrd1 chainDipOrd1
         otherDb dipOrd1
 
@@ -1093,7 +1093,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s008 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign hetGla1 chainHetGla1
         otherDb hetGla1
 
@@ -1141,7 +1141,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s013 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign mm9 chainMm9
         otherDb mm9
 
@@ -1149,7 +1149,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s014 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign mm8 chainMm8
         otherDb mm8
 
@@ -1157,7 +1157,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s015 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign mm7 chainMm7
         otherDb mm7
 
@@ -1165,7 +1165,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s016 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign mm6 chainMm6
         otherDb mm6
 
@@ -1189,7 +1189,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s019 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign ochPri2 chainOchPri2
         otherDb ochPri2
 
@@ -1237,7 +1237,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s025 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign rn5 chainRn5
         otherDb rn5
 
@@ -1245,7 +1245,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s026 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign rn4 chainRn4
         otherDb rn4
 
@@ -1253,7 +1253,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s027 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign rn3 chainRn3
         otherDb rn3
 
@@ -1261,7 +1261,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s028 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign rn2 chainRn2
         otherDb rn2
 
@@ -1277,7 +1277,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s030 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign speTri1 chainSpeTri1
         otherDb speTri1
 
@@ -1317,7 +1317,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s035 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign canFam2 chainCanFam2
         otherDb canFam2
 
@@ -1325,7 +1325,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s036 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign canFam1 chainCanFam1
         otherDb canFam1
 
@@ -1333,7 +1333,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s037 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign canFamPoodle1 chainCanFamPoodle1
         otherDb canFamPoodle1
 
@@ -1357,7 +1357,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s039 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign felCat5 chainFelCat5
         otherDb felCat5
 
@@ -1365,7 +1365,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s040 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign felCat4 chainFelCat4
         otherDb felCat4
 
@@ -1373,7 +1373,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s041 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign felCat3 chainFelCat3
         otherDb felCat3
 
@@ -1477,7 +1477,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s053 clade=c02
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign bosTau6 chainBosTau6
         otherDb bosTau6
 
@@ -1485,7 +1485,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s054 clade=c02
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign bosTau5 chainBosTau5
         otherDb bosTau5
 
@@ -1493,7 +1493,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s055 clade=c02
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign bosTau4 chainBosTau4
         otherDb bosTau4
 
@@ -1501,7 +1501,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s056 clade=c02
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign bosTau3 chainBosTau3
         otherDb bosTau3
 
@@ -1509,7 +1509,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s057 clade=c02
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign bosTauMd3 chainBosTauMd3
         otherDb bosTauMd3
 
@@ -1517,7 +1517,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s058 clade=c02
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign bosTau2 chainBosTau2
         otherDb bosTau2
 
@@ -1525,7 +1525,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s059 clade=c02
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign bosTau1 chainBosTau1
         otherDb bosTau1
 
@@ -1621,7 +1621,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s070 clade=c02
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign susScr3 chainSusScr3
         otherDb susScr3
 
@@ -1629,7 +1629,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s071 clade=c02
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign susScr2 chainSusScr2
         otherDb susScr2
 
@@ -1637,7 +1637,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s072 clade=c02
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign susScr1 chainSusScr1
         otherDb susScr1
 
@@ -1653,7 +1653,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s074 clade=c02
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign turTru1 chainTurTru1
         otherDb turTru1
 
@@ -1669,7 +1669,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s076 clade=c02
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign vicPac1 chainVicPac1
         otherDb vicPac1
 
@@ -1725,7 +1725,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s083 clade=c03
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign myoLuc1 chainMyoLuc1
         otherDb myoLuc1
 
@@ -1789,7 +1789,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s091 clade=c04
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign eriEur1 chainEriEur1
         otherDb eriEur1
 
@@ -1813,7 +1813,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s094 clade=c04
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign sorAra1 chainSorAra1
         otherDb sorAra1
 
@@ -1845,7 +1845,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s096c clade=c05
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign equCab1 chainEquCab1
         otherDb equCab1
 
@@ -1877,7 +1877,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s101 clade=c06
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign dasNov2 chainDasNov2
         otherDb dasNov2
 
@@ -1885,7 +1885,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s102 clade=c06
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign dasNov1 chainDasNov1
         otherDb dasNov1
 
@@ -1909,7 +1909,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s105 clade=c07
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign echTel1 chainEchTel1
         otherDb echTel1
 
@@ -1933,7 +1933,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s108 clade=c07
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign loxAfr2 chainLoxAfr2
         otherDb loxAfr2
 
@@ -1941,7 +1941,7 @@ priority 8
         subTrack placentalChainNetViewnet off
         subGroups view=net species=s109 clade=c07
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign loxAfr1 chainLoxAfr1
         otherDb loxAfr1
 

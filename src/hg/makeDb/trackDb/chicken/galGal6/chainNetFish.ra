@@ -39,7 +39,7 @@ otherDb galGal6
         subTrack fishChainNetViewchain off
         subGroups view=chain species=s001 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain angJap1
         otherDb angJap1
 
@@ -47,7 +47,7 @@ otherDb galGal6
         subTrack fishChainNetViewchain off
         subGroups view=chain species=s002 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain oreNil3
         otherDb oreNil3
 
@@ -71,7 +71,7 @@ otherDb galGal6
         subTrack fishChainNetViewchain off
         subGroups view=chain species=s005 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain mayZeb1
         otherDb mayZeb1
 
@@ -87,7 +87,7 @@ otherDb galGal6
         subTrack fishChainNetViewchain off
         subGroups view=chain species=s007 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain tetNig1
         otherDb tetNig1
 
@@ -95,7 +95,7 @@ otherDb galGal6
         subTrack fishChainNetViewchain off
         subGroups view=chain species=s008 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain fr3
         otherDb fr3
 
@@ -117,7 +117,7 @@ otherDb galGal6
         subTrack fishChainNetViewnet off
         subGroups view=net species=s001 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign angJap1 chainAngJap1
         otherDb angJap1
 
@@ -125,7 +125,7 @@ otherDb galGal6
         subTrack fishChainNetViewnet off
         subGroups view=net species=s002 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign oreNil3 chainOreNil3
         otherDb oreNil3
 
@@ -149,7 +149,7 @@ otherDb galGal6
         subTrack fishChainNetViewnet off
         subGroups view=net species=s005 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign mayZeb1 chainMayZeb1
         otherDb mayZeb1
 
@@ -165,7 +165,7 @@ otherDb galGal6
         subTrack fishChainNetViewnet off
         subGroups view=net species=s007 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign tetNig1 chainTetNig1
         otherDb tetNig1
 
@@ -173,7 +173,7 @@ otherDb galGal6
         subTrack fishChainNetViewnet off
         subGroups view=net species=s008 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign fr3 chainFr3
         otherDb fr3
 
