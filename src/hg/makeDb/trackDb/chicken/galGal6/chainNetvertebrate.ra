@@ -31,7 +31,7 @@ otherDb galGal6
         subTrack vertebrateChainNetViewchain on
         subGroups view=chain species=s000 clade=c00
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain hg38
         otherDb hg38
         visibility dense
@@ -49,7 +49,7 @@ otherDb galGal6
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=s002 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain chrPic2
         otherDb chrPic2
 
@@ -57,7 +57,7 @@ otherDb galGal6
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=s003 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain cheMyd1
         otherDb cheMyd1
 
@@ -65,7 +65,7 @@ otherDb galGal6
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=s004 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain allSin1
         otherDb allSin1
 
@@ -81,7 +81,7 @@ otherDb galGal6
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=s006 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain pelSin1
         otherDb pelSin1
 
@@ -89,7 +89,7 @@ otherDb galGal6
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=s007 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain apaSpi1
         otherDb apaSpi1
 
@@ -97,7 +97,7 @@ otherDb galGal6
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=s008 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain pytBiv1
         otherDb pytBiv1
 
@@ -137,7 +137,7 @@ otherDb galGal6
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=s013 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain nanPar1
         otherDb nanPar1
 
@@ -153,7 +153,7 @@ otherDb galGal6
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=s015 clade=c01
         shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
+        longLabel $o_Organism ($o_date) Chained Alignments
         type chain letCam1
         otherDb letCam1
 
@@ -166,7 +166,7 @@ otherDb galGal6
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=s000 clade=c00
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign hg38 chainHg38
         otherDb hg38
 
@@ -182,7 +182,7 @@ otherDb galGal6
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=s002 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign chrPic2 chainChrPic2
         otherDb chrPic2
 
@@ -190,7 +190,7 @@ otherDb galGal6
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=s003 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign cheMyd1 chainCheMyd1
         otherDb cheMyd1
 
@@ -198,7 +198,7 @@ otherDb galGal6
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=s004 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign allSin1 chainAllSin1
         otherDb allSin1
 
@@ -214,7 +214,7 @@ otherDb galGal6
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=s006 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign pelSin1 chainPelSin1
         otherDb pelSin1
 
@@ -222,7 +222,7 @@ otherDb galGal6
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=s007 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign apaSpi1 chainApaSpi1
         otherDb apaSpi1
 
@@ -230,7 +230,7 @@ otherDb galGal6
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=s008 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign pytBiv1 chainPytBiv1
         otherDb pytBiv1
 
@@ -270,7 +270,7 @@ otherDb galGal6
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=s013 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign nanPar1 chainNanPar1
         otherDb nanPar1
 
@@ -286,7 +286,7 @@ otherDb galGal6
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=s015 clade=c01
         shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
+        longLabel $o_Organism ($o_date) Alignment Net
         type netAlign letCam1 chainLetCam1
         otherDb letCam1
 
