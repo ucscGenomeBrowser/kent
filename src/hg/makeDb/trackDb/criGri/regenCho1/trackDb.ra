@@ -31,3 +31,5 @@ visibility hide
 type bed 4 .
 color 0,0,0
 altColor 80,80,80
+
+include trackDb.7way.ra

@@ -15,7 +15,6 @@ int start = cartInt(cart, "o");
 int num = 4;
 
  genericHeader(tdb, itemName);
- //removed genericBedClick(conn, tdb, itemName, start, num) and copied from there this more customized code
 
  char query[512];
  char **row;
@@ -29,7 +28,7 @@ int num = 4;
  while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+hasBin, num);
-    printf("<B>Link to Gene Review:</B> <a href='https://www.ncbi.nlm.nih.gov/books/NBK1116/?term=%s' target=_blank>%s</a><BR>\n", bed->name, bed->name);
+    printf("<B>Link to Gene Reviews:</B> <a href='https://www.ncbi.nlm.nih.gov/books/NBK1116/?term=%s' target=_blank>%s</a><BR>\n", bed->name, bed->name);
     printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL, TRUE, bed->name);
     }
  prGeneReviews(conn, itemName);

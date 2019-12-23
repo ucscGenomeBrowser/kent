@@ -24,15 +24,15 @@ export searchTrix=""
 # check to see if there is a searchTrix assembly index
 if [ -s ${buildDir}/trackData/assemblyGap/${asmId}.assembly.ix ]; then
   rm -f $buildDir/ixIxx/${asmId}.assembly.ix*
-  ln -s ${buildDir}/trackData/assemblyGap/${asmId}.assembly.ix $buildDir/ixIxx
-  ln -s ${buildDir}/trackData/assemblyGap/${asmId}.assembly.ixx $buildDir/ixIxx
+  ln -s ../trackData/assemblyGap/${asmId}.assembly.ix $buildDir/ixIxx
+  ln -s ../trackData/assemblyGap/${asmId}.assembly.ixx $buildDir/ixIxx
   searchTrix="
 searchTrix ixIxx/${asmId}.assembly.ix"
 fi
 
 if [ -s ${buildDir}/trackData/assemblyGap/${asmId}.assembly.bb ]; then
 rm -f $buildDir/bbi/${asmId}.assembly.bb
-ln -s $buildDir/trackData/assemblyGap/${asmId}.assembly.bb $buildDir/bbi/${asmId}.assembly.bb
+ln -s ../trackData/assemblyGap/${asmId}.assembly.bb $buildDir/bbi/${asmId}.assembly.bb
 printf "track assembly
 longLabel Assembly
 shortLabel Assembly
@@ -52,7 +52,7 @@ fi
 
 if [ -s ${buildDir}/trackData/assemblyGap/${asmId}.gap.bb ]; then
 rm -f $buildDir/bbi/${asmId}.gap.bb
-ln -s $buildDir/trackData/assemblyGap/${asmId}.gap.bb $buildDir/bbi/${asmId}.gap.bb
+ln -s ../trackData/assemblyGap/${asmId}.gap.bb $buildDir/bbi/${asmId}.gap.bb
 printf "track gap
 longLabel AGP gap
 shortLabel Gap (AGP defined)
@@ -67,7 +67,7 @@ fi
 
 if [ -s ${buildDir}/trackData/cytoBand/${asmId}.cytoBand.bb ]; then
 rm -f $buildDir/bbi/${asmId}.cytoBand.bb
-ln -s $buildDir/trackData/cytoBand/${asmId}.cytoBand.bb $buildDir/bbi/${asmId}.cytoBand.bb
+ln -s ../trackData/cytoBand/${asmId}.cytoBand.bb $buildDir/bbi/${asmId}.cytoBand.bb
 
 # printf "track cytoBand
 # shortLabel Chromosome Band
@@ -93,7 +93,7 @@ fi
 
 if [ -s ${buildDir}/trackData/gc5Base/${asmId}.gc5Base.bw ]; then
 rm -f $buildDir/bbi/${asmId}.gc5Base.bw
-ln -s $buildDir/trackData/gc5Base/${asmId}.gc5Base.bw $buildDir/bbi/${asmId}.gc5Base.bw
+ln -s ../trackData/gc5Base/${asmId}.gc5Base.bw $buildDir/bbi/${asmId}.gc5Base.bw
 printf "track gc5Base
 shortLabel GC Percent
 longLabel GC Percent in 5-Base Windows
@@ -120,12 +120,12 @@ export tanDupCount=0
 if [ -s $buildDir/trackData/gapOverlap/${asmId}.gapOverlap.bb ]; then
   gapOverlapCount=`zcat $buildDir/trackData/gapOverlap/${asmId}.gapOverlap.bed.gz | wc -l`
   rm -f $buildDir/bbi/${asmId}.gapOverlap.bb
-  ln -s $buildDir/trackData/gapOverlap/${asmId}.gapOverlap.bb $buildDir/bbi/${asmId}.gapOverlap.bb
+  ln -s ../trackData/gapOverlap/${asmId}.gapOverlap.bb $buildDir/bbi/${asmId}.gapOverlap.bb
 fi
 if [ -s $buildDir/trackData/tandemDups/${asmId}.tandemDups.bb ]; then
   tanDupCount=`zcat $buildDir/trackData/tandemDups/${asmId}.tandemDups.bed.gz | wc -l`
   rm -f $buildDir/bbi/${asmId}.tandemDups.bb
-  ln -s $buildDir/trackData/tandemDups/${asmId}.tandemDups.bb $buildDir/bbi/${asmId}.tandemDups.bb
+  ln -s ../trackData/tandemDups/${asmId}.tandemDups.bb $buildDir/bbi/${asmId}.tandemDups.bb
 fi
 
 if [ "${gapOverlapCount}" -gt 0 -o "${tanDupCount}" -gt 0 ]; then
@@ -182,7 +182,7 @@ fi
 
 if [ -s ${buildDir}/trackData/repeatMasker/bbi/${asmId}.rmsk.SINE.bb ]; then
 rm -f $buildDir/bbi/${asmId}.rmsk.SINE.bb
-ln -s $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.SINE.bb $buildDir/bbi/${asmId}.rmsk.SINE.bb
+ln -s ../trackData/repeatMasker/bbi/${asmId}.rmsk.SINE.bb $buildDir/bbi/${asmId}.rmsk.SINE.bb
 printf "    track repeatMaskerSINE
     parent repeatMasker
     shortLabel SINE
@@ -197,7 +197,7 @@ fi
 
 if [ -s ${buildDir}/trackData/repeatMasker/bbi/${asmId}.rmsk.LINE.bb ]; then
 rm -f $buildDir/bbi/${asmId}.rmsk.LINE.bb
-ln -s $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.LINE.bb $buildDir/bbi/${asmId}.rmsk.LINE.bb
+ln -s ../trackData/repeatMasker/bbi/${asmId}.rmsk.LINE.bb $buildDir/bbi/${asmId}.rmsk.LINE.bb
 printf "    track repeatMaskerLINE
     parent repeatMasker
     shortLabel LINE
@@ -212,7 +212,7 @@ fi
 
 if [ -s ${buildDir}/trackData/repeatMasker/bbi/${asmId}.rmsk.LTR.bb ]; then
 rm -f $buildDir/bbi/${asmId}.rmsk.LTR.bb
-ln -s $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.LTR.bb $buildDir/bbi/${asmId}.rmsk.LTR.bb
+ln -s ../trackData/repeatMasker/bbi/${asmId}.rmsk.LTR.bb $buildDir/bbi/${asmId}.rmsk.LTR.bb
 printf "    track repeatMaskerLTR
     parent repeatMasker
     shortLabel LTR
@@ -227,7 +227,7 @@ fi
 
 if [ -s ${buildDir}/trackData/repeatMasker/bbi/${asmId}.rmsk.DNA.bb ]; then
 rm -f $buildDir/bbi/${asmId}.rmsk.DNA.bb
-ln -s $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.DNA.bb $buildDir/bbi/${asmId}.rmsk.DNA.bb
+ln -s ../trackData/repeatMasker/bbi/${asmId}.rmsk.DNA.bb $buildDir/bbi/${asmId}.rmsk.DNA.bb
 printf "    track repeatMaskerDNA
     parent repeatMasker
     shortLabel DNA
@@ -242,7 +242,7 @@ fi
 
 if [ -s ${buildDir}/trackData/repeatMasker/bbi/${asmId}.rmsk.Simple.bb ]; then
 rm -f $buildDir/bbi/${asmId}.rmsk.Simple.bb
-ln -s $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.Simple.bb $buildDir/bbi/${asmId}.rmsk.Simple.bb
+ln -s ../trackData/repeatMasker/bbi/${asmId}.rmsk.Simple.bb $buildDir/bbi/${asmId}.rmsk.Simple.bb
 printf "    track repeatMaskerSimple
     parent repeatMasker
     shortLabel Simple
@@ -257,7 +257,7 @@ fi
 
 if [ -s ${buildDir}/trackData/repeatMasker/bbi/${asmId}.rmsk.Low_complexity.bb ]; then
 rm -f $buildDir/bbi/${asmId}.rmsk.Low_complexity.bb
-ln -s $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.Low_complexity.bb $buildDir/bbi/${asmId}.rmsk.Low_complexity.bb
+ln -s ../trackData/repeatMasker/bbi/${asmId}.rmsk.Low_complexity.bb $buildDir/bbi/${asmId}.rmsk.Low_complexity.bb
 printf "    track repeatMaskerLowComplexity
     parent repeatMasker
     shortLabel Low Complexity
@@ -272,7 +272,7 @@ fi
 
 if [ -s ${buildDir}/trackData/repeatMasker/bbi/${asmId}.rmsk.Satellite.bb ]; then
 rm -f $buildDir/bbi/${asmId}.rmsk.Satellite.bb
-ln -s $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.Satellite.bb $buildDir/bbi/${asmId}.rmsk.Satellite.bb
+ln -s ../trackData/repeatMasker/bbi/${asmId}.rmsk.Satellite.bb $buildDir/bbi/${asmId}.rmsk.Satellite.bb
 printf "    track repeatMaskerSatellite
     parent repeatMasker
     shortLabel Satellite
@@ -287,7 +287,7 @@ fi
 
 if [ -s ${buildDir}/trackData/repeatMasker/bbi/${asmId}.rmsk.RNA.bb ]; then
 rm -f $buildDir/bbi/${asmId}.rmsk.RNA.bb
-ln -s $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.RNA.bb $buildDir/bbi/${asmId}.rmsk.RNA.bb
+ln -s ../trackData/repeatMasker/bbi/${asmId}.rmsk.RNA.bb $buildDir/bbi/${asmId}.rmsk.RNA.bb
 printf "    track repeatMaskerRNA
     parent repeatMasker
     shortLabel RNA
@@ -302,7 +302,7 @@ fi
 
 if [ -s ${buildDir}/trackData/repeatMasker/bbi/${asmId}.rmsk.Other.bb ]; then
 rm -f $buildDir/bbi/${asmId}.rmsk.Other.bb
-ln -s $buildDir/trackData/repeatMasker/bbi/${asmId}.rmsk.Other.bb $buildDir/bbi/${asmId}.rmsk.Other.bb
+ln -s ../trackData/repeatMasker/bbi/${asmId}.rmsk.Other.bb $buildDir/bbi/${asmId}.rmsk.Other.bb
 printf "    track repeatMaskerOther
     parent repeatMasker
     shortLabel Other
@@ -317,7 +317,7 @@ fi
 
 if [ -s ${buildDir}/trackData/simpleRepeat/simpleRepeat.bb ]; then
 rm -f $buildDir/bbi/${asmId}.simpleRepeat.bb
-ln -s $buildDir/trackData/simpleRepeat/simpleRepeat.bb $buildDir/bbi/${asmId}.simpleRepeat.bb
+ln -s ../trackData/simpleRepeat/simpleRepeat.bb $buildDir/bbi/${asmId}.simpleRepeat.bb
 printf "track simpleRepeat
 shortLabel Simple Repeats
 longLabel Simple Tandem Repeats by TRF
@@ -343,9 +343,9 @@ if [ -s ${buildDir}/trackData/ncbiGene/$asmId.ncbiGene.bb ]; then
 rm -f $buildDir/bbi/${asmId}.ncbiGene.bb
 rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ix
 rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ixx
-ln -s $buildDir/trackData/ncbiGene/$asmId.ncbiGene.bb $buildDir/bbi/${asmId}.ncbiGene.bb
-ln -s $buildDir/trackData/ncbiGene/$asmId.ncbiGene.ix $buildDir/ixIxx/${asmId}.ncbiGene.ix
-ln -s $buildDir/trackData/ncbiGene/$asmId.ncbiGene.ixx $buildDir/ixIxx/${asmId}.ncbiGene.ixx
+ln -s ../trackData/ncbiGene/$asmId.ncbiGene.bb $buildDir/bbi/${asmId}.ncbiGene.bb
+ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ix $buildDir/ixIxx/${asmId}.ncbiGene.ix
+ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ixx $buildDir/ixIxx/${asmId}.ncbiGene.ixx
   printf "track ncbiGene
 longLabel NCBI gene predictions
 shortLabel NCBI Genes
@@ -389,7 +389,7 @@ html html/%s.cpgIslands\n\n" "${asmId}"
 fi
 
 if [ -s ${buildDir}/trackData/cpgIslands/masked/${asmId}.cpgIslandExt.bb ]; then
-ln -s ${buildDir}/trackData/cpgIslands/masked/${asmId}.cpgIslandExt.bb ${buildDir}/bbi/${asmId}.cpgIslandExt.bb
+ln -s ../trackData/cpgIslands/masked/${asmId}.cpgIslandExt.bb ${buildDir}/bbi/${asmId}.cpgIslandExt.bb
 printf "    track cpgIslandExt
     parent cpgIslands %s
     shortLabel CpG Islands
@@ -400,7 +400,7 @@ printf "    track cpgIslandExt
 fi
 
 if [ -s ${buildDir}/trackData/cpgIslands/unmasked/${asmId}.cpgIslandExtUnmasked.bb ]; then
-ln -s ${buildDir}/trackData/cpgIslands/unmasked/${asmId}.cpgIslandExtUnmasked.bb ${buildDir}/bbi/${asmId}.cpgIslandExtUnmasked.bb
+ln -s ../trackData/cpgIslands/unmasked/${asmId}.cpgIslandExtUnmasked.bb ${buildDir}/bbi/${asmId}.cpgIslandExtUnmasked.bb
 printf "    track cpgIslandExtUnmasked
     parent cpgIslands on
     shortLabel Unmasked CpG
@@ -418,7 +418,7 @@ fi
 # windowMasker
 if [ -s ${buildDir}/trackData/windowMasker/${asmId}.windowMasker.bb ]; then
 rm -f ${buildDir}/bbi/${asmId}.windowMasker.bb
-ln -s ${buildDir}/trackData/windowMasker/${asmId}.windowMasker.bb ${buildDir}/bbi/${asmId}.windowMasker.bb
+ln -s ../trackData/windowMasker/${asmId}.windowMasker.bb ${buildDir}/bbi/${asmId}.windowMasker.bb
 
 printf "track windowMasker
 shortLabel WM + SDust
@@ -435,7 +435,7 @@ fi
 # allGaps
 if [ -s ${buildDir}/trackData/allGaps/${asmId}.allGaps.bb ]; then
 rm -f ${buildDir}/bbi/${asmId}.allGaps.bb
-ln -s ${buildDir}/trackData/allGaps/${asmId}.allGaps.bb ${buildDir}/bbi/${asmId}.allGaps.bb
+ln -s ../trackData/allGaps/${asmId}.allGaps.bb ${buildDir}/bbi/${asmId}.allGaps.bb
 
 printf "track allGaps
 shortLabel All Gaps
@@ -452,7 +452,7 @@ fi
 # augustus genes
 if [ -s ${buildDir}/trackData/augustus/${asmId}.augustus.bb ]; then
 rm -f ${buildDir}/bbi/${asmId}.augustus.bb
-ln -s ${buildDir}/trackData/augustus/${asmId}.augustus.bb ${buildDir}/bbi/${asmId}.augustus.bb
+ln -s ../trackData/augustus/${asmId}.augustus.bb ${buildDir}/bbi/${asmId}.augustus.bb
 
 export augustusVis="dense"
 
@@ -477,9 +477,9 @@ if [ -s ${buildDir}/trackData/xenoRefGene/${asmId}.xenoRefGene.bb ]; then
 rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ix
 rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ixx
 rm -f ${buildDir}/bbi/${asmId}.xenoRefGene.bb
-ln -s ${buildDir}/trackData/xenoRefGene/${asmId}.xenoRefGene.bb ${buildDir}/bbi/${asmId}.xenoRefGene.bb
-ln -s $buildDir/trackData/xenoRefGene/$asmId.xenoRefGene.ix $buildDir/ixIxx/${asmId}.xenoRefGene.ix
-ln -s $buildDir/trackData/xenoRefGene/$asmId.xenoRefGene.ixx $buildDir/ixIxx/${asmId}.xenoRefGene.ixx
+ln -s ../trackData/xenoRefGene/${asmId}.xenoRefGene.bb ${buildDir}/bbi/${asmId}.xenoRefGene.bb
+ln -s ../trackData/xenoRefGene/$asmId.xenoRefGene.ix $buildDir/ixIxx/${asmId}.xenoRefGene.ix
+ln -s ../trackData/xenoRefGene/$asmId.xenoRefGene.ixx $buildDir/ixIxx/${asmId}.xenoRefGene.ixx
 
 printf "track xenoRefGene
 shortLabel RefSeq mRNAs
@@ -500,7 +500,7 @@ fi
 # gapOverlap
 # if [ -s ${buildDir}/trackData/gapOverlap/${asmId}.gapOverlap.bb ]; then
 # rm -f ${buildDir}/bbi/${asmId}.gapOverlap.bb
-# ln -s ${buildDir}/trackData/gapOverlap/${asmId}.gapOverlap.bb ${buildDir}/bbi/${asmId}.gapOverlap.bb
+# ln -s ../trackData/gapOverlap/${asmId}.gapOverlap.bb ${buildDir}/bbi/${asmId}.gapOverlap.bb
 
 # printf "track gapOverlap
 # shortLabel Gap Overlaps
@@ -522,7 +522,7 @@ printf "# Plink: ${buildDir}/trackData/ensGene/process/bbi/${asmId}.ensGene.bb $
 if [ -s ${buildDir}/trackData/ensGene/process/bbi/${asmId}.ensGene.bb ]; then
 printf "# link: ${buildDir}/trackData/ensGene/process/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb\n" 1>&2
 rm -f ${buildDir}/bbi/${asmId}.ensGene.bb
-ln -s ${buildDir}/trackData/ensGene/process/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb
+ln -s ../trackData/ensGene/process/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb
 
 printf "track ensGene
 shortLabel Ensembl genes

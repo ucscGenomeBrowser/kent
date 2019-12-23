@@ -1339,6 +1339,28 @@ void indelShowOptions(struct cart *cart, struct trackDb *tdb)
 indelShowOptionsWithName(cart, tdb, tdb->track);
 }
 
+#define BAM_DEFAULT_SHOW_DIFF_BASES_MAX_ZOOM "100"
+
+void bamAddBaseAndIndelSettings(struct trackDb *tdb)
+/* Unless already set in tdb, add settings to enable base-level differences and indel display. */
+{
+struct hash *settings = tdb->settingsHash;
+if (!hashLookup(settings, BASE_COLOR_USE_SEQUENCE))
+    hashAdd(settings, BASE_COLOR_USE_SEQUENCE, cloneString("lfExtra"));
+if (!hashLookup(settings, BASE_COLOR_DEFAULT))
+    hashAdd(settings, BASE_COLOR_DEFAULT, cloneString(BASE_COLOR_DRAW_DIFF_BASES));
+if (!hashLookup(settings, SHOW_DIFF_BASES_ALL_SCALES))
+    hashAdd(settings, SHOW_DIFF_BASES_ALL_SCALES, cloneString("."));
+if (!hashLookup(settings, INDEL_DOUBLE_INSERT))
+    hashAdd(settings, INDEL_DOUBLE_INSERT, cloneString("on"));
+if (!hashLookup(settings, INDEL_QUERY_INSERT))
+    hashAdd(settings, INDEL_QUERY_INSERT, cloneString("on"));
+if (!hashLookup(settings, INDEL_POLY_A))
+    hashAdd(settings, INDEL_POLY_A, cloneString("on"));
+if (!hashLookup(settings, "showDiffBasesMaxZoom"))
+    hashAdd(settings, "showDiffBasesMaxZoom", cloneString(BAM_DEFAULT_SHOW_DIFF_BASES_MAX_ZOOM));
+}
+
 /****** base position (ruler) controls *******/
 
 static char *zoomOptions[] = 
@@ -7474,6 +7496,10 @@ char cartVarName[1024];
 
 printf("<TABLE%s><TR><TD>",boxed?" width='100%'":"");
 
+bamAddBaseAndIndelSettings(tdb);
+// Deal with tdb being from a subtrack when a view is being configured, ugh:
+if (differentString(tdb->track, name) && tdb->parent != NULL && sameString(tdb->parent->type, "bam"))
+    bamAddBaseAndIndelSettings(tdb->parent);
 #ifdef NOTNOW  // temporarily (?) remove this check box because code doesn't allow for setting wiggle options
 char *showWig = cartOrTdbString(cart, tdb, BAMWIG_MODE, "0");
 safef(cartVarName, sizeof(cartVarName), "%s.%s", name, BAMWIG_MODE);
@@ -7506,14 +7532,6 @@ cgiMakeIntVar(cartVarName,
               atoi(cartOrTdbString(cart, tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT)), 4);
 printf("</TD></TR></TABLE>");
 
-if (isCustomTrack(name))
-    {
-    // Auto-magic baseColor defaults for BAM, same as in hgTracks.c newCustomTrack
-    hashAdd(tdb->settingsHash, BASE_COLOR_USE_SEQUENCE, cloneString("lfExtra"));
-    hashAdd(tdb->settingsHash, BASE_COLOR_DEFAULT, cloneString("diffBases"));
-    hashAdd(tdb->settingsHash, SHOW_DIFF_BASES_ALL_SCALES, cloneString("."));
-    hashAdd(tdb->settingsHash, "showDiffBasesMaxZoom", cloneString("100"));
-    }
 baseColorDropLists(cart, tdb, name);
 puts("<BR>");
 indelShowOptionsWithName(cart, tdb, name);

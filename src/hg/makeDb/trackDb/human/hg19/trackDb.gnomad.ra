@@ -272,15 +272,18 @@ priority 9
 
 track gnomadPLI
 shortLabel gnomAD pLoF Metrics
-longLabel gnomAD predicted loss of function metrics
+longLabel gnomAD Predicted Loss of Function Constraint Metrics
 compositeTrack On
 group varRep
 type bigBed 12 +
+filter._pli 0:1
+filterLabel._pli Show only items between this pLI range
+filterByRange._pli on
 release alpha
 
     track pliByGene
-    shortLabel Gene LoF
-    longLabel LoF Constrained Metrics By Gene
+    shortLabel gnomAD Gene LoF
+    longLabel gnomAD Loss of Function Constraint Metrics (pLI) By Gene
     type bigBed 12 +
     mouseOverField _mouseOver
     itemRgb on
@@ -289,15 +292,15 @@ release alpha
     url https://gnomad.broadinstitute.org/gene/$$?dataset=gnomad_r2_1
     urlLabel View this Gene on the gnomAD browser
     labelFields name,geneName
-    #filter._pli 0:1
-    #filterLabel._pli Show only items between this pLI range
-    #filterByRange._pli on
+    filter._pli 0:1
+    filterLabel._pli Show only items between this pLI range
+    filterByRange._pli on
     parent gnomadPLI
     release alpha
 
     track pliByTranscript
-    shortLabel Transcript LoF
-    longLabel LoF Constrained Metrics By Transcript
+    shortLabel gnomAD Transcript LoF
+    longLabel gnomAD Loss of Function Constraint Metrics (pLI) By Transcript
     type bigBed 12 +
     mouseOverField _mouseOver
     itemRgb on
@@ -306,8 +309,8 @@ release alpha
     url https://gnomad.broadinstitute.org/transcript/$$?dataset=gnomad_r2_1
     urlLabel View this Transcript on the gnomAD browser
     labelFields name,geneName
-    #filter._pli 0:1
-    #filterLabel._pli Show only items between this pLI range
-    #filterByRange._pli on
+    filter._pli 0:1
+    filterLabel._pli Show only items between this pLI range
+    filterByRange._pli on
     parent gnomadPLI
     release alpha
