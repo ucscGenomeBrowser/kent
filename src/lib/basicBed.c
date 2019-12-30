@@ -340,7 +340,8 @@ return ret;
  *	be a failure in the vast majority of cases parsing integers,
  *	therefore, this shouldn't be too severe a performance hit.
  */
-static int itemRgbColumn(char *column9)
+int itemRgbColumn(char *column9)
+/* Convert color specification to internal format. */
 {
 int itemRgb = 0;
 /*  Allow comma separated list of rgb values here   */
