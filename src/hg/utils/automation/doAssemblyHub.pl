@@ -598,6 +598,20 @@ if [ ! -L \${asmId}_genomic.fna.gz -o \${asmId}_genomic.fna.gz -nt \$asmId.2bit 
     ln -s $assemblySource/\${asmId}_assembly_structure .
   fi
   faToTwoBit \${asmId}_genomic.fna.gz \$asmId.2bit
+  twoBitDup -keyList=stdout \$asmId.2bit > \$asmId.dupCheck.txt
+  (grep "are identical" \$asmId.dupCheck.txt || true) > \$asmId.dups.txt
+  if [ -s "\$asmId.dups.txt" ]; then
+    printf "WARNING duplicate sequences found in \$asmId.2bit\\n" 1>&2
+    grep "are identical" \$asmId.dupCheck.txt 1>&2
+    awk '{print \$3}' \$asmId.dups.txt > \$asmId.remove.dups.list
+    mv \${asmId}_genomic.fna.gz \${asmId}_genomic.fna.dups.gz
+    faSomeRecords -exclude \${asmId}_genomic.fna.dups.gz \\
+      \$asmId.remove.dups.list stdout | gzip -c > \${asmId}_genomic.fna.gz
+    rm -f \$asmId.2bit
+    faToTwoBit \${asmId}_genomic.fna.gz \$asmId.2bit
+  fi
+  rm -f \$asmId.dups.txt
+  gzip -f \$asmId.dupCheck.txt
   touch -r \${asmId}_genomic.fna.gz \$asmId.2bit
 else
   printf "# download step previously completed\\n" 1>&2
@@ -760,12 +774,18 @@ faToTwoBit -noMask *.fa.gz ../\$asmId.unmasked.2bit
 twoBitDup -keyList=stdout ../\$asmId.unmasked.2bit > \$asmId.dupCheck.txt
 (grep "are identical" \$asmId.dupCheck.txt || true) > \$asmId.dups.txt
 if [ -s "\$asmId.dups.txt" ]; then
-  printf "ERROR: duplicate sequences found in ../\$asmId.unmasked.2bit\n" 1>&2
+  printf "ERROR: duplicate sequences found in ../\$asmId.unmasked.2bit\\n" 1>&2
   grep "are identical" \$asmId.dupCheck.txt 1>&2
-  exit 255
-else
-  rm -f \$asmId.dups.txt
+  awk '{print \$3}' \$asmId.dups.txt > \$asmId.remove.dups.list
+  mv \$asmId.unmasked.2bit \$asmId.unmasked.dups.2bit
+  twoBitToFa \$asmId.unmasked.dups.2bit stdout | faSomeRecords -exclude \\
+    stdin \$asmId.remove.dups.list stdout | gzip -c > \$asmId.noDups.fasta.gz
+  rm -f ../\$asmId.2bit ../\$asmId.unmasked.2bit
+  faToTwoBit \$asmId.noDups.fasta.gz ../\$asmId.2bit
+  faToTwoBit -noMask \$asmId.noDups.fasta.gz ../\$asmId.unmasked.2bit
 fi
+rm -f \$asmId.dups.txt
+gzip -f \$asmId.dupCheck.txt
 touch -r ../download/\$asmId.2bit ../\$asmId.2bit
 touch -r ../download/\$asmId.2bit ../\$asmId.unmasked.2bit
 touch -r ../download/\$asmId.2bit ../\$asmId.agp.gz
@@ -776,14 +796,14 @@ twoBitInfo ../download/\$asmId.2bit stdout | sort -k2nr > source.\$asmId.chrom.s
 export newTotal=`ave -col=2 ../\$asmId.chrom.sizes | grep "^total"`
 export oldTotal=`ave -col=2 source.\$asmId.chrom.sizes | grep "^total"`
 if [ "\$newTotal" != "\$oldTotal" ]; then
-  printf "# ERROR: sequence construction error: not same totals source vs. new:\n" 1>&2
-  printf "# \$newTotal != \$oldTotal\n" 1>&2
+  printf "# ERROR: sequence construction error: not same totals source vs. new:\\n" 1>&2
+  printf "# \$newTotal != \$oldTotal\\n" 1>&2
   exit 255
 fi
 rm source.\$asmId.chrom.sizes
 export checkAgp=`checkAgpAndFa ../\$asmId.agp.gz ../\$asmId.2bit 2>&1 | tail -1`
 if [ "\$checkAgp" != "All AGP and FASTA entries agree - both files are valid" ]; then
-  printf "# ERROR: checkAgpAndFa \$asmId.agp.gz \$asmId.2bit failing\n" 1>&2
+  printf "# ERROR: checkAgpAndFa \$asmId.agp.gz \$asmId.2bit failing\\n" 1>&2
   exit 255
 fi
 join -t\$'\\t' <(sort ../\$asmId.chrom.sizes) <(sort \${asmId}*.names) | awk '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$3,\$2,\$1,\$2}' > \$asmId.ncbiToUcsc.lift
@@ -792,11 +812,11 @@ export c0=`cat \$asmId.ncbiToUcsc.lift | wc -l`
 export c1=`cat \$asmId.ucscToNcbi.lift | wc -l`
 export c2=`cat ../\$asmId.chrom.sizes | wc -l`
 # verify all names are accounted for
-if [ "\$c0" -ne "\$c2 ]; then
+if [ "\$c0" -ne "\$c2" ]; then
   printf "# ERROR: not all names accounted for in \$asmId.ncbiToUcsc.lift" 1>&2
   exit 255
 fi
-if [ "\$c1" -ne "\$c2 ]; then
+if [ "\$c1" -ne "\$c2" ]; then
   printf "# ERROR: not all names accounted for in \$asmId.ucscToNcbi.lift" 1>&2
   exit 255
 fi
