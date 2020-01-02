@@ -5,7 +5,7 @@ Name="GlobalReference"
 destDir=/hive/data/genomes/asmHubs/globalReference
 srcDir=${HOME}/kent/src/hg/makeDb/doc/globalReference
 
-all:: ${destDir}/genomes.txt
+all:: ${destDir}/hub.txt ${destDir}/groups.txt ${destDir}/genomes.txt
 
 abc:: ${destDir}/hub.txt ${destDir}/groups.txt
 	@ls -og ${destDir}/index.html ${destDir}/asmStats${Name}.html
@@ -26,3 +26,11 @@ ${destDir}/genomes.txt:  ${destDir}/asmStats${Name}.html ${srcDir}/mkGenomes.pl 
 ${destDir}/asmStats${Name}.html: ${destDir}/index.html ${srcDir}/mkAsmStats.pl
 	cd ${destDir} && ${srcDir}/mkAsmStats.pl > $@
 	chmod 775 $@
+
+${destDir}/hub.txt: ${srcDir}/hub.txt
+	rm -f ${destDir}/hub.txt
+	cp -p ${srcDir}/hub.txt ${destDir}/hub.txt
+
+${destDir}/groups.txt: ${srcDir}/groups.txt
+	rm -f ${destDir}/groups.txt
+	cp -p ${srcDir}/groups.txt ${destDir}/groups.txt
