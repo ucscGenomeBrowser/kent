@@ -38,17 +38,19 @@ chomp $timeStamp;
 
 print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
-<!--#set var="TITLE" value="Platinum Genomes Project assembly statistics" -->
+<!--#set var="TITLE" value="Global Reference Genomes Project assembly statistics" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
 
-<h1>Platinum Genomes Project assembly statistics</h1>
+<h1>Global Reference Genomes Project assembly statistics</h1>
 <p>
-This assembly hub contains assemblies released
-by the <a href='https://genome.cshlp.org/content/27/1/157' target=_blank>
-Platinum Genomes Project.</a>
-</p>
+This assembly hub contains assemblies collected by the 
+<a href="https://www.genome.wustl.edu/items/reference-genome-improvement/" target=_blank>Reference
+Genome Improvement Project</a> from Washington University in Saint Louis, Missouri, USA. For more
+information, contact 
+<a href="https://www.genome.wustl.edu/people/tina-graves-lindsay/" target=_blank>
+Tina Graves-Lindsay</a>.</p>
 
 <p>
 <h3>See also: <a href='index.html' target=_blank>hub access</a></h3>

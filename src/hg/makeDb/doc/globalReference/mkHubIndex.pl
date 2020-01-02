@@ -39,23 +39,25 @@ chomp $timeStamp;
 
 print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
-<!--#set var="TITLE" value="Platinum Genomes Project assembly hub" -->
+<!--#set var="TITLE" value="Global Reference Genomes assembly hubs" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
 
-<h1>Platinum Genomes Project assembly hub</h1>
+<h1>Global Reference Genomes assembly hubs</h1>
 <p>
-This assembly hub contains assemblies released
-by the <a href='https://genome.cshlp.org/content/27/1/157' target=_blank>
-Platinum Genomes Project.</a>
+This assembly hub contains ten high-quality, population-identified assemblies released
+by the <a href='https://www.genome.wustl.edu/items/reference-genome-improvement/' target=_blank>
+Reference Genome Improvement</a> project. This population list is not conclusive and 
+represents reference genomes from 10 different human populations. Thank you to 
+Washington University in Saint Louis for consolidating these open source reference genomes.
 </p>
 
 <h3>How to view the hub</h3>
 <p>
 You can load this hub from our
 <a href="https://genome.ucsc.edu/cgi-bin/hgHubConnect#publicHubs" target="_blank">Public Hubs</a> 
-page or by clicking these links to any of our official websites:
+page or by clicking these assembly links to any of our official websites:
 <ul>
   <li>
     <a href="https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubWorkDir/hub.txt&amp;genome=$defaultAssembly"
@@ -86,7 +88,7 @@ To manually attach this hub to other genome browsers:
 
 <p>
 After adding the hub, you will be redirected to the gateway page.  The
-genome assemblies can be selected from the <em>Platinum Genomes Hub Assembly</em> dropdown menu.
+genome assemblies can be selected from the <em>Reference Genome Improvement Hub Assembly</em> dropdown menu.
 </p>
 <p>
 <h3>See also: <a href='asmStats$Name.html' target=_blank>assembly statistics</a></h3>
