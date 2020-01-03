@@ -5022,6 +5022,7 @@ visibility hide
 color 0, 80, 0
 type bed 4
 html geneReviews
+url https://www.ncbi.nlm.nih.gov/books/NBK1116/?term=$$
 
 searchName geneReviews
 searchTable geneReviews
