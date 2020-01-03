@@ -256,6 +256,7 @@ release alpha
         chainMinScore 3000
         chainLinearGap medium
         parent liftHg38
+        release alpha
 
         track chainHg38ReMap
         shortLabel NCBI ReMap hg38
@@ -268,6 +269,7 @@ release alpha
         chainMinScore 3000
         chainLinearGap medium
         parent liftHg38
+        release alpha
 
         track chainHg38ReMapAxtChain
         shortLabel ReMap + axtChain hg38
@@ -280,6 +282,7 @@ release alpha
         chainMinScore 3000
         chainLinearGap medium
         parent liftHg38
+        release alpha
 
 track ucscRetroAli5
 shortLabel Retroposed Genes
