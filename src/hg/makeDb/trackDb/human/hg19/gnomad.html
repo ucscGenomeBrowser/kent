@@ -27,6 +27,28 @@ target="_blank">README</a>.</p>
     Hovering the mouse pointer over a variant pops up a display of alleles and counts.</li></dd>
 </dl>
 
+<p>
+The details for variants include extensive <em>tag=value</em> annotations extracted from the
+INFO column of gnomAD VCF files, listed under the label "INFO column annotations".
+The tags beginning with <strong>GC</strong> list genotype counts in an order that is
+fairly intuitive when a variant has two alleles:
+homozygous reference, heterozygous, homozygous alternate.
+However, when there are multiple alternate alleles, the number of combinations increases
+and the order of genotypes listed is a bit more complicated.  If the alternate alleles
+are named alt1, alt2, alt3, ... altN, then the order of genotype counts follows this pattern:
+</p><p>
+  ref/ref,
+  <br>
+  ref/alt1, alt1/alt1,
+  <br>
+  ref/alt2, alt1/alt2, alt2/alt2,
+  <br>
+  ref/alt3, alt1/alt3, alt2/alt3, alt3/alt3,
+  <br>
+  ...
+  <br>
+  ref/altN, alt1/altN, alt2/altN, alt3/altN, ..., altN/altN
+</p>
 <h2>Data Access</h2>
 
 <p>

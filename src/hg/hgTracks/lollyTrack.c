@@ -15,13 +15,6 @@
 
 #define LOLLY_DIAMETER    2 * lollyCart->radius
 
-
-/* the lolly colors */
-static int lollyPalette[] =
-{
-0x1f77b4, 0xff7f0e, 0x2ca02c, 0xd62728, 0x9467bd, 0x8c564b, 0xe377c2, 0x7f7f7f, 0xbcbd22, 0x17becf
-};
-
 struct lolly
 {
 struct lolly *next;
@@ -33,6 +26,16 @@ unsigned radius;  /* radius of the top of the lolly */
 unsigned height;  /* height of the lolly */
 Color color;      /* color of the lolly */
 };
+
+static unsigned getLollyColor( struct hvGfx *hvg, unsigned color)
+/* Get the device color from our internal definition. */
+{
+struct rgbColor itemRgb;
+itemRgb.r = (color & 0xff0000) >> 16;
+itemRgb.g = (color & 0xff00) >> 8;
+itemRgb.b = color & 0xff;
+return  hvGfxFindColorIx(hvg, itemRgb.r, itemRgb.g, itemRgb.b);
+}
 
 static void lollyDrawItems(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
@@ -51,7 +54,8 @@ if ( tg->visibility == tvDense)  // in dense mode we just track lines
     for (pop = popList; pop; pop = pop->next)
         {
         int sx = ((pop->start - seqStart) + .5) * scale + xOff; // x coord of center (lower region)
-        hvGfxLine(hvg, sx, yOff, sx , yOff+ tl.fontHeight, pop->color);
+        unsigned color =  getLollyColor(hvg, pop->color);
+        hvGfxLine(hvg, sx, yOff, sx , yOff+ tl.fontHeight, color);
         }
     return;
     }
@@ -77,7 +81,8 @@ for (pop = popList; pop; pop = pop->next)
 for (pop = popList; pop; pop = pop->next)
     {
     int sx = ((pop->start - seqStart) + .5) * scale + xOff; // x coord of center (lower region)
-    hvGfxCircle(hvg, sx, yOff + trackHeight - pop->radius - pop->height, pop->radius, pop->color, TRUE);
+    unsigned color =  getLollyColor(hvg, pop->color);
+    hvGfxCircle(hvg, sx, yOff + trackHeight - pop->radius - pop->height, pop->radius, color, TRUE);
     if ( tg->visibility != tvSquish)  
         hvGfxCircle(hvg, sx, yOff + trackHeight - pop->radius - pop->height, pop->radius, MG_BLACK, FALSE);
     if (!noMapBoxes)
@@ -130,35 +135,9 @@ static int lollyHeight(struct track *tg, enum trackVisibility vis)
 if ( tg->visibility == tvDense)
     return  tl.fontHeight;
 
-// if we're pack, then use bigBed drawing
-if (tg->visibility == tvPack)
-    {
-    bigBedMethods(tg, tg->tdb, tg->lollyCart->typeWordCount, tg->lollyCart->typeWords);
-    tg->mapsSelf = FALSE;
-    tg->drawLeftLabels = NULL;
-    return tg->totalHeight(tg, vis);
-    }
-
 // return the height we calculated at load time
 return tg->lollyCart->height;
 }
-
-#ifdef NOTUSED
-double calcVarianceFromSums(double sum, double sumSquares, bits64 n)
-/* Calculate variance. */
-{   
-double var = sumSquares - sum*sum/n;
-if (n > 1)
-    var /= n-1;
-return var;
-}   
-    
-double calcStdFromSums(double sum, double sumSquares, bits64 n)
-/* Calculate standard deviation. */
-{   
-return sqrt(calcVarianceFromSums(sum, sumSquares, n));
-}
-#endif // NOTUSED
 
 int cmpHeight(const void *va, const void *vb)
 // sort the lollies by height 
@@ -176,6 +155,11 @@ if (tg->visibility == tvSquish)
     {
     lollyCart->radius = 2;
     lollyCart->height =  lollyCart->origHeight / 3;
+    }
+else if (tg->visibility == tvPack)
+    {
+    lollyCart->radius = 4;
+    lollyCart->height =  lollyCart->origHeight / 2;
     }
 struct lm *lm = lmInit(0);
 struct bbiFile *bbi =  fetchBbiForTrack(tg);
@@ -219,9 +203,10 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     pop->start = atoi(bedRow[1]);
     pop->end = atoi(bedRow[2]);
     pop->name = cloneString(bedRow[3]);
+    pop->color = 0;
+    if (bbi->fieldCount > 8)
+        pop->color = itemRgbColumn(bedRow[8]);
     count++;
-    // sumData += val;
-    // sumSquares += val * val;
     if (val > maxVal)
         maxVal = val;
     if (val < minVal)
@@ -241,47 +226,11 @@ int usableHeight = trackHeight - 2 * LOLLY_DIAMETER;
 for(pop = popList; pop; pop = pop->next)
     {
     pop->radius = lollyCart->radius;
-    pop->color = MG_RED;
     if (range == 0.0)
-        {
         pop->height = usableHeight ;
-        pop->color = lollyPalette[0] | 0xff000000;
-        }
     else
-        {
         pop->height = usableHeight * (pop->val  - lollyCart->lowerLimit) / range + LOLLY_DIAMETER;
-        int colorIndex = floor(9.99 * (pop->val  - lollyCart->lowerLimit) / range );
-        pop->color = lollyPalette[colorIndex] | 0xff000000;
-        }
     }
-
-#ifdef NOTUSED   // a method of scaling assuming a sort of normal distribution
-double average = sumData/count;
-double stdDev = calcStdFromSums(sumData, sumSquares, count);
-
-for(pop = popList; pop; pop = pop->next)
-    {
-    if (pop->val > average + stdDev / 5)
-        {
-        pop->color = MG_RED;
-        pop->radius = 8;
-        pop->height = 3 * tl.fontHeight;
-        }
-    else if (pop->val < average - stdDev / 5)
-        {
-        pop->color = MG_GREEN;
-        pop->radius = 3;
-        pop->height = 1 * tl.fontHeight;
-        }
-    else
-        {
-        pop->color = MG_GRAY;
-        pop->radius = 5;
-        pop->height = 2 * tl.fontHeight;
-        }
-        
-    }
-#endif // NOTUSED
 
 slSort(&popList, cmpHeight);
 tg->items = popList;

@@ -282,8 +282,8 @@ filterByRange._pli on
 release alpha
 
     track pliByGene
-    shortLabel Gene LoF
-    longLabel Loss of Function Constraint Metrics By Gene
+    shortLabel gnomAD Gene LoF
+    longLabel gnomAD Loss of Function Constraint Metrics (pLI) By Gene
     type bigBed 12 +
     mouseOverField _mouseOver
     itemRgb on
@@ -299,8 +299,8 @@ release alpha
     release alpha
 
     track pliByTranscript
-    shortLabel Transcript LoF
-    longLabel Loss of Function Constraint Metrics By Transcript
+    shortLabel gnomAD Transcript LoF
+    longLabel gnomAD Loss of Function Constraint Metrics (pLI) By Transcript
     type bigBed 12 +
     mouseOverField _mouseOver
     itemRgb on

@@ -2883,6 +2883,7 @@ char *maxItemStr = trackDbSetting(tg->tdb, "maxItems");
 int maxItems = isNotEmpty(maxItemStr) ? atoi(maxItemStr) : 250000;
 bigBedAddLinkedFeaturesFromExt(tg, chromName, winStart, winEnd, freqSourceIx, 0, FALSE, 4, &lfList,
                                maxItems);
+slReverse(&lfList);
 // if the summary is filled in then the number of items in the region is greater than maxItems.
 if (tg->summary != NULL)
     {
@@ -3042,7 +3043,6 @@ if (vis == tvDense ||
 else
     {
     // Sort by position as usual
-    slReverse(&tg->items);
     slSort(&tg->items, linkedFeaturesCmp);
     }
 genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
