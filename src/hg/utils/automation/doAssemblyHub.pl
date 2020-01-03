@@ -29,6 +29,7 @@ use vars qw/
     $opt_augustusSpecies
     $opt_xenoRefSeq
     $opt_ucscNames
+    $opt_asmHubName
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -62,6 +63,7 @@ my $sourceDir = "/hive/data/outside/ncbi/genomes";
 my $augustusSpecies = "human";
 my $xenoRefSeq = "/hive/data/genomes/asmHubs/VGP/xenoRefSeq";
 my $ucscNames = 0;  # default 'FALSE' (== 0)
+my $asmHubName = "n/a";  # directory name in: /gbdb/hubs/asmHubName
 my $workhorse = "hgwdev";  # default workhorse when none chosen
 my $fileServer = "hgwdev";  # default when none chosen
 my $bigClusterHub = "ku";  # default when none chosen
@@ -95,6 +97,7 @@ options:
        $sourceDir/<genbank|refseq>/subGroup/species/all_assembly_versions/asmId
     -ucscNames        Translate NCBI/INSDC/RefSeq names to UCSC names
                       default is to use the given NCBI/INSDC/RefSeq names
+    -asmHubName <name>  directory name in: /gbdb/hubs/asmHubName
     -augustusSpecies <human|chicken|zebrafish> default 'human'
     -xenoRefSeq </path/to/xenoRefSeqMrna> - location of xenoRefMrna.fa.gz
                 expanded directory of mrnas/ and xenoRefMrna.sizes, default
@@ -114,7 +117,7 @@ Automates build of assembly hub.  Steps:
     sequence: establish AGP and 2bit file from NCBI directory
     assemblyGap: create assembly and gap bigBed files and indexes
                  for assembly track names
-    gatewayPage: create html/asmId.description.html contents
+    gatewayPage: create html/asmId.description.html contents (USE: asmHubName)
     cytoBand: create cytoBand track and navigation ideogram
     gc5Base: create bigWig file for gc5Base track
     repeatMasker: run repeat masker cluster run and create bigBed files for
@@ -172,6 +175,7 @@ sub checkOptions {
 		      'sourceDir=s',
 		      'augustusSpecies=s',
 		      'xenoRefSeq=s',
+		      'asmHubName=s',
 		      'ucscNames',
 		      @HgAutomate::commonOptionSpec,
 		      );
@@ -881,6 +885,10 @@ _EOF_
 #########################################################################
 # * step: gatewayPage [workhorse]
 sub doGatewayPage {
+  if ($asmHubName eq "n/a") {
+    printf STDERR "ERROR: step gatewayPage needs argument -asmHubName <name>\n";
+    exit 255;
+  }
   my $runDir = "$buildDir/html";
   &HgAutomate::mustMkdir($runDir);
 
@@ -904,8 +912,9 @@ export asmId=$asmId
 export species=$species
 
 \$HOME/kent/src/hg/utils/automation/asmHubGatewayPage.pl \\
-     ../download/\${asmId}_assembly_report.txt ../\${asmId}.chrom.sizes \\
-        $photoJpg $photoCredit \\
+     $asmHubName ../download/\${asmId}_assembly_report.txt \\
+       ../\${asmId}.chrom.sizes \\
+         $photoJpg $photoCredit \\
            > \$asmId.description.html 2> \$asmId.names.tab
 \$HOME/kent/src/hg/utils/automation/genbank/buildStats.pl \\
        ../\$asmId.chrom.sizes 2> \$asmId.build.stats.txt
@@ -1558,6 +1567,7 @@ $workhorse = $opt_workhorse ? $opt_workhorse : $workhorse;
 $bigClusterHub = $opt_bigClusterHub ? $opt_bigClusterHub : $bigClusterHub;
 $smallClusterHub = $opt_smallClusterHub ? $opt_smallClusterHub : $smallClusterHub;
 $fileServer = $opt_fileServer ? $opt_fileServer : $fileServer;
+$asmHubName = $opt_asmHubName ? $opt_asmHubName : $asmHubName;
 
 $assemblySource = $opt_sourceDir ? "$sourceDir" : "$sourceDir/$genbankRefseq/$subGroup/$species/all_assembly_versions/$asmId";
 
