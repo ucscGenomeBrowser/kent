@@ -29,6 +29,7 @@ use vars qw/
     $opt_augustusSpecies
     $opt_xenoRefSeq
     $opt_ucscNames
+    $opt_asmHubName
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -62,6 +63,7 @@ my $sourceDir = "/hive/data/outside/ncbi/genomes";
 my $augustusSpecies = "human";
 my $xenoRefSeq = "/hive/data/genomes/asmHubs/VGP/xenoRefSeq";
 my $ucscNames = 0;  # default 'FALSE' (== 0)
+my $asmHubName = "n/a";  # directory name in: /gbdb/hubs/asmHubName
 my $workhorse = "hgwdev";  # default workhorse when none chosen
 my $fileServer = "hgwdev";  # default when none chosen
 my $bigClusterHub = "ku";  # default when none chosen
@@ -69,6 +71,9 @@ my $smallClusterHub = "ku";  # default when none chosen
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
+
+# key is original accession name from the remove.dups.list, value is 1
+my %dupAccessionList = {};
 
 sub usage {
   # Usage / help / self-documentation:
@@ -95,6 +100,7 @@ options:
        $sourceDir/<genbank|refseq>/subGroup/species/all_assembly_versions/asmId
     -ucscNames        Translate NCBI/INSDC/RefSeq names to UCSC names
                       default is to use the given NCBI/INSDC/RefSeq names
+    -asmHubName <name>  directory name in: /gbdb/hubs/asmHubName
     -augustusSpecies <human|chicken|zebrafish> default 'human'
     -xenoRefSeq </path/to/xenoRefSeqMrna> - location of xenoRefMrna.fa.gz
                 expanded directory of mrnas/ and xenoRefMrna.sizes, default
@@ -114,7 +120,7 @@ Automates build of assembly hub.  Steps:
     sequence: establish AGP and 2bit file from NCBI directory
     assemblyGap: create assembly and gap bigBed files and indexes
                  for assembly track names
-    gatewayPage: create html/asmId.description.html contents
+    gatewayPage: create html/asmId.description.html contents (USE: asmHubName)
     cytoBand: create cytoBand track and navigation ideogram
     gc5Base: create bigWig file for gc5Base track
     repeatMasker: run repeat masker cluster run and create bigBed files for
@@ -172,6 +178,7 @@ sub checkOptions {
 		      'sourceDir=s',
 		      'augustusSpecies=s',
 		      'xenoRefSeq=s',
+		      'asmHubName=s',
 		      'ucscNames',
 		      @HgAutomate::commonOptionSpec,
 		      );
@@ -187,6 +194,21 @@ sub checkOptions {
 #########################################################################
 #  assistant subroutines here.  The 'do' steps follow this section
 #########################################################################
+#########################################################################
+# if there are duplicates in original sequence, read in that list for use here
+sub readDupsList() {
+  my $downloadDir = "$buildDir/download";
+
+  if ( -s "${downloadDir}/${asmId}.remove.dups.list" ) {
+    open (FH, "<${downloadDir}/${asmId}.remove.dups.list") or die "can not read ${downloadDir}/${asmId}.remove.dups.list";
+    while (my $accession = <FH>) {
+      chomp $accession;
+      $dupAccessionList{$accession} = 1;
+    }
+    close (FH);
+  }
+}
+
 #########################################################################
 #  return true if result does not exist or it is older than source
 #  else return false
@@ -262,7 +284,9 @@ sub compositeFasta($$$) {
 
   my ($fh, $tmpFile) = tempfile("seqList_XXXX", DIR=>'/dev/shm', SUFFIX=>'.txt', UNLINK=>1);
   foreach my $acc (sort keys %accToChr) {
-     printf $fh "%s\n", $acc;
+     if (! exists($dupAccessionList{$acc})) {
+       printf $fh "%s\n", $acc;
+     }
   }
   close $fh;
 
@@ -322,6 +346,7 @@ sub unlocalizedAgp($$$$) {
          chomp $line;
          my (@a) = split('\t', $line);
          my $ncbiAcc = $a[0];
+         next if (exists($dupAccessionList{$ncbiAcc}));
          my $acc = $ncbiAcc;
          $acc =~ s/\./v/ if ($ucscNames);
          die "ERROR: chrN $chrN not correct for $acc"
@@ -357,7 +382,9 @@ sub unlocalizedFasta($$$) {
 
   my ($fh, $tmpFile) = tempfile("seqList_XXXX", DIR=>'/dev/shm', SUFFIX=>'.txt', UNLINK=>1);
   foreach my $acc (sort keys %accToChr) {
-     printf $fh "%s\n", $acc;
+     if (! exists($dupAccessionList{$acc})) {
+       printf $fh "%s\n", $acc;
+     }
   }
   close $fh;
 
@@ -420,6 +447,7 @@ sub processAltAgp($$$) {
     chomp $line;
     my (@a) = split('\t', $line);
     my $ncbiAcc = $a[0];
+    next if (exists($dupAccessionList{$ncbiAcc}));
     my $ucscName = $nameHash->{$ncbiAcc};
     printf $fh "%s", $ucscName;  # begin AGP line with accession nam
     for (my $i = 1; $i < scalar(@a); ++$i) {  # the reset of the AGP line
@@ -463,7 +491,6 @@ sub altSequences($) {
   open (FH, "find -L '${assemblyStructure}' -type f | grep '/alt_scaffolds/alt_scaffold_placement.txt'|") or die "can not find alt_scaffolds in ${assemblyStructure}";;
   while (my $line = <FH>) {
    chomp $line;
-###   printf "%s\n", $line;
    readAltPlacement($line, \%accToChr);
   }
   close (FH);
@@ -511,8 +538,9 @@ sub unplacedAgp($$$$) {
     if ($line =~ m/^#/) {
         print AGP $line;
     } else {
+        my ($ncbiAcc, undef) = split('\s+', $line, 2);
+        next if (exists($dupAccessionList{$ncbiAcc}));
         if ($ucscNames) {
-          my ($ncbiAcc, undef) = split('\s+', $line, 2);
           my $ucscAcc = $ncbiAcc;
           $ucscAcc =~ s/\./v/;
           printf NAMES "%s%s\t%s\n", $chrPrefix, $ucscAcc, $ncbiAcc;
@@ -546,7 +574,9 @@ sub unplacedFasta($$$$) {
 
   my ($fh, $tmpFile) = tempfile("seqList_XXXX", DIR=>'/dev/shm', SUFFIX=>'.txt', UNLINK=>1);
   foreach my $ctg (sort keys %contigName) {
-     printf $fh "%s\n", $ctg;
+     if (! exists($dupAccessionList{$ctg})) {
+       printf $fh "%s\n", $ctg;
+     }
   }
   close $fh;
 
@@ -584,8 +614,9 @@ sub doDownload {
   $bossScript->add(<<_EOF_
 export asmId=$asmId
 
-if [ ! -L \${asmId}_genomic.fna.gz -o \${asmId}_genomic.fna.gz -nt \$asmId.2bit ]; then
+if [ ! -s \${asmId}.2bit -o \${asmId}_genomic.fna.gz -nt \$asmId.2bit ]; then
   rm -f \${asmId}_genomic.fna.gz \\
+    \${asmId}_genomic.fna.dups.gz \\
     \${asmId}_assembly_report.txt \\
     \${asmId}_rm.out.gz \\
     \${asmId}_assembly_structure \\
@@ -598,6 +629,18 @@ if [ ! -L \${asmId}_genomic.fna.gz -o \${asmId}_genomic.fna.gz -nt \$asmId.2bit 
     ln -s $assemblySource/\${asmId}_assembly_structure .
   fi
   faToTwoBit \${asmId}_genomic.fna.gz \$asmId.2bit
+  twoBitDup \$asmId.2bit > \$asmId.dups.txt
+  if [ -s "\$asmId.dups.txt" ]; then
+    printf "WARNING duplicate sequences found in \$asmId.2bit\\n" 1>&2
+    cat \$asmId.dups.txt 1>&2
+    awk '{print \$1}' \$asmId.dups.txt > \$asmId.remove.dups.list
+    mv \${asmId}_genomic.fna.gz \${asmId}_genomic.fna.dups.gz
+    faSomeRecords -exclude \${asmId}_genomic.fna.dups.gz \\
+      \$asmId.remove.dups.list stdout | gzip -c > \${asmId}_genomic.fna.gz
+    rm -f \$asmId.2bit
+    faToTwoBit \${asmId}_genomic.fna.gz \$asmId.2bit
+  fi
+  gzip -f \$asmId.dups.txt
   touch -r \${asmId}_genomic.fna.gz \$asmId.2bit
 else
   printf "# download step previously completed\\n" 1>&2
@@ -606,6 +649,9 @@ fi
 _EOF_
   );
   $bossScript->execute();
+
+  readDupsList();
+
 } # doDownload
 
 
@@ -757,15 +803,19 @@ printf STDERR "partsDone: %d\n", $partsDone;
 zcat *.agp.gz | gzip > ../\$asmId.agp.gz
 faToTwoBit *.fa.gz ../\$asmId.2bit
 faToTwoBit -noMask *.fa.gz ../\$asmId.unmasked.2bit
-twoBitDup -keyList=stdout ../\$asmId.unmasked.2bit > \$asmId.dupCheck.txt
-(grep "are identical" \$asmId.dupCheck.txt || true) > \$asmId.dups.txt
+twoBitDup ../\$asmId.unmasked.2bit > \$asmId.dups.txt
 if [ -s "\$asmId.dups.txt" ]; then
-  printf "ERROR: duplicate sequences found in ../\$asmId.unmasked.2bit\n" 1>&2
-  grep "are identical" \$asmId.dupCheck.txt 1>&2
-  exit 255
-else
-  rm -f \$asmId.dups.txt
+  printf "ERROR: duplicate sequences found in ../\$asmId.unmasked.2bit\\n" 1>&2
+  cat \$asmId.dups.txt 1>&2
+  awk '{print \$1}' \$asmId.dups.txt > \$asmId.remove.dups.list
+  mv ../\$asmId.unmasked.2bit ../\$asmId.unmasked.dups.2bit
+  twoBitToFa ../\$asmId.unmasked.dups.2bit stdout | faSomeRecords -exclude \\
+    stdin \$asmId.remove.dups.list stdout | gzip -c > \$asmId.noDups.fasta.gz
+  rm -f ../\$asmId.2bit ../\$asmId.unmasked.2bit
+  faToTwoBit \$asmId.noDups.fasta.gz ../\$asmId.2bit
+  faToTwoBit -noMask \$asmId.noDups.fasta.gz ../\$asmId.unmasked.2bit
 fi
+gzip -f \$asmId.dups.txt
 touch -r ../download/\$asmId.2bit ../\$asmId.2bit
 touch -r ../download/\$asmId.2bit ../\$asmId.unmasked.2bit
 touch -r ../download/\$asmId.2bit ../\$asmId.agp.gz
@@ -776,14 +826,14 @@ twoBitInfo ../download/\$asmId.2bit stdout | sort -k2nr > source.\$asmId.chrom.s
 export newTotal=`ave -col=2 ../\$asmId.chrom.sizes | grep "^total"`
 export oldTotal=`ave -col=2 source.\$asmId.chrom.sizes | grep "^total"`
 if [ "\$newTotal" != "\$oldTotal" ]; then
-  printf "# ERROR: sequence construction error: not same totals source vs. new:\n" 1>&2
-  printf "# \$newTotal != \$oldTotal\n" 1>&2
+  printf "# ERROR: sequence construction error: not same totals source vs. new:\\n" 1>&2
+  printf "# \$newTotal != \$oldTotal\\n" 1>&2
   exit 255
 fi
 rm source.\$asmId.chrom.sizes
 export checkAgp=`checkAgpAndFa ../\$asmId.agp.gz ../\$asmId.2bit 2>&1 | tail -1`
 if [ "\$checkAgp" != "All AGP and FASTA entries agree - both files are valid" ]; then
-  printf "# ERROR: checkAgpAndFa \$asmId.agp.gz \$asmId.2bit failing\n" 1>&2
+  printf "# ERROR: checkAgpAndFa \$asmId.agp.gz \$asmId.2bit failing\\n" 1>&2
   exit 255
 fi
 join -t\$'\\t' <(sort ../\$asmId.chrom.sizes) <(sort \${asmId}*.names) | awk '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$3,\$2,\$1,\$2}' > \$asmId.ncbiToUcsc.lift
@@ -792,11 +842,11 @@ export c0=`cat \$asmId.ncbiToUcsc.lift | wc -l`
 export c1=`cat \$asmId.ucscToNcbi.lift | wc -l`
 export c2=`cat ../\$asmId.chrom.sizes | wc -l`
 # verify all names are accounted for
-if [ "\$c0" -ne "\$c2 ]; then
+if [ "\$c0" -ne "\$c2" ]; then
   printf "# ERROR: not all names accounted for in \$asmId.ncbiToUcsc.lift" 1>&2
   exit 255
 fi
-if [ "\$c1" -ne "\$c2 ]; then
+if [ "\$c1" -ne "\$c2" ]; then
   printf "# ERROR: not all names accounted for in \$asmId.ucscToNcbi.lift" 1>&2
   exit 255
 fi
@@ -861,6 +911,10 @@ _EOF_
 #########################################################################
 # * step: gatewayPage [workhorse]
 sub doGatewayPage {
+  if ($asmHubName eq "n/a") {
+    printf STDERR "ERROR: step gatewayPage needs argument -asmHubName <name>\n";
+    exit 255;
+  }
   my $runDir = "$buildDir/html";
   &HgAutomate::mustMkdir($runDir);
 
@@ -884,8 +938,9 @@ export asmId=$asmId
 export species=$species
 
 \$HOME/kent/src/hg/utils/automation/asmHubGatewayPage.pl \\
-     ../download/\${asmId}_assembly_report.txt ../\${asmId}.chrom.sizes \\
-        $photoJpg $photoCredit \\
+     $asmHubName ../download/\${asmId}_assembly_report.txt \\
+       ../\${asmId}.chrom.sizes \\
+         $photoJpg $photoCredit \\
            > \$asmId.description.html 2> \$asmId.names.tab
 \$HOME/kent/src/hg/utils/automation/genbank/buildStats.pl \\
        ../\$asmId.chrom.sizes 2> \$asmId.build.stats.txt
@@ -1538,6 +1593,7 @@ $workhorse = $opt_workhorse ? $opt_workhorse : $workhorse;
 $bigClusterHub = $opt_bigClusterHub ? $opt_bigClusterHub : $bigClusterHub;
 $smallClusterHub = $opt_smallClusterHub ? $opt_smallClusterHub : $smallClusterHub;
 $fileServer = $opt_fileServer ? $opt_fileServer : $fileServer;
+$asmHubName = $opt_asmHubName ? $opt_asmHubName : $asmHubName;
 
 $assemblySource = $opt_sourceDir ? "$sourceDir" : "$sourceDir/$genbankRefseq/$subGroup/$species/all_assembly_versions/$asmId";
 

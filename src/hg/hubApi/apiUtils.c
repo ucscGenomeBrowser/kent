@@ -638,6 +638,12 @@ else if (sameOk(tableName, "decipherSnvsRaw"))
   ret = TRUE;
 else if (sameOk(tableName, "lovd"))
   ret = TRUE;
+else if (sameOk(tableName, "lovdShort"))
+  ret = TRUE;
+else if (sameOk(tableName, "lovdLong"))
+  ret = TRUE;
+else if (sameOk(tableName, "lovdComp"))
+  ret = TRUE;
 else if (sameOk(tableName, "hgmd"))
   ret = TRUE;
 else

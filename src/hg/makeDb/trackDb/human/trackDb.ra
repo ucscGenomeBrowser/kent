@@ -158,7 +158,7 @@ type bed 3
         mmcnt2Filter 0
         mmcnt3Filter 0
         dataVersion /gbdb/$D/bbi/mastermindRelease.txt
-        parent varsInPubs
+        parent varsInPubs pack
 
         track avada
         shortLabel Avada Variants
@@ -170,7 +170,7 @@ type bed 3
         exonNumbers off
         #itemRgb on
         dataVersion release 1
-        parent varsInPubs
+        parent varsInPubs pack
         urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" doi="https://doi.org/$$"
         mouseOverField _mouseOver
 
@@ -1635,6 +1635,7 @@ ucscNotesFilterType multipleListOr
 maxFuncImpactFilterValues 0|(not annotated),0865|frameshift,1587|stop_gained,1574|splice_acceptor_variant,1575|splice_donor_variant,1821|inframe_insertion,1583|missense_variant,1590|terminator_codon_variant,1819|synonymous_variant,1580|coding_sequence_variant,1623|5_prime_UTR_variant,1624|3_prime_UTR_variant,1619|nc_transcript_variant,2153|genic_upstream_transcript_variant,1986|upstream_transcript_variant,2152|genic_downstream_transcript_variant,1987|downstream_transcript_variant,1627|intron_variant
 maxFuncImpactFilterType multipleListOr
 priority 6.8
+release alpha
 
 track dbSnp153Composite
 compositeTrack on
@@ -5022,6 +5023,7 @@ visibility hide
 color 0, 80, 0
 type bed 4
 html geneReviews
+url https://www.ncbi.nlm.nih.gov/books/NBK1116/?term=$$
 
 searchName geneReviews
 searchTable geneReviews
