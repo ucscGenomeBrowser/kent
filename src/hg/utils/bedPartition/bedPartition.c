@@ -4,7 +4,7 @@
  * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "options.h"
-#include "pipeline.h"
+#include "partitionSort.h"
 #include "basicBed.h"
 #include "sqlNum.h"
 #include "dystring.h"
@@ -14,8 +14,10 @@
 /* command line options and values */
 static struct optionSpec optionSpecs[] =
 {
+    {"parallel", OPTION_INT},
     {NULL, 0}
 };
+static int gParallel = 0;
 
 static void usage(char *msg)
 /* Explain usage and exit. */
@@ -30,6 +32,7 @@ errAbort("Error: %s\n"
   "The bedFile maybe compressed and no ordering is assumed.\n"
   "\n"
   "options:\n"
+  "   -parallel=n - use this many cores for parallel sorting\n"
   "\n", msg);
 }
 
@@ -41,32 +44,14 @@ struct bedInput
     struct bed3 *pending;     /* next bed to read, if not NULL */
 };
 
-static struct pipeline *openBedSortPipe(char *bedFile)
-/* open pipeline that sorts bed */
-{
-static char *zcatCmd[] = {"zcat", NULL};
-static char *bzcatCmd[] = {"zcat", NULL};
-static char *sortCmd[] = {"sort", "-k", "1,1", "-k", "2,2n", "-k", "3,3nr", NULL};
-int iCmd = 0;
-char **cmds[3];
-
-if (endsWith(bedFile, ".gz") || endsWith(bedFile, ".Z"))
-    cmds[iCmd++] = zcatCmd;
-else if (endsWith(bedFile, ".bz2"))
-    cmds[iCmd++] = bzcatCmd;
-cmds[iCmd++] = sortCmd;
-cmds[iCmd++] = NULL;
-
-return pipelineOpen(cmds, pipelineRead, bedFile, NULL);
-}
-
 static struct bedInput *bedInputNew(char *bedFile)
 /* create object to read BEDs */
 {
 struct bedInput *bi;
 AllocVar(bi);
-bi->pl = openBedSortPipe(bedFile);
+bi->pl = partitionSortOpenPipeline(bedFile, 0, 1, 2, gParallel);
 bi->lf = pipelineLineFile(bi->pl);
+
 return bi;
 }
 
@@ -167,6 +152,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc != 3)
     usage("wrong # args");
+gParallel = optionInt("parallel", gParallel);
 bedPartition(argv[1], argv[2]);
 return 0;
 }
