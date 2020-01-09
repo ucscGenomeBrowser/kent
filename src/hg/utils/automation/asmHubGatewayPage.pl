@@ -12,7 +12,7 @@ my $sourceServer = "hgdownload.soe.ucsc.edu";
 my @months = qw( 0 Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 
 sub usage() {
-  printf STDERR "usage: asmHubGatewayPage.pl <pathTo>/*assembly_report.txt <pathTo>/asmId.chrom.sizes <pathTo>/image.jpg <pathTo>/photoCredits.txt\n";
+  printf STDERR "usage: asmHubGatewayPage.pl <asmHubName> <pathTo>/*assembly_report.txt <pathTo>/asmId.chrom.sizes <pathTo>/image.jpg <pathTo>/photoCredits.txt\n";
   printf STDERR "output is to stdout, redirect to file: > description.html\n";
   printf STDERR "photoCredits.txt is a two line tag<tab>string file:\n";
   printf STDERR "tags: photoCreditURL and photoCreditName\n";
@@ -93,11 +93,11 @@ sub chromSizes($) {
 
 my $argc = scalar(@ARGV);
 
-if ($argc != 4) {
+if ($argc != 5) {
   usage;
 }
 
-my ($asmReport, $chromSizes, $jpgImage, $photoCredits) = @ARGV;
+my ($asmHubName, $asmReport, $chromSizes, $jpgImage, $photoCredits) = @ARGV;
 if ( ! -s $asmReport ) {
   printf STDERR "ERROR: can not find '$asmReport'\n";
   usage;
@@ -280,7 +280,7 @@ printf "<!-- Display image in righthand corner -->
 <table align=right border=0 width=%d height=%d>
   <tr><td align=RIGHT><a href=\"https://www.ncbi.nlm.nih.gov/assembly/%s\"
     target=_blank>
-    <img src=\"https://%s/hubs/VGP/genomes/%s/html/%s\" width=%d height=%d alt=\"%s\"></a>
+    <img src=\"https://%s/hubs/%s/genomes/%s/html/%s\" width=%d height=%d alt=\"%s\"></a>
   </td></tr>
   <tr><td align=right>
     <font size=-1> <em>%s</em><BR>
@@ -290,7 +290,7 @@ printf "<!-- Display image in righthand corner -->
     </font>
   </td></tr>
 </table>
-\n", $imageWidth+$imageWidthBorder, $imageHeight, $asmAccession, $sourceServer, $asmId, $imageName, $imageWidth, $imageHeight, $commonName, $orgName, $photoCreditURL, $photoCreditName;
+\n", $imageWidth+$imageWidthBorder, $imageHeight, $asmAccession, $sourceServer, $asmHubName, $asmId, $imageName, $imageWidth, $imageHeight, $commonName, $orgName, $photoCreditURL, $photoCreditName;
 }
 
 my $sciNameUnderscore = $orgName;
@@ -301,14 +301,13 @@ printf "<p>
 <b>Common name:</b>&nbsp;%s<br>
 <b>Taxonomic name: %s, taxonomy ID:</b> <a href='https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=%s' target='_blank'> %s</a><br>
 <b>Sequencing/Assembly provider ID:</b> %s<br>
-<b>Vertebrate Genomes Project information:</b> <a href='https://vgp.github.io/genomeark/%s/' target=_blank>%s</a><br>
 <b>Assembly date:</b> %s<br>
 <b>Assembly type:</b> %s<br>
 <b>Assembly level:</b> %s<br>
 <b>Biosample:</b> <a href=\"https://www.ncbi.nlm.nih.gov/biosample/?term=%s\" target=\"_blank\">%s</a><br>
 <b>Assembly accession ID:</b> <a href=\"https://www.ncbi.nlm.nih.gov/assembly/%s\" target=\"_blank\">%s</a><br>
 <b>Assembly FTP location:</b> <a href=\"ftp://ftp.ncbi.nlm.nih.gov/genomes/all/%s\" target=\"_blank\">%s</a><br>
-\n", $commonName, $orgName, $taxId, $taxId, $submitter, $sciNameUnderscore, $orgName, $asmDate, $descrAsmType,
+\n", $commonName, $orgName, $taxId, $taxId, $submitter, $asmDate, $descrAsmType,
   $asmLevel, $bioSample, $bioSample, $asmAccession, $asmAccession, $newStyleUrl, $newStyleUrl;
 
 chromSizes($chromSizes);
@@ -322,7 +321,9 @@ See also: <a href='/goldenPath/help/hgTrackHubHelp.html' target=_blank>track hub
 <br>
 To download this assembly data, use this <em>rsync</em> command:
 <pre>
-  rsync -a -P rsync://$sourceServer/hubs/VGP/genomes/$asmId/ ./$asmId/
+  rsync -a -P \\
+    rsync://$sourceServer/hubs/$asmHubName/genomes/$asmId/ \\
+      ./$asmId/
 
   which creates the local directory: ./$asmId/
 </pre>
@@ -330,7 +331,7 @@ or this <em>wget</em> command:
 <pre>
   wget --timestamping -m -nH -x --cut-dirs=4 -e robots=off -np -k \\
     --reject \"index.html*\" -P \"$asmId\" \\
-       https://$sourceServer/hubs/VGP/genomes/$asmId/
+       https://$sourceServer/hubs/$asmHubName/genomes/$asmId/
 
   which creates a local directory: ./$asmId/
 </pre>
@@ -342,7 +343,7 @@ Something like:
 <pre>
 hub myLocalHub
 shortLabel myLocalHub
-longLabel genomes from Vertebrate Genomes Project assemblies
+longLabel genome assembly $asmId
 genomesFile $asmId.genomes.txt
 email yourEmail\@yourdomain.edu
 descriptionUrl html/$asmId.description.html

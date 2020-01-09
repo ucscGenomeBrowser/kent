@@ -2679,7 +2679,7 @@ if (setting == NULL)
     }
 members = needMem(sizeof(members_t));
 members->setting = cloneString(setting);
-#define MAX_SUBGROUP_MEMBERS 1000
+#define MAX_SUBGROUP_MEMBERS 2000
 char *words[MAX_SUBGROUP_MEMBERS+3];    // members preceded by tag and title, one extra to detect
 count = chopLine(members->setting, words);
 if (count == ArraySize(words))
