@@ -314,3 +314,16 @@ release alpha
     filterByRange._pli on
     parent gnomadPLI
     release alpha
+
+track gnomadMissense
+shortLabel gnomAD Missense Constraint Metrics
+longLabel gnomAD Missense Constraint Metrics
+bigDataUrl /gbdb/hg19/gnomAD/missense/missenseConstrained.bb
+itemRgb on
+labelFields name,geneName
+group varRep
+type bigBed 12 +
+filter.obs_exp 0:5
+filterLabel.obs_exp Show only items between this score range
+filterByRange.obs_exp on
+release alpha
