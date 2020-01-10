@@ -1155,6 +1155,9 @@ void mustGetLine(FILE *file, char *buf, int charCount);
  * encountered.  The string in buf is '\0'-terminated.  (See man 3 fgets.)
  * Die if there is an error. */
 
+void mustSeek(FILE *file, off_t offset, int whence);
+/* Seek to given offset, relative to whence (see man fseek) in file or errAbort. */
+
 int mustOpenFd(char *fileName, int flags);
 /* Open a file descriptor (see man 2 open) or squawk and die. */
 

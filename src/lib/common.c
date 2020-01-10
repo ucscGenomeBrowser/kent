@@ -2731,6 +2731,23 @@ if (ferror(file))
     errAbort("mustGetLine: fgets failed: %s", strerror(ferror(file)));
 }
 
+
+static char *getWhenceStr(int whence)
+/* get string description of fseek/lseek whence parameter */
+{
+return ((whence == SEEK_SET) ? "SEEK_SET" : (whence == SEEK_CUR) ? "SEEK_CUR" :
+        (whence == SEEK_END) ? "SEEK_END" : "invalid 'whence' value");
+
+}
+
+void mustSeek(FILE *file, off_t offset, int whence)
+/* Seek to given offset, relative to whence (see man fseek) in file or errAbort. */
+{
+int ret = fseek(file, offset, whence);
+if (ret < 0)
+    errnoAbort("fseek(%lld, %s (%d)) failed", (long long)offset, getWhenceStr(whence), whence);
+}
+
 int mustOpenFd(char *fileName, int flags)
 /* Open a file descriptor (see man 2 open) or squawk and die. */
 {
@@ -2797,9 +2814,7 @@ off_t mustLseek(int fd, off_t offset, int whence)
 {
 off_t ret = lseek(fd, offset, whence);
 if (ret < 0)
-    errnoAbort("lseek(%d, %lld, %s (%d)) failed", fd, (long long)offset,
-	       ((whence == SEEK_SET) ? "SEEK_SET" : (whence == SEEK_CUR) ? "SEEK_CUR" :
-		(whence == SEEK_END) ? "SEEK_END" : "invalid 'whence' value"), whence);
+    errnoAbort("lseek(%d, %lld, %s (%d)) failed", fd, (long long)offset, getWhenceStr(whence), whence);
 return ret;
 }
 
