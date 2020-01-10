@@ -391,7 +391,10 @@ if (!checkedCache)
     {
     trackDbCacheDir = cfgOption("cacheTrackDbDir");
     if (trackDbCacheDir != NULL)
+        {
+        makeDirsOnPath(trackDbCacheDir);
         doCache = TRUE;
+        }
 
     checkedCache = TRUE;
     }

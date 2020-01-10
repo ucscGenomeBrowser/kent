@@ -158,7 +158,7 @@ type bed 3
         mmcnt2Filter 0
         mmcnt3Filter 0
         dataVersion /gbdb/$D/bbi/mastermindRelease.txt
-        parent varsInPubs
+        parent varsInPubs pack
 
         track avada
         shortLabel Avada Variants
@@ -170,7 +170,7 @@ type bed 3
         exonNumbers off
         #itemRgb on
         dataVersion release 1
-        parent varsInPubs
+        parent varsInPubs pack
         urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" doi="https://doi.org/$$"
         mouseOverField _mouseOver
 
@@ -5023,6 +5023,7 @@ visibility hide
 color 0, 80, 0
 type bed 4
 html geneReviews
+url https://www.ncbi.nlm.nih.gov/books/NBK1116/?term=$$
 
 searchName geneReviews
 searchTable geneReviews

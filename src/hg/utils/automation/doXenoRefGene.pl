@@ -40,7 +40,6 @@ my $defaultWorkhorse = 'hgwdev';
 my $maskedSeq = "$HgAutomate::clusterData/\$db/\$db.2bit";
 my $mrnas = "/hive/data/genomes/asmHubs/VGP/xenoRefSeq";
 my $noDbGenePredCheck = 1;    # default yes, use -db for genePredCheck
-my $mrnas = "/hive/data/genomes/asmHubs/VGP/xenoRefSeq";
 my $augustusDir = "/hive/data/outside/augustus/augustus-3.3.1";
 my $augustusConfig="$augustusDir/config";
 
