@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 struct dyString *headText = newDyString(512);
 char *destination = cgiUsualString("destination", defaultDestination);
-if (strstr(destination, "://"))
+if (strstr(destination, "//"))
     errAbort("To stop Open Redirect abuse, only relative URLs are supported. "
 	    "Request for destination=[%s] rejected.\n", destination);
 
