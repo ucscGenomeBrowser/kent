@@ -5229,7 +5229,7 @@ boolean compositeHideEmptySubtracksSetting(struct trackDb *tdb, boolean *retDefa
 {
 if (!tdbIsComposite(tdb))
     return FALSE;
-char *hideEmpties = trackDbSetting(tdb, SUBTRACK_HIDE_EMPTY);
+char *hideEmpties = cloneString(trackDbSetting(tdb, SUBTRACK_HIDE_EMPTY));
 if (!hideEmpties)
     return FALSE;
 char *orig = cloneString(hideEmpties);
