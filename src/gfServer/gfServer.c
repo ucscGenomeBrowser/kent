@@ -746,10 +746,12 @@ boolean isTrans;
 mustRead(f, &isTrans, sizeof(isTrans));
 if (doTrans != isTrans)
     errAbort("index file isTrans==%d and -trans==%d", isTrans, doTrans);
-void *memMapped = mmap(NULL, fileSize(fileName), PROT_READ, MAP_SHARED, fileno(f), 0);
+off_t fsize = fileSize(fileName);
+void *memMapped = mmap(NULL, fsize, PROT_READ, MAP_SHARED, fileno(f), 0);
 if (memMapped == MAP_FAILED)
-    errnoAbort("mmap of index file failed");
-
+    errnoAbort("mmap of index file failed: %s", fileName);
+if (madvise(memMapped, fsize, MADV_RANDOM | MADV_WILLNEED) < 0)
+    errnoAbort("madvise of index file failed: %s", fileName);
 
 if (doTrans)
     {
