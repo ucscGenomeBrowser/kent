@@ -481,12 +481,22 @@ genePredToBigGenePred process/\$db.ncbiRefSeq.gp stdout | sort -k1,1 -k2,2n > \$
 bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as \\
   \$db.ncbiRefSeq.bigGp \$db.chrom.sizes \\
     \$db.ncbiRefSeq.bb
+bigBedInfo \$db.ncbiRefSeq.bb | egrep "^itemCount:|^basesCovered:" \\
+    | sed -e 's/,//g' > \$db.ncbiRefSeq.stats.txt
+LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeq %s %'d %s %'d\\n" `cat \$db.ncbiRefSeq.stats.txt` | xargs echo
+~/kent/src/hg/utils/automation/gpToIx.pl process/\$db.ncbiRefSeq.gp \\
+    | sort -u > \$asmId.ncbiRefSeq.ix.txt
+ixIxx \$asmId.ncbiRefSeq.ix.txt \$asmId.ncbiRefSeq.ix \$asmId.ncbiRefSeq.ixx
+rm -f \$asmId.ncbiRefSeq.ix.txt
 if [ -s process/\$db.curated.gp ]; then
   genePredToBigGenePred process/\$db.curated.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeqCurated.bigGp
   bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as \\
   \$db.ncbiRefSeqCurated.bigGp \$db.chrom.sizes \\
     \$db.ncbiRefSeqCurated.bb
   rm -f \$db.ncbiRefSeqCurated.bigGp
+  bigBedInfo \$db.ncbiRefSeqCurated.bb | egrep "^itemCount:|^basesCovered:" \\
+    | sed -e 's/,//g' > \$db.ncbiRefSeqCurated.stats.txt
+  LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqCurated %s %'d %s %'d\\n" `cat \$db.ncbiRefSeqCurated.stats.txt` | xargs echo
 fi
 if [ -s process/\$db.predicted.gp ]; then
   genePredToBigGenePred process/\$db.predicted.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeqPredicted.bigGp
@@ -494,9 +504,15 @@ if [ -s process/\$db.predicted.gp ]; then
   \$db.ncbiRefSeqPredicted.bigGp \$db.chrom.sizes \\
     \$db.ncbiRefSeqPredicted.bb
   rm -f \$db.ncbiRefSeqPredicted.bigGp
+  bigBedInfo \$db.ncbiRefSeqPredicted.bb | egrep "^itemCount:|^basesCovered:" \\
+    | sed -e 's/,//g' > \$db.ncbiRefSeqPredicted.stats.txt
+  LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqPredicted %s %'d %s %'d\\n" `cat \$db.ncbiRefSeqPredicted.stats.txt` | xargs echo
 fi
 if [ -s "process/\$db.other.bb" ]; then
   ln -f -s process/\$db.other.bb \$db.ncbiRefSeqOther.bb
+  bigBedInfo \$db.ncbiRefSeqOther.bb | egrep "^itemCount:|^basesCovered:" \\
+    | sed -e 's/,//g' > \$db.ncbiRefSeqOther.stats.txt
+  LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqOther %s %'d %s %'d\\n" `cat \$asmId.ncbiRefSeqOther.stats.txt` | xargs echo
 fi
 if [ -s "process/ncbiRefSeqOther.ix" ]; then
   ln -f -s process/ncbiRefSeqOther.ix ./\$db.ncbiRefSeqOther.ix
@@ -557,9 +573,10 @@ printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" \\
 rm -f \$db.ncbiRefSeq.bigGp
 
 pslToBigPsl -fa=download/\$asmId.rna.fa.gz -cds=process/\$asmId.rna.cds \\
-  process/\$asmId.\$db.psl.gz stdout | sort -k1,1 -k2,2n > \$asmId.\$db.bigPsl
+  process/\$asmId.\$db.psl.gz stdout | sort -k1,1 -k2,2n > \$asmId.bigPsl
 bedToBigBed -type=bed12+13 -tab -as=bigPsl.as \\
-  \$asmId.\$db.bigPsl \$db.chrom.sizes \$asmId.\$db.bigPsl.bb
+  \$asmId.bigPsl \$db.chrom.sizes \$asmId.bigPsl.bb
+rm -f \$asmId.bigPsl
 _EOF_
     );
   } else {
