@@ -50,6 +50,7 @@ my $stepper = new HgStepManager(
       { name => 'tandemDups',   func => \&doTandemDups },
       { name => 'cpgIslands',   func => \&doCpgIslands },
       { name => 'ncbiGene',   func => \&doNcbiGene },
+      { name => 'ncbiRefSeq',   func => \&doNcbiRefSeq },
       { name => 'xenoRefGene',   func => \&doXenoRefGene },
       { name => 'augustus',   func => \&doAugustus },
       { name => 'trackDb',   func => \&doTrackDb },
@@ -139,6 +140,8 @@ Automates build of assembly hub.  Steps:
     cpgIslands: run CpG islands cluster runs for both masked and unmasked
                 sequences and create bigBed files for this composite track
     ncbiGene: on RefSeq assemblies, construct a gene track from the
+              NCBI gff3 predictions
+    ncbiRefSeq on RefSeq assemblies, construct a gene track from the
               NCBI gff3 predictions
     xenoRefSeq: map RefSeq mRNAs to the assembly to construct a 'xeno'
                 gene prediction track
@@ -1468,6 +1471,45 @@ _EOF_
   );
   $bossScript->execute();
 } # doNcbiGene
+
+#########################################################################
+# * step: ncbiRefSeq [workhorse]
+sub doNcbiRefSeq {
+  my $runDir = "$buildDir/trackData/ncbiRefSeq";
+  my $gffFile = "$assemblySource/${asmId}_genomic.gff.gz";
+  if ( ! -s "${gffFile}" ) {
+    printf STDERR "# step ncbiRefSeq no gff file found at:\n#  %s\n", $gffFile;
+    return;
+  }
+
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "run NCBI RefSeq gene procedures";
+  my $bossScript = newBash HgRemoteScript("$runDir/doNcbiRefSeq.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId="$asmId"
+export buildDir="$buildDir"
+export liftFile="\$buildDir/sequence/\$asmId.ncbiToUcsc.lift"
+export target2bit="\$buildDir/\$asmId.2bit"
+
+if [ $buildDir/\$asmId.2bit -nt \$asmId.ncbiRefSeq.bb ]; then
+
+~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \\
+      -bigClusterHub=$bigClusterHub -dbHost=$dbHost \\
+      -liftFile="\$liftFile" \\
+      -target2bit="\$target2bit" \\
+      -stop=load -fileServer=$fileServer -smallClusterHub=$smallClusterHub -workhorse=$workhorse \\
+      $genbankRefseq $subGroup $species \\
+      \$asmId \$asmId
+else
+  printf "# ncbiRefSeq previously completed\\n" 1>&2
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # ncbiRefSeq
 
 #########################################################################
 # * step: augustus [workhorse]
