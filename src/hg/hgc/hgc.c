@@ -8887,6 +8887,7 @@ return itemCount;
 void htcDnaNearGene( char *geneName)
 /* Fetch DNA near a gene. */
 {
+cartWebStart(cart, database, "%s", geneName);
 char *table    = cartString(cart, "o");
 int itemCount;
 char *quotedItem = makeQuotedString(geneName, '\'');
