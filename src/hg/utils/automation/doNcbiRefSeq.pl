@@ -34,7 +34,6 @@ use vars qw/
     $opt_species
     $opt_liftFile
     $opt_target2bit
-    $opt_targetSizes
     $opt_toGpWarnOnly
     /;
 
@@ -88,8 +87,6 @@ options:
                           names
     -target2bit pathName  when not a local UCSC genome, use this 2bit file for
                           the target genome sequence
-    -targetSizes pathName when not a local UCSC genome, use this file for
-                          target genome chrom.sizes file
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -117,7 +114,7 @@ Assumptions:
    database/assembly \$db.
 2. $HgAutomate::clusterData/\$db/chrom.sizes contains all sequence names and sizes from
    \$db.2bit.
-NOTE: Override these assumptions with -target2Bit and -targetSizes options
+NOTE: Override these assumptions with the -target2Bit option
 " if ($detailed);
   print "\n";
   exit $status;
@@ -128,7 +125,7 @@ NOTE: Override these assumptions with -target2Bit and -targetSizes options
 # Command line args: genbankRefseq subGroup species asmId db
 my ($genbankRefseq, $subGroup, $species, $asmId, $db, $ftpDir);
 # Other:
-my ($buildDir, $toGpWarnOnly, $dbExists, $liftFile, $target2bit, $targetSizes);
+my ($buildDir, $toGpWarnOnly, $dbExists, $liftFile, $target2bit);
 my ($secondsStart, $secondsEnd);
 
 sub checkOptions {
@@ -137,7 +134,6 @@ sub checkOptions {
 		      'buildDir=s',
 		      'liftFile=s',
 		      'target2bit=s',
-		      'targetSizes=s',
 		      'toGpWarnOnly',
 		      @HgAutomate::commonOptionSpec,
 		      );
@@ -206,7 +202,6 @@ _EOF_
     );
   }
 
-printf STDERR "# checking $local2Bit\n";
   if ( -s $local2Bit ) {
     $bossScript->add(<<_EOF_
 ln -f -s $local2Bit .
@@ -248,8 +243,8 @@ _EOF_
     }
   }
 
-  my $hostSizes = "$HgAutomate::clusterData/\$db/chrom.sizes";
-  $hostSizes = $targetSizes if (-s "$targetSizes");
+  my $dbTwoBit = "$HgAutomate::clusterData/$db/$db.2bit";
+  $dbTwoBit = $target2bit if (-s "$target2bit");
 
   if (! $haveLiftFile ) {
        $bossScript->add(<<_EOF_
@@ -260,12 +255,13 @@ mkdir -p \$runDir/idKeys
 cd \$runDir/idKeys
 time ($doIdKeys -buildDir=\$runDir/idKeys -twoBit=\$runDir/\$asmId.ncbi.2bit \$db) > idKeys.log 2>&1
 cd \$runDir
+twoBitInfo $dbTwoBit stdout | sort -k2,2nr > \$db.chrom.sizes
 ln -f -s idKeys/\$db.idKeys.txt ./ncbi.\$asmId.idKeys.txt
 ln -f -s /hive/data/genomes/\$db/bed/idKeys/\$db.idKeys.txt ./ucsc.\$db.idKeys.txt
 # joining the idKeys establishes a lift file to translate chrom names
 join -t\$'\\t' ucsc.\$db.idKeys.txt ncbi.\$asmId.idKeys.txt \\
    | cut -f2-3 | sort \\
-     | join -t\$'\\t' - <(sort $hostSizes) \\
+     | join -t\$'\\t' - <(sort \$db.chrom.sizes) \\
        | awk -F\$'\\t' '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$2, \$3, \$1, \$3}' \\
           | sort -k3nr > \${asmId}To\${db}.lift
 _EOF_
@@ -274,7 +270,7 @@ _EOF_
 
   $bossScript->add(<<_EOF_
 cd \$runDir
-twoBitInfo \$asmId.ncbi.2bit stdout | sort -k2nr > $hostSizes
+twoBitInfo \$asmId.ncbi.2bit stdout | sort -k2nr > \$asmId.ncbi.chrom.sizes
 zcat \${asmId}_rna.fna.gz | sed -e 's/ .*//;' | gzip -c > \$asmId.rna.fa.gz
 faSize -detailed \${asmId}.rna.fa.gz | sort -k2nr > rna.sizes
 
@@ -307,18 +303,15 @@ sub doProcess {
 
   my $localLiftFile = "\$downloadDir/\${asmId}To\${db}.lift";
   $localLiftFile = $liftFile if (-s $liftFile);
-  my $hostSizes = "$HgAutomate::clusterData/\$db/chrom.sizes";
-  my $pslTargetSizes = "-targetSizes=$hostSizes -db=\$db";
-  if (-s "$targetSizes") {
-    $hostSizes = $targetSizes;
-    $pslTargetSizes = "-targetSizes=$hostSizes";
+  my $pslTargetSizes = "-db=\$db";
+  my $fakePslSizes = "";
+  if (-s "$target2bit") {
+    $pslTargetSizes = "-targetSizes=\$db.chrom.sizes";
+    $fakePslSizes = "-chromSize=\$db.chrom.sizes";
   }
-  my $fakePslSizes = $targetSizes ? "-chromSize=$targetSizes" : "";
 
   my $dbTwoBit = "$HgAutomate::clusterData/$db/$db.2bit";
   $dbTwoBit = $target2bit if (-s "$target2bit");
-printf STDERR "# DBG dbTwoBit: '%s'\n", $dbTwoBit;
-printf STDERR "# DBG: target2bit: '%s'\n", $target2bit;
 
   $bossScript->add(<<_EOF_
 # establish all variables to use here
@@ -392,11 +385,12 @@ cut -f1 \$db.ncbiRefSeq.gp | sort -u > \$asmId.\$db.name.list
 join -t\$'\\t' \$asmId.\$db.name.list \$asmId.refLink.tab > \$asmId.\$db.ncbiRefSeqLink.tab
 
 # Make bigBed with attributes in extra columns for ncbiRefSeqOther:
+twoBitInfo $dbTwoBit stdout | sort -k2,2n > \$db.chrom.sizes
 genePredToBed \$db.other.gp stdout | sort -k1,1 -k2n,2n > \$db.other.bed
 $ncbiRefSeqOtherAttrs \$db.other.bed \$asmId.attrs.txt > \$db.other.extras.bed
 bedToBigBed -type=bed12+13 -as=ncbiRefSeqOther.as -tab \\
   -extraIndex=name \\
-  \$db.other.extras.bed $hostSizes \$db.other.bb
+  \$db.other.extras.bed \$db.chrom.sizes \$db.other.bb
 
 # Make trix index for ncbiRefSeqOther
 $ncbiRefSeqOtherIxIxx \\
@@ -408,7 +402,7 @@ ixIxx ncbiRefSeqOther.ix.tab ncbiRefSeqOther.ix{,x}
 (zgrep "^#" \$ncbiGffGz | head || true) > gffForPsl.gff
 (zegrep -v "NG_" \$ncbiGffGz || true) \\
   | awk -F\$'\\t' '\$3 == "cDNA_match" || \$3 == "match"' >> gffForPsl.gff
-gff3ToPsl -dropT \$downloadDir/\$asmId.chrom.sizes \$downloadDir/rna.sizes \\
+gff3ToPsl -dropT \$downloadDir/\$asmId.ncbi.chrom.sizes \$downloadDir/rna.sizes \\
   gffForPsl.gff stdout | pslPosTarget stdin \$asmId.psl
 simpleChain -outPsl -maxGap=300000 \$asmId.psl stdout | pslSwap stdin stdout \\
   | liftUp -type=.psl stdout $localLiftFile drop stdin \\
@@ -476,35 +470,65 @@ export asmId=$asmId
 _EOF_
   );
   if (! $dbExists) {
-    my $hostSizes = "$HgAutomate::clusterData/\$db/chrom.sizes";
-    $hostSizes = $targetSizes if (-s "$targetSizes");
     $bossScript->add(<<_EOF_
 export target2bit=$dbTwoBit
-export targetSizes=$hostSizes
 
+twoBitInfo \$target2bit stdout | sort -k2,2nr > \$db.chrom.sizes
 wget -O bigGenePred.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigGenePred.as'
 wget -O bigPsl.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigPsl.as'
 
+### overall gene track with both predicted and curated
 genePredToBigGenePred process/\$db.ncbiRefSeq.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeq.bigGp
-bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as \\
-  \$db.ncbiRefSeq.bigGp \$targetSizes \\
+
+bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
+  \$db.ncbiRefSeq.bigGp \$db.chrom.sizes \\
     \$db.ncbiRefSeq.bb
+bigBedInfo \$db.ncbiRefSeq.bb | egrep "^itemCount:|^basesCovered:" \\
+    | sed -e 's/,//g' > \$db.ncbiRefSeq.stats.txt
+LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeq %s %'d %s %'d\\n" `cat \$db.ncbiRefSeq.stats.txt` | xargs echo
+~/kent/src/hg/utils/automation/gpToIx.pl process/\$db.ncbiRefSeq.gp \\
+    | sort -u > \$asmId.ncbiRefSeq.ix.txt
+ixIxx \$asmId.ncbiRefSeq.ix.txt \$asmId.ncbiRefSeq.ix{,x}
+rm -f \$asmId.ncbiRefSeq.ix.txt
+
+### curated only if present
 if [ -s process/\$db.curated.gp ]; then
   genePredToBigGenePred process/\$db.curated.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeqCurated.bigGp
-  bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as \\
-  \$db.ncbiRefSeqCurated.bigGp \$targetSizes \\
+  bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
+  \$db.ncbiRefSeqCurated.bigGp \$db.chrom.sizes \\
     \$db.ncbiRefSeqCurated.bb
   rm -f \$db.ncbiRefSeqCurated.bigGp
+  bigBedInfo \$db.ncbiRefSeqCurated.bb | egrep "^itemCount:|^basesCovered:" \\
+    | sed -e 's/,//g' > \$db.ncbiRefSeqCurated.stats.txt
+  LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqCurated %s %'d %s %'d\\n" `cat \$db.ncbiRefSeqCurated.stats.txt` | xargs echo
+  ~/kent/src/hg/utils/automation/gpToIx.pl process/\$db.curated.gp \\
+    | sort -u > \$asmId.ncbiRefSeqCurated.ix.txt
+  ixIxx \$asmId.ncbiRefSeqCurated.ix.txt \$asmId.ncbiRefSeqCurated.ix{,x}
+  rm -f \$asmId.ncbiRefSeqCurated.ix.txt
 fi
+
+### predicted only if present
 if [ -s process/\$db.predicted.gp ]; then
   genePredToBigGenePred process/\$db.predicted.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeqPredicted.bigGp
-  bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as \\
-  \$db.ncbiRefSeqPredicted.bigGp \$targetSizes \\
+  bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
+  \$db.ncbiRefSeqPredicted.bigGp \$db.chrom.sizes \\
     \$db.ncbiRefSeqPredicted.bb
   rm -f \$db.ncbiRefSeqPredicted.bigGp
+  bigBedInfo \$db.ncbiRefSeqPredicted.bb | egrep "^itemCount:|^basesCovered:" \\
+    | sed -e 's/,//g' > \$db.ncbiRefSeqPredicted.stats.txt
+  LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqPredicted %s %'d %s %'d\\n" `cat \$db.ncbiRefSeqPredicted.stats.txt` | xargs echo
+  ~/kent/src/hg/utils/automation/gpToIx.pl process/\$db.predicted.gp \\
+    | sort -u > \$asmId.ncbiRefSeqPredicted.ix.txt
+  ixIxx \$asmId.ncbiRefSeqPredicted.ix.txt \$asmId.ncbiRefSeqPredicted.ix{,x}
+  rm -f \$asmId.ncbiRefSeqPredicted.ix.txt
 fi
+
+### all other annotations, not necessarily genes
 if [ -s "process/\$db.other.bb" ]; then
   ln -f -s process/\$db.other.bb \$db.ncbiRefSeqOther.bb
+  bigBedInfo \$db.ncbiRefSeqOther.bb | egrep "^itemCount:|^basesCovered:" \\
+    | sed -e 's/,//g' > \$db.ncbiRefSeqOther.stats.txt
+  LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqOther %s %'d %s %'d\\n" `cat \$asmId.ncbiRefSeqOther.stats.txt` | xargs echo
 fi
 if [ -s "process/ncbiRefSeqOther.ix" ]; then
   ln -f -s process/ncbiRefSeqOther.ix ./\$db.ncbiRefSeqOther.ix
@@ -556,7 +580,7 @@ if [ -s \$db.noRna.available.list ]; then
   fi
 fi
 
-export totalBases=`ave -col=2 \$targetSizes | grep "^total" | awk '{printf "%d", \$2}'`
+export totalBases=`ave -col=2 \$db.chrom.sizes | grep "^total" | awk '{printf "%d", \$2}'`
 export basesCovered=`bedSingleCover.pl \$db.ncbiRefSeq.bigGp | ave -col=4 stdin | grep "^total" | awk '{printf "%d", \$2}'`
 export percentCovered=`echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
 printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" \\
@@ -565,9 +589,10 @@ printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" \\
 rm -f \$db.ncbiRefSeq.bigGp
 
 pslToBigPsl -fa=download/\$asmId.rna.fa.gz -cds=process/\$asmId.rna.cds \\
-  process/\$asmId.\$db.psl.gz stdout | sort -k1,1 -k2,2n > \$asmId.\$db.bigPsl
-bedToBigBed -type=bed12+13 -tab -as=bigPsl.as \\
-  \$asmId.\$db.bigPsl \$targetSizes \$asmId.\$db.bigPsl.bb
+  process/\$asmId.\$db.psl.gz stdout | sort -k1,1 -k2,2n > \$asmId.bigPsl
+bedToBigBed -type=bed12+13 -tab -as=bigPsl.as -extraIndex=name \\
+  \$asmId.bigPsl \$db.chrom.sizes \$asmId.bigPsl.bb
+rm -f \$asmId.bigPsl
 _EOF_
     );
   } else {
@@ -686,7 +711,6 @@ _EOF_
 $toGpWarnOnly = 0;
 $toGpWarnOnly = 1 if ($opt_toGpWarnOnly);
 $liftFile = $opt_liftFile ? $opt_liftFile : "";
-$targetSizes = $opt_targetSizes ? $opt_targetSizes : "";
 $target2bit = $opt_target2bit ? $opt_target2bit : "";
 
 $secondsStart = `date "+%s"`;

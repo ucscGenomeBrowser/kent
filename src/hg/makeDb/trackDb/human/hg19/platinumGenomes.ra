@@ -7,7 +7,6 @@ dataVersion Release 2017-1.0
 configureByPopup off
 type vcfTabix
 html ../platinumGenomes
-pennantIcon New red ../goldenPath/newsarch.html#102419 Platinum Genome VCFs release Oct. 24, 2019
 
 track platinumNA12877
 parent platinumGenomes

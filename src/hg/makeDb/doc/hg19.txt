@@ -33841,3 +33841,45 @@ ln -s /hive/data/outside/gnomAD.2/constraint/pliByTranscript.bb
 
     # commit all
 ##############################################################################
+2020-01-13: Add size filter to dgvMerged and dgvSupporting track (ChrisL)
+cd /hive/data/genomes/hg19/bed/dgv/160810
+zcat dgvMerged.bed.gz | tawk '{print $0, $3-$2}' > dgvMergedWithSize.bed
+zcat dgvSupporting.bed.gz | tawk '{print $0, $3-$2}' > dgvSupportingWithSize.bed
+cat dgvPlusSize.as
+# table dgvPlus
+# "Database of Genomic Variants incorporating dbVar, July 2013 and later"
+#     (
+#     string chrom;       "Reference sequence chromosome or scaffold"
+#     uint   chromStart;  "Start position in chromosome"
+#     uint   chromEnd;    "End position in chromosome"
+#     string name;        "ID of merged variant or supporting variant"
+#     uint   score;       "Score from 0-1000 (placeholder for BED 9+ format)"
+#     char[1] strand;     "+ or - (placeholder for BED 9+ format)"
+#     uint thickStart;    "Same as chromStart (placeholder for BED 9+ format)"
+#     uint thickEnd;      "Same as chromStart (placeholder for BED 9+ format)"
+#     uint itemRgb;   "Item R,G,B color."
+#     string varType;     "Type of variation"
+#     string reference;   "Literature reference for the study that included this variant"
+#     uint pubMedId;      "For linking to pubMed abstract of reference"
+#     lstring method;     "Brief description of method"
+#     lstring platform;    "Sequencing platform (if specified)"
+#     string mergedVariants; "If this is a supporting variant, ID of merged variant"
+#     lstring supportingVariants; "If this is a merged variant, IDs of supporting variants"
+#     uint sampleSize;    "Number of samples in study"
+#     uint observedGains; "Number of samples with copy number gains"
+#     uint observedLosses; "Number of samples with copy number losses"
+#     lstring cohortDescription; "Description of sample population for the study"
+#     lstring genes;      "Genes overlapping this variant"
+#     lstring samples;    "Sample IDs if available"
+#     uint _size;         "Genomic Size of variant"
+#     )
+bedToBigBed -tab -as=dgvPlusSize.as -type=bed9+14 dgvMergedWithSize.bed  /hive/data/genomes/hg19/chrom.sizes dgvMerged.bb
+# pass1 - making usageList (24 chroms): 1054 millis
+# pass2 - checking and writing primary data (392583 records, 23 fields): 8495 millis
+bedToBigBed -tab -as=dgvPlusSize.as -type=bed9+14 dgvSupportingWithSize.bed  /hive/data/genomes/hg19/chrom.sizes dgvSupporting.bb
+# pass1 - making usageList (25 chroms): 2577 millis
+# pass2 - checking and writing primary data (6668715 records, 23 fields): 27271 millis
+cd /gbdb/hg19/dgv/
+ln -s /hive/data/genomes/hg19/bed/dgv/160810/dgvMerged.bb
+ln -s /hive/data/genomes/hg19/bed/dgv/160810/dgvSupporting.bb
+##############################################################################

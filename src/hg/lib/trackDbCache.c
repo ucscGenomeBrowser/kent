@@ -390,7 +390,7 @@ static boolean doCache = FALSE;
 if (!checkedCache)
     {
     trackDbCacheDir = cfgOption("cacheTrackDbDir");
-    if (trackDbCacheDir != NULL)
+    if (isNotEmpty(trackDbCacheDir))
         {
         makeDirsOnPath(trackDbCacheDir);
         doCache = TRUE;
