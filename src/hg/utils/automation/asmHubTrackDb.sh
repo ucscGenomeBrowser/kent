@@ -377,6 +377,11 @@ ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeq.bb $buildDir/bbi/${asmId}.ncbiRe
 ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeq.ix $buildDir/ixIxx/${asmId}.ncbiRefSeq.ix
 ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeq.ixx $buildDir/ixIxx/${asmId}.ncbiRefSeq.ixx
 
+  export dataVersion="html/ncbiRefSeqVersion.txt"
+  if [ -s ${buildDir}/trackData/ncbiRefSeq/$asmId.ncbiRefSeqVersion.txt ]; then
+   dataVersion=`cat ${buildDir}/trackData/ncbiRefSeq/$asmId.ncbiRefSeqVersion.txt`
+  fi
+
   printf "track refSeqComposite
 compositeTrack on
 shortLabel NCBI RefSeq
@@ -387,7 +392,7 @@ type bigBed
 dragAndDrop subTracks
 noInherit on
 allButtonPair on
-dataVersion html/ncbiRefSeqVersion.txt
+dataVersion $dataVersion
 html html/%s.refSeqComposite
 priority 2
 
@@ -500,6 +505,11 @@ rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ix
         baseColorUseSequence lfExtra
         baseColorUseCds table given
         color 0,0,0\n\n" "${asmId}"
+  fi
+
+  if [ -s ${buildDir}/trackData/ncbiRefSeq/$asmId.ncbiRefSeqVersion.txt ]; then
+    rm -f $buildDir/html/$asmId.ncbiRefSeqVersion.txt
+    ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeqVersion.txt $buildDir/html/
   fi
 
   $scriptDir/asmHubNcbiRefSeq.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.refSeqComposite.html

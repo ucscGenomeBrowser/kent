@@ -66,10 +66,7 @@ print <<_EOF_
 The NCBI RefSeq Genes composite track shows
 $assemblyDate $em${organism}$noEm/$asmId
 protein-coding and non-protein-coding genes taken from the NCBI RNA reference
-sequences collection (RefSeq). All subtracks use coordinates provided by RefSeq,
-except for the <em>UCSC RefSeq</em> track, which UCSC produces by realigning
-the RefSeq RNAs to the genome. This realignment may result in occasional
-differences between the annotation coordinates provided by UCSC and NCBI.
+sequences collection (RefSeq). All subtracks use coordinates provided by RefSeq.
 See the <a href="#methods">Methods</a> section for more details about how
 the different tracks were created.
 </p>
