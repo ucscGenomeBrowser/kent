@@ -487,6 +487,7 @@ rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ix
         shortLabel RefSeq Alignments
         longLabel RefSeq Alignments of RNAs
         type bigPsl
+        searchIndex name
         bigDataUrl bbi/%s.bigPsl.bb
         indelDoubleInsert on
         indelQueryInsert on

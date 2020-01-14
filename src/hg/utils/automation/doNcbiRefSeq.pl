@@ -477,8 +477,10 @@ twoBitInfo \$target2bit stdout | sort -k2,2nr > \$db.chrom.sizes
 wget -O bigGenePred.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigGenePred.as'
 wget -O bigPsl.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigPsl.as'
 
+### overall gene track with both predicted and curated
 genePredToBigGenePred process/\$db.ncbiRefSeq.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeq.bigGp
-bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as \\
+
+bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
   \$db.ncbiRefSeq.bigGp \$db.chrom.sizes \\
     \$db.ncbiRefSeq.bb
 bigBedInfo \$db.ncbiRefSeq.bb | egrep "^itemCount:|^basesCovered:" \\
@@ -486,28 +488,42 @@ bigBedInfo \$db.ncbiRefSeq.bb | egrep "^itemCount:|^basesCovered:" \\
 LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeq %s %'d %s %'d\\n" `cat \$db.ncbiRefSeq.stats.txt` | xargs echo
 ~/kent/src/hg/utils/automation/gpToIx.pl process/\$db.ncbiRefSeq.gp \\
     | sort -u > \$asmId.ncbiRefSeq.ix.txt
-ixIxx \$asmId.ncbiRefSeq.ix.txt \$asmId.ncbiRefSeq.ix \$asmId.ncbiRefSeq.ixx
+ixIxx \$asmId.ncbiRefSeq.ix.txt \$asmId.ncbiRefSeq.ix{,x}
 rm -f \$asmId.ncbiRefSeq.ix.txt
+
+### curated only if present
 if [ -s process/\$db.curated.gp ]; then
   genePredToBigGenePred process/\$db.curated.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeqCurated.bigGp
-  bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as \\
+  bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
   \$db.ncbiRefSeqCurated.bigGp \$db.chrom.sizes \\
     \$db.ncbiRefSeqCurated.bb
   rm -f \$db.ncbiRefSeqCurated.bigGp
   bigBedInfo \$db.ncbiRefSeqCurated.bb | egrep "^itemCount:|^basesCovered:" \\
     | sed -e 's/,//g' > \$db.ncbiRefSeqCurated.stats.txt
   LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqCurated %s %'d %s %'d\\n" `cat \$db.ncbiRefSeqCurated.stats.txt` | xargs echo
+  ~/kent/src/hg/utils/automation/gpToIx.pl process/\$db.curated.gp \\
+    | sort -u > \$asmId.ncbiRefSeqCurated.ix.txt
+  ixIxx \$asmId.ncbiRefSeqCurated.ix.txt \$asmId.ncbiRefSeqCurated.ix{,x}
+  rm -f \$asmId.ncbiRefSeqCurated.ix.txt
 fi
+
+### predicted only if present
 if [ -s process/\$db.predicted.gp ]; then
   genePredToBigGenePred process/\$db.predicted.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeqPredicted.bigGp
-  bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as \\
+  bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
   \$db.ncbiRefSeqPredicted.bigGp \$db.chrom.sizes \\
     \$db.ncbiRefSeqPredicted.bb
   rm -f \$db.ncbiRefSeqPredicted.bigGp
   bigBedInfo \$db.ncbiRefSeqPredicted.bb | egrep "^itemCount:|^basesCovered:" \\
     | sed -e 's/,//g' > \$db.ncbiRefSeqPredicted.stats.txt
   LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqPredicted %s %'d %s %'d\\n" `cat \$db.ncbiRefSeqPredicted.stats.txt` | xargs echo
+  ~/kent/src/hg/utils/automation/gpToIx.pl process/\$db.predicted.gp \\
+    | sort -u > \$asmId.ncbiRefSeqPredicted.ix.txt
+  ixIxx \$asmId.ncbiRefSeqPredicted.ix.txt \$asmId.ncbiRefSeqPredicted.ix{,x}
+  rm -f \$asmId.ncbiRefSeqPredicted.ix.txt
 fi
+
+### all other annotations, not necessarily genes
 if [ -s "process/\$db.other.bb" ]; then
   ln -f -s process/\$db.other.bb \$db.ncbiRefSeqOther.bb
   bigBedInfo \$db.ncbiRefSeqOther.bb | egrep "^itemCount:|^basesCovered:" \\
@@ -574,7 +590,7 @@ rm -f \$db.ncbiRefSeq.bigGp
 
 pslToBigPsl -fa=download/\$asmId.rna.fa.gz -cds=process/\$asmId.rna.cds \\
   process/\$asmId.\$db.psl.gz stdout | sort -k1,1 -k2,2n > \$asmId.bigPsl
-bedToBigBed -type=bed12+13 -tab -as=bigPsl.as \\
+bedToBigBed -type=bed12+13 -tab -as=bigPsl.as -extraIndex=name \\
   \$asmId.bigPsl \$db.chrom.sizes \$asmId.bigPsl.bb
 rm -f \$asmId.bigPsl
 _EOF_
