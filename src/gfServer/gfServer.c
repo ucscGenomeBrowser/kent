@@ -330,7 +330,7 @@ if (clumpList == NULL)
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
     struct gfSeqSource *ss = clump->target;
-    sprintf(buf, "%d\t%d\t%s\t%d\t%d\t%d", 
+    sprintf(buf, "%lld\t%lld\t%s\t%lld\t%lld\t%d", 
 	clump->qStart, clump->qEnd, ss->fileName,
 	clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount);
     errSendString(connectionHandle, buf);
@@ -379,15 +379,15 @@ for (isRc = 0; isRc <= 1; ++isRc)
 	for (clump = clumps[frame]; clump != NULL; clump = clump->next)
 	    {
 	    struct gfSeqSource *ss = clump->target;
-	    sprintf(buf, "%d\t%d\t%s\t%d\t%d\t%d\t%c\t%d", 
+	    sprintf(buf, "%lld\t%lld\t%s\t%lld\t%lld\t%d\t%c\t%d", 
 		clump->qStart, clump->qEnd, ss->fileName,
 		clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount,
 		strand, frame);
 	    errSendString(connectionHandle, buf);
 	    dyStringClear(dy);
 	    for (hit = clump->hitList; hit != NULL; hit = hit->next)
-	        dyStringPrintf(dy, " %d %d", hit->qStart, hit->tStart - ss->start);
-	    errSendLongString(connectionHandle, dy->string);
+	        dyStringPrintf(dy, " %lld %lld", hit->qStart, hit->tStart - ss->start);
+	    netSendLongString(connectionHandle, dy->string);
 	    ++clumpCount;
 	    if (--limit < 0)
 		break;
@@ -434,7 +434,7 @@ for (isRc = 0; isRc <= 1; ++isRc)
 	    for (clump = clumps[qFrame][tFrame]; clump != NULL; clump = clump->next)
 		{
 		struct gfSeqSource *ss = clump->target;
-		sprintf(buf, "%d\t%d\t%s\t%d\t%d\t%d\t%c\t%d\t%d", 
+		sprintf(buf, "%lld\t%lld\t%s\t%lld\t%lld\t%d\t%c\t%d\t%d", 
 		    clump->qStart, clump->qEnd, ss->fileName,
 		    clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount,
 		    strand, qFrame, tFrame);
@@ -442,7 +442,7 @@ for (isRc = 0; isRc <= 1; ++isRc)
 		dyStringClear(dy);
 		for (hit = clump->hitList; hit != NULL; hit = hit->next)
 		    {
-		    dyStringPrintf(dy, " %d %d", hit->qStart, hit->tStart - ss->start);
+		    dyStringPrintf(dy, " %lld %lld", hit->qStart, hit->tStart - ss->start);
 		    }
 		errSendLongString(connectionHandle, dy->string);
 		++clumpCount;
@@ -474,7 +474,7 @@ clumpList = gfPcrClumps(gf, fPrimer, fPrimerSize, rPrimer, rPrimerSize, 0, maxDi
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
     struct gfSeqSource *ss = clump->target;
-    safef(buf, sizeof(buf), "%s\t%d\t%d\t+", ss->fileName, 
+    safef(buf, sizeof(buf), "%s\t%lld\t%lld\t+", ss->fileName, 
         clump->tStart, clump->tEnd);
     errSendString(connectionHandle, buf);
     ++clumpCount;
@@ -486,7 +486,7 @@ clumpList = gfPcrClumps(gf, rPrimer, rPrimerSize, fPrimer, fPrimerSize, 0, maxDi
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
     struct gfSeqSource *ss = clump->target;
-    safef(buf, sizeof(buf), "%s\t%d\t%d\t-", ss->fileName, 
+    safef(buf, sizeof(buf), "%s\t%lld\t%lld\t-", ss->fileName, 
         clump->tStart, clump->tEnd);
     errSendString(connectionHandle, buf);
     ++clumpCount;
@@ -779,7 +779,7 @@ if (gf->segSize == 0)
     {
     // use lists
     gf->lists = needHugeZeroedMem(gf->tileSpaceSize * sizeof(gf->lists[0]));
-    bits32 *cur = gf->allocated;
+    void *cur = gf->allocated;
     size_t count = 0;
     for (i = 0; i < gf->tileSpaceSize; i++)
         {
@@ -790,21 +790,21 @@ if (gf->segSize == 0)
             count += gf->listSizes[i];
             }
         }
-    mustSeek(f, count*sizeof(bits32), SEEK_CUR);
+    mustSeek(f, count*sizeof(gfOffset), SEEK_CUR);
     }
 else
     {
     // use endLists
-    gf->endLists = needHugeZeroedMem(gf->tileSpaceSize * sizeof(gf->endLists[0]));
-    bits16 *cur = gf->allocated;
+    gf->endLists = needHugeZeroedMem(gf->tileSpaceSize * sizeof(struct endList));
+    void *cur = gf->allocated;
     size_t count = 0;
     for (i = 0; i < gf->tileSpaceSize; i++)
         {
         gf->endLists[i] = cur;
-        cur += 3 * gf->listSizes[i];
+        cur += gf->listSizes[i];
         count += gf->listSizes[i];
         }
-    mustSeek(f, 3*count*sizeof(bits16), SEEK_CUR);
+    mustSeek(f, count*sizeof(struct endList), SEEK_CUR);
     }
 return gf;
 }
