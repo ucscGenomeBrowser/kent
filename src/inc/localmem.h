@@ -89,4 +89,6 @@ void lmRefAdd(struct lm *lm, struct slRef **pRefList, void *val);
 char *lmJoinStrings(struct lm *lm, char *a, char *b);
 /* Return concatenation of a and b allocated in lm */
 
+struct hash *lmCloneHash(struct lm *lm, struct hash *hash);
+/* Clone a hash into local memory. ASSUMES VALUES ARE STRINGS */
 #endif//ndef LOCALMEM_H

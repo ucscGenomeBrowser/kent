@@ -19,6 +19,7 @@
 #include "jsonParse.h"
 #include "customComposite.h"
 #include "stdlib.h"
+#include "localmem.h"
 
 /* Tool tips */
 #define COLLECTION_TITLE  "Double-click to edit name and color"
@@ -729,6 +730,8 @@ for(collection = collectionList; collection; collection = collection->next)
 
         char colorString[64];
         safef(colorString, sizeof colorString, "%ld,%ld,%ld", (track->color >> 16) & 0xff,(track->color >> 8) & 0xff,track->color & 0xff);
+        struct lm *lm = lmInit(4096);
+        tdb->settingsHash = lmCloneHash(lm, tdb->settingsHash);
         hashReplace(tdb->settingsHash, "color", colorString);
 
         hashReplace(tdb->settingsHash, "shortLabel", track->shortLabel);
