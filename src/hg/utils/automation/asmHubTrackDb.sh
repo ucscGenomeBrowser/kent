@@ -377,6 +377,11 @@ ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeq.bb $buildDir/bbi/${asmId}.ncbiRe
 ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeq.ix $buildDir/ixIxx/${asmId}.ncbiRefSeq.ix
 ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeq.ixx $buildDir/ixIxx/${asmId}.ncbiRefSeq.ixx
 
+  export dataVersion="html/ncbiRefSeqVersion.txt"
+  if [ -s ${buildDir}/trackData/ncbiRefSeq/$asmId.ncbiRefSeqVersion.txt ]; then
+   dataVersion=`cat ${buildDir}/trackData/ncbiRefSeq/$asmId.ncbiRefSeqVersion.txt`
+  fi
+
   printf "track refSeqComposite
 compositeTrack on
 shortLabel NCBI RefSeq
@@ -387,7 +392,7 @@ type bigBed
 dragAndDrop subTracks
 noInherit on
 allButtonPair on
-dataVersion html/ncbiRefSeqVersion.txt
+dataVersion $dataVersion
 html html/%s.refSeqComposite
 priority 2
 
@@ -397,6 +402,7 @@ priority 2
         altColor 120,12,12
         shortLabel RefSeq All
         type bigGenePred
+        labelFields name,geneName,geneName2
         searchIndex name
         searchTrix ixIxx/%s.ncbiRefSeq.ix
         bigDataUrl bbi/%s.ncbiRefSeq.bb
@@ -420,6 +426,7 @@ priority 2
         shortLabel RefSeq Curated
         longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, NP_* or YP_*)
         type bigGenePred
+        labelFields name,geneName,geneName2
         searchIndex name
         searchTrix ixIxx/%s.ncbiRefSeqCurated.ix
         idXref ncbiRefSeqLink mrnaAcc name
@@ -443,6 +450,7 @@ priority 2
         shortLabel RefSeq Predicted
         longLabel NCBI RefSeq genes, predicted subset (XM_* or XR_*)
         type bigGenePred
+        labelFields name,geneName,geneName2
         searchIndex name
         searchTrix ixIxx/%s.ncbiRefSeqPredicted.ix
         idXref ncbiRefSeqLink mrnaAcc name
@@ -487,6 +495,7 @@ rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ix
         shortLabel RefSeq Alignments
         longLabel RefSeq Alignments of RNAs
         type bigPsl
+        searchIndex name
         bigDataUrl bbi/%s.bigPsl.bb
         indelDoubleInsert on
         indelQueryInsert on
@@ -499,6 +508,11 @@ rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ix
         baseColorUseSequence lfExtra
         baseColorUseCds table given
         color 0,0,0\n\n" "${asmId}"
+  fi
+
+  if [ -s ${buildDir}/trackData/ncbiRefSeq/$asmId.ncbiRefSeqVersion.txt ]; then
+    rm -f $buildDir/html/$asmId.ncbiRefSeqVersion.txt
+    ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeqVersion.txt $buildDir/html/
   fi
 
   $scriptDir/asmHubNcbiRefSeq.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.refSeqComposite.html

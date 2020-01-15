@@ -50,9 +50,19 @@ html dgvPlusGold
 
     track dgvMerged override
     parent dgvPlus on
+    type bigBed 9 +
+    bigDataUrl /gbdb/hg19/dgv/dgvMerged.bb
+    filter._size 1:9734324
+    filterByRange._size on
+    filterLabel._size Genomic size of variant
 
     track dgvSupporting override
-    parent dgvPlus off
+    parent dgvPlus
+    type bigBed 9 +
+    bigDataUrl /gbdb/hg19/dgv/dgvSupporting.bb
+    filter._size 1:9320633
+    filterByRange._size on
+    filterLabel._size Genomic size of variant
 
 # Repeats
 
