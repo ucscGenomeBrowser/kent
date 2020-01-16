@@ -613,7 +613,7 @@ cd kent/src/hg/makeDb/trackDb
     pushd ~/kent/src/hg/makeDb/trackDb
     ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg38 33 99 'Jan 2020'
 
-    # If being pushed public, update 'Release Notes' in
+    # Update 'Release Notes' in
     # human/hg38/wgEncodeGencodeSuper.html
 
     # edit human/hg38/trackDb.gencode.ra to add new .ra file include
@@ -625,6 +625,8 @@ cd kent/src/hg/makeDb/trackDb
     pushd /hive/data/genomes/hg38/bed/gencodeV33
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
+    # check tracks in browser sand box
     # commit all
+    make DBS=hg38 alpha
 
 #########################################################################
