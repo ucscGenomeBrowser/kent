@@ -83,13 +83,14 @@ type bigBed 12 +
 noScoreFilter .
 urlLabel Link to LRG report: 
 url ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml
-urls hgncId="http://www.genenames.org/data/hgnc_data.php?hgnc_id=$$" ncbiAcc="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+urls hgncId="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" ncbiAcc="https://www.ncbi.nlm.nih.gov/nuccore/$$"
 baseColorDefault diffBases
 baseColorUseSequence lrg
 indelDoubleInsert on
 indelQueryInsert on
 showDiffBasesAllScales .
 color 72,167,38
+pennantIcon Updated red ../goldenPath/newsarch.html#103119 "updated Oct. 31, 2019"
 
 track gad
 shortLabel GAD View
@@ -156,8 +157,42 @@ type bed 3
         mmcnt1Filter 0
         mmcnt2Filter 0
         mmcnt3Filter 0
-        dataVersion /gbdb/hg19/bbi/mastermindRelease.txt
-        parent varsInPubs
+        dataVersion /gbdb/$D/bbi/mastermindRelease.txt
+        parent varsInPubs pack
+
+        track avada
+        shortLabel Avada Variants
+        longLabel Avada Variants extracted from full text publications
+        visibility dense
+        type bigBed 9 +
+        bigDataUrl /gbdb/$D/bbi/avada.bb
+        noScoreFilter on
+        exonNumbers off
+        #itemRgb on
+        dataVersion release 1
+        parent varsInPubs pack
+        urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" doi="https://doi.org/$$" ensId="http://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$" entrezs="https://www.ncbi.nlm.nih.gov/gene/$$" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+        mouseOverField _mouseOver
+
+track pathoPred
+type bigWig
+longLabel Pathogenicity predictions
+shortLabel Pathogenicity
+color 112,172,192
+visibility hide
+superTrack on
+group phenDis
+
+        track cadd
+        type bigWig
+        longLabel CADD scores version 1.4
+        viewLimits 0:30
+        color 100,130,160
+        bigDataUrl /gbdb/$D/bbi/CADD-v1.4.bw
+        viewLimitsMax 0:100
+        shortLabel CADD
+        visibility full
+        parent pathoPred on
 
 track caseControl
 compositeTrack on
@@ -1580,6 +1615,149 @@ macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp151CodingDbSnp,
 priority 6.9
+
+track dbSnp152
+shortLabel All dbSNP (152)
+longLabel Short Genetic Variants from dbSNP release 152
+bigDataUrl /gbdb/$D/snp/dbSnp152.bb
+detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp152Details.tab.gz
+group varRep
+visibility dense
+url https://www.ncbi.nlm.nih.gov/snp/$$
+urlLabel dbSNP: 
+type bigDbSnp
+freqSourceOrder 1000Genomes,GnomAD_exomes,TOPMED,GnomAD,ExAC,GoESP,ALSPAC,TWINSUK,Estonian
+maxWindowToDraw 1000000
+classFilterValues snv,mnv,ins,del,delins,identity
+classFilterType multipleListOr
+ucscNotesFilterValues |(nothing noted),classMismatch|Variant class/type is inconsistent with allele sizes,clinvar|Present in ClinVar,clusterError|Overlaps a variant with the same type/class and position,commonAll|MAF >= 1% in all projects that report frequencies,commonSome|MAF >= 1% in at least one project that reports frequencies,delMismatch|Deleted sequence mismatches genomic reference sequence,diffMajor|Different projects report different major alleles,multiMap|Variant is placed in more than one genomic position,overlapDiffClass|Variant overlaps other variant(s) of different type/class,overlapSameClass|Variant overlaps other variant(s) of same type/class but different position,refIsMinor|Genomic reference allele is minor allele in at least one project that reports frequencies,refIsRare|Genomic reference allele frequency is <1% in at least one project,refIsSingleton|Genomic reference frequency is 0 in all projects reporting frequencies,revStrand|Variant maps to opposite strand relative to dbSNP's preferred top-level placement
+ucscNotesFilterType multipleListOr
+maxFuncImpactFilterValues 0|(not annotated),0865|frameshift,1587|stop_gained,1574|splice_acceptor_variant,1575|splice_donor_variant,1821|inframe_insertion,1583|missense_variant,1590|terminator_codon_variant,1819|synonymous_variant,1580|coding_sequence_variant,1623|5_prime_UTR_variant,1624|3_prime_UTR_variant,1619|nc_transcript_variant,2153|genic_upstream_transcript_variant,1986|upstream_transcript_variant,2152|genic_downstream_transcript_variant,1987|downstream_transcript_variant,1627|intron_variant
+maxFuncImpactFilterType multipleListOr
+priority 6.8
+release alpha
+
+track dbSnp153Composite
+compositeTrack on
+shortLabel dbSNP 153
+longLabel Short Genetic Variants from dbSNP release 153
+type bed 3
+group varRep
+visibility pack
+url https://www.ncbi.nlm.nih.gov/snp/$$
+urlLabel dbSNP: 
+subGroup1 view Views variants=Variants errs=Mapping_Errors
+priority 0.8
+
+    track dbSnp153ViewVariants
+    view variants
+    parent dbSnp153Composite
+    shortLabel Variants
+    visibility dense
+    type bigDbSnp
+    detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp153Details.tab.gz
+    freqSourceOrder 1000Genomes,GnomAD_exomes,TOPMED,ExAC,PAGE_STUDY,GnomAD,GoESP,Estonian,ALSPAC,TWINSUK,NorthernSweden,Vietnamese
+    classFilterValues snv,mnv,ins,del,delins,identity
+    classFilterType multipleListOr
+    showCfg on
+    ucscNotesFilterValues \
+        altIsAmbiguous|Alternate allele contains IUPAC ambiguous base(s),\
+        classMismatch|Variant class/type is inconsistent with allele sizes,\
+        clinvar|Present in ClinVar,\
+        clinvarBenign|ClinVar significance of benign and/or likely benign,\
+        clinvarConflicting|ClinVar includes both benign and pathogenic reports,\
+        clinvarPathogenic|ClinVar significance of pathogenic and/or likely pathogenic,\
+        clusterError|Overlaps a variant with the same type/class and position,\
+        commonAll|MAF >= 1% in all projects that report frequencies,\
+        commonSome|MAF >= 1% in at least one project that reports frequencies,\
+        diffMajor|Different projects report different major alleles,\
+        freqIncomplete|Frequency reported with incomplete allele data,\
+        freqIsAmbiguous|Frequency reported for allele with IUPAC ambiguous base(s),\
+        freqNotMapped|Frequency reported on different assembly but not mapped by dbSNP,\
+        freqNotRefAlt|Reference genome allele is not major allele in at least one project,\
+        multiMap|Variant is placed in more than one genomic position,\
+        otherMapErr|Another mapping of this variant has illegal coords (indel mapping error?),\
+        overlapDiffClass|Variant overlaps other variant(s) of different type/class,\
+        overlapSameClass|Variant overlaps other variant(s) of same type/class but different position,\
+        rareAll|MAF < 1% in all projects that report frequencies (or no frequency data),\
+        rareSome|MAF < 1% in at least one project that reports frequencies,\
+        refIsAmbiguous|Reference genome allele contains IUPAC ambiguous base(s),\
+        refIsMinor|Reference genome allele is minor allele in at least one project that reports frequencies,\
+        refIsRare|Reference genome allele frequency is <1% in at least one project,\
+        refIsSingleton|Reference genome frequency is 0 in all projects that report frequencies,\
+        refMismatch|Reference allele mismatches reference genome sequence,\
+        revStrand|Variant maps to opposite strand relative to dbSNP's preferred top-level placement
+#'
+    ucscNotesFilterType multipleListOr
+    maxFuncImpactFilterLabel Greatest functional impact on gene
+    maxFuncImpactFilterValues 0|(not annotated),\
+        0865|frameshift,\
+        1587|stop_gained,\
+        1574|splice_acceptor_variant,\
+        1575|splice_donor_variant,\
+        1821|inframe_insertion,\
+        1583|missense_variant,\
+        1590|terminator_codon_variant,\
+        1819|synonymous_variant,\
+        1580|coding_sequence_variant,\
+        1623|5_prime_UTR_variant,\
+        1624|3_prime_UTR_variant,\
+        1619|nc_transcript_variant,\
+        2153|genic_upstream_transcript_variant,\
+        1986|upstream_transcript_variant,\
+        2152|genic_downstream_transcript_variant,\
+        1987|downstream_transcript_variant,\
+        1627|intron_variant
+    maxFuncImpactFilterType multipleListOr
+
+        track dbSnp153Common
+        parent dbSnp153ViewVariants on
+        subGroups view=variants
+        shortLabel Common dbSNP(153)
+        longLabel Common (1000 Genomes Phase 3 MAF >= 1%) Short Genetic Variants from dbSNP Release 153
+        bigDataUrl /gbdb/$D/snp/dbSnp153Common.bb
+        priority 1
+
+        track dbSnp153ClinVar
+        parent dbSnp153ViewVariants off
+        subGroups view=variants
+        shortLabel ClinVar dbSNP(153)
+        longLabel Short Genetic Variants from dbSNP Release 153 Included in ClinVar
+        bigDataUrl /gbdb/$D/snp/dbSnp153ClinVar.bb
+        priority 2
+
+        track dbSnp153Mult
+        parent dbSnp153ViewVariants off
+        subGroups view=variants
+        shortLabel Mult. dbSNP(153)
+        longLabel Short Genetic Variants from dbSNP Release 153 that Map to Multiple Genomic Loci
+        bigDataUrl /gbdb/$D/snp/dbSnp153Mult.bb
+        priority 3
+
+        track dbSnp153
+        parent dbSnp153ViewVariants off
+        subGroups view=variants
+        shortLabel All dbSNP(153)
+        longLabel All Short Genetic Variants from dbSNP Release 153
+        bigDataUrl /gbdb/$D/snp/dbSnp153.bb
+        maxWindowToDraw 1000000
+        priority 4
+
+    track dbSnp153ViewErrs
+    parent dbSnp153Composite
+    view errs
+    shortLabel Mapping Errors
+    visibility dense
+
+        track dbSnp153BadCoords
+        parent dbSnp153ViewErrs off
+        subGroups view=errs
+        shortLabel Map Err dbSnp(153)
+        longLabel Mappings with Inconsistent Coordinates from dbSNP 153
+        bigDataUrl /gbdb/$D/snp/dbSnp153BadCoords.bb
+        type bigBed 4
+        color 100,100,100
+        priority 5
 
 track hgdpGeo
 shortLabel HGDP Allele Freq
@@ -3457,16 +3635,38 @@ compositeTrack on
         urls case_id=https://portal.gdc.cancer.gov/cases/$$
         parent cancerMutations
 
-track lovd
+track lovdComp
 shortLabel LOVD Variants
 longLabel Leiden Open Variation Database Public Variants
 group phenDis
 visibility hide
+compositeTrack on
 type bedDetail 6
-url http://varcache.lovd.nl/redirect/$$
-urlLabel Link to LOVD:
-tableBrowser off lovd
-noScoreFilter on
+tableBrowser off lovdComp
+html lovdComp
+
+        track lovdShort
+        shortLabel LOVD Variants <= 100bp
+        longLabel Leiden Open Variation Database, short <=100bp variants
+        group phenDis
+        visibility hide
+        type bedDetail 6
+        url http://varcache.lovd.nl/redirect/$$
+        urlLabel Link to LOVD:
+        noScoreFilter on
+        parent lovdComp
+
+        track lovdLong
+        shortLabel LOVD Variants > 100bp
+        longLabel Leiden Open Variation Database Public Variants, long >100bp variants
+        group phenDis
+        visibility hide
+        type bedDetail 6
+        url http://varcache.lovd.nl/redirect/$$
+        urlLabel Link to LOVD:
+        noScoreFilter on
+        parent lovdComp
+
 
 track hgmd
 shortLabel HGMD Variants
@@ -4823,6 +5023,7 @@ visibility hide
 color 0, 80, 0
 type bed 4
 html geneReviews
+url https://www.ncbi.nlm.nih.gov/books/NBK1116/?term=$$
 
 searchName geneReviews
 searchTable geneReviews
@@ -5122,6 +5323,54 @@ semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.950
 padding 250
+
+searchTable dbSnp152
+searchMethod exact
+searchType bigBed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.949
+padding 100
+
+searchTable dbSnp153Common
+searchMethod exact
+searchType bigBed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9450
+padding 100
+
+searchTable dbSnp153ClinVar
+searchMethod exact
+searchType bigBed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9451
+padding 100
+
+searchTable dbSnp153
+searchMethod exact
+searchType bigBed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9452
+padding 100
+
+searchTable dbSnp153Mult
+searchMethod exact
+searchType bigBed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9453
+padding 100
+
+searchTable dbSnp153BadCoords
+searchMethod exact
+searchType bigBed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9454
+padding 100
 
 include cloneEnd.trackDb.ra
 

@@ -783,8 +783,8 @@ for (cl = conflicts; cl != NULL; cl = cl->next)
 void prGene(FILE *f, struct cluster *cluster, struct clusterGene *cg)
 /* output info on one gene */
 {
-fprintf(f, "%d\t%s\t%s\t%s\t%d\t%d\t%s", cluster->id, cg->track->name, cg->gp->name, cg->gp->chrom, cg->gp->txStart, cg->gp->txEnd,
-        cg->gp->strand);
+fprintf(f, "%d\t%s\t%s\t%s\t%d\t%d\t%s\t%d\t%d", cluster->id, cg->track->name, cg->gp->name, cg->gp->chrom, cg->gp->txStart, cg->gp->txEnd,
+        cg->gp->strand, genePredBases(cg->gp), genePredCodingBases(cg->gp));
 if (gDetectConflicted)
     {
     fprintf(f, "\t%c\t%c", (cluster->hasExonConflicts ? 'y' : 'n'),
@@ -930,7 +930,9 @@ fputs("#"
       "chrom\t"
       "txStart\t"
       "txEnd\t"
-      "strand", f);
+      "strand\t"
+      "rnaLength\t"
+      "cdsLength", f);
 if (gDetectConflicted)
     fputs("\thasExonConflicts\t"
           "hasCdsConflicts\t"

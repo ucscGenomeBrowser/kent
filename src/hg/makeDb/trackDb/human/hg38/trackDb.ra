@@ -1,5 +1,4 @@
 include ../../refSeqComposite.ra
-include ../../crispr10K.ra alpha
 
 include barCharts.ra
 
@@ -525,6 +524,16 @@ track snp144 override
 group varRep
 snpSeqFile /gbdb/hg38/snp/snp144.fa
 
+track tgpPhase3
+shortLabel 1000G Ph3 Vars
+longLabel 1000 Genomes Phase 3 Integrated Variant Calls from IGSR: SNVs and Indels
+type vcfTabix
+group varRep
+visibility hide
+maxWindowToDraw 5000000
+showHardyWeinberg on
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
 track genomicSuperDups override
 group rep
 priority 5
@@ -594,8 +603,7 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra alpha
 
-include knownGene.ra beta,public
-include knownGene.alpha.ra alpha
+include knownGene.ra
 
 include trackDb.100way.ra
 include trackDb.145way.ra alpha
@@ -629,6 +637,55 @@ snpVersion 144
 # override to use hg38 specific html page
 track crispr override
 html crispr
+
+track liftHg19
+shortLabel hg19 Mapping
+longLabel hg19 Mappings: UCSC LiftOver and NCBI ReMap
+group map
+visibility hide
+priority 499
+type chain
+compositeTrack on
+release alpha
+
+        track liftOverHg19
+        shortLabel UCSC liftOver to hg19
+        longLabel UCSC liftOver alignments to hg19
+        priority 1
+        type chain hg19
+        matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+        matrixHeader A, C, G, T
+        otherDb hg19
+        chainMinScore 3000
+        chainLinearGap medium
+        parent liftHg19
+        release alpha
+
+        track chainHg19ReMap
+        shortLabel NCBI ReMap hg19
+        longLabel NCBI ReMap alignments to hg19/GRCh37
+        priority 2
+        type chain hg19
+        matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+        matrixHeader A, C, G, T
+        otherDb hg19
+        chainMinScore 3000
+        chainLinearGap medium
+        parent liftHg19
+        release alpha
+
+        track chainHg19ReMapAxtChain
+        shortLabel ReMap + axtChain 19hg38
+        longLabel NCBI ReMap alignments to hg19/GRCh37, joined by axtChain
+        priority 3
+        type chain hg19
+        matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+        matrixHeader A, C, G, T
+        otherDb hg19
+        chainMinScore 3000
+        chainLinearGap medium
+        parent liftHg19
+        release alpha
 
 track ncbiRefSeqRefGene
 compositeTrack on
@@ -712,4 +769,42 @@ include encode3.ra
 
 include wgEncodeReg.dev.ra alpha
 
+include hic.ra
+
+include gnomad.ra
+
+include platinumGenomes.ra
+
+track epdNew
+compositeTrack on
+shortLabel EPDnew Promoters
+longLabel Promoters from EPDnew
+html ../../epdNewPromoter
+type bigBed 8
+group expression
+visibility hide
+urlLabel EPDnew link:
+bedNameLabel Promoter ID
+exonArrows on
+pennantIcon New red ../goldenPath/newsarch.html#112719a Track Released Nov. 27, 2019
+
+    track epdNewPromoter
+    shortLabel EPDnew v6
+    longLabel Promoters from EPDnew human version 006
+    parent epdNew on
+    bigDataUrl /gbdb/$D/bbi/epdNewHuman006.$D.bb
+    dataVersion EPDNew Human Version 006 (May 2018)
+    url https://epd.epfl.ch/cgi-bin/get_doc?db=hgEpdNew&format=genome&entry=$$
+    color 50,50,200
+    priority 1
+
+    track epdNewPromoterNonCoding
+    shortLabel EPDnew NC v1
+    longLabel ncRNA promoters from EPDnewNC human version 001
+    parent epdNew on
+    bigDataUrl /gbdb/$D/bbi/epdNewHumanNc001.$D.bb
+    dataVersion EPDNewNC Human Version 001 (April 2019)
+    url https://epd.epfl.ch/cgi-bin/get_doc?db=hsNCEpdNew&format=genome&entry=$$
+    color 180,0,134
+    priority 2
 

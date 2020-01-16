@@ -43,6 +43,8 @@
   <li>
   <a href="hubQuickStartAssembly.html" target="_blank">Quick Start Guide to Assembly Hubs with 
   Blat</a></li> 
+  <li><a href="hubQuickStartSearch.html" target="_blank">Quick Start Guide to Searchable Track 
+  Hubs</a></li>
 </ul> 
 <div> 
 <form name="googleForm1" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/goldenPath/help';"> 
@@ -78,15 +80,18 @@ has been registered with UCSC. Additionally, users can import data from unlisted
 display, and share their own track hubs. Genome assemblies that UCSC does not support can be loaded 
 and viewed with associated data.</p>  
 <p>
-The data underlying the tracks and optional sequence in a hub reside on the remote server of the 
-data provider rather than at UCSC. Genomic annotations are stored in compressed binary indexed 
-files in bigBed, bigBarChart, bigGenePred, bigNarrowPeak, bigPsl, bigChain, bigInteract, bigMaf, bigWig, BAM, CRAM, HAL or VCF 
-format that contain the data at several resolutions. In the case of assemblies that UCSC does not 
-support, genomic sequence is stored in the efficient twoBit format. When a hub track is displayed 
-in the Genome Browser, only the relevant data needed to support the view of the current genomic 
-region are transmitted rather than the entire file. The transmitted data are cached on the UCSC 
-server to expedite future access. This on-demand transfer mechanism eliminates the need to transmit 
-large data sets across the Internet, thereby minimizing upload time into the browser.</p> 
+The data underlying the tracks and optional sequence in a hub reside on the
+remote server of the data provider rather than at UCSC. Genomic annotations are
+stored in compressed binary indexed files in bigBed, bigBarChart, bigGenePred,
+bigNarrowPeak, bigPsl, bigChain, bigInteract, bigMaf, bigWig, BAM, CRAM, HAL,
+hic or VCF format that contain the data at several resolutions. In the case of
+assemblies that UCSC does not support, genomic sequence is stored in the
+efficient twoBit format. When a hub track is displayed in the Genome Browser,
+only the relevant data needed to support the view of the current genomic region
+are transmitted rather than the entire file. The transmitted data are cached on
+the UCSC server to expedite future access. This on-demand transfer mechanism
+eliminates the need to transmit large data sets across the Internet, thereby
+minimizing upload time into the browser.</p> 
 <p>
 The track hub utility offers a convenient way to view and share very large sets of data. Individuals
 wishing to display only a few small data sets may find it easier to use the Genome Browser 
@@ -188,13 +193,14 @@ To create your own hub you will need:</p>
 <ul>
   <li>
   one or more data sets formatted in one of the compressed binary index formats supported by the 
-  Genome Browser: bigBed, bigBarChart, bigGenePred, bigNarrowPeak, bigPsl, bigChain, bigInteract, bigMaf, bigWig, BAM, CRAM, 
-  HAL or VCF</li>
+  Genome Browser: bigBed, bigBarChart, bigGenePred, bigNarrowPeak, bigPsl, bigChain, bigInteract,
+  bigMaf, bigWig, BAM, CRAM, HAL, hic or VCF</li>
   <li>
   a set of text files that specify properties for the track hub and for each of the data tracks 
   within it</li>
   <li>
-  a twoBit file with your sequence if you are setting up an assembly hub.</li>
+  a twoBit file with your sequence if you are setting up an assembly hub. Note that the allowed
+  characters in sequence names are [A-Za-z_0-9_-]</li>
   <li>
   an Internet-enabled web server or ftp server </li>
   <!--Question: do we have some general minimum requirements for this?-->
@@ -206,6 +212,10 @@ setting up a track hub is similar, but is usually much easier. Depending on the 
 complexity of the data sets, a track hub can typically be set up in a day or two. It is generally 
 easiest to run the command-line data formatting programs in a Linux programming environment, 
 although it's possible to manipulate smaller data sets using Mac OS-X as well.</p>
+<p>
+<b>Note:</b> there is now a <code>useOneFile on</code> hub setting that allows the hub
+properties to be specified in a single file. More information about this setting can be found on the
+<a href="./hgTracksHelp.html#UseOneFile" target="_blank">Genome Browser User Guide</a>.</p>
 <p>
 <strong><em>Example 1:</em></strong> Directory hierarchy for a hub containing DNase and RNAseq data 
 for the hg18 and hg19 human genome assemblies. The hg18/ and hg19/ subdirectories contain the 
@@ -255,9 +265,10 @@ supported by the Genome Browser:
 <a href="interact.html">bigInteract</a>,
 <a href="bigPsl.html">bigPsl</a>, 
 <a href="bigMaf.html">bigMaf</a>,
-<a href="bigWig.html">bigWig</a>, 
+<a href="hic.html">hic</a>, 
 <a href="bam.html">BAM</a>,
-<a href="cram.html">CRAM</a>, HAL or
+<a href="cram.html">CRAM</a>,
+<a href="https://github.com/ComparativeGenomicsToolkit/hal" target="_blank">HAL</a> or
 <a href="vcf.html">VCF</a>.</p>
 <p>
 <em>bigWig</em> - The bigWig format is best for displaying continuous value plot data, such as 
@@ -275,13 +286,6 @@ name and (optionally) a color and a score with one or more related regions on th
 such as all the exons of a gene. See the <a href="bigBed.html">bigBed Track Format</a> help page for
 information on creating and configuring bigBed tracks.</p> 
 <p>
-<em>bigNarrowPeak</em> - BigNarrowPeak files are binary indexed versions of Browser Extensible Data 
-(<a href="../../FAQ/FAQformat.html#format1">BED</a>) files with first six fields being the same as bed,
-and an extra four fields that contain various scores and the offset of the base within the block that is 
-the peak.
- See the <a href="bigNarrowPeak.html">bigNarrowPeak Track
-Format</a> help page for information on creating and configuring bigNarrowPeak tracks.</p>
-<p>
 <em>bigGenePred</em> - BigGenePred files are binary indexed versions of Browser Extensible Data 
 (<a href="../../FAQ/FAQformat.html#format1">BED</a>) files with an extra eight fields that are 
 useful for describing gene predictions that are modeled after the fields in 
@@ -289,6 +293,18 @@ useful for describing gene predictions that are modeled after the fields in
 associating a name and (optionally) a color and a score with one or more related regions on the same
 chromosome, such as all the exons of a gene. See the <a href="bigGenePred.html">bigGenePred Track 
 Format</a> help page for information on creating and configuring bigGenePred tracks.</p> 
+<p>
+<em>bigChain</em> - BigChain files are binary indexed versions of 
+<a href="chain.html">chain</a> files. BigChain format is useful for large pairwise alignment data 
+sets. See the <a href="bigChain.html">bigChain Track Format</a> help page for more information on 
+creating and configuring bigChain tracks.</p>
+<p>
+<em>bigNarrowPeak</em> - BigNarrowPeak files are binary indexed versions of Browser Extensible Data 
+(<a href="../../FAQ/FAQformat.html#format1">BED</a>) files with first six fields being the same as bed,
+and an extra four fields that contain various scores and the offset of the base within the block that is 
+the peak.
+ See the <a href="bigNarrowPeak.html">bigNarrowPeak Track
+Format</a> help page for information on creating and configuring bigNarrowPeak tracks.</p>
 <p>
 <em>bigBarChart</em> - BigBarChart files are binary indexed versions of 
 <a href="../../FAQ/FAQformat.html#format21">barChart</a> files. BigBarChart format is useful for
@@ -298,7 +314,7 @@ Format</a> help page for information on creating and configuring bigBarChart tra
 <p>
 <em>bigInteract</em> - BigInteract files are binary indexed versions of 
 <a href="../../FAQ/FAQformat.html#format22">interact</a> files. BigInteract format is useful for
-bringing interacdt display into track hubs, and supports schema customization and label configuration
+bringing interact display into track hubs, and supports schema customization and label configuration
 that is not supported for regular interact format. See the <a href="interact.html">interact Track
 Format</a> help page for information on creating and configuring bigInteract tracks.</p> 
 <p>
@@ -306,15 +322,19 @@ Format</a> help page for information on creating and configuring bigInteract tra
 <a href="../../FAQ/FAQformat.html#format2">PSL</a> files. BigPsl format is useful for large data 
 sets created by BLAT or other tools. See the <a href="bigPsl.html">bigPsl Track Format</a> help page
 for more information on creating and configuring bigPsl tracks.</p>
-<p><em>bigChain</em> - BigChain files are binary indexed versions of 
-<a href="chain.html">chain</a> files. BigChain format is useful for large pairwise alignment data 
-sets. See the <a href="bigChain.html">bigChain Track Format</a> help page for more information on 
-creating and configuring bigChain tracks.</p>
-<p><em>bigMaf</em> - BigMaf files are binary indexed versions of 
+<p>
+<em>bigMaf</em> - BigMaf files are binary indexed versions of 
 <a href="../../FAQ/FAQformat.html#format5">MAF</a> files. BigMaf format is useful for large multiple
 alignment data sets. See the <a href="bigMaf.html">bigMaf Track Format</a> help page for more 
 information on creating and configuring bigMaf tracks.</p>
-<p><em>BAM</em> - BAM files contain alignments of (generally short) DNA reads to a reference 
+<p>
+<em>hic</em> - Hic files are binary files that store contact matrices from chromatin
+conformation experiments.  This format is useful for displaying interactions at a scale and depth
+that exceeds what can be easily visualized with the interact and bigInteract formats.
+See the <a href="hic.html">hic Track Format</a> help page for more information on creating and
+configuring hic tracks.</p>
+<p>
+<em>BAM</em> - BAM files contain alignments of (generally short) DNA reads to a reference 
 sequence, usually a complete genome. BAM files are binary versions of Sequence Alignment/Map
 (<a href="http://samtools.sourceforge.net/" target="_blank">SAM</a>) format files. Unlike bigWig and
 bigBed formats, the index for a BAM file is in a separate file, which the track hub expects to be in
@@ -350,6 +370,10 @@ for more information.</p>
 Create a track hub directory in an Internet-accessible location on your web or ftp server. This 
 directory will contain the hub.txt and genomes.txt files that define properties of the track hub and
 a subdirectory for each of the genome assemblies covered by the hub track data.</p>
+<p>
+<b>Note:</b> there is now a <code>useOneFile on</code> hub setting that allows the hub
+properties to be specified in a single file. More information about this setting can be found on the
+<a href="./hgTracksHelp.html#UseOneFile" target="_blank">Genome Browser User Guide</a>.</p>
 <hr>
 <p>
 <strong>Step 3. Place the track data files in an Internet-accessible location</strong><br> 
@@ -533,11 +557,12 @@ configuration and track settings, and on the details pages. Suggested maximum le
 characters.</p>
 <p>
 <em>type</em> - the format of the file specified by bigDataUrl. Must be either <em>bigWig</em>, 
-<em>bigBed</em>, <em>bigBarChart</em>, <em>bigGenePred</em>, <em>bigInteract</em>, <em>bigNarrowPeak</em>, <em>bigChain</em>, <em>bigPsl</em>, 
-<em>bigMaf</em>, <em>bam</em>, <em>halSnake</em> or <em>vcfTabix</em> (Note: use <em> type bam</em> 
-for CRAM files). If the type is <em>bigBed</em>, it may be followed by an optional number denoting 
-the number of fields in the bigBed file (e.g., &quot;type bigBed 12&quot; for a file with 12 fields
-or &quot;type bigBed 12 +&quot; for a file that contains additional <a href="../../FAQ/FAQformat.html#format1" 
+<em>bigBed</em>, <em>bigBarChart</em>, <em>bigGenePred</em>, <em>bigInteract</em>, <em>bigNarrowPeak</em>,
+<em>bigChain</em>, <em>bigPsl</em>, <em>bigMaf</em>, <em>hic</em>, <em>bam</em>, <em>halSnake</em> or
+<em>vcfTabix</em> (Note: use <em> type bam</em> for CRAM files). If the type is <em>bigBed</em>, it
+may be followed by an optional number denoting the number of fields in the bigBed file (e.g.,
+&quot;type bigBed 12&quot; for a file with 12 fields or &quot;type bigBed 12 +&quot; for a file
+that contains additional <a href="../../FAQ/FAQformat.html#format1" 
 target="_blank">non-standard columns</a>). 
 If no number is given, a default value of 3 is assumed (a very limited display that omits names, strand 
 information, and exon boundaries).</p>
@@ -654,9 +679,12 @@ The Genome Browser supports searching for items within bigBed tracks in track da
 this behavior you have to add an index to the bigBed file when you initially create the the bigBed 
 file from the bed file input. Indices are usually created on the name field of the bed, but can be 
 created on any field of the bed. Free-text searches can also be enabled by creating a 
-<a href="trix.html">TRIX index file</a> that maps id's in the track to free-text metadata.</p>
+<a href="trix.html">TRIX index file</a> that maps id's in the track to free-text metadata. Further
+intructions can be found in the <a href="hubQuickStartSearch.html">Searchable Hub Quick Start 
+Guide</a>.</p>
 <p>
-See the searchIndex and searchTrix fields in the Hub Track Database Definition document for 
+See the searchIndex and searchTrix fields in the <a href="trackDb/trackDbHub.html">Hub Track 
+Database Definition document</a> for 
 information on how to set up your bigBed to enable searching. The searchIndex setting requires
 the input BED data to be case-senstive sorted (<code>sort -k1,1 -k2,2n</code>). You can use
 either the example UNIX <code>sort</code> command or the <code>bedSort</code> utility available
@@ -828,31 +856,51 @@ just examples and do not represent real trackDb variables for hubs at Ensembl.)
 <!-- ========== Where to host your data ============================== -->
 <a name="Hosting"></a>
 <h2>Where to host your data?</h2> 
-<p>
 As stated in <a href="#Intro">What Are Track Hubs?</a>, track hubs files must be located
-in web-accessible locations that support byte-range requests. If your institution does not
-provide web hosting space for you, we know of at least the following sites where you can host
-your data and configuration files for free:</p>
+in web-accessible locations that support byte-range requests. There are four options for these:
 <ul>
-  <li><a href="https://de.cyverse.org/de/" target="_blank">CyVerse Discovery Environment</a></li>
-  <!--<li><a href="https://usegalaxy.org/" target="_blank">Galaxy</a></li>-->
-  <li><a href="https://github.com/" target="_blank">Github</a></li>
-  <li><a href="https://figshare.com/" target="_blank">Figshare</a></li>
+  <li>Your institution's IT department
+  <li>Commercial webspace providers
+  <li>Commercial cloud providers
+  <li>Free webspace providers
 </ul>
 <p>
-Each of the providers above has a slightly different approach to hosting data for
-compatibility with the UCSC Genome Browser, and may have different advantages and disadvantages,
-such as size limitations, usage statistics, and version control integration. Additionally, as 
-previously mentioned, any provider that supports byte-range access will work for hub hosting, 
-and you are not limited to the above sites. Below is a summarized guide for
-each of the providers mentioned above.</p>
+<b>Your Institution:</b> Many universities provide a location for researchers
+to place shareable data on the web and contacting your institution's system
+administrators will help discover a location to store your data. For example,
+if you work at the NIH, there is an internal data sharing <a
+href="https://hpc.nih.gov/nih/datashare.html" target="_blank">NIH network</a>
+site. Sometimes institution firewall rules can change, and you may need to
+inform your system administrators to add browser IP addresses as exceptions,
+listed 
+<a href="http://genomewiki.ucsc.edu/index.php/Public_Hub_Guidelines#Connection_issues.3F" target="_blank">here</a>. 
+Usually your IT department can direct you to someone
+who manages webspace for individual groups. This is our recommended option, as
+it is usually free, very fast and you can update the files yourself easily.</p>
 
-<p>In general, commercial online <b>cloud backup</b> providers
+<p><b>Webspace providers:</b> If your institution does not provide any web
+hosting space for you, the most convenient solution is usually to buy a
+virtualized webspace server from a commercial web hosting provider. These cost
+around $5-30 per month, provide more than 100GB of storage and unlimited
+bandwith. Often this service is called "shared hosting" or VPS, virtual private
+server. Files can be uploaded with FTP, rsync or scp and appear on a https://
+domain. Some exemples of providers are: A2 Hosting, BlueHost, GoDaddy,
+HostGator, Hostinger, DreamHost, but there are many others. This is not a
+complete list and we do not endorse a particular one. You can search the
+internet for subsets of these to find comparisons and reviews. The advantage of
+webspace providers is that they bill a flat rate per month, which is often
+easier to order through Universities than the per-GB billing of cloud
+providers. For optimal performance, select a West Coast / San Francisco data
+center when ordering a web server, as this is closest and fastest from
+UCSC. Unlike cloud providers, the storage is less reliable, it is good
+to keep local copies of the files.</p>
+
+<p><b>Cloud providers:</b> In general, commercial online cloud <b>backup</b> providers
 that charge a flat rate, like Dropbox, iCloud, Google Drive, Box.com, Microsoft
 OneDrive, Tencent Weiyun, Yandex.Disk, etc. do not work reliably as their business
 model requires rare and rate-limited data access, which is too slow or too limited for
 genome annotation display. However, commercial
-<b>cloud storage</b> offers that charge per GB transferred, like Amazon S3, Microsoft
+cloud <b>storage</b> offers that charge per GB transferred, like Amazon S3, Microsoft
 Azure Storage, Google Cloud Storage, Backblaze, Alibaba Object Store, etc.
 typically do work. For optimal performance,
 select a San Francisco / San Jose data center for the main UCSC site genome.ucsc.edu,  
@@ -861,6 +909,22 @@ genome-asia.ucsc.edu. You may also want to review this discussion about issues w
 <a href="http://genomewiki.ucsc.edu/index.php/Cloud-storage_providers_and_byte-range_requests_of_UCSC_big*_files"
 target="_blank">distributed storage servers</a>. <b>These services are external
 to UCSC and may change.</b></p>
+
+</p><b>Free webspace:</b> If you do not want to pay for web space,
+we know of at least the following sites where you can host
+research data and configuration files for free:
+<ul>
+  <li><a href="https://de.cyverse.org/de/" target="_blank">CyVerse Discovery Environment</a> - lots of space, but can be relatively slow to display</li>
+  <!--<li><a href="https://usegalaxy.org/" target="_blank">Galaxy</a></li>-->
+  <li><a href="https://github.com/" target="_blank">Github</a> - files limited to 100MB, but very fast</li>
+  <li><a href="https://figshare.com/" target="_blank">Figshare</a> - not limited and fast, but every file needs to be uploaded individually and cannot be changed. Optimal for very stable links, e.g. in publications.</li>
+</ul>
+Each of the providers above has a slightly different approach to hosting data for
+compatibility with the UCSC Genome Browser, and may have different advantages and disadvantages,
+such as size limitations, usage statistics, and version control integration. Additionally, as 
+previously mentioned, any provider that supports byte-range access will work for hub hosting, 
+and you are not limited to the above sites. Below is a summarized guide for
+each of the providers mentioned above.</p>
 
 <h3>Hosting Hubs on CyVerse</h3>
 <p>

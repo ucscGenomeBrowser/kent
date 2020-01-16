@@ -23,7 +23,6 @@
 <hr>
 <p>
 <strong>Other resources:</strong>
-<td>
   <ul><strong>
     <li><a class="toc" href="http://genome.ucsc.edu/blog/genome-browser-in-a-box-gbib-origins/" 
      target="_blank">UCSC blog post about GBiB</a></li>
@@ -283,6 +282,15 @@ that start with wgEncodeGencode to your GBiB into the hg19 directory. There are 
 files in a hgFixed directory, such as for the publication tracks, that could be mirrored with such
 commands.</p>
 <p>
+Here is another example for hg38 where the following commands would download all the supporting
+encRegTfbs and factorbook tables for the Transcription Factor ChIP-seq Clusters track:
+<pre>
+<code>sudo rsync hgdownload.soe.ucsc.edu::mysql/hg38/encRegTfbs* /data/mysql/hg38/.</code>
+</pre>
+<pre>
+<code>sudo rsync hgdownload.soe.ucsc.edu::mysql/hg38/factor* /data/mysql/hg38/.</code>
+</pre>
+<p>
 You can also download gbdb files in this manner.
 <pre>
 <code>sudo rsync hgdownload.soe.ucsc.edu::gbdb/hg19/multiz100way/phyloP100way.wib /data/gbdb/hg19/multiz100way/.</code>
@@ -434,11 +442,22 @@ uploading a track or assembly hub, right-click on your &quot;hub.txt&quot; file 
 &quot;Copy link address&quot;. You can now paste this URL into the box on the &quot;My Hubs&quot;
 tab of the <a href="../../cgi-bin/hgHubConnect" target="_blank">Track Data Hubs</a> page.</p>
 
+<a name="loadBam"></a>
 <h3><em>Example: Loading a local BAM custom track</em></h3>
 <p>
-Here is an example of a  custom track that loads a local BAM file (to customize this for your own 
-use, replace the URL with a pasted URL from your own machine):</p>
+Here is an example of a custom track in a shared test/ folder that loads a locally hosted
+BAM file when pasted on the custom tracks page (select <em>My Data >> Custom Tracks</em>
+in the Genome Browser menu):
 <pre><code>track type=bam name=BamExample bigDataUrl=http://127.0.0.1:1234/folders/test/bamExample.bam </code></pre>
+<p>
+To customize this URL for your own use, replace the URL with a pasted URL to files from your own
+machine discoverable under the <em>My Data >> GBiB Shared Data Folder</em> in the Genome Browser menu.
+Since the GBiB is configured so that the VirtualBox shared folder path can be placed directly into the
+custom track page (via a line <code>udc.localDir=/folders</code> in the hg.conf file) and there
+is software that knows files ending in <code>.bam</code> should be loaded as <code>type=bam</code>,
+the link can be replaced with just a path to the file. For example, pasting the following on the
+custom tracks page would also work:</p>
+<pre><code>/folders/test/bamExample.bam </code></pre>
 
 <a name="Connectwithssh"></a>
 <h3>Connecting to GBiB with ssh</h3>

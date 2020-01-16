@@ -95,6 +95,7 @@ DBS = \
 	droYak1 droYak2 \
 	eboVir3 eboVir2 eboVir1 bunEbo1 sudEbo1 resEbo1 taiEbo1 zaiEbo1 \
 	echTel1 echTel2 \
+	enhLutNer1 \
 	equCab1 equCab2 equCab3 \
 	eriEur1 eriEur2 \
 	eulFla1 \
@@ -108,7 +109,7 @@ DBS = \
 	galGal2 galGal3 galGal4 galGal5 galGal6 \
 	galVar1 \
 	gasAcu1 \
-	gorGor1 gorGor2 gorGor3 gorGor4 gorGor5 \
+	gorGor1 gorGor2 gorGor3 gorGor4 gorGor5 gorGor6 \
 	h1n1 \
 	haeCon1 haeCon2 \
 	hetBac1 \

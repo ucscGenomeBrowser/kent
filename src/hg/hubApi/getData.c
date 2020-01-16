@@ -201,7 +201,7 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
     struct chromInfo *ci = hGetChromInfo(db, chrom);
     jsonWriteNumber(jw, "start", (long long)0);
     jsonWriteNumber(jw, "end", (long long)ci->size);
-    if (tdb && startsWith("wig", tdb->type))
+    if (tdb && isWiggleDataTable(tdb->type))
 	{
 	if (jsonOutputArrays || debug)
 	    wigColumnTypes(jw);
@@ -224,7 +224,7 @@ else	/* fully specified chrom:start-end */
 	apiErrAbort(err400, err400Msg, "track '%s' is not a position track, request track without chrom and start,end specifications, genome: '%s'", track, db);
 
     jsonWriteString(jw, "chrom", chrom);
-    if (tdb && startsWith("wig", tdb->type))
+    if (tdb && isWiggleDataTable(tdb->type))
 	{
 	if (jsonOutputArrays || debug)
 	    wigColumnTypes(jw);
@@ -255,6 +255,8 @@ char **columnNames = NULL;
 char **columnTypes = NULL;
 int *jsonTypes = NULL;
 struct asObject *as = asForTable(conn, splitSqlTable, tdb);
+if (! as)
+    apiErrAbort(err500, err500Msg, "can not find schema definition for table '%s', genome: '%s'", splitSqlTable, db);
 struct asColumn *columnEl = as->columnList;
 int asColumnCount = slCount(columnEl);
 int columnCount = tableColumns(conn, splitSqlTable, &columnNames, &columnTypes, &jsonTypes);
@@ -286,7 +288,7 @@ if (isEmpty(chrom))
 	    }
 	else
 	    sqlDyStringPrintf(query, "select * from %s", splitSqlTable);
-	if (tdb && startsWith("wig", tdb->type))
+	if (tdb && isWiggleDataTable(tdb->type))
             itemsDone += wigTableDataOutput(jw, db, splitSqlTable, chrom,
 		start, end, itemsDone);
 	else
@@ -413,7 +415,7 @@ if (itemCount >= maxItemsOutput)
 return itemCount;
 }	/*	static unsigned wigDataOutput(...) */
 
-static void wigData(struct jsonWrite *jw, struct bbiFile *bwf, char *chrom,
+static void bigWigData(struct jsonWrite *jw, struct bbiFile *bwf, char *chrom,
     unsigned start, unsigned end)
 /* output the data for a bigWig bbi file */
 {
@@ -483,7 +485,7 @@ if (isNotEmpty(chrom))
     {
     chromSize = bbiChromSize(bbi, chrom);
     if (0 == chromSize)
-	apiErrAbort(err400, err400Msg, "can not find specified chrom=%s in bigBed file URL %s", chrom, bigDataUrl);
+	apiErrAbort(err400, err400Msg, "can not find specified chrom=%s in bigBed file URL '%s', track=%s genome=%s for endpoint '/getData/track' given hubUrl='%s'", chrom, bigDataUrl, track, genome, hubUrl);
     jsonWriteNumber(jw, "chromSize", (long long)chromSize);
     }
 else
@@ -508,6 +510,8 @@ jsonWriteString(jw, "trackType", thisTrack->type);
 if (allowedBigBedType(thisTrack->type))
     {
     struct asObject *as = bigBedAsOrDefault(bbi);
+    if (! as)
+	apiErrAbort(err500, err500Msg, "can not find schema definition for bigDataUrl '%s', track=%s genome: '%s' for endpoint '/getData/track' given hubUrl='%s'", bigDataUrl, track, genome, hubUrl);
     struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
     if (jsonOutputArrays || debug)
         bigColumnTypes(jw, fiList, as);
@@ -536,7 +540,7 @@ else if (startsWith("bigWig", thisTrack->type))
     if (jsonOutputArrays || debug)
 	wigColumnTypes(jw);
     jsonWriteObjectStart(jw, track);
-    wigData(jw, bbi, chrom, uStart, uEnd);
+    bigWigData(jw, bbi, chrom, uStart, uEnd);
     jsonWriteObjectEnd(jw);
     }
 bbiFileClose(&bbi);
@@ -595,7 +599,6 @@ if (trackHasNoData(thisTrack))
 /* might be a big* track with no table */
 char *bigDataUrl = NULL;
 boolean tableTrack = TRUE;
-boolean protectedData = FALSE;
 
 if (thisTrack)
     {
@@ -608,14 +611,15 @@ if (thisTrack)
 	freeMem(sqlTable);
 	sqlTable = cloneString(tableName);
 	}
-    if (trackDbSetting(thisTrack, "tableBrowser"))
-        protectedData = TRUE;
     }
 else
     {
     freeMem(sqlTable);
     sqlTable = cloneString(track);
     }
+
+if (protectedTrack(thisTrack, sqlTable))
+	apiErrAbort(err403, err403Msg, "this data request: 'db=%s;track=%s' is protected data, see also: https://genome.ucsc.edu/FAQ/FAQdownloads.html#download40", db, track);
 
 struct hTableInfo *hti = hFindTableInfoWithConn(conn, NULL, sqlTable);
 
@@ -645,8 +649,6 @@ if (! hTableOrSplitExists(db, sqlTable))
     else
 	tableTrack = FALSE;
     }
-if (protectedData)
-	apiErrAbort(err403, err403Msg, "this data request: 'db=%s;track=%s' is protected data, see also: https://genome.ucsc.edu/FAQ/FAQdownloads.html#download40", db, track);
 
 struct jsonWrite *jw = apiStartOutput();
 jsonWriteString(jw, "genome", db);
@@ -719,6 +721,8 @@ if ( uEnd > uStart )
 if (thisTrack && allowedBigBedType(thisTrack->type))
     {
     struct asObject *as = bigBedAsOrDefault(bbi);
+    if (! as)
+	apiErrAbort(err500, err500Msg, "can not find schema definition for bigDataUrl '%s', track=%s genome='%s' for endpoint '/getData/track'", bigDataUrl, track, db);
     struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
     if (jsonOutputArrays || debug)
         bigColumnTypes(jw, fiList, as);
@@ -748,7 +752,7 @@ else if (thisTrack && startsWith("bigWig", thisTrack->type))
 	wigColumnTypes(jw);
 
     jsonWriteObjectStart(jw, track);
-    wigData(jw, bbi, chrom, uStart, uEnd);
+    bigWigData(jw, bbi, chrom, uStart, uEnd);
     jsonWriteObjectEnd(jw);
     bbiFileClose(&bbi);
     }
@@ -779,9 +783,9 @@ if (chromSeqFileExists(db, chrom))
 
     if (isEmpty(start) || isEmpty(end))
 	if (chromSize > MAX_DNA_LENGTH)
-	    apiErrAbort(err400, err400Msg, "DNA sequence request %d too large, limit: %u for endpoint '/getData/sequence?genome=%s;chrom=%s'", chromSize, MAX_DNA_LENGTH, db, chrom);
+	    apiErrAbort(err400, err400Msg, "DNA sequence request %u (size of %s) too large, limit: %u for endpoint '/getData/sequence?genome=%s;chrom=%s'", chromSize, chrom, MAX_DNA_LENGTH, db, chrom);
 	else
-	    seq = hChromSeqMixed(db, chrom, 0, 0);
+	    seq = hChromSeqMixed(db, chrom, 0, chromSize);
     else
 	if ( (sqlSigned(end) - sqlSigned(start)) > MAX_DNA_LENGTH)
 	    apiErrAbort(err400, err400Msg, "DNA sequence request %d too large, limit: %u for endpoint '/getData/sequence?genome=%s;chrom=%s;start=%s;end=%s'", sqlSigned(end) - sqlSigned(start), MAX_DNA_LENGTH, db, chrom, start, end);

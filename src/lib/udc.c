@@ -530,7 +530,7 @@ while (TRUE)
 	if (status == 206) 
 	    break;
 	}
-    if (status != 301 && status != 302)
+    if (status != 301 && status != 302 && status != 307 && status != 308)
 	return FALSE;
     ++redirectCount;
     if (redirectCount > 5)

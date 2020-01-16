@@ -73,7 +73,7 @@ struct hash *newHash = lmAlloc(lm, sizeof(struct hash));
 
 *newHash = *hash;
 newHash->lm = NULL;
-newHash->ownLm = FALSE;
+newHash->ownLm = TRUE;  // mark as having been read in from trackDb cache
 newHash->next = NULL;
 lmAllocArray(lm, newHash->table, hash->size);
 
@@ -170,6 +170,9 @@ struct slName *files = listDir(dirName, "*");
 char fileName[4096];
 for(; files; files = files->next)
     {
+    if (sameString(files->name, "name.txt"))
+        continue;
+
     safef(fileName, sizeof fileName, "%s/%s/%s", trackDbCacheDir, string, files->name);
     cacheLog("checking cache file %s", fileName);
     
@@ -198,7 +201,25 @@ for(; files; files = files->next)
         continue;
         }
 
-    unsigned long address = atoi(files->name); // the name of the file is the address it uses
+    char *addressString = cloneString(files->name);
+    char *dot = strchr(addressString, '.');
+    if (dot == NULL)
+        {
+        cacheLog("no dot in  %s", addressString);
+        continue;
+        }
+
+    unsigned cachedStructVersion = atoi(dot + 1);
+    cacheLog("cached trackDb version %d, should be %d in  %s", cachedStructVersion, TRACKDB_VERSION,  addressString);
+
+    if (TRACKDB_VERSION != cachedStructVersion)
+        {
+        cacheLog("wrong cached trackDb version %d, should be %d in  %s", cachedStructVersion, TRACKDB_VERSION,  addressString);
+        continue;
+        }
+
+    *dot = 0;
+    unsigned long address = atoi(addressString); // the name of the file is the address it uses plus TRACKDB_VERSION
     unsigned long size = fileSize(fileName);
 
     u_char *mem = (u_char *) mmap((void *)address, size, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0);
@@ -207,6 +228,7 @@ for(; files; files = files->next)
     if ((unsigned long)mem == address)  // make sure we can get this address
         {
         u_char *ret = mem + lmBlockHeaderSize();
+        maybeTouchFile(fileName);
         cacheLog("using cache memory at %lx", ret);
         return (struct trackDb *)ret;
         }
@@ -325,7 +347,7 @@ ftruncate(fd, memUsed);
 //close(fd);
 
 char fileName[4096];
-safef(fileName, sizeof fileName, "%s/%s/%ld", trackDbCacheDir, string, paddress);
+safef(fileName, sizeof fileName, "%s/%s/%ld.%d", trackDbCacheDir, string, paddress, TRACKDB_VERSION);
 
 cacheLog("renaming %s to %s", tempFileName, fileName);
 mustRename(tempFileName, fileName);
@@ -368,8 +390,11 @@ static boolean doCache = FALSE;
 if (!checkedCache)
     {
     trackDbCacheDir = cfgOption("cacheTrackDbDir");
-    if (trackDbCacheDir != NULL)
+    if (isNotEmpty(trackDbCacheDir))
+        {
+        makeDirsOnPath(trackDbCacheDir);
         doCache = TRUE;
+        }
 
     checkedCache = TRUE;
     }

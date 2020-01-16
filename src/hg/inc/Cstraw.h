@@ -17,7 +17,7 @@ char* Cstraw (char *norm, char *fname, int binsize, char *chr1loc, char *chr2loc
  * The function returns NULL unless an error was encountered, in which case the return value points
  * to a character string explaining the error. */
 
-char* CstrawHeader (char *filename, char **genome, char ***chromNames, int *nChroms, char ***bpResolutions, int *nBpRes, char ***fragResolutions, int *nFragRes);
+char* CstrawHeader (char *filename, char **genome, char ***chromNames, int **chromSizes, int *nChroms, char ***bpResolutions, int *nBpRes, char ***fragResolutions, int *nFragRes, char ***attributes, int *nAttributes);
 /* Wrapper function to retrieve header fields from a .hic file, for use by C libraries.
  * This retrieves the assembly name, list of chromosome names, list of available binsize resolutions,
  * and list of available fragment resolutions in the specific .hic file.

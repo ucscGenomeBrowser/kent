@@ -72,6 +72,7 @@
 #include "hex.h"
 #include <openssl/sha.h>
 #include "customComposite.h"
+//#include "bed3Sources.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -190,6 +191,7 @@ for (track = tracks; track != NULL; track = track->next)
     }
 return NULL;
 }
+
 
 int tgCmpPriority(const void *va, const void *vb)
 /* Compare to sort based on priority; use shortLabel as secondary sort key. */
@@ -1480,6 +1482,7 @@ mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, track, FALSE,
                NULL, 0, 0, (revCmplDisp ? "Next item" : "Prev item"), buttonText);
 
 #ifdef IMAGEv2_SHORT_TOGGLE
+// LIKELY UNUSED
 char *label = (theImgBox ? track->longLabel : parentTrack->longLabel);
 int width = portWidth - (2 * arrowButtonWidth);
 int x = portX + arrowButtonWidth;
@@ -2084,7 +2087,7 @@ for (track = trackList; track != NULL; track = track->next)
     }
 }
 
-static void logTrackVisibilities (char *hgsid, struct track *trackList)
+static void logTrackVisibilities (char *hgsid, struct track *trackList, char *position)
 /* log visibile tracks and hgsid */
 {
 struct dyString *dy = newDyString(1024);
@@ -2107,6 +2110,7 @@ for(ptr=begin; ((ptr = strchr(ptr, ',')) != NULL); ptr++)
 	}
     }
 fprintf(stderr, "trackLog %d %s %s %s\n", count++, database, hgsid, begin);
+fprintf(stderr, "trackLog position %s %s %s\n",  database, hgsid, position);
 
 dyStringFree(&dy);
 }
@@ -4494,6 +4498,7 @@ if (
 || sameWord(type, "genePred")
 || sameWord(type, "gvf")
 || sameWord(type, "narrowPeak")
+|| sameWord(type, "bigNarrowPeak")
 || sameWord(type, "psl")
 || sameWord(type, "barChart")
 || sameWord(type, "bigBarChart")
@@ -4568,11 +4573,69 @@ setGlobalsFromWindow(windows); // first window
 flatTrack->maxHeight = maxHeight;
 }
 
-boolean doCollapseEmptySubtracks(struct track *track)
-/* Suppress display of empty subtracks. Initial support only for bed's. */
+boolean doHideEmptySubtracksNoMultiBed(struct cart *cart, struct track *track)
+/* TRUE if hideEmptySubtracks is enabled, but there is no multiBed */
 {
-char *collapseEmptySubtracks = trackDbSetting(track->tdb, "collapseEmptySubtracks");
-return (collapseEmptySubtracks && sameWord(collapseEmptySubtracks, "on"));
+char *multiBedFile = NULL;
+char *subtrackIdFile = NULL;
+boolean hideEmpties = compositeHideEmptySubtracks(cart, track->tdb, &multiBedFile, &subtrackIdFile);
+if (hideEmpties && (multiBedFile == NULL || subtrackIdFile == NULL))
+        return TRUE;
+return FALSE;
+}
+
+struct hash *getNonEmptySubtracks(struct track *track)
+{
+/* Support setting to suppress display of empty subtracks. 
+ * If multiBed is available, return hash with subtrack names as keys
+ */
+
+char *multiBedFile = NULL;
+char *subtrackIdFile = NULL;
+if (!compositeHideEmptySubtracks(cart, track->tdb, &multiBedFile, &subtrackIdFile))
+    return NULL;
+if (!multiBedFile)
+    return NULL;
+
+// load multiBed items in window
+// TODO: filters here ?
+// TODO:  protect against temporary network error ? */
+struct lm *lm = lmInit(0);
+struct bbiFile *bbi = bigBedFileOpen(multiBedFile);
+struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
+char *row[bbi->fieldCount];
+char startBuf[16], endBuf[16];
+struct hash *nonEmptySubtracksHash = hashNew(0);
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, row, ArraySize(row));
+    // TODO: do this in bed3Sources.c
+    char *idList = row[4];
+    struct slName *ids = slNameListFromComma(idList);
+    struct slName *id = NULL;
+    for (id = ids; id != NULL; id = id->next)
+        hashStore(nonEmptySubtracksHash, id->name);
+    // TODO: free some stuff ?
+    }
+
+// read file containing ids of subtracks 
+struct lineFile *lf = udcWrapShortLineFile(subtrackIdFile, NULL, 0); 
+char *words[11];
+int ct = 0;
+while ((ct = lineFileChopNext(lf, words, sizeof words)) != 0)
+    {
+    char *id = words[0];
+    if (hashLookup(nonEmptySubtracksHash, id))
+        {
+        int i;
+        for (i=1; i<ct; i++)
+            {
+            hashStore(nonEmptySubtracksHash, cloneString(words[i]));
+            }
+        }
+    }
+lineFileClose(&lf);
+return nonEmptySubtracksHash;
 }
 
 void makeActiveImage(struct track *trackList, char *psOutput)
@@ -4798,17 +4861,20 @@ for (track = trackList; track != NULL; track = track->next)
         {
         struct track *subtrack;
         if (isCompositeInAggregate(track))
-            flatTracksAdd(&flatTracks,track,cart, orderedWiggles);
+            flatTracksAdd(&flatTracks, track, cart, orderedWiggles);
         else
             {
-            boolean doCollapse = doCollapseEmptySubtracks(track);
+            boolean doHideEmpties = doHideEmptySubtracksNoMultiBed(cart, track);
+                // If multibed was found, it has been used to suppress loading,
+                // and subtracks lacking items in window are already set hidden
             for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
                 {
                 if (!isSubtrackVisible(subtrack))
                     continue;
 
                 if (!isLimitedVisHiddenForAllWindows(subtrack) && 
-                        !(doCollapse && slCount(subtrack->items) == 0))
+                        !(doHideEmpties && slCount(subtrack->items) == 0))
+                        // Ignore subtracks with no items in window
                     {
                     flatTracksAdd(&flatTracks,subtrack,cart, orderedWiggles);
                     }
@@ -5411,9 +5477,11 @@ if (withCenterLabels)
             {
             track->preDrawMultiRegion(track);
             }
+        y += flatTrack->maxHeight;
         }
 
     // now do the actual draw
+    y = yAfterRuler;
     for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         {
         int savey = y;
@@ -6107,35 +6175,17 @@ else if (sameString(type, "bigWig"))
     tg->bbiFile = ct->bbiFile;
     tg->nextItemButtonable = FALSE;
     }
-else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") ||
-        sameString(type, "bigNarrowPeak") || sameString(type, "bigPsl") ||
-        sameString(type, "bigMaf")|| sameString(type, "bigChain") ||
-        sameString(type, "bigLolly") || 
-        sameString(type, "bigBarChart") || sameString(type, "bigInteract"))
+else if (startsWith("big", type))
     {
     struct bbiFile *bbi = ct->bbiFile;
 
     /* Find field counts, and from that revise the tdb->type to be more complete. */
     char extra = (bbi->fieldCount > bbi->definedFieldCount ? '+' : '.');
     char typeBuf[64];
-    if (sameString(type, "bigGenePred"))
-	safef(typeBuf, sizeof(typeBuf), "bigGenePred");
-    else if (sameString(type, "bigNarrowPeak"))
-	safef(typeBuf, sizeof(typeBuf), "bigNarrowPeak");
-    else if (sameString(type, "bigChain"))
-	safef(typeBuf, sizeof(typeBuf), "bigChain");
-    else if (sameString(type, "bigMaf"))
-	safef(typeBuf, sizeof(typeBuf), "bigMaf");
-    else if (sameString(type, "bigPsl"))
-	safef(typeBuf, sizeof(typeBuf), "bigPsl");
-    else if (sameString(type, "bigBarChart"))
-	safef(typeBuf, sizeof(typeBuf), "bigBarChart");
-    else if (sameString(type, "bigLolly"))
-	safef(typeBuf, sizeof(typeBuf), "bigLolly");
-    else if (sameString(type, "bigInteract"))
-	safef(typeBuf, sizeof(typeBuf), "bigInteract");
-    else
+    if (startsWithWord("bigBed", type))
 	safef(typeBuf, sizeof(typeBuf), "bigBed %d %c", bbi->definedFieldCount, extra);
+    else
+	safecpy(typeBuf, sizeof(typeBuf), type);
     tdb->type = cloneString(typeBuf);
 
     /* Finish wrapping track around tdb. */
@@ -6311,19 +6361,6 @@ char *pos = NULL;
 struct slName *bl = NULL;
 
 ctList = customTracksParseCart(database, cart, &browserLines, &ctFileName);
-#ifdef NOT
-/* this is the incorrect location for this to be done.  This is actually
- * counting all custom tracks whether they are new or not.  Every view of
- * the tracks adds to the penalty.
- */
-if (slCount(ctList) > 0) {
-  int trackCount = slCount(ctList);
-  /* add penalty in relation to number of tracks created, and adjust
-   * exitMs accordingly so that it will not hogExit at this time
-   */
-  (void) earlyBotCheck(enteredMainTime, "hgTracks", (double)(trackCount + 1) * delayFraction, warnMs, (trackCount + 1)*exitMs);
-}
-#endif
 
 for (bl = browserLines; bl != NULL; bl = bl->next)
     {
@@ -6937,7 +6974,7 @@ for (track = trackList; track != NULL; track = track->next)
         }
 
     // now deal with composite track children
-    if (tdbIsComposite(track->tdb))
+    if (tdbIsComposite(track->tdb) || tdbIsMultiTrack(track->tdb))
         {
         char *usedThis = buffer;
 
@@ -6977,7 +7014,11 @@ for (track = trackList; track != NULL; track = track->next)
                     cartRemove(cart, trackHubSkipHubName(subtrack->track)); // remove the undecorated version
                 }
             else if (hideKids && isSubtrackVisible(subtrack))
+                {
                 cartSetString(cart, buffer, "0");
+                subtrack->subTrackVis = tvHide;
+                subtrack->subTrackVisSet = TRUE;
+                }
             }
         }
     }
@@ -7200,13 +7241,8 @@ static boolean isTrackForParallelLoad(struct track *track)
 /* Is this a track that should be loaded in parallel ? */
 {
 char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
-return (startsWithWord("bigWig"  , track->tdb->type)
+return (startsWith("big", track->tdb->type)
      || startsWithWord("mathWig"  , track->tdb->type)
-     || startsWithWord("bigBed"  , track->tdb->type)
-     || startsWithWord("bigPsl"  , track->tdb->type)
-     || startsWithWord("bigNarrowPeak"  , track->tdb->type)
-     || startsWithWord("bigGenePred"  , track->tdb->type)
-     || startsWithWord("bigChain"  , track->tdb->type)
      || startsWithWord("bam"     , track->tdb->type)
      || startsWithWord("halSnake", track->tdb->type)
      || startsWithWord("bigLolly", track->tdb->type)
@@ -7258,6 +7294,28 @@ for (track = trackList; track != NULL; track = track->next)
 static pthread_mutex_t pfdMutex = PTHREAD_MUTEX_INITIALIZER;
 static struct paraFetchData *pfdList = NULL, *pfdRunning = NULL, *pfdDone = NULL, *pfdNeverStarted = NULL;
 
+static void checkHideEmptySubtracks(struct track *tg)
+/* Suppress queries on subtracks w/o data in window (identified from multiIntersect file) */
+{
+if (!tdbIsComposite(tg->tdb))
+    return;
+struct hash *nonEmptySubtracksHash = getNonEmptySubtracks(tg);
+if (!nonEmptySubtracksHash)
+    return;
+struct track *subtrack;
+for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if (!isSubtrackVisible(subtrack))
+        continue;
+    if (!hashLookup(nonEmptySubtracksHash, subtrack->track))
+        {
+        subtrack->loadItems = dontLoadItems;
+        subtrack->limitedVis = tvHide;
+        subtrack->limitedVisSet = TRUE;
+        }
+    }
+}
+
 static void *remoteParallelLoad(void *threadParam)
 /* Each thread loads tracks in parallel until all work is done. */
 {
@@ -7294,6 +7352,7 @@ while(1)
 	{
 	pfd->done = FALSE;
 	checkMaxWindowToDraw(pfd->track);
+	checkHideEmptySubtracks(pfd->track);
 	pfd->track->loadItems(pfd->track);
 	pfd->done = TRUE;
 	}
@@ -7789,7 +7848,7 @@ for (track = trackList; track != NULL; track = track->next)
 
 
 if (sameString(cfgOptionDefault("trackLog", "off"), "on"))
-    logTrackVisibilities(cartSessionId(cart), trackList);
+    logTrackVisibilities(cartSessionId(cart), trackList, position);
 
 
 /////////////////
@@ -7932,12 +7991,14 @@ for (window=windows; window; window=window->next)
 	{
 	if (track->visibility != tvHide)
 	    {
-	    if (!track->parallelLoading)
+            if (!track->parallelLoading)
 		{
 		if (measureTiming)
 		    lastTime = clock1000();
 
 		checkMaxWindowToDraw(track);
+
+		checkHideEmptySubtracks(track);     // TODO: Test with multi-window feature
 
 		checkIfWiggling(cart, track);
 
@@ -8494,6 +8555,23 @@ if (!hideControls)
         {
         hPrintf("<B>Chromosome Color Key:</B><BR> ");
         hPrintf("<IMG SRC = \"../images/new_colorchrom.gif\" BORDER=1 WIDTH=596 HEIGHT=18 ><BR>\n");
+        }
+    if (doPliColors)
+        {
+        hPrintf("<B>gnomAD Loss-of-Function Constraint (pLI) Color Key:</B><BR> ");
+        hPrintf("<table style=\"border: 1px solid black\"><tr>\n");
+        hPrintf("<td style=\"background-color:rgb(0,244,153)\">&lt; 0.1</td>\n");
+        hPrintf("<td style=\"background-color:rgb(74,240,94)\">&lt; 0.2</td>\n");
+        hPrintf("<td style=\"background-color:rgb(127,233,58)\">&lt; 0.3</td>\n");
+        hPrintf("<td style=\"background-color:rgb(165,224,26)\">&lt; 0.4</td>\n");
+        hPrintf("<td style=\"background-color:rgb(191,210,22)\">&lt; 0.5</td>\n");
+        hPrintf("<td style=\"background-color:rgb(210,191,13)\">&lt; 0.6</td>\n");
+        hPrintf("<td style=\"background-color:rgb(224,165,8)\">&lt; 0.7</td>\n");
+        hPrintf("<td style=\"background-color:rgb(233,127,5)\">&lt; 0.8</td>\n");
+        hPrintf("<td style=\"background-color:rgb(240,74,3)\">&lt; 0.9</td>\n");
+        hPrintf("<td style=\"background-color:rgb(244,0,2)\">&lt; 1</td>\n");
+        hPrintf("<td style=\"color: white; background-color:rgb(0,0,0)\">No pLI score</td>\n");
+        hPrintf("</tr></table>\n");
         }
 
     if (showTrackControls)
@@ -10270,10 +10348,20 @@ if (cartOptionalString(cart, "udcTimeout"))
     }
 }
 
+void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut)
+/* add text to track long label to indicate filter is active */
+{
+tg->longLabel = labelAsFilteredNumber(tg->longLabel, numOut);
+}
+
 void labelTrackAsFiltered(struct track *tg)
 /* add text to track long label to indicate filter is active */
 {
-char *oldLabel = tg->longLabel;
-tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
+tg->longLabel = labelAsFiltered(tg->longLabel);
+
+// also label parent composite track filtered
+struct trackDb *parentTdb = tdbGetComposite(tg->tdb);
+if (parentTdb)
+    parentTdb->longLabel = labelAsFiltered(parentTdb->longLabel);
 }
 

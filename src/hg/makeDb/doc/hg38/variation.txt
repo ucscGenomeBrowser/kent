@@ -1819,3 +1819,58 @@ EOF
 
 
 ##############################################################################
+# DBSNP152 / DBSNP153 / bigDbSnp: see ../bigDbSnp.txt
+
+
+##############################################################################
+# 1000 GENOMES PHASE 3 VARIANT CALLS (DONE 11/13/19 angie)
+    screen -S tgp -t tgp
+    mkdir /hive/data/genomes/hg38/bed/1000GenomesPhase3
+    cd /hive/data/genomes/hg38/bed/1000GenomesPhase3
+    wget http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000_genomes_project/release/20190312_biallelic_SNV_and_INDEL/20190312_biallelic_SNV_and_INDEL_README.txt
+    wget --timestamping \
+      ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000_genomes_project/release/20190312_biallelic_SNV_and_INDEL/ALL.chr\*.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz
+    wget http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000_genomes_project/release/20190312_biallelic_SNV_and_INDEL/20190312_biallelic_SNV_and_INDEL_MANIFEST.txt
+    # Check md5sums
+    tawk '{print $3, $1;}' 20190312_biallelic_SNV_and_INDEL_MANIFEST.txt | g -v tbi > md5sums.check
+    md5sum -c md5sums.check
+#./ALL.chr1.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz: OK
+#...
+#./ALL.chrX.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz: OK
+    # Index them locally instead of downloading, probably quicker.
+    for f in *.vcf.gz; do
+      echo indexing $f
+      tabix -p vcf $f
+    done
+    # Install the files
+    mkdir /gbdb/hg38/1000Genomes
+    ln -s `pwd`/*.vcf.gz* /gbdb/hg38/1000Genomes/
+    cp /dev/null tgpPhase3.txt
+    for c in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X; do
+      file=ALL.chr$c.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz
+      echo -e "/gbdb/hg38/1000Genomes/$file\tchr$c" >> tgpPhase3.txt
+    done
+    # hgBbiDbLink doesn't support the seq column so use hgLoadSqlTab:
+    hgLoadSqlTab hg38 tgpPhase3 ~/kent/src/hg/lib/bbiChroms.sql tgpPhase3.txt
+    # Make a chromosomes line for trackDb (no alts, no Y!):
+    hgsql hg38 -NBe 'select seqName from tgpPhase3' | xargs echo | sed -e 's/ /,/g'
+#chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+    # I don't see counts of SNPs / indels documented anywhere, so extract:
+    time (zcat ALL.chr*.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz | g -v ^# | cut -f 8 | sed -re 's/.*VT=//; s/;.*//' | sort | uniq -c | head -100)
+
+
+##############################################################################
+# DGV with filters - DONE Jan 01 2020
+    zcat dgvSupporting.bed.gz | tawk '{print $0, $3-$2}' | sort -k1,1 -k2,2n > dgvSupportingWithSize.bed
+    zcat dgvMerged.bed.gz | tawk '{print $0, $3-$2}' | sort -k1,1 -k2,2n > dgvMergedWithSize.bed
+    bedToBigBed -tab -as=/hive/data/genomes/hg19/bed/dgv/160810/dgvPlusSize.as -type=bed9+14 dgvMergedWithSize.bed  /hive/data/genomes/hg38/chrom.sizes dgvMerged.bb
+    # pass1 - making usageList (41 chroms): 333 millis
+    # pass2 - checking and writing primary data (389106 records, 23 fields): 9803 millis
+    bedToBigBed -tab -as=/hive/data/genomes/hg19/bed/dgv/160810/dgvPlusSize.as -type=bed9+14 dgvSupportingWithSize.bed  /hive/data/genomes/hg38/chrom.sizes dgvSupporting.bb
+    # pass1 - making usageList (41 chroms): 2695 millis
+    # pass2 - checking and writing primary data (6584665 records, 23 fields): 27859 millis
+    mkdir -p /gbdb/hg38/dgv/
+    cd /gbdb/hg38/dgv
+    ln -s /hive/data/genomes/hg38/bed/dgv/160906/dgvMerged.bb
+    ln -s /hive/data/genomes/hg38/bed/dgv/160906/dgvSupporting.bb
+##############################################################################

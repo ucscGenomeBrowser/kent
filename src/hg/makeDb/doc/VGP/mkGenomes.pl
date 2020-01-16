@@ -52,7 +52,12 @@ foreach my $asmId (@orderList) {
   my $oneThird = int($bigChrom/3);
   my $tenK = $oneThird + 10000;
   $tenK = $bigChrom if ($tenK > $bigChrom);
-  printf "defaultPos %s:%d-%d\n", $chrName, $oneThird, $tenK;
+  my $defPos="${chrName}:${oneThird}-${tenK}";
+  if ( -s "$asmId/defaultPos.txt" ) {
+    $defPos=`cat "$asmId/defaultPos.txt"`;
+    chomp $defPos;
+  }
+  printf "defaultPos %s\n", $defPos;
   printf "orderKey %d\n", $orderKey++;
   printf "scientificName %s\n", $descr;
   printf "htmlPath genomes/%s/html/%s.description.html\n", $asmId, $asmId;
@@ -65,7 +70,7 @@ foreach my $asmId (@orderList) {
   printf GF "description %s\n", $orgName;
   printf GF "twoBitPath %s/%s.2bit\n", $asmId, $asmId;
   printf GF "organism %s\n", $descr;
-  printf GF "defaultPos %s:%d-%d\n", $chrName, $oneThird, $tenK;
+  printf GF "defaultPos %s\n", $defPos;
   printf GF "orderKey %d\n", $orderKey++;
   printf GF "scientificName %s\n", $descr;
   printf GF "htmlPath %s/html/%s.description.html\n", $asmId, $asmId;

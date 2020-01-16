@@ -6,82 +6,126 @@ from __future__ import unicode_literals
 from django.contrib import admin
 from .models import *
 
+class ContributorTypeAdmin(admin.ModelAdmin):
+    search_fields = ["short_name", "description"]
+    list_display = ["short_name", "description"]
+
+admin.site.register(ContributorType, ContributorTypeAdmin)
+
 class ContributorAdmin(admin.ModelAdmin):
-    list_filter = ['project_role']
-    autocomplete_fields = ['comments', 'projects', 'labs', 'grants']
-    search_fields = ['name', 'project_role', 'email',]
-    list_display = ['name', 'project_role', 'email', ]
+    list_filter = ['type']
+    autocomplete_fields = ['projects', 'labs', 'grants', 'type']
+    search_fields = ['name', 'email','city']
+    list_display = ['name', 'email', 'type', 'city']
 
 admin.site.register(Contributor, ContributorAdmin)
 
+class SoftwareDeveloperAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['who']
+    list_display = ['who', 'favorite_languages']
+
+admin.site.register(SoftwareDeveloper, SoftwareDeveloperAdmin)
+
+class InternAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['who']
+    list_display = ['who', 'advisor', 'interests']
+
+admin.site.register(Intern, InternAdmin)
+
+class WranglerAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['who']
+    list_display = ['who', ]
+
+admin.site.register(Wrangler, WranglerAdmin)
 
 class LabAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['contributors', 'pi', 'contact', 'grants', 'projects', 'comments']
-    search_fields = ['short_name', 'pi', 'contact']
-    list_display = ['short_name', 'institution',]
+    autocomplete_fields = ['contributors', 'pi', 'grants', 'projects']
+    search_fields = ['short_name', 'institution', ]
+    list_display = ['short_name', 'pi', 'institution',]
 
 admin.site.register(Lab, LabAdmin)
 
-class ProjectStateAdmin(admin.ModelAdmin):
-    list_display = ['state', 'description']
-    autocomplete_fields = ['comments']
+class ProjectStatusAdmin(admin.ModelAdmin):
+    list_display = ['status', 'description']
     
-admin.site.register(ProjectState, ProjectStateAdmin)
+admin.site.register(ProjectStatus, ProjectStatusAdmin)
+
+class WranglingStatusAdmin(admin.ModelAdmin):
+    list_display = ['status', 'description']
+    
+admin.site.register(WranglingStatus, WranglingStatusAdmin)
 
 class EffortTypeAdmin(admin.ModelAdmin):
     list_display = ['short_name', 'description']
-    autocomplete_fields = ['comments']
     
 admin.site.register(EffortType, EffortTypeAdmin)
 
+class TrackerAdmin(admin.ModelAdmin):
+    readonly_fields = ['project','uuid','submission_id', 'submission_bundles_exported_count',
+        'aws_primary_bundle_count', 'gcp_primary_bundle_count',
+        'aws_analysis_bundle_count', 'gcp_analysis_bundle_count',
+        'azul_analysis_bundle_count', 'succeeded_workflows', 
+        'matrix_bundle_count', 'matrix_cell_count']
+    list_display = ['project', 'submission_bundles_exported_count', 
+        'aws_primary_bundle_count', 'gcp_primary_bundle_count', 
+        'aws_analysis_bundle_count', 'gcp_analysis_bundle_count', 
+        'azul_analysis_bundle_count', 'succeeded_workflows',
+        'matrix_bundle_count', 'matrix_cell_count']
+
+admin.site.register(Tracker, TrackerAdmin)
+
+
+class TrackerInline(admin.TabularInline):
+    model = Tracker
+    verbose_name_plural = 'Post-submission tracking - bundles and cells'
+    fields = ['submission_bundles_exported_count', 'aws_primary_bundle_count', 
+        'aws_analysis_bundle_count', 'azul_analysis_bundle_count', 
+        'succeeded_workflows', 'matrix_bundle_count', 'matrix_cell_count']
+    readonly_fields = ['submission_bundles_exported_count', 'aws_primary_bundle_count', 
+        'aws_analysis_bundle_count', 'azul_analysis_bundle_count', 
+        'succeeded_workflows', 'matrix_bundle_count', 'matrix_cell_count']
+    can_delete = False
+
 class ProjectAdmin(admin.ModelAdmin):
-    search_fields = ['short_name', 'title', 'contributors', 'labs', 'organ_part', 
-    #'organ', 
-    'disease', 'species', 'grants']
+    search_fields = ['short_name', 'title']
     autocomplete_fields = ["contributors", "labs", 
     	"organ", "organ_part", "disease", "files",
-    	"species", "sample_type", "assay_type", "assay_tech", "publications", "comments", 
-	"grants", "files", "urls", "contacts", "responders", "submit_comments"]
-    list_display = ['short_name', 'stars', 'state_reached', 'wrangler1', 'title',]
-    list_filter = ['species', 'effort', 'state_reached', 'assay_tech']
+    	"species", "sample_type", "assay_tech", "publications", 
+	"grants", "files", "urls", "contacts", ]
+    list_display = ['short_name', 'stars', 'status', 'primary_wrangler', 'submit_date',]
+    list_filter = ['species', 'effort', 'primary_wrangler', 'status', 'assay_tech']
+    inlines = [TrackerInline,]
     fieldsets = (
-        ('overall', { 'fields': (('short_name', 'state_reached', ), ('title', 'stars'), ('labs', 'consent'))}), 
+        ('overall', { 'fields': (('short_name', 'status', ), ('title', 'stars'), ('labs', 'consent'), ('git_ticket_url'))}), 
+        ('biosample',  { 'fields': (('species', 'sample_type'), ('organ', 'organ_part'), 'disease')}),
+        ('assay', { 'fields': (('assay_tech', 'cells_expected'))}),
+	('pubs, people, and pay', { 'fields': ('description', 'publications', 'contributors', 'grants')}),
 	('wrangling',  { 'fields': (
-		('wrangler1', 'wrangler2'), 
-		('cur_state', 'comments'),
+		('primary_wrangler', 'secondary_wrangler'), 
+		('wrangling_status', 'comments'),
 		('effort', 'origin_name',),
 		('contacts', 'files'),
 		('first_contact_date', 'last_contact_date'),
-		'responders',
-		('first_response_date', 'last_response_date'),
 		)}),
 	('submission steps',  { 'fields': (
-		('questionnaire', 'questionnaire_date'),
-		('tAndC', 'tAndC_date'),
-		('sheet_template', 'sheet_template_date'),
-		('sheet_from_lab', 'sheet_from_lab_date'),
-		('sheet_curated', 'sheet_curated_date'),
-		('sheet_validated', 'sheet_validated_date'),
-		('staging_area', 'staging_area_date'),
-		('submit_comments', 'submit_date'),
+		('questionnaire_date', 'questionnaire_comments'),
+		('tAndC_date', 'tAndC_comments'),
+		('sheet_template_date', 'sheet_template', ),
+                ('shared_google_sheet'),
+		('sheet_from_lab_date', 'sheet_from_lab', ),
+		('back_to_lab_date', 'back_to_lab', ),
+                ('lab_review_date', 'lab_review_comments', ),
+		('sheet_validated_date', 'sheet_that_validated', ),
+		('staging_area_date', 'staging_area', ),
+		('submit_date', 'submit_comments', ),
 		)}),
-	('post-submit',  { 'fields': (
-		('cloud_date', 'pipeline_date', 'orange_date'),
-		)}),
-        ('biosample',  { 'fields': (('species', 'sample_type'), ('organ', 'organ_part'), 'disease')}),
-        ('assay', { 'fields': ('assay_type', 'assay_tech', 'cells_expected')}),
-	('pubs, people, and pay', { 'fields': ('description', 'publications', 'contributors', 'grants')}),
     )
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-       if db_field.name == "wrangler1" or db_field.name == "wrangler2":
-           kwargs["queryset"] = Contributor.objects.filter(project_role="wrangler")
-       return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 admin.site.register(Project, ProjectAdmin)
 
 class GrantAdmin(admin.ModelAdmin):
-    autocomplete_fields = ["funded_contributors", "funded_projects", "funded_labs", "comments"]
-    search_fields = ["funded_contributors", "funded_projects", "funded_labs"]
+    autocomplete_fields = ["funded_contributors", "funded_projects", "funded_labs", ]
+    search_fields = ['grant_id','grant_title']
     list_display = ['grant_id', 'funder', 'grant_title',]
     list_filter = ['funder']
 
@@ -89,7 +133,6 @@ admin.site.register(Grant, GrantAdmin)
 
 class FunderAdmin(admin.ModelAdmin):
     list_display = ['short_name', 'description',]
-    autocomplete_fields = ['comments']
 
 admin.site.register(Funder, FunderAdmin)
 
@@ -103,29 +146,26 @@ admin.site.register(Species, SpeciesAdmin)
 class ConsentAdmin(admin.ModelAdmin):
     search_fields = ["short_name", "description"]
     list_display = ["short_name", "description"]
-    autocomplete_fields = ['comments']
 
 admin.site.register(Consent, ConsentAdmin)
 
 class DiseaseAdmin(admin.ModelAdmin):
     search_fields = ["short_name", "description"]
     list_display = ["short_name", "description"]
-    autocomplete_fields = ['comments', 'projects']
+    autocomplete_fields = ['projects']
 
 admin.site.register(Disease, DiseaseAdmin)
 
 class OrganAdmin(admin.ModelAdmin):
-    search_fields = ["short_name", "description"]
-    list_display = ["short_name", "description"]
-    #autocomplete_fields = ['comments', 'projects']
-    autocomplete_fields = ['comments', ]
+    search_fields = ["short_name", "description", "ontology_id"]
+    list_display = ["short_name", "ontology_id", "description"]
 
 admin.site.register(Organ, OrganAdmin)
 
 class OrganPartAdmin(admin.ModelAdmin):
     search_fields = ["short_name", "description"]
     list_display = ["short_name", "description"]
-    autocomplete_fields = ['comments', 'projects']
+    autocomplete_fields = ['projects']
 
 
 admin.site.register(OrganPart, OrganPartAdmin)
@@ -133,56 +173,30 @@ admin.site.register(OrganPart, OrganPartAdmin)
 class SampleTypeAdmin(admin.ModelAdmin):
     search_fields = ["short_name", "description"]
     list_display = ["short_name", "description"]
-    autocomplete_fields = ['comments']
 
 admin.site.register(SampleType, SampleTypeAdmin)
 
 class AssayTechAdmin(admin.ModelAdmin):
     search_fields = ["short_name", "description"]
     list_display = ["short_name", "description"]
-    autocomplete_fields = ['comments', 'projects']
+    autocomplete_fields = ['projects']
 
 admin.site.register(AssayTech, AssayTechAdmin)
-
-class AssayTypeAdmin(admin.ModelAdmin):
-    search_fields = ["short_name", "description"]
-    list_display = ["short_name", "description"]
-    autocomplete_fields = ['comments', 'projects']
-
-admin.site.register(AssayType, AssayTypeAdmin)
 
 class PublicationAdmin(admin.ModelAdmin):
     search_fields = ["short_name", "title"]
     list_display = ["short_name", "title"]
-    autocomplete_fields = ['comments']
 
 admin.site.register(Publication, PublicationAdmin)
-
-class CommentTypeAdmin(admin.ModelAdmin):
-    search_fields = ["short_name", "description"]
-    list_display = ["short_name", "description"]
-    short_description = "emotion"
-
-admin.site.register(CommentType, CommentTypeAdmin)
-
-class CommentAdmin(admin.ModelAdmin):
-    search_fields = ["type", "text"]
-    list_display = ["type", "text"]
-    autocomplete_fields = ['projects', 'labs', 'contributors', 'grants', 'consents', 'organs', 'organ_parts', 'urls', 'files']
-    list_filter = ['type']
-
-admin.site.register(Comment, CommentAdmin)
 
 class UrlAdmin(admin.ModelAdmin):
     search_fields = ["short_name", "path"]
     list_display = ["short_name", "path"]
-    autocomplete_fields = ['comments']
 
 admin.site.register(Url, UrlAdmin)
 
 class FileAdmin(admin.ModelAdmin):
     search_fields = ["short_name", "file"]
     list_display = ["short_name", "file"]
-    autocomplete_fields = ['comments']
 
 admin.site.register(File, FileAdmin)

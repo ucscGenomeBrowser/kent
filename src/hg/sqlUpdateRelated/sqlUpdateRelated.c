@@ -19,12 +19,26 @@ errAbort(
   "usage:\n"
   "   sqlUpdateRelated database tableFiles\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -missOk - if set, tableFiles mentioned that don't exist are skipped rather than erroring\n"
+  "   -uncsv - if set, run uncsv and just take first value for each field, needed sometimes\n"
+  "            to deal with extra quotes from tagstorms and other sources\n"
+  "The tableFiles are in a interesting and peculiar format.  The first line with the field name\n"
+  "ends up controlling this program.  If a field starts with just a regular letter all is as\n"
+  "you may expect,  the field just contains data to load.  However if the field starts with\n"
+  "a special char, special things happen.  In particular\n"
+  "   ? - indicates field is a conditional key field.  Record is only inserted if the value\n"
+  "       for this field is not already present in table\n"
+  "   ! - indicates this is update key field.  Record must already exist,  values in other fields\n"
+  "       are updated.\n"
+  "   @ - indicates a foreign key relationship - see source code until docs are in shape\n"
+  "   @@ - indicates a many-to-many relationship - see source code until docs are in shape"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"missOk", OPTION_BOOLEAN},
+   {"uncsv", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -107,7 +121,7 @@ if (!sqlTableExists(conn, table))
     errAbort("Table %s from %s doesn't exist", table, attyField);
 }
 
-void sqlUpdateViaTabFile(struct sqlConnection *conn, char *tabFile, char *tableName)
+void sqlUpdateViaTabFile(struct sqlConnection *conn, char *tabFile, char *tableName, boolean uncsv)
 /* Interpret one tab-separated file */
 {
 // Load the tabFile 
@@ -119,6 +133,7 @@ char **inFields = inTable->fields;
 // foreign and multi-multi fields into structures 
 char *conditionalField = NULL;  // We might have one of these
 int conditionalIx = -1;
+boolean updateCondition = FALSE;    
 struct foreignRef *foreignRefList = NULL;
 struct multiRef *multiRefList = NULL;
 int fieldIx;
@@ -126,13 +141,14 @@ for (fieldIx=0; fieldIx<inTable->fieldCount; ++fieldIx)
     {
     char *field = inFields[fieldIx];
     char firstChar = field[0];
-    if (firstChar == '?')
+    if (firstChar == '?' || firstChar == '!')
         {
 	if (conditionalField != NULL)
-	    errAbort("Multiple fields starting with a '?', There can only be one\n"
+	    errAbort("Multiple fields starting with a '?' or '!', There can only be one\n"
 		"but both %s and %s exist\n", conditionalField, field+1);
 	conditionalField = field;
 	conditionalIx = fieldIx;
+	updateCondition = (firstChar == '!');
 	checkFieldExists(conn, tableName, field + 1, field);
 	verbose(2, "conditionalField = %s, ix = %d\n", field, conditionalIx);
 	}
@@ -214,6 +230,14 @@ for (fieldIx=0; fieldIx<inTable->fieldCount; ++fieldIx)
 verbose(2, "Got %s conditional, %d foreignRefs, %d multiRefs\n", 
 	naForNull(conditionalField), slCount(foreignRefList), slCount(multiRefList));
 
+if (updateCondition)  // In update mode we can't handle fancy stuff
+    {
+    if (foreignRefList != NULL || multiRefList != NULL)
+        errAbort("Can't handle foreign keys or multi-multi relations when doing ! updates");
+    if (inTable->fieldCount < 2)
+        errAbort("Need at least two fields in update mode");
+    }
+
 /* Now we loop through the input table and make the appropriate sql queries and inserts */
 struct fieldedRow *fr;
 struct dyString *sql = dyStringNew(0);
@@ -222,13 +246,61 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
     {
     char **row = fr->row;
 
+    /* The case of the update (!) condition is special.  */
+    if (updateCondition)
+        {
+	/* Make sure that the record we are updating exists for better
+	 * error reporting.  There's a race condition that'll make a SQL error happen
+	 * instead once in a million years. */
+	dyStringClear(sql);
+	char *rawVal = row[conditionalIx];
+	char *uncsvVal = rawVal;
+	if (uncsv)
+	    uncsvVal = csvParseNext(&rawVal, csvScratch);
+	char *conditionalEscaped = sqlEscapeString(uncsvVal);
+	sqlDyStringPrintf(sql, "select count(*) from %s where %s='%s'",
+	    tableName, conditionalField+1, conditionalEscaped);
+	verbose(2, "%s\n", sql->string);
+	if (sqlQuickNum(conn, sql->string) == 0)
+	    errAbort("Trying to update %s in %s.%s, but it doesn't exist",
+		uncsvVal, tableName, conditionalField+1);
+
+	dyStringClear(sql);
+	sqlDyStringPrintf(sql, "update %s set", tableName);
+	boolean firstTime = TRUE;
+	for (fieldIx=0; fieldIx < inTable->fieldCount; ++fieldIx)
+	    {
+	    if (fieldIx != conditionalIx)
+		{
+		char *rawVal = row[fieldIx];
+		char *uncsvVal = rawVal;
+		if (uncsv)
+		    uncsvVal = csvParseNext(&rawVal, csvScratch);
+		char *escaped = sqlEscapeString(uncsvVal);
+		if (firstTime)
+		    firstTime = FALSE;
+		else
+		    sqlDyStringPrintf(sql, ",");
+		sqlDyStringPrintf(sql, " %s='%s'", inFields[fieldIx], escaped);
+		freez(&escaped);
+		}
+	    }
+	sqlDyStringPrintf(sql, " where %s='%s'", conditionalField+1, conditionalEscaped);
+	verbose(2, "%s\n", sql->string);
+	sqlUpdate(conn, sql->string);
+
+	continue;	// We are done,  the rest of the loop is for inserts not updates
+	}
+
     /* Deal with conditional field.  If we have one and the value we are trying to insert
      * already exists then just continue to next row. */
     if (conditionalField != NULL && sameString(conditionalField, inFields[conditionalIx]))
 	{
 	dyStringClear(sql);
 	char *rawVal = row[conditionalIx];
-	char *uncsvVal = csvParseNext(&rawVal, csvScratch);
+	char *uncsvVal = rawVal;
+	if (uncsv)
+	    uncsvVal = csvParseNext(&rawVal, csvScratch);
 	// Before we do more we see if the record already exists
 	sqlDyStringPrintf(sql, "select count(*) from %s where %s='%s'",
 	    tableName, conditionalField+1, uncsvVal);
@@ -241,8 +313,11 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
     struct foreignRef *fRef;
     for (fRef = foreignRefList; fRef != NULL; fRef = fRef->next)
         {
-	char *origVal = row[fRef->nativeFieldIx];
-	char *val = emptyForNull(csvParseNext(&origVal, csvScratch));
+	char *rawVal = row[fRef->nativeFieldIx];
+	char *uncsvVal = rawVal;
+	if (uncsv)
+	    uncsvVal = csvParseNext(&rawVal, csvScratch);
+	char *val = emptyForNull(uncsvVal);
 	char *escaped = sqlEscapeString(val);
 	dyStringPrintf(sql, "\"%s\"",  escaped);
 	dyStringClear(sql);
@@ -320,8 +395,11 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	    firstTime = !firstTime;
 	else
 	    dyStringAppendC(sql, ',');
-	char *origVal = row[fieldIx];
-	char *val = emptyForNull(csvParseNext(&origVal, csvScratch));
+	char *rawVal = row[fieldIx];
+	char *uncsvVal = rawVal;
+	if (uncsv)
+	    uncsvVal = csvParseNext(&rawVal, csvScratch);
+	char *val = emptyForNull(uncsvVal);
 	char *escaped = sqlEscapeString(val);
 	dyStringPrintf(sql, "\"%s\"",  escaped);
 	freez(&escaped);
@@ -354,13 +432,17 @@ void sqlUpdateRelated(char *database, char **inFiles, int inCount)
 {
 struct sqlConnection *conn = sqlConnect(database);
 int fileIx;
+boolean missOk = optionExists("missOk");
+boolean  uncsv = optionExists("uncsv");
 for (fileIx = 0; fileIx < inCount; ++fileIx)
     {
     char *inFile = inFiles[fileIx];
+    if (missOk && !fileExists(inFile))
+        continue;
     char *tableName = cloneString(inFile);
     chopSuffix(tableName);
     verbose(1, "Processing %s into %s table \n", inFile, tableName);
-    sqlUpdateViaTabFile(conn, inFile, tableName);
+    sqlUpdateViaTabFile(conn, inFile, tableName, uncsv);
     }
 sqlDisconnect(&conn);
 }

@@ -18119,4 +18119,361 @@ TMPDIR=/dev/shm
     # commit all
     # if pushing public: add ticket and MARK QA READY
 
+2019-08-30: repeat above for final release
+    mv /hive/data/genomes/mm10/bed/gencodeVM23 /hive/data/genomes/mm10/bed/gencodeVM23pre
+    # redo do above imports
+
+    for t in tables/* ; do cmp ../gencodeVM23pre/$t $t ; done
+
+    Changes:
+    wgEncodeGencode2wayConsPseudoVM23.gp 
+    wgEncodeGencodeAttrsVM23.tab
+    wgEncodeGencodePolyaVM23.gp
+    wgEncodeGencodeTagVM23.tab
+    only attrs and maybe tags matter to hgGene gencode
+
+    mkdir pre-diffs
+    diff ../gencodeVM23pre/tables/wgEncodeGencodeAttrsVM23.tab tables/wgEncodeGencodeAttrsVM23.tab >pre-diffs/wgEncodeGencodeAttrsVM23.diff
+    diff ../gencodeVM23pre/tables/wgEncodeGencodeTagVM23.tab tables/wgEncodeGencodeTagVM23.tab >pre-diffs/wgEncodeGencodeTagVM23.diff
+
+    # wgEncodeGencodeAttrsVM23: experimental confirmation level changed on a few pseudogenes
+    # wgEncodeGencodeTagVM23: pseudo_consens changed on a few pseudogenes.
+
+
 #########################################################################
+# LASTZ Rat regenRn1 (DONE - 2019-09-12 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzRegenRn1.2019-09-12
+    cd /hive/data/genomes/mm10/bed/lastzRegenRn1.2019-09-12
+
+    printf '# rat vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Rat RegenRn1
+SEQ2_DIR=/hive/data/genomes/regenRn1/regenRn1.2bit
+SEQ2_LEN=/hive/data/genomes/regenRn1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=500
+
+BASE=/hive/data/genomes/mm10/bed/lastzRegenRn1.2019-09-12
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen -S mm10RegenRn1
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-noDbNameCheck -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-syntenicNet -chainMinScore=5000 -chainLinearGap=medium) > do.log 2>&1
+    #   real    185m22.610s
+
+
+    cat fb.mm10.chainRegenRn1Link.txt
+    #	1699005386 bases of 2652783500 (64.046%) in intersection
+    cat fb.mm10.chainSynRegenRn1Link.txt
+    #   1591231371 bases of 2652783500 (59.983%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` mm10 regenRn1) > rbest.log 2>&1 &
+    # real    516m24.464s
+
+    cat fb.mm10.chainRBest.RegenRn1.txt
+    # 1565180527 bases of 2652783500 (59.001%) in intersection
+
+    mkdir /hive/data/genomes/regenRn1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/regenRn1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzRegenRn1.2019-09-12/DEF \
+	-swap -syntenicNet -noDbNameCheck \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=5000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    94m19.060s
+
+    cat fb.regenRn1.chainMm10Link.txt
+    #   1634389849 bases of 2282482188 (71.606%) in intersection
+    cat fb.regenRn1.chainSynMm10Link.txt
+    #   1564752158 bases of 2282482188 (68.555%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` regenRn1 mm10) > rbest.log 2>&1
+    # real    488m25.471s
+
+    cat fb.regenRn1.chainRBest.Mm10.txt
+    # 1565313924 bases of 2282482188 (68.579%) in intersection
+
+##############################################################################
+# crispr whole genome (DONE - 2019-10-08 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/crisprAll
+    cd /hive/data/genomes/mm10/bed/crisprAll
+
+    # the large shoulder argument will cause the entire genome to be scanned
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 -stop=ranges \
+    mm10 knownGene -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > ranges.log 2>&1
+    # real    2m58.652s
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=guides -stop=guides \
+    mm10 knownGene -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > guides.log 2>&1
+    # real    8m40.172s
+Completed: 100 of 100 jobs
+CPU time in finished jobs:      11503s     191.72m     3.20h    0.13d  0.000 y
+IO & Wait Time:                   254s       4.23m     0.07h    0.00d  0.000 y
+Average job time:                 118s       1.96m     0.03h    0.00d
+Longest finished job:             386s       6.43m     0.11h    0.00d
+Submission to last job:           387s       6.45m     0.11h    0.00d
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=specScoreJobList -stop=specScores \
+    mm10 knownGene -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > specScores.log 2>&1
+Completed: 2947877 of 2947877 jobs
+CPU time in finished jobs:  262070681s 4367844.69m 72797.41h 3033.23d  8.310 y
+IO & Wait Time:               6243499s  104058.31m  1734.31h   72.26d  0.198 y
+Average job time:                  91s       1.52m     0.03h    0.00d
+Longest finished job:             217s       3.62m     0.06h    0.00d
+Submission to last job:        274925s    4582.08m    76.37h    3.18d
+
+# Number of specScores: 220282678
+
+# real    5619m9.026s
+# user    617m24.869s
+# sys     52m8.371s
+
+    ### remember to get back to hgwdev to run this
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=effScores -stop=load \
+    mm10 knownGene -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > load.log 2>&1
+    # real    970m21.487s
+    # user    0m0.983s
+    # sys     0m2.219s
+
+# effScores:
+Completed: 27697 of 27697 jobs
+CPU time in finished jobs:   14348277s  239137.94m  3985.63h  166.07d  0.455 y
+IO & Wait Time:                150120s    2502.01m    41.70h    1.74d  0.005 y
+Average job time:                 523s       8.72m     0.15h    0.01d
+Longest finished job:            1966s      32.77m     0.55h    0.02d
+Submission to last job:         15067s     251.12m     4.19h    0.17d
+
+# offTargets:
+Completed: 147394 of 147394 jobs
+CPU time in finished jobs:    2213680s   36894.66m   614.91h   25.62d  0.070 y
+IO & Wait Time:               2663355s   44389.25m   739.82h   30.83d  0.084 y
+Average job time:                  33s       0.55m     0.01h    0.00d
+Longest finished job:              68s       1.13m     0.02h    0.00d
+
+#########################################################################
+
+# For ENCODE 3 tracks, see doc/encode3/mouse.txt
+
+##############################################################################
+2019-11-16: import of UCSC GENCODE group processing of GENCODE VM24 PRE-RELEASE (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM24
+    pushd /hive/data/genomes/mm10/bed/gencodeVM24
+
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M24 99 'Nov 2019'
+
+    # If being pushed public, update 'Release Notes' in
+    # human/mm10/wgEncodeGencodeSuper.html
+
+    # edit human/mm10/trackDb.gencode.ra to add new .ra file include
+    make DBS=mm10
+
+    ## only if being pushed to RR:
+    # edit all.joiner to add ~/tmp/gencodeVM24.joiner
+    # verify with:
+    pushd /hive/data/genomes/mm10/bed/gencodeVM24
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+    # if pushing public: add ticket and MARK QA READY
+
+##############################################################################
+# LASTZ Gorilla gorGor6 (DONE - 2019-11-20 - Hiram)
+    #	establish a screen to control this job
+    screen -S mm10gorGor6
+    mkdir /hive/data/genomes/mm10/bed/lastzGorGor6.2019-11-20
+    cd /hive/data/genomes/mm10/bed/lastzGorGor6.2019-11-20
+
+    printf '# mouse vs. gorilla
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=1
+
+# QUERY: gorilla gorGor6
+SEQ2_DIR=/hive/data/genomes/gorGor6/gorGor6.2bit
+SEQ2_LEN=/hive/data/genomes/gorGor6/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=130
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzGorGor6.2019-11-20
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #	real    518m27.777s
+
+    cat fb.mm10.chainGorGor6Link.txt
+    #	929953885 bases of 2652783500 (35.056%) in intersection
+    cat fb.mm10.chainSynGorGor6Link.txt
+    #   882047357 bases of 2652783500 (33.250%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load  mm10 gorGor6 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    270m54.749s
+
+    cat fb.mm10.chainRBest.GorGor6.txt
+    # 885135149 bases of 2652783500 (33.366%) in intersection
+
+    mkdir /hive/data/genomes/gorGor6/bed/blastz.mm10.swap
+    cd /hive/data/genomes/gorGor6/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzGorGor6.2019-11-20/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    72m34.088s
+
+    cat fb.gorGor6.chainMm10Link.txt
+    #	1017872526 bases of 2999027915 (33.940%) in intersection
+    cat fb.gorGor6.chainSynMm10Link.txt
+    #    880983055 bases of 2999027915 (29.376%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev gorGor6 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    237m38.959s
+
+    cat fb.gorGor6.chainRBest.Mm10.txt
+    # 883663662 bases of 2999027915 (29.465%) in intersection
+
+##############################################################################
+# LASTZ Chinese hamster ovary cell line CHO-K1  regenCho1
+#	(DONE - 2019-11-26 - Hiram)
+    #	establish a screen to control this job
+    mkdir /hive/data/genomes/mm10/bed/lastzRegenCho1.2019-11-26
+    cd /hive/data/genomes/mm10/bed/lastzRegenCho1.2019-11-26
+
+    printf '# Chinese hamster ovary cell line vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Chinese hamster ovary cell line CHO-K1  regenCho1
+SEQ2_DIR=/hive/data/genomes/regenCho1/regenCho1.2bit
+SEQ2_LEN=/hive/data/genomes/regenCho1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzRegenCho1.2019-11-26
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-noDbNameCheck -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #	real    340m52.020s
+
+    cat fb.mm10.chainRegenCho1Link.txt
+    #	1525566783 bases of 2652783500 (57.508%) in intersection
+    cat fb.mm10.chainSynRegenCho1Link.txt
+    #   1410851403 bases of 2652783500 (53.184%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm10 regenCho1 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    #	real    664m46.970s
+
+    cat fb.mm10.chainRBest.RegenCho1.txt
+    # 1395524606 bases of 2652783500 (52.606%) in intersection
+
+    mkdir /hive/data/genomes/regenCho1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/regenCho1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzRegenCho1.2019-11-26/DEF \
+	-noDbNameCheck -swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    101m20.296s
+
+    cat fb.regenCho1.chainMm10Link.txt
+    #	1522181082 bases of 2266312740 (67.166%) in intersection
+    cat fb.regenCho1.chainSynMm10Link.txt
+    #   1397889394 bases of 2266312740 (61.681%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev regenCho1 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    660m29.571s
+
+    cat fb.regenCho1.chainRBest.Mm10.txt
+    # 1396267649 bases of 2266312740 (61.610%) in intersection
+
+##############################################################################
+2020-01-16: import of UCSC GENCODE group processing of GENCODE VM24 (markd)
+    # deprecate pre-release
+    mv /hive/data/genomes/mm10/bed/gencodeVM24 /hive/data/genomes/hg38/bed/gencodeVM24pre
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM24
+    pushd /hive/data/genomes/mm10/bed/gencodeVM24
+
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M24 99 'Jan 2020'
+
+    # If being pushed public, update 'Release Notes' in
+    # mouse/mm10/wgEncodeGencodeSuper.html
+
+    # edit human/mm10/trackDb.gencode.ra to add new .ra file include
+    make DBS=mm10
+
+    ## only if being pushed to RR:
+    # edit all.joiner to add ~/tmp/gencodeVM24.joiner
+    # verify with:
+    pushd /hive/data/genomes/mm10/bed/gencodeVM24
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # check tracks in browser sandbox
+    # commit all
+    make DBS=mm10 alpha
+    # if pushing public: add ticket and MARK QA READY
+
+##############################################################################

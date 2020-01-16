@@ -21,6 +21,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         longLabel NCBI RefSeq genes, curated and predicted sets (NM_*, XM_*, NR_*, XR_*, NP_* or YP_*)
         idXref ncbiRefSeqLink mrnaAcc name
         baseColorUseCds given
+        baseColorDefault genomicCodons
         priority 1
 
         track ncbiRefSeqCurated
@@ -30,6 +31,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, NP_* or YP_*)
         idXref ncbiRefSeqLink mrnaAcc name
         baseColorUseCds given
+        baseColorDefault genomicCodons
         priority 2
 
         track ncbiRefSeqPredicted
@@ -39,6 +41,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         longLabel NCBI RefSeq genes, predicted subset (XM_* or XR_*)
         idXref ncbiRefSeqLink mrnaAcc name
         baseColorUseCds given
+        baseColorDefault genomicCodons
         priority 3
 
         track ncbiRefSeqOther
@@ -95,6 +98,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         idXref ncbiRefSeqLink mrnaAcc name
         color 20,20,160
         baseColorUseCds given
+        baseColorDefault genomicCodons
 
         track ncbiRefSeqMane
         parent refSeqComposite off
@@ -103,6 +107,8 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         shortLabel RefSeq MANE
         longLabel RefSeq selected representative transcript for each gene, MANE 0.5
         trackHandler ncbiRefSeq
+        baseColorUseCds given
+        baseColorDefault genomicCodons
 
         track refGene override
         parent refSeqComposite off
@@ -113,6 +119,8 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         idXref hgFixed.refLink mrnaAcc name
         dataVersion 
         priority 9
+        baseColorUseCds given
+        baseColorDefault genomicCodons
 
 searchName ncbiRefSeqCuratedName2
 searchTable ncbiRefSeqCurated

@@ -177,6 +177,7 @@
     <A onclick="return jumpTo(this);" HREF="#">factorSource</A>,
     <A onclick="return jumpTo(this);" HREF="#">genePred</A>,
     <A onclick="return jumpTo(this);" HREF="#">gvf</A>,
+    <A onclick="return jumpTo(this);" HREF="#">hic</A>,
     <A onclick="return jumpTo(this);" HREF="#">ld2</A>,
     <A onclick="return jumpTo(this);" HREF="#">narrowPeak</A>,
     <A onclick="return jumpTo(this);" HREF="#">netAlign</A>,
@@ -214,6 +215,7 @@
     <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigWig</A>,
     <A onclick="return jumpTo(this);" HREF="#">halSnake</A>,
+    <A onclick="return jumpTo(this);" HREF="#">hic</A>,
     <A onclick="return jumpTo(this);" HREF="#">vcfTabix</A>,
     <P>Detailed descriptions of each type can be found
     below.  In many cases the type setting includes additional
@@ -354,7 +356,7 @@
     <P>The location of a remote data file containing the chain link data.</P>
 </DIV>
 
-<DIV class="bigDataUrl"><span class="types bigBarChart bigBed bigChain bigInteract bigMaf bigPsl bigWig bam vcfTabix"></span>
+<DIV class="bigDataUrl"><span class="types bigBarChart bigBed bigChain bigInteract bigMaf bigPsl bigWig bam hic vcfTabix"></span>
 <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
     <P class="isRequired">Required: <span class="red">For Hubs</span></P>
     <P>The location of a remote data file containing the bulk of the data for the track.
@@ -1098,6 +1100,13 @@ There are no extra options that can appear on the type bigBarChart line.
 There are no extra options that can appear on the type bigInteract line.
 </DIV>
 
+<DIV class="hic"><span class="types hic"></span>
+<div class="format">
+    <code>type hic</code></div>
+There are no extra options that can appear on the type hic line.
+</DIV>
+
+
 <DIV class="bed_flavors"><span class="types bed5FloatScore bedRnaElements broadPeak coloredExon gvf ld2 narrowPeak peptideMapping"></span>
 <div class="format">
     <code>type bed5FloatScore</code><BR>
@@ -1316,7 +1325,7 @@ There are no extra options that can appear on the type bigInteract line.
     excluded.  The filter cannot be set to less than 200 or more than 1000..</P>
 </DIV>
 
-<DIV class="filterBy"><span class="types bed genePred psl factorSource"></span>
+<DIV class="filterBy"><span class="types bed bigBed genePred psl factorSource"></span>
 <div class="format"><code>filterBy  &lt;field1:title=[+]opt1a...&gt;
                             [field2:title=[+]opt2a...]</code></div>
     <!-- DONNA -- redo -->
@@ -1435,6 +1444,253 @@ There are no extra options that can appear on the type bigInteract line.
     filtering.  The Browser UI should show when tracks are filtered,
     so that losing the filter is obvious!</I></P>
     -->
+</DIV>
+
+<DIV class="filter"><span class="types bed bigBed"></span>
+<div class="format">
+    <code>filter.&lt;fieldName&gt; [&lt;default integer&gt;]</code><BR>
+    <code>filterByRange.&lt;fieldName&gt; &lt;off/on&gt;</code><BR>
+    <code>filterLimits.&lt;fieldName&gt; &lt;low&gt;[:&lt;high&gt;]</code><BR>
+    </div>
+<!-- 
+    <P>There are a number of different filters available for bed data, see also the 
+    <a href="../hubQuickStartFilter.html">filters quick start guide</a>.</P>-->
+    <P><code> filter.&lt;fieldName&gt; </code> is used for numerical data. It does not 
+    require any variables, however, a preselected filter value can be passed 
+    following the argument to enable the filter by default.</P>
+    <P>By default, the range of values for <code>filter.&lt;fieldName&gt;</code> is 0 to 1000. 
+    However, you can explicitly set the upper and lower limits of the filter with 
+    <code>filterLimits.&lt;fieldName&gt;</code>.</P>
+    <P>The numeric filters will exclude items that fall below the setting. That is, a
+    <code>filter.&lt;fieldName&gt;</code> of 800 will exclude all items with a score 
+    below 800. You can also filter values within a range by including the 
+    <code>filterByRange.&lt;fieldName&gt;</code> setting. For example, 
+    <code>filter.&lt;fieldName&gt; 800:900</code> will include only items with scores at 
+    or above 800 and below 900. It is recommended that <code>filterByRange.&lt;fieldName&gt;</code> 
+    be used in combination with <code>filterLimits.&lt;fieldName&gt;</code> 
+    to set limit boundaries.</P>
+    <P>The filter label will be the description of the field as specified by the autoSql (.as) file.
+    This label can be customized with the 
+    <a href="#filterLabel"><code>filterLabel.&lt;fieldName&gt;</code></a> parameter.
+    See the bigBed help page and <a target="_blank" 
+    href="/goldenPath/help/bigBed.html#Ex3">example 3</a> for more information about creating
+    unique .as files for bigBed data.</P>
+    <P><B>Notes:</B><ul>
+    <li><code>filter.&lt;fieldName&gt;</code> can be used multiple times with different 
+    columns</li>
+    <li>Both integers and decimals (floats) are supported</li>
+    <li>Any column/field values that start with non-numerical characters will be treated 
+    as zeros</li>
+    <li>Column/fieldName values that start with a number followed by non-numerical characters 
+    will be treated as only the number; the non-numerical characters (and any numbers 
+    that follow them) will be ignored (see example below)</li>
+    <li>If a column/fieldName contains negative values, then the default filter value of 0 
+    will filter out items with negative values. If that is not the desired behavior then 
+    you should specify a value</li>
+    <li>By default, all bed tracks that are at least bed5 will have a score filter. 
+    Enabling any of the <code>filter*.&lt;fieldName&gt;</code> filter settings will disable 
+    that default filter</li></ul></P>
+
+    <P><B>Examples:</B></P>
+    <pre>
+    filter.score</pre>
+    <P>In this example, filtering is being enabled for the field <code>score</code>. No default 
+    value is being passed, so by default the filter is set to 0. This means only negative values
+    will be filtered out.</P>
+    <pre>
+    filter.score 300</pre>
+    <P>In this second example, we are enabling filtering on the same field <code>score</code>, 
+    however, we are passing the integer 300. This means that when the data is loaded, items with 
+    scores below 300 will be excluded by default. This value can then be modified in the track 
+    description page.</P>
+    <pre>
+    filter.signal 300:400
+    filterByRange.signal on
+    filterLimits.signal 200:500</pre>
+    <P>In this example, we are enabling numerical filtering on the field <code>signal</code>. 
+    <code>filterByRange.&lt;fieldName&gt;</code> is also being enabled, allowing for filtering 
+    between interval values, this also allows us to pass a range of values to the 
+    <code>filter.&lt;fieldName&gt;</code> parameter. In this case, by default only values between
+    300 and 400 are being displayed. Lastly, the filter limits are being modified to accept values 
+    between 200 and 500 as opposed to the default 0 to 1000.</P>
+    <pre>
+    filter.confidenceScore 6</pre>
+    <P>Example values in the <code>confidenceScore</code> field/column:</P>
+   <pre>
+    5
+    6 (Uncertain)
+    Unknown
+    7.0</pre>	
+    <P>This example applies <code>filter.&lt;fieldName&gt;</code> to values in the
+    field named <code>confidenceScore</code> containing some non-numerical values.
+    If items with the four values above were filtered with a minimum value of 6:
+    <P>
+    <code>5</code> - item would be removed as it is less than the filter value<br>
+    <code>6 (Uncertain)</code> - item should show up, as it would be interpreted as
+    &quot;6&quot;<br>
+    <code>Unknown</code> - item would be removed as it would be interpreted as 0<br>
+    <code>7.0</code> - item would appear as decimals are supported</P>
+</DIV>
+
+<DIV class="filterText"><span class="types bigBed"></span>
+<div class="format">
+    <code>filterText.&lt;fieldName&gt; [&lt;default search string&gt;]</code><BR>
+    <code>filterType.&lt;fieldName&gt; &lt;wildcard/regexp&gt;</code><BR>
+    </div>
+<!-- 
+    <P>There are a number of different filters available for bed data, see also the 
+    <a href="../hubQuickStartFilter.html">filters quick start guide</a>.</P>-->
+    <P><code>filterText.&lt;fieldName&gt;</code> is used to enable text searching in the 
+    specified fieldName. It does not require any variables, however, a preselected filter value
+    can be passed following the argument to enable the filter by default.</P> 
+    <P><code>filterText.&lt;fieldName&gt;</code> will enable two kinds of searching, wildcard and
+    regexp. By default, the wildcard option is enabled. This means that a search term with 
+    a wildcard (*) item on either end will match any number of additional characters before
+    and/or after the search term. The regexp option allows for searching with <a target="_blank"
+    href="https://en.wikipedia.org/wiki/Regular_expression#POSIX_basic_and_extended">regular 
+    expression rules</a>. The optional settings <code>filterType.&lt;fieldName&gt;</code> may
+    be added to switch the default from wildcard to regexp.</P>
+    <P>The filter label will be the description of the field as specified by the autoSql (.as) file.
+    This label can be customized with the <a 
+    href="#filterLabel"><code>filterLabel.&lt;fieldName&gt;</code></a> parameter.
+    See the bigBed help page and <a target="_blank" 
+    href="/goldenPath/help/bigBed.html#Ex3">example 3</a> for more information about creating 
+    unique .as files for bigBed data.</P>
+    <P><B>Notes:</B><ul>
+    <li><code>filterText.&lt;fieldName&gt;</code> will treat all fields as strings. That is to say,
+    it can be enabled on entirely numerical fields, such as <code>chromStart</code>, if one is 
+    looking to filter numerical values <strong>as text</strong></li>
+    <li>By default, all bed tracks that are at least bed5 will have a score filter. Enabling 
+    any of the <code>filter*.&lt;fieldName&gt;</code> filter settings will disable 
+    that default filter</li></ul></P>
+    <P><B>Examples:</B></P>
+    <pre>
+    filterText.geneName *BRCA*</pre>
+    <P>In this example, we are applying a default filter on the field <code>geneName</code> 
+    so that only items with BRCA in the <code>geneName</code> are visible. By default, this is 
+    a wildcard search of <code>*BRCA*</code> which is equivelant to
+    a regexp search <code>.*BRCA.*</code>. The filter term can be freely changed in the track 
+    setting page allowing users to filter on other values in the <code>geneName</code> field.</P>
+    <pre>
+    filterText.geneName</pre>
+    <P>This example is enabling filtering on the same field as above, <code>geneName</code>,
+    however, it is not declaring a default search parameter. This means that the search box 
+    will be present but no <code>geneName</code> items will be filtered out of the data 
+    unless the user specifies a value.</P>
+    <pre>
+    filterText.geneName \.1$
+    filterType.geneName regexp</pre>
+    <P>
+    This example once again enables filtering on the same field, however, it is declaring
+    regexp as the filter type and passing a regular expression to be applied by default. 
+    In this case, we are targeting all <code>geneName</code> items that are version 1.</P>
+</DIV>
+
+<DIV class="filterValues"><span class="types bigBed"></span>
+<div class="format">
+    <code>filterValues.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
+    <code>filterValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
+    <code>filterType.&lt;fieldName&gt; &lt;singleList/multipleListOr/multipleListAnd&gt;</code><BR>
+    </div>
+<!-- 
+    <P>There are a number of different filters available for bed data, see also the 
+    <a href="../hubQuickStartFilter.html">filters quick start guide</a>.</P>-->
+    <P><code>filterValues.&lt;fieldName&gt;</code> is used to enable filtering by 
+    specified values within a field. It can be used on fields that can contain
+    one text value or a list of comma-separated values of text, like "classA,classB".
+    Usually these are category names.
+    The option requires at least one value to filter on.</P>
+    <P>Every individual possible value that can ever occur in the field must be
+    passed in a comma separated list. You will then be able to select those
+    values as categories, choosing to display only items that
+    belong to one, any, or at least one of the selected values. By default, the user
+    can select multiple values from this list and the filter lets pass any features
+    with at least one of these values (<code>multipleListOr</code>).</P>
+    <P>In order to choose the default selection behavior, the optional parameter
+    <code>filterType.&lt;fieldName&gt;</code> may be used. If this parameter is not passed,
+    by default the selection will be set to &quot;one or more match&quot; which is the same
+    as having <code>filterType.fieldName multipleListOr</code>. If the user should
+    only be able to select a single value, 
+    <code>singleList</code> can be passed instead. The final option,
+    <code>multipleListAnd</code>, means that the user can select multiple categories,
+    but the filter will let pass only features where all of these categories are present.
+    </P>
+    <P>You can also choose which values to have selected by default using the
+    <code>filterValuesDefault.&lt;fieldName&gt;</code> parameter. It can take a comma separated
+    list just like <code>filterValues.&lt;fieldName&gt;</code>, and any items included will be
+    automatically selected. Not that the values need to be present in both settings.</P>  
+    <P>The labels in the menu shown to the user can be configured to display a different name/label
+    than the one present in the bigBed field. This can be helpful when the data values are
+    written in short form, but you want a longer more descriptive name to show up in the UI.
+    The format for this substitution is as follows:</P>
+    <pre>filterValues.fieldName fieldValue1|alternativeName1,fieldValue2|alternativeName2...</pre>
+    <P>E.g. if the value in the bigBed field is <code>AML</code>, a setting 
+    like <code>Acute Myeloid Leukemia|AML</code> will show <code>Acute Myeloid Leukemia</code> 
+    in the user interface but will lead to the value <code>AML</code> being searched in the bigBed 
+    field. This can reduce the size of the bigBed file a lot. See example below for more information.</P>
+    <P><B>Notes:</B><ul>
+    <li>Currently, all values must be stated individually</li>
+    <li>Value names must match exactly</li>
+    <li>By default, all bed tracks that are at least bed5 will have a score filter. Enabling any 
+    of the <code>filter*.&lt;fieldName&gt;</code> filter settings will disable that default 
+    filter</li>
+    <li>The default label can be customized with the <a 
+    href="#filterLabel"><code>filterLabel.&lt;fieldName&gt;</code></a> parameter</li></ul></P>
+    <P><B>Examples:</B></P>
+    <pre>
+    filterValues.OddEven Odd,Even</pre>
+    <P>In this simple example, we are applying <code>filterValues.&lt;fieldName&gt;</code>
+    to the <code>OddEven</code> field, which designates either &quot;Even&quot; 
+    or &quot;Odd&quot;. We can then filter the data using the <code>OddEven</code> 
+    field with a drop-down menu displayed on the track controls page to just evens or odds. 
+    As there is no filterType, the user can also show both evens and odds at the same time.</P>
+    <pre>
+    filterValues.OddEven Odd,Even
+    filterType.OddEven singleList</pre>
+    <P>In this follow up example, we are passing the <code>filterType.fieldName singleList</code>
+    parameter, which means that only one item in the <code>OddEven</code> field can be 
+    chosen, in this case &quot;Odd&quot; or &quot;Even&quot;. This removes the default that 
+    allows multiple selections.</P>
+    <pre>
+    filterValues.OddEven Odd,Even
+    filterType.OddEven singleList
+    filterValuesDefault.OddEven Odd</pre>
+    <P>In this third example, we have added the <code>filterValuesDefault.fieldName</code>
+    parameter as well. Now the default filter when the hub is loaded will have the Odd value
+    preselected.</P>
+    <pre>
+    filterValues.annotationType DNA-BR,AS,BS,BSi</pre>
+    <P>In this example the filter is being applied to multiple values in the 
+    <code>annotationType</code> field. We can then select from these values in the 
+    <code>annotationType</code> field with a drop-down menu displayed on the track settings page, 
+    and display only items that match our selections. The selection choices will let us match
+    one, all, or any combination of the supplied values.</P>
+    <pre>
+    filterValues.annotationType DNA-BR|DNA-binding region,AS|active site,BS|beta strand,BSi|binding site</pre>
+    <P>In this follow up to the previous question, we have changed the name of the items that
+    show up in the drop down menu to be more descriptive than the dense file format values. This means
+    that if we wanted to only see items with <code>annotationType</code> of 
+    <code>DNA-BR</code>, we would select <code>DNA-binding region</code> from the interface menu.</P>
+</DIV>
+
+<DIV class="filterLabel"><span class="types bed bigBed"></span>
+<div class="format"><code>filterLabel.&lt;fieldName&gt; &lt;label&gt;</code></div>
+    <P>When a user clicks on a track item in the Browser image,	
+    the item detail page is shown. This setting specifies an
+    alternate label for the filter on that page. Without this
+    setting, the label will be the description of the field as 
+    specified by the autoSql (.as) file. Some of the parameters modified by
+    this are:</P>
+    <P><ul><li><code>filter.&lt;fieldName&gt;</code></li>
+    <li><code>filterText.&lt;fieldName&gt;</code></li>
+    <li><code>filterValues.&lt;fieldName&gt;</code></li></ul></P>
+    <P><B>Example:</B></P>
+    <pre>
+    filterValues.strand +,-
+    filterLabel.strand Strand (Orientation)</pre>
+    <P>In this example, we have a standard &quot;strand&quot; BED field with the default 
+    description &quot;+ or - for strand&quot;. We have enabled a filter and simplified
+    the label to just "Strand (Orientation)".</P>
 </DIV>
 
 <DIV class="itemRgb"><span class="types bed bigBed bedDetail bedGraph bedLogR"></span>
@@ -2063,25 +2319,31 @@ There are no extra options that can appear on the type bigInteract line.
 
 <DIV class="alwaysZero"><span class="types wig bedGraph bigWig"></span>
 <div class="format"><code>alwaysZero  &lt;off/on&gt;</code></div>
-    <P>When autoScale is set to "on" in the signal track, 
+    <P>When autoScale is set to "on" or "group" in the signal track, 
     additionally setting <code>alwaysZero</code> to "on" will ensure that the y=0
     value will be in view at all times. Default: off.
     </P>
 </DIV>
 
 <DIV class="autoScale"><span class="types wig bigWig bedGraph"></span>
-<div class="format"><code>autoScale &lt;off/on&gt;</code></div>
+<div class="format"><code>autoScale &lt;off/on/group&gt;</code></div>
     <P>The graph of the
-    data displayed in the Browser image is usually scaled on the y
-    axis in absolute coordinates.  However, you can display the data
-    in autoScale which will ensure that the high score in the current
-    viewing window will peak at the top of the graph.  Like most graph settings, 
+    data displayed in the Browser image is usually scaled on the y-axis 
+    in absolute coordinates.  However, you can display the data
+    in two types of autoScale which will ensure either that the high score in the current
+    viewing window will peak at the top of the graph, or that all tracks in a 
+    composite will be scaled according to the highest point in the viewing 
+    window of any visible tracks in the same composite.  Like most graph settings, 
     this is configurable by the user.  Setting it to "<code>on</code>" in trackDb will default 
-    the track to <code>autoScale</code>. Default: off.</P>
-    <P>NOTE: this option
-    should be avoided if it will lead to display regions in which a low signal
+    the track to <code>auto-scale to data view</code>.
+    Setting it to "<code>group</code>" in trackDb will default 
+    the track to <code>group auto-scale</code>. The default is 
+    "<code>off</code>" which will set the track to <code>use vertical viewing 
+    range setting</code>.</P>
+    <P>NOTE: These options can be misleading if a noisy, low signal
     erroneously appears as significant because there is no high signal in the
-    view window.</P>
+    view window. The "<code>group</code>" option only applies to composite 
+    bigWig tracks.</P>
     <P><B>Example:</B></P>
     <pre>   autoScale on</pre>
 </DIV>
@@ -4342,6 +4604,12 @@ For the complete bigInteract format definitions please see the
     </P>
 </DIV>
 
+<DIV class="interactMultiRegion"><span class="types bigInteract"></span>
+<div class="format"><code>interactMultiRegion &lt;true|padding&gt;</code></div>
+    <P>This setting causes a link to appear on the details page that appears when an interaction is clicked on. This link will generate a &quot;multi-region&quot; Genome Browser view of the interaction (or interaction cluster) endpoints. Use padding to specify non-default padding at the edges of each region.  The default value is 200 base pairs.
+    </P>
+</DIV>
+
 <DIV class="interact_example"><span class="types bigInteract"></span>
 <div class="format"><B>Example of an interact/bigInteract track</B></div>
     <pre>
@@ -4352,6 +4620,30 @@ For the complete bigInteract format definitions please see the
     bigDataUrl http://...
     </pre>
 </div>
+
+<!-- - - - - - - - hic settings - - - - - - - -->
+<DIV class="hic_intro">
+<H3>hic: Hi-C contact matrices</H3>
+    <P>
+    The hic track type is for displaying chromatin-chromatin interaction data via heat
+maps.  Currently this track type supports one file format: the .hic file format created
+by the <a href="https://www.aidenlab.org" target="_blank">Aiden Lab</a> at <a target="_blank"
+href="https://www.bcm.edu">Baylor College of Medicine</a>.  This is an indexed
+binary format that supports remote access, so the file can be hosted on any web accessible
+server and displayed at UCSC.
+For more information on the .hic file format, see the documentation on <a target="_blank"
+href="https://github.com/aidenlab/juicer/wiki/Data">github</a>.</p>
+</DIV>
+
+<DIV class="hic_example"><span class="types hic"></span>
+<div class="format"><B>Example of a hic track</B></div>
+    <pre>
+    track myHiCData
+    type hic
+    bigDataUrl http://...
+    </pre>
+</div>
+
 
 <!-- - - - - - - - bigBarChart settings - - - - - - - -->
 <DIV class="bigBarChart_intro">
@@ -4378,6 +4670,15 @@ For the complete bigBarChart format definitions please see the
     </P>
 </DIV>
 
+<DIV class="barChartMaxSize"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartMaxSize &lt;small/medium/large&gt;</code></div>
+    <P>BarChart track display selects one of three sizes (small, medium, or large) to 
+        display barCharts, based on size of the genomic region in the current window.
+        For dense data, it is helpful to reduce the barChart sizes, even when in relatively
+        small genomic regions.  This setting limits the size of the largest barChart 
+        to the selected value.  When unset, the default value is &quot;large&quot;.
+    </P>
+</DIV>
 <DIV class="barChartMetric"><span class="types bigBarChart"></span>
 <div class="format"><code>barChartMetric &lt;metric&gt;</code></div>
     <P>This setting provides a label for details page information about the barChart values presented.
@@ -4665,6 +4966,30 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     Note: This setting will not work correctly if 'container multiWig' is specified.</P>
 </DIV>
 
+<DIV class="hideEmptySubtracks"><span class="types compositeTrack"></span>
+<div class="format">
+        <code>hideEmptySubtracks &lt;on/default&gt; [multiBed.bb multiBedSources.tab]</code></div>
+    <P>When you have many subtracks in a composite track, it may be useful to limit the display
+    to only those with data in the current viewing window.  This track setting produces a
+    checkbox on the track configuration page allowing the user to enable or disable this feature.
+    if <code>default</code> is specified, the feature is on by default (the checkbox is checked).
+    </p>
+    <p>
+    For extremely large composites, especially those where each subtrack may be sparse,
+    substantial performance improvements can be gained by creating an index file of the 
+    intersections of items in all subtracks (&quot;multiBed&quot;).  This file, and an
+    accompanying sources file, are optional arguments to this setting.
+    Instructions for creating these files are at the MultiBed help page (TBD).
+</DIV>
+<DIV class="hideEmptySubtracksLabel"><span class="types compositeTrack"></span>
+<div class="format">
+        <code>hideEmptySubtracks &lt;label&gt;</code></div>
+    <P>This setting is used in conjunction with the <code>hideEmptySubtracks</code> setting
+    to customize the label preceding the selection checkbox on the track configuration page.
+    Default wording is &quot;Hide empty subtracks&quot;.  Custom wording is useful to distinguish
+    affected tracks in multi-view composites (e.g. &quot;Hide empty Peaks subtracks&quot;).
+    </p>
+</DIV>
 
 <DIV class="compositeTrack_example"><span class="types compositeTrack"></span>
 <div class="format"><B>Example of a Composite track</B></div>
@@ -5426,9 +5751,6 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
 <div class="format"><code>htmlUrl</code></div>
     <P>Internal only &ndash; user does not set.
     Filled with user entered URL for track
-    description in hgCustom CGI.</P>
-</DIV>
-
 <DIV class="initialPos"><span class="types customTracks"></span>
 <div class="format"><code>initialPos</code></div>
     <P>Internal only &ndash; user does not set.

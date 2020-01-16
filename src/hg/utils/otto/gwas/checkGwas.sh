@@ -80,6 +80,23 @@ do
     hgsqlSwapTables hg38 $n $i $o -dropTable3
 done
 
+# now archive
+# match other archive date formats
+dateDir=`date +%F`
+if [ ! -d ${WORKDIR}/archive ]; then
+    mkdir -p ${WORKDIR}/archive
+fi
+cd ${WORKDIR}/archive
+for db in "hg18" "hg19" "hg38"
+do
+    mkdir -p ${db}/${dateDir}
+    cd ${db}/${dateDir}
+    printf "This directory contains a backup of the GWAS Catalog track data tables built on %s\n" "${dateDir}" > README 
+    hgsql --raw -Ne "show create table gwasCatalog" ${db} > gwasCatalog.sql
+    hgsql -Ne "select * from gwasCatalog" ${db} | gzip >  gwasCatalog.txt.gz
+done
+
+
 echo "Gwas Installed `date`" 
 
 

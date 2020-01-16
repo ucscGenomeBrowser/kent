@@ -1,0 +1,1091 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the regenCho1
+
+#  Can use existing photograph (otherwise find one before starting here)
+
+#########################################################################
+#  Initial steps, use existing photograph (DONE - 2019-11-18 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/regenCho1
+cd ~/kent/src/hg/makeDb/doc/regenCho1
+
+sed -e 's/galGal6/regenCho1/g; s/GalGal6/RegenCho1/g; s/DONE/TBD/g;' \
+	../galGal6/initialBuild.txt > initialBuild.txt
+
+mkdir -p /hive/data/genomes/regenCho1/regeneron
+# sequences were obtained via email instructions from Regeneron
+# downloaded from a URl for their secure situation
+-rw-r--r-- 1  642308119 Nov 16 21:13 regen.cho.zip
+# unzipped (with a few tricks) into the files:
+-rw-rw-r-- 1 2404315688 Nov 16 13:20 REGN_CHO_HYBRID_SCAFFOLD.fasta
+-rw-rw-r-- 1  127348249 Nov 16 13:21 REGN_CHO_CONTIGS.fasta
+-rw-rw-r-- 1     954479 Nov 16 13:22 REGN_CHO.agp
+# tricks:  When you unzip the file, you obtain:
+-rw-rw-r-- 1       169 Nov 17 05:11 md5sum.txt
+-rw-rw-r-- 1 642893273 Nov 17 05:11 REGN_CHO_ASSM.tgz
+# the file named .tgz is a gzipped file tar image, you need to:
+# mv REGN_CHO_ASSM.tgz REGN_CHO_ASSM.tar.gz
+# gunzip REGN_CHO_ASSM.tar.gz
+# tar xvf REGN_CHO_ASSM.tar
+
+# check assembly size for later reference:
+faSize REGN_CHO_HYBRID_SCAFFOLD.fasta
+# 2404312997 bases (265206282 N's 2139106715 real 2134987163 upper
+#	4119552 lower) in 113 sequences in 1 files
+# Total size: mean 21277106.2 sd 48948367.5 min 65387 (Super-Scaffold_100188)
+#	max 240360982 (Super-Scaffold_100001) median 796941
+# %0.17 masked total, %0.19 masked real
+
+faSize REGN_CHO_CONTIGS.fasta
+# 127192052 bases (0 N's 127192052 real 111817586 upper 15374466 lower)
+#	in 7771 sequences in 1 files
+# Total size: mean 16367.5 sd 16086.3 min 4 (011634F_pilon_obj)
+#	max 493946 (001235F_pilon_obj) median 11822
+# %12.09 masked total, %12.09 masked real
+
+# check for duplicate sequence:
+faToTwoBit REGN_CHO_HYBRID_SCAFFOLD.fasta REGN_CHO_CONTIGS.fasta test.2bit
+# should be silent:
+twoBitDup test.2bit
+
+#  Can use existing photograph
+cd  /hive/data/genomes/regenCho1
+cp -p ../criGriChoV2/photoReference.txt  .
+
+cp -p ../rn6/photoReference.txt .
+cat photoReference.txt
+photoCreditURL  https://commons.wikimedia.org/wiki/File:Cho_cells_adherend2.jpg
+photoCreditName WikiMedia Commons: Alcibiades
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2019-11-25)
+    cd /hive/data/genomes/regenCho1
+    # copy the criGriChoV2 file and edit:
+    cp -p ../criGriChoV2/criGriChoV2.config.ra regenCho1.config.ra
+
+
+    cat regenRn9.config.ra
+# config parameters for makeGenomeDb.pl:
+db regenCho1
+clade mammal
+scientificName Cricetulus griseus
+commonName Chinese hamster
+assemblyDate Nov. 2019
+assemblyLabel Regeneron CHOv1
+assemblyShortLabel regenCho1
+orderKey 3347
+# including NC_007936.1 in the ucsc/chrM.* files from criGriChoV2
+mitoAcc none
+fastaFiles /hive/data/genomes/regenCho1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/regenCho1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir criGri
+photoCreditURL  https://commons.wikimedia.org/wiki/File:Cho_cells_adherend2.jpg
+photoCreditName WikiMedia Commons: Alcibiades
+ncbiGenomeId 2791
+ncbiAssemblyId 1422381
+ncbiAssemblyName CHOK1S_HZDv1
+ncbiBioProject PRJEB21211
+ncbiBioSample SAMEA104116709
+genBankAccessionID GCA_900186095.1
+taxId 10029
+
+    # compare with previous version to see if it is sane:
+    diff regenCho1.config.ra ../criGriChoV2/criGriChoV2.config.ra
+
+#############################################################################
+# setup UCSC named files (DONE - 2019-11-25 - Hiram)
+
+    mkdir /hive/data/genomes/regenCho1/ucsc
+    cd /hive/data/genomes/regenCho1/ucsc
+
+    # limit to contigs only 100 bases and larger:
+
+    awk '$2 > 99' ../regeneron/REGN_CHO.chrom.sizes \
+  > limit.sizes
+
+    cut -f1 limit.sizes | sort > allowed.names
+
+    # running this script to get the contig names shorter
+    # result of this script output into: ucsc.regeneron.name.translate
+
+    printf '#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "<allowed.names") or die "can not read allowed.names";
+while (my $line = <FH>) {
+  chomp $line;
+  my $ucscName = $line;
+  if ($ucscName =~ m/^Super-Scaffold/) {
+     $ucscName =~ s/Super-Scaffold_/ss/;
+  } elsif ($ucscName =~ m/_pilon_obj$/) {
+     $ucscName =~ s/_pilon_obj//;
+     $ucscName =~ s/^/pi/;
+  } elsif ($ucscName =~ m/pilon_subseq/) {
+    if ($ucscName =~ m/000052F_pilon_subseq/) {
+       $ucscName =~ s/32403:237079_obj//;
+       $ucscName =~ s/027473:1032013_obj//;
+       $ucscName =~ s/_pilon_subseq//;
+    } else {
+       $ucscName =~ s/_pilon_subseq_.*//;
+    }
+    $ucscName =~ s/^/pisub/;
+  } else {
+    die "can not recognize $ucscName";
+  }
+  printf "%%s\\t%%s\\n", $ucscName, $line;
+}
+close (FH);
+' > nameMangle.pl
+
+    chmod +x nameMangle.pl
+
+    ./nameMangle.pl > ucsc.regeneron.name.translate
+    # three of the names had to be fixed up that came out as a duplicates
+#	pisub002451F    002451F_pilon_subseq_1:60219_obj
+#	pisub002451F    002451F_pilon_subseq_60220:143470_obj
+#	pisub002349F    002349F_pilon_subseq_113319:159808_obj
+#	pisub002349F    002349F_pilon_subseq_93081:113318_obj
+#	pisub002822F    002822F_pilon_subseq_1:48280_obj
+#	pisub002822F    002822F_pilon_subseq_48281:109600_obj
+
+    # to become:
+#	pisub002451Fa   002451F_pilon_subseq_1:60219_obj
+#	pisub002451Fb   002451F_pilon_subseq_60220:143470_obj
+#	pisub002349Fa   002349F_pilon_subseq_113319:159808_obj
+#	pisub002349Fb   002349F_pilon_subseq_93081:113318_obj
+#	pisub002822Fa   002822F_pilon_subseq_1:48280_obj
+#	pisub002822Fb   002822F_pilon_subseq_48281:109600_obj
+
+
+    # this script translated the contig names in the fasta file
+    # result into: | gzip -c > ucsc.fa.gz
+
+    printf '#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %%regenToUcsc;        # key is Regeneron name, value is UCSC name
+
+open (FH, "<ucsc.regeneron.name.translate") or die "can not read ucsc.regeneron.name.translate";
+while (my $line = <FH>) {
+   chomp $line;
+   my ($ucsc, $regen) = split('"'"'\\s+'"'"', $line);
+   die "regen name already seen $regen" if (defined($regenToUcsc{$regen}));
+   $regenToUcsc{$regen} = $ucsc;
+}
+close (FH);
+
+my $skipping = 0;
+
+open (FH, "cat ../regeneron/REGN_CHO_HYBRID_SCAFFOLD.fasta ../regeneron/REGN_CHO_CONTIGS.fasta|") or die "can not read the fasta files";
+while (my $line = <FH>) {
+  chomp $line;
+  if ($line =~ m/^>/) {
+    $line =~ s/>//;
+    if (!defined($regenToUcsc{$line})) {
+      $skipping = 1;
+    } else {
+      printf ">%%s\\n", $regenToUcsc{$line};
+      $skipping = 0;
+    }
+  } else {
+    if ($skipping) {
+      next;
+    } else {
+      printf "%%s\\n", $line;
+    }
+  }
+}
+close (FH);
+' > translateFasta.pl
+
+
+    chmod +x translateFasta.pl
+
+    time ./translateFasta.pl | gzip -c > ucsc.fa.gz
+    # using chrM from criGriChoV2
+    cp -p ../../criGriChoV2/ucsc/chrM.agp .
+    cp -p ../../criGriChoV2/ucsc/chrM.fa.gz .
+
+    # verify the resulting fasta is sane, and no duplicates:
+
+    faToTwoBit ucsc.fa.gz chrM.fa.gz test.2bit
+    twoBitDup test.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+    # the scripts creating the fasta here will be using this refseq.2bit file
+    # remove it later
+
+    # what kind of gaps are there
+    twoBitInfo -nBed test.2bit test.nBed
+
+    awk '{print $3-$2,$0}' test.nBed | sort -n | head
+    #	5 ss100002      204423915       204423920
+    #	6 ss100011      48606414        48606420
+    awk '{print $3-$2,$0}' test.nBed | sort -n | tail
+    #	117669 ss100003 119385162       119502831
+    #	165458 ss100001 75253875        75419333
+
+    awk '{print $3-$2}' test.nBed | ave stdin
+Q1 2137.000000
+median 3822.000000
+Q3 6640.500000
+average 5128.624123
+min 5.000000
+max 165458.000000
+count 51711
+total 265206282.000000
+standard deviation 4674.221642
+
+    twoBitToFa test.2bit stdout \
+	| hgFakeAgp -minContigGap=1 -singleContigs stdin fake.agp
+    checkAgpAndFa fake.agp test.2bit 2>&1 | tail -4
+    # All AGP and FASTA entries agree - both files are valid
+
+    twoBitToFa test.2bit stdout | faSize stdin
+# 2531519022 bases (265206282 N's 2266312740 real 2246820852 upper
+#	19491888 lower) in 7812 sequences in 1 files
+# Total size: mean 324055.2 sd 6387461.2 min 105 (pi011564F)
+#	max 240360982 (ss100001) median 12236
+
+    # no longer need the temporary 2bit file
+    rm test.2bit test.nBed
+
+#############################################################################
+#  Initial database build (DONE - 2019-11-25 - Hiram)
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -stop=db regenCho1.config.ra -workhorse=hgwdev) \
+       > db.log 2>&1
+    # real    16m7.888s
+
+    # finish it off:
+    time (makeGenomeDb.pl -continue=dbDb regenCho1.config.ra -workhorse=hgwdev) \
+	> dbDb.log 2>&1
+    # real    0m8.473s
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add regenCho1 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/regenCho1
+    ln -s `pwd`/regenCho1.unmasked.2bit /gbdb/regenCho1/regenCho1.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2019-11-25 - Hiram)
+    mkdir /hive/data/genomes/regenCho1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/regenCho1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/regenCho1/regenCho1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku regenCho1) > do.log 2>&1
+    # real    3m30.732s
+
+    cat fb.regenCho1.cpgIslandExtUnmasked.txt
+    # 13292341 bases of 2266312740 (0.587%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2019-11-25 - Hiram)
+    mkdir /hive/data/genomes/regenCho1/bed/cytoBand
+    cd /hive/data/genomes/regenCho1/bed/cytoBand
+    makeCytoBandIdeo.csh regenCho1
+
+#############################################################################
+# run up idKeys files for chromAlias/ncbiRefSeq (DONE - 2019-11-25 - Hiram)
+    mkdir /hive/data/genomes/regenCho1/bed/idKeys
+    cd /hive/data/genomes/regenCho1/bed/idKeys
+
+    time (doIdKeys.pl \
+        -twoBit=/hive/data/genomes/regenCho1/regenCho1.unmasked.2bit \
+        -buildDir=`pwd` regenCho1) > do.log 2>&1 &
+    # real    3m20.182s
+
+    cat regenCho1.keySignature.txt
+    #  ab4b597342e6842b8b2d85ba44f45f1d
+
+#############################################################################
+# gapOverlap (DONE - 2019-11-25 - Hiram)
+    mkdir /hive/data/genomes/regenCho1/bed/gapOverlap
+    cd /hive/data/genomes/regenCho1/bed/gapOverlap
+    time (doGapOverlap.pl \
+    -twoBit=/hive/data/genomes/regenCho1/regenCho1.unmasked.2bit regenCho1 ) \
+        > do.log 2>&1 &
+    # real    2m50.902s
+
+    # there are 4 items found:
+    wc -l bed.tab
+    # 4 bed.tab
+
+    cat fb.regenCho1.gapOverlap.txt
+    # 1900 bases of 2531519022 (0.000%) in intersection
+
+#############################################################################
+# tandemDups (DONE - 2019-11-25 - Hiram)
+    mkdir /hive/data/genomes/regenCho1/bed/tandemDups
+    cd /hive/data/genomes/regenCho1/bed/tandemDups
+    time (~/kent/src/hg/utils/automation/doTandemDup.pl \
+  -twoBit=/hive/data/genomes/regenCho1/regenCho1.unmasked.2bit regenCho1) \
+        > do.log 2>&1 &
+    # real    462m49.910s
+
+    cat fb.regenCho1.tandemDups.txt
+    # 38468992 bases of 2531519022 (1.520%) in intersection
+
+    bigBedInfo regenCho1.tandemDups.bb | sed -e 's/^/#  /;'
+#  version: 4
+#  fieldCount: 13
+#  hasHeaderExtension: yes
+#  isCompressed: yes
+#  isSwapped: 0
+#  extraIndexCount: 0
+#  itemCount: 530,201
+#  primaryDataSize: 14,192,892
+#  primaryIndexSize: 160,912
+#  zoomLevels: 9
+#  chromCount: 3872
+#  basesCovered: 1,023,131,655
+#  meanDepth (of bases covered): 3.894087
+#  minDepth: 1.000000
+#  maxDepth: 326.000000
+#  std of depth: 11.009630
+
+#########################################################################
+# ucscToINSDC and ucscToRefSeq table/track (TBD - 2019-11-25 - Hiram)
+    # construct idKeys for the refseq sequence
+    mkdir /hive/data/genomes/regenCho1/refseq/idKeys
+    cd /hive/data/genomes/regenCho1/refseq/idKeys
+    faToTwoBit ../GCF_000002315.5_GRCg6a_genomic.fna.gz regenCho1.refSeq.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/regenCho1.refSeq.2bit refseqRegenCho1)  > do.log 2>&1 &
+    # real    0m48.786s
+
+    cat refseqRegenCho1.keySignature.txt
+    #  7850e2d5dabb6134fdc9d7083f1a3a54
+
+    # and the genbank sequence needs keys too:
+    mkdir /hive/data/genomes/regenCho1/refseq/idKeysGenbank
+    cd /hive/data/genomes/regenCho1/refseq/idKeysGenbank
+    faToTwoBit /hive/data/outside/ncbi/genomes/genbank/vertebrate_other/Gallus_gallus/all_assembly_versions/GCA_000002315.5_GRCg6a/GCA_000002315.5_GRCg6a_genomic.fna.gz regenCho1.genbank.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/regenCho1.genbank.2bit genbankRegenCho1)  > do.log 2>&1 &
+
+    cat genbankRegenCho1.keySignature.txt
+    #  a20fdad3318d371fcb34fcc66bab3752
+
+    mkdir /hive/data/genomes/regenCho1/bed/chromAlias
+
+    join -t$'\t' ../idKeys/regenCho1.idKeys.txt \
+        ../../refseq/idKeysGenbank/genbankRegenCho1.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToINSDC.bed
+
+    join -t$'\t' ../idKeys/regenCho1.idKeys.txt \
+        ../../refseq/idKeys/refseqRegenCho1.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+
+    # should be same line counts throughout:
+    wc -l * ../../chrom.sizes
+    #	463 ucscToINSDC.bed
+    #	464 ucscToRefSeq.bed
+    #	464 ../../chrom.sizes
+
+    # need to find the accession for the INSDC equivalent to chrM:
+    egrep chrM *
+# ucscToRefSeq.bed:chrM   0       16775   NC_001323.1
+    # lookup that accession at NCBI Entrez: X52392.1
+    # and add to ucscToINSDC.bed:
+    printf "chrM\t0\t16775\tX52392.1\n" >> ucscToINSDC.bed
+    # verify:
+    grep chrM *
+# ucsc.genbank.tab:chrM   X52392.1
+# ucsc.refseq.tab:chrM    NC_001323.1
+# ucscToINSDC.bed:chrM    0       16775   X52392.1
+# ucscToRefSeq.bed:chrM   0       16775   NC_001323.1
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 27
+    # use the $chrSize in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab regenCho1 ucscToINSDC stdin ucscToINSDC.bed
+     # should be the same for ucscToRefSeq:
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 27
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' \
+         | hgLoadSqlTab regenCho1 ucscToRefSeq stdin ucscToRefSeq.bed
+
+    # should be quiet for all OK
+    checkTableCoords regenCho1
+
+    # should cover %100 entirely:
+    featureBits -countGaps regenCho1 ucscToINSDC
+    # 1065365425 bases of 1065365425 (100.000%) in intersection
+    featureBits -countGaps regenCho1 ucscToRefSeq
+    # 1065365425 bases of 1065365425 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2019-11-26 - Hiram)
+
+    mkdir /hive/data/genomes/regenCho1/bed/chromAlias
+    cd /hive/data/genomes/regenCho1/bed/chromAlias
+
+    sort ../../ucsc/ucsc.regeneron.name.translate > regen.tab
+    ~/kent/src/hg/utils/automation/chromAlias.pl regen.tab \
+	> regenCho1.chromAlias.tab
+
+    join regen.tab <(sort -k1,1 ../../chrom.sizes) \
+      | awk '{printf "%s\t0\t%d\t%s\n", $1, $3, $2}' > regen.alias.bed
+
+     wc -l *
+#	7811 regen.alias.bed
+#	7811 regen.tab
+#	7811 regenCho1.chromAlias.tab
+
+
+    hgLoadSqlTab regenCho1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        regenCho1.chromAlias.tab
+
+    # display the Regeneron AGP file as a track:
+
+    ln -s ../../regeneron/REGN_CHO.agp  .
+
+    awk '{printf "%d\t%s\t%d\t%s\t%d\n", $2, $4, $3, $1, $3}' regen.alias.bed \
+	> regenToUcsc.lift
+
+
+    grep -v "^#" REGN_CHO.agp | grep -w yes \
+      | awk '{printf "%s\t%d\t%d\tgap\t0\t.\n", $1, $2-1, $3}' > regen.gaps.bed
+
+    grep -v "^#" REGN_CHO.agp | grep -v -w yes \
+      | awk '{printf "%s\t%d\t%d\t%s\t0\t%s\n", $1, $2-1, $3, $6, $9}' \
+        > regen.contigs.bed
+
+    sort -k1,1 -k2,2n regen.gaps.bed regen.contigs.bed > regen.agp.bed
+
+    liftUp regen.agp.lifted.bed regenToUcsc.lift error regen.agp.bed
+
+    hgLoadBed regenCho1 regenAGP regen.agp.lifted.bed
+    # Read 15529 elements of size 6 from regen.agp.lifted.bed
+
+    grep -w gap regen.agp.lifted.bed | hgLoadBed regenCho1 regenAGPGap stdin
+    # Read 3859 elements of size 6 from stdin
+
+    featureBits -countGaps regenCho1 gap
+    # 265206282 bases of 2531519022 (10.476%) in intersection
+
+    featureBits -countGaps regenCho1 regenAGPGap
+    # 265493399 bases of 2531519022 (10.488%) in intersection
+
+    featureBits -countGaps regenCho1 gap regenAGPGap
+    # 265206282 bases of 2531519022 (10.476%) in intersection
+
+    # the REGN_CHO.agp is missing the chrM sequence added in this browser
+    featureBits -countGaps regenCho1 regenAGP
+    2531502738 bases of 2531519022 (99.999%) in intersection
+
+    grep chrM ../../chrom.sizes
+    # chrM    16284
+
+    calc \( 2531502738 + 16284 \) - 2531519022
+
+    calc 2531502738 + 16284
+    # 2531502738 + 16284 = 2531519022.000000
+    calc \( 2531502738 + 16284 \) - 2531519022
+    # ( 2531502738 + 16284 ) - 2531519022 = 0.000000
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2019-11-25 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/criGri/regenCho1
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" regenCho1 \
+      | sed -e 's/[0-9_FR]\+//;' | sort | uniq -c 
+      1 chrM
+   7659 pi
+     33 pisub
+      3 pisuba
+      3 pisubb
+  51824 ss
+
+
+    # implies a rule: '[cps][his](sub)?[rM0-9]+(_[ab0-9FR]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" regenCho1 | wc -l
+    # 59523
+
+    hgsql -N -e "select frag from gold;" regenCho1 \
+       | egrep -e '[cps][his]+(sub)?[rM0-9]+(_[ab0-9FR]+)?' | wc -l
+    # 59523
+
+    hgsql -N -e "select frag from gold;" regenCho1 \
+       | egrep -v -e '[cps][his]+(sub)?[rM0-9]+(_[ab0-9FR]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/regenCho1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [cps][his]+(sub)?[rM0-9]+(_[ab0-9FR]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (DONE - 2019-11-25 - Hiram)
+    mkdir /hive/data/genomes/regenCho1/bed/repeatMasker
+    cd /hive/data/genomes/regenCho1/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku regenCho1) > do.log 2>&1 &
+    # real    518m50.143s
+
+    cat faSize.rmsk.txt
+# 2531519022 bases (265206282 N's 2266312740 real 1530161366 upper
+#	736151374 lower) in 7812 sequences in 1 files
+# Total size: mean 324055.2 sd 6387461.2 min 105 (pi011564F)
+#	max 240360982 (ss100001) median 12236
+# %29.08 masked total, %32.48 masked real
+
+    egrep -i "versi|relea" do.log
+# RepeatMasker version development-$Id: RepeatMasker,v 1.332 2017/04/17 19:01:11 rhubley Exp $
+#    February 01 2017 (open-4-0-8) 1.332 version of RepeatMasker
+# grep RELEASE /hive/data/staging/data/RepeatMasker/Libraries/RepeatMaskerLib.embl
+# CC    Dfam_Consensus RELEASE 20181026;                            *
+
+    time featureBits -countGaps regenCho1 rmsk
+    # 736157955 bases of 2531519022 (29.080%) in intersection
+    # real    0m29.036s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' regenCho1 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 736157955.000000
+    # real    0m18.986s
+
+##########################################################################
+# running simple repeat (DONE - 2019-11-25 - Hiram)
+
+    # The '-trf409 4' is a bit smaller than human which is 6
+
+    mkdir /hive/data/genomes/regenCho1/bed/simpleRepeat
+    cd /hive/data/genomes/regenCho1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409=4 regenCho1) > do.log 2>&1 &
+    # real    17m24.592s
+
+    cat fb.simpleRepeat
+    # 68344927 bases of 2266312740 (3.016%) in intersection
+
+    cd /hive/data/genomes/regenCho1
+    # when using the Window Masker result:
+    cd /hive/data/genomes/regenCho1
+#    twoBitMask bed/windowMasker/regenCho1.cleanWMSdust.2bit \
+#       -add bed/simpleRepeat/trfMask.bed  regenCho1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # or using the rmsk result after it is done:
+    twoBitMask regenCho1.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed regenCho1.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa regenCho1.2bit stdout | faSize stdin > faSize.regenCho1.2bit.txt
+    cat faSize.regenCho1.2bit.txt | sed -e 's/^/# /;'
+# 2531519022 bases (265206282 N's 2266312740 real 1528440046 upper
+#	737872694 lower) in 7812 sequences in 1 files
+# Total size: mean 324055.2 sd 6387461.2 min 105 (pi011564F)
+#	max 240360982 (ss100001) median 12236
+# %29.15 masked total, %32.56 masked real
+
+    rm /gbdb/regenCho1/regenCho1.2bit
+    ln -s `pwd`/regenCho1.2bit /gbdb/regenCho1/regenCho1.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2019-11-26 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/regenCho1/bed/microsat
+    cd /cluster/data/regenCho1/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed regenCho1 microsat microsat.bed
+    # Read 226558 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2019-11-26 - Hiram)
+    # wait for RepeatMasker to finish before this, since this is going
+    # to compare itself with the rmsk result
+
+    mkdir /hive/data/genomes/regenCho1/bed/windowMasker
+    cd /hive/data/genomes/regenCho1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev regenCho1) > do.log 2>&1
+    # real    132m19.374s
+
+    # Masking statistics
+    cat faSize.regenCho1.cleanWMSdust.txt
+# 2531519022 bases (265206282 N's 2266312740 real 1539053551 upper
+#	727259189 lower) in 7812 sequences in 1 files
+# Total size: mean 324055.2 sd 6387461.2 min 105 (pi011564F)
+#	max 240360982 (ss100001) median 12236
+# %28.73 masked total, %32.09 masked real
+
+    cat fb.regenCho1.rmsk.windowmaskerSdust.txt
+    # 432987841 bases of 2531519022 (17.104%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2019-11-26 - Hiram)
+    mkdir /hive/data/genomes/regenCho1/bed/cpgIslands
+    cd /hive/data/genomes/regenCho1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku regenCho1) > do.log 2>&1
+    # real    3m34.486s
+
+    cat fb.regenCho1.cpgIslandExt.txt
+    # 11992730 bases of 2266312740 (0.529%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2019-11-26 - Hiram)
+    mkdir /hive/data/genomes/regenCho1/bed/genscan
+    cd /hive/data/genomes/regenCho1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku regenCho1) > do.log 2>&1
+    # real    126m0.077s
+
+    # three jobs failed on the ku run, finished on hgwdev manually:
+# ./runGsBig.2M.csh ss1415 000 gtf/000/ss1415.gtf pep/000/ss1415.pep subopt/000/ss1415.bed
+# ./runGsBig.2M.csh ss100006 000 gtf/000/ss100006.gtf pep/000/ss100006.pep subopt/000/ss100006.bed
+# ./runGsBig.2M.csh ss5358 000 gtf/000/ss5358.gtf pep/000/ss5358.pep subopt/000/ss5358.bed
+
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku regenCho1) > makeBed.log 2>&1
+    # real    1m14.506s
+
+    cat fb.regenCho1.genscan.txt
+    # 55358798 bases of 2266312740 (2.443%) in intersection
+
+    cat fb.regenCho1.genscanSubopt.txt
+    # 58714924 bases of 2266312740 (2.591%) in intersection
+
+#########################################################################
+# Create kluster run files (TBD - 2019-06-29 - Hiram)
+
+    # numerator is regenCho1 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap regenCho1 gap
+    # 265206282 bases of 2266312740 (11.702%) in intersection
+
+    #                       ^^^
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2266312740 / 2861349177 \) \* 1024
+    #  ( 2266312740 / 2861349177 ) * 1024 = 811.052445
+
+    # ==> use -repMatch=800 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/regenCho1
+    blat regenCho1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/regenCho1.11.ooc \
+        -repMatch=800
+    #   Wrote 24088 overused 11-mers to jkStuff/regenCho1.11.ooc
+    # criGriChoV2 was repMatch 850 and:
+    #   Wrote 22423 overused 11-mers to jkStuff/criGriChoV2.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' regenCho1 \
+        | sort -k7,7nr | ave -col=7 stdin
+    # min 52599.000000
+    # max 165458.000000
+
+    gapToLift -verbose=2 -minGap=50000 regenCho1 jkStuff/nonBridged.lift \
+        -bedFile=jkStuff/nonBridged.bed
+    wc -l jkStuff/nonBri*
+    #	7832 jkStuff/nonBridged.bed
+    #	7832 jkStuff/nonBridged.lift
+
+########################################################################
+# lastz/chain/net swap human/hg38 (DONE - 2019-11-26 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg38/bed/lastzRegenCho1.2019-11-26
+
+    cat fb.hg38.chainRegenCho1Link.txt
+    # 979733899 bases of 3095998939 (31.645%) in intersection
+    cat fb.hg38.chainSynRegenCho1Link.txt
+    # 917104031 bases of 3095998939 (29.622%) in intersection
+    cat fb.hg38.chainRBest.RegenCho1.txt
+    # 901006295 bases of 3095998939 (29.102%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/regenCho1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/regenCho1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzRegenCho1.2019-11-26/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > swap.log 2>&1
+    #  real    79m18.904s
+
+    cat fb.regenCho1.chainHg38Link.txt
+    # 956720146 bases of 2266312740 (42.215%) in intersection
+    cat fb.regenCho1.chainSynHg38Link.txt
+    # 895755077 bases of 2266312740 (39.525%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	regenCho1 hg38) > rbest.log 2>&1 &
+    # real    289m24.440s
+
+    cat fb.regenCho1.chainRBest.Hg38.txt
+    # 902782523 bases of 2266312740 (39.835%) in intersection
+
+#########################################################################
+# lastz/chain/net swap mouse/mm10 (DONE - 2019-11-26 - Hiram)
+
+    # original alignment
+    cd /hive/data/genomes/mm10/bed/lastzRegenCho1.2019-11-26
+
+    cat fb.mm10.chainRegenCho1Link.txt
+    #	1525566783 bases of 2652783500 (57.508%) in intersection
+    cat fb.mm10.chainSynRegenCho1Link.txt
+    #   1410851403 bases of 2652783500 (53.184%) in intersection
+    cat fb.mm10.chainRBest.RegenCho1.txt
+    # 1395524606 bases of 2652783500 (52.606%) in intersection
+
+    mkdir /hive/data/genomes/regenCho1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/regenCho1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzRegenCho1.2019-11-26/DEF \
+	-noDbNameCheck -swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    101m20.296s
+
+    cat fb.regenCho1.chainMm10Link.txt
+    #	1522181082 bases of 2266312740 (67.166%) in intersection
+    cat fb.regenCho1.chainSynMm10Link.txt
+    #   1397889394 bases of 2266312740 (61.681%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev regenCho1 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    660m29.571s
+
+    cat fb.regenCho1.chainRBest.Mm10.txt
+    # 1396267649 bases of 2266312740 (61.610%) in intersection
+
+##############################################################################
+# GENBANK AUTO UPDATE (DONE - 2019-11-26 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism             mrnaCnt   estCnt  refSeqCnt
+    # Cricetulus barabensis	34	2	0
+    # Cricetulus griseus	90146	12	344
+    # Cricetulus longicaudatus	58	0	0
+    # Cricetulus migratorius	18	0	0
+    # Cricetulus sp.	36	0	0
+
+    # edit etc/genbank.conf to add regenCho1 just before criGriChoV2
+# regenCho1 (Cricetulus griseus - Chinese hamster ovary cell line CHO-K1)
+regenCho1.serverGenome = /hive/data/genomes/regenCho1/regenCho1.2bit
+regenCho1.ooc = /hive/data/genomes/regenCho1/jkStuff/regenCho1.11.ooc
+regenCho1.lift = /hive/data/genomes/regenCho1/jkStuff/nonBridged.lift
+regenCho1.downloadDir = regenCho1
+regenCho1.perChromTables = no
+regenCho1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+regenCho1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+regenCho1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+regenCho1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+regenCho1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+# defaults yes: genbank.mrna.native.load, genbank.mrna.native.loadDesc,
+# genbank.est.native.load, refseq.mrna.native.load, refseq.mrna.native.loadDesc,
+# refseq.mrna.xeno.load , refseq.mrna.xeno.loadDesc
+# regenCho1.upstreamGeneTbl = ensGene
+# regenCho1.upstreamMaf = multiz9way /hive/data/genomes/regenCho1/bed/multiz9way/species.list
+
+    # verify the files specified exist before checking in the file:
+  grep ^regenCho1 etc/genbank.conf | grep hive | awk '{print $NF}' | xargs ls -og
+# -rw-rw-r-- 1    283099 Nov 26 11:49 /hive/data/genomes/regenCho1/jkStuff/nonBridged.lift
+# -rw-rw-r-- 1     96360 Nov 26 10:19 /hive/data/genomes/regenCho1/jkStuff/regenCho1.11.ooc
+# -rw-rw-r-- 1 661068165 Nov 26 10:12 /hive/data/genomes/regenCho1/regenCho1.2bit
+
+    git commit -m "Added regenCho1 - Regeneron CHO refs #24568" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add regenCho1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added regenCho1 - Regeneron CHO refs #24568" etc/hgwdev.dbs \
+	etc/align.dbs
+    git push
+    make etc-update
+
+    # wait a few days for genbank magic to take place, the tracks will
+    # appear
+
+#############################################################################
+# augustus gene track (DONE - 2019-11-26 - Hiram)
+    mkdir /hive/data/genomes/regenCho1/bed/augustus
+    cd /hive/data/genomes/regenCho1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev regenCho1) > do.log 2>&1
+    # real    219m51.368s
+
+    cat fb.regenCho1.augustusGene.txt
+    # 50452718 bases of 2266312740 (2.226%) in intersection
+
+#########################################################################
+# ncbiRefSeq (TBD - 2019-11-25 - Hiram)
+
+    mkdir /hive/data/genomes/regenCho1/bed/ncbiRefSeq
+    cd /hive/data/genomes/regenCho1/bed/ncbiRefSeq
+    # running step wise just to be careful
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.5_GRCg6a regenCho1) > download.log 2>&1
+    # real    1m19.029s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.5_GRCg6a regenCho1) > process.log 2>&1
+    # real    2m6.030s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.5_GRCg6a regenCho1) > load.log 2>&1
+    # real    0m22.312s
+
+    cat fb.ncbiRefSeq.regenCho1.txt
+    #  88641893 bases of 1055588482 (8.397%) in intersection
+
+    # need to add: include ../../refSeqComposite.ra alpha
+    # to the chicken/regenCho1/trackDb.ra to turn on the track in the browser
+
+    # there was one gene that claimed to have a protein, but the
+    # protein sequence was not included in the protein.faa file
+    # discovered from joinerCheck
+    # manual fix to blank out this one protein, to see the entry
+    hgsql -e 'select * from ncbiRefSeqLink where protAcc="NP_989875.1";' regenCho1
+    hgsql -e 'update ncbiRefSeqLink set protAcc="" where protAcc="NP_989875.1";' regenCho1
+    # this makes the 'protein' link disappear from the gene details page
+    # curious that this gene is marked as a non-coding gene anyway ?
+    # gene: FET1 at chr4:63,102,774-63,105,516-
+
+    featureBits -enrichment regenCho1 refGene ncbiRefSeq 
+ # refGene 1.374%, ncbiRefSeq 8.397%, both 1.370%, cover 99.73%, enrich 11.88x
+    featureBits -enrichment regenCho1 ncbiRefSeq refGene
+ # ncbiRefSeq 8.397%, refGene 1.374%, both 1.370%, cover 16.32%, enrich 11.88x
+
+    featureBits -enrichment regenCho1 ncbiRefSeqCurated refGene
+ # ncbiRefSeqCurated 1.368%, refGene 1.374%, both 1.364%, cover 99.71%, enrich 72.59x
+    featureBits -enrichment regenCho1 refGene ncbiRefSeqCurated
+ # refGene 1.374%, ncbiRefSeqCurated 1.368%, both 1.364%, cover 99.32%, enrich 72.59x
+
+#########################################################################
+# LIFTOVER TO criGriChoV2 (DONE - 2019-11-26 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/regenCho1/bed/blat.criGriChoV2.2019-11-26
+    cd /hive/data/genomes/regenCho1/bed/blat.criGriChoV2.2019-11-26
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/regenCho1/jkStuff/regenCho1.11.ooc \
+         regenCho1 criGriChoV2
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/regenCho1/jkStuff/regenCho1.11.ooc \
+         regenCho1 criGriChoV2) > doLiftOverToRn6.log 2>&1
+    # real    523m38.199s
+
+    # see if the liftOver menus function in the browser from regenCho1
+    # to criGriChoV2
+
+    # would like to see this as a track:
+    # not actually using this psl file
+    time chainToPsl regenCho1ToCriGriChoV2.over.chain.gz ../../chrom.sizes \
+   /hive/data/genomes/criGriChoV2/chrom.sizes ../../regenCho1.2bit \
+   /hive/data/genomes/criGriChoV2/criGriChoV2.2bit regenCho1ToCriGriChoV2.psl
+
+    # this net track is loaded
+chainSort regenCho1ToCriGriChoV2.over.chain.gz stdout \
+   | chainPreNet stdin \
+   /hive/data/genomes/regenCho1/chrom.sizes \
+   /hive/data/genomes/criGriChoV2/chrom.sizes stdout \
+     | chainNet stdin -minSpace=1 /hive/data/genomes/regenCho1/chrom.sizes \
+        /hive/data/genomes/criGriChoV2/chrom.sizes stdout /dev/null \
+        | netSyntenic stdin noClass.net
+
+netClass -verbose=0 -noAr noClass.net regenCho1 criGriChoV2 regenCho1.criGriChoV2.net
+
+netFilter -minGap=10 regenCho1.criGriChoV2.net \
+    | hgLoadNet -verbose=0 regenCho1 netCriGriChoV2 stdin
+
+
+Got 7812 chroms in /hive/data/genomes/regenCho1/chrom.sizes, 8265 in /hive/data/genomes/criGriChoV2/chrom.sizes
+Finishing nets
+writing stdout
+writing /dev/null
+memory usage 168030208, utime 102 s/100, stime 9
+
+#########################################################################
+#  BLATSERVERS ENTRY (TBD - 2019-11-25 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("regenCho1", "blat1a", "17892", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("regenCho1", "blat1a", "17893", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to MEPE gene (egg shell protein)
+##  (TBD - 2019-11-25 - Hiram)
+
+    # as found from the galGal5 to regenCho1 liftOver
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr4:45667017-45672928"
+	where name="regenCho1";' hgcentraltest
+
+#########################################################################
+# crispr whole genome (WORKING - 2019-07-02 - Hiram)
+    mkdir /hive/data/genomes/regenCho1/bed/crisprAll
+    cd /hive/data/genomes/regenCho1/bed/crisprAll
+
+    # working on this script, adding the indexFa step:
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+   -stop=indexFa -buildDir=`pwd` -smallClusterHub=ku regenCho1 augustusGene) \
+	> indexFa.log 2>&1
+    # real    23m26.694s
+
+    # the large shoulder argument will cause the entire genome to be scanned
+~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 -stop=ranges \
+    hg19 knownGene -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev-101 -bigClusterHub=ku \
+      -workhorse=hgwdev
+
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+       -continue=ranges -stop=guides -buildDir=`pwd` -smallClusterHub=ku \
+           regenCho1 ncbiRefSeq) > guides.log 2>&1
+    # real    2m50.758s
+
+    # adding the /dev/shm/ setup rsync for the indexed Fa
+    # performed manually to work out the procedure
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+        -continue=specScores -stop=specScores -buildDir=`pwd` \
+           -smallClusterHub=ku regenCho1 ncbiRefSeq) > specScores.log
+
+    # had about half of ku for about half this time:
+# Completed: 884922 of 884922 jobs
+# CPU time in finished jobs:  35872791s  597879.85m  9964.66h  415.19d  1.138 y
+# IO & Wait Time:               899261s   14987.69m   249.79h   10.41d  0.029 y
+# Average job time:                 42s       0.69m     0.01h    0.00d
+# Longest finished job:             88s       1.47m     0.02h    0.00d
+# Submission to last job:        48045s     800.75m    13.35h    0.56d
+
+
+    time find tmp/outGuides -type f | xargs cut -f3-6 > ../specScores.tab
+    # real    236m17.220s
+    wc -l specScores.tab
+    # 66451712 specScores.tab
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+	-continue=effScores -stop=load \
+	    -buildDir=`pwd` -smallClusterHub=ku regenCho1 ncbiRefSeq) \
+	> load.log
+    # real    307m41.143s
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2018-10-17 - Hiram)
+xyz
+    cd $HOME/kent/src/hg/makeDb/schema
+    # verify all the business is done for release
+    ~/kent/src/hg/utils/automation/verifyBrowser.pl regenCho1
+
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=regenCho1 -tableCoverage all.joiner
+    joinerCheck -database=regenCho1 -times all.joiner
+    joinerCheck -database=regenCho1 -keys all.joiner
+
+    # when clean, check in:
+    git commit -m 'adding rules for regenCho1 refs #24568' all.joiner
+    git push
+    # run up a 'make alpha' in hg/hgTables to get this all.joiner file
+    # into the hgwdev/genome-test system
+
+XXX - ready when tracks are done - Tue Nov 26 13:35:39 PST 2019
+    cd /hive/data/genomes/regenCho1
+    time (makeDownloads.pl regenCho1) > downloads.log 2>&1
+    #  real    10m7.605s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/regenCho1/pushQ
+    cd /hive/data/genomes/regenCho1/pushQ
+  time (makePushQSql.pl -redmineList regenCho1) > regenCho1.pushQ.sql 2> stderr.out
+    # real    9m58.779s
+
+    # remove the extra chainNet files from the listings:
+    sed -i -e "/etNig1/d" redmine.regenCho1.file.list
+    sed -i -e "/asAcu1/d" redmine.regenCho1.file.list
+    sed -i -e "/etNig1/d" redmine.regenCho1.table.list
+    sed -i -e "/onAlb1/d" redmine.regenCho1.table.list
+    sed -i -e "/asAcu1/d" redmine.regenCho1.table.list
+    sed -i -e "/Stickleback/d" redmine.regenCho1.releaseLog.txt
+    sed -i -e "/Tetraodon/d" redmine.regenCho1.releaseLog.txt
+    sed -i -e "/sparrow/d" redmine.regenCho1.releaseLog.txt
+    # remove the tandemDups and gapOverlap from the file list:
+    sed -i -e "/tandemDups/d" redmine.regenCho1.table.list
+    sed -i -e "/Tandem Dups/d" redmine.regenCho1.releaseLog.txt
+    sed -i -e "/gapOverlap/d" redmine.regenCho1.table.list
+    sed -i -e "/Gap Overlaps/d" redmine.regenCho1.releaseLog.txt
+    #  real    7m21.629s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/regenCho1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/regenCho1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/regenCho1/bbi/quality.bw
+    # WARNING: regenCho1 does not have seq
+    # WARNING: regenCho1 does not have extFile
+
+    # add the path names to the listing files in the redmine issue
+    # in the three appropriate entry boxes:
+
+#	/hive/data/genomes/regenCho1/pushQ/redmine.regenCho1.file.list
+#	/hive/data/genomes/regenCho1/pushQ/redmine.regenCho1.releaseLog.txt
+#	/hive/data/genomes/regenCho1/pushQ/redmine.regenCho1.table.list
+
+#########################################################################

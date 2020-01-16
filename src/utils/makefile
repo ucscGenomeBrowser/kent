@@ -104,7 +104,8 @@ UTILS_APPLIST = \
 	twoBitToFa \
 	wigCorrelate \
 	wigToBigWig \
-	wordLine
+	wordLine \
+	chromToUcsc
 
 # list of utilities to build of interest only at UCSC
 
@@ -193,6 +194,7 @@ SCRIPT_FILES = \
 	doLocusName \
 	cancerMafToBigBed \
 	pq \
+	bedAppendPaperInfo \
 	${USER_APP_SCRIPTS}
 
 # List of all directories to build

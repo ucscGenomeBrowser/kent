@@ -1,0 +1,7 @@
+hub PlantsWithCompositeTrackErrors
+longLabel CSHL Biology of Genomes meeting 2013 demonstration assembly hub
+genomesFile manyErrorsGenomes.txt
+email genome-www@soe.ucsc.edu
+descriptionUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/plants.html
+shortLabel Plants with composite errors
+

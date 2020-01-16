@@ -1,0 +1,338 @@
+#########################
+# ENCODE3 mouse
+
+mkdir -p /hive/data/encode3/mouse
+cd /hive/data/encode3/mouse
+
+#########################
+# mm10 histone ChIP-seq from Ren lab
+# contact:  David Gorkin
+#
+# (2019-07-03 kate)
+#
+# Expecting 3 tracks:
+#       1. Large composite of ChIP-seq peaks and signal from various marks in various tissues at
+#               different embryonic stages, along with chromHMM for each mark/tissue/stage
+#               (chromHMM may be better as separate track)
+#
+#       2. ATAC-seq (open chromatin) for tissues/stages
+#
+#       3. Possible:  enhancer/gene interactions in interact format
+
+# RM #23693
+
+# Their hub: http://renlab.sdsc.edu/yanxiao/encode_trackhub/hub.txt
+
+mkdir histones
+cd histones
+
+# Download files listed in track hub
+
+wget http://renlab.sdsc.edu/yanxiao/encode_trackhub/mm10/trackDb.txt
+
+# winnow to just merged files:
+
+raToLines trackDb.txt stdout | grep Merge > trackDb.merge.lines
+wc -l trackDb.merge.lines
+# 1128
+
+linesToRa trackDb.merge.lines trackDb.merge.ra
+grep bigDataUrl trackDb.merge.ra | sed -e 's/bigDataUrl/wget/' -e 's/.proxy=true//' > wget.csh
+
+mkdir data
+cd data
+csh ../wget.csh >&! ../wget.log &
+
+ls *.bigBed | wc -l
+# 563
+# These are narrowPeak files, however they are configured in hub as bigBed 6 +
+# This config shows track colors (e.g. red for repressive, green for promoter), but
+# doesn't allow filtering on pValue, etc.
+
+# Use files as is from portal, we are not changing so no need to rename
+
+ln -s `pwd` /gbdb/mm10/encode3/histones
+
+#######################
+# Create multiBed file for hideEmptySubtracks feature
+
+# Create file mapping tracks to files
+raToTab $HOME/kent/src/hg/makeDb/trackDb/mouse/mm10/encode3.histone.ra \
+        -cols=track,bigDataUrl stdout | grep bigBed > encode3RenHistonePeaks.tracks.txt
+wc -l encode3RenHistonePeaks.tracks.txt
+# 563 encode3RenHistonePeaks.tracks.txt
+
+# Assign id 1-N to each subtrack
+awk '{print NR, "\t", $1}' < encode3RenHistonePeaks.tracks.txt > \
+                                encode3RenHistonePeaks.multiBedSources.tab
+
+# Create multibed file
+
+cut -f 2 encode3RenHistonePeaks.tracks.txt |  \
+                sed -e 's^.*/^^' -e 's/bigBed/bed/' > encode3RenHistonePeaks.files.txt
+cd data/peakBeds
+bedtools multiinter -i `cat ../../encode3RenHistonePeaks.files.txt` | \
+                                cut -f 1-5 > \
+                                         ../../encode3RenHistonePeaks.multiBed.bed
+
+cd ../..
+bedToBigBed -as=$HOME/kent/src/hg/lib/bed3Sources.as -type=bed3+2 \
+            encode3RenHistonePeaks.multiBed.bed /hive/data/genomes/mm10/chrom.sizes \
+                encode3RenHistonePeaks.multiBed.bb
+# 12 mins elapsed
+
+ln -s `pwd`/encode3RenHistonePeaks.multiBed.bb /gbdb/mm10/encode3/histones/multiBed.bb
+ln -s `pwd`/encode3RenHistonePeaks.multiBedSources.tab /gbdb/mm10/encode3/histones/multiBedSources.tab
+
+###################
+# chromHMM data
+
+cd ..
+mkdir chromHmm
+cd chromHmm
+wget http://enhancer.sdsc.edu/enhancer_export/ENCODE/chromHMM/readme
+
+mkdir pooled
+cd pooled
+csh ../wget.csh >&! wget.log &
+
+# make trackDb and rename script
+ln -s  /cluster/home/kate/kent/src/hg/makeDb/outside/encode3/mouse/makeChromHmmTrackDb.pl rename.pl
+
+ls *.bb | perl rename.pl > rename.txt
+cp rename.txt rename.csh
+# edit rename.csh to symlink files to /gbdb/mm10/encode3/chromHmm
+
+#################################################
+# ATAC-seq from Ren lab
+# (kate)
+
+# Download signals (.bw) and pooled peaks from Ren lab
+
+wget -r -A bw,pooled_peaks.narrowPeak http://renlab.sdsc.edu/yanxiao/encode_trackhub/mm10/atacseq
+
+mkdir lab
+# move files to lab dir
+
+# Reuse hub config
+#  http://renlab.sdsc.edu/yanxiao/encode_trackhub/
+
+wget http://renlab.sdsc.edu/yanxiao/encode_trackhub/mm10/trackDb.txt
+
+cp /hive/data/outside/encode3/mouse/chromHmm/tracks/rename.pl .
+
+# edit for this track.  Script will take file list and generate a trackDb and file rename/link script
+
+cd lab
+ls *.bw *.narrowPeak | perl ../rename.pl > ../rename.csh
+
+# oops, need to biggify the narrowPeaks (and zero out scores, some of which exceed 1000)
+
+set sizes = /hive/data/genomes/mm10/chrom.sizes
+foreach f (*.narrowPeak)
+    set d = $f:r
+    mv $f $d.narrowPeak.bad
+    awk 'OFS="\t" {$5 = 0; print}' < $d.narrowPeak.bad > $d.narrowPeak
+    bedToBigBed -type=bed6+4 -as=$HOME/kent/src/hg/lib/bigNarrowPeak.as $d.narrowPeak $sizes $d.bb
+end
+linesToRa trackDb.atac.lines trackDb.atac.ra
+
+cd ..
+mkdir /gbdb/mm10/encode3/atac
+csh rename.csh
+
+mv trackDb.atac.ra ~/kent/src/hg/makeDb/trackDb/mouse/mm10
+
+# edit for indents, add views
+
+#################################################
+# Update peak files, from Dave Gorkin at Ren Lab
+# Overlapping peaks merged, score field set
+# 09-09-2019
+
+mkdir lab2; cd lab2
+wget -A bed -r -nd http://enhancer.sdsc.edu/enhancer_export/ENCODE/for_ucsc/atac_pooled_peaks/
+
+# oops, they have decimal points in score.  Strip these.
+
+// biggify
+set sizes = /hive/data/genomes/mm10/chrom.sizes
+foreach f (*.bed)
+    set d = $f:r
+    sed 's/\..*//' < $d.bed > $d.fixed.bed
+    bedToBigBed -type=bed5 $d.fixed.bed $sizes $d.bb
+end
+
+# link to /gbdb
+rm /hive/data/gbdb/mm10/encode3/atac/*.bb
+csh rename2.bb.csh
+
+
+######################################################################################
+# Interact tracks from Ren Lab enhancer/gene map, with EPDnew promoters (JK rec)
+
+# (kate July 2019)
+
+cd /hive/data/encode3/mouse
+mkdir interact
+cd interact
+
+# Download spreadsheet from Dropbox copy provided by Dave Gorkin
+# https://www.dropbox.com/s/ksxt9k2dh46k2ya/Gorkin_Ren_tableS5-11.xlsx?dl=0
+
+# Gorkin_Ren_EnhancerGene_Rep1.txt
+
+dos2unix Gorkin_Ren_EnhancerGene_Rep1.txt
+tr '\r' '\n' < Gorkin* > enhancerGene.rep1.txt
+
+# edit out title line
+head -1 enhancerGene.rep1.txt
+# chrom   start   end     ensembl symbol  SCC     Z       p-value (z)     p-value (empirical)
+# chr1    4426300 4428300 ENSMUSG00000025902.9    Sox17   6.16E-01        2.07E+00        0.018999025     0.016378526
+
+# The SCC field will be basis of score.  It ranges from .25 to 1.0
+
+# strip trailing empty lines (from bad XLS export)
+# strip first two lines from enhancerGene file to make map.rep1.txt
+
+#################
+# Download promoters from EPDnew (rec from JK)
+# https://epd.epfl.ch/EPDnew_database.php
+
+wget ftp://ccg.epfl.ch/epdnew/README
+wget ftp://ccg.epfl.ch/epdnew/M_musculus/003/cross_references.txt .
+
+# corrupted file ?  First line:
+
+wget ftp://ccg.epfl.ch/epdnew/M_musculus/current/Mm_EPDnew.bed
+
+# This is version 3, file dated 6/4/18
+
+# NOTE: file contains 1 or more promoters per gene.
+# Based on conversations with provider (Philip Bucher), we will merge into a single promoter region
+
+wc -l Mm_EPDnew.bed
+# 25111
+
+sed 's/_.*900 / 900 /' MM_EPDnew.bed > promoters.temp.bed
+bedtools groupby -g 1,4,5,6 -c 2,3 -o min,max < promoters.temp.bed | \
+        awk '{OFS="\t"; print $1, $5, $6, $2, $3, $4}' | \
+                bedSort stdin promoters.bed
+
+wc -l promoters.bed
+# 20549
+# Reduced by 5000
+
+#################
+# Create interact file from interactions and promoters files
+
+# merge replicates, stripping extra columns, adding a column for count.  
+
+# export from spreadsheet.  Trim empty lines.  dos2unix.  tr \m's to \n's.
+wc -l map.*
+  31964 map.rep1.txt
+  33301 map.rep2.txt
+  21142 map.replicated.txt
+
+ln -s /cluster/home/kate/kent/src/hg/makeDb/outside/encode3/mouse/mergeInteractReps.pl mergeReps.pl
+perl mergeReps.pl map.rep1.txt map.rep2.txt | bedSort stdin map.merged.txt
+
+ln -s /cluster/home/kate/kent/src/hg/makeDb/outside/encode3/mouse/makeInteract.pl .
+mkdir out
+perl makeInteract.pl map.merged.txt MM_EPDnew.bed cross_references.txt out/ >&! makeInteract.log
+
+head makeInteract.log
+#Creating output files in directory out//
+#ERROR: Rejecting promoter for Apoo ENSMUSG00000049233
+                                    #on chr13 (chrX|94367074|94367134|+|237,177,32)
+#Found 41941 interactions with promoters, 1649 with missing promoters
+#RESCUES: 295
+#ENSMUSG00000036097 Slf2
+#ENSMUSG00000098306 Kiss1
+#...
+#MISSING PROMOTERS: 328
+#Gpbar1
+#Cacng6
+#Fev
+#..
+
+bedSort out/enhancers.all.bed out/enhancers.all.sorted.bed
+bedSort out/enhancers.rep.bed out/enhancers.rep.sorted.bed
+
+# why needed ???
+bedSort out/interactions.all.bed out/interactions.all.sorted.bed
+bedSort out/interactions.rep.bed out/interactions.rep.sorted.bed
+
+# biggify
+set sizes = /hive/data/genomes/mm10/chrom.sizes
+bedToBigBed -type=bed5+14 -as=enhancerPromoterInteract.as out/interactions.all.sorted.bed \
+                  $sizes gbdb/encode3EnhancerPromoterInteractAll.bb
+bedToBigBed -type=bed5+14 -as=enhancerPromoterInteract.as out/interactions.rep.sorted.bed \
+                  $sizes gbdb/encode3EnhancerPromoterInteractRep.bb
+
+# TODO: add more fields
+bedToBigBed -type=bed9 out/promoters.all.bed \
+                $sizes gbdb/epdPromoterAll.bb
+bedToBigBed -type=bed9 out/promoters.rep.bed \
+                $sizes gbdb/epdPromoterRep.bb
+
+bedToBigBed -type=bed4 out/enhancers.all.sorted.bed \
+                $sizes gbdb/encode3EnhancerAll.bb
+bedToBigBed -type=bed4 out/enhancers.rep.sorted.bed \
+                $sizes gbdb/encode3EnhancerRep.bb
+cd gbdb
+foreach f (epdPromoterAll epdPromoterRep encode3EnhancerAll encode3EnhancerRep encode3EnhancerPromoterInteractAll encode3EnhancerPromoterInteractRep)
+    ln -s `pwd`/$f.bb /gbdb/mm10/bbi
+end
+
+cd gbdb
+ln -s `pwd`/epdPromoters3.bb /gbdb/mm10/bbi
+
+# NOTE: Renamed .bb files to prefix w/ encode3Ren/encode3RenInteract
+
+#########################
+# old  stuff
+
+perl makeInteract.pl enhancerGene.rep1.txt MM_EPDnew.bed cross_references.txt >&! errors.txt
+
+# strip first two lines from enhancerGene file to make map.rep1.txt
+#perl makeInteract.pl map.rep1.txt promoters.bed cross_references.txt > enhancerGeneInteract.bed
+#Found 30793 interactions with promoters, 1171 with missing promoters
+
+# NOTE: Missing 374 promoters (will need to get these from GB annotation)
+
+# NOTE: Problem with cross-references file. At least one instance of error 
+# Here the ENSG 65324 should be Eno1, not Eno1b (acc to GENCODE V20)
+ENSMUSG00000059040      Eno1b   NM_001025388    Mus musculus enolase 1B, retrotransposed (Eno1b), mRNA.
+ENSMUSG00000063524      Eno1b   NM_023119       Mus musculus enolase 1B, retrotransposed (Eno1b), mRNA.
+
+# NOTE: Problem with duplicated interactions in enhancerGene file -- 2 ENSG's mapped to two
+# gene names (so interactions appear twice):
+
+chr17   13666000        13671200        ENSMUSG00000038347.10   Tcte2   8.69E-01        1.85E+00        0.03221258      0.002229654
+chr17   13666000        13671200        ENSMUSG00000038347.10   2700054A10Rik   8.69E-01        1.85E+00        0.03221258      0.002229654
+
+chr12     57514900        57516900        ENSMUSG00000046782.10   4921506M07Rik   4.82E-01        1.75E+00        0.039890209     0.04302926
+chr12     57514900        57516900        ENSMUSG00000046782.10   Ttc6    4.82E-01        1.75E+00        0.039890209     0.04302926
+
+
+bedSort enhancerGene.rep1.txt.out encode3EnhancerPromoterInteract.bed
+
+# Biggify interactions
+mkdir gbdb
+set sizes = /hive/data/genomes/mm10/chrom.sizes
+bedToBigBed -type=bed5+13 -as=enhancerPromoterInteract.as encode3EnhancerPromoterInteract.bed \
+                  $sizes gbdb/encode3EnhancerPromoterInteract.bb
+cd /gbdb
+ln -s `pwd`/encode3EnhancerPromoterInteract.bb /gbdb/mm10/bbi
+cd ..
+
+# Biggify promoters file
+bedSort MM_EPDnew.bed.out epdPromoters3.bed
+
+# TODO: add more fields ?
+bedToBigBed -type=bed9 epdPromoters3.bed \
+                $sizes gbdb/epdProomoters3.bb
+cd gbdb
+ln -s `pwd`/epdPromoters3.bb /gbdb/mm10/bbi
+cd ..

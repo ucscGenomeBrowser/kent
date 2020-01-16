@@ -625,6 +625,10 @@ if (curTrack == NULL)
     isMaf = isMafTable(database, curTrack, curTable);
     }
 
+/* Table-specific options */
+if (isHicTable(curTable))
+    hicMainPageConfig(cart, hTrackDbForTrack(database,curTable));
+
 /* Region line */
 {
 char *regionType;

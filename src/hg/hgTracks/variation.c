@@ -6,7 +6,12 @@
 
 #include "variation.h"
 #include "imageV2.h"
-
+#include "bedCart.h"
+#include "bigBed.h"
+#include "bigDbSnp.h"
+#include "bigWarn.h"
+#include "hvGfx.h"
+#include "soTerm.h"
 
 static double snp125AvHetCutoff = SNP125_DEFAULT_MIN_AVHET;
 static int snp125WeightCutoff = SNP125_DEFAULT_MAX_WEIGHT;
@@ -2535,4 +2540,523 @@ void delHindsMethods(struct track *tg)
 {
 tg->itemColor = delHindsItemColor;
 tg->itemNameColor = delHindsItemColor;
+}
+
+// Functional impact coloring scheme with lf->filterColor values
+#define bigDbSnpColorCodingChange MG_RED
+#define bigDbSnpColorSyn MG_GREEN
+#define bigDbSnpColorUtrNc MG_BLUE
+
+static Color lfColorFromSoTerm(enum soTerm term)
+/* Assign a Color according to soTerm. */
+{
+Color color = MG_BLACK;
+switch (term)
+    {
+    case frameshift_variant:
+    case frameshift:
+    case initiator_codon_variant:
+    case stop_gained:
+    case stop_lost:
+    case splice_acceptor_variant:
+    case splice_donor_variant:
+    case inframe_indel:
+    case inframe_insertion:
+    case inframe_deletion:
+    case missense_variant:
+    case terminator_codon_variant:
+        color = bigDbSnpColorCodingChange;
+        break;
+    case synonymous_variant:
+        color = bigDbSnpColorSyn;
+        break;
+    case _5_prime_UTR_variant:
+    case _3_prime_UTR_variant:
+    case nc_transcript_variant:
+        color = bigDbSnpColorUtrNc;
+        break;
+    default:
+        ;
+        // Leave color at default black
+    }
+return color;
+}
+
+static void removeMinMafFromCart(struct trackDb *tdb)
+/* Remove track's minimum Minor Allele Frequency filter settings from cart. */
+{
+char *cartVar = NULL;
+cartLookUpVariableClosestToHome(cart, tdb, FALSE, "minMaf", &cartVar);
+if (cartVar)
+    cartRemove(cart, cartVar);
+cartLookUpVariableClosestToHome(cart, tdb, FALSE, "freqProj", &cartVar);
+if (cartVar)
+    cartRemove(cart, cartVar);
+}
+
+static int getFreqSourceIx(struct trackDb *tdb)
+/* If trackDb setting freqSourceOrder is defined then return the index of the currently selected
+ * project (default: first project). */
+{
+char *freqSourceOrder = trackDbSetting(tdb, "freqSourceOrder");
+int ix = 0;
+if (isNotEmpty(freqSourceOrder))
+    {
+    char *freqProj = cartOptionalStringClosestToHome(cart, tdb, FALSE, "freqProj");
+    if (isNotEmpty(freqProj))
+        {
+        freqSourceOrder = cloneString(freqSourceOrder);
+        int fsCount = countSeparatedItems(freqSourceOrder, ',');
+        char *sources[fsCount];
+        chopCommas(freqSourceOrder, sources);
+        for (ix = 0;  ix < fsCount;  ix++)
+            {
+            if (sameString(sources[ix], freqProj))
+                break;
+            }
+        if (ix == fsCount)
+            {
+            // Unrecognized project; clear from cart.
+            warn("%s: unrecognized frequency source project '%s'; "
+                 "removing minimum MAF filter from cart.", tdb->shortLabel, freqProj);
+            removeMinMafFromCart(tdb);
+            ix = -1;
+            }
+        freeMem(freqSourceOrder);
+        }
+    }
+return ix;
+}
+
+static int bdsRefAltSlashSepLen(struct bigDbSnp *bds)
+/* Return length of abbreviated slash-separated allele string (ref/alt1/alt2/...) */
+{
+char abbrev[16];
+int len = strlen(bigDbSnpAbbrevAllele(bds->ref, abbrev, sizeof abbrev));
+int i;
+for (i = 0;  i < bds->altCount;  i++)
+    len += 1 + strlen(bigDbSnpAbbrevAllele(bds->alts[i], abbrev, sizeof abbrev));
+return len;
+}
+
+static void bdsAppendRefAlt(struct bigDbSnp *bds, struct dyString *dy)
+/* Append abbreviated ref and alt alleles to dy */
+{
+dyStringAppendSep(dy, " ");
+char abbrev[24];
+dyStringAppend(dy, bigDbSnpAbbrevAllele(bds->ref, abbrev, sizeof abbrev));
+int i;
+for (i = 0;  i < bds->altCount;  i++)
+    {
+    dyStringPrintf(dy, "/%s",
+                   bigDbSnpAbbrevAllele(bds->alts[i], abbrev, sizeof abbrev));
+    }
+}
+
+static int bdsMajMinSlashSepLen(struct bigDbSnp *bds, int freqSourceIx)
+/* Return length of abbreviated slash-separated allele string (major allele/minor allele),
+ * or -1 if not available. */
+{
+if (bds->freqSourceCount > freqSourceIx && isfinite(bds->minorAlleleFreq[freqSourceIx]))
+    {
+    char abbrev[16];
+    int len = strlen(bigDbSnpAbbrevAllele(bds->majorAllele[freqSourceIx],
+                                          abbrev, sizeof abbrev));
+    len += 1 + strlen(bigDbSnpAbbrevAllele(bds->minorAllele[freqSourceIx],
+                                           abbrev, sizeof abbrev));
+    return len;
+    }
+return -1;
+}
+
+static void bdsAppendMajMin(struct bigDbSnp *bds, struct dyString *dy, int freqSourceIx)
+/* Append abbreviated major and minor (i.e. 2nd most frequent) alleles to dy if available. */
+{
+if (bds->freqSourceCount > freqSourceIx && isfinite(bds->minorAlleleFreq[freqSourceIx]))
+    {
+    dyStringAppendSep(dy, " ");
+    char abbrev[24];
+    dyStringAppend(dy, bigDbSnpAbbrevAllele(bds->majorAllele[freqSourceIx], abbrev, sizeof abbrev));
+    dyStringPrintf(dy, "/%s",
+                   bigDbSnpAbbrevAllele(bds->minorAllele[freqSourceIx], abbrev, sizeof abbrev));
+    }
+}
+
+static void bdsAppendMaf(struct bigDbSnp *bds, int freqSourceIx, struct dyString *dy)
+/* If frequency data are available for the currently selected source then append minor allele freq
+ * to dy. */
+{
+if (bds->freqSourceCount > freqSourceIx && isfinite(bds->minorAlleleFreq[freqSourceIx]))
+    {
+    dyStringAppendSep(dy, " ");
+    dyStringPrintf(dy, "%f", bds->minorAlleleFreq[freqSourceIx]);
+    }
+}
+
+static void bdsAppendFunc(struct bigDbSnp *bds, struct dyString *dy)
+/* Append maximum functional impact (if any) to dy. */
+{
+if (bds->maxFuncImpact > 0)
+    {
+    dyStringAppendSep(dy, " ");
+    dyStringAppend(dy, soTermToString(bds->maxFuncImpact));
+    }
+}
+
+static char *bdsLabel(struct trackDb *tdb, struct bigDbSnp *bds)
+/* Simulate itemName with options... */
+{
+struct dyString *dy = dyStringNew(0);
+if (cartUsualBooleanClosestToHome(cart, tdb, FALSE, "label.rsId", TRUE))
+    dyStringAppend(dy, bds->name);
+boolean tooLong = FALSE;
+if (cartUsualBooleanClosestToHome(cart, tdb, FALSE, "label.refAlt", TRUE))
+    {
+    if (bdsRefAltSlashSepLen(bds) < 24)
+        bdsAppendRefAlt(bds, dy);
+    else
+        tooLong = TRUE;
+    }
+int freqSourceIx = getFreqSourceIx(tdb);
+if (cartUsualBooleanClosestToHome(cart, tdb, FALSE, "label.majMin", FALSE))
+    {
+    if (bdsMajMinSlashSepLen(bds, freqSourceIx) < 24)
+        bdsAppendMajMin(bds, dy, freqSourceIx);
+    else
+        tooLong = TRUE;
+    }
+if (cartUsualBooleanClosestToHome(cart, tdb, FALSE, "label.maf", FALSE))
+    {
+    bdsAppendMaf(bds, freqSourceIx, dy);
+    }
+// If the alleles are too long, print the class as a backup.
+if (tooLong)
+    dyStringPrintf(dy, " %s", bigDbSnpClassToString(bds->class));
+if (cartUsualBooleanClosestToHome(cart, tdb, FALSE, "label.func", FALSE))
+    bdsAppendFunc(bds, dy);
+return dyStringCannibalize(&dy);
+}
+
+static char *bdsMouseOver(struct bigDbSnp *bds)
+/* Simulate mouseover with options... */
+{
+struct dyString *dy = dyStringCreate("%s:", bds->name);
+bdsAppendRefAlt(bds, dy);
+bdsAppendFunc(bds, dy);
+return dyStringCannibalize(&dy);
+}
+
+static void paranoidCheckMnvLengths(struct bigDbSnp *bds)
+/* Make sure an mnv variant's alleles are all the same length. */
+{
+if (bds->class != bigDbSnpMnv)
+    errAbort("paranoidCheckMnvLengths: expected %s class=bigDbSnpMnv=%d, got %d",
+             bds->name, bigDbSnpMnv, bds->class);
+int refLen = strlen(bds->ref);
+if (refLen != bds->chromEnd - bds->chromStart)
+    errAbort("paranoidCheckMnvLengths: %s: length of ref '%s' is %d but chromEnd - chromStart is %d",
+             bds->name, bds->ref, refLen, bds->chromEnd - bds->chromStart);
+int aIx;
+for (aIx = 0;  aIx < bds->altCount;  aIx++)
+    if (strlen(bds->alts[aIx]) != refLen)
+        errAbort("paranoidCheckMnvLengths: %s: length of ref '%s' is %d but alt[%d] '%s' is %d",
+                 bds->name, bds->ref, refLen, aIx, bds->alts[aIx], (int)strlen(bds->alts[aIx]));
+}
+
+static boolean alleleBasesMatch(struct bigDbSnp *bds, int i)
+/* Return TRUE if all alternate alleles match ref at base i. */
+{
+assert(i >= 0);
+boolean allMatch = TRUE;
+int aIx;
+for (aIx = 0;  aIx < bds->altCount;  aIx++)
+    {
+    if (bds->alts[aIx][i] != bds->ref[i])
+        {
+        allMatch = FALSE;
+        break;
+        }
+    }
+return allMatch;
+}
+
+static boolean filterMaf(struct bigDbSnp *bds, int freqSourceIx, double minMaf)
+/* Return TRUE if bds passes minimum Minor Allele Frequency filter. */
+{
+if (freqSourceIx < 0)
+    return TRUE;
+if (bds->freqSourceCount > freqSourceIx)
+    {
+    double maf = bds->minorAlleleFreq[freqSourceIx];
+    if (maf >= minMaf)
+        return TRUE;
+    }
+return FALSE;
+}
+
+struct linkedFeatures *lfFromBigDbSnp(struct trackDb *tdb, struct bigBedInterval *bb,
+                                      struct bigBedFilter *filters, int freqSourceIx)
+/* Convert one bigDbSnp item to a linkedFeatures for drawing if it passes filter, else NULL. */
+{
+struct linkedFeatures *lf = NULL;
+char startBuf[16], endBuf[16];
+char *bedRow[32];
+bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+if (bigBedFilterInterval(bedRow, filters))
+    {
+    struct bigDbSnp *bds = bigDbSnpLoad(bedRow);
+    double minMaf = cartUsualDoubleClosestToHome(cart, tdb, FALSE, "minMaf", 0.0);
+    if (! filterMaf(bds, freqSourceIx, minMaf))
+        return NULL;
+    AllocVar(lf);
+    lf->name = cloneString(bds->name);
+    AllocVar(lf->components);
+    lf->start = lf->components->start = bds->chromStart;
+    lf->tallStart = lf->start + bds->shiftBases;
+    lf->tallEnd = lf ->end = lf->components->end = bds->chromEnd;
+    lf->label = bdsLabel(tdb, bds);
+    lf->mouseOver = bdsMouseOver(bds);
+    lf->filterColor = lfColorFromSoTerm(bds->maxFuncImpact);
+    lf->original = bds;
+    // MNVs in dbSNP are usually linked SNVs; if so, use one sf component for each SNV.
+    if (bds->class == bigDbSnpMnv && bds->chromEnd - bds->chromStart > 2)
+        {
+        paranoidCheckMnvLengths(bds);
+        int len = bds->chromEnd - bds->chromStart;
+        struct simpleFeature *sf = lf->components, *sfList = NULL;
+        int i;
+        for (i = 0;  i < len;  i++)
+            {
+            if (alleleBasesMatch(bds, i))
+                {
+                // If in a block, end the block.
+                if (sf != NULL)
+                    {
+                    sf->end = bds->chromStart + i;
+                    slAddHead(&sfList, sf);
+                    sf = NULL;
+                    }
+                }
+            else
+                {
+                // If in a block, continue it, else start a new block.
+                if (sf == NULL)
+                    {
+                    AllocVar(sf);
+                    sf->start = bds->chromStart + i;
+                    sf->end = bds->chromEnd;
+                    }
+                }
+            }
+        if (sf != NULL)
+            slAddHead(&sfList, sf);
+        slReverse(&sfList);
+        lf->components = sfList;
+        }
+    }
+return lf;
+}
+
+static double getMinMaf(struct trackDb *tdb)
+/* If minMaf is out of range, remove it from cart and return 0.0; otherwise return
+ * current value from cart. */
+{
+double minMaf = cartUsualDoubleClosestToHome(cart, tdb, FALSE, "minMaf", 0.0);
+if (minMaf < 0.0 || minMaf > 0.5)
+    {
+    warn("%s: invalid minimum Minor Allele Frequency %0.03f (range is 0.0 - 0.5); "
+         "removing minimum MAF filter from cart.", tdb->shortLabel, minMaf);
+    removeMinMafFromCart(tdb);
+    return 0.0;
+    }
+return minMaf;
+}
+
+static void bigDbSnpLoadItems(struct track *tg)
+/* Convert bigDbSnp items in window to linkedFeatures. */
+{
+struct linkedFeatures *lfList = NULL;
+double minMaf = getMinMaf(tg->tdb);
+// If minMaf is 0, there's no need to filter so set freqSourceIx to -1.
+int freqSourceIx = (minMaf == 0.0) ? -1 : getFreqSourceIx(tg->tdb);
+char *maxItemStr = trackDbSetting(tg->tdb, "maxItems");
+int maxItems = isNotEmpty(maxItemStr) ? atoi(maxItemStr) : 250000;
+bigBedAddLinkedFeaturesFromExt(tg, chromName, winStart, winEnd, freqSourceIx, 0, FALSE, 4, &lfList,
+                               maxItems);
+slReverse(&lfList);
+// if the summary is filled in then the number of items in the region is greater than maxItems.
+if (tg->summary != NULL)
+    {
+    // too many items to display
+    tg->drawItems = bigDrawWarning;
+    tg->networkErrMsg = "Too many variants in display (zoom in to see details)";
+    tg->totalHeight = bigWarnTotalHeight;
+    tg->items = NULL;
+    }
+else
+    tg->items = lfList;
+}
+
+static Color bigDbSnpColor(struct track *tg, void *item, struct hvGfx *hvg)
+/* Return color stashed away in lf->filterColor. */
+{
+struct linkedFeatures *lf = (struct linkedFeatures *)item;
+return lf->filterColor;
+}
+
+static boolean bdsIsIndel(struct bigDbSnp *bds, int *retMinAltLen, int *retMaxAltLen)
+/* Set *ret{Min,Max}AltLen to the {least,greatest} alt allele length.
+ * Return TRUE if any alt is shorter or longer than ref. */
+{
+int refLen = strlen(bds->ref);
+int minAltLen = refLen, maxAltLen = refLen;
+int i;
+for (i = 0;  i < bds->altCount;  i++)
+    {
+    int altLen = strlen(bds->alts[i]);
+    if (altLen < minAltLen)
+        minAltLen = altLen;
+    if (altLen > maxAltLen)
+        maxAltLen = altLen;
+    }
+if (retMinAltLen)
+    *retMinAltLen = minAltLen;
+if (retMaxAltLen)
+    *retMaxAltLen = maxAltLen;
+return (refLen != minAltLen || refLen != maxAltLen);
+}
+
+static boolean bdsHasInsAndDel(struct bigDbSnp *bds, int *retMaxDel)
+/* If bds variant has both insertion(s) and deletion(s) relative to the reference genome,
+ * then return TRUE.  Set *retMaxDel to the largest number of bases deleted. */
+{
+boolean isBoth = FALSE;
+int minAltLen, maxAltLen;
+if (bdsIsIndel(bds, &minAltLen, &maxAltLen))
+    {
+    int refLen = strlen(bds->ref);
+    isBoth = (minAltLen < refLen && refLen < maxAltLen);
+    if (retMaxDel)
+        *retMaxDel = (refLen - minAltLen);
+    }
+else if (retMaxDel)
+    *retMaxDel = 0;
+return isBoth;
+}
+
+static void bigDbSnpDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg,
+                        int xOff, int y, double scale,
+                        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw one bigDbSnp variant, possibly with thin and/or gray portions to show uncertain placement,
+ * and with block-and-line when an MNV is really two linked SNVs. */
+{
+struct linkedFeatures *lf = item;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+int x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+int w = x2-x1;
+if (w > 1 && lf->tallStart > lf->start)
+    {
+    // There's a thin region, and enough pixels to draw thin and thick.
+    struct bigDbSnp *bds = (struct bigDbSnp *)lf->original;
+    int maxDel = 0;
+    if (bdsHasInsAndDel(bds, &maxDel))
+        {
+        // There are both inserted and deleted bases, so draw a lighter-colored box to show
+        // deleted bases.  Draw the thin region afterwards, so it appears on top of the box.
+        Color delColor = somewhatLighterColor(hvg, lighterColor(hvg, color));
+        int delStart = lf->end - maxDel;
+        int delStartPx = 0, delEndPx = 0;
+        if (scaledBoxToPixelCoords(delStart, lf->end, scale, xOff, &delStartPx, &delEndPx))
+            {
+            int wDel = delEndPx - delStartPx;
+            hvGfxBox(hvg, delStartPx, y, wDel, heightPer, delColor);
+            }
+        }
+    int thinStartPx = 0, thinEndPx = 0;
+    if (scaledBoxToPixelCoords(lf->start, lf->tallStart, scale, xOff, &thinStartPx, &thinEndPx))
+        {
+        int shortOff = heightPer/4;
+        int shortHeight = heightPer - 2*shortOff;
+        // Make sure we get at least one pixel of thin.
+        int wThin = thinEndPx - thinStartPx;
+        if (wThin == 0)
+            {
+            wThin = 1;
+            thinEndPx += 1;
+            }
+        hvGfxBox(hvg, thinStartPx, y+shortOff, wThin, shortHeight, color);
+        }
+    int thickStartPx = 0, thickEndPx = 0;
+    if (scaledBoxToPixelCoords(lf->tallStart, lf->end, scale, xOff, &thickStartPx, &thickEndPx))
+        {
+        // Use thinEndPx instead of thickStartPx in case thinEndPx was incremented above.
+        int wThick = thickEndPx - thinEndPx;
+        hvGfxBox(hvg, thinEndPx, y, wThick, heightPer, color);
+        }
+    }
+else
+    {
+    struct simpleFeature *sf;
+    if (lf->components->next != NULL)
+        {
+        // horizontal line connector for MNVs in which some bases do not change
+        int x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+        int x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+        // If I don't subtract 1 from x2, then it sticks out past the end of the last block when
+        // zoomed in so much that each base is multiple pixels.
+        x2--;
+        int midY = y + (tg->heightPer>>1);
+        int w = x2-x1;
+        if (w > 0)
+            hvGfxLine(hvg, x1, midY, x2, midY, color);
+        }
+    for (sf = lf->components;  sf != NULL;  sf = sf->next)
+        {
+        drawScaledBox(hvg, sf->start, sf->end, scale, xOff, y, heightPer, color);
+        }
+    }
+}
+
+static int lfColorCmp(const void *va, const void *vb)
+/* Compare lf->filterColors to sort based on color -- black first, red last */
+{
+const struct linkedFeatures *a = *((struct linkedFeatures **)va);
+const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+const Color ca = (Color)(a->filterColor);
+const Color cb = (Color)(b->filterColor);
+
+return snp125ColorCmpRaw(ca, a->name, cb, b->name);
+}
+
+void bigDbSnpDraw(struct track *tg, int seqStart, int seqEnd,
+                  struct hvGfx *hvg, int xOff, int yOff, int width,
+                  MgFont *font, Color color, enum trackVisibility vis)
+/* Draw linked features items. */
+{
+if (vis == tvDense ||
+    (tg->limitedVisSet && tg->limitedVis == tvDense))
+    {
+    // Sort so that items with the strongest colors appear on top.
+    slSort(&tg->items, lfColorCmp);
+    }
+else
+    {
+    // Sort by position as usual
+    slSort(&tg->items, linkedFeaturesCmp);
+    }
+genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
+}
+
+void bigDbSnpMethods(struct track *track)
+/* Special load and draw hooks for type bigDbSnp. */
+{
+linkedFeaturesMethods(track);
+track->canPack = TRUE;
+track->loadItems = bigDbSnpLoadItems;
+track->drawItems = bigDbSnpDraw;
+track->drawItemAt = bigDbSnpDrawItemAt;
+track->itemColor = bigDbSnpColor;
+track->itemNameColor = bigDbSnpColor;
+track->itemName = bigLfItemName;
 }

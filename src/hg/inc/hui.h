@@ -152,6 +152,11 @@ char *hTrackUiForTrack(char *trackName);
 // ie. subGroup1 subtrackColor Color; sortOrder subtrackColor=+ cellType=+
 #define SUBTRACK_COLOR_SUBGROUP "subtrackColor"
 
+// trackDb setting and cart/cgi var
+#define SUBTRACK_HIDE_EMPTY       "hideEmptySubtracks"
+// trackDb setting
+#define SUBTRACK_HIDE_EMPTY_LABEL "hideEmptySubtracksLabel"
+
 void netUi(struct trackDb *tdb);
 
 struct controlGrid
@@ -747,6 +752,9 @@ void indelEnabled(struct cart *cart, struct trackDb *tdb, float basesPerPixel,
 /* Query cart & trackDb to determine what indel display (if any) is enabled. Set
  * basesPerPixel to -1.0 to disable check for zoom level.  */
 
+void bamAddBaseAndIndelSettings(struct trackDb *tdb);
+/* Unless already set in tdb, add settings to enable base-level differences and indel display. */
+
 /*** Some Stuff for the base position (ruler) controls ***/
 
 #define ZOOM_1PT5X      "1.5x"
@@ -973,6 +981,19 @@ char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct tra
 	char *vocabType, char *label);
 /* If the parentTdb has an ENCODE controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to display it.  Return string is cloned. */
+
+
+boolean compositeHideEmptySubtracks(struct cart *cart, struct trackDb *tdb,
+                                        char **retMultiBedFile, char **retSubtrackIdFile);
+/* Parse hideEmptySubtracks setting and check cart
+ * Return TRUE if we should hide empties
+ */
+
+boolean compositeChildHideEmptySubtracks(struct cart *cart, struct trackDb *childTdb,
+                                        char **retMultiBedFile, char **retSubtrackIdFile);
+/* Parse hideEmptySubtracks setting and check cart
+ * Return TRUE if we should hide empties
+ */
 
 char *wgEncodeVocabLink(char *file,char *term,char *value,char *title, char *label,char *suffix);
 // returns allocated string of HTML link to ENCODE controlled vocabulary term
@@ -1500,4 +1521,13 @@ void printDataVersion(char *database, struct trackDb *tdb);
 /* If this annotation has a dataVersion setting, print it.
  * check hgFixed.trackVersion, meta data and trackDb 'dataVersion'. */
 
+void labelMakeCheckBox(struct cart *cart, struct trackDb *tdb, char *sym, char *desc,
+                       boolean defaultOn);
+/* add a checkbox for the user to select a component of a label (e.g. ID, name, other info).
+ * NOTE: This does not have a track name argument, so the correct tdb must be passed in:
+ * if setting is at composite level, then pass in composite tdb, likewise for view. */
+
+int defaultFieldLocation(char *field);
+/* Sometimes we get bigBed filters with field names that are not in the AS file.  
+ * Try to guess what the user means. */
 #endif /* HUI_H */

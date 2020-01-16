@@ -1,0 +1,44 @@
+
+track chainNetRn6 override
+shortLabel rat/rn6 Chain/Net
+longLabel rat/rn6 ($o_date), Chain and Net Alignments
+
+track chainNetRegenRn0 override
+shortLabel rat/regenRn0 Chain/Net
+longLabel rat/regenRn0 ($o_date), Chain and Net Alignments
+
+track chainNetMm10 override
+priority 200.3
+chainLinearGap medium
+chainMinScore 5000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetOryCun2 override
+priority 250.3
+chainLinearGap medium
+chainMinScore 3000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetMacFas5 override
+priority 309.40
+chainLinearGap medium
+chainMinScore 3000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetHg38 override
+priority 350.3
+chainLinearGap medium
+chainMinScore 3000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetCanFam3 override
+priority 400.3
+chainLinearGap medium
+chainMinScore 3000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetSusScr11 override
+priority 455.3
+chainLinearGap medium
+chainMinScore 3000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91

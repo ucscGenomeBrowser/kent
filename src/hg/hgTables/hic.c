@@ -183,13 +183,13 @@ struct hicMeta *fileInfo;
 char *errMsg = hicLoadHeader(fileName, &fileInfo, database);
 if (errMsg != NULL)
     errAbort("%s", errMsg);
-
-char *norm = hicUiFetchNormalization(cart, table, fileInfo);
+struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
+char *norm = hicUiFetchNormalization(cart, tdb, fileInfo);
 
 for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     {
     struct interact *results = NULL, *result = NULL;
-    int res = hicUiFetchResolutionAsInt(cart, table, fileInfo, region->end-region->start);
+    int res = hicUiFetchResolutionAsInt(cart, tdb, fileInfo, region->end-region->start);
     char *errMsg = hicLoadData(fileInfo, res, norm, region->chrom, region->start, region->end,
             region->chrom, region->start, region->end, &results);
     if (errMsg != NULL)
@@ -235,8 +235,9 @@ if (errMsg != NULL)
     }
 else
     {
-    int res = hicUiFetchResolutionAsInt(cart, table, fileInfo, region->end-region->start);
-    char *norm = hicUiFetchNormalization(cart, table, fileInfo);
+    struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
+    int res = hicUiFetchResolutionAsInt(cart, tdb, fileInfo, region->end-region->start);
+    char *norm = hicUiFetchNormalization(cart, tdb, fileInfo);
 
     struct interact *results = NULL, *result = NULL;
     errMsg = hicLoadData(fileInfo, res, norm, region->chrom, region->start, region->end,
@@ -395,3 +396,28 @@ freeMem(fileName);
 hFreeConn(&conn);
 }
 
+void hicMainPageConfig(struct cart *cart, struct trackDb *tdb)
+/* Display Hi-C-specific track configuration options (resolution, normalization) on
+ * the main page. */
+{
+char *filename = trackDbSettingOrDefault(tdb, "bigDataUrl", NULL);
+struct hicMeta *meta = NULL;
+if (filename == NULL)
+    {
+    warn("Missing bigDataUrl setting for track %s", tdb->shortLabel);
+    return;
+    }
+char *errMsg = hicLoadHeader(filename, &meta, NULL);
+if (errMsg != NULL)
+    {
+    warn("Error fetching header for track %s: %s", tdb->shortLabel, errMsg);
+    return;
+    }
+hPrintf("<TR><TD><B>track options:</B> ");
+hPrintf("resolution ");
+hicUiResolutionDropDown(cart, tdb, meta);
+hPrintf("&nbsp;&nbsp;&nbsp;");
+hPrintf("score normalization ");
+hicUiNormalizationDropDown(cart, tdb, meta);
+hPrintf("</TD></TR>\n");
+}

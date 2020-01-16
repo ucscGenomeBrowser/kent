@@ -60,8 +60,6 @@
 #define BIGBEDMAXIMUMITEMS 100000
 
 /* for botDelay call, 10 second for warning, 20 second for immediate exit */
-#define warnMs 10000
-#define exitMs 20000
 #define delayFraction   0.25
 extern long enteredMainTime;
 
@@ -271,6 +269,7 @@ struct track
     struct bbiSummaryElement *summary;  /* for bigBed */
     struct bbiSummaryElement *sumAll;   /* for bigBed */
     boolean drawLabelInBox;     /* draw labels into the features instead of next to them */
+    boolean drawLabelInBoxNotDense;    /* don't draw labels in dense mode, (needed only when drawLabelInBox set */
     
     struct track *nextWindow;   /* Same track in next window's track list. */
     struct track *prevWindow;   /* Same track in prev window's track list. */
@@ -587,6 +586,7 @@ extern Color shadesOfRedOnYellow[EXPR_DATA_SHADES];
 extern Color shadesOfBlueOnYellow[EXPR_DATA_SHADES];
 
 extern boolean chromosomeColorsMade; /* Have the 3 shades of 8 chromosome colors been allocated? */
+extern boolean doPliColors; /* Put up the color legend for the gnomAD pLI track */
 extern boolean exprBedColorsMade; /* Have the shades of Green, Red, and Blue been allocated? */
 extern int maxRGBShade;
 
@@ -677,6 +677,12 @@ double scaleForWindow(double width, int seqStart, int seqEnd);
 double scaleForPixels(double pixelWidth);
 /* Return what you need to multiply bases by to
  * get to scale of pixel coordinates. */
+
+boolean scaledBoxToPixelCoords(int chromStart, int chromEnd, double scale, int xOff,
+                               int *pX1, int *pX2);
+/* Convert chrom coordinates to pixels. Clip to window to prevent integer overflow.
+ * For special case of a SNP insert location with width==0, set width=1.
+ * Returns FALSE if it does not intersect the window, or if it would have a negative width. */
 
 void drawScaledBox(struct hvGfx *hvg, int chromStart, int chromEnd,
 	double scale, int xOff, int y, int height, Color color);
@@ -1380,7 +1386,7 @@ boolean isCenterLabelsPackOff(struct track *track);
 boolean isCenterLabelIncluded(struct track *track);
 /* Center labels may be conditionally included */
 
-boolean doCollapseEmptySubtracks(struct track *track);
+boolean doHideEmptySubtracks(struct track *track, char **multiBedFile, char **subtrackIdFile);
 /* Suppress display of empty subtracks. Initial support only for bed's. */
 
 Color maybeDarkerLabels(struct track *track, struct hvGfx *hvg, Color color);
@@ -1662,6 +1668,9 @@ void genericDrawNextItem(struct track *tg, void *item, struct hvGfx *hvg, int xO
 
 struct spaceSaver *findSpaceSaver(struct track *tg, enum trackVisibility vis);
 /* Find SpaceSaver in list. Return spaceSaver found or NULL. */
+
+void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut);
+/* add text to track long label to indicate filter is active and how many items were deleted */
 
 void labelTrackAsFiltered(struct track *tg);
 /* add text to track long label to indicate filter is active */

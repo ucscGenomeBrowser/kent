@@ -1,0 +1,10 @@
+{% block breadcrumbs %}{% endblock %}
+{% if project_list %}
+    <ul>
+    {% for p in project_list %}
+        <li><a href="project/{{p.id}}"> {{ p.short_name }}</a> -  {{ p.title }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No projects are available.</p>
+{% endif %}

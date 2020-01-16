@@ -49,6 +49,13 @@
 #define BAR_CHART_NO_WHITEOUT         "noWhiteout"
 #define BAR_CHART_NO_WHITEOUT_DEFAULT        FALSE
 
+/* Support limiting graphs to small or medium hights (bypass semantic zoom) */
+#define BAR_CHART_MAX_GRAPH_SIZE                 "barChartMaxSize"
+#define BAR_CHART_MAX_GRAPH_SIZE_SMALL           "small"
+#define BAR_CHART_MAX_GRAPH_SIZE_MEDIUM          "medium"
+#define BAR_CHART_MAX_GRAPH_SIZE_LARGE           "large"
+#define BAR_CHART_MAX_GRAPH_SIZE_DEFAULT          BAR_CHART_MAX_GRAPH_SIZE_LARGE
+
 void barChartCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track, 
                         char *title, boolean boxed);
 /* Bar chart track type */

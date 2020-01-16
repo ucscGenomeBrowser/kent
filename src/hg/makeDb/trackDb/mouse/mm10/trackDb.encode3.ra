@@ -1,11 +1,13 @@
 track encode3Reg
-superTrack on show
+superTrack on
 shortLabel ENCODE Regulation
 longLabel Integrated Regulation from ENCODE
 wgEncode 1
 group regulation
 priority 2
-pennantIcon New red
+pennantIcon New red ../goldenPath/newsarch.html#110119 Released Nov. 1, 2019
 
-include trackDb.histones.ra
-include trackDb.chromHmm.ra
+include encode3.chromHmm.ra
+include encode3.histone.ra
+include encode3.atac.ra
+

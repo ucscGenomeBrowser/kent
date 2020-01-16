@@ -32,6 +32,7 @@ barChartDataUrl barChart bigBarChart
 #
 barChartLabel barChart bigBarChart
 barChartMetric barChart bigBarChart
+barChartMaxSize barChart bigBarChart
 barChartSampleUrl barChart bigBarChart
 barChartUnit barChart bigBarChart
 baseColorDefault *
@@ -42,7 +43,7 @@ baseQualRange bam
 bedFilter bed
 bedNameLabel bed barChart bigBarChart bigBed
 bedPackDense bed bigBed
-bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart gtexTranscExpr bigInteract bigChain bigGenePred bigLolly bigNarrowPeak hic
+bigDataUrl customTracks big* bam vcfTabix halSnake gtexTranscExpr hic
 bigGeneDataUrl genePred
 blastRef psl bigPsl
 boxedCfg *
@@ -71,6 +72,8 @@ codingAnnoLabel_snp132CodingDbSnp bed
 codingAnnoLabel_snp134CodingDbSnp bed
 codingAnnotations bed
 collapseEmptySubtracks *
+hideEmptySubtracks *
+hideEmptySubtracksLabel *
 color *
 colorByStrand bigBed bed genePred
 colorChromDefault psl bigPsl
@@ -91,9 +94,9 @@ dbPrefixUrls bigBed bed bigPsl genePred psl
 dbPrefixLabels bigBed bed bigPsl genePred psl
 dbProfile *
 dbTrackType customTracks
-detailsTabUrls bigBed bigGenePred bigPsl
+detailsTabUrls big*
 defaultGeneTracks bed
-defaultLabelFields bigBed bigPsl bigGenePred bigBarChart
+defaultLabelFields big*
 defaultMaf wigMaf
 defaultMaxWeight bed
 defaultLinkedTables genePred
@@ -131,6 +134,7 @@ filterComposite *
 filterTopScorers bed5FloatScoreWithFdr bed5FloatScore
 firstItemPos customTracks
 frames wigMaf
+freqSourceOrder bigDbSnp
 forceFirstCharLowerCase wigMaf
 ensemblTranscriptIdUrl genePred
 ensemblGeneIdUrl genePred
@@ -242,7 +246,7 @@ lfPslTable bed
 linesAt chromGraph
 linkDataUrl  bigChain
 linkIdInName bed bigBed
-labelFields bigBed bigPsl bigGenePred bigBarChart bigInteract
+labelFields big*
 labelOnFeature bed bigBed
 labelSeparator bigBed bigPsl bigGenePred
 lollipopField bigBed bigLolly
@@ -265,7 +269,7 @@ maxHeightPixels *
 maxItems *
 maxLimit *
 maxScore broadPeak narrowPeak
-maxWindowToDraw bam rmsk joinedRmsk bed narrowPeak broadPeak bigWig bedlogR genepred vcf vcfTabix factorSource
+maxWindowToDraw bam big* rmsk joinedRmsk bed narrowPeak broadPeak bedlogR genepred vcf vcfTabix factorSource
 maxWindowToQuery bigWig bed bedlogR
 metadata *
 mouseOverField bigBed bigPsl
@@ -396,6 +400,7 @@ sGroup_Zaire(DRC)_1976-7 wigMaf
 *Filter bed narrowPeak broadPeak
 *FilterLimits bed narrowPeak broadPeak
 *FilterByRange bed narrowPeak broadPeak
+*FilterLabel bed narrowPeak broadPeak big*
 scoreFilter broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed bigPsl
 scoreFilterByRange bed peptideMapping bigBed bigPsl
 scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed bigPsl
@@ -412,6 +417,7 @@ sepFields bigBed bigPsl bigGenePred
 shortLabel *
 showCdsAllScales psl bigPsl
 showCdsMaxZoom psl bigPsl
+showCfg *
 showDiffBasesAllScales *
 showDiffBasesMaxZoom *
 showHardyWeinberg vcf vcfTabix
@@ -487,7 +493,7 @@ urls bigBed bed bigPsl genePred psl bigBarChart bigGenePred bigLolly
 useScore *
 view *
 viewLimits *
-viewLimitsMax bed bedGraph wig
+viewLimitsMax bed bedGraph wig bigWig
 viewUi *
 visibility *
 visibilityViewDefaults *

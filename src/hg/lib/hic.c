@@ -18,10 +18,10 @@ char *hicLoadHeader(char *filename, struct hicMeta **header, char *ucscAssembly)
  * an error message that explains why the retrieval failed. */
 {
 char *genome;
-char **chromosomes, **bpResolutions;
-int nChroms, nBpRes;
+char **chromosomes, **bpResolutions, **attributes;
+int *chromSizes, nChroms, nBpRes, nAttributes;
 
-char *errMsg = CstrawHeader(filename, &genome, &chromosomes, &nChroms, &bpResolutions, &nBpRes, NULL, NULL);
+char *errMsg = CstrawHeader(filename, &genome, &chromosomes, &chromSizes, &nChroms, &bpResolutions, &nBpRes, NULL, NULL, &attributes, &nAttributes);
 if (errMsg != NULL)
     return errMsg;
 
@@ -32,30 +32,36 @@ newMeta->nRes = nBpRes;
 newMeta->resolutions = bpResolutions;
 newMeta->nChroms = nChroms;
 newMeta->chromNames = chromosomes;
+newMeta->chromSizes = chromSizes;
 newMeta->ucscToAlias = NULL;
 newMeta->ucscAssembly = cloneString(ucscAssembly);
 newMeta->filename = cloneString(filename);
+newMeta->attributes = attributes;
+newMeta->nAttributes = nAttributes;
 
 *header = newMeta;
 if (trackHubDatabase(genome))
     return NULL;
 
 // add alias hash in case file uses 1 vs chr1, etc.
-struct hash *aliasToUcsc = chromAliasMakeLookupTable(newMeta->ucscAssembly);
-if (aliasToUcsc != NULL)
+if (newMeta->ucscAssembly != NULL)
     {
-    struct hash *ucscToAlias = newHash(0);
-    int i;
-    for (i=0; i<nChroms; i++)
+    struct hash *aliasToUcsc = chromAliasMakeLookupTable(newMeta->ucscAssembly);
+    if (aliasToUcsc != NULL)
         {
-        struct chromAlias *cA = hashFindVal(aliasToUcsc, chromosomes[i]);
-        if (cA != NULL)
+        struct hash *ucscToAlias = newHash(0);
+        int i;
+        for (i=0; i<nChroms; i++)
             {
-            hashAdd(ucscToAlias, cA->chrom, cloneString(chromosomes[i]));
+            struct chromAlias *cA = hashFindVal(aliasToUcsc, chromosomes[i]);
+            if (cA != NULL)
+                {
+                hashAdd(ucscToAlias, cA->chrom, cloneString(chromosomes[i]));
+                }
             }
+        newMeta->ucscToAlias = ucscToAlias;
+        hashFree(&aliasToUcsc);
         }
-    newMeta->ucscToAlias = ucscToAlias;
-    hashFree(&aliasToUcsc);
     }
 return NULL;
 }
@@ -101,7 +107,7 @@ char *hicLoadData(struct hicMeta *fileInfo, int resolution, char *normalization,
  * and the return value (if non-NULL) is the text of any error message encountered by the underlying
  * Straw library. */
 {
-int *x, *y, numRecords;
+int *x, *y, numRecords=0;
 double *counts;
 
 if (!fileInfo)

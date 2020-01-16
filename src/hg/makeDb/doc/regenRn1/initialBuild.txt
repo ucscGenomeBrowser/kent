@@ -1,0 +1,992 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the regenRn1
+
+#  Can use existing photograph (otherwise find one before starting here)
+
+#########################################################################
+#  Initial steps, use existing photograph (DONE - 2019-09-08 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/regenRn1
+cd ~/kent/src/hg/makeDb/doc/regenRn1
+
+sed -e 's/Rn0/Rn1/g; s/DONE/TBD/g;' \
+    ../regenRn0/initialBuild.txt > initialBuild.txt
+
+mkdir -p /hive/data/genomes/regenRn1/regeneron
+# sequences were obtained via email instructions from Regeneron
+# downloaded from a URl for their secure situation
+# -rw-r--r-- 1  643996250 Sep  8 08:26 DarkAgouti_chromosomes.tgz
+
+# their file is very odd. it is not a tgz, it requires two:
+# unzip
+# unzip
+# then it is a tar file, which makes a directory:
+
+-rw-r--r-- 1 2395238400 Sep  8 08:26 file.tar
+
+tar xvf file.tat
+
+drwxrwxr-x 2       4096 Sep  7 17:39 DA_annotated_chromosomes
+
+# examples:
+-rw-rw-r-- 1 115245581 Sep  3 12:06 chr1.fasta
+-rw-rw-r-- 1  41589339 Sep  3 13:00 chr12.fasta
+
+#  Can use existing photograph
+cp -p ../regenRn0/photoReference.txt .
+cat photoReference.txt
+photoCreditURL  http://www.genome.gov/dmd/img.cfm?node=Photos/Animals/Rat%20(brown%20norway)&id=79111
+photoCreditName NHGRI press photos
+
+# check assembly size for later reference:
+
+faSize DA_annotated_chromosomes/*.fasta
+
+2395213054 bases (112730866 N's 2282482188 real 2276778425 upper 5703763 lower)
+    in 23 sequences in 23 files
+Total size: mean 104139698.0 sd 52890062.5 min 2246 (chrM)
+    max 236134952 (chr2) median 102991095
+
+# this assembly just has the 23 chromosome sequences
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2019-09-08)
+    cd /hive/data/genomes/regenRn1
+    # copy the rn6 file and edit:
+
+    cat regenRn9.config.ra
+# Config parameters for makeGenomeDb.pl:
+db regenRn1
+clade mammal
+scientificName Rattus norvegicus
+commonName Rat
+assemblyDate May. 2019
+assemblyLabel Regeneron rat
+assemblyShortLabel Regen Rn1
+orderKey 18021
+mitoAcc none
+fastaFiles /hive/data/genomes/regenRn1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/regenRn1/ucsc/fake.agp
+# qualFiles none
+dbDbSpeciesDir rat
+photoCreditURL http://www.genome.gov/10005141
+photoCreditName NHGRI Press Photos
+ncbiGenomeId 73
+ncbiAssemblyId 382928
+ncbiAssemblyName RegenRn1
+ncbiBioProject 10629
+ncbiBioSample SAMN02808228
+genBankAccessionID GCA_000001895.4
+taxId 10116
+
+    # compare with previous version to see if it is sane:
+    diff regenRn1.config.ra ../regenRn0/regenRn0.config.ra
+
+#############################################################################
+# setup UCSC named files (DONE - 2019-09-08 - Hiram)
+
+    # copy the *.fasta files from ../regeneron/DA_annotated_chromosomes/
+    # to here, renaming to .fa, then gzip
+
+    mkdir /hive/data/genomes/regenRn1/ucsc
+    cd /hive/data/genomes/regenRn1/regeneron/DA_annotated_chromosomes
+
+    ls *.fasta | sed -e 's/.fasta//;' | while read C
+do
+  cp -p $C.fasta ../../ucsc/$C.fa
+  gzip ../../ucsc/$C.fa &
+done
+wait
+
+    cd /hive/data/genomes/regenRn1/ucsc
+
+    # construct a fakeAgp:
+    faToTwoBit *.fa.gz test.2bit
+    twoBitDup test.2bit
+    twoBitToFa test.2bit stdout | hgFakeAgp -minContigGap=1 \
+      -minScaffoldGap=100 stdin fake.agp
+
+    checkAgpAndFa fake.agp test.2bit 2>&1 | tail -4
+    # All AGP and FASTA entries agree - both files are valid
+
+    twoBitToFa test.2bit stdout | faSize stdin
+# 2395213054 bases (112730866 N's 2282482188 real 2276778425 upper
+#	5703763 lower) in 23 sequences in 1 files
+# Total size: mean 104139698.0 sd 52890062.5 min 2246 (chrM)
+#	max 236134952 (chr2) median 102991095
+# %0.24 masked total, %0.25 masked real
+
+    # no longer need the temporary 2bit file
+    rm test.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2019-09-08 - Hiram)
+
+    # create the database
+    time (makeGenomeDb.pl -stop=db regenRn1.config.ra -workhorse=hgwdev) \
+       > db.log 2>&1
+    # real    14m41.734s
+
+    # finish it off
+    time (makeGenomeDb.pl -continue=dbDb regenRn1.config.ra -workhorse=hgwdev) \
+       > dbDb.log 2>&1
+    # real    0m11.683s
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add regenRn1 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/regenRn1
+    ln -s `pwd`/regenRn1.unmasked.2bit /gbdb/regenRn1/regenRn1.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2019-09-08 - Hiram)
+    mkdir /hive/data/genomes/regenRn1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/regenRn1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/regenRn1/regenRn1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku regenRn1) > do.log 2>&1
+    # real    3m16.335s
+
+    cat fb.regenRn1.cpgIslandExtUnmasked.txt
+    # 10642803 bases of 2282482188 (0.466%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2019-09-08 - Hiram)
+    mkdir /hive/data/genomes/regenRn1/bed/cytoBand
+    cd /hive/data/genomes/regenRn1/bed/cytoBand
+    makeCytoBandIdeo.csh regenRn1
+
+#############################################################################
+# run up idKeys files for chromAlias/ncbiRefSeq (TBD - 2019-09-08 - Hiram)
+    mkdir /hive/data/genomes/regenRn1/bed/idKeys
+    cd /hive/data/genomes/regenRn1/bed/idKeys
+
+    time (doIdKeys.pl \
+        -twoBit=/hive/data/genomes/regenRn1/regenRn1.unmasked.2bit \
+        -buildDir=`pwd` regenRn1) > do.log 2>&1 &
+    # real    0m47.105s
+
+    cat regenRn1.keySignature.txt
+    #  7850e2d5dabb6134fdc9d7083f1a3a54
+
+#############################################################################
+# gapOverlap (DONE - 2019-09-08 - Hiram)
+    mkdir /hive/data/genomes/regenRn1/bed/gapOverlap
+    cd /hive/data/genomes/regenRn1/bed/gapOverlap
+    time (doGapOverlap.pl \
+        -twoBit=/hive/data/genomes/regenRn1/regenRn1.unmasked.2bit regenRn1 ) \
+        > do.log 2>&1 &
+    # real    1m49.029s
+
+    # there are 7 items found:
+    wc -l bed.tab
+    # 7 bed.tab
+
+    cat fb.regenRn1.gapOverlap.txt
+    # 5912 bases of 2762428432 (0.000%) in intersection
+
+#############################################################################
+# tandemDups (DONE - 2019-09-08 - Hiram)
+    mkdir /hive/data/genomes/regenRn1/bed/tandemDups
+    cd /hive/data/genomes/regenRn1/bed/tandemDups
+    time (~/kent/src/hg/utils/automation/doTandemDup.pl \
+  -twoBit=/hive/data/genomes/regenRn1/regenRn1.unmasked.2bit regenRn1) \
+        > do.log 2>&1 &
+    # real    371m3.411s
+
+    cat fb.regenRn1.tandemDups.txt
+    # 75673026 bases of 2395213054 (3.159%) in intersection
+
+    bigBedInfo regenRn1.tandemDups.bb | sed -e 's/^/#  /;'
+#  version: 4
+#  fieldCount: 13
+#  hasHeaderExtension: yes
+#  isCompressed: yes
+#  isSwapped: 0
+#  extraIndexCount: 0
+#  itemCount: 899,735
+#  primaryDataSize: 23,487,472
+#  primaryIndexSize: 63,376
+#  zoomLevels: 9
+#  chromCount: 22
+#  basesCovered: 1,254,230,011
+#  meanDepth (of bases covered): 6.233185
+#  minDepth: 1.000000
+#  maxDepth: 253.000000
+#  std of depth: 11.790108
+
+#########################################################################
+# ucscToINSDC and ucscToRefSeq table/track (TBD - 2019-09-08 - Hiram)
+    # construct idKeys for the refseq sequence
+    mkdir /hive/data/genomes/regenRn1/refseq/idKeys
+    cd /hive/data/genomes/regenRn1/refseq/idKeys
+    faToTwoBit ../GCF_000002315.5_GRCg6a_genomic.fna.gz regenRn1.refSeq.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/regenRn1.refSeq.2bit refseqRegenRn1)  > do.log 2>&1 &
+    # real    0m48.786s
+
+    cat refseqRegenRn1.keySignature.txt
+    #  7850e2d5dabb6134fdc9d7083f1a3a54
+
+    # and the genbank sequence needs keys too:
+    mkdir /hive/data/genomes/regenRn1/refseq/idKeysGenbank
+    cd /hive/data/genomes/regenRn1/refseq/idKeysGenbank
+    faToTwoBit /hive/data/outside/ncbi/genomes/genbank/vertebrate_other/Gallus_gallus/all_assembly_versions/GCA_000002315.5_GRCg6a/GCA_000002315.5_GRCg6a_genomic.fna.gz regenRn1.genbank.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/regenRn1.genbank.2bit genbankRegenRn1)  > do.log 2>&1 &
+
+    cat genbankRegenRn1.keySignature.txt
+    #  a20fdad3318d371fcb34fcc66bab3752
+
+    mkdir /hive/data/genomes/regenRn1/bed/chromAlias
+
+    join -t$'\t' ../idKeys/regenRn1.idKeys.txt \
+        ../../refseq/idKeysGenbank/genbankRegenRn1.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToINSDC.bed
+
+    join -t$'\t' ../idKeys/regenRn1.idKeys.txt \
+        ../../refseq/idKeys/refseqRegenRn1.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+
+    # should be same line counts throughout:
+    wc -l * ../../chrom.sizes
+    #	463 ucscToINSDC.bed
+    #	464 ucscToRefSeq.bed
+    #	464 ../../chrom.sizes
+
+    # need to find the accession for the INSDC equivalent to chrM:
+    egrep chrM *
+# ucscToRefSeq.bed:chrM   0       16775   NC_001323.1
+    # lookup that accession at NCBI Entrez: X52392.1
+    # and add to ucscToINSDC.bed:
+    printf "chrM\t0\t16775\tX52392.1\n" >> ucscToINSDC.bed
+    # verify:
+    grep chrM *
+# ucsc.genbank.tab:chrM   X52392.1
+# ucsc.refseq.tab:chrM    NC_001323.1
+# ucscToINSDC.bed:chrM    0       16775   X52392.1
+# ucscToRefSeq.bed:chrM   0       16775   NC_001323.1
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 27
+    # use the $chrSize in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab regenRn1 ucscToINSDC stdin ucscToINSDC.bed
+     # should be the same for ucscToRefSeq:
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 27
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' \
+         | hgLoadSqlTab regenRn1 ucscToRefSeq stdin ucscToRefSeq.bed
+
+    # should be quiet for all OK
+    checkTableCoords regenRn1
+
+    # should cover %100 entirely:
+    featureBits -countGaps regenRn1 ucscToINSDC
+    # 1065365425 bases of 1065365425 (100.000%) in intersection
+    featureBits -countGaps regenRn1 ucscToRefSeq
+    # 1065365425 bases of 1065365425 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (TBD - 2019-09-08 - Hiram)
+
+    # did not run this up, there aren't any names to alias
+    mkdir /hive/data/genomes/regenRn1/bed/chromAlias
+    cd /hive/data/genomes/regenRn1/bed/chromAlias
+
+    ln -s ../../ucsc/ucsc.regeneron.name.translate regen.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl regen.tab \
+	> regenRn1.chromAlias.tab
+
+    join regen.tab <(sort -k1,1 ../../chrom.sizes) \
+      | awk '{printf "%s\t0\t%d\t%s\n", $1, $3, $2}' > regen.alias.bed
+
+     wc -l *
+#	6846 regen.alias.bed
+#	6846 regen.tab
+#	6846 regenRn1.chromAlias.tab
+
+    hgLoadSqlTab regenRn1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        regenRn1.chromAlias.tab
+
+    # display the Regeneron AGP file as a track:
+
+    ln -s ../../ucsc/ucsc.agp ./translatedRegen.agp
+
+    grep -v "^#" translatedRegen.agp | grep -w scaffold \
+      | awk '{printf "%s\t%d\t%d\tgap\t0\t.\n", $1, $2-1, $3}' > regen.gaps.bed
+
+    grep -v "^#" translatedRegen.agp | grep -v -w scaffold \
+      | awk '{printf "%s\t%d\t%d\t%s\t0\t%s\n", $1, $2-1, $3, $6, $9}' \
+        > regen.contigs.bed
+
+    sort -k1,1 -k2,2n regen.gaps.bed regen.contigs.bed > regen.agp.bed
+
+    hgLoadBed regenRn1 regenAGP regen.agp.bed
+    # Read 17962 elements of size 6 from regen.agp.bed
+
+    cut -f1-4 regen.gaps.bed | hgLoadBed regenRn1 regenAGPGap stdin
+    # Read 5558 elements of size 4 from stdin
+
+#########################################################################
+# fixup search rule for assembly track/gold table (TBD - 2019-09-08 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/rat/regenRn1
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" regenRn1 \
+      | sed -e 's/[0-9_FR]\+//;' | sort | uniq -c 
+   6725 pi
+     67 pisub
+  47725 ss
+
+    # implies a rule: '[ps][is](sub)?[0-9]+(_[0-9FR]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" regenRn1 | wc -l
+    # 54517
+
+    hgsql -N -e "select frag from gold;" regenRn1 \
+       | egrep -e '[ps][is](sub)?[0-9]+(_[0-9FR]+)?' | wc -l
+    # 54517
+
+    hgsql -N -e "select frag from gold;" regenRn1 \
+       | egrep -v -e '[ps][is](sub)?[0-9]+(_[0-9FR]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/regenRn1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [ps][is](sub)?[0-9]+(_[0-9FR]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (DONE - 2019-09-08 - Hiram)
+    mkdir /hive/data/genomes/regenRn1/bed/repeatMasker
+    cd /hive/data/genomes/regenRn1/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku regenRn1) > do.log 2>&1 &
+    # real    343m22.076s
+
+    cat faSize.rmsk.txt
+# 2395213054 bases (112730866 N's 2282482188 real 1288908568 upper
+#	993573620 lower) in 23 sequences in 1 files
+# Total size: mean 104139698.0 sd 52890062.5 min 2246 (chrM)
+#	max 236134952 (chr2) median 102991095
+# %41.48 masked total, %43.53 masked real
+
+    egrep -i "versi|relea" do.log
+# RepeatMasker version development-$Id: RepeatMasker,v 1.332 2017/04/17 19:01:11 rhubley Exp $
+#    February 01 2017 (open-4-0-8) 1.332 version of RepeatMasker
+# grep RELEASE /hive/data/staging/data/RepeatMasker/Libraries/RepeatMaskerLib.embl
+# CC    Dfam_Consensus RELEASE 20181026;                            *
+
+    time featureBits -countGaps regenRn1 rmsk
+    # 993577605 bases of 2395213054 (41.482%) in intersection
+    # real    0m31.877s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' regenRn1 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 993577605.000000
+    # real    0m19.017s
+
+##########################################################################
+# running simple repeat (DONE - 2019-09-08 - Hiram)
+
+    # The '-trf409 4' is a bit smaller than human which is 6
+
+    mkdir /hive/data/genomes/regenRn1/bed/simpleRepeat
+    cd /hive/data/genomes/regenRn1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409=4 regenRn1) > do.log 2>&1 &
+    # real    14m43.287s
+
+    cat fb.simpleRepeat
+    # 77526109 bases of 2282482188 (3.397%) in intersection
+
+    cd /hive/data/genomes/regenRn1
+    # when using the Window Masker result:
+    cd /hive/data/genomes/regenRn1
+#    twoBitMask bed/windowMasker/regenRn1.cleanWMSdust.2bit \
+#       -add bed/simpleRepeat/trfMask.bed  regenRn1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # or using the rmsk result after it is done:
+    twoBitMask regenRn1.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed regenRn1.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa regenRn1.2bit stdout | faSize stdin > faSize.regenRn1.2bit.txt
+    cat faSize.regenRn1.2bit.txt
+# 2395213054 bases (112730866 N's 2282482188 real 1285490790 upper
+#	996991398 lower) in 23 sequences in 1 files
+# Total size: mean 104139698.0 sd 52890062.5 min 2246 (chrM)
+#	max 236134952 (chr2) median 102991095
+# %41.62 masked total, %43.68 masked real
+
+    rm /gbdb/regenRn1/regenRn1.2bit
+    ln -s `pwd`/regenRn1.2bit /gbdb/regenRn1/regenRn1.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2019-09-09 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/regenRn1/bed/microsat
+    cd /cluster/data/regenRn1/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed regenRn1 microsat microsat.bed
+    # Read 208104 elements of size 4 from microsat.bed
+
+    featureBits regenRn1 microsat
+    # 9627095 bases of 2282482188 (0.422%) in intersection
+
+##########################################################################
+## WINDOWMASKER (DONE - 2019-09-09 - Hiram)
+    # wait for RepeatMasker to finish before this, since this is going
+    # to compare itself with the rmsk result
+
+    mkdir /hive/data/genomes/regenRn1/bed/windowMasker
+    cd /hive/data/genomes/regenRn1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev regenRn1) > do.log 2>&1
+    # real    26m58.753s
+
+    # Masking statistics
+    cat faSize.regenRn1.cleanWMSdust.txt
+# 2762428432 bases (227617579 N's 2534810853 real 1629368138 upper
+#	905442715 lower) in 6846 sequences in 1 files
+# Total size: mean 403509.8 sd 6476189.8 min 101 (pi012238F)
+#	max 248247500 (ss100001) median 10668
+# %32.78 masked total, %35.72 masked real
+
+    cat fb.regenRn1.rmsk.windowmaskerSdust.txt
+    # 696560115 bases of 2762428432 (25.215%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2019-09-09 - Hiram)
+    mkdir /hive/data/genomes/regenRn1/bed/cpgIslands
+    cd /hive/data/genomes/regenRn1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku regenRn1) > do.log 2>&1
+    # real    3m12.993s
+
+    cat fb.regenRn1.cpgIslandExt.txt
+    # 9240105 bases of 2282482188 (0.405%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2019-09-09 - Hiram)
+    mkdir /hive/data/genomes/regenRn1/bed/genscan
+    cd /hive/data/genomes/regenRn1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku regenRn1) > do.log 2>&1
+    # real    113m30.148s
+
+    cat fb.regenRn1.genscan.txt
+    # 48448954 bases of 2282482188 (2.123%) in intersection
+
+    cat fb.regenRn1.genscanSubopt.txt
+    # 51171443 bases of 2282482188 (2.242%) in intersection
+
+#########################################################################
+# Create kluster run files (DONE - 2019-09-11 - Hiram)
+
+    # numerator is regenRn1 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap regenRn1 gap
+    # 112730866 bases of 2282482188 (4.939%) in intersection
+    #                       ^^^
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2282482188 / 2861349177 \) \* 1024
+    #  ( 2282482188 / 2861349177 ) * 1024 = 816.839056
+
+    # ==> use -repMatch=800 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/regenRn1
+    blat regenRn1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/regenRn1.11.ooc \
+        -repMatch=800
+    #   Wrote 30001 overused 11-mers to jkStuff/regenRn1.11.ooc
+    # regenRn0 was repMatch 900 and:
+    #   Wrote 29409 overused 11-mers to jkStuff/regenRn1.11.ooc
+    # rn6 was repMatch 1000 and:
+    #   Wrote 27021 overused 11-mers to jkStuff/rn6.11.ooc
+    #   rn5 at repMatch 950 and:
+    #   Wrote 34513 overused 11-mers to jkStuff/rn5.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' regenRn1 \
+        | sort -k7,7nr | ave -col=7 stdin
+    # min 100.000000
+    # max 136961.000000
+
+    gapToLift -verbose=2 -minGap=100 regenRn1 jkStuff/nonBridged.lift \
+        -bedFile=jkStuff/nonBridged.bed
+### kent source version 387 ###
+#       chrom count: 23
+#       found 23482 gaps of size >= 100
+#       bed output requested to jkStuff/nonBridged.bed
+#       no gaps on chrom: chr11, size: 83994014
+#       no gaps on chrom: chr2, size: 236134952
+#       no gaps on chrom: chr8, size: 119798696
+#       no gaps on chrom: chrM, size: 2246
+
+    wc -l jkStuff/nonBri*
+
+    #   23505 jkStuff/nonBridged.bed
+    #   23505 jkStuff/nonBridged.lift
+
+########################################################################
+# lastz/chain/net swap human/hg38 (DONE - 2019-09-12 - Hiram)
+
+    # original alignment
+    cd /hive/data/genomes/hg38/bed/lastzRegenRn1.2019-09-12
+
+    cat fb.hg38.chainRegenRn1Link.txt
+    # 863041482 bases of 3095998939 (27.876%) in intersection
+    cat fb.hg38.chainSynRegenRn1Link.txt
+    # 809332351 bases of 3095998939 (26.141%) in intersection
+    cat fb.hg38.chainRBest.RegenRn1.txt
+    # 792532873 bases of 3095998939 (25.599%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/regenRn1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/regenRn1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzRegenRn1.2019-09-12/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium -noDbNameCheck \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    63m47.773s
+
+    cat fb.regenRn1.chainHg38Link.txt
+    # 827167139 bases of 2282482188 (36.240%) in intersection
+    cat fb.regenRn1.chainSynHg38Link.txt
+    # 788025130 bases of 2282482188 (34.525%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` regenRn1 hg38) > rbest.log 2>&1
+    # real    300m50.570s
+
+    cat fb.regenRn1.chainRBest.Hg38.txt
+    # 793987134 bases of 2282482188 (34.786%) in intersection
+
+#########################################################################
+# lastz/chain/net swap mouse/mm10 (DONE - 2019-11-26 - Hiram)
+
+    # original alignment
+    cd /hive/data/genomes/mm10/bed/lastzRegenRn1.2019-09-12
+
+    cat fb.mm10.chainRegenRn1Link.txt
+    #	1699005386 bases of 2652783500 (64.046%) in intersection
+    cat fb.mm10.chainSynRegenRn1Link.txt
+    #   1591231371 bases of 2652783500 (59.983%) in intersection
+    cat fb.mm10.chainRBest.RegenRn1.txt
+    # 1565180527 bases of 2652783500 (59.001%) in intersection
+
+    mkdir /hive/data/genomes/regenRn1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/regenRn1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzRegenRn1.2019-09-12/DEF \
+	-swap -syntenicNet -noDbNameCheck \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=5000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    94m19.060s
+
+    cat fb.regenRn1.chainMm10Link.txt
+    #   1634389849 bases of 2282482188 (71.606%) in intersection
+    cat fb.regenRn1.chainSynMm10Link.txt
+    #   1564752158 bases of 2282482188 (68.555%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` regenRn1 mm10) > rbest.log 2>&1
+    # real    488m25.471s
+
+    cat fb.regenRn1.chainRBest.Mm10.txt
+    # 1565313924 bases of 2282482188 (68.579%) in intersection
+
+##############################################################################
+# GENBANK AUTO UPDATE (DONE - 2019-09-11 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Rattus norvegicus       130204  1103594 17712
+
+    # edit etc/genbank.conf to add regenRn1 just before galGal5
+
+# regenRn1 (Regeneron rat assembly)
+regenRn1.serverGenome = /hive/data/genomes/regenRn1/regenRn1.2bit
+regenRn1.ooc = /hive/data/genomes/regenRn1/jkStuff/regenRn1.11.ooc
+regenRn1.lift = /hive/data/genomes/regenRn1/jkStuff/nonBridged.lift
+regenRn1.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+regenRn1.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+regenRn1.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+regenRn1.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+regenRn1.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+regenRn1.downloadDir = regenRn1
+regenRn1.refseq.mrna.xeno.load  = yes
+regenRn1.refseq.mrna.xeno.loadDesc = yes
+regenRn1.genbank.mrna.xeno.load  = yes
+regenRn1.perChromTables = no
+regenRn1.mgc = yes
+# regenRn1.upstreamGeneTbl = ensGene
+# regenRn1.upstreamMaf = multiz13way /hive/data/genomes/regenRn1/bed/multiz13way/species.list.txt
+
+    # verify the files specified exist before checking in the file:
+  grep ^regenRn1 etc/genbank.conf | grep hive | awk '{print $NF}' | xargs ls -og
+# -rw-rw-r-- 1    840371 Sep  9 07:27 /hive/data/genomes/regenRn1/jkStuff/nonBridged.lift
+# -rw-rw-r-- 1    120012 Sep 11 08:54 /hive/data/genomes/regenRn1/jkStuff/regenRn1.11.ooc
+# -rw-rw-r-- 1 625487112 Sep  9 07:14 /hive/data/genomes/regenRn1/regenRn1.2bit
+
+    git commit -m "Added regenRn1 - Regeneron rat refs #21579" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add regenRn1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added regenRn1 - Regeneron rat refs #21579" etc/hgwdev.dbs etc/align.dbs
+    git push
+    make etc-update
+
+    # wait a few days for genbank magic to take place, the tracks will
+    # appear
+
+#############################################################################
+# augustus gene track (DONE - 2019-09-11 - Hiram)
+    mkdir /hive/data/genomes/regenRn1/bed/augustus
+    cd /hive/data/genomes/regenRn1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev regenRn1) > do.log 2>&1
+    # real    144m4.269s
+
+    cat fb.regenRn1.augustusGene.txt
+    # 43428122 bases of 2282482188 (1.903%) in intersection
+
+#########################################################################
+# ncbiRefSeq (TBD - 2019-09-08 - Hiram)
+    # There are no source files for this
+
+    mkdir /hive/data/genomes/regenRn1/bed/ncbiRefSeq
+    cd /hive/data/genomes/regenRn1/bed/ncbiRefSeq
+    # running step wise just to be careful
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.5_GRCg6a regenRn1) > download.log 2>&1
+    # real    1m19.029s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.5_GRCg6a regenRn1) > process.log 2>&1
+    # real    2m6.030s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.5_GRCg6a regenRn1) > load.log 2>&1
+    # real    0m22.312s
+
+    cat fb.ncbiRefSeq.regenRn1.txt
+    #  88641893 bases of 1055588482 (8.397%) in intersection
+
+    # need to add: include ../../refSeqComposite.ra alpha
+    # to the chicken/regenRn1/trackDb.ra to turn on the track in the browser
+
+    # there was one gene that claimed to have a protein, but the
+    # protein sequence was not included in the protein.faa file
+    # discovered from joinerCheck
+    # manual fix to blank out this one protein, to see the entry
+    hgsql -e 'select * from ncbiRefSeqLink where protAcc="NP_989875.1";' regenRn1
+    hgsql -e 'update ncbiRefSeqLink set protAcc="" where protAcc="NP_989875.1";' regenRn1
+    # this makes the 'protein' link disappear from the gene details page
+    # curious that this gene is marked as a non-coding gene anyway ?
+    # gene: FET1 at chr4:63,102,774-63,105,516-
+
+    featureBits -enrichment regenRn1 refGene ncbiRefSeq 
+ # refGene 1.374%, ncbiRefSeq 8.397%, both 1.370%, cover 99.73%, enrich 11.88x
+    featureBits -enrichment regenRn1 ncbiRefSeq refGene
+ # ncbiRefSeq 8.397%, refGene 1.374%, both 1.370%, cover 16.32%, enrich 11.88x
+
+    featureBits -enrichment regenRn1 ncbiRefSeqCurated refGene
+ # ncbiRefSeqCurated 1.368%, refGene 1.374%, both 1.364%, cover 99.71%, enrich 72.59x
+    featureBits -enrichment regenRn1 refGene ncbiRefSeqCurated
+ # refGene 1.374%, ncbiRefSeqCurated 1.368%, both 1.364%, cover 99.32%, enrich 72.59x
+
+#########################################################################
+# LIFTOVER TO rn6 (DONE - 2019-09-09 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/regenRn1/bed/blat.rn6.2019-09-09
+    cd /hive/data/genomes/regenRn1/bed/blat.rn6.2019-09-09
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/regenRn1/jkStuff/regenRn1.11.ooc \
+         regenRn1 rn6
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/regenRn1/jkStuff/regenRn1.11.ooc \
+         regenRn1 rn6) > doLiftOverToRn6.log 2>&1
+    # real    171m37.650s
+
+    # see if the liftOver menus function in the browser from regenRn1 to rn6
+
+    # would like to see this as a track:
+    hgLoadChain regenRn1 chainRn6 regenRn1ToRn6.over.chain.gz
+
+    # Loading 127292 chains into regenRn1.chainRn6
+    # real    0m9.461s
+
+    chainSort regenRn1ToRn6.over.chain.gz stdout \
+      | chainPreNet stdin \
+        /hive/data/genomes/regenRn1/chrom.sizes \
+        /hive/data/genomes/rn6/chrom.sizes stdout \
+      | chainNet stdin -minSpace=1 /hive/data/genomes/regenRn1/chrom.sizes \
+        /hive/data/genomes/rn6/chrom.sizes stdout /dev/null \
+      | netSyntenic stdin noClass.net
+
+    netClass -verbose=0 -noAr noClass.net regenRn1 rn6 regenRn1.rn6.net
+
+    netFilter -minGap=10 regenRn1.rn6.net \
+      | hgLoadNet -verbose=0 regenRn1 netRn6 stdin
+
+    featureBits regenRn1 chainRn6Link > fb.regenRn1.chainRn6Link.txt 2>&1
+
+    cat fb.regenRn1.chainRn6Link.txt
+    # 2211701054 bases of 2282482188 (96.899%) in intersection
+
+#########################################################################
+# LIFTOVER TO regenRn0 (DONE - 2019-09-09 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/regenRn1/bed/blat.regenRn0.2019-09-09
+    cd /hive/data/genomes/regenRn1/bed/blat.regenRn0.2019-09-09
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/regenRn1/jkStuff/regenRn1.11.ooc \
+         regenRn1 regenRn0
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/regenRn1/jkStuff/regenRn1.11.ooc \
+         regenRn1 regenRn0) > doLiftOverToRegenRn0.log 2>&1
+    # real    176m49.811s
+
+    # see if the liftOver menus function in the browser from regenRn1 to galGal5
+
+    # would like to see this as a track:
+    hgLoadChain regenRn1 chainRegenRn0 regenRn1ToRegenRn0.over.chain.gz
+    # Loading 56 chains into regenRn1.chainRegenRn0
+
+    chainSort regenRn1ToRegenRn0.over.chain.gz stdout \
+      | chainPreNet stdin \
+        /hive/data/genomes/regenRn1/chrom.sizes \
+        /hive/data/genomes/regenRn0/chrom.sizes stdout \
+      | chainNet stdin -minSpace=1 /hive/data/genomes/regenRn1/chrom.sizes \
+        /hive/data/genomes/regenRn0/chrom.sizes stdout /dev/null \
+      | netSyntenic stdin noClass.net
+
+   netClass -verbose=0 -noAr noClass.net regenRn1 regenRn0 regenRn1.regenRn0.net
+
+    netFilter -minGap=10 regenRn1.regenRn0.net \
+      | hgLoadNet -verbose=0 regenRn1 netRegenRn0 stdin
+
+featureBits regenRn1 chainRegenRn0Link > fb.regenRn1.chainRegenRn0Link.txt 2>&1
+
+    cat fb.regenRn1.chainRegenRn0Link.txt
+    # 2395098699 bases of 2282482188 (104.934%) in intersection
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2019-09-13 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("regenRn1", "blat1c", "17912", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("regenRn1", "blat1c", "17913", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to MEPE gene (egg shell protein)
+##  (TBD - 2019-09-08 - Hiram)
+
+    # as found from the galGal5 to regenRn1 liftOver
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr4:45667017-45672928"
+	where name="regenRn1";' hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2018-10-17 - Hiram)
+xyz
+    cd $HOME/kent/src/hg/makeDb/schema
+    # verify all the business is done for release
+    ~/kent/src/hg/utils/automation/verifyBrowser.pl regenRn1
+
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=regenRn1 -tableCoverage all.joiner
+    joinerCheck -database=regenRn1 -times all.joiner
+    joinerCheck -database=regenRn1 -keys all.joiner
+
+    # when clean, check in:
+    git commit -m 'adding rules for regenRn1 refs #21579' all.joiner
+    git push
+    # run up a 'make alpha' in hg/hgTables to get this all.joiner file
+    # into the hgwdev/genome-test system
+
+    cd /hive/data/genomes/regenRn1
+    time (makeDownloads.pl regenRn1) > downloads.log 2>&1
+XXX - running - Tue Oct 22 08:15:47 PDT 2019
+    #  real    10m7.605s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/regenRn1/pushQ
+    cd /hive/data/genomes/regenRn1/pushQ
+  time (makePushQSql.pl -redmineList regenRn1) > regenRn1.pushQ.sql 2> stderr.out
+    # real    9m58.779s
+
+    # remove the extra chainNet files from the listings:
+    sed -i -e "/etNig1/d" redmine.regenRn1.file.list
+    sed -i -e "/asAcu1/d" redmine.regenRn1.file.list
+    sed -i -e "/etNig1/d" redmine.regenRn1.table.list
+    sed -i -e "/onAlb1/d" redmine.regenRn1.table.list
+    sed -i -e "/asAcu1/d" redmine.regenRn1.table.list
+    sed -i -e "/Stickleback/d" redmine.regenRn1.releaseLog.txt
+    sed -i -e "/Tetraodon/d" redmine.regenRn1.releaseLog.txt
+    sed -i -e "/sparrow/d" redmine.regenRn1.releaseLog.txt
+    # remove the tandemDups and gapOverlap from the file list:
+    sed -i -e "/tandemDups/d" redmine.regenRn1.table.list
+    sed -i -e "/Tandem Dups/d" redmine.regenRn1.releaseLog.txt
+    sed -i -e "/gapOverlap/d" redmine.regenRn1.table.list
+    sed -i -e "/Gap Overlaps/d" redmine.regenRn1.releaseLog.txt
+    #  real    7m21.629s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/regenRn1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/regenRn1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/regenRn1/bbi/quality.bw
+    # WARNING: regenRn1 does not have seq
+    # WARNING: regenRn1 does not have extFile
+
+    # add the path names to the listing files in the redmine issue
+    # in the three appropriate entry boxes:
+
+#	/hive/data/genomes/regenRn1/pushQ/redmine.regenRn1.file.list
+#	/hive/data/genomes/regenRn1/pushQ/redmine.regenRn1.releaseLog.txt
+#	/hive/data/genomes/regenRn1/pushQ/redmine.regenRn1.table.list
+
+##############################################################################
+# crispr whole genome (DONE - 2019-10-15,22 - Hiram)
+    mkdir /hive/data/genomes/regenRn1/bed/crisprAll
+    cd /hive/data/genomes/regenRn1/bed/crisprAll
+
+    # the large shoulder argument will cause the entire genome to be scanned
+    # and since this is a new genome, samtools fa indexing will take place 
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 -stop=ranges \
+    regenRn1 refGene -shoulder=250000000 -tableName=crisprAll \
+    -fileServer=hgwdev -buildDir=`pwd` -smallClusterHub=hgwdev \
+      -bigClusterHub=ku -workhorse=hgwdev) > ranges.log 2>&1
+    # real    65m1.474s
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=guides -stop=guides \
+    regenRn1 knownGene -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev) > guides.log 2>&1
+    # real    5m21.112s
+
+    # one of the jobs failed on ku, but worked OK on hgwdev stand alone
+/cluster/software/bin/python \
+  /hive/data/outside/crisprTrack/scripts/findGuides.py \
+    /hive/data/genomes/regenRn1/bed/crisprAll/ranges/tmp/040.fa \
+      /hive/data/genomes/regenRn1/chrom.sizes tmp/040.bed tmp/040.fa
+Completed: 99 of 100 jobs
+Crashed: 1 jobs
+CPU time in finished jobs:       9475s     157.92m     2.63h    0.11d  0.000 y
+IO & Wait Time:                   371s       6.18m     0.10h    0.00d  0.000 y
+Average job time:                  99s       1.66m     0.03h    0.00d
+Longest finished job:             524s       8.73m     0.15h    0.01d
+Submission to last job:           539s       8.98m     0.15h    0.01d
+
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=specScoreJobList -stop=specScores -fileServer=hgwdev \
+          regenRn1 knownGene -shoulder=250000000 -tableName=crisprAll \
+            -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+               -workhorse=hgwdev) > specScores.log 2>&1
+    # real    4764m4.884s
+    # user    0m1.693s
+    # sys     0m1.684s
+
+# Number of specScores: 204371688
+
+# Completed: 2733924 of 2733924 jobs
+# CPU time in finished jobs:  220930932s 3682182.20m 61369.70h 2557.07d  7.006 y
+# IO & Wait Time:               5388062s   89801.04m  1496.68h   62.36d  0.171 y
+# Average job time:                  83s       1.38m     0.02h    0.00d
+# Longest finished job:             189s       3.15m     0.05h    0.00d
+# Submission to last job:        228205s    3803.42m    63.39h    2.64d
+
+    ### remember to get back to hgwdev to run this
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
+       -continue=effScores -stop=load regenRn1 knownGene \
+         -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+            -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
+               -workhorse=hgwdev) > load.log 2>&1
+    # real    834m5.635s
+    # user    0m0.962s
+    # sys     0m1.894s
+
+# effScores:
+Completed: 24067 of 24067 jobs
+CPU time in finished jobs:   12223610s  203726.84m  3395.45h  141.48d  0.388 y
+IO & Wait Time:                143817s    2396.95m    39.95h    1.66d  0.005 y
+Average job time:                 514s       8.56m     0.14h    0.01d
+Longest finished job:            1269s      21.15m     0.35h    0.01d
+Submission to last job:         12710s     211.83m     3.53h    0.15d
+
+
+# offTargets:
+Completed: 136697 of 136697 jobs
+CPU time in finished jobs:    2016502s   33608.36m   560.14h   23.34d  0.064 y
+IO & Wait Time:               2570740s   42845.67m   714.09h   29.75d  0.082 y
+Average job time:                  34s       0.56m     0.01h    0.00d
+Longest finished job:              77s       1.28m     0.02h    0.00d
+Submission to last job:          4643s      77.38m     1.29h    0.05d
+
+#########################################################################

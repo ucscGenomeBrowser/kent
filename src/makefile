@@ -3,7 +3,7 @@ include inc/common.mk
 
 all: utils cgi blatSuite
 
-alpha: clean
+alpha: check-alpha clean
 	${MAKE} utils-alpha cgi-alpha blatSuite
 
 beta: check-beta clean cgi-beta
@@ -34,13 +34,17 @@ cgi: libs
 	cd hg && ${MAKE} cgi
 	cd utils/bedToBigBed && ${MAKE} cgi
 
-cgi-alpha: libs
+cgi-alpha: check-alpha libs
 	cd hg && ${MAKE} alpha
 	cd utils/bedToBigBed && ${MAKE} alpha
 
 cgi-beta: check-beta libs
 	cd hg && ${MAKE} beta
 	cd utils/bedToBigBed && ${MAKE} beta
+
+check-alpha:
+	# this will fail if we are not on master branch:
+	git branch | egrep '\* master' > /dev/null
 
 check-beta:
 	# this will fail if we are not in a beta checkout:
@@ -151,7 +155,7 @@ utils: libs destBin
 	cd utils && ${MAKE}
 	cd hg && ${MAKE} utils
 
-utils-alpha: libs destBin
+utils-alpha: check-alpha libs destBin
 	${MKDIR} ${SCRIPTS}
 	cd parasol && ${MAKE}
 	@for D in ${DIRS} x; do \

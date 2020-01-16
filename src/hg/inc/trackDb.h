@@ -35,8 +35,14 @@ struct minMax
     double min, max;
 };
 
+/* DO NOT CHANGE THE TRACKDB STRUCTURE WITHOUT INCREMENTING THE VERSION NUMBER */
+/* This number is tacked onto the end of cached trackDb entries to make sure we
+ * don't use a cached structure that has different contents. */
+#define TRACKDB_VERSION 3 
+
 struct trackDb
-/* This describes an annotation track. */
+/* This describes an annotation track.  */
+/* DO NOT CHANGE THE TRACKDB STRUCTURE WITHOUT INCREMENTING THE VERSION NUMBER */
     {
     struct trackDb *next;  /* Next in singly linked list.  Next sibling in tree. */
     char *track; /* Symbolic ID of Track - used in cart. Is tableName in database historically. */
@@ -53,6 +59,7 @@ struct trackDb
     unsigned char altColorG;	/* Light color green component 0-255 */
     unsigned char altColorB;	/* Light color blue component 0-255 */
     unsigned char useScore;	/* 1 if use score, 0 if not */
+/* DO NOT CHANGE THE TRACKDB STRUCTURE WITHOUT INCREMENTING THE VERSION NUMBER */
 #ifndef	__cplusplus
     unsigned char private;	/* 1 if only want to show it on test site */
 #else
@@ -69,6 +76,7 @@ struct trackDb
     struct hash *settingsHash;  /* Hash for settings. Not saved in database.
                                  * Don't use directly, rely on trackDbSetting to access. */
     /* additional info, determined from settings */
+/* DO NOT CHANGE THE TRACKDB STRUCTURE WITHOUT INCREMENTING THE VERSION NUMBER */
     char treeNodeType;          // bit map containing defining supertrack, composite and children
                                 //     of same (may be parent & child)
     struct trackDb *parent;     // parent of composite or superTracks
@@ -85,6 +93,8 @@ struct trackDb
     struct tdbExtras *tdbExtras;// This struct allows storing extra values which may be used
                                 // multiple times within a single cgi. An example is the metadata
                                 // looked up once in the metaDb and used again and again.
+    boolean isNewFilterType;    // are we using the new filter variables on this track
+/* DO NOT CHANGE THE TRACKDB STRUCTURE WITHOUT INCREMENTING THE VERSION NUMBER */
     };
 
 #define FOLDER_MASK                      0x10
@@ -438,6 +448,7 @@ typedef enum _eCfgType
     cfgInteract =15,
     cfgLollipop =16,
     cfgHic      =17,
+    cfgBigDbSnp =19,
     cfgUndetermined // Not specifically denied, but not determinable in lib code
     } eCfgType;
 
@@ -656,15 +667,7 @@ INLINE boolean tdbIsBigBed(struct trackDb *tdb)
 // Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed.
 {
 // TODO: replace with table lookup  (same as bigBedFind ?)
-return startsWithWord("bigBed", tdb->type) || 
-        startsWithWord("bigGenePred", tdb->type) || 
-        startsWithWord("bigMaf", tdb->type) || 
-        startsWithWord("bigPsl", tdb->type) || 
-        startsWithWord("bigNarrowPeak", tdb->type) || 
-        startsWithWord("bigBarChart", tdb->type) || 
-        startsWithWord("bigInteract", tdb->type) || 
-        startsWithWord("bigLolly", tdb->type) || 
-        startsWithWord("bigChain", tdb->type);
+return (!startsWithWord("bigWig", tdb->type) && startsWith("big", tdb->type));
 }
 
 INLINE boolean tdbIsBigWig(struct trackDb *tdb)
@@ -738,5 +741,11 @@ struct trackDb *trackDbHubCache(char *trackDbUrl, time_t time);
 
 boolean trackDbCacheOn();
 /* Check to see if we're caching trackDb contents. */
+
+char *labelAsFiltered(char *label);
+/* add text to label to indicate filter is active */
+
+char *labelAsFilteredNumber(char *label, unsigned number);
+/* add text to label to indicate filter is active */
 #endif /* TRACKDB_H */
 

@@ -802,7 +802,7 @@ void straw(string norm, string fname, int binsize, string chr1loc, string chr2lo
 }
 
 
-void parseHeaderFields(istream& fin, string &genome, vector<string> &chromNames, vector<int> &bpResolutions, vector<int> &fragResolutions)
+void parseHeaderFields(istream& fin, string &genome, vector<string> &chromNames, vector<int> &chromSizes, vector<int> &bpResolutions, vector<int> &fragResolutions, vector<string> &attributes)
 /* Parse out header fields from the supplied data buffer, assumed to come from the beginning of
  * a .hic file. */
 {
@@ -820,12 +820,13 @@ void parseHeaderFields(istream& fin, string &genome, vector<string> &chromNames,
   int nattributes;
   fin.read((char*)&nattributes, sizeof(int));
 
-  // reading and ignoring attribute-value dictionary
-  // Should expand this to save these to another structure
+  // read in attribute-value dictionary
   for (int i=0; i<nattributes; i++) {
     string key, value;
     getline(fin, key, '\0');
     getline(fin, value, '\0');
+    attributes.insert(attributes.end(), key);
+    attributes.insert(attributes.end(), value);
   }
   int nChrs;
   fin.read((char*)&nChrs, sizeof(int));
@@ -834,9 +835,9 @@ void parseHeaderFields(istream& fin, string &genome, vector<string> &chromNames,
     string name;
     getline(fin, name, '\0');
     chromNames.insert(chromNames.end(), name);
-    // ignoring chromosome sizes
     int length;
     fin.read((char*)&length, sizeof(int));
+    chromSizes.insert(chromSizes.end(), length);
   }
 
   int nBpResolutions;
@@ -857,7 +858,7 @@ void parseHeaderFields(istream& fin, string &genome, vector<string> &chromNames,
 }
 
 
-void getHeaderFields(string fname, string &genome, vector<string> &chromNames, vector<int> &bpResolutions, vector<int> &fragResolutions)
+void getHeaderFields(string fname, string &genome, vector<string> &chromNames, vector<int> &chromSizes, vector<int> &bpResolutions, vector<int> &fragResolutions, vector<string> &attributes)
 /* Retrieve .hic header fields from the supplied filename and return them in the supplied variables. */
 {
   // HTTP code
@@ -874,7 +875,7 @@ void getHeaderFields(string fname, string &genome, vector<string> &chromNames, v
     buffer = getHttpData(url, 0, 100000);
     membuf sbuf(buffer, buffer + 100000);
     istream bufin(&sbuf);  
-    parseHeaderFields(bufin, genome, chromNames, bpResolutions, fragResolutions);
+    parseHeaderFields(bufin, genome, chromNames, chromSizes, bpResolutions, fragResolutions, attributes);
     delete buffer;
   }
   else {
@@ -883,7 +884,7 @@ void getHeaderFields(string fname, string &genome, vector<string> &chromNames, v
     if (!fin) {
       throw strawException("File " + fname + " cannot be opened for reading");
     }
-    parseHeaderFields(fin, genome, chromNames, bpResolutions, fragResolutions);
+    parseHeaderFields(fin, genome, chromNames, chromSizes, bpResolutions, fragResolutions, attributes);
     fin.close();
   }
 }
@@ -930,7 +931,7 @@ extern "C" char *Cstraw (char *norm, char *fname, int binsize, char *chr1loc, ch
 }
 
 
-extern "C" char *CstrawHeader (char *filename, char **genome, char ***chromNames, int *nChroms, char ***bpResolutions, int *nBpRes, char ***fragResolutions, int *nFragRes)
+extern "C" char *CstrawHeader (char *filename, char **genome, char ***chromNames, int **chromSizes, int *nChroms, char ***bpResolutions, int *nBpRes, char ***fragResolutions, int *nFragRes, char ***attributes, int *nAttributes)
 /* Wrapper function to retrieve header fields from a .hic file, for use by C libraries.
  * This retrieves the assembly name, list of chromosome names, list of available binsize resolutions,
  * and list of available fragment resolutions in the specific .hic file.
@@ -940,10 +941,12 @@ extern "C" char *CstrawHeader (char *filename, char **genome, char ***chromNames
   string filenameString(filename);
   string genomeString;
   vector<string> chromNameVector;
+  vector<int> chromSizeVector;
   vector<int> bpResolutionVector;
   vector<int> fragResolutionVector;
+  vector<string> attributeVector;
   try {
-    getHeaderFields(filenameString, genomeString, chromNameVector, bpResolutionVector, fragResolutionVector);
+    getHeaderFields(filenameString, genomeString, chromNameVector, chromSizeVector, bpResolutionVector, fragResolutionVector, attributeVector);
   } catch (strawException& err) {
     char *errMsg = (char*) calloc((size_t) strlen(err.what())+1, sizeof(char));
     strcpy(errMsg, err.what());
@@ -965,6 +968,14 @@ extern "C" char *CstrawHeader (char *filename, char **genome, char ***chromNames
     {
       (*chromNames)[i] = (char*) malloc((chromNameVector[i].length()+1)*sizeof(char));
       strcpy((*chromNames)[i], chromNameVector[i].c_str());
+    }
+  }
+  if (chromSizes != NULL)
+  {
+    *chromSizes = (int*) calloc((size_t) chromSizeVector.size(), sizeof(int));
+    for (int i=0; i<chromSizeVector.size(); i++)
+    {
+      (*chromSizes)[i] = chromSizeVector[i];
     }
   }
   if (nBpRes != NULL)
@@ -991,6 +1002,19 @@ extern "C" char *CstrawHeader (char *filename, char **genome, char ***chromNames
     {
       (*fragResolutions)[i] = (char*) malloc((to_string(fragResolutionVector[i]).length()+1)*sizeof(char));
       strcpy((*fragResolutions)[i], to_string(fragResolutionVector[i]).c_str());
+    }
+  }
+  if (nAttributes != NULL)
+  {
+    *nAttributes = attributeVector.size();
+  }
+  if (attributes != NULL)
+  {
+    *attributes = (char**) calloc((size_t) attributeVector.size(), sizeof(char*));
+    for (int i=0; i<attributeVector.size(); i++)
+    {
+      (*attributes)[i] = (char*) malloc((attributeVector[i].length()+1)*sizeof(char));
+      strcpy((*attributes)[i], attributeVector[i].c_str());
     }
   }
   return NULL;

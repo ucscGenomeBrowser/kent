@@ -1,0 +1,504 @@
+# for emacs: -*- mode: sh; -*-
+
+# dbSnpNNN ("dbSNP 2.0") bigDbSnp tracks for hg38 / GRCh38 and hg19 / GRCh37
+
+##############################################################################
+# dbSnp152: dbSNP build 152 (DONE 9/18/19 angie)
+
+    topDir=/hive/data/outside/dbSNP/152
+    mkdir -p $topDir/json
+    cd $topDir/json
+    wget --timestamping -nd ftp://ftp.ncbi.nih.gov/snp/latest_release/JSON/\*
+    md5sum -c CHECKSUMS
+#refsnp-chr10.json.bz2: OK
+#...
+#refsnp-withdrawn.json.bz2: OK
+
+    # jsonQuery commands to figure out what assemblies, SO terms and frequency sources are in there,
+    # by sampling first 10,000 variants on an arbitrary chrom:
+    set assemblyPath = "primary_snapshot_data.placements_with_allele[*].placement_annot.seq_id_traits_by_assembly[*].assembly_name"
+    set rnaSoPath = "primary_snapshot_data.allele_annotations[*].assembly_annotation[*].genes[*].rnas[*].sequence_ontology[*].accession"
+    set proteinSoPath = "primary_snapshot_data.allele_annotations[*].assembly_annotation[*].genes[*].rnas[*].protein.sequence_ontology[*].accession"
+    set freqSourcePath = "primary_snapshot_data.allele_annotations[*].frequency[*].study_name"
+    foreach jPath ("$assemblyPath" "$rnaSoPath" "$proteinSoPath" "$freqSourcePath")
+      echo "$jPath"
+      bzcat refsnp-chr3.json.bz2 \
+      | head -10000 \
+      | jsonQuery -countUniq -verbose=2 stdin "$jPath" stdout \
+      | sort -nr
+      echo ""
+    end
+    # Assemblies:
+#     10229 "GRCh38.p12"
+#     10111 "GRCh37.p13"
+    # RNA SO terms -- make sure all of these appear in soTerm.[ch]:
+#    147701 "SO:0001627"
+#     26809 "SO:0002153"
+#     19013 "SO:0002152"
+#      8334 "SO:0001624"
+#      3082 "SO:0001986"
+#      2657 "SO:0001580"
+#      1772 "SO:0001619"
+#      1741 "SO:0001987"
+#       833 "SO:0001623"
+#        30 "SO:0001575"
+#        10 "SO:0001574"
+#         4 "SO:0001590"
+    # Protein SO terms -- ditto for soTerm.[ch]:
+#       784 "SO:0001819"
+#       713 "SO:0001583"
+#         6 "SO:0001821"
+#         5 "SO:0001587"
+#         2 "SO:0000865"
+    # Made sure all those are in hg/{inc,lib}/soTerm.[ch]
+
+    # Projects reporting allele counts/frequencies:
+#     18130 "GnomAD"
+#     17473 "1000Genomes"
+#     17376 "TOPMED"
+#     15952 "TWINSUK"
+#     15952 "ALSPAC"
+#     15188 "Estonian"
+#       555 "GnomAD_exomes"
+#       473 "GoESP"
+#       468 "ExAC"
+    freqSourceOrder=1000Genomes,GnomAD_exomes,TOPMED,ExAC,GnomAD,GoESP,ALSPAC,TWINSUK,Estonian
+
+    cd $topDir
+    # Construct a mapping from RefSeq accessions like NC_000... to assembly, 2bit, and UCSC name.
+    hgsql hg38 -NBe 'select alias, chrom from chromAlias where find_in_set("refseq", source);' \
+    | tawk '{print $1, "GRCh38.p12", "/hive/data/genomes/hg38/hg38.2bit", $2;}' \
+      > refSeqToUcsc.tab
+    hgsql hg19 -NBe 'select alias, chrom from chromAlias where find_in_set("refseq", source);' \
+    | tawk '{print $1, "GRCh37.p13", "/hive/data/genomes/hg19/hg19.2bit", $2;}' \
+      >> refSeqToUcsc.tab
+
+    # Construct a mapping of equivalent RefSeq assembly regions for GRCh38 and GRCh37,
+    # so we can distinguish multiple mappings to PAR/alts/fixes from plain old multiple mappings.
+    refseqAssemblies=/hive/data/outside/ncbi/genomes/refseq/vertebrate_mammalian/Homo_sapiens/all_assembly_versions
+    grep -v ^# \
+      $refseqAssemblies/GCF_000001405.{25_GRCh37.p13,38_GRCh38.p12}/*_assembly_structure/all_alt_scaffold_placement.txt \
+    | tawk '{print $7, $12-1, $13, $4, $10-1, $11;}' \
+    | sort -k 1,1 -k2n,2n \
+    | tawk '{print $1 ":" $2 ":" $3, $4 ":" $5 ":" $6;}' \
+      > equivRegions.tab
+    # Add PARs:
+    grep -w PAR \
+      $refseqAssemblies/GCF_000001405.25_GRCh37.p13/*_assembly_regions.txt \
+    | sort \
+    | sed -e 's/X/NC_000023.10/; s/Y/NC_000024.9/;' \
+    | tawk '{print $1, $2 ":" $3 - 1 ":" $4;}'
+#PAR#1   NC_000023.10:60000:2699520
+#PAR#1   NC_000024.9:10000:2649520
+#PAR#2   NC_000023.10:154931043:155260560
+#PAR#2   NC_000024.9:59034049:59363566
+    echo -e "NC_000023.10:60000:2699520\tNC_000024.9:10000:2649520" >> equivRegions.tab
+    echo -e "NC_000023.10:154931043:155260560\tNC_000024.9:59034049:59363566" >> equivRegions.tab
+    grep -w PAR \
+      $refseqAssemblies/GCF_000001405.38_GRCh38.p12/*_assembly_regions.txt \
+    | sort \
+    | sed -e 's/X/NC_000023.11/; s/Y/NC_000024.10/;' \
+    | tawk '{print $1, $2 ":" $3 - 1 ":" $4;}'
+#PAR#1   NC_000023.11:10000:2781479
+#PAR#1   NC_000024.10:10000:2781479
+#PAR#2   NC_000023.11:155701382:156030895
+#PAR#2   NC_000024.10:56887902:57217415
+    echo "NC_000023.11:10000:2781479\tNC_000024.10:10000:2781479" >> equivRegions.tab
+    echo "NC_000023.11:155701382:156030895\tNC_000024.10:56887902:57217415" >> equivRegions.tab
+
+
+    # Run doBigDbSnp.pl...
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir -continue convert -stop bigBed \
+      >& do.log &
+    tail -f do.log
+# *** All done !  (through the 'install' step)  Elapsed time: 278m36s
+# *** Steps were performed in /hive/data/outside/dbSNP/152/bigDbSnp.2019-09-17
+
+    # 9/17/19: re-run from dbSnpJsonToTab onward after lots of changes
+    topDir=/hive/data/outside/dbSNP/152
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir -stop install -debug
+# *** Steps were performed in /hive/data/outside/dbSNP/152/bigDbSnp.2019-09-17
+    cd /hive/data/outside/dbSNP/152/bigDbSnp.2019-09-17
+    # Link to ../split, -continue convert to avoid re-splitting (the slowest part of the process):
+    rm split
+    ln -s ../split split
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 152 $freqSourceOrder \
+      -buildDir=`pwd` -continue convert -stop install \
+      >& do.log &
+    tail -f do.log
+# *** All done !  (through the 'install' step)  Elapsed time: 449m6s
+# *** Steps were performed in /hive/data/outside/dbSNP/152/bigDbSnp.2019-09-17
+
+    # 10/8/19: count up how many variants have freq counts for each project
+    cut -f 4 dbSnp152Details.tab \
+    | perl -wne 'chomp; next unless $_; @w = split ",";
+        if ($w[0]) { print "1000Genomes\n" }
+        if ($w[1]) { print "GnomAD_exomes\n"; }
+        if ($w[2]) { print "TOPMED\n" }
+        if ($w[3]) { print "ExAC\n" }
+        if ($w[4]) { print "GnomAD\n" }
+        if ($w[5]) { print "GoESP\n" }
+        if ($w[6]) { print "ALSPAC\n" }
+        if ($w[7]) { print "TWINSUK\n" }
+        if ($w[8]) { print "Estonian\n" }' \
+    | sort | uniq -c | sort -nr
+#437624857 TOPMED
+#234158623 GnomAD
+#84743526 1000Genomes
+#44887599 TWINSUK
+#44887599 ALSPAC
+#31397792 Estonian
+#11721224 GnomAD_exomes
+#8854021 ExAC
+#1973787 GoESP
+
+    # 10/11/19: count up how many instances of each type of ucscNote:
+    cut -f 15 hg19.dbSnp152.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
+#   10680 altIsAmbiguous
+#    4808 classMismatch
+#  409132 clinvar
+#  106941 clusterError
+#12757487 commonAll
+#18901486 commonSome
+#  823424 diffMajor
+#    7635 freqIsAmbiguous
+#   23027 freqNotRefAlt
+#  555144 multiMap
+#99618012 overlapDiffClass
+#14790469 overlapSameClass
+#     101 refIsAmbiguous
+# 2933684 refIsMinor
+#  150892 refIsRare
+#   45618 refIsSingleton
+#       4 refMismatch
+# 3761191 revStrand
+    cut -f 15 hg38.dbSnp152.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
+#    10807 altIsAmbiguous
+#     5103 classMismatch
+#   408665 clinvar
+#    94310 clusterError
+# 13027110 commonAll
+# 19258751 commonSome
+#   836327 diffMajor
+#     7736 freqIsAmbiguous
+#    36306 freqNotRefAlt
+#   130175 multiMap
+#102260850 overlapDiffClass
+# 15075710 overlapSameClass
+#      110 refIsAmbiguous
+#  3033691 refIsMinor
+#   189809 refIsRare
+#    63804 refIsSingleton
+#       33 refMismatch
+#  4439534 revStrand
+
+    # 10/18/19: add subset tracks
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 152 $freqSourceOrder \
+       -buildDir=`pwd` -continue=bigBed -stop=install >& subsets.log &
+    tail -f subsets.log
+
+
+##############################################################################
+# dbSnp153: dbSNP build 153 (DONE 11/25/19 angie)
+
+    topDir=/hive/data/outside/dbSNP/153
+    mkdir -p $topDir/json
+    cd $topDir/json
+    wget --timestamping -nd ftp://ftp.ncbi.nih.gov/snp/latest_release/JSON/\*
+    md5sum -c CHECKSUMS
+#refsnp-chr10.json.bz2: OK
+#...
+#refsnp-withdrawn.json.bz2: OK
+
+    # jsonQuery commands to figure out what assemblies, SO terms and frequency sources are in there,
+    # by sampling first 10,000 variants on an arbitrary chrom:
+    assemblyPath="primary_snapshot_data.placements_with_allele[*].placement_annot.seq_id_traits_by_assembly[*].assembly_name"
+    rnaSoPath="primary_snapshot_data.allele_annotations[*].assembly_annotation[*].genes[*].rnas[*].sequence_ontology[*].accession"
+    proteinSoPath="primary_snapshot_data.allele_annotations[*].assembly_annotation[*].genes[*].rnas[*].protein.sequence_ontology[*].accession"
+    freqSourcePath="primary_snapshot_data.allele_annotations[*].frequency[*].study_name"
+    for jPath in "$assemblyPath" "$rnaSoPath" "$proteinSoPath" "$freqSourcePath"; do
+      echo "$jPath"
+      bzcat refsnp-chr3.json.bz2 \
+      | head -10000 \
+      | jsonQuery -countUniq -verbose=2 /dev/stdin "$jPath" stdout \
+      | sort -nr
+      echo ""
+    done
+    # Assemblies:
+#     10229 "GRCh38.p12"
+#     10111 "GRCh37.p13"
+
+    # RNA SO terms -- make sure all of these appear in soTerm.[ch]:
+#    144288 "SO:0001627"
+#     25829 "SO:0002153"
+#     19729 "SO:0002152"
+#      8506 "SO:0001624"
+#      3112 "SO:0001986"
+#      2648 "SO:0001580"
+#      1769 "SO:0001619"
+#      1712 "SO:0001987"
+#       878 "SO:0001623"
+#        30 "SO:0001575"
+#        10 "SO:0001574"
+#         4 "SO:0001590"
+    # Protein SO terms -- ditto for soTerm.[ch]:
+#       770 "SO:0001819"
+#       726 "SO:0001583"
+#         6 "SO:0001821"
+#         5 "SO:0001587"
+#         2 "SO:0000865"
+    # Made sure all those are in hg/{inc,lib}/soTerm.[ch] (nothing new since b152)
+
+    # Projects reporting allele counts/frequencies:
+#     17493 "1000Genomes"
+#     17392 "TOPMED"
+#     16619 "GnomAD"
+#     16306 "NorthernSweden"
+#     15970 "TWINSUK"
+#     15970 "ALSPAC"
+#     15202 "Estonian"
+#     13096 "Vietnamese"
+#      1844 "PAGE_STUDY"
+#       473 "GoESP"
+#       468 "ExAC"
+#       458 "GnomAD_exomes"
+
+    # This time the JSON downloads include a file frequency_studies.json that describes each study.
+    # Will be useful for making a details page, but some descriptions are just study names.
+    # Get total_count values from refsnp-chr3.json.bz2, put 1000Genomes first, then order by
+    # decreasing total_count:
+    # 1000Genomes:  5008
+    # GnomAD_exomes: 251006
+    # TOPMED: 125568
+    # ExAC: 121234
+    # PAGE_STUDY: 78694
+    # GnomAD: 31348
+    # GoESP: 12494
+    # Estonian: 4480
+    # ALSPAC: 3854
+    # TWINSUK: 3708
+    # NorthernSweden: 600
+    # Vietnamese: 212
+    freqSourceOrder=1000Genomes,GnomAD_exomes,TOPMED,ExAC,PAGE_STUDY,GnomAD,GoESP,Estonian,ALSPAC,TWINSUK,NorthernSweden,Vietnamese
+    # Hmm, the PAGE study is a population genetics study.  It excludes caucasians:
+    # https://www.biorxiv.org/content/biorxiv/early/2018/10/17/188094.full.pdf
+    # "Genotyped individuals self-identified as Hispanic/Latino (N=22,216),
+    #  African American (N=17,299), Asian (N=4,680), Native Hawaiian (N=3,940),
+    #  Native American (N=652), or Other (N=1,052, primarily South Asian or mixed heritage,
+    #  as well as participants who did not identify with any of the available options."
+    # They didn't attempt to make balanced global (non-caucasian) populations (e.g. almost
+    # as many Native Hawaiians as Asians), so I'll keep 1000Genomes first.
+
+    # Reuse assembly sequence mapping files from b152 since the assemblies are the same.
+    cd $topDir
+    cp ../152/refSeqToUcsc.tab .
+    cp ../152/equivRegions.tab .
+
+    # Run doBigDbSnp.pl (first with -debug to make runDir
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir -debug
+# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-08-07
+    cd /hive/data/outside/dbSNP/153/bigDbSnp.2019-08-07
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir -stop install \
+      >& do.log &
+    tail -f do.log
+# *** All done !  (through the 'install' step)  Elapsed time: 2095m35s
+
+    # 9/13/19: Now that checkDbSnp has been added to doBigDbSnp.pl, re-run from the check
+    # stage onward (but don't cleanup just yet in case we need to debug files).
+    cd /hive/data/outside/dbSNP/153/bigDbSnp.2019-08-07
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir -buildDir=`pwd` \
+      -continue check -stop install \
+      >& check.log &
+    tail -f check.log
+
+    # 9/18/19: re-run from dbSnpJsonToTab onward after adding several more ucscNotes.
+    cd /hive/data/outside/dbSNP/153/bigDbSnp.2019-08-07
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir \
+      -buildDir=`pwd` -continue convert -stop install \
+      >& redo.log &
+    tail -f redo.log
+# *** All done !  (through the 'install' step)  Elapsed time: 263m59s
+# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-08-07
+
+    #*** uh-oh... when checkBigDbSnp failed, doCheck.sh did not fail... I guess backgrounding
+    #*** the jobs and 'wait' hide errors?
+    cd /hive/data/outside/dbSNP/153/bigDbSnp.2019-08-07
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir -buildDir=`pwd` \
+      -continue check -stop install \
+      >& check.log &
+    tail -f check.log
+
+    # 9/19/19: and again after changing doBigDbSnp.pl to have args & wait on specific pids:
+    # 10/30/19: and again after adding new ucscNotes (#23283).
+    # 11/4/19: and again after finding that refIsMinor & diffMajor could be appended multiple times
+    # 11/7/19: and again after finding that some cases of freqNotRefAlt are VCF normalization probs
+    # 11/8/19: and again after adding badCoords.bed and warnings output files
+    # 11/15/19: and again after adding ucscNotes freqIncomplete, freqNotMapped
+    # 11/24/19: and again: support for alt alleles with different expansion ranges (rs782394990)
+    topDir=/hive/data/outside/dbSNP/153
+    freqSourceOrder=1000Genomes,GnomAD_exomes,TOPMED,ExAC,PAGE_STUDY,GnomAD,GoESP,Estonian,ALSPAC,TWINSUK,NorthernSweden,Vietnamese
+    # Run doBigDbSnp.pl (first with -debug to make runDir):
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 153 $freqSourceOrder -debug
+# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-24
+    cd /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-24
+    # Link to ../bigDbSnp.2019-08-07/split, -continue convert to avoid re-splitting (the slowest part of the process):
+    rmdir split
+    ln -s ../bigDbSnp.2019-08-07/split split
+    $HOME/kent/src/hg/utils/automation/doBigDbSnp.pl $topDir 153 $freqSourceOrder \
+      -buildDir=`pwd` -continue convert -stop install \
+      >& do.log &
+    tail -f do.log
+# *** All done !  (through the 'install' step)  Elapsed time: 579m31s
+# *** Steps were performed in /hive/data/outside/dbSNP/153/bigDbSnp.2019-11-24
+
+    wc -l dbSnp153Errors.tab
+#0 dbSnp153Errors.tab
+    # Yay!  Now we don't need to document any dropped variants.  :)
+    awk '{print $1, $2, $3;}' dbSnp153Warnings.tab  | sort | uniq -c
+#   5339 Frequency report not
+#   3852 Incomplete freq data
+#  65257 Mismatching SPDI del
+# 197684 Mismatching SPDI pos
+
+    # Statistics:
+    bigBedInfo -extraIndex hg19.dbSnp153.bb
+#extraIndexCount: 1
+#    name (field 3) with 683142960 items
+#itemCount: 683,142,960
+#chromCount: 297
+#basesCovered: 823,963,745
+#meanDepth (of bases covered): 1.279107
+#minDepth: 1.000000
+#maxDepth: 321.000000
+#std of depth: 1.993272
+    bigBedInfo -extraIndex hg38.dbSnp153.bb
+#extraIndexCount: 1
+#    name (field 3) with 702599342 items
+#itemCount: 702,599,342
+#chromCount: 575
+#basesCovered: 845,712,321
+#meanDepth (of bases covered): 1.279667
+#minDepth: 1.000000
+#maxDepth: 321.000000
+#std of depth: 1.990520
+    bigBedInfo -extraIndex hg19.dbSnp153BadCoords.bb
+#    name (field 3) with 121484 items
+#itemCount: 121,484
+#chromCount: 191
+#basesCovered: 750,840
+#meanDepth (of bases covered): 2.603311
+#minDepth: 1.000000
+#maxDepth: 150.000000
+#std of depth: 4.266904
+    bigBedInfo -extraIndex hg38.dbSnp153BadCoords.bb
+#extraIndexCount: 1
+#    name (field 3) with 149475 items
+#itemCount: 149,475
+#chromCount: 418
+#basesCovered: 986,919
+#meanDepth (of bases covered): 2.867679
+#minDepth: 1.000000
+#maxDepth: 119.000000
+#std of depth: 4.568874
+
+    # count up how many variants (mappings) have freq counts for each project
+    cut -f 4 dbSnp153Details.tab \
+    | perl -we '
+        my @freqSourceOrder = ("1000Genomes", "GnomAD_exomes", "TOPMED", "ExAC", "PAGE_STUDY",
+            "GnomAD", "GoESP", "Estonian", "ALSPAC", "TWINSUK", "NorthernSweden", "Vietnamese");
+        my @counts = ();
+        while (<>) {
+            chomp; next unless $_; @w = split ",";
+            for (my $i = 0;  $i < @w;  $i++) {
+                if ($w[$i]) { $counts[$i]++; }
+            }
+        }
+        for (my $i = 0;  $i < @freqSourceOrder;  $i++) {
+            print sprintf("%10d %s", $counts[$i] || 0, $freqSourceOrder[$i]) . "\n";
+        }'
+# 437625304 TOPMED
+# 211192464 GnomAD
+#  84744519 1000Genomes
+#  44888412 TWINSUK
+#  44888412 ALSPAC
+#  31397949 Estonian
+#  16351704 NorthernSweden
+#  12283947 GnomAD_exomes
+#  10004068 Vietnamese
+#   8854135 ExAC
+#   1973844 GoESP
+#   1323049 PAGE_STUDY
+
+    # count up how many instances of each type of ucscNote:
+    time cut -f 15 hg19.dbSnp153.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
+#    10755 altIsAmbiguous
+#     5998 classMismatch
+#   454678 clinvar
+#   143864 clinvarBenign
+#     7932 clinvarConflicting
+#    96242 clinvarPathogenic
+#   114826 clusterError
+# 12184521 commonAll
+# 20541190 commonSome
+#  1377831 diffMajor
+#     3922 freqIncomplete
+#     7656 freqIsAmbiguous
+#     2685 freqNotMapped
+#    17694 freqNotRefAlt
+#   562180 multiMap
+#   114095 otherMapErr
+#107015341 overlapDiffClass
+# 16915239 overlapSameClass
+#662601770 rareAll
+#670958439 rareSome
+#      101 refIsAmbiguous
+#  3272116 refIsMinor
+#   136547 refIsRare
+#    37832 refIsSingleton
+#        4 refMismatch
+#  3813702 revStrand
+#real    34m57.796s
+#user    47m49.283s
+#sys     4m29.442s
+
+    # Check count of rs's with at least one bad mapping:
+    grep otherMapErr hg19.dbSnp153.checked.bigDbSnp | cut -f 4 | sort -u | wc -l
+#55454
+
+    time cut -f 15 hg38.dbSnp153.checked.bigDbSnp | sed -re 's/,/\n/g;' | g . | sort | uniq -c
+#    10888 altIsAmbiguous
+#     6216 classMismatch
+#   453996 clinvar
+#   143736 clinvarBenign
+#     7950 clinvarConflicting
+#    95262 clinvarPathogenic
+#   128306 clusterError
+# 12438655 commonAll
+# 20902944 commonSome
+#  1399109 diffMajor
+#     4673 freqIncomplete
+#     7756 freqIsAmbiguous
+#     6590 freqNotMapped
+#    32170 freqNotRefAlt
+#   132123 multiMap
+#   204219 otherMapErr
+#110007682 overlapDiffClass
+# 17291289 overlapSameClass
+#681696398 rareAll
+#690160687 rareSome
+#      111 refIsAmbiguous
+#  3360435 refIsMinor
+#   160827 refIsRare
+#    50927 refIsSingleton
+#       33 refMismatch
+#  4532511 revStrand
+#real    36m36.972s
+#user    49m41.817s
+#sys     4m43.806s
+
+    # Check count of rs's with at least one bad mapping:
+    grep otherMapErr hg38.dbSnp153.checked.bigDbSnp | cut -f 4 | sort -u | wc -l
+#86636
+
+
+##############################################################################

@@ -1,0 +1,483 @@
+# ChromHMM from Ren lab, based on ENCODE 3 data
+
+track encode3RenChromHmm
+parent encode3Reg
+compositeTrack on
+type bigBed 9
+longLabel Chromatin state of embryonic tissue (12 tissues, 8 ages) from ENCODE 3 (UCSD/Ren)
+shortLabel Chromatin State
+itemRgb on
+dimensions dimX=tissue dimY=age
+subGroup1 tissue Tissue forebrain=forebrain midbrain=midbrain hindbrain=hindbrain neural=neural facial=facial limb=limb heart=heart kidney=kidney lung=lung liver=liver stomach=stomach intestine=intestine
+subGroup2 age Age E10=E10.5 E11=E11.5 E12=E12.5 E13=E13.5 E14=E14.5 E15=E15.5 E16=E16.5 P0=P0
+sortOrder tissue=+ age=+
+dragAndDrop subTracks
+group regulation
+labelOnFeature noDense
+bedPackDense on
+centerLabelsPack off
+exonNumbers off
+visibility pack
+
+    track encode3RenChromHmmForebrainP0
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmForebrainP0.bb
+    parent encode3RenChromHmm on
+    shortLabel cHMM forebrain P0
+    longLabel Chromatin state of day P0 forebrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=forebrain age=P0
+
+    track encode3RenChromHmmHeartP0
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHeartP0.bb
+    parent encode3RenChromHmm on
+    shortLabel cHMM heart P0
+    longLabel Chromatin state of day P0 heart from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=heart age=P0
+
+    track encode3RenChromHmmHindbrainP0
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHindbrainP0.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM hindbrain P0
+    longLabel Chromatin state of day P0 hindbrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=hindbrain age=P0
+
+    track encode3RenChromHmmIntestineP0
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmIntestineP0.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM intestine P0
+    longLabel Chromatin state of day P0 intestine from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=intestine age=P0
+
+    track encode3RenChromHmmKidneyP0
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmKidneyP0.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM kidney P0
+    longLabel Chromatin state of day P0 kidney from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=kidney age=P0
+
+    track encode3RenChromHmmLiverP0
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmLiverP0.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM liver P0
+    longLabel Chromatin state of day P0 liver from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=liver age=P0
+
+    track encode3RenChromHmmLungP0
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmLungP0.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM lung P0
+    longLabel Chromatin state of day P0 lung from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=lung age=P0
+
+    track encode3RenChromHmmMidbrainP0
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmMidbrainP0.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM midbrain P0
+    longLabel Chromatin state of day P0 midbrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=midbrain age=P0
+
+    track encode3RenChromHmmStomachP0
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmStomachP0.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM stomach P0
+    longLabel Chromatin state of day P0 stomach from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=stomach age=P0
+
+    track encode3RenChromHmmFacialE11
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmFacialE11.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM facial E11
+    longLabel Chromatin state of embryonic day E11.5 facial from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=facial age=E11
+
+    track encode3RenChromHmmForebrainE11
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmForebrainE11.bb
+    parent encode3RenChromHmm on
+    shortLabel cHMM forebrn E11
+    longLabel Chromatin state of embryonic day E11.5 forebrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=forebrain age=E11
+
+    track encode3RenChromHmmHeartE11
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHeartE11.bb
+    parent encode3RenChromHmm on
+    shortLabel cHMM heart E11
+    longLabel Chromatin state of embryonic day E11.5 heart from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=heart age=E11
+
+    track encode3RenChromHmmHindbrainE11
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHindbrainE11.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM hindbrn E11
+    longLabel Chromatin state of embryonic day E11.5 hindbrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=hindbrain age=E11
+
+    track encode3RenChromHmmLimbE11
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmLimbE11.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM limb E11
+    longLabel Chromatin state of embryonic day E11.5 limb from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=limb age=E11
+
+    track encode3RenChromHmmLiverE11
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmLiverE11.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM liver E11
+    longLabel Chromatin state of embryonic day E11.5 liver from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=liver age=E11
+
+    track encode3RenChromHmmMidbrainE11
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmMidbrainE11.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM midbrain E11
+    longLabel Chromatin state of embryonic day E11.5 midbrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=midbrain age=E11
+
+    track encode3RenChromHmmNeuralE11
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmNeuralE11.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM neural E11
+    longLabel Chromatin state of embryonic day E11.5 neural from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=neural age=E11
+
+    track encode3RenChromHmmFacialE12
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmFacialE12.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM facial E12
+    longLabel Chromatin state of embryonic day E12.5 facial from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=facial age=E12
+
+    track encode3RenChromHmmForebrainE12
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmForebrainE12.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM forebrn E12
+    longLabel Chromatin state of embryonic day E12.5 forebrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=forebrain age=E12
+
+    track encode3RenChromHmmHeartE12
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHeartE12.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM heart E12
+    longLabel Chromatin state of embryonic day E12.5 heart from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=heart age=E12
+
+    track encode3RenChromHmmHindbrainE12
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHindbrainE12.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM hindbrn E12
+    longLabel Chromatin state of embryonic day E12.5 hindbrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=hindbrain age=E12
+
+    track encode3RenChromHmmLimbE12
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmLimbE12.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM limb E12
+    longLabel Chromatin state of embryonic day E12.5 limb from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=limb age=E12
+
+    track encode3RenChromHmmLiverE12
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmLiverE12.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM liver E12
+    longLabel Chromatin state of embryonic day E12.5 liver from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=liver age=E12
+
+    track encode3RenChromHmmMidbrainE12
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmMidbrainE12.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM midbrain E12
+    longLabel Chromatin state of embryonic day E12.5 midbrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=midbrain age=E12
+
+    track encode3RenChromHmmNeuralE12
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmNeuralE12.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM neural E12
+    longLabel Chromatin state of embryonic day E12.5 neural from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=neural age=E12
+
+    track encode3RenChromHmmFacialE13
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmFacialE13.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM facial E13
+    longLabel Chromatin state of embryonic day E13.5 facial from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=facial age=E13
+
+    track encode3RenChromHmmForebrainE13
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmForebrainE13.bb
+    parent encode3RenChromHmm on
+    shortLabel cHMM forebrn E13
+    longLabel Chromatin state of embryonic day E13.5 forebrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=forebrain age=E13
+
+    track encode3RenChromHmmHeartE13
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHeartE13.bb
+    parent encode3RenChromHmm on
+    shortLabel cHMM heart E13
+    longLabel Chromatin state of embryonic day E13.5 heart from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=heart age=E13
+
+    track encode3RenChromHmmHindbrainE13
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHindbrainE13.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM hindbrn E13
+    longLabel Chromatin state of embryonic day E13.5 hindbrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=hindbrain age=E13
+
+    track encode3RenChromHmmLimbE13
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmLimbE13.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM limb E13
+    longLabel Chromatin state of embryonic day E13.5 limb from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=limb age=E13
+
+    track encode3RenChromHmmLiverE13
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmLiverE13.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM liver E13
+    longLabel Chromatin state of embryonic day E13.5 liver from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=liver age=E13
+
+    track encode3RenChromHmmMidbrainE13
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmMidbrainE13.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM midbrain E13
+    longLabel Chromatin state of embryonic day E13.5 midbrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=midbrain age=E13
+
+    track encode3RenChromHmmNeuralE13
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmNeuralE13.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM neural E13
+    longLabel Chromatin state of embryonic day E13.5 neural from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=neural age=E13
+
+    track encode3RenChromHmmFacialE14
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmFacialE14.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM facial E14
+    longLabel Chromatin state of embryonic day E14.5 facial from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=facial age=E14
+
+    track encode3RenChromHmmForebrainE14
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmForebrainE14.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM forebrn E14
+    longLabel Chromatin state of embryonic day E14.5 forebrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=forebrain age=E14
+
+    track encode3RenChromHmmHeartE14
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHeartE14.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM heart E14
+    longLabel Chromatin state of embryonic day E14.5 heart from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=heart age=E14
+
+    track encode3RenChromHmmHindbrainE14
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHindbrainE14.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM hindbrn E14
+    longLabel Chromatin state of embryonic day E14.5 hindbrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=hindbrain age=E14
+
+    track encode3RenChromHmmIntestineE14
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmIntestineE14.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM intestn E14
+    longLabel Chromatin state of embryonic day E14.5 intestine from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=intestine age=E14
+
+    track encode3RenChromHmmKidneyE14
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmKidneyE14.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM kidney E14
+    longLabel Chromatin state of embryonic day E14.5 kidney from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=kidney age=E14
+
+    track encode3RenChromHmmLimbE14
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmLimbE14.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM limb E14
+    longLabel Chromatin state of embryonic day E14.5 limb from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=limb age=E14
+
+    track encode3RenChromHmmLiverE14
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmLiverE14.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM liver E14
+    longLabel Chromatin state of embryonic day E14.5 liver from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=liver age=E14
+
+    track encode3RenChromHmmLungE14
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmLungE14.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM lung E14
+    longLabel Chromatin state of embryonic day E14.5 lung from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=lung age=E14
+
+    track encode3RenChromHmmMidbrainE14
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmMidbrainE14.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM midbrain E14
+    longLabel Chromatin state of embryonic day E14.5 midbrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=midbrain age=E14
+
+    track encode3RenChromHmmNeuralE14
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmNeuralE14.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM neural E14
+    longLabel Chromatin state of embryonic day E14.5 neural from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=neural age=E14
+
+    track encode3RenChromHmmStomachE14
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmStomachE14.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM stomach E14
+    longLabel Chromatin state of embryonic day E14.5 stomach from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=stomach age=E14
+
+    track encode3RenChromHmmFacialE15
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmFacialE15.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM facial E15
+    longLabel Chromatin state of embryonic day E15.5 facial from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=facial age=E15
+
+    track encode3RenChromHmmForebrainE15
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmForebrainE15.bb
+    parent encode3RenChromHmm on
+    shortLabel cHMM forebrn E15
+    longLabel Chromatin state of embryonic day E15.5 forebrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=forebrain age=E15
+
+    track encode3RenChromHmmHeartE15
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHeartE15.bb
+    parent encode3RenChromHmm on
+    shortLabel cHMM heart E15
+    longLabel Chromatin state of embryonic day E15.5 heart from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=heart age=E15
+
+    track encode3RenChromHmmHindbrainE15
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHindbrainE15.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM hindbrn E15
+    longLabel Chromatin state of embryonic day E15.5 hindbrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=hindbrain age=E15
+
+    track encode3RenChromHmmIntestineE15
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmIntestineE15.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM intestn E15
+    longLabel Chromatin state of embryonic day E15.5 intestine from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=intestine age=E15
+
+    track encode3RenChromHmmKidneyE15
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmKidneyE15.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM kidney E15
+    longLabel Chromatin state of embryonic day E15.5 kidney from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=kidney age=E15
+
+    track encode3RenChromHmmLimbE15
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmLimbE15.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM limb E15
+    longLabel Chromatin state of embryonic day E15.5 limb from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=limb age=E15
+
+    track encode3RenChromHmmLiverE15
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmLiverE15.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM liver E15
+    longLabel Chromatin state of embryonic day E15.5 liver from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=liver age=E15
+
+    track encode3RenChromHmmLungE15
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmLungE15.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM lung E15
+    longLabel Chromatin state of embryonic day E15.5 lung from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=lung age=E15
+
+    track encode3RenChromHmmMidbrainE15
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmMidbrainE15.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM midbrain E15
+    longLabel Chromatin state of embryonic day E15.5 midbrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=midbrain age=E15
+
+    track encode3RenChromHmmNeuralE15
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmNeuralE15.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM neural E15
+    longLabel Chromatin state of embryonic day E15.5 neural from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=neural age=E15
+
+    track encode3RenChromHmmStomachE15
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmStomachE15.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM stomach E15
+    longLabel Chromatin state of embryonic day E15.5 stomach from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=stomach age=E15
+
+    track encode3RenChromHmmForebrainE16
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmForebrainE16.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM forebrn E16
+    longLabel Chromatin state of embryonic day E16.5 forebrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=forebrain age=E16
+
+    track encode3RenChromHmmHeartE16
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHeartE16.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM heart E16
+    longLabel Chromatin state of embryonic day E16.5 heart from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=heart age=E16
+
+    track encode3RenChromHmmHindbrainE16
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmHindbrainE16.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM hindbrn E16
+    longLabel Chromatin state of embryonic day E16.5 hindbrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=hindbrain age=E16
+
+    track encode3RenChromHmmIntestineE16
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmIntestineE16.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM intestn E16
+    longLabel Chromatin state of embryonic day E16.5 intestine from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=intestine age=E16
+
+    track encode3RenChromHmmKidneyE16
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmKidneyE16.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM kidney E16
+    longLabel Chromatin state of embryonic day E16.5 kidney from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=kidney age=E16
+
+    track encode3RenChromHmmLiverE16
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmLiverE16.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM liver E16
+    longLabel Chromatin state of embryonic day E16.5 liver from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=liver age=E16
+
+    track encode3RenChromHmmLungE16
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmLungE16.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM lung E16
+    longLabel Chromatin state of embryonic day E16.5 lung from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=lung age=E16
+
+    track encode3RenChromHmmMidbrainE16
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmMidbrainE16.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM midbrain E16
+    longLabel Chromatin state of embryonic day E16.5 midbrain from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=midbrain age=E16
+
+    track encode3RenChromHmmStomachE16
+    bigDataUrl /gbdb/mm10/encode3/chromHmm/encode3RenChromHmmStomachE16.bb
+    parent encode3RenChromHmm off
+    shortLabel cHMM stomach E16
+    longLabel Chromatin state of embryonic day E16.5 stomach from ENCODE 3 (UCSD/Ren)
+    subGroups tissue=stomach age=E16
+

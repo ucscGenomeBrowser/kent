@@ -40,7 +40,6 @@ my $defaultWorkhorse = 'hgwdev';
 my $maskedSeq = "$HgAutomate::clusterData/\$db/\$db.2bit";
 my $mrnas = "/hive/data/genomes/asmHubs/VGP/xenoRefSeq";
 my $noDbGenePredCheck = 1;    # default yes, use -db for genePredCheck
-my $mrnas = "/hive/data/genomes/asmHubs/VGP/xenoRefSeq";
 my $augustusDir = "/hive/data/outside/augustus/augustus-3.3.1";
 my $augustusConfig="$augustusDir/config";
 
@@ -135,11 +134,34 @@ sub doSplitTarget {
   my $bossScript = newBash HgRemoteScript("$runDir/doSplitTarget.bash", $workhorse,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
+export asmId="$db"
+export maskedSeq="$maskedSeq"
+export queryCount=`cat "$mrnas/query.list" | wc -l`
+# aim for 1,000,000 cluster job batch size
+export targetPartCount=`echo \$queryCount | awk '{printf "%d", 1 + (1000000 / \$1)}'`
+twoBitInfo \$maskedSeq stdout | sort -k2,2nr > \$asmId.chrom.sizes
+export targetParts=`cat \$asmId.chrom.sizes | wc -l`
+export maxChunk=`head -1 \$asmId.chrom.sizes | awk '{printf "%d", 1.1*\$(NF)}'`
+export seqLimit=`echo \$targetParts \$targetPartCount | awk '{printf "%d", 1 + (\$1 / \$2)}'`
+export totalJobs=`echo \$queryCount \$targetPartCount | awk '{printf "%d", \$1 * \$2}'`
+rm -fr targetList
+~/kent/src/hg/utils/automation/partitionSequence.pl -concise \\
+   -lstDir=targetList \$maxChunk 0 \$maskedSeq \$asmId.chrom.sizes \$seqLimit
+rm -fr target
 mkdir target
-twoBitToFa $maskedSeq stdout | faSplit byname stdin target/
+ls targetList/*.lst | while read partSpec
+do
+  export part=`basename \$partSpec | sed -e 's/.lst/.fa/;'`
+  export faFile="target/\$part"
+  rm -f \$faFile
+  touch \$faFile
+  cat \$partSpec | while read seq
+  do
+    twoBitToFa \$seq stdout
+  done > \$faFile
+done
 gzip target/*.fa
 ls target | sed -e 's/.fa.gz//;' > target.list
-faSize -detailed target/*.fa.gz | sort -k2,2nr > $db.chrom.sizes
 _EOF_
   );
 

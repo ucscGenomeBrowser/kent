@@ -131,15 +131,15 @@ in the sections below.</I>
     <UL>
         <LI><A HREF="#bam">bam/cram</A>: Compressed Sequence Alignment/Map tracks</LI>
         <LI><A HREF="#bigBed_-_Item_or_Region_Track_Settings">bigBed</A>: Item or region tracks</LI>
-        <LI><A HREF="#bigBarChart">bigBarChart</A>: Bar charts of categorical varaables displayed over genomic regions</LI>
+        <LI><A HREF="#bigBarChart">bigBarChart</A>: Bar charts of categorical variables displayed over genomic regions</LI>
         <LI><A HREF="#bigChain_-_Pairwise_Alignments">bigChain</A>: Genome-wide Pairwise Alignments</LI>
         <LI><A HREF="#bigGenePred_-_Gene_Annotations">bigGenePred</A>: Gene Annotations</LI>
         <LI><A HREF="#bigInteract">bigInteract</A>: Pairwise interactions</LI>
         <LI><A HREF="#bigNarrowPeak_-_Peaks">bigNarrowPeak</A>: Peaks</LI>
-        <LI><A HREF="#bigMaf_-_Multiple_Alignments">bigMaf</A>: Mulitple alignments</LI>
+        <LI><A HREF="#bigMaf_-_Multiple_Alignments">bigMaf</A>: Mulitple Alignments</LI>
         <LI><A HREF="#bigPsl_-_Pairwise_Alignments">bigPsl</A>: Pairwise Alignments</LI>
-        <LI><A HREF="#bigWig_-_Signal_Graphing_Track_Settings">bigWig</A>:
-                                                                Signal graphing tracks</LI>
+        <LI><A HREF="#bigWig_-_Signal_Graphing_Track_Settings">bigWig</A>: Signal graphing tracks</LI>
+        <LI><A HREF="#hic">hic</A>: Hi-C contact matrices</LI>
         <LI><A HREF="#halSnake">halSnake</A>: HAL Snake Format</LI>
         <LI><A HREF="#vcfTabix">vcfTabix</A>: Variant Call Format</LI>
     </UL></LI>
@@ -414,6 +414,11 @@ are described below along with settings specific to their types.</P>
     <div class="format"> <code class="level-full">barChartLabel &lt;label&gt;</code>
     </div>
 </td></tr>
+<tr valign=top><td class="barChartMaxSize"><a name="barChartMaxSize"></a>
+        <img class='toggle detail'>
+    <div class="format"><code class="level-new">barChartMaxSize &lt;small/medium/large&gt;</code>
+    </div>
+</td></tr>
 <tr valign=top><td class="barChartMetric"><a name="barChartMetric"></a> <img class='toggle detail'>
     <div class="format"> <code class="level-full">barChartMetric &lt;metric&gt;</code>
     </div>
@@ -531,6 +536,33 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="labelSeparator"><A name="labelSeparator"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">labelSeparator &lt;text&gt;</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="filter"><A name="filter"></A>
+            <A name="filter.fieldName"></A>
+            <A name="filterLimits.fieldName"></A>
+            <A name="filterByRange.fieldName"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-new">filter.&lt;fieldName&gt; [&lt;default integer&gt;]</code><BR>
+            <span class="filterByRange"><code class="level-new">filterByRange.&lt;fieldName&gt; &lt;off/on&gt;</code></span><BR>
+            <span class="filterLimits"><code class="level-new">filterLimits.&lt;fieldName&gt; &lt;low&gt;[:&lt;high&gt;]</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="filterText"><A name="filterText"></A>
+            <A name="filterText.fieldName"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-new">filterText.&lt;fieldName&gt; [&lt;default search string&gt;]</code><BR>
+            <span class="filterType"><code class="level-new">filterType.&lt;fieldName&gt; &lt;wildcard/regexp&gt;</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="filterValues"><A name="filterValues"></A>
+            <A name="filterValues.fieldName"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-new">filterValues.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
+            <span class="filterValuesDefault"><code class="level-new">filterValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code></span><BR>
+            <span class="filterType"><code class="level-new">filterLimits.&lt;fieldName&gt; &lt;singleList/multipleListOr/multipleListAnd&gt;</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="filterLabel"><A name="filterLabel"></A>
+            <A name="filterLabel.fieldName"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-new">filterLabel.&lt;fieldName&gt; &lt;label&gt;</code></div>
+    </TD></TR>
 </TABLE>
 
 <TABLE class="settingsTable" id="Item_or_Region_Track_Settings_-_less_frequent">
@@ -620,15 +652,6 @@ are described below along with settings specific to their types.</P>
 <BR><BR>
 
 <a name="bigInteract"></a>
-<style>
-.dot {
-    display: inline-block; 
-    height: 10px; 
-    width: 10px; 
-    margin-right: 2px;
-    border-radius: 50%;
-}
-</style>
 <table class="settingsTable" id="bigInteract">
 <thead><tr><td><div ID="bigInteract_intro" class="intro"></div></td></tr></thead>
 <tr valign=top><th><img class='toggle oneSection'>
@@ -647,6 +670,10 @@ are described below along with settings specific to their types.</P>
 </td></tr>
 <tr valign=top><td class="interactUp"><a name="interactUp"></a> <img class='toggle detail'>
     <div class="format"> <code class="level-full">interactUp &lt;true/false&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="interactMultiRegion"><a name="interactMultiRegion"></a> <img class='toggle detail'>
+    <div class="format"> <code class="level-new">interactMultiRegion &lt;true/padding&gt;</code>
     </div>
 </td></tr>
 
@@ -764,7 +791,7 @@ are described below along with settings specific to their types.</P>
             <code>type bigWig &lt;#&gt; &lt;#&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="autoScale"><A name="autoScale"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-base">autoScale &lt;off/on&gt;</code></div>
+        <div class="format"><code class="level-base">autoScale &lt;off/on/group&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="maxHeightPixels">
         <A name="maxHeightPixels"></A><IMG class='toggle detail'>
@@ -819,6 +846,22 @@ are described below along with settings specific to their types.</P>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="bigWig_example"><IMG class='toggle detail'>
         <div class="format"><B>Examples of signal graphing tracks</B></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<A name="hic"></A>
+<TABLE class="settingsTable" id="hic_-_Hi-C contact matrices">
+<THEAD><TR><TD><DIV ID="hic_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;hic - Hi-C contact matrices
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="hic"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type hic</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -975,6 +1018,16 @@ hierarchical containers:
     </TD></TR>
     <TR VALIGN=TOP><TD class="dragAndDrop"><A name="dragAndDrop"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">dragAndDrop subTracks</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="hideEmptySubtracks"><A name="hideEmptySubtracks"></A>
+                <IMG class='toggle detail'>
+        <div class="format">
+        <code class="level-new">hideEmptySubtracks &lt;on/default&gt; [multiBed.bb multiBedSources.tab]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="hideEmptySubtracksLabel"><A name="hideEmptySubtracksLabel"></A>
+                <IMG class='toggle detail'>
+        <div class="format">
+        <code class="level-new">hideEmptySubtracksLabel &lt;label&gt;</code></div>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="compositeTrack_example">
         <IMG class='toggle detail'>
