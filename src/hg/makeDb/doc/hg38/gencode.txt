@@ -625,8 +625,9 @@ cd kent/src/hg/makeDb/trackDb
     pushd /hive/data/genomes/hg38/bed/gencodeV33
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
-    # check tracks in browser sand box
+    # check tracks in browser sandbox
     # commit all
     make DBS=hg38 alpha
+    # if pushing public: create ticket and MARK QA READY
 
 #########################################################################
