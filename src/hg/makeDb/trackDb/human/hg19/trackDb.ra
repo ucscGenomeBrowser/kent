@@ -1,19 +1,5 @@
 #	"$Id: trackDb.ra,v 1.125 2010/06/11 22:12:18 mary Exp $";
 
-track dgvGold
-parent dgvPlus
-shortLabel DGV Gold Standard
-longLabel Database of Genomic Variants: Gold Standard Variants
-bigDataUrl /gbdb/hg19/dgv/dgvGold.bb
-type bigBed 12
-url http://dgv.tcag.ca/gb2/gbrowse_details/dgv2_hg19?ref=$S;start=${;end=$};name=$$;class=Sequence
-searchIndex name
-
-
-searchTable dgvGold
-searchType bigBed
-searchDescription DGV Gold Variants
-
 track problematic
 shortLabel Problematic Regions
 longLabel Problematic Regions for NGS or Sanger sequencing or very variable regions
