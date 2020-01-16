@@ -15,7 +15,7 @@
 #ifdef BIGONE
 
 #define maxBlockCount (2*230*1024 - 1)
-#define psBits bits64
+#define psBits bits32
 /* psBits is the size of an index word.  If 16 bits
  * patSpace will use less memory, but be limited to
  * 16 meg or less genome size. */

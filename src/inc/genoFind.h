@@ -41,15 +41,13 @@ enum gfConstants {
     gfPepMaxTileUse = 30000,
 };
 
-typedef bits64 gfOffset;  /* offset/size of genome sequences */
-
 struct gfSeqSource
 /* Where a block of sequence comes from. */
     {
     struct gfSeqSource *next;
     char *fileName;	/* Name of file. */
     bioSeq *seq;	/* Sequences.  Usually either this or fileName is NULL. */
-    gfOffset start,end;	/* Position within merged sequence. */
+    bits32 start,end;	/* Position within merged sequence. */
     Bits *maskedBits;	/* If non-null contains repeat-masking info. */
     };
 
@@ -57,9 +55,9 @@ struct gfHit
 /* A genoFind hit. */
    {
    struct gfHit *next;
-   gfOffset qStart;		/* Where it hits in query. */
-   gfOffset tStart;		/* Where it hits in target. */
-   gfOffset diagonal;		/* tStart + qSize - qStart. */
+   bits32 qStart;		/* Where it hits in query. */
+   bits32 tStart;		/* Where it hits in target. */
+   bits32 diagonal;		/* tStart + qSize - qStart. */
    };
 
 /* gfHits are free'd with simple freeMem or slFreeList. */
@@ -73,9 +71,9 @@ struct gfClump
  * sequences). */
     {
     struct gfClump *next;	/* Next clump. */
-    gfOffset qStart, qEnd;	/* Position in query. */
+    bits32 qStart, qEnd;	/* Position in query. */
     struct gfSeqSource *target;	/* Target source sequence. */
-    gfOffset tStart, tEnd;	/* Position in target. */
+    bits32 tStart, tEnd;	/* Position in target. */
     int hitCount;		/* Number of hits. */
     struct gfHit *hitList;	/* List of hits. Not allocated here. */
     int queryCoverage;		/* Number of bases covered in query (thx AG!) */
@@ -86,15 +84,6 @@ void gfClumpFree(struct gfClump **pClump);
 
 void gfClumpFreeList(struct gfClump **pList);
 /* Free a list of dynamically allocated gfClump's */
-
-struct endList
-/* A more complex list for each N-mer. Used if isSegmented is true. */
-{
-    int tileTail: 16;   /* The first is the packed last few * letters of the tile */
-    gfOffset offset: 48;  /* offset in genome */
-};
-
-
 
 struct genoFind
 /* An index of all K-mers in the genome. */
@@ -114,13 +103,20 @@ struct genoFind
     bool allowOneMismatch;		 /* Allow a single mismatch? */
     bool noSimpRepMask;			  /* Dis-Allow simple repeat masking. */
     int segSize;			 /* Index is segmented if non-zero. */
-    gfOffset totalSeqSize;		 /* Total size of all sequences. */
-    gfOffset *listSizes;                   /* Size of list for each N-mer */
+    bits32 totalSeqSize;		 /* Total size of all sequences. */
+    bits32 *listSizes;                   /* Size of list for each N-mer */
     void *allocated;                     /* Storage space for all lists. */
-    gfOffset **lists;                      /* A list for each N-mer. Used if
+    bits32 **lists;                      /* A list for each N-mer. Used if
                                           * isSegmented is false. */
-    struct endList **endLists;           /* A more complex list for each N-mer.
-                                          * Used if isSegmented is true. */
+    bits16 **endLists;                   /* A more complex list for each N-mer.
+                                          * Used if isSegmented is true.
+					  * Values come in groups of threes.
+					  * The first is the packed last few
+					  * letters of the tile.  The next two
+					  * are the offset in the genome.  This
+					  * would be a struct but that would take
+					  * 8 bytes instead of 6, or nearly an
+					  * extra gigabyte of RAM. */
     };
 
 void genoFindFree(struct genoFind **pGenoFind);
