@@ -9,7 +9,6 @@
 
 
 #include "common.h"
-#include "hash.h"
 #include "localmem.h"
 
 
@@ -290,41 +289,5 @@ char *output = lmAlloc(lm, resSize);
 strcpy(output, a);
 strcpy(output + aSize, b);
 return output;
-}
-
-static struct hashEl *lmCloneHashElList(struct lm *lm, struct hashEl *list)
-/* Clone a list of hashEl's. */
-{
-struct hashEl *newList = NULL;
-
-for(; list; list = list->next)
-    {
-    struct hashEl *hel = lmAlloc(lm, sizeof(struct hashEl));
-    slAddHead(&newList, hel);
-    hel->name = lmCloneString(lm, list->name);
-    hel->val = lmCloneString(lm, (char *)list->val);  // we're assuming that the values are strings
-    hel->hashVal = list->hashVal;
-    }
-
-return newList;
-}
-
-struct hash *lmCloneHash(struct lm *lm, struct hash *hash)
-/* Clone a hash into local memory. ASSUMES VALUES ARE STRINGS */
-{
-struct hash *newHash = lmAlloc(lm, sizeof(struct hash));
-
-*newHash = *hash;
-newHash->lm = lm;
-newHash->ownLm = TRUE;
-newHash->next = NULL;
-lmAllocArray(lm, newHash->table, hash->size);
-
-int ii;
-for(ii=0; ii < hash->size; ii++)
-    if (hash->table[ii] != NULL)
-        newHash->table[ii] = lmCloneHashElList(lm, hash->table[ii]);
-
-return newHash;
 }
 
