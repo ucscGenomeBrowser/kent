@@ -1214,7 +1214,6 @@ static void findClumpBounds(struct gfClump *clump, int tileSize)
 /* Figure out qStart/qEnd tStart/tEnd from hitList */
 {
 struct gfHit *hit;
-int x;
 hit = clump->hitList;
 if (hit == NULL)
     return;
@@ -1222,7 +1221,7 @@ clump->qStart = clump->qEnd = hit->qStart;
 clump->tStart = clump->tEnd = hit->tStart;
 for (hit = hit->next; hit != NULL; hit = hit->next)
     {
-    x = hit->qStart;
+    gfOffset x = hit->qStart;
     if (x < clump->qStart) clump->qStart = x;
     if (x > clump->qEnd) clump->qEnd = x;
     x = hit->tStart;
@@ -1457,8 +1456,8 @@ int tileSizeMinusOne = gf->tileSize - 1;
 int mask = gf->tileMask;
 DNA *dna = seq->dna;
 int i, j;
-gfOffset bits = 0;
-gfOffset bVal;
+bits32 bits = 0;
+bits32 bVal;
 int listSize;
 gfOffset qStart, *tList;
 int hitCount = 0;
@@ -1484,7 +1483,7 @@ for (i=tileSizeMinusOne; i<size; ++i)
 	    tList = gf->lists[bits];
 	    for (j=0; j<listSize; ++j)
 		{
-		int tStart = tList[j];
+		gfOffset tStart = tList[j];
 		if (target == NULL || 
 			(target == findSource(gf, tStart) && tStart >= tMin && tStart < tMax) ) 
 		    {
@@ -1664,7 +1663,7 @@ int size = seq->size;
 int tileSize = gf->tileSize;
 int tileTailSize = gf->segSize;
 int tileHeadSize = gf->tileSize - tileTailSize;
-int lastStart = size - tileSize;
+gfOffset lastStart = size - tileSize;
 char *poly = seq->dna;
 int i, j;
 int tileHead, tileTail;
