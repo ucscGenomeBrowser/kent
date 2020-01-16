@@ -563,8 +563,7 @@ cd kent/src/hg/makeDb/trackDb
     # wgEncodeGencodeTagV32: pseudo_consens changed on a few pseudogenes.
 
 #########################################################################
-2019-11-15: import of UCSC GENCODE group processing of GENCODE V32 (markd)
-    # PRE-RELEASE
+2019-11-15: import of UCSC GENCODE group processing of GENCODE V33 PRE-RELEASE (markd)
     # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
 
     # download, build and load tables
@@ -587,6 +586,40 @@ cd kent/src/hg/makeDb/trackDb
     make DBS=hg38
 
     ## only if being pushed to RR:
+    # edit all.joiner to add ~/tmp/gencodeV33.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg38/bed/gencodeV33
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+
+#########################################################################
+2020-01-16: import of UCSC GENCODE group processing of GENCODE V33  (markd)
+    # deprecate pre-release
+    mv /hive/data/genomes/hg38/bed/gencodeV33 /hive/data/genomes/hg38/bed/gencodeV33pre
+
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg38/bed/gencodeV33
+    pushd /hive/data/genomes/hg38/bed/gencodeV33
+
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg38 33 99 'Jan 2020'
+
+    # If being pushed public, update 'Release Notes' in
+    # human/hg38/wgEncodeGencodeSuper.html
+
+    # edit human/hg38/trackDb.gencode.ra to add new .ra file include
+    make DBS=hg38
+
+    ## only if being pushed to RR (may be there from pre-release)
     # edit all.joiner to add ~/tmp/gencodeV33.joiner
     # verify with:
     pushd /hive/data/genomes/hg38/bed/gencodeV33
