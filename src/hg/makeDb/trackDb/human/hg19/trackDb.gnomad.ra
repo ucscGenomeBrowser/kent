@@ -307,10 +307,8 @@ html gnomad
     longLabel gnomAD Predicted Loss of Function Constraint Metrics
     compositeTrack On
     group varRep
-    type bigBed 12 +
-    filter._pli 0:1
-    filterLabel._pli Show only items between this pLI range
-    filterByRange._pli on
+    type bigBed 12
+    labelFields name,geneName
     release alpha
 
         track pliByGene
@@ -328,6 +326,7 @@ html gnomad
         filterLabel._pli Show only items between this pLI range
         filterByRange._pli on
         parent gnomadPLI
+        priority 1
         release alpha
 
         track pliByTranscript
@@ -345,18 +344,20 @@ html gnomad
         filterLabel._pli Show only items between this pLI range
         filterByRange._pli on
         parent gnomadPLI
+        priority 2
         release alpha
 
-    track gnomadMissense
-    parent gnomadSuper
-    shortLabel gnomAD Missense Constraint Metrics
-    longLabel gnomAD Missense Constraint Metrics
-    bigDataUrl /gbdb/hg19/gnomAD/missense/missenseConstrained.bb
-    itemRgb on
-    labelFields name,geneName
-    group varRep
-    type bigBed 12 +
-    filter.obs_exp 0:5
-    filterLabel.obs_exp Show only items between this score range
-    filterByRange.obs_exp on
-    release alpha
+        track gnomadMissense
+        parent gnomadPLI
+        shortLabel gnomAD Missense Constraint Metrics
+        longLabel gnomAD Missense Constraint Metrics
+        bigDataUrl /gbdb/hg19/gnomAD/missense/missenseConstrained.bb
+        itemRgb on
+        labelFields name,geneName
+        group varRep
+        type bigBed 12 +
+        filter.obs_exp 0:5
+        filterLabel.obs_exp Show only items between this score range
+        filterByRange.obs_exp on
+        priority 3
+        release alpha

@@ -74,7 +74,7 @@ struct hash
     boolean autoExpand;         /* Automatically expand hash */
     float expansionFactor;      /* Expand when elCount > size*expansionFactor */
     int numResizes;             /* number of times resize was called */
-    boolean ownLm;              /* TRUE if lm was allocated by newHashExt */
+    boolean ownLm;              /* TRUE if lm was allocated by newHashExt OR read in from trackDbCache  */
     };
 
 #define defaultExpansionFactor 1.0

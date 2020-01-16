@@ -49,6 +49,41 @@ lmRefAdd(lm, &super->children, tdb);
 return super;
 }
 
+struct hashEl *lmCloneHashElList(struct lm *lm, struct hashEl *list)
+/* Clone a list of hashEl's. */
+{
+struct hashEl *newList = NULL;
+
+for(; list; list = list->next)
+    {
+    struct hashEl *hel = lmAlloc(lm, sizeof(struct hashEl));
+    slAddHead(&newList, hel);
+    hel->name = lmCloneString(lm, list->name);
+    hel->val = lmCloneString(lm, (char *)list->val);  // we're assuming that the values are strings
+    hel->hashVal = list->hashVal;
+    }
+
+return newList;
+}
+
+struct hash *lmCloneHash(struct lm *lm, struct hash *hash)
+/* Clone a hash into local memory. */
+{
+struct hash *newHash = lmAlloc(lm, sizeof(struct hash));
+
+*newHash = *hash;
+newHash->lm = NULL;
+newHash->ownLm = TRUE;  // mark as having been read in from trackDb cache
+newHash->next = NULL;
+lmAllocArray(lm, newHash->table, hash->size);
+
+int ii;
+for(ii=0; ii < hash->size; ii++)
+    if (hash->table[ii] != NULL)
+        newHash->table[ii] = lmCloneHashElList(lm, hash->table[ii]);
+
+return newHash;
+}
 
 struct trackDb *lmCloneTdb(struct lm *lm, struct trackDb *tdb, struct trackDb *parent,  struct hash *superHash)
 /* clone a single tdb structure.  Will clone its children if it has any */
