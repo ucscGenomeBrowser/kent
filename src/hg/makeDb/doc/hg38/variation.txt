@@ -1860,3 +1860,17 @@ EOF
 
 
 ##############################################################################
+# DGV with filters - DONE Jan 01 2020
+    zcat dgvSupporting.bed.gz | tawk '{print $0, $3-$2}' | sort -k1,1 -k2,2n > dgvSupportingWithSize.bed
+    zcat dgvMerged.bed.gz | tawk '{print $0, $3-$2}' | sort -k1,1 -k2,2n > dgvMergedWithSize.bed
+    bedToBigBed -tab -as=/hive/data/genomes/hg19/bed/dgv/160810/dgvPlusSize.as -type=bed9+14 dgvMergedWithSize.bed  /hive/data/genomes/hg38/chrom.sizes dgvMerged.bb
+    # pass1 - making usageList (41 chroms): 333 millis
+    # pass2 - checking and writing primary data (389106 records, 23 fields): 9803 millis
+    bedToBigBed -tab -as=/hive/data/genomes/hg19/bed/dgv/160810/dgvPlusSize.as -type=bed9+14 dgvSupportingWithSize.bed  /hive/data/genomes/hg38/chrom.sizes dgvSupporting.bb
+    # pass1 - making usageList (41 chroms): 2695 millis
+    # pass2 - checking and writing primary data (6584665 records, 23 fields): 27859 millis
+    mkdir -p /gbdb/hg38/dgv/
+    cd /gbdb/hg38/dgv
+    ln -s /hive/data/genomes/hg38/bed/dgv/160906/dgvMerged.bb
+    ln -s /hive/data/genomes/hg38/bed/dgv/160906/dgvSupporting.bb
+##############################################################################

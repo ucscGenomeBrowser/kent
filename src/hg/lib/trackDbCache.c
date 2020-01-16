@@ -73,7 +73,7 @@ struct hash *newHash = lmAlloc(lm, sizeof(struct hash));
 
 *newHash = *hash;
 newHash->lm = NULL;
-newHash->ownLm = FALSE;
+newHash->ownLm = TRUE;  // mark as having been read in from trackDb cache
 newHash->next = NULL;
 lmAllocArray(lm, newHash->table, hash->size);
 
@@ -390,7 +390,7 @@ static boolean doCache = FALSE;
 if (!checkedCache)
     {
     trackDbCacheDir = cfgOption("cacheTrackDbDir");
-    if (trackDbCacheDir != NULL)
+    if (isNotEmpty(trackDbCacheDir))
         {
         makeDirsOnPath(trackDbCacheDir);
         doCache = TRUE;
