@@ -1473,8 +1473,9 @@ if (mysqlError != 0)
     if (abort)
         {
         monitorLeave();
+	// Extra debugging info.
 	if (sameOk(cfgOption("noSqlInj.dumpStack"), "on"))
-    	    dumpStack("DEBUG Can't start query"); // Extra debugging info. DEBUG REMOVE
+    	    dumpStack("DEBUG Can't start query");
 	sqlAbort(sc, "Can't start query:\n%s\n", query);
         }
     }
