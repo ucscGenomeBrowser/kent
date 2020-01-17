@@ -33965,9 +33965,9 @@ ln -s /hive/data/genomes/hg19/bed/dgv/160810/dgvSupporting.bb
 ##############################################################################
 # adding RefSeq Select to NCBIRefSeq, Max, Feb 17 2020
 cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2019-11-21
-zcat download/*_genomic.gff.gz | grep 'tag=RefSeq Select'  | cut -f9- | tr ';' '\n' | grep Name= | grep -v NP_ | cut -d= -f2 | sort -u > refseqSelectTranscripts.txt
+zcat download/*_genomic.gff.gz | egrep 'tag=(RefSeq|MANE) Select'  | cut -f9- | tr ';' '\n' | grep Name= | grep -v NP_ | cut -d= -f2 | sort -u > refseqSelectTranscripts.txt
 cat process/hg19.curated.gp | fgrep -f refseqSelectTranscripts.txt - > refseqSelect.curated.gp
 hgLoadGenePred -genePredExt hg19 ncbiRefSeqSelect refseqSelect.curated.gp
 wc -l refseqSelect.curated.gp
-9355 refseqSelect.curated.gp
+21436 refseqSelect.curated.gp
 ##############################################################################
