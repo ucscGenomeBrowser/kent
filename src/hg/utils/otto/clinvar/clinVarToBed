@@ -376,7 +376,10 @@ for line in ifh:
 
     # Code-review/QA: Is it OK to pass through coordinates on chrM for hg19?
     if chrom=="chrMT": # why does NCBI use chrMT but we use chrM ?
-        chrom = "chrM"
+        if assembly=="GRCh37":
+            chrom = "chrMT" # our chrM is different from NCBI's MT, but chrMT got added hg19 in 2020 
+        else:
+            chrom = "chrM"
 
     shortName, longName = shortenName(name)
 
@@ -487,8 +490,6 @@ for line in ifh:
     row = newRow
 
     if assembly=="GRCh37":
-        if chrom=="chrM":
-            continue # we don't have the same MT chrom as NCBI, skip these
         ofh = hg19Bed
         if isCnv:
             ofh = hg19BedCnv
