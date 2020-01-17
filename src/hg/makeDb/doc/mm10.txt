@@ -18276,9 +18276,7 @@ Longest finished job:              68s       1.13m     0.02h    0.00d
 # For ENCODE 3 tracks, see doc/encode3/mouse.txt
 
 ##############################################################################
-2019-11-16: import of UCSC GENCODE group processing of GENCODE VM24 (markd)
-    # PRE-RELEASE
-
+2019-11-16: import of UCSC GENCODE group processing of GENCODE VM24 PRE-RELEASE (markd)
     # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
 
     # download, build and load tables
@@ -18441,5 +18439,41 @@ TMPDIR=/dev/shm
 
     cat fb.regenCho1.chainRBest.Mm10.txt
     # 1396267649 bases of 2266312740 (61.610%) in intersection
+
+##############################################################################
+2020-01-16: import of UCSC GENCODE group processing of GENCODE VM24 (markd)
+    # deprecate pre-release
+    mv /hive/data/genomes/mm10/bed/gencodeVM24 /hive/data/genomes/hg38/bed/gencodeVM24pre
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM24
+    pushd /hive/data/genomes/mm10/bed/gencodeVM24
+
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M24 99 'Jan 2020'
+
+    # If being pushed public, update 'Release Notes' in
+    # mouse/mm10/wgEncodeGencodeSuper.html
+
+    # edit human/mm10/trackDb.gencode.ra to add new .ra file include
+    make DBS=mm10
+
+    ## only if being pushed to RR:
+    # edit all.joiner to add ~/tmp/gencodeVM24.joiner
+    # verify with:
+    pushd /hive/data/genomes/mm10/bed/gencodeVM24
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # check tracks in browser sandbox
+    # commit all
+    make DBS=mm10 alpha
+    # if pushing public: add ticket and MARK QA READY
 
 ##############################################################################
