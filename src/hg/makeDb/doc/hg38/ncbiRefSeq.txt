@@ -312,3 +312,11 @@ hgLoadGenePred -genePredExt hg38 ncbiRefSeqHgmd hgmd.curated.gp
  # refGene 3.098%, ncbiRefSeqCurated 2.880%, both 2.846%, cover 91.86%, enrich 31.90x
 
 #########################################################################
+# addition of RefSeq Select-restricted subset, Max, Feb 10 2019
+cd /hive/data/genomes/hg38/bed/ncbiRefSeq.p13.2019-12-06/
+zcat download/*_genomic.gff.gz | grep 'tag=RefSeq Select'  | cut -f9- | tr ';' '\n' | grep Name= | grep -v NP_ | cut -d= -f2 | sort -u > refseqSelectTranscripts.txt
+zcat process/hg38.curated.gp | fgrep -f refseqSelectTranscripts.txt - > refseqSelect.curated.gp
+hgLoadGenePred -genePredExt hg38 ncbiRefSeqSelect refseqSelect.curated.gp
+wc -l refseqSelect.curated.gp
+6378 refseqSelect.curated.gp
+#############################################################################

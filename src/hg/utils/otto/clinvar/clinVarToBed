@@ -1,6 +1,6 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
-import logging, sys, optparse, re, os, datetime, gzip, urllib2, subprocess
+import logging, sys, optparse, re, os, datetime, gzip, urllib.request, urllib.error, urllib.parse, subprocess
 from collections import defaultdict
 from os.path import join, basename, dirname, isfile, abspath
 from datetime import date, datetime, timedelta
@@ -40,7 +40,7 @@ def mustRun(cmd):
     logging.debug(cmd)
     ret = os.system(cmd)
     if ret!=0:
-        print("Could not run: %s" % cmd)
+        print(("Could not run: %s" % cmd))
         sys.exit(1)
 
 def shortenName(name):
@@ -115,7 +115,7 @@ def compareWithLastMonth(fname, maxDiff):
     previousDateStr = previousDate.date().isoformat()
     previousFname = fname.replace(todayStr, previousDateStr)
     if not isfile(previousFname):
-        print("Cannot find %s, cannot compare new data with previous month" % previousFname)
+        print(("Cannot find %s, cannot compare new data with previous month" % previousFname))
         return
         
     previousCount = sum(1 for line in open(previousFname))
@@ -181,8 +181,8 @@ def parseHgvsFile(hgvsFname):
         if line.startswith("#Symbol") and "GeneID" in line:
             if not line == expHead:
                 print ("Header of hgvs file has changed again. Code needs fixing")
-                print ("found:",line)
-                print ("expected:",expHead)
+                print(("found:",line))
+                print(("expected:",expHead))
             else:
                 foundHead = True
 
@@ -255,7 +255,7 @@ def reviewStatusToHtmlStars(reviewStatus):
         starCount = 0
 
     if starCount == None:
-        print("Illegal review status: %s" % revStatus)
+        print(("Illegal review status: %s" % revStatus))
         assert(False)
 
     emptyStarCount = 4-starCount
@@ -288,11 +288,11 @@ def downloadFromNcbi(skipDownload):
 
     if not (skipDownload and isfile(outFname) and isfile(varFname) and isfile(hgvsFname)):
         logging.info("Downlading %s to %s" % (url, outFname))
-        open(outFname, "w").write(urllib2.urlopen(url).read())
+        open(outFname, "w").write(urllib.request.urlopen(url).read())
         logging.info("Downlading %s to %s" % (hgvsUrl, hgvsFname))
-        open(hgvsFname, "w").write(urllib2.urlopen(hgvsUrl).read())
+        open(hgvsFname, "w").write(urllib.request.urlopen(hgvsUrl).read())
         logging.info("Downlading %s to %s" % (varUrl, varFname))
-        open(varFname, "w").write(urllib2.urlopen(varUrl).read())
+        open(varFname, "w").write(urllib.request.urlopen(varUrl).read())
     return filename, varFname, hgvsFname
 
 # ----------- MAIN --------------
@@ -370,13 +370,16 @@ for line in ifh:
         continue
 
     if chrom=="Un" and assembly=="GRCh38":
-        print("wrong chrUn chrom on assembly hg38. Skipping %s" % irvcAcc)
+        print(("wrong chrUn chrom on assembly hg38. Skipping %s" % irvcAcc))
         continue
     chrom = "chr"+chrom
 
     # Code-review/QA: Is it OK to pass through coordinates on chrM for hg19?
     if chrom=="chrMT": # why does NCBI use chrMT but we use chrM ?
-        chrom = "chrM"
+        if assembly=="GRCh37":
+            chrom = "chrMT" # our chrM is different from NCBI's MT, but chrMT got added hg19 in 2020 
+        else:
+            chrom = "chrM"
 
     shortName, longName = shortenName(name)
 
@@ -388,11 +391,11 @@ for line in ifh:
         longName = longName[:60]+"..."
 
     if start=="" or end=="":
-        print("undefined start or end coordinate. record %s"% irvcAcc)
+        print(("undefined start or end coordinate. record %s"% irvcAcc))
         continue
 
     if int(start)<0 or int(end)<0:
-        print("illegal start or end coordinate. record %s"% irvcAcc)
+        print(("illegal start or end coordinate. record %s"% irvcAcc))
         continue
 
     # sometimes they seem to inverse their coordinates
@@ -487,8 +490,6 @@ for line in ifh:
     row = newRow
 
     if assembly=="GRCh37":
-        if chrom=="chrM":
-            continue # we don't have the same MT chrom as NCBI, skip these
         ofh = hg19Bed
         if isCnv:
             ofh = hg19BedCnv
