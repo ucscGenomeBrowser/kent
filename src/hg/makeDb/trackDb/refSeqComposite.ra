@@ -93,7 +93,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         priority 7
         type genePred
         shortLabel RefSeq Select
-        longLabel NCBI RefSeq Select: representative transcripts, usually one per protein-coding gene
+        longLabel NCBI RefSeq Select & MANE: representative transcripts, usually one per protein-coding gene
         trackHandler ncbiRefSeq
         idXref ncbiRefSeqLink mrnaAcc name
         color 20,20,160
@@ -105,7 +105,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         priority 7
         type genePred
         shortLabel RefSeq HGMD
-        longLabel Only NCBI RefSeq manually annotated transcripts with at least one HGMD clinical variant
+        longLabel NCBI RefSeq curated and annotated by HGMD, usually one per clinically relevant gene
         trackHandler ncbiRefSeq
         idXref ncbiRefSeqLink mrnaAcc name
         color 20,20,160
