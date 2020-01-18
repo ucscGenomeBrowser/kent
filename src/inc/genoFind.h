@@ -130,14 +130,9 @@ struct genoFind
     bool allowOneMismatch;		 /* Allow a single mismatch? */
     bool noSimpRepMask;			  /* Dis-Allow simple repeat masking. */
     int segSize;			 /* Index is segmented if non-zero. */
-<<<<<<< HEAD
-    bits32 totalSeqSize;		 /* Total size of all sequences. */
-    struct gfSeqSource *sources;         /* List of sequence sources. */
-    bits32 *listSizes;                   /* Size of list for each N-mer */
-=======
     gfOffset totalSeqSize;		 /* Total size of all sequences. */
+    struct gfSeqSource *sources;         /* List of sequence sources. */
     gfOffset *listSizes;                   /* Size of list for each N-mer */
->>>>>>> 85f6ef8de8 (Initial pass at 64bit blat index)
     void *allocated;                     /* Storage space for all lists. */
     gfOffset **lists;                      /* A list for each N-mer. Used if
                                           * isSegmented is false. */
