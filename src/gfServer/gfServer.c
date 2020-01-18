@@ -7,7 +7,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
-#include <sys/mman.h>
 #include "portable.h"
 #include "filePath.h"
 #include "net.h"
@@ -74,7 +73,6 @@ boolean canStop = FALSE;
 char *indexFile = NULL;
 
 int timeout = 90;  // default timeout in seconds
-
 
 void usage()
 /* Explain usage and exit. */
