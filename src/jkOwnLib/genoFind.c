@@ -818,16 +818,12 @@ gfOffset **lists = gf->lists;
 initNtLookup();
 for (i=0; i<=lastTile; i += stepSize)
     {
-    assert(lists[0][0] < 100000000);  // FIXME: tmp
     tile = makeTile(poly, tileSize);
-    assert(lists[0][0] < 100000000);  // FIXME: tmp
     if (tile >= 0)
         {
 	if (listSizes[tile] < maxPat)
 	    {
-            assert(lists[0][0] < 100000000);  // FIXME: tmp
 	    lists[tile][listSizes[tile]++] = offset;
-            assert(lists[0][0] < 100000000);  // FIXME: tmp
 	    }
 	}
     offset += stepSize;
