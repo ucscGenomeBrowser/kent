@@ -31,20 +31,19 @@ fi
 #fi
 
 # compare old and new line counts and abort if no increase
-$KENTBIN/bedClip lovd.hg19.bed /cluster/data/hg19/chrom.sizes lovd.hg19.clipped.bed
+$KENTBIN/bedClip lovd.hg19.bed /cluster/data/hg19/chrom.sizes stdout | sed -e 's/^chrM/chrMT/g' > lovd.hg19.clipped.bed
+echo 
 cat lovd.hg19.clipped.bed | awk '(($3-$2)<=100)' > lovd.hg19.short.bed
+echo -e 'chrM\t0\t16571\tCheck chrMT\tPlease look at chrMT, not chrM, for LOVD annotations.\t' >> lovd.hg19.short.bed
 cat lovd.hg19.clipped.bed | awk '(($3-$2)>100)' > lovd.hg19.long.bed
-#old19Lc=`$KENTBIN/hgsql hg19 -e "SELECT COUNT(*) from lovd" -NB`
+echo -e 'chrM\t0\t16571\tCheck chrMT\tPlease look at chrMT, not chrM, for LOVD annotations.\t' >> lovd.hg19.long.bed
 old19ShortLc=`$KENTBIN/hgsql hg19 -e "SELECT COUNT(*) from lovdShort" -NB`
 old19LongLc=`$KENTBIN/hgsql hg19 -e "SELECT COUNT(*) from lovdLong" -NB`
 new19ShortLc=`wc -l lovd.hg19.short.bed | cut -d' ' -f1 `
 new19LongLc=`wc -l lovd.hg19.long.bed | cut -d' ' -f1 `
-#old18Lc=`$KENTBIN/hgsql hg18 -e "SELECT COUNT(*) from lovd" -NB`
-#new18Lc=`wc -l lovd.hg18.bed | cut -d' ' -f1 `
 
 echo hg19 short rowcount: old $old19ShortLc new: $new19ShortLc
 echo hg19 long rowcount: old $old19LongLc new: $new19LongLc
-#echo hg18 rowcount: old $old18Lc new: $new18Lc
 
 if [ "$new19ShortLc" -eq "$old19ShortLc" ]; then
         echo LOVD hg19 short: rowcount for $today is equal to old rowcount in mysql, quitting
@@ -56,8 +55,6 @@ if [ "$new19LongLc" -eq "$old19LongLc" ]; then
         exit 0
 fi
 
-# commenting out, as LOVD count will go down in the future, because they have a 
-# db cleanup procedure in place now
 if [ "$new19ShortLc" -lt "$old19ShortLc" ]; then
         echo LOVD hg19 short: rowcount for $today is smaller to old rowcount in mysql, quitting
         exit 255
@@ -75,6 +72,7 @@ longDiff=`echo $old19LongLc $new19LongLc | awk '{if (($2-$1)/$1 > 0.1) printf "v
 # egrep -v 'score|strand|thick|reserved|block|chromStarts' /cluster/home/max/kent/src/hg/lib/bedDetail.sql > bedDetail4.sql 
 # need to use bedClip as current files include invalid coords which LOVD won't fix.
 #$KENTBIN/bedClip lovd.hg19.bed /cluster/data/hg19/chrom.sizes lovd.hg19.clipped.bed
-cat lovd.hg19.clipped.bed | awk '(($3-$2)<=100)' | $KENTBIN/hgLoadBed hg19 lovdShort stdin -tab -sqlTable=../bedDetail4.sql -renameSqlTable -noBin
-cat lovd.hg19.clipped.bed | awk '(($3-$2)>100)' | $KENTBIN/hgLoadBed hg19 lovdLong stdin -tab -sqlTable=../bedDetail4.sql -renameSqlTable -noBin
+cat lovd.hg19.short.bed | $KENTBIN/hgLoadBed hg19 lovdShort stdin -tab -sqlTable=../bedDetail4.sql -renameSqlTable -noBin
+cat lovd.hg19.long.bed | $KENTBIN/hgLoadBed hg19 lovdLong stdin -tab -sqlTable=../bedDetail4.sql -renameSqlTable -noBin
 #$KENTBIN/bedClip lovd.hg18.bed /cluster/data/hg18/chrom.sizes stdout | $KENTBIN/hgLoadBed hg18 lovd stdin  -tab -sqlTable=../bedDetail4.sql -renameSqlTable -noBin
+echo LOVD update: OK
