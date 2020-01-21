@@ -107,8 +107,8 @@ target="_blank">here</a> to view this track in the Genome Browser.</p>
 <p>
 <strong><em>Example #2:</em></strong>
 Here is an example of an annotation file that defines 2 separate annotation tracks in BED format. 
-The first track displays blue one-base tick marks every 10000 bases on chr 22. The second track 
-displays red 100-base features alternating with blank space in the same region of chr 22. 
+The first track displays blue one-base tick marks every 10000 bases on chr22. The second track 
+displays red 100-base features alternating with blank space in the same region of chr22. 
 <pre><code>browser position chr22:20100000-20140000
 track name=spacer description="Blue ticks every 10000 bases" color=0,0,255,
 #chrom chromStart chromEnd
@@ -760,6 +760,12 @@ cart variables, for example having both hide all and highlight features.)
   <code>ct_name_####</code>, only with the full custom track name will this feature work: 
   <code>ct_name_####=full</code></li>
   <li>
+  <code>&lt;trackName&gt;.heightPer=&lt;number&gt;</code> - sets the height of the a bigWig track
+  in pixels - <a 
+  href="../../cgi-bin/hgTracks?db=hg38&ignoreCookie=1&hideTracks=1&mappability=full&umap24Quantitative.heightPer=100"
+  target="_blank">example link</a> to set umap bigWig track height to 100 pixels
+  </li>
+  <li>
   <code>&lt;trackName&gt;_hideKids=1</code> - hides a specific super track's individual tracks - <a
   href="../../cgi-bin/hgTracks?db=hg19&wgEncodeReg_hideKids=1&ignoreCookie=1" target="_blank">
   example link</a> to hide the Encode Regulation super track</li>
@@ -790,15 +796,15 @@ specific to your annotation file is highlighted):</p>
 <pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?org=<font color="000099"><em>organism_name</em></font>&amp;position=<font color="000099"><em>chr_position</em></font>&amp;hgt.customText=<font color="000099"><em>URL</em></font></code></pre>
 <p>
 <strong><em>Example #5:</em></strong><br>
-The following URL will open up the Genome Browser window to display chr 22 of the latest human
+The following URL will open up the Genome Browser window to display chr22 of the latest human
 genome assembly and will show the annotation track pointed to by the URL
 http://genome.ucsc.edu/goldenPath/help/test.bed:
 <pre><code
 <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed"
 target="_blank">http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed</a></code></pre>
 <p>
-<strong>Step 3.</strong> Provide the URL to others. To upload a custom annotation track pointed to
-by a URL into the Genome Browser, paste the URL into the large text edit box on the Add Custom
+<strong>Step 3.</strong> Provide the URL to others. To upload a custom annotation track from a 
+URL into the Genome Browser, paste the URL into the large text edit box on the Add Custom
 Tracks page, then click the Submit button.</p>
 <p>
 If you'd like to share your annotation track with a broader audience, send the URL for your
@@ -952,7 +958,7 @@ If you do not receive this output, you may be able to resolve the problem throug
 following actions:</p>
 <ul>
   <li>
-  Store the files on a real webserver, e.g. at your University. Check with the
+  Store the files on a real web server, e.g. at your University. Check with the
   systems administrators about the configuration of the server. This will often
   solve the problem.</li>
   <li>
@@ -964,7 +970,7 @@ following actions:</p>
 <strong><em>Problem:</em></strong> I used to host files on Dropbox which used to accept byte-range 
 requests, but I can't get my data to display. Why?<br>
 <strong><em>Solution:</em></strong> As described in the previous question, Dropbox is a backup provider
-and not a real webserver and as such does not support hosting indexed files, even though it used to
+and not a real web server and as such does not support hosting indexed files, even though it used to
 work to some extent. Dropbox recently removed their Public Folder feature, which means all links
 to files hosted there are inaccessible to the browser. For more information, please refer to  <a 
 href="https://www.dropbox.com/help/files-folders/public-folder" target="_blank">this announcement

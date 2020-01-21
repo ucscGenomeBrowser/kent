@@ -94,13 +94,19 @@ parameters</a> section of the Custom Tracks User's Guide.</p>
 chosen visibility</li>
 <li><code>textSize=&lt;number&gt;</code> - sets browser text size to either 6, 8, 10, 12, 14, 18,
 24, or 34. Default is a textSize of 8.</li>
-<li><code>ignoreCookie=1</code> - removes pre-existing user settings like track seletion, custom
+<li><code>&lt;trackName&gt;.heightPer=&lt;###&gt;</code> - sets a bigWig track's height to a 
+particular number of pixels (between 20-100)</li>
+<li><code>ignoreCookie=1</code> - removes pre-existing user settings like track selection, custom
 tracks, and track hubs</li>
 </ul>
 <p>
-For example, you can use the following command to hide every track (hideTracks=1) and set the knownGene track to 
-the pack visibility (knownGene=pack):</p>
-<p><code><a href="../cgi-bin/hgTracks?db=hg38&hideTracks=1&knownGene=pack">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hideTracks=1&knownGene=pack</a></code></p>
+For example, you can use the following command to hide every track (hideTracks=1), set the
+genome database to hg38 (db=hg38), set the mappability track to full visibility (mappability=full),
+and set the umap track height to 100 pixels (umap24Quantitative.heightPer=100). Each of these 
+parameters can be used individually or in combination.</p>
+<p><code><a 
+href="../cgi-bin/hgTracks?db=hg38&ignoreCookie=1&hideTracks=1&mappability=full&umap24Quantitative.heightPer=100">
+http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hideTracks=1&mappability=full&umap24Quantitative.heightPer=100</a></code></p>
 
 <p>Composite tracks have additional URL parameters that encode options to hide, select, and 
 display subtracks.</p>
