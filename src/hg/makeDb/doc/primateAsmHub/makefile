@@ -1,6 +1,7 @@
 
 Name="Primates"
-destDir=/hive/data/genomes/asmHubs/primates
+name="primates"
+destDir=/hive/data/genomes/asmHubs/${name}
 srcDir=${HOME}/kent/src/hg/makeDb/doc/primateAsmHub
 
 all:: makeDirs ${destDir}/hub.txt ${destDir}/groups.txt ${destDir}/genomes.txt \
@@ -12,12 +13,12 @@ makeDirs:
 
 ${destDir}/index.html: ${srcDir}/mkHubIndex.pl
 	${srcDir}/mkHubIndex.pl > $@
-	sed -e "s/hgdownload.soe/genome-test.gi/g; s/asmStats${Name}/testAsmStats${Name}/;" $@ > ${destDir}/testIndex.html
+	sed -e "s/hgdownload.soe/genome-test.gi/g; s#${name}/hub.txt#${name}/testHub.txt#; s/asmStats${Name}/testAsmStats${Name}/;" $@ > ${destDir}/testIndex.html
 	chmod +x $@ ${destDir}/testIndex.html
 
 ${destDir}/asmStats${Name}.html: ${srcDir}/mkAsmStats.pl
 	${srcDir}/mkAsmStats.pl > $@
-	sed -e "s/hgdownload.soe/genome-test.gi/g; s/asmStats${Name}/testAsmStats${Name}/;" $@ > ${destDir}/testAsmStats${Name}.html
+	sed -e "s/hgdownload.soe/genome-test.gi/g; s/index.html/testIndex.html/; s/asmStats${Name}/testAsmStats${Name}/;" $@ > ${destDir}/testAsmStats${Name}.html
 	chmod +x $@ ${destDir}/testAsmStats${Name}.html
 
 ${destDir}/genomes.txt:  ${srcDir}/mkGenomes.pl \
@@ -31,6 +32,7 @@ ${destDir}/genomes.txt:  ${srcDir}/mkGenomes.pl \
 ${destDir}/hub.txt: ${srcDir}/hub.txt
 	rm -f ${destDir}/hub.txt
 	cp -p ${srcDir}/hub.txt ${destDir}/hub.txt
+	sed -e 's/index.html/testIndex.html/;' ${srcDir}/hub.txt > ${destDir}/testHub.txt
 
 ${destDir}/groups.txt: ${srcDir}/groups.txt
 	rm -f ${destDir}/groups.txt

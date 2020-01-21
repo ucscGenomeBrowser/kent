@@ -6,18 +6,15 @@ use warnings;
 my $home = $ENV{'HOME'};
 my $srcDocDir = "primateAsmHub";
 my $asmHubDocDir = "$home/kent/src/hg/makeDb/doc/$srcDocDir";
-my $Name = "Primates";
+my $Name = "Primate";
 my $asmHubName = "primates";
 my $defaultAssembly = "GCF_000001405.39_GRCh38.p13";
 
 my $srcDir = "$home/kent/src/hg/makeDb/doc/$srcDocDir";
-my $commonNameList = "primates.asmId.commonName.tsv";
 my $commonNameOrder = "primates.commonName.asmId.orderList.tsv";
 
 my @orderList;	# asmId of the assemblies in order from the *.list files
 # the order to read the different .list files:
-my @classList = qw( human );
-my %class;	# key is asmId, value is from class list
 my $assemblyCount = 0;
 
 ##############################################################################
@@ -41,19 +38,22 @@ chomp $timeStamp;
 
 print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
-<!--#set var="TITLE" value="Primate genomes assembly hubs" -->
+<!--#set var="TITLE" value="$Name genomes assembly hubs" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
 
-<h1>Primate Genomes assembly hubs</h1>
+<h1>$Name Genomes assembly hubs</h1>
 <p>
-Assemblies from NCBI/Genbank/Refseq sources
+Assemblies from NCBI/Genbank/Refseq sources, subset of $asmHubName only.
 </p>
 
 <h3>How to view the hub</h3>
 <p>
-You can load this hub from our
+Individual assemblies are attached to the genome browser via the
+<em>link to genome browser</em> in the table below.  To attach all
+of these assemblies in one set for this hub, select the ${Name}s assembly
+hub from our
 <a href="https://genome.ucsc.edu/cgi-bin/hgHubConnect#publicHubs" target="_blank">Public Hubs</a> 
 page or by clicking these assembly links to any of our official websites:
 <ul>
@@ -70,7 +70,7 @@ page or by clicking these assembly links to any of our official websites:
 </p>
 
 <p>
-To manually attach this hub to other genome browsers:
+To manually attach all the assemblies in this hub to other genome browsers:
 <ol>
   <li>
     From the blue navigation bar, go to
@@ -86,13 +86,17 @@ To manually attach this hub to other genome browsers:
 
 <p>
 After adding the hub, you will be redirected to the gateway page.  The
-genome assemblies can be selected from the <em>Reference Genome Improvement Hub Assembly</em> dropdown menu.
+genome assemblies can be selected from the
+<em>${Name}s Hub Assembly</em> dropdown menu.
+Instead of adding all the assemblies in one collected group, use the individual
+<em>link to genome browser</em> in the table below.
 </p>
-<p>
-<h3>See also: <a href='asmStats$Name.html' target=_blank>assembly statistics</a></h3>
-</p>
+<h3>See also: <a href='asmStats$Name.html'
+target=_blank>assembly statistics</a></h3><br>
 <h3>Data resource links</h3>
-NOTE: <em>Click on the column headers to sort the table by that column</em>
+NOTE: <em>Click on the column headers to sort the table by that column</em><br>
+The <em>link to genome browser</em> will attach only that single assembly to
+the genome browser.
 END
 }	#	sub startHtml()
 
@@ -143,11 +147,13 @@ END
 sub tableContents() {
   my $rowCount = 0;
   foreach my $asmId (@orderList) {
-    my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/" . substr($asmId, 0 ,3);
-    $buildDir .= "/" . substr($asmId, 4 ,3);
-    $buildDir .= "/" . substr($asmId, 7 ,3);
-    $buildDir .= "/" . substr($asmId, 10 ,3);
-    $buildDir .= "/" . $asmId;
+    my $accessionDir = substr($asmId, 0 ,3);
+    $accessionDir .= "/" . substr($asmId, 4 ,3);
+    $accessionDir .= "/" . substr($asmId, 7 ,3);
+    $accessionDir .= "/" . substr($asmId, 10 ,3);
+    $accessionDir .= "/" . $asmId;
+    my $ncbiFtpLink = "ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$accessionDir/";
+    my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir";
     my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
     my ($gcPrefix, $asmAcc, $asmName) = split('_', $asmId, 3);
     my $chromSizes="${buildDir}/${asmId}.chrom.sizes";
@@ -202,9 +208,10 @@ sub tableContents() {
       }
     }
     close (FH);
+    my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$accessionDir";
     printf "<tr><td align=right>%d</td>\n", ++$rowCount;
-    printf "<td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/%s/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", $asmHubName, $asmId, $commonName;
-    printf "    <td align=center><a href='https://hgdownload.soe.ucsc.edu/hubs/%s/genomes/%s/' target=_blank>%s</a></td>\n", $asmHubName, $asmId, $sciName;
+    printf "<td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=%s/%s.hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", $hubUrl, $asmId, $asmId, $commonName;
+    printf "    <td align=center><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s</a></td>\n", $gcPrefix, $asmAcc, $asmId;
     if ( $bioSample ne "notFound" ) {
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/biosample/?term=%s' target=_blank>%s</a></td>\n", $bioSample, $bioSample;
@@ -212,7 +219,7 @@ sub tableContents() {
     printf "    <td align=left>n/a</td>\n";
     }
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/bioproject/?term=%s' target=_blank>%s</a></td>\n", $bioProject, $bioProject;
-    printf "    <td align=center>%s</td>\n", $asmDate;
+    printf "    <td align=center><a href='%s' target=_blank>%s</a></td>\n", $ncbiFtpLink, $asmDate;
     printf "</tr>\n";
   }
 }	#	sub tableContents()

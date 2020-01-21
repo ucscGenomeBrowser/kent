@@ -8,6 +8,7 @@ my $home = $ENV{'HOME'};
 my $srcDocDir = "primateAsmHub";
 my $asmHubDocDir = "$home/kent/src/hg/makeDb/doc/$srcDocDir";
 my $asmHubName = "primates";
+my $Name = "Primate";
 
 my $commonNameList = "primates.asmId.commonName.tsv";
 my $commonNameOrder = "primates.commonName.asmId.orderList.tsv";
@@ -39,22 +40,22 @@ chomp $timeStamp;
 
 print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
-<!--#set var="TITLE" value="Primate genomes assembly hubs" -->
+<!--#set var="TITLE" value="$Name genomes assembly hubs" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
 
-<h1>Primate Genomes assembly hubs</h1>
+<h1>$Name Genomes assembly hubs</h1>
 <p>
-Assemblies from NCBI/Genbank/Refseq sources
+Assemblies from NCBI/Genbank/Refseq sources, subset of $asmHubName only.
 </p>
 
-<p>
-<h3>See also: <a href='index.html' target=_blank>hub access</a></h3>
-</p>
+<h3>See also: <a href='index.html' target=_blank>hub access</a></h3><br>
 
 <h3>Data resource links</h3>
-NOTE: <em>Click on the column headers to sort the table by that column</em>
+NOTE: <em>Click on the column headers to sort the table by that column</em><br>
+The <em>link to genome browser</em> will attach only that single assembly to
+the genome browser.
 END
 }
 
@@ -226,7 +227,7 @@ sub tableContents() {
       }
     }
     close (FH);
-    printf "<tr><th>%d</th><td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/%s/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", ++$asmCount, $asmHubName, $asmId, $commonName;
+    printf "<tr><th>%d</th><td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/genomes/%s/%s.hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", ++$asmCount, $asmId, $asmId, $asmId, $commonName;
     printf "    <td align=center><a href='https://hgdownload.soe.ucsc.edu/hubs/%s/genomes/%s/' target=_blank>%s</a></td>\n", $asmHubName, $asmId, $sciName;
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s</a></td>\n", $gcPrefix, $asmAcc, $asmId;
     printf "    <td align=right>%s</td>\n", commify($seqCount);

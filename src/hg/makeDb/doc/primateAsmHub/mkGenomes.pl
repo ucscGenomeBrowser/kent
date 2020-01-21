@@ -77,16 +77,71 @@ foreach my $asmId (reverse(@orderList)) {
   my $localGenomesFile = "$buildDir/${asmId}.genomes.txt";
   open (GF, ">$localGenomesFile") or die "can not write to $localGenomesFile";
   printf GF "genome %s\n", $asmId;
-  printf GF "trackDb %s/%s.trackDb.txt\n", $asmId, $asmId;
-  printf GF "groups groups.txt\n";
+  printf GF "trackDb %s.trackDb.txt\n", $asmId;
+  printf GF "groups %s.groups.txt\n", $asmId;
   printf GF "description %s\n", $orgName;
-  printf GF "twoBitPath %s/%s.2bit\n", $asmId, $asmId;
+  printf GF "twoBitPath %s.2bit\n", $asmId;
   printf GF "organism %s\n", $descr;
   printf GF "defaultPos %s\n", $defPos;
   printf GF "orderKey %d\n", $orderKey++;
   printf GF "scientificName %s\n", $descr;
-  printf GF "htmlPath %s/html/%s.description.html\n", $asmId, $asmId;
+  printf GF "htmlPath html/%s.description.html\n", $asmId;
   close (GF);
+  my $localHubTxt = "$buildDir/${asmId}.hub.txt";
+  open (HT, ">$localHubTxt") or die "can not write to $localHubTxt";
+  printf HT "hub %s genome assembly\n", $asmId;
+  printf HT "shortLabel %s\n", $orgName;
+  printf HT "longLabel %s/%s/%s genome assembly\n", $orgName, $descr, $asmId;
+  printf HT "genomesFile %s.genomes.txt\n", $asmId;
+  printf HT "email hclawson\@ucsc.edu\n";
+  printf HT "descriptionUrl html/%s.description.html\n", $asmId;
+  close (HT);
+
+  my $localGroups = "$buildDir/${asmId}.groups.txt";
+  open (GR, ">$localGroups") or die "can not write to $localGroups";
+  print GR <<_EOF_
+name user
+label Custom
+priority 1
+defaultIsClosed 1
+
+name map
+label Mapping
+priority 2
+defaultIsClosed 0
+
+name genes
+label Genes
+priority 3
+defaultIsClosed 0
+
+name rna
+label mRNA
+priority 4
+defaultIsClosed 0
+
+name regulation
+label Regulation
+priority 5
+defaultIsClosed 0
+
+name compGeno
+label Comparative
+priority 6
+defaultIsClosed 0
+
+name varRep
+label Variation
+priority 7
+defaultIsClosed 0
+
+name x
+label Experimental
+priority 10
+defaultIsClosed 1
+_EOF_
+   ;
+   close (GR);
 }
 
 __END__

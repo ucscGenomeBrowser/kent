@@ -4,12 +4,12 @@ use strict;
 use warnings;
 use File::Basename;
 
+my $topLevel = "/hive/data/genomes/asmHubs";
+
 my %betterName;	# key is asmId, value is common name
 my $hubName = "primates";
 my $Name = "Primates";
 my $srcDocDir = "primateAsmHub";
-my $destDir = "/hive/data/genomes/asmHubs/$hubName";
-my $hubDir = "/gbdb/hubs/$hubName";
 
 my $home = $ENV{'HOME'};
 my $srcDir = "$home/kent/src/hg/makeDb/doc/$srcDocDir";
@@ -37,47 +37,55 @@ while (my $line = <FH>) {
 }
 close (FH);
 
+my $destDir = "/hive/data/genomes/asmHubs";
+
 my $orderKey = 1;
 foreach my $asmId (reverse(@orderList)) {
-  my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/" . substr($asmId, 0 ,3);
-  $buildDir .= "/" . substr($asmId, 4 ,3);
-  $buildDir .= "/" . substr($asmId, 7 ,3);
-  $buildDir .= "/" . substr($asmId, 10 ,3);
-  $buildDir .= "/" . $asmId;
-  if ( ! -d "${destDir}/genomes" ) {
-    `mkdir "${destDir}/genomes"`;
+  my $accessionDir = substr($asmId, 0 ,3);
+  $accessionDir .= "/" . substr($asmId, 4 ,3);
+  $accessionDir .= "/" . substr($asmId, 7 ,3);
+  $accessionDir .= "/" . substr($asmId, 10 ,3);
+  $accessionDir .= "/" . $asmId;
+  $destDir = "/hive/data/genomes/asmHubs/$accessionDir";
+  my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir";
+  if ( ! -d "${destDir}" ) {
+    `mkdir "${destDir}"`;
   }
-  printf STDERR "ln -s '${buildDir}' '${destDir}/genomes/${asmId}'\n";
-  if ( ! -d "${destDir}/genomes/${asmId}" ) {
-    `mkdir -p "${destDir}/genomes/${asmId}"`;
-  }
-  `rm -f "${destDir}/genomes/${asmId}/bbi"`;
-  `rm -f "${destDir}/genomes/${asmId}/ixIxx"`;
-  `rm -fr "${destDir}/genomes/${asmId}/html"`;
-  `mkdir -p "${destDir}/genomes/${asmId}/html"`;
-  `rm -f "${destDir}/genomes/${asmId}/${asmId}.2bit"`;
-  `rm -f "${destDir}/genomes/${asmId}/${asmId}.agp.gz"`;
-  `rm -f "${destDir}/genomes/${asmId}/${asmId}.chrom.sizes"`;
-  `rm -f "${destDir}/genomes/${asmId}/${asmId}_assembly_report.txt"`;
-  `rm -f "${destDir}/genomes/${asmId}/${asmId}.trackDb.txt"`;
-  `rm -f "${destDir}/genomes/${asmId}/${asmId}.genomes.txt"`;
-  `ln -s "${buildDir}/bbi" "${destDir}/genomes/${asmId}/bbi"`;
-  `ln -s "${buildDir}/ixIxx" "${destDir}/genomes/${asmId}/ixIxx"`;
-  `ln -s ${buildDir}/html/*.html "${destDir}/genomes/${asmId}/html/"`;
-#  `rm -f ${destDir}/genomes/${asmId}/html/*.jpg`;
+  printf STDERR "ln -s '${buildDir}' '${destDir}'\n";
+  `rm -f "${destDir}/bbi"`;
+  `rm -f "${destDir}/ixIxx"`;
+  `rm -fr "${destDir}/html"`;
+  `mkdir -p "${destDir}/html"`;
+  `rm -f "${destDir}/${asmId}.2bit"`;
+  `rm -f "${destDir}/${asmId}.agp.gz"`;
+  `rm -f "${destDir}/${asmId}.chrom.sizes"`;
+  `rm -f "${destDir}/${asmId}_assembly_report.txt"`;
+  `rm -f "${destDir}/${asmId}.trackDb.txt"`;
+  `rm -f "${destDir}/${asmId}.genomes.txt"`;
+  `rm -f "${destDir}/${asmId}.hub.txt"`;
+  `rm -f "${destDir}/${asmId}.groups.txt"`;
+  `ln -s "${buildDir}/bbi" "${destDir}/bbi"`;
+  `ln -s "${buildDir}/ixIxx" "${destDir}/ixIxx"`;
+  `ln -s ${buildDir}/html/*.html "${destDir}/html/"`;
    my $jpgFiles =`ls ${buildDir}/html/*.jpg 2> /dev/null | wc -l`;
    chomp $jpgFiles;
    if ($jpgFiles > 0) {
-    `ln -s ${buildDir}/html/*.jpg "${destDir}/genomes/${asmId}/html/"`;
+    `rm -f ${destDir}/html/*.jpg`;
+    `ln -s ${buildDir}/html/*.jpg "${destDir}/html/"`;
    }
 #  `ln -s ${buildDir}/html/*.png "${destDir}/genomes/${asmId}/html/"`;
-  `ln -s "${buildDir}/${asmId}.2bit" "${destDir}/genomes/${asmId}/"`;
-  `ln -s "${buildDir}/${asmId}.agp.gz" "${destDir}/genomes/${asmId}/"`;
-  `ln -s "${buildDir}/${asmId}.chrom.sizes" "${destDir}/genomes/${asmId}/"`;
-  `ln -s "${buildDir}/download/${asmId}_assembly_report.txt" "${destDir}/genomes/${asmId}/"`;
-  `ln -s "${buildDir}/${asmId}.trackDb.txt" "${destDir}/genomes/${asmId}/"`;
-  `ln -s "${buildDir}/${asmId}.genomes.txt" "${destDir}/genomes/${asmId}/"`;
+  `ln -s "${buildDir}/${asmId}.2bit" "${destDir}/"`;
+  `ln -s "${buildDir}/${asmId}.agp.gz" "${destDir}/"`;
+  `ln -s "${buildDir}/${asmId}.chrom.sizes" "${destDir}/"`;
+  `ln -s "${buildDir}/download/${asmId}_assembly_report.txt" "${destDir}/"`;
+  `ln -s "${buildDir}/${asmId}.trackDb.txt" "${destDir}/"`;
+  `ln -s "${buildDir}/${asmId}.genomes.txt" "${destDir}/"`;
+  `ln -s "${buildDir}/${asmId}.hub.txt" "${destDir}/"`;
+  `ln -s "${buildDir}/${asmId}.groups.txt" "${destDir}/"`;
 }
+
+__END__
+
 my $hubDir = "/gbdb/hubs/$hubName";
 
 `rm -f "${hubDir}/index.html"`;
