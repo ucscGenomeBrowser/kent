@@ -1,4 +1,4 @@
-GCA_003601015.1_HG03807_prelim_1.0	Bengali, Bangaladesh
+GCA_003601015.1_HG03807_prelim_1.0	Bengali, Bangladesh
 GCA_002209525.2_HG01352_prelim_2.1	Columbian, Colombia
 GCA_003574075.1_HG02818_prelim_1.0	Gambia, Gambia
 GCA_002872155.1_NA19434_prelim_1.0	Luhya, Kenya
