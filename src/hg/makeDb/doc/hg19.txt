@@ -34001,3 +34001,16 @@ wc -l refseqSelect.curated.gp
 
     # commit all
 ##############################################################################
+2020-01-21: manually update GENCODE V19 to include chrMT (markd)
+
+  cd /hive/data/genomes/hg19/bed/gencodeV19/chrMT
+  # convert chrM annotation in gff3 to chrMT
+  zcat ../data/release_19/gencode.v19.annotation.gff3.gz | tawk 'NR==1{print;next} $1=="chrM"{$1="chrMT"; print}' >chrMT.gff3
+  # comprensive and basic are the same on chrM and there are no pseudogenes, so this is
+  # easy
+  cat ../tables/wgEncodeGencodeCompV19.gp chrMT.gp >wgEncodeGencodeCompV19.gp
+  cat ../tables/wgEncodeGencodeBasicV19.gp chrMT.gp >wgEncodeGencodeBasicV19.gp
+  
+  hgLoadGenePred -genePredExt hg19  wgEncodeGencodeCompV19 wgEncodeGencodeCompV19.gp
+  hgLoadGenePred -genePredExt hg19  wgEncodeGencodeBasicV19 wgEncodeGencodeBasicV19.gp
+##############################################################################
