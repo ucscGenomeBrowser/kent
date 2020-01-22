@@ -120,19 +120,19 @@ ensToUcscMkLiftMm38Test: mkdirs
 ###
 genePredTests: set1AnnotTest ummappingWarnHs38Test specialCases1Test
 
-set1AnnotTest: ${set1Gp} mkdirs
-	${gencodeGxfToGenePred} input/set1.gtf ${ensToUcscMappingChainHg38} output/$@.gp
+set1AnnotTest: ${set1Gp} ${ensToUcscMappingChainHg37} mkdirs
+	${gencodeGxfToGenePred} ${ucscGenomeDbHs37} input/set1.gtf ${ensToUcscMappingChainHg37} output/$@.gp
 	${diff} expected/$@.gp output/$@.gp
 
 ummappingWarnHs38Test: ${ensToUcscMappingChainHg38}
-	${gencodeGxfToGenePred} input/mappingErrorsHs38.gtf ${ensToUcscMappingChainHg38} output/$@.gp --unmapped=output/$@.unmapped.gp >output/$@.out 2>&1
+	${gencodeGxfToGenePred} ${ucscGenomeDbHs38} input/mappingErrorsHs38.gtf ${ensToUcscMappingChainHg38} output/$@.gp --unmapped=output/$@.unmapped.gp >output/$@.out 2>&1
 	${diff} expected/$@.out output/$@.out
 	${diff} expected/$@.gp output/$@.gp
 	${diff} expected/$@.unmapped.gp output/$@.unmapped.gp
 
 # chrM, PAR, mapped and unmapped haplotypes and patches
 specialCases1Test: ${ensToUcscMappingChainHg37} mkdirs
-	${gencodeGxfToGenePred} --unmapped=output/$@.unmapped.gp input/specialCases1.gtf ${ensToUcscMappingChainHg37} output/$@.gp
+	${gencodeGxfToGenePred} --unmapped=output/$@.unmapped.gp ${ucscGenomeDbHs37} input/specialCases1.gtf ${ensToUcscMappingChainHg37} output/$@.gp
 	${diff} expected/$@.gp output/$@.gp
 	${diff} expected/$@.unmapped.gp output/$@.unmapped.gp
 
