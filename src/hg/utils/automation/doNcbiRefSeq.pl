@@ -338,6 +338,11 @@ zcat \$ncbiGffGz \\
       -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
 genePredCheck \$asmId.gp
 
+zcat \$ncbiGffGz \\
+  | egrep 'tag=(RefSeq|MANE) Select' | cut -f9- | tr ';' '\\n' \\
+    | grep 'Name=' | grep -v NP_ | cut -d= -f2 | sort -u \\
+       > \$asmId.refseqSelectTranscripts.txt
+
 # extract labels from semi-structured text in gbff COMMENT/description sections:
 zcat \$downloadDir/\${asmId}_rna.gbff.gz \\
   | (grep ' :: ' || true) \\
@@ -359,6 +364,13 @@ $genePredCheckDb \$asmId.\$db.gp.gz
 # may not be any curated genes
 if [ ! -s \$db.curated.gp ]; then
   rm -f \$db.curated.gp
+else
+  cat \$db.curated.gp | fgrep -f \$asmId.refseqSelectTranscripts.txt - \\
+    > \$db.refseqSelect.curated.gp
+  # may not be any refseqSelect.curated genes
+  if [ ! -s \$db.refseqSelect.curated.gp ]; then
+    rm -f \$db.refseqSelect.curated.gp
+  fi
 fi
 
 # predicted subset of all genes
@@ -372,6 +384,9 @@ fi
 
 if [ -s \$db.curated.gp ]; then
   $genePredCheckDb \$db.curated.gp
+  if [ -s \$db.refseqSelect.curated.gp ]; then
+     $genePredCheckDb \$db.refseqSelect.curated.gp
+  fi
 fi
 if [ -s \$db.predicted.gp ]; then
   $genePredCheckDb \$db.predicted.gp
@@ -505,6 +520,21 @@ if [ -s process/\$db.curated.gp ]; then
     | sort -u > \$asmId.ncbiRefSeqCurated.ix.txt
   ixIxx \$asmId.ncbiRefSeqCurated.ix.txt \$asmId.ncbiRefSeqCurated.ix{,x}
   rm -f \$asmId.ncbiRefSeqCurated.ix.txt
+### and refseqSelect if exists (a subset of curated)
+  if [ -s process/\$db.refseqSelect.curated.gp ]; then
+    genePredToBigGenePred process/\$db.refseqSelect.curated.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeqSelectCurated.bigGp
+    bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
+    \$db.ncbiRefSeqSelectCurated.bigGp \$db.chrom.sizes \\
+      \$db.ncbiRefSeqSelectCurated.bb
+    rm -f \$db.ncbiRefSeqSelectCurated.bigGp
+    bigBedInfo \$db.ncbiRefSeqSelectCurated.bb | egrep "^itemCount:|^basesCovered:" \\
+      | sed -e 's/,//g' > \$db.ncbiRefSeqSelectCurated.stats.txt
+    LC_NUMERIC=en_US /usr/bin/printf "# ncbiRefSeqSelectCurated %s %'d %s %'d\\n" `cat \$db.ncbiRefSeqSelectCurated.stats.txt` | xargs echo
+    ~/kent/src/hg/utils/automation/gpToIx.pl process/\$db.refseqSelect.curated.gp \\
+      | sort -u > \$asmId.ncbiRefSeqSelectCurated.ix.txt
+    ixIxx \$asmId.ncbiRefSeqSelectCurated.ix.txt \$asmId.ncbiRefSeqSelectCurated.ix{,x}
+    rm -f \$asmId.ncbiRefSeqSelectCurated.ix.txt
+  fi
 fi
 
 ### predicted only if present
@@ -605,6 +635,10 @@ $genePredCheckDb ncbiRefSeq
 if [ -s process/\$db.curated.gp ]; then
   hgLoadGenePred -genePredExt \$db ncbiRefSeqCurated process/\$db.curated.gp
   $genePredCheckDb ncbiRefSeqCurated
+  if [ -s process/\$db.refseqSelect.curated.gp ]; then
+    hgLoadGenePred -genePredExt \$db ncbiRefSeqSelect process/\$db.refseqSelect.curated.gp
+    $genePredCheckDb ncbiRefSeqSelect
+  fi
 fi
 
 if [ -s process/\$db.predicted.gp ]; then
