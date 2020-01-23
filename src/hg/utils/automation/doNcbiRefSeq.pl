@@ -338,10 +338,14 @@ zcat \$ncbiGffGz \\
       -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
 genePredCheck \$asmId.gp
 
-zcat \$ncbiGffGz \\
-  | egrep 'tag=(RefSeq|MANE) Select' | cut -f9- | tr ';' '\\n' \\
+zcat \$ncbiGffGz | egrep 'tag=(RefSeq|MANE) Select' || true > before.cut9.txt
+
+if [ -s before.cut9.txt ]; then
+  cut -f9- before.cut9.txt | tr ';' '\\n' \\
     | grep 'Name=' | grep -v NP_ | cut -d= -f2 | sort -u \\
        > \$asmId.refseqSelectTranscripts.txt
+fi
+rm -f before.cut9.txt
 
 # extract labels from semi-structured text in gbff COMMENT/description sections:
 zcat \$downloadDir/\${asmId}_rna.gbff.gz \\
@@ -364,7 +368,7 @@ $genePredCheckDb \$asmId.\$db.gp.gz
 # may not be any curated genes
 if [ ! -s \$db.curated.gp ]; then
   rm -f \$db.curated.gp
-else
+elif [ -s \$asmId.refseqSelectTranscripts.txt ]; then
   cat \$db.curated.gp | fgrep -f \$asmId.refseqSelectTranscripts.txt - \\
     > \$db.refseqSelect.curated.gp
   # may not be any refseqSelect.curated genes
