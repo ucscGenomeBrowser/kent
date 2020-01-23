@@ -1244,6 +1244,8 @@ if [ ../simpleRepeat/trfMask.bed.gz -nt \$asmId.masked.faSize.txt ]; then
   twoBitMask $src2BitToMask -type=.bed \\
      -add ../simpleRepeat/trfMask.bed.gz \$asmId.masked.2bit
   twoBitToFa \$asmId.masked.2bit stdout | faSize stdin > \$asmId.masked.faSize.txt
+  touch -r \$asmId.masked.2bit \$asmId.masked.faSize.txt
+  cp -p \$asmId.masked.faSize.txt ../../\$asmId.faSize.txt
 else
   printf "# addMask step previously completed\\n" 1>&2
   exit 0
