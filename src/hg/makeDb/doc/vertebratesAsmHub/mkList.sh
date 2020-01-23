@@ -22,7 +22,7 @@ join -t$'\t' $clade.taxId.list \
     > $clade.xrefName.list
 
 awk -F$'\t' '{printf "%s\t%s\n", $13, $3}' $clade.xrefName.list \
-  | sort | grep -v GCF_001723915 > $clade.asmId.commonName.tsv
+  | sort | grep -v GCF_001723915 > ../asmHubs/$clade.asmId.commonName.tsv
 
 awk -F$'\t' '{printf "%s\t%s\n", $3, $13}' $clade.xrefName.list \
-  | sort -fr | grep -v GCF_001723915 > $clade.commonName.asmId.orderList.tsv
+  | sort -fr | grep -v GCF_001723915 > ../asmHubs/$clade.commonName.asmId.orderList.tsv
