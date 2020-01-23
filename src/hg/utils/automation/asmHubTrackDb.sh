@@ -510,6 +510,30 @@ rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ix
         color 0,0,0\n\n" "${asmId}"
   fi
 
+  if [ -s ${buildDir}/trackData/ncbiRefSeq/$asmId.ncbiRefSeqSelectCurated.bb ]; then
+    rm -f $buildDir/bbi/${asmId}.ncbiRefSeqSelectCurated.bb
+    rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeqSelectCurated.ix
+    rm -f $buildDir/ixIxx/${asmId}.ncbiRefSeqSelectCurated.ixx
+    ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeqSelectCurated.bb $buildDir/bbi/${asmId}.ncbiRefSeqSelectCurated.bb
+    ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeqSelectCurated.ix $buildDir/ixIxx/${asmId}.ncbiRefSeqSelectCurated.ix
+    ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeqSelectCurated.ixx $buildDir/ixIxx/${asmId}.ncbiRefSeqSelectCurated.ixx
+
+    printf "        track ncbiRefSeqSelect
+        parent refSeqComposite off
+        priority 7
+        type bigGenePred
+        shortLabel RefSeq Select
+        longLabel NCBI RefSeq/MANE Select: one representative transcript per protein-coding gene
+        idXref ncbiRefSeqLink mrnaAcc name
+        color 20,20,160
+        labelFields name,geneName,geneName2
+        searchIndex name
+        searchTrix ixIxx/%s.ncbiRefSeqSelectCurated.ix
+        bigDataUrl bbi/%s.ncbiRefSeqSelectCurated.bb
+        baseColorUseCds given
+        baseColorDefault genomicCodons\n\n" "${asmId}" "${asmId}"
+  fi
+
   if [ -s ${buildDir}/trackData/ncbiRefSeq/$asmId.ncbiRefSeqVersion.txt ]; then
     rm -f $buildDir/html/$asmId.ncbiRefSeqVersion.txt
     ln -s ../trackData/ncbiRefSeq/$asmId.ncbiRefSeqVersion.txt $buildDir/html/
