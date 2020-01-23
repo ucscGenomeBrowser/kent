@@ -1498,7 +1498,7 @@ export target2bit="\$buildDir/\$asmId.2bit"
 
 if [ $buildDir/\$asmId.2bit -nt \$asmId.ncbiRefSeq.bb ]; then
 
-~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \\
+~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -toGpWarnOnly -buildDir=`pwd` \\
       -bigClusterHub=$bigClusterHub -dbHost=$dbHost \\
       -liftFile="\$liftFile" \\
       -target2bit="\$target2bit" \\
