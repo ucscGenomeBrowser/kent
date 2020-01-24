@@ -4,17 +4,25 @@ use strict;
 use warnings;
 use File::Basename;
 
-my $topLevel = "/hive/data/genomes/asmHubs";
+my $argc = scalar(@ARGV);
+if ($argc != 2) {
+  printf STDERR "mkGenomes.pl Name asmName\n";
+  printf STDERR "e.g.: mkAsmStats Mammals mammals\n";
+  exit 255;
+}
+my $Name = shift;
+my $asmHubName = shift;
 
 my %betterName;	# key is asmId, value is common name
-my $hubName = "vertebrate";
-my $Name = "Vertebrate";
-my $srcDocDir = "${hubName}sAsmHub";
+my $srcDocDir = "${asmHubName}AsmHub";
+my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild";
+my $destDir = "/hive/data/genomes/asmHubs/$asmHubName";
 
 my $home = $ENV{'HOME'};
 my $srcDir = "$home/kent/src/hg/makeDb/doc/$srcDocDir";
-my $commonNameList = "$hubName.asmId.commonName.tsv";
-my $commonNameOrder = "$hubName.commonName.asmId.orderList.tsv";
+my $commonNameList = "$asmHubName.asmId.commonName.tsv";
+my $commonNameOrder = "$asmHubName.commonName.asmId.orderList.tsv";
+
 
 open (FH, "<$srcDir/${commonNameList}") or die "can not read $srcDir/${commonNameList}";
 while (my $line = <FH>) {
@@ -37,67 +45,15 @@ while (my $line = <FH>) {
 }
 close (FH);
 
-my $destDir = "/hive/data/genomes/asmHubs";
-
 my $orderKey = 1;
 foreach my $asmId (reverse(@orderList)) {
-  my $accessionDir = substr($asmId, 0 ,3);
-  $accessionDir .= "/" . substr($asmId, 4 ,3);
-  $accessionDir .= "/" . substr($asmId, 7 ,3);
-  $accessionDir .= "/" . substr($asmId, 10 ,3);
-  $accessionDir .= "/" . $asmId;
-  $destDir = "/hive/data/genomes/asmHubs/$accessionDir";
-  my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir";
-  if ( ! -d "${destDir}" ) {
-    `mkdir -p "${destDir}"`;
-  }
-  printf STDERR "ln -s '${buildDir}' '${destDir}'\n";
-  `rm -f "${destDir}/bbi"`;
-  `rm -f "${destDir}/ixIxx"`;
-  `rm -fr "${destDir}/html"`;
-  `mkdir -p "${destDir}/html"`;
-  `rm -f "${destDir}/${asmId}.2bit"`;
-  `rm -f "${destDir}/${asmId}.agp.gz"`;
-  `rm -f "${destDir}/${asmId}.chrom.sizes"`;
-  `rm -f "${destDir}/${asmId}_assembly_report.txt"`;
-  `rm -f "${destDir}/${asmId}.trackDb.txt"`;
-  `rm -f "${destDir}/${asmId}.genomes.txt"`;
-  `rm -f "${destDir}/${asmId}.hub.txt"`;
-  `rm -f "${destDir}/${asmId}.groups.txt"`;
-  `ln -s "${buildDir}/bbi" "${destDir}/bbi"`;
-  `ln -s "${buildDir}/ixIxx" "${destDir}/ixIxx"`;
-  `ln -s ${buildDir}/html/*.html "${destDir}/html/"`;
-   my $jpgFiles =`ls ${buildDir}/html/*.jpg 2> /dev/null | wc -l`;
-   chomp $jpgFiles;
-   if ($jpgFiles > 0) {
-    `rm -f ${destDir}/html/*.jpg`;
-    `ln -s ${buildDir}/html/*.jpg "${destDir}/html/"`;
-   }
-#  `ln -s ${buildDir}/html/*.png "${destDir}/genomes/${asmId}/html/"`;
-  `ln -s "${buildDir}/${asmId}.2bit" "${destDir}/"`;
-  `ln -s "${buildDir}/${asmId}.agp.gz" "${destDir}/"`;
-  `ln -s "${buildDir}/${asmId}.chrom.sizes" "${destDir}/"`;
-  `ln -s "${buildDir}/download/${asmId}_assembly_report.txt" "${destDir}/"`;
-  `ln -s "${buildDir}/${asmId}.trackDb.txt" "${destDir}/"`;
-  `ln -s "${buildDir}/${asmId}.genomes.txt" "${destDir}/"`;
-  `ln -s "${buildDir}/${asmId}.hub.txt" "${destDir}/"`;
-  `ln -s "${buildDir}/${asmId}.groups.txt" "${destDir}/"`;
-}
-
-__END__
-
-my $hubDir = "/gbdb/hubs/$hubName";
-
-`rm -f "${hubDir}/index.html"`;
-`ln -s "${destDir}/index.html" "${hubDir}/index.html"`;
-`rm -f "${hubDir}/testIndex.html"`;
-`ln -s "${destDir}/testIndex.html" "${hubDir}/testIndex.html"`;
-`rm -f "${hubDir}/testAsmStats${Name}.html"`;
-`ln -s "${destDir}/testAsmStats${Name}.html" "${hubDir}/testAsmStats${Name}.html"`;
-
-__END__
-;
+  my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/" . substr($asmId, 0 ,3);
+  $buildDir .= "/" . substr($asmId, 4 ,3);
+  $buildDir .= "/" . substr($asmId, 7 ,3);
+  $buildDir .= "/" . substr($asmId, 10 ,3);
+  $buildDir .= "/" . $asmId;
   my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
+  next if (! -s $asmReport);
   my $descr=`grep -i "organism name:" $asmReport | head -1 | sed -e 's#.*organism name: *##i; s# (.*\$##;'`;
   chomp $descr;
   my $orgName=`grep -i "organism name:" $asmReport | head -1 | sed -e 's#.* name: .* (##; s#).*##;'`;
@@ -130,16 +86,71 @@ __END__
   my $localGenomesFile = "$buildDir/${asmId}.genomes.txt";
   open (GF, ">$localGenomesFile") or die "can not write to $localGenomesFile";
   printf GF "genome %s\n", $asmId;
-  printf GF "trackDb %s/%s.trackDb.txt\n", $asmId, $asmId;
-  printf GF "groups groups.txt\n";
+  printf GF "trackDb %s.trackDb.txt\n", $asmId;
+  printf GF "groups %s.groups.txt\n", $asmId;
   printf GF "description %s\n", $orgName;
-  printf GF "twoBitPath %s/%s.2bit\n", $asmId, $asmId;
+  printf GF "twoBitPath %s.2bit\n", $asmId;
   printf GF "organism %s\n", $descr;
   printf GF "defaultPos %s\n", $defPos;
   printf GF "orderKey %d\n", $orderKey++;
   printf GF "scientificName %s\n", $descr;
-  printf GF "htmlPath %s/html/%s.description.html\n", $asmId, $asmId;
+  printf GF "htmlPath html/%s.description.html\n", $asmId;
   close (GF);
+  my $localHubTxt = "$buildDir/${asmId}.hub.txt";
+  open (HT, ">$localHubTxt") or die "can not write to $localHubTxt";
+  printf HT "hub %s genome assembly\n", $asmId;
+  printf HT "shortLabel %s\n", $orgName;
+  printf HT "longLabel %s/%s/%s genome assembly\n", $orgName, $descr, $asmId;
+  printf HT "genomesFile %s.genomes.txt\n", $asmId;
+  printf HT "email hclawson\@ucsc.edu\n";
+  printf HT "descriptionUrl html/%s.description.html\n", $asmId;
+  close (HT);
+
+  my $localGroups = "$buildDir/${asmId}.groups.txt";
+  open (GR, ">$localGroups") or die "can not write to $localGroups";
+  print GR <<_EOF_
+name user
+label Custom
+priority 1
+defaultIsClosed 1
+
+name map
+label Mapping
+priority 2
+defaultIsClosed 0
+
+name genes
+label Genes
+priority 3
+defaultIsClosed 0
+
+name rna
+label mRNA
+priority 4
+defaultIsClosed 0
+
+name regulation
+label Regulation
+priority 5
+defaultIsClosed 0
+
+name compGeno
+label Comparative
+priority 6
+defaultIsClosed 0
+
+name varRep
+label Variation
+priority 7
+defaultIsClosed 0
+
+name x
+label Experimental
+priority 10
+defaultIsClosed 1
+_EOF_
+   ;
+   close (GR);
 }
 
 __END__

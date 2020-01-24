@@ -59,7 +59,7 @@ print <<"END"
 Assemblies from NCBI/Genbank/Refseq sources, subset of $asmHubName only.
 </p>
 
-<h3>See also: <a href='index.html' target=_blank>hub access</a></h3><br>
+<h3>See also: <a href='index.html'>hub access</a></h3><br>
 
 <h3>Data resource links</h3>
 NOTE: <em>Click on the column headers to sort the table by that column</em><br>
@@ -121,15 +121,15 @@ sub endHtml() {
 
 printf "<p>\nOther assembly hubs available:<br>\n<table border='1'><thead>\n<tr>";
 
-printf "<th><a href='../primates/asmStatsPrimates.html' target=_blank>Primates</a></th>\n"
+printf "<th><a href='../primates/asmStatsPrimates.html'>Primates</a></th>\n"
   if ($asmHubName ne "primates");
-printf "<th><a href='../mammals/asmStatsMammals.html' target=_blank>Mammals</a></th>\n"
+printf "<th><a href='../mammals/asmStatsMammals.html'>Mammals</a></th>\n"
   if ($asmHubName ne "mammals");
-printf "<th><a href='../birds/asmStatsBirds.html' target=_blank>Birds</a></th>\n"
+printf "<th><a href='../birds/asmStatsBirds.html'>Birds</a></th>\n"
   if ($asmHubName ne "birds");
-printf "<th><a href='../fish/asmStatsFish.html' target=_blank>Fish</a></th>\n"
+printf "<th><a href='../fish/asmStatsFish.html'>Fish</a></th>\n"
   if ($asmHubName ne "fish");
-printf "<th><a href='../vertebrate/asmStatsVertebrate.html' target=_blank>other vertebrates</a></th>\n"
+printf "<th><a href='../vertebrate/asmStatsVertebrate.html'>other vertebrates</a></th>\n"
   if ($asmHubName ne "vertebrate");
 
 printf "</tr></thead>\n</table>\n</p>\n";
