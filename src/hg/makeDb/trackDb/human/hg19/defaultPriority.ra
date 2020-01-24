@@ -46,7 +46,7 @@ visibility hide
 track dgvPlus override
 group varRep
 visibility hide
-type bigBed 9 +
+#type bigBed 9 +
 html dgvPlusGold
 
     track dgvMerged override
