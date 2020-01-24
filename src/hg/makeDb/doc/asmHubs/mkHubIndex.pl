@@ -40,6 +40,11 @@ chomp $timeStamp;
 
 # <html xmlns="http://www.w3.org/1999/xhtml">
 
+my $subSetMessage = "subset of $asmHubName only";
+if ($asmHubName eq "vertebrate") {
+   $subSetMessage = "subset of other ${asmHubName}s only";
+}
+
 print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
 <!--#set var="TITLE" value="$Name genomes assembly hubs" -->
@@ -49,7 +54,7 @@ print <<"END"
 
 <h1>$Name Genomes assembly hubs</h1>
 <p>
-Assemblies from NCBI/Genbank/Refseq sources, subset of $asmHubName only.
+Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 </p>
 
 <h3>How to view the hub</h3>
@@ -172,6 +177,7 @@ sub tableContents() {
     my $ncbiFtpLink = "ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$accessionDir/";
     my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir";
     my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
+    next if (! -s "$asmReport");
     my ($gcPrefix, $asmAcc, $asmName) = split('_', $asmId, 3);
     my $chromSizes="${buildDir}/${asmId}.chrom.sizes";
     my $sciName = "notFound";

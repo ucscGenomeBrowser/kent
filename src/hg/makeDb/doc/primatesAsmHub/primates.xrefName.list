@@ -1,0 +1,23 @@
+1868482	2013-09-18	Philippine tarsier	Carlito syrichta	SAMN02445010	PRJNA20339	GCF_000164805.1	Tarsius_syrichta-2.0.1	female	haploid	vertebrate_mammalian	Carlito_syrichta	GCF_000164805.1_Tarsius_syrichta-2.0.1
+30608	2017-02-06	gray mouse lemur	Microcebus murinus	SAMN06275470	PRJNA19967	GCF_000165445.2	Mmur_3.0	pooled male and female	haploid	vertebrate_mammalian	Microcebus_murinus	GCF_000165445.2_Mmur_3.0
+30611	2011-03-16	small-eared galago	Otolemur garnettii	SAMN02981229	PRJNA16955	GCF_000181295.1	OtoGar3	female	haploid	vertebrate_mammalian	Otolemur_garnettii	GCF_000181295.1_OtoGar3
+37293	2017-06-09	Ma's night monkey	Aotus nancymaae	SAMN03121886	PRJNA251539	GCF_000952055.2	Anan_2.0	female	haploid	vertebrate_mammalian	Aotus_nancymaae	GCF_000952055.2_Anan_2.0
+379532	2015-03-23	Coquerel's sifaka	Propithecus coquereli	SAMN03121823	PRJNA251429	GCF_000956105.1	Pcoq_1.0	female	haploid	vertebrate_mammalian	Propithecus_coquereli	GCF_000956105.1_Pcoq_1.0
+591936	2018-09-11	Ugandan red Colobus	Piliocolobus tephrosceles	SAMN07735529	PRJNA413051	GCF_002776525.2	ASM277652v2	male	haploid	vertebrate_mammalian	Piliocolobus_tephrosceles	GCF_002776525.2_ASM277652v2
+60711	2014-03-25	green monkey	Chlorocebus sabaeus	SAMN01760484	PRJNA168621	GCF_000409795.2	Chlorocebus_sabeus 1.1	male	haploid	vertebrate_mammalian	Chlorocebus_sabaeus	GCF_000409795.2_Chlorocebus_sabeus_1.1
+61621	2016-08-03	black snub-nosed monkey	Rhinopithecus bieti	SAMN02786331	PRJNA315476	GCF_001698545.1	ASM169854v1	male	haploid	vertebrate_mammalian	Rhinopithecus_bieti	GCF_001698545.1_ASM169854v1
+61622	2019-07-29	golden snub-nosed monkey	Rhinopithecus roxellana	SAMN11039125	PRJNA524949	GCF_007565055.1	ASM756505v1	male	haploid	vertebrate_mammalian	Rhinopithecus_roxellana	GCF_007565055.1_ASM756505v1
+61853	2019-07-02	northern white-cheeked gibbon	Nomascus leucogenys	SAMN11124083	PRJNA369439	GCF_006542625.1	Asia_NLE_v1	female	haploid	vertebrate_mammalian	Nomascus_leucogenys	GCF_006542625.1_Asia_NLE_v1
+9483	2010-01-22	white-tufted-ear marmoset	Callithrix jacchus	SAMN02981242	PRJNA20401	GCF_000004665.1	Callithrix jacchus-3.2	n/a	haploid	vertebrate_mammalian	Callithrix_jacchus	GCF_000004665.1_Callithrix_jacchus-3.2
+9531	2015-03-19	sooty mangabey	Cercocebus atys	SAMN03379531	PRJNA157077	GCF_000955945.1	Caty_1.0	female	haploid	vertebrate_mammalian	Cercocebus_atys	GCF_000955945.1_Caty_1.0
+9541	2013-06-12	crab-eating macaque	Macaca fascicularis	SAMN00811240	PRJNA20409	GCF_000364345.1	Macaca_fascicularis_5.0	female	haploid	vertebrate_mammalian	Macaca_fascicularis	GCF_000364345.1_Macaca_fascicularis_5.0
+9544	2019-02-13	Rhesus monkey	Macaca mulatta	SAMN09435472	PRJNA476474	GCF_003339765.1	Mmul_10	n/a	haploid	vertebrate_mammalian	Macaca_mulatta	GCF_003339765.1_Mmul_10
+9545	2015-03-19	pig-tailed macaque	Macaca nemestrina	SAMN03121842	PRJNA251427	GCF_000956065.1	Mnem_1.0	female	haploid	vertebrate_mammalian	Macaca_nemestrina	GCF_000956065.1_Mnem_1.0
+9555	2017-04-20	olive baboon	Papio anubis	SAMN02981400	PRJNA54005	GCF_000264685.3	Panu_3.0	female	haploid	vertebrate_mammalian	Papio_anubis	GCF_000264685.3_Panu_3.0
+9555	2019-10-02	olive baboon	Papio anubis	SAMN11179045	PRJNA527874	GCF_008728515.1	Panubis1.0	male	haploid	vertebrate_mammalian	Papio_anubis	GCF_008728515.1_Panubis1.0
+9565	2018-06-19	gelada	Theropithecus gelada	SAMN09197221	PRJNA470999	GCF_003255815.1	Tgel_1.0	female	haploid	vertebrate_mammalian	Theropithecus_gelada	GCF_003255815.1_Tgel_1.0
+9568	2015-03-12	drill	Mandrillus leucophaeus	SAMN03121813	PRJNA251423	GCF_000951045.1	Mleu.le_1.0	female	haploid	vertebrate_mammalian	Mandrillus_leucophaeus	GCF_000951045.1_Mleu.le_1.0
+9597	2015-08-18	pygmy chimpanzee	Pan paniscus	SAMEA1029457	PRJNA49285	GCF_000258655.2	panpan1.1	female	haploid	vertebrate_mammalian	Pan_paniscus	GCF_000258655.2_panpan1.1
+9598	2018-01-19	chimpanzee	Pan troglodytes	SAMN06272697	PRJNA369439	GCF_002880755.1	Clint_PTRv2	male	haploid	vertebrate_mammalian	Pan_troglodytes	GCF_002880755.1_Clint_PTRv2
+9601	2018-01-19	Sumatran orangutan	Pongo abelii	SAMN06275555	PRJNA369439	GCF_002880775.1	Susie_PABv2	female	haploid	vertebrate_mammalian	Pongo_abelii	GCF_002880775.1_Susie_PABv2
+9606	2019-02-28	human	Homo sapiens	n/a	PRJNA31257	GCF_000001405.39	GRCh38.p13	n/a	haploid-with-alt-loci	vertebrate_mammalian	Homo_sapiens	GCF_000001405.39_GRCh38.p13

@@ -14,8 +14,7 @@ my $Name = shift;
 my $asmHubName = shift;
 
 my $home = $ENV{'HOME'};
-my $srcDocDir = "${asmHubName}AsmHub";
-my $asmHubDocDir = "$home/kent/src/hg/makeDb/doc/$srcDocDir";
+my $toolsDir = "$home/kent/src/hg/makeDb/doc/asmHubs";
 
 my $commonNameList = "$asmHubName.asmId.commonName.tsv";
 my $commonNameOrder = "$asmHubName.commonName.asmId.orderList.tsv";
@@ -28,7 +27,6 @@ my $overallNucleotides = 0;
 my $overallSeqCount = 0;
 my $overallGapSize = 0;
 my $overallGapCount = 0;
-
 
 ##############################################################################
 # from Perl Cookbook Recipe 2.17, print out large numbers with comma delimiters:
@@ -47,6 +45,11 @@ sub startHtml() {
 my $timeStamp = `date "+%F"`;
 chomp $timeStamp;
 
+my $subSetMessage = "subset of $asmHubName only";
+if ($asmHubName eq "vertebrate") {
+   $subSetMessage = "subset of other ${asmHubName}s only";
+}
+
 print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
 <!--#set var="TITLE" value="$Name genomes assembly hubs" -->
@@ -56,7 +59,7 @@ print <<"END"
 
 <h1>$Name Genomes assembly hubs</h1>
 <p>
-Assemblies from NCBI/Genbank/Refseq sources, subset of $asmHubName only.
+Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 </p>
 
 <h3>See also: <a href='index.html'>hub access</a></h3><br>
@@ -276,7 +279,7 @@ sub tableContents() {
 ### main()
 ##############################################################################
 
-open (FH, "<$asmHubDocDir/${commonNameOrder}") or die "can not read ${commonNameOrder}";
+open (FH, "<$toolsDir/${commonNameOrder}") or die "can not read ${commonNameOrder}";
 while (my $line = <FH>) {
   chomp $line;
   my ($commonName, $asmId) = split('\t', $line);

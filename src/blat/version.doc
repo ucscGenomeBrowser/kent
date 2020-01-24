@@ -4,6 +4,7 @@
      o (in 36x2) Fixed problem with -maxIntron set to non-default value on protein query.
      o (in 36x3) Added ipv6 support.
      o (in 36x4) Added _alt support.
+     o (in 36x5) If ipv6 disabled, retries with ipv4-only socket.
 
 36:
      o (in 35x1) added repMatch default values for tileSizes 16 to 18 in genoFind.c

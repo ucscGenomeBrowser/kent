@@ -4794,10 +4794,11 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
 <H3>Supertrack settings</H3>
     <P>The first 
     hierarchical container is called the supertrack, which may be thought of as 
-    a folder that holds other tracks. The Browser currently supports only one
+    a folder that holds other tracks that by default are closed, unless the
+    setting <code>show</code> is added. The Browser currently supports only one
     level of supertrack folders.  Generally the subtracks
     of a supertrack are of differing types.  If all the children are
-    of the same type, it is often better to use the "compositeTrack" grouping
+    of the same type, it is often better to use the <a href="#compositeTrack">compositeTrack</a> grouping
     described below.  If all of the children are wig or bigWig tracks, it may
     be of interest to use a signal overlay "container multiWig" grouping. Signal
     overlay tracks display the signal data from several subtracks as colored
@@ -4818,46 +4819,28 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     <code>superTrack on show</code>, to the end of the statement. To have
     the supertrack not display by default use only <code>superTrack on</code>.
     It may help to think of the original declaring supertrack stanza as a
-    light switch that by default is off, and can be flipped on by adding show.</p>
+    light switch that by default is off, and can be flipped on by adding <code>show</code>.</p>
     <p>
-    All tracks that claim membership to the supertrack can then set their
+    All tracks that claim membership to the supertrack should set their
     own visibilities in lower stanzas by declaring settings such as
-    <code>parent superTrack1 pack</code> or by having the parent line
-    and a separate <code>visibility pack</code> line. If no visibility setting
+    <code>parent superTrack1</code> and also by having a separate
+    <code>visibility dense</code> line. If no visibility setting
     is defined for a track, the default setting of hide is assigned.
     This can cause confusion if one mistakenly tries to set visibilities only
-    at the top supertrack stanza.</p>
+    at the top supertack stanza, not allowed, and leaves them out for each child.</p>
     <p>
-    When it comes to setting visibilities of supertracks, do not try to
-    set the visibility at the top supertrack stanza, there you can only have
-    the on or off light-switch setting such as <code>superTrack on show</code>
-    for default display. Instead as you declare each member of a
-    supertrack either add a separate visibility line, such as <code>visibility
-    pack</code> or declare visibility at that moment you define membership with
-    a line like <code>parent superTrack1 pack</code>.</p>
-    <p>
-    What may be additionally confusing is that you can also use
-    <code>superTrack superTrack1 pack</code> instead of
-    <code>parent superTrack1 pack</code> to define membership and visibility in a supertrack.
     Do not confuse the parent line with how it is used in composites. For example,
-    in supertracks DO NOT follow the example of <code>parent compositeTrack1 [off/on]</code>,
-    which will only work with composite tracks.</p>
-    <p>
-    When attempting to debug visibility settings, it may be 
-    helpful to read the <A href='#inheritance'>note about
+    in supertracks DO NOT follow the example of <strike><code>parent superTrack1 [off/on]</code></strike>,
+    where <code>[off/on]</code> will only work with composite tracks. When attempting to debug visibility
+    settings, it may be helpful to read the <A href='#inheritance'>note about
     inheritance</A> found below.</p>
 </DIV>
 
 <DIV class="parent_supertrack"><span class="types superTrack"></span>
-<div class="format"><code>parent &lt;superTrack&gt; &lt;dense|hide|pack|full&gt; </code></div>
+<div class="format"><code>parent &lt;superTrack&gt;</code></div>
     <P>Membership in a supertrack, composite, or aggregate track is declared by the
     child, not the supertrack itself with a line such as <code>parent superTrack1</code>.</p>
     <p>
-    At the same moment of membership declaration visibility of the child can be declared
-    too such as with <code>parent superTrack1 pack</code>. What may be additionally confusing
-    is that you may also use  <code>superTrack superTrack1 pack</code> instead of
-    <code>parent superTrack1 pack</code> to define membership and visibility
-    in a supertrack (for bigWigs, pack is not an available visibility option).
     Do not confuse the parent line with how it is used in composites. For example,
     in supertracks DO NOT follow the example of <code>parent compositeTrack1 [off/on]</code>,
     which will only work with composite tracks.</p>
@@ -4870,85 +4853,49 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     additional indentation that makes enforcement of the supertrack
     indentation impractical.</p>
     <p>
-    When attempting to debug visibility settings, it may be
+    All tracks that claim membership to the supertrack should set their
+    own visibilities in lower stanzas by declaring separate settings such as
+    <code>visibility dense</code>.When attempting to debug visibility settings, it may be
     helpful to read the <A href='#inheritance'>note about
     inheritance</A> found below.</p>
 </DIV>
 
 <DIV class="superTrack_example"><span class="types superTrack"></span>
-<div class="format"><B>Examples of a Supertrack</B></div>
-    <p>
-    The following three examples are different ways of
-    declaring an equivalent supertrack.</p>
+<div class="format"><B>Example of a Supertrack</B></div>
     <p>
     Example 1
     <pre>
-    track myFolderA
+    track myFolder
     superTrack on show
-    shortLabel My Folder A
-    longLabel My folder A keeps my tracks together
+    shortLabel My Folder
+    longLabel My folder keeps my tracks together
       ...
 
-        track myFirstTrackA
-        parent myFolderA
+        track myFirstTrack
+        parent myFolder
         visibility dense
           ...
 
-        track mySecondTrackA
-        parent myFolderA
+        track mySecondTrack
+        parent myFolder
         visibility hide
           ...    </pre>
-    <p>The track called &quot;My Folder A&quot; is declared as a supertrack and
+    <p>The track called &quot;My Folder&quot; is declared as a supertrack and
     contains two children who claim membership with parent lines.
-    Notice that the first track, <code>track myFirstTrackA</code>, is visible by
+    Notice that the first track, <code>track myFirstTrack</code>, is visible by
     default with <code>visibility dense</code> (because the supertrack itself,
-    <code>myFolderA</code>, has the light-switch-like setting
+    <code>myFolder</code>, has the light-switch-like setting
     of <code>show</code> to display all the contents of the supertrack).
-    The second track,<code>track mySecondTrackA</code>, is not displayed,
+    The second track, <code>track mySecondTrack</code>, is not displayed,
     however, with <code>visibility hide</code> and will require clicking a
     box on the Track Setting page to display.</p>
-    <p>
-    Example 2
-    <pre>
-    track myFolderB
-    superTrack on show
-    shortLabel My Folder B
-    longLabel My folder B keeps my tracks together
-      ...
-
-        track myFirstTrackB
-        parent myFolderB dense
-          ...
-
-        track mySecondTrackB
-        parent myFolderB hide
-          ...    </pre>
-    <p>
-    Functionally equivalent to the above, here a track
-    called &quot;My FolderB&quot; is declared as a supertrack and
-    contains two children who claim membership with parent lines that
-    simultaneously declare visibility.</p>
-    <p>
-    Example 3
-    <pre>
-    track myFolderC
-    superTrack on show
-    shortLabel My Folder C
-    longLabel My folder C keeps my tracks together
-      ...
-
-        track myFirstTrackC
-        superTrack myFolderC dense
-          ...
-
-        track mySecondTrackC
-        superTrack myFolderC hide
-          ...    </pre>
-    <p>
-    Functionally equivalent to the above, here a track
-    called &quot;My Folder C&quot; is declared as a supertrack and
-    contains two children who claim membership with superTrack lines that
-    simultaneously declare visibility.</p>
+    <p>Note: do not confuse the parent
+    line with how it is used in composites. For example,
+    in supertracks DO NOT follow the example of <strike><code>parent superTrack1 [off/on]</code></strike>,
+    which will only work with composite tracks. See the
+    <a href="../hubQuickStartGroups.html" target="_blank">Quick Start Guide to
+    Organizing Track Hubs into Groupings</a> for more examples.</p>
+</p>
 </DIV>
 
 
