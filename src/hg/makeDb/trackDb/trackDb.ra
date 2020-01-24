@@ -1017,15 +1017,15 @@ type bed 4 .
 
 track clinvarLift
 shortLabel ClinVar Lift
-longLabel Human ClinVar lifted to this genome
+longLabel Human ClinVar variants lifted to $Organism
 group compGeno
 visibility hide
-color 0,0,100
 type bigBed 12 +
-bigDataUrl /gbdb/susScr11/bbi/clinvarLift.bb
+bigDataUrl /gbdb/$D/bbi/clinvarLift.bb
 release alpha
 itemRgb on
-urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
+# how should we handle the hgsid here? Isn't the hgsid required for backlinks? Or maybe not here, as it'll open in a new tab?
+urls origPos="/cgi-bin/hgTracks?position=$$" rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
 mouseOverField _mouseOver
 scoreLabel ClinVar Star-Rating (0-4)
 
