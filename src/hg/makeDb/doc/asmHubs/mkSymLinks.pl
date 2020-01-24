@@ -17,11 +17,11 @@ my %betterName;	# key is asmId, value is common name
 my $srcDocDir = "${asmHubName}AsmHub";
 
 my $home = $ENV{'HOME'};
-my $srcDir = "$home/kent/src/hg/makeDb/doc/$srcDocDir";
+my $toolsDir = "$home/kent/src/hg/makeDb/doc/asmHubs";
 my $commonNameList = "$asmHubName.asmId.commonName.tsv";
 my $commonNameOrder = "$asmHubName.commonName.asmId.orderList.tsv";
 
-open (FH, "<$srcDir/${commonNameList}") or die "can not read $srcDir/${commonNameList}";
+open (FH, "<$toolsDir/${commonNameList}") or die "can not read $toolsDir/${commonNameList}";
 while (my $line = <FH>) {
   chomp $line;
   my ($asmId, $name) = split('\t', $line);
@@ -33,7 +33,7 @@ my @orderList;	# asmId of the assemblies in order from the *.list files
 # the order to read the different .list files:
 my $assemblyCount = 0;
 
-open (FH, "<$srcDir/${commonNameOrder}") or die "can not read ${commonNameOrder}";
+open (FH, "<$toolsDir/${commonNameOrder}") or die "can not read ${commonNameOrder}";
 while (my $line = <FH>) {
   chomp $line;
   my ($commonName, $asmId) = split('\t', $line);
