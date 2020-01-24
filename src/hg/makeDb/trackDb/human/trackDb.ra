@@ -171,7 +171,7 @@ type bed 3
         #itemRgb on
         dataVersion release 1
         parent varsInPubs pack
-        urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" doi="https://doi.org/$$"
+        urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" doi="https://doi.org/$$" ensId="http://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$" entrezs="https://www.ncbi.nlm.nih.gov/gene/$$" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOverField _mouseOver
 
 track pathoPred
@@ -1658,7 +1658,7 @@ priority 0.8
     detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp153Details.tab.gz
     freqSourceOrder 1000Genomes,GnomAD_exomes,TOPMED,ExAC,PAGE_STUDY,GnomAD,GoESP,Estonian,ALSPAC,TWINSUK,NorthernSweden,Vietnamese
     classFilterValues snv,mnv,ins,del,delins,identity
-    classFilterType multipleListOr
+    classFilterType singleList
     showCfg on
     ucscNotesFilterValues \
         altIsAmbiguous|Alternate allele contains IUPAC ambiguous base(s),\
@@ -1708,7 +1708,7 @@ priority 0.8
         2152|genic_downstream_transcript_variant,\
         1987|downstream_transcript_variant,\
         1627|intron_variant
-    maxFuncImpactFilterType multipleListOr
+    maxFuncImpactFilterType singleList
 
         track dbSnp153Common
         parent dbSnp153ViewVariants on

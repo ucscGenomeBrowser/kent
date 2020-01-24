@@ -1,0 +1,76 @@
+105023	2015-12-11	turquoise killifish	Nothobranchius furzeri	SAMEA2698544	PRJEB5837	GCF_001465895.1	Nfu_20140520	female	haploid	vertebrate_other	Nothobranchius_furzeri	GCF_001465895.1_Nfu_20140520
+106582	2018-04-10	zebra mbuna	Maylandia zebra	SAMN03892560	PRJNA60369	GCF_000238955.4	M_zebra_UMD2a	pooled male and female	haploid	vertebrate_other	Maylandia_zebra	GCF_000238955.4_M_zebra_UMD2a
+109280	2016-12-08	tiger tail seahorse	Hippocampus comes	SAMN04531611	PRJNA314292	GCF_001891065.1	H_comes_QL1_v1	male	haploid	vertebrate_other	Hippocampus_comes	GCF_001891065.1_H_comes_QL1_v1
+113540	2019-04-11	Asian bonytongue	Scleropages formosus	SAMEA4872123	PRJEB31995	GCF_900964775.1	fSclFor1.1	n/a	haploid	vertebrate_other	Scleropages_formosus	GCF_900964775.1_fSclFor1.1
+1234273	2018-11-13	yellow catfish	Tachysurus fulvidraco	SAMN10147840	PRJNA494039	GCF_003724035.1	ASM372403v1	n/a	haploid	vertebrate_other	Tachysurus_fulvidraco	GCF_003724035.1_ASM372403v1
+144197	2014-05-13	bicolor damselfish	Stegastes partitus	SAMN02743342	PRJNA89147	GCF_000690725.1	Stegastes_partitus-1.0.2	male	haploid	vertebrate_other	Stegastes_partitus	GCF_000690725.1_Stegastes_partitus-1.0.2
+150288	2014-12-02	great blue-spotted mudskipper	Boleophthalmus pectinirostris	SAMN03201692	PRJNA232434	GCF_000788275.1	BP.fa	pooled male and female	haploid	vertebrate_other	Boleophthalmus_pectinirostris	GCF_000788275.1_BP.fa
+158456	2019-03-20	Siamese fighting fish	Betta splendens	SAMEA104381735	PRJEB30365	GCF_900634795.2	fBetSpl5.2	n/a	haploid	vertebrate_other	Betta_splendens	GCF_900634795.2_fBetSpl5.2
+1608454	2015-12-14	bony fishes	Sinocyclocheilus anshuiensis	SAMN03320099	PRJNA274017	GCF_001515605.1	SAMN03320099.WGS_v1.1	female	haploid	vertebrate_other	Sinocyclocheilus_anshuiensis	GCF_001515605.1_SAMN03320099.WGS_v1.1
+1676925	2018-01-10	bony fishes	Paramormyrops kingsleyae	SAMN08000665	PRJNA417677	GCF_002872115.1	PKINGS_0.1	male	haploid	vertebrate_other	Paramormyrops_kingsleyae	GCF_002872115.1_PKINGS_0.1
+173247	2019-04-11	live sharksucker	Echeneis naucrates	SAMEA4966390	PRJEB31992	GCF_900963305.1	fEcheNa1.1	n/a	haploid	vertebrate_other	Echeneis_naucrates	GCF_900963305.1_fEcheNa1.1
+181472	2019-07-03	jewelled blenny	Salarias fasciatus	SAMEA4966329	PRJEB33184	GCF_902148845.1	fSalaFa1.1	n/a	haploid	vertebrate_other	Salarias_fasciatus	GCF_902148845.1_fSalaFa1.1
+1841481	2017-12-08	yellowtail amberjack	Seriola lalandi dorsalis	SAMN04902367	PRJNA319656	GCF_002814215.1	Sedor1	n/a	haploid	vertebrate_other	Seriola_lalandi	GCF_002814215.1_Sedor1
+205130	2018-03-31	zig-zag eel	Mastacembelus armatus	SAMEA104026378	PRJEB25769	GCF_900324485.1	fMasArm1.1	n/a	haploid	vertebrate_other	Mastacembelus_armatus	GCF_900324485.1_fMasArm1.1
+210632	2019-02-06	Indian glassy fish	Parambassis ranga	SAMEA4675621	PRJEB30257	GCF_900634625.1	fParRan2.1	n/a	haploid	vertebrate_other	Parambassis_ranga	GCF_900634625.1_fParRan2.1
+215358	2018-11-27	large yellow croaker	Larimichthys crocea	SAMN03092871	PRJNA245366	GCF_000972845.2	L_crocea_2.0	n/a	haploid	vertebrate_other	Larimichthys_crocea	GCF_000972845.2_L_crocea_2.0
+244447	2014-01-28	tongue sole	Cynoglossus semilaevis	SAMN02595200	PRJNA73987	GCF_000523025.1	Cse_v1.0	n/a	haploid	vertebrate_other	Cynoglossus_semilaevis	GCF_000523025.1_Cse_v1.0
+283035	2019-09-06	pike-perch	Sander lucioperca	SAMN12618724	PRJNA561467	GCF_008315115.1	SLUC_FBN_1	n/a	haploid	vertebrate_other	Sander_lucioperca	GCF_008315115.1_SLUC_FBN_1
+28743	2015-10-01	sheepshead minnow	Cyprinodon variegatus	SAMN02736898	PRJNA89149	GCF_000732505.1	C_variegatus-1.0	female	haploid	vertebrate_other	Cyprinodon_variegatus	GCF_000732505.1_C_variegatus-1.0
+29144	2019-08-14	milkfish	Chanos chanos	SAMEA5159473	PRJEB33882	GCF_902362185.1	fChaCha1.1	n/a	haploid	vertebrate_other	Chanos_chanos	GCF_902362185.1_fChaCha1.1
+299321	2019-03-16	denticle herring	Denticeps clupeoides	SAMEA104129917	PRJEB31545	GCF_900700375.1	fDenClu1.1	n/a	haploid	vertebrate_other	Denticeps_clupeoides	GCF_900700375.1_fDenClu1.1
+303518	2011-12-22	bony fishes	Pundamilia nyererei	SAMN00149614	PRJNA60367	GCF_000239375.1	PunNye1.0	female	haploid	vertebrate_other	Pundamilia_nyererei	GCF_000239375.1_PunNye1.0
+30732	2018-02-07	Indian medaka	Oryzias melastigma	SAMN07596545	PRJNA401159	GCF_002922805.1	Om_v0.7.RACA	pooled male and female	haploid	vertebrate_other	Oryzias_melastigma	GCF_002922805.1_Om_v0.7.RACA
+307959	2015-12-14	bony fishes	Sinocyclocheilus rhinocerous	SAMN03320098	PRJNA274017	GCF_001515625.1	SAMN03320098_v1.1	female	haploid	vertebrate_other	Sinocyclocheilus_rhinocerous	GCF_001515625.1_SAMN03320098_v1.1
+31033	2019-06-05	torafugu	Takifugu rubripes	SAMEA104384834	PRJEB31988	GCF_901000725.2	fTakRub1.2	n/a	haploid	vertebrate_other	Takifugu_rubripes	GCF_901000725.2_fTakRub1.2
+310915	2018-10-22	striped catfish	Pangasianodon hypophthalmus	SAMN08866743	PRJNA448819	GCF_003671635.1	VN_pangasius	n/a	haploid	vertebrate_other	Pangasianodon_hypophthalmus	GCF_003671635.1_VN_pangasius
+32473	2018-09-19	Monterrey platyfish	Xiphophorus couchianus	SAMN03922721	PRJNA290781	GCF_001444195.1	X_couchianus-1.0	female	haploid	vertebrate_other	Xiphophorus_couchianus	GCF_001444195.1_X_couchianus-1.0
+32507	2011-12-22	lyretail cichlid	Neolamprologus brichardi	SAMN00139653	PRJNA60365	GCF_000239395.1	NeoBri1.0	female	haploid	vertebrate_other	Neolamprologus_brichardi	GCF_000239395.1_NeoBri1.0
+37003	2016-05-22	mangrove rivulus	Kryptolebias marmoratus	SAMN04622665	PRJNA317650	GCF_001649575.1	ASM164957v1	hermaphrodite	haploid	vertebrate_other	Kryptolebias_marmoratus	GCF_001649575.1_ASM164957v1
+375764	2019-07-03	orbiculate cardinalfish	Sphaeramia orbicularis	SAMEA4966328	PRJEB33177	GCF_902148855.1	fSphaOr1.1	n/a	haploid	vertebrate_other	Sphaeramia_orbicularis	GCF_902148855.1_fSphaOr1.1
+41447	2017-08-03	greater amberjack	Seriola dumerili	SAMD00083043	PRJDB5856	GCF_002260705.1	Sdu_1.0	n/a	haploid	vertebrate_other	Seriola_dumerili	GCF_002260705.1_Sdu_1.0
+42514	2016-07-12	red-bellied piranha	Pygocentrus nattereri	SAMN04522165	PRJNA301891	GCF_001682695.1	Pygocentrus_nattereri-1.0.2	female	haploid	vertebrate_other	Pygocentrus_nattereri	GCF_001682695.1_Pygocentrus_nattereri-1.0.2
+433405	2019-03-08	wolf-eel	Anarrhichthys ocellatus	SAMN10245424	PRJNA496475	GCF_004355925.1	GSC_Weel_1.0	n/a	haploid	vertebrate_other	Anarrhichthys_ocellatus	GCF_004355925.1_GSC_Weel_1.0
+43700	2017-01-17	swamp eel	Monopterus albus	SAMN06219872	PRJNA183073	GCF_001952655.1	M_albus_1.0	male	haploid	vertebrate_other	Monopterus_albus	GCF_001952655.1_M_albus_1.0
+441366	2019-02-06	blunt-snouted clingfish	Gouania willdenowi	SAMEA104026382	PRJEB30359	GCF_900634775.1	fGouWil2.1	n/a	haploid	vertebrate_other	Gouania_willdenowi	GCF_900634775.1_fGouWil2.1
+47969	2019-05-28	blue tilapia	Oreochromis aureus	SAMN11513266	PRJNA539829	GCF_005870065.1	ASM587006v1	n/a	haploid	vertebrate_other	Oreochromis_aureus	GCF_005870065.1_ASM587006v1
+48698	2013-10-28	Amazon molly	Poecilia formosa	SAMN02981564	PRJNA89109	GCF_000485575.1	Poecilia_formosa-5.1.2	female	haploid	vertebrate_other	Poecilia_formosa	GCF_000485575.1_Poecilia_formosa-5.1.2
+48699	2015-11-13	sailfin molly	Poecilia latipinna	SAMN02048973	PRJNA196862	GCF_001443285.1	P_latipinna-1.0	female	haploid	vertebrate_other	Poecilia_latipinna	GCF_001443285.1_P_latipinna-1.0
+48701	2015-11-13	shortfin molly	Poecilia mexicana	SAMN02048972	PRJNA196869	GCF_001443325.1	P_mexicana-1.0	female	haploid	vertebrate_other	Poecilia_mexicana	GCF_001443325.1_P_mexicana-1.0
+52670	2015-07-28	bony fishes	Austrofundulus limnaeus	SAMN03490872	PRJNA280995	GCF_001266775.1	Austrofundulus_limnaeus-1.0	male	haploid	vertebrate_other	Austrofundulus_limnaeus	GCF_001266775.1_Austrofundulus_limnaeus-1.0
+56716	2019-02-06	bony fishes	Cottoperca gobio	SAMEA104242975	PRJEB30248	GCF_900634415.1	fCotGob3.1	n/a	haploid	vertebrate_other	Cottoperca_gobio	GCF_900634415.1_fCotGob3.1
+56723	2016-05-03	ballan wrasse	Labrus bergylta	SAMEA3939555	PRJEB13687	GCF_900080235.1	BallGen_V1	female	haploid	vertebrate_other	Labrus_bergylta	GCF_900080235.1_BallGen_V1
+586833	2019-07-03	pinecone soldierfish	Myripristis murdjan	SAMEA4872133	PRJEB33188	GCF_902150065.1	fMyrMur1.1	n/a	haploid	vertebrate_other	Myripristis_murdjan	GCF_902150065.1_fMyrMur1.1
+63155	2019-08-01	flier cichlid	Archocentrus centrarchus	SAMN09948522	PRJNA489129	GCF_007364275.1	fArcCen1	male	haploid	vertebrate_other	Archocentrus_centrarchus	GCF_007364275.1_fArcCen1
+64144	2018-03-31	climbing perch	Anabas testudineus	SAMEA104026376	PRJEB25768	GCF_900324465.1	fAnaTes1.1	male	haploid	vertebrate_other	Anabas_testudineus	GCF_900324465.1_fAnaTes1.1
+74940	2018-01-16	Chinook salmon	Oncorhynchus tshawytscha	SAMN07843558	PRJNA416144	GCF_002872995.1	Otsh_v1.0	female	haploid	vertebrate_other	Oncorhynchus_tshawytscha	GCF_002872995.1_Otsh_v1.0
+75366	2015-12-16	bony fishes	Sinocyclocheilus grahami	SAMN03320097	PRJNA274017	GCF_001515645.1	SAMN03320097.WGS_v1.1	female	haploid	vertebrate_other	Sinocyclocheilus_grahami	GCF_001515645.1_SAMN03320097.WGS_v1.1
+7950	2019-04-16	Atlantic herring	Clupea harengus	SAMEA5339254	PRJEB31270	GCF_900700415.1	Ch_v2.0.2	n/a	haploid	vertebrate_other	Clupea_harengus	GCF_900700415.1_Ch_v2.0.2
+7955	2017-05-09	zebrafish	Danio rerio	SAMN06930106	PRJNA11776	GCF_000002035.6	GRCz11	n/a	haploid-with-alt-loci	vertebrate_other	Danio_rerio	GCF_000002035.6_GRCz11
+7957	2018-08-09	goldfish	Carassius auratus	SAMN09670328	PRJNA481500	GCF_003368295.1	ASM336829v1	n/a	haploid	vertebrate_other	Carassius_auratus	GCF_003368295.1_ASM336829v1
+7962	2014-11-03	common carp	Cyprinus carpio	SAMEA2757102	PRJEB7241	GCF_000951615.1	common carp genome	n/a	haploid	vertebrate_other	Cyprinus_carpio	GCF_000951615.1_common_carp_genome
+7994	2017-09-25	Mexican tetra	Astyanax mexicanus	SAMN02981523	PRJNA89115	GCF_000372685.2	Astyanax_mexicanus-2.0	female	haploid	vertebrate_other	Astyanax_mexicanus	GCF_000372685.2_Astyanax_mexicanus-2.0
+7998	2016-06-21	channel catfish	Ictalurus punctatus	SAMN03486842	PRJNA281269	GCF_001660625.1	IpCoco_1.2	female	haploid	vertebrate_other	Ictalurus_punctatus	GCF_001660625.1_IpCoco_1.2
+8005	2018-10-30	electric eel	Electrophorus electricus	SAMN02802636	PRJNA249073	GCF_003665695.1	Ee_SOAP_WITH_SSPACE	n/a	haploid	vertebrate_other	Electrophorus_electricus	GCF_003665695.1_Ee_SOAP_WITH_SSPACE
+8010	2019-04-17	northern pike	Esox lucius	SAMN09690694	PRJNA221548	GCF_004634155.1	Eluc_v4	female	haploid	vertebrate_other	Esox_lucius	GCF_004634155.1_Eluc_v4
+8019	2019-11-04	coho salmon	Oncorhynchus kisutch	SAMN05991263	PRJNA352719	GCF_002021735.2	Okis_V2	female	haploid	vertebrate_other	Oncorhynchus_kisutch	GCF_002021735.2_Okis_V2
+8022	2017-06-02	rainbow trout	Oncorhynchus mykiss	SAMN05449231	PRJNA335610	GCF_002163495.1	Omyk_1.0	male	haploid	vertebrate_other	Oncorhynchus_mykiss	GCF_002163495.1_Omyk_1.0
+8023	2019-06-07	sockeye salmon	Oncorhynchus nerka	SAMN11519041	PRJNA530256	GCF_006149115.1	Oner_1.0	female	haploid	vertebrate_other	Oncorhynchus_nerka	GCF_006149115.1_Oner_1.0
+8030	2015-06-10	Atlantic salmon	Salmo salar	SAMN02749551	PRJNA72713	GCF_000233375.1	ICSASG_v2	female	haploid	vertebrate_other	Salmo_salar	GCF_000233375.1_ICSASG_v2
+8032	2019-06-02	river trout	Salmo trutta	SAMEA994732	PRJEB32115	GCF_901001165.1	fSalTru1.1	n/a	haploid	vertebrate_other	Salmo_trutta	GCF_901001165.1_fSalTru1.1
+8036	2018-02-12	Arctic char	Salvelinus alpinus	SAMN06561764	PRJNA348349	GCF_002910315.2	ASM291031v2	n/a	haploid	vertebrate_other	Salvelinus_alpinus	GCF_002910315.2_ASM291031v2
+8049	2019-07-16	Atlantic cod	Gadus morhua	SAMEA5574046	PRJEB33455	GCF_902167405.1	gadMor3.0	n/a	haploid	vertebrate_other	Gadus_morhua	GCF_902167405.1_gadMor3.0
+8078	2015-01-21	mummichog	Fundulus heteroclitus	SAMN03277211	PRJNA177717	GCF_000826765.1	Fundulus_heteroclitus-3.0.2	female	haploid	vertebrate_other	Fundulus_heteroclitus	GCF_000826765.1_Fundulus_heteroclitus-3.0.2
+8081	2014-04-28	guppy	Poecilia reticulata	SAMN02404645	PRJNA238429	GCF_000633615.1	Guppy_female_1.0+MT	female	haploid	vertebrate_other	Poecilia_reticulata	GCF_000633615.1_Guppy_female_1.0_MT
+8083	2017-12-07	southern platyfish	Xiphophorus maculatus	SAMN08025980	PRJNA72525	GCF_002775205.1	X_maculatus-5.0-male	male	haploid	vertebrate_other	Xiphophorus_maculatus	GCF_002775205.1_X_maculatus-5.0-male
+8090	2017-07-27	Japanese medaka	Oryzias latipes	SAMN06689957	PRJNA325079	GCF_002234675.1	ASM223467v1	male	haploid	vertebrate_other	Oryzias_latipes	GCF_002234675.1_ASM223467v1
+80966	2017-04-25	spiny chromis	Acanthochromis polyacanthus	SAMN06347167	PRJNA311159	GCF_002109545.1	ASM210954v1	n/a	haploid	vertebrate_other	Acanthochromis_polyacanthus	GCF_002109545.1_ASM210954v1
+80972	2017-11-16	clown anemonefish	Amphiprion ocellaris	SAMN07982614	PRJNA407816	GCF_002776465.1	AmpOce1.0	n/a	haploid	vertebrate_other	Amphiprion_ocellaris	GCF_002776465.1_AmpOce1.0
+8128	2018-06-29	Nile tilapia	Oreochromis niloticus	SAMN05859795	PRJNA344471	GCF_001858045.2	O_niloticus_UMD_NMBU	female	haploid	vertebrate_other	Oreochromis_niloticus	GCF_001858045.2_O_niloticus_UMD_NMBU
+8153	2011-12-22	Burton's mouthbrooder	Haplochromis burtoni	SAMN00139641	PRJNA60363	GCF_000239415.1	AstBur1.0	female	haploid	vertebrate_other	Haplochromis_burtoni	GCF_000239415.1_AstBur1.0
+8154	2018-05-30	eastern happy	Astatotilapia calliptera	SAMEA104026430	PRJEB24325	GCF_900246225.1	fAstCal1.2	n/a	haploid	vertebrate_other	Astatotilapia_calliptera	GCF_900246225.1_fAstCal1.2
+8167	2019-03-19	yellow perch	Perca flavescens	SAMN10722690	PRJNA514308	GCF_004354835.1	PFLA_1.0	male	haploid	vertebrate_other	Perca_flavescens	GCF_004354835.1_PFLA_1.0
+8175	2019-07-30	gilthead seabream	Sparus aurata	SAMEA104384835	PRJEB31901	GCF_900880675.1	fSpaAur1.1	n/a	haploid	vertebrate_other	Sparus_aurata	GCF_900880675.1_fSpaAur1.1
+8187	2016-05-09	barramundi perch	Lates calcarifer	SAMN04026617	PRJNA294489	GCF_001640805.1	ASM164080v1	male	haploid	vertebrate_other	Lates_calcarifer	GCF_001640805.1_ASM164080v1
+8208	2014-07-29	black rockcod	Notothenia coriiceps	SAMN02206445	PRJNA66471	GCF_000735185.1	NC01	male	haploid	vertebrate_other	Notothenia_coriiceps	GCF_000735185.1_NC01
+8255	2017-01-24	Japanese flounder	Paralichthys olivaceus	SAMN05817825	PRJNA344006	GCF_001970005.1	Flounder_ref_guided_V1.0	female	haploid	vertebrate_other	Paralichthys_olivaceus	GCF_001970005.1_Flounder_ref_guided_V1.0

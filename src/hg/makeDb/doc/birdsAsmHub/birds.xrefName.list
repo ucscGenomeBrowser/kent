@@ -1,0 +1,65 @@
+114329	2018-12-28	saffron-crested tyrant-manakin	Neopelma chrysocephalum	SAMN08784363	PRJNA445439	GCF_003984885.1	ASM398488v2	n/a	diploid	vertebrate_other	Neopelma_chrysocephalum	GCF_003984885.1_ASM398488v2
+118200	2014-06-06	Downy woodpecker	Picoides pubescens	SAMN02314405	PRJNA212874	GCF_000699005.1	ASM69900v1	female	haploid	vertebrate_other	Picoides_pubescens	GCF_000699005.1_ASM69900v1
+121530	2014-06-25	red-crested turaco	Tauraco erythrolophus	SAMN02339893	PRJNA212908	GCF_000709365.1	ASM70936v1	male	haploid	vertebrate_other	Tauraco_erythrolophus	GCF_000709365.1_ASM70936v1
+128390	2014-06-16	crested ibis	Nipponia nippon	SAMN02596464	PRJNA232572	GCF_000708225.1	ASM70822v1	male	haploid	vertebrate_other	Nipponia_nippon	GCF_000708225.1_ASM70822v1
+13146	2012-01-02	budgerigar	Melopsittacus undulatus	SAMN02981360	PRJNA72527	GCF_000238935.1	Melopsittacus_undulatus_6.3	male	haploid	vertebrate_other	Melopsittacus_undulatus	GCF_000238935.1_Melopsittacus_undulatus_6.3
+156563	2018-01-26	blue tit	Cyanistes caeruleus	SAMN03734925	PRJNA284903	GCF_002901205.1	cyaCae2	male	haploid	vertebrate_other	Cyanistes_caeruleus	GCF_002901205.1_cyaCae2
+164674	2018-04-03	willow flycatcher	Empidonax traillii	SAMN08663748	PRJNA437496	GCF_003031625.1	ASM303162v1	n/a	haploid	vertebrate_other	Empidonax_traillii	GCF_003031625.1_ASM303162v1
+176057	2014-06-05	Kea	Nestor notabilis	SAMN02339299	PRJNA212900	GCF_000696875.1	ASM69687v1	male	haploid	vertebrate_other	Nestor_notabilis	GCF_000696875.1_ASM69687v1
+181119	2013-01-11	Tibetan ground-tit	Pseudopodoces humilis	SAMN02981490	PRJNA175930	GCF_000331425.1	PseHum1.0	n/a	haploid	vertebrate_other	Pseudopodoces_humilis	GCF_000331425.1_PseHum1.0
+187382	2014-06-02	Macqueen's bustard	Chlamydotis macqueenii	SAMN02324157	PRJNA212891	GCF_000695195.1	ASM69519v1	male	haploid	vertebrate_other	Chlamydotis_macqueenii	GCF_000695195.1_ASM69519v1
+188344	2014-05-23	cuckoo roller	Leptosomus discolor	SAMN02333687	PRJNA212897	GCF_000691785.1	ASM69178v1	male	haploid	vertebrate_other	Leptosomus_discolor	GCF_000691785.1_ASM69178v1
+188379	2014-05-09	little egret	Egretta garzetta	SAMN02596466	PRJNA232959	GCF_000687185.1	ASM68718v1	male	haploid	vertebrate_other	Egretta_garzetta	GCF_000687185.1_ASM68718v1
+194338	2018-06-21	burrowing owl	Athene cunicularia	SAMN08961563	PRJNA431202	GCF_003259725.1	athCun1	n/a	haploid	vertebrate_other	Athene_cunicularia	GCF_003259725.1_athCun1
+198806	2015-11-04	ruff	Calidris pugnax	SAMN03491621	PRJNA281024	GCF_001431845.1	ASM143184v1	n/a	haploid	vertebrate_other	Calidris_pugnax	GCF_001431845.1_ASM143184v1
+240206	2014-06-09	yellow-throated sandgrouse	Pterocles gutturalis	SAMN02339892	PRJNA212906	GCF_000699245.1	ASM69924v1	male	haploid	vertebrate_other	Pterocles_gutturalis	GCF_000699245.1_ASM69924v1
+2489341	2019-01-18	Kakapo	Strigops habroptila	SAMN09948751	PRJNA489135	GCF_004027225.1	bStrHab1_v1.p	female	haploid	vertebrate_other	Strigops_habroptila	GCF_004027225.1_bStrHab1_v1.p
+279965	2014-06-10	chuck-will's-widow	Antrostomus carolinensis	SAMN02318612	PRJNA212888	GCF_000700745.1	ASM70074v1	male	haploid	vertebrate_other	Antrostomus_carolinensis	GCF_000700745.1_ASM70074v1
+30419	2014-05-19	hoatzin	Opisthocomus hoazin	SAMN02302474	PRJNA212873	GCF_000692075.1	ASM69207v1	female	haploid	vertebrate_other	Opisthocomus_hoazin	GCF_000692075.1_ASM69207v1
+30455	2014-05-13	Northern fulmar	Fulmarus glacialis	SAMN02324803	PRJNA212894	GCF_000690835.1	ASM69083v1	male	haploid	vertebrate_other	Fulmarus_glacialis	GCF_000690835.1_ASM69083v1
+30464	2018-07-26	birds	Nothoprocta perdicaria	SAMN08476459	PRJNA433110	GCF_003342845.1	notPer1	male	haploid	vertebrate_other	Nothoprocta_perdicaria	GCF_003342845.1_notPer1
+308060	2018-07-26	Okarito brown kiwi	Apteryx rowi	SAMN08476454	PRJNA433110	GCF_003343035.1	aptRow1	male	haploid	vertebrate_other	Apteryx_rowi	GCF_003343035.1_aptRow1
+321398	2016-03-31	blue-crowned manakin	Lepidothrix coronata	SAMN04274560	PRJNA300662	GCF_001604755.1	Lepidothrix_coronata-1.0	male	haploid	vertebrate_other	Lepidothrix_coronata	GCF_001604755.1_Lepidothrix_coronata-1.0
+328815	2019-07-03	golden-collared manakin	Manacus vitellinus	SAMN02299332	PRJNA335611	GCF_001715985.3	ASM171598v3	female	haploid	vertebrate_other	Manacus_vitellinus	GCF_001715985.3_ASM171598v3
+345164	2013-02-05	Saker falcon	Falco cherrug	SAMN02981426	PRJNA168071	GCF_000337975.1	F_cherrug_v1.0	male	haploid	vertebrate_other	Falco_cherrug	GCF_000337975.1_F_cherrug_v1.0
+36300	2014-05-09	Dalmatian pelican	Pelecanus crispus	SAMN02339887	PRJNA212901	GCF_000687375.1	ASM68737v1	male	haploid	vertebrate_other	Pelecanus_crispus	GCF_000687375.1_ASM68737v1
+37040	2014-05-13	red-throated loon	Gavia stellata	SAMN02324832	PRJNA212895	GCF_000690875.1	ASM69087v1	male	haploid	vertebrate_other	Gavia_stellata	GCF_000690875.1_ASM69087v1
+415028	2018-12-14	White-ruffed manakin	Corapipo altera	SAMN10424454	PRJNA505529	GCF_003945725.1	ASM394572v1	n/a	haploid	vertebrate_other	Corapipo_altera	GCF_003945725.1_ASM394572v1
+44394	2013-04-30	white-throated sparrow	Zonotrichia albicollis	SAMN02981528	PRJNA197293	GCF_000385455.1	Zonotrichia_albicollis-1.0.1	male	haploid	vertebrate_other	Zonotrichia_albicollis	GCF_000385455.1_Zonotrichia_albicollis-1.0.1
+48883	2012-07-25	medium ground-finch	Geospiza fortis	SAMN00839579	PRJNA156703	GCF_000277835.1	GeoFor_1.0	female	haploid	vertebrate_other	Geospiza_fortis	GCF_000277835.1_GeoFor_1.0
+50402	2014-08-05	killdeer	Charadrius vociferus	SAMN02296710	PRJNA212867	GCF_000708025.1	ASM70802v2	female	haploid	vertebrate_other	Charadrius_vociferus	GCF_000708025.1_ASM70802v2
+52644	2014-08-04	bald eagle	Haliaeetus leucocephalus	SAMN02664716	PRJNA237821	GCF_000737465.1	Haliaeetus_leucocephalus-4.0	male	haploid	vertebrate_other	Haliaeetus_leucocephalus	GCF_000737465.1_Haliaeetus_leucocephalus-4.0
+54374	2014-06-02	brown roatelo	Mesitornis unicolor	SAMN02339298	PRJNA212899	GCF_000695765.1	ASM69576v1	female	haploid	vertebrate_other	Mesitornis_unicolor	GCF_000695765.1_ASM69576v1
+54380	2014-05-12	Red-legged seriema	Cariama cristata	SAMN02318733	PRJNA212889	GCF_000690535.1	ASM69053v1	male	haploid	vertebrate_other	Cariama_cristata	GCF_000690535.1_ASM69053v1
+54383	2014-05-13	sunbittern	Eurypyga helias	SAMN02324546	PRJNA212893	GCF_000690775.1	ASM69077v1	female	haploid	vertebrate_other	Eurypyga_helias	GCF_000690775.1_ASM69077v1
+55661	2014-06-17	common cuckoo	Cuculus canorus	SAMN02298149	PRJNA212870	GCF_000709325.1	ASM70932v1	male	haploid	vertebrate_other	Cuculus_canorus	GCF_000709325.1_ASM70932v1
+56313	2014-05-08	Barn owl	Tyto alba	SAMN02339894	PRJNA212909	GCF_000687205.1	ASM68720v1	female	haploid	vertebrate_other	Tyto_alba	GCF_000687205.1_ASM68720v1
+57068	2014-05-27	rifleman	Acanthisitta chloris	SAMN02318032	PRJNA212877	GCF_000695815.1	ASM69581v1	female	haploid	vertebrate_other	Acanthisitta_chloris	GCF_000695815.1_ASM69581v1
+57397	2014-06-16	bar-tailed trogon	Apaloderma vittatum	SAMN02318033	PRJNA212878	GCF_000703405.1	ASM70340v1	male	haploid	vertebrate_other	Apaloderma_vittatum	GCF_000703405.1_ASM70340v1
+57412	2014-05-13	speckled mousebird	Colius striatus	SAMN02324230	PRJNA212892	GCF_000690715.1	ASM69071v1	male	haploid	vertebrate_other	Colius_striatus	GCF_000690715.1_ASM69071v1
+57421	2014-05-16	carmine bee-eater	Merops nubicus	SAMN02338310	PRJNA212898	GCF_000691845.1	ASM69184v1	female	haploid	vertebrate_other	Merops_nubicus	GCF_000691845.1_ASM69184v1
+59729	2019-05-16	zebra finch	Taeniopygia guttata	SAMN02981239	PRJNA489098	GCF_003957565.1	bTaeGut1_v1.p	male	haploid	vertebrate_other	Taeniopygia_guttata	GCF_003957565.1_bTaeGut1_v1.p
+59894	2013-06-27	collared flycatcher	Ficedula albicollis	SAMN02981387	PRJNA75089	GCF_000247815.1	FicAlb1.5	male	haploid	vertebrate_other	Ficedula_albicollis	GCF_000247815.1_FicAlb1.5
+649802	2018-12-14	Wire-tailed manakin	Pipra filicauda	SAMN08774045	PRJNA445296	GCF_003945595.1	ASM394559v1	n/a	haploid	vertebrate_other	Pipra_filicauda	GCF_003945595.1_ASM394559v1
+85066	2014-06-02	American crow	Corvus brachyrhynchos	SAMN02297499	PRJNA212869	GCF_000691975.1	ASM69197v1	female	haploid	vertebrate_other	Corvus_brachyrhynchos	GCF_000691975.1_ASM69197v1
+87175	2019-09-06	birds	Camarhynchus parvulus	SAMEA5603054	PRJEB32528	GCF_901933205.1	STF_HiC	n/a	haploid	vertebrate_other	Camarhynchus_parvulus	GCF_901933205.1_STF_HiC
+8790	2018-07-26	emu	Dromaius novaehollandiae	SAMN08476457	PRJNA433110	GCF_003342905.1	droNov1	male	haploid	vertebrate_other	Dromaius_novaehollandiae	GCF_003342905.1_droNov1
+8839	2018-11-29	mallard	Anas platyrhynchos	SAMN10245527	PRJNA496533	GCF_003850225.1	IASCAAS_PekingDuck_PBH1.5	n/a	haploid	vertebrate_other	Anas_platyrhynchos	GCF_003850225.1_IASCAAS_PekingDuck_PBH1.5
+8897	2014-09-04	chimney swift	Chaetura pelagica	SAMN03018471	PRJNA210808	GCF_000747805.1	ChaPel_1.0	female	haploid	vertebrate_other	Chaetura_pelagica	GCF_000747805.1_ChaPel_1.0
+8932	2013-02-11	rock pigeon	Columba livia	SAMN02981415	PRJNA167554	GCF_000337935.1	Cliv_1.0	male	haploid	vertebrate_other	Columba_livia	GCF_000337935.1_Cliv_1.0
+8954	2013-02-05	peregrine falcon	Falco peregrinus	SAMN02981425	PRJNA159791	GCF_000337955.1	F_peregrinus_v1.0	male	haploid	vertebrate_other	Falco_peregrinus	GCF_000337955.1_F_peregrinus_v1.0
+8969	2014-05-15	white-tailed eagle	Haliaeetus albicilla	SAMN02333670	PRJNA212896	GCF_000691405.1	ASM69140v1	male	haploid	vertebrate_other	Haliaeetus_albicilla	GCF_000691405.1_ASM69140v1
+8996	2017-06-01	helmeted guineafowl	Numida meleagris	SAMN05969731	PRJNA352321	GCF_002078875.1	NumMel1.0	male	haploid	vertebrate_other	Numida_meleagris	GCF_002078875.1_NumMel1.0
+9031	2018-03-27	chicken	Gallus gallus	SAMN02981218	PRJNA13342	GCF_000002315.6	GRCg6a	female	haploid	vertebrate_other	Gallus_gallus	GCF_000002315.6_GRCg6a
+9054	2019-02-06	Ring-necked pheasant	Phasianus colchicus	SAMN08888240	PRJNA449162	GCF_004143745.1	ASM414374v1	n/a	haploid	vertebrate_other	Phasianus_colchicus	GCF_004143745.1_ASM414374v1
+9103	2014-11-24	turkey	Meleagris gallopavo	SAMN02981253	PRJNA42129	GCF_000146605.3	Turkey_5.1	female	haploid	vertebrate_other	Meleagris_gallopavo	GCF_000146605.3_Turkey_5.1
+9135	2019-07-18	Common canary	Serinus canaria	SAMN12017177	PRJNA548289	GCF_007115625.1	cibio_Scana_2019	n/a	haploid	vertebrate_other	Serinus_canaria	GCF_007115625.1_cibio_Scana_2019
+9157	2019-01-15	Great Tit	Parus major	SAMN03083587	PRJNA208335	GCF_001522545.3	Parus_major1.1	male	haploid	vertebrate_other	Parus_major	GCF_001522545.3_Parus_major1.1
+9172	2015-11-20	Common starling	Sturnus vulgaris	SAMN04029017	PRJNA293892	GCF_001447265.1	Sturnus_vulgaris-1.0	male	haploid	vertebrate_other	Sturnus_vulgaris	GCF_001447265.1_Sturnus_vulgaris-1.0
+9209	2014-06-17	great cormorant	Phalacrocorax carbo	SAMN02339889	PRJNA212903	GCF_000708925.1	ASM70892v1	male	haploid	vertebrate_other	Phalacrocorax_carbo	GCF_000708925.1_ASM70892v1
+9233	2014-06-06	emperor penguin	Aptenodytes forsteri	SAMN02596600	PRJNA235982	GCF_000699145.1	ASM69914v1	male	haploid	vertebrate_other	Aptenodytes_forsteri	GCF_000699145.1_ASM69914v1
+9238	2014-06-06	Adelie penguin	Pygoscelis adeliae	SAMN02596601	PRJNA235983	GCF_000699105.1	ASM69910v1	male	haploid	vertebrate_other	Pygoscelis_adeliae	GCF_000699105.1_ASM69910v1
+9244	2019-05-16	Anna's hummingbird	Calypte anna	SAMN02265252	PRJNA489139	GCF_003957555.1	bCalAnn1_v1.p	female	haploid	vertebrate_other	Calypte_anna	GCF_003957555.1_bCalAnn1_v1.p
+93934	2016-03-01	Japanese quail	Coturnix japonica	SAMN03989050	PRJNA292031	GCF_001577835.1	Coturnix japonica 2.0	male	haploid	vertebrate_other	Coturnix_japonica	GCF_001577835.1_Coturnix_japonica_2.0
+94827	2014-08-05	white-throated tinamou	Tinamus guttatus	SAMN02316659	PRJNA212876	GCF_000705375.1	ASM70537v2	female	haploid	vertebrate_other	Tinamus_guttatus	GCF_000705375.1_ASM70537v2
+97097	2014-05-08	White-tailed tropicbird	Phaethon lepturus	SAMN02339888	PRJNA212902	GCF_000687285.1	ASM68728v1	female	haploid	vertebrate_other	Phaethon_lepturus	GCF_000687285.1_ASM68728v1

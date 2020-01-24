@@ -4443,7 +4443,10 @@ if (!hIsGsidServer())
              "If you would prefer to get DNA for many items in a particular track, "
              "or get DNA with formatting options based on gene structure (introns, exons, UTRs, etc.), try using the ");
         printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(TRUE, NULL));
-        puts("Table Browser</A> with the \"sequence\" output format.");
+        puts("Table Browser</A> with the \"sequence\" output format. You can also use the ");
+        printf("<A HREF=\"../goldenPath/help/api.html\" TARGET=_blank>");
+        puts("REST API</A> with the <b>/getData/sequence</b> endpoint function "
+             "to extract sequence data with coordinates.");
         }
     else
         {
@@ -8884,6 +8887,7 @@ return itemCount;
 void htcDnaNearGene( char *geneName)
 /* Fetch DNA near a gene. */
 {
+cartWebStart(cart, database, "%s", geneName);
 char *table    = cartString(cart, "o");
 int itemCount;
 char *quotedItem = makeQuotedString(geneName, '\'');

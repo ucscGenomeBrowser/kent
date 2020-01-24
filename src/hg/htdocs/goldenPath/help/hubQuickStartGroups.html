@@ -65,7 +65,7 @@ section of the Track Hub User Guide.
 <ul>
   <li><strong><a href="#multiWig">Understanding multiWig tracks</a></strong>
   <li><strong><a href="#composite">Understanding composite tracks</a></strong>
-  <li><strong><a href="#superTrack">Understanding super-tracks</a></strong>
+  <li><strong><a href="#superTrack">Understanding supertracks</a></strong>
 </ul>
 
 <h2>Resources</h2>
@@ -145,10 +145,10 @@ tracks here</a>. See an
 <a href="http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hg19/trackDb.txt"
 target="_blank">example trackDb.txt</a>.</p>
 
-<!-- ========== super-tracks  ==================== -->
+<!-- ========== supertracks  ==================== -->
 
 <a name="superTrack"></a><br>
-<h2>Understanding super-tracks</h2>
+<h2>Understanding supertracks</h2>
 <pre><code><strong>track</strong> <em>uniqueSuperTrackName</em>
 <strong>superTrack</strong> <em>on show</em>
 ...
@@ -168,17 +168,35 @@ target="_blank">example trackDb.txt</a>.</p>
        <strong>track</strong> <em>newUniqueNameWithoutSpaces</em>
        <strong>parent</strong> <em>uniqueCompositeTrackNameInSuperTrack off</em> </code></pre>
 <p>
-A super-track groups together different types of tracks - typically composites - in 
-a high level folder. Use a super-track if you need a second layer of hierarchy after composites. 
+A supertrack groups together different types of tracks - typically composites - in
+a high level folder. Use a supertrack if you need a second layer of hierarchy after composites.
 For example, you could have a composite with RNA-seq results and a composite with ChIP-Seq results grouped
-together into a super-track describing a cell line.
-Super-tracks contain composite tracks or container multiWigs, but not vice
+together into a supertrack describing a cell line.
+Supertracks contain composite tracks or container multiWigs, but not vice
 versa. The <code><strong>superTrack</strong> on show</code> line allows for this track to be later 
 referenced as <code><strong>parent</strong> uniqueSuperTrackName</code> in each of the children 
 subtracks (note how it is only required for direct children, and not for subtracks contained in a 
-composite inside the super-track). The &quot;show&quot; is optional and sets the super-track to 
-display by default. Read <a href="trackDb/trackDbHub.html#superTrack" target="_blank">all about 
-super-tracks here</a>. See an 
+composite inside the supertrack -more below). The &quot;show&quot; is optional and sets the supertrack to
+display by default. It may help to think of the original declaring supertrack stanza as a light switch
+that by default is off, and can be flipped on by adding show.</p>
+<p>
+All tracks that claim membership to the supertrack can then set their
+own visibilities in lower stanzas by declaring settings such as by having
+the parent line and a separate <code>visibility dense</code> line.
+If no visibility setting is defined for a track,
+the default setting of hide is assigned. This can cause confusion if one
+mistakenly tries to set visibilities only at the top parent supertack stanza and
+leaves out visibility declarations for all children.</p>
+<p> Also do not confuse the parent line with how it is used in composites. For example,
+in supertracks DO NOT try something like  <strike><code>parent uniqueSuperTrackName [off/on]</code></strike>,
+where the <code>[off/on]</code> will only work with composite tracks.
+In the above nested example you do see <code>track uniqueNameWithoutSpaces</code> with a
+setting line specific only to the fact it is a child of a composite,
+<code><strong>parent</strong> <em>uniqueCompositeTrackNameInSuperTrack on</em></code>. The parent
+of the child composite track is in turn is a child to a supertrack declared by
+<code><strong>parent</strong> <em>uniqueSuperTrackName</em></code>.
+Read <a href="trackDb/trackDbHub.html#superTrack" target="_blank">all about
+supertracks here</a>. See an
 <a href="http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hg19/trackDb.txt"
 target="_blank">example trackDb.txt</a>.</p>
 

@@ -192,7 +192,7 @@ ret = hel->val;
 if (slRemoveEl(pBucket, hel))
     {
     hash->elCount -= 1;
-    if (!hash->lm)
+    if (!hash->lm && !hash->ownLm)   // if we didn't come from local mem or trackDb cache
 	freeHashEl(hel);
     }
 return ret;

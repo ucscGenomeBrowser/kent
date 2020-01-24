@@ -7,7 +7,6 @@ shortLabel gnomAD Variants
 longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants
 group varRep
 html gnomad
-pennantIcon New red ../goldenPath/newsarch.html#102819 Released Oct. 25, 2019
 
     track gnomadGenomesVariantsV3
     parent gnomadVariants

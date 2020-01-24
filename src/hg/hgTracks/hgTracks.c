@@ -4620,14 +4620,18 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
 // read file containing ids of subtracks 
 struct lineFile *lf = udcWrapShortLineFile(subtrackIdFile, NULL, 0); 
-char *words[2];
-while (lineFileChopNext(lf, words, sizeof words))
+char *words[11];
+int ct = 0;
+while ((ct = lineFileChopNext(lf, words, sizeof words)) != 0)
     {
     char *id = words[0];
-    char *name = words[1];
     if (hashLookup(nonEmptySubtracksHash, id))
         {
-        hashStore(nonEmptySubtracksHash, cloneString(name));
+        int i;
+        for (i=1; i<ct; i++)
+            {
+            hashStore(nonEmptySubtracksHash, cloneString(words[i]));
+            }
         }
     }
 lineFileClose(&lf);
@@ -7987,7 +7991,7 @@ for (window=windows; window; window=window->next)
 	{
 	if (track->visibility != tvHide)
 	    {
-	    if (!track->parallelLoading)
+            if (!track->parallelLoading)
 		{
 		if (measureTiming)
 		    lastTime = clock1000();

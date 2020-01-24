@@ -13,8 +13,6 @@ do
    rm -f /gbdb/hubs/$subDir/genomes/$asmId/bbi
    rm -f /gbdb/hubs/$subDir/genomes/$asmId/ixIxx
    rm -f /gbdb/hubs/$subDir/genomes/$asmId/html/*.html
-   rm -f /gbdb/hubs/$subDir/genomes/$asmId/html/*.jpg
-   rm -f /gbdb/hubs/$subDir/genomes/$asmId/html/*.png
    rm -f /gbdb/hubs/$subDir/genomes/$asmId/$asmId.2bit
    rm -f /gbdb/hubs/$subDir/genomes/$asmId/$asmId.agp
    rm -f /gbdb/hubs/$subDir/genomes/$asmId/$asmId.agp.gz
@@ -32,7 +30,6 @@ do
    ln -s `pwd -P`/$asmId/bbi /gbdb/hubs/$subDir/genomes/$asmId/bbi
    ln -s `pwd -P`/$asmId/ixIxx /gbdb/hubs/$subDir/genomes/$asmId/ixIxx
    ln -s `pwd -P`/$asmId/html/*.html /gbdb/hubs/$subDir/genomes/$asmId/html/
-   ln -s `pwd -P`/$asmId/html/*.jpg /gbdb/hubs/$subDir/genomes/$asmId/html/
    ln -s `pwd -P`/$asmId/trackData/addMask/$asmId.masked.2bit /gbdb/hubs/$subDir/genomes/$asmId/$asmId.2bit
    ln -s `pwd -P`/$asmId/$asmId.agp.gz /gbdb/hubs/$subDir/genomes/$asmId/$asmId.agp.gz
    ln -s `pwd -P`/$asmId/$asmId.genomes.txt /gbdb/hubs/$subDir/genomes/$asmId

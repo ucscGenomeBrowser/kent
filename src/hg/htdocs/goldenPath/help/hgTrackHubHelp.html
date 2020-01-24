@@ -856,31 +856,51 @@ just examples and do not represent real trackDb variables for hubs at Ensembl.)
 <!-- ========== Where to host your data ============================== -->
 <a name="Hosting"></a>
 <h2>Where to host your data?</h2> 
-<p>
 As stated in <a href="#Intro">What Are Track Hubs?</a>, track hubs files must be located
-in web-accessible locations that support byte-range requests. If your institution does not
-provide web hosting space for you, we know of at least the following sites where you can host
-your data and configuration files for free:</p>
+in web-accessible locations that support byte-range requests. There are four options for these:
 <ul>
-  <li><a href="https://de.cyverse.org/de/" target="_blank">CyVerse Discovery Environment</a></li>
-  <!--<li><a href="https://usegalaxy.org/" target="_blank">Galaxy</a></li>-->
-  <li><a href="https://github.com/" target="_blank">Github</a></li>
-  <li><a href="https://figshare.com/" target="_blank">Figshare</a></li>
+  <li>Your institution's IT department
+  <li>Commercial webspace providers
+  <li>Commercial cloud providers
+  <li>Free webspace providers
 </ul>
 <p>
-Each of the providers above has a slightly different approach to hosting data for
-compatibility with the UCSC Genome Browser, and may have different advantages and disadvantages,
-such as size limitations, usage statistics, and version control integration. Additionally, as 
-previously mentioned, any provider that supports byte-range access will work for hub hosting, 
-and you are not limited to the above sites. Below is a summarized guide for
-each of the providers mentioned above.</p>
+<b>Your Institution:</b> Many universities provide a location for researchers
+to place shareable data on the web and contacting your institution's system
+administrators will help discover a location to store your data. For example,
+if you work at the NIH, there is an internal data sharing <a
+href="https://hpc.nih.gov/nih/datashare.html" target="_blank">NIH network</a>
+site. Sometimes institution firewall rules can change, and you may need to
+inform your system administrators to add browser IP addresses as exceptions,
+listed 
+<a href="http://genomewiki.ucsc.edu/index.php/Public_Hub_Guidelines#Connection_issues.3F" target="_blank">here</a>. 
+Usually your IT department can direct you to someone
+who manages webspace for individual groups. This is our recommended option, as
+it is usually free, very fast and you can update the files yourself easily.</p>
 
-<p>In general, commercial online <b>cloud backup</b> providers
+<p><b>Webspace providers:</b> If your institution does not provide any web
+hosting space for you, the most convenient solution is usually to buy a
+virtualized webspace server from a commercial web hosting provider. These cost
+around $5-30 per month, provide more than 100GB of storage and unlimited
+bandwith. Often this service is called "shared hosting" or VPS, virtual private
+server. Files can be uploaded with FTP, rsync or scp and appear on a https://
+domain. Some exemples of providers are: A2 Hosting, BlueHost, GoDaddy,
+HostGator, Hostinger, DreamHost, but there are many others. This is not a
+complete list and we do not endorse a particular one. You can search the
+internet for subsets of these to find comparisons and reviews. The advantage of
+webspace providers is that they bill a flat rate per month, which is often
+easier to order through Universities than the per-GB billing of cloud
+providers. For optimal performance, select a West Coast / San Francisco data
+center when ordering a web server, as this is closest and fastest from
+UCSC. Unlike cloud providers, the storage is less reliable, it is good
+to keep local copies of the files.</p>
+
+<p><b>Cloud providers:</b> In general, commercial online cloud <b>backup</b> providers
 that charge a flat rate, like Dropbox, iCloud, Google Drive, Box.com, Microsoft
 OneDrive, Tencent Weiyun, Yandex.Disk, etc. do not work reliably as their business
 model requires rare and rate-limited data access, which is too slow or too limited for
 genome annotation display. However, commercial
-<b>cloud storage</b> offers that charge per GB transferred, like Amazon S3, Microsoft
+cloud <b>storage</b> offers that charge per GB transferred, like Amazon S3, Microsoft
 Azure Storage, Google Cloud Storage, Backblaze, Alibaba Object Store, etc.
 typically do work. For optimal performance,
 select a San Francisco / San Jose data center for the main UCSC site genome.ucsc.edu,  
@@ -889,6 +909,22 @@ genome-asia.ucsc.edu. You may also want to review this discussion about issues w
 <a href="http://genomewiki.ucsc.edu/index.php/Cloud-storage_providers_and_byte-range_requests_of_UCSC_big*_files"
 target="_blank">distributed storage servers</a>. <b>These services are external
 to UCSC and may change.</b></p>
+
+</p><b>Free webspace:</b> If you do not want to pay for web space,
+we know of at least the following sites where you can host
+research data and configuration files for free:
+<ul>
+  <li><a href="https://de.cyverse.org/de/" target="_blank">CyVerse Discovery Environment</a> - lots of space, but can be relatively slow to display</li>
+  <!--<li><a href="https://usegalaxy.org/" target="_blank">Galaxy</a></li>-->
+  <li><a href="https://github.com/" target="_blank">Github</a> - files limited to 100MB, but very fast</li>
+  <li><a href="https://figshare.com/" target="_blank">Figshare</a> - not limited and fast, but every file needs to be uploaded individually and cannot be changed. Optimal for very stable links, e.g. in publications.</li>
+</ul>
+Each of the providers above has a slightly different approach to hosting data for
+compatibility with the UCSC Genome Browser, and may have different advantages and disadvantages,
+such as size limitations, usage statistics, and version control integration. Additionally, as 
+previously mentioned, any provider that supports byte-range access will work for hub hosting, 
+and you are not limited to the above sites. Below is a summarized guide for
+each of the providers mentioned above.</p>
 
 <h3>Hosting Hubs on CyVerse</h3>
 <p>

@@ -4794,10 +4794,11 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
 <H3>Supertrack settings</H3>
     <P>The first 
     hierarchical container is called the supertrack, which may be thought of as 
-    a folder that holds other tracks. The Browser currently supports only one
+    a folder that holds other tracks that by default are closed, unless the
+    setting <code>show</code> is added. The Browser currently supports only one
     level of supertrack folders.  Generally the subtracks
     of a supertrack are of differing types.  If all the children are
-    of the same type, it is often better to use the "compositeTrack" grouping
+    of the same type, it is often better to use the <a href="#compositeTrack">compositeTrack</a> grouping
     described below.  If all of the children are wig or bigWig tracks, it may
     be of interest to use a signal overlay "container multiWig" grouping. Signal
     overlay tracks display the signal data from several subtracks as colored
@@ -4810,36 +4811,62 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
 </DIV>
 
 <DIV class="superTrack"><span class="types superTrack"></span>
-<div class="format"><code>superTrack on</code></div>
-    <P>To declare a supertrack, simply add this
+<div class="format"><code>superTrack on show</code></div>
+    <p>
+    To declare a supertrack, simply add this
     setting to a track definition that will hold a few standard
     settings. To set a supertrack to display as default add the word show,
-    <code>superTrack on show</code>, to the end of the statement.
-    When attempting to debug visibility settings, it may be 
-    helpful to read the <A href='#inheritance'>note about
-    inheritance</A> found below.</P> 
-    </P>
+    <code>superTrack on show</code>, to the end of the statement. To have
+    the supertrack not display by default use only <code>superTrack on</code>.
+    It may help to think of the original declaring supertrack stanza as a
+    light switch that by default is off, and can be flipped on by adding <code>show</code>.</p>
+    <p>
+    All tracks that claim membership to the supertrack should set their
+    own visibilities in lower stanzas by declaring settings such as
+    <code>parent superTrack1</code> and also by having a separate
+    <code>visibility dense</code> line. If no visibility setting
+    is defined for a track, the default setting of hide is assigned.
+    This can cause confusion if one mistakenly tries to set visibilities only
+    at the top supertack stanza, not allowed, and leaves them out for each child.</p>
+    <p>
+    Do not confuse the parent line with how it is used in composites. For example,
+    in supertracks DO NOT follow the example of <strike><code>parent superTrack1 [off/on]</code></strike>,
+    where <code>[off/on]</code> will only work with composite tracks. When attempting to debug visibility
+    settings, it may be helpful to read the <A href='#inheritance'>note about
+    inheritance</A> found below.</p>
 </DIV>
 
 <DIV class="parent_supertrack"><span class="types superTrack"></span>
 <div class="format"><code>parent &lt;superTrack&gt;</code></div>
     <P>Membership in a supertrack, composite, or aggregate track is declared by the
-    child, not the supertrack itself.  Any number of children may
-    belong to one supertrack, but ten is a suggested maximum number for usability
+    child, not the supertrack itself with a line such as <code>parent superTrack1</code>.</p>
+    <p>
+    Do not confuse the parent line with how it is used in composites. For example,
+    in supertracks DO NOT follow the example of <code>parent compositeTrack1 [off/on]</code>,
+    which will only work with composite tracks.</p>
+    <p>
+    Any number of children may belong to one supertrack, but ten is a suggested number for usability
     considerations.  Stylistically, children's stanzas within the trackDB typically are indented
     directly under the stanza of the parent. However, this is less frequently the case with
     supertracks, because the children are often scattered in other places within the trackDb 
     file, or the supertrack children are themselves composites containing
     additional indentation that makes enforcement of the supertrack
-    indentation impractical.</P>
+    indentation impractical.</p>
+    <p>
+    All tracks that claim membership to the supertrack should set their
+    own visibilities in lower stanzas by declaring separate settings such as
+    <code>visibility dense</code>.When attempting to debug visibility settings, it may be
+    helpful to read the <A href='#inheritance'>note about
+    inheritance</A> found below.</p>
 </DIV>
 
 <DIV class="superTrack_example"><span class="types superTrack"></span>
 <div class="format"><B>Example of a Supertrack</B></div>
+    <p>
+    Example 1
     <pre>
     track myFolder
     superTrack on show
-    group regulation
     shortLabel My Folder
     longLabel My folder keeps my tracks together
       ...
@@ -4853,11 +4880,22 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
         parent myFolder
         visibility hide
           ...    </pre>
-    <P>The supertrack called "My Folder"
-    contains two children.  All will be grouped under 
-    "regulation".  Notice that the first track is visible by
-    default (if the supertrack itself is visible by adding &quot;show&quot;), but the second
-    track is not.</P>
+    <p>The track called &quot;My Folder&quot; is declared as a supertrack and
+    contains two children who claim membership with parent lines.
+    Notice that the first track, <code>track myFirstTrack</code>, is visible by
+    default with <code>visibility dense</code> (because the supertrack itself,
+    <code>myFolder</code>, has the light-switch-like setting
+    of <code>show</code> to display all the contents of the supertrack).
+    The second track, <code>track mySecondTrack</code>, is not displayed,
+    however, with <code>visibility hide</code> and will require clicking a
+    box on the Track Setting page to display.</p>
+    <p>Note: do not confuse the parent
+    line with how it is used in composites. For example,
+    in supertracks DO NOT follow the example of <strike><code>parent superTrack1 [off/on]</code></strike>,
+    which will only work with composite tracks. See the
+    <a href="../hubQuickStartGroups.html" target="_blank">Quick Start Guide to
+    Organizing Track Hubs into Groupings</a> for more examples.</p>
+</p>
 </DIV>
 
 

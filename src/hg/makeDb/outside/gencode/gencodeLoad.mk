@@ -364,7 +364,7 @@ ${tableEntrezGeneTab}: ${tableEntrezGeneMeta} ${metaFilterDepend}
 ##
 ${gencodeGp}: ${annotationGff} ${ensemblToUcscChain}
 	@mkdir -p $(dir $@)
-	${gencodeGxfToGenePred} ${annotationGff} ${ensemblToUcscChain} $@.${tmpExt}
+	${gencodeGxfToGenePred} ${db} ${annotationGff} ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${tableTranscriptionSupportLevelData}: ${metaFilterDepend}

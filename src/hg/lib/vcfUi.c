@@ -268,9 +268,9 @@ if (filterCount < 1)
     return;
 printf("<B>Exclude variants with these FILTER values:</B><BR>\n");
 char cartVar[1024];
+safef(cartVar, sizeof(cartVar), "%s."VCF_EXCLUDE_FILTER_VAR, name);
 if (slCount(vcff->filterDefs) > 1)
     {
-    safef(cartVar, sizeof(cartVar), "%s."VCF_EXCLUDE_FILTER_VAR, name);
     jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);
     puts("&nbsp;");
     jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);

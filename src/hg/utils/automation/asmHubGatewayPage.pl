@@ -156,6 +156,12 @@ chomp $thisDir;
 printf STDERR "# thisDir $thisDir\n";
 my $ftpName = dirname($thisDir);
 my $asmId = basename($ftpName);;
+my $accessionDir = substr($asmId, 0 ,3);
+$accessionDir .= "/" . substr($asmId, 4 ,3);
+$accessionDir .= "/" . substr($asmId, 7 ,3);
+$accessionDir .= "/" . substr($asmId, 10 ,3);
+$accessionDir .= "/" . $asmId;
+
 my ($gcXPrefix, $accession, $rest) = split('_', $asmId, 3);
 my $newStyleUrl = sprintf("%s/%s/%s/%s/%s", $gcXPrefix, substr($accession,0,3),
    substr($accession,3,3), substr($accession,6,3), $asmId);
@@ -280,7 +286,7 @@ printf "<!-- Display image in righthand corner -->
 <table align=right border=0 width=%d height=%d>
   <tr><td align=RIGHT><a href=\"https://www.ncbi.nlm.nih.gov/assembly/%s\"
     target=_blank>
-    <img src=\"https://%s/hubs/%s/genomes/%s/html/%s\" width=%d height=%d alt=\"%s\"></a>
+    <img src=\"https://%s/hubs/%s/html/%s\" width=%d height=%d alt=\"%s\"></a>
   </td></tr>
   <tr><td align=right>
     <font size=-1> <em>%s</em><BR>
@@ -290,7 +296,7 @@ printf "<!-- Display image in righthand corner -->
     </font>
   </td></tr>
 </table>
-\n", $imageWidth+$imageWidthBorder, $imageHeight, $asmAccession, $sourceServer, $asmHubName, $asmId, $imageName, $imageWidth, $imageHeight, $commonName, $orgName, $photoCreditURL, $photoCreditName;
+\n", $imageWidth+$imageWidthBorder, $imageHeight, $asmAccession, $sourceServer, $accessionDir, $imageName, $imageWidth, $imageHeight, $commonName, $orgName, $photoCreditURL, $photoCreditName;
 }
 
 my $sciNameUnderscore = $orgName;
@@ -317,12 +323,11 @@ printf "</p>\n<hr>
 <b>Download files for this assembly hub:</b><br>
 To use the data from this assembly for a local hub instance at your
 institution, download these data as indicated by these instructions.<br>
-See also: <a href='/goldenPath/help/hgTrackHubHelp.html' target=_blank>track hub help</a> documentation.<br>
 <br>
 To download this assembly data, use this <em>rsync</em> command:
 <pre>
   rsync -a -P \\
-    rsync://$sourceServer/hubs/$asmHubName/genomes/$asmId/ \\
+    rsync://$sourceServer/hubs/$newStyleUrl/ \\
       ./$asmId/
 
   which creates the local directory: ./$asmId/
@@ -331,48 +336,51 @@ or this <em>wget</em> command:
 <pre>
   wget --timestamping -m -nH -x --cut-dirs=4 -e robots=off -np -k \\
     --reject \"index.html*\" -P \"$asmId\" \\
-       https://$sourceServer/hubs/$asmHubName/genomes/$asmId/
+       https://$sourceServer/hubs/$newStyleUrl/
 
   which creates a local directory: ./$asmId/
 </pre>
-<br>
-There is an included $asmId.genomes.txt file in that download
-data to use for your local track hub instance.<br>
-You will need to add a hub.txt file to point to this genomes.txt file.<br>
-Something like:
-<pre>
-hub myLocalHub
-shortLabel myLocalHub
-longLabel genome assembly $asmId
-genomesFile $asmId.genomes.txt
-email yourEmail\@yourdomain.edu
-descriptionUrl html/$asmId.description.html
-</pre>
+<p>
+There is an included <em>$asmId.hub.txt</em> file in that download
+data directory to use for your local track hub instance.<br>
+Using the genome browser menus: <em><strong>My Data</strong> -&gt; <strong>Track Hubs</strong></em><br>
+select the <em><strong>My Hubs</strong></em> tab to enter a URL
+to this hub.txt file to attach this assembly hub to a genome browser.
+</p>
+<p>
 The <em>html/$asmId.description.html</em> page is information for your users to
 describe this assembly.  This WEB page with these instructions
 is an instance of html/$asmId.description.html file.
+</p>
+<p>
+See also: <a href='/goldenPath/help/hgTrackHubHelp.html' target=_blank>track hub help</a> documentation.<br>
 </p>\n";
 
 printf "<hr>
 <p>
 To operate a blat server on this assembly, in the directory where you have
-the $asmId.2bit file:
+the <em>$asmId.2bit</em> file:
 <pre>
-gfServer -log=%s.gfServer.trans.log -ipLog -canStop start \\
-    yourserver.domain.edu 76543 -trans -mask %s.2bit &
-gfServer -log=%s.gfServer.log -ipLog -canStop start \\
-    yourserver.domain.edu 76542 -stepSize=5 %s.2bit &
+gfServer -log=$asmId.gfServer.trans.log -ipLog -canStop start \\
+    yourserver.domain.edu 76543 -trans -mask $asmId.2bit &
+gfServer -log=$asmId.gfServer.log -ipLog -canStop start \\
+    yourserver.domain.edu 76542 -stepSize=5 $asmId.2bit &
 </pre>
 Adjust the port numbers <em>76543</em> <em>76542</em> and the
 <em>yourserver.domain.edu</em> for your local circumstances.<br>
-Enter the following specifications in your genomes.txt file:
+Typically, port numbers in the range <em>49152</em> to <em>65535</em>
+are available for private use as in this case.
+See also: <a href='https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml' target=_blank>IANA.org</a> port registry.
+</p>
+<p>
+Enter the following specifications in your <em>$asmId.genomes.txt</em> file:
 <pre>
 transBlat yourserver.domain.edu 76543
 blat yourserver.domain.edu 76542
 </pre>
 See also: <a href=\"https://genome.ucsc.edu/goldenPath/help/hubQuickStartAssembly.html#blat\"
 target=_blank>Blat for an Assembly Hub</a>
-</p>\n", $asmId, $asmId, $asmId, $asmId;
+</p>\n";
 
 printf "<hr>
 <p>

@@ -4,17 +4,25 @@ use strict;
 use warnings;
 use File::stat;
 
-my $home = $ENV{'HOME'};
-my $srcDocDir = "primateAsmHub";
-my $asmHubDocDir = "$home/kent/src/hg/makeDb/doc/$srcDocDir";
-my $asmHubName = "primates";
+my $argc = scalar(@ARGV);
+if ($argc != 2) {
+  printf STDERR "mkAsmStats Name asmName\n";
+  printf STDERR "e.g.: mkAsmStats Mammals mammals\n";
+  exit 255;
+}
+my $Name = shift;
+my $asmHubName = shift;
 
-my $commonNameList = "primates.asmId.commonName.tsv";
-my $commonNameOrder = "primates.commonName.asmId.orderList.tsv";
+my $home = $ENV{'HOME'};
+my $toolsDir = "$home/kent/src/hg/makeDb/doc/asmHubs";
+
+my $commonNameList = "$asmHubName.asmId.commonName.tsv";
+my $commonNameOrder = "$asmHubName.commonName.asmId.orderList.tsv";
 my @orderList;	# asmId of the assemblies in order from the *.list files
 # the order to read the different .list files:
 
-my $assemblyCount = 0;
+my $assemblyTotal = 0;	# complete list of assemblies in this group
+my $asmCount = 0;	# count of assemblies completed and in the table
 my $overallNucleotides = 0;
 my $overallSeqCount = 0;
 my $overallGapSize = 0;
@@ -37,24 +45,29 @@ sub startHtml() {
 my $timeStamp = `date "+%F"`;
 chomp $timeStamp;
 
+my $subSetMessage = "subset of $asmHubName only";
+if ($asmHubName eq "vertebrate") {
+   $subSetMessage = "subset of other ${asmHubName}s only";
+}
+
 print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
-<!--#set var="TITLE" value="Primate genomes assembly hubs" -->
+<!--#set var="TITLE" value="$Name genomes assembly hubs" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
 
-<h1>Primate Genomes assembly hubs</h1>
+<h1>$Name Genomes assembly hubs</h1>
 <p>
-Assemblies from NCBI/Genbank/Refseq sources
+Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 </p>
 
-<p>
-<h3>See also: <a href='index.html' target=_blank>hub access</a></h3>
-</p>
+<h3>See also: <a href='index.html'>hub access</a></h3><br>
 
 <h3>Data resource links</h3>
-NOTE: <em>Click on the column headers to sort the table by that column</em>
+NOTE: <em>Click on the column headers to sort the table by that column</em><br>
+The <em>link to genome browser</em> will attach only that single assembly to
+the genome browser.
 END
 }
 
@@ -84,10 +97,16 @@ my $commaSeqCount = commify($overallSeqCount);
 my $commaGapSize = commify($overallGapSize);
 my $commaGapCount = commify($overallGapCount);
 
+my $percentDone = 100.0 * $asmCount / $assemblyTotal;
+my $doneMsg = "";
+if ($asmCount < $assemblyTotal) {
+  $doneMsg = sprintf(" (%d build completed, %.2f %% finished)", $asmCount, $percentDone);
+}
+
 print <<"END"
 
 </tbody>
-<tfoot><tr><th>TOTALS:</th><td align=center colspan=3>assembly count&nbsp;$assemblyCount</td>
+<tfoot><tr><th>TOTALS:</th><td align=center colspan=3>total assembly count&nbsp;${assemblyTotal}${doneMsg}</td>
   <td align=right>$commaSeqCount</td>
   <td align=right>$commaNuc</td>
   <td align=right>$commaGapCount</td>
@@ -102,6 +121,22 @@ END
 ### end the HTML output
 ##############################################################################
 sub endHtml() {
+
+printf "<p>\nOther assembly hubs available:<br>\n<table border='1'><thead>\n<tr>";
+
+printf "<th><a href='../primates/asmStatsPrimates.html'>Primates</a></th>\n"
+  if ($asmHubName ne "primates");
+printf "<th><a href='../mammals/asmStatsMammals.html'>Mammals</a></th>\n"
+  if ($asmHubName ne "mammals");
+printf "<th><a href='../birds/asmStatsBirds.html'>Birds</a></th>\n"
+  if ($asmHubName ne "birds");
+printf "<th><a href='../fish/asmStatsFish.html'>Fish</a></th>\n"
+  if ($asmHubName ne "fish");
+printf "<th><a href='../vertebrate/asmStatsVertebrate.html'>other vertebrates</a></th>\n"
+  if ($asmHubName ne "vertebrate");
+
+printf "</tr></thead>\n</table>\n</p>\n";
+
 print <<"END"
 </div><!-- closing gbsPage from gbPageStartHardcoded.html -->
 </div><!-- closing container-fluid from gbPageStartHardcoded.html -->
@@ -145,24 +180,24 @@ sub gapStats($$) {
   return ($gapCount);
 }
 
-# GCA_901709675.1_fSynAcu1.1/trackData/allGaps] zcat GCA_901709675.1_fSynAcu1.1.allGaps.bed.gz | awk '{print $3-$2,$0}' | ave stdin | grep "^count" | awk '{print $2}'
-
 ##############################################################################
 ### tableContents()
 ##############################################################################
 sub tableContents() {
 
-  my $asmCount = 0;
   foreach my $asmId (reverse(@orderList)) {
-    my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/" . substr($asmId, 0 ,3);
-    $buildDir .= "/" . substr($asmId, 4 ,3);
-    $buildDir .= "/" . substr($asmId, 7 ,3);
-    $buildDir .= "/" . substr($asmId, 10 ,3);
-    $buildDir .= "/" . $asmId;
+    my $accessionDir = substr($asmId, 0 ,3);
+    $accessionDir .= "/" . substr($asmId, 4 ,3);
+    $accessionDir .= "/" . substr($asmId, 7 ,3);
+    $accessionDir .= "/" . substr($asmId, 10 ,3);
+    $accessionDir .= "/" . $asmId;
+    my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir";
     my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
+    next if (! -s "$asmReport");
     my ($gcPrefix, $asmAcc, $asmName) = split('_', $asmId, 3);
     my $chromSizes = "${buildDir}/${asmId}.chrom.sizes";
     my $twoBit = "${buildDir}/trackData/addMask/${asmId}.masked.2bit";
+    next if (! -s "$twoBit");
     my $faSizeTxt = "${buildDir}/${asmId}.faSize.txt";
     if ( ! -s "$faSizeTxt" ) {
        printf STDERR "twoBitToFa $twoBit stdout | faSize stdin > $faSizeTxt\n";
@@ -226,7 +261,9 @@ sub tableContents() {
       }
     }
     close (FH);
-    printf "<tr><th>%d</th><td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/%s/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", ++$asmCount, $asmHubName, $asmId, $commonName;
+    my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$accessionDir";
+    printf "<tr><td align=right>%d</td>\n", ++$asmCount;
+    printf "<td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=%s/%s.hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", $hubUrl, $asmId, $asmId, $commonName;
     printf "    <td align=center><a href='https://hgdownload.soe.ucsc.edu/hubs/%s/genomes/%s/' target=_blank>%s</a></td>\n", $asmHubName, $asmId, $sciName;
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s</a></td>\n", $gcPrefix, $asmAcc, $asmId;
     printf "    <td align=right>%s</td>\n", commify($seqCount);
@@ -242,12 +279,12 @@ sub tableContents() {
 ### main()
 ##############################################################################
 
-open (FH, "<$asmHubDocDir/${commonNameOrder}") or die "can not read ${commonNameOrder}";
+open (FH, "<$toolsDir/${commonNameOrder}") or die "can not read ${commonNameOrder}";
 while (my $line = <FH>) {
   chomp $line;
   my ($commonName, $asmId) = split('\t', $line);
   push @orderList, $asmId;
-  ++$assemblyCount;
+  ++$assemblyTotal;
 }
 close (FH);
 

@@ -19,7 +19,7 @@ join -t$'\t' primates.taxId.list \
     > primates.xrefName.list
 
 awk -F$'\t' '{printf "%s\t%s\n", $13, $3}' primates.xrefName.list \
-  | sort > primates.asmId.commonName.tsv
+  | sort > ../asmHubs/primates.asmId.commonName.tsv
 
 awk -F$'\t' '{printf "%s\t%s\n", $3, $13}' primates.xrefName.list \
-  | sort -fr > primates.commonName.asmId.orderList.tsv
+  | sort -fr > ../asmHubs/primates.commonName.asmId.orderList.tsv
