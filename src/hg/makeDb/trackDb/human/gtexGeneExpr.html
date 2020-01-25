@@ -84,23 +84,42 @@ Additional summary plots of GTEx sample characteristics are available at the
 <a target="_blank" href="https://gtexportal.org/home/tissueSummaryPage">
 GTEx Portal Tissue Summary</a> page.</p>
 
+
 <h2>Data Access</h2>
 <p>
-GTEx Gene expression data can be accessed through the Table Browser in the
+The raw data for the GTEx Gene expression track can be accessed interactively through the 
 <a href="hgTables?db=$db&hgta_track=$db&hgta_group=allTables&hgta_table=gtexGene">
-gtexGene table</a>. Supplementary information can be found in the connected tables below.
+Table Browser</a> or <a href="hgIntegrator">Data Integrator</a>. Metadata can be 
+found in the connected tables below.
 <ul>
-<li><strong><a href="hgTables?db=$db&hgta_track=hgFixed&hgta_group=allTables&hgta_table=hgFixed.gtexTissue">
-gtexTissue</a></strong> has information on the order of each of the 53 tissues in the expression
-data.</li>
-<li><strong><a href="hgTables?db=$db&hgta_track=$db&hgta_group=allTables&hgta_table=gtexGeneModel">
-gtexGeneModel</a></strong> describes the gene names and coordinates.</li> 
-<li><strong><a href="hgTables?db=$db&hgta_group=allTables&hgta_track=hgFixed&hgta_table=hgFixed.gtexSampleData">
-gtexSampleData</a></strong> has scores for each individual gene-sample data point.</li>
-<li><strong><a href="hgTables?db=$db&hgta_group=allTables&hgta_track=hgFixed&hgta_table=hgFixed.gtexSample">
-gtexSample</a></strong> contains metadata about sample isolation time, collection site, and tissue notes.</li>
-<li><strong><a href="hgTables?db=$db&hgta_group=allTables&hgta_track=hgFixed&hgta_table=hgFixed.gtexDonor">
-gtexDonor</a></strong> has anonymized information on the tissue donor.</li></ul></p>
+<li><strong><a 
+href="hgTables?db=$db&hgta_track=$db&hgta_group=allTables&hgta_table=gtexGeneModel">
+gtexGeneModel</a></strong> describes the gene names and coordinates in genePred format.</li> 
+<li><strong><a 
+href="hgTables?db=$db&hgta_track=hgFixed&hgta_group=allTables&hgta_table=hgFixed.gtexTissue">
+hgFixed.gtexTissue</a></strong> lists each of the 53 tissues in alphabetical order,
+corresponding to the comma separated expression values in gtexGene.</li>
+<li><strong><a 
+href="hgTables?db=$db&hgta_group=allTables&hgta_track=hgFixed&hgta_table=hgFixed.gtexSampleData">
+hgFixed.gtexSampleData</a></strong> has RPKM expression scores for each individual gene-sample 
+data point, connected to gtexSample.</li>
+<li><strong><a 
+href="hgTables?db=$db&hgta_group=allTables&hgta_track=hgFixed&hgta_table=hgFixed.gtexSample">
+hgFixed.gtexSample</a></strong> contains metadata about sample time, collection site,
+and tissue, connected to the donor field in the gtexDonor table.</li>
+<li><strong><a 
+href="hgTables?db=$db&hgta_group=allTables&hgta_track=hgFixed&hgta_table=hgFixed.gtexDonor">
+hgFixed.gtexDonor</a></strong> has anonymized information on the tissue donor.</li></ul></p>
+<p>
+For automated analysis and downloads, the track data files can be downloaded from 
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/gtex/">our downloads server</a>
+or <a href="../goldenPath/help/api.html">the JSON API</a>.
+Individual regions or the whole genome annotation can be accessed as text using our utility
+<code>bigBedToBed</code>. Instructions for downloading the utility can be found 
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. 
+That utility can also be used to obtain features within a given range, e.g. 
+<code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg19/gtex/gtexTranscExpr.bb -chrom=chr21
+-start=0 -end=100000000 stdout</code></p>
 <p>
 Data can also be obtained directly from GTEx at the following link:
 <a href="https://gtexportal.org/home/datasets" target=_blank>
