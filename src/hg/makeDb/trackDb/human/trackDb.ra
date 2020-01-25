@@ -4664,16 +4664,16 @@ shortLabel ClinGen CNVs
 longLabel Clinical Genome Resource (ClinGen) CNVs
 group phenDis
 visibility hide
-subGroup1 view Views atot=Total cnv=CNVs
-subGroup2 phen Phenotype ben=Benign path=Pathogenic unk=Unknown
-subGroup3 level Confidence cur=Curated det=Determined lik=Likely unc=Uncertain
-dimensions dimensionY=phen dimensionX=level
-sortOrder phen=+ level=+ view=+
+subGroup1 view Views cov=Coverage cnv=CNVs
+subGroup2 class Class path=Pathogenic likP=Likely_Pathogenic unc=Uncertain likB=Likely_Benign ben=Benign
+subGroup3 level Evidence cur=Curated sub=Submitted
+dimensions dimensionY=class dimensionX=level
+sortOrder class=+ level=+ view=+
 type bed 3
 
     track iscaViewTotal
-    shortLabel Total (Graphical)
-    view atot
+    shortLabel Coverage (Graphical)
+    view cov
     visibility full
     parent iscaComposite
     viewUi on
@@ -4685,31 +4685,30 @@ type bed 3
 	track iscaPathGainCum
 	parent iscaViewTotal
 	shortLabel Path Gain
-	longLabel ClinGen CNVs: Pathogenic Gain Total
+	longLabel ClinGen CNVs: Pathogenic Gain Coverage
 	color 0,0,200
-        subGroups view=atot phen=path level=det
+        subGroups view=cov class=path level=sub
 
 	track iscaPathLossCum
 	parent iscaViewTotal
 	shortLabel Path Loss
-	longLabel ClinGen CNVs: Pathogenic Loss Total
+	longLabel ClinGen CNVs: Pathogenic Loss Coverage
 	color 200,0,0
-        subGroups view=atot phen=path level=det
+        subGroups view=cov class=path level=sub
 
 	track iscaBenignGainCum
 	parent iscaViewTotal
 	shortLabel Benign Gain
-	longLabel ClinGen CNVs: Benign Gain Total
+	longLabel ClinGen CNVs: Benign Gain Coverage
 	color 0,0,200
-        subGroups view=atot phen=ben level=det
-
+        subGroups view=cov class=ben level=sub
 
 	track iscaBenignLossCum
 	parent iscaViewTotal
 	shortLabel Benign Loss
-	longLabel ClinGen CNVs: Benign Loss Total
+	longLabel ClinGen CNVs: Benign Loss Coverage
 	color 200,0,0
-        subGroups view=atot phen=ben level=det
+        subGroups view=cov class=ben level=sub
 
     track iscaViewDetail
     shortLabel CNVs
@@ -4725,43 +4724,43 @@ type bed 3
 	parent iscaViewDetail off
 	shortLabel Curated Path
 	longLabel ClinGen CNVs: Curated Pathogenic
-        subGroups view=cnv phen=path level=cur
+        subGroups view=cnv class=path level=cur
 
 	track iscaCuratedBenign
 	parent iscaViewDetail off
 	shortLabel Curated Ben
 	longLabel ClinGen CNVs: Curated Benign
-        subGroups view=cnv phen=ben level=cur
+        subGroups view=cnv class=ben level=cur
 
 	track iscaPathogenic
 	parent iscaViewDetail
 	shortLabel Pathogenic
 	longLabel ClinGen CNVs: Pathogenic
-        subGroups view=cnv phen=path level=det
+        subGroups view=cnv class=path level=sub
 
 	track iscaLikelyPathogenic
 	parent iscaViewDetail off
 	shortLabel Uncert Path
 	longLabel ClinGen CNVs: Uncertain: Likely Pathogenic
-        subGroups view=cnv phen=path level=lik
+        subGroups view=cnv class=likP level=sub
 
 	track iscaUncertain
 	parent iscaViewDetail off
 	shortLabel Uncertain
 	longLabel ClinGen CNVs: Uncertain
-        subGroups view=cnv phen=unk level=unc
+        subGroups view=cnv class=unc level=sub
 
 	track iscaLikelyBenign
 	parent iscaViewDetail off
 	shortLabel Uncert Ben
 	longLabel ClinGen CNVs: Uncertain: Likely Benign
-        subGroups view=cnv phen=ben level=lik
+        subGroups view=cnv class=likB level=sub
 
 	track iscaBenign
 	parent iscaViewDetail off
 	shortLabel Benign
 	longLabel ClinGen CNVs: Benign
-        subGroups view=cnv phen=ben level=det
+        subGroups view=cnv class=ben level=sub
 
 
 include phastBias.ra
