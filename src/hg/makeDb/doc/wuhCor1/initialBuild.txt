@@ -1,0 +1,1240 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the wuhCor1
+
+#  Can use existing photograph (otherwise find one before starting here)
+
+#########################################################################
+#  Initial steps, find a suitable photograph (DONE - 2020-01-29 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/wuhCor1
+cd ~/kent/src/hg/makeDb/doc/wuhCor1
+
+sed -e 's/regenCho1/wuhCor1/g; s/RegenCho1/WuhCor1/g; s/DONE/TBD/g;' \
+	../regenCho1/initialBuild.txt > initialBuild.txt
+
+mkdir -p /hive/data/genomes/wuhCor1/photo
+cd /hive/data/genomes/wuhCor1/photo
+wget --timestamping \
+https://upload.wikimedia.org/wikipedia/commons/7/73/Coronavirus_virion.jpg
+
+# check this into the source tree under the name '2019-nCoV.jpg'
+
+cd /hive/data/genomes/wuhCor1
+
+printf "photoCreditURL\thttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC3397359/
+photoCreditName\tBelouzard, et al. Viruses. 2012 Jun; 4(6): 1011-1033\n" \
+   > photoReference.txt
+
+#########################################################################
+#  Initial steps, download sequence (DONE - 2020-01-29 - Hiram)
+mkdir /hive/data/genomes/wuhCor1/download
+cd /hive/data/genomes/wuhCor1/download
+
+
+time rsync -a -L --stats rsync://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/858/895/GCF_009858895.2_ASM985889v3/ ./
+
+# sent 335 bytes  received 119,676 bytes  80,007.33 bytes/sec
+# total size is 118,465  speedup is 0.99
+
+# real    0m1.582s
+
+faSize GCF_*v3_genomic.fna.gz
+29903 bases (0 N's 29903 real 29903 upper 0 lower) in 1 sequences in 1 files
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2020-01-29)
+    cd /hive/data/genomes/wuhCor1
+
+    $HOME/kent/src/hg/utils/automation/prepConfig.pl wuhCor1 virus \
+        virus ./download/*_assembly_report.txt > wuhCor1.config.ra
+
+# fixup missing genomeId
+
+ncbiGenomeId
+ncbiGenomeId n/a
+
+# fixup missing BioSample:
+
+ncbiBioSample notFound
+ncbiBioSample n/a
+
+# fixup missing assemblyLabel:
+
+assemblyLabel na
+assemblyLabel 2019-nCoV
+
+# fixup commonName:
+
+commonName Viruses
+commonName Wuhan seafood market pneumonia virus
+
+# fixup scientificName:
+
+scientificName Wuhan seafood market pneumonia virus
+scientificName 2019-nCoV
+
+    cat wuhCor1.config.ra 
+# config parameters for makeGenomeDb.pl:
+db wuhCor1
+clade virus
+genomeCladePriority 2000
+scientificName 2019-nCoV
+commonName Wuhan seafood market pneumonia virus
+assemblyDate Jan. 2020
+assemblyLabel Wuhan-Hu-1
+assemblyShortLabel ASM985889v3
+orderKey 22324
+mitoAcc none
+fastaFiles /hive/data/genomes/wuhCor1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/wuhCor1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir virus
+photoCreditURL  https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3397359/
+photoCreditName Belouzard, et al. Viruses. 2012 Jun; 4(6): 1011-1033
+ncbiGenomeId 
+ncbiAssemblyId 15851418
+ncbiAssemblyName ASM985889v3
+ncbiBioProject 485481
+ncbiBioSample n/a
+genBankAccessionID GCF_009858895.2
+taxId 2697049
+
+#############################################################################
+# setup UCSC named files (DONE - 2020-01-29 - Hiram)
+
+    mkdir /hive/data/genomes/wuhCor1/ucsc
+    cd /hive/data/genomes/wuhCor1/ucsc
+
+    zcat ../download/GCF_009858895.2_ASM985889v3_genomic.fna.gz \
+      | sed -e 's/>NC_045512.2 .*/>NC_045512v2/;' | gzip -c > wuhCor1.fa.gz
+
+    hgFakeAgp -singleContigs wuhCor1.fa.gz wuhCor1.agp
+
+    # verify OK:
+    checkAgpAndFa *.agp *.fa.gz
+    # All AGP and FASTA entries agree - both files are valid
+
+    # same as original ?
+    faSize *.fa.gz
+29903 bases (0 N's 29903 real 29903 upper 0 lower) in 1 sequences in 1 files
+
+
+#############################################################################
+#  Initial database build (TBD - 2019-11-25 - Hiram)
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -stop=db wuhCor1.config.ra -workhorse=hgwdev) \
+       > db.log 2>&1
+    # real    0m18.720s
+
+    # finish it off:
+    time (makeGenomeDb.pl -continue=dbDb wuhCor1.config.ra -workhorse=hgwdev) \
+	> dbDb.log 2>&1
+    # real    0m2.204s
+
+    # after getting the photo checked into the source tree under the correct
+    # name 2019-nCoV
+time (~/kent/src/hg/utils/automation/makeGenomeDb.pl -continue=trackDb wuhCor1.config.ra -workhorse=hgwdev) \
+	> trackDb.log 2>&1
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add wuhCor1 to trackDb/makefile
+
+    # will not be masking this sequence:
+
+    cp -p wuhCor1.unmasked.2bit wuhCor1.2bit
+
+    # establish symlink
+    cd /hive/data/genomes/wuhCor1
+    ln -s `pwd`/wuhCor1.2bit /gbdb/wuhCor1/wuhCor1.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2020-01-29 - Hiram)
+    mkdir /hive/data/genomes/wuhCor1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/wuhCor1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/wuhCor1/wuhCor1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku wuhCor1) > do.log 2>&1
+    # real    0m37.529s
+
+    cat fb.wuhCor1.cpgIslandExtUnmasked.txt
+    # 218 bases of 29903 (0.729%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2020-01-29 - Hiram)
+    mkdir /hive/data/genomes/wuhCor1/bed/cytoBand
+    cd /hive/data/genomes/wuhCor1/bed/cytoBand
+    makeCytoBandIdeo.csh wuhCor1
+
+#############################################################################
+# run up idKeys files for chromAlias/ncbiRefSeq (DONE - 2020-01-29 - Hiram)
+    mkdir /hive/data/genomes/wuhCor1/bed/idKeys
+    cd /hive/data/genomes/wuhCor1/bed/idKeys
+
+    time (doIdKeys.pl \
+        -twoBit=/hive/data/genomes/wuhCor1/wuhCor1.unmasked.2bit \
+        -buildDir=`pwd` wuhCor1) > do.log 2>&1 &
+    # real    3m20.182s
+
+    cat wuhCor1.keySignature.txt
+    #  ce5cfe2a678171c02635a4e5e2e5647d
+
+#############################################################################
+# gapOverlap (DONE - 2020-01-29 - Hiram)
+    # there are no gaps here
+    mkdir /hive/data/genomes/wuhCor1/bed/gapOverlap
+    cd /hive/data/genomes/wuhCor1/bed/gapOverlap
+    time (doGapOverlap.pl \
+    -twoBit=/hive/data/genomes/wuhCor1/wuhCor1.unmasked.2bit wuhCor1 ) \
+        > do.log 2>&1 &
+    # real    2m50.902s
+
+    # there are 4 items found:
+    wc -l bed.tab
+    # 4 bed.tab
+
+    cat fb.wuhCor1.gapOverlap.txt
+    # 1900 bases of 2531519022 (0.000%) in intersection
+
+#############################################################################
+# tandemDups (DONE - 2020-01-29 - Hiram)
+    # this was run, but there were no tandem dups found
+
+    mkdir /hive/data/genomes/wuhCor1/bed/tandemDups
+    cd /hive/data/genomes/wuhCor1/bed/tandemDups
+    time (~/kent/src/hg/utils/automation/doTandemDup.pl \
+  -twoBit=/hive/data/genomes/wuhCor1/wuhCor1.unmasked.2bit wuhCor1) \
+        > do.log 2>&1 &
+    # real    462m49.910s
+
+    cat fb.wuhCor1.tandemDups.txt
+    # 0 bases of 29903 (0.000%) in intersection
+
+    bigBedInfo wuhCor1.tandemDups.bb | sed -e 's/^/#  /;'
+#  version: 4
+#  fieldCount: 13
+#  hasHeaderExtension: yes
+#  isCompressed: yes
+#  isSwapped: 0
+#  extraIndexCount: 0
+#  itemCount: 0
+#  primaryDataSize: 8
+#  zoomLevels: 0
+#  chromCount: 0
+#  basesCovered: 0
+#  meanDepth (of bases covered): 0.000000
+#  minDepth: 0.000000
+#  maxDepth: 0.000000
+#  std of depth: 0.000000
+
+#########################################################################
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2020-01-29 - Hiram)
+    # construct idKeys for the refseq sequence
+    mkdir /hive/data/genomes/wuhCor1/download/idKeys
+    cd /hive/data/genomes/wuhCor1/download/idKeys
+    faToTwoBit ../GCF_*v3_genomic.fna.gz wuhCor1.refSeq.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/wuhCor1.refSeq.2bit refseqWuhCor1)  > do.log 2>&1 &
+    # real    0m48.786s
+
+    cat refseqWuhCor1.keySignature.txt
+    #  ce5cfe2a678171c02635a4e5e2e5647d
+
+    # and the genbank sequence needs keys too:
+    mkdir /hive/data/genomes/wuhCor1/download/idKeysGenbank
+    cd /hive/data/genomes/wuhCor1/download/idKeysGenbank
+
+time rsync -a -L --stats rsync://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/009/858/895/GCA_009858895.3_ASM985889v3/GCA_009858895.3_ASM985889v3_genomic.fna.gz ./
+
+    faToTwoBit GCA*_genomic.fna.gz wuhCor1.genbank.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/wuhCor1.genbank.2bit genbankWuhCor1)  > do.log 2>&1 &
+
+    cat genbankWuhCor1.keySignature.txt
+    #  ce5cfe2a678171c02635a4e5e2e5647d
+
+    mkdir /hive/data/genomes/wuhCor1/bed/chromAlias
+    cd /hive/data/genomes/wuhCor1/bed/chromAlias
+
+    join -t$'\t' ../idKeys/wuhCor1.idKeys.txt \
+        ../../download/idKeysGenbank/genbankWuhCor1.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToINSDC.bed
+
+    join -t$'\t' ../idKeys/wuhCor1.idKeys.txt \
+        ../../download/idKeys/refseqWuhCor1.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+
+    # should be same line counts throughout:
+    wc -l * ../../chrom.sizes
+    #	1 ucscToINSDC.bed
+    #	1 ucscToRefSeq.bed
+    #	1 ../../chrom.sizes
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 11
+    # use the $chrSize in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab wuhCor1 ucscToINSDC stdin ucscToINSDC.bed
+     # should be the same for ucscToRefSeq:
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 11
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' \
+         | hgLoadSqlTab wuhCor1 ucscToRefSeq stdin ucscToRefSeq.bed
+
+    # should be quiet for all OK
+    checkTableCoords wuhCor1
+
+    # should cover %100 entirely:
+    featureBits -countGaps wuhCor1 ucscToINSDC
+    # 29903 bases of 29903 (100.000%) in intersection
+    featureBits -countGaps wuhCor1 ucscToRefSeq
+    # 29903 bases of 29903 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (TBD - 2019-11-26 - Hiram)
+
+    mkdir /hive/data/genomes/wuhCor1/bed/chromAlias
+    cd /hive/data/genomes/wuhCor1/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' wuhCor1 \
+        | sort -k1,1 > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' wuhCor1 \
+        | sort -k1,1 > ucsc.genbank.tab
+
+    wc -l *.tab
+#  1 ucsc.genbank.tab
+#  1 ucsc.refseq.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+	> wuhCor1.chromAlias.tab
+
+  for t in refseq genbank
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t wuhCor1.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 1 =? 1 OK
+# checking genbank: 1 =? 1 OK
+
+
+    hgLoadSqlTab wuhCor1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        wuhCor1.chromAlias.tab
+
+    hgsql -e 'select * from chromAlias;' wuhCor1
+
++-------------+-------------+---------+
+| alias       | chrom       | source  |
++-------------+-------------+---------+
+| MN908947.3  | NC_045512v2 | genbank |
+| NC_045512.2 | NC_045512v2 | refseq  |
++-------------+-------------+---------+
+
+#########################################################################
+# fixup search rule for assembly track/gold table (TBD - 2019-11-25 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/criGri/wuhCor1
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" wuhCor1 \
+      | sed -e 's/[0-9_FR]\+//;' | sort | uniq -c
+      1 chrM
+   7659 pi
+     33 pisub
+      3 pisuba
+      3 pisubb
+  51824 ss
+
+
+    # implies a rule: '[cps][his](sub)?[rM0-9]+(_[ab0-9FR]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" wuhCor1 | wc -l
+    # 59523
+
+    hgsql -N -e "select frag from gold;" wuhCor1 \
+       | egrep -e '[cps][his]+(sub)?[rM0-9]+(_[ab0-9FR]+)?' | wc -l
+    # 59523
+
+    hgsql -N -e "select frag from gold;" wuhCor1 \
+       | egrep -v -e '[cps][his]+(sub)?[rM0-9]+(_[ab0-9FR]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/wuhCor1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [cps][his]+(sub)?[rM0-9]+(_[ab0-9FR]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (TBD - 2019-11-25 - Hiram)
+    mkdir /hive/data/genomes/wuhCor1/bed/repeatMasker
+    cd /hive/data/genomes/wuhCor1/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku wuhCor1) > do.log 2>&1 &
+    # real    518m50.143s
+
+    cat faSize.rmsk.txt
+# 2531519022 bases (265206282 N's 2266312740 real 1530161366 upper
+#	736151374 lower) in 7812 sequences in 1 files
+# Total size: mean 324055.2 sd 6387461.2 min 105 (pi011564F)
+#	max 240360982 (ss100001) median 12236
+# %29.08 masked total, %32.48 masked real
+
+    egrep -i "versi|relea" do.log
+# RepeatMasker version development-$Id: RepeatMasker,v 1.332 2017/04/17 19:01:11 rhubley Exp $
+#    February 01 2017 (open-4-0-8) 1.332 version of RepeatMasker
+# grep RELEASE /hive/data/staging/data/RepeatMasker/Libraries/RepeatMaskerLib.embl
+# CC    Dfam_Consensus RELEASE 20181026;                            *
+
+    time featureBits -countGaps wuhCor1 rmsk
+    # 736157955 bases of 2531519022 (29.080%) in intersection
+    # real    0m29.036s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' wuhCor1 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 736157955.000000
+    # real    0m18.986s
+
+##########################################################################
+# running simple repeat (TBD - 2019-11-25 - Hiram)
+
+    # The '-trf409 4' is a bit smaller than human which is 6
+
+    mkdir /hive/data/genomes/wuhCor1/bed/simpleRepeat
+    cd /hive/data/genomes/wuhCor1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409=4 wuhCor1) > do.log 2>&1 &
+    # real    17m24.592s
+
+    cat fb.simpleRepeat
+    # 68344927 bases of 2266312740 (3.016%) in intersection
+
+    cd /hive/data/genomes/wuhCor1
+    # when using the Window Masker result:
+    cd /hive/data/genomes/wuhCor1
+#    twoBitMask bed/windowMasker/wuhCor1.cleanWMSdust.2bit \
+#       -add bed/simpleRepeat/trfMask.bed  wuhCor1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # or using the rmsk result after it is done:
+    twoBitMask wuhCor1.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed wuhCor1.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa wuhCor1.2bit stdout | faSize stdin > faSize.wuhCor1.2bit.txt
+    cat faSize.wuhCor1.2bit.txt | sed -e 's/^/# /;'
+# 2531519022 bases (265206282 N's 2266312740 real 1528440046 upper
+#	737872694 lower) in 7812 sequences in 1 files
+# Total size: mean 324055.2 sd 6387461.2 min 105 (pi011564F)
+#	max 240360982 (ss100001) median 12236
+# %29.15 masked total, %32.56 masked real
+
+    rm /gbdb/wuhCor1/wuhCor1.2bit
+    ln -s `pwd`/wuhCor1.2bit /gbdb/wuhCor1/wuhCor1.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (TBD - 2019-11-26 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/wuhCor1/bed/microsat
+    cd /cluster/data/wuhCor1/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed wuhCor1 microsat microsat.bed
+    # Read 226558 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (TBD - 2019-11-26 - Hiram)
+    # wait for RepeatMasker to finish before this, since this is going
+    # to compare itself with the rmsk result
+
+    mkdir /hive/data/genomes/wuhCor1/bed/windowMasker
+    cd /hive/data/genomes/wuhCor1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev wuhCor1) > do.log 2>&1
+    # real    132m19.374s
+
+    # Masking statistics
+    cat faSize.wuhCor1.cleanWMSdust.txt
+# 2531519022 bases (265206282 N's 2266312740 real 1539053551 upper
+#	727259189 lower) in 7812 sequences in 1 files
+# Total size: mean 324055.2 sd 6387461.2 min 105 (pi011564F)
+#	max 240360982 (ss100001) median 12236
+# %28.73 masked total, %32.09 masked real
+
+    cat fb.wuhCor1.rmsk.windowmaskerSdust.txt
+    # 432987841 bases of 2531519022 (17.104%) in intersection
+
+##########################################################################
+# cpgIslands - (TBD - 2019-11-26 - Hiram)
+    mkdir /hive/data/genomes/wuhCor1/bed/cpgIslands
+    cd /hive/data/genomes/wuhCor1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku wuhCor1) > do.log 2>&1
+    # real    3m34.486s
+
+    cat fb.wuhCor1.cpgIslandExt.txt
+    # 11992730 bases of 2266312740 (0.529%) in intersection
+
+##############################################################################
+# genscan - (TBD - 2019-11-26 - Hiram)
+    mkdir /hive/data/genomes/wuhCor1/bed/genscan
+    cd /hive/data/genomes/wuhCor1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku wuhCor1) > do.log 2>&1
+    # real    126m0.077s
+
+    # three jobs failed on the ku run, finished on hgwdev manually:
+# ./runGsBig.2M.csh ss1415 000 gtf/000/ss1415.gtf pep/000/ss1415.pep subopt/000/ss1415.bed
+# ./runGsBig.2M.csh ss100006 000 gtf/000/ss100006.gtf pep/000/ss100006.pep subopt/000/ss100006.bed
+# ./runGsBig.2M.csh ss5358 000 gtf/000/ss5358.gtf pep/000/ss5358.pep subopt/000/ss5358.bed
+
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku wuhCor1) > makeBed.log 2>&1
+    # real    1m14.506s
+
+    cat fb.wuhCor1.genscan.txt
+    # 55358798 bases of 2266312740 (2.443%) in intersection
+
+    cat fb.wuhCor1.genscanSubopt.txt
+    # 58714924 bases of 2266312740 (2.591%) in intersection
+
+#########################################################################
+# Create kluster run files (TBD - 2019-06-29 - Hiram)
+
+    # numerator is wuhCor1 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap wuhCor1 gap
+    # 265206282 bases of 2266312740 (11.702%) in intersection
+
+    #                       ^^^
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2266312740 / 2861349177 \) \* 1024
+    #  ( 2266312740 / 2861349177 ) * 1024 = 811.052445
+
+    # ==> use -repMatch=800 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/wuhCor1
+    blat wuhCor1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/wuhCor1.11.ooc \
+        -repMatch=800
+    #   Wrote 24088 overused 11-mers to jkStuff/wuhCor1.11.ooc
+    # criGriChoV2 was repMatch 850 and:
+    #   Wrote 22423 overused 11-mers to jkStuff/criGriChoV2.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' wuhCor1 \
+        | sort -k7,7nr | ave -col=7 stdin
+    # min 52599.000000
+    # max 165458.000000
+
+    gapToLift -verbose=2 -minGap=50000 wuhCor1 jkStuff/nonBridged.lift \
+        -bedFile=jkStuff/nonBridged.bed
+    wc -l jkStuff/nonBri*
+    #	7832 jkStuff/nonBridged.bed
+    #	7832 jkStuff/nonBridged.lift
+
+########################################################################
+# lastz/chain/net swap human/hg38 (TBD - 2019-11-26 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg38/bed/lastzWuhCor1.2019-11-26
+
+    cat fb.hg38.chainWuhCor1Link.txt
+    # 979733899 bases of 3095998939 (31.645%) in intersection
+    cat fb.hg38.chainSynWuhCor1Link.txt
+    # 917104031 bases of 3095998939 (29.622%) in intersection
+    cat fb.hg38.chainRBest.WuhCor1.txt
+    # 901006295 bases of 3095998939 (29.102%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/wuhCor1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/wuhCor1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzWuhCor1.2019-11-26/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > swap.log 2>&1
+    #  real    79m18.904s
+
+    cat fb.wuhCor1.chainHg38Link.txt
+    # 956720146 bases of 2266312740 (42.215%) in intersection
+    cat fb.wuhCor1.chainSynHg38Link.txt
+    # 895755077 bases of 2266312740 (39.525%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	wuhCor1 hg38) > rbest.log 2>&1 &
+    # real    289m24.440s
+
+    cat fb.wuhCor1.chainRBest.Hg38.txt
+    # 902782523 bases of 2266312740 (39.835%) in intersection
+
+#########################################################################
+# lastz/chain/net swap mouse/mm10 (TBD - 2019-11-26 - Hiram)
+
+    # original alignment
+    cd /hive/data/genomes/mm10/bed/lastzWuhCor1.2019-11-26
+
+    cat fb.mm10.chainWuhCor1Link.txt
+    #	1525566783 bases of 2652783500 (57.508%) in intersection
+    cat fb.mm10.chainSynWuhCor1Link.txt
+    #   1410851403 bases of 2652783500 (53.184%) in intersection
+    cat fb.mm10.chainRBest.WuhCor1.txt
+    # 1395524606 bases of 2652783500 (52.606%) in intersection
+
+    mkdir /hive/data/genomes/wuhCor1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/wuhCor1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzWuhCor1.2019-11-26/DEF \
+	-noDbNameCheck -swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    101m20.296s
+
+    cat fb.wuhCor1.chainMm10Link.txt
+    #	1522181082 bases of 2266312740 (67.166%) in intersection
+    cat fb.wuhCor1.chainSynMm10Link.txt
+    #   1397889394 bases of 2266312740 (61.681%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev wuhCor1 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    660m29.571s
+
+    cat fb.wuhCor1.chainRBest.Mm10.txt
+    # 1396267649 bases of 2266312740 (61.610%) in intersection
+
+##############################################################################
+# GENBANK AUTO UPDATE (TBD - 2019-11-26 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism             mrnaCnt   estCnt  refSeqCnt
+    # Cricetulus barabensis	34	2	0
+    # Cricetulus griseus	90146	12	344
+    # Cricetulus longicaudatus	58	0	0
+    # Cricetulus migratorius	18	0	0
+    # Cricetulus sp.	36	0	0
+
+    # edit etc/genbank.conf to add wuhCor1 just before criGriChoV2
+# wuhCor1 (Cricetulus griseus - Chinese hamster ovary cell line CHO-K1)
+wuhCor1.serverGenome = /hive/data/genomes/wuhCor1/wuhCor1.2bit
+wuhCor1.ooc = /hive/data/genomes/wuhCor1/jkStuff/wuhCor1.11.ooc
+wuhCor1.lift = /hive/data/genomes/wuhCor1/jkStuff/nonBridged.lift
+wuhCor1.downloadDir = wuhCor1
+wuhCor1.perChromTables = no
+wuhCor1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+wuhCor1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+wuhCor1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+wuhCor1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+wuhCor1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+# defaults yes: genbank.mrna.native.load, genbank.mrna.native.loadDesc,
+# genbank.est.native.load, refseq.mrna.native.load, refseq.mrna.native.loadDesc,
+# refseq.mrna.xeno.load , refseq.mrna.xeno.loadDesc
+# wuhCor1.upstreamGeneTbl = ensGene
+# wuhCor1.upstreamMaf = multiz9way /hive/data/genomes/wuhCor1/bed/multiz9way/species.list
+
+    # verify the files specified exist before checking in the file:
+  grep ^wuhCor1 etc/genbank.conf | grep hive | awk '{print $NF}' | xargs ls -og
+# -rw-rw-r-- 1    283099 Nov 26 11:49 /hive/data/genomes/wuhCor1/jkStuff/nonBridged.lift
+# -rw-rw-r-- 1     96360 Nov 26 10:19 /hive/data/genomes/wuhCor1/jkStuff/wuhCor1.11.ooc
+# -rw-rw-r-- 1 661068165 Nov 26 10:12 /hive/data/genomes/wuhCor1/wuhCor1.2bit
+
+    git commit -m "Added wuhCor1 - Regeneron CHO refs #24568" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add wuhCor1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added wuhCor1 - Regeneron CHO refs #24568" etc/hgwdev.dbs \
+	etc/align.dbs
+    git push
+    make etc-update
+
+    # wait a few days for genbank magic to take place, the tracks will
+    # appear
+
+#############################################################################
+# augustus gene track (TBD - 2019-11-26 - Hiram)
+    mkdir /hive/data/genomes/wuhCor1/bed/augustus
+    cd /hive/data/genomes/wuhCor1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev wuhCor1) > do.log 2>&1
+    # real    219m51.368s
+
+    cat fb.wuhCor1.augustusGene.txt
+    # 50452718 bases of 2266312740 (2.226%) in intersection
+
+#########################################################################
+# ncbiRefSeq (TBD - 2019-11-25 - Hiram)
+
+    # XXX can't be done on this genome, it is not from NCBI
+
+    mkdir /hive/data/genomes/wuhCor1/bed/ncbiRefSeq
+    cd /hive/data/genomes/wuhCor1/bed/ncbiRefSeq
+    # running step wise just to be careful
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.5_GRCg6a wuhCor1) > download.log 2>&1
+    # real    1m19.029s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.5_GRCg6a wuhCor1) > process.log 2>&1
+    # real    2m6.030s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.5_GRCg6a wuhCor1) > load.log 2>&1
+    # real    0m22.312s
+
+    cat fb.ncbiRefSeq.wuhCor1.txt
+    #  88641893 bases of 1055588482 (8.397%) in intersection
+
+    # need to add: include ../../refSeqComposite.ra alpha
+    # to the chicken/wuhCor1/trackDb.ra to turn on the track in the browser
+
+    # there was one gene that claimed to have a protein, but the
+    # protein sequence was not included in the protein.faa file
+    # discovered from joinerCheck
+    # manual fix to blank out this one protein, to see the entry
+    hgsql -e 'select * from ncbiRefSeqLink where protAcc="NP_989875.1";' wuhCor1
+    hgsql -e 'update ncbiRefSeqLink set protAcc="" where protAcc="NP_989875.1";' wuhCor1
+    # this makes the 'protein' link disappear from the gene details page
+    # curious that this gene is marked as a non-coding gene anyway ?
+    # gene: FET1 at chr4:63,102,774-63,105,516-
+
+    featureBits -enrichment wuhCor1 refGene ncbiRefSeq
+ # refGene 1.374%, ncbiRefSeq 8.397%, both 1.370%, cover 99.73%, enrich 11.88x
+    featureBits -enrichment wuhCor1 ncbiRefSeq refGene
+ # ncbiRefSeq 8.397%, refGene 1.374%, both 1.370%, cover 16.32%, enrich 11.88x
+
+    featureBits -enrichment wuhCor1 ncbiRefSeqCurated refGene
+ # ncbiRefSeqCurated 1.368%, refGene 1.374%, both 1.364%, cover 99.71%, enrich 72.59x
+    featureBits -enrichment wuhCor1 refGene ncbiRefSeqCurated
+ # refGene 1.374%, ncbiRefSeqCurated 1.368%, both 1.364%, cover 99.32%, enrich 72.59x
+
+#########################################################################
+# LIFTOVER TO criGriChoV2 (TBD - 2019-11-26 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/wuhCor1/bed/blat.criGriChoV2.2019-11-26
+    cd /hive/data/genomes/wuhCor1/bed/blat.criGriChoV2.2019-11-26
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/wuhCor1/jkStuff/wuhCor1.11.ooc \
+         wuhCor1 criGriChoV2
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/wuhCor1/jkStuff/wuhCor1.11.ooc \
+         wuhCor1 criGriChoV2) > doLiftOverToRn6.log 2>&1
+    # real    523m38.199s
+
+    # see if the liftOver menus function in the browser from wuhCor1
+    # to criGriChoV2
+
+    # would like to see this as a track:
+    # not actually using this psl file
+    time chainToPsl wuhCor1ToCriGriChoV2.over.chain.gz ../../chrom.sizes \
+   /hive/data/genomes/criGriChoV2/chrom.sizes ../../wuhCor1.2bit \
+   /hive/data/genomes/criGriChoV2/criGriChoV2.2bit wuhCor1ToCriGriChoV2.psl
+
+    # this net track is loaded
+chainSort wuhCor1ToCriGriChoV2.over.chain.gz stdout \
+   | chainPreNet stdin \
+   /hive/data/genomes/wuhCor1/chrom.sizes \
+   /hive/data/genomes/criGriChoV2/chrom.sizes stdout \
+     | chainNet stdin -minSpace=1 /hive/data/genomes/wuhCor1/chrom.sizes \
+        /hive/data/genomes/criGriChoV2/chrom.sizes stdout /dev/null \
+        | netSyntenic stdin noClass.net
+
+netClass -verbose=0 -noAr noClass.net wuhCor1 criGriChoV2 wuhCor1.criGriChoV2.net
+
+netFilter -minGap=10 wuhCor1.criGriChoV2.net \
+    | hgLoadNet -verbose=0 wuhCor1 netCriGriChoV2 stdin
+
+
+Got 7812 chroms in /hive/data/genomes/wuhCor1/chrom.sizes, 8265 in /hive/data/genomes/criGriChoV2/chrom.sizes
+Finishing nets
+writing stdout
+writing /dev/null
+memory usage 168030208, utime 102 s/100, stime 9
+
+#########################################################################
+#  BLATSERVERS ENTRY (TBD - 2019-11-25 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("wuhCor1", "blat1a", "17892", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("wuhCor1", "blat1a", "17893", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to MEPE gene (egg shell protein)
+##  (TBD - 2019-11-25 - Hiram)
+
+    # as found from the galGal5 to wuhCor1 liftOver
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr4:45667017-45672928"
+	where name="wuhCor1";' hgcentraltest
+
+#########################################################################
+# crispr whole genome (WORKING - 2019-12-20 - Hiram)
+#  indexFa, ranges, guides, specScoreJobList, specScores,
+#  effScores, offTargets, load, cleanup
+
+    mkdir /hive/data/genomes/wuhCor1/bed/crisprAll
+    cd /hive/data/genomes/wuhCor1/bed/crisprAll
+
+    # the indexing step takes a while
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+   -stop=indexFa -buildDir=`pwd` -smallClusterHub=ku wuhCor1 augustusGene) \
+	> indexFa.log 2>&1
+    # real    62m50.349s
+
+    # the large shoulder argument will cause the entire genome to be scanned
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -shoulder=250000000 \
+       -continue=ranges -stop=guides -buildDir=`pwd` -smallClusterHub=hgwdev \
+         -buildDir=`pwd` -tableName=crisprAll -fileServer=hgwdev \
+           -verbose=2 -bigClusterHub=ku wuhCor1 augustusGene) \
+                > guides.log 2>&1
+
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -shoulder=250000000 \
+       -continue=specScoreJobList -stop=specScores -buildDir=`pwd` \
+         -smallClusterHub=hgwdev \
+         -buildDir=`pwd` -tableName=crisprAll -fileServer=hgwdev \
+           -verbose=2 -bigClusterHub=ku wuhCor1 augustusGene) \
+                > specScores.log 2>&1
+# Completed: 2673411 of 2673411 jobs
+# CPU time in finished jobs:  225364310s 3756071.84m 62601.20h 2608.38d  7.146 y
+# IO & Wait Time:                384571s    6409.51m   106.83h    4.45d  0.012 y
+# Average job time:                  84s       1.41m     0.02h    0.00d
+# Longest finished job:             173s       2.88m     0.05h    0.00d
+# Submission to last job:        367928s    6132.13m   102.20h    4.26d
+
+    # broken cluster run, finished manually, then
+    time find tmp/outGuides -type f | xargs cut -f3-6 > ../specScores.tab
+
+# real    640m44.668s
+# user    3m56.891s
+# sys     12m3.577s
+    wc -l specScores.tab
+    # 199696592 specScores.tab
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -shoulder=250000000 \
+       -continue=effScores -stop=load -buildDir=`pwd` \
+         -smallClusterHub=hgwdev \
+         -buildDir=`pwd` -tableName=crisprAll -fileServer=hgwdev \
+           -verbose=2 -bigClusterHub=ku wuhCor1 augustusGene) \
+                > load.log 2>&1
+XXX - running - Fri Dec 27 14:59:10 PST 2019
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2018-10-17 - Hiram)
+xyz
+    cd $HOME/kent/src/hg/makeDb/schema
+    # verify all the business is done for release
+    ~/kent/src/hg/utils/automation/verifyBrowser.pl wuhCor1
+
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=wuhCor1 -tableCoverage all.joiner
+    joinerCheck -database=wuhCor1 -times all.joiner
+    joinerCheck -database=wuhCor1 -keys all.joiner
+
+    # when clean, check in:
+    git commit -m 'adding rules for wuhCor1 refs #24568' all.joiner
+    git push
+    # run up a 'make alpha' in hg/hgTables to get this all.joiner file
+    # into the hgwdev/genome-test system
+
+XXX - ready when tracks are done - Tue Nov 26 13:35:39 PST 2019
+    cd /hive/data/genomes/wuhCor1
+    time (makeDownloads.pl wuhCor1) > downloads.log 2>&1
+    #  real    10m7.605s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/wuhCor1/pushQ
+    cd /hive/data/genomes/wuhCor1/pushQ
+  time (makePushQSql.pl -redmineList wuhCor1) > wuhCor1.pushQ.sql 2> stderr.out
+    # real    9m58.779s
+
+    # remove the extra chainNet files from the listings:
+    sed -i -e "/etNig1/d" redmine.wuhCor1.file.list
+    sed -i -e "/asAcu1/d" redmine.wuhCor1.file.list
+    sed -i -e "/etNig1/d" redmine.wuhCor1.table.list
+    sed -i -e "/onAlb1/d" redmine.wuhCor1.table.list
+    sed -i -e "/asAcu1/d" redmine.wuhCor1.table.list
+    sed -i -e "/Stickleback/d" redmine.wuhCor1.releaseLog.txt
+    sed -i -e "/Tetraodon/d" redmine.wuhCor1.releaseLog.txt
+    sed -i -e "/sparrow/d" redmine.wuhCor1.releaseLog.txt
+    # remove the tandemDups and gapOverlap from the file list:
+    sed -i -e "/tandemDups/d" redmine.wuhCor1.table.list
+    sed -i -e "/Tandem Dups/d" redmine.wuhCor1.releaseLog.txt
+    sed -i -e "/gapOverlap/d" redmine.wuhCor1.table.list
+    sed -i -e "/Gap Overlaps/d" redmine.wuhCor1.releaseLog.txt
+    #  real    7m21.629s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/wuhCor1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/wuhCor1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/wuhCor1/bbi/quality.bw
+    # WARNING: wuhCor1 does not have seq
+    # WARNING: wuhCor1 does not have extFile
+
+    # add the path names to the listing files in the redmine issue
+    # in the three appropriate entry boxes:
+
+#	/hive/data/genomes/wuhCor1/pushQ/redmine.wuhCor1.file.list
+#	/hive/data/genomes/wuhCor1/pushQ/redmine.wuhCor1.releaseLog.txt
+#	/hive/data/genomes/wuhCor1/pushQ/redmine.wuhCor1.table.list
+
+#########################################################################
+# LASTZ wuhCor1 vs criGriChoV1 Chinese hamster CHO-K1 cell line
+#	(TBD - 2019-12-10 - Hiram)
+
+    mkdir /hive/data/genomes/wuhCor1/bed/lastzCriGriChoV1.2019-12-10
+    cd /hive/data/genomes/wuhCor1/bed/lastzCriGriChoV1.2019-12-10
+
+    printf '# Regeneron CHO assembly vs Chinese hamster CHO-K1 (v1) cell line
+
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Regeneron wuhCor1 assembly
+SEQ1_DIR=/hive/data/genomes/wuhCor1/wuhCor1.2bit
+SEQ1_LEN=/hive/data/genomes/wuhCor1/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=500
+
+# QUERY: Chinese hamster CHO-K1 cell line
+SEQ2_DIR=/hive/data/genomes/criGriChoV1/criGriChoV1.2bit
+SEQ2_LEN=/hive/data/genomes/criGriChoV1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=500
+
+BASE=/hive/data/genomes/wuhCor1/bed/lastzCriGriChoV1.2019-12-10
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      -noDbNameCheck `pwd`/DEF -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+          -chainMinScore=1000 -chainLinearGap=loose) > do.log 2>&1
+    # broken during chain step, out of memory, finish last two on hgwdev
+    # real    2877m7.655s
+    time (doBlastzChainNet.pl -verbose=2 \
+      -continue=chainMerge -noDbNameCheck `pwd`/DEF -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+          -chainMinScore=1000 -chainLinearGap=loose) > chainMerge.log 2>&1
+    # real    341m40.234s
+
+    cat fb.wuhCor1.chainCriGriChoV1Link.txt
+    # 2227351234 bases of 2266312740 (98.281%) in intersection
+
+    cat fb.wuhCor1.chainSynCriGriChoV1Link.txt
+    # 2149876184 bases of 2266312740 (94.862%) in intersection
+
+time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` wuhCor1 criGriChoV1) \
+     > rbest.log 2>&1 &
+XXX - running - Wed Dec 18 11:45:37 PST 2019
+    # real    55m37.534s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/criGriChoV1/bed/blastz.wuhCor1.swap
+    cd /hive/data/genomes/criGriChoV1/bed/blastz.wuhCor1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/wuhCor1/bed/lastzCriGriChoV1.2019-12-10/DEF \
+        -swap -chainMinScore=1000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > swap.log 2>&1
+XXX - running - Wed Dec 18 11:45:37 PST 2019
+    #  real    258m32.140s
+
+    cat fb.criGriChoV1.chainWuhCor1Link.txt
+    # 2274544087 bases of 2318132242 (98.120%) in intersection
+
+time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` criGriChoV1 wuhCor1) \
+       > rbest.log 2>&1 &
+    # real    83m10.946s
+
+#########################################################################
+# LASTZ wuhCor1 vs criGriChoV2 Chinese hamster CHO-K1 cell line
+#	(TBD - 2019-12-10 - Hiram)
+
+    mkdir /hive/data/genomes/wuhCor1/bed/lastzCriGriChoV2.2019-12-10
+    cd /hive/data/genomes/wuhCor1/bed/lastzCriGriChoV2.2019-12-10
+
+    printf '# Regeneron CHO assembly vs Chinese hamster CHO-K1 (v2) cell line
+
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Regeneron wuhCor1 assembly
+SEQ1_DIR=/hive/data/genomes/wuhCor1/wuhCor1.2bit
+SEQ1_LEN=/hive/data/genomes/wuhCor1/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=500
+
+# QUERY: Chinese hamster CHO-K1 cell line, GCA_900186095.1_CHOK1S_HZDv1
+SEQ2_DIR=/hive/data/genomes/criGriChoV2/criGriChoV2.2bit
+SEQ2_LEN=/hive/data/genomes/criGriChoV2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=500
+
+BASE=/hive/data/genomes/wuhCor1/bed/lastzCriGriChoV2.2019-12-10
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      -noDbNameCheck `pwd`/DEF -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+          -chainMinScore=1000 -chainLinearGap=loose) > do.log 2>&1
+XXX - running - Tue Dec 10 13:15:37 PST 2019
+    # real    572m1.046s
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      -continue=load -noDbNameCheck `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+          -stop=load -chainMinScore=1000 -chainLinearGap=loose) > load.log 2>&1
+    # real    130m2.464s
+
+
+    # debug download to allow edit of script to avoid changing liftOver
+    time (doBlastzChainNet.pl -verbose=2 \
+      -debug -continue=download -noDbNameCheck `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+  -stop=download -chainMinScore=1000 -chainLinearGap=loose) > download.log 2>&1
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      -continue=cleanup -noDbNameCheck `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+          -chainMinScore=1000 -chainLinearGap=loose) > cleanup.log 2>&1
+    # real    1m37.970s
+
+
+    cat fb.wuhCor1.chainCriGriChoV2Link.txt
+    # 2258183039 bases of 2301325917 (98.125%) in intersection
+
+  time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` wuhCor1 criGriChoV2) \
+     > rbest.log 2>&1 &
+    # real    55m37.534s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/criGriChoV2/bed/blastz.wuhCor1.swap
+    cd /hive/data/genomes/criGriChoV2/bed/blastz.wuhCor1.swap
+
+    # stop at 'load' to avoid changing liftOver (already done with blat)
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/wuhCor1/bed/lastzCriGriChoV2.2019-12-10/DEF \
+        -swap -chainMinScore=1000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -stop=load -noDbNameCheck -syntenicNet) > swap.log 2>&1
+    #  real    258m32.140s
+
+    cat fb.criGriChoV2.chainWuhCor1Link.txt
+    # 2274544087 bases of 2318132242 (98.120%) in intersection
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/wuhCor1/bed/lastzCriGriChoV2.2019-12-10/DEF -debug \
+        -continue=download -swap -chainMinScore=1000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -stop=download -noDbNameCheck -syntenicNet) > download.log 2>&1
+
+  time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` criGriChoV2 wuhCor1) \
+       > rbest.log 2>&1 &
+    # real    83m10.946s
+
+#########################################################################
+# LASTZ wuhCor1 vs criGri1 Chinese hamster CHO-K1 cell line
+#	(TBD - 2019-12-10 - Hiram)
+
+    mkdir /hive/data/genomes/wuhCor1/bed/lastzCriGri1.2019-12-10
+    cd /hive/data/genomes/wuhCor1/bed/lastzCriGri1.2019-12-10
+
+    printf '# Regeneron CHO assembly vs Chinese hamster GCA_000419365.1
+
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Regeneron wuhCor1 assembly
+SEQ1_DIR=/hive/data/genomes/wuhCor1/wuhCor1.2bit
+SEQ1_LEN=/hive/data/genomes/wuhCor1/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=500
+
+# QUERY: Chinese hamster GCA_000419365.1 C_griseus_v1.0 12-Jul-2013
+SEQ2_DIR=/hive/data/genomes/criGri1/criGri1.2bit
+SEQ2_LEN=/hive/data/genomes/criGri1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=500
+
+BASE=/hive/data/genomes/wuhCor1/bed/lastzCriGri1.2019-12-10
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      -noDbNameCheck `pwd`/DEF -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+          -chainMinScore=1000 -chainLinearGap=loose) > do.log 2>&1
+XXX - running - Tue Dec 10 13:20:14 PST 2019
+    # real    572m1.046s
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      -continue=load -noDbNameCheck `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+          -stop=load -chainMinScore=1000 -chainLinearGap=loose) > load.log 2>&1
+    # real    130m2.464s
+
+
+    # debug download to allow edit of script to avoid changing liftOver
+    time (doBlastzChainNet.pl -verbose=2 \
+      -debug -continue=download -noDbNameCheck `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+  -stop=download -chainMinScore=1000 -chainLinearGap=loose) > download.log 2>&1
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      -continue=cleanup -noDbNameCheck `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+          -chainMinScore=1000 -chainLinearGap=loose) > cleanup.log 2>&1
+    # real    1m37.970s
+
+
+    cat fb.wuhCor1.chainCriGri1Link.txt
+    # 2258183039 bases of 2301325917 (98.125%) in intersection
+
+  time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` wuhCor1 criGri1) \
+     > rbest.log 2>&1 &
+    # real    55m37.534s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/criGri1/bed/blastz.wuhCor1.swap
+    cd /hive/data/genomes/criGri1/bed/blastz.wuhCor1.swap
+
+    # stop at 'load' to avoid changing liftOver (already done with blat)
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/wuhCor1/bed/lastzCriGri1.2019-12-10/DEF \
+        -swap -chainMinScore=1000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -stop=load -noDbNameCheck -syntenicNet) > swap.log 2>&1
+    #  real    258m32.140s
+
+    cat fb.criGri1.chainWuhCor1Link.txt
+    # 2274544087 bases of 2318132242 (98.120%) in intersection
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/wuhCor1/bed/lastzCriGri1.2019-12-10/DEF -debug \
+        -continue=download -swap -chainMinScore=1000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -stop=download -noDbNameCheck -syntenicNet) > download.log 2>&1
+
+  time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` criGri1 wuhCor1) \
+       > rbest.log 2>&1 &
+    # real    83m10.946s
+
+#########################################################################
+# LIFTOVER TO criGri1 (TBD - 2019-12-17 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/wuhCor1/bed/blat.criGri1.2019-12-17
+    cd /hive/data/genomes/wuhCor1/bed/blat.criGri1.2019-12-17
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/wuhCor1/jkStuff/wuhCor1.11.ooc \
+         wuhCor1 criGri1
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/wuhCor1/jkStuff/wuhCor1.11.ooc \
+         wuhCor1 criGri1) > doLiftOverToRn6.log 2>&1
+    # lost terminal connection, finished align run manually on ku
+
+    # then, continuing:
+    time (doSameSpeciesLiftOver.pl -verbose=2 -continue=chain \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/wuhCor1/jkStuff/wuhCor1.11.ooc \
+         -buildDir=`pwd` wuhCor1 criGri1) > chain.criGri1.log 2>&1
+XXX - running - Wed Dec 18 00:22:45 PST 2019
+
+    # see if the liftOver menus function in the browser from wuhCor1
+    # to criGri1
+
+    # would like to see this as a track:
+    # not actually using this psl file
+    time chainToPsl wuhCor1ToCriGri1.over.chain.gz ../../chrom.sizes \
+   /hive/data/genomes/criGri1/chrom.sizes ../../wuhCor1.2bit \
+   /hive/data/genomes/criGri1/criGri1.2bit wuhCor1ToCriGri1.psl
+
+    # this net track is loaded
+chainSort wuhCor1ToCriGri1.over.chain.gz stdout \
+   | chainPreNet stdin \
+   /hive/data/genomes/wuhCor1/chrom.sizes \
+   /hive/data/genomes/criGri1/chrom.sizes stdout \
+     | chainNet stdin -minSpace=1 /hive/data/genomes/wuhCor1/chrom.sizes \
+        /hive/data/genomes/criGri1/chrom.sizes stdout /dev/null \
+        | netSyntenic stdin noClass.net
+
+netClass -verbose=0 -noAr noClass.net wuhCor1 criGri1 wuhCor1.criGri1.net
+
+netFilter -minGap=10 wuhCor1.criGri1.net \
+    | hgLoadNet -verbose=0 wuhCor1 netCriGri1 stdin
+
+
+Got 7812 chroms in /hive/data/genomes/wuhCor1/chrom.sizes, 8265 in /hive/data/genomes/criGri1/chrom.sizes
+Finishing nets
+writing stdout
+writing /dev/null
+memory usage 168030208, utime 102 s/100, stime 9
+
+#########################################################################
