@@ -22,5 +22,6 @@ color 12,12,120
 type genePred 
 baseColorUseCds given
 baseColorDefault genomicCodons
-itemDetailsHtmlTable geneDesc
+
+# itemDetailsHtmlTable geneDesc
 
