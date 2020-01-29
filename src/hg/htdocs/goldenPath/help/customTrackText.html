@@ -603,7 +603,7 @@ The following track line attribute=value pairs are defined in the Genome Browser
   <strong>group=<<em>group</em>></strong> - Defines the annotation track group in which the custom 
   track will display in the Genome Browser window. By default, <em>group</em> is set to 
   &quot;user&quot;, which causes custom tracks to display at the top of the track listing in the 
-  group &quot;Custom Tracks".  The value for &quot;group&quot; <strong>must</strong> be the 
+  group &quot;Custom Tracks&quot;.  The value for &quot;group&quot; <strong>must</strong> be the
   &quot;name&quot; of one of the predefined track groups. To get a list of allowable group names for
   an assembly, go to the table browser and select &quot;group: All Tables&quot; &quot;table: 
   grp&quot; and &quot;get output&quot; where entries in the &quot;name&quot; column may be used
@@ -647,6 +647,16 @@ The following track line attribute=value pairs are defined in the Genome Browser
   <a href="../help/bigWig.html" target="_blank">bigWig</a> or
   <a href="../help/vcf.html" target="_blank">VCF</a> tracks. This is a required attribute for those 
   track types. There is no default for this attribute.</li>
+  <li>
+  <strong>doWiggle=<<em>on</em>></strong> - The doWiggle setting enables BAM custom tracks
+  to be displayed as bar graphs where the height is proportional to the number of reads mapped
+  to each genomic position. This display is described as a density graph and is best viewed with
+  the track set to full and scaling set to auto-scale. See the Track Database Definition
+  <a href="../help/trackDb/trackDbHub.html#doWiggle" target="_blank">doWiggle entry</a>
+  for more information about the use in hubs and the
+  <a href="../help/hgBamTrackHelp" target="_blank">configuring BAM tracks</a> and the
+  <a href="../help/hgWiggleTrackHelp.html" target="_blank">configuring graph-based tracks</a>
+  help pages to learn how to further change the display.</li>
 </ul>
 <p>
 Here is an example of a properly formatted track line using the bigBed format, with accompanying 
