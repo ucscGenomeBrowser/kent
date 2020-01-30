@@ -172,8 +172,8 @@ jsInlineF(
     "                $('#sortMethod').val(\"dateDesc\");\n"
     "            }\n"
     "        } else {\n"
-    "            $('#sessionTable').DataTable().order([3,'desc']).draw();\n"
-    "            $('#sortMethod').val(\"useDesc\");\n"
+    "            $('#sessionTable').DataTable().order([2,'desc']).draw();\n"
+    "            $('#sortMethod').val(\"dateDesc\");\n"
     "        }\n"
     "    }\n"
     "});\n",
@@ -245,7 +245,8 @@ while (thisSession != NULL)
     printf ("\t\t<b>Views:</b> %ld\n", thisSession->useCount);
     printf ("\t\t</td>\n");
     struct tm creationDate;
-    strptime(thisSession->firstUse, "%Y-%m-%d", &creationDate);
+    ZeroVar(&creationDate);
+    strptime(thisSession->firstUse, "%Y-%m-%d %T", &creationDate);
     /* Hidden columns */
     printf ("\t\t<td>%ld</td>\n", mktime(&creationDate));
     printf ("\t\t<td>%ld</td>\n", thisSession->useCount);

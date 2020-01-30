@@ -730,11 +730,11 @@ struct trackDb *lmCloneSuper(struct lm *lm, struct trackDb *tdb, struct hash *su
 void trackDbHubCloneTdbListToSharedMem(char *trackDbUrl, struct trackDb *list, unsigned long size);
 /* For this hub, Allocate shared memory and clone trackDb list into it. */
 
-void trackDbCloneTdbListToSharedMem(char *db, struct trackDb *list, unsigned long size);
+void trackDbCloneTdbListToSharedMem(char *db, char *tdbPathString, struct trackDb *list, unsigned long size);
 /* For this native db, allocate shared memory and clone trackDb list into it. */
 
-struct trackDb *trackDbCache(char *db, time_t time);
-/* Check to see if this db has a cached trackDb. */
+struct trackDb *trackDbCache(char *db, char *tdbPathString, time_t time);
+/* Check to see if this db and trackDb table has a cached trackDb. */
 
 struct trackDb *trackDbHubCache(char *trackDbUrl, time_t time);
 /* Check to see if this hub has a cached trackDb. */

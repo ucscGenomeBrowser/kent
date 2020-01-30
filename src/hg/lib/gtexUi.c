@@ -306,8 +306,10 @@ cgiMakeHiddenVar(buf, "0");
 void gtexPortalLink(char *geneId)
 /* print URL to GTEX portal gene expression page using Ensembl Gene Id*/
 {
+char *ensGene = cloneString(geneId);
+chopSuffix(ensGene);
 printf("<a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>"
-        "View at GTEx portal</a>\n", geneId);
+        "View at GTEx portal</a>\n", ensGene);
 }
 
 void gtexBodyMapLink()

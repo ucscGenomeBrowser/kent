@@ -151,14 +151,23 @@ for(tdb = list; tdb; tdb = tdb->next)
 return newList;
 }
 
+static char *cacheDirForDbAndTable(char *string, char *tdbPathString)
+/* Determine the directory name for the trackDb cache files */
+{
+char dirName[4096];
+if (tdbPathString == NULL)
+    safef(dirName, sizeof dirName, "%s/%s", trackDbCacheDir, string);
+else
+    safef(dirName, sizeof dirName, "%s/%s.%s", trackDbCacheDir, string, tdbPathString);
 
-static struct trackDb *checkCache(char *string, time_t time)
+return cloneString(dirName);
+}
+
+static struct trackDb *checkCache(char *string, char *tdbPathString, time_t time)
 /* Check to see if this db or hub has a cached trackDb. string is either a db 
  * or a SHA1 calculated from a hubUrl. Use time to see if cache should be flushed. */
 {
-char dirName[4096];
-
-safef(dirName, sizeof dirName, "%s/%s", trackDbCacheDir, string);
+char *dirName = cacheDirForDbAndTable(string, tdbPathString);
 if (!isDirectory(dirName))
     {
     cacheLog("abandoning cache search for %s, no directory", string);
@@ -173,7 +182,7 @@ for(; files; files = files->next)
     if (sameString(files->name, "name.txt"))
         continue;
 
-    safef(fileName, sizeof fileName, "%s/%s/%s", trackDbCacheDir, string, files->name);
+    safef(fileName, sizeof fileName, "%s/%s", dirName, files->name);
     cacheLog("checking cache file %s", fileName);
     
     struct stat statBuf;
@@ -242,11 +251,11 @@ return NULL;
 }
 
 
-struct trackDb *trackDbCache(char *db, time_t time)
+struct trackDb *trackDbCache(char *db, char *tdbPathString, time_t time)
 /* Check to see if this db has a cached trackDb. */
 {
-cacheLog("checking for cache for db %s at time  %ld", db, time);
-return checkCache(db, time);
+cacheLog("checking for cache for db %s tdbPathString %s at time  %ld", db, tdbPathString,  time);
+return checkCache(db, tdbPathString, time);
 }
 
 struct trackDb *trackDbHubCache(char *trackDbUrl, time_t time)
@@ -258,10 +267,10 @@ SHA1((const unsigned char *)trackDbUrl, strlen(trackDbUrl), hash);
 char newName[(SHA_DIGEST_LENGTH + 1) * 2];
 hexBinaryString(hash,  SHA_DIGEST_LENGTH, newName, (SHA_DIGEST_LENGTH + 1) * 2);
 
-return checkCache(newName, time);
+return checkCache(newName, NULL, time);
 }
 
-static void cloneTdbListToSharedMem(char *string, struct trackDb *list, unsigned long size, char *name)
+static void cloneTdbListToSharedMem(char *string, char *tdbPathString, struct trackDb *list, unsigned long size, char *name)
 /* Allocate shared memory and clone trackDb list into it. */
 {
 static int inited = 0;
@@ -274,8 +283,7 @@ if (inited == 0)
     
 int oflags=O_RDWR | O_CREAT;
 
-char dirName[4096];
-safef(dirName, sizeof dirName, "%s/%s", trackDbCacheDir, string);
+char *dirName = cacheDirForDbAndTable(string, tdbPathString);
 
 if (!isDirectory(dirName))
     {
@@ -285,7 +293,7 @@ if (!isDirectory(dirName))
     }
 
 char tempFileName[4096];
-safef(tempFileName, sizeof tempFileName, "%s/%s", trackDbCacheDir, rTempName(string, "temp", ""));
+safef(tempFileName, sizeof tempFileName, "%s",  rTempName(dirName, "temp", ""));
 
 int fd = open(tempFileName, oflags, 0666 );
 if (fd < 0)
@@ -347,23 +355,26 @@ ftruncate(fd, memUsed);
 //close(fd);
 
 char fileName[4096];
-safef(fileName, sizeof fileName, "%s/%s/%ld.%d", trackDbCacheDir, string, paddress, TRACKDB_VERSION);
+safef(fileName, sizeof fileName, "%s/%ld.%d", dirName, paddress, TRACKDB_VERSION);
 
 cacheLog("renaming %s to %s", tempFileName, fileName);
 mustRename(tempFileName, fileName);
 
 // write out the name of the trackDb being cached.
-safef(fileName, sizeof fileName, "%s/%s/name.txt", trackDbCacheDir, string);
+safef(fileName, sizeof fileName, "%s/name.txt", dirName);
 FILE *stream = mustOpen(fileName, "w");
-fprintf(stream, "%s\n", name);
+if (tdbPathString == NULL)
+    fprintf(stream, "%s\n", name);
+else
+    fprintf(stream, "%s.%s\n", name,tdbPathString);
 carefulClose(&stream);
 }
 
-void trackDbCloneTdbListToSharedMem(char *db, struct trackDb *list, unsigned long size)
+void trackDbCloneTdbListToSharedMem(char *db, char *tdbPathString, struct trackDb *list, unsigned long size)
 /* For this native db, allocate shared memory and clone trackDb list into it. */
 {
 cacheLog("cloning memory for db %s %ld", db, size);
-cloneTdbListToSharedMem(db, list, size, db);
+cloneTdbListToSharedMem(db, tdbPathString, list, size, db);
 }
 
 void trackDbHubCloneTdbListToSharedMem(char *trackDbUrl, struct trackDb *list, unsigned long size)
@@ -378,7 +389,7 @@ SHA1((const unsigned char *)trackDbUrl, strlen(trackDbUrl), hash);
 char newName[(SHA_DIGEST_LENGTH + 1) * 2];
 hexBinaryString(hash,  SHA_DIGEST_LENGTH, newName, (SHA_DIGEST_LENGTH + 1) * 2);
 
-cloneTdbListToSharedMem(newName, list, size, trackDbUrl);
+cloneTdbListToSharedMem(newName, NULL, list, size, trackDbUrl);
 }
 
 boolean trackDbCacheOn()
