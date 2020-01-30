@@ -71,11 +71,8 @@ then
 	exit 1
 # Run qaAutoTrack.sh for different tracks depending on the day of the week
 else
-	if [ -e  "$logDir/*.txt" ]
-	then
-		# Identify and remove log files that are greater than 6 months old.
-		find $logDir -mtime +182 -name *.txt -exec rm {} +
-	fi
+	# Identify and remove log files that are greater than 6 months old.
+	find $logDir -mtime +182 -name *.txt -exec rm {} +
 
 	if [[ $dayOfWeek == "Monday" ]]
 	then
