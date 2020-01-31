@@ -71,9 +71,6 @@ then
 	exit 1
 # Run qaAutoTrack.sh for different tracks depending on the day of the week
 else
-	# Identify and remove log files that are greater than 6 months old.
-	find $logDir -mtime +182 -name *.txt -exec rm {} +
-
 	if [[ $dayOfWeek == "Monday" ]]
 	then
 		qaAutoTrack.sh hg19 isca 

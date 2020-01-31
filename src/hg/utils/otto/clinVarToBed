@@ -1,0 +1,610 @@
+#!/usr/bin/env python3
+
+import logging, sys, optparse, re, os, datetime, gzip, urllib.request, urllib.error, urllib.parse, subprocess
+from collections import defaultdict
+from os.path import join, basename, dirname, isfile, abspath
+from datetime import date, datetime, timedelta
+
+dbToUrl = {
+    "dbVar": "https://www.ncbi.nlm.nih.gov/dbvar/variants/%s/",
+    "UniProtKB (variants)" : "http://www.uniprot.org/uniprot/%s",
+    "OMIM Allelic Variant" : "http://www.omim.org/entry/%s",
+    "MedGen": "https://www.ncbi.nlm.nih.gov/medgen/%s",
+    "OMIM" : "http://www.omim.org/entry/%s",
+    "Orphanet" : "http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=EN&Expert=%s"
+}
+
+# === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
+parser = optparse.OptionParser("""usage: %prog [options] summaryFname varAllFname hgvsFname - check and convert the three main clinVar tab-sep files to four bed files, split into CNV and shorter mutations, for both hg19 and hg38 and convert all to bigBed
+
+Output goes into the current dir
+
+input file is ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz
+""") 
+
+parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
+parser.add_option("-a", "--auto", dest="auto", action="store_true", help="download the file from NCBI into the current dir and convert to bigBed")
+parser.add_option("", "--skipDown", dest="skipDownload", action="store_true", help="Only with --auto: don't download again if it's already there, useful when debugging/developing")
+parser.add_option("", "--maxDiff", dest="maxDiff", action="store", type="float", help="look for last month's download file in current dir and accept this much difference, expressed as a ratio. Can only be used with --auto.")
+(options, args) = parser.parse_args()
+
+if options.debug:
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.INFO)
+
+clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	HGNC_ID	ClinicalSignificance	ClinSigSimple	LastEvaluated	RS# (dbSNP)	nsv/esv (dbVar)	RCVaccession	PhenotypeIDS	PhenotypeList	Origin	OriginSimple	Assembly	ChromosomeAccession	Chromosome	Start	Stop	ReferenceAllele	AlternateAllele	Cytogenetic	ReviewStatus	NumberSubmitters	Guidelines	TestedInGTR	OtherIDs	SubmitterCategories	VariationID\n"
+# ==== FUNCTIONs =====
+
+def mustRun(cmd):
+    logging.debug(cmd)
+    ret = os.system(cmd)
+    if ret!=0:
+        print(("Could not run: %s" % cmd))
+        sys.exit(1)
+
+def shortenName(name):
+    "make the clinvar name shorter and keep a long version for the mouse over "
+    cnvMatch = cnvRe.match(name)
+    #hgvsMatch = hgvsRe.match(name)
+
+    if ":" in name and not "chr" in name:
+        longName = name.split(":")[0]
+    else:
+        longName = name
+
+    shortName = name
+
+    if cnvMatch != None:
+        # some names include the original assembly as a prefix
+        band, copy = cnvMatch.groups()
+        if copy == None:
+            copy = ""
+        shortName = band+copy
+    elif name.startswith("GRCh"):
+        # GRCh37/hg19 15q14-15.1 chr15:34638237..42057083 complex variant
+        print(name)
+        assert False # name that starts with GRCh but does not match our regex should not happen
+    elif "." in name:
+        # many names look like NM_000274.3(OAT):c.550_552delGCT (p.Ala184del)
+        # so we remove the gene and the protein description
+        if ":" in name:
+            name = name.split(":")[1]
+            longName = name.split(" ")[0]
+        name = name.split(" ")[0].split("[")[0].split("(")[0]
+        shortName = name
+
+        if name.endswith("del"):
+            shortName = "del"
+        elif name.endswith("ins"):
+            shortName = "ins"
+        elif name.endswith("dup"):
+            shortName = "dup"
+        else:
+            posMatch = posRe.match(name)
+            if posMatch!=None:
+                pos, dupDelIns, change = posMatch.groups()
+                if dupDelIns==None:
+                    dupDelIns= ""
+
+                if change==None or change=="":
+                    shortName = pos+dupDelIns
+                else:
+                    shortName = dupDelIns+change
+
+    return shortName, longName
+
+def clinSignToPathoCode(pathoStr):
+    """ there are hundreds of possible pathogenicity descriptions. flatten into one of seven codes:
+    - benign = BN
+    likely benign = LB
+    conflicting = CF
+    likely pathogenic= LP
+    pathogenic = PG
+    other = OT
+    uncertain = UC
+
+    examples:
+
+    Benign/Likely benign,other      13      0.002%
+    Conflicting interpretations of pathogenicity,risk factor        13      0.002%
+    Likely benign,other     18      0.003%  
+    Pathogenic,drug response        28      0.005%
+    protective      32      0.005%
+    Pathogenic,risk factor  33      0.005%
+    Pathogenic,other        102     0.017%
+    Affects 120     0.019%
+    association     202     0.033%
+    drug response   387     0.063%
+    risk factor     444     0.072%
+    no interpretation for the single variant        564     0.092%
+    other   1687    0.274%
+    Pathogenic/Likely pathogenic    5209    0.846%
+    not provided    8860    1.440%
+    Benign/Likely benign    19489   3.167%
+    Likely pathogenic       30200   4.907%
+    Conflicting interpretations of pathogenicity    30910   5.023%
+    Pathogenic      66679   10.835%
+    Benign  77551   12.602%
+    Likely benign   154870  25.166%
+    Uncertain significance  217838  35.399%
+
+    """
+    pathoStr = pathoStr.lower()
+    # don't change the order of these unless you tested it. The order is crucial.
+    if "conflicting" in pathoStr:
+        return "CF"
+    if "likely pathogenic" in pathoStr:
+        return "LP"
+    if "likely benign" in pathoStr:
+        return "LB"
+    if "uncertain" in pathoStr:
+        return "UC"
+    if "pathogenic" in pathoStr:
+        return "PG"
+    if "benign" in pathoStr:
+        return "BN"
+    return "OT"
+
+def lastMonth(d,x=1):
+    """ returns same day as this month, but last month, e.g. for 2013-01-01 
+    return 2012-12-01 
+    """
+
+    days_of_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    newmonth = ((( d.month - 1) - x ) % 12 ) + 1
+    newyear  = d.year + ((( d.month - 1) - x ) // 12 ) 
+    if d.day > days_of_month[newmonth-1]:
+      newday = days_of_month[newmonth-1]
+    else:
+      newday = d.day
+    return datetime( newyear, newmonth, newday)
+
+def compareWithLastMonth(fname, maxDiff):
+    " go back one month from current date, make sure that linecount diff is at most maxDiff "
+    todayStr = date.today().isoformat()
+    previousDate = lastMonth(date.today())
+    previousDateStr = previousDate.date().isoformat()
+    previousFname = fname.replace(todayStr, previousDateStr)
+    if not isfile(previousFname):
+        print(("Cannot find %s, cannot compare new data with previous month" % previousFname))
+        return
+        
+    previousCount = sum(1 for line in open(previousFname))
+    todayCount = sum(1 for line in open(fname))
+    percDiff = (todayCount-previousCount)/float(todayCount)
+
+    if percDiff < 0 and maxDiff:
+        raise Exception("line count change negative: %s %d, %s %d. Run without --maxDiff to ignore this error. Or run the cronjob script doUpdate.sh with -nocheck to ignore this error." % \
+            (previousFname, previousCount, fname, todayCount))
+    if percDiff > maxDiff:
+        raise Exception("line count increased too much: yesterday %d , today %d. Check if the input file is OK. If yes, remove the --maxDiff option from the clinVarToBed, call it only with the --auto option. Or run the cronjob script doUpdate.sh with -nocheck to ignore this error." % (previousCount, todayCount))
+    # see RM 14350 do more than just linecount
+    # see http://stackoverflow.com/questions/1566461/how-to-count-differences-between-two-files-on-linux
+    cmd = "diff %s %s --speed-large-files | grep '^[\>\<]'  | wc -l" % (fname, previousFname)
+    diffCount = int(subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT))
+    logging.info("%s: %d lines changed" % (fname, diffCount))
+    percDiff = float(diffCount)/todayCount
+    if percDiff > maxDiff:
+        logging.info(cmd)
+        diffFname =  abspath(join("archive", "lastDiff.txt"))
+        cmd = "diff %s %s --speed-large-files > %s" % (fname, previousFname, diffFname)
+        os.system(cmd) # ret code is not 0, as there are differences, so no need to check
+        raise Exception("too many differences: %d out of %d lines. Look at the differences n the file %s. If you are OK with them, run '/hive/data/outside/otto/clinvar/doUpdate.sh -nocheck'" % (diffCount, todayCount, diffFname))
+
+# I'm leaving this in the code, because I would not be surprised if one day we have to go back and parse
+# the other files again
+#def parseVariationAlleleFile(varFname):
+#    """ return dict allele Id -> variant ID """
+#    logging.info("Parsing %s" % varFname)
+#    allToVar = {}
+#    foundHead = False
+#    expHead = "#VariationID	Type	AlleleID	Interpreted"
+#    for line in gzip.open(varFname):
+#        line = line.rstrip("\n")
+#        if line==expHead:
+#            foundHead = True
+#        if line.startswith("#Var") and "Type" in line:
+#            if not line == expHead:
+#                print(("Header of variation_allele.txt.gz has changed again. Code needs fixing"))
+#                print("found:",line)
+#                print("expected:",expHead)
+#            else:
+#                foundHead = True
+#
+#        if line.startswith("#"):
+#            continue
+#        if not foundHead:
+#            raise Exception("Header of variation_allele.txt.gz has changed again. Code needs fixing")
+#        fields = line.split("\t")
+#        allToVar[fields[2]]=fields[0]
+#    return allToVar
+
+def parseHgvsFile(hgvsFname):
+    " return dict: allele Id -> (hgvs coding, hgvs protein) "
+    logging.info("Parsing %s" % hgvsFname)
+    expHead	= "#Symbol	GeneID	VariationID	AlleleID	Type	Assembly	NucleotideExpression	NucleotideChange	ProteinExpression	ProteinChange	UsedForNaming	Submitted	OnRefSeqGene"
+    allToHgvs = {}
+    foundHead = False
+    for line in gzip.open(hgvsFname, "rt"):
+        line = line.rstrip("\n")
+        if line==expHead:
+            foundHead = True
+        if line.startswith("#Symbol") and "GeneID" in line:
+            if not line == expHead:
+                print ("Header of hgvs file has changed again. Code needs fixing")
+                print(("found:",line))
+                print(("expected:",expHead))
+            else:
+                foundHead = True
+
+        if line.startswith("#"):
+            continue
+        if not foundHead:
+            raise Exception("Invalid Header. Code needs fixing, again.")
+
+        fields = line.split("\t")
+        varType = fields[4]
+        if "coding" in varType and not "LRG" in fields[6]:
+            allToHgvs[fields[3]]=(fields[6], fields[8])
+    return allToHgvs
+
+def accListToHtml(inStr):
+    """
+    given a string of a list of db:acc tuples, like "dbVar:nssv578901, omim:12343", convert the accessions
+    to HTML links to the databases
+    """
+    newParts = []
+    for part in inStr.split(","):
+        fields = part.split(":")
+        if len(fields)!=2:
+            newParts.append(part)
+            continue
+
+        db, acc = fields
+        accForUrl = acc
+
+        if db in dbToUrl:
+            if "OMIM" in db:
+                accForUrl = accForUrl.replace(".", "#")
+            url = (dbToUrl[db] % accForUrl)
+            newPart = "<a target=_blank href='%s'>%s:%s</a>" % (url, db, acc)
+        else:
+            newPart = part
+        newParts.append(newPart)
+    return ", ".join(newParts)
+
+def reviewStatusToHtmlStars(reviewStatus):
+    """
+    In email from Donna maglott@ncbi.nlm.nih.gov mapping is like this:
+        1-criteria provided, conflicting interpretations
+        2-criteria provided, multiple submitters, no conflicts
+        1-criteria provided, single submitter
+        0-no assertion criteria provided
+        0-no assertion for the individual variant
+        0-no assertion provided
+        4-practice guideline
+        3-reviewed by expert panel
+
+    given the review status, return an html string with the correct number of black stars
+    """
+    revStatus = reviewStatus.strip().lower().replace(" ", "")
+    starCount = None
+
+    if revStatus == "nointerpretationforthesinglevariant":
+        starCount = 0
+    if revStatus=="criteriaprovided,conflictinginterpretations":
+        starCount = 1
+    if revStatus=="criteriaprovided,multiplesubmitters,noconflicts":
+        starCount = 2
+    if revStatus=="criteriaprovided,singlesubmitter":
+        starCount = 1
+    if revStatus == "practiceguideline":
+        starCount = 4
+    if revStatus == "reviewedbyexpertpanel":
+        starCount = 3
+    if "noassertion" in revStatus or revStatus=="-":
+        starCount = 0
+
+    if starCount == None:
+        print(("Illegal review status: %s" % revStatus))
+        assert(False)
+
+    emptyStarCount = 4-starCount
+
+    htmlList = ["&#9733;"]*starCount 
+    htmlList.extend( ["&#9734;"]*emptyStarCount )
+
+    htmlStr = "".join(htmlList)
+    htmlStr += "&nbsp;&nbsp;<small>based on: %s</small>" % reviewStatus
+
+    asciiDesc = "%d stars" % starCount
+    return htmlStr, asciiDesc, starCount
+
+def downloadFromNcbi(skipDownload):
+    " download files from NCBI and return triple of filenames "
+    today = date.today().isoformat()
+    outSuffix = "%s." % today
+
+    url = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz"
+    outFname = "archive/variant_summary.%s.txt.gz" % today
+    filename = outFname
+
+    # get the new variant allele file
+    varUrl = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variation_allele.txt.gz"
+    varFname = join(dirname(filename), "variation_allele.%s.txt.gz" % today)
+
+    # get the new hgvs allele file
+    hgvsUrl = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/hgvs4variation.txt.gz"
+    hgvsFname = join(dirname(filename), "hgvs4variation.%s.txt.gz" % today)
+
+    if not (skipDownload and isfile(outFname) and isfile(varFname) and isfile(hgvsFname)):
+        logging.info("Downlading %s to %s" % (url, outFname))
+        open(outFname, "wb").write(urllib.request.urlopen(url).read())
+        logging.info("Downlading %s to %s" % (hgvsUrl, hgvsFname))
+        open(hgvsFname, "wb").write(urllib.request.urlopen(hgvsUrl).read())
+        logging.info("Downlading %s to %s" % (varUrl, varFname))
+        open(varFname, "wb").write(urllib.request.urlopen(varUrl).read())
+    return filename, varFname, hgvsFname
+
+# ----------- MAIN --------------
+if args==[] and not options.auto:
+    parser.print_help()
+    exit(1)
+
+outSuffix = ""
+
+if options.auto:
+    filename, varFName, hgvsFname = downloadFromNcbi(options.skipDownload)
+else:
+    filename = args[0]
+    varFname = args[1]
+    hgvsFname = args[2]
+
+#allToVar = parseVariationAlleleFile(varFname) # the alleles are now in the hgvs file after a Clinvar change
+allToHgvs = parseHgvsFile(hgvsFname)
+
+# e.g. GRCh38/hg38 1p36.33-36.31(chr1:1181847-5507243)x1
+# GRCh38/hg38 9p24.3-q34.3(chr9:204193-138179445)
+# GRCh37/hg19 21q22.13-22.2(chr21:38741104..40274106)
+# GRCh37/hg19 15q14-15.1 chr15:34638237..42057083 complex variant
+cnvRe = re.compile(r'GRCh[0-9]*/hg[0-9]* ([XY0-9pq.-]+) ?\(?[XYa-z_:0-9.-]+?\)?(x[0-9]+)?.*')
+
+hgvsRe = re.compile(r'(N[RPCGM]_[0-9.]+)(\([a-zA-Z0-9_-]+\))?:([+0-9c.ACTG>a-z_()-]+)')
+
+# e.g.
+# c.80_83delGGATinsTGCTGTAAACTGTAACTGTAAA
+# c.80A>T
+# c.740+356C>T
+# c.3839_3855del17
+posRe = re.compile(r'^([mgcpdrn]\.[*0-9_?+-]+)(delins|dup|del|ins|inv)?([>~ACTG0-9]*)$')
+
+ifh = gzip.open(filename, "rt")
+
+# check the header
+line1 = ifh.readline()
+if (line1 != clinvarExpectHeaders): # test if clinvar has changed their header line again
+    logging.error("ClinVar has changed their header line again")
+    logging.error("current header line: %s" % line1.replace("\t","|"))
+    logging.error("expected header line: %s" % clinvarExpectHeaders.replace("\t","|"))
+    raise Exception("code needs fixing")
+
+# open out files
+hg19Bed = open("archive/clinvarMain.hg19.%sbed" % outSuffix, "w")
+hg38Bed = open("archive/clinvarMain.hg38.%sbed" % outSuffix, "w")
+hg19BedCnv = open("archive/clinvarCnv.hg19.%sbed" % outSuffix, "w")
+hg38BedCnv = open("archive/clinvarCnv.hg38.%sbed" % outSuffix, "w")
+
+longCount = 0
+noAssCount = 0
+
+# convert lines
+for line in ifh:
+    line = line.replace(", ", ",").replace(";", ",") # replace, bigBed conventions
+    line = line.rstrip("\n")
+    row = line.split("\t")
+    row = [f.replace("\0", "") for f in row ]
+
+    alleleId, allType, name, geneId, geneSymbol, hgncId, clinSign, clinSignSimple, lastEval, snpAcc, dbVarAcc, \
+      irvcAcc, phenotypeIds, phenotypeList, origin, originSimple, assembly, chromAcc, chrom, start, end, \
+      refAll, varAll, cytogenetic, reviewStatus, numberSubmitters, guidelines, inGtr, otherIds, \
+      submCategories, varId = row
+
+    # changed in July 2018 when the "varId" was merged into this table. It used to be 
+    # in allToVar
+    if varId=="":
+        logging.warn("empty variantID for alleleId %s, %s" % (alleleId, irvcAcc))
+
+    hgvsCod, hgvsProt =  allToHgvs.get(alleleId, ("", ""))
+
+    if chrom=="" or assembly=="" or assembly=="NCBI36":
+        noAssCount += 1
+        continue
+
+    if chrom=="Un" and assembly=="GRCh38":
+        print(("wrong chrUn chrom on assembly hg38. Skipping %s" % irvcAcc))
+        continue
+    chrom = "chr"+chrom
+
+    if chrom=="chrMT": # why does NCBI use chrMT but we use chrM ?
+        if assembly=="GRCh37":
+            chrom = "chrMT" # our chrM is different from NCBI's MT, but chrMT got added hg19 in 2020 
+        else:
+            chrom = "chrM"
+
+    shortName, longName = shortenName(name)
+
+    if len(shortName)>20:
+        shortName = shortName[:17]+"..."
+        longCount+=1
+
+    if len(longName)>60:
+        longName = longName[:60]+"..."
+
+    if start=="" or end=="":
+        print(("undefined start or end coordinate. record %s"% irvcAcc))
+        continue
+
+    if int(start)<0 or int(end)<0:
+        print(("illegal start or end coordinate. record %s"% irvcAcc))
+        continue
+
+    # sometimes they seem to inverse their coordinates
+    if int(start)>int(end):
+        start, end = end, start
+
+    if chrom=="chr17" and (end=="217748468" or end=="84062405"):
+        print("blacklisted feature")
+        continue
+
+    # reorder columns for bigBed
+    start = str(int(start)-1) # convert to zero-based, half-open
+    score = "0"
+    strand = "."
+    thickStart = start
+    thickEnd = end
+    itemRgb = "0"
+    blockCount = "1"
+    blockSizes = str(int(end)-int(start))
+    blockStarts = "0"
+
+    # used until Oct 2017
+    # if dbVarAcc.startswith("nsv") or "copy number" in allType:
+    # now using just size on genome, see #20268
+    if (int(end)-int(start))>100:
+        isCnv = True
+    else:
+        isCnv = False
+
+    if isCnv:
+        if "gain" in allType or "duplication" in allType:
+            itemRgb = "0,0,255"
+        if "deletion" in allType or "loss" in allType:
+            itemRgb = "255,0,0"
+    else:
+        isPat, isBen = False, False
+        if "pathogenic" in clinSign.lower():
+            isPat = True
+        if "benign" in clinSign.lower():
+            isBen = True
+
+        if (isPat==True and isBen==True) or (isPat==False and isBen==False):
+            itemRgb = "128,128,128"
+        elif isPat==True:
+            itemRgb = "210,0,0"
+        elif isBen==True:
+            itemRgb = "0,210,0"
+        else:
+            assert(False)# should never happen
+
+    pathoCode = clinSignToPathoCode(clinSign)
+    varLen = int(end)-int(start)
+
+    geneStr = geneSymbol
+    if geneId.isdigit() and geneId!="-1":
+        geneStr = geneId+"|"+geneSymbol
+    if len(geneStr)>250:
+        geneStr = "not shown, too many genes"
+
+    if name=="":
+        name = "No display name was provided by ClinVar for this variant"
+        shortName = "NoName"
+
+    if len(name)>90:
+        name = name[:90]+"..."
+    name = varId+"|"+name
+
+    if len(hgvsProt) > 90:
+        hgvsProt = hgvsProt[:90]+"..."
+    if len(hgvsCod) > 90:
+        hgvsCod = hgvsCod[:90]+"..."
+
+    otherIds = accListToHtml(otherIds)
+
+    phenotypeIds = accListToHtml(phenotypeIds)
+
+    starRatingHtml, asciiStars, starCount = reviewStatusToHtmlStars(reviewStatus)
+
+    mouseOverParts = [longName, clinSign, asciiStars, "Phenotypes: "+phenotypeList, "Origin: "+origin, numberSubmitters+" submitters"]
+    mouseOver = ", ".join(mouseOverParts)
+
+    row = [chrom, start, end, shortName, str(starCount), strand, thickStart, thickEnd, itemRgb, \
+        blockCount, blockSizes, blockStarts,
+        name, clinSign, starRatingHtml, allType, geneStr,
+        snpAcc, dbVarAcc, irvcAcc, inGtr, phenotypeList, phenotypeIds, origin, assembly, cytogenetic,
+        hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds, mouseOver, pathoCode, str(varLen)]
+
+    # replace clinvar's placeholders with real empty fields
+    newRow = []
+    for x in row:
+        if x in ["-1", "-"]:
+            newRow.append("")
+        else:
+             newRow.append(x)
+    row = newRow
+
+    if assembly=="GRCh37":
+        ofh = hg19Bed
+        if isCnv:
+            ofh = hg19BedCnv
+    elif assembly=="GRCh38":
+        ofh = hg38Bed
+        if isCnv:
+            ofh = hg38BedCnv
+    else:
+        noAssCount +=1
+        
+    ofh.write("\t".join(row))
+    ofh.write("\n")
+
+hg19Bed.close()
+hg38Bed.close()
+hg19BedCnv.close()
+hg38BedCnv.close()
+
+logging.info("%d lines with feature name that was too long, shortened them" % longCount)
+logging.info("%d lines without, with old assembly or no chrom, skipped" % noAssCount)
+
+fnames = [hg19Bed.name, hg38Bed.name, hg19BedCnv.name, hg38BedCnv.name]
+
+# sort the files
+for fname in fnames:
+    cmd = "bedSort %s %s" % (fname, fname)
+    logging.debug(cmd)
+    assert(os.system(cmd)==0)
+
+# check new bed files against last months's bed files
+if options.maxDiff:
+    for fname in fnames:
+        compareWithLastMonth(fname, options.maxDiff)
+
+# convert to bigBed without the date in the fname, like clinvarMain.hg19.bb
+tmpFnames = []
+for fname in fnames:
+    parts = fname.split(".")
+    if len(parts) == 4: # clinvarMain.hg19.2011-11-11.bed
+        base, db, date, ext = parts
+    else:
+        base, db, ext = parts
+        
+    outFname = "%s.%s.bb" % (base, db)
+    tmpFname = "%s.%s.temp.bb" % (base, db)
+
+    outFname = basename(outFname) # strip the archive/ part, put into current dir
+    cmd = "bedToBigBed -tab -type=bed9+ -as=clinvar.as %s /hive/data/genomes/%s/chrom.sizes %s" % (fname, db, tmpFname)
+    mustRun(cmd)
+
+    tableName = outFname.split('.')[0] # e.g. clinvarMain
+
+    tmpFnames.append( (db, tableName, tmpFname, outFname) )
+
+# make it atomic by renaming the temp files to the final file names at the very end
+for db, tableName, tmpFname, finalFname in tmpFnames:
+    os.rename(tmpFname, finalFname)
+
+# make sure that the "Data last updated" in the table browser is correct
+for db, tableName, tmpFname, finalFname in tmpFnames:
+    cmd = "hgBbiDbLink %s %s /gbdb/%s/bbi/clinvar/%s.bb" % (db, tableName, db, tableName)
+    mustRun(cmd)
+
+print("ClinVar update end: OK")
