@@ -4296,7 +4296,9 @@ var imageV2 = {
                     vis.update(this.id, visibility);
                     valid = true;
                 } else {
-                    warn("Invalid hgTracks.trackDb received from the server");
+                    // what got returned from the AJAX request was a different
+                    // set of tracks.  Let's do a reload and hope for the best
+                    imageV2.fullReload();
                 }
             } else {
                 valid = true;

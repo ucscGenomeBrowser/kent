@@ -9,6 +9,7 @@
 #include "trackHub.h"
 #include "errCatch.h"
 #include "ra.h"
+#include "hui.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -111,7 +112,10 @@ hashElFreeList(&helList);
 #define READ_SIZE 1024 * 1024 * 64
 int downloadFile(FILE *f, char *url)
 /* Download a file in chunks, return -1 on error. Wrap in errCatch so
- * we can keep downloading rest of hub files. */
+ * we can keep downloading rest of hub files.
+ * For now using udc to read the files, but curl or wget would be preferred.
+ * The reason I'm not using them is because system() and popen don't honor
+ * SIGINT.  */
 {
 int ret = 0;
 struct errCatch *errCatch = errCatchNew();
@@ -358,6 +362,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc < 2)
     usage();
+setUdcCacheDir();
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 hubClone(argv[1], optionExists("download"));
 return 0;
