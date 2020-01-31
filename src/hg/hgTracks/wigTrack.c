@@ -1313,6 +1313,9 @@ if (retGraphUpperLimit != NULL)
 if (retGraphLowerLimit != NULL)
     *retGraphLowerLimit = graphLowerLimit;
 
+if (sameString(tg->tdb->type, "mathWig") && (wigCart->autoScale == wiggleScaleCumulative))
+    wigCart->autoScale = wiggleScaleAuto;
+
 if (wigCart->autoScale == wiggleScaleCumulative)
     setMinMax(tg, graphLowerLimit, graphUpperLimit);
 }

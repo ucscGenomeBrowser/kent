@@ -3,7 +3,7 @@
 track problematic
 shortLabel Problematic Regions
 longLabel Problematic Regions for NGS or Sanger sequencing or very variable regions
-superTrack on
+compositeTrack on
 hideEmptySubtracks on
 group map
 visibility hide

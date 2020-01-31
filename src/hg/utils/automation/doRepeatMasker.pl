@@ -546,15 +546,19 @@ _EOF_
 
   if ($opt_updateTable) {
   $bossScript->add(<<_EOF_
-sed -e 's/nestedRepeats/nestedRepeatsUpdate/g' \$HOME/kent/src/hg/lib/nestedRepeats.sql > nestedRepeatsUpdate.sql
-hgLoadBed \$db nestedRepeats$updateTable \$db.nestedRepeats.bed \\
-  -sqlTable=nestedRepeatsUpdate.sql
+if [ -s \$db.nestedRepeats.bed ]; then
+  sed -e 's/nestedRepeats/nestedRepeatsUpdate/g' \$HOME/kent/src/hg/lib/nestedRepeats.sql > nestedRepeatsUpdate.sql
+  hgLoadBed \$db nestedRepeats$updateTable \$db.nestedRepeats.bed \\
+    -sqlTable=nestedRepeatsUpdate.sql
+fi
 _EOF_
   );
   } else {
   $bossScript->add(<<_EOF_
-hgLoadBed \$db nestedRepeats \$db.nestedRepeats.bed \\
-  -sqlTable=\$HOME/kent/src/hg/lib/nestedRepeats.sql
+if [ -s \$db.nestedRepeats.bed ]; then
+  hgLoadBed \$db nestedRepeats \$db.nestedRepeats.bed \\
+    -sqlTable=\$HOME/kent/src/hg/lib/nestedRepeats.sql
+fi
 _EOF_
   );
   }
