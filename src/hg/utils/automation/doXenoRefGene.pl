@@ -289,20 +289,22 @@ sub doMakeGp {
 
   $bossScript->add(<<_EOF_
 export db=$db
-grep NR_ \$db.xenoRefGene.psl > NR.psl
-grep NM_ \$db.xenoRefGene.psl > NM.psl
-mrnaToGene -cdsDb=hgFixed NM.psl NM.gp
-mrnaToGene -noCds NR.psl NR.gp
-cat NM.gp NR.gp | genePredSingleCover stdin \$db.xenoRefGene.gp
-genePredCheck -db=\$db -chromSizes=\$db.chrom.sizes \$db.xenoRefGene.gp
-genePredToBigGenePred -geneNames=$mrnas/geneOrgXref.txt \$db.xenoRefGene.gp \\
-   stdout | sort -k1,1 -k2,2n > \$db.bgpInput
-sed -e 's#Alternative/human readable gene name#species of origin of the mRNA#; s#Name or ID of item, ideally both human readable and unique#RefSeq accession id#; s#Primary identifier for gene#gene name#;' \\
-  \$HOME/kent/src/hg/lib/bigGenePred.as > xenoRefGene.as
-bedToBigBed -extraIndex=name,geneName -type=bed12+8 -tab -as=xenoRefGene.as \\
-   \$db.bgpInput \$db.chrom.sizes \$db.xenoRefGene.bb
-\$HOME/kent/src/hg/utils/automation/xenoRefGeneIx.pl \$db.bgpInput | sort -u > \$db.ix.txt
-ixIxx \$db.ix.txt \$db.xenoRefGene.ix \$db.xenoRefGene.ixx
+if [ -s "\$db.xenoRefGene.psl" ]; then
+  grep NR_ \$db.xenoRefGene.psl > NR.psl
+  grep NM_ \$db.xenoRefGene.psl > NM.psl
+  mrnaToGene -cdsDb=hgFixed NM.psl NM.gp
+  mrnaToGene -noCds NR.psl NR.gp
+  cat NM.gp NR.gp | genePredSingleCover stdin \$db.xenoRefGene.gp
+  genePredCheck -db=\$db -chromSizes=\$db.chrom.sizes \$db.xenoRefGene.gp
+  genePredToBigGenePred -geneNames=$mrnas/geneOrgXref.txt \$db.xenoRefGene.gp \\
+     stdout | sort -k1,1 -k2,2n > \$db.bgpInput
+  sed -e 's#Alternative/human readable gene name#species of origin of the mRNA#; s#Name or ID of item, ideally both human readable and unique#RefSeq accession id#; s#Primary identifier for gene#gene name#;' \\
+    \$HOME/kent/src/hg/lib/bigGenePred.as > xenoRefGene.as
+  bedToBigBed -extraIndex=name,geneName -type=bed12+8 -tab -as=xenoRefGene.as \\
+     \$db.bgpInput \$db.chrom.sizes \$db.xenoRefGene.bb
+  \$HOME/kent/src/hg/utils/automation/xenoRefGeneIx.pl \$db.bgpInput | sort -u > \$db.ix.txt
+  ixIxx \$db.ix.txt \$db.xenoRefGene.ix \$db.xenoRefGene.ixx
+fi
 _EOF_
   );
   $bossScript->execute();
@@ -331,11 +333,25 @@ rm -f $buildDir/NM.gp
 rm -f $buildDir/NR.gp
 rm -f $buildDir/NM.psl
 rm -f $buildDir/NR.psl
-gzip $buildDir/\$db.bgpInput &
-gzip $buildDir/\$db.ix.txt &
-gzip $buildDir/\$db.all.psl &
-gzip $buildDir/\$db.xenoRefGene.psl &
+if [ -s "$buildDir/\$db.bgpInput" ]; then
+  gzip $buildDir/\$db.bgpInput &
+fi
+if [ -s "$buildDir/\$db.ix.txt" ]; then
+  gzip $buildDir/\$db.ix.txt &
+fi
+if [ -s "$buildDir/\$db.all.psl" ]; then
+  gzip $buildDir/\$db.all.psl &
+else
+  rm -f $buildDir/\$db.all.psl
+fi
+if [ -s "$buildDir/\$db.xenoRefGene.psl" ]; then
+  gzip $buildDir/\$db.xenoRefGene.psl &
+else
+  rm -f $buildDir/\$db.xenoRefGene.psl
+fi
+if [ -s "$buildDir/\$db.xenoRefGene.gp" ]; then
 gzip $buildDir/\$db.xenoRefGene.gp
+fi
 wait
 _EOF_
   );
