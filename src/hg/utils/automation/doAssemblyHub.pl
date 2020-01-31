@@ -26,6 +26,7 @@ use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_buildDir
     $opt_sourceDir
+    $opt_rmskSpecies
     $opt_augustusSpecies
     $opt_xenoRefSeq
     $opt_ucscNames
@@ -61,6 +62,7 @@ my $stepper = new HgStepManager(
 # Option defaults:
 my $dbHost = 'hgwdev';
 my $sourceDir = "/hive/data/outside/ncbi/genomes";
+my $rmskSpecies = "";
 my $augustusSpecies = "human";
 my $xenoRefSeq = "/hive/data/genomes/asmHubs/VGP/xenoRefSeq";
 my $ucscNames = 0;  # default 'FALSE' (== 0)
@@ -102,6 +104,8 @@ options:
     -ucscNames        Translate NCBI/INSDC/RefSeq names to UCSC names
                       default is to use the given NCBI/INSDC/RefSeq names
     -asmHubName <name>  directory name in: /gbdb/hubs/asmHubName
+    -rmskSpecies to override command line 'species' name for repeat masker
+                      e.g. -rmskSpecies=viruses
     -augustusSpecies <human|chicken|zebrafish> default 'human'
     -xenoRefSeq </path/to/xenoRefSeqMrna> - location of xenoRefMrna.fa.gz
                 expanded directory of mrnas/ and xenoRefMrna.sizes, default
@@ -179,6 +183,7 @@ sub checkOptions {
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      'buildDir=s',
 		      'sourceDir=s',
+		      'rmskSpecies=s',
 		      'augustusSpecies=s',
 		      'xenoRefSeq=s',
 		      'asmHubName=s',
@@ -1030,7 +1035,7 @@ sub doRepeatMasker {
 export asmId=$asmId
 
 if [ $buildDir/\$asmId.2bit -nt faSize.rmsk.txt ]; then
-export species=`echo $species | sed -e 's/_/ /g;'`
+export species=`echo $rmskSpecies | sed -e 's/_/ /g;'`
 
 doRepeatMasker.pl -stop=mask -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit \\
   -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" \$asmId
@@ -1407,7 +1412,7 @@ _EOF_
 #########################################################################
 # * step: ncbiGene [workhorse]
 sub doNcbiGene {
-  my $gffFile = "$sourceDir/${asmId}_genomic.gff.gz";
+  my $gffFile = "$assemblySource/${asmId}_genomic.gff.gz";
   if ( ! -s "${gffFile}" ) {
     printf STDERR "# step ncbiGene: no gff file found at:\n#  %s\n", $gffFile;
     return;
@@ -1560,9 +1565,11 @@ if [ $buildDir/\$asmId.2bit -nt \$asmId.xenoRefGene.bb ]; then
   time (~/kent/src/hg/utils/automation/doXenoRefGene.pl -buildDir=`pwd` -dbHost=$dbHost \\
     -bigClusterHub=$bigClusterHub -mrnas=$xenoRefSeq -workhorse=$workhorse \\
     -maskedSeq=$buildDir/trackData/addMask/\$asmId.masked.2bit \$asmId) > do.log 2>&1
+  if [ -s "\$asmId.xenoRefGene.bb" ]; then
   bigBedInfo \$asmId.xenoRefGene.bb | egrep "^itemCount:|^basesCovered:" \\
     | sed -e 's/,//g' > \$asmId.xenoRefGene.stats.txt
   LC_NUMERIC=en_US /usr/bin/printf "# xenoRefGene %s %'d %s %'d\\n" `cat \$asmId.xenoRefGene.stats.txt` | xargs echo
+  fi
 else
   printf "# xenoRefGene previously completed\\n" 1>&2
 fi
@@ -1630,6 +1637,7 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/asmHubs/$genbankRefseq/$subGroup/$species/$asmId";
 
 $sourceDir = $opt_sourceDir ? $opt_sourceDir : $sourceDir;
+$rmskSpecies = $opt_rmskSpecies ? $opt_rmskSpecies : $species;
 $augustusSpecies = $opt_augustusSpecies ? $opt_augustusSpecies : $augustusSpecies;
 $xenoRefSeq = $opt_xenoRefSeq ? $opt_xenoRefSeq : $xenoRefSeq;
 $ucscNames = $opt_ucscNames ? 1 : $ucscNames;   # '1' == 'TRUE'

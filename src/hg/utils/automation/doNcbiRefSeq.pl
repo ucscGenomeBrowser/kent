@@ -152,6 +152,21 @@ sub checkOptions {
 #########################################################################
 # * step: download [workhorse]
 sub doDownload {
+  my $filesFound = 0;
+ my @requiredFiles = qw( genomic.gff.gz rna.fna.gz rna.gbff.gz protein.faa.gz );
+  my $filesExpected = scalar(@requiredFiles);
+  foreach my $expectFile (@requiredFiles) {
+    if ( -s "/hive/data/outside/ncbi/${asmId}_${expectFile}" ) {
+      ++$filesFound;
+    } else {
+      printf STDERR "# doNcbiRefSeq.pl: missing required file /hive/data/outside/ncbi/${asmId}_${expectFile}\n";
+    }
+  }
+
+  if ($filesFound < $filesExpected) {
+    printf STDERR "# doNcbiRefSeq.pl download: can not find all files required\n";
+    exit 0;
+  }
   my $runDir = "$buildDir/download";
   &HgAutomate::mustMkdir($runDir);
 
