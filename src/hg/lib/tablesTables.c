@@ -394,7 +394,7 @@ void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table,
     boolean withFilters, char *itemPlural, 
     int pageSize, struct fieldedTableSegment *largerContext, struct hash *suggestHash, 
     struct facetField **ffArray, char *visibleFacetList,
-    void (*addFunc)(int))
+    void (*addFunc)(int), char *initialWhere)
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
  * The maxLenField is maximum character length of field before truncation with ...
@@ -406,10 +406,112 @@ if (strchr(returnUrl, '?') == NULL)
 if (withFilters || visibleFacetList)
     showTableFilterInstructionsEtc(table, itemPlural, largerContext, addFunc, visibleFacetList);
 
+// show top bar with quick-deselects
+if (visibleFacetList)
+    {
+    // left column
+    printf("<div>\n");
+
+    if (!isEmpty(initialWhere))
+	{
+
+	printf("Restricting files to where %s. ", initialWhere);
+
+	printf("&nbsp&nbsp;");
+	printf("<input class='btn btn-secondary' type='button' id='clearRestrictionButton' VALUE=\"Clear Restriction\">");
+	jsOnEventById("click", "clearRestrictionButton",
+	    "$(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');\n"
+	    "$('[name=cdwBrowseFiles_page]').val('1');\n"
+	    "$('[name=clearRestriction]').val('1');\n"
+	    "$('#submit').click();\n");
+
+	printf("<br>");
+        }
+
+    htmlPrintf("<dl style='display: inline-block; margin: 0'>\n");
+
+    struct slName *nameList = slNameListFromComma(visibleFacetList);
+    int f;
+    for (f = 0; f < table->fieldCount; ++f) 
+	{
+	struct facetField *field = ffArray[f];
+	if (slNameInListUseCase(nameList, field->fieldName)) // i.e. is this field a visible facet?
+	    {
+	    if (!field->allSelected)  // something selected  TODO is this really the right expression?
+		{
+		htmlPrintf("<span class='card facet-card' style='display: inline-block;'><span class='card-body'>\n");
+		htmlPrintf("<dt style='display: inline-block; margin: 0;'>\n");
+		htmlPrintf("<h6 class='card-title'>%s</h6></dt>\n", field->fieldName);
+
+		// why did this newer way not seem to work? or at least to only affect the dds and not the dts?
+
+		// save old way: style='display: inline; float: left;'
+
+		struct facetVal *val;
+
+		int valuesShown = 0;
+		int valuesNotShown = 0;  // can be used for a click to see-more when there are lots of values
+
+		// Sort values alphabetically
+		// Make a copy to not disturb the original order 
+		struct facetVal *valListCopy = facetsClone(field->valList);
+		slSort(&valListCopy, facetValCmp);
+		
+		for (val = valListCopy; val; val=val->next)
+		    {
+		    boolean specificallySelected = (val->selected && !field->allSelected);
+		    // TODO do we want to stop of valuesShown exceeds FacetFieldLimit? Maybe use that or something else or nothing?
+		    if ((val->selectCount > 0 && (field->showAllValues || valuesShown < FacetFieldLimit))
+			|| specificallySelected)
+			{
+			++valuesShown;
+			char *op = "add";
+			if (specificallySelected)
+			    op = "remove";
+			if (sameString(op, "remove"))
+			    {
+			    printf("<dd class=\"facet\" style='display: inline-block; margin: 0;'>\n");
+			    htmlPrintf("<input type=checkbox value=%s class=cdwFSCheckBox %s>&nbsp;",
+				specificallySelected ? "true" : "false", 
+				specificallySelected ? "checked" : "");
+			    htmlPrintf("<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+				    "&browseFiles_facet_op=%s|url|"
+				    "&browseFiles_facet_fieldName=%s|url|"
+				    "&browseFiles_facet_fieldVal=%s|url|"
+				    "&cdwBrowseFiles_page=1' "
+				    ">",
+				cartSessionVarName(), cartSessionId(cart),
+				op, field->fieldName, val->val
+				);
+			    htmlPrintf("%s (%d)</a>", val->val, val->selectCount);
+			    printf("</dd>\n");
+			    }
+			}
+		    else if (val->selectCount > 0)
+			{
+			++valuesNotShown;
+			}
+		    }
+		slFreeList(&valListCopy);
+		
+		htmlPrintf("</span></span>\n");
+
+		}
+
+	    }
+	}
+
+    htmlPrintf("</dl>\n");
+    
+    printf("</div><br>\n");
+
+    }
+
 printf("<div class='row'>\n"); // parent container
 
 if (visibleFacetList)
     {
+
     // left column
     printf("<div class='col-xs-6 col-sm-4 col-md-4 col-lg-3 col-xl-3'>\n");
 
@@ -574,7 +676,7 @@ void webSortableFieldedTable(struct cart *cart, struct fieldedTable *table,
 webFilteredFieldedTable(cart, table, returnUrl, varPrefix, 
     maxLenField, tagOutputWrappers, wrapperContext,
     FALSE, NULL, 
-    slCount(table->rowList), NULL, NULL, NULL, NULL, NULL);
+    slCount(table->rowList), NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
 
@@ -731,7 +833,7 @@ if (!visibleFacetList)
     }
 
 webFilteredFieldedTable(cart, table, returnUrl, varPrefix, maxFieldWidth, 
-    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, &context, suggestHash, ffArray, visibleFacetList, addFunc);
+    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, &context, suggestHash, ffArray, visibleFacetList, addFunc, initialWhere);
 fieldedTableFree(&table);
 
 dyStringFree(&query);
