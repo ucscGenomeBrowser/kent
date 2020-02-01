@@ -41,7 +41,8 @@ void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table,
     boolean withFilters, char *itemPlural, 
     int pageSize, struct fieldedTableSegment *largerContext, struct hash *suggestHash, 
     struct facetField **ffArray, char *visibleFacetList,
-    void (*addFunc)(int) );
+    void (*addFunc)(int),
+    char *intialWhere );
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
  * The maxLenField is maximum character length of field before truncation with ...

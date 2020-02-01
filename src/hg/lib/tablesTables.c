@@ -394,7 +394,7 @@ void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table,
     boolean withFilters, char *itemPlural, 
     int pageSize, struct fieldedTableSegment *largerContext, struct hash *suggestHash, 
     struct facetField **ffArray, char *visibleFacetList,
-    void (*addFunc)(int))
+    void (*addFunc)(int), char *initialWhere)
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
  * The maxLenField is maximum character length of field before truncation with ...
@@ -406,10 +406,107 @@ if (strchr(returnUrl, '?') == NULL)
 if (withFilters || visibleFacetList)
     showTableFilterInstructionsEtc(table, itemPlural, largerContext, addFunc, visibleFacetList);
 
+// Show top bar with quick-deselects for selected facet values
+//  as well a clear restriction button that cleans out cdwFile_filter cart var. 
+
+if (visibleFacetList)
+    {
+
+    if (!isEmpty(initialWhere))
+	{
+	// left column
+	printf("<div>\n");
+        
+	printf("Restricting files to where %s. ", initialWhere);
+
+	printf("&nbsp&nbsp;");
+	printf("<input class='btn btn-secondary' type='button' id='clearRestrictionButton' VALUE=\"Clear Restriction\">");
+	jsOnEventById("click", "clearRestrictionButton",
+	    "$(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');\n"
+	    "$('[name=cdwBrowseFiles_page]').val('1');\n"
+	    "$('[name=clearRestriction]').val('1');\n"
+	    "$('#submit').click();\n");
+
+	printf("<br>");
+        }
+
+    boolean gotSelected = FALSE;
+
+    struct slName *nameList = slNameListFromComma(visibleFacetList);
+    int f;
+    for (f = 0; f < table->fieldCount; ++f) 
+	{
+	struct facetField *field = ffArray[f];
+	if (slNameInListUseCase(nameList, field->fieldName)) // i.e. is this field a visible facet?
+	    {
+	    if (!field->allSelected)
+		{
+		if (!gotSelected)
+		    {
+		    if (isEmpty(initialWhere))  // we still need to do this
+			{
+			// left column
+			printf("<div>\n");
+			}
+		    htmlPrintf("<dl style='display: inline-block;'>\n");
+		    gotSelected = TRUE;
+		    }
+		htmlPrintf("<span class='card facet-card' style='display: inline-block;'><span class='card-body'>\n");
+		htmlPrintf("<dt style='display: inline-block;'>\n");
+		htmlPrintf("<h6 class='card-title'>%s</h6></dt>\n", field->fieldName);
+
+		struct facetVal *val;
+
+		// Sort values alphabetically
+		// Make a copy to not disturb the original order 
+		struct facetVal *valListCopy = facetsClone(field->valList);
+		slSort(&valListCopy, facetValCmp);
+		
+		for (val = valListCopy; val; val=val->next)
+		    {
+		    boolean specificallySelected = (val->selected && !field->allSelected);
+		    if (specificallySelected)
+			{
+			char *op = "remove";
+			printf("<dd class=\"facet\" style='display: inline-block;'>\n");
+			htmlPrintf("<input type=checkbox value=%s class=cdwFSCheckBox %s>&nbsp;",
+			    specificallySelected ? "true" : "false", 
+			    specificallySelected ? "checked" : "");
+			htmlPrintf("<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+				"&browseFiles_facet_op=%s|url|"
+				"&browseFiles_facet_fieldName=%s|url|"
+				"&browseFiles_facet_fieldVal=%s|url|"
+				"&cdwBrowseFiles_page=1' "
+				">",
+			    cartSessionVarName(), cartSessionId(cart),
+			    op, field->fieldName, val->val
+			    );
+			htmlPrintf("%s (%d)</a>", val->val, val->selectCount);
+			printf("</dd>\n");
+			}
+		    }
+		slFreeList(&valListCopy);
+		
+		htmlPrintf("</span></span>\n");
+
+		}
+
+	    }
+	}
+
+    if (gotSelected)
+	htmlPrintf("</dl>\n");
+   
+    if (!isEmpty(initialWhere) || gotSelected)
+	printf("</div><br>\n");
+
+    }
+
 printf("<div class='row'>\n"); // parent container
 
 if (visibleFacetList)
     {
+
     // left column
     printf("<div class='col-xs-6 col-sm-4 col-md-4 col-lg-3 col-xl-3'>\n");
 
@@ -574,7 +671,7 @@ void webSortableFieldedTable(struct cart *cart, struct fieldedTable *table,
 webFilteredFieldedTable(cart, table, returnUrl, varPrefix, 
     maxLenField, tagOutputWrappers, wrapperContext,
     FALSE, NULL, 
-    slCount(table->rowList), NULL, NULL, NULL, NULL, NULL);
+    slCount(table->rowList), NULL, NULL, NULL, NULL, NULL, NULL);
 }
 
 
@@ -731,7 +828,7 @@ if (!visibleFacetList)
     }
 
 webFilteredFieldedTable(cart, table, returnUrl, varPrefix, maxFieldWidth, 
-    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, &context, suggestHash, ffArray, visibleFacetList, addFunc);
+    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, &context, suggestHash, ffArray, visibleFacetList, addFunc, initialWhere);
 fieldedTableFree(&table);
 
 dyStringFree(&query);
