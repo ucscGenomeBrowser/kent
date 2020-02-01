@@ -406,15 +406,34 @@ if (strchr(returnUrl, '?') == NULL)
 if (withFilters || visibleFacetList)
     showTableFilterInstructionsEtc(table, itemPlural, largerContext, addFunc, visibleFacetList);
 
-// show top bar with quick-deselects
-if (visibleFacetList)
+// Show top bar with quick-deselects for selected facet values
+//  as well a clear restriction button that cleans out cdwFile_filter cart var. 
+
+boolean haveSelectedValues = FALSE;
+// pre-scan to see if we will have any selected values.
+    {
+    struct slName *nameList = slNameListFromComma(visibleFacetList);
+    int f;
+    for (f = 0; f < table->fieldCount; ++f) 
+	{
+	struct facetField *field = ffArray[f];
+	if (slNameInListUseCase(nameList, field->fieldName)) // i.e. is this field a visible facet?
+	    {
+	    if (!field->allSelected)
+		{
+		haveSelectedValues = TRUE;
+		}
+	    }
+	}
+    }
+if (visibleFacetList && (!isEmpty(initialWhere) || haveSelectedValues))
     {
     // left column
     printf("<div>\n");
 
     if (!isEmpty(initialWhere))
 	{
-
+        
 	printf("Restricting files to where %s. ", initialWhere);
 
 	printf("&nbsp&nbsp;");
@@ -428,49 +447,37 @@ if (visibleFacetList)
 	printf("<br>");
         }
 
-    htmlPrintf("<dl style='display: inline-block; margin: 0'>\n");
-
-    struct slName *nameList = slNameListFromComma(visibleFacetList);
-    int f;
-    for (f = 0; f < table->fieldCount; ++f) 
+    if (haveSelectedValues)
 	{
-	struct facetField *field = ffArray[f];
-	if (slNameInListUseCase(nameList, field->fieldName)) // i.e. is this field a visible facet?
+	htmlPrintf("<dl style='display: inline-block;'>\n");
+
+	struct slName *nameList = slNameListFromComma(visibleFacetList);
+	int f;
+	for (f = 0; f < table->fieldCount; ++f) 
 	    {
-	    if (!field->allSelected)  // something selected  TODO is this really the right expression?
+	    struct facetField *field = ffArray[f];
+	    if (slNameInListUseCase(nameList, field->fieldName)) // i.e. is this field a visible facet?
 		{
-		htmlPrintf("<span class='card facet-card' style='display: inline-block;'><span class='card-body'>\n");
-		htmlPrintf("<dt style='display: inline-block; margin: 0;'>\n");
-		htmlPrintf("<h6 class='card-title'>%s</h6></dt>\n", field->fieldName);
-
-		// why did this newer way not seem to work? or at least to only affect the dds and not the dts?
-
-		// save old way: style='display: inline; float: left;'
-
-		struct facetVal *val;
-
-		int valuesShown = 0;
-		int valuesNotShown = 0;  // can be used for a click to see-more when there are lots of values
-
-		// Sort values alphabetically
-		// Make a copy to not disturb the original order 
-		struct facetVal *valListCopy = facetsClone(field->valList);
-		slSort(&valListCopy, facetValCmp);
-		
-		for (val = valListCopy; val; val=val->next)
+		if (!field->allSelected)
 		    {
-		    boolean specificallySelected = (val->selected && !field->allSelected);
-		    // TODO do we want to stop of valuesShown exceeds FacetFieldLimit? Maybe use that or something else or nothing?
-		    if ((val->selectCount > 0 && (field->showAllValues || valuesShown < FacetFieldLimit))
-			|| specificallySelected)
+		    htmlPrintf("<span class='card facet-card' style='display: inline-block;'><span class='card-body'>\n");
+		    htmlPrintf("<dt style='display: inline-block;'>\n");
+		    htmlPrintf("<h6 class='card-title'>%s</h6></dt>\n", field->fieldName);
+
+		    struct facetVal *val;
+
+		    // Sort values alphabetically
+		    // Make a copy to not disturb the original order 
+		    struct facetVal *valListCopy = facetsClone(field->valList);
+		    slSort(&valListCopy, facetValCmp);
+		    
+		    for (val = valListCopy; val; val=val->next)
 			{
-			++valuesShown;
-			char *op = "add";
+			boolean specificallySelected = (val->selected && !field->allSelected);
 			if (specificallySelected)
-			    op = "remove";
-			if (sameString(op, "remove"))
 			    {
-			    printf("<dd class=\"facet\" style='display: inline-block; margin: 0;'>\n");
+			    char *op = "remove";
+			    printf("<dd class=\"facet\" style='display: inline-block;'>\n");
 			    htmlPrintf("<input type=checkbox value=%s class=cdwFSCheckBox %s>&nbsp;",
 				specificallySelected ? "true" : "false", 
 				specificallySelected ? "checked" : "");
@@ -487,21 +494,17 @@ if (visibleFacetList)
 			    printf("</dd>\n");
 			    }
 			}
-		    else if (val->selectCount > 0)
-			{
-			++valuesNotShown;
-			}
+		    slFreeList(&valListCopy);
+		    
+		    htmlPrintf("</span></span>\n");
+
 		    }
-		slFreeList(&valListCopy);
-		
-		htmlPrintf("</span></span>\n");
 
 		}
-
 	    }
-	}
 
-    htmlPrintf("</dl>\n");
+	htmlPrintf("</dl>\n");
+	}
     
     printf("</div><br>\n");
 
