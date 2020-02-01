@@ -1,5 +1,5 @@
 table clinVarBed
-"Browser extensible data (12 fields) plus information about a ClinVar entry"
+"Browser extensible data (12 fields) plus information about a ClinVar entry. _clinSignCode has these possible values: BN=benign, LB=likely benign, CF=conflicting, PG=pathogenic, LP=likely pathogenic, UC=uncertain, OT=other"
     (
     string chrom;        "Chromosome (or contig, scaffold, etc.)"
     uint   chromStart;   "Start position in chromosome"
@@ -34,4 +34,6 @@ table clinVarBed
     string guidelines;         "Guidelines"
     lstring otherIds;         "Other identifiers e.g. OMIM IDs, etc."
     lstring _mouseOver;        "Mouse over text"
+    string _clinSignCode;        "Clinical Significance"
+    uint _varLen;            "Variant Length in base pairs "
     )

@@ -3750,11 +3750,11 @@ scoreLabel ClinVar Star-Rating (0-4)
     parent clinvar
     priority 1
     type bigBed 12 +
-    filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other
-    filterType._clinSign singleList
-    filterValues.origin not-reported,uniparental,tested-inconclusive,biparental,not applicable,paternal,maternal,inherited,de novo,somatic,not provided,unknown,germline
-    filterType.origin multipleListOr
-    filterByRange._valLen on
+    #filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other
+    #filterType._clinSign singleList
+    #filterValues.origin not-reported,uniparental,tested-inconclusive,biparental,not applicable,paternal,maternal,inherited,de novo,somatic,not provided,unknown,germline
+    #filterType.origin multipleListOr
+    #filterByRange._valLen on
     mouseOverField _mouseOver
     bigDataUrl /gbdb/$D/bbi/clinvar/clinvarMain.bb
 
@@ -3765,13 +3765,13 @@ scoreLabel ClinVar Star-Rating (0-4)
     type bigBed 12 +
     parent clinvar
     priority 2
-    filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other
-    filterType._clinSign singleList
-    filterValues.origin not-reported,uniparental,tested-inconclusive,biparental,not applicable,paternal,maternal,inherited,de novo,somatic,not provided,unknown,germline
-    filterType.origin multipleListOr
-    filter._varLen 0
-    filterByRange._varLen on
-    filterByRange.bullshit on
+    #filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other
+    #filterType._clinSign singleList
+    #filterValues.origin not-reported,uniparental,tested-inconclusive,biparental,not applicable,paternal,maternal,inherited,de novo,somatic,not provided,unknown,germline
+    #filterType.origin multipleListOr
+    #filter._varLen 0
+    #filterByRange._varLen on
+    #filterByRange.bullshit on
     mouseOverField _mouseOver
     bigDataUrl /gbdb/$D/bbi/clinvar/clinvarCnv.bb
 
