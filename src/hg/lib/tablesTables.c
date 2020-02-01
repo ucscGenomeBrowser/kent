@@ -409,30 +409,13 @@ if (withFilters || visibleFacetList)
 // Show top bar with quick-deselects for selected facet values
 //  as well a clear restriction button that cleans out cdwFile_filter cart var. 
 
-boolean haveSelectedValues = FALSE;
-// pre-scan to see if we will have any selected values.
+if (visibleFacetList)
     {
-    struct slName *nameList = slNameListFromComma(visibleFacetList);
-    int f;
-    for (f = 0; f < table->fieldCount; ++f) 
-	{
-	struct facetField *field = ffArray[f];
-	if (slNameInListUseCase(nameList, field->fieldName)) // i.e. is this field a visible facet?
-	    {
-	    if (!field->allSelected)
-		{
-		haveSelectedValues = TRUE;
-		}
-	    }
-	}
-    }
-if (visibleFacetList && (!isEmpty(initialWhere) || haveSelectedValues))
-    {
-    // left column
-    printf("<div>\n");
 
     if (!isEmpty(initialWhere))
 	{
+	// left column
+	printf("<div>\n");
         
 	printf("Restricting files to where %s. ", initialWhere);
 
@@ -447,66 +430,75 @@ if (visibleFacetList && (!isEmpty(initialWhere) || haveSelectedValues))
 	printf("<br>");
         }
 
-    if (haveSelectedValues)
+    boolean gotSelected = FALSE;
+
+    struct slName *nameList = slNameListFromComma(visibleFacetList);
+    int f;
+    for (f = 0; f < table->fieldCount; ++f) 
 	{
-	htmlPrintf("<dl style='display: inline-block;'>\n");
-
-	struct slName *nameList = slNameListFromComma(visibleFacetList);
-	int f;
-	for (f = 0; f < table->fieldCount; ++f) 
+	struct facetField *field = ffArray[f];
+	if (slNameInListUseCase(nameList, field->fieldName)) // i.e. is this field a visible facet?
 	    {
-	    struct facetField *field = ffArray[f];
-	    if (slNameInListUseCase(nameList, field->fieldName)) // i.e. is this field a visible facet?
+	    if (!field->allSelected)
 		{
-		if (!field->allSelected)
+		if (!gotSelected)
 		    {
-		    htmlPrintf("<span class='card facet-card' style='display: inline-block;'><span class='card-body'>\n");
-		    htmlPrintf("<dt style='display: inline-block;'>\n");
-		    htmlPrintf("<h6 class='card-title'>%s</h6></dt>\n", field->fieldName);
-
-		    struct facetVal *val;
-
-		    // Sort values alphabetically
-		    // Make a copy to not disturb the original order 
-		    struct facetVal *valListCopy = facetsClone(field->valList);
-		    slSort(&valListCopy, facetValCmp);
-		    
-		    for (val = valListCopy; val; val=val->next)
+		    if (isEmpty(initialWhere))  // we still need to do this
 			{
-			boolean specificallySelected = (val->selected && !field->allSelected);
-			if (specificallySelected)
-			    {
-			    char *op = "remove";
-			    printf("<dd class=\"facet\" style='display: inline-block;'>\n");
-			    htmlPrintf("<input type=checkbox value=%s class=cdwFSCheckBox %s>&nbsp;",
-				specificallySelected ? "true" : "false", 
-				specificallySelected ? "checked" : "");
-			    htmlPrintf("<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
-				    "&browseFiles_facet_op=%s|url|"
-				    "&browseFiles_facet_fieldName=%s|url|"
-				    "&browseFiles_facet_fieldVal=%s|url|"
-				    "&cdwBrowseFiles_page=1' "
-				    ">",
-				cartSessionVarName(), cartSessionId(cart),
-				op, field->fieldName, val->val
-				);
-			    htmlPrintf("%s (%d)</a>", val->val, val->selectCount);
-			    printf("</dd>\n");
-			    }
+			// left column
+			printf("<div>\n");
 			}
-		    slFreeList(&valListCopy);
-		    
-		    htmlPrintf("</span></span>\n");
-
+		    htmlPrintf("<dl style='display: inline-block;'>\n");
+		    gotSelected = TRUE;
 		    }
+		htmlPrintf("<span class='card facet-card' style='display: inline-block;'><span class='card-body'>\n");
+		htmlPrintf("<dt style='display: inline-block;'>\n");
+		htmlPrintf("<h6 class='card-title'>%s</h6></dt>\n", field->fieldName);
+
+		struct facetVal *val;
+
+		// Sort values alphabetically
+		// Make a copy to not disturb the original order 
+		struct facetVal *valListCopy = facetsClone(field->valList);
+		slSort(&valListCopy, facetValCmp);
+		
+		for (val = valListCopy; val; val=val->next)
+		    {
+		    boolean specificallySelected = (val->selected && !field->allSelected);
+		    if (specificallySelected)
+			{
+			char *op = "remove";
+			printf("<dd class=\"facet\" style='display: inline-block;'>\n");
+			htmlPrintf("<input type=checkbox value=%s class=cdwFSCheckBox %s>&nbsp;",
+			    specificallySelected ? "true" : "false", 
+			    specificallySelected ? "checked" : "");
+			htmlPrintf("<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+				"&browseFiles_facet_op=%s|url|"
+				"&browseFiles_facet_fieldName=%s|url|"
+				"&browseFiles_facet_fieldVal=%s|url|"
+				"&cdwBrowseFiles_page=1' "
+				">",
+			    cartSessionVarName(), cartSessionId(cart),
+			    op, field->fieldName, val->val
+			    );
+			htmlPrintf("%s (%d)</a>", val->val, val->selectCount);
+			printf("</dd>\n");
+			}
+		    }
+		slFreeList(&valListCopy);
+		
+		htmlPrintf("</span></span>\n");
 
 		}
-	    }
 
-	htmlPrintf("</dl>\n");
+	    }
 	}
-    
-    printf("</div><br>\n");
+
+    if (gotSelected)
+	htmlPrintf("</dl>\n");
+   
+    if (!isEmpty(initialWhere) || gotSelected)
+	printf("</div><br>\n");
 
     }
 
