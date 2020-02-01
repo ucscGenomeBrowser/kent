@@ -34,6 +34,9 @@ int facetValCmpSelectCountDesc(const void *va, const void *vb);
 int facetValCmp(const void *va, const void *vb);
 /* Compare two facetVal alphabetically by val */
 
+struct facetVal *facetsClone(struct facetVal *origList);
+/* Copy the facet vals list */
+
 void selectedListFacetValUpdate(struct facetField **pSelectedList, char *facetName, char *facetValue, char *op);
 /* Add or remove by changing selected boolean */
 

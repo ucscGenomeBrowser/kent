@@ -1,0 +1,27 @@
+track doseSensitivity
+shortLabel ClinGen sensitivity
+longLabel ClinGen sensitivity composite track
+compositeTrack on
+group phenDis
+visibility hide
+type bed 9 +
+itemRgb on
+
+    track clinGenHaploInsufficiency
+    parent doseSensitivity
+    shortLabel Haplo Insufficiency
+    longLabel ClinGen Haplo Insufficiency
+    visibility dense
+    priority 1
+
+#    mouseOverField note
+
+    track clinGenTriploSensitivity
+    parent doseSensitivity
+    shortLabel Triplo Sensitivity
+    longLabel ClinGen Triplo Sensitivity
+    visibility dense
+    priority 2
+
+# can later add an '11 th' column with notes to display on mouse over
+#    mouseOverField note

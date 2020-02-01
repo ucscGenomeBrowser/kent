@@ -10,6 +10,7 @@
 #include "errCatch.h"
 #include "ra.h"
 #include "hui.h"
+#include "pipeline.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -109,38 +110,6 @@ fprintf(out, "\n");
 hashElFreeList(&helList);
 }
 
-#define READ_SIZE 1024 * 1024 * 64
-int downloadFile(FILE *f, char *url)
-/* Download a file in chunks, return -1 on error. Wrap in errCatch so
- * we can keep downloading rest of hub files.
- * For now using udc to read the files, but curl or wget would be preferred.
- * The reason I'm not using them is because system() and popen don't honor
- * SIGINT.  */
-{
-int ret = 0;
-struct errCatch *errCatch = errCatchNew();
-if (errCatchStart(errCatch))
-    {
-    struct udcFile *file = udcFileOpen(url, udcDefaultDir());
-    size_t size = READ_SIZE;
-    off_t fileSize = udcFileSize(url);
-    off_t counter = 0;
-    char *buf = needLargeMem(size+1);
-    while (counter < fileSize)
-        {
-        bits64 sizeRead = udcRead(file, buf, size);
-        counter += sizeRead;
-        mustWrite(f, buf, sizeRead);
-        }
-    freeMem(buf);
-    udcFileClose(&file);
-    }
-errCatchEnd(errCatch);
-if (errCatch->gotError)
-    ret = -1;
-errCatchFree(&errCatch);
-return ret;
-}
 
 void printTrackDbStanza(struct hash *stanza, FILE *out, char *baseUrl, char *downloadDir)
 /* print a trackDb stanza but with relative references replaced by remote links */
@@ -178,11 +147,17 @@ for (hel = helList; hel != NULL; hel = hel->next)
                     relName = hel->val;
                     dyStringPrintf(fname, "%s%s", downloadDir, (char *)hel->val);
                     }
-                FILE *f = mustOpen(dyStringContents(fname), "wb");
-                // download file, in chunks if necessary
-                if (downloadFile(f, urlToData) == -1)
-                    fprintf(stderr, "Error downloading file. Try again with wget or curl: %s\n", urlToData);
                 fprintf(out, "%s %s\n", hel->name, relName);
+                char *cmd[] = {"wget", "-q", "-O", dyStringContents(fname), urlToData, NULL};
+
+                // use pipelineNoAbort so the loop continues if a url is typo'd or something,
+                // but still warn the user
+                struct pipeline *pl = pipelineOpen1(cmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL);
+                int ret = pipelineWait(pl);
+                if (ret != 0)
+                    {
+                    warn("wget failed for url: %s", urlToData);
+                    }
                 }
             else
                 fprintf(out, "%s %s\n", hel->name, urlToData);

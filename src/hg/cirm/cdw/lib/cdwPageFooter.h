@@ -36,7 +36,7 @@
       "<div class='row'>\n"
         "<p class='centered-text col-md-12'>\n"
         "&nbsp;&nbsp;<a href='https://www.linkedin.com/groups?gid=4017737&trk=myg_ugrp_ovr'\n"
-        "target='_blank'><i class='fab fa-linkedin-square fa-2x'></i></a>\n"
+        "target='_blank'><i class='fab fa-linkedin fa-2x'></i></a>\n"
         "&nbsp;&nbsp;<a href='https://www.flickr.com/photos/cirm' target='_blank'><i\n"
         "class='fab fa-flickr fa-2x'></i></a>\n"
         "&nbsp;&nbsp;<a href='https://blog.cirm.ca.gov/' target='_blank'><i\n"

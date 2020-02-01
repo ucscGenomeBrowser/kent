@@ -1658,7 +1658,7 @@ priority 0.8
     detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp153Details.tab.gz
     freqSourceOrder 1000Genomes,GnomAD_exomes,TOPMED,ExAC,PAGE_STUDY,GnomAD,GoESP,Estonian,ALSPAC,TWINSUK,NorthernSweden,Vietnamese
     classFilterValues snv,mnv,ins,del,delins,identity
-    classFilterType singleList
+    classFilterType multipleListOr
     showCfg on
     ucscNotesFilterValues \
         altIsAmbiguous|Alternate allele contains IUPAC ambiguous base(s),\
@@ -1708,7 +1708,7 @@ priority 0.8
         2152|genic_downstream_transcript_variant,\
         1987|downstream_transcript_variant,\
         1627|intron_variant
-    maxFuncImpactFilterType singleList
+    maxFuncImpactFilterType multipleListOr
 
         track dbSnp153Common
         parent dbSnp153ViewVariants on
