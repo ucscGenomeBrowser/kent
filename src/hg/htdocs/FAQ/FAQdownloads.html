@@ -923,6 +923,12 @@ to automatically connect to the UCSC public SQL database and return GTF files in
 <a href="http://genomewiki.ucsc.edu/index.php/Genes_in_gtf_or_gff_format#Using_kent_commands_with_the_public_database_server">
 this short guide</a>.</p>
 <p>
+GTF files have been generated using the <code>genePredToGtf</code> method described above and are 
+available on our download server for the main gene transcript sets. These can be found on the 
+download server address <i>http://hgdownload.soe.ucsc.edu/goldenPath/$db/bigZips/genes/</i> where 
+<i>$db</i> is the assembly of interest. For example, the <a target="_blank" 
+href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/">hg38 GTF files</a>.</p>
+<p>
 <p>Summary of Table Browser limitations:</p>
 <ul>
   <li>The Table Browser has transcript IDs only, so although it includes both &quot;gene_id&quot;
@@ -932,7 +938,8 @@ used for both fields.</li>
 includes proper start and stop codons.</li>
   <li>Some tables in older genome assemblies are not supported.</li>
 </ul>
-            <a href="../FAQ/FAQformat#format9">GenePred</a> (short for Gene Predictions) is a table
+<p>
+<a href="../FAQ/FAQformat#format9">GenePred</a> (short for Gene Predictions) is a table
 format commonly used for gene tracks in the UCSC Genome Browser where each transcript has a single
 row. Tables are not stored in GTF as it would require many rows to describe a single transcript
 since each gene feature (i.e., exon) requires a separate line. The <code>genePredToGtf</code> command-line
