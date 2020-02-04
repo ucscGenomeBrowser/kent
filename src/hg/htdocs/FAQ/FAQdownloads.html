@@ -916,17 +916,19 @@ to acquire data.
 <h2>Obtaining GTF (Gene Transfer Format)</h2>
 <h6>What is the best method for obtaining GTF output?</h6>
 <p>
-Currently, the <a href="../cgi-bin/hgTables">Table Browser</a> does not have an option return data as
-<a href="../FAQ/FAQformat.html#format4">GTF</a> files. Currently, the best method to obtain 
-GTF files is to use the command-line format conversion utility, <code>genePredToGtf</code>. This can be set up 
+Currently, the <a href="../cgi-bin/hgTables">Table Browser</a> option return data in
+<a href="../FAQ/FAQformat.html#format4">GTF format</a> is limited as explained below.
+To convert custom GenePred format data into GTF, the best method is to use the 
+command-line format conversion utility, <code>genePredToGtf</code>. This can optionally be set up 
 to automatically connect to the UCSC public SQL database and return GTF files in a few minutes using 
 <a href="http://genomewiki.ucsc.edu/index.php/Genes_in_gtf_or_gff_format#Using_kent_commands_with_the_public_database_server">
 this short guide</a>.</p>
 <p>
-GTF files have been generated using the <code>genePredToGtf</code> method described above and are 
-available on our download server for the main gene transcript sets. These can be found on the 
-download server address <i>http://hgdownload.soe.ucsc.edu/goldenPath/$db/bigZips/genes/</i> where 
-<i>$db</i> is the assembly of interest. For example, the <a target="_blank" 
+For simplicity, GTF files have been generated using the <code>genePredToGtf</code> method 
+described above and are available on our download server for the main gene transcript sets.
+These can be found at the following download server address:
+<i>http://hgdownload.soe.ucsc.edu/goldenPath/$db/bigZips/genes/</i> 
+where <i>$db</i> is the assembly of interest. For example, the <a target="_blank" 
 href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/">hg38 GTF files</a>.</p>
 <p>
 <p>Summary of Table Browser limitations:</p>
