@@ -26,6 +26,7 @@ use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_buildDir
     $opt_sourceDir
+    $opt_species
     $opt_rmskSpecies
     $opt_augustusSpecies
     $opt_xenoRefSeq
@@ -62,6 +63,8 @@ my $stepper = new HgStepManager(
 # Option defaults:
 my $dbHost = 'hgwdev';
 my $sourceDir = "/hive/data/outside/ncbi/genomes";
+my $species = "";       # usually found in asmId_assembly_report.txt
+my $ftpDir = "";	# will be determined from given asmId
 my $rmskSpecies = "";
 my $augustusSpecies = "human";
 my $xenoRefSeq = "/hive/data/genomes/asmHubs/VGP/xenoRefSeq";
@@ -83,13 +86,8 @@ sub usage {
   my ($status, $detailed) = @_;
   # Basic help (for incorrect usage):
   print STDERR "
-usage: $base [options] genbank|refseq subGroup species asmId
+usage: $base [options] asmId
 required arguments:
-    genbank|refseq - specify either genbank or refseq hierarchy source
-    subGroup       - specify subGroup at NCBI FTP site, examples:
-                   - vertebrate_mammalian vertebrate_other plant etc...
-    species        - species directory at NCBI FTP site, examples:
-                   - Homo_sapiens Mus_musculus etc...
     asmId          - assembly identifier at NCBI FTP site, examples:
                    - GCF_000001405.32_GRCh38.p6 GCF_000001635.24_GRCm38.p4 etc..
 
@@ -98,13 +96,17 @@ options:
   print STDERR $stepper->getOptionHelp();
   print STDERR <<_EOF_
     -buildDir dir     Construct assembly hub in dir instead of default
-       $HgAutomate::clusterData/asmHubs/{genbank|refseq}/subGroup/species/asmId/
+       $HgAutomate::clusterData/asmHubs/refseqBuild/GC[AF]/123/456/789/asmId/
     -sourceDir dir    Find assembly in dir instead of default:
-       $sourceDir/<genbank|refseq>/subGroup/species/all_assembly_versions/asmId
+       $sourceDir/GC[AF]/123/456/789/asmId
     -ucscNames        Translate NCBI/INSDC/RefSeq names to UCSC names
                       default is to use the given NCBI/INSDC/RefSeq names
     -asmHubName <name>  directory name in: /gbdb/hubs/asmHubName
-    -rmskSpecies to override command line 'species' name for repeat masker
+    -species <name>   use this species designation if there is no
+                      asmId_assembly_report.txt with an
+                      'Organism name:' entry to obtain species
+    -rmskSpecies <name> to override default 'species' name for repeat masker
+                      the default is found in the asmId_asssembly_report.txt
                       e.g. -rmskSpecies=viruses
     -augustusSpecies <human|chicken|zebrafish> default 'human'
     -xenoRefSeq </path/to/xenoRefSeqMrna> - location of xenoRefMrna.fa.gz
@@ -121,7 +123,7 @@ _EOF_
 Automates build of assembly hub.  Steps:
     download: sets up sym link working hierarchy from already mirrored
                 files from NCBI in:
-                      $sourceDir/{genbank|refseq}/
+                      $sourceDir/GC[AF]/123/456/789/asmId
     sequence: establish AGP and 2bit file from NCBI directory
     assemblyGap: create assembly and gap bigBed files and indexes
                  for assembly track names
@@ -173,8 +175,8 @@ Assumptions:
 
 
 # Globals:
-# Command line args: genbankRefseq subGroup species asmId
-my ($genbankRefseq, $subGroup, $species, $asmId);
+# Command line args: asmId
+my ( $asmId);
 # Other:
 my ($buildDir, $secondsStart, $secondsEnd, $assemblySource);
 
@@ -1508,7 +1510,6 @@ if [ $buildDir/\$asmId.2bit -nt \$asmId.ncbiRefSeq.bb ]; then
       -liftFile="\$liftFile" \\
       -target2bit="\$target2bit" \\
       -stop=load -fileServer=$fileServer -smallClusterHub=$smallClusterHub -workhorse=$workhorse \\
-      $genbankRefseq $subGroup $species \\
       \$asmId \$asmId
 else
   printf "# ncbiRefSeq previously completed\\n" 1>&2
@@ -1591,7 +1592,7 @@ sub doTrackDb {
   $bossScript->add(<<_EOF_
 export asmId=$asmId
 
-\$HOME/kent/src/hg/utils/automation/asmHubTrackDb.sh $genbankRefseq \$asmId $runDir \\
+\$HOME/kent/src/hg/utils/automation/doHubTrackDb.sh \$asmId $runDir \\
    > \$asmId.trackDb.txt
 
 _EOF_
@@ -1621,12 +1622,20 @@ _EOF_
 
 # Make sure we have valid options and exactly 1 argument:
 &checkOptions();
-&usage(1) if (scalar(@ARGV) != 4);
+&usage(1) if (scalar(@ARGV) != 1);
 $secondsStart = `date "+%s"`;
 chomp $secondsStart;
 
 # expected command line arguments after options are processed
-($genbankRefseq, $subGroup, $species, $asmId) = @ARGV;
+($asmId) = @ARGV;
+# yes, there can be more than two fields separated by _
+# but in this case, we only care about the first two:
+# GC[AF]_123456789.3_assembly_Name
+#   0         1         2      3 ....
+my @partNames = split('_', $asmId);
+$ftpDir = sprintf("%s/%s/%s/%s/%s", $partNames[0],
+   substr($partNames[1],0,3), substr($partNames[1],3,3),
+   substr($partNames[1],6,3), $asmId);
 
 # Force debug and verbose until this is looking pretty solid:
 # $opt_debug = 1;
@@ -1634,7 +1643,26 @@ chomp $secondsStart;
 
 # Establish what directory we will work in.
 $buildDir = $opt_buildDir ? $opt_buildDir :
-  "$HgAutomate::clusterData/asmHubs/$genbankRefseq/$subGroup/$species/$asmId";
+  "$HgAutomate::clusterData/asmHubs/refseqBuild/$ftpDir";
+
+$assemblySource = $opt_sourceDir ? "$sourceDir" : "$sourceDir/$ftpDir";
+my $asmReport = "$assemblySource/${asmId}_assembly_report.txt";
+
+$species = $opt_species ? $opt_species : $species;
+
+if (length($species) < 1) {
+  if (-s "$asmReport") {
+     $species = `grep -i "organism name:" $asmReport`;
+     chomp $species;
+     $species =~ s/.*organism\s+name:\s+//i;
+     $species =~ s/\s+\(.*//;
+  } else {
+     die "no -species specified and can not find $asmReport";
+  }
+  if (length($species) < 1) {
+     die "no -species specified and can not find Organism name: in $asmReport";
+  }
+}
 
 $sourceDir = $opt_sourceDir ? $opt_sourceDir : $sourceDir;
 $rmskSpecies = $opt_rmskSpecies ? $opt_rmskSpecies : $species;
@@ -1647,7 +1675,6 @@ $smallClusterHub = $opt_smallClusterHub ? $opt_smallClusterHub : $smallClusterHu
 $fileServer = $opt_fileServer ? $opt_fileServer : $fileServer;
 $asmHubName = $opt_asmHubName ? $opt_asmHubName : $asmHubName;
 
-$assemblySource = $opt_sourceDir ? "$sourceDir" : "$sourceDir/$genbankRefseq/$subGroup/$species/all_assembly_versions/$asmId";
 
 die "can not find assembly source directory\n$assemblySource" if ( ! -d $assemblySource);
 printf STDERR "# buildDir: %s\n", $buildDir;
