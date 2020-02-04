@@ -29,9 +29,6 @@ use vars @HgAutomate::commonOptionVars;
 use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_buildDir
-    $opt_genbank
-    $opt_subgroup
-    $opt_species
     $opt_liftFile
     $opt_target2bit
     $opt_toGpWarnOnly
@@ -63,13 +60,8 @@ sub usage {
   my ($status, $detailed) = @_;
   # Basic help (for incorrect usage):
   print STDERR "
-usage: $base [options] genbank|refseq subGroup species asmId db
+usage: $base [options] asmId db
 required arguments:
-    genbank|refseq - specify either genbank or refseq hierarchy source
-    subGroup       - specify subGroup at NCBI FTP site, examples:
-                   - vertebrate_mammalian vertebrate_other plant etc...
-    species        - species directory at NCBI FTP site, examples:
-                   - Homo_sapiens Mus_musculus etc...
     asmId          - assembly identifier at NCBI FTP site, examples:
                    - GCF_000001405.32_GRCh38.p6 GCF_000001635.24_GRCm38.p4 etc..
     db             - database to load with track tables
@@ -122,10 +114,10 @@ NOTE: Override these assumptions with the -target2Bit option
 
 
 # Globals:
-# Command line args: genbankRefseq subGroup species asmId db
-my ($genbankRefseq, $subGroup, $species, $asmId, $db, $ftpDir);
+# Command line args: asmId db
+my ($asmId, $db);
 # Other:
-my ($buildDir, $toGpWarnOnly, $dbExists, $liftFile, $target2bit);
+my ($ftpDir, $buildDir, $toGpWarnOnly, $dbExists, $liftFile, $target2bit);
 my ($secondsStart, $secondsEnd);
 
 sub checkOptions {
@@ -156,7 +148,7 @@ sub doDownload {
  my @requiredFiles = qw( genomic.gff.gz rna.fna.gz rna.gbff.gz protein.faa.gz );
   my $filesExpected = scalar(@requiredFiles);
   foreach my $expectFile (@requiredFiles) {
-    if ( -s "/hive/data/outside/ncbi/${asmId}_${expectFile}" ) {
+    if ( -s "/hive/data/outside/ncbi/genomes/$ftpDir/${asmId}_${expectFile}" ) {
       ++$filesFound;
     } else {
       printf STDERR "# doNcbiRefSeq.pl: missing required file /hive/data/outside/ncbi/${asmId}_${expectFile}\n";
@@ -173,10 +165,11 @@ sub doDownload {
   my $whatItDoes = "download required set of files from NCBI.";
   my $bossScript = newBash HgRemoteScript("$runDir/doDownload.bash", $workhorse,
 				      $runDir, $whatItDoes);
-  my $outsideCopy = "/hive/data/outside/ncbi/$ftpDir";
-  my $localData = "/hive/data/inside/ncbi/$ftpDir";
-  $localData =~ s/all_assembly_versions/latest_assembly_versions/;
-  my $local2Bit = "$localData/$asmId.ncbi.2bit";
+  my $outsideCopy = "/hive/data/outside/ncbi/genomes/$ftpDir";
+  # might already have the NCBI 2bit file here:
+  my $localData = $buildDir;
+  $localData =~ s#trackData/ncbiRefSeq#download#;
+  my $local2Bit = "$localData/$asmId.2bit";
 
   # establish variables
   $bossScript->add(<<_EOF_
@@ -192,6 +185,7 @@ _EOF_
     );
 
 printf STDERR "# checking $outsideCopy\n";
+printf STDERR "# checking $local2Bit\n";
 
   # see if local symLinks can be made with copies already here from NCBI:
   if ( -d "$outsideCopy" ) {
@@ -219,7 +213,7 @@ _EOF_
 
   if ( -s $local2Bit ) {
     $bossScript->add(<<_EOF_
-ln -f -s $local2Bit .
+ln -f -s $local2Bit \${asmId}.ncbi.2bit
 _EOF_
     );
   } elsif ( -s "$outsideCopy/${asmId}_genomic.fna.gz") {
@@ -759,7 +753,7 @@ _EOF_
 
 # Make sure we have valid options and exactly 1 argument:
 &checkOptions();
-&usage(1) if (scalar(@ARGV) != 5);
+&usage(1) if (scalar(@ARGV) != 2);
 
 $toGpWarnOnly = 0;
 $toGpWarnOnly = 1 if ($opt_toGpWarnOnly);
@@ -770,8 +764,15 @@ $secondsStart = `date "+%s"`;
 chomp $secondsStart;
 
 # expected command line arguments after options are processed
-($genbankRefseq, $subGroup, $species, $asmId, $db) = @ARGV;
-$ftpDir = "genomes/$genbankRefseq/$subGroup/$species/all_assembly_versions/$asmId";
+($asmId, $db) = @ARGV;
+# yes, there can be more than two fields separated by _
+# but in this case, we only care about the first two:
+# GC[AF]_123456789.3_assembly_Name
+#   0         1         2      3 ....
+my @partNames = split('_', $asmId);
+$ftpDir = sprintf("%s/%s/%s/%s/%s", $partNames[0],
+   substr($partNames[1],0,3), substr($partNames[1],3,3),
+   substr($partNames[1],6,3), $asmId);
 
 if ( -z "$liftFile" && ! -s "/hive/data/genomes/$db/bed/idKeys/$db.idKeys.txt") {
   die "ERROR: can not find /hive/data/genomes/$db/bed/idKeys/$db.idKeys.txt\n\t  need to run doIdKeys.pl for $db before this procedure.";

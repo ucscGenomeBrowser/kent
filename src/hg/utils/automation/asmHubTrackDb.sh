@@ -2,16 +2,15 @@
 
 set -beEux -o pipefail
 
-if [ $# -ne 3 ]; then
-  printf "usage: trackDb.sh <genbank|refseq> <asmId> <pathTo/assembly hub build directory> > trackDb.txt\n" 1>&2
+if [ $# -ne 2 ]; then
+  printf "usage: trackDb.sh <asmId> <pathTo/assembly hub build directory> > trackDb.txt\n" 1>&2
   printf "expecting to find *.ucsc.2bit and bbi/ files at given path\n" 1>&2
   printf "the ncbi|ucsc selects the naming scheme\n" 1>&2
   exit 255
 fi
 
-export genbankRefseq=$1
-export asmId=$2
-export buildDir=$3
+export asmId=$1
+export buildDir=$2
 export hubLinks="/hive/data/genomes/asmHubs/hubLinks"
 
 export scriptDir="$HOME/kent/src/hg/utils/automation"
