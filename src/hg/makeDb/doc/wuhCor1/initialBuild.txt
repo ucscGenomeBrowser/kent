@@ -123,7 +123,7 @@ taxId 2697049
 
 
 #############################################################################
-#  Initial database build (TBD - 2019-11-25 - Hiram)
+#  Initial database build (DONE - 2020-01-29 - Hiram)
 
     # verify sequence and AGP are OK:
     time (makeGenomeDb.pl -stop=db wuhCor1.config.ra -workhorse=hgwdev) \
@@ -452,7 +452,7 @@ searchPriority 8
     ln -s `pwd`/wuhCor1.2bit /gbdb/wuhCor1/wuhCor1.2bit
 
 #########################################################################
-# CREATE MICROSAT TRACK (TBD - 2019-11-26 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2020-01-29 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/wuhCor1/bed/microsat
     cd /cluster/data/wuhCor1/bed/microsat
@@ -512,7 +512,7 @@ searchPriority 8
     # 24036 bases of 29903 (80.380%) in intersection
 
 #########################################################################
-# Create kluster run files (TBD - 2019-06-29 - Hiram)
+# Create kluster run files (DONE - 2020-01-29 - Hiram)
     # do NOT need to run genbank on this sequence
 
     # numerator is wuhCor1 gapless bases "real" as reported by:
@@ -550,77 +550,9 @@ searchPriority 8
     #	7832 jkStuff/nonBridged.bed
     #	7832 jkStuff/nonBridged.lift
 
-########################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2019-11-26 - Hiram)
-    # original alignment
-    cd /hive/data/genomes/hg38/bed/lastzWuhCor1.2019-11-26
-
-    cat fb.hg38.chainWuhCor1Link.txt
-    # 979733899 bases of 3095998939 (31.645%) in intersection
-    cat fb.hg38.chainSynWuhCor1Link.txt
-    # 917104031 bases of 3095998939 (29.622%) in intersection
-    cat fb.hg38.chainRBest.WuhCor1.txt
-    # 901006295 bases of 3095998939 (29.102%) in intersection
-
-    # and for the swap:
-    mkdir /hive/data/genomes/wuhCor1/bed/blastz.hg38.swap
-    cd /hive/data/genomes/wuhCor1/bed/blastz.hg38.swap
-
-    time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzWuhCor1.2019-11-26/DEF \
-        -swap -chainMinScore=3000 -chainLinearGap=medium \
-          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -noDbNameCheck -syntenicNet) > swap.log 2>&1
-    #  real    79m18.904s
-
-    cat fb.wuhCor1.chainHg38Link.txt
-    # 956720146 bases of 2266312740 (42.215%) in intersection
-    cat fb.wuhCor1.chainSynHg38Link.txt
-    # 895755077 bases of 2266312740 (39.525%) in intersection
-
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
-	wuhCor1 hg38) > rbest.log 2>&1 &
-    # real    289m24.440s
-
-    cat fb.wuhCor1.chainRBest.Hg38.txt
-    # 902782523 bases of 2266312740 (39.835%) in intersection
-
-#########################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2019-11-26 - Hiram)
-
-    # original alignment
-    cd /hive/data/genomes/mm10/bed/lastzWuhCor1.2019-11-26
-
-    cat fb.mm10.chainWuhCor1Link.txt
-    #	1525566783 bases of 2652783500 (57.508%) in intersection
-    cat fb.mm10.chainSynWuhCor1Link.txt
-    #   1410851403 bases of 2652783500 (53.184%) in intersection
-    cat fb.mm10.chainRBest.WuhCor1.txt
-    # 1395524606 bases of 2652783500 (52.606%) in intersection
-
-    mkdir /hive/data/genomes/wuhCor1/bed/blastz.mm10.swap
-    cd /hive/data/genomes/wuhCor1/bed/blastz.mm10.swap
-    time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzWuhCor1.2019-11-26/DEF \
-	-noDbNameCheck -swap -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
-    #	real    101m20.296s
-
-    cat fb.wuhCor1.chainMm10Link.txt
-    #	1522181082 bases of 2266312740 (67.166%) in intersection
-    cat fb.wuhCor1.chainSynMm10Link.txt
-    #   1397889394 bases of 2266312740 (61.681%) in intersection
-
-    time (doRecipBest.pl -load -workhorse=hgwdev wuhCor1 mm10 \
-      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    660m29.571s
-
-    cat fb.wuhCor1.chainRBest.Mm10.txt
-    # 1396267649 bases of 2266312740 (61.610%) in intersection
-
 ##############################################################################
-# GENBANK AUTO UPDATE (TBD - 2019-11-26 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2020-01-29 - Hiram)
+    ### XXX ### NOT running genbank on this sequence
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -773,7 +705,7 @@ fi
 # checked: 11 failed: 0
 
 #########################################################################
-#  BLATSERVERS ENTRY (TBD - 2019-11-25 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2020-01-29 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
@@ -786,7 +718,8 @@ fi
 
 ############################################################################
 ## reset default position to MEPE gene (egg shell protein)
-##  (TBD - 2019-11-25 - Hiram)
+## XXX ### Not special default position set for this assembly
+##  (DONE - 2020-01-29 - Hiram)
 
     # as found from the galGal5 to wuhCor1 liftOver
     ssh hgwdev
@@ -794,7 +727,7 @@ fi
 	where name="wuhCor1";' hgcentraltest
 
 #########################################################################
-# crispr whole genome (WORKING - 2019-12-20 - Hiram)
+# crispr whole genome (DONE - 2020-01-29 - Hiram)
 #  indexFa, ranges, guides, specScoreJobList, specScores,
 #  effScores, offTargets, load, cleanup
 
@@ -805,7 +738,7 @@ fi
     time (~/kent/src/hg/utils/automation/doCrispr.pl \
    -stop=indexFa -buildDir=`pwd` -smallClusterHub=ku wuhCor1 ncbiGene) \
 	> indexFa.log 2>&1
-    # real    62m50.349s
+    # real    0m5.501s
 
     # the large shoulder argument will cause the entire genome to be scanned
 
@@ -844,7 +777,7 @@ fi
     # real    3m29.601s
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2018-10-17 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2020-01-30 - Hiram)
 xyz
     cd $HOME/kent/src/hg/makeDb/schema
     # verify all the business is done for release
@@ -861,16 +794,15 @@ xyz
     # run up a 'make alpha' in hg/hgTables to get this all.joiner file
     # into the hgwdev/genome-test system
 
-XXX - ready when tracks are done - Tue Nov 26 13:35:39 PST 2019
     cd /hive/data/genomes/wuhCor1
-    time (makeDownloads.pl wuhCor1) > downloads.log 2>&1
+    time (makeDownloads.pl -ignoreRepeatMasker wuhCor1) > downloads.log 2>&1
     #  real    10m7.605s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/wuhCor1/pushQ
     cd /hive/data/genomes/wuhCor1/pushQ
   time (makePushQSql.pl -redmineList wuhCor1) > wuhCor1.pushQ.sql 2> stderr.out
-    # real    9m58.779s
+    # real    0m14.576s
 
     # remove the extra chainNet files from the listings:
     sed -i -e "/etNig1/d" redmine.wuhCor1.file.list

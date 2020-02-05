@@ -5015,11 +5015,11 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
 
 <DIV class="hideEmptySubtracks"><span class="types compositeTrack"></span>
 <div class="format">
-        <code>hideEmptySubtracks &lt;on/default&gt; [multiBed.bb multiBedSources.tab]</code></div>
+        <code>hideEmptySubtracks &lt;on/off&gt; [multiBed.bb multiBedSources.tab]</code></div>
     <P>When you have many subtracks in a composite track, it may be useful to limit the display
     to only those with data in the current viewing window.  This track setting produces a
     checkbox on the track configuration page allowing the user to enable or disable this feature.
-    if <code>default</code> is specified, the feature is on by default (the checkbox is checked).
+    if <code>on</code> is specified, the feature is on by default (the checkbox is checked).
     </p>
     <p>
     For extremely large composites, especially those where each subtrack may be sparse,
