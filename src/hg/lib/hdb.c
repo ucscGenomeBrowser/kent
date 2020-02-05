@@ -142,6 +142,12 @@ hFreeConn(&conn);
 return ci;
 }
 
+boolean isMito(char *chrom)
+/* Return True if chrom is chrM or chrMT */
+{
+return sameString(chrom, "chrM") || sameString(chrom, "chrMT");
+}
+
 struct chromInfo *hGetChromInfo(char *db, char *chrom)
 /* Get chromInfo for named chromosome (case-insens.) from db.
  * Return NULL if no such chrom. */
