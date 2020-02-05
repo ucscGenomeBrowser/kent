@@ -14,7 +14,7 @@ void usage()
 {
 errAbort(
   "cdwRenameDataset - Rename a dataset, updating cdwDataset, cdwSubmitDir.url, and cdwSubmit.url\n"
-  "tables.  You'll still need to update meta.txt and resubmit it, and rename the wrangle dir.\n"
+  "tables.  You'll still need to rename the wrangle dir, update meta.txt and resubmit it, and update summary/*.html and resubmit it.\n"
   "usage:\n"
   "   cdwRenameDataset oldName newName\n"
   "options:\n"
