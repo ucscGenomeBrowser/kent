@@ -375,7 +375,7 @@ if (otDefault != NULL && otDefault != otList)
     if (! otInOtList)
 	outputType = otDefault->name;
     }
-hPrintf("<SELECT NAME=\"%s\">", hgtaOutputType);
+hPrintf("<SELECT id='outputTypeDropdown' NAME=\"%s\">", hgtaOutputType);
 for (ot = otList; ot != NULL; ot = ot->next)
     {
     hPrintf(" <OPTION VALUE=%s", ot->name);
@@ -387,6 +387,24 @@ for (ot = otList; ot != NULL; ot = ot->next)
     }
 hPrintf("</SELECT>\n");
 hPrintf(" ");
+
+hPrintf("<DIV style='display:none; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px' id='gffNote'>"
+        "<b>Note:</b> Table Browser GTF files contain transcripts, but no gene identifiers or symbols.<br> "
+        "If you are looking for fully formatted "
+        "gene model files for use in genome analysis pipelines,<br>check the "
+        "<a href='https://hgdownload.soe.ucsc.edu/%s/bigZips/genes'>bigZips/genes</a> "
+        "directory on our download server.</DIV>", database);
+hPrintf(" ");
+
+jsInline("function checkGtfNote() {"
+    "if (document.getElementById('outputTypeDropdown').value==='gff') "
+    "    document.getElementById('gffNote').style.display=''; "
+    "else "
+    "    document.getElementById('gffNote').style.display='none'; "
+    "}"
+    "$(document).ready(checkGtfNote);\n"
+);
+jsOnEventById("change", "outputTypeDropdown", "checkGtfNote()");
 
 if (!cfgOptionBooleanDefault("hgta.disableSendOutput", FALSE))
     {
