@@ -84,7 +84,6 @@ printf("<input class='btn btn-secondary' type='button' id='clearButton' VALUE=\"
 jsOnEventById("click", "clearButton",
     "$(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');\n"
     "$('[name=cdwBrowseFiles_page]').val('1');\n"
-    "$('[name=clearSearch]').val('1');\n"
     "$('#submit').click();\n");
 
 printf("<br>");
@@ -394,7 +393,7 @@ void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table,
     boolean withFilters, char *itemPlural, 
     int pageSize, struct fieldedTableSegment *largerContext, struct hash *suggestHash, 
     struct facetField **ffArray, char *visibleFacetList,
-    void (*addFunc)(int), char *initialWhere)
+    void (*addFunc)(int))
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
  * The maxLenField is maximum character length of field before truncation with ...
@@ -411,18 +410,18 @@ if (withFilters || visibleFacetList)
 
 if (visibleFacetList)
     {
+    char *where = cartUsualString(cart, "cdwFile_filter", "");
 
-    if (!isEmpty(initialWhere))
+    if (!isEmpty(where))
 	{
 	// left column
 	printf("<div>\n");
         
-	printf("Restricting files to where %s. ", initialWhere);
+	printf("Restricting files to where %s. ", where);
 
 	printf("&nbsp&nbsp;");
 	printf("<input class='btn btn-secondary' type='button' id='clearRestrictionButton' VALUE=\"Clear Restriction\">");
 	jsOnEventById("click", "clearRestrictionButton",
-	    "$(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');\n"
 	    "$('[name=cdwBrowseFiles_page]').val('1');\n"
 	    "$('[name=clearRestriction]').val('1');\n"
 	    "$('#submit').click();\n");
@@ -443,7 +442,7 @@ if (visibleFacetList)
 		{
 		if (!gotSelected)
 		    {
-		    if (isEmpty(initialWhere))  // we still need to do this
+		    if (isEmpty(where))  // we still need to do this
 			{
 			// left column
 			printf("<div>\n");
@@ -497,7 +496,7 @@ if (visibleFacetList)
     if (gotSelected)
 	htmlPrintf("</dl>\n");
    
-    if (!isEmpty(initialWhere) || gotSelected)
+    if (!isEmpty(where) || gotSelected)
 	printf("</div><br>\n");
 
     }
@@ -671,7 +670,7 @@ void webSortableFieldedTable(struct cart *cart, struct fieldedTable *table,
 webFilteredFieldedTable(cart, table, returnUrl, varPrefix, 
     maxLenField, tagOutputWrappers, wrapperContext,
     FALSE, NULL, 
-    slCount(table->rowList), NULL, NULL, NULL, NULL, NULL, NULL);
+    slCount(table->rowList), NULL, NULL, NULL, NULL, NULL);
 }
 
 
@@ -828,7 +827,7 @@ if (!visibleFacetList)
     }
 
 webFilteredFieldedTable(cart, table, returnUrl, varPrefix, maxFieldWidth, 
-    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, &context, suggestHash, ffArray, visibleFacetList, addFunc, initialWhere);
+    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, &context, suggestHash, ffArray, visibleFacetList, addFunc);
 fieldedTableFree(&table);
 
 dyStringFree(&query);

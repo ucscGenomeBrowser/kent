@@ -1233,13 +1233,6 @@ printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "browseFiles");
 
-cgiMakeHiddenVar("clearSearch", "0");
-char *clearSearch = cartOptionalString(cart, "clearSearch");
-if (clearSearch && sameString(clearSearch,"1"))
-    {
-    cartRemove(cart, "clearSearch");
-    }
-
 cgiMakeHiddenVar("clearRestriction", "0");
 char *clearRestriction = cartOptionalString(cart, "clearRestriction");
 if (clearRestriction && sameString(clearRestriction,"1"))

@@ -3208,10 +3208,10 @@ if (!ajax)
                "<IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
                hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
                chromosome, encodedMapName, tdb->parent->shortLabel);
-        printf("<p>This track is part of a parent called <i>%s</i>. To show other tracks of this parent, "
-               "please go to the"
+        printf("<p>This track is part of a parent called <i>%s</i>. "
+                "To show other tracks of this parent, go to the "
                "<A HREF=\"%s?%s=%s&c=%s&g=%s\" title='Link to parent track'>"
-               "%s</A> configuration page.",
+               "%s</a> configuration page</A>.",
                tdb->parent->shortLabel, hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
                chromosome, encodedMapName, tdb->parent->shortLabel);
         freeMem(encodedMapName);
