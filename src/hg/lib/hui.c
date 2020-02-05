@@ -5222,14 +5222,14 @@ puts("</TABLE>");
 boolean compositeHideEmptySubtracksSetting(struct trackDb *tdb, boolean *retDefault,
                                         char **retMultiBedFile, char **retSubtrackIdFile)
 /* Parse hideEmptySubtracks setting
- * Format:  hideEmptySubtracks on|default
+ * Format:  hideEmptySubtracks on|off
  *              or
- *          hideEmptySubtracks on|default multiBed.bed subtrackIds.tab
+ *          hideEmptySubtracks on|off multiBed.bed subtrackIds.tab
  * where multiBed.bed is a bed3Sources bigBed, generated with bedtools multiinter
  *              post-processed by UCSC multiBed.pl tool
  *      subtrackIds.tab is a tab-sep file: id subtrackName
  *
- * Return TRUE if set to true/on/default.  retDefault is TRUE if set default, o/w FALSE
+ * Return TRUE if setting is present.  retDefault is TRUE if set to 'on', o/w FALSE
  */
 {
 if (!tdbIsComposite(tdb))
@@ -5241,13 +5241,12 @@ char *orig = cloneString(hideEmpties);
 char *words[3];
 int wordCount = chopByWhite(hideEmpties, words, ArraySize(words));
 char *mode = words[0];
-if (differentString(mode, "on") && differentString(mode, "true") &&
-    differentString(mode, "default"))
-        {
-        warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTY, orig);
-        return FALSE;
-        }
-boolean deflt = sameString(mode, "default") ? TRUE : FALSE;
+if (differentString(mode, "on") && differentString(mode, "off"))
+    {
+    warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTY, orig);
+    return FALSE;
+    }
+boolean deflt = sameString(mode, "on") ? TRUE : FALSE;
 if (retDefault)
     *retDefault = deflt;
 
