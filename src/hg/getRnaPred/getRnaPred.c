@@ -274,7 +274,7 @@ if (gp->exonFrames != NULL)
 /* just overwrite the buffer with the peptide, which will stop at end of DNA
  * if no stop codon. Buffer size must allow for stop codon. */
 int ir, ip;
-boolean isChrM = sameString(gp->chrom, "chrM");
+boolean isChrM = isMito(gp->chrom);
 for (ir = offset, ip = 0; ir < cdsBuf->stringSize; ir += 3, ip++)
     {
     cdsBuf->string[ip] = (isChrM ? lookupMitoCodon(cdsBuf->string+ir)
