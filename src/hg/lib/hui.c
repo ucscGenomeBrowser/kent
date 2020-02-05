@@ -6388,6 +6388,13 @@ if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name,
 if (textFiltersShowAll(db, cart, tdb))
     skipScoreFilter = TRUE;
 
+if (cartOptionalString(cart, "ajax") == NULL)
+    {
+    webIncludeResourceFile("ui.dropdownchecklist.css");
+    jsIncludeFile("ui.dropdownchecklist.js",NULL);
+    jsIncludeFile("ddcl.js",NULL);
+    }
+
 // Add any multi-selects next
 filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
 if (filterBySet != NULL)
