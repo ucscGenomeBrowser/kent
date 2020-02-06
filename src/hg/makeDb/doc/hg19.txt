@@ -34019,12 +34019,22 @@ wc -l refseqSelect.curated.gp
   hgLoadGenePred -genePredExt hg19  wgEncodeGencodeBasicV19 wgEncodeGencodeBasicV19.gp
 
 ##############################################################################
-# doseSensitivity (WORKING - 2020-02-06)
+# doseSensitivity (WORKING - 2020-02-06, Ana, Hiram)
 
   mkdir /hive/data/genomes/hg19/bed/doseSensitivity
   cd /hive/data/genomes/hg19/bed/doseSensitivity
 
-  ftp original files from ClinGen
+  ftp original files from ClinGen:
+
+  ftp://ftp.ncbi.nlm.nih.giv/pub/dbVar/clingen/
+
+  wget --timestamping \
+ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/clingen/ClinGen_haploinsufficiency_gene_GRCh37.bed
+
+  wget --timestamping \
+ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/clingen/ClinGen_triplosensitivity_gene_GRCh37.bed
+
+
 -rw-rw-rw- 1 202784 Jan 28 16:21 ClinGen_gene_curation_list_GRCh37.tsv
 -rw-rw-rw- 1  45142 Jan 28 16:21 ClinGen_haploinsufficiency_gene_GRCh37.bed
 -rw-rw-rw- 1  48750 Jan 28 16:22 ClinGen_triplosensitivity_gene_GRCh37.bed
@@ -34104,6 +34114,24 @@ close (FH);
          | sort -k1,1 -k2,2n > triploSensitivity.bed
 
   # convert bed to bigBed:
+  # using the dosSensitivity.as file:
+
+table doseSensitivity
+"ClinGen dosage sensitivity bed 9 plus original dosageScore"
+    (
+    string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Name of item"
+    uint   score;      "Score from 0-1000"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "Start of where display should be thick (start codon)"
+    uint thickEnd;     "End of where display should be thick (stop codon)"
+    uint itemRgb;      "color indicates dosage score"
+    string dosageScore; "dosage score from ClinGen"
+    string mouseOver;  "description for the score meaning"
+    )
+
 
   bedToBigBed -tab -type=bed9+2 -as=doseSensitivity.as \
      haploInsufficiency.bed ../../chrom.sizes haploInsufficiency.bb
