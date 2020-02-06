@@ -4681,7 +4681,7 @@ shortLabel ClinGen CNVs
 longLabel Clinical Genome Resource (ClinGen) CNVs
 group phenDis
 visibility hide
-subGroup1 view Views cov=Coverage cnv=CNVs
+subGroup1 view Views cov=Coverage cnv=CNVs dose=Dose
 subGroup2 class Class path=Pathogenic likP=Likely_Pathogenic unc=Uncertain likB=Likely_Benign ben=Benign
 subGroup3 level Evidence cur=Curated sub=Submitted
 dimensions dimensionY=class dimensionX=level
@@ -4779,6 +4779,37 @@ type bed 3
 	longLabel ClinGen CNVs: Benign
         subGroups view=cnv class=ben level=sub
 
+    track doseSensitivity
+    parent iscaComposite
+    view dose
+    shortLabel ClinGen sensitivity
+    longLabel ClinGen sensitivity composite track
+    group phenDis
+    visibility hide
+    type bigBed 9 +
+    itemRgb on
+
+        track clinGenHaploInsufficiency
+        parent doseSensitivity
+        shortLabel Haplo Insufficiency
+        longLabel ClinGen Haplo Insufficiency
+        visibility dense
+        priority 1
+        type bigBed 9 +
+        bigDataUrl /gbdb/hg19/doseSensitivity/clinGenHaploInsufficiency.bb
+        mouseOverField mouseOver
+        subGroups view=dose class=path level=cur
+
+        track clinGenTriploSensitivity
+        parent doseSensitivity
+        shortLabel Triplo Sensitivity
+        longLabel ClinGen Triplo Sensitivity
+        visibility dense
+        priority 2
+        type bigBed 9 +
+        bigDataUrl /gbdb/hg19/doseSensitivity/clinGenTriploSensitivity.bb
+        mouseOverField mouseOver
+        subGroups view=dose class=path level=cur
 
 include phastBias.ra
 
