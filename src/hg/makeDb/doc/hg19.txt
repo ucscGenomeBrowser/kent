@@ -34017,4 +34017,77 @@ wc -l refseqSelect.curated.gp
   
   hgLoadGenePred -genePredExt hg19  wgEncodeGencodeCompV19 wgEncodeGencodeCompV19.gp
   hgLoadGenePred -genePredExt hg19  wgEncodeGencodeBasicV19 wgEncodeGencodeBasicV19.gp
+
+##############################################################################
+# doseSensitivity (WORKING - 2020-02-06)
+
+  mkdir /hive/data/genomes/hg19/bed/doseSensitivity
+  cd /hive/data/genomes/hg19/bed/doseSensitivity
+
+  ftp original files from ClinGen
+-rw-rw-rw- 1 202784 Jan 28 16:21 ClinGen_gene_curation_list_GRCh37.tsv
+-rw-rw-rw- 1  45142 Jan 28 16:21 ClinGen_haploinsufficiency_gene_GRCh37.bed
+-rw-rw-rw- 1  48750 Jan 28 16:22 ClinGen_triplosensitivity_gene_GRCh37.bed
+
+  # convert the original 'bed 5' data to bed 9+2 with perl script:
+
+  ./toUcsc.pl ClinGen_haploinsufficiency_gene_GRCh37.bed \
+         | sort -k1,1 -k2,2n > haploInsufficiency.bed
+  ./toUcsc.pl ClinGen_triplosensitivity_gene_GRCh37.bed \
+         | sort -k1,1 -k2,2n > triploSensitivity.bed
+
+  # convert bed to bigBed:
+
+  bedToBigBed -tab -type=bed9+2 -as=doseSensitivity.as \
+     haploInsufficiency.bed ../../chrom.sizes haploInsufficiency.bb
+  bedToBigBed -tab -type=bed9+2 -as=doseSensitivity.as \
+     triploSensitivity.bed ../../chrom.sizes triploSensitivity.bb
+
+  # measure data in bigBed files:
+  bigBedInfo haploInsufficiency.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 11
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 1,396
+# primaryDataSize: 42,693
+# primaryIndexSize: 6,388
+# zoomLevels: 6
+# chromCount: 24
+# basesCovered: 160,842,763
+# meanDepth (of bases covered): 1.001796
+# minDepth: 1.000000
+# maxDepth: 2.000000
+# std of depth: 0.042340
+
+  bigBedInfo triploSensitivity.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 11
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 1,396
+# primaryDataSize: 39,932
+# primaryIndexSize: 6,388
+# zoomLevels: 6
+# chromCount: 24
+# basesCovered: 160,842,763
+# meanDepth (of bases covered): 1.001796
+# minDepth: 1.000000
+# maxDepth: 2.000000
+# std of depth: 0.042340
+
+
+  # symlinks to /gbdb/hg19:
+
+  ln -s `pwd`/haploInsufficiency.bb \
+     /gbdb/hg19/doseSensitivity/clinGenHaploInsufficiency.bb
+  ln -s `pwd`/triploSensitivity.bb \
+     /data/hg19/doseSensitivity/clinGenTriploSensitivity.bb
+
+  # trackDb composite perhaps in ClinVar CNVs composite
+
 ##############################################################################
