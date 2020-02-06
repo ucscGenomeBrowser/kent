@@ -34029,6 +34029,73 @@ wc -l refseqSelect.curated.gp
 -rw-rw-rw- 1  45142 Jan 28 16:21 ClinGen_haploinsufficiency_gene_GRCh37.bed
 -rw-rw-rw- 1  48750 Jan 28 16:22 ClinGen_triplosensitivity_gene_GRCh37.bed
 
+  # create perl script for processing: toUcsc.pl
+
+###########################################################################
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) {
+  printf STDERR "usage: ./toUcsc.pl originalFile.bed > newFile.bed\n";
+  exit 255;
+}
+
+my @mouseOver;
+
+$mouseOver[0] = "not yet evaluated";
+$mouseOver[1] = "no evidence for dosage pathogenicity";
+$mouseOver[2] = "little evidence for dosage pathogenicity";
+$mouseOver[3] = "some evidence for dosage pathogenicity";
+$mouseOver[4] = "sufficient evidence for dosage pathogenicity";
+$mouseOver[5] = "gene associated with autosomal recessive phenotype";
+$mouseOver[6] = "haploinsufficiency unlikely";
+
+my $inFile = shift;
+
+open (FH, "grep -v track $inFile|") or die "can not read $inFile";
+while (my $line = <FH>) {
+  chomp $line;
+# printf STDERR "# %s\n", $line if ($line =~ m/Not/);
+  my @a = split('\s+', $line, 5);
+  my $selectMouseOver = 0;
+  my $color = "0,255,0";
+  my $score = $a[4];
+  if ($a[4] =~ m/Not/) {
+    $color = "128,128,128";
+    $score = 0;
+    $selectMouseOver = 0;
+  } elsif (0 == $a[4]) {
+    $color = "252,79,89";
+    $selectMouseOver = 1;
+  } elsif (1 == $a[4]) {
+    $color = "209,45,51";
+    $selectMouseOver = 2;
+  } elsif (2 == $a[4]) {
+    $color = "160,48,51";
+    $selectMouseOver = 3;
+  } elsif (3 == $a[4]) {
+    $color = "109,51,43";
+    $selectMouseOver = 4;
+  } elsif (30 == $a[4]) {
+    $color = "109,51,43";
+    $selectMouseOver = 5;
+  } elsif (40 == $a[4]) {
+    $color = "0,0,255";
+    $selectMouseOver = 6;
+  } else {
+    printf STDERR "%s\n", $line;
+    die "unrecognized column 5 value ?";
+  }
+  printf "%s\t%d\t%d\t%s\t%d\t+\t%d\t%d\t%s\t%s\t%d - %s\n",
+    $a[0], $a[1], $a[2], $a[3], $score, $a[1], $a[2], $color, $a[4], $score, $mouseOver[$selectMouseOver];
+}
+close (FH);
+###########################################################################
+
   # convert the original 'bed 5' data to bed 9+2 with perl script:
 
   ./toUcsc.pl ClinGen_haploinsufficiency_gene_GRCh37.bed \
