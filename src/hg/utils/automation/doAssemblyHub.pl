@@ -1453,7 +1453,7 @@ if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
      exit 0
   fi
   liftUp -extGenePred -type=.gp stdout \\
-      ../../sequence/\$asmId.ncbiToUcsc.lift error \\
+      ../../sequence/\$asmId.ncbiToUcsc.lift warn \\
        \$asmId.ncbiGene.genePred.gz | gzip -c \\
           > \$asmId.ncbiGene.ucsc.genePred.gz
   ~/kent/src/hg/utils/automation/gpToIx.pl \$asmId.ncbiGene.ucsc.genePred.gz \\
@@ -1592,7 +1592,7 @@ sub doTrackDb {
   $bossScript->add(<<_EOF_
 export asmId=$asmId
 
-\$HOME/kent/src/hg/utils/automation/doHubTrackDb.sh \$asmId $runDir \\
+\$HOME/kent/src/hg/utils/automation/asmHubTrackDb.sh \$asmId $runDir \\
    > \$asmId.trackDb.txt
 
 _EOF_

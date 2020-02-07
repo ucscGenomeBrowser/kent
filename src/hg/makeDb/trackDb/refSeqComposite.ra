@@ -18,7 +18,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         parent refSeqComposite off
         color 12,12,120
         shortLabel RefSeq All
-        longLabel NCBI RefSeq genes, curated and predicted sets (NM_*, XM_*, NR_*, XR_*, NP_* or YP_*)
+        longLabel NCBI RefSeq genes, curated and predicted (NM_*, XM_*, NR_*, XR_*, NP_*, YP_*)
         idXref ncbiRefSeqLink mrnaAcc name
         baseColorUseCds given
         baseColorDefault genomicCodons
@@ -48,7 +48,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         color 32,32,32
         parent refSeqComposite off
         shortLabel RefSeq Other
-        longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, NP_* or YP_*)
+        longLabel NCBI RefSeq Other Annotations (not NM_*, NR_*, XM_*, XR_*, NP_* or YP_*)
         priority 4
         searchIndex name
         searchTrix /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.ix
