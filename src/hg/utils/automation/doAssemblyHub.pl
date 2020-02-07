@@ -244,6 +244,7 @@ sub readChr2Acc($$) {
     chomp $line;
     my ($chrN, $acc) = split('\t', $line);
     $chrN =~ s/ /_/g;   # some assemblies have spaces in chr names ...
+    $chrN =~ s/:/_/g;   # one assembly GCF_002910315.2 had : in a chr name
     $accToChr->{$acc} = $chrN;
   }
   close (FH);
@@ -660,8 +661,6 @@ _EOF_
   );
   $bossScript->execute();
 
-  readDupsList();
-
 } # doDownload
 
 
@@ -679,6 +678,8 @@ sub doSequence {
   my $otherChrParts = 0;  # to see if this is unplaced scaffolds only
   my $primaryAssembly = "$buildDir/download/${asmId}_assembly_structure/Primary_Assembly";
   my $partsDone = 0;
+
+  readDupsList();
 
   ###########  Assembled chromosomes  ################
   my $chr2acc = "$primaryAssembly/assembled_chromosomes/chr2acc";
