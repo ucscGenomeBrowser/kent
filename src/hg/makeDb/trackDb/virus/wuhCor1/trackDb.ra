@@ -6,9 +6,6 @@ html gold
 track gap override
 html gap
 
-track crisprAllTargets override
-visibility squish
-
 searchTable gold
 shortCircuit 1
 termRegex NC_[0-9v]+
