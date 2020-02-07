@@ -4,7 +4,7 @@ track problematic
 shortLabel Problematic Regions
 longLabel Problematic Regions for NGS or Sanger sequencing or very variable regions
 compositeTrack on
-hideEmptySubtracks default
+hideEmptySubtracks on
 group map
 visibility hide
 type bigBed 3 +
@@ -2824,4 +2824,4 @@ dataVersion EPDNew Version 006 (May 2018)
 visibility hide
 pennantIcon New red ../goldenPath/newsarch.html#112719a Track Released Nov. 27, 2019
 
-include doseSensitivity.ra
+#  include doseSensitivity.ra
