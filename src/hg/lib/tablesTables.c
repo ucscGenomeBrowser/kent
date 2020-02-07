@@ -405,29 +405,16 @@ if (strchr(returnUrl, '?') == NULL)
 if (withFilters || visibleFacetList)
     showTableFilterInstructionsEtc(table, itemPlural, largerContext, addFunc, visibleFacetList);
 
-// Show top bar with quick-deselects for selected facet values
-//  as well a clear restriction button that cleans out cdwFile_filter cart var. 
-
 if (visibleFacetList)
     {
+
+    // Show top bar with quick-deselects for selected facet values
+    //  as well a clear restriction button that cleans out cdwFile_filter cart var. 
+
+    struct dyString *facetBar = dyStringNew(1024);
+
     char *where = cartUsualString(cart, "cdwFile_filter", "");
 
-    if (!isEmpty(where))
-	{
-	// left column
-	printf("<div>\n");
-        
-	printf("Restricting files to where %s. ", where);
-
-	printf("&nbsp&nbsp;");
-	printf("<input class='btn btn-secondary' type='button' id='clearRestrictionButton' VALUE=\"Clear Restriction\">");
-	jsOnEventById("click", "clearRestrictionButton",
-	    "$('[name=cdwBrowseFiles_page]').val('1');\n"
-	    "$('[name=clearRestriction]').val('1');\n"
-	    "$('#submit').click();\n");
-
-	printf("<br>");
-        }
 
     boolean gotSelected = FALSE;
 
@@ -440,19 +427,10 @@ if (visibleFacetList)
 	    {
 	    if (!field->allSelected)
 		{
-		if (!gotSelected)
-		    {
-		    if (isEmpty(where))  // we still need to do this
-			{
-			// left column
-			printf("<div>\n");
-			}
-		    htmlPrintf("<dl style='display: inline-block;'>\n");
-		    gotSelected = TRUE;
-		    }
-		htmlPrintf("<span class='card facet-card' style='display: inline-block;'><span class='card-body'>\n");
-		htmlPrintf("<dt style='display: inline-block;'>\n");
-		htmlPrintf("<h6 class='card-title'>%s</h6></dt>\n", field->fieldName);
+		gotSelected = TRUE;
+		htmlDyStringPrintf(facetBar, "<span class='card facet-card' style='display: inline-block;'><span class='card-body'>\n");
+		htmlDyStringPrintf(facetBar, "<dt style='display: inline-block;'>\n");
+		htmlDyStringPrintf(facetBar, "<h6 class='card-title'>%s</h6></dt>\n", field->fieldName);
 
 		struct facetVal *val;
 
@@ -467,11 +445,11 @@ if (visibleFacetList)
 		    if (specificallySelected)
 			{
 			char *op = "remove";
-			printf("<dd class=\"facet\" style='display: inline-block;'>\n");
-			htmlPrintf("<input type=checkbox value=%s class=cdwFSCheckBox %s>&nbsp;",
+			htmlDyStringPrintf(facetBar, "<dd class=\"facet\" style='display: inline-block;'>\n");
+			htmlDyStringPrintf(facetBar, "<input type=checkbox value=%s class=cdwFSCheckBox %s>&nbsp;",
 			    specificallySelected ? "true" : "false", 
 			    specificallySelected ? "checked" : "");
-			htmlPrintf("<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+			htmlDyStringPrintf(facetBar, "<a href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
 				"&browseFiles_facet_op=%s|url|"
 				"&browseFiles_facet_fieldName=%s|url|"
 				"&browseFiles_facet_fieldVal=%s|url|"
@@ -480,25 +458,65 @@ if (visibleFacetList)
 			    cartSessionVarName(), cartSessionId(cart),
 			    op, field->fieldName, val->val
 			    );
-			htmlPrintf("%s (%d)</a>", val->val, val->selectCount);
-			printf("</dd>\n");
+			htmlDyStringPrintf(facetBar, "%s (%d)</a>", val->val, val->selectCount);
+			htmlDyStringPrintf(facetBar, "</dd>\n");
 			}
 		    }
 		slFreeList(&valListCopy);
 		
-		htmlPrintf("</span></span>\n");
+		htmlDyStringPrintf(facetBar, "</span></span>\n");
 
 		}
 
 	    }
 	}
 
+    if (!isEmpty(where) || gotSelected)
+        {
+	printf("<div>\n");
+        }
+
+    if (!isEmpty(where))
+	{
+	// left column
+        
+	printf("Restricting files to where %s. ", where);
+
+	printf("&nbsp&nbsp;");
+	printf("<input class='btn btn-secondary' type='button' id='clearRestrictionButton' VALUE=\"Clear Restriction\">");
+	jsOnEventById("click", "clearRestrictionButton",
+	    "$('[name=cdwBrowseFiles_page]').val('1');\n"
+	    "$('[name=clearRestriction]').val('1');\n"
+	    "$('#submit').click();\n");
+
+	printf("<br>");
+        }
+
+
     if (gotSelected)
-	htmlPrintf("</dl>\n");
-   
+	{
+	// reset all facet value selections button
+	char *op = "resetAll";
+	htmlPrintf("<a class='btn btn-secondary' href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
+	    "&browseFiles_facet_op=%s|url|"
+	    "&browseFiles_facet_fieldName=%s|url|"
+	    "&browseFiles_facet_fieldVal=%s|url|"
+	    "&cdwBrowseFiles_page=1' "
+		">%s</a>\n",
+		cartSessionVarName(), cartSessionId(cart),
+	    op, "", "",
+	    "Clear All"
+	    );
+
+	printf("<dl style='display: inline-block;'>\n");
+	printf("%s\n", facetBar->string);
+	printf("</dl>\n");
+	}
+
     if (!isEmpty(where) || gotSelected)
 	printf("</div><br>\n");
 
+    dyStringFree(&facetBar);
     }
 
 printf("<div class='row'>\n"); // parent container
@@ -508,19 +526,6 @@ if (visibleFacetList)
 
     // left column
     printf("<div class='col-xs-6 col-sm-4 col-md-4 col-lg-3 col-xl-3'>\n");
-
-    // reset all facet value selections
-    char *op = "resetAll";
-    htmlPrintf("<a class='btn btn-secondary' href='../cgi-bin/cdwWebBrowse?%s=%s|url|&cdwCommand=browseFiles"
-	    "&browseFiles_facet_op=%s|url|"
-	    "&browseFiles_facet_fieldName=%s|url|"
-	    "&browseFiles_facet_fieldVal=%s|url|"
-	    "&cdwBrowseFiles_page=1' "
-	    ">%s</a><br><br>\n",
-	cartSessionVarName(), cartSessionId(cart),
-	op, "", "",
-	"Clear All"
-	);
 
     struct slName *nameList = slNameListFromComma(visibleFacetList);
     int f;
