@@ -181,8 +181,8 @@ doBackup()
 
 printCheck()
 {
-    db=$1
-    archRoot="`realpath ${archiveDir}`/${db}/${trackSetName}/${versionName}"
+    currentDb=$1
+    archRoot="`realpath ${archiveDir}`/${currentDb}/${trackSetName}/${versionName}"
     printf "check mode: moving files to the following directory:\n"
     printf "%s\n" "${archRoot}"
     printf "\n"
@@ -192,7 +192,7 @@ printCheck()
         for tbl in $(cat "${tables}")
         do
             printf "${archRoot}/${tbl}.gz\n" ""
-            printf "${archRoot}/${tbl}.tab.tab.sql\n" ""
+            printf "${archRoot}/${tbl}.trackDb.tab.sql\n" ""
             printf "${archRoot}/${tbl}.sql\n" ""
         done
     else
@@ -201,7 +201,7 @@ printCheck()
         do
             printf "${archRoot}/${tbl}.gz\n" ""
             printf "${archRoot}/${tbl}.trackDb.tab.gz\n" ""
-            printf "${archRoot}/${tbl}.sqk\n" ""
+            printf "${archRoot}/${tbl}.sql\n" ""
         done
     fi
     printf "\n"
@@ -313,7 +313,7 @@ then
     then
         printf "Archiving to %s\n" "${archiveDir}" 1>&2
     fi
-    if [ "${check}" != "TRUE" ]
+    if [ "${checkOnly}" != "TRUE" ]
     then
         mkdir -p "${archiveDir}"
     fi
