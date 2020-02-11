@@ -22,7 +22,8 @@ Usage: `basename $0` [-hcbtfv] archiveRoot database(s) trackArchiveName
 
 Required Positional arguments:
 archiveRoot        The root location of the backup directory (/hive/data/inside/archive/).
-database(s)        A single database or double quoted list of databases to back up
+database(s)        A single database, a double quoted list of databases, or a file of db
+                   names to back up
 trackSetName       The name of this track archive set. A directory will be created
                    in the archiveRoot location with the files or tables from the -t
                    or -f arguments.
