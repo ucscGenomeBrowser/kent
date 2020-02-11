@@ -6860,7 +6860,7 @@ _EOF_
     hgLoadChain -normScore -tIndex hg38 chainSelfRedo hg38.hg38.all.chain.gz
     checkTableCoords hg38 chainSelfRedo
 
-    # Rename to chainSelf and update lastz symlinks
+    # Rename to chainSelf and update lastz symlinks and downloads
     hgsql hg38 -e 'drop table chainSelf; drop table chainSelfLink;
                    rename table chainSelfRedo to chainSelf;
                    rename table chainSelfRedoLink to chainSelfLink;'
@@ -6868,6 +6868,16 @@ _EOF_
     rm lastz.self lastz.hg38
     ln -s lastzSelf.2020-01-27 lastz.self
     ln -s lastzSelf.2020-01-27 lastz.hg38
+    cd /hive/data/genomes/hg38/bed/lastzSelf.2020-01-27/axtChain
+    cp /hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/axtChain/README.txt .
+    $EDITOR README.txt
+    md5sum hg38.hg38.all.chain.gz > md5sum.txt
+    # Make sure that the old download dir has only symlinks, no real files, then remove and rebuild.
+    ls -lR /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/vsSelf/
+    rm -r /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/vsSelf/
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/vsSelf/
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/vsSelf/
+    ln -s /hive/data/genomes/hg38/bed/lastzSelf.2020-01-27/axtChain/{README.txt,hg38.hg38.all.chain.gz,md5sum.txt} .
 
 
 #########################################################################
