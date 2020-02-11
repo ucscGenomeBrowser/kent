@@ -2791,7 +2791,7 @@ SEQ2_LAP=0
 BASE=/hive/data/genomes/hg38/bed/lastzSelf.2014-01-25
 TMPDIR=/dev/shm
 '_EOF_'
-    # << happy emacs
+_EOF_
 
     time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
 	-verbose=2 \
@@ -6663,4 +6663,211 @@ of mammalian chromosme architecture. (https://www.biorxiv.org/content/10.1101/63
 mkdir -p /gbdb/hg38/bbi/hic
 cd /gbdb/hg38/bbi/hic
 ln -s /hive/data/genomes/hg38/bed/hic/* .
+
+
+#########################################################################
+# LASTZ Self/hg38 (DONE 2020-02-11 - Angie)
+    # RM #24695
+    # Re-run with updated process to include pslDropOverlap .
+    # Use "contigs" from previous run lastzSelf.2014-01-25/hg38.self.2bit
+
+    screen -S hg38Self -t hg38Self
+    mkdir /hive/data/genomes/hg38/bed/lastzSelf.2020-01-27
+    cd /hive/data/genomes/hg38/bed/lastzSelf.2020-01-27
+    cat << _EOF_ > DEF
+# human vs human with mouse defaults
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+
+# TARGET: Human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/hg38.self.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/hg38.self.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Human hg38
+SEQ2_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ2_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ2_CTGDIR=/hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/hg38.self.2bit
+SEQ2_CTGLEN=/hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/hg38.self.chrom.sizes
+SEQ2_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzSelf.2020-01-27
+TMPDIR=/dev/shm
+_EOF_
+
+    # NOTE FOR NEXT TIME: use -chainMinScore=10000 (at least), not 3000
+
+    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -stop=net >& do.log &
+    tail -f do.log
+
+
+    # After two days, 4 jobs are running, one of which (part014.lst vs itself) crashed with
+    # out-of-mem error.  After 3 days, 3 jobs completed but part014.lst runs lastz out of mem.
+    # Split part014.lst up into components, run on hgwdev (more mem).
+    mkdir /hive/data/genomes/hg38/bed/lastzSelf.2020-01-27/run.blastz/part014
+    cd /hive/data/genomes/hg38/bed/lastzSelf.2020-01-27/run.blastz/part014
+    mkdir psl
+    cp /dev/null jobList
+    for t in $(cat ../tParts/part014.lst); do
+      tBase=$(basename $t)
+      for q in $(cat ../tParts/part014.lst); do
+        qBase=$(basename $q)
+        echo "$HOME/kent/src/hg/utils/automation/blastz-run-ucsc -outFormat psl -dropSelf $t $q ../../DEF {check out exists psl/${tBase}_${qBase}.psl }" >> jobList
+      done
+    done
+    para create jobList
+    para try, check, push, etc,
+    # 94 of the jobs ran for 12s or less.  The other 6 are chr{X_Y}_00 vs. self & each other,
+    # chr13_16 vs self and chr16_03 vs self.  All but chr16_03 vs self completed in < 6 minutes.
+#Completed: 99 of 100 jobs
+#Crashed: 1 jobs
+#CPU time in finished jobs:       1559s      25.98m     0.43h    0.02d  0.000 y
+#IO & Wait Time:                   248s       4.14m     0.07h    0.00d  0.000 y
+#Average job time:                  18s       0.30m     0.01h    0.00d
+#Longest finished job:             321s       5.35m     0.09h    0.00d
+#Submission to last job:         94681s    1578.02m    26.30h    1.10d
+
+    # Dang, chr16_03 vs. self still runs out of mem even on hgwdev.
+    mkdir /hive/data/genomes/hg38/bed/lastzSelf.2020-01-27/run.blastz/part014/chr16_03
+    cd /hive/data/genomes/hg38/bed/lastzSelf.2020-01-27/run.blastz/part014/chr16_03
+    twoBitToFa /hive/data/genomes/hg38/bed/lastzSelf.2014-01-25/hg38.self.2bit:chr16_03:0-1689648 \
+      chr16_03.fa
+    faSplit -lift=chr16_03.lift size chr16_03.fa 169000 chr16_03_split_
+    faToTwoBit chr16_03_split_*.fa chr16_03_split.2bit
+    twoBitInfo chr16_03_split.2bit stdout | sort -k2nr > chr16_03_split.sizes
+    sed -re 's@CTGDIR.*@CTGDIR=/hive/data/genomes/hg38/bed/lastzSelf.2020-01-27/run.blastz/part014/chr16_03/chr16_03_split.2bit@;
+             s@CTGLEN.*@CTGLEN=/hive/data/genomes/hg38/bed/lastzSelf.2020-01-27/run.blastz/part014/chr16_03/chr16_03_split.sizes@;' \
+      ../../../DEF > DEF.split
+    mkdir psl
+    cwd=$(pwd)
+    while read tBase tSize; do
+      while read qBase qSize; do
+        echo "$HOME/kent/src/hg/utils/automation/blastz-run-ucsc -outFormat psl -dropSelf $cwd/chr16_03_split.2bit:$tBase:0-$tSize $cwd/chr16_03_split.2bit:$qBase:0-$qSize DEF.split {check out exists psl/${tBase}_${qBase}.psl}"
+      done < chr16_03_split.sizes
+    done < chr16_03_split.sizes > jobList
+    para create jobList
+    para try, check, push, etc,
+#Completed: 100 of 100 jobs
+#CPU time in finished jobs:     142614s    2376.89m    39.61h    1.65d  0.005 y
+#IO & Wait Time:                   167s       2.79m     0.05h    0.00d  0.000 y
+#Average job time:                1428s      23.80m     0.40h    0.02d
+#Longest finished job:           22861s     381.02m     6.35h    0.26d
+#Submission to last job:         22874s     381.23m     6.35h    0.26d
+    # 6 hours for chr16_03_split_00 vs. itself.  ~4.5h for _09 vs _00.
+    cat psl/*.psl \
+    | liftUp -nohead -type=.psl stdout \
+        chr16_03.lift error stdin \
+    | liftUp -nohead -type=.psl -pslQ \
+        ../psl/hg38.self.2bit:chr16_03:0-1689648_hg38.self.2bit:chr16_03:0-1689648.psl \
+        chr16_03.lift error stdin
+
+    cd ..
+    cat psl/* > ../../psl/part014.lst/part014.lst_part014.lst.psl
+
+    # Make run.time file or doBlastzChainNet.pl won't continue:
+    cd /hive/data/genomes/hg38/bed/lastzSelf.2020-01-27/run.blastz
+    para time >& run.time
+
+    # Resume doBlastzChainNet.pl:
+    cd /hive/data/genomes/hg38/bed/lastzSelf.2020-01-27
+    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -continue=cat -stop=net >& do2.log &
+    tail -f do2.log
+#Batch failed after 4 tries on chain.csh part016.lst chain/part016.lst.chain
+#Command failed:
+#ssh -x -o 'StrictHostKeyChecking = no' -o 'BatchMode = yes' hgwdev nice /hive/data/genomes/hg38/bed/lastzSelf.2020-01-27/axtChain/run/doChainRun.csh
+
+    cd /hive/data/genomes/hg38/bed/lastzSelf.2020-01-27/axtChain/run
+    para problems
+    # mostly these:
+#errAbort re-entered due to out-of-memory condition. Exiting.
+    # one job made it through errAbort:
+#needLargeMem: Out of memory - request size 564838920 bytes, errno: 12
+    para time
+#Completed: 59 of 68 jobs
+#Crashed: 9 jobs
+#CPU time in finished jobs:      24727s     412.12m     6.87h    0.29d  0.001 y
+#IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+#Average job time:                 409s       6.82m     0.11h    0.00d
+#Longest finished job:            2350s      39.17m     0.65h    0.03d
+#Submission to last job:          2462s      41.03m     0.68h    0.03d
+    para crashed
+#chain.csh part012.lst {check out line+ chain/part012.lst.chain}
+#chain.csh part017.lst {check out line+ chain/part017.lst.chain}
+#chain.csh part016.lst {check out line+ chain/part016.lst.chain}
+#chain.csh part015.lst {check out line+ chain/part015.lst.chain}
+#chain.csh part014.lst {check out line+ chain/part014.lst.chain}
+#chain.csh hg38.self.2bit:chr1_10: {check out line+ chain/hg38.self.2bit:chr1_10:.chain}
+#chain.csh hg38.self.2bit:chr10_05: {check out line+ chain/hg38.self.2bit:chr10_05:.chain}
+#chain.csh hg38.self.2bit:chr7_00: {check out line+ chain/hg38.self.2bit:chr7_00:.chain}
+
+    # Run the jobs outside of parasol (~11h):
+    csh -efx chain.csh part012.lst chain/part012.lst.chain &
+    csh -efx chain.csh part017.lst chain/part017.lst.chain &
+    csh -efx chain.csh part016.lst chain/part016.lst.chain &
+    csh -efx chain.csh part015.lst chain/part015.lst.chain &
+    csh -efx chain.csh part014.lst chain/part014.lst.chain &
+    csh -efx chain.csh hg38.self.2bit:chr1_10: chain/hg38.self.2bit:chr1_10:.chain &
+    csh -efx chain.csh hg38.self.2bit:chr10_05: chain/hg38.self.2bit:chr10_05:.chain &
+    csh -efx chain.csh hg38.self.2bit:chr7_00: chain/hg38.self.2bit:chr7_00:.chain &
+    csh -efx chain.csh hg38.self.2bit:chr16_08: chain/hg38.self.2bit:chr16_08:.chain &
+
+    # Resume doBlastzChainNet.pl again:
+    cd /hive/data/genomes/hg38/bed/lastzSelf.2020-01-27
+    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+        -continue=chainMerge -stop=net >& do3.log &
+    tail -f do3.log
+# *** All done !  Elapsed time: 19m11s
+
+    # Load track w/new name chainSelfRedo to compare to existing chainSelf:
+    hgLoadChain -normScore -tIndex hg38 chainSelfRedo axtChain/hg38.hg38.all.chain.gz
+
+    # No idea why but somehow the liftUp seems not to have worked for part012 and part017,
+    # so the all.chain had chr22_31, chr8_01 etc.  :b  run again again.
+    cd /hive/data/genomes/hg38/bed/lastzSelf.2020-01-27/axtChain/run
+    mv chain/part012.lst.chain{,.bak}
+    mv chain/part017.lst.chain{,.bak}
+    csh -efx chain.csh part012.lst chain/part012.lst.chain >& part012.log &
+    csh -efx chain.csh part017.lst chain/part017.lst.chain >& part017.log &
+    # Those completed successfully.  Dunno why the earlier ones didn't get lifted.
+    cd ..
+    mv hg38.hg38.all{,.oopsPartUnlifted}.chain.gz
+    # Reconstruct hg38.hg38.all.chain.gz (the chainMerge step is just this command):
+    find /hive/data/genomes/hg38/bed/lastzSelf.2020-01-27/axtChain/run/chain -name "*.chain" \
+    | chainMergeSort -inputList=stdin \
+    | nice gzip -c \
+      > /hive/data/genomes/hg38/bed/lastzSelf.2020-01-27/axtChain/hg38.hg38.all.chain.gz
+
+    # NOTE FOR NEXT TIME: this filtering step will be unnecessary when -minScore=10000 is used
+    # from the beginning.
+    # Filter to minScore of 10000 (too much fluff with -minScore=3000) per Jim (see #24695)
+    cd /hive/data/genomes/hg38/bed/lastzSelf.2020-01-27/axtChain
+    mv hg38.hg38.all.chain.gz hg38.hg38.all.unfiltered.chain.gz
+    chainFilter hg38.hg38.all.unfiltered chain.gz -minScore=10000 \
+    | gzip -c > hg38.hg38.all.chain.gz
+    hgLoadChain -normScore -tIndex hg38 chainSelfRedo hg38.hg38.all.chain.gz
+    checkTableCoords hg38 chainSelfRedo
+
+    # Rename to chainSelf and update lastz symlinks
+    hgsql hg38 -e 'drop table chainSelf; drop table chainSelfLink;
+                   rename table chainSelfRedo to chainSelf;
+                   rename table chainSelfRedoLink to chainSelfLink;'
+    cd /hive/data/genomes/hg38/bed
+    rm lastz.self lastz.hg38
+    ln -s lastzSelf.2020-01-27 lastz.self
+    ln -s lastzSelf.2020-01-27 lastz.hg38
+
+
 #########################################################################
