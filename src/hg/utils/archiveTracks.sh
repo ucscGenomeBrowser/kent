@@ -22,7 +22,8 @@ Usage: `basename $0` [-hcbtfv] archiveRoot database(s) trackArchiveName
 
 Required Positional arguments:
 archiveRoot        The root location of the backup directory (/hive/data/inside/archive/).
-database(s)        A single database or double quoted list of databases to back up
+database(s)        A single database, a double quoted list of databases, or a file of db
+                   names to back up
 trackSetName       The name of this track archive set. A directory will be created
                    in the archiveRoot location with the files or tables from the -t
                    or -f arguments.
@@ -181,8 +182,8 @@ doBackup()
 
 printCheck()
 {
-    db=$1
-    archRoot="`realpath ${archiveDir}`/${db}/${trackSetName}/${versionName}"
+    currentDb=$1
+    archRoot="`realpath ${archiveDir}`/${currentDb}/${trackSetName}/${versionName}"
     printf "check mode: moving files to the following directory:\n"
     printf "%s\n" "${archRoot}"
     printf "\n"
@@ -192,7 +193,7 @@ printCheck()
         for tbl in $(cat "${tables}")
         do
             printf "${archRoot}/${tbl}.gz\n" ""
-            printf "${archRoot}/${tbl}.tab.tab.sql\n" ""
+            printf "${archRoot}/${tbl}.trackDb.tab.sql\n" ""
             printf "${archRoot}/${tbl}.sql\n" ""
         done
     else
@@ -201,7 +202,7 @@ printCheck()
         do
             printf "${archRoot}/${tbl}.gz\n" ""
             printf "${archRoot}/${tbl}.trackDb.tab.gz\n" ""
-            printf "${archRoot}/${tbl}.sqk\n" ""
+            printf "${archRoot}/${tbl}.sql\n" ""
         done
     fi
     printf "\n"
@@ -313,7 +314,7 @@ then
     then
         printf "Archiving to %s\n" "${archiveDir}" 1>&2
     fi
-    if [ "${check}" != "TRUE" ]
+    if [ "${checkOnly}" != "TRUE" ]
     then
         mkdir -p "${archiveDir}"
     fi
