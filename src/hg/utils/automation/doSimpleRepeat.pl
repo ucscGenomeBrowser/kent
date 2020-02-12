@@ -347,18 +347,26 @@ _EOF_
     );
   }
   $bossScript->add(<<_EOF_
-awk '{if (\$5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
-awk 'BEGIN{OFS="\\t"}{name=substr(\$16,0,16);\$4=name;printf "%s\\n", \$0}' \\
-   simpleRepeat.bed | sort -k1,1 -k2,2n > simpleRepeat.bed16.bed
-twoBitInfo $unmaskedSeq stdout | sort -k2nr > tmp.chrom.sizes
-bedToBigBed -tab -type=bed4+12 -as=\$HOME/kent/src/hg/lib/simpleRepeat.as \\
-   simpleRepeat.bed16.bed tmp.chrom.sizes simpleRepeat.bb
-rm -f tmp.chrom.sizes simpleRepeat.bed16.bed tmp.chrom.sizes
+if ( -s simpleRepeat.bed ) then
+  awk '{if (\$5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+  awk 'BEGIN{OFS="\\t"}{name=substr(\$16,0,16);\$4=name;printf "%s\\n", \$0}' \\
+    simpleRepeat.bed | sort -k1,1 -k2,2n > simpleRepeat.bed16.bed
+  twoBitInfo $unmaskedSeq stdout | sort -k2nr > tmp.chrom.sizes
+  bedToBigBed -tab -type=bed4+12 -as=\$HOME/kent/src/hg/lib/simpleRepeat.as \\
+    simpleRepeat.bed16.bed tmp.chrom.sizes simpleRepeat.bb
+  rm -f tmp.chrom.sizes simpleRepeat.bed16.bed tmp.chrom.sizes
+else
+  echo empty simpleRepeat.bed - no repeats found
+endif
 _EOF_
   );
   if ($chromBased) {
     $bossScript->add(<<_EOF_
-splitFileByColumn trfMask.bed trfMaskChrom/
+if ( -s trfMask.bed ) then
+  splitFileByColumn trfMask.bed trfMaskChrom/
+else
+  echo empty trfMask.bed - no repeats found
+endif
 _EOF_
     );
   }
@@ -379,10 +387,14 @@ sub doLoad {
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-hgLoadBed $db simpleRepeat simpleRepeat.bed \\
+if ( -s "simpleRepeat.bed" ) then
+  hgLoadBed $db simpleRepeat simpleRepeat.bed \\
         -sqlTable=\$HOME/kent/src/hg/lib/simpleRepeat.sql
-featureBits $db simpleRepeat >& fb.simpleRepeat
-cat fb.simpleRepeat
+  featureBits $db simpleRepeat >& fb.simpleRepeat
+  cat fb.simpleRepeat
+else
+  echo empty simpleRepeat.bed - no repeats found
+endif
 _EOF_
   );
   $bossScript->execute();
@@ -398,8 +410,10 @@ sub doCleanup {
   my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-rm -fr TrfPart/*
-rm -fr TrfPart
+if ( -d "TrfPart" || -l "TrfPart" ) then
+  rm -fr TrfPart/*
+  rm -fr TrfPart
+endif
 if (-d /hive/data/genomes/$db/TrfPart) then
   rmdir /hive/data/genomes/$db/TrfPart
 endif

@@ -12,33 +12,34 @@
   <div class="row">
     <div class="col-sm-3">
       <ul>
+        <li><a href="#2020">2020 News</a></li>
         <li><a href="#2019">2019 News</a></li>
         <li><a href="#2018">2018 News</a></li>
         <li><a href="#2017">2017 News</a></li>
         <li><a href="#2016">2016 News</a></li>
-        <li><a href="#2015">2015 News</a></li>
       </ul>
     </div>
     <div class="col-sm-3">
       <ul>
+        <li><a href="#2015">2015 News</a></li>
         <li><a href="#2014">2014 News</a></li>
         <li><a href="#2013">2013 News</a></li>
         <li><a href="#2012">2012 News</a></li>
         <li><a href="#2011">2011 News</a></li>
-        <li><a href="#2010">2010 News</a></li>
       </ul>
     </div>
     <div class="col-sm-3">
       <ul>
+        <li><a href="#2010">2010 News</a></li>
         <li><a href="#2009">2009 News</a></li>
         <li><a href="#2008">2008 News</a></li>
         <li><a href="#2007">2007 News</a></li>
         <li><a href="#2006">2006 News</a></li>
-        <li><a href="#2005">2005 News</a></li>
       </ul>
     </div>
     <div class="col-sm-3">
       <ul>
+        <li><a href="#2005">2005 News</a></li>
         <li><a href="#2004">2004 News</a></li>
         <li><a href="#2003">2003 News</a></li>
         <li><a href="#2002">2002 News</a></li>
@@ -48,8 +49,101 @@
   </div>
 </div>
 
-<!-- ============= 2019 archived news ============= -->
-<a name="2019"></a>
+<!-- ============= 2020 archived news ============= -->
+<a name="2020"></a>
+
+<a name="021120"></a>
+<h2>Feb. 11, 2020 &nbsp;&nbsp; New GENCODE gene tracks: Human V33 (hg19/hg38) - Mouse M24 
+(mm10)</h2>
+<p>
+We are pleased to announce new GENCODE Gene annotation tracks, which correspond
+to <a href="http://www.ensembl.info/2019/10/17/whats-coming-up-in-ensembl-release-99/"
+target="_blank">Ensembl 99</a>, for three assemblies: <a target="_blank" 
+href="../../cgi-bin/hgTrackUi?db=hg19&c=chr21&g=wgEncodeGencodeV33lift37">hg19/GRCh37</a>, 
+<a target="_blank" href="../../cgi-bin/hgTrackUi?db=hg38c=chr1&g=wgEncodeGencodeV33">hg38/GRCh38</a>, 
+and <a target="_blank" href="../../cgi-bin/hgTrackUi?db=mm10&c=chr12&g=wgEncodeGencodeVM24">mm10/GRCm38</a>.
+For human, the GENCODE V33 annotations were mapped to hg38/GRCh38 and then back-mapped 
+to the hg19/GRCh37 assembly. For all three assemblies, the gene sets contain the following 
+tracks:</p>
+<ul>
+  <li>Basic - a subset of the <em>Comprehensive set</em>.</li>
+  <li>Comprehensive - all GENCODE coding and non-coding transcript annotations, including
+      polymorphic pseudogenes. This includes both manual and automatic annotations.</li>
+  <li>Pseudogenes - all annotations except polymorphic pseudogenes.</li></ul>
+<p>
+The hg38 and mm10 assemblies also include the following tracks that are not available on hg19:
+</p>
+<ul>
+  <li>2-way Pseudogenes - pseudogenes predicted by both the Yale Pseudopipe and UCSC
+      Retrofinder pipelines.</li>
+  <li>PolyA - polyA signals and sites manually annotated on the genome based on transcribed
+      evidence (ESTs and cDNAs) of 3' end of transcripts containing at least 3 A's not matching the
+      genome.</li></ul>
+<p>
+Details on each release can be found on the <a target="_blank" 
+href="https://www.gencodegenes.org/">GENCODE site</a>. This includes <a target="_blank" 
+href="https://www.gencodegenes.org/human/stats.html">statistics on each release</a>.
+<p>We would like to thank the <a target="_blank" 
+href="https://www.gencodegenes.org/pages/gencode.html">GENCODE project</a> for providing these 
+annotations. We would also like to thank Mark Diekhans and Lou Nassar for the development and 
+release of these tracks.</p>
+
+<a name="021020"></a>
+<h2>Feb. 10 2020 &nbsp;&nbsp; Updated data for NCBI RefSeq tracks for human assemblies hg19 
+and hg38</h2>
+<p>
+We are happy to release the updated NCBI RefSeq Annotation Release 109.20190905 track on the
+Genome Browser. The NCBI RefSeq Genes composite track shows human protein-coding and 
+non-protein-coding genes taken from the NCBI RNA reference sequences collection (RefSeq). 
+This update adds more than 500 new gene entries to the collection of nearly 167,000 annotations.
+More information can be found on the track description pages for these composite
+tracks for 
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=refSeqComposite">hg19</a> and 
+<a href="../../cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite">hg38</a>.</p>
+
+<p>
+We would like to thank NCBI and the RefSeq Annotation database for collecting and curating
+this data. We would also like to thank Hiram Clawson and Daniel Schmelter for their role
+creating, documenting, and reviewing these tracks.</p>
+
+<a name="020720"></a>
+<h2>Feb. 7, 2020 &nbsp;&nbsp; New and updated Variants in Papers tracks: Avada variants 
+(hg19) & Mastermind variants (hg19, hg38)</h2>
+<p>
+We are pleased to announce a new track, Avada Variants, now available on hg19. Additionally, 
+we have updated the Mastermind Variants track and expanded it to hg38.</p>
+
+<p class="text-center">
+  <img class='text-center' src="../images/variantsInPapersNewsArch2020.png"  width='80%' 
+alt="Example of AVADA and Mastermind tracks">
+</p>
+
+<h3>Avada Variants</h3>
+<p>
+The Avada Variants track shows the genomic positions of variants in the <a target="_blank"
+href="http://bejerano.stanford.edu/AVADA/">AVADA database</a>. AVADA is a database of variants 
+built by machine learning software that analyzes full text research articles in PDF format 
+to find genes and variants that look most relevant for genetic diagnosis.</p>
+<p>
+Additional information can be found on the <a target="_blank" 
+href="../../cgi-bin/hgTrackUi?db=hg19&g=avada">track description</a> page as well as the 
+<a target="_blank" href="https://doi.org/10.1038/s41436-019-0643-6">AVADA publication</a>.</p>
+
+<h3>Mastermind Variants</h3>
+<p>
+The <a href="#032619">Mastermind Variants</a> track is now available for the hg38 assembly 
+alongside hg19. Both tracks will now be updated on a quarterly cycle. The track is also 
+now filtered to make the data more specific by removing longer non-indels that are 
+not directly mentioned in the text.</p>
+<p>
+Additional information on Mastermind Variants can be found in the <a target="_blank" 
+href="../../cgi-bin/hgTrackUi?db=hg19&g=mastermind">track description page</a>.</p>
+<p>
+We would like to thank Gill Bejerano and Johannes Birgmeier for making the AVADA data
+available, as well as Genomenon for the Mastermind track. We would also like to thank
+Maximilian Haeussler, Lou Nassar, and the rest of the Genome Browser team for the 
+creation of these tracks.</p>
+
 <a name="012020"></a>
 <h2>Jan. 20, 2020 &nbsp;&nbsp; 1000 Genomes Project Phase 3 variants now available for human
   (GRCh38/hg38)</h2>
@@ -70,12 +164,14 @@ et al.</a>).</p>
 <p>
 Variants were called on the autosomes (chromosomes 1 through 22) and on the Pseudo-Autosomal Regions
 (PARs) of chromosome X. Therefore this track has no annotations on alternate haplotype sequences,
-fix patches, chromosome Y and the non-PAR portion (the majority) of chromosome X.</p>
+fix patches, chromosome Y, or the non-PAR portion (the majority) of chromosome X.</p>
 <p>
 We would like to thank the IGSR for making these variant calls freely available. We would also like
 to thank Angie Hinrichs and Jairo Navarro for their efforts in creating and reviewing this track.
 </p>
 
+<!-- ============= 2019 archived news ============= -->
+<a name="2019"></a>
 <a name="121319"></a>
 <h2>Dec. 13, 2019 &nbsp;&nbsp; New dbSNP pipeline: dbSNP b153 release, bigDbSnp track type</h2>
 <p>

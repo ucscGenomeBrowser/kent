@@ -1487,6 +1487,9 @@ There are no extra options that can appear on the type hic line.
     <li>If a column/fieldName contains negative values, then the default filter value of 0 
     will filter out items with negative values. If that is not the desired behavior then 
     you should specify a value</li>
+    <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
+    type <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a 
+    &quot;.&quot; (for non-extended bigBed tracks) is required
     <li>By default, all bed tracks that are at least bed5 will have a score filter. 
     Enabling any of the <code>filter*.&lt;fieldName&gt;</code> filter settings will disable 
     that default filter</li></ul></P>
@@ -1560,6 +1563,9 @@ There are no extra options that can appear on the type hic line.
     <li><code>filterText.&lt;fieldName&gt;</code> will treat all fields as strings. That is to say,
     it can be enabled on entirely numerical fields, such as <code>chromStart</code>, if one is 
     looking to filter numerical values <strong>as text</strong></li>
+    <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
+    type <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a
+    &quot;.&quot; (for non-extended bigBed tracks) is required
     <li>By default, all bed tracks that are at least bed5 will have a score filter. Enabling 
     any of the <code>filter*.&lt;fieldName&gt;</code> filter settings will disable 
     that default filter</li></ul></P>
@@ -1634,6 +1640,9 @@ There are no extra options that can appear on the type hic line.
     <li>By default, all bed tracks that are at least bed5 will have a score filter. Enabling any 
     of the <code>filter*.&lt;fieldName&gt;</code> filter settings will disable that default 
     filter</li>
+    <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
+    type <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a
+    &quot;.&quot; (for non-extended bigBed tracks) is required
     <li>The default label can be customized with the <a 
     href="#filterLabel"><code>filterLabel.&lt;fieldName&gt;</code></a> parameter</li></ul></P>
     <P><B>Examples:</B></P>
@@ -5006,11 +5015,11 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
 
 <DIV class="hideEmptySubtracks"><span class="types compositeTrack"></span>
 <div class="format">
-        <code>hideEmptySubtracks &lt;on/default&gt; [multiBed.bb multiBedSources.tab]</code></div>
+        <code>hideEmptySubtracks &lt;on/off&gt; [multiBed.bb multiBedSources.tab]</code></div>
     <P>When you have many subtracks in a composite track, it may be useful to limit the display
     to only those with data in the current viewing window.  This track setting produces a
     checkbox on the track configuration page allowing the user to enable or disable this feature.
-    if <code>default</code> is specified, the feature is on by default (the checkbox is checked).
+    if <code>on</code> is specified, the feature is on by default (the checkbox is checked).
     </p>
     <p>
     For extremely large composites, especially those where each subtrack may be sparse,

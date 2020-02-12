@@ -142,6 +142,12 @@ hFreeConn(&conn);
 return ci;
 }
 
+boolean isMito(char *chrom)
+/* Return True if chrom is chrM or chrMT */
+{
+return sameString(chrom, "chrM") || sameString(chrom, "chrMT");
+}
+
 struct chromInfo *hGetChromInfo(char *db, char *chrom)
 /* Get chromInfo for named chromosome (case-insens.) from db.
  * Return NULL if no such chrom. */
@@ -4143,16 +4149,23 @@ if (trackHubDatabase(db))
 struct trackDb *tdbList = NULL;
 
 boolean doCache = trackDbCacheOn();
+char *tdbPathString = hTrackDbPath();
 
 if (doCache)
     {
-    char *table = hTrackDbPath();
+    struct slName *tableList = hTrackDbList();
 
     struct sqlConnection *conn = hAllocConn(db);
-    time_t tableTime = sqlTableUpdateTime(conn, table);
+    time_t newestTime = 0;
+    for(; tableList; tableList = tableList->next)
+        {
+        time_t tableTime = sqlTableUpdateTime(conn, tableList->name);
+        newestTime = tableTime > newestTime ? tableTime : newestTime;
+        }
+
     hFreeConn(&conn);
 
-    struct trackDb *cacheTdb = trackDbCache(db, tableTime);
+    struct trackDb *cacheTdb = trackDbCache(db, tdbPathString, newestTime);
 
     if (cacheTdb != NULL)
         return cacheTdb;
@@ -4165,7 +4178,7 @@ tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, db);
 
 if (doCache)
-    trackDbCloneTdbListToSharedMem(db, tdbList, memCheckPoint());
+    trackDbCloneTdbListToSharedMem(db, tdbPathString, tdbList, memCheckPoint());
 
 return tdbList;
 }

@@ -2388,7 +2388,7 @@ static char* translateCds(char* chrom, char* cds, unsigned options)
 {
 int cdsLen = strlen(cds);
 char *prot = needMem((cdsLen/3)+1);
-boolean isChrM = sameString(chrom, "chrM");
+boolean isChrM = isMito(chrom);
 int iCds, iProt;
 for (iCds = 0, iProt = 0; iCds < cdsLen; iCds+=3, iProt++)
     prot[iProt] = translateCodon(isChrM, cds+iCds, (iCds == cdsLen-3), options);

@@ -13,12 +13,14 @@ dataVersion /gbdb/$D/ncbiRefSeq/ncbiRefSeqVersion.txt
 priority 2
 dbPrefixUrls hg="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" dm="http://flybase.org/reports/$$" ce="http://www.wormbase.org/db/gene/gene?name=$$" rn="https://rgd.mcw.edu/rgdweb/search/search.html?term=$$" sacCer="https://www.yeastgenome.org/locus/$$" danRer="https://zfin.org/$$" mm="http://www.informatics.jax.org/marker/$$" xenTro="https://www.xenbase.org/gene/showgene.do?method=display&geneId=$$"
 dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer="ZFIN" mm="MGI" xenTro="XenBase"
+pennantIcon Updated red ../goldenPath/newsarch.html#020720b "updated Feb. 7, 2020"
+
 
         track ncbiRefSeq
         parent refSeqComposite off
         color 12,12,120
         shortLabel RefSeq All
-        longLabel NCBI RefSeq genes, curated and predicted sets (NM_*, XM_*, NR_*, XR_*, NP_* or YP_*)
+        longLabel NCBI RefSeq genes, curated and predicted (NM_*, XM_*, NR_*, XR_*, NP_*, YP_*)
         idXref ncbiRefSeqLink mrnaAcc name
         baseColorUseCds given
         baseColorDefault genomicCodons
@@ -48,7 +50,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         color 32,32,32
         parent refSeqComposite off
         shortLabel RefSeq Other
-        longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, NP_* or YP_*)
+        longLabel NCBI RefSeq Other Annotations (not NM_*, NR_*, XM_*, XR_*, NP_* or YP_*)
         priority 4
         searchIndex name
         searchTrix /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.ix

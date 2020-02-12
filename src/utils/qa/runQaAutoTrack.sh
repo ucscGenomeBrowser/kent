@@ -71,20 +71,6 @@ then
 	exit 1
 # Run qaAutoTrack.sh for different tracks depending on the day of the week
 else
-	if [ -e  "$logDir/*.txt" ]
-	then
-		# Identify log files that are greater than 6 months old.
-		# $1, $2, $3, and $4 are the db, table, date, and time respectively.
-		# $5 is the file extension (txt).
-		oldLogFiles=$(ls $logDir/*.txt | awk -v ymdOld=$logTooOld -F'.' '$3 <= ymdOld {print $1"."$2"."$3"."$4"."$5}')
-		# Remove these old log files
-		# Prevents log file directory from becoming overstuffed with files
-		for file in $(echo $oldLogFiles)
-		do
-			rm $file
-		done
-	fi
-
 	if [[ $dayOfWeek == "Monday" ]]
 	then
 		qaAutoTrack.sh hg19 isca 

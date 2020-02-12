@@ -1233,12 +1233,12 @@ printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "browseFiles");
 
-cgiMakeHiddenVar("clearSearch", "0");
-char *clearSearch = cartOptionalString(cart, "clearSearch");
-if (clearSearch && sameString(clearSearch,"1"))
+cgiMakeHiddenVar("clearRestriction", "0");
+char *clearRestriction = cartOptionalString(cart, "clearRestriction");
+if (clearRestriction && sameString(clearRestriction,"1"))
     {
     cartSetString(cart, "cdwFile_filter", "");  // reset file filter to empty string
-    cartRemove(cart, "clearSearch");
+    cartRemove(cart, "clearRestriction");
     }
 
 // DEBUG REMOVE
@@ -1278,10 +1278,7 @@ char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s",
     cartSidUrlString(cart) );
 char *where = cartUsualString(cart, "cdwFile_filter", "");
-if (!isEmpty(where))
-    {
-    printf("<BR>Restricting files to where %s. ", where);
-    }
+
 struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "file_name", wrapFileName);
 hashAdd(wrappers, "ucsc_db", wrapTrackNearFileName);

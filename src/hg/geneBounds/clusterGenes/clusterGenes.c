@@ -56,6 +56,9 @@ errAbort(
   "   -conflicted - detect conflicted loci. Conflicted loci are loci that\n"
   "    contain genes that share not sequence.  This option greatly increases\n"
   "    size of output file.\n"
+  "   -minOverlappingBases=N - require at least N bases to overlap to merge two\n"
+  "    transcripts.  This is done on a per-exon basis, not the total overlap.\n"
+  "    The default is 1.\n"
   "\n"
   "The cdsConflicts and exonConflicts columns contains `y' if the cluster has\n"
   "conficts. A conflict is a cluster where all of the genes don't share exons. \n"
@@ -74,15 +77,17 @@ static struct optionSpec options[] = {
    {"joinContained", OPTION_BOOLEAN},
    {"conflicted", OPTION_BOOLEAN},
    {"ignoreStrand", OPTION_BOOLEAN},
+   {"minOverlappingBases", OPTION_INT},
    {NULL, 0},
 };
 
 /* from command line  */
-boolean gUseCds;
-boolean gTrackNames;
-boolean gJoinContained = FALSE;
-boolean gDetectConflicted = FALSE;
-boolean gIgnoreStrand = FALSE;
+static boolean gUseCds;
+static boolean gTrackNames;
+static boolean gJoinContained = FALSE;
+static boolean gDetectConflicted = FALSE;
+static boolean gIgnoreStrand = FALSE;
+static int gMinOverlappingBases = 1;
 
 struct track
 /*  Object representing a track. */
@@ -672,53 +677,64 @@ freez(pCm);
 return clusterList;
 }
 
-void clusterMakerAddExon(struct clusterMaker *cm, struct track *track, struct genePred *gp,
-                         int exonStart, int exonEnd, struct dlNode **oldNodePtr)
-/* Add a gene exon to clusterMaker. */
+static bool overlapingBases(int exonStart, int exonEnd, struct dlNode *node)
+/* check if the overlap with cluster is over threshold  */
 {
-struct dlNode *oldNode = *oldNodePtr;
+struct cluster *cluster = node->val;
+int maxStart = max(exonStart, cluster->txStart);
+int minEnd = min(exonEnd, cluster->txEnd);
+return (minEnd - maxStart) >= gMinOverlappingBases;
+}
+
+static struct dlNode *clusterMakerAddExonMerge(struct clusterMaker *cm, int exonStart, int exonEnd, struct dlNode *currentNode)
+/* merge notes that overlap exon over threshold, return node */
+{
 struct binElement *bEl, *bList = binKeeperFind(cm->bk, exonStart, exonEnd);
-verbose(4, "  %s %d-%d\n", track->name, exonStart, exonEnd);
-if (bList == NULL)
+for (bEl = bList; bEl != NULL; bEl = bEl->next)
     {
-    if (oldNode == NULL)
+    struct dlNode *newNode = bEl->val;
+    if (newNode != currentNode)
         {
-        struct cluster *cluster = clusterNew();
-        oldNode = dlAddValTail(cm->clusters, cluster);
-        }
-    addExon(cm->bk, oldNode, exonStart, exonEnd, track, gp);
-    }
-else
-    {
-    for (bEl = bList; bEl != NULL; bEl = bEl->next)
-        {
-        struct dlNode *newNode = bEl->val;
-        if (newNode != oldNode)
+        if (currentNode == NULL)
             {
-            if (oldNode == NULL)
-                {
-                /* Add to existing cluster. */
-                oldNode = newNode;
-                }
-            else
-                {
-                /* Merge new cluster into old one. */
-                verbose(3, "Merging %p %p\n", oldNode, newNode);
-                mergeClusters(cm->bk, bEl->next, oldNode, newNode);
-                }
+            /* Add to existing cluster. */
+            currentNode = newNode;
+            }
+        else if (overlapingBases(exonStart, exonEnd, currentNode))
+            {
+            /* Merge new cluster into old one. */
+            verbose(3, "Merging %p %p\n", currentNode, newNode);
+            mergeClusters(cm->bk, bEl->next, currentNode, newNode);
             }
         }
-    addExon(cm->bk, oldNode, exonStart, exonEnd, track, gp);
-    slFreeList(&bList);
     }
-*oldNodePtr = oldNode;
+slFreeList(&bList);
+return currentNode;
+}
+
+static void clusterMakerAddExon(struct clusterMaker *cm, struct track *track, struct genePred *gp,
+                                int exonStart, int exonEnd, struct dlNode **currentNodePtr)
+/* Add a gene exon to clusterMaker. */
+{
+verbose(4, "  %s %d-%d\n", track->name, exonStart, exonEnd);
+struct dlNode *currentNode = clusterMakerAddExonMerge(cm, exonStart, exonEnd, *currentNodePtr);
+
+if ((currentNode == NULL) || !overlapingBases(exonStart, exonEnd, currentNode))
+    {
+    struct cluster *cluster = clusterNew();
+    currentNode = dlAddValTail(cm->clusters, cluster);
+    addExon(cm->bk, currentNode, exonStart, exonEnd, track, gp);
+    }
+else
+    addExon(cm->bk, currentNode, exonStart, exonEnd, track, gp);
+*currentNodePtr = currentNode;
 }
 
 void clusterMakerAdd(struct clusterMaker *cm, struct track *track, struct genePred *gp)
 /* Add gene to clusterMaker. */
 {
 int exonIx;
-struct dlNode *oldNode = NULL;
+struct dlNode *currentNode = NULL;
 
 /* Build up cluster list with aid of binKeeper.  For each exon look to see if
  * it overlaps an existing cluster.  If so put it into existing cluster,
@@ -733,7 +749,7 @@ if (gJoinContained)
     int start =(gUseCds) ? gp->cdsStart : gp->txStart;
     int end =(gUseCds) ? gp->cdsEnd : gp->txEnd;
     if (end > start) 
-        clusterMakerAddExon(cm, track, gp, start, end, &oldNode);
+        clusterMakerAddExon(cm, track, gp, start, end, &currentNode);
     }
 else
     {
@@ -741,7 +757,7 @@ else
         {
         int exonStart, exonEnd;
         if (gpGetExon(gp, exonIx, gUseCds, &exonStart, &exonEnd))
-            clusterMakerAddExon(cm, track, gp, exonStart, exonEnd, &oldNode);
+            clusterMakerAddExon(cm, track, gp, exonStart, exonEnd, &currentNode);
         }
     }
 }
@@ -994,6 +1010,7 @@ gTrackNames = optionExists("trackNames");
 gJoinContained = optionExists("joinContained");
 gDetectConflicted = optionExists("conflicted");
 gIgnoreStrand = optionExists("ignoreStrand");
+gMinOverlappingBases = optionInt("minOverlappingBases", gMinOverlappingBases);
 if (!gTrackNames)
     {
     if (argc < 4)

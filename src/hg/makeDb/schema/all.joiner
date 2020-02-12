@@ -144,13 +144,14 @@ set tupBel tupBel1
 set tupChi tupChi1
 set turTru turTru1,turTru2
 set vicPac vicPac1,vicPac2
+set wuhCor wuhCor1
 set xenLae xenLae2
 set xenTro xenTro1,xenTro2,xenTro3,xenTro7,xenTro9
 set xipMac xipMac1
 
 
 # Define all organism/assembly-specific databases.
-set gbd $ailMel,$allMis,$ambMex,$anaPla,$anoCar,$anoGam,$aotNan,$apiMel,$aplCal,$aptMan,$aquChr,$astMex,$balAcu,$bisBis,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$canFam,$calJac,$calMil,$casCan,$cavApe,$cavPor,$cb,$ce,$cebCap,$cerAty,$cerSim,$chiLan,$choHof,$chlSab,$chrPic,$ci,$cioSav,$colAng,$cotJap,$criGri,$danRer,$dasNov,$dipOrd,$dm,$dp,$droMult,$droYak,$eboVir,$echTel,$equCab,$eriEur,$eulFla,$eulMac,$felCat,$ficAlb,$fr,$fukDam,$gadMor,$galGal,$gasAcu,$galVar,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$jacJac,$latCha,$lepOcu,$loxAfr,$manPen,$macEug,$macNem,$macFas,$manLeu,$melGal,$melHap,$melInc,$melUnd,$mesAur,$micMur,$micOch,$mm,$monDom,$musFur,$myoLuc,$nanGal,$nanPar,$nasLar,$neoSch,$nomLeu,$ochPri,$octDeg,$orcOrc,$oreNil,$ornAna,$oryCun,$oryLat,$otoGar,$oviAri,$oxyTri,$panPan,$panManBai,$panTro,$papAnu,$papHam,$pelSin,$petMar,$perMan,$poeFor,$ponAbe,$priPac,$proCap,$proCoq,$pteVam,$rheMac,$rhiBie,$rhiRox,$rn,$rouAeg,$sacCer,$saiBol,$sarHar,$sorAra,$speTri,$staAur,$strPur,$susScr,$taeGut,$tarSyr,$tetNig,$thaSir,$triMan,$tupBel,$tupChi,$turTru,$vicPac,$xenLae,$xenTro,$xipMac
+set gbd $ailMel,$allMis,$ambMex,$anaPla,$anoCar,$anoGam,$aotNan,$apiMel,$aplCal,$aptMan,$aquChr,$astMex,$balAcu,$bisBis,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$canFam,$calJac,$calMil,$casCan,$cavApe,$cavPor,$cb,$ce,$cebCap,$cerAty,$cerSim,$chiLan,$choHof,$chlSab,$chrPic,$ci,$cioSav,$colAng,$cotJap,$criGri,$danRer,$dasNov,$dipOrd,$dm,$dp,$droMult,$droYak,$eboVir,$echTel,$equCab,$eriEur,$eulFla,$eulMac,$felCat,$ficAlb,$fr,$fukDam,$gadMor,$galGal,$gasAcu,$galVar,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$jacJac,$latCha,$lepOcu,$loxAfr,$manPen,$macEug,$macNem,$macFas,$manLeu,$melGal,$melHap,$melInc,$melUnd,$mesAur,$micMur,$micOch,$mm,$monDom,$musFur,$myoLuc,$nanGal,$nanPar,$nasLar,$neoSch,$nomLeu,$ochPri,$octDeg,$orcOrc,$oreNil,$ornAna,$oryCun,$oryLat,$otoGar,$oviAri,$oxyTri,$panPan,$panManBai,$panTro,$papAnu,$papHam,$pelSin,$petMar,$perMan,$poeFor,$ponAbe,$priPac,$proCap,$proCoq,$pteVam,$rheMac,$rhiBie,$rhiRox,$rn,$rouAeg,$sacCer,$saiBol,$sarHar,$sorAra,$speTri,$staAur,$strPur,$susScr,$taeGut,$tarSyr,$tetNig,$thaSir,$triMan,$tupBel,$tupChi,$turTru,$vicPac,$wuhCor,$xenLae,$xenTro,$xipMac
 
 set metaGbd $gbd
 
@@ -7851,7 +7852,7 @@ identifier txnFactorMotifId
 
 identifier ncbiGene
 "Genes on Ebola virus from genbank records"
-    $eboVir,$staAur.ncbiGene.chrom dupeOk
+    $eboVir,$staAur,$wuhCor.ncbiGene.chrom dupeOk
     $eboVir.chromInfo.chrom
     $staAur.chromInfo.chrom
 
@@ -8018,6 +8019,8 @@ tablesIgnored $gbd
     cloneEnds%
     contamination
     cpgIsland%
+    crisprAllRanges
+    crisprAllTargets
     crisprRanges
     crisprTargets
     crispr10KTargets

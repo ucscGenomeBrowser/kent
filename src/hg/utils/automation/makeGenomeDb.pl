@@ -1043,14 +1043,25 @@ sub makeDescription {
 <B>Sequencing/Assembly provider ID:</B> $assemblyLabel $providerAssemblyName<BR>
 <B>Assembly date:</B> $assemblyDate<BR>
 <B>Accession ID:</B> $genBankAccessionID<BR>
-<B>NCBI Genome ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId"
-TARGET="_blank">$ncbiGenomeId</A> ($scientificName)<BR>
-<B>NCBI Assembly ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
-TARGET="_blank">$ncbiAssemblyId</A><BR>
-<B>NCBI BioProject ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject"
-TARGET="_blank">$ncbiBioProject</A><BR>
-<B>NCBI BioSample ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample"
-TARGET="_blank">$ncbiBioSample</A>
+_EOF_
+  ;
+  if ($ncbiGenomeId ne "n/a") {
+  printf $fh "<B>NCBI Genome ID:</B> <A HREF='https://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId'
+TARGET='_blank'>$ncbiGenomeId</A> ($scientificName)<BR>\n";
+  } else {
+  printf $fh "<B>NCBI Genome ID:</B> $ncbiGenomeId<BR>\n";
+  }
+  printf $fh "<B>NCBI Assembly ID:</B> <A HREF='https://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId'
+TARGET='_blank'>$ncbiAssemblyId</A><BR>
+<B>NCBI BioProject ID:</B> <A HREF='https://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject'
+TARGET='_blank'>$ncbiBioProject</A><BR>\n";
+  if ($ncbiBioSample ne "n/a") {
+    printf $fh "<B>NCBI BioSample ID:</B> <A HREF='https://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample'
+TARGET='_blank'>$ncbiBioSample</A>\n";
+  } else {
+    printf $fh "<B>NCBI BioSample ID:</B> $ncbiBioSample<BR>\n";
+  }
+  print $fh <<_EOF_
 </P>
 <HR>
 <P>

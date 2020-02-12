@@ -513,7 +513,7 @@ static char baseColorLookupCodon(DNA *dna)
 /* Call dnautil's lookupCodon, but translate stop codon '\0' to '*' for display. */
 {
 char peptide;
-if (sameString(chromName, "chrM"))
+if (isMito(chromName))
     peptide = lookupMitoCodon(dna);
 else
     peptide = lookupCodon(dna);

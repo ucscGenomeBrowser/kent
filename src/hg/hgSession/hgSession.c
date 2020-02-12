@@ -351,10 +351,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<a href=\"%s\">%s</a>", dyStringContents(dy), sessionName);
     dyStringFree(&dy);
 
+    struct tm firstUseTm;
+    ZeroVar(&firstUseTm);
+    strptime(firstUse, "%Y-%m-%d %T", &firstUseTm);
     char *spacePt = strchr(firstUse, ' ');
     if (spacePt != NULL) *spacePt = '\0';
-        printf("&nbsp;&nbsp;</TD>"
-	        "<TD><nobr>%s</nobr>&nbsp;&nbsp;</TD><TD align=center>", firstUse);
+    printf("&nbsp;&nbsp;</TD>"
+            "<TD data-order=\"%ld\"><nobr>%s</nobr>&nbsp;&nbsp;</TD><TD align=center>", mktime(&firstUseTm), firstUse);
 
     char *dbIdx = NULL;
     if (startsWith("db=", row[3]))

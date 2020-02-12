@@ -29,6 +29,7 @@
 <li><a href="#singledownload">How can I download a file with a single transcript per gene?</a></li>
 <li><a href="#whatdo">This is rather complicated. Can you tell me which gene transcript track
                       I should use?</a></li>
+<li><a href="#gtfDownload">Does UCSC provide GTF/GFF files for gene models?</a></li>
 </ul>
 <hr>
 <p>
@@ -345,7 +346,7 @@ indicating unalignable transcript sequence.
 </p>
 
 <a name="report"></a>
-<h6>How shall I report a gene transcript in a manuscript?</h6>
+<h2>How shall I report a gene transcript in a manuscript?</h2>
 
 <p>
 When reporting on GENCODE/Ensembl transcripts, please specify the ENST
@@ -380,7 +381,7 @@ their mapping to the genome. NCBI provides a list of
 </ul>
 
 <a name="ccds"></a>
-<h6>What is CCDS?</h6>
+<h2>What is CCDS?</h2>
 <p>
 The <a target=_blank href="https://www.ncbi.nlm.nih.gov/projects/CCDS/CcdsBrowse.cgi">
 Consensus Coding Sequence Project</a> is a list of transcript coding sequence (CDS) genomic regions
@@ -391,7 +392,7 @@ As  the name implies, it does not cover UTR regions or non-coding transcripts.
 </p>
 
 <a name="justsingle"></a>
-<h6>How can I show a single transcript per gene?</h6>
+<h2>How can I show a single transcript per gene?</h2>
 
 <p> 
 For the tracks &quot;<a target=_blank 
@@ -413,7 +414,7 @@ It contains only the transcripts that are part of the Human Gene Mutation Databa
 </p>
 
 <a name="singledownload"></a>
-<h6>How can I download a file with a single transcript per gene?</h6>
+<h2>How can I download a file with a single transcript per gene?</h2>
 <p>
 This is a common request, but very often this is not necessary when designing
 an analysis.  You will have to make a choice of this single transcript using
@@ -477,7 +478,7 @@ we also provide another subtrack, "RefSeq HGMD". It contains
 the transcript is the one to which all reported clinical variants can be mapped to.
 
 <a name="whatdo"></a>
-<h6>This is rather complicated. Can you tell me which gene transcript track I should use?</h6>
+<h2>This is rather complicated. Can you tell me which gene transcript track I should use?</h2>
 <p> 
 For automated analysis, if you are doing NGS analysis and you need to capture
 all possible transcripts, GENCODE provides one of the most comprehensive gene sets.  For human 
@@ -502,6 +503,25 @@ href="http://genome.ucsc.edu/s/view/GeneSupport">Gene Support</a> public session
 helpful. This session is a collection of tracks centered around supporting evidence
 for genes.</p>
 </p>
+
+<a name="gtfDownload"></a>
+<h2>Does UCSC provide GTF/GFF files for gene models?</h2>
+<p>
+We provide files in GTF format, which is an extension to GFF2, for most assemblies. More 
+information on GTF format can be found <a target="_blank" href="FAQformat.html#format4">
+in our FAQ</a>.</p>
+<p>
+These files are generated for four gene model tables: ncbiRefSeq, refGene, ensGene, knownGene. 
+Certain assemblies, such as hg19, will have all four files while smaller assemblies may only have
+one or two of these. Which file a user should use depends on their analysis, as they contain 
+different data and metadata.</p>
+<p>
+These files are generated using the <code>genePredToGtf</code> method described in our 
+<a target="_blank" href="https://genome.ucsc.edu/FAQ/FAQdownloads.html#download37">
+downloads FAQ</a> using the <code>-utr</code> flag. They can be found on the download server 
+address <i>http://hgdownload.soe.ucsc.edu/goldenPath/$db/bigZips/genes/</i> where
+<i>$db</i> is the assembly of interest. For example, the <a target="_blank" 
+href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/genes/">hg38 GTF files</a>.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
 

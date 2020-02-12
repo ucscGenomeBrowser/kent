@@ -13,15 +13,17 @@ versionName=""
 trackSetName=""
 dbList=""
 verbose="FALSE"
+checkOnly="FALSE"
 EXIT_STATUS=0
 
 usage() {
 cat << EOF
-Usage: `basename $0` [-hbtfv] archiveRoot database(s) trackArchiveName
+Usage: `basename $0` [-hcbtfv] archiveRoot database(s) trackArchiveName
 
 Required Positional arguments:
 archiveRoot        The root location of the backup directory (/hive/data/inside/archive/).
-database(s)        A single database or double quoted list of databases to back up
+database(s)        A single database, a double quoted list of databases, or a file of db
+                   names to back up
 trackSetName       The name of this track archive set. A directory will be created
                    in the archiveRoot location with the files or tables from the -t
                    or -f arguments.
@@ -32,6 +34,7 @@ Optional arguments (Must preceed required args):
 -f                  A list of files to back up for this track set (/gbdb/ files).
 -v                  Use a specified version string like "v1" instead of the output of 'date +%F'.
 -s                  Print verbose status along the way to stderr.
+-c                  Don't copy anything, just output what WOULD be copied
 
 Backs up a list of tables or files for a track for a single database or list of
 databases. Note the third required argument of what this track set is named. Exits 0 for success
@@ -39,9 +42,11 @@ and 1 on failure. The heirarchy created is:
 \$archiveRoot/\$database/\$trackSetName/\$version/
 
 Example Usages:
-To back up the big files of the crispr track, as well as the crisprRanges table:
-find /gbdb/hg38/crispr/crispr{Details.tab,.bb} -print  > crisprFiles.txt
-`basename $0` -t crisprRanges -f crisprFiles.txt /hive/data/inside/archive/ hg38 "CRISPR"
+In the example below, a list of files (listOfBigBeds.txt) contains all the bigBeds for backup,
+while we only want to back up one table, crisprRanges:
+`basename $0` -t crisprRanges -f listOfBigBeds.txt /hive/data/inside/archive/ hg38 "CRISPR"
+
+A list of tables would work similarly for the -t switch.
 EOF
 }
 
@@ -175,10 +180,54 @@ doBackup()
     cd ${archiveDir}
 }
 
+printCheck()
+{
+    currentDb=$1
+    archRoot="`realpath ${archiveDir}`/${currentDb}/${trackSetName}/${versionName}"
+    printf "check mode: moving files to the following directory:\n"
+    printf "%s\n" "${archRoot}"
+    printf "\n"
+    if [[ -e "${tables}" ]]
+    then
+        printf "The following tables and trackDb's will be dumped:\n"
+        for tbl in $(cat "${tables}")
+        do
+            printf "${archRoot}/${tbl}.gz\n" ""
+            printf "${archRoot}/${tbl}.trackDb.tab.sql\n" ""
+            printf "${archRoot}/${tbl}.sql\n" ""
+        done
+    else
+        printf "The following tables and trackDb's will be dumped:\n"
+        for tbl in ${tables}
+        do
+            printf "${archRoot}/${tbl}.gz\n" ""
+            printf "${archRoot}/${tbl}.trackDb.tab.gz\n" ""
+            printf "${archRoot}/${tbl}.sql\n" ""
+        done
+    fi
+    printf "\n"
+    if [[ -e "${files}" ]]
+    then
+        printf "The following big data files will be archived:\n"
+        for f in $(cat "${files}")
+        do
+            fname=`basename ${f}`
+            printf "%s/%s\n" "${archRoot}" "${fname}"
+        done
+    else
+        printf "The following big data files will be archived:\n"
+        for f in ${files}
+        do
+            fname=`basename ${f}`
+            printf "%s/%s\n" "${archRoot}" "${fname}"
+        done
+    fi
+}
+
 ##### Parse command-line input #####
 
 #OPTIND=1 # Reset is necessary if getopts was used previously in the script.  It is a good idea to make this local in a function.
-while getopts "hst:f:v:" opt
+while getopts "hsct:f:v:" opt
 do
     case $opt in
         h)
@@ -187,6 +236,9 @@ do
             ;;
         s)
             verbose="TRUE"
+            ;;
+        c)
+            checkOnly="TRUE"
             ;;
         t)
             tables="${OPTARG}"
@@ -262,7 +314,10 @@ then
     then
         printf "Archiving to %s\n" "${archiveDir}" 1>&2
     fi
-    mkdir -p "${archiveDir}"
+    if [ "${checkOnly}" != "TRUE" ]
+    then
+        mkdir -p "${archiveDir}"
+    fi
 fi
 
 if [[ "${archiveDir}" != /* ]]
@@ -271,17 +326,28 @@ then
     archiveDir=`pwd`/"${tmp}"
 fi
 
+
 cd "${archiveDir}"
 if [[ -f "${dbList}" ]]
 then
     for db in $(cat "${dbList}")
     do
-        doBackup ${db}
+        if [ "${checkOnly}" = "TRUE" ]
+        then
+            printCheck ${db}
+        else
+            doBackup ${db}
+        fi
     done
 else
     for db in $(echo "${dbList}")
     do
-        doBackup ${db}
+        if [ "${checkOnly}" = "TRUE" ]
+        then
+            printCheck ${db}
+        else
+            doBackup ${db}
+        fi
     done
 fi
 exit ${EXIT_STATUS}
