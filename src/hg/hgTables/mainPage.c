@@ -392,7 +392,7 @@ hPrintf("<DIV style='display:none; opacity:0.9; border: 1px solid #EEE; margin: 
         "<b>Note:</b> Table Browser GTF files contain transcripts, but no gene identifiers or symbols.<br> "
         "If you are looking for fully formatted "
         "gene model files for use in genome analysis pipelines,<br>check the "
-        "<a href='https://hgdownload.soe.ucsc.edu/%s/bigZips/genes'>bigZips/genes</a> "
+        "<a href='https://hgdownload.soe.ucsc.edu/goldenPath/%s/bigZips/genes'>bigZips/genes</a> "
         "directory on our download server.</DIV>", database);
 hPrintf(" ");
 

@@ -5041,8 +5041,9 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	    {
 	    safef(id, sizeof id, "%s_toggle", subtrack->track);
 	    #define SUBTRACK_CFG_WRENCH "<span id='%s' class='clickable%s' " \
-					"title='Configure this subtrack'><img src='../images/wrench.png'></span>\n"
-	    printf(SUBTRACK_CFG_WRENCH,id,(visibleCB ? "":" disabled"));
+					"title='Configure this subtrack'><img src='../images/wrench.png'>" \
+                    "<span class='link'>&nbsp;Configure</a> </span></span>\n"
+	    printf(SUBTRACK_CFG_WRENCH,id, (visibleCB ? "":" disabled"));
 	    jsOnEventByIdF("click", id, "return subCfg.cfgToggle(this,\"%s\");", subtrack->track);
 	    }
 	}
