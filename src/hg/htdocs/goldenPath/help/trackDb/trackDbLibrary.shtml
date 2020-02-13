@@ -1488,7 +1488,7 @@ There are no extra options that can appear on the type hic line.
     will filter out items with negative values. If that is not the desired behavior then 
     you should specify a value</li>
     <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
-    type <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a 
+    <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a 
     &quot;.&quot; (for non-extended bigBed tracks) is required
     <li>By default, all bed tracks that are at least bed5 will have a score filter. 
     Enabling any of the <code>filter*.&lt;fieldName&gt;</code> filter settings will disable 
