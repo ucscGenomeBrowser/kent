@@ -4,7 +4,7 @@ track problematic
 shortLabel Problematic Regions
 longLabel Problematic Regions for NGS or Sanger sequencing or very variable regions
 compositeTrack on
-hideEmptySubtracks default
+hideEmptySubtracks on
 group map
 visibility hide
 type bigBed 3 +
@@ -2822,6 +2822,23 @@ color 50,50,200
 exonArrows on
 dataVersion EPDNew Version 006 (May 2018)
 visibility hide
-pennantIcon New red ../goldenPath/newsarch.html#112719a Track Released Nov. 27, 2019
 
-include doseSensitivity.ra
+#  include doseSensitivity.ra
+
+track rmskTracks
+superTrack on
+shortLabel RepeatMasker
+longLabel RepeatMasker experiments with various alignment engines
+group x
+visibility hide
+color 0,100,0
+altColor 128,228,128
+
+    track rmskHmmer2020
+    superTrack rmskTracks full
+    shortLabel RM HMMER 2020
+    longLabel updated 2020 Repeating Elements by RepeatMasker - HMMER alignment engine
+    type rmsk
+    maxWindowToDraw 10000000
+    canPack off
+    spectrum on

@@ -368,7 +368,7 @@ zcat \$downloadDir/\${asmId}_rna.gbff.gz \\
   | sort > \$asmId.refLink.tab
 
 # converting the NCBI coordinates to UCSC coordinates
-liftUp -extGenePred -type=.gp stdout $localLiftFile drop \$asmId.gp \\
+liftUp -extGenePred -type=.gp stdout $localLiftFile warn \$asmId.gp \\
   | gzip -c > \$asmId.\$db.gp.gz
 $genePredCheckDb \$asmId.\$db.gp.gz
 
@@ -433,7 +433,7 @@ ixIxx ncbiRefSeqOther.ix.tab ncbiRefSeqOther.ix{,x}
 gff3ToPsl -dropT \$downloadDir/\$asmId.ncbi.chrom.sizes \$downloadDir/rna.sizes \\
   gffForPsl.gff stdout | pslPosTarget stdin \$asmId.psl
 simpleChain -outPsl -maxGap=300000 \$asmId.psl stdout | pslSwap stdin stdout \\
-  | liftUp -type=.psl stdout $localLiftFile drop stdin \\
+  | liftUp -type=.psl stdout $localLiftFile warn stdin \\
    | gzip -c > \$db.psl.gz
 pslCheck $pslTargetSizes \\
    -querySizes=\$downloadDir/rna.sizes \$db.psl.gz

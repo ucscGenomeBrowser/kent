@@ -244,6 +244,7 @@ sub readChr2Acc($$) {
     chomp $line;
     my ($chrN, $acc) = split('\t', $line);
     $chrN =~ s/ /_/g;   # some assemblies have spaces in chr names ...
+    $chrN =~ s/:/_/g;   # one assembly GCF_002910315.2 had : in a chr name
     $accToChr->{$acc} = $chrN;
   }
   close (FH);
@@ -660,8 +661,6 @@ _EOF_
   );
   $bossScript->execute();
 
-  readDupsList();
-
 } # doDownload
 
 
@@ -679,6 +678,8 @@ sub doSequence {
   my $otherChrParts = 0;  # to see if this is unplaced scaffolds only
   my $primaryAssembly = "$buildDir/download/${asmId}_assembly_structure/Primary_Assembly";
   my $partsDone = 0;
+
+  readDupsList();
 
   ###########  Assembled chromosomes  ################
   my $chr2acc = "$primaryAssembly/assembled_chromosomes/chr2acc";
@@ -1453,7 +1454,7 @@ if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
      exit 0
   fi
   liftUp -extGenePred -type=.gp stdout \\
-      ../../sequence/\$asmId.ncbiToUcsc.lift error \\
+      ../../sequence/\$asmId.ncbiToUcsc.lift warn \\
        \$asmId.ncbiGene.genePred.gz | gzip -c \\
           > \$asmId.ncbiGene.ucsc.genePred.gz
   ~/kent/src/hg/utils/automation/gpToIx.pl \$asmId.ncbiGene.ucsc.genePred.gz \\
@@ -1592,7 +1593,7 @@ sub doTrackDb {
   $bossScript->add(<<_EOF_
 export asmId=$asmId
 
-\$HOME/kent/src/hg/utils/automation/doHubTrackDb.sh \$asmId $runDir \\
+\$HOME/kent/src/hg/utils/automation/asmHubTrackDb.sh \$asmId $runDir \\
    > \$asmId.trackDb.txt
 
 _EOF_

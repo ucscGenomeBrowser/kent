@@ -305,7 +305,10 @@ if (dt == 0)
     if (dq < gapCalc->smallSize)
         return gapCalc->qSmall[dq];
     else if (dq >= gapCalc->qLastPos)
-        return gapCalc->qLastPosVal + gapCalc->qLastSlope * (dq-gapCalc->qLastPos);
+        {
+        int cost = gapCalc->qLastPosVal + gapCalc->qLastSlope * (dq-gapCalc->qLastPos);
+        return (cost < 0) ? BIGNUM : cost;
+        }
     else
         return interpolate(dq, gapCalc->longPos, gapCalc->qLong, gapCalc->qPosCount);
     }
@@ -314,7 +317,10 @@ else if (dq == 0)
     if (dt < gapCalc->smallSize)
         return gapCalc->tSmall[dt];
     else if (dt >= gapCalc->tLastPos)
-        return gapCalc->tLastPosVal + gapCalc->tLastSlope * (dt-gapCalc->tLastPos);
+        {
+        int cost = gapCalc->tLastPosVal + gapCalc->tLastSlope * (dt-gapCalc->tLastPos);
+        return (cost < 0) ? BIGNUM : cost;
+        }
     else
         return interpolate(dt, gapCalc->longPos, gapCalc->tLong, gapCalc->tPosCount);
     }
@@ -324,7 +330,10 @@ else
     if (both < gapCalc->smallSize)
         return gapCalc->bSmall[both];
     else if (both >= gapCalc->bLastPos)
-        return gapCalc->bLastPosVal + gapCalc->bLastSlope * (both-gapCalc->bLastPos);
+        {
+        int cost = gapCalc->bLastPosVal + gapCalc->bLastSlope * (both-gapCalc->bLastPos);
+        return (cost < 0) ? BIGNUM : cost;
+        }
     else
         return interpolate(both, gapCalc->longPos, gapCalc->bLong, gapCalc->bPosCount);
     }

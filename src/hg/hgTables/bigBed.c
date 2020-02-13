@@ -128,11 +128,16 @@ struct bigBedInterval *ivList = NULL, *iv;
 ivList = bigBedIntervalQuery(bbi, region->chrom, region->start, region->end, 0, bbLm);
 char *row[bbi->fieldCount];
 char startBuf[16], endBuf[16];
+struct hash *idHash = NULL;
+if (bbi->fieldCount >= 4)
+    idHash = identifierHash(database, table);
 for (iv = ivList; iv != NULL; iv = iv->next)
     {
     bigBedIntervalToRow(iv, region->chrom, startBuf, endBuf, row, bbi->fieldCount);
     if (asFilterOnRow(filter, row))
         {
+        if ((idHash != NULL) && (hashLookup(idHash, row[3]) == NULL))
+            continue;
 	struct bed *bed = bedLoadN(row, bbi->definedFieldCount);
 	struct bed *lmBed = lmCloneBed(bed, bedLm);
 	slAddHead(pBedList, lmBed);
