@@ -3147,6 +3147,88 @@ if (tdbIsContainer(tdb))
         cartTdbTreeReshapeIfNeeded(cart,tdb);
     }
 
+if (tdb->parent)
+    {
+    printf("<style>div.superTrackInfo {"
+                "box-shadow: inset 0 0 5px 0 black;"
+                "padding: 5px; padding-left: 50px;"
+                "margin-bottom: 10px;"
+                "} </style>\n");
+
+    printf("This track is part of a super-track. "
+            "To configure the parent or sibling tracks, click a link in the box below.");
+
+    // show super-track info
+    printf("<div class='superTrackInfo'>");
+/*
+    printf("<i>Parent track</i> ");
+*/
+    struct trackDb *tdbParent = tdb->parent;
+    if (trackDbSetting(tdbParent, "wgEncode"))
+        printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' "
+               "width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
+    printf("<b style='font-size:%d%%;'><a href='%s?%s=%s&c=%s&g=%s'"
+               " title='Configure parent track'>%s</a> Tracks</b>",
+                strlen(tdb->longLabel) > 30 ? 133 : 200,
+                hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+                chromosome, cgiEncode(tdbParent->track), tdbParent->longLabel);
+
+    // show group info
+    struct grp *grp, *grps = hLoadGrps(database);
+    for (grp = grps; grp != NULL; grp = grp->next)
+        {
+        if (sameString(grp->name, tdb->grp))
+            {
+            printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
+                   "(<A HREF=\"%s?%s=%s&c=%s&hgTracksConfigPage=configure"
+                   "&hgtgroup_%s_close=0#%sGroup\" title='%s tracks in track configuration "
+                   "page'><IMG height=12 src='../images/ab_up.gif'>All %s%s</A>)</B>",
+                   hgTracksName(), cartSessionVarName(), cartSessionId(cart), chromosome,
+                   tdb->grp, tdb->grp, grp->label, grp->label,
+                   endsWith(grp->label," Tracks")?"":" tracks");
+            break;
+            }
+        }
+    grpFreeList(&grps);
+
+    printf("<table cellpadding='2' style='margin-left: 50px';>");
+    struct slRef *childRef;
+    tdbRefSortPrioritiesFromCart(cart, &tdbParent->children);
+    for (childRef = tdbParent->children; childRef != NULL; childRef = childRef->next)
+        {
+        struct trackDb *sibTdb = childRef->val;
+        if (sameString(sibTdb->track, tdb->track))
+            continue;
+        printf("<tr>");
+        //hPrintPennantIcon(sibTdb);
+        printf("<td><a href='%s?%s=%s&c=%s&g=%s'>%s</a>&nbsp;</td>", 
+                    tdbIsDownloadsOnly(sibTdb) ? hgFileUiName(): hTrackUiForTrack(sibTdb->track),
+                    cartSessionVarName(), cartSessionId(cart), chromosome, cgiEncode(sibTdb->track), 
+                    sibTdb->shortLabel);
+        printf("<td>%s</td></tr>\n", sibTdb->longLabel);
+        }
+    printf("</table>");
+
+
+/*
+   char *encodedMapName = cgiEncode(tdb->parent->track);
+    printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
+           "(<A HREF=\"%s?%s=%s&c=%s&g=%s\" title='Link to parent track'>"
+           "<IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
+           hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+           chromosome, encodedMapName, tdb->parent->shortLabel);
+
+    printf("<p>This track is part of a parent called <i>%s</i>. "
+            "To show other tracks of this parent, go to the "
+           "<A HREF=\"%s?%s=%s&c=%s&g=%s\" title='Link to parent track'>"
+           "%s</a> configuration page</A>.",
+           tdb->parent->shortLabel, hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+           chromosome, encodedMapName, tdb->parent->shortLabel);
+    freeMem(encodedMapName);
+*/
+    printf("</div>");
+    }
+
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
@@ -3197,27 +3279,13 @@ else
                 tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 
     }
+
 /* Print link for parent track */
 if (!ajax)
     {
-    if (tdb->parent)
+    if (!tdb->parent)
         {
-        char *encodedMapName = cgiEncode(tdb->parent->track);
-        printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
-               "(<A HREF=\"%s?%s=%s&c=%s&g=%s\" title='Link to parent track'>"
-               "<IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
-               hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-               chromosome, encodedMapName, tdb->parent->shortLabel);
-        printf("<p>This track is part of a parent called <i>%s</i>. "
-                "To show other tracks of this parent, go to the "
-               "<A HREF=\"%s?%s=%s&c=%s&g=%s\" title='Link to parent track'>"
-               "%s</a> configuration page</A>.",
-               tdb->parent->shortLabel, hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-               chromosome, encodedMapName, tdb->parent->shortLabel);
-        freeMem(encodedMapName);
-        }
-    else
-        {
+        // show group info
         struct grp *grp, *grps = hLoadGrps(database);
         for (grp = grps; grp != NULL; grp = grp->next)
             {
@@ -3235,6 +3303,7 @@ if (!ajax)
             }
         grpFreeList(&grps);
         }
+
     }
 puts("<BR><BR>");
 
