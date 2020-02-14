@@ -5148,7 +5148,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 
     // A schema link for each track
     printf("</td>\n<TD>&nbsp;");
-    makeSchemaLink(db,subtrack,"schema");
+    makeSchemaLink(db,subtrack,"Schema");
     printf("&nbsp;");
 
     // Do we have a restricted until date?
@@ -7716,7 +7716,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
 
 toLowerN(membersOfView->groupTitle, 1);
 printf("<B>Select %s</B> (<A HREF='../goldenPath/help/multiView.html' title='Help on views' "
-       "TARGET=_BLANK>help</A>):\n", membersOfView->groupTitle);
+       "TARGET=_BLANK>Help</A>):\n", membersOfView->groupTitle);
 printf("<TABLE><TR style='text-align:left;'>\n");
 // Make row of vis drop downs
 for (ix = 0; ix < membersOfView->count; ix++)
