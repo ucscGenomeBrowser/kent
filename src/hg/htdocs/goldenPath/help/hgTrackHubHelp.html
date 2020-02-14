@@ -857,9 +857,9 @@ just examples and do not represent real trackDb variables for hubs at Ensembl.)
 <a name="Hosting"></a>
 <h2>Where to host your data?</h2> 
 As stated in <a href="#Intro">What Are Track Hubs?</a>, track hubs files must be located
-in web-accessible locations that support byte-range requests. There are four options for these:
+in web-accessible locations that support byte-range requests. Four options for hosting include:
 <ul>
-  <li>Your institution's IT department
+  <li>Your institution's Information Technology services
   <li>Commercial webspace providers
   <li>Commercial cloud providers
   <li>Free webspace providers
@@ -874,7 +874,7 @@ site. Sometimes institution firewall rules can change, and you may need to
 inform your system administrators to add browser IP addresses as exceptions,
 listed 
 <a href="http://genomewiki.ucsc.edu/index.php/Public_Hub_Guidelines#Connection_issues.3F" target="_blank">here</a>. 
-Usually your IT department can direct you to someone
+Usually, your IT department can direct you to someone
 who manages webspace for individual groups. This is our recommended option, as
 it is usually free, very fast and you can update the files yourself easily.</p>
 
@@ -886,27 +886,27 @@ domain.
 Avoid unlimited offers, they often 
 do not allow binary files and are slower, rather look for a 
 "virtual private server" (VPS).
-Some exemples of providers are: A2 Hosting, BlueHost, GoDaddy,
+Some examples of providers are: A2 Hosting, BlueHost, GoDaddy,
 HostGator, Hostinger, DreamHost, but there are many others. This is not a
 complete list and we do not endorse a particular one. 
 You can search the internet for "virtual private server comparison".
 Offers start at around 5-10$/month for 25-50GB of storage. The advantage of
 VPS providers is that they bill a flat rate per month, which may be
-easier to order through Universities than the per-GB billing of cloud
+easier to order through Universities than the per GB transferred billing of cloud
 providers. For optimal performance, select a West Coast / San Francisco data
 center when ordering a web server, as this is closest and fastest from
 UCSC. There are usually no backups included, so it is good
 to keep local copies of your files.</p>
 
 <p><b>Cloud providers:</b> In general, commercial online cloud <b>backup</b> providers
-that charge a flat rate, like Dropbox, iCloud, Google Drive, Box.com, Microsoft
-OneDrive, Tencent Weiyun, Yandex.Disk, etc. do not work reliably as their business
+that charge a flat rate (Dropbox, iCloud, Google Drive, Box.com, Microsoft
+OneDrive, Tencent Weiyun, Yandex.Disk, etc.) do not work reliably as their business
 model requires rare and rate-limited data access, which is too slow or too limited for
 genome annotation display. However, commercial
-cloud <b>storage</b> offers that charge per GB transferred, like Amazon S3, Microsoft
-Azure Storage, Google Cloud Storage, Backblaze, Alibaba Object Store, etc.
+cloud <b>storage</b> offers that charge per GB transferred (Amazon S3, Microsoft
+Azure Storage, Google Cloud Storage, Backblaze, Alibaba Object Store, etc.)
 typically do work. As of 2020, they cost around 2-3 US cents per GB/month to store
-the hub data and 12-18 US cents per GB transferred, when the hub is used
+the hub data and 12-18 US cents per GB transferred, when the hub is used.
 For optimal performance, select a San Francisco / San Jose data center for the main
 UCSC site genome.ucsc.edu,  a Frankfurt/Germany data center for
 genome-euro.ucsc.edu and a Tokyo data center for genome-asia.ucsc.edu. You may
@@ -916,6 +916,7 @@ target="_blank">distributed storage servers</a>. <b>These services are external
 to UCSC and may change.</b></p>
 
 </p><b>Free webspace:</b> If you do not want to pay for web space,
+and your institution does not provide a data location supporting byte-range requests,
 we know of at least the following sites where you can host
 research data and configuration files for free:
 <ul>
