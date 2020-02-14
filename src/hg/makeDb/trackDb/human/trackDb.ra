@@ -90,7 +90,6 @@ indelDoubleInsert on
 indelQueryInsert on
 showDiffBasesAllScales .
 color 72,167,38
-pennantIcon Updated red ../goldenPath/newsarch.html#103119 "updated Oct. 31, 2019"
 
 track gad
 shortLabel GAD View
@@ -142,6 +141,7 @@ longLabel Genetic Variants mentioned in scientific publications
 superTrack on
 group phenDis
 type bed 3
+pennantIcon Updated red ../goldenPath/newsarch.html#020720 "Updated Feb. 7, 2020"
 
         track mastermind
         shortLabel Mastermind Variants
@@ -159,6 +159,7 @@ type bed 3
         mmcnt3Filter 0
         dataVersion /gbdb/$D/bbi/mastermindRelease.txt
         parent varsInPubs pack
+        pennantIcon Updated red ../goldenPath/newsarch.html#020720 "Updated Feb. 7, 2020"
 
         track avada
         shortLabel Avada Variants
@@ -173,6 +174,7 @@ type bed 3
         parent varsInPubs pack
         urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" doi="https://doi.org/$$" ensId="http://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$" entrezs="https://www.ncbi.nlm.nih.gov/gene/$$" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOverField _mouseOver
+        pennantIcon New red ../goldenPath/newsarch.html#020720 "Released Feb. 7, 2020"
 
 track pathoPred
 type bigWig
@@ -4681,7 +4683,7 @@ shortLabel ClinGen CNVs
 longLabel Clinical Genome Resource (ClinGen) CNVs
 group phenDis
 visibility hide
-subGroup1 view Views cov=Coverage cnv=CNVs
+subGroup1 view Views cov=Coverage cnv=CNVs dose=Dose
 subGroup2 class Class path=Pathogenic likP=Likely_Pathogenic unc=Uncertain likB=Likely_Benign ben=Benign
 subGroup3 level Evidence cur=Curated sub=Submitted
 dimensions dimensionY=class dimensionX=level
@@ -4779,6 +4781,37 @@ type bed 3
 	longLabel ClinGen CNVs: Benign
         subGroups view=cnv class=ben level=sub
 
+    track doseSensitivity
+    parent iscaComposite
+    view dose
+    shortLabel ClinGen sensitivity
+    longLabel ClinGen sensitivity composite track
+    group phenDis
+    visibility hide
+    type bigBed 9 +
+    itemRgb on
+
+        track clinGenHaploInsufficiency
+        parent doseSensitivity
+        shortLabel Haplo Insufficiency
+        longLabel ClinGen Haplo Insufficiency
+        visibility dense
+        priority 1
+        type bigBed 9 +
+        bigDataUrl /gbdb/hg19/doseSensitivity/clinGenHaploInsufficiency.bb
+        mouseOverField mouseOver
+        subGroups view=dose class=path level=cur
+
+        track clinGenTriploSensitivity
+        parent doseSensitivity
+        shortLabel Triplo Sensitivity
+        longLabel ClinGen Triplo Sensitivity
+        visibility dense
+        priority 2
+        type bigBed 9 +
+        bigDataUrl /gbdb/hg19/doseSensitivity/clinGenTriploSensitivity.bb
+        mouseOverField mouseOver
+        subGroups view=dose class=path level=cur
 
 include phastBias.ra
 

@@ -17,7 +17,8 @@ body.training {
         background: url("../../images/internal_bg1.jpg") repeat-x fixed left bottom #F9F9F7;
 }
 
-a:link {color: #121E9A;}
+a:link {color: #121E9A; text-decoration: underline}
+span.link {color: #121E9A; text-decoration: underline}
 
 td.hotkey {
      font-family: courier;

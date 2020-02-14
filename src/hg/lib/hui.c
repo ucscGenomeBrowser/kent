@@ -5041,8 +5041,9 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	    {
 	    safef(id, sizeof id, "%s_toggle", subtrack->track);
 	    #define SUBTRACK_CFG_WRENCH "<span id='%s' class='clickable%s' " \
-					"title='Configure this subtrack'><img src='../images/wrench.png'></span>\n"
-	    printf(SUBTRACK_CFG_WRENCH,id,(visibleCB ? "":" disabled"));
+					"title='Configure this subtrack'><img src='../images/wrench.png'>" \
+                    "<span class='link'>&nbsp;Configure</a> </span></span>\n"
+	    printf(SUBTRACK_CFG_WRENCH,id, (visibleCB ? "":" disabled"));
 	    jsOnEventByIdF("click", id, "return subCfg.cfgToggle(this,\"%s\");", subtrack->track);
 	    }
 	}
@@ -5222,14 +5223,14 @@ puts("</TABLE>");
 boolean compositeHideEmptySubtracksSetting(struct trackDb *tdb, boolean *retDefault,
                                         char **retMultiBedFile, char **retSubtrackIdFile)
 /* Parse hideEmptySubtracks setting
- * Format:  hideEmptySubtracks on|default
+ * Format:  hideEmptySubtracks on|off
  *              or
- *          hideEmptySubtracks on|default multiBed.bed subtrackIds.tab
+ *          hideEmptySubtracks on|off multiBed.bed subtrackIds.tab
  * where multiBed.bed is a bed3Sources bigBed, generated with bedtools multiinter
  *              post-processed by UCSC multiBed.pl tool
  *      subtrackIds.tab is a tab-sep file: id subtrackName
  *
- * Return TRUE if set to true/on/default.  retDefault is TRUE if set default, o/w FALSE
+ * Return TRUE if setting is present.  retDefault is TRUE if set to 'on', o/w FALSE
  */
 {
 if (!tdbIsComposite(tdb))
@@ -5241,13 +5242,12 @@ char *orig = cloneString(hideEmpties);
 char *words[3];
 int wordCount = chopByWhite(hideEmpties, words, ArraySize(words));
 char *mode = words[0];
-if (differentString(mode, "on") && differentString(mode, "true") &&
-    differentString(mode, "default"))
-        {
-        warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTY, orig);
-        return FALSE;
-        }
-boolean deflt = sameString(mode, "default") ? TRUE : FALSE;
+if (differentString(mode, "on") && differentString(mode, "off"))
+    {
+    warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTY, orig);
+    return FALSE;
+    }
+boolean deflt = sameString(mode, "on") ? TRUE : FALSE;
 if (retDefault)
     *retDefault = deflt;
 
@@ -6387,6 +6387,13 @@ if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name,
 
 if (textFiltersShowAll(db, cart, tdb))
     skipScoreFilter = TRUE;
+
+if (cartOptionalString(cart, "ajax") == NULL)
+    {
+    webIncludeResourceFile("ui.dropdownchecklist.css");
+    jsIncludeFile("ui.dropdownchecklist.js",NULL);
+    jsIncludeFile("ddcl.js",NULL);
+    }
 
 // Add any multi-selects next
 filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);

@@ -24,6 +24,8 @@ Henry
 ###############
 # Download files and metadata
 
+cd /hive/data/outside/encode3/tfbs/dac
+
 mkdir hg38 hg19 mm10
 
 wget -nd -P hg38 http://users.wenglab.org/pratth/tf.GRCh38.tar.gz
@@ -665,3 +667,33 @@ foreach f ($files)
     ln -s `pwd`/bigScoredPeaks/$f.bb /gbdb/hg38/encode3/tfbs
 end
 'EOF'
+
+################################################
+# Create BED5+ user-friendly download file with clusters and cell info
+# 2020-01-27 kate
+
+cd /hive/data/outside/encode3/tfbs/dac
+
+set t =  encRegTfbsClustered
+set f = ${t}WithCells
+set d = /data/apache/htdocs-hgdownload/goldenPath
+
+set db = hg38
+cd $db
+clusterAddSources.pl clusters.bed clusters.inputs.tab > $f.bed
+mkdir -p $d/$db/$t
+gzip -c $f.bed > $d/$db/$t/$f.$db.bed.gz
+cd ..
+
+set db = hg19
+cd $db
+clusterAddSources.pl clusters.bed clusters.inputs.tab > $f.bed
+mkdir -p $d/$db/$t
+gzip -c $f.bed > $d/$db/$t/$f.$db.bed.gz
+cd ..
+
+# Add README.txt to downloads dirs
+
+
+
+

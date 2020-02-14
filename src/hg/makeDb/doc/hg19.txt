@@ -34017,4 +34017,211 @@ wc -l refseqSelect.curated.gp
   
   hgLoadGenePred -genePredExt hg19  wgEncodeGencodeCompV19 wgEncodeGencodeCompV19.gp
   hgLoadGenePred -genePredExt hg19  wgEncodeGencodeBasicV19 wgEncodeGencodeBasicV19.gp
+
+##############################################################################
+# doseSensitivity (WORKING - 2020-02-06, Ana, Hiram)
+
+  mkdir /hive/data/genomes/hg19/bed/doseSensitivity
+  cd /hive/data/genomes/hg19/bed/doseSensitivity
+
+  ftp original files from ClinGen:
+
+  ftp://ftp.ncbi.nlm.nih.giv/pub/dbVar/clingen/
+
+  wget --timestamping \
+ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/clingen/ClinGen_haploinsufficiency_gene_GRCh37.bed
+
+  wget --timestamping \
+ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/clingen/ClinGen_triplosensitivity_gene_GRCh37.bed
+
+
+-rw-rw-rw- 1 202784 Jan 28 16:21 ClinGen_gene_curation_list_GRCh37.tsv
+-rw-rw-rw- 1  45142 Jan 28 16:21 ClinGen_haploinsufficiency_gene_GRCh37.bed
+-rw-rw-rw- 1  48750 Jan 28 16:22 ClinGen_triplosensitivity_gene_GRCh37.bed
+
+  # create perl script for processing: toUcsc.pl
+
+###########################################################################
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) {
+  printf STDERR "usage: ./toUcsc.pl originalFile.bed > newFile.bed\n";
+  exit 255;
+}
+
+my @mouseOver;
+
+$mouseOver[0] = "not yet evaluated";
+$mouseOver[1] = "no evidence for dosage pathogenicity";
+$mouseOver[2] = "little evidence for dosage pathogenicity";
+$mouseOver[3] = "some evidence for dosage pathogenicity";
+$mouseOver[4] = "sufficient evidence for dosage pathogenicity";
+$mouseOver[5] = "gene associated with autosomal recessive phenotype";
+$mouseOver[6] = "haploinsufficiency unlikely";
+
+my $inFile = shift;
+
+open (FH, "grep -v track $inFile|") or die "can not read $inFile";
+while (my $line = <FH>) {
+  chomp $line;
+# printf STDERR "# %s\n", $line if ($line =~ m/Not/);
+  my @a = split('\s+', $line, 5);
+  my $selectMouseOver = 0;
+  my $color = "0,255,0";
+  my $score = $a[4];
+  if ($a[4] =~ m/Not/) {
+    $color = "128,128,128";
+    $score = 0;
+    $selectMouseOver = 0;
+  } elsif (0 == $a[4]) {
+    $color = "252,79,89";
+    $selectMouseOver = 1;
+  } elsif (1 == $a[4]) {
+    $color = "209,45,51";
+    $selectMouseOver = 2;
+  } elsif (2 == $a[4]) {
+    $color = "160,48,51";
+    $selectMouseOver = 3;
+  } elsif (3 == $a[4]) {
+    $color = "109,51,43";
+    $selectMouseOver = 4;
+  } elsif (30 == $a[4]) {
+    $color = "109,51,43";
+    $selectMouseOver = 5;
+  } elsif (40 == $a[4]) {
+    $color = "0,0,255";
+    $selectMouseOver = 6;
+  } else {
+    printf STDERR "%s\n", $line;
+    die "unrecognized column 5 value ?";
+  }
+  printf "%s\t%d\t%d\t%s\t%d\t+\t%d\t%d\t%s\t%s\t%d - %s\n",
+    $a[0], $a[1], $a[2], $a[3], $score, $a[1], $a[2], $color, $a[4], $score, $mouseOver[$selectMouseOver];
+}
+close (FH);
+###########################################################################
+
+  # convert the original 'bed 5' data to bed 9+2 with perl script:
+
+  ./toUcsc.pl ClinGen_haploinsufficiency_gene_GRCh37.bed \
+         | sort -k1,1 -k2,2n > haploInsufficiency.bed
+  ./toUcsc.pl ClinGen_triplosensitivity_gene_GRCh37.bed \
+         | sort -k1,1 -k2,2n > triploSensitivity.bed
+
+  # convert bed to bigBed:
+  # using the dosSensitivity.as file:
+
+table doseSensitivity
+"ClinGen dosage sensitivity bed 9 plus original dosageScore"
+    (
+    string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Name of item"
+    uint   score;      "Score from 0-1000"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "Start of where display should be thick (start codon)"
+    uint thickEnd;     "End of where display should be thick (stop codon)"
+    uint itemRgb;      "color indicates dosage score"
+    string dosageScore; "dosage score from ClinGen"
+    string mouseOver;  "description for the score meaning"
+    )
+
+
+  bedToBigBed -tab -type=bed9+2 -as=doseSensitivity.as \
+     haploInsufficiency.bed ../../chrom.sizes haploInsufficiency.bb
+  bedToBigBed -tab -type=bed9+2 -as=doseSensitivity.as \
+     triploSensitivity.bed ../../chrom.sizes triploSensitivity.bb
+
+  # measure data in bigBed files:
+  bigBedInfo haploInsufficiency.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 11
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 1,396
+# primaryDataSize: 42,693
+# primaryIndexSize: 6,388
+# zoomLevels: 6
+# chromCount: 24
+# basesCovered: 160,842,763
+# meanDepth (of bases covered): 1.001796
+# minDepth: 1.000000
+# maxDepth: 2.000000
+# std of depth: 0.042340
+
+  bigBedInfo triploSensitivity.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 11
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 1,396
+# primaryDataSize: 39,932
+# primaryIndexSize: 6,388
+# zoomLevels: 6
+# chromCount: 24
+# basesCovered: 160,842,763
+# meanDepth (of bases covered): 1.001796
+# minDepth: 1.000000
+# maxDepth: 2.000000
+# std of depth: 0.042340
+
+
+  # symlinks to /gbdb/hg19:
+
+  ln -s `pwd`/haploInsufficiency.bb \
+     /gbdb/hg19/doseSensitivity/clinGenHaploInsufficiency.bb
+  ln -s `pwd`/triploSensitivity.bb \
+     /data/hg19/doseSensitivity/clinGenTriploSensitivity.bb
+
+  # trackDb composite perhaps in ClinVar CNVs composite
+
+##############################################################################
+# NCBI ReMap alignments (DONE 2020-02-11 Angie)
+# RM 24449
+    mkdir /hive/data/genomes/hg19/bed/chainHg38ReMap
+    cd /hive/data/genomes/hg19/bed/chainHg38ReMap
+    wget ftp://ftp.ncbi.nlm.nih.gov/pub/remap/Homo_sapiens/current/GCF_000001405.25_GRCh37.p13/GCF_000001405.39_GRCh38.p13/GCF_000001405.25-GCF_000001405.39.gff
+    # We will need to substitute all the RefSeq chrom and contig IDs with our own names.
+    # The same alt contig can appear in both assemblies with the same name, so replace
+    # hg38 names at the beginning of the line and hg19 names after "Target=".
+    hgsql hg38 -NBe 'select alias, chrom from chromAlias where find_in_set("refseq", source)' \
+    | sed -re 's/\./\\./;' \
+    | awk '{print "s/^" $1 "\\b/" $2 "/;";}' \
+      > hg19.hg38.chromAlias.sed
+    hgsql hg19 -NBe 'select alias, chrom from chromAlias where find_in_set("refseq", source)' \
+    | sed -re 's/\./\\./;' \
+    | awk '{print "s/Target=" $1 "\\b/Target=" $2 "/;";}' \
+      >> hg19.hg38.chromAlias.sed
+    sed -f hg19.hg38.chromAlias.sed GCF_000001405.25-GCF_000001405.39.gff \
+    | gff3ToPsl -dropQ /hive/data/genomes/{hg38,hg19}/chrom.sizes stdin stdout \
+    | pslPosTarget stdin stdout \
+    | sort -k14,14 -k16n,16n > remap.hg19.hg38.psl
+    # Convert to chain for browser display.  Some of the remap chains have minScore < 1000 and
+    # by default would be dropped by chainScore... use -minScore=0 to prevent that.
+    time pslToChain remap.hg19.hg38.psl stdout \
+    | chainScore -minScore=0 stdin /hive/data/genomes/{hg19/hg19.2bit,hg38/hg38.2bit} \
+        remap.hg19.hg38.chain
+#real    5m55.241s
+    hgLoadChain hg19 -tIndex chainHg38ReMap remap.hg19.hg38.chain
+#Loading 5315 chains into hg19.chainHg38ReMap
+    # Chaining the ReMap alignments makes it a lot easier to see when separate alignments
+    # to the same sequence are in the same order and orientation.
+    time axtChain -psl -linearGap=medium -verbose=0 remap.hg19.hg38.psl \
+      /hive/data/genomes/hg19/hg19.2bit /hive/data/genomes/hg38/hg38.2bit \
+      remap.axtChain.hg19.hg38.chain
+#real    1m41.773s
+    hgLoadChain hg19 -tIndex chainHg38ReMapAxtChain remap.axtChain.hg19.hg38.chain
+#Loading 2141 chains into hg19.chainHg38ReMapAxtChain
+
+
 ##############################################################################

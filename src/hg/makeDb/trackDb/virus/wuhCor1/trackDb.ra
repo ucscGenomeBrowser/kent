@@ -32,3 +32,4 @@ searchTable ncbiGene
 searchType genePred
 searchMethod fuzzy
 searchPriority 18
+
