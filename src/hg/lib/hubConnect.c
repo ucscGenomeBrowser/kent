@@ -744,13 +744,16 @@ if (trackHub != NULL)
             {
             // we have to open the trackDb file to get the udc cache to check for an update
             struct udcFile *checkCache = udcFileMayOpen(hubGenome->trackDbFile, NULL);
-            time_t time = udcUpdateTime(checkCache);
-            udcFileClose(&checkCache);
+            if (checkCache != NULL)
+                {
+                time_t time = udcUpdateTime(checkCache);
+                udcFileClose(&checkCache);
 
-            struct trackDb *cacheTdb = trackDbHubCache(hubGenome->trackDbFile, time);
+                struct trackDb *cacheTdb = trackDbHubCache(hubGenome->trackDbFile, time);
 
-            if (cacheTdb != NULL)
-                return cacheTdb;
+                if (cacheTdb != NULL)
+                    return cacheTdb;
+                }
 
             memCheckPoint(); // we want to know how much memory is used to build the tdbList
             }
