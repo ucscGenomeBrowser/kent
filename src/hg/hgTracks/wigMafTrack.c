@@ -167,7 +167,6 @@ int speciesCt = 0, groupCt = 1;
 int speciesOffCt = 0;
 struct hash *speciesOffHash = newHash(0);
 char *speciesUseFile = trackDbSetting(track->tdb, SPECIES_USE_FILE);
-char *msaTable = NULL;
 
 /* either speciesOrder or speciesGroup is specified in trackDb */
 char *speciesOrder = trackDbSetting(track->tdb, SPECIES_ORDER_VAR);
@@ -193,22 +192,7 @@ if (speciesUseFile)
     {
     if ((speciesGroup != NULL) || (speciesOrder != NULL))
 	errAbort("Can't specify speciesUseFile and speciesGroup or speciesOrder");
-    if (hIsGsidServer())
-	{
-	msaTable = trackDbSetting(track->tdb, "msaTable");
-    	if (msaTable != NULL)
-	    {
-	    speciesOrder = cartGetOrderFromFileAndMsaTable(database, cart, speciesUseFile, msaTable);
-    	    }
-	else
-	    {
-    	    speciesOrder = cartGetOrderFromFile(database, cart, speciesUseFile);
-	    }
-	}
-    else
-	{
-    	speciesOrder = cartGetOrderFromFile(database, cart, speciesUseFile);
-    	}
+    speciesOrder = cartGetOrderFromFile(database, cart, speciesUseFile);
     speciesOff = NULL;
     }
 

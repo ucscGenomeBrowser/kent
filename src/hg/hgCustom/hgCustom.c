@@ -183,12 +183,6 @@ if (!isUpdateForm)
     char *onChangeOrg = "document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();";
     char *onChangeClade = "document.orgForm.clade.value = document.mainForm.clade.options[document.mainForm.clade.selectedIndex].value; document.orgForm.org.value = 0; document.orgForm.db.value = 0; document.orgForm.submit();";
 
-    if (hIsGsidServer())
-        {
-        printf("<span style='color:red;'>The Custom Track function and its documentation is "
-                "currently under development ...</span><BR><BR>\n");
-        }
-
     puts("<TABLE BORDER=0>\n");
     if (gotClade)
         {

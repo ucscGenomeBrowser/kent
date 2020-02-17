@@ -1483,34 +1483,7 @@ struct sqlConnection *conn = NULL;
 if (!trackHubDatabase(database))
     conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
 pushWarnHandler(earlyAbortHandler);
-/* only allows view table schema function for CGB or GSID servers for the time being */
-if (hIsCgbServer() || hIsGsidServer())
-    {
-    if (cartVarExists(cart, hgtaDoSchema))
-	{
-	doSchema(conn);
-	}
-    else
-	{
-        if (cartVarExists(cart, hgtaDoValueRange))
-	    {
-    	    doValueRange(cartString(cart, hgtaDoValueRange));
-	    }
-	else
-	    {
-	    if (cartVarExists(cart, hgtaDoValueHistogram))
-    		{
-		doValueHistogram(cartString(cart, hgtaDoValueHistogram));
-	    	}
-	    else
-	    	{
-	    	errAbort("Sorry, currently only the \"View Table Schema\" function of the Table Browser is available on this server.");
-	    	}
-	    }
-	}
-
-    }
-else if (cartVarExists(cart, hgtaDoTest))
+if (cartVarExists(cart, hgtaDoTest))
     doTest();
 else if (cartVarExists(cart, hgtaDoMainPage))
     doMainPage(conn);

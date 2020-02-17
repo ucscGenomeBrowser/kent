@@ -15,7 +15,7 @@ O = $A.o bamClick.o barChartClick.o bigBedClick.o bigDbSnpClick.o \
 	mafClick.o makeItemsClick.o mgcClick.o \
 	parClick.o peakClusters.o regMotif.o retroClick.o rmskJoinedClick.o \
 	rnaFoldClick.o \
-	transMapClick.o txCdsInfo.o pubs.o vcfClick.o virusClick.o wiggleClick.o \
+	transMapClick.o txCdsInfo.o pubs.o vcfClick.o wiggleClick.o \
 	wikiTrack.o variomeClick.o numtsClick.o geneReviewsClick.o
 
 include ../../inc/cgi_build_rules.mk

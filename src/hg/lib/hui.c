@@ -7146,7 +7146,6 @@ int groupCt;
 char option[MAX_SP_SIZE];
 int group, prevGroup;
 int i,j;
-boolean parentLevel = isNameAtParentLevel(tdb,name);
 
 bool lowerFirstChar = TRUE;
 
@@ -7159,17 +7158,11 @@ for(; wmSpecies; wmSpecies = wmSpecies->next)
     {
     struct slName *newName = slNameNew(wmSpecies->name);
     slAddHead(&speciesList, newName);
-    //printf("%s<BR>\n",speciesList->name);
     }
 slReverse(&speciesList);
 
 int numberPerRow;
 boolean lineBreakJustPrinted;
-char trackName[255];
-char query[256];
-char **row;
-struct sqlConnection *conn;
-struct sqlResult *sr;
 char *words[MAX_SP_SIZE];
 int defaultOffSpeciesCnt = 0;
 
@@ -7227,10 +7220,7 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
 
         puts("\n<TABLE><TR>");
         }
-    if (hIsGsidServer())
-	numberPerRow = 6;
-    else
-	numberPerRow = 5;
+    numberPerRow = 5;
 
     /* new logic to decide if line break should be displayed here */
     if ((j != 0 && (j % numberPerRow) == 0) && (lineBreakJustPrinted == FALSE))
@@ -7240,7 +7230,6 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
         }
 
     char id[MAX_SP_SIZE];
-    boolean checked = TRUE;
     if (defaultOffSpeciesCnt > 0)
         {
         if (stringArrayIx(wmSpecies->name,words,defaultOffSpeciesCnt) == -1)
@@ -7248,73 +7237,27 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
         else
             {
             safef(id, sizeof(id), "cb_maf_%s_%s_defOff", groups[group], wmSpecies->name);
-            checked = FALSE;
             }
         }
     else
         safef(id, sizeof(id), "cb_maf_%s_%s", groups[group], wmSpecies->name);
 
-    if (hIsGsidServer())
-        {
-        char *chp;
-        /* for GSID maf, display only entries belong to the specific MSA selected */
-        safef(option, sizeof(option), "%s.%s", name, wmSpecies->name);
-        label = hOrganism(wmSpecies->name);
-        if (label == NULL)
+    puts("<TD>");
+    boolean defaultState = TRUE;
+    if (offHash != NULL)
+        defaultState = (hashLookup(offHash, wmSpecies->name) == NULL);
+    safecpy(option, sizeof(option), name);
+    wmSpecies->on = isSpeciesOn(cart, tdb, wmSpecies->name, option, sizeof option, defaultState );
+    cgiMakeCheckBoxWithId(option, wmSpecies->on,id);
+    label = hOrganism(wmSpecies->name);
+    if (label == NULL)
             label = wmSpecies->name;
-        strcpy(trackName, tdb->track);
-
-        /* try AaMaf first */
-        chp = strstr(trackName, "AaMaf");
-        /* if it is not a AaMaf track, try Maf next */
-        if (chp == NULL) chp = strstr(trackName, "Maf");
-
-        /* test if the entry actually is part of the specific maf track data */
-        if (chp != NULL)
-            {
-            *chp = '\0';
-            sqlSafef(query, sizeof(query),
-                  "select id from %sMsa where id = 'ss.%s'", trackName, label);
-
-            conn = hAllocConn(db);
-            sr = sqlGetResult(conn, query);
-            row = sqlNextRow(sr);
-
-            /* offer it only if the entry is found in current maf data set */
-            if (row != NULL)
-                {
-                puts("<TD>");
-                cgiMakeCheckBoxWithId(option,cartUsualBooleanClosestToHome(
-                                          cart, tdb, parentLevel,wmSpecies->name, checked),id);
-                printf("%s", label);
-                puts("</TD>");
-                fflush(stdout);
-                lineBreakJustPrinted = FALSE;
-                j++;
-                }
-            sqlFreeResult(&sr);
-            hFreeConn(&conn);
-            }
-        }
-    else
-        {
-        puts("<TD>");
-	boolean defaultState = TRUE;
-	if (offHash != NULL)
-	    defaultState = (hashLookup(offHash, wmSpecies->name) == NULL);
-        safecpy(option, sizeof(option), name);
-        wmSpecies->on = isSpeciesOn(cart, tdb, wmSpecies->name, option, sizeof option, defaultState );
-        cgiMakeCheckBoxWithId(option, wmSpecies->on,id);
-        label = hOrganism(wmSpecies->name);
-        if (label == NULL)
-		label = wmSpecies->name;
-        if (lowerFirstChar)
-            *label = tolower(*label);
-        printf("%s<BR>", label);
-        puts("</TD>");
-        lineBreakJustPrinted = FALSE;
-        j++;
-        }
+    if (lowerFirstChar)
+        *label = tolower(*label);
+    printf("%s<BR>", label);
+    puts("</TD>");
+    lineBreakJustPrinted = FALSE;
+    j++;
     }
 puts("</TR></TABLE><BR>\n");
 return wmSpeciesList;

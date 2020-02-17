@@ -2566,70 +2566,6 @@ void cartSetDbDisconnector(DbDisconnect disconnector)
 cartDefaultDisconnector = disconnector;
 }
 
-static void saveDefaultGsidLists(char *genomeDb, struct cart *cart)
-/* save the default lists of GSID subject and sequence IDs to 2 internal files under trash/ct
-   for applications to use */
-{
-char *outName = NULL;
-char *outName2= NULL;
-FILE *outF, *outF2;
-struct tempName tn;
-struct tempName tn2;
-struct sqlResult *sr=NULL, *sr2=NULL;
-char **row, **row2;
-char query[255], query2[255];
-char *chp;
-struct sqlConnection *conn, *conn2;
-
-conn= hAllocConn(genomeDb);
-conn2= hAllocConn(genomeDb);
-
-trashDirFile(&tn, "ct", "gsidSubj", ".list");
-outName = tn.forCgi;
-
-trashDirFile(&tn2, "ct", "gsidSeq", ".list");
-outName2 = tn2.forCgi;
-
-outF = mustOpen(outName,"w");
-outF2= mustOpen(outName2,"w");
-
-sqlSafef(query, sizeof(query), "select distinct subjId from hgFixed.gsIdXref order by subjId");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    fprintf(outF, "%s\n", row[0]);
-
-    sqlSafef(query2, sizeof(query2),
-          "select dnaSeqId from hgFixed.gsIdXref where subjId='%s' order by dnaSeqId", row[0]);
-
-    sr2 = sqlGetResult(conn2, query2);
-    while ((row2 = sqlNextRow(sr2)) != NULL)
-        {
-        /* Remove "ss." from the front of the DNA sequence ID,
-           so that they could be used both for DNA and protein MSA maf display */
-        chp = strstr(row2[0], "ss.");
-        if (chp != NULL)
-            {
-            fprintf(outF2, "%s\t%s\n", chp+3L, row[0]);
-            }
-        else
-            {
-            fprintf(outF2, "%s\t%s\n", row2[0], row[0]);
-            }
-        }
-    sqlFreeResult(&sr2);
-    }
-
-sqlFreeResult(&sr);
-carefulClose(&outF);
-carefulClose(&outF2);
-hFreeConn(&conn);
-hFreeConn(&conn2);
-
-cartSetString(cart, gsidSubjList, outName);
-cartSetString(cart, gsidSeqList, outName2);
-}
-
 char *cartGetOrderFromFile(char *genomeDb, struct cart *cart, char *speciesUseFile)
 /* Look in a cart variable that holds the filename that has a list of
  * species to show in a maf file */
@@ -2639,18 +2575,7 @@ struct dyString *orderDY = dyStringNew(256);
 char *words[16];
 if ((val = cartUsualString(cart, speciesUseFile, NULL)) == NULL)
     {
-    if (hIsGsidServer())
-	{
-	saveDefaultGsidLists(genomeDb, cart);
-	/* now it should be set */
-	val = cartUsualString(cart, speciesUseFile, NULL);
-	if (val == NULL)
-            errAbort("can't find species list file var '%s' in cart\n",speciesUseFile);
-	}
-    else
-	{
-        errAbort("can't find species list file var '%s' in cart\n",speciesUseFile);
-	}
+    errAbort("can't find species list file var '%s' in cart\n",speciesUseFile);
     }
 
 struct lineFile *lf = lineFileOpen(val, TRUE);
@@ -2661,66 +2586,6 @@ if (lf == NULL)
 while( ( lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
     dyStringPrintf(orderDY, "%s ",words[0]);
 
-return dyStringCannibalize(&orderDY);
-}
-
-char *cartGetOrderFromFileAndMsaTable(char *genomeDb, struct cart *cart, char *speciesUseFile, char *msaTable)
-/* This function is used for GSID server only.
-   Look in a cart variable that holds the filename that has a list of
- * species to show in a maf file and also restrict the results by the IDs existing in an MSA table*/
-{
-char *val;
-struct sqlResult *sr=NULL;
-char query[255];
-struct sqlConnection *conn;
-
-struct dyString *orderDY = dyStringNew(256);
-char *words[16];
-if ((val = cartUsualString(cart, speciesUseFile, NULL)) == NULL)
-    {
-    if (hIsGsidServer())
-	{
-	saveDefaultGsidLists(genomeDb, cart);
-
-	/* now it should be set */
-	val = cartUsualString(cart, speciesUseFile, NULL);
-	if (val == NULL)
-            errAbort("can't find species list file var '%s' in cart\n",speciesUseFile);
-	}
-    else
-	{
-        errAbort("can't find species list file var '%s' in cart\n",speciesUseFile);
-	}
-    }
-
-struct lineFile *lf = lineFileOpen(val, TRUE);
-
-if (lf == NULL)
-    errAbort("can't open species list file %s",val);
-
-if (hIsGsidServer())
-    {
-    conn= hAllocConn(genomeDb);
-    while( ( lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
-        {
-        sqlSafef(query, sizeof(query),
-	      "select id from %s where id like '%%%s'", msaTable, words[0]);
-	sr = sqlGetResult(conn, query);
-	if (sqlNextRow(sr) != NULL)
-            {
-            dyStringPrintf(orderDY, "%s ",words[0]);
-            sqlFreeResult(&sr);
-            }
-        }
-    hFreeConn(&conn);
-    }
-else
-    {
-    while( ( lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
-        {
-        dyStringPrintf(orderDY, "%s ",words[0]);
-        }
-    }
 return dyStringCannibalize(&orderDY);
 }
 
