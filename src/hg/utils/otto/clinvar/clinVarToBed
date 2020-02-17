@@ -379,7 +379,7 @@ hgvsRe = re.compile(r'(N[RPCGM]_[0-9.]+)(\([a-zA-Z0-9_-]+\))?:([+0-9c.ACTG>a-z_(
 # c.3839_3855del17
 posRe = re.compile(r'^([mgcpdrn]\.[*0-9_?+-]+)(delins|dup|del|ins|inv)?([>~ACTG0-9]*)$')
 
-ifh = gzip.open(filename, "rt")
+ifh = gzip.open(filename, "rt", encoding="latin_1")
 
 # check the header
 line1 = ifh.readline()
@@ -390,10 +390,10 @@ if (line1 != clinvarExpectHeaders): # test if clinvar has changed their header l
     raise Exception("code needs fixing")
 
 # open out files
-hg19Bed = open("archive/clinvarMain.hg19.%sbed" % outSuffix, "w")
-hg38Bed = open("archive/clinvarMain.hg38.%sbed" % outSuffix, "w")
-hg19BedCnv = open("archive/clinvarCnv.hg19.%sbed" % outSuffix, "w")
-hg38BedCnv = open("archive/clinvarCnv.hg38.%sbed" % outSuffix, "w")
+hg19Bed = open("archive/clinvarMain.hg19.%sbed" % outSuffix, "w", encoding="latin1")
+hg38Bed = open("archive/clinvarMain.hg38.%sbed" % outSuffix, "w", encoding="latin1")
+hg19BedCnv = open("archive/clinvarCnv.hg19.%sbed" % outSuffix, "w", encoding="latin1")
+hg38BedCnv = open("archive/clinvarCnv.hg38.%sbed" % outSuffix, "w", encoding="latin1")
 
 longCount = 0
 noAssCount = 0

@@ -45,6 +45,15 @@ if (subCount != 1)
     errAbort("%d %s found in %s in mustStrSwapOne, must occur once", subCount, oldStr, string);
 }
 
+void updateTagsField(struct sqlConnection *conn, char *table, char *field, char *oldName, char *newName)
+/* Update table.tags with substituted data_set_id name. */
+{
+char query[2048];
+sqlSafef(query, sizeof(query), "update %s set tags = replace(tags,'%s=%s','%s=%s') "
+  "where REGEXP_INSTR(tags, '(^|&)%s=%s(&|^)') > 0;", table, field,oldName, field,newName, field,oldName);
+update(conn, query);
+}
+
 void cdwRenameDataset(char *oldName, char *newName)
 /* cdwRenameDataset - Rename a dataset, updating cdwDataset, cdwSubmitDir.url, and cdwSubmit.url 
  * tables. */
@@ -88,6 +97,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     update(conn2, query);
     }
 sqlFreeResult(&sr);
+
+updateTagsField(conn, "cdwFile",     "meta"       , oldName, newName);
+updateTagsField(conn, "cdwMetaTags", "meta"       , oldName, newName);
+updateTagsField(conn, "cdwMetaTags", "data_set_id", oldName, newName);
+
 }
 
 int main(int argc, char *argv[])

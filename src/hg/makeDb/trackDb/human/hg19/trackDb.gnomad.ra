@@ -358,7 +358,8 @@ html gnomad
         group varRep
         type bigBed 12 +
         filter.obs_exp 0:5
-        filterLabel.obs_exp Show only items between this score range
+        filterLabel.obs_exp Show only items between this O/E range
         filterByRange.obs_exp on
         priority 3
+        mouseOverField _mouseOver
         release alpha

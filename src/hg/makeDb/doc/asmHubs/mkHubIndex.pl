@@ -20,6 +20,8 @@ my $commonNameOrder = "$asmHubName.commonName.asmId.orderList.tsv";
 my @orderList;	# asmId of the assemblies in order from the *.list files
 # the order to read the different .list files:
 my $assemblyCount = 0;
+my %betterName;	# key is asmId, value is a common name better than found
+			# in assembly_report file
 
 ##############################################################################
 # from Perl Cookbook Recipe 2.17, print out large numbers with comma delimiters:
@@ -97,8 +99,7 @@ genome assemblies can be selected from the
 Instead of adding all the assemblies in one collected group, use the individual
 <em>link to genome browser</em> in the table below.
 </p>
-<h3>See also: <a href='asmStats${Name}.html'
-target=_blank>assembly statistics</a></h3><br>
+<h3>See also: <a href='asmStats${Name}.html'>assembly statistics</a></h3><br>
 <h3>Data resource links</h3>
 NOTE: <em>Click on the column headers to sort the table by that column</em><br>
 The <em>link to genome browser</em> will attach only that single assembly to
@@ -139,20 +140,22 @@ END
 ##############################################################################
 sub endHtml() {
 
-printf "<p>\nOther assembly hubs available:<br>\n<table border='1'><thead>\n<tr>";
+if ($asmHubName ne "viral") {
+  printf "<p>\nOther assembly hubs available:<br>\n<table border='1'><thead>\n<tr>";
 
-printf "<th><a href='../primates/index.html'>Primates</a></th>\n"
-  if ($asmHubName ne "primates");
-printf "<th><a href='../mammals/index.html'>Mammals</a></th>\n"
-  if ($asmHubName ne "mammals");
-printf "<th><a href='../birds/index.html'>Birds</a></th>\n"
-  if ($asmHubName ne "birds");
-printf "<th><a href='../fish/index.html'>Fish</a></th>\n"
-  if ($asmHubName ne "fish");
-printf "<th><a href='../vertebrate/index.html'>other vertebrates</a></th>\n"
-  if ($asmHubName ne "vertebrate");
+  printf "<th><a href='../primates/index.html'>Primates</a></th>\n"
+    if ($asmHubName ne "primates");
+  printf "<th><a href='../mammals/index.html'>Mammals</a></th>\n"
+    if ($asmHubName ne "mammals");
+  printf "<th><a href='../birds/index.html'>Birds</a></th>\n"
+    if ($asmHubName ne "birds");
+  printf "<th><a href='../fish/index.html'>Fish</a></th>\n"
+    if ($asmHubName ne "fish");
+  printf "<th><a href='../vertebrate/index.html'>other vertebrates</a></th>\n"
+    if ($asmHubName ne "vertebrate");
 
 printf "</tr></thead>\n</table>\n</p>\n";
+}
 
 print <<"END"
 </div><!-- closing gbsPage from gbPageStartHardcoded.html -->
@@ -168,17 +171,18 @@ END
 ##############################################################################
 sub tableContents() {
   my $rowCount = 0;
-  foreach my $asmId (@orderList) {
+  foreach my $asmId (reverse(@orderList)) {
+    my ($gcPrefix, $asmAcc, $asmName) = split('_', $asmId, 3);
+    my $accessionId = sprintf("%s_%s", $gcPrefix, $asmAcc);
     my $accessionDir = substr($asmId, 0 ,3);
     $accessionDir .= "/" . substr($asmId, 4 ,3);
     $accessionDir .= "/" . substr($asmId, 7 ,3);
     $accessionDir .= "/" . substr($asmId, 10 ,3);
-    $accessionDir .= "/" . $asmId;
-    my $ncbiFtpLink = "ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$accessionDir/";
-    my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir";
+    my $ncbiFtpLink = "ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$accessionDir/$asmId";
+    my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
     my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
-    next if (! -s "$asmReport");
-    my ($gcPrefix, $asmAcc, $asmName) = split('_', $asmId, 3);
+    my $trackDb="$buildDir/${asmId}.trackDb.txt";
+    next if (! -s "$trackDb");
     my $chromSizes="${buildDir}/${asmId}.chrom.sizes";
     my $sciName = "notFound";
     my $commonName = "notFound";
@@ -219,6 +223,7 @@ sub tableContents() {
            $sciName = $line;
            $commonName =~ s/.*\(//;
            $commonName =~ s/\)//;
+           $commonName = $betterName{$asmId} if (exists($betterName{$asmId}));
            $sciName =~ s/.*:\s+//;
            $sciName =~ s/\s+\(.*//;
         }
@@ -231,9 +236,9 @@ sub tableContents() {
       }
     }
     close (FH);
-    my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$accessionDir";
+    my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$accessionDir/$accessionId";
     printf "<tr><td align=right>%d</td>\n", ++$rowCount;
-    printf "<td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=%s/%s.hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", $hubUrl, $asmId, $asmId, $commonName;
+    printf "<td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=%s/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", $hubUrl, $asmId, $commonName;
     printf "    <td align=center><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s</a></td>\n", $gcPrefix, $asmAcc, $asmId;
     if ( $bioSample ne "notFound" ) {
@@ -256,6 +261,7 @@ while (my $line = <FH>) {
   chomp $line;
   my ($commonName, $asmId) = split('\t', $line);
   push @orderList, $asmId;
+  $betterName{$asmId} = $commonName;
   ++$assemblyCount;
 }
 close (FH);
