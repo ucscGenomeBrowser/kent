@@ -6,10 +6,10 @@ Note that you can use htmlCheck with several useful commands either directly on 
 location where we edit the .html files (kent/src/hg/cirm/gateway/htdocs),
 
 or by using a url like 
- https://cirm-01-galt.cirm/index.html
+ https://cirm-01-galt.cirm/cirmIndex.html
 
 You can also login to cirmdcm from hgwdev with your password for testing:
- https://galt%40soe.ucsc.edu:mypassword@cirmdcm.soe.ucsce.edu/index.html
+ https://galt%40soe.ucsc.edu:mypassword@cirmdcm.soe.ucsce.edu/cirmIndex.html
 
 It is helpful to run htmlCheck with both the validate and strictTagNestCheck commands since they cover different things.
 This will find errors in the html syntax.
@@ -18,7 +18,7 @@ htmlCheck getLinks is very handy for displaying all of the links and making sure
 To be properly relative, they should not start with the slash / character because that is an absolute path.
 
 This error is harmless:
-https://cirm-01-galt.cirm/index.html# doesn't exist
+https://cirm-01-galt.cirm/cirmIndex.html# doesn't exist
 It just means that the menu method employed has some dummy URLs "#" in dropdowns.
 
 This one filters out the internal # tags and off-site links to focus on the rest 

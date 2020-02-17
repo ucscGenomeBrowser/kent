@@ -9,26 +9,27 @@ destDir=/hive/data/genomes/asmHubs/${name}
 srcDir=${HOME}/kent/src/hg/makeDb/doc/${name}AsmHub
 toolsDir=${HOME}/kent/src/hg/makeDb/doc/asmHubs
 
-all:: makeDirs ${destDir}/hub.txt ${destDir}/groups.txt ${destDir}/genomes.txt \
-	${destDir}/index.html ${destDir}/asmStats${Name}.html
+all:: makeDirs symLinks ${destDir}/hub.txt ${destDir}/groups.txt \
+	${destDir}/genomes.txt ${destDir}/index.html \
+	${destDir}/asmStats${Name}.html
 
 makeDirs:
 	mkdir -p ${destDir}
+
+symLinks:
 	${toolsDir}/mkSymLinks.pl ${Name} ${name}
 
-${destDir}/index.html: ${toolsDir}/mkHubIndex.pl
+${destDir}/index.html:
 	${toolsDir}/mkHubIndex.pl ${Name} ${name} ${defaultAssembly} > $@
-	sed -e "s/hgdownload.soe/genome-test.gi/g; s#/index.html#/testIndex.html#; s#${name}/hub.txt#${name}/testHub.txt#; s/asmStats${Name}/testAsmStats${Name}/;" $@ > ${destDir}/testIndex.html
+	sed -e "s/hgdownload.soe/hgdownload-test.gi/g; s#/index.html#/testIndex.html#; s#${name}/hub.txt#${name}/testHub.txt#; s/asmStats${Name}/testAsmStats${Name}/;" $@ > ${destDir}/testIndex.html
 	chmod +x $@ ${destDir}/testIndex.html
 
-${destDir}/asmStats${Name}.html: ${toolsDir}/mkAsmStats.pl
+${destDir}/asmStats${Name}.html:
 	${toolsDir}/mkAsmStats.pl ${Name} ${name} > $@
-	sed -e "s/hgdownload.soe/genome-test.gi/g; s/index.html/testIndex.html/; s#/asmStats#/testAsmStats#;" $@ > ${destDir}/testAsmStats${Name}.html
+	sed -e "s/hgdownload.soe/hgdownload-test.gi/g; s/index.html/testIndex.html/; s#/asmStats#/testAsmStats#;" $@ > ${destDir}/testAsmStats${Name}.html
 	chmod +x $@ ${destDir}/testAsmStats${Name}.html
 
-${destDir}/genomes.txt:  ${toolsDir}/mkGenomes.pl \
-	${toolsDir}/${name}.asmId.commonName.tsv \
-	${toolsDir}/${name}.commonName.asmId.orderList.tsv
+${destDir}/genomes.txt:
 	${toolsDir}/mkGenomes.pl ${Name} ${name} > $@
 
 ${destDir}/hub.txt: ${srcDir}/hub.txt
@@ -39,3 +40,13 @@ ${destDir}/hub.txt: ${srcDir}/hub.txt
 ${destDir}/groups.txt: ${toolsDir}/groups.txt
 	rm -f ${destDir}/groups.txt
 	cp -p ${toolsDir}/groups.txt ${destDir}/groups.txt
+
+clean::
+	rm -f ${destDir}/hub.txt
+	rm -f ${destDir}/testHub.txt
+	rm -f ${destDir}/groups.txt
+	rm -f ${destDir}/genomes.txt
+	rm -f ${destDir}/index.html
+	rm -f ${destDir}/testIndex.html
+	rm -f ${destDir}/asmStats${Name}.html
+	rm -f ${destDir}/testAsmStats${Name}.html
