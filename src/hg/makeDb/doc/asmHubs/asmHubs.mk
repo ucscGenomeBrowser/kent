@@ -10,27 +10,27 @@ srcDir=${HOME}/kent/src/hg/makeDb/doc/${name}AsmHub
 toolsDir=${HOME}/kent/src/hg/makeDb/doc/asmHubs
 
 all:: makeDirs symLinks ${destDir}/hub.txt ${destDir}/groups.txt \
-	${destDir}/genomes.txt ${destDir}/index.html \
+	mkGenomes ${destDir}/index.html \
 	${destDir}/asmStats${Name}.html
 
 makeDirs:
 	mkdir -p ${destDir}
 
-symLinks:
+symLinks::
 	${toolsDir}/mkSymLinks.pl ${Name} ${name}
 
-${destDir}/index.html:
-	${toolsDir}/mkHubIndex.pl ${Name} ${name} ${defaultAssembly} > $@
-	sed -e "s/hgdownload.soe/hgdownload-test.gi/g; s#/index.html#/testIndex.html#; s#${name}/hub.txt#${name}/testHub.txt#; s/asmStats${Name}/testAsmStats${Name}/;" $@ > ${destDir}/testIndex.html
-	chmod +x $@ ${destDir}/testIndex.html
+hubIndex::
+	${toolsDir}/mkHubIndex.pl ${Name} ${name} ${defaultAssembly} > ${destDir}/index.html
+	sed -e "s/hgdownload.soe/hgdownload-test.gi/g; s#/index.html#/testIndex.html#; s#${name}/hub.txt#${name}/testHub.txt#; s/asmStats${Name}/testAsmStats${Name}/;" ${destDir}/index.html > ${destDir}/testIndex.html
+	chmod +x ${destDir}/index.html ${destDir}/testIndex.html
 
-${destDir}/asmStats${Name}.html:
-	${toolsDir}/mkAsmStats.pl ${Name} ${name} > $@
-	sed -e "s/hgdownload.soe/hgdownload-test.gi/g; s/index.html/testIndex.html/; s#/asmStats#/testAsmStats#;" $@ > ${destDir}/testAsmStats${Name}.html
-	chmod +x $@ ${destDir}/testAsmStats${Name}.html
+asmStats::
+	${toolsDir}/mkAsmStats.pl ${Name} ${name} > ${destDir}/asmStats${Name}.html
+	sed -e "s/hgdownload.soe/hgdownload-test.gi/g; s/index.html/testIndex.html/; s#/asmStats#/testAsmStats#;" ${destDir}/asmStats${Name}.html > ${destDir}/testAsmStats${Name}.html
+	chmod +x ${destDir}/asmStats${Name}.html ${destDir}/testAsmStats${Name}.html
 
-${destDir}/genomes.txt:
-	${toolsDir}/mkGenomes.pl ${Name} ${name} > $@
+mkGenomes::
+	${toolsDir}/mkGenomes.pl ${Name} ${name} > ${destDir}/genomes.txt
 
 ${destDir}/hub.txt: ${srcDir}/hub.txt
 	rm -f ${destDir}/hub.txt

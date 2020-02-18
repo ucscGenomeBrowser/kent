@@ -57,7 +57,7 @@ foreach my $asmId (reverse(@orderList)) {
   $accessionDir .= "/" . substr($asmId, 7 ,3);
   $accessionDir .= "/" . substr($asmId, 10 ,3);
 #  $accessionDir .= "/" . $asmId;
-  my $prevDestDir = "/hive/data/genomes/asmHubs/$accessionDir/$asmId";
+#  my $prevDestDir = "/hive/data/genomes/asmHubs/$accessionDir/$asmId";
   $destDir = "/hive/data/genomes/asmHubs/$accessionDir/$accessionId";
   my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
 #  printf STDERR "# working '${buildDir}' '${destDir}'\n";
@@ -65,10 +65,10 @@ foreach my $asmId (reverse(@orderList)) {
   if ( ! -d "${destDir}" ) {
     `mkdir -p "${destDir}"`;
   }
-  if ( -d "${prevDestDir}" ) {
-    printf STDERR "# rm -fr '${prevDestDir}'\n";
-    `rm -fr "${prevDestDir}"`;
-  }
+#  if ( -d "${prevDestDir}" ) {
+#    printf STDERR "# rm -fr '${prevDestDir}'\n";
+#    `rm -fr "${prevDestDir}"`;
+#  }
   `rm -f "${destDir}/bbi"`;
   `rm -f "${destDir}/ixIxx"`;
   `rm -fr "${destDir}/html"`;

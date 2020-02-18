@@ -25,6 +25,7 @@ my $commonNameOrder = "$asmHubName.commonName.asmId.orderList.tsv";
 
 open (FH, "<$toolsDir/${commonNameList}") or die "can not read $toolsDir/${commonNameList}";
 while (my $line = <FH>) {
+  next if ($line =~ m/^#/);
   chomp $line;
   my ($asmId, $name) = split('\t', $line);
   $betterName{$asmId} = $name;
@@ -37,6 +38,7 @@ my $assemblyCount = 0;
 
 open (FH, "<$toolsDir/${commonNameOrder}") or die "can not read ${commonNameOrder}";
 while (my $line = <FH>) {
+  next if ($line =~ m/^#/);
   chomp $line;
   my ($commonName, $asmId) = split('\t', $line);
   push @orderList, $asmId;
@@ -66,11 +68,11 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $orderKey, $accessionDir, $accession
   chomp $orgName;
   $orgName = $betterName{$asmId} if (exists($betterName{$asmId}));
 
-  printf "genome %s\n", $asmId;
-  printf "trackDb %s/%s/trackDb.txt\n", $accessionDir, $accessionId;
+  printf "genome %s\n", $accessionId;
+  printf "trackDb ../%s/%s/trackDb.txt\n", $accessionDir, $accessionId;
   printf "groups groups.txt\n";
   printf "description %s\n", $orgName;
-  printf "twoBitPath %s/%s/%s.2bit\n", $accessionDir, $accessionId, $accessionId;
+  printf "twoBitPath ../%s/%s/%s.2bit\n", $accessionDir, $accessionId, $accessionId;
   printf "organism %s\n", $descr;
   my $chrName=`head -1 $buildDir/$asmId.chrom.sizes | awk '{print \$1}'`;
   chomp $chrName;
@@ -87,7 +89,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $orderKey, $accessionDir, $accession
   printf "defaultPos %s\n", $defPos;
   printf "orderKey %d\n", $orderKey++;
   printf "scientificName %s\n", $descr;
-  printf "htmlPath %s/%s/html/%s.description.html\n", $accessionDir, $accessionId, $asmId;
+  printf "htmlPath ../%s/%s/html/%s.description.html\n", $accessionDir, $accessionId, $asmId;
   printf "\n";
   my $localGenomesFile = "$buildDir/${asmId}.genomes.txt";
   my $localOrderKey;
