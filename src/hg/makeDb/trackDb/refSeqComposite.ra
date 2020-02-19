@@ -94,8 +94,8 @@ pennantIcon Updated red ../goldenPath/newsarch.html#020720b "updated Feb. 7, 202
         parent refSeqComposite off
         priority 7
         type genePred
-        shortLabel RefSeq Select
-        longLabel NCBI RefSeq/MANE Select: one representative transcript per protein-coding gene
+        shortLabel RefSeq Select/MANE
+        longLabel NCBI RefSeq/MANE Select: One representative transcript per protein-coding gene
         trackHandler ncbiRefSeq
         idXref ncbiRefSeqLink mrnaAcc name
         color 20,20,160
