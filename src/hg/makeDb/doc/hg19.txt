@@ -33954,11 +33954,12 @@ ln -s /hive/data/genomes/hg19/bed/dgv/160810/dgvSupporting.bb
     #     float expected;      "Number of expected missense variants"
     #     float obs_exp;      "Observed/expected score"
     #     float chisq;       "Chi-Squared Difference"
+    #     string _mouseOver; "MouseOver label"
     #     )
 
     # now we can make the bigBed:
     ./aaToGenomic.py trimmedUtrs.txt 148353-3/Table_S4.csv | sort -k1,1 -k2,2n > missenseConstrained.bed
-    bedToBigBed -tab -type=bed12+5 -as=missenseBed.as missenseConstrained.bed /hive/data/genomes/hg19/chrom.sizes missenseConstrained.bb
+    bedToBigBed -tab -type=bed12+6 -as=missenseBed.as missenseConstrained.bed /hive/data/genomes/hg19/chrom.sizes missenseConstrained.bb
     # pass1 - making usageList (24 chroms): 5 millis
     # pass2 - checking and writing primary data (6507 records, 17 fields): 134 millis
     # only a few genes:
@@ -34184,5 +34185,44 @@ table doseSensitivity
      /data/hg19/doseSensitivity/clinGenTriploSensitivity.bb
 
   # trackDb composite perhaps in ClinVar CNVs composite
+
+##############################################################################
+# NCBI ReMap alignments (DONE 2020-02-11 Angie)
+# RM 24449
+    mkdir /hive/data/genomes/hg19/bed/chainHg38ReMap
+    cd /hive/data/genomes/hg19/bed/chainHg38ReMap
+    wget ftp://ftp.ncbi.nlm.nih.gov/pub/remap/Homo_sapiens/current/GCF_000001405.25_GRCh37.p13/GCF_000001405.39_GRCh38.p13/GCF_000001405.25-GCF_000001405.39.gff
+    # We will need to substitute all the RefSeq chrom and contig IDs with our own names.
+    # The same alt contig can appear in both assemblies with the same name, so replace
+    # hg38 names at the beginning of the line and hg19 names after "Target=".
+    hgsql hg38 -NBe 'select alias, chrom from chromAlias where find_in_set("refseq", source)' \
+    | sed -re 's/\./\\./;' \
+    | awk '{print "s/^" $1 "\\b/" $2 "/;";}' \
+      > hg19.hg38.chromAlias.sed
+    hgsql hg19 -NBe 'select alias, chrom from chromAlias where find_in_set("refseq", source)' \
+    | sed -re 's/\./\\./;' \
+    | awk '{print "s/Target=" $1 "\\b/Target=" $2 "/;";}' \
+      >> hg19.hg38.chromAlias.sed
+    sed -f hg19.hg38.chromAlias.sed GCF_000001405.25-GCF_000001405.39.gff \
+    | gff3ToPsl -dropQ /hive/data/genomes/{hg38,hg19}/chrom.sizes stdin stdout \
+    | pslPosTarget stdin stdout \
+    | sort -k14,14 -k16n,16n > remap.hg19.hg38.psl
+    # Convert to chain for browser display.  Some of the remap chains have minScore < 1000 and
+    # by default would be dropped by chainScore... use -minScore=0 to prevent that.
+    time pslToChain remap.hg19.hg38.psl stdout \
+    | chainScore -minScore=0 stdin /hive/data/genomes/{hg19/hg19.2bit,hg38/hg38.2bit} \
+        remap.hg19.hg38.chain
+#real    5m55.241s
+    hgLoadChain hg19 -tIndex chainHg38ReMap remap.hg19.hg38.chain
+#Loading 5315 chains into hg19.chainHg38ReMap
+    # Chaining the ReMap alignments makes it a lot easier to see when separate alignments
+    # to the same sequence are in the same order and orientation.
+    time axtChain -psl -linearGap=medium -verbose=0 remap.hg19.hg38.psl \
+      /hive/data/genomes/hg19/hg19.2bit /hive/data/genomes/hg38/hg38.2bit \
+      remap.axtChain.hg19.hg38.chain
+#real    1m41.773s
+    hgLoadChain hg19 -tIndex chainHg38ReMapAxtChain remap.axtChain.hg19.hg38.chain
+#Loading 2141 chains into hg19.chainHg38ReMapAxtChain
+
 
 ##############################################################################

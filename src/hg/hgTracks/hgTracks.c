@@ -5204,8 +5204,7 @@ if (withLeftLabels)
         if (zoomedToBaseLevel || rulerCds)
             {
             /* disable complement toggle for HIV because HIV is single stranded RNA */
-            if (!hIsGsidServer())
-                drawComplementArrow(hvgSide,leftLabelX, y, leftLabelWidth-1, baseHeight, font);
+            drawComplementArrow(hvgSide,leftLabelX, y, leftLabelWidth-1, baseHeight, font);
             if (zoomedToBaseLevel)
                 y += baseHeight;
             }
@@ -8535,14 +8534,11 @@ if (!hideControls)
                         "popUpHgt.hgTracks('multi-region config'); return false;", virtMode);
     hPrintf(" ");
 
-    if (!hIsGsidServer())
-        {
-        hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
-                               revCmplDisp ? "Show forward strand at this location"
-                                           : "Show reverse strand at this location",
-                               NULL, revCmplDisp);
-        hPrintf(" ");
-        }
+    hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
+                           revCmplDisp ? "Show forward strand at this location"
+                                       : "Show reverse strand at this location",
+                           NULL, revCmplDisp);
+    hPrintf(" ");
 
     hButtonWithOnClick("hgt.setWidth", "resize", "Resize image width to browser window size", "hgTracksSetWidth()");
     hPrintf(" ");
@@ -8597,15 +8593,7 @@ if (!hideControls)
                            "return vis.expandAllGroups(true)");
         hPrintf("</td></tr>");
 
-        if (!hIsGsidServer())
-	    {
-	    cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
-	    }
-	else
-	    {
-	    /* 4 cols fit GSID's display better */
-	    cg = startControlGrid(4, "left");
-	    }
+        cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
 	for (group = groupList; group != NULL; group = group->next)
 	    {
 	    if (group->trackList == NULL)
@@ -8622,12 +8610,7 @@ if (!hideControls)
 				    &indicator, &otherState);
 	    hPrintf("<TR>");
 	    cg->rowOpen = TRUE;
-            if (!hIsGsidServer())
-                hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS);
-            else
-                hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",
-                        MAX_CONTROL_COLUMNS-1);
-
+            hPrintf("<th align=\"left\" colspan=%d class='blueToggleBar'>",MAX_CONTROL_COLUMNS);
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
 
@@ -9019,10 +9002,7 @@ if (!cartUsualBoolean(cart, "hgt.imageV1", FALSE))
     }
 withExonNumbers = cartUsualBoolean(cart, "exonNumbers", TRUE);
 emAltHighlight = cartUsualBoolean(cart, "emAltHighlight", FALSE);
-if (!hIsGsidServer())
-    {
-    revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
-    }
+revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
 emPadding = cartUsualInt(cart, "emPadding", emPadding);
 gmPadding = cartUsualInt(cart, "gmPadding", gmPadding);
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);

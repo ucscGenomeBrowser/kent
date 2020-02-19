@@ -548,8 +548,10 @@ _EOF_
 	  );
       }
       $bossScript->add(<<_EOF_
-grep -v "^#" infoOut.txt | awk '{printf "%s\\t%s,%s,%s,%s,%s\\n", \$1,\$2,\$3,\$8,\$9,\$10}' > $db.ensGene.nameIndex.txt
-ixIxx $db.ensGene.nameIndex.txt $db.ensGene.name.ix $db.ensGene.name.ixx
+grep -v "^#" infoOut.txt \\
+  | awk -F\$'\\t' '{printf "%s\\t%s,%s,%s,%s\\n", \$1,\$2,\$8,\$9,\$10}' \\
+    | sed -e 's/,,/,/g; s/,\$//;' > $db.ensGene.nameIndex.txt
+ixIxx $db.ensGene.nameIndex.txt $db.ensGene.ix $db.ensGene.ixx
 
 _EOF_
 	  );
@@ -561,11 +563,16 @@ _EOF_
 # * step: download [dbHost]
 sub doDownload {
   my $runDir = "$buildDir/download";
-  # First, make sure we're starting clean.
+  # check if been already done
+  if (-s "$runDir/$ensGtfFile" && -s "$runDir/$ensPepFile" ) {
+     &HgAutomate::verbose(1,
+         "# step download is already completed, continuing...\n");
+     return;
+  }
+  # If not already done, then it should be clean.
   if (-d "$runDir" && ! $opt_debug) {
-    die "ERROR: download: looks like this was run successfully already\n" .
-      "($runDir exists)\nEither run with -continue=process or some later\n" .
-	"stage, or move aside/remove\n$runDir\nand run again.\n";
+    die "ERROR: download: looks like this was attempted unsuccessfully" .
+      " before.\n($runDir exists, download files do not)\n";
   }
   &HgAutomate::mustMkdir($runDir);
 

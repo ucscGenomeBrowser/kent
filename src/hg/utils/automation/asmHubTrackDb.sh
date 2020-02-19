@@ -698,10 +698,21 @@ if [ -s ${buildDir}/trackData/ensGene/process/bbi/${asmId}.ensGene.bb ]; then
 printf "# link: ${buildDir}/trackData/ensGene/process/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb\n" 1>&2
 rm -f ${buildDir}/bbi/${asmId}.ensGene.bb
 ln -s ../trackData/ensGene/process/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb
+rm -f ${buildDir}/ixIxx/${asmId}.ensGene.ix
+rm -f ${buildDir}/ixIxx/${asmId}.ensGene.ixx
+
+ln -s ../trackData/ensGene/process/${asmId}.ensGene.ix $buildDir/ixIxx
+ln -s ../trackData/ensGene/process/${asmId}.ensGene.ixx $buildDir/ixIxx
+
+export ensVersion="v86"
+
+if [ -s ${buildDir}/trackData/ensGene/version.txt ]; then
+  ensVersion=`cat "${buildDir}/trackData/ensGene/version.txt"`
+fi
 
 printf "track ensGene
 shortLabel Ensembl genes
-longLabel Ensembl genes v86
+longLabel Ensembl genes %s
 group genes
 priority 40
 visibility pack
@@ -709,9 +720,11 @@ color 150,0,0
 type bigBed 12 .
 bigDataUrl bbi/%s.ensGene.bb
 searchIndex name
-searchTrix ixIxx/%s.ensGene.name.ix
-html html/%s.ensGene\n\n" "${asmId}" "${asmId}" "${asmId}"
-$scriptDir/asmHubEnsGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.ensGene.html
+searchTrix ixIxx/%s.ensGene.ix
+html html/%s.ensGene\n\n" "${ensVersion}" "${asmId}" "${asmId}" "${asmId}"
+
+$scriptDir/asmHubEnsGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.ensGene.html "${ensVersion}"
+
 fi
 
 if [ -s ${hubLinks}/${asmId}/rnaSeqData/$asmId.trackDb.txt ]; then

@@ -4,7 +4,7 @@
     "<div class='row'>\n"
       "<div class='col'>\n"
       "<p class='text-muted'>\n"
-      "<a href='../index'>Home</a><br />\n"
+      "<a href='../cirmIndex'>Home</a><br />\n"
       "<a href='https://www.ucsc.edu/'>UCSC Home <i\n"
       "class='fas fa-external-link-alt' aria-hidden='true'></i></a><br />\n"
       "<a href='https://www.cirm.ca.gov/'>CIRM Home <i\n"

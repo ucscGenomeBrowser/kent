@@ -20,8 +20,8 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "cdwUnlockSubmittedFiles - Unlock already submitted files from data warehouse.  n"
-  "This is just for cases where data is submitted already and changed into a symlink, "
+  "cdwUnlockSubmittedFiles - Unlock already submitted files from data warehouse.  \n"
+  "This is just for cases where data is submitted already and changed into a symlink, \n"
   "but now needs to be modified.\n"
   "usage:\n"
   "   cdwUnlockSubmittedFiles submitterEmail submitDir fileId1 fileId2 ... fileIdN\n"

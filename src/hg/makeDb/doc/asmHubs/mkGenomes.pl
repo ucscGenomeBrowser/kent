@@ -25,6 +25,7 @@ my $commonNameOrder = "$asmHubName.commonName.asmId.orderList.tsv";
 
 open (FH, "<$toolsDir/${commonNameList}") or die "can not read $toolsDir/${commonNameList}";
 while (my $line = <FH>) {
+  next if ($line =~ m/^#/);
   chomp $line;
   my ($asmId, $name) = split('\t', $line);
   $betterName{$asmId} = $name;
@@ -37,6 +38,7 @@ my $assemblyCount = 0;
 
 open (FH, "<$toolsDir/${commonNameOrder}") or die "can not read ${commonNameOrder}";
 while (my $line = <FH>) {
+  next if ($line =~ m/^#/);
   chomp $line;
   my ($commonName, $asmId) = split('\t', $line);
   push @orderList, $asmId;
@@ -46,6 +48,12 @@ close (FH);
 
 my $orderKey = 1;
 foreach my $asmId (reverse(@orderList)) {
+  my ($gcPrefix, $accession, undef) = split('_', $asmId);
+  my $accessionId = sprintf("%s_%s", $gcPrefix, $accession);
+  my $accessionDir = substr($asmId, 0 ,3);
+  $accessionDir .= "/" . substr($asmId, 4 ,3);
+  $accessionDir .= "/" . substr($asmId, 7 ,3);
+  $accessionDir .= "/" . substr($asmId, 10 ,3);
   my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/" . substr($asmId, 0 ,3);
   $buildDir .= "/" . substr($asmId, 4 ,3);
   $buildDir .= "/" . substr($asmId, 7 ,3);
@@ -53,17 +61,18 @@ foreach my $asmId (reverse(@orderList)) {
   $buildDir .= "/" . $asmId;
   my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
   next if (! -s $asmReport);
+printf STDERR "# %03d genomes.txt %s/%s\n", $orderKey, $accessionDir, $accessionId;
   my $descr=`grep -i "organism name:" $asmReport | head -1 | sed -e 's#.*organism name: *##i; s# (.*\$##;'`;
   chomp $descr;
   my $orgName=`grep -i "organism name:" $asmReport | head -1 | sed -e 's#.* name: .* (##; s#).*##;'`;
   chomp $orgName;
   $orgName = $betterName{$asmId} if (exists($betterName{$asmId}));
 
-  printf "genome %s\n", $asmId;
-  printf "trackDb genomes/%s/%s.trackDb.txt\n", $asmId, $asmId;
+  printf "genome %s\n", $accessionId;
+  printf "trackDb ../%s/%s/trackDb.txt\n", $accessionDir, $accessionId;
   printf "groups groups.txt\n";
   printf "description %s\n", $orgName;
-  printf "twoBitPath genomes/%s/%s.2bit\n", $asmId, $asmId;
+  printf "twoBitPath ../%s/%s/%s.2bit\n", $accessionDir, $accessionId, $accessionId;
   printf "organism %s\n", $descr;
   my $chrName=`head -1 $buildDir/$asmId.chrom.sizes | awk '{print \$1}'`;
   chomp $chrName;
@@ -80,27 +89,28 @@ foreach my $asmId (reverse(@orderList)) {
   printf "defaultPos %s\n", $defPos;
   printf "orderKey %d\n", $orderKey++;
   printf "scientificName %s\n", $descr;
-  printf "htmlPath genomes/%s/html/%s.description.html\n", $asmId, $asmId;
+  printf "htmlPath ../%s/%s/html/%s.description.html\n", $accessionDir, $accessionId, $asmId;
   printf "\n";
   my $localGenomesFile = "$buildDir/${asmId}.genomes.txt";
+  my $localOrderKey;
   open (GF, ">$localGenomesFile") or die "can not write to $localGenomesFile";
-  printf GF "genome %s\n", $asmId;
-  printf GF "trackDb %s.trackDb.txt\n", $asmId;
-  printf GF "groups %s.groups.txt\n", $asmId;
+  printf GF "genome %s\n", $accessionId;
+  printf GF "trackDb trackDb.txt\n";
+  printf GF "groups groups.txt\n";
   printf GF "description %s\n", $orgName;
-  printf GF "twoBitPath %s.2bit\n", $asmId;
+  printf GF "twoBitPath %s.2bit\n", $accessionId;
   printf GF "organism %s\n", $descr;
   printf GF "defaultPos %s\n", $defPos;
-  printf GF "orderKey %d\n", $orderKey++;
+  printf GF "orderKey %d\n", $localOrderKey++;
   printf GF "scientificName %s\n", $descr;
   printf GF "htmlPath html/%s.description.html\n", $asmId;
   close (GF);
   my $localHubTxt = "$buildDir/${asmId}.hub.txt";
   open (HT, ">$localHubTxt") or die "can not write to $localHubTxt";
-  printf HT "hub %s genome assembly\n", $asmId;
+  printf HT "hub %s genome assembly\n", $accessionId;
   printf HT "shortLabel %s\n", $orgName;
   printf HT "longLabel %s/%s/%s genome assembly\n", $orgName, $descr, $asmId;
-  printf HT "genomesFile %s.genomes.txt\n", $asmId;
+  printf HT "genomesFile genomes.txt\n";
   printf HT "email hclawson\@ucsc.edu\n";
   printf HT "descriptionUrl html/%s.description.html\n", $asmId;
   close (HT);
