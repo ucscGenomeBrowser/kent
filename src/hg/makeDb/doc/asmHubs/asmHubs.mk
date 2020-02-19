@@ -9,27 +9,28 @@ destDir=/hive/data/genomes/asmHubs/${name}
 srcDir=${HOME}/kent/src/hg/makeDb/doc/${name}AsmHub
 toolsDir=${HOME}/kent/src/hg/makeDb/doc/asmHubs
 
-all:: makeDirs ${destDir}/hub.txt ${destDir}/groups.txt ${destDir}/genomes.txt \
-	${destDir}/index.html ${destDir}/asmStats${Name}.html
+all:: makeDirs symLinks ${destDir}/hub.txt ${destDir}/groups.txt \
+	mkGenomes ${destDir}/index.html \
+	${destDir}/asmStats${Name}.html
 
 makeDirs:
 	mkdir -p ${destDir}
+
+symLinks::
 	${toolsDir}/mkSymLinks.pl ${Name} ${name}
 
-${destDir}/index.html: ${toolsDir}/mkHubIndex.pl
-	${toolsDir}/mkHubIndex.pl ${Name} ${name} ${defaultAssembly} > $@
-	sed -e "s/hgdownload.soe/genome-test.gi/g; s#/index.html#/testIndex.html#; s#${name}/hub.txt#${name}/testHub.txt#; s/asmStats${Name}/testAsmStats${Name}/;" $@ > ${destDir}/testIndex.html
-	chmod +x $@ ${destDir}/testIndex.html
+hubIndex::
+	${toolsDir}/mkHubIndex.pl ${Name} ${name} ${defaultAssembly} > ${destDir}/index.html
+	sed -e "s/hgdownload.soe/hgdownload-test.gi/g; s#/index.html#/testIndex.html#; s#${name}/hub.txt#${name}/testHub.txt#; s/asmStats${Name}/testAsmStats${Name}/;" ${destDir}/index.html > ${destDir}/testIndex.html
+	chmod +x ${destDir}/index.html ${destDir}/testIndex.html
 
-${destDir}/asmStats${Name}.html: ${toolsDir}/mkAsmStats.pl
-	${toolsDir}/mkAsmStats.pl ${Name} ${name} > $@
-	sed -e "s/hgdownload.soe/genome-test.gi/g; s/index.html/testIndex.html/; s#/asmStats#/testAsmStats#;" $@ > ${destDir}/testAsmStats${Name}.html
-	chmod +x $@ ${destDir}/testAsmStats${Name}.html
+asmStats::
+	${toolsDir}/mkAsmStats.pl ${Name} ${name} > ${destDir}/asmStats${Name}.html
+	sed -e "s/hgdownload.soe/hgdownload-test.gi/g; s/index.html/testIndex.html/; s#/asmStats#/testAsmStats#;" ${destDir}/asmStats${Name}.html > ${destDir}/testAsmStats${Name}.html
+	chmod +x ${destDir}/asmStats${Name}.html ${destDir}/testAsmStats${Name}.html
 
-${destDir}/genomes.txt:  ${toolsDir}/mkGenomes.pl \
-	${toolsDir}/${name}.asmId.commonName.tsv \
-	${toolsDir}/${name}.commonName.asmId.orderList.tsv
-	${toolsDir}/mkGenomes.pl ${Name} ${name} > $@
+mkGenomes::
+	${toolsDir}/mkGenomes.pl ${Name} ${name} > ${destDir}/genomes.txt
 
 ${destDir}/hub.txt: ${srcDir}/hub.txt
 	rm -f ${destDir}/hub.txt
@@ -39,3 +40,13 @@ ${destDir}/hub.txt: ${srcDir}/hub.txt
 ${destDir}/groups.txt: ${toolsDir}/groups.txt
 	rm -f ${destDir}/groups.txt
 	cp -p ${toolsDir}/groups.txt ${destDir}/groups.txt
+
+clean::
+	rm -f ${destDir}/hub.txt
+	rm -f ${destDir}/testHub.txt
+	rm -f ${destDir}/groups.txt
+	rm -f ${destDir}/genomes.txt
+	rm -f ${destDir}/index.html
+	rm -f ${destDir}/testIndex.html
+	rm -f ${destDir}/asmStats${Name}.html
+	rm -f ${destDir}/testAsmStats${Name}.html

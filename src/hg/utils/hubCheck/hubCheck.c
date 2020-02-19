@@ -477,8 +477,8 @@ char *makeChildObjectString(char *id, char *title, char *shortLabel, char *longL
 struct dyString *item = dyStringNew(0);
 dyStringPrintf(item, "{icon: 'fa fa-plus', id:'%s', li_attr:{class: 'hubError', title: '%s', "
         "shortLabel: '%s', longLabel: '%s', color: '%s', name:'%s'}, "
-        "text:\"%s\", parent: '%s', state: {opened: true}}",
-        id, title, shortLabel, longLabel, color, name, text, parent);
+        "text:'%s', parent: '%s', state: {opened: true}}",
+        id, title, shortLabel, longLabel, color, name, replaceChars(text, "'", "\\'"), parent);
 return dyStringCannibalize(&item);
 }
 
@@ -512,22 +512,27 @@ count++;
 }
 
 void genomeErr(struct dyString *errors, char *message, struct trackHub *hub,
-    struct trackHubGenome *genome)
+    struct trackHubGenome *genome, boolean doHtml)
 /* Construct the right javascript for the jstree for a top-level genomes.txt error or
  * error opening a trackDb.txt file */
 {
-static int count = 0; // forces unique ID's which the jstree object needs
-char id[512];
-char *strippedMessage = NULL;
-char *genomeName = trackHubSkipHubName(genome->name);
-if (message)
-    strippedMessage = cloneString(message);
-stripChar(strippedMessage, '\n');
-safef(id, sizeof(id), "%s%d", genomeName, count);
+if (!doHtml)
+    dyStringPrintf(errors, "%s", message);
+else
+    {
+    static int count = 0; // forces unique ID's which the jstree object needs
+    char id[512];
+    char *strippedMessage = NULL;
+    char *genomeName = trackHubSkipHubName(genome->name);
+    if (message)
+        strippedMessage = cloneString(message);
+    stripChar(strippedMessage, '\n');
+    safef(id, sizeof(id), "%s%d", genomeName, count);
 
-dyStringPrintf(errors, "trackData['%s'] = [%s", genomeName,
-    makeChildObjectString(id, "Error Getting TrackDb", genomeName, genomeName, "#550073", genomeName, strippedMessage, genomeName));
-count++;
+    dyStringPrintf(errors, "trackData['%s'] = [%s,", genomeName,
+        makeChildObjectString(id, "Genome Error", genomeName, genomeName, "#550073", genomeName, strippedMessage, genomeName));
+    count++;
+    }
 }
 
 void trackDbErr(struct dyString *errors, char *message, struct trackHubGenome *genome, struct trackDb *tdb, boolean doHtml)
@@ -540,20 +545,35 @@ if (!doHtml)
 else
     {
     char *strippedMessage = NULL;
+    char *splitMessages[16]; // SUBGROUP_MAX=9 but add a few extra just in case
     char parentOrTrackString[512];
     char id[512];
     static int count = 0; // forces unique ID's which the jstree object needs
+    int numMessages = 0;
+    int i = 0;
 
+    // if a subtrack is missing multiple subgroups, then message will contain
+    // at least two newline separated errors, both should be printed separately:
     if (message)
+        {
         strippedMessage = cloneString(message);
+        while (lastChar(strippedMessage) == '\n')
+            trimLastChar(strippedMessage);
+        numMessages = chopByChar(strippedMessage, '\n', splitMessages, sizeof(splitMessages));
+        }
 
-    stripChar(strippedMessage, '\n');
-    safef(id, sizeof(id), "%s%d", trackHubSkipHubName(tdb->track), count);
-    safef(parentOrTrackString, sizeof(parentOrTrackString), "%s_%s", trackHubSkipHubName(genome->name), trackHubSkipHubName(tdb->track));
-    dyStringPrintf(errors, "%s,",
-            makeChildObjectString(id, "TrackDb Error", tdb->shortLabel, tdb->longLabel,
-            "#550073", trackHubSkipHubName(tdb->track), strippedMessage, parentOrTrackString));
-    count++;
+    for (; i < numMessages; i++)
+        {
+        if (isNotEmpty(splitMessages[i]))
+            {
+            safef(id, sizeof(id), "%s%d", trackHubSkipHubName(tdb->track), count);
+            safef(parentOrTrackString, sizeof(parentOrTrackString), "%s_%s", trackHubSkipHubName(genome->name), trackHubSkipHubName(tdb->track));
+            dyStringPrintf(errors, "%s,",
+                    makeChildObjectString(id, "TrackDb Error", tdb->shortLabel, tdb->longLabel,
+                    "#550073", trackHubSkipHubName(tdb->track), splitMessages[i], parentOrTrackString));
+            count++;
+            }
+        }
     }
 }
 
@@ -590,10 +610,7 @@ if (errCatchStart(errCatch))
     // membersForAllSubGroupsGet() warns about the parent stanza, turn it into an errAbort
     if (errCatch->gotWarning)
         {
-        char *temp = cloneString(errCatch->message->string);
-        stripChar(temp, '\n');
-        dyStringClear(errCatch->message);
-        errAbort("%s", temp);
+        errAbort("%s", errCatch->message->string);
         }
 
     if (membersForAll && checkEmptyMembersForAll(membersForAll, tdb->parent))
@@ -819,6 +836,14 @@ boolean openedGenome = FALSE;
 
 if (errCatchStart(errCatch))
     {
+    if (genome->twoBitPath != NULL)
+        {
+        char *htmlPath = hashFindVal(genome->settingsHash, "htmlPath");
+        if (htmlPath == NULL)
+            warn("warning: missing htmlPath setting for assembly hub '%s'", genome->name);
+        else if (!udcExists(htmlPath))
+            warn("warning: htmlPath file does not exist: '%s'", htmlPath);
+        }
     tdbList = trackHubTracksForGenome(hub, genome);
     tdbList = trackDbLinkUpGenerations(tdbList);
     tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
@@ -829,22 +854,12 @@ if (errCatch->gotError)
     {
     openedGenome = TRUE;
     genomeErrorCount += 1;
-    if (options->htmlOut)
-        {
-        genomeErr(errors, errCatch->message->string, hub, genome);
-        }
-    else
-        dyStringPrintf(errors, "%s", errCatch->message->string);
+    genomeErr(errors, errCatch->message->string, hub, genome, options->htmlOut);
     }
-if (errCatch->gotWarning && !errCatch->gotError)
+if (errCatch->gotWarning)
     {
     openedGenome = TRUE;
-    if (options->htmlOut)
-        {
-        genomeErr(errors, errCatch->message->string, hub, genome);
-        }
-    else
-        dyStringPrintf(errors, "%s", errCatch->message->string);
+    genomeErr(errors, errCatch->message->string, hub, genome, options->htmlOut);
     }
 errCatchFree(&errCatch);
 
@@ -905,9 +920,13 @@ int retVal = 0;
 if (errCatchStart(errCatch))
     {
     hub = trackHubOpen(hubUrl, "");
+    if (hub->descriptionUrl == NULL)
+        warn("warning: missing hub overview descripton page (descriptionUrl setting)");
+    else if (!udcExists(hub->descriptionUrl))
+        warn("warning: %s descriptionUrl setting does not exist", hub->descriptionUrl);
     }
 errCatchEnd(errCatch);
-if (errCatch->gotError)
+if (errCatch->gotError || errCatch->gotWarning)
     {
     retVal = 1;
     if (options->htmlOut)

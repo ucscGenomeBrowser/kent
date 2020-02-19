@@ -1,6 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # This file describes how hg19 was extended with the rCRS mitochondrial sequence (NC_012920) as chrMT
+# Redmine #24648
 
 ##############################################################################
 # Get NC_012920.1 sequence, rename to chrMT. (DONE - 2020-01-14 - Angie)
@@ -441,6 +442,21 @@ done
       > gtexGeneModelV6.MT.gp
     sort -k2,2 -k3n,3n gtexGeneModelV6.initial.gp gtexGeneModelV6.p13.gp gtexGeneModelV6.MT.gp \
     | hgLoadGenePred hg19 gtexGeneModel stdin
+
+
+##############################################################################
+# Oops update original wiggle gc5Base (gc5BaseBw is not released for hg19) (DONE 2020-02-18 - Angie)
+    # Redmine #24648 notes 18 & 19
+    cd /hive/data/genomes/hg19/bed/gc5Base/
+    wigEncode hg19.p13.plusMT.gc5Base.wigVarStep.gz gc5Base.p13.plusMT.{wig,wib}
+    # Install
+    ln -s `pwd`/gc5Base.p13.plusMT.wib /gbdb/hg19/wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg19/wib hg19 gc5Base gc5Base.p13.plusMT.wig
+    # Also update the gc5Base varStep wiggle download file:
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/gc5Base
+    ln -sf /hive/data/genomes/hg19/bed/gc5Base/hg19.p13.plusMT.gc5Base.wigVarStep.gz \
+      hg19.gc5Base.txt.gz
+    md5sum hg19.gc5Base.txt.gz > md5sum.txt
 
 
 ##############################################################################

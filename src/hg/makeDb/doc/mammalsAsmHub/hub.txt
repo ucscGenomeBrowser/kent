@@ -1,6 +1,6 @@
-hub Fish genome assemblies
-shortLabel Fish assemblies
-longLabel Fish genome assemblies
+hub Mammal genome assemblies
+shortLabel Mammal assemblies
+longLabel Mammal genome assemblies
 genomesFile genomes.txt
 email hclawson@ucsc.edu
 descriptionUrl index.html

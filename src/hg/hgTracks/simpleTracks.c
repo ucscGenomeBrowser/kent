@@ -1376,6 +1376,8 @@ void spreadAlignStringProt(struct hvGfx *hvg, int x, int y, int width, int heigh
  * The count param is the number of bases to print, not length of
  * the input line (text) */
 {
+    errAbort("Function spreadAlignStringProt() called.  It is not supported on non-GSID server.");
+#ifdef NOTNOW
 char cBuf[2] = "";
 int i,j,textPos=0;
 int x1, x2, xx1, xx2;
@@ -1519,6 +1521,7 @@ for (i=0; i<count; i++, text++, textPos++)
 	}
     }
 freez(&inMotif);
+#endif
 }
 
 void spreadBasesString(struct hvGfx *hvg, int x, int y, int width, int height, Color color,

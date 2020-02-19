@@ -331,121 +331,6 @@ struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno)
 return lfFromPslx(psl, 1, isXeno, FALSE, NULL);
 }
 
-#ifndef GBROWSE
-boolean  gsidSelectedSubjListLoaded = FALSE;
-
-void initializeGsidSubjList()
-{
-struct gsidSubj *subj;
-struct lineFile *lf;
-
-char *line;
-int lineSize;
-
-char *subjListFileName;
-
-if (hIsGisaidServer())
-    {
-    subjListFileName = cartOptionalString(cart, gisaidSubjList);
-    }
-else
-    {
-    subjListFileName = cartOptionalString(cart, gsidSubjList);
-    }
-if (subjListFileName)
-    {
-    lf = lineFileOpen(subjListFileName, TRUE);
-
-    while (lineFileNext(lf, &line, &lineSize))
-    	{
-    	AllocVar(subj);
-    	subj->subjId = cloneString(line);
-    	slAddHead(&gsidSelectedSubjList, subj);
-    	}
-    slReverse(&gsidSelectedSubjList);
-    lineFileClose(&lf);
-    gsidSelectedSubjListLoaded = TRUE;
-    }
-}
-
-/* special processing for GSID entries */
-/* check if the entry belongs to a subject that is selected */
-boolean isSelected(char *seqId)
-{
-char query[256];
-struct sqlResult *sr;
-char **row;
-char *subjId, *testSubjId;
-struct sqlConnection *conn;
-struct gsidSubj *subj;
-
-if (!gsidSelectedSubjListLoaded) initializeGsidSubjList();
-
-conn= hAllocConn(database);
-
-if (hIsGsidServer())
-    {
-    sqlSafef(query, sizeof query, "select subjId from gsIdXref where dnaSeqId='%s'", seqId);
-    }
-else
-    {
-    sqlSafef(query, sizeof query, "select subjId from gisaidXref where dnaSeqId='%s'", seqId);
-    }
-sr = sqlMustGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row != NULL)
-    {
-    subjId = row[0];
-
-    /* scan thru subj ID list */
-    subj = gsidSelectedSubjList;
-    while (subj != NULL)
-    	{
-    	testSubjId = subj->subjId;
-	if (sameWord(subjId, testSubjId))
-	    {
-	    sqlFreeResult(&sr);
-	    hFreeConn(&conn);
-	    return(TRUE);
-	    }
-    	subj = subj->next;
-    	}
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return(FALSE);
-}
-
-boolean gsidCheckSelected(struct track *tg)
-{
-char *setting;
-char *subjListFileName;
-
-/* check subject only if the selectSubject is set to on in trackDb for this track */
-setting = trackDbSetting(tg->tdb, SELECT_SUBJ);
-if (isNotEmpty(setting))
-    {
-    if (sameString(setting, "on"))
-	{
-	/* return TRUE only if the user has selected the subjects */
-	if (hIsGisaidServer())
-	    {
-	    subjListFileName = strdup(gisaidSubjList);
-	    }
-	else
-	    {
-	    subjListFileName = gsidSubjList;
-	    }
-	if (cartOptionalString(cart, subjListFileName))
-	    {
-	    return(TRUE);
-	    }
-	}
-    }
-return(FALSE);
-}
-#endif /* GBROWSE */
-
 static void connectedLfFromPslsInRange(struct sqlConnection *conn,
     struct track *tg, int start, int end, char *chromName,
     boolean isXeno, boolean nameGetsPos, int sizeMul)
@@ -480,17 +365,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     struct psl *psl = pslLoad(row+rowOffset);
     lf = lfFromPslx(psl, sizeMul, isXeno, nameGetsPos, tg);
-#ifndef GBROWSE
-    /* if this is a GSID track, check if we need to check for inclusion of the item */
-    if (hIsGsidServer() && gsidCheckSelected(tg))
-	{
-    	if (isSelected(lf->name))
-	    slAddHead(&lfList, lf);
-	}
-
-    else
-#endif /* GBROWSE */
-    	slAddHead(&lfList, lf);
+    slAddHead(&lfList, lf);
     // Don't free psl - may be used by baseColor code (and freeing is slow)
     }
 slReverse(&lfList);
