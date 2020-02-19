@@ -477,8 +477,8 @@ char *makeChildObjectString(char *id, char *title, char *shortLabel, char *longL
 struct dyString *item = dyStringNew(0);
 dyStringPrintf(item, "{icon: 'fa fa-plus', id:'%s', li_attr:{class: 'hubError', title: '%s', "
         "shortLabel: '%s', longLabel: '%s', color: '%s', name:'%s'}, "
-        "text:\"%s\", parent: '%s', state: {opened: true}}",
-        id, title, shortLabel, longLabel, color, name, text, parent);
+        "text:'%s', parent: '%s', state: {opened: true}}",
+        id, title, shortLabel, longLabel, color, name, replaceChars(text, "'", "\\'"), parent);
 return dyStringCannibalize(&item);
 }
 
@@ -540,20 +540,35 @@ if (!doHtml)
 else
     {
     char *strippedMessage = NULL;
+    char *splitMessages[16]; // SUBGROUP_MAX=9 but add a few extra just in case
     char parentOrTrackString[512];
     char id[512];
     static int count = 0; // forces unique ID's which the jstree object needs
+    int numMessages = 0;
+    int i = 0;
 
+    // if a subtrack is missing multiple subgroups, then message will contain
+    // at least two newline separated errors, both should be printed separately:
     if (message)
+        {
         strippedMessage = cloneString(message);
+        while (lastChar(strippedMessage) == '\n')
+            trimLastChar(strippedMessage);
+        numMessages = chopByChar(strippedMessage, '\n', splitMessages, sizeof(splitMessages));
+        }
 
-    stripChar(strippedMessage, '\n');
-    safef(id, sizeof(id), "%s%d", trackHubSkipHubName(tdb->track), count);
-    safef(parentOrTrackString, sizeof(parentOrTrackString), "%s_%s", trackHubSkipHubName(genome->name), trackHubSkipHubName(tdb->track));
-    dyStringPrintf(errors, "%s,",
-            makeChildObjectString(id, "TrackDb Error", tdb->shortLabel, tdb->longLabel,
-            "#550073", trackHubSkipHubName(tdb->track), strippedMessage, parentOrTrackString));
-    count++;
+    for (; i < numMessages; i++)
+        {
+        if (isNotEmpty(splitMessages[i]))
+            {
+            safef(id, sizeof(id), "%s%d", trackHubSkipHubName(tdb->track), count);
+            safef(parentOrTrackString, sizeof(parentOrTrackString), "%s_%s", trackHubSkipHubName(genome->name), trackHubSkipHubName(tdb->track));
+            dyStringPrintf(errors, "%s,",
+                    makeChildObjectString(id, "TrackDb Error", tdb->shortLabel, tdb->longLabel,
+                    "#550073", trackHubSkipHubName(tdb->track), splitMessages[i], parentOrTrackString));
+            count++;
+            }
+        }
     }
 }
 
@@ -590,10 +605,7 @@ if (errCatchStart(errCatch))
     // membersForAllSubGroupsGet() warns about the parent stanza, turn it into an errAbort
     if (errCatch->gotWarning)
         {
-        char *temp = cloneString(errCatch->message->string);
-        stripChar(temp, '\n');
-        dyStringClear(errCatch->message);
-        errAbort("%s", temp);
+        errAbort("%s", errCatch->message->string);
         }
 
     if (membersForAll && checkEmptyMembersForAll(membersForAll, tdb->parent))
