@@ -1,4 +1,5 @@
-Found 9 problems:
+Found 10 problems:
+
 Couldn't open https://bad.url.txt/missing.bb
 No subtracks in group: Blank.  This indicates a problem in the subGroup line for this group.
 No subtracks in group: Tags.  This indicates a problem in the subGroup line for this group.
