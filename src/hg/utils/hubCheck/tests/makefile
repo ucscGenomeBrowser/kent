@@ -7,7 +7,7 @@ test:: one two errors
 	${MAKE} clean
 
 one:	mkout
-	${hubCheck} input/hub1.txt > output/output1.txt
+	-${hubCheck} input/hub1.txt > output/output1.txt
 	diff expected/output1.txt output/output1.txt
 
 two:	mkout
