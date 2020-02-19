@@ -641,9 +641,29 @@ variable just after the &quot;hgTracks&quot; portion of the URL so that it reads
 following the ampersand). To restore the default timeout, a warning message will appear on hgTracks
 with a link to clear the udcTimeout variable.</p>
 
+<a name="validate"></a>
+<h3>Check hub settings using Validate Hub tool</h3>
+<p>
+Hubs can be checked for valid file configuration, trackDb keywords, and composite or super track 
+settings with the Validate Hub tool. This tool can be accessed from the Track Hub page under 
+<a href="../../cgi-bin/hgHubConnect?#validateHub">the
+Validate Hub tab</a>. After entering your URL in the search box, 
+the tool runs hubCheck with the following settings:
+<pre>hubCheck -noTracks http://url.to.hub.txt</pre>
+Note that for speed, the noTracks setting was added and the Validate Hub tool does not check 
+presence of your remotely hosted data track files. This tool checks your hub.txt, genome.txt,
+and trackDb.txt settings. The following picture shows 
+<a href="examples/hubExamples/hubGroupings/hub.txt">the example track grouping hub</a>
+showing no configuration errors:</p>
+
+<p class='text-center'>
+  <img class='text-center' src="images/validateHub.png" alt="Validate hub tool checks config setting" width="499" height="299">
+  <p class='gbsCaption text-center'>The validate hub tool checks for valid hub settings.</p>
+</p>
+
 <h3>Check hub settings using hubCheck utility</h3>
 <p>
-It is a good practice to run the command-line utility <em>hubCheck</em> on your track hub when you 
+It is a good practice to run the command-line utility <em>hubCheck</em> on your track hub when you
 first bring it online and whenever you make significant changes. This utility by default checks
 that the files in the hub are correctly formatted, but it can also be configured to check a few
 other things including that various trackDb settings are correctly spelled and that they are
