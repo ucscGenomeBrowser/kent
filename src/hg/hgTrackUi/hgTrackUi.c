@@ -3149,21 +3149,12 @@ if (tdbIsContainer(tdb))
 
 if (tdb->parent)
     {
-    printf("<style>div.superTrackInfo {"
-                "box-shadow: inset 0 0 5px 0 black;"
-                "padding: 5px; padding-left: 50px;"
-                "margin-bottom: 10px;"
-                "} </style>\n");
-
     printf("This track is part of a super-track. "
-            "To configure the parent or sibling tracks, click a link in the box below.");
+            "To configure the parent or sibling tracks, click a link below.");
 
     // show super-track info
-    printf("<div class='superTrackInfo'>");
-/*
-    printf("<i>Parent track</i> ");
-*/
     struct trackDb *tdbParent = tdb->parent;
+    printf("<p>");
     if (trackDbSetting(tdbParent, "wgEncode"))
         printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' "
                "width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
@@ -3198,7 +3189,11 @@ if (tdb->parent)
         {
         struct trackDb *sibTdb = childRef->val;
         if (sameString(sibTdb->track, tdb->track))
+            {
+            printf("<tr><b><td>%s</td>\n", sibTdb->shortLabel);
+            printf("<td>%s</td></b></tr>\n", sibTdb->longLabel);
             continue;
+            }
         printf("<tr>");
         //hPrintPennantIcon(sibTdb);
         printf("<td><a href='%s?%s=%s&c=%s&g=%s'>%s</a>&nbsp;</td>", 
@@ -3209,25 +3204,14 @@ if (tdb->parent)
         }
     printf("</table>");
 
+// TODO:  Add collapsed panel for Description
 
-/*
-   char *encodedMapName = cgiEncode(tdb->parent->track);
-    printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
-           "(<A HREF=\"%s?%s=%s&c=%s&g=%s\" title='Link to parent track'>"
-           "<IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
-           hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-           chromosome, encodedMapName, tdb->parent->shortLabel);
-
-    printf("<p>This track is part of a parent called <i>%s</i>. "
-            "To show other tracks of this parent, go to the "
-           "<A HREF=\"%s?%s=%s&c=%s&g=%s\" title='Link to parent track'>"
-           "%s</a> configuration page</A>.",
-           tdb->parent->shortLabel, hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-           chromosome, encodedMapName, tdb->parent->shortLabel);
-    freeMem(encodedMapName);
-*/
-    printf("</div>");
+    printf("</p><p>&nbsp;&nbsp;<b>+ Description</b>\n");
+    printf("<hr>");
+    printf("</p>");
     }
+
+/* track configuration form */
 
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
@@ -3271,7 +3255,7 @@ else if (sameWord(tdb->track, "refSeqComposite"))
     }
 else
     {
-    if (trackDbSetting(tdb, "wgEncode"))
+    if (trackDbSetting(tdb, "wgEncode") && !tdb->parent)
         printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' "
                "width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
     // set large title font size, but less so for long labels to minimize wrap
