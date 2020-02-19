@@ -95,7 +95,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#020720b "updated Feb. 7, 202
         priority 7
         type genePred
         shortLabel RefSeq Select/MANE
-        longLabel NCBI RefSeq/MANE Select: One representative transcript per protein-coding gene
+        longLabel NCBI RefSeq Select/MANE: One representative transcript per protein-coding gene
         trackHandler ncbiRefSeq
         idXref ncbiRefSeqLink mrnaAcc name
         color 20,20,160
