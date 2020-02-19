@@ -648,18 +648,19 @@ Hubs can be checked for valid file configuration, trackDb keywords, and composit
 settings with the Validate Hub tool. This tool can be accessed from the Track Hub page under 
 <a href="../../cgi-bin/hgHubConnect?#validateHub">the
 Validate Hub tab</a>. After entering your URL in the search box, 
-the tool runs hubCheck with the following settings:</p>
+the tool runs hubCheck like so:</p>
 <pre>hubCheck -noTracks http://url.to.hub.txt</pre>
 <p>
-Note that for speed, the noTracks setting was added and the Validate Hub tool does not check 
-presence of your remotely hosted data track files. This tool checks your hub.txt, genome.txt,
-and trackDb.txt settings. The following picture shows 
+The noTracks setting speeds up the validation process but does not check for 
+the presence of your remotely hosted data track files. This tool checks your hub.txt, 
+genome.txt, and trackDb.txt settings and displays errors in bright red font, such 
+as "<font color="red">Missing required setting...</font>" and "<font color="red">Cannot open...</font>". The following picture shows 
 <a href="examples/hubExamples/hubGroupings/hub.txt">the example track grouping hub</a>
-showing no configuration errors:</p>
+with no configuration errors:</p>
 
 <p class='text-center'>
   <img class='text-center' src="../../images/validateHub.png" alt="Validate hub tool checks config setting" width="749" height="249">
-  <p class='gbsCaption text-center'>The validate hub tool checks for valid hub settings.</p>
+  <p class='gbsCaption text-center'>The validate hub tool checks for proper configuration files and track hub settings.</p>
 </p>
 
 <h3>Check hub settings using hubCheck utility</h3>
