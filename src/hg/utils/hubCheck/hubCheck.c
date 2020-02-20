@@ -482,33 +482,35 @@ dyStringPrintf(item, "{icon: 'fa fa-plus', id:'%s', li_attr:{class: 'hubError', 
 return dyStringCannibalize(&item);
 }
 
-void hubErr(struct dyString *errors, char *message, struct trackHub *hub)
+void hubErr(struct dyString *errors, char *message, struct trackHub *hub, boolean doHtml)
 /* Construct the right javascript for the jstree for a top level hub.txt error. */
 {
-char *sl;
-char *strippedMessage = NULL;
-static int count = 0; // force a unique id for the jstree object
-char id[512];
-//TODO: Choose better default labels
-if (hub && hub->shortLabel != NULL)
-    {
-    sl = hub->shortLabel;
-    }
+if (!doHtml)
+    dyStringPrintf(errors, "%s", message);
 else
-    sl = "Hub Error";
-if (message)
-    strippedMessage = cloneString(message);
-stripChar(strippedMessage, '\n');
-safef(id, sizeof(id), "%s%d", sl, count);
+    {
+    char *sl;
+    char *strippedMessage = NULL;
+    static int count = 0; // force a unique id for the jstree object
+    char id[512];
+    //TODO: Choose better default labels
+    if (hub && hub->shortLabel != NULL)
+        {
+        sl = hub->shortLabel;
+        }
+    else
+        sl = "Hub Error";
+    if (message)
+        strippedMessage = cloneString(message);
+    stripChar(strippedMessage, '\n');
+    safef(id, sizeof(id), "%s%d", sl, count);
 
-// make the error message
-dyStringPrintf(errors, "trackData['%s'] = [%s];\n", sl,
-    makeChildObjectString(id, "Hub Error", sl, sl, "#550073", sl, strippedMessage, sl));
+    // make the error message
+    dyStringPrintf(errors, "trackData['%s'] = [%s];\n", sl,
+        makeChildObjectString(id, "Hub Error", sl, sl, "#550073", sl, strippedMessage, sl));
 
-// display it by default
-dyStringPrintf(errors, "trackData['#'] = [%s];\n",
-    makeFolderObjectString(sl, "Error getting hub or genomes configuration", "#", "Click to open node", TRUE, TRUE));
-count++;
+    count++;
+    }
 }
 
 void genomeErr(struct dyString *errors, char *message, struct trackHub *hub,
@@ -850,16 +852,12 @@ if (errCatchStart(errCatch))
     trackHubPolishTrackNames(hub, tdbList);
     }
 errCatchEnd(errCatch);
-if (errCatch->gotError)
-    {
-    openedGenome = TRUE;
-    genomeErrorCount += 1;
-    genomeErr(errors, errCatch->message->string, hub, genome, options->htmlOut);
-    }
-if (errCatch->gotWarning)
+if (errCatch->gotError || errCatch->gotWarning)
     {
     openedGenome = TRUE;
     genomeErr(errors, errCatch->message->string, hub, genome, options->htmlOut);
+    if (errCatch->gotError)
+        genomeErrorCount += 1;
     }
 errCatchFree(&errCatch);
 
@@ -915,6 +913,7 @@ int trackHubCheck(char *hubUrl, struct trackHubCheckOptions *options, struct dyS
 {
 struct errCatch *errCatch = errCatchNew();
 struct trackHub *hub = NULL;
+struct dyString *hubErrors = dyStringNew(0);
 int retVal = 0;
 
 if (errCatchStart(errCatch))
@@ -929,28 +928,27 @@ errCatchEnd(errCatch);
 if (errCatch->gotError || errCatch->gotWarning)
     {
     retVal = 1;
+    hubErr(hubErrors, errCatch->message->string, hub, options->htmlOut);
+
     if (options->htmlOut)
-        {
-        hubErr(errors, errCatch->message->string, hub);
-        }
-    else
-        dyStringPrintf(errors, "%s\n", errCatch->message->string);
+        dyStringPrintf(errors, "trackData['#'] = [%s,",
+            makeFolderObjectString(hub->shortLabel, "Hub Errors", "#",
+                "Click to open node", TRUE, TRUE));
     }
-if (errCatch->gotWarning && !errCatch->gotError)
-    dyStringPrintf(errors, "%s", errCatch->message->string);
 errCatchFree(&errCatch);
 
 if (hub == NULL)
+    {
+    dyStringPrintf(errors, "%s", dyStringCannibalize(&hubErrors));
     return 1;
+    }
+if (options->htmlOut && retVal != 1)
+    dyStringPrintf(errors, "trackData['#'] = [");
 
 if (options->checkSettings)
     retVal |= hubSettingsCheckInit(hub, options, errors);
 
 struct trackHubGenome *genome;
-
-if (options->htmlOut)
-    dyStringPrintf(errors, "trackData['#'] = [");
-
 int numGenomeErrors = 0;
 char genomeTitleString[128];
 struct dyString *genomeErrors = dyStringNew(0);
@@ -969,7 +967,10 @@ for (genome = hub->genomeList; genome != NULL; genome = genome->next)
     retVal |= numGenomeErrors;
     }
 if (options->htmlOut)
+    {
     dyStringPrintf(errors, "];\n");
+    }
+dyStringPrintf(errors, "%s", dyStringCannibalize(&hubErrors));
 dyStringPrintf(errors, "%s", dyStringCannibalize(&genomeErrors));
 trackHubClose(&hub);
 return retVal;

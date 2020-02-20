@@ -1555,4 +1555,7 @@ unsigned dayOfYear();
 boolean haplotype(const char *name);
 /* Is this name a haplotype name ?  _hap or _alt in the name */
 
+char *shorterDouble(double value);
+/* Work around a "bug" in %g output that goes into scientific notation too early. */
+
 #endif /* COMMON_H */
