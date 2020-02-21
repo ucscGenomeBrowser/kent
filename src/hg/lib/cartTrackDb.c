@@ -79,6 +79,30 @@ struct hash *groupsInTrackList = newHash(0);
 struct hash *groupsInDatabase = newHash(0);
 struct trackDb *track;
 
+/* Do some error checking for tracks with group names that are not in database.
+ * Warnings at this stage mess up CGIs that may produce text output like hgTables & hgIntegrator,
+ * so don't warn, just put CTs in group user and others in group x. */
+groupsAll = hLoadGrps(db);
+if (!trackHubDatabase(db))
+    {
+    struct hash *allGroups = hashNew(0);
+    for (group = groupsAll;  group != NULL; group = group->next)
+        hashAdd(allGroups, group->name, group);
+    for (track = trackList; track != NULL; track = track->next)
+        {
+        if (!hashLookup(allGroups, track->grp))
+            {
+            fprintf(stderr, "Track %s has group %s, which isn't in grp table\n",
+                    track->table, track->grp);
+            if (isCustomTrack(track->track))
+                track->grp = cloneString("user");
+            else
+                track->grp = cloneString("x");
+            }
+        }
+    hashFree(&allGroups);
+    }
+
 /* Stream through track list building up hash of active groups. */
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -87,7 +111,6 @@ for (track = trackList; track != NULL; track = track->next)
     }
 
 /* Scan through group table, putting in ones where we have data. */
-groupsAll = hLoadGrps(db);
 for (group = slPopHead(&groupsAll); group != NULL; group = slPopHead(&groupsAll))
     {
     if (hashLookup(groupsInTrackList, group->name))
@@ -122,16 +145,6 @@ for (group = slPopHead(pHubGrpList); group != NULL; group = slPopHead(pHubGrpLis
     else
 	slAddHead(&groupList, newGrp);
     hashAdd(groupsInDatabase, newGrp->name, newGrp);
-    }
-
-/* Do some error checking for tracks with group names that are
- * not in database.  Just warn about them. */
-if (!trackHubDatabase(db))
-    for (track = trackList; track != NULL; track = track->next)
-    {
-    if (!hashLookup(groupsInDatabase, track->grp))
-         warn("Track %s has group %s, which isn't in grp table",
-	 	track->table, track->grp);
     }
 
 /* Create dummy group for all tracks. */
