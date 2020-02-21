@@ -1632,11 +1632,7 @@ printf("%s",
 "\n"
 "<P>For more information on the graphical version of BLAT, click the Help \n"
 "button on the top menu bar");
-
-if (hIsGsidServer())
-    printf(". </P> \n");
-else
-    printf(" or see the Genome Browser <A HREF=\"../FAQ/FAQblat.html\">FAQ</A>. </P> \n");
+printf(" or see the Genome Browser <A HREF=\"../FAQ/FAQblat.html\">FAQ</A>. </P> \n");
 
 }
 

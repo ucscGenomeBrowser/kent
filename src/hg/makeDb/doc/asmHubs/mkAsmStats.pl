@@ -20,6 +20,8 @@ my $commonNameList = "$asmHubName.asmId.commonName.tsv";
 my $commonNameOrder = "$asmHubName.commonName.asmId.orderList.tsv";
 my @orderList;	# asmId of the assemblies in order from the *.list files
 # the order to read the different .list files:
+my %betterName;	# key is asmId, value is better common name than found in
+		# assembly_report
 
 my $assemblyTotal = 0;	# complete list of assemblies in this group
 my $asmCount = 0;	# count of assemblies completed and in the table
@@ -103,7 +105,8 @@ if ($asmCount < $assemblyTotal) {
   $doneMsg = sprintf(" (%d build completed, %.2f %% finished)", $asmCount, $percentDone);
 }
 
-print <<"END"
+if ($assemblyTotal > 1) {
+  print <<"END"
 
 </tbody>
 <tfoot><tr><th>TOTALS:</th><td align=center colspan=3>total assembly count&nbsp;${assemblyTotal}${doneMsg}</td>
@@ -115,27 +118,36 @@ print <<"END"
   </tr></tfoot>
 </table>
 END
+} else {
+  print <<"END"
+
+</tbody>
+</table>
+END
 }
+}	#	sub endTable()
 
 ##############################################################################
 ### end the HTML output
 ##############################################################################
 sub endHtml() {
 
-printf "<p>\nOther assembly hubs available:<br>\n<table border='1'><thead>\n<tr>";
+if ($asmHubName ne "viral") {
+  printf "<p>\nOther assembly hubs available:<br>\n<table border='1'><thead>\n<tr>";
 
-printf "<th><a href='../primates/asmStatsPrimates.html'>Primates</a></th>\n"
-  if ($asmHubName ne "primates");
-printf "<th><a href='../mammals/asmStatsMammals.html'>Mammals</a></th>\n"
-  if ($asmHubName ne "mammals");
-printf "<th><a href='../birds/asmStatsBirds.html'>Birds</a></th>\n"
-  if ($asmHubName ne "birds");
-printf "<th><a href='../fish/asmStatsFish.html'>Fish</a></th>\n"
-  if ($asmHubName ne "fish");
-printf "<th><a href='../vertebrate/asmStatsVertebrate.html'>other vertebrates</a></th>\n"
-  if ($asmHubName ne "vertebrate");
+  printf "<th><a href='../primates/asmStatsPrimates.html'>Primates</a></th>\n"
+    if ($asmHubName ne "primates");
+  printf "<th><a href='../mammals/asmStatsMammals.html'>Mammals</a></th>\n"
+    if ($asmHubName ne "mammals");
+  printf "<th><a href='../birds/asmStatsBirds.html'>Birds</a></th>\n"
+    if ($asmHubName ne "birds");
+  printf "<th><a href='../fish/asmStatsFish.html'>Fish</a></th>\n"
+    if ($asmHubName ne "fish");
+  printf "<th><a href='../vertebrate/asmStatsVertebrate.html'>other vertebrates</a></th>\n"
+    if ($asmHubName ne "vertebrate");
 
-printf "</tr></thead>\n</table>\n</p>\n";
+  printf "</tr></thead>\n</table>\n</p>\n";
+}
 
 print <<"END"
 </div><!-- closing gbsPage from gbPageStartHardcoded.html -->
@@ -186,15 +198,15 @@ sub gapStats($$) {
 sub tableContents() {
 
   foreach my $asmId (reverse(@orderList)) {
+    my ($gcPrefix, $asmAcc, $asmName) = split('_', $asmId, 3);
+    my $accessionId = sprintf("%s_%s", $gcPrefix, $asmAcc);
     my $accessionDir = substr($asmId, 0 ,3);
     $accessionDir .= "/" . substr($asmId, 4 ,3);
     $accessionDir .= "/" . substr($asmId, 7 ,3);
     $accessionDir .= "/" . substr($asmId, 10 ,3);
-    $accessionDir .= "/" . $asmId;
-    my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir";
+    my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
     my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
     next if (! -s "$asmReport");
-    my ($gcPrefix, $asmAcc, $asmName) = split('_', $asmId, 3);
     my $chromSizes = "${buildDir}/${asmId}.chrom.sizes";
     my $twoBit = "${buildDir}/trackData/addMask/${asmId}.masked.2bit";
     next if (! -s "$twoBit");
@@ -249,6 +261,7 @@ sub tableContents() {
            $sciName = $line;
            $commonName =~ s/.*\(//;
            $commonName =~ s/\)//;
+           $commonName = $betterName{$asmId} if (exists($betterName{$asmId}));
            $sciName =~ s/.*:\s+//;
            $sciName =~ s/\s+\(.*//;
         }
@@ -261,11 +274,11 @@ sub tableContents() {
       }
     }
     close (FH);
-    my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$accessionDir";
+    my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$accessionDir/$accessionId";
     printf "<tr><td align=right>%d</td>\n", ++$asmCount;
-    printf "<td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=%s/%s.hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", $hubUrl, $asmId, $asmId, $commonName;
-    printf "    <td align=center><a href='https://hgdownload.soe.ucsc.edu/hubs/%s/genomes/%s/' target=_blank>%s</a></td>\n", $asmHubName, $asmId, $sciName;
-    printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s</a></td>\n", $gcPrefix, $asmAcc, $asmId;
+    printf "<td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=%s/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", $hubUrl, $accessionId, $commonName;
+    printf "    <td align=center><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
+    printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s/' target=_blank>%s</a></td>\n", $accessionId, $asmId;
     printf "    <td align=right>%s</td>\n", commify($seqCount);
     printf "    <td align=right>%s</td>\n", commify($totalSize);
     printf "    <td align=right>%s</td>\n", commify($gapCount);
@@ -281,9 +294,11 @@ sub tableContents() {
 
 open (FH, "<$toolsDir/${commonNameOrder}") or die "can not read ${commonNameOrder}";
 while (my $line = <FH>) {
+  next if ($line =~ m/^#/);
   chomp $line;
   my ($commonName, $asmId) = split('\t', $line);
   push @orderList, $asmId;
+  $betterName{$asmId} = $commonName;
   ++$assemblyTotal;
 }
 close (FH);

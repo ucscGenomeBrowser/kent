@@ -4433,29 +4433,25 @@ cgiContinueHiddenVar("r");
 puts("Position ");
 savePosInTextBox(seqName, winStart+1, winEnd);
 
-/* bypass message about Table Browser for GSID server, since we haven't offered TB for GSID */
-if (!hIsGsidServer())
+if (tbl[0] == 0)
     {
-    if (tbl[0] == 0)
-        {
-        puts("<P>"
-             "Note: This page retrieves genomic DNA for a single region. "
-             "If you would prefer to get DNA for many items in a particular track, "
-             "or get DNA with formatting options based on gene structure (introns, exons, UTRs, etc.), try using the ");
-        printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(TRUE, NULL));
-        puts("Table Browser</A> with the \"sequence\" output format. You can also use the ");
-        printf("<A HREF=\"../goldenPath/help/api.html\" TARGET=_blank>");
-        puts("REST API</A> with the <b>/getData/sequence</b> endpoint function "
-             "to extract sequence data with coordinates.");
-        }
-    else
-        {
-        puts("<P>"
-	     "Note: if you would prefer to get DNA for more than one feature of "
-	     "this track at a time, try the ");
-        printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(FALSE, tbl));
-        puts("Table Browser</A> using the output format sequence.");
-        }
+    puts("<P>"
+         "Note: This page retrieves genomic DNA for a single region. "
+         "If you would prefer to get DNA for many items in a particular track, "
+         "or get DNA with formatting options based on gene structure (introns, exons, UTRs, etc.), try using the ");
+    printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(TRUE, NULL));
+    puts("Table Browser</A> with the \"sequence\" output format. You can also use the ");
+    printf("<A HREF=\"../goldenPath/help/api.html\" TARGET=_blank>");
+    puts("REST API</A> with the <b>/getData/sequence</b> endpoint function "
+         "to extract sequence data with coordinates.");
+    }
+else
+    {
+    puts("<P>"
+         "Note: if you would prefer to get DNA for more than one feature of "
+         "this track at a time, try the ");
+    printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(FALSE, tbl));
+    puts("Table Browser</A> using the output format sequence.");
     }
 
 hgSeqOptionsHtiCart(hti,cart);
@@ -4782,89 +4778,47 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 printf("</TABLE>\n");
 printf("</FORM>\n");
-if (hIsGsidServer())
-    {
-    printf("<H3>Coloring Information and Examples</H3>\n");
-    puts("The color values range from 0 (darkest) to 255 (lightest) and are additive.\n");
-    puts("The examples below show a few ways to highlight individual tracks, "
-	 "and their interplay. It's good to keep it simple at first. It's easy "
-	 "to make pretty, but completely cryptic, displays with this feature.");
-    puts(
-	 "<UL>"
-	 "<LI>To put Genes in upper case red text, check the "
-	 "appropriate box in the Toggle Case column and set the color to pure "
-	 "red, RGB (255,0,0). Upon submitting, any Gene within the "
-	 "designated chromosomal interval will now appear in red capital letters.\n"
-	 "<LI>To see the overlap between Genes and InterPro Domains try "
-	 "setting the Genes/Regions to red (255,0,0) and InterPro to green (0,255,0). "
-	 "Places where the Genes and InterPro Domains overlap will be painted yellow "
-	 "(255,255,0).\n"
-	 "<LI>To get a level-of-coverage effect for tracks like Genes with "
-	 "multiple overlapping items, initially select a darker color such as deep "
-	 "green, RGB (0,64,0). Nucleotides covered by a single Gene will appear dark "
-	 "green, while regions covered with more Genes get progressively brighter &mdash; "
-	 "saturating at 4 Genes."
-	 "<LI>Another track can be used to mask unwanted features. Setting the "
-	 "InterPro track to RGB (255,255,255) will white-out Genes within InterPro "
-	 "domains. "
-	 "</UL>");
-    puts("<H3>Further Details and Ideas</H3>");
-    puts("<P>Copying and pasting the web page output to a text editor such as Word "
-	 "will retain upper case but lose colors and other formatting. That is still "
-	 "useful because other web tools such as "
-	 "<A HREF=\"https://www.ncbi.nlm.nih.gov/blast\" TARGET=_BLANK>NCBI Blast</A> "
-	 "can be set to ignore lower case.  To fully capture formatting such as color "
-	 "and underlining, view the output as \"source\" in your web browser, or download "
-	 "it, or copy the output page into an html editor.</P>");
-    puts("<P>The default line width of 60 characters is standard, but if you have "
-	 "a reasonable sized monitor it's useful to set this higher - to 125 characters "
-	 "or more.  You can see more DNA at once this way, and fewer line breaks help "
-	 "in finding DNA strings using the web browser search function.</P>");
-    }
-else
-    {
-    printf("<H3>Coloring Information and Examples</H3>\n");
-    puts("The color values range from 0 (darkest) to 255 (lightest) and are additive.\n");
-    puts("The examples below show a few ways to highlight individual tracks, "
-	 "and their interplay. It's good to keep it simple at first.  It's easy "
-	 "to make pretty, but completely cryptic, displays with this feature.");
-    puts(
-	 "<UL>"
-	 "<LI>To put exons from RefSeq Genes in upper case red text, check the "
-	 "appropriate box in the Toggle Case column and set the color to pure "
-	 "red, RGB (255,0,0). Upon submitting, any RefSeq Gene within the "
-	 "designated chromosomal interval will now appear in red capital letters.\n"
-	 "<LI>To see the overlap between RefSeq Genes and Genscan predictions try "
-	 "setting the RefSeq Genes to red (255,0,0) and Genscan to green (0,255,0). "
-	 "Places where the RefSeq Genes and Genscan overlap will be painted yellow "
-	 "(255,255,0).\n"
-	 "<LI>To get a level-of-coverage effect for tracks like Spliced Ests with "
-	 "multiple overlapping items, initially select a darker color such as deep "
-	 "green, RGB (0,64,0). Nucleotides covered by a single EST will appear dark "
-	 "green, while regions covered with more ESTs get progressively brighter &mdash; "
-	 "saturating at 4 ESTs."
-	 "<LI>Another track can be used to mask unwanted features. Setting the "
-	 "RepeatMasker track to RGB (255,255,255) will white-out Genscan predictions "
-	 "of LINEs but not mainstream host genes; masking with RefSeq Genes will show "
-	 "what is new in the gene prediction sector."
-	 "</UL>");
-    puts("<H3>Further Details and Ideas</H3>");
-    puts("<P>Copying and pasting the web page output to a text editor such as Word "
-	 "will retain upper case but lose colors and other formatting. That is still "
-	 "useful because other web tools such as "
-	 "<A HREF=\"https://www.ncbi.nlm.nih.gov/blast\" TARGET=_BLANK>NCBI Blast</A> "
-	 "can be set to ignore lower case.  To fully capture formatting such as color "
-	 "and underlining, view the output as \"source\" in your web browser, or download "
-	 "it, or copy the output page into an html editor.</P>");
-    puts("<P>The default line width of 60 characters is standard, but if you have "
-	 "a reasonable sized monitor it's useful to set this higher - to 125 characters "
-	 "or more.  You can see more DNA at once this way, and fewer line breaks help "
-	 "in finding DNA strings using the web browser search function.</P>");
-    puts("<P>Be careful about requesting complex formatting for a very large "
-	 "chromosomal region.  After all the html tags are added to the output page, "
-	 "the file size may exceed size limits that your browser, clipboard, and "
-	 "other software can safely display.  The tool will format 10 Mb and more, however.</P>");
-    }
+printf("<H3>Coloring Information and Examples</H3>\n");
+puts("The color values range from 0 (darkest) to 255 (lightest) and are additive.\n");
+puts("The examples below show a few ways to highlight individual tracks, "
+     "and their interplay. It's good to keep it simple at first.  It's easy "
+     "to make pretty, but completely cryptic, displays with this feature.");
+puts(
+     "<UL>"
+     "<LI>To put exons from RefSeq Genes in upper case red text, check the "
+     "appropriate box in the Toggle Case column and set the color to pure "
+     "red, RGB (255,0,0). Upon submitting, any RefSeq Gene within the "
+     "designated chromosomal interval will now appear in red capital letters.\n"
+     "<LI>To see the overlap between RefSeq Genes and Genscan predictions try "
+     "setting the RefSeq Genes to red (255,0,0) and Genscan to green (0,255,0). "
+     "Places where the RefSeq Genes and Genscan overlap will be painted yellow "
+     "(255,255,0).\n"
+     "<LI>To get a level-of-coverage effect for tracks like Spliced Ests with "
+     "multiple overlapping items, initially select a darker color such as deep "
+     "green, RGB (0,64,0). Nucleotides covered by a single EST will appear dark "
+     "green, while regions covered with more ESTs get progressively brighter &mdash; "
+     "saturating at 4 ESTs."
+     "<LI>Another track can be used to mask unwanted features. Setting the "
+     "RepeatMasker track to RGB (255,255,255) will white-out Genscan predictions "
+     "of LINEs but not mainstream host genes; masking with RefSeq Genes will show "
+     "what is new in the gene prediction sector."
+     "</UL>");
+puts("<H3>Further Details and Ideas</H3>");
+puts("<P>Copying and pasting the web page output to a text editor such as Word "
+     "will retain upper case but lose colors and other formatting. That is still "
+     "useful because other web tools such as "
+     "<A HREF=\"https://www.ncbi.nlm.nih.gov/blast\" TARGET=_BLANK>NCBI Blast</A> "
+     "can be set to ignore lower case.  To fully capture formatting such as color "
+     "and underlining, view the output as \"source\" in your web browser, or download "
+     "it, or copy the output page into an html editor.</P>");
+puts("<P>The default line width of 60 characters is standard, but if you have "
+     "a reasonable sized monitor it's useful to set this higher - to 125 characters "
+     "or more.  You can see more DNA at once this way, and fewer line breaks help "
+     "in finding DNA strings using the web browser search function.</P>");
+puts("<P>Be careful about requesting complex formatting for a very large "
+     "chromosomal region.  After all the html tags are added to the output page, "
+     "the file size may exceed size limits that your browser, clipboard, and "
+     "other software can safely display.  The tool will format 10 Mb and more, however.</P>");
 trackDbFreeList(&tdbList);
 }
 
@@ -25455,11 +25409,6 @@ struct trackDb *tdb = NULL;
 
 hgBotDelayFrac(0.5);
 
-if (hIsGisaidServer())
-    {
-    validateGisaidUser(cart);
-    }
-
 /*	database and organism are global variables used in many places	*/
 getDbAndGenome(cart, &database, &genome, NULL);
 organism = hOrganism(database);
@@ -26444,14 +26393,6 @@ else if (sameWord(table, "ncRna"))
 else if (sameWord(table, "gbProtAnn"))
     {
     doGbProtAnn(tdb, item);
-    }
-else if (sameWord(table, "h1n1Gene"))
-    {
-    doH1n1Gene(tdb, item);
-    }
-else if (startsWith("h1n1_", table) || startsWith("h1n1b_", table))
-    {
-    doH1n1Seq(tdb, item);
     }
 else if (sameWord(table, "bdgpGene") || sameWord(table, "bdgpNonCoding"))
     {

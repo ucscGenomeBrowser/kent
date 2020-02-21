@@ -163,8 +163,11 @@ $accessionDir .= "/" . substr($asmId, 10 ,3);
 $accessionDir .= "/" . $asmId;
 
 my ($gcXPrefix, $accession, $rest) = split('_', $asmId, 3);
+my $accessionId = sprintf("%s_%s", $gcXPrefix, $accession);
 my $newStyleUrl = sprintf("%s/%s/%s/%s/%s", $gcXPrefix, substr($accession,0,3),
    substr($accession,3,3), substr($accession,6,3), $asmId);
+my $localDataUrl = sprintf("%s/%s/%s/%s/%s", $gcXPrefix, substr($accession,0,3),
+   substr($accession,3,3), substr($accession,6,3), $accessionId);
 $ftpName =~ s#/hive/data/outside/ncbi/##;
 $ftpName =~ s#/hive/data/inside/ncbi/##;
 $ftpName =~ s#/hive/data/genomes/asmHubs/##;
@@ -327,21 +330,21 @@ institution, download these data as indicated by these instructions.<br>
 To download this assembly data, use this <em>rsync</em> command:
 <pre>
   rsync -a -P \\
-    rsync://$sourceServer/hubs/$newStyleUrl/ \\
-      ./$asmId/
+    rsync://$sourceServer/hubs/$localDataUrl/ \\
+      ./$accessionId/
 
-  which creates the local directory: ./$asmId/
+  which creates the local directory: ./$accessionId/
 </pre>
 or this <em>wget</em> command:
 <pre>
-  wget --timestamping -m -nH -x --cut-dirs=4 -e robots=off -np -k \\
-    --reject \"index.html*\" -P \"$asmId\" \\
-       https://$sourceServer/hubs/$newStyleUrl/
+  wget --timestamping -m -nH -x --cut-dirs=6 -e robots=off -np -k \\
+    --reject \"index.html*\" -P \"$accessionId\" \\
+       https://$sourceServer/hubs/$localDataUrl/
 
-  which creates a local directory: ./$asmId/
+  which creates a local directory: ./$accessionId/
 </pre>
 <p>
-There is an included <em>$asmId.hub.txt</em> file in that download
+There is an included <em>hub.txt</em> file in that download
 data directory to use for your local track hub instance.<br>
 Using the genome browser menus: <em><strong>My Data</strong> -&gt; <strong>Track Hubs</strong></em><br>
 select the <em><strong>My Hubs</strong></em> tab to enter a URL
@@ -373,7 +376,7 @@ are available for private use as in this case.
 See also: <a href='https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml' target=_blank>IANA.org</a> port registry.
 </p>
 <p>
-Enter the following specifications in your <em>$asmId.genomes.txt</em> file:
+Enter the following specifications in your <em>genomes.txt</em> file:
 <pre>
 transBlat yourserver.domain.edu 76543
 blat yourserver.domain.edu 76542

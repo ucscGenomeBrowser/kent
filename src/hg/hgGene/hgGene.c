@@ -412,8 +412,7 @@ if (ajaxSection != NULL)
     }
 
 addGoodSection(linksSection(conn, sectionRa), conn, &sectionList);
-/* disable ortherOrg section for CGB servers for the time being */
-if (!hIsCgbServer()) addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(gadSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(malaCardsSection(conn, sectionRa), conn, &sectionList);
     addGoodSection(ctdSection(conn, sectionRa), conn, &sectionList);

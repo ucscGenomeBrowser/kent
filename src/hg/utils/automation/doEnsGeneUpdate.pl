@@ -548,8 +548,10 @@ _EOF_
 	  );
       }
       $bossScript->add(<<_EOF_
-grep -v "^#" infoOut.txt | awk '{printf "%s\\t%s,%s,%s,%s,%s\\n", \$1,\$2,\$3,\$8,\$9,\$10}' > $db.ensGene.nameIndex.txt
-ixIxx $db.ensGene.nameIndex.txt $db.ensGene.name.ix $db.ensGene.name.ixx
+grep -v "^#" infoOut.txt \\
+  | awk -F\$'\\t' '{printf "%s\\t%s,%s,%s,%s\\n", \$1,\$2,\$8,\$9,\$10}' \\
+    | sed -e 's/,,/,/g; s/,\$//;' > $db.ensGene.nameIndex.txt
+ixIxx $db.ensGene.nameIndex.txt $db.ensGene.ix $db.ensGene.ixx
 
 _EOF_
 	  );

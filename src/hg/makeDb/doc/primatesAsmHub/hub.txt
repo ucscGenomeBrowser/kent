@@ -1,5 +1,5 @@
 hub Primate genome assemblies
-shortLabel Primates
+shortLabel Primate assemblies
 longLabel Primate genome assemblies
 genomesFile genomes.txt
 email hclawson@ucsc.edu
