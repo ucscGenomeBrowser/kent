@@ -386,43 +386,48 @@ struct hash *uniqHash = newHash(8);
 struct slName *name, *nameList = NULL;
 char *trackTable = track->table;
 
-hashAdd(uniqHash, trackTable, NULL);
-if (useJoiner)
-    {
-    if (allJoiner == NULL)
-        allJoiner = joinerRead("all.joiner");
-    struct joinerPair *jpList, *jp;
-    jpList = joinerRelate(allJoiner, db, trackTable, db);
-    for (jp = jpList; jp != NULL; jp = jp->next)
-	{
-	struct joinerDtf *dtf = jp->b;
-	if (cartTrackDbIsAccessDenied(dtf->database, dtf->table))
-	    continue;
-	char buf[256];
-	char *s;
-	if (sameString(dtf->database, db))
-	    s = dtf->table;
-	else
-	    {
-	    safef(buf, sizeof(buf), "%s.%s", dtf->database, dtf->table);
-	    s = buf;
-	    }
-	if (!hashLookup(uniqHash, s))
-	    {
-	    hashAdd(uniqHash, s, NULL);
-	    name = slNameNew(s);
-	    slAddHead(&nameList, name);
-	    }
-	}
-    slNameSort(&nameList);
-    }
 /* suppress for parent tracks -- only the subtracks have tables */
 if (track->subtracks == NULL)
     {
     name = slNameNew(trackTable);
     slAddHead(&nameList, name);
+    hashAdd(uniqHash, trackTable, NULL);
     }
 addTablesAccordingToTrackType(db, &nameList, uniqHash, track);
+if (useJoiner)
+    {
+    if (allJoiner == NULL)
+        allJoiner = joinerRead("all.joiner");
+    struct slName *joinedList = NULL, *t;
+    for (t = nameList;  t != NULL;  t = t->next)
+        {
+        struct joinerPair *jpList, *jp;
+        jpList = joinerRelate(allJoiner, db, t->name, db);
+        for (jp = jpList; jp != NULL; jp = jp->next)
+            {
+            struct joinerDtf *dtf = jp->b;
+            if (cartTrackDbIsAccessDenied(dtf->database, dtf->table))
+                continue;
+            char buf[256];
+            char *s;
+            if (sameString(dtf->database, db))
+                s = dtf->table;
+            else
+                {
+                safef(buf, sizeof(buf), "%s.%s", dtf->database, dtf->table);
+                s = buf;
+                }
+            if (!hashLookup(uniqHash, s))
+                {
+                hashAdd(uniqHash, s, NULL);
+                name = slNameNew(s);
+                slAddHead(&joinedList, name);
+                }
+            }
+	}
+    slNameSort(&joinedList);
+    nameList = slCat(nameList, joinedList);
+    }
 hashFree(&uniqHash);
 return nameList;
 }
