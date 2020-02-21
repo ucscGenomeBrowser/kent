@@ -7876,6 +7876,7 @@ identifier ncbiRefSeq
     $gbd.ncbiRefSeqPsl.qName
     $gbd.ncbiRefSeqCds.id
     $gbd.seqNcbiRefSeq.acc
+    $gbd.ncbiRefSeqSelect.name
 
 identifier ncbiRefSeqPepTable
 "NCBI RefSeq protein sequences"
