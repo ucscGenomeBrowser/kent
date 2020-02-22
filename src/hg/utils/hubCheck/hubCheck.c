@@ -843,7 +843,7 @@ if (errCatchStart(errCatch))
         char *htmlPath = hashFindVal(genome->settingsHash, "htmlPath");
         if (htmlPath == NULL)
             warn("warning: missing htmlPath setting for assembly hub '%s'", genome->name);
-        else if (!udcExists(htmlPath))
+        else if ((!hasProtocol(htmlPath) && !udcExists(htmlPath)) || netUrlHead(htmlPath, NULL) < 0)
             warn("warning: htmlPath file does not exist: '%s'", htmlPath);
         }
     tdbList = trackHubTracksForGenome(hub, genome);
@@ -919,9 +919,13 @@ int retVal = 0;
 if (errCatchStart(errCatch))
     {
     hub = trackHubOpen(hubUrl, "");
-    if (hub->descriptionUrl == NULL)
+    // servers that don't return Content-Length header aren't found by udcExists so
+    // use netUrlHead too. We still want udcExists so if a file is a local file we
+    // can still find it
+    char *descUrl = hub->descriptionUrl;
+    if (descUrl == NULL)
         warn("warning: missing hub overview descripton page (descriptionUrl setting)");
-    else if (!udcExists(hub->descriptionUrl))
+    else if ((!hasProtocol(descUrl) && !udcExists(descUrl)) || netUrlHead(descUrl, NULL) < 0)
         warn("warning: %s descriptionUrl setting does not exist", hub->descriptionUrl);
     }
 errCatchEnd(errCatch);
