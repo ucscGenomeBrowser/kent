@@ -3149,8 +3149,8 @@ if (tdbIsContainer(tdb))
 
 if (tdb->parent)
     {
-    printf("This track is part of a super-track. "
-            "To configure the parent or sibling tracks, click a link below.");
+    printf("<i>This track is part of a super-track. "
+            "To configure the parent or sibling tracks, click a link below.</i>");
 
     // show super-track info
     struct trackDb *tdbParent = tdb->parent;
@@ -3159,7 +3159,7 @@ if (tdb->parent)
         printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' "
                "width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
     printf("<b style='font-size:%d%%;'><a href='%s?%s=%s&c=%s&g=%s'"
-               " title='Configure parent track'>%s</a> Tracks</b>",
+               " title='Configure parent track'>%s tracks</b></a>",
                 strlen(tdb->longLabel) > 30 ? 133 : 200,
                 hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
                 chromosome, cgiEncode(tdbParent->track), tdbParent->longLabel);
@@ -3190,25 +3190,47 @@ if (tdb->parent)
         struct trackDb *sibTdb = childRef->val;
         if (sameString(sibTdb->track, tdb->track))
             {
-            printf("<tr><b><td>%s</td>\n", sibTdb->shortLabel);
-            printf("<td>%s</td></b></tr>\n", sibTdb->longLabel);
+            printf("<tr><td><b>%s</b></td>\n", sibTdb->shortLabel);
+            printf("<td>%s</td></tr>\n", sibTdb->longLabel);
             continue;
             }
         printf("<tr>");
-        //hPrintPennantIcon(sibTdb);
         printf("<td><a href='%s?%s=%s&c=%s&g=%s'>%s</a>&nbsp;</td>", 
                     tdbIsDownloadsOnly(sibTdb) ? hgFileUiName(): hTrackUiForTrack(sibTdb->track),
                     cartSessionVarName(), cartSessionId(cart), chromosome, cgiEncode(sibTdb->track), 
                     sibTdb->shortLabel);
         printf("<td>%s</td></tr>\n", sibTdb->longLabel);
         }
-    printf("</table>");
+    printf("</table></p>");
 
-// TODO:  Add collapsed panel for Description
+    // collapsed panel for Description
+    printf("<p><table>");
+    jsBeginCollapsibleSectionFontSize(cart, tdb->track, "superDescription", "Description", FALSE,
+                                            "medium");
+    char *html = replaceChars(tdbParent->html, "<H", "<h");
+    html = replaceChars(html, "</H", "</h");
 
-    printf("</p><p>&nbsp;&nbsp;<b>+ Description</b>\n");
+    // remove Description header
+    html = replaceChars(html, "<h2>Description</h2>", "");
+    html = replaceChars(html, "<h3>Description</h3>", "");
+    html = replaceChars(html, "<h1>Description</h1>", "");
+
+    // remove everything after Description text
+    char *end = stringIn("<h2>", html);
+    if (!end)
+        end = stringIn("<h1>", html);
+    if (!end)
+        end = stringIn("<h3>", html);
+    if (end)
+        *end = '\0';
+    printf("%s", html);
+    printf("<p><i>To view the full description of this super-track, click the link above.</i>\n");
+    jsEndCollapsibleSection();
+    printf("</table></p>");
+
+    //printf("</p><p>&nbsp;&nbsp;<b>+ Description</b>\n");
+
     printf("<hr>");
-    printf("</p>");
     }
 
 /* track configuration form */
@@ -3260,7 +3282,7 @@ else
                "width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
     // set large title font size, but less so for long labels to minimize wrap
     printf("<B style='font-size:%d%%;'>%s%s</B>\n", strlen(tdb->longLabel) > 30 ? 133 : 200,
-                tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
+                tdb->longLabel, tdbIsSuper(tdb) ? " tracks" : "");
 
     }
 
