@@ -1456,7 +1456,7 @@ There are no extra options that can appear on the type hic line.
     <P>There are a number of different filters available for bed data, see also the 
     <a href="../hubQuickStartFilter.html">filters quick start guide</a>.</P>-->
     <P><code> filter.&lt;fieldName&gt; </code> is used for numerical data. It requires
-    a default value to be passed. A value of 0 (of the lowest value present in the dataset) 
+    a default value to be passed. A value of 0 (or the lowest value present in the dataset) 
     can be used to enable numerical filtering, but filter nothing by default.</P>
     <P>By default, the range of values for <code>filter.&lt;fieldName&gt;</code> is 0 to 1000. 
     However, you can explicitly set the upper and lower limits of the filter with 
@@ -1548,7 +1548,7 @@ There are no extra options that can appear on the type hic line.
     specified fieldName. It requires a default search string to be passed. An asterisk/wildcard (*)
     can be used to enable text searching, but pass no default value. If a word or string is
     passed, items matching the string will be filtered by default. See examples below for 
-    details</P>.
+    details.</P>
     <P><code>filterText.&lt;fieldName&gt;</code> will enable two kinds of searching, wildcard and
     regexp. By default, the wildcard option is enabled. This means that a search term with 
     a wildcard (*) item on either end will match any number of additional characters before
