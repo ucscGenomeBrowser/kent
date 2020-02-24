@@ -29,6 +29,10 @@ asmStats::
 	sed -e "s/hgdownload.soe/hgdownload-test.gi/g; s/index.html/testIndex.html/; s#/asmStats#/testAsmStats#;" ${destDir}/asmStats${Name}.html > ${destDir}/testAsmStats${Name}.html
 	chmod +x ${destDir}/asmStats${Name}.html ${destDir}/testAsmStats${Name}.html
 
+trackData::
+	${toolsDir}/trackData.pl ${Name} ${name} > ${destDir}/trackData.html
+	chmod +x ${destDir}/trackData.html
+
 mkGenomes::
 	${toolsDir}/mkGenomes.pl ${Name} ${name} > ${destDir}/genomes.txt
 
