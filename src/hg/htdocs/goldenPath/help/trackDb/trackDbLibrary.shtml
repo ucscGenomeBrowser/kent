@@ -1448,16 +1448,16 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="filter"><span class="types bed bigBed"></span>
 <div class="format">
-    <code>filter.&lt;fieldName&gt; [&lt;default integer&gt;]</code><BR>
+    <code>filter.&lt;fieldName&gt; &lt;default integer&gt;</code><BR>
     <code>filterByRange.&lt;fieldName&gt; &lt;off/on&gt;</code><BR>
     <code>filterLimits.&lt;fieldName&gt; &lt;low&gt;[:&lt;high&gt;]</code><BR>
     </div>
 <!-- 
     <P>There are a number of different filters available for bed data, see also the 
     <a href="../hubQuickStartFilter.html">filters quick start guide</a>.</P>-->
-    <P><code> filter.&lt;fieldName&gt; </code> is used for numerical data. It does not 
-    require any variables, however, a preselected filter value can be passed 
-    following the argument to enable the filter by default.</P>
+    <P><code> filter.&lt;fieldName&gt; </code> is used for numerical data. It requires
+    a default value to be passed. A value of 0 (of the lowest value present in the dataset) 
+    can be used to enable numerical filtering, but filter nothing by default.</P>
     <P>By default, the range of values for <code>filter.&lt;fieldName&gt;</code> is 0 to 1000. 
     However, you can explicitly set the upper and lower limits of the filter with 
     <code>filterLimits.&lt;fieldName&gt;</code>.</P>
@@ -1484,9 +1484,9 @@ There are no extra options that can appear on the type hic line.
     <li>Column/fieldName values that start with a number followed by non-numerical characters 
     will be treated as only the number; the non-numerical characters (and any numbers 
     that follow them) will be ignored (see example below)</li>
-    <li>If a column/fieldName contains negative values, then the default filter value of 0 
-    will filter out items with negative values. If that is not the desired behavior then 
-    you should specify a value</li>
+    <li>If a column/fieldName contains negative values, be sure to specify a default value
+    at or below the lowest negative value in order to avoid actively filtering items by
+    default (unless that is the intended behavior)</li>
     <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
     <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a 
     &quot;.&quot; (for non-extended bigBed tracks) is required
@@ -1496,10 +1496,11 @@ There are no extra options that can appear on the type hic line.
 
     <P><B>Examples:</B></P>
     <pre>
-    filter.score</pre>
-    <P>In this example, filtering is being enabled for the field <code>score</code>. No default 
-    value is being passed, so by default the filter is set to 0. This means only negative values
-    will be filtered out.</P>
+    filter.score 0</pre>
+    <P>In this example, filtering is being enabled for the field <code>score</code>. We are
+    passing a default value of 0, which is usually a safe default value to pass as most score
+    values contain only positive numbers. Note, however, that any negative values would be 
+    filtered out by default in this example.</P>
     <pre>
     filter.score 300</pre>
     <P>In this second example, we are enabling filtering on the same field <code>score</code>, 
@@ -1537,15 +1538,17 @@ There are no extra options that can appear on the type hic line.
 
 <DIV class="filterText"><span class="types bigBed"></span>
 <div class="format">
-    <code>filterText.&lt;fieldName&gt; [&lt;default search string&gt;]</code><BR>
+    <code>filterText.&lt;fieldName&gt; &lt;default search string&gt;</code><BR>
     <code>filterType.&lt;fieldName&gt; &lt;wildcard/regexp&gt;</code><BR>
     </div>
 <!-- 
     <P>There are a number of different filters available for bed data, see also the 
     <a href="../hubQuickStartFilter.html">filters quick start guide</a>.</P>-->
     <P><code>filterText.&lt;fieldName&gt;</code> is used to enable text searching in the 
-    specified fieldName. It does not require any variables, however, a preselected filter value
-    can be passed following the argument to enable the filter by default.</P> 
+    specified fieldName. It requires a default search string to be passed. An asterisk/wildcard (*)
+    can be used to enable text searching, but pass no default value. If a word or string is
+    passed, items matching the string will be filtered by default. See examples below for 
+    details</P>.
     <P><code>filterText.&lt;fieldName&gt;</code> will enable two kinds of searching, wildcard and
     regexp. By default, the wildcard option is enabled. This means that a search term with 
     a wildcard (*) item on either end will match any number of additional characters before
@@ -1578,9 +1581,10 @@ There are no extra options that can appear on the type hic line.
     a regexp search <code>.*BRCA.*</code>. The filter term can be freely changed in the track 
     setting page allowing users to filter on other values in the <code>geneName</code> field.</P>
     <pre>
-    filterText.geneName</pre>
+    filterText.geneName *</pre>
     <P>This example is enabling filtering on the same field as above, <code>geneName</code>,
-    however, it is not declaring a default search parameter. This means that the search box 
+    however, it is not declaring a default search parameter. This is done by passing only an
+    asterisk/wildcard (*). This means that the search box 
     will be present but no <code>geneName</code> items will be filtered out of the data 
     unless the user specifies a value.</P>
     <pre>
