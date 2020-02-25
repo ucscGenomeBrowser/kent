@@ -50,27 +50,29 @@ The subtracks available for this track include:
    and RefSeq transcripts. <small>(Track not currently available for every assembly.)</small>
    </li>
    <li>
-   <em>RefSeq HGMD</em> &ndash; only show RefSeq Curated transcripts annotated by the Human
-   Gene Mutation Database. This track is only available on the human genomes hg19 and hg38.
-   It is the most restricted RefSeq subset, targeting clinical diagnostics.
-   </li>
-   <li>
-   <em>RefSeq Select/MANE</em> &ndash; only show transcript marked as RefSeq Select or MANE Select. 
-   A single Select transcript is chosen as representative for each protein-coding gene. 
-   Transcripts categorized as MANE are further agreed upon as representative by both NCBI 
-   RefSeq and Ensembl/GENCODE, and have a 100% identical match to a transcript in 
-   the Ensembl annotation. See <a target="_blank" 
-   href="https://www.ncbi.nlm.nih.gov/refseq/refseq_select/">NCBI RefSeq Select</a>.
-   </li>
-   <li>
     <em>UCSC RefSeq</em> &ndash; annotations generated from UCSC's realignment of RNAs with NM 
     and NR accessions to the $organism genome. This track was previously known as the &quot;RefSeq 
     Genes&quot; track.</li>
+   <li>
+   <em>RefSeq Select+MANE (subset)</em> &ndash; Subset of RefSeq Curated, transcripts marked as RefSeq Select or MANE Select. 
+   A single Select transcript is chosen as representative for each protein-coding gene. 
+   This track includes transcripts categorized as MANE, they are further agreed upon as representative by both NCBI 
+   RefSeq and Ensembl/GENCODE, and have a 100% identical match to a transcript in 
+   the Ensembl annotation. See <a target="_blank" 
+   href="https://www.ncbi.nlm.nih.gov/refseq/refseq_select/">NCBI RefSeq Select</a>. 
+   Note that we provide a separate track <a target=_blank href="hgTrackUi?g=mane">MANE</a>, 
+   which contains only the MANE transcripts, and not the ones specific to RefSeq.
+   </li>
+   <li>
+   <em>RefSeq HGMD (subset)</em> &ndash; Subset of RefSeq Curated, transcripts annotated by the Human
+   Gene Mutation Database. This track is only available on the human genomes hg19 and hg38.
+   It is the most restricted RefSeq subset, targeting clinical diagnostics.
+   </li>
   </ul>
 </dl>
 
 <p>
-The <em>RefSeq All</em>, <em>RefSeq Curated</em>, <em>RefSeq Predicted</em>, <em>RefSeq Clinical</em>,
+The <em>RefSeq All</em>, <em>RefSeq Curated</em>, <em>RefSeq Predicted</em>, <em>RefSeq HGMD</em>,
 <em>RefSeq Select/MANE</em> and <em>UCSC RefSeq</em> tracks follow the display conventions for
 <a href="../goldenPath/help/hgTracksHelp.html#GeneDisplay"
 target="_blank">gene prediction tracks</a>.
