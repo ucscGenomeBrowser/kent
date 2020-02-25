@@ -271,7 +271,7 @@ def aaToBedByStrand(aaStart, aaEnd, score, observed, expected, chi2, gene, trans
     else:
         ret = aaToBedNegStrand(aaStart, aaEnd, score, transcript, lineNum)
     # now add the extra scoring information
-    color = "160,160,160" # findColor(score, chi2)
+    color = "0,0,0" # findColor(score, chi2)
     ret = ret._replace(itemRgb=color)
     print("%s\t%s\t%d\t%.3f\t%.3f\t%.3f\tO/E: %0.3f" % (bedToStr(ret), gene, observed, expected, score, chi2, score))
 

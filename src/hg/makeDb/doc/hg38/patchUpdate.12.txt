@@ -188,6 +188,8 @@
     | grep -E '_(alt|fix)$' \
     | sed -re 's/^/hg38.2bit:/;' \
       > hg38.altsAndFixes.p12
+    # Link for blat server installation convenience:
+    ln -sf hg38.altsAndFixes.p12 altsAndFixes
 
 
 #########################################################################

@@ -866,6 +866,8 @@ if (isNotEmpty(customText))
 	err = customTrackUnavailableErrsFromList(newCts);
 	if (err)
 	    newCts = NULL;  /* do not save the unhappy remote cts*/
+        if (isNotEmpty(errCatch->message->string))
+            err = catTwoStrings(emptyForNull(err), errCatch->message->string);
 	}
     errCatchFree(&errCatch);
     }

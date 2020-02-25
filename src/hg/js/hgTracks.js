@@ -2083,6 +2083,11 @@ var dragReorder = {
         // setup mouse callbacks for the area tags
         $(imageV2.imgTbl).find("tr").mouseover( dragReorder.trMouseOver );
 
+        // ensure clicks into hgTrackUi save the cart state
+        $("td a").each( function (tda) {
+            this.onclick = posting.saveSettings;
+        });
+
         $(".area").each( function(t) {
                             this.onmouseover = dragReorder.mapItemMouseOver;
                             this.onmouseout = dragReorder.mapItemMouseOut;

@@ -877,6 +877,11 @@ cgiDecodeFull(querySpec, querySpecDecoded, len);
 struct jsonElement *queryObj = jsonParse(querySpecDecoded);
 struct slRef *dataSources = jsonListVal(jsonFindNamedField(queryObj, "queryObj", "dataSources"),
                                         "dataSources");
+// Set up output.
+int savedStdout = -1;
+struct pipeline *textOutPipe = configTextOut(queryObj, &savedStdout);
+webStartText();
+
 // Get trackDb, assembly and regionList.
 struct trackDb *fullTrackList = getFullTrackList(cart);
 char *db = cartString(cart, "db");
@@ -885,10 +890,6 @@ struct annoAssembly *assembly = hAnnoGetAssembly(db);
 char regionDesc[PATH_LEN];
 struct bed4 *regionList = getRegionList(db, dataSources, fullTrackList,
                                         regionDesc, sizeof(regionDesc));
-// Set up output.
-int savedStdout = -1;
-struct pipeline *textOutPipe = configTextOut(queryObj, &savedStdout);
-webStartText();
 // Print a simple output header
 time_t now = time(NULL);
 printf("# hgIntegrator: database=%s region=%s %s", db, regionDesc, ctime(&now));
