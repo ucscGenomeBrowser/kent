@@ -51,6 +51,7 @@
 #include "interactUi.h"
 #include "bedTabix.h"
 #include "hic.h"
+#include "hui.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -762,6 +763,8 @@ expandOneUrl(tdb->settingsHash, genome->trackDbFile, "linkDataUrl");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "searchTrix");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "barChartSampleUrl");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "barChartMatrixUrl");
+expandOneUrl(tdb->settingsHash, genome->trackDbFile, SUBTRACK_HIDE_EMPTY_MULTIBED_URL);
+expandOneUrl(tdb->settingsHash, genome->trackDbFile, SUBTRACK_HIDE_EMPTY_SOURCES_URL);
 }
 
 struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName)

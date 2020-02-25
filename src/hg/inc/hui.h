@@ -154,8 +154,9 @@ char *hTrackUiForTrack(char *trackName);
 
 // trackDb setting and cart/cgi var
 #define SUBTRACK_HIDE_EMPTY       "hideEmptySubtracks"
-// trackDb setting
 #define SUBTRACK_HIDE_EMPTY_LABEL "hideEmptySubtracksLabel"
+#define SUBTRACK_HIDE_EMPTY_MULTIBED_URL       "hideEmptySubtracksMultiBedUrl"
+#define SUBTRACK_HIDE_EMPTY_SOURCES_URL        "hideEmptySubtracksSourcesUrl"
 
 void netUi(struct trackDb *tdb);
 
