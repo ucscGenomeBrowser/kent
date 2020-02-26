@@ -1964,8 +1964,8 @@ if (width==0)
 if (width < 65)
     width = 65;
 
-printf("<INPUT TYPE=TEXT class='inputBox' name='%s' id='%s' style='width: %dpx' value=%g",
-       varName,varName,width,initialVal);
+printf("<INPUT TYPE=TEXT class='inputBox' name='%s' id='%s' style='width: %dpx' value=%s",
+       varName,varName,width,shorterDouble(initialVal));
 jsOnEventByIdF("change", varName, "return validateFloat(this,%s,%s);",
        (min ? min : "\"null\""),(max ? max : "\"null\""));
 if (title)
@@ -1982,12 +1982,12 @@ char *minStr=NULL;
 char *maxStr=NULL;
 if ((int)min != NO_VALUE)
     {
-    safef(minLimit,sizeof(minLimit),"%g",min);
+    safef(minLimit,sizeof(minLimit),"%s",shorterDouble(min));
     minStr = minLimit;
     }
 if ((int)max != NO_VALUE)
     {
-    safef(maxLimit,sizeof(maxLimit),"%g",max);
+    safef(maxLimit,sizeof(maxLimit),"%s",shorterDouble(max));
     maxStr = maxLimit;
     }
 cgiMakeDoubleVarInRange(varName,initialVal,title,width,minStr,maxStr);

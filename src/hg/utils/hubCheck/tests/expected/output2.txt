@@ -1,3 +1,2 @@
-Found 2 problems:
-
+Found 1 problem:
 Couldn't open input/hub2.txt

@@ -1,6 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # This file describes how hg19 was extended with the rCRS mitochondrial sequence (NC_012920) as chrMT
+# Redmine #24648
 
 ##############################################################################
 # Get NC_012920.1 sequence, rename to chrMT. (DONE - 2020-01-14 - Angie)
@@ -441,6 +442,111 @@ done
       > gtexGeneModelV6.MT.gp
     sort -k2,2 -k3n,3n gtexGeneModelV6.initial.gp gtexGeneModelV6.p13.gp gtexGeneModelV6.MT.gp \
     | hgLoadGenePred hg19 gtexGeneModel stdin
+
+
+##############################################################################
+# Oops update original wiggle gc5Base (gc5BaseBw is not released for hg19) (DONE 2020-02-18 - Angie)
+    # Redmine #24648 notes 18 & 19
+    cd /hive/data/genomes/hg19/bed/gc5Base/
+    wigEncode hg19.p13.plusMT.gc5Base.wigVarStep.gz gc5Base.p13.plusMT.{wig,wib}
+    # Install
+    ln -s `pwd`/gc5Base.p13.plusMT.wib /gbdb/hg19/wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg19/wib hg19 gc5Base gc5Base.p13.plusMT.wig
+    # Also update the gc5Base varStep wiggle download file:
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/gc5Base
+    ln -sf /hive/data/genomes/hg19/bed/gc5Base/hg19.p13.plusMT.gc5Base.wigVarStep.gz \
+      hg19.gc5Base.txt.gz
+    md5sum hg19.gc5Base.txt.gz > md5sum.txt
+
+
+##############################################################################
+# Sort & reload database tables (DONE 2020-02-20 - Angie)
+
+    # Commands run in hgsql:
+    hgsql hg19
+
+      # rename table augustusGene to augustusGeneBak;
+      # create table augustusGene like augustusGeneBak;
+      # insert into augustusGene select * from augustusGeneBak order by chrom,txStart;
+#Query OK, 33620 rows affected (0.63 sec)
+#Records: 33620  Duplicates: 0  Warnings: 0
+      # show table status like "augustusGene%";
+#(same number of rows; data size dropped a bit, but contents appear unchanged)
+      # drop table augustusGeneBak;
+
+      # rename table cpgIslandExt to cpgIslandExtBak;
+      # create table cpgIslandExt like cpgIslandExtBak;
+      # insert into cpgIslandExt select * from cpgIslandExtBak order by chrom,chromStart;
+#Records: 30344  Duplicates: 0  Warnings: 0
+      # show table status like "cpgIslandExt%";
+      # drop table cpgIslandExtBak;
+
+      # rename table gap to gapBak;
+      # create table gap like gapBak;
+      # insert into gap select * from gapBak order by chrom,chromStart;
+#Records: 497  Duplicates: 0  Warnings: 0
+      # show table status like "gap%";
+      # drop table gapBak;
+
+      # rename table genscan to genscanBak;
+      # create table genscan like genscanBak;
+      # insert into genscan select * from genscanBak order by chrom,txStart;
+#Records: 107250  Duplicates: 0  Warnings: 0
+      # show table status like "genscan%";
+      # drop table genscanBak;
+
+      # rename table gold to goldBak;
+      # create table gold like goldBak;
+      # insert into gold select * from goldBak order by chrom,chromStart;
+#Records: 28665  Duplicates: 0  Warnings: 0
+      # show table status like "gold%";
+      # drop table goldBak;
+
+      # rename table rmsk to rmskBak;
+      # create table rmsk like rmskBak;
+      # insert into rmsk select * from rmskBak order by genoName,genoStart;
+#Records: 5481341  Duplicates: 0  Warnings: 0
+      # show table status like "rmsk%";
+      # drop table rmskBak;
+
+      # rename table simpleRepeat to simpleRepeatBak;
+      # create table simpleRepeat like simpleRepeatBak;
+      # insert into simpleRepeat select * from simpleRepeatBak order by chrom,chromStart;
+#Records: 1000830  Duplicates: 0  Warnings: 0
+      # show table status like "simpleRepeat%";
+      # drop table simpleRepeatBak;
+
+      # rename table windowmaskerSdust to windowmaskerSdustBak;
+      # create table windowmaskerSdust like windowmaskerSdustBak;
+      # insert into windowmaskerSdust select * from windowmaskerSdustBak order by chrom,chromStart;
+#Records: 16745130  Duplicates: 0  Warnings: 0
+      # show table status like "windowmaskerSdust%";
+      # drop table windowmaskerSdustBak;
+      # quit
+
+    # Double check:
+    positionalTblCheck hg19 augustusGene
+    positionalTblCheck hg19 cpgIslandExt
+    positionalTblCheck hg19 gap
+    positionalTblCheck hg19 genscan
+    positionalTblCheck hg19 gold
+    positionalTblCheck hg19 rmsk
+    positionalTblCheck hg19 simpleRepeat
+    positionalTblCheck hg19 windowmaskerSdust
+
+
+#############################################################################
+# Build perSeqMax file for gfServer (hgBlat) (DONE 2020-02-24 - Angie)
+    # When the blat server is restarted with the updated hg19.2bit file,
+    # hg19.altsAndFixes needs to be copied over along with the new hg19.2bit file,
+    # and gfServer needs to be restarted with -perSeqMax=hg19.altsAndFixes.
+    cd /hive/data/genomes/hg19
+    cut -f 1 chrom.sizes.p13.plusMT \
+    | grep -E '(MT|_(alt|fix|hap.*))$' \
+    | sed -re 's/^/hg19.2bit:/;' \
+      > hg19.altsAndFixes.p13.plusMT
+    # Link for blat server installation convenience:
+    ln -sf hg19.altsAndFixes.p13.plusMT altsAndFixes
 
 
 ##############################################################################

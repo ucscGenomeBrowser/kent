@@ -1,0 +1,2 @@
+Found 1 problem:
+warning: input/hub.html descriptionUrl setting does not exist

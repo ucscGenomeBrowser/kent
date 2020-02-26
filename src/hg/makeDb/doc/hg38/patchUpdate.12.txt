@@ -44,6 +44,11 @@
       hgsql hg38 -e "insert into hg38.$table select * from grcH38P12.$table"
     done
 
+    #*** NOTE for NEXT TIME: check results with positionalTblCheck in case they need to be resorted:
+    for table in gap gold rmsk simpleRepeat windowmaskerSdust cpgIslandExt genscan augustusGene; do
+      positionalTblCheck hg38 $table
+    done
+
 
 ##############################################################################
 # Extend main database gc5BaseBw.bw (DONE - 2018-08-10 - Angie)
@@ -183,6 +188,8 @@
     | grep -E '_(alt|fix)$' \
     | sed -re 's/^/hg38.2bit:/;' \
       > hg38.altsAndFixes.p12
+    # Link for blat server installation convenience:
+    ln -sf hg38.altsAndFixes.p12 altsAndFixes
 
 
 #########################################################################

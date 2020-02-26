@@ -252,6 +252,9 @@ void hashResize(struct hash *hash, int powerOfTwoSize);
 struct hash *hashFromSlNameList(void *list);
 /* Create a hash out of a list of slNames. */
 
+struct slName *hashSlNameFromHash(struct hash *hash);
+/* Create a slName list from the names in a hash. */
+
 struct hash *hashSetFromSlNameList(void *list);
 /* Create a hashSet (hash without values) out of a list of slNames. */
 

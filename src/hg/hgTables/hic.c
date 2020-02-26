@@ -64,7 +64,6 @@ hti->isPos= TRUE;
 safecpy(hti->chromField, sizeof(hti->chromField), "chrom");
 safecpy(hti->startField, sizeof(hti->startField), "chromStart");
 safecpy(hti->endField, sizeof(hti->endField), "chromEnd");
-safecpy(hti->scoreField, sizeof(hti->scoreField), "value");
 hti->type = cloneString("hic");
 return hti;
 }

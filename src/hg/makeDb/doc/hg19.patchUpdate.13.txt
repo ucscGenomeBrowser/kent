@@ -237,6 +237,8 @@
     | grep -E '_(alt|fix|hap.*)$' \
     | sed -re 's/^/hg19.2bit:/;' \
       > hg19.altsAndFixes.p13
+    # Link for blat server installation convenience:
+    ln -sf hg19.altsAndFixes.p13 altsAndFixes
 
 
 #############################################################################

@@ -396,6 +396,20 @@ cartSetString(cart, hgtaRange, range);
 return hgp;
 }
 
+boolean isRegionWholeGenome()
+/* Return TRUE if the current region is the whole genome. */
+{
+char *regionType = cartString(cart, hgtaRegionType);
+
+if (regionType == NULL)
+    return TRUE;
+
+if (sameString(regionType, hgtaRegionTypeGenome))
+    return TRUE;
+
+return FALSE;
+}
+
 struct region *getRegions()
 /* Consult cart to get list of regions to work on. */
 {
