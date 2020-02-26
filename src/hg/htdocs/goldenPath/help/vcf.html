@@ -51,7 +51,13 @@ The typical workflow for generating a VCF custom track is this:</p>
   into file offsets in <em>my.vcf.gz</em>.</li>
   <li>
   Move both the compressed VCF file (<em>my.vcf.gz</em>) and tabix index file 
-  (<em>my.vcf.gz.tbi</em>) to an http, https, or ftp location.</li>
+  (<em>my.vcf.gz.tbi</em>) to an http, https, or ftp location.Note that the Genome Browser
+  looks for an index file with the same URL as the VCF file with the .tbi suffix added. If your
+  hosting site does not use the filename as the URL link, you will have to specifically
+  call the location of this .vcf.tbi index file with the <code>bigDataIndex</code> keyword.
+  This keyword is relevant for Custom Tracks and Track Hubs. You can read more about 
+  <em>bigDataIndex</em> in
+  <a href="trackDb/trackDbHub.html#bigDataIndex">the TrackDb Database Definition page</a>.</li>
   <li>
   Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a single 
   <a href="hgTracksHelp.html#TRACK">track line</a>. The basic version of the track line will look 
