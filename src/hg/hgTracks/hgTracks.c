@@ -4857,6 +4857,9 @@ if (wigOrder != NULL)
 // Construct flatTracks
 for (track = trackList; track != NULL; track = track->next)
     {
+    if (isLimitedVisHiddenForAllWindows(track))
+        continue;
+
     if (tdbIsComposite(track->tdb))
         {
         struct track *subtrack;
@@ -4883,10 +4886,7 @@ for (track = trackList; track != NULL; track = track->next)
         }
     else
 	{	
-	if (!isLimitedVisHiddenForAllWindows(track))
-	    {
-	    flatTracksAdd(&flatTracks,track,cart, orderedWiggles);
-	    }
+        flatTracksAdd(&flatTracks,track,cart, orderedWiggles);
 	}
     }
 flatTracksSort(&flatTracks); // Now we should have a perfectly good flat track list!
