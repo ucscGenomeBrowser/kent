@@ -691,18 +691,20 @@ fi
 # fi
 ###################################################################
 
-printf "# Plink: ${buildDir}/trackData/ensGene/process/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb\n" 1>&2
+export assemblyId=`echo ${asmId} | cut -d_ -f1-2`
+
 ###################################################################
 # Ensembl genes
-if [ -s ${buildDir}/trackData/ensGene/process/bbi/${asmId}.ensGene.bb ]; then
-printf "# link: ${buildDir}/trackData/ensGene/process/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb\n" 1>&2
+if [ -s ${buildDir}/trackData/ensGene/bbi/${assemblyId}.ensGene.bb ]; then
+ls -og ${buildDir}/trackData/ensGene/bbi/${assemblyId}.ensGene.bb 1>&2
+printf "# link: ${buildDir}/trackData/ensGene/process/bbi/${assemblyId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb\n" 1>&2
 rm -f ${buildDir}/bbi/${asmId}.ensGene.bb
-ln -s ../trackData/ensGene/process/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb
+ln -s ../trackData/ensGene/bbi/${assemblyId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb
 rm -f ${buildDir}/ixIxx/${asmId}.ensGene.ix
 rm -f ${buildDir}/ixIxx/${asmId}.ensGene.ixx
 
-ln -s ../trackData/ensGene/process/${asmId}.ensGene.ix $buildDir/ixIxx
-ln -s ../trackData/ensGene/process/${asmId}.ensGene.ixx $buildDir/ixIxx
+ln -s ../trackData/ensGene/process/${assemblyId}.ensGene.ix $buildDir/ixIxx/${asmId}.ensGene.ix
+ln -s ../trackData/ensGene/process/${assemblyId}.ensGene.ixx $buildDir/ixIxx/${asmId}.ensGene.ixx
 
 export ensVersion="v86"
 

@@ -79,7 +79,7 @@ my $base = $0;
 $base =~ s/^(.*\/)?//;
 
 # key is original accession name from the remove.dups.list, value is 1
-my %dupAccessionList = {};
+my %dupAccessionList;
 
 sub usage {
   # Usage / help / self-documentation:
@@ -936,7 +936,9 @@ sub doGatewayPage {
   my $photoJpg = "noPhoto";
   my $photoCredit = "noPhoto";
   my $photoLink = "";
-  if ( -s "$runDir/../photo/$species.jpg" ) {
+  my $speciesNoBlank = $species;
+  $speciesNoBlank =~ s/ /_/g;
+  if ( -s "$runDir/../photo/$speciesNoBlank.jpg" ) {
      $photoJpg = "../photo/\${species}.jpg";
      $photoCredit = "../photo/photoCredits.txt";
      $photoLink = "rm -f \${species}.jpg; ln -s ../photo/\${species}.jpg ."
@@ -946,7 +948,7 @@ sub doGatewayPage {
 
   $bossScript->add(<<_EOF_
 export asmId=$asmId
-export species=$species
+export species=$speciesNoBlank
 
 \$HOME/kent/src/hg/utils/automation/asmHubGatewayPage.pl \\
      $asmHubName ../download/\${asmId}_assembly_report.txt \\
@@ -1028,6 +1030,13 @@ _EOF_
 # * step: repeatMasker [workhorse]
 sub doRepeatMasker {
   my $runDir = "$buildDir/trackData/repeatMasker";
+  if ( -d "$buildDir/trackData/repeatMasker/run.cluster" ) {
+     if ( ! -s "$buildDir/trackData/repeatMasker/faSize.rmsk.txt" ) {
+       &HgAutomate::verbose(1,
+	"\nERROR: step repeatmasker may be running\n");
+       exit 255;
+     }
+  }
   &HgAutomate::mustMkdir($runDir);
 
   my $whatItDoes = "construct repeatMasker track data";
@@ -1186,6 +1195,14 @@ _EOF_
 # * step: idKeys [workhorse]
 sub doIdKeys {
   my $runDir = "$buildDir/trackData/idKeys";
+  if (! -s "$buildDir/$asmId.2bit") {
+    &HgAutomate::verbose(1, "ERROR: idKeys can not find $asmId.2bit\n");
+    exit 255;
+  }
+  if (! needsUpdate("$buildDir/$asmId.2bit", "$runDir/$asmId.keySignature.txt")) {
+     &HgAutomate::verbose(1, "# idKeys step previously completed\n");
+     return;
+  }
   &HgAutomate::mustMkdir($runDir);
 
   my $whatItDoes = "construct ID key data for each contig/chr";
@@ -1194,9 +1211,11 @@ sub doIdKeys {
 
   $bossScript->add(<<_EOF_
 export asmId=$asmId
+export twoBit=$buildDir/\$asmId.2bit
 
 if [ ../../\$asmId.2bit -nt \$asmId.keySignature.txt ]; then
-  doIdKeys.pl \$asmId -buildDir=`pwd` -twoBit=../../\$asmId.2bit
+  doIdKeys.pl \$asmId -buildDir=`pwd` -twoBit=\$twoBit
+  touch -r \$twoBit \$asmId.keySignature.txt
 else
   printf "# idKeys step previously completed\\n" 1>&2
   exit 0
@@ -1342,18 +1361,36 @@ _EOF_
 #########################################################################
 # * step: tandemDups [workhorse]
 sub doTandemDups {
-  my $runDir = "$buildDir/trackData/gapOverlap";
+  my $runDir = "$buildDir/trackData/tandemDups";
+  if (! -s "$buildDir/$asmId.unmasked.2bit") {
+    &HgAutomate::verbose(1,
+	"ERROR: tandemDups: can not find $buildDir/$asmId.unmasked.2bit\n");
+    exit 255;
+  }
+  if (-d "${runDir}" ) {
+     if (! -s "$runDir/$asmId.tandemDups.bb") {
+       &HgAutomate::verbose(1,
+       "WARNING tandemDups step may already be running, but not completed ?\n");
+       return;
+     } elsif (! needsUpdate("$buildDir/$asmId.unmasked.2bit", "$runDir/$asmId.tandemDups.bb")) {
+       &HgAutomate::verbose(1, "# tandemDups step previously completed\n");
+       return;
+     }
+  }
+
   &HgAutomate::mustMkdir($runDir);
 
-  my $whatItDoes = "construct gap overlap track (duplicate sequence on each side of a gap)";
+  my $whatItDoes = "construct tandem dups track (nearby pairs of exact duplicate sequence)";
   my $bossScript = newBash HgRemoteScript("$runDir/doTandemDups.bash",
                     $workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
 export asmId=$asmId
+export twoBit=$buildDir/\$asmId.unmasked.2bit
 
-if [ ../../\$asmId.unmasked.2bit -nt \$asmId.gapOverlap.bed.gz ]; then
-  doTandemDup.pl -buildDir=`pwd` -bigClusterHub=$bigClusterHub -smallClusterHub=$smallClusterHub -workhorse=$workhorse -twoBit=../../\$asmId.2bit \$asmId
+if [ \$twoBit -nt \$asmId.tandemDups.bb ]; then
+  doTandemDup.pl -buildDir=`pwd` -bigClusterHub=$bigClusterHub -smallClusterHub=$smallClusterHub -workhorse=$workhorse -twoBit=\$twoBit \$asmId
+  touch -r \$twoBit \$asmId.tandemDups.bb
 else
   printf "# tandemDups step previously completed\\n" 1>&2
   exit 0
@@ -1421,7 +1458,7 @@ sub doNcbiGene {
     return;
   }
   if ( ! -s "$buildDir/sequence/$asmId.ncbiToUcsc.lift" ) {
-    printf STDERR "# ERROR: ncbiGene: can not find ../../sequence/$asmId.ncbiToUcsc.lift\n";
+    printf STDERR "# ERROR: ncbiGene: can not find $buildDir/sequence/$asmId.ncbiToUcsc.lift\n";
     exit 255;
   }
   my $runDir = "$buildDir/trackData/ncbiGene";
@@ -1475,7 +1512,7 @@ if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
     | sed -e 's/,//g' > \$asmId.ncbiGene.stats.txt
   LC_NUMERIC=en_US /usr/bin/printf "# ncbiGene %s %'d %s %'d\\n" `cat \$asmId.ncbiGene.stats.txt` | xargs echo
 else
-  printf "# ncbiGene previously completed\\n" 1>&2
+  printf "# ncbiGene step previously completed\\n" 1>&2
 fi
 _EOF_
   );
@@ -1513,7 +1550,7 @@ if [ $buildDir/\$asmId.2bit -nt \$asmId.ncbiRefSeq.bb ]; then
       -stop=load -fileServer=$fileServer -smallClusterHub=$smallClusterHub -workhorse=$workhorse \\
       \$asmId \$asmId
 else
-  printf "# ncbiRefSeq previously completed\\n" 1>&2
+  printf "# ncbiRefSeq step previously completed\\n" 1>&2
 fi
 _EOF_
   );
@@ -1542,7 +1579,7 @@ if [ $buildDir/\$asmId.2bit -nt \$asmId.augustus.bb ]; then
     -bigClusterHub=$bigClusterHub -species=$augustusSpecies -workhorse=$workhorse \\
     -noDbGenePredCheck -maskedSeq=$buildDir/\$asmId.2bit \$asmId) > cleanup.log 2>&1
 else
-  printf "# augustus genes previously completed\\n" 1>&2
+  printf "# augustus genes step previously completed\\n" 1>&2
 fi
 _EOF_
   );
@@ -1573,7 +1610,7 @@ if [ $buildDir/\$asmId.2bit -nt \$asmId.xenoRefGene.bb ]; then
   LC_NUMERIC=en_US /usr/bin/printf "# xenoRefGene %s %'d %s %'d\\n" `cat \$asmId.xenoRefGene.stats.txt` | xargs echo
   fi
 else
-  printf "# xenoRefGene previously completed\\n" 1>&2
+  printf "# xenoRefGene step previously completed\\n" 1>&2
 fi
 _EOF_
   );
@@ -1646,7 +1683,8 @@ $ftpDir = sprintf("%s/%s/%s/%s/%s", $partNames[0],
 $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/asmHubs/refseqBuild/$ftpDir";
 
-$assemblySource = $opt_sourceDir ? "$sourceDir" : "$sourceDir/$ftpDir";
+$sourceDir = $opt_sourceDir ? $opt_sourceDir : $sourceDir;
+$assemblySource = $opt_sourceDir ? "$opt_sourceDir" : "$sourceDir/$ftpDir";
 my $asmReport = "$assemblySource/${asmId}_assembly_report.txt";
 
 $species = $opt_species ? $opt_species : $species;
@@ -1665,7 +1703,6 @@ if (length($species) < 1) {
   }
 }
 
-$sourceDir = $opt_sourceDir ? $opt_sourceDir : $sourceDir;
 $rmskSpecies = $opt_rmskSpecies ? $opt_rmskSpecies : $species;
 $augustusSpecies = $opt_augustusSpecies ? $opt_augustusSpecies : $augustusSpecies;
 $xenoRefSeq = $opt_xenoRefSeq ? $opt_xenoRefSeq : $xenoRefSeq;
@@ -1683,6 +1720,9 @@ printf STDERR "# sourceDir %s\n", $sourceDir;
 printf STDERR "# augustusSpecies %s\n", $augustusSpecies;
 printf STDERR "# xenoRefSeq %s\n", $xenoRefSeq;
 printf STDERR "# assemblySource: %s\n", $assemblySource;
+printf STDERR "# asmHubName %s\n", $asmHubName;
+printf STDERR "# rmskSpecies %s\n", $rmskSpecies;
+printf STDERR "# augustusSpecies %s\n", $augustusSpecies;
 
 # Do everything.
 $stepper->execute();

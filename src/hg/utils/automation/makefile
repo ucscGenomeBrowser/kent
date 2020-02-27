@@ -53,6 +53,9 @@ SCRIPT_FILES = \
 	ensVersions \
 	extractNestedRepeats.pl \
 	extractGtf.pl \
+	kmerPairs.pl \
+	kmerCollapsePairedEnds.pl \
+	kmerPrint.pl \
 	liftRMAlign.pl \
 	makeDownloads.pl \
 	makeGenomeDb.pl \

@@ -1282,8 +1282,9 @@ else
     if (catch->gotError)
 	{
 	addWarning(dsWarn, err);
-	addWarning(dsWarn, catch->message->string);
 	}
+    if (isNotEmpty(catch->message->string))
+        addWarning(dsWarn, catch->message->string);
     errCatchFree(&catch);
 
     /* exclude special setting used by table browser to indicate
@@ -1297,7 +1298,7 @@ else
             nextTok = strchr(db, 0);
         db = cloneStringZ(db,nextTok-db);
         if (!sameString(db,database))
-            err = "Invalid configuration found - remove db= or return it to it's original value";
+            err = "Invalid configuration found - remove db= or return it to its original value. ";
         }
 
     if (cartVarExists(cart, hgCtUpdatedTrack) && !hasData)
@@ -1316,8 +1317,8 @@ else
                     ctUpdated = TRUE;
                     }
                 errCatchEnd(catch);
-                if (catch->gotError)
-                    addWarning(dsWarn, catch->message->string);
+                if (isNotEmpty(catch->message->string))
+                    err = catTwoStrings(emptyForNull(err), catch->message->string);
                 errCatchFree(&catch);
                 }
             }
