@@ -827,3 +827,17 @@ exonArrows on
     color 180,0,134
     priority 2
 
+#RefSeq Select is a subtrack part of the RefSeq Composite in ../../refSeqComposite.ra
+#For more information on this change, see RM#24787
+track ncbiRefSeqSelect
+parent refSeqComposite off
+priority 8
+type genePred
+shortLabel RefSeq Select+MANE
+longLabel NCBI RefSeq Select+MANE subset: one representative transcript per protein-coding gene
+trackHandler ncbiRefSeq
+idXref ncbiRefSeqLink mrnaAcc name
+color 20,20,160
+baseColorUseCds given
+baseColorDefault genomicCodons
+
