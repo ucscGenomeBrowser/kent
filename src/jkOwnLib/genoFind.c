@@ -697,19 +697,17 @@ fclose(f);
 return nibSize;
 }
 
-static long long maxTotalBases()
+static bits64 maxTotalBases()
 /* Return maximum bases we can index. */
 {
-long long maxBases = 1024*1024;
-maxBases *= 4*1024;
-return maxBases;
+return 0x1fULL << 48; // index restricted to 48 bits
 }
 
-static long long twoBitCheckTotalSize(struct twoBitFile *tbf)
+static bits64 twoBitCheckTotalSize(struct twoBitFile *tbf)
 /* Return total size of sequence in two bit file.  Squawk and
  * die if it's more than 4 gig. */
 {
-long long totalSize = twoBitTotalSize(tbf);
+bits64 totalSize = twoBitTotalSize(tbf);
 if (totalSize > maxTotalBases())
     errAbort("Sorry, can only index up to %lld bases, %s has %lld",
 	maxTotalBases(),  tbf->fileName, totalSize);
@@ -717,7 +715,7 @@ return totalSize;
 }
 
 static void gfCountTilesInTwoBit(struct genoFind *gf, int stepSize,
-	char *fileName, int *retSeqCount, long long *retBaseCount)
+	char *fileName, int *retSeqCount, bits64 *retBaseCount)
 /* Count all tiles in 2bit file.  Returns number of sequences and
  * total size of sequences in file. */
 {
@@ -725,7 +723,7 @@ struct dnaSeq *seq;
 struct twoBitFile *tbf = twoBitOpen(fileName);
 struct twoBitIndex *index;
 int seqCount = 0;
-long long baseCount = twoBitCheckTotalSize(tbf);
+bits64 baseCount = twoBitCheckTotalSize(tbf);
 
 printf("Counting tiles in %s\n", fileName);
 for (index = tbf->indexList; index != NULL; index = index->next)
@@ -951,7 +949,7 @@ int i;
 gfOffset offset = 0, nibSize;
 char *fileName;
 struct gfSeqSource *ss;
-long long totalBases = 0, warnAt = maxTotalBases();
+bits64 totalBases = 0, warnAt = maxTotalBases();
 int totalSeq = 0;
 
 if (allowOneMismatch)
@@ -964,7 +962,7 @@ for (i=0; i<fileCount; ++i)
     if (twoBitIsFile(fileName))
 	{
 	int seqCount;
-	long long baseCount;
+	bits64 baseCount;
         gfCountTilesInTwoBit(gf, stepSize, fileName, &seqCount, &baseCount);
 	totalBases += baseCount;
 	totalSeq += seqCount;
@@ -1154,7 +1152,7 @@ gfOffset offset[2][3];
 char *fileName;
 struct dnaSeq *seq;
 int sourceCount = 0;
-long long totalBases = 0, warnAt = maxTotalBases();
+bits64 totalBases = 0, warnAt = maxTotalBases();
 
 if (allowOneMismatch)
     errAbort("Don't currently support allowOneMismatch in gfIndexTransNibsAndTwoBits");
