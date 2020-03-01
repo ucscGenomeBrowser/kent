@@ -39,13 +39,27 @@ sub commify($) {
     return scalar reverse $text
 }
 
-sub oneTrackData($$) {
-  my ($file, $genomeSize) = @_;
+# ($itemCount, $percentCover) = oneTrackData($trackFile, $sizeNoGaps, $trackFb);
+# might have a track feature bits file (trackFb), maybe not
+sub oneTrackData($$$$$$) {
+  my ($asmId, $trackName, $file, $genomeSize, $trackFb, $runDir) = @_;
 # printf STDERR "# %s\n", $file;
   my $itemCount = 0;
   my $percentCover = 0;
   if (! -s "${file}") {
-    return("n/a", "n/a");
+    if ($trackName eq "gapOverlap") {
+      if (-s "${runDir}/$asmId.gapOverlap.bed.gz" ) {
+       my $lineCount=`zcat "${runDir}/$asmId.gapOverlap.bed.gz" | head | wc -l`;
+        chomp $lineCount;
+       if (0 == $lineCount) {
+         return("0", "0 %");
+       } else {
+         return("n/a", "n/a");
+       }
+      }
+    } else {
+      return("n/a", "n/a");
+    }
   }
   if ($file =~ m/.bw$/) {
       my $bigWigInfo = `bigWigInfo "$file" | egrep "basesCovered:|mean:" | awk '{print \$NF}' | xargs echo | sed -e 's/,//g;'`;
@@ -60,6 +74,12 @@ sub oneTrackData($$) {
       my ($items, $bases) = split('\s', $bigBedInfo);
       $itemCount = commify($items);
       $percentCover = sprintf("%.2f %%", 100.0 * $bases / $genomeSize);
+#             56992654 bases of 2616369673 (2.178%) in intersection
+      if ( -s "${trackFb}" ) {
+printf STDERR "# $trackFb\n";
+          my ($itemBases, undef, undef, $noGapSize, undef) = split('\s+', `cat $trackFb`, 5);
+          $percentCover = sprintf("%.2f %%", 100.0 * $itemBases / $noGapSize);
+      }
 # printf STDERR "# bigBedInfo %s %s %s\n", $itemCount, $percentCover, $file;
   }
   return ($itemCount, $percentCover);
@@ -110,16 +130,17 @@ print <<"END"
 <thead><tr><th>count</th>
   <th>common name<br>link&nbsp;to&nbsp;genome&nbsp;browser</th>
   <th class="sorttable_numeric">gc5 base</th>
-  <th class="sorttable_numeric">gap</th>
-  <th class="sorttable_numeric">assembly</th>
+  <th class="sorttable_numeric">AGP<br>gap</th>
+  <th class="sorttable_numeric">all<br>gaps</th>
+  <th class="sorttable_numeric">assembly<br>sequences</th>
   <th class="sorttable_numeric">rmsk</th>
   <th class="sorttable_numeric">TRF<br>simpleRepeat</th>
-  <th class="sorttable_numeric">windowMasker</th>
-  <th class="sorttable_numeric">gapOverlap</th>
-  <th class="sorttable_numeric">tandemDups</th>
+  <th class="sorttable_numeric">window<br>Masker</th>
+  <th class="sorttable_numeric">gap<br>Overlap</th>
+  <th class="sorttable_numeric">tandem<br>Dups</th>
   <th class="sorttable_numeric">cpg<br>unmasked</th>
   <th class="sorttable_numeric">cpg<br>island</th>
-  <th class="sorttable_numeric">ncbiGene</th>
+  <th class="sorttable_numeric">genes<br>ncbi</th>
   <th class="sorttable_numeric">ncbiRefSeq</th>
   <th class="sorttable_numeric">xenoRefGene</th>
   <th class="sorttable_numeric">augustus</th>
@@ -193,9 +214,10 @@ sub asmCounts($) {
   return ($sequenceCount, $totalSize);
 }
 
-#    my ($gapSize) = maskStats($faSizeTxt);
+#    my ($gapSize, $maskPerCent, $sizeNoGaps) = maskStats($faSizeTxt);
 sub maskStats($) {
   my ($faSizeFile) = @_;
+  my $sizeNoGaps = `grep 'sequences in 1 file' $faSizeFile | awk '{print \$4}'`;
   my $gapSize = `grep 'sequences in 1 file' $faSizeFile | awk '{print \$3}'`;
   chomp $gapSize;
   $gapSize =~ s/\(//;
@@ -204,7 +226,7 @@ sub maskStats($) {
   my $maskedBases = `grep 'sequences in 1 file' $faSizeFile | awk '{print \$9}'`;
   chomp $maskedBases;
   my $maskPerCent = 100.0 * $maskedBases / $totalBases;
-  return ($gapSize, $maskPerCent);
+  return ($gapSize, $maskPerCent, $sizeNoGaps);
 }
 
 # grep "sequences in 1 file" GCA_900324465.2_fAnaTes1.2.faSize.txt
@@ -226,7 +248,7 @@ sub gapStats($$) {
 ##############################################################################
 sub tableContents() {
 
-  my @trackList = qw(gc5Base gap assembly rmsk simpleRepeat windowMasker gapOverlap tandemDups cpgIslandExtUnmasked cpgIslandExt ncbiGene ncbiRefSeq xenoRefGene augustus);
+  my @trackList = qw(gc5Base gap allGaps assembly rmsk simpleRepeat windowMasker gapOverlap tandemDups cpgIslandExtUnmasked cpgIslandExt ncbiGene ncbiRefSeq xenoRefGene augustus);
 
 
   foreach my $asmId (reverse(@orderList)) {
@@ -249,7 +271,7 @@ sub tableContents() {
       printf STDERR "# no 2bit file:\n# %s\n", $twoBit;
       printf "<tr><td align=right>%d</td>\n", ++$asmCount;
       printf "<td align=center>%s</td>\n", $accessionId;
-      printf "<th colspan=14 align=center>missing masked 2bit file</th>\n";
+      printf "<th colspan=15 align=center>missing masked 2bit file</th>\n";
       printf "</tr>\n";
       next;
     }
@@ -258,7 +280,7 @@ sub tableContents() {
        printf STDERR "twoBitToFa $twoBit stdout | faSize stdin > $faSizeTxt\n";
        print `twoBitToFa $twoBit stdout | faSize stdin > $faSizeTxt`;
     }
-    my ($gapSize, $maskPerCent) = maskStats($faSizeTxt);
+    my ($gapSize, $maskPerCent, $sizeNoGaps) = maskStats($faSizeTxt);
     $overallGapSize += $gapSize;
     my ($seqCount, $totalSize) = asmCounts($chromSizes);
     $overallSeqCount += $seqCount;
@@ -301,6 +323,8 @@ sub tableContents() {
     printf "<td align=center><a href='https://genome-test.gi.ucsc.edu/h/%s' target=_blank>%s<br>%s</a></td>\n", $accessionId, $commonName, $accessionId;
     foreach my $track (@trackList) {
       my $trackFile = "$buildDir/bbi/$asmId.$track";
+      my $trackFb = "$buildDir/trackData/$track/fb.$asmId.$track.txt";
+      my $runDir = "$buildDir/trackData/$track";
       my ($itemCount, $percentCover);
       if ( "$track" eq "gc5Base" ) {
          $trackFile .= ".bw";
@@ -327,10 +351,11 @@ sub tableContents() {
           }
         } else {
           ($itemCount, $percentCover) = split('\s+', `cat $rmskStats`);
+          $percentCover = sprintf("%.2f %%", $percentCover);
           chomp $percentCover;
         }
       } else {
-        ($itemCount, $percentCover) = oneTrackData($trackFile, $totalSize);
+        ($itemCount, $percentCover) = oneTrackData($asmId, $track, $trackFile, $totalSize, $trackFb, $runDir);
       }
       printf "    <td align=right>%s<br>(%s)</td>\n", $itemCount, $percentCover;
     }
