@@ -15,6 +15,7 @@ sub usage() {
   my ($status) = @_;
   my $bn=`basename $0`;
   chomp $bn;
+  print STDERR "varStepToBedGraph.pl - take variableStep wiggle data (span=1 only) and convert it to bedGraph bed-like format.\n";
   print STDERR "usage: $bn <variable step format file names | stdin>\n";
   exit $status;
 }
