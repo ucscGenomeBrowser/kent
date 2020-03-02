@@ -36,7 +36,7 @@ errAbort("bedToPsl - convert bed format files to psl format\n"
     "-tabs        -  use tab as a separator\n"
     "-keepQuery   -  instead of creating a fake query, create PSL with identical query and\n"
     "                target specs. Useful if bed features are to be lifted with pslMap and one \n"
-    "                wants to keep the source location in the lift result.\n" , msg);
+    "                wants to keep the source location in the lift result.\n");
 }
 
 static struct hash *loadChromSizes(char *chromSizesFile)
