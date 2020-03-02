@@ -21,11 +21,10 @@ static struct optionSpec optionSpecs[] = {
 static boolean keepQuery = FALSE;
 static boolean doTabs = FALSE;
 
-void usage(char *msg)
+void usage()
 /* Explain usage and exit. */
 {
-errAbort("%s:\n"
-    "bedToPsl - convert bed format files to psl format\n"
+errAbort("bedToPsl - convert bed format files to psl format\n"
     "usage:\n"
     "   bedToPsl [options] chromSizes bedFile pslFile\n"
     "\n"
@@ -148,7 +147,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
-    usage("Too few arguments");
+    usage();
 if (optionExists("tabs"))
     doTabs = TRUE;
 if (optionExists("keepQuery"))
