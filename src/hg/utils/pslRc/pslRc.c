@@ -12,16 +12,16 @@ static struct optionSpec optionSpecs[] = {
 };
 boolean gNoRc = FALSE;
 
-void usage(char *msg)
+void usage()
 /* usage message and abort */
 {
-errAbort("%s:\n"
-         "pslRc [options] inPsl outPsl\n"
+errAbort("pslRc - reverse-complement psl\n"
+         "usage:\n"
+         "    pslRc [options] inPsl outPsl\n"
          "\n"
          "reverse-complement psl\n"
          "\n"
-         "Options:\n",
-         msg);
+         "Options:\n");
 }
 
 void pslRcFile(char *inPslFile, char *outPslFile)
