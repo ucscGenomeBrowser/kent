@@ -1511,7 +1511,7 @@ if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
   genePredToBed -tab -fillSpace \$asmId.ncbiGene.ucsc.genePred.gz stdout \\
     | bedToExons stdin stdout | bedSingleCover.pl stdin > \$asmId.exons.bed
   export baseCount=`awk '{sum+=\$3-\$2}END{printf "%d", sum}' \$asmId.exons.bed`
-  export asmSizeNoGaps=`grep sequences ../../\$asmId.faSize.txt | awk '{print \$1}'`
+  export asmSizeNoGaps=`grep sequences ../../\$asmId.faSize.txt | awk '{print \$5}'`
   export perCent=`echo \$baseCount \$asmSizeNoGaps | awk '{printf "%.3f", 100.0*\$1/\$2}'`
   rm -f \$asmId.exons.bed
   ~/kent/src/hg/utils/automation/gpToIx.pl \$asmId.ncbiGene.ucsc.genePred.gz \\
