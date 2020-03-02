@@ -358,13 +358,13 @@ selectTableFree();
 #endif
 }
 
-void usage(char *msg)
+void usage()
 /* usage message and abort */
 {
 static char *usageMsg =
 #include "usage.msg"
     ;
-errAbort("%s:  %s", msg, usageMsg);
+errAbort("%s", usageMsg);
 }
 
 /* entry */
@@ -373,7 +373,7 @@ int main(int argc, char** argv)
 char *selectFile, *inFile, *outFile, *dropFile;
 optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
-    usage("wrong # args");
+    usage();
 selectFile = argv[1];
 inFile = argv[2];
 outFile = argv[3];
