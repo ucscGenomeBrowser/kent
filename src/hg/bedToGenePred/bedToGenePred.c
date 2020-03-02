@@ -16,17 +16,16 @@ static struct optionSpec optionSpecs[] = {
 
 /* command line options */
 
-void usage(char *msg)
+void usage()
 /* Explain usage and exit. */
 {
-errAbort("%s:\n"
-    "bedToGenePred - convert bed format files to genePred format\n"
+errAbort("bedToGenePred - convert bed format files to genePred format\n"
     "usage:\n"
     "   bedToGenePred bedFile genePredFile\n"
     "\n"
     "Convert a bed file to a genePred file. If BED has at least 12 columns,\n"
     "then a genePred with blocks is created. Otherwise single-exon genePreds are\n"
-    "created.\n", msg);
+    "created.\n");
 }
 
 
@@ -63,7 +62,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
 if (argc != 3)
-    usage("Too few arguments");
+    usage();
 cnvBedToGenePred(argv[1], argv[2]);
 return 0;
 }
