@@ -10,9 +10,9 @@
 void usage()
 /* Explain usage and exit. */
 {
-errAbort("postTransMapChain - Post genomic pslMap (TransMap) chaining.\n"
+errAbort("pslMapPostChain - Post genomic pslMap (TransMap) chaining.\n"
          "usage:\n"
-         "    postTransMapChain [options] inPsl outPsl\n"
+         "    pslMapPostChain [options] inPsl outPsl\n"
          "\n"
          "Post genomic pslMap (TransMap) chaining.  This takes transcripts\n"
          "that have been mapped via genomic chains adds back in\n"
