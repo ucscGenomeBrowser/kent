@@ -52,14 +52,14 @@ static char *mapInfoHdr =
     "mappedStrand\t"
     "mappedAligned\t" "qStartTrunc\t" "qEndTrunc\n";
 
-static void usage(char *msg)
+static void usage()
 /* usage msg and exit */
 {
 /* message got huge, so it's in a generate file */
 static char *usageMsg =
 #include "usage.msg"
     ;
-errAbort("%s\n%s", msg, usageMsg);
+errAbort("%s", usageMsg);
 }
 
 static void verbosePslNl(int verbosity, char *msg, struct psl *psl)
@@ -380,7 +380,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
-    usage("Error: wrong number of arguments");
+    usage();
 suffix = optionVal("suffix", NULL);
 if (optionExists("keepTranslated"))
     mapOpts |= pslTransMapKeepTrans;
