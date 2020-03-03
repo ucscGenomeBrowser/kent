@@ -983,6 +983,20 @@ char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct tra
 /* If the parentTdb has an ENCODE controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to display it.  Return string is cloned. */
 
+boolean compositeHideEmptySubtracksSetting(struct trackDb *tdb, boolean *retDefault,
+                                        char **retMultiBedFile, char **retSubtrackIdFile);
+/* Parse hideEmptySubtracks settings
+ * Format:  hideEmptySubtracks on|off
+ *      Optional index files for performance:
+ *          hideEmptySubtracksMultiBedUrl multiBed.bigBed 
+ *          hideEmptySubtracksSourceUrl subtrackIds.tab
+ * MultiBed.bed is a bed3Sources bigBed, generated with UCSC tool trackDbIndexBb
+ *              (for single view subtracks, can use bedtools multiinter
+ *              post-processed by UCSC multiBed.pl tool)
+ *      subtrackIds.tab is a tab-sep file: id subtrackName
+ *
+ * Return TRUE if setting is present.  retDefault is TRUE if set to 'on', o/w FALSE
+*/
 
 boolean compositeHideEmptySubtracks(struct cart *cart, struct trackDb *tdb,
                                         char **retMultiBedFile, char **retSubtrackIdFile);

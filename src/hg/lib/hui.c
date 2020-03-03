@@ -5240,15 +5240,16 @@ if (!tdbIsComposite(tdb))
 char *hideEmpties = cloneString(trackDbSetting(tdb, SUBTRACK_HIDE_EMPTY));
 if (!hideEmpties)
     return FALSE;
+boolean deflt = FALSE;
 if (sameString(hideEmpties, "on"))
-    *retDefault = TRUE;
-else if (sameString(hideEmpties, "off"))
-    *retDefault = FALSE;
-else
+    deflt = TRUE;
+else if (differentString(hideEmpties, "off"))
     {
     warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTY, hideEmpties);
     return FALSE;
     }
+if (retDefault)
+    *retDefault = deflt;
 if (retMultiBedFile != NULL && retSubtrackIdFile != NULL)
     {
     char *file = cloneString(trackDbSetting(tdb, SUBTRACK_HIDE_EMPTY_MULTIBED_URL));
