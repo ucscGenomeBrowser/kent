@@ -1454,14 +1454,28 @@ _EOF_
 sub doNcbiGene {
   my $gffFile = "$assemblySource/${asmId}_genomic.gff.gz";
   if ( ! -s "${gffFile}" ) {
-    printf STDERR "# step ncbiGene: no gff file found at:\n#  %s\n", $gffFile;
+    &HgAutomate::verbose(1, "# step ncbiGene: no gff file found at:\n#  %s\n", $gffFile);
     return;
   }
   if ( ! -s "$buildDir/sequence/$asmId.ncbiToUcsc.lift" ) {
-    printf STDERR "# ERROR: ncbiGene: can not find $buildDir/sequence/$asmId.ncbiToUcsc.lift\n";
+    &HgAutomate::verbose(1, "# ERROR: ncbiGene: can not find $buildDir/sequence/$asmId.ncbiToUcsc.lift\n");
     exit 255;
   }
   my $runDir = "$buildDir/trackData/ncbiGene";
+  if (-d "${runDir}" ) {
+     if (! -s "$runDir/$asmId.ncbiGene.bb") {
+       &HgAutomate::verbose(1,
+       "WARNING ncbiGene step may already be running, but not completed ?\n");
+       return;
+     } elsif (! needsUpdate("$gffFile", "$runDir/$asmId.ncbiGene.bb")) {
+       &HgAutomate::verbose(1, "# ncbiGene step previously completed\n");
+       return;
+     }
+  }
+  if (! -s "$buildDir/$asmId.faSize.txt") {
+    &HgAutomate::verbose(1, "# step ncbiGene: can not find faSize.txt at:\n#  %s\n", "$buildDir/$asmId.faSize.txt");
+    exit 255;
+  }
 
   &HgAutomate::mustMkdir($runDir);
 
@@ -1494,6 +1508,12 @@ if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
       ../../sequence/\$asmId.ncbiToUcsc.lift warn \\
        \$asmId.ncbiGene.genePred.gz | gzip -c \\
           > \$asmId.ncbiGene.ucsc.genePred.gz
+  genePredToBed -tab -fillSpace \$asmId.ncbiGene.ucsc.genePred.gz stdout \\
+    | bedToExons stdin stdout | bedSingleCover.pl stdin > \$asmId.exons.bed
+  export baseCount=`awk '{sum+=\$3-\$2}END{printf "%d", sum}' \$asmId.exons.bed`
+  export asmSizeNoGaps=`grep sequences ../../\$asmId.faSize.txt | awk '{print \$5}'`
+  export perCent=`echo \$baseCount \$asmSizeNoGaps | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+  rm -f \$asmId.exons.bed
   ~/kent/src/hg/utils/automation/gpToIx.pl \$asmId.ncbiGene.ucsc.genePred.gz \\
     | sort -u > \$asmId.ncbiGene.ix.txt
   ixIxx \$asmId.ncbiGene.ix.txt \$asmId.ncbiGene.ix \$asmId.ncbiGene.ixx
@@ -1511,6 +1531,7 @@ if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
   bigBedInfo \$asmId.ncbiGene.bb | egrep "^itemCount:|^basesCovered:" \\
     | sed -e 's/,//g' > \$asmId.ncbiGene.stats.txt
   LC_NUMERIC=en_US /usr/bin/printf "# ncbiGene %s %'d %s %'d\\n" `cat \$asmId.ncbiGene.stats.txt` | xargs echo
+  printf "%d bases of %d (%s%%) in intersection\\n" "\$baseCount" "\$asmSizeNoGaps" "\$perCent" > fb.\$asmId.ncbiGene.txt
 else
   printf "# ncbiGene step previously completed\\n" 1>&2
 fi
@@ -1561,6 +1582,21 @@ _EOF_
 # * step: augustus [workhorse]
 sub doAugustus {
   my $runDir = "$buildDir/trackData/augustus";
+  if (! -s "$buildDir/$asmId.2bit") {
+    &HgAutomate::verbose(1,
+	"ERROR: augustus step can not find $buildDir/$asmId.2bit\n");
+    exit 255;
+  }
+  if (-d "${runDir}" ) {
+     if (! -s "$runDir/$asmId.augustus.bb") {
+       &HgAutomate::verbose(1,
+       "WARNING augustus step may already be running, but not completed ?\n");
+       return;
+     } elsif (! needsUpdate("$buildDir/$asmId.2bit", "$runDir/$asmId.augustus.bb")) {
+       &HgAutomate::verbose(1, "# augustus step previously completed\n");
+       return;
+     }
+  }
 
   &HgAutomate::mustMkdir($runDir);
 

@@ -186,3 +186,30 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 return hash;
 }
+
+struct hash *chromAliasMakeReverseLookupTable(char *database)
+/* Given a database name and a connection to that database, construct a lookup table
+ * that takes the actual assembly chromosome names to struct chromAliases.  Because a
+ * chromosome name may well have multiple aliases, repeated calls to hashLookupNext
+ * may be required to see them all.  Returns NULL if the given database does not have
+ * a chromAlias table. */
+{
+struct hash *hash = NULL;
+if (!hTableExists(database, "chromAlias"))
+    return NULL;
+
+struct sqlConnection *conn = hAllocConn(database);
+hash = hashNew(0);
+char query[2048];
+sqlSafef(query, sizeof(query), "select * from chromAlias");
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct chromAlias *new = chromAliasLoad(row);
+    hashAdd(hash, new->chrom, new);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return hash;
+}

@@ -2842,3 +2842,18 @@ altColor 128,228,128
     maxWindowToDraw 10000000
     canPack off
     spectrum on
+
+#RefSeq Select is a subtrack part of the RefSeq Composite in ../../refSeqComposite.ra
+#For more information on this change, see RM#24787
+track ncbiRefSeqSelect
+parent refSeqComposite off
+priority 8
+type genePred
+shortLabel RefSeq Select
+longLabel NCBI RefSeq Select: One representative transcript per protein-coding gene
+trackHandler ncbiRefSeq
+idXref ncbiRefSeqLink mrnaAcc name
+color 20,20,160
+baseColorUseCds given
+baseColorDefault genomicCodons
+

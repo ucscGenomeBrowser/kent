@@ -15,14 +15,14 @@
 
 struct blackListRange *gBlackListRanges = NULL;
 
-static void usage(char *msg)
+static void usage()
 /* usage msg and exit */
 {
 /* message got huge, so it's in a generate file */
 static char *usageMsg =
 #include "usage.msg"
     ;
-errAbort("%s:  %s", msg, usageMsg);
+errAbort("%s", usageMsg);
 }
 
 static void prAlgo()
@@ -523,7 +523,7 @@ optionInit(&argc, argv, optionSpecs);
 if (optionExists("algoHelp"))
     prAlgo();
 if (argc != 3)
-    usage("wrong # of args");
+    usage();
 
 gLocalNearBest = optionFrac("localNearBest", gLocalNearBest);
 gGlobalNearBest = optionFrac("globalNearBest", gGlobalNearBest);

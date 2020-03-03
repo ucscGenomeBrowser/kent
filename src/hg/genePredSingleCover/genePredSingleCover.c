@@ -211,14 +211,12 @@ carefulClose(&outFh);
 chromBinsFree(&genes);
 }
 
-static void usage(char *msg)
+static void usage()
 /* Explain usage and exit. */
 {
-errAbort("%s\n"
-    "\n"
-    "genePredSingleCover - create single-coverage genePred files\n"
-    "\n"
-    "genePredSingleCover [options] inGenePred outGenePred\n"
+errAbort("genePredSingleCover - create single-coverage genePred files\n"
+    "usage:\n"
+    "    genePredSingleCover [options] inGenePred outGenePred\n"
     "\n"
     "Create a genePred file that have single CDS coverage of the genome.\n"
     "UTR is allowed to overlap.  The default is to keep the gene with the\n"
@@ -232,7 +230,7 @@ errAbort("%s\n"
     "   be choosen over lower scoring ones.  Equaly scoring genes are\n"
     "   choosen by number of CDS bases.  If this option is supplied, all\n"
     "   genes must be in the file\n"
-    "\n", msg);
+    "\n");
 }
 
 int main(int argc, char *argv[])
@@ -240,7 +238,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
 if (argc != 3)
-    usage("wrong # args");
+    usage();
 genePredSingleCover(argv[1], argv[2], optionVal("scores", NULL));
 
 return 0;

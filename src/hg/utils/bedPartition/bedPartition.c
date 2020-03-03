@@ -19,11 +19,10 @@ static struct optionSpec optionSpecs[] =
 };
 static int gParallel = 0;
 
-static void usage(char *msg)
+static void usage()
 /* Explain usage and exit. */
 {
-errAbort("Error: %s\n"
-  "bedPartition - split BED ranges into non-overlapping ranges\n"
+errAbort("bedPartition - split BED ranges into non-overlapping ranges\n"
   "usage:\n"
   "   bedPartition [options] bedFile rangesBed\n"
   "\n"
@@ -32,8 +31,7 @@ errAbort("Error: %s\n"
   "The bedFile maybe compressed and no ordering is assumed.\n"
   "\n"
   "options:\n"
-  "   -parallel=n - use this many cores for parallel sorting\n"
-  "\n", msg);
+  "   -parallel=n - use this many cores for parallel sorting\n");
 }
 
 struct bedInput
@@ -151,7 +149,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
 if (argc != 3)
-    usage("wrong # args");
+    usage();
 gParallel = optionInt("parallel", gParallel);
 bedPartition(argv[1], argv[2]);
 return 0;
