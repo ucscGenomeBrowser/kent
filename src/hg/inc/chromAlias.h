@@ -69,4 +69,11 @@ struct hash *chromAliasMakeLookupTable(char *database);
  * that takes chromosome alias names to a matching struct chromAlias.  Returns NULL
  * if the given database does not have a chromAlias table. */
 
+struct hash *chromAliasMakeReverseLookupTable(char *database);
+/* Given a database name and a connection to that database, construct a lookup table
+ * that takes the actual assembly chromosome names to struct chromAliases.  Because a
+ * chromosome name may well have multiple aliases, repeated calls to hashLookupNext
+ * may be required to see them all.  Returns NULL if the given database does not have
+ * a chromAlias table. */
+
 #endif /* CHROMALIAS_H */

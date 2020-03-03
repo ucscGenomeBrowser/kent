@@ -1,4 +1,6 @@
-overlapSelect [options] selectFile inFile outFile
+overlapSelect - Select records based on overlapping chromosome ranges.
+usage:
+   overlapSelect [options] selectFile inFile outFile
 
 Select records based on overlapping chromosome ranges.  The ranges are
 specified in the selectFile, with each block specifying a range.

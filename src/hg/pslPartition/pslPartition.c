@@ -24,11 +24,10 @@ static int gPartSize = 20000;
 static boolean gDropContained = FALSE;
 static int gParallel = 0;
 
-static void usage(char *msg)
+static void usage()
 /* Explain usage and exit. */
 {
-errAbort("Error: %s\n"
-  "pslPartition - split PSL files into non-overlapping sets\n"
+errAbort("pslPartition - split PSL files into non-overlapping sets\n"
   "usage:\n"
   "   pslPartition [options] pslFile outDir\n"
   "\n"
@@ -48,7 +47,7 @@ errAbort("Error: %s\n"
   "  -dropContained - drop PSLs that are completely contained in a block of\n"
   "   another PSL.\n"
   "  -parallel=n - use this many cores for parallel sorting\n"
-  "\n", msg);
+  "\n");
 }
 
 struct pslInput
@@ -271,7 +270,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
 if (argc != 3)
-    usage("wrong # args");
+    usage();
 gOutLevels = optionInt("outLevels", gOutLevels);
 gPartSize = optionInt("partSize", gPartSize);
 gDropContained = optionExists("dropContained");

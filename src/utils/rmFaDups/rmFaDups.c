@@ -1,4 +1,4 @@
-/* rmFaDup - remove duplicate records from FA file. */
+/* rmFaDups - remove duplicate records from FA file. */
 
 /* Copyright (C) 2011 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
@@ -12,9 +12,9 @@ void usage()
 /* Print usage and exit. */
 {
 errAbort(
-  "rmFaDup - remove duplicate records in FA file\n"
+  "rmFaDups - remove duplicate records in FA file\n"
   "usage\n"
-  "   rmFaDup oldName.fa newName.fa\n");
+  "   rmFaDups oldName.fa newName.fa\n");
 }
 
 void rmFaDups(char *inFile, char *outFile)
