@@ -1,0 +1,10 @@
+clinvar lift (DONE, Fri Jan 31 06:38:39 PST 2020, max)
+doClinvarLift bosTau9
+featureBits hg38 clinvarLift.bed
+620623 bases of 3095998939 (0.020%) in intersection
+wc -l clinvarLift.bed
+610774 clinvarLift.bed
+featureBits bosTau9 clinvarLift.bosTau9.bed
+593362 bases of 2715853792 (0.022%) in intersection
+wc -l clinvarLift.bosTau9.bed
+586272 clinvarLift.bosTau9.bed
