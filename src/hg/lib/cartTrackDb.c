@@ -90,7 +90,8 @@ if (!trackHubDatabase(db))
         hashAdd(allGroups, group->name, group);
     for (track = trackList; track != NULL; track = track->next)
         {
-        if (!hashLookup(allGroups, track->grp))
+        /* If track isn't in a track up, and has a group we don't know about, change it to one we do. */
+        if (!startsWith("hub_", track->grp) && !hashLookup(allGroups, track->grp))
             {
             fprintf(stderr, "Track %s has group %s, which isn't in grp table\n",
                     track->table, track->grp);

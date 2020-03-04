@@ -302,6 +302,55 @@ html gnomad
             priority 9
             subGroups view=eRDepth
 
+    track gnomadStructuralVariants
+    parent gnomadSuper
+    shortLabel gnomAD Structural Variants
+    longLabel Genome Aggregation Database (gnomAD) - Structural Variants
+    compositeTrack on
+    group varRep
+    type bigBed 9 +
+    release alpha
+    dataVersion Release 2.1
+
+        track full
+        parent gnomadStructuralVariants on
+        bigDataUrl /gbdb/hg19/gnomAD/structuralVariants/gnomad_v2.1_sv.sites.bb
+        shortLabel gnomAD All SV's
+        longLabel gnomAD Structural Variants All
+        type bigBed 9 +
+        itemRgb on
+        url https://gnomad.broadinstitute.org/variant/$$?dataset=gnomad_sv_r2_1
+        urlLabel gnomAD Structural Variant Browser
+        filterLabel.svtype "Filter by Variant Class"
+        filterValues.svtype BND,CPX,CTX,DEL,DUP,INS,INV,MCNV
+        release alpha
+
+        track nonneuro
+        parent gnomadStructuralVariants off
+        bigDataUrl /gbdb/hg19/gnomAD/structuralVariants/gnomad_v2.1_sv.nonneuro.sites.bb
+        shortLabel gnomAD Non-Neuro SV's
+        longLabel gnomAD Structural Variants Non-neuro Only
+        type bigBed 9 +
+        itemRgb on
+        url https://gnomad.broadinstitute.org/variant/$$?dataset=gnomad_sv_r2_1
+        urlLabel gnomAD Structural Variant Browser
+        filterLabel.svtype "Filter by Variant Class"
+        filterValues.svtype BND,CPX,CTX,DEL,DUP,INS,INV,MCNV
+        release alpha
+
+        track controls
+        parent gnomadStructuralVariants off
+        bigDataUrl /gbdb/hg19/gnomAD/structuralVariants/gnomad_v2.1_sv.controls_only.sites.bb
+        shortLabel gnomAD Control Only SV's
+        longLabel gnomAD Structural Variants Controls Only
+        type bigBed 9 +
+        itemRgb on
+        url https://gnomad.broadinstitute.org/variant/$$?dataset=gnomad_sv_r2_1
+        urlLabel gnomAD Structural Variant Browser
+        filterLabel.svtype "Filter by Variant Class"
+        filterValues.svtype BND,CPX,CTX,DEL,DUP,INS,INV,MCNV
+        release alpha
+
     track gnomadPLI
     parent gnomadSuper
     shortLabel gnomAD pLoF Metrics
