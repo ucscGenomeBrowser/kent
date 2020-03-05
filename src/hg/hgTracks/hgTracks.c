@@ -7306,7 +7306,7 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (!isSubtrackVisible(subtrack))
         continue;
-    if (!hashLookup(nonEmptySubtracksHash, subtrack->track))
+    if (!hashLookup(nonEmptySubtracksHash, trackHubSkipHubName(subtrack->track)))
         {
         subtrack->loadItems = dontLoadItems;
         subtrack->limitedVis = tvHide;
