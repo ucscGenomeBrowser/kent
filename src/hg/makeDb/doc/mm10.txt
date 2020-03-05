@@ -18477,3 +18477,15 @@ TMPDIR=/dev/shm
     # if pushing public: add ticket and MARK QA READY
 
 ##############################################################################
+clinvar lift, done, Fri Jan 31 06:12:46 PST 2020, max
+doClinvarLift mm10
+featureBits hg38 clinvarLift.bed
+620623 bases of 3095998939 (0.020%) in intersection
+wc -l clinvarLift.bed
+610774 clinvarLift.bed
+featureBits mm10 clinvarLift.mm10.bed
+581378 bases of 2652783500 (0.022%) in intersection
+wc -l clinvarLift.mm10.bed
+575023 clinvarLift.mm10.bed
+##############################################################################
+

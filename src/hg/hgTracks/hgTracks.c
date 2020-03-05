@@ -4857,6 +4857,9 @@ if (wigOrder != NULL)
 // Construct flatTracks
 for (track = trackList; track != NULL; track = track->next)
     {
+    if (isLimitedVisHiddenForAllWindows(track))
+        continue;
+
     if (tdbIsComposite(track->tdb))
         {
         struct track *subtrack;
@@ -4883,10 +4886,7 @@ for (track = trackList; track != NULL; track = track->next)
         }
     else
 	{	
-	if (!isLimitedVisHiddenForAllWindows(track))
-	    {
-	    flatTracksAdd(&flatTracks,track,cart, orderedWiggles);
-	    }
+        flatTracksAdd(&flatTracks,track,cart, orderedWiggles);
 	}
     }
 flatTracksSort(&flatTracks); // Now we should have a perfectly good flat track list!
@@ -8566,7 +8566,7 @@ if (!hideControls)
         hPrintf("<td style=\"background-color:rgb(233,127,5)\">&lt; 0.8</td>\n");
         hPrintf("<td style=\"background-color:rgb(240,74,3)\">&lt; 0.9</td>\n");
         hPrintf("<td style=\"background-color:rgb(244,0,2)\">&lt; 1</td>\n");
-        hPrintf("<td style=\"color: white; background-color:rgb(0,0,0)\">No pLI score</td>\n");
+        hPrintf("<td style=\"color: white; background-color:rgb(160,160,160)\">No pLI score</td>\n");
         hPrintf("</tr></table>\n");
         }
 

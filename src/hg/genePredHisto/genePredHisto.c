@@ -18,11 +18,10 @@ static boolean clIds = FALSE;  /* print ids */
 /* type for function used to get histogram data */
 typedef void (*histoFuncType)(struct genePred *gp, FILE *outFh);
 
-void usage(char *msg)
+void usage()
 /* Explain usage and exit. */
 {
-errAbort("%s\n\n"
-         "genePredHisto - get data for generating histograms from a genePred file.\n"
+errAbort("genePredHisto - get data for generating histograms from a genePred file.\n"
          "usage:\n"
          "   genePredHisto [options] what genePredFile histoOut\n"
          "\n"
@@ -39,8 +38,7 @@ errAbort("%s\n\n"
          "   exonCnt- count of exons\n"
          "   5utrExonCnt- count of exons containing 5'UTR\n"
          "   cdsExonCnt- count of exons count CDS\n"
-         "   3utrExonCnt- count of exons containing 3'UTR\n",
-         msg);
+         "   3utrExonCnt- count of exons containing 3'UTR\n");
 }
 
 struct range
@@ -210,7 +208,10 @@ else if (sameString(what, "cdsExonCnt"))
 else if (sameString(what, "3utrExonCnt"))
     return utr3CntHisto;
 else
-    usage("invalid what argument");
+    {
+    verbose(1, "invalid what argument");
+    usage();
+    }
 return NULL;
 }
 
@@ -236,7 +237,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
-    usage("wrong number of arguments");
+    usage();
 clIds = optionExists("ids");
 genePredHisto(argv[1], argv[2], argv[3]);
 return 0;

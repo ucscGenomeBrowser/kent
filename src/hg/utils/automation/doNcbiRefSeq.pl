@@ -414,7 +414,7 @@ join -t\$'\\t' \$asmId.\$db.name.list \$asmId.refLink.tab > \$asmId.\$db.ncbiRef
 
 # Make bigBed with attributes in extra columns for ncbiRefSeqOther:
 twoBitInfo $dbTwoBit stdout | sort -k2,2n > \$db.chrom.sizes
-genePredToBed \$db.other.gp stdout | sort -k1,1 -k2n,2n > \$db.other.bed
+genePredToBed -tab -fillSpace \$db.other.gp stdout | sort -k1,1 -k2n,2n > \$db.other.bed
 $ncbiRefSeqOtherAttrs \$db.other.bed \$asmId.attrs.txt > \$db.other.extras.bed
 bedToBigBed -type=bed12+13 -as=ncbiRefSeqOther.as -tab \\
   -extraIndex=name \\
@@ -428,10 +428,18 @@ ixIxx ncbiRefSeqOther.ix.tab ncbiRefSeqOther.ix{,x}
 
 # PSL data will be loaded into a psl type track to show the alignments
 (zgrep "^#" \$ncbiGffGz | head || true) > gffForPsl.gff
-(zegrep -v "NG_" \$ncbiGffGz || true) \\
-  | awk -F\$'\\t' '\$3 == "cDNA_match" || \$3 == "match"' >> gffForPsl.gff
-gff3ToPsl -dropT \$downloadDir/\$asmId.ncbi.chrom.sizes \$downloadDir/rna.sizes \\
-  gffForPsl.gff stdout | pslPosTarget stdin \$asmId.psl
+if [ -s ../../../download/\${asmId}.remove.dups.list ]; then
+  (zegrep -v "NG_" \$ncbiGffGz || true) \\
+    | grep -v -f ../../../download/\${asmId}.remove.dups.list \\
+    | awk -F\$'\\t' '\$3 == "cDNA_match" || \$3 == "match"' >> gffForPsl.gff
+  gff3ToPsl -dropT \$downloadDir/\$asmId.ncbi.chrom.sizes \$downloadDir/rna.sizes \\
+    gffForPsl.gff stdout | pslPosTarget stdin \$asmId.psl
+else
+  (zegrep -v "NG_" \$ncbiGffGz || true) \\
+    | awk -F\$'\\t' '\$3 == "cDNA_match" || \$3 == "match"' >> gffForPsl.gff
+  gff3ToPsl -dropT \$downloadDir/\$asmId.ncbi.chrom.sizes \$downloadDir/rna.sizes \\
+    gffForPsl.gff stdout | pslPosTarget stdin \$asmId.psl
+fi
 simpleChain -outPsl -maxGap=300000 \$asmId.psl stdout | pslSwap stdin stdout \\
   | liftUp -type=.psl stdout $localLiftFile warn stdin \\
    | gzip -c > \$db.psl.gz
@@ -507,7 +515,11 @@ wget -O bigPsl.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master
 
 ### overall gene track with both predicted and curated
 genePredToBigGenePred process/\$db.ncbiRefSeq.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeq.bigGp
-
+genePredToBed -tab -fillSpace process/\$db.ncbiRefSeq.gp stdout \\
+    | bedToExons stdin stdout | bedSingleCover.pl stdin > \$asmId.exons.bed
+export baseCount=`awk '{sum+=\$3-\$2}END{printf "%d", sum}' \$asmId.exons.bed`
+export asmSizeNoGaps=`grep sequences ../../\$asmId.faSize.txt | awk '{print \$5}'`
+export perCent=`echo \$baseCount \$asmSizeNoGaps | awk '{printf "%.3f", 100.0*\$1/\$2}'`
 bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
   \$db.ncbiRefSeq.bigGp \$db.chrom.sizes \\
     \$db.ncbiRefSeq.bb
@@ -628,8 +640,9 @@ export basesCovered=`bedSingleCover.pl \$db.ncbiRefSeq.bigGp | ave -col=4 stdin 
 export percentCovered=`echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
 printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" \\
    "\$totalBases" "\$percentCovered" > fb.ncbiRefSeq.\$db.txt
+printf "%d bases of %d (%s%%) in intersection\\n" "\$baseCount" "\$asmSizeNoGaps" "\$perCent" > fb.\$asmId.ncbiRefSeq.txt
 
-rm -f \$db.ncbiRefSeq.bigGp
+rm -f \$db.ncbiRefSeq.bigGp \$asmId.exons.bed
 
 pslToBigPsl -fa=download/\$asmId.rna.fa.gz -cds=process/\$asmId.rna.cds \\
   process/\$asmId.\$db.psl.gz stdout | sort -k1,1 -k2,2n > \$asmId.bigPsl

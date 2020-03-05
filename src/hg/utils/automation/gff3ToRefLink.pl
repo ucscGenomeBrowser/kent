@@ -405,6 +405,10 @@ if ($argc != 3) {
 }
 my ($raFile, $gffFile, $labelFile) = @ARGV;
 
+printf STDERR "# raFile: %s\n", $raFile;
+printf STDERR "# gffFile: %s\n", $gffFile;
+printf STDERR "# labelFile: %s\n", $labelFile;
+
 my ($gff, $topLevelIds) = parseGff3($gffFile);
 my ($outColumns) = collectColumns($gff, $topLevelIds);
 my ($descriptionData, $statusData, $proteinId) = parseRaFile($labelFile, $raFile);

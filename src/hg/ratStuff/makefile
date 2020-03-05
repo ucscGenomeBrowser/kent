@@ -16,11 +16,11 @@ UTILS_APPLIST = \
 	mafSplit \
 	mafSplitPos \
 	mafsInRegion \
-	mafOrder \
-	mafRc
+	mafOrder
 
 # List of directories to build at UCSC
 DIRS = \
+	mafRc \
 	stageMultiz
 
 # List of directories to build

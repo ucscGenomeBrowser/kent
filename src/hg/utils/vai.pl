@@ -77,8 +77,10 @@ sub usage($) {
   my ($status) = @_;
 
   print STDERR <<EOF
+vai.pl - Invokes hgVai (Variant Annotation Integrator) on a set of variant calls to add functional effect predictions and other data relevant to function.
 
-usage: vai.pl [options] db input.(vcf|pgsnp|pgSnp|txt)[.gz] > output.tab
+usage:
+    vai.pl [options] db input.(vcf|pgsnp|pgSnp|txt)[.gz] > output.tab
 
 Invokes hgVai (Variant Annotation Integrator) on a set of variant calls to
 add functional effect predictions (e.g. does the variant fall within a
