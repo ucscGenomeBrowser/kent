@@ -2267,7 +2267,7 @@ popWarnHandler();
 popAbortHandler();
 
 cartWriteCookie(cart, cookieName);
-if (doContentType)
+if (doContentType && !cartDidContentType)
     {
     puts("Content-Type:text/html");
     puts("\n");
