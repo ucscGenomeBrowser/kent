@@ -166,3 +166,142 @@ twoBitInfo safeName.2bit stdout | sort -k2,2n | tail -2
 # NC_025217v1     31491
 # NC_010646v1     31686
 
+#########################################################################
+## kmer calculations for phylo tree generation (DONE - 2020-03-06 - Hiram)
+#########################################################################
+
+mkdir /hive/data/genomes/wuhCor1/bed/lastzStrains/kmers
+cd /hive/data/genomes/wuhCor1/bed/lastzStrains/kmers
+
+# construct a parasol job list:
+ls ../sequences/safeNameFa | sed -e 's/.fa//;' | while read acc
+do
+  printf "kmerOne %s {check out exists+ kmers/%s/%s.31mers.profile.txt.gz}\n" "${acc}" "${acc}" "${acc}"
+done > jobList
+
+### The kmerOne script run in that jobList is:
+
+##############################################
+#!/bin/bash
+
+set -beEu -o pipefail
+
+export SORT="$HOME/bin/x86_64/gnusort -S32G --parallel=4 -T /dev/shm"
+
+acc=$1
+fa="../sequences/safeNameFa/$acc.fa"
+
+if [ ! -s "kmers/${acc}/${acc}.31mers.profile.txt.gz" ]; then
+  mkdir -p "kmers/${acc}"
+  ./kmerPrint.pl 31 ${fa} | gzip -c > kmers/${acc}/${acc}.31mers.txt.gz
+  zcat kmers/${acc}/${acc}.31mers.txt.gz | cut -f1 | ${SORT} | uniq -c \
+     | awk '{printf "%s\t%d\n", $2, $1}' | ${SORT} | gzip -c > kmers/${acc}/${acc}.31mers.profile.txt.gz
+  rm -f kmers/${acc}/${acc}.31mers.txt.gz
+fi
+
+##############################################
+
+### Takes about 3 minutes to run that parasol job on hgwdev
+
+### After the kmers are done, compare all by all
+### Construct a parasol job list to do this with the script:
+   
+  ~/kent/src/hg/makeDb/doc/wuhCor1/mkCompareJobList.pl > compare.jobList
+
+### That jobList uses the script comparePair
+  cp -p ~/kent/src/hg/makeDb/doc/wuhCor1/comparePair ./
+
+### Takes 10 minutes to run on hgwdev:
+# Completed: 7021 of 7021 jobs
+# CPU time in finished jobs:       1367s      22.78m     0.38h    0.02d  0.000 y
+# IO & Wait Time:                 17245s     287.42m     4.79h    0.20d  0.001 y
+# Average job time:                   3s       0.04m     0.00h    0.00d
+# Longest finished job:               6s       0.10m     0.00h    0.00d
+# Submission to last job:           618s      10.30m     0.17h    0.01d
+
+### Collect all the comparisons together into a single file:
+
+find ./compare.31 -type f | xargs cat > allByAll.kmers31.compared.txt
+
+### That is a four column list:
+1. target sequence name
+2. perCent of target sequence matching to query
+3. query sequence name
+4. perCent of query sequence matching to target
+
+### The number for 'matching to query' and 'matching to target' is the
+### same number:  basesMatched, it is just different denominators:
+
+  $targetPercent = 100.0 * $basesMatched / $targetSize;
+   $queryPercent = 100.0 * $basesMatched / $querySize;
+
+### For example:
+# LR757996v1      99.7755 MT123290v1      99.6986
+# LR757996v1      99.8760 MT106053v1      99.8292
+# LR757996v1      99.7755 MN994468v1      99.7253
+
+### Using that four column file, construct an all by all matrix, using
+### the matrixUp.pl script:
+   ~/kent/src/hg/makeDb/doc/wuhCor1/matrixUp.pl
+
+~/kent/src/hg/makeDb/doc/wuhCor1/matrixUp.pl allByAll.kmers31.compared.txt \
+    > data31mer.csv
+mv matrixKey.txt matrixKey.31mer.txt
+
+### that matrixKey is the row and column names, the data31mer.csv matrix
+### has not column or row header names.
+
+### Now, using the phylip 'neighbor' program to do neighbor joining of that
+### matrix into a phylo tree:
+
+mkdir /hive/data/genomes/wuhCor1/bed/lastzStrains/kmers/phylip
+cd /hive/data/genomes/wuhCor1/bed/lastzStrains/kmers/phylip
+
+### This 'neighbor' command is very limited, it can only handle 'names'
+### that are integers and not longer that 10 digits.  The names are
+### shortened by the mkTestData.pl script:
+
+  ~/kent/src/hg/makeDb/doc/wuhCor1/mkTestData.pl
+
+### I realize now, that script is overly complicated, it should simply assign
+### sequence integers to each name and output the correspondence table rather
+### than trying to shorten the names magically.  Way too much work.
+### Done the hard way:
+
+   ~/kent/src/hg/makeDb/doc/wuhCor1/mkTestData.pl 31 > infile \
+       2> name.31mer.translate.txt
+
+### The 'neighbor' command is an interactive command, it expects to
+### find the input file: 'infile' which was just made by mkTestData.pl
+### it displays an interactive menu, use the 'N' selection command to select
+### UPGMA type of joining, see also additional comments of how this was run
+### in ../staAur2/multiz369way.txt
+
+### After neighbor is done, rename the results, and restore
+the sequence names in the final upgma.31mer.nh tree:
+
+if [ -s outfile ]; then
+  rm -f outfile.31mer
+  mv outfile outfile.31mer
+fi
+
+if [ -s outtree ]; then
+  rm -f outfile.31mer outtree.31mer
+  mv outtree outtree.31mer
+fi
+
+# Note the duplicate sequence MN908947v3 was used instead of NC_045512v2
+# fixup the name with the sed
+
+cat outtree.31mer \
+  | sed -e 's/(/(\n/g; s/,/,\n/g; s/)/\n)/g; s/ //g;' \
+  | grep -v "^$" | ~/kent/src/hg/utils/phyloTrees/binaryTree.pl \
+    -nameTranslate=name.31mer.translate.txt -noInternal -lineOutput /dev/stdin \
+      | sed -e 's/MN908947v3/NC_045512v2/;' > upgma.31mer.nh
+
+# Using the TreeGraph editor on the Mac, rework the tree to get the
+# reference NC_045512v2 at the top of the tree, this makes the tree:
+
+    ~/kent/src/hg/makeDb/doc/wuhCor1/wuhCor1.119way.nh
+
+#########################################################################
