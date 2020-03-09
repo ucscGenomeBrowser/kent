@@ -14,11 +14,13 @@ use Exporter;
 
 @ISA = qw(Exporter);
 
+our @verToDate;
+
 # This is a listing of the public methods and variables (which should be
 # treated as constants) exported by this module:
 @EXPORT_OK = (
     # Support for common command line options:
-    qw( ensVersionList ensGeneVersioning
+    qw( ensVersionList ensGeneVersioning @verToDate
       ),
 );
 
@@ -26,7 +28,6 @@ use Exporter;
 my $ensemblFTP = "ftp://ftp.ensembl.org/pub/";
 
 #	version to date relationship for Ensembl archive reference
-my @verToDate;
 $verToDate[27] = "dec2004";
 $verToDate[32] = "jul2005";
 $verToDate[33] = "sep2005";
@@ -7880,6 +7881,7 @@ my %ensGeneGtfFileNames_99 = (
 'GCF_001431845.1_ASM143184v1' => 'calidris_pugnax/Calidris_pugnax.ASM143184v1.99.gtf.gz',
 'calMil1' => 'callorhinchus_milii/Callorhinchus_milii.Callorhinchus_milii-6.1.3.99.gtf.gz',
 'canFam3' => 'canis_familiaris/Canis_familiaris.CanFam3.1.99.gtf.gz',
+'GCF_000002285.3_CanFam3.1' => 'canis_familiaris/Canis_familiaris.CanFam3.1.99.gtf.gz',
 'GCF_001704415.1_ARS1' => 'capra_hircus/Capra_hircus.ARS1.99.gtf.gz',
 'tarSyr2' => 'carlito_syrichta/Carlito_syrichta.Tarsius_syrichta-2.0.1.99.gtf.gz',
 'casCan1' => 'castor_canadensis/Castor_canadensis.C.can_genome_v1.0.99.gtf.gz',
@@ -7935,6 +7937,7 @@ my %ensGeneGtfFileNames_99 = (
 'loxAfr3' => 'loxodonta_africana/Loxodonta_africana.loxAfr3.99.gtf.gz',
 'GCF_007474595.1_mLynCan4_v1.p' => 'lynx_canadensis/Lynx_canadensis.mLynCan4_v1.p.99.gtf.gz',
 'macFas5' => 'macaca_fascicularis/Macaca_fascicularis.Macaca_fascicularis_5.0.99.gtf.gz',
+'GCF_000364345.1_Macaca_fascicularis_5.0' => 'macaca_fascicularis/Macaca_fascicularis.Macaca_fascicularis_5.0.99.gtf.gz',
 'rheMac10' => 'macaca_mulatta/Macaca_mulatta.Mmul_10.99.gtf.gz',
 'GCF_000956065.1_Mnem_1.0' => 'macaca_nemestrina/Macaca_nemestrina.Mnem_1.0.99.gtf.gz',
 'manLeu1' => 'mandrillus_leucophaeus/Mandrillus_leucophaeus.Mleu.le_1.0.99.gtf.gz',
@@ -8063,6 +8066,7 @@ my %ensGeneFtpPeptideFileNames_99 = (
 'GCF_001431845.1_ASM143184v1' => 'calidris_pugnax/pep/Calidris_pugnax.ASM143184v1.pep.all.fa.gz',
 'calMil1' => 'callorhinchus_milii/pep/Callorhinchus_milii.Callorhinchus_milii-6.1.3.pep.all.fa.gz',
 'canFam3' => 'canis_familiaris/pep/Canis_familiaris.CanFam3.1.pep.all.fa.gz',
+'GCF_000002285.3_CanFam3.1' => 'canis_familiaris/pep/Canis_familiaris.CanFam3.1.pep.all.fa.gz',
 'GCF_001704415.1_ARS1' => 'capra_hircus/pep/Capra_hircus.ARS1.pep.all.fa.gz',
 'tarSyr2' => 'carlito_syrichta/pep/Carlito_syrichta.Tarsius_syrichta-2.0.1.pep.all.fa.gz',
 'casCan1' => 'castor_canadensis/pep/Castor_canadensis.C.can_genome_v1.0.pep.all.fa.gz',
@@ -8118,6 +8122,7 @@ my %ensGeneFtpPeptideFileNames_99 = (
 'loxAfr3' => 'loxodonta_africana/pep/Loxodonta_africana.loxAfr3.pep.all.fa.gz',
 'GCF_007474595.1_mLynCan4_v1.p' => 'lynx_canadensis/pep/Lynx_canadensis.mLynCan4_v1.p.pep.all.fa.gz',
 'macFas5' => 'macaca_fascicularis/pep/Macaca_fascicularis.Macaca_fascicularis_5.0.pep.all.fa.gz',
+'GCF_000364345.1_Macaca_fascicularis_5.0' => 'macaca_fascicularis/pep/Macaca_fascicularis.Macaca_fascicularis_5.0.pep.all.fa.gz',
 'rheMac10' => 'macaca_mulatta/pep/Macaca_mulatta.Mmul_10.pep.all.fa.gz',
 'GCF_000956065.1_Mnem_1.0' => 'macaca_nemestrina/pep/Macaca_nemestrina.Mnem_1.0.pep.all.fa.gz',
 'manLeu1' => 'mandrillus_leucophaeus/pep/Mandrillus_leucophaeus.Mleu.le_1.0.pep.all.fa.gz',
@@ -8246,6 +8251,7 @@ my %ensGeneFtpMySqlFileNames_99 = (
 'GCF_001431845.1_ASM143184v1' => 'calidris_pugnax_core_99_1',
 'calMil1' => 'callorhinchus_milii_core_99_613',
 'canFam3' => 'canis_familiaris_core_99_31',
+'GCF_000002285.3_CanFam3.1' => 'canis_familiaris_core_99_31',
 'GCF_001704415.1_ARS1' => 'capra_hircus_core_99_1',
 'tarSyr2' => 'carlito_syrichta_core_99_2',
 'casCan1' => 'castor_canadensis_core_99_1',
@@ -8301,6 +8307,7 @@ my %ensGeneFtpMySqlFileNames_99 = (
 'loxAfr3' => 'loxodonta_africana_core_99_3',
 'GCF_007474595.1_mLynCan4_v1.p' => 'lynx_canadensis_core_99_41',
 'macFas5' => 'macaca_fascicularis_core_99_5',
+'GCF_000364345.1_Macaca_fascicularis_5.0' => 'macaca_fascicularis_core_99_5',
 'rheMac10' => 'macaca_mulatta_core_99_10',
 'GCF_000956065.1_Mnem_1.0' => 'macaca_nemestrina_core_99_1',
 'manLeu1' => 'mandrillus_leucophaeus_core_99_1',

@@ -1,0 +1,30 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $s1 = shift;
+my $s2 = shift;
+my $N = shift;
+my $result = shift;
+
+print `mkdir -p "compare.${N}/$s1"`;
+my $f1 = "./kmers/$s1/${s1}.${N}mers.profile.txt.gz";
+my $f2 = "./kmers/$s2/${s2}.${N}mers.profile.txt.gz";
+my $targetSize=`zcat "${f1}" | awk -v nLen=$N '{total+=\$2}END{print nLen * total}'`;
+my $querySize=`zcat "${f2}" | awk -v nLen=$N '{total+=\$2}END{print nLen * total}'`;
+chomp $targetSize;
+chomp $querySize;
+my $targetPercent = 0;
+my $queryPercent = 0;
+my $bashCmd = qq#"/bin/bash -c \"join -t\$'\t' <(zcat ${f1}) <(zcat ${f2}) | awk -v nLen=$N '{min=\\\$2; if (\\\$3 < min) { min=\\\$3}; total+=min}END{printf \\\"%d\\\", nLen * total}'\""#;
+my $basesMatched=`"$bashCmd"`;
+chomp $basesMatched;
+if ("x${basesMatched}y" eq "xy") { $basesMatched = 0; }
+if ($basesMatched > 0) {
+   $targetPercent = 100.0 * $basesMatched / $targetSize;
+   $queryPercent = 100.0 * $basesMatched / $querySize;
+}
+open (FH, ">$result") or die "can not write to $result";
+printf FH "$s1\t%.4f\t$s2\t%.4f\n", $targetPercent, $queryPercent;
+close (FH);
