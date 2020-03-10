@@ -34,8 +34,20 @@ wget http://ftp.ensembl.org/pub/grch37/release-99/fasta/homo_sapiens/dna/Homo_sa
 faSize -detailed Homo_sapiens.GRCh37.dna_sm.primary_assembly.fa.gz > ensemblSizes.txt &
 paste ensemblSizes.txt ucscSizes.noAlt.txt  | cut -f1,3 > ensemblToUcsc.txt
 
+# index for aligners
+mkdir hg19
+zcat hg19.p13.plusMT.no_alt_analysis_set.fa.gz > hg19/hg19.p13.plusMT.no_alt_analysis_set.fa
+cd hg19
+bwa index hg19.p13.plusMT.no_alt_analysis_set.fa
+bowtie2-build hg19.p13.plusMT.no_alt_analysis_set.fa hg19.p13.plusMT.no_alt_analysis_set
+hisat2-build hg19.p13.plusMT.no_alt_analysis_set.fa hg19.p13.plusMT.no_alt_analysis_set
+cd ..
+
+tar cvzf hg19.p13.plusMT.no_alt_analysis_set.bwa_index.tar.gz hg19/*.{pac,amb,ann,bwt,sa}
+tar cvzf hg19.p13.plusMT.no_alt_analysis_set.bowtie2_index.tar.gz hg19/*.bt2
+tar cvzf hg19.p13.plusMT.no_alt_analysis_set.hisat2_index.tar.gz hg19/*.ht2
+
 # copy stuff to webserver
 mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/analysisSet/chromAlias -p
-mv *.2bit /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/analysisSet/
-mv hg19.*.gz /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/analysisSet/
+mv *.2bit hg19.*.gz /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/analysisSet/
 mv *toUcsc.txt /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/analysisSet/chromAlias/
