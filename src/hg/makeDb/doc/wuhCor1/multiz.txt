@@ -573,3 +573,22 @@ genePredSingleCover ../ncbiGene/wuhCor1.ncbiGene.ucsc.genePred.gz stdout \
 hgLoadMafFrames wuhCor1 multiz119wayFrames frames.tab  
 
 ##############################################################################
+
+# braney:  build more inclusive single coverage ORF annotation for MAF codon display and for mafSnp display
+mkdir  /hive/data/genomes/wuhCor1/bed/multiz119way/mafFrames
+cd  /hive/data/genomes/wuhCor1/bed/multiz119way/mafFrames
+
+wget "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/858/895/GCF_009858895.2_ASM985889v3/GCF_009858895.2_ASM985889v3_protein.faa.gz"
+
+blat -noHead -t=dnax -q=prot /hive/data/genomes/wuhCor1/wuhCor1.2bit        GCF_009858895.2_ASM985889v3_protein.faa.gz stdout | pslToBed stdin full.bed
+
+cp full.bed hack.bed
+
+#edit hack.bed to remove overlap of YP_009725296.1 with YP_009724395.1
+
+bedToGenePred hack.bed stdout | genePredSingleCover stdin singleCover.gp
+hgLoadGenePred wuhCor1 singleCover singleCover.gp
+
+genePredToMafFrames wuhCor1          ../mafFrag.multiz119way.maf frames.tab wuhCor1 singleCover.gp
+hgLoadMafFrames wuhCor1 multiz119wayFrames frames.tab
+
