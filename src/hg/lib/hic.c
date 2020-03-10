@@ -23,7 +23,7 @@ void mangleName(char *ucscName, char mangledUcscName[], int size)
     touppers(workingName);
     if (startsWith("CHR", workingName))
         offset = 3;
-    strncpy(mangledUcscName, workingName+offset, size-offset);
+    safencpy(mangledUcscName, size, workingName+offset, strlen(workingName+offset));
 }
 
 
@@ -56,7 +56,9 @@ newMeta->nAttributes = nAttributes;
 
 *header = newMeta;
 
-struct slName *ucscNameList = hAllChromNames(newMeta->ucscAssembly), *ucscName = NULL;
+struct slName *ucscNameList = NULL, *ucscName = NULL;
+if (newMeta->ucscAssembly != NULL)
+    ucscNameList = hAllChromNames(newMeta->ucscAssembly);
 struct hash *ucscToChromAlias = NULL;
 if ((newMeta->ucscAssembly != NULL) && !trackHubDatabase(ucscAssembly))
     ucscToChromAlias = chromAliasMakeReverseLookupTable(newMeta->ucscAssembly);
