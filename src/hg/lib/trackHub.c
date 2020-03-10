@@ -1259,7 +1259,7 @@ if (relativeUrl != NULL)
     else if (startsWithWord("hic", type))
         {
         struct hicMeta *header;
-        char *errString = hicLoadHeader(bigDataUrl, &header, NULL);
+        char *errString = hicLoadHeader(bigDataUrl, &header, genome->name);
         if (errString != NULL)
             errAbort("hic file error: %s", errString);
         }
