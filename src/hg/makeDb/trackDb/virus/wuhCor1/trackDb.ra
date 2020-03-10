@@ -33,3 +33,4 @@ searchType genePred
 searchMethod fuzzy
 searchPriority 18
 
+include trackDb.119way.ra
