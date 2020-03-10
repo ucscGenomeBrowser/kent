@@ -375,7 +375,7 @@ examples:
                         but no ENCODE tables and switch to offline mode 
                         (see the -o option)
   bash $0 update hg19 -  update all data and all tables of the hg19 assembly
-                         (in total 7TB)
+                         (in total 7TB). Specifying no assemblies will update all assemblies.
   bash $0 cgiUpdate   -  update the Genome Browser CGI programs
   bash $0 clean       -  remove temporary files older than one day
 
@@ -1625,8 +1625,13 @@ function updateBrowser {
    cgiUpdate
    echo
 
+   DBS=$*
+   # if none specified, update all
+   if [ "$DBS" == "" ] ; then
+       DBS=`ls $GBDBDIR/`
+   fi
+
    # update gbdb
-   DBS=`ls $GBDBDIR/`
    echo updating GBDB: $DBS
    for db in $DBS; do 
        echo2 syncing gbdb: $db
@@ -1832,7 +1837,7 @@ elif [ "${1:-}" == "cgiUpdate" ]; then
    cgiUpdate
 
 elif [ "${1:-}" == "update" ]; then 
-   updateBrowser
+   updateBrowser ${@:2} # all arguments after the second one
 
 elif [ "${1:-}" == "clean" ]; then
     cleanTrash
