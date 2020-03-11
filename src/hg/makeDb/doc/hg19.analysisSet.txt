@@ -1,0 +1,53 @@
+# get NCBI's analysis set fasta files
+mkdir /hive/data/genomes/hg19/bed/analysisSet
+cd /hive/data/genomes/hg19/bed/analysisSet
+wget https://ftp.ncbi.nlm.nih.gov/genomes/archive/old_genbank/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37.p13/seqs_for_alignment_pipelines/GCA_000001405.14_GRCh37.p13_full_analysis_set.fna.gz 
+wget https://ftp.ncbi.nlm.nih.gov/genomes/archive/old_genbank/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37.p13/seqs_for_alignment_pipelines/GCA_000001405.14_GRCh37.p13_no_alt_analysis_set.fna.gz 
+
+# 298 unique sequence lengths so can use them to join with UCSC sequences
+cat /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/p13.plusMT/hg19.p13.plusMT.chrom.sizes | grep -v 'chrM'$'\t' | sort -k2n > ucscSizes.txt
+faSize GCA_000001405.14_GRCh37.p13_full_analysis_set.fna.gz -detailed | sort -k2n | grep -v chrEBV > ncbiSizes.txt
+# make sure that they match
+paste ncbiSizes.txt ucscSizes.txt  |awk '($1!=$3)' | awk '($2!=$4)'
+# create sed replacement file
+paste ncbiSizes.txt ucscSizes.txt  | awk '($1!=$3) {OFS="\t"; print($1,$3);} ' > ncbiToUcsc.txt
+cat ncbiToUcsc.txt  | awk '{print ("s/"$1"/"$2"/g")}' > ncbiToUcsc.sed
+
+# convert NCBI chroms
+zcat GCA_000001405.14_GRCh37.p13_full_analysis_set.fna.gz | sed -f ncbiToUcsc.sed > hg19.p13.plusMT.full_analysis_set.fa
+zcat GCA_000001405.14_GRCh37.p13_no_alt_analysis_set.fna.gz | sed -f ncbiToUcsc.sed > hg19.p13.plusMT.no_alt_analysis_set.fa &
+gzip hg19.p13.plusMT.no_alt_analysis_set.fa 
+gzip hg19.p13.plusMT.full_analysis_set.fa 
+
+# not sure if anyone needs a 2bit file for these?
+faToTwoBit hg19.p13.plusMT.no_alt_analysis_set.fa.gz hg19.p13.plusMT.no_alt_analysis_set.2bit 
+faToTwoBit hg19.p13.plusMT.full_analysis_set.fa.gz hg19.p13.plusMT.full_analysis_set.2bit
+
+# make table for g1k genome
+twoBitInfo hg19.p13.plusMT.no_alt_analysis_set.2bit stdout | grep -v 'chrEBV' | grep -v 'chrM'$'\t' | sort -k2n > ucscSizes.noAlt.txt
+wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/technical/reference/human_g1k_v37.fasta.gz 
+faSize -detailed human_g1k_v37.fasta.gz > g1k.sizes
+paste g1k.sizes ucscSizes.noAlt.txt |cut -f1,3 > g1kToUcsc.txt
+
+# make table for Ensembl genome
+wget http://ftp.ensembl.org/pub/grch37/release-99/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna_sm.primary_assembly.fa.gz 
+faSize -detailed Homo_sapiens.GRCh37.dna_sm.primary_assembly.fa.gz > ensemblSizes.txt &
+paste ensemblSizes.txt ucscSizes.noAlt.txt  | cut -f1,3 > ensemblToUcsc.txt
+
+# index for aligners
+mkdir hg19
+zcat hg19.p13.plusMT.no_alt_analysis_set.fa.gz > hg19/hg19.p13.plusMT.no_alt_analysis_set.fa
+cd hg19
+bwa index hg19.p13.plusMT.no_alt_analysis_set.fa
+bowtie2-build hg19.p13.plusMT.no_alt_analysis_set.fa hg19.p13.plusMT.no_alt_analysis_set
+hisat2-build hg19.p13.plusMT.no_alt_analysis_set.fa hg19.p13.plusMT.no_alt_analysis_set
+cd ..
+
+tar cvzf hg19.p13.plusMT.no_alt_analysis_set.bwa_index.tar.gz hg19/*.{pac,amb,ann,bwt,sa}
+tar cvzf hg19.p13.plusMT.no_alt_analysis_set.bowtie2_index.tar.gz hg19/*.bt2
+tar cvzf hg19.p13.plusMT.no_alt_analysis_set.hisat2_index.tar.gz hg19/*.ht2
+
+# copy stuff to webserver
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/analysisSet/chromAlias -p
+mv *.2bit hg19.*.gz /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/analysisSet/
+mv *toUcsc.txt /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/bigZips/analysisSet/chromAlias/

@@ -1,0 +1,108 @@
+track cons12way
+compositeTrack on
+shortLabel Conservation
+longLabel Multiz Alignment & Conservation (12 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements
+subGroup2 clade Clade vert=Vertebrate
+dragAndDrop subTracks
+dimensions dimensionX=clade
+visibility full
+type bed 4
+group compGeno
+priority 1
+
+    track cons12wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons12way
+
+        track multiz12way
+        subTrack cons12wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 12 Vertebrates
+        subGroups view=align clade=vert
+        noInherit on
+        irows on
+        summary multiz12waySummary
+        frames multiz12wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault danRer10
+        speciesGroups Vertebrate
+        sGroup_Vertebrate gasAcu1 lepOcu1 tetNig2 fr3 oryLat2 xenTro9 galGal6 calMil1 hg38 mm10 latCha1
+        speciesDefaultOff lepOcu1 tetNig2 oryLat2 calMil1
+        speciesDefaultOn gasAcu1 fr3 xenTro9 galGal6 hg38 mm10 latCha1
+        defaultMaf multiz12wayDefault
+        itemFirstCharCase noChange
+        treeImage phylo/danRer10_12way.png
+        priority 100
+
+    # PhyloP conservation
+    track cons12wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons12way
+    viewLimits -20.0:9.869
+    viewLimitsMax -20:0.869
+
+        track phyloP12way
+        subTrack cons12wayViewphyloP on
+        subGroups view=phyloP clade=vert
+        shortLabel Cons 12 Verts
+        longLabel 12 vertebrates Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -20 7.532
+        maxHeightPixels 100:50:11
+        viewLimits -4.5:4.88
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons12wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility hide
+    subTrack cons12way
+
+        track phastCons12way
+        subTrack cons12wayViewphastcons off
+        subGroups view=phastcons clade=vert
+        shortLabel Cons 12 Verts
+        longLabel 12 vertebrates conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons12wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility hide
+    subTrack cons12way
+
+        track phastConsElements12way
+        subTrack cons12wayViewelements off
+        subGroups view=elements clade=vert
+        shortLabel 12 Vert. El
+        longLabel 12 vertebrates Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23
