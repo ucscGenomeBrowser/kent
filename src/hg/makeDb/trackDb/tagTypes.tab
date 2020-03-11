@@ -74,6 +74,8 @@ codingAnnotations bed
 collapseEmptySubtracks *
 hideEmptySubtracks *
 hideEmptySubtracksLabel *
+hideEmptySubtracksMultiBedUrl *
+hideEmptySubtracksSourcesUrl *
 color *
 colorByStrand bigBed bed genePred
 colorChromDefault psl bigPsl
