@@ -22,6 +22,7 @@ color 12,12,120
 type genePred 
 baseColorUseCds given
 baseColorDefault genomicCodons
+labelFields geneName,geneName2
 url https://www.ncbi.nlm.nih.gov/protein/$$
 urlLabel NCBI Refseq protein
 
@@ -34,3 +35,4 @@ searchMethod fuzzy
 searchPriority 18
 
 include trackDb.119way.ra
+include epitopes.ra
