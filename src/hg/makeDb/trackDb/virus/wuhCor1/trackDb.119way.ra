@@ -51,19 +51,19 @@ group compGeno
     view phyloP
     visibility full
     subTrack cons119way
-    viewLimits -3:0.5
-    viewLimitsMax -4.611:0.934
+    viewLimits -4:5
+    viewLimitsMax -7.405:20
 
         track phyloP119way
         subTrack cons119wayViewphyloP on
         subGroups view=phyloP
         shortLabel PhyloP
-        longLabel 158 Ebola strains and 2 Marburg strains Basewise Conservation by PhyloP
+        longLabel 119 virus strains Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -4.711 0.934
+        type wig -7.405 20
         maxHeightPixels 100:50:11
-        viewLimits -3.107:0.934
+        viewLimits -7.405:20
         autoScale off
         spanList 1
         windowingFunction mean
@@ -82,7 +82,7 @@ group compGeno
         subTrack cons119wayViewphastcons on
         subGroups view=phastcons
         shortLabel PhastCons
-        longLabel 158 Ebola strains and 2 Marburg strains Basewise Conservation by PhastCons
+        longLabel 119 virus strains Basewise Conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -105,9 +105,8 @@ group compGeno
         subTrack cons119wayViewelements on
         subGroups view=elements
         shortLabel Cons. Elements
-        longLabel 158 Ebola strains and 2 Marburg strains Conserved Elements
+        longLabel 119 virus strains Conserved Elements
         noInherit on
         color 110,10,40
         type bed 5 .
         priority 23
-
