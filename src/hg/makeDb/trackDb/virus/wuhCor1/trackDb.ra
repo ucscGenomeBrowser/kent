@@ -22,7 +22,6 @@ color 12,12,120
 type genePred 
 baseColorUseCds given
 baseColorDefault genomicCodons
-labelFields geneName,geneName2
 url https://www.ncbi.nlm.nih.gov/protein/$$
 urlLabel NCBI Refseq protein
 
