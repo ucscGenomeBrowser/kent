@@ -84,7 +84,7 @@ options:
   -defaultDistance=0.1 - use this distance when not given in input
   -allDistances=0.1 - use this distance for everything, default use input
   -lineOutput - output one line per leaf output, indented per depth
-  -quoteNames - add \"quotes\" on node names, default not quoted
+  -quoteNames - add 'quotes' on node names, default not quoted
   -nameTranslate=<file> - two column file, translate names from input file,
 	first column is name in input file, second column is output name
 	tab separation columns
@@ -168,13 +168,13 @@ sub printTree($) {
   $distOut = "0.000001" if ($distOut eq "0.");
   if ( $node->{'isLeaf'} ) {
     if ($quoteNames) {
-      printf "\"%s\":%s", $node->{'name'}, $distOut;
+      printf "'%s':%s", $node->{'name'}, $distOut;
     } else {
       printf "%s:%s", $node->{'name'}, $distOut;
     }
   } elsif ( ! $noInternal) {
     if ($quoteNames) {
-      printf "\"%s\":%s", $node->{'name'}, $distOut;
+      printf "'%s':%s", $node->{'name'}, $distOut;
     } else {
       printf "%s:%s", $node->{'name'}, $distOut;
     }
