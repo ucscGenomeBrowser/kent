@@ -88,6 +88,7 @@ options:
   -nameTranslate=<file> - two column file, translate names from input file,
 	first column is name in input file, second column is output name
 	tab separation columns
+  -bothNames - during nameTranslate, use both names in output: name1/name2
   -verbose=N - specify verbose debug printout, 0 nothing, 1 a bit, 2 more, etc
 reads 'phylip' file format from NCBI taxonomy and outputs
 binary newick tree format, resolving the polytomys common
@@ -104,6 +105,7 @@ my $verbose = 0;	# verbose debug level, integer
 my $allDistances = "";	# to set all distances to this value, default use input
 my $lineOutput = 0;	# one line per leaf output format
 my $quoteNames = 0;	# add "quotes" on node names
+my $bothNames = 0;	# during nameTranslate, use both names in output
 my $nameTranslate = "";	# two column tab separated: inputName<tab>outputName
 my %translateName;	# key is input name, value is output name
 
@@ -331,6 +333,7 @@ GetOptions ("noInternal" => \$noInternal,
     "nameTranslate=s"  => \$nameTranslate,
     "lineOutput"  => \$lineOutput,
     "quoteNames"  => \$quoteNames,
+    "bothNames"  => \$bothNames,
     "allDistances=f"  => \$allDistances)
     or die "Error in command line arguments\n";
 
@@ -342,6 +345,7 @@ printf STDERR "# allDistances: %f\n", $allDistances if (length($allDistances));
 printf STDERR "# nameTranslate from: %s\n", $nameTranslate if (length($nameTranslate));
 printf STDERR "# lineOutput '%s'\n", $lineOutput ? "TRUE" : "FALSE";
 printf STDERR "# quoteNames '%s'\n", $quoteNames ? "TRUE" : "FALSE";
+printf STDERR "# bothNames '%s'\n", $bothNames ? "TRUE" : "FALSE";
 printf STDERR "# verbose: %d\n", $verbose;
 
 if (length($nameTranslate)) {
@@ -349,7 +353,11 @@ if (length($nameTranslate)) {
   while (my $line = <FH>) {
     chomp $line;
     my ($inName, $outName) = split('\t', $line);
-    $translateName{$inName} = $outName;
+    if ($bothNames) {
+        $translateName{$inName} = "$inName/$outName";
+    } else {
+        $translateName{$inName} = $outName;
+    }
   }
   close (FH);
 }
