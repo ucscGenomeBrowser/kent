@@ -286,7 +286,7 @@ if [ -s outfile ]; then
 fi
 
 if [ -s outtree ]; then
-  rm -f outfile.31mer outtree.31mer
+  rm -f outtree.31mer
   mv outtree outtree.31mer
 fi
 
@@ -386,7 +386,6 @@ done
 
     ls ../mafLinks | sed -e 's/.maf.gz//; s/NC_045512v2.//' > maf.list
 
-cat << '_EOF_' > template
     printf '#LOOP
 ./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/wuhCor1/bed/multiz119way/maf/$(root1).maf}
 #ENDLOOP
@@ -421,8 +420,8 @@ set path = ($run/penn $path); rehash
 $run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c \
         > /dev/null
 popd > /dev/null
-/bin/rm -f $result.maf
-/bin/cp -p $tmp/$c $result.maf
+/bin/rm -f $result
+/bin/cp -p $tmp/$c $result
 /bin/rm -fr $tmp
 ' > autoMultiz.csh
 
