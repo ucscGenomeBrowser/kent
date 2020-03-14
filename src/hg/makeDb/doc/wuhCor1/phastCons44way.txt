@@ -1,0 +1,348 @@
+#########################################################################
+# Phylogenetic tree from 44-way (DONE - 2014-10-17 - Hiram)
+    mkdir /hive/data/genomes/wuhCor1/bed/multiz44way/4d
+    cd /hive/data/genomes/wuhCor1/bed/multiz44way/4d
+
+    # tried using the 'defraged' maf:
+    ../defraged.multiz44way.maf
+    # that did not work
+    # Skipping 4d.all.mfa; insufficient informative sites ...
+
+    # using the full maf:
+    ../multiz44way.maf
+
+    # using ncbiGene for wuhCor1
+    hgsql -N -e 'select * from ncbiGene;' wuhCor1 \
+       | cut -f2- > wuhCor1.ncbiGene.gp
+
+    genePredSingleCover wuhCor1.ncbiGene.gp stdout \
+       | sort > wuhCor1.ncbiGeneNR.gp
+    wc -l *.gp
+    #  13 wuhCor1.ncbiGene.gp
+    #  10 wuhCor1.ncbiGeneNR.gp
+
+    sed -e 's/wuhCor1.NC_045512v2/NC_045512v2.NC_045512v2/' \
+       ../multiz44way.maf > multiz44way.NC_045512v2.maf
+
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+       --4d --features wuhCor1.ncbiGeneNR.gp \
+         -i MAF multiz44way.NC_045512v2.maf -o SS > multiz44way.ss
+    # real    0m1.273s
+
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+        -i SS --tuple-size 1 multiz44way.ss > multiz44way.mfa
+    # real    0m0.015s
+
+    #want comma-less species.list
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+       --aggregate "`cat ../species.list`" multiz44way.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # real    0m0.019s
+
+    # check they are all in there:
+    grep "^>" 4d.all.mfa | sort -u | wc -l
+    #  44
+
+    sed -e 's/ /,/g;' ../tree.nh > tree_commas.nh
+
+    # tree_commas.nh looks like:
+# (((NC_045512v2,MN996532v1),((((DQ022305v2,GQ153547v1),GQ153542v1),
+# (MG772933v1,MG772934v1)),((((((DQ071615v1,KJ473815v1),((((FJ588686v1,
+# KY770858v1),((((((KF367457v1,KY417144v1),(KY417151v1,KY417152v1)),
+# ((KY417142v1,MK211377v1),(MK211376v1,MK211378v1))),((((KT444582v1,
+# KY417143v1),KY417149v1),KY417146v1),(KY417147v1,KY417148v1))),(KJ473816v1,
+# KY417145v1)),MK211375v1)),NC_004718v3),KP886808v1)),MK211374v1),
+# (KF569996v1,KU973692v1)),JX993988v1),((((DQ412042v1,DQ648856v1),
+# (KJ473812v1,KY770860v1)),KY938558v1),((DQ412043v1,KJ473814v1),
+# JX993987v1))))),(KY352407v1,NC_014470v1))
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time nice -n +19 \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree tree_commas.nh 4d.all.mfa
+    #   real    0m1.520s
+
+    mv phyloFit.mod all.mod
+
+    grep "TREE:" all.mod | sed -e 's/TREE: //;' > 44way.nh
+
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/all_dists \
+      44way.nh | grep NC_045512v2 | sed -e 's/NC_045512v2.//;' \
+         | sort -k2n > 44way.distances.txt
+    sed -e 's/^/# /;' 44way.distances.txt | head
+# MN996532v1    0.111391
+# DQ022305v2    0.756533
+# GQ153542v1    0.758373
+# GQ153547v1    0.758589
+# JX993987v1    0.825373
+# KJ473814v1    0.844563
+
+    sed -e 's/^/# /;' 44way.distances.txt | tail
+# KT444582v1    0.961789
+# KY352407v1    1.063753
+# NC_014470v1   1.075344
+# MG772933v1    1.076854
+# MG772934v1    1.106462
+
+#########################################################################
+# phastCons 44-way (DONE - 2014-06-04 - Hiram)
+    # split 44way mafs into 10M chunks and generate sufficient statistics
+    # files for # phastCons
+    ssh hgwdev
+    mkdir -p /hive/data/genomes/wuhCor1/bed/multiz44way/cons/SS
+    cd /hive/data/genomes/wuhCor1/bed/multiz44way/cons/SS
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
+       ../../defraged.multiz44way.maf -i MAF -o SS \
+          -r multiz44way -w 10000000,0 -I 1000 -B 5000
+
+    # Run phastCons
+
+export len=45
+export cov=0.3
+export rho=0.3
+export c=wuhCor1
+
+
+    cd /hive/data/genomes/wuhCor1/bed/multiz44way/cons
+
+sed -e 's/NC_045512v2/wuhCor1/g' ../4d/all.mod > all.mod
+
+time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phastCons \
+  SS/multiz44way.1-29903.ss all.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $c.bed --score \
+     | sed -e "s/$c/NC_045512v2/;" > $c.pp
+# real    0m1.058s
+
+awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "NC_045512v2", $2, $3, $5, $5}' \
+   wuhCor1.bed > tmpMostConserved.bed
+/cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    wigToBigWig -verbose=2 $c.pp /hive/data/genomes/wuhCor1/chrom.sizes $c.bw
+# pid=31961: VmPeak:       40836 kB
+
+    bigWigInfo wuhCor1.bw | sed -e 's/^/# /;'
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 34,334
+# primaryIndexSize: 6,436
+# zoomLevels: 6
+# chromCount: 1
+# basesCovered: 29,903
+# mean: 0.855761
+# min: 0.000000
+# max: 1.000000
+# std: 0.317335
+
+    wigEncode $c.pp phastCons44way.wig phastCons44way.wib
+    #  Converted wuhCor1.pp, upper limit 1.00, lower limit 0.00
+
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/wuhCor1/bed/multiz44way/cons
+    hgLoadBed wuhCor1 phastConsElements44way mostConserved.bed
+    # Read 550 elements of size 5 from mostConserved.bed
+
+    featureBits wuhCor1 phastConsElements44way
+    #  25779 bases of 29903 (86.209%) in intersection
+
+    ln -s `pwd`/phastCons44way.wib \
+          /gbdb/wuhCor1/multiz44way/phastCons44way.wib
+    hgLoadWiggle -pathPrefix=/gbdb/wuhCor1/multiz44way \
+	wuhCor1 phastCons44way phastCons44way.wig
+
+    # on human we often try for 5% overall cov, and 70% CDS cov
+    # most bets are off here for that goal, these alignments are too few
+    #	and too far between
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    featureBits wuhCor1 -enrichment ncbiGene:cds phastConsElements44way
+# ncbiGene:cds 97.850%, phastConsElements44way 86.209%, both 84.062%,
+#   cover 85.91%, enrich 1.00x
+
+    wigTableStats.sh wuhCor1 phastCons44way
+# db.table          min max mean       count sumData      stdDev  viewLimits
+wuhCor1.phastCons44way  0 1 0.855761 29903 25589.8 0.317335 viewLimits=0:1
+
+    #  Create histogram to get an overview of all the data
+    hgWiggle -doHistogram -db=wuhCor1 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons44way > histogram.data 2>&1
+    #	real    2m40.179s
+
+XXX - to be done
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Ebola wuhCor1 Histogram phastCons44way track"
+set xlabel " phastCons44way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#########################################################################
+# phyloP for 7-way (DONE - 2014-10-17 - Hiram)
+    # run phyloP with score=LRT
+    mkdir /cluster/data/wuhCor1/bed/multiz44way/consPhyloP
+    cd /cluster/data/wuhCor1/bed/multiz44way/consPhyloP
+
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../4d/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.248
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../4d/all.mod 0.248 > all.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod
+    #   BACKGROUND: 0.376000 0.124000 0.124000 0.376000 
+
+    sed -e 's/wuhCor1/NC_045512v2/' ../cons/SS/multiz44way.1-29903.ss \
+      > NC_045512v2.ss
+
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloP \
+      --method LRT --mode CONACC --wig-scores --chrom NC_045512v2 \
+        -i SS all.mod NC_045512v2.ss > NC_045512v2.wigFix
+    # real    0m6.054s
+
+
+    # check integrity of data with wigToBigWig
+    wigToBigWig -verbose=2 NC_045512v2.wigFix \
+      /hive/data/genomes/wuhCor1/chrom.sizes phyloP44way.bw
+    # pid=57048: VmPeak:       40872 kB
+
+    bigWigInfo phyloP44way.bw | sed -e 's/^/# /;'
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 61,491
+# primaryIndexSize: 6,436
+# zoomLevels: 6
+# chromCount: 1
+# basesCovered: 29,903
+# mean: 1.653331
+# min: -11.968000
+# max: 4.256000
+# std: 1.896185
+
+    #	encode those files into wiggle data
+    wigEncode NC_045512v2.wigFix phyloP44way.wig phyloP44way.wib
+    # Converted NC_045512v2.wigFix, upper limit 4.26, lower limit -11.97
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP44way.wib /gbdb/wuhCor1/multiz44way/phyloP44way.wib
+    hgLoadWiggle -pathPrefix=/gbdb/wuhCor1/multiz44way wuhCor1 \
+	phyloP44way phyloP44way.wig
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh wuhCor1 phyloP44way
+# db.table                  min max   mean  count sumData
+# wuhCor1.phyloP44way     -11.968 4.256 1.65333 29903 49439.5
+#    stdDev viewLimits
+#    1.89619 viewLimits=-7.8276:4.256
+
+    #	that range is: 4.256 + 11.968 = 16.224 for hBinSize=0.016224
+
+    #  Create histogram to get an overview of all the data
+    hgWiggle -doHistogram -hBinSize=0.027305 -hBinCount=1000 \
+       -hMinVal=-20 -verbose=2 \
+	    -db=wuhCor1 phyloP44way > histogram.data 2>&1
+
+XXX - to be done
+    # find out the range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin
+# Q1 0.000158
+# median 0.000791
+# Q3 0.002532
+# average 0.002123
+# min 0.000053
+# max 0.045049
+# count 471
+# total 1.000058
+# standard deviation 0.004132
+
+    #	create plot of histogram:
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Ebola wuhCor1 Histogram phyloP44way track"
+set xlabel " phyloP44way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
+# 44-way downloads (DONE - 2014-10-22 - Hiram)
+    mkdir -p \
+       /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/phastCons44way
+    cd /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/phastCons44way
+
+    cp -p ../../cons/wuhCor1.pp ./wuhCor1.phastCons44way.wigFix
+    gzip wuhCor1.phastCons44way.wigFix
+    ln -s ../../cons/all.mod ./wuhCor1.phastCons44way.mod
+    ln -s ../../cons/wuhCor1.bw ./wuhCor1.phastCons44way.bw
+
+    # reusing the README.txt file from:
+# /usr/local/apache/htdocs-hgdownload/goldenPath/eboVir3/phastCons160way/README.txt
+    # edited here to reflect this construction
+
+    md5sum *.txt *.gz *.mod *.bw > md5sum.txt
+
+    mkdir -p \
+       /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/phyloP44way
+    cd /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/phyloP44way
+
+    ln -s ../../consPhyloP/all.mod ./wuhCor1.phyloP44way.mod
+    cp -p ../../consPhyloP/NC_045512v2.wigFix ./wuhCor1.phyloP44way.wigFix
+    ln -s ../../consPhyloP/phyloP44way.bw ./wuhCor1.phyloP44way.bw
+    gzip *.wigFix
+
+    ln -s ../phastCons44way/nameList44.txt .
+
+    # reusing the README.txt file from:
+# /usr/local/apache/htdocs-hgdownload/goldenPath/eboVir3/phyloP160way/README.txt
+    # edited here to reflect this construction
+
+    md5sum *.txt *.gz *.mod *.bw > md5sum.txt
+
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/phastCons44way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/phastCons44way
+    ln -s \
+     /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/phastCons44way/* ./
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/phyloP44way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/phyloP44way
+    ln -s \
+     /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/phyloP44way/* ./
+    
+##############################################################################
