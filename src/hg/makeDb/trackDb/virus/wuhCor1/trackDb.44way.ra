@@ -48,7 +48,7 @@ group compGeno
     visibility full
     subTrack cons44way
     viewLimits -4:5
-    viewLimitsMax -7.405:20
+    viewLimitsMax -11.968:4.256
 
         track phyloP44way
         subTrack cons44wayViewphyloP on
@@ -57,9 +57,9 @@ group compGeno
         longLabel 44 virus strains Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -7.405 20
+        type wig -11.968 4.256
         maxHeightPixels 100:50:11
-        viewLimits -7.405:20
+        viewLimits -11.968:4.256
         autoScale off
         spanList 1
         windowingFunction mean

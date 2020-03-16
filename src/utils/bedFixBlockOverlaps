@@ -48,7 +48,7 @@ for line in ifh:
         newStarts.append(str(bs))
     row[10] = ",".join(newLens)
     row[11] = ",".join(newStarts)
-    print "\t".join(row)
+    print("\t".join(row))
 
 
 
