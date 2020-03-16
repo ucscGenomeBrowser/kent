@@ -4,7 +4,7 @@ longLabel epitopes from biorxiv 10.1101/2020.02.12.946087v1
 group immu
 visibility dense
 itemRgb on
-type bigBed 9+
+type bigBed 9 +
 compositeTrack on
 
     track bCellEpitopes
