@@ -286,7 +286,7 @@ if [ -s outfile ]; then
 fi
 
 if [ -s outtree ]; then
-  rm -f outfile.31mer outtree.31mer
+  rm -f outtree.31mer
   mv outtree outtree.31mer
 fi
 
@@ -386,7 +386,6 @@ done
 
     ls ../mafLinks | sed -e 's/.maf.gz//; s/NC_045512v2.//' > maf.list
 
-cat << '_EOF_' > template
     printf '#LOOP
 ./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/wuhCor1/bed/multiz119way/maf/$(root1).maf}
 #ENDLOOP
@@ -421,8 +420,8 @@ set path = ($run/penn $path); rehash
 $run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c \
         > /dev/null
 popd > /dev/null
-/bin/rm -f $result.maf
-/bin/cp -p $tmp/$c $result.maf
+/bin/rm -f $result
+/bin/cp -p $tmp/$c $result
 /bin/rm -fr $tmp
 ' > autoMultiz.csh
 
@@ -592,3 +591,60 @@ hgLoadGenePred wuhCor1 singleCover singleCover.gp
 genePredToMafFrames wuhCor1          ../mafFrag.multiz119way.maf frames.tab wuhCor1 singleCover.gp
 hgLoadMafFrames wuhCor1 multiz119wayFrames frames.tab
 
+##############################################################################
+# constructing download files (DONE - 2020-03-13 - Hiram)
+##############################################################################
+
+mkdir /hive/data/genomes/wuhCor1/bed/multiz119way/downloads/multiz119way
+cd /hive/data/genomes/wuhCor1/bed/multiz119way/downloads/multiz119way
+
+cat ../../4d/119way.nh \
+  | sed -e 's/(/(\n/g; s/,/,\n/g; s/)/\n)/g; s/ //g;' \
+  | grep -v "^$" | ~/kent/src/hg/utils/phyloTrees/binaryTree.pl \
+    -noInternal -lineOutput \
+      /dev/stdin > wuhCor1.119way.nh
+
+ln -s ../phastCons119way/nameList119.txt ./wuhCor1.119way.nameList.txt
+cut -f1,3 wuhCor1.119way.nameList.txt > accession.descriptiveName.tsv
+
+cat ../../4d/119way.nh \
+  | sed -e 's/(/(\n/g; s/,/,\n/g; s/)/\n)/g; s/ //g;' \
+  | grep -v "^$" | ~/kent/src/hg/utils/phyloTrees/binaryTree.pl -quoteNames \
+    -nameTranslate=accession.descriptiveName.tsv -noInternal -lineOutput \
+      -bothNames /dev/stdin > wuhCor1.119way.descriptiveName.nh
+
+# These .nh files end up with an extra bit of distance business on
+# the last line:
+#  "Wigeon CoV HKU20":0.181934):0.1:0.1;
+# edit that down to just:
+#  "Wigeon CoV HKU20":0.181934);
+# same for:
+#  NC_016995v1:0.181934);
+# probably a bug in the binaryTree.pl script
+
+# do not need this two column list:
+
+rm accession.descriptiveName.tsv
+
+cp -p ../../defraged.multiz119way.maf ./wuhCor1.multiz119way.maf
+gzip wuhCor1.multiz119way.maf
+
+# use the README from  eboVir3 and edit for circumstances here
+
+# generate phylo distance list:
+
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/all_dists \
+   wuhCor1.119way.descriptiveName.nh | grep NC_045512v2 \
+    | sed -e "s#'NC_045512v2/Wuhan-Hu-1'##;" \
+       | awk -F$'\t' '{printf "%s\t%s\n", $3,$2}' \
+          > wuhCor1.119way.phyloDistance.txt
+
+# construct redmine fileList
+
+cd /hive/data/genomes/wuhCor1/bed/multiz119way/downloads
+
+find /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1 /gbdb/wuhCor1/multiz119way ! -type d \
+  | egrep "multiz119way|phastCons119way|phyloP119way" \
+     > redmine25090.file.list
+
+hgsql -e 'show tables;' wuhCor1 | grep 119 > redmine25090.table.list

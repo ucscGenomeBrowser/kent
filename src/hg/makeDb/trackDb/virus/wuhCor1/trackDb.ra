@@ -34,3 +34,5 @@ searchMethod fuzzy
 searchPriority 18
 
 include trackDb.119way.ra
+include epitopes.ra
+include trackDb.44way.ra

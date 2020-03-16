@@ -6130,11 +6130,11 @@ if (setting)
         }
     safef(altLabel, sizeof(altLabel), "%s", (filterByRange?"": "colspan=3"));
     if (minLimit != NO_VALUE && maxLimit != NO_VALUE)
-        printf("<TD align='left'%s> (%g to %g)",altLabel,minLimit, maxLimit);
+        printf("<TD align='left'%s> (%s to %s)",altLabel,shorterDouble(minLimit), shorterDouble(maxLimit));
     else if (minLimit != NO_VALUE)
-        printf("<TD align='left'%s> (minimum %g)",altLabel,minLimit);
+        printf("<TD align='left'%s> (minimum %s)",altLabel,shorterDouble(minLimit));
     else if (maxLimit != NO_VALUE)
-        printf("<TD align='left'%s> (maximum %g)",altLabel,maxLimit);
+        printf("<TD align='left'%s> (maximum %s)",altLabel,shorterDouble(maxLimit));
     else
         printf("<TD align='left'%s",altLabel);
     puts("</TR>");
