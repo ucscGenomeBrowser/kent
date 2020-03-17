@@ -717,13 +717,11 @@ fi
     #	test it with some sequence
 
 ############################################################################
-## reset default position to MEPE gene (egg shell protein)
-## XXX ### Not special default position set for this assembly
-##  (DONE - 2020-01-29 - Hiram)
+## reset default position to whole genome
+##  (DONE - 2020-03-17 - Max)
 
-    # as found from the galGal5 to wuhCor1 liftOver
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr4:45667017-45672928"
+    hgsql -e 'update dbDb set defaultPos="NC_045512v2:1-29903"
 	where name="wuhCor1";' hgcentraltest
 
 #########################################################################

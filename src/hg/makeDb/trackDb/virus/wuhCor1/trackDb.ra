@@ -4,7 +4,19 @@ html gold
 
 # Local declaration so that local gap.html is picked up.
 track gap override
-html gap
+visibility hide
+html gap.html
+
+track uniprot override
+visibility dense
+
+track unipAliSwissprot override
+labelFields protShortNames
+longLabel SwissProt proteins (configure track to show protein annotations)
+visibility pack
+
+track rmsk override
+visibility hide
 
 searchTable gold
 shortCircuit 1
@@ -14,7 +26,7 @@ searchPriority 8
 
 track ncbiGene
 shortLabel NCBI Genes
-longLabel NCBI Genes from GCF_009858895.2_ASM985889v3 record
+longLabel NCBI Genes from GCF_009858895.2
 group genes
 visibility pack
 priority 1
@@ -25,7 +37,11 @@ baseColorDefault genomicCodons
 url https://www.ncbi.nlm.nih.gov/protein/$$
 urlLabel NCBI Refseq protein
 
-# itemDetailsHtmlTable geneDesc
+track primers
+shortLabel Detection Primers
+longLabel Detection Kit Primers
+group map
+type psl
 
 searchName ncbiGene
 searchTable ncbiGene

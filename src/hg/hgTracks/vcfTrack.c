@@ -526,40 +526,42 @@ if (rec->alleleCount < 2)
     dyStringAppendC(dy, '?');
     return;
     }
-const struct vcfFile *vcff = rec->file;
-int gtRefRefCount = 0, gtRefAltCount = 0, gtAltAltCount = 0, gtUnkCount = 0, gtOtherCount = 0;
-boolean allHaploid = TRUE;
+int *gtCounts = NULL, *alCounts = NULL;;
+int phasedGts = 0, diploidCount = 0;
+vcfCountGenotypes(rec, &gtCounts, &alCounts, &phasedGts, &diploidCount);
+size_t abbrevSize = 16;
+char displayAls[rec->alleleCount][abbrevSize];
 int i;
-for (i=0;  i < vcff->genotypeCount;  i++)
+for (i = 0;  i < rec->alleleCount;  i++)
+    abbrevAndHandleRC(displayAls[i], sizeof displayAls[i], rec->alleles[i]);
+if (diploidCount == 0)
     {
-    struct vcfGenotype *gt = &(rec->genotypes[i]);
-    if (! gt->isHaploid)
-        allHaploid = FALSE;
-    if (gt->hapIxA == 0 && gt->hapIxB == 0)
-	gtRefRefCount++;
-    else if (gt->hapIxA == 1 && gt->hapIxB == 1)
-	gtAltAltCount++;
-    else if ((gt->hapIxA == 0 && gt->hapIxB == 1) || (gt->hapIxA == 1 && gt->hapIxB == 0))
-	gtRefAltCount++;
-    else if (gt->hapIxA < 0 || gt->hapIxB < 0)
-	gtUnkCount++;
-    else
-	gtOtherCount++;
+    // No diploid genotypes, just allele counts.
+    for (i = 0;  i < rec->alleleCount;  i++)
+        {
+        if (i > 0)
+            dyStringAppendC(dy, ' ');
+        dyStringPrintf(dy, "%s:%d", displayAls[i], alCounts[i]);
+        }
     }
-char refAl[16];
-abbrevAndHandleRC(refAl, sizeof(refAl), rec->alleles[0]);
-char altAl1[16];
-abbrevAndHandleRC(altAl1, sizeof(altAl1), rec->alleles[1]);
-if (allHaploid)
-    dyStringPrintf(dy, "%s:%d %s:%d",
-		   refAl, gtRefRefCount, altAl1, gtRefAltCount);
 else
-    dyStringPrintf(dy, "%s/%s:%d %s/%s:%d %s/%s:%d", refAl, refAl, gtRefRefCount,
-		   refAl, altAl1, gtRefAltCount, altAl1, altAl1, gtAltAltCount);
-if (gtUnkCount > 0)
-    dyStringPrintf(dy, " unknown:%d", gtUnkCount);
-if (gtOtherCount > 0)
-    dyStringPrintf(dy, " other:%d", gtOtherCount);
+    {
+    dyStringPrintf(dy, "%s/%s:%d", displayAls[0], displayAls[0], gtCounts[0]);
+    for (i = 1;  i < rec->alleleCount + 1;  i++)
+        {
+        int j;
+        for (j = 0;  j <= i;  j++)
+            {
+            int gtIx = vcfGenotypeIndex(j, i);
+            if (gtCounts[gtIx] > 0)
+                {
+                char *alJ = (j == rec->alleleCount) ? "?" : displayAls[j];
+                char *alI = (i == rec->alleleCount) ? "?" : displayAls[i];
+                dyStringPrintf(dy, "; %s/%s:%d", alJ, alI, gtCounts[gtIx]);
+                }
+            }
+        }
+    }
 }
 
 void mapBoxForCenterVariant(struct vcfRecord *rec, struct hvGfx *hvg, struct track *tg,

@@ -53,19 +53,15 @@ Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
 missing data. </p>
 
 <p>
-The data contained in the <a href="../cgi-bin/hgTrackUi?g=cons119way">119 Accessions</a> and the
-<a href="../cgi-bin/hgTrackUi?g=strainCons119way">119 Strains</a> tracks are the same. The only
-difference between these two tracks are the identifiers used to label the sequences. In the 119
-Accessions track, the sequence is labeled using its NCBI <a href="https://www.ncbi.nlm.nih.gov/nuccore"
-target="_blank">Nucleotide</a> accession number. In the 119 Strains track, we used a shortened
-version of the strain name from the NCBI Nucleotide entry to label each sequence, and when this
-was unavailable, we constructed our own using the <tt>DEFINITION</tt>, <tt>/country</tt>, and
-<tt>/collection_date</tt> lines from the NCBI record.
+In the track display, the sequence is labeled using its
+NCBI <a href="https://www.ncbi.nlm.nih.gov/nuccore"
+target="_blank">Nucleotide</a> accession number.
 </p>
 <p>
-The mapping between sequence identifiers and strain names is provided via <a
-href="http://hgdownload.soe.ucsc.edu/goldenpath/wuhCor1/phyloP119way/accession.to.sequenceIdentifier.txt">a text file</a> on our download server. 
-<a href="http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/makeDb/doc/wuhCor1/153.descriptions.txt">Additional meta information</a> from Genbank is provided in a tab-separated file.</p>
+The mapping between sequence accession identifiers and more descriptive names
+is provided via <a
+href="http://hgdownload.soe.ucsc.edu/goldenpath/wuhCor1/phyloP119way/wuhCor1.119way.nameList.txt">a text file</a> on our download server.
+</p>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
@@ -139,7 +135,7 @@ species are translated using the default species annotation.
 <H2>Methods</H2>
 <P>
 Pairwise alignments with the reference sequence were generated for
-each sequence using lastz version 1.03.52.
+each sequence using lastz version 1.04.00.
 Parameters used for each lastz alignment:
 <pre>
 # hsp_threshold      = 2200
@@ -293,9 +289,17 @@ gaps filled by lower-scoring chains, to produce an alignment net.
 <tr><td>119</td><td>2018-08-13</td><td><a href='https://www.ncbi.nlm.nih.gov/nuccore/NC_028824.1' target=_blank>NC_028824.1</a></td><td>3.505645</td><td>BtRf-AlphaCoV/YN2012</td></tr>
 </tbody></table>
 <P>
-The multiple alignment was constructed from the resulting best-in-genome
-pairwise alignments progressively aligned using multiz/autoMZ,
-following a simple binary tree phylogeny:
+The multiple alignment was constructed from the resulting
+pairwise alignments progressively aligned using
+<a href='http://www.bx.psu.edu/miller_lab/'
+target=_blank>multiz/autoMZ</a>.
+The phylogenetic tree was calculated on 31mer frequency similarity
+and neighbor joining that distance matrix with the
+<a href='http://evolution.genetics.washington.edu/phylip.html'
+target=_blank>phylip</a> toolset command:
+<a href='http://evolution.genetics.washington.edu/phylip/progs.data.dist.html'
+target=_blank>neighbor</a>.  The reference sequence NC_045512v2 is at the
+top of the tree:
 <pre>
 ((((((((((((((((((((((((((((((((((((((((((((((((((((((NC_045512v2 (MN996528v1
 MT019532v1)) MN988668v1) LR757996v1) (MN996530v1 NMDC60013002_07)) MT039873v1)
@@ -400,7 +404,7 @@ details page or in the browser when the track's display mode is set to
 <H2>Credits</H2>
 <P> This track was created using the following programs:
 <UL>
-<LI> Alignment tools: lastz (formerly blastz) and multiz by Minmei Hou, Scott Schwartz, Robert Harris, and 
+<LI> Alignment tools: lastz (formerly blastz) and multiz by Minmei Hou, Scott Schwartz, Robert Harris, and
 Webb Miller of the <A HREF="http://www.bx.psu.edu/miller_lab/"
 TARGET=_blank>Penn State Bioinformatics Group</A>
 <LI> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
@@ -423,7 +427,7 @@ display), and Brian Raney (gap annotation and codon framing) at UCSC
 Gire SK, Goba A, Andersen KG, Sealfon RS, Park DJ, Kanneh L, Jalloh S, Momoh M,
 Fullah M, Dudas G <em>et al.</em>
 <a href="https://science.sciencemag.org/content/345/6202/1369"
-target="_blank">Genomic surveillance elucidates Ebola virus origin and transmission 
+target="_blank">Genomic surveillance elucidates Ebola virus origin and transmission
 during the 2014 outbreak</a>.
 <em>Science</em> 2014 Sep 12;345(6202):1369-72.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25214632" target="_blank">25214632</a>;
