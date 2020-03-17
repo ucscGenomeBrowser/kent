@@ -1,6 +1,6 @@
 track epitopes
-shortLabel Epitopes
-longLabel epitopes from biorxiv 10.1101/2020.02.12.946087v1
+shortLabel Predicted Epitopes
+longLabel Epitopes from Grifoni et al 2020
 group immu
 visibility dense
 itemRgb on
