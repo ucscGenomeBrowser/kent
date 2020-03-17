@@ -463,7 +463,7 @@ printf("<label for=\"disableUdcTimeout\">Enable hub refresh</label>\n");
 printf("<div class=\"tooltip\"> (?)\n");
 printf("<span class=\"tooltiptext\">"
     "Checking this box changes the cache expiration time (default of 5 minutes) "
-    "and allows the Genome Browser to reload Hub configuration files with each refresh."
+    "and allows the Genome Browser to reload Hub configuration and data files with each refresh."
     "</span>\n");
 printf("</div></li>\n"); // tooltip div
 printf("</ul>\n");
