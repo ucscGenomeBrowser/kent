@@ -1136,3 +1136,11 @@ awk '{print $1}' | sort > genes.lst
 hgsql hg38 -Ne "select geneSymbol, kgId from kgXref" | sort > ids.txt
 join genes.lst  ids.txt | awk '{print $2,$1}' | sort > knownToMyGene2.txt
 hgLoadSqlTab $db knownToMyGene2 ~/kent/src/hg/lib/knownTo.sql knownToMyGene2.txt
+
+# make gtexDistance table
+mkdir $dir/hgNear
+cd $dir/hgNear
+hgsql hgFixed -e select 1.0, id, name from gtexTissue > gtex.weights
+hgMapToGene hg38 -all -type=genePred gtexGeneModelV6 knownGene knownToGtex
+hgExpDistance hg38 -verbose=2 -lookup=knownToGtex -weights=gtex.weights hgFixed.gtexTissueMedian hgFixed.gtexTissue gtexDistance
+
