@@ -25,7 +25,11 @@ baseColorDefault genomicCodons
 url https://www.ncbi.nlm.nih.gov/protein/$$
 urlLabel NCBI Refseq protein
 
-# itemDetailsHtmlTable geneDesc
+track primers
+shortLabel Detection Primers
+longLabel Detection Kit Primers
+group map
+type psl
 
 searchName ncbiGene
 searchTable ncbiGene
