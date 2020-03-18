@@ -500,7 +500,7 @@ jsOnEventById("click", "hubLoadMaybeTiming",
     "var doMeasureTiming = document.getElementById('addMeasureTiming').checked === true;"
     "validateText.value=$.trim(validateText.value);"
     "if(validateUrl($('#validateHubUrl').val())) {"
-    "   loc = \"../cgi-bin/hgTracks?&hgHub_do_firstDb=on\" + \"&hubUrl=\" + validateText.value;"
+    "   loc = \"../cgi-bin/hgTracks?hgHub_do_firstDb=on&hgHub_do_redirect=on&hgHubConnect.remakeTrackHub=on\" + \"&hubUrl=\" + validateText.value;"
     "   if (doMeasureTiming) { loc += \"&measureTiming=1\";} else { loc += \"&measureTiming=[]\"; }"
     "   if (udcTimeout) { loc += \"&udcTimeout=5\"; } else { loc += \"&udcTimeout=[]\"; }"
     "   window.location.href=loc; "
