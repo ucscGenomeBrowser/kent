@@ -18,7 +18,7 @@ group compGeno
 
         track multiz44way
         subTrack cons44wayViewalign on
-        shortLabel Multiz Align
+        shortLabel Bat CoV multiz
         longLabel Multiz Genome Alignments of 44 Coronavirus bat strains
         subGroups view=align
         noInherit on
@@ -53,7 +53,7 @@ group compGeno
         track phyloP44way
         subTrack cons44wayViewphyloP on
         subGroups view=phyloP
-        shortLabel PhyloP
+        shortLabel Bat PhyloP
         longLabel 44 Bat virus strains Basewise Conservation by PhyloP
         noInherit on
         configurable on

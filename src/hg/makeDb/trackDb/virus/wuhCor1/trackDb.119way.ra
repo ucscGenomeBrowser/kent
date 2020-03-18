@@ -4,7 +4,7 @@ shortLabel 119 Accessions
 longLabel Multiz Alignment & Conservation (119 strains: strains with vertebrate hosts and human SARS-Cov2, Accession Names)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
-visibility full
+visibility hide
 priority 1
 type bed 4
 group compGeno
