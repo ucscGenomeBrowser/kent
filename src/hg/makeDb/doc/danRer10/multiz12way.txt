@@ -1,0 +1,1547 @@
+#############################################################################
+## 12way Multiz (DONE - 2020-02-26 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/danRer10/bed/multiz12way
+    cd /hive/data/genomes/danRer10/bed/multiz12way
+
+    # from the 218-way in the source tree, select out the 12 used here:
+    /cluster/bin/phast/tree_doctor \
+        --prune-all-but hg38,mm10,galGal5,xenTro9,latCha1,lepOcu1,calMil1,tetNig2,fr3,gasAcu1,oryLat2,danRer10 \
+        /cluster/home/hiram/kent/src/hg/utils/phyloTrees/218way.nh \
+           | sed -e 's/galGal5/galGal6/;' > danRer10.12way.nh.0
+     ~/kent/src/hg/utils/phyloTrees/asciiTree.pl danRer10.12way.nh.0 \
+       | sed -e 's/^/# /;
+# ((((((hg38:0.145908,
+#      mm10:0.356483):0.460153,
+#     galGal6:0.559442):0.05,
+#    xenTro9:0.347944):0.1,
+#   latCha1:0.977944):0.111354,
+#  (((((tetNig2:0.124159,
+#      fr3:0.203847):0.19518,
+#     oryLat2:0.48197):0.015,
+#    gasAcu1:0.246413):0.27064,
+#   danRer10:0.730752):0.143632,
+#  lepOcu1:0.400000):0.326688):0.100000,
+# calMil1:0.75);
+
+
+    # using TreeGraph2 tree editor on the Mac, rearrange to get danRer10
+    # at the top:
+
+    #	what that looks like:
+~/kent/src/hg/utils/phyloTrees/asciiTree.pl danRer10.12way.nh | sed -e 's/^/# /;'
+# ((((danRer10:0.730752,
+#    (gasAcu1:0.246413,
+#    (oryLat2:0.48197,
+#    (tetNig2:0.124159,
+#    fr3:0.203847):0.19518):0.015):0.27064):0.143632,
+#   lepOcu1:0.4):0.326688,
+#  ((((hg38:0.145908,
+#     mm10:0.356483):0.460153,
+#    galGal6:0.559442):0.05,
+#   xenTro9:0.347944):0.1,
+#  latCha1:0.977944):0.111354):0.1,
+# calMil1:0.75);
+
+    # extract species list from that .nh file
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+        danRer10.12way.nh | xargs echo | sed 's/ //g; s/,/ /g' \
+        | sed 's/[()]//g; s/,/ /g' | tr '[ ]' '[\n]' > species.list.txt
+
+    # construct db to name translation list:
+    cat species.list.txt | while read DB
+do
+hgsql -N -e "select name,organism from dbDb where name=\"${DB}\";" hgcentraltest
+done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
+        | sed -e 's/-nosed/_nosed/; s/-eating/_eating/;' > db.to.name.txt
+
+    # construct a common name .nh file:
+    /cluster/bin/phast/tree_doctor --rename \
+    "`cat db.to.name.txt`" danRer10.12way.nh | sed -e 's/00*)/)/g; s/00*,/,/g' \
+       | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+         | sed -e 's/__/_/g;' > danRer10.12way.commonNames.nh
+    cat danRer10.12way.commonNames.nh | sed -e 's/^/# /;'
+# ((((Zebrafish:0.730752,
+#    (Stickleback:0.246413,
+#    (Medaka:0.48197,
+#    (Tetraodon:0.124159,
+#    Fugu:0.203847):0.19518):0.015):0.27064):0.143632,
+#   Spotted_gar:0.4):0.326688,
+#  ((((Human:0.145908,
+#     Mouse:0.356483):0.460153,
+#    Chicken:0.559442):0.05,
+#   X_tropicalis:0.347944):0.1,
+#  Coelacanth:0.977944):0.111354):0.1,
+# Elephant_shark:0.75);
+
+#	Use this specification in the phyloGif tool:
+#	http://genome.ucsc.edu/cgi-bin/phyloGif
+#	to obtain a png image for src/hg/htdocs/images/phylo/danRer10_12way.png
+
+    ~/kent/src/hg/utils/phyloTrees/asciiTree.pl danRer10.12way.nh > t.nh
+    ~/kent/src/hg/utils/phyloTrees/scientificNames.sh t.nh \
+       | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+          > danRer10.12way.scientificNames.nh
+    cat danRer10.12way.scientificNames.nh | sed -e 's/^/# /;'
+# ((((Danio_rerio:0.730752,
+#    (Gasterosteus_aculeatus:0.246413,
+#    (Oryzias_latipes:0.48197,
+#    (Tetraodon_nigroviridis:0.124159,
+#    Takifugu_rubripes:0.203847):0.19518):0.015):0.27064):0.143632,
+#   Lepisosteus_oculatus:0.4):0.326688,
+#  ((((Homo_sapiens:0.145908,
+#     Mus_musculus:0.356483):0.460153,
+#    Gallus_gallus:0.559442):0.05,
+#   Xenopus_tropicalis:0.347944):0.1,
+#  Latimeria_chalumnae:0.977944):0.111354):0.1,
+# Callorhinchus_milii:0.75);
+
+    /cluster/bin/phast/all_dists danRer10.12way.nh | grep danRer10 \
+        | sed -e "s/danRer10.//" | sort -k2n > 12way.distances.txt
+    #	Use this output to create the table below
+    cat 12way.distances.txt | sed -e 's/^/# /;'
+# gasAcu1       1.247805
+# lepOcu1       1.274384
+# tetNig2       1.335731
+# fr3   1.415419
+# oryLat2       1.498362
+# xenTro9       1.760370
+# galGal6       2.021868
+# calMil1       2.051072
+# hg38  2.068487
+# mm10  2.279062
+# latCha1       2.290370
+
+    printf '#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "<12way.distances.txt") or
+        die "can not read 12way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($D, $dist) = split('"'"'\\s+'"'"', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/danRer10/bed/lastz.$D/fb.danRer10." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '"'"'{print \\$5}'"'"' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\\%%//;
+    my $swapFile="/hive/data/genomes/${D}/bed/lastz.danRer10/fb.${D}.chainDanRer10Link.txt";
+    my $swapMeasure = "N/A";
+    if ( -s $swapFile ) {
+	$swapMeasure =
+	    `awk '"'"'{print \\$5}'"'"' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
+	chomp $swapMeasure;
+	$swapMeasure = 0.0 if (length($swapMeasure) < 1);
+	$swapMeasure =~ s/\\%%//;
+    }
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name='"'\$D'"';" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+    printf "# %%02d  %%.4f (%%%% %%05.3f) (%%%% %%05.3f) - %%s %%s\\n", $count, $dist,
+        $chainLinkMeasure, $swapMeasure, $orgName, $D;
+}
+close (FH);
+' > sizeStats.pl
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+
+### type of chain: 'chain'
+#       featureBits chainLink measures
+#               chainLink
+#  N distance  on danRer10  on other     other species
+# 01  1.2478 (% 9.814) (% 27.557) - Stickleback gasAcu1
+# 02  1.2744 (% 8.409) (% 11.294) - Spotted gar lepOcu1
+# 03  1.3357 (% 6.063) (% 23.344) - Tetraodon tetNig2
+# 04  1.4154 (% 7.080) (% 22.699) - Fugu fr3
+# 05  1.4984 (% 9.640) (% 17.684) - Medaka oryLat2
+# 06  1.7604 (% 6.731) (% 7.029) - X. tropicalis xenTro9
+# 07  2.0219 (% 5.871) (% 6.171) - Chicken galGal6
+# 08  2.0511 (% 5.599) (% 7.088) - Elephant shark calMil1
+# 09  2.0685 (% 7.110) (% 3.357) - Human hg38
+# 10  2.2791 (% 5.228) (% 2.769) - Mouse mm10
+# 11  2.2904 (% 6.319) (% 4.504) - Coelacanth latCha1
+
+# None of this concern for distances matters in building the first step, the
+# maf files.  The distances will be better calibrated later.
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	danRer10.12way.nh | xargs echo | sed 's/ //g; s/,/ /g' > tree.nh
+
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+    # danRer10 gasAcu1 oryLat2 tetNig2 fr3 lepOcu1 hg38 mm10 galGal6 xenTro9 latCha1 calMil1
+
+    # survey N50 for each
+    for db in `cat species.list`
+do
+n50.pl /hive/data/genomes/$db/chrom.sizes 2>&1 | head -4 | grep -v N50 
+done
+#       reading: /hive/data/genomes/danRer10/chrom.sizes
+#       contig count: 1061, total size: 1371719383, one half size: 685859691
+685335267       11      chr8    54191831
+#       reading: /hive/data/genomes/gasAcu1/chrom.sizes
+#       contig count: 23, total size: 463354448, one half size: 231677224
+215092307       7       chrXIX  20240660
+#       reading: /hive/data/genomes/oryLat2/chrom.sizes
+#       contig count: 7189, total size: 869000216, one half size: 434500108
+430162296       13      chr15   30000224
+#       reading: /hive/data/genomes/tetNig2/chrom.sizes
+#       contig count: 27, total size: 358618246, one half size: 179309123
+167871265       4       chr3    15489435
+#       reading: /hive/data/genomes/fr3/chrom.sizes
+#       contig count: 6835, total size: 391484715, one half size: 195742357
+188661948       13      chr22   11609757
+#       reading: /hive/data/genomes/lepOcu1/chrom.sizes
+#       contig count: 1925, total size: 945874548, one half size: 472937274
+423108882       7       chrLG7  50812227
+#       reading: /hive/data/genomes/hg38/chrom.sizes
+#       contig count: 595, total size: 3257347282, one half size: 1628673641
+1547391171      8       chrX    156040895
+#       reading: /hive/data/genomes/mm10/chrom.sizes
+#       contig count: 66, total size: 2730871774, one half size: 1365435887
+1312176979      8       chr7    145441459
+#       reading: /hive/data/genomes/galGal6/chrom.sizes
+#       contig count: 464, total size: 1065365425, one half size: 532682712
+458128853       3       chr3    110838418
+#       reading: /hive/data/genomes/xenTro9/chrom.sizes
+#       contig count: 6822, total size: 1440398454, one half size: 720199227
+648724361       4       chr3    137218701
+#       reading: /hive/data/genomes/latCha1/chrom.sizes
+#       contig count: 22819, total size: 2860591921, one half size: 1430295960
+1429463522      829     JH127390        925337
+#       reading: /hive/data/genomes/calMil1/chrom.sizes
+#       contig count: 21204, total size: 974498586, one half size: 487249293
+484739066       59      KI635913        4564766
+
+    #	bash shell syntax here ...
+    cd /hive/data/genomes/danRer10/bed/multiz12way
+    export H=/hive/data/genomes/danRer10/bed
+    mkdir mafLinks
+    # these are all distant assemblies, can use ordinary net:
+    for G in gasAcu1 oryLat2 tetNig2 fr3 lepOcu1 hg38 mm10 galGal6 \
+	xenTro9 latCha1 calMil1
+    do
+      mkdir mafLinks/$G
+      echo ln -s ${H}/lastz.$G/mafNet/danRer10.${G}.net.maf.gz ./mafLinks/$G
+      ln -s ${H}/lastz.$G/mafNet/danRer10.${G}.net.maf.gz ./mafLinks/$G
+    done
+
+    # verify the symLinks are good:
+    ls -ogrtL mafLinks/*/* | sed -e 's/^/# /; s/-rw-rw-r-- 1//;'
+#  66991086 Feb  9  2015 mafLinks/hg38/danRer10.hg38.net.maf.gz
+#  50189830 Sep 18  2015 mafLinks/mm10/danRer10.mm10.net.maf.gz
+#  60631047 Feb  9  2017 mafLinks/tetNig2/danRer10.tetNig2.net.maf.gz
+#  70106431 Feb  9  2017 mafLinks/fr3/danRer10.fr3.net.maf.gz
+#  95760363 Feb  9  2017 mafLinks/oryLat2/danRer10.oryLat2.net.maf.gz
+#  95378303 Feb 10  2017 mafLinks/gasAcu1/danRer10.gasAcu1.net.maf.gz
+#  87196632 Feb 25 11:25 mafLinks/lepOcu1/danRer10.lepOcu1.net.maf.gz
+#  63376503 Feb 25 12:15 mafLinks/latCha1/danRer10.latCha1.net.maf.gz
+#  59790355 Feb 25 16:31 mafLinks/galGal6/danRer10.galGal6.net.maf.gz
+#  63181229 Feb 25 16:37 mafLinks/xenTro9/danRer10.xenTro9.net.maf.gz
+#  55318165 Feb 25 17:21 mafLinks/calMil1/danRer10.calMil1.net.maf.gz
+
+    # split the maf files into a set of hashed named files
+    # this hash named split keeps the same chr/contig names in the same
+    # named hash file.
+    mkdir /hive/data/genomes/danRer10/bed/multiz12way/mafSplit
+    cd /hive/data/genomes/danRer10/bed/multiz12way/mafSplit
+    time for D in `sed -e "s/danRer10 //" ../species.list`
+do
+    echo "${D}"
+    mkdir $D
+    cd $D
+    echo "mafSplit -byTarget -useHashedName=8 /dev/null . ../../mafLinks/${D}/*.maf.gz"
+    mafSplit -byTarget -useHashedName=8 /dev/null . \
+	../../mafLinks/${D}/*.maf.gz
+    cd ..
+done
+    # real    0m35.938s
+
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . -type f | wc -l
+    # 2791
+    find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
+    wc -l maf.list
+    # 256maf.list
+
+    mkdir /hive/data/genomes/danRer10/bed/multiz12way/splitRun
+    cd /hive/data/genomes/danRer10/bed/multiz12way/splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/autoMZ penn
+
+    #	verify the db and pairs settings are correct
+    printf '#!/bin/csh -ef
+set db = danRer10
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /dev/shm/$db/multiz.$c
+set pairs = /hive/data/genomes/danRer10/bed/multiz12way/mafSplit
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c $result
+/bin/rm -fr $tmp
+' > autoMultiz.csh
+
+    chmod +x autoMultiz.csh
+
+    printf '#LOOP
+./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/danRer10/bed/multiz12way/splitRun/maf/$(root1).maf}
+#ENDLOOP
+' > template
+
+    ln -s ../../mafSplit/maf.list maf.list
+    ssh ku
+    cd /hive/data/genomes/danRer10/bed/multiz12way/splitRun/run
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc...
+# Completed: 256 of 256 jobs
+# CPU time in finished jobs:      27124s     452.06m     7.53h    0.31d  0.001 y
+# IO & Wait Time:                   701s      11.69m     0.19h    0.01d  0.000 y
+# Average job time:                 109s       1.81m     0.03h    0.00d
+# Longest finished job:            2174s      36.23m     0.60h    0.03d
+# Submission to last job:          2267s      37.78m     0.63h    0.03d
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    cd /hive/data/genomes/danRer10/bed/multiz12way
+    head -1 splitRun/maf/217.maf > multiz12way.maf
+    time for F in splitRun/maf/*.maf
+do
+    echo "${F}" 1>&2
+    egrep -v "^#" ${F}
+done >> multiz12way.maf
+    # real    1m12.634s
+
+    tail -1 splitRun/maf/217.maf >> multiz12way.maf
+# -rw-rw-r--  1 2931187404 Mar  9 11:57 multiz12way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/danRer10/bed/multiz12way
+    mkdir /gbdb/danRer10/multiz12way
+    ln -s `pwd`/multiz12way.maf /gbdb/danRer10/multiz12way
+    cd /dev/shm
+    time hgLoadMaf danRer10 multiz12way
+# Loaded 4609310 mafs in 1 files from /gbdb/danRer10/multiz12way
+# real    0m44.124s
+
+    time hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 danRer10 multiz12waySummary \
+	/gbdb/danRer10/multiz12way/multiz12way.maf
+# Created 1343139 summary blocks from 20786747 components and 4609310 mafs from /gbdb/danRer10/multiz12way/multiz12way.maf
+# real    0m50.372s
+
+# -rw-rw-r--   1  225415432 Mar  9 11:58 multiz12way.tab
+# -rw-rw-r--   1   60694329 Mar  9 12:01 multiz12waySummary.tab
+
+    wc -l multiz12way*.tab
+#  4609310 multiz12way.tab
+#  1343139 multiz12waySummary.tab
+
+    rm multiz12way*.tab
+
+##############################################################################
+# GAP ANNOTATE multiz12way MAF AND LOAD TABLES (DONE - 2020-03-09 - Hiram)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #	function correctly when more than one reference sequence
+    #	are in a single file.  Need to split of the maf file into individual
+    #   maf files
+    mkdir -p /hive/data/genomes/danRer10/bed/multiz12way/anno/mafSplit
+    cd /hive/data/genomes/danRer10/bed/multiz12way/anno/mafSplit
+
+    time mafSplit -outDirDepth=2 -byTarget -useFullSequenceName \
+        /dev/null . ../../multiz12way.maf
+    #   real    0m43.493s
+
+    find . -type f | wc -l
+    #   1012
+
+    # check for N.bed files everywhere:
+    cd /hive/data/genomes/danRer10/bed/multiz12way/anno
+    for DB in `cat ../species.list`
+do
+    if [ ! -s /hive/data/genomes/${DB}/${DB}.N.bed ]; then
+        echo "MISS: ${DB}"
+#         cd /hive/data/genomes/${DB}
+#         twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
+    else
+        echo "  OK: ${DB}"
+    fi
+done
+
+    cd /hive/data/genomes/danRer10/bed/multiz12way/anno
+    for DB in `cat ../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    screen -S gapAnno      # use a screen to control this longish job
+    ssh ku
+    cd /hive/data/genomes/danRer10/bed/multiz12way/anno
+    mkdir result
+    # there was a stray 'result/mafSplit' directory ending up in this, avoid
+    # it via the grep -v mafSplit
+    find ./mafSplit -type d | sed -e 's#./mafSplit/##' | grep -v mafSplit \
+       | while read D
+do
+    echo mkdir -p result/${D}
+    mkdir -p result/${D}
+done
+    printf '#LOOP
+mafAddIRows -nBeds=nBeds mafSplit/$(path1) /hive/data/genomes/danRer10/danRer10.2bit {check out exists+ result/$(path1)}
+#ENDLOOP
+' > template
+
+    find ./mafSplit -type f | sed -e 's#^./mafSplit/##' > maf.list
+    gensub2 maf.list single template jobList
+    # limit jobs on a node with the ram=32g requirement because they go fast
+    para -ram=32g create jobList
+    para try ... check ... push ...
+# Completed: 1012 of 1012 jobs
+# CPU time in finished jobs:        427s       7.12m     0.12h    0.00d  0.000 y
+# IO & Wait Time:                  2676s      44.59m     0.74h    0.03d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:              14s       0.23m     0.00h    0.00d
+# Submission to last job:           112s       1.87m     0.03h    0.00d
+
+    # verify all result files have some content, look for 0 size files:
+    find ./result -type f -size 0
+    # should see none
+    # or in this manner:
+    find ./result -type f | xargs ls -og | sort -k3nr | tail
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    head -q -n 1 result/0/2/chrUn_KN149893v1.maf > danRer10.12way.maf
+    time find ./result -type f | while read F
+do
+    echo "${F}" 1>&2
+    grep -h -v "^#" ${F}
+done >> danRer10.12way.maf
+    # real    1m22.625s
+
+    #	these maf files do not have the end marker, this does nothing:
+    #	tail -q -n 1 result/0/2/chrUn_KN149893v1.maf >> danRer10.12way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> danRer10.12way.maf
+    ls -og
+# -rw-rw-r--  1 5791972643 Mar  9 12:13 danRer10.12way.maf
+
+    du -hsc danRer10.12way.maf ../*.maf
+    # 5.4G    danRer10.12way.maf
+    # 2.8G    ../multiz12way.maf
+
+    # construct symlinks to get the individual maf files into gbdb:
+    rm /gbdb/danRer10/multiz12way/multiz12way.maf   # remove previous results
+    ln -s `pwd`/danRer10.12way.maf /gbdb/danRer10/multiz12way/multiz12way.maf
+
+    # Load into database
+    cd /dev/shm
+    time hgLoadMaf -pathPrefix=/gbdb/danRer10/multiz12way danRer10 multiz12way
+    # Loaded 4981463 mafs in 1 files from /gbdb/danRer10/multiz12way
+    # real    1m4.890s
+
+    time hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 danRer10 multiz12waySummary \
+        /gbdb/danRer10/multiz12way/multiz12way.maf
+# Created 1343139 summary blocks from 20786747 components and 4981463 mafs from /gbdb/danRer10/multiz12way/multiz12way.maf
+# real    0m59.393s
+
+# -rw-rw-r--   1  244520097 Mar  9 12:14 multiz12way.tab
+# -rw-rw-r--   1   63380607 Mar  9 12:18 multiz12waySummary.tab
+
+    rm multiz12way*.tab
+
+######################################################################
+# multiz12way MAF FRAMES (DONE - 2020-03-09 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/danRer10/bed/multiz12way/frames
+    cd /hive/data/genomes/danRer10/bed/multiz12way/frames
+#   survey all the genomes to find out what kinds of gene tracks they have
+    printf '#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    printf "# ${db}: "
+    set tables = `hgsql $db -N -e "show tables" | egrep "Gene|ncbiRefSeq"`
+    foreach table ($tables)
+        if ($table == "ensGene" || $table == "refGene" || \
+           $table == "ncbiRefSeq" || $table == "mgcGenes" || \
+           $table == "knownGene" || $table == "xenoRefGene" ) then
+           set count = `hgsql $db -N -e "select count(*) from $table"`
+            echo -n "${table}: ${count}, "
+        endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+            "select scientificName from dbDb where name='"'"'$db'"'"'"`
+    set orgId = `hgsql hgFixed -N -e \
+            "select id from organism where name='"'"'$orgName'"'"'"`
+    if ($orgId == "") then
+        echo "Mrnas: 0"
+    else
+        set count = `hgsql hgFixed -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+        echo "Mrnas: ${count}"
+    endif
+end
+' > showGenes.csh
+
+    chmod +x ./showGenes.csh
+    time ./showGenes.csh
+# danRer10: ensGene: 62895, mgcGenes: 16938, ncbiRefSeq: 56101, refGene: 16812, xenoRefGene: 136995, Mrnas: 1535827
+# gasAcu1: ensGene: 29245, refGene: 65, xenoRefGene: 291425, Mrnas: 280208
+# oryLat2: ensGene: 25434, refGene: 903, xenoRefGene: 262904, Mrnas: 669014
+# tetNig2: ensGene: 24078, xenoRefGene: 252452, Mrnas: 100127
+# fr3: ensGene: 29241, ncbiRefSeq: 33131, refGene: 655, Mrnas: 335149
+# lepOcu1: ensGene: 27887, Mrnas: 87
+# hg38: ensGene: 208239, knownGene: 247541, mgcGenes: 36638, ncbiRefSeq: 166923, refGene: 85561, xenoRefGene: 198240, Mrnas: 11716560
+# mm10: ensGene: 103734, knownGene: 142446, mgcGenes: 27606, ncbiRefSeq: 106520, refGene: 44703, xenoRefGene: 190199, Mrnas: 5493887
+# galGal6: ensGene: 39288, ncbiRefSeq: 62183, refGene: 7482, xenoRefGene: 149238, Mrnas: 639553
+# xenTro9: ensGene: 56323, ncbiRefSeq: 43724, refGene: 8806, xenoRefGene: 161423, Mrnas: 1298807
+# latCha1: ensGene: 26660, ncbiRefSeq: 40763, xenoRefGene: 427419, Mrnas: 86
+# calMil1: ensGene: 49990, ncbiRefSeq: 30682, xenoRefGene: 401231, Mrnas: 146276
+
+real    1m57.753s
+
+    # use knownGene for hg38 and mm10
+    # everything else use ensGene
+ 
+    mkdir genes
+
+    #   1. knownGene: hg38 and mm10
+    for DB in hg38 mm10
+    do
+      hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+        | genePredSingleCover stdin stdout | gzip -2c \
+          > genes/${DB}.gp.gz
+      printf "#  ${DB}: "
+      genePredCheck -db=${DB} genes/${DB}.gp.gz
+    done
+#  hg38: checked: 22100 failed: 0
+#  mm10: checked: 22026 failed: 0
+
+    #   2. ensGene: danRer10 gasAcu1 oryLat2 tetNig2 fr3 lepOcu1
+    #               galGal6 xenTro9 latCha1 calMil1
+    for DB in danRer10 gasAcu1 oryLat2 tetNig2 fr3 lepOcu1 galGal6 xenTro9 latCha1 calMil1
+do
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds
+from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /dev/shm/${DB}.tmp.gz
+    mv /dev/shm/${DB}.tmp.gz genes/$DB.gp.gz
+    printf "# ${DB}: "
+    genePredCheck -db=${DB} genes/${DB}.gp.gz
+done
+# danRer10: checked: 25259 failed: 0
+# gasAcu1: checked: 20631 failed: 0
+# oryLat2: checked: 19586 failed: 0
+# tetNig2: checked: 19539 failed: 0
+# fr3: checked: 20017 failed: 0
+# lepOcu1: checked: 18252 failed: 0
+# galGal6: checked: 16651 failed: 0
+# xenTro9: checked: 19819 failed: 0
+# latCha1: checked: 19539 failed: 0
+# calMil1: checked: 19188 failed: 0
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+# genes/calMil1.gp.gz: 19188
+# genes/danRer10.gp.gz: 25259
+# genes/fr3.gp.gz: 20017
+# genes/galGal6.gp.gz: 16651
+# genes/gasAcu1.gp.gz: 20631
+# genes/hg38.gp.gz: 22082
+# genes/latCha1.gp.gz: 19539
+# genes/lepOcu1.gp.gz: 18252
+# genes/mm10.gp.gz: 22026
+# genes/oryLat2.gp.gz: 19586
+# genes/tetNig2.gp.gz: 19539
+# genes/xenTro9.gp.gz: 19819
+
+    time (cat ../anno/danRer10.12way.maf \
+	| genePredToMafFrames danRer10 stdin stdout \
+          `cat ../species.list.txt | xargs echo \
+            | sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g;"` \
+		| gzip > multiz12wayFrames.bed.gz)
+    # real    1m29.321s
+
+    # verify there are frames on everything, should be 4 species:
+    zcat multiz12wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c \
+       | sed -e 's/^/# /;'
+#  421479 calMil1
+#  235622 danRer10
+#  413788 fr3
+#  451258 galGal6
+#  420945 gasAcu1
+#  415541 hg38
+#  432488 latCha1
+#  460409 lepOcu1
+#  426202 mm10
+#  401711 oryLat2
+#  383412 tetNig2
+#  433380 xenTro9
+
+    #   load the resulting file
+    ssh hgwdev
+    cd /hive/data/genomes/danRer10/bed/multiz12way/frames
+    time hgLoadMafFrames danRer10 multiz12wayFrames multiz12wayFrames.bed.gz
+    #   real    0m10.853s
+
+    time featureBits -countGaps danRer10 multiz12wayFrames
+    # 54994220 bases of 1371719383 (4.009%) in intersection
+    # real    0m23.424s
+
+    #   enable the trackDb entries:
+# frames multiz12wayFrames
+# irows on
+    #   appears to work OK
+
+#########################################################################
+# Phylogenetic tree from 12way (DONE - 2020-03-09 - Hiram)
+    mkdir /hive/data/genomes/danRer10/bed/multiz12way/4d
+    cd /hive/data/genomes/danRer10/bed/multiz12way/4d
+
+    # using the ensGene
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from refGene" danRer10 \
+      | genePredSingleCover stdin stdout > danRer10.ensGeneNR.gp
+    genePredCheck -db=danRer10 danRer10.ensGeneNR.gp
+    # checked: 14875 failed: 0
+
+    # the annotated maf is:
+    og ../anno/danRer10.12way.maf
+# -rw-rw-r-- 1 5791972643 Mar  9 12:13 ../anno/danRer10.12way.maf
+
+    mkdir annoSplit
+    cd annoSplit
+    time mafSplit -verbose=2 -outDirDepth=2 -byTarget -useFullSequenceName \
+	/dev/null . ../../anno/danRer10.12way.maf
+    # real    1m30.335s
+
+    find . -type f | wc -l
+    #   1012
+    ssh ku
+    mkdir /hive/data/genomes/danRer10/bed/multiz12way/4d/run
+    cd /hive/data/genomes/danRer10/bed/multiz12way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fex
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set GP = danRer10.ensGeneNR.gp
+
+set r = "/hive/data/genomes/danRer10/bed/multiz12way"
+set c = $1
+set infile = $r/4d/$2
+set outDir = $r/4d/$3
+set outfile = $r/4d/run/$4
+/bin/mkdir -p $outDir
+cd /dev/shm
+/bin/awk -v C=$c '$2 == C {print}' $r/4d/$GP | sed -e "s/\t$c\t/\tdanRer10.$c\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+echo $NL
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $infile -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $outfile
+else
+    echo "" > $outfile
+endif
+/bin/rm -f /dev/shm/$c.gp /dev/shm/$c.ss
+_EOF_
+#########################################
+    chmod +x 4d.csh
+
+    find ../annoSplit -type f | sed -e "s#../annoSplit/##" > maf.list
+    wc -l maf.list
+# 1012 maf.list
+
+    printf '#LOOP
+4d.csh $(root1) annoSplit/$(dir1)/$(file1) mfa/$(dir1) {check out line+ ../mfa/$(dir1)/$(root1).mfa}
+#ENDLOOP
+' > template
+
+    mkdir ../mfa
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check
+    para time
+# Completed: 1012 of 1012 jobs
+# CPU time in finished jobs:        406s       6.77m     0.11h    0.00d  0.000 y
+# IO & Wait Time:                  2465s      41.08m     0.68h    0.03d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:              21s       0.35m     0.01h    0.00d
+# Submission to last job:           107s       1.78m     0.03h    0.00d
+
+    # Not all results have contents, or finish successfully, that is OK
+    # it is because not all contigs have genes, only gene sequences are measured
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/danRer10/bed/multiz12way/4d
+    # remove the broken empty files, size 0 and size 1:
+    find ./mfa -type f -size 0 | xargs rm -f
+    # sometimes this doesn't work, don't know why, it isn't safe, it
+    # outputs files that are larger than size 1:
+    ### XXX find ./mfa -type f -size 1 | xargs rm -f
+    # when it doesn't, use this empty list procedure
+    find ./mfa -type f | xargs ls -og | awk '$3 < 2' | awk '{print $NF}' \
+        > empty.list
+    cat empty.list | xargs rm -f
+    # see what is left:
+    ls -ogrt mfa/*/*/*.mfa | sort -k3nr | wc
+    #             140     980    8396
+
+    # want comma-less species.list
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" mfa/*/*/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # real    0m1.369s
+
+    # check they are all in there:
+    grep "^>" 4d.all.mfa | sed -e 's/^/# /;'
+# >danRer10
+# >gasAcu1
+# >oryLat2
+# >tetNig2
+# >fr3
+# >lepOcu1
+# >hg38
+# >mm10
+# >galGal6
+# >xenTro9
+# >latCha1
+# >calMil1
+
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	../danRer10.12way.nh | xargs echo | sed -e 's/ //g' > tree_commas.nh
+    # tree_commas.nh looks like:
+    # ((((danRer10,(gasAcu1,(oryLat2,(tetNig2,fr3)))),lepOcu1),((((hg38,mm10),galGal6),xenTro9),latCha1)),calMil1)
+
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree tree_commas.nh 4d.all.mfa
+    #  real    7m11.213s
+
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+# TREE: ((((danRer10:0.611884,(gasAcu1:0.328166,(oryLat2:0.456031,
+# (tetNig2:0.205925,fr3:0.188605):0.228366):0.00373574):0.355398):0.157683,
+# lepOcu1:0.563099):0.19044,((((hg38:0.183526,mm10:0.265304):0.337095,
+# galGal6:0.450474):0.106427,xenTro9:0.776415):0.0616915,
+# latCha1:0.561233):0.0520656):0.328637,calMil1:0.328637);
+
+
+    # compare these calculated lengths to the tree extracted from 191way:
+    grep TREE all.mod | sed -e 's/TREE: //' \
+       | /cluster/bin/phast/all_dists /dev/stdin | grep danRer10 \
+          | sed -e "s/danRer10.//;"  | sort > new.dists
+    /cluster/bin/phast/all_dists ../danRer10.12way.nh | grep danRer10 \
+        | sed -e "s/danRer10.//;" | sort > old.dists
+     # printing out the 'new', the 'old' the 'difference' and percent difference
+    join new.dists old.dists | awk '{
+  printf "#\t%s\t%8.5f\t%8.5f\t%8.5f\t%8.5f\n", $1, $2, $3, $2-$3, 100*($2-$3)/$3 }' \
+      | sort -k3n
+#       gasAcu1  1.29545         1.24781         0.04764         3.81814
+#       lepOcu1  1.33267         1.27438         0.05828         4.57335
+#       fr3      1.38799         1.41542        -0.02743        -1.93794
+#       tetNig2  1.40531         1.33573         0.06958         5.20898
+#       oryLat2  1.42705         1.49836        -0.07131        -4.75940
+#       latCha1  1.57331         2.29037        -0.71706        -31.30778
+#       calMil1  1.61728         2.05107        -0.43379        -21.14948
+#       galGal6  1.63067         2.02187        -0.39120        -19.34859
+#       hg38     1.70081         2.06849        -0.36768        -17.77507
+#       mm10     1.78259         2.27906        -0.49647        -21.78405
+#       xenTro9  1.85018         1.76037         0.08981         5.10171
+
+#########################################################################
+# phastCons 12way (DONE - 2020-03-09 - Hiram)
+    # split 12way mafs into 10M chunks and generate sufficient statistics
+    # files for # phastCons
+    ssh ku
+    mkdir -p /hive/data/genomes/danRer10/bed/multiz12way/cons/SS
+    cd /hive/data/genomes/danRer10/bed/multiz12way/cons/SS
+    mkdir result done
+
+    printf '#!/bin/csh -ef
+set d = $1
+set c = $2
+set doneDir = done/$d
+set MAF = /hive/data/genomes/danRer10/bed/multiz12way/anno/result/$d/$c.maf
+set WINDOWS = /hive/data/genomes/danRer10/bed/multiz12way/cons/SS/result/$d/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $3 ) then
+    exit 0
+endif
+if ( -s $3.running ) then
+    exit 0
+endif
+
+/bin/mkdir -p $doneDir
+/bin/date >> $3.running
+
+/bin/rm -fr $WINDOWS
+/bin/mkdir -p $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \\
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+/bin/date >> $3
+/bin/rm -f $3.running
+' > mkSS.csh
+
+    chmod +x mkSS.csh
+
+    printf '#LOOP
+mkSS.csh $(dir1) $(root1) {check out line+ done/$(dir1)/$(root1)}
+#ENDLOOP
+' > template
+
+    find ../../anno/result -type f | sed -e "s#../../anno/result/##" > maf.list
+    wc -l maf.list
+# 1012 maf.list
+
+    ssh ku
+    cd /hive/data/genomes/danRer10/bed/multiz12way/cons/SS
+
+    gensub2 maf.list single template jobList
+    # beware overwhelming the cluster with these quick high I/O jobs
+    para create jobList
+    para try ... check ... etc
+    para -maxJob=64 push
+# Completed: 1012 of 1012 jobs
+# CPU time in finished jobs:        752s      12.53m     0.21h    0.01d  0.000 y
+# IO & Wait Time:                  2558s      42.64m     0.71h    0.03d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:              50s       0.83m     0.01h    0.00d
+# Submission to last job:            78s       1.30m     0.02h    0.00d
+
+    find ./result -type f | wc -l
+    # 988
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, beware where this
+    #	takes place or do not run too many at once.
+    ssh ku
+    mkdir -p /hive/data/genomes/danRer10/bed/multiz12way/cons/run.cons
+    cd /hive/data/genomes/danRer10/bed/multiz12way/cons/run.cons
+
+    #	This is setup for multiple runs based on subsets, but only running
+    #   the 'all' subset here.
+    #   It triggers off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  Running:
+    #	all and vertebrates
+
+    printf '#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set c = $1
+set d = $2
+set f = $3
+set len = $4
+set cov = $5
+set rho = $6
+set grp = $cwd:t
+set cons = /hive/data/genomes/danRer10/bed/multiz12way/cons
+set tmp = $cons/tmp/${d}_${c}
+mkdir -p $tmp
+set ssSrc = $cons/SS/result
+set useGrp = "$grp.mod"
+if (-s $cons/$grp/$grp.non-inf) then
+  ln -s $cons/$grp/$grp.mod $tmp
+  ln -s $cons/$grp/$grp.non-inf $tmp
+  ln -s $ssSrc/$d/$f $tmp
+else
+  ln -s $ssSrc/$d/$f $tmp
+  ln -s $cons/$grp/$grp.mod $tmp
+endif
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \\
+    --not-informative `cat $grp.non-inf` \\
+    --seqname $c --idpref $c --most-conserved $c.bed --score > $c.pp
+else
+  $PHASTBIN/phastCons $f $useGrp \\
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \\
+    --seqname $c --idpref $c --most-conserved $c.bed --score > $c.pp
+endif
+popd > /dev/null
+mkdir -p pp/$d bed/$d
+sleep 4
+touch pp/$d bed/$d
+rm -f pp/$d/$c.pp
+rm -f bed/$d/$c.bed
+mv $tmp/$c.pp pp/$d
+mv $tmp/$c.bed bed/$d
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty $cons/tmp/$d:h
+' > doPhast.csh
+
+    chmod +x doPhast.csh
+
+    #	this template will serve for all runs
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    printf '#LOOP
+../run.cons/doPhast.csh $(root1) $(dir1) $(file1) 45 0.3 0.3 {check out line+ pp/$(dir1)/$(root1).pp}
+#ENDLOOP
+' > template
+
+    find ../SS/result -type f | sed -e "s#../SS/result/##" > ss.list
+    wc -l ss.list
+    #	988 ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    mkdir /hive/data/genomes/danRer10/bed/multiz12way/cons/all
+    cd /hive/data/genomes/danRer10/bed/multiz12way/cons/all
+    #	Using the .mod tree
+    cp -p ../../4d/all.mod ./all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para -ram=32g create jobList
+    para try ... check ...
+    para push
+# Completed: 988 of 988 jobs
+# CPU time in finished jobs:       2515s      41.91m     0.70h    0.03d  0.000 y
+# IO & Wait Time:                  6393s     106.56m     1.78h    0.07d  0.000 y
+# Average job time:                   9s       0.15m     0.00h    0.00d
+# Longest finished job:              30s       0.50m     0.01h    0.00d
+# Submission to last job:            51s       0.85m     0.01h    0.00d
+
+    # create Most Conserved track
+    cd /hive/data/genomes/danRer10/bed/multiz12way/cons/all
+    time cut -f1 ../../../../chrom.sizes | while read C
+do
+    ls -d bed/?/?/${C} 2> /dev/null | while read D
+    do
+        echo ${D}/${C}*.bed 1>&2
+        cat ${D}/${C}*.bed
+    done | sort -k1,1 -k2,2n \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
+done > tmpMostConserved.bed
+    # real    0m32.669s
+
+    time /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed \
+         > mostConserved.bed
+    # real    0m8.310s
+
+    # -rw-rw-r--  1 51368105 Mar  9 15:30 mostConserved.bed
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/danRer10/bed/multiz12way/cons/all
+    time hgLoadBed danRer10 phastConsElements12way mostConserved.bed
+    # Read 1488448 elements of size 5 from mostConserved.bed
+    # real    0m8.385s
+
+    # on human we often try for 6% overall cov, and 70% CDS cov
+    # most bets are off here for that goal, these alignments are too few
+    #	and too far between
+    #	--rho 0.3 --expected-length 46 --target-coverage 0.3
+    time featureBits danRer10 -enrichment refGene:cds phastConsElements12way
+# refGene:cds 1.564%, phastConsElements12way 17.638%, both 1.288%,
+#      cover 82.38%, enrich 4.67x
+#  real    0m9.863s
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /hive/data/genomes/danRer10/bed/multiz12way/cons/all
+    mkdir downloads
+
+    # the third sed fixes the chrom names, removing the partition extensions
+    time (find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| sed -e 's/\.[0-9][0-9]*-[0-9][0-9]* start/ start/' \
+        | gzip -c > downloads/phastCons12way.wigFix.gz)
+    # real    3m10.237s
+
+# -rw-rw-r-- 1 449679749 Mar  9 15:35 phastCons12way.wigFix.gz
+
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phastCons12way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/danRer10/chrom.sizes \
+	    phastCons12way.bw) > bigWig.log 2>&1
+    egrep "real|VmPeak" bigWig.log
+# pid=62255: VmPeak:     3407948 kB
+# real    2m59.768s
+
+    bigWigInfo phastCons12way.bw | sed -e 's/^/# /;'
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 721,160,862
+# primaryIndexSize: 17,722,396
+# zoomLevels: 10
+# chromCount: 867
+# basesCovered: 311,564,898
+# mean: 0.714476
+# min: 0.000000
+# max: 1.000000
+# std: 0.348523
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phastCons12way.wigFix.gz \
+	| wigEncode stdin phastCons12way.wig phastCons12way.wib)
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+    #  real    1m16.871s
+
+
+    du -hsc *.wi?
+    # 298M    phastCons12way.wib
+    #  53M     phastCons12way.wig
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons12way.wib /gbdb/danRer10/multiz12way/phastCons12way.wib
+    time hgLoadWiggle -pathPrefix=/gbdb/danRer10/multiz12way \
+	danRer10 phastCons12way phastCons12way.wig
+    #   real    0m3.628s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh danRer10 phastCons12way
+# db.table               min max mean       count sumData
+# danRer10.phastCons12way 0 1 0.714476 311564898 2.22606e+08
+#     stdDev  viewLimits
+#    0.348523 viewLimits=0:1
+
+    #  Create histogram to get an overview of all the data
+    #  Do not mix stderr with the output, it gets confused
+    time hgWiggle -doHistogram -db=danRer10 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons12way > danRer10.phastCons12way.histogram.data 2> t.err
+    #	real    0m16.475s
+
+    # the Y axis range:
+    grep -v "^#" danRer10.phastCons12way.histogram.data \
+      | awk '{print $5}'  | ave stdin | sed -e 's/^/# /;'
+# Q1 0.000172
+# median 0.000255
+# Q3 0.000602
+# average 0.001000
+# min 0.000007
+# max 0.093661
+# count 1000
+# total 1.000006
+# standard deviation 0.004616
+
+    #	create plot of histogram:
+
+    # updated for new gnuplot on hgwdev 2018-11-26 (can't get font to change)
+    printf 'set terminal pngcairo size 1000,600 background "#000000" font "/usr/share/fonts/default/Type1/n022004l.pfb"
+set output "danRer10.phastCons12way.histo.png"
+set size 1.0, 1.0
+set style line 1 lt 2 lc rgb "#ff88ff" lw 2
+set style line 2 lt 2 lc rgb "#66ff66" lw 2
+set style line 3 lt 2 lc rgb "#ffff00" lw 2
+set style line 4 lt 2 lc rgb "#ffffff" lw 2
+set border lc rgb "#ffff00"
+set key left box ls 3
+set key tc variable
+set grid noxtics
+set y2tics
+set grid ytics ls 4
+set title " Rat/danRer10 Histogram phastCons12way track" \
+    tc rgb "#ffffff"
+set xlabel " phastCons12way score" tc rgb "#ffffff"
+set ylabel " Relative Frequency" tc rgb "#ff88ff"
+set y2label " Cumulative Relative Frequency (CRF)" tc rgb "#66ff66"
+set y2range [0:1]
+set yrange [0:0.1]
+
+plot "danRer10.phastCons12way.histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
+        "danRer10.phastCons12way.histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
+' | gnuplot
+
+    display danRer10.phastCons12way.histo.png &
+
+#########################################################################
+# phyloP for 12way (DONE - 2020-03-18 - Hiram)
+    # run phyloP with score=LRT
+    ssh ku
+    mkdir /cluster/data/danRer10/bed/multiz12way/consPhyloP
+    cd /cluster/data/danRer10/bed/multiz12way/consPhyloP
+
+    mkdir run.phyloP
+    cd run.phyloP
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../4d/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.557
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../4d/all.mod 0.557 > all.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod
+    #   BACKGROUND: 0.208000 0.292000 0.292000 0.208000 
+
+    printf '#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set f = $1
+set d = $f:h
+set file1 = $f:t
+set out = $2
+set cName = $f:t:r
+set grp = $cwd:t
+set cons = /hive/data/genomes/danRer10/bed/multiz12way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+set ssSrc = "/hive/data/genomes/danRer10/bed/multiz12way/cons/SS/result/$f"
+set useGrp = "$grp.mod"
+/bin/ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \\
+    -i SS $useGrp $ssSrc.ss > $file1.wigFix
+popd > /dev/null
+/bin/mkdir -p $out:h
+sleep 4
+/bin/touch $out:h
+/bin/mv $tmp/$file1.wigFix $out
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d:h
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp
+' > doPhyloP.csh
+
+    chmod +x doPhyloP.csh
+
+    # Create list of chunks
+    find ../../cons/SS/result -type f | grep ".ss$" \
+	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
+    # make sure the list looks good
+    wc -l ss.list
+    #	988 ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    printf '#LOOP
+../run.phyloP/doPhyloP.csh $(path1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+' > template
+
+    ######################   Running all species  #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/danRer10/bed/multiz12way/consPhyloP/all
+    cd /hive/data/genomes/danRer10/bed/multiz12way/consPhyloP/all
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    #	beware overwhelming the cluster with these fast running high I/O jobs
+    para create jobList
+    para try ... check ... push ... etc ...
+    para -maxJob=63 push
+    para time > run.time
+# Completed: 988 of 988 jobs
+# CPU time in finished jobs:      18582s     309.71m     5.16h    0.22d  0.001 y
+# IO & Wait Time:                  6554s     109.23m     1.82h    0.08d  0.000 y
+# Average job time:                  25s       0.42m     0.01h    0.00d
+# Longest finished job:             254s       4.23m     0.07h    0.00d
+# Submission to last job:           486s       8.10m     0.14h    0.01d
+
+    mkdir downloads
+
+    time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phyloP12way.wigFix.gz)
+    #   real    3m22.175s
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phyloP12way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/danRer10/chrom.sizes \
+	phyloP12way.bw) > bigWig.log 2>&1
+    egrep "real|VmPeak" bigWig.log
+# pid=162963: VmPeak:    3407948 kB
+# real    2m54.795s
+
+    bigWigInfo phyloP12way.bw | sed -e 's/^/# /;'
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 580,443,197
+# primaryIndexSize: 17,722,396
+# zoomLevels: 10
+# chromCount: 867
+# basesCovered: 311,564,898
+# mean: 0.549000
+# min: -2.566000
+# max: 3.744000
+# std: 0.881331
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phyloP12way.wigFix.gz \
+	| wigEncode stdin phyloP12way.wig phyloP12way.wib)
+# Converted stdin, upper limit 3.74, lower limit -2.57
+# real    1m19.223s
+
+    du -hsc *.wi?
+    # 298M    phyloP12way.wib
+    # 53M     phyloP12way.wig
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP12way.wib /gbdb/danRer10/multiz12way/phyloP12way.wib
+    time hgLoadWiggle -pathPrefix=/gbdb/danRer10/multiz12way danRer10 \
+	phyloP12way phyloP12way.wig
+    # real    0m3.914s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh danRer10 phyloP12way
+# db.table              min max mean count sumData
+# danRer10.phyloP12way     -2.566 3.744 0.549 311564898 1.71049e+08
+#       stdDev viewLimits
+#     0.881332 viewLimits=-2.566:3.744
+
+    #	that range is: 2.566+3.744 = 6.310 for hBinSize=0.00631
+
+    #  Create histogram to get an overview of all the data
+    #  do NOT mix up stderr with the output, it interferes with the output
+    time (hgWiggle -doHistogram \
+	-hBinSize=0.00631 -hBinCount=1000 -hMinVal=-2.566 -verbose=2 \
+	    -db=danRer10 phyloP12way) > danRer10.phyloP12way.histogram.data \
+               2> t.err
+    # real    0m14.661s
+
+    # find the Y range for the 2:6 graph
+    grep "^[0-9]" danRer10.phyloP12way.histogram.data | ave -col=5 stdin \
+      | sed -e 's/^/# /;'
+# Q1 0.000046
+# median 0.000237
+# Q3 0.001022
+# average 0.001013
+# min 0.000000
+# max 0.023355
+# count 987
+# total 0.999989
+# standard deviation 0.002159
+
+    # find the X range for the 2:6 graph
+    grep "^[0-9]" danRer10.phyloP12way.histogram.data | ave -col=2 stdin \
+      | sed -e 's/^/# /;'
+# Q1 -0.985345
+# median 0.570070
+# Q3 2.125485
+# average 0.570096
+# min -2.566000
+# max 3.744000
+# count 987
+# total 562.684331
+# standard deviation 1.798949
+
+    #	create plot of histogram:
+    # updated for new gnuplot on hgwdev 2018-11-26 (can't get font to change)
+    printf 'set terminal pngcairo size 1000,600 background "#000000" font "/usr/share/fonts/default/Type1/n022004l.pfb"
+set output "danRer10.phyloP12way.histo.png"
+set size 1.0, 1.0
+set style line 1 lt 2 lc rgb "#ff88ff" lw 2
+set style line 2 lt 2 lc rgb "#66ff66" lw 2
+set style line 3 lt 2 lc rgb "#ffff00" lw 2
+set style line 4 lt 2 lc rgb "#ffffff" lw 2
+set border lc rgb "#ffff00"
+set key left box ls 3
+set key tc variable
+set grid noxtics
+set y2tics
+set grid ytics ls 4
+set title " Rat/danRer10 Histogram phyloP12way track" \
+    tc rgb "#ffffff"
+set xlabel " phyloP12way score" tc rgb "#ffffff"
+set ylabel " Relative Frequency" tc rgb "#ff88ff"
+set y2label " Cumulative Relative Frequency (CRF)" tc rgb "#66ff66"
+set y2range [0:1]
+set xrange [-2.6:3.8]
+set yrange [0:0.03]
+
+plot "danRer10.phyloP12way.histogram.data" using 2:5 title " RelFreq" with impulses ls 1, \
+        "danRer10.phyloP12way.histogram.data" using 2:7 axes x1y2 title " CRF" with lines ls 2
+' | gnuplot
+
+# set xrange [-4.4:0.97]
+
+    display danRer10.phyloP12way.histo.png &
+
+    # appears to have an odd hole in the data near X=0 ?
+
+#############################################################################
+# hgPal downloads (DONE - 2020-03-18 - Hiram)
+#   FASTA from 12way for refGene
+
+    ssh hgwdev
+    screen -S danRer10HgPal
+    mkdir /hive/data/genomes/danRer10/bed/multiz12way/pal
+    cd /hive/data/genomes/danRer10/bed/multiz12way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.list
+
+    # this for loop takes about 2.6 hours on this large count contig assembly
+    export mz=multiz12way
+    export gp=ensGene
+    export db=danRer10
+    export I=0
+    export D=0
+    mkdir exonAA exonNuc
+    printf '#!/bin/sh\n' > $gp.jobs
+
+    time for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
+    do
+        I=`echo $I | awk '{print $1+1}'`
+        D=`echo $D | awk '{print $1+1}'`
+        dNum=`echo $D | awk '{printf "%03d", int($1/1000)}'`
+        mkdir -p exonNuc/${dNum} > /dev/null
+        mkdir -p exonAA/${dNum} > /dev/null
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/${dNum}/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/${dNum}/$C.exonAA.fa.gz &"
+        if [ $I -gt 16 ]; then
+            echo "date"
+            echo "wait"
+            I=0
+        fi
+    done >> $gp.jobs
+    # real    0m0.680s
+
+    echo "date" >> $gp.jobs
+    echo "wait" >> $gp.jobs
+
+    chmod +x  $gp.jobs 
+
+    time (./$gp.jobs) > $gp.jobs.log 2>&1 &
+    # real    8m29.976s
+
+    export mz=multiz12way
+    export gp=ensGene
+    time find ./exonAA -type f | grep exonAA.fa.gz | xargs zcat \
+     | gzip -c > $gp.$mz.exonAA.fa.gz
+    #  real    0m20.579s
+
+    time find ./exonNuc -type f | grep exonNuc.fa.gz | xargs zcat \
+     | gzip -c > $gp.$mz.exonNuc.fa.gz
+    #  real    1m53.293s
+
+# -rw-rw-r-- 1 123892644 Mar 18 15:03 ensGene.multiz12way.exonAA.fa.gz
+# -rw-rw-r-- 1 234280591 Mar 18 15:06 ensGene.multiz12way.exonNuc.fa.gz
+
+    export mz=multiz12way
+    export gp=ensGene
+    export db=danRer10
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    md5sum *.fa.gz > md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+    rm -rf exonAA exonNuc
+
+#############################################################################
+# construct download files for 12way (DONE - 2020-03-19 - Hiram)
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/danRer10/multiz12way
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/danRer10/phastCons12way
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/danRer10/phyloP12way
+    mkdir /hive/data/genomes/danRer10/bed/multiz12way/downloads
+    cd /hive/data/genomes/danRer10/bed/multiz12way/downloads
+    mkdir multiz12way phastCons12way phyloP12way
+    cd multiz12way
+    time cp -p ../../anno/danRer10.12way.maf .
+    #   real    0m9.852s
+
+    # -rw-rw-r-- 1 5791972643 Mar  9 12:13 danRer10.12way.maf
+
+    du -hsc *
+    #  5.4G    danRer10.12way.maf
+
+    time gzip *.maf
+    #   10 to 20 minutes
+
+    # -rw-rw-r-- 1 1185287804 Mar  9 12:13 danRer10.12way.maf.gz
+
+    du -hsc *.maf.gz ../../anno/*.maf
+# 1.2G    danRer10.12way.maf.gz
+# 5.4G    ../../anno/danRer10.12way.maf
+
+    grep TREE ../../4d/all.mod | awk '{print $NF}' \
+      | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+         > danRer10.12way.nh
+    ln -s ../../danRer10.12way.commonNames.nh .
+    ln -s ../../danRer10.12way.scientificNames.nh .
+    time md5sum *.nh *.maf.gz > md5sum.txt
+    #   real    0m3.346s
+
+    ln -s `pwd`/* \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/danRer10/multiz12way
+
+    # obtain the README.txt from galGal6/multiz77way and update for this
+    #   situation
+
+    # to get the species table list for the README:
+    for F in `cat ../../species.list`
+do
+      hgsql -N -e "select organism,scientificName,description from dbDb where name=\"$F\";" hgcentraltest
+done | cat
+
+Zebrafish       Danio rerio     Sep. 2014 (GRCz10/danRer10) (reference)
+
+Stickleback     Gasterosteus aculeatus  Feb. 2006 (Broad/gasAcu1)
+Medaka  Oryzias latipes Oct. 2005 (NIG/UT MEDAKA1/oryLat2)
+Tetraodon       Tetraodon nigroviridis  Mar. 2007 (Genoscope 8.0/tetNig2)
+Fugu    Takifugu rubripes       Oct. 2011 (FUGU5/fr3)
+Spotted gar     Lepisosteus oculatus    Dec 2011 (LepOcu1/lepOcu1)
+Human   Homo sapiens    Dec. 2013 (GRCh38/hg38)
+Mouse   Mus musculus    Dec. 2011 (GRCm38/mm10)
+Chicken Gallus gallus   Mar. 2018 (GRCg6a/galGal6)
+X. tropicalis   Xenopus tropicalis      Jul. 2016 (Xenopus_tropicalis_v9.1/xenTro9)
+Coelacanth      Latimeria chalumnae     Aug. 2011 (Broad/latCha1)
+Elephant shark  Callorhinchus milii     Dec. 2013 (Callorhinchus_milii-6.1.3/calMil1)
+
+    #####################################################################
+    cd /hive/data/genomes/danRer10/bed/multiz12way/downloads/phastCons12way
+
+    ln -s ../../cons/all/downloads/phastCons12way.wigFix.gz \
+        ./danRer10.phastCons12way.wigFix.gz
+    ln -s ../../cons/all/phastCons12way.bw ./danRer10.phastCons12way.bw
+    ln -s ../../cons/all/all.mod ./danRer10.phastCons12way.mod
+    time md5sum *.gz *.mod *.bw > md5sum.txt
+    #   real    0m3.635s
+
+    # obtain the README.txt from galGal6/phastCons77way and update for this
+
+    #   situation
+    ln -s `pwd`/* \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/danRer10/phastCons12way
+
+    #####################################################################
+    cd /hive/data/genomes/danRer10/bed/multiz12way/downloads/phyloP12way
+
+    ln -s ../../consPhyloP/all/downloads/phyloP12way.wigFix.gz \
+        ./danRer10.phyloP12way.wigFix.gz
+    ln -s ../../consPhyloP/run.phyloP/all.mod danRer10.phyloP12way.mod
+    ln -s ../../consPhyloP/all/phyloP12way.bw danRer10.phyloP12way.bw
+
+    time md5sum *.mod *.bw *.gz > md5sum.txt
+    #   real    0m3.417s
+
+    # obtain the README.txt from galGal6/phyloP77way and update for this
+    #   situation
+    ln -s `pwd`/* \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/danRer10/phyloP12way
+
+    ###########################################################################
+    ## create upstream refGene maf files
+    cd /hive/data/genomes/danRer10/bed/multiz12way/downloads/multiz12way
+    # bash script
+#!/bin/sh
+export geneTbl="refGene"
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits danRer10 ${geneTbl}:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags danRer10 multiz12way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/danRer10/bed/multiz12way/species.list \
+        | gzip -c > upstream${S}.${geneTbl}.maf.gz &
+    echo "done upstream${S}.${geneTbl}.maf.gz"
+done
+wait
+    #   real    3m40.415s
+
+    md5sum *.maf.gz *.nh upstream*.gz README.txt >> md5sum.txt
+
+    # some other symlinks were already made above
+    # obtain the README.txt from cavPor3/multiz12way and update for this
+    #   situation
+    ln -s `pwd`/upstream*.gz `pwd`/README.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/danRer10/multiz12way
+
+#############################################################################
+# wiki page for 12way (DONE - 2020-03-18 - Hiram)
+    mkdir /hive/users/hiram/bigWays/danRer10.12way
+    cd /hive/users/hiram/bigWays
+    echo "danRer10" > danRer10.12way/ordered.list
+    awk '{print $1}' /hive/data/genomes/danRer10/bed/multiz12way/12way.distances.txt \
+       >> danRer10.12way/ordered.list
+
+    # sizeStats.sh catches up the cached measurements required for data
+    # in the tables.  They are usually already mostly done, only new
+    # assemblies will have updates.
+    ./sizeStats.sh danRer10.12way/ordered.list
+    # dbDb.sh constructs danRer10.12way/GalVar1_12way_conservation_alignment.html
+    # may need to add new assembly references to srcReference.list and
+    # urlReference.list
+
+    ./dbDb.sh danRer10 12way
+    # sizeStats.pl constructs danRer10.12way/GalVar1_12way_Genome_size_statistics.html
+    # this requires entries in coverage.list for new sequences
+    ./sizeStats.pl danRer10 12way
+
+    # defCheck.pl constructs GalVar1_12way_conservation_lastz_parameters.html
+    ./defCheck.pl danRer10 12way
+
+    # this constructs the html pages in danRer10.12way/:
+# -rw-rw-r-- 1 6821 Mar 18 16:07 DanRer10_12-way_conservation_alignment.html
+# -rw-rw-r-- 1 8990 Mar 18 16:07 DanRer10_12-way_Genome_size_statistics.html
+# -rw-rw-r-- 1 5347 Mar 18 16:07 DanRer10_12-way_conservation_lastz_parameters.html
+
+    # add those pages to the genomewiki.  Their page names are the
+    # names of the .html files without the .html:
+#  GalVar1_12way_conservation_alignment
+#  GalVar1_6way_Genome_size_statistics
+#  GalVar1_6way_conservation_lastz_parameters
+
+    # when you view the first one you enter, it will have links to the
+    # missing two.
+
+############################################################################
