@@ -1,7 +1,7 @@
 track strainCons44way
 compositeTrack on
-shortLabel Bat CoV multiz
-longLabel Multiz Alignment & Conservation (44 Virus Strains)
+shortLabel Cons Bat CoV
+longLabel Multiz Alignment & Conservation (44 Strains with bats as hosts)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility hide
@@ -20,7 +20,7 @@ html cons44way
         track strainName44way
         subTrack strainCons44wayViewalign on
         shortLabel Bat CoV multiz
-        longLabel Multiz Genome Alignments of 44 Coronavirus strains
+        longLabel Multiz Genome Alignments of 44 Coronavirus bat strains
         subGroups view=align
         noInherit on
         group compGeno
@@ -51,8 +51,8 @@ html cons44way
         track strainPhyloP44way
         subTrack strainCons44wayViewphyloP on
         subGroups view=phyloP
-        shortLabel PhyloP
-        longLabel 44 virus strains Basewise Conservation by PhyloP
+        shortLabel Bat PhyloP
+        longLabel 44 Bat virus strains Basewise Conservation by PhyloP
         noInherit on
         configurable on
         type wig -11.968 4.256
@@ -67,7 +67,7 @@ html cons44way
 
     # phastCons conservation
     track strainCons44wayViewphastcons
-    shortLabel Element Conservation (phastCons)
+    shortLabel Bat Element Conservation (phastCons)
     view phastcons
     visibility full
     subTrack strainCons44way
@@ -75,8 +75,8 @@ html cons44way
         track strainPhastCons44way
         subTrack strainCons44wayViewphastcons on
         subGroups view=phastcons
-        shortLabel PhastCons
-        longLabel 44 virus strains Basewise Conservation by PhastCons
+        shortLabel Bat PhastCons
+        longLabel 44 bat virus strains Basewise Conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -90,7 +90,7 @@ html cons44way
 
     # Conserved Elements (Most Conserved)
     track strainCons44wayViewelements
-    shortLabel Conserved Elements
+    shortLabel Bat Conserved Elements
     view elements
     visibility dense
     subTrack strainCons44way
@@ -98,8 +98,8 @@ html cons44way
         track strainPhastConsElements44way
         subTrack strainCons44wayViewelements on
         subGroups view=elements
-        shortLabel Cons. Elements
-        longLabel 44 virus strains Conserved Elements
+        shortLabel Bat Cons. El.
+        longLabel 44 bat virus strains Conserved Elements
         noInherit on
         color 110,10,40
         type bed 5 .
