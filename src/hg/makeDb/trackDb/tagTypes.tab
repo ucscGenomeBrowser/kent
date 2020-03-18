@@ -121,7 +121,7 @@ ensemblIdUrl genePred
 ensArchive genePred
 exonArrows genePred bed broadPeak bigBed
 exonArrowsDense bed
-exonNumbers genePred bed broadPeak psl bigPsl bigBed
+exonNumbers genePred bed broadPeak psl big*
 expDrawExons expRatio
 expProbeTable expRatio
 expScale bed expRatio

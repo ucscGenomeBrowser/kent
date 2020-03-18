@@ -1,7 +1,7 @@
 track cons44way
 compositeTrack on
-shortLabel 44 Accessions
-longLabel Multiz Alignment & Conservation (44 Virus Strains, Accession Names)
+shortLabel 44 Bat Strains
+longLabel Multiz Alignment & Conservation (44 Strains with bats as hosts, Accession Names)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility hide
@@ -18,8 +18,8 @@ group compGeno
 
         track multiz44way
         subTrack cons44wayViewalign on
-        shortLabel Multiz Align
-        longLabel Multiz Genome Alignments of 44 Coronavirus strains
+        shortLabel Bat CoV multiz
+        longLabel Multiz Genome Alignments of 44 Coronavirus bat strains
         subGroups view=align
         noInherit on
 #        irows on
@@ -43,7 +43,7 @@ group compGeno
 
     # PhyloP conservation
     track cons44wayViewphyloP
-    shortLabel Basewise Conservation (phyloP)
+    shortLabel Basewise Bat Strain Conservation (phyloP)
     view phyloP
     visibility full
     subTrack cons44way
@@ -53,8 +53,8 @@ group compGeno
         track phyloP44way
         subTrack cons44wayViewphyloP on
         subGroups view=phyloP
-        shortLabel PhyloP
-        longLabel 44 virus strains Basewise Conservation by PhyloP
+        shortLabel Bat PhyloP
+        longLabel 44 Bat virus strains Basewise Conservation by PhyloP
         noInherit on
         configurable on
         type wig -11.968 4.256
@@ -69,7 +69,7 @@ group compGeno
 
     # phastCons conservation
     track cons44wayViewphastcons
-    shortLabel Element Conservation (phastCons)
+    shortLabel Bat Element Conservation (phastCons)
     view phastcons
     visibility full
     subTrack cons44way
@@ -77,8 +77,8 @@ group compGeno
         track phastCons44way
         subTrack cons44wayViewphastcons on
         subGroups view=phastcons
-        shortLabel PhastCons
-        longLabel 44 virus strains Basewise Conservation by PhastCons
+        shortLabel Bat PhastCons
+        longLabel 44 bat virus strains Basewise Conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -92,7 +92,7 @@ group compGeno
 
     # Conserved Elements (Most Conserved)
     track cons44wayViewelements
-    shortLabel Conserved Elements
+    shortLabel Bat Conserved Elements
     view elements
     visibility dense
     subTrack cons44way
@@ -100,8 +100,8 @@ group compGeno
         track phastConsElements44way
         subTrack cons44wayViewelements on
         subGroups view=elements
-        shortLabel Cons. Elements
-        longLabel 44 virus strains Conserved Elements
+        shortLabel Bat Cons. El.
+        longLabel 44 bat virus strains Conserved Elements
         noInherit on
         color 110,10,40
         type bed 5 .
