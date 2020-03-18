@@ -5034,7 +5034,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
 </DIV>
 <DIV class="hideEmptySubtracksLabel"><span class="types compositeTrack"></span>
 <div class="format">
-        <code>hideEmptySubtracks &lt;label&gt;</code></div>
+        <code>hideEmptySubtracksLabel &lt;label&gt;</code></div>
     <P>This setting is used in conjunction with the <code>hideEmptySubtracks</code> setting
     to customize the label preceding the selection checkbox on the track configuration page.
     Default wording is &quot;Hide empty subtracks&quot;.  Custom wording is useful to distinguish
