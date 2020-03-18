@@ -68,12 +68,13 @@ awk '{print $1,$2,$3,$4,$5}' output.bed > load.bed
 
 hgLoadBed wuhCor1 mafSnp44way load.bed
 
-## don't have a 'strain' name track for this one
+cut -f1,3 ../multiz44way/acc.date.description.list | sed -e 's/\./v/;' \
+   | sed -e 's/ /_/g;' | grep -v NC_045512v2 \
+     | awk -F$'\t' '{printf "s#%s#%s#g;\n", $1, $2}' > accToName.sed
 
-cat load.bed \
-  | sed -f ~/kent/src/hg/makeDb/doc/wuhCor1/ucscName.strainName.sed \
-  | sed -e 's/G3686v1_2014/KM034562v1/' \
-  > strainLoad.bed
+
+sed -f ./accToName.sed load.bed > strainLoad.bed
 
 hgLoadBed wuhCor1 mafSnpStrainName44way strainLoad.bed
-
+# Read 196342 elements of size 5 from strainLoad.bed
+# Creating table definition for mafSnpStrainName44way, bedSize: 5
