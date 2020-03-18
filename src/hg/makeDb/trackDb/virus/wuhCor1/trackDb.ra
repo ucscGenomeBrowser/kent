@@ -9,6 +9,8 @@ html gap.html
 
 track uniprot override
 visibility dense
+longLabel UniProt Protein Annotations
+shortLabel UniProt
 
 track unipAliSwissprot override
 labelFields protShortNames
@@ -36,6 +38,7 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 url https://www.ncbi.nlm.nih.gov/protein/$$
 urlLabel NCBI Refseq protein
+exonNumbers off
 
 track primers
 shortLabel Detection Primers
