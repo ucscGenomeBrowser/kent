@@ -396,7 +396,7 @@ html gnomad
         priority 2
 
         track gnomadMissense
-        parent gnomadPLI on
+        parent gnomadPLI off
         shortLabel gnomAD Missense Constraint Metrics
         longLabel gnomAD Missense Constraint Metrics
         bigDataUrl /gbdb/hg19/gnomAD/missense/missenseConstrained.bb
