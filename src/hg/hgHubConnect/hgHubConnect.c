@@ -429,12 +429,12 @@ printf("<input name=\"hubValidateButton\" id='hubValidateButton' "
     "class=\"hubField\" type=\"button\" value=\"Check Hub settings\">\n");
 printf(" or \n");
 printf("<input name=\"hubLoadMaybeTiming\" id='hubLoadMaybeTiming' "
-    "class=\"hubField\" type=\"button\" value=\"Load Hub\">\n");
+    "class=\"hubField\" type=\"button\" value=\"View Hub on Genome Browser\">\n");
 printf("</div>\n"); // validateHubUrlRow div
 
 printf("<div id=\"extraSettingsContainer\" class=\"addHubBar\">\n");
 printf("<img id=\"advancedSettingsButton\" src=\"../images/add_sm.gif\">\n");
-printf("Advanced Settings");
+printf("Optional View Hub Settings");
 
 char *measureTiming = cartCgiUsualString(cart, "measureTiming", NULL);
 char *udcTimeout = cartCgiUsualString(cart, "udcTimeout", NULL);
