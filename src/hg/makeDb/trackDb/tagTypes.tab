@@ -197,6 +197,7 @@ group *
 groupings expRatio
 hapClusterEnabled vcf vcfTabix
 hapClusterColorBy vcf vcfTabix
+hapClusterMethod vcf vcfTabix
 hapClusterTreeAngle vcf vcfTabix
 hapClusterHeight vcf vcfTabix
 hapmapPhase bed
