@@ -1,0 +1,24 @@
+<h2>Description</h2>
+<p>
+This track shows the locations of those primers in detection kits that match the
+reference sequence. The primers were copied from the file <a href="https://bitbucket.org/tomeraltman/covid-19-primer-data/src/master/kit-primers/all-COVID-19-kit-primers.fasta">all-COVID-19-kit-primers.fasta</a>".
+</p>
+<p>
+Four primers match the reference sequence over less than 14bp: 2019-nCoV_N2-P, HKU-ORF-1b-nsp14-R, 2019-nCoV_N1-R, WH-NIC_N-P.
+Four primers were not found at all: HKU-ORF-1b-nsp14-F, 2019-nCoV_RP-P, 2019-nCoV_RP-R, 2019-nCoV_RP-F.
+
+<h2>Summary</h2>
+<p>
+Bioinformatic formats for currently-deployed primer-probe sets for detecting COVID-19 (currently available in FASTA format). The sequences and the identifiers for these primers were obtained from the following sources:
+
+<ul>
+    <li><a href="https://www.cdc.gov/coronavirus/2019-ncov/lab/rt-pcr-panel-primer-probes.html">CDC Laboratory Guidance</a>
+    <li><a href="https://www.biorxiv.org/content/10.1101/2020.02.25.964775v1">Comparative analysis of primer-probe sets for the laboratory confirmation of SARS-CoV-2</a>
+    <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6988269/">Detection of 2019 novel coronavirus (2019-nCoV) by real-time RT-PCR</a>
+</ul>
+
+<h2>Methods</h2>
+The primers were mapped with the following command: <tt>"blat ../../wuhCor1.2bit primers.fa stdout -stepSize=1 -tileSize=6  -minScore=10 -oneOff=1 -noHead > primers.psl"</tt>
+
+<h2>Credits</h2>
+Data collected by Tomer Altman, found by <em>Jason Fernandes</em>.

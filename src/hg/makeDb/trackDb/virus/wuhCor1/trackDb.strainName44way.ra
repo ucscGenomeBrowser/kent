@@ -1,0 +1,106 @@
+track strainCons44way
+compositeTrack on
+shortLabel Cons Bat CoV
+longLabel Multiz Alignment & Conservation (44 Strains with bats as hosts)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+priority 1
+type bed 4
+group compGeno
+html cons44way
+
+    track strainCons44wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack strainCons44way
+
+        track strainName44way
+        subTrack strainCons44wayViewalign on
+        shortLabel Bat CoV multiz
+        longLabel Multiz Genome Alignments of 44 Coronavirus bat strains
+        subGroups view=align
+        noInherit on
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        mafDot on
+	snpTable mafSnpStrainName44way
+        frames strainName44wayFrames
+	mafShowSnp on
+        type wigMaf 0.0 1.0
+        speciesCodonDefault wuhCor1
+        speciesGroups CoV_2019
+        sGroup_CoV_2019 Bat_CoV_RaTG13 Bat_SARS_CoV_HKU3-1 Bat_SARS_CoV_HKU3-12 Bat_SARS_CoV_HKU3-7 Bat_SARS-like_CoV_bat-SL-CoVZC45 Bat_SARS-like_CoV_bat-SL-CoVZXC21 Bat_SARS_CoV_Rp3 BtRs-BetaCoV/GX2013 Bat_SARS_CoV_Rs672/2006 Bat_CoV_Anlong-103 Bat_SARS-like_CoV_WIV1 Bat_SARS-like_CoV_Rs4084 Bat_SARS-like_CoV_Rs7327 Bat_SARS-like_CoV_Rs9401 Bat_SARS-like_CoV_As6526 CoV_BtRs-BetaCoV/YN2018C CoV_BtRs-BetaCoV/YN2018B CoV_BtRs-BetaCoV/YN2018D SARS-like_CoV_WIV16 Bat_SARS-like_CoV_Rs4081 Bat_SARS-like_CoV_Rs4255 Bat_SARS-like_CoV_Rs4231 Bat_SARS-like_CoV_Rs4237 Bat_SARS-like_CoV_Rs4247 BtRs-BetaCoV/YN2013 Bat_SARS-like_CoV_Rf4092 CoV_BtRs-BetaCoV/YN2018A SARS_CoV Bat_SARS-like_CoV_YNLF_31C CoV_BtRl-BetaCoV/SC2018 Rhinolophus_affinis_CoV_LYRa11 UNVERIFIED:_SARS-related_CoV_F46 Bat_CoV_Cp/Yunnan2011 Bat_SARS_CoV_Rf1 Bat_CoV_(BtCoV/273/2005) BtRf-BetaCoV/HeB2013 Bat_CoV_Jiyuan-84 Bat_CoV_strain_16BO133 Bat_SARS_CoV_Rm1 BtRs-BetaCoV/HuB2013 Bat_CoV_Rp/Shaanxi2011 SARS-related_CoV_strain_BtKY72 Bat_CoV_BM48-31/BGR/2008
+        speciesDefaultOn Bat_CoV_RaTG13 Bat_SARS_CoV_HKU3-1 Bat_SARS_CoV_HKU3-12 Bat_SARS_CoV_HKU3-7 Bat_SARS-like_CoV_bat-SL-CoVZC45 Bat_SARS-like_CoV_bat-SL-CoVZXC21 Bat_SARS_CoV_Rp3 BtRs-BetaCoV/GX2013 Bat_SARS_CoV_Rs672/2006 Bat_CoV_Anlong-103 Bat_SARS-like_CoV_WIV1 Bat_SARS-like_CoV_Rs4084 Bat_SARS-like_CoV_Rs7327 Bat_SARS-like_CoV_Rs9401 Bat_SARS-like_CoV_As6526 CoV_BtRs-BetaCoV/YN2018C CoV_BtRs-BetaCoV/YN2018B CoV_BtRs-BetaCoV/YN2018D SARS-like_CoV_WIV16 Bat_SARS-like_CoV_Rs4081 Bat_SARS-like_CoV_Rs4255 Bat_SARS-like_CoV_Rs4231 Bat_SARS-like_CoV_Rs4237 Bat_SARS-like_CoV_Rs4247 BtRs-BetaCoV/YN2013 Bat_SARS-like_CoV_Rf4092 CoV_BtRs-BetaCoV/YN2018A SARS_CoV Bat_SARS-like_CoV_YNLF_31C CoV_BtRl-BetaCoV/SC2018 Rhinolophus_affinis_CoV_LYRa11 UNVERIFIED:_SARS-related_CoV_F46 Bat_CoV_Cp/Yunnan2011 Bat_SARS_CoV_Rf1 Bat_CoV_(BtCoV/273/2005) BtRf-BetaCoV/HeB2013 Bat_CoV_Jiyuan-84 Bat_CoV_strain_16BO133 Bat_SARS_CoV_Rm1 BtRs-BetaCoV/HuB2013 Bat_CoV_Rp/Shaanxi2011 SARS-related_CoV_strain_BtKY72 Bat_CoV_BM48-31/BGR/2008
+        itemFirstCharCase noChange
+        priority 100
+        treeImage phylo/wuhCor1_44way.png
+
+    # PhyloP conservation
+    track strainCons44wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack strainCons44way
+    viewLimits -4:5
+    viewLimitsMax -11.968:4.256
+
+        track strainPhyloP44way
+        subTrack strainCons44wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel Bat PhyloP
+        longLabel 44 Bat virus strains Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -11.968 4.256
+        maxHeightPixels 100:50:11
+        viewLimits -11.968:4.256
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track strainCons44wayViewphastcons
+    shortLabel Bat Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack strainCons44way
+
+        track strainPhastCons44way
+        subTrack strainCons44wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel Bat PhastCons
+        longLabel 44 bat virus strains Basewise Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track strainCons44wayViewelements
+    shortLabel Bat Conserved Elements
+    view elements
+    visibility dense
+    subTrack strainCons44way
+
+        track strainPhastConsElements44way
+        subTrack strainCons44wayViewelements on
+        subGroups view=elements
+        shortLabel Bat Cons. El.
+        longLabel 44 bat virus strains Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23

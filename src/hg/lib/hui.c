@@ -5222,12 +5222,14 @@ puts("</TABLE>");
 
 boolean compositeHideEmptySubtracksSetting(struct trackDb *tdb, boolean *retDefault,
                                         char **retMultiBedFile, char **retSubtrackIdFile)
-/* Parse hideEmptySubtracks setting
+/* Parse hideEmptySubtracks settings
  * Format:  hideEmptySubtracks on|off
- *              or
- *          hideEmptySubtracks on|off multiBed.bed subtrackIds.tab
- * where multiBed.bed is a bed3Sources bigBed, generated with bedtools multiinter
- *              post-processed by UCSC multiBed.pl tool
+ *      Optional index files for performance:
+ *          hideEmptySubtracksMultiBedUrl multiBed.bigBed 
+ *          hideEmptySubtracksSourceUrl subtrackIds.tab
+ * MultiBed.bed is a bed3Sources bigBed, generated with UCSC tool trackDbIndexBb
+ *              (for single view subtracks, can use bedtools multiinter
+ *              post-processed by UCSC multiBed.pl tool)
  *      subtrackIds.tab is a tab-sep file: id subtrackName
  *
  * Return TRUE if setting is present.  retDefault is TRUE if set to 'on', o/w FALSE
@@ -5238,31 +5240,32 @@ if (!tdbIsComposite(tdb))
 char *hideEmpties = cloneString(trackDbSetting(tdb, SUBTRACK_HIDE_EMPTY));
 if (!hideEmpties)
     return FALSE;
-char *orig = cloneString(hideEmpties);
-char *words[3];
-int wordCount = chopByWhite(hideEmpties, words, ArraySize(words));
-char *mode = words[0];
-if (differentString(mode, "on") && differentString(mode, "off"))
+boolean deflt = FALSE;
+if (sameString(hideEmpties, "on"))
+    deflt = TRUE;
+else if (differentString(hideEmpties, "off"))
     {
-    warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTY, orig);
+    warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTY, hideEmpties);
     return FALSE;
     }
-boolean deflt = sameString(mode, "on") ? TRUE : FALSE;
 if (retDefault)
     *retDefault = deflt;
-
-if (wordCount == 1)
-    return TRUE;
-if (wordCount != 3)
+if (retMultiBedFile != NULL && retSubtrackIdFile != NULL)
     {
-    warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTY, orig);
-    return FALSE;
+    char *file = cloneString(trackDbSetting(tdb, SUBTRACK_HIDE_EMPTY_MULTIBED_URL));
+    if (file != NULL)
+        {
+        // multi-bed specified to speed display
+        *retMultiBedFile = cloneString(hReplaceGbdb(file));
+        file = cloneString(trackDbSetting(tdb, SUBTRACK_HIDE_EMPTY_SOURCES_URL));
+        if (file == NULL)
+            {
+            warn("Track %s missing setting: %s", tdb->track, SUBTRACK_HIDE_EMPTY_SOURCES_URL);
+            return FALSE;
+            }
+        *retSubtrackIdFile = cloneString(hReplaceGbdb(file));
+        }
     }
-// multi-bed specified (to speed display)
-if (retMultiBedFile)
-    *retMultiBedFile = cloneString(hReplaceGbdb(words[1]));
-if (retSubtrackIdFile)
-    *retSubtrackIdFile = cloneString(hReplaceGbdb(words[2]));
 return TRUE;
 }
 
@@ -5321,6 +5324,7 @@ else
 boolean displayAll = sameString(displaySubs, "all");
 
 boolean hideSubtracksDefault;
+// TODO: Gray out or otherwise suppress when in multi-region mode 
 if (compositeHideEmptySubtracksSetting(parentTdb, &hideSubtracksDefault, NULL, NULL))
     {
     char *hideLabel = "Hide empty subtracks";
@@ -6126,11 +6130,11 @@ if (setting)
         }
     safef(altLabel, sizeof(altLabel), "%s", (filterByRange?"": "colspan=3"));
     if (minLimit != NO_VALUE && maxLimit != NO_VALUE)
-        printf("<TD align='left'%s> (%g to %g)",altLabel,minLimit, maxLimit);
+        printf("<TD align='left'%s> (%s to %s)",altLabel,shorterDouble(minLimit), shorterDouble(maxLimit));
     else if (minLimit != NO_VALUE)
-        printf("<TD align='left'%s> (minimum %g)",altLabel,minLimit);
+        printf("<TD align='left'%s> (minimum %s)",altLabel,shorterDouble(minLimit));
     else if (maxLimit != NO_VALUE)
-        printf("<TD align='left'%s> (maximum %g)",altLabel,maxLimit);
+        printf("<TD align='left'%s> (maximum %s)",altLabel,shorterDouble(maxLimit));
     else
         printf("<TD align='left'%s",altLabel);
     puts("</TR>");

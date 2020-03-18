@@ -324,34 +324,6 @@ static void ignoreEm(char *format, va_list args)
 {
 }
 
-static int genotypeIndex(int h0Ix, int h1Ix)
-/* Return the index in a linear array of distinct genotypes, given two 0-based allele indexes.
- * This follows the following convention used by GnomAD (GATK?), that has the advantage that
- * gt indexes of small numbers don't change as the number of alleles increases, and also matches
- * the ref/ref, ref/alt, alt/alt convention for biallelic variants:
- * 0/0,
- * 0/1, 1/1,
- * 0/2, 1/2, 2/2,
- * 0/3, 1/3, 2/3, 3/3,
- * ... */
-{
-// Note that in that scheme, h0Ix <= h1Ix; if h0Ix > h1Ix, swap them.
-if (h0Ix > h1Ix)
-    {
-    int tmp = h0Ix;
-    h0Ix = h1Ix;
-    h1Ix = tmp;
-    }
-return (h1Ix * (h1Ix+1) / 2) + h0Ix;
-}
-
-static int genotypeArraySize(int alleleCount)
-/* Return the number of distinct genotypes given the number of alleles.  That is the same as the
- * array index of the first genotype that would follow for alleleCount+1. */
-{
-return genotypeIndex(0, alleleCount + 1);
-}
-
 static void vcfGenotypesDetails(struct vcfRecord *rec, struct trackDb *tdb, char **displayAls)
 /* Print summary of allele and genotype frequency, plus collapsible section
  * with table of genotype details. */
@@ -364,37 +336,13 @@ puts("<TABLE>");
 pushWarnHandler(ignoreEm);
 vcfParseGenotypes(rec);
 popWarnHandler();
-// Tally genotypes and alleles for summary, adding 1 to rec->alleleCount to represent missing data:
-int alCounts[rec->alleleCount + 1];
-zeroBytes(alCounts, sizeof alCounts);
-int numGenotypes = genotypeArraySize(rec->alleleCount + 1);
-int gtCounts[numGenotypes];
-zeroBytes(gtCounts, sizeof gtCounts);
+int *gtCounts = NULL, *alCounts = NULL;;
 int phasedGts = 0, diploidCount = 0;
-int i;
-for (i = 0;  i < vcff->genotypeCount;  i++)
-    {
-    struct vcfGenotype *gt = &(rec->genotypes[i]);
-    if (gt->isPhased)
-	phasedGts++;
-    int hapIxA = gt->hapIxA;
-    if (hapIxA < 0)
-        hapIxA = rec->alleleCount;
-    alCounts[hapIxA]++;
-    if (!gt->isHaploid)
-	{
-        diploidCount++;
-        int hapIxB = gt->hapIxB;
-        if (hapIxB < 0)
-            hapIxB = rec->alleleCount;
-        alCounts[hapIxB]++;
-        gtCounts[genotypeIndex(hapIxA, hapIxB)]++;
-        }
-    }
+vcfCountGenotypes(rec, &gtCounts, &alCounts, &phasedGts, &diploidCount);
 printf("<B>Genotype count:</B> %d", vcff->genotypeCount);
-if (sameString(seqName, "chrY"))
+if (diploidCount == 0)
     printf(" (haploid)");
-else if (sameString(seqName, "chrX"))
+else if (diploidCount != vcff->genotypeCount)
     printf(" (%d phased, %d diploid, %d haploid)", phasedGts, diploidCount,
            vcff->genotypeCount - diploidCount);
 else
@@ -403,6 +351,7 @@ puts("<BR>");
 int totalAlleles = vcff->genotypeCount + diploidCount;
 double refAf = (double)alCounts[0]/totalAlleles;
 printf("<B>Alleles:</B> %s: %d (%.3f%%)", displayAls[0], alCounts[0], 100*refAf);
+int i;
 for (i = 1;  i < rec->alleleCount;  i++)
     {
     double altAf = (double)alCounts[i]/totalAlleles;
@@ -421,7 +370,7 @@ if (vcff->genotypeCount > 1 && diploidCount > 0)
         int j;
         for (j = 0;  j <= i;  j++)
             {
-            int gtIx = genotypeIndex(j, i);
+            int gtIx = vcfGenotypeIndex(j, i);
             if (gtCounts[gtIx] > 0)
                 {
                 char *alJ = (j == rec->alleleCount) ? "?" : displayAls[j];

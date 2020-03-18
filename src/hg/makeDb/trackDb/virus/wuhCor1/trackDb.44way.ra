@@ -1,0 +1,108 @@
+track cons44way
+compositeTrack on
+shortLabel 44 Bat Strains
+longLabel Multiz Alignment & Conservation (44 Strains with bats as hosts, Accession Names)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility hide
+priority 1
+type bed 4
+group compGeno
+
+    track cons44wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons44way
+
+        track multiz44way
+        subTrack cons44wayViewalign on
+        shortLabel Bat CoV multiz
+        longLabel Multiz Genome Alignments of 44 Coronavirus bat strains
+        subGroups view=align
+        noInherit on
+#        irows on
+#        summary multiz44waySummary
+        frames multiz44wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        mafDot on
+	snpTable mafSnp44way
+	mafShowSnp on
+#	snpMode on
+        type wigMaf 0.0 1.0
+        speciesCodonDefault wuhCor1
+        speciesGroups CoV_2019
+        sGroup_CoV_2019 MN996532v1 DQ022305v2 GQ153547v1 GQ153542v1 MG772933v1 MG772934v1 DQ071615v1 KJ473815v1 FJ588686v1 KY770858v1 KF367457v1 KY417144v1 KY417151v1 KY417152v1 KY417142v1 MK211377v1 MK211376v1 MK211378v1 KT444582v1 KY417143v1 KY417149v1 KY417146v1 KY417147v1 KY417148v1 KJ473816v1 KY417145v1 MK211375v1 NC_004718v3 KP886808v1 MK211374v1 KF569996v1 KU973692v1 JX993988v1 DQ412042v1 DQ648856v1 KJ473812v1 KY770860v1 KY938558v1 DQ412043v1 KJ473814v1 JX993987v1 KY352407v1 NC_014470v1
+        speciesDefaultOn MN996532v1 DQ022305v2 GQ153547v1 GQ153542v1 MG772933v1 MG772934v1 DQ071615v1 KJ473815v1 FJ588686v1 KY770858v1 KF367457v1 KY417144v1 KY417151v1 KY417152v1 KY417142v1 MK211377v1 MK211376v1 MK211378v1 KT444582v1 KY417143v1 KY417149v1 KY417146v1 KY417147v1 KY417148v1 KJ473816v1 KY417145v1 MK211375v1 NC_004718v3 KP886808v1 MK211374v1 KF569996v1 KU973692v1 JX993988v1 DQ412042v1 DQ648856v1 KJ473812v1 KY770860v1 KY938558v1 DQ412043v1 KJ473814v1 JX993987v1 KY352407v1 NC_014470v1
+        itemFirstCharCase noChange
+        priority 100
+        treeImage phylo/wuhCor1_44way.png
+
+    # PhyloP conservation
+    track cons44wayViewphyloP
+    shortLabel Basewise Bat Strain Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons44way
+    viewLimits -4:5
+    viewLimitsMax -11.968:4.256
+
+        track phyloP44way
+        subTrack cons44wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel Bat PhyloP
+        longLabel 44 Bat virus strains Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -11.968 4.256
+        maxHeightPixels 100:50:11
+        viewLimits -11.968:4.256
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons44wayViewphastcons
+    shortLabel Bat Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons44way
+
+        track phastCons44way
+        subTrack cons44wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel Bat PhastCons
+        longLabel 44 bat virus strains Basewise Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons44wayViewelements
+    shortLabel Bat Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons44way
+
+        track phastConsElements44way
+        subTrack cons44wayViewelements on
+        subGroups view=elements
+        shortLabel Bat Cons. El.
+        longLabel 44 bat virus strains Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23
