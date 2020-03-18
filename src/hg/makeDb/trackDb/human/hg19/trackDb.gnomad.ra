@@ -359,7 +359,6 @@ html gnomad
     group varRep
     type bigBed 12
     labelFields name,geneName
-    release alpha
 
         track pliByGene
         shortLabel gnomAD Gene LoF
@@ -377,7 +376,6 @@ html gnomad
         filterByRange._pli on
         parent gnomadPLI
         priority 1
-        release alpha
 
         track pliByTranscript
         shortLabel gnomAD Transcript LoF
@@ -395,7 +393,6 @@ html gnomad
         filterByRange._pli on
         parent gnomadPLI
         priority 2
-        release alpha
 
         track gnomadMissense
         parent gnomadPLI
@@ -411,4 +408,3 @@ html gnomad
         filterByRange.obs_exp on
         priority 3
         mouseOverField _mouseOver
-        release alpha
