@@ -359,6 +359,7 @@ html gnomad
     group varRep
     type bigBed 12
     labelFields name,geneName
+    visibility pack
 
         track pliByGene
         shortLabel gnomAD Gene LoF
@@ -374,7 +375,7 @@ html gnomad
         filter._pli 0:1
         filterLabel._pli Show only items between this pLI range
         filterByRange._pli on
-        parent gnomadPLI
+        parent gnomadPLI on
         priority 1
 
         track pliByTranscript
@@ -391,11 +392,11 @@ html gnomad
         filter._pli 0:1
         filterLabel._pli Show only items between this pLI range
         filterByRange._pli on
-        parent gnomadPLI
+        parent gnomadPLI off
         priority 2
 
         track gnomadMissense
-        parent gnomadPLI
+        parent gnomadPLI on
         shortLabel gnomAD Missense Constraint Metrics
         longLabel gnomAD Missense Constraint Metrics
         bigDataUrl /gbdb/hg19/gnomAD/missense/missenseConstrained.bb
