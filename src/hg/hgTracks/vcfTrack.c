@@ -1096,6 +1096,136 @@ drawTreeInLabelArea(ht, hvg, yOff+extraPixel, hapHeight+CLIP_PAD, &yHelper, &tit
 		    drawRectangle);
 }
 
+static void drawSampleLabels(struct vcfFile *vcff, boolean isAllDiploid, int yStart, int height,
+                             unsigned short *gtHapOrder, int gtHapCount, MgFont *font, Color color,
+                             char *track)
+/* Draw sample names as left labels. */
+{
+if (isAllDiploid)
+    {
+    double pxPerGt = (double)height / vcff->genotypeCount;
+    if (pxPerGt < tl.fontHeight + 1)
+        warn("track %s: drawSampleLabels called with insufficient height", track);
+    int gtIx;
+    for (gtIx = 0;  gtIx < vcff->genotypeCount;  gtIx++)
+        {
+        int y = gtIx * pxPerGt;
+        hvGfxTextRight(hvgSide, leftLabelX, y+yStart, leftLabelWidth-1, (int)pxPerGt,
+                       color, font, vcff->genotypeIds[gtIx]);
+        }
+    }
+else
+    {
+    double pxPerHt = (double)height / gtHapCount;
+    if (pxPerHt < tl.fontHeight + 1)
+        warn("track %s: drawSampleLabels called with insufficient height", track);
+    int orderIx;
+    for (orderIx = 0;  orderIx < gtHapCount;  orderIx++)
+        {
+        int gtHapIx = gtHapOrder[orderIx];
+        int gtIx = (gtHapIx >> 1);
+        int y = gtIx * pxPerHt;
+        hvGfxTextRight(hvgSide, leftLabelX, y+yStart, leftLabelWidth-1, (int)pxPerHt,
+                       color, font, vcff->genotypeIds[gtIx]);
+        }
+    }
+}
+
+static void drawSampleTitles(struct vcfFile *vcff, int yStart, int height,
+                             unsigned short *gtHapOrder, int gtHapCount, char *track)
+/* Draw mouseover labels / titles with the samples that are drawn at each pixel y offset */
+{
+double hapPerPx = (double)gtHapCount / height;
+int labelEnd = leftLabelX + leftLabelWidth;
+struct dyString *dy = dyStringNew(0);
+int y;
+for (y = 0;  y < height;  y++)
+    {
+    dyStringClear(dy);
+    int gtHapStart = y * hapPerPx;
+    int gtHapEnd = (y + 1) * hapPerPx;
+    if (gtHapEnd == gtHapStart)
+        gtHapEnd++;
+    char *lastSample = NULL;
+    int gtHapIx;
+    for (gtHapIx = gtHapStart;  gtHapIx < gtHapEnd;  gtHapIx++)
+        {
+        int gtIx = (gtHapOrder[gtHapIx] >> 1);
+        char *sample = vcff->genotypeIds[gtIx];
+        if (!lastSample || differentString(sample, lastSample))
+            {
+            if (isNotEmpty(dy->string))
+                dyStringAppend(dy, ", ");
+            dyStringAppend(dy, sample);
+            lastSample = sample;
+            }
+        }
+    imgTrackAddMapItem(curImgTrack, TITLE_BUT_NO_LINK, dy->string,
+		       leftLabelX, y+yStart, labelEnd, y+yStart+1, track);
+    }
+}
+
+static void vcfGtHapFileOrderDraw(struct track *tg, int seqStart, int seqEnd,
+                                  struct hvGfx *hvg, int xOff, int yOff, int width,
+                                  MgFont *font, Color color, enum trackVisibility vis)
+/* Draw rows in the same fashion as vcfHapClusterDraw, but instead of clustering, use the
+ * order in which samples appear in the VCF file. */
+{
+struct vcfFile *vcff = tg->extraUiData;
+if (vcff->records == NULL)
+    return;
+undefYellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
+enum hapColorMode colorMode = getColorMode(tg->tdb);
+pushWarnHandler(ignoreEm);
+struct vcfRecord *rec;
+for (rec = vcff->records;  rec != NULL;  rec = rec->next)
+    vcfParseGenotypes(rec);
+popWarnHandler();
+int ploidy = 2; // Assuming diploid genomes here, no XXY, tetraploid etc.
+int gtCount = vcff->genotypeCount;
+boolean isAllDiploid = TRUE;
+unsigned short *gtHapOrder = needMem(gtCount * ploidy * sizeof(unsigned short));
+int orderIx = 0;
+int gtIx;
+// Determine the number of chromosome rows; for chrX, can be mix of diploid and haploid.
+for (gtIx=0;  gtIx < gtCount;  gtIx++)
+    {
+    int gtHapIx = (gtIx << 1);
+    gtHapOrder[orderIx] = gtHapIx;
+    orderIx++;
+    for (rec = vcff->records;  rec != NULL;  rec = rec->next)
+        {
+        struct vcfGenotype *gt = &(rec->genotypes[gtIx]);
+        if (!gt->isHaploid)
+            {
+            gtHapOrder[orderIx] = gtHapIx+1;
+            orderIx++;
+            break;
+            }
+        else
+            isAllDiploid = FALSE;
+        }
+    }
+int gtHapCount = orderIx;
+for (rec = vcff->records;  rec != NULL;  rec = rec->next)
+    drawOneRec(rec, gtHapOrder, gtHapCount, tg, hvg, xOff, yOff, width, FALSE, FALSE,
+               colorMode);
+// If height is sufficient, draw sample names as left labels; otherwise make mouseover titles
+// with sample names for each pixel y offset.
+int extraPixel = (colorMode == altOnlyMode) ? 1 : 0;
+int hapHeight = tg->height - CLIP_PAD - 2*extraPixel;
+int minHeightForLabels;
+if (isAllDiploid)
+    minHeightForLabels = vcff->genotypeCount * (tl.fontHeight + 1);
+else
+    minHeightForLabels = gtHapCount * (tl.fontHeight + 1);
+if (hapHeight >= minHeightForLabels)
+    drawSampleLabels(vcff, isAllDiploid, yOff+extraPixel, hapHeight, gtHapOrder, gtHapCount,
+                     font, color, tg->track);
+else
+    drawSampleTitles(vcff, yOff+extraPixel, hapHeight, gtHapOrder, gtHapCount, tg->track);
+}
+
 static int vcfHapClusterTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Return height of haplotype graph (2 * #samples * lineHeight);
  * 2 because we're assuming diploid genomes here, no XXY, tetraploid etc. */
@@ -1130,7 +1260,11 @@ static void vcfHapClusterOverloadMethods(struct track *tg, struct vcfFile *vcff)
 {
 tg->heightPer = (tg->visibility == tvSquish) ? (tl.fontHeight/4) : (tl.fontHeight / 2);
 tg->lineHeight = tg->heightPer + 1;
-tg->drawItems = vcfHapClusterDraw;
+char *hapMethod = cartOrTdbString(cart, tg->tdb, VCF_HAP_METHOD_VAR, VCF_DEFAULT_HAP_METHOD);
+if (sameString(hapMethod, VCF_HAP_METHOD_FILE_ORDER))
+    tg->drawItems = vcfGtHapFileOrderDraw;
+else
+    tg->drawItems = vcfHapClusterDraw;
 tg->totalHeight = vcfHapClusterTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemName = vcfHapClusterTrackName;

@@ -145,14 +145,20 @@ awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "NC_045512v2", $2, $3, $5, $5}' \
     cd /hive/data/genomes/wuhCor1/bed/multiz44way/cons
     hgLoadBed wuhCor1 phastConsElements44way mostConserved.bed
     # Read 550 elements of size 5 from mostConserved.bed
+    hgLoadBed wuhCor1 strainPhastConsElements44way mostConserved.bed
+    # Read 550 elements of size 5 from mostConserved.bed
 
     featureBits wuhCor1 phastConsElements44way
+    #  25779 bases of 29903 (86.209%) in intersection
+    featureBits wuhCor1 strainPhastConsElements44way
     #  25779 bases of 29903 (86.209%) in intersection
 
     ln -s `pwd`/phastCons44way.wib \
           /gbdb/wuhCor1/multiz44way/phastCons44way.wib
     hgLoadWiggle -pathPrefix=/gbdb/wuhCor1/multiz44way \
 	wuhCor1 phastCons44way phastCons44way.wig
+    hgLoadWiggle -pathPrefix=/gbdb/wuhCor1/multiz44way \
+	wuhCor1 strainPhastCons44way phastCons44way.wig
 
     # on human we often try for 5% overall cov, and 70% CDS cov
     # most bets are off here for that goal, these alignments are too few
@@ -248,6 +254,8 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ln -s `pwd`/phyloP44way.wib /gbdb/wuhCor1/multiz44way/phyloP44way.wib
     hgLoadWiggle -pathPrefix=/gbdb/wuhCor1/multiz44way wuhCor1 \
 	phyloP44way phyloP44way.wig
+    hgLoadWiggle -pathPrefix=/gbdb/wuhCor1/multiz44way wuhCor1 \
+	strainPhyloP44way phyloP44way.wig
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
@@ -310,9 +318,10 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     gzip wuhCor1.phastCons44way.wigFix
     ln -s ../../cons/all.mod ./wuhCor1.phastCons44way.mod
     ln -s ../../cons/wuhCor1.bw ./wuhCor1.phastCons44way.bw
+    ln -s ../../acc.date.description.list wuhCor1.44way.nameList.txt
 
-    # reusing the README.txt file from:
-# /usr/local/apache/htdocs-hgdownload/goldenPath/eboVir3/phastCons160way/README.txt
+    # reusing the README.txt file from the 119way already completed:
+# /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/phastCons119way/README.txt
     # edited here to reflect this construction
 
     md5sum *.txt *.gz *.mod *.bw > md5sum.txt
@@ -326,10 +335,10 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ln -s ../../consPhyloP/phyloP44way.bw ./wuhCor1.phyloP44way.bw
     gzip *.wigFix
 
-    ln -s ../phastCons44way/nameList44.txt .
+    ln -s ../../acc.date.description.list wuhCor1.44way.nameList.txt
 
     # reusing the README.txt file from:
-# /usr/local/apache/htdocs-hgdownload/goldenPath/eboVir3/phyloP160way/README.txt
+# /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/phyloP119way/README.txt
     # edited here to reflect this construction
 
     md5sum *.txt *.gz *.mod *.bw > md5sum.txt

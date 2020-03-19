@@ -429,21 +429,23 @@ printf("<input name=\"hubValidateButton\" id='hubValidateButton' "
     "class=\"hubField\" type=\"button\" value=\"Check Hub settings\">\n");
 printf(" or \n");
 printf("<input name=\"hubLoadMaybeTiming\" id='hubLoadMaybeTiming' "
-    "class=\"hubField\" type=\"button\" value=\"Load Hub\">\n");
+    "class=\"hubField\" type=\"button\" value=\"View Hub on Genome Browser\">\n");
 printf("</div>\n"); // validateHubUrlRow div
 
 printf("<div id=\"extraSettingsContainer\" class=\"addHubBar\">\n");
 printf("<img id=\"advancedSettingsButton\" src=\"../images/add_sm.gif\">\n");
-printf("Advanced Settings");
+printf("Optional View Hub Settings");
 
 char *measureTiming = cartCgiUsualString(cart, "measureTiming", NULL);
 char *udcTimeout = cartCgiUsualString(cart, "udcTimeout", NULL);
+boolean doMeasureTiming = isNotEmpty(measureTiming);
+boolean doUdcTimeout = isNotEmpty(udcTimeout);
 
 printf("<div id=\"extraSettingsList\" style=\"display: none\">\n");
 printf("<ul style=\"list-style-type:none\">\n<li>\n");
 // measureTiming first
 printf("<input name=\"addMeasureTiming\" id=\"addMeasureTiming\" "
-    "class=\"hubField\" type=\"checkbox\" %s>", measureTiming != NULL ? "checked": "");
+    "class=\"hubField\" type=\"checkbox\" %s>", doMeasureTiming ? "checked": "");
 printf("<label for=\"addMeasureTiming\">Display load times</label>\n");
 
 // and a tooltip explaining this checkbox
@@ -457,7 +459,7 @@ printf("</div></li>\n"); // tooltip div
 printf("<li>\n");
 // udcTimeout enable/disable
 printf("<input name=\"disableUdcTimeout\" id=\"disableUdcTimeout\" "
-    "class=\"hubField\" type=\"checkbox\" %s >", udcTimeout != NULL ? "checked" : "");
+    "class=\"hubField\" type=\"checkbox\" %s >", doUdcTimeout ? "checked" : "");
 printf("<label for=\"disableUdcTimeout\">Enable hub refresh</label>\n");
 // add a tooltip explaining these checkboxes
 printf("<div class=\"tooltip\"> (?)\n");
@@ -479,10 +481,16 @@ printf("</div>"); // hubDeveloper div
 
 jsOnEventById("click", "hubValidateButton",
     "var validateText = document.getElementById('validateHubUrl');"
+    "var udcTimeout = document.getElementById('disableUdcTimeout').checked === true;"
+    "var doMeasureTiming = document.getElementById('addMeasureTiming').checked === true;"
     "validateText.value=$.trim(validateText.value);"
     "if(validateUrl($('#validateHubUrl').val())) { "
     " document.validateHubForm.elements['validateHubUrl'].value=validateText.value;"
     " document.validateHubForm.elements['" hgHubDoHubCheck "'].value='on';"
+    " if (doMeasureTiming) { document.validateHubForm.elements['measureTiming'].value='1'; }"
+    " else { document.validateHubForm.elements['measureTiming'].value=''}"
+    " if (udcTimeout) { document.validateHubForm.elements['udcTimeout'].value='1'; }"
+    " else { document.validateHubForm.elements['udcTimeout'].value=''}"
     " document.validateHubForm.submit(); return true; }"
     "else { return false; }"
     );
@@ -492,7 +500,7 @@ jsOnEventById("click", "hubLoadMaybeTiming",
     "var doMeasureTiming = document.getElementById('addMeasureTiming').checked === true;"
     "validateText.value=$.trim(validateText.value);"
     "if(validateUrl($('#validateHubUrl').val())) {"
-    "   loc = \"../cgi-bin/hgTracks?&hgHub_do_firstDb=on\" + \"&hubUrl=\" + validateText.value;"
+    "   loc = \"../cgi-bin/hgTracks?hgHub_do_firstDb=on&hgHub_do_redirect=on&hgHubConnect.remakeTrackHub=on\" + \"&hubUrl=\" + validateText.value;"
     "   if (doMeasureTiming) { loc += \"&measureTiming=1\";} else { loc += \"&measureTiming=[]\"; }"
     "   if (udcTimeout) { loc += \"&udcTimeout=5\"; } else { loc += \"&udcTimeout=[]\"; }"
     "   window.location.href=loc; "
@@ -1764,6 +1772,8 @@ if (doHubDevMode)
     {
     printf("<FORM ACTION=\"%s\" NAME=\"validateHubForm\">\n",  "../cgi-bin/hgHubConnect");
     cgiMakeHiddenVar("validateHubUrl", "");
+    cgiMakeHiddenVar("measureTiming", "");
+    cgiMakeHiddenVar("udcTimeout", "");
     // allows saving the old url in the search bar but not run hubCheck on it right away
     // mostly for when you come back to hgHubConnect after just looking at hgTracks
     cgiMakeHiddenVar(hgHubDoHubCheck, "off");

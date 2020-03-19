@@ -121,7 +121,7 @@ ensemblIdUrl genePred
 ensArchive genePred
 exonArrows genePred bed broadPeak bigBed
 exonArrowsDense bed
-exonNumbers genePred bed broadPeak psl bigPsl bigBed
+exonNumbers genePred bed broadPeak psl big*
 expDrawExons expRatio
 expProbeTable expRatio
 expScale bed expRatio
@@ -197,6 +197,7 @@ group *
 groupings expRatio
 hapClusterEnabled vcf vcfTabix
 hapClusterColorBy vcf vcfTabix
+hapClusterMethod vcf vcfTabix
 hapClusterTreeAngle vcf vcfTabix
 hapClusterHeight vcf vcfTabix
 hapmapPhase bed

@@ -360,3 +360,225 @@ TMPDIR=/dev/shm
     # real    441m12.898s
 
 ########################################################################
+# LASTZ Coelacanth latCha1 (DONE - 2020-02-25 - Hiram)
+    mkdir /hive/data/genomes/danRer10/bed/lastzLatCha1.2020-02-25
+    cd /hive/data/genomes/danRer10/bed/lastzLatCha1.2020-02-25
+
+    printf '# zebrafish vs. Coelacanth
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_M=254
+
+BLASTZ_H=2000
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer10
+SEQ1_DIR=/hive/data/genomes/danRer10/danRer10.2bit
+SEQ1_LEN=/hive/data/genomes/danRer10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=6
+
+# QUERY: Coelacanth latCha1
+#  14,000,000 is enough to work with the biggest chrom as one item
+SEQ2_DIR=/hive/data/genomes/latCha1/latCha1.2bit
+SEQ2_LEN=/hive/data/genomes/latCha1/chrom.sizes
+SEQ2_CHUNK=14000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/danRer10/bed/lastzLatCha1.2020-02-25
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -syntenicNet -workhorse=hgwdev -smallClusterHub=ku \
+            -bigClusterHub=ku) > do.log 2>&1
+    #	real    177m11.851s
+
+    cat fb.danRer10.chainLatCha1Link.txt
+    #	86552427 bases of 1369683683 (6.319%) in intersection
+    cat fb.danRer10.chainSynLatCha1Link.txt
+    #	15892801 bases of 1369683683 (1.160%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+          danRer10 latCha1) > rbest.log 2>&1 &
+    # real    71m59.526s
+
+    cat fb.danRer10.chainRBest.LatCha1.txt
+    #    56607816 bases of 1369683683 (4.133%) in intersection
+
+    mkdir /hive/data/genomes/latCha1/bed/blastz.danRer10.swap
+    cd /hive/data/genomes/latCha1/bed/blastz.danRer10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer10/bed/lastzLatCha1.2020-02-25/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-syntenicNet -swap) > swap.log 2>&1
+    #	real    12m58.361s
+
+    cat fb.latCha1.chainDanRer10Link.txt
+    #	98338936 bases of 2183592768 (4.504%) in intersection
+    cat fb.latCha1.chainSynDanRer10Link.txt
+    #   13550035 bases of 2183592768 (0.621%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+          latCha1 danRer10) > rbest.log 2>&1
+    # real    67m29.683s
+    cat fb.latCha1.chainRBest.DanRer10.txt
+    # 56742837 bases of 2183592768 (2.599%) in intersection
+
+########################################################################
+# LASTZ spotted gar lepOcu1 (DONE - 2020-02-25 - Hiram)
+    mkdir /hive/data/genomes/danRer10/bed/lastzLepOcu1.2020-02-25
+    cd /hive/data/genomes/danRer10/bed/lastzLepOcu1.2020-02-25
+
+    printf '# zebrafish vs. spotted gar
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_M=254
+
+BLASTZ_H=2000
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer10
+SEQ1_DIR=/hive/data/genomes/danRer10/danRer10.2bit
+SEQ1_LEN=/hive/data/genomes/danRer10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=6
+
+# QUERY: spotted gar lepOcu1
+SEQ2_DIR=/hive/data/genomes/lepOcu1/lepOcu1.2bit
+SEQ2_LEN=/hive/data/genomes/lepOcu1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/danRer10/bed/lastzLepOcu1.2020-02-25
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -syntenicNet -workhorse=hgwdev -smallClusterHub=ku \
+            -bigClusterHub=ku) > do.log 2>&1
+    #	real    118m59.600s
+
+    cat fb.danRer10.chainLepOcu1Link.txt
+    #	115180491 bases of 1369683683 (8.409%) in intersection
+    cat fb.danRer10.chainSynLepOcu1Link.txt
+    #    58800217 bases of 1369683683 (4.293%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` danRer10 \
+	lepOcu1) > rbest.log 2>&1 &
+    # real    88m25.172s
+
+    cat fb.danRer10.chainRBest.LepOcu1.txt
+    #	78985057 bases of 1369683683 (5.767%) in intersection
+
+    mkdir /hive/data/genomes/lepOcu1/bed/blastz.danRer10.swap
+    cd /hive/data/genomes/lepOcu1/bed/blastz.danRer10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer10/bed/lastzLepOcu1.2020-02-25/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-syntenicNet -swap) > swap.log 2>&1
+    #	real    7m34.876s
+
+    cat fb.lepOcu1.chainDanRer10Link.txt
+    #	98189747 bases of 869414361 (11.294%) in intersection
+    cat fb.lepOcu1.chainSynDanRer10Link.txt
+    #   47688590 bases of 869414361 (5.485%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+          lepOcu1 danRer10) > rbest.log 2>&1
+    # real    83m11.208s
+
+    cat fb.lepOcu1.chainRBest.DanRer10.txt
+    #	78000762 bases of 869414361 (8.972%) in intersection
+
+########################################################################
+# LASTZ Elephant shark calMil1 (DONE - 2020-02-25 - Hiram)
+    mkdir /hive/data/genomes/danRer10/bed/lastzCalMil1.2020-02-25
+    cd /hive/data/genomes/danRer10/bed/lastzCalMil1.2020-02-25
+
+    printf '# zebrafish vs. Elephant shark
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_M=254
+
+BLASTZ_H=2000
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer10
+SEQ1_DIR=/hive/data/genomes/danRer10/danRer10.2bit
+SEQ1_LEN=/hive/data/genomes/danRer10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=6
+
+# QUERY: Elephant shark calMil1
+SEQ2_DIR=/hive/data/genomes/calMil1/calMil1.2bit
+SEQ2_LEN=/hive/data/genomes/calMil1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/danRer10/bed/lastzCalMil1.2020-02-25
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -syntenicNet -workhorse=hgwdev -smallClusterHub=ku \
+            -bigClusterHub=ku) > do.log 2>&1
+    #	real    48m39.821s
+
+    cat fb.danRer10.chainCalMil1Link.txt
+    #	76690714 bases of 1369683683 (5.599%) in intersection
+    cat fb.danRer10.chainSynCalMil1Link.txt
+    #   18240388 bases of 1369683683 (1.332%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` danRer10 \
+	calMil1) > rbest.log 2>&1 &
+    # real    466m55.498s
+
+    cat fb.danRer10.chainRBest.CalMil1.txt
+    # 48435763 bases of 1369683683 (3.536%) in intersection
+
+    mkdir /hive/data/genomes/calMil1/bed/blastz.danRer10.swap
+    cd /hive/data/genomes/calMil1/bed/blastz.danRer10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer10/bed/lastzCalMil1.2020-02-25/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-syntenicNet -swap) > swap.log 2>&1
+    #	real    7m34.876s
+
+    cat fb.calMil1.chainDanRer10Link.txt
+    #	66411165 bases of 936953458 (7.088%) in intersection
+    cat fb.calMil1.chainSynDanRer10Link.txt
+    #   15359860 bases of 936953458 (1.639%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+          calMil1 danRer10) > rbest.log 2>&1
+    # real    57m38.923s
+
+    cat fb.calMil1.chainRBest.DanRer10.txt
+    #   47381650 bases of 936953458 (5.057%) in intersection
+
+########################################################################

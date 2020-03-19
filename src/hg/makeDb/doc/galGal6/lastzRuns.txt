@@ -3972,3 +3972,76 @@ TMPDIR=/dev/shm
     # 846862875 bases of 917263224 (92.325%) in intersection
 
 #############################################################################
+# LASTZ chicken/galGal6 vs Zebrafish/danRer10 - (DONE - 2020-02-25 - script/hiram)
+    mkdir /hive/data/genomes/galGal6/bed/lastzDanRer10.2020-02-25
+    cd /hive/data/genomes/galGal6/bed/lastzDanRer10.2020-02-25
+
+   printf "# chicken vs Zebrafish
+# galGal6 vs danRer10
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=254
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: galGal6 - chicken - Gallus gallus
+SEQ1_DIR=/hive/data/genomes/galGal6/galGal6.2bit
+SEQ1_LEN=/hive/data/genomes/galGal6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: danRer10 - Zebrafish - Danio rerio
+SEQ2_DIR=/hive/data/genomes/danRer10/danRer10.2bit
+SEQ2_LEN=/hive/data/genomes/danRer10/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=2000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galGal6/bed/lastzDanRer10.2020-02-25
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+      -workhorse=hgwdev -bigClusterHub=ku \
+        -dbHost=hgwdev -smallClusterHub=ku \
+          -fileServer=hgwdev -syntenicNet) > do.log 2>&1
+    # real    156m19.439s
+
+    cat fb.galGal6.chainDanRer10Link.txt
+    # 65140381 bases of 1055588482 (6.171%) in intersection
+
+    cat fb.galGal6.chainSynDanRer10Link.txt
+    # 14892321 bases of 1055588482 (1.411%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	galGal6 danRer10) > rbest.log 2>&1 &
+    # real	181m30.518s
+
+    cat fb.galGal6.chainRBest.DanRer10.txt
+    # 54759431 bases of 1055588482 (5.188%) in intersection
+
+    mkdir /hive/data/genomes/danRer10/bed/blastz.galGal6.swap
+    cd /hive/data/genomes/danRer10/bed/blastz.galGal6.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/galGal6/bed/lastzDanRer10.2020-02-25/DEF \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-syntenicNet -swap) > swap.log 2>&1 &
+    #	real    6m15.358s
+
+    cat fb.danRer10.chainGalGal6Link.txt
+    #	80410462 bases of 1369683683 (5.871%) in intersection
+    cat fb.danRer10.chainSynGalGal6Link.txt
+    #   17599825 bases of 1369683683 (1.285%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+          danRer10 galGal6) > rbest.log 2>&1
+    # real    188m48.335s
+
+    cat fb.danRer10.chainRBest.GalGal6.txt
+    #	55546117 bases of 1369683683 (4.055%) in intersection
+
+#############################################################################
