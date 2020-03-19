@@ -1,5 +1,5 @@
 #########################################################################
-# Phylogenetic tree from 44-way (DONE - 2014-10-17 - Hiram)
+# Phylogenetic tree from 44-way (DONE - 2020-03-13 - Hiram)
     mkdir /hive/data/genomes/wuhCor1/bed/multiz44way/4d
     cd /hive/data/genomes/wuhCor1/bed/multiz44way/4d
 
@@ -86,7 +86,7 @@
 # MG772934v1    1.106462
 
 #########################################################################
-# phastCons 44-way (DONE - 2014-06-04 - Hiram)
+# phastCons 44-way (DONE - 2020-03-13 - Hiram)
     # split 44way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh hgwdev
@@ -203,7 +203,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #########################################################################
-# phyloP for 7-way (DONE - 2014-10-17 - Hiram)
+# phyloP for 7-way (DONE - 2020-03-13 - Hiram)
     # run phyloP with score=LRT
     mkdir /cluster/data/wuhCor1/bed/multiz44way/consPhyloP
     cd /cluster/data/wuhCor1/bed/multiz44way/consPhyloP
@@ -309,7 +309,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
-# 44-way downloads (DONE - 2014-10-22 - Hiram)
+# 44-way downloads (DONE - 2020-03-18 - Hiram)
     mkdir -p \
        /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/phastCons44way
     cd /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/phastCons44way

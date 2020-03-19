@@ -1,5 +1,5 @@
 #########################################################################
-# Phylogenetic tree from 119-way (DONE - 2014-10-17 - Hiram)
+# Phylogenetic tree from 119-way (DONE - 2020-03-11 - Hiram)
     mkdir /hive/data/genomes/wuhCor1/bed/multiz119way/4d
     cd /hive/data/genomes/wuhCor1/bed/multiz119way/4d
 
@@ -92,7 +92,7 @@ NC_
 # NC_028824v1   3.505645
 
 #########################################################################
-# phastCons 119-way (DONE - 2014-06-04 - Hiram)
+# phastCons 119-way (DONE - 2020-03-11 - Hiram)
     # split 119way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh ku
@@ -206,7 +206,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #########################################################################
-# phyloP for 7-way (DONE - 2014-10-17 - Hiram)
+# phyloP for 7-way (DONE - 2020-03-11 - Hiram)
     # run phyloP with score=LRT
     mkdir /cluster/data/wuhCor1/bed/multiz119way/consPhyloP
     cd /cluster/data/wuhCor1/bed/multiz119way/consPhyloP
@@ -311,7 +311,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
-# 119-way downloads (DONE - 2014-10-22 - Hiram)
+# 119-way downloads (DONE - 2020-03-13 - Hiram)
     mkdir -p \
        /hive/data/genomes/wuhCor1/bed/multiz119way/downloads/phastCons119way
     cd /hive/data/genomes/wuhCor1/bed/multiz119way/downloads/phastCons119way
