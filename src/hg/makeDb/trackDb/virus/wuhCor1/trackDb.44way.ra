@@ -1,7 +1,12 @@
+Red blocks are drawn when a polymorphism in a coding region results in a change in the amino acid that is generated.
+Green blocks are drawn when a polymorphism in a coding region results in no change to the amino acid that is generated.
+Blue blocks are drawn when a polymorphism is outside a coding region.
+Pale yellow blocks are drawn when there are no aligning bases to that region in the reference genome.
+
 track cons44way
 compositeTrack on
 shortLabel 44 Bat Strains
-longLabel Multiz Alignment & Conservation (44 Strains with bats as hosts, Accession Names)
+longLabel Multiz Alignment - 44 Strains with bats as hosts: red=nonsyn green=syn blue=noncod yellow=noalign
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility hide

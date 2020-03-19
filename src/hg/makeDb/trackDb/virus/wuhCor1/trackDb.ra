@@ -7,16 +7,6 @@ track gap override
 visibility hide
 html gap.html
 
-track uniprot override
-visibility dense
-longLabel UniProt Protein Annotations
-shortLabel UniProt
-
-track unipAliSwissprot override
-labelFields protShortNames
-longLabel SwissProt proteins (configure track to show protein annotations)
-visibility pack
-
 track rmsk override
 visibility hide
 
@@ -44,7 +34,7 @@ exonNumbers off
 
 track primers
 shortLabel Detection Primers
-longLabel Detection Kit Primers
+longLabel Detection Kit Primer Sets
 group map
 type psl
 
@@ -58,3 +48,4 @@ include trackDb.119way.ra
 include epitopes.ra
 include trackDb.44way.ra
 include trackDb.strainName44way.ra
+include trackDb.uniprot.ra

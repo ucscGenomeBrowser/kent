@@ -1,8 +1,8 @@
 track epitopes
 shortLabel Predicted Epitopes
-longLabel Epitopes from Grifoni et al 2020
+longLabel Predicted Epitopes from Grifoni et al 2020
 group immu
-visibility dense
+visibility hide
 itemRgb on
 type bigBed 9 +
 compositeTrack on
