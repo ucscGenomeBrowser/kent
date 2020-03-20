@@ -1,0 +1,15 @@
+track ncbiGeneBGP
+shortLabel NCBI Genes
+longLabel NCBI Genes from GCF_009858895.2
+group genes
+visibility hide
+priority 1
+color 12,12,120
+type bigGenePred 
+bigDataUrl /gbdb/wuhCor1/ncbiGene.bb
+baseColorUseCds given
+baseColorDefault genomicCodons
+labelFields geneName2,geneName,uniProtGene
+url https://www.ncbi.nlm.nih.gov/protein/$$
+urlLabel NCBI Refseq protein
+exonNumbers off
