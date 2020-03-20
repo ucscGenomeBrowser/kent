@@ -1,0 +1,19 @@
+table nextstrainClade
+"Clades assigned by nextstrain.org"
+    (
+    string chrom;      "Reference sequence accession"
+    uint   chromStart; "Start position in reference"
+    uint   chromEnd;   "End position in reference"
+    string name;       "Name of clade"
+    uint   score;      "Placeholder for BED compatibility (0)"
+    char[1] strand;    "Placeholder for BED compatibility (+)"
+    uint thickStart;   "Start of where display should be thick"
+    uint thickEnd;     "End of where display should be thick"
+    uint reserved;     "itemRgb color"
+    int blockCount;    "Number of blocks (characteristic variants)"
+    int[blockCount] blockSizes; "Comma separated list of block sizes"
+    int[blockCount] chromStarts; "Start positions relative to chromStart"
+    string variants;   "Characteristic variant names"
+    int sampleCount;   "Number of samples belonging to the clade"
+    string[sampleCount] samples; "Samples belonging to the clade"
+    )
