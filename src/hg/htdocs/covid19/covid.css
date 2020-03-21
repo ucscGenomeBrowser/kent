@@ -1,0 +1,47 @@
+/* Style for Ebola Portal */
+
+table {
+    border-style: none
+}
+
+td {
+    border-style: none;
+    vertical-align: top;
+}
+
+/* override visited img links in HGStyle */
+.screenshot {
+    display: block;
+    width: 100%;
+    margin: 15px 0 !important;
+}
+
+.screenshot:hover {
+    outline: 1px solid ActiveBorder;
+}
+
+.header {
+    color: #00457c;
+    font-size: 25px;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+.header span {
+    vertical-align: middle;
+    width: 30%;
+}
+
+.subHeader {
+    font-size: 15px;
+    background-color: #efefef;
+}
+
+.bar {
+    height: auto;
+    padding-bottom: 4px;
+}
+
+.wrapper {
+    border: none;
+
