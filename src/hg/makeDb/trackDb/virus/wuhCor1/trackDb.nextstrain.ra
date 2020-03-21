@@ -13,7 +13,7 @@ type bigBed 12 +
 itemRgb on
 visibility hide
 group varRep
-priority 10
+priority 0.5
 bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainClade.bb
 
 track nextstrainSamples
@@ -25,5 +25,5 @@ hapClusterEnabled on
 hapClusterMethod fileOrder
 hapClusterHeight 400
 group varRep
-priority 11
+priority 0.5
 bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples.vcf.gz
