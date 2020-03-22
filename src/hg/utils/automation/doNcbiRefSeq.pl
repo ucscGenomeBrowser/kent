@@ -157,7 +157,7 @@ sub doDownload {
 
   if ($filesFound < $filesExpected) {
     printf STDERR "# doNcbiRefSeq.pl download: can not find all files required\n";
-    exit 0;
+    exit 255;
   }
   my $runDir = "$buildDir/download";
   &HgAutomate::mustMkdir($runDir);
