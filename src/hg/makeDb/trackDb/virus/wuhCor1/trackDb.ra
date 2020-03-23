@@ -36,3 +36,4 @@ include epitopes.ra
 include trackDb.44way.ra
 include trackDb.strainName44way.ra
 include trackDb.uniprot.ra
+include trackDb.nextstrain.ra

@@ -1,0 +1,29 @@
+track nextstrainGene
+shortLabel Nextstrain Genes
+longLabel Genes annotated by nextstrain.org/ncov
+type bigBed 4
+visibility hide
+group genes
+bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainGene.bb
+
+track nextstrainClade
+shortLabel Nextstrain Clades
+longLabel Situation report zoom "clades" from nextstrain.org/ncov
+type bigBed 12 +
+itemRgb on
+visibility hide
+group varRep
+priority 0.5
+bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainClade.bb
+
+track nextstrainSamples
+shortLabel Nextstrain Vars
+longLabel Nextstrain/GISAID Sample Variants from nextstrain.org/ncov
+type vcfTabix
+visibility hide
+hapClusterEnabled on
+hapClusterMethod fileOrder
+hapClusterHeight 400
+group varRep
+priority 0.5
+bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples.vcf.gz

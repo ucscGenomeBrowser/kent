@@ -842,3 +842,6 @@ xyz
 #	/hive/data/genomes/wuhCor1/pushQ/redmine.wuhCor1.table.list
 
 #########################################################################
+# Nextstrain Genes, Clades, Variants: see otto/nextstrainNcov/ scripts (DONE - 2020-03-20 - Angie)
+
+#########################################################################
