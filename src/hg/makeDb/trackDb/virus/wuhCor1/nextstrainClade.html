@@ -3,20 +3,36 @@
 <a href="https://nextstrain.org/ncov" target=_blank>Nextstrain.org</a> displays
 data about variants that occur in the current 2019/2020 outbreak.
 Nextstrain has a powerful user interface for viewing the evolutionary tree
-that it infers from the patterns of variants in sequences worldwide, but
-does not offer a detailed plot of variants along the genome, so we have processed
-their genome annotations into genome browser tracks.
+that it infers from the patterns of variants in sequences worldwide.
+Nextstrain also produces weekly situation reports (e.g.
+<a href="https://nextstrain.org/narratives/ncov/sit-rep/2020-03-20"
+   target=_blank>March 20th, 2020</a>), in which they highlight certain branches of
+the inferred evolutionary tree.  They define clades in terms of a small number of
+variants that define the branches as the mechanism to highlight the branches of interest
+in the situation reports.
+Nextstrain cautions that these clades
+<a href="https://github.com/nextstrain/ncov/issues/208#issuecomment-600491195"
+   target=_blank>are not officially recognized</a> and
+<a href="https://github.com/nextstrain/ncov/issues/207#issuecomment-600756907"
+   target=_blank>should not be over-interpreted</a>,
+but since the clades are an interesting feature of Nextstrain and can be used to color nodes in
+Nextstrain's tree display, we have imported the sets of characteristic mutations and display them
+as features that span the genome, with tall boxes at the locations of characteristic mutations.
 </p>
+
 <p>
-Use this track in conjunction with the track
-<em>Nextstrain Vars</em> (all variants; protein-coding variants use gene names from this track).
+The <em>Nextstrain Vars</em> track contains all variants shown on Nextstrain,
+of which this track's variants are a very small subset.
 </p>
 
 <h2>Methods</h2>
 <p>Nextstrain downloads SARS-CoV-2 genomes from
   <a href="https://gisaid.org/" target=_blank>GISAID</a>
   as they are submitted by labs worldwide.
-  The sequences are processed by an
+  Nextstrain identifies variants that define clades of interest and puts them in the file
+  <a href="https://github.com/nextstrain/ncov/blob/master/config/clades.tsv"
+     target=_blank>clades.tsv</a>.
+  The genome sequences and metadata including clades.tsv are processed by an
   <a href="https://github.com/nextstrain/ncov" target=_blank>automated pipeline</a>
   and annotations are written to the data file
   <a href="http://data.nextstrain.org/ncov.json" target=_blank>ncov.json</a>.
@@ -29,7 +45,6 @@ UCSC downloads ncov.json and extracts annotations for display.</p>
 <p>The UCSC SARS-CoV-2 genome browser and associated data annotation tracks were funded by
   generous private donors to the
   <a href="https://ucscgenomics.soe.ucsc.edu/" target=_blank> UC Santa Cruz Genomics Institute</a>.
-</p>
 
 <h2>References</h2>
 <p>
