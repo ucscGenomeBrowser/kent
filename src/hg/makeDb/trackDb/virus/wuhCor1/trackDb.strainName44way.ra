@@ -20,7 +20,7 @@ html cons44way
         track strainName44way
         subTrack strainCons44wayViewalign on
         shortLabel Bat CoV multiz
-        longLabel Multiz Genome Alignments of 44 Coronavirus bat strains
+        longLabel Multiz Alignment of 44 strains with bats as hosts: red=nonsyn green=syn blue=noncod yellow=noalign
         subGroups view=align
         noInherit on
         group compGeno

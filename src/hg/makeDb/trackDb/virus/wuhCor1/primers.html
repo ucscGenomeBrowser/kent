@@ -4,8 +4,56 @@ This track shows the locations of those primers in detection kits that match the
 reference sequence. The primers were copied from the file <a href="https://bitbucket.org/tomeraltman/covid-19-primer-data/src/master/kit-primers/all-COVID-19-kit-primers.fasta">all-COVID-19-kit-primers.fasta</a>".
 </p>
 <p>
+All are RT-PCR primer sets. Each set consists of one forward, one reverse and one internal primer.
+</p>
+
+<p>
 Four primers match the reference sequence over less than 14bp: 2019-nCoV_N2-P, HKU-ORF-1b-nsp14-R, 2019-nCoV_N1-R, WH-NIC_N-P.
 Four primers were not found at all: HKU-ORF-1b-nsp14-F, 2019-nCoV_RP-P, 2019-nCoV_RP-R, 2019-nCoV_RP-F.
+</p>
+
+<p>Here is our current understanding of the origin of the primers:</p>
+<table class="stdTbl">
+    </tr>
+        <th>
+            Prefix
+        </th>
+        <th>
+            Institution
+        </th>
+        <th>
+            Overview
+        </th>
+        <th>
+            Manual
+        </th>
+    </tr>
+
+    <tr>
+        <td>HKU</td>
+        <td>The University of Hong King</td>
+        <td>Detects N gene and Orf1b. Not specific for SARS-Cov2, but other Sarbecovirus species are not in circulation</td>
+        <td><a href="https://www.who.int/docs/default-source/coronaviruse/peiris-protocol-16-1-20.pdf?sfvrsn=af1aac73_4" target=_blank>WHO Peiris Protocol</a></td>
+    </tr>
+
+    <tr>
+        <td>2019-nCoV</td>
+        <td>CDC, USA</td>
+        <td>Three reactions, target: N gene. One primer/probe set detects all
+            betacoronaviruses, two sets are specific for SARS-CoV-2. All 3 assays must be positive 
+        </td>
+        <td><a href="https://www.fda.gov/media/134922/download" target=_blank>Instructions</a></td>
+    </tr>
+
+    <tr>
+        <td>EU-Drosten</td>
+        <td>Drosten Lab, Charite Berlin, Germany</td>
+        <td>Set 1: run E and RdRp primers (designed for SARS-CoV, SARS-CoV-2, and bat-associated
+        betacoronaviruses), if Set 1 is positive, use SARS-Cov-2 specific detection primer</td>
+    <td><a href="https://www.who.int/docs/default-source/coronaviruse/protocol-v2-1.pdf?sfvrsn=a9ef618c_2" target=_blank>Instructions</a></td>
+    </tr>
+
+</table>
 
 <h2>Summary</h2>
 <p>
@@ -21,4 +69,6 @@ Bioinformatic formats for currently-deployed primer-probe sets for detecting COV
 The primers were mapped with the following command: <tt>"blat ../../wuhCor1.2bit primers.fa stdout -stepSize=1 -tileSize=6  -minScore=10 -oneOff=1 -noHead > primers.psl"</tt>
 
 <h2>Credits</h2>
-Data collected by Tomer Altman, found by <em>Jason Fernandes</em>.
+The UCSC SARS-CoV-2 genome browser and associated data annotation tracks were
+funded by generous private donors to the UC Santa Cruz Genomics Institute.
+Fasta data collected by Tomer Altman, found by Jason Fernandes.
