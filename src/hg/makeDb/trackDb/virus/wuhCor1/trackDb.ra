@@ -25,12 +25,6 @@ longLabel Detection Kit Primer Sets
 group map
 type psl
 
-searchName ncbiGene
-searchTable ncbiGene
-searchType genePred
-searchMethod fuzzy
-searchPriority 18
-
 include trackDb.119way.ra
 include epitopes.ra
 include trackDb.44way.ra

@@ -13,3 +13,10 @@ labelFields geneName2,geneName,uniProtGene
 url https://www.ncbi.nlm.nih.gov/protein/$$
 urlLabel NCBI Refseq protein
 exonNumbers off
+searchIndex name
+searchTrix /gbdb/wuhCor1/ncbiSearch.ix
+
+searchTable ncbiGeneBGP
+searchType bigBed
+searchDescription NCBI Genes
+searchPriority 1.3

@@ -12,4 +12,9 @@ baseColorDefault genomicCodons
 url https://www.ncbi.nlm.nih.gov/protein/$$
 urlLabel NCBI Refseq protein
 
-~                                                      
+searchName ncbiGene
+searchTable ncbiGene
+searchType genePred
+searchMethod fuzzy
+searchPriority 18
+
