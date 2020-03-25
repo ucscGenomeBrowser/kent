@@ -30,7 +30,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="htt
 mouseOverField comments
 
 track uniprotCov2
-shortLabel UniProt Cov2
+shortLabel UniProt Other
 longLabel UniProt Protein Annotations (configure track to show more)
 group genes
 visibility dense
