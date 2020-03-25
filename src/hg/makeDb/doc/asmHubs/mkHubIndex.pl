@@ -99,7 +99,7 @@ genome assemblies can be selected from the
 Instead of adding all the assemblies in one collected group, use the individual
 <em>link to genome browser</em> in the table below.
 </p>
-<h3>See also: <a href='asmStats${Name}.html'>assembly statistics</a></h3><br>
+<h3>See also: <a href='asmStats${Name}.html'>assembly statistics</a>,&nbsp;<a href='trackData.html'>track statistics</a></h3><br>
 <h3>Data resource links</h3>
 NOTE: <em>Click on the column headers to sort the table by that column</em><br>
 The <em>link to genome browser</em> will attach only that single assembly to
@@ -141,20 +141,31 @@ END
 sub endHtml() {
 
 if ($asmHubName ne "viral") {
-  printf "<p>\nOther assembly hubs available:<br>\n<table border='1'><thead>\n<tr>";
+  printf "<p>\n<table border='1'><thead>\n<tr>";
+  printf "<th>Assembly hubs index pages:&nbsp;</th>\n";
+  printf "<th><a href='../primates/index.html'>Primates</a></th>\n";
+  printf "<th><a href='../mammals/index.html'>Mammals</a></th>\n";
+  printf "<th><a href='../birds/index.html'>Birds</a></th>\n";
+  printf "<th><a href='../fish/index.html'>Fish</a></th>\n";
+  printf "<th><a href='../vertebrate/index.html'>other vertebrates</a></th>\n";
 
-  printf "<th><a href='../primates/index.html'>Primates</a></th>\n"
-    if ($asmHubName ne "primates");
-  printf "<th><a href='../mammals/index.html'>Mammals</a></th>\n"
-    if ($asmHubName ne "mammals");
-  printf "<th><a href='../birds/index.html'>Birds</a></th>\n"
-    if ($asmHubName ne "birds");
-  printf "<th><a href='../fish/index.html'>Fish</a></th>\n"
-    if ($asmHubName ne "fish");
-  printf "<th><a href='../vertebrate/index.html'>other vertebrates</a></th>\n"
-    if ($asmHubName ne "vertebrate");
+  printf "</tr><tr>\n";
+  printf "<th>Hubs assembly statistics:&nbsp;</th>\n";
+  printf "<th><a href='../primates/asmStatsPrimates.html'>Primates</a></th>\n";
+  printf "<th><a href='../mammals/asmStatsMammals.html'>Mammals</a></th>\n";
+  printf "<th><a href='../birds/asmStatsBirds.html'>Birds</a></th>\n";
+  printf "<th><a href='../fish/asmStatsFish.html'>Fish</a></th>\n";
+  printf "<th><a href='../vertebrate/asmStatsVertebrate.html'>other vertebrates</a></th>\n";
 
-printf "</tr></thead>\n</table>\n</p>\n";
+  printf "</tr><tr>\n";
+  printf "<th>Hubs track statistics:&nbsp;</th>\n";
+  printf "<th><a href='../primates/trackData.html'>Primates</a></th>\n";
+  printf "<th><a href='../mammals/trackData.html'>Mammals</a></th>\n";
+  printf "<th><a href='../birds/trackData.html'>Birds</a></th>\n";
+  printf "<th><a href='../fish/trackData.html'>Fish</a></th>\n";
+  printf "<th><a href='../vertebrate/trackData.html'>other vertebrates</a></th>\n";
+
+  printf "</tr></thead>\n</table>\n</p>\n";
 }
 
 print <<"END"
@@ -239,7 +250,7 @@ sub tableContents() {
     my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$accessionDir/$accessionId";
     printf "<tr><td align=right>%d</td>\n", ++$rowCount;
 ###    printf "<td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=%s/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", $hubUrl, $accessionId, $commonName;
-    printf "<td align=center><a href='https://hgwdev-hiram.gi.ucsc.edu/h/%s' target=_blank>%s</a></td>\n", $accessionId, $commonName;
+    printf "<td align=center><a href='https://genome.ucsc.edu/h/%s' target=_blank>%s</a></td>\n", $accessionId, $commonName;
     printf "    <td align=center><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s</a></td>\n", $gcPrefix, $asmAcc, $asmId;
     if ( $bioSample ne "notFound" ) {
