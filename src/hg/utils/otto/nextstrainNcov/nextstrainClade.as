@@ -13,7 +13,7 @@ table nextstrainClade
     int blockCount;    "Number of blocks (characteristic variants)"
     int[blockCount] blockSizes; "Comma separated list of block sizes"
     int[blockCount] chromStarts; "Start positions relative to chromStart"
-    string variants;   "Characteristic variant names"
+    string variants;   "Mutations that occurred on the path from the reference to this clade"
     int sampleCount;   "Number of samples belonging to the clade"
     string[sampleCount] samples; "Samples belonging to the clade"
     )

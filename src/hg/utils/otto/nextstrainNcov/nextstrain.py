@@ -71,6 +71,40 @@ def cladeFromVariants(name, variants):
         clade['varNames'] = varNames
     return clade
 
+def numDateToMonthDay(numDate):
+    """Transform decimal year timestamp to string with only month and day"""
+    year = int(numDate)
+    isLeapYear = 1 if (year % 4 == 0) else 0
+    # Get rid of the year
+    numDate -= year
+    # Convert to Julian day
+    jDay = int(numDate * 365) + 1
+    if (jDay > 334 + isLeapYear):
+        monthDay ="Dec" + str(jDay - 334 - isLeapYear)
+    elif (jDay > 304 + isLeapYear):
+        monthDay ="Nov" + str(jDay - 304 - isLeapYear)
+    elif (jDay > 273 + isLeapYear):
+        monthDay ="Oct" + str(jDay - 273 - isLeapYear)
+    elif (jDay > 243 + isLeapYear):
+        monthDay ="Sep" + str(jDay - 243 - isLeapYear)
+    elif (jDay > 212 + isLeapYear):
+        monthDay ="Aug" + str(jDay - 212 - isLeapYear)
+    elif (jDay > 181 + isLeapYear):
+        monthDay ="Jul" + str(jDay - 181 - isLeapYear)
+    elif (jDay > 151 + isLeapYear):
+        monthDay ="Jun" + str(jDay - 151 - isLeapYear)
+    elif (jDay > 120 + isLeapYear):
+        monthDay ="May" + str(jDay - 120 - isLeapYear)
+    elif (jDay > 90 + isLeapYear):
+        monthDay ="Apr" + str(jDay - 90 - isLeapYear)
+    elif (jDay > 59 + isLeapYear):
+        monthDay ="Mar" + str(jDay - 59 - isLeapYear)
+    elif (jDay > 31):
+        monthDay ="Feb" + str(jDay - 31)
+    else:
+        monthDay ="Jan" + str(jDay)
+    return monthDay
+
 def rUnpackNextstrainTree(branch, parentVariants):
     """Recursively descend ncov.tree and build data structures for genome browser tracks"""
     # Inherit parent variants
@@ -118,9 +152,11 @@ def rUnpackNextstrainTree(branch, parentVariants):
     else:
         for varName in branchVariants:
             variantCounts[varName] += 1
+        date = numDateToMonthDay(branch['node_attrs']['num_date']['value'])
         samples.append({ 'id': branch['node_attrs']['gisaid_epi_isl']['value'],
                          'name': branch['name'],
                          'clade': branch['node_attrs']['clade_membership']['value'],
+                         'date': date,
                          'variants': branchVariants })
         if (cladeName):
             if (clades[cladeName].get('sampleCount')):
@@ -135,7 +171,7 @@ def rUnpackNextstrainTree(branch, parentVariants):
 rUnpackNextstrainTree(ncov['tree'], {})
 
 sampleCount = len(samples)
-sampleNames = [ sample['id'] + ':' + sample['name'] for sample in samples ]
+sampleNames = [ ':'.join([sample['id'], sample['name'], sample['date']]) for sample in samples ]
 
 # Parse variant names like 'G11083T' into pos and alleles; bundle in VCF column order
 parsedVars = []

@@ -39,7 +39,7 @@ sub commify($) {
     return scalar reverse $text
 }
 
-# ($itemCount, $percentCover) = oneTrackData($trackFile, $sizeNoGaps, $trackFb);
+# ($itemCount, $percentCover) = oneTrackData($asmId, $track, $trackFile, $totalSize, $trackFb, $runDir);
 # might have a track feature bits file (trackFb), maybe not
 sub oneTrackData($$$$$$) {
   my ($asmId, $trackName, $file, $genomeSize, $trackFb, $runDir) = @_;
@@ -57,6 +57,8 @@ sub oneTrackData($$$$$$) {
          return("n/a", "n/a");
        }
       }
+    } elsif ($trackName eq "gap") {
+      return("0", "0 %");
     } else {
       return("n/a", "n/a");
     }
@@ -76,7 +78,6 @@ sub oneTrackData($$$$$$) {
       $percentCover = sprintf("%.2f %%", 100.0 * $bases / $genomeSize);
 #             56992654 bases of 2616369673 (2.178%) in intersection
       if ( -s "${trackFb}" ) {
-printf STDERR "# $trackFb\n";
           my ($itemBases, undef, undef, $noGapSize, undef) = split('\s+', `cat $trackFb`, 5);
           $percentCover = sprintf("%.2f %%", 100.0 * $itemBases / $noGapSize);
       }
@@ -100,17 +101,17 @@ if ($asmHubName eq "vertebrate") {
 
 print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
-<!--#set var="TITLE" value="$Name genomes assembly hubs" -->
+<!--#set var="TITLE" value="$Name genomes assembly hubs, track statistics" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
 
-<h1>$Name Genomes assembly hubs</h1>
+<h1>$Name Genomes assembly hubs, track statistics</h1>
 <p>
 Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 </p>
 
-<h3>See also: <a href='index.html'>hub access</a></h3><br>
+<h3>See also: <a href='index.html'>hub access</a>,&nbsp;<a href='asmStats$Name.html'>assembly statistics</a></h3><br>
 
 <h3>Data resource links</h3>
 NOTE: <em>Click on the column headers to sort the table by that column</em><br>
@@ -143,7 +144,8 @@ print <<"END"
   <th class="sorttable_numeric">genes<br>ncbi</th>
   <th class="sorttable_numeric">ncbiRefSeq</th>
   <th class="sorttable_numeric">xenoRefGene</th>
-  <th class="sorttable_numeric">augustus</th>
+  <th class="sorttable_numeric">augustus<br>genes</th>
+  <th class="sorttable_numeric">Ensembl<br>genes</th>
 </tr></thead><tbody>
 END
 }
@@ -183,18 +185,29 @@ END
 sub endHtml() {
 
 if ($asmHubName ne "viral") {
-  printf "<p>\nOther assembly hubs available:<br>\n<table border='1'><thead>\n<tr>";
+  printf "<p>\n<table border='1'><thead>\n<tr>";
+  printf "<th>Assembly hubs index pages:&nbsp;</th>\n";
+  printf "<th><a href='../primates/index.html'>Primates</a></th>\n";
+  printf "<th><a href='../mammals/index.html'>Mammals</a></th>\n";
+  printf "<th><a href='../birds/index.html'>Birds</a></th>\n";
+  printf "<th><a href='../fish/index.html'>Fish</a></th>\n";
+  printf "<th><a href='../vertebrate/index.html'>other vertebrates</a></th>\n";
 
-  printf "<th><a href='../primates/trackData.html'>Primates</a></th>\n"
-    if ($asmHubName ne "primates");
-  printf "<th><a href='../mammals/trackData.html'>Mammals</a></th>\n"
-    if ($asmHubName ne "mammals");
-  printf "<th><a href='../birds/trackData.html'>Birds</a></th>\n"
-    if ($asmHubName ne "birds");
-  printf "<th><a href='../fish/trackData.html'>Fish</a></th>\n"
-    if ($asmHubName ne "fish");
-  printf "<th><a href='../vertebrate/trackData.html'>other vertebrates</a></th>\n"
-    if ($asmHubName ne "vertebrate");
+  printf "</tr><tr>\n";
+  printf "<th>Hubs assembly statistics:&nbsp;</th>\n";
+  printf "<th><a href='../primates/asmStatsPrimates.html'>Primates</a></th>\n";
+  printf "<th><a href='../mammals/asmStatsMammals.html'>Mammals</a></th>\n";
+  printf "<th><a href='../birds/asmStatsBirds.html'>Birds</a></th>\n";
+  printf "<th><a href='../fish/asmStatsFish.html'>Fish</a></th>\n";
+  printf "<th><a href='../vertebrate/asmStatsVertebrate.html'>other vertebrates</a></th>\n";
+
+  printf "</tr><tr>\n";
+  printf "<th>Hubs track statistics:&nbsp;</th>\n";
+  printf "<th><a href='../primates/trackData.html'>Primates</a></th>\n";
+  printf "<th><a href='../mammals/trackData.html'>Mammals</a></th>\n";
+  printf "<th><a href='../birds/trackData.html'>Birds</a></th>\n";
+  printf "<th><a href='../fish/trackData.html'>Fish</a></th>\n";
+  printf "<th><a href='../vertebrate/trackData.html'>other vertebrates</a></th>\n";
 
   printf "</tr></thead>\n</table>\n</p>\n";
 }
@@ -248,10 +261,12 @@ sub gapStats($$) {
 ##############################################################################
 sub tableContents() {
 
-  my @trackList = qw(gc5Base gap allGaps assembly rmsk simpleRepeat windowMasker gapOverlap tandemDups cpgIslandExtUnmasked cpgIslandExt ncbiGene ncbiRefSeq xenoRefGene augustus);
+  my @trackList = qw(gc5Base gap allGaps assembly rmsk simpleRepeat windowMasker gapOverlap tandemDups cpgIslandExtUnmasked cpgIslandExt ncbiGene ncbiRefSeq xenoRefGene augustus ensGene);
 
 
+  my $asmCounted = 0;
   foreach my $asmId (reverse(@orderList)) {
+    my $tracksCounted = 0;
     my ($gcPrefix, $asmAcc, $asmName) = split('_', $asmId, 3);
     my $accessionId = sprintf("%s_%s", $gcPrefix, $asmAcc);
     my $accessionDir = substr($asmId, 0 ,3);
@@ -320,7 +335,7 @@ sub tableContents() {
     close (FH);
     my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$accessionDir/$accessionId";
     printf "<tr><td align=right>%d</td>\n", ++$asmCount;
-    printf "<td align=center><a href='https://genome-test.gi.ucsc.edu/h/%s' target=_blank>%s<br>%s</a></td>\n", $accessionId, $commonName, $accessionId;
+    printf "<td align=center><a href='https://genome.ucsc.edu/h/%s' target=_blank>%s<br>%s</a></td>\n", $accessionId, $commonName, $accessionId;
     foreach my $track (@trackList) {
       my $trackFile = "$buildDir/bbi/$asmId.$track";
       my $trackFb = "$buildDir/trackData/$track/fb.$asmId.$track.txt";
@@ -331,6 +346,7 @@ sub tableContents() {
       } else {
          $trackFile .= ".bb";
       }
+      my $customKey = "";
       if ( "$track" eq "rmsk") {
         my $rmskStats = "$buildDir/trackData/repeatMasker/$asmId.rmsk.stats";
         if (! -s "${rmskStats}") {
@@ -351,15 +367,27 @@ sub tableContents() {
           }
         } else {
           ($itemCount, $percentCover) = split('\s+', `cat $rmskStats`);
-          $percentCover = sprintf("%.2f %%", $percentCover);
           chomp $percentCover;
+          $customKey = sprintf("%.2f", $percentCover);
+          $percentCover = sprintf("%.2f %%", $percentCover);
         }
       } else {
         ($itemCount, $percentCover) = oneTrackData($asmId, $track, $trackFile, $totalSize, $trackFb, $runDir);
+        if (($percentCover =~ m/%/) || ($percentCover !~ m#n/a#)) {
+          $customKey = $percentCover;
+          $customKey =~ s/[ %]+//;
+        }
       }
+      if (length($customKey)) {
+      printf "    <td align=right sorttable_customkey='%s'>%s<br>(%s)</td>\n", $customKey, $itemCount, $percentCover;
+      } else {
       printf "    <td align=right>%s<br>(%s)</td>\n", $itemCount, $percentCover;
+      }
+      $tracksCounted += 1 if ($itemCount ne "n/a");
     }
     printf "</tr>\n";
+    $asmCounted += 1;
+    printf STDERR "# %03d\t%02d tracks\t%s\n", $asmCounted, $tracksCounted, $asmId;
   }
 }
 
