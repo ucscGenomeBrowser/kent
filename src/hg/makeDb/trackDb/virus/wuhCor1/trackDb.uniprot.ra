@@ -8,7 +8,7 @@ visibility pack
 type bigPsl
 bigDataUrl /gbdb/$D/uniprot/unipAliSwissprotCov2.bb
 searchIndex name,acc
-urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
+#urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
 labelFields protShortNames,geneName,uniprotName,acc,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
 mouseOverField protFullNames
 itemRgb off
@@ -26,7 +26,8 @@ visibility pack
 group genes
 type bigBed 12 +
 bigDataUrl /gbdb/wuhCor1/uniprot/unipInterestCov2.bb
-urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+#urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
 
 track uniprotCov2
@@ -39,7 +40,8 @@ exonNumbers off
 compositeTrack on
 allButtonPair on
 mouseOverField comments
-urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+#urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 scoreLabel Score (1000=SwissProt, 0=Trembl)
 scoreFilter 0
 itemRgb on
@@ -54,7 +56,7 @@ dataVersion /gbdb/$D/uniprot/version.txt
         type bigPsl
         bigDataUrl /gbdb/$D/uniprot/unipAliTremblCov2.bb
         searchIndex name,acc
-        urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
+        #urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
         labelFields acc,uniprotName,geneName,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
         mouseOverField protFullNames
         itemRgb off
@@ -108,14 +110,15 @@ dataVersion /gbdb/$D/uniprot/version.txt
         itemRgb off
 
         track unipCov2Chain
-        shortLabel Chains
-        longLabel UniProt Mature Protein Products (Polypeptide Chains)
+        shortLabel Mature Proteins
+        longLabel UniProt Mature, Processed Protein Products (Polypeptide Chains)
         priority 7
-        parent uniprotCov2 off
+        parent uniprotCov2 on
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipChainCov2.bb
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#ptm_processing" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        #urls uniProtId="http://www.uniprot.org/uniprot/$$#ptm_processing" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
         track unipCov2Domain
         shortLabel Domains
@@ -125,7 +128,7 @@ dataVersion /gbdb/$D/uniprot/version.txt
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipDomainCov2.bb
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        #urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
         track unipCov2DisulfBond
         shortLabel Disulf. Bonds
@@ -144,7 +147,7 @@ dataVersion /gbdb/$D/uniprot/version.txt
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipModifCov2.bb
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#aaMod_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        #urls uniProtId="http://www.uniprot.org/uniprot/$$#aaMod_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
         track unipCov2Mut
         shortLabel Mutations
@@ -154,7 +157,8 @@ dataVersion /gbdb/$D/uniprot/version.txt
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipMutCov2.bb
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#pathology_and_biotech" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$" variationId="http://www.uniprot.org/uniprot/$$"
+        #urls uniProtId="http://www.uniprot.org/uniprot/$$#pathology_and_biotech" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$" variationId="http://www.uniprot.org/uniprot/$$"
+        urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
         track unipCov2Struct
         shortLabel Structure
@@ -165,7 +169,8 @@ dataVersion /gbdb/$D/uniprot/version.txt
         visibility hide
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipStructCov2.bb
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#structure" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        #urls uniProtId="http://www.uniprot.org/uniprot/$$#structure" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
         track unipCov2Other
         shortLabel Other Annot.
@@ -175,7 +180,8 @@ dataVersion /gbdb/$D/uniprot/version.txt
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipOtherCov2.bb
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        #urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
         track unipCov2Repeat
         shortLabel Repeats
@@ -185,7 +191,8 @@ dataVersion /gbdb/$D/uniprot/version.txt
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipRepeatCov2.bb
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        #urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
         track unipCov2Conflict
         shortLabel Seq. Conflicts
@@ -195,7 +202,8 @@ dataVersion /gbdb/$D/uniprot/version.txt
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipConflictCov2.bb
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#Sequence_conflict_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        #urls uniProtId="http://www.uniprot.org/uniprot/$$#Sequence_conflict_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
 searchTable unipCov2AliSwissprot
 searchType bigBed
