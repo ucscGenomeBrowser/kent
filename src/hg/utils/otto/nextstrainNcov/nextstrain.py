@@ -48,7 +48,7 @@ def cladeColorFromName(cladeName):
 def subtractStart(coord, start):
     return coord - start
 
-def cladeFromVariants(name, variants):
+def cladeFromVariants(name, variants, varStr):
     """Extract bed12 info from an object whose keys are SNV variant names"""
     clade = {}
     snvEnds = []
@@ -68,7 +68,7 @@ def cladeFromVariants(name, variants):
         clade['color'] = cladeColorFromName(name)
         clade['varSizes'] = snvSizes
         clade['varStarts'] = snvStarts
-        clade['varNames'] = varNames
+        clade['varNames'] = varStr
     return clade
 
 def numDateToMonthDay(numDate):
@@ -105,19 +105,19 @@ def numDateToMonthDay(numDate):
         monthDay ="Jan" + str(jDay)
     return monthDay
 
-def rUnpackNextstrainTree(branch, parentVariants):
+def rUnpackNextstrainTree(branch, parentVariants, parentVarStr):
     """Recursively descend ncov.tree and build data structures for genome browser tracks"""
-    # Inherit parent variants
-    branchVariants = parentVariants.copy()
-    # Add variants specific to this branch (if any)
-    try:
+    # Gather variants specific to this node/branch (if any)
+    localVariants = []
+    if (branch.get('branch_attrs') and branch['branch_attrs'].get('mutations') and
+        branch['branch_attrs']['mutations'].get('nuc')):
         # Nucleotide variants specific to this branch
         for varName in branch['branch_attrs']['mutations']['nuc']:
             if (snvRe.match(varName)):
-                branchVariants[varName] = 1
+                localVariants.append(varName)
                 if (not variantCounts.get(varName)):
                     variantCounts[varName] = 0;
-        # Amino acid variants specific to this branch
+        # Amino acid variants: figure out which nucleotide variant goes with each
         for geneName in branch['branch_attrs']['mutations'].keys():
             if (geneName != 'nuc'):
                 for change in branch['branch_attrs']['mutations'][geneName]:
@@ -130,25 +130,40 @@ def rUnpackNextstrainTree(branch, parentVariants):
                             cdsStart = genePos.get(geneName)
                             varStartMin += cdsStart
                             varStartMax = varStartMin + 2
-                            for varName in branchVariants.keys():
+                            for varName in localVariants:
                                 ref, pos, alt = snvRe.match(varName).groups()
-                                pos = int(pos)
+                                pos = int(pos) - 1
                                 if (pos >= varStartMin and pos <= varStartMax):
                                     variantAaChanges[varName] = geneName + ':' + change
                         else:
                             warn("Can't find start for gene " + geneName)
                     else:
                         warn("Can't match amino acid change" + change)
-    except KeyError:
-        pass
+    # Inherit parent variants
+    branchVariants = parentVariants.copy()
+    # Add variants specific to this branch (if any)
+    for varName in localVariants:
+        branchVariants[varName] = 1
+    # Make an ordered variant string as David requested: semicolons between nodes,
+    # comma-separated within a node:
+    branchVarStr = ''
+    for varName in localVariants:
+        if (len(branchVarStr)):
+            branchVarStr += ', '
+        branchVarStr += varName
+        aaVar = variantAaChanges.get(varName)
+        if (aaVar):
+            branchVarStr += ' (' + aaVar + ')'
+    if (len(parentVarStr) and len(branchVarStr)):
+        branchVarStr = parentVarStr + '; ' + branchVarStr
     if (branch['node_attrs'].get('clade_membership')):
         cladeName = branch['node_attrs']['clade_membership']['value']
         if (not cladeName in clades):
-            clades[cladeName] = cladeFromVariants(cladeName, branchVariants)
+            clades[cladeName] = cladeFromVariants(cladeName, branchVariants, branchVarStr)
     kids = branch.get('children')
     if (kids):
         for child in kids:
-            rUnpackNextstrainTree(child, branchVariants);
+            rUnpackNextstrainTree(child, branchVariants, branchVarStr);
     else:
         for varName in branchVariants:
             variantCounts[varName] += 1
@@ -168,7 +183,7 @@ def rUnpackNextstrainTree(branch, parentVariants):
             else:
                 clades[cladeName]['samples'] = [ branch['name'] ]
 
-rUnpackNextstrainTree(ncov['tree'], {})
+rUnpackNextstrainTree(ncov['tree'], {}, '')
 
 sampleCount = len(samples)
 sampleNames = [ ':'.join([sample['id'], sample['name'], sample['date']]) for sample in samples ]
@@ -223,7 +238,7 @@ with open('nextstrainClade.bed', 'w') as outC:
                                        len(clade['varSizes']) + 2,
                                        '1,' + ','.join(map(str, clade['varSizes'])) + ',1,',
                                        '0,' + ','.join(map(str, clade['varStarts'])) + ',29902,',
-                                       ', '.join(clade['varNames']),
+                                       clade['varNames'],
                                        clade['sampleCount'],
                                        ', '.join(clade['samples']) ])) + '\n')
     outC.close()
