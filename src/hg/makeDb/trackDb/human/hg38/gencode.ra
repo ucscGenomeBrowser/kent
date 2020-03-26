@@ -1,0 +1,8 @@
+
+track gencodeAnnotV32
+shortLabel New Gencode V32
+longLabel New Gencode V32
+visibility pack
+type genePred
+group genes
+directUrl /cgi-bin/hgGene2?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s

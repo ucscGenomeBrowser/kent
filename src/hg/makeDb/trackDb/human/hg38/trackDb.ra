@@ -10,6 +10,8 @@ include mane.ra
 
 include gdcCancer.ra
 
+include gencode.ra
+
 track miRnaAtlas
 compositeTrack on
 shortLabel miRNA Tissue Atlas
