@@ -935,15 +935,33 @@ if (errCatch->gotError || errCatch->gotWarning)
     hubErr(hubErrors, errCatch->message->string, hub, options->htmlOut);
 
     if (options->htmlOut)
-        dyStringPrintf(errors, "trackData['#'] = [%s,",
-            makeFolderObjectString(hub->shortLabel, "Hub Errors", "#",
-                "Click to open node", TRUE, TRUE));
+        {
+        if (hub && hub->shortLabel)
+            {
+            dyStringPrintf(errors, "trackData['#'] = [%s",
+                makeFolderObjectString(hub->shortLabel, "Hub Errors", "#",
+                    "Click to open node", TRUE, TRUE));
+            }
+        else
+            {
+            dyStringPrintf(errors, "trackData['#'] = [%s",
+                makeFolderObjectString("Hub Error", "Hub Errors", "#",
+                    "Click to open node", TRUE, TRUE));
+            }
+        }
     }
 errCatchFree(&errCatch);
 
 if (hub == NULL)
     {
-    dyStringPrintf(errors, "%s", dyStringCannibalize(&hubErrors));
+    // the reason we couldn't close the array in the previous block is because
+    // there may be non-fatal errors and we still want to keep trying to check
+    // the genomes settings, which need to be children of the root '#' node.
+    // Here we are at a fatal error so we can close the array and return
+    if (options->htmlOut)
+        dyStringPrintf(errors, "];\n%s", dyStringCannibalize(&hubErrors));
+    else
+        dyStringPrintf(errors, "%s", dyStringCannibalize(&hubErrors));
     return 1;
     }
 if (options->htmlOut && retVal != 1)

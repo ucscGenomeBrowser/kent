@@ -8,6 +8,10 @@ map to the genome.
 The data has been curated from scientific publications by the UniProt/SwissProt staff.
 </p> 
 
+<p>Note that the data is not online at UniProt itself yet, so the Genome
+Browser is the only place where you can see it, at the time of release of this Genome Browser. It will be
+released on April 22nd.</p>
+
 <h2>Display Conventions and Configuration</h2>
 
 <p>
@@ -55,12 +59,12 @@ binary for your system. Instructions for downloading source code and binaries ca
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
 The tool can also be used to obtain only features within a given range, for example:
 <br><br> 
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/uniprot/unipAliSwissprot.bb -chrom=chr6 -start=0 -end=1000000 stdout</tt> 
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/uniprot/unipAliSwissprotCov2.bb -chrom=NC_045512v2 -start=0 -end=29903 stdout</tt> 
 <br><br>
 This track is updated every month. The MySQL table hgFixed.trackVersion
 contains the name of the currently available data on the website. Older
 versions of the data files can be downloaded from the <a
-href="http://hgdownload.soe.ucsc.edu/goldenPath/$db/archive/">archive
+href="http://hgdownload.soe.ucsc.edu/goldenPath/archive/$db">archive
 folder</a> of our downloads server.  <br>
 Please refer to our
 <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>

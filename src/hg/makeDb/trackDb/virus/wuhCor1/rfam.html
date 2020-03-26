@@ -1,0 +1,56 @@
+<html>
+<body>
+<p>
+This track shows hits to RNA covariance models in the <a
+href="https://rfam.xfam.org/" target="_blank">Rfam</A> database,
+mapped to genomic coordinates.
+
+</p> 
+
+<h2>Methods</h2>
+
+The genome was scanned for conserved secondary structures usng cmscan from the Infernal (1.1.2) package using these parameters:
+<p>
+<pre>
+# cmscan :: search sequence(s) against a CM database
+# INFERNAL 1.1.2 (July 2016)
+# Copyright (C) 2016 Howard Hughes Medical Institute.
+# Freely distributed under a BSD open source license.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# model-specific thresholding:           NC cutoffs
+# Filters set as if DB size in Mb is:    5.000000
+# HMM-only mode for 0 basepair models:   no
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+</pre>
+
+There were two hits total:
+
+<pre>
+E-value  score  bias  modelname   start    end   mdl trunc   gc  description
+--------- ------ -----  ---------- ------ ------   --- ----- ----  -----------
+1.9e-16   81.6   0.0  Corona_FSE   13469   13550 +  cm    no 0.54  Coronavirus frameshifting stimulation element
+
+                    ::::::<<<<<<<<<<<________>>>>>>>>>>>:::::::::::::::::::::::::::::::::::::::::::::: CS
+   Corona_FSE     1 GGGUuCgGGGUaccAGuGaaGCuCGaCUgguACCCuGUGcuAaUGGuucuGAuaCUGAUGUUguauaaAGaGCuUUUGAUAU 82  
+                    GGGUU G:GGU:::AG:G+AGC+CG:CU:::ACC:UG G +A  GG++CU  UACUGAUGU GUAUA AG+GCUUUUGA+AU
+  wuhCor1_dna 13469 GGGUUUGCGGUGUAAGUGCAGCCCGUCUUACACCGUGCGGCACAGGCACUAGUACUGAUGUCGUAUACAGGGCUUUUGACAU 13550
+                    ********************************************************************************** PP
+
+
+E-value  score  bias  modelname  start    end   mdl trunc   gc  description
+--------- ------ -----  --------- ------ ------   --- ----- ----  -----------
+6.2e-11   54.4   0.0  s2m         29727   29769 +  cm    no 0.56  Coronavirus 3' stem-loop II-like motif (s2m)
+
+
+                          :<<<<<----<<<-<<<<_____>>-->>-->>>--->>>>>: CS
+                 s2m    1 cgguGCCGaGGCCACGCcGAGUAgGAUCGAGGGUACAGCacca 43  
+                           ::::CCGAGGC ACGC:GAGUA:GAUCGAG GUACAG::::+
+  wuhCor1_dna       29727 UUUCACCGAGGCCACGCGGAGUACGAUCGAGUGUACAGUGAAC 29769
+                          ******************************************* PP
+
+</pre>
+
+
+</p>
+</body>
+</html>

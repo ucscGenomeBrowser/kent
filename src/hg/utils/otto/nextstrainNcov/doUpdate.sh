@@ -18,7 +18,6 @@ curl -s -I http://data.nextstrain.org/ncov.json \
 latestDate=$(cat ncov.json.date)
 oldDate=$(cat old.ncov.json.date)
 if [ $(date -d "$latestDate" +%s) -le $(date -d "$oldDate" +%s)  ]; then
-    echo "Not newer than $(cat old.ncov.json.date)"
     exit 0
 fi
 
