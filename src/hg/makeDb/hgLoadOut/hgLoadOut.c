@@ -186,6 +186,7 @@ if (!lineFileNext(lf, &line, &lineSize))
     errAbort("Empty %s", lf->fileName);
 if (!(startsWith("   SW  perc perc", line) ||
       startsWith("   SW   perc perc", line) ||
+      startsWith("    SW   perc perc", line) ||
       startsWith("  bit   perc perc", line)))
     {
     errAbort("%s doesn't seem to be a RepeatMasker .out file, first "
