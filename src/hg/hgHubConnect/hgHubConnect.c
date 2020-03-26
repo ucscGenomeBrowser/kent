@@ -404,6 +404,9 @@ dyStringFree(&cmd);
 }
 
 void hgHubConnectDeveloperMode()
+/* Put up the controls for the "Hub Development" Tab, which includes a button to run the
+ * hubCheck utility on a hub and load a hub with the udcTimeout and measureTiming
+ * variables turned on */
 {
 // put out the top of our page
 char *hubUrl = cartOptionalString(cart, "validateHubUrl");
