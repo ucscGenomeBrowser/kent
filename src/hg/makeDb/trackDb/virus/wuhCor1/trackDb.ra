@@ -25,6 +25,12 @@ longLabel Detection Kit Primer Sets
 group map
 type psl
 
+track rfam
+shortLabel RFAM
+longLabel RFAM hits
+group genes
+type bed 9
+
 include trackDb.119way.ra
 include epitopes.ra
 include trackDb.44way.ra
