@@ -76,16 +76,16 @@ dataVersion /gbdb/$D/uniprot/version.txt
         color 255,0,150
         itemRgb off
 
-        track unipCov2LocExtra
-        shortLabel Extracellular
-        longLabel UniProt Extracellular Domain
-        priority 4
-        parent uniprotCov2 off
-        visibility dense
-        type bigBed 12 +
-        bigDataUrl /gbdb/$D/uniprot/unipLocExtraCov2.bb
-        color 0,150,255
-        itemRgb off
+        #track unipCov2LocExtra
+        #shortLabel Extracellular
+        #longLabel UniProt Extracellular Domain
+        #priority 4
+        #parent uniprotCov2 off
+        #visibility dense
+        #type bigBed 12 +
+        #bigDataUrl /gbdb/$D/uniprot/unipLocExtraCov2.bb
+        #color 0,150,255
+        #itemRgb off
 
         track unipCov2LocTransMemb
         shortLabel Transmembrane
@@ -98,16 +98,16 @@ dataVersion /gbdb/$D/uniprot/version.txt
         color 0,150,0
         itemRgb off
 
-        track unipCov2LocCytopl
-        shortLabel Cytoplasmic
-        longLabel UniProt Cytoplasmic Domains
-        priority 6
-        parent uniprotCov2 off
-        visibility dense
-        type bigBed 12 +
-        bigDataUrl /gbdb/$D/uniprot/unipLocCytoplCov2.bb
-        color 255,150,0
-        itemRgb off
+        #track unipCov2LocCytopl
+        #shortLabel Cytoplasmic
+        #longLabel UniProt Cytoplasmic Domains
+        #priority 6
+        #parent uniprotCov2 off
+        #visibility dense
+        #type bigBed 12 +
+        #bigDataUrl /gbdb/$D/uniprot/unipLocCytoplCov2.bb
+        #color 255,150,0
+        #itemRgb off
 
         track unipCov2Chain
         shortLabel Mature Proteins
@@ -149,16 +149,16 @@ dataVersion /gbdb/$D/uniprot/version.txt
         bigDataUrl /gbdb/$D/uniprot/unipModifCov2.bb
         #urls uniProtId="http://www.uniprot.org/uniprot/$$#aaMod_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
-        track unipCov2Mut
-        shortLabel Mutations
-        longLabel UniProt Amino Acid Mutations
-        priority 10
-        parent uniprotCov2 off
-        visibility dense
-        type bigBed 12 +
-        bigDataUrl /gbdb/$D/uniprot/unipMutCov2.bb
-        #urls uniProtId="http://www.uniprot.org/uniprot/$$#pathology_and_biotech" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$" variationId="http://www.uniprot.org/uniprot/$$"
-        urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        #track unipCov2Mut
+        #shortLabel Mutations
+        #longLabel UniProt Amino Acid Mutations
+        #priority 10
+        #parent uniprotCov2 off
+        #visibility dense
+        #type bigBed 12 +
+        #bigDataUrl /gbdb/$D/uniprot/unipMutCov2.bb
+        ##urls uniProtId="http://www.uniprot.org/uniprot/$$#pathology_and_biotech" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$" variationId="http://www.uniprot.org/uniprot/$$"
+        #urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
         track unipCov2Struct
         shortLabel Structure
@@ -194,16 +194,16 @@ dataVersion /gbdb/$D/uniprot/version.txt
         #urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
         urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
-        track unipCov2Conflict
-        shortLabel Seq. Conflicts
-        longLabel UniProt Sequence Conflicts
-        priority 13
-        parent uniprotCov2 off
-        visibility dense
-        type bigBed 12 +
-        bigDataUrl /gbdb/$D/uniprot/unipConflictCov2.bb
-        #urls uniProtId="http://www.uniprot.org/uniprot/$$#Sequence_conflict_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-        urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        #track unipCov2Conflict
+        #shortLabel Seq. Conflicts
+        #longLabel UniProt Sequence Conflicts
+        #priority 13
+        #parent uniprotCov2 off
+        #visibility dense
+        #type bigBed 12 +
+        #bigDataUrl /gbdb/$D/uniprot/unipConflictCov2.bb
+        ##urls uniProtId="http://www.uniprot.org/uniprot/$$#Sequence_conflict_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        #urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
 searchTable unipCov2AliSwissprot
 searchType bigBed
