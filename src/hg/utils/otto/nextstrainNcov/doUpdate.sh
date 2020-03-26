@@ -42,7 +42,7 @@ bedToBigBed -type=bed4 -tab -verbose=0 nextstrainGene.bed $chromSizes \
     nextstrainGene.bb
 
 sort -k2n,2n nextstrainClade.bed > nextstrainClade.sorted.bed
-bedToBigBed -as=$ottoDir/nextstrainClade.as -type=bed12+2 -tab -verbose=0 \
+bedToBigBed -as=$ottoDir/nextstrainClade.as -type=bed12+7 -tab -verbose=0 \
     nextstrainClade.sorted.bed $chromSizes \
     nextstrainClade.bb
 
