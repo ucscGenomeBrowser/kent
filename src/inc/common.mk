@@ -82,6 +82,13 @@ ifeq (${IS_HGWDEV},yes)
    L+=${HALLIBS}
 endif
 
+ifeq (${USE_HIC},)
+    USE_HIC=1
+endif
+
+ifeq (${USE_HIC},1)
+    HG_DEFS+=-DUSE_HIC
+endif
 
 # libssl: disabled by default
 ifneq (${SSL_DIR}, "/usr/include/openssl")
