@@ -14,6 +14,11 @@ table nextstrainClade
     int[blockCount] blockSizes; "Comma separated list of block sizes"
     int[blockCount] chromStarts; "Start positions relative to chromStart"
     string variants;   "Mutations that occurred on the path from the reference to this clade"
+    string dateInferred; "Date of clade branch inferred by TreeTime"
+    string dateConfMin;  "Earliest date in TreeTime confidence interval"
+    string dateConfMax;  "Latest date in TreeTime confidence interval"
+    string divInferred;  "Administrative division inferred by TreeTime"
+    string divConf;      "Top-scoring administrative divisions and confidence from TreeTime"
     int sampleCount;   "Number of samples belonging to the clade"
     string[sampleCount] samples; "Samples belonging to the clade"
     )

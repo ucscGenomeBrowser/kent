@@ -71,8 +71,24 @@ def cladeFromVariants(name, variants, varStr):
         clade['varNames'] = varStr
     return clade
 
-def numDateToMonthDay(numDate):
-    """Transform decimal year timestamp to string with only month and day"""
+def addDatesToClade(clade, numDateAttrs):
+    """Add the numeric dates from ncov.json node_attrs.num_date to clade record"""
+    clade['dateInferred'] = numDateAttrs['value']
+    clade['dateConfMin'] = numDateAttrs['confidence'][0]
+    clade['dateConfMax'] = numDateAttrs['confidence'][1]
+
+def addDivisionToClade(clade, divisionAttrs):
+    """Add the administrative division (location) data from ncov.json node_attrs.division to clade"""
+    clade['divInferred'] = divisionAttrs['value']
+    confString = ''
+    for div, conf in divisionAttrs['confidence'].items():
+        if (len(confString)):
+            confString += ', '
+        confString += "%s: %0.5f" % (div, conf)
+    clade['divConf'] = confString
+
+def numDateToYmd(numDate):
+    """Convert numeric date (decimal year) to integer year, month, day"""
     year = int(numDate)
     isLeapYear = 1 if (year % 4 == 0) else 0
     # Get rid of the year
@@ -80,30 +96,42 @@ def numDateToMonthDay(numDate):
     # Convert to Julian day
     jDay = int(numDate * 365) + 1
     if (jDay > 334 + isLeapYear):
-        monthDay ="Dec" + str(jDay - 334 - isLeapYear)
+        month, day = 11, (jDay - 334 - isLeapYear)
     elif (jDay > 304 + isLeapYear):
-        monthDay ="Nov" + str(jDay - 304 - isLeapYear)
+        month, day = 10, (jDay - 304 - isLeapYear)
     elif (jDay > 273 + isLeapYear):
-        monthDay ="Oct" + str(jDay - 273 - isLeapYear)
+        month, day = 9, (jDay - 273 - isLeapYear)
     elif (jDay > 243 + isLeapYear):
-        monthDay ="Sep" + str(jDay - 243 - isLeapYear)
+        month, day = 8, (jDay - 243 - isLeapYear)
     elif (jDay > 212 + isLeapYear):
-        monthDay ="Aug" + str(jDay - 212 - isLeapYear)
+        month, day = 7, (jDay - 212 - isLeapYear)
     elif (jDay > 181 + isLeapYear):
-        monthDay ="Jul" + str(jDay - 181 - isLeapYear)
+        month, day = 6, (jDay - 181 - isLeapYear)
     elif (jDay > 151 + isLeapYear):
-        monthDay ="Jun" + str(jDay - 151 - isLeapYear)
+        month, day = 5, (jDay - 151 - isLeapYear)
     elif (jDay > 120 + isLeapYear):
-        monthDay ="May" + str(jDay - 120 - isLeapYear)
+        month, day = 4, (jDay - 120 - isLeapYear)
     elif (jDay > 90 + isLeapYear):
-        monthDay ="Apr" + str(jDay - 90 - isLeapYear)
+        month, day = 3, (jDay - 90 - isLeapYear)
     elif (jDay > 59 + isLeapYear):
-        monthDay ="Mar" + str(jDay - 59 - isLeapYear)
+        month, day = 2, (jDay - 59 - isLeapYear)
     elif (jDay > 31):
-        monthDay ="Feb" + str(jDay - 31)
+        month, day = 1, (jDay - 31)
     else:
-        monthDay ="Jan" + str(jDay)
-    return monthDay
+        month, day = 0, jDay
+    return year, month, day
+
+months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+def numDateToMonthDay(numDate):
+    """Transform decimal year timestamp to string with only month and day"""
+    year, month, day = numDateToYmd(numDate)
+    return months[month] + str(day)
+
+def numDateToYmdStr(numDate):
+    """Convert decimal year to YY-MM-DD string"""
+    year, month, day = numDateToYmd(numDate)
+    return "%02d-%02d-%02d" % (year, month+1, day)
 
 def rUnpackNextstrainTree(branch, parentVariants, parentVarStr):
     """Recursively descend ncov.tree and build data structures for genome browser tracks"""
@@ -156,10 +184,13 @@ def rUnpackNextstrainTree(branch, parentVariants, parentVarStr):
             branchVarStr += ' (' + aaVar + ')'
     if (len(parentVarStr) and len(branchVarStr)):
         branchVarStr = parentVarStr + '; ' + branchVarStr
-    if (branch['node_attrs'].get('clade_membership')):
-        cladeName = branch['node_attrs']['clade_membership']['value']
+    nodeAttrs = branch['node_attrs']
+    if (nodeAttrs.get('clade_membership')):
+        cladeName = nodeAttrs['clade_membership']['value']
         if (not cladeName in clades):
             clades[cladeName] = cladeFromVariants(cladeName, branchVariants, branchVarStr)
+            addDatesToClade(clades[cladeName], nodeAttrs['num_date'])
+            addDivisionToClade(clades[cladeName], nodeAttrs['division'])
     kids = branch.get('children')
     if (kids):
         for child in kids:
@@ -167,11 +198,10 @@ def rUnpackNextstrainTree(branch, parentVariants, parentVarStr):
     else:
         for varName in branchVariants:
             variantCounts[varName] += 1
-        date = numDateToMonthDay(branch['node_attrs']['num_date']['value'])
-        samples.append({ 'id': branch['node_attrs']['gisaid_epi_isl']['value'],
+        samples.append({ 'id': nodeAttrs['gisaid_epi_isl']['value'],
                          'name': branch['name'],
-                         'clade': branch['node_attrs']['clade_membership']['value'],
-                         'date': date,
+                         'clade': nodeAttrs['clade_membership']['value'],
+                         'date': numDateToMonthDay(nodeAttrs['num_date']['value']),
                          'variants': branchVariants })
         if (cladeName):
             if (clades[cladeName].get('sampleCount')):
@@ -239,6 +269,11 @@ with open('nextstrainClade.bed', 'w') as outC:
                                        '1,' + ','.join(map(str, clade['varSizes'])) + ',1,',
                                        '0,' + ','.join(map(str, clade['varStarts'])) + ',29902,',
                                        clade['varNames'],
+                                       numDateToYmdStr(clade['dateInferred']),
+                                       numDateToYmdStr(clade['dateConfMin']),
+                                       numDateToYmdStr(clade['dateConfMax']),
+                                       clade['divInferred'],
+                                       clade['divConf'],
                                        clade['sampleCount'],
                                        ', '.join(clade['samples']) ])) + '\n')
     outC.close()
