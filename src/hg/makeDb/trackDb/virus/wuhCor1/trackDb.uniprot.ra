@@ -18,29 +18,31 @@ indelDoubleInsert on
 indelQueryInsert on
 baseColorTickColor contrastingColor
 
-track unipCov2Chain
-shortLabel UniProt Products
-longLabel UniProt Mature, Processed Protein Products (Polypeptide Chains)
-priority 2.5
-visibility pack
-type bigBed 12 +
-bigDataUrl /gbdb/$D/uniprot/unipChainCov2.bb
-#urls uniProtId="http://www.uniprot.org/uniprot/$$#ptm_processing" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-mouseOverField comments
-group genes
-
 track unipCov2Interest
 shortLabel UniProt Highlights
 longLabel UniProt highlighted "Regions of Interest"
 priority 2
 visibility pack
+color 2,12,100
 group genes
 type bigBed 12 +
 bigDataUrl /gbdb/wuhCor1/uniprot/unipInterestCov2.bb
 #urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
+
+track unipCov2Chain
+shortLabel UniProt Products
+longLabel UniProt Mature, Processed Protein Products (Polypeptide Chains)
+priority 3
+visibility pack
+color 0,2,80
+type bigBed 12 +
+bigDataUrl /gbdb/$D/uniprot/unipChainCov2.bb
+#urls uniProtId="http://www.uniprot.org/uniprot/$$#ptm_processing" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+mouseOverField comments
+group genes
 
 track uniprotCov2
 shortLabel UniProt Other
@@ -51,6 +53,7 @@ type bigBed 12 +
 exonNumbers off
 compositeTrack on
 allButtonPair on
+priority 4
 mouseOverField comments
 #urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"

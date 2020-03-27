@@ -45,7 +45,7 @@ group compGeno
     track cons44wayViewphyloP
     shortLabel Basewise Bat Strain Conservation (phyloP)
     view phyloP
-    visibility full
+    visibility hide
     subTrack cons44way
     viewLimits -4:5
     viewLimitsMax -11.968:4.256
@@ -94,7 +94,7 @@ group compGeno
     track cons44wayViewelements
     shortLabel Bat Conserved Elements
     view elements
-    visibility dense
+    visibility hide
     subTrack cons44way
 
         track phastConsElements44way

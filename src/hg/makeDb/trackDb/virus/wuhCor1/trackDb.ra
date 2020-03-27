@@ -32,10 +32,12 @@ group genes
 type bed 9
 
 track gordon
-shortLabel Human Genes
-longLabel Human Interacting Genes from Gordon et al.
+shortLabel Protein Interact.
+longLabel Human Interacting Proteins from Gordon et al.
 group genes
+color 1,50,32
 type bed 6
+priority 10
 
 track crisprDet
 shortLabel CRISPR Detection
