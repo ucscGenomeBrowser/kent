@@ -367,7 +367,37 @@
           </small>
         </div>
       </div>
-
+    </div>
+  </div>
+  <div class="row no-gutters">
+    <div class="card-deck">
+      <div class="card">
+        <div class="card-body text-center">
+          <br>
+          <a href="https://avatars1.githubusercontent.com/u/12550239?s=200&v=4">
+          <img class="card-img-top"Style="max-width: 300px" 
+          src="https://avatars1.githubusercontent.com/u/12550239?s=200&v=4"> 
+          </a>      
+          <p class="lead"><span style="color: #1E90FF">NS-Forest:</span>
+          Necessary and Sufficient Forest (NS-Forest) for Cell Type Marker Determination from cell type clusters</p>
+          <ul class="list-group list-group-flush text-left">
+            <li class="list-group-item">
+            <p>
+            Necessary and Sufficient Forest is a method that takes cluster results from single cell/nuclei RNAseq experiments and generates lists of minimal markers needed to define each “cell type cluster”.
+            <br>
+            The method begins by re-encoding the cluster labels into binary classifications, and Random Forest models are generated comparing each cluster versus all. The top fifteen genes are then reranked using a score measuring how binary they are, e.g., a gene with expression in the target cluster but no expression in the other clusters would have a high binary score. Expression cutoffs for the top six genes ranked by binary score are then determined by generating individual decision trees and extracting the decision path information. Then all permutations of the top six most binary genes are evaluated using f-beta score as an objective function (the beta value default set at 0.5, which weights the f-measure score more toward precision as opposed to recall)
+            </p>
+            </li>
+            <li class="list-group-item"><a href="https://github.com/JCVenterInstitute/NSForest"
+            target="_blank">NSForest GitHub</a> <i class="fab fa-github" aria-hidden="true"></i></li>
+          </ul>    
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">
+          NSForest was created by Brian Aevermann and Richard Scheuermann at JCVenterInstitute.
+          </small>
+        </div>
+      </div>
     </div>
   </div>
 </div>
