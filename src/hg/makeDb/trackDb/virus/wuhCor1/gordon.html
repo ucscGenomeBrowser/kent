@@ -1,0 +1,33 @@
+<H2>Description</H2>
+<P>
+<p>This track shows data from  Gordon et al, 2020 <a target=_blank href="https://www.biorxiv.org/content/10.1101/2020.03.22.002386v1.full.pdf+html">"A
+SARS-CoV-2-Human Protein-Protein Interaction Map Reveals Drug Targets and
+Potential Drug-Repurposing"</a>.
+
+<p>The authors  cloned, tagged and expressed 26
+of the mature proteins expressed by SARS-CoV-2 in 293 human cells and used
+affinity purification mass spectrometry (AP-MS) to identify human proteins that
+interact with viral proteins. 332 high confidence interactions are reported
+betwen human and viral proteins. 
+
+<h2>Display Conventions and Configuration</h2>
+<p> 
+<p>On the viral genome the coordinates of the viral protein are marked and labeled with the name of the human interactor. 
+<p>The bed file also includes the <a href = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4378866/">MIST</a> score * 1000.  A MIST score of 1 is a highly reproducible and specific interaction, scores are multipled by 1000 for display purposes.
+<p>The set of interactions displayed hered includes *only* the 332 "high confidence" interactions that met criteria for significance (using a MIST cutoff >= 0.7 as well as "a SAINTexpress BFDR <= 0.05 and an average spectral count >= 2."). 
+
+
+<h2>Methods</h2>
+<p>The tab delimited version of supplementary table 2 was downloaded from <a href = "https://www.biorxiv.org/content/biorxiv/early/2020/03/22/2020.03.22.002386/DC5/embed/media-5.xlsx?download=true"> biorxiv</a>.
+This table lists the viral protein that served as the "bait" and Uniprot identifiers of human proteins that were captured as "prey".</p>
+<p>We then manually modified a version of the "UniProt Mature Protein Products (Polypeptide Chains)" track to rename ORFs to match paper nomenclature as indicated by Figure 1.</p>
+<p>The table was then joined and MIST score multipled by 1000 to produce a track reporting interactions. </p>
+<p>An analagous table was made for hg38. Contact jferna10@ucsc.edu or maxh@ucsc.edu if you have any questions 
+on the data.</p>
+
+
+<h2>Credits</h2>
+<p>The UCSC SARS-CoV-2 genome browser and associated data annotation tracks were funded by generous private donors to the UC Santa Cruz Genomics Institute.</>
+
+<h2>References</h2>
+Gordon et al, <a href = "https://www.biorxiv.org/content/10.1101/2020.03.22.002386v1.full.pdf+html">"A SARS-CoV-2-Human Protein-Protein Interaction Map Reveals Drug Targets and Potential Drug-Repurposing"</a>, Biorxiv 2020</p>

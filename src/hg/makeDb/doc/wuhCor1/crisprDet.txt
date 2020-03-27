@@ -1,0 +1,4 @@
+Fri Mar 27 07:50:33 PDT 2020
+cd /hive/data/genomes/wuhCor1/bed/crisprDet
+blat ../wuhCor1.2bit seqs.fa seqs.psl -noHead -minScore=18 -stepSize=3 -tileSize=6
+hgLoadPsl wuhCor1 -table=crisprMammoth seqs.psl 

@@ -5,7 +5,7 @@ table asmEquivalent
     string destination;     "equivalent assembly name"
     enum ("ensembl", "ucsc", "genbank", "refseq") sourceAuthority; "origin of source assembly"
     enum ("ensembl", "ucsc", "genbank", "refseq") destinationAuthority; "origin of equivalent assembly"
-    uint   matchCount;       "number of exactly matching sequences"
-    uint   sourceCount;      "number of sequences in source assembly"
-    uint   destinationCount; "number of sequences in equivalent assembly"
+    bigint   matchCount;       "number of exactly matching sequences"
+    bigint   sourceCount;      "number of sequences in source assembly"
+    bigint   destinationCount; "number of sequences in equivalent assembly"
     )

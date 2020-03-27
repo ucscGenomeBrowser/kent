@@ -19,8 +19,8 @@ searchPriority 8
 include ncbiGeneBGP.ra
 
 track primers
-shortLabel Detection Primers
-longLabel Detection Kit Primer Sets
+shortLabel RT-PCR Primers
+longLabel RT-PCR Detection Kit Primer Sets
 group map
 type psl
 
@@ -29,6 +29,20 @@ shortLabel RFAM
 longLabel RFAM hits
 group genes
 type bed 9
+
+track gordon
+shortLabel Protein Interact.
+longLabel Human Interacting Proteins from Gordon et al.
+group genes
+color 1,50,32
+type bed 6
+priority 10
+
+track crisprDet
+shortLabel CRISPR Detection
+longLabel CRISPR Detection Guides
+group genes
+type psl
 
 include trackDb.119way.ra
 include epitopes.ra
