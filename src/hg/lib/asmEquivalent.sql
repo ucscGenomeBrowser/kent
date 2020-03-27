@@ -9,9 +9,9 @@ CREATE TABLE asmEquivalent (
     destination varchar(255) not null,	# equivalent assembly name
     sourceAuthority enum("ensembl", "ucsc", "genbank", "refseq") not null,	# origin of source assembly
     destinationAuthority enum("ensembl", "ucsc", "genbank", "refseq") not null,	# origin of equivalent assembly
-    matchCount int unsigned not null,	# number of exactly matching sequences
-    sourceCount int unsigned not null,	# number of sequences in source assembly
-    destinationCount int unsigned not null,	# number of sequences in equivalent assembly
+    matchCount bigint not null,	# number of exactly matching sequences
+    sourceCount bigint not null,	# number of sequences in source assembly
+    destinationCount bigint not null,	# number of sequences in equivalent assembly
               #Indices
     INDEX (source),
     INDEX (destination)
