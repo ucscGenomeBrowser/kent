@@ -144,8 +144,8 @@ dataVersion /gbdb/$D/uniprot/version.txt
         bigDataUrl /gbdb/$D/uniprot/unipDisulfBondCov2.bb
 
         track unipCov2Modif
-        shortLabel AA Modifications
-        longLabel UniProt Amino Acid Modifications
+        shortLabel Glycosyl/Phosph.
+        longLabel UniProt Amino Acid Glycosylation/Phosphorylation sites
         priority 9
         parent uniprotCov2 off
         visibility dense
