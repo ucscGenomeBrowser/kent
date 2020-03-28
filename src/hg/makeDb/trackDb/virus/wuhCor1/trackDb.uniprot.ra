@@ -1,8 +1,8 @@
 # uncomposited the uniprot track a little, as suggested by Jim and Angie.
 # this is only possible by renaming all tracks and copying the desc page
 track unipCov2AliSwissprot
-shortLabel UniProt Proteins
-longLabel UniProt Proteins
+shortLabel Full Proteins
+longLabel UniProt full-length proteins
 priority 1
 visibility pack
 type bigPsl
@@ -12,27 +12,32 @@ searchIndex name,acc
 labelFields protShortNames,geneName,uniprotName,acc,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
 mouseOverField protFullNames
 itemRgb off
-group genes
+group uniprot
 color 2,12,120
 indelDoubleInsert on
 indelQueryInsert on
 baseColorTickColor contrastingColor
+dataVersion /gbdb/$D/uniprot/version.txt
+exonNumbers off
 
 track unipCov2Interest
-shortLabel UniProt Highlights
+shortLabel Highlights
 longLabel UniProt highlighted "Regions of Interest"
 priority 2
 visibility pack
 color 2,12,100
-group genes
+group uniprot
 type bigBed 12 +
 bigDataUrl /gbdb/wuhCor1/uniprot/unipInterestCov2.bb
 #urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
+dataVersion /gbdb/$D/uniprot/version.txt
+exonNumbers off
+itemRgb on
 
 track unipCov2Chain
-shortLabel UniProt Products
+shortLabel Mature Products
 longLabel UniProt Mature, Processed Protein Products (Polypeptide Chains)
 priority 3
 visibility pack
@@ -42,54 +47,101 @@ bigDataUrl /gbdb/$D/uniprot/unipChainCov2.bb
 #urls uniProtId="http://www.uniprot.org/uniprot/$$#ptm_processing" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
-group genes
+group uniprot
+dataVersion /gbdb/$D/uniprot/version.txt
+exonNumbers off
+itemRgb on
 
-track uniprotCov2
-shortLabel UniProt Other
-longLabel UniProt Protein Annotations (configure track to show more)
-group genes
+track unipCov2Domain
+shortLabel Protein Domains
+longLabel UniProt Domains
+priority 8
+group uniprot
+#parent uniprotCov2 off
 visibility dense
 type bigBed 12 +
+bigDataUrl /gbdb/$D/uniprot/unipDomainCov2.bb
+#urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
-compositeTrack on
-allButtonPair on
-priority 4
-mouseOverField comments
-#urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-scoreLabel Score (1000=SwissProt, 0=Trembl)
-scoreFilter 0
+
+track unipCov2DisulfBond
+shortLabel Disulf. Bonds
+longLabel UniProt Disulfide Bonds
+priority 8
+group uniprot
+#parent uniprotCov2 off
+visibility dense
+type bigBed 12 +
+bigDataUrl /gbdb/$D/uniprot/unipDisulfBondCov2.bb
+dataVersion /gbdb/$D/uniprot/version.txt
+exonNumbers off
 itemRgb on
+
+track unipCov2Modif
+shortLabel Glycosyl/Phosph.
+longLabel UniProt Amino Acid Glycosylation/Phosphorylation sites
+priority 9
+#parent uniprotCov2 off
+visibility dense
+type bigBed 12 +
+group uniprot
+bigDataUrl /gbdb/$D/uniprot/unipModifCov2.bb
+#urls uniProtId="http://www.uniprot.org/uniprot/$$#aaMod_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+dataVersion /gbdb/$D/uniprot/version.txt
+itemRgb on
+
+#track uniprotCov2
+#shortLabel UniProt Other
+#longLabel UniProt Protein Annotations (configure track to show more)
+#group uniprot
+#visibility dense
+#type bigBed 12 +
+#exonNumbers off
+#compositeTrack on
+#allButtonPair on
+#priority 4
+#mouseOverField comments
+##urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+#urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+##scoreLabel Score (1000=SwissProt, 0=Trembl)
+##scoreFilter 0
+#itemRgb on
+#dataVersion /gbdb/$D/uniprot/version.txt
+
+track unipCov2AliTrembl
+shortLabel TrEMBL Aln.
+longLabel UCSC alignment of TrEMBL proteins to genome
+priority 2
+#parent uniprotCov2 off
+visibility hide
+group uniprot
+type bigPsl
+bigDataUrl /gbdb/$D/uniprot/unipAliTremblCov2.bb
+searchIndex name,acc
+#urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
+labelFields acc,uniprotName,geneName,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
+mouseOverField protFullNames
+itemRgb off
+color 0,150,250
+indelDoubleInsert on
+indelQueryInsert on
+baseColorTickColor contrastingColor
 dataVersion /gbdb/$D/uniprot/version.txt
 
-        track unipCov2AliTrembl
-        shortLabel TrEMBL Aln.
-        longLabel UCSC alignment of TrEMBL proteins to genome
-        priority 2
-        parent uniprotCov2 off
-        visibility hide
-        type bigPsl
-        bigDataUrl /gbdb/$D/uniprot/unipAliTremblCov2.bb
-        searchIndex name,acc
-        #urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
-        labelFields acc,uniprotName,geneName,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
-        mouseOverField protFullNames
-        itemRgb off
-        color 0,150,250
-        indelDoubleInsert on
-        indelQueryInsert on
-        baseColorTickColor contrastingColor
+track unipCov2LocSignal
+shortLabel Signal Peptides
+longLabel UniProt Signal Peptides
+priority 3
+#parent uniprotCov2 off
+visibility dense
+type bigBed 12 +
+group uniprot
+bigDataUrl /gbdb/$D/uniprot/unipLocSignalCov2.bb
+color 255,0,150
+itemRgb off
+dataVersion /gbdb/$D/uniprot/version.txt
 
-        track unipCov2LocSignal
-        shortLabel Signal Peptide
-        longLabel UniProt Signal Peptides
-        priority 3
-        parent uniprotCov2 off
-        visibility dense
-        type bigBed 12 +
-        bigDataUrl /gbdb/$D/uniprot/unipLocSignalCov2.bb
-        color 255,0,150
-        itemRgb off
 
         #track unipCov2LocExtra
         #shortLabel Extracellular
@@ -102,16 +154,18 @@ dataVersion /gbdb/$D/uniprot/version.txt
         #color 0,150,255
         #itemRgb off
 
-        track unipCov2LocTransMemb
-        shortLabel Transmembrane
-        longLabel UniProt Transmembrane Domains
-        priority 5
-        parent uniprotCov2 on
-        visibility dense
-        type bigBed 12 +
-        bigDataUrl /gbdb/$D/uniprot/unipLocTransMembCov2.bb
-        color 0,150,0
-        itemRgb off
+track unipCov2LocTransMemb
+shortLabel Transmem. Domains
+longLabel UniProt Transmembrane Domains
+priority 5
+#parent uniprotCov2 on
+visibility dense
+type bigBed 12 +
+bigDataUrl /gbdb/$D/uniprot/unipLocTransMembCov2.bb
+group uniprot
+color 0,150,0
+itemRgb off
+dataVersion /gbdb/$D/uniprot/version.txt
 
         #track unipCov2LocCytopl
         #shortLabel Cytoplasmic
@@ -124,35 +178,6 @@ dataVersion /gbdb/$D/uniprot/version.txt
         #color 255,150,0
         #itemRgb off
 
-        track unipCov2Domain
-        shortLabel Domains
-        longLabel UniProt Domains
-        priority 8
-        parent uniprotCov2 off
-        visibility dense
-        type bigBed 12 +
-        bigDataUrl /gbdb/$D/uniprot/unipDomainCov2.bb
-        #urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-
-        track unipCov2DisulfBond
-        shortLabel Disulf. Bonds
-        longLabel UniProt Disulfide Bonds
-        priority 8
-        parent uniprotCov2 off
-        visibility dense
-        type bigBed 12 +
-        bigDataUrl /gbdb/$D/uniprot/unipDisulfBondCov2.bb
-
-        track unipCov2Modif
-        shortLabel Glycosyl/Phosph.
-        longLabel UniProt Amino Acid Glycosylation/Phosphorylation sites
-        priority 9
-        parent uniprotCov2 off
-        visibility dense
-        type bigBed 12 +
-        bigDataUrl /gbdb/$D/uniprot/unipModifCov2.bb
-        #urls uniProtId="http://www.uniprot.org/uniprot/$$#aaMod_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-
         #track unipCov2Mut
         #shortLabel Mutations
         #longLabel UniProt Amino Acid Mutations
@@ -164,39 +189,44 @@ dataVersion /gbdb/$D/uniprot/version.txt
         ##urls uniProtId="http://www.uniprot.org/uniprot/$$#pathology_and_biotech" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$" variationId="http://www.uniprot.org/uniprot/$$"
         #urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
-        track unipCov2Struct
-        shortLabel Structure
-        longLabel UniProt Protein Primary/Secondary Structure Annotations
-        priority 11
-        parent uniprotCov2 off
-        group genes
-        visibility hide
-        type bigBed 12 +
-        bigDataUrl /gbdb/$D/uniprot/unipStructCov2.bb
-        #urls uniProtId="http://www.uniprot.org/uniprot/$$#structure" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-        urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+track unipCov2Struct
+shortLabel Structure
+longLabel UniProt Protein Primary/Secondary Structure Annotations
+priority 11
+#parent uniprotCov2 off
+visibility dense
+type bigBed 12 +
+group uniprot
+bigDataUrl /gbdb/$D/uniprot/unipStructCov2.bb
+#urls uniProtId="http://www.uniprot.org/uniprot/$$#structure" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+dataVersion /gbdb/$D/uniprot/version.txt
 
-        track unipCov2Other
-        shortLabel Other Annot.
-        longLabel UniProt Other Annotations
-        priority 11
-        parent uniprotCov2 off
-        visibility dense
-        type bigBed 12 +
-        bigDataUrl /gbdb/$D/uniprot/unipOtherCov2.bb
-        #urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-        urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+track unipCov2Other
+shortLabel Other Annot.
+longLabel UniProt Other Annotations
+priority 11
+#parent uniprotCov2 off
+visibility dense
+group uniprot
+type bigBed 12 +
+bigDataUrl /gbdb/$D/uniprot/unipOtherCov2.bb
+#urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+dataVersion /gbdb/$D/uniprot/version.txt
 
-        track unipCov2Repeat
-        shortLabel Repeats
-        longLabel UniProt Repeats
-        priority 12
-        parent uniprotCov2 off
-        visibility dense
-        type bigBed 12 +
-        bigDataUrl /gbdb/$D/uniprot/unipRepeatCov2.bb
-        #urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-        urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+track unipCov2Repeat
+shortLabel Repeats
+longLabel UniProt Repeats
+priority 12
+group uniprot
+#parent uniprotCov2 off
+visibility dense
+type bigBed 12 +
+bigDataUrl /gbdb/$D/uniprot/unipRepeatCov2.bb
+#urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+dataVersion /gbdb/$D/uniprot/version.txt
 
         #track unipCov2Conflict
         #shortLabel Seq. Conflicts
