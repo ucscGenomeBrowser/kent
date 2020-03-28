@@ -1,11 +1,12 @@
 track strainCons44way
 compositeTrack on
-shortLabel Cons Bat CoV
+shortLabel 44 Aln: Names
 longLabel Multiz Alignment & Conservation (44 Strains with bats as hosts)
-subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+#subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons)
 dragAndDrop subTracks
-visibility full
-priority 1
+visibility dense
+priority 10
 type bed 4
 group compGeno
 html cons44way
@@ -43,7 +44,7 @@ html cons44way
     track strainCons44wayViewphyloP
     shortLabel Basewise Conservation (phyloP)
     view phyloP
-    visibility full
+    visibility hide
     subTrack strainCons44way
     viewLimits -4:5
     viewLimitsMax -11.968:4.256
@@ -69,7 +70,7 @@ html cons44way
     track strainCons44wayViewphastcons
     shortLabel Bat Element Conservation (phastCons)
     view phastcons
-    visibility full
+    visibility dense
     subTrack strainCons44way
 
         track strainPhastCons44way
@@ -89,18 +90,18 @@ html cons44way
         priority 13
 
     # Conserved Elements (Most Conserved)
-    track strainCons44wayViewelements
-    shortLabel Bat Conserved Elements
-    view elements
-    visibility dense
-    subTrack strainCons44way
+    #track strainCons44wayViewelements
+    #shortLabel Bat Conserved Elements
+    #view elements
+    #visibility dense
+    #subTrack strainCons44way
 
-        track strainPhastConsElements44way
-        subTrack strainCons44wayViewelements on
-        subGroups view=elements
-        shortLabel Bat Cons. El.
-        longLabel 44 bat virus strains Conserved Elements
-        noInherit on
-        color 110,10,40
-        type bed 5 .
-        priority 23
+    #    track strainPhastConsElements44way
+    #    subTrack strainCons44wayViewelements on
+    #    subGroups view=elements
+    #    shortLabel Bat Cons. El.
+    #    longLabel 44 bat virus strains Conserved Elements
+    #    noInherit on
+    #    color 110,10,40
+    #    type bed 5 .
+    #    priority 23

@@ -1,6 +1,6 @@
 track cons119way
 compositeTrack on
-shortLabel 119 Accessions
+shortLabel 119 Coronav. Aln
 longLabel Multiz Alignment & Conservation (119 strains: strains with vertebrate hosts and human SARS-Cov2, Accession Names)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
@@ -46,7 +46,7 @@ group compGeno
     track cons119wayViewphyloP
     shortLabel Basewise Conservation (phyloP)
     view phyloP
-    visibility full
+    visibility hide
     subTrack cons119way
     viewLimits -4:5
     viewLimitsMax -7.405:20
@@ -72,7 +72,7 @@ group compGeno
     track cons119wayViewphastcons
     shortLabel Element Conservation (phastCons)
     view phastcons
-    visibility full
+    visibility dense
     subTrack cons119way
 
         track phastCons119way
@@ -92,18 +92,18 @@ group compGeno
         priority 13
 
     # Conserved Elements (Most Conserved)
-    track cons119wayViewelements
-    shortLabel Conserved Elements
-    view elements
-    visibility dense
-    subTrack cons119way
+    #track cons119wayViewelements
+    #shortLabel Conserved Elements
+    #view elements
+    #visibility dense
+    #subTrack cons119way
 
-        track phastConsElements119way
-        subTrack cons119wayViewelements on
-        subGroups view=elements
-        shortLabel Cons. Elements
-        longLabel 119 virus strains Conserved Elements
-        noInherit on
-        color 110,10,40
-        type bed 5 .
-        priority 23
+        #track phastConsElements119way
+        #subTrack cons119wayViewelements on
+        #subGroups view=elements
+        #shortLabel Cons. Elements
+        #longLabel 119 virus strains Conserved Elements
+        #noInherit on
+        #color 110,10,40
+        #type bed 5 .
+        #priority 23
