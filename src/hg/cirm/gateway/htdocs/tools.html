@@ -383,8 +383,7 @@
           <ul class="list-group list-group-flush text-left">
             <li class="list-group-item">
             <p>
-            Necessary and Sufficient Forest is a method that takes cluster results from single cell/nuclei RNAseq experiments and generates lists of minimal markers needed to define each “cell type cluster”.
-            <br>
+            Necessary and Sufficient Forest is a method that takes cluster results from single cell/nuclei RNAseq experiments and generates lists of minimal markers needed to define each <q>cell type cluster</q>.
             The method begins by re-encoding the cluster labels into binary classifications, and Random Forest models are generated comparing each cluster versus all. The top fifteen genes are then reranked using a score measuring how binary they are, e.g., a gene with expression in the target cluster but no expression in the other clusters would have a high binary score. Expression cutoffs for the top six genes ranked by binary score are then determined by generating individual decision trees and extracting the decision path information. Then all permutations of the top six most binary genes are evaluated using f-beta score as an objective function (the beta value default set at 0.5, which weights the f-measure score more toward precision as opposed to recall)
             </p>
             </li>
