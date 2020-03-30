@@ -5,7 +5,7 @@ html gold
 # Local declaration so that local gap.html is picked up.
 track gap override
 visibility hide
-html gap.html
+html gap
 
 track rmsk override
 visibility hide

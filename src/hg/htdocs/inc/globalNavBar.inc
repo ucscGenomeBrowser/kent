@@ -18,7 +18,7 @@
 	<li><a href="../cgi-bin/hgTracks?db=mm10&amp;position=lastDbPos">Mouse GRCm38/mm10</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=mm9&amp;position=lastDbPos">Mouse NCBI37/mm9</a></li>
 	<li><a href="http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hubIndex.html">Mouse: 16 strains</a></li>
-	<li><a href="../cgi-bin/hgGateway?db=wuhCor1">SARS-CoV-2 (COVID-19 Virus)</a></li>
+	<li><a href="../cgi-bin/hgGateway?db=wuhCor1">SARS-CoV-2 (COVID-19)</a></li>
 	<li class="last"><a href="../cgi-bin/hgGateway">Other</a></li>
         </ul>
 </li>

@@ -51,6 +51,7 @@ group uniprot
 dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
 itemRgb on
+html uniprotCov2
 
 track unipCov2Domain
 shortLabel Protein Domains
@@ -65,6 +66,7 @@ bigDataUrl /gbdb/$D/uniprot/unipDomainCov2.bb
 mouseOverField comments
 dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
+html uniprotCov2
 
 track unipCov2DisulfBond
 shortLabel Disulf. Bonds
@@ -79,6 +81,7 @@ dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 exonNumbers off
 itemRgb on
+html uniprotCov2
 
 track unipCov2Modif
 shortLabel Glycosyl/Phosph.
@@ -93,6 +96,7 @@ bigDataUrl /gbdb/$D/uniprot/unipModifCov2.bb
 mouseOverField comments
 dataVersion /gbdb/$D/uniprot/version.txt
 itemRgb on
+html uniprotCov2
 
 #track uniprotCov2
 #shortLabel UniProt Other
@@ -131,6 +135,7 @@ indelDoubleInsert on
 indelQueryInsert on
 baseColorTickColor contrastingColor
 dataVersion /gbdb/$D/uniprot/version.txt
+html uniprotCov2
 
 track unipCov2LocSignal
 shortLabel Signal Peptides
@@ -145,7 +150,7 @@ color 255,0,150
 itemRgb off
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
-
+html uniprotCov2
 
         #track unipCov2LocExtra
         #shortLabel Extracellular
@@ -171,6 +176,7 @@ color 0,150,0
 itemRgb off
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
+html uniprotCov2
 
         #track unipCov2LocCytopl
         #shortLabel Cytoplasmic
@@ -207,6 +213,7 @@ bigDataUrl /gbdb/$D/uniprot/unipStructCov2.bb
 urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
+html uniprotCov2
 
 track unipCov2Other
 shortLabel Other Annot.
@@ -221,6 +228,7 @@ bigDataUrl /gbdb/$D/uniprot/unipOtherCov2.bb
 urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
+html uniprotCov2
 
 track unipCov2Repeat
 shortLabel Repeats
@@ -235,6 +243,7 @@ bigDataUrl /gbdb/$D/uniprot/unipRepeatCov2.bb
 urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
+html uniprotCov2
 
         #track unipCov2Conflict
         #shortLabel Seq. Conflicts
