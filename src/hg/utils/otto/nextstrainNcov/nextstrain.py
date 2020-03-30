@@ -77,15 +77,15 @@ def addDatesToClade(clade, numDateAttrs):
     clade['dateConfMin'] = numDateAttrs['confidence'][0]
     clade['dateConfMax'] = numDateAttrs['confidence'][1]
 
-def addDivisionToClade(clade, divisionAttrs):
-    """Add the administrative division (location) data from ncov.json node_attrs.division to clade"""
-    clade['divInferred'] = divisionAttrs['value']
+def addCountryToClade(clade, countryAttrs):
+    """Add country data from ncov.json node_attrs.country to clade"""
+    clade['countryInferred'] = countryAttrs['value']
     confString = ''
-    for div, conf in divisionAttrs['confidence'].items():
+    for country, conf in countryAttrs['confidence'].items():
         if (len(confString)):
             confString += ', '
-        confString += "%s: %0.5f" % (div, conf)
-    clade['divConf'] = confString
+        confString += "%s: %0.5f" % (country, conf)
+    clade['countryConf'] = confString
 
 def numDateToYmd(numDate):
     """Convert numeric date (decimal year) to integer year, month, day"""
@@ -190,7 +190,12 @@ def rUnpackNextstrainTree(branch, parentVariants, parentVarStr):
         if (not cladeName in clades):
             clades[cladeName] = cladeFromVariants(cladeName, branchVariants, branchVarStr)
             addDatesToClade(clades[cladeName], nodeAttrs['num_date'])
-            addDivisionToClade(clades[cladeName], nodeAttrs['division'])
+            if (nodeAttrs.get('country')):
+                addCountryToClade(clades[cladeName], nodeAttrs['country'])
+            elif (nodeAttrs.get('division')):
+                addCountryToClade(clades[cladeName], nodeAttrs['division'])
+            else:
+                warn('No country or division for new clade ' + cladeName)
     kids = branch.get('children')
     if (kids):
         for child in kids:
@@ -233,16 +238,23 @@ def parsedVarPos(pv):
 parsedVars.sort(key=parsedVarPos)
 
 def boolToStr01(bool):
+    """Convert boolean to string 1 or 0."""
     if (bool):
         return '1'
     else:
         return '0'
 
+def writeVcfHeaderExceptSamples(outF):
+    """Write VCF header lines -- except for sample names (this ends with a \t not a \n)."""
+    outF.write('##fileformat=VCFv4.3\n')
+    outF.write('##source=nextstrain.org\n')
+    outF.write('\t'.join(['#CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO', 'FORMAT']) +
+               '\t');
+
+# VCF
 with open('nextstrainSamples.vcf', 'w') as outC:
-    outC.write('##fileformat=VCFv4.3\n')
-    outC.write('##source=nextstrain.org\n')
-    outC.write('\t'.join(['#CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO', 'FORMAT']) +
-               '\t' + '\t'.join(sampleNames) + '\n')
+    writeVcfHeaderExceptSamples(outC)
+    outC.write('\t'.join(sampleNames) + '\n')
     for pv in parsedVars:
         varName = pv[1]
         info = 'AC=' + str(variantCounts[varName]) + ';AN=' + str(sampleCount)
@@ -259,6 +271,36 @@ with open('nextstrainSamples.vcf', 'w') as outC:
                                '\t'.join(genotypes) ]) + '\n')
     outC.close()
 
+# Per-clade VCF subset
+for cladeName in clades:
+    if cladeName != 'unassigned':
+        cladeSamples = [ sample for sample in samples if (sample['clade'] == cladeName) ]
+        cladeSampleCount = len(cladeSamples)
+        cladeSampleNames = [ sample['name'] for sample in cladeSamples ]
+        with open('nextstrainSamples' + cladeName + '.vcf', 'w') as outV:
+            writeVcfHeaderExceptSamples(outV)
+            outV.write('\t'.join(cladeSampleNames) + '\n')
+            for pv in parsedVars:
+                varName = pv[1]
+                genotypes = []
+                ac=0
+                for sample in cladeSamples:
+                    gt = boolToStr01(sample['variants'].get(varName))
+                    genotypes.append(gt)
+                    if (sample['variants'].get(varName)):
+                        ac += 1
+                if (ac > 0):
+                    info = 'AC=' + str(ac) + ';AN=' + str(cladeSampleCount)
+                    aaChange = variantAaChanges.get(varName)
+                    if (aaChange):
+                        info += ';AACHANGE=' + aaChange
+                    outV.write('\t'.join([ chrom,
+                                           '\t'.join(map(str, pv)),
+                                           '\t'.join(['.', 'PASS', info, 'GT']),
+                                           '\t'.join(genotypes) ]) + '\n')
+            outV.close()
+
+# BED+ file for clades
 with open('nextstrainClade.bed', 'w') as outC:
     for name, clade in clades.items():
         if (clade.get('thickStart')):
@@ -272,8 +314,8 @@ with open('nextstrainClade.bed', 'w') as outC:
                                        numDateToYmdStr(clade['dateInferred']),
                                        numDateToYmdStr(clade['dateConfMin']),
                                        numDateToYmdStr(clade['dateConfMax']),
-                                       clade['divInferred'],
-                                       clade['divConf'],
+                                       clade['countryInferred'],
+                                       clade['countryConf'],
                                        clade['sampleCount'],
                                        ', '.join(clade['samples']) ])) + '\n')
     outC.close()
