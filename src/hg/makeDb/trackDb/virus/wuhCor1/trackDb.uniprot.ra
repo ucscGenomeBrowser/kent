@@ -62,6 +62,7 @@ visibility dense
 type bigBed 12 +
 bigDataUrl /gbdb/$D/uniprot/unipDomainCov2.bb
 #urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+mouseOverField comments
 dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
 
@@ -75,6 +76,7 @@ visibility dense
 type bigBed 12 +
 bigDataUrl /gbdb/$D/uniprot/unipDisulfBondCov2.bb
 dataVersion /gbdb/$D/uniprot/version.txt
+mouseOverField comments
 exonNumbers off
 itemRgb on
 
@@ -88,6 +90,7 @@ type bigBed 12 +
 group uniprot
 bigDataUrl /gbdb/$D/uniprot/unipModifCov2.bb
 #urls uniProtId="http://www.uniprot.org/uniprot/$$#aaMod_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+mouseOverField comments
 dataVersion /gbdb/$D/uniprot/version.txt
 itemRgb on
 
@@ -141,6 +144,7 @@ bigDataUrl /gbdb/$D/uniprot/unipLocSignalCov2.bb
 color 255,0,150
 itemRgb off
 dataVersion /gbdb/$D/uniprot/version.txt
+mouseOverField comments
 
 
         #track unipCov2LocExtra
@@ -166,6 +170,7 @@ group uniprot
 color 0,150,0
 itemRgb off
 dataVersion /gbdb/$D/uniprot/version.txt
+mouseOverField comments
 
         #track unipCov2LocCytopl
         #shortLabel Cytoplasmic
@@ -201,6 +206,7 @@ bigDataUrl /gbdb/$D/uniprot/unipStructCov2.bb
 #urls uniProtId="http://www.uniprot.org/uniprot/$$#structure" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 dataVersion /gbdb/$D/uniprot/version.txt
+mouseOverField comments
 
 track unipCov2Other
 shortLabel Other Annot.
@@ -214,6 +220,7 @@ bigDataUrl /gbdb/$D/uniprot/unipOtherCov2.bb
 #urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 dataVersion /gbdb/$D/uniprot/version.txt
+mouseOverField comments
 
 track unipCov2Repeat
 shortLabel Repeats
@@ -227,6 +234,7 @@ bigDataUrl /gbdb/$D/uniprot/unipRepeatCov2.bb
 #urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 dataVersion /gbdb/$D/uniprot/version.txt
+mouseOverField comments
 
         #track unipCov2Conflict
         #shortLabel Seq. Conflicts
