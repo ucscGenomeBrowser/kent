@@ -44,6 +44,20 @@ longLabel CRISPR Detection Guides
 group genes
 type psl
 
+track rosettaMhc
+shortLabel Rosetta Predictions
+longLabel CD8 Epitopes predicted by NetMHC and Rosetta
+group immu
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/bbi/rosetta.bb
+
+track epiValid
+shortLabel Validated Epitopes
+longLabel Validated Epitopes from SARS
+group immu
+type bigBed 4 +
+bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
+
 include trackDb.119way.ra
 include epitopes.ra
 include trackDb.44way.ra
