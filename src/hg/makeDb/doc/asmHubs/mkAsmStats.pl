@@ -133,8 +133,9 @@ END
 sub endHtml() {
 
 if ($asmHubName ne "viral") {
-  printf "<p>\n<table border='1'><thead>\n<tr>";
-  printf "<th>Assembly hubs index pages:&nbsp;</th>\n";
+  printf "<p>\n<table border='1'><thead>\n";
+  printf "<tr><th colspan=6 style='text-align:center;'>Additional hubs with collections of assemblies</th></tr>\n";
+  printf "<tr><th>Assembly hubs index pages:&nbsp;</th>\n";
   printf "<th><a href='../primates/index.html'>Primates</a></th>\n";
   printf "<th><a href='../mammals/index.html'>Mammals</a></th>\n";
   printf "<th><a href='../birds/index.html'>Birds</a></th>\n";
@@ -143,11 +144,11 @@ if ($asmHubName ne "viral") {
 
   printf "</tr><tr>\n";
   printf "<th>Hubs assembly statistics:&nbsp;</th>\n";
-  printf "<th><a href='../primates/asmStatsPrimates.html'>Primates</a></th>\n";
-  printf "<th><a href='../mammals/asmStatsMammals.html'>Mammals</a></th>\n";
-  printf "<th><a href='../birds/asmStatsBirds.html'>Birds</a></th>\n";
-  printf "<th><a href='../fish/asmStatsFish.html'>Fish</a></th>\n";
-  printf "<th><a href='../vertebrate/asmStatsVertebrate.html'>other vertebrates</a></th>\n";
+  printf "<th><a href='../primates/asmStats.html'>Primates</a></th>\n";
+  printf "<th><a href='../mammals/asmStats.html'>Mammals</a></th>\n";
+  printf "<th><a href='../birds/asmStats.html'>Birds</a></th>\n";
+  printf "<th><a href='../fish/asmStats.html'>Fish</a></th>\n";
+  printf "<th><a href='../vertebrate/asmStats.html'>other vertebrates</a></th>\n";
 
   printf "</tr><tr>\n";
   printf "<th>Hubs track statistics:&nbsp;</th>\n";
