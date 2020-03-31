@@ -59,7 +59,7 @@ bigDataUrl /gbdb/wuhCor1/bbi/rosetta.bb
 
 track epiValid
 shortLabel Validated Epitopes
-longLabel Validated Epitopes from SARS
+longLabel Validated Epitopes from SARS 2003 outbreak
 group immu
 type bigBed 4 +
 bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
