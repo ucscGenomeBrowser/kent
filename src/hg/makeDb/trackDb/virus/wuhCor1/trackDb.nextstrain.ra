@@ -29,3 +29,105 @@ hapClusterHeight 400
 group varRep
 priority 0.5
 bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples.vcf.gz
+release beta,public
+
+track nextstrainSamples
+shortLabel Nextstrain Vars
+longLabel Nextstrain/GISAID Sample Variants from nextstrain.org/ncov
+type vcfTabix
+visibility hide
+hapClusterEnabled on
+hapClusterMethod fileOrder
+group varRep
+priority 0.5
+html nextstrainSamples
+compositeTrack on
+release alpha
+
+    track nextstrainSamplesAll
+    parent nextstrainSamples on
+    shortLabel All Vars
+    longLabel Variants in All Nextstrain/GISAID Samples from nextstrain.org/ncov
+    hapClusterHeight 500
+    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples.vcf.gz
+    priority 1
+
+    track nextstrainSamplesA1a
+    parent nextstrainSamples off
+    shortLabel A1a Vars
+    longLabel Variants in Clade A1a Nextstrain/GISAID Samples from nextstrain.org/ncov
+    hapClusterHeight 39
+    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA1a.vcf.gz
+    priority 10
+
+    track nextstrainSamplesA2
+    parent nextstrainSamples off
+    shortLabel A2 Vars
+    longLabel Variants in Clade A2 Nextstrain/GISAID Samples from nextstrain.org/ncov
+    hapClusterHeight 2
+    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA2.vcf.gz
+    priority 20
+
+    track nextstrainSamplesA2a
+    parent nextstrainSamples off
+    shortLabel A2a Vars
+    longLabel Variants in Clade A2a Nextstrain/GISAID Samples from nextstrain.org/ncov
+    hapClusterHeight 228
+    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA2a.vcf.gz
+    priority 30
+
+    track nextstrainSamplesA3
+    parent nextstrainSamples off
+    shortLabel A3 Vars
+    longLabel Variants in Clade A3 Nextstrain/GISAID Samples from nextstrain.org/ncov
+    hapClusterHeight 16
+    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA1a.vcf.gz
+    priority 40
+
+    track nextstrainSamplesA6
+    parent nextstrainSamples off
+    shortLabel A6 Vars
+    longLabel Variants in Clade A6 Nextstrain/GISAID Samples from nextstrain.org/ncov
+    hapClusterHeight 12
+    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA6.vcf.gz
+    priority 50
+
+    track nextstrainSamplesA7
+    parent nextstrainSamples off
+    shortLabel A7 Vars
+    longLabel Variants in Clade A7 Nextstrain/GISAID Samples from nextstrain.org/ncov
+    hapClusterHeight 1
+    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA7.vcf.gz
+    priority 60
+
+    track nextstrainSamplesB
+    parent nextstrainSamples off
+    shortLabel B Vars
+    longLabel Variants in Clade B Nextstrain/GISAID Samples from nextstrain.org/ncov
+    hapClusterHeight 28
+    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB.vcf.gz
+    priority 70
+
+    track nextstrainSamplesB1
+    parent nextstrainSamples off
+    shortLabel B1 Vars
+    longLabel Variants in Clade B1 Nextstrain/GISAID Samples from nextstrain.org/ncov
+    hapClusterHeight 80
+    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB1.vcf.gz
+    priority 80
+
+    track nextstrainSamplesB2
+    parent nextstrainSamples off
+    shortLabel B2 Vars
+    longLabel Variants in Clade B2 Nextstrain/GISAID Samples from nextstrain.org/ncov
+    hapClusterHeight 5
+    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB2.vcf.gz
+    priority 90
+
+    track nextstrainSamplesB4
+    parent nextstrainSamples off
+    shortLabel B4 Vars
+    longLabel Variants in Clade B4 Nextstrain/GISAID Samples from nextstrain.org/ncov
+    hapClusterHeight 4
+    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB4.vcf.gz
+    priority 100
