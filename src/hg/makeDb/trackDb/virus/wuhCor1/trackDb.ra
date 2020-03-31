@@ -30,13 +30,19 @@ longLabel RFAM hits
 group genes
 type bed 9
 
-track gordon
+track gordon2
 shortLabel Protein Interact.
-longLabel Human Interacting Proteins from Gordon et al.
+longLabel Human Interacting Proteins from Gordon et al. (* = druggable)
 group genes
 color 1,50,32
-type bed 6
+type bigBed 5 +
+bigDataUrl /gbdb/wuhCor1/bbi/gordon.bb
+useScore on
+scoreMin 600
+scoreMax 1000
 priority 10
+mouseOverField drug
+urls pmid=https://www.ncbi.nlm.nih.gov/pubmed/$$
 
 track crisprDet
 shortLabel CRISPR Detection
@@ -53,10 +59,18 @@ bigDataUrl /gbdb/wuhCor1/bbi/rosetta.bb
 
 track epiValid
 shortLabel Validated Epitopes
-longLabel Validated Epitopes from SARS
+longLabel Validated Epitopes from SARS 2003 outbreak
 group immu
 type bigBed 4 +
 bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
+
+track publicAnnots
+shortLabel User annotations
+longLabel User-contributed annotations via bit.ly/cov2annots
+group map
+type bigBed 4 +
+bigDataUrl /gbdb/wuhCor1/bbi/public.bb
+
 
 include trackDb.119way.ra
 include epitopes.ra
