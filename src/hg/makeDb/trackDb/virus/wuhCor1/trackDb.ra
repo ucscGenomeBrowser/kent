@@ -58,6 +58,14 @@ group immu
 type bigBed 4 +
 bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
 
+track publicAnnots
+shortLabel User annotations
+longLabel User-contributed annotations via bit.ly/cov2annots
+group map
+type bigBed 4 +
+bigDataUrl /gbdb/wuhCor1/bbi/public.bb
+
+
 include trackDb.119way.ra
 include epitopes.ra
 include trackDb.44way.ra
