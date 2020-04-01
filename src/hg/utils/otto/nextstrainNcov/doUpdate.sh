@@ -54,12 +54,14 @@ bedToBigBed -as=$ottoDir/nextstrainClade.as -type=bed12+7 -tab -verbose=0 \
 mkdir -p $ottoDir/archive/$today
 cp -p $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
     $runDir/nextstrainSamples*.vcf.gz{,.tbi} \
+    $runDir/nextstrain.nh \
+    $runDir/ncov.json \
     $ottoDir/archive/$today
-cp -p $runDir/ncov.json $ottoDir/archive/$today
 
 # Install
 ln -sf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
     $runDir/nextstrainSamples*.vcf.gz{,.tbi} \
+    $runDir/nextstrain.nh \
     $gbdbDir/
 
 echo "Updated nextstrain/ncov `date` (ncov.json date $latestDate)"
