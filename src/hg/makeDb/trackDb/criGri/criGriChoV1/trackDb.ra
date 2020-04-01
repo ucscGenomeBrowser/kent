@@ -44,3 +44,4 @@ visibility pack
 
 track mrna override
 visibility hide
+include ../../refSeqComposite.ra alpha
