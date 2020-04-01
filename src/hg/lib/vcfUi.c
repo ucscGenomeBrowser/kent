@@ -139,7 +139,7 @@ if (vcff != NULL && vcff->genotypeCount > 1)
     puts("<TR><TD>");
     cgiMakeRadioButton(varName, VCF_HAP_METHOD_FILE_ORDER,
                        sameString(hapMethod, VCF_HAP_METHOD_FILE_ORDER));
-    puts("</TD><TD>Using the order in which samples appear in the underlying VCF file");
+    puts("</TD><TD>using the order in which samples appear in the underlying VCF file");
     puts("</TR></TD></TABLE>");
     }
 }

@@ -111,7 +111,7 @@ print <<"END"
 Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 </p>
 
-<h3>See also: <a href='index.html'>hub access</a>,&nbsp;<a href='asmStats$Name.html'>assembly statistics</a></h3><br>
+<h3>See also: <a href='index.html'>hub access</a>,&nbsp;<a href='asmStats.html'>assembly statistics</a></h3><br>
 
 <h3>Data resource links</h3>
 NOTE: <em>Click on the column headers to sort the table by that column</em><br>
@@ -195,11 +195,11 @@ if ($asmHubName ne "viral") {
 
   printf "</tr><tr>\n";
   printf "<th>Hubs assembly statistics:&nbsp;</th>\n";
-  printf "<th><a href='../primates/asmStatsPrimates.html'>Primates</a></th>\n";
-  printf "<th><a href='../mammals/asmStatsMammals.html'>Mammals</a></th>\n";
-  printf "<th><a href='../birds/asmStatsBirds.html'>Birds</a></th>\n";
-  printf "<th><a href='../fish/asmStatsFish.html'>Fish</a></th>\n";
-  printf "<th><a href='../vertebrate/asmStatsVertebrate.html'>other vertebrates</a></th>\n";
+  printf "<th><a href='../primates/asmStats.html'>Primates</a></th>\n";
+  printf "<th><a href='../mammals/asmStats.html'>Mammals</a></th>\n";
+  printf "<th><a href='../birds/asmStats.html'>Birds</a></th>\n";
+  printf "<th><a href='../fish/asmStats.html'>Fish</a></th>\n";
+  printf "<th><a href='../vertebrate/asm.html'>other vertebrates</a></th>\n";
 
   printf "</tr><tr>\n";
   printf "<th>Hubs track statistics:&nbsp;</th>\n";

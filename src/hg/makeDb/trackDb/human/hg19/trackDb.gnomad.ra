@@ -321,8 +321,11 @@ html gnomad
         itemRgb on
         url https://gnomad.broadinstitute.org/variant/$$?dataset=gnomad_sv_r2_1
         urlLabel gnomAD Structural Variant Browser
-        filterLabel.svtype "Filter by Variant Class"
-        filterValues.svtype BND,CPX,CTX,DEL,DUP,INS,INV,MCNV
+        filterLabel.svtype "Filter by Type of Variation"
+        filterValues.svtype BND|Breakend,CPX|Complex,CTX|Translocation,DEL|Deletion,DUP|Duplication,INS|Insertion,INV|Inversion,MCNV|Multi-allele CNV
+        filter.svlen 50:199840172
+        filterByRange.svlen on
+        filterLabel.svlen "Filter by Variant Size"
         mouseOverField _mouseOver
         searchIndex name
         release alpha
@@ -336,8 +339,11 @@ html gnomad
         itemRgb on
         url https://gnomad.broadinstitute.org/variant/$$?dataset=gnomad_sv_r2_1
         urlLabel gnomAD Structural Variant Browser
-        filterLabel.svtype "Filter by Variant Class"
-        filterValues.svtype BND,CPX,CTX,DEL,DUP,INS,INV,MCNV
+        filterLabel.svtype "Filter by Type of Variation"
+        filterValues.svtype BND|Breakend,CPX|Complex,CTX|Translocation,DEL|Deletion,DUP|Duplication,INS|Insertion,INV|Inversion,MCNV|Multi-allele CNV
+        filter.svlen 50:199840172
+        filterByRange.svlen on
+        filterLabel.svlen "Filter by Variant Size"
         mouseOverField _mouseOver
         searchIndex name
         release alpha
@@ -351,8 +357,11 @@ html gnomad
         itemRgb on
         url https://gnomad.broadinstitute.org/variant/$$?dataset=gnomad_sv_r2_1
         urlLabel gnomAD Structural Variant Browser
-        filterLabel.svtype "Filter by Variant Class"
-        filterValues.svtype BND,CPX,CTX,DEL,DUP,INS,INV,MCNV
+        filterLabel.svtype "Filter by Type of Variation"
+        filterValues.svtype BND|Breakend,CPX|Complex,CTX|Translocation,DEL|Deletion,DUP|Duplication,INS|Insertion,INV|Inversion,MCNV|Multi-allele CNV
+        filter.svlen 50:199840172
+        filterByRange.svlen on
+        filterLabel.svlen "Filter by Variant Size"
         mouseOverField _mouseOver
         searchIndex name
         release alpha
