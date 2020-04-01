@@ -10,8 +10,8 @@ track gap override
 html gap
 visibility hide
 
-track refGene override
-visibility pack
+# track refGene override
+# visibility pack
 
 track xenoRefGene override
 visibility hide
