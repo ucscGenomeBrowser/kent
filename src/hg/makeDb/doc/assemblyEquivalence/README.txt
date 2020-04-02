@@ -23,7 +23,7 @@ There are five different sources of sequence that will be compared:
 2. NCBI RefSeq assemblies
 3. NCBI Genbank assemblies
 4. Ensembl assemblies
-XXX 5. UCSC assembly hub genomes - maybe, this is the same ID as RefSeq/Genbank
+XXX 5. UCSC assembly hub genomes - maybe
 
 Priority will go to exact matches.  If there is an exact match,
 the partial matches will not be checked.  When there is no exact match,
@@ -237,95 +237,137 @@ cd /hive/data/inside/assemblyEquivalence/notExact
 ### Finally, to get the lines that belong in the final asmEquivalent
 ### table in hgFixed:
 
-sed -e 's/\tcount A .*//;' results/match.*.txt > notExact.table.2020-03-26.tsv
+sed -e 's/\tcount A .*//;' results/match.*.txt > notExact.table.2020-03-30.tsv
 
 To load up both the exact and these notExact matches into the hgFixed table:
 
-sort notExact.table.2020-03-26.tsv ../table.2020-03-26.tsv \
+sort notExact.table.2020-03-30.tsv ../table.2020-03-30.tsv \
  | hgLoadSqlTab hgFixed asmEquivalent ~/kent/src/hg/lib/asmEquivalent.sql stdin
 
 hgsql -e 'select count(*) from asmEquivalent;' hgFixed
 +----------+
 | count(*) |
 +----------+
-|     2036 |
+|     2118 |
 +----------+
+
+### There shouldn't be any duplicate entries:
+
+hgsql -N -e 'select source,destination from asmEquivalent;' hgFixed \
+    | sort | uniq -c | sort -rn | head
+      1 zonAlb1 Zonotrichia_albicollis.Zonotrichia_albicollis-1.0.1
+      1 zonAlb1 GCF_000385455.1_Zonotrichia_albicollis-1.0.1
+      1 zonAlb1 GCA_000385455.1_Zonotrichia_albicollis-1.0.1
+      1 xipMac1 GCA_000241075.1_Xiphophorus_maculatus-4.4.2
+      1 xenTro9 Xenopus_tropicalis.Xenopus_tropicalis_v9.1
+      1 xenTro9 GCA_000004195.3_Xenopus_tropicalis_v9.1
+      1 xenLae2 GCF_001663975.1_Xenopus_laevis_v2
+      1 xenLae2 GCA_001663975.1_Xenopus_laevis_v2
+      1 wuhCor1 GCF_009858895.2_ASM985889v3
+      1 vicPac2 GCA_000164845.3_Vicugna_pacos-2.0.2
+hgsql -N -e 'select source,destination from asmEquivalent;' hgFixed \
+   | sort | uniq -c | sort -rn | tail
+
+      1 Anabas_testudineus.fAnaTes1.1   GCF_900324465.1_fAnaTes1.1
+      1 Amphiprion_percula.Nemo_v1      GCA_003047355.1_Nemo_v1
+      1 Amphiprion_ocellaris.AmpOce1.0  GCF_002776465.1_AmpOce1.0
+      1 Amphiprion_ocellaris.AmpOce1.0  GCA_002776465.1_AmpOce1.0
+      1 Amphilophus_citrinellus.Midas_v5        GCA_000751415.1_Midas_v5
+      1 Ailuropoda_melanoleuca.ailMel1  ailMel1
+      1 Ailuropoda_melanoleuca.ailMel1  GCF_000004335.2_AilMel_1.0
+      1 Ailuropoda_melanoleuca.ailMel1  GCA_000004335.1_AilMel_1.0
+      1 Acanthochromis_polyacanthus.ASM210954v1 GCF_002109545.1_ASM210954v1
+      1 Acanthochromis_polyacanthus.ASM210954v1 GCA_002109545.1_ASM210954v1
+
+# How many ensembl assemblies map to genbank or refseq assemblies:
+hgsql -N -e 'select source,destination from asmEquivalent where
+  sourceAuthority="ensembl" AND (destinationAuthority="genbank" OR
+    destinationAuthority="refseq");' hgFixed | wc -l
+# 354
+
+# How many ucsc assemblies map to genbank or refseq assemblies:
+hgsql -N -e 'select source,destination from asmEquivalent where
+  sourceAuthority="ucsc" AND (destinationAuthority="genbank" OR
+    destinationAuthority="refseq");' hgFixed | wc -l
+# 350
+
+# ucsc to only refseq:
+hgsql -N -e 'select source,destination from asmEquivalent where
+  sourceAuthority="ucsc" AND destinationAuthority="refseq";' hgFixed | wc -l
+# 146
+
+# ucsc to only genbank
+hgsql -N -e 'select source,destination from asmEquivalent where
+  sourceAuthority="ucsc" AND destinationAuthority="genbank";' hgFixed | wc -l
+# 204
+
+# How many ucsc assemblies map to ensembl assemblies:
+hgsql -N -e 'select source,destination from asmEquivalent where
+  sourceAuthority="ucsc" AND destinationAuthority="ensembl";' hgFixed | wc -l
+# 85
+
+# These counts should always be symmetrical, e.g. ensembl to ucsc
+ hgsql -N -e 'select source,destination from asmEquivalent where
+  sourceAuthority="ensembl" AND destinationAuthority="ucsc";' hgFixed | wc -l
+# 85
 
 # To see some of the highest differences, sort by column 1 and by column 2
 # and check head or tail of such sorts, there shouldn't be any '0 0' columns
 # as that would be an 'exact' match and that has already been ruled
 # out:  (this could be done with the loaded table too)
 
-awk -F$'\t' '{printf "%4d %4d\t%s\t%s\n", $5-$7,$6-$7,$1,$2}'    notExact.table.2020-03-26.tsv | sort -k1,1n | head
--1473    0      GCA_000768395.1_Cpor_2.0        croPor0
--1473    0      croPor0 GCA_000768395.1_Cpor_2.0
--756   -2       GCA_000708225.1_ASM70822v1      nipNip0
--754    2       nipNip0 GCA_000708225.1_ASM70822v1
--454   -1       GCA_000231765.1_GadMor_May2010  gadMor1
--453    1       gadMor1 GCA_000231765.1_GadMor_May2010
--428   -1       GCA_003265705.1_ASM326570v1     GCF_003265705.1_ASM326570v1
--427    1       GCF_003265705.1_ASM326570v1     GCA_003265705.1_ASM326570v1
--412   -1       GCA_003584765.1_ASM358476v1     GCF_003584765.1_ASM358476v1
--411    1       GCF_003584765.1_ASM358476v1     GCA_003584765.1_ASM358476v1
+awk -F$'\t' '{printf "%4d %4d\t%s\t%s\n", $6-$5,$7-$5,$1,$2}' \
+   notExact.table.2020-03-30.tsv | sort -k1,1n -k3,3 | head
+   0    1       Anabas_testudineus.fAnaTes1.1   GCF_900324465.1_fAnaTes1.1
+   0    1       Aotus_nancymaae.Anan_2.0        GCF_000952055.2_Anan_2.0
+   0    1       Aotus_nancymaae.Anan_2.0        aotNan1
+   0    1       Astatotilapia_calliptera.fAstCal1.2     GCF_900246225.1_fAstCal1.2
+   0    1       Astyanax_mexicanus_pachon.Astyanax_mexicanus-1.0.2      astMex1
+   0    1       Betta_splendens.fBetSpl5.2      GCF_900634795.2_fBetSpl5.2
+   0    1       Bos_indicus_hybrid.UOA_Brahman_1        GCA_003369695.2_UOA_Brahman_1
+   0    1       CHM1    GCA_000306695.2_CHM1_1.1
+   0    1       Canis_lupus_familiarisgreatdane.UMICH_Zoey_3.1  GCA_005444595.1_UMICH_Zoey_3.1
+   0    1       Cercocebus_atys.Caty_1.0        cerAty1
 
-awk -F$'\t' '{printf "%4d %4d\t%s\t%s\n", $5-$7,$6-$7,$1,$2}'    notExact.table.2020-03-26.tsv | sort -k2,2n | head
--141 -141       Otolemur_garnettii.OtoGar3      GCA_000181295.3_OtoGar3
--141 -141       Otolemur_garnettii.OtoGar3      GCF_000181295.1_OtoGar3
--141 -141       Otolemur_garnettii.OtoGar3      otoGar3
--115 -113       vicPac2 GCA_000164845.3_Vicugna_pacos-2.0.2
--109 -109       takFla1 GCA_000400755.1_version_1_of_Takifugu_flavidus_genome
- -42  -42       Mustela_putorius_furo.MusPutFur1.0      GCF_000215625.1_MusPutFur1.0
- -42  -42       musFur1 GCF_000215625.1_MusPutFur1.0
- -41  -41       Mustela_putorius_furo.MusPutFur1.0      GCA_000215625.1_MusPutFur1.0
- -41  -41       musFur1 GCA_000215625.1_MusPutFur1.0
- -19  -19       gorGor4 GCA_000151905.3_gorGor4
-
-awk -F$'\t' '{printf "%4d %4d\t%s\t%s\n", $5-$7,$6-$7,$1,$2}'    notExact.table.2020-03-26.tsv | sort -k1,1n | tail
-   0   16       Neolamprologus_brichardi.NeoBri1.0      neoBri1
-   0   19       GCA_000151905.3_gorGor4 gorGor4
-   0   41       GCA_000215625.1_MusPutFur1.0    Mustela_putorius_furo.MusPutFur1.0
-   0   41       GCA_000215625.1_MusPutFur1.0    musFur1
-   0   42       GCF_000215625.1_MusPutFur1.0    Mustela_putorius_furo.MusPutFur1.0
-   0   42       GCF_000215625.1_MusPutFur1.0    musFur1
-   0  109       GCA_000400755.1_version_1_of_Takifugu_flavidus_genome   takFla1
-   0  141       GCA_000181295.3_OtoGar3 Otolemur_garnettii.OtoGar3
-   0  141       GCF_000181295.1_OtoGar3 Otolemur_garnettii.OtoGar3
-   0  141       otoGar3 Otolemur_garnettii.OtoGar3
-
-awk -F$'\t' '{printf "%4d %4d\t%s\t%s\n", $5-$7,$6-$7,$1,$2}'    notExact.table.2020-03-26.tsv | sort -k2,2n | tail
-  -1   19       Gorilla_gorilla.gorGor4 gorGor4
-   0   41       GCA_000215625.1_MusPutFur1.0    Mustela_putorius_furo.MusPutFur1.0
-   0   41       GCA_000215625.1_MusPutFur1.0    musFur1
-   0   42       GCF_000215625.1_MusPutFur1.0    Mustela_putorius_furo.MusPutFur1.0
-   0   42       GCF_000215625.1_MusPutFur1.0    musFur1
-   0  109       GCA_000400755.1_version_1_of_Takifugu_flavidus_genome   takFla1
-  -2  113       GCA_000164845.3_Vicugna_pacos-2.0.2     vicPac2
-   0  141       GCA_000181295.3_OtoGar3 Otolemur_garnettii.OtoGar3
-   0  141       GCF_000181295.1_OtoGar3 Otolemur_garnettii.OtoGar3
-   0  141       otoGar3 Otolemur_garnettii.OtoGar3
+awk -F$'\t' '{printf "%4d %4d\t%s\t%s\n", $6-$5,$7-$5,$1,$2}' \
+   notExact.table.2020-03-30.tsv | sort -k1,1n | tail
+ 453  454       GCA_000231765.1_GadMor_May2010  gadMor1
+ 454  453       gadMor1 GCA_000231765.1_GadMor_May2010
+ 754  756       GCA_000708225.1_ASM70822v1      nipNip0
+ 756  754       nipNip0 GCA_000708225.1_ASM70822v1
+1233 1234       GCA_900497805.2_bare-nosed_wombat_genome_assembly       GCF_900497805.2_bare-nosed_wombat_genome_assembly
+1233 1234       GCA_900497805.2_bare-nosed_wombat_genome_assembly       Vombatus_ursinus.bare-nosed_wombat_genome_assembly
+1234 1233       GCF_900497805.2_bare-nosed_wombat_genome_assembly       GCA_900497805.2_bare-nosed_wombat_genome_assembly
+1234 1233       Vombatus_ursinus.bare-nosed_wombat_genome_assembly      GCA_900497805.2_bare-nosed_wombat_genome_assembly
+1473 1473       GCA_000768395.1_Cpor_2.0        croPor0
+1473 1473       croPor0 GCA_000768395.1_Cpor_2.0
 
 # This could be done with the loaded table too:
 
-hgsql -N -e 'select matchCount-sourceCount,matchCount-destinationCount,(matchCount-sourceCount)-(matchCount-destinationCount),source from asmEquivalent where matchCount-sourceCount!=0;' hgFixed | sort -k3,3n | tail
--1      -3      2       enhLutKen1
--1      -3      2       manPen1
--1      -3      2       serCan1
--1      -3      2       serCan1
--754    -756    2       GCA_000708225.1_ASM70822v1
--1      -4      3       GCA_001541155.1_Algmis_Hirise_1.0
--1      -9      8       xipMac1
--1      -16     15      neoBri1
--1      -20     19      gorGor4
--2      -115    113     vicPac2
+hgsql -N -e 'select sourceCount-matchCount,destinationCount-matchCount,source,destination from asmEquivalent where
+     matchCount!=sourceCount OR matchCount!=destinationCount;' hgFixed \
+       | sort -k1,1n -k3,3 | head
+0       1       Anabas_testudineus.fAnaTes1.1   GCF_900324465.1_fAnaTes1.1
+0       1       Aotus_nancymaae.Anan_2.0        GCF_000952055.2_Anan_2.0
+0       1       Aotus_nancymaae.Anan_2.0        aotNan1
+0       1       Astatotilapia_calliptera.fAstCal1.2     GCF_900246225.1_fAstCal1.2
+0       1       Astyanax_mexicanus_pachon.Astyanax_mexicanus-1.0.2      astMex1
+0       1       Betta_splendens.fBetSpl5.2      GCF_900634795.2_fBetSpl5.2
+0       1       Bos_indicus_hybrid.UOA_Brahman_1        GCA_003369695.2_UOA_Brahman_1
+0       1       CHM1    GCA_000306695.2_CHM1_1.1
+0       1       Canis_lupus_familiarisgreatdane.UMICH_Zoey_3.1  GCA_005444595.1_UMICH_Zoey_3.1
+0       1       Cercocebus_atys.Caty_1.0        cerAty1
 
-hgsql -N -e 'select matchCount-sourceCount,matchCount-destinationCount,(matchCount-sourceCount)-(matchCount-destinationCount),source from asmEquivalent where matchCount-sourceCount!=0;' hgFixed | sort -k3,3n | head
--141    0       -141    GCA_000181295.3_OtoGar3
--141    0       -141    GCF_000181295.1_OtoGar3
--141    0       -141    otoGar3
--115    -2      -113    GCA_000164845.3_Vicugna_pacos-2.0.2
--109    0       -109    GCA_000400755.1_version_1_of_Takifugu_flavidus_genome
--42     0       -42     GCF_000215625.1_MusPutFur1.0
--42     0       -42     GCF_000215625.1_MusPutFur1.0
--41     0       -41     GCA_000215625.1_MusPutFur1.0
--41     0       -41     GCA_000215625.1_MusPutFur1.0
--19     0       -19     GCA_000151905.3_gorGor4
+hgsql -N -e 'select sourceCount-matchCount,destinationCount-matchCount,source,destination from asmEquivalent where
+     matchCount!=sourceCount OR matchCount!=destinationCount;' hgFixed \
+       | sort -k1,1n -k3,3 | tail
+453     454     GCA_000231765.1_GadMor_May2010  gadMor1
+454     453     gadMor1 GCA_000231765.1_GadMor_May2010
+754     756     GCA_000708225.1_ASM70822v1      nipNip0
+756     754     nipNip0 GCA_000708225.1_ASM70822v1
+1233    1234    GCA_900497805.2_bare-nosed_wombat_genome_assembly       GCF_900497805.2_bare-nosed_wombat_genome_assembly
+1233    1234    GCA_900497805.2_bare-nosed_wombat_genome_assembly       Vombatus_ursinus.bare-nosed_wombat_genome_assembly
+1234    1233    GCF_900497805.2_bare-nosed_wombat_genome_assembly       GCA_900497805.2_bare-nosed_wombat_genome_assembly
+1234    1233    Vombatus_ursinus.bare-nosed_wombat_genome_assembly      GCA_900497805.2_bare-nosed_wombat_genome_assembly
+1473    1473    GCA_000768395.1_Cpor_2.0        croPor0
+1473    1473    croPor0 GCA_000768395.1_Cpor_2.0

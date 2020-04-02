@@ -5,7 +5,7 @@ html gold
 # Local declaration so that local gap.html is picked up.
 track gap override
 visibility hide
-html gap.html
+html gap
 
 track rmsk override
 visibility hide
@@ -30,19 +30,60 @@ longLabel RFAM hits
 group genes
 type bed 9
 
-track gordon
+track gordon2
 shortLabel Protein Interact.
-longLabel Human Interacting Proteins from Gordon et al.
+longLabel Human Interacting Proteins from Gordon et al. (* = druggable)
 group genes
 color 1,50,32
-type bed 6
+type bigBed 5 +
+bigDataUrl /gbdb/wuhCor1/bbi/gordon.bb
+useScore on
+scoreMin 600
+scoreMax 1000
 priority 10
+mouseOverField drug
+urls pmid=https://www.ncbi.nlm.nih.gov/pubmed/$$
 
 track crisprDet
 shortLabel CRISPR Detection
 longLabel CRISPR Detection Guides
 group genes
 type psl
+
+track rosettaMhc
+shortLabel Rosetta Predictions
+longLabel CD8 Epitopes predicted by NetMHC and Rosetta
+group immu
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/bbi/rosetta.bb
+
+track epiValid
+shortLabel Validated Epitopes
+longLabel Validated Epitopes from SARS 2003 outbreak
+group immu
+type bigBed 4 +
+bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
+
+track publicAnnots
+shortLabel User annotations
+longLabel User-contributed annotations via bit.ly/cov2annots
+group map
+type bigBed 4 +
+bigDataUrl /gbdb/wuhCor1/bbi/public.bb
+
+track pdb
+shortLabel PDB Structures
+longLabel Protein Data Bank (PDB) Sequence Matches
+group genes
+type bigBed 12 +
+visibility hide
+url https://www.pdb.org/pdb/explore/explore.do?structureId=$$
+urlLabel link to PDB
+iframeUrl https://www.pdb.org/pdb/explore/explore.do?structureId=$$
+iframeOptions width='1000' height='800' scrolling='yes'
+bigDataUrl /gbdb/wuhCor1/bbi/pdb.bb
+priority 30
+
 
 include trackDb.119way.ra
 include epitopes.ra

@@ -17,8 +17,8 @@ table nextstrainClade
     string dateInferred; "Date of clade branch inferred by TreeTime"
     string dateConfMin;  "Earliest date in TreeTime confidence interval"
     string dateConfMax;  "Latest date in TreeTime confidence interval"
-    string divInferred;  "Administrative division inferred by TreeTime"
-    string divConf;      "Top-scoring administrative divisions and confidence from TreeTime"
+    string countryInferred;  "Country inferred by TreeTime"
+    string countryConf;      "Top-scoring countries and confidence from TreeTime"
     int sampleCount;   "Number of samples belonging to the clade"
     string[sampleCount] samples; "Samples belonging to the clade"
     )

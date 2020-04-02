@@ -312,7 +312,7 @@ html gnomad
     release alpha
     dataVersion Release 2.1
 
-        track full
+        track gnomadSvFull
         parent gnomadStructuralVariants on
         bigDataUrl /gbdb/hg19/gnomAD/structuralVariants/gnomad_v2.1_sv.sites.bb
         shortLabel gnomAD All SV's
@@ -321,11 +321,16 @@ html gnomad
         itemRgb on
         url https://gnomad.broadinstitute.org/variant/$$?dataset=gnomad_sv_r2_1
         urlLabel gnomAD Structural Variant Browser
-        filterLabel.svtype "Filter by Variant Class"
-        filterValues.svtype BND,CPX,CTX,DEL,DUP,INS,INV,MCNV
+        filterLabel.svtype "Filter by Type of Variation"
+        filterValues.svtype BND|Breakend,CPX|Complex,CTX|Translocation,DEL|Deletion,DUP|Duplication,INS|Insertion,INV|Inversion,MCNV|Multi-allele CNV
+        filter.svlen 50:199840172
+        filterByRange.svlen on
+        filterLabel.svlen "Filter by Variant Size"
+        mouseOverField _mouseOver
+        searchIndex name
         release alpha
 
-        track nonneuro
+        track gnomadSvNonneuro
         parent gnomadStructuralVariants off
         bigDataUrl /gbdb/hg19/gnomAD/structuralVariants/gnomad_v2.1_sv.nonneuro.sites.bb
         shortLabel gnomAD Non-Neuro SV's
@@ -334,11 +339,16 @@ html gnomad
         itemRgb on
         url https://gnomad.broadinstitute.org/variant/$$?dataset=gnomad_sv_r2_1
         urlLabel gnomAD Structural Variant Browser
-        filterLabel.svtype "Filter by Variant Class"
-        filterValues.svtype BND,CPX,CTX,DEL,DUP,INS,INV,MCNV
+        filterLabel.svtype "Filter by Type of Variation"
+        filterValues.svtype BND|Breakend,CPX|Complex,CTX|Translocation,DEL|Deletion,DUP|Duplication,INS|Insertion,INV|Inversion,MCNV|Multi-allele CNV
+        filter.svlen 50:199840172
+        filterByRange.svlen on
+        filterLabel.svlen "Filter by Variant Size"
+        mouseOverField _mouseOver
+        searchIndex name
         release alpha
 
-        track controls
+        track gnomadSvControls
         parent gnomadStructuralVariants off
         bigDataUrl /gbdb/hg19/gnomAD/structuralVariants/gnomad_v2.1_sv.controls_only.sites.bb
         shortLabel gnomAD Control Only SV's
@@ -347,8 +357,13 @@ html gnomad
         itemRgb on
         url https://gnomad.broadinstitute.org/variant/$$?dataset=gnomad_sv_r2_1
         urlLabel gnomAD Structural Variant Browser
-        filterLabel.svtype "Filter by Variant Class"
-        filterValues.svtype BND,CPX,CTX,DEL,DUP,INS,INV,MCNV
+        filterLabel.svtype "Filter by Type of Variation"
+        filterValues.svtype BND|Breakend,CPX|Complex,CTX|Translocation,DEL|Deletion,DUP|Duplication,INS|Insertion,INV|Inversion,MCNV|Multi-allele CNV
+        filter.svlen 50:199840172
+        filterByRange.svlen on
+        filterLabel.svlen "Filter by Variant Size"
+        mouseOverField _mouseOver
+        searchIndex name
         release alpha
 
     track gnomadPLI
@@ -409,3 +424,23 @@ html gnomad
         filterByRange.obs_exp on
         priority 3
         mouseOverField _mouseOver
+
+searchTable pliByTranscript
+searchType bigBed
+searchDescription gnomAD Loss of Function Metrics by Transcript
+
+searchTable pliByGene
+searchType bigBed
+searchDescription gnomAD Loss of Function Metrics by Gene
+
+searchTable gnomadSvFull
+searchType bigBed
+searchDescription gnomAD Structural Variants - All structural variants
+
+searchTable gnomadSvNonneuro
+searchType bigBed
+searchDescription gnomAD Structural Variants - Non-neuro structural variants
+
+searchTable gnomadSvControls
+searchType bigBed
+searchDescription gnomAD Structural Variants - Control structural variants

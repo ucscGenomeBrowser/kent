@@ -33,9 +33,13 @@ cd $runDir
 #Generate bed and VCF files
 $ottoDir/nextstrain.py
 
-# bgzip & tabix the VCF
+# bgzip & tabix the VCF files
 bgzip -f nextstrainSamples.vcf
 tabix -p vcf nextstrainSamples.vcf.gz
+for clade in A1a A2 A2a A3 A6 A7 B B1 B2 B4; do
+  bgzip -f nextstrainSamples$clade.vcf
+  tabix -p vcf nextstrainSamples$clade.vcf.gz
+done
 
 # bigBed-ify the gene names and "clades"
 bedToBigBed -type=bed4 -tab -verbose=0 nextstrainGene.bed $chromSizes \
@@ -48,12 +52,16 @@ bedToBigBed -as=$ottoDir/nextstrainClade.as -type=bed12+7 -tab -verbose=0 \
 
 # Archive
 mkdir -p $ottoDir/archive/$today
-cp -p $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb $runDir/nextstrainSamples.vcf.gz{,.tbi} \
+cp -p $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
+    $runDir/nextstrainSamples*.vcf.gz{,.tbi} \
+    $runDir/nextstrain.nh \
+    $runDir/ncov.json \
     $ottoDir/archive/$today
-cp -p $runDir/ncov.json $ottoDir/archive/$today
 
 # Install
-ln -sf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb $runDir/nextstrainSamples.vcf.gz{,.tbi} \
+ln -sf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
+    $runDir/nextstrainSamples*.vcf.gz{,.tbi} \
+    $runDir/nextstrain.nh \
     $gbdbDir/
 
 echo "Updated nextstrain/ncov `date` (ncov.json date $latestDate)"

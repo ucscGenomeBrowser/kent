@@ -34235,7 +34235,7 @@ table doseSensitivity
     gsutil cp gs://gnomad-public/papers/2019-sv/gnomad_v2.1_sv.*.bed* .
     gsutil cp gs://gnomad-public/papers/2019-sv/gnomad_v2.1_sv.*.vcf* .
 
-    for f in *.bed.gz; do out=${f/.bed.gz/}; zcat $f | tail -n +2 | cut -f1-4,32 | tawk '{$1="chr"$1; print $0}'> $out.bed4Plus; done
+    for f in *.bed.gz; do out=${f/.bed.gz/}; zcat $f | tail -n +2 | cut -f1-4,18-28,31,32,36-38,41-42 | tawk '{$1="chr"$1; print $0}'> $out.bed4Plus; done
     # variant types:
     zcat gnomad_v2.1_sv.sites.bed.gz | cut -f32 | sort | uniq -c       
       52604 BND y
@@ -34252,7 +34252,7 @@ table doseSensitivity
     for f in *.bed4Plus; do out=${f/.bed4Plus/}; bedClip -truncate $f $chromSizes stdout | ./gnomadSvToUcsc.awk | sort -k1,1 -k2,2n > $out.bed9Plus; done
 
     chromSizes=/hive/data/genomes/hg19/chrom.sizes
-    for f in *.bed9Plus; do out=${f/.bed9Plus/}; bedToBigBed -tab -type=bed9+1 -as=gnomadSv.as $f $chromSizes $out.bb; done
+    for f in *.bed9Plus; do out=${f/.bed9Plus/}; bedToBigBed -tab -type=bed9+19 -as=gnomadSv.as -extraIndex=name $f $chromSizes $out.bb; done
     mkdir -p /gbdb/hg19/gnomAD/structuralVariants/ 
     cd /gbdb/hg19/gnomAD/structuralVariants/
     cp -s /hive/data/outside/gnomAD.2/structuralVariants/*.bb .

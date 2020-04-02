@@ -2,7 +2,7 @@
 <p>
 This track shows the locations of those primers in detection kits that match the
 reference sequence. The primers were copied from the file 
-<a href="https://bitbucket.org/tomeraltman/covid-19-primer-data/src/master/kit-primers/all-COVID-19-kit-primers.fasta">
+<a target="_blank" href="https://bitbucket.org/tomeraltman/covid-19-primer-data/src/master/kit-primers/all-COVID-19-kit-primers.fasta">
 all-COVID-19-kit-primers.fasta</a>.
 </p>
 <p>
@@ -89,21 +89,25 @@ Bioinformatic formats for currently-deployed primer-probe sets for detecting COV
 </ul>
 
 <h2>Methods</h2>
-The primers were mapped with the following command:</br><tt>"blat ../../wuhCor1.2bit primers.fa stdout -stepSize=1 -tileSize=6  -minScore=10 -oneOff=1 -noHead > primers.psl"</tt>
+The primers were mapped with the following command:</br><tt>blat ../../wuhCor1.2bit primers.fa stdout -stepSize=1 -tileSize=6  -minScore=10 -oneOff=1 -noHead &gt; primers.psl</tt>
 
 
 <h2>Data Access</h2>
 <p>
-You can download the PSL file underlying this track from our
+You can download the PSL file underlying this track (primers) from our
 <a href="http://hgdownload.soe.ucsc.edu/goldenPath/wuhCor1/database/" 
-target=_blank>Download Server.</a></p>
-<p>
-The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>
-or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be
-accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>;
-the track name is "primers".</p>
+target=_blank>Download Server</a>.
+The data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can also be
+accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>.</p>
 
 <h2>Credits</h2>
-The UCSC SARS-CoV-2 genome browser and associated data annotation tracks were
-funded by generous private donors to the UC Santa Cruz Genomics Institute.
-Fasta data collected by Tomer Altman, found by Jason Fernandes.
+<p>
+This data annotation track was made by Maximilian Haeussler, with assistance from Daniel Schmelter.
+Fasta data collected by Tomer Altman, found by Jason Fernandes.</p>
+
+<h2>Funding</h2>
+<p>
+The SARS-CoV-2 genome browser and data annotation tracks are funded by generous 
+individual donors including Pat &amp; Rowland Rebele.</p>
+
