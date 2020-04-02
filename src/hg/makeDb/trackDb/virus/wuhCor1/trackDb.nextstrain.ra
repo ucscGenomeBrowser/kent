@@ -18,19 +18,6 @@ bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainClade.bb
 url https://nextstrain.org/ncov?d=tree&m=div&label=clade:$$
 urlLabel View in Nextstrain: 
 
-#track nextstrainSamples
-#shortLabel Nextstrain Vars
-#longLabel Nextstrain/GISAID Sample Variants from nextstrain.org/ncov
-#type vcfTabix
-#visibility hide
-#hapClusterEnabled on
-#hapClusterMethod fileOrder
-#hapClusterHeight 400
-#group varRep
-#priority 0.5
-#bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples.vcf.gz
-#release public
-
 track nextstrainSamples
 shortLabel Nextstrain Vars
 longLabel Nextstrain/GISAID Sample Variants from nextstrain.org/ncov
