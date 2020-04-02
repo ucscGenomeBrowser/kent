@@ -81,7 +81,7 @@ release alpha
     shortLabel A3 Vars
     longLabel Variants in Clade A3 Nextstrain/GISAID Samples from nextstrain.org/ncov
     hapClusterHeight 14
-    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA1a.vcf.gz
+    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA3.vcf.gz
     priority 40
 
     track nextstrainSamplesA6
