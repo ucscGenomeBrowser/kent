@@ -1109,11 +1109,18 @@ drawTreeInLabelArea(ht, hvg, yOff+extraPixel, hapHeight+CLIP_PAD, &yHelper, &tit
 		    drawRectangle);
 }
 
-static void drawSampleLabels(struct vcfFile *vcff, boolean isAllDiploid, int yStart, int height,
+static void drawSampleLabels(struct vcfFile *vcff, struct hvGfx *hvg,
+                             boolean isAllDiploid, int yStart, int height,
                              unsigned short *gtHapOrder, int gtHapCount, MgFont *font, Color color,
                              char *track)
 /* Draw sample names as left labels. */
 {
+// Figure out which hvg to use, save current clipping, and clip to left label coords:
+struct hvGfx *hvgLL = (hvgSide != NULL) ? hvgSide : hvg;
+int clipXBak, clipYBak, clipWidthBak, clipHeightBak;
+hvGfxGetClip(hvgLL, &clipXBak, &clipYBak, &clipWidthBak, &clipHeightBak);
+hvGfxUnclip(hvgLL);
+hvGfxSetClip(hvgLL, leftLabelX, yStart, leftLabelWidth, height);
 if (isAllDiploid)
     {
     double pxPerGt = (double)height / vcff->genotypeCount;
@@ -1123,7 +1130,7 @@ if (isAllDiploid)
     for (gtIx = 0;  gtIx < vcff->genotypeCount;  gtIx++)
         {
         int y = gtIx * pxPerGt;
-        hvGfxTextRight(hvgSide, leftLabelX, y+yStart, leftLabelWidth-1, (int)pxPerGt,
+        hvGfxTextRight(hvgLL, leftLabelX, y+yStart, leftLabelWidth-1, (int)pxPerGt,
                        color, font, vcff->genotypeIds[gtIx]);
         }
     }
@@ -1138,10 +1145,13 @@ else
         int gtHapIx = gtHapOrder[orderIx];
         int gtIx = (gtHapIx >> 1);
         int y = gtIx * pxPerHt;
-        hvGfxTextRight(hvgSide, leftLabelX, y+yStart, leftLabelWidth-1, (int)pxPerHt,
+        hvGfxTextRight(hvgLL, leftLabelX, y+yStart, leftLabelWidth-1, (int)pxPerHt,
                        color, font, vcff->genotypeIds[gtIx]);
         }
     }
+// Restore the prior clipping:
+hvGfxUnclip(hvgLL);
+hvGfxSetClip(hvgLL, clipXBak, clipYBak, clipWidthBak, clipHeightBak);
 }
 
 static void drawSampleTitles(struct vcfFile *vcff, int yStart, int height,
@@ -1241,7 +1251,7 @@ if (isAllDiploid)
 else
     minHeightForLabels = gtHapCount * (tl.fontHeight + 1);
 if (hapHeight >= minHeightForLabels)
-    drawSampleLabels(vcff, isAllDiploid, yOff+extraPixel, hapHeight, gtHapOrder, gtHapCount,
+    drawSampleLabels(vcff, hvg, isAllDiploid, yOff+extraPixel, hapHeight, gtHapOrder, gtHapCount,
                      font, color, tg->track);
 else
     drawSampleTitles(vcff, yOff+extraPixel, hapHeight, gtHapOrder, gtHapCount, tg->track);
