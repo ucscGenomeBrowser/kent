@@ -12,6 +12,31 @@ start=$2
 end=$3
 origName=$4
 
+# get the list of genes affected for the mouseOver
+geneListStr=""
+numGenes = 0
+for (i = 5; i <= 12; i++)
+    {
+    if ($i != "NA" && $i != "True" && $i != "False")
+        {
+        newGeneCount = split($i,geneList,",");
+        if (numGenes + newGeneCount <= 2)
+            {
+            for (j = 1; j <= newGeneCount; j++)
+                {
+                if (numGenes == 0 && j == 1) {geneListStr = geneList[j]}
+                else {geneListStr = geneListStr ", " geneList[j]}
+                }
+            }
+        else {geneListStr = "Too many genes affected, click on item for full list."}
+        numGenes += newGeneCount;
+        }
+    }
+if (numGenes == 0) {geneListStr = "NA"}
+
+# make the list of affected genes for each type print nicely by adding a space after the commas
+for (i = 5; i <= 15; i++)
+    gsub(",", ", ", $i)
 PROTEIN_CODING__COPY_GAIN=$5
 PROTEIN_CODING__DUP_LOF=$6
 PROTEIN_CODING__DUP_PARTIAL=$7
@@ -44,7 +69,7 @@ for (i = 1; i < length(acArray) - 1; i++)
 ac = ac "" acArray[length(acArray)]
 
 split($20,afArray,",")
-for (i = 1; i< length(afArray) - 1; i++)
+for (i = 1; i < length(afArray) - 1; i++)
     {
     af = af "" sprintf("%0.2g, ", afArray[i])
     }
@@ -52,9 +77,9 @@ af = af "" sprintf("%0.2g", afArray[length(afArray)])
 
 split($4,a,"_")
 name=a[3] "_" a[4] "_" a[5]
-color=""
-mouseOver = "Position: " chrom ":" start+1 "-" end ", Size: " svlen ", Class: " svtype ", Allele Count: " ac ", Allele Number: " an ", Allele Frequency: " af
+mouseOver = "Gene(s) affected: " geneListStr ", Position: " chrom ":" start+1 "-" end ", Size: " svlen ", Class: " svtype ", Allele Count: " ac ", Allele Number: " an ", Allele Frequency: " af
 
+color=""
 switch(svtype) {
     case "BND":
         color = "154,182,160"
