@@ -210,15 +210,6 @@ def rUnpackNextstrainTree(branch, parentVariants, parentVarStr):
                          'clade': nodeAttrs['clade_membership']['value'],
                          'date': numDateToMonthDay(nodeAttrs['num_date']['value']),
                          'variants': branchVariants })
-        if (cladeName and cladeName != 'unassigned'):
-            if (clades[cladeName].get('sampleCount')):
-                clades[cladeName]['sampleCount'] += 1
-            else:
-                clades[cladeName]['sampleCount'] = 1
-            if (clades[cladeName].get('samples')):
-                clades[cladeName]['samples'].append(branch['name'])
-            else:
-                clades[cladeName]['samples'] = [ branch['name'] ]
 
 rUnpackNextstrainTree(ncov['tree'], {}, '')
 
@@ -273,7 +264,11 @@ with open('nextstrainSamples.vcf', 'w') as outC:
                                '\t'.join(genotypes) ]) + '\n')
     outC.close()
 
-# Per-clade VCF subset
+# Assign samples to clades; a sample can appear in multiple clades if they are nested.
+cladeSamples = {}
+cladeSampleCounts = {}
+cladeSampleNames = {}
+
 def sampleIdsFromNode(node, ids):
     """Fill in a dict of IDs of all samples found under node."""
     kids = node.get('children')
@@ -287,24 +282,28 @@ def sampleIdsFromNode(node, ids):
 for cladeName, node in cladeNodes.items():
     sampleIds = {}
     sampleIdsFromNode(node, sampleIds)
-    cladeSamples = [ sample for sample in samples if sample['id'] in sampleIds ]
-    cladeSampleCount = len(cladeSamples)
-    cladeSampleNames = [ '|'.join([ sample['id'], sample['name'], sample['date'] ])
-                         for sample in cladeSamples ]
+    cladeSampleList = [ sample for sample in samples if sample['id'] in sampleIds ]
+    cladeSamples[cladeName] = cladeSampleList
+    cladeSampleCounts[cladeName] = len(cladeSampleList)
+    cladeSampleNames[cladeName] = [ '|'.join([ sample['id'], sample['name'], sample['date'] ])
+                                    for sample in cladeSampleList ]
+
+# Per-clade VCF subset
+for cladeName, cladeSampleList in cladeSamples.items():
     with open('nextstrainSamples' + cladeName + '.vcf', 'w') as outV:
         writeVcfHeaderExceptSamples(outV)
-        outV.write('\t'.join(cladeSampleNames) + '\n')
+        outV.write('\t'.join(cladeSampleNames[cladeName]) + '\n')
         for pv in parsedVars:
             varName = pv[1]
             genotypes = []
             ac=0
-            for sample in cladeSamples:
+            for sample in cladeSampleList:
                 gt = boolToStr01(sample['variants'].get(varName))
                 genotypes.append(gt)
                 if (sample['variants'].get(varName)):
                     ac += 1
             if (ac > 0):
-                info = 'AC=' + str(ac) + ';AN=' + str(cladeSampleCount)
+                info = 'AC=' + str(ac) + ';AN=' + str(cladeSampleCounts[cladeName])
                 aaChange = variantAaChanges.get(varName)
                 if (aaChange):
                     info += ';AACHANGE=' + aaChange
@@ -330,8 +329,8 @@ with open('nextstrainClade.bed', 'w') as outC:
                                        numDateToYmdStr(clade['dateConfMax']),
                                        clade['countryInferred'],
                                        clade['countryConf'],
-                                       clade['sampleCount'],
-                                       ', '.join(clade['samples']) ])) + '\n')
+                                       cladeSampleCounts[name],
+                                       ', '.join(cladeSampleNames[name]) ])) + '\n')
     outC.close()
 
 # Newick-formatted tree of samples for VCF display
