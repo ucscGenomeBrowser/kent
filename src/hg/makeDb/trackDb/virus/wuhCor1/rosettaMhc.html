@@ -1,0 +1,24 @@
+<h2>Description</h2>
+As a first step toward the development of diagnostic and therapeutic tools to fight the Coronavirus disease (COVID-19), it is important to characterize CD8+ T cell epitopes in the SARS-CoV-2 peptidome that can trigger adaptive immune responses. Here, we use RosettaMHC, a comparative modeling approach which leverages existing high-resolution X-ray structures from peptide/MHC complexes available in the Protein Data Bank, to derive physically realistic 3D models for high-affinity SARS-CoV-2 epitopes. We outline an application of our method to model 439 9mer and 279 10mer predicted epitopes displayed by the common allele HLA-A*02:01, and we make our models publicly available through an online database (<a target=_blank href="https://rosettamhc.chemistry.ucsc.edu">https://rosettamhc.chemistry.ucsc.edu</a>). As more detailed studies on antigen-specific T cell recognition become available, RosettaMHC models of  antigens from different strains and HLA alleles can be used as a basis to understand the link between peptide/HLA complex structure and surface chemistry with immunogenicity, in the context of SARS-CoV-2 infection.
+
+<p>
+This track includes 718 CD8 epitopes restricted to HLA-A*02:01 as predicted by NetMHCpan4.0 and RosettaMHC.
+The structural models of all 718 epitopes are available in the database (see Description). All the epitopes are scored using a combined NetMHCPan4.0 (eluted ligand) predicted binding affinity and binding energy calculated in Rosetta force field (score =  (0.5 * ( ((NetMHCPan affinity - Average NetMHCPan affinity) / range of NetMHCPan affinities) + ( (Rosetta binding energy - Average Rosetta binding energy )  / range of Rosetta binding energies) )   + 1 ) * 500).
+</p>
+
+<h2>Methods</h2>
+Epitopes of lengths 9 and 10 from all reading frames of SARS-CoV-2 proteome are generated and filtered using NetMHCPan4.0 (eluted ligand prediction). All the epitopes predicted as strong or weak binders (a total of 718) to HLA-A*02:01 by NetMHCPan4.0 (using default %Rank cut-off) are modeled using RosettaMHC. Further, binding energies of all 718 epitopes to HLA-A*02:01 is calculated in Rosetta. Alongside all the models, their NetMHCpan predictions and binding energies are made available through a <a target=_blank href="https://rosettamhc.chemistry.ucsc.edu">database</a> and Supplementary Table 1 from the reference, Nerli and Sgourakis. (2020) in the References section below.
+
+<h3>Notes</h3>
+<p>For a full description of the methods used, refer to Nerli and Sgourakis. (2020) in the References section below.</p>
+
+<h2>Credits</h2>
+<p>Nikolaos Sgourakis (nsgourak@ucsc.edu)</p>
+<p>Santrupti Nerli (snerli@ucsc.edu)</p>
+
+<p>
+Data were generated and processed at UCSC. For inquiries, please contact Nikolaos Sgourakis from the Sgourakis Research Group at UCSC.
+</p>
+
+<h2>References</h2>
+<p>Nerli and Sgourakis. 2020 (Manuscript submitted) (<a href="https://www.biorxiv.org/content/10.1101/2020.03.23.004176v1">BioRxiv</a>).</p>

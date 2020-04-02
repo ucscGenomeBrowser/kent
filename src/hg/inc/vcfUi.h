@@ -17,6 +17,7 @@
 #define VCF_HAP_METHOD_VAR "hapClusterMethod"
 #define VCF_HAP_METHOD_CENTER_WEIGHTED "centerWeighted"
 #define VCF_HAP_METHOD_FILE_ORDER "fileOrder"
+#define VCF_HAP_METHOD_TREE_FILE "treeFile"
 #define VCF_DEFAULT_HAP_METHOD VCF_HAP_METHOD_CENTER_WEIGHTED
 
 #define VCF_HAP_COLORBY_VAR "hapClusterColorBy"
