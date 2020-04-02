@@ -1,0 +1,9 @@
+track encodeCcreCombined
+type bigBed 9 +
+shortLabel ENCODE cCREs
+longLabel ENCODE cCREs combined from all cell types
+bigDataUrl /gbdb/$D/encode3/ccre/encodeCcreCombined.bigBed
+itemRgb On
+wgEncode 1
+group regulation
+
