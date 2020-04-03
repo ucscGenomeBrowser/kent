@@ -1399,14 +1399,16 @@ return leafIx;
 }
 
 static void rDrawPhyloTreeInLabelArea(struct phyloTree *node, struct hvGfx *hvg, int x,
-                                      int yOff, double pxPerHap, Color color, MgFont *font,
+                                      int yOff, double pxPerHap, MgFont *font,
                                       boolean drawRectangle)
-/* Recursively draw the tree in the left label area.
- * Returns pixel height for use at non-leaf levels of tree. */
+/* Recursively draw the tree in the left label area. */
 {
 const int branchW = 4;
 int labelEnd = leftLabelX + leftLabelWidth;
-
+// Misuse the branch length value as RGB color (if it's the typical small number, will still
+// draw as approximately black):
+unsigned int rgb = node->ident->length;
+Color color = MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
 
 if (node->numEdges > 0)
     {
@@ -1416,33 +1418,33 @@ if (node->numEdges > 0)
     for (ix = 0;  ix < node->numEdges;  ix++)
         {
         struct phyloTree *child = node->edges[ix];
-        rDrawPhyloTreeInLabelArea(child, hvg, x+branchW, yOff, pxPerHap, color, font, drawRectangle);
+        rDrawPhyloTreeInLabelArea(child, hvg, x+branchW, yOff, pxPerHap, font, drawRectangle);
         struct nodeCoords *childCoords = child->priv;
         int childY = yOff + ((0.5 + childCoords->rank) * pxPerHap);
-        hvGfxLine(hvg, x, childY, x+branchW, childY, MG_BLACK);
+        hvGfxLine(hvg, x, childY, x+branchW, childY, color);
         if (minY < 0 || childY < minY)
             minY = childY;
         if (childY > maxY)
             maxY = childY;
         }
     // Draw a vertical line to connect the children
-    hvGfxLine(hvg, x, minY, x, maxY, MG_BLACK);
+    hvGfxLine(hvg, x, minY, x, maxY, color);
     }
 else
     {
-    // Leaf node -- draw a horizontal line
+    // Leaf node -- draw a horizontal line, and label if there is space to right of tree
     struct nodeCoords *coords = node->priv;
     int y = yOff + ((0.5 + coords->rank) * pxPerHap);
     hvGfxLine(hvg, x, y, x+branchW, y, color);
     int textX = x + branchW + 3;
     if (pxPerHap >= tl.fontHeight+1 && textX < labelEnd)
-        hvGfxText(hvg, textX, y, color, font, node->ident->name);
+        hvGfxText(hvg, textX, y, MG_BLACK, font, node->ident->name);
     }
 }
 
 static void drawPhyloTreeInLabelArea(struct phyloTree *tree, struct hvGfx *hvg, int yOff,
                                      int clipHeight, int gtHapCount,
-                                     Color color, MgFont *font, boolean drawRectangle,
+                                     MgFont *font, boolean drawRectangle,
                                      unsigned short *leafOrderToHapOrderStart,
                                      unsigned short *leafOrderToHapOrderEnd)
 {
@@ -1456,7 +1458,7 @@ phyloTreeAddNodeCoords(tree, leafOrderToHapOrderStart, leafOrderToHapOrderEnd, 0
 // Draw the tree:
 int x = leftLabelX;
 double pxPerHap = (double)clipHeight / gtHapCount;
-rDrawPhyloTreeInLabelArea(tree, hvgLL, x, yOff, pxPerHap, color, font, drawRectangle);
+rDrawPhyloTreeInLabelArea(tree, hvgLL, x, yOff, pxPerHap, font, drawRectangle);
 // Restore the prior clipping:
 hvGfxUnclip(hvgLL);
 hvGfxSetClip(hvgLL, clipXBak, clipYBak, clipWidthBak, clipHeightBak);
@@ -1486,7 +1488,7 @@ int extraPixel = (colorMode == altOnlyMode) ? 1 : 0;
 int hapHeight = tg->height - CLIP_PAD - 2*extraPixel;
 char *treeAngle = cartOrTdbString(cart, tg->tdb, VCF_HAP_TREEANGLE_VAR, VCF_DEFAULT_HAP_TREEANGLE);
 boolean drawRectangle = sameString(treeAngle, VCF_HAP_TREEANGLE_RECTANGLE);
-drawPhyloTreeInLabelArea(tree, hvg, yOff+extraPixel, hapHeight, gtHapCount, color, font,
+drawPhyloTreeInLabelArea(tree, hvg, yOff+extraPixel, hapHeight, gtHapCount, font,
                          drawRectangle, leafOrderToHapOrderStart, leafOrderToHapOrderEnd);
 drawSampleTitles(vcff, yOff+extraPixel, hapHeight, gtHapOrder, gtHapCount, tg->track);
 }

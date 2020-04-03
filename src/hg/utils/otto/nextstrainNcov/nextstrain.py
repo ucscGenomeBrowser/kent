@@ -43,7 +43,7 @@ cladeColors = { 'A1a': '73,75,225', 'A2': '75,131,233', 'A2a': '92,173,207',
 def cladeColorFromName(cladeName):
     color = cladeColors.get(cladeName);
     if (not color):
-        color = 'purple'
+        color = '0,0,0'
     return color
 
 def subtractStart(coord, start):
@@ -334,17 +334,35 @@ with open('nextstrainClade.bed', 'w') as outC:
     outC.close()
 
 # Newick-formatted tree of samples for VCF display
-def rNextstrainToNewick(node):
+def cladeRgbFromName(cladeName):
+    """Look up the r,g,b string color for clade; convert to int RGB."""
+    rgbCommaStr = cladeColorFromName(cladeName)
+    r, g, b = [ int(x) for x in rgbCommaStr.split(',') ]
+    rgb = (r << 16) | (g << 8) | b
+    return rgb
+
+def rNextstrainToNewick(node, parentColor=None):
     """Recursively descend ncov.tree and build Newick tree string of samples to file"""
     kids = node.get('children')
     if (kids):
-        treeString = '(' + ','.join([ rNextstrainToNewick(child) for child in kids ]) + ')'
+        nodeAttrs = node['node_attrs']
+        if (nodeAttrs.get('clade_membership')):
+            cladeName = nodeAttrs['clade_membership']['value']
+            color = str(cladeRgbFromName(cladeName))
+        elif (parentColor):
+            color = parentColor
+        else:
+            color = '0'
+        descendants = ','.join([ rNextstrainToNewick(child, color) for child in kids ])
+        treeString = '(' + descendants + ')' + ':' + color
     else:
         nodeAttrs = node['node_attrs']
         gId = nodeAttrs['gisaid_epi_isl']['value']
         name = node['name']
         date = numDateToMonthDay(nodeAttrs['num_date']['value'])
-        treeString = '|'.join([ gId, name, date ])
+        cladeName = nodeAttrs['clade_membership']['value']
+        color = str(cladeRgbFromName(cladeName))
+        treeString = '|'.join([ gId, name, date ]) + ':' + color
     return treeString
 
 with open('nextstrain.nh', 'w') as outF:
