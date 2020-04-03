@@ -15,3 +15,5 @@ searchPriority 8
 track ensGene override
 visibility pack
 priority 1.1
+
+include ../../refSeqComposite.ra alpha

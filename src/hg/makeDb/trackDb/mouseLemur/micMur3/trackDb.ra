@@ -14,3 +14,4 @@ searchPriority 8
 
 include trackDb.3way.ra alpha
 
+include ../../refSeqComposite.ra alpha

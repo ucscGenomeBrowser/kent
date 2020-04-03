@@ -12,6 +12,7 @@
 #include "hgColors.h"
 #include "hgTracks.h"
 #include "pgSnp.h"
+#include "phyloTree.h"
 #include "trashDir.h"
 #include "vcf.h"
 #include "vcfUi.h"
@@ -1031,6 +1032,23 @@ else if (sameString(colorBy, VCF_HAP_COLORBY_BASE))
 return colorMode;
 }
 
+static boolean vcfHapClusterDrawInit(struct track *tg, struct vcfFile *vcff, struct hvGfx *hvg,
+                                     enum hapColorMode *retHapColorMode)
+/* Parse vcff's genotypes and get ready to draw haplotypes.  Return FALSE if nothing to draw. */
+{
+if (vcff->records == NULL)
+    return FALSE;
+undefYellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
+if (retHapColorMode)
+    *retHapColorMode = getColorMode(tg->tdb);
+pushWarnHandler(ignoreEm);
+struct vcfRecord *rec;
+for (rec = vcff->records;  rec != NULL;  rec = rec->next)
+    vcfParseGenotypes(rec);
+popWarnHandler();
+return TRUE;
+}
+
 static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
 			      struct hvGfx *hvg, int xOff, int yOff, int width,
 			      MgFont *font, Color color, enum trackVisibility vis)
@@ -1038,16 +1056,10 @@ static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
  * alpha similarity, and draw in the order determined by clustering. */
 {
 struct vcfFile *vcff = tg->extraUiData;
-if (vcff->records == NULL)
+enum hapColorMode colorMode;
+if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode))
     return;
 purple = hvGfxFindColorIx(hvg, 0x99, 0x00, 0xcc);
-undefYellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
-enum hapColorMode colorMode = getColorMode(tg->tdb);
-pushWarnHandler(ignoreEm);
-struct vcfRecord *rec;
-for (rec = vcff->records;  rec != NULL;  rec = rec->next)
-    vcfParseGenotypes(rec);
-popWarnHandler();
 unsigned short gtHapCount = 0;
 int nRecords = slCount(vcff->records);
 int centerIx = getCenterVariantIx(tg, seqStart, seqEnd, vcff->records);
@@ -1060,6 +1072,7 @@ int endIx = min(nRecords, centerIx+1 + maxVariantsPerSide);
 struct hacTree *ht = NULL;
 unsigned short *gtHapOrder = clusterHaps(vcff, centerIx, startIx, endIx, &gtHapCount, &ht);
 struct vcfRecord *centerRec = NULL;
+struct vcfRecord *rec;
 int ix;
 // Unlike drawing order (last drawn is on top), the first mapBox gets priority,
 // so map center variant before drawing & mapping other variants!
@@ -1096,11 +1109,18 @@ drawTreeInLabelArea(ht, hvg, yOff+extraPixel, hapHeight+CLIP_PAD, &yHelper, &tit
 		    drawRectangle);
 }
 
-static void drawSampleLabels(struct vcfFile *vcff, boolean isAllDiploid, int yStart, int height,
+static void drawSampleLabels(struct vcfFile *vcff, struct hvGfx *hvg,
+                             boolean isAllDiploid, int yStart, int height,
                              unsigned short *gtHapOrder, int gtHapCount, MgFont *font, Color color,
                              char *track)
 /* Draw sample names as left labels. */
 {
+// Figure out which hvg to use, save current clipping, and clip to left label coords:
+struct hvGfx *hvgLL = (hvgSide != NULL) ? hvgSide : hvg;
+int clipXBak, clipYBak, clipWidthBak, clipHeightBak;
+hvGfxGetClip(hvgLL, &clipXBak, &clipYBak, &clipWidthBak, &clipHeightBak);
+hvGfxUnclip(hvgLL);
+hvGfxSetClip(hvgLL, leftLabelX, yStart, leftLabelWidth, height);
 if (isAllDiploid)
     {
     double pxPerGt = (double)height / vcff->genotypeCount;
@@ -1110,7 +1130,7 @@ if (isAllDiploid)
     for (gtIx = 0;  gtIx < vcff->genotypeCount;  gtIx++)
         {
         int y = gtIx * pxPerGt;
-        hvGfxTextRight(hvgSide, leftLabelX, y+yStart, leftLabelWidth-1, (int)pxPerGt,
+        hvGfxTextRight(hvgLL, leftLabelX, y+yStart, leftLabelWidth-1, (int)pxPerGt,
                        color, font, vcff->genotypeIds[gtIx]);
         }
     }
@@ -1125,10 +1145,13 @@ else
         int gtHapIx = gtHapOrder[orderIx];
         int gtIx = (gtHapIx >> 1);
         int y = gtIx * pxPerHt;
-        hvGfxTextRight(hvgSide, leftLabelX, y+yStart, leftLabelWidth-1, (int)pxPerHt,
+        hvGfxTextRight(hvgLL, leftLabelX, y+yStart, leftLabelWidth-1, (int)pxPerHt,
                        color, font, vcff->genotypeIds[gtIx]);
         }
     }
+// Restore the prior clipping:
+hvGfxUnclip(hvgLL);
+hvGfxSetClip(hvgLL, clipXBak, clipYBak, clipWidthBak, clipHeightBak);
 }
 
 static void drawSampleTitles(struct vcfFile *vcff, int yStart, int height,
@@ -1165,22 +1188,9 @@ for (y = 0;  y < height;  y++)
     }
 }
 
-static void vcfGtHapFileOrderDraw(struct track *tg, int seqStart, int seqEnd,
-                                  struct hvGfx *hvg, int xOff, int yOff, int width,
-                                  MgFont *font, Color color, enum trackVisibility vis)
-/* Draw rows in the same fashion as vcfHapClusterDraw, but instead of clustering, use the
- * order in which samples appear in the VCF file. */
+static unsigned short *gtHapOrderFromGtOrder(struct vcfFile *vcff,
+                                             boolean *retIsAllDiploid, int *retGtHapCount)
 {
-struct vcfFile *vcff = tg->extraUiData;
-if (vcff->records == NULL)
-    return;
-undefYellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
-enum hapColorMode colorMode = getColorMode(tg->tdb);
-pushWarnHandler(ignoreEm);
-struct vcfRecord *rec;
-for (rec = vcff->records;  rec != NULL;  rec = rec->next)
-    vcfParseGenotypes(rec);
-popWarnHandler();
 int ploidy = 2; // Assuming diploid genomes here, no XXY, tetraploid etc.
 int gtCount = vcff->genotypeCount;
 boolean isAllDiploid = TRUE;
@@ -1193,6 +1203,7 @@ for (gtIx=0;  gtIx < gtCount;  gtIx++)
     int gtHapIx = (gtIx << 1);
     gtHapOrder[orderIx] = gtHapIx;
     orderIx++;
+    struct vcfRecord *rec;
     for (rec = vcff->records;  rec != NULL;  rec = rec->next)
         {
         struct vcfGenotype *gt = &(rec->genotypes[gtIx]);
@@ -1206,7 +1217,27 @@ for (gtIx=0;  gtIx < gtCount;  gtIx++)
             isAllDiploid = FALSE;
         }
     }
-int gtHapCount = orderIx;
+if (retIsAllDiploid)
+    *retIsAllDiploid = isAllDiploid;
+if (retGtHapCount)
+    *retGtHapCount = orderIx;
+return gtHapOrder;
+}
+
+static void vcfGtHapFileOrderDraw(struct track *tg, int seqStart, int seqEnd,
+                                  struct hvGfx *hvg, int xOff, int yOff, int width,
+                                  MgFont *font, Color color, enum trackVisibility vis)
+/* Draw rows in the same fashion as vcfHapClusterDraw, but instead of clustering, use the
+ * order in which samples appear in the VCF file. */
+{
+struct vcfFile *vcff = tg->extraUiData;
+enum hapColorMode colorMode;
+if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode))
+    return;
+boolean isAllDiploid;
+int gtHapCount;
+unsigned short *gtHapOrder = gtHapOrderFromGtOrder(vcff, &isAllDiploid, &gtHapCount);
+struct vcfRecord *rec;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     drawOneRec(rec, gtHapOrder, gtHapCount, tg, hvg, xOff, yOff, width, FALSE, FALSE,
                colorMode);
@@ -1220,10 +1251,246 @@ if (isAllDiploid)
 else
     minHeightForLabels = gtHapCount * (tl.fontHeight + 1);
 if (hapHeight >= minHeightForLabels)
-    drawSampleLabels(vcff, isAllDiploid, yOff+extraPixel, hapHeight, gtHapOrder, gtHapCount,
+    drawSampleLabels(vcff, hvg, isAllDiploid, yOff+extraPixel, hapHeight, gtHapOrder, gtHapCount,
                      font, color, tg->track);
 else
     drawSampleTitles(vcff, yOff+extraPixel, hapHeight, gtHapOrder, gtHapCount, tg->track);
+}
+
+static struct phyloTree *getTreeFromFile(struct trackDb *tdb)
+/* Get the filename that follows trackDb setting 'hapClusterMethod treeFile ' and read it in
+ * as a phyloTree. */
+{
+char *hapMethod = cloneString(trackDbSetting(tdb, VCF_HAP_METHOD_VAR));
+if (! startsWithWord(VCF_HAP_METHOD_TREE_FILE, nextWord(&hapMethod)))
+    errAbort("getTreeFromFile: expected trackDb setting " VCF_HAP_METHOD_VAR "to start with '"
+             VCF_HAP_METHOD_TREE_FILE "' followed by a file name, but got '%s'", hapMethod);
+char *fileName = nextWord(&hapMethod);
+return phyloOpenTree(fileName);
+}
+
+struct hash *makeSampleToIx(struct vcfFile *vcff)
+/* Alloc & return a hash of sample names to genotype indices in vcff. */
+{
+struct hash *sampleToIx = hashNew(0);
+int gtIx;
+for (gtIx = 0;  gtIx < vcff->genotypeCount;  gtIx++)
+    hashAddInt(sampleToIx, vcff->genotypeIds[gtIx], gtIx);
+return sampleToIx;
+}
+
+static int gtIxFromSample(struct hash *sampleToIx, char *sample, char *vcfFileName)
+/* Look up sample's genotype index in sampleToIx, die complaining about vcfFileName if not found. */
+{
+int gtIx = hashIntValDefault(sampleToIx, sample, -1);
+if (gtIx < 0)
+    errAbort("gtIxFromSample: sample '%s' not found in VCF file %s", sample, vcfFileName);
+return gtIx;
+}
+
+static void rSetGtHapOrderFromTree(struct phyloTree *node, struct vcfFile *vcff,
+                                   struct hash *sampleToIx,
+                                   unsigned short *gtHapOrder, int *pGtHapCount,
+                                   unsigned short *leafOrderToHapOrderStart,
+                                   unsigned short *leafOrderToHapOrderEnd, int *pLeafCount)
+/* Set gtHapOrder to sample gt & hap indices in the order we encounter the samples in tree. */
+{
+if (node->numEdges > 0)
+    {
+    int ix;
+    for (ix = 0;  ix < node->numEdges;  ix++)
+        rSetGtHapOrderFromTree(node->edges[ix], vcff, sampleToIx, gtHapOrder, pGtHapCount,
+                               leafOrderToHapOrderStart, leafOrderToHapOrderEnd, pLeafCount);
+    }
+else
+    {
+    int gtIx = gtIxFromSample(sampleToIx, node->ident->name, vcff->fileOrUrl);
+    int gtHapIx = (gtIx << 1);
+    gtHapOrder[*pGtHapCount] = gtHapIx;
+    leafOrderToHapOrderStart[*pLeafCount] = leafOrderToHapOrderEnd[*pLeafCount] = *pGtHapCount;
+    *pGtHapCount += 1;
+    struct vcfRecord *rec;
+    for (rec = vcff->records;  rec != NULL;  rec = rec->next)
+        {
+        struct vcfGenotype *gt = &(rec->genotypes[gtIx]);
+        if (!gt->isHaploid)
+            {
+            gtHapOrder[*pGtHapCount] = gtHapIx+1;
+            leafOrderToHapOrderEnd[*pLeafCount] = *pGtHapCount;
+            *pGtHapCount += 1;
+            break;
+            }
+        }
+    *pLeafCount += 1;
+    }
+}
+
+static unsigned short *gtHapOrderFromTree(struct vcfFile *vcff, struct phyloTree *tree,
+                                          unsigned short **retLeafOrderToHapOrderStart,
+                                          unsigned short **retLeafOrderToHapOrderEnd,
+                                          int *retGtHapCount)
+/* Alloc & return gtHapOrder, set to samples in the order we encounter them in tree.
+ * Also build up maps of leaf order to low and high gtHapIx, for drawing the tree later. */
+{
+struct hash *sampleToIx = makeSampleToIx(vcff);
+int ploidy = 2; // Assuming diploid genomes here, no XXY, tetraploid etc.
+int gtCount = vcff->genotypeCount;
+unsigned short *gtHapOrder = needMem(gtCount * ploidy * sizeof(unsigned short));
+*retLeafOrderToHapOrderStart = needMem(gtCount * sizeof(unsigned short));
+*retLeafOrderToHapOrderEnd = needMem(gtCount * sizeof(unsigned short));
+*retGtHapCount = 0;
+int leafCount = 0;
+rSetGtHapOrderFromTree(tree, vcff, sampleToIx, gtHapOrder, retGtHapCount,
+                       *retLeafOrderToHapOrderStart, *retLeafOrderToHapOrderEnd, &leafCount);
+if (leafCount != vcff->genotypeCount)
+    errAbort("gtHapOrderFromTree: tree has %d leaves, but VCF file %s has %d genotype columns",
+             leafCount, vcff->fileOrUrl, vcff->genotypeCount);
+return gtHapOrder;
+}
+
+
+// Relative coordinates for tree layout, to be transformed into pixel coords later.
+struct nodeCoords
+    {
+    double rank;   // Centerpoint of children's rank in terms of hap order (0 = top haplotype)
+    int depth;     // Maximum child depth + 1
+    };
+
+static int phyloTreeAddNodeCoords(struct phyloTree *node,
+                                  unsigned short *leafOrderToHapOrderStart,
+                                  unsigned short *leafOrderToHapOrderEnd,
+                                  int leafIx)
+/* Recursively annotate node and descendants with nodeCoords to prepare for drawing the tree. */
+{
+struct nodeCoords *coords;
+AllocVar(coords);
+node->priv = coords;
+if (node->numEdges > 0)
+    {
+    double minRank = -1, maxRank = 0;
+    int maxDepth = 0;
+    int ix;
+    for (ix = 0;  ix < node->numEdges;  ix++)
+        {
+        struct phyloTree *child = node->edges[ix];
+        leafIx = phyloTreeAddNodeCoords(child, leafOrderToHapOrderStart, leafOrderToHapOrderEnd,
+                                        leafIx);
+        struct nodeCoords *childCoords = child->priv;
+        if (minRank < 0 || childCoords->rank < minRank)
+            minRank = childCoords->rank;
+        if (childCoords->rank > maxRank)
+            maxRank = childCoords->rank;
+        if (childCoords->depth > maxDepth)
+            maxDepth = childCoords->depth;
+        }
+    coords->rank = (minRank + maxRank) / 2.0;
+    coords->depth = maxDepth + 1;
+    }
+else
+    {
+    // Leaf (sample)
+    double rankStart = leafOrderToHapOrderStart[leafIx];
+    double rankEnd = leafOrderToHapOrderStart[leafIx];
+    coords->rank = (rankStart + rankEnd) / 2.0;
+    leafIx++;
+    coords->depth = 0;
+    }
+return leafIx;
+}
+
+static void rDrawPhyloTreeInLabelArea(struct phyloTree *node, struct hvGfx *hvg, int x,
+                                      int yOff, double pxPerHap, MgFont *font,
+                                      boolean drawRectangle)
+/* Recursively draw the tree in the left label area. */
+{
+const int branchW = 4;
+int labelEnd = leftLabelX + leftLabelWidth;
+// Misuse the branch length value as RGB color (if it's the typical small number, will still
+// draw as approximately black):
+unsigned int rgb = node->ident->length;
+Color color = MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
+
+if (node->numEdges > 0)
+    {
+    // Draw each child and a horizontal line to child
+    int minY = -1, maxY = 0;
+    int ix;
+    for (ix = 0;  ix < node->numEdges;  ix++)
+        {
+        struct phyloTree *child = node->edges[ix];
+        rDrawPhyloTreeInLabelArea(child, hvg, x+branchW, yOff, pxPerHap, font, drawRectangle);
+        struct nodeCoords *childCoords = child->priv;
+        int childY = yOff + ((0.5 + childCoords->rank) * pxPerHap);
+        hvGfxLine(hvg, x, childY, x+branchW, childY, color);
+        if (minY < 0 || childY < minY)
+            minY = childY;
+        if (childY > maxY)
+            maxY = childY;
+        }
+    // Draw a vertical line to connect the children
+    hvGfxLine(hvg, x, minY, x, maxY, color);
+    }
+else
+    {
+    // Leaf node -- draw a horizontal line, and label if there is space to right of tree
+    struct nodeCoords *coords = node->priv;
+    int y = yOff + ((0.5 + coords->rank) * pxPerHap);
+    hvGfxLine(hvg, x, y, x+branchW, y, color);
+    int textX = x + branchW + 3;
+    if (pxPerHap >= tl.fontHeight+1 && textX < labelEnd)
+        hvGfxText(hvg, textX, y, MG_BLACK, font, node->ident->name);
+    }
+}
+
+static void drawPhyloTreeInLabelArea(struct phyloTree *tree, struct hvGfx *hvg, int yOff,
+                                     int clipHeight, int gtHapCount,
+                                     MgFont *font, boolean drawRectangle,
+                                     unsigned short *leafOrderToHapOrderStart,
+                                     unsigned short *leafOrderToHapOrderEnd)
+{
+struct hvGfx *hvgLL = (hvgSide != NULL) ? hvgSide : hvg;
+int clipXBak, clipYBak, clipWidthBak, clipHeightBak;
+hvGfxGetClip(hvgLL, &clipXBak, &clipYBak, &clipWidthBak, &clipHeightBak);
+hvGfxUnclip(hvgLL);
+hvGfxSetClip(hvgLL, leftLabelX, yOff, leftLabelWidth, clipHeight);
+// Figure out rank (vertical position) and depth (horizontal position) of every node in tree:
+phyloTreeAddNodeCoords(tree, leafOrderToHapOrderStart, leafOrderToHapOrderEnd, 0);
+// Draw the tree:
+int x = leftLabelX;
+double pxPerHap = (double)clipHeight / gtHapCount;
+rDrawPhyloTreeInLabelArea(tree, hvgLL, x, yOff, pxPerHap, font, drawRectangle);
+// Restore the prior clipping:
+hvGfxUnclip(hvgLL);
+hvGfxSetClip(hvgLL, clipXBak, clipYBak, clipWidthBak, clipHeightBak);
+}
+
+static void vcfGtHapTreeFileDraw(struct track *tg, int seqStart, int seqEnd,
+                                 struct hvGfx *hvg, int xOff, int yOff, int width,
+                                 MgFont *font, Color color, enum trackVisibility vis)
+/* Draw rows in the same fashion as vcfHapClusterDraw, but instead of clustering, use the
+ * order in which samples appear in the VCF file. */
+{
+struct vcfFile *vcff = tg->extraUiData;
+enum hapColorMode colorMode;
+if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode))
+    return;
+struct phyloTree *tree = getTreeFromFile(tg->tdb);
+int gtHapCount;
+unsigned short *leafOrderToHapOrderStart, *leafOrderToHapOrderEnd;
+unsigned short *gtHapOrder = gtHapOrderFromTree(vcff, tree,
+                                                &leafOrderToHapOrderStart, &leafOrderToHapOrderEnd,
+                                                &gtHapCount);
+struct vcfRecord *rec;
+for (rec = vcff->records;  rec != NULL;  rec = rec->next)
+    drawOneRec(rec, gtHapOrder, gtHapCount, tg, hvg, xOff, yOff, width, FALSE, FALSE,
+               colorMode);
+int extraPixel = (colorMode == altOnlyMode) ? 1 : 0;
+int hapHeight = tg->height - CLIP_PAD - 2*extraPixel;
+char *treeAngle = cartOrTdbString(cart, tg->tdb, VCF_HAP_TREEANGLE_VAR, VCF_DEFAULT_HAP_TREEANGLE);
+boolean drawRectangle = sameString(treeAngle, VCF_HAP_TREEANGLE_RECTANGLE);
+drawPhyloTreeInLabelArea(tree, hvg, yOff+extraPixel, hapHeight, gtHapCount, font,
+                         drawRectangle, leafOrderToHapOrderStart, leafOrderToHapOrderEnd);
+drawSampleTitles(vcff, yOff+extraPixel, hapHeight, gtHapOrder, gtHapCount, tg->track);
 }
 
 static int vcfHapClusterTotalHeight(struct track *tg, enum trackVisibility vis)
@@ -1263,6 +1530,8 @@ tg->lineHeight = tg->heightPer + 1;
 char *hapMethod = cartOrTdbString(cart, tg->tdb, VCF_HAP_METHOD_VAR, VCF_DEFAULT_HAP_METHOD);
 if (sameString(hapMethod, VCF_HAP_METHOD_FILE_ORDER))
     tg->drawItems = vcfGtHapFileOrderDraw;
+else if (startsWithWord(VCF_HAP_METHOD_TREE_FILE, hapMethod))
+    tg->drawItems = vcfGtHapTreeFileDraw;
 else
     tg->drawItems = vcfHapClusterDraw;
 tg->totalHeight = vcfHapClusterTotalHeight;

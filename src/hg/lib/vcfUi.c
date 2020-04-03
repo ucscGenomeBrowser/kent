@@ -140,7 +140,16 @@ if (vcff != NULL && vcff->genotypeCount > 1)
     cgiMakeRadioButton(varName, VCF_HAP_METHOD_FILE_ORDER,
                        sameString(hapMethod, VCF_HAP_METHOD_FILE_ORDER));
     puts("</TD><TD>using the order in which samples appear in the underlying VCF file");
-    puts("</TR></TD></TABLE>");
+    // If trackDb specifies a treeFile, offer that as an option
+    char *hapMethodTdb = trackDbSetting(tdb, VCF_HAP_METHOD_VAR);
+    if (hapMethodTdb && startsWithWord("treeFile", hapMethodTdb))
+        {
+        puts("<TR><TD>");
+        cgiMakeRadioButton(varName, VCF_HAP_METHOD_TREE_FILE,
+                           startsWithWord(VCF_HAP_METHOD_TREE_FILE, hapMethod));
+        printf("</TD><TD>using the tree specified in file associated with track");
+        }
+    puts("</TD></TR></TABLE>");
     }
 }
 

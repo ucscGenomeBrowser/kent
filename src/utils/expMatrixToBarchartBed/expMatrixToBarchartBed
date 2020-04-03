@@ -297,8 +297,8 @@ def expMatrixToBarchartBed(options):
     # Join the bed-like file and the coordinate file, the awk accounts for any extra
     # fields that may be included, and keeps the file in standard bed 6+5 format
     joinedFile = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
-    cmd = "join -t $'\\t' -1 4 -2 1 " + sortedCoords.name + " " + sortedBedLikeFile.name + \
-            " | awk -F'\t' -v OFS=\"\\t\" '{printf \"%s\\t%s\\t%s\\t%s\", $2,$3,$4,$1; " + \
+    cmd = "join -t '	' -1 4 -2 1 " + sortedCoords.name + " " + sortedBedLikeFile.name + \
+            " | awk -F'\\t' -v OFS=\"\\t\" '{printf \"%s\\t%s\\t%s\\t%s\", $2,$3,$4,$1; " + \
             "for (i=5;i<=NF;i++) {printf \"\\t%s\", $i}; printf\"\\n\";}' > " + joinedFile.name
     os.system(cmd)
 
