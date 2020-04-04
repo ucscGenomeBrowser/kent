@@ -368,8 +368,8 @@ html gnomad
 
     track gnomadPLI
     parent gnomadSuper
-    shortLabel gnomAD pLoF Metrics
-    longLabel gnomAD Predicted Loss of Function Constraint Metrics
+    shortLabel gnomAD Constraint Metrics
+    longLabel Genome Aggregation Database (gnomAD) - Predicted Constraint Metrics
     compositeTrack On
     group varRep
     type bigBed 12
@@ -377,8 +377,8 @@ html gnomad
     visibility pack
 
         track pliByGene
-        shortLabel gnomAD Gene LoF
-        longLabel gnomAD Loss of Function Constraint Metrics (pLI) By Gene
+        shortLabel gnomAD Gene Constraint
+        longLabel gnomAD Predicted Constraint Metrics By Gene (synonymous, missense, pLoF)
         type bigBed 12 +
         mouseOverField _mouseOver
         itemRgb on
@@ -394,8 +394,8 @@ html gnomad
         priority 1
 
         track pliByTranscript
-        shortLabel gnomAD Transcript LoF
-        longLabel gnomAD Loss of Function Constraint Metrics (pLI) By Transcript
+        shortLabel gnomAD Transcript Constraint
+        longLabel gnomAD Predicted Constraint Metrics By Transcript (synonymous, missense, pLoF)
         type bigBed 12 +
         mouseOverField _mouseOver
         itemRgb on
@@ -412,8 +412,8 @@ html gnomad
 
         track gnomadMissense
         parent gnomadPLI off
-        shortLabel gnomAD Missense Constraint Metrics
-        longLabel gnomAD Missense Constraint Metrics
+        shortLabel gnomAD Regional Constraint
+        longLabel gnomAD Predicted Constraint Metrics By Transcript Regions (missense)
         bigDataUrl /gbdb/hg19/gnomAD/missense/missenseConstrained.bb
         itemRgb on
         labelFields name,geneName
