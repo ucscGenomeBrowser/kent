@@ -1590,7 +1590,7 @@ if (errCatchStart(errCatch))
     if (vcff != NULL)
 	{
 	filterRecords(vcff, tg->tdb);
-	if (hapClustEnabled && vcff->genotypeCount > 1 && vcff->genotypeCount < 3000 &&
+	if (hapClustEnabled && vcff->genotypeCount > 1 &&
 	    (tg->visibility == tvPack || tg->visibility == tvSquish))
 	    vcfHapClusterOverloadMethods(tg, vcff);
 	else
