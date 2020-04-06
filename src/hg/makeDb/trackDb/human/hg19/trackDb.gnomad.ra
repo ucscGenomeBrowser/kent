@@ -387,6 +387,7 @@ html gnomad
         url https://gnomad.broadinstitute.org/gene/$$?dataset=gnomad_r2_1
         urlLabel View this Gene on the gnomAD browser
         labelFields name,geneName
+        defaultLabelFields geneName
         filter._pli 0:1
         filterLabel._pli Show only items between this pLI range
         filterByRange._pli on
@@ -417,6 +418,7 @@ html gnomad
         bigDataUrl /gbdb/hg19/gnomAD/missense/missenseConstrained.bb
         itemRgb on
         labelFields name,geneName
+        defaultLabelFields geneName
         group varRep
         type bigBed 12 +
         filter.obs_exp 0:5
