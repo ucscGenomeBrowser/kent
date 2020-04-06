@@ -3896,15 +3896,7 @@ if (bigDataUrl != NULL)
     if (hasProtocol(bigDataUrlLocal))
         return TRUE;
     else
-        {
-        boolean exists;
-        if (hasProtocol(bigDataUrlLocal))
-            exists = udcExists(bigDataUrlLocal);
-        else
-            exists = fileExists(bigDataUrlLocal);
-        freeMem(bigDataUrlLocal);
-        return exists;
-        }
+        return fileExists(bigDataUrlLocal);
     }
 else
     {
