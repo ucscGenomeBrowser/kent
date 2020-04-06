@@ -3892,11 +3892,11 @@ char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
 if (bigDataUrl != NULL)
     {
     bigDataUrl = replaceChars(bigDataUrl, "$D", database);
-    if (hasProtocol(bigDataUrl))
+    char *bigDataUrlLocal = hReplaceGbdb(bigDataUrl);
+    if (hasProtocol(bigDataUrlLocal))
         return TRUE;
     else
         {
-        char *bigDataUrlLocal = hReplaceGbdb(bigDataUrl);
         boolean exists;
         if (hasProtocol(bigDataUrlLocal))
             exists = udcExists(bigDataUrlLocal);
