@@ -85,6 +85,11 @@ Z-scores are available for the missense and synonynmous categories and pLI score
 the loss-of-function variation.
 </p>
 <p>
+<em>NOTE</em>: The Regional Constraint track data reflects regions within transcripts that are
+intolerant of missense variation within the ExAc dataset and was calculated with the method
+described by Samocha et al., 2017.
+<p>
+<p>
 <em>Missense and Synonymous</em>: Positive Z-scores indicate more constraint (fewer observed 
 variants than expected), and negative scores indicate less constraint (more observed variants than
 expected). <b>A greater Z-score indicates more intolerance to the class of variation.</b> Z-scores
@@ -97,14 +102,9 @@ scores, a mirrored distribution of all Z-scores between -5 and 0 was created, an
 Z-scores were corrected by dividing by the standard deviation of the Z-score of the mirror
 distribution.
 </p>
-
-
 <p>
-<em>NOTE</em>: The Regional Constraint track data reflects the regional constraint from the ExAc 
-dataset and was calculated with the method described by Samocha el al.,2017. 
-<p>
-<em>Loss-of-function</em>: pLI closer to 1 indicates that the gene or transcript cannot tolerate
-protein truncating variation (nonsense, splice acceptor and splice donor variation). The gnomAD
+<em>Loss-of-function</em>: <b>pLI closer to 1 indicates that the gene or transcript cannot tolerate
+protein truncating variation</b> (nonsense, splice acceptor and splice donor variation). The gnomAD
 team recommends transcripts with a <b>pLI &gt;= 0.9</b> for the set of transcripts extremely intolerant
 to truncating variants. pLI is based on the idea that transcripts can be classified into three
 categories:
