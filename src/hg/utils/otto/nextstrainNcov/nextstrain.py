@@ -95,7 +95,8 @@ def numDateToYmd(numDate):
     # Get rid of the year
     numDate -= year
     # Convert to Julian day
-    jDay = int(numDate * 365) + 1
+    daysInYear = 366 if isLeapYear else 365
+    jDay = int(numDate * daysInYear) + 1
     if (jDay > 334 + isLeapYear):
         month, day = 11, (jDay - 334 - isLeapYear)
     elif (jDay > 304 + isLeapYear):

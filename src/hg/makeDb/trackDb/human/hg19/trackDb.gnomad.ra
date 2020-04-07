@@ -311,6 +311,7 @@ html gnomad
     type bigBed 9 +
     release alpha
     dataVersion Release 2.1
+    html gnomadSv
 
         track gnomadSvFull
         parent gnomadStructuralVariants on
@@ -321,11 +322,11 @@ html gnomad
         itemRgb on
         url https://gnomad.broadinstitute.org/variant/$$?dataset=gnomad_sv_r2_1
         urlLabel gnomAD Structural Variant Browser
-        filterLabel.svtype "Filter by Type of Variation"
+        filterLabel.svtype Type of Variation
         filterValues.svtype BND|Breakend,CPX|Complex,CTX|Translocation,DEL|Deletion,DUP|Duplication,INS|Insertion,INV|Inversion,MCNV|Multi-allele CNV
         filter.svlen 50:199840172
         filterByRange.svlen on
-        filterLabel.svlen "Filter by Variant Size"
+        filterLabel.svlen Filter by Variant Size
         mouseOverField _mouseOver
         searchIndex name
         release alpha
@@ -339,11 +340,11 @@ html gnomad
         itemRgb on
         url https://gnomad.broadinstitute.org/variant/$$?dataset=gnomad_sv_r2_1
         urlLabel gnomAD Structural Variant Browser
-        filterLabel.svtype "Filter by Type of Variation"
+        filterLabel.svtype Type of Variation
         filterValues.svtype BND|Breakend,CPX|Complex,CTX|Translocation,DEL|Deletion,DUP|Duplication,INS|Insertion,INV|Inversion,MCNV|Multi-allele CNV
         filter.svlen 50:199840172
         filterByRange.svlen on
-        filterLabel.svlen "Filter by Variant Size"
+        filterLabel.svlen Filter by Variant Size
         mouseOverField _mouseOver
         searchIndex name
         release alpha
@@ -357,19 +358,19 @@ html gnomad
         itemRgb on
         url https://gnomad.broadinstitute.org/variant/$$?dataset=gnomad_sv_r2_1
         urlLabel gnomAD Structural Variant Browser
-        filterLabel.svtype "Filter by Type of Variation"
+        filterLabel.svtype Type of Variation
         filterValues.svtype BND|Breakend,CPX|Complex,CTX|Translocation,DEL|Deletion,DUP|Duplication,INS|Insertion,INV|Inversion,MCNV|Multi-allele CNV
         filter.svlen 50:199840172
         filterByRange.svlen on
-        filterLabel.svlen "Filter by Variant Size"
+        filterLabel.svlen Filter by Variant Size
         mouseOverField _mouseOver
         searchIndex name
         release alpha
 
     track gnomadPLI
     parent gnomadSuper
-    shortLabel gnomAD pLoF Metrics
-    longLabel gnomAD Predicted Loss of Function Constraint Metrics
+    shortLabel gnomAD Constraint Metrics
+    longLabel Genome Aggregation Database (gnomAD) - Predicted Constraint Metrics
     compositeTrack On
     group varRep
     type bigBed 12
@@ -377,8 +378,8 @@ html gnomad
     visibility pack
 
         track pliByGene
-        shortLabel gnomAD Gene LoF
-        longLabel gnomAD Loss of Function Constraint Metrics (pLI) By Gene
+        shortLabel gnomAD Gene Constraint
+        longLabel gnomAD Predicted Constraint Metrics By Gene 
         type bigBed 12 +
         mouseOverField _mouseOver
         itemRgb on
@@ -387,6 +388,7 @@ html gnomad
         url https://gnomad.broadinstitute.org/gene/$$?dataset=gnomad_r2_1
         urlLabel View this Gene on the gnomAD browser
         labelFields name,geneName
+        defaultLabelFields geneName
         filter._pli 0:1
         filterLabel._pli Show only items between this pLI range
         filterByRange._pli on
@@ -394,8 +396,8 @@ html gnomad
         priority 1
 
         track pliByTranscript
-        shortLabel gnomAD Transcript LoF
-        longLabel gnomAD Loss of Function Constraint Metrics (pLI) By Transcript
+        shortLabel gnomAD Transcript Constraint
+        longLabel gnomAD Predicted Constraint Metrics By Transcript 
         type bigBed 12 +
         mouseOverField _mouseOver
         itemRgb on
@@ -412,11 +414,12 @@ html gnomad
 
         track gnomadMissense
         parent gnomadPLI off
-        shortLabel gnomAD Missense Constraint Metrics
-        longLabel gnomAD Missense Constraint Metrics
+        shortLabel gnomAD Regional Constraint
+        longLabel gnomAD Predicted Constraint Metrics By Transcript Regions 
         bigDataUrl /gbdb/hg19/gnomAD/missense/missenseConstrained.bb
         itemRgb on
         labelFields name,geneName
+        defaultLabelFields geneName
         group varRep
         type bigBed 12 +
         filter.obs_exp 0:5
