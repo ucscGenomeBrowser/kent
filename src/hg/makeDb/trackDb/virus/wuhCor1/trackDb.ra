@@ -4,7 +4,11 @@ html gold
 
 # Local declaration so that local gap.html is picked up.
 track gap override
+visibility hide
 html gap
+
+track rmsk override
+visibility hide
 
 searchTable gold
 shortCircuit 1
@@ -12,24 +16,79 @@ termRegex NC_[0-9v]+
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
-track ncbiGene
-shortLabel NCBI Genes
-longLabel NCBI Genes from GCF_009858895.2_ASM985889v3 record
+include ncbiGeneBGP.ra
+
+track primers
+shortLabel RT-PCR Primers
+longLabel RT-PCR Detection Kit Primer Sets
+group map
+type psl
+
+track rfam
+shortLabel RFAM
+longLabel RFAM hits
 group genes
-visibility pack
-priority 1
-color 12,12,120
-type genePred 
-baseColorUseCds given
-baseColorDefault genomicCodons
-url https://www.ncbi.nlm.nih.gov/protein/$$
-urlLabel NCBI Refseq protein
+type bed 9
 
-# itemDetailsHtmlTable geneDesc
+track gordon2
+shortLabel Protein Interact.
+longLabel Human Interacting Proteins from Gordon et al. (* = druggable)
+group genes
+color 1,50,32
+type bigBed 5 +
+bigDataUrl /gbdb/wuhCor1/bbi/gordon.bb
+useScore on
+scoreMin 600
+scoreMax 1000
+priority 10
+mouseOverField drug
+urls pmid=https://www.ncbi.nlm.nih.gov/pubmed/$$
 
-searchName ncbiGene
-searchTable ncbiGene
-searchType genePred
-searchMethod fuzzy
-searchPriority 18
+track crisprDet
+shortLabel CRISPR Detection
+longLabel CRISPR Detection Guides
+group genes
+type psl
 
+track rosettaMhc
+shortLabel Rosetta Predictions
+longLabel CD8 Epitopes predicted by NetMHC and Rosetta
+group immu
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/bbi/rosetta.bb
+
+track epiValid
+shortLabel Validated Epitopes
+longLabel Validated Epitopes from SARS 2003 outbreak
+group immu
+type bigBed 4 +
+bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
+
+track publicAnnots
+shortLabel User annotations
+longLabel User-contributed annotations via bit.ly/cov2annots
+group map
+type bigBed 4 +
+bigDataUrl /gbdb/wuhCor1/bbi/public.bb
+
+track pdb
+shortLabel PDB Structures
+longLabel Protein Data Bank (PDB) Sequence Matches
+group genes
+type bigBed 12
+visibility hide
+url https://www.pdb.org/pdb/explore/explore.do?structureId=$$
+urlLabel link to PDB
+iframeUrl https://www.pdb.org/pdb/explore/explore.do?structureId=$$
+iframeOptions width='1000' height='800' scrolling='yes'
+bigDataUrl /gbdb/wuhCor1/bbi/pdb.bb
+exonNumbers off
+priority 30
+
+
+include trackDb.119way.ra
+include epitopes.ra
+include trackDb.44way.ra
+include trackDb.strainName44way.ra
+include trackDb.uniprot.ra
+include trackDb.nextstrain.ra

@@ -157,7 +157,7 @@ sub doDownload {
 
   if ($filesFound < $filesExpected) {
     printf STDERR "# doNcbiRefSeq.pl download: can not find all files required\n";
-    exit 0;
+    exit 255;
   }
   my $runDir = "$buildDir/download";
   &HgAutomate::mustMkdir($runDir);
@@ -243,10 +243,12 @@ _EOF_
      chomp $result;
      if ( $result =~ m/ucscToRefSeq/ ) {
        $haveLiftFile = 1;
+### the sort -k2,2 -u eliminates the problem of duplicate sequences existing
+### in the target $db assembly
        $bossScript->add(<<_EOF_
 cd \$runDir
 hgsql -N -e 'select 0,name,chromEnd,chrom,chromEnd from ucscToRefSeq;' \${db} \\
-     > \${asmId}To\${db}.lift
+     | sort -k2,2 -u > \${asmId}To\${db}.lift
 _EOF_
        );
     }
@@ -331,6 +333,7 @@ export ncbiGffGz=\$downloadDir/\${asmId}_genomic.gff.gz
 export db=$db
 export gff3ToRefLink=$gff3ToRefLink
 export gbffToCds=$gbffToCds
+export dateStamp=`date "+%F"`
 
 export annotationRelease=`zcat \$ncbiGffGz | head -100 | grep ^#.annotation-source | sed -e 's/.*annotation-source //'`
 if [ "\$annotationRelease" == "" ]; then
@@ -371,6 +374,10 @@ zcat \$downloadDir/\${asmId}_rna.gbff.gz \\
 liftUp -extGenePred -type=.gp stdout $localLiftFile warn \$asmId.gp \\
   | gzip -c > \$asmId.\$db.gp.gz
 $genePredCheckDb \$asmId.\$db.gp.gz
+zcat \$asmId.\$db.gp.gz > ncbiRefSeq.\$dateStamp
+genePredToGtf -utr file ncbiRefSeq.\$dateStamp stdout | gzip -c \\
+  > ../\$db.\$dateStamp.ncbiRefSeq.gtf.gz
+rm -f ncbiRefSeq.\$dateStamp
 
 # curated subset of all genes
 (zegrep "^[NY][MRP]_" \$asmId.\$db.gp.gz || true) > \$db.curated.gp
@@ -731,6 +738,14 @@ ln -f -s `pwd`/\$db.rna.fa $gbdbDir/seqNcbiRefSeq.rna.fa
 hgLoadSeq -drop -seqTbl=seqNcbiRefSeq -extFileTbl=extNcbiRefSeq \$db $gbdbDir/seqNcbiRefSeq.rna.fa
 
 hgLoadPsl \$db -table=ncbiRefSeqPsl process/\$asmId.\$db.psl.gz
+
+if [ -d "/usr/local/apache/htdocs-hgdownload/goldenPath/archive" ]; then
+ gtfFile=`ls \$db.*.ncbiRefSeq.gtf.gz`
+ mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq
+ rm -f /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq/\$gtfFile
+ ln -s `pwd`/\$db.*.ncbiRefSeq.gtf.gz \\
+   /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq/
+fi
 
 featureBits \$db ncbiRefSeq > fb.ncbiRefSeq.\$db.txt 2>&1
 cat fb.ncbiRefSeq.\$db.txt 2>&1

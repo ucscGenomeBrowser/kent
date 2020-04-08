@@ -65,8 +65,8 @@ if [ "$new19LongLc" -lt "$old19LongLc" ]; then
         exit 255
 fi
 
-echo $old19ShortLc $new19ShortLc | awk '{if (($2-$1)/$1 > 0.1) printf "validate on hg19 LOVD short failed: old count: %d, new count: %d\n", $1,$2; exit 1;}'
-echo $old19LongLc $new19LongLc | awk '{if (($2-$1)/$1 > 0.1) printf "validate on hg19 LOVD long failed: old count: %d, new count: %d\n", $1,$2; exit 1;}'
+echo $old19ShortLc $new19ShortLc | awk '{if (($2-$1)/$1 > 0.1) {printf "validate on hg19 LOVD short failed: old count: %d, new count: %d\n", $1,$2; exit 1;}}'
+echo $old19LongLc $new19LongLc | awk '{if (($2-$1)/$1 > 0.1) {printf "validate on hg19 LOVD long failed: old count: %d, new count: %d\n", $1,$2; exit 1;}}'
 
 # bedDetail4.sql was generated like this:
 # egrep -v 'score|strand|thick|reserved|block|chromStarts' /cluster/home/max/kent/src/hg/lib/bedDetail.sql > bedDetail4.sql 

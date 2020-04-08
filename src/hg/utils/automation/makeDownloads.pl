@@ -100,7 +100,7 @@ Assumptions:
 my ($db);
 # Other:
 my ($topDir, $scriptDir, $trfRunDir, $trfRunDirRel);
-my ($chromBased, @chroms, %chromRoots, $chromGz, $geneTable);
+my ($chromBased, @chroms, %chromRoots, $chromGz, $geneTable, @geneTableList);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
@@ -128,10 +128,18 @@ sub dbHasTable {
   return ($rows > 0);
 } # dbHasTable
 
+sub getGeneTableList {
+  # Construct list of gene tables to make gtf file dumps
+  foreach my $table ('ncbiRefSeq', 'refGene', 'ensGene', 'knownGene') {
+    if (&dbHasTable($dbHost, $db, $table)) {
+      push @geneTableList, $table;
+    }
+  }
+} # getGeneTableList
 
 sub getGeneTable {
   # If there is a suitable table for generating upstream genes, return it.
-  foreach my $table ('refGene', 'mgcGenes') {
+  foreach my $table ('ncbiRefSeq', 'refGene', 'ensGene', 'mgcGenes') {
     if (&dbHasTable($dbHost, $db, $table)) {
       return $table;
     }
@@ -698,6 +706,50 @@ _EOF_
   close($fh);
 } # makeDatabaseReadme
 
+sub makeBigZipsGenesReadme {
+  # Dump out a README.txt for bigZips/genes
+  my ($runDir) = @_;
+  my $fh = &HgAutomate::mustOpen(">$runDir/README.bigZipsGenes.txt");
+  print $fh <<_EOF_
+Introduction
+^^^^^^^^^^^^
+
+This directory contains GTF files for the main gene transcript sets where available. They are
+sourced from the following gene model tables: ncbiRefSeq, refGene, ensGene, knownGene
+
+Not all files are available for every assembly. For more information on the source tables
+see the respective data track description page in the assembly. For example:
+    http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&g=refGene
+
+Information on the different gene models can also be found in our genes FAQ:
+    https://genome.ucsc.edu/FAQ/FAQgenes.html
+
+Generation
+^^^^^^^^^^
+
+The files are created using the genePredToGtf utility with the additional -utr flag. Utilities
+can be found in the following directory:
+    http://hgdownload.soe.ucsc.edu/admin/exe/
+
+An example command is as follows:
+    genePredToGtf -utr hg38 ncbiRefSeq hg38.ncbiRefSeq.gtf
+
+Additional Resources
+^^^^^^^^^^^^^^^^^^^^
+
+Information on GTF format and how it is related to GFF format:
+    https://genome.ucsc.edu/FAQ/FAQformat.html#format4
+
+Information about the different gene models available in the Genome Browser:
+    https://genome.ucsc.edu/FAQ/FAQgenes.html
+
+More information on how the files were generated:
+    https://genome.ucsc.edu/FAQ/FAQdownloads.html#download37
+_EOF_
+  ;
+  close($fh);
+}	#	sub makeBigZipsGenesReadme
+
 sub makeBigZipsReadme {
   # Dump out a README.txt for bigZips/ .
   my ($runDir) = @_;
@@ -835,8 +887,12 @@ _EOF_
   my $dunno = '*** ??? ***';
   if ($geneTable) {
     my $geneDesc;
-    if ($geneTable eq 'refGene') {
+    if ($geneTable eq 'ncbiRefSeq') {
+      $geneDesc = 'NCBI RefSeq';
+    } elsif ($geneTable eq 'refGene') {
       $geneDesc = 'RefSeq';
+    } elsif ($geneTable eq 'ensGene') {
+      $geneDesc = 'Ensembl';
     } elsif ($geneTable eq 'mgcGenes') {
       $geneDesc = 'MGC';
     } elsif ($geneTable eq 'xenoRefGene') {
@@ -920,7 +976,6 @@ _EOF_
   &printAssemblyUsage($fh, $Organism, $assemblyLabel);
   close($fh);
 } # makeBigZipsReadme
-
 
 sub makeChromosomesReadme {
   # Dump out a README.txt for chromsomes/ .
@@ -1108,13 +1163,24 @@ foreach d (bigZips $chromGz database liftOver)
   endif
   mv $runDir/README.\$d.txt README.txt
 end
+endif
 
 _EOF_
   );
+  if (scalar(@geneTableList) > 0) {
+  $bossScript->add(<<_EOF_
+mkdir -p $runDir/bigZips/genes
+cd $runDir/bigZips/genes
+mv $runDir/README.bigZipsGenes.txt README.txt
+
+_EOF_
+  );
+  }
 
   # Create README.*.txt files which will be moved into subdirs by the script.
   &makeDatabaseReadme($runDir);
   &makeBigZipsReadme($runDir);
+  &makeBigZipsGenesReadme($runDir);
   &makeChromosomesReadme($runDir) if ($chromBased);
   &makeLiftOverReadme($runDir);
 
@@ -1147,6 +1213,7 @@ rm -f $gp/liftOver/README.txt
 ln -s $runDir/liftOver/README.txt $gp/liftOver/README.txt
 _EOF_
   );
+
   if ($geneTable) {
     $bossScript->add(<<_EOF_
 cd $runDir/bigZips
@@ -1159,7 +1226,32 @@ md5sum up*.gz >> md5sum.txt
 ln -s $runDir/bigZips/up*.gz $gp/bigZips/
 _EOF_
     );
-  }
+  }	#	if ($geneTable)
+
+  if (scalar(@geneTableList) > 0) {
+    $bossScript->add(<<_EOF_
+cd $runDir/bigZips
+mkdir -p genes $gp/bigZips/genes
+_EOF_
+    );
+    foreach my $geneTbl (@geneTableList) {
+      $bossScript->add(<<_EOF_
+genePredToGtf -utr $db $geneTbl stdout | gzip -c > genes/$geneTbl.gtf.gz
+_EOF_
+      );
+    }
+    $bossScript->add(<<_EOF_
+cd $runDir/bigZips/genes
+md5sum *.gtf.gz > md5sum.txt
+rm -fr $gp/bigZips/genes
+mkdir $gp/bigZips/genes
+ln -s $runDir/bigZips/genes/*.gtf.gz $gp/bigZips/genes/
+ln -s $runDir/bigZips/genes/md5sum.txt $gp/bigZips/genes/
+ln -s $runDir/bigZips/genes/README.txt $gp/bigZips/genes/
+_EOF_
+    );
+  }	#	if (scalar(@geneTableList) > 0)
+
   $bossScript->execute();
 } # doInstall
 
@@ -1266,6 +1358,7 @@ $scriptDir = "$topDir/jkStuff";
 $trfRunDirRel = "$HgAutomate::trackBuild/simpleRepeat";
 $trfRunDir = "$topDir/$trfRunDirRel";
 $geneTable = &getGeneTable();
+&getGeneTableList();
 
 if (! -e "$topDir/$db.2bit") {
   die "Sorry, this script requires $topDir/$db.2bit.\n";

@@ -406,7 +406,7 @@ if (filename == NULL)
     warn("Missing bigDataUrl setting for track %s", tdb->shortLabel);
     return;
     }
-char *errMsg = hicLoadHeader(filename, &meta, NULL);
+char *errMsg = hicLoadHeader(filename, &meta, database);
 if (errMsg != NULL)
     {
     warn("Error fetching header for track %s: %s", tdb->shortLabel, errMsg);

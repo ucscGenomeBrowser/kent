@@ -54,17 +54,17 @@ if ($asmHubName eq "vertebrate") {
 
 print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
-<!--#set var="TITLE" value="$Name genomes assembly hubs" -->
+<!--#set var="TITLE" value="$Name genomes assembly hubs, assembly statistics" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
 
-<h1>$Name Genomes assembly hubs</h1>
+<h1>$Name Genomes assembly hubs, assembly statistics</h1>
 <p>
 Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 </p>
 
-<h3>See also: <a href='index.html'>hub access</a></h3><br>
+<h3>See also: <a href='index.html'>hub access</a>,&nbsp;<a href='trackData.html'>track statistics</a></h3><br>
 
 <h3>Data resource links</h3>
 NOTE: <em>Click on the column headers to sort the table by that column</em><br>
@@ -133,18 +133,30 @@ END
 sub endHtml() {
 
 if ($asmHubName ne "viral") {
-  printf "<p>\nOther assembly hubs available:<br>\n<table border='1'><thead>\n<tr>";
+  printf "<p>\n<table border='1'><thead>\n";
+  printf "<tr><th colspan=6 style='text-align:center;'>Additional hubs with collections of assemblies</th></tr>\n";
+  printf "<tr><th>Assembly hubs index pages:&nbsp;</th>\n";
+  printf "<th><a href='../primates/index.html'>Primates</a></th>\n";
+  printf "<th><a href='../mammals/index.html'>Mammals</a></th>\n";
+  printf "<th><a href='../birds/index.html'>Birds</a></th>\n";
+  printf "<th><a href='../fish/index.html'>Fish</a></th>\n";
+  printf "<th><a href='../vertebrate/index.html'>other vertebrates</a></th>\n";
 
-  printf "<th><a href='../primates/asmStatsPrimates.html'>Primates</a></th>\n"
-    if ($asmHubName ne "primates");
-  printf "<th><a href='../mammals/asmStatsMammals.html'>Mammals</a></th>\n"
-    if ($asmHubName ne "mammals");
-  printf "<th><a href='../birds/asmStatsBirds.html'>Birds</a></th>\n"
-    if ($asmHubName ne "birds");
-  printf "<th><a href='../fish/asmStatsFish.html'>Fish</a></th>\n"
-    if ($asmHubName ne "fish");
-  printf "<th><a href='../vertebrate/asmStatsVertebrate.html'>other vertebrates</a></th>\n"
-    if ($asmHubName ne "vertebrate");
+  printf "</tr><tr>\n";
+  printf "<th>Hubs assembly statistics:&nbsp;</th>\n";
+  printf "<th><a href='../primates/asmStats.html'>Primates</a></th>\n";
+  printf "<th><a href='../mammals/asmStats.html'>Mammals</a></th>\n";
+  printf "<th><a href='../birds/asmStats.html'>Birds</a></th>\n";
+  printf "<th><a href='../fish/asmStats.html'>Fish</a></th>\n";
+  printf "<th><a href='../vertebrate/asmStats.html'>other vertebrates</a></th>\n";
+
+  printf "</tr><tr>\n";
+  printf "<th>Hubs track statistics:&nbsp;</th>\n";
+  printf "<th><a href='../primates/trackData.html'>Primates</a></th>\n";
+  printf "<th><a href='../mammals/trackData.html'>Mammals</a></th>\n";
+  printf "<th><a href='../birds/trackData.html'>Birds</a></th>\n";
+  printf "<th><a href='../fish/trackData.html'>Fish</a></th>\n";
+  printf "<th><a href='../vertebrate/trackData.html'>other vertebrates</a></th>\n";
 
   printf "</tr></thead>\n</table>\n</p>\n";
 }
@@ -206,10 +218,16 @@ sub tableContents() {
     $accessionDir .= "/" . substr($asmId, 10 ,3);
     my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
     my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
-    next if (! -s "$asmReport");
+    if (! -s "$asmReport") {
+      printf STDERR "# no assembly report:\n# %s\n", $asmReport;
+      next;
+    }
     my $chromSizes = "${buildDir}/${asmId}.chrom.sizes";
     my $twoBit = "${buildDir}/trackData/addMask/${asmId}.masked.2bit";
-    next if (! -s "$twoBit");
+    if (! -s "$twoBit") {
+      printf STDERR "# no 2bit file:\n# %s\n", $twoBit;
+      next;
+    }
     my $faSizeTxt = "${buildDir}/${asmId}.faSize.txt";
     if ( ! -s "$faSizeTxt" ) {
        printf STDERR "twoBitToFa $twoBit stdout | faSize stdin > $faSizeTxt\n";
@@ -276,7 +294,8 @@ sub tableContents() {
     close (FH);
     my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$accessionDir/$accessionId";
     printf "<tr><td align=right>%d</td>\n", ++$asmCount;
-    printf "<td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=%s/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", $hubUrl, $accessionId, $commonName;
+#    printf "<td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=%s/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", $hubUrl, $accessionId, $commonName;
+    printf "<td align=center><a href='https://genome.ucsc.edu/h/%s' target=_blank>%s</a></td>\n", $accessionId, $commonName;
     printf "    <td align=center><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s/' target=_blank>%s</a></td>\n", $accessionId, $asmId;
     printf "    <td align=right>%s</td>\n", commify($seqCount);

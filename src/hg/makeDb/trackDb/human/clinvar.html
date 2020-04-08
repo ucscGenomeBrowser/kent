@@ -54,6 +54,8 @@ Entries in the ClinVar CNV track are colored
 Entries in the ClinVar short variants track are shaded by clinical annotation:
 <b><font color="red">red for pathogenic</font></b>,
 <B><font color="#888">dark grey for uncertain significance or not provided</font></b> and
+<B><font color="#000088">dark blue for variant of uncertain significance</font></b> and
+<B><font color="#ADD8E6">light blue for conflicting</font></b> and
 <B><font color="green">green for benign</font></b>.
 </p>
 
@@ -62,12 +64,14 @@ The score of the variants is the number of "stars" in ClinVar. On the track conf
 target="_blank">ClinVar documentation</a>.
 </p>
 
-<p>On the human assembly hg19, no variants on the mitochondrial genome are
-shown, as the mitochondrial genome was not part of the human genome when it was
-released. The version of "chrM" that was selected from Genbank by UCSC when 
-the hg19 assembly was packaged is different than the version added by NCBI when
-they added an "MT" sequence later. Since the mitochondrial sequence differs,
-the variant positions cannot be converted reliably.
+<p>For the human genome version hg19: the hg19 genome released by UCSC in 2009 had a 
+mitochondrial genome "chrM" that was not the same as the one later used for most
+databases like ClinVar. As a result, we added the official mitochondrial genome
+in 2020 as "chrMT" and all mitochondrial annotations of ClinVar and most other
+databases are shown on the mitochondrial genome called "chrMT". For full description
+of the issue of the mitochondrial genome in hg19, please see the 
+<a target=_blank href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/">README file</a> 
+on our download site. 
 </p>
 
 

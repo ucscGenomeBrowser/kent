@@ -1,0 +1,113 @@
+<h2>Description</h2>
+<p>
+This track shows the locations of those primers in detection kits that match the
+reference sequence. The primers were copied from a spreadsheet
+<a target="_blank" href="https://docs.google.com/spreadsheets/d/17eucK_mSAGgYvxVCKJkbbYaogr2ofbhgW2f9W7K3oOA/edit#gid=636736390">
+shared on the Berkeley Covid Slack channel</a>.
+</p>
+<p>
+All are RT-qPCR primer sets. Each set consists of one forward, one reverse and one internal primer. 
+</p>
+
+<p>
+Four primers match the reference sequence over less than 14bp: 2019-nCoV_N2-P, HKU-ORF-1b-nsp14-R, 2019-nCoV_N1-R, WH-NIC_N-P.
+Four primers were not found at all: HKU-ORF-1b-nsp14-F, 2019-nCoV_RP-P, 2019-nCoV_RP-R, 2019-nCoV_RP-F.
+</p>
+
+<p>Here is our current understanding of the origin of the primers:</p>
+<table class="stdTbl">
+    </tr>
+        <th>
+            Prefix
+        </th>
+        <th>
+            Institution
+        </th>
+        <th>
+            Overview
+        </th>
+        <th>
+            Manual
+        </th>
+    </tr>
+
+    <tr>
+        <td>China- and Orf1b</td>
+        <td>China CDC</td>
+        <td></td>
+        <td></td>
+    </tr>
+
+    <tr>
+        <td>NIID-</td>
+        <td>Nat. Inst. of Infect. Dis., Japan</td>
+        <td></td>
+        <td></td>
+    </tr>
+
+    <tr>
+        <td>WH-</td>
+        <td>National Inst. of Health (Thailand)</td>
+        <td></td>
+        <td></td>
+    </tr>
+
+    <tr>
+        <td>HKU-</td>
+        <td>The University of Hong King</td>
+        <td>Detects N gene and Orf1b. Not specific for SARS-Cov2, but other Sarbecovirus species are not in circulation</td>
+        <td><a href="https://www.who.int/docs/default-source/coronaviruse/peiris-protocol-16-1-20.pdf?sfvrsn=af1aac73_4" target=_blank>WHO Peiris Protocol</a></td>
+    </tr>
+
+    <tr>
+        <td>2019-nCoV-</td>
+        <td>CDC, USA</td>
+        <td>Three reactions, target: N gene. One primer/probe set detects all
+            betacoronaviruses, two sets are specific for SARS-CoV-2. All 3 assays must be positive 
+        </td>
+        <td><a href="https://www.fda.gov/media/134922/download" target=_blank>Instructions</a></td>
+    </tr>
+
+    <tr>
+        <td>EU-Drosten</td>
+        <td>Drosten Lab, Charite Berlin, Germany</td>
+        <td>Set 1: run E and RdRp primers (designed for SARS-CoV, SARS-CoV-2, and bat-associated
+        betacoronaviruses), if Set 1 is positive, use SARS-Cov-2 specific detection primer</td>
+    <td><a href="https://www.who.int/docs/default-source/coronaviruse/protocol-v2-1.pdf?sfvrsn=a9ef618c_2" target=_blank>Instructions</a></td>
+    </tr>
+
+</table>
+
+<h2>Summary</h2>
+<p>
+Bioinformatic formats for currently-deployed primer-probe sets for detecting COVID-19 (currently available in FASTA format). The sequences and the identifiers for these primers were obtained from the following sources:
+
+<ul>
+    <li><a href="https://www.cdc.gov/coronavirus/2019-ncov/lab/rt-pcr-panel-primer-probes.html">CDC Laboratory Guidance</a>
+    <li><a href="https://www.biorxiv.org/content/10.1101/2020.02.25.964775v1">Comparative analysis of primer-probe sets for the laboratory confirmation of SARS-CoV-2</a>
+    <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6988269/">Detection of 2019 novel coronavirus (2019-nCoV) by real-time RT-PCR</a>
+</ul>
+
+<h2>Methods</h2>
+The primers were mapped with the following command:</br><tt>blat ../../wuhCor1.2bit primers.fa stdout -stepSize=1 -tileSize=6  -minScore=10 -oneOff=1 -noHead &gt; primers.psl</tt>
+
+
+<h2>Data Access</h2>
+<p>
+You can download the PSL file underlying this track (primers) from our
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/wuhCor1/database/" 
+target=_blank>Download Server</a>.
+The data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can also be
+accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>.</p>
+
+<h2>Credits</h2>
+<p>
+This data annotation track was made by Maximilian Haeussler, with assistance from Daniel Schmelter.
+Fasta data collected by Tomer Altman, found by Jason Fernandes.</p>
+
+<h2>Funding</h2>
+<p>
+The SARS-CoV-2 genome browser and data annotation tracks are funded by generous 
+individual donors including Pat &amp; Rowland Rebele.</p>
+

@@ -12,6 +12,10 @@
 #include "bwgInternal.h"
 #include "zlibFace.h"
 
+char *version = "2.8";   // when changing, change in bedToBigBed, bedGraphToBigWig, and wigToBigWig
+/* Version history from 2.8 on at least -
+ * 2.8  sync up version numbers with bedToBigBed 
+ */
 
 static int blockSize = 256;
 static int itemsPerSlot = 1024;
@@ -24,8 +28,8 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "wigToBigWig v %d - Convert ascii format wig file (in fixedStep, variableStep\n"
-  "or bedGraph format) to binary big wig format.\n"
+  "wigToBigWig v %s - Convert ascii format wig file (in fixedStep, variableStep\n"
+  "or bedGraph format) to binary big wig format (bbi version: %d).\n"
   "usage:\n"
   "   wigToBigWig in.wig chrom.sizes out.bw\n"
   "Where in.wig is in one of the ascii wiggle formats, but not including track lines\n"
@@ -45,7 +49,7 @@ errAbort(
   "   -unc - If set, do not use compression.\n"
   "   -fixedSummaries - If set, use a predefined sequence of summary levels.\n"
   "   -keepAllChromosomes - If set, store all chromosomes in b-tree."
-  , bbiCurrentVersion, blockSize, itemsPerSlot
+  , version, bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
 

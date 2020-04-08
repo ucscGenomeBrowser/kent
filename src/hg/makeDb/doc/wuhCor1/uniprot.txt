@@ -1,0 +1,12 @@
+cd /hive/data/genomes/wuhCor1/bed/uniprot
+# uniprot xml is only available as a pre-release
+wget http://ftp.ebi.ac.uk/pub/databases/uniprot/pre_release/coronavirus.xml
+/hive/data/outside/otto/uniprot/uniprotToTab -p coronavirus.xml 2697049 tab/ 
+# uniprot has everything annotated twice, once on pp1a and once on pp1ab, but
+# the annotations are not exactly identical!! So to make this look better, I just
+# remove all pp1a annotation
+sed -i /P0DTC1/d tab/swissprot.2697049.annots.tab
+echo Coronvirus pre-release 16 Mar 2020 10am > tab/version.txt
+mkdir -p fasta
+/hive/data/outside/otto/uniprot/doUniprot --dbs=wuhCor1 -p run -d --skipTrembl
+

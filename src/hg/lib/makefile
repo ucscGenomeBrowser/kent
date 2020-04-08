@@ -98,7 +98,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     sgdClone.o sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o snakeUi.o \
     snp.o snp125.o snp125CodingCoordless.o snp132Ext.o snpExceptions.o snpFasta.o snpMap.o snpTmp.o \
     snpUi.o snp125Exceptions.o snp125Ui.o softPromoter.o softberryHom.o soTerm.o \
-    spDb.o splignAlign.o sqlSanity.o stanMad.o straw.o stsAlias.o \
+    spDb.o splignAlign.o sqlSanity.o stanMad.o stsAlias.o \
     stsInfo.o stsInfo2.o stsInfoMouse.o stsInfoMouseNew.o stsInfoRat.o \
     stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o suggest.o \
     switchDbTss.o synMap.o synteny100000.o syntenyBerk.o syntenySanger.o \
@@ -118,6 +118,10 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     oregannoUi.o gvUi.o gv.o omicia.o protVar.o pgSnp.o \
     alignInfo.o cddInfo.o loweutils.o cddDesc.o arCOGs.o arcogdesc.o geneTree.o \
     megablastInfo.o pgPhenoAssoc.o pgSiftPred.o pgPolyphenPred.o userRegions.o variome.o
+
+ifeq (${USE_HIC}, 1)
+  O += straw.o
+endif
 
 ifeq (${GBROWSE}, 1)
   GBROWSE_D=-DGBROWSE

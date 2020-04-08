@@ -318,7 +318,10 @@ def reviewStatusToHtmlStars(reviewStatus):
     htmlStr = "".join(htmlList)
     htmlStr += "&nbsp;&nbsp;<small>based on: %s</small>" % reviewStatus
 
-    asciiDesc = "%d stars" % starCount
+    if starCount==1:
+        asciiDesc = "%d star" % starCount
+    else:
+        asciiDesc = "%d stars" % starCount
     return htmlStr, asciiDesc, starCount
 
 def downloadFromNcbi(skipDownload):
@@ -476,28 +479,25 @@ for line in ifh:
     else:
         isCnv = False
 
+    pathoCode = clinSignToPathoCode(clinSign)
+
     if isCnv:
         if "gain" in allType or "duplication" in allType:
             itemRgb = "0,0,255"
         if "deletion" in allType or "loss" in allType:
             itemRgb = "255,0,0"
     else:
-        isPat, isBen = False, False
-        if "pathogenic" in clinSign.lower():
-            isPat = True
-        if "benign" in clinSign.lower():
-            isBen = True
-
-        if (isPat==True and isBen==True) or (isPat==False and isBen==False):
-            itemRgb = "128,128,128"
-        elif isPat==True:
+        if pathoCode in ["PG", "LP"]: # pathogenic or likely pathogenic
             itemRgb = "210,0,0"
-        elif isBen==True:
+        elif pathoCode in ["BN", "LB"]: # benign or likely benign
             itemRgb = "0,210,0"
+        elif pathoCode in ["CF"]: # conflicting
+            itemRgb = "137,121,212" # light-blue
+        elif pathoCode in ["OT", "UC"]: # uncertain or other
+            itemRgb = "128,128,128" # grey
         else:
             assert(False)# should never happen
 
-    pathoCode = clinSignToPathoCode(clinSign)
     varLen = int(end)-int(start)
 
     geneStr = geneSymbol

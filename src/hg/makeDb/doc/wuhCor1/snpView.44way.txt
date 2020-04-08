@@ -1,0 +1,80 @@
+# Hiram 2020-03-13
+
+mkdir -p  /hive/data/genomes/wuhCor1/bed/snpView44Way
+cd /hive/data/genomes/wuhCor1/bed/snpView44Way
+
+awk '/^s/ {print $2}' ../multiz44way/defraged.multiz44way.maf \
+  | sed 's/\..*//' > species.lst  
+for i in `cat species.lst`; do f=`echo $i \
+  | tr '_' '-'`; echo "s/$f/$i/g"; done > backSedScript.txt
+for i in `cat species.lst`; do f=`echo $i \
+  | tr '_' '-'`; echo "s/$i/$f/g"; done > foreSedScript.txt
+sed -f foreSedScript.txt species.lst > editSpecies.lst
+
+mafGene -exons wuhCor1 multiz44way singleCover44way species.lst stdout \
+   | sed -f foreSedScript.txt >  nonsyn.faa
+
+paSNP editSpecies.lst nonsyn.faa stdout | sed 's/:/ /' | sed 's/-/ /' \
+   | awk '{print $1, $2-1, $3, $4, 1583, "+", $2-1, $3, "255,0,0", 1, $3-($2 - 1), 0}' \
+   | sed -f backSedScript.txt > nonsyn.bed
+
+mafGene -uniqAA -exons wuhCor1 multiz44way singleCover species.lst stdout \
+  | sed -f foreSedScript.txt > syn.faa
+
+paSNP editSpecies.lst syn.faa stdout | sed 's/:/ /' | sed 's/-/ /' \
+   | awk '{print $1, $2-1, $3, $4, 1819, "+", $2-1, $3, "0,255,0", 1, $3 - ($2 - 1), 0}' \
+     | sed -f backSedScript.txt   > syn.bed
+
+mafToSnpBed wuhCor1 ../multiz44way/defraged.multiz44way.maf \
+   ../multiz44way/mafFrames/singleCover44way.gp stdout \
+      | sed 's/wuhCor1.//' > single.bed
+
+#these should all disappear on the merge
+grep "1580$" single.bed \
+  | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "255,255,0", 1, $3 -$2, 0}' \
+    > codingVariant.bed
+
+grep "1623$" single.bed \
+  | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "255,255,0", 1, $3 -$2, 0}' \
+    > utrVariant.bed
+grep "1624$" single.bed \
+  | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "255,255,0", 1, $3 -$2, 0}' \
+    >> utrVariant.bed
+
+grep " 0$" single.bed \
+ | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "240,240,180", 1, $3 -$2, 0}' \
+   > missing.bed
+
+grep "1628$" single.bed \
+  | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "0,0,0", 1, $3 -$2, 0}' \
+    > intergenic.bed
+
+grep "1627$" single.bed \
+   | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "0,0,0", 1, $3 -$2, 0}' \
+     > intron.bed
+
+hgsql -N -e "select * from chromInfo" wuhCor1 > wuhCor1.chrom.sizes
+
+rm output.bed
+for i in `cat species.lst`
+do
+echo $i 1>&2
+grep -wh "$i" nonsyn.bed syn.bed codingVariant.bed utrVariant.bed \
+    intron.bed intergenic.bed missing.bed \
+      | bedSmash stdin wuhCor1.chrom.sizes stdout >> output.bed
+done
+
+awk '{print $1,$2,$3,$4,$5}' output.bed > load.bed
+
+hgLoadBed wuhCor1 mafSnp44way load.bed
+
+cut -f1,3 ../multiz44way/acc.date.description.list | sed -e 's/\./v/;' \
+   | sed -e 's/ /_/g;' | grep -v NC_045512v2 \
+     | awk -F$'\t' '{printf "s#%s#%s#g;\n", $1, $2}' > accToName.sed
+
+
+sed -f ./accToName.sed load.bed > strainLoad.bed
+
+hgLoadBed wuhCor1 mafSnpStrainName44way strainLoad.bed
+# Read 196342 elements of size 5 from strainLoad.bed
+# Creating table definition for mafSnpStrainName44way, bedSize: 5

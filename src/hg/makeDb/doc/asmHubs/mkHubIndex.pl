@@ -61,34 +61,35 @@ Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 
 <h3>How to view the hub</h3>
 <p>
-You can load this hub from our
-<a href="https://genome.ucsc.edu/cgi-bin/hgHubConnect#publicHubs" target="_blank">Public Hubs</a> 
-page or by clicking these assembly links to any of our official websites:
-<ul>
-  <li>
-    <a href="https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
-    target="_blank">genome.ucsc.edu</a></li>
-  <li> 
-    <a href="https://genome-euro.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
-    target="_blank">genome-euro.ucsc.edu</a></li>
-  <li>
-    <a href="https://genome-asia.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
-    target="_blank">genome-asia.ucsc.edu</a></li>
-</ul>
-</p>
-
-<p>
-To manually attach all the assemblies in this hub to other genome browsers:
+Options:
 <ol>
-  <li>
-    From the blue navigation bar, go to
+  <li>The links to the genome browser in the table below will attach that
+      one specific assembly to the genome browser.  This is most likely what
+      you want.</li>
+  <li>Instead, you can attach the entire set of assemblies as one group to
+      the genome browser with the following links depending upon which of
+      our mirror site browsers you prefer to use:
+    <ul>
+    <li><a href="https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=GCF_000001405.39"
+        target="_blank">genome.ucsc.edu</a></li>
+    <li><a href="https://genome-euro.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=GCF_000001405.39"
+        target="_blank">genome-euro.ucsc.edu</a></li>
+    <li><a href="https://genome-asia.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=GCF_000001405.39"
+        target="_blank">genome-asia.ucsc.edu</a></li>
+    </ul>
+  </li>
+  <li>To manually attach all the assemblies in this hub to genome browsers
+      that are not one of the three UCSC mirror sites:
+    <ol>
+      <li>From the blue navigation bar, go to
     <em><strong>My Data</strong> -&gt; <strong>Track Hubs</strong></em></li>
-  <li>
-    Then select the <strong>My Hubs</strong> tab and enter this URL into the textbox:
+      <li>Then select the <strong>My Hubs</strong> tab and enter this URL into
+          the textbox:
     <br><code>https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt</code></li>
-  <li>
-    Once you have added the URL to the entry form, press the <em><strong>Add Hub</strong></em>
-    button to add the hub.</li>
+      <li> Once you have added the URL to the entry form,
+           press the <em><strong>Add Hub</strong></em> button to add the hub.</li>
+    </ol>
+  </li>
 </ol>
 </p>
 
@@ -99,11 +100,16 @@ genome assemblies can be selected from the
 Instead of adding all the assemblies in one collected group, use the individual
 <em>link to genome browser</em> in the table below.
 </p>
-<h3>See also: <a href='asmStats${Name}.html'>assembly statistics</a></h3><br>
+<h3>See also: <a href='asmStats.html'>assembly statistics</a>,&nbsp;<a href='trackData.html'>track statistics</a> <== additional information for these assemblies.</h3><br>
 <h3>Data resource links</h3>
+<p>
 NOTE: <em>Click on the column headers to sort the table by that column</em><br>
-The <em>link to genome browser</em> will attach only that single assembly to
-the genome browser.
+The <em>common name/link to genome browser</em> will attach only that single assembly to
+the genome browser.<br>
+The <em>scientific name/and data download</em> link provides access to the files for that one
+assembly hub.<br>
+The other links provide access to NCBI resources for these assemblies.
+</p>
 END
 }	#	sub startHtml()
 
@@ -141,20 +147,32 @@ END
 sub endHtml() {
 
 if ($asmHubName ne "viral") {
-  printf "<p>\nOther assembly hubs available:<br>\n<table border='1'><thead>\n<tr>";
+  printf "<p>\n<table border='1'><thead>\n";
+  printf "<tr><th colspan=6 style='text-align:center;'>Additional hubs with collections of assemblies</th></tr>\n";
+  printf "<tr><th>Assembly hubs index pages:&nbsp;</th>\n";
+  printf "<th><a href='../primates/index.html'>Primates</a></th>\n";
+  printf "<th><a href='../mammals/index.html'>Mammals</a></th>\n";
+  printf "<th><a href='../birds/index.html'>Birds</a></th>\n";
+  printf "<th><a href='../fish/index.html'>Fish</a></th>\n";
+  printf "<th><a href='../vertebrate/index.html'>other vertebrates</a></th>\n";
 
-  printf "<th><a href='../primates/index.html'>Primates</a></th>\n"
-    if ($asmHubName ne "primates");
-  printf "<th><a href='../mammals/index.html'>Mammals</a></th>\n"
-    if ($asmHubName ne "mammals");
-  printf "<th><a href='../birds/index.html'>Birds</a></th>\n"
-    if ($asmHubName ne "birds");
-  printf "<th><a href='../fish/index.html'>Fish</a></th>\n"
-    if ($asmHubName ne "fish");
-  printf "<th><a href='../vertebrate/index.html'>other vertebrates</a></th>\n"
-    if ($asmHubName ne "vertebrate");
+  printf "</tr><tr>\n";
+  printf "<th>Hubs assembly statistics:&nbsp;</th>\n";
+  printf "<th><a href='../primates/asmStats.html'>Primates</a></th>\n";
+  printf "<th><a href='../mammals/asmStats.html'>Mammals</a></th>\n";
+  printf "<th><a href='../birds/asmStats.html'>Birds</a></th>\n";
+  printf "<th><a href='../fish/asmStats.html'>Fish</a></th>\n";
+  printf "<th><a href='../vertebrate/asmStats.html'>other vertebrates</a></th>\n";
 
-printf "</tr></thead>\n</table>\n</p>\n";
+  printf "</tr><tr>\n";
+  printf "<th>Hubs track statistics:&nbsp;</th>\n";
+  printf "<th><a href='../primates/trackData.html'>Primates</a></th>\n";
+  printf "<th><a href='../mammals/trackData.html'>Mammals</a></th>\n";
+  printf "<th><a href='../birds/trackData.html'>Birds</a></th>\n";
+  printf "<th><a href='../fish/trackData.html'>Fish</a></th>\n";
+  printf "<th><a href='../vertebrate/trackData.html'>other vertebrates</a></th>\n";
+
+  printf "</tr></thead>\n</table>\n</p>\n";
 }
 
 print <<"END"
@@ -239,7 +257,7 @@ sub tableContents() {
     my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$accessionDir/$accessionId";
     printf "<tr><td align=right>%d</td>\n", ++$rowCount;
 ###    printf "<td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=%s/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", $hubUrl, $accessionId, $commonName;
-    printf "<td align=center><a href='https://hgwdev-hiram.gi.ucsc.edu/h/%s' target=_blank>%s</a></td>\n", $accessionId, $commonName;
+    printf "<td align=center><a href='https://genome.ucsc.edu/h/%s' target=_blank>%s</a></td>\n", $accessionId, $commonName;
     printf "    <td align=center><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s</a></td>\n", $gcPrefix, $asmAcc, $asmId;
     if ( $bioSample ne "notFound" ) {

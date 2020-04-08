@@ -3397,7 +3397,7 @@ if (!startsWith("big", tdb->type) && sqlDatabaseExists(otherDb) && chromSeqFileE
     if (chainWinSize < 1000000)
         {
         hgcAnchorSomewhere("htcChainAli", item, tdb->track, chain->tName);
-        printf("View details of parts of chain within browser "
+        printf("View DNA sequence alignment details of parts of chain within browser "
            "window</A>.<BR>\n");
         }
     else

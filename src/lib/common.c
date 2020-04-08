@@ -3768,13 +3768,9 @@ else
 char *shorterDouble(double value)
 /* Work around a "bug" in %g output that goes into scientific notation too early. */
 {
-static char gbuffer[4096];
 static char g15buffer[4096];
 
-sprintf(gbuffer, "%g", value);
 sprintf(g15buffer, "%.15g", value);
 
-if (strlen(gbuffer) < strlen(g15buffer))
-    return gbuffer;
-return g15buffer;
+return cloneString(g15buffer);
 }

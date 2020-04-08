@@ -1,0 +1,20 @@
+
+track ncbiGene
+shortLabel NCBI Genes
+longLabel NCBI Genes from GCF_009858895.2
+group genes
+visibility hide
+priority 1
+color 12,12,120
+type genePred 
+baseColorUseCds given
+baseColorDefault genomicCodons
+url https://www.ncbi.nlm.nih.gov/protein/$$
+urlLabel NCBI Refseq protein
+
+searchName ncbiGene
+searchTable ncbiGene
+searchType genePred
+searchMethod fuzzy
+searchPriority 18
+

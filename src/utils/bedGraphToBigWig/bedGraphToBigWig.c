@@ -20,6 +20,11 @@
 #include "bigWig.h"
 
 
+char *version = "2.8";   // when changing, change in bedToBigBed, bedGraphToBigWig, and wigToBigWig
+/* Version history from 2.8 on at least -
+ * 2.8  sync up version numbers with bedToBigBed 
+ */
+
 static int blockSize = 256;
 static int itemsPerSlot = 1024;
 static boolean doCompress = FALSE;
@@ -31,7 +36,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "bedGraphToBigWig v %d - Convert a bedGraph file to bigWig format.\n"
+  "bedGraphToBigWig v %s - Convert a bedGraph file to bigWig format (bbi version: %d).\n"
   "usage:\n"
   "   bedGraphToBigWig in.bedGraph chrom.sizes out.bw\n"
   "where in.bedGraph is a four column file in the format:\n"
@@ -49,7 +54,7 @@ errAbort(
   "   -blockSize=N - Number of items to bundle in r-tree.  Default %d\n"
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
   "   -unc - If set, do not use compression."
-  , bbiCurrentVersion, blockSize, itemsPerSlot
+  , version, bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
 

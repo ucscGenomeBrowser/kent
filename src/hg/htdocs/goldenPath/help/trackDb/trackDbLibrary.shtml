@@ -5017,24 +5017,63 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     Note: This setting will not work correctly if 'container multiWig' is specified.</P>
 </DIV>
 
+<DIV class="indelDoubleInsert"><span class="types bam"></span>
+<div class="format">
+    <code>indelDoubleInsert &lt;off/on&gt;</code><BR>
+    <code>indelQueryInsert &lt;off/on&gt;</code><BR>
+    <code>indelPolyA &lt;off/on&gt;</code></div>
+    <P>Insertion and deletion
+    differences between tag sequences and the reference genome can be
+    highlighted with the use of these settings. These options may be
+    set by the user.</P>
+    <UL>
+    <LI> <code>indelDoubleInsert</code>: Use to highlight alignment gaps in both the target
+    (reference) and query (tag) sequence with double (<B>=</B>) lines.</LI>
+    <LI> <code>indelQueryInsert</code>: Use to highlight an insert in the query
+    sequence only by drawing an orange (<B style="color:orange;">|</B>)
+    or purple (<B style="color:purple;">|</B>) vertical line.
+    Orange lines show unalignable regions in the middle of a sequence,
+    and purple highlights regions at the end of the query sequence.</LI>
+    <LI><code>indelPolyA</code>: Use to highlight an apparently valid
+    poly-a tail by drawing a vertical green line (<B style="color:green;">|</B>).</LI>
+    </UL>
+    <P><B>Example:</B></P>
+    <pre>
+    baseColorUseSequence genbank
+    indelDoubleInsert on
+    indelQueryInsert on
+    indelPolyA on    </pre>
+</DIV>
+
 <DIV class="hideEmptySubtracks"><span class="types compositeTrack"></span>
 <div class="format">
-        <code>hideEmptySubtracks &lt;on/off&gt; [multiBed.bb multiBedSources.tab]</code></div>
-    <P>When you have many subtracks in a composite track, it may be useful to limit the display
+        <code>hideEmptySubtracks &lt;on/off&gt;</code></div>
+    <p>When you have many subtracks in a composite track, it may be useful to limit the display
     to only those with data in the current viewing window.  This track setting produces a
     checkbox on the track configuration page allowing the user to enable or disable this feature.
     if <code>on</code> is specified, the feature is on by default (the checkbox is checked).
     </p>
+</DIV>
+<DIV class="hideEmptySubtracksMultiBedUrl"><span class="types compositeTrack"></span>
+<div class="format">
+        <code>hideEmptySubtracksMultiBedUrl file.bb</code></div>
+    </p>
     <p>
-    For extremely large composites, especially those where each subtrack may be sparse,
+    For large composites, especially those where each subtrack may be sparse,
     substantial performance improvements can be gained by creating an index file of the 
     intersections of items in all subtracks (&quot;multiBed&quot;).  This file, and an
-    accompanying sources file, are optional arguments to this setting.
-    Instructions for creating these files are at the MultiBed help page (TBD).
+    accompanying sources file, are optional settings for the <code>hideEmptySubtracks</code> feature.
+    NOTE: These settings are required to use the <code>hideEmptySubtracks</code> feature effectively with
+    multi-view composites.</p>
+    <p>Instructions for creating these files are at the MultiBed help page (TBD).</p>
+</DIV>
+<DIV class="hideEmptySubtracksSourcesUrl"><span class="types compositeTrack"></span>
+<div class="format">
+        <code>hideEmptySubtracksSourcesUrl file.tab</code></div>
 </DIV>
 <DIV class="hideEmptySubtracksLabel"><span class="types compositeTrack"></span>
 <div class="format">
-        <code>hideEmptySubtracks &lt;label&gt;</code></div>
+        <code>hideEmptySubtracksLabel &lt;label&gt;</code></div>
     <P>This setting is used in conjunction with the <code>hideEmptySubtracks</code> setting
     to customize the label preceding the selection checkbox on the track configuration page.
     Default wording is &quot;Hide empty subtracks&quot;.  Custom wording is useful to distinguish

@@ -34235,7 +34235,7 @@ table doseSensitivity
     gsutil cp gs://gnomad-public/papers/2019-sv/gnomad_v2.1_sv.*.bed* .
     gsutil cp gs://gnomad-public/papers/2019-sv/gnomad_v2.1_sv.*.vcf* .
 
-    for f in *.bed.gz; do out=${f/.bed.gz/}; zcat $f | tail -n +2 | cut -f1-4,32 | tawk '{$1="chr"$1; print $0}'> $out.bed4Plus; done
+    for f in *.bed.gz; do out=${f/.bed.gz/}; zcat $f | tail -n +2 | cut -f1-4,18-28,31,32,36-38,41-42 | tawk '{$1="chr"$1; print $0}'> $out.bed4Plus; done
     # variant types:
     zcat gnomad_v2.1_sv.sites.bed.gz | cut -f32 | sort | uniq -c       
       52604 BND y
@@ -34252,9 +34252,37 @@ table doseSensitivity
     for f in *.bed4Plus; do out=${f/.bed4Plus/}; bedClip -truncate $f $chromSizes stdout | ./gnomadSvToUcsc.awk | sort -k1,1 -k2,2n > $out.bed9Plus; done
 
     chromSizes=/hive/data/genomes/hg19/chrom.sizes
-    for f in *.bed9Plus; do out=${f/.bed9Plus/}; bedToBigBed -tab -type=bed9+1 -as=gnomadSv.as $f $chromSizes $out.bb; done
+    for f in *.bed9Plus; do out=${f/.bed9Plus/}; bedToBigBed -tab -type=bed9+19 -as=gnomadSv.as -extraIndex=name $f $chromSizes $out.bb; done
     mkdir -p /gbdb/hg19/gnomAD/structuralVariants/ 
     cd /gbdb/hg19/gnomAD/structuralVariants/
     cp -s /hive/data/outside/gnomAD.2/structuralVariants/*.bb .
 
+##############################################################################
+2020-03-11: import of UCSC GENCODE group processing of GENCODE V34lift37 pre-release (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV34lift37Pre
+    pushd /hive/data/genomes/hg19/bed/gencodeV34lift37Pre
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 34lift37 100 'March 2020'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.gencode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV34lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV34lift37Pre
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
 ##############################################################################

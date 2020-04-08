@@ -40,6 +40,6 @@ userApps: all
 	rsync -a ./bin/* ${DESTDIR}/${BINDIR}/
 
 clean:
-	rm -f */*.o lib/*/*.a
-	rm -f bin/*
+	rm -fr */*.o lib/*/*.a
+	rm -fr bin/*
 

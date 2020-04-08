@@ -52,6 +52,202 @@
 <!-- ============= 2020 archived news ============= -->
 <a name="2020"></a>
 
+<a name="040320"></a>
+<h2>Apr. 2, 2020 &nbsp;&nbsp; First data release for SARS-CoV-2 genome browser</h2>
+<p>
+In recent months, we have seen the beginning of the global effort against the 
+coronavirus. Here at the UCSC Genome Browser, we have also been directing 
+some work towards that front and will continue to do so.</p>
+<p>
+This has brought new users to our site who may have previously been unfamiliar 
+with this resource. The Genome Browser aims to facilitate genome 
+research by offering data visualization, genome annotations, and other tools. 
+We encourage anyone who would like to learn more to see our 
+<a target="_blank" href="help/hgTracksHelp.html#GetStarted">user guide</a>.</p>
+<p>
+With this in mind, we would like to announce a <a target="_blank" 
+href="/covid19.html">new landing page</a> as well as the first release 
+of novel coronavirus annotation data for the <a target="_blank" 
+href="/cgi-bin/hgGateway?db=wuhCor1">SARS-CoV-2 genome assembly browser</a> released 
+in early February. The SARS-CoV-2 genome browser includes displays of the virus's 
+molecular evolution in other species and its further evolution during this human 
+pandemic. We have also added multiple lung datasets to the <a target="_blank" 
+href="https://cells.ucsc.edu/?bp=lung">UCSC Single Cell Browser</a>.
+
+This information is made freely available to researchers everywhere, 
+with the goal of advancing our knowledge of SARS-CoV-2 (COVID-19).</p>
+<p>
+These latest data were primarily sourced from outside groups and include different 
+kinds of information such as gene annotations, variant data, and locally produced 
+multiple genome alignments.</p>
+<p>
+<small><b>Note:</b> Genome Browser data is often referred to as 'tracks', and the 
+term 'track' and 'data annotation track' can be used interchangeably.</small></p><br>
+
+<ul>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=ncbiGeneBGP">
+NCBI Genes</a> - This track shows genes annotated on the SARS-CoV-2 genome released 
+by the National Center for Biotechnology Information (NCBI) on 2/16/20.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=nextstrainGene">
+Nextstrain Genes</a> - This track shows genes annotated by Nextstrain.org in relation to 
+their collection and processing of SARS-CoV-2 variant data from the Global Initiative 
+on Sharing All Influenza Data (GSAID).</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=unipCov2AliSwissprot">
+UniProt Protein Annotations</a> - A collection of tracks that show protein sequence annotations 
+from the UniProt/SwissProt database, mapped to genomic coordinates. All data has been 
+curated from scientific publications by the UniProt/SwissProt staff. This data is comprised 
+of 11 data tracks, some of these include:
+  <ul>
+  <li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=unipCov2AliSwissprot">
+UniProt full-length proteins</a> - The protein sequences from SwissProt mapped onto the 
+genome, genomic coordinates for other UniProt feature tracks are based on this data.</li>
+  <li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=unipCov2Interest">
+UniProt highlighted 'Regions of Interest'</a> - This track shows protein sequence annotations 
+defined as "regions of interest" from the UniProt/SwissProt database, this data has been 
+curated from scientific publications by the UniProt/SwissProt staff.</li>
+  <li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=unipCov2Chain">
+UniProt Mature, Processed Protein Products (Polypeptide Chains)</a> - Polypeptide chain in 
+mature protein after post-processing.</li>
+  <li>
+For a full list of available UniProt tracks, see <b>UniProt Protein Annotations</b> in 
+the <a target="_blank" href="/cgi-bin/hgTracks?db=wuhCor1">SARS-CoV-2 browser</a>.</li></ul></li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?wuhCor1&c=NC_045512v2&g=epitopes">
+Immune Epitope Database and Analysis Resource (IEDB) Epitopes</a> - This track indicates the 
+immune epitope predictions for B cells, CD4 T-cells and CD8 T-cells, using varying 
+software packages.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?wuhCor1&c=NC_045512v2&g=primers">
+RT-PCR Primers</a> - This track shows RT-PCR Primers in viral detection kits aligned to 
+the SARS-CoV-2 genome from six different sources, including government agencies from 
+the US, China, Japan, and Thailand.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=nextstrainSamples">
+Nextstrain Variants</a> - This track displays all single-nucleotide variants in the 
+thousands of SARS-CoV-2 genome sequences from GISAID collected and processed 
+by Nextstrain.org. This track can be used to examine variation, protein 
+changes, and sequence conservation among SARS-CoV-2 sequences.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=nextstrainClade">
+Nextstrain Clades</a> - This track shows the location of variants that distinguish each 
+of the branches of interest defined by Nextstrain.org and can be used in conjunction 
+with their tree and map diagrams to examine viral lineage.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=strainCons44way">
+Multiz Alignment & Conservation (44 Strains with bats as hosts)</a> - This track shows 
+multiple alignments of 44 virus sequences, aligned to the SARS-CoV-2 reference 
+sequence SARS-CoV-2/NC_045512.2. It also includes measurements of evolutionary 
+conservation using two methods (phastCons and phyloP) from the PHAST package, 
+for all 44 virus sequences.</li></ul>
+
+<p>
+More information on any of these data annotation tracks can be found by clicking 
+on the names. This will lead to the track description page, which also allows 
+for configuration of various display options. Additional information on how to use 
+the UCSC Genome Browser can be found on our <a target="_blank" 
+href="/training/index.html">training page</a>.</p>
+<p>
+We would like to thank NCBI, UniProt, Nextstrain, the Sgourakis Research Group, 
+Tomer Altman, and Jason Fernandes as well as the scientists from UCSC for providing these data.</p>
+<p>
+The SARS-CoV-2 genome browser and data annotation tracks are funded by generous individual 
+donors including Pat & Rowland Rebele.</p>
+
+
+<a name="031720"></a>
+<h2>Mar. 17, 2020 &nbsp;&nbsp; New mitochondrial sequence for human (hg19)</h2>
+<p>
+We are pleased to announce the release of a patch to the hg19 assembly that will introduce a new
+mitochondrial sequence, <a href="../../cgi-bin/hgTracks?db=hg19&position=chrMT:4277-5648"
+target="_blank">chrMT</a>, to the assembly. We used GenBank sequence NC_001807 for chrM in hg19 and
+earlier, but the sequence preferred by the community is the revised Cambridge Reference Sequence
+(rCRS), <a href="https://www.ncbi.nlm.nih.gov/nuccore/251831106" target="_blank">NC_012920</a>. The
+new chrMT is the rCRS, NC_012920. <a href="https://www.ncbi.nlm.nih.gov/grc/help/patches/"
+target="_blank">Patch sequences</a> from
+<a href="https://www.ncbi.nlm.nih.gov/assembly/GCA_000001405.14" target="_blank">GRCh37.p13</a> have
+also been added to hg19.</p>
+<p>
+More information on how patch sequences are incorporated can be found on the
+<a href="http://genome.ucsc.edu/blog/patches/" target="_blank">Patching up the Genome</a> blog post.
+The blog post contains details about the new
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/latest/"
+target="_blank">/latest</a> download directory on the downloads server. With the addition of new
+sequences to hg19, we can expect to see BLAT return more matches to the genome.</p>
+<p>
+Also, with these patches, the hg19 genome is not optimal anymore for aligners. So we added an
+&quot;<a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/analysisSet/"
+target="_blank">analysis set</a>&quot; version of the hg19 genome fasta file to our
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/" target="_blank">bigZips</a>
+directory, and indexes for BWA, Bowtie2, and Hisat2.</p>
+<p>
+We would like to thank the Genome Research Consortium for creating the patches to hg19. We would
+also like to thank Angie Hinrichs and Jairo Navarro at UCSC for implementing and testing the latest
+patch to hg19.</a>
+
+<a name="022720"></a>
+<h2>Feb. 27, 2020 &nbsp;&nbsp; New NCBI RefSeq Select + MANE track for Human (hg19/hg38)</h2>
+<p>
+mitochondrial sequence, <a href="../../cgi-bin/hgTracks?db=hg19&position=chrMT:4277-5648"
+target="_blank">chrMT</a>, to the assembly. We used GenBank sequence NC_001807 for chrM in hg19 and
+earlier, but the sequence preferred by the community is the revised Cambridge Reference Sequence
+(rCRS), <a href="https://www.ncbi.nlm.nih.gov/nuccore/251831106" target="_blank">NC_012920</a>. The
+new chrMT is the rCRS, NC_012920. <a href="https://www.ncbi.nlm.nih.gov/grc/help/patches/"
+target="_blank">Patch sequences</a> from
+<a href="https://www.ncbi.nlm.nih.gov/assembly/GCA_000001405.14" target="_blank">GRCh37.p13</a> have
+also been added to hg19.</p>
+<p>
+More information on how patch sequences are incorporated can be found on the
+<a href="http://genome.ucsc.edu/blog/patches/" target="_blank">Patching up the Genome</a> blog post.
+The blog post contains details about the new
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/latest/"
+target="_blank">/latest</a> download directory on the downloads server. With the addition of new
+sequences to hg19, we can expect to see BLAT return more matches to the genome.</p>
+<p>
+Also, with these patches, the hg19 genome is not optimal anymore for aligners. So we added an
+&quot;<a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/analysisSet/"
+target="_blank">analysis set</a>&quot; version of the hg19 genome fasta file to our
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/" target="_blank">bigZips</a>
+directory, and indexes for BWA, Bowtie2, and Hisat2.</p>
+<p>
+We would like to thank the Genome Research Consortium for creating the patches to hg19. We would
+also like to thank Angie Hinrichs and Jairo Navarro at UCSC for implementing and testing the latest
+patch to hg19.</a>
+
+<a name="022720"></a>
+<h2>Feb. 27, 2020 &nbsp;&nbsp; New NCBI RefSeq Select + MANE track for Human (hg19/hg38)</h2>
+<p>
+mitochondrial sequence, <a href="../../cgi-bin/hgTracks?db=hg19&position=chrMT:4277-5648"
+target="_blank">chrMT</a>, to the assembly. We used GenBank sequence NC_001807 for chrM in hg19 and
+earlier, but the sequence preferred by the community is the revised Cambridge Reference Sequence
+(rCRS), <a href="https://www.ncbi.nlm.nih.gov/nuccore/251831106" target="_blank">NC_012920</a>. The
+new chrMT is the rCRS, NC_012920. <a href="https://www.ncbi.nlm.nih.gov/grc/help/patches/"
+target="_blank">Patch sequences</a> from
+<a href="https://www.ncbi.nlm.nih.gov/assembly/GCA_000001405.14" target="_blank">GRCh37.p13</a> have
+also been added to hg19.</p>
+<p>
+More information on how patch sequences are incorporated can be found on the
+<a href="http://genome.ucsc.edu/blog/patches/" target="_blank">Patching up the Genome</a> blog post.
+The blog post contains details about the new
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/latest/"
+target="_blank">/latest</a> download directory on the downloads server. With the addition of new
+sequences to hg19, we can expect to see BLAT return more matches to the genome.</p>
+<p>
+Also, with these patches, the hg19 genome is not optimal anymore for aligners. So we added an
+&quot;<a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/analysisSet/"
+target="_blank">analysis set</a>&quot; version of the hg19 genome fasta file to our
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/" target="_blank">bigZips</a>
+directory, and indexes for BWA, Bowtie2, and Hisat2.</p>
+<p>
+We would like to thank the Genome Research Consortium for creating the patches to hg19. We would
+also like to thank Angie Hinrichs and Jairo Navarro at UCSC for implementing and testing the latest
+patch to hg19.</a>
+
 <a name="022720"></a>
 <h2>Feb. 27, 2020 &nbsp;&nbsp; New NCBI RefSeq Select + MANE track for Human (hg19/hg38)</h2>
 <p>
@@ -12548,64 +12744,6 @@ Richard Durbin.</p>
 
 <h2>Aug. 23, 2001 &nbsp;&nbsp; New annotation tracks on Apr. 2001 browser</h2> 
 <p>
-Tracks continue to be added to the <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg7/">Apr. 
-2001 browser</a>. Our old friend the Exofish track is back. The blat mouse homology track is now up 
-as well, computed at somewhat more sensitive settings than it was in the Dec. 2000 browser.</p> 
-<p>
-We've recently received some significant funding from NHGRI to maintain and extend this site. This 
-has allowed us among other things to hire an artist, Jenny Draper, who is responsible for the new 
-look.</p>
-
-<h2>Apr. 1, 2001 Freeze</h2>
-<p>
-Jul. 13, 2001: fixed bug where some UTRs were mis-annotated in the known genes on the minus 
-strand.</p>
-
-<h2>Dec. 12, 2000 Freeze</h2>
-<p>
-Jul. 13, 2001: fixed bug where some UTRs were mis-annotated in the known genes on the minus 
-strand.</p>
-<p>
-Apr. 5, 2001: chromosome level files (but not contig level files) updated to fix bug where some of 
-the centromeres were misplaced</p>
-<p>
-Apr. 1, 2001: chromosome Y updated to fix a bug that put a large gap between each clone. This bug 
-was limited to the Y chromosome.</p>
-
-<h2>Oct. 7, 2000 Freeze</h2>
-<p>
-Apr. 7, 2001: Affymetrix gene predictions updated and available for bulk download.</p>
-<p>
-Jan. 9, 2001: all files were updated after a bug that had caused some finished clones to be flipped 
-in the assembly was caught and fixed. Our apologies for any inconvenience this has caused.</p>
-<p>
-Nov. 10, 2000: the sequence (.fa) files for two contigs: X/ctg18523/ctg18523.fa and 
-7/ctg15082/ctg15082.fa were updated. These files had null (zero valued) characters that have been 
-replaced with N characters. These characters were a result of a mismatch between clone sizes in the 
-map and in finished NT contigs. The sequence for chromosomes X and 7, which contain these contigs, 
-has also been updated.</p> 
-<p>
-<h2>Sep. 5, 2000 Freeze</h2> 
-<p>
-Oct. 11, 2000: chr21.agp and chr22.fa were updated. chr21.agp was a version which went with the UCSC
-draft assembly rather than the Sanger/NCBI final assembly of this chromosome. chr21.agp and chr21.fa
-are now in sync.   chr22.fa and chr22.agp were also previously out of sync. chr22.fa was obtained 
-from Sanger while chr22.agp had been obtained by NCBI. With this update they are consistent, both 
-NCBI versions. Apologies for any rework this causes you.</p> 
-<p>
-Oct. 9, 2000: chr21_random.* and chr22_random.* were removed from the zip-files in the Sep. 5 
-freeze.  These files were relics that should not have been included in the first place.  The files
-chr9_random.agp, chr10_random.agp, chr11_random.agp, chr12_random.agp, chr13_random.agp and 
-chr14_random.agp were updated. There was a bug where the initial field of the initial lines in these
-files was &quot;null)&quot; rather than &quot;chrN_random&quot; as it should have been.</p>
-<p>
-<h2>Jul. 17, 2000 Freeze</h2>
-<p>
-Sep. 22, 2000: The zip-files chromFa.zip and chromAgp.zip under the Jul. 17th full data set were 
-updated to fix some duplications of clone contigs that occurred in the chrN_random.agp and 
-chrN_random.fa files contained within these zip-files. These &quot;_random&quot; files contain 
-clone contigs that were mapped to a particular chromosome, but could not be placed at a specific 
-position within that chromosome. They correspond to the &quot;RANDOM&quot; sections of the WashU 
 map. None of the regular chrN.agp or chrN.fa files were affected by this update, nor was any of the 
 information in the contigAgp.zip or contigFa.zip files changed. For convenience, we include two new 
 files, chromRandAgp.zip and chromRandFa.zip, for users who would like to download only the data that

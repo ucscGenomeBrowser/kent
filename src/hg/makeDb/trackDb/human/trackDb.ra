@@ -1628,7 +1628,7 @@ longLabel Short Genetic Variants from dbSNP release 152
 bigDataUrl /gbdb/$D/snp/dbSnp152.bb
 detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp152Details.tab.gz
 group varRep
-visibility dense
+visibility hide
 url https://www.ncbi.nlm.nih.gov/snp/$$
 urlLabel dbSNP: 
 type bigDbSnp

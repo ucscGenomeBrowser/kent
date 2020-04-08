@@ -1,0 +1,54 @@
+<h2>Description</h2>
+<p>
+<a href="https://nextstrain.org/ncov" target=_blank>Nextstrain.org</a> displays
+data about variants that occur in the current 2019/2020 outbreak.
+Nextstrain has a powerful user interface for viewing the evolutionary tree
+that it infers from the patterns of variants in sequences worldwide, but
+does not offer a detailed plot of variants along the genome, so we have processed
+their genome annotations into genome browser tracks.
+</p>
+<p>
+Use this track in conjunction with the track
+<em>Nextstrain Vars</em> (all variants; protein-coding variants use gene names from this track).
+</p>
+
+<h2>Methods</h2>
+<p>Nextstrain downloads SARS-CoV-2 genomes from
+  <a href="https://gisaid.org/" target=_blank>GISAID</a>
+  as they are submitted by labs worldwide.
+  The sequences are processed by an
+  <a href="https://github.com/nextstrain/ncov" target=_blank>automated pipeline</a>
+  and annotations are written to the data file
+  <a href="http://data.nextstrain.org/ncov.json" target=_blank>ncov.json</a>.
+UCSC downloads ncov.json and extracts annotations for display.</p>
+
+<h2>Data Access</h2>
+<p>
+You can download the bigBed file underlying this track (nextstrainGene) from our 
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/nextstrain/" 
+target=_blank>Download Server.</a> The data can be explored interactively with 
+the <a href="../cgi-bin/hgTables">Table Browser</a>
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be
+accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>.</p>
+
+<h2>Credits</h2>
+<p>Thanks to
+  <a href="https://nextstrain.org/ncov" target=_blank>nextstrain.org</a> for making its
+  <a href="http://data.nextstrain.org/ncov.json" target=_blank>data file</a> freely available.</p>
+
+<h2>References</h2>
+<p>
+Hadfield J, Megill C, Bell SM, Huddleston J, Potter B, Callender C, Sagulenko P, Bedford T, Neher
+RA.
+<a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/bty407"
+    target="_blank">
+    Nextstrain: real-time tracking of pathogen evolution</a>.
+<em>Bioinformatics</em>. 2018 Dec 1;34(23):4121-4123.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29790939" target="_blank">29790939</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6247931/" target="_blank">PMC6247931</a>
+</p>
+
+<h2>Funding</h2>
+<p>
+The SARS-CoV-2 genome browser and data annotation tracks are funded by generous
+individual donors including Pat &amp; Rowland Rebele.</p>

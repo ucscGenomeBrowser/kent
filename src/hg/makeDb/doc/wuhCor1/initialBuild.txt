@@ -704,6 +704,21 @@ fi
     genePredCheck -db=wuhCor1 ncbiGene
 # checked: 11 failed: 0
 
+cp wuhCor1.ncbiGene.bed  extra.wuhCor1.ncbiGene.bed 
+
+# braney, add some extra fields to the bigBed and use an AS file that has some UniProt fields
+
+bedToBigBed -type=bed12+10 -tab -as=ncbiGene.as       -extraIndex=name extra.wuhCor1.ncbiGene.bed         ../../chrom.sizes ncbiGene.bb 
+
+ln -s `pwd`/ncbiGene.bb /gbdb/wuhCor1
+
+awk '{printf "%s ",$4; for(ii=18; ii <= NF; ii++) printf "%s ",$ii; printf "%s\n",$4 }' extra.wuhCor1.ncbiGene.bed |  sed 's/\.[0-9]$//' > extra.search.txt
+
+ixIxx extra.search.txt ncbiSearch.ix ncbiSearch.ixx
+
+ln -s `pwd`/ncbiSearch.ix /gbdb/wuhCor1/
+ln -s `pwd`/ncbiSearch.ixx /gbdb/wuhCor1/
+
 #########################################################################
 #  BLATSERVERS ENTRY (DONE - 2020-01-29 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
@@ -717,13 +732,11 @@ fi
     #	test it with some sequence
 
 ############################################################################
-## reset default position to MEPE gene (egg shell protein)
-## XXX ### Not special default position set for this assembly
-##  (DONE - 2020-01-29 - Hiram)
+## reset default position to whole genome
+##  (DONE - 2020-03-17 - Max)
 
-    # as found from the galGal5 to wuhCor1 liftOver
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr4:45667017-45672928"
+    hgsql -e 'update dbDb set defaultPos="NC_045512v2:1-29903"
 	where name="wuhCor1";' hgcentraltest
 
 #########################################################################
@@ -833,5 +846,8 @@ xyz
 #	/hive/data/genomes/wuhCor1/pushQ/redmine.wuhCor1.file.list
 #	/hive/data/genomes/wuhCor1/pushQ/redmine.wuhCor1.releaseLog.txt
 #	/hive/data/genomes/wuhCor1/pushQ/redmine.wuhCor1.table.list
+
+#########################################################################
+# Nextstrain Genes, Clades, Variants: see otto/nextstrainNcov/ scripts (DONE - 2020-03-20 - Angie)
 
 #########################################################################

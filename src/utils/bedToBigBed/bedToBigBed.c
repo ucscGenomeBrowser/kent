@@ -18,8 +18,9 @@
 #include "bigBed.h"
 #include "twoBit.h"
 
-char *version = "2.7";
+char *version = "2.8";   // when changing, change in bedToBigBed, bedGraphToBigWig, and wigToBigWig
 /* Version history from 2.6 on at least -
+ *   2.8 - Various changes where developer didn't increment version id
  *   2.7 - Added check for duplicate field names in asParse.c
  *   2.6 - Made it not crash on empty input.  
  *   */
@@ -41,7 +42,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "bedToBigBed v. %s - Convert bed file to bigBed. (BigBed version: %d)\n"
+  "bedToBigBed v. %s - Convert bed file to bigBed. (bbi version: %d)\n"
   "usage:\n"
   "   bedToBigBed in.bed chrom.sizes out.bb\n"
   "Where in.bed is in one of the ascii bed formats, but not including track lines\n"
