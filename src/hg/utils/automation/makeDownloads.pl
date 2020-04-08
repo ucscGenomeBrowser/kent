@@ -1163,12 +1163,19 @@ foreach d (bigZips $chromGz database liftOver)
   endif
   mv $runDir/README.\$d.txt README.txt
 end
-if (-d "$runDir/bigZips/genes") then
-  cd $runDir/bigZips/genes
-  mv $runDir/README.bigZipsGenes.txt README.txt
 endif
+
 _EOF_
   );
+  if (scalar(@geneTableList) > 0) {
+  $bossScript->add(<<_EOF_
+mkdir -p $runDir/bigZips/genes
+cd $runDir/bigZips/genes
+mv $runDir/README.bigZipsGenes.txt README.txt
+
+_EOF_
+  );
+  }
 
   # Create README.*.txt files which will be moved into subdirs by the script.
   &makeDatabaseReadme($runDir);

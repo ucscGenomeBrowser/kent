@@ -1097,6 +1097,8 @@ int imgTrackAddMapItem(struct imgTrack *imgTrack,char *link,char *title,
 // returns count of map items added, which could be 0, 1 or more than one if item spans slices
 // NOTE: Precedence is given to first map item when adding items with same coordinates!
 {
+if (imgTrack == NULL)
+    return 0;
 struct imgSlice *slice;
 char *imgFile = NULL;               // name of file that hold the image
 char *neededId = NULL; // id is only added it it is NOT the trackId.
