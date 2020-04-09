@@ -1021,3 +1021,21 @@ TMPDIR=/dev/shm
     # real    131m41.477s
 
 ##############################################################################
+# LIFTOVER TO canFam4 (DONE - 2020-04-02 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/canFam3/bed/blat.canFam4.2020-04-02
+    cd /hive/data/genomes/canFam3/bed/blat.canFam4.2020-04-02
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/canFam3/jkStuff/canFam3.11.ooc \
+         canFam3 canFam4
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/canFam3/jkStuff/canFam3.11.ooc \
+         canFam3 canFam4) > doLiftOverToCanFam4.log 2>&1
+XXX - running - Thu Apr  2 10:22:07 PDT 2020
+    # real    1264m58.309s
+
+    # see if the liftOver menus function in the browser from canFam3 to canFam4
+
+##############################################################################
