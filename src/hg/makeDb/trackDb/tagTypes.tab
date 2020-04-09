@@ -33,6 +33,8 @@ barChartDataUrl barChart bigBarChart
 barChartLabel barChart bigBarChart
 barChartMetric barChart bigBarChart
 barChartMaxSize barChart bigBarChart
+barChartLargeGraphWinSize barChart bigBarChart
+barChartMediumGraphWinSize barChart bigBarChart
 barChartSampleUrl barChart bigBarChart
 barChartUnit barChart bigBarChart
 baseColorDefault *
