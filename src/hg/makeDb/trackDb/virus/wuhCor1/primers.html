@@ -1,20 +1,23 @@
 <h2>Description</h2>
 <p>
 This track shows the locations of those primers in detection kits that match the
-reference sequence. The primers were copied from a spreadsheet
+reference sequence. The primers were copied from 
 <a target="_blank" href="https://docs.google.com/spreadsheets/d/17eucK_mSAGgYvxVCKJkbbYaogr2ofbhgW2f9W7K3oOA/edit#gid=636736390">
-shared on the Berkeley Covid Slack channel</a>.
-</p>
-<p>
-All are RT-qPCR primer sets. Each set consists of one forward, one reverse and
-one internal primer.  </p>
-
-<p>
-Four primers match the reference sequence over less than 14bp: 2019-nCoV_N2-P, HKU-ORF-1b-nsp14-R, 2019-nCoV_N1-R, WH-NIC_N-P.
-Four primers were not found at all: HKU-ORF-1b-nsp14-F, 2019-nCoV_RP-P, 2019-nCoV_RP-R, 2019-nCoV_RP-F.
+spreadsheet</a> created by the project
+<a target="_blank" href="https://sites.google.com/view/opencovid19/home">
+OpenCovid19</a>.
+The initial version of the track used the FASTA file from <a href="https://tomeraltman.net/2020/04/05/all-public-primers.html" target=_blank">Design Flaws in COVID-19 Primers from Multiple International Labs</a>.
 </p>
 
-<p>Here is our current understanding of the origin of the primers:</p>
+<p>
+Most are RT-qPCR primer sets, sequencing primers have the prefix Seq1- or Seq2-. RT-qPCR sets consists of one forward, one reverse and one internal probe, as indicated by the names.</p>
+
+<p>
+Four primers match the reference sequence over less than 14bp: 
+Four primers were not found at all: 
+</p>
+
+<p>Here is a quick overview of the origin of the primers, please see the website and spreadsheet linked above for more details:</p>
 <table class="stdTbl">
     </tr>
         <th>
@@ -32,7 +35,7 @@ Four primers were not found at all: HKU-ORF-1b-nsp14-F, 2019-nCoV_RP-P, 2019-nCo
     </tr>
 
     <tr>
-        <td>China- and Orf1b</td>
+        <td>CN-CDC-</td>
         <td>China CDC</td>
         <td></td>
         <td></td>
@@ -60,7 +63,7 @@ Four primers were not found at all: HKU-ORF-1b-nsp14-F, 2019-nCoV_RP-P, 2019-nCo
     </tr>
 
     <tr>
-        <td>2019-nCoV-</td>
+        <td>US-CDC-</td>
         <td>CDC, USA</td>
         <td>Three reactions, target: N gene. One primer/probe set detects all
             betacoronaviruses, two sets are specific for SARS-CoV-2. All 3 assays must be positive 
@@ -78,18 +81,19 @@ Four primers were not found at all: HKU-ORF-1b-nsp14-F, 2019-nCoV_RP-P, 2019-nCo
 
 </table>
 
-<h2>Summary</h2>
 <p>
-Bioinformatic formats for currently-deployed primer-probe sets for detecting COVID-19 (currently available in FASTA format). The sequences and the identifiers for these primers were obtained from the following sources:
+The sequences and the identifiers for these primers were obtained from the following sources, among others:
 
 <ul>
     <li><a href="https://www.cdc.gov/coronavirus/2019-ncov/lab/rt-pcr-panel-primer-probes.html">CDC Laboratory Guidance</a>
     <li><a href="https://www.biorxiv.org/content/10.1101/2020.02.25.964775v1">Comparative analysis of primer-probe sets for the laboratory confirmation of SARS-CoV-2</a>
     <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6988269/">Detection of 2019 novel coronavirus (2019-nCoV) by real-time RT-PCR</a>
 </ul>
+More details can be found in the spreadsheet linked above.
+
 
 <h2>Methods</h2>
-The primers were mapped with the following command:</br><tt>blat ../../wuhCor1.2bit primers.fa stdout -stepSize=1 -tileSize=6  -minScore=10 -oneOff=1 -noHead &gt; primers.psl</tt>
+The primers were mapped with the following command:</br><tt>blat ../../wuhCor1.2bit primers.fa stdout -stepSize=3 -tileSize=6  -minScore=10 -oneOff=1 -noHead | pslReps stdin stdout /dev/null -minNearTopSize=10 -minCover=0.8 -nohead > primers.psl</tt>
 
 
 <h2>Data Access</h2>
@@ -104,7 +108,7 @@ accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>.
 <h2>Credits</h2>
 <p>
 This data annotation track was made by Maximilian Haeussler, with assistance from Daniel Schmelter.
-Fasta data collected by Tomer Altman, found by Jason Fernandes.</p>
+Fasta data collected by Tomer Altman (Biome Bioinformatics), prepared by Jason Fernandes (UCSC), updated by Darach Miller (Stanford) and the OpenCovid19 project.</p>
 
 <h2>Funding</h2>
 <p>
