@@ -75,13 +75,14 @@ track pdb
 shortLabel PDB Structures
 longLabel Protein Data Bank (PDB) Sequence Matches
 group genes
-type bigBed 12 +
+type bigBed 12
 visibility hide
 url https://www.pdb.org/pdb/explore/explore.do?structureId=$$
 urlLabel link to PDB
 iframeUrl https://www.pdb.org/pdb/explore/explore.do?structureId=$$
 iframeOptions width='1000' height='800' scrolling='yes'
 bigDataUrl /gbdb/wuhCor1/bbi/pdb.bb
+exonNumbers off
 priority 30
 
 
