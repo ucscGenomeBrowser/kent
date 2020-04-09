@@ -91,3 +91,4 @@ include trackDb.44way.ra
 include trackDb.strainName44way.ra
 include trackDb.uniprot.ra
 include trackDb.nextstrain.ra
+include kim2020.ra
