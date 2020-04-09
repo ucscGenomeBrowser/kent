@@ -6,7 +6,7 @@ document.body.onload = addGtag;
 
 function addGtag() {
   var hostName = location.hostname;
-  var analyticsKey = "UA-4289047-3";
+  var analyticsKey = "UA-4289047-5";
   if (hostName.search("genome.ucsc") > -1) {
     analyticsKey = "UA-4289047-4";
   } else if (hostName.search("hgw[0-9]") > -1) {
