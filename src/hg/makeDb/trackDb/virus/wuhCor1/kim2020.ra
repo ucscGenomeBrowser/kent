@@ -1,0 +1,120 @@
+track kimNp
+shortLabel Kim RNA Brkpts
+longLabel Kim 2020 RNA-seq: Nanopore and MGISeq Breakpoints
+type bigWig
+visibility dense
+group regulation
+compositeTrack on
+autoScale on
+
+        track kimNpLdr3pBreak
+        type bigWig
+        shortLabel DRS Ld2Bd 3'
+        longLabel Nanopore Leader-to-body 3' Breakpoints
+        group expression
+        visibility dense
+        color 25,113,194
+        graphTypeDefault bar
+        alwaysZero on
+        windowingFunction maximum 
+        smoothingWindow off
+        transformFunc LOG
+        maxHeightPixels 48:48:11
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/kim-scv2-drs-leader-to-body-breakpoints.bigWig
+        parent kimNp
+
+        track kimNp5pBreak
+        type bigWig
+        shortLabel DRS NC-Brkpt 5'
+        longLabel Nanopore Noncanonical 5' Breakpoints
+        group expression
+        visibility dense
+        color 240,140,0
+        graphTypeDefault bar
+        alwaysZero on
+        windowingFunction maximum 
+        smoothingWindow off
+        transformFunc LOG
+        maxHeightPixels 48:48:11
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/kim-scv2-drs-5p-breakpoints.bigWig
+        parent kimNp
+
+        track kimNpNc3pBrk
+        type bigWig
+        shortLabel DRS NC-Brkpt 3'
+        longLabel Nanopore Noncanonical 3' Breakpoints
+        group expression
+        visibility dense
+        color 102,168,15
+        graphTypeDefault bar
+        alwaysZero on
+        windowingFunction maximum 
+        smoothingWindow off
+        transformFunc LOG
+        maxHeightPixels 48:48:11
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/kim-scv2-drs-3p-breakpoints.bigWig
+        parent kimNp
+
+        track kimMgiLdr3p
+        type bigWig
+        shortLabel MGI Ld2Bd 3'
+        longLabel MGISEQ Leader-to-body 3' Breakpoints
+        group expression
+        visibility dense
+        color 102,168,15
+        graphTypeDefault bar
+        alwaysZero on
+        windowingFunction maximum 
+        smoothingWindow off
+        transformFunc LOG
+        maxHeightPixels 48:48:11
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/kim-scv2-mgiseq-leader-to-body-breakpoints.bigWig
+        parent kimNp
+
+        track kimMgiNc5p
+        type bigWig
+        shortLabel MGI NC-Brkpt 5'
+        longLabel Kim et al. MGISEQ Noncanonical 5' Breakpoints
+        group expression
+        visibility dense
+        color 102,168,15
+        graphTypeDefault bar
+        alwaysZero on
+        windowingFunction maximum 
+        smoothingWindow off
+        transformFunc LOG
+        maxHeightPixels 48:48:11
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/kim-scv2-mgiseq-5p-breakpoints.bigWig
+        parent kimNp
+
+        track kimMgiNc3p
+        type bigWig
+        shortLabel MGI NC-Brkpt 3'
+        longLabel Kim et al. MGISEQ Noncanonical 3' Breakpoints
+        group expression
+        visibility dense
+        color 102,168,15
+        graphTypeDefault bar
+        alwaysZero on
+        windowingFunction maximum 
+        smoothingWindow off
+        transformFunc LOG
+        maxHeightPixels 48:48:11
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/kim-scv2-mgiseq-3p-breakpoints.bigWig
+        parent kimNp
+
+track kimRnaMod
+type bigBarChart
+shortLabel Kim RNA Modif
+longLabel Kim et al. Nanopore RNA Modifications: gRNA S 3a E M 6 7a 7b 8 N
+barChartBars gRNA S ORF3a E M ORF6 ORF7a ORF7b ORF8 N
+barChartMetric median 
+group regulation
+visibility hide
+color 224,49,49
+bigDataUrl /gbdb/wuhCor1/bbi/kim2020/kim-scv2-drs-modifications.bb
+# custom track has bigChartColors which is invalid, triggers no error but means that rainbow colors are used
+#barChartColors 1,1,1 2,2,2 3,3,3 4,4,4 5,5,5 6,6,6 7,7,7 8,8,8 9,9,9 10,10,10
+#barChartColors #010101 #020202 #030303 #040404 #050505 #060606 #070707 #080808 #090909 #0A0A0A
+barChartUnit frac
+barChartMaxSize large
