@@ -1,0 +1,9 @@
+cd /hive/data/genomes/wuhCor1/bed/kim2020
+wget http://cookies.qbio.io:18080/kim-2020-scv2-gbtracks/kim-scv2-drs-leader-to-body-breakpoints.bigWig
+wget http://cookies.qbio.io:18080/kim-2020-scv2-gbtracks/kim-scv2-drs-3p-breakpoints.bigWig
+wget http://cookies.qbio.io:18080/kim-2020-scv2-gbtracks/kim-scv2-drs-modifications.bb
+wget http://cookies.qbio.io:18080/kim-2020-scv2-gbtracks/kim-scv2-mgiseq-3p-breakpoints.bigWig
+wget http://cookies.qbio.io:18080/kim-2020-scv2-gbtracks/kim-scv2-mgiseq-5p-breakpoints.bigWig
+wget http://cookies.qbio.io:18080/kim-2020-scv2-gbtracks/kim-scv2-drs-5p-breakpoints.bigWig
+cd /gbdb/wuhCor1/bbi/kim2020/
+for i in `ls /hive/data/genomes/wuhCor1/bed/kim2020/*.b*`; do ln -s $i; done

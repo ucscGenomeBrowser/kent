@@ -9,7 +9,7 @@ autoScale on
 
         track kimNpLdr3pBreak
         type bigWig
-        shortLabel DRS Ld2Bd 3'
+        shortLabel Nanop Ld2Bd 3'
         longLabel Nanopore Leader-to-body 3' Breakpoints
         group expression
         visibility dense
@@ -25,7 +25,7 @@ autoScale on
 
         track kimNp5pBreak
         type bigWig
-        shortLabel DRS NC-Brkpt 5'
+        shortLabel Nanop NC-Brkpt 5'
         longLabel Nanopore Noncanonical 5' Breakpoints
         group expression
         visibility dense
@@ -41,7 +41,7 @@ autoScale on
 
         track kimNpNc3pBrk
         type bigWig
-        shortLabel DRS NC-Brkpt 3'
+        shortLabel Nanop NC-Brkpt 3'
         longLabel Nanopore Noncanonical 3' Breakpoints
         group expression
         visibility dense
@@ -109,6 +109,7 @@ shortLabel Kim RNA Modif
 longLabel Kim et al. Nanopore RNA Modifications: gRNA S 3a E M 6 7a 7b 8 N
 barChartBars gRNA S ORF3a E M ORF6 ORF7a ORF7b ORF8 N
 barChartMetric median 
+urlLabel Position on genome
 group regulation
 visibility hide
 color 224,49,49
