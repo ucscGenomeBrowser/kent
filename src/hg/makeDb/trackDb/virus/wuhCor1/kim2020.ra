@@ -2,7 +2,7 @@ track kimNp
 shortLabel Kim RNA Brkpts
 longLabel Kim 2020 RNA-seq: Nanopore and MGISeq Breakpoints
 type bigWig
-visibility dense
+visibility hide
 group regulation
 compositeTrack on
 autoScale on
