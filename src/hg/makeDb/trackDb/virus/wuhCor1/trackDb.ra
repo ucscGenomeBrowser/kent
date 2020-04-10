@@ -91,7 +91,7 @@ track cas13Crispr
 shortLabel Cas13 CRISPR
 longLabel Cas13 CRISPR targets
 group map
-type bigBed 12 +
+type bigBed 4 +
 visibility hide
 bigDataUrl /gbdb/wuhCor1/bbi/cas13Crispr.bb
 exonNumbers off
