@@ -213,6 +213,7 @@ jsonObjectAdd(ele, "canPack", newJsonNumber(0));
 jsonObjectAdd(ele, "visibility", newJsonNumber(rulerMode));
 jsonObjectAdd(ele, "configureBy", newJsonString("popup"));
 jsonObjectAdd(ele, "kindOfParent", newJsonNumber(0));
+//jsonObjectAdd(ele, "isMergedItem", newJsonBoolean(FALSE));
 jsonObjectAdd(settings, "ruler", (struct jsonElement *) ele);
 }
 
@@ -246,6 +247,17 @@ if (kindOfChild != kocOrphan)
 
 boolean isCustomComposite = trackDbSettingOn(track->tdb, CUSTOM_COMPOSITE_SETTING);
 jsonObjectAdd(ele, "isCustomComposite", newJsonBoolean(isCustomComposite));
+
+// check if track can have merged items, needed for context clicks in track
+char *canHaveMergedItems = trackDbSetting(track->tdb, MERGESPAN_TDB_SETTING);
+if (canHaveMergedItems != NULL)
+    {
+    // tells hgTracks.js whether we currently are merged or not
+    char setting[256];
+    safef(setting, sizeof(setting), "%s.%s", track->track, MERGESPAN_CART_SETTING);
+    jsonObjectAdd(ele, setting, newJsonNumber(cartUsualInt(cart, setting, 0)));
+    }
+
 // XXXX really s/d be numChildren
 jsonObjectAdd(ele, "hasChildren", newJsonNumber(slCount(track->tdb->subtracks)));
 

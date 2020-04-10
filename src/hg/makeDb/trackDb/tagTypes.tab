@@ -277,6 +277,7 @@ maxWindowToDraw bam big* rmsk joinedRmsk bed narrowPeak broadPeak bedlogR genepr
 maxWindowToQuery bigWig bed bedlogR
 metadata *
 mouseOverField big*
+mergeSpannedItems bigBed
 mgiUrl bed
 mgiUrlLabel bed
 minFreq vcf vcfTabix

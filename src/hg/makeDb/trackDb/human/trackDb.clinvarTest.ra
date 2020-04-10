@@ -49,3 +49,4 @@ noScoreFilter on
     filterLimits._varLen 0:99999999
     mouseOverField _mouseOver
     bigDataUrl /gbdb/$D/bbi/clinvar/clinvarCnv.bb
+    mergeSpannedItems on
