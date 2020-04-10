@@ -17,10 +17,15 @@ scoreLabel ClinVar Star-Rating (0-4)
     priority 1
     type bigBed 12 +
     filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other
-    filterType._clinSign singleList
+    filterType._clinSignCode singleList
+    filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,NOVO|de novo,UNK|unknown
+    filterType._originCode singleList
+    filterValues._allTypeCode SNV|single nucleotide variant,INS|insertion,DEL|deletion,INDEL|insertion-deletion,dupl|duplication,OTH|other
+    filterType._allTypeCode singleList
     filterValues.origin not-reported,uniparental,tested-inconclusive,biparental,not applicable,paternal,maternal,inherited,de novo,somatic,not provided,unknown,germline
-    filterType.origin multipleListOr
+    filterType.origin multipleListOnlyOr
     filterByRange._valLen on
+    filterLimits._varLen 0:99999999
     mouseOverField _mouseOver
     bigDataUrl /gbdb/$D/bbi/clinvar/clinvarMain.bb
 
@@ -31,12 +36,16 @@ scoreLabel ClinVar Star-Rating (0-4)
     type bigBed 12 +
     parent clinvar
     priority 2
+    filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,NOVO|de novo,UNK|unknown
+    filterType._originCode singleList
+    filterValues._allTypeCode SNV|single nucleotide variant,INS|insertion,DEL|deletion,INDEL|insertion-deletion,dupl|duplication,OTH|other
+    filterType._allTypeCode singleList
     filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other
     filterType._clinSign singleList
     filterValues.origin not-reported,uniparental,tested-inconclusive,biparental,not applicable,paternal,maternal,inherited,de novo,somatic,not provided,unknown,germline
-    filterType.origin multipleListOr
+    filterType.origin multipleListOnlyOr
     filter._varLen 0
     filterByRange._varLen on
-    filterByRange.bullshit on
+    filterLimits._varLen 0:99999999
     mouseOverField _mouseOver
     bigDataUrl /gbdb/$D/bbi/clinvar/clinvarCnv.bb
