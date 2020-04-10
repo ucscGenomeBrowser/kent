@@ -1,6 +1,6 @@
 track epitopes
-shortLabel IEDB Epitopes
-longLabel IEDB-predicted Epitopes from Grifoni et al 2020
+shortLabel Predicted Epitopes
+longLabel IEDB-Predicted Epitopes from Grifoni et al 2020
 group immu
 visibility hide
 itemRgb on

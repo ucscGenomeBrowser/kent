@@ -4,7 +4,7 @@ track unipCov2AliSwissprot
 shortLabel Full Proteins
 longLabel UniProt full-length proteins
 priority 1
-visibility pack
+visibility hide
 type bigPsl
 bigDataUrl /gbdb/$D/uniprot/unipAliSwissprotCov2.bb
 searchIndex name,acc
@@ -20,26 +20,10 @@ baseColorTickColor contrastingColor
 dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
 
-track unipCov2Interest
-shortLabel Highlights
-longLabel UniProt highlighted "Regions of Interest"
-priority 2
-visibility pack
-color 2,12,100
-group uniprot
-type bigBed 12 +
-bigDataUrl /gbdb/wuhCor1/uniprot/unipInterestCov2.bb
-#urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-mouseOverField comments
-dataVersion /gbdb/$D/uniprot/version.txt
-exonNumbers off
-itemRgb on
-
 track unipCov2Chain
 shortLabel Mature Products
 longLabel UniProt Mature, Processed Protein Products (Polypeptide Chains)
-priority 3
+priority 2
 visibility pack
 color 0,2,80
 type bigBed 12 +
@@ -52,6 +36,22 @@ dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
 itemRgb on
 html uniprotCov2
+
+track unipCov2Interest
+shortLabel Highlights
+longLabel UniProt highlighted "Regions of Interest"
+priority 3
+visibility pack
+color 2,12,100
+group uniprot
+type bigBed 12 +
+bigDataUrl /gbdb/wuhCor1/uniprot/unipInterestCov2.bb
+#urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+mouseOverField comments
+dataVersion /gbdb/$D/uniprot/version.txt
+exonNumbers off
+itemRgb on
 
 track unipCov2Domain
 shortLabel Protein Domains
