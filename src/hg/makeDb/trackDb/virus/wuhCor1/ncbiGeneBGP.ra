@@ -1,6 +1,6 @@
 track ncbiGeneBGP
 shortLabel NCBI Genes
-longLabel NCBI Genes from GCF_009858895.2
+longLabel NCBI Genes: transcribed mRNAs
 group genes
 visibility pack
 priority 1
