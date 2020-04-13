@@ -5,7 +5,6 @@ longLabel Integrated Regulation from ENCODE
 wgEncode 1
 group regulation
 priority 2
-pennantIcon New red ../goldenPath/newsarch.html#110119 Released Nov. 1, 2019
 
 include encode3.chromHmm.ra
 include encode3.histone.ra

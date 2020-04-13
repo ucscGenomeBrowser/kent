@@ -45,26 +45,6 @@ new19LongLc=`wc -l lovd.hg19.long.bed | cut -d' ' -f1 `
 echo hg19 short rowcount: old $old19ShortLc new: $new19ShortLc
 echo hg19 long rowcount: old $old19LongLc new: $new19LongLc
 
-if [ "$new19ShortLc" -eq "$old19ShortLc" ]; then
-        echo LOVD hg19 short: rowcount for $today is equal to old rowcount in mysql, quitting
-        exit 0
-fi
-
-if [ "$new19LongLc" -eq "$old19LongLc" ]; then
-        echo LOVD hg19 long: rowcount for $today is equal to old rowcount in mysql, quitting
-        exit 0
-fi
-
-if [ "$new19ShortLc" -lt "$old19ShortLc" ]; then
-        echo LOVD hg19 short: rowcount for $today is smaller to old rowcount in mysql, quitting
-        exit 255
-fi
-
-if [ "$new19LongLc" -lt "$old19LongLc" ]; then
-        echo LOVD hg19 long: rowcount for $today is smaller to old rowcount in mysql, quitting
-        exit 255
-fi
-
 echo $old19ShortLc $new19ShortLc | awk '{if (($2-$1)/$1 > 0.1) {printf "validate on hg19 LOVD short failed: old count: %d, new count: %d\n", $1,$2; exit 1;}}'
 echo $old19LongLc $new19LongLc | awk '{if (($2-$1)/$1 > 0.1) {printf "validate on hg19 LOVD long failed: old count: %d, new count: %d\n", $1,$2; exit 1;}}'
 
