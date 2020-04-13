@@ -2388,6 +2388,8 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
         {
 	complement(line, strlen(line));
         }
+    if (genomeIsRna)
+        toRna(line);
     /* draw sequence letters for alignment */
     hvGfxSetClip(hvg, x, y-1, width, mi->height);
 

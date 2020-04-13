@@ -190,6 +190,10 @@ boolean hgIsOfficialChromName(char *db, char *name);
 /* Determine if name is exact (case-sensitive) match with
  * a chromosome in the current assembly */
 
+boolean hgPdbOk(char *database);
+/* Return TRUE if hgPdbOk is on in dbDb
+ * on this database. */
+
 boolean hgNearOk(char *database);
 /* Return TRUE if ok to put up familyBrowser (hgNear)
  * on this database. */

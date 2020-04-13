@@ -70,6 +70,8 @@ longLabel User-contributed annotations via bit.ly/cov2annots
 group map
 type bigBed 4 +
 bigDataUrl /gbdb/wuhCor1/bbi/public.bb
+urls extraField1=$$
+mouseOverField extraField0
 
 track pdb
 shortLabel PDB Structures
@@ -84,6 +86,16 @@ iframeOptions width='1000' height='800' scrolling='yes'
 bigDataUrl /gbdb/wuhCor1/bbi/pdb.bb
 exonNumbers off
 priority 30
+
+track cas13Crispr
+shortLabel Cas13 CRISPR
+longLabel Cas13 CRISPR targets
+group map
+type bigBed 4 +
+visibility hide
+bigDataUrl /gbdb/wuhCor1/bbi/cas13Crispr.bb
+exonNumbers off
+priority 40
 
 
 include trackDb.119way.ra
