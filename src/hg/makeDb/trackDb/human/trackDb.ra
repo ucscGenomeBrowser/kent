@@ -145,7 +145,6 @@ longLabel Genetic Variants mentioned in scientific publications
 superTrack on
 group phenDis
 type bed 3
-pennantIcon Updated red ../goldenPath/newsarch.html#020720 "Updated Feb. 7, 2020"
 
         track mastermind
         shortLabel Mastermind Variants
@@ -163,7 +162,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#020720 "Updated Feb. 7, 2020
         mmcnt3Filter 0
         dataVersion /gbdb/$D/bbi/mastermindRelease.txt
         parent varsInPubs pack
-        pennantIcon Updated red ../goldenPath/newsarch.html#020720 "Updated Feb. 7, 2020"
 
         track avada
         shortLabel Avada Variants
@@ -178,7 +176,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#020720 "Updated Feb. 7, 2020
         parent varsInPubs pack
         urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" doi="https://doi.org/$$" ensId="http://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$" entrezs="https://www.ncbi.nlm.nih.gov/gene/$$" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOverField _mouseOver
-        pennantIcon New red ../goldenPath/newsarch.html#020720 "Released Feb. 7, 2020"
 
 track pathoPred
 type bigWig
