@@ -365,16 +365,24 @@ extras->unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
 #define MIN_BAR_WIDTH 1
 #define MIN_GRAPH_PADDING 0
 
-char *setting = trackDbSetting(tdb, BAR_CHART_WIN_MAX_GRAPH);
-extras->winMaxGraph = isNotEmpty(setting) ? atoi(setting) : WIN_MAX_GRAPH_DEFAULT;
-setting = trackDbSetting(tdb, BAR_CHART_WIN_MED_GRAPH);
-extras->winMedGraph = isNotEmpty(setting) ? atoi(setting) : WIN_MED_GRAPH_DEFAULT;
-
+extras->winMaxGraph = WIN_MAX_GRAPH_DEFAULT;
+extras->winMedGraph = WIN_MED_GRAPH_DEFAULT;
+char *setting = trackDbSetting(tdb, BAR_CHART_SIZE_WINDOWS);
+if (isNotEmpty(setting))
+    {
+    char *words[2];
+    int ct = chopLine(setting, words);
+    if (ct == 2)
+        {
+        extras->winMaxGraph = atoi(words[0]);
+        extras->winMedGraph = atoi(words[1]);
+        }
+    }
 int scale = (getCategoryCount(tg) < 15 ? 2 : 1);
 long winSize = virtWinBaseCount;
 if (winSize < extras->winMaxGraph && 
         sameString(extras->maxGraphSize, BAR_CHART_MAX_GRAPH_SIZE_LARGE))
-    {
+{
     extras->boxModelHeight = MAX_BAR_CHART_MODEL_HEIGHT;
     extras->barWidth = MAX_BAR_WIDTH * scale;
     extras->padding = MAX_GRAPH_PADDING;
