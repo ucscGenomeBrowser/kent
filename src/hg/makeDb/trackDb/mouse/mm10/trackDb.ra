@@ -376,9 +376,6 @@ hapClusterEnabled on
 hapClusterMethod fileOrder
 maxWindowToDraw 1000000
 
-track crisprAllTargets override
-pennantIcon New red ../goldenPath/newsarch.html#110519 Released Nov. 5, 2019
-
 track nestedRepeats override
 group varRep
 priority 10
@@ -420,7 +417,6 @@ visibility hide
 urlLabel EPDnew link:
 bedNameLabel Promoter ID
 exonArrows on
-pennantIcon New red ../goldenPath/newsarch.html#112719a Track Released Nov. 27, 2019
 
     track epdNewPromoter
     shortLabel EPDnew v6

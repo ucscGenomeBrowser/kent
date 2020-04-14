@@ -95,6 +95,8 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
             "sortExp", "sortSim", "hideTracks", "ignoreCookie",
             NULL };
 
+boolean genomeIsRna = FALSE;    // is genome RNA instead of DNA
+
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
 boolean baseShowPos;           /* TRUE if should display full position at top of base track */
@@ -545,6 +547,8 @@ else
 
 if (complementSeq)
     complement(seq->dna, seq->size);
+if (genomeIsRna)
+    toRna(seq->dna);
 spreadBasesString(hvg, x, y, width, height, color, font,
                                 seq->dna, seq->size, FALSE);
 
@@ -10131,6 +10135,8 @@ printf("State: %s\n", state->string);
 #endif
 
 getDbAndGenome(cart, &database, &organism, oldVars);
+
+genomeIsRna = !isHubTrack(database) && hgPdbOk(database);
 
 initGenbankTableNames(database);
 

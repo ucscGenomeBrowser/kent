@@ -481,6 +481,9 @@ extern struct track *emGeneTrack;   /* Track for gene table for exon mostly */
 extern struct rgbColor vertWindowSeparatorColor; /* color for vertical windows separator */
 extern char *multiRegionsBedUrl;       /* URL to bed regions list */
 
+// is genome RNA?
+extern boolean genomeIsRna;
+
 // demo2
 extern int demo2NumWindows;
 extern int demo2WindowSize;
