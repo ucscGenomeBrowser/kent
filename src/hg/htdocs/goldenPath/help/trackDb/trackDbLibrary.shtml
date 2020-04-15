@@ -1647,8 +1647,13 @@ There are no extra options that can appear on the type hic line.
     <li>In order for filters to work, the track must be <code>type bigBed N +</code> or
     type <code>type bigBed N .</code> a &quot;+&quot; (for bigBed+ tracks) or a
     &quot;.&quot; (for non-extended bigBed tracks) is required
+    <li>There should not be any white spaces between declared items after commas, e.x.
+    "itemOne,itemTwo,itemThree"</li>
     <li>The default label can be customized with the <a 
-    href="#filterLabel"><code>filterLabel.&lt;fieldName&gt;</code></a> parameter</li></ul></P>
+    href="#filterLabel"><code>filterLabel.&lt;fieldName&gt;</code></a> parameter</li>
+    <li>When using filter values in a field that incudes commas, an additional comma
+    can be used to escape it. E.x. "fieldOne,fieldTwo,,fieldTwo,fieldThree"</li>
+    </ul></P>
     <P><B>Examples:</B></P>
     <pre>
     filterValues.OddEven Odd,Even</pre>

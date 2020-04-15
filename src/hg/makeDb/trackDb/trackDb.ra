@@ -575,6 +575,7 @@ group genes
 visibility hide
 color 150,0,0
 type genePred ensPep
+pennantIcon Updated red ../goldenPath/newsarch.html#041420 "Updated Apr. 14, 2020"
 
 track ensEstGene
 shortLabel Ensembl EST Genes

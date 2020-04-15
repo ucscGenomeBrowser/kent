@@ -3,7 +3,7 @@ Thu Apr  9 07:52:21 PDT 2020 Max
 cd /hive/data/genomes/wuhCor1/bed/primers
 # got primers.tsv from https://docs.google.com/spreadsheets/d/17eucK_mSAGgYvxVCKJkbbYaogr2ofbhgW2f9W7K3oOA/edit#gid=636736390
 python convert.py > primers.fa 
-blat ../../wuhCor1.2bit primers.fa stdout -stepSize=3 -tileSize=6  -minScore=10 -oneOff=1 -noHead | pslReps stdin stdout /dev/null -minNearTopSize=10 -minCover=0.8 -nohead > primers.psl 
+blat ../../wuhCor1.2bit primers.fa stdout -stepSize=3 -tileSize=6  -minScore=10 -oneOff=1 -noHead -fine | pslReps stdin stdout /dev/null -minNearTopSize=10 -minCover=0.8 -nohead > primers.psl 
 hgLoadPsl wuhCor1 primers.psl 
 hgLoadSeq wuhCor1 primers.fa -replace
 cut -f10 primers.psl  | sort > found.txt

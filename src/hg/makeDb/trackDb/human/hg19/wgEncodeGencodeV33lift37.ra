@@ -29,7 +29,6 @@ wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV33lift37
 wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV33lift37
 wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV33lift37
 wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV33lift37
-pennantIcon Updated red ../goldenPath/newsarch.html#021120 "Updated Feb. 11, 2020"
 
     track wgEncodeGencodeV33lift37ViewGenes
     shortLabel Genes

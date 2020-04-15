@@ -119,7 +119,6 @@ bigDataUrl /gbdb/wuhCor1/bbi/kim2020/kim-scv2-drs-modifications.bb
 #barChartColors #010101 #020202 #030303 #040404 #050505 #060606 #070707 #080808 #090909 #0A0A0A
 barChartUnit frac
 maxLimit 1
-#barChartMaxSize medium
-barChartLargeGraphWinSize 500
-barChartMediumGraphWinSize 5000
+barChartSizeWindows 500 8000
+
 
