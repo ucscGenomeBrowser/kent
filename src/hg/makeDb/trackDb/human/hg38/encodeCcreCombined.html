@@ -1,25 +1,38 @@
 <h2>Description</h2>
 <p>
 This track displays all human Candidate Cis-Regulatory Elements (cCREs), 
-identified and classified by ENCODE Data Analysis Center according to 
+identified and classified by the ENCODE Data Analysis Center according to 
 regulatory effect (promoter-like, enhancer-like, CTCF-bound).</p>
+<!--
 <p>
 The related cCREs by Biosample composite track presents ccREs 
 and associated epigenetic signal in all individual biosamples in a large matrix.
 Additional views of the data are provided by the <a>ENCODE Integrative Megahub</a>.
 </p>
+-->
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-CCres are colored according to their 
+CCREs are colored according to their 
 classification (red for promoter-like, orange for proximal enhancer-like, 
-yellow for distal enhancer-like, and blue for CTCF-bound). 
+yellow for distal enhancer-like, and blue for CTCF-only). 
 </p>
 
 <h2>Methods</h2>
+<!--
+1. cCREs with promoter-like signatures (cCRE-PLS) fall within 200 bp (center to center) of an annotated GENCODE TSS and have high DNase and H3K4me3 signals (evaluated as DNase and H3K4me3 max-Z scores, defined as the maximal DNase or H3K4me3 Z scores across all biosamples with data; see Methods).
+
+2. cCREs with enhancer-like signatures (cCRE-ELS) have high DNase and H3K27ac max-Z scores and must additionally have a low H3K4me3 max-Z score if they are within 200 bp of an annotated TSS. The subset of cCREs-ELS within 2 kb of a TSS is denoted proximal (cCRE-pELS), while the remaining subset is denoted distal (cCRE-dELS).
+
+3. DNase-H3K4me3 cCREs have high H3K4me3 max-Z scores but low H3K27ac max-Z scores and do not fall within 200 bp of a TSS.
+
+4. 
+CTCF-only cCREs have high DNase and CTCF max-Z scores and low H3K4me3 and H3K27ac max-Z scores.
+-->
 <p>
-Information about the classification of ENCODE cCREs is available on the about page of 
-<a target="_blank" href="https://www.google.com/url?q=https://screen.encodeproject.org&sa=D&ust=1576878761694000">SCREEN</a>.
+Information about the classification of ENCODE cCREs is available on the <i>About</i> page of the
+<a target="_blank" href="https://screen.encodeproject.org">SCREEN</a> 
+(Search Candidate cis-Regulatory Elements) tool.
 </p>
 
 <h2>Credits</h2>
@@ -27,7 +40,7 @@ Information about the classification of ENCODE cCREs is available on the about p
 This dataset was produced by the ENCODE Data Analysis Center (
 <a target="_blank" href="https://www.umassmed.edu/zlab/">Zlab</a>
  at UMass Medical Center). 
-THanks to Henry Pratt, Jill Moore, Michael Purcaro, and Zhiping Weng, PI for providing
+Thanks to Henry Pratt, Jill Moore, Michael Purcaro, and Zhiping Weng, PI for providing
 this data.
 Thanks also to the ENCODE Consortium, the ENCODE production laboratories, 
 and the ENCODE Data Coordination Center for generating and processing the datasets used here.
@@ -37,6 +50,6 @@ and the ENCODE Data Coordination Center for generating and processing the datase
 <p>
 The ENCODE accession numbers of the constituent datasets at the
 <a target="_blank" href="https://encodeproject.org">ENCODE Portal</a>
-are available from the peak details page.
+are available from the cCRE details page.
 </p>
 
