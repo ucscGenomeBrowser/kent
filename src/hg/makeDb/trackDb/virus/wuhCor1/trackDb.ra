@@ -53,6 +53,9 @@ type psl
 track rosettaMhc
 shortLabel Rosetta Predictions
 longLabel CD8 Epitopes predicted by NetMHC and Rosetta
+url     https://rosettamhc.chemistry.ucsc.edu/?epitope=$$
+urls name="https://rosettamhc.chemistry.ucsc.edu/?epitope=$$"
+urlLabel Link to Rosetta Model
 group immu
 type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/bbi/rosetta.bb
