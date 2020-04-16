@@ -25976,7 +25976,8 @@ else if (sameWord(table, "rnaGene"))
     {
     doRnaGene(tdb, item);
     }
-else if (sameWord(table, "RfamSeedFolds")
+else if (startsWith("rnaStruct", table) 
+         || sameWord(table, "RfamSeedFolds")
 	 || sameWord(table, "RfamFullFolds")
 	 || sameWord(table, "rfamTestFolds")
 	 || sameWord(table, "evofold")
