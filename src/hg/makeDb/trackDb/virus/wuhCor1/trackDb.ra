@@ -82,7 +82,7 @@ longLabel User-contributed annotations via bit.ly/cov2annots
 group map
 type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/bbi/public.bb
-urls extraField1=$$
+#urls extraField1=$$
 mouseOverField extraField0
 
 track pdb
