@@ -690,7 +690,14 @@ for (col1 = as1->columnList, col2 = as2->columnList;
      col1 != NULL && col2 != NULL && checkCount < n;
      col1 = col1->next, col2 = col2->next, ++checkCount)
     {
-    if (!sameOk(col1->name, col2->name))
+    char *name1 = col1->name;
+    char *name2 = col2->name;
+    // Ignore initial _ -- sometimes added to bigBed field names to suppress hgc display.
+    if (name1 && name1[0] == '_')
+        name1++;
+    if (name2 && name2[0] == '_')
+        name2++;
+    if (!sameOk(name1, name2))
 	return FALSE;
     }
 return TRUE;

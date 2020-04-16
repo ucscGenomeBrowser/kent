@@ -18,6 +18,15 @@ searchPriority 8
 
 include ncbiGeneBGP.ra
 
+track rnaStructTrial
+shortLabel RNA Struct trial
+longLabel My fun test of RNA structure
+group genes
+visibility hide
+color 20,90,0
+type bed 6 +
+exonArrows off
+
 track primers
 shortLabel RT-PCR Primers
 longLabel RT-PCR Detection Kit Primer Sets
@@ -53,6 +62,9 @@ type psl
 track rosettaMhc
 shortLabel Rosetta Predictions
 longLabel CD8 Epitopes predicted by NetMHC and Rosetta
+url     https://rosettamhc.chemistry.ucsc.edu/?epitope=$$
+urls name="https://rosettamhc.chemistry.ucsc.edu/?epitope=$$"
+urlLabel Link to Rosetta Model
 group immu
 type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/bbi/rosetta.bb
