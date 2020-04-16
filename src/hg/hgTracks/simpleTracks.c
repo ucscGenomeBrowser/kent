@@ -14239,6 +14239,8 @@ if (startsWith("peptideAtlas", track->track))
     peptideAtlasMethods(track);
 else if (startsWith("gtexGene", track->track))
     gtexGeneMethods(track);
+else if (startsWith("rnaStruct", track->track))
+    rnaSecStrMethods(track);
 #endif /* GBROWSE */
 }
 

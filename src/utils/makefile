@@ -153,6 +153,7 @@ UCSC_APPS = \
 USER_APP_SCRIPTS = \
 	bedJoinTabOffset.py \
 	expMatrixToBarchartBed \
+	barChartMaxLimit \
 	ucscApiClient \
 	tdbRename \
 	tdbSort \
