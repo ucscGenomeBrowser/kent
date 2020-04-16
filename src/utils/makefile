@@ -197,7 +197,7 @@ SCRIPT_FILES = \
 	pq \
 	bedAppendPaperInfo \
 	googleSheetToBigBed \
-	doClinvarLift
+	doClinvarLift \
 	${USER_APP_SCRIPTS}
 
 # List of all directories to build
