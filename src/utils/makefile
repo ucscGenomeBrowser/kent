@@ -196,6 +196,7 @@ SCRIPT_FILES = \
 	cancerMafToBigBed \
 	pq \
 	bedAppendPaperInfo \
+	googleSheetToBigBed \
 	doClinvarLift
 	${USER_APP_SCRIPTS}
 
