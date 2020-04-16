@@ -145,7 +145,7 @@ UCSC_APPS = \
 	upper \
 	venn \
 	verticalSplitSqlTable \
-	weedLines \
+	weedLines
 
 
 # list of scripts to install
@@ -157,7 +157,7 @@ USER_APP_SCRIPTS = \
 	ucscApiClient \
 	tdbRename \
 	tdbSort \
-	webSync
+	webSync \
 
 SCRIPT_FILES = \
 	agpToLift \
@@ -196,6 +196,8 @@ SCRIPT_FILES = \
 	cancerMafToBigBed \
 	pq \
 	bedAppendPaperInfo \
+	googleSheetToBigBed \
+	doClinvarLift \
 	${USER_APP_SCRIPTS}
 
 # List of all directories to build
