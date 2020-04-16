@@ -3362,7 +3362,6 @@ else if (hDbIsActive(otherDb) && subChain != chain)
 	   subSetScore);
 else
     printf("<BR>\n");
-printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
 
 boolean normScoreAvailable = chainDbNormScoreAvailable(tdb);
 
@@ -3378,11 +3377,16 @@ if (normScoreAvailable)
 	 "select normScore from %s where id = '%s'", tableName, item);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
-	printf("<B>Normalized Score:</B> %1.0f (bases matched: %d)<BR>\n",
-	    atof(row[0]), (int) (chain->score/atof(row[0])));
+        {
+        double normScore = atof(row[0]);
+        int basesAligned = chain->score / normScore;
+	printf("<B>Normalized Score:</B> %1.0f (aligned bases: %d)", normScore, basesAligned);
+        }
     sqlFreeResult(&sr);
+    printf("<BR>\n");
     }
 
+printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
 printf("<BR>\n");
 
 chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
@@ -3396,9 +3400,10 @@ if (!startsWith("big", tdb->type) && sqlDatabaseExists(otherDb) && chromSeqFileE
     {
     if (chainWinSize < 1000000)
         {
+        printf("View ");
         hgcAnchorSomewhere("htcChainAli", item, tdb->track, chain->tName);
-        printf("View DNA sequence alignment details of parts of chain within browser "
-           "window</A>.<BR>\n");
+        printf("DNA sequence alignment</A> details of parts of chain within browser "
+           "window.<BR>\n");
         }
     else
         {

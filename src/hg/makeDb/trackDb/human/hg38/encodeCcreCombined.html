@@ -3,11 +3,15 @@
 This track displays the <em>ENCODE Registry of candidate cis-Regulatory Elements</em> (cCREs) in
 the human genome, a total of 925,535 elements identified and classified by the 
 ENCODE Data Analysis Center according to regulatory effect.
+cCREs are the subset of DNase hypersensitivity sites clustered across all ENCODE samples
+that are supported by either histone modifications (H3K4me3 and H3K27ac) or CTCF-binding data.
 The cCRE dataset is the core of the integrative level of epigenomic and transcriptomic
 annotations produced by ENCODE.
 </p>
 Additional exploration of the cCRE's and underlying raw ENCODE data is provided by the
-<a target="_blank" href="https://screen.wenglab.org/">SCREEN web tool</a> 
+<a target="_blank" href="https://screen.wenglab.org/">
+SCREEN</a>
+(Search Candidate cis-Regulatory Elements) web tool,
 designed specifically for the registry, accessible by linkouts from the track details page.
 
 <!--
@@ -23,7 +27,7 @@ Additional views of the data are provided by the <a>ENCODE Integrative Megahub</
 CCREs are colored according to classification by regulatory signature:
 <p>
 <table cellpadding='2'>
-  <thead>
+  
   <tr>
     <th style="border-bottom: 2px solid;">Color</th>
     <th style="border-bottom: 2px solid;"></th>
@@ -51,20 +55,42 @@ CCREs are colored according to classification by regulatory signature:
 </p>
 
 <h2>Methods</h2>
-<!--
-1. cCREs with promoter-like signatures (cCRE-PLS) fall within 200 bp (center to center) of an annotated GENCODE TSS and have high DNase and H3K4me3 signals (evaluated as DNase and H3K4me3 max-Z scores, defined as the maximal DNase or H3K4me3 Z scores across all biosamples with data; see Methods).
-
-2. cCREs with enhancer-like signatures (cCRE-ELS) have high DNase and H3K27ac max-Z scores and must additionally have a low H3K4me3 max-Z score if they are within 200 bp of an annotated TSS. The subset of cCREs-ELS within 2 kb of a TSS is denoted proximal (cCRE-pELS), while the remaining subset is denoted distal (cCRE-dELS).
-
-3. DNase-H3K4me3 cCREs have high H3K4me3 max-Z scores but low H3K27ac max-Z scores and do not fall within 200 bp of a TSS.
-
-4. 
-CTCF-only cCREs have high DNase and CTCF max-Z scores and low H3K4me3 and H3K27ac max-Z scores.
--->
 <p>
-Information about the classification of ENCODE cCREs is available on the <i>About</i> page of the
-<a target="_blank" href="https://screen.encodeproject.org">SCREEN</a> 
-(Search Candidate cis-Regulatory Elements) tool.
+All individual DNase hypsersensitivity sites (DHSs) identified from 706 DNAse-seq experiments
+in human (a total of 93 million) were iteratively clustered and filtered 
+for highest signal across all experiments, producing 2.2 million representative DHSs (rDHSs).
+The highest signal elements from this set that were also supported by high H3K4me3, H3K27ac 
+and/or CTCF ChIP-seq signals were designated cCRE's (a total of 926,535 in human).
+</p>
+<p>
+Classification of cCRE's was performed based on the following criteria:
+<p>
+<p>
+1. cCREs with promoter-like signatures (cCRE-PLS) fall within 200 bp of 
+an annotated GENCODE TSS and have high DNase and H3K4me3 signals.
+</p>
+<p>
+2. cCREs with enhancer-like signatures (cCRE-ELS) have high DNase and H3K27ac 
+with low H3K4me3 max-Z score if they are within 200 bp of an annotated TSS. 
+The subset of cCREs-ELS within 2 kb of a TSS is denoted proximal (cCRE-pELS), 
+while the remaining subset is denoted distal (cCRE-dELS).
+</p>
+
+<p>
+3. DNase-H3K4me3 cCREs have high H3K4me3 max-Z scores but low H3K27ac max-Z scores 
+and do not fall within 200 bp of a TSS.
+</p>
+
+<p>
+4. CTCF-only cCREs have high DNase and CTCF and low H3K4me3 and H3K27ac.
+</p>
+
+<img style='margin-left: 40px;' height=229 width=371 src="../images/cCREgroups.png">
+
+<p>
+For further detail about the identification and classification of ENCODE cCREs see 
+the <i>About</i> page of the
+<a target="_blank" href="https://screen.encodeproject.org">SCREEN</a> web tool.
 </p>
 
 <h2>Data Access</h2>
