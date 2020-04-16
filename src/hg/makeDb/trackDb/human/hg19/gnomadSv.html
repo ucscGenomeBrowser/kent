@@ -1,19 +1,22 @@
 <h2>Description</h2>
 <p>
-The ${longLabel} track set shows structural variants calls (variants &gt;50bp) from the gnomAD v2.1
-release on 10,847 unrelated genomes.</p>
-
-<h2>Display Conventions and Configuration</h2>
+The ${longLabel} track set shows structural variants calls (&gt;50 nucleotides) from the gnomAD v2.1
+release on 10,847 unrelated genomes. It mostly (but not entirely) overlaps with the genome set used
+for the gnomAD short variant release. For more information see the following blog post, 
+<a href="https://macarthurlab.org/2019/03/20/structural-variants-in-gnomad/" target="_blank">
+Structural variants in gnomAD</a></p>
 <p>
 There are three subtracks in this track set:
 <ol>
-  <li>All: The full set of variant annotations from all 10,847 samples.</li>
-  <li>Controls: Only samples from individuals not selected as a case in a case/control study of
-      common disease (5,192 samples).</li>
-  <li>Non-neuro: Only samples from individuals not selected as having a neurological condition in a
-      case/control study (8,342 samples).</li>
+  <li><b>All SV's:</b> The full set of variant annotations from all 10,847 samples.</li>
+  <li><b>Control Only SV's:</b> Only samples from individuals not selected as a case in a
+      case/control study of common disease (5,192 samples).</li>
+  <li><b>Non-neuro SV's:</b> Only samples from individuals not selected as having a neurological
+      condition in a case/control study (8,342 samples).</li>
 </ol>
 </p>
+
+<h2>Display Conventions and Configuration</h2>
 
 <p>
 Items in all subtracks follow the same conventions: items are shaded according to variant type,
