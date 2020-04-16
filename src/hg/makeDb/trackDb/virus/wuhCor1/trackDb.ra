@@ -96,6 +96,8 @@ visibility hide
 bigDataUrl /gbdb/wuhCor1/bbi/cas13Crispr.bb
 exonNumbers off
 priority 40
+useScore on
+scoreMax 700
 
 
 include trackDb.119way.ra

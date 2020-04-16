@@ -277,7 +277,7 @@ maxScore broadPeak narrowPeak
 maxWindowToDraw bam big* rmsk joinedRmsk bed narrowPeak broadPeak bedlogR genepred vcf vcfTabix factorSource
 maxWindowToQuery bigWig bed bedlogR
 metadata *
-mouseOverField bigBed bigPsl
+mouseOverField big*
 mgiUrl bed
 mgiUrlLabel bed
 minFreq vcf vcfTabix
