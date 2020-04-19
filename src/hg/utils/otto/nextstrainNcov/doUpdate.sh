@@ -58,7 +58,7 @@ bedToBigBed -as=$ottoDir/nextstrainClade.as -type=bed12+7 -tab -verbose=0 \
 
 # Archive
 mkdir -p $ottoDir/archive/$today
-cp -p $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
+cp -pf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
     $runDir/nextstrainSamples*.vcf.gz{,.tbi} \
     $runDir/nextstrain*.nh \
     $runDir/ncov.json \
