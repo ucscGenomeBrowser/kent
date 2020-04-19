@@ -18,9 +18,9 @@ searchPriority 8
 
 include ncbiGeneBGP.ra
 
-track rnaStructTrial
-shortLabel RNA Struct trial
-longLabel My fun test of RNA structure
+track rnaStructRangan
+shortLabel Rangan RNA
+longLabel Rangan et al. RNA predictions
 group genes
 visibility hide
 color 20,90,0
