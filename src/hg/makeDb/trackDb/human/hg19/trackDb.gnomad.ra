@@ -309,7 +309,7 @@ html gnomad
     compositeTrack on
     group varRep
     type bigBed 9 +
-    release alpha
+    release alpha,beta
     dataVersion Release 2.1
     html gnomadSv
 
@@ -329,7 +329,7 @@ html gnomad
         filterLabel.svlen Filter by Variant Size
         mouseOverField _mouseOver
         searchIndex name
-        release alpha
+        release alpha,beta
 
         track gnomadSvNonneuro
         parent gnomadStructuralVariants off
@@ -347,7 +347,7 @@ html gnomad
         filterLabel.svlen Filter by Variant Size
         mouseOverField _mouseOver
         searchIndex name
-        release alpha
+        release alpha,beta
 
         track gnomadSvControls
         parent gnomadStructuralVariants off
@@ -365,7 +365,7 @@ html gnomad
         filterLabel.svlen Filter by Variant Size
         mouseOverField _mouseOver
         searchIndex name
-        release alpha
+        release alpha,beta
 
     track gnomadPLI
     parent gnomadSuper
