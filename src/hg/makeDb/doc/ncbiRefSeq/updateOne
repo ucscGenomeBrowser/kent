@@ -1,0 +1,117 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use POSIX qw(mktime ctime strftime);
+use File::stat;
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 2) {
+  printf STDERR "usage: updateOne <ucscDb> <asmId>\n";
+  printf STDERR "e.g.:  ./updateOne susScr11 GCF_000003025.6_Sscrofa11.1\n";
+  exit 255;
+}
+
+my $db = shift;
+my $asmId = shift;
+# e.g.: GCF_000003025.6_Sscrofa11.1
+# GCF_000003025.6_Sscrofa11.1_genomic.gff.gz
+
+my $srcDir = substr($asmId, 0, 3);
+$srcDir .= "/" . substr($asmId, 4, 3);
+$srcDir .= "/" . substr($asmId, 7, 3);
+$srcDir .= "/" . substr($asmId, 10, 3);
+$srcDir .= "/" . $asmId;
+# printf "# %s\n", $srcDir;
+my $gffFile = "/hive/data/outside/ncbi/genomes/$srcDir/${asmId}_genomic.gff.gz";
+if (! -s "${gffFile}" ) {
+  printf STDERR "ERROR: can not find gff file:\n# %s\n", $gffFile;
+  exit 255;
+}
+# print `ls -og $gffFile`;
+my $fileStat = stat($gffFile);
+my $fileMtime = $fileStat->mtime;
+## printf "%d\n", $fileMtime;
+## printf "%s", POSIX::ctime($fileMtime);
+my $fileDate = strftime("%Y-%m-%d %H:%M:%S", localtime($fileMtime));
+# printf "%d %s %s\n", $fileMtime, $fileDate, "${asmId}_genomic.gff.gz";
+
+my $tableStatus = `hgsql -N -e 'show table status like "ncbiRefSeq";' $db | cut -f13`;
+chomp $tableStatus;
+my $status = "done $fileDate";
+my $tableTimeStamp = 0;
+if (0 == length($tableStatus)) {
+  printf STDERR "ERROR: ncbiRefSeq table missing in '%s'\n", $db;
+  $status = "needUpdate $fileDate";
+  #  exit 255;
+} else {
+# e.g.: 2018-02-09 14:41:04
+
+my ($ymd, $hms) = split('\s+', $tableStatus);
+my ($y, $m, $d) = split('-', $ymd);
+my ($h, $min, $s) = split(':', $hms);
+
+# printf "%s\n", $tableStatus;
+$tableTimeStamp = POSIX::mktime($s, $min, $h, $d, $m-1, $y-1900);
+$status = "needUpdate $fileDate" if ($tableTimeStamp < $fileMtime);
+printf "%04d-%02d-%02d %02d:%02d:%02d %s.ncbiRefSeq %s\n", $y, $m, $d, $h, $min, $s, $db, $status;
+}
+if ($tableTimeStamp < 1) {
+  printf "%s.ncbiRefSeq %s\n", $db, $status;
+}
+# printf "%d\n", $tableTimeStamp;
+# printf "%s\n", POSIX::ctime($tableTimeStamp);
+if ($tableTimeStamp >= $fileMtime) {
+  exit 0;
+}
+
+my $bedDir = "/hive/data/genomes/$db/bed";
+if ( ! -d "${bedDir}" ) {
+  printf "ERROR: can not find bed directory:\n# %s\n", $bedDir;
+  exit 255;
+}
+my $today = `date "+%F"`;
+chomp $today;
+my $buildDir = "$bedDir/ncbiRefSeq.$today";
+if ( -d "${buildDir}" ) {
+  printf STDERR "# already run today $buildDir\n";
+  exit 0;
+}
+
+## printf STDERR "# %s\n", $buildDir;
+
+print `mkdir -p "${buildDir}"`;
+my $runScript = <<"_END_";
+#!/bin/bash
+
+set -beEu -o pipefail
+cd $buildDir
+time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=\`pwd\` -toGpWarnOnly -smallClusterHub=hgwdev \\
+  \"${asmId}\" \"${db}\") >> do.log 2>&1
+_END_
+
+open (my $fh, '>', "${buildDir}/run.sh") or die "can not write to ${buildDir}/run.sh";
+printf $fh "%s\n", $runScript;
+close $fh;
+print `chmod +x "$buildDir/run.sh"`;
+my @sysArgs = ("$buildDir/run.sh");
+my $sysReturn = system(@sysArgs);
+if ($sysReturn == -1) {
+  printf STDERR "ERROR: failed to execute $buildDir/run.sh\n";
+  exit 255;
+} elsif ($sysReturn & 127) {
+  printf STDERR "ERROR: run.sh died with signal %d\n", $sysReturn & 127;
+  exit 255;
+} else {
+  my $exitCode = $sysReturn >> 8;
+  if (0 == $exitCode) {
+    exit 0;
+  } else {
+    printf STDERR "ERROR: $buildDir/run.sh script returned %d\n", $exitCode;
+    exit 255;
+  }
+}
+# should never get here
+printf STDERR "ERROR: should never get to this point in updateOne\n";
+exit 255;
