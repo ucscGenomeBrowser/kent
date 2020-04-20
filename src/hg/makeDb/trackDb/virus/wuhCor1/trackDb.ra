@@ -60,7 +60,7 @@ group genes
 type psl
 
 track rosettaMhc
-shortLabel Rosetta Predictions
+shortLabel CD8 RosettaMHC
 longLabel CD8 Epitopes predicted by NetMHC and Rosetta
 url     https://rosettamhc.chemistry.ucsc.edu/?epitope=$$
 urls name="https://rosettamhc.chemistry.ucsc.edu/?epitope=$$"
@@ -76,14 +76,29 @@ group immu
 type bigBed 4 +
 bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
 
+# the RR version of the track, with the filters
+track publicAnnots
+release beta,public
+shortLabel User annotations
+longLabel User-contributed annotations via bit.ly/cov2annots
+group map
+priority 4
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/bbi/public.bb
+mouseOverField extraField0
+
+#
+release alpha
 track publicAnnots
 shortLabel User annotations
 longLabel User-contributed annotations via bit.ly/cov2annots
 group map
+priority 6
 type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/bbi/public.bb
-#urls extraField1=$$
 mouseOverField extraField0
+filterValues.extraField0 genes,evolution,RNA,antibodies,CRISPR,primers,proteins 
+filterType.extraField0 singleList
 
 track pdb
 shortLabel PDB Structures
