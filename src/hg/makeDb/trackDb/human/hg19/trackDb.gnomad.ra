@@ -50,7 +50,7 @@ html gnomad
     dataVersion Release 2.0.2
     subGroup1 view Views gAvg=GenomesAverage eAvg=ExomesAverage gRDepth=GenomesReadDepth eRDepth=ExomesReadDepth
     type bigWig
-    html gnomad
+    html gnomadCoverage
 
         track gnomadGenomesAvgCoverage
         parent gnomadCoverage
@@ -69,7 +69,7 @@ html gnomad
             track gnomadGenomesMeanCoverage
             shortLabel Mean Coverage
             longLabel gnomAD Mean Genome Sample Coverage
-            parent gnomadGenomesAvgCoverage off
+            parent gnomadGenomesAvgCoverage on
             color 255,0,0
             bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.genomes.coverage.mean.bw
             subGroups view=gAvg
@@ -77,7 +77,7 @@ html gnomad
             track gnomadGenomesMedianCoverage
             shortLabel Median Coverage
             longLabel gnomAD Median Genome Sample Coverage
-            parent gnomadGenomesAvgCoverage on
+            parent gnomadGenomesAvgCoverage off
             color 0,0,255
             bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.genomes.coverage.median.bw
             subGroups view=gAvg
@@ -194,7 +194,7 @@ html gnomad
             track gnomadExomesMeanCoverage
             shortLabel Mean Coverage
             longLabel gnomAD Mean Exome Sample Coverage
-            parent gnomadExomesAvgCoverage off
+            parent gnomadExomesAvgCoverage on
             color 255,0,0
             bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.exomes.coverage.mean.bw
             subGroups view=eAvg
@@ -202,7 +202,7 @@ html gnomad
             track gnomadExomesMedianCoverage
             shortLabel Median Coverage
             longLabel gnomAD Median Exome Sample Coverage
-            parent gnomadExomesAvgCoverage on
+            parent gnomadExomesAvgCoverage off
             color 0,0,255
             bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.exomes.coverage.median.bw
             subGroups view=eAvg

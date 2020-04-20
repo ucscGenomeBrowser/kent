@@ -322,11 +322,10 @@ standard deviation 0.000000
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/canFam4/canFam4.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku canFam4) > do.log 2>&1
-XXX - running - Tue Mar 31 10:53:35 PDT 2020
-    # real    4m13.285s
+    # real    3m30.591s
 
     cat fb.canFam4.cpgIslandExtUnmasked.txt
-    # 28001209 bases of 2999027915 (0.934%) in intersection
+    # 56535294 bases of 2481941580 (2.278%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2020-03-31 - Hiram)
@@ -342,11 +341,10 @@ XXX - running - Tue Mar 31 10:53:35 PDT 2020
     time (doIdKeys.pl \
         -twoBit=/hive/data/genomes/canFam4/canFam4.unmasked.2bit \
         -buildDir=`pwd` canFam4) > do.log 2>&1 &
-XXX - running - Tue Mar 31 10:54:22 PDT 2020
-    # real    2m48.092s
+    # real    3m22.298s
 
     cat canFam4.keySignature.txt
-    #  10c42ee6ea4a90775c5da9d8b83854aa
+    #  174191aae5515d1114a9d6320b152b1a
 
 #############################################################################
 # gapOverlap (DONE - 2020-03-31 - Hiram)
@@ -408,82 +406,41 @@ chrX    45160089        45162189        chrX:45160090-45162189  1000    +      4
 
     time (doIdKeys.pl -buildDir=`pwd` \
         -twoBit=`pwd`/canFam4.genbank.2bit genbankCanFam4)  > do.log 2>&1 &
-XXX - running - Tue Mar 31 10:58:05 PDT 2020
-    # real    2m50.723s
+    # real    3m30.599s
 
     cat genbankCanFam4.keySignature.txt
-    #  10c42ee6ea4a90775c5da9d8b83854aa
-
-    # and the genbank sequence needs keys too:
-    mkdir /hive/data/genomes/canFam4/genbank/idKeysGenbank
-    cd /hive/data/genomes/canFam4/genbank/idKeysGenbank
-    faToTwoBit /hive/data/outside/ncbi/genomes/genbank/vertebrate_mammalian/Gorilla_gorilla/all_assembly_versions/GCA_008122165.1_Kamilah_GGO_v0/GCA_008122165.1_Kamilah_GGO_v0_genomic.fna.gz canFam4.genbank.2bit
-
-    time (doIdKeys.pl -buildDir=`pwd` \
-        -twoBit=`pwd`/canFam4.genbank.2bit genbankCanFam4)  > do.log 2>&1 &
-    # real    3m11.098s
-
-    cat genbankCanFam4.keySignature.txt
-    #  84734b343949ddf1e28b453d25d3ddf7
+    #  174191aae5515d1114a9d6320b152b1a
 
     mkdir /hive/data/genomes/canFam4/bed/chromAlias
     cd /hive/data/genomes/canFam4/bed/chromAlias
 
     join -t$'\t' ../idKeys/canFam4.idKeys.txt \
-        ../../genbank/idKeysGenbank/genbankCanFam4.idKeys.txt | cut -f2- \
+        ../../genbank/idKeys/genbankCanFam4.idKeys.txt | cut -f2- \
           | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
             | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
                | sort -k1,1 -k2,2n > ucscToINSDC.bed
 
-    join -t$'\t' ../idKeys/canFam4.idKeys.txt \
-        ../../genbank/idKeys/genbankCanFam4.idKeys.txt | cut -f2- \
-          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
-            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
-               | sort -k1,1 -k2,2n > ucscToRefSeq.bed
-
     # should be same line counts throughout:
     wc -l * ../../chrom.sizes
-    #	5485 ucscToINSDC.bed
-    #	5486 ucscToRefSeq.bed
-    #	5486 ../../chrom.sizes
-
-    # need to find the accession for the INSDC equivalent to chrM:
-    egrep chrM *
-# ucscToRefSeq.bed:chrM   0       16412   NC_011120.1
-
-    # lookup that accession at NCBI Entrez: X93347.1
-    # and add to ucscToINSDC.bed:
-    printf "chrM\t0\t16564\tAY612638.1\n" >> ucscToINSDC.bed
-    # verify:
-    grep chrM *
-ucscToINSDC.bed:chrM    0       16412   X93347.1
-ucscToRefSeq.bed:chrM   0       16412   NC_011120.1
+    #   2198 ucscToINSDC.bed
+    #	2198 ../../chrom.sizes
 
     export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
     echo $chrSize
-    # 26
+    # 23
     # use the $chrSize in this sed
     sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
          | hgLoadSqlTab canFam4 ucscToINSDC stdin ucscToINSDC.bed
-     # should be the same for ucscToRefSeq:
-    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
-    echo $chrSize
-    # 26
-    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
-       | sed -e 's/INSDC/RefSeq/g;' \
-         | hgLoadSqlTab canFam4 ucscToRefSeq stdin ucscToRefSeq.bed
 
     # should be quiet for all OK
     checkTableCoords canFam4
 
     # should cover %100 entirely:
     featureBits -countGaps canFam4 ucscToINSDC
-    # 3044872214 bases of 3044872214 (100.000%) in intersection
-    featureBits -countGaps canFam4 ucscToRefSeq
-    # 3044872214 bases of 3044872214 (100.000%) in intersection
+    # 2482000080 bases of 2482000080 (100.000%) in intersection
 
 #########################################################################
-# add chromAlias table (TBD - 2019-11-19 - Hiram)
+# add chromAlias table (DONE - 2020-04-02 - Hiram)
 
     mkdir /hive/data/genomes/canFam4/bed/chromAlias
     cd /hive/data/genomes/canFam4/bed/chromAlias
@@ -523,36 +480,38 @@ done
         canFam4.chromAlias.tab
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2019-11-19 - Hiram)
-    cd ~/kent/src/hg/makeDb/trackDb/gorilla/canFam4
+# fixup search rule for assembly track/gold table (DONE - 2020-04-02 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/dog/canFam4
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" canFam4 \
       | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
-      1 NC_.1
-   6344 SRLZ.1
+   2783 JAAHUQ.1
 
-    # implies a rule: '[NS][CR][L0-9_][Z0-9][0-9]+(\.[0-9]+)?'
+    # implies a rule: 'JAAHUQ[0-9]+(\.[0-9]+)?'
 
     # verify this rule will find them all and eliminate them all:
     hgsql -N -e "select frag from gold;" canFam4 | wc -l
-    # 6345
+    # 2783
 
     hgsql -N -e "select frag from gold;" canFam4 \
-       | egrep -e '[NS][CR][L0-9_][Z0-9][0-9]+(\.[0-9]+)?' | wc -l
-    # 6345
+       | egrep -e 'JAAHUQ[0-9]+(\.[0-9]+)?' | wc -l
+    # 2783
 
     hgsql -N -e "select frag from gold;" canFam4 \
-       | egrep -v -e '[NS][CR][L0-9_][Z0-9][0-9]+(\.[0-9]+)?' | wc -l
+       | egrep -v -e 'JAAHUQ[0-9]+(\.[0-9]+)?' | wc -l
     # 0
 
     # hence, add to trackDb/rhesus/canFam4/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [NS][CR][L0-9_][Z0-9][0-9]+(\.[0-9]+)?
+termRegex JAAHUQ[0-9]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
     # verify searches work in the position box
+
+    git commit -m 'adding search rule for gold/assembly track refs #25279' \
+       trackDb.ra
 
 ##########################################################################
 # running repeat masker (DONE - 2020-03-31 - Hiram)
@@ -660,183 +619,211 @@ searchPriority 8
     # 598271411 bases of 2482000080 (24.104%) in intersection
 
 ##########################################################################
-# cpgIslands - (TBD - 2019-11-20 - Hiram)
+# cpgIslands - (DONE - 2020-04-02 - Hiram)
     mkdir /hive/data/genomes/canFam4/bed/cpgIslands
     cd /hive/data/genomes/canFam4/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku canFam4) > do.log 2>&1
-    # real    4m0.657s
+    # real    3m29.034s
 
     cat fb.canFam4.cpgIslandExt.txt
-    # 20339043 bases of 2999027915 (0.678%) in intersection
+    # 47618882 bases of 2481941580 (1.919%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2019-11-20 - Hiram)
+# genscan - (DONE - 2020-04-02 - Hiram)
     mkdir /hive/data/genomes/canFam4/bed/genscan
     cd /hive/data/genomes/canFam4/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku canFam4) > do.log 2>&1
-    # real    100m37.264s
+    # real    8m19.775s
+
+    # two jobs broken:
+./runGsBig2M.csh chr22 000 gtf/000/chr22.gtf pep/000/chr22.pep subopt/000/chr22.bed &
+./runGsBig2M.csh chr34 000 gtf/000/chr34.gtf pep/000/chr34.pep subopt/000/chr34.bed
+wait
+    # real    14m27.845s
+
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku canFam4) > makeBed.log 2>&1
+    # real    0m45.365s
 
     cat fb.canFam4.genscan.txt
-    # 51534246 bases of 2999027915 (1.718%) in intersection
+    # 57650331 bases of 2481941580 (2.323%) in intersection
 
     cat fb.canFam4.genscanSubopt.txt
-    # 53019930 bases of 2999027915 (1.768%) in intersection
+    # 50129491 bases of 2481941580 (2.020%) in intersection
 
 #########################################################################
-# Create kluster run files (TBD - 2019-11-20 - Hiram)
+# Create kluster run files (DONE - 2020-04-02 - Hiram)
 
     # numerator is canFam4 gapless bases "real" as reported by:
     featureBits -noRandom -noHap canFam4 gap
-    # 41796384 bases of 2715375767 (1.539%) in intersection
+    # 36700 bases of 2353522726 (0.002%) in intersection
     #                      ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 2715375767 / 2861349177 \) \* 1024
-    #  ( 2715375767 / 2861349177 ) * 1024 = 971.760038
+    calc \( 2353522726 / 2861349177 \) \* 1024
+    #  ( 2353522726 / 2861349177 ) * 1024 = 842.262556
 
-    # ==> use -repMatch=950 according to size scaled down from 1024 for human.
+    # ==> use -repMatch=800 according to size scaled down from 1024 for human.
     #   and rounded down to nearest 50
     cd /hive/data/genomes/canFam4
     time blat canFam4.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/canFam4.11.ooc \
-        -repMatch=950
-    #   Wrote 39217 overused 11-mers to jkStuff/canFam4.11.ooc
+        -repMatch=800
+    #	Wrote 34718 overused 11-mers to jkStuff/canFam4.11.ooc
+    #	real    0m21.985s
 
-    # gorGor5 at repMatch=1100:
-    #   Wrote 31384 overused 11-mers to jkStuff/gorGor5.11.ooc
-    # gorGor4 at repMatch=1000:
-    # Wrote 32028 overused 11-mers to jkStuff/gorGor4.11.ooc
+    # canFam3 at repMatch=900:
+    #   Wrote 24788 overused 11-mers to jkStuff/canFam3.11.ooc
+    #	real    1m11.629s
 
-    #   check non-bridged gaps to see what the typical size is:
+    #   there are no non-bridged gaps
     hgsql -N \
         -e 'select * from gap where bridge="no" order by size;' canFam4 \
-        | sort -k7,7nr | ave -col=7 stdin
-    # min 100.000000
-    # max 100.000000
-    # they are all 100 sized, 220 gaps
 
+    # HOWEVER, every gap in this assembly is the same 'within scaffold'
+    # at size 100:
+    hgsql -N -e 'select size from gap where bridge="yes" order by size;'
+     canFam4  | sort | uniq -c
+    # 585 100
+
+    # using these gaps to make a lift file
     # minimum gap size is 100 and produces a reasonable number of lifts
     gapToLift -verbose=2 -minGap=100 canFam4 jkStuff/canFam4.nonBridged.lft \
         -bedFile=jkStuff/canFam4.nonBridged.bed
     wc -l jkStuff/canFam4.nonBri*
-    #	5706 jkStuff/canFam4.nonBridged.bed
-    #	5706 jkStuff/canFam4.nonBridged.lft
+    #	2198 jkStuff/canFam4.nonBridged.bed
+    #	2198 jkStuff/canFam4.nonBridged.lft
 
 ########################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2019-11-20 - Hiram)
+# lastz/chain/net swap human/hg38 (DONE - 2020-04-10 - Hiram)
 
     # original alignment
-    cd /hive/data/genomes/hg38/bed/lastzCanFam4.2019-11-20
+    cd /hive/data/genomes/hg38/bed/lastzCanFam4.2020-04-02
 
     cat fb.hg38.chainCanFam4Link.txt
-    # 2908900659 bases of 3095998939 (93.957%) in intersection
+    # 1549397508 bases of 3110768607 (49.808%) in intersection
     cat fb.hg38.chainSynCanFam4Link.txt
-    # 2885980361 bases of 3095998939 (93.216%) in intersection
+    # 1488468205 bases of 3110768607 (47.849%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	hg38 canFam4) > rbest.log 2>&1 &
+    # real    310m32.196s
+
     cat fb.hg38.chainRBest.CanFam4.txt
-    # 2693876207 bases of 3095998939 (87.012%) in intersection
+    # 1425406620 bases of 3110768607 (45.822%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/canFam4/bed/blastz.hg38.swap
     cd /hive/data/genomes/canFam4/bed/blastz.hg38.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzCanFam4.2019-11-20/DEF \
+      /hive/data/genomes/hg38/bed/lastzCanFam4.2020-04-02/DEF \
         -swap -chainMinScore=3000 -chainLinearGap=medium \
-          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    63m46.473s
+    #  real    99m10.990s
 
     cat fb.canFam4.chainHg38Link.txt
-    # 2738870921 bases of 2999027915 (91.325%) in intersection
+    # 1493209286 bases of 2481941580 (60.163%) in intersection
     cat fb.canFam4.chainSynHg38Link.txt
-    # 2728591501 bases of 2999027915 (90.983%) in intersection
+    # 1448164376 bases of 2481941580 (58.348%) in intersection
 
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` canFam4 hg38) \
-       > rbest.log 2>&1
-XXX - running - Tue Nov 26 11:55:51 PST 2019
-    # real    125m35.459s
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	canFam4 hg38) > rbest.log 2>&1 &
+    # real    257m59.713s
+
+    cat fb.canFam4.chainRBest.Hg38.txt
+    # 1425296830 bases of 2481941580 (57.427%) in intersection
 
 ###########################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2019-11-21 - Hiram)
+# lastz/chain/net swap mouse/mm10 (DONE - 2020-04-20 - Hiram)
 
     # original alignment
-    cd /hive/data/genomes/mm10/bed/lastzCanFam4.2019-11-20
     cat fb.mm10.chainCanFam4Link.txt
-    #	929953885 bases of 2652783500 (35.056%) in intersection
+    #	777883731 bases of 2652783500 (29.323%) in intersection
     cat fb.mm10.chainSynCanFam4Link.txt
-    #   882047357 bases of 2652783500 (33.250%) in intersection
+    #   736602602 bases of 2652783500 (27.767%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm10 canFam4 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    #	real    219m16.168s
+
     cat fb.mm10.chainRBest.CanFam4.txt
-    # 885135149 bases of 2652783500 (33.366%) in intersection
+    # 741307883 bases of 2652783500 (27.945%) in intersection
 
     mkdir /hive/data/genomes/canFam4/bed/blastz.mm10.swap
     cd /hive/data/genomes/canFam4/bed/blastz.mm10.swap
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzCanFam4.2019-11-20/DEF \
+	/hive/data/genomes/mm10/bed/lastzCanFam4.2020-04-02/DEF \
 	-swap -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
-	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
-    #	real    72m34.088s
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    50m20.639s
 
     cat fb.canFam4.chainMm10Link.txt
-    #	1017872526 bases of 2999027915 (33.940%) in intersection
+    #	772902855 bases of 2481941580 (31.141%) in intersection
     cat fb.canFam4.chainSynMm10Link.txt
-    #    880983055 bases of 2999027915 (29.376%) in intersection
+    #   737924732 bases of 2481941580 (29.732%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev canFam4 mm10 \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    237m38.959s
+    # real    173m38.016s
 
     cat fb.canFam4.chainRBest.Mm10.txt
-    # 883663662 bases of 2999027915 (29.465%) in intersection
+    # 740357755 bases of 2481941580 (29.830%) in intersection
 
 ##############################################################################
-# GENBANK AUTO UPDATE (TBD - 2019-11-20 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2020-04-09 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # organism       mrnaCnt estCnt  refSeqCnt
-    # Gorilla 1       0       0
-    # Gorilla gorilla 617     30      95
-    # Gorilla gorilla gorilla 4       0       0
+    # Canis latrans   2       0       0
+    # Canis lupus     36      0       0
+    # Canis lupus familiaris  3351    382644  1718
+    # Canis lupus laniger     2       0       0
+    # Canis lupus lupus       2       0       0
+    # Canis mesomelas 1       0       0
+    # Canis sp.       45      0       0
 
-    # that single 'Gorilla' name is a new one, adding that to
-    # the list of Gorilla names in src/lib/gbGenome.c
+    # the latrans is the Coyota, the mesomelas
+    # is the Black-backed jackal from Africa and the langier is the Tibetan wolf
+    # lupus lupus is the Eurasian wolf
 
-    # edit etc/genbank.conf to add canFam4 just before galGal5
+    # edit etc/genbank.conf to add canFam4 just after canFam3
 
-# Gorilla - genbank assembly: GCA_011100685.1
+# canFam4 (German shepard - GCA_011100685.1 - UU_Cfam_GSD_1.0)
 canFam4.serverGenome = /hive/data/genomes/canFam4/canFam4.2bit
 canFam4.ooc = /hive/data/genomes/canFam4/jkStuff/canFam4.11.ooc
 canFam4.lift = /hive/data/genomes/canFam4/jkStuff/canFam4.nonBridged.lft
-canFam4.perChromTables = no
-canFam4.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
-canFam4.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
-canFam4.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
-canFam4.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
-canFam4.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
-canFam4.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+canFam4.align.unplacedChroms = chrUn_*
+canFam4.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+canFam4.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+canFam4.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+canFam4.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+canFam4.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+canFam4.refseq.mrna.native.load = yes
+canFam4.refseq.mrna.xeno.load = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+canFam4.genbank.mrna.xeno.load = yes
 canFam4.downloadDir = canFam4
-# default yes refseq.mrna.native refseq.mrna.xeno genbank.mrna.native
-# default yes genbank.est.native
-# default no genbank.mrna.xeno genbank.est.xeno
+canFam4.upstreamGeneTbl = refGene
+canFam4.perChromTables = no
 
     # verify the files specified exist before checking in the file:
   grep ^canFam4 etc/genbank.conf | grep hive | awk '{print $NF}' | xargs ls -og
-# -rw-rw-r-- 1 792944027 Nov 20 10:59 /hive/data/genomes/canFam4/canFam4.2bit
-# -rw-rw-r-- 1    156876 Nov 20 11:06 /hive/data/genomes/canFam4/jkStuff/canFam4.11.ooc
-# -rw-rw-r-- 1    333597 Nov 20 11:08 /hive/data/genomes/canFam4/jkStuff/canFam4.nonBridged.lft
+# -rw-rw-r-- 1 651703337 Apr  2 08:57 /hive/data/genomes/canFam4/canFam4.2bit
+# -rw-rw-r-- 1    138880 Apr  2 09:51 /hive/data/genomes/canFam4/jkStuff/canFam4.11.ooc
+# -rw-rw-r-- 1    139818 Apr  2 09:56 /hive/data/genomes/canFam4/jkStuff/canFam4.nonBridged.lft
 
-    git commit -m "Added canFam4 gorilla; refs #24524" etc/genbank.conf src/lib/gbGenome.c
+    git commit -m "Added canFam4 dog; refs #25279" etc/genbank.conf
     git push
-
-    # update the binaries due to the update in lib/src/gbGenome.c
-    make install-server
 
     # update /cluster/data/genbank/:
     make etc-update
@@ -846,7 +833,7 @@ canFam4.downloadDir = canFam4
     git pull
     # add canFam4 to:
     #   etc/hgwdev.dbs etc/align.dbs
-    git commit -m "Added canFam4 - gorilla refs #24524" etc/hgwdev.dbs etc/align.dbs
+    git commit -m "Added canFam4 - dog refs #25279" etc/hgwdev.dbs etc/align.dbs
     git push
     make etc-update
 
@@ -854,20 +841,21 @@ canFam4.downloadDir = canFam4
     # appear
 
 #############################################################################
-# augustus gene track (TBD - 2019-11-20 - Hiram)
+# augustus gene track (DONE - 2020-04-10 - Hiram)
 
     mkdir /hive/data/genomes/canFam4/bed/augustus
     cd /hive/data/genomes/canFam4/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev canFam4) > do.log 2>&1
-    # real    139m55.244s
+    # real    74m39.734s
 
     cat fb.canFam4.augustusGene.txt
-    # 55005426 bases of 2999027915 (1.834%) in intersection
+    # 49999966 bases of 2481941580 (2.015%) in intersection
 
 #########################################################################
 # ncbiRefSeq (TBD - 2019-11-20 - Hiram)
+    ### XXX ### Not available on GCA/genbank assemblies
 
     mkdir /hive/data/genomes/canFam4/bed/ncbiRefSeq
     cd /hive/data/genomes/canFam4/bed/ncbiRefSeq
@@ -913,127 +901,105 @@ canFam4.downloadDir = canFam4
  # refGene 0.402%, ncbiRefSeqCurated 0.401%, both 0.400%, cover 99.33%, enrich 247.79x
 
 #########################################################################
-# LIFTOVER TO gorGor5 (TBD - 2019-11-20 - Hiram)
+# LIFTOVER TO canFam3 (DONE - 2020-04-02 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/canFam4/bed/blat.gorGor5.2019-11-20
-    cd /hive/data/genomes/canFam4/bed/blat.gorGor5.2019-11-20
+    mkdir /hive/data/genomes/canFam4/bed/blat.canFam3.2020-04-02
+    cd /hive/data/genomes/canFam4/bed/blat.canFam3.2020-04-02
     doSameSpeciesLiftOver.pl -verbose=2 \
         -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/canFam4/jkStuff/canFam4.11.ooc \
-         canFam4 gorGor5
+         canFam4 canFam3
     time (doSameSpeciesLiftOver.pl -verbose=2 \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/canFam4/jkStuff/canFam4.11.ooc \
-         canFam4 gorGor5) > doLiftOverToGorGor5.log 2>&1
-    # real    936m35.524s
+         canFam4 canFam3) > doLiftOverToCanFam3.log 2>&1
+    # real    1100m17.743s
 
-    # see if the liftOver menus function in the browser from canFam4 to gorGor5
-
-#########################################################################
-# LIFTOVER TO gorGor4 (TBD - 2019-11-20 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/canFam4/bed/blat.gorGor4.2019-11-20
-    cd /hive/data/genomes/canFam4/bed/blat.gorGor4.2019-11-20
-    doSameSpeciesLiftOver.pl -verbose=2 \
-        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -ooc=/hive/data/genomes/canFam4/jkStuff/canFam4.11.ooc \
-         canFam4 gorGor4
-    time (doSameSpeciesLiftOver.pl -verbose=2 \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -ooc=/hive/data/genomes/canFam4/jkStuff/canFam4.11.ooc \
-         canFam4 gorGor4) > doLiftOverToGorGor4.log 2>&1
-    # real    654m46.645s
-
-    # see if the liftOver menus function in the browser from canFam4 to gorGor4
+    # see if the liftOver menus function in the browser from canFam4 to canFam3
 
 #########################################################################
-#  BLATSERVERS ENTRY (TBD - 2019-11-20 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2020-04-02 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("canFam4", "blat1c", "17914", "1", "0"); \
+	VALUES ("canFam4", "blat1b", "17904", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("canFam4", "blat1c", "17915", "0", "1");' \
+	VALUES ("canFam4", "blat1b", "17905", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
-## reset default position similar to gorGor5 found via blat of NR_046473.1 mRNA
-##  (TBD - 2019-11-20 - Hiram)
+## reset default position similar to canFam3 found via blat
+##	of NM_001003070.1 mRNA
+##  (DONE - 2020-04-02 - Hiram)
 
-    # as found from the galGal5 to canFam4 liftOver
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr14:81559118-81601404"
+    hgsql -e 'update dbDb set defaultPos="chr14:7969766-7997673"
 	where name="canFam4";' hgcentraltest
 
 ##############################################################################
-# crispr whole genome (TBD - 2019-11-20 - Hiram)
+# crispr whole genome (DONE - 2020-04-09 - Hiram)
     mkdir /hive/data/genomes/canFam4/bed/crisprAll
     cd /hive/data/genomes/canFam4/bed/crisprAll
 
     # the large shoulder argument will cause the entire genome to be scanned
     # this takes a while for a new genome to get the bwa indexing done
     time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 -stop=ranges \
-    canFam4 ncbiRefSeq -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+    canFam4 genscan -shoulder=250000000 -tableName=crisprAll \
+    -fileServer=hgwdev \
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev) > ranges.log 2>&1
-    # real    72m58.740s
+    # real    1m16.539s
 
     time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
-       -continue=guides -stop=specScores canFam4 ncbiRefSeq \
+       -continue=guides -stop=specScores canFam4 genscan \
 	-shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev) > specScores.log 2>&1
-    # real    8m40.172s
+    # real    6558m26.295s
 
     cat guides/run.time | sed -e 's/^/# /;'
 # Completed: 100 of 100 jobs
-# CPU time in finished jobs:      12309s     205.15m     3.42h    0.14d  0.000 y
-# IO & Wait Time:                   290s       4.83m     0.08h    0.00d  0.000 y
-# Average job time:                 126s       2.10m     0.03h    0.00d
-# Longest finished job:             380s       6.33m     0.11h    0.00d
-# Submission to last job:           386s       6.43m     0.11h    0.00d
+# CPU time in finished jobs:      11979s     199.66m     3.33h    0.14d  0.000 y
+# IO & Wait Time:                   251s       4.18m     0.07h    0.00d  0.000 y
+# Average job time:                 122s       2.04m     0.03h    0.00d
+# Longest finished job:             289s       4.82m     0.08h    0.00d
+# Submission to last job:           303s       5.05m     0.08h    0.00d
 
     cat specScores/run.time | sed -e 's/^/# /;'
-# Completed: 3041114 of 3041114 jobs
-# CPU time in finished jobs:  282305886s 4705098.10m 78418.30h 3267.43d  8.952 y
-# IO & Wait Time:              84009113s 1400151.88m 23335.86h  972.33d  2.664 y
-# Average job time:                 120s       2.01m     0.03h    0.00d
-# Longest finished job:             498s       8.30m     0.14h    0.01d
-# Submission to last job:        381920s    6365.33m   106.09h    4.42d
+# Completed: 3096565 of 3096565 jobs
+# CPU time in finished jobs:  263946983s 4399116.38m 73318.61h 3054.94d  8.370 y
+# IO & Wait Time:              17766691s  296111.52m  4935.19h  205.63d  0.563 y
+# Average job time:                  91s       1.52m     0.03h    0.00d
+# Longest finished job:             851s      14.18m     0.24h    0.01d
+# Submission to last job:        324649s    5410.82m    90.18h    3.76d
 
-Submission to last job:        274925s    4582.08m    76.37h    3.18d
-
-# Number of specScores: 227564780
-
-# real    7482m37.507s
-# user    0m2.047s
-# sys     0m2.110s
+# # Number of specScores: 233102255
 
     ### remember to get back to hgwdev to run this
     time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
-       -continue=effScores -stop=load canFam4 ncbiRefSeq \
+       -continue=effScores -stop=load canFam4 genscan \
     -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev) > load.log 2>&1
-    # real    1081m16.460s
+    #  real    932m13.229s
 
     cat effScores/run.time | sed -e 's/^/# /;'
-# Completed: 27933 of 27933 jobs
-# CPU time in finished jobs:   13825593s  230426.55m  3840.44h  160.02d  0.438 y
-# IO & Wait Time:                172582s    2876.37m    47.94h    2.00d  0.005 y
-# Average job time:                 501s       8.35m     0.14h    0.01d
-# Longest finished job:           20199s     336.65m     5.61h    0.23d
-# Submission to last job:         22274s     371.23m     6.19h    0.26d
+# Completed: 25662 of 25662 jobs
+# CPU time in finished jobs:   12763858s  212730.96m  3545.52h  147.73d  0.405 y
+# IO & Wait Time:                144123s    2402.05m    40.03h    1.67d  0.005 y
+# Average job time:                 503s       8.38m     0.14h    0.01d
+# Longest finished job:            4091s      68.18m     1.14h    0.05d
+# Submission to last job:         15067s     251.12m     4.19h    0.17d
 
     cat offTargets/run.time | sed -e 's/^/# /;'
-# Completed: 152056 of 152056 jobs
-# CPU time in finished jobs:    2009038s   33483.97m   558.07h   23.25d  0.064 y
-# IO & Wait Time:               2321685s   38694.75m   644.91h   26.87d  0.074 y
-# Average job time:                  28s       0.47m     0.01h    0.00d
-# Longest finished job:              53s       0.88m     0.01h    0.00d
-# Submission to last job:          4266s      71.10m     1.19h    0.05d
+# Completed: 154829 of 154829 jobs
+# CPU time in finished jobs:    1805712s   30095.20m   501.59h   20.90d  0.057 y
+# IO & Wait Time:               3128264s   52137.73m   868.96h   36.21d  0.099 y
+# Average job time:                  32s       0.53m     0.01h    0.00d
+# Longest finished job:             273s       4.55m     0.08h    0.00d
+# Submission to last job:          5337s      88.95m     1.48h    0.06d
 
 #########################################################################
 # all.joiner update, downloads and in pushQ - (WORKING - 2019-11-20 - Hiram)
@@ -1041,20 +1007,20 @@ Submission to last job:        274925s    4582.08m    76.37h    3.18d
     # verify all the business is done for release
     ~/kent/src/hg/utils/automation/verifyBrowser.pl canFam4
 
+XXX - wait for genbank to be loaded
     # fixup all.joiner until this is a clean output
     joinerCheck -database=canFam4 -tableCoverage all.joiner
     joinerCheck -database=canFam4 -times all.joiner
     joinerCheck -database=canFam4 -keys all.joiner
 
     # when clean, check in:
-    git commit -m 'adding rules for canFam4 refs #24524' all.joiner
+    git commit -m 'adding rules for canFam4 refs #25279' all.joiner
     git push
     # run up a 'make alpha' in hg/hgTables to get this all.joiner file
     # into the hgwdev/genome-test system
 
     cd /hive/data/genomes/canFam4
     time (makeDownloads.pl canFam4) > downloads.log 2>&1
-XXX - running - Wed Nov 27 15:54:09 PST 2019
     #  real    17m47.024s
 
     #   now ready for pushQ entry
