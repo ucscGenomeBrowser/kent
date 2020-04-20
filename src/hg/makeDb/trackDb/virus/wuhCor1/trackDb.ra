@@ -106,9 +106,11 @@ longLabel Protein Data Bank (PDB) Sequence Matches
 group genes
 type bigBed 12
 visibility hide
-url https://www.rcsb.org/structure/$$
+#$url https://www.rcsb.org/structure/$$
+url https://www.ebi.ac.uk/pdbe/pdbe-kb/covid19/$$
 urlLabel link to PDB
-iframeUrl https://www.rcsb.org/structure/$$
+#iframeUrl https://www.rcsb.org/structure/$$
+iframeUrl https://www.ebi.ac.uk/pdbe/pdbe-kb/covid19/$$
 iframeOptions width='1000' height='800' scrolling='yes'
 bigDataUrl /gbdb/wuhCor1/bbi/pdb.bb
 exonNumbers off
