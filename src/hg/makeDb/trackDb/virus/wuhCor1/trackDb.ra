@@ -111,6 +111,21 @@ priority 40
 useScore on
 scoreMax 700
 
+track poranHla1
+shortLabel Poran HLA I
+longLabel RECON HLA-I epitopes
+visibility hide
+type bigBed 9 +
+group immu
+bigDataUrl /gbdb/wuhCor1/bbi/poranHla/CD8-hla1.bb
+
+track poranHla2
+shortLabel Poran HLA II
+longLabel RECON HLA-II epitopes
+visibility hide
+group immu
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/bbi/poranHla/CD8-hla2.bb
 
 include trackDb.119way.ra
 include epitopes.ra
