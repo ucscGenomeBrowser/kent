@@ -12,7 +12,7 @@ noScoreFilter on
 
     track clinvarMain
     shortLabel ClinVar Short Variants
-    longLabel ClinVar Short Variants <= 100bp
+    longLabel ClinVar Short Variants < 50bp
     visibility pack
     parent clinvar
     priority 1
@@ -31,7 +31,7 @@ noScoreFilter on
 
     track clinvarCnv
     shortLabel ClinVar Long Variants
-    longLabel ClinVar Long Variants > 100bp (mostly Copy-Number Variants)
+    longLabel ClinVar Long Variants >= 50bp (mostly Copy-Number Variants)
     visibility pack
     type bigBed 12 +
     parent clinvar

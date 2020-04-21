@@ -3649,7 +3649,7 @@ tableBrowser off lovdComp
 html lovdComp
 
         track lovdShort
-        shortLabel LOVD Variants <= 100bp
+        shortLabel LOVD Variants < 50bp
         longLabel Leiden Open Variation Database, short <=100bp variants
         group phenDis
         visibility hide
@@ -3660,7 +3660,7 @@ html lovdComp
         parent lovdComp
 
         track lovdLong
-        shortLabel LOVD Variants > 100bp
+        shortLabel LOVD Variants >= 50bp
         longLabel Leiden Open Variation Database Public Variants, long >100bp variants
         group phenDis
         visibility hide
