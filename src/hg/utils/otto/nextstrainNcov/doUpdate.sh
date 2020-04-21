@@ -47,7 +47,7 @@ for clade in A1a A2 A2a A3 A6 A7 B B1 B2 B4; do
   tabix -p vcf nextstrainSamples$clade.vcf.gz
 done
 
-# bigBed-ify the gene names and "clades"
+# bigBed-ify the gene names, "clades" and discarded/blacklisted/informative tracks for David
 bedToBigBed -type=bed4 -tab -verbose=0 nextstrainGene.bed $chromSizes \
     nextstrainGene.bb
 
@@ -56,6 +56,29 @@ bedToBigBed -as=$ottoDir/nextstrainClade.as -type=bed12+7 -tab -verbose=0 \
     nextstrainClade.sorted.bed $chromSizes \
     nextstrainClade.bb
 
+bedToBigBed -type=bed4 -tab -verbose=0 nextstrainDiscarded.bed $chromSizes \
+    nextstrainDiscarded.bb
+
+bedToBigBed -type=bed4 -tab -verbose=0 nextstrainBlacklisted.bed $chromSizes \
+    nextstrainBlacklisted.bb
+
+bedToBigBed -type=bed4 -tab -verbose=0 nextstrainInformative.bed $chromSizes \
+    nextstrainInformative.bb
+
+# bigWig for the tree parsimony scores track for David
+bedGraphToBigWig nextstrainParsimony.bedGraph $chromSizes nextstrainParsimony.bw
+
+# Install
+ln -sf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
+    $runDir/nextstrainSamples*.vcf.gz{,.tbi} \
+    $runDir/nextstrain*.nh \
+    $gbdbDir/
+
+# Install but don't archive (for now) the experimental tracks for David.
+ln -sf $runDir/nextstrain{Discarded,Blacklisted,Informative}.bb \
+    $runDir/nextstrainParsimony.bw \
+    $gbdbDir/
+
 # Archive
 mkdir -p $ottoDir/archive/$today
 cp -pf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
@@ -63,11 +86,5 @@ cp -pf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
     $runDir/nextstrain*.nh \
     $runDir/ncov.json \
     $ottoDir/archive/$today
-
-# Install
-ln -sf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
-    $runDir/nextstrainSamples*.vcf.gz{,.tbi} \
-    $runDir/nextstrain*.nh \
-    $gbdbDir/
 
 echo "Updated nextstrain/ncov `date` (ncov.json date $latestDate)"
