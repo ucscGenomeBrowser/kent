@@ -1,56 +1,46 @@
 <h2>Description</h2>
 <p>
-The gnomAD tracks show variants from 123,136 exomes and 15,496 whole genomes of unrelated individuals
-sequenced as part of various population-genetic and disease-specific <a target="_blank"
+The tracks that are listed here contain data from unrelated individuals sequenced as part of
+various population-genetic and disease-specific <a target="_blank"
 href="https://gnomad.broadinstitute.org/about">studies</a> collected by the <a target="_blank"
-href="https://gnomad.broadinstitute.org/">Genome Aggregation Database (gnomAD)</a>, release 2.0.2.
-Raw data from all studies have been reprocessed through a unified pipeline and jointly
-variant-called to increase consistency across projects. For more information on the processing
-pipeline and population annotations, see the following <a target="_blank"
-href="https://macarthurlab.org/2017/02/27/the-genome-aggregation-database-gnomad">blog post</a>
+href="https://gnomad.broadinstitute.org/">Genome Aggregation Database (gnomAD)</a>.
+Individuals affected by severe pediatric diseases and first-degree relatives were excluded from the
+studies. However, some individuals with severe disease may still have remained in the datasets,
+although probably at an equivalent or lower frequency than observed in the general population. Raw
+data from all studies have been reprocessed using a standardized pipeline and jointly variant-called
+process, which aims to increase consistency between projects. For more information on the processing
+pipeline and population annotations, see the following blog post <a target="_blank"
+href="https://macarthurlab.org/2017/02/27/the-genome-aggregation-database-gnomad">gnomAD</a>,
+ <a target="_blank"href="https://macarthurlab.org/2018/10/17/gnomad-v2-1">gnomAD v2.1</a> 
 and the 2.0.2 <a href="https://storage.googleapis.com/gnomad-public/release/2.0.2/README.txt"
 target="_blank">README</a>.</p>
 
-<h2>Display Conventions</h2>
-<dl>
-  <dt>For the <strong>Coverage</strong> subtracks:</dt>
-  <dd><li>The <strong>Average Sample Coverage</strong> graphs display the mean and median read depth of the samples
-    at each position.</li>
-  <li>The <strong>nX Coverage Percentage</strong> graphs display the percentage of samples whose read
-    depth is at least 1X, 5X, 10X, 15X, 20X, 25X, 30X, 50X, and 100X.</li></dd>
-<br>
-  <dt>For the <strong>Variants</strong> subtracks:</dt>
-  <dd><li>In <button type="button">dense</button> mode, a vertical line is drawn at the position of
-    each variant.</li>
-  <li>In <button type="button">pack</button> mode, &quot;ref&quot; and &quot;alt&quot; alleles are
-    displayed to the left of a vertical line with colored portions corresponding to allele counts.
-    Hovering the mouse pointer over a variant pops up a display of alleles and counts.</li></dd>
-</dl>
+<p>
+The <strong>Genome and Exome Variants</strong> (gnomAD Variants) track set shows single nucleotide
+variants (SNVs) and small insertion/deletion variants of &lt;50 nucleotides (indels) of unrelated
+individuals from the v2.0.2 release. The <strong>Genome and Exome Sample Coverage</strong> (gnomAD
+Coverage) track set shows various read depth variant metrics calculated separately for exomes and
+genomes on a ~10% subset of the v2.0.2 samples. The <strong>Structural Variants (SV)</strong>
+(gnomAD Structural Variants) track set shows structural variants calls (variants &gt;=50 nucleotides)
+from the gnomAD v2.1 release on 10,847 unrelated genomes. The <strong>Predicted Constraint Metrics</strong> (gnomAD Constraint Metrics) track set contains metrics of pathogenicity per-gene as predicted for
+gnomAD v2.1.1.
+</p>
 
 <p>
-The details for variants include extensive <em>tag=value</em> annotations extracted from the
-INFO column of gnomAD VCF files, listed under the label "INFO column annotations".
-The tags beginning with <strong>GC</strong> list genotype counts in an order that is
-fairly intuitive when a variant has two alleles:
-homozygous reference, heterozygous, homozygous alternate.
-However, when there are multiple alternate alleles, the number of combinations increases
-and the order of genotypes listed is a bit more complicated.  If the alternate alleles
-are named alt1, alt2, alt3, ... altN, then the order of genotype counts follows this pattern:
-</p><p>
-  ref/ref,
-  <br>
-  ref/alt1, alt1/alt1,
-  <br>
-  ref/alt2, alt1/alt2, alt2/alt2,
-  <br>
-  ref/alt3, alt1/alt3, alt2/alt3, alt3/alt3,
-  <br>
-  ...
-  <br>
-  ref/altN, alt1/altN, alt2/altN, alt3/altN, ..., altN/altN
+For additional information please click on the hyperlink of the respective track above.
 </p>
-<h2>Data Access</h2>
 
+<h2>Display Conventions</h2>
+<p>
+These tracks are multi-view composite tracks that contain multiple data types (views). Each view
+within a track has separate display controls, as described <a target="_blank"
+href="https://genome.ucsc.edu/goldenPath/help/multiView.html">here</a>. Most gnomAD tracks contain
+multiple subtracks, corresponding to subsets of data. If a track contains many subtracks, only some
+subracks will be displayed by default. The user can select which subtracks are displayed via the
+display controls on the track details page.
+</p> 
+
+<h2>Data Acces</h2>
 <p>
 The raw data can be explored interactively with the <a target="_blank" href="../cgi-bin/hgTables">
 Table Browser</a>, or the <a target="_blank" href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
@@ -80,7 +70,7 @@ href="https://opendatacommons.org/licenses/odbl/1.0/" target="_blank">ODC Open D
 
 <p>
 Lek M, Karczewski KJ, Minikel EV, Samocha KE, Banks E, Fennell T, O'Donnell-Luria AH, Ware JS, Hill
-AJ, Cummings BB <em>et al</em>.
+AJ, Cummings BB, <em>et al</em>.
 <a href="https://www.nature.com/articles/nature19057" target="_blank">Analysis of protein-coding
 genetic variation in 60,706 humans</a>. <em>Nature</em>. 2016 Aug 17;536(7616):285-91.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>;
