@@ -62,7 +62,7 @@ are named alt1, alt2, alt3, ... altN, then the order of genotype counts follows 
 For the variant Quality Control (QC) process, a combination of a random forest classifier and hard
 filters, described below, were used. Filters above can be used to exclude variant sets that failed
 <b>Random Forest</b> (RF), <b>Inbreeding Coefficient</b> (InbreedingCoeff) and/or <b>Allele Count</b>
-(AC) filters, or <b>passed all</b> (PASS) filters. As variant QC was performed on exomes and genomes
+(AC0) filters, or <b>passed all</b> (PASS) filters. As variant QC was performed on exomes and genomes
 separately but using the same pipeline, some variants have 2 filter statuses which may be discordant
 in some cases. There are 144,941 variants filtered out in exomes, but passing filters in genomes and
 290,254 variants for the reverse. Users should just treat them with caution.
@@ -77,15 +77,16 @@ for SNVs and singleton insertion for indels.
 </p>
 
 <p>
-For exomes, a RF probability of  &gt;= 0.1 for SNVs and &gt;= 0.1 for indels was used for the
+For exomes, a RF probability of  &gt;= 0.1 for SNVs and &gt;= 0.2 for indels was used for the
 filtration process. For genomes, a RF probability &gt;= 0.4 for both, SNVs and indels, was used.
 </p>
 
 <p>
 In addition to the random forests filter, all variants falling in low complexity (LCR filter) and
-segmental duplication (SEGDUP filter) regions, variants with low Inbreeding coefficient (&lt; -0.3;
-InbreedingCoeff filter), and all variants where no individual had a high quality non-reference
-genotype (GQ &gt;= 20, DP &gt;= 10, AB &gt; 0.2 for heterozygotes; AC0 filter) were also filtered
+segmental duplication (SEGDUP filter) regions, variants with low Inbreeding coefficient (Excess
+heterozygotes defined by an inbreeding coefficient &lt; -0.3), and all variants where no individual
+had a high quality non-reference genotype (Genotype Quality (GQ) &gt;= 20, depth (DP) &gt;= 10,
+and minor alelle balance (AB) &gt; 0.2 for heterozygotes) were also filtered
 out.
 </p>
 
