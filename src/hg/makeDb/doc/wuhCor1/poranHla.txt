@@ -1,0 +1,9 @@
+Fri Apr 17 07:35:53 PDT 2020 Max
+
+Data copied with wget https://github.com/snerligit/gb
+This file:
+https://github.com/snerligit/gb/tree/master/PoranHLAI
+and this file
+https://github.com/snerligit/gb/tree/master/PoranHLAII
+
+Commit was 464f225

@@ -18522,3 +18522,137 @@ wc -l clinvarLift.mm10.bed
     # if pushing public: add ticket and MARK QA READY
 
 ##############################################################################
+# LASTZ Southern sea otter enhLutNer1 (DONE - 2020-04-16 - Jonathan)
+    #	establish a screen to control this job
+    mkdir /hive/data/genomes/mm10/bed/lastzEnhLutNer1.2020-04-15
+    cd /hive/data/genomes/mm10/bed/lastzEnhLutNer1.2020-04-15
+
+    printf '# Southern sea otter vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Southern sea otter enhLutNer1
+SEQ2_DIR=/hive/data/genomes/enhLutNer1/enhLutNer1.2bit
+SEQ2_LEN=/hive/data/genomes/enhLutNer1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=180
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzEnhLutNer1.2020-04-15
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-noDbNameCheck -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #	real    140m43.505s
+
+    cat fb.mm10.chainEnhLutNer1Link.txt
+    #   772059271 bases of 2652783500 (29.104%) in intersection
+    cat fb.mm10.chainSynEnhLutNer1Link.txt
+    #   717097454 bases of 2652783500 (27.032%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm10 enhLutNer1 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    #	real    174m28.167s
+
+    cat fb.mm10.chainRBest.EnhLutNer1.txt
+    # 734878489 bases of 2652783500 (27.702%) in intersection
+
+    mkdir /hive/data/genomes/enhLutNer1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/enhLutNer1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzEnhLutNer1.2020-04-15/DEF \
+	-noDbNameCheck -swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    48m44.604s
+
+    cat fb.enhLutNer1.chainMm10Link.txt
+    #   787727864 bases of 2413653822 (32.636%) in intersection
+    cat fb.enhLutNer1.chainSynMm10Link.txt
+    #   712950571 bases of 2413653822 (29.538%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev enhLutNer1 mm10 \
+      -buildDir=`pwd`) > rbest.log 2>&1 &
+    # real    167m45.490s
+
+    cat fb.enhLutNer1.chainRBest.Mm10.txt
+    # 734620004 bases of 2413653822 (30.436%) in intersection
+
+##############################################################################
+# LASTZ German shepard canFam4 (DONE - 2020-04-02 - Hiram)
+    #	establish a screen to control this job
+    mkdir /hive/data/genomes/mm10/bed/lastzCanFam4.2020-04-02
+    cd /hive/data/genomes/mm10/bed/lastzCanFam4.2020-04-02
+
+    printf '# German shepard canFam4 vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: German shepard canFam4
+SEQ2_DIR=/hive/data/genomes/canFam4/canFam4.2bit
+SEQ2_LEN=/hive/data/genomes/canFam4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzCanFam4.2020-04-02
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #	real    483m10.607s
+
+    cat fb.mm10.chainCanFam4Link.txt
+    #	777883731 bases of 2652783500 (29.323%) in intersection
+    cat fb.mm10.chainSynCanFam4Link.txt
+    #   736602602 bases of 2652783500 (27.767%) in intersection
+
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm10 canFam4 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    #	real    219m16.168s
+
+    cat fb.mm10.chainRBest.CanFam4.txt
+    # 741307883 bases of 2652783500 (27.945%) in intersection
+
+    mkdir /hive/data/genomes/canFam4/bed/blastz.mm10.swap
+    cd /hive/data/genomes/canFam4/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCanFam4.2020-04-02/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    50m20.639s
+
+    cat fb.canFam4.chainMm10Link.txt
+    #	772902855 bases of 2481941580 (31.141%) in intersection
+    cat fb.canFam4.chainSynMm10Link.txt
+    #   737924732 bases of 2481941580 (29.732%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev canFam4 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    173m38.016s
+
+    cat fb.canFam4.chainRBest.Mm10.txt
+    # 740357755 bases of 2481941580 (29.830%) in intersection
+
+##############################################################################

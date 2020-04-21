@@ -18,9 +18,9 @@ searchPriority 8
 
 include ncbiGeneBGP.ra
 
-track rnaStructTrial
-shortLabel RNA Struct trial
-longLabel My fun test of RNA structure
+track rnaStructRangan
+shortLabel Rangan RNA
+longLabel Rangan et al. RNA predictions
 group genes
 visibility hide
 color 20,90,0
@@ -60,7 +60,7 @@ group genes
 type psl
 
 track rosettaMhc
-shortLabel Rosetta Predictions
+shortLabel CD8 RosettaMHC
 longLabel CD8 Epitopes predicted by NetMHC and Rosetta
 url     https://rosettamhc.chemistry.ucsc.edu/?epitope=$$
 urls name="https://rosettamhc.chemistry.ucsc.edu/?epitope=$$"
@@ -76,14 +76,29 @@ group immu
 type bigBed 4 +
 bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
 
+# the RR version of the track, with the filters
 track publicAnnots
+release beta,public
 shortLabel User annotations
 longLabel User-contributed annotations via bit.ly/cov2annots
 group map
+priority 4
 type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/bbi/public.bb
-#urls extraField1=$$
 mouseOverField extraField0
+
+#
+track publicAnnots
+release alpha
+shortLabel User annotations
+longLabel User-contributed annotations via bit.ly/cov2annots
+group map
+priority 6
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/bbi/public.bb
+mouseOverField extraField0
+filterValues.extraField0 genes,evolution,RNA,antibodies,CRISPR,primers,proteins 
+filterType.extraField0 singleList
 
 track pdb
 shortLabel PDB Structures
@@ -91,9 +106,11 @@ longLabel Protein Data Bank (PDB) Sequence Matches
 group genes
 type bigBed 12
 visibility hide
-url https://www.rcsb.org/structure/$$
+#$url https://www.rcsb.org/structure/$$
+url https://www.ebi.ac.uk/pdbe/pdbe-kb/covid19/$$
 urlLabel link to PDB
-iframeUrl https://www.rcsb.org/structure/$$
+#iframeUrl https://www.rcsb.org/structure/$$
+iframeUrl https://www.ebi.ac.uk/pdbe/pdbe-kb/covid19/$$
 iframeOptions width='1000' height='800' scrolling='yes'
 bigDataUrl /gbdb/wuhCor1/bbi/pdb.bb
 exonNumbers off
@@ -111,6 +128,21 @@ priority 40
 useScore on
 scoreMax 700
 
+track poranHla1
+shortLabel Poran HLA I
+longLabel RECON HLA-I epitopes
+visibility hide
+type bigBed 9 +
+group immu
+bigDataUrl /gbdb/wuhCor1/bbi/poranHla/CD8-hla1.bb
+
+track poranHla2
+shortLabel Poran HLA II
+longLabel RECON HLA-II epitopes
+visibility hide
+group immu
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/bbi/poranHla/CD8-hla2.bb
 
 include trackDb.119way.ra
 include epitopes.ra
