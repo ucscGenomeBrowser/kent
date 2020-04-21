@@ -14,6 +14,10 @@ dbToUrl = {
     "Orphanet" : "http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=EN&Expert=%s"
 }
 
+# since we're filtering on it, we make sure that we have all molecular consequences in the tdb file
+# if they add a new one, this script must fail and tdb must be updated.
+possMolConseqs = set(["genic downstream transcript variant","no sequence alteration","inframe indel","stop lost","genic upstream transcript variant","initiatior codon variant","inframe insertion","inframe deletion","","splice acceptor variant","splice donor variant","5 prime UTR variant","nonsense","non-coding transcript variant","3 prime UTR variant","frameshift variant","intron variant","synonymous variant","missense variant", ""])
+
 # === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
 parser = optparse.OptionParser("""usage: %prog [options] summaryFname varAllFname hgvsFname - check and convert the three main clinVar tab-sep files to four bed files, split into CNV and shorter mutations, for both hg19 and hg38 and convert all to bigBed
 
@@ -94,7 +98,86 @@ def shortenName(name):
 
     return shortName, longName
 
-def clinSignToPathoCode(pathoStr):
+def allTypeToCode(allType):
+    """
+    Map the allele type field from ClinVal to one of these classes for filtering:
+        SNV = single nucleotide variant
+        INS = insertion
+        DEL = deletion
+        INDEL = indel
+        DUPL = duplication
+        OTH = other
+
+    In 3/2020, these were all possible values:
+
+        fusion  6       0.000%
+        complex 61      0.005%
+        protein only    103     0.008%
+        NT expansion    142     0.011%
+        Translocation   302     0.022%
+        inversion       583     0.043%
+        undetermined variant    866     0.064%
+        insertion       7133    0.530%
+        indel   8490    0.630%
+        short repeat    18778   1.394%
+        duplication     34148   2.535%
+        copy number loss        40441   3.002%
+        copy number gain        40671   3.019%
+        deletion        77325   5.740%
+        single nucleotide variant       1118033 82.997%
+
+    """
+    if allType=="single nucleotide variant":
+        return "SNV"
+    elif allType in ["deletion", "copy number loss"]:
+        return "DEL"
+    elif allType in ["duplication", "copy number gain", "tandem duplication"]:
+        return "DUPL"
+    elif allType=="indel":
+        return "INDEL"
+    elif allType in ["insertion", "NT expansion", "short repeat"]:
+        return "INS"
+    elif allType in ["Translocation", "fusion", "complex", "protein only", "inversion", "undetermined variant"]:
+        return "OTH"
+    else:
+        print("found unknown allele type: "+allType)
+        assert(False) # found new allele type in ClinVar table : code needs fixing
+
+def originSimpleToCode(originSimple):
+    """
+    for filtering, group the simplified origins into simpler origin codes:
+    return one of these values:
+        "GERM" = germline
+        "SOM" = somatic
+        "GERMSOM" = germline/somatic
+        "NOVO" = de novo
+        "UNK" = unknown
+
+    as of 3/2020, these are the values in originSimple and how often they appear:
+
+    tested-inconclusive     91      0.007%
+    not applicable  193     0.014%
+    germline/somatic        1808    0.134%
+    somatic 7929    0.589%
+    not provided    53173   3.947%
+    unknown 72601   5.389%
+    germline        1211288 89.919%
+    """
+    if originSimple=="germline":
+        return "GERM"
+    elif originSimple=="germline/somatic":
+        return "GERMSOM"
+    elif originSimple in ["not applicable", "not provided", "unknown", "tested-inconclusive"]:
+        return "UNK"
+    elif originSimple in ["not applicable", "not provided", "unknown"]:
+        return "UNK"
+    elif originSimple in ["somatic"]:
+        return "SOM"
+    else:
+        print("found new origin string: "+originSimple)
+        assert(False) # Clinvar has added a new origin string
+
+def clinSignToCode(pathoStr):
     """ there are hundreds of possible pathogenicity descriptions. flatten into one of seven codes:
     - benign = BN
     likely benign = LB
@@ -170,8 +253,8 @@ def compareWithLastMonth(fname, maxDiff):
         print(("Cannot find %s, cannot compare new data with previous month" % previousFname))
         return
         
-    previousCount = sum(1 for line in open(previousFname))
-    todayCount = sum(1 for line in open(fname))
+    previousCount = sum(1 for line in open(previousFname, encoding="utf8"))
+    todayCount = sum(1 for line in open(fname, encoding="utf8"))
     percDiff = (todayCount-previousCount)/float(todayCount)
 
     if percDiff < 0 and maxDiff:
@@ -329,17 +412,26 @@ def downloadFromNcbi(skipDownload):
     today = date.today().isoformat()
     outSuffix = "%s." % today
 
-    url = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz"
+    baseUrl = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/"
+    url = baseUrl+"variant_summary.txt.gz"
     outFname = "archive/variant_summary.%s.txt.gz" % today
     filename = outFname
 
     # get the new variant allele file
-    varUrl = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variation_allele.txt.gz"
+    varUrl = baseUrl+"variation_allele.txt.gz"
     varFname = join(dirname(filename), "variation_allele.%s.txt.gz" % today)
 
     # get the new hgvs allele file
-    hgvsUrl = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/hgvs4variation.txt.gz"
+    hgvsUrl = baseUrl+"hgvs4variation.txt.gz"
     hgvsFname = join(dirname(filename), "hgvs4variation.%s.txt.gz" % today)
+
+    # get the new VCF file
+    vcfUrl = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz"
+    vcfFname = join(dirname(filename), "GRCh38.clinvar.%s.vcf.gz" % today)
+
+    if not (isfile(vcfFname)):
+        logging.info("Downlading %s to %s" % (vcfUrl, vcfFname))
+        open(vcfFname, "wb").write(urllib.request.urlopen(vcfUrl).read())
 
     if not (skipDownload and isfile(outFname) and isfile(varFname) and isfile(hgvsFname)):
         logging.info("Downlading %s to %s" % (url, outFname))
@@ -348,7 +440,38 @@ def downloadFromNcbi(skipDownload):
         open(hgvsFname, "wb").write(urllib.request.urlopen(hgvsUrl).read())
         logging.info("Downlading %s to %s" % (varUrl, varFname))
         open(varFname, "wb").write(urllib.request.urlopen(varUrl).read())
-    return filename, varFname, hgvsFname
+
+    return filename, varFname, hgvsFname, vcfFname
+
+def parseVcf(vcfFname):
+    " parse VCF and return as dict alleleId -> (molConseq) "
+    logging.info("Parsing %s" % vcfFname)
+    ret = {}
+    for line in gzip.open(vcfFname, "rt"):
+        # #CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO
+        #1       930248  789256  G       A       .       .       ALLELEID=707587;CLNDISDB=MedGen:CN517202;CLNDN=not_provided;CLNHGVS=
+        if line.startswith("#"):
+            continue
+        chrom, start, end, ref, alt, qual, filter, info = line.rstrip("\n").split("\t")
+        infoParts = info.split(";")
+
+        alleleId = None
+        mc = None
+        for info in infoParts:
+            key, val = info.split("=")
+            if key=="ALLELEID":
+                alleleId = val
+            elif key=="MC":
+                mc = val.split("|")[1].split(",")[0].replace("_", " ")
+                if not mc in possMolConseqs:
+                    print("molecular consequence '%s' in VCF file is not known and so not in trackDb file. ",
+                            "Please update otto script %s" % (mc, __file__))
+                    sys.exit(1)
+
+        if mc and alleleId:
+            ret[int(alleleId)] = mc
+
+    return ret
 
 # ----------- MAIN --------------
 if args==[] and not options.auto:
@@ -358,13 +481,15 @@ if args==[] and not options.auto:
 outSuffix = ""
 
 if options.auto:
-    filename, varFName, hgvsFname = downloadFromNcbi(options.skipDownload)
+    filename, varFName, hgvsFname, vcfFname = downloadFromNcbi(options.skipDownload)
 else:
     filename = args[0]
     varFname = args[1]
     hgvsFname = args[2]
+    vcfFname = args[3]
 
 #allToVar = parseVariationAlleleFile(varFname) # the alleles are now in the hgvs file after a Clinvar change
+allToVcf = parseVcf(vcfFname)
 allToHgvs = parseHgvsFile(hgvsFname)
 
 # e.g. GRCh38/hg38 1p36.33-36.31(chr1:1181847-5507243)x1
@@ -400,6 +525,7 @@ hg38BedCnv = open("archive/clinvarCnv.hg38.%sbed" % outSuffix, "w", encoding="la
 
 longCount = 0
 noAssCount = 0
+noMcCount = 0
 
 # convert lines
 for line in ifh:
@@ -419,6 +545,12 @@ for line in ifh:
         logging.warn("empty variantID for alleleId %s, %s" % (alleleId, irvcAcc))
 
     hgvsCod, hgvsProt =  allToHgvs.get(alleleId, ("", ""))
+
+    molConseq = allToVcf.get(int(alleleId))
+    if molConseq is None:
+        logging.debug("%s has no molConseq" % alleleId)
+        noMcCount += 1
+        molConseq = ""
 
     if chrom=="" or assembly=="" or assembly=="NCBI36":
         noAssCount += 1
@@ -479,21 +611,25 @@ for line in ifh:
     else:
         isCnv = False
 
-    pathoCode = clinSignToPathoCode(clinSign)
+    pathoCode = clinSignToCode(clinSign)
+    originCode = originSimpleToCode(originSimple)
+    allTypeCode = allTypeToCode(allType)
 
     if isCnv:
-        if "gain" in allType or "duplication" in allType:
+        if "gain" in allType or "duplication" in allType or "insertion" in allType:
             itemRgb = "0,0,255"
         if "deletion" in allType or "loss" in allType:
             itemRgb = "255,0,0"
     else:
         if pathoCode in ["PG", "LP"]: # pathogenic or likely pathogenic
-            itemRgb = "210,0,0"
+            itemRgb = "210,0,0" # red
         elif pathoCode in ["BN", "LB"]: # benign or likely benign
-            itemRgb = "0,210,0"
+            itemRgb = "0,210,0" # green
+        elif pathoCode in ["UC"]: # uncertain
+            itemRgb = "0,0,128" # dark-blue
         elif pathoCode in ["CF"]: # conflicting
             itemRgb = "137,121,212" # light-blue
-        elif pathoCode in ["OT", "UC"]: # uncertain or other
+        elif pathoCode in ["OT"]: # other
             itemRgb = "128,128,128" # grey
         else:
             assert(False)# should never happen
@@ -506,13 +642,19 @@ for line in ifh:
     if len(geneStr)>250:
         geneStr = "not shown, too many genes"
 
+    mouseOverName = name
+
     if name=="":
         name = "No display name was provided by ClinVar for this variant"
         shortName = "NoName"
+        mouseOverName = ""
 
     if len(name)>90:
         name = name[:90]+"..."
     name = varId+"|"+name
+
+    if len(mouseOverName)>80:
+        mouseOverName = mouseOverName[:80]+"..."
 
     if len(hgvsProt) > 90:
         hgvsProt = hgvsProt[:90]+"..."
@@ -525,14 +667,18 @@ for line in ifh:
 
     starRatingHtml, asciiStars, starCount = reviewStatusToHtmlStars(reviewStatus)
 
-    mouseOverParts = [longName, clinSign, asciiStars, "Phenotypes: "+phenotypeList, "Origin: "+origin, numberSubmitters+" submitters"]
+    mouseOverParts = [mouseOverName, "Type: "+allType, "Consequence: "+ molConseq, "Significance: "+clinSign,
+            "Origin: "+origin, "Phenotypes: "+phenotypeList]
+    # removed Apr 2020: numberSubmitters+" submitters", "Level: "+asciiStars
     mouseOver = ", ".join(mouseOverParts)
 
     row = [chrom, start, end, shortName, str(starCount), strand, thickStart, thickEnd, itemRgb, \
         blockCount, blockSizes, blockStarts,
-        name, clinSign, starRatingHtml, allType, geneStr,
+        name, clinSign, starRatingHtml, allType, geneStr, molConseq,
         snpAcc, dbVarAcc, irvcAcc, inGtr, phenotypeList, phenotypeIds, origin, assembly, cytogenetic,
-        hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds, mouseOver, pathoCode, str(varLen)]
+        hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds, mouseOver,
+        # these fields are the for the filters, not for the display
+        pathoCode, originCode, allTypeCode, str(varLen), str(starCount)]
 
     # replace clinvar's placeholders with real empty fields
     newRow = []
