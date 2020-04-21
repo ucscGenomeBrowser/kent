@@ -15,7 +15,7 @@ html gnomad
     configureByPopup off
     visibility pack
     type vcfTabix
-    html gnomad
+    html gnomadVariants
 
         track gnomadGenomesVariants
         parent gnomadVariants on
