@@ -447,7 +447,7 @@ def parseVcf(vcfFname):
     " parse VCF and return as dict alleleId -> (molConseq) "
     logging.info("Parsing %s" % vcfFname)
     ret = {}
-    for line in gzip.open(vcfFname, "rt"):
+    for line in gzip.open(vcfFname, "rt", encoding="utf_8"):
         # #CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO
         #1       930248  789256  G       A       .       .       ALLELEID=707587;CLNDISDB=MedGen:CN517202;CLNDN=not_provided;CLNHGVS=
         if line.startswith("#"):
@@ -606,7 +606,8 @@ for line in ifh:
     # used until Oct 2017
     # if dbVarAcc.startswith("nsv") or "copy number" in allType:
     # now using just size on genome, see #20268
-    if (int(end)-int(start))>100:
+    # shortening to >= 50bp to bring into line with LOVD and gnomAD
+    if (int(end)-int(start))>=50:
         isCnv = True
     else:
         isCnv = False
