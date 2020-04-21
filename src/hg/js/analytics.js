@@ -1,6 +1,6 @@
 // analytics.js - Javascript for use in static html page footer code
 
-// Copyright (C) 2008 The Regents of the University of California
+// Copyright (C) 2020 The Regents of the University of California
 
 document.body.onload = addGtag;
 

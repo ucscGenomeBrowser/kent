@@ -88,8 +88,8 @@ bigDataUrl /gbdb/wuhCor1/bbi/public.bb
 mouseOverField extraField0
 
 #
-release alpha
 track publicAnnots
+release alpha
 shortLabel User annotations
 longLabel User-contributed annotations via bit.ly/cov2annots
 group map
