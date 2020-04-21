@@ -212,6 +212,7 @@ def rUnpackNextstrainTree(branch, parentVariants, parentVarStr):
                          'name': branch['name'],
                          'clade': nodeAttrs['clade_membership']['value'],
                          'date': numDateToMonthDay(nodeAttrs['num_date']['value']),
+                         'lab': nodeAttrs['submitting_lab']['value'],
                          'variants': branchVariants,
                          'varStr': branchVarStr })
 
@@ -458,8 +459,136 @@ for cladeName, node in cladeNodes.items():
         outF.write(rNextstrainToNewick(node) + ';\n')
         outF.close()
 
-# File with samples and their variant paths
+# File with samples and their clades, labs and variant paths
+
+apostropheSRe = re.compile("'s");
+firstLetterRe = re.compile('(\w)\w+');
+spacePunctRe = re.compile('\W');
+
+def abbreviateLab(lab):
+    """Lab names are very long and sometimes differ by punctuation or typos.  Abbreviate for easier comparison."""
+    labAbbrev = apostropheSRe.sub('', lab)
+    labAbbrev = firstLetterRe.sub(r'\1', labAbbrev, count=0)
+    labAbbrev = spacePunctRe.sub('', labAbbrev, count=0)
+    return labAbbrev
+
 with open('nextstrainSamples.varPaths', 'w') as outF:
     for sample in samples:
-        outF.write('\t'.join([sampleName(sample), sample['clade'], sample['varStr']]) + '\n');
+        lab = sample['lab']
+        labAbbrev = abbreviateLab(lab)
+        outF.write('\t'.join([sampleName(sample), sample['clade'], labAbbrev, lab,
+                              sample['varStr']]) + '\n');
+    outF.close()
+
+# Narrow down variants to "informative" set (bi-allelic, each allele supported by
+# sufficient number of samples):
+minSamples = 2
+discardedAlleles = []
+blacklist = []
+informativeVariants = []
+
+for mv in mergedVars:
+    pv, alts, altCounts, sampleAlleles, backMutSamples = mv
+    pos, varNameMerged, ref, altStr = pv
+    recurrentAlts = []
+    for alt, altCount in zip(alts, altCounts):
+        if (altCount < minSamples):
+            discardedAlleles.append([ chrom, pos-1, pos, ref + str(pos) + alt ])
+        else:
+            recurrentAlts.append(alt)
+    if (len(recurrentAlts) > 1):
+        multiRecurrentName = ','.join([ ref + str(pos) + alt for alt in recurrentAlts ])
+        blacklist.append([ chrom, pos-1, pos, multiRecurrentName ])
+    elif (len(recurrentAlts) == 1):
+        informativeVariants.append([ pos, ref, recurrentAlts[0] ])
+
+# Dump out BED files for the categories:
+with open('nextstrainDiscarded.bed', 'w') as outF:
+    for da in discardedAlleles:
+        outF.write('\t'.join(map(str, da)) + '\n');
+    outF.close()
+
+with open('nextstrainBlacklisted.bed', 'w') as outF:
+    for bl in blacklist:
+        outF.write('\t'.join(map(str, bl)) + '\n');
+    outF.close()
+
+with open('nextstrainInformative.bed', 'w') as outF:
+    for iv in informativeVariants:
+        pos, ref, alt = iv
+        outF.write('\t'.join(map(str, [ chrom, pos-1, pos, ref + str(pos) + alt ])) + '\n')
+    outF.close()
+
+# Compute parsimony score for tree at each informative variant.
+
+anyDiscordantVariants = []
+
+def refAltCosts(node, pos, ref, alt, parentValue):
+    nodeValue = parentValue
+    mutCount = 0
+    # If there are mutations on this branch, and one of them is at pos and is ref or alt
+    # (i.e. not a discarded allele that we're ignoring), then change nodeValue.
+    if (node.get('branch_attrs') and node['branch_attrs'].get('mutations') and
+        node['branch_attrs']['mutations'].get('nuc')):
+        for varName in node['branch_attrs']['mutations']['nuc']:
+            m = snvRe.match(varName)
+            if (m):
+                mRef, mPos, mAlt = m.groups()
+                mPos = int(mPos)
+                if (mPos == pos and (mAlt == ref or mAlt == alt)):
+                    nodeValue = mAlt
+                    mutCount += 1
+    kids = node.get('children')
+    if (kids):
+        refCost, altCost = [0, 0]
+        for kid in kids:
+            kidRefCost, kidAltCost, kidMutCount = refAltCosts(kid, pos, ref, alt, nodeValue)
+            refCost += min(kidRefCost, kidAltCost+1)
+            altCost += min(kidRefCost+1, kidAltCost)
+            mutCount += kidMutCount
+    else:
+        refCost = 0 if (nodeValue == ref) else 1
+        altCost = 1 if (nodeValue == ref) else 0
+    if ((refCost < altCost and nodeValue == alt) or
+        (altCost < refCost and nodeValue == ref)):
+        anyDiscordantVariants.append('\t'.join([ref + str(pos) + alt, node['name']]))
+    return refCost, altCost, mutCount
+
+parsimonyScores = []
+mutationCounts = []
+rootDiscordantVariants = []
+
+for iv in informativeVariants:
+    pos, ref, alt = iv
+    varName = ref + str(pos) + alt
+    rootRefCost, rootAltCost, mutCount = refAltCosts(ncov['tree'], pos, ref, alt, ref)
+    parsimonyScores.append([pos, min(rootRefCost, rootAltCost)])
+    mutationCounts.append([pos, mutCount])
+    rootLabel = 0 if (rootRefCost <= rootAltCost) else 1
+    if (rootLabel != 0):
+        # Note: so far this has not happened.  Seems like it would be pretty lame if it did.
+        rootDiscordantVariants.append([chrom, pos-1, pos, varName])
+
+# Write out files with discordant nodes, parsimony/mutation counts (identical!):
+with open('nextstrainRootDiscordant.bed', 'w') as outF:
+    for dv in rootDiscordantVariants:
+        outF.write('\t'.join(dv) + '\n');
+    outF.close();
+
+with open('nextstrainAnyDiscordant.txt', 'w') as outF:
+    for varName in anyDiscordantVariants:
+        outF.write(varName + '\n');
+    outF.close()
+
+# bedGraph for parsimony scores and mutation counts
+with open('nextstrainParsimony.bedGraph', 'w') as outF:
+    for ps in parsimonyScores:
+        pos, score = ps
+        outF.write('\t'.join(map(str, [ chrom, pos-1, pos, score ])) + '\n')
+    outF.close()
+
+with open('nextstrainMutCounts.bedGraph', 'w') as outF:
+    for ps in mutationCounts:
+        pos, score = ps
+        outF.write('\t'.join(map(str, [ chrom, pos-1, pos, score ])) + '\n')
     outF.close()
