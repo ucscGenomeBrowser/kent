@@ -108,10 +108,9 @@ type bigBed 12
 visibility hide
 #$url https://www.rcsb.org/structure/$$
 url https://www.ebi.ac.uk/pdbe/pdbe-kb/covid19/$$
-urlLabel link to PDB
-#iframeUrl https://www.rcsb.org/structure/$$
-iframeUrl https://www.ebi.ac.uk/pdbe/pdbe-kb/covid19/$$
-iframeOptions width='1000' height='800' scrolling='yes'
+urlLabel Link to PDB Covid Portal at the EBI
+iframeUrl https://www.rcsb.org/structure/$$
+iframeOptions width='1000' height='800' scrolling='yes' style='margin-top:10px'
 bigDataUrl /gbdb/wuhCor1/bbi/pdb.bb
 exonNumbers off
 priority 30

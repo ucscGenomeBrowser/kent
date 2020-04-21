@@ -186,6 +186,8 @@ def rUnpackNextstrainTree(branch, parentVariants, parentVarStr):
             branchVarStr += ' (' + aaVar + ')'
     if (len(parentVarStr) and len(branchVarStr)):
         branchVarStr = parentVarStr + '; ' + branchVarStr
+    elif (not len(branchVarStr)):
+        branchVarStr = parentVarStr
     nodeAttrs = branch['node_attrs']
     if (nodeAttrs.get('clade_membership')):
         cladeName = nodeAttrs['clade_membership']['value']
@@ -210,12 +212,17 @@ def rUnpackNextstrainTree(branch, parentVariants, parentVarStr):
                          'name': branch['name'],
                          'clade': nodeAttrs['clade_membership']['value'],
                          'date': numDateToMonthDay(nodeAttrs['num_date']['value']),
-                         'variants': branchVariants })
+                         'lab': nodeAttrs['submitting_lab']['value'],
+                         'variants': branchVariants,
+                         'varStr': branchVarStr })
 
 rUnpackNextstrainTree(ncov['tree'], {}, '')
 
+def sampleName(sample):
+    return '|'.join([sample['id'], sample['name'], sample['date']])
+
 sampleCount = len(samples)
-sampleNames = [ '|'.join([sample['id'], sample['name'], sample['date']]) for sample in samples ]
+sampleNames = [ sampleName(sample)  for sample in samples ]
 
 # Parse variant names like 'G11083T' into pos and alleles; bundle in VCF column order
 parsedVars = []
@@ -231,12 +238,59 @@ def parsedVarPos(pv):
     return pv[0]
 parsedVars.sort(key=parsedVarPos)
 
-def boolToStr01(bool):
-    """Convert boolean to string 1 or 0."""
-    if (bool):
-        return '1'
+def parsedVarAlleleCount(pv):
+    return variantCounts[pv[1]]
+
+def mergeVariants(pvList):
+    """Given a list of parsedVars [pos, varName, ref, alt] at the same pos, resolve the actual allele at each sample, handling back-mutations and serial mutations."""
+    # Sort by descending allele count, assuming that the ref allele of the most frequently
+    # observed variant is the true ref allele.  For back-muts, ref and alt are swapped;
+    # for serial muts, alt of the first is ref of the second.
+    pvList.sort(key=parsedVarAlleleCount)
+    pvList.reverse()
+    pos, varName, trueRef, firstAlt = pvList[0]
+    alts = []
+    sampleAlleles = [ 0 for sample in samples ]
+    backMutSamples = []
+    for pv in pvList:
+        thisPos, thisName, thisRef, thisAlt = pv
+        if (thisPos != pos):
+            warn("mergeVariants: inconsistent pos " + pos + " and " + thisPos)
+        if (thisAlt == trueRef):
+            # Back-mutation, not a true alt
+            alIx = 0
+        else:
+            # Add to list of alts - unless it's an alt we've already seen, but from a different
+            # serial mutation.  For example, there might be T>A but also T>G+G>A; don't add A twice.
+            if (not thisAlt in alts):
+                alts.append(thisAlt)
+                if (thisName != varName):
+                    varName += "," + thisName
+            alIx = alts.index(thisAlt) + 1
+        for ix, sample in enumerate(samples):
+            if (sample['variants'].get(thisName)):
+                sampleAlleles[ix] = alIx
+                if (alIx == 0):
+                    backMutSamples.append(sampleName(sample))
+    # After handling back- and serial mutations, figure out true counts of each alt allele:
+    altCounts = [ 0 for alt in alts ]
+    for alIx in sampleAlleles:
+        if (alIx > 0):
+            altCounts[alIx - 1] += 1
+    return [ [pos, varName, trueRef, ','.join(alts)],
+             alts, altCounts, sampleAlleles, backMutSamples ]
+
+mergedVars = []
+
+variantsAtPos = []
+for pv in parsedVars:
+    pos = pv[0]
+    if (len(variantsAtPos) == 0 or pos == variantsAtPos[0][0]):
+        variantsAtPos.append(pv)
     else:
-        return '0'
+        mergedVars.append(mergeVariants(variantsAtPos))
+        variantsAtPos = [pv]
+mergedVars.append(mergeVariants(variantsAtPos))
 
 def writeVcfHeaderExceptSamples(outF):
     """Write VCF header lines -- except for sample names (this ends with a \t not a \n)."""
@@ -245,19 +299,40 @@ def writeVcfHeaderExceptSamples(outF):
     outF.write('\t'.join(['#CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO', 'FORMAT']) +
                '\t');
 
+def tallyAaChanges(varNameMerged):
+    """If any of the merged variants cause a coding change, then produce a comma-sep string in same order as variants with corresponding change(s) or '-' if a variant does not cause a coding change.  If none of the variants cause a coding change, return the empty string."""
+    varNames = varNameMerged.split(',')
+    gotAaChange = 0
+    aaChanges = []
+    for varName in varNames:
+        aaChange = variantAaChanges.get(varName)
+        if (aaChange):
+            gotAaChange = 1
+            aaChanges.append(aaChange)
+        else:
+            aaChanges.append('-');
+    if (gotAaChange):
+        aaChangeStr = ','.join(aaChanges)
+    else:
+        aaChangeStr = ''
+    return aaChangeStr
+
 # VCF
 with open('nextstrainSamples.vcf', 'w') as outC:
     writeVcfHeaderExceptSamples(outC)
     outC.write('\t'.join(sampleNames) + '\n')
-    for pv in parsedVars:
-        varName = pv[1]
-        info = 'AC=' + str(variantCounts[varName]) + ';AN=' + str(sampleCount)
-        aaChange = variantAaChanges.get(varName)
-        if (aaChange):
+    for mv in mergedVars:
+        pv, alts, altCounts, sampleAlleles, backMutSamples = mv
+        info = 'AC=' + ','.join(map(str, altCounts)) + ';AN=' + str(sampleCount)
+        varNameMerged = pv[1]
+        aaChange = tallyAaChanges(varNameMerged)
+        if (len(aaChange)):
             info += ';AACHANGE=' + aaChange
+        if (len(backMutSamples)):
+            info += ';BACKMUTS=' + ','.join(backMutSamples)
         genotypes = []
-        for sample in samples:
-            gt = boolToStr01(sample['variants'].get(varName))
+        for sample, alIx in zip(samples, sampleAlleles):
+            gt = str(alIx)
             genotypes.append(gt + ':' + sample['clade'])
         outC.write('\t'.join([ chrom,
                                '\t'.join(map(str, pv)),
@@ -284,30 +359,38 @@ for cladeName, node in cladeNodes.items():
     sampleIds = {}
     sampleIdsFromNode(node, sampleIds)
     cladeSampleList = [ sample for sample in samples if sample['id'] in sampleIds ]
-    cladeSamples[cladeName] = cladeSampleList
+    cladeSamples[cladeName] = sampleIds
     cladeSampleCounts[cladeName] = len(cladeSampleList)
-    cladeSampleNames[cladeName] = [ '|'.join([ sample['id'], sample['name'], sample['date'] ])
-                                    for sample in cladeSampleList ]
+    cladeSampleNames[cladeName] = [ sampleName(sample) for sample in cladeSampleList ]
 
 # Per-clade VCF subset
-for cladeName, cladeSampleList in cladeSamples.items():
+for cladeName, cladeSampleIds in cladeSamples.items():
     with open('nextstrainSamples' + cladeName + '.vcf', 'w') as outV:
         writeVcfHeaderExceptSamples(outV)
         outV.write('\t'.join(cladeSampleNames[cladeName]) + '\n')
-        for pv in parsedVars:
-            varName = pv[1]
+        for mv in mergedVars:
+            pv, alts, overallAltCounts, sampleAlleles, backMutSamples = mv
+            varNameMerged = pv[1]
             genotypes = []
-            ac=0
-            for sample in cladeSampleList:
-                gt = boolToStr01(sample['variants'].get(varName))
-                genotypes.append(gt)
-                if (sample['variants'].get(varName)):
-                    ac += 1
-            if (ac > 0):
-                info = 'AC=' + str(ac) + ';AN=' + str(cladeSampleCounts[cladeName])
-                aaChange = variantAaChanges.get(varName)
-                if (aaChange):
+            altCounts = [ 0 for alt in alts ]
+            acTotal=0
+            for sample, alIx in zip(samples, sampleAlleles):
+                if (sample['id'] in cladeSampleIds):
+                    gt = str(alIx)
+                    genotypes.append(gt + ':' + cladeName)
+                    if (alIx > 0):
+                        altCounts[alIx - 1] += 1
+                        acTotal += 1
+            if (acTotal > 0):
+                info = 'AC=' + ','.join(map(str, altCounts))
+                info += ';AN=' + str(cladeSampleCounts[cladeName])
+                aaChange = tallyAaChanges(varNameMerged)
+                if (len(aaChange)):
                     info += ';AACHANGE=' + aaChange
+                cladeBackMuts = [ sampleName for sampleName in backMutSamples
+                                  if sampleName in cladeSampleNames[cladeName] ]
+                if (len(cladeBackMuts)):
+                    info += ';BACKMUTS=' + ','.join(cladeBackMuts)
                 outV.write('\t'.join([ chrom,
                                        '\t'.join(map(str, pv)),
                                        '\t'.join(['.', 'PASS', info, 'GT']),
@@ -363,15 +446,149 @@ def rNextstrainToNewick(node, parentColor=None):
         date = numDateToMonthDay(nodeAttrs['num_date']['value'])
         cladeName = nodeAttrs['clade_membership']['value']
         color = str(cladeRgbFromName(cladeName))
-        treeString = '|'.join([ gId, name, date ]) + ':' + color
+        treeString = sampleName({ 'id': gId, 'name': name, 'date': date }) + ':' + color
     return treeString
 
 with open('nextstrain.nh', 'w') as outF:
     outF.write(rNextstrainToNewick(ncov['tree']) + ';\n')
-    outF.close
+    outF.close()
 
 for cladeName, node in cladeNodes.items():
     filename = 'nextstrain' + cladeName + '.nh'
     with open(filename, 'w') as outF:
         outF.write(rNextstrainToNewick(node) + ';\n')
-        outF.close
+        outF.close()
+
+# File with samples and their clades, labs and variant paths
+
+apostropheSRe = re.compile("'s");
+firstLetterRe = re.compile('(\w)\w+');
+spacePunctRe = re.compile('\W');
+
+def abbreviateLab(lab):
+    """Lab names are very long and sometimes differ by punctuation or typos.  Abbreviate for easier comparison."""
+    labAbbrev = apostropheSRe.sub('', lab)
+    labAbbrev = firstLetterRe.sub(r'\1', labAbbrev, count=0)
+    labAbbrev = spacePunctRe.sub('', labAbbrev, count=0)
+    return labAbbrev
+
+with open('nextstrainSamples.varPaths', 'w') as outF:
+    for sample in samples:
+        lab = sample['lab']
+        labAbbrev = abbreviateLab(lab)
+        outF.write('\t'.join([sampleName(sample), sample['clade'], labAbbrev, lab,
+                              sample['varStr']]) + '\n');
+    outF.close()
+
+# Narrow down variants to "informative" set (bi-allelic, each allele supported by
+# sufficient number of samples):
+minSamples = 2
+discardedAlleles = []
+blacklist = []
+informativeVariants = []
+
+for mv in mergedVars:
+    pv, alts, altCounts, sampleAlleles, backMutSamples = mv
+    pos, varNameMerged, ref, altStr = pv
+    recurrentAlts = []
+    for alt, altCount in zip(alts, altCounts):
+        if (altCount < minSamples):
+            discardedAlleles.append([ chrom, pos-1, pos, ref + str(pos) + alt ])
+        else:
+            recurrentAlts.append(alt)
+    if (len(recurrentAlts) > 1):
+        multiRecurrentName = ','.join([ ref + str(pos) + alt for alt in recurrentAlts ])
+        blacklist.append([ chrom, pos-1, pos, multiRecurrentName ])
+    elif (len(recurrentAlts) == 1):
+        informativeVariants.append([ pos, ref, recurrentAlts[0] ])
+
+# Dump out BED files for the categories:
+with open('nextstrainDiscarded.bed', 'w') as outF:
+    for da in discardedAlleles:
+        outF.write('\t'.join(map(str, da)) + '\n');
+    outF.close()
+
+with open('nextstrainBlacklisted.bed', 'w') as outF:
+    for bl in blacklist:
+        outF.write('\t'.join(map(str, bl)) + '\n');
+    outF.close()
+
+with open('nextstrainInformative.bed', 'w') as outF:
+    for iv in informativeVariants:
+        pos, ref, alt = iv
+        outF.write('\t'.join(map(str, [ chrom, pos-1, pos, ref + str(pos) + alt ])) + '\n')
+    outF.close()
+
+# Compute parsimony score for tree at each informative variant.
+
+anyDiscordantVariants = []
+
+def refAltCosts(node, pos, ref, alt, parentValue):
+    nodeValue = parentValue
+    mutCount = 0
+    # If there are mutations on this branch, and one of them is at pos and is ref or alt
+    # (i.e. not a discarded allele that we're ignoring), then change nodeValue.
+    if (node.get('branch_attrs') and node['branch_attrs'].get('mutations') and
+        node['branch_attrs']['mutations'].get('nuc')):
+        for varName in node['branch_attrs']['mutations']['nuc']:
+            m = snvRe.match(varName)
+            if (m):
+                mRef, mPos, mAlt = m.groups()
+                mPos = int(mPos)
+                if (mPos == pos and (mAlt == ref or mAlt == alt)):
+                    nodeValue = mAlt
+                    mutCount += 1
+    kids = node.get('children')
+    if (kids):
+        refCost, altCost = [0, 0]
+        for kid in kids:
+            kidRefCost, kidAltCost, kidMutCount = refAltCosts(kid, pos, ref, alt, nodeValue)
+            refCost += min(kidRefCost, kidAltCost+1)
+            altCost += min(kidRefCost+1, kidAltCost)
+            mutCount += kidMutCount
+    else:
+        refCost = 0 if (nodeValue == ref) else 1
+        altCost = 1 if (nodeValue == ref) else 0
+    if ((refCost < altCost and nodeValue == alt) or
+        (altCost < refCost and nodeValue == ref)):
+        anyDiscordantVariants.append('\t'.join([ref + str(pos) + alt, node['name']]))
+    return refCost, altCost, mutCount
+
+parsimonyScores = []
+mutationCounts = []
+rootDiscordantVariants = []
+
+for iv in informativeVariants:
+    pos, ref, alt = iv
+    varName = ref + str(pos) + alt
+    rootRefCost, rootAltCost, mutCount = refAltCosts(ncov['tree'], pos, ref, alt, ref)
+    parsimonyScores.append([pos, min(rootRefCost, rootAltCost)])
+    mutationCounts.append([pos, mutCount])
+    rootLabel = 0 if (rootRefCost <= rootAltCost) else 1
+    if (rootLabel != 0):
+        # Note: so far this has not happened.  Seems like it would be pretty lame if it did.
+        rootDiscordantVariants.append([chrom, pos-1, pos, varName])
+
+# Write out files with discordant nodes, parsimony/mutation counts (identical!):
+with open('nextstrainRootDiscordant.bed', 'w') as outF:
+    for dv in rootDiscordantVariants:
+        outF.write('\t'.join(dv) + '\n');
+    outF.close();
+
+with open('nextstrainAnyDiscordant.txt', 'w') as outF:
+    for varName in anyDiscordantVariants:
+        outF.write(varName + '\n');
+    outF.close()
+
+# bedGraph for parsimony scores and mutation counts
+with open('nextstrainParsimony.bedGraph', 'w') as outF:
+    for ps in parsimonyScores:
+        pos, score = ps
+        outF.write('\t'.join(map(str, [ chrom, pos-1, pos, score ])) + '\n')
+    outF.close()
+
+with open('nextstrainMutCounts.bedGraph', 'w') as outF:
+    for ps in mutationCounts:
+        pos, score = ps
+        outF.write('\t'.join(map(str, [ chrom, pos-1, pos, score ])) + '\n')
+    outF.close()
