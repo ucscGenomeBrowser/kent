@@ -103,7 +103,7 @@ release alpha,beta
     priority 10
 
     track filterABQD
-    shortLabel GIAB alle imbalalance
+    shortLabel GIAB allele imbalalance
     longLabel Genome-in-a-bottle: Calls with abnormal allele balance
     type bigBed 3
     bigDataUrl /gbdb/hg19/bbi/problematic/filterABQD.bb
