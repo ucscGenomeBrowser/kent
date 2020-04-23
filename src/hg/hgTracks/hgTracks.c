@@ -10351,3 +10351,27 @@ if (parentTdb)
     parentTdb->longLabel = labelAsFiltered(parentTdb->longLabel);
 }
 
+static char *labelAddNote(char *label, char *note)
+/* add parenthesized text to label */
+// TODO: move to lib/trackDbCustom.c
+{
+char buffer[2048];
+safef(buffer, sizeof buffer, " (%s)", note);
+if (stringIn(note, label))
+    return label;
+return (catTwoStrings(label, buffer));
+}
+
+void labelTrackAsHideEmpty(struct track *tg)
+/* Add text to track long label to indicate empty subtracks are hidden,
+ * but avoid adding to subtrack labels */
+{
+#define EMPTY_SUBTRACKS_HIDDEN "empty subtracks hidden"
+struct trackDb *parentTdb = tdbGetComposite(tg->tdb);
+if (parentTdb)
+    parentTdb->longLabel = labelAddNote(parentTdb->longLabel, EMPTY_SUBTRACKS_HIDDEN);
+else
+    tg->longLabel = labelAddNote(tg->longLabel, EMPTY_SUBTRACKS_HIDDEN);
+}
+
+
