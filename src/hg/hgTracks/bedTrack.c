@@ -90,7 +90,7 @@ else if (tg->isBigBed)
 
     struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, tg->tdb);
     if (compositeChildHideEmptySubtracks(cart, tg->tdb, NULL, NULL))
-       labelTrackAsFiltered(tg);
+       labelTrackAsHideEmpty(tg);
 
      if (tg->itemName == bedName && !trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
         tg->itemName = bigBedItemName;
