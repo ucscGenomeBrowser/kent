@@ -739,6 +739,7 @@ if (!exon)
         /* Load sample table */
         verbose(2, "Creating sample table\n");
         gtexSampleCreateTable(conn, sampleTable);
+        verbose(3, "Load table %s from %s/%s\n", sampleTable, tabDir, sampleTable); 
         hgLoadTabFile(conn, tabDir, sampleTable, &f);
         hgRemoveTabFile(tabDir, sampleTable);
 
@@ -750,11 +751,15 @@ if (!exon)
         char dir[128];
         char fileName[64];
         splitPath(tissuesFile, dir, fileName, NULL);
+        if (dir[0] == 0)
+            dir[0]= '.';
+        verbose(3, "Load table %s from %s/%s\n", tissueTable, dir, fileName); 
         hgLoadNamedTabFile(conn, dir, tissueTable, fileName, NULL);
 
         /* Load donor table */
         verbose(2, "Creating donor table\n");
         gtexDonorCreateTable(conn, donorTable);
+        verbose(3, "Load table %s from %s/%s\n", donorTable, dir, donorTable);
         hgLoadTabFile(conn, tabDir, donorTable, &donorFile);
         hgRemoveTabFile(tabDir, donorTable);
 
