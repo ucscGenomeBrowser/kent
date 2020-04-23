@@ -34286,3 +34286,49 @@ table doseSensitivity
 
     # commit all
 ##############################################################################
+# NCBI regions that are problematic for sequencing, Mon Nov 18 05:06:17 PST 2019, Max
+
+mkdir /hive/data/genomes/hg19/bed/specialRegions/orig
+cd /hive/data/genomes/hg19/bed/specialRegions/orig
+# download and convert to Excel
+wget ftp://ftp.ncbi.nlm.nih.gov/variation/get-rm/highly_homologous_genes/Table_S1_List1_NGS_Dead_Zone_exon_level.xlsx
+wget ftp://ftp.ncbi.nlm.nih.gov/variation/get-rm/highly_homologous_genes/Table_S2_List2_NGS_Problem_List_High_Stringency_exon_level.xlsx
+wget ftp://ftp.ncbi.nlm.nih.gov/variation/get-rm/highly_homologous_genes/Table_S3_List3_NGS_Problem_List_Low_Stringency_exon_level.xlsx
+wget ftp://ftp.ncbi.nlm.nih.gov/variation/get-rm/highly_homologous_genes/Table_S4_List4_Sanger_Dead_Zone_exon_level.xlsx
+in2csv Table_S1_List1_NGS_Dead_Zone_exon_level.xlsx | csvformat -T > Table_S1_List1_NGS_Dead_Zone_exon_level.tsv
+in2csv  Table_S2_List2_NGS_Problem_List_High_Stringency_exon_level.xlsx | csvformat -T > Table_S2_List2_NGS_Problem_List_High_Stringency_exon_level.tsv
+in2csv Table_S3_List3_NGS_Problem_List_Low_Stringency_exon_level.xlsx | csvformat -T > Table_S3_List3_NGS_Problem_List_Low_Stringency_exon_level.tsv
+in2csv Table_S4_List4_Sanger_Dead_Zone_exon_level.xlsx | csvformat -T > Table_S4_List4_Sanger_Dead_Zone_exon_level.tsv
+
+cd ..
+# tabToBed is from https://github.com/maximilianh/maxtools
+tabToBed orig/Table_S1_List1_NGS_Dead_Zone_exon_level.tsv bed/deadZone.bed as/deadZone.as -t bed3+
+bedToBigBed -tab bed/deadZone.bed /hive/data/genomes/hg19/chrom.sizes bb/deadZone.bb -tab -type=bed3+ -as=as/deadZone.as
+
+tabToBed orig/Table_S2_List2_NGS_Problem_List_High_Stringency_exon_level.tsv bed/ngsProblemHigh.bed as/ngsProblemHigh.as -t bed3+
+bedToBigBed -tab bed/ngsProblemHigh.bed /hive/data/genomes/hg19/chrom.sizes bb/ngsProblemHigh.bb -tab -type=bed3+ -as=as/ngsProblemHigh.as
+
+tabToBed orig/Table_S3_List3_NGS_Problem_List_Low_Stringency_exon_level.tsv bed/ngsProblemLow.bed as/ngsProblemLow.as -t bed3+
+bedToBigBed -tab bed/ngsProblemLow.bed /hive/data/genomes/hg19/chrom.sizes bb/ngsProblemLow.bb -tab -type=bed3+ -as=as/ngsProblemLow.as
+
+tabToBed orig/Table_S4_List4_Sanger_Dead_Zone_exon_level.tsv bed/sangerDeadZone.bed as/sangerDeadZone.as -t bed3+
+bedToBigBed -tab bed/sangerDeadZone.bed /hive/data/genomes/hg19/chrom.sizes bb/sangerDeadZone.bb -tab -type=bed3+ -as=as/sangerDeadZone.as
+
+# the GIAB BED filter files
+cd orig
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/analysis/NIST_union_callsets_06172013/VQSRv2.18_filterABQD.bed.gz
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/analysis/NIST_union_callsets_06172013/VQSRv2.18_filterAlign.bed.gz
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/analysis/NIST_union_callsets_06172013/VQSRv2.18_filterConflicting.bed.gz
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/analysis/NIST_union_callsets_06172013/VQSRv2.18_filterCov.bed.gz
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/analysis/NIST_union_callsets_06172013/VQSRv2.18_filterHapNoVar.bed.gz
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/analysis/NIST_union_callsets_06172013/VQSRv2.18_filterMap.bed.gz
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/analysis/NIST_union_callsets_06172013/VQSRv2.18_filterSSE.bed.gz
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/analysis/NIST_union_callsets_06172013/VQSRv2.18_filterlt2Datasets.bed.gz
+gunzip *.gz
+cd ..
+for i in orig/*.bed; do out=`echo $i | sed -e 's|orig/VQSRv2.18_||g'`; out=`basename $out .bed`; echo $out; chromToUcsc -a hg19.chromAlias.tsv -i $i -o bed/$out.bed; done
+for i in bed/filter*.bed; do echo $i; bedSort $i $i; bedToBigBed $i /hive/data/genomes/hg19/chrom.sizes bb/`basename $i .bed`.bed -type=bed3; done
+cd /gbdb/hg19/bbi/special;
+for i in /hive/data/genomes/hg19/bed/specialRegions/bb/filter*.bb;  do ln -s $i; done
+bedSort orig/hg19-blacklist.v2.bed orig/hg19-blacklist.v2.bed 
+bedToBigBed orig/hg19-blacklist.v2.bed /hive/data/genomes/hg19/chrom.sizes  bb/encBlacklist.bb -tab
