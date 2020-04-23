@@ -30795,11 +30795,11 @@ gunzip gencode.v19.genes.patched_contigs.gtf.gz
 # optional: liftOver from chrMT (NC_012920) coords to chrM (NC_001807).
 
 awk '$1 !~ /^#/ {print "chr"$0}' gencode.v19.genes.patched_contigs.gtf | sed 's/chrMT/chrM/' | \
-        gtfToGenePred stdin gencodeV19.hg19.genePred
-hgLoadGenePred hg19 gtexGeneModelV6 gencodeV19.hg19.genePred -infoOut=gtexGeneModelInfoV6.tab
+        gtfToGenePred stdin gencodeV19.hg19.genePred -infoOut=gtexGeneModelInfoV6.tab
+hgLoadGenePred hg19 gtexGeneModelV6 gencodeV19.hg19.genePred
 
 # Get transcript for each gene
-A#tail -n +2 gtexGeneModelInfoV6.tab | awk '{printf("%s\t%s\n", $1, $9)}' > gtexGeneTranscriptsV6.tab
+#tail -n +2 gtexGeneModelInfoV6.tab | awk '{printf("%s\t%s\n", $1, $9)}' > gtexGeneTranscriptsV6.tab
 #hgLoadSqlTab hgFixed gtexTranscriptV6 ~/kent/src/hg/lib/gtexTranscript.sql gtexGeneTranscriptsV6.tab
 
 # Load BED table
