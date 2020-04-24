@@ -76,20 +76,7 @@ group immu
 type bigBed 4 +
 bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
 
-# the RR version of the track, with the filters
 track publicAnnots
-release beta,public
-shortLabel User annotations
-longLabel User-contributed annotations via bit.ly/cov2annots
-group map
-priority 4
-type bigBed 9 +
-bigDataUrl /gbdb/wuhCor1/bbi/public.bb
-mouseOverField extraField0
-
-#
-track publicAnnots
-release alpha
 shortLabel User annotations
 longLabel User-contributed annotations via bit.ly/cov2annots
 group map
