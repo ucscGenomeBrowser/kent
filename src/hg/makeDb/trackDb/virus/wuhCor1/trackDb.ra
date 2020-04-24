@@ -76,20 +76,7 @@ group immu
 type bigBed 4 +
 bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
 
-# the RR version of the track, with the filters
 track publicAnnots
-release beta,public
-shortLabel User annotations
-longLabel User-contributed annotations via bit.ly/cov2annots
-group map
-priority 4
-type bigBed 9 +
-bigDataUrl /gbdb/wuhCor1/bbi/public.bb
-mouseOverField extraField0
-
-#
-track publicAnnots
-release alpha
 shortLabel User annotations
 longLabel User-contributed annotations via bit.ly/cov2annots
 group map
@@ -134,6 +121,9 @@ visibility hide
 type bigBed 9 +
 group immu
 bigDataUrl /gbdb/wuhCor1/bbi/poranHla/CD8-hla1.bb
+noScoreFilter on
+mouseOverField name2
+html poranHla1
 
 track poranHla2
 shortLabel Poran HLA II
@@ -142,6 +132,18 @@ visibility hide
 group immu
 type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/bbi/poranHla/CD8-hla2.bb
+noScoreFilter on
+mouseOverField name2
+html poranHla1
+
+track artic
+shortLabel ARTIC primers
+longLabel ARTIC Oxford Nanopore sequencing primers
+visibility hide
+group map
+type bigBed 4 +
+bigDataUrl /gbdb/wuhCor1/bbi/artic.bb
+noScoreFilter on
 
 include trackDb.119way.ra
 include epitopes.ra

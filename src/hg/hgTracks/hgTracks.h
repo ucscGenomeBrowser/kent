@@ -1678,6 +1678,9 @@ void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut);
 void labelTrackAsFiltered(struct track *tg);
 /* add text to track long label to indicate filter is active */
 
+void labelTrackAsHideEmpty(struct track *tg);
+/* add text to track long label to indicate empty subtracks are hidden */
+
 void setupHotkeys(boolean gotExtTools);
 /* setup keyboard shortcuts and a help dialog for it */
 

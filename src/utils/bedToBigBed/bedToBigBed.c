@@ -37,6 +37,7 @@ char *udcDir = NULL;
 static boolean doCompress = FALSE;
 static boolean tabSep = FALSE;
 static boolean sizesIs2Bit = FALSE;
+static boolean allow1bpOverlap = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -79,6 +80,7 @@ errAbort(
   "           extraIndex=name and extraIndex=name,id are commonly used.\n"
   "   -sizesIs2Bit  -- If set, the chrom.sizes file is assumed to be a 2bit file.\n"
   "   -udcDir=/path/to/udcCacheDir  -- sets the UDC cache dir for caching of remote files.\n"
+  "   -allow1bpOverlap  -- allow exons to overlap by at most one base pair\n"
   , version, bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
@@ -93,6 +95,7 @@ static struct optionSpec options[] = {
    {"sizesIs2Bit", OPTION_BOOLEAN},
    {"extraIndex", OPTION_STRING},
    {"udcDir", OPTION_STRING},
+   {"allow1bpOverlap", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -195,7 +198,7 @@ for (;;)
 	    wordCount = chopLine(line, row);
 	lineFileExpectWords(lf, fieldCount, wordCount);
 
-	loadAndValidateBed(row, bedN, fieldCount, lf, bed, as, FALSE);
+	loadAndValidateBedExt(row, bedN, fieldCount, lf, bed, as, FALSE, allow1bpOverlap);
 
 	chrom = bed->chrom;
 	start = bed->chromStart;
@@ -822,6 +825,7 @@ doCompress = !optionExists("unc");
 sizesIs2Bit = optionExists("sizesIs2Bit");
 extraIndex = optionVal("extraIndex", NULL);
 tabSep = optionExists("tab");
+allow1bpOverlap = optionExists("allow1bpOverlap");
 udcDir = optionVal("udcDir", udcDefaultDir());
 if (argc != 4)
     usage();
