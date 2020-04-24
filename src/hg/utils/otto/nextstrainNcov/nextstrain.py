@@ -592,3 +592,36 @@ with open('nextstrainMutCounts.bedGraph', 'w') as outF:
         pos, score = ps
         outF.write('\t'.join(map(str, [ chrom, pos-1, pos, score ])) + '\n')
     outF.close()
+
+# Informative-only VCF
+with open('nextstrainRecurrentBiallelic.vcf', 'w') as outF:
+    writeVcfHeaderExceptSamples(outF)
+    outF.write('\t'.join(sampleNames) + '\n')
+    for iv in informativeVariants:
+        pos, ref, alt = iv
+        varName = ref + str(pos) + alt
+        # Ignore any discarded variants at this position, but handle back-mutations if any,
+        # by calling mergeVariants on this and its back-mutation
+        backMutVarName = alt + str(pos) + ref
+        variants = [ [ pos, varName, ref, alt ] ]
+        if (variantCounts.get(backMutVarName)):
+            variants.append([ pos, backMutVarName, alt, ref ])
+        pv, alts, altCounts, sampleAlleles, backMutSamples = mergeVariants(variants)
+        if (len(alts) != 1):
+            warn('Expected exactly one alt from merging ' + varName + ' and ' + backMutVarName +
+                 ', but got [' + ', '.join(alts) + ']')
+        info = 'AC=' + str(altCounts[0])
+        info += ';AN=' + str(sampleCount)
+        aaChange = tallyAaChanges(varName)
+        if (len(aaChange)):
+            info += ';AACHANGE=' + aaChange
+        if (len(backMutSamples)):
+            info += ';BACKMUTS=' + ','.join(backMutSamples)
+        genotypes = []
+        for sample, alIx in zip(samples, sampleAlleles):
+            gt = str(alIx)
+            genotypes.append(gt + ':' + sample['clade'])
+        outF.write('\t'.join([ '\t'.join([ chrom, str(pos), varName, ref, alt,
+                                           '.', 'PASS', info, 'GT']),
+                               '\t'.join(genotypes) ]) + '\n')
+    outF.close()

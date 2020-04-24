@@ -46,6 +46,8 @@ for clade in A1a A2 A2a A3 A6 A7 B B1 B2 B4; do
   bgzip -f nextstrainSamples$clade.vcf
   tabix -p vcf nextstrainSamples$clade.vcf.gz
 done
+bgzip -f nextstrainRecurrentBiallelic.vcf
+tabix -p vcf nextstrainRecurrentBiallelic.vcf.gz
 
 # bigBed-ify the gene names, "clades" and discarded/blacklisted/informative tracks for David
 bedToBigBed -type=bed4 -tab -verbose=0 nextstrainGene.bed $chromSizes \
@@ -70,7 +72,7 @@ bedGraphToBigWig nextstrainParsimony.bedGraph $chromSizes nextstrainParsimony.bw
 
 # Install
 ln -sf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
-    $runDir/nextstrainSamples*.vcf.gz{,.tbi} \
+    $runDir/nextstrain*.vcf.gz{,.tbi} \
     $runDir/nextstrain*.nh \
     $gbdbDir/
 
@@ -82,7 +84,7 @@ ln -sf $runDir/nextstrain{Discarded,Blacklisted,Informative}.bb \
 # Archive
 mkdir -p $ottoDir/archive/$today
 cp -pf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
-    $runDir/nextstrainSamples*.vcf.gz{,.tbi} \
+    $runDir/nextstrain*.vcf.gz{,.tbi} \
     $runDir/nextstrain*.nh \
     $runDir/ncov.json \
     $ottoDir/archive/$today
