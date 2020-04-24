@@ -1,13 +1,52 @@
 <h2>Description</h2>
-The ongoing COVID-19 pandemic has created an urgency to identify novel vaccine targets for protective immunity against SARS-CoV-2. Consistent with observations for SARS-CoV, a closely related coronavirus responsible for the 2003 SARS outbreak, early reports identify a protective role for both humoral and cell-mediated immunity for SARS CoV-2. In this study, we leveraged HLA-I and HLA-II T cell epitope prediction tools from RECON (Real-time Epitope Computation for ONcology), our bioinformatic pipeline that was developed using proteomic profiling of individual HLA-I and HLA-II alleles to predict rules for peptide binding to a diverse set of such alleles. We applied these binding predictors to viral genomes from the Coronaviridae family, and specifically to identify SARS-CoV-2 T cell epitopes. To test the suitability of these tools to identify viral T cell epitopes, we first validated HLA-I and HLA-II predictions on Coronaviridae family epitopes deposited in the Virus Pathogen Database and Analysis Resource (ViPR) database. We then use our HLA-I and HLA-II predictors to identify 11,776 HLA-I and 7,991 HLA-II candidate binding peptides across all 12 open reading frames (ORFs) of SARS-CoV-2. This extensive list of identified candidate peptides is driven by the length of the ORFs and the significant number of HLA-I and HLA-II alleles that we are able to predict (74 and 83, respectively), providing over 99% coverage for the US, European and Asian populations, for both HLA-I and HLA-II. From our SARS-CoV-2 predicted peptide-HLA-I allele pairs, 368 pairs identically matched previously reported pairs in the ViPR database, originating from other forms of coronaviruses. 320 of these pairs (89.1%) had a positive MHC-binding assay result. This analysis reinforces the validity our predictions. Using this bioinformatic platform, we identify multiple putative epitopes for CD4+ and CD8+ T cells whose HLA binding properties cover nearly the entire population and thus may be effective when included in prophylactic vaccines against SARS-CoV-2 to induce broad cellular immunity.
-
 <p>
-This track includes 11776 CD8 epitopes restricted to HLA-I as predicted by RECON. All the epitopes are scored using a combined coverage score reported for USA, EUR and API. Specifically, score = (USA_coverage+EUR_coverage+API_coverage)*1000/3.
+This track shows putative epitopes for CD4+ and CD8+ T cells whose HLA binding 
+properties cover over 99% for US, European and Asian populations, for both HLA-I and HLA-II.
+The track includes 11776 CD8 epitopes restricted to HLA-I as predicted by RECON. All the epitopes 
+are scored using a combined coverage score reported for USA, EUR and API. Specifically, 
+score = (USA_coverage+EUR_coverage+API_coverage)*1000/3.<br><br>
+For more details see <a target="_blank" href=" https://doi.org/10.1101/2020.04.06.027805">
+here</a>
 </p>
 
-<h3>Notes</h3>
-<p>For a full description of the methods used, refer <a href=" https://doi.org/10.1101/2020.04.06.027805">here</a>.</p>
+<h2>Display Conventions and Configuration</h2>
+<p>
+Genomic locations of epitopes are labeled with a unique ID. Mousing over an item shows
+the protein name and restrictions to HLA-I. A click on an item shows a standard feature 
+detail page with the both the ID and the mouse over information.</p>
+
+<h2>Methods</h2>
+<p>For a full description of the methods used, 
+refer <a target="_blank" href=" https://doi.org/10.1101/2020.04.06.027805">here</a>.</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables">Table Browser</a>, or combined with other datasets in the
+<a href="hgIntegrator">Data Integrator</a> tool.
+For automated analysis, the genome annotation is stored in
+a bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/bbi/kim2020">the download server</a>.</p>
+
+<p>
+Annotations can
+be converted from binary to ASCII text by our command-line tool bigBedToBed.
+Instructions for downloading this command can be found on our
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">utilities page</a>.
+The tool can also be used to obtain features within a given range without downloading the file,
+for example:</p>
+<code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/bbi/poranHla/CD8-hla1.bb -chrom=NC_045512v2 -start=0 -end=29902 stdout</code>
+
+<p>
+Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our
+<a href="../../FAQ/FAQdownloads.html#download36">Data Access FAQ</a>
+for more information.</p>
 
 <h2>References</h2>
-<p> Asaf Poran, Dewi Harjanto, Matthew Malloy, Michael S. Rooney, Lakshmi Srinivasan, Richard B. Gaynor, (2020) (<a href="https://www.biorxiv.org/content/10.1101/2020.04.06.027805v1">BioRxiv</a>).</p>
-
+<p>Asaf Poran, Dewi Harjanto, Matthew Malloy, Michael S. Rooney, Lakshmi Srinivasan, 
+Richard B. Gaynor. <a target="_blank"
+href="https://www.biorxiv.org/content/10.1101/2020.04.06.027805v1">Sequence-based 
+prediction of vaccine targets for inducing T cell responses to SARS-CoV-2 
+utilizing the bioinformatics predictor RECON</a>. bioRxiv 2020.04.06.027805</p>

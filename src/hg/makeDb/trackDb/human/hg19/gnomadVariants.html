@@ -1,0 +1,129 @@
+<h2>Description</h2>
+<p>
+The <strong>Genome Aggregation Database (gnomAD) - Genome and Exome Variants (gnomAD Variants)</strong>
+ tracks show single nucleotide variants (SNVs) and small insertion/deletion variants of &lt;50
+nucleotides (indels) from 123,136 exomes and 15,496 whole genomes of unrelated individuals, short
+variant release 2.0.2. For more information on the processing pipeline and population annotations,
+see the following
+ <a target="_blank"
+href="https://macarthurlab.org/2017/02/27/the-genome-aggregation-database-gnomad">blog post</a>
+and the 2.0.2 <a href="https://storage.googleapis.com/gnomad-public/release/2.0.2/README.txt"
+target="_blank">README</a>.
+</p>
+
+
+<p>
+There are two subracks in this track set:
+<ol>
+  <li><b>gnomAD Exome Variants:</b> short variants of 123,136 exomes, release 2.0.2.
+  <li><b>gnomAD Genome Variants:</b> short variants of 15,496 genomes, release 2.0.2.
+</ol>
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>  
+In <button type="button">dense</button> mode, a vertical line is drawn at the position of each
+variant.
+</p>
+
+<p>
+In <button type="button">pack</button> mode, &quot;ref&quot; and &quot;alt&quot; alleles are
+displayed to the left of a vertical line with colored portions corresponding to allele counts.
+Hovering the mouse pointer over a variant pops up a display of alleles and counts.
+</dl>
+
+<p>
+The details for variants include extensive <em>tag=value</em> annotations extracted from the
+INFO column of gnomAD VCF files, listed under the label "INFO column annotations".
+The tags beginning with <strong>GC</strong> list genotype counts in an order that is
+fairly intuitive when a variant has two alleles:
+homozygous reference, heterozygous, homozygous alternate.
+However, when there are multiple alternate alleles, the number of combinations increases
+and the order of genotypes listed is a bit more complicated.  If the alternate alleles
+are named alt1, alt2, alt3, ... altN, then the order of genotype counts follows this pattern:
+</p><p>
+  ref/ref,
+  <br>
+  ref/alt1, alt1/alt1,
+  <br>
+  ref/alt2, alt1/alt2, alt2/alt2,
+  <br>
+  ref/alt3, alt1/alt3, alt2/alt3, alt3/alt3,
+  <br>
+  ...
+  <br>
+  ref/altN, alt1/altN, alt2/altN, alt3/altN, ..., altN/altN
+</p>
+
+<h3>Variant filters</h3>
+
+<p>
+For the variant Quality Control (QC) process, a combination of a random forest classifier and hard
+filters, described below, were used. Filters above can be used to exclude variant sets that failed
+<b>Random Forest</b> (RF), <b>Inbreeding Coefficient</b> (InbreedingCoeff) and/or <b>Allele Count</b>
+(AC0) filters, or <b>passed all</b> (PASS) filters. As variant QC was performed on exomes and genomes
+separately but using the same pipeline, some variants have 2 filter statuses which may be discordant
+in some cases. There are 144,941 variants filtered out in exomes, but passing filters in genomes and
+290,254 variants for the reverse. Users should just treat them with caution.
+</p>
+
+<p>
+A trained allele-specific random forest classifier was used to build a high quality set of variants.
+In order to set a threshold for the PASS / RF filter in the release, metrics to determine a cutoff
+on the random forests model output were used based on: precision / recall against two well
+characterized samples, number of singleton Mendelian violations in the trios, singleton transition
+for SNVs and singleton insertion for indels.
+</p>
+
+<p>
+For exomes, a RF probability of  &gt;= 0.1 for SNVs and &gt;= 0.2 for indels was used for the
+filtration process. For genomes, a RF probability &gt;= 0.4 for both, SNVs and indels, was used.
+</p>
+
+<p>
+In addition to the random forests filter, all variants falling in low complexity (LCR filter) and
+segmental duplication (SEGDUP filter) regions, variants with low Inbreeding coefficient (Excess
+heterozygotes defined by an inbreeding coefficient &lt; -0.3), and all variants where no individual
+had a high quality non-reference genotype (Genotype Quality (GQ) &gt;= 20, depth (DP) &gt;= 10,
+and minor alelle balance (AB) &gt; 0.2 for heterozygotes) were also filtered
+out.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The raw data can be explored interactively with the <a target="_blank" href="../cgi-bin/hgTables">
+Table Browser</a>, or the <a target="_blank" href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
+automated analysis, the data may be queried from our <a target="_blank" 
+href="/goldenPath/help/api.html">REST API</a>, and the genome annotations are stored in files that 
+can be downloaded from our <a
+href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/" target="_blank">download server</a>, subject
+to the conditions set forth by the gnomAD consortium (see below). Coverage values
+for the genome are in <a target="_blank" href="../goldenPath/help/bigWig.html">bigWig</a> files in
+the coverage/ subdirectory. Variant VCFs can be found in the vcf/ subdirectory.</p>
+<p>
+The data can also be found directly from the gnomAD <a target="_blank" 
+href="https://gnomad.broadinstitute.org/downloads">downloads page</a>. Please refer to 
+our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list archives</a> for questions, or our <a target="_blank"
+href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more information.</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the <a href="https://gnomad.broadinstitute.org/about" target="_blank">Genome Aggregation
+Database Consortium</a> for making these data available. The data are released under the <a
+href="https://opendatacommons.org/licenses/odbl/1.0/" target="_blank">ODC Open Database License
+(OBdL)</a> as described <a href="https://gnomad.broadinstitute.org/terms" target="_blank">here</a>.
+</p>
+
+<h2>References</h2>
+
+<p>
+Lek M, Karczewski KJ, Minikel EV, Samocha KE, Banks E, Fennell T, O'Donnell-Luria AH, Ware JS, Hill
+AJ, Cummings BB, <em>et al</em>.
+<a href="https://www.nature.com/articles/nature19057" target="_blank">Analysis of protein-coding
+genetic variation in 60,706 humans</a>. <em>Nature</em>. 2016 Aug 17;536(7616):285-91.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>;
+PMC: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
+</p>

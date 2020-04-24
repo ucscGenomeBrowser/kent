@@ -1,0 +1,149 @@
+# Download and load GTEx V8 (October 2015) from portal:
+#      gtexportal.org
+# 2/20 KRR
+
+cd /hive/data/outside/GTEx
+
+# Download normalized gene expression levels (TPM)
+
+mkdir -p V8/rnaSeq
+cd V8/rnaSeq
+
+wget -nd https://storage.googleapis.com/gtex_analysis_v8/rna_seq_data/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct.gz
+set dataFile = GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct
+gunzip $dataFile.gz
+wc -l $dataFile
+# 56203 GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct
+
+# Download subject and sample metadata and compare to V6
+
+wget -nd https://storage.googleapis.com/gtex_analysis_v8/annotations/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt
+wget -nd https://storage.googleapis.com/gtex_analysis_v8/annotations/GTEx_Analysis_v8_Annotations_SampleAttributesDD.xlsx
+
+wc -l *Sample*txt ../../V6/*Sample*txt
+# 22952 GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt
+# 11984 GTEx_Data_V6_Annotations_SampleAttributesDS.txt
+
+# > 2x more samples
+
+wget -nd https://storage.googleapis.com/gtex_analysis_v8/annotations/GTEx_Analysis_v8_Annotations_SubjectPhenotypesDS.txt
+wget -nd https://storage.googleapis.com/gtex_analysis_v8/annotations/GTEx_Analysis_v8_Annotations_SubjectPhenotypesDD.xlsx
+
+wc -l *Phenotypes*.txt ../../V6/*Phenotypes*.txt
+# 981 GTEx_Analysis_v8_Annotations_SubjectPhenotypesDS.txt
+# 571 ../../V6/GTEx_Data_V6_Annotations_SubjectPhenotypesDS.txt
+
+# nearly 2x subjects
+
+# Download gene models
+wget -nd  https://storage.googleapis.com/gtex_analysis_v8/reference/gencode.v26.GRCh38.genes.gtf
+
+# Parse and load
+# 4/20 KRR
+
+set subjectFile = GTEx_Analysis_v8_Annotations_SubjectPhenotypesDS.txt
+set sampleFile = GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt
+
+set hgGtex = ~kate/kent/src/hg/makeDb/outside/hgGtex/hgGtex
+set dir = tables
+mkdir $dir
+
+# test run -- metadata, and just a few rows of data
+$hgGtex -tab=$dir -noLoad -limit=2 gtexV8 V8 $dataFile $sampleFile $subjectFile $tissueFile -verbose=2 >&! hgGtex.log &
+
+# NOTE: change to tissues in sample descriptions... (field 7)
+# Changed fibroblasts description, and added Kidney - Medulla (4 samples)
+diff sampleTissues.txt /hive/data/outside/GTEx/V6
+0a1
+> 
+22d22
+< Cells - Cultured fibroblasts
+24a25
+> Cells - Transformed fibroblasts
+36d36
+< Kidney - Medulla
+
+# Manually update tissueFile, with version that includes GTEx abbrevs
+cp ../../V6/metadata/gtexTissue.new.tab gtexColorTissue.tab
+# edit
+set tissueFile = gtexColorTissue.tab
+
+# sanity check files
+cd tables
+ls -l
+-rw-rw-r-- 1 kate genecats       17346 Apr 21 16:33 gtexV8Donor.tab
+-rw-rw-r-- 1 kate genecats          14 Apr 21 16:53 gtexV8Info.tab
+-rw-rw-r-- 1 kate genecats     3062798 Apr 21 16:33 gtexV8Sample.tab
+-rw-rw-r-- 1 kate genecats 61521590867 Apr 21 16:53 gtexV8SampleData.tab
+-rw-rw-r-- 1 kate genecats   189120561 Apr 21 16:53 gtexV8TissueData.tab
+-rw-rw-r-- 1 kate genecats    19937702 Apr 21 16:53 gtexV8TissueMedianAll.tab
+-rw-rw-r-- 1 kate genecats    19913568 Apr 21 16:53 gtexV8TissueMedianFemale.tab
+-rw-rw-r-- 1 kate genecats    19871866 Apr 21 16:53 gtexV8TissueMedianMale.tab
+
+wc -l gtex*Tab
+        980 gtexV8Donor.tab
+          1 gtexV8Info.tab
+      17382 gtexV8Sample.tab
+  976868400 gtexV8SampleData.tab
+    3034800 gtexV8TissueData.tab
+      56200 gtexV8TissueMedianAll.tab
+      56200 gtexV8TissueMedianFemale.tab
+      56200 gtexV8TissueMedianMale.tab
+
+# peruse Info.tab, first lines of others
+
+# Look OK, so load into database
+
+$hgGtex -tab=$dir gtexV8 V8 $dataFile $sampleFile $subjectFile $tissueFile -verbose=2 >&! load.log &
+
+[hgFixed]> show tables like 'gtexV8%';
++-----------------------------+
+| Tables_in_hgFixed (gtexV8%) |
++-----------------------------+
+| gtexV8Donor                 |
+| gtexV8Info                  |
+| gtexV8Sample                |
+| gtexV8SampleData            |
+| gtexV8Tissue                |
+| gtexV8TissueMedianAll       |
+| gtexV8TissueMedianFemale    |
+| gtexV8TissueMedianMale      |
++-----------------------------+
+
+# merge gtexV8Info into gtexInfo (i.e. add a row for V8)
+hgsql hgFixed -e 'select * from gtexV8Info';
++---------+-------------+----------+----------------+
+| version | releaseDate | maxScore | maxMedianScore |
++---------+-------------+----------+----------------+
+| V8      | 0           |        0 |         747400 |
++---------+-------------+----------+----------------+
+
+# get release date from GTEx portal
+hgsql hgFixed -e "insert into gtexInfo set version='V8', releaseDate='2019-08-26', maxMedianScore=747400"
+
+# Rename tables for use by hgGtexGeneBed
+
+hgsql hgFixed -e 'alter table gtexV8TissueMedianAll rename to gtexTissueMedianV8';
+
+#######################################
+# Download fine-mapped eQTL's
+
+cd ../
+mkdir eQtl
+cd eQtl
+wget -nd https://storage.googleapis.com/gtex_analysis_v8/single_tissue_qtl_data/README_eQTL_v8.txt
+
+wget -nd https://storage.googleapis.com/gtex_analysis_v8/single_tissue_qtl_data/GTEx_v8_finemapping_CAVIAR.tar
+
+tar vf GTEx_v8_finemapping_CAVIAR.tar
+ln -s GTEx_v8_finemapping_CAVIAR caviar
+cd caviar
+
+# Download variant mapping and VEP annotation
+
+wget -nd https://storage.googleapis.com/gtex_analysis_v8/reference/GTEx_Analysis_2017-06-05_v8_WholeGenomeSeq_838Indiv_Analysis_Freeze.lookup_table.txt.gz
+
+wget -nd https://storage.googleapis.com/gtex_analysis_v8/reference/WGS_Feature_overlap_collapsed_VEP_short_4torus.MAF01.txt.gzo
+
+gunzip *.gz
+

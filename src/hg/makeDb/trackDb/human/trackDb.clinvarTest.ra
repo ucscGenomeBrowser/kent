@@ -7,11 +7,12 @@ visibility hide
 type bed 12 +
 itemRgb on
 urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
-scoreLabel ClinVar Star-Rating (0-4)
+#scoreLabel ClinVar Star-Rating (0-4)
+noScoreFilter on
 
     track clinvarMain
     shortLabel ClinVar Short Variants
-    longLabel ClinVar Short Variants <= 100bp
+    longLabel ClinVar Short Variants < 50bp
     visibility pack
     parent clinvar
     priority 1
@@ -30,7 +31,7 @@ scoreLabel ClinVar Star-Rating (0-4)
 
     track clinvarCnv
     shortLabel ClinVar Long Variants
-    longLabel ClinVar Long Variants > 100bp (mostly Copy-Number Variants)
+    longLabel ClinVar Long Variants >= 50bp (mostly Copy-Number Variants)
     visibility pack
     type bigBed 12 +
     parent clinvar

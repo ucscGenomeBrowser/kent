@@ -2,22 +2,24 @@
 
 <p>
 This track shows genomic regions known to cause artefacts for common sequencing analyses, 
-like alignment, variant or peak calling. Its subtracks were imported from
+like alignment, variant, or peak calling. Its subtracks were imported from
 from <a href="https://www.ncbi.nlm.nih.gov/variation/tools/get-rm/" target=_blank>NCBI Get-RM</a>, 
-<a href="https://www.nist.gov/programs-projects/genome-bottle" target=_blank>Genome-in-a-Bottle</a>
+<a href="https://www.nist.gov/programs-projects/genome-bottle" target=_blank>Genome-in-a-Bottle</a>,
 and from Anshul Kundaje's <a href="https://github.com/Boyle-Lab/Blacklist/blob/master/lists/hg19-blacklist-README.pdf" target=_blank>ENCODE Blacklist</a>.
 </p>
 
 <p>
-The only exception is the "UCSC FAQ notes", the track was typed manually, based on
-the Genome Browser's assembly description, our FAQs and NCBI RefSeq "other" annotations.
+The only exception is the subtrack "UCSC FAQ Comments", which contains annotations of fixed sequences, 
+alternate haplotypes, unplaced contigs, pseudo-autosomal regions, and mitochondria. It was 
+curated manually, based on
+the Genome Browser's assembly description, our FAQs, and NCBI RefSeq "other" annotations.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-The UCSC FAQ notes track has a mouse over description, all other tracks have at most a name field, which 
-can be shown in pack mode. The tracks are usually kept in dense mode.
+The UCSC FAQ notes track has a mouse over description, all other tracks have at most a name 
+field, which can be shown in pack mode. The tracks are usually kept in dense mode.
 </p>
 
 <H2>Data access</H2>
@@ -26,9 +28,9 @@ The raw data can be explored interactively with the <a href="../cgi-bin/hgTables
 or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
 
 <p>
-For automated download and analysis, the genome annotation is stored in bigBeds files that
+For automated download and analysis, the genome annotation is stored in bigBed files that
 can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/special/" target="_blank">our download server</a>.
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/problematic/" target="_blank">our download server</a>.
 Individual
 regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>
 which can be compiled from the source code or downloaded as a precompiled
@@ -36,7 +38,7 @@ binary for your system. Instructions for downloading source code and binaries ca
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
 The tool
 can also be used to obtain only features within a given range, e.g. 
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/special/deadZone.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/problematic/deadZone.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
 </p>
 
 <h2>Methods</h2>
@@ -50,8 +52,26 @@ target="_blank">hg19 makeDoc file</a>.
 
 <h2>Credits</h2>
 <p>
-?
-</p>
+Thanks to Ana Benet-Pages, Max Haeussler, Angie Hinrich, and Daniel Schmelter
+at the UCSC Genome Browser for planning, building and testing these tracks. The
+underlying data comes from the ENCODE Blacklist project, the NCBI 
+<a target=_blank href="https://www.ncbi.nlm.nih.gov/variation/tools/get-rm/">GeT-RM</a>,
+and the Genome-In-A-Bottle project.</p>
 
 <h2>References</h2>
-?
+<p>
+Amemiya HM, Kundaje A, Boyle AP.
+<a href="http://dx.doi.org/10.1038/s41598-019-45839-z" target="_blank">
+The ENCODE Blacklist: Identification of Problematic Regions of the Genome</a>.
+<em>Sci Rep</em>. 2019 Jun 27;9(1):9354.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31249361" target="_blank">31249361</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6597582/" target="_blank">PMC6597582</a>
+</p><p>
+Zook JM, Chapman B, Wang J, Mittelman D, Hofmann O, Hide W, Salit M.
+<a href="https://dx.doi.org/10.1038/nbt.2835" target="_blank">
+Integrating human sequence data sets provides a resource of benchmark SNP and indel genotype
+calls</a>.
+<em>Nat Biotechnol</em>. 2014 Mar;32(3):246-51.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24531798" target="_blank">24531798</a>
+</p>
+

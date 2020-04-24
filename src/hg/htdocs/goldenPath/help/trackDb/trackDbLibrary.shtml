@@ -4699,12 +4699,12 @@ For the complete bigBarChart format definitions please see the
 </DIV>
 <DIV class="barChartSizeWindows"><span class="types bigBarChart"></span>
 <div class="format"><code>barChartSizeWindows &lt;largeMax&gt; &lt;smallMin&gt;</code></div>
-    <P>BarChart track display selects one of three sizes (small, medium, or large) to
-        display barCharts, based on size of the genomic region in the current window.
-        The window sizes set by default for this feature (50000 and 500000) bases
-        work well with gene-level annotations in vertebrate genomes.
-        For other use cases, e.g. when annotating a small genome,
-        this setting can be used to customize.  The setting parameters are used as follows:
+    <P>This setting provides a way to choose the basepair thresholds which determine the barChart
+        sizes (small, medium, or large charts). The default basepair window size is 50000 and 
+        500000 bases, which is intended for one chart per gene in vertebrate genomes. This 
+        setting can be used to flexibly customize chart sizes based on the basepair window 
+        size being visualized when densely annotating a sequence.</p>
+
 <table>
 <tr><td><i>large</i></td><td> window size &lt; largeMax</td></tr>
 <tr><td><i>medium</i></td><td> window size &gt;= largeMax and &lt; smallMin</td></tr>
@@ -4712,8 +4712,8 @@ For the complete bigBarChart format definitions please see the
 </table>
     <P><B>Example:</B></P>
     <pre>   barChartSizeWindows 500 8000</pre>
-    <P>In this example, used when displaying barCharts on a 30,000 nt viral genome,
-    large charts appear in windows (regions) up to 499 bases, medium in windows
+    <P>In this example, used when displaying barCharts on a 30,000 basepair viral genome,
+    large charts appear in windows up to 499 bases, medium in windows
     from 500 to 7999 in size, and small when 8000 or more bases are shown in browser window.
     </P>
 </DIV>

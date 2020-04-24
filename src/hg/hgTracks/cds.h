@@ -85,7 +85,18 @@
 #define CDS_SYN_BLEND_G  50 
 #define CDS_SYN_BLEND_B  0
 
-#define CDS_NUM_COLORS 13
+// Ribosomal shift colors
+#define CDS_RIBO_SLIP1    13  /* purple */
+#define CDS_RIBO_SLIP1_R  250 
+#define CDS_RIBO_SLIP1_G  50 
+#define CDS_RIBO_SLIP1_B  255
+
+#define CDS_RIBO_SLIP2    14  /* cyan */
+#define CDS_RIBO_SLIP2_R  50 
+#define CDS_RIBO_SLIP2_G  250 
+#define CDS_RIBO_SLIP2_B  255
+
+#define CDS_NUM_COLORS 15
 
 Color getCdsColor(int index);
 /* return color from index of types of colors */
