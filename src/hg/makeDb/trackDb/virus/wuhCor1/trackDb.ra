@@ -26,6 +26,8 @@ visibility hide
 color 20,90,0
 type bed 6 +
 exonArrows off
+noScoreFilter .
+
 
 track primers
 shortLabel RT-PCR Primers
