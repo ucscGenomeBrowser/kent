@@ -29,14 +29,23 @@ priority 0.5
 html nextstrainSamples
 compositeTrack on
 
-    track nextstrainSamplesAll
+    track nextstrainSamplesRb
     parent nextstrainSamples on
+    shortLabel Rec Bi-allelic
+    longLabel Recurrent Bi-allelic Variants in all Nextstrain/GISAID Samples from nextstrain.org/ncov
+    hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain.nh
+    hapClusterHeight 500
+    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainRecurrentBiallelic.vcf.gz
+    priority 1
+
+    track nextstrainSamplesAll
+    parent nextstrainSamples off
     shortLabel All Vars
     longLabel Variants in All Nextstrain/GISAID Samples from nextstrain.org/ncov
     hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain.nh
     hapClusterHeight 500
     bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples.vcf.gz
-    priority 1
+    priority 2
 
     track nextstrainSamplesA1a
     parent nextstrainSamples off

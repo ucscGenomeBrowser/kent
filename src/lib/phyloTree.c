@@ -22,7 +22,9 @@ return tree;
 
 struct phyloTree *phyloOpenTree(char *fileName)
 {
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct lineFile *lf = lineFileUdcMayOpen(fileName, TRUE);
+if (lf == NULL)
+    errAbort("phyloOpenTree: Can't open '%s'", fileName);
 struct phyloTree *tree = phyloReadTree(lf);
 
 lineFileClose(&lf);
