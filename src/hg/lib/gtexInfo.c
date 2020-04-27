@@ -190,10 +190,21 @@ sqlRemakeTable(conn, table, query);
 }
 
 char *gtexVersionSuffix(char *table)
-/* Return version string for a GTEx track table.  For now, just supporting V4 and V6 (default, no suffix )*/                                        
+/* Return version string for a GTEx track table.  Supporting V4, V6, V8 (default, no suffix )*/                                        
 {
-if (table && endsWith(table, "V4"))
-    return("V4");
+if (table)
+    {
+    if (endsWith(table, "V4"))
+        return("V4");
+/* 
+    TODO: Handle default case more generically
+    
+    if (endsWith(table, "V6"))
+        return("V6");
+*/
+    if (endsWith(table, "V8"))
+        return("V8");
+    }
 return("");
 }
 
