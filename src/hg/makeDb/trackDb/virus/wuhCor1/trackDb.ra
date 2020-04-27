@@ -80,7 +80,7 @@ bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
 
 track publicAnnots
 shortLabel Crowd-sourced data
-longLabel Crowd-sourced data: user annotations contributed via bit.ly/cov2annots
+longLabel Crowd-sourced data: annotations contributed via bit.ly/cov2annots
 group map
 priority 6
 type bigBed 9 +
