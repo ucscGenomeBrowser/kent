@@ -1,4 +1,38 @@
 #############################################################################
+# GTEx V8 (Apr 2020) Kate
+# Create BED from hgFixed tables (see doc/gtex)
+ 
+# Load gene models (Gencode V26 transcript union from GTEx)
+
+cd /hive/data/outside/gtex/V8/rnaSeq
+gtfToGenePred gencode.v26.GRCh38.genes.gtf gencodeV26.hg38.genePred \
+                -infoOut=gtexGeneModelInfoV8.tab
+hgLoadGenePred hg38 gtexGeneModelV8 gencodeV26.hg38.genePred
+
+# Get transcript for each gene (why ?)
+tail -n +2 gtexGeneModelInfoV8.tab | awk '{printf("%s\t%s\n", $1, $9)}' > gtexGeneTranscriptsV8.tab
+#hgLoadSqlTab hgFixed gtexTranscriptV8 ~/kent/src/hg/lib/gtexTranscript.sql gtexGeneTranscriptsV8.tab
+# no schema (or table on hgwdev.hgFixed)
+
+# Load BED table
+cd /hive/data/genomes/hg38/bed/gtex
+mkdir V8
+cd V8
+
+set gencode = V26
+~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed \
+        hg38 -noLoad -gtexVersion=V8 -gencodeVersion=$gencode gtexGeneV8 -verbose=2 >&! log.txt
+
+Reading wgEncodeGencodeAttrs table
+Reading gtexGeneModelV8 table
+Reading gtexTissueMedian table
+Writing tab file gtexGeneV8
+Max score: 267400.000000
+
+~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed \
+        hg38 -gtexVersion=V8 -gencodeVersion=$gencode gtexGeneV8 -verbose=2 
+
+#############################################################################
 # GTEx V6 (October 2015) Kate
 # Create BED from hgFixed tables (see doc/gtex)
 # Reloading during QA of track (fixing gene classes, adding scores).  (March 2016) Kate

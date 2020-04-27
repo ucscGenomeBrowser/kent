@@ -4644,9 +4644,9 @@ cartWebStart(cart, database, "Extended DNA Case/Color");
 
 if (NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))))
     hgParseChromRange(database, pos, &seqName, &winStart, &winEnd);
-if (winEnd - winStart > 1000000)
+if (winEnd - winStart > 5000000)
     {
-    printf("Please zoom in to 1 million bases or less to color the DNA");
+    printf("Please zoom in to 5 million bases or less to color the DNA");
     return;
     }
 

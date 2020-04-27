@@ -420,7 +420,7 @@ track->bbiFile = NULL;
 
 struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, track->tdb) ;
 if (compositeChildHideEmptySubtracks(cart, track->tdb, NULL, NULL))
-   labelTrackAsFiltered(track);
+   labelTrackAsHideEmpty(track);
 
 unsigned filtered = 0;
 for (bb = bbList; bb != NULL; bb = bb->next)

@@ -237,7 +237,8 @@ for(; files; files = files->next)
     if ((unsigned long)mem == address)  // make sure we can get this address
         {
         u_char *ret = mem + lmBlockHeaderSize();
-        maybeTouchFile(fileName);
+        // we're going to depend on access time working correctly
+        //maybeTouchFile(fileName);  
         cacheLog("using cache memory at %lx", ret);
         return (struct trackDb *)ret;
         }

@@ -26,6 +26,8 @@ visibility hide
 color 20,90,0
 type bed 6 +
 exonArrows off
+noScoreFilter .
+
 
 track primers
 shortLabel RT-PCR Primers
@@ -76,20 +78,7 @@ group immu
 type bigBed 4 +
 bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
 
-# the RR version of the track, with the filters
 track publicAnnots
-release beta,public
-shortLabel User annotations
-longLabel User-contributed annotations via bit.ly/cov2annots
-group map
-priority 4
-type bigBed 9 +
-bigDataUrl /gbdb/wuhCor1/bbi/public.bb
-mouseOverField extraField0
-
-#
-track publicAnnots
-release alpha
 shortLabel User annotations
 longLabel User-contributed annotations via bit.ly/cov2annots
 group map
@@ -135,6 +124,8 @@ type bigBed 9 +
 group immu
 bigDataUrl /gbdb/wuhCor1/bbi/poranHla/CD8-hla1.bb
 noScoreFilter on
+mouseOverField name2
+html poranHla1
 
 track poranHla2
 shortLabel Poran HLA II
@@ -144,6 +135,8 @@ group immu
 type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/bbi/poranHla/CD8-hla2.bb
 noScoreFilter on
+mouseOverField name2
+html poranHla1
 
 track artic
 shortLabel ARTIC primers

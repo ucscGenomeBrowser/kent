@@ -696,7 +696,7 @@ each subdirectory of $outRoot into a per-target-chunk file.";
         | sed -e 's#/\$##; s#^./##' > tParts.lst
 chmod a+x cat.csh
 $gensub2 tParts.lst single gsub jobList
-mkdir ../pslParts
+mkdir -p ../pslParts
 $paraRun
 _EOF_
     );
@@ -823,7 +823,7 @@ to each target sequence.";
   $bossScript->add(<<_EOF_
 chmod a+x chain.csh
 $gensub2 pslParts.lst single gsub jobList
-mkdir chain liftedChain
+mkdir -p chain liftedChain
 $paraRun
 rmdir liftedChain
 _EOF_
@@ -990,7 +990,7 @@ _EOF_
 # Make axtNet for download: one .axt per $tDb seq.
 netSplit noClass.net net
 cd ..
-mkdir axtNet
+mkdir -p axtNet
 foreach f (axtChain/net/*.net)
 netToAxt \$f axtChain/chain/\$f:t:r.chain \\
   $seq1Dir $seq2Dir stdout \\
@@ -999,7 +999,7 @@ netToAxt \$f axtChain/chain/\$f:t:r.chain \\
 end
 
 # Make mafNet for multiz: one .maf per $tDb seq.
-mkdir mafNet
+mkdir -p mafNet
 foreach f (axtNet/*.$tDb.$qDb.net.axt.gz)
   axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. \$f \\
         $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} \\
@@ -1021,14 +1021,14 @@ _EOF_
   } else {
     $bossScript->add(<<_EOF_
 # Make axtNet for download: one .axt for all of $tDb.
-mkdir ../axtNet
+mkdir -p ../axtNet
 netToAxt -verbose=0 noClass.net $chain \\
   $seq1Dir $seq2Dir stdout \\
 | axtSort stdin stdout \\
 | gzip -c > ../axtNet/$tDb.$qDb.net.axt.gz
 
 # Make mafNet for multiz: one .maf for all of $tDb.
-mkdir ../mafNet
+mkdir -p ../mafNet
 axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. ../axtNet/$tDb.$qDb.net.axt.gz \\
   $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} \\
   stdout \\
@@ -1552,7 +1552,7 @@ sub installDownloads {
   $bossScript->add(<<_EOF_
 mkdir -p $HgAutomate::goldenPath/$tDb
 rm -rf $HgAutomate::goldenPath/$tDb/vs$QDb
-mkdir $HgAutomate::goldenPath/$tDb/vs$QDb
+mkdir -p $HgAutomate::goldenPath/$tDb/vs$QDb
 cd $HgAutomate::goldenPath/$tDb/vs$QDb
 ln -s $runDir/$tDb.$qDb.all.chain.gz .
 ln -s $runDir/README.txt .
@@ -1562,7 +1562,7 @@ _EOF_
     );
   if (! $isSelf) {
     my $axt = ($splitRef ?
-	       "mkdir axtNet\n" . "ln -s $buildDir/axtNet/*.axt.gz axtNet/" :
+	       "mkdir -p axtNet\n" . "ln -s $buildDir/axtNet/*.axt.gz axtNet/" :
 	       "ln -s $buildDir/axtNet/$tDb.$qDb.net.axt.gz .");
     if ( -s "$runDir/$tDb.$qDb.net.gz") {
     $bossScript->add(<<_EOF_
@@ -1693,7 +1693,7 @@ netFilter -syn $tDb.$qDb.net.gz  \\
     | netSplit stdin synNet
 chainSplit chain $tDb.$qDb.all.chain.gz
 cd ..
-mkdir $successDir
+mkdir -p $successDir
 foreach f (axtChain/synNet/*.net)
   netToAxt \$f axtChain/chain/\$f:t:r.chain \\
     $defVars{'SEQ1_DIR'} $defVars{'SEQ2_DIR'} stdout \\

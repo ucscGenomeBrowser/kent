@@ -1,0 +1,5 @@
+mkdir /cluster/data/wuhCor1/bed/rangan
+cd /cluster/data/wuhCor1/bed/rangan
+
+# received RNA Structures.bed from Manny
+hgLoadSqlTab wuhCor1 rnaStructRangan /scratch/braney/kent/src/hg/lib/rnaStruct.sql "RNA Structures.bed"
