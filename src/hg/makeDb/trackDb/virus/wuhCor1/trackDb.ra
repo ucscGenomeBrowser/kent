@@ -79,8 +79,8 @@ type bigBed 4 +
 bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
 
 track publicAnnots
-shortLabel User annotations
-longLabel User-contributed annotations via bit.ly/cov2annots
+shortLabel Crowd-sourced data
+longLabel Crowd-sourced data: user annotations contributed via bit.ly/cov2annots
 group map
 priority 6
 type bigBed 9 +
