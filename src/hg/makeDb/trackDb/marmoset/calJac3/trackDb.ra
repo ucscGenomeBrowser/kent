@@ -191,4 +191,4 @@ priority 1
 
 # change these two to switch to the new refSeqComposite 2018-02
 include trackDb.refGene.ra beta,public
-include ../../refSeqComposite.ra alpha
+include ../../refSeqComposite.ra

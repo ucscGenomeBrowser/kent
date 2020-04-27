@@ -6,4 +6,5 @@ searchType genePred
 searchMethod prefix
 termRegex ^(chrM+scaffold)[0-9_]+(\.[0-9]+)?
 searchPriority 50
-include ../../refSeqComposite.ra alpha
+
+include ../../refSeqComposite.ra

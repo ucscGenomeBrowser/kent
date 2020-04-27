@@ -19,4 +19,4 @@ visibility hide
 
 include trackDb.chainNet.ra
 
-include ../../refSeqComposite.ra alpha
+include ../../refSeqComposite.ra
