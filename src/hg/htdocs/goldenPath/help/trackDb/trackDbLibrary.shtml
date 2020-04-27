@@ -1600,7 +1600,7 @@ There are no extra options that can appear on the type hic line.
 <div class="format">
     <code>filterValues.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
     <code>filterValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
-    <code>filterType.&lt;fieldName&gt; &lt;singleList/multipleListOr/multipleListAnd&gt;</code><BR>
+    <code>filterType.&lt;fieldName&gt; &lt;singleList/multipleListOr/multipleListAnd/multipleListOnlyOr/multipleListOnlyAnd&gt;</code><BR>
     </div>
 <!-- 
     <P>There are a number of different filters available for bed data, see also the 
@@ -1621,9 +1621,17 @@ There are no extra options that can appear on the type hic line.
     by default the selection will be set to &quot;one or more match&quot; which is the same
     as having <code>filterType.fieldName multipleListOr</code>. If the user should
     only be able to select a single value, 
-    <code>singleList</code> can be passed instead. The final option,
+    <code>singleList</code> can be passed instead. Another option,
     <code>multipleListAnd</code>, means that the user can select multiple categories,
     but the filter will let pass only features where all of these categories are present.
+    </p>
+    <p>
+    <code>multipleListOr</code> and <code>multipleListAnd</code> both still let the user
+    override the type of combination manually in the user interface with a radio button. 
+    If you specify <code>multipleListOnlyOr</code> or <code>multipleListOnlyAnd</code>
+    then the radiobutton is suppressed and the user cannot choose between the options
+    anymore. This can be used in cases where by the nature of the field, it
+    makes little sense to offer the OR or AND search. 
     </P>
     <P>You can also choose which values to have selected by default using the
     <code>filterValuesDefault.&lt;fieldName&gt;</code> parameter. It can take a comma separated
