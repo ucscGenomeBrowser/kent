@@ -122,8 +122,13 @@ hgsql hgFixed -e 'select * from gtexV8Info';
 hgsql hgFixed -e "insert into gtexInfo set version='V8', releaseDate='2019-08-26', maxMedianScore=747400"
 
 # Rename tables for use by hgGtexGeneBed
+# TODO: Change hgGtex to name tables as needed by next step!
 
 hgsql hgFixed -e 'alter table gtexV8TissueMedianAll rename to gtexTissueMedianV8';
+hgsql hgFixed -e 'alter table gtexV8Tissue rename to gtexTissueV8';
+hgsql hgFixed -e 'alter table gtexV8Sample rename to gtexSampleV8';
+hgsql hgFixed -e 'alter table gtexV8Donor rename to gtexDonorV8';
+hgsql hgFixed -e 'alter table gtexV8SampleData rename to gtexSampleDataV8';
 
 #######################################
 # Download fine-mapped eQTL's

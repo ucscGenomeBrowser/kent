@@ -540,6 +540,8 @@ if (lf->udcFile)
     freeMem(lf->buf);
     lf->buf = line;
     lf->bufSize = lineSize;
+    if (retSize != NULL)
+	*retSize = lineSize;
     return TRUE;
     }
 

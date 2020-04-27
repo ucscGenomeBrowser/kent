@@ -37,9 +37,12 @@ type psl
 
 track rfam
 shortLabel RFAM
-longLabel RFAM hits
+longLabel RFAM families
+visibility hide
 group genes
-type bed 9
+color 98,23,0
+url https://rfam.org/family/$$
+type bed 5
 
 track gordon2
 shortLabel Protein Interact.
@@ -168,6 +171,7 @@ compositeTrack on
         longLabel M2 SARS-CoV peptides mapped to SARS-Cov-2
         type bigBed 4
         bigDataUrl /gbdb/wuhCor1/bbi/M2_peptides.bb
+
 
 include trackDb.119way.ra
 include epitopes.ra
