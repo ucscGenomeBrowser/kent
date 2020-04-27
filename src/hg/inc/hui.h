@@ -1139,6 +1139,15 @@ void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,bool
 void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix);
 /* Put up a choice for labels. */
 
+#define MERGESPAN_TDB_SETTING "mergeSpannedItems"
+// also used in hgTracks.js!
+#define MERGESPAN_CART_SETTING "doMergeItems"
+void mergeSpanCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix);
+/* If this track offers a merge spanned items option, put up the cfg for it, which
+ * is just a checkbox with a small explanation. Comparing tdb->track to prefix
+ * ensures we don't offer this control at the composite level, as this is a
+ * subtrack only config */
+
 #define NO_SCORE_FILTER  "noScoreFilter"
 #define  SCORE_FILTER      "scoreFilter"
 #define  SCORE_LABEL      "scoreLabel"

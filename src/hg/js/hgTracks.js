@@ -726,6 +726,19 @@ var posting = {
     mapClk: function ()
     {
         var done = false;
+        // if we clicked on a merged item then show all the items, similar to clicking a
+        // dense track to turn it to pack
+        if (this && this.href && this.href.indexOf("i=mergedItem") !== -1) {
+            var id = this.href.slice(this.href.indexOf("&g="));
+            id = id.split(/&[^=]+=/)[1];
+            updateObj={};
+            updateObj[id+".doMergeItems"] = 0;
+            hgTracks.trackDb[id][id+".doMergeItems"] = 0;
+            cart.setVarsObj(updateObj,null,false);
+            imageV2.requestImgUpdate(id, id + ".doMergeItems=0");
+            return false;
+        }
+
         if (false && imageV2.inPlaceUpdate) {
             // XXXX experimental and only turned on in larrym's tree.
             // Use in-place update if the map item just modifies the current position (this is nice
@@ -2911,7 +2924,22 @@ var rightClick = {
             hgTracks.highlight = highlights.join("|");
             cart.setVarsObj({'highlight' : hgTracks.highlight});
             imageV2.highlightRegion();
-
+        } else if (cmd === 'toggleMerge') {
+            // toggle both the cart (if the user goes to trackUi)
+            // and toggle args[key], if the user doesn't leave hgTracks
+            var key = id + ".doMergeItems";
+            var updateObj = {};
+            if (args[key] === 1) {
+                args[key] = 0;
+                updateObj[key] = 0;
+                cart.setVarsObj(updateObj,null,false);
+                imageV2.requestImgUpdate(id, id + ".doMergeItems=0");
+            } else {
+                args[key] = 1;
+                updateObj[key] = 1;
+                cart.setVars(updateObj,null,false);
+                imageV2.requestImgUpdate(id, id + ".doMergeItems=1");
+            }
         } else {   // if ( cmd in 'hide','dense','squish','pack','full','show' )
             // Change visibility settings:
             //
@@ -3100,7 +3128,7 @@ var rightClick = {
                     if (title.length > maxLength) {
                         title = title.substring(0, maxLength) + "...";
                     }
-                    if (isGene || isHgc || id === "wikiTrack") {
+                    if ((isGene || isHgc || id === "wikiTrack") && href.indexOf("i=mergedItem") === -1) {
                         // Add "Open details..." item
                         var displayItemFunctions = false;
                         if (rec) {
@@ -3202,7 +3230,7 @@ var rightClick = {
                         };
                         any = true;
                     }
-                    if (href && href.length  > 0) {
+                    if (href && href.length  > 0 && href.indexOf("i=mergedItem") === -1) {
                         // Add "Show details..." item
                         if (title.indexOf("Click to alter ") === 0) {
                             // suppress the "Click to alter..." items
@@ -3270,6 +3298,21 @@ var rightClick = {
                         onclick: function(menuItemClicked, menuObject) {
                             rightClick.hit(menuItemClicked, menuObject, "float");
                             return true; }
+                    };
+                }
+                // add a toggle to hide/show the merged item(s)
+                mergeTrack = rightClick.selectedMenuItem.id + ".doMergeItems";
+                if (rec.hasOwnProperty(mergeTrack)) {
+                    var hasMergedItems = rec[mergeTrack] === 1;
+                    titleStr = rightClick.makeImgTag("wrench.png") + " ";
+                    if (hasMergedItems) {
+                        titleStr += "Show merged items";
+                    } else {
+                        titleStr += "Merge items that span the current region";
+                    }
+                    o[titleStr] = {onclick: function(menuItemClick, menuObject) {
+                        rightClick.hit(menuItemClick, menuObject, "toggleMerge", rec);
+                        return true; }
                     };
                 }
                 menu.push($.contextMenu.separator);

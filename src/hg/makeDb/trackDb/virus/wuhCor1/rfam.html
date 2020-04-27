@@ -1,56 +1,25 @@
-<html>
-<body>
-<p>
-This track shows hits to RNA covariance models in the <a
-href="https://rfam.xfam.org/" target="_blank">Rfam</A> database,
-mapped to genomic coordinates.
-
-</p> 
-
-<h2>Methods</h2>
-
-The genome was scanned for conserved secondary structures usng cmscan from the Infernal (1.1.2) package using these parameters:
-<p>
-<pre>
-# cmscan :: search sequence(s) against a CM database
-# INFERNAL 1.1.2 (July 2016)
-# Copyright (C) 2016 Howard Hughes Medical Institute.
-# Freely distributed under a BSD open source license.
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# model-specific thresholding:           NC cutoffs
-# Filters set as if DB size in Mb is:    5.000000
-# HMM-only mode for 0 basepair models:   no
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-</pre>
-
-There were two hits total:
-
-<pre>
-E-value  score  bias  modelname   start    end   mdl trunc   gc  description
---------- ------ -----  ---------- ------ ------   --- ----- ----  -----------
-1.9e-16   81.6   0.0  Corona_FSE   13469   13550 +  cm    no 0.54  Coronavirus frameshifting stimulation element
-
-                    ::::::<<<<<<<<<<<________>>>>>>>>>>>:::::::::::::::::::::::::::::::::::::::::::::: CS
-   Corona_FSE     1 GGGUuCgGGGUaccAGuGaaGCuCGaCUgguACCCuGUGcuAaUGGuucuGAuaCUGAUGUUguauaaAGaGCuUUUGAUAU 82  
-                    GGGUU G:GGU:::AG:G+AGC+CG:CU:::ACC:UG G +A  GG++CU  UACUGAUGU GUAUA AG+GCUUUUGA+AU
-  wuhCor1_dna 13469 GGGUUUGCGGUGUAAGUGCAGCCCGUCUUACACCGUGCGGCACAGGCACUAGUACUGAUGUCGUAUACAGGGCUUUUGACAU 13550
-                    ********************************************************************************** PP
-
-
-E-value  score  bias  modelname  start    end   mdl trunc   gc  description
---------- ------ -----  --------- ------ ------   --- ----- ----  -----------
-6.2e-11   54.4   0.0  s2m         29727   29769 +  cm    no 0.56  Coronavirus 3' stem-loop II-like motif (s2m)
-
-
-                          :<<<<<----<<<-<<<<_____>>-->>-->>>--->>>>>: CS
-                 s2m    1 cgguGCCGaGGCCACGCcGAGUAgGAUCGAGGGUACAGCacca 43  
-                           ::::CCGAGGC ACGC:GAGUA:GAUCGAG GUACAG::::+
-  wuhCor1_dna       29727 UUUCACCGAGGCCACGCGGAGUACGAUCGAGUGUACAGUGAAC 29769
-                          ******************************************* PP
-
-</pre>
-
-
-</p>
-</body>
-</html>
+<H2>Rfam families</H2>
+<P>
+The SARS-CoV-2 genome was annotated using the structured RNA families from the <a href="https://rfam.org">Rfam database</a> including the following Coronavirus-specific families: 
+<ul>
+    <li><a href="https://rfam.org/family/RF03120">Sarbecovirus-5UTR</a></li>
+    <li><a href="https://rfam.org/family/RF03125">Sarbecovirus-3UTR</a></li>
+    <li><a href="https://rfam.org/family/RF00507">Coronavirus frameshift stimulating element</a></li>
+    <li><a href="https://rfam.org/family/RF00165">3' UTR pseudoknot</a></li>
+    <li><a href="https://rfam.org/family/RF00164">s2m RNA</a></li>
+</ul>
+<H2>Methods</H2>
+<P>
+The annotations were generated using the Infernal cmsearch program and the Rfam covariance models (release 14.2). The cmsearch output was manually edited to remove the lower-scoring   Betacoronavirus-5UTR and Betacoronavirus-3UTR families that belong to the same Rfam clans as the Sarbecovirus-5UTR and Sarbecovirus-3UTR families (<a href="https://rfam.org/clan/CL00116">CL00116</a> and <a href="https://rfam.org/clan/CL00117">CL00117</a>).
+The alignments and the secondary structure were produced using LocARNA and refined based on the latest literature.
+<H2>Credits</H2>
+<P>
+The curated Sarbecovirus alignments were provided by <a href="https://scholar.google.com/citations?user=XmpBJz0AAAAJ">Kevin Lamkiewicz</a> and <a href="https://www.rna.uni-jena.de/members/manja-marz/">Manja Marz</a> (Friedrich Schiller University Jena). <a href="https://scholar.google.com/citations?user=jn84-g0AAAAJ&hl=en">Eric Nawrocki</a> (NCBI) revised the existing Rfam entries (RF00164, RF00165, and RF00507). We also thank <a href="https://scholar.google.com/citations?user=WPiccHYAAAAJ&hl=en">Ramakanth Madhugiri</a> (Justus Liebig University Giessen) for reviewing the Coronavirus UTR alignments. The track was prepared by the <a href="https://docs.rfam.org/en/latest/rfam-team.html">Rfam team</a>.
+<br>
+This work is part of the <a href="https://bbsrc.ukri.org/">BBSRC</a>-funded project to expand the coverage of viral RNAs in Rfam.
+<H2>References</H2>
+<P>
+<ul>
+    <li>Find more information about Coronavirus families at <a href="https://rfam.org/covid-19">https://rfam.org/covid-19</a></li>
+    <li><a href="https://docs.rfam.org/en/latest/citing-rfam.html">Citing Rfam</a></li>
+</ul>
