@@ -44,8 +44,30 @@ We used Bowtie 1.2.2 to align crRNAs to the human transcriptome (HG38;
 including non-coding RNA) and removed crRNAs that mapped to the human 
 transcriptome with &#8804;2 mismatches.</p>
 
-<h2>Credits</h2>
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables">Table Browser</a>, or combined with other datasets in the
+<a href="hgIntegrator">Data Integrator</a> tool.
+For automated analysis, the genome annotation is stored in
+a bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/bbi/cas13Crispr.bb">the download server</a>.</p>
+<p>
+Annotations can
+be converted from binary to ASCII text by our command-line tool bigBedToBed.
+Instructions for downloading this command can be found on our
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">utilities page</a>.
+The tool can also be used to obtain features within a given range without downloading the file,
+for example:</p>
+<code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/bbi/cas13Crispr.bb -chrom=NC_045512v2 -start=0 -end=29902 stdout</code>
+<p>
+Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our
+<a href="../../FAQ/FAQdownloads.html#download36">Data Access FAQ</a>
+for more information.</p>
 
+<h2>Credits</h2>
 <p>
 The predictions for this track are produced by <a 
 href="https://scholar.google.com/citations?user=rvWeKTQAAAAJ&amp;hl=en">
