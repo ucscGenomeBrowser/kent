@@ -122,7 +122,7 @@ maxLimit 1
 barChartSizeWindows 500 8000
 
 track transcriptome
-shortLabel Transcripts
+shortLabel Transcriptome
 longLabel Canonical SARS-CoV-2 Transcript Information from Kim et al. 2020
 visibility dense
 group genes
