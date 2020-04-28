@@ -78,7 +78,6 @@ release alpha
 shortLabel GTEx Gene V8
 longLabel Gene Expression in 54 tissues from GTEx RNA-seq of 17382 samples, 948 donors (V8, Aug 2019)
 type bed 6 +
-html gtexGeneExpr
 pennantIcon new red
 group expression
 maxItems 200

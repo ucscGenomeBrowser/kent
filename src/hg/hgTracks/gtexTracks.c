@@ -919,16 +919,17 @@ return height;
 }
 
 static char *tissueExpressionText(struct gtexTissue *tissue, double expScore, 
-                                        boolean doLogTransform, char *qualifier)
+                                        boolean doLogTransform, char *qualifier, char *version)
 /* Construct mouseover text for tissue graph */
 {
 static char buf[128];
-doLogTransform = FALSE; // for now, always display expression level on graph as raw RPKM
-safef(buf, sizeof(buf), "%s (%.1f %s%s%sRPKM)", tissue->description, 
+doLogTransform = FALSE; // for now, always display expression level on graph as raw RPKM/TPM
+safef(buf, sizeof(buf), "%s (%.1f %s%s%s%s)", tissue->description, 
                                 doLogTransform ? log10(expScore+1.0) : expScore,
                                 qualifier != NULL ? qualifier : "",
                                 qualifier != NULL ? " " : "",
-                                doLogTransform ? "log " : "");
+                                doLogTransform ? "log " : "",
+                                sameString(version, "V8") ? "TPM" : "RPKM");
 return buf;
 }
 
@@ -1033,7 +1034,8 @@ for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
     if (extras->isComparison && extras->isDifference)
         qualifier = "F-M";
     mapBoxHc(hvg, geneStart, geneEnd, x1, yZero-height, barWidth, height, tg->track, mapItemName,  
-                tissueExpressionText(tissue, expScore, extras->doLogTransform, qualifier));
+                tissueExpressionText(tissue, expScore, extras->doLogTransform, qualifier, 
+                                        extras->version));
     // add map box to comparison graph
     if (geneInfo->medians2)
         {
@@ -1044,7 +1046,8 @@ for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
         if (extras->isComparison && extras->isDifference)
             qualifier = "M-F";
         mapBoxHc(hvg, geneStart, geneEnd, x1, y, barWidth, height, tg->track, mapItemName,
-                tissueExpressionText(tissue, expScore, extras->doLogTransform, qualifier));
+                tissueExpressionText(tissue, expScore, extras->doLogTransform, qualifier, 
+                                        extras->version));
         }
     x1 = x1 + barWidth + padding;
     }

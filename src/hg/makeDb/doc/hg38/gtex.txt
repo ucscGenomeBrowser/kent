@@ -21,7 +21,7 @@ cd V8
 
 set gencode = V26
 ~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed \
-        hg38 -noLoad -gtexVersion=V8 -gencodeVersion=$gencode gtexGeneV8 -verbose=2 >&! log.txt
+        hg38 -noLoad -gtexVersion=V8 -gencodeVersion=$gencode gtexGeneV8 -verbose=2 >&! log.txt &
 
 Reading wgEncodeGencodeAttrs table
 Reading gtexGeneModelV8 table
@@ -29,8 +29,37 @@ Reading gtexTissueMedian table
 Writing tab file gtexGeneV8
 Max score: 267400.000000
 
-~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed \
-        hg38 -gtexVersion=V8 -gencodeVersion=$gencode gtexGeneV8 -verbose=2 
+# Add scores
+set bedScore = ~/kent/src/utils/bedScore/bedScore
+$bedScore -col=10 -minScore=0 -log -method=encode gtexGeneV8.tab gtexGeneBedV8.bed
+textHistogram -real -autoScale=14 -log -col=5 gtexGeneBedV8.bed
+0.000000 ************************************************************ 21287
+71.428643 **************************************************** 5635
+142.857286 **************************************************** 5513
+214.285929 *************************************************** 4683
+285.714571 *************************************************** 4480
+357.143214 *************************************************** 4748
+428.571857 **************************************************** 5466
+500.000500 ************************************************ 3117
+571.429143 ***************************************** 911
+642.857786 ********************************* 252
+714.286429 ************************** 81
+785.715071 ************** 11
+857.143714 ******** 4
+928.572357 *************** 12
+
+# load up
+set lib = ~/kent/src/hg/lib
+hgLoadBed hg38 -noBin -tab -type=bed6+4 \
+        -as=$lib/gtexGeneBed.as -sqlTable=$lib/gtexGeneBed.sql -renameSqlTable \
+                gtexGeneV8 gtexGeneBedV8.bed
+#Read 56200 elements of size 10 from gtexGeneBedV8.bed
+
+
+### TODO 
+# Add GTEx to Gene Sorter (2016-08-18 kate)
+# See hg/near/makeNear.doc
+
 
 #############################################################################
 # GTEx V6 (October 2015) Kate
@@ -56,7 +85,6 @@ cd gtex
 # table renamed to gtexGeneModel later
 
 # Use latest GENCODE attrs file to get biotypes
-
 
 # create bed table
 ~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed  hg38 -gtexVersion=V6 \
