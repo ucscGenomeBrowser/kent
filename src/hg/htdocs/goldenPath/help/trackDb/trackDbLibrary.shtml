@@ -1934,6 +1934,20 @@ There are no extra options that can appear on the type hic line.
     <P>
 </DIV>
 
+<DIV class="mergeSpannedItems"><span class="types bigBed"></span>
+<div class="format"><code>mergeSpannedItems &lt;on/off&gt;</code></div>
+    <P>Allows merging all track items that extend beyond both sides of the current viewing window
+    into one bed item in the display. The presence of this setting permits the display to offer this
+    collapsed viewing option, while the <em>on</em> or <em>off</em> denotes what view should be
+    shown by default.</P>
+    <P>The display can be enabled/disabled by the user either on the normal track configuration
+    page, or via selection from the right-click menu. If the track is a bigBed 9 (+), then the
+    merged item will be shaded as the average of all the merged items.</P>
+    <P><B>Example:</B></P>
+    <pre>   mergeSpannedItems on</pre>
+    <P>
+</DIV>
+
 <DIV class="linkIdInName"><span class="types bed bigBed"></span>
 <div class="format"><code>linkIdInName on</code></div>
     <P>This setting changes the meaning of the bed name field
