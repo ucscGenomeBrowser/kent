@@ -111,13 +111,15 @@ track cas13Crispr
 shortLabel Cas13 CRISPR
 longLabel Cas13 CRISPR targets
 group map
-type bigBed 4 +
+type bigBed 5 +
 visibility hide
 bigDataUrl /gbdb/wuhCor1/bbi/cas13Crispr.bb
 exonNumbers off
 priority 40
-useScore on
+spectrum on
 scoreMax 700
+filter.EfficiencyScore 0
+filterLimits.EfficiencyScore 0:700
 
 track poranHla1
 shortLabel Poran HLA I
