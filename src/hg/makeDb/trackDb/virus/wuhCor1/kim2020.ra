@@ -121,4 +121,54 @@ barChartUnit frac
 maxLimit 1
 barChartSizeWindows 500 8000
 
+track transcriptome
+shortLabel Transcriptome
+longLabel Canonical SARS-CoV-2 Transcript Information from Kim et al. 2020
+visibility dense
+group genes
+type bigBed 12
+priority 5
+compositeTrack on
 
+        track TRS_sites
+        parent transcriptome
+        shortLabel TRS sites
+        longLabel Transcription Regulatory Sequences (TRS)
+        type bigBed 6
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/TRS.bb
+        priority 1
+        
+        track mRNAs
+        parent transcriptome
+        shortLabel Known Transcripts (gRNA and mRNA)
+        longLabel Canonical SARS-CoV-2 Transcripts (gRNA and mRNA)
+        type bigBed 12
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/transcripts.bb
+        priority 2
+        
+        track Kim_RNAs 
+        parent transcriptome
+        shortLabel Kim recomb. trans.
+        longLabel All recombined transcripts from Kim et al. 2020
+        type bigBed 12
+        scoreFilter 900
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/Kim_recombination.bb
+        priority 3
+        
+        track Kim_TRS_sgmRNAs 
+        parent transcriptome
+        shortLabel Kim recomb. TRS trans.
+        longLabel Recombined transcripts from Kim et al. 2020 with a TRS
+        scoreFilter 900
+        type bigBed 12
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/Kim_TRS.bb
+        priority 4
+        
+        track Kim_non-TRS_sgmRNAs 
+        parent transcriptome
+        shortLabel Kim Recomb. Novel transcripts
+        longLabel Recombined transcripts from Kim et al. 2020 without a TRS
+        scoreFilter 900
+        type bigBed 12
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/Kim_notTRS.bb
+        priority 5
