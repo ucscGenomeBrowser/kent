@@ -383,7 +383,8 @@ safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_MAX_VIEW_LIMIT);
 int viewMax = cartCgiUsualInt(cart, cartVar, GTEX_MAX_VIEW_LIMIT_DEFAULT);
 cgiMakeIntVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
 char *version = gtexVersion(tdb->table);
-printf("<span class='%s'>  RPKM (range 0-%d)</span>\n", buf, round(gtexMaxMedianScore(version)));
+printf("<span class='%s'>  %s (range 0-%d)</span>\n", buf, gtexExprUnit(version),
+                                round(gtexMaxMedianScore(version)));
 }
 
 void gtexGeneUi(struct cart *cart, struct trackDb *tdb, char *track, char *title, boolean boxed)

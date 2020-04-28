@@ -58,7 +58,8 @@ var gtexTrackSettings = (function() {
     var CLASS_TISSUE_HOVERED_COLOR = 'gbmTissueHoveredColor';
     var CLASS_TISSUE_UNSELECTED_COLOR = 'gbmTissueNotSelectedColor';
 
-    // 53 tissues from GTEx, as in hgTracks.gtexTissue table
+    // 54 tissues from GTEx, as in hgTracks.gtexTissue table
+    // NOTE: kidneyMedulla was added in V8
     // TODO: Consider generating this list during make, to an auxiliary .js file
     var tissues = [
         'adiposeSubcut', 'adiposeVisceral', 'adrenalGland', 'arteryAorta', 'arteryCoronary', 
@@ -71,7 +72,7 @@ var gtexTrackSettings = (function() {
         'heartAtrialAppend', 'heartLeftVentricl', 'kidneyCortex', 'liver', 'lung', 
         'minorSalivGland', 'muscleSkeletal', 'nerveTibial', 'ovary', 'pancreas', 'pituitary', 
         'prostate', 'skinNotExposed', 'skinExposed', 'smallIntestine', 'spleen', 'stomach', 
-        'testis', 'thyroid', 'uterus', 'vagina', 'wholeBlood'
+        'testis', 'thyroid', 'uterus', 'vagina', 'wholeBlood', 'kidneyMedulla'
     ];
 
     // Convenience functions

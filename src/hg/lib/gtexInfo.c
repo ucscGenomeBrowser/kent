@@ -230,7 +230,6 @@ char query[1024];
 struct sqlConnection *conn = hAllocConn("hgFixed");
 if (!conn)
     return 0;
-// TODO: trackDB setting for this
 if (!version || sameString(version, ""))
     version = GTEX_DEFAULT_VERSION;
 sqlSafef(query, sizeof query, "select maxMedianScore from gtexInfo where version='%s'", version);
@@ -239,4 +238,10 @@ if (score == 0.0)
     errAbort("Internal error: GTEx version \"%s\" not found in gtexInfo table", version);
 hFreeConn(&conn);
 return score;
+}
+
+char *gtexExprUnit(char *version)
+/* Units of gene expression */
+{
+return (sameString(version, "V8") ? "TPM" : "RPKM");
 }
