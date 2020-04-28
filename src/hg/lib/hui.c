@@ -4524,8 +4524,11 @@ switch(cType)
 			int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
 			scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
 
-			if(startsWith("bigBed", tdb->type))
-			    labelCfgUi(db, cart, tdb, prefix);
+            if(startsWith("bigBed", tdb->type))
+                {
+                labelCfgUi(db, cart, tdb, prefix);
+                mergeSpanCfgUi(cart, tdb, prefix);
+                }
 			}
 			break;
     case cfgPeak:
@@ -6587,6 +6590,24 @@ for(; thisLabel; thisLabel = thisLabel->next)
         ;
     assert(col);
     printf(" %s&nbsp;&nbsp;&nbsp;", col->comment);
+    }
+}
+
+void mergeSpanCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix)
+/* If this track offers a merge spanned items option, put up the cfg for it, which
+ * is just a checkbox with a small explanation. Comparing tdb->track to prefix
+ * ensures we don't offer this control at the composite level, as this is a
+ * subtrack only config */
+{
+if (trackDbSettingOn(tdb, MERGESPAN_TDB_SETTING) && sameString(tdb->track, prefix))
+    {
+    boolean curOpt = trackDbSettingOn(tdb, "mergeSpannedItems");
+    char mergeSetting[256];
+    safef(mergeSetting, sizeof(mergeSetting), "%s.%s", tdb->track, MERGESPAN_CART_SETTING);
+    if (cartVarExists(cart, mergeSetting))
+        curOpt = cartBoolean(cart, mergeSetting);
+    printf("<b>Merge items that span the current region</b>:");
+    cgiMakeCheckBox(mergeSetting, curOpt);
     }
 }
 

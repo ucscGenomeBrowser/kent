@@ -26,6 +26,8 @@ visibility hide
 color 20,90,0
 type bed 6 +
 exonArrows off
+noScoreFilter .
+
 
 track primers
 shortLabel RT-PCR Primers
@@ -35,9 +37,12 @@ type psl
 
 track rfam
 shortLabel RFAM
-longLabel RFAM hits
+longLabel RFAM families
+visibility hide
 group genes
-type bed 9
+color 98,23,0
+url https://rfam.org/family/$$
+type bed 5
 
 track gordon2
 shortLabel Protein Interact.
@@ -77,8 +82,8 @@ type bigBed 4 +
 bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
 
 track publicAnnots
-shortLabel User annotations
-longLabel User-contributed annotations via bit.ly/cov2annots
+shortLabel Crowd-sourced data
+longLabel Crowd-sourced data: annotations contributed via bit.ly/cov2annots
 group map
 priority 6
 type bigBed 9 +
@@ -144,6 +149,29 @@ group map
 type bigBed 4 +
 bigDataUrl /gbdb/wuhCor1/bbi/artic.bb
 noScoreFilter on
+
+track targets
+shortLabel T-react epitopes
+longLabel  T-cell reactive epitopes in patients and donors
+group immu
+visibility hide
+type bigBed
+compositeTrack on
+
+        track M1_library
+        parent targets
+        shortLabel M1 SARS-CoV peptides
+        longLabel M1 SARS-CoV peptides mapped to SARS-Cov-2
+        type bigBed 4
+        bigDataUrl /gbdb/wuhCor1/bbi/M1_peptides.bb
+        
+        track M2_library
+        parent targets
+        shortLabel M2 SARS-CoV peptides
+        longLabel M2 SARS-CoV peptides mapped to SARS-Cov-2
+        type bigBed 4
+        bigDataUrl /gbdb/wuhCor1/bbi/M2_peptides.bb
+
 
 include trackDb.119way.ra
 include epitopes.ra

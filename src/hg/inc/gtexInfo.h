@@ -97,4 +97,7 @@ char *gtexVersion(char *table);
 char *gtexVersionSuffixFromVersion(char *version);
 /* Return version table suffix for a version */
 
+char *gtexExprUnit(char *version);
+/* Units of gene expression */
+
 

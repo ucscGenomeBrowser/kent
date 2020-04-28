@@ -8,7 +8,6 @@ hideEmptySubtracks on
 group map
 visibility hide
 type bigBed 3 +
-release alpha,beta
 
 
     track comments
@@ -18,7 +17,6 @@ release alpha,beta
     bigDataUrl /gbdb/hg19/bbi/problematic/comments.bb
     visibility dense
     parent problematic
-    release alpha,beta
     priority 1
     noScoreFilter on
     mouseOverField note
@@ -30,7 +28,6 @@ release alpha,beta
     bigDataUrl /gbdb/hg19/bbi/problematic/encBlacklist.bb
     visibility dense
     parent problematic
-    release alpha,beta
     priority 2
 
     track getRmNgsDeadZone
@@ -40,7 +37,6 @@ release alpha,beta
     bigDataUrl /gbdb/hg19/bbi/problematic/deadZone.bb
     visibility dense
     parent problematic
-    release alpha,beta
     priority 3
 
     track getRmSangerDeadZone
@@ -50,7 +46,6 @@ release alpha,beta
     bigDataUrl /gbdb/hg19/bbi/problematic/sangerDeadZone.bb
     visibility dense
     parent problematic
-    release alpha,beta
     priority 4
 
     track getRmNgsProblemLow
@@ -60,7 +55,6 @@ release alpha,beta
     bigDataUrl /gbdb/hg19/bbi/problematic/ngsProblemLow.bb
     visibility dense
     parent problematic
-    release alpha,beta
     priority 5
 
     track getRmNgsProblemHigh
@@ -70,7 +64,6 @@ release alpha,beta
     bigDataUrl /gbdb/hg19/bbi/problematic/ngsProblemHigh.bb
     visibility dense
     parent problematic
-    release alpha,beta
     priority 6
 
     track filterSSE
@@ -80,7 +73,6 @@ release alpha,beta
     bigDataUrl /gbdb/hg19/bbi/problematic/filterSSE.bb
     visibility dense
     parent problematic
-    release alpha,beta
     priority 7
 
     track filterHapNoVar
@@ -90,7 +82,6 @@ release alpha,beta
     bigDataUrl /gbdb/hg19/bbi/problematic/filterHapNoVar.bb
     visibility dense
     parent problematic
-    release alpha,beta
     priority 9
 
     track filterMap
@@ -100,7 +91,6 @@ release alpha,beta
     bigDataUrl /gbdb/hg19/bbi/problematic/filterMap.bb
     visibility dense
     parent problematic
-    release alpha,beta
     priority 10
 
     track filterABQD
@@ -110,7 +100,6 @@ release alpha,beta
     bigDataUrl /gbdb/hg19/bbi/problematic/filterABQD.bb
     visibility dense
     parent problematic
-    release alpha,beta
     priority 11
 
     track filterAlign
@@ -120,7 +109,6 @@ release alpha,beta
     bigDataUrl /gbdb/hg19/bbi/problematic/filterAlign.bb
     visibility dense
     parent problematic
-    release alpha,beta
     priority 12
 
     track filterConflicting
@@ -130,7 +118,6 @@ release alpha,beta
     bigDataUrl /gbdb/hg19/bbi/problematic/filterConflicting.bb
     visibility dense
     parent problematic
-    release alpha,beta
     priority 13
 
 track cosmicRegions

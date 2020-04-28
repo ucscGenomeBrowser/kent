@@ -13,8 +13,20 @@ isScoreOrder <- args[5] == "order=score"
 version <- args[6]
 
 # TODO: replace with V6 colors
-source("hgcData/gtexColorsV4.R")
-# sets colorsHex
+# Currently, V6 and V8 tracks both use V4 colors.  V8 has one additional tissue (Kidney - Medulla)
+
+if (version == "V8") {
+    colorVersion <- "V8"
+    units <- "TPM"
+} else {
+    colorVersion <- "V4"
+    units <- "RPKM"
+}
+
+colorVersion <- if (version == "V8") "V8" else "V4"
+colorFile <- paste0("hgcData/gtexColors", colorVersion, ".R")
+source(colorFile)
+# sets colorsHex, darkerColorsHex
 
 df <- read.table(dataFile, sep="\t", header=TRUE)
 labels <- names(table(df$tissue))
@@ -44,11 +56,12 @@ darkgray <- "#737373"
 # plot with customized margins, symbol and line styles and colors, to mimic GTEx figure in
 # UCSC GTEx grant proposal
 par(mar=c(12,4,3,1) + 0.1, mgp=c(2,1,0), font.main=1)
-yLabel <- if (isLog) "Log10 (RPKM+1)" else "RPKM"
+#yLabel <- if (isLog) "Log10 (RPKM+1)" else "RPKM"
+yLabel <- if (isLog) paste0("Log10 (",units,"+1)") else units 
 max <- max(df$rpkm)
 yLimit <- if (isLog) c(-.05, max+.1) else c(-(max*.02), max+ (max*.03))
 exprPlot <- boxplot(rpkm ~ tissueFactor, data=df, ylab=yLabel, ylim=yLimit,
-                        main=paste(gene, "Gene Expression from GTEx (Release ", version, ")"),
+                        main=paste0(gene, " Gene Expression from GTEx (Release ", version, ")"),
                         col=colorsHex, border=c(darkgray),
                         # medians
                         medcol="black", medlwd=2,
