@@ -150,7 +150,7 @@ compositeTrack on
         parent transcriptome
         shortLabel Kim recomb. trans.
         longLabel All recombined transcripts from Kim et al. 2020
-        type bigBed 12
+        type bigBed 12 .   
         scoreFilter 900
         bigDataUrl /gbdb/wuhCor1/bbi/kim2020/Kim_recombination.bb
         priority 3
@@ -160,7 +160,7 @@ compositeTrack on
         shortLabel Kim recomb. TRS trans.
         longLabel Recombined transcripts from Kim et al. 2020 with a TRS
         scoreFilter 900
-        type bigBed 12
+        type bigBed 12 .
         bigDataUrl /gbdb/wuhCor1/bbi/kim2020/Kim_TRS.bb
         priority 4
         
@@ -169,6 +169,6 @@ compositeTrack on
         shortLabel Kim Recomb. Novel transcripts
         longLabel Recombined transcripts from Kim et al. 2020 without a TRS
         scoreFilter 900
-        type bigBed 12
+        type bigBed 12 .
         bigDataUrl /gbdb/wuhCor1/bbi/kim2020/Kim_notTRS.bb
         priority 5
