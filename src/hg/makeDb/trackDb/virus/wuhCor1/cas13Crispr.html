@@ -1,23 +1,61 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"></head><body><h2>Description</h2>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"></head><body>
 
-<p>This track shows the <em>in silico</em> design of crRNAs for Cas13 using
-the tool <a href="https://github.com/QilabGitHub/nCov2019_Guide_Design" target="_blank">nCov2019_Guide_Design</a>, as described in Abbott <em>et al.</em>, 2020. </p><p>
+<h2>Description</h2>
+<p>
+This track shows the <em>in silico</em> design of crRNAs for Cas13 using
+the tool <a href="https://github.com/QilabGitHub/nCov2019_Guide_Design" 
+target="_blank">nCov2019_Guide_Design</a>, as described in Abbott <em>et al.</em>, 2020.</p>
 
-</p><p>To target highly conserved regions of the SARS-CoV-2 genome, we generated an <em>in silico</em> collection of all 3,802 possible crRNAs. After excluding crRNAs that are either predicted to have potential off-target binding (&#8804;2 mismatches in the human transcriptome) or having poly-T sequences (&#8805;4 consecutive Ts) that may prevent crRNA expression, we obtained a set of 3,203 crRNAs. These crRNAs are also able to target SARS and MERS with &#8804;1 mismatch.
-</p>
+<p>
+To target highly conserved regions of the SARS-CoV-2 genome, <em>in silico</em> collection of 
+all 3,802 possible crRNAs were generated. After excluding crRNAs that are either predicted 
+to have potential off-target binding (&#8804;2 mismatches in the human transcriptome) or 
+having poly-T sequences (&#8805;4 consecutive Ts) that may prevent crRNA expression, a set 
+of 3,203 crRNAs were obtained. These crRNAs are also able to target SARS and 
+MERS with &#8804;1 mismatch.</p>
 
-<p>Each crRNA here has been characterized with four features: 1) efficiency is predicted using the online tool at https://gitlab.com/sanjanalab/cas13; 2) specificy is determined by the number of off-target loci in human mRNA with &#8804;2 Mismatches to the crRNA; 3) generality within Coronaviridae is quantified as the percentage of Coronaviridae strains targeted by the given crRNA with perfect identity; 4) generality within SARS-CoV-2 is quantified as the percentage of 1,087 SARS-CoV-2 patient genomes downloaded on March 20, 2020 that are targeted by the given crRNA with perfect identity.</p>
+<p>
+Each crRNA has been characterized with four features:
+<ul>
+<li>Efficiency is predicted using the online tool at https://gitlab.com/sanjanalab/cas13</li> 
+<li>Specificy is determined by the number of off-target loci in human mRNA with &#8804;2 
+Mismatches to the crRNA</li> 
+<li>Generality within Coronaviridae is quantified as the percentage of Coronaviridae strains 
+targeted by the given crRNA with perfect identity</li> 
+<li>Generality within SARS-CoV-2 is quantified as the percentage of 1,087 SARS-CoV-2 patient 
+genomes downloaded on March 20, 2020 that are targeted by the given crRNA with perfect 
+identity</li></ul></p>
 
 <h2>Method</h2>
-
-<p>To design all possible crRNAs for the three pathogenic RNA viruses (SARS-CoV-2, SARS-CoV, and MERS-CoV), the reference genomes of SARS-CoV, MERS-CoV, along with SARS-CoV-2 genomes derived from 47 patients were first aligned by MAFFT using the --auto flag. crRNA candidates were identified by using a sliding window to extract all 22-nucleotide (nt) sequences with perfect identity among the SARS-CoV-2 genomes. We annotated each crRNA candidate with the number of mismatches relative to the SARS-CoV and MERS-CoV genomes, as well as the GC content. 3,802 crRNA candidates were selected with perfect match against the 47 SARS-CoV-2 genomes and with &#8804;1 mismatch to SARS-CoV or MERS-CoV sequences. To characterize the specificity of 22-nt crRNAs, we ensured that each crRNA does not target any sequences in the human transcriptome. We used Bowtie 1.2.2 to align crRNAs to the human transcriptome (HG38; including non-coding RNA) and removed crRNAs that mapped to the human transcriptome with &#8804;2 mismatches.</p>
+<p>
+To design all possible crRNAs for the three pathogenic RNA viruses (SARS-CoV-2, SARS-CoV, 
+and MERS-CoV), the reference genomes of SARS-CoV, MERS-CoV, along with SARS-CoV-2 genomes 
+derived from 47 patients were first aligned by MAFFT using the --auto flag. 
+crRNA candidates were identified by using a sliding window to extract all 22-nucleotide 
+(nt) sequences with perfect identity among the SARS-CoV-2 genomes.</p>
+<p>
+We annotated each crRNA candidate with the number of mismatches relative to the SARS-CoV 
+and MERS-CoV genomes, as well as the GC content. 3,802 crRNA candidates were selected with 
+perfect match against the 47 SARS-CoV-2 genomes and with &#8804;1 mismatch to SARS-CoV 
+or MERS-CoV sequences. To characterize the specificity of 22-nt crRNAs, we ensured 
+that each crRNA does not target any sequences in the human transcriptome.</p>
+<p>
+We used Bowtie 1.2.2 to align crRNAs to the human transcriptome (HG38; 
+including non-coding RNA) and removed crRNAs that mapped to the human 
+transcriptome with &#8804;2 mismatches.</p>
 
 <h2>Credits</h2>
 
-<p>The predictions for this track are produced by <a href="https://scholar.google.com/citations?user=rvWeKTQAAAAJ&amp;hl=en"> Xueqiu Lin </a> and Augustine Chemparathy in <a href="https://med.stanford.edu/qilab/home.html" target="_blank">Stanley Qi lab</a> at Stanford University</p><h2>References</h2>
-<p>Abbott, Timothy R., Girija Dhamdhere, Yanxia Liu, Xueqiu Lin, Laine Goudy, Leiping Zeng, Augustine Chemparathy,
-<em> et al.</em>
+<p>
+The predictions for this track are produced by <a 
+href="https://scholar.google.com/citations?user=rvWeKTQAAAAJ&amp;hl=en">
+Xueqiu Lin </a> and Augustine Chemparathy in <a href="https://med.stanford.edu/qilab/home.html" 
+target="_blank">Stanley Qi lab</a> at Stanford University</p><h2>References</h2>
+<p>
+Abbott, Timothy R., Girija Dhamdhere, Yanxia Liu, Xueqiu Lin, Laine Goudy, Leiping Zeng, 
+Augustine Chemparathy, <em>et al.</em>
 , 2020.
-<a href="https://doi.org/10.1101/2020.03.13.991307" target="_blank">Development of CRISPR as a Prophylactic Strategy to Combat Novel Coronavirus and Influenza</a>. 
+<a href="https://doi.org/10.1101/2020.03.13.991307" target="_blank">
+Development of CRISPR as a Prophylactic Strategy to Combat Novel Coronavirus and Influenza</a>. 
 <em> bioRxiv </em></p>
 </body></html>
