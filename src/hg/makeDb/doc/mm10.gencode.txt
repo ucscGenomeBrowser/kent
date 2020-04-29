@@ -935,7 +935,7 @@ cd kent/src/hg/makeDb/trackDb
     pushd ~/kent/src/hg/makeDb/trackDb
     ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M25 100 'March 2020'
 
-    # If being pushed public, update 'Release Notes' if pushing puyblic.
+    # Update 'Release Notes'
     # mouse/mm10/wgEncodeGencodeSuper.html
 
     # edit mouse/mm10/trackDb.gencode.ra to add new .ra file include
@@ -951,4 +951,10 @@ cd kent/src/hg/makeDb/trackDb
     # commit all
     make DBS=mm10 alpha
     # if pushing public: add ticket and MARK QA READY
+
+###
+2020-03-11: final release (markd)
+    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM25
+  repeat above, only making release month April
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M25 100 'April 2020'
 
