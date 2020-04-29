@@ -23,3 +23,5 @@ searchPriority 8
 include trackDb.chainNet.ra
 
 include trackDb.3way.ra
+
+include ../../refSeqComposite.ra

@@ -5326,19 +5326,6 @@ else
     }
 boolean displayAll = sameString(displaySubs, "all");
 
-boolean hideSubtracksDefault;
-// TODO: Gray out or otherwise suppress when in multi-region mode 
-if (compositeHideEmptySubtracksSetting(parentTdb, &hideSubtracksDefault, NULL, NULL))
-    {
-    char *hideLabel = "Hide empty subtracks";
-    hideLabel = trackDbSettingOrDefault(parentTdb, SUBTRACK_HIDE_EMPTY_LABEL, hideLabel);
-    printf("<BR><B>%s:</B> &nbsp;", hideLabel);
-    char buf[128];
-    safef(buf, sizeof buf, "%s.%s", parentTdb->track, SUBTRACK_HIDE_EMPTY);
-    boolean doHideEmpties = compositeHideEmptySubtracks(cart, parentTdb, NULL, NULL);
-    cgiMakeCheckBox(buf, doHideEmpties);
-    }
-
 // Table wraps around entire list so that "Top" link can float to the correct place.
 cgiDown(0.7);
 printf("<table><tr><td class='windowSize'>");
@@ -8662,8 +8649,22 @@ if (primarySubtrack == NULL && !cartVarExists(cart, "ajax"))
     jsIncludeFile("hui.js",NULL);
     jsIncludeFile("subCfg.js",NULL);
     }
+cgiDown(0.3);
 
-cgiDown(0.7);
+boolean hideSubtracksDefault;
+// TODO: Gray out or otherwise suppress when in multi-region mode 
+if (compositeHideEmptySubtracksSetting(tdb, &hideSubtracksDefault, NULL, NULL))
+    {
+    char *hideLabel = "Hide empty subtracks";
+    hideLabel = trackDbSettingOrDefault(tdb, SUBTRACK_HIDE_EMPTY_LABEL, hideLabel);
+    printf("<p><b>%s:</b> &nbsp;", hideLabel);
+    char buf[128];
+    safef(buf, sizeof buf, "%s.%s", tdb->track, SUBTRACK_HIDE_EMPTY);
+    boolean doHideEmpties = compositeHideEmptySubtracks(cart, tdb, NULL, NULL);
+    cgiMakeCheckBox(buf, doHideEmpties);
+    printf("</p>");
+    }
+
 if (trackDbCountDescendantLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)
     {
     if (primarySubtrack)

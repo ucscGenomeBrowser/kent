@@ -54,6 +54,7 @@ $hgGtex -tab=$dir -noLoad -limit=2 gtexV8 V8 $dataFile $sampleFile $subjectFile 
 # NOTE: change to tissues in sample descriptions... (field 7)
 # Changed fibroblasts description, and added Kidney - Medulla (4 samples)
 diff sampleTissues.txt /hive/data/outside/GTEx/V6
+
 0a1
 > 
 22d22
@@ -65,8 +66,11 @@ diff sampleTissues.txt /hive/data/outside/GTEx/V6
 
 # Manually update tissueFile, with version that includes GTEx abbrevs
 cp ../../V6/metadata/gtexTissue.new.tab gtexColorTissue.tab
-# edit
+# edit - change fibroblast label, move Kidney - Medulla to alphabetical position and renumber id's
+
 set tissueFile = gtexColorTissue.tab
+
+$hgGtex -tab=$dir -noLoad gtexV8 V8 $dataFile $sampleFile $subjectFile $tissueFile -verbose=2 >&! noload.log &
 
 # sanity check files
 cd tables
@@ -124,11 +128,20 @@ hgsql hgFixed -e "insert into gtexInfo set version='V8', releaseDate='2019-08-26
 # Rename tables for use by hgGtexGeneBed
 # TODO: Change hgGtex to name tables as needed by next step!
 
+hgsql hgFixed -e 'alter table gtexTissueMedianV8 rename to gtexTissueMedianV8Old';
+hgsql hgFixed -e 'alter table gtexTissueV8 rename to gtexTissueV8Old';
+hgsql hgFixed -e 'alter table gtexSampleV8 rename to gtexSampleV8Old';
+hgsql hgFixed -e 'alter table gtexDonorV8 rename to gtexDonorV8Old';
+hgsql hgFixed -e 'alter table gtexSampleDataV8 rename to gtexSampleDataV8Old';
+
 hgsql hgFixed -e 'alter table gtexV8TissueMedianAll rename to gtexTissueMedianV8';
 hgsql hgFixed -e 'alter table gtexV8Tissue rename to gtexTissueV8';
 hgsql hgFixed -e 'alter table gtexV8Sample rename to gtexSampleV8';
 hgsql hgFixed -e 'alter table gtexV8Donor rename to gtexDonorV8';
 hgsql hgFixed -e 'alter table gtexV8SampleData rename to gtexSampleDataV8';
+# hung on last command.  Instead, renamed gtexSampleDataV8Old to gtexSampleDataV8.
+
+# NOTE: Tried to drop the gtexV8SampleData table but that hung too -- ask adminsL
 
 #######################################
 # Download fine-mapped eQTL's
