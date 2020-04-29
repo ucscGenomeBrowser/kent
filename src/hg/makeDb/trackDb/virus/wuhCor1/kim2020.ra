@@ -124,7 +124,7 @@ barChartSizeWindows 500 8000
 track transcriptome
 shortLabel Transcriptome
 longLabel Canonical SARS-CoV-2 Transcript Information from Kim et al. 2020
-visibility dense
+visibility hide
 group genes
 type bigBed 12
 priority 5
