@@ -966,7 +966,8 @@ return max(geneBed->chromEnd, max(winStart, geneBed->chromStart) + graphWidth/sc
 
 static void gtexGeneMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, 
                         char *mapItemName, int start, int end, int x, int y, int width, int height)
-/* Create a map box on gene model and label, and one for each tissue (bar in the graph) in
+/* Create a map box on gene graph, gene model and label, 
+ * and one for each tissue (bar in the graph) in
  * pack or full mode.  Just single map for squish/dense modes */
 {
 if (tg->limitedVis == tvDense)
@@ -1073,6 +1074,12 @@ if (geneInfo->geneModel && geneInfo->description)
     mapBoxHc(hvg, geneStart, geneEnd, x1, y+itemHeight-geneModelHeight-3, w, geneModelHeight,
                         tg->track, mapItemName, geneInfo->description);
     } 
+
+// add map box to expression graph
+x1 = insideX + graphX; // x1 is at left of graph
+height = topGraphHeight;
+width = gtexGraphWidth(tg, geneInfo);
+mapBoxHc(hvg, geneStart, geneEnd, x1, y, width, height, tg->track, mapItemName, itemName);
 }
 
 static char *gtexGeneItemName(struct track *tg, void *item)
