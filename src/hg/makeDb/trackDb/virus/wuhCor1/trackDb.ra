@@ -61,7 +61,7 @@ urls pmid=https://www.ncbi.nlm.nih.gov/pubmed/$$
 track crisprDet
 shortLabel CRISPR Detection
 longLabel CRISPR Detection Guides
-group genes
+group map
 type psl
 
 track rosettaMhc
