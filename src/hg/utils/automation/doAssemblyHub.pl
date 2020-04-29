@@ -28,6 +28,7 @@ use vars qw/
     $opt_sourceDir
     $opt_species
     $opt_rmskSpecies
+    $opt_ncbiRmsk
     $opt_augustusSpecies
     $opt_xenoRefSeq
     $opt_ucscNames
@@ -66,6 +67,8 @@ my $sourceDir = "/hive/data/outside/ncbi/genomes";
 my $species = "";       # usually found in asmId_assembly_report.txt
 my $ftpDir = "";	# will be determined from given asmId
 my $rmskSpecies = "";
+my $ncbiRmsk = 0;	# when =1 call doRepeatMasker.pl
+                        # with -ncbiRmsk=path.out.gz and -liftSpec=...
 my $augustusSpecies = "human";
 my $xenoRefSeq = "/hive/data/genomes/asmHubs/VGP/xenoRefSeq";
 my $ucscNames = 0;  # default 'FALSE' (== 0)
@@ -108,6 +111,8 @@ options:
     -rmskSpecies <name> to override default 'species' name for repeat masker
                       the default is found in the asmId_asssembly_report.txt
                       e.g. -rmskSpecies=viruses
+    -ncbiRmsk         use NCBI rm.out.gz file instead of local cluster run
+                      for repeat masking
     -augustusSpecies <human|chicken|zebrafish> default 'human'
     -xenoRefSeq </path/to/xenoRefSeqMrna> - location of xenoRefMrna.fa.gz
                 expanded directory of mrnas/ and xenoRefMrna.sizes, default
@@ -186,6 +191,7 @@ sub checkOptions {
 		      'buildDir=s',
 		      'sourceDir=s',
 		      'rmskSpecies=s',
+		      'ncbiRmsk',
 		      'augustusSpecies=s',
 		      'xenoRefSeq=s',
 		      'asmHubName=s',
@@ -630,12 +636,14 @@ if [ ! -s \${asmId}.2bit -o \${asmId}_genomic.fna.gz -nt \$asmId.2bit ]; then
     \${asmId}_genomic.fna.dups.gz \\
     \${asmId}_assembly_report.txt \\
     \${asmId}_rm.out.gz \\
+    \${asmId}_rm.run \\
     \${asmId}_assembly_structure \\
     \$asmId.2bit
 
   ln -s $assemblySource/\${asmId}_genomic.fna.gz .
   ln -s $assemblySource/\${asmId}_assembly_report.txt .
   ln -s $assemblySource/\${asmId}_rm.out.gz .
+  ln -s $assemblySource/\${asmId}_rm.run .
   if [ -d $assemblySource/\${asmId}_assembly_structure ]; then
     ln -s $assemblySource/\${asmId}_assembly_structure .
   fi
@@ -1043,19 +1051,40 @@ sub doRepeatMasker {
   my $bossScript = newBash HgRemoteScript("$runDir/doRepeatMasker.bash",
                     $workhorse, $runDir, $whatItDoes);
 
+  my $rmskOpts = "";
+  if ($ncbiRmsk) {
+     $rmskOpts = " \\
+  -ncbiRmsk=\"$buildDir/download/${asmId}_rm.out.gz\" ";
+     if ($ucscNames) {
+       $rmskOpts .= " \\
+  -liftSpec=\"$buildDir/sequence/$asmId.ncbiToUcsc.lift\"";
+     }
+  }
+
   $bossScript->add(<<_EOF_
 export asmId=$asmId
 
 if [ $buildDir/\$asmId.2bit -nt faSize.rmsk.txt ]; then
 export species=`echo $rmskSpecies | sed -e 's/_/ /g;'`
 
-doRepeatMasker.pl -stop=mask -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit \\
+rm -f versionInfo.txt
+
+doRepeatMasker.pl -stop=mask -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit $rmskOpts \\
   -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" \$asmId
 
-gzip \$asmId.sorted.fa.out \$asmId.fa.out \$asmId.nestedRepeats.bed
+if [ -s "\$asmId.fa.out" ]; then
+  gzip \$asmId.fa.out
+fi
+gzip \$asmId.sorted.fa.out \$asmId.nestedRepeats.bed
 
-doRepeatMasker.pl -continue=cleanup -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit \\
+doRepeatMasker.pl -continue=cleanup -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit $rmskOpts \\
   -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" \$asmId
+
+if [ ! -s versionInfo.txt ]; then
+  if [ -s ../../download/${asmId}_rm.run ]; then
+    ln -s ../../download/${asmId}_rm.run versionInfo.txt
+  fi
+fi
 
 \$HOME/kent/src/hg/utils/automation/asmHubRepeatMasker.sh \$asmId `pwd`/\$asmId.sorted.fa.out.gz `pwd`
 else
@@ -1543,13 +1572,29 @@ _EOF_
 #########################################################################
 # * step: ncbiRefSeq [workhorse]
 sub doNcbiRefSeq {
-  my $runDir = "$buildDir/trackData/ncbiRefSeq";
+  # skip this procedure if all the required files are not available
   my $gffFile = "$assemblySource/${asmId}_genomic.gff.gz";
   if ( ! -s "${gffFile}" ) {
     printf STDERR "# step ncbiRefSeq no gff file found at:\n#  %s\n", $gffFile;
     return;
   }
+  my $filesFound = 0;
+ my @requiredFiles = qw( genomic.gff.gz rna.fna.gz rna.gbff.gz protein.faa.gz );
+  my $filesExpected = scalar(@requiredFiles);
+  foreach my $expectFile (@requiredFiles) {
+    if ( -s "$assemblySource/${asmId}_${expectFile}" ) {
+      ++$filesFound;
+    } else {
+      printf STDERR "# step ncbiRefSeq missing required file $assemblySource/${asmId}_${expectFile}\n";
+    }
+  }
 
+  if ($filesFound < $filesExpected) {
+    printf STDERR "# step ncbiRefSeq does not have all files required\n";
+    return;
+  }
+
+  my $runDir = "$buildDir/trackData/ncbiRefSeq";
   &HgAutomate::mustMkdir($runDir);
 
   my $whatItDoes = "run NCBI RefSeq gene procedures";
@@ -1748,7 +1793,7 @@ $bigClusterHub = $opt_bigClusterHub ? $opt_bigClusterHub : $bigClusterHub;
 $smallClusterHub = $opt_smallClusterHub ? $opt_smallClusterHub : $smallClusterHub;
 $fileServer = $opt_fileServer ? $opt_fileServer : $fileServer;
 $asmHubName = $opt_asmHubName ? $opt_asmHubName : $asmHubName;
-
+$ncbiRmsk = $opt_ncbiRmsk ? 1 : 0;
 
 die "can not find assembly source directory\n$assemblySource" if ( ! -d $assemblySource);
 printf STDERR "# buildDir: %s\n", $buildDir;
