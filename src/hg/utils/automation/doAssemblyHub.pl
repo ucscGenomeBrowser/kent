@@ -1483,7 +1483,7 @@ _EOF_
 sub doNcbiGene {
   my $gffFile = "$assemblySource/${asmId}_genomic.gff.gz";
   if ( ! -s "${gffFile}" ) {
-    &HgAutomate::verbose(1, "# step ncbiGene: no gff file found at:\n#  %s\n", $gffFile);
+    &HgAutomate::verbose(1, "# step ncbiGene: no gff file found at:\n#  $gffFile\n");
     return;
   }
   if ( ! -s "$buildDir/sequence/$asmId.ncbiToUcsc.lift" ) {
@@ -1502,7 +1502,7 @@ sub doNcbiGene {
      }
   }
   if (! -s "$buildDir/$asmId.faSize.txt") {
-    &HgAutomate::verbose(1, "# step ncbiGene: can not find faSize.txt at:\n#  %s\n", "$buildDir/$asmId.faSize.txt");
+    &HgAutomate::verbose(1, "# step ncbiGene: can not find faSize.txt at:\n#  $buildDir/$asmId.faSize.txt\n");
     exit 255;
   }
 
