@@ -39,7 +39,7 @@ compositeTrack on
     priority 1
 
     track nextstrainSamplesAll
-    parent nextstrainSamples off
+    parent nextstrainSamples on
     shortLabel All Vars
     longLabel Variants in All Nextstrain/GISAID Samples from nextstrain.org/ncov
     hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain.nh
