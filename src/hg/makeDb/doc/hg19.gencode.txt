@@ -1,0 +1,681 @@
+############################################################################
+2012-11-11: import and UCSC GENCODE group process of GENCODE V14 (markd)
+    # Due to UCSC Genome Browser using the NC_001807 mitochondrial genome sequence
+    # (chrM) and GENCODE annotating the NC_012920 mitochondrial sequence, the
+    # GENCODE mitochondrial sequences are lifted to UCSC chrM.
+
+    # download files
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV14/release
+    cd /hive/data/genomes/hg19/bed/gencodeV14/
+
+    # download gencode release
+    wget -nv -r -np ftp://ftp.sanger.ac.uk/pub/gencode/release_14
+    mv ftp.sanger.ac.uk/pub/gencode/release_14 .
+    rm -rf ftp.sanger.ac.uk/
+
+    # silly sanity check:
+    cd release_14
+    for f in *.gz *.tgz ; do zcat $f >/dev/null ; done
+
+    # untar main distribution
+    tar -zxf gencode14_GRCh37.tgz
+
+    cd /hive/data/genomes/hg19/bed/gencodeV14
+
+    # obtain transcription support level analysis from UCSC GENCODE group (markd/rachel)
+    mkdir -p data
+    cp /cluster/home/markd/compbio/ccds/branches/transSupV14.1/modules/gencodeTransSupport/exprs/classDev/runs/2012-11-11/results/gencode.v14.transcriptionSupportLevel.{tab,tsv} data/
+
+    # create Makefile from previous one.  This time, we need to get
+    # if from the ENCODE DCC area.
+    cp /hive/groups/encode/dcc/data/gencodeV13/Makefile .
+    # edit to set version:
+    ver = 14
+
+    # on code in the CCDS subversion tree:
+    #   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
+    # and markd's python library (it will be moved to the hausslerlab
+    # repository soon)
+    # may need to update
+        ccds2/modules/gencode/src/lib/gencode/data/gencodeGenes.py
+    # to add new biotypes, use this command to verify and update as needed
+    # be sure to do a make in ccds2/modules/gencode
+    make checkAttrs
+
+    # build and load tables
+    (time nice make -j 10) >&build.out&
+
+    # compare tables from previous release to see if number chnaged made
+    # sense.
+        make cmpRelease
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.
+    ## Important to make sure filter attrs.transcriptType matches current set
+    ## figured out with
+    select distinct transcriptType from wgEncodeGencodeAttrsV14 order by transcriptType;
+    cd kent/src/hg/makeDb/trackDb
+    cp human/hg19/wgEncodeGencodeV13.ra human/hg19/wgEncodeGencodeV14.ra
+    cp human/hg19/wgEncodeGencodeV13.html human/hg19/wgEncodeGencodeV14.html
+    # edit these plus human/hg19/trackDb.wgEncode.ra
+
+    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
+    ### track handler for this version of gencode:
+    registerTrackHandlerOnFamily("wgEncodeGencodeV14", gencodeGeneMethods);
+
+##############################################################################
+2013-04-08: import of UCSC GENCODE group processing of GENCODE V15 (markd)
+    # Due to UCSC Genome Browser using the NC_001807 mitochondrial genome sequence
+    # (chrM) and GENCODE annotating the NC_012920 mitochondrial sequence, the
+    # GENCODE mitochondrial sequences are lifted to UCSC chrM.
+
+    # download files
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV15
+    cd /hive/data/genomes/hg19/bed/gencodeV15
+
+    # download gencode release
+    wget -nv -r -np ftp://ftp.sanger.ac.uk/pub/gencode/release_15
+    mv ftp.sanger.ac.uk/pub/gencode/release_15 .
+    rm -rf ftp.sanger.ac.uk/
+
+    # silly sanity check:
+    for f in release_15/*.gz release_15/*.tgz ; do zcat $f >/dev/null ; done
+
+    # untar main distribution
+    cd release_15
+    tar -zxf gencode15_GRCh37.tgz
+
+    cd /hive/data/genomes/hg19/bed/gencodeV15
+
+    # obtain transcription support level analysis from UCSC GENCODE group (markd/rachel)
+    mkdir -p data
+    cp /cluster/home/markd/compbio/ccds/branches/transSupV15.1/modules/gencodeTransSupport/exprs/classDev/runs/2013-03-28/results/gencode.v15.transcriptionSupportLevel.{tab,tsv} data/
+
+    # create Makefile from previous one.
+    cp ../gencodeV14/Makefile .
+    # edit to set version:
+    ver = 15
+
+    # on code in the CCDS subversion tree:
+    #   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
+    # and markd's python library may need to update
+        ccds2/modules/gencode/src/lib/gencode/data/gencodeGenes.py
+    # to add new biotypes, use this command to verify and update as needed
+    # be sure to do a make in ccds2/modules/gencode
+    make checkAttrs
+
+    # build and load tables
+    (time nice make -j 10) >&build.out&
+
+    # compare tables from previous release to see if number chnaged made
+    # sense.
+        make cmpRelease
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.
+    ## Important to make sure filter attrs.transcriptType matches current set
+    ## figured out with
+    select distinct transcriptType from wgEncodeGencodeAttrsV15 order by transcriptType;
+    cd kent/src/hg/makeDb/trackDb
+    cp human/hg19/wgEncodeGencodeV14.ra human/hg19/wgEncodeGencodeV15.ra
+    cp human/hg19/wgEncodeGencodeV14.html human/hg19/wgEncodeGencodeV15.html
+    # edit these plus human/hg19/trackDb.wgEncode.ra
+
+    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
+    ### track handler for this version of gencode:
+    registerTrackHandler("wgEncodeGencodeV15", gencodeGeneMethods);
+
+############################################################################
+2013-06-02: import of UCSC GENCODE group processing of GENCODE V16 (markd)
+    # Due to UCSC Genome Browser using the NC_001807 mitochondrial genome sequence
+    # (chrM) and GENCODE annotating the NC_012920 mitochondrial sequence, the
+    # GENCODE mitochondrial sequences are lifted to UCSC chrM.
+    # Thus is the first release to include haplotype regions
+
+    # download files
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV16/data
+    cd /hive/data/genomes/hg19/bed/gencodeV16
+
+    # download gencode release
+    cd data
+    wget -nv -r -np ftp://ftp.sanger.ac.uk/pub/gencode/release_16
+    mv ftp.sanger.ac.uk/pub/gencode/release_16 .
+    rm -rf ftp.sanger.ac.uk/
+
+    cd /hive/data/genomes/hg19/bed/gencodeV16
+
+    # obtain transcription support level analysis from UCSC GENCODE group (markd/rachel)
+    mkdir -p data
+    cp /cluster/home/markd/compbio/ccds/branches/transSupV16.1/modules/gencodeTransSupport/exprs/classDev/runs/2013-06-16/results/gencode.v16.transcriptionSupportLevel.{tab,tsv} data/
+
+    # create Makefile from previous one.
+    cp ../gencodeV15/Makefile .
+    # edit to set version:
+    ver = 16
+
+    # on code in the CCDS subversion tree:
+    #   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
+    # and markd's python library may need to update
+        ccds2/modules/gencode/src/lib/gencode/data/gencodeGenes.py
+    # to add new biotypes, use this command to verify and update as needed
+    # be sure to do a make in ccds2/modules/gencode
+    make checkAttrs
+
+    # build and load tables
+    (time nice make -j 10) >&build.out&
+
+    # compare tables from previous release to see if number chnaged made
+    # sense.
+        make cmpRelease
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.
+    ## Important to make sure filter attrs.transcriptType matches current set
+    ## figured out with
+    select distinct transcriptType from wgEncodeGencodeAttrsV16 order by transcriptType;
+    cd kent/src/hg/makeDb/trackDb
+    cp human/hg19/wgEncodeGencodeV15.ra human/hg19/wgEncodeGencodeV16.ra
+    cp human/hg19/wgEncodeGencodeV15.html human/hg19/wgEncodeGencodeV16.html
+
+    # edit these plus human/hg19/trackDb.wgEncode.ra
+    # - set priorities in wgEncodeGencodeV16.ra in reverse order with previous
+    #   tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous -0.001
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
+
+    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
+    ### track handler for this version of gencode:
+    registerTrackHandler("wgEncodeGencodeV16", gencodeGeneMethods);
+
+    # sanity check number of rows in each table
+    make cmpRelease
+
+    # update all.joiner and validate
+    # look for the last section `begin Gencode V??' in all.joiner
+    # and copy and update version
+    # repeat this until happy, editing minCheck as needed
+    for tbl in $(hgsql -Ne 'show tables like "wgEncodeGencode%V16"' hg19) ; do runJoiner.csh hg19 $tbl ~/kent/src/hg/makeDb/schema/all.joiner noTimes ; done >&check/joiner.out
+
+##############################################################################
+2013-06-19: import of UCSC GENCODE group processing of GENCODE V17 (markd)
+    # Due to UCSC Genome Browser using the NC_001807 mitochondrial genome sequence
+    # (chrM) and GENCODE annotating the NC_012920 mitochondrial sequence, the
+    # GENCODE mitochondrial sequences are lifted to UCSC chrM.
+    # Thus is the first release to include haplotype regions
+
+    # download files
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV17/data
+    cd /hive/data/genomes/hg19/bed/gencodeV17
+
+    # download gencode release
+    cd data
+    wget -nv -r -np ftp://ftp.sanger.ac.uk/pub/gencode/release_17
+    mv ftp.sanger.ac.uk/pub/gencode/release_17 .
+    rm -rf ftp.sanger.ac.uk/
+
+    cd /hive/data/genomes/hg19/bed/gencodeV17
+
+    # obtain transcription support level analysis from UCSC GENCODE group (markd/rachel)
+    mkdir -p data
+    cp /cluster/home/markd/compbio/ccds/branches/transSupV17.1/modules/gencodeTransSupport/exprs/classDev/runs/2013-06-19/results/gencode.v17.transcriptionSupportLevel.{tab,tsv} data/
+
+    # create Makefile from previous one.
+    cp ../gencodeV16/Makefile .
+    # edit to set version:
+    ver = 17
+
+    # on code in the CCDS subversion tree:
+    #   svn+ssh://hgwdev.soe.ucsc.edu/projects/compbio/svnroot/hausslerlab/ccds/trunk
+    # and markd's python library may need to update
+        ccds2/modules/gencode/src/lib/gencode/data/gencodeGenes.py
+    # to add new biotypes, use this command to verify and update as needed
+    # be sure to do a make in ccds2/modules/gencode
+    make checkAttrs
+
+    # build and load tables
+    (time nice make -j 10) >&build.out&
+
+    # compare tables from previous release to see if number chnaged made
+    # sense.
+        make cmpRelease
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.
+    ## Important to make sure filter attrs.transcriptType matches current set
+    ## figured out with
+    select distinct transcriptType from wgEncodeGencodeAttrsV17 order by transcriptType;
+    cd kent/src/hg/makeDb/trackDb
+    cp human/hg19/wgEncodeGencodeV16.ra human/hg19/wgEncodeGencodeV17.ra
+    cp human/hg19/wgEncodeGencodeV16.html human/hg19/wgEncodeGencodeV17.html
+
+    # edit these plus human/hg19/trackDb.wgEncode.ra
+    # - set priorities in wgEncodeGencodeV17.ra in reverse order with previous
+    #   tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous -0.001
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
+
+    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
+    ### track handler for this version of gencode:
+    registerTrackHandler("wgEncodeGencodeV17", gencodeGeneMethods);
+
+    # sanity check number of rows in each table
+    make cmpRelease
+
+    # update all.joiner and validate
+    # look for the last section `begin Gencode V??' in all.joiner
+    # and copy and update version
+    # repeat this until happy, editing minCheck as needed
+    for tbl in $(hgsql -Ne 'show tables like "wgEncodeGencode%V17"' hg19) ; do runJoiner.csh hg19 $tbl ~/kent/src/hg/makeDb/schema/all.joiner noTimes ; done >&check/joiner.out
+
+#########################################################################
+2016-03-02: import of UCSC GENCODE group processing of GENCODE V24lift37 (markd)
+    # download files
+    mkdir -p /hive/data/genomes/hg19/bed/V24lift37
+    cd /hive/data/genomes/hg19/bed/V24lift37
+
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set
+    # release and transcript support versions
+
+
+    # download, build and load tables
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense (results in gencode-cmp.tsv)
+        make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk cmpRelease
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.  Follow instructiuons in ra file to ensure
+    ## filters are correct.
+    cd kent/src/hg/makeDb/trackDb
+    cp human/hg38/wgEncodeGencodeV24.ra human/hg19/wgEncodeGencodeV24lift37.ra
+    cp human/hg38/wgEncodeGencodeV24.html human/hg19/wgEncodeGencodeV24lift37.html
+
+    # edit these plus human/hg38/trackDb.wgEncode.ra
+    # - set priorities in wgEncodeGencodeV24.ra tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous minus 0.001
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
+    # - Update wgEncodeGencodeSuper.html to describe new release and to
+    #   pick up other updates.
+
+    # update all.joiner and validate
+    # look for the last section `begin Gencode V??' in all.joiner
+    # and copy and update version
+    # repeat this until happy, editing minCheck as needed
+    # output in check/joiner.out
+    cd /hive/data/genomes/hg19/bed/gencodeV24lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+#########################################################################
+2017-04-16: import of UCSC GENCODE group processing of GENCODE V26lift37 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV26lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV26lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 26lift37 88 'March 2017'
+
+    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg19
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit  all.joiner to add ~/tmp/gencodeV26lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV26lift37
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+##############################################################################
+2017-09-14: import of UCSC GENCODE group processing of GENCODE V27lift37 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV27lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV27lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 27lift37 90 'August 2017'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV27lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV27lift37
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+###########################################################################
+2018-03-08: update UCSC GENCODE V19 to include protein id (for VAI)
+
+cd /hive/data/genomes/hg19/bed/gencodeV19/
+# move tables that need to be rebuilt
+mkdir -p prev/pre-proteinId
+mv tables/wgEncodeGencodeAttrsV19.tab tables/wgEncodeGencodeTagV19.tab prev/pre-proteinId/
+mv loaded/wgEncodeGencodeAttrsV19.tab.loaded loaded/wgEncodeGencodeTagV19.tab.loaded prev/pre-proteinId/
+
+
+# V19 didn't have protein ids in GTF, need to get from ensembl database
+ cd ~/hive/tmp
+ ftp://ftp.ensembl.org/pub/release-74/mysql/homo_sapiens_core_74_37/homo_sapiens_core_74_37.sql.gz
+ ftp://ftp.ensembl.org/pub/release-74/mysql/homo_sapiens_core_74_37/transcript.txt.gz
+ ftp://ftp.ensembl.org/pub/release-74/mysql/homo_sapiens_core_74_37/translation.txt.gz
+
+ # load small subset
+ hgsql -e 'create database markd_ens'
+ zcat homo_sapiens_core_74_37.sql.gz |hgsql markd_ens
+ gunzip trans*
+ hgsqlimport markd_ens $(pwd)/transcript.txt $(pwd)/translation.txt
+ # add proteinId column to wgEncodeGencodeAttrsV19
+ hgsql
+ CREATE table markd_ens.trans_prot
+ SELECT concat(trans.stable_id, ".", CAST(trans.version AS CHAR)) transcriptId,
+        concat(prot.stable_id,  ".", CAST(prot.version AS CHAR)) proteinId
+     FROM markd_ens.transcript trans, markd_ens.translation prot
+     WHERE prot.transcript_id = trans.transcript_id;
+  CREATE INDEX transcriptId ON markd_ens.trans_prot(transcriptId);
+  UPDATE hg19.wgEncodeGencodeAttrsV19 as attr
+  INNER JOIN markd_ens.trans_prot as tp  ON attr.transcriptId = tp.transcriptId
+  SET attr.proteinId = tp.proteinId;
+  SELECT count(*) FROM wgEncodeGencodeAttrsV19 WHERE transcriptClass="coding" AND proteinId = "";
+  -> 0 !!! got them all
+  DROP DATABASE markd_ens;
+
+# 2018-03-19: update search to include protein id
+edit kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeGencodeV19.ra
+
+#########################################################################
+2018-04-17: import of UCSC GENCODE group processing of GENCODE V28lift37 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV28lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV28lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 28lift37 92 'Apr 2018'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV28lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV28lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+
+    # 2018-05-01 markd
+    # fix bug in wgEncodeGencodeEntrezGeneV28lift37 with change in gencodeLoad.mk.  Reload the table.
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV28lift37
+    rm tables/wgEncodeGencodeEntrezGeneV28lift37.tab
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.3.out&
+
+
+##############################################################################
+2018-11-09: import of UCSC GENCODE group processing of GENCODE V29lift37 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV29lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV29lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # Contained invalid biotype for one transcript (ENST00000649475.1_1), fix for now
+    cd data/release_29lift37
+    mv gencode.v29lift37.annotation.gff3.gz  gencode.v29lift37.annotation.orig.gff3.gz
+    zcat gencode.v29lift37.annotation.orig.gff3.gz | sed -e 's/lincrna/lincRNA/g' | gzip -c>  gencode.v29lift37.annotation.gff3.gz
+    cd ../..
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.2.out&
+
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 29lift37 94 'Oct 2018'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV29lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV29lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+
+#############################################################################
+2019-04-08: import of UCSC GENCODE group processing of GENCODE V30lift37 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV30lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV30lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 30lift37 96 'Apr 2019'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV30lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV30lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+
+#############################################################################
+2019-07-05: import of UCSC GENCODE group processing of GENCODE V31lift37 (markd)
+    # Replaced import of pre-release
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV31lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV31lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 31lift37 97 'June 2019'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV31lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV31lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+
+##############################################################################
+2019-09-03: import of UCSC GENCODE group processing of GENCODE V32lift37 (markd)
+    # PRE-RELEASE
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV32lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV32lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 32lift37 98 'Sept 2019'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV32lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV32lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+
+2019-08-30: repeat above for final release
+    mv /hive/data/genomes/hg19/bed/gencodeV32lift37 /hive/data/genomes/hg19/bed/gencodeV32lift37pre
+    # redo do above imports
+
+#########################################################################
+2019-11-17: import of UCSC GENCODE group processing of GENCODE V33lift37 PRE-RELEASE (markd)
+    # 
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV33lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV33lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 33lift37 99 'Nov 2019'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV33lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV33lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+##############################################################################
+2020-01-16: import of UCSC GENCODE group processing of GENCODE V33lift37 (markd)
+    # deprecate pre-release
+    mv /hive/data/genomes/hg19/bed/gencodeV33lift37 /hive/data/genomes/hg19/bed/gencodeV33lift37Pre
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV33lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV33lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 33lift37 99 'Jan 2020'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.gencode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV33lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV33lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+##############################################################################
+2020-01-21: manually update GENCODE V19 to include chrMT (markd)
+
+  cd /hive/data/genomes/hg19/bed/gencodeV19/chrMT
+  # convert chrM annotation in gff3 to chrMT
+  zcat ../data/release_19/gencode.v19.annotation.gff3.gz | tawk 'NR==1{print;next} $1=="chrM"{$1="chrMT"; print}' >chrMT.gff3
+  # comprensive and basic are the same on chrM and there are no pseudogenes, so this is
+  # easy
+  cat ../tables/wgEncodeGencodeCompV19.gp chrMT.gp >wgEncodeGencodeCompV19.gp
+  cat ../tables/wgEncodeGencodeBasicV19.gp chrMT.gp >wgEncodeGencodeBasicV19.gp
+  
+  hgLoadGenePred -genePredExt hg19  wgEncodeGencodeCompV19 wgEncodeGencodeCompV19.gp
+  hgLoadGenePred -genePredExt hg19  wgEncodeGencodeBasicV19 wgEncodeGencodeBasicV19.gp
+
+##############################################################################
+2020-03-11: import of UCSC GENCODE group processing of GENCODE V34lift37 pre-release (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV34lift37Pre
+    pushd /hive/data/genomes/hg19/bed/gencodeV34lift37Pre
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 34lift37 100 'March 2020'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.gencode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV34lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV34lift37Pre
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
