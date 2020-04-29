@@ -156,8 +156,8 @@ if (setting && (sameString(setting, FILTERBY_SINGLE_LIST)
                 || sameString(setting, FILTERBY_MULTIPLE_LIST_OR)
                 || sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_OR)))
     filter->comparisonType = COMPARE_HASH_LIST_OR;
-else if (setting && sameString(setting, FILTERBY_MULTIPLE_LIST_AND) 
-        || sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_AND))
+else if (setting && (sameString(setting, FILTERBY_MULTIPLE_LIST_AND) 
+                || sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_AND)))
     filter->comparisonType = COMPARE_HASH_LIST_AND;
 else
     filter->comparisonType = COMPARE_HASH;
