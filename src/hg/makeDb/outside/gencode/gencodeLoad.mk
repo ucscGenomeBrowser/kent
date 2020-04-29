@@ -35,11 +35,11 @@ mach = $(shell uname -m)
 # - ensemblPrevVersion is use to get chrom name mappings for pre-release,
 #   as this doesn't change between release.
 ##
-#db = hg38
-db = hg19
+db = hg38
+#db = hg19
 #db = mm10
-#preRelease = no
-preRelease = yes
+preRelease = no
+#preRelease = yes
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
     ver = M25
