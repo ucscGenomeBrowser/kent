@@ -208,11 +208,15 @@ def rUnpackNextstrainTree(branch, parentVariants, parentVarStr):
     else:
         for varName in branchVariants:
             variantCounts[varName] += 1
+        if (nodeAttrs.get('submitting_lab')):
+            lab = nodeAttrs['submitting_lab']['value']
+        else:
+            lab = ''
         samples.append({ 'id': nodeAttrs['gisaid_epi_isl']['value'],
                          'name': branch['name'],
                          'clade': nodeAttrs['clade_membership']['value'],
                          'date': numDateToMonthDay(nodeAttrs['num_date']['value']),
-                         'lab': nodeAttrs['submitting_lab']['value'],
+                         'lab': lab,
                          'variants': branchVariants,
                          'varStr': branchVarStr })
 
