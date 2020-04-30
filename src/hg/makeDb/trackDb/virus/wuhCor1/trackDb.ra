@@ -36,8 +36,8 @@ group map
 type psl
 
 track rfam
-shortLabel RFAM
-longLabel RFAM families
+shortLabel Rfam
+longLabel Rfam families
 visibility hide
 group genes
 color 98,23,0
