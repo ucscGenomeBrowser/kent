@@ -1664,8 +1664,9 @@ if (errCatchStart(errCatch))
     if (vcff != NULL)
 	{
 	filterRecords(vcff, tg->tdb);
+        int vis = tdbVisLimitedByAncestors(cart,tg->tdb,TRUE,TRUE);
 	if (hapClustEnabled && vcff->genotypeCount > 1 && vcff->genotypeCount < 3000 &&
-	    (tg->visibility == tvPack || tg->visibility == tvSquish))
+	    (vis == tvPack || vis == tvSquish))
 	    vcfHapClusterOverloadMethods(tg, vcff);
 	else
 	    {

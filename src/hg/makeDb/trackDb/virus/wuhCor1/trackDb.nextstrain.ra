@@ -37,6 +37,17 @@ compositeTrack on
     hapClusterHeight 500
     bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainRecurrentBiallelic.vcf.gz
     priority 1
+    release alpha
+
+    track nextstrainSamplesAll
+    parent nextstrainSamples on
+    shortLabel All Vars
+    longLabel Variants in All Nextstrain/GISAID Samples from nextstrain.org/ncov
+    hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain.nh
+    hapClusterHeight 500
+    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples.vcf.gz
+    priority 2
+    release beta, public
 
     track nextstrainSamplesAll
     parent nextstrainSamples off
@@ -46,6 +57,7 @@ compositeTrack on
     hapClusterHeight 500
     bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples.vcf.gz
     priority 2
+    release alpha
 
     track nextstrainSamplesA1a
     parent nextstrainSamples off

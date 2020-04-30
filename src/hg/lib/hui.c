@@ -8662,6 +8662,9 @@ if (compositeHideEmptySubtracksSetting(tdb, &hideSubtracksDefault, NULL, NULL))
     safef(buf, sizeof buf, "%s.%s", tdb->track, SUBTRACK_HIDE_EMPTY);
     boolean doHideEmpties = compositeHideEmptySubtracks(cart, tdb, NULL, NULL);
     cgiMakeCheckBox(buf, doHideEmpties);
+    printf("<a class='toc' href='' title='Subtracks with no data in the browser window"
+                " are hidden. Changing the browser window by zooming or scrolling may result"
+                " in display of a different selection of tracks.'>?</a>");
     printf("</p>");
     }
 

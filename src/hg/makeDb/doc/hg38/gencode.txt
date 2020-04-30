@@ -665,4 +665,11 @@ cd kent/src/hg/makeDb/trackDb
     make DBS=hg38 alpha
     # if pushing public: create ticket and MARK QA READY
 
+###
+2020-04-29 final release markd
+  mkdir -p /hive/data/genomes/hg38/bed/gencodeV34
+
+  repeat above, only making release month April
+  ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg38 34 100 'April 2020'
+
 #########################################################################

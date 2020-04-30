@@ -6,6 +6,7 @@ visibility hide
 group regulation
 compositeTrack on
 autoScale on
+priority 2
 
         track kimNpLdr3pBreak
         type bigWig
@@ -120,10 +121,11 @@ bigDataUrl /gbdb/wuhCor1/bbi/kim2020/kim-scv2-drs-modifications.bb
 barChartUnit frac
 maxLimit 1
 barChartSizeWindows 500 8000
+priority 3
 
 track transcriptome
 shortLabel Transcriptome
-longLabel Canonical SARS-CoV-2 Transcript Information from Kim et al. 2020
+longLabel SARS-CoV-2 Trancriptome tracks
 visibility hide
 group genes
 type bigBed 12
@@ -146,26 +148,35 @@ compositeTrack on
         bigDataUrl /gbdb/wuhCor1/bbi/kim2020/transcripts.bb
         priority 2
         
+track kimTranscripts
+shortLabel Kim Transcripts
+longLabel Canonical SARS-CoV-2 Transcript Information from Kim et al. 2020
+visibility hide
+group regulation
+type bigBed 12
+priority 1
+compositeTrack on
+
         track Kim_RNAs 
-        parent transcriptome
+        parent kimTranscripts
         shortLabel Kim recomb. trans.
         longLabel All recombined transcripts from Kim et al. 2020
-        type bigBed 12 .   
+        type bigBed 12 .
         scoreFilter 900
         bigDataUrl /gbdb/wuhCor1/bbi/kim2020/Kim_recombination.bb
         priority 3
-        
+
         track Kim_TRS_sgmRNAs 
-        parent transcriptome
+        parent kimTranscripts
         shortLabel Kim recomb. TRS trans.
         longLabel Recombined transcripts from Kim et al. 2020 with a TRS
         scoreFilter 900
         type bigBed 12 .
         bigDataUrl /gbdb/wuhCor1/bbi/kim2020/Kim_TRS.bb
         priority 4
-        
+
         track Kim_non-TRS_sgmRNAs 
-        parent transcriptome
+        parent kimTranscripts
         shortLabel Kim Recomb. Novel transcripts
         longLabel Recombined transcripts from Kim et al. 2020 without a TRS
         scoreFilter 900

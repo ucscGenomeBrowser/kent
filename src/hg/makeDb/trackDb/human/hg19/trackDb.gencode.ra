@@ -31,4 +31,5 @@ include wgEncodeGencodeV30lift37.ra
 include wgEncodeGencodeV31lift37.ra
 include wgEncodeGencodeV32lift37.ra
 include wgEncodeGencodeV33lift37.ra
+include wgEncodeGencodeV34lift37.ra
 
