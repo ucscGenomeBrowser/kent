@@ -13,12 +13,11 @@ type bigBed 3 +
     track comments
     shortLabel UCSC FAQ Comments
     longLabel UCSC FAQ comments on assembly structure
-    type bigBed 9 +
+    type bigBed 9 
     bigDataUrl /gbdb/hg19/bbi/problematic/comments.bb
     visibility dense
     parent problematic
     priority 1
-    noScoreFilter on
     mouseOverField note
 
     track encBlacklist
