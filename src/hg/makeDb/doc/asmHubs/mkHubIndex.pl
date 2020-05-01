@@ -47,7 +47,27 @@ if ($asmHubName eq "vertebrate") {
    $subSetMessage = "subset of other ${asmHubName}s only";
 }
 
-print <<"END"
+if ($Name =~ m/vgp/i) {
+  print <<"END"
+<!DOCTYPE HTML 4.01 Transitional>
+<!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly hub" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
+
+<h1>VGP - Vertebrate Genomes Project assembly hub</h1>
+<p>
+<a href='https://vertebrategenomesproject.org/' target=_blank>
+<img src='VGPlogo.png' width=280 alt='VGP logo'></a></p>
+<p>
+This assembly hub contains assemblies released
+by the <a href='https://vertebrategenomesproject.org/' target=_blank>
+Vertebrate Genomes Project.</a>
+</p>
+
+END
+} else {
+  print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
 <!--#set var="TITLE" value="$Name genomes assembly hubs" -->
 <!--#set var="ROOT" value="../.." -->
@@ -59,6 +79,10 @@ print <<"END"
 Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 </p>
 
+END
+}
+
+print <<"END"
 <h3>How to view the hub</h3>
 <p>
 Options:
@@ -198,9 +222,12 @@ sub tableContents() {
     $accessionDir .= "/" . substr($asmId, 10 ,3);
     my $ncbiFtpLink = "ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$accessionDir/$asmId";
     my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
+    if ($gcPrefix eq "GCA") {
+     $buildDir = "/hive/data/genomes/asmHubs/genbankBuild/$accessionDir/$asmId";
+    }
     my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
     my $trackDb="$buildDir/${asmId}.trackDb.txt";
-    next if (! -s "$trackDb");
+    next if (! -s "$trackDb");	# assembly build not complete
     my $chromSizes="${buildDir}/${asmId}.chrom.sizes";
     my $sciName = "notFound";
     my $commonName = "notFound";

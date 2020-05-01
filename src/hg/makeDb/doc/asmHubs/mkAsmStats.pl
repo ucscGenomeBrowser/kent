@@ -52,7 +52,27 @@ if ($asmHubName eq "vertebrate") {
    $subSetMessage = "subset of other ${asmHubName}s only";
 }
 
-print <<"END"
+if ($Name =~ m/vgp/i) {
+  print <<"END"
+<!DOCTYPE HTML 4.01 Transitional>
+<!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly hubs, assembly statistics" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
+
+<h1>VGP - Vertebrate Genomes Project assembly hubs, assembly statistics</h1>
+<p>
+<a href='https://vertebrategenomesproject.org/' target=_blank>
+<img src='VGPlogo.png' width=280 alt='VGP logo'></a></p>
+<p>
+This assembly hub contains assemblies released
+by the <a href='https://vertebrategenomesproject.org/' target=_blank>
+Vertebrate Genomes Project.</a>
+</p>
+
+END
+} else {
+  print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
 <!--#set var="TITLE" value="$Name genomes assembly hubs, assembly statistics" -->
 <!--#set var="ROOT" value="../.." -->
@@ -64,6 +84,10 @@ print <<"END"
 Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 </p>
 
+END
+}
+
+  print <<"END"
 <h3>See also: <a href='index.html'>hub access</a>,&nbsp;<a href='trackData.html'>track statistics</a></h3><br>
 
 <h3>Data resource links</h3>
@@ -217,6 +241,9 @@ sub tableContents() {
     $accessionDir .= "/" . substr($asmId, 7 ,3);
     $accessionDir .= "/" . substr($asmId, 10 ,3);
     my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
+    if ($gcPrefix eq "GCA") {
+     $buildDir = "/hive/data/genomes/asmHubs/genbankBuild/$accessionDir/$asmId";
+    }
     my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
     if (! -s "$asmReport") {
       printf STDERR "# no assembly report:\n# %s\n", $asmReport;
@@ -228,6 +255,8 @@ sub tableContents() {
       printf STDERR "# no 2bit file:\n# %s\n", $twoBit;
       next;
     }
+    my $trackDb="$buildDir/${asmId}.trackDb.txt";
+    next if (! -s "$trackDb");	# assembly build not complete
     my $faSizeTxt = "${buildDir}/${asmId}.faSize.txt";
     if ( ! -s "$faSizeTxt" ) {
        printf STDERR "twoBitToFa $twoBit stdout | faSize stdin > $faSizeTxt\n";

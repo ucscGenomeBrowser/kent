@@ -46,29 +46,32 @@ close (FH);
 
 my $destDir = "/hive/data/genomes/asmHubs";
 
+my $buildDone = 0;
 my $orderIndex = 0;
 foreach my $asmId (reverse(@orderList)) {
   ++$orderIndex;
   my ($gcPrefix, $accession, undef) = split('_', $asmId);
   my $accessionId = sprintf("%s_%s", $gcPrefix, $accession);
-  printf STDERR "# %03d symlinks %s\n", $orderIndex, $accessionId;
   my $accessionDir = substr($asmId, 0 ,3);
   $accessionDir .= "/" . substr($asmId, 4 ,3);
   $accessionDir .= "/" . substr($asmId, 7 ,3);
   $accessionDir .= "/" . substr($asmId, 10 ,3);
-#  $accessionDir .= "/" . $asmId;
-#  my $prevDestDir = "/hive/data/genomes/asmHubs/$accessionDir/$asmId";
   $destDir = "/hive/data/genomes/asmHubs/$accessionDir/$accessionId";
   my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
-#  printf STDERR "# working '${buildDir}' '${destDir}'\n";
-#  printf STDERR "# working '${buildDir}' '${prevDestDir}'\n";
+  if ($gcPrefix eq "GCA") {
+     $buildDir = "/hive/data/genomes/asmHubs/genbankBuild/$accessionDir/$asmId";
+  }
+  my $trackDb = "$buildDir/$asmId.trackDb.txt";
+  if ( ! -s "${trackDb}" ) {
+    printf STDERR "# %03d not built yet: %s\n", $orderIndex, $asmId;
+    next;
+  }
+  ++$buildDone;
+  printf STDERR "# %03d symlinks %s\n", $buildDone, $accessionId;
+#  printf STDERR "%s\n", $destDir;
   if ( ! -d "${destDir}" ) {
     `mkdir -p "${destDir}"`;
   }
-#  if ( -d "${prevDestDir}" ) {
-#    printf STDERR "# rm -fr '${prevDestDir}'\n";
-#    `rm -fr "${prevDestDir}"`;
-#  }
   `rm -f "${destDir}/bbi"`;
   `rm -f "${destDir}/ixIxx"`;
   `rm -fr "${destDir}/html"`;
