@@ -69,10 +69,10 @@ var gtexTrackSettings = (function() {
         'brainSpinalcord', 'brainSubstanNigra', 'breastMamTissue', 'xformedlymphocytes',
         'xformedfibroblasts', 'ectocervix', 'endocervix', 'colonSigmoid', 'colonTransverse',
         'esophagusJunction', 'esophagusMucosa', 'esophagusMuscular', 'fallopianTube', 
-        'heartAtrialAppend', 'heartLeftVentricl', 'kidneyCortex', 'liver', 'lung', 
+        'heartAtrialAppend', 'heartLeftVentricl', 'kidneyCortex', 'kidneyMedulla', 'liver', 'lung', 
         'minorSalivGland', 'muscleSkeletal', 'nerveTibial', 'ovary', 'pancreas', 'pituitary', 
         'prostate', 'skinNotExposed', 'skinExposed', 'smallIntestine', 'spleen', 'stomach', 
-        'testis', 'thyroid', 'uterus', 'vagina', 'wholeBlood', 'kidneyMedulla'
+        'testis', 'thyroid', 'uterus', 'vagina', 'wholeBlood'
     ];
 
     // Convenience functions

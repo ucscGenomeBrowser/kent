@@ -9931,53 +9931,6 @@ EOF
 
 
 ##############################################################################
-2013-12-13: import of UCSC GENCODE group processing of GENCODE VM2 (markd)
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM2
-    cd /hive/data/genomes/mm10/bed/gencodeVM2
-
-    # create Makefile from previous one.
-    cp /hive/data/genomes/hg19/bed/gencodeV19/Makefile .
-
-    # download, build and load tables
-    (time nice make -j 10) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.
-        # NOT DONE THIS TIME, SINCE THIS is the first mouse.
-        make cmpRelease >gencode-cmp.tsv
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.
-    ## Important to make sure filter attrs.transcriptType matches current set
-    ## figured out with
-    select distinct transcriptType from wgEncodeGencodeAttrsVM2 order by transcriptType;
-    cd kent/src/hg/makeDb/trackDb
-    cp human/mm10/wgEncodeGencodeV18.ra human/mm10/wgEncodeGencodeVM2.ra
-    cp human/mm10/wgEncodeGencodeV18.html human/mm10/wgEncodeGencodeVM2.html
-
-    # edit these plus human/mm10/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeVM2.ra in reverse order with previous
-    #   tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous -0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-    # - Update wgEncodeGencodeSuper.html to describe new release and to
-    #   pick up other updates.
-
-    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
-    ### track handler for this version of gencode:
-    registerTrackHandler("wgEncodeGencodeVM2", gencodeGeneMethods);
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode V??' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    cd /hive/data/genomes/mm10/bed/gencodeVM2
-    make joinerCheck
-    # see output in check/joiner.out
-##############################################################################
 # SEGMENTAL DUPLICATIONS (WORKING 4/14/14 Pauline)
     # File emailed from John Huddleston (jlhudd@uw.edu) in the Eichler Lab.
     mkdir /hive/data/genomes/mm10/bed/genomicSuperDups
@@ -10632,61 +10585,6 @@ done
 #      4269
 
 ##############################################################################
-# 2014-08-17: import of UCSC GENCODE group processing of GENCODE VM3 (markd)
-
-    # download files
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM3/data
-    cd /hive/data/genomes/mm10/bed/gencodeVM3
-
-    # download gencode release
-    cd data
-    wget -nv -r -np ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_mouse/release_M3
-    mv ftp.sanger.ac.uk/pub/gencode/Gencode_mouse/release_M3 .
-    rm -rf ftp.sanger.ac.uk
-
-    cd ..
-    # create Makefile from previous one.
-    cp /hive/data/genomes/mm10/bed/gencodeVM2/Makefile .
-
-    # build and load tables
-    (time nice make -j 10) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.
-        make cmpRelease >gencode-cmp.tsv
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.
-    ## Important to make sure filter attrs.transcriptType matches current set
-    ## figured out with
-    select distinct transcriptType from wgEncodeGencodeAttrsVM3 order by transcriptType;
-    cd kent/src/hg/makeDb/trackDb
-    cp mouse/mm10/wgEncodeGencodeVM2.ra mouse/mm10/wgEncodeGencodeVM3.ra
-    cp mouse/mm10/wgEncodeGencodeVM2.html mouse/mm10/wgEncodeGencodeVM3.html
-
-    # edit these plus mouse/mm10/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeVM3.ra in reverse order with previous
-    #   tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous minus 0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-    # - Update wgEncodeGencodeSuper.html to describe new release and to
-    #   pick up other updates.
-
-    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
-    ### track handler for this version of gencode:
-    registerTrackHandler("wgEncodeGencodeVM3", gencodeGeneMethods);
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode VM?' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    cd /hive/data/genomes/mm10/bed/gencodeVM3
-    make joinerCheck  # output in check/joiner.out
-
-##############################################################################
 # LASTZ Cow bosTau8 (DONE - 2014-10-15 - Steve)
     mkdir /hive/data/genomes/mm10/bed/lastzBosTau8.2014-10-15
     cd /hive/data/genomes/mm10/bed/lastzBosTau8.2014-10-15
@@ -10740,55 +10638,6 @@ TMPDIR=/scratch/tmp
     # Create link
     cd /hive/data/genomes/bosTau8/bed
     ln -s blastz.mm10.swap lastz.mm10
-
-############################################################################
-# 2014-12-05: import of UCSC GENCODE group processing of GENCODE VM4 (markd)
-
-    # download files
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM4/data
-    cd /hive/data/genomes/mm10/bed/gencodeVM4
-
-    # create Makefile from previous one.
-    # WARNING: next build start with hg/makeDb/outside/gencode/gencodeLoad.mk
-    cp  /hive/data/genomes/hg38/bed/gencodeV21/Makefile .
-
-    # download, build and load tables
-    (time nice make -j 10) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.
-        make cmpRelease >gencode-cmp.tsv
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.
-    ## Important to make sure filter attrs.transcriptType matches current set
-    ## figured out with
-    select distinct transcriptType from wgEncodeGencodeAttrsVM4 order by transcriptType;
-    cd kent/src/hg/makeDb/trackDb
-    cp mouse/mm10/wgEncodeGencodeVM2.ra mouse/mm10/wgEncodeGencodeVM4.ra
-    cp mouse/mm10/wgEncodeGencodeVM2.html mouse/mm10/wgEncodeGencodeVM4.html
-
-    # edit these plus mouse/mm10/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeVM4.ra in reverse order with previous
-    #   tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous minus 0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-    # - Update wgEncodeGencodeSuper.html to describe new release and to
-    #   pick up other updates.
-
-    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
-    ### track handler for this version of gencode:
-    registerTrackHandler("wgEncodeGencodeVM4", gencodeGeneMethods);
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode VM?' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    cd /hive/data/genomes/mm10/bed/gencodeVM4
-    make joinerCheck  # output in check/joiner.out
 
 ##############################################################################
 ##############################################################################
@@ -11337,51 +11186,6 @@ http://genome.crg.es/genepredictions/M.musculus/mm10/SGP2/hg38/mm10.sgp2.gff3
     featureBits -enrichment mm9 refGene:CDS sgpGene
 # refGene:CDS 1.305%, sgpGene 1.439%, both 1.113%, cover 85.23%, enrich 59.23x
 #########################################################################
-2015-06-29-13: import of UCSC GENCODE group processing of GENCODE VM5 (markd)
-    # download files
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM5
-    cd /hive/data/genomes/mm10/bed/gencodeVM5
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set
-    # release and transcript support versions
-
-
-    # download, build and load tables
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.
-        make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk cmpRelease >gencode-cmp.tsv
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.
-    ## Important to make sure filter attrs.transcriptType matches current set
-    ## figured out with
-    select distinct transcriptType from wgEncodeGencodeAttrsVM5 order by transcriptType;
-    cd kent/src/hg/makeDb/trackDb
-    cp human/mm10/wgEncodeGencodeV18.ra human/mm10/wgEncodeGencodeVM5.ra
-    cp human/mm10/wgEncodeGencodeV18.html human/mm10/wgEncodeGencodeVM5.html
-
-    # edit these plus human/mm10/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeVM5.ra in reverse order with previous
-    #   tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous minus 0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-    # - Update wgEncodeGencodeSuper.html to describe new release and to
-    #   pick up other updates.
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode V??' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    # output in check/joiner.out
-    cd /hive/data/genomes/mm10/bed/gencodeVM5
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-#########################################################################
 # lastz zebrafish danRer10 (DONE - 2015-09-11 - Hiram)
     # establish a screen to control this job with a name to indicate what it is
     screen -S mm10DanRer10
@@ -11442,48 +11246,6 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -buildDir=`pwd` danRer10 mm10) > rbest.log 2>&1
     #    real    7m34.259s
-
-#########################################################################
-2015-10-02: import of UCSC GENCODE group processing of GENCODE VM7 (markd)
-    # download files
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM7
-    cd /hive/data/genomes/mm10/bed/gencodeVM7
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set
-    # release and transcript support versions
-
-
-    # download, build and load tables
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.
-        make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk cmpRelease >gencode-cmp.tsv
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.  Follow instructiuons in ra file to ensure
-    ## filters are correct.
-    cd kent/src/hg/makeDb/trackDb
-    cp mouse/mm10/wgEncodeGencodeVM4.ra mouse/mm10/wgEncodeGencodeVM7.ra
-    cp mouse/mm10/wgEncodeGencodeVM4.html mouse/mm10/wgEncodeGencodeVM7.html
-
-    # edit these plus mouse/mm10/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeVM7.ra tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous minus 0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-    # - Update wgEncodeGencodeSuper.html to describe new release and to
-    #   pick up other updates.
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode V??' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    # output in check/joiner.out
-    cd /hive/data/genomes/mm10/bed/gencodeVM7
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
 #########################################################################
 # DBSNP 142 / SNP142 (DONE 2015-11-20 braney)
@@ -11781,89 +11543,6 @@ bedToBigBed patNonBulk.bed /cluster/data/genomes/mm10/chrom.sizes patNonBulk.bb 
 bedToBigBed patBulk.bed /cluster/data/genomes/mm10/chrom.sizes patBulk.bb -tab -as=../patSummary.as -type=bed12+
 hgBbiDbLink hg19 patBulk /gbdb/hg19/bbi/patBulk.bb
 hgBbiDbLink hg19 patNonBulk /gbdb/hg19/bbi/patNonBulk.bb
-
-#########################################################################
-2016-03-14: import of UCSC GENCODE group processing of GENCODE VM8 (markd)
-# not to be pushed to RR
-
-    # download files
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM8
-    cd /hive/data/genomes/mm10/bed/gencodeVM8
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.
-        make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk cmpRelease >gencode-cmp.tsv
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.  Follow instructions in ra file to ensure
-    ## filters are correct.
-    cd kent/src/hg/makeDb/trackDb
-    cp mouse/mm10/wgEncodeGencodeVM7.ra mouse/mm10/wgEncodeGencodeVM8.ra
-    cp mouse/mm10/wgEncodeGencodeVM7.html mouse/mm10/wgEncodeGencodeVM8.html
-
-    # edit these plus mouse/mm10/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeVM8.ra tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous minus 0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-    # - Update wgEncodeGencodeSuper.html to describe new release and to
-    #   pick up other updates.
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode V??' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    # output in check/joiner.out
-    cd /hive/data/genomes/mm10/bed/gencodeVM8
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-#########################################################################
-2016-03-14: import of UCSC GENCODE group processing of GENCODE VM9 (markd)
-
-    # download files
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM9
-    cd /hive/data/genomes/mm10/bed/gencodeVM9
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.
-        make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk cmpRelease >gencode-cmp.tsv
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.  Follow instructions in ra file to ensure
-    ## filters are correct.
-    cd kent/src/hg/makeDb/trackDb
-    cp mouse/mm10/wgEncodeGencodeVM8.ra mouse/mm10/wgEncodeGencodeVM9.ra
-    cp mouse/mm10/wgEncodeGencodeVM8.html mouse/mm10/wgEncodeGencodeVM9.html
-
-    # edit these plus mouse/mm10/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeVM9.ra tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous minus 0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-    # - Update wgEncodeGencodeSuper.html to describe new release and to
-    #   pick up other updates.
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode V??' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    # output in check/joiner.out
-    cd /hive/data/genomes/mm10/bed/gencodeVM9
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
 ##############################################################################
 # LASTZ Rat rn6 (DONE - 2016-04-09 - Jonathan)
@@ -12342,45 +12021,6 @@ TMPDIR=/dev/shm
     # real    620m0.039s
 
 #########################################################################
-2016-07-22: import of UCSC GENCODE group processing of GENCODE VM10 (markd)
-    # will not be pushed to the RR.
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM10
-    pushd /hive/data/genomes/mm10/bed/gencodeVM10
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.  Results are in gencode-cmp.tsv
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.  Follow instructions in ra file to ensure
-    ## filters are correct.
-    cd kent/src/hg/makeDb/trackDb
-    cp mouse/mm10/wgEncodeGencodeVM9.ra mouse/mm10/wgEncodeGencodeVM10.ra
-    cp mouse/mm10/wgEncodeGencodeVM9.html mouse/mm10/wgEncodeGencodeVM10.html
-
-    # edit these plus mouse/mm10/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeVM10.ra tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous minus 0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-    # - Update wgEncodeGencodeSuper.html to describe new release and to
-    #   pick up other updates.  [ONLY if it's going to be pushed]
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode V??' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    # output in check/joiner.out
-    cd /hive/data/genomes/mm10/bed/gencodeVM10
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-#########################################################################
 # LASTZ mouse/mm10 Chimp/panTro5 - (DONE - 2016-08-03 - Hiram)
     mkdir /hive/data/genomes/mm10/bed/lastzPanTro5.2016-08-03
     cd /hive/data/genomes/mm10/bed/lastzPanTro5.2016-08-03
@@ -12448,84 +12088,6 @@ TMPDIR=/dev/shm
 # Crispr track. See ../crisprTrack/README.txt (2016-09-15 max)
 # Command: doCrispr.sh mm10 ensGene
 ##############################################################################
-
-#########################################################################
-2016-10-27: import of UCSC GENCODE group processing of GENCODE VM11 (markd)
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM11
-    cd /hive/data/genomes/mm10/bed/gencodeVM11
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.
-        make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk cmpRelease >gencode-cmp.tsv
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.  Follow instructions in ra file to ensure
-    ## filters are correct.
-    cd kent/src/hg/makeDb/trackDb
-    cp mouse/mm10/wgEncodeGencodeVM8.ra mouse/mm10/wgEncodeGencodeVM11.ra
-    cp mouse/mm10/wgEncodeGencodeVM8.html mouse/mm10/wgEncodeGencodeVM11.html
-
-    # edit these plus mouse/mm10/trackDb.wgEncode.ra
-    # - set priorities in wgEncodeGencodeVM11.ra tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous minus 0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-    # - Update wgEncodeGencodeSuper.html to describe new release and to
-    #   pick up other updates.
-
-    # update all.joiner and validate
-    # look for the last section `begin Gencode V??' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    # output in check/joiner.out
-    cd /hive/data/genomes/mm10/bed/gencodeVM11
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-##############################################################################
-2016-12-08: import of UCSC GENCODE group processing of GENCODE VM12 (markd)
-            No being pushed to RR
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM12
-    cd /hive/data/genomes/mm10/bed/gencodeVM12
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    ##  gencode-cmp.tsv- check to see if sizes make sense
-
-    ## Copy and update trackDb files from previous release.
-    ## Change version and use lower priority so it sorts to top of
-    ## super track page.  Follow instructions in ra file to ensure
-    ## filters are correct.
-    cd kent/src/hg/makeDb/trackDb
-    cp mouse/mm10/wgEncodeGencodeVM11.ra mouse/mm10/wgEncodeGencodeVM12.ra
-    cp mouse/mm10/wgEncodeGencodeVM11.html mouse/mm10/wgEncodeGencodeVM12.html
-
-    # edit these plus mouse/mm10/trackDb.ra
-    # - set priorities in wgEncodeGencodeVM12.ra tracks so newest shows up first
-    #     priority - set to previous version priority minus 0.001
-    #     searchPriority - set each to previous minus 0.001
-    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
-    #     superTrack wgEncodeGencodeSuper pack
-    # - Update wgEncodeGencodeSuper.html to describe new release and to
-    #   pick up other updates.
-
-    # DID NOT UPDATE all.joiner SINCE NOT BEING PUSHED PUBLIC
-    # update all.joiner and validate
-    # look for the last section `begin Gencode V??' in all.joiner
-    # and copy and update version
-    # repeat this until happy, editing minCheck as needed
-    # output in check/joiner.out
-    cd /hive/data/genomes/mm10/bed/gencodeVM12
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
 ############################################################################################
 # Mouse strains VCF (DONE - 2016-11-08 - Hiram)
@@ -13285,34 +12847,6 @@ TMPDIR=/dev/shm
          > rbest.log 2>&1 &
     # real    110m9.546s
 
-#########################################################################
-2017-04-16: import of UCSC GENCODE group processing of GENCODE VM13 (markd)
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM13
-    pushd /hive/data/genomes/mm10/bed/gencodeVM13
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    ##  gencode-cmp.tsv check to see if sizes make sense
-
-    # generate trackDb and joiner blurb
-    pushd kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M13 88 'March 2017'
-
-    # edit mouse/mm10/trackDb.ra to add new .ra file include
-    make DBS=mm10
-
-    # Update mouse/mm10/wgEncodeGencodeSuper.html and update 'Release Notes'
-    # to describe new release. [ONLY if it's going to be pushed]
-
-    # edit  all.joiner to add ~/tmp/gencodeVM13.joiner
-    # verify with:
-    pushd /hive/data/genomes/mm10/bed/gencodeVM13
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
-
-    # commit all
 ##############################################################################
 # LASTZ Chinese hamster ovary cell line CHO-K1  criGriChoV1
 #	(DONE - 2017-04-13 - Hiram)
@@ -15014,34 +14548,6 @@ fi
     #  checked: 85224 failed: 0 errors: 0
 
 ##############################################################################
-2017-05-31: import of UCSC GENCODE group processing of GENCODE VM14 (markd)
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM14
-    pushd /hive/data/genomes/mm10/bed/gencodeVM14
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    ##  gencode-cmp.tsv check to see if sizes make sense
-
-    # generate trackDb and joiner blurb
-    pushd kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M14 89 'May 2017'
-
-    # edit mouse/mm10/trackDb.wgEncode.ra to add new .ra file include
-    make DBS=mm10
-
-    # Update mouse/mm10/wgEncodeGencodeSuper.html and update 'Release Notes'
-    # to describe new release. [ONLY if it's going to be pushed]
-
-    # edit  all.joiner to add ~/tmp/gencodeVM14.joiner
-    # verify with:
-    pushd /hive/data/genomes/mm10/bed/gencodeVM14
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
-
-    # commit all
-##############################################################################
 # LASTZ zebrafish danRer11 (DONE - 2017-06-12 - Chris)
     #	establish a screen to control this job
     screen -S mm10danRer11
@@ -15519,37 +15025,6 @@ bedToBigBed -tab -type=bed9+7 -as=$HOME/kent/src/hg/lib/refSeqFuncElems.as \
   refSeqFuncElems.bed /hive/data/genomes/mm10/chrom.sizes refSeqFuncElems.bb
 rm -f /gbdb/mm10/ncbiRefSeq/refSeqFuncElems.bb
 ln -s `pwd`/refSeqFuncElems.bb /gbdb/mm10/ncbiRefSeq/
-
-##############################################################################
-2017-09-15: import of UCSC GENCODE group processing of GENCODE VM15 (markd)
-    # not to push to the RR
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM15
-    pushd /hive/data/genomes/mm10/bed/gencodeVM15
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    ##  gencode-cmp.tsv check to see if sizes make sense
-
-    # generate trackDb and joiner blurb
-    pushd kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M15 90 'Aug 2017'
-
-    # Update mouse/mm10/wgEncodeGencodeSuper.html and update 'Release Notes'
-    # to describe new release. [ONLY if it's going to be pushed]
-
-    # edit mouse/mm10/trackDb.gencode.ra to add new .ra file include
-    make DBS=mm10
-
-    ## only if being pushed to RR:
-    # edit  all.joiner to add ~/tmp/gencodeVM15.joiner
-    # verify with:
-    pushd /hive/data/genomes/mm10/bed/gencodeVM15
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
-
-    # commit all
 
 ##############################################################################
 # ncbiRefSeq composite (DONE - 2017-11-16 - Angie)
@@ -16080,38 +15555,6 @@ TMPDIR=/dev/shm
     # real    267m17.552s
 
 ##############################################################################
-2017-12-17: import of UCSC GENCODE group processing of GENCODE VM16 (markd)
-    # being push to the RR
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM16
-    pushd /hive/data/genomes/mm10/bed/gencodeVM16
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    ##  gencode-cmp.tsv check to see if sizes make sense
-
-    # generate trackDb and joiner blurb
-    pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M16 91 'Dec 2017'
-
-    # Update mouse/mm10/wgEncodeGencodeSuper.html and update 'Release Notes'
-    # to describe new release. [ONLY if it's going to be pushed]
-
-    # edit mouse/mm10/trackDb.gencode.ra to add new .ra file include
-    make DBS=mm10
-
-    ## only if being pushed to RR:
-    # edit  all.joiner to add ~/tmp/gencodeVM16.joiner
-    # verify with:
-    pushd /hive/data/genomes/mm10/bed/gencodeVM16
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
-
-    # commit all and make push request, the file tables.lst will have the
-    # list of tables for the push request.
-
-##############################################################################
 # LASTZ Damara mole rat vs. mouse/Mm10 (DONE - 2018-01-01 - Hiram)
     mkdir /hive/data/genomes/mm10/bed/lastzFukDam1.2018-01-01
     cd /hive/data/genomes/mm10/bed/lastzFukDam1.2018-01-01
@@ -16569,28 +16012,6 @@ TMPDIR=/dev/shm
 
     cat fb.petMar3.chainRBestMm10Link.txt
     # 21335101 bases of 1043181598 (2.045%) in intersection
-
-#########################################################################
-2018-03-08: update UCSC GENCODE VM16 to include protein id (for VAI) and fix PAR tag
-
-cd /hive/data/genomes/mm10/bed/gencodeVM16
-
-# save existing data
-mkdir -p prev/pre-proteinId
-mv tables/wgEncodeGencodeAttrsVM16.tab tables/wgEncodeGencodeTagVM16.tab prev/pre-proteinId/
-mv loaded/wgEncodeGencodeAttrsVM16.tab.loaded loaded/wgEncodeGencodeTagVM16.tab.loaded prev/pre-proteinId/
-mv data/gencode.tsv prev/pre-proteinId/
-cp -p data/gencode.vM16.transcriptionSupportLevel.tab prev/pre-proteinId/
-
-# edit gencodeLoad.mk to set mm10 as target
-
-# get gencode.tsv without rebuild TSL file or loading tables that don't change
-~markd/compbio/ccds/ccds2/output/bin/x86_64/opt/gencodeGxfToAttrs --keepGoing data/release_M16/gencode.vM16.chr_patch_hapl_scaff.annotation.gtf.gz data/gencode.tsv
-make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk   loaded/wgEncodeGencodeAttrsVM16.tab.loaded  loaded/wgEncodeGencodeTagVM16.tab.loaded
-
-# 2018-03-19: update search to include protein id
-cd kent/src/hg/makeDb/trackDb
-../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M16 91 'Dec 2017'
 
 #########################################################################
 # lastz garter snake/thaSir1 (DONE - 2018-03-13 - Hiram)
@@ -17247,39 +16668,6 @@ TMPDIR=/dev/shm
     cat fb.balAcu1.chainRBest.Mm10.txt
     # 810427625 bases of 2286657046 (35.442%) in intersection
 
-#########################################################################
-2018-07-01: import of UCSC GENCODE group processing of GENCODE VM17 (markd)
-    # not being push to the RR
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM17
-    pushd /hive/data/genomes/mm10/bed/gencodeVM17
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    ##  gencode-cmp.tsv check to see if sizes make sense
-
-    # generate trackDb and joiner blurb
-    pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M17 92 'Mar 2018'
-
-    ## only if being pushed to RR:
-    # Update mouse/mm10/wgEncodeGencodeSuper.html
-    # Update 'Release Notes' to describe new release.
-
-    # edit mouse/mm10/trackDb.gencode.ra to add new .ra file include
-    make DBS=mm10
-
-    ## only if being pushed to RR:
-    # edit  all.joiner to add ~/tmp/gencodeVM17.joiner
-    # verify with:
-    pushd /hive/data/genomes/mm10/bed/gencodeVM17
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
-
-    # commit all and make push request, the file tables.lst will have the
-    # list of tables for the push request.
-
 ##############################################################################
 # LASTZ mouse/mm10 Axolotl/ambMex1 - (DONE - 2018-07-09 - Hiram)
     mkdir /hive/data/genomes/mm10/bed/lastzAmbMex1.2018-07-09
@@ -17362,42 +16750,6 @@ TMPDIR=/dev/shm
 
     cat fb.ambMex1.chainRBest.Mm10.txt
     # 38584422 bases of 28366694468 (0.136%) in intersection
-
-##############################################################################
-2018-08-03: import of UCSC GENCODE group processing of GENCODE VM18 (markd)
-    # being push to the RR
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM18
-    pushd /hive/data/genomes/mm10/bed/gencodeVM18
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    ##  gencode-cmp.tsv check to see if sizes make sense
-
-    # generate trackDb and joiner blurb
-    pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M18 93 'July 2018'
-
-    ## only if being pushed to RR:
-    # Update mouse/mm10/wgEncodeGencodeSuper.html
-    # Update 'Release Notes' to describe new release.
-
-    # edit mouse/mm10/trackDb.gencode.ra to add new .ra file include
-    make DBS=mm10
-
-    ## only if being pushed to RR:
-    # edit  all.joiner to add ~/tmp/gencodeVM18.joiner
-    # verify with:
-    pushd /hive/data/genomes/mm10/bed/gencodeVM18
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
-
-    # commit all and make push request, the file tables.lst will have the
-    # list of tables for the push request.
-
-    cd ~/kent/src/hg/makeDb/trackDb
-    make alpha DBS=mm10
 
 ##############################################################################
 # LASTZ mouse/mm10 vs. chicken/galGal6 - (DONE - 2018-10-12 - Hiram)
@@ -17544,43 +16896,6 @@ TMPDIR=/dev/shm
     cat fb.bosTau9.chainRBest.Mm10.txt
     # 667305554 bases of 2715853792 (24.571%) in intersection
 
-#########################################################################
-2018-11-10: import of UCSC GENCODE group processing of GENCODE VM19 (markd)
-    # not being push to the RR
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM19
-    pushd /hive/data/genomes/mm10/bed/gencodeVM19
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    ##  gencode-cmp.tsv check to see if sizes make sense
-
-    # generate trackDb and joiner blurb
-    pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M19 94 'Oct 2018'
-
-    ## only if being pushed to RR:
-    (skipped)
-    # Update mouse/mm10/wgEncodeGencodeSuper.html
-    # Update 'Release Notes' to describe new release.
-
-    # edit mouse/mm10/trackDb.gencode.ra to add new .ra file include
-    make DBS=mm10
-
-    ## only if being pushed to RR: (SKIPPED)
-    # edit  all.joiner to add ~/tmp/gencodeVM19.joiner
-    # verify with:
-    pushd /hive/data/genomes/mm10/bed/gencodeVM19
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
-
-    # commit all and make push request, the file tables.lst will have the
-    # list of tables for the push request.
-
-    cd ~/kent/src/hg/makeDb/trackDb
-    make alpha DBS=mm10
-
 ##############################################################################
 # LASTZ mouse/mm10 vs. Japanese quail/cotJap2 - (DONE - 2018-11-15 - Hiram)
     mkdir /hive/data/genomes/mm10/bed/lastzCotJap2.2018-11-15
@@ -17659,43 +16974,6 @@ TMPDIR=/dev/shm
 
     cat fb.cotJap2.chainRBest.Mm10.txt
     # 76078816 bases of 917263224 (8.294%) in intersection
-
-##############################################################################
-2018-11-30: import of UCSC GENCODE group processing of GENCODE VM20 prerelease (markd)
-    # This is a prerelease for testing and is *not* to pushed until the final release.
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM20
-    pushd /hive/data/genomes/mm10/bed/gencodeVM20
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    ##  gencode-cmp.tsv check to see if sizes make sense
-
-    # generate trackDb and joiner blurb
-    pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M20 95 'Dec 2018'
-
-    ## only if being pushed to RR:
-    (skipped)
-    # Update mouse/mm10/wgEncodeGencodeSuper.html
-    # Update 'Release Notes' to describe new release.
-
-    # edit mouse/mm10/trackDb.gencode.ra to add new .ra file include
-    make DBS=mm10
-
-    ## only if being pushed to RR: (SKIPPED)
-    # edit  all.joiner to add ~/tmp/gencodeVM20.joiner
-    # verify with:
-    pushd /hive/data/genomes/mm10/bed/gencodeVM20
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
-
-    # commit all and make push request, the file tables.lst will have the
-    # list of tables for the push request.
-
-    cd ~/kent/src/hg/makeDb/trackDb
-    make alpha DBS=mm10
 
 #########################################################################
 2019-01-17: tabula muris track (max)
@@ -17887,81 +17165,6 @@ cbTrackHub mm10 bam/ TM_facs_metadata.fix.tsv cell_ontology_class hub/ --name "T
     cd  $pd
     md5sum *.fa.gz > md5sum.txt
 ##############################################################################
-2019-04-08: import of UCSC GENCODE group processing of GENCODE VM20 (markd)
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM21
-    pushd /hive/data/genomes/mm10/bed/gencodeVM21
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    ##  gencode-cmp.tsv check to see if sizes make sense
-
-    # generate trackDb and joiner blurb
-    pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M21 96 'Apr 2019'
-
-    ## only if being pushed to RR:
-    # Update mouse/mm10/wgEncodeGencodeSuper.html
-    # Update 'Release Notes' to describe new release.
-
-    # edit mouse/mm10/trackDb.gencode.ra to add new .ra file include
-    make DBS=mm10
-
-    ## only if being pushed to RR:
-    # edit  all.joiner to add ~/tmp/gencodeVM21.joiner
-    # verify with:
-    pushd /hive/data/genomes/mm10/bed/gencodeVM21
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
-
-    # commit all and make push request, the file tables.lst will have the
-    # list of tables for the push request.
-
-    cd ~/kent/src/hg/makeDb/trackDb
-    make alpha DBS=mm10
-
-    # commit all
-    # if pushing public, add ticket and MARK QA READY
-
-#########################################################################
-2019-07-03: import of UCSC GENCODE group processing of GENCODE VM22 (markd)
-    # Replaced import of pre-release
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM22
-    pushd /hive/data/genomes/mm10/bed/gencodeVM22
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    ##  gencode-cmp.tsv check to see if sizes make sense
-
-    # generate trackDb and joiner blurb
-    pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M22 97 'June 2019'
-
-    ## only if being pushed to RR:
-    # Update mouse/mm10/wgEncodeGencodeSuper.html
-    # Update 'Release Notes' to describe new release.
-
-    # edit mouse/mm10/trackDb.gencode.ra to add new .ra file include
-    make DBS=mm10
-
-    ## only if being pushed to RR:
-    # edit  all.joiner to add ~/tmp/gencodeVM22.joiner
-    # verify with:
-    pushd /hive/data/genomes/mm10/bed/gencodeVM22
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
-
-    # commit all and make push request, the file tables.lst will have the
-    # list of tables for the push request.
-
-    cd ~/kent/src/hg/makeDb/trackDb
-    make alpha DBS=mm10
-
-    # commit all
-    # if pushing public, add ticket and MARK QA READY
-
-##############################################################################
 # LASTZ Rat regenRn0 (DONE - 2019-07-01 - Jonathan)
     mkdir /hive/data/genomes/mm10/bed/lastzRegenRn0.2019-07-01
     cd /hive/data/genomes/mm10/bed/lastzRegenRn0.2019-07-01
@@ -18084,61 +17287,6 @@ TMPDIR=/dev/shm
 
     cat fb.rheMac10.chainRBest.Mm10.txt
     # 878542993 bases of 2936892733 (29.914%) in intersection
-
-##############################################################################
-2019-08-30: import of UCSC GENCODE group processing of GENCODE VM23 (markd)
-    # PRE-RELEASE
-
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM23
-    pushd /hive/data/genomes/mm10/bed/gencodeVM23
-
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.  Results are in gencode-cmp.tsv
-
-    # generate trackDb and joiner blurb
-    pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M23 98 'Sept 2019'
-
-    # If being pushed public, update 'Release Notes' in
-    # human/mm10/wgEncodeGencodeSuper.html
-
-    # edit human/mm10/trackDb.gencode.ra to add new .ra file include
-    make DBS=mm10
-
-    ## only if being pushed to RR:
-    # edit all.joiner to add ~/tmp/gencodeVM23.joiner
-    # verify with:
-    pushd /hive/data/genomes/mm10/bed/gencodeVM23
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-    # commit all
-    # if pushing public: add ticket and MARK QA READY
-
-2019-08-30: repeat above for final release
-    mv /hive/data/genomes/mm10/bed/gencodeVM23 /hive/data/genomes/mm10/bed/gencodeVM23pre
-    # redo do above imports
-
-    for t in tables/* ; do cmp ../gencodeVM23pre/$t $t ; done
-
-    Changes:
-    wgEncodeGencode2wayConsPseudoVM23.gp 
-    wgEncodeGencodeAttrsVM23.tab
-    wgEncodeGencodePolyaVM23.gp
-    wgEncodeGencodeTagVM23.tab
-    only attrs and maybe tags matter to hgGene gencode
-
-    mkdir pre-diffs
-    diff ../gencodeVM23pre/tables/wgEncodeGencodeAttrsVM23.tab tables/wgEncodeGencodeAttrsVM23.tab >pre-diffs/wgEncodeGencodeAttrsVM23.diff
-    diff ../gencodeVM23pre/tables/wgEncodeGencodeTagVM23.tab tables/wgEncodeGencodeTagVM23.tab >pre-diffs/wgEncodeGencodeTagVM23.diff
-
-    # wgEncodeGencodeAttrsVM23: experimental confirmation level changed on a few pseudogenes
-    # wgEncodeGencodeTagVM23: pseudo_consens changed on a few pseudogenes.
-
 
 #########################################################################
 # LASTZ Rat regenRn1 (DONE - 2019-09-12 - Hiram)
@@ -18276,38 +17424,6 @@ Longest finished job:              68s       1.13m     0.02h    0.00d
 # For ENCODE 3 tracks, see doc/encode3/mouse.txt
 
 ##############################################################################
-2019-11-16: import of UCSC GENCODE group processing of GENCODE VM24 PRE-RELEASE (markd)
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM24
-    pushd /hive/data/genomes/mm10/bed/gencodeVM24
-
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.  Results are in gencode-cmp.tsv
-
-    # generate trackDb and joiner blurb
-    pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M24 99 'Nov 2019'
-
-    # If being pushed public, update 'Release Notes' in
-    # human/mm10/wgEncodeGencodeSuper.html
-
-    # edit human/mm10/trackDb.gencode.ra to add new .ra file include
-    make DBS=mm10
-
-    ## only if being pushed to RR:
-    # edit all.joiner to add ~/tmp/gencodeVM24.joiner
-    # verify with:
-    pushd /hive/data/genomes/mm10/bed/gencodeVM24
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-    # commit all
-    # if pushing public: add ticket and MARK QA READY
-
-##############################################################################
 # LASTZ Gorilla gorGor6 (DONE - 2019-11-20 - Hiram)
     #	establish a screen to control this job
     screen -S mm10gorGor6
@@ -18441,42 +17557,6 @@ TMPDIR=/dev/shm
     # 1396267649 bases of 2266312740 (61.610%) in intersection
 
 ##############################################################################
-2020-01-16: import of UCSC GENCODE group processing of GENCODE VM24 (markd)
-    # deprecate pre-release
-    mv /hive/data/genomes/mm10/bed/gencodeVM24 /hive/data/genomes/hg38/bed/gencodeVM24pre
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM24
-    pushd /hive/data/genomes/mm10/bed/gencodeVM24
-
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.  Results are in gencode-cmp.tsv
-
-    # generate trackDb and joiner blurb
-    pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M24 99 'Jan 2020'
-
-    # If being pushed public, update 'Release Notes' in
-    # mouse/mm10/wgEncodeGencodeSuper.html
-
-    # edit human/mm10/trackDb.gencode.ra to add new .ra file include
-    make DBS=mm10
-
-    ## only if being pushed to RR:
-    # edit all.joiner to add ~/tmp/gencodeVM24.joiner
-    # verify with:
-    pushd /hive/data/genomes/mm10/bed/gencodeVM24
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-    # check tracks in browser sandbox
-    # commit all
-    make DBS=mm10 alpha
-    # if pushing public: add ticket and MARK QA READY
-
-##############################################################################
 clinvar lift, done, Fri Jan 31 06:12:46 PST 2020, max
 doClinvarLift mm10
 featureBits hg38 clinvarLift.bed
@@ -18487,40 +17567,6 @@ featureBits mm10 clinvarLift.mm10.bed
 581378 bases of 2652783500 (0.022%) in intersection
 wc -l clinvarLift.mm10.bed
 575023 clinvarLift.mm10.bed
-##############################################################################
-2020-03-11: import of UCSC GENCODE group processing of GENCODE VM25 pre-release (markd)
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
-
-    # download, build and load tables
-    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM25Pre
-    pushd /hive/data/genomes/mm10/bed/gencodeVM25Pre
-
-    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
-
-    # compare tables from previous release to see if number changed makes
-    # sense.  Results are in gencode-cmp.tsv
-
-    # generate trackDb and joiner blurb
-    pushd ~/kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M25 100 'March 2020'
-
-    # If being pushed public, update 'Release Notes' if pushing puyblic.
-    # mouse/mm10/wgEncodeGencodeSuper.html
-
-    # edit mouse/mm10/trackDb.gencode.ra to add new .ra file include
-    make DBS=mm10
-
-    ## only if being pushed to RR:
-    # edit all.joiner to add ~/tmp/gencodeVM25.joiner
-    # verify with:
-    pushd /hive/data/genomes/mm10/bed/gencodeVM25Pre
-    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
-
-    # check tracks in browser sandbox
-    # commit all
-    make DBS=mm10 alpha
-    # if pushing public: add ticket and MARK QA READY
-
 ##############################################################################
 # LASTZ Southern sea otter enhLutNer1 (DONE - 2020-04-16 - Jonathan)
     #	establish a screen to control this job

@@ -1,0 +1,7 @@
+cd /hive/data/genomes/wuhCor1/bed/ncbiGene
+ 
+# get Genbank entry NC_045512.2.gbk
+genbankToBigGenePred NC_045512.2.gbk NC_045512v2 ../../chrom.sizes tab
+ 
+#bbedToBigBed -allow1bpOverlap -tab -type=bed12+ -as=as prev.bed ../../chrom.sizes bb/genes.bb 
+ bedToBigBed -allow1bpOverlap -tab -type=bed12+ -as=as prev.bed ../../chrom.sizes bb/genes.bb   -extraIndex=name

@@ -13,12 +13,11 @@ type bigBed 3 +
     track comments
     shortLabel UCSC FAQ Comments
     longLabel UCSC FAQ comments on assembly structure
-    type bigBed 9 +
+    type bigBed 9 
     bigDataUrl /gbdb/hg19/bbi/problematic/comments.bb
     visibility dense
     parent problematic
     priority 1
-    noScoreFilter on
     mouseOverField note
 
     track encBlacklist
@@ -31,7 +30,7 @@ type bigBed 3 +
     priority 2
 
     track getRmNgsDeadZone
-    shortLabel NBCI NGS Dead Zone
+    shortLabel NCBI NGS Dead Zone
     longLabel NCBI Get-RM NGS Dead Zone
     type bigBed 3 +
     bigDataUrl /gbdb/hg19/bbi/problematic/deadZone.bb
@@ -40,7 +39,7 @@ type bigBed 3 +
     priority 3
 
     track getRmSangerDeadZone
-    shortLabel NBCI Sanger Dead Zone
+    shortLabel NCBI Sanger Dead Zone
     longLabel NCBI Get-RM Sanger Dead Zone
     type bigBed 3 +
     bigDataUrl /gbdb/hg19/bbi/problematic/sangerDeadZone.bb
@@ -49,7 +48,7 @@ type bigBed 3 +
     priority 4
 
     track getRmNgsProblemLow
-    shortLabel NGS Low Stringency
+    shortLabel NCBI NGS Low Stringency
     longLabel NCBI Get-RM NGS Problem List, Low Stringency
     type bigBed 3 +
     bigDataUrl /gbdb/hg19/bbi/problematic/ngsProblemLow.bb
@@ -58,7 +57,7 @@ type bigBed 3 +
     priority 5
 
     track getRmNgsProblemHigh
-    shortLabel NGS High Stringency
+    shortLabel NCBI NGS High Stringency
     longLabel NCBI Get-RM NGS Problem List, High Stringency
     type bigBed 3 +
     bigDataUrl /gbdb/hg19/bbi/problematic/ngsProblemHigh.bb

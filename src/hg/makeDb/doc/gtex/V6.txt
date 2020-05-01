@@ -126,4 +126,18 @@ hgsql hgFixed -e 'alter table gtexTissueV6 rename to gtexTissueV6Old; alter tabl
 
 # Test GTEx track on hgwdev still works with new table
 
+############
+# Correct cell type description, as per V8 portal page
+# 4/29/20 KRR
+
+ [hgFixed]> select * from gtexTissue where name like '%fibro%';
++----+--------------------+---------------------------------+-------+----------+---------+
+| id | name               | description                     | organ | color    | abbrev  |
++----+--------------------+---------------------------------+-------+----------+---------+
+| 22 | xformedfibroblasts | Cells - Transformed fibroblasts | Skin  | 10141901 | FIBRBLS |
++----+--------------------+---------------------------------+-------+----------+---------+
+1 row in set (0.00 sec)
+
+MariaDB [hgFixed]> update gtexTissue set description="Cells - Cultured fibroblasts" where id=22;
+
 

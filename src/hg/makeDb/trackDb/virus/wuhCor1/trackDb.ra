@@ -16,7 +16,8 @@ termRegex NC_[0-9v]+
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
-include ncbiGeneBGP.ra
+include ncbiGeneBGP.ra beta,public
+include ncbiGene.ra alpha
 
 track rnaStructRangan
 shortLabel Rangan RNA
@@ -36,8 +37,8 @@ group map
 type psl
 
 track rfam
-shortLabel RFAM
-longLabel RFAM families
+shortLabel Rfam
+longLabel Rfam families
 visibility hide
 group genes
 color 98,23,0
@@ -61,7 +62,7 @@ urls pmid=https://www.ncbi.nlm.nih.gov/pubmed/$$
 track crisprDet
 shortLabel CRISPR Detection
 longLabel CRISPR Detection Guides
-group genes
+group map
 type psl
 
 track rosettaMhc
@@ -82,7 +83,7 @@ type bigBed 4 +
 bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
 
 track publicAnnots
-shortLabel Crowd-sourced data
+shortLabel Crowd-Sourced Data
 longLabel Crowd-sourced data: annotations contributed via bit.ly/cov2annots
 group map
 priority 6
@@ -111,13 +112,15 @@ track cas13Crispr
 shortLabel Cas13 CRISPR
 longLabel Cas13 CRISPR targets
 group map
-type bigBed 4 +
+type bigBed 5 +
 visibility hide
 bigDataUrl /gbdb/wuhCor1/bbi/cas13Crispr.bb
 exonNumbers off
 priority 40
-useScore on
+spectrum on
 scoreMax 700
+filter.EfficiencyScore 0
+filterLimits.EfficiencyScore 0:700
 
 track poranHla1
 shortLabel Poran HLA I
@@ -142,7 +145,7 @@ mouseOverField name2
 html poranHla1
 
 track artic
-shortLabel ARTIC primers
+shortLabel ARTIC Primers
 longLabel ARTIC Oxford Nanopore sequencing primers
 visibility hide
 group map
@@ -151,7 +154,7 @@ bigDataUrl /gbdb/wuhCor1/bbi/artic.bb
 noScoreFilter on
 
 track targets
-shortLabel T-react epitopes
+shortLabel T-React. Epitopes
 longLabel  T-cell reactive epitopes in patients and donors
 group immu
 visibility hide
@@ -161,19 +164,20 @@ compositeTrack on
         track M1_library
         parent targets
         shortLabel M1 SARS-CoV peptides
-        longLabel M1 SARS-CoV peptides mapped to SARS-Cov-2
+        longLabel T-Cell reactive epitopes: M1 SARS-CoV peptides mapped to SARS-Cov-2
         type bigBed 4
         bigDataUrl /gbdb/wuhCor1/bbi/M1_peptides.bb
         
         track M2_library
         parent targets
         shortLabel M2 SARS-CoV peptides
-        longLabel M2 SARS-CoV peptides mapped to SARS-Cov-2
+        longLabel T-Cell reactive epitopes: M2 SARS-CoV peptides mapped to SARS-Cov-2
         type bigBed 4
         bigDataUrl /gbdb/wuhCor1/bbi/M2_peptides.bb
 
 
 include trackDb.119way.ra
+include trackDb.strainName119way.ra
 include epitopes.ra
 include trackDb.44way.ra
 include trackDb.strainName44way.ra

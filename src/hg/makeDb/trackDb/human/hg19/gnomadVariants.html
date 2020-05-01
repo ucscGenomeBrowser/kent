@@ -64,28 +64,29 @@ filters, described below, were used. Filters above can be used to exclude varian
 <b>Random Forest</b> (RF), <b>Inbreeding Coefficient</b> (InbreedingCoeff) and/or <b>Allele Count</b>
 (AC0) filters, or <b>passed all</b> (PASS) filters. As variant QC was performed on exomes and genomes
 separately but using the same pipeline, some variants have 2 filter statuses which may be discordant
-in some cases. There are 144,941 variants filtered out in exomes, but passing filters in genomes and
-290,254 variants for the reverse. Users should just treat them with caution.
+in some cases. There are 144,941 variants that did not pass the quality filters in the exomes data
+set, but passed the filters in the genomes, and 290,254 variants for the reverse case. Users should
+just treat them with caution.
 </p>
 
 <p>
-A trained allele-specific random forest classifier was used to build a high quality set of variants.
+A trained, allele-specific random forest classifier was used to build a high quality set of variants.
 In order to set a threshold for the PASS / RF filter in the release, metrics to determine a cutoff
-on the random forests model output were used based on: precision / recall against two well
+on the random forest model output were used based on: precision / recall against two well
 characterized samples, number of singleton Mendelian violations in the trios, singleton transition
 for SNVs and singleton insertion for indels.
 </p>
 
 <p>
 For exomes, a RF probability of  &gt;= 0.1 for SNVs and &gt;= 0.2 for indels was used for the
-filtration process. For genomes, a RF probability &gt;= 0.4 for both, SNVs and indels, was used.
+filtration process. For genomes, a RF probability &gt;= 0.4 for both SNVs and indels was used.
 </p>
 
 <p>
-In addition to the random forests filter, all variants falling in low complexity (LCR filter) and
-segmental duplication (SEGDUP filter) regions, variants with low Inbreeding coefficient (Excess
+In addition to the random forest filter, all variants falling in low complexity (LCR filter) and
+segmental duplication (SEGDUP filter) regions, variants with low inbreeding coefficient (excess
 heterozygotes defined by an inbreeding coefficient &lt; -0.3), and all variants where no individual
-had a high quality non-reference genotype (Genotype Quality (GQ) &gt;= 20, depth (DP) &gt;= 10,
+had a high-quality, non-reference genotype (Genotype Quality (GQ) &gt;= 20, depth (DP) &gt;= 10,
 and minor alelle balance (AB) &gt; 0.2 for heterozygotes) were also filtered
 out.
 </p>
@@ -94,10 +95,9 @@ out.
 
 <p>
 The raw data can be explored interactively with the <a target="_blank" href="../cgi-bin/hgTables">
-Table Browser</a>, or the <a target="_blank" href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
+Table Browser</a> or the <a target="_blank" href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
 automated analysis, the data may be queried from our <a target="_blank" 
-href="/goldenPath/help/api.html">REST API</a>, and the genome annotations are stored in files that 
-can be downloaded from our <a
+href="/goldenPath/help/api.html">REST API</a> or downloaded as files from our <a
 href="http://hgdownload.soe.ucsc.edu/gbdb/$db/gnomAD/" target="_blank">download server</a>, subject
 to the conditions set forth by the gnomAD consortium (see below). Coverage values
 for the genome are in <a target="_blank" href="../goldenPath/help/bigWig.html">bigWig</a> files in
@@ -106,7 +106,7 @@ the coverage/ subdirectory. Variant VCFs can be found in the vcf/ subdirectory.<
 The data can also be found directly from the gnomAD <a target="_blank" 
 href="https://gnomad.broadinstitute.org/downloads">downloads page</a>. Please refer to 
 our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
-target="_blank">mailing list archives</a> for questions, or our <a target="_blank"
+target="_blank">mailing list archives</a> for questions or our <a target="_blank"
 href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more information.</p>
 
 <h2>Credits</h2>
