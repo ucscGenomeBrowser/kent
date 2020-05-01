@@ -154,6 +154,8 @@ awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "NC_045512v2", $2, $3, $5, $5}' \
 
     featureBits wuhCor1 phastConsElements119way
     #  26502 bases of 29903 (88.627%) in intersection
+    featureBits wuhCor1 strainPhastConsElements119way
+    #  26502 bases of 29903 (88.627%) in intersection
 
 
     ln -s `pwd`/phastCons119way.wib \
@@ -252,6 +254,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     wigEncode NC_045512v2.wigFix phyloP119way.wig phyloP119way.wib
     # Converted NC_045512v2.wigFix, upper limit 20.00, lower limit -7.41
 
+    cd /hive/data/genomes/wuhCor1/bed/multiz119way/consPhyloP
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phyloP119way.wib /gbdb/wuhCor1/multiz119way/phyloP119way.wib
     hgLoadWiggle -pathPrefix=/gbdb/wuhCor1/multiz119way wuhCor1 \
