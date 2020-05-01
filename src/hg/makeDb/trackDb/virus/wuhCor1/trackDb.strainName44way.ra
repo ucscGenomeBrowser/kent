@@ -1,12 +1,12 @@
 track strainCons44way
 compositeTrack on
-shortLabel 44 Aln: Names
+shortLabel 44 Bat CoVs
 longLabel Multiz Alignment & Conservation (44 Strains with bats as hosts)
 #subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons)
 dragAndDrop subTracks
 visibility hide
-priority 10
+priority 1
 type bed 4
 group compGeno
 html cons44way
