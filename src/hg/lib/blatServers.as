@@ -5,4 +5,5 @@ table blatServers
     string host;	"Host (machine) name"
     int port;	"TCP/IP port on host"
     byte isTrans;  "0 for nucleotide/1 for translated nucleotide"
+    byte canPcr;  "1 for use with PCR, 0 for not"
     )
