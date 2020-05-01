@@ -148,3 +148,13 @@ compositeTrack on
     hapClusterHeight 4
     bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB4.vcf.gz
     priority 100
+
+
+track nextstrainCount
+shortLabel Nextrain Varcount
+longLabel Number of variants per position
+type bigWig
+bigDataUrl /hive/data/outside/otto/nextstrainNcov/2020-05-01/nextstrainSamples.bigWig
+visibility hide
+group varRep
+
