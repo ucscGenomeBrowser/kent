@@ -21,5 +21,10 @@ table mergedBGP
    string geneName;    "Primary identifier for gene"
    string geneName2;   "Alternative/human readable gene name"
    string geneType;    "Gene type"
+
+   lstring description;  "Description"
+   lstring refSeqSummary;  "RefSeq Summary"
+
+
    )
 
