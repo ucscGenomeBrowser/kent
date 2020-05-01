@@ -5,10 +5,11 @@
 
 #Description of online BLAT servers
 CREATE TABLE blatServers (
-    db varchar(32) not null,	# Database name
-    host varchar(128) not null,	# Host (machine) name
+    db varchar(255) not null,	# Database name
+    host varchar(255) not null,	# Host (machine) name
     port int not null,	# TCP/IP port on host
     isTrans tinyint not null,	# 0 for nucleotide/1 for translated nucleotide
+    canPcr tinyint not null,	# 1 for use with PCR, 0 for not
               #Indices
-    INDEX(db)
+    PRIMARY KEY(db)
 );

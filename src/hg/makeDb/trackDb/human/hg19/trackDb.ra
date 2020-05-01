@@ -11,8 +11,8 @@ type bigBed 3 +
 
 
     track comments
-    shortLabel UCSC FAQ Comments
-    longLabel UCSC FAQ comments on assembly structure
+    shortLabel UCSC Unusual Regions
+    longLabel UCSC unusual regions on assembly structure
     type bigBed 9 
     bigDataUrl /gbdb/hg19/bbi/problematic/comments.bb
     visibility dense
@@ -67,7 +67,7 @@ type bigBed 3 +
 
     track filterSSE
     shortLabel GIAB filter SSE
-    longLabel Genome-in-a-bottle: calls with evidence of systematic sequencing errors 
+    longLabel NIST Genome-in-a-bottle: calls with evidence of systematic sequencing errors 
     type bigBed 3
     bigDataUrl /gbdb/hg19/bbi/problematic/filterSSE.bb
     visibility dense
@@ -76,7 +76,7 @@ type bigBed 3 +
 
     track filterHapNoVar
     shortLabel GIAB call conflict
-    longLabel Genome-in-a-bottle: HaplotypeCaller makes no call and UnifiedGenotyper makes a variant call
+    longLabel NIST Genome-in-a-bottle: HaplotypeCaller makes no call and UnifiedGenotyper makes a variant call
     type bigBed 3
     bigDataUrl /gbdb/hg19/bbi/problematic/filterHapNoVar.bb
     visibility dense
@@ -85,7 +85,7 @@ type bigBed 3 +
 
     track filterMap
     shortLabel GIAB quality issue
-    longLabel Genome-in-a-bottle: calls with low mapping quality or high coverage
+    longLabel NIST Genome-in-a-bottle: calls with low mapping quality or high coverage
     type bigBed 3
     bigDataUrl /gbdb/hg19/bbi/problematic/filterMap.bb
     visibility dense
@@ -94,7 +94,7 @@ type bigBed 3 +
 
     track filterABQD
     shortLabel GIAB allele imbalance
-    longLabel Genome-in-a-bottle: Calls with abnormal allele balance
+    longLabel NIST Genome-in-a-bottle: calls with abnormal allele balance
     type bigBed 3
     bigDataUrl /gbdb/hg19/bbi/problematic/filterABQD.bb
     visibility dense
@@ -103,7 +103,7 @@ type bigBed 3 +
 
     track filterAlign
     shortLabel GIAB align problem
-    longLabel Genome-in-a-bottle: Calls with evidence of local alignment problems like clipped reads
+    longLabel NIST Genome-in-a-bottle: calls with evidence of local alignment problems like clipped reads
     type bigBed 3
     bigDataUrl /gbdb/hg19/bbi/problematic/filterAlign.bb
     visibility dense
@@ -112,7 +112,7 @@ type bigBed 3 +
 
     track filterConflicting
     shortLabel GIAB genotype conflict
-    longLabel Genome-in-a-bottle: Calls with unresolved conflicting genotypes after arbitration
+    longLabel NIST Genome-in-a-bottle: calls with unresolved conflicting genotypes after arbitration
     type bigBed 3
     bigDataUrl /gbdb/hg19/bbi/problematic/filterConflicting.bb
     visibility dense
