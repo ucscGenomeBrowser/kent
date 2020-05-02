@@ -37,7 +37,8 @@ echo $i
 grep -wh "$i" nonsyn.bed syn.bed codingVariant.bed utrVariant.bed intron.bed intergenic.bed missing.bed | bedSmash stdin chrom.sizes stdout >>  output.bed
 done
 
-awk '{print $1,$2,$3,$4,$5}' output.bed > load.bed
+# make codingVariants into missing data instead of showing blue
+awk '{print $1,$2,$3,$4,$5}' output.bed | sed 's/ 1580$/ 0/' > load.bed
 
 cut -f1,3 ~/kent/src/hg/makeDb/doc/wuhCor1/nameList119.txt \
    | sed -e 's/ /_/g;' | grep -v NC_045512v2 \
