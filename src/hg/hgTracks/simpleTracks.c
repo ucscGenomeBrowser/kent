@@ -239,8 +239,8 @@ int winEnd;                     /* End of window in sequence. */
 char *position = NULL;          /* Name of position. */
 
 int trackTabWidth = 11;
-int leftLabelWidthDefaultChars = 17;   /* default number of characters allowed for left label */
-int leftLabelWidthChars = 17;   /* number of characters allowed for left label */
+int leftLabelWidthDefaultChars = 23;   /* default number of characters allowed for left label */
+int leftLabelWidthChars = 23;   /* number of characters allowed for left label */
 int insideX;			/* Start of area to draw track in in pixels. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
 int leftLabelX;                 /* Start of area to draw left labels on. */
