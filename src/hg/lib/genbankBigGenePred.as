@@ -1,5 +1,5 @@
-table bigGenePred
-"bigGenePred gene models"
+table genbankBigGenePred
+"bigGenePred gene models parsed from Genbank files"
 (
    string chrom;       "Reference sequence chromosome or scaffold"
    uint   chromStart;  "Start position in chromosome"
