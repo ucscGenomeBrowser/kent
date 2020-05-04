@@ -1,0 +1,650 @@
+#########################################################################
+## collecting sequences - (DONE - 2020-03-06 - Hiram)
+#########################################################################
+
+mkdir -p /hive/data/genomes/wuhCor1/bed/lastzStrains/sequences
+
+cd /hive/data/genomes/wuhCor1/bed/lastzStrains/sequences
+
+#  The SARS-CoV-2.acc.2020-03-06.list is obtained from Entrez with search term:
+
+#   SARS-CoV-2
+
+# produces 108 sequences as of 06 March
+
+With that list, fetch sequences and gbk records:
+
+mkdir -p fasta gbk
+cat SARS-CoV-2.acc.2020-03-06.list | while read acc
+do
+  if [ ! -s "fasta/${acc}.fa" ]; then
+wget -O fasta/${acc}.fa \
+   "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$acc"
+wget -O gbk/${acc}.gbk \
+  "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=gb&sendto=on&id=$acc"
+  fi
+done
+
+# The coronaviridae.list was obtained from Entrez with the search string:
+
+#  Coronaviridae[Organism] AND srcdb_refseq[PROP] NOT wgs[PROP] NOT cellular organisms[ORGN] NOT AC_000001:AC_999999[PACC] 
+
+#  Which was created from the page:
+
+#  https://www.ncbi.nlm.nih.gov/genomes/GenomesGroup.cgi?taxid=11118
+
+#  when asked to show "RefSeq nucleotides"
+
+# this is a list of 55 sequences, all RefSeq with NC_ identifiers
+
+# With that list, fetch sequences and gbk records:
+
+cat coronaviridae.list | while read acc
+do
+  if [ ! -s "fasta/${acc}.fa" ]; then
+wget -O fasta/${acc}.fa \
+   "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$acc"
+wget -O gbk/${acc}.gbk \
+  "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=gb&sendto=on&id=$acc"
+  fi
+done
+
+# The china.all.fasta is from: the 'download all sequences' button
+
+#   https://bigd.big.ac.cn/ncov/release_genome
+
+# As well as the listing, from the 'download table' button:
+
+#   china.sequence.list.txt
+
+# Can select the 'complete' sequence list from that table:
+
+ awk -F$'\t' '$5 == "Complete"' 'china.sequence.list.txt' | cut -f1,2,5
+
+# split of the china.all.fasta record:
+
+sed -e 's/^>.* />/;' china.all.fasta > shortNames.china.all.fasta
+faSplit byname shortNames.china.all.fasta chinaFasta/
+
+# Now, to eliminate the duplicates from those two sources:
+
+faToTwoBit fasta/*.fa chinaFasta/*.fa t.2bit
+twoBitDup t.2bit | awk '{print $1}' | sort > dup.list
+
+# extract the non duplicates
+twoBitToFa t.2bit stdout | faSomeRecords -exclude stdin dup.list nonDups.fa
+
+# the duplicates were moved to ncbiDups/ and chinaDups/ directories
+# need to ensure our reference is in there, it was a duplicate:
+#  NC_045512.2 and MN908947.3 are identical
+# and the MN908947.3 sequence was used, move those around to get the
+# NC_045512.2 sequence there instead
+
+# some sequences were too short, they were just gene sequences:
+
+twoBitInfo t.2bit stdout | awk '$2 < 25000' > too.small
+
+# LC522350.1      182
+# LC523807.1      357
+# MN938385.1      287
+# MN938387.1      107
+# MN970003.1      290
+# MT008022.1      322
+# MT042773.1      294
+# MT050414.1      562
+# MT072667.1      670
+# MT072668.1      810
+# MT081059.1      1260
+# MT081066.1      1260
+# MT111895.1      770
+# MT111896.1      569
+# MT127113.1      615
+# MT127114.1      1411
+# MT127115.1      1269
+# MT127116.1      459
+# MT152900.1      322
+# NM_001371415.1  3339
+# NM_021804.3     3596
+
+# moved to ncbiTooSmall/ directory
+
+# Construct UCSC safe sequence names:
+
+mkdir -p safeNameFa
+
+for F in fasta/*.fa chinaFasta/*.fa
+do
+  B=`basename $F | sed -e "s/\.\([0-9]\+\)/v\1/; s/-/_/g;"`
+  printf "%s\n" "${B}"
+#  head -12 "${F}" | sed -e 's/^>\([^ ]\+\).*/>\1/;' | sed -e 's/\./v/; s/-/_/g;'
+  sed -e 's/^>\([^ ]\+\).*/>\1/;' "${F}" | sed -e 's/\./v/; s/-/_/g;' \
+    > safeNameFa/${B}
+done
+
+# this leaves 119 sequences, mostly from NCBI, a few from China:
+
+# GWHABKP00000000.fa  MT019532v1.fa   NC_001846v1.fa  NC_018871v1.fa
+# GWHABKW00000000.fa  MT019533v1.fa   NC_002306v3.fa  NC_019843v3.fa
+# LC521925.fa       MT020781v1.fa   NC_002645v1.fa  NC_022103v1.fa
+# LC522972.fa       MT027062v1.fa   NC_003045v1.fa  NC_023760v1.fa
+# LC522973.fa       MT027064v1.fa   NC_003436v1.fa  NC_025217v1.fa
+# LC522974.fa       MT039873v1.fa   NC_004718v3.fa  NC_026011v1.fa
+# LC522975.fa       MT039887v1.fa   NC_005831v2.fa  NC_028752v1.fa
+# LC528232v1.fa     MT039888v1.fa   NC_006213v1.fa  NC_028806v1.fa
+# LC528233v1.fa     MT039890v1.fa   NC_006577v2.fa  NC_028811v1.fa
+# LR757995v1.fa     MT044257v1.fa   NC_009019v1.fa  NC_028814v1.fa
+# LR757996v1.fa     MT044258v1.fa   NC_009020v1.fa  NC_028824v1.fa
+# LR757997v1.fa     MT049951v1.fa   NC_009021v1.fa  NC_028833v1.fa
+# LR757998v1.fa     MT066175v1.fa   NC_009657v1.fa  NC_030292v1.fa
+# MN938384v1.fa     MT066176v1.fa   NC_009988v1.fa  NC_030886v1.fa
+# MN975262v1.fa     MT072688v1.fa   NC_010437v1.fa  NC_032107v1.fa
+# MN985325v1.fa     MT093571v1.fa   NC_010438v1.fa  NC_032730v1.fa
+# MN988668v1.fa     MT093631v1.fa   NC_010646v1.fa  NC_034440v1.fa
+# MN988713v1.fa     MT106052v1.fa   NC_010800v1.fa  NC_034972v1.fa
+# MN994467v1.fa     MT106053v1.fa   NC_011547v1.fa  NC_035191v1.fa
+# MN994468v1.fa     MT106054v1.fa   NC_011549v1.fa  NC_038294v1.fa
+# MN996527v1.fa     MT118835v1.fa   NC_011550v1.fa  NC_038861v1.fa
+# MN996528v1.fa     MT123290v1.fa   NC_012936v1.fa  NC_039207v1.fa
+# MN996529v1.fa     MT123291v1.fa   NC_014470v1.fa  NC_039208v1.fa
+# MN996530v1.fa     MT123292v1.fa   NC_016991v1.fa  NC_045512v2.fa
+# MN996531v1.fa     MT123293v1.fa   NC_016992v1.fa  NMDC60013002_05.fa
+# MN997409v1.fa     MT126808v1.fa   NC_016993v1.fa  NMDC60013002_06.fa
+# MT007544v1.fa     MT135041v1.fa   NC_016994v1.fa  NMDC60013002_07.fa
+# MT019529v1.fa     MT135043v1.fa   NC_016995v1.fa  NMDC60013002_09.fa
+# MT019530v1.fa     MT152824v1.fa   NC_016996v1.fa  NMDC60013002_10.fa
+# MT019531v1.fa     NC_001451v1.fa  NC_017083v1.fa
+
+# verify no dups:
+
+faToTwoBit safeNameFa/*.fa safeName.2bit
+twoBitDup safeName.2bit
+# is silent, and sizes are reasonable:
+twoBitInfo safeName.2bit stdout | sort -k2,2n | head -2
+# NC_039208v1     25425
+# NC_035191v1     25995
+twoBitInfo safeName.2bit stdout | sort -k2,2n | tail -2
+# NC_025217v1     31491
+# NC_010646v1     31686
+
+#########################################################################
+## kmer calculations for phylo tree generation (DONE - 2020-03-06 - Hiram)
+#########################################################################
+
+mkdir /hive/data/genomes/wuhCor1/bed/lastzStrains/kmers
+cd /hive/data/genomes/wuhCor1/bed/lastzStrains/kmers
+
+# construct a parasol job list:
+ls ../sequences/safeNameFa | sed -e 's/.fa//;' | while read acc
+do
+  printf "kmerOne %s {check out exists+ kmers/%s/%s.31mers.profile.txt.gz}\n" "${acc}" "${acc}" "${acc}"
+done > jobList
+
+### The kmerOne script run in that jobList is:
+
+##############################################
+#!/bin/bash
+
+set -beEu -o pipefail
+
+export SORT="$HOME/bin/x86_64/gnusort -S32G --parallel=4 -T /dev/shm"
+
+acc=$1
+fa="../sequences/safeNameFa/$acc.fa"
+
+if [ ! -s "kmers/${acc}/${acc}.31mers.profile.txt.gz" ]; then
+  mkdir -p "kmers/${acc}"
+  ./kmerPrint.pl 31 ${fa} | gzip -c > kmers/${acc}/${acc}.31mers.txt.gz
+  zcat kmers/${acc}/${acc}.31mers.txt.gz | cut -f1 | ${SORT} | uniq -c \
+     | awk '{printf "%s\t%d\n", $2, $1}' | ${SORT} | gzip -c > kmers/${acc}/${acc}.31mers.profile.txt.gz
+  rm -f kmers/${acc}/${acc}.31mers.txt.gz
+fi
+
+##############################################
+
+### Takes about 3 minutes to run that parasol job on hgwdev
+
+### After the kmers are done, compare all by all
+### Construct a parasol job list to do this with the script:
+   
+  ~/kent/src/hg/makeDb/doc/wuhCor1/mkCompareJobList.pl > compare.jobList
+
+### That jobList uses the script comparePair
+  cp -p ~/kent/src/hg/makeDb/doc/wuhCor1/comparePair ./
+
+### Takes 10 minutes to run on hgwdev:
+# Completed: 7021 of 7021 jobs
+# CPU time in finished jobs:       1367s      22.78m     0.38h    0.02d  0.000 y
+# IO & Wait Time:                 17245s     287.42m     4.79h    0.20d  0.001 y
+# Average job time:                   3s       0.04m     0.00h    0.00d
+# Longest finished job:               6s       0.10m     0.00h    0.00d
+# Submission to last job:           618s      10.30m     0.17h    0.01d
+
+### Collect all the comparisons together into a single file:
+
+find ./compare.31 -type f | xargs cat > allByAll.kmers31.compared.txt
+
+### That is a four column list:
+1. target sequence name
+2. perCent of target sequence matching to query
+3. query sequence name
+4. perCent of query sequence matching to target
+
+### The number for 'matching to query' and 'matching to target' is the
+### same number:  basesMatched, it is just different denominators:
+
+  $targetPercent = 100.0 * $basesMatched / $targetSize;
+   $queryPercent = 100.0 * $basesMatched / $querySize;
+
+### For example:
+# LR757996v1      99.7755 MT123290v1      99.6986
+# LR757996v1      99.8760 MT106053v1      99.8292
+# LR757996v1      99.7755 MN994468v1      99.7253
+
+### Using that four column file, construct an all by all matrix, using
+### the matrixUp.pl script:
+   ~/kent/src/hg/makeDb/doc/wuhCor1/matrixUp.pl
+
+~/kent/src/hg/makeDb/doc/wuhCor1/matrixUp.pl allByAll.kmers31.compared.txt \
+    > data31mer.csv
+mv matrixKey.txt matrixKey.31mer.txt
+
+### that matrixKey is the row and column names, the data31mer.csv matrix
+### has not column or row header names.
+
+### Now, using the phylip 'neighbor' program to do neighbor joining of that
+### matrix into a phylo tree:
+
+mkdir /hive/data/genomes/wuhCor1/bed/lastzStrains/kmers/phylip
+cd /hive/data/genomes/wuhCor1/bed/lastzStrains/kmers/phylip
+
+### This 'neighbor' command is very limited, it can only handle 'names'
+### that are integers and not longer that 10 digits.  The names are
+### shortened by the mkTestData.pl script:
+
+  ~/kent/src/hg/makeDb/doc/wuhCor1/mkTestData.pl
+
+### I realize now, that script is overly complicated, it should simply assign
+### sequence integers to each name and output the correspondence table rather
+### than trying to shorten the names magically.  Way too much work.
+### Done the hard way:
+
+   ~/kent/src/hg/makeDb/doc/wuhCor1/mkTestData.pl 31 > infile \
+       2> name.31mer.translate.txt
+
+### The 'neighbor' command is an interactive command, it expects to
+### find the input file: 'infile' which was just made by mkTestData.pl
+### it displays an interactive menu, use the 'N' selection command to select
+### UPGMA type of joining, see also additional comments of how this was run
+### in ../staAur2/multiz369way.txt
+
+### After neighbor is done, rename the results, and restore
+the sequence names in the final upgma.31mer.nh tree:
+
+if [ -s outfile ]; then
+  rm -f outfile.31mer
+  mv outfile outfile.31mer
+fi
+
+if [ -s outtree ]; then
+  rm -f outtree.31mer
+  mv outtree outtree.31mer
+fi
+
+# Note the duplicate sequence MN908947v3 was used instead of NC_045512v2
+# fixup the name with the sed
+
+cat outtree.31mer \
+  | sed -e 's/(/(\n/g; s/,/,\n/g; s/)/\n)/g; s/ //g;' \
+  | grep -v "^$" | ~/kent/src/hg/utils/phyloTrees/binaryTree.pl \
+    -nameTranslate=name.31mer.translate.txt -noInternal -lineOutput /dev/stdin \
+      | sed -e 's/MN908947v3/NC_045512v2/;' > upgma.31mer.nh
+
+# Using the TreeGraph editor on the Mac, rework the tree to get the
+# reference NC_045512v2 at the top of the tree, this makes the tree:
+
+    ~/kent/src/hg/makeDb/doc/wuhCor1/wuhCor1.119way.nh
+
+#########################################################################
+## setting up multiz
+
+mkdir /hive/data/genomes/wuhCor1/bed/multiz119way
+cd /hive/data/genomes/wuhCor1/bed/multiz119way
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+       ../../goldenPath/multiz119way/sequenceNames.119way.nh \
+	| xargs echo | sed 's/ //g; s/,/ /g' > tree.nh
+
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    # all the nets are the same, can use ordinary mafNet:
+    #	bash shell syntax here ...
+    cd /hive/data/genomes/wuhCor1/bed/multiz119way
+    export H=/hive/data/genomes/wuhCor1/bed
+    mkdir mafLinks
+    # the grep -v NC_045512v2 eliminates the self alignment
+    ls -d ../lastzStrains/runDir/lastz.* | grep -v NC_045512v2 | while read D
+do
+  if [ -d "${D}" ]; then
+    asmId=`basename $D | sed -e 's/lastz.//;'`
+    mafNet="${D}/mafNet/NC_045512v2.maf.gz"
+    if [ ! -f "${mafNet}" ]; then
+      echo "ERROR: can not find mafNet file ${mafNet}" 1>&2
+      exit 255
+    fi
+    echo ln -s ../$mafNet mafLinks/NC_045512v2.$asmId.maf.gz
+    ln -s ../$mafNet mafLinks/NC_045512v2.$asmId.maf.gz
+  fi
+done
+
+
+    # verify the symLinks are good:
+    ls -ogrtL mafLinks/* | sed -e 's/^/# /; s/-rw-rw-r-- 1//;' | head -4
+#  17193 Mar  9 17:09 mafLinks/NC_045512v2.GWHABKP00000000.maf.gz
+#  12617 Mar  9 17:17 mafLinks/NC_045512v2.NC_038294v1.maf.gz
+#  11529 Mar  9 17:17 mafLinks/NC_045512v2.NC_012936v1.maf.gz
+#  12046 Mar  9 17:20 mafLinks/NC_045512v2.NC_034440v1.maf.gz
+
+    ls -ogrtL mafLinks/* | sed -e 's/^/# /; s/-rw-rw-r-- 1//;' | tail -4
+#  11733 Mar  9 17:38 mafLinks/NC_045512v2.NC_017083v1.maf.gz
+#   8549 Mar  9 17:38 mafLinks/NC_045512v2.NC_016991v1.maf.gz
+#  13176 Mar  9 17:38 mafLinks/NC_045512v2.MT039888v1.maf.gz
+#  13143 Mar  9 17:39 mafLinks/NC_045512v2.NMDC60013002_06.maf.gz
+
+# leaves 118 files:
+    ls -ogrtL mafLinks/*.maf.gz | wc -l
+# 118
+
+    # scan the names to verify sanity:
+    zcat mafLinks/*.maf.gz | grep "^s " | awk '{print $2}' | sort \
+   | uniq -c | sort -rn | sed -e 's/^/# /;' | less
+# should look like:
+#     775 NC_045512v2.NC_045512v2
+#      22 NC_025217v1.NC_025217v1
+#      22 LR757997v1.LR757997v1
+#      21 NC_016991v1.NC_016991v1
+#      21 GWHABKW00000000.GWHABKW00000000
+#      18 NC_012936v1.NC_012936v1
+#     ...
+#       1 LC528232v1.LC528232v1
+#       1 LC522975.LC522975
+#       1 LC522974.LC522974
+#       1 LC522973.LC522973
+#       1 LC522972.LC522972
+#       1 LC521925.LC521925
+#       1 GWHABKP00000000.GWHABKP00000000
+
+
+    ssh ku
+    cd /hive/data/genomes/wuhCor1/bed/multiz119way
+    mkdir run maf
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/autoMZ penn
+
+    ls ../mafLinks | sed -e 's/.maf.gz//; s/NC_045512v2.//' > maf.list
+
+    printf '#LOOP
+./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/wuhCor1/bed/multiz119way/maf/$(root1).maf}
+#ENDLOOP
+' > template
+
+    printf '#!/bin/csh -ef
+set db = NC_045512v2
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /dev/shm/$db/multiz.$c
+set pairs = /hive/data/genomes/wuhCor1/bed/multiz119way/mafLinks
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../tree.nh ../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //;" species.list`)
+    set in = $pairs/$db.$s.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c $result
+/bin/rm -fr $tmp
+' > autoMultiz.csh
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... push
+    para time
+# Completed: 118 of 118 jobs
+# CPU time in finished jobs:      61696s    1028.27m    17.14h    0.71d  0.002 y
+# IO & Wait Time:                   338s       5.63m     0.09h    0.00d  0.000 y
+# Average job time:                 526s       8.76m     0.15h    0.01d
+# Longest finished job:             555s       9.25m     0.15h    0.01d
+# Submission to last job:           580s       9.67m     0.16h    0.01d
+
+# put the results back together into a single file, and fixup the s line names
+# the first sed is duplicating the sequence name on the s lines, transforming
+# from:
+# s MN996528v1      0 1 + 29891 A
+# to
+# s MN996528v1.MN996528v1      0 1 + 29891 A
+# and the ones that belong to the reference:
+# s NC_045512v2     0 1 + 29903 A
+# become via the second sed:
+# s wuhCor1.NC_045512v2
+
+cd /hive/data/genomes/wuhCor1/bed/multiz119way
+head -1 maf/NC_018871v1.maf > multiz119way.maf
+for F in maf/*.maf
+do
+    echo "${F}" 1>&2
+    egrep -v "^#" ${F} | sed -e 's#^s \([A-Z0-9a-z_]*\)#s \1.\1#;'
+done | sed -e 's#^s NC_045512v2.NC_045512v2#s wuhCor1.NC_045512v2#;' \
+>> multiz119way.maf
+tail -1 maf/NC_018871v1.maf >> multiz119way.maf
+
+# -rw-rw-r-- 1 950715307 Mar  9 22:34 multiz119way.maf
+
+# scan names to verify sanity:
+grep "^s " multiz119way.maf | awk '{print $2}' | sort | uniq -c \
+  | sort -rn | sed -e 's/^/# /;' | less
+#  132042 wuhCor1.NC_045512v2
+#  132042 MT135043v1.MT135043v1
+#  132042 MT135041v1.MT135041v1
+#  132042 MT049951v1.MT049951v1
+#  132042 MT039890v1.MT039890v1
+#  132042 MT007544v1.MT007544v1
+#  131570 MT019531v1.MT019531v1
+...
+#   37288 NC_011547v1.NC_011547v1
+#   33630 NC_016992v1.NC_016992v1
+#   28202 NC_016993v1.NC_016993v1
+#   25724 NC_039208v1.NC_039208v1
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/wuhCor1/bed/multiz119way
+    mkdir /gbdb/wuhCor1/multiz119way
+    ln -s `pwd`/multiz119way.maf /gbdb/wuhCor1/multiz119way
+    cd /dev/shm
+    time hgLoadMaf wuhCor1 multiz119way
+# Loaded 132042 mafs in 1 files from /gbdb/wuhCor1/multiz119way
+# real    0m6.780s
+
+    # merge that into a single block:
+    cd /hive/data/genomes/wuhCor1/bed/multiz119way
+
+    time mafFrag wuhCor1 multiz119way NC_045512v2 0 29903 + mafFrag.multiz119way.maf
+    # real    0m12.119s
+
+    printf '#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $file = shift;
+
+open (FH, "<$file") or die "can not read $file";
+while (my $line = <FH>) {
+  if ($line =~ m/^s /) {
+    chomp $line;
+    my @a = split("\s+", $line);
+    if (scalar(@a) == 7) {
+      if ($a[1] !~ m/wuhCor1/) {
+        $a[1] = "$a[1].$a[1]";
+      }
+      $a[6] =~ s/\./-/g;
+      print join(" ", @a), "\n";
+    } else {
+      die "ERROR: s line found not 7 fields ?";
+    } 
+  } else {
+    printf "%s", $line;
+  }
+}
+close (FH);
+' > dotToDash.pl
+
+chmod +x dotToDash.pl
+
+./dotToDash.pl mafFrag.multiz119way.maf > defraged.multiz119way.maf
+
+# and reload:
+rm /gbdb/wuhCor1/multiz119way/multiz119way.maf
+ln -s `pwd`/defraged.multiz119way.maf \
+   /gbdb/wuhCor1/multiz119way/multiz119way.maf
+
+cd /dev/shm
+time hgLoadMaf wuhCor1 multiz119way
+# Loaded 1 mafs in 1 files from /gbdb/wuhCor1/multiz119way
+# real    0m0.056s
+
+# construct strain-name track 2020-04-30 - Hiram
+
+mkdir /hive/data/genomes/wuhCor1/bed/multiz119way/strainName
+cd /hive/data/genomes/wuhCor1/bed/multiz119way/strainName
+
+cut -f1,3 ~/kent/src/hg/makeDb/doc/wuhCor1/nameList119.txt | sed -e 's/ /_/g;' \
+  | awk -F$'\t' '{printf "s#%s.%s#%s#g;\n", $1, $1, $2}' > accToName.sed
+
+cat ../defraged.multiz119way.maf \
+ | sed -f accToName.sed  > strainName119way.maf
+
+mkdir /gbdb/wuhCor1/strainName119way
+rm /gbdb/wuhCor1/strainName119way/strainName119way.maf
+ln -s `pwd`/strainName.multiz119way.maf \
+   /gbdb/wuhCor1/strainName119way/strainName119way.maf
+
+cd /dev/shm
+time hgLoadMaf -loadFile=/gbdb/wuhCor1/multiz119way/strainName119way.maf \
+  wuhCor1 strainName119way
+
+# -rw-rw-r--   1          39 Apr 30 21:38 strainName119way.tab
+
+   cat strainName119way.tab
+585     NC_045512v2     0       29903   14      29      0.500000
+
+   rm strainName119way.tab
+
+##############################################################################
+# frames 2020-03-09 - Hiram first attempt, one gene track used
+genePredSingleCover ../ncbiGene/wuhCor1.ncbiGene.ucsc.genePred.gz stdout \
+  | genePredToMafFrames wuhCor1 mafFrag.multiz119way.maf \
+     frames.tab wuhCor1 /dev/stdin
+
+hgLoadMafFrames wuhCor1 multiz119wayFrames frames.tab  
+
+##############################################################################
+
+# braney:  build more inclusive single coverage ORF annotation for MAF codon display and for mafSnp display
+mkdir  /hive/data/genomes/wuhCor1/bed/multiz119way/mafFrames
+cd  /hive/data/genomes/wuhCor1/bed/multiz119way/mafFrames
+
+wget "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/858/895/GCF_009858895.2_ASM985889v3/GCF_009858895.2_ASM985889v3_protein.faa.gz"
+
+blat -noHead -t=dnax -q=prot /hive/data/genomes/wuhCor1/wuhCor1.2bit        GCF_009858895.2_ASM985889v3_protein.faa.gz stdout | pslToBed stdin full.bed
+
+cp full.bed hack.bed
+
+#edit hack.bed to remove overlap of YP_009725296.1 with YP_009724395.1
+
+cd /hive/data/genomes/wuhCor1/bed/multiz119way/mafFrames
+
+bedToGenePred hack.bed stdout | genePredSingleCover stdin singleCover.gp
+hgLoadGenePred wuhCor1 singleCover singleCover.gp
+
+genePredToMafFrames wuhCor1          ../mafFrag.multiz119way.maf frames.tab wuhCor1 singleCover.gp
+hgLoadMafFrames wuhCor1 multiz119wayFrames frames.tab
+hgLoadMafFrames wuhCor1 strainName119wayFrames frames.tab  
+
+##############################################################################
+# constructing download files (DONE - 2020-03-13 - Hiram)
+##############################################################################
+
+mkdir /hive/data/genomes/wuhCor1/bed/multiz119way/downloads/multiz119way
+cd /hive/data/genomes/wuhCor1/bed/multiz119way/downloads/multiz119way
+
+cat ../../4d/119way.nh \
+  | sed -e 's/(/(\n/g; s/,/,\n/g; s/)/\n)/g; s/ //g;' \
+  | grep -v "^$" | ~/kent/src/hg/utils/phyloTrees/binaryTree.pl \
+    -noInternal -lineOutput \
+      /dev/stdin > wuhCor1.119way.nh
+
+ln -s ../phastCons119way/nameList119.txt ./wuhCor1.119way.nameList.txt
+cut -f1,3 wuhCor1.119way.nameList.txt > accession.descriptiveName.tsv
+
+cat ../../4d/119way.nh \
+  | sed -e 's/(/(\n/g; s/,/,\n/g; s/)/\n)/g; s/ //g;' \
+  | grep -v "^$" | ~/kent/src/hg/utils/phyloTrees/binaryTree.pl -quoteNames \
+    -nameTranslate=accession.descriptiveName.tsv -noInternal -lineOutput \
+      -bothNames /dev/stdin > wuhCor1.119way.descriptiveName.nh
+
+# These .nh files end up with an extra bit of distance business on
+# the last line:
+#  "Wigeon CoV HKU20":0.181934):0.1:0.1;
+# edit that down to just:
+#  "Wigeon CoV HKU20":0.181934);
+# same for:
+#  NC_016995v1:0.181934);
+# probably a bug in the binaryTree.pl script
+
+# do not need this two column list:
+
+rm accession.descriptiveName.tsv
+
+cp -p ../../defraged.multiz119way.maf ./wuhCor1.multiz119way.maf
+gzip wuhCor1.multiz119way.maf
+
+# use the README from  eboVir3 and edit for circumstances here
+
+# generate phylo distance list:
+
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/all_dists \
+   wuhCor1.119way.descriptiveName.nh | grep NC_045512v2 \
+    | sed -e "s#'NC_045512v2/Wuhan-Hu-1'##;" \
+       | awk -F$'\t' '{printf "%s\t%s\n", $3,$2}' \
+          > wuhCor1.119way.phyloDistance.txt
+
+# construct redmine fileList
+
+cd /hive/data/genomes/wuhCor1/bed/multiz119way/downloads
+
+find /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1 /gbdb/wuhCor1/multiz119way ! -type d \
+  | egrep "multiz119way|phastCons119way|phyloP119way" \
+     > redmine25090.file.list
+
+hgsql -e 'show tables;' wuhCor1 | grep 119 > redmine25090.table.list

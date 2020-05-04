@@ -38,6 +38,7 @@ static char *positionCgiName = "position";
 
 DbConnector cartDefaultConnector = hConnectCart;
 DbDisconnect cartDefaultDisconnector = hDisconnectCart;
+static boolean cartDidContentType = FALSE;
 
 static void hashUpdateDynamicVal(struct hash *hash, char *name, void *val)
 /* Val is a dynamically allocated (freeMem-able) entity to put
@@ -2266,10 +2267,11 @@ popWarnHandler();
 popAbortHandler();
 
 cartWriteCookie(cart, cookieName);
-if (doContentType)
+if (doContentType && !cartDidContentType)
     {
     puts("Content-Type:text/html");
     puts("\n");
+    cartDidContentType = TRUE;
     }
 return cart;
 }
@@ -2313,6 +2315,11 @@ va_list argscp;
 va_copy(argscp, args);
 if (!initted && !cgiOptionalString("ajax"))
     {
+    if (!cartDidContentType)
+        {
+        puts("Content-Type:text/html\n");
+        cartDidContentType = TRUE;
+        }
     htmStart(stdout, "Early Error");
     initted = TRUE;
     }

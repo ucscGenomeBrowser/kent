@@ -494,7 +494,7 @@ if (geneId != NULL)
     }
 
 /* Stream through association table counting matches. */
-sqlSafef(query, sizeof(query), "%-s", ord->queryOne);  // purely for side-effect of adding NOSQLINJ prefix
+sqlSafef(query, sizeof(query), "%-s", ord->queryAll);  // purely for side-effect of adding NOSQLINJ prefix
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

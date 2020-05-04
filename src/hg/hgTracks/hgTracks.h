@@ -481,6 +481,9 @@ extern struct track *emGeneTrack;   /* Track for gene table for exon mostly */
 extern struct rgbColor vertWindowSeparatorColor; /* color for vertical windows separator */
 extern char *multiRegionsBedUrl;       /* URL to bed regions list */
 
+// is genome RNA?
+extern boolean genomeIsRna;
+
 // demo2
 extern int demo2NumWindows;
 extern int demo2WindowSize;
@@ -1674,6 +1677,9 @@ void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut);
 
 void labelTrackAsFiltered(struct track *tg);
 /* add text to track long label to indicate filter is active */
+
+void labelTrackAsHideEmpty(struct track *tg);
+/* add text to track long label to indicate empty subtracks are hidden */
 
 void setupHotkeys(boolean gotExtTools);
 /* setup keyboard shortcuts and a help dialog for it */

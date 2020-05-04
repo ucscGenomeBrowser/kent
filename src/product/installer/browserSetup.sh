@@ -375,7 +375,7 @@ examples:
                         but no ENCODE tables and switch to offline mode 
                         (see the -o option)
   bash $0 update hg19 -  update all data and all tables of the hg19 assembly
-                         (in total 7TB)
+                         (in total 7TB). Specifying no assemblies will update all assemblies.
   bash $0 cgiUpdate   -  update the Genome Browser CGI programs
   bash $0 clean       -  remove temporary files older than one day
 
@@ -1384,7 +1384,7 @@ function downloadGenomes
             echo2 Downloading $DBS plus hgFixed proteome go hgFixed
             MYSQLDBS="$DBS proteome uniProt go hgFixed"
         else
-            echo2 Downloading $DBS plus GenBank tables
+            echo2 Downloading $DBS plus GenBank and RefSeq tables
             MYSQLDBS="$DBS"
             GENBANKTBLS="author cell description development gbCdnaInfo gbExtFile gbLoaded \
                          gbMiscDiff gbSeq gbWarn geneName imageClone keyword library \
@@ -1544,7 +1544,7 @@ function downloadMinimal
     echo2 Downloading minimal tables for databases $DBS 
 
     # only these db tables are copied over by default
-    minRsyncOpt="--include=cytoBand.* --include=chromInfo.* --include=cytoBandIdeo.* --include=kgColor.* --include=knownAttrs.* --include=knownGene.* --include=knownToTag.* --include=kgXref.* --include=ensemblLift.* --include=ucscToEnsemblwgEncodeRegTfbsCells.* --include=tableList.* --include=refSeqStatus.* --include=wgEncodeRegTfbsCellsV3.* --include=extFile.* --include=trackDb.* --include=grp.* --include=ucscRetroInfo5.* --include=refLink.* --include=ucscRetroSeq5.* --include=ensemblLift.* --include=knownCanonical.* --include=gbExtFile.* --include=flyBase2004Xref --include=hgFindSpec.*"
+    minRsyncOpt="--include=cytoBand.* --include=chromInfo.* --include=cytoBandIdeo.* --include=kgColor.* --include=knownAttrs.* --include=knownGene.* --include=knownToTag.* --include=kgXref.* --include=ensemblLift.* --include=ucscToEnsembl.* --include=wgEncodeRegTfbsCells.* --include=encRegTfbsClusteredSources.* --include=tableList.* --include=refSeqStatus.* --include=wgEncodeRegTfbsCellsV3.* --include=extFile.* --include=trackDb.* --include=grp.* --include=ucscRetroInfo5.* --include=refLink.* --include=ucscRetroSeq5.* --include=ensemblLift.* --include=knownCanonical.* --include=gbExtFile.* --include=flyBase2004Xref --include=hgFindSpec.* --include=ncbiRefSeq*"
 
     # these tables are not used for searches by default. Searches are very slow. We focus on genes.
     notSearchTables='wgEncodeGencodeBasicV19 wgEncodeGencodeCompV17 wgEncodeGencodeBasicV14 wgEncodeGencodeBasicV17 wgEncode GencodeCompV14 mgcFullMrna wgEncodeGencodeBasicV7 orfeomeMrna wgEncodeGencodePseudoGeneV14 wgEncodeGencodePseudoGeneV17 wgEncodeGencodePseudoGeneV19 wgEncodeGencodeCompV7 knownGeneOld6 geneReviews transMapAlnSplicedEst gbCdnaInfo oreganno vegaPseudoGene transMapAlnMRna ucscGenePfam qPcrPrimers transMapAlnUcscGenes transMapAlnRefSeq genscan bacEndPairs fosEndPairs'
@@ -1625,8 +1625,13 @@ function updateBrowser {
    cgiUpdate
    echo
 
+   DBS=$*
+   # if none specified, update all
+   if [ "$DBS" == "" ] ; then
+       DBS=`ls $GBDBDIR/`
+   fi
+
    # update gbdb
-   DBS=`ls $GBDBDIR/`
    echo updating GBDB: $DBS
    for db in $DBS; do 
        echo2 syncing gbdb: $db
@@ -1832,7 +1837,7 @@ elif [ "${1:-}" == "cgiUpdate" ]; then
    cgiUpdate
 
 elif [ "${1:-}" == "update" ]; then 
-   updateBrowser
+   updateBrowser ${@:2} # all arguments after the second one
 
 elif [ "${1:-}" == "clean" ]; then
     cleanTrash

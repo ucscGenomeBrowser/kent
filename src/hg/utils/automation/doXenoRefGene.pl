@@ -296,6 +296,13 @@ if [ -s "\$db.xenoRefGene.psl" ]; then
   mrnaToGene -noCds NR.psl NR.gp
   cat NM.gp NR.gp | genePredSingleCover stdin \$db.xenoRefGene.gp
   genePredCheck -db=\$db -chromSizes=\$db.chrom.sizes \$db.xenoRefGene.gp
+  genePredToBed \$db.xenoRefGene.gp stdout \\
+    | bedToExons stdin stdout | bedSingleCover.pl stdin > \$db.exons.bed
+  export baseCount=`awk '{sum+=\$3-\$2}END{printf "%d", sum}' \$db.exons.bed`
+  export asmSizeNoGaps=`grep sequences ../../\$db.faSize.txt | awk '{print \$5}'`
+  export perCent=`echo \$baseCount \$asmSizeNoGaps | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+  printf "%d bases of %d (%s%%) in intersection\\n" "\$baseCount" "\$asmSizeNoGaps" "\$perCent" > fb.\$db.xenoRefGene.txt
+  rm -f \$db.exons.bed
   genePredToBigGenePred -geneNames=$mrnas/geneOrgXref.txt \$db.xenoRefGene.gp \\
      stdout | sort -k1,1 -k2,2n > \$db.bgpInput
   sed -e 's#Alternative/human readable gene name#species of origin of the mRNA#; s#Name or ID of item, ideally both human readable and unique#RefSeq accession id#; s#Primary identifier for gene#gene name#;' \\

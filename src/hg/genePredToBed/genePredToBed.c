@@ -16,19 +16,34 @@ errAbort(
   "usage:\n"
   "   genePredToBed in.genePred out.bed\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -tab - genePred fields are separated by tab instead of just white space\n"
+  "   -fillSpace - when tab input, fill space chars in 'name' with underscore: _\n"
+  "   -score=N - set score to N in bed output (default 0)"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"tab", OPTION_BOOLEAN},
+   {"fillSpace", OPTION_BOOLEAN},
+   {"score", OPTION_INT},
    {NULL, 0},
 };
+
+boolean tabSep = FALSE;
+boolean fillSpace = FALSE;
+int defaultScore = 0;
 
 void convertGenePredToBed(char *inFile, char *outFile)
 /* genePredToBed - Convert from genePred to bed format.. */
 {
-struct genePred *gp, *gpList= genePredLoadAll(inFile);
+struct genePred *gp = NULL;
+struct genePred *gpList = NULL;
+if (tabSep)
+  gpList= genePredLoadAllByChar(inFile, '\t');
+else
+  gpList= genePredLoadAll(inFile);
+
 FILE *f = mustOpen(outFile, "w");
 for (gp = gpList; gp != NULL; gp = gp->next)
     {
@@ -36,8 +51,14 @@ for (gp = gpList; gp != NULL; gp = gp->next)
     fprintf(f, "%s\t", gp->chrom);
     fprintf(f, "%u\t", gp->txStart);
     fprintf(f, "%u\t", gp->txEnd);
-    fprintf(f, "%s\t", gp->name);
-    fprintf(f, "%u\t", 0);
+    if (tabSep && fillSpace)
+        {
+        replaceChar(gp->name, ' ', '_');
+        fprintf(f, "%s\t", gp->name);
+        }
+    else
+        fprintf(f, "%s\t", gp->name);
+    fprintf(f, "%u\t", defaultScore);
     fprintf(f, "%s\t", gp->strand);
     fprintf(f, "%u\t", gp->cdsStart);
     fprintf(f, "%u\t", gp->cdsEnd);
@@ -67,6 +88,9 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+tabSep = optionExists("tab");
+fillSpace = optionExists("fillSpace");
+defaultScore = optionInt("score", defaultScore);
 convertGenePredToBed(argv[1], argv[2]);
 return 0;
 }

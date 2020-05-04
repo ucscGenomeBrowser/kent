@@ -48,8 +48,7 @@ void vcfCfgHaplotypeCenter(struct cart *cart, struct trackDb *tdb, char *track,
 {
 if (vcff != NULL && vcff->genotypeCount > 1)
     {
-    printf("<TABLE cellpadding=0><TR><TD>"
-	   "<B>Haplotype sorting order:</B> using ");
+    printf("using ");
     char *centerChrom = cartOptionalStringClosestToHome(cart, tdb, parentLevel,
 							"centerVariantChrom");
     if (isEmpty(centerChrom))
@@ -59,7 +58,7 @@ if (vcff != NULL && vcff->genotypeCount > 1)
 	if (isNotEmpty(thisChrom))
 	    {
 	    // but we do have a candidate, so offer to make it the center:
-	    puts("<TR><TD>");
+	    puts("<TR><TD></TD><TD>");
 	    vcfCfgHaplotypeCenterHiddens(track, thisName, thisChrom, thisPos);
 	    char label[256];
 	    safef(label, sizeof(label), "Use %s", nameOrDefault(thisName, "this variant"));
@@ -67,7 +66,7 @@ if (vcff != NULL && vcff->genotypeCount > 1)
 	    printf(" as anchor</TD></TR>\n");
 	    }
 	else
-	    printf("<TR><TD>To anchor the sorting to a particular variant, "
+	    printf("<TR><TD></TD><TD>To anchor the sorting to a particular variant, "
 		   "click on the variant in the genome browser, "
 		   "and then click on the 'Use this variant' button on the next page."
 		   "</TD></TR>\n");
@@ -89,7 +88,7 @@ if (vcff != NULL && vcff->genotypeCount > 1)
 	    else
 		{
 		// make a "use me" button
-		printf("%s at %s:%d as anchor.</TD></TR>\n<TR><TD>\n",
+		printf("%s at %s:%d as anchor.</TD></TR>\n<TR><TD></TD><TD>\n",
 		       nameOrDefault(centerName, "variant"), centerChrom, centerPos+1);
 		char label[256];
 		safef(label, sizeof(label), "Use %s", nameOrDefault(thisName, "this variant"));
@@ -105,7 +104,7 @@ if (vcff != NULL && vcff->genotypeCount > 1)
 		   nameOrDefault(centerName, "variant"), centerChrom, centerPos+1);
 	    }
 	// Make a clear button that modifies the hiddens using onClick
-	puts("<TR><TD>");
+	puts("<TR><TD></TD><TD>");
 	struct dyString *onClick = dyStringNew(0);
 	dyStringPrintf(onClick, "updateOrMakeNamedVariable(%s, '%s.centerVariantChrom', ''); ",
 		       formName, track);
@@ -117,7 +116,40 @@ if (vcff != NULL && vcff->genotypeCount > 1)
 	cgiMakeButtonWithOnClick("clearCenterSubmit", "Clear selection", NULL, onClick->string);
 	printf(" (use " VCF_HAPLOSORT_DEFAULT_DESC ")</TD></TR>\n");
 	}
-    puts("</TABLE>");
+    }
+}
+
+static void vcfCfgHaplotypeMethod(struct cart *cart, struct trackDb *tdb, char *track,
+                                  boolean parentLevel, struct vcfFile *vcff)
+/* If vcff has genotype data, offer the option of whether to cluster or just use the order
+ * of genotypes in the VCF file.  For clustering, show status and controls for choosing the
+ * center variant for haplotype clustering/sorting in hgTracks. */
+{
+if (vcff != NULL && vcff->genotypeCount > 1)
+    {
+    printf("<TABLE cellpadding=0><TR><TD colspan=2>"
+	   "<B>Haplotype sorting order:</B></TD></TR><TR><TD>\n");
+    char *hapMethod = cartOrTdbString(cart, tdb, VCF_HAP_METHOD_VAR, VCF_DEFAULT_HAP_METHOD);
+    char varName[1024];
+    safef(varName, sizeof(varName), "%s." VCF_HAP_METHOD_VAR, track);
+    cgiMakeRadioButton(varName, VCF_HAP_METHOD_CENTER_WEIGHTED,
+                       sameString(hapMethod, VCF_HAP_METHOD_CENTER_WEIGHTED));
+    printf("</TD><TD>");
+    vcfCfgHaplotypeCenter(cart, tdb, track, parentLevel, vcff, NULL, NULL, 0, "mainForm");
+    puts("<TR><TD>");
+    cgiMakeRadioButton(varName, VCF_HAP_METHOD_FILE_ORDER,
+                       sameString(hapMethod, VCF_HAP_METHOD_FILE_ORDER));
+    puts("</TD><TD>using the order in which samples appear in the underlying VCF file");
+    // If trackDb specifies a treeFile, offer that as an option
+    char *hapMethodTdb = trackDbSetting(tdb, VCF_HAP_METHOD_VAR);
+    if (hapMethodTdb && startsWithWord("treeFile", hapMethodTdb))
+        {
+        puts("<TR><TD>");
+        cgiMakeRadioButton(varName, VCF_HAP_METHOD_TREE_FILE,
+                           startsWithWord(VCF_HAP_METHOD_TREE_FILE, hapMethod));
+        printf("</TD><TD>using the tree specified in file associated with track");
+        }
+    puts("</TD></TR></TABLE>");
     }
 }
 
@@ -236,7 +268,7 @@ static void vcfCfgHapCluster(struct cart *cart, struct trackDb *tdb, struct vcfF
  * the VCF file describes multiple genotypes. */
 {
 vcfCfgHapClusterEnable(cart, tdb, name, parentLevel);
-vcfCfgHaplotypeCenter(cart, tdb, name, parentLevel, vcff, NULL, NULL, 0, "mainForm");
+vcfCfgHaplotypeMethod(cart, tdb, name, parentLevel, vcff);
 vcfCfgHapClusterColor(cart, tdb, name, parentLevel);
 vcfCfgHapClusterTreeAngle(cart, tdb, name, parentLevel);
 vcfCfgHapClusterHeight(cart, tdb, vcff, name, parentLevel);

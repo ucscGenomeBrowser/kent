@@ -238,7 +238,7 @@ int count = slCount(tissues);
 AllocArray(tisTable, count);
 int i=0, col=0;
 int cols = 2;
-int last = count/2 + 1;
+int last = count/2 + count%2;
 
 puts(
 " <!-- Tissue list -->\n"
@@ -439,13 +439,18 @@ cart = theCart;
 char *db = NULL, *genome = NULL, *clade = NULL;
 getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
 database = db;
+char *track = cartUsualString(cart, "g", "gtexGene");
+char *version = gtexVersion(track);
 
 // Start web page with new-style header
-webStartGbNoBanner(cart, db, "Genome Browser GTEx Track Settings");
+
+char pageTitle[200];
+safef(pageTitle, sizeof pageTitle, "Genome Browser GTEx Gene %s Track Settings", version);
+webStartGbNoBanner(cart, db, pageTitle);
+
 puts("<link rel='stylesheet' href='../style/gb.css'>");         // NOTE: This will likely go to web.c
 puts("<link rel='stylesheet' href='../style/hgGtexTrackSettings.css'>");
 
-char *track = cartUsualString(cart, "g", "gtexGene");
 struct trackDb *tdb = getTrackDb(db, track);
 if (!tdb)
     errAbort("No GTEx track %s found in database %s\n", track, db);

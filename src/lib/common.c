@@ -3765,3 +3765,12 @@ else
    return FALSE;
 }
 
+char *shorterDouble(double value)
+/* Work around a "bug" in %g output that goes into scientific notation too early. */
+{
+static char g15buffer[4096];
+
+sprintf(g15buffer, "%.15g", value);
+
+return cloneString(g15buffer);
+}

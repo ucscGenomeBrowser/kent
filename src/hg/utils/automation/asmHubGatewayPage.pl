@@ -7,6 +7,9 @@ use lib "$Bin";
 use AsmHub;
 use File::Basename;
 
+### XXX ### temporary hgdownload-test.gi
+### my $sourceServer = "hgdownload-test.gi.ucsc.edu";
+
 my $sourceServer = "hgdownload.soe.ucsc.edu";
 
 my @months = qw( 0 Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
@@ -17,6 +20,7 @@ sub usage() {
   printf STDERR "photoCredits.txt is a two line tag<tab>string file:\n";
   printf STDERR "tags: photoCreditURL and photoCreditName\n";
   printf STDERR "use string 'noPhoto' for image and credits when no photo\n";
+  printf STDERR "stderr output is routed to a 'asmId.names.tab' file for use elsewhere\n";
   exit 255;
 }
 
@@ -153,17 +157,17 @@ if ($jpgImage ne "noPhoto") {
 
 my $thisDir = `pwd`;
 chomp $thisDir;
-printf STDERR "# thisDir $thisDir\n";
 my $ftpName = dirname($thisDir);
 my $asmId = basename($ftpName);;
+my ($gcXPrefix, $accession, $rest) = split('_', $asmId, 3);
+my $accessionId = sprintf("%s_%s", $gcXPrefix, $accession);
+
 my $accessionDir = substr($asmId, 0 ,3);
 $accessionDir .= "/" . substr($asmId, 4 ,3);
 $accessionDir .= "/" . substr($asmId, 7 ,3);
 $accessionDir .= "/" . substr($asmId, 10 ,3);
-$accessionDir .= "/" . $asmId;
+$accessionDir .= "/" . $accessionId;
 
-my ($gcXPrefix, $accession, $rest) = split('_', $asmId, 3);
-my $accessionId = sprintf("%s_%s", $gcXPrefix, $accession);
 my $newStyleUrl = sprintf("%s/%s/%s/%s/%s", $gcXPrefix, substr($accession,0,3),
    substr($accession,3,3), substr($accession,6,3), $asmId);
 my $localDataUrl = sprintf("%s/%s/%s/%s/%s", $gcXPrefix, substr($accession,0,3),
@@ -171,7 +175,6 @@ my $localDataUrl = sprintf("%s/%s/%s/%s/%s", $gcXPrefix, substr($accession,0,3),
 $ftpName =~ s#/hive/data/outside/ncbi/##;
 $ftpName =~ s#/hive/data/inside/ncbi/##;
 $ftpName =~ s#/hive/data/genomes/asmHubs/##;
-printf STDERR "# ftpName $ftpName\n";
 # my $urlDirectory = `basename $ftpName`;
 # chomp $urlDirectory;
 my $speciesSubgroup = $ftpName;

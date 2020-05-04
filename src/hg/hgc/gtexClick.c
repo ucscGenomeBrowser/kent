@@ -119,9 +119,10 @@ printf("<b>Gene class: </b><span style='color: %s'>%s</span><br>\n",
             geneClassColorCode(geneClass), geneClass);
 int tisId;
 float highLevel = gtexGeneHighestMedianExpression(gtexGene, &tisId);
-printf("<b>Highest median expression: </b> %0.2f RPKM in %s<br>\n", 
-                highLevel, gtexGetTissueDescription(tisId, version));
-printf("<b>Total median expression: </b> %0.2f RPKM<br>\n", gtexGeneTotalMedianExpression(gtexGene));
+printf("<b>Highest median expression: </b> %0.2f %s in %s<br>\n", 
+                highLevel, gtexExprUnit(version), gtexGetTissueDescription(tisId, version));
+printf("<b>Total median expression: </b> %0.2f %s<br>\n", gtexGeneTotalMedianExpression(gtexGene),
+                gtexExprUnit(version));
 printf("<b>Score: </b> %d<br>\n", gtexGene->score); 
 printf("<b>Genomic position: "
                 "</b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 

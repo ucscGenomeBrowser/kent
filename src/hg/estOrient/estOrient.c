@@ -32,14 +32,11 @@ static char *gDisoriented = NULL;
 static char *gEstOrientInfoFile = NULL;
 static char *gInfo = NULL;
 
-void usage(char *msg, ...)
+void usage()
 /* usage msg and exit */
 {
-va_list ap;
-va_start(ap, msg);
-vfprintf(stderr, msg, ap);
-errAbort("\n%s",
-         "estOrient [options] db estTable outPsl\n"
+errAbort("estOrient - convert ESTs so that orientation matches directory of transcription\n"
+         "\nusage: estOrient [options] db estTable outPsl\n"
          "\n"
          "Read ESTs from a database and determine orientation based on\n"
          "estOrientInfo table or direction in gbCdnaInfo table.  Update\n"
@@ -335,7 +332,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
-    usage("wrong # of args:");
+    usage();
 ZeroVar(&gbCacheAcc);
 char *db = argv[1], *estTable = argv[2], *outPslFile = argv[3];
 gChroms = optionMultiVal("chrom", NULL);

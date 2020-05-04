@@ -55,6 +55,7 @@
 #define BAR_CHART_MAX_GRAPH_SIZE_MEDIUM          "medium"
 #define BAR_CHART_MAX_GRAPH_SIZE_LARGE           "large"
 #define BAR_CHART_MAX_GRAPH_SIZE_DEFAULT          BAR_CHART_MAX_GRAPH_SIZE_LARGE
+#define BAR_CHART_SIZE_WINDOWS                   "barChartSizeWindows"
 
 void barChartCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track, 
                         char *title, boolean boxed);

@@ -526,7 +526,10 @@ while ((psl = pslNext(lf)) != NULL)
 lineFileClose(&lf);
 if (pslList == NULL)
     {
-    puts("<table><tr><td><hr>Sorry, no matches found (scoring higher than 20)<hr><td></tr></table>");
+    printf("<table><tr><td><hr>Sorry, no matches found");
+    if (isStraightNuc)
+	printf(" (with score at least %d)", minThreshold);
+    printf("<hr><td></tr></table>\n");
     return;
     }
 

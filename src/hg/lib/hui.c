@@ -4524,8 +4524,11 @@ switch(cType)
 			int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
 			scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
 
-			if(startsWith("bigBed", tdb->type))
-			    labelCfgUi(db, cart, tdb, prefix);
+            if(startsWith("bigBed", tdb->type))
+                {
+                labelCfgUi(db, cart, tdb, prefix);
+                mergeSpanCfgUi(cart, tdb, prefix);
+                }
 			}
 			break;
     case cfgPeak:
@@ -5148,7 +5151,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 
     // A schema link for each track
     printf("</td>\n<TD>&nbsp;");
-    makeSchemaLink(db,subtrack,"schema");
+    makeSchemaLink(db,subtrack,"Schema");
     printf("&nbsp;");
 
     // Do we have a restricted until date?
@@ -5222,12 +5225,14 @@ puts("</TABLE>");
 
 boolean compositeHideEmptySubtracksSetting(struct trackDb *tdb, boolean *retDefault,
                                         char **retMultiBedFile, char **retSubtrackIdFile)
-/* Parse hideEmptySubtracks setting
+/* Parse hideEmptySubtracks settings
  * Format:  hideEmptySubtracks on|off
- *              or
- *          hideEmptySubtracks on|off multiBed.bed subtrackIds.tab
- * where multiBed.bed is a bed3Sources bigBed, generated with bedtools multiinter
- *              post-processed by UCSC multiBed.pl tool
+ *      Optional index files for performance:
+ *          hideEmptySubtracksMultiBedUrl multiBed.bigBed 
+ *          hideEmptySubtracksSourceUrl subtrackIds.tab
+ * MultiBed.bed is a bed3Sources bigBed, generated with UCSC tool trackDbIndexBb
+ *              (for single view subtracks, can use bedtools multiinter
+ *              post-processed by UCSC multiBed.pl tool)
  *      subtrackIds.tab is a tab-sep file: id subtrackName
  *
  * Return TRUE if setting is present.  retDefault is TRUE if set to 'on', o/w FALSE
@@ -5238,31 +5243,32 @@ if (!tdbIsComposite(tdb))
 char *hideEmpties = cloneString(trackDbSetting(tdb, SUBTRACK_HIDE_EMPTY));
 if (!hideEmpties)
     return FALSE;
-char *orig = cloneString(hideEmpties);
-char *words[3];
-int wordCount = chopByWhite(hideEmpties, words, ArraySize(words));
-char *mode = words[0];
-if (differentString(mode, "on") && differentString(mode, "off"))
+boolean deflt = FALSE;
+if (sameString(hideEmpties, "on"))
+    deflt = TRUE;
+else if (differentString(hideEmpties, "off"))
     {
-    warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTY, orig);
+    warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTY, hideEmpties);
     return FALSE;
     }
-boolean deflt = sameString(mode, "on") ? TRUE : FALSE;
 if (retDefault)
     *retDefault = deflt;
-
-if (wordCount == 1)
-    return TRUE;
-if (wordCount != 3)
+if (retMultiBedFile != NULL && retSubtrackIdFile != NULL)
     {
-    warn("Track %s %s setting invalid: %s", tdb->track, SUBTRACK_HIDE_EMPTY, orig);
-    return FALSE;
+    char *file = cloneString(trackDbSetting(tdb, SUBTRACK_HIDE_EMPTY_MULTIBED_URL));
+    if (file != NULL)
+        {
+        // multi-bed specified to speed display
+        *retMultiBedFile = cloneString(hReplaceGbdb(file));
+        file = cloneString(trackDbSetting(tdb, SUBTRACK_HIDE_EMPTY_SOURCES_URL));
+        if (file == NULL)
+            {
+            warn("Track %s missing setting: %s", tdb->track, SUBTRACK_HIDE_EMPTY_SOURCES_URL);
+            return FALSE;
+            }
+        *retSubtrackIdFile = cloneString(hReplaceGbdb(file));
+        }
     }
-// multi-bed specified (to speed display)
-if (retMultiBedFile)
-    *retMultiBedFile = cloneString(hReplaceGbdb(words[1]));
-if (retSubtrackIdFile)
-    *retSubtrackIdFile = cloneString(hReplaceGbdb(words[2]));
 return TRUE;
 }
 
@@ -5319,18 +5325,6 @@ else
     displaySubs = cartUsualString(cart, "displaySubtracks", "all"); // browser wide defaults to all
     }
 boolean displayAll = sameString(displaySubs, "all");
-
-boolean hideSubtracksDefault;
-if (compositeHideEmptySubtracksSetting(parentTdb, &hideSubtracksDefault, NULL, NULL))
-    {
-    char *hideLabel = "Hide empty subtracks";
-    hideLabel = trackDbSettingOrDefault(parentTdb, SUBTRACK_HIDE_EMPTY_LABEL, hideLabel);
-    printf("<BR><B>%s:</B> &nbsp;", hideLabel);
-    char buf[128];
-    safef(buf, sizeof buf, "%s.%s", parentTdb->track, SUBTRACK_HIDE_EMPTY);
-    boolean doHideEmpties = compositeHideEmptySubtracks(cart, parentTdb, NULL, NULL);
-    cgiMakeCheckBox(buf, doHideEmpties);
-    }
 
 // Table wraps around entire list so that "Top" link can float to the correct place.
 cgiDown(0.7);
@@ -6126,11 +6120,11 @@ if (setting)
         }
     safef(altLabel, sizeof(altLabel), "%s", (filterByRange?"": "colspan=3"));
     if (minLimit != NO_VALUE && maxLimit != NO_VALUE)
-        printf("<TD align='left'%s> (%g to %g)",altLabel,minLimit, maxLimit);
+        printf("<TD align='left'%s> (%s to %s)",altLabel,shorterDouble(minLimit), shorterDouble(maxLimit));
     else if (minLimit != NO_VALUE)
-        printf("<TD align='left'%s> (minimum %g)",altLabel,minLimit);
+        printf("<TD align='left'%s> (minimum %s)",altLabel,shorterDouble(minLimit));
     else if (maxLimit != NO_VALUE)
-        printf("<TD align='left'%s> (maximum %g)",altLabel,maxLimit);
+        printf("<TD align='left'%s> (maximum %s)",altLabel,shorterDouble(maxLimit));
     else
         printf("<TD align='left'%s",altLabel);
     puts("</TR>");
@@ -6583,6 +6577,24 @@ for(; thisLabel; thisLabel = thisLabel->next)
         ;
     assert(col);
     printf(" %s&nbsp;&nbsp;&nbsp;", col->comment);
+    }
+}
+
+void mergeSpanCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix)
+/* If this track offers a merge spanned items option, put up the cfg for it, which
+ * is just a checkbox with a small explanation. Comparing tdb->track to prefix
+ * ensures we don't offer this control at the composite level, as this is a
+ * subtrack only config */
+{
+if (trackDbSettingOn(tdb, MERGESPAN_TDB_SETTING) && sameString(tdb->track, prefix))
+    {
+    boolean curOpt = trackDbSettingOn(tdb, "mergeSpannedItems");
+    char mergeSetting[256];
+    safef(mergeSetting, sizeof(mergeSetting), "%s.%s", tdb->track, MERGESPAN_CART_SETTING);
+    if (cartVarExists(cart, mergeSetting))
+        curOpt = cartBoolean(cart, mergeSetting);
+    printf("<b>Merge items that span the current region</b>:");
+    cgiMakeCheckBox(mergeSetting, curOpt);
     }
 }
 
@@ -7659,7 +7671,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
 
 toLowerN(membersOfView->groupTitle, 1);
 printf("<B>Select %s</B> (<A HREF='../goldenPath/help/multiView.html' title='Help on views' "
-       "TARGET=_BLANK>help</A>):\n", membersOfView->groupTitle);
+       "TARGET=_BLANK>Help</A>):\n", membersOfView->groupTitle);
 printf("<TABLE><TR style='text-align:left;'>\n");
 // Make row of vis drop downs
 for (ix = 0; ix < membersOfView->count; ix++)
@@ -8637,8 +8649,25 @@ if (primarySubtrack == NULL && !cartVarExists(cart, "ajax"))
     jsIncludeFile("hui.js",NULL);
     jsIncludeFile("subCfg.js",NULL);
     }
+cgiDown(0.3);
 
-cgiDown(0.7);
+boolean hideSubtracksDefault;
+// TODO: Gray out or otherwise suppress when in multi-region mode 
+if (compositeHideEmptySubtracksSetting(tdb, &hideSubtracksDefault, NULL, NULL))
+    {
+    char *hideLabel = "Hide empty subtracks";
+    hideLabel = trackDbSettingOrDefault(tdb, SUBTRACK_HIDE_EMPTY_LABEL, hideLabel);
+    printf("<p><b>%s:</b> &nbsp;", hideLabel);
+    char buf[128];
+    safef(buf, sizeof buf, "%s.%s", tdb->track, SUBTRACK_HIDE_EMPTY);
+    boolean doHideEmpties = compositeHideEmptySubtracks(cart, tdb, NULL, NULL);
+    cgiMakeCheckBox(buf, doHideEmpties);
+    printf("<a class='toc' href='' title='Subtracks with no data in the browser window"
+                " are hidden. Changing the browser window by zooming or scrolling may result"
+                " in display of a different selection of tracks.'>?</a>");
+    printf("</p>");
+    }
+
 if (trackDbCountDescendantLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)
     {
     if (primarySubtrack)

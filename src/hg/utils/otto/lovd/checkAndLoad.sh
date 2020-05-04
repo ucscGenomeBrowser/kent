@@ -33,9 +33,9 @@ fi
 # compare old and new line counts and abort if no increase
 $KENTBIN/bedClip lovd.hg19.bed /cluster/data/hg19/chrom.sizes stdout | sed -e 's/^chrM/chrMT/g' > lovd.hg19.clipped.bed
 echo 
-cat lovd.hg19.clipped.bed | awk '(($3-$2)<=100)' > lovd.hg19.short.bed
+cat lovd.hg19.clipped.bed | awk '(($3-$2)<50)' > lovd.hg19.short.bed
 echo -e 'chrM\t0\t16571\tCheck chrMT\tPlease look at chrMT, not chrM, for LOVD annotations.\t' >> lovd.hg19.short.bed
-cat lovd.hg19.clipped.bed | awk '(($3-$2)>100)' > lovd.hg19.long.bed
+cat lovd.hg19.clipped.bed | awk '(($3-$2)>=50)' > lovd.hg19.long.bed
 echo -e 'chrM\t0\t16571\tCheck chrMT\tPlease look at chrMT, not chrM, for LOVD annotations.\t' >> lovd.hg19.long.bed
 old19ShortLc=`$KENTBIN/hgsql hg19 -e "SELECT COUNT(*) from lovdShort" -NB`
 old19LongLc=`$KENTBIN/hgsql hg19 -e "SELECT COUNT(*) from lovdLong" -NB`
@@ -45,28 +45,8 @@ new19LongLc=`wc -l lovd.hg19.long.bed | cut -d' ' -f1 `
 echo hg19 short rowcount: old $old19ShortLc new: $new19ShortLc
 echo hg19 long rowcount: old $old19LongLc new: $new19LongLc
 
-if [ "$new19ShortLc" -eq "$old19ShortLc" ]; then
-        echo LOVD hg19 short: rowcount for $today is equal to old rowcount in mysql, quitting
-        exit 0
-fi
-
-if [ "$new19LongLc" -eq "$old19LongLc" ]; then
-        echo LOVD hg19 long: rowcount for $today is equal to old rowcount in mysql, quitting
-        exit 0
-fi
-
-if [ "$new19ShortLc" -lt "$old19ShortLc" ]; then
-        echo LOVD hg19 short: rowcount for $today is smaller to old rowcount in mysql, quitting
-        exit 255
-fi
-
-if [ "$new19LongLc" -lt "$old19LongLc" ]; then
-        echo LOVD hg19 long: rowcount for $today is smaller to old rowcount in mysql, quitting
-        exit 255
-fi
-
-echo $old19ShortLc $new19ShortLc | awk '{if (($2-$1)/$1 > 0.1) printf "validate on hg19 LOVD short failed: old count: %d, new count: %d\n", $1,$2; exit 1;}'
-echo $old19LongLc $new19LongLc | awk '{if (($2-$1)/$1 > 0.1) printf "validate on hg19 LOVD long failed: old count: %d, new count: %d\n", $1,$2; exit 1;}'
+echo $old19ShortLc $new19ShortLc | awk '{if (($2-$1)/$1 > 0.1) {printf "validate on hg19 LOVD short failed: old count: %d, new count: %d\n", $1,$2; exit 1;}}'
+echo $old19LongLc $new19LongLc | awk '{if (($2-$1)/$1 > 0.1) {printf "validate on hg19 LOVD long failed: old count: %d, new count: %d\n", $1,$2; exit 1;}}'
 
 # bedDetail4.sql was generated like this:
 # egrep -v 'score|strand|thick|reserved|block|chromStarts' /cluster/home/max/kent/src/hg/lib/bedDetail.sql > bedDetail4.sql 

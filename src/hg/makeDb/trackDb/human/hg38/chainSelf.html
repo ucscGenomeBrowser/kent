@@ -1,0 +1,103 @@
+<H2>Description</H2>
+<P>
+This track shows alignments of the $organism genome with itself, using
+a gap scoring system that allows longer gaps than traditional
+affine gap scoring systems. The system can also tolerate gaps
+in both sets of sequence simultaneously.  After filtering out the 
+&quot;trivial&quot; alignments produced when identical locations of the 
+genome map to one another (e.g. chr<em>N</em> mapping to chr<em>N</em>), 
+the remaining alignments point out areas of duplication within the 
+$organism genome. The pseudoautosomal regions of chrX and chrY are an 
+exception: in this assembly, these regions have been copied from chrX into 
+chrY, resulting in a large amount of self chains aligning in these positions 
+on both chromosomes. </P>
+<P>
+The chain track displays boxes joined together by either single or
+double lines. The boxes represent aligning regions.  Single lines indicate 
+gaps that are largely due to a deletion in the query assembly or an 
+insertion in the target assembly.  Double lines represent more complex gaps 
+that involve substantial sequence in both the query and target assemblies. 
+This may result from inversions, overlapping deletions, an abundance of local 
+mutation, or an unsequenced gap in one of the assemblies. In cases where 
+multiple chains align over a particular region of the $organism genome, the 
+chains with single-lined gaps are often due to processed pseudogenes, while 
+chains with double-lined gaps are more often due to paralogs and unprocessed 
+pseudogenes. </P>
+<P>
+Chains have both a score and a normalized score. The score is derived by 
+comparing sequence similarity, while penalizing both mismatches and gaps
+in a per base fashion. This leads to longer chains having greater scores, 
+even if a smaller chain provides a better match. The normalized score divides
+the score by the length of the alignment, providing a more comparable score value
+not dependent on the match length.</P>
+
+<H2>Display Conventions and Configuration</H2>
+<P>By default, the chains are colored by the normalized score. This can be changed
+to color based on which chromosome they map to in the aligning organism. There is also
+an option to color all the chains black.</P>
+<P>
+To display only the chains of one chromosome in the aligning
+organism, enter the name of that chromosome (e.g. chr4) in box next to: 
+Filter by chromosome.</P>
+<P>
+By default, chains with a score of 20,000 or more are displayed. This default value provides
+a conservative cutoff, filtering out many false-positive alignments with low sequence 
+similarity, or high penalties. It should be noted however, that alignments below this 
+threshold may still be indicative of homology.</P>
+<P>
+In the "pack" and "full" display
+modes, the individual feature names indicate the chromosome, strand, and
+location (in thousands) of the match for each matching alignment.</P>
+
+<H2>Methods</H2>
+<P>
+The genome was aligned to itself using blastz. Trivial alignments were 
+filtered out, and the remaining alignments were converted into axt format
+using the lavToAxt program. The axt alignments were fed into axtChain, which 
+organizes all alignments between a single target chromosome and a single
+query chromosome into a group and creates a kd-tree out of the gapless 
+subsections (blocks) of the alignments. A dynamic program was then run over 
+the kd-trees to find the maximally scoring chains of these blocks. Chains 
+scoring below a threshold were discarded; the remaining chains are displayed 
+in this track.</P>
+
+<H2>Credits</H2>
+<P>
+Blastz was developed at <A HREF="http://www.bx.psu.edu/miller_lab/"
+TARGET=_blank>Pennsylvania State University</A> by
+Minmei Hou, Scott Schwartz, Zheng Zhang, and Webb Miller with advice from
+Ross Hardison.</P>
+<P>
+Lineage-specific repeats were identified by Arian Smit and his
+<A HREF="http://www.repeatmasker.org" TARGET=_blank>RepeatMasker</A>
+program.</P>
+<P>
+The axtChain program was developed at the University of California
+at Santa Cruz by Jim Kent with advice from Webb Miller and David Haussler.
+</P>
+<P>
+The browser display and database storage of the chains were generated
+by Robert Baertsch and Jim Kent.</P>
+
+<H2>References</H2>
+
+<p>
+Chiaromonte F, Yap VB, Miller W.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/11928468"
+TARGET=_blank>Scoring pairwise genomic sequence alignments</a>.
+<em>Pac Symp Biocomput 2002</em>, 115-26 (2002).
+</p>
+
+<p>
+Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
+<a href="https://www.pnas.org/content/100/20/11484" target="_blank">
+Evolution's cauldron: duplication, deletion, and rearrangement in the mouse and human genomes</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
+</p>
+
+<p>
+Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC, Haussler D, Miller W.
+<a href="https://genome.cshlp.org/content/13/1/103.abstract" target="_blank">
+Human-mouse alignments with BLASTZ</a>.
+<em>Genome Res</em>. 2003 Jan;13(1):103-7.
+</p>

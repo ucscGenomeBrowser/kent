@@ -23,6 +23,7 @@ use vars qw/
     $opt_vegaGene
     $opt_buildDir
     $opt_chromSizes
+    $opt_species
     /;
 
 
@@ -45,6 +46,7 @@ my $base = $0;
 $base =~ s/^(.*\/)?//;
 my (@versionList) = &EnsGeneAutomate::ensVersionList();
 my $versionListString = join(", ", @versionList);
+my $versionString = "";
 
 sub usage {
   # Usage / help / self-documentation:
@@ -68,6 +70,8 @@ other options:
                           (necessary if experimenting with builds).
     -chromSizes filePath  Use filePath for chrom.size file instead of database
                           chromInfo request
+    -species "Species name"  supply a species name when working with an
+                          assembly hub
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -149,7 +153,7 @@ _EOF_
 # Globals:
 my ($species, $ensGtfUrl, $ensGtfFile, $ensPepUrl, $ensPepFile,
     $ensMySqlUrl, $ensVersionDateReference, $previousEnsVersion, $buildDir,
-    $chromSizes, $previousBuildDir, $vegaGene);
+    $dbExists, $chromSizes, $previousBuildDir, $vegaGene, $hubSpecies);
 # Command line argument:
 my $CONFIG;
 # Required command line arguments:
@@ -171,6 +175,7 @@ sub checkOptions {
 		      'vegaGene',
 		      'buildDir=s',
 		      'chromSizes=s',
+		      'species=s',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -190,14 +195,25 @@ sub doLoad {
       "The process step appears to have not been done.\n" .
 	"Run with -continue=process before this step.\n";
   }
+  if (! -s "$buildDir/process/$db.allGenes.gp.gz" ) {
+   die "ERROR: load: process result: '$buildDir/process/$db.allGenes.gp.gz'\n" .
+      "does not exist.  The process step appears to have not been done.\n" .
+	"Run with -continue=process before this step.\n";
+  }
+
+  if (-s "$db.ensGene.stats.txt" || -s "fb.$db.ensGene.txt" ) {
+     &HgAutomate::verbose(1,
+         "# step load is already completed, continuing...\n");
+     return;
+  }
+
 
   my $whatItDoes = "load processed ensGene data into local database.";
-  my $bossScript = new HgRemoteScript("$runDir/doLoad.csh", $dbHost,
+  my $bossScript = newBash HgRemoteScript("$runDir/doLoad.bash", $dbHost,
 				      $runDir, $whatItDoes);
 
   my $thisGenePred = "$buildDir" . "/process/$db.allGenes.gp.gz";
   my $prevGenePred = "$previousBuildDir" . "/process/$db.allGenes.gp.gz";
-  printf STDERR "# checking previous: $previousBuildDir\n";
   my $thisGtp = "$buildDir" . "/process/ensGtp.tab";
   my $prevGtp = "$previousBuildDir" . "/process/ensGtp.tab";
   my $thisGeneName = "$buildDir" . "/process/ensemblToGeneName.tab";
@@ -245,16 +261,24 @@ sub doLoad {
     $identicalToPrevious = 0;
   }
 
+# there are too many things to check to verify identical to previous
 $identicalToPrevious = 0;
 
-  if ($identicalToPrevious ) {
+  $bossScript->add(<<_EOF_
+export db="$db"
+
+_EOF_
+	  );
+
+  if ($dbExists && $identicalToPrevious ) {
       $bossScript->add(<<_EOF_
 hgsql -e 'INSERT INTO trackVersion \\
     (db, name, who, version, updateTime, comment, source, dateReference) \\
-    VALUES("$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
+    VALUES("\$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
 	"identical to previous version $previousEnsVersion", \\
 	"identical to previous version $previousEnsVersion", \\
 	"$ensVersionDateReference" );' hgFixed
+featureBits \$db ensGene > fb.\$db.ensGene.txt 2>&1
 _EOF_
 	  );
   } else {
@@ -263,92 +287,113 @@ _EOF_
 
       if ($opt_vegaGene) {
       $bossScript->add(<<_EOF_
-hgLoadGenePred $skipInv -genePredExt $db \\
+hgLoadGenePred $skipInv -genePredExt \$db \\
     vegaGene process/not.vegaPseudo.gp.gz >& load.not.pseudo.errors.txt
-hgLoadGenePred $skipInv -genePredExt $db \\
+hgLoadGenePred $skipInv -genePredExt \$db \\
     vegaPseudoGene process/vegaPseudo.gp.gz >& load.pseudo.errors.txt
-hgsql -N -e "select name from vegaPseudoGene;" $db > pseudo.name
-hgsql -N -e "select name from vegaGene;" $db > not.pseudo.name
+hgsql -N -e "select name from vegaPseudoGene;" \$db > pseudo.name
+hgsql -N -e "select name from vegaGene;" \$db > not.pseudo.name
 sort -u pseudo.name not.pseudo.name > vegaGene.name
 sed -e "s/20/40/; s/19/39/" $ENV{'HOME'}/kent/src/hg/lib/ensGtp.sql \\
     > vegaGtp.sql
-hgLoadSqlTab $db vegaGtp vegaGtp.sql process/ensGtp.tab
+hgLoadSqlTab \$db vegaGtp vegaGtp.sql process/ensGtp.tab
 zcat download/$ensPepFile \\
 	| sed -e 's/^>.* Transcript:/>/;' | gzip > vegaPep.txt.gz
 zcat vegaPep.txt.gz \\
     | ~/kent/src/utils/faToTab/faToTab.pl /dev/null /dev/stdin \\
-	 | sed -e '/^\$/d; s/\*\$//' | sort > vegaPepAll.$db.fa.tab
-join vegaPepAll.$db.fa.tab vegaGene.name | sed -e "s/ /\\t/" \\
-    > vegaPep.$db.fa.tab
-hgPepPred $db tab vegaPep vegaPep.$db.fa.tab
+	 | sed -e '/^\$/d; s/\*\$//' | sort > vegaPepAll.\$db.fa.tab
+join vegaPepAll.\$db.fa.tab vegaGene.name | sed -e "s/ /\\t/" \\
+    > vegaPep.\$db.fa.tab
+hgPepPred \$db tab vegaPep vegaPep.\$db.fa.tab
 # verify names in vegaGene is a superset of names in vegaPep
-hgsql -N -e "select name from vegaPep;" $db | sort > vegaPep.name
-set geneCount = `cat vegaGene.name | wc -l`
-set pepCount = `cat vegaPep.name | wc -l`
-set commonCount = `comm -12 vegaPep.name vegaGene.name | wc -l`
-set percentId = \\
-    `echo \$commonCount \$pepCount | awk '{printf "%d", 100.0*\$1/\$2}'`
+hgsql -N -e "select name from vegaPep;" \$db | sort > vegaPep.name
+export geneCount=`cat vegaGene.name | wc -l`
+export pepCount=`cat vegaPep.name | wc -l`
+export commonCount=`comm -12 vegaPep.name vegaGene.name | wc -l`
+export percentId=`echo \$commonCount \$pepCount | awk '{printf "%d", 100.0*\$1/\$2}'`
 echo "gene count: \$geneCount, peptide count: \$pepCount, common name count: \$commonCount"
 echo "percentId: \$percentId"
-if (! (\$percentId > 95)) then
+if [ \$percentId -lt 96 ]; then
     echo "ERROR: percent coverage of peptides to genes: \$percentId"
     echo "ERROR: should be greater than 95"
     exit 255
-endif
+fi
 _EOF_
 	  );
       } elsif (defined $geneScaffolds) {
 	  $bossScript->add(<<_EOF_
-hgLoadGenePred $skipInv -genePredExt $db ensGene process/$db.allGenes.gp.gz \\
+hgLoadGenePred $skipInv -genePredExt \$db ensGene process/\$db.allGenes.gp.gz \\
 	>& loadGenePred.errors.txt
-checkTableCoords $db -table=ensGene
-zcat process/ensemblGeneScaffolds.$db.bed.gz | sort > to.clean.GeneScaffolds.bed
-cut -f1 /hive/data/genomes/$db/chrom.sizes | sort > legitimate.names
+checkTableCoords \$db -table=ensGene
+zcat process/ensemblGeneScaffolds.\$db.bed.gz | sort > to.clean.GeneScaffolds.bed
+cut -f1 /hive/data/genomes/\$db/chrom.sizes | sort > legitimate.names
 join -t'\t' legitimate.names to.clean.GeneScaffolds.bed \\
-    | sed -e "s/GeneScaffold/GS/" | hgLoadBed $db ensemblGeneScaffold stdin
-checkTableCoords $db -table=ensemblGeneScaffold
+    | sed -e "s/GeneScaffold/GS/" | hgLoadBed \$db ensemblGeneScaffold stdin
+checkTableCoords \$db -table=ensemblGeneScaffold
 _EOF_
 	  );
       } else {
+        if ($dbExists) {
       $bossScript->add(<<_EOF_
-hgLoadGenePred $skipInv -genePredExt $db \\
-    ensGene process/$db.allGenes.gp.gz >& loadGenePred.errors.txt
+hgLoadGenePred $skipInv -genePredExt \$db \\
+    ensGene process/\$db.allGenes.gp.gz > loadGenePred.errors.txt 2>&1
 _EOF_
 	  );
+        } else {
+          if (! -s "$chromSizes") {
+            die "ERROR: load: assembly hub load needs a chromSizes\n";
+          }
+          $bossScript->add(<<_EOF_
+mkdir -p bbi
+genePredFilter -verbose=2 -chromSizes=$chromSizes \\
+  process/\$db.allGenes.gp.gz stdout | gzip -c > \$db.ensGene.gp.gz
+genePredToBed \$db.ensGene.gp.gz stdout | sort -k1,1 -k2,2n > \$db.ensGene.gp.bed
+bedToExons \$db.ensGene.gp.bed stdout | bedSingleCover.pl stdin > \$db.exons.bed
+export baseCount=`awk '{sum+=\$3-\$2}END{printf "%d", sum}' \$db.exons.bed`
+export asmSizeNoGaps=`grep sequences ../../\$db.faSize.txt | awk '{print \$5}'`
+export perCent=`echo \$baseCount \$asmSizeNoGaps | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$baseCount" "\$asmSizeNoGaps" "\$perCent" > fb.\$db.ensGene.txt
+printf "%s\n" "${versionString}" > version.txt
+bedToBigBed -extraIndex=name \$db.ensGene.gp.bed $chromSizes bbi/\$db.ensGene.bb
+bigBedInfo bbi/\$db.ensGene.bb | egrep "^itemCount:|^basesCovered:" \\
+    | sed -e 's/,//g' > \$db.ensGene.stats.txt
+LC_NUMERIC=en_US /usr/bin/printf "# ensGene %s %'d %s %'d\\n" `cat \$db.ensGene.stats.txt` | xargs echo
+_EOF_
+	  );
+        }
       }
 
-      if (! $opt_vegaGene) {
+      if ($dbExists && ! $opt_vegaGene) {
       $bossScript->add(<<_EOF_
 zcat download/$ensPepFile \\
 	| sed -e 's/^>.* transcript:/>/; s/ CCDS.*\$//; s/ .*\$//' | gzip > ensPep.txt.gz
 zcat ensPep.txt.gz \\
     | ~/kent/src/utils/faToTab/faToTab.pl /dev/null /dev/stdin \\
-	 | sed -e '/^\$/d; s/\*\$//' | sort > ensPep.$db.fa.tab
-hgPepPred $db tab ensPep ensPep.$db.fa.tab
-hgLoadSqlTab $db ensGtp ~/kent/src/hg/lib/ensGtp.sql process/ensGtp.tab
-hgLoadSqlTab $db ensemblToGeneName process/ensemblToGeneName.sql process/ensemblToGeneName.tab
-hgLoadSqlTab $db ensemblSource process/ensemblSource.sql process/ensemblSource.tab
+	 | sed -e '/^\$/d; s/\*\$//' | sort > ensPep.\$db.fa.tab
+hgPepPred \$db tab ensPep ensPep.\$db.fa.tab
+hgLoadSqlTab \$db ensGtp ~/kent/src/hg/lib/ensGtp.sql process/ensGtp.tab
+hgLoadSqlTab \$db ensemblToGeneName process/ensemblToGeneName.sql process/ensemblToGeneName.tab
+hgLoadSqlTab \$db ensemblSource process/ensemblSource.sql process/ensemblSource.tab
 # verify names in ensGene is a superset of names in ensPep
-hgsql -N -e "select name from ensPep;" $db | sort > ensPep.name
-hgsql -N -e "select name from ensGene;" $db | sort > ensGene.name
-set geneCount = `cat ensGene.name | wc -l`
-set pepCount = `cat ensPep.name | wc -l`
-set commonCount = `comm -12 ensPep.name ensGene.name | wc -l`
-set percentId = \\
-    `echo \$commonCount \$pepCount | awk '{printf "%d", 100.0*\$1/\$2}'`
+hgsql -N -e "select name from ensPep;" \$db | sort > ensPep.name
+hgsql -N -e "select name from ensGene;" \$db | sort > ensGene.name
+export geneCount=`cat ensGene.name | wc -l`
+export pepCount=`cat ensPep.name | wc -l`
+export commonCount=`comm -12 ensPep.name ensGene.name | wc -l`
+export percentId=`echo \$commonCount \$pepCount | awk '{printf "%d", 100.0*\$1/\$2}'`
 echo "gene count: \$geneCount, peptide count: \$pepCount, common name count: \$commonCount"
 echo "percentId: \$percentId"
-if (! (\$percentId > 95)) then
+if [ \$percentId -lt 96 ]; then
     echo "ERROR: percent coverage of peptides to genes: \$percentId"
     echo "ERROR: should be greater than 95"
     exit 255
-endif
+fi
 _EOF_
       );
       }
-      if (! $opt_vegaGene && defined $knownToEnsembl) {
+      if ($dbExists && ! $opt_vegaGene && defined $knownToEnsembl) {
 	  $bossScript->add(<<_EOF_
-hgMapToGene $db ensGene knownGene knownToEnsembl
+hgMapToGene \$db ensGene knownGene knownToEnsembl
 _EOF_
 	  );
       }
@@ -356,20 +401,21 @@ _EOF_
       $bossScript->add(<<_EOF_
 hgsql -e 'INSERT INTO trackVersion \\
     (db, name, who, version, updateTime, comment, source, dateReference) \\
-    VALUES("$db", "vegaGene", "$ENV{'USER'}", "$ensVersion", now(), \\
+    VALUES("\$db", "vegaGene", "$ENV{'USER'}", "$ensVersion", now(), \\
 	"with peptides $ensPepFile", \\
 	"$ensGtfUrl", \\
 	"$ensVersionDateReference" );' hgFixed
 _EOF_
       );
-      } else {
+      } elsif ($dbExists) {
       $bossScript->add(<<_EOF_
 hgsql -e 'INSERT INTO trackVersion \\
     (db, name, who, version, updateTime, comment, source, dateReference) \\
-    VALUES("$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
+    VALUES("\$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
 	"with peptides $ensPepFile", \\
 	"$ensGtfUrl", \\
 	"$ensVersionDateReference" );' hgFixed
+featureBits \$db ensGene > fb.\$db.ensGene.txt 2>&1
 _EOF_
       );
       }
@@ -381,6 +427,16 @@ _EOF_
 # * step: process [dbHost]
 sub doProcess {
   my $runDir = "$buildDir/process";
+  my $geneCount = 0;
+  if (-s "$runDir/$db.allGenes.gp.gz" ) {
+    $geneCount = `zcat "$runDir/$db.allGenes.gp.gz" | wc -l`;
+    chomp $geneCount;
+  }
+  if ($geneCount > 0) {
+     &HgAutomate::verbose(1,
+         "# step process is already completed, continuing...\n");
+     return;
+  }
   # First, make sure we're starting clean.
   if (-d "$runDir" && ! $opt_debug) {
     die "ERROR: process: looks like this was run successfully already\n" .
@@ -397,15 +453,20 @@ sub doProcess {
   }
   $bossScript = new HgRemoteScript("$runDir/doProcess.csh", $dbHost,
 				  $runDir, $whatItDoes);
+  $bossScript->add(<<_EOF_
+set db = "$db"
+
+_EOF_
+      );
   #  if lifting, create the lift file
   if ($lifting) {
       $bossScript->add(<<_EOF_
-rm -f randoms.$db.lift
-foreach C (`cut -f1 /hive/data/genomes/$db/chrom.sizes | grep random`)
-   set size = `grep \$C /hive/data/genomes/$db/chrom.sizes | cut -f2`
+rm -f randoms.\$db.lift
+foreach C (`cut -f1 /hive/data/genomes/\$db/chrom.sizes | grep random`)
+   set size = `grep \$C /hive/data/genomes/\$db/chrom.sizes | cut -f2`
    hgsql -N -e \\
 "select chromStart,contig,size,chrom,\$size from ctgPos where chrom='\$C';" \\
-	$db  | awk '{gsub("\\\\.[0-9]+", "", \$2); print }' >> randoms.$db.lift
+	\$db  | awk '{gsub("\\\\.[0-9]+", "", \$2); print }' >> randoms.\$db.lift
 end
 _EOF_
       );
@@ -432,7 +493,7 @@ _EOF_
   #  lift randoms if necessary
   if ($lifting) {
       $bossScript->add(<<_EOF_
-	| liftUp -type=.gtf stdout randoms.$db.lift carry stdin \\
+	| liftUp -type=.gtf stdout randoms.\$db.lift carry stdin \\
 _EOF_
       );
   }
@@ -441,9 +502,11 @@ _EOF_
 	| gzip > allGenes.gtf.gz
 _EOF_
   );
+  my $name2 = "";
+  $name2 = "-geneNameAsName2" if (! $dbExists);	# assembly hub use name2
   $bossScript->add(<<_EOF_
-gtfToGenePred -includeVersion -infoOut=infoOut.txt -genePredExt allGenes.gtf.gz stdout \\
-    | gzip > $db.allGenes.gp.gz
+gtfToGenePred ${name2} -includeVersion -infoOut=infoOut.txt -genePredExt allGenes.gtf.gz stdout \\
+    | gzip > \$db.allGenes.gp.gz
 $Bin/extractGtf.pl infoOut.txt > ensGtp.tab
 $Bin/ensemblInfo.pl infoOut.txt > ensemblToGeneName.tab
 $Bin/extractSource.pl allGenes.gtf.gz | sort -u > ensemblSource.tab
@@ -469,93 +532,75 @@ _EOF_
   }
   if (defined $geneScaffolds) {
       $bossScript->add(<<_EOF_
-mv $db.allGenes.gp.gz $db.allGenes.beforeLift.gp.gz
+mv \$db.allGenes.gp.gz \$db.allGenes.beforeLift.gp.gz
 $Bin/ensGeneScaffolds.pl ../download/seq_region.txt.gz \\
-	../download/assembly.txt.gz | gzip > $db.ensGene.lft.gz
-liftAcross -warn -bedOut=ensemblGeneScaffolds.$db.bed $db.ensGene.lft.gz \\
-	$db.allGenes.beforeLift.gp.gz $db.allGenes.gp >& liftAcross.err.out
-gzip ensemblGeneScaffolds.$db.bed $db.allGenes.gp liftAcross.err.out
+	../download/assembly.txt.gz | gzip > \$db.ensGene.lft.gz
+liftAcross -warn -bedOut=ensemblGeneScaffolds.\$db.bed \$db.ensGene.lft.gz \\
+	\$db.allGenes.beforeLift.gp.gz \$db.allGenes.gp >& liftAcross.err.out
+gzip ensemblGeneScaffolds.\$db.bed \$db.allGenes.gp liftAcross.err.out
 _EOF_
       );
   }
   if (defined $liftMtOver) {
       $bossScript->add(<<_EOF_
-cp $db.allGenes.gp.gz $db.allGenes.beforeLiftMtOver.gp.gz
-zcat $db.allGenes.gp.gz > all.gp
+cp \$db.allGenes.gp.gz \$db.allGenes.beforeLiftMtOver.gp.gz
+zcat \$db.allGenes.gp.gz > all.gp
 grep chrM all.gp | liftOver -genePred stdin $liftMtOver chrMLifted.gp noMap.chrM
 grep -v chrM all.gp | cat - chrMLifted.gp > allLifted.gp
-gzip -c allLifted.gp > $db.allGenes.gp.gz
+gzip -c allLifted.gp > \$db.allGenes.gp.gz
 rm *.gp
 _EOF_
       );
     }
   if (defined $liftUp) {
       $bossScript->add(<<_EOF_
-mv $db.allGenes.gp.gz $db.allGenes.beforeLiftUp.gp.gz
-liftUp -extGenePred -type=.gp $db.allGenes.gp \\
+mv \$db.allGenes.gp.gz \$db.allGenes.beforeLiftUp.gp.gz
+liftUp -extGenePred -type=.gp \$db.allGenes.gp \\
     $liftUp carry \\
-    $db.allGenes.beforeLiftUp.gp.gz
-gzip $db.allGenes.gp
+    \$db.allGenes.beforeLiftUp.gp.gz
+gzip \$db.allGenes.gp
 _EOF_
       );
       if (defined $geneScaffolds) {
       $bossScript->add(<<_EOF_
-mv ensemblGeneScaffolds.$db.bed.gz ensemblGeneScaffolds.$db.beforeLiftUp.bed.gz
-liftUp -type=.bed ensemblGeneScaffolds.$db.bed \\
+mv ensemblGeneScaffolds.\$db.bed.gz ensemblGeneScaffolds.\$db.beforeLiftUp.bed.gz
+liftUp -type=.bed ensemblGeneScaffolds.\$db.bed \\
     $liftUp carry \\
-    ensemblGeneScaffolds.$db.beforeLiftUp.bed.gz
-gzip ensemblGeneScaffolds.$db.bed
+    ensemblGeneScaffolds.\$db.beforeLiftUp.bed.gz
+gzip ensemblGeneScaffolds.\$db.bed
 _EOF_
 	  );
       }
   }
+  $bossScript->add(<<_EOF_
+grep -v "^#" infoOut.txt \\
+  | awk -F'\\t' '{printf "%s\\t%s,%s,%s,%s\\n", \$1,\$2,\$8,\$9,\$10}' \\
+    | sed -e 's/,,/,/g; s/,\\+\$//;' > \$db.ensGene.nameIndex.txt
+ixIxx \$db.ensGene.nameIndex.txt \$db.ensGene.ix \$db.ensGene.ixx
+_EOF_
+                  );
   # if all of these are supposed to be valid, they should be able to
   #	pass genePredCheck right now
   if (! defined $skipInvalid) {
       if ($opt_vegaGene) {
       $bossScript->add(<<_EOF_
-genePredCheck -db=$db vegaPseudo.gp.gz
-genePredCheck -db=$db not.vegaPseudo.gp.gz
+genePredCheck -db=\$db vegaPseudo.gp.gz
+genePredCheck -db=\$db not.vegaPseudo.gp.gz
 _EOF_
 	  );
       }
       if (-s "$chromSizes") {
       $bossScript->add(<<_EOF_
-genePredCheck -chromSizes=$chromSizes $db.allGenes.gp.gz
+genePredCheck -chromSizes=$chromSizes \$db.allGenes.gp.gz
 _EOF_
          );
       } else {
       $bossScript->add(<<_EOF_
-genePredCheck -db=$db $db.allGenes.gp.gz
+genePredCheck -db=\$db \$db.allGenes.gp.gz
 _EOF_
          );
       }
-      $bossScript->add(<<_EOF_
-# construct bigBed and index for assembly hub
-mkdir -p bbi
-genePredToBed $db.allGenes.gp.gz stdout | sort -k1,1 -k2,2n > $db.ensGene.bed
-_EOF_
-	  );
-      if (-s "$chromSizes") {
-      $bossScript->add(<<_EOF_
-bedToBigBed -extraIndex=name $db.ensGene.bed $chromSizes bbi/$db.ensGene.bb
-_EOF_
-	  );
-      } else {
-      $bossScript->add(<<_EOF_
-bedToBigBed -extraIndex=name $db.ensGene.bed ../../../chrom.sizes bbi/$db.ensGene.bb
-_EOF_
-	  );
-      }
-      $bossScript->add(<<_EOF_
-grep -v "^#" infoOut.txt \\
-  | awk -F\$'\\t' '{printf "%s\\t%s,%s,%s,%s\\n", \$1,\$2,\$8,\$9,\$10}' \\
-    | sed -e 's/,,/,/g; s/,\$//;' > $db.ensGene.nameIndex.txt
-ixIxx $db.ensGene.nameIndex.txt $db.ensGene.ix $db.ensGene.ixx
-
-_EOF_
-	  );
-      }
+  }
   $bossScript->execute() if (! $opt_debug);
 } # doProcess
 
@@ -619,6 +664,7 @@ _EOF_
   } else {
     $bossScript->add(<<_EOF_
 rm -f bed.tab ensPep.txt.gz ensPep.$db.fa.tab ensPep.name ensGene.name
+rm -f $db.ensGene.gp.bed
 _EOF_
     );
   }
@@ -631,6 +677,11 @@ sub doMakeDoc {
   my $runDir = "$buildDir";
   my $whatItDoes = "Display the make doc text to stdout.";
 
+  if (! $dbExists) {
+    &HgAutomate::verbose(1,
+         "# step makeDoc is not run when not a database build\n");
+    return;
+  }
   my $updateTime = `hgsql -N -e 'select updateTime from trackVersion where db = "$db" order by updateTime DESC limit 1;' hgFixed`;
   chomp $updateTime;
   $updateTime =~ s/ .*//;	#	removes time
@@ -688,6 +739,7 @@ _EOF_
   print "############################################################################\n";
 
 } # doMakeDoc
+#############################################################################
 
 sub requireVar {
   # Ensure that var is in %config and return its value.
@@ -731,7 +783,19 @@ sub parseConfig {
 
   # Required variables.
   $db = &requireVar('db', \%config);
+  # may be working on an assembly hub that does not have a database browser
+  $dbExists = 0;
+  $dbExists = 1 if (&HgAutomate::databaseExists($dbHost, $db));
+
+  printf STDERR "# dbExists: %d for db: %s\n", $dbExists, $db;
+
+  if ($dbExists) {
   $species = &HgAutomate::getSpecies($dbHost, $db);
+  } elsif (length($hubSpecies) < 1) {
+    die "ERROR: must supply: -species='Species name' for assembly hub build\n";
+  } else {
+    $species = $hubSpecies;
+  }
   &HgAutomate::verbose(1,
 	"\n db: $db, species: '$species'\n");
 
@@ -812,6 +876,9 @@ if (!defined $opt_ensVersion) {
 }
 
 $ensVersion = $opt_ensVersion;
+$versionString = "version $ensVersion/";
+$versionString .= ucfirst(substr($EnsGeneAutomate::verToDate[$ensVersion],0,3));
+$versionString .= ". " . substr($EnsGeneAutomate::verToDate[$ensVersion],3,4);
 
 if (! $opt_vegaGene) {
   if ($versionListString !~ m/$ensVersion/) {
@@ -819,6 +886,10 @@ if (! $opt_vegaGene) {
     die "must be one of: $versionListString\n";
   }
 }
+
+$chromSizes = $opt_chromSizes ? $opt_chromSizes : "";
+
+$hubSpecies = $opt_species ? $opt_species : "";
 
 ($CONFIG) = @ARGV;
 &parseConfig($CONFIG);
@@ -833,8 +904,6 @@ printf STDERR "# running debug mode, will not execute scripts\n" if ($opt_debug)
 $previousEnsVersion = `hgsql -Ne 'select max(version) from trackVersion where name="ensGene" AND db="$db" AND version<$ensVersion;' hgFixed`;
 chomp $previousEnsVersion;
 if ( $previousEnsVersion eq 'NULL') { $previousEnsVersion=0;}
-
-$chromSizes = $opt_chromSizes ? $opt_chromSizes: "";
 
 # Establish what directory we will work in, tack on the ensembl version ID.
 if ($opt_vegaGene) {

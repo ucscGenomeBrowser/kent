@@ -20,6 +20,10 @@ include trackDb.gtex.ra
 # GeneHancer from Weizmann labs
 include trackDb.geneHancer.ra
 
+# NCBI ClinVar
+include trackDb.clinvar.ra public,beta
+include trackDb.clinvarTest.ra alpha
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)
@@ -141,7 +145,6 @@ longLabel Genetic Variants mentioned in scientific publications
 superTrack on
 group phenDis
 type bed 3
-pennantIcon Updated red ../goldenPath/newsarch.html#020720 "Updated Feb. 7, 2020"
 
         track mastermind
         shortLabel Mastermind Variants
@@ -159,7 +162,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#020720 "Updated Feb. 7, 2020
         mmcnt3Filter 0
         dataVersion /gbdb/$D/bbi/mastermindRelease.txt
         parent varsInPubs pack
-        pennantIcon Updated red ../goldenPath/newsarch.html#020720 "Updated Feb. 7, 2020"
 
         track avada
         shortLabel Avada Variants
@@ -174,7 +176,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#020720 "Updated Feb. 7, 2020
         parent varsInPubs pack
         urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" doi="https://doi.org/$$" ensId="http://grch37.ensembl.org/Homo_sapiens/Gene/Summary?g=$$" entrezs="https://www.ncbi.nlm.nih.gov/gene/$$" refSeq="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOverField _mouseOver
-        pennantIcon New red ../goldenPath/newsarch.html#020720 "Released Feb. 7, 2020"
 
 track pathoPred
 type bigWig
@@ -1541,7 +1542,7 @@ track snp151Common
 shortLabel Common SNPs(151)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 151) Found in >= 1% of Samples
 group varRep
-visibility dense
+visibility hide
 url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp151Seq
@@ -1624,7 +1625,7 @@ longLabel Short Genetic Variants from dbSNP release 152
 bigDataUrl /gbdb/$D/snp/dbSnp152.bb
 detailsTabUrls _dataOffset=/gbdb/hgFixed/dbSnp/dbSnp152Details.tab.gz
 group varRep
-visibility dense
+visibility hide
 url https://www.ncbi.nlm.nih.gov/snp/$$
 urlLabel dbSNP: 
 type bigDbSnp
@@ -3648,7 +3649,7 @@ tableBrowser off lovdComp
 html lovdComp
 
         track lovdShort
-        shortLabel LOVD Variants <= 100bp
+        shortLabel LOVD Variants < 50bp
         longLabel Leiden Open Variation Database, short <=100bp variants
         group phenDis
         visibility hide
@@ -3659,7 +3660,7 @@ html lovdComp
         parent lovdComp
 
         track lovdLong
-        shortLabel LOVD Variants > 100bp
+        shortLabel LOVD Variants >= 50bp
         longLabel Leiden Open Variation Database Public Variants, long >100bp variants
         group phenDis
         visibility hide
@@ -3733,49 +3734,6 @@ semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 11.001
 padding 50
-
-track clinvar
-compositeTrack on
-shortLabel ClinVar Variants
-longLabel ClinVar Variants
-group phenDis
-visibility hide
-type bed 12 +
-itemRgb on
-urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
-scoreLabel ClinVar Star-Rating (0-4)
-
-    track clinvarMain
-    shortLabel ClinVar Short Variants
-    longLabel ClinVar Short Variants <= 100bp
-    visibility pack
-    parent clinvar
-    priority 1
-    type bigBed 12 +
-    #filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other
-    #filterType._clinSign singleList
-    #filterValues.origin not-reported,uniparental,tested-inconclusive,biparental,not applicable,paternal,maternal,inherited,de novo,somatic,not provided,unknown,germline
-    #filterType.origin multipleListOr
-    #filterByRange._valLen on
-    mouseOverField _mouseOver
-    bigDataUrl /gbdb/$D/bbi/clinvar/clinvarMain.bb
-
-    track clinvarCnv
-    shortLabel ClinVar Long Variants
-    longLabel ClinVar Long Variants > 100bp (mostly Copy-Number Variants)
-    visibility pack
-    type bigBed 12 +
-    parent clinvar
-    priority 2
-    #filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other
-    #filterType._clinSign singleList
-    #filterValues.origin not-reported,uniparental,tested-inconclusive,biparental,not applicable,paternal,maternal,inherited,de novo,somatic,not provided,unknown,germline
-    #filterType.origin multipleListOr
-    #filter._varLen 0
-    #filterByRange._varLen on
-    #filterByRange.bullshit on
-    mouseOverField _mouseOver
-    bigDataUrl /gbdb/$D/bbi/clinvar/clinvarCnv.bb
 
 track interactions
 shortLabel Gene Interactions

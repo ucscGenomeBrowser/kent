@@ -152,12 +152,17 @@ char *setting = getFilterType(cart, tdb, field,  FILTERBY_SINGLE);
 
 AllocVar(filter);
 filter->fieldNum =  getFieldNum(bbi, field);
-if (setting && (sameString(setting, FILTERBY_SINGLE_LIST) || sameString(setting, FILTERBY_MULTIPLE_LIST_OR)))
-    filter->comparisonType = COMPARE_HASH_LIST_OR;
-else if (setting && sameString(setting, FILTERBY_MULTIPLE_LIST_AND))
-    filter->comparisonType = COMPARE_HASH_LIST_AND;
-else
-    filter->comparisonType = COMPARE_HASH;
+filter->comparisonType = COMPARE_HASH;
+if (setting) 
+    {
+    if (sameString(setting, FILTERBY_SINGLE_LIST) 
+            || sameString(setting, FILTERBY_MULTIPLE_LIST_OR)
+            || sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_OR))
+                filter->comparisonType = COMPARE_HASH_LIST_OR;
+    else if (sameString(setting, FILTERBY_MULTIPLE_LIST_AND) 
+            || sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_AND))
+                filter->comparisonType = COMPARE_HASH_LIST_AND;
+    }
 filter->valueHash = newHash(5);
 filter->numValuesInHash = slCount(choices);
 
@@ -388,6 +393,21 @@ struct lm *lm = lmInit(0);
 struct trackDb *tdb = track->tdb;
 struct bigBedInterval *bb, *bbList = bigBedSelectRangeExt(track, chrom, start, end, lm, maxItems);
 char *mouseOverField = cartOrTdbString(cart, track->tdb, "mouseOverField", NULL);
+
+// check if this track can merge large items, this setting must be allowed in the trackDb
+// stanza for the track, but can be enabled/disabled via trackUi/right click menu so
+// we also need to check the cart for the current status
+int mergeCount = 0;
+boolean doWindowSizeFilter = trackDbSettingOn(track->tdb, MERGESPAN_TDB_SETTING);
+if (doWindowSizeFilter)
+    {
+    char hasMergedItemsSetting[256];
+    safef(hasMergedItemsSetting, sizeof(hasMergedItemsSetting), "%s.%s", track->track, MERGESPAN_CART_SETTING);
+    if (cartVarExists(cart, hasMergedItemsSetting))
+        doWindowSizeFilter = cartInt(cart, hasMergedItemsSetting) == 1;
+    else // save the cart var so javascript can offer the right toggle
+        cartSetInt(cart, hasMergedItemsSetting, 1);
+    }
 /* protect against temporary network error */
 struct bbiFile *bbi = NULL;
 struct errCatch *errCatch = errCatchNew();
@@ -417,8 +437,10 @@ track->bbiFile = NULL;
 
 struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, track->tdb) ;
 if (compositeChildHideEmptySubtracks(cart, track->tdb, NULL, NULL))
-   labelTrackAsFiltered(track);
+   labelTrackAsHideEmpty(track);
 
+// a fake item that is the union of the items that span the current  window
+struct linkedFeatures *spannedLf = NULL;
 unsigned filtered = 0;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
@@ -449,13 +471,47 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	{
         char startBuf[16], endBuf[16];
         char *bedRow[bbi->fieldCount];
-
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
         if (bigBedFilterInterval(bedRow, filters))
             {
             struct bed *bed = bedLoadN(bedRow, fieldCount);
             lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
                 scoreMin, scoreMax, useItemRgb);
+            }
+        if (track->visibility != tvDense && lf && doWindowSizeFilter && bb->start < winStart && bb->end > winEnd)
+            {
+            mergeCount++;
+            struct bed *bed = bedLoadN(bedRow, fieldCount);
+            struct linkedFeatures *tmp = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
+                scoreMin, scoreMax, useItemRgb);
+            if (spannedLf)
+                {
+                if (tmp->start < spannedLf->start)
+                    spannedLf->start = tmp->start;
+                if (tmp->end > spannedLf->end)
+                    spannedLf->end = tmp->end;
+                if (fieldCount > 9) // average the colors in the merged item
+                    {
+                    struct rgbColor itemColor = colorIxToRgb(lf->filterColor);
+                    struct rgbColor currColor = colorIxToRgb(spannedLf->filterColor);
+                    int r = currColor.r + round((itemColor.r - currColor.r) / mergeCount);
+                    int g = currColor.g + round((itemColor.g - currColor.g) / mergeCount);
+                    int b = currColor.b + round((itemColor.b - currColor.b) / mergeCount);
+                    spannedLf->filterColor = MAKECOLOR_32(r,g,b);
+                    }
+                }
+            else
+                {
+                // setting the label here protects against the case when only one item would
+                // have been merged. When this happens we warn in the track longLabel that
+                // nothing happened and essentially make the spanned item be what the actual
+                // item would be. If multiple items are merged then the labels and mouseOvers
+                // will get fixed up later
+                tmp->label = bigBedMakeLabel(track->tdb, track->labelColumns,  bb, chromName);
+                tmp->mouseOver   = restField(bb, mouseOverIdx);
+                slAddHead(&spannedLf, tmp);
+                }
+            continue; // lf will be NULL, but these items aren't "filtered", they're merged
             }
 	}
 
@@ -482,6 +538,33 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
 if (filtered)
    labelTrackAsFilteredNumber(track, filtered);
+
+if (doWindowSizeFilter)
+    // add the number of merged items to the track longLabel
+    {
+    char labelBuf[256];
+    if (mergeCount > 1)
+        safef(labelBuf, sizeof(labelBuf), " (Merged %d items)", mergeCount);
+    else
+        safef(labelBuf, sizeof(labelBuf), " (No Items Merged in window)");
+    track->longLabel = catTwoStrings(track->longLabel, labelBuf);
+    }
+
+if (spannedLf)
+    {
+    // if two or more items were merged together, fix up the label of the special merged item,
+    // otherwise the label and mouseOver will be the normal bed one
+    char itemLabelBuf[256], mouseOver[256];
+    if (mergeCount > 1)
+        {
+        safef(itemLabelBuf, sizeof(itemLabelBuf), "Merged %d items", mergeCount);
+        safef(mouseOver, sizeof(mouseOver), "Merged %d items. Right-click and select 'show merged items' to expand", mergeCount);
+        spannedLf->label = cloneString(itemLabelBuf);
+        spannedLf->name = "mergedItem"; // always, for correct hgc clicks
+        spannedLf->mouseOver = cloneString(mouseOver);
+        }
+    slAddHead(pLfList, spannedLf);
+    }
 
 lmCleanup(&lm);
 

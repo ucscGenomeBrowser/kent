@@ -1,4 +1,6 @@
-pslCDnaFilter [options] inPsl outPsl
+pslCDnaFilter - Filter cDNA alignments in psl format.
+usage:
+    pslCDnaFilter [options] inPsl outPsl
 
 Filter cDNA alignments in psl format.  Filtering criteria are
 comparative, selecting near best in genome alignments for each

@@ -1,0 +1,682 @@
+########################################################################
+# an alignment of 44 closely related SARS viruses (DONE - 2020-03-13 - Hiram)
+########################################################################
+# List of 44 sequences obtained via email from MIT/Irwin via Markd:
+
+cd /hive/data/genomes/wuhCor1/bed/lastzStrains/sequences
+
+#  -rw-r--r-- 1    7074 Mar 13 13:39 SarbecovirusGenomes.44.RAxML.Mapped.nh
+#   head -15 SarbecovirusGenomes.44.RAxML.Mapped.nh | grep "[a-z]"
+#       NC_045512_Wuhan_seafood_market_pneumonia_virus:0.02561,
+#       MN996532_Bat_coronavirus_RaTG13:0.02795
+#       MG772933_Bat_SARS_like_coronavirus_CoVZC45:0.01539,
+#       MG772934_Bat_SARS_like_coronavirus_CoVZXC21:0.0187
+#      ... etc ...
+    tail SarbecovirusGenomes.44.RAxML.Mapped.nh | grep "[a-z]"
+#        GQ153547_Bat_SARS_coronavirus_HKU3_12:0.00659
+#        KY352407_SARS_related_coronavirus_strain_BtKY72:0.33662,
+#        NC_014470_Bat_coronavirus_BM48_31_BGR_2008:0.26995
+
+# extract the accession names from that .nh file:
+
+sed -e 's/^ \+//;' SarbecovirusGenomes.44.RAxML.Mapped.nh \
+  | egrep -i "[a-z]" | sort -u \
+   | sed -e 's/_Coronavirus.*//i; s/_Bat.*//;' \
+     | sed -e 's/_[a-z]\+.*//i;' | sort -u > MIT_Irwin.list44
+
+# only 41 of those are new, we already have 3 here.  Fetch the
+# new list:
+################################################
+
+cat MIT_Irwin.list44 | while read acc
+do
+  alreadyHere=`ls fasta/${acc}* 2> /dev/null | wc -l`
+  if [ "${alreadyHere}" -gt 0 ]; then
+    ls -og fasta/${acc}* 1>&2
+  else
+    rm -f "fasta/${acc}.fa"
+    if [ ! -s "fasta/${acc}.fa" ]; then
+      printf "# to be fetched $acc\n" 1>&2
+wget -O fasta/${acc}.fa \
+   "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$acc"
+      betterName=`grep "^>" fasta/${acc}.fa | sed -e 's/>//; s/ .*//;'`
+      if [ "x${betterName}" != "xy" ]; then
+        mv fasta/${acc}.fa fasta/${betterName}.fa
+        ls -og fasta/${acc}* 1>&2
+wget -O gbk/${acc}.gbk \
+  "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=gb&sendto=on&id=$acc"
+        mv gbk/${acc}.gbk gbk/${betterName}.gbk
+      fi
+    fi
+  fi
+done
+
+################################################
+# Construct safe names
+
+for F in fasta/*.fa chinaFasta/*.fa
+do
+  B=`basename $F | sed -e "s/\.\([0-9]\+\)/v\1/; s/-/_/g;"`
+  if [ -s "safeNameFa/${B}" ]; then
+    ls -og safeNameFa/${B}
+  else
+    sed -e 's/^>\([^ ]\+\).*/>\1/;' "${F}" | sed -e 's/\./v/; s/-/_/g;' \
+      > safeNameFa/${B}
+    ls -og safeNameFa/${B}
+  fi
+done
+
+################################################
+# make a list of the new sequences for lastz alignment procedure
+
+ls -ogrt safeNameFa | tail -41  | awk '{print $NF}' \
+    | sed -e 's/.fa//;' > ../new41.list
+
+################################################
+# generate 2bit and chrom.sizes files
+
+cd /hive/data/genomes/wuhCor1/bed/lastzStrains
+
+for asmId in `ls sequences/safeNameFa | sed -e 's/.fa//;'`
+do
+  twoBit="twoBits/${asmId}.2bit"
+  sizes="sizes/${asmId}.chrom.sizes"
+  if [ -s "${sizes}" ]; then
+    ls -og "${sizes}" "${twoBit}" 1>&2
+  else
+    faToTwoBit sequences/safeNameFa/${asmId}.fa "${twoBit}"
+    twoBitInfo "${twoBit}" "${sizes}"
+    ls -og "${sizes}" "${twoBit}" 1>&2
+  fi
+done
+
+################################################
+# prepare alignment scripts
+ for db in `cat new41.list`; do ./prepOne.pl $db; done
+
+# find those new scripts to get into a run list:
+find ./runDir -type f | grep runAlignment.sh \
+   | xargs ls -ogrt | grep "Mar 13" | awk '{print $NF}' > alignment.run41.list
+
+# and then run them
+
+ time (./perlPara.pl 13 alignment.run41.list) >> alignment41.log 2>&1 &
+
+#  real    8m24.503s
+
+################################################
+# calculate kmers for these new sequences
+
+cd /hive/data/genomes/wuhCor1/bed/lastzStrains/kmers
+
+for F in `cat ../new41.list`
+do
+  printf "kmerOne $F {check out exists+ kmers/$F/$F.31mers.profile.txt.gz}\n"
+done > new41.jobList
+
+para create new41.jobList
+para try
+para push
+para check
+para time
+# Completed: 41 of 41 jobs
+# CPU time in finished jobs:         27s       0.45m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                    89s       1.48m     0.02h    0.00d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:               5s       0.08m     0.00h    0.00d
+# Submission to last job:            41s       0.68m     0.01h    0.00d
+
+#####################################################
+# need to compute the compare matrix for 44 sequences
+#####################################################
+ln -s ../sequences/MIT_Irwin.list44 ./
+
+Completed: 946 of 946 jobs
+CPU time in finished jobs:        186s       3.09m     0.05h    0.00d  0.000 y
+IO & Wait Time:                  2364s      39.41m     0.66h    0.03d  0.000 y
+Average job time:                   3s       0.04m     0.00h    0.00d
+Longest finished job:               6s       0.10m     0.00h    0.00d
+Submission to last job:           113s       1.88m     0.03h    0.00d
+
+find ./compare.31 -type f | xargs cat > 44x44.kmers31.compared.txt
+
+~/kent/src/hg/makeDb/doc/wuhCor1/matrixUp.pl 44x44.kmers31.compared.txt \
+    > 44x44.data31mer.csv
+mv matrixKey.txt matrixKey.44x44.31mer.txt
+
+mkdir /hive/data/genomes/wuhCor1/bed/lastzStrains/kmers/phylip44x44
+cd /hive/data/genomes/wuhCor1/bed/lastzStrains/kmers/phylip44x44
+
+mkTestData.pl 31 > infile 2> name.31mer.translate.txt
+
+### After neighbor is done, rename the results, and restore
+### the sequence names in the final upgma.31mer.nh tree:
+
+if [ -s outfile ]; then
+  rm -f outfile.31mer
+  mv outfile outfile.31mer
+fi
+
+if [ -s outtree ]; then
+  rm -f outtree.31mer
+  mv outtree outtree.31mer
+fi
+
+cat outtree.31mer \
+  | sed -e 's/(/(\n/g; s/,/,\n/g; s/)/\n)/g; s/ //g;' \
+  | grep -v "^$" | ~/kent/src/hg/utils/phyloTrees/binaryTree.pl \
+    -nameTranslate=name.31mer.translate.txt -noInternal -lineOutput /dev/stdin \
+      > upgma.31mer.nh
+
+# fixup the last line due to bug in binaryTree.pl
+#     NC_014470v1:0.4932):0.00132):0.1:0.1;
+# becomes
+#     NC_014470v1:0.4932):0.00132);
+
+# (((NC_045512v2:0.3188,MN996532v1:0.3188):0.16942,((((DQ022305v2:0.10465,
+# GQ153547v1:0.10465):0.10735,GQ153542v1:0.212):0.24472,(MG772933v1:0.2271,
+# MG772934v1:0.2271):0.22962):0.01207,((((((DQ071615v1:0.3384,
+# KJ473815v1:0.3384):0.01263,((((FJ588686v1:0.23975,
+# KY770858v1:0.23975):0.02765,((((((KF367457v1:0.12575,
+# KY417144v1:0.12575):0.04487,(KY417151v1:0.10235,
+# KY417152v1:0.10235):0.06828):0.01948,((KY417142v1:0.12335,
+# MK211377v1:0.12335):0.04481,(MK211376v1:0.12075,
+# MK211378v1:0.12075):0.04741):0.02194):0.02759,((((KT444582v1:0.1421,
+# KY417143v1:0.1421):0.03015,KY417149v1:0.17225):0.01565,
+# KY417146v1:0.1879):0.00607,(KY417147v1:0.1504,
+# KY417148v1:0.1504):0.04357):0.02373):0.02307,(KJ473816v1:0.23015,
+# KY417145v1:0.23015):0.01062):0.00826,MK211375v1:0.24903):0.01837):0.03006,
+# NC_004718v3:0.29746):0.044,KP886808v1:0.34146):0.00956):0.02562,
+# MK211374v1:0.37664):0.02202,(KF569996v1:0.3649,
+# KU973692v1:0.3649):0.03377):0.01393,JX993988v1:0.41259):0.04802,
+# ((((DQ412042v1:0.0557,DQ648856v1:0.0557):0.11303,(KJ473812v1:0.0946,
+# KY770860v1:0.0946):0.07413):0.10069,KY938558v1:0.26941):0.17723,
+# ((DQ412043v1:0.38955,KJ473814v1:0.38955):0.03895,
+# JX993987v1:0.4285):0.01814):0.01397):0.00818):0.01943):0.0063,
+# (KY352407v1:0.4932,NC_014470v1:0.4932):0.00132);
+
+#########################################################################
+## setting up multiz
+
+mkdir /hive/data/genomes/wuhCor1/bed/multiz44way
+cd /hive/data/genomes/wuhCor1/bed/multiz44way
+
+~/kent/src/hg/utils/phyloTrees/asciiTree.pl \
+   ../lastzStrains/kmers/phylip44x44/wuhCor1.44way.nh > wuhCor1.44way.nh
+
+
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+       wuhCor1.44way.nh | xargs echo | sed 's/ //g; s/,/ /g' > tree.nh
+# (((NC_045512v2 MN996532v1) ((((DQ022305v2 GQ153547v1) GQ153542v1)
+# (MG772933v1 MG772934v1)) ((((((DQ071615v1 KJ473815v1) ((((FJ588686v1
+# KY770858v1) ((((((KF367457v1 KY417144v1) (KY417151v1 KY417152v1))
+# ((KY417142v1 MK211377v1) (MK211376v1 MK211378v1))) ((((KT444582v1
+# KY417143v1) KY417149v1) KY417146v1) (KY417147v1 KY417148v1))) (KJ473816v1
+# KY417145v1)) MK211375v1)) NC_004718v3) KP886808v1)) MK211374v1) (KF569996v1
+# KU973692v1)) JX993988v1) ((((DQ412042v1 DQ648856v1) (KJ473812v1 KY770860v1))
+# KY938558v1) ((DQ412043v1 KJ473814v1) JX993987v1))))) (KY352407v1 NC_014470v1))
+
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    cat species.list | tr ' ' '\n' | sort > 44.grep.list
+
+    # all the nets are the same, can use ordinary mafNet:
+    #	bash shell syntax here ...
+    cd /hive/data/genomes/wuhCor1/bed/multiz44way
+    export H=/hive/data/genomes/wuhCor1/bed
+    mkdir mafLinks
+    # the grep -v NC_045512v2 eliminates the self alignment
+    ls -d ../lastzStrains/runDir/lastz.* | grep -v NC_045512v2 \
+      | grep -f 44.grep.list | while read D
+do
+  if [ -d "${D}" ]; then
+    asmId=`basename $D | sed -e 's/lastz.//;'`
+    mafNet="${D}/mafNet/NC_045512v2.maf.gz"
+    if [ ! -f "${mafNet}" ]; then
+      echo "ERROR: can not find mafNet file ${mafNet}" 1>&2
+      exit 255
+    fi
+    echo ln -s ../$mafNet mafLinks/NC_045512v2.$asmId.maf.gz
+    ln -s ../$mafNet mafLinks/NC_045512v2.$asmId.maf.gz
+  fi
+done
+
+
+    # verify the symLinks are good:
+    ls -ogrtL mafLinks/* | sed -e 's/^/# /; s/-rw-rw-r-- 1//;' | head -4
+#  18023 Mar  9 17:24 mafLinks/NC_045512v2.NC_014470v1.maf.gz
+#  17928 Mar  9 17:34 mafLinks/NC_045512v2.NC_004718v3.maf.gz
+#  18069 Mar 13 15:36 mafLinks/NC_045512v2.KF569996v1.maf.gz
+#  18057 Mar 13 15:36 mafLinks/NC_045512v2.DQ071615v1.maf.gz
+
+
+    ls -ogrtL mafLinks/* | sed -e 's/^/# /; s/-rw-rw-r-- 1//;' | tail -4
+#  18016 Mar 13 15:40 mafLinks/NC_045512v2.MK211376v1.maf.gz
+#  18230 Mar 13 15:40 mafLinks/NC_045512v2.KY417149v1.maf.gz
+#  18076 Mar 13 15:42 mafLinks/NC_045512v2.MK211378v1.maf.gz
+#  17190 Mar 13 15:42 mafLinks/NC_045512v2.MN996532v1.maf.gz
+
+# leaves 43 files:
+    ls -ogrtL mafLinks/*.maf.gz | wc -l
+# 43
+
+    # scan the names to verify sanity:
+    zcat mafLinks/*.maf.gz | grep "^s " | awk '{print $2}' | sort \
+   | uniq -c | sort -rn | sed -e 's/^/# /;' | less
+# should look like:
+#      98 NC_045512v2.NC_045512v2
+#       5 NC_004718v3.NC_004718v3
+#       4 KY938558v1.KY938558v1
+#       4 KY352407v1.KY352407v1
+#       3 NC_014470v1.NC_014470v1
+#     ...
+#       1 MG772933v1.MG772933v1
+#       1 KY417149v1.KY417149v1
+#       1 KY417146v1.KY417146v1
+#       1 KY417143v1.KY417143v1
+#       1 JX993987v1.JX993987v1
+#       1 GQ153542v1.GQ153542v1
+
+    ssh ku
+    cd /hive/data/genomes/wuhCor1/bed/multiz44way
+    mkdir run maf
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/autoMZ penn
+
+    ls ../mafLinks | sed -e 's/.maf.gz//; s/NC_045512v2.//' > maf.list
+
+    printf '#LOOP
+./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/wuhCor1/bed/multiz44way/maf/$(root1).maf}
+#ENDLOOP
+' > template
+
+    printf '#!/bin/csh -ef
+set db = NC_045512v2
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /dev/shm/$db/multiz.$c
+set pairs = /hive/data/genomes/wuhCor1/bed/multiz44way/mafLinks
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../tree.nh ../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //;" species.list`)
+    set in = $pairs/$db.$s.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result.maf
+/bin/cp -p $tmp/$c $result
+/bin/rm -fr $tmp
+' > autoMultiz.csh
+
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... push
+    para time
+# Completed: 43 of 43 jobs
+# CPU time in finished jobs:       6254s     104.23m     1.74h    0.07d  0.000 y
+# IO & Wait Time:                   117s       1.95m     0.03h    0.00d  0.000 y
+# Average job time:                 148s       2.47m     0.04h    0.00d
+# Longest finished job:             152s       2.53m     0.04h    0.00d
+# Submission to last job:           170s       2.83m     0.05h    0.00d
+
+# put the results back together into a single file, and fixup the s line names
+# the first sed is duplicating the sequence name on the s lines, transforming
+# from:
+# s MN996528v1      0 1 + 29891 A
+# to
+# s MN996528v1.MN996528v1      0 1 + 29891 A
+# and the ones that belong to the reference:
+# s NC_045512v2     0 1 + 29903 A
+# become via the second sed:
+# s wuhCor1.NC_045512v2
+
+cd /hive/data/genomes/wuhCor1/bed/multiz44way
+head -1 maf/NC_004718v3.maf > multiz44way.maf
+for F in maf/*.maf
+do
+    echo "${F}" 1>&2
+    egrep -v "^#" ${F} | sed -e 's#^s \([A-Z0-9a-z_]*\)#s \1.\1#;'
+done | sed -e 's#^s NC_045512v2.NC_045512v2#s wuhCor1.NC_045512v2#;' \
+>> multiz44way.maf
+tail -1 maf/NC_004718v3.maf >> multiz44way.maf
+
+# -rw-rw-r-- 1 63426765 Mar 13 20:23 multiz44way.maf
+
+# scan names to verify sanity:
+grep "^s " multiz44way.maf | awk '{print $2}' | sort | uniq -c \
+  | sort -rn | sed -e 's/^/# /;' | less
+#    3956 wuhCor1.NC_045512v2
+#    3784 MG772933v1.MG772933v1
+#    3741 MG772934v1.MG772934v1
+#    3569 MN996532v1.MN996532v1
+#    3526 DQ022305v2.DQ022305v2
+...
+#    2666 KY770858v1.KY770858v1
+#    2666 JX993987v1.JX993987v1
+#    2494 JX993988v1.JX993988v1
+#    2064 KJ473816v1.KJ473816v1
+#    1978 KJ473815v1.KJ473815v1
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/wuhCor1/bed/multiz44way
+    mkdir /gbdb/wuhCor1/multiz44way
+    ln -s `pwd`/multiz44way.maf /gbdb/wuhCor1/multiz44way
+    cd /dev/shm
+    time hgLoadMaf wuhCor1 multiz44way
+# Loaded 3956 mafs in 1 files from /gbdb/wuhCor1/multiz44way
+# real    0m0.667s
+
+    # merge that into a single block:
+    cd /hive/data/genomes/wuhCor1/bed/multiz44way
+
+ time mafFrag wuhCor1 multiz44way NC_045512v2 0 29903 + mafFrag.multiz44way.maf
+    # real    0m0.529s
+
+    printf '#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $file = shift;
+
+open (FH, "<$file") or die "can not read $file";
+while (my $line = <FH>) {
+  if ($line =~ m/^s /) {
+    chomp $line;
+    my @a = split('"'"'\s+'"'"', $line);
+    if (scalar(@a) == 7) {
+      if ($a[1] !~ m/wuhCor1/) {
+        $a[1] = "$a[1].$a[1]";
+      }
+      $a[6] =~ s/\./-/g;
+      print join(" ", @a), "\\n";
+    } else {
+      die "ERROR: s line found not 7 fields ?";
+    } 
+  } else {
+    printf "%%s", $line;
+  }
+}
+close (FH);
+' > dotToDash.pl
+
+chmod +x dotToDash.pl
+
+./dotToDash.pl mafFrag.multiz44way.maf > defraged.multiz44way.maf
+
+# and reload:
+rm /gbdb/wuhCor1/multiz44way/multiz44way.maf
+ln -s `pwd`/defraged.multiz44way.maf \
+   /gbdb/wuhCor1/multiz44way/multiz44way.maf
+
+cd /dev/shm
+time hgLoadMaf wuhCor1 multiz44way
+# Loaded 1 mafs in 1 files from /gbdb/wuhCor1/multiz44way
+# real    0m0.038s
+
+# -rw-rw-r--   1         38 Mar 13 20:35 multiz44way.tab
+
+cat multiz44way.tab
+# 585     NC_045512v2     0       29903   5       29      0.500000
+
+# do NOT need to load MafSummary, this is already small enough,
+# no summary level needed
+
+# construct strain-name track
+
+mkdir /cluster/data/wuhCor1/bed/multiz44way/strainName
+cd /cluster/data/wuhCor1/bed/multiz44way/strainName
+
+cut -f1,3 ../acc.date.description.list | sed -e 's/ /_/g;' \
+  | awk -F$'\t' '{printf "s#%s.%s#%s#g;\n", $1, $1, $2}' > accToName.sed
+
+
+sed -f accToName.sed ../defraged.multiz44way.maf \
+   | sed -e 's#wuhCor1.SARS-CoV-2/Wuhan-Hu-1#wuhCor1.NC_045512v2#;' \
+     > strainName.multiz44way.maf
+
+rm /gbdb/wuhCor1/multiz44way/strainName44way.maf
+ln -s `pwd`/strainName.multiz44way.maf \
+   /gbdb/wuhCor1/multiz44way/strainName44way.maf
+
+cd /dev/shm
+time hgLoadMaf -loadFile=/gbdb/wuhCor1/multiz44way/strainName44way.maf \
+    wuhCor1 strainName44way
+
+##############################################################################
+# frames 2020-03-13 - Hiram first attempt, one gene track used
+genePredSingleCover ../ncbiGene/wuhCor1.ncbiGene.ucsc.genePred.gz stdout \
+  | genePredToMafFrames wuhCor1 mafFrag.multiz44way.maf \
+     frames.tab wuhCor1 /dev/stdin
+
+wc -l frames.tab
+# 10 frames.tab
+
+hgLoadMafFrames wuhCor1 multiz44wayFrames frames.tab  
+
+##############################################################################
+
+# braney:  build more inclusive single coverage ORF annotation for MAF codon display and for mafSnp display
+mkdir  /hive/data/genomes/wuhCor1/bed/multiz44way/mafFrames
+cd  /hive/data/genomes/wuhCor1/bed/multiz44way/mafFrames
+
+cp -p "/hive/data/outside/ncbi/genomes/GCF/009/858/895/GCF_009858895.2_ASM985889v3/GCF_009858895.2_ASM985889v3_protein.faa.gz" .
+ 
+zgrep "^>" GCF_009858895.2_ASM985889v3_protein.faa.gz 
+>YP_009724389.1 orf1ab polyprotein [Wuhan seafood market pneumonia virus]
+>YP_009724390.1 surface glycoprotein [Wuhan seafood market pneumonia virus]
+>YP_009724391.1 ORF3a protein [Wuhan seafood market pneumonia virus]
+>YP_009724392.1 envelope protein [Wuhan seafood market pneumonia virus]
+>YP_009724393.1 membrane glycoprotein [Wuhan seafood market pneumonia virus]
+>YP_009724394.1 ORF6 protein [Wuhan seafood market pneumonia virus]
+>YP_009724395.1 ORF7a protein [Wuhan seafood market pneumonia virus]
+>YP_009724396.1 ORF8 protein [Wuhan seafood market pneumonia virus]
+>YP_009724397.2 nucleocapsid phosphoprotein [Wuhan seafood market pneumonia virus]
+>YP_009725255.1 ORF10 protein [Wuhan seafood market pneumonia virus]
+>YP_009725295.1 orf1a polyprotein [Wuhan seafood market pneumonia virus]
+>YP_009725296.1 ORF7b [Wuhan seafood market pneumonia virus]
+
+blat -noHead -t=dnax -q=prot /hive/data/genomes/wuhCor1/wuhCor1.2bit \
+   GCF_009858895.2_ASM985889v3_protein.faa.gz stdout | pslToBed stdin full.bed
+
+cp full.bed hack.bed
+
+#edit hack.bed to remove overlap of YP_009725296.1 with YP_009724395.1
+# change the 27758 to 27755 and the 129 to 126
+diff full.bed hack.bed
+12c12
+< NC_045512v2   27755   27884   YP_009725296.1  1000    +       27755   27884  0
+        1       129,    0,
+---
+> NC_045512v2   27758   27884   YP_009725296.1  1000    +       27758   27884  0
+        1       126,    0,
+
+
+bedToGenePred hack.bed stdout | genePredSingleCover stdin singleCover44way.gp
+hgLoadGenePred wuhCor1 singleCover44way singleCover44way.gp
+
+genePredToMafFrames wuhCor1 ../mafFrag.multiz44way.maf frames.tab wuhCor1 singleCover44way.gp
+hgLoadMafFrames wuhCor1 multiz44wayFrames frames.tab
+
+hgLoadMafFrames wuhCor1 strainName44wayFrames frames.tab  
+
+##############################################################################
+# constructing download files (DONE - 2020-03-13 - Hiram)
+##############################################################################
+
+mkdir /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/multiz44way
+cd /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/multiz44way
+
+cat ../../4d/44way.nh \
+  | sed -e 's/(/(\n/g; s/,/,\n/g; s/)/\n)/g; s/ //g;' \
+  | grep -v "^$" | ~/kent/src/hg/utils/phyloTrees/binaryTree.pl \
+    -noInternal -lineOutput \
+      /dev/stdin > wuhCor1.44way.nh
+
+ln -s ../phastCons44way/nameList44.txt ./wuhCor1.44way.nameList.txt
+cut -f1,3 wuhCor1.44way.nameList.txt > accession.descriptiveName.tsv
+
+cat ../../4d/44way.nh \
+  | sed -e 's/(/(\n/g; s/,/,\n/g; s/)/\n)/g; s/ //g;' \
+  | grep -v "^$" | ~/kent/src/hg/utils/phyloTrees/binaryTree.pl -quoteNames \
+    -nameTranslate=accession.descriptiveName.tsv -noInternal -lineOutput \
+      -bothNames /dev/stdin > wuhCor1.44way.descriptiveName.nh
+
+# These .nh files end up with an extra bit of distance business on
+# the last line:
+#  "Wigeon CoV HKU20":0.181934):0.1:0.1;
+# edit that down to just:
+#  "Wigeon CoV HKU20":0.181934);
+# same for:
+#  NC_016995v1:0.181934);
+# probably a bug in the binaryTree.pl script
+
+# do not need this two column list:
+
+rm accession.descriptiveName.tsv
+
+cp -p ../../defraged.multiz44way.maf ./wuhCor1.multiz44way.maf
+gzip wuhCor1.multiz44way.maf
+
+# use the README from  eboVir3 and edit for circumstances here
+
+# generate phylo distance list:
+
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/all_dists \
+   wuhCor1.44way.descriptiveName.nh | grep NC_045512v2 \
+    | sed -e "s#'NC_045512v2/Wuhan-Hu-1'##;" \
+       | awk -F$'\t' '{printf "%s\t%s\n", $3,$2}' \
+          > wuhCor1.44way.phyloDistance.txt
+
+# construct redmine fileList
+
+cd /hive/data/genomes/wuhCor1/bed/multiz44way/downloads
+
+find /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1 /gbdb/wuhCor1/multiz44way ! -type d \
+  | egrep "multiz44way|phastCons44way|phyloP44way" \
+     > redmine25090.file.list
+
+hgsql -e 'show tables;' wuhCor1 | grep 44 > redmine25090.table.list
+
+##############################################################################
+# constructing download files (DONE - 2020-03-13 - Hiram)
+##############################################################################
+
+mkdir /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/multiz44way
+cd /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/multiz44way
+
+ln -s ../../acc.date.description.list ./wuhCor1.44way.nameList.txt
+cut -f1,3 wuhCor1.44way.nameList.txt > accession.descriptiveName.tsv
+
+# the sed -e 's#:0.1:0.1;#;#;' removes the error output last line
+# of binaryTree.pl
+cat ../../4d/44way.nh \
+  | sed -e 's/(/(\n/g; s/,/,\n/g; s/)/\n)/g; s/ //g;' \
+  | grep -v "^$" | ~/kent/src/hg/utils/phyloTrees/binaryTree.pl -quoteNames \
+    -nameTranslate=accession.descriptiveName.tsv -noInternal -lineOutput \
+      -bothNames /dev/stdin | sed -e 's#:0.1:0.1;#;#;' \
+         > wuhCor1.44way.descriptiveName.nh
+
+# do not need this two column list:
+
+rm accession.descriptiveName.tsv
+
+cp -p ../../strainName/strainName.multiz44way.maf ./wuhCor1.multiz44way.maf
+gzip wuhCor1.multiz44way.maf
+
+# use the README from the 119-way and edit for circumstances here
+
+# generate phylo distance list:
+
+cut -f1,3 ../../acc.date.description.list | sed -e 's/ /_/g;' \
+  | sed -e 's/\./v/;' \ 
+  | awk -F$'\t' '{printf "s#%s#%s.%s#g;\n", $1, $1, $2}' > accToName.sed
+
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/all_dists \
+   ../../4d/44way.nh | grep NC_045512v2 | cut -f2-3 | sort -k2,2n \
+    | sed -f accToName.sed > wuhCor1.44way.phyloDistance.txt
+
+# do not need to deliver this
+rm accToName.sed
+
+# and the sequences
+
+mkdir /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/multiz44way/sequences
+cd /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/multiz44way/sequences
+
+# need a file list:
+cut -f1 ../wuhCor1.44way.nameList.txt | sed -e 's/\./v/; s/$/.fa/;' | xargs echo
+DQ022305v2.fa DQ071615v1.fa DQ412042v1.fa DQ412043v1.fa DQ648856v1.fa FJ588686v1.fa KY352407v1.fa NC_014470v1.fa GQ153542v1.fa GQ153547v1.fa JX993987v1.fa JX993988v1.fa KF569996v1.fa KF367457v1.fa KU973692v1.fa KY417143v1.fa KY417144v1.fa KY417145v1.fa KY770860v1.fa KJ473812v1.fa KJ473814v1.fa KJ473815v1.fa KJ473816v1.fa KP886808v1.fa KT444582v1.fa KY417146v1.fa KY417147v1.fa KY417148v1.fa KY417149v1.fa KY770858v1.fa MN996532v1.fa KY417142v1.fa KY417151v1.fa KY417152v1.fa MG772934v1.fa KY938558v1.fa MK211374v1.fa MK211375v1.fa MK211376v1.fa MK211377v1.fa MK211378v1.fa MG772933v1.fa NC_004718v3.fa NC_045512v2.fa
+
+# using that file list:
+cd /hive/data/genomes/wuhCor1/bed/lastzStrains/sequences/safeNameFa
+tar cvzf /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/multiz44way/sequences/dnaFasta44.tgz DQ022305v2.fa DQ071615v1.fa DQ412042v1.fa DQ412043v1.fa DQ648856v1.fa FJ588686v1.fa KY352407v1.fa NC_014470v1.fa GQ153542v1.fa GQ153547v1.fa JX993987v1.fa JX993988v1.fa KF569996v1.fa KF367457v1.fa KU973692v1.fa KY417143v1.fa KY417144v1.fa KY417145v1.fa KY770860v1.fa KJ473812v1.fa KJ473814v1.fa KJ473815v1.fa KJ473816v1.fa KP886808v1.fa KT444582v1.fa KY417146v1.fa KY417147v1.fa KY417148v1.fa KY417149v1.fa KY770858v1.fa MN996532v1.fa KY417142v1.fa KY417151v1.fa KY417152v1.fa MG772934v1.fa KY938558v1.fa MK211374v1.fa MK211375v1.fa MK211376v1.fa MK211377v1.fa MK211378v1.fa MG772933v1.fa NC_004718v3.fa NC_045512v2.fa
+
+# and the proteins
+
+cut -f1 ../wuhCor1.44way.nameList.txt | sed -e 's/\./v/; s/$/.faa.gz/;' \
+  | xargs echo
+DQ022305v2.faa.gz DQ071615v1.faa.gz DQ412042v1.faa.gz DQ412043v1.faa.gz DQ648856v1.faa.gz FJ588686v1.faa.gz KY352407v1.faa.gz NC_014470v1.faa.gz GQ153542v1.faa.gz GQ153547v1.faa.gz JX993987v1.faa.gz JX993988v1.faa.gz KF569996v1.faa.gz KF367457v1.faa.gz KU973692v1.faa.gz KY417143v1.faa.gz KY417144v1.faa.gz KY417145v1.faa.gz KY770860v1.faa.gz KJ473812v1.faa.gz KJ473814v1.faa.gz KJ473815v1.faa.gz KJ473816v1.faa.gz KP886808v1.faa.gz KT444582v1.faa.gz KY417146v1.faa.gz KY417147v1.faa.gz KY417148v1.faa.gz KY417149v1.faa.gz KY770858v1.faa.gz MN996532v1.faa.gz KY417142v1.faa.gz KY417151v1.faa.gz KY417152v1.faa.gz MG772934v1.faa.gz KY938558v1.faa.gz MK211374v1.faa.gz MK211375v1.faa.gz MK211376v1.faa.gz MK211377v1.faa.gz MK211378v1.faa.gz MG772933v1.faa.gz NC_004718v3.faa.gz NC_045512v2.faa.gz
+
+cd /hive/data/genomes/wuhCor1/bed/lastzStrains/sequences/gbkProteins
+tar cvzf /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/multiz44way/sequences/proteinFasta44.tgz DQ022305v2.faa.gz DQ071615v1.faa.gz DQ412042v1.faa.gz DQ412043v1.faa.gz DQ648856v1.faa.gz FJ588686v1.faa.gz KY352407v1.faa.gz NC_014470v1.faa.gz GQ153542v1.faa.gz GQ153547v1.faa.gz JX993987v1.faa.gz JX993988v1.faa.gz KF569996v1.faa.gz KF367457v1.faa.gz KU973692v1.faa.gz KY417143v1.faa.gz KY417144v1.faa.gz KY417145v1.faa.gz KY770860v1.faa.gz KJ473812v1.faa.gz KJ473814v1.faa.gz KJ473815v1.faa.gz KJ473816v1.faa.gz KP886808v1.faa.gz KT444582v1.faa.gz KY417146v1.faa.gz KY417147v1.faa.gz KY417148v1.faa.gz KY417149v1.faa.gz KY770858v1.faa.gz MN996532v1.faa.gz KY417142v1.faa.gz KY417151v1.faa.gz KY417152v1.faa.gz MG772934v1.faa.gz KY938558v1.faa.gz MK211374v1.faa.gz MK211375v1.faa.gz MK211376v1.faa.gz MK211377v1.faa.gz MK211378v1.faa.gz MG772933v1.faa.gz NC_004718v3.faa.gz NC_045512v2.faa.gz
+
+# and the proteins in tab format:
+cut -f1 ../wuhCor1.44way.nameList.txt | sed -e 's/\./v/; s/$/.faa.tab.gz/;' \
+  | xargs echo
+
+tar cvzf /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/multiz44way/sequences/proteinTab44.tgz DQ022305v2.faa.tab.gz DQ071615v1.faa.tab.gz DQ412042v1.faa.tab.gz DQ412043v1.faa.tab.gz DQ648856v1.faa.tab.gz FJ588686v1.faa.tab.gz KY352407v1.faa.tab.gz NC_014470v1.faa.tab.gz GQ153542v1.faa.tab.gz GQ153547v1.faa.tab.gz JX993987v1.faa.tab.gz JX993988v1.faa.tab.gz KF569996v1.faa.tab.gz KF367457v1.faa.tab.gz KU973692v1.faa.tab.gz KY417143v1.faa.tab.gz KY417144v1.faa.tab.gz KY417145v1.faa.tab.gz KY770860v1.faa.tab.gz KJ473812v1.faa.tab.gz KJ473814v1.faa.tab.gz KJ473815v1.faa.tab.gz KJ473816v1.faa.tab.gz KP886808v1.faa.tab.gz KT444582v1.faa.tab.gz KY417146v1.faa.tab.gz KY417147v1.faa.tab.gz KY417148v1.faa.tab.gz KY417149v1.faa.tab.gz KY770858v1.faa.tab.gz MN996532v1.faa.tab.gz KY417142v1.faa.tab.gz KY417151v1.faa.tab.gz KY417152v1.faa.tab.gz MG772934v1.faa.tab.gz KY938558v1.faa.tab.gz MK211374v1.faa.tab.gz MK211375v1.faa.tab.gz MK211376v1.faa.tab.gz MK211377v1.faa.tab.gz MK211378v1.faa.tab.gz MG772933v1.faa.tab.gz NC_004718v3.faa.tab.gz NC_045512v2.faa.tab.gz
+
+
+mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/multiz44way/sequences
+cd /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/multiz44way/sequences
+ln -s /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/multiz44way/sequences/* .
+cd /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1/multiz44way
+ln -s /hive/data/genomes/wuhCor1/bed/multiz44way/downloads/multiz44way/* .
+# error OK:
+#   ln: failed to create symbolic link './sequences': File exists
+
+# construct redmine fileList
+
+cd /hive/data/genomes/wuhCor1/bed/multiz44way/downloads
+
+find /usr/local/apache/htdocs-hgdownload/goldenPath/wuhCor1 /gbdb/wuhCor1/multiz44way ! -type d \
+  | egrep "multiz44way|phastCons44way|phyloP44way" \
+     > redmine25187.file.list
+
+hgsql -e 'show tables;' wuhCor1 | grep 44 > redmine25187.table.list
+
+# the table.list should just be:
+mafSnpStrainName44way
+strainName44way
+strainName44wayFrames
+strainPhastCons44way
+strainPhastConsElements44way
+strainPhyloP44way
+
+Not the other 44way tables.
+
+Also the file list needed a couple multiz44way files removed.

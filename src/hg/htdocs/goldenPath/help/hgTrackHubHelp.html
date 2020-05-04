@@ -641,9 +641,31 @@ variable just after the &quot;hgTracks&quot; portion of the URL so that it reads
 following the ampersand). To restore the default timeout, a warning message will appear on hgTracks
 with a link to clear the udcTimeout variable.</p>
 
+<a name="validate"></a>
+<h3>Check hub settings using Validate Hub tool</h3>
+<p>
+Hubs can be checked for valid file configuration, trackDb keywords, and composite or super track 
+settings with the Validate Hub tool. This tool can be accessed from the Track Hub page under 
+<a href="../../cgi-bin/hgHubConnect?#validateHub">the
+Validate Hub tab</a>. After entering your URL in the search box, 
+the tool runs hubCheck like so:</p>
+<pre>hubCheck -noTracks http://url.to.hub.txt</pre>
+<p>
+The noTracks setting speeds up the validation process but does not check for 
+the presence of your remotely hosted data track files. This tool checks your hub.txt, 
+genome.txt, and trackDb.txt settings and displays errors in bright red font, such 
+as "<font color="red">Missing required setting...</font>" and "<font color="red">Cannot open...</font>". The following picture shows 
+<a href="examples/hubExamples/hubGroupings/hub.txt">the example track grouping hub</a>
+with no configuration errors:</p>
+
+<p class='text-center'>
+  <img class='text-center' src="../../images/validateHub.png" alt="Validate hub tool checks config setting" width="749" height="249">
+  <p class='gbsCaption text-center'>The Validate Hub tool checks for proper configuration files and track hub settings.</p>
+</p>
+
 <h3>Check hub settings using hubCheck utility</h3>
 <p>
-It is a good practice to run the command-line utility <em>hubCheck</em> on your track hub when you 
+It is a good practice to run the command-line utility <em>hubCheck</em> on your track hub when you
 first bring it online and whenever you make significant changes. This utility by default checks
 that the files in the hub are correctly formatted, but it can also be configured to check a few
 other things including that various trackDb settings are correctly spelled and that they are
@@ -892,7 +914,7 @@ complete list and we do not endorse a particular one.
 You can search the internet for "virtual private server comparison".
 Offers start at around 5-10$/month for 25-50GB of storage. The advantage of
 VPS providers is that they bill a flat rate per month, which may be
-easier to order through Universities than the per GB transferred billing of cloud
+easier to order through universities than the per GB transferred billing of cloud
 providers. For optimal performance, select a West Coast / San Francisco data
 center when ordering a web server, as this is closest and fastest from
 UCSC. There are usually no backups included, so it is good
@@ -1046,6 +1068,14 @@ one must first create an account, upload the <em>bigDataUrl</em> files, create s
 and then edit your <em>hub.txt</em>, <em>genomes.txt</em>, and <em>trackDb.txt</em> appropriately. One advantage to using
 Figshare is their emphasis on usage statistics, so institutional accounts can see how often
 their hubs and tracks are being accessed by others.</p>
+
+<p>
+Note that Figshare does not use filenames as part of the URLs, therefore bigDataUrl files 
+that require a separate index file, like VCFs and BAM files, must have their index file
+location specified with a <em>bigDataIndex</em>. This keyword is relevant for Custom Tracks
+and Track Hubs. You can read more about <em>bigDataIndex</em> in 
+<a href="trackDb/trackDbHub.html#bigDataIndex">the TrackDb Database Definition page</a>.
+</p>
 
 <p>
 For more information on using Figshare, please see their 

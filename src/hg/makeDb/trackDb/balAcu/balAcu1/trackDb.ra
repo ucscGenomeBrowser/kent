@@ -13,7 +13,7 @@ visibility pack
 track rmsk override
 visibility full
 
-include ../../refSeqComposite.ra alpha
+include ../../refSeqComposite.ra
 
 searchTable gold
 shortCircuit 1

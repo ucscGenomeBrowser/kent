@@ -18,11 +18,28 @@ if ($argc != 4) {
   exit 255;
 }
 
+# from Perl Cookbook Recipe 2.17, print out large numbers with comma
+# delimiters:
+sub commify($) {
+    my $text = reverse $_[0];
+    $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+    return scalar reverse $text
+}
+
+# $scriptDir/asmHubEnsGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.ensGene.html "${ensVersion}"
+
 my $asmId = shift;
 my $namesFile = shift;
 my $bbiPrefix = shift;
 my $ensVersion = shift;
 my $ensGeneBbi = "$bbiPrefix.ensGene.bb";
+my $runDir = $bbiPrefix;
+$runDir =~ s#/bbi/.*#/trackData/ensGene#;
+my $fbResults = "${runDir}/fb.$asmId.ensGene.txt";
+my $fbBases = "";
+if ( -s "${fbResults}" ) {
+  ($fbBases, undef) = split('\s+', `cat $fbResults`);
+}
 
 if ( ! -s $ensGeneBbi ) {
   printf STDERR "ERROR: can not find ensGene bbi file:\n\t'%s'\n", $ensGeneBbi;
@@ -39,6 +56,9 @@ my $organism = `grep -v "^#" $namesFile | cut -f5`;
 chomp $organism;
 my $geneCount = `bigBedInfo $ensGeneBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/Gene count/; s/ basesCovered/; Bases covered/;'`;
 chomp $geneCount;
+if (length($fbBases)) {
+  $geneCount .= sprintf(" (%s bases in exons only)", commify($fbBases));
+}
 
 print <<_EOF_
 <h2>Description</h2>

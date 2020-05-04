@@ -1475,6 +1475,74 @@ for (i = 0;  i < gt->infoCount;  i++)
 return NULL;
 }
 
+int vcfGenotypeIndex(int h0Ix, int h1Ix)
+/* Return the index in a linear array of distinct genotypes, given two 0-based allele indexes.
+ * This follows the following convention used by GnomAD (GATK?), that has the advantage that
+ * gt indexes of small numbers don't change as the number of alleles increases, and also matches
+ * the ref/ref, ref/alt, alt/alt convention for biallelic variants:
+ * 0/0,
+ * 0/1, 1/1,
+ * 0/2, 1/2, 2/2,
+ * 0/3, 1/3, 2/3, 3/3,
+ * ... */
+{
+// Note that in that scheme, h0Ix <= h1Ix; if h0Ix > h1Ix, swap them.
+if (h0Ix > h1Ix)
+    {
+    int tmp = h0Ix;
+    h0Ix = h1Ix;
+    h1Ix = tmp;
+    }
+return (h1Ix * (h1Ix+1) / 2) + h0Ix;
+}
+
+static int genotypeArraySize(int alleleCount)
+/* Return the number of distinct genotypes given the number of alleles.  That is the same as the
+ * array index of the first genotype that would follow for alleleCount+1. */
+{
+return vcfGenotypeIndex(0, alleleCount + 1);
+}
+
+void vcfCountGenotypes(struct vcfRecord *rec, int **retGtCounts, int **retAlleleCounts,
+                       int *retPhasedCount, int *retDiploidCount)
+/* Tally genotypes and alleles for summary, adding 1 to rec->alleleCount to represent missing data */
+{
+vcfParseGenotypes(rec);
+int *alCounts;
+AllocArray(alCounts, rec->alleleCount + 1);
+int *gtCounts;
+AllocArray(gtCounts, genotypeArraySize(rec->alleleCount + 1));
+int phasedGts = 0, diploidCount = 0;
+int i;
+for (i = 0;  i < rec->file->genotypeCount;  i++)
+    {
+    struct vcfGenotype *gt = &(rec->genotypes[i]);
+    if (gt->isPhased)
+	phasedGts++;
+    int hapIxA = gt->hapIxA;
+    if (hapIxA < 0)
+        hapIxA = rec->alleleCount;
+    alCounts[hapIxA]++;
+    if (!gt->isHaploid)
+	{
+        diploidCount++;
+        int hapIxB = gt->hapIxB;
+        if (hapIxB < 0)
+            hapIxB = rec->alleleCount;
+        alCounts[hapIxB]++;
+        gtCounts[vcfGenotypeIndex(hapIxA, hapIxB)]++;
+        }
+    }
+if (retGtCounts)
+    *retGtCounts = gtCounts;
+if (retAlleleCounts)
+    *retAlleleCounts = alCounts;
+if (retPhasedCount)
+    *retPhasedCount = phasedGts;
+if (retDiploidCount)
+    *retDiploidCount = diploidCount;
+}
+
 static char *vcfDataLineAutoSqlString =
         "table vcfDataLine"
         "\"The fields of a Variant Call Format data line\""

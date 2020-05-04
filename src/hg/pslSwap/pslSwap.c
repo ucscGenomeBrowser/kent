@@ -13,19 +13,17 @@ static struct optionSpec optionSpecs[] = {
 };
 boolean gNoRc = FALSE;
 
-void usage(char *msg)
+void usage()
 /* usage message and abort */
 {
-errAbort("%s:\n"
-         "pslSwap [options] inPsl outPsl\n"
-         "\n"
-         "Swap target and query in psls\n"
+errAbort("pslSwap - swap target and query in psls\n"
+         "usage:\n"
+         "    pslSwap [options] inPsl outPsl\n"
          "\n"
          "Options:\n"
          "  -noRc - don't reverse complement untranslated alignments to\n"
          "   keep target positive strand.  This will make the target strand\n"
-         "   explict.\n",
-         msg);
+         "   explict.\n");
 }
 
 void pslSwapFile(char *inPslFile, char *outPslFile)
@@ -51,7 +49,7 @@ int main(int argc, char** argv)
 {
 optionInit(&argc, argv, optionSpecs);
 if (argc != 3)
-    usage("wrong # args");
+    usage();
 gNoRc = optionExists("noRc");
 dnaUtilOpen();
 pslSwapFile(argv[1], argv[2]);

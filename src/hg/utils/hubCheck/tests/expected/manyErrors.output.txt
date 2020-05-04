@@ -1,4 +1,4 @@
-Found 10 problems:
+Found 11 problems:
 
 Couldn't open https://bad.url.txt/missing.bb
 No subtracks in group: Blank.  This indicates a problem in the subGroup line for this group.
@@ -9,3 +9,4 @@ container multiWig H2A_Z_MultiWig_ImputedComp has only one subtrack. multiWigs m
 missing 'subgroups' setting for subtrack RegBuildOverview
 state3 not a member of sortOrder subgroup view
 subtrack track2 not a member of subgroup sub1
+warning: missing htmlPath setting for assembly hub 'araTha1'

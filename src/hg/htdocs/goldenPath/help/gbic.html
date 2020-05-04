@@ -138,6 +138,25 @@ Your network firewall must allow outgoing connections to the following servers a
       </ul></li>
   </ul></p>
 
+<a name="partition"></a>
+<h3>Root file system too small for all data</h3>
+<p>
+If you need to move data to another partition because the root file system is too small for all
+of the assembly's data, the following steps will help complete the installation. First, do a minimal
+installation with the browserSetup.sh script as described below, using just the &quot;install&quot;
+argument. Then make symlinks to the directory that will contain the data, e.g. if your biggest
+filesystem is called &quot;/big&quot;:</p>
+<pre>
+sudo mv /var/lib/mysql /big/
+sudo mv /gbdb /big/
+sudo ln -s /big/mysql /var/lib/mysql
+sudo ln -s /big/gbdb /gbdb
+</pre>
+<p>
+Then use the &quot;mirror&quot; or &quot;minimal&quot; arguments to browserSetup.sh to rsync over
+the majority of the data.
+</p>
+
 <a name='gbic-commands'></a>
 <h2>GBiC Commands</h2>
 

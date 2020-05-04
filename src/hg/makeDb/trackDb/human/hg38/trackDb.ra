@@ -534,7 +534,6 @@ visibility hide
 maxWindowToDraw 5000000
 showHardyWeinberg on
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-pennantIcon New red ../goldenPath/newsarch.html#012020 Track Released Jan. 20, 2020
 
 track genomicSuperDups override
 group rep
@@ -766,7 +765,6 @@ group varRep
     filterByRange._size on
     filterLabel._size Genomic size of variant
     filterValues.varType complex,deletion,duplication,gain,gain+loss,insertion,inversion,loss,mobile element insertion,novel sequence insertion,sequence alteration,tandem duplication
-    release alpha
 
     track dgvSupporting override
     parent dgvPlus
@@ -776,7 +774,6 @@ group varRep
     filterByRange._size on
     filterLabel._size Genomic size of variant
     filterValues.varType complex,deletion,duplication,gain,gain+loss,insertion,inversion,loss,mobile element insertion,novel sequence insertion,sequence alteration,tandem duplication
-    release alpha
 
 track gtexTranscExpr override
 bigDataUrl /gbdb/hg38/gtex/gtexTranscExpr.bb
@@ -828,4 +825,18 @@ exonArrows on
     url https://epd.epfl.ch/cgi-bin/get_doc?db=hsNCEpdNew&format=genome&entry=$$
     color 180,0,134
     priority 2
+
+#RefSeq Select is a subtrack part of the RefSeq Composite in ../../refSeqComposite.ra
+#For more information on this change, see RM#24787
+track ncbiRefSeqSelect
+parent refSeqComposite off
+priority 8
+type genePred
+shortLabel RefSeq Select+MANE
+longLabel NCBI RefSeq Select+MANE subset: one representative transcript per protein-coding gene
+trackHandler ncbiRefSeq
+idXref ncbiRefSeqLink mrnaAcc name
+color 20,20,160
+baseColorUseCds given
+baseColorDefault genomicCodons
 

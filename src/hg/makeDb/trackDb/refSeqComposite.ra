@@ -13,8 +13,7 @@ dataVersion /gbdb/$D/ncbiRefSeq/ncbiRefSeqVersion.txt
 priority 2
 dbPrefixUrls hg="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" dm="http://flybase.org/reports/$$" ce="http://www.wormbase.org/db/gene/gene?name=$$" rn="https://rgd.mcw.edu/rgdweb/search/search.html?term=$$" sacCer="https://www.yeastgenome.org/locus/$$" danRer="https://zfin.org/$$" mm="http://www.informatics.jax.org/marker/$$" xenTro="https://www.xenbase.org/gene/showgene.do?method=display&geneId=$$"
 dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer="ZFIN" mm="MGI" xenTro="XenBase"
-pennantIcon Updated red ../goldenPath/newsarch.html#020720b "updated Feb. 7, 2020"
-
+pennantIcon Updated red ../goldenPath/newsarch.html#042920 "Updated Apr. 29, 2020"
 
         track ncbiRefSeq
         parent refSeqComposite off
@@ -90,40 +89,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#020720b "updated Feb. 7, 202
         bigDataUrl /gbdb/$D/ncbiRefSeq/ncbiRefSeqGenomicDiff.bb
         itemRgb on
 
-        track ncbiRefSeqSelect
-        parent refSeqComposite off
-        priority 7
-        type genePred
-        shortLabel RefSeq Select/MANE
-        longLabel NCBI RefSeq Select/MANE: One representative transcript per protein-coding gene
-        trackHandler ncbiRefSeq
-        idXref ncbiRefSeqLink mrnaAcc name
-        color 20,20,160
-        baseColorUseCds given
-        baseColorDefault genomicCodons
-
-        track ncbiRefSeqHgmd
-        parent refSeqComposite off
-        priority 7
-        type genePred
-        shortLabel RefSeq HGMD
-        longLabel NCBI RefSeq curated and annotated by HGMD, usually one per clinically relevant gene
-        trackHandler ncbiRefSeq
-        idXref ncbiRefSeqLink mrnaAcc name
-        color 20,20,160
-        baseColorUseCds given
-        baseColorDefault genomicCodons
-
-        track ncbiRefSeqMane
-        parent refSeqComposite off
-        priority 8
-        type genePred
-        shortLabel RefSeq MANE
-        longLabel RefSeq selected representative transcript for each gene, MANE 0.5
-        trackHandler ncbiRefSeq
-        baseColorUseCds given
-        baseColorDefault genomicCodons
-
         track refGene override
         parent refSeqComposite off
         shortLabel UCSC RefSeq
@@ -132,7 +97,19 @@ pennantIcon Updated red ../goldenPath/newsarch.html#020720b "updated Feb. 7, 202
         type genePred refPep refMrna
         idXref hgFixed.refLink mrnaAcc name
         dataVersion 
+        priority 7
+        baseColorUseCds given
+        baseColorDefault genomicCodons
+
+        track ncbiRefSeqHgmd
+        parent refSeqComposite off
         priority 9
+        type genePred
+        shortLabel RefSeq HGMD
+        longLabel NCBI RefSeq HGMD subset: transcripts with clinical variants in HGMD
+        trackHandler ncbiRefSeq
+        idXref ncbiRefSeqLink mrnaAcc name
+        color 20,20,160
         baseColorUseCds given
         baseColorDefault genomicCodons
 

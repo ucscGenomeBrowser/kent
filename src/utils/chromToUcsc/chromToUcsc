@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import logging, optparse, gzip
 from sys import stdin, stdout, stderr, exit, modules
+from os.path import basename
+
 try:
     from urllib.request import urlopen # py2
 except ImportError:
@@ -16,9 +18,12 @@ def parseArgs():
     parser = optparse.OptionParser("""usage: %prog [options] filename - change NCBI or Ensembl chromosome names to UCSC names using the chromAlias table of the genome browser.
 
     Examples:
-        %prog -g hg19 --get
+        %prog -g hg19 --get              # download the file hg19.chromAlias.tsv into current directory
         %prog -i test2.bed -o test2.ucsc.bed -a hg19.chromAlias.tsv -g hg19
         cat test.bed | %prog -a mm10.chromAlias.tsv > test.ucsc.bed
+
+    If you do not want to use the --get option to retrieve the mapping tables, you can also download the alias mapping
+    files yourself, e.g. for mm10 with 'wget http://hgdownload.soe.ucsc.edu/goldenPath/mm10/database/chromAlias.txt.gz'
     """)
 
     parser.add_option("", "--get", dest="doDownload", action="store_true", help="download a chrom alias table from UCSC for --genomeDb into the current directory and exit")
@@ -72,12 +77,15 @@ def chromToUcsc(db, aliasFname, ifh, ofh):
     ucscChroms = set(toUcsc.values())
 
     mtSkipCount = 0
+
+    isHg19 = (db=="hg19" or basename(aliasFname).startswith("hg19"))
+
     for lineNo, sep, chrom, rest in splitLines(ifh):
         # just pass through any UCSC chrom names
         if chrom in ucscChroms:
             ucscChrom = chrom
         else:
-            if db=="hg19" and (chrom=="MT" or chrom=="M"):
+            if isHg19 and (chrom=="MT" or chrom=="M"):
                 mtSkipCount += 1
                 continue
 

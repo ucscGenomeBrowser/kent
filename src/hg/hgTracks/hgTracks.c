@@ -95,6 +95,8 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
             "sortExp", "sortSim", "hideTracks", "ignoreCookie",
             NULL };
 
+boolean genomeIsRna = FALSE;    // is genome RNA instead of DNA
+
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
 boolean baseShowPos;           /* TRUE if should display full position at top of base track */
@@ -545,6 +547,8 @@ else
 
 if (complementSeq)
     complement(seq->dna, seq->size);
+if (genomeIsRna)
+    toRna(seq->dna);
 spreadBasesString(hvg, x, y, width, height, color, font,
                                 seq->dna, seq->size, FALSE);
 
@@ -4857,6 +4861,9 @@ if (wigOrder != NULL)
 // Construct flatTracks
 for (track = trackList; track != NULL; track = track->next)
     {
+    if (isLimitedVisHiddenForAllWindows(track))
+        continue;
+
     if (tdbIsComposite(track->tdb))
         {
         struct track *subtrack;
@@ -4883,10 +4890,7 @@ for (track = trackList; track != NULL; track = track->next)
         }
     else
 	{	
-	if (!isLimitedVisHiddenForAllWindows(track))
-	    {
-	    flatTracksAdd(&flatTracks,track,cart, orderedWiggles);
-	    }
+        flatTracksAdd(&flatTracks,track,cart, orderedWiggles);
 	}
     }
 flatTracksSort(&flatTracks); // Now we should have a perfectly good flat track list!
@@ -7306,7 +7310,7 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (!isSubtrackVisible(subtrack))
         continue;
-    if (!hashLookup(nonEmptySubtracksHash, subtrack->track))
+    if (!hashLookup(nonEmptySubtracksHash, trackHubSkipHubName(subtrack->track)))
         {
         subtrack->loadItems = dontLoadItems;
         subtrack->limitedVis = tvHide;
@@ -8566,7 +8570,7 @@ if (!hideControls)
         hPrintf("<td style=\"background-color:rgb(233,127,5)\">&lt; 0.8</td>\n");
         hPrintf("<td style=\"background-color:rgb(240,74,3)\">&lt; 0.9</td>\n");
         hPrintf("<td style=\"background-color:rgb(244,0,2)\">&lt; 1</td>\n");
-        hPrintf("<td style=\"color: white; background-color:rgb(0,0,0)\">No pLI score</td>\n");
+        hPrintf("<td style=\"color: white; background-color:rgb(160,160,160)\">No pLI score</td>\n");
         hPrintf("</tr></table>\n");
         }
 
@@ -10132,6 +10136,8 @@ printf("State: %s\n", state->string);
 
 getDbAndGenome(cart, &database, &organism, oldVars);
 
+genomeIsRna = !isHubTrack(database) && hgPdbOk(database);
+
 initGenbankTableNames(database);
 
 protDbName = hPdbFromGdb(database);
@@ -10344,4 +10350,28 @@ struct trackDb *parentTdb = tdbGetComposite(tg->tdb);
 if (parentTdb)
     parentTdb->longLabel = labelAsFiltered(parentTdb->longLabel);
 }
+
+static char *labelAddNote(char *label, char *note)
+/* add parenthesized text to label */
+// TODO: move to lib/trackDbCustom.c
+{
+char buffer[2048];
+safef(buffer, sizeof buffer, " (%s)", note);
+if (stringIn(note, label))
+    return label;
+return (catTwoStrings(label, buffer));
+}
+
+void labelTrackAsHideEmpty(struct track *tg)
+/* Add text to track long label to indicate empty subtracks are hidden,
+ * but avoid adding to subtrack labels */
+{
+#define EMPTY_SUBTRACKS_HIDDEN "empty subtracks hidden"
+struct trackDb *parentTdb = tdbGetComposite(tg->tdb);
+if (parentTdb)
+    parentTdb->longLabel = labelAddNote(parentTdb->longLabel, EMPTY_SUBTRACKS_HIDDEN);
+else
+    tg->longLabel = labelAddNote(tg->longLabel, EMPTY_SUBTRACKS_HIDDEN);
+}
+
 

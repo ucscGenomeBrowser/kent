@@ -157,7 +157,7 @@ sub doDownload {
 
   if ($filesFound < $filesExpected) {
     printf STDERR "# doNcbiRefSeq.pl download: can not find all files required\n";
-    exit 0;
+    exit 255;
   }
   my $runDir = "$buildDir/download";
   &HgAutomate::mustMkdir($runDir);
@@ -243,10 +243,12 @@ _EOF_
      chomp $result;
      if ( $result =~ m/ucscToRefSeq/ ) {
        $haveLiftFile = 1;
+### the sort -k2,2 -u eliminates the problem of duplicate sequences existing
+### in the target $db assembly
        $bossScript->add(<<_EOF_
 cd \$runDir
 hgsql -N -e 'select 0,name,chromEnd,chrom,chromEnd from ucscToRefSeq;' \${db} \\
-     > \${asmId}To\${db}.lift
+     | sort -k2,2 -u > \${asmId}To\${db}.lift
 _EOF_
        );
     }
@@ -331,6 +333,7 @@ export ncbiGffGz=\$downloadDir/\${asmId}_genomic.gff.gz
 export db=$db
 export gff3ToRefLink=$gff3ToRefLink
 export gbffToCds=$gbffToCds
+export dateStamp=`date "+%F"`
 
 export annotationRelease=`zcat \$ncbiGffGz | head -100 | grep ^#.annotation-source | sed -e 's/.*annotation-source //'`
 if [ "\$annotationRelease" == "" ]; then
@@ -371,6 +374,10 @@ zcat \$downloadDir/\${asmId}_rna.gbff.gz \\
 liftUp -extGenePred -type=.gp stdout $localLiftFile warn \$asmId.gp \\
   | gzip -c > \$asmId.\$db.gp.gz
 $genePredCheckDb \$asmId.\$db.gp.gz
+zcat \$asmId.\$db.gp.gz > ncbiRefSeq.\$dateStamp
+genePredToGtf -utr file ncbiRefSeq.\$dateStamp stdout | gzip -c \\
+  > ../\$db.\$dateStamp.ncbiRefSeq.gtf.gz
+rm -f ncbiRefSeq.\$dateStamp
 
 # curated subset of all genes
 (zegrep "^[NY][MRP]_" \$asmId.\$db.gp.gz || true) > \$db.curated.gp
@@ -414,7 +421,7 @@ join -t\$'\\t' \$asmId.\$db.name.list \$asmId.refLink.tab > \$asmId.\$db.ncbiRef
 
 # Make bigBed with attributes in extra columns for ncbiRefSeqOther:
 twoBitInfo $dbTwoBit stdout | sort -k2,2n > \$db.chrom.sizes
-genePredToBed \$db.other.gp stdout | sort -k1,1 -k2n,2n > \$db.other.bed
+genePredToBed -tab -fillSpace \$db.other.gp stdout | sort -k1,1 -k2n,2n > \$db.other.bed
 $ncbiRefSeqOtherAttrs \$db.other.bed \$asmId.attrs.txt > \$db.other.extras.bed
 bedToBigBed -type=bed12+13 -as=ncbiRefSeqOther.as -tab \\
   -extraIndex=name \\
@@ -428,10 +435,18 @@ ixIxx ncbiRefSeqOther.ix.tab ncbiRefSeqOther.ix{,x}
 
 # PSL data will be loaded into a psl type track to show the alignments
 (zgrep "^#" \$ncbiGffGz | head || true) > gffForPsl.gff
-(zegrep -v "NG_" \$ncbiGffGz || true) \\
-  | awk -F\$'\\t' '\$3 == "cDNA_match" || \$3 == "match"' >> gffForPsl.gff
-gff3ToPsl -dropT \$downloadDir/\$asmId.ncbi.chrom.sizes \$downloadDir/rna.sizes \\
-  gffForPsl.gff stdout | pslPosTarget stdin \$asmId.psl
+if [ -s ../../../download/\${asmId}.remove.dups.list ]; then
+  (zegrep -v "NG_" \$ncbiGffGz || true) \\
+    | grep -v -f ../../../download/\${asmId}.remove.dups.list \\
+    | awk -F\$'\\t' '\$3 == "cDNA_match" || \$3 == "match"' >> gffForPsl.gff
+  gff3ToPsl -dropT \$downloadDir/\$asmId.ncbi.chrom.sizes \$downloadDir/rna.sizes \\
+    gffForPsl.gff stdout | pslPosTarget stdin \$asmId.psl
+else
+  (zegrep -v "NG_" \$ncbiGffGz || true) \\
+    | awk -F\$'\\t' '\$3 == "cDNA_match" || \$3 == "match"' >> gffForPsl.gff
+  gff3ToPsl -dropT \$downloadDir/\$asmId.ncbi.chrom.sizes \$downloadDir/rna.sizes \\
+    gffForPsl.gff stdout | pslPosTarget stdin \$asmId.psl
+fi
 simpleChain -outPsl -maxGap=300000 \$asmId.psl stdout | pslSwap stdin stdout \\
   | liftUp -type=.psl stdout $localLiftFile warn stdin \\
    | gzip -c > \$db.psl.gz
@@ -507,7 +522,11 @@ wget -O bigPsl.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master
 
 ### overall gene track with both predicted and curated
 genePredToBigGenePred process/\$db.ncbiRefSeq.gp stdout | sort -k1,1 -k2,2n > \$db.ncbiRefSeq.bigGp
-
+genePredToBed -tab -fillSpace process/\$db.ncbiRefSeq.gp stdout \\
+    | bedToExons stdin stdout | bedSingleCover.pl stdin > \$asmId.exons.bed
+export baseCount=`awk '{sum+=\$3-\$2}END{printf "%d", sum}' \$asmId.exons.bed`
+export asmSizeNoGaps=`grep sequences ../../\$asmId.faSize.txt | awk '{print \$5}'`
+export perCent=`echo \$baseCount \$asmSizeNoGaps | awk '{printf "%.3f", 100.0*\$1/\$2}'`
 bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as -extraIndex=name \\
   \$db.ncbiRefSeq.bigGp \$db.chrom.sizes \\
     \$db.ncbiRefSeq.bb
@@ -628,8 +647,9 @@ export basesCovered=`bedSingleCover.pl \$db.ncbiRefSeq.bigGp | ave -col=4 stdin 
 export percentCovered=`echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
 printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" \\
    "\$totalBases" "\$percentCovered" > fb.ncbiRefSeq.\$db.txt
+printf "%d bases of %d (%s%%) in intersection\\n" "\$baseCount" "\$asmSizeNoGaps" "\$perCent" > fb.\$asmId.ncbiRefSeq.txt
 
-rm -f \$db.ncbiRefSeq.bigGp
+rm -f \$db.ncbiRefSeq.bigGp \$asmId.exons.bed
 
 pslToBigPsl -fa=download/\$asmId.rna.fa.gz -cds=process/\$asmId.rna.cds \\
   process/\$asmId.\$db.psl.gz stdout | sort -k1,1 -k2,2n > \$asmId.bigPsl
@@ -718,6 +738,14 @@ ln -f -s `pwd`/\$db.rna.fa $gbdbDir/seqNcbiRefSeq.rna.fa
 hgLoadSeq -drop -seqTbl=seqNcbiRefSeq -extFileTbl=extNcbiRefSeq \$db $gbdbDir/seqNcbiRefSeq.rna.fa
 
 hgLoadPsl \$db -table=ncbiRefSeqPsl process/\$asmId.\$db.psl.gz
+
+if [ -d "/usr/local/apache/htdocs-hgdownload/goldenPath/archive" ]; then
+ gtfFile=`ls \$db.*.ncbiRefSeq.gtf.gz`
+ mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq
+ rm -f /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq/\$gtfFile
+ ln -s `pwd`/\$db.*.ncbiRefSeq.gtf.gz \\
+   /usr/local/apache/htdocs-hgdownload/goldenPath/archive/\$db/ncbiRefSeq/
+fi
 
 featureBits \$db ncbiRefSeq > fb.ncbiRefSeq.\$db.txt 2>&1
 cat fb.ncbiRefSeq.\$db.txt 2>&1

@@ -1549,7 +1549,7 @@ boolean netSkipHttpHeaderLinesWithRedirect(int sd, char *url, char **redirectedU
  * Handles 300, 301, 302, 303, 307, 308 http redirects by setting *redirectedUrl to
  * the new location. */
 {
-char buf[2000];
+char buf[8192];
 char *line = buf;
 int maxbuf = sizeof(buf);
 int i=0;

@@ -1,0 +1,52 @@
+track clinvar
+compositeTrack on
+shortLabel ClinVar Variants
+longLabel ClinVar Variants
+group phenDis
+visibility hide
+type bed 12 +
+itemRgb on
+urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
+#scoreLabel ClinVar Star-Rating (0-4)
+noScoreFilter on
+
+    track clinvarMain
+    shortLabel ClinVar Short Variants
+    longLabel ClinVar Short Variants < 50bp
+    visibility pack
+    parent clinvar
+    priority 1
+    type bigBed 12 +
+    filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other
+    filterType._clinSignCode singleList
+    filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,NOVO|de novo,UNK|unknown
+    filterType._originCode singleList
+    filterValues._allTypeCode SNV|single nucleotide variant,INS|insertion,DEL|deletion,INDEL|insertion-deletion,dupl|duplication,OTH|other
+    filterType._allTypeCode singleList
+    filterByRange._valLen on
+    filterLimits._varLen 0:99999999
+    filterValues.molConseq genic downstream transcript variant|genic downstream transcript variant,no sequence alteration|no sequence alteration,inframe indel|inframe indel,stop lost|stop lost,genic upstream transcript variant|genic upstream transcript variant,initiatior codon variant|initiatior codon variant,inframe insertion|inframe insertion,inframe deletion|inframe deletion,splice acceptor variant|splice acceptor variant,splice donor variant|splice donor variant,5 prime UTR variant|5 prime UTR variant,nonsense|nonsense,non-coding transcript variant|non-coding transcript variant,3 prime UTR variant|3 prime UTR variant,frameshift variant|frameshift variant,intron variant|intron variant,synonymous variant|synonymous variant,missense variant|missense variant,|unknown
+    mouseOverField _mouseOver
+    bigDataUrl /gbdb/$D/bbi/clinvar/clinvarMain.bb
+
+    track clinvarCnv
+    shortLabel ClinVar Long Variants
+    longLabel ClinVar Long Variants >= 50bp (mostly Copy-Number Variants)
+    visibility pack
+    type bigBed 12 +
+    parent clinvar
+    priority 2
+    filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,NOVO|de novo,UNK|unknown
+    filterType._originCode singleList
+    filterValues._allTypeCode SNV|single nucleotide variant,INS|insertion,DEL|deletion,INDEL|insertion-deletion,dupl|duplication,OTH|other
+    filterType._allTypeCode singleList
+    filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other
+    filterType._clinSign singleList
+    filterValues.origin not-reported,uniparental,tested-inconclusive,biparental,not applicable,paternal,maternal,inherited,de novo,somatic,not provided,unknown,germline
+    filterType.origin multipleListOnlyOr
+    filter._varLen 0
+    filterByRange._varLen on
+    filterLimits._varLen 0:99999999
+    mouseOverField _mouseOver
+    bigDataUrl /gbdb/$D/bbi/clinvar/clinvarCnv.bb
+    mergeSpannedItems on

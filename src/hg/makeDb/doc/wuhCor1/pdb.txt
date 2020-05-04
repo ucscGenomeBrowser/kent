@@ -1,0 +1,11 @@
+wget ftp://ftp.rcsb.org/pub/pdb/derived_data/pdb_seqres.txt.gz
+twoBitToFa ../../wuhCor1.2bit ../../wuhCor1.fa
+zcat pdb_seqres.txt.gz  | sed -e 's/ .*//g' > pdb.fa
+# for some reason BLAST didn't complete this time so using BLAT
+/cluster/bin/blast/x86_64/blast-2.2.20/bin/formatdb -i wuhCor1.fa -p F
+/cluster/bin/blast/x86_64/blast-2.2.20/bin/blastall -p tblastn -d wuhCor1.fa -i pdb.fa -e10 -a 15 | blastToPsl stdin tblastn.psl  
+blat wuhCor1.fa pdb.fa -q=prot pdb.psl -t=dnax -minScore=20 
+pslCDnaFilter -minId=0.8 -minCover=0.8 pdb.psl stdout | sed -e 's/_[A-Z]//g'  | sort -u > pdb.filt.psl
+pslToBed pdb.filt.psl pdb.filt.bed
+bedSort pdb.filt.bed pdb.filt.bed
+bedToBigBed pdb.filt.bed ../../chrom.sizes -type=bed12+ pdb.bb

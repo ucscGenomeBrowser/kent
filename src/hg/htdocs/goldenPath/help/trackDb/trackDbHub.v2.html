@@ -419,6 +419,12 @@ are described below along with settings specific to their types.</P>
     <div class="format"><code class="level-new">barChartMaxSize &lt;small/medium/large&gt;</code>
     </div>
 </td></tr>
+<tr valign=top><td class="barChartSizeWindows"><a name="barChartSizeWindows"></a>
+        <img class='toggle detail'>
+    <div class="format"><code class="level-new">
+        barChartSizeWindows &lt;largeMax&gt; &lt;smallMin&gt;</code>
+    </div>
+</td></tr>
 <tr valign=top><td class="barChartMetric"><a name="barChartMetric"></a> <img class='toggle detail'>
     <div class="format"> <code class="level-full">barChartMetric &lt;metric&gt;</code>
     </div>
@@ -541,14 +547,14 @@ are described below along with settings specific to their types.</P>
             <A name="filterLimits.fieldName"></A>
             <A name="filterByRange.fieldName"></A><IMG class='toggle detail'>
         <div class="format">
-            <code class="level-new">filter.&lt;fieldName&gt; [&lt;default integer&gt;]</code><BR>
+            <code class="level-new">filter.&lt;fieldName&gt; &lt;default integer&gt;</code><BR>
             <span class="filterByRange"><code class="level-new">filterByRange.&lt;fieldName&gt; &lt;off/on&gt;</code></span><BR>
             <span class="filterLimits"><code class="level-new">filterLimits.&lt;fieldName&gt; &lt;low&gt;[:&lt;high&gt;]</code></span></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="filterText"><A name="filterText"></A>
             <A name="filterText.fieldName"></A><IMG class='toggle detail'>
         <div class="format">
-            <code class="level-new">filterText.&lt;fieldName&gt; [&lt;default search string&gt;]</code><BR>
+            <code class="level-new">filterText.&lt;fieldName&gt; &lt;default search string&gt;</code><BR>
             <span class="filterType"><code class="level-new">filterType.&lt;fieldName&gt; &lt;wildcard/regexp&gt;</code></span></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="filterValues"><A name="filterValues"></A>
@@ -581,6 +587,9 @@ are described below along with settings specific to their types.</P>
             <A name="itemBigImagePath"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">itemImagePath &lt;path&gt; &lt;suffix&gt;</code><BR>
             <span class="itemBigImagePath"><code class="level-full">itemBigImagePath &lt;path&gt; &lt;suffix&gt;</code></span></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="mergeSpannedItems"><A name="mergeSpannedItems"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">mergeSpannedItems &lt;on/off&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="linkIdInName"><A name="linkIdInName"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">linkIdInName on</code></div>
@@ -1022,7 +1031,17 @@ hierarchical containers:
     <TR VALIGN=TOP><TD class="hideEmptySubtracks"><A name="hideEmptySubtracks"></A>
                 <IMG class='toggle detail'>
         <div class="format">
-        <code class="level-new">hideEmptySubtracks &lt;on/off&gt; [multiBed.bb multiBedSources.tab]</code></div>
+        <code class="level-new">hideEmptySubtracks &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="hideEmptySubtracksMultiBedUrl"><A name="hideEmptySubtracksMultiBedUrl"></A>
+                <IMG class='toggle detail'>
+        <div class="format">
+        <code class="level-new">hideEmptySubtracksMultiBedUrl file.bb</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="hideEmptySubtracksSourcesUrl"><A name="hideEmptySubtracksSourcesUrl"></A>
+                <IMG class='toggle detail'>
+        <div class="format">
+        <code class="level-new">hideEmptySubtracksSourcesUrl file.tab</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="hideEmptySubtracksLabel"><A name="hideEmptySubtracksLabel"></A>
                 <IMG class='toggle detail'>

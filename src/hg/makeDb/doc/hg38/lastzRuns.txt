@@ -12467,4 +12467,150 @@ TMPDIR=/dev/shm
     cat fb.regenCho1.chainRBest.Hg38.txt
     # 902782523 bases of 2266312740 (39.835%) in intersection
 
+#############################################################################
+# LASTZ human/hg38 vs. Southern Sea Otter/enhLutNer1
+#	(DONE - 2019-12-22 - Jonathan)
+
+    mkdir /hive/data/genomes/hg38/bed/lastzEnhLutNer1.2019-12-20
+    cd /hive/data/genomes/hg38/bed/lastzEnhLutNer1.2019-12-20
+
+    printf '# human vs Southern sea otter
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_M=254
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=20
+SEQ1_LAP=10000
+
+# QUERY: Southern sea otter enhLutNer1
+SEQ2_DIR=/hive/data/genomes/enhLutNer1/enhLutNer1.2bit
+SEQ2_LEN=/hive/data/genomes/enhLutNer1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzEnhLutNer1.2019-12-20
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > do.log 2>&1
+    # real    336m47.917s
+
+    cat fb.hg38.chainEnhLutNer1Link.txt
+    # 1537745313 bases of 3095998939 (49.669%) in intersection
+    cat fb.hg38.chainSynEnhLutNer1Link.txt
+    # 1454400074 bases of 3095998939 (46.977%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	hg38 enhLutNer1) > rbest.log 2>&1 &
+    # real    336m47.917s
+
+    cat fb.hg38.chainRBest.EnhLutNer1.txt
+    # 1413203552 bases of 3095998939 (45.646%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/enhLutNer1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/enhLutNer1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzEnhLutNer1.2019-12-20/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > swap.log 2>&1
+    #  real    88m38.087s
+
+    cat fb.enhLutNer1.chainHg38Link.txt
+    # 1526639908 bases of 2413653822 (63.250%) in intersection
+    cat fb.enhLutNer1.chainSynHg38Link.txt
+    # 1403546142 bases of 2413653822 (58.150%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	enhLutNer1 hg38) > rbest.log 2>&1 &
+    # real    319m54.030s
+
+    cat fb.enhLutNer1.chainRBest.Hg38.txt
+    # 1414347523 bases of 2413653822 (58.598%) in intersection
+
+#########################################################################
+# LASTZ human/hg38 vs. German shepard/canFam4
+#	(DONE - 2020-04-02 - Hiram)
+
+    mkdir /hive/data/genomes/hg38/bed/lastzCanFam4.2020-04-02
+    cd /hive/data/genomes/hg38/bed/lastzCanFam4.2020-04-02
+
+    printf '# human vs. German shepard
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_M=254
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=20
+SEQ1_LAP=10000
+
+# QUERY: German shepard Mischka/canFam4
+SEQ2_DIR=/hive/data/genomes/canFam4/canFam4.2bit
+SEQ2_LEN=/hive/data/genomes/canFam4/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzCanFam4.2020-04-02
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    904m29.420s
+
+    cat fb.hg38.chainCanFam4Link.txt
+    # 1549397508 bases of 3110768607 (49.808%) in intersection
+    cat fb.hg38.chainSynCanFam4Link.txt
+    # 1488468205 bases of 3110768607 (47.849%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	hg38 canFam4) > rbest.log 2>&1 &
+    # real    310m32.196s
+
+    cat fb.hg38.chainRBest.CanFam4.txt
+    # 1425406620 bases of 3110768607 (45.822%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/canFam4/bed/blastz.hg38.swap
+    cd /hive/data/genomes/canFam4/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzCanFam4.2020-04-02/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    99m10.990s
+
+    cat fb.canFam4.chainHg38Link.txt
+    # 1493209286 bases of 2481941580 (60.163%) in intersection
+    cat fb.canFam4.chainSynHg38Link.txt
+    # 1448164376 bases of 2481941580 (58.348%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	canFam4 hg38) > rbest.log 2>&1 &
+    # real    257m59.713s
+
+    cat fb.canFam4.chainRBest.Hg38.txt
+    # 1425296830 bases of 2481941580 (57.427%) in intersection
+
 #########################################################################

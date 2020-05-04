@@ -7,18 +7,19 @@
 #include "psl.h"
 #include <string.h>
 
-void usage(char *msg)
+void usage()
 /* Explain usage and exit. */
 {
-errAbort("%s:\n\n"
-         "postTransMapChain [options] inPsl outPsl\n"
+errAbort("pslMapPostChain - Post genomic pslMap (TransMap) chaining.\n"
+         "usage:\n"
+         "    pslMapPostChain [options] inPsl outPsl\n"
          "\n"
          "Post genomic pslMap (TransMap) chaining.  This takes transcripts\n"
          "that have been mapped via genomic chains adds back in\n"
          "blocks that didn't get include in genomic chains due\n"
          "to complex rearrangements or other issues.\n"
          "\n"
-         "This program has not seen much use and may not do what you want\n", msg);
+         "This program has not seen much use and may not do what you want\n");
 }
 
 static struct optionSpec optionSpecs[] =
@@ -312,9 +313,9 @@ int main(int argc, char **argv)
 {
 optionInit(&argc, argv, optionSpecs);
 if (optionExists("h") || optionExists("help"))
-    usage("usage");
+    usage();
 if (argc != 3)
-    usage("wrong # of args");
+    usage();
 pslMapPostChain(argv[1], argv[2]);
 return 0;
 }

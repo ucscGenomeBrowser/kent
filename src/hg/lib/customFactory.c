@@ -41,6 +41,7 @@
 #include "pgSnp.h"
 #include "regexHelper.h"
 #include "chromInfo.h"
+#include "grp.h"
 #include "trackHub.h"
 #include "bedTabix.h"
 #include "barChartBed.h"
@@ -3550,6 +3551,24 @@ char *tmp = *pString;
 freeMem(tmp);
 }
 
+static boolean checkGroup(char *db, char *group)
+/* Check if group is valid in db (if mysql, in grp table; if hub, in groups file or default) */
+{
+static struct hash *dbToGroups = NULL;
+if (dbToGroups == NULL)
+    dbToGroups = hashNew(0);
+struct hash *groups = hashFindVal(dbToGroups, db);
+if (groups == NULL)
+    {
+    groups = hashNew(0);
+    hashAdd(dbToGroups, db, groups);
+    struct grp *groupList = hLoadGrps(db), *grp;
+    for (grp = groupList;  grp != NULL;  grp = grp->next)
+        hashAddInt(groups, grp->name, TRUE);
+    }
+return hashIntValDefault(groups, group, FALSE);
+}
+
 static void customTrackUpdateFromSettings(struct customTrack *track,
                                           char *genomeDb,
 					  char *line, int lineIx)
@@ -3678,7 +3697,7 @@ if ((val = hashFindVal(hash, "visibility")) != NULL)
 	{
 	tdb->visibility = atoi(val);
 	if (tdb->visibility > tvSquish)
-	    errAbort("line %d of custom input: Expecting visibility 0 to 4 got %s", lineIx, val);
+	    errAbort("Line %d of custom input: Expecting visibility 0 to 4 got %s. ", lineIx, val);
 	}
     else
         {
@@ -3686,7 +3705,22 @@ if ((val = hashFindVal(hash, "visibility")) != NULL)
 	}
     }
 if ((val = hashFindVal(hash, "group")) != NULL)
-    tdb->grp = val;
+    {
+    if (checkGroup(genomeDb, val))
+        tdb->grp = val;
+    else
+        {
+        boolean isHub = trackHubDatabase(genomeDb);
+        char *groupSource = isHub ? "the hub's groups.txt file" : "the table 'grp'";
+        warn("Line %d of custom input: group '%s' is not valid. "
+            "Either remove the group setting or use a group named in %s.",
+             lineIx, val, groupSource);
+        if (isHub)
+            hashRemove(hash, "group");
+        else
+            hashReplace(hash, "group", "user");
+        }
+    }
 if ((val = hashFindVal(hash, "useScore")) != NULL)
     tdb->useScore = !sameString(val, "0");
 if ((val = hashFindVal(hash, "priority")) != NULL)

@@ -35,6 +35,9 @@ struct barChartTrack
     // dimensions for drawing
     char *maxGraphSize;         /* optionally limit graph size (override semantic zoom)
                                      small, medium, or large (default) */
+     int winMaxGraph;             /* Draw large graphs if window size smaller than this */
+     int winMedGraph;             /* Draw medium graphs if window size greater than this 
+                                        and smaller than winMaxGraph */
 
     int squishHeight;           /* Height of item in squish mode (larger than typical) */
     int boxModelHeight;         /* Height of indicator box drawn under graph to show gene extent */
@@ -344,19 +347,17 @@ extras->maxGraphSize = trackDbSettingClosestToHomeOrDefault(tdb,
 extras->unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
 
 /* Set barchart dimensions to draw.  For three window sizes */
-#define WIN_MAX_GRAPH 50000
-#define WIN_MED_GRAPH 500000
 
 #define MAX_BAR_CHART_MODEL_HEIGHT     2
 #define MED_BAR_CHART_MODEL_HEIGHT     2
 #define MIN_BAR_CHART_MODEL_HEIGHT     1
 
-#define WIN_MAX_GRAPH 50000
+#define WIN_MAX_GRAPH_DEFAULT 50000
 #define MAX_GRAPH_HEIGHT 175
 #define MAX_BAR_WIDTH 5
 #define MAX_GRAPH_PADDING 2
 
-#define WIN_MED_GRAPH 500000
+#define WIN_MED_GRAPH_DEFAULT 500000
 #define MED_GRAPH_HEIGHT 100
 #define MED_BAR_WIDTH 3
 #define MED_GRAPH_PADDING 1
@@ -364,16 +365,31 @@ extras->unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
 #define MIN_BAR_WIDTH 1
 #define MIN_GRAPH_PADDING 0
 
+extras->winMaxGraph = WIN_MAX_GRAPH_DEFAULT;
+extras->winMedGraph = WIN_MED_GRAPH_DEFAULT;
+char *setting = trackDbSetting(tdb, BAR_CHART_SIZE_WINDOWS);
+if (isNotEmpty(setting))
+    {
+    char *words[2];
+    int ct = chopLine(setting, words);
+    if (ct == 2)
+        {
+        extras->winMaxGraph = atoi(words[0]);
+        extras->winMedGraph = atoi(words[1]);
+        }
+    }
 int scale = (getCategoryCount(tg) < 15 ? 2 : 1);
 long winSize = virtWinBaseCount;
-if (winSize < WIN_MAX_GRAPH && sameString(extras->maxGraphSize, BAR_CHART_MAX_GRAPH_SIZE_LARGE))
-    {
+if (winSize < extras->winMaxGraph && 
+        sameString(extras->maxGraphSize, BAR_CHART_MAX_GRAPH_SIZE_LARGE))
+{
     extras->boxModelHeight = MAX_BAR_CHART_MODEL_HEIGHT;
     extras->barWidth = MAX_BAR_WIDTH * scale;
     extras->padding = MAX_GRAPH_PADDING;
     extras->maxHeight = MAX_GRAPH_HEIGHT;
     }
-else if (winSize < WIN_MED_GRAPH && differentString(extras->maxGraphSize, BAR_CHART_MAX_GRAPH_SIZE_SMALL))
+else if (winSize < extras->winMedGraph && 
+        differentString(extras->maxGraphSize, BAR_CHART_MAX_GRAPH_SIZE_SMALL))
     {
     extras->boxModelHeight = MED_BAR_CHART_MODEL_HEIGHT;
     extras->barWidth = MED_BAR_WIDTH * scale;

@@ -17,6 +17,7 @@ my $chr = "";
 my $step = 1;
 my $span = 1;
 
+print STDERR "fixStepToBedGraph.pl - read fixedStep wiggle input data, output four column bedGraph format data\n";
 print STDERR "usage: fixStepToBedGraph.pl\n";
 print STDERR "\trun in a pipeline like this:\n";
 print STDERR "usage: ",

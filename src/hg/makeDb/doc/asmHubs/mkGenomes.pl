@@ -46,22 +46,32 @@ while (my $line = <FH>) {
 }
 close (FH);
 
-my $orderKey = 1;
+my $buildDone = 0;
+my $orderKey = 0;
 foreach my $asmId (reverse(@orderList)) {
+  ++$orderKey;
   my ($gcPrefix, $accession, undef) = split('_', $asmId);
   my $accessionId = sprintf("%s_%s", $gcPrefix, $accession);
   my $accessionDir = substr($asmId, 0 ,3);
   $accessionDir .= "/" . substr($asmId, 4 ,3);
   $accessionDir .= "/" . substr($asmId, 7 ,3);
   $accessionDir .= "/" . substr($asmId, 10 ,3);
-  my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/" . substr($asmId, 0 ,3);
-  $buildDir .= "/" . substr($asmId, 4 ,3);
-  $buildDir .= "/" . substr($asmId, 7 ,3);
-  $buildDir .= "/" . substr($asmId, 10 ,3);
-  $buildDir .= "/" . $asmId;
+  my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
+  if ($gcPrefix eq "GCA") {
+     $buildDir = "/hive/data/genomes/asmHubs/genbankBuild/$accessionDir/$asmId";
+  }
   my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
-  next if (! -s $asmReport);
-printf STDERR "# %03d genomes.txt %s/%s\n", $orderKey, $accessionDir, $accessionId;
+  my $trackDb = "$buildDir/$asmId.trackDb.txt";
+  if ( ! -s "${trackDb}" ) {
+    printf STDERR "# %03d not built yet: %s\n", $orderKey, $asmId;
+    next;
+  }
+  if ( ! -s "${asmReport}" ) {
+    printf STDERR "# %03d missing assembly_report: %s\n", $orderKey, $asmId;
+    next;
+  }
+  ++$buildDone;
+printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessionId;
   my $descr=`grep -i "organism name:" $asmReport | head -1 | sed -e 's#.*organism name: *##i; s# (.*\$##;'`;
   chomp $descr;
   my $orgName=`grep -i "organism name:" $asmReport | head -1 | sed -e 's#.* name: .* (##; s#).*##;'`;
@@ -87,7 +97,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $orderKey, $accessionDir, $accession
     chomp $defPos;
   }
   printf "defaultPos %s\n", $defPos;
-  printf "orderKey %d\n", $orderKey++;
+  printf "orderKey %d\n", $buildDone;
   printf "scientificName %s\n", $descr;
   printf "htmlPath ../%s/%s/html/%s.description.html\n", $accessionDir, $accessionId, $asmId;
   printf "\n";

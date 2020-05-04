@@ -1,0 +1,90 @@
+#!/bin/bash
+
+set -beEu -o pipefail
+
+if [ $# -ne 4 ]; then
+  printf "usage: runOne <sourceAuth> <sourceId> <destAuth> <destId>\n" 1>&2
+  printf "example:\n" 1>&2
+  printf "./runOne refseq GCF_009858895.2_ASM985889v3 \\
+    ensembl Caenorhabditis_elegans.WBcel235\n" 1>&2
+  exit 255
+fi
+
+##########################################################################
+### translate a GCA/GCF assembly ID into a directory path
+##########################################################################
+function gcDir() {
+local asmId=$1
+
+local gcX=`echo "$asmId" | cut -c1-3`
+local d0=`echo "$asmId" | cut -c5-7`
+local d1=`echo "$asmId" | cut -c8-10`
+local d2=`echo "$asmId" | cut -c11-13`
+
+local outDir="${gcX}/${d0}/${d1}/${d2}"
+
+printf "%s" "${outDir}"
+
+}
+
+export sourceAuth=$1
+export sourceId=$2
+export destAuth=$3
+export destId=$4
+
+function idKeys() {
+export buildDir="notFound"
+export auth=$1
+export id=$2
+case "${auth}" in
+  ucsc) buildDir="/hive/data/genomes/${id}/bed/idKeys"
+        ;;
+  ensembl) speciesDir=`echo $id | cut -d. -f1`
+   buildDir="/hive/data/outside/ensembl/genomes/release-99/idKeys/$speciesDir"
+        ;;
+  genbank) gca=`gcDir $id`
+   buildDir="/hive/data/genomes/asmHubs/genbankBuild/$gca/$id/idKeys"
+        ;;
+  refseq)  gcf=`gcDir $id`
+   buildDir="/hive/data/genomes/asmHubs/refseqBuild/$gcf/$id/idKeys"
+        ;;
+  *) printf "ERROR: can not find source authority, must be one of:\n" 1>&2
+     printf "ucsc ensembl genbank refseq\n" 1>&2
+     exit 255;
+        ;;
+esac
+printf "%s" "${buildDir}/${id}.idKeys.txt"
+}
+
+export sourceKeys=`idKeys $sourceAuth $sourceId`
+export destKeys=`idKeys $destAuth $destId`
+
+if [ ! -s "${sourceKeys}" ]; then
+  printf "ERROR: can not find source keys: %s\n" "${sourceKeys}" 1>&2
+  exit 255
+fi
+if [ ! -s "${destKeys}" ]; then
+  printf "ERROR: can not find dest keys: %s\n" "${destKeys}" 1>&2
+  exit 255
+fi
+
+## ls -og "${sourceKeys}" "${destKeys}"
+
+export aDupCount=`cat ${sourceKeys} | wc -l`
+export bDupCount=`cat ${destKeys} | wc -l`
+export aCount=`cut -f1 ${sourceKeys} | sort -u | wc -l`
+export bCount=`cut -f1 ${destKeys} | sort -u | wc -l`
+export joinCount=`join -t$'\t' <(sort -k1,1 -u $sourceKeys) <(sort -k1,1 -u $destKeys) | wc -l`
+export diffA=`echo $aCount $joinCount | awk '{printf "%d", $1-$2}'`
+export diffB=`echo $bCount $joinCount | awk '{printf "%d", $1-$2}'`
+export dupsA=`echo $aDupCount $aCount | awk '{printf "%d", $1-$2}'`
+export dupsB=`echo $bDupCount $bCount | awk '{printf "%d", $1-$2}'`
+export missedA=`echo $aDupCount $joinCount | awk '{printf "%d", $1-$2}'`
+export missedB=`echo $bDupCount $joinCount | awk '{printf "%d", $1-$2}'`
+export missedAperCent=`echo $aDupCount $joinCount | awk '{printf "%d", 100*($1-$2)/$1}'`
+export missedBperCent=`echo $bDupCount $joinCount | awk '{printf "%d", 100*($1-$2)/$1}'`
+if [ "${missedAperCent}" -lt 10 -a "${missedBperCent}" -lt 10 ]; then
+  printf "%s\t%s\t%s\t%s\t%d\t%d\t%d\tcount A %d, count B %d, diffA %d, diffB %d, dupsA %d, dupsB %d, missA %d, missB %d, AperCent %d, BperCent %d\n" "${sourceId}" "${destId}" "${sourceAuth}" "${destAuth}" "${joinCount}" "${aDupCount}" "${bDupCount}" "${aCount}" "${bCount}" "${diffA}" "${diffB}" "${dupsA}" "${dupsB}" "${missedA}" "${missedB}" "${missedAperCent}" "${missedBperCent}"
+else
+  printf "%s\t%s\t%s\t%s\t%d\t%d\t%d\tcount A %d, count B %d, diffA %d, diffB %d, dupsA %d, dupsB %d, missA %d, missB %d, AperCent %d, BperCent %d\n" "${sourceId}" "${destId}" "${sourceAuth}" "${destAuth}" "${joinCount}" "${aDupCount}" "${bDupCount}" "${aCount}" "${bCount}" "${diffA}" "${diffB}" "${dupsA}" "${dupsB}" "${missedA}" "${missedB}" "${missedAperCent}" "${missedBperCent}" 1>&2
+fi

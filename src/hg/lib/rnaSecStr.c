@@ -30,7 +30,7 @@ ret->secStr = cloneString(row[7]);
 {
 int sizeOne;
 sqlDoubleDynamicArray(row[8], &ret->conf, &sizeOne);
-assert(sizeOne == ret->size);
+//assert(sizeOne == ret->size);
 }
 return ret;
 }

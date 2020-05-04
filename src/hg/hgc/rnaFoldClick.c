@@ -17,6 +17,7 @@
 #include "rnautil.h"
 #include "rnaSecStr.h"
 #include "memalloc.h"
+#include "hgConfig.h"
 
 
 /* Taken from hgc.c (should probably be in hgc.h)*/
@@ -368,6 +369,46 @@ for (i = 0; i < mcCount; i++)
 slReverse(&maf->components);
 }
 
+void htmlPrintSecStr(FILE *f, char *table, struct rnaSecStr *item)
+/* Print out the details for an rnaStruct* table. */
+{
+// grab the sequence
+struct dnaSeq *seq = hChromSeq(database, item->chrom, item->chromStart, item->chromEnd);
+touppers(seq->dna);
+if (item->strand[0] == '-')
+    reverseComplement(seq->dna, seq->size);
+toRna(seq->dna);
+
+// make sure the dna is not longer than the paren string
+seq->dna[strlen(item->secStr)] = 0;
+
+char *rnaPlotPath = cfgOptionDefault("rnaPlotPath", "../cgi-bin/RNAplot");
+mkdirTrashDirectory(table);
+
+char command[512];
+char psName[512];
+safef(psName, sizeof(psName), "../trash/%s/%s_%s.ps", table, table, item->name);
+FILE *of = popen(rnaPlotPath, "w");
+if (of != NULL)
+    {
+    fprintf(of, ">%s\n", psName);        /* This tells where to put file. */
+    fprintf(of, "%s\n%s\n", seq->dna, item->secStr);
+    pclose(of);
+    }
+
+char pngName[256];
+char *rootName = cloneString(psName);
+ 
+chopSuffix(rootName);
+safef(pngName, sizeof(pngName), "%s.png", rootName);
+
+safef(command, sizeof(command),
+    "gs -g768x768 -sDEVICE=png16m -sOutputFile=%s -dBATCH -dNOPAUSE -q %s" , pngName, psName);
+mustSystem(command);
+
+printf("<IMG SRC='%s' border = '2'>", pngName);
+}
+
 void htmlPrintSecStrEvofoldDrawing(FILE *f, struct rnaSecStr *item)
 {
 char fileName[512];
@@ -451,7 +492,7 @@ struct rnaSecStr *item;
 char extraWhere[256];
 char **row;
 int  rowOffset = 0;
-char *mafTrack = trackDbRequiredSetting(tdb, "mafTrack");
+char *mafTrack = trackDbSetting(tdb, "mafTrack");
 int start = cartInt(cart, "o");
 struct mafAli *maf;
 char option[128];
@@ -468,22 +509,30 @@ sprintf(extraWhere, "chromStart = %d and name = '%s'", start, itemName);
 sr   = hExtendedChromQuery(conn, table, seqName, extraWhere,  FALSE, NULL, &rowOffset);
 row  = sqlNextRow(sr);
 item = rnaSecStrLoad(row + rowOffset);
-maf  = mafFromRnaSecStrItem(mafTrack, item);
+if (mafTrack)
+    {
+    maf  = mafFromRnaSecStrItem(mafTrack, item);
 
-/* order maf by species */
-safef(option, sizeof(option), "%s.speciesOrder", tdb->track);
-speciesOrder = cartUsualString(cart, option, NULL);
-if (speciesOrder == NULL)
-  speciesOrder = trackDbSetting(tdb, "speciesOrder");
-if (speciesOrder)
-  mafSortBySpeciesOrder(maf, speciesOrder);
+    /* order maf by species */
+    safef(option, sizeof(option), "%s.speciesOrder", tdb->track);
+    speciesOrder = cartUsualString(cart, option, NULL);
+    if (speciesOrder == NULL)
+      speciesOrder = trackDbSetting(tdb, "speciesOrder");
+    if (speciesOrder)
+      mafSortBySpeciesOrder(maf, speciesOrder);
 
-mafAndFoldHeader(stdout);
-htmlPrintMafAndFold(stdout, maf, item->secStr, item->conf, 100);
+    mafAndFoldHeader(stdout);
+    htmlPrintMafAndFold(stdout, maf, item->secStr, item->conf, 100);
 
-mafAndFoldLegend(stdout);
+    mafAndFoldLegend(stdout);
+    }
 
-/* Draw structure for evoFold */
+/* Draw structure for rnaStruct* table */
+if (startsWith("rnaStruct", tdb->table))
+    {
+    htmlHorizontalLine();
+    htmlPrintSecStr(stdout, tdb->table, item);
+    }
 if (sameWord(tdb->table, "evofold"))
     {
     htmlHorizontalLine();

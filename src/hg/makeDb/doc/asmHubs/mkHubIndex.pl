@@ -16,6 +16,18 @@ my $defaultAssembly = shift;
 my $home = $ENV{'HOME'};
 my $toolsDir = "$home/kent/src/hg/makeDb/doc/asmHubs";
 my $commonNameOrder = "$asmHubName.commonName.asmId.orderList.tsv";
+my $vgpIndex = 0;
+$vgpIndex = 1 if ($Name =~ m/vgp/i);
+my %vgpClass;	# key is asmId, value is taxon 'class' as set by VGP project
+if ($vgpIndex) {
+  my $vgpClass = "$home/kent/src/hg/makeDb/doc/vgpAsmHub/vgp.taxId,asmId.class.txt";
+  open (FH, "<$vgpClass") or die "can not read $vgpClass";
+  while (my $line = <FH>) {
+    my ($taxId, $asmId, $class) = split('\t', $line);
+    $vgpClass{$asmId} = $class;
+  }
+  close (FH);
+}
 
 my @orderList;	# asmId of the assemblies in order from the *.list files
 # the order to read the different .list files:
@@ -47,7 +59,27 @@ if ($asmHubName eq "vertebrate") {
    $subSetMessage = "subset of other ${asmHubName}s only";
 }
 
-print <<"END"
+if ($vgpIndex) {
+  print <<"END"
+<!DOCTYPE HTML 4.01 Transitional>
+<!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly hub" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
+
+<h1>VGP - Vertebrate Genomes Project assembly hub</h1>
+<p>
+<a href='https://vertebrategenomesproject.org/' target=_blank>
+<img src='VGPlogo.png' width=280 alt='VGP logo'></a></p>
+<p>
+This assembly hub contains assemblies released
+by the <a href='https://vertebrategenomesproject.org/' target=_blank>
+Vertebrate Genomes Project.</a>
+</p>
+
+END
+} else {
+  print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
 <!--#set var="TITLE" value="$Name genomes assembly hubs" -->
 <!--#set var="ROOT" value="../.." -->
@@ -59,36 +91,41 @@ print <<"END"
 Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 </p>
 
+END
+}
+
+print <<"END"
 <h3>How to view the hub</h3>
 <p>
-You can load this hub from our
-<a href="https://genome.ucsc.edu/cgi-bin/hgHubConnect#publicHubs" target="_blank">Public Hubs</a> 
-page or by clicking these assembly links to any of our official websites:
-<ul>
-  <li>
-    <a href="https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
-    target="_blank">genome.ucsc.edu</a></li>
-  <li> 
-    <a href="https://genome-euro.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
-    target="_blank">genome-euro.ucsc.edu</a></li>
-  <li>
-    <a href="https://genome-asia.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
-    target="_blank">genome-asia.ucsc.edu</a></li>
-</ul>
-</p>
-
-<p>
-To manually attach all the assemblies in this hub to other genome browsers:
+Options:
 <ol>
-  <li>
-    From the blue navigation bar, go to
+  <li>The links to the genome browser in the table below will attach that
+      one specific assembly to the genome browser.  This is most likely what
+      you want.</li>
+  <li>Instead, you can attach the entire set of assemblies as one group to
+      the genome browser with the following links depending upon which of
+      our mirror site browsers you prefer to use:
+    <ul>
+    <li><a href="https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=GCF_000001405.39"
+        target="_blank">genome.ucsc.edu</a></li>
+    <li><a href="https://genome-euro.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=GCF_000001405.39"
+        target="_blank">genome-euro.ucsc.edu</a></li>
+    <li><a href="https://genome-asia.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=GCF_000001405.39"
+        target="_blank">genome-asia.ucsc.edu</a></li>
+    </ul>
+  </li>
+  <li>To manually attach all the assemblies in this hub to genome browsers
+      that are not one of the three UCSC mirror sites:
+    <ol>
+      <li>From the blue navigation bar, go to
     <em><strong>My Data</strong> -&gt; <strong>Track Hubs</strong></em></li>
-  <li>
-    Then select the <strong>My Hubs</strong> tab and enter this URL into the textbox:
+      <li>Then select the <strong>My Hubs</strong> tab and enter this URL into
+          the textbox:
     <br><code>https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt</code></li>
-  <li>
-    Once you have added the URL to the entry form, press the <em><strong>Add Hub</strong></em>
-    button to add the hub.</li>
+      <li> Once you have added the URL to the entry form,
+           press the <em><strong>Add Hub</strong></em> button to add the hub.</li>
+    </ol>
+  </li>
 </ol>
 </p>
 
@@ -97,13 +134,19 @@ After adding the hub, you will be redirected to the gateway page.  The
 genome assemblies can be selected from the
 <em>${Name} Hub Assembly</em> dropdown menu.
 Instead of adding all the assemblies in one collected group, use the individual
-<em>link to genome browser</em> in the table below.
+<em>view in browser</em> in the table below.
 </p>
-<h3>See also: <a href='asmStats${Name}.html'>assembly statistics</a></h3><br>
+<h3>See also: <a href='asmStats.html'>assembly statistics</a>,&nbsp;<a href='trackData.html'>track statistics</a> <== additional information for these assemblies.</h3><br>
 <h3>Data resource links</h3>
+<p>
 NOTE: <em>Click on the column headers to sort the table by that column</em><br>
-The <em>link to genome browser</em> will attach only that single assembly to
-the genome browser.
+The <em>common name/view in browser</em> will attach only that single assembly to
+the genome browser.<br>
+The <em>scientific name/and data download</em> link provides access to the files for that one
+assembly hub.<br>
+The <em>class/VGP link</em> provides access to the VGP GenomeArk page for that genome<br>
+The other links provide access to NCBI resources for these assemblies.
+</p>
 END
 }	#	sub startHtml()
 
@@ -111,16 +154,20 @@ END
 ### start the table output
 ##############################################################################
 sub startTable() {
-print <<"END"
+print '
 <table class="sortable" border="1">
 <thead><tr><th>count</th>
-  <th>common name<br>link&nbsp;to&nbsp;genome&nbsp;browser</th>
+  <th>common&nbsp;name&nbsp;and<br>view&nbsp;in&nbsp;browser</th>
   <th>scientific name<br>and&nbsp;data&nbsp;download</th>
   <th>NCBI&nbsp;assembly</th>
   <th>bioSample</th><th>bioProject</th>
   <th>assembly&nbsp;date,<br>source&nbsp;link</th>
-</tr></thead><tbody>
-END
+';
+
+if ($vgpIndex) {
+  printf "<th>class<br>VGP&nbsp;link</th>\n";
+}
+print "</tr></thead><tbody>\n";
 }	#	sub startTable()
 
 ##############################################################################
@@ -141,20 +188,32 @@ END
 sub endHtml() {
 
 if ($asmHubName ne "viral") {
-  printf "<p>\nOther assembly hubs available:<br>\n<table border='1'><thead>\n<tr>";
+  printf "<p>\n<table border='1'><thead>\n";
+  printf "<tr><th colspan=6 style='text-align:center;'>Additional hubs with collections of assemblies</th></tr>\n";
+  printf "<tr><th>Assembly hubs index pages:&nbsp;</th>\n";
+  printf "<th><a href='../primates/index.html'>Primates</a></th>\n";
+  printf "<th><a href='../mammals/index.html'>Mammals</a></th>\n";
+  printf "<th><a href='../birds/index.html'>Birds</a></th>\n";
+  printf "<th><a href='../fish/index.html'>Fish</a></th>\n";
+  printf "<th><a href='../vertebrate/index.html'>other vertebrates</a></th>\n";
 
-  printf "<th><a href='../primates/index.html'>Primates</a></th>\n"
-    if ($asmHubName ne "primates");
-  printf "<th><a href='../mammals/index.html'>Mammals</a></th>\n"
-    if ($asmHubName ne "mammals");
-  printf "<th><a href='../birds/index.html'>Birds</a></th>\n"
-    if ($asmHubName ne "birds");
-  printf "<th><a href='../fish/index.html'>Fish</a></th>\n"
-    if ($asmHubName ne "fish");
-  printf "<th><a href='../vertebrate/index.html'>other vertebrates</a></th>\n"
-    if ($asmHubName ne "vertebrate");
+  printf "</tr><tr>\n";
+  printf "<th>Hubs assembly statistics:&nbsp;</th>\n";
+  printf "<th><a href='../primates/asmStats.html'>Primates</a></th>\n";
+  printf "<th><a href='../mammals/asmStats.html'>Mammals</a></th>\n";
+  printf "<th><a href='../birds/asmStats.html'>Birds</a></th>\n";
+  printf "<th><a href='../fish/asmStats.html'>Fish</a></th>\n";
+  printf "<th><a href='../vertebrate/asmStats.html'>other vertebrates</a></th>\n";
 
-printf "</tr></thead>\n</table>\n</p>\n";
+  printf "</tr><tr>\n";
+  printf "<th>Hubs track statistics:&nbsp;</th>\n";
+  printf "<th><a href='../primates/trackData.html'>Primates</a></th>\n";
+  printf "<th><a href='../mammals/trackData.html'>Mammals</a></th>\n";
+  printf "<th><a href='../birds/trackData.html'>Birds</a></th>\n";
+  printf "<th><a href='../fish/trackData.html'>Fish</a></th>\n";
+  printf "<th><a href='../vertebrate/trackData.html'>other vertebrates</a></th>\n";
+
+  printf "</tr></thead>\n</table>\n</p>\n";
 }
 
 print <<"END"
@@ -180,9 +239,12 @@ sub tableContents() {
     $accessionDir .= "/" . substr($asmId, 10 ,3);
     my $ncbiFtpLink = "ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$accessionDir/$asmId";
     my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
+    if ($gcPrefix eq "GCA") {
+     $buildDir = "/hive/data/genomes/asmHubs/genbankBuild/$accessionDir/$asmId";
+    }
     my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
     my $trackDb="$buildDir/${asmId}.trackDb.txt";
-    next if (! -s "$trackDb");
+    next if (! -s "$trackDb");	# assembly build not complete
     my $chromSizes="${buildDir}/${asmId}.chrom.sizes";
     my $sciName = "notFound";
     my $commonName = "notFound";
@@ -239,7 +301,7 @@ sub tableContents() {
     my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$accessionDir/$accessionId";
     printf "<tr><td align=right>%d</td>\n", ++$rowCount;
 ###    printf "<td align=center><a href='https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=%s/hub.txt&amp;genome=%s&amp;position=lastDbPos' target=_blank>%s</a></td>\n", $hubUrl, $accessionId, $commonName;
-    printf "<td align=center><a href='https://hgwdev-hiram.gi.ucsc.edu/h/%s' target=_blank>%s</a></td>\n", $accessionId, $commonName;
+    printf "<td align=center><a href='https://genome.ucsc.edu/h/%s' target=_blank>%s</a></td>\n", $accessionId, $commonName;
     printf "    <td align=center><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/assembly/%s_%s/' target=_blank>%s</a></td>\n", $gcPrefix, $asmAcc, $asmId;
     if ( $bioSample ne "notFound" ) {
@@ -249,6 +311,13 @@ sub tableContents() {
     }
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/bioproject/?term=%s' target=_blank>%s</a></td>\n", $bioProject, $bioProject;
     printf "    <td align=center><a href='%s' target=_blank>%s</a></td>\n", $ncbiFtpLink, $asmDate;
+    if ($vgpIndex) {
+      my $sciNameUnderscore = $sciName;
+      $sciNameUnderscore =~ s/ /_/g;
+      $sciNameUnderscore = "Strigops_habroptilus" if ($sciName =~ m/Strigops habroptila/);
+
+      printf "    <td align=center><a href='https://vgp.github.io/genomeark/%s/' target=_blank>%s</a></td>\n", $sciNameUnderscore, $vgpClass{$asmId}
+    }
     printf "</tr>\n";
   }
 }	#	sub tableContents()

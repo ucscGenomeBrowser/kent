@@ -124,6 +124,9 @@ void initGroupsTracksTables();
 struct region *getRegions();
 /* Consult cart to get list of regions to work on. */
 
+boolean isRegionWholeGenome();
+/* Return TRUE if the current region is the whole genome. */
+
 struct region *getRegionsFullGenome();
 /* Get a region list that covers all of each chromosome. */
 

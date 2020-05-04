@@ -5,7 +5,6 @@ group genes
 shortLabel All GENCODE
 longLabel All GENCODE transcripts, including comprehensive set and previous version
 priority 2.1
-pennantIcon Updated red ../goldenPath/newsarch.html#021120 "Updated Feb. 11, 2020"
 
 # doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
 include wgEncodeGencodeVM2.ra
@@ -29,3 +28,4 @@ include wgEncodeGencodeVM21.ra
 include wgEncodeGencodeVM22.ra
 include wgEncodeGencodeVM23.ra
 include wgEncodeGencodeVM24.ra
+include wgEncodeGencodeVM25.ra

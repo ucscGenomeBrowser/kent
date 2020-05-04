@@ -1,0 +1,866 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the enhLutNer1 assembly (Enhydra Lutris Nereis)
+
+#########################################################################
+#  Initial steps, photograph provided by the Monterey Bay Aquarium (DONE - 2019-10-09 - Jonathan)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/enhLutNer1
+cd ~/kent/src/hg/makeDb/doc/enhLutNer1
+
+sed -e 's/rheMac10/enhLutNer1/g; s/RheMac10/EnhLutNer1/g; s/TBD/TBD/g;' \
+  ../rheMac10/initialBuild.txt > initialBuild.txt
+
+mkdir -p /hive/data/genomes/enhLutNer1/genbank
+cd /hive/data/genomes/enhLutNer1
+
+# Photo provided by the Monterey Bay Aquarium (in pdf, converted to png)
+printf "photoCreditURL  https://www.montereybayaquarium.org/
+photoCreditName Courtesy of the Monterey Bay Aquarium
+" > photoReference.txt
+
+## download from NCBI
+cd /hive/data/genomes/enhLutNer1/genbank
+
+time rsync -L -a -P --stats \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Enhydra_lutris/all_assembly_versions/GCA_006410715.1_ASM641071v1/ ./
+
+    # sent 240 bytes  received 1,945,221,740 bytes  54,794,985.35 bytes/sec
+    # total size is 1,944,746,108  speedup is 1.00
+    # real    0m34.708s
+
+# this information is from the top of 
+#    enhLutNer1/genbank/*_assembly_report.txt
+#    (aka: enhLutNer1/genbank/GCA_006410715.1_ASM641071v1_assembly_report.txt
+
+# Assembly name:  ASM641071v1
+# Organism name:  Enhydra lutris nereis (sea otter)
+# Isolate:  Gidget
+# Sex:  female
+# Taxid:          1049777
+# BioSample:      SAMN09238016
+# BioProject:     PRJNA472597
+# Submitter:      UCLA
+# Date:           2019-06-24
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# WGS project:    QQQE01
+# Assembly method: Meraculous + Dovetail HiRise v. MAY-2016
+# Expected final version: yes
+# Genome coverage: 80.0x
+# Sequencing technology: Illumina HiSeq
+# GenBank assembly accession: GCA_006410715.1
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_006410725.1              Primary Assembly
+#
+
+# check assembly size for later reference:
+faSize G*v1_genomic.fna.gz
+
+# 2425597608 bases (11943786 N's 2413653822 real 1675884180 upper
+#	737769642 lower) in 55496 sequences in 1 files
+# Total size: mean 43707.6 sd 750707.1 min 1000 (QQQE01055496.1)
+#	max 56733013 (QQQE01000071.1) median 2458
+# %30.42 masked total, %30.57 masked real
+
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2019-10-11 - Jonathan)
+# This step copied/modified separately from ../ambMex1/initialBuild.txt
+    mkdir /hive/data/genomes/enhLutNer1/ucsc
+    cd /hive/data/genomes/enhLutNer1/ucsc
+
+    # verify no duplicate sequences:  note the use of the -long argument
+    # on this gigantic amount of sequence
+    time faToTwoBit ../genbank/*1_genomic.fna.gz genbank.2bit
+    #	real    0m47.443s
+
+    time twoBitDup genbank.2bit
+    # real    0m12.307s
+
+    # should be silent output, otherwise the duplicates need to be removed
+
+    # since this is an unplaced contig assembly, verify all names are .1:
+    twoBitInfo genbank.2bit  stdout | awk '{print $1}' \
+	| sed -e 's/[0-9]\+//;' | sort | uniq -c
+    #  55496 QQQE.1
+
+    # in this case, all the .1's can be changed to: v1
+    time zcat ../genbank/GCA_006410715.1_ASM641071v1_genomic.fna.gz \
+       | sed -e 's/.1 Enhydra.*/v1/;' | gzip -c \
+          > ucsc.enhLutNer1.fa.gz
+    # real    9m37.801s
+# -rw-rw-r-- 1 793146354 Oct 11 14:25 ucsc.enhLutNer1.fa.gz
+
+    # and there is no AGP file with the assembly, construct one:
+    time hgFakeAgp -minContigGap=1 ucsc.enhLutNer1.fa.gz ucsc.enhLutNer1.fake.agp
+    # real    0m28.416s
+
+    # verify fasta and AGP match:
+    time faToTwoBit ucsc.enhLutNer1.fa.gz test.2bit
+    # real    0m53.075s
+
+    # verify still silent:
+    time twoBitDup test.2bit
+    # real    0m8.486s
+
+    # and check AGP vs. fasta correspondence:
+    time cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail
+    #  All AGP and FASTA entries agree - both files are valid
+    # real    0m5.140s
+
+    # verify nothing lost compared to genbank:
+    time twoBitToFa test.2bit stdout | faSize stdin
+# 2425597608 bases (11943786 N's 2413653822 real 1675884180 upper
+#	737769642 lower) in 55496 sequences in 1 files
+# Total size: mean 43707.6 sd 750707.1 min 1000 (QQQE01055496v1)
+#	max 56733013 (QQQE01000071v1) median 2458
+# %30.42 masked total, %30.57 masked real
+
+    # real    0m28.771s
+
+    # the original genbank count:
+# 2425597608 bases (11943786 N's 2413653822 real 1675884180 upper
+#	737769642 lower) in 55496 sequences in 1 files
+
+    # no longer needed:
+    rm -f genbank.2bit test.2bit
+
+
+#############################################################################
+# establish config.ra file (DONE - Jonathan - 2019-10-14)
+    cd /hive/data/genomes/enhLutNer1
+    ~/kent/src/hg/utils/automation/prepConfig.pl enhLutNer1 mammal otters \
+       genbank/*_assembly_report.txt > enhLutNer1.config.ra
+
+    sed -e 's/mitoAcc notFound/mitoAcc none/' -i enhLutNer1.config.ra
+    # verify it really does look sane
+    cat enhLutNer1.config.ra
+
+# config parameters for makeGenomeDb.pl:
+db enhLutNer1
+clade mammal
+genomeCladePriority 35
+scientificName Enhydra lutris nereis
+commonName Sea otter
+assemblyDate Jun. 2019
+assemblyLabel UCLA
+assemblyShortLabel ASM641071v1
+orderKey 19259
+mitoAcc none
+fastaFiles /hive/data/genomes/enhLutNer1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/enhLutNer1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir otters
+photoCreditURL  https://www.montereybayaquarium.org/
+photoCreditName Courtesy of the Monterey Bay Aquarium
+ncbiGenomeId 8272
+ncbiAssemblyId 3544501
+ncbiAssemblyName ASM641071v1
+ncbiBioProject 472597
+ncbiBioSample SAMN09238016
+genBankAccessionID GCA_006410715.1
+taxId 1049777
+
+    # Since we're releasing this along with the Northern sea otter assembly and
+    # want to differentiate them, let's make the common name a bit more
+    # detailed.
+
+    sed -e 's/Sea otter/Southern sea otter/' -i enhLutNer1.config.ra
+
+#############################################################################
+#  Initial database build (DONE - 2019-11-15 - Jonathan)
+
+    # verify sequence and AGP are OK:
+    cd /hive/data/genomes/enhLutNer1
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp enhLutNer1.config.ra) > agp.log 2>&1
+    # real    2m17.995s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db enhLutNer1.config.ra) > db.log 2>&1
+    # real    14m58.961s
+
+    # Log file reveals I forgot to put Enhydra_lutris_nereis.png into place.  Fixed that.
+
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=trackDb enhLutNer1.config.ra) >> db.log 2>&1
+    # real    0m7.728s
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add enhLutNer1 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/enhLutNer1
+    ln -s `pwd`/enhLutNer1.unmasked.2bit /gbdb/enhLutNer1/enhLutNer1.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2019-11-15 - Jonathan)
+    mkdir /hive/data/genomes/enhLutNer1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/enhLutNer1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/enhLutNer1/enhLutNer1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku enhLutNer1) > do.log 2>&1
+    # real    5m27.460s
+
+    cat fb.enhLutNer1.cpgIslandExtUnmasked.txt
+    # 45112255 bases of 2413653822 (1.869%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2019-11-15 - Jonathan)
+    mkdir /hive/data/genomes/enhLutNer1/bed/cytoBand
+    cd /hive/data/genomes/enhLutNer1/bed/cytoBand
+    makeCytoBandIdeo.csh enhLutNer1
+
+#############################################################################
+# run up idKeys files for chromAlias/ncbiRefSeq (DONE - 2019-11-15 - Jonathan)
+    mkdir /hive/data/genomes/enhLutNer1/bed/idKeys
+    cd /hive/data/genomes/enhLutNer1/bed/idKeys
+
+    time (doIdKeys.pl \
+        -twoBit=/hive/data/genomes/enhLutNer1/enhLutNer1.unmasked.2bit \
+        -buildDir=`pwd` enhLutNer1) > do.log 2>&1 &
+    # real    20m55.006s
+
+    cat enhLutNer1.keySignature.txt
+    #  6ccb6138a2432071b6103be8b66bb46d
+
+#############################################################################
+# gapOverlap (DONE - 2019-11-15 - Jonathan)
+    mkdir /hive/data/genomes/enhLutNer1/bed/gapOverlap
+    cd /hive/data/genomes/enhLutNer1/bed/gapOverlap
+    time (doGapOverlap.pl \
+        -twoBit=/hive/data/genomes/enhLutNer1/enhLutNer1.unmasked.2bit enhLutNer1 ) \
+        > do.log 2>&1 &
+    # real    3m3.656s
+
+    cat fb.enhLutNer1.gapOverlap.txt
+    # 290750 bases of 2425597608 (0.012%) in intersection
+
+#############################################################################
+# tandemDups (DONE - 2019-11-15 - Jonathan)
+    mkdir /hive/data/genomes/enhLutNer1/bed/tandemDups
+    cd /hive/data/genomes/enhLutNer1/bed/tandemDups
+    time (~/kent/src/hg/utils/automation/doTandemDup.pl \
+  -twoBit=/hive/data/genomes/enhLutNer1/enhLutNer1.unmasked.2bit enhLutNer1) \
+        > do.log 2>&1 &
+    # real    41m29.596s
+
+    cat fb.enhLutNer1.tandemDups.txt
+    # 22686356 bases of 2425597608 (0.935%) in intersection
+
+    bigBedInfo enhLutNer1.tandemDups.bb | sed -e 's/^/#  /;'
+#  version: 4
+#  fieldCount: 13
+#  hasHeaderExtension: yes
+#  isCompressed: yes
+#  isSwapped: 0
+#  extraIndexCount: 0
+#  itemCount: 363,243
+#  primaryDataSize: 10,216,241
+#  primaryIndexSize: 110,800
+#  zoomLevels: 8
+#  chromCount: 2600
+#  basesCovered: 1,194,001,583
+#  meanDepth (of bases covered): 3.077659
+#  minDepth: 1.000000
+#  maxDepth: 158.000000
+#  std of depth: 3.224928
+
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2019-12-04 - Jonathan)
+    # construct idKeys for the genbank sequence
+    mkdir /hive/data/genomes/enhLutNer1/genbank/idKeys
+    cd /hive/data/genomes/enhLutNer1/genbank/idKeys
+    faToTwoBit ../GCA_006410715.1_ASM641071v1_genomic.fna.gz enhLutNer1.genbank.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` \
+        -twoBit=`pwd`/enhLutNer1.genbank.2bit genbankEnhLutNer1)  > do.log 2>&1 &
+    # real    19m47.915s
+
+    cat genbankEnhLutNer1.keySignature.txt
+    #  6ccb6138a2432071b6103be8b66bb46d
+
+    mkdir /hive/data/genomes/enhLutNer1/bed/chromAlias
+    cd /hive/data/genomes/enhLutNer1/bed/chromAlias
+
+    join -t$'\t' ../idKeys/enhLutNer1.idKeys.txt \
+        ../../genbank/idKeys/genbankEnhLutNer1.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToINSDC.bed
+
+    # should be same line counts throughout:
+    wc -l * ../../chrom.sizes
+    # 55496 ucscToINSDC.bed
+    # 55496 ../../chrom.sizes
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 14
+    # use the $chrSize in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab enhLutNer1 ucscToINSDC stdin ucscToINSDC.bed
+
+    # should be quiet for all OK
+    checkTableCoords enhLutNer1
+
+    # should cover %100 entirely:
+    featureBits -countGaps enhLutNer1 ucscToINSDC
+    # 2425597608 bases of 2425597608 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2019-12-04 - Jonathan)
+
+    mkdir /hive/data/genomes/enhLutNer1/bed/chromAlias
+    cd /hive/data/genomes/enhLutNer1/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' enhLutNer1 \
+        | sort -k1,1 > ucsc.genbank.tab
+
+    # Commented out pending adding enhLutNer1 Ensembl build
+    #   ### Adding Ensembl alias with v95 release, after idKeys made: 2019-01-16
+    #   join -t$'\t' ../idKeys/enhLutNer1.idKeys.txt \
+    #       ../../ens95/ensEnhLutNer1.idKeys.txt | cut -f2- \
+    #         | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+    #           | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+    #              | sort -k1,1 -k2,2n > ucscToEns.bed
+    #   cut -f1,4 ucscToEns.bed | sort > ucsc.ensembl.tab
+
+    wc -l *.bed
+#   55496 ucscToINSDC.bed
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+        > enhLutNer1.chromAlias.tab
+
+for t in genbank
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t enhLutNer1.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking genbank: 55496 =? 55496 OK
+
+    hgLoadSqlTab enhLutNer1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        enhLutNer1.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2019-12-06 - Jonathan)
+    cd ~/kent/src/hg/makeDb/trackDb/otters/enhLutNer1
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" enhLutNer1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+    # result truncated - 4307 lines like the following
+     35 QQQEv1_988
+     35 QQQEv1_989
+    290 QQQEv1_99
+     35 QQQEv1_990
+     35 QQQEv1_991
+     35 QQQEv1_992
+     35 QQQEv1_993
+     35 QQQEv1_994
+     35 QQQEv1_995
+     35 QQQEv1_996
+     35 QQQEv1_997
+     35 QQQEv1_998
+     35 QQQEv1_999
+
+    # implies a rule: 'QQQE[0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" enhLutNer1 | wc -l
+    # 212165
+
+    hgsql -N -e "select frag from gold;" enhLutNer1 \
+       | egrep -e 'QQQE[0-9]+(\.[0-9]+)?' | wc -l
+    # 212165
+
+    hgsql -N -e "select frag from gold;" enhLutNer1 \
+       | egrep -v -e 'QQQE[0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/otters/enhLutNer1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [ANQ][CN][V0-9_][O0-9][0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (DONE - 2019-12-09 - Jonathan)
+    mkdir /hive/data/genomes/enhLutNer1/bed/repeatMasker
+    cd /hive/data/genomes/enhLutNer1/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku enhLutNer1) > do.log 2>&1
+    # real    328m48.349s
+
+    cat faSize.rmsk.txt
+# 2425597608 bases (11943786 N's 2413653822 real 1460514973 upper
+#       953138849 lower) in 55496 sequences in 1 files
+# Total size: mean 43707.6 sd 750707.1 min 1000 (QQQE01055496v1)
+#       max 56733013 (QQQE01000071v1) median 2458
+# %39.30 masked total, %39.49 masked real
+
+    egrep -i "versi|relea" do.log
+# RepeatMasker version development-$Id: RepeatMasker,v 1.332 2017/04/17 19:01:11 rhubley Exp $
+#    February 01 2017 (open-4-0-8) 1.332 version of RepeatMasker
+# CC    Dfam_Consensus RELEASE 20181026;                            *
+# CC    RepBase RELEASE 20181026;
+
+    time featureBits -countGaps enhLutNer1 rmsk
+    # 953703279 bases of 2425597608 (39.318%) in intersection
+    # real    0m46.575s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' enhLutNer1 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 953703279.000000
+    # real    1m29.363s
+
+##########################################################################
+# running simple repeat (DONE - 2019-12-09 - Jonathan)
+
+    # The '-trf409 5' is a bit smaller than human which is 6
+
+    mkdir /hive/data/genomes/enhLutNer1/bed/simpleRepeat
+    cd /hive/data/genomes/enhLutNer1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409=5 enhLutNer1) > do.log 2>&1
+    # real    27m25.848s
+
+    cat fb.simpleRepeat
+    # 29255764 bases of 2413653822 (1.212%) in intersection
+
+    cd /hive/data/genomes/enhLutNer1
+    # if using the Window Masker result instead of rmsk (because of greater coverage):
+#    twoBitMask bed/windowMasker/enhLutNer1.cleanWMSdust.2bit \
+#       -add bed/simpleRepeat/trfMask.bed  enhLutNer1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # add to rmsk after it is done:
+    twoBitMask enhLutNer1.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed enhLutNer1.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa enhLutNer1.2bit stdout | faSize stdin > faSize.enhLutNer1.2bit.txt
+    cat faSize.enhLutNer1.2bit.txt
+# 2425597608 bases (11943786 N's 2413653822 real 1459552465 upper
+#       954101357 lower) in 55496 sequences in 1 files
+# Total size: mean 43707.6 sd 750707.1 min 1000 (QQQE01055496v1)
+#       max 56733013 (QQQE01000071v1) median 2458
+# %39.33 masked total, %39.53 masked real
+
+    rm /gbdb/enhLutNer1/enhLutNer1.2bit
+    ln -s `pwd`/enhLutNer1.2bit /gbdb/enhLutNer1/enhLutNer1.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2019-12-09 - Jonathan)
+    ssh hgwdev
+    mkdir /hive/data/genomes/enhLutNer1/bed/microsat
+    cd /hive/data/genomes/enhLutNer1/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed enhLutNer1 microsat microsat.bed
+    # Read 52659 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2019-12-09 - Jonathan)
+
+    mkdir /hive/data/genomes/enhLutNer1/bed/windowMasker
+    cd /hive/data/genomes/enhLutNer1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev enhLutNer1) > do.log 2>&1
+    # real    122m18.256s
+
+    # Masking statistics
+    cat faSize.enhLutNer1.cleanWMSdust.txt
+# 2425597608 bases (11943786 N's 2413653822 real 1662278860 upper
+#       751374962 lower) in 55496 sequences in 1 files
+# Total size: mean 43707.6 sd 750707.1 min 1000 (QQQE01055496v1)
+#       max 56733013 (QQQE01000071v1) median 2458
+# %30.98 masked total, %31.13 masked real
+
+
+    cat fb.enhLutNer1.rmsk.windowmaskerSdust.txt
+    # 478644513 bases of 2425597608 (19.733%) in intersection
+
+# reminder to go back to the trf results and re-incorporate them if switching from rmsk to wm masking
+
+##########################################################################
+# cpgIslands - (DONE - 2019-12-16 - Jonathan)
+    mkdir /hive/data/genomes/enhLutNer1/bed/cpgIslands
+    cd /hive/data/genomes/enhLutNer1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku enhLutNer1) > do.log 2>&1
+    # real    8m36.572s
+
+    cat fb.enhLutNer1.cpgIslandExt.txt
+    # 40415592 bases of 2413653822 (1.674%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2019-12-19 - Jonathan)
+    mkdir /hive/data/genomes/enhLutNer1/bed/genscan
+    cd /hive/data/genomes/enhLutNer1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku enhLutNer1) > do.log 2>&1
+
+# some failed.  para time, to set up time file
+# then para status | grep -v done to get only the ones that failed.
+# grab those, put in script, run on dev.  maybe change -window=2400000 to -window=2000000
+# - Hiram says the jobs generally complete fine when he does that.
+# only a couple jobs failed, so probably just run those in the background on dev.
+
+# $ para status | grep -v done
+# 55496 jobs in batch
+# 1 jobs (including everybody's) in Parasol queue or running.
+# Checking finished jobs
+# #state  tries   real    cpu     host    jobid   cmd
+# crash   4       92.00   90.03   ku-06.gi        66499300        ./runGsBig.csh QQQE01000220v1 000 gtf/000/QQQE01000220v1.gtf pep/000/QQQE01000220v1.pep subopt/000/QQQE01000220v1.bed
+# crash   4       51.00   46.12   ku-19.gi        66502474        ./runGsBig.csh QQQE01000173v1 000 gtf/000/QQQE01000173v1.gtf pep/000/QQQE01000173v1.pep subopt/000/QQQE01000173v1.bed
+
+    cp runGsBig.csh runGsNotQuiteAsBig.csh
+    # Change 2400000 windows to 2000000 and temp dir to /data/tmp
+    ./runGsNotQuiteAsBig.csh QQQE01000220v1 000 gtf/000/QQQE01000220v1.gtf pep/000/QQQE01000220v1.pep subopt/000/QQQE01000220v1.bed > 220v1.log 2>&1
+    ./runGsNotQuiteAsBig.csh QQQE01000173v1 000 gtf/000/QQQE01000173v1.gtf pep/000/QQQE01000173v1.pep subopt/000/QQQE01000173v1.bed > 173v1.log 2>&1
+
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku -continue=makeBed enhLutNer1) > do.log2 2>&1
+    # real    4m14.067s
+
+    cat fb.enhLutNer1.genscan.txt
+    # 61083503 bases of 2413653822 (2.531%) in intersection
+
+    cat fb.enhLutNer1.genscanSubopt.txt
+    # 59601148 bases of 2413653822 (2.469%) in intersection
+
+#########################################################################
+# Create kluster run files (DONE - 2019-12-20 - Jonathan)
+
+    # numerator is enhLutNer1 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap enhLutNer1 gap
+    # 11943786 bases of 2413653822 (0.495%) in intersection
+    #                      ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2413653822 / 2861349177 \) \* 1024
+    #  ( 2413653822 / 2861349177 ) * 1024 = 863.781860
+
+    # ==> use -repMatch=350 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/enhLutNer1
+    blat enhLutNer1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/enhLutNer1.11.ooc \
+        -repMatch=850
+    #   Wrote 23338 overused 11-mers to jkStuff/enhLutNer1.11.ooc
+    # rheMac8 at repMatch=900:
+    #   Wrote 43065 overused 11-mers to jkStuff/rheMac8.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' enhLutNer1 \
+        | sort -k7,7nr | ave -col=7 stdin
+    #   No numerical data column 7 of stdin
+
+    # There are no unbridged gaps here, so no lift to create
+    # gapToLift -verbose=2 -minGap=100 enhLutNer1 jkStuff/enhLutNer1.nonBridged.lft \
+    #     -bedFile=jkStuff/enhLutNer1.nonBridged.bed
+    # wc -l jkStuff/enhLutNer1.nonBri*
+    # # 2979 jkStuff/enhLutNer1.nonBridged.bed
+    # # 2979 jkStuff/enhLutNer1.nonBridged.lft
+
+########################################################################
+# lastz/chain/net swap human/hg38 (DONE - 2019-12-22 - Jonathan)
+# Waiting on hg38/lastzRuns.txt run
+    # original alignment
+    cd /hive/data/genomes/hg38/bed/lastzEnhLutNer1.2019-07-03
+
+    cat fb.hg38.chainEnhLutNer1Link.txt
+    # 1537745313 bases of 3095998939 (49.669%) in intersection
+    cat fb.hg38.chainSynEnhLutNer1Link.txt
+    # 1454400074 bases of 3095998939 (46.977%) in intersection
+    cat fb.hg38.chainRBest.EnhLutNer1.txt
+    # 1413203552 bases of 3095998939 (45.646%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/enhLutNer1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/enhLutNer1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzEnhLutNer1.2019-12-20/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > swap.log 2>&1
+    #  real    88m38.087s
+
+    cat fb.enhLutNer1.chainHg38Link.txt
+    # 1526639908 bases of 2413653822 (63.250%) in intersection
+    cat fb.enhLutNer1.chainSynHg38Link.txt
+    # 1403546142 bases of 2413653822 (58.150%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` enhLutNer1 hg38) > rbest.log 2>&1
+    # real    319m54.030s
+
+    cat fb.enhLutNer1.chainRBest.Hg38.txt
+    # 1414347523 bases of 2413653822 (58.598%) in intersection
+
+#########################################################################
+# lastz/chain/net swap mouse/mm10 (DONE - 2020-04-16 - Jonathan)
+
+    # original alignment
+    cd /hive/data/genomes/mm10/bed/lastzEnhLutNer1.2020-04-15
+
+    cat fb.mm10.chainEnhLutNer1Link.txt
+    #   772059271 bases of 2652783500 (29.104%) in intersection
+    cat fb.mm10.chainSynEnhLutNer1Link.txt
+    #   717097454 bases of 2652783500 (27.032%) in intersection
+    cat fb.mm10.chainRBest.EnhLutNer1.txt
+    # 734878489 bases of 2652783500 (27.702%) in intersection
+
+    mkdir /hive/data/genomes/enhLutNer1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/enhLutNer1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzEnhLutNer1.2020-04-15/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    48m44.604s
+
+    cat fb.enhLutNer1.chainMm10Link.txt
+    #   787727864 bases of 2413653822 (32.636%) in intersection
+    cat fb.enhLutNer1.chainSynMm10Link.txt
+    #   712950571 bases of 2413653822 (29.538%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` enhLutNer1 mm10) > rbest.log 2>&1
+    # real    167m45.490s
+
+    cat fb.enhLutNer1.chainRBest.Mm10.txt
+    # 734620004 bases of 2413653822 (30.436%) in intersection
+
+
+##############################################################################
+# GENBANK AUTO UPDATE (DONE - 2019-12-23 - Jonathan)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Macaca mulatta  381495  60276   5820
+
+    # edit etc/genbank.conf to add enhLutNer1 just after musFur1 (ferret), since
+    # they're somewhat related
+
+# enhLutNer1 Enhydra lutris nereis (southern sea otter) (genbank assembly GCA_006410715.1)
+enhLutNer1.serverGenome = /hive/data/genomes/enhLutNer1/enhLutNer1.2bit
+enhLutNer1.ooc = /hive/data/genomes/enhLutNer1/jkStuff/enhLutNer1.11.ooc
+enhLutNer1.lift = no
+enhLutNer1.perChromTables = no
+enhLutNer1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+enhLutNer1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+enhLutNer1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+enhLutNer1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+enhLutNer1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+enhLutNer1.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+enhLutNer1.downloadDir = enhLutNer1
+enhLutNer1.refseq.mrna.native.load  = yes
+enhLutNer1.refseq.mrna.xeno.load  = yes
+
+    # verify the files specified exist before checking in the file:
+  grep ^enhLutNer1 etc/genbank.conf | grep hive | awk '{print $NF}' | xargs ls -og
+# -rw-rw-r-- 1 639922406 Dec  9 14:48 /hive/data/genomes/enhLutNer1/enhLutNer1.2bit
+# -rw-rw-r-- 1     93360 Dec 20 11:39 /hive/data/genomes/enhLutNer1/jkStuff/enhLutNer1.11.ooc
+
+    # Reminder to add the new species to gbGenome.c in the genbank directory.
+
+    git commit -m "Added enhLutNer1 otter/Enhydra lutris nereis; refs #23771" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add enhLutNer1 to:
+    #   etc/hgwdev.dbs
+    #   etc/align.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added enhLutNer1 - Southern sea otter refs #21152"
+    git push
+    make etc-update
+
+    # wait a few days for genbank magic to take place, the tracks will
+    # appear.  Actually, apparently these days we have to request it from the
+    # genbank handler (currently Chris)
+
+#############################################################################
+# augustus gene track (DONE - 2020-01-03 - Jonathan)
+
+    mkdir /hive/data/genomes/enhLutNer1/bed/augustus
+    cd /hive/data/genomes/enhLutNer1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev enhLutNer1) > do.log 2>&1
+    # real    95m23.998s
+
+    cat fb.enhLutNer1.augustusGene.txt
+    # 50979954 bases of 2413653822 (2.112%) in intersection
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2020-03-02 - Jonathan)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("enhLutNer1", "blat1b", "17902", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("enhLutNer1", "blat1b", "17903", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# Set default position (DONE - 2020-03-02 - Jonathan)
+
+    # Setting to a putative region for BEND7, a gene identified as being
+    # under positive selection (see https://doi.org/10.1093/molbev/msz101)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="QQQE01000156v1:7095823-7210817"
+	where name="enhLutNer1";' hgcentraltest
+
+#########################################################################
+# crispr 10K shoulders (DONE - 2018-10-16 - Jonathan)
+
+# Gone sideways on me - the usage message is wrong and this will NOT use the
+# default build directory of $db/bed/crispr - apparently it's dumping stuff
+# into the current directory.  Now I have to figure out what all it did
+# create and clean up after it before trying to get the ranges step
+# to run (also it looks like it tried to start guides?)
+    mkdir /hive/data/genomes/enhLutNer1/bed/crispr
+    cd /hive/data/genomes/enhLutNer1/bed/crispr
+
+    # No native RefSeq track, so using xenoRefGene
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+	-stop=indexFa -buildDir=`pwd` -smallClusterHub=ku enhLutNer1 xenoRefGene) \
+	> indexFa.log 2>&1
+    # real    59m2.708s
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+       -continue=ranges -stop=guides -buildDir=`pwd` -smallClusterHub=ku \
+           enhLutNer1 xenoRefGene) > guides.log 2>&1
+    # real    7m5.619s
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+        -continue=specScoreJobList -stop=specScores -buildDir=`pwd` \
+           -smallClusterHub=ku enhLutNer1 xenoRefGene) > specScores.log
+
+# Completed: 1520504 of 1520504 jobs
+# CPU time in finished jobs:  131133376s 2185556.27m 36425.94h 1517.75d  4.158 y
+# IO & Wait Time:               3406121s   56768.68m   946.14h   39.42d  0.108 y
+# Average job time:                  88s       1.47m     0.02h    0.00d
+# Longest finished job:             373s       6.22m     0.10h    0.00d
+# Submission to last job:        160229s    2670.48m    44.51h    1.85d
+
+    cd specScores
+    time find tmp/outGuides -type f | xargs cut -f3-6 > ../specScores.tab
+    # real    355m56.098s
+    cd ..
+    wc -l specScores.tab
+    # 115041122 specScores.tab
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+	-continue=effScores -stop=load \
+	    -buildDir=`pwd` -smallClusterHub=ku enhLutNer1 ncbiRefSeq) \
+	> load.log
+    # real    393m15.373s
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2019-07-03,08-30 - Jonathan)
+xyz
+    cd $HOME/kent/src/hg/makeDb/schema
+    # verify all the business is done for release
+    ~/kent/src/hg/utils/automation/verifyBrowser.pl enhLutNer1
+
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=enhLutNer1 -tableCoverage all.joiner
+    joinerCheck -database=enhLutNer1 -times all.joiner
+    joinerCheck -database=enhLutNer1 -keys all.joiner
+
+    # when clean, check in:
+    git commit -m 'adding rules for enhLutNer1, refs #21152' all.joiner
+    git push
+    # run up a 'make alpha' in hg/hgTables to get this all.joiner file
+    # into the hgwdev/genome-test system
+
+    cd /hive/data/genomes/enhLutNer1
+    time (makeDownloads.pl enhLutNer1) > downloads.log 2>&1
+    #  real    15m58.971s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/enhLutNer1/pushQ
+    cd /hive/data/genomes/enhLutNer1/pushQ
+ time ($HOME/kent/src/hg/utils/automation/makePushQSql.pl -redmineList enhLutNer1) > enhLutNer1.pushQ.sql 2> stderr.out
+    # real    15m52.548s
+
+    # remove the tandemDups and gapOverlap from the file list:
+    sed -i -e "/tandemDups/d" redmine.enhLutNer1.table.list
+    sed -i -e "/Tandem Dups/d" redmine.enhLutNer1.releaseLog.txt
+    sed -i -e "/gapOverlap/d" redmine.enhLutNer1.table.list
+    sed -i -e "/Gap Overlaps/d" redmine.enhLutNer1.releaseLog.txt
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/enhLutNer1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/enhLutNer1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/enhLutNer1/bbi/quality.bw
+    # WARNING: enhLutNer1 does not have seq
+    # WARNING: enhLutNer1 does not have extFile
+
+
+    # verify the file list does correctly match to files
+    cat redmine.enhLutNer1.file.list | while read L
+do
+  eval ls $L > /dev/null
+done
+    # should be silent, missing files will show as errors
+
+    # verify database tables, how many to expect:
+    wc -l redmine.enhLutNer1.table.list
+    # 63 redmine.enhLutNer1.table.list
+
+    # how many actual:
+    awk -F'.' '{printf "hgsql -N %s -e '"'"'show table status like \"%s\";'"'"'\n", $1, $2}' redmine.enhLutNer1.table.list | sh | wc -l
+    # 63
+
+    # would be a smaller number actual if some were missing
+
+    # add the path names to the listing files in the redmine issue
+    # in the three appropriate entry boxes:
+
+#	/hive/data/genomes/enhLutNer1/pushQ/redmine.enhLutNer1.file.list
+#	/hive/data/genomes/enhLutNer1/pushQ/redmine.enhLutNer1.releaseLog.txt
+#	/hive/data/genomes/enhLutNer1/pushQ/redmine.enhLutNer1.table.list
+
+#########################################################################

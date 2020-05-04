@@ -12,9 +12,9 @@
 void usage()
 /* print usage infomation and exit */
 {
-errAbort("pslToBed: tranform a psl format file to a bed format file.\n"
+errAbort("pslToBed - tranform a psl format file to a bed format file.\n"
          "usage:\n"
-         "    pslToBed psl bed\n"
+         "    pslToBed [options] psl bed\n"
 	 "options:\n"
 	 "    -cds=cdsFile\n"
 	 "cdsFile specifies a input cds tab-separated file which contains\n"

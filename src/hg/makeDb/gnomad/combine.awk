@@ -47,7 +47,7 @@ strand=$6
 thickStart=$7
 thickEnd=$8
 itemRgb=""
-if (score == -1) {itemRgb = "0,0,0"}
+if (score == -1) {itemRgb = "160,160,160"}
 else if (score >= 0 && score < 0.1) {itemRgb = "0,244,153"}
 else if (score >= 0.1 && score < 0.2) {itemRgb = "74,240,94"}
 else if (score >= 0.2 && score < 0.3) {itemRgb = "127,233,58"}

@@ -309,6 +309,21 @@ struct vcfInfoDef *vcfInfoDefForGtKey(struct vcfFile *vcff, const char *key);
 const struct vcfInfoElement *vcfGenotypeFindInfo(const struct vcfGenotype *gt, char *key);
 /* Find the genotype infoElement for key, or return NULL. */
 
+int vcfGenotypeIndex(int h0Ix, int h1Ix);
+/* Return the index in a linear array of distinct genotypes, given two 0-based allele indexes.
+ * This follows the following convention used by GnomAD (GATK?), that has the advantage that
+ * gt indexes of small numbers don't change as the number of alleles increases, and also matches
+ * the ref/ref, ref/alt, alt/alt convention for biallelic variants:
+ * 0/0,
+ * 0/1, 1/1,
+ * 0/2, 1/2, 2/2,
+ * 0/3, 1/3, 2/3, 3/3,
+ * ... */
+
+void vcfCountGenotypes(struct vcfRecord *rec, int **retGtCounts, int **retAlleleCounts,
+                       int *retPhasedCount, int *retDiploidCount);
+/* Tally genotypes and alleles for summary, adding 1 to rec->alleleCount to represent missing data */
+
 char *vcfFilePooledStr(struct vcfFile *vcff, char *str);
 /* Allocate memory for a string from vcff's shared string pool. */
 

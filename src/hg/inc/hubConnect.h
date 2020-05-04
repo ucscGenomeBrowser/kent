@@ -53,6 +53,7 @@
 #define hgHubDoFirstDb     hgHubDo "firstDb"
 #define hgHubDoDecorateDb  hgHubDo "decorateDb"
 #define hgHubDoRedirect    hgHubDo "redirect"
+#define hgHubDoHubCheck    hgHubDo "hubCheck"
 
 boolean isHubTrack(char *trackName);
 /* Return TRUE if it's a hub track. */

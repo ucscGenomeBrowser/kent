@@ -1,0 +1,185 @@
+track kimNp
+shortLabel Kim RNA Brkpts
+longLabel Kim 2020 RNA-seq: Nanopore and MGISeq Breakpoints
+type bigWig
+visibility hide
+group regulation
+compositeTrack on
+autoScale on
+priority 2
+
+        track kimNpLdr3pBreak
+        type bigWig
+        shortLabel Nanop Ld2Bd 3'
+        longLabel Nanopore Leader-to-body 3' Breakpoints
+        group expression
+        visibility dense
+        color 25,113,194
+        graphTypeDefault bar
+        alwaysZero on
+        windowingFunction maximum 
+        smoothingWindow off
+        transformFunc LOG
+        maxHeightPixels 48:48:11
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/kim-scv2-drs-leader-to-body-breakpoints.bigWig
+        parent kimNp
+
+        track kimNp5pBreak
+        type bigWig
+        shortLabel Nanop NC-Brkpt 5'
+        longLabel Nanopore Noncanonical 5' Breakpoints
+        group expression
+        visibility dense
+        color 240,140,0
+        graphTypeDefault bar
+        alwaysZero on
+        windowingFunction maximum 
+        smoothingWindow off
+        transformFunc LOG
+        maxHeightPixels 48:48:11
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/kim-scv2-drs-5p-breakpoints.bigWig
+        parent kimNp
+
+        track kimNpNc3pBrk
+        type bigWig
+        shortLabel Nanop NC-Brkpt 3'
+        longLabel Nanopore Noncanonical 3' Breakpoints
+        group expression
+        visibility dense
+        color 102,168,15
+        graphTypeDefault bar
+        alwaysZero on
+        windowingFunction maximum 
+        smoothingWindow off
+        transformFunc LOG
+        maxHeightPixels 48:48:11
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/kim-scv2-drs-3p-breakpoints.bigWig
+        parent kimNp
+
+        track kimMgiLdr3p
+        type bigWig
+        shortLabel MGI Ld2Bd 3'
+        longLabel MGISEQ Leader-to-body 3' Breakpoints
+        group expression
+        visibility dense
+        color 102,168,15
+        graphTypeDefault bar
+        alwaysZero on
+        windowingFunction maximum 
+        smoothingWindow off
+        transformFunc LOG
+        maxHeightPixels 48:48:11
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/kim-scv2-mgiseq-leader-to-body-breakpoints.bigWig
+        parent kimNp
+
+        track kimMgiNc5p
+        type bigWig
+        shortLabel MGI NC-Brkpt 5'
+        longLabel Kim et al. MGISEQ Noncanonical 5' Breakpoints
+        group expression
+        visibility dense
+        color 102,168,15
+        graphTypeDefault bar
+        alwaysZero on
+        windowingFunction maximum 
+        smoothingWindow off
+        transformFunc LOG
+        maxHeightPixels 48:48:11
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/kim-scv2-mgiseq-5p-breakpoints.bigWig
+        parent kimNp
+
+        track kimMgiNc3p
+        type bigWig
+        shortLabel MGI NC-Brkpt 3'
+        longLabel Kim et al. MGISEQ Noncanonical 3' Breakpoints
+        group expression
+        visibility dense
+        color 102,168,15
+        graphTypeDefault bar
+        alwaysZero on
+        windowingFunction maximum 
+        smoothingWindow off
+        transformFunc LOG
+        maxHeightPixels 48:48:11
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/kim-scv2-mgiseq-3p-breakpoints.bigWig
+        parent kimNp
+
+track kimRnaMod
+type bigBarChart
+shortLabel Kim RNA Modif
+longLabel Kim et al. Nanopore RNA Modifications: gRNA S 3a E M 6 7a 7b 8 N
+barChartBars gRNA S ORF3a E M ORF6 ORF7a ORF7b ORF8 N
+barChartMetric median 
+bedNameLabel Position on genome
+group regulation
+visibility hide
+color 224,49,49
+bigDataUrl /gbdb/wuhCor1/bbi/kim2020/kim-scv2-drs-modifications.bb
+# custom track has bigChartColors which is invalid, triggers no error but means that rainbow colors are used
+#barChartColors 1,1,1 2,2,2 3,3,3 4,4,4 5,5,5 6,6,6 7,7,7 8,8,8 9,9,9 10,10,10
+#barChartColors #010101 #020202 #030303 #040404 #050505 #060606 #070707 #080808 #090909 #0A0A0A
+barChartUnit frac
+maxLimit 1
+barChartSizeWindows 500 8000
+priority 3
+
+track transcriptome
+shortLabel Transcriptome
+longLabel SARS-CoV-2 Trancriptome tracks
+visibility hide
+group genes
+type bigBed 12
+priority 5
+compositeTrack on
+
+        track TRS_sites
+        parent transcriptome
+        shortLabel TRS sites
+        longLabel Transcription Regulatory Sequences (TRS)
+        type bigBed 6
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/TRS.bb
+        priority 1
+        
+        track mRNAs
+        parent transcriptome
+        shortLabel Known Transcripts (gRNA and mRNA)
+        longLabel Canonical SARS-CoV-2 Transcripts (gRNA and mRNA)
+        type bigBed 12
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/transcripts.bb
+        priority 2
+        
+track kimTranscripts
+shortLabel Kim Transcripts
+longLabel Canonical SARS-CoV-2 Transcript Information from Kim et al. 2020
+visibility hide
+group regulation
+type bigBed 12
+priority 1
+compositeTrack on
+
+        track Kim_RNAs 
+        parent kimTranscripts
+        shortLabel Kim recomb. trans.
+        longLabel All recombined transcripts from Kim et al. 2020
+        type bigBed 12 .
+        scoreFilter 900
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/Kim_recombination.bb
+        priority 3
+
+        track Kim_TRS_sgmRNAs 
+        parent kimTranscripts
+        shortLabel Kim recomb. TRS trans.
+        longLabel Recombined transcripts from Kim et al. 2020 with a TRS
+        scoreFilter 900
+        type bigBed 12 .
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/Kim_TRS.bb
+        priority 4
+
+        track Kim_non-TRS_sgmRNAs 
+        parent kimTranscripts
+        shortLabel Kim Recomb. Novel transcripts
+        longLabel Recombined transcripts from Kim et al. 2020 without a TRS
+        scoreFilter 900
+        type bigBed 12 .
+        bigDataUrl /gbdb/wuhCor1/bbi/kim2020/Kim_notTRS.bb
+        priority 5

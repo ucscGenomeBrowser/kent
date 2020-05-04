@@ -1,0 +1,152 @@
+<h2>Description</h2>
+<p>
+The <b>${longLabel}</b> track set shows structural variants calls (&gt;=50 nucleotides) from the gnomAD v2.1
+release on 10,847 unrelated genomes. It mostly (but not entirely) overlaps with the genome set used
+for the gnomAD short variant release. For more information see the following blog post, 
+<a href="https://macarthurlab.org/2019/03/20/structural-variants-in-gnomad/" target="_blank">
+Structural variants in gnomAD</a>.</p>
+<p>
+There are three subtracks in this track set:
+<ol>
+  <li><b>All SV's:</b> The full set of variant annotations from all 10,847 samples.</li>
+  <li><b>Control Only SV's:</b> Only samples from individuals not selected as a case in a
+      case/control study of common disease (5,192 samples).</li>
+  <li><b>Non-neuro SV's:</b> Only samples from individuals not selected as having a neurological
+      condition in a case/control study (8,342 samples).</li>
+</ol>
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Items in all subtracks follow the same conventions: items are shaded according to variant type,
+mouseover on items indicates affected protein-coding genes, size of the variant (which may differ
+from the chromosomal coordinates in cases like insertions), variant type (insertion, duplication,
+etc), Allele Count, Allele Number, and Allele Frequency. When more than 2 genes are affected by a
+variant, the full list can be obtained by clicking on the item and reading the details page. A short
+summary of the 3 datasets is available in the below table:</p>
+
+<table class="stdTbl">
+  <tr>
+    <th>Variant Type</th>
+    <th>All</th>
+    <th>Controls</th>
+    <th>Non-neuro</th>
+  </tr>
+  <tr>
+    <td style="background-color: rgb(154,182,160)">Breakend (BND)</td>
+    <td>52604</td>
+    <td>37891</td>
+    <td>44952</td>
+  </tr>
+  <tr>
+    <td style="background-color: rgb(182,239,195)">Complex (CPX)</td>
+    <td>4778</td>
+    <td>3129</td>
+    <td>4167</td>
+  </tr>
+  <tr>
+    <td style="background-color: rgb(154,182,160)">Translocation (CTX)</td>
+    <td>8</td>
+    <td>4</td>
+    <td>5</td>
+  </tr>
+  <tr>
+    <td style="background-color: rgb(231,154,144)">Deletion (DEL)</td>
+    <td>169635</td>
+    <td>116401</td>
+    <td>145978</td>
+  </tr>
+  <tr>
+    <td style="background-color: rgb(143,184,214)">Duplication (DUP)</td>
+    <td>49571</td>
+    <td>36223</td>
+    <td>43916</td>
+  </tr>
+  <tr>
+    <td style="background-color: rgb(231,183,237)">Insertion (INS)</td>
+    <td>109025</td>
+    <td>78475</td>
+    <td>95658</td>
+  </tr>
+  <tr>
+    <td style="background-color: rgb(250,199,140)">Inversion (INV)</td>
+    <td>748</td>
+    <td>492</td>
+    <td>667</td>
+  </tr>
+  <tr>
+    <td style="background-color: rgb(183,170,214)">Multi-Allele CNV (MCNV)</td>
+    <td>1108</td>
+    <td>1108</td>
+    <td>1108</td>
+  </tr>
+</table>
+
+<p>
+All tracks can be filtered according to the size of the variant and variant type.</p>
+
+<H2>Methods</H2>
+<p>
+Bed files were obtained from the gnomAD Google Storage bucket:
+
+<pre>
+gsutil cp gs://gnomad-public/papers/2019-sv/gnomad_v2.1_sv.*.bed*
+</pre>
+
+These data were then transformed into bigBed tracks. For the full list of commands used to make this
+track please see the &quot;gnomAD Structural Variants v2.1&quot; section of the
+<a href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg19.txt"
+target="_blank">makedoc</a>.</p>
+
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the <a href="../hgTables">Table Browser</a>, or
+the <a href="../hgIntegrator">Data Integrator</a>. For automated access, this track, like all 
+others, is available via our <a href="../goldenPath/help/api.html">API</a>.  However, for bulk 
+processing, it is recommended to download the dataset. The genome annotation is stored in a bigBed 
+file that can be downloaded from the
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg19/gnomAD/structuralVariants/">download server</a>.
+The exact filenames can be found in the track configuration file. Annotations can be converted to
+ASCII text by our tool <code>bigBedToBed</code> which can be compiled from the source code or
+downloaded as a precompiled binary for your system. Instructions for downloading source code and
+binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool can
+also be used to obtain only features within a given range, for example:</p>
+
+<pre>
+bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg19/gnomAD/structuralVariants/gnomad_v2.1_sv.sites.bb -chrom=chr6 -start=0 -end=1000000 stdout
+</pre>
+
+<p>
+Please refer to our
+<A HREF="https://groups.google.com/a/soe.ucsc.edu/forum/?hl=en&fromgroups#!search/gnomAD"
+target="_blank">mailing list archives</a>
+for questions and example queries, or our
+<a HREF="../FAQ/FAQdownloads.html#download36" target="_blank">Data Access FAQ</a>
+for more information.</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the gnomAD team, especially Anne O'Donnell Luria and Emily O'Heir for their help with
+making these data and recommendations on how to display the data.
+</p>
+
+<h2>References</h2>
+<p>
+Collins RJ, Brand H, Karczewski KJ, Zhao H, Alfoldi J, Francioli LC, Khera AV, Lowther C, Gauthier
+LD, Wang H, <em>et al</em>. <a href="https://doi.org/10.1101/578674" target="_blank">
+An open resource of structural variation for medical and population genetics</a>.
+<em>bioRxiv</em>. 2019 October 21.
+<a href="https://www.biorxiv.org/content/10.1101/578674v2" target="_blank">bioRxiv</a>
+</p>
+
+<p>
+Karczewski KJ, Francioli LC, Tiao G, Cummings BB, Alfoldi J, Wang Q, Collins RL, Laricchia KM,
+Gann A, Birnbaum DP, <em>et al</em>. <a href="https://doi.org/10.1101/531210" target="_blank">
+Variation across 141,456 human exomes and genomes reveals the spectrum of loss-of-function
+intolerance across human protein-coding genes</a>.
+<em>bioRxiv</em>. 2019 August 13.
+<a href="https://www.biorxiv.org/content/10.1101/531210v3" target="_blank">bioRxiv</a>
+</p>
