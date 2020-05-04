@@ -16,6 +16,18 @@ my $defaultAssembly = shift;
 my $home = $ENV{'HOME'};
 my $toolsDir = "$home/kent/src/hg/makeDb/doc/asmHubs";
 my $commonNameOrder = "$asmHubName.commonName.asmId.orderList.tsv";
+my $vgpIndex = 0;
+$vgpIndex = 1 if ($Name =~ m/vgp/i);
+my %vgpClass;	# key is asmId, value is taxon 'class' as set by VGP project
+if ($vgpIndex) {
+  my $vgpClass = "$home/kent/src/hg/makeDb/doc/vgpAsmHub/vgp.taxId,asmId.class.txt";
+  open (FH, "<$vgpClass") or die "can not read $vgpClass";
+  while (my $line = <FH>) {
+    my ($taxId, $asmId, $class) = split('\t', $line);
+    $vgpClass{$asmId} = $class;
+  }
+  close (FH);
+}
 
 my @orderList;	# asmId of the assemblies in order from the *.list files
 # the order to read the different .list files:
@@ -47,7 +59,27 @@ if ($asmHubName eq "vertebrate") {
    $subSetMessage = "subset of other ${asmHubName}s only";
 }
 
-print <<"END"
+if ($vgpIndex) {
+  print <<"END"
+<!DOCTYPE HTML 4.01 Transitional>
+<!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly hub" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
+
+<h1>VGP - Vertebrate Genomes Project assembly hub</h1>
+<p>
+<a href='https://vertebrategenomesproject.org/' target=_blank>
+<img src='VGPlogo.png' width=280 alt='VGP logo'></a></p>
+<p>
+This assembly hub contains assemblies released
+by the <a href='https://vertebrategenomesproject.org/' target=_blank>
+Vertebrate Genomes Project.</a>
+</p>
+
+END
+} else {
+  print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
 <!--#set var="TITLE" value="$Name genomes assembly hubs" -->
 <!--#set var="ROOT" value="../.." -->
@@ -59,6 +91,10 @@ print <<"END"
 Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 </p>
 
+END
+}
+
+print <<"END"
 <h3>How to view the hub</h3>
 <p>
 Options:
@@ -98,16 +134,17 @@ After adding the hub, you will be redirected to the gateway page.  The
 genome assemblies can be selected from the
 <em>${Name} Hub Assembly</em> dropdown menu.
 Instead of adding all the assemblies in one collected group, use the individual
-<em>link to genome browser</em> in the table below.
+<em>view in browser</em> in the table below.
 </p>
 <h3>See also: <a href='asmStats.html'>assembly statistics</a>,&nbsp;<a href='trackData.html'>track statistics</a> <== additional information for these assemblies.</h3><br>
 <h3>Data resource links</h3>
 <p>
 NOTE: <em>Click on the column headers to sort the table by that column</em><br>
-The <em>common name/link to genome browser</em> will attach only that single assembly to
+The <em>common name/view in browser</em> will attach only that single assembly to
 the genome browser.<br>
 The <em>scientific name/and data download</em> link provides access to the files for that one
 assembly hub.<br>
+The <em>class/VGP link</em> provides access to the VGP GenomeArk page for that genome<br>
 The other links provide access to NCBI resources for these assemblies.
 </p>
 END
@@ -117,16 +154,20 @@ END
 ### start the table output
 ##############################################################################
 sub startTable() {
-print <<"END"
+print '
 <table class="sortable" border="1">
 <thead><tr><th>count</th>
-  <th>common name<br>link&nbsp;to&nbsp;genome&nbsp;browser</th>
+  <th>common&nbsp;name&nbsp;and<br>view&nbsp;in&nbsp;browser</th>
   <th>scientific name<br>and&nbsp;data&nbsp;download</th>
   <th>NCBI&nbsp;assembly</th>
   <th>bioSample</th><th>bioProject</th>
   <th>assembly&nbsp;date,<br>source&nbsp;link</th>
-</tr></thead><tbody>
-END
+';
+
+if ($vgpIndex) {
+  printf "<th>class<br>VGP&nbsp;link</th>\n";
+}
+print "</tr></thead><tbody>\n";
 }	#	sub startTable()
 
 ##############################################################################
@@ -198,9 +239,12 @@ sub tableContents() {
     $accessionDir .= "/" . substr($asmId, 10 ,3);
     my $ncbiFtpLink = "ftp://ftp.ncbi.nlm.nih.gov/genomes/all/$accessionDir/$asmId";
     my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
+    if ($gcPrefix eq "GCA") {
+     $buildDir = "/hive/data/genomes/asmHubs/genbankBuild/$accessionDir/$asmId";
+    }
     my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
     my $trackDb="$buildDir/${asmId}.trackDb.txt";
-    next if (! -s "$trackDb");
+    next if (! -s "$trackDb");	# assembly build not complete
     my $chromSizes="${buildDir}/${asmId}.chrom.sizes";
     my $sciName = "notFound";
     my $commonName = "notFound";
@@ -267,6 +311,13 @@ sub tableContents() {
     }
     printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/bioproject/?term=%s' target=_blank>%s</a></td>\n", $bioProject, $bioProject;
     printf "    <td align=center><a href='%s' target=_blank>%s</a></td>\n", $ncbiFtpLink, $asmDate;
+    if ($vgpIndex) {
+      my $sciNameUnderscore = $sciName;
+      $sciNameUnderscore =~ s/ /_/g;
+      $sciNameUnderscore = "Strigops_habroptilus" if ($sciName =~ m/Strigops habroptila/);
+
+      printf "    <td align=center><a href='https://vgp.github.io/genomeark/%s/' target=_blank>%s</a></td>\n", $sciNameUnderscore, $vgpClass{$asmId}
+    }
     printf "</tr>\n";
   }
 }	#	sub tableContents()

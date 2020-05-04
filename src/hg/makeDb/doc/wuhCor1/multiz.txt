@@ -533,12 +533,16 @@ time hgLoadMaf wuhCor1 multiz119way
 # Loaded 1 mafs in 1 files from /gbdb/wuhCor1/multiz119way
 # real    0m0.056s
 
-# construct strain-name track
+# construct strain-name track 2020-04-30 - Hiram
 
-cat defraged.multiz119way.maf \
- | sed -f ~/kent/src/hg/makeDb/doc/wuhCor1/ucscName.strainName.sed \
-  | sed -e 's/wuhCor1.G3686v1_2014/wuhCor1.KM034562v1/' \
-    > strainName.multiz119way.maf
+mkdir /hive/data/genomes/wuhCor1/bed/multiz119way/strainName
+cd /hive/data/genomes/wuhCor1/bed/multiz119way/strainName
+
+cut -f1,3 ~/kent/src/hg/makeDb/doc/wuhCor1/nameList119.txt | sed -e 's/ /_/g;' \
+  | awk -F$'\t' '{printf "s#%s.%s#%s#g;\n", $1, $1, $2}' > accToName.sed
+
+cat ../defraged.multiz119way.maf \
+ | sed -f accToName.sed  > strainName119way.maf
 
 mkdir /gbdb/wuhCor1/strainName119way
 rm /gbdb/wuhCor1/strainName119way/strainName119way.maf
@@ -546,22 +550,15 @@ ln -s `pwd`/strainName.multiz119way.maf \
    /gbdb/wuhCor1/strainName119way/strainName119way.maf
 
 cd /dev/shm
-time hgLoadMaf wuhCor1 strainName119way
+time hgLoadMaf -loadFile=/gbdb/wuhCor1/multiz119way/strainName119way.maf \
+  wuhCor1 strainName119way
 
-    time hgLoadMafSummary -verbose=2 -minSize=30000 \
-	-mergeGap=1500 -maxSize=200000 wuhCor1 multiz119waySummary \
-	/gbdb/wuhCor1/multiz119way/multiz119way.maf
-# Created 1343139 summary blocks from 20786747 components and 4609310 mafs from /gbdb/wuhCor1/multiz119way/multiz119way.maf
-# real    0m50.372s
+# -rw-rw-r--   1          39 Apr 30 21:38 strainName119way.tab
 
-# -rw-rw-r--   1  225415432 Mar  9 11:58 multiz119way.tab
-# -rw-rw-r--   1   60694329 Mar  9 12:01 multiz119waySummary.tab
+   cat strainName119way.tab
+585     NC_045512v2     0       29903   14      29      0.500000
 
-    wc -l multiz119way*.tab
-#  4609310 multiz119way.tab
-#  1343139 multiz119waySummary.tab
-
-    rm multiz119way*.tab
+   rm strainName119way.tab
 
 ##############################################################################
 # frames 2020-03-09 - Hiram first attempt, one gene track used
@@ -585,11 +582,14 @@ cp full.bed hack.bed
 
 #edit hack.bed to remove overlap of YP_009725296.1 with YP_009724395.1
 
+cd /hive/data/genomes/wuhCor1/bed/multiz119way/mafFrames
+
 bedToGenePred hack.bed stdout | genePredSingleCover stdin singleCover.gp
 hgLoadGenePred wuhCor1 singleCover singleCover.gp
 
 genePredToMafFrames wuhCor1          ../mafFrag.multiz119way.maf frames.tab wuhCor1 singleCover.gp
 hgLoadMafFrames wuhCor1 multiz119wayFrames frames.tab
+hgLoadMafFrames wuhCor1 strainName119wayFrames frames.tab  
 
 ##############################################################################
 # constructing download files (DONE - 2020-03-13 - Hiram)

@@ -429,20 +429,35 @@ def cladeRgbFromName(cladeName):
     rgb = (r << 16) | (g << 8) | b
     return rgb
 
-def rNextstrainToNewick(node, parentColor=None):
+def rNextstrainToNewick(node, parentClade=None, parentVarStr=''):
     """Recursively descend ncov.tree and build Newick tree string of samples to file"""
     kids = node.get('children')
     if (kids):
+        # Make a more concise variant path string than the one we make for the clade track,
+        # to embed in internal node labels for Yatish's tree explorations.
+        localVariants = []
+        if (node.get('branch_attrs') and node['branch_attrs'].get('mutations') and
+            node['branch_attrs']['mutations'].get('nuc')):
+            # Nucleotide variants specific to this branch
+            for varName in node['branch_attrs']['mutations']['nuc']:
+                if (snvRe.match(varName)):
+                    localVariants.append(varName)
+        varStr = '+'.join(localVariants)
+        if (len(parentVarStr) and len(varStr)):
+            varStr = ';'.join([parentVarStr, varStr])
+        elif (not len(varStr)):
+            varStr = parentVarStr
         nodeAttrs = node['node_attrs']
         if (nodeAttrs.get('clade_membership')):
             cladeName = nodeAttrs['clade_membership']['value']
-            color = str(cladeRgbFromName(cladeName))
-        elif (parentColor):
-            color = parentColor
+        elif (parentClade):
+            cladeName = parentClade
         else:
-            color = '0'
-        descendants = ','.join([ rNextstrainToNewick(child, color) for child in kids ])
-        treeString = '(' + descendants + ')' + ':' + color
+            cladeName = 'unassigned'
+        color = str(cladeRgbFromName(cladeName))
+        descendants = ','.join([ rNextstrainToNewick(child, cladeName, varStr) for child in kids ])
+        label = '#'.join([cladeName, varStr])
+        treeString = '(' + descendants + ')' + label + ':' + color
     else:
         nodeAttrs = node['node_attrs']
         gId = nodeAttrs['gisaid_epi_isl']['value']

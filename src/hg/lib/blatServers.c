@@ -2,15 +2,15 @@
  * generated blatServers.h and blatServers.sql.  This module links the database and
  * the RAM representation of objects. */
 
-/* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
-
 #include "common.h"
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
 #include "blatServers.h"
 
+
+
+char *blatServersCommaSepFieldNames = "db,host,port,isTrans,canPcr";
 
 void blatServersStaticLoad(char **row, struct blatServers *ret)
 /* Load a row from blatServers table into ret.  The contents of ret will
@@ -21,6 +21,7 @@ ret->db = row[0];
 ret->host = row[1];
 ret->port = sqlSigned(row[2]);
 ret->isTrans = sqlSigned(row[3]);
+ret->canPcr = sqlSigned(row[4]);
 }
 
 struct blatServers *blatServersLoad(char **row)
@@ -34,16 +35,17 @@ ret->db = cloneString(row[0]);
 ret->host = cloneString(row[1]);
 ret->port = sqlSigned(row[2]);
 ret->isTrans = sqlSigned(row[3]);
+ret->canPcr = sqlSigned(row[4]);
 return ret;
 }
 
 struct blatServers *blatServersLoadAll(char *fileName) 
-/* Load all blatServers from a tab-separated file.
+/* Load all blatServers from a whitespace-separated file.
  * Dispose of this with blatServersFreeList(). */
 {
 struct blatServers *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileRow(lf, row))
     {
@@ -55,28 +57,21 @@ slReverse(&list);
 return list;
 }
 
-struct blatServers *blatServersLoadWhere(struct sqlConnection *conn, char *table, char *where)
-/* Load all blatServers from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
+struct blatServers *blatServersLoadAllByChar(char *fileName, char chopper) 
+/* Load all blatServers from a chopper separated file.
  * Dispose of this with blatServersFreeList(). */
 {
 struct blatServers *list = NULL, *el;
-struct dyString *query = dyStringNew(256);
-struct sqlResult *sr;
-char **row;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[5];
 
-sqlDyStringPrintf(query, "select * from %s", table);
-if (where != NULL)
-    dyStringPrintf(query, " where %s", where);
-sr = sqlGetResult(conn, query->string);
-while ((row = sqlNextRow(sr)) != NULL)
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
     el = blatServersLoad(row);
     slAddHead(&list, el);
     }
+lineFileClose(&lf);
 slReverse(&list);
-sqlFreeResult(&sr);
-dyStringFree(&query);
 return list;
 }
 
@@ -93,6 +88,7 @@ ret->db = sqlStringComma(&s);
 ret->host = sqlStringComma(&s);
 ret->port = sqlSignedComma(&s);
 ret->isTrans = sqlSignedComma(&s);
+ret->canPcr = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -136,6 +132,10 @@ fputc(sep,f);
 fprintf(f, "%d", el->port);
 fputc(sep,f);
 fprintf(f, "%d", el->isTrans);
+fputc(sep,f);
+fprintf(f, "%d", el->canPcr);
 fputc(lastSep,f);
 }
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 

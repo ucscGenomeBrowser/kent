@@ -16,7 +16,7 @@ termRegex NC_[0-9v]+
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
-include ncbiGeneBGP.ra
+include ncbiGene.ra
 
 track rnaStructRangan
 shortLabel Rangan RNA
@@ -36,8 +36,8 @@ group map
 type psl
 
 track rfam
-shortLabel RFAM
-longLabel RFAM families
+shortLabel Rfam
+longLabel Rfam families
 visibility hide
 group genes
 color 98,23,0
@@ -67,11 +67,13 @@ type psl
 track rosettaMhc
 shortLabel CD8 RosettaMHC
 longLabel CD8 Epitopes predicted by NetMHC and Rosetta
-url     https://rosettamhc.chemistry.ucsc.edu/?epitope=$$
+url https://rosettamhc.chemistry.ucsc.edu/?epitope=$$
 urls name="https://rosettamhc.chemistry.ucsc.edu/?epitope=$$"
 urlLabel Link to Rosetta Model
 group immu
 type bigBed 9 +
+exonArrows off
+exonNumbers off
 bigDataUrl /gbdb/wuhCor1/bbi/rosetta.bb
 
 track epiValid
@@ -176,6 +178,7 @@ compositeTrack on
 
 
 include trackDb.119way.ra
+include trackDb.strainName119way.ra
 include epitopes.ra
 include trackDb.44way.ra
 include trackDb.strainName44way.ra

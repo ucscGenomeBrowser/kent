@@ -37,11 +37,25 @@ echo $i
 grep -wh "$i" nonsyn.bed syn.bed codingVariant.bed utrVariant.bed intron.bed intergenic.bed missing.bed | bedSmash stdin chrom.sizes stdout >>  output.bed
 done
 
-awk '{print $1,$2,$3,$4,$5}' output.bed > load.bed
+# make codingVariants into missing data instead of showing blue
+awk '{print $1,$2,$3,$4,$5}' output.bed | sed 's/ 1580$/ 0/' > load.bed
 
-cat load.bed | sed -f ~/kent/src/hg/makeDb/doc/wuhCor1/ucscName.strainName.sed \
-  | sed -e 's/G3686v1_2014/KM034562v1/' \
-  > strainLoad.bed
+cut -f1,3 ~/kent/src/hg/makeDb/doc/wuhCor1/nameList119.txt \
+   | sed -e 's/ /_/g;' | grep -v NC_045512v2 \
+     | awk -F$'\t' '{printf "s#%s#%s#g;\n", $1, $2}' > accToName.sed
+
+cut -f1,3 ~/kent/src/hg/makeDb/doc/wuhCor1/nameList119.txt | sed -e 's/ /_/g;' \
+  | awk -F$'\t' '{printf "s#%s.%s#%s#g;\n", $1, $1, $2}' > accToName.sed
+
+cat load.bed | sed -f accToName.sed > strainLoad.bed
+
+# verify enough correct names, should be 118:
+awk '{print $4}' strainLoad.bed | sort | uniq -c | wc -l
+    118
+
+# and one chromosome name:
+awk '{print $1}' strainLoad.bed | sort | uniq -c
+ 205615 NC_045512v2
 
 hgLoadBed wuhCor1 mafSnp119way load.bed
 hgLoadBed wuhCor1 mafSnpStrainName119way strainLoad.bed
