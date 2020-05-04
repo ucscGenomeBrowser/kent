@@ -444,7 +444,7 @@ def rNextstrainToNewick(node, parentClade=None, parentVarStr=''):
                     localVariants.append(varName)
         varStr = '+'.join(localVariants)
         if (len(parentVarStr) and len(varStr)):
-            varStr = ';'.join([parentVarStr, varStr])
+            varStr = '$'.join([parentVarStr, varStr])
         elif (not len(varStr)):
             varStr = parentVarStr
         nodeAttrs = node['node_attrs']
