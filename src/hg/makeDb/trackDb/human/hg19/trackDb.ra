@@ -31,7 +31,7 @@ type bigBed 3 +
 
     track getRmNgsDeadZone
     shortLabel NCBI NGS Dead Zone
-    longLabel NCBI Get-RM NGS Dead Zone
+    longLabel NCBI GeT-RM NGS Dead Zone
     type bigBed 3 +
     bigDataUrl /gbdb/hg19/bbi/problematic/deadZone.bb
     visibility dense
@@ -40,7 +40,7 @@ type bigBed 3 +
 
     track getRmSangerDeadZone
     shortLabel NCBI Sanger Dead Zone
-    longLabel NCBI Get-RM Sanger Dead Zone
+    longLabel NCBI GeT-RM Sanger Dead Zone
     type bigBed 3 +
     bigDataUrl /gbdb/hg19/bbi/problematic/sangerDeadZone.bb
     visibility dense
