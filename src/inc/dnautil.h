@@ -97,6 +97,9 @@ char *reverseComplementSlashSeparated(char *alleleStr);
 enum dnaCase {dnaUpper,dnaLower,dnaMixed,};
 /* DNA upper, lower, or mixed case? */
 
+/* Convert U's to T's */
+void toDna(DNA *dna);
+
 /* Convert T's to U's */
 void toRna(DNA *dna);
 

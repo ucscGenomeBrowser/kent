@@ -547,6 +547,23 @@ return 0;
 }
 
 
+/* Convert U's to T's */
+void toDna(DNA *rna)
+{
+DNA c;
+for (;;)
+    {
+    c = *rna;
+    if (c == 'u')
+	*rna = 't';
+    else if (c == 'U')
+	*rna = 'T';
+    else if (c == 0)
+	break;
+    ++rna;
+    }
+}
+
 /* Convert T's to U's */
 void toRna(DNA *dna)
 {
