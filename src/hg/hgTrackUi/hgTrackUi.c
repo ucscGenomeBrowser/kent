@@ -3224,7 +3224,10 @@ if (tdb->parent)
     if (end)
         *end = '\0';
     printf("%s", html);
-    printf("<p><i>To view the full description of this super-track, click the link above.</i>\n");
+    printf("<p><i>To view the full description of this super-track, click "
+                "<a target='_blank' href='%s?%s=%s&c=%s&g=%s#TRACK_HTML'>here.</i></a>\n",
+                    hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+                    chromosome, cgiEncode(tdbParent->track));
     jsEndCollapsibleSection();
     printf("</table></p>");
 
