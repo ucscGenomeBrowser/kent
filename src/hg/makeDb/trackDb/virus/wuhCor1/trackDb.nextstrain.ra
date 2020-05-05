@@ -19,10 +19,10 @@ url https://nextstrain.org/ncov?d=tree&m=div&label=clade:$$
 urlLabel View in Nextstrain: 
 
 track nextstrainSamples
-shortLabel Nextstrain Vars
+shortLabel Nextstrain Variants
 longLabel Nextstrain/GISAID Sample Variants from nextstrain.org/ncov
 type vcfTabix
-visibility hide
+visibility pack
 hapClusterEnabled on
 group varRep
 priority 0.5
