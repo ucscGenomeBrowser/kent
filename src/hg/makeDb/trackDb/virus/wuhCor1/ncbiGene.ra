@@ -14,6 +14,8 @@ baseColorDefault genomicCodons
 urls product=https://www.ncbi.nlm.nih.gov/protein/$$ geneId=https://www.ncbi.nlm.nih.gov/gene/$$
 #urlLabel NCBI Refseq protein
 mouseOverField note
+searchIndex name
+searchTrix /gbdb/wuhCor1/ncbiSearch.ix
 
 track ncbiProducts
 shortLabel NCBI Proteins
@@ -49,5 +51,6 @@ mouseOverField note
 
 searchTable ncbiGeneBGP
 searchType bigBed
+searchMethod fuzzy
 searchDescription NCBI Genes
 searchPriority 1.3

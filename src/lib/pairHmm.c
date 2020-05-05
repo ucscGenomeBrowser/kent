@@ -26,7 +26,7 @@ struct phmmMatrix *phmmMatrixNew(int stateCount,
 {
 int i;
 struct phmmMommy *allCells;
-int allCellSize;
+size_t allCellSize;
 int rowSize;
 int *allScores;
 struct phmmMatrix *am;
@@ -44,7 +44,7 @@ am->stateByteSize = am->stateSize * sizeof(struct phmmMommy);
 am->states = needMem(stateCount * sizeof(struct phmmState));
 
 /* Initialize matrix of cells for each state. */
-allCellSize = stateCount * am->stateByteSize;
+allCellSize = (size_t)stateCount * (size_t)am->stateByteSize;
 am->allCells = allCells = needLargeMem(allCellSize); 
 memset(allCells, 0, allCellSize);
 for (i=0; i<stateCount; ++i)

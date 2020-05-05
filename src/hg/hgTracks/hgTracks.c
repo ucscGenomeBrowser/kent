@@ -1083,6 +1083,7 @@ void oligoMatchLoad(struct track *tg)
 {
 char *dna = dnaInWindow();
 char *fOligo = oligoMatchSeq();
+toDna(fOligo);
 char *(*finder)(char *needle, char *haystack) = (anyIupac(fOligo) ? iupacIn : stringInWrapper);
 int oligoSize = strlen(fOligo);
 char *rOligo = cloneString(fOligo);

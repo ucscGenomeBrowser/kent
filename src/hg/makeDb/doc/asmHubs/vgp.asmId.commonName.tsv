@@ -75,7 +75,6 @@ GCA_011762505.1_mArvNil1.pat.X	African grass rat
 GCA_011762515.1_mTurTru1.pat	common bottlenose dolphin
 GCA_011762535.1_mTurTru1.mat	common bottlenose dolphin
 GCA_011762545.1_mArvNil1.pat	African grass rat
-GCA_011762595.1_mTurTru1.mat.Y	common bottlenose dolphin
 GCA_012275265.1_bMelUnd1.mat	budgerigar
 GCA_012275275.1_bMelUnd1.pat	budgerigar
 GCA_012275295.1_bMelUnd1.mat.Z	budgerigar
@@ -105,7 +104,6 @@ GCA_902167395.1_gadMor3.0_alternate_haplotype	Atlantic cod
 GCA_902362175.1_fChaCha1.1_alternate_haplotype	milkfish
 GCA_902459445.1_eAstRub1.2_alternate_haplotype	European starfish
 GCA_902459495.1_aGeoSer1.1_alternate_haplotype	caecilians
-GCA_902459505.1_aGeoSer1.1	caecilians
 GCA_902500245.1_fThaAma1.1_alternate_haplotype	bony fishes
 GCA_902500255.1_fThaAma1.1	bony fishes
 GCA_902685485.1_mSciVul1.1_alternate_haplotype	Eurasian red squirrel
@@ -132,6 +130,7 @@ GCF_009829145.1_bChiLan1.pri	lance-tailed manakin
 GCF_009829155.1_mMusErm1.Pri	ermine
 GCF_010909765.1_sAmbRad1.pri	thorny skate
 GCF_010993605.1_kPetMar1.pri	sea lamprey
+GCF_011762595.1_mTurTru1.mat.Y	common bottlenose dolphin
 GCF_900246225.1_fAstCal1.2	eastern happy
 GCF_900324465.2_fAnaTes1.2	climbing perch
 GCF_900324485.2_fMasArm1.2	zig-zag eel
@@ -155,3 +154,4 @@ GCF_902150065.1_fMyrMur1.1	pinecone soldierfish
 GCF_902167405.1_gadMor3.0	Atlantic cod
 GCF_902362185.1_fChaCha1.1	milkfish
 GCF_902459465.1_eAstRub1.3	European starfish
+GCF_902459505.1_aGeoSer1.1	caecilians

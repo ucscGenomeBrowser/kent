@@ -52,6 +52,41 @@
 <!-- ============= 2020 archived news ============= -->
 <a name="2020"></a>
 
+<a name="050620"></a>
+<h2>May 6, 2020 &nbsp;&nbsp; Problematic Regions for NGS or Sanger sequencing or very variable regions</h2>
+<p>
+We are happy to announce a new data track which describes
+<a target="_blank" href="../../cgi-bin/hgTrackUi?db=hg19&g=problematic">Problematic Regions for NGS or Sanger sequencing or very variable regions</a> in the human assembly (hg19/GRCh37).</p>
+
+<p>
+This track shows genomic regions known to cause artefacts for common sequencing downstream analyses,
+like alignment, variant, or peak calling. This track is composed of 12 subtracks with underlying
+data imported from these projects:</p>
+
+<ul>
+<li>
+<a target="_blank" href="../../cgi-bin/hgGateway">UCSC</a> - manually curated annotations of fixed sequences,
+alternate haplotypes, unplaced contigs, pseudo-autosomal regions, and mitochondria that can yield
+alignments with low quality mapping scores and discordant read pairs. </li>
+<li>
+<a target="_blank" href="https://personal.broadinstitute.org/anshul/projects/encode/rawdata/blacklists/hg19-
+blacklist-README.pdf">ENCODE Blacklist</a> - comprehensive set of regions that have anomalous,
+unstructured or high signal in next-generation sequencing experiments.</li>
+<li>
+<a target="_blank" href="https://www.ncbi.nlm.nih.gov/variation/tools/get-rm/">NCBI GeT-RM</a> - highly homologous
+gene and exon level regions that are difficult or impossible to analyze with standard Sanger or NGS
+approaches and are relevant to current clinical testing.</li>
+<li>
+<a target="_blank" href="https://www.nist.gov/programs-projects/genome-bottle">Genome-in-a-Bottle</a> - defined
+regions where it is difficult to make a confident call, due to low coverage, systematic sequencing
+errors, local alignment problems, etc.</li>
+</ul>
+
+<p>
+We would like to thank Anna Benet-Pages, Max Haeussler, Angie Hinrichs, and Daniel Schmelter at the
+UCSC Genome Browser for planning, building, and testing these tracks.
+</p>
+
 <a name="050420"></a>
 <h2>May 4, 2020 &nbsp;&nbsp; May 4th data release for SARS-CoV-2 genome browser</h2>
 <p>
