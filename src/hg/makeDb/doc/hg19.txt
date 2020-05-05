@@ -33597,3 +33597,86 @@ cd /gbdb/hg19/bbi/special;
 for i in /hive/data/genomes/hg19/bed/specialRegions/bb/filter*.bb;  do ln -s $i; done
 bedSort orig/hg19-blacklist.v2.bed orig/hg19-blacklist.v2.bed 
 bedToBigBed orig/hg19-blacklist.v2.bed /hive/data/genomes/hg19/chrom.sizes  bb/encBlacklist.bb -tab
+
+#############################################################################
+# GTEx V8 (April 2020) Kate
+# Create BED from hgFixed tables (see doc/gtex)
+
+cd /hive/data/outside/gtex/V8/rnaSeq
+
+# Lift GTEx LDACC gene models (GENCODE V26 isoforms collapsed to single gene model)
+from hg38 annotation by GTEx LDACC
+
+set chain = /hive/data/genomes/hg38/bed/liftOver/hg38ToHg19.over.chain.gz
+liftOver -genePred gencodeV26.hg38.genePred $chain gencodeV26.hg19.lifted.genePred \
+                gencodeV26.hg19.unmapped
+# 1300 gencodeV26.hg19.unmapped
+# (was 925 in V6 lift hg19 to hg38)
+
+# TODO: Consider transmap
+
+hgLoadGenePred hg19 gtexGeneModelV8 gencodeV26.hg19.lifted.genePred
+
+# Load BED table
+cd /hive/data/genomes/hg19/bed/gtex
+mkdir -p V8
+cd V8
+
+set gencode = V26lift37
+~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed \
+        hg19 -noLoad -gtexVersion=V8 -gencodeVersion=$gencode gtexGeneV8 -verbose=2 >&! log.txt &
+
+# Max score: 267400.000000
+
+wc -l gtexGeneV8.tab
+#54481 gtexGeneV8.tab
+
+# 1070 genes not found in GencodeAttrs table
+# e.g. 
+Can't find geneId ENSG00000278267 in wgEncodeGencodeAttrsV26lift37
+#from Ensembl page for MIR6859-1:
+#Stable ID ENSG00000278267 not present in GRCh37.
+
+# 650 genes not found in modelHash
+# e.g. 
+Can't find gene ENSG00000279928.2 in modelHash
+# From Ensembl
+Gene: FO538757.1 ENSG00000279928
+There is no ungapped mapping of this gene onto the GRCh37 assembly.
+Stable ID ENSG00000279928 not present in GRCh37.
+
+#Max score: 219385.906250
+wc -l gtexGeneV8.tab
+# 54481 gtexGeneV8.tab
+# 55393 gtexGeneV6.tab
+
+# Add scores (see hg38/gtex.txt for background)
+
+set bedScore = ~/kent/src/utils/bedScore/bedScore
+$bedScore -col=10 -minScore=0 -log -method=encode gtexGeneV8.tab gtexGeneBedV8.bed
+textHistogram -real -autoScale=14 -log -col=5 gtexGeneBedV8.bed
+0.000000 ************************************************************ 20189
+71.428643 **************************************************** 5512
+142.857286 **************************************************** 5401
+214.285929 *************************************************** 4587
+285.714571 *************************************************** 4399
+357.143214 *************************************************** 4672
+428.571857 **************************************************** 5390
+500.000500 ************************************************* 3073
+571.429143 ***************************************** 904
+642.857786 ********************************* 248
+714.286429 *************************** 80
+785.715071 ************** 10
+857.143714 ******** 4
+928.572357 *************** 12
+
+# table looks OK, load it
+set lib = ~/kent/src/hg/lib
+hgLoadBed hg19 -noBin -tab -type=bed6+4 \
+        -as=$lib/gtexGeneBed.as -sqlTable=$lib/gtexGeneBed.sql -renameSqlTable \
+                gtexGeneV8 gtexGeneBedV8.bed
+# Read 54481 elements of size 10 from gtexGeneBedV8.bed
+
+# TODO: Add to gene sorter
+
+
