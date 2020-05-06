@@ -3432,7 +3432,7 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
         enum browserType browser = cgiBrowser();
         if (browser == btIE || browser == btFF)
             downArrow = "&darr;";
-        printf("&nbsp;&nbsp;<A HREF='#DISPLAY_SUBTRACKS' TITLE='Jump to subtracks section of "
+        printf("&nbsp;&nbsp;<A HREF='#DISPLAY_SUBTRACKS' TITLE='Jump to subtrack list section of "
                "page'>Subtracks%s</A>", downArrow);
         printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
                "Description%s</A>", downArrow);
@@ -3613,8 +3613,6 @@ if (tdb == NULL)
    errAbort("Can't find %s in track database %s chromosome %s",
 	    track, database, chromosome);
    }
-char *title = (tdbIsSuper(tdb) ? "Super-track Settings" :
-               tdbIsDownloadsOnly(tdb) ? DOWNLOADS_ONLY_TITLE : "Track Settings");
 if(cartOptionalString(cart, "ajax"))
     {
     // html is going to be used w/n a dialog in hgTracks.js so serve up stripped down html
@@ -3626,7 +3624,20 @@ if(cartOptionalString(cart, "ajax"))
     }
 else
     {
-    cartWebStart(cart, database, "%s %s", tdb->shortLabel, title);
+    char title[1000];
+    if (tdb->parent)
+        {
+        safef(title, sizeof title, 
+                        // TODO: replace in-line styling with class
+                "<span style='background-color: #c3d4f4; padding-left: 10px; margin-left: -8px;'>"
+                        "%s&nbsp;&nbsp;</span> %s", 
+                tdb->parent->shortLabel, tdb->shortLabel);
+        }
+    else
+        safef(title, sizeof title, "%s", tdb->shortLabel);
+    char *titleEnd = (tdbIsSuper(tdb) ? "" :
+               tdbIsDownloadsOnly(tdb) ? DOWNLOADS_ONLY_TITLE : "Track Settings");
+    cartWebStart(cart, database, "%s %s", title, titleEnd);
     trackUi(tdb, tdbList, ct, FALSE);
     printf("<BR>\n");
     jsonPrintGlobals();
