@@ -3635,7 +3635,7 @@ else
         }
     else
         safef(title, sizeof title, "%s", tdb->shortLabel);
-    char *titleEnd = (tdbIsSuper(tdb) ? "" :
+    char *titleEnd = (tdbIsSuper(tdb) ? "Tracks" :
                tdbIsDownloadsOnly(tdb) ? DOWNLOADS_ONLY_TITLE : "Track Settings");
     cartWebStart(cart, database, "%s %s", title, titleEnd);
     trackUi(tdb, tdbList, ct, FALSE);
