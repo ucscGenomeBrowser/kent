@@ -3629,8 +3629,10 @@ else
         {
         safef(title, sizeof title, 
                         // TODO: replace in-line styling with class
-                "<span style='background-color: #c3d4f4; padding-left: 10px; margin-left: -8px;'>"
-                        "%s&nbsp;&nbsp;</span> %s", 
+                "<span style='background-color: #c3d4f4; "
+                    "padding-left: 10px; padding-right: 10px;"
+                    "margin-right: 10px; margin-left: -8px;'>"
+                       "%s</span> %s", 
                 tdb->parent->shortLabel, tdb->shortLabel);
         }
     else
