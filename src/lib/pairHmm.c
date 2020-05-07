@@ -96,7 +96,7 @@ static void phmmFindMatrixIx(struct phmmMatrix *am, struct phmmMommy *cell,
 	int *retStateIx, int *retQix, int *retTix)
 /* Given a cell in matrix return state, query, and target index. */
 {
-int cellIx = cell - am->allCells;
+size_t cellIx = cell - am->allCells;
 *retStateIx = cellIx/am->stateSize;
 cellIx %= am->stateSize;
 *retTix = cellIx / am->qDim;
