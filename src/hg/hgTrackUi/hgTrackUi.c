@@ -3149,18 +3149,12 @@ if (tdbIsContainer(tdb))
 
 if (tdb->parent)
     {
-    printf("<i>This track is part of a super-track. "
-            "To configure the parent or sibling tracks, click a link below.</i>");
-
     // show super-track info
     struct trackDb *tdbParent = tdb->parent;
-    printf("<p>");
     if (trackDbSetting(tdbParent, "wgEncode"))
         printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' "
                "width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
-    printf("<b style='font-size:%d%%;'><a href='%s?%s=%s&c=%s&g=%s'"
-               " title='Configure parent track'>%s tracks</b></a>",
-                strlen(tdb->longLabel) > 30 ? 133 : 200,
+    printf("<b>Track grouping: <a href='%s?%s=%s&c=%s&g=%s'>%s </b></a>",
                 hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
                 chromosome, cgiEncode(tdbParent->track), tdbParent->longLabel);
 
@@ -3182,29 +3176,10 @@ if (tdb->parent)
         }
     grpFreeList(&grps);
 
-    printf("<table cellpadding='2' style='margin-left: 50px';>");
-    struct slRef *childRef;
-    tdbRefSortPrioritiesFromCart(cart, &tdbParent->children);
-    for (childRef = tdbParent->children; childRef != NULL; childRef = childRef->next)
-        {
-        struct trackDb *sibTdb = childRef->val;
-        if (sameString(sibTdb->track, tdb->track))
-            {
-            printf("<tr><td><b>%s</b></td>\n", sibTdb->shortLabel);
-            printf("<td>%s</td></tr>\n", sibTdb->longLabel);
-            continue;
-            }
-        printf("<tr>");
-        printf("<td><a href='%s?%s=%s&c=%s&g=%s'>%s</a>&nbsp;</td>", 
-                    tdbIsDownloadsOnly(sibTdb) ? hgFileUiName(): hTrackUiForTrack(sibTdb->track),
-                    cartSessionVarName(), cartSessionId(cart), chromosome, cgiEncode(sibTdb->track), 
-                    sibTdb->shortLabel);
-        printf("<td>%s</td></tr>\n", sibTdb->longLabel);
-        }
-    printf("</table></p>");
-
     // collapsed panel for Description
-    printf("<p><table>");
+
+    printf("<p>");
+    printf("<p><table>");  // required by jsCollapsible
     jsBeginCollapsibleSectionFontSize(cart, tdb->track, "superDescription", "Description", FALSE,
                                             "medium");
     char *html = replaceChars(tdbParent->html, "<H", "<h");
@@ -3224,14 +3199,39 @@ if (tdb->parent)
     if (end)
         *end = '\0';
     printf("%s", html);
-    printf("<p><i>To view the full description of this super-track, click "
+    printf("<p><i>To view the full description, click "
                 "<a target='_blank' href='%s?%s=%s&c=%s&g=%s#TRACK_HTML'>here.</i></a>\n",
                     hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
                     chromosome, cgiEncode(tdbParent->track));
     jsEndCollapsibleSection();
-    printf("</table></p>");
+    printf("</table>"); // required by jsCollapsible
 
-    //printf("</p><p>&nbsp;&nbsp;<b>+ Description</b>\n");
+    // collapsed panel for list of other tracks in the supertrack
+
+    char listTitle[1000];
+    safef(listTitle, sizeof listTitle, "Other tracks in this grouping (%d)", 
+                        slCount(tdbParent->children)-1);
+    printf("<table>");  // required by jsCollapsible
+    jsBeginCollapsibleSectionFontSize(cart, tdb->track, "superMembers", listTitle, FALSE, "medium");
+    printf("<table cellpadding='2' style='margin-left: 50px';>");
+    struct slRef *childRef;
+    tdbRefSortPrioritiesFromCart(cart, &tdbParent->children);
+    for (childRef = tdbParent->children; childRef != NULL; childRef = childRef->next)
+        {
+        struct trackDb *sibTdb = childRef->val;
+        if (sameString(sibTdb->track, tdb->track))
+            continue;
+        printf("<tr>");
+        printf("<td><a href='%s?%s=%s&c=%s&g=%s'>%s</a>&nbsp;</td>", 
+                    tdbIsDownloadsOnly(sibTdb) ? hgFileUiName(): hTrackUiForTrack(sibTdb->track),
+                    cartSessionVarName(), cartSessionId(cart), chromosome, cgiEncode(sibTdb->track), 
+                    sibTdb->shortLabel);
+        printf("<td>%s</td></tr>\n", sibTdb->longLabel);
+        }
+    printf("</table>");
+    jsEndCollapsibleSection();
+    printf("</table>"); // required by jsCollapsible
+    printf("</p>");
 
     printf("<hr>");
     }
