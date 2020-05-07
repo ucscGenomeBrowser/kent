@@ -71,17 +71,25 @@ bedToBigBed -type=bed4 -tab -verbose=0 nextstrainInformative.bed $chromSizes \
 bedGraphToBigWig nextstrainParsimony.bedGraph $chromSizes nextstrainParsimony.bw
 
 # Install
-ln -sf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
+mkdir -p $ottoDir/current
+cp -pf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
     $runDir/nextstrain*.vcf.gz{,.tbi} \
     $runDir/nextstrain*.nh \
+    $ottoDir/current/
+ln -sf $ottoDir/current/nextstrainGene.bb $ottoDir/current/nextstrainClade.bb \
+    $ottoDir/current/nextstrain*.vcf.gz{,.tbi} \
+    $ottoDir/current/nextstrain*.nh \
     $gbdbDir/
 
 # Install but don't archive (for now) the experimental tracks for David.
-ln -sf $runDir/nextstrain{Discarded,Blacklisted,Informative}.bb \
+cp -pf $runDir/nextstrain{Discarded,Blacklisted,Informative}.bb \
     $runDir/nextstrainParsimony.bw \
+    $ottoDir/current/
+ln -sf $ottoDir/current/nextstrain{Discarded,Blacklisted,Informative}.bb \
+    $ottoDir/current/nextstrainParsimony.bw \
     $gbdbDir/
 
-# Archive
+# Daily archive (may overwrite files from earlier today)
 mkdir -p $ottoDir/archive/$today
 cp -pf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
     $runDir/nextstrain*.vcf.gz{,.tbi} \
