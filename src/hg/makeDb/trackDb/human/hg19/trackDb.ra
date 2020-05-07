@@ -4,7 +4,7 @@ track problematic
 shortLabel Problematic Regions
 longLabel Problematic Regions for NGS or Sanger sequencing or very variable regions
 compositeTrack on
-hideEmptySubtracks on
+hideEmptySubtracks off
 group map
 visibility hide
 type bigBed 3 +
