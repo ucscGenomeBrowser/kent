@@ -8662,9 +8662,24 @@ if (compositeHideEmptySubtracksSetting(tdb, &hideSubtracksDefault, NULL, NULL))
     safef(buf, sizeof buf, "%s.%s", tdb->track, SUBTRACK_HIDE_EMPTY);
     boolean doHideEmpties = compositeHideEmptySubtracks(cart, tdb, NULL, NULL);
     cgiMakeCheckBox(buf, doHideEmpties);
-    printf("<a class='toc' href='' title='Subtracks with no data in the browser window"
+
+    // info icon with explanatory text on mouseover
+    printf("<sub class='ui-icon ui-icon-info' style='display: inline-block;' title="
+                "'Subtracks with no data in the browser window"
                 " are hidden. Changing the browser window by zooming or scrolling may result"
-                " in display of a different selection of tracks.'>?</a>");
+                " in display of a different selection of tracks.'"
+                "</sub>");
+/* FA icons
+puts(
+"<!-- Info icon built from stacked fa icons -->\n"
+"           <a href='#INFO_SECTION' title='Jump to the track description'>\n"
+"               <span class='gbIconSmall fa-stack'>\n"
+"                   <i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i>\n"
+"                   <i class='gbWhiteColor fa fa-info fa-stack-1x'></i>\n"
+"               </span></a>\n"
+);
+*/
+
     printf("</p>");
     }
 
