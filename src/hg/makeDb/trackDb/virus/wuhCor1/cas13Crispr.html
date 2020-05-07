@@ -2,24 +2,25 @@
 
 <h2>Description</h2>
 <p>
-This track shows the <em>in silico</em> design of crRNAs for Cas13 using
+This track shows the <em>in-silico</em> design of crRNAs for Cas13 using
 the tool <a href="https://github.com/QilabGitHub/nCov2019_Guide_Design" 
 target="_blank">nCov2019_Guide_Design</a>, as described in Abbott <em>et al.</em>, 2020.</p>
 
 <p>
-To target highly conserved regions of the SARS-CoV-2 genome, <em>in silico</em> collection of 
+To target highly conserved regions of the SARS-CoV-2 genome, an <em>in-silico</em> collection of 
 all 3,802 possible crRNAs were generated. After excluding crRNAs that are either predicted 
 to have potential off-target binding (&#8804;2 mismatches in the human transcriptome) or 
-having poly-T sequences (&#8805;4 consecutive Ts) that may prevent crRNA expression, a set 
+having poly-T sequences that may prevent crRNA expression (&#8805;4 consecutive Ts), a set 
 of 3,203 crRNAs were obtained. These crRNAs are also able to target SARS and 
 MERS with &#8804;1 mismatch.</p>
 
 <p>
 Each crRNA has been characterized with four features:
 <ul>
-<li>Efficiency is predicted using the online tool at https://gitlab.com/sanjanalab/cas13</li> 
+<li>Efficiency is predicted using the online tool at <a target=_"blank" 
+href="https://gitlab.com/sanjanalab/cas13">https://gitlab.com/sanjanalab/cas13</a></li> 
 <li>Specificy is determined by the number of off-target loci in human mRNA with &#8804;2 
-Mismatches to the crRNA</li> 
+mismatches to the crRNA</li> 
 <li>Generality within Coronaviridae is quantified as the percentage of Coronaviridae strains 
 targeted by the given crRNA with perfect identity</li> 
 <li>Generality within SARS-CoV-2 is quantified as the percentage of 1,087 SARS-CoV-2 patient 
@@ -40,7 +41,7 @@ perfect match against the 47 SARS-CoV-2 genomes and with &#8804;1 mismatch to SA
 or MERS-CoV sequences. To characterize the specificity of 22-nt crRNAs, we ensured 
 that each crRNA does not target any sequences in the human transcriptome.</p>
 <p>
-We used Bowtie 1.2.2 to align crRNAs to the human transcriptome (HG38; 
+We used Bowtie 1.2.2 to align crRNAs to the human transcriptome (hg38; 
 including non-coding RNA) and removed crRNAs that mapped to the human 
 transcriptome with &#8804;2 mismatches.</p>
 
