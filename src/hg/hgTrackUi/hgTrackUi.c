@@ -3088,6 +3088,98 @@ if (jsonGlobalsHash == NULL)
 jsonObjectAdd(jsonGlobalsHash, name, ele);
 }
 
+void showSupertrackInfo(struct trackDb *tdb)
+{
+// A bit of context when we're in hierarchy: parent description and sibling track list
+
+if (!tdb->parent)
+    return;
+
+// show super-track info
+struct trackDb *tdbParent = tdb->parent;
+if (trackDbSetting(tdbParent, "wgEncode"))
+    printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' "
+           "width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
+printf("<b>Track collection: <a href='%s?%s=%s&c=%s&g=%s'>%s </b></a>",
+            hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+            chromosome, cgiEncode(tdbParent->track), tdbParent->longLabel);
+
+// show group info
+struct grp *grp, *grps = hLoadGrps(database);
+for (grp = grps; grp != NULL; grp = grp->next)
+    {
+    if (sameString(grp->name, tdb->grp))
+        {
+        printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
+               "(<A HREF=\"%s?%s=%s&c=%s&hgTracksConfigPage=configure"
+               "&hgtgroup_%s_close=0#%sGroup\" title='%s tracks in track configuration "
+               "page'><IMG height=12 src='../images/ab_up.gif'>All %s%s</A>)</B>",
+               hgTracksName(), cartSessionVarName(), cartSessionId(cart), chromosome,
+               tdb->grp, tdb->grp, grp->label, grp->label,
+               endsWith(grp->label," Tracks")?"":" tracks");
+        break;
+        }
+    }
+grpFreeList(&grps);
+
+// collapsed panel for Description
+
+printf("<p>");
+printf("<p><table>");  // required by jsCollapsible
+jsBeginCollapsibleSectionFontSize(cart, tdb->track, "superDescription", "Description", FALSE,
+                                        "medium");
+char *html = replaceChars(tdbParent->html, "<H", "<h");
+html = replaceChars(html, "</H", "</h");
+
+// remove Description header
+html = replaceChars(html, "<h2>Description</h2>", "");
+html = replaceChars(html, "<h3>Description</h3>", "");
+html = replaceChars(html, "<h1>Description</h1>", "");
+
+// remove everything after Description text
+char *end = stringIn("<h2>", html);
+if (!end)
+    end = stringIn("<h1>", html);
+if (!end)
+    end = stringIn("<h3>", html);
+if (end)
+    *end = '\0';
+printf("%s", html);
+printf("<p><i>To view the full description, click "
+            "<a target='_blank' href='%s?%s=%s&c=%s&g=%s#TRACK_HTML'>here.</i></a>\n",
+                    hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+                    chromosome, cgiEncode(tdbParent->track));
+jsEndCollapsibleSection();
+printf("</table>"); // required by jsCollapsible
+
+// collapsed panel for list of other tracks in the supertrack
+
+char listTitle[1000];
+safef(listTitle, sizeof listTitle, "Other tracks in this collection (%d)", 
+                    slCount(tdbParent->children)-1);
+printf("<table>");  // required by jsCollapsible
+jsBeginCollapsibleSectionFontSize(cart, tdb->track, "superMembers", listTitle, FALSE, "medium");
+printf("<table cellpadding='2' style='margin-left: 50px';>");
+struct slRef *childRef;
+tdbRefSortPrioritiesFromCart(cart, &tdbParent->children);
+for (childRef = tdbParent->children; childRef != NULL; childRef = childRef->next)
+    {
+    struct trackDb *sibTdb = childRef->val;
+    if (sameString(sibTdb->track, tdb->track))
+        continue;
+    printf("<tr>");
+    printf("<td><a href='%s?%s=%s&c=%s&g=%s'>%s</a>&nbsp;</td>", 
+                tdbIsDownloadsOnly(sibTdb) ? hgFileUiName(): hTrackUiForTrack(sibTdb->track),
+                cartSessionVarName(), cartSessionId(cart), chromosome, cgiEncode(sibTdb->track), 
+                sibTdb->shortLabel);
+    printf("<td>%s</td></tr>\n", sibTdb->longLabel);
+    }
+printf("</table>");
+jsEndCollapsibleSection();
+printf("</table>"); // required by jsCollapsible
+printf("</p>");
+}
+
 void trackUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
 /* Put up track-specific user interface. */
 {
@@ -3147,95 +3239,6 @@ if (tdbIsContainer(tdb))
         cartTdbTreeReshapeIfNeeded(cart,tdb);
     }
 
-if (tdb->parent)
-    {
-    // show super-track info
-    struct trackDb *tdbParent = tdb->parent;
-    if (trackDbSetting(tdbParent, "wgEncode"))
-        printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' "
-               "width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
-    printf("<b>Track grouping: <a href='%s?%s=%s&c=%s&g=%s'>%s </b></a>",
-                hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-                chromosome, cgiEncode(tdbParent->track), tdbParent->longLabel);
-
-    // show group info
-    struct grp *grp, *grps = hLoadGrps(database);
-    for (grp = grps; grp != NULL; grp = grp->next)
-        {
-        if (sameString(grp->name, tdb->grp))
-            {
-            printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
-                   "(<A HREF=\"%s?%s=%s&c=%s&hgTracksConfigPage=configure"
-                   "&hgtgroup_%s_close=0#%sGroup\" title='%s tracks in track configuration "
-                   "page'><IMG height=12 src='../images/ab_up.gif'>All %s%s</A>)</B>",
-                   hgTracksName(), cartSessionVarName(), cartSessionId(cart), chromosome,
-                   tdb->grp, tdb->grp, grp->label, grp->label,
-                   endsWith(grp->label," Tracks")?"":" tracks");
-            break;
-            }
-        }
-    grpFreeList(&grps);
-
-    // collapsed panel for Description
-
-    printf("<p>");
-    printf("<p><table>");  // required by jsCollapsible
-    jsBeginCollapsibleSectionFontSize(cart, tdb->track, "superDescription", "Description", FALSE,
-                                            "medium");
-    char *html = replaceChars(tdbParent->html, "<H", "<h");
-    html = replaceChars(html, "</H", "</h");
-
-    // remove Description header
-    html = replaceChars(html, "<h2>Description</h2>", "");
-    html = replaceChars(html, "<h3>Description</h3>", "");
-    html = replaceChars(html, "<h1>Description</h1>", "");
-
-    // remove everything after Description text
-    char *end = stringIn("<h2>", html);
-    if (!end)
-        end = stringIn("<h1>", html);
-    if (!end)
-        end = stringIn("<h3>", html);
-    if (end)
-        *end = '\0';
-    printf("%s", html);
-    printf("<p><i>To view the full description, click "
-                "<a target='_blank' href='%s?%s=%s&c=%s&g=%s#TRACK_HTML'>here.</i></a>\n",
-                    hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-                    chromosome, cgiEncode(tdbParent->track));
-    jsEndCollapsibleSection();
-    printf("</table>"); // required by jsCollapsible
-
-    // collapsed panel for list of other tracks in the supertrack
-
-    char listTitle[1000];
-    safef(listTitle, sizeof listTitle, "Other tracks in this grouping (%d)", 
-                        slCount(tdbParent->children)-1);
-    printf("<table>");  // required by jsCollapsible
-    jsBeginCollapsibleSectionFontSize(cart, tdb->track, "superMembers", listTitle, FALSE, "medium");
-    printf("<table cellpadding='2' style='margin-left: 50px';>");
-    struct slRef *childRef;
-    tdbRefSortPrioritiesFromCart(cart, &tdbParent->children);
-    for (childRef = tdbParent->children; childRef != NULL; childRef = childRef->next)
-        {
-        struct trackDb *sibTdb = childRef->val;
-        if (sameString(sibTdb->track, tdb->track))
-            continue;
-        printf("<tr>");
-        printf("<td><a href='%s?%s=%s&c=%s&g=%s'>%s</a>&nbsp;</td>", 
-                    tdbIsDownloadsOnly(sibTdb) ? hgFileUiName(): hTrackUiForTrack(sibTdb->track),
-                    cartSessionVarName(), cartSessionId(cart), chromosome, cgiEncode(sibTdb->track), 
-                    sibTdb->shortLabel);
-        printf("<td>%s</td></tr>\n", sibTdb->longLabel);
-        }
-    printf("</table>");
-    jsEndCollapsibleSection();
-    printf("</table>"); // required by jsCollapsible
-    printf("</p>");
-
-    printf("<hr>");
-    }
-
 /* track configuration form */
 
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
@@ -3289,6 +3292,7 @@ else
 
     }
 
+
 /* Print link for parent track */
 if (!ajax)
     {
@@ -3315,6 +3319,9 @@ if (!ajax)
 
     }
 puts("<BR><BR>");
+
+if (tdb->parent)
+    showSupertrackInfo(tdb);
 
 if (ct && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
