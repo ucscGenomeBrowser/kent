@@ -1,0 +1,75 @@
+track dbVar_common
+group varRep
+compositeTrack on
+visibility pack
+itemRgb on
+type bigBed 9 + .
+shortLabel Common SV
+longLabel NCBI Curated Common Structural Variants
+mouseOverField label
+searchIndex name
+filterLabel.type Items in Type Field
+filterValues.type alu deletion,copy number gain,copy number loss,copy number variation,deletion,duplication,herv deletion,line1 deletion,sva deletion
+filterLabel.length Items in Length Field
+filterValues.length Under 10KB,10KB to 100KB,100KB to 1MB,Over 1MB
+release alpha
+
+    track dbVar_common_gnomad
+    parent dbVar_common on
+    shortLabel NCBI Curated gnomAD SVs
+    longLabel NCBI Curated Common SVs: all populations from gnomAD
+    bigDataUrl https://ftp.ncbi.nlm.nih.gov/pub/dbVar/sandbox/dbvarhub/hg19/common_gnomad.bb
+    type bigBed 9 + .
+    url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+    urlLabel NCBI Variant Page:
+    release alpha
+
+    track dbVar_common_1000g
+    parent dbVar_common on
+    shortLabel NCBI Curated 1000 Genomes SVs
+    longLabel NCBI Curated Common SVs: all populations from 1000 Genomes
+    bigDataUrl https://ftp.ncbi.nlm.nih.gov/pub/dbVar/sandbox/dbvarhub/hg19/common_1000g.bb
+    type bigBed 9 + .
+    url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+    urlLabel NCBI Variant Page:
+    release alpha
+
+    track dbVar_common_decipher
+    parent dbVar_common on
+    shortLabel NCBI Curated DECIPHER SVs
+    longLabel NCBI Curated Common SVs: all populations from DECIPHER
+    bigDataUrl https://ftp.ncbi.nlm.nih.gov/pub/dbVar/sandbox/dbvarhub/hg19/common_decipher.bb
+    type bigBed 9 + .
+    url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+    urlLabel NCBI Variant Page:
+    release alpha
+
+    track dbVar_common_african
+    parent dbVar_common on
+    shortLabel NCBI Curated African SVs
+    longLabel NCBI Curated Common SVs: African
+    bigDataUrl https://ftp.ncbi.nlm.nih.gov/pub/dbVar/sandbox/dbvarhub/hg19/common_african.bb
+    type bigBed 9 + .
+    url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+    urlLabel NCBI Variant Page:
+    release alpha
+
+    track dbVar_common_european
+    parent dbVar_common on
+    shortLabel NCBI Curated European SVs
+    longLabel NCBI Curated Common SVs: European
+    bigDataUrl https://ftp.ncbi.nlm.nih.gov/pub/dbVar/sandbox/dbvarhub/hg19/common_european.bb
+    type bigBed 9 + .
+    url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+    urlLabel NCBI Variant Page:
+    release alpha
+
+    track dbVar_common_global
+    parent dbVar_common on
+    shortLabel NCBI Curated All Populations
+    longLabel NCBI Curated Common SVs: all populations
+    bigDataUrl https://ftp.ncbi.nlm.nih.gov/pub/dbVar/sandbox/dbvarhub/hg19/common_global.bb
+    type bigBed 9 + .
+    url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+    urlLabel NCBI Variant Page:
+    release alpha

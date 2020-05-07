@@ -24,6 +24,9 @@ include trackDb.geneHancer.ra
 include trackDb.clinvar.ra public,beta
 include trackDb.clinvarTest.ra alpha
 
+# NCBI dbVar
+include trackDb.dbVar.ra
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)
