@@ -70,15 +70,25 @@ bedToBigBed -type=bed4 -tab -verbose=0 nextstrainInformative.bed $chromSizes \
 # bigWig for the tree parsimony scores track for David
 bedGraphToBigWig nextstrainParsimony.bedGraph $chromSizes nextstrainParsimony.bw
 
+# Max's nextstrainSamples*.bedGraph allele count bigWigs:
+for i in nextstrainSamples*.vcf.gz; do
+    base=`basename $i .vcf.gz`
+    zcat $i | cut -f1,2,8 | cut -d';' -f1 | grep -v '#' | sed -e 's/AC=//g' | cut -f1 -d, \
+        | tawk '{print $1, $2, $2+1, $3}' > $base.bedGraph
+    bedGraphToBigWig $base.bedGraph $chromSizes $base.bigWig
+done
+
 # Install
 mkdir -p $ottoDir/current
 cp -pf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
     $runDir/nextstrain*.vcf.gz{,.tbi} \
     $runDir/nextstrain*.nh \
+    $runDir/nextstrainSamples*.bigWig \
     $ottoDir/current/
 ln -sf $ottoDir/current/nextstrainGene.bb $ottoDir/current/nextstrainClade.bb \
     $ottoDir/current/nextstrain*.vcf.gz{,.tbi} \
     $ottoDir/current/nextstrain*.nh \
+    $ottoDir/current/nextstrainSamples*.bigWig \
     $gbdbDir/
 
 # Install but don't archive (for now) the experimental tracks for David.
@@ -94,6 +104,7 @@ mkdir -p $ottoDir/archive/$today
 cp -pf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
     $runDir/nextstrain*.vcf.gz{,.tbi} \
     $runDir/nextstrain*.nh \
+    $runDir/nextstrainSamples*.bigWig \
     $runDir/ncov.json \
     $ottoDir/archive/$today
 
