@@ -39,7 +39,9 @@ if [[ ! -e lastUpdate || tempUpdate -nt lastUpdate ]]; then
     cd $today
     hubClone -download https://ftp.ncbi.nlm.nih.gov/pub/dbVar/sandbox/dbvarhub/hub.txt
     cp dbVar/hg19/common*.bb ../release/hg19/
+    cp dbVar/hg19/conflict*.bb ../release/hg19/
     cp dbVar/hg38/common*.bb ../release/hg38/
+    cp dbVar/hg38/conflict*.bb ../release/hg38/
     cd ..
     mv tempUpdate lastUpdate
     echo "dbVar update done: `date`" 
