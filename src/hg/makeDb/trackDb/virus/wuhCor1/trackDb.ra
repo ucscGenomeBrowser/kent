@@ -185,3 +185,4 @@ include trackDb.strainName44way.ra
 include trackDb.uniprot.ra
 include trackDb.nextstrain.ra
 include kim2020.ra
+include trackDb.7way.ra
