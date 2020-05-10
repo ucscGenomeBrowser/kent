@@ -52,7 +52,7 @@ ifneq ($(UNAME_S),Darwin)
 else
   ifneq ($(wildcard /opt/local/lib/libiconv.a),)
        ICONVLIB=/opt/local/lib/libiconv.a
-  else
+   else
        ICONVLIB=-liconv
   endif
 endif
@@ -219,6 +219,11 @@ ifneq ($(MAKECMDGOALS),clean)
     endif
   endif
   ifeq (${MYSQLLIBS},)
+   ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a),)
+          MYSQLLIBS+=/usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a
+     endif
+  endif
+  ifeq (${MYSQLLIBS},)
     ifneq ($(wildcard /opt/local/lib/mysql57/mysql/libmysqlclient.a),)
 	  MYSQLLIBS=/opt/local/lib/mysql57/mysql/libmysqlclient.a
     endif
@@ -314,9 +319,6 @@ ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/include/mysql/mysql.h),)
 endif
 ifneq ($(wildcard /usr/local/opt/openssl/include/openssl/hmac.h),)
   HG_INC+=-I/usr/local/opt/openssl/include
-endif
-ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a),)
-  L+=/usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a
 endif
 
 # pass through COREDUMP
