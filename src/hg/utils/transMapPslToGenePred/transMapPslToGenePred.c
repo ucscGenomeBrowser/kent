@@ -29,7 +29,7 @@ errAbort(
   "transMapPslToGenePred - convert PSL alignments of mRNAs to gene annotations.\n"
   "\n"
   "usage:\n"
-  "   mrnaToGene [options] sourceGenePred mappedPsl mappedGenePred\n"
+  "   transMapPslToGenePred [options] sourceGenePred mappedPsl mappedGenePred\n"
   "\n"
 
   "Convert PSL alignments from transmap to genePred.  It specifically handles\n"

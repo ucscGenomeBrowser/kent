@@ -26,12 +26,15 @@ sub pslIsProtein($$$$$$$) {
   my @sizes = split(',', $blockSizes);
   my $lastBlock = $blockCount - 1;
   my $answer = 1;
-  if ($strand =~ m/^\+/) {
-    my $test = $starts[$lastBlock] + (3 * $sizes[$lastBlock]);
-    $answer = 3 if ($tEnd == $test);
-  } elsif ($strand =~ m/^-/) {
-    my $test = $tSize - ($starts[$lastBlock] + (3 * $sizes[$lastBlock]));
-    $answer = 3 if ($tStart == $test);
+  if (length($strand) > 1) {
+    my $direction = substr($strand, 1, 1);
+    if ($direction eq "+") {
+      my $test = $starts[$lastBlock] + (3 * $sizes[$lastBlock]);
+      $answer = 3 if ($tEnd == $test);
+    } elsif ($direction eq "-") {
+      my $test = $tSize - ($starts[$lastBlock] + (3 * $sizes[$lastBlock]));
+      $answer = 3 if ($tStart == $test);
+    }
   }
   return $answer;
 } # pslIsProtein()
