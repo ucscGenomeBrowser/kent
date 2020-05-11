@@ -167,8 +167,6 @@ def rUnpackNextstrainTree(branch, parentVariants, parentVarStr):
                                     variantAaChanges[varName] = geneName + ':' + change
                         else:
                             warn("Can't find start for gene " + geneName)
-                    else:
-                        warn("Can't match amino acid change" + change)
     # Inherit parent variants
     branchVariants = parentVariants.copy()
     # Add variants specific to this branch (if any)
