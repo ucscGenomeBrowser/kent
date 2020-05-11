@@ -37,6 +37,8 @@ my @orderList;	# asmId of the assemblies in order from the *.list files
 # the order to read the different .list files:
 my %betterName;	# key is asmId, value is better common name than found in
 		# assembly_report
+my $vgpIndex = 0;
+$vgpIndex = 1 if ($Name =~ m/vgp/i);
 
 my $assemblyTotal = 0;	# complete list of assemblies in this group
 my $asmCount = 0;	# count of assemblies completed and in the table
@@ -115,7 +117,7 @@ if ($asmHubName eq "vertebrate") {
    $subSetMessage = "subset of other ${asmHubName}s only";
 }
 
-if ($Name =~ m/vgp/i) {
+if ($vgpIndex) {
   print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
 <!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly hubs, track statistics" -->
@@ -228,12 +230,18 @@ my $commaGapSize = commify($overallGapSize);
 my $commaGapCount = commify($overallGapCount);
 
 my $percentDone = 100.0 * $asmCount / $assemblyTotal;
+my $doneMsg = "";
+if ($asmCount < $assemblyTotal) {
+  $doneMsg = sprintf(" (%d build completed, %.2f %% finished)", $asmCount, $percentDone);
+}
+my $columnCount = scalar(@trackList);
+my $colSpanFill = $columnCount - 1;
 
 if ($assemblyTotal > 1) {
   print <<"END"
 
 </tbody>
-<tfoot><tr><th>TOTALS:</th><td align=center colspan=13>total assembly count&nbsp;${assemblyTotal}</td>
+<tfoot><tr><th>TOTALS:</th><td align=center colspan=$colSpanFill>total assembly count&nbsp;${assemblyTotal}${doneMsg}</td>
   </tr></tfoot>
 </table>
 END
@@ -251,7 +259,9 @@ END
 ##############################################################################
 sub endHtml() {
 
-if ($asmHubName ne "viral") {
+# do not print these links for VGP index
+
+if ((0 == $vgpIndex) && ($asmHubName ne "viral")) {
   printf "<p>\n<table border='1'><thead>\n<tr>";
   printf "<th>Assembly hubs index pages:&nbsp;</th>\n";
   printf "<th><a href='../primates/index.html'>Primates</a></th>\n";

@@ -52,7 +52,7 @@ ifneq ($(UNAME_S),Darwin)
 else
   ifneq ($(wildcard /opt/local/lib/libiconv.a),)
        ICONVLIB=/opt/local/lib/libiconv.a
-  else
+   else
        ICONVLIB=-liconv
   endif
 endif
@@ -109,13 +109,21 @@ else
      ifneq ($(wildcard /usr/lib/x86_64-linux-gnu/libssl.a),)
 	L+=/usr/lib/x86_64-linux-gnu/libssl.a
      else
-	L+=-lssl
+        ifneq ($(wildcard /usr/local/opt/openssl/lib/libssl.a),)
+           L+=/usr/local/opt/openssl/lib/libssl.a
+        else
+           L+=-lssl
+        endif
      endif
    endif
    ifneq ($(wildcard /opt/local/lib/libcrypto.a),)
        L+=/opt/local/lib/libcrypto.a
    else
-       L+=-lcrypto
+        ifneq ($(wildcard /usr/local/opt/openssl/lib/libcrypto.a),)
+           L+=/usr/local/opt/openssl/lib/libcrypto.a
+        else
+           L+=-lcrypto
+        endif
    endif
 endif
 
@@ -211,6 +219,11 @@ ifneq ($(MAKECMDGOALS),clean)
     endif
   endif
   ifeq (${MYSQLLIBS},)
+   ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a),)
+          MYSQLLIBS+=/usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a
+     endif
+  endif
+  ifeq (${MYSQLLIBS},)
     ifneq ($(wildcard /opt/local/lib/mysql57/mysql/libmysqlclient.a),)
 	  MYSQLLIBS=/opt/local/lib/mysql57/mysql/libmysqlclient.a
     endif
@@ -301,6 +314,12 @@ L += $(kentSrc)/htslib/libhts.a
 
 L+=${PNGLIB} ${MLIB} ${ZLIB} ${ICONVLIB}
 HG_INC+=${PNGINCL}
+ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/include/mysql/mysql.h),)
+  HG_INC+=-I/usr/local/Cellar/mariadb/10.4.12/include/mysql
+endif
+ifneq ($(wildcard /usr/local/opt/openssl/include/openssl/hmac.h),)
+  HG_INC+=-I/usr/local/opt/openssl/include
+endif
 
 # pass through COREDUMP
 ifneq (${COREDUMP},)
