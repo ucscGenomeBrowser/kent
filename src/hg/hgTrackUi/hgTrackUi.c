@@ -3650,7 +3650,9 @@ else
         safef(title, sizeof title, "%s", tdb->shortLabel);
     char *titleEnd = (tdbIsSuper(tdb) ? "Tracks" :
                tdbIsDownloadsOnly(tdb) ? DOWNLOADS_ONLY_TITLE : "Track Settings");
+    htmlNoEscape();     // allow HTML tags to format title blue bar (using short label)
     cartWebStart(cart, database, "%s %s", title, titleEnd);
+    htmlDoEscape();
     trackUi(tdb, tdbList, ct, FALSE);
     printf("<BR>\n");
     jsonPrintGlobals();
