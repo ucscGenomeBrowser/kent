@@ -8664,11 +8664,10 @@ if (compositeHideEmptySubtracksSetting(tdb, &hideSubtracksDefault, NULL, NULL))
     cgiMakeCheckBox(buf, doHideEmpties);
 
     // info icon with explanatory text on mouseover
-    printf("<sub class='ui-icon ui-icon-info' style='display: inline-block;' title="
-                "'Subtracks with no data in the browser window"
+    printf("<sub class='ui-icon ui-icon-info' style='display: inline-block;'"
+                " title='Subtracks with no data in the browser window"
                 " are hidden. Changing the browser window by zooming or scrolling may result"
-                " in display of a different selection of tracks.'"
-                "</sub>");
+                " in display of a different selection of tracks.'></sub>");
 /* FA icons
 puts(
 "<!-- Info icon built from stacked fa icons -->\n"
