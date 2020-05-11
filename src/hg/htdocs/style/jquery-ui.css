@@ -220,7 +220,7 @@
 .ui-icon-video { background-position: -224px -128px; }
 .ui-icon-script { background-position: -240px -128px; }
 .ui-icon-alert { background-position: 0 -144px; }
-.ui-icon-info { background-position: -16px -144px; background-image: url(images/ui-icons_2e83ff_256x240.png); }
+.ui-icon-info { background-position: -16px -144px; background-image: url(images/ui-icons_2e83ff_256x240.png); -webkit-transform: scale(1.1); -ms-transform: scale(1.1); transform: scale(1.1); }
 .ui-icon-notice { background-position: -32px -144px; }
 .ui-icon-help { background-position: -48px -144px; }
 .ui-icon-check { background-position: -64px -144px; }
