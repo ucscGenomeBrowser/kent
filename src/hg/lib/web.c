@@ -378,7 +378,7 @@ puts( // TODO: Replace nested tables with CSS (difficulty is that tables are clo
      );
 // FIXME: Need a more general solution here to support styling in blue bar title. 
 //      Perhaps support escaped < and > by doubling or backslash
-htmTextOutWithEscapes(stdout, title);
+htmlTextOut(title);
 
 puts("     </div></div>\n"
      "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"

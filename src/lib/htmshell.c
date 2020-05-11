@@ -156,14 +156,6 @@ while ((c = *s++) != 0)
     }
 }
 
-void htmTextOutWithEscapes(FILE *f, char *s)
-/* Print out string */
-{
-NoEscape = TRUE;
-htmTextOut(f, s); 
-NoEscape = FALSE;
-}
-
 void htmlTextOut(char *s)
 /* Print out string, if necessary replacing > with &gt; and the like */
 {

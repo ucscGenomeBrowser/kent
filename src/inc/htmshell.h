@@ -57,9 +57,6 @@ void htmHorizontalLine(FILE *f);
 void htmTextOut(FILE *f, char *s);
 /* Print out string to file, if necessary replacing > with &gt; and the like */
 
-void htmTextOutWithEscapes(FILE *f, char *s);
-/* Print out string to file */
-
 void htmlTextOut(char *s);
 /* Print out string, if necessary replacing > with &gt; and the like */
 
