@@ -7,7 +7,7 @@ use File::Basename;
 my $argc = scalar(@ARGV);
 if ($argc != 2) {
   printf STDERR "mkGenomes.pl Name asmName\n";
-  printf STDERR "e.g.: mkAsmStats Mammals mammals\n";
+  printf STDERR "e.g.: mkGenomes.pl Mammals mammals\n";
   exit 255;
 }
 my $Name = shift;
@@ -15,7 +15,6 @@ my $asmHubName = shift;
 
 my %betterName;	# key is asmId, value is common name
 my $srcDocDir = "${asmHubName}AsmHub";
-my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild";
 my $destDir = "/hive/data/genomes/asmHubs/$asmHubName";
 
 my $home = $ENV{'HOME'};

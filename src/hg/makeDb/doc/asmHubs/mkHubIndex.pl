@@ -187,7 +187,9 @@ END
 ##############################################################################
 sub endHtml() {
 
-if ($asmHubName ne "viral") {
+# do not print these links for VGP index
+
+if ((0 == $vgpIndex) && ($asmHubName ne "viral")) {
   printf "<p>\n<table border='1'><thead>\n";
   printf "<tr><th colspan=6 style='text-align:center;'>Additional hubs with collections of assemblies</th></tr>\n";
   printf "<tr><th>Assembly hubs index pages:&nbsp;</th>\n";
