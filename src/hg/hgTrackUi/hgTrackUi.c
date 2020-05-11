@@ -3155,8 +3155,8 @@ printf("</table>"); // required by jsCollapsible
 // collapsed panel for list of other tracks in the supertrack
 
 char listTitle[1000];
-safef(listTitle, sizeof listTitle, "Other tracks in this collection (%d)", 
-                    slCount(tdbParent->children)-1);
+safef(listTitle, sizeof listTitle, "All tracks in this collection (%d)", 
+                    slCount(tdbParent->children));
 printf("<table>");  // required by jsCollapsible
 jsBeginCollapsibleSectionFontSize(cart, tdb->track, "superMembers", listTitle, FALSE, "medium");
 printf("<table cellpadding='2' style='margin-left: 50px';>");
@@ -3166,7 +3166,11 @@ for (childRef = tdbParent->children; childRef != NULL; childRef = childRef->next
     {
     struct trackDb *sibTdb = childRef->val;
     if (sameString(sibTdb->track, tdb->track))
+        {
+        printf("<tr><td><b>%s</b></td>\n", sibTdb->shortLabel);
+        printf("<td>%s</td></tr>\n", sibTdb->longLabel);
         continue;
+        }
     printf("<tr>");
     printf("<td><a href='%s?%s=%s&c=%s&g=%s'>%s</a>&nbsp;</td>", 
                 tdbIsDownloadsOnly(sibTdb) ? hgFileUiName(): hTrackUiForTrack(sibTdb->track),
