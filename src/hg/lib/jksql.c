@@ -976,22 +976,26 @@ return sqlListTablesLike(sc, NULL);
 struct sqlResult *sqlDescribe(struct sqlConnection *conn, char *table)
 /* run the sql DESCRIBE command or get a cached table description and return the sql result */
 {
-char query[1024];
+char query[1024], cacheQuery[1024];
+struct sqlResult *sr;
 
 struct sqlConnection *cacheConn = sqlTableCacheFindConn(conn);
+sqlSafef(query, sizeof(query), "DESCRIBE %s", table);
 
 if (cacheConn)
     {
     char *tableListTable = cfgVal("showTableCache");
-    sqlSafef(query, sizeof(query), "SELECT Field, Type, NullAllowed, isKey, hasDefault, Extra FROM %s WHERE tableName='%s'", \
+    sqlSafef(cacheQuery, sizeof(cacheQuery), "SELECT Field, Type, NullAllowed, isKey, hasDefault, Extra FROM %s WHERE tableName='%s'", \
         tableListTable, table);
     conn = cacheConn;
+    // check that entries actually exist in the cached table descriptions, otherwise
+    // use the default query
+    if (sqlQuickString(conn, cacheQuery) != NULL)
+        {
+        sr = sqlGetResult(conn, cacheQuery);
+        return sr;
+        }
     }
-
-else
-    sqlSafef(query, sizeof(query), "DESCRIBE %s", table);
-
-struct sqlResult *sr;
 sr = sqlGetResult(conn, query);
 return sr;
 }

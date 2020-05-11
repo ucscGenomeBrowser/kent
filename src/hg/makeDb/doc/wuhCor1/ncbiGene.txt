@@ -5,3 +5,8 @@ genbankToBigGenePred NC_045512.2.gbk NC_045512v2 ../../chrom.sizes tab
  
 #bbedToBigBed -allow1bpOverlap -tab -type=bed12+ -as=as prev.bed ../../chrom.sizes bb/genes.bb 
  bedToBigBed -allow1bpOverlap -tab -type=bed12+ -as=as prev.bed ../../chrom.sizes bb/genes.bb   -extraIndex=name
+
+tawk '{print $4,   $21, $23, $22, $22}' prev.bed | sed 's/\.[0-9]*$//' > ncbiSearch.txt
+ixIxx ncbiSearch.txt ncbiSearch.ix ncbiSearch.ixx
+ln -s `pwd`/ncbiSearch.ix /gbdb/wuhCor1
+ln -s `pwd`/ncbiSearch.ixx /gbdb/wuhCor1

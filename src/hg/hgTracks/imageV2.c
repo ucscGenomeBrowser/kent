@@ -213,7 +213,6 @@ jsonObjectAdd(ele, "canPack", newJsonNumber(0));
 jsonObjectAdd(ele, "visibility", newJsonNumber(rulerMode));
 jsonObjectAdd(ele, "configureBy", newJsonString("popup"));
 jsonObjectAdd(ele, "kindOfParent", newJsonNumber(0));
-//jsonObjectAdd(ele, "isMergedItem", newJsonBoolean(FALSE));
 jsonObjectAdd(settings, "ruler", (struct jsonElement *) ele);
 }
 

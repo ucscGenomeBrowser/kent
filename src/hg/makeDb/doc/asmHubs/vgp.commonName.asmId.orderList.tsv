@@ -106,7 +106,7 @@ common yellowthroat	GCA_009764595.1_bGeoTri1.pri
 common yellowthroat	GCA_009764545.1_bGeoTri1.alt
 common brushtail	GCA_011100645.1_mTriVul1.alt
 common brushtail	GCA_011100635.1_mTriVul1.pri
-common bottlenose dolphin	GCA_011762595.1_mTurTru1.mat.Y
+common bottlenose dolphin	GCF_011762595.1_mTurTru1.mat.Y
 common bottlenose dolphin	GCA_011762535.1_mTurTru1.mat
 common bottlenose dolphin	GCA_011762515.1_mTurTru1.pat
 Common tern	GCA_009819645.1_bSteHir1.alt
@@ -120,7 +120,7 @@ Canada lynx	GCA_007474575.1_mLynCan4_v1.alt
 California sea lion	GCA_009762305.1_mZalCal1.pri
 California sea lion	GCA_009762295.1_mZalCal1.alt
 caecilians	GCF_901765095.1_aMicUni1.1
-caecilians	GCA_902459505.1_aGeoSer1.1
+caecilians	GCF_902459505.1_aGeoSer1.1
 caecilians	GCA_902459495.1_aGeoSer1.1_alternate_haplotype
 caecilians	GCA_901765105.1_aMicUni1.1_alternate_haplotype
 budgerigar	GCA_012275295.1_bMelUnd1.mat.Z

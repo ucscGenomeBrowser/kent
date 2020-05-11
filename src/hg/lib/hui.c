@@ -8630,6 +8630,15 @@ for (i = 0; i < MAX_SUBGROUP; i++)
 return TRUE;
 }
 
+void printInfoIcon(char *mouseover)
+/* Print info icon (i) with explanatory text on mouseover
+ * Uses jquery icon set, with style customized to GB in jquery-ui.css */
+{
+// jquery icons print a bit high, so using sub instead of span to place next to text
+printf("<sub class='ui-icon ui-icon-info' style='display: inline-block;' title='%s'></sub>",
+            mouseover);
+}
+
 void hCompositeUi(char *db, struct cart *cart, struct trackDb *tdb,
                   char *primarySubtrack, char *fakeSubmit, char *formName)
 // UI for composite tracks: subtrack selection.  If primarySubtrack is
@@ -8662,9 +8671,12 @@ if (compositeHideEmptySubtracksSetting(tdb, &hideSubtracksDefault, NULL, NULL))
     safef(buf, sizeof buf, "%s.%s", tdb->track, SUBTRACK_HIDE_EMPTY);
     boolean doHideEmpties = compositeHideEmptySubtracks(cart, tdb, NULL, NULL);
     cgiMakeCheckBox(buf, doHideEmpties);
-    printf("<a class='toc' href='' title='Subtracks with no data in the browser window"
-                " are hidden. Changing the browser window by zooming or scrolling may result"
-                " in display of a different selection of tracks.'>?</a>");
+
+    // info icon with explanatory text on mouseover
+    char *info = 
+        "Subtracks with no data in the browser window are hidden. Changing the browser window"
+        " by zooming or scrolling may result in display of a different selection of tracks.";
+    printInfoIcon(info);
     printf("</p>");
     }
 

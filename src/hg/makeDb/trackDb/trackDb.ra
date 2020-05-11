@@ -13,6 +13,8 @@ include trackDb.chainNet.fish.ra
 include trackDb.chainNet.insects.ra
 include trackDb.chainNet.other.ra
 
+include trackDb.encode3.ra
+
 include trackDb.transMap.ra
 
 include trackDb.nt.ra

@@ -19,10 +19,10 @@ url https://nextstrain.org/ncov?d=tree&m=div&label=clade:$$
 urlLabel View in Nextstrain: 
 
 track nextstrainSamples
-shortLabel Nextstrain Vars
+shortLabel Nextstrain Variants
 longLabel Nextstrain/GISAID Sample Variants from nextstrain.org/ncov
 type vcfTabix
-visibility hide
+visibility pack
 hapClusterEnabled on
 group varRep
 priority 0.5
@@ -152,9 +152,110 @@ compositeTrack on
 
 track nextstrainCount
 shortLabel Nextrain Varcount
-longLabel Number of variants per position
+longLabel Nextstrain: Number of variants per position
+release alpha
 type bigWig
-bigDataUrl /hive/data/outside/otto/nextstrainNcov/2020-05-01/nextstrainSamples.bigWig
+compositeTrack on
 visibility hide
 group varRep
+autoScale on
+maxHeightPixels 100:40:8
 
+        track nextstrainCountAll
+        shortLabel Nextrain All
+        longLabel Nextstrain, all clades: Number of variants per position
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples.bigWig
+        visibility dense
+        release alpha
+        parent nextstrainCount
+
+        track nextstrainCountA1
+        shortLabel Nextrain A1a
+        longLabel Nextstrain, A1a clade: Number of variants per position
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA1a.bigWig
+        visibility dense
+        parent nextstrainCount
+        release alpha
+
+        track nextstrainCountA2
+        shortLabel Nextrain A2
+        longLabel Nextstrain, A2 clade: Number of variants per position
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA2.bigWig
+        visibility dense
+        parent nextstrainCount
+        release alpha
+
+        track nextstrainCountA2a
+        shortLabel Nextrain A2a
+        longLabel Nextstrain, A2a clade: Number of variants per position
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA2a.bigWig
+        visibility dense
+        parent nextstrainCount
+        release alpha
+
+        track nextstrainCountA3
+        shortLabel Nextrain A3
+        longLabel Nextstrain, A3 clade: Number of variants per position
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA3.bigWig
+        visibility dense
+        parent nextstrainCount
+        release alpha
+
+        track nextstrainCountA6
+        shortLabel Nextrain A6
+        longLabel Nextstrain, A6 clade: Number of variants per position
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA6.bigWig
+        visibility dense
+        parent nextstrainCount
+        release alpha
+
+        track nextstrainCountA7
+        shortLabel Nextrain A7
+        longLabel Nextstrain, A7 clade: Number of variants per position
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA7.bigWig
+        visibility dense
+        parent nextstrainCount
+        release alpha
+
+        track nextstrainCountB
+        shortLabel Nextrain B
+        longLabel Nextstrain, B clade: Number of variants per position
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB.bigWig
+        visibility dense
+        parent nextstrainCount
+        release alpha
+
+        track nextstrainCountB1
+        shortLabel Nextrain B1
+        longLabel Nextstrain, B1 clade: Number of variants per position
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB1.bigWig
+        visibility dense
+        parent nextstrainCount
+        release alpha
+
+        track nextstrainCountB2
+        shortLabel Nextrain B2
+        longLabel Nextstrain, B2 clade: Number of variants per position
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB2.bigWig
+        visibility dense
+        parent nextstrainCount
+        release alpha
+
+        track nextstrainCountB4
+        shortLabel Nextrain B4
+        longLabel Nextstrain, B4 clade: Number of variants per position
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB4.bigWig
+        visibility dense
+        parent nextstrainCount
+        release alpha

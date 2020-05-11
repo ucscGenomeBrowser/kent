@@ -322,6 +322,40 @@ annotation.</p>
 For detailed information about the individuals and organizations who contributed to a specific 
 assembly, see the <a href="../goldenPath/credits.html">Credits</a> page.</p>
 
+<a name="asmEquivalent"></a>
+<h6>Which UCSC assemblies are equivalent to Ensembl or NCBI assemblies?</h6>
+<p>
+The asmEquivalent table on the hgFixed database is available on the public MySQL server to show
+which assemblies versions are identical (or almost identical) to each other between UCSC, Ensembl,
+Genbank, and RefSeq assemblies.</p>
+<pre>
+mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A -e 'desc asmEquivalent;' hgFixed
++----------------------+-------------------------------------------+
+| Field                | Type                                      |
++----------------------+-------------------------------------------+
+| source               | varchar(255)                              |
+| destination          | varchar(255)                              |
+| sourceAuthority      | enum('ensembl','ucsc','genbank','refseq') |
+| destinationAuthority | enum('ensembl','ucsc','genbank','refseq') |
+| matchCount           | bigint(20)                                |
+| sourceCount          | bigint(20)                                |
+| destinationCount     | bigint(20)                                |
++----------------------+-------------------------------------------+</pre>
+<p>
+The &quot;Count&quot; indications are the count of individual sequences in the assembly. When all
+three counts are identical, <code>matchCount == sourceCount == destinationCount</code>, then the
+match between genome assemblies is perfectly identical.</p>
+<p>
+Non-perfect matches can be due to a number of factors:
+  <ol>
+    <li>different or not included chrMT genome sequences in an assembly</li>
+    <li>identical duplicated sequences present or absent from an assembly</li>
+    <li>some smaller contigs not included in an assembly</li>
+    <li>slight differences in versions of assemblies where some contain sequences not in the other
+        assembly</li>
+  </ol>
+</p>
+
 <a name="release4"></a>
 <h2>Comparison of UCSC and NCBI human assemblies</h2>
 <h6>How do the human assemblies displayed in the UCSC Genome Browser differ from the NCBI human 

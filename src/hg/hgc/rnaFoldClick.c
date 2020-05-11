@@ -369,7 +369,7 @@ for (i = 0; i < mcCount; i++)
 slReverse(&maf->components);
 }
 
-void htmlPrintSecStr(FILE *f, char *table, struct rnaSecStr *item)
+void htmlPrintSecStr(FILE *f, char *table, struct rnaSecStr *item, int start)
 /* Print out the details for an rnaStruct* table. */
 {
 // grab the sequence
@@ -406,6 +406,9 @@ safef(command, sizeof(command),
     "gs -g768x768 -sDEVICE=png16m -sOutputFile=%s -dBATCH -dNOPAUSE -q %s" , pngName, psName);
 mustSystem(command);
 
+printf("<a target=blank href='http://pseudoviewer.inha.ac.kr/WSPV_quickSender.asp?seq=%s&str=%s&start=%d'>Display on PseudoViewer</a><BR>", seq->dna, item->secStr, start);
+htmlHorizontalLine();
+printf("RNAFold diagram:<BR>");
 printf("<IMG SRC='%s' border = '2'>", pngName);
 }
 
@@ -497,20 +500,24 @@ int start = cartInt(cart, "o");
 struct mafAli *maf;
 char option[128];
 char *speciesOrder = NULL;
+boolean hasConf = sqlColumnExists(conn, table, "conf");
 
 /* print header */
 genericHeader(tdb, itemName);
 /* printRfamUrl(itemName); */
 genericBedClick(conn, tdb, itemName, start, 6);
-htmlHorizontalLine();
 
 /* get the rnaSecStr and maf from db */
 sprintf(extraWhere, "chromStart = %d and name = '%s'", start, itemName);
 sr   = hExtendedChromQuery(conn, table, seqName, extraWhere,  FALSE, NULL, &rowOffset);
 row  = sqlNextRow(sr);
-item = rnaSecStrLoad(row + rowOffset);
+if (hasConf)
+    item = rnaSecStrLoadConf(row + rowOffset);
+else
+    item = rnaSecStrLoad(row + rowOffset);
 if (mafTrack)
     {
+    htmlHorizontalLine();
     maf  = mafFromRnaSecStrItem(mafTrack, item);
 
     /* order maf by species */
@@ -531,7 +538,7 @@ if (mafTrack)
 if (startsWith("rnaStruct", tdb->table))
     {
     htmlHorizontalLine();
-    htmlPrintSecStr(stdout, tdb->table, item);
+    htmlPrintSecStr(stdout, tdb->table, item, start);
     }
 if (sameWord(tdb->table, "evofold"))
     {
