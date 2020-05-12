@@ -13,6 +13,7 @@ ncovJsonUrl='https://nextstrain.org/charon/getDataset?prefix=/ncov/global'
 cd $ottoDir
 
 # The file is named .json, but is actually gzipped, so gunzip it.
+rm -f ncov.json
 curl -s "$ncovJsonUrl" \
 | gunzip -c > ncov.json
 curl -s -I "$ncovJsonUrl" \
@@ -28,7 +29,7 @@ today=`date +%F`
 mkdir -p $today
 ncovTime=$(date -d "$latestDate" +%F-%H:%M)
 cp -p ncov.json $today/ncov.$ncovTime.json
-mv ncov.json old.ncov.json
+mv -f ncov.json old.ncov.json
 mv ncov.json.date old.ncov.json.date
 
 runDir=$ottoDir/$today
@@ -73,8 +74,13 @@ bedGraphToBigWig nextstrainParsimony.bedGraph $chromSizes nextstrainParsimony.bw
 # Max's nextstrainSamples*.bedGraph allele count bigWigs:
 for i in nextstrainSamples*.vcf.gz; do
     base=`basename $i .vcf.gz`
-    zcat $i | cut -f1,2,8 | cut -d';' -f1 | grep -v '#' | sed -e 's/AC=//g' | cut -f1 -d, \
-        | tawk '{print $1, $2, $2+1, $3}' > $base.bedGraph
+    zcat $i \
+    | grep -v '#' \
+    | perl -wne '@w=split("\t");
+                 $w[7] =~ m/AC=(\d+)[\d,]*;AN=(\d+)/ ||
+                          die "Cant find AC and AN in |$w[7]|";
+                 print join("\t", $w[0], $w[1]-1, $w[1], (sprintf "%.06f", $1 / $2)) . "\n";' \
+      > $base.bedGraph
     bedGraphToBigWig $base.bedGraph $chromSizes $base.bigWig
 done
 
@@ -105,7 +111,6 @@ cp -pf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
     $runDir/nextstrain*.vcf.gz{,.tbi} \
     $runDir/nextstrain*.nh \
     $runDir/nextstrainSamples*.bigWig \
-    $runDir/ncov.json \
     $ottoDir/archive/$today
 
 echo "Updated nextstrain/ncov `date` (ncov.json date $latestDate)"
