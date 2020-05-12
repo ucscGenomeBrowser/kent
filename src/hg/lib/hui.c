@@ -4037,6 +4037,8 @@ static boolean filterByColumnIsList(struct cart *cart, struct trackDb *tdb,  cha
 {
 return (sameString(setting, FILTERBY_SINGLE_LIST) ||
         sameString(setting, FILTERBY_MULTIPLE_LIST_OR) ||
+        sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_OR) ||
+        sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_AND) ||
         sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
 }
 
@@ -4045,7 +4047,16 @@ static boolean filterByColumnIsMultiple(struct cart *cart, struct trackDb *tdb, 
 {
 return (sameString(setting, FILTERBY_MULTIPLE) ||
         sameString(setting, FILTERBY_MULTIPLE_LIST_OR) ||
+        sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_OR) ||
+        sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_AND) ||
         sameString(setting, FILTERBY_MULTIPLE_LIST_AND));
+}
+
+static boolean filterByColumnAllowsMatch(struct cart *cart, struct trackDb *tdb,  char *setting)
+/* Does this filter allow the "Only Match if ..." choice */
+{
+return  !(sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_OR) ||
+          sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_AND));
 }
 
 void filterBySetCfgUiGuts(struct cart *cart, struct trackDb *tdb,
@@ -4059,10 +4070,10 @@ if (filterBySet == NULL)
 #define FILTERBY_HELP_LINK "<A HREF=\"../goldenPath/help/multiView.html\" TARGET=ucscHelp>help</A>"
 int count = slCount(filterBySet);
 if (count == 1)
-    puts("<TABLE cellpadding=3><TR valign='top'>");
+    puts("<TABLE class='trackUiFilterTable'><TR valign='top'>");
 else
-    printf("<B>%s items by:</B> (select multiple categories and items - %s)"
-	   "<TABLE cellpadding=3><TR valign='bottom'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
+    printf("<B>%s items by category:</B> "
+	   "<TABLE class='trackUiFilterTable'><TR valign='bottom'>\n",filterTypeTitle);
 
 #ifdef ADVANCED_BUTTON
 if (tdbIsBigBed(tdb))
@@ -4096,10 +4107,19 @@ for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next)
         safef(selectStatement, sizeof selectStatement, " (select multiple items - %s)", FILTERBY_HELP_LINK);
     else
         selectStatement[0] = 0;
+
+    char *filterTitle = filterBy->title;
+    if (strchr(filterTitle, '|')!=NULL) {
+        // replace | character with the 0 byte
+        filterTitle = cloneString(filterTitle);
+        char *pipePt = strchr(filterTitle, '|');
+        *pipePt = '\0';
+    }
+
     if(count == 1)
-	printf("<B>%s by %s</B>%s",filterTypeTitle,filterBy->title,selectStatement);
+	printf("<B>%s by %s</B>%s",filterTypeTitle,filterTitle,selectStatement);
     else
-	printf("<B>%s</B>",filterBy->title);
+	printf("<B>%s</B>",filterTitle);
     puts("</TD>");
     }
 puts("</tr><tr>");
@@ -4107,7 +4127,8 @@ for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next)
     {
     puts("<td>");
     char *setting =  getFilterType(cart, tdb, filterBy->column, FILTERBY_SINGLE_LIST);
-    if (filterByColumnIsMultiple(cart, tdb, setting) && filterByColumnIsList(cart, tdb, setting) && tdbIsBigBed(tdb))
+    if (filterByColumnIsMultiple(cart, tdb, setting) && filterByColumnIsList(cart, tdb, setting) && tdbIsBigBed(tdb) &&
+            filterByColumnAllowsMatch(cart, tdb, setting))
         {
         char cartSettingString[4096];
         safef(cartSettingString, sizeof cartSettingString, "%s.%s.%s", prefix,FILTER_TYPE_NAME_LOW, filterBy->column);
@@ -4621,7 +4642,7 @@ if (subCount > LARGE_COMPOSITE_CUTOFF)
 else
     safecpy(buffer,SMALLBUF,"displaySubtracks");
 cgiMakeOnEventRadioButtonWithClass(buffer, "selected", !displayAll, "allOrOnly", "click", javascript);
-puts("only selected/visible &nbsp;&nbsp;");
+puts("only checked &nbsp;&nbsp;");
 safef(javascript, sizeof(javascript),
       "showOrHideSelectedSubtracks(false);");
 cgiMakeOnEventRadioButtonWithClass(buffer, "all", displayAll, "allOrOnly", "click", javascript);
@@ -5474,9 +5495,8 @@ if (boxed)
         printf("<CENTER><B>%s Configuration</B></CENTER>\n", title);
     }
 else if (title)
-    printf("<p><B>%s &nbsp;</b>", title );
-else
-    printf("<p>");
+    printf("<B>%s &nbsp;</b>", title );
+// a <p> is not necessary here / not clear why it was there. It lead to a huge space in the wrench box
 return boxed;
 }
 
@@ -6092,10 +6112,10 @@ if (setting)
     if (*opened == FALSE)
         {
         boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
-        puts("<TABLE>");
+        puts("<TABLE class='hgTrackUiScoreFilterTable'>");
         *opened = TRUE;
         }
-    printf("<TR><TD align='right'><B>%s:</B><TD align='left'>",label);
+    printf("<TR><TD align='right'><B>Numeric Filter: %s </B><TD align='left'>",label);
     char varName[256];
     char altLabel[256];
     char *filterName = getScoreNameAdd(tdb, scoreName, _BY_RANGE);
@@ -6368,7 +6388,7 @@ return count;
 
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title,
                 int maxScore, boolean boxed)
-// Put up UI for filtering bed track based on a score
+// Put up UI for filtering bed track based on a score or any other fields defined by the filter* trackDb statements
 {
 char option[256];
 boolean parentLevel = isNameAtParentLevel(tdb,name);
@@ -8490,18 +8510,19 @@ if (trackDbCountDescendantLeaves(parentTdb) <= 1)
 if (dimensionsExist(parentTdb))
     return FALSE;
 
-#define PM_BUTTON_GLOBAL "<IMG height=18 width=18 id='%s' src='../images/%s'>"
-#define PM_BUTTON_GLOBAL_JS "matSubCBsCheck(%s);"
-char id[256];
-safef(id, sizeof id, "btn_plus_all"); 
-printf(PM_BUTTON_GLOBAL, id, "add_sm.gif");
-jsOnEventByIdF("click", id, PM_BUTTON_GLOBAL_JS, "true");
-
-safef(id, sizeof id, "btn_minus_all"); 
-printf(PM_BUTTON_GLOBAL, id, "remove_sm.gif");
-jsOnEventByIdF("click", id, PM_BUTTON_GLOBAL_JS, "false");
-
-puts("&nbsp;<B>Select all subtracks</B><BR>");
+puts("<div style='margin-bottom:3px'>Use checkboxes below to show or hide subtracks. Use drop-downs to change their visibilities.</div>");
+puts("<B>All subtracks:</B> ");
+//#define PM_BUTTON_GLOBAL "<IMG height=18 width=18 id='%s' src='../images/%s'>"
+//#define PM_BUTTON_GLOBAL_JS "matSubCBsCheck(%s);"
+//char id[256];
+//safef(id, sizeof id, "btn_plus_all"); 
+//safef(id, sizeof id, "btn_plus_all"); 
+//printf(PM_BUTTON_GLOBAL, id, "add_sm.gif");
+//printf(PM_BUTTON_GLOBAL, id, "add_sm.gif");
+printf("<span style='margin-right:6px' class='link' id='btn_plus_all'>check</span>");
+printf("<span class='link' id='btn_minus_all'>uncheck</span>");
+jsOnEventByIdF("click", "btn_plus_all", "matSubCBsCheck(%s)", "true");
+jsOnEventByIdF("click", "btn_minus_all", "matSubCBsCheck(%s)", "false");
 return TRUE;
 }
 
