@@ -176,7 +176,6 @@ compositeTrack on
         type bigBed 4
         bigDataUrl /gbdb/wuhCor1/bbi/M2_peptides.bb
 
-
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
 include epitopes.ra
