@@ -631,11 +631,26 @@ var subCfg = { // subtrack config module.
         });
     },
 
+    enableSubtrack: function (subCb) 
+    { // enable subtrack config and make its checkbox checked
+        //subCb.checked = true;
+        // must also update the boolshad shadow control
+        //var boolshad = normed($("input.cbShadow[name='boolshad\\." + subCb.name+"']"));
+        //boolshad.value = "1";
+        subCfg.checkOneSubtrack(subCb, true, true);
+
+        //subCfg.enableCfg(subCb, true);
+        //subCfg.markChange(null,subCb);
+    },
+
     replaceWithVis: function (obj,subtrack,open)
     { // Replaces the current fauxVis object with a true visibility selector
 
-        if ($(obj).hasClass('disabled'))
-            return;
+        if ($(obj).hasClass('disabled')) {
+            //return;
+            var subCb = normed($("input[name='" + subtrack + "_sel']"));
+            subCfg.enableSubtrack(subCb, true);
+        }
         var classList = $( obj ).attr("class").split(" ");
         classList = aryRemove(classList,["disabled"]);
         var view = classList[classList.length - 1]; // This relies on view being the last class!!!
@@ -646,7 +661,10 @@ var subCfg = { // subtrack config module.
         if (subCfg.canPack === false)
             visibilities = ['hide','dense','full'];
         $(visibilities).each( function (ix) {
-             selectHtml += "<OPTION"+(visibilities[ix] === selected ? " SELECTED":"")+">";
+             var addStr = "";
+             if (ix===0)
+                addStr = " HIDDEN ";
+             selectHtml += "<OPTION"+(visibilities[ix] === selected ? " SELECTED":"")+addStr+">";
              selectHtml += visibilities[ix]+"</OPTION>";
         });
         selectHtml += "</SELECT>";
@@ -675,10 +693,10 @@ var subCfg = { // subtrack config module.
                 $(this).unbind('blur');
                 $(this).unbind('click');
             }
+            var subCb = normed($("input[name='" + this.name + "_sel']"));
             if (this.selectedIndex === 0) { // setting to hide so uncheck and disable.
                 // Easiest is to uncheck subCB and reset vis
                 //    so that the reverse action makes sense
-                var subCb = normed($("input[name='" + this.name + "_sel']"));
                 if (subCb) {
                     subCfg.checkOneSubtrack(subCb,false,true);
                     subCfg.inheritSetting(this,true);
@@ -687,6 +705,8 @@ var subCfg = { // subtrack config module.
                 }
             } else {
                 subCfg.markChange(e,this);
+                // make sure that current track is really visible (dropdown is not disabled, even for hidden tracks)
+                subCfg.enableSubtrack(subCb, true);
                 // If made visible, be sure to make composite visible
                 // But do NOT turn composite from hide to full, since it will turn on other subs
                 // Just trigger a supertrack reshaping
@@ -717,9 +737,9 @@ var subCfg = { // subtrack config module.
                 $(subFaux).addClass('disabled');
         } else {
             var subVis = normed($(tr).find('select.subVisDD'));
-            if (subVis) {
-                $(subVis).attr('disabled',!setTo);
-            }
+            //if (subVis) {
+                //$(subVis).attr('disabled',!setTo);
+            //}
         }
         var wrench = normed($(tr).find('span.clickable'));
         if (wrench) {
@@ -743,19 +763,22 @@ var subCfg = { // subtrack config module.
         }
 
         if ($(cfg).css('display') === 'none') {
-            if ($(wrench).hasClass('disabled'))
-                return;
-            // Don't allow if this composite is not enabled!
             // find the cb
             var tr = $(cfg).parents('tr').first();
             var subCb = normed($(tr).find("input[name='"+subtrack+"_sel']"));
             if (!subCb) {
-                warn("DEBUG: Can't find subCB for "+subtrack);
+                warn("DEBUG: Can't find subtrack checkbox DOM element for "+subtrack);
                 return false;
             }
+            // activate this subtrack if it previously was disabled
+            if ($(wrench).hasClass('disabled'))
+                subCfg.enableSubtrack(subCb);
+                //subCfg.enableCfg(subCb, true);
+
             //if (subCb.disabled === true) // || subCb.checked === false)
-            if (isFauxDisabled(subCb,true))
+            if (isFauxDisabled(subCb,true)) {
                 return false;
+            }
 
             if (metadataIsVisible(subtrack))
                 metadataShowHide(subtrack,"","");

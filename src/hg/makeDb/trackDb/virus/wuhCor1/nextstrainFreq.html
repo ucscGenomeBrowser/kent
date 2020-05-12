@@ -1,34 +1,22 @@
 <h2>Description</h2>
 <p>
 <a href="https://nextstrain.org/ncov" target=_blank>Nextstrain.org</a> displays
-data about variants that occur in the current 2019/2020 outbreak.
-Nextstrain has a powerful user interface for viewing the evolutionary tree
-that it infers from the patterns of variants in sequences worldwide, but
-does not offer a detailed plot of variants along the genome, so we have processed
-their data into this track to display the variants of each sample that Nextstrain
-has obtained from
-<a href="https://gisaid.org" target=_blank>GISAID</a>.
+data about variants that have occurred in the current 2019/2020 outbreak of SARS-CoV-2.
+Nextstrain has a powerful user interface for viewing the time stamped phylogenetic tree
+that it infers from the patterns of variants in sequences worldwide.
+Nextstrain maintains an ongoing pipeline that continuously obtains SARS-CoV-2 genome sequences
+and metadata from
+<a href="https://gisaid.org" target=_blank>GISAID</a>,
+aligns them agains the reference genome
+(<a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2" target=_blank>NC_045512.2</a>),
+collects single-nucleotide variants (SNVs), and infers a phylogenetic tree.
 </p>
 <p>
-Click on a variant to see more details including protein change (if applicable;
-protein changes use gene names in the <em>Nextstrain Genes</em> track) and the
-genotype for each GISAID sample.
-</p>
-
-<h2>Display Conventions</h2>
-<p>
-In &quot;dense&quot; mode, a vertical line is drawn at the position of each variant.
-In &quot;pack&quot; mode, the display shows a plot of all samples' variants, with samples
-ordered using Nextstrain's phylogenetic tree in order to highlight patterns of linkage.</p>
-<p>
-Each sample is placed in a horizontal row of pixels; when the number of
-samples exceeds the number of vertical pixels for the track, multiple
-samples fall in the same pixel row and pixels are averaged across samples.</p>
-<p>
-Each variant is a vertical bar with white (invisible) representing the reference allele
-and black representing the non-reference allele(s).
-Tick marks are drawn at the top and bottom of each variant's vertical bar
-to make the bar more visible when most alleles are reference alleles.
+This track shows the alternate allele frequency of each SNV reported by Nextstrain as a
+bar graph with the height indicating the frequency.
+(The <em>Nextstrain Variants</em> track offers a more detailed display of the variants,
+breaking up the vertical bars according to the order of virus genome samples in the
+phylogenetic tree.)
 </p>
 
 <h2>Methods</h2>
@@ -38,26 +26,16 @@ to make the bar more visible when most alleles are reference alleles.
   The sequences are processed by an
   <a href="https://github.com/nextstrain/ncov" target=_blank>automated pipeline</a>
   and annotations are written to a data file
-  thta UCSC downloads and extracts annotations for display.</p>
+  that UCSC downloads and extracts annotations for display.</p>
 
 <h2>Data Access</h2>
 <p>
-You can download the bigBed file underlying this track (nextstrainSamples*.vcf.gz) from our
-<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/nextstrain/" 
-target=_blank>Download Server</a>. The data can be explored interactively with the 
+You can download the bigBed file underlying this track (nextstrainSamples*.bigWig) from our
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/nextstrain/"
+target=_blank>Download Server</a>. The data can be explored interactively with the
 <a href="../cgi-bin/hgTables">Table Browser</a>
 or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be
 accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>.
-</p>
-
-<h2>Credits</h2>
-<p>This work is made possible by the open sharing of genetic data by research
-groups from all over the world. We gratefully acknowledge their contributions.
-Special thanks to
-  <a href="https://nextstrain.org/ncov" target=_blank>nextstrain.org</a> for
-  sharing its analysis of genomes collected by
-  <a href="https://gisaid.org/" target=_blank>GISAID</a>,
-  and to researchers worldwide for sharing their SARS-CoV-2 genome sequences.
 </p>
 
 <h2>Data usage policy</h2>
@@ -72,6 +50,14 @@ Derived data, such as phylogenies, can be downloaded from
 <a href="https://nextstrain.org/ncov" target=_blank>nextstrain.org</a>
 (see "DOWNLOAD DATA" link at bottom of page) -
 please contact the relevant authors where appropriate.
+
+<h2>Credits</h2>
+<p>Thanks to
+  <a href="https://nextstrain.org/ncov" target=_blank>nextstrain.org</a> for
+  sharing its analysis of genomes collected by
+  <a href="https://gisaid.org/" target=_blank>GISAID</a>,
+  and to researchers worldwide for sharing their SARS-CoV-2 genome sequences.
+</p>
 
 <h2>References</h2>
 <p>

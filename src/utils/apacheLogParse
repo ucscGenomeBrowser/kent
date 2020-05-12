@@ -1,14 +1,14 @@
-#!/cluster/software/bin/python2.7
+#!/usr/bin/env python3
 
 # parse apache logfiles on the cluster
 
-import glob, urlparse, gzip, marshal, os, shutil, gc, tempfile, types, csv, atexit, datetime, time, operator
+import glob, urllib.parse, gzip, marshal, os, shutil, gc, tempfile, types, csv, atexit, datetime, time, operator
 
 from collections import namedtuple, Counter, defaultdict
 from os.path import basename, join, abspath, isfile, dirname, isdir
 from os import listdir
 import optparse, logging, sys, string
-from itertools import imap
+
 from operator import itemgetter
 import heapq
 
@@ -19,9 +19,6 @@ removeTmpName = None
 
 # where do we store the raw apache logfiles
 baseLogDir = "/hive/data/inside/wwwstats/RR"
-
-# years to analyze
-years = ["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"]
 
 # list of servers to analyze
 # change these for debugging or if need to focus on single servers
@@ -38,8 +35,8 @@ apacheFields = ['ip', 'time', 'status', "reqType", 'speed', "filePath", "cgiPara
 ApacheLine = namedtuple("ApacheLine", apacheFields)
 
 # when writing the tab file, we need to replace some characters from the apache log file
-keyValReplTable = string.maketrans("\t\n=|", "  __")
-tabSepReplTable = string.maketrans("\t\n", "  ")
+keyValReplTable = str.maketrans("\t\n=|", "  __")
+tabSepReplTable = str.maketrans("\t\n", "  ")
 
 # debugging option to run only one job
 RUNONE = False
@@ -68,7 +65,7 @@ def lineFileNext(fh):
         fields = line.split("\t")
         try:
             rec = Record(*fields)
-        except Exception, msg:
+        except Exception as msg:
             logging.error("Exception occured while parsing line, %s" % msg)
             logging.error("Filename %s" % fh.name)
             logging.error("Line was: %s" % repr(line))
@@ -131,11 +128,11 @@ def parseApacheLine(fields):
     #reqType, reqUrl, httpVer = reqFields
 
     # split into cgi as a string and the params as a dict, e.g. "cgi-bin/hgXXX" and {'hgsid':'1233'}
-    filePath, paramStr = urlparse.urlsplit(reqUrl)[2:4]
+    filePath, paramStr = urllib.parse.urlsplit(reqUrl)[2:4]
     cgi = basename(filePath)
-    params = urlparse.parse_qs(paramStr)
+    params = urllib.parse.parse_qs(paramStr)
     paramList = []
-    for key, val in params.iteritems():
+    for key, val in params.items():
         val = val[0]
         # get rid of the = and | characters in these strings
         key = key.translate(keyValReplTable)
@@ -169,6 +166,7 @@ def isBot(agent):
             "Commons-HttpClient" in a or "HTTPGrab" in a or "internal dummy" in a or \
             "Daum" in agent or "ltx71" in agent or "python-request" in agent or \
             "Scout" in agent or "Riddler" in agent or "wget" in agent or \
+            "//naver.me/spd" in agent or \
             a.startswith("google") or a.startswith("yahoo") or a.startswith("bing"):
         return True
     else:
@@ -191,10 +189,13 @@ def apacheCount(inFname):
     # open file
     logging.info( "Reading %s" % inFname)
     if inFname.endswith(".gz"):
-        ifh = gzip.open(inFname)
+        print("opening gzip file")
+        ifh = gzip.open(inFname, "rt", encoding="utf8")
     else:
-        ifh = open(inFname)
+        print("opening normal text file")
+        ifh = open(inFname, "rt", encoding="utf8")
 
+    print(ifh, ofh.name)
     hgcClicks   = defaultdict(Counter)
     sidIps      = defaultdict(Counter)
     agentCounts = defaultdict(Counter)
@@ -247,7 +248,7 @@ def inOutCat(inDir, outDir):
 
     # create little files with the filenames in inDir, to get around parasol's line limit
     inOutFnames = []
-    for date, inFnames in byWeek.iteritems():
+    for date, inFnames in byWeek.items():
         fileListFname = join(inDir, date+".fileList")
 
         ofh = open(fileListFname, "w")
@@ -267,6 +268,10 @@ def inOutTab(outDir):
         os.makedirs(outDir)
 
     fnames = []
+
+    years = os.listdir(baseLogDir)
+    years = [x for x in years if x[0].isdigit()]
+
     for year in years:
         yearDir = join(baseLogDir, year)
         for servName in servNames:
@@ -279,7 +284,7 @@ def inOutTab(outDir):
                 outFname = join(outDir, outFname)
                 fnames.append ( (inFname, outFname) )
 
-    print "Found %d logfiles in %s" % (len(fnames), yearDir)
+    print("Found %d logfiles in %s" % (len(fnames), yearDir))
     return fnames
 
 def inOutCount(catDir, outDir):
@@ -305,7 +310,7 @@ def submitJobs(headNode, jobOutDir, job, fnames):
 
     # clear joboutdir
     if doCleanDir and os.path.isdir(jobOutDir):
-        print ("Deleting directory %s and all contents" % jobOutDir)
+        print(("Deleting directory %s and all contents" % jobOutDir))
         print ("You have three seconds to change your mind and hit ctrl-c")
         time.sleep(3)
         runCmd("rm -rf %s/*" % jobOutDir)
@@ -317,7 +322,7 @@ def submitJobs(headNode, jobOutDir, job, fnames):
         cmd = "%s %s %s %s" % (__file__, inFname, job, "temp.hgcClicks.tab")
         ret = os.system(cmd)
         if ret!=0:
-            print "return code %d" % ret
+            print("return code %d" % ret)
             return
         logging.info("Running merge on single file %s" % outFname)
         runReduce(jobOutDir, True)
@@ -350,7 +355,7 @@ def submitJobs(headNode, jobOutDir, job, fnames):
     jlf.close()
 
     # submitting joblist
-    print("Running jobs in dir %s" % jobOutDir)
+    print(("Running jobs in dir %s" % jobOutDir))
     cmd = "ssh %s 'cd %s; para freeBatch; para resetCounts; para clearSickNodes; para make jobList'" % \
         (headNode, jobOutDir)
     logging.info("running: %s" % cmd)
@@ -369,10 +374,10 @@ def submitJobs(headNode, jobOutDir, job, fnames):
 
 def writeCounts(allCounts):
     kgIdToSym = getKgIdToSym()
-    for dataType, counter in allCounts.iteritems():
+    for dataType, counter in allCounts.items():
         ofh = open(dataType+".tab", "w")
         if dataType.endswith("Set"):
-            for id, val in counter.iteritems():
+            for id, val in counter.items():
                 row = [id, str(len(val)), ",".join(val)]
                 ofh.write("\t".join(row)+"\n")
         else:
@@ -383,7 +388,7 @@ def writeCounts(allCounts):
                     row = [id, str(count)]
                 ofh.write("\t".join(row)+"\n")
         ofh.close()
-        print "wrote %s" % ofh.name
+        print("wrote %s" % ofh.name)
 
 #def postProcess(allCounts):
     #""" assume allCounts is a dict with name -> someVariable 
@@ -499,7 +504,7 @@ def writeDictCounter(dictCounter, outFname, headers):
     """
     makeDir(dirname(outFname))
     lines = []
-    for key, itemCounts in dictCounter.iteritems():
+    for key, itemCounts in dictCounter.items():
         countSum, itemCount, countStr = counterToString(itemCounts)
         fields = [key, str(countSum), str(itemCount), countStr]
         lines.append("\t".join(fields))
@@ -523,7 +528,7 @@ def mergeLines(lastValues, ofh):
                 #print part
             vals = part.split(":")
             if len(vals)!=2:
-                print vals
+                print(vals)
             key, count = vals
             c[key]+=int(count)
 
@@ -635,7 +640,7 @@ def parsedToMerged(countDir, mergeDir):
 def mergeFnames(dateToFnames):
     """ return list of infnames, outfname tuples. infname is like 2013_hgw8_20130414.hgcClicks.tab.gz , outfname like hgClicks/20130414.tab.gz """
 
-    for outPath, inFnames in dateToFnames.iteritems():
+    for outPath, inFnames in dateToFnames.items():
         assert(len(inFnames)>0)
         logging.info("%s" % outPath)
         logging.debug("merging %s into %s" % (inFnames, outPath))
@@ -657,7 +662,7 @@ def plot(mergeDir, htmlDir):
         year = basename(inFname)[:4]
         byYear[year].append(basename(inFname).split(".")[0])
 
-    for year, fnames in byYear.iteritems():
+    for year, fnames in byYear.items():
         # sort fnames by date
         dates = [(datetime.datetime.strptime(fn, "%Y-%m-%d"), fn) for fn in fnames]
         dates.sort()
@@ -680,7 +685,7 @@ def plot(mergeDir, htmlDir):
             dateTrackCounts[date] = dateCounts
 
         allTracks = []
-        trackClickSum = trackClickSum.items() # convert dict to list of tuples (track, count)
+        trackClickSum = list(trackClickSum.items()) # convert dict to list of tuples (track, count)
         trackClickSum.sort(key=operator.itemgetter(1), reverse=True) # sort by count
 
         rank = 0
@@ -720,9 +725,9 @@ def apacheToTab(inFname, outBotIpsFname):
     " parse apache log file to tab file. outBotIpsFname is something like 20130420_hgw4.botIps, write output to 20130420_hgw4_<realDate>.tab.gz "
     logging.info("Parsing %s" % inFname)
     if inFname.endswith(".gz"):
-        ifh = gzip.open(inFname)
+        ifh = gzip.open(inFname, "rt", encoding="utf8")
     else:
-        ifh = open(inFname)
+        ifh = open(inFname, "rt", encoding="utf8")
 
     baseOut = outBotIpsFname.replace(".botIps.txt","")
     fileHandles = {} # cache the file handles
@@ -733,7 +738,7 @@ def apacheToTab(inFname, outBotIpsFname):
         # parse apache log line
         count += 1
         if count % 20000 == 0:
-            print "parsed %d rows" % count
+            print("parsed %d rows" % count)
 
         log = parseApacheLine(row)
         if log==None:
@@ -754,7 +759,7 @@ def apacheToTab(inFname, outBotIpsFname):
         if outFname in fileHandles:
             ofh = fileHandles[outFname]
         else:
-            ofh = gzip.open(outFname, "w")
+            ofh = gzip.open(outFname, "wt", encoding="utf8")
             ofh.write("#"+"\t".join(apacheFields)+"\n")
             fileHandles[outFname] = ofh
 
@@ -784,7 +789,7 @@ def countJob(inFname, outFnameParasol):
     outBase = basename(outFnameParasol).split(".")[0]
 
     outFname = join(baseOutDir, "hgcClicks", outBase+".tab.gz")
-    print outFname, outFnameParasol
+    print(outFname, outFnameParasol)
     assert (outFname==outFnameParasol) # output path has to look like  <baseDir>/hgcClicks/<baseName>.tab.gz
 
     hgcClicks, ipSids, agentCounts = apacheCount(inFname)
