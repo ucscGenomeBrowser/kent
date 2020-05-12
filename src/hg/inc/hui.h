@@ -1554,4 +1554,9 @@ void labelMakeCheckBox(struct cart *cart, struct trackDb *tdb, char *sym, char *
 int defaultFieldLocation(char *field);
 /* Sometimes we get bigBed filters with field names that are not in the AS file.  
  * Try to guess what the user means. */
+
+void printInfoIcon(char *mouseover);
+/* Print info icon (i) with explanatory text on mouseover
+ * Uses jquery icon set, with style customized to GB in jquery-ui.css */
+
 #endif /* HUI_H */
