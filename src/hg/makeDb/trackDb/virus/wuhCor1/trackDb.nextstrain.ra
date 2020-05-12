@@ -41,7 +41,7 @@ compositeTrack on
 
     track nextstrainSamplesAll
     parent nextstrainSamples on
-    shortLabel All Vars
+    shortLabel All Variants
     longLabel Variants in All Nextstrain/GISAID Samples from nextstrain.org/ncov
     hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain.nh
     hapClusterHeight 500
@@ -51,7 +51,7 @@ compositeTrack on
 
     track nextstrainSamplesAll
     parent nextstrainSamples off
-    shortLabel All Vars
+    shortLabel All Variants
     longLabel Variants in All Nextstrain/GISAID Samples from nextstrain.org/ncov
     hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain.nh
     hapClusterHeight 500
@@ -61,7 +61,7 @@ compositeTrack on
 
     track nextstrainSamplesA1a
     parent nextstrainSamples off
-    shortLabel A1a Vars
+    shortLabel A1a Variants
     longLabel Variants in Clade A1a Nextstrain/GISAID Samples from nextstrain.org/ncov
     hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA1a.nh
     hapClusterHeight 49
@@ -70,7 +70,7 @@ compositeTrack on
 
     track nextstrainSamplesA2
     parent nextstrainSamples off
-    shortLabel A2 Vars
+    shortLabel A2 Variants
     longLabel Variants in Clade A2 Nextstrain/GISAID Samples from nextstrain.org/ncov
     hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA2.nh
     hapClusterHeight 240
@@ -79,7 +79,7 @@ compositeTrack on
 
     track nextstrainSamplesA2a
     parent nextstrainSamples off
-    shortLabel A2a Vars
+    shortLabel A2a Variants
     longLabel Variants in Clade A2a Nextstrain/GISAID Samples from nextstrain.org/ncov
     hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA2a.nh
     hapClusterHeight 239
@@ -88,7 +88,7 @@ compositeTrack on
 
     track nextstrainSamplesA3
     parent nextstrainSamples off
-    shortLabel A3 Vars
+    shortLabel A3 Variants
     longLabel Variants in Clade A3 Nextstrain/GISAID Samples from nextstrain.org/ncov
     hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA3.nh
     hapClusterHeight 14
@@ -97,7 +97,7 @@ compositeTrack on
 
     track nextstrainSamplesA6
     parent nextstrainSamples off
-    shortLabel A6 Vars
+    shortLabel A6 Variants
     longLabel Variants in Clade A6 Nextstrain/GISAID Samples from nextstrain.org/ncov
     hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA6.nh
     hapClusterHeight 11
@@ -106,7 +106,7 @@ compositeTrack on
 
     track nextstrainSamplesA7
     parent nextstrainSamples off
-    shortLabel A7 Vars
+    shortLabel A7 Variants
     longLabel Variants in Clade A7 Nextstrain/GISAID Samples from nextstrain.org/ncov
     hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA7.nh
     hapClusterHeight 1
@@ -115,7 +115,7 @@ compositeTrack on
 
     track nextstrainSamplesB
     parent nextstrainSamples off
-    shortLabel B Vars
+    shortLabel B Variants
     longLabel Variants in Clade B Nextstrain/GISAID Samples from nextstrain.org/ncov
     hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainB.nh
     hapClusterHeight 103
@@ -124,7 +124,7 @@ compositeTrack on
 
     track nextstrainSamplesB1
     parent nextstrainSamples off
-    shortLabel B1 Vars
+    shortLabel B1 Variants
     longLabel Variants in Clade B1 Nextstrain/GISAID Samples from nextstrain.org/ncov
     hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainB1.nh
     hapClusterHeight 71
@@ -133,7 +133,7 @@ compositeTrack on
 
     track nextstrainSamplesB2
     parent nextstrainSamples off
-    shortLabel B2 Vars
+    shortLabel B2 Variants
     longLabel Variants in Clade B2 Nextstrain/GISAID Samples from nextstrain.org/ncov
     hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainB2.nh
     hapClusterHeight 4
@@ -142,7 +142,7 @@ compositeTrack on
 
     track nextstrainSamplesB4
     parent nextstrainSamples off
-    shortLabel B4 Vars
+    shortLabel B4 Variants
     longLabel Variants in Clade B4 Nextstrain/GISAID Samples from nextstrain.org/ncov
     hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainB4.nh
     hapClusterHeight 4
@@ -150,9 +150,9 @@ compositeTrack on
     priority 100
 
 
-track nextstrainCount
-shortLabel Nextrain Varcount
-longLabel Nextstrain: Number of variants per position
+track nextstrainFreq
+shortLabel Nextstrain Frequency
+longLabel Nextstrain Variants Alternate Allele Frequency
 release alpha
 type bigWig
 compositeTrack on
@@ -161,101 +161,112 @@ group varRep
 autoScale on
 maxHeightPixels 100:40:8
 
-        track nextstrainCountAll
-        shortLabel Nextrain All
-        longLabel Nextstrain, all clades: Number of variants per position
+        track nextstrainFreqAll
+        shortLabel All Frequency
+        longLabel Nextstrain, all samples: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples.bigWig
         visibility dense
         release alpha
-        parent nextstrainCount
+        parent nextstrainFreq
+        priority 1
 
-        track nextstrainCountA1
-        shortLabel Nextrain A1a
-        longLabel Nextstrain, A1a clade: Number of variants per position
+        track nextstrainFreqA1
+        shortLabel A1a Frequency
+        longLabel Nextstrain, A1a clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA1a.bigWig
         visibility dense
-        parent nextstrainCount
+        parent nextstrainFreq
+        priority 10
         release alpha
 
-        track nextstrainCountA2
-        shortLabel Nextrain A2
-        longLabel Nextstrain, A2 clade: Number of variants per position
+        track nextstrainFreqA2
+        shortLabel A2 Frequency
+        longLabel Nextstrain, A2 clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA2.bigWig
         visibility dense
-        parent nextstrainCount
+        parent nextstrainFreq
+        priority 20
         release alpha
 
-        track nextstrainCountA2a
-        shortLabel Nextrain A2a
-        longLabel Nextstrain, A2a clade: Number of variants per position
+        track nextstrainFreqA2a
+        shortLabel A2a Frequency
+        longLabel Nextstrain, A2a clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA2a.bigWig
         visibility dense
-        parent nextstrainCount
+        parent nextstrainFreq
+        priority 30
         release alpha
 
-        track nextstrainCountA3
-        shortLabel Nextrain A3
-        longLabel Nextstrain, A3 clade: Number of variants per position
+        track nextstrainFreqA3
+        shortLabel A3 Frequency
+        longLabel Nextstrain, A3 clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA3.bigWig
         visibility dense
-        parent nextstrainCount
+        parent nextstrainFreq
+        priority 40
         release alpha
 
-        track nextstrainCountA6
-        shortLabel Nextrain A6
-        longLabel Nextstrain, A6 clade: Number of variants per position
+        track nextstrainFreqA6
+        shortLabel A6 Frequency
+        longLabel Nextstrain, A6 clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA6.bigWig
         visibility dense
-        parent nextstrainCount
+        parent nextstrainFreq
+        priority 50
         release alpha
 
-        track nextstrainCountA7
-        shortLabel Nextrain A7
-        longLabel Nextstrain, A7 clade: Number of variants per position
+        track nextstrainFreqA7
+        shortLabel A7 Frequency
+        longLabel Nextstrain, A7 clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA7.bigWig
         visibility dense
-        parent nextstrainCount
+        parent nextstrainFreq
+        priority 60
         release alpha
 
-        track nextstrainCountB
-        shortLabel Nextrain B
-        longLabel Nextstrain, B clade: Number of variants per position
+        track nextstrainFreqB
+        shortLabel B Frequency
+        longLabel Nextstrain, B clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB.bigWig
         visibility dense
-        parent nextstrainCount
+        parent nextstrainFreq
+        priority 70
         release alpha
 
-        track nextstrainCountB1
-        shortLabel Nextrain B1
-        longLabel Nextstrain, B1 clade: Number of variants per position
+        track nextstrainFreqB1
+        shortLabel B1 Frequency
+        longLabel Nextstrain, B1 clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB1.bigWig
         visibility dense
-        parent nextstrainCount
+        parent nextstrainFreq
+        priority 80
         release alpha
 
-        track nextstrainCountB2
-        shortLabel Nextrain B2
-        longLabel Nextstrain, B2 clade: Number of variants per position
+        track nextstrainFreqB2
+        shortLabel B2 Frequency
+        longLabel Nextstrain, B2 clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB2.bigWig
         visibility dense
-        parent nextstrainCount
+        parent nextstrainFreq
+        priority 90
         release alpha
 
-        track nextstrainCountB4
-        shortLabel Nextrain B4
-        longLabel Nextstrain, B4 clade: Number of variants per position
+        track nextstrainFreqB4
+        shortLabel B4 Frequency
+        longLabel Nextstrain, B4 clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB4.bigWig
         visibility dense
-        parent nextstrainCount
+        parent nextstrainFreq
+        priority 100
         release alpha
