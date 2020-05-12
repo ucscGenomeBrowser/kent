@@ -158,7 +158,9 @@ type bigWig
 compositeTrack on
 visibility hide
 group varRep
-autoScale on
+autoScale off
+viewLimits 0:1.0
+viewLimitsMax 0:1.0
 maxHeightPixels 100:40:8
 
         track nextstrainFreqAll
