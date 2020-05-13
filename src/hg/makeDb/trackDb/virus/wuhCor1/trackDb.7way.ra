@@ -19,7 +19,7 @@ group compGeno
         track multiz7way
         subTrack cons7wayViewalign on
         shortLabel Bat CoV multiz
-        longLabel Multiz Alignment of 7 strains of CoV: red=nonsyn green=syn blue=noncod yellow=noalign
+        longLabel Multiz Alignment of 7 strains of human CoV: red=nonsyn green=syn blue=noncod yellow=noalign
         subGroups view=align
         noInherit on
         frames multiz7wayFrames
