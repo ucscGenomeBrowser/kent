@@ -498,20 +498,18 @@ boolean hapClustEnabled = cartOrTdbBoolean(cart, tdb, VCF_HAP_ENABLED_VAR, TRUE)
 if (hapClustEnabled && rec->file != NULL && rec->file->genotypeCount > 1)
     {
     char *hapMethod = cartOrTdbString(cart, tdb, VCF_HAP_METHOD_VAR, VCF_DEFAULT_HAP_METHOD);
+    char *hapOrSample = vcfHaplotypeOrSample(cart);
     if (sameString(hapMethod, VCF_HAP_METHOD_CENTER_WEIGHTED))
         {
         static char *formName = "vcfCfgHapCenter";
         printf("<FORM NAME=\"%s\" ACTION=\"%s\">\n", formName, hgTracksName());
         cartSaveSession(cart);
         printf("<TABLE cellpadding=0><TR><TD colspan=2>"
-               "<B>Haplotype sorting order:</B> ");
+               "<B>%s sorting order:</B> ", hapOrSample);
         vcfCfgHaplotypeCenter(cart, tdb, tdb->track, FALSE, rec->file, rec->name,
                               seqName, rec->chromStart, formName);
         printf("</TABLE></FORM>\n");
         }
-    else
-        printf("<B>Haplotype sorting order:</B> the order in which samples appear in the "
-               "underlying VCF file<BR>");
     }
 char leftBase = rec->alleles[0][0];
 unsigned int vcfStart = vcfRecordTrimIndelLeftBase(rec);

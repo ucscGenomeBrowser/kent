@@ -53,4 +53,7 @@ void vcfCfgHaplotypeCenter(struct cart *cart, struct trackDb *tdb, char *track,
 void vcfCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
 /* Complete track controls for VCF. */
 
+char *vcfHaplotypeOrSample(struct cart *cart);
+/* Return "Sample" if the current organism is uniploid (like SARS-CoV-2), "Haplotype" otherwise. */
+
 #endif//def VCF_UI

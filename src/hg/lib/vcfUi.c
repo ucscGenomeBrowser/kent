@@ -40,6 +40,15 @@ safef(cartVar, sizeof(cartVar), "%s.centerVariantName", track);
 cgiMakeHiddenVar(cartVar, ctrName);
 }
 
+char *vcfHaplotypeOrSample(struct cart *cart)
+/* Return "Sample" if the current organism is uniploid (like SARS-CoV-2), "Haplotype" otherwise. */
+{
+// We should make a better way of determining whether the organism is diploid,
+// but for now this will prevent David from being bothered by diploid terminology
+// when viewing SARS-CoV-2 variants:
+return sameOk(cartOptionalString(cart, "db"), "wuhCor1") ? "Sample" : "Haplotype";
+}
+
 void vcfCfgHaplotypeCenter(struct cart *cart, struct trackDb *tdb, char *track,
 			   boolean parentLevel, struct vcfFile *vcff,
 			   char *thisName, char *thisChrom, int thisPos, char *formName)
@@ -66,10 +75,29 @@ if (vcff != NULL && vcff->genotypeCount > 1)
 	    printf(" as anchor</TD></TR>\n");
 	    }
 	else
-	    printf("<TR><TD></TD><TD>To anchor the sorting to a particular variant, "
+            {
+	    printf("<TR><TD></TD><TD>");
+            char *hapOrSample = vcfHaplotypeOrSample(cart);
+            if (sameString(hapOrSample, "Sample"))
+                {
+                puts("Samples are clustered by similarity around a central variant. "
+                     "Samples are reordered for display using the clustering tree, which is "
+                     "drawn in the left label area.");
+                }
+            else
+                {
+                puts("If this mode is selected and genotypes are phased or homozygous, "
+                     "then each genotype is split into two independent haplotypes. "
+                     "These local haplotypes are clustered by similarity around a central variant. "
+                     "Haplotypes are reordered for display using the clustering tree, which is "
+                     "drawn in the left label area. "
+                     "Local haplotype blocks can often be identified using this display.");
+                }
+            printf("<br>To anchor the sorting to a particular variant, "
 		   "click on the variant in the genome browser, "
 		   "and then click on the 'Use this variant' button on the next page."
 		   "</TD></TR>\n");
+            }
 	}
     else
 	{
@@ -128,10 +156,20 @@ static void vcfCfgHaplotypeMethod(struct cart *cart, struct trackDb *tdb, char *
 if (vcff != NULL && vcff->genotypeCount > 1)
     {
     printf("<TABLE cellpadding=0><TR><TD colspan=2>"
-	   "<B>Haplotype sorting order:</B></TD></TR><TR><TD>\n");
+	   "<B>%s sorting order:</B></TD></TR>\n", vcfHaplotypeOrSample(cart));
+    // If trackDb specifies a treeFile, offer that as an option
     char *hapMethod = cartOrTdbString(cart, tdb, VCF_HAP_METHOD_VAR, VCF_DEFAULT_HAP_METHOD);
+    char *hapMethodTdb = trackDbSetting(tdb, VCF_HAP_METHOD_VAR);
     char varName[1024];
     safef(varName, sizeof(varName), "%s." VCF_HAP_METHOD_VAR, track);
+    if (hapMethodTdb && startsWithWord("treeFile", hapMethodTdb))
+        {
+        puts("<TR><TD>");
+        cgiMakeRadioButton(varName, VCF_HAP_METHOD_TREE_FILE,
+                           startsWithWord(VCF_HAP_METHOD_TREE_FILE, hapMethod));
+        printf("</TD><TD>using the tree specified in file associated with track</TD></TR>");
+        }
+    printf("<TR><TD>");
     cgiMakeRadioButton(varName, VCF_HAP_METHOD_CENTER_WEIGHTED,
                        sameString(hapMethod, VCF_HAP_METHOD_CENTER_WEIGHTED));
     printf("</TD><TD>");
@@ -139,17 +177,15 @@ if (vcff != NULL && vcff->genotypeCount > 1)
     puts("<TR><TD>");
     cgiMakeRadioButton(varName, VCF_HAP_METHOD_FILE_ORDER,
                        sameString(hapMethod, VCF_HAP_METHOD_FILE_ORDER));
-    puts("</TD><TD>using the order in which samples appear in the underlying VCF file");
-    // If trackDb specifies a treeFile, offer that as an option
-    char *hapMethodTdb = trackDbSetting(tdb, VCF_HAP_METHOD_VAR);
-    if (hapMethodTdb && startsWithWord("treeFile", hapMethodTdb))
-        {
-        puts("<TR><TD>");
-        cgiMakeRadioButton(varName, VCF_HAP_METHOD_TREE_FILE,
-                           startsWithWord(VCF_HAP_METHOD_TREE_FILE, hapMethod));
-        printf("</TD><TD>using the tree specified in file associated with track");
-        }
-    puts("</TD></TR></TABLE>");
+    puts("</TD><TD>using the order in which samples appear in the underlying VCF file</TD></TR>");
+    puts("</TABLE>");
+    jsInlineF("$('input[type=radio][name=\"%s\"]').change(function() { "
+              "if (this.value == '"VCF_HAP_METHOD_CENTER_WEIGHTED"') {"
+              "  $('#leafShapeContainer').show();"
+              "} else {"
+              "  $('#leafShapeContainer').hide();"
+              "}});\n",
+              varName);
     }
 }
 
@@ -212,14 +248,14 @@ boolean hapClustEnabled = cartOrTdbBoolean(cart, tdb, VCF_HAP_ENABLED_VAR, TRUE)
 char cartVar[1024];
 safef(cartVar, sizeof(cartVar), "%s." VCF_HAP_ENABLED_VAR, name);
 cgiMakeCheckBox(cartVar, hapClustEnabled);
-printf("<B>Enable Haplotype sorting display</B><BR>\n");
+printf("<B>Enable %s sorting display</B><BR>\n", vcfHaplotypeOrSample(cart));
 }
 
 static void vcfCfgHapClusterColor(struct cart *cart, struct trackDb *tdb, char *name,
 				   boolean parentLevel)
 /* Let the user choose how to color the sorted haplotypes. */
 {
-printf("<B>Haplotype coloring scheme:</B><BR>\n");
+printf("<B>Allele coloring scheme:</B><BR>\n");
 char *colorBy = cartOrTdbString(cart, tdb, VCF_HAP_COLORBY_VAR, VCF_DEFAULT_HAP_COLORBY);
 char varName[1024];
 safef(varName, sizeof(varName), "%s." VCF_HAP_COLORBY_VAR, name);
@@ -235,16 +271,22 @@ static void vcfCfgHapClusterTreeAngle(struct cart *cart, struct trackDb *tdb, ch
 				   boolean parentLevel)
 /* Let the user choose branch shape. */
 {
-printf("<B>Haplotype clustering tree leaf shape:</B><BR>\n");
+// This option applies only to center-weighted clustering; don't show option when some other
+// method is selected.
+char *hapMethod = cartOrTdbString(cart, tdb, VCF_HAP_METHOD_VAR, VCF_DEFAULT_HAP_METHOD);
+printf("<div id='leafShapeContainer'%s>\n",
+       differentString(hapMethod, VCF_HAP_METHOD_CENTER_WEIGHTED) ? " style='display: none;'" : "");
+printf("<B>%s clustering tree leaf shape:</B><BR>\n", vcfHaplotypeOrSample(cart));
 char *treeAngle = cartOrTdbString(cart, tdb, VCF_HAP_TREEANGLE_VAR, VCF_DEFAULT_HAP_TREEANGLE);
 char varName[1024];
 safef(varName, sizeof(varName), "%s." VCF_HAP_TREEANGLE_VAR, name);
 cgiMakeRadioButton(varName, VCF_HAP_TREEANGLE_TRIANGLE,
 		   sameString(treeAngle, VCF_HAP_TREEANGLE_TRIANGLE));
-printf("draw leaf clusters as &lt;<BR>\n");
+printf("draw branches whose samples are all identical as &lt;<BR>\n");
 cgiMakeRadioButton(varName, VCF_HAP_TREEANGLE_RECTANGLE,
 		   sameString(treeAngle, VCF_HAP_TREEANGLE_RECTANGLE));
-printf("draw leaf clusters as [<BR>\n");
+printf("draw branches whose samples are all identical as [<BR>\n");
+puts("</div>");
 }
 
 static void vcfCfgHapClusterHeight(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
@@ -253,7 +295,7 @@ static void vcfCfgHapClusterHeight(struct cart *cart, struct trackDb *tdb, struc
 {
 if (vcff != NULL && vcff->genotypeCount > 1)
     {
-    printf("<B>Haplotype sorting display height:</B> \n");
+    printf("<B>%s sorting display height:</B> \n", vcfHaplotypeOrSample(cart));
     int cartHeight = cartOrTdbInt(cart, tdb, VCF_HAP_HEIGHT_VAR, VCF_DEFAULT_HAP_HEIGHT);
     char varName[1024];
     safef(varName, sizeof(varName), "%s." VCF_HAP_HEIGHT_VAR, name);
@@ -267,10 +309,12 @@ static void vcfCfgHapCluster(struct cart *cart, struct trackDb *tdb, struct vcfF
 /* Show controls for haplotype-sorting display, which only makes sense to do when
  * the VCF file describes multiple genotypes. */
 {
+char *hapOrSample = vcfHaplotypeOrSample(cart);
+printf("<H3>%s sorting display</H3>\n", hapOrSample);
 vcfCfgHapClusterEnable(cart, tdb, name, parentLevel);
 vcfCfgHaplotypeMethod(cart, tdb, name, parentLevel, vcff);
-vcfCfgHapClusterColor(cart, tdb, name, parentLevel);
 vcfCfgHapClusterTreeAngle(cart, tdb, name, parentLevel);
+vcfCfgHapClusterColor(cart, tdb, name, parentLevel);
 vcfCfgHapClusterHeight(cart, tdb, vcff, name, parentLevel);
 }
 
@@ -351,13 +395,6 @@ if (vcff != NULL)
     boolean parentLevel = isNameAtParentLevel(tdb, name);
     if (vcff->genotypeCount > 1)
 	{
-	puts("<H3>Haplotype sorting display</H3>");
-	puts("<P>When this display mode is enabled and genotypes are phased or homozygous, "
-	     "each genotype is split into two independent haplotypes. "
-	     "These local haplotypes are clustered by similarity around a central variant. "
-	     "Haplotypes are reordered for display using the clustering tree, which is "
-	     "drawn in the left label area. "
-	     "Local haplotype blocks can often be identified using this display.</P>");
 	vcfCfgHapCluster(cart, tdb, vcff, name, parentLevel);
 	}
     if (differentString(tdb->track,"evsEsp6500"))
