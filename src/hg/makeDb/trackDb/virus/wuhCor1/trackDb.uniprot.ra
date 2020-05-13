@@ -21,8 +21,8 @@ dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
 
 track unipCov2Chain
-shortLabel Mature Products
-longLabel UniProt Mature, Processed Protein Products (Polypeptide Chains)
+shortLabel Protein Products
+longLabel UniProt Protein Products (Polypeptide Chains)
 priority 2
 visibility pack
 color 0,2,80
