@@ -11,3 +11,11 @@ tawk '{print $4,   $21, $23, $22, $22}' prev.bed | sed 's/\.[0-9]*$//' > ncbiSea
 ixIxx ncbiSearch.txt ncbiSearch.ix ncbiSearch.ixx
 ln -s `pwd`/ncbiSearch.ix /gbdb/wuhCor1
 ln -s `pwd`/ncbiSearch.ixx /gbdb/wuhCor1
+
+#make trix for peptides.bb
+bigBedToBed /gbdb/wuhCor1/bbi/ncbi/peptides.bb stdout | awk 'BEGIN {FS="\t"} {printf "%s\n", $4}' > ncbiProductNames.txt
+bigBedToBed /gbdb/wuhCor1/bbi/ncbi/peptides.bb stdout | awk 'BEGIN {FS="\t"} {printf "%s %s\n", $18,$22}' > ncbiTerms.txt
+cat ncbiTerms.txt | tr '[a-z]' '[A-Z]' > ncbiTermsUpper.txt
+cat ncbiTerms.txt | tr '[A-Z]' '[a-z]' > ncbiTermsLower.txt
+paste ncbiProductNames.txt ncbiTerms.txt | paste -d ' '  /dev/stdin ncbiTermsUpper.txt | paste -d ' '  /dev/stdin ncbiTermsLower.txt > ncbiProducts.txt
+ixIxx ncbiProducts.txt ncbiProducts.ix ncbiProducts.ixx

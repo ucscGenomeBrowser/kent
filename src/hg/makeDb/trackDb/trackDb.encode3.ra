@@ -9,8 +9,7 @@ bigDataUrl /gbdb/$D/encode3/ccre/encodeCcreCombined.bb
 mouseOverField typeLabel
 bedNameLabel ENCODE Accession
 urlLabel cCRE details at ENCODE SCREEN:
-#filterValues.ccre PLS|promoter-like (PLS),pELS|proximal enhancer-like (pELS),pELS,,CTCF-bound|proximal enhancer-like (pELS),,CTCF-bound,dELS|distal enhancer-like (dELS),dELS|distal enhancer-like (dELS),,CTCF-bound,CTCF-only,,CTCF-bound|CTCF only,DNase-H3K4me3|DNase-H3K4me3,DNase-H3K4me3,,CTCF-bound|DNase-H3K4me3,,CTCF-bound
-filterValues.typeLabel prom|promoter-like (prom),enhP|proximal enhancer-like (enhP),enhD|distal enhancer-like (enhD),ctcf|CTCF only (ctcf),K4m3|H3K4me3 (k4m3)
+filterValues.typeLabel prom|promoter-like (prom),enhP|proximal enhancer-like (enhP),enhD|distal enhancer-like (enhD),CTCF|CTCF only (CTCF),K4m3|H3K4me3 (K4m3)
 itemRgb On
 wgEncode 1
 group regulation

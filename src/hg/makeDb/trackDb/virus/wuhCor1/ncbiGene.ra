@@ -26,13 +26,15 @@ priority 1
 color 12,12,120
 type bigGenePred 
 bigDataUrl /gbdb/wuhCor1/bbi/ncbi/peptides.bb
-labelFields geneName2,geneName,geneId,product
+labelFields geneName,product
 baseColorUseCds given
 exonNumbers off
 baseColorDefault genomicCodons
 urls product=https://www.ncbi.nlm.nih.gov/protein/$$ geneId=https://www.ncbi.nlm.nih.gov/gene/$$
 #urlLabel NCBI Refseq protein
 mouseOverField note
+searchIndex name
+searchTrix /gbdb/wuhCor1/ncbiProducts.ix
 
 track ncbiOther
 shortLabel NCBI Other
@@ -48,6 +50,12 @@ exonNumbers off
 urls product=https://www.ncbi.nlm.nih.gov/protein/$$ geneId=https://www.ncbi.nlm.nih.gov/gene/$$
 #urlLabel NCBI Refseq protein
 mouseOverField note
+
+searchTable ncbiProducts
+searchType bigBed
+searchMethod fuzzy
+searchDescription NCBI Proteins
+searchPriority 1.3
 
 searchTable ncbiGeneBGP
 searchType bigBed
