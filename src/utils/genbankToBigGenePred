@@ -135,7 +135,7 @@ def writeFeatures(ft, chromName, ofh, isGenePred=False, rec=None, nameField="typ
         row.append("") # cDNA PSL
         row.append(repr(ft.qualifiers)) # protein sequence
         row.append("") # prot to cDNA PSL
-        row.append(repr(ft.qualifiers)) # anythign else
+        #row.append(repr(ft.qualifiers)) # anythign else
     else:
         row.append(ft.qualifiers.get("inference", [""])[0])
         row.append(ft.qualifiers.get("function", [""])[0])
@@ -151,7 +151,7 @@ def bedToBigBed(fname, chromSizes, asName, bbDir):
     assert (subprocess.call(cmd)==0)
 
     outFname = basename(fname).replace(".bed", ".bb")
-    cmd = ["/cluster/home/braney/bin/x86_64/bedToBigBed", "-tab", "-type=bed12+", "-as="+asName, fname, chromSizes, join(bbDir, outFname)]
+    cmd = ["/cluster/home/braney/bin/x86_64/bedToBigBed", "-tab", "-type=bed12+", "-as="+asName, fname, chromSizes, join(bbDir, outFname), "-extraIndex=name", "-allow1bpOverlap"]
     logging.info("Running: "+(" ".join(cmd)))
     ret = subprocess.call(cmd)
     assert(ret==0)
