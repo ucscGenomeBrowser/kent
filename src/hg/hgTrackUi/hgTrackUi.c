@@ -3097,30 +3097,12 @@ if (!tdb->parent)
 
 // show super-track info
 struct trackDb *tdbParent = tdb->parent;
-if (trackDbSetting(tdbParent, "wgEncode"))
-    printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' "
-           "width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
-printf("<b>Track collection: <a href='%s?%s=%s&c=%s&g=%s'>%s </b></a>",
+
+printf("<b>Track collection: "
+           "<img height=12 src='../images/ab_up.gif'>"
+            "<a href='%s?%s=%s&c=%s&g=%s'>%s </b></a>",
             hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
             chromosome, cgiEncode(tdbParent->track), tdbParent->longLabel);
-
-// show group info
-struct grp *grp, *grps = hLoadGrps(database);
-for (grp = grps; grp != NULL; grp = grp->next)
-    {
-    if (sameString(grp->name, tdb->grp))
-        {
-        printf("&nbsp;&nbsp;<B style='font-size:100%%;'>"
-               "(<A HREF=\"%s?%s=%s&c=%s&hgTracksConfigPage=configure"
-               "&hgtgroup_%s_close=0#%sGroup\" title='%s tracks in track configuration "
-               "page'><IMG height=12 src='../images/ab_up.gif'>All %s%s</A>)</B>",
-               hgTracksName(), cartSessionVarName(), cartSessionId(cart), chromosome,
-               tdb->grp, tdb->grp, grp->label, grp->label,
-               endsWith(grp->label," Tracks")?"":" tracks");
-        break;
-        }
-    }
-grpFreeList(&grps);
 
 // collapsed panel for Description
 
@@ -3287,7 +3269,7 @@ else if (sameWord(tdb->track, "refSeqComposite"))
     }
 else
     {
-    if (trackDbSetting(tdb, "wgEncode") && !tdb->parent)
+    if (trackDbSetting(tdb, "wgEncode"))
         printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' "
                "width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
     // set large title font size, but less so for long labels to minimize wrap
