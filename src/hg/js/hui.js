@@ -100,20 +100,6 @@ function exposeAll()
     }
 }
 
-function hideAll() {
-    /* Make main display dropdown hide if currently shown */
-    var visDD = normed($("select.visDD"));
-    if (visDD) {
-        if ($(visDD).attr('selectedIndex') !== 0) {
-            $(visDD).attr('selectedIndex', 0);
-            $(visDD).change();
-        }
-        // If superChild and hidden by supertrack, wierd things go on unless we trigger reshape
-        if ($(visDD).hasClass('superChild'))
-            visTriggersHiddenSelect(visDD);
-    }
-}
-
 function matSubCbClick(subCB)
 {
 // subCB:onclick  When a subtrack checkbox is clicked, it may result in
@@ -137,9 +123,6 @@ function matSubCbClick(subCB)
 
     if (subCB.checked)
         exposeAll();  // Unhide composite vis?
-    else if ($("input.subCB:checked").length===0) {
-        hideAll();
-    }
 
     matSubCBsSelected();
 }

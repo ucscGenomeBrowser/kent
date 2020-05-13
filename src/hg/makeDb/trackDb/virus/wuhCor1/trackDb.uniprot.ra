@@ -68,17 +68,6 @@ dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
 html uniprotCov2
 
-track unipProtease
-shortLabel Protease Cleavage
-longLabel Protease Cleavage Sites
-visibility dense
-type bigBed
-group uniprot
-bigDataUrl /gbdb/wuhCor1/uniprot/protease_sites.bb
-dataVersion Manually created based on April 2020 UniProt release
-exonNumbers off
-color 50,50,20
-
 track unipCov2DisulfBond
 shortLabel Disulf. Bonds
 longLabel UniProt Disulfide Bonds

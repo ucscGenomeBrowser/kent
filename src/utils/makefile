@@ -199,7 +199,6 @@ SCRIPT_FILES = \
 	bedAppendPaperInfo \
 	googleSheetToBigBed \
 	doClinvarLift \
-	genbankToBigGenePred \
 	${USER_APP_SCRIPTS}
 
 # List of all directories to build
