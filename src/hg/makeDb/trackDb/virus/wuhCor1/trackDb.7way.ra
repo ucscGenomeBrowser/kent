@@ -22,8 +22,6 @@ group compGeno
         longLabel Multiz Alignment of 7 strains of CoV: red=nonsyn green=syn blue=noncod yellow=noalign
         subGroups view=align
         noInherit on
-#        irows on
-#        summary multiz7waySummary
         frames multiz7wayFrames
         group compGeno
         color 0, 10, 100
@@ -31,12 +29,12 @@ group compGeno
         mafDot on
 	snpTable mafSnp7way
 	mafShowSnp on
-#	snpMode on
+	snpMode on
         type wigMaf 0.0 1.0
         speciesCodonDefault wuhCor1
         speciesGroups CoV_2019
-        sGroup_CoV_2019 SARSClassic MERS OC43 HKU1 V229E NL63
-        speciesDefaultOn SARSClassic MERS OC43 HKU1 V229E NL63
+        sGroup_CoV_2019 SARS_CoV_1 MERS OC43 HKU1 CoV229E NL63
+        speciesDefaultOn SARS_CoV_1 MERS OC43 HKU1 CoV229E NL63
         itemFirstCharCase noChange
         priority 100
         treeImage phylo/wuhCor1_7way.png
