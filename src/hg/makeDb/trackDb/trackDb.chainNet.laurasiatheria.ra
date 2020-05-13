@@ -1943,7 +1943,6 @@ html chainNet
 # enhLutNer1 - Southern sea otter - Enhydra lutris nereis - mammal - carnivora - 1049777
 ################################################################
 track chainNetEnhLutNer1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -1966,7 +1965,6 @@ spectrum on
 html chainNet
 
     track chainNetEnhLutNer1Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -1974,7 +1972,6 @@ html chainNet
     spectrum on
 
         track chainEnhLutNer1
-        release alpha
         parent chainNetEnhLutNer1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -1983,14 +1980,12 @@ html chainNet
         html chainNet
 
     track chainNetEnhLutNer1Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetEnhLutNer1
 
         track netEnhLutNer1
-        release alpha
         parent chainNetEnhLutNer1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
