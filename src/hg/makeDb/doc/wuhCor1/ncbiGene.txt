@@ -1,6 +1,7 @@
 cd /hive/data/genomes/wuhCor1/bed/ncbiGene
  
 # get Genbank entry NC_045512.2.gbk
+curl -s  "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&id=NC_045512.2&rettype=gb&retmode=txt"; > NC_045512.2.gbk
 genbankToBigGenePred NC_045512.2.gbk NC_045512v2 ../../chrom.sizes tab
  
 #bbedToBigBed -allow1bpOverlap -tab -type=bed12+ -as=as prev.bed ../../chrom.sizes bb/genes.bb 
@@ -10,11 +11,3 @@ tawk '{print $4,   $21, $23, $22, $22}' prev.bed | sed 's/\.[0-9]*$//' > ncbiSea
 ixIxx ncbiSearch.txt ncbiSearch.ix ncbiSearch.ixx
 ln -s `pwd`/ncbiSearch.ix /gbdb/wuhCor1
 ln -s `pwd`/ncbiSearch.ixx /gbdb/wuhCor1
-
-#make trix for peptides.bb
-bigBedToBed /gbdb/wuhCor1/bbi/ncbi/peptides.bb stdout | awk 'BEGIN {FS="\t"} {printf "%s\n", $4}' > ncbiProductNames.txt
-bigBedToBed /gbdb/wuhCor1/bbi/ncbi/peptides.bb stdout | awk 'BEGIN {FS="\t"} {printf "%s %s\n", $18,$22}' > ncbiTerms.txt
-cat ncbiTerms.txt | tr '[a-z]' '[A-Z]' > ncbiTermsUpper.txt
-cat ncbiTerms.txt | tr '[A-Z]' '[a-z]' > ncbiTermsLower.txt
-paste ncbiProductNames.txt ncbiTerms.txt | paste -d ' '  /dev/stdin ncbiTermsUpper.txt | paste -d ' '  /dev/stdin ncbiTermsLower.txt > ncbiProducts.txt
-ixIxx ncbiProducts.txt ncbiProducts.ix ncbiProducts.ixx
