@@ -99,6 +99,7 @@ UTILS_APPLIST = \
 	timing \
 	toLower \
 	toUpper \
+        trackDbIndexBb \
 	twoBitDup \
 	twoBitInfo \
 	twoBitToFa \
