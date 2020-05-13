@@ -1,0 +1,358 @@
+###############################################################################
+### Constructing a small 7-way alignment with just human CoV plus MERS
+### Working - Hiram - 2020-05-13
+###############################################################################
+
+mkdir -p /hive/data/genomes/wuhCor1/bed/multiz7way/lastz
+cd /hive/data/genomes/wuhCor1/bed/multiz7way/lastz
+
+# setup ordinary virus names for this sample:
+# CoV229E instead of 229E, the 229E doesn't work in the MAF file processing
+# Also can't use a name with minus sign such as SARS-CoV-1
+
+sed -e 's/^>.*/>MERS/;' ../../lastzStrains/sequences/safeNameFa/NC_019843v3.fa > MERS.fa
+sed -e 's/^>.*/>SARS_CoV_1/;' ../../lastzStrains/sequences/safeNameFa/NC_004718v3.fa > SARS_CoV_1.fa
+sed -e 's/^>.*/>CoV229E/;' ../../lastzStrains/sequences/safeNameFa/NC_002645v1.fa > CoV229E.fa
+sed -e 's/^>.*/>NL63/;' ../../lastzStrains/sequences/safeNameFa/NC_005831v2.fa > NL63.fa
+sed -e 's/^>.*/>OC43/;' ../../lastzStrains/sequences/safeNameFa/NC_006213v1.fa > OC43.fa
+sed -e 's/^>.*/>HKU1/;'  ../../lastzStrains/sequences/safeNameFa/NC_006577v2.fa > HKU1.fa
+twoBitToFa ../../../wuhCor1.2bit wuhCor1.fa
+
+faCount *.fa
+
+# #seq    len     A       C       G       T       N       cpg
+# CoV229E 27317   7420    4549    5903    9445    0       488
+# HKU1    29926   8331    3895    5699    12001   0       340
+# MERS    30119   7900    6116    6304    9799    0       711
+# NL63    27553   7253    3979    5516    10805   0       332
+# OC43    30741   8502    4660    6649    10930   0       485
+# SARS_CoV_1      29751   8481    5940    6187    9143    0       568
+# NC_045512v2     29903   8954    5492    5863    9594    0       439
+
+export TOP="/hive/data/genomes/wuhCor1/bed/multiz7way/lastz"
+export target="wuhCor1"
+
+time for query in CoV229E HKU1 MERS NL63 OC43 SARS_CoV_1
+do
+cd  ${TOP}
+rm -fr ${TOP}/$query
+mkdir -p ${TOP}/$query
+cd  ${TOP}/$query
+time /cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz \
+   ../${target}.fa ../${query}.fa \
+   --transition=2 --format=axt+ --rdotplot=$target.$query.dotPlot \
+     --noytrim > $target.$query.axt
+faSize -detailed ../$target.fa > $target.sizes
+faSize -detailed ../$query.fa > $query.sizes
+faToTwoBit ../$query.fa $query.2bit
+axtToPsl $target.$query.axt $target.sizes $query.sizes $target.$query.psl
+axtToMaf $target.$query.axt $target.sizes $query.sizes $target.$query.maf
+axtChain -psl -verbose=0 -linearGap=loose $target.$query.psl \
+   ../../../../$target.2bit $query.2bit stdout \
+    | chainAntiRepeat ../../../../$target.2bit $query.2bit stdin $target.$query.chain 
+chainPreNet $target.$query.chain $target.sizes $query.sizes stdout \
+   | chainNet  stdin -minSpace=1 $target.sizes $query.sizes stdout /dev/null \
+     | netSyntenic stdin $target.$query.noClass.net
+netSplit $target.$query.noClass.net net
+netToAxt net/*.net $target.$query.chain ../../../../$target.2bit $query.2bit stdout \
+   | axtSort stdin $target.$query.axtNet  
+axtToMaf -tPrefix=NC_045512v2. -qPrefix=$query.  $target.$query.axtNet \
+   $target.sizes $query.sizes $target.$query.mafNet
+cd  ${TOP}
+done
+
+# real    0m2.402s
+
+# verify names are correct in mafNet files
+for F in */*.mafNet
+do
+  grep "^s " ${F} | awk '{print $2}' | sort | uniq -c | sed -e 's/^/# /'
+done
+#       9 CoV229E.CoV229E
+#       9 NC_045512v2.NC_045512v2
+#       6 HKU1.HKU1
+#       6 NC_045512v2.NC_045512v2
+#       9 MERS.MERS
+#       9 NC_045512v2.NC_045512v2
+#       8 NC_045512v2.NC_045512v2
+#       8 NL63.NL63
+#       5 NC_045512v2.NC_045512v2
+#       5 OC43.OC43
+#       5 NC_045512v2.NC_045512v2
+#       5 SARS_CoV_1.SARS_CoV_1
+
+cd /hive/data/genomes/wuhCor1/bed/multiz7way
+# extract 7-way tree from 119way.nh, and reset names:
+
+/cluster/bin/phast/tree_doctor \
+ --prune-all-but NC_045512v2,NC_019843v3,NC_004718v3,NC_002645v1,NC_005831v2,NC_006213v1,NC_006577v2 \
+  ../../goldenPath/multiz119way/sequenceNames.119way.nh \
+  | sed -e 's/NC_019843v3/MERS/; s/NC_004718v3/SARS_CoV_1/; s/NC_002645v1/CoV229E/; s/NC_005831v2/NL63/; s/NC_006213v1/OC43/; s/NC_006577v2/HKU1/;' > wuhCor1.7way.nh
+
+/cluster/home/hiram/kent/src/hg/utils/phyloTrees/asciiTree.pl \
+   wuhCor1.7way.nh | sed -e 's/^/# /;'
+
+# ((((NC_045512v2:0.48935,
+#    SARS_CoV_1:0.48934):0.01064,
+#   MERS:0.49999):0.000012,
+#  (OC43:0.49947,
+#  HKU1:0.499460):0.000540):0.000001,
+# (CoV229E:0.49967,
+# NL63:0.49967):0.000321);
+
+sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+       wuhCor1.7way.nh | xargs echo | sed 's/ //g; s/,/ /g' > tree.nh
+
+sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+cat species.list | tr ' ' '\n' | sort > 7.grep.list
+
+mkdir mafLinks
+
+for S in `sed -e 's/NC_045512v2 //;' species.list`
+do
+  echo $S
+  mafFile="mafLinks/NC_045512v2.${S}.maf.gz"
+  cat ./lastz/${S}/wuhCor1.${S}.mafNet | gzip -c > "${mafFile}"
+done
+
+zcat mafLinks/*.maf.gz | grep "^s " | awk '{print $2}' | sort \
+    | uniq -c | sort -rn | sed -e 's/^/# /;'
+#      42 NC_045512v2.NC_045512v2
+#       9 MERS.MERS
+#       9 CoV229E.CoV229E
+#       8 NL63.NL63
+#       6 HKU1.HKU1
+#       5 SARS_CoV_1.SARS_CoV_1
+#       5 OC43.OC43
+
+mkdir maf run
+cd run
+mkdir penn
+cp -p /cluster/bin/penn/multiz.2009-01-21_patched/multiz penn
+cp -p /cluster/bin/penn/multiz.2009-01-21_patched/maf_project penn
+cp -p /cluster/bin/penn/multiz.2009-01-21_patched/autoMZ penn
+
+printf '#LOOP
+./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/wuhCor1/bed/multiz7way/maf/$(root1).maf}
+#ENDLOOP
+' > template
+
+ls ../mafLinks | sed -e 's/NC_045512v2.//; s/.maf.gz//;' > maf.list
+
+printf '#!/bin/csh -ef
+set db = NC_045512v2
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /dev/shm/$db/multiz.$c
+set pairs = /hive/data/genomes/wuhCor1/bed/multiz7way/mafLinks
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../tree.nh ../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //;" species.list`)
+    set in = $pairs/$db.$s.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+ls -ogrtL
+echo "$run/penn/autoMZ + T=$tmp E=$db ""`cat tree.nh`"" $db.*.sing.maf $c"
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c $result
+echo "# working: $tmp"
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty  /dev/shm/$db
+' > autoMultiz.csh
+
+chmod +x autoMultiz.csh
+
+gensub2 maf.list single template jobList
+
+para create jobList
+para try
+para time > run.time
+
+cat run.time
+
+Completed: 6 of 6 jobs
+CPU time in finished jobs:         11s       0.19m     0.00h    0.00d  0.000 y
+IO & Wait Time:                    25s       0.41m     0.01h    0.00d  0.000 y
+Average job time:                   6s       0.10m     0.00h    0.00d
+Longest finished job:               7s       0.12m     0.00h    0.00d
+Submission to last job:            13s       0.22m     0.00h    0.00d
+
+## put the results together into a single
+
+head -1 maf/SARS_CoV_1.maf > multiz7way.maf
+for F in maf/*.maf
+do
+    echo "${F}" 1>&2
+    egrep -v "^#" ${F} | sed -e 's#^s \([A-Z0-9a-z_]*\)#s \1.\1#;'
+done | sed -e 's#^s NC_045512v2.NC_045512v2#s wuhCor1.NC_045512v2#;' \
+>> multiz7way.maf
+tail -1 maf/SARS_CoV_1.maf >> multiz7way.maf
+
+grep "^s " multiz7way.maf | awk '{print $2}' | sort | uniq -c \
+  | sort -rn | sed -e 's/^/# /;'
+#     450 wuhCor1.NC_045512v2
+#     450 SARS_CoV_1.SARS_CoV_1
+#     330 MERS.MERS
+#     288 OC43.OC43
+#     276 HKU1.HKU1
+#     252 NL63.NL63
+#     162 CoV229E.CoV229E
+
+mkdir /gbdb/wuhCor1/multiz7way
+rm -f /gbdb/wuhCor1/multiz7way/multiz7way.maf
+ln -s `pwd`/multiz7way.maf /gbdb/wuhCor1/multiz7way
+hgLoadMaf wuhCor1 multiz7way
+# Loaded 450 mafs in 1 files from /gbdb/wuhCor1/multiz7way
+
+mafFrag wuhCor1 multiz7way NC_045512v2 0 29903 + mafFrag.multiz7way.maf
+
+./dotToDash.pl mafFrag.multiz7way.maf > defraged.multiz7way.maf
+
+rm /gbdb/wuhCor1/multiz7way/multiz7way.maf
+ln -s `pwd`/defraged.multiz7way.maf /gbdb/wuhCor1/multiz7way/multiz7way.maf
+
+hgLoadMaf wuhCor1 multiz7way
+# Loaded 1 mafs in 1 files from /gbdb/wuhCor1/multiz7way
+
+##############################################################################
+## frames (DONE - 2020-05-13 - Hiram)
+
+# build single coverage ORF annotation for MAF codon display and for mafSnp display
+mkdir  /hive/data/genomes/wuhCor1/bed/multiz7way/mafFrames
+cd  /hive/data/genomes/wuhCor1/bed/multiz7way/mafFrames
+
+cp -p "/hive/data/outside/ncbi/genomes/GCF/009/858/895/GCF_009858895.2_ASM985889v3/GCF_009858895.2_ASM985889v3_protein.faa.gz" .
+ 
+zgrep "^>" GCF_009858895.2_ASM985889v3_protein.faa.gz 
+>YP_009724389.1 orf1ab polyprotein [Wuhan seafood market pneumonia virus]
+>YP_009724390.1 surface glycoprotein [Wuhan seafood market pneumonia virus]
+>YP_009724391.1 ORF3a protein [Wuhan seafood market pneumonia virus]
+>YP_009724392.1 envelope protein [Wuhan seafood market pneumonia virus]
+>YP_009724393.1 membrane glycoprotein [Wuhan seafood market pneumonia virus]
+>YP_009724394.1 ORF6 protein [Wuhan seafood market pneumonia virus]
+>YP_009724395.1 ORF7a protein [Wuhan seafood market pneumonia virus]
+>YP_009724396.1 ORF8 protein [Wuhan seafood market pneumonia virus]
+>YP_009724397.2 nucleocapsid phosphoprotein [Wuhan seafood market pneumonia virus]
+>YP_009725255.1 ORF10 protein [Wuhan seafood market pneumonia virus]
+>YP_009725295.1 orf1a polyprotein [Wuhan seafood market pneumonia virus]
+>YP_009725296.1 ORF7b [Wuhan seafood market pneumonia virus]
+
+blat -noHead -t=dnax -q=prot /hive/data/genomes/wuhCor1/wuhCor1.2bit \
+   GCF_009858895.2_ASM985889v3_protein.faa.gz stdout | pslToBed stdin full.bed
+
+sed -e 's/27758/27755/g; s/129/126/g;' full.bed > hack.bed
+
+#edit hack.bed to remove overlap of YP_009725296.1 with YP_009724395.1
+# change the 27758 to 27755 and the 129 to 126
+diff full.bed hack.bed
+12c12
+< NC_045512v2   27755   27884   YP_009725296.1  1000    +       27755   27884  0
+        1       129,    0,
+---
+> NC_045512v2   27758   27884   YP_009725296.1  1000    +       27758   27884  0
+        1       126,    0,
+
+bedToGenePred hack.bed stdout | genePredSingleCover stdin singleCover7way.gp
+hgLoadGenePred wuhCor1 singleCover7way singleCover7way.gp
+
+genePredToMafFrames wuhCor1 ../mafFrag.multiz7way.maf frames.tab wuhCor1 singleCover7way.gp
+hgLoadMafFrames wuhCor1 multiz7wayFrames frames.tab
+
+##############################################################################
+## SNP view
+mkdir -p  /hive/data/genomes/wuhCor1/bed/snpView7Way
+cd /hive/data/genomes/wuhCor1/bed/snpView7Way
+
+awk '/^s/ {print $2}' ../multiz7way/defraged.multiz7way.maf \
+  | sed 's/\..*//' > species.lst  
+for i in `cat species.lst`; do f=`echo $i \
+  | tr '_' '-'`; echo "s/$f/$i/g"; done > backSedScript.txt
+for i in `cat species.lst`; do f=`echo $i \
+  | tr '_' '-'`; echo "s/$i/$f/g"; done > foreSedScript.txt
+sed -f foreSedScript.txt species.lst > editSpecies.lst
+
+mafGene -exons wuhCor1 multiz7way singleCover7way species.lst stdout \
+   | sed -f foreSedScript.txt >  nonsyn.faa
+
+paSNP editSpecies.lst nonsyn.faa stdout | sed 's/:/ /' | sed 's/-/ /' \
+   | awk '{print $1, $2-1, $3, $4, 1583, "+", $2-1, $3, "255,0,0", 1, $3-($2 - 1), 0}' \
+   | sed -f backSedScript.txt > nonsyn.bed
+
+awk '{print $4}' nonsyn.bed | sort | uniq -c | sed -e 's/^/# /;'
+#    1696 CoV229E
+#    2170 HKU1
+#    2371 MERS
+#    2330 NL63
+#    2257 OC43
+#    1385 SARS_CoV_1
+
+mafGene -uniqAA -exons wuhCor1 multiz7way singleCover7way species.lst stdout \
+  | sed -f foreSedScript.txt > syn.faa
+
+paSNP editSpecies.lst syn.faa stdout | sed 's/:/ /' | sed 's/-/ /' \
+   | awk '{print $1, $2-1, $3, $4, 1819, "+", $2-1, $3, "0,255,0", 1, $3 - ($2 - 1), 0}' \
+     | sed -f backSedScript.txt   > syn.bed
+
+mafToSnpBed wuhCor1 ../multiz7way/defraged.multiz7way.maf \
+   ../multiz7way/mafFrames/singleCover7way.gp stdout \
+      | sed 's/wuhCor1.//' > single.bed
+
+#these should all disappear on the merge
+grep "1580$" single.bed \
+  | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "255,255,0", 1, $3 -$2, 0}' \
+    > codingVariant.bed
+
+grep "1623$" single.bed \
+  | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "255,255,0", 1, $3 -$2, 0}' \
+    > utrVariant.bed
+grep "1624$" single.bed \
+  | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "255,255,0", 1, $3 -$2, 0}' \
+    >> utrVariant.bed
+
+grep " 0$" single.bed \
+ | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "240,240,180", 1, $3 -$2, 0}' \
+   > missing.bed
+
+grep "1628$" single.bed \
+  | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "0,0,0", 1, $3 -$2, 0}' \
+    > intergenic.bed
+
+grep "1627$" single.bed \
+   | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "0,0,0", 1, $3 -$2, 0}' \
+     > intron.bed
+
+hgsql -N -e "select * from chromInfo" wuhCor1 > wuhCor1.chrom.sizes
+
+rm output.bed
+for i in `cat species.lst`
+do
+echo $i 1>&2
+grep -wh "$i" nonsyn.bed syn.bed codingVariant.bed utrVariant.bed \
+    intron.bed intergenic.bed missing.bed \
+      | bedSmash stdin wuhCor1.chrom.sizes stdout >> output.bed
+done
+
+# make codingVariants into missing data instead of showing blue
+awk '{print $1,$2,$3,$4,$5}' output.bed | sed 's/ 1580$/ 0/' > load.bed
+
+hgLoadBed wuhCor1 mafSnp7way load.bed
+# Read 22910 elements of size 5 from load.bed
+##############################################################################
