@@ -393,7 +393,7 @@ for cladeName, cladeSampleIds in cladeSamples.items():
                     info += ';BACKMUTS=' + ','.join(cladeBackMuts)
                 outV.write('\t'.join([ chrom,
                                        '\t'.join(map(str, pv)),
-                                       '\t'.join(['.', 'PASS', info, 'GT']),
+                                       '\t'.join(['.', 'PASS', info, 'GT:CLADE']),
                                        '\t'.join(genotypes) ]) + '\n')
 
 # BED+ file for clades
@@ -625,5 +625,5 @@ with open('nextstrainRecurrentBiallelic.vcf', 'w') as outF:
             gt = str(alIx)
             genotypes.append(gt + ':' + sample['clade'])
         outF.write('\t'.join([ '\t'.join([ chrom, str(pos), varName, ref, alt,
-                                           '.', 'PASS', info, 'GT']),
+                                           '.', 'PASS', info, 'GT:CLADE']),
                                '\t'.join(genotypes) ]) + '\n')
