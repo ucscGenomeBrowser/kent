@@ -14,7 +14,7 @@
 
 struct rnaSecStr *rnaSecStrLoad(char **row)
 /* Load a rnaSecStr from row fetched with select * from rnaSecStr
- * from database.  Dispose of this with rnaSecStrFree(). */
+ * from database. Ignores conf column if present.  Dispose of this with rnaSecStrFree(). */
 {
 struct rnaSecStr *ret;
 
@@ -31,10 +31,10 @@ return ret;
 }
 
 struct rnaSecStr *rnaSecStrLoadConf(char **row)
+/* Load a rnaSecStr from row fetched with select * from rnaSecStr
+ * from database. Loads conf column.  Dispose of this with rnaSecStrFree(). */
 {
 struct rnaSecStr *ret;
-/* Load a rnaSecStr from row fetched with select * from rnaSecStr
- * from database.  Dispose of this with rnaSecStrFree(). */
 
 AllocVar(ret);
 ret->size = sqlUnsigned(row[6]);
