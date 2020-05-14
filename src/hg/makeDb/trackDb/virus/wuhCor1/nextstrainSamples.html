@@ -18,7 +18,27 @@ at that position, including protein change (if applicable; protein
 changes use gene names in the <em>Nextstrain Genes</em> track), number of
 samples with the variant, list giving the nucleotide (allele) for that
 position in each GISAID sample, etc.
-
+</p>
+<p>
+Nextstrain identifies certain clades within the phylogenetic tree
+according to a
+<a href="https://github.com/nextstrain/ncov/blob/master/config/clades.tsv"
+   target=_blank>set of defining variants</a>.
+The <em>Nextstrain Clades</em> track provides more information about these clades
+and serves as a useful color key for the clade colors in the phylogenetic tree display.
+</p>
+<p>
+This track is composed of several subtracks so that different subsets of variants may be viewed:
+  <ul>
+    <li><b>Recurrent Bi-allelic</b>: This is the only subtrack displayed by default.
+      It is limited to variants that have been observed in at least two samples, and
+      excludes positions at which more than one alternate allele has been observed in
+      more than one sample.</li>
+    <li><b>All Variants</b>: All variants found in all samples.</li>
+    <li><b><em>&lt;Clade&gt;</em> Variants</b>: All variants found in samples belonging to
+      <em>&lt;Clade&gt;</em>, which is one of Nextstrain's clades:
+      A1a, A2, A2a, A3, A6, A7, B, B1, B2, and B4.</li>
+  </ul>
 </p>
 
 <h2>Display Conventions</h2>
@@ -48,10 +68,6 @@ When the vertical height of the track is set sufficiently high
 sample names are drawn to the right of the tree; however, with thousands of
 samples in the Nextstrain tree, and a maximum track height of 2500 pixels,
 the full Nextstrain tree is too large for sample names to be displayed.
-Nextstrain identifies certain clades within the phylogenetic tree
-according to a
-<a href="https://github.com/nextstrain/ncov/blob/master/config/clades.tsv"
-   target=_blank>set of defining variants</a>.
 In the track controls the user can choose to display subtracks containing
 the phylogenetic trees and variants for individual clades.
 Some clades have few enough samples that they can be made tall enough to
@@ -59,7 +75,6 @@ display sample names.
 Branches of the phylogenetic tree are colored by clade using the same
 color scheme as
 <a href="https://nextstrain.org/ncov" target=_blank>nextstrain.org</a>.
-The <em>Nextstrain Clades</em> track provides more information about these clades.
 </p>
 
 <h2>Methods</h2>
