@@ -22,7 +22,6 @@ geneBed.sort(key=bedStart)
 with open('nextstrainGene.bed', 'w') as outG:
     for bed in geneBed:
         outG.write('\t'.join(map(str, bed)) + '\n')
-    outG.close()
 
 # Variants and "clades"
 
@@ -340,7 +339,6 @@ with open('nextstrainSamples.vcf', 'w') as outC:
                                '\t'.join(map(str, pv)),
                                '\t'.join(['.', 'PASS', info, 'GT:CLADE']),
                                '\t'.join(genotypes) ]) + '\n')
-    outC.close()
 
 # Assign samples to clades; a sample can appear in multiple clades if they are nested.
 cladeSamples = {}
@@ -397,7 +395,6 @@ for cladeName, cladeSampleIds in cladeSamples.items():
                                        '\t'.join(map(str, pv)),
                                        '\t'.join(['.', 'PASS', info, 'GT']),
                                        '\t'.join(genotypes) ]) + '\n')
-        outV.close()
 
 # BED+ file for clades
 with open('nextstrainClade.bed', 'w') as outC:
@@ -417,7 +414,6 @@ with open('nextstrainClade.bed', 'w') as outC:
                                        clade['countryConf'],
                                        cladeSampleCounts[name],
                                        ', '.join(cladeSampleNames[name]) ])) + '\n')
-    outC.close()
 
 # Newick-formatted tree of samples for VCF display
 def cladeRgbFromName(cladeName):
@@ -468,13 +464,11 @@ def rNextstrainToNewick(node, parentClade=None, parentVarStr=''):
 
 with open('nextstrain.nh', 'w') as outF:
     outF.write(rNextstrainToNewick(ncov['tree']) + ';\n')
-    outF.close()
 
 for cladeName, node in cladeNodes.items():
     filename = 'nextstrain' + cladeName + '.nh'
     with open(filename, 'w') as outF:
         outF.write(rNextstrainToNewick(node) + ';\n')
-        outF.close()
 
 # File with samples and their clades, labs and variant paths
 
@@ -495,7 +489,6 @@ with open('nextstrainSamples.varPaths', 'w') as outF:
         labAbbrev = abbreviateLab(lab)
         outF.write('\t'.join([sampleName(sample), sample['clade'], labAbbrev, lab,
                               sample['varStr']]) + '\n');
-    outF.close()
 
 # Narrow down variants to "informative" set (bi-allelic, each allele supported by
 # sufficient number of samples):
@@ -523,18 +516,15 @@ for mv in mergedVars:
 with open('nextstrainDiscarded.bed', 'w') as outF:
     for da in discardedAlleles:
         outF.write('\t'.join(map(str, da)) + '\n');
-    outF.close()
 
 with open('nextstrainBlacklisted.bed', 'w') as outF:
     for bl in blacklist:
         outF.write('\t'.join(map(str, bl)) + '\n');
-    outF.close()
 
 with open('nextstrainInformative.bed', 'w') as outF:
     for iv in informativeVariants:
         pos, ref, alt = iv
         outF.write('\t'.join(map(str, [ chrom, pos-1, pos, ref + str(pos) + alt ])) + '\n')
-    outF.close()
 
 # Compute parsimony score for tree at each informative variant.
 
@@ -590,25 +580,21 @@ for iv in informativeVariants:
 with open('nextstrainRootDiscordant.bed', 'w') as outF:
     for dv in rootDiscordantVariants:
         outF.write('\t'.join(dv) + '\n');
-    outF.close();
 
 with open('nextstrainAnyDiscordant.txt', 'w') as outF:
     for varName in anyDiscordantVariants:
         outF.write(varName + '\n');
-    outF.close()
 
 # bedGraph for parsimony scores and mutation counts
 with open('nextstrainParsimony.bedGraph', 'w') as outF:
     for ps in parsimonyScores:
         pos, score = ps
         outF.write('\t'.join(map(str, [ chrom, pos-1, pos, score ])) + '\n')
-    outF.close()
 
 with open('nextstrainMutCounts.bedGraph', 'w') as outF:
     for ps in mutationCounts:
         pos, score = ps
         outF.write('\t'.join(map(str, [ chrom, pos-1, pos, score ])) + '\n')
-    outF.close()
 
 # Informative-only VCF
 with open('nextstrainRecurrentBiallelic.vcf', 'w') as outF:
@@ -641,4 +627,3 @@ with open('nextstrainRecurrentBiallelic.vcf', 'w') as outF:
         outF.write('\t'.join([ '\t'.join([ chrom, str(pos), varName, ref, alt,
                                            '.', 'PASS', info, 'GT']),
                                '\t'.join(genotypes) ]) + '\n')
-    outF.close()
