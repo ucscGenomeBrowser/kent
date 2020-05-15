@@ -26,8 +26,21 @@ visibility pack
 hapClusterEnabled on
 group varRep
 priority 0.5
+html nextstrainSamplesDevOnly
+compositeTrack on
+release alpha
+
+track nextstrainSamples
+shortLabel Nextstrain Variants
+longLabel Nextstrain/GISAID Sample Variants from nextstrain.org/ncov
+type vcfTabix
+visibility pack
+hapClusterEnabled on
+group varRep
+priority 0.5
 html nextstrainSamples
 compositeTrack on
+release beta,public
 
     track nextstrainSamplesRb
     parent nextstrainSamples on
@@ -47,7 +60,7 @@ compositeTrack on
     hapClusterHeight 500
     bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples.vcf.gz
     priority 2
-    release beta, public
+    release beta,public
 
     track nextstrainSamplesAll
     parent nextstrainSamples off

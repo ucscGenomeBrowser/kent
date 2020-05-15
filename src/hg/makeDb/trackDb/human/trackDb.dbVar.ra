@@ -1,8 +1,8 @@
 track dbVarSv
 superTrack on
 group varRep
-html dbVar_common
-shortLabel NCBI Curated Structural Variants
+html dbVarCurated
+shortLabel dbVar Curated Structural Variants
 longLabel NCBI Curated Structural Variants from dbVar
 
     track dbVar_common
@@ -12,20 +12,21 @@ longLabel NCBI Curated Structural Variants from dbVar
     visibility pack
     itemRgb on
     type bigBed 9 + .
-    shortLabel NCBI Common SV
-    longLabel NCBI Curated Common Structural Variants
+    html dbVarCommon
+    shortLabel dbVar Common SV
+    longLabel NCBI dbVar Curated Common Structural Variants
     mouseOverField label
     searchIndex name
-    filterLabel.type Items in Type Field
+    filterLabel.type Variant Type
     filterValues.type alu deletion,copy number gain,copy number loss,copy number variation,deletion,duplication,herv deletion,line1 deletion,sva deletion
-    filterLabel.length Items in Length Field
+    filterLabel.length Variant Size
     filterValues.length Under 10KB,10KB to 100KB,100KB to 1MB,Over 1MB
     release alpha
 
         track dbVar_common_gnomad
         parent dbVar_common on
-        shortLabel NCBI Curated gnomAD SVs
-        longLabel NCBI Curated Common SVs: all populations from gnomAD
+        shortLabel dbVar Curated gnomAD SVs
+        longLabel NCBI dbVar Curated Common SVs: all populations from gnomAD
         bigDataUrl /gbdb/$D/bbi/dbVar/common_gnomad.bb
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
@@ -34,8 +35,8 @@ longLabel NCBI Curated Structural Variants from dbVar
 
         track dbVar_common_1000g
         parent dbVar_common on
-        shortLabel NCBI Curated 1000 Genomes SVs
-        longLabel NCBI Curated Common SVs: all populations from 1000 Genomes
+        shortLabel dbVar Curated 1000 Genomes SVs
+        longLabel NCBI dbVar Curated Common SVs: all populations from 1000 Genomes
         bigDataUrl /gbdb/$D/bbi/dbVar/common_1000g.bb
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
@@ -44,8 +45,8 @@ longLabel NCBI Curated Structural Variants from dbVar
 
         track dbVar_common_decipher
         parent dbVar_common on
-        shortLabel NCBI Curated DECIPHER SVs
-        longLabel NCBI Curated Common SVs: all populations from DECIPHER
+        shortLabel dbVar Curated DECIPHER SVs
+        longLabel NCBI dbVar Curated Common SVs: all populations from DECIPHER
         bigDataUrl /gbdb/$D/bbi/dbVar/common_decipher.bb
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
@@ -54,8 +55,8 @@ longLabel NCBI Curated Structural Variants from dbVar
 
         track dbVar_common_african
         parent dbVar_common on
-        shortLabel NCBI Curated African SVs
-        longLabel NCBI Curated Common SVs: African
+        shortLabel dbVar Curated African SVs
+        longLabel NCBI dbVar Curated Common SVs: African
         bigDataUrl /gbdb/$D/bbi/dbVar/common_african.bb
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
@@ -64,8 +65,8 @@ longLabel NCBI Curated Structural Variants from dbVar
 
         track dbVar_common_european
         parent dbVar_common on
-        shortLabel NCBI Curated European SVs
-        longLabel NCBI Curated Common SVs: European
+        shortLabel dbVar Curated European SVs
+        longLabel NCBI dbVar Curated Common SVs: European
         bigDataUrl /gbdb/$D/bbi/dbVar/common_european.bb
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
@@ -74,8 +75,8 @@ longLabel NCBI Curated Structural Variants from dbVar
 
         track dbVar_common_global
         parent dbVar_common on
-        shortLabel NCBI Curated All Populations
-        longLabel NCBI Curated Common SVs: all populations
+        shortLabel dbVar Curated All Populations
+        longLabel NCBI dbVar Curated Common SVs: all populations
         bigDataUrl /gbdb/$D/bbi/dbVar/common_global.bb
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
@@ -88,22 +89,22 @@ longLabel NCBI Curated Structural Variants from dbVar
     visibility pack
     itemRgb on
     type bigBed 9 + .
-    shortLabel NCBI Conflict SV
-    longLabel NCBI Curated Conflict Variants
+    html dbVarConflict
+    shortLabel dbVar Conflict SV
+    longLabel NCBI dbVar Curated Conflict Variants
     mouseOverField label
     searchIndex name
-    html conflict.html
-    filterLabel.overlap Items in Overlap Field
+    filterLabel.overlap Variant Overlap
     filterValues.overlap 10 to 25,25 to 50,50 to 75,75 to 90,90 to 100
-    filterLabel.type Items in Type Field
+    filterLabel.type Variant Type
     filterValues.type alu deletion,copy number gain,copy number loss,copy number variation,deletion,duplication,herv deletion,line1 deletion,sva deletion
-    filterLabel.length Items in Length Field
+    filterLabel.length Variant Length
     filterValues.length Under 10KB,10KB to 100KB,100KB to 1MB,Over 1MB
 
         track dbVar_conflict_pathogenic
         parent dbVar_conflict on
-        shortLabel NCBI Curated Conflict SVs
-        longLabel NCBI Curated Common SVs: Conflicts with Pathogenic
+        shortLabel dbVar Curated Conflict SVs
+        longLabel NCBI dbVar Curated Common SVs: Conflicts with Pathogenic
         bigDataUrl /gbdb/$D/bbi/dbVar/conflict_pathogenic.bb
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$

@@ -5105,19 +5105,23 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
 <DIV class="hideEmptySubtracksMultiBedUrl"><span class="types compositeTrack"></span>
 <div class="format">
         <code>hideEmptySubtracksMultiBedUrl file.bb</code></div>
-    </p>
     <p>
     For large composites, especially those where each subtrack may be sparse,
     substantial performance improvements can be gained by creating an index file of the 
     intersections of items in all subtracks (&quot;multiBed&quot;).  This file, and an
-    accompanying sources file, are optional settings for the <code>hideEmptySubtracks</code> feature.
-    NOTE: These settings are required to use the <code>hideEmptySubtracks</code> feature effectively with
-    multi-view composites.</p>
-    <p>Instructions for creating these files are at the MultiBed help page (TBD).</p>
+    accompanying sources file, are optional settings for the
+    <code>hideEmptySubtracks</code> feature.
+    Instructions for creating these files are at the MultiBed help page (TBD).</p>
+    <p>
+    NOTE: These settings are required to use the <code>hideEmptySubtracks</code> feature 
+    with multi-view composites.</p>
 </DIV>
 <DIV class="hideEmptySubtracksSourcesUrl"><span class="types compositeTrack"></span>
 <div class="format">
         <code>hideEmptySubtracksSourcesUrl file.tab</code></div>
+    <p>
+    This setting is used in conjunction with the <code>hideEmptySubtracksMultiBedUrl</code> 
+    setting, described above.</p>
 </DIV>
 <DIV class="hideEmptySubtracksLabel"><span class="types compositeTrack"></span>
 <div class="format">

@@ -1275,14 +1275,17 @@ outputPublicTableRow(hubInfo, count);
 if (hubSearchResult != NULL)
     {
     printf("</tbody></table>\n");
-    printf("<div class=\"hubTdbTree\">\n");
-    printf("<div id='tracks%d'></div>", hubInfo->id); // div for the jstree for this hub's search result(s)
-    printf("</div>\n");
     struct trackHub *hub = fetchTrackHub(hubInfo);
-    struct hubOutputStructure *hubOut = buildHubSearchOutputStructure(hub, hubSearchResult);
-    if (dyStringIsEmpty(hubOut->descriptionMatch) && (hubOut->genomes == NULL))
-        return; // no detailed search results; hit must have been to hub short label or something   
-    printHubOutputStructure(hubOut, hubInfo);
+    if (hub != NULL)
+        {
+        printf("<div class=\"hubTdbTree\">\n");
+        printf("<div id='tracks%d'></div>", hubInfo->id); // div for the jstree for this hub's search result(s)
+        printf("</div>\n");
+        struct hubOutputStructure *hubOut = buildHubSearchOutputStructure(hub, hubSearchResult);
+        if (dyStringIsEmpty(hubOut->descriptionMatch) && (hubOut->genomes == NULL))
+            return; // no detailed search results; hit must have been to hub short label or something
+        printHubOutputStructure(hubOut, hubInfo);
+        }
     }
 }
 
@@ -1303,11 +1306,6 @@ void printHubList(struct slName *hubsToPrint, struct hash *hubLookup, struct has
  */
 {
 int count = 0;
-int udcTimeoutVal = udcCacheTimeout();
-char *udcOldDir = cloneString(udcDefaultDir());
-char *searchUdcDir = cfgOptionDefault("hgHubConnect.cacheDir", udcOldDir);
-udcSetDefaultDir(searchUdcDir);
-udcSetCacheTimeout(1<<30);
 struct hubEntry *hubList = NULL;
 struct hubEntry *hubInfo;
 long slTime;
@@ -1351,8 +1349,6 @@ if (hubsToPrint != NULL)
     if (searchResultHash == NULL)
         printf("</tbody></table>\n");
     }
-udcSetCacheTimeout(udcTimeoutVal);
-udcSetDefaultDir(udcOldDir);
 if (hubsToPrint != NULL)
     {
     /* Write out the list of hubs in a single table inside a div that will be hidden by

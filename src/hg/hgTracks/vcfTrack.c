@@ -1265,7 +1265,7 @@ char *hapMethod = cloneString(trackDbSetting(tdb, VCF_HAP_METHOD_VAR));
 if (! startsWithWord(VCF_HAP_METHOD_TREE_FILE, nextWord(&hapMethod)))
     errAbort("getTreeFromFile: expected trackDb setting " VCF_HAP_METHOD_VAR "to start with '"
              VCF_HAP_METHOD_TREE_FILE "' followed by a file name, but got '%s'", hapMethod);
-char *fileName = nextWord(&hapMethod);
+char *fileName = hReplaceGbdb(nextWord(&hapMethod));
 return phyloOpenTree(fileName);
 }
 
@@ -1577,6 +1577,7 @@ else
 
 if (isEmpty(fileOrUrl))
     return;
+fileOrUrl = hReplaceGbdb(fileOrUrl);
 int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;
 boolean hapClustEnabled = cartOrTdbBoolean(cart, tg->tdb, VCF_HAP_ENABLED_VAR, TRUE);
