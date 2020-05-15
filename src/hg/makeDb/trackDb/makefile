@@ -282,6 +282,11 @@ listDbs:
 	    fi \
 	done
 
+test:
+	tdbQuery -check -release=alpha -strict "select count(*) from *" >/dev/null
+	tdbQuery -check -release=beta -strict "select count(*) from *" >/dev/null
+	tdbQuery -check -release=public -strict "select count(*) from *" >/dev/null
+
 # Get rid of symbolic links (created by lower-level makefiles):
 clean:
 	find . -type l -exec rm {} \;
