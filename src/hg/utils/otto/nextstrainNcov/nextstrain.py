@@ -3,6 +3,7 @@
 import json
 import re
 from warnings import warn
+from collections import defaultdict
 
 with open('ncov.json') as f:
     ncov = json.load(f)
@@ -45,23 +46,39 @@ def cladeColorFromName(cladeName):
         color = '0,0,0'
     return color
 
-def subtractStart(coord, start):
-    return coord - start
-
 def cladeFromVariants(name, variants, varStr):
     """Extract bed12 info from an object whose keys are SNV variant names"""
     clade = {}
     snvEnds = []
-    varNames = []
+    # Watch out for back-mutations which make invalid BED because then we have multiple "blocks"
+    # at the same position.  Instead, make a back-mutation cancel out the mutation because the
+    # mutation is not found at this node.
+    changesByPos = defaultdict(list)
+    ixsToRemove = []
     for varName in variants:
         m = snvRe.match(varName)
         if (m):
-            snvEnds.append(int(m.group(2)))
-            varNames.append(varName)
+            ref, pos, alt = m.groups()
+            prevMut = changesByPos[pos]
+            if (prevMut):
+                # If multi-allelic, leave the position in the list; but if back-mutation,
+                # remove the original mutation.  In either case, don't add this pos again.
+                prevIx, prevRef, prevAlt = prevMut
+                if (prevAlt == ref and prevRef == alt):
+                    ixsToRemove.append(prevIx)
+                    changesByPos[pos] = []
+            else:
+                ix = len(snvEnds)
+                changesByPos[pos] = (ix, ref, alt)
+                snvEnds.append(int(pos))
+    if ixsToRemove:
+        ixsToRemove.sort(reverse=True)
+        for ix in ixsToRemove:
+            del snvEnds[ix]
     if snvEnds:
         snvEnds.sort()
-        snvStarts = list(map(lambda x: x-1, snvEnds))
-        snvSizes = list(map(lambda x: 1, snvEnds))
+        snvStarts = [ e-1 for e in snvEnds ]
+        snvSizes = [ 1 for e in snvEnds ]
         clade['thickStart'] = min(snvStarts)
         clade['thickEnd'] = max(snvEnds)
         clade['name'] = name
