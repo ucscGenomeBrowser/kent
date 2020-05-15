@@ -60,7 +60,7 @@ release beta,public
     hapClusterHeight 500
     bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples.vcf.gz
     priority 2
-    release beta, public
+    release beta,public
 
     track nextstrainSamplesAll
     parent nextstrainSamples off
