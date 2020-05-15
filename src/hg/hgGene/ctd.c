@@ -104,7 +104,7 @@ while (row != NULL)
 	first = 0;
 	}
     
-    printf("<LI><A HREF=\"http://ctd.mdibl.org/detail.go?type=chem&acc=%s\" target=_blank>", 
+    printf("<LI><A HREF=\"http://ctdbase.org/detail.go?type=chem&acc=%s\" target=_blank>", 
     	   chemId);
     printf("%s</A>\n", chemId);
     printf("%s\n", chemName);
