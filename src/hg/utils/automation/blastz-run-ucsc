@@ -128,7 +128,7 @@ sub findCommand {
   my $setPath = "PATH=";
   $setPath .= "$defVars{PATH}:" if (defined $defVars{'PATH'});
   $setPath .= "$defaultPath; ";
-  my $which = qx{$setPath type -ap $cmd 2> /dev/null | head -1};
+  my $which = qx{$setPath type -ap $cmd 2> /dev/null | grep -v "not found" | head -1 | awk '{print \$NF}' };
   chomp $which;
   $which = $cmd if ($which eq "");
   return $which;
