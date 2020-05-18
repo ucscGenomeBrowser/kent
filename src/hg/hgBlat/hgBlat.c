@@ -34,12 +34,12 @@
 #include "net.h"
 #include "fuzzyFind.h"
 
-
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
 boolean orgChange = FALSE;
 boolean dbChange = FALSE;
 boolean allGenomes = FALSE;
+boolean allResults = FALSE;
 
 
 struct gfResult
@@ -292,16 +292,15 @@ struct serverTable
     char *host;		/* Name of machine hosting server. */
     char *port;		/* Port that hosts server. */
     char *nibDir;	/* Directory of sequence files. */
+    int tileSize;       /* gfServer -tileSize */
+    int stepSize;       /* gfServer -stepSize */
+    int minMatch;       /* gfServer -minMatch */
     };
 
 char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "translated DNA"};
 char *outputList[] = {"hyperlink", "psl", "psl no header"};
 
-#ifdef LOWELAB
-int minMatchShown = 14;
-#else
-int minMatchShown = 20;
-#endif
+int minMatchShown = 0;
 
 static struct serverTable *trackHubServerTable(char *db, boolean isTrans)
 /* Find out if database is a track hub with a blat server */
@@ -357,9 +356,9 @@ if (!sqlExists(conn, query))
         db = dbActualName;
     }
 
-/* Do a little join to get data to fit into the serverTable. */
-sqlSafef(query, sizeof(query), "select dbDb.name,dbDb.description,blatServers.isTrans"
-               ",blatServers.host,blatServers.port,dbDb.nibPath "
+/* Do a little join to get data to fit into the serverTable and grab dbDb.nibPath too. */
+sqlSafef(query, sizeof(query), "select dbDb.name,dbDb.description,blatServers.isTrans,"
+               "blatServers.host,blatServers.port,dbDb.nibPath "
 	       "from dbDb,blatServers where blatServers.isTrans = %d and "
 	       "dbDb.name = '%s' and dbDb.name = blatServers.db", 
 	       isTrans, db);
@@ -505,8 +504,6 @@ char unhideTrack[64];
 char *sort = cartUsualString(cart, "sort", pslSortList[0]);
 char *output = cartUsualString(cart, "output", outputList[0]);
 boolean pslOut = startsWith("psl", output);
-boolean isStraightNuc = (qType == gftRna || qType == gftDna);
-int  minThreshold = (isStraightNuc ? minMatchShown : 0);
 
 sprintf(uiState, "%s=%s", cartSessionVarName(), cartSessionId(cart));
 
@@ -520,15 +517,15 @@ else
 
 while ((psl = pslNext(lf)) != NULL)
     {
-    if (psl->match >= minThreshold)
+    if (psl->match >= minMatchShown)
 	slAddHead(&pslList, psl);
     }
 lineFileClose(&lf);
 if (pslList == NULL)
     {
     printf("<table><tr><td><hr>Sorry, no matches found");
-    if (isStraightNuc)
-	printf(" (with score at least %d)", minThreshold);
+    if (!allResults)
+	printf(" (with score at least %d)", minMatchShown);
     printf("<hr><td></tr></table>\n");
     return;
     }
@@ -902,7 +899,7 @@ int geneGap = ffIntronMaxDefault;  // about a million bases is a cutoff for gene
 
 int qSlop = 5; // forgive 5 bases, about dna stepSize = 5.
 if (gH->complex)
-    qSlop = 4; // reduce for translated with tileSize/stepSize = 4.
+    qSlop = 4; // reduce for translated with stepSize = 4.
 
 struct gfResult *gfR = NULL, *gfLast = NULL;
 for(gfR=gH->gfList; gfR; gfR=gfR->next)
@@ -918,15 +915,6 @@ for(gfR=gH->gfList; gfR; gfR=gfR->next)
 	thisHits += gfR->numHits;
 	thisTEnd  = gfR->tEnd;
 	thisExons += 1;
-
-	//if (gH->complex)
-	    //{
-	    // gfR->tStrand, gfR->tFrame
-	    //if (gH->complex)
-		//{
-		//gfR->qFrame
-		//}
-	    //}
 	}
     else
 	{
@@ -1084,7 +1072,7 @@ for (;;)
 	if (!gH->complex) // dna xType
 	    {
 	    // maximum tiles that could fit in qSpan
-	    int limit = ((gfR->qEnd - gfR->qStart) - 6)/5; 
+	    int limit = ((gfR->qEnd - gfR->qStart) - 6)/5;  // stepSize=5
 	    ++limit;  // for a little extra.
 	    if (numHits > limit)
 		numHits = limit;
@@ -1245,6 +1233,113 @@ else
 return conn;
 }
 
+int findMinMatch(long genomeSize, boolean isProt)
+// Return default minMatch for genomeSize,
+// the expected number of occurrences of string length k 
+// in random genome of size N = N/(4^k)
+{
+int alphaBetSize;
+if (isProt)
+    {
+    alphaBetSize = 20;
+    genomeSize = genomeSize / 3;
+    }
+else
+    {
+    alphaBetSize = 4;
+    }
+int k = 1;
+double expected = genomeSize;
+for (k=1; k<36; k++)
+    {
+    expected /= alphaBetSize;
+    if (expected < .004)
+	break;
+    }
+return k;
+}
+
+long findGenomeSize(char *database)
+// get genomeSize from database.
+{
+struct sqlConnection *conn = hAllocConn(database);
+char query[256];
+sqlSafef(query, sizeof query, "select sum(size) from chromInfo");
+long genomeSize = sqlQuickLongLong(conn, query);
+hFreeConn(&conn);
+if (genomeSize == 0)
+    {
+    warn("Genome Size not found for %s", database);
+    genomeSize = 3272116950;  // substitute human genome size
+    }
+return genomeSize;
+}
+
+long findGenomeSizeFromHub(char *database)
+// fetch genome size by adding up chroms from hub 2bit.
+{
+struct trackHubGenome *genome = trackHubGetGenome(database);
+
+genome->tbf = twoBitOpen(genome->twoBitPath);
+
+long genomeSize = 0;
+struct twoBitIndex *index;
+for (index = genome->tbf->indexList; index != NULL; index = index->next)
+    {
+    genomeSize += twoBitSeqSize(genome->tbf, index->name);
+    }
+
+twoBitClose(&genome->tbf);
+
+return genomeSize;
+}
+
+
+int findGenomeParams(struct serverTable *serve)
+/* Send status message to server arnd report result.
+ * Get tileSize stepSize and minMatch.
+ */
+
+{
+char buf[256];
+int sd = 0;
+int ret = 0;
+
+/* Put together command. */
+sd = gfConnectEx(serve->host, serve->port);
+sprintf(buf, "%sstatus", gfSignature());
+mustWriteFd(sd, buf, strlen(buf));
+
+for (;;)
+    {
+    if (netGetString(sd, buf) == NULL)
+	{
+	warn("Error reading status information from %s:%s",serve->host, serve->port);
+	ret = -1;
+        break;
+	}
+    if (sameString(buf, "end"))
+        break;
+    else
+        {
+	if (startsWith("tileSize ", buf))
+	    {
+            serve->tileSize = atoi(buf+strlen("tileSize "));
+	    }
+	if (startsWith("stepSize ", buf))
+	    {
+            serve->stepSize = atoi(buf+strlen("stepSize "));
+	    }
+	if (startsWith("minMatch ", buf))
+	    {
+            serve->minMatch = atoi(buf+strlen("minMatch "));
+	    }
+        }
+    }
+close(sd);
+return(ret); 
+}
+
 void blatSeq(char *userSeq, char *organism, char *database, int dbCount)
 /* Blat sequence user pasted in. */
 {
@@ -1252,7 +1347,6 @@ FILE *f;
 struct dnaSeq *seqList = NULL, *seq;
 struct tempName pslTn, faTn;
 int maxSingleSize, maxTotalSize, maxSeqCount;
-int minSingleSize = minMatchShown;
 char *genome, *db;
 char *type = cgiString("type");
 char *seqLetters = cloneString(userSeq);
@@ -1369,6 +1463,19 @@ faWriteAll(faTn.forCgi, seqList);
 trashDirFile(&pslTn, "hgSs", "hgSs", ".pslx");
 f = mustOpen(pslTn.forCgi, "w");
 gvo = gfOutputPsl(0, qIsProt, FALSE, f, FALSE, TRUE);
+
+
+/* Strategy for calculating minMatchShown.
+ Calculate the minimum size for filtering based on genome size.
+ The expected numberof occurrences of q = n/(4^k)
+ = N * pow(4,-k);  where N is genome size, and k is minimum size required.
+ For protein, use 22 instead of 4.
+ For human, a cutoff of 20, expected number < .003 or 0.3% 
+ so the probability of getting it just by chance is low.
+*/
+
+int xlat;
+
 serve = findServer(db, isTx);
 /* Write header for extended (possibly protein) psl file. */
 if (isTx)
@@ -1377,27 +1484,65 @@ if (isTx)
         {
 	qType = gftDnaX;
 	tType = gftDnaX;
+        xlat = 3;
 	}
     else
         {
 	qType = gftProt;
 	tType = gftDnaX;
+        xlat = 1;
 	}
+    serve->tileSize = 4;
+    serve->stepSize = 4;
+    serve->minMatch = 3;
     }
 else
     {
     qType = gftDna;
     tType = gftDna;
+    serve->tileSize = 11;
+    serve->stepSize = 5;
+    serve->minMatch = 2;
+    xlat = 1;
     }
 pslxWriteHead(f, qType, tType);
 
-if (qType == gftProt)
+
+long genomeSize = 3272116950;  // substitute human genome size
+
+// Use with message about recommended length when using short query
+// This is the minimum that can find anything at all.
+int minSuggested = 0;
+
+if (allGenomes)
     {
-    minSingleSize = 14;
+    minMatchShown = 0;
     }
-else if (qType == gftDnaX)
+else
     {
-    minSingleSize = 36;
+    #ifdef LOWELAB
+    minMatchShown = 14;
+    #else
+    // read genome size
+    if (trackHubDatabase(database))
+	{
+	genomeSize = findGenomeSizeFromHub(database);
+	}
+    else
+	{
+	genomeSize = findGenomeSize(database);
+	}
+    minMatchShown = findMinMatch(genomeSize, qType == gftProt);
+    #endif
+    if (allResults)
+	minMatchShown = 0;
+
+    // read tileZize stepSize minMatch from server status
+    findGenomeParams(serve);
+
+    int minLucky = (serve->minMatch * serve->stepSize + (serve->tileSize - serve->stepSize)) * xlat;
+
+    minSuggested = max(minMatchShown,minLucky);
     }
 
 int seqNumber = 0;
@@ -1422,10 +1567,10 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	    seq->name, oneSize, maxSingleSize);
 	continue;
 	}
-    if (oneSize < minSingleSize)
+    if (oneSize < minSuggested)
         {
 	warn("Warning: Sequence %s is only %d letters long (%d is the recommended minimum)", 
-		seq->name, oneSize, minSingleSize);
+		seq->name, oneSize, minSuggested);
 	// we could use "continue;" here to actually enforce skipping, 
 	// but let's give the short sequence a chance, it might work.
 	// minimum possible length = tileSize+stepSize, so mpl=16 for dna stepSize=5, mpl=10 for protein.
@@ -1450,8 +1595,7 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	    if (allGenomes)
 		queryServer(conn, db, seq, "transQuery", xType, TRUE, FALSE, FALSE, seqNumber);
 	    else
-		gfAlignTransTrans(&conn, serve->nibDir, seq, FALSE, 5, 
-		    tFileCache, gvo, !txTxBoth);
+		gfAlignTransTrans(&conn, serve->nibDir, seq, FALSE, 5, tFileCache, gvo, !txTxBoth);
 	    if (txTxBoth)
 		{
 		reverseComplement(seq->dna, seq->size);
@@ -1459,8 +1603,7 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 		if (allGenomes)
 		    queryServer(conn, db, seq, "transQuery", xType, TRUE, FALSE, TRUE, seqNumber);
 		else
-		    gfAlignTransTrans(&conn, serve->nibDir, seq, TRUE, 5, 
-			tFileCache, gvo, FALSE);
+		    gfAlignTransTrans(&conn, serve->nibDir, seq, TRUE, 5, tFileCache, gvo, FALSE);
 		}
 	    }
 	else
@@ -1522,7 +1665,8 @@ printf(
 cartSaveSession(cart);
 puts("\n");
 puts("<INPUT TYPE=HIDDEN NAME=changeInfo VALUE=\"\">\n");
-puts("<TABLE BORDER=0 WIDTH=80>\n<TR>\n");
+puts("<TABLE BORDER=0 WIDTH=80>\n");
+printf("<TR>\n");
 printf("<TD ALIGN=CENTER style='overflow:hidden;white-space:nowrap;'>Genome:");
 printf(" <INPUT TYPE=CHECKBOX id=allGenomes NAME=allGenomes VALUE=\"\">");
 printf(" <span id=searchAllText> Search all<span>");
@@ -1538,7 +1682,9 @@ printf("<TD ALIGN=CENTER>Query type:</TD>");
 printf("<TD ALIGN=CENTER>Sort output:</TD>");
 printf("<TD ALIGN=CENTER>Output type:</TD>");
 printf("<TD ALIGN=CENTER>&nbsp</TD>");
-printf("</TR>\n<TR>\n");
+printf("</TR>\n");
+
+printf("<TR>\n");
 printf("<TD ALIGN=CENTER>\n");
 printBlatGenomeListHtml(db, "change", onChangeText);
 printf("</TD>\n");
@@ -1561,21 +1707,35 @@ userSeq = cartUsualString(cart, "userSeq", "");
 printf("<TD COLSPAN=5 ALIGN=CENTER>\n");
 htmlPrintf("<TEXTAREA NAME=userSeq ROWS=14 COLS=80>%s</TEXTAREA>\n", userSeq);
 printf("</TD>\n");
-printf("</TR>\n<TR>\n");
-printf("<TD COLSPAN=5 ALIGN=CENTER>\n");
+printf("</TR>\n");
+
+printf("<TR>\n");
+printf("<TD COLSPAN=1 ALIGN=CENTER style='overflow:hidden;white-space:nowrap;'>\n");
+cgiMakeCheckBoxWithId("allResults", allResults, "allResults");
+printf(" <span id=allResultsText> All Results<br> (no minimum score)<span>");
+// clicking on the All Results text clicks the checkbox.
+jsOnEventById("click", "allResultsText", 
+    "document.mainForm.allResults.click();"
+    "return false;"   // cancel the default
+    );
+printf("</TD>\n");
+
+printf("<TD COLSPAN=4 ALIGN=LEFT>\n");
 printf("<INPUT TYPE=SUBMIT NAME=Submit VALUE=submit>\n");
 printf("<INPUT TYPE=SUBMIT NAME=Lucky VALUE=\"I'm feeling lucky\">\n");
 printf("<INPUT TYPE=SUBMIT NAME=Clear VALUE=clear>\n");
 printf("</TD>\n");
-printf("</TR>\n<TR>\n"); 
+printf("</TR>\n");
+
+printf("<TR>\n"); 
 puts("<TD COLSPAN=5 WIDTH=\"100%\">\n" 
     "Paste in a query sequence to find its location in the\n"
     "the genome. Multiple sequences may be searched \n"
     "if separated by lines starting with '>' followed by the sequence name.\n"
     "</TD>\n"
     "</TR>\n"
-
 );
+
 puts("<TR><TD COLSPAN=5 WIDTH=\"100%\">\n"); 
 puts("<BR><B>File Upload:</B> ");
 puts("Rather than pasting a sequence, you can choose to upload a text file containing "
@@ -1826,6 +1986,8 @@ getDbAndGenome(cart, &db, &organism, oldVars);
 char *oldDb = cloneString(db);
 findClosestServer(&db, &organism);
 
+allResults = cartUsualBoolean(cart, "allResults", allResults);
+
 /* Get sequence - from userSeq variable, or if 
  * that is empty from a file. */
 if (clearUserSeq)
@@ -1941,7 +2103,7 @@ else
 	printf("The entire alignment, including mismatches and gaps, must score 20 or higher in order to appear in the Blat output.\n");
 	printf("For more details see the <a href='/FAQ/FAQblat.html#blat9'>BLAT FAQ</a>.<br>\n");
 
-	// Print report  // TODO move to final report at the end of ALL Assemblies
+	// Print report  // move to final report at the end of ALL Assemblies
 	int lastSeqNumber = -1;
 	int idCount = 0;
 	char id[256];
