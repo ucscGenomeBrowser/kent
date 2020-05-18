@@ -44,6 +44,7 @@ static struct optionSpec optionSpecs[] = {
     {"trans", OPTION_BOOLEAN},
     {"syslog", OPTION_BOOLEAN},
     {"perSeqMax", OPTION_STRING},
+    {"noSimpRepMask", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -56,6 +57,7 @@ int tileSize = gfTileSize;	/* Can be overridden from command line. */
 int stepSize = 0;		/* Can be overridden from command line. */
 boolean doTrans = FALSE;	/* Do translation? */
 boolean allowOneMismatch = FALSE; 
+boolean noSimpRepMask = FALSE;
 int repMatch = 1024;    /* Can be overridden from command line. */
 int maxDnaHits = 100;   /* Can be overridden from command line. */
 int maxTransHits = 200; /* Can be overridden from command line. */
@@ -110,6 +112,7 @@ errAbort(
   "   -mask           Use masking from .2bit file.\n"
   "   -repMatch=N     Number of occurrences of a tile (n-mer) that triggers repeat masking the\n"
   "                   tile. Default is %d.\n"
+  "   -noSimpRepMask  Suppresses simple repeat masking.\n"
   "   -maxDnaHits=N   Maximum number of hits for a DNA query that are sent from the server.\n"
   "                   Default is %d.\n"
   "   -maxTransHits=N Maximum number of hits for a translated query that are sent from the server.\n"
@@ -155,7 +158,7 @@ if (doTrans)
 
 gf = gfIndexNibsAndTwoBits(fileCount, seqFiles, minMatch, maxGap, 
 	tileSize, repMatch, FALSE,
-	allowOneMismatch, stepSize);
+	allowOneMismatch, stepSize, noSimpRepMask);
 
 while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     {
@@ -187,7 +190,7 @@ time_t startTime, endTime;
 startTime = clock1000();
 gf = gfIndexNibsAndTwoBits(fileCount, seqFiles, minMatch, maxGap, 
 	tileSize, repMatch, FALSE,
-	allowOneMismatch, stepSize);
+	allowOneMismatch, stepSize, noSimpRepMask);
 endTime = clock1000();
 printf("Index built in %4.3f seconds\n", 0.001 * (endTime - startTime));
 
@@ -584,14 +587,14 @@ if (doTrans)
     logInfo("setting up translated index");
     gfIndexTransNibsAndTwoBits(transGf, fileCount, seqFiles, 
     	minMatch, maxGap, tileSize, repMatch, NULL, allowOneMismatch, 
-	doMask, stepSize);
+	doMask, stepSize, noSimpRepMask);
     }
 else
     {
     uglyf("starting untranslated server...\n");
     logInfo("setting up untranslated index");
     gf = gfIndexNibsAndTwoBits(fileCount, seqFiles, minMatch, 
-    	maxGap, tileSize, repMatch, NULL, allowOneMismatch, stepSize);
+    	maxGap, tileSize, repMatch, NULL, allowOneMismatch, stepSize, noSimpRepMask);
     }
 logInfo("indexing complete");
 
@@ -1018,6 +1021,7 @@ seqLog = optionExists("seqLog");
 ipLog = optionExists("ipLog");
 doMask = optionExists("mask");
 canStop = optionExists("canStop");
+noSimpRepMask = optionExists("noSimpRepMask");
 if (argc < 2)
     usage();
 if (optionExists("log"))
