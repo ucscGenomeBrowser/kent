@@ -43,6 +43,7 @@ boolean trimA = FALSE;
 boolean trimHardA = FALSE;
 boolean trimT = FALSE;
 boolean fastMap = FALSE;
+boolean noSimpRepMask = FALSE;
 char *makeOoc = NULL;
 char *ooc = NULL;
 enum gfType qType = gftDna;
@@ -115,6 +116,7 @@ printf(
   "                  Default is 1024.  Typically comes into play only with makeOoc.\n"
   "                  Also affected by stepSize: when stepSize is halved, repMatch is\n"
   "                  doubled to compensate.\n"
+  "   -noSimpRepMask Suppresses simple repeat masking.\n"
   "   -mask=type     Mask out repeats.  Alignments won't be started in masked region\n"
   "                  but may extend through it in nucleotide searches.  Masked areas\n"
   "                  are ignored entirely in protein or translated searches. Types are:\n"
@@ -185,6 +187,7 @@ struct optionSpec options[] = {
    {"fine", OPTION_BOOLEAN},
    {"maxIntron", OPTION_INT},
    {"extendThroughN", OPTION_BOOLEAN},
+   {"noSimpRepMask", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -496,7 +499,7 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
     for (frame = 0; frame < 3; ++frame)
 	{
 	gfs[frame] = gfIndexSeq(dbSeqLists[frame], minMatch, maxGap, tileSize, 
-		repMatch, ooc, TRUE, oneOff, FALSE, stepSize);
+		repMatch, ooc, TRUE, oneOff, FALSE, stepSize, noSimpRepMask);
 	}
 
     for (i=0; i<queryCount; ++i)
@@ -568,7 +571,7 @@ databaseName = dbFile;
 gfClientFileArray(dbFile, &dbFiles, &dbCount);
 if (makeOoc != NULL)
     {
-    gfMakeOoc(makeOoc, dbFiles, dbCount, tileSize, repMatch, tType);
+    gfMakeOoc(makeOoc, dbFiles, dbCount, tileSize, repMatch, tType, noSimpRepMask);
     if (showStatus)
 	printf("Done making %s\n", makeOoc);
     exit(0);
@@ -605,7 +608,7 @@ if (bothSimpleNuc || bothSimpleProt)
     if (mask == NULL && !bothSimpleProt)
         gfClientUnmask(dbSeqList);
     gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, 
-    	tIsProt, oneOff, FALSE, stepSize);
+    	tIsProt, oneOff, FALSE, stepSize, noSimpRepMask);
     if (mask != NULL)
         gfClientUnmask(dbSeqList);
 
@@ -714,6 +717,7 @@ minScore = optionInt("minScore", minScore);
 maxGap = optionInt("maxGap", maxGap);
 minRepDivergence = optionFloat("minRepDivergence", minRepDivergence);
 minIdentity = optionFloat("minIdentity", minIdentity);
+noSimpRepMask = optionExists("noSimpRepMask");
 gfCheckTileSize(tileSize, tIsProtLike);
 if (minMatch < 0)
     errAbort("minMatch must be at least 1");

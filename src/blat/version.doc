@@ -5,6 +5,7 @@
      o (in 36x3) Added ipv6 support.
      o (in 36x4) Added _alt support.
      o (in 36x5) If ipv6 disabled, retries with ipv4-only socket.
+     o (in 36x6) Added noSimpRepMask option to blat gfServer isPcr to skip simple repeat masking.
 
 36:
      o (in 35x1) added repMatch default values for tileSizes 16 to 18 in genoFind.c

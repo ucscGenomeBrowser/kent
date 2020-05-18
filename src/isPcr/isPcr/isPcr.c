@@ -23,6 +23,7 @@ int repMatch = 1024*4;
 double minRepDivergence = 15;
 char *out = "fa";
 boolean flipReverse = FALSE;
+boolean noSimpRepMask = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -58,6 +59,7 @@ errAbort(
   "               it is marked as overused.  Typically this is 256 for tileSize\n"
   "               12, 1024 for tile size 11, 4096 for tile size 10.\n"
   "               Default is 1024.  Only comes into play with makeOoc\n"
+  "   -noSimpRepMask Suppresses simple repeat masking.\n"
   "   -flipReverse Reverse complement reverse (second) primer before using\n"
   "   -out=XXX - Output format.  Either\n"
   "      fa - fasta with position, primers in header (default)\n"
@@ -78,6 +80,7 @@ static struct optionSpec options[] = {
    {"minGood", OPTION_INT},
    {"makeOoc", OPTION_STRING},
    {"repMatch", OPTION_INT},
+   {"noSimpRepMask", OPTION_BOOLEAN},
    {"flipReverse", OPTION_BOOLEAN},
    {"out", OPTION_STRING},
    {NULL, 0},
@@ -136,7 +139,7 @@ char *row[3];
 gfClientFileArray(dbFile, &dbFiles, &dbCount);
 if (makeOoc != NULL)
     {
-    gfMakeOoc(makeOoc, dbFiles, dbCount, tileSize, repMatch, gftDna);
+    gfMakeOoc(makeOoc, dbFiles, dbCount, tileSize, repMatch, gftDna, noSimpRepMask);
     if (showStatus)
 	printf("Done making %s\n", makeOoc);
     exit(0);
@@ -144,7 +147,7 @@ if (makeOoc != NULL)
 dbSeqList = gfClientSeqList(dbCount, dbFiles, FALSE, FALSE, mask, 
 	minRepDivergence, showStatus);
 gf = gfIndexSeq(dbSeqList, 2, 2, tileSize, repMatch, ooc, 
-    FALSE, 0, mask != NULL, stepSize);
+    FALSE, 0, mask != NULL, stepSize, noSimpRepMask);
 
 lf = lineFileOpen(queryFile, TRUE);
 while (lineFileRow(lf, row))
@@ -183,6 +186,7 @@ makeOoc = optionVal("makeOoc", makeOoc);
 repMatch = optionInt("repMatch", repMatch);
 flipReverse = optionExists("flipReverse");
 minRepDivergence = optionInt("minRepDivergence", minRepDivergence);
+noSimpRepMask = optionExists("noSimpRepMask");
 out = optionVal("out", out);
 isPcr(argv[1], argv[2], argv[3]);
 return 0;
