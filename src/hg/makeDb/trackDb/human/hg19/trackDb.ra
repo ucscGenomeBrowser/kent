@@ -1271,23 +1271,6 @@ informant Human N-SCAN Human N-SCAN uses mouse (mm9) as the informant and iterat
 track chainNetVenter override
 priority 450
 
-# Add override for patchwork fix and alt haplotypes track and remove old haplotype track ref#18855
-track altSeqLiftOverPsl override
-release alpha
-
-track fixSeqLiftOverPsl override
-release alpha
-
-track altLocations
-type bed 4
-group map
-color 32,32,190
-shortLabel Alt Haplotypes
-longLabel Alternate Haplotypes to Reference Sequence Correspondence
-url ../cgi-bin/hgTracks?db=$D&position=$$
-urlLabel Corresponding position:
-release beta,public
-
 # Some, but not all subtracks of pgSnp (Personal Genome Variants) were lifted
 track pgAk1 override
 origAssembly hg18
@@ -1817,7 +1800,7 @@ include altSeqComposite9.ra alpha
 
 include altSeqComposite10.ra alpha
 
-include hg19Patch13.ra
+include hg19Patch13.ra alpha
 
 track vistaEnhancers override
 url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
