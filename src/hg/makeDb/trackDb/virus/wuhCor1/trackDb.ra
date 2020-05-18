@@ -164,6 +164,13 @@ bigDataUrl /gbdb/wuhCor1/bbi/conticello.bb
 noScoreFilter on
 filter.freq 0.01
 
+track stringtieKim
+shortLabel StringTie-Kim
+longLabel StringTie results from minimap of Kim 2020 reads
+visibility hide
+group genes
+type bed
+
 track targets
 shortLabel T-React. Epitopes
 longLabel  T-cell reactive epitopes in patients and donors
