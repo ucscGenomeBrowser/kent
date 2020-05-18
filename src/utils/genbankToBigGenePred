@@ -52,6 +52,10 @@ def writeFeatures(ft, chromName, ofh, isGenePred=False, rec=None, nameField="typ
     if geneList and len(geneList)==1:
         geneId = geneList[0]
 
+    # requested by Jason Fernandes, email Apr 29, 2020, 9:34 PM
+    if chromName=="NC_045512v2" and start==265 and end==13483:
+        geneId = "Orf1a"
+
     prodList =  ft.qualifiers.get("product")
     prod = ""
     if prodList and len(prodList)==1:
