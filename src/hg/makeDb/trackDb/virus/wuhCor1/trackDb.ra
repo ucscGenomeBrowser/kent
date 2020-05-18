@@ -154,6 +154,16 @@ type bigBed 4 +
 bigDataUrl /gbdb/wuhCor1/bbi/artic.bb
 noScoreFilter on
 
+track conticello
+shortLabel RNA editing
+longLabel RNA editing events from Conticello et al 2020
+visibility hide
+group map
+type bigBed 9 +
+bigDataUrl /gbdb/wuhCor1/bbi/conticello.bb
+noScoreFilter on
+filter.freq 0.01
+
 track targets
 shortLabel T-React. Epitopes
 longLabel  T-cell reactive epitopes in patients and donors
