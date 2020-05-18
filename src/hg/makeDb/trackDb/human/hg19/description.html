@@ -177,26 +177,32 @@ TARGET="_blank">Assembly Terminology</A> page.</P>
 <P>
 <B>Note on chrM</B><BR>
 Since the release of the UCSC hg19 assembly, the <EM>Homo sapiens</EM>
-mitochondrion sequence (represented as &quot;chrM&quot; in the Genome Browser)
-has been replaced in GenBank with the record
-<A HREF="https://www.ncbi.nlm.nih.gov/nuccore/251831106" TARGET=_blank>NC_012920</A>.
-We have not replaced the original sequence,
+mitochondrion sequence used as &quot;chrM&quot; in the Genome Browser,
 <A HREF="https://www.ncbi.nlm.nih.gov/nuccore/17981852" TARGET=_blank>NC_001807</A>,
-in the hg19 Genome Browser.  We plan to use the
-<A HREF="http://mitomap.org/bin/view.pl/MITOMAP/HumanMitoSeq" TARGET=_blank>Revised Cambridge
-Reference Sequence (rCRS)</A> in the next human assembly release.
+has been replaced in GenBank with the record
+<A HREF="https://www.ncbi.nlm.nih.gov/nuccore/251831106" TARGET=_blank>NC_012920</A>,
+the <A HREF="http://mitomap.org/bin/view.pl/MITOMAP/HumanMitoSeq" TARGET=_blank>Revised Cambridge
+Reference Sequence (rCRS)</A>.
+We have not replaced the chrM sequence in the hg19 Genome Browser.
+However, in March 2020 we added the rCRS sequence to hg19 separately as &quot;chrMT&quot;.
+In the latest human assembly release (Dec. 2013, GRCh38/hg38), &quot;chrM&quot; is the rCRS
+and NC_001807 is not included.
 <P>
 <B>Chromosome naming scheme</B><BR>
 In addition to the &quot;regular&quot; chromosomes, the hg19 browser contains
-9 haplotype chromosomes, 39 unplaced contigs, and 20 unlocalized contigs.
+9 alternative haplotype sequences, 39 unplaced contigs, and 20 unlocalized contigs
+from the initial GRCh37 assembly release.
+In March 2020 we added patch sequences from GRC patch release 13 (GRCh37.p13):
+73 "novel" patches (alternative haplotype sequences) and 131 "fix" patches
+(corrected sequences).
 For unlocalized contigs, the contig name is appended to the regular chromosome
 name, as in <TT>chr1_gl000191_random</TT>.  If the chromosome is unknown, the
 contig is represented with the name &quot;chrUn&quot; followed by the contig
 identifier, as in <TT>chrUn_gl000211</TT>.  Note that the chrUn contigs are no
 longer placed in a single, artificial chromosome as they have been in previous UCSC
-assemblies. hg19 also includes alternative haplotype sequences as well as fix sequences. 
+assemblies.
 The 9 alternative haplotypes released with the original assembly are shown in the
-table below. For subsequent alternate haplotype patches the regular chromosome 
+table below. For subsequent alternative haplotype patches the regular chromosome
 name is followed by the contig accession and then &quot;_alt&quot;, for example 
 <TT>chr5_gl339449_alt.</TT> Fix sequences introduced by patches are named in a similar 
 fashion but with &quot;_fix&quot; instead of &quot;_alt&quot;, e.g. <TT>chrX_jh806590_fix</TT>. 
