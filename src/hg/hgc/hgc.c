@@ -970,7 +970,7 @@ if (sameWord(tdb->table, "npredGene"))
 else
     {
     char *label = itemName;
-    if (isNotEmpty(itemLabel) && sameString(itemName, itemLabel))
+    if (isNotEmpty(itemLabel) && differentString(itemName, itemLabel))
         label = itemLabel;
     printf("%s</A><BR>\n", label);
     }
@@ -983,7 +983,7 @@ void printCustomUrlWithFields(struct trackDb *tdb, char *itemName, char *itemLab
 char urlSetting[10];
 safef(urlSetting, sizeof(urlSetting), "url");
 
-printCustomUrlWithLabel(tdb, itemName, itemName, urlSetting, encode, fields);
+printCustomUrlWithLabel(tdb, itemName, itemLabel, urlSetting, encode, fields);
 }
 
 void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)

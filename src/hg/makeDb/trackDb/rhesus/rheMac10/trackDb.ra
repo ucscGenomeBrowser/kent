@@ -18,3 +18,15 @@ searchPriority 8
 
 track chainNetHg38 override
 visibility pack
+
+track rhesusSNVs
+shortLabel Rhesus SNVs
+longLabel Annotated SNVs from the Rhesus Macaque Sequencing Consortium
+group varRep
+type vcfTabix
+visibility hide
+priority 11.5
+hapClusterHeight 360
+hapClusterEnabled on
+hapClusterMethod fileOrder
+maxWindowToDraw 1000000

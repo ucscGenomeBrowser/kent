@@ -1,0 +1,138 @@
+<h2>Description</h2>
+<p>
+This track shows single nucleotide variants (SNVs), from the Rhesus Macaque
+Genome Consortium that were sequenced and identified by
+<a href="https://www.hgsc.bcm.edu/non-human-primates/rhesus-monkey-genome-project" target="_blank">
+Jeff Rogers&apos; lab at BCM-HGSC</a>.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+<!-- An image with arrows & numbers sure would help here! and on the controls page -->
+<!-- Also, this will apply to any VCF track w/phased genotypes, so probably should -->
+<!-- be moved into an include file. -->
+In &quot;dense&quot; mode, a vertical line is drawn at the position of each
+variant.
+In &quot;pack&quot; mode, since these variants have been phased, the
+display shows a clustering of haplotypes in the viewed range, sorted
+by similarity of alleles weighted by proximity to a central variant.
+The clustering view can highlight local patterns of linkage.</p>
+<p>
+In the clustering display, each sample's phased diploid genotype is split
+into two independent haplotypes.
+Each haplotype is placed in a horizontal row of pixels; when the number of
+haplotypes exceeds the number of vertical pixels for the track, multiple
+haplotypes fall in the same pixel row and pixels are averaged across haplotypes.</p>
+<p>
+Each variant is a vertical bar with white (invisible) representing the reference allele
+and black representing the non-reference allele(s).
+Tick marks are drawn at the top and bottom of each variant's vertical bar
+to make the bar more visible when most alleles are reference alleles.
+The vertical bar for the central variant used in clustering is outlined in purple.
+In order to avoid long compute times, the range of alleles used in clustering
+may be limited; alleles used in clustering have purple tick marks at the
+top and bottom.</p>
+<p>
+The clustering tree is displayed to the left of the main image.
+It does not represent relatedness of individuals; it simply shows the arrangement
+of local haplotypes by similarity.  When a rightmost branch is purple, it means
+that all haplotypes in that branch are identical, at least within the range of
+variants used in clustering.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+All SNV calls are relative to the reference rhesus macaque genome
+(Mmul_10/rheMac10). Gene models from the Ensembl release 98 merged Ensembl and
+RefSeq dataset that also includes annotations based on PacBio iso-seq
+(<a href="
+ftp://ftp.ensembl.org/pub/release-98/variation/vep/macaca_mulatta_merged_vep_98_Mmul_10.tar.gz" target="_blank">available here</a>)
+were used to predict the functional consequences of the SNVs.
+</p>
+
+<p>
+Whole-genome sequencing was performed over an eight-year period. Consequently,
+as technology improved, the sequencing platforms used to generate
+next-generation sequencing reads for this dataset progressed as follows:
+Illumina HiSeq 2000, HiSeq Rapid 2500, HiSeq X, and NovaSeq platforms,
+generating 2 X 100 bp or 2 X 150 bp paired-end reads, as is typical for each
+platform. All underlying sequence data have been deposited into the SRA
+(BioProject ID: <a href="https://www.ncbi.nlm.nih.gov/bioproject/PRJNA251548" target="_blank">
+PRJNA251548</a>).
+</p>
+
+<p>
+Reads were aligned to the reference genome (Mmul_10/rheMac10) , which also
+included the mitochondria genome (NC_005943.1) and had the pseudoautosomal
+region of chromosome Y masked using BWA-MEM 0.7.12-r1039 (Li and Durbin, 2009;
+Li, 2013). To identify reads potentially originating from a single fragment of
+DNA and mark them in the bam files, we used Picard MarkDuplicates version
+1.105.
+</p>
+
+<p>
+SNVs were called using the Genome Analysis Toolkit (GATK) version 4.1.2.0
+(McKenna, et al., 2010) and a VCF file was generated. The hard filters
+suggested by the developers of GATK
+(https://software.broadinstitute.org/gatk/documentation/article?id=11097) were
+applied to the SNVs and all failing SNVs were removed. We then used GATK
+VariantAnnotator to annotate SNVs applying AlleleBalance. SNVs with an allelic
+balance for heterozygous calls (ABHet=ref/(ref+alt)) ABHet < 0.2 or ABHet >
+0.8 were removed.
+</p>
+
+<p>
+The Variant Effect Predictor software from Ensembl (McLaren et al., 2010) was
+used to predict the functional consequence of SNVs queried against Ensembl
+release 98 rhesus macaque gene models based on Ensembl and RefSeq gene
+predictions and including PacBio iso-seq data.
+</p>
+
+<p>
+Definitions of consequence types can be found
+<a href="http://useast.ensembl.org/info/genome/variation/prediction/predicted_data.html" target="_blank">in the VEP documentation</a>.
+</p>
+
+<h2>Credits</h2>
+Thanks to the Rhesus Macaque Genome Consortium and <a href="https://www.hgsc.bcm.edu/non-human-primates/rhesus-monkey-genome-project" target="_blank">
+Jeff Rogers&apos; lab at BCM-HGSC</a> for supplying the data for this track.
+
+<h2>References</h2>
+
+<p>
+Li, H. Aligning sequence reads, clone sequences and assembly contigs with BWA-MEM. Preprint at 
+<a href="https://arxiv.org/pdf/1303.3997v2.pdf"
+target="_blank">http://arxiv.org/pdf/1303.3997v2.pdf</a> 2013.
+</p>
+
+<p>
+Li H, Durbin R.
+<a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/btp324"
+target="_blank">
+Fast and accurate short read alignment with Burrows-Wheeler transform</a>.
+<em>Bioinformatics</em>. 2009 Jul 15;25(14):1754-60.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/19451168" target="_blank">19451168</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2705234/" target="_blank">PMC2705234</a>
+</p>
+
+<p>
+McKenna A, Hanna M, Banks E, Sivachenko A, Cibulskis K, Kernytsky A, Garimella K, Altshuler D,
+Gabriel S, Daly M <em>et al</em>.
+<a href="https://genome.cshlp.org/content/20/9/1297.long" target="_blank">
+The Genome Analysis Toolkit: a MapReduce framework for analyzing next-generation DNA sequencing
+data</a>.
+<em>Genome Res</em>. 2010 Sep;20(9):1297-303.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/20644199" target="_blank">20644199</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2928508/" target="_blank">PMC2928508</a>
+</p>
+
+<p>
+McLaren W, Pritchard B, Rios D, Chen Y, Flicek P, Cunningham F.
+<a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/btq330"
+target="_blank">
+Deriving the consequences of genomic variants with the Ensembl API and SNP Effect Predictor</a>.
+<em>Bioinformatics</em>. 2010 Aug 15;26(16):2069-70.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/20562413" target="_blank">20562413</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2916720/" target="_blank">PMC2916720</a>
+</p>
