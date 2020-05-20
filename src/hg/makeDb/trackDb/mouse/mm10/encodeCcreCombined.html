@@ -1,20 +1,21 @@
 <h2>Description</h2>
 <p>
 This track displays the <em>ENCODE Registry of candidate cis-Regulatory Elements</em> (cCREs) 
-in the genome, identified and classified by the ENCODE Data Analysis Center according to 
-regulatory effect.
-CCREs are the subset of DNase hypersensitivity sites clustered across all samples
-that are supported by either histone modifications (H3K4me3 and H3K27ac) or CTCF-binding data.
-The cCRE dataset is the core of the integrative level of epigenomic and transcriptomic
-annotations produced by ENCODE.
-The registry currently comprises a total of 926,535 elements in the human genome and 339,815 
-in the mouse genome (less comprehensively assayed).
-</p>
+in the mouse genome, a total of 339,815 elements identified and classified by the ENCODE Data 
+Analysis Center according to biochemical signatures.
+cCREs are the subset of representative DNase hypersensitive sites across ENCODE samples that 
+are supported by either histone modifications (H3K4me3 and H3K27ac) or CTCF-binding data.
+The Registry of cCREs is one of the core components of the integrative level of the
+ENCODE Encyclopedia of DNA Elements.</p>
+
+<p>
 Additional exploration of the cCRE's and underlying raw ENCODE data is provided by the
 <a target="_blank" href="https://screen.wenglab.org/">
 SCREEN</a>
 (Search Candidate cis-Regulatory Elements) web tool,
-designed specifically for the registry, and accessible by linkouts from the track details page.
+designed specifically for the Registry, accessible by linkouts from the track details page.
+The cCREs identified in the human genome are available in a companion track, 
+<a target="_blank" href="../cgi-bin/hgTrackUi?db=hg38&g=encodeCcreCombined">here</a>.</p>
 
 <!--
 <p>
@@ -33,32 +34,33 @@ CCREs are colored and labeled according to classification by regulatory signatur
   <tr>
     <th style="border-bottom: 2px solid;">Color</th>
     <th style="border-bottom: 2px solid;"></th>
-    <th style="border-bottom: 2px solid;">Label</th>
-    <th style="border-bottom: 2px solid;">Classification</th>
+    <th style="border-bottom: 2px solid;">UCSC label</th>
+    <th style="border-bottom: 2px solid;">ENCODE classification</th>
+    <th style="border-bottom: 2px solid;">ENCODE label</th>
     <th style="border-bottom: 2px solid;"></th>
   </tr>
   </thead>
 
-<tr><td style='background-color: red;'></td><td>red</td>
+<tr><td style='background-color: #FF0000;'></td><td>red</td>
         <td>prom</td>
-        <td>promoter-like</td>
+        <td>promoter-like signature</td>
         <td>PLS</td></tr>
-<tr><td style='background-color: orange;'></td><td>orange</td>
+<tr><td style='background-color: #FFA700;'></td><td>orange</td>
         <td>enhP</td>
-        <td>proximal enhancer-like</td>
+        <td>proximal enhancer-like signature</td>
         <td>pELS</td></tr>
-<tr><td style='background-color: yellow;'></td><td>yellow</td>
+<tr><td style='background-color: #FFCD00;'></td><td>yellow</td>
         <td>enhD</td>
-        <td>distal enhancer-like</td>
+        <td>distal enhancer-like signature</td>
         <td>dELS</td></tr>
-<tr><td style='background-color: blue;'</td><td>blue</td>
-        <td>CTCF</td>
-        <td>CTCF-only</td>
-        <td>CTCF-only</td></tr>
-<tr><td style='background-color: #ffa0a0;'></td><td>pink</td>
+<tr><td style='background-color: #FFAAAA;'></td><td>pink</td>
         <td>K4m3</td>
         <td>DNase-H3K4me3</td>
         <td>DNase-H3K4me3</td></tr>
+<tr><td style='background-color: #00B0F0;'</td><td>blue</td>
+        <td>CTCF</td>
+        <td>CTCF-only</td>
+        <td>CTCF-only</td></tr>
 </table>
 </p>
 <p>
@@ -68,12 +70,11 @@ are not within 200bp of an annotated TSS.
 
 <h2>Methods</h2>
 <p>
-All individual DNase hypsersensitivity sites (DHSs) identified from DNAse-seq experiments
-(in human, a total of 93 million sites from 706 experiments) were iteratively clustered
-and filtered for highest signal across all experiments, producing 
-representative DHSs (rDHSs), with a total of  2.2 million such sites in human.
+All individual DNase hypsersensitive sites (DHSs) identified from 176 DNase-seq profiles
+in mouse (a total of 26 million) were iteratively clustered and filtered for the highest 
+signal across all experiments, producing 1.2 million representative DHSs (rDHSs).
 The highest signal elements from this set that were also supported by high H3K4me3, H3K27ac 
-and/or CTCF ChIP-seq signals were designated cCRE's (a total of 926,535 in human).
+and/or CTCF ChIP-seq signals were designated cCRE's (a total of 339,815 in mouse).
 </p>
 <p>
 Classification of cCRE's was performed based on the following criteria:
@@ -101,6 +102,7 @@ and do not fall within 200 bp of a TSS.
 <img style='margin-left: 40px;' height=229 width=371 src="../images/cCREgroups.png">
 
 <p>
+The GENCODE VM18 (Ensembl 93) basic gene annotation set was used in this analysis.
 For further detail about the identification and classification of ENCODE cCREs see 
 the <i>About</i> page of the
 <a target="_blank" href="https://screen.encodeproject.org">SCREEN</a> web tool.
@@ -130,8 +132,12 @@ binary for your system.
 Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
 The tool can also be used to obtain only features within a given range, e.g. 
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/encodeCcreCombined.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/mm10/bbi/encodeCcreCombined.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
 </p>
+
+<h2>Release Notes</h2>
+<p>
+This annotation is based on ENCODE data released on or before September 14, 2018.</p>
 
 <h2>Credits</h2>
 <p>
@@ -146,7 +152,11 @@ and the ENCODE Data Coordination Center for generating and processing the datase
 
 <h2>References</h2>
 <p>
-ENCODE Project Consortium..
+ENCODE Project Consortium.
+Expanded Encyclopedias of DNA Elements in the Human and Mouse Genomes. <em>In press</em>.
+</p>
+<p>
+ENCODE Project Consortium.
 <a href="https://doi.org/10.1038/nature11247" target="_blank">
 An integrated encyclopedia of DNA elements in the human genome</a>.
 <em>Nature</em>. 2012 Sep 6;489(7414):57-74.
@@ -154,7 +164,7 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/22955616" target="_blank">229
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3439153/" target="_blank">PMC3439153</a>
 </p>
 
-ENCODE Project Consortium..
+ENCODE Project Consortium.
 <a href="http://dx.plos.org/10.1371/journal.pbio.1001046" target="_blank">
 A user's guide to the encyclopedia of DNA elements (ENCODE)</a>.
 <em>PLoS Biol</em>. 2011 Apr;9(4):e1001046.
