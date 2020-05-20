@@ -14,7 +14,7 @@ BLASTZ_M=254
 BLASTZ_K=4500
 BLASTZ_L=4500
 BLASTZ_Y=15000
-BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_Q=/hive/data/staging/data/blastz/human_chimp.v2.q
 #    A    C    G    T
 #    90 -330 -236 -356
 #  -330  100 -318 -236
@@ -44,20 +44,20 @@ TMPDIR=/dev/shm
         -chainMinScore=5000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
         -syntenicNet) > do.log 2>&1 &
-    # real    282m16.272s
+    # real    94m43.451s
 
     cat fb.panTro6.chainPonAbe3Link.txt
-    # 2823472924 bases of 3049335806 (92.593%) in intersection
+    # 2710778689 bases of 3018592990 (89.803%) in intersection
     cat fb.panTro6.chainSynPonAbe3Link.txt
-    # 2800840721 bases of 3049335806 (91.851%) in intersection
+    # 2692073497 bases of 3018592990 (89.183%) in intersection
 
     # filter with doRecipBest.pl
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
         panTro6 ponAbe3) > rbest.log 2>&1 &
-    # real    129m13.848s
+    # real    79m59.335s
 
-    cat fb.panTro6.chainRBestPonAbe3Link.txt
-    # 2640015618 bases of 3049335806 (86.577%) in intersection
+    cat fb.panTro6.chainRBest.PonAbe3.txt
+    # 2631531198 bases of 3018592990 (87.177%) in intersection
 
     # running the swap
     mkdir /hive/data/genomes/ponAbe3/bed/blastz.panTro6.swap
@@ -67,18 +67,18 @@ TMPDIR=/dev/shm
         -chainMinScore=5000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
         -syntenicNet) > swap.log 2>&1
-    # real    92m31.689s
+    # real    64m29.790s
 
     cat fb.ponAbe3.chainPanTro6Link.txt
-    # 2693373164 bases of 3043444524 (88.498%) in intersection
+    # 2685290576 bases of 3043444524 (88.232%) in int rsection
     cat fb.ponAbe3.chainSynPanTro6Link.txt
-    # 2679121264 bases of 3043444524 (88.029%) in intersection
+    # 2669539267 bases of 3043444524 (87.714%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
         ponAbe3 panTro6) > rbest.log 2>&1 &
-    # real    141m23.715s
+    # real    84m51.043s
 
-    cat fb.ponAbe3.chainRBestPanTro6Link.txt
-    # 2641871600 bases of 3043444524 (86.805%) in intersection
+    cat fb.ponAbe3.chainRBest.PanTro6.txt
+    # 2631453596 bases of 3043444524 (86.463%) in intersection
 
 #############################################################################
