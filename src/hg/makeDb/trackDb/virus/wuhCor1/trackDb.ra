@@ -193,6 +193,49 @@ compositeTrack on
         type bigBed 4
         bigDataUrl /gbdb/wuhCor1/bbi/M2_peptides.bb
 
+track microdel
+shortLabel Microdeletions
+longLabel Microdeletions
+type bed 6
+group compGeno
+spectrum on
+
+track nanoCov
+shortLabel Nanopore Coverage
+longLabel Nanopore transcript sequencing coverage from Naumburg et al 2020
+type bigWig
+visibility hide
+group x
+compositeTrack on
+
+        track nanoCovKim
+        shortLabel Kim 2020
+        longLabel Nanopore Coverage: Kim 2020
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/bbi/nanoCov/kim.bw
+        autoScale on
+        visibility full
+        parent nanoCov
+
+        track nanoCovDavidson
+        shortLabel Davidson 2020
+        longLabel Nanopore Coverage: Davidson 2020
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/bbi/nanoCov/davidson.bw
+        visibility full
+        autoScale on
+        parent nanoCov
+
+        track nanoCovTaiaora
+        shortLabel Taiaora 2020
+        longLabel Nanopore Coverage: Taiaora 2020
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/bbi/nanoCov/taiaora.bw
+        visibility full
+        autoScale on
+        parent nanoCov
+
+
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
 include epitopes.ra
