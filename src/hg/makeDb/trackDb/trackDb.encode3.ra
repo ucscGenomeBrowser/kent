@@ -6,15 +6,16 @@ type bigBed 9 +
 shortLabel ENCODE cCREs
 longLabel ENCODE Candidate Cis-Regulatory Elements (cCREs) combined from all cell types
 bigDataUrl /gbdb/$D/encode3/ccre/encodeCcreCombined.bb
-mouseOverField typeLabel
 bedNameLabel ENCODE Accession
 urlLabel cCRE details at ENCODE SCREEN:
-filterValues.typeLabel prom|promoter-like (prom),enhP|proximal enhancer-like (enhP),enhD|distal enhancer-like (enhD),CTCF|CTCF only (CTCF),K4m3|H3K4me3 (K4m3)
+filterValues.ucscLabel prom|promoter-like signature (PLS/prom),enhP|proximal enhancer-like signature (pELS/enhP),enhD|distal enhancer-like signature (dELS/enhD),CTCF|CTCF only (CTCF/CTCF-only),K4m3|DNase-H3K4me3 (DNase-H3K4me3/k4m3)
 itemRgb On
 wgEncode 1
 group regulation
 pennantIcon New red
-labelFields accessionLabel,typeLabel
-defaultLabelFields accessionLabel
 darkerLabels on
+labelFields accessionLabel,ucscLabel,encodeLabel
+defaultLabelFields accessionLabel,ucscLabel
+skipFields encodeLabel,ucscLabel,accessionLabel,description
+mouseOverField description
 
