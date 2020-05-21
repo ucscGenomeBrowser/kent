@@ -1,0 +1,56 @@
+track clinGenSuper
+shortLabel ClinGen
+longLabel Clinical Genome Resource
+group phenDis
+superTrack on
+
+    track dosageSensitivity
+    parent clinGenSuper on
+    shortLabel ClinGen Dosage Sensitivity
+    longLabel Clinical Genome Resource Dosage Sensitivity 
+    visibility pack
+    type bigBed 9 +
+    itemRgb on
+    compositeTrack on
+
+        track clinGenHaplo
+        parent dosageSensitivity
+        shortLabel ClinGen Haplo Insufficiency
+        longLabel ClinGen Haplo Insufficiency
+        visibility dense
+        type bigBed 9 +
+        bigDataUrl /gbdb/$D/bbi/clinGen/clinGenHaplo.bb
+        mouseOverField _mouseOver
+        filterValues.haploScore 0|No evidence available,1|Little evidence for dosage pathogenicity,2|Some evidence for dosage pathogenicity,3|Sufficient evidence for dosage pathogenicity,30|Gene associated with autosomal recessive phenotype,40|Dosage sensitivity unlikely
+        filterLabel.haploScore Haplosensitivity Score
+
+        track clinGenTriplo
+        parent dosageSensitivity
+        shortLabel ClinGen Triplo Sensitivity
+        longLabel ClinGen Triplo Sensitivity
+        visibility dense
+        type bigBed 9 +
+        bigDataUrl /gbdb//$D/bbi/clinGen/clinGenTriplo.bb
+        mouseOverField _mouseOver
+        filterValues.triploScore 0|No evidence available,1|Little evidence for dosage pathogenicity,2|Some evidence for dosage pathogenicity,3|Sufficient evidence for dosage pathogenicity,30|Gene associated with autosomal recessive phenotype,40|Dosage sensitivity unlikely
+        filterLabel.triploScore Triplosensitivity Score
+
+    track clinGenCnv
+    parent clinGenSuper off
+    shortLabel ClinGen Copy Number Variants
+    longLabel Clinical Genome Resource Copy Number Variants
+    type bigBed 9 +
+    itemRgb on
+    visibility dense
+    mergeSpannedItems off
+    bigDataUrl /gbdb/$D/bbi/clinGen/clinGenCnv.bb
+    mouseOverField _mouseOver
+    filter.size
+    filterLabel.size Variant Size
+    filterValues.variantType copy_number_loss|loss,copy_number_gain|gain
+    filterLabel.variantType Copy Number Type (gain or loss)
+    filterValues.clinicalInterpretation Pathogenic|pathogenic,Benign|benign
+    filterLabel.clinicalInterpretation Benign or Pathogenic
+    url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
+    urlLabel NCBI DbVar:
+    urls pubMed="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" clinGenId="https://dosage.clinicalgenome.org/clingen_region.cgi?id=$$&page=print"
