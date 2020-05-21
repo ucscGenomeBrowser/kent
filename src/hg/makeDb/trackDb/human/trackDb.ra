@@ -27,6 +27,9 @@ include trackDb.clinvarTest.ra alpha
 # NCBI dbVar
 include trackDb.dbVar.ra
 
+# ClinGen
+include trackDb.clinGen.ra alpha
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)
