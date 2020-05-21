@@ -45,7 +45,6 @@ superTrack on
     mergeSpannedItems off
     bigDataUrl /gbdb/$D/bbi/clinGen/clinGenCnv.bb
     mouseOverField _mouseOver
-    filter.size
     filterLabel.size Variant Size
     filterValues.variantType copy_number_loss|loss,copy_number_gain|gain
     filterLabel.variantType Copy Number Type (gain or loss)

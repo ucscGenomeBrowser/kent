@@ -2845,3 +2845,5 @@ color 20,20,160
 baseColorUseCds given
 baseColorDefault genomicCodons
 
+track clinGenCnv override
+filter.size 773:11309570
