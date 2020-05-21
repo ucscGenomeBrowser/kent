@@ -651,11 +651,13 @@
 </DIV>
 
 <DIV class="pennantIcon"><span class="types all"></span>
-<div class="format"><code>pennantIcon &lt;iconFile&gt;/&lt;text color&gt; [html [tip]]</code></div>
+<div class="format"><code>pennantIcon &lt;iconFile&gt;/&lt;text color&gt; [html [tip]] 
+[; &lt;iconFile&gt;/&lt;text color&gt; [html [tip]]]</code></div>
     <P>Certain tracks can be visually flagged in the Browser menu by use of an icon or text label 
     and a link to a description of the flags meaning.  The icon is displayed next to the track's
     short label in the track groups section below the Browser image, and on the track's 
-    description and configuration pages.
+    description and configuration pages. Multiple pennantIcons can be added on a single track by
+    separating each entry with a semicolon ';'.
     This setting has three parts:</P>
     <UL>
     <LI>icon -  Can be fully qualified URL (http, https, ftp) to an image file,  or the name of an image in the Browser's images directory in the 
@@ -670,6 +672,7 @@
     <P><B>Examples:</B></P>
     <pre>    pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"</pre>
     <pre>    pennantIcon New red ../goldenPath/releaseLog.html "Released October 19, 2017"</pre>
+    <pre>    pennantIcon 19.jpg liftOver.html "lifted hg19"; p12 black http://genome.ucsc.edu/patches/ "annotations patch"</pre>
 </DIV>
 
 <DIV class="priority"><span class="types all"></span>
