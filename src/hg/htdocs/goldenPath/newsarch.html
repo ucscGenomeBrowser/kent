@@ -52,6 +52,78 @@
 <!-- ============= 2020 archived news ============= -->
 <a name="2020"></a>
 
+<a name="052220"></a>
+<h2>May. 22, 2020 &nbsp;&nbsp; Updated GENCODE gene tracks: Human V34 (hg19/hg38) - Mouse M25
+(mm10) and updated GTEx V8 gene expression track in hg38</h2>
+<h3>GENCODE Gene Set Updates</h3>
+<p>
+We are pleased to announce new GENCODE Gene annotation tracks, which correspond
+to <a href="http://www.ensembl.info/2020/04/29/ensembl-100-has-been-released/"
+target="_blank">Ensembl 100</a>, for three assemblies: <a target="_blank" 
+href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGencodeV34lift37">hg19/GRCh37</a>,
+<a target="_blank" 
+href="../../cgi-bin/hgTrackUi?db=hg38c=chr1&g=wgEncodeGencodeV34">hg38/GRCh38</a>,
+and <a target="_blank" 
+href="../../cgi-bin/hgTrackUi?db=mm10&c=chr12&g=wgEncodeGencodeVM25">mm10/GRCm38</a>.
+For human, the GENCODE V34 annotations were mapped to hg38/GRCh38 and then back-mapped
+to the hg19/GRCh37 assembly. For all three assemblies, the gene sets contain the following
+tracks:</p>
+<ul>
+  <li>Basic - a subset of the <em>Comprehensive set</em>.</li>
+  <li>Comprehensive - all GENCODE coding and non-coding transcript annotations, including
+      polymorphic pseudogenes. This includes both manual and automatic annotations.</li>
+  <li>Pseudogenes - all annotations except polymorphic pseudogenes.</li></ul>
+<p>
+The hg38 and mm10 assemblies also include the following tracks that are not available on hg19:
+</p>
+<ul>
+  <li>2-way Pseudogenes - pseudogenes predicted by both the Yale Pseudopipe and UCSC
+      Retrofinder pipelines.</li>
+  <li>PolyA - polyA signals and sites manually annotated on the genome based on transcribed
+      evidence (ESTs and cDNAs) of 3' end of transcripts containing at least 3 A's not matching the
+      genome.</li></ul>
+<p>
+Details on each release can be found on the <a target="_blank" 
+href="https://www.gencodegenes.org/">GENCODE site</a>. This includes <a target="_blank" 
+href="https://www.gencodegenes.org/human/stats.html">statistics on each release</a>.
+<p>We would like to thank the <a target="_blank" 
+href="https://www.gencodegenes.org/pages/gencode.html">GENCODE project</a> for providing these
+annotations. We would also like to thank Mark Diekhans and Daniel Schmelter for the development and
+release of these tracks.</p>
+
+
+<h3>Updated GTEx V8 gene transcript expression from RNA-seq of 54 tissues</h3>
+<a name="052220a"></a>
+<p>We are excited to announce an update to the GTEx V8 for the gene expression track
+based on data from the <a target="_blank" href="http://commonfund.nih.gov/GTEx/index">
+NIH Genotype-Tissue Expression (GTEx) project</a>. This track displays 
+tissue-specific gene expression based on RNA-seq in 54 tissues from 948 donors
+released in August 2019. 
+The original data for this track can be found at <a target="_blank"
+ href="https://www.gtexportal.org/">the GTEX Portal</a>hosted by the Broad Institute.
+
+This track features a horizontal bar chart for each GENCODE gene, resulting in 
+colored bars which show median tissue expression values assayed by the GTEx project in RPKM.
+Mouse over the bar in the graph shows a tissue specific expression value, while clicking on a chart
+shows a much larger box-and-wiskers graph for that transcript. The complete tissue color legend 
+and filters are shown on the <a target="_blanK" 
+a href="/cgi-bin/hgGtexTrackSettings?db=hg38&g=gtexGeneV8">GTEx track configuration page</a>. 
+Below the bar graph, a line is shown indicating the gene extent that was used to 
+generate the annotation, colored by gene class using GENCODE conventions 
+(e.g. blue for protein-coding, green for non-coding).
+</p>
+<p>
+<a href = 
+"/cgi-bin/hgGtexTrackSettings?db=hg38&g=gtexGeneV8" 
+target = _blank>
+<img src = "../images/GTExV8.png" WIDTH = 750 HEIGHT = 432>
+</a>
+</p>
+
+<p>
+Thank you Kate Rosenbloom and Daniel Schmelter for developing and releasing these tracks</p>
+
+
 <a name="051220"></a>
 <h2>May 12, 2020 &nbsp;&nbsp; New video:  Coronavirus Browser SARS CoV-2  </h2>
 <p>
