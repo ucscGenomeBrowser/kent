@@ -558,7 +558,7 @@ compositeTrack on
     type vcfPhasedTrio
     shortLabel 1000 Genomes CEPH Utah Trio
     longLabel 1000 Genomes CEPH Utah Trio
-    vcfChildSample NA12878
+    vcfChildSample NA12878|child
     vcfParentSamples NA12892|mother,NA12891|father
     release alpha
 
@@ -568,7 +568,7 @@ compositeTrack on
     type vcfPhasedTrio
     shortLabel 1000 Genomes Puerto Rico Trio
     longLabel 1000 Genomes Puerto Rico Trio
-    vcfChildSample HG00733
+    vcfChildSample HG00733|child
     vcfParentSamples HG00732|mother,HG00731|father
     release alpha
 
@@ -578,7 +578,7 @@ compositeTrack on
     type vcfPhasedTrio
     shortLabel 1000 Genomes Vietnamese Trio
     longLabel 1000 Genomes Vietnamese Trio
-    vcfChildSample HG02024
+    vcfChildSample HG02024|child
     vcfParentSamples HG02025|mother,HG02026|father
     release alpha
 
