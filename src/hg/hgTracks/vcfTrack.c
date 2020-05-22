@@ -1826,6 +1826,8 @@ for (i = 0; i < slCount(hapArray); i++)
 }
 
 static struct hapDistanceMatrix *fillOutDistanceMatrix(struct hapCluster **hapArray, struct vcfFile *vcff, char *sample, struct cwaExtraData *helper, int gtCount)
+/* Allocates and fill out a struct hapDistanceMatrix, one row per child allele, and a
+ * hapDistanceMatrixCell per parent allele */
 {
 short parGtCount = (gtCount - 1) * 2;
 int i,j;
