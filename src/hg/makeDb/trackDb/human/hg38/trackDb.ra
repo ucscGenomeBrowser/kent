@@ -559,7 +559,7 @@ compositeTrack on
     shortLabel 1000 Genomes CEPH Utah Trio
     longLabel 1000 Genomes CEPH Utah Trio
     vcfChildSample NA12878
-    vcfParentSamples NA12892,NA12891
+    vcfParentSamples NA12892|mother,NA12891|father
     release alpha
 
     track tgpPR05_PUR
@@ -569,7 +569,7 @@ compositeTrack on
     shortLabel 1000 Genomes Puerto Rico Trio
     longLabel 1000 Genomes Puerto Rico Trio
     vcfChildSample HG00733
-    vcfParentSamples HG00732,HG00731
+    vcfParentSamples HG00732|mother,HG00731|father
     release alpha
 
     track tgpVN049_KHV
@@ -579,7 +579,7 @@ compositeTrack on
     shortLabel 1000 Genomes Vietnamese Trio
     longLabel 1000 Genomes Vietnamese Trio
     vcfChildSample HG02024
-    vcfParentSamples HG02025,HG02026
+    vcfParentSamples HG02025|mother,HG02026|father
     release alpha
 
 track genomicSuperDups override
