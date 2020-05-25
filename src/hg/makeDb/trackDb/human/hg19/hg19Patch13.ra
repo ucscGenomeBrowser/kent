@@ -5,8 +5,6 @@ longLabel GRCh37 patch release 13, alternate sequences and reference sequence pa
 subGroup1 view Views location=Patch/Haplotype psl=Alignment chain=Chain net=Net
 dragAndDrop subTracks
 # sortOrder view=+
-visibility show
-priority 2
 type bed 4
 noInherit on
 group map
@@ -18,27 +16,6 @@ matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330
 matrixHeader A, C, G, T
 html hg19Patch13
 dataVersion GRCh37 Patch 13 update, Jun. 2013
-release beta,public
-
-track hg19Patch13
-compositeTrack on
-shortLabel GRC Patch Release
-longLabel GRCh37 patch release 13, alternate sequences and reference sequence patches
-subGroup1 view Views location=Patch/Haplotype psl=Alignment chain=Chain net=Net
-dragAndDrop subTracks
-# sortOrder view=+
-type bed 4
-noInherit on
-group map
-chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr19,chr20,chr21,chr22,chrX
-otherDb hg19Patch13
-chainMinScore 2000
-chainLinearGap medium
-matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
-matrixHeader A, C, G, T
-html hg19Patch13
-dataVersion GRCh37 Patch 13 update, Jun. 2013
-release alpha
 
     track hg19Patch13Location
     shortLabel Patch/Haplotype

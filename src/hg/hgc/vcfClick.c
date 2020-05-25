@@ -464,22 +464,21 @@ static void vcfRecordDetails(struct trackDb *tdb, struct vcfRecord *rec)
 {
 if (isNotEmpty(rec->name) && differentString(rec->name, "."))
     printf("<B>Name:</B> %s<BR>\n", rec->name);
-if (sameString(tdb->track, "exacVariants"))
+// Add some special URL substitution variables for ExAC/GnomAD-style links
+struct slPair *substFields = slPairNew("ref", rec->alleles[0]);
+substFields->next = slPairNew("firstAlt", rec->alleles[1]);
+char posString[64];
+safef(posString, sizeof posString, "%d", rec->chromStart+1);
+substFields->next->next = slPairNew("pos", posString);
+char *label = rec->name;
+if ((isEmpty(rec->name) || sameString(rec->name, ".")) &&
+    (startsWith("exac", tdb->track) || startsWith("gnomad", tdb->track)))
     {
-    printf("<b>ExAC:</b> "
-           "<a href=\"http://exac.broadinstitute.org/variant/%s-%d-%s-%s\" "
-           "target=_blank>%s:%d %s/%s</a><br>\n",
-           skipChr(rec->chrom), rec->chromStart+1, rec->alleles[0], rec->alleles[1],
-           skipChr(rec->chrom), rec->chromStart+1, rec->alleles[0], rec->alleles[1]);
+    struct dyString *dyLabel = dyStringCreate("%s-%s-%s-%s", skipChr(rec->chrom), posString,
+                                              rec->alleles[0], rec->alleles[1]);
+    label = dyStringCannibalize(&dyLabel);
     }
-if (sameString(tdb->track, "gnomadGenomesVariants") || sameString(tdb->track, "gnomadExomesVariants"))
-    {
-    printf("<b>gnomAD:</b> "
-           "<a href=\"http://gnomad.broadinstitute.org/variant/%s-%d-%s-%s\" "
-           "target=_blank>%s:%d %s/%s</a><br>\n",
-           skipChr(rec->chrom), rec->chromStart+1, rec->alleles[0], rec->alleles[1],
-           skipChr(rec->chrom), rec->chromStart+1, rec->alleles[0], rec->alleles[1]);
-    }
+printCustomUrlWithFields(tdb, rec->name, label, TRUE, substFields);
 // Since these are variants, if it looks like a dbSNP or dbVar ID, provide a link:
 if (regexMatch(rec->name, "^rs[0-9]+$"))
     {
@@ -493,7 +492,6 @@ else if (regexMatch(rec->name, "^[en]ss?v[0-9]+$"))
     printf("<A HREF=\"https://www.ncbi.nlm.nih.gov/dbvar/variants/%s/\" "
 	   "TARGET=_BLANK>%s</A><BR>\n", rec->name, rec->name);
     }
-printCustomUrl(tdb, rec->name, TRUE);
 boolean hapClustEnabled = cartOrTdbBoolean(cart, tdb, VCF_HAP_ENABLED_VAR, TRUE);
 if (hapClustEnabled && rec->file != NULL && rec->file->genotypeCount > 1)
     {

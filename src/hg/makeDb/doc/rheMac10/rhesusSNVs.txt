@@ -1,0 +1,13 @@
+2020-05-19 SNVs from the Rhesus Macaque Sequencing Consortium (markd)
+
+  cd /hive/data/genomes/rheMac10/bed/rhesusSNVs/
+
+   #Obtained Rhesus VCF from "Harris, Ronald Alan" <rharris1@bcm.edu>
+   -r--r--r-- 1 markd genecats 389114605666 Apr 29 12:39 rheMac10.snvs.vcf.gz
+   -r--r--r-- 1 markd genecats      2769802 Apr 29 16:06 rheMac10.snvs.vcf.gz.tbi
+
+   mkdir /gbdb/rheMac10/rhesusSNVs
+   ln -s /hive/data/genomes/rheMac10/bed/rhesusSNVs/rheMac10.snvs.vcf.gz* /gbdb/rheMac10/rhesusSNVs/
+   hgBbiDbLink rheMac10 rhesusSNVs /gbdb/rheMac10/rhesusSNVs/rheMac10.snvs.vcf.gz
+
+

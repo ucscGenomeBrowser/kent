@@ -404,6 +404,7 @@ if (! sameString(exp1, words[ix]))
 
 // There might be a whole lot of genotype columns...
 #define VCF_MAX_COLUMNS 16 * 1024
+#define VCF_MIN_COLUMNS 8
 
 char *vcfDefaultHeader = "#CHROM POS ID REF ALT QUAL FILTER INFO";
 /* Default header if we have none. */
@@ -416,6 +417,8 @@ int wordCount = chopLine(line+1, words);
 if (wordCount >= VCF_MAX_COLUMNS)
     vcfFileErr(vcff, "header contains at least %d columns; "
 	       "VCF_MAX_COLUMNS may need to be increased in vcf.c!", VCF_MAX_COLUMNS);
+if (wordCount < VCF_MIN_COLUMNS)
+    errAbort("VCF header missing at least one of the required VCF fields");
 expectColumnName(vcff, "CHROM", words, 0);
 expectColumnName(vcff, "POS", words, 1);
 expectColumnName(vcff, "ID", words, 2);
@@ -424,7 +427,7 @@ expectColumnName(vcff, "ALT", words, 4);
 expectColumnName2(vcff, "QUAL", "PROB", words, 5);
 expectColumnName(vcff, "FILTER", words, 6);
 expectColumnName(vcff, "INFO", words, 7);
-if (wordCount > 8)
+if (wordCount > VCF_MIN_COLUMNS)
     {
     expectColumnName(vcff, "FORMAT", words, 8);
     if (wordCount < 10)
