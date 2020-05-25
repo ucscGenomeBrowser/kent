@@ -1159,6 +1159,14 @@ for (mi = miList; mi != NULL; mi = mi->next)
 		case missense_variant:
 		    color = MG_RED;
 		    break;
+                // non-syn BLOSUM62 > 1
+                case 1579:
+                    color = 0xffe0e0ff;
+		    break;
+                // non-syn BLOSUM62 > -1  but less than 1
+                case 1581:
+                    color = 0xffb0b0ff;
+		    break;
 		}
 	    hvGfxBox(hvg, x1 + xOff, yOff, w, height1, color);
 

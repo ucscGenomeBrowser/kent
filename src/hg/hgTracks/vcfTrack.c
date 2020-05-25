@@ -169,7 +169,7 @@ static void filterRefOnlyAlleles(struct vcfFile *vcff, struct trackDb *tdb)
 struct vcfRecord *rec, *nextRecord, *retList = NULL;
 const struct vcfGenotype *gt;
 
-struct slPair *sample, *sampleOrder = vcfPhasedGetSampleOrder(cart, tdb);
+struct slPair *sample, *sampleOrder = vcfPhasedGetSampleOrder(cart, tdb, FALSE);
 for (rec = vcff->records; rec != NULL; rec = nextRecord)
     {
     nextRecord = rec->next;
@@ -232,7 +232,7 @@ int maxLen = 33;
 int maxAlCount = 5;
 struct slPair *sample = NULL, *phasedSamples = NULL;
 if (sameString(tdb->type, "vcfPhasedTrio"))
-    phasedSamples = vcfPhasedGetSampleOrder(cart, tdb);
+    phasedSamples = vcfPhasedGetSampleOrder(cart, tdb, FALSE);
 
 vcff->allPhased = TRUE;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
@@ -1826,6 +1826,8 @@ for (i = 0; i < slCount(hapArray); i++)
 }
 
 static struct hapDistanceMatrix *fillOutDistanceMatrix(struct hapCluster **hapArray, struct vcfFile *vcff, char *sample, struct cwaExtraData *helper, int gtCount)
+/* Allocates and fill out a struct hapDistanceMatrix, one row per child allele, and a
+ * hapDistanceMatrixCell per parent allele */
 {
 short parGtCount = (gtCount - 1) * 2;
 int i,j;
@@ -2025,11 +2027,8 @@ int i, y1, y2;
 struct rgbColor yellow = lightRainbowAtPos(0.2);
 int transYellow = MAKECOLOR_32_A(yellow.r, yellow.g, yellow.b, 100);
 
-char defaultLabelVar[1024], aliasLabelVar[1024];
-safef(defaultLabelVar, sizeof(defaultLabelVar), "%s.%s", track->track, VCF_PHASED_DEFAULT_LABEL_VAR);
-safef(aliasLabelVar, sizeof(aliasLabelVar), "%s.%s", track->track, VCF_PHASED_ALIAS_LABEL_VAR);
-boolean useDefaultLabel = cartUsualBoolean(cart, defaultLabelVar, TRUE);
-boolean useAliasLabel = cartUsualBoolean(cart, aliasLabelVar, FALSE);
+boolean useDefaultLabel = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_DEFAULT_LABEL_VAR, TRUE);
+boolean useAliasLabel = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_ALIAS_LABEL_VAR, FALSE);
 
 for (name = sampleNames, i = 0; name != NULL; name = name->next, i++)
     {
@@ -2064,7 +2063,7 @@ if (vcff->records == NULL)
     return;
 
 const double scale = scaleForPixels(width);
-struct slPair *pair, *sampleNames = vcfPhasedGetSampleOrder(cart, track->tdb);
+struct slPair *pair, *sampleNames = vcfPhasedGetSampleOrder(cart, track->tdb, FALSE);
 int gtCount = slCount(sampleNames);
 int yOffsets[gtCount * 2]; // y offsets of each haplotype line
 char *sampleOrder[gtCount]; // order of sampleName lines
@@ -2102,7 +2101,7 @@ const struct vcfFile *vcff = tg->extraUiData;
 // when doing composite track height, vcfPhasedLoadItems won't have been called yet!
 if (!vcff || vcff->records == NULL)
     return 0;
-int totalSamples = slCount(vcfPhasedGetSampleOrder(cart, tg->tdb));
+int totalSamples = slCount(vcfPhasedGetSampleOrder(cart, tg->tdb, FALSE));
 tg->lineHeight = tl.fontHeight + 1;
 tg->heightPer = tl.fontHeight;
 // if all variants in view are phased, then 3 lines per sample,

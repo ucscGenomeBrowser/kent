@@ -32,6 +32,9 @@
 #include "chain.h"
 #endif
 
+/*  Matrix made by matblas from blosum62.iij */
+extern char blosumText[];
+
 struct axt
 /* This contains information about one xeno alignment. */
     {
@@ -268,5 +271,8 @@ double axtCoverage(struct axt *axt, int qSize, int tSize);
 void axtOutPretty(struct axt *axt, int lineSize, FILE *f);
 /* Output axt in pretty format. */
 
+struct axtScoreScheme *axtScoreSchemeFromProteinText(char *text, char *fileName);
+/* Parse text into a scoring scheme.  This should be in BLAST protein matrix
+ * format as in blosumText above. */
 #endif /* AXT_H */
 

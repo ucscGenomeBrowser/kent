@@ -132,8 +132,7 @@ if ($asmCount < $assemblyTotal) {
 }
 
 if ($assemblyTotal > 1) {
-  print <<"END"
-
+  print "
 </tbody>
 <tfoot><tr><th>TOTALS:</th><td align=center colspan=3>total assembly count&nbsp;${assemblyTotal}${doneMsg}</td>
   <td align=right>$commaSeqCount</td>
@@ -141,16 +140,32 @@ if ($assemblyTotal > 1) {
   <td align=right>$commaGapCount</td>
   <td align=right>$commaGapSize</td>
   <td colspan=1>&nbsp;</td>
-  </tr></tfoot>
-</table>
-END
-} else {
-  print <<"END"
+  </tr>
+";
 
+  # try extra column headers as last row for this very large index page
+  if ($vgpIndex) {
+  print "<tr><th>count</th>
+  <th>common name<br>link&nbsp;to&nbsp;genome&nbsp;browser</th>
+  <th>scientific name<br>and&nbsp;data&nbsp;download</th>
+  <th>NCBI&nbsp;assembly</th>
+  <th>sequence<br>count</th><th>genome&nbsp;size<br>nucleotides</th>
+  <th>gap<br>count</th><th>unknown&nbsp;bases<br>(gap size sum)</th><th>masking<br>percent</th>
+  </tr>
+";
+  }
+
+  print "
+</tfoot>
+</table>
+";
+
+  } else {
+  print "
 </tbody>
 </table>
-END
-}
+";
+  }	# $assemblyTotal <= 1
 }	#	sub endTable()
 
 ##############################################################################

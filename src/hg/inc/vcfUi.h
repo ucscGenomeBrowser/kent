@@ -58,7 +58,7 @@ void vcfCfgHaplotypeCenter(struct cart *cart, struct trackDb *tdb, char *track,
 /* If vcff has genotype data, show status and controls for choosing the center variant
  * for haplotype clustering/sorting in hgTracks. */
 
-struct slPair *vcfPhasedGetSampleOrder(struct cart *cart, struct trackDb *tdb);
+struct slPair *vcfPhasedGetSampleOrder(struct cart *cart, struct trackDb *tdb, boolean parentLevel);
 /* Parse out a trio sample order from trackDb */
 
 void vcfCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
