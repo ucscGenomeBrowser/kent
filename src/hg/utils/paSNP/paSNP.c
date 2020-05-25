@@ -6,6 +6,7 @@
 #include "axt.h"
 #include "math.h"
 #include "pa.h"
+#include "axt.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -21,17 +22,20 @@ errAbort(
   "options:\n"
   "   -binCol          consider only binary columns\n"
   "   -fullCol         consider only full (no dash,X,or Z) columns\n"
+  "   -outScore        output BLOSUM62 score as third field\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"binCol", OPTION_BOOLEAN},
    {"fullCol", OPTION_BOOLEAN},
+   {"outScore", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
 boolean binCol = FALSE;
 boolean fullCol = FALSE;
+boolean outScore = FALSE;
 
 
 char **speciesNames;
@@ -40,6 +44,7 @@ int aaCountS[1000][26];
 int aaCount[26];
 int dashCountS[1000];
 int numSpecies;
+struct axtScoreScheme *ss;
 
 void countAA( struct alignDetail *detail, int cNum, void *closure)
 {
@@ -61,9 +66,10 @@ for(ii=0; ii < detail->numSpecies; ii++)
 	if ((firstChar != sb->buffer[cNum]) && (sb->buffer[cNum] != '-'))
 	    {
 	    char strand = position[strlen(position) - 1];
-	    fprintf(f, "%s %s 1\n", 
+            int score = ss->matrix[(int)toupper(firstChar)][(int)sb->buffer[cNum]];
+	    fprintf(f, "%s %s %d\n", 
 		getPosString(position, strand, cNum, detail->startFrame, detail->endFrame),
-		 sb->species);
+		 sb->species, outScore ? score : 1);
 		 }
 	
 	
@@ -99,6 +105,10 @@ fullCol = optionExists("fullCol");
 
 if (binCol && fullCol)
     errAbort("cannot set both binCol and fullCol");
+
+outScore = optionExists("outScore");
+
+ss = axtScoreSchemeFromProteinText(blosumText, "fake");
 
 paSnp(argv[1],argv[2],argv[3]);
 return 0;
