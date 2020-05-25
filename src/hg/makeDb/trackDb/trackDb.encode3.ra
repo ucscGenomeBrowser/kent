@@ -9,6 +9,7 @@ bigDataUrl /gbdb/$D/encode3/ccre/encodeCcreCombined.bb
 bedNameLabel ENCODE Accession
 urlLabel cCRE details at ENCODE SCREEN:
 filterValues.ucscLabel prom|promoter-like signature (PLS/prom),enhP|proximal enhancer-like signature (pELS/enhP),enhD|distal enhancer-like signature (dELS/enhD),CTCF|CTCF only (CTCF/CTCF-only),K4m3|DNase-H3K4me3 (DNase-H3K4me3/k4m3)
+filterLabel.ucscLabel cCRE classification
 itemRgb On
 wgEncode 1
 group regulation

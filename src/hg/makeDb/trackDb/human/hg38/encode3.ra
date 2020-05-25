@@ -1,6 +1,5 @@
 # ENCODE 3 tracks
 
-#include encode3.ccre.ra alpha
 track encodeCcreCombined override
 url https://screen.encodeproject.org/search/?q=$$&assembly=GRCh38
 
