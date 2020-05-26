@@ -431,15 +431,15 @@ slReverse(&ret);
 return ret;
 }
 
-struct slPair *vcfPhasedGetSampleOrder(struct cart *cart, struct trackDb *tdb)
+struct slPair *vcfPhasedGetSampleOrder(struct cart *cart, struct trackDb *tdb, boolean parentLevel)
 /* Parse out a trio sample order from either trackDb or the cart */
 {
 char sampleOrderVar[1028],hideParentsVar[1028];
 safef(sampleOrderVar, sizeof(sampleOrderVar), "%s.%s", tdb->track, VCF_PHASED_SAMPLE_ORDER_VAR);
 safef(hideParentsVar, sizeof(hideParentsVar), "%s.%s", tdb->track, VCF_PHASED_HIDE_OTHER_VAR);
-boolean hideOtherSamples = cartUsualBoolean(cart, hideParentsVar, FALSE);
+boolean hideOtherSamples = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_HIDE_OTHER_VAR, FALSE);
 char *cartOrder = cartOptionalString(cart, sampleOrderVar);
-struct slPair *tdbOrder = vcfPhasedGetSamplesFromTdb(tdb,hideOtherSamples);
+struct slPair *tdbOrder = vcfPhasedGetSamplesFromTdb(tdb, hideOtherSamples);
 if (cartOrder != NULL && !hideOtherSamples)
     {
     struct slName *name;
@@ -464,17 +464,18 @@ struct slPair *nameVals = vcfPhasedGetSamplesFromTdb(tdb,FALSE);
 return nameVals->val != NULL;
 }
 
-static void vcfCfgPhasedTrioUi(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff, char *name)
+static void vcfCfgPhasedTrioUi(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff, char *name,
+                                boolean parentLevel)
 /* Put up the phased trio specific config settings */
 {
 if (hasSampleAliases(tdb))
     {
     printf("<b>Label samples by:</b>");
     char defaultLabel[1024], aliasLabel[1024];
-    safef(defaultLabel, sizeof(defaultLabel), "%s.%s", tdb->track, VCF_PHASED_DEFAULT_LABEL_VAR);
-    safef(aliasLabel, sizeof(aliasLabel), "%s.%s", tdb->track, VCF_PHASED_ALIAS_LABEL_VAR);
-    boolean isDefaultChecked = cartUsualBoolean(cart, defaultLabel, TRUE);
-    boolean isAliasChecked = cartUsualBoolean(cart, aliasLabel, FALSE);
+    safef(defaultLabel, sizeof(defaultLabel), "%s.%s", name, VCF_PHASED_DEFAULT_LABEL_VAR);
+    safef(aliasLabel, sizeof(aliasLabel), "%s.%s", name, VCF_PHASED_ALIAS_LABEL_VAR);
+    boolean isDefaultChecked = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_DEFAULT_LABEL_VAR, TRUE);
+    boolean isAliasChecked = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_ALIAS_LABEL_VAR, FALSE);
     cgiMakeCheckBox(defaultLabel, isDefaultChecked);
     printf("VCF file sample names &nbsp;");
     cgiMakeCheckBox(aliasLabel, isAliasChecked);
@@ -485,8 +486,8 @@ if (trackDbSetting(tdb,VCF_PHASED_PARENTS_SAMPLE_SETTING))
     {
     printf("<b>Hide parent/other sample(s)");
     char hideVarName[1024];
-    safef(hideVarName, sizeof(hideVarName), "%s.%s", tdb->track, VCF_PHASED_HIDE_OTHER_VAR);
-    boolean hidingOtherSamples = cartUsualBoolean(cart, hideVarName, FALSE);
+    safef(hideVarName, sizeof(hideVarName), "%s.%s", name, VCF_PHASED_HIDE_OTHER_VAR);
+    boolean hidingOtherSamples = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_HIDE_OTHER_VAR, FALSE);
     cgiMakeCheckBox(hideVarName, hidingOtherSamples);
     }
 }
@@ -506,7 +507,7 @@ if (vcff != NULL)
 	}
     if (sameString(tdb->type, "vcfPhasedTrio"))
         {
-        vcfCfgPhasedTrioUi(cart, tdb, vcff, name);
+        vcfCfgPhasedTrioUi(cart, tdb, vcff, name, parentLevel);
         }
     if (differentString(tdb->track,"evsEsp6500"))
         {

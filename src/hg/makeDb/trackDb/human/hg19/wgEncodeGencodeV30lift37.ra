@@ -1,6 +1,6 @@
 track wgEncodeGencodeV30lift37
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE V30lift37
 longLabel GENCODE lifted annotations from V30lift37 (Ensembl 96)
 group genes

@@ -11,7 +11,7 @@ def parseArgs():
     trackDb.ra composite of bigBeds, and a chrom.sizes file, will create index files needed to optimize 
     hideEmptySubtracks setting. Depending on size and quantity of files, can take over 60 minutes.
     
-    This script has three dependancies: bigBedToBed, bedToBigBed, and bedtools. The first two are
+    This script has three dependencies: bigBedToBed, bedToBigBed, and bedtools. The first two are
     UCSC Genome Browser utilities, and can be found here: http://hgdownload.soe.ucsc.edu/admin/exe/
     
     The following commands can be used to download the tools to the current directory:
@@ -26,7 +26,7 @@ def parseArgs():
     
     bedtools can be found here: https://bedtools.readthedocs.io
     
-    These dependancies can be in the path, in the local directory the script is run from, or specified using
+    These dependencies can be in the path, in the local directory the script is run from, or specified using
     the optional flags.
   
     Example run:
