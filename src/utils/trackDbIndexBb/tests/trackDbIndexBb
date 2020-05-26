@@ -50,6 +50,7 @@ def parseArgs():
     return args, options
 
 def raInfoExtract(raFile,field,subGroupsRemove,trackName,metaDataVar):
+    """Parse trackDb file"""
     bigDataUrls = OrderedDict()
     compositeNames = ['trackName'] #List to hold all possible parent names part of composite
     with open(raFile,'r') as file:
