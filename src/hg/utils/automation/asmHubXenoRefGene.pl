@@ -72,10 +72,10 @@ invertebrate mRNA in
 
 <h2>Track statistics summary</h2>
 <p>
-<b>Total genome size: </b>$totalBases</br>
+<b>Total genome size: </b>$totalBases<br>
 <b>Gene count: </b>$itemCount<br>
-<b>Bases in genes: </b>$basesCovered</br>
-<b>Percent genome coverage: </b>% $percentCoverage</br>
+<b>Bases in genes: </b>$basesCovered<br>
+<b>Percent genome coverage: </b>% $percentCoverage<br>
 </p>
 
 <h2>Search tips</h2>
