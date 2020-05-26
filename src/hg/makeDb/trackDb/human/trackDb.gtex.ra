@@ -77,7 +77,7 @@ track gtexGeneV8
 shortLabel GTEx Gene V8
 longLabel Gene Expression in 54 tissues from GTEx RNA-seq of 17382 samples, 948 donors (V8, Aug 2019)
 type bed 6 +
-pennantIcon new red ../goldenPath/newsarch.html#052220a "Note: Released May. 22, 2020"
+pennantIcon new red ../goldenPath/newsarch.html#052220a "Released May. 22, 2020"
 group expression
 maxItems 200
 spectrum on
