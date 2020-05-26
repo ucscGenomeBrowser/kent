@@ -3306,7 +3306,7 @@ if (!ajax)
     }
 puts("<BR><BR>");
 
-if (tdb->parent)
+if (tdbIsSuperTrackChild(tdb))
     showSupertrackInfo(tdb);
 
 if (ct && sameString(tdb->type, "maf"))
