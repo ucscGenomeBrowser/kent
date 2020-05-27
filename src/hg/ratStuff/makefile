@@ -20,7 +20,6 @@ UTILS_APPLIST = \
 
 # List of directories to build at UCSC
 DIRS = \
-	mafRc \
 	stageMultiz
 
 # List of directories to build
