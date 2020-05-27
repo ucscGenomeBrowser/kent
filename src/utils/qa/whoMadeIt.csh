@@ -69,7 +69,7 @@ endif
 rm -f grandTotFile$$
 foreach file ( $location )
   echo $file
-  git blame $file | awk -F'(' '{print $2}' \
+  git blame -w $file | awk -F'(' '{print $2}' \
     | awk -F'20' '{print $1}' | sort \
     | uniq -c | sort -k2 -nr >& xxOutFilexx
   set size=`cat xxOutFilexx | awk '{total+=$1} END {print total}'`
