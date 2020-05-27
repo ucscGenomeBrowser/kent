@@ -1,0 +1,153 @@
+track PhyloCSF_raw
+superTrack on hide
+shortLabel Raw PhyloCSF
+longLabel Raw PhyloCSF
+type bigWig
+autoScale off
+viewLimits -15:15
+maxHeightPixels 60:30:12
+graphTypeDefault bar
+yLineMark 0
+yLineOnOff on
+priority 22
+group compGeno
+
+    track PhyloCSFraw_plus_1
+    parent PhyloCSF_raw
+    bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/PhyloCSFRaw+1.bw
+    shortLabel PhyloCSFraw+1
+    longLabel Raw PhyloCSF  Strand +  Frame 1
+    color 0,175,0
+    visibility full
+    graphTypeDefault bar
+    priority 22
+
+    track PhyloCSFraw_plus_2
+    parent PhyloCSF_raw
+    bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/PhyloCSFRaw+2.bw
+    shortLabel PhyloCSFraw+2
+    longLabel Raw PhyloCSF  Strand +  Frame 2
+    color 0,175,0
+    visibility full
+    graphTypeDefault bar
+    priority 22
+
+    track PhyloCSFraw_plus_3
+    parent PhyloCSF_raw
+    bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/PhyloCSFRaw+3.bw
+    shortLabel PhyloCSFraw+3
+    longLabel Raw PhyloCSF  Strand +  Frame 3
+    color 0,175,0
+    visibility full
+    graphTypeDefault bar
+    priority 22
+
+    track PhyloCSFraw_minus_1
+    parent PhyloCSF_raw
+    bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/PhyloCSFRaw-1.bw
+    shortLabel PhyloCSFraw-1
+    longLabel Raw PhyloCSF  Strand -  Frame 1
+    color 200,0,0
+    visibility full
+    graphTypeDefault bar
+    priority 22
+
+    track PhyloCSFraw_minus_2
+    parent PhyloCSF_raw
+    bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/PhyloCSFRaw-2.bw
+    shortLabel PhyloCSFraw-2
+    longLabel Raw PhyloCSF  Strand -  Frame 2
+    color 200,0,0
+    visibility full
+    graphTypeDefault bar
+    priority 22
+
+    track PhyloCSFraw_minus_3
+    parent PhyloCSF_raw
+    bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/PhyloCSFRaw-3.bw
+    shortLabel PhyloCSFraw-3
+    longLabel Raw PhyloCSF  Strand -  Frame 3
+    color 200,0,0
+    visibility full
+    graphTypeDefault bar
+    priority 22
+
+track PhyloCSFpower
+bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/PhyloCSFpower.bw
+shortLabel PhyloCSF Power
+longLabel Relative branch length of local alignment, a measure of PhyloCSF statistical power
+type bigWig
+autoScale off
+viewLimits 0:1
+maxHeightPixels 60:30:12
+graphTypeDefault bar
+yLineMark 0.5
+yLineOnOff on
+color 0,0,0
+visibility hide
+priority 23
+group compGeno
+
+##track Splice_prediction
+#superTrack on show
+#shortLabel Splice Predictions
+#longLabel Splice Predictions
+#type bigWig
+#autoScale off
+#viewLimits 0:15
+#maxHeightPixels 60:30:12
+#graphTypeDefault bar
+#yLineMark 15
+#yLineOnOff on
+#gridDefault on
+#showSubtrackColorOnUi on
+#priority 24
+#group PhyloCSF
+#
+#    track Splice_plus
+#    container multiWig
+#    parent Splice_prediction
+#    aggregate transparentOverlay
+#    shortLabel SplicePred+
+#    longLabel Splice Predictions For + Strand
+#    visibility full
+#
+#        track Donor_plus
+#        parent Splice_plus
+#        bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/Splice.donor.+.bw
+#        shortLabel SpliceDon+
+#        longLabel Splice Donor Predictions For + Strand 
+#        color 0,200,0
+#        type bigWig
+#
+#        track Acceptor_plus
+#        parent Splice_plus
+#        bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/Splice.acceptor.+.bw
+#        shortLabel SpliceAcc+
+#        longLabel Splice Acceptor Predictions For + Strand
+#        color 200,0,0
+#        type bigWig
+#
+#    track Splice_minus
+#    container multiWig
+#    parent Splice_prediction
+#    aggregate transparentOverlay
+#    shortLabel SplicePred-
+#    longLabel Splice Predictions For - Strand
+#    visibility full
+#
+#        track Donor_minus
+#        parent Splice_minus
+#        bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/Splice.donor.-.bw
+#        shortLabel SpliceDon-
+#        longLabel Splice Donor Predictions For - Strand
+#        color 0,200,0
+#        type bigWig
+#
+#        track Acceptor_minus
+#        parent Splice_minus
+#        bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/Splice.acceptor.-.bw
+#        shortLabel SpliceAcc-
+#        longLabel Splice Acceptor Predictions For - Strand
+#        color 200,0,0
+#        type bigWig
