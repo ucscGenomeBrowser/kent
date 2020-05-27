@@ -1,0 +1,106 @@
+#!/usr/bin/env python
+
+import logging, sys, optparse, re
+from collections import defaultdict
+from os.path import join, basename, dirname, isfile
+
+# ==== functions =====
+    
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("usage: %prog [options] inFname outFname - extract phenotype info from genemap2.txt and also add the inheritance mode")
+
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    #parser.add_option("-f", "--file", dest="file", action="store", help="run on file") 
+    #parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+    (options, args) = parser.parse_args()
+
+    if args==[]:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+        logging.getLogger().setLevel(logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+        logging.getLogger().setLevel(logging.INFO)
+
+    return args, options
+
+mimRe = re.compile(r', ([0-9]{3,6}) [(]([1234])[)](?:, |$)')
+keyRe = re.compile(r' [(]([1234])[)]$')
+
+def splitPheno(inStr):
+    """ parse the dumbest format in the history of bioinformatics into a tuple:
+        (phenotype, mimdId, mapKey, inheritance mode)
+    """
+    # Immunodeficiency 38, 616126 (3), Autosomal recessive
+    # {Melanoma, cutaneous malignant, 1}, 155600 (2), Autosomal dominant
+    # Dystonia 13, torsion, 607671 (2), Autosomal dominant
+    # {Parkinson disease 10}, 606852 (2)
+    # Ciliary dyskinesia, primary, 9, with or without situs inversus, 612444 (3)
+    if inStr=="":
+        return "", "", "", "", ""
+    matches = mimRe.findall(inStr)
+    if len(matches)==0:
+        #print("no match: %s, assuming that it's all just a phenotype" % inStr)
+        matches = keyRe.split(inStr)
+        assert(len(matches)==3)
+        pheno = matches[0]
+        mapId = matches[1]
+        return pheno, "", mapId, ""
+
+    if len(matches)>1:
+        print("too many matches: %s" % inStr)
+
+    phenotype, mimId, mapKey, inhMode = mimRe.split(inStr)
+
+    return (phenotype, mimId, mapKey, inhMode)
+
+def genemapToInheritance(inFname, outFname):
+    ofh = open(outFname, "w")
+    for line in open(inFname):
+        if line.startswith("#"):
+            continue
+        # Chromosome	Genomic Position Start	Genomic Position End	Cyto Location	Computed Cyto Location	MIM Number	Gene Symbols	Gene Name	Approved Symbol	Entrez Gene ID	Ensembl Gene ID	Comments	Phenotypes	Mouse Gene Symbol/ID
+        row = line.rstrip("\n").split("\t")
+        chrom, start, end, cyto, compCyto, mimNo, syms, geneName, approvSym, entrezId, ensId, comments, phenotypes, mgiStr = row
+        # Pex10 (MGI:2684988)
+        if mgiStr=="":
+            mgiSym, mgiId = "", ""
+        else:
+            mgiSym, mgiId = mgiStr.split(" (MGI:")
+            mgiId = mgiId.rstrip(")")
+
+        if phenotypes=="":
+            continue
+        phenoParts = phenotypes.split("; ")
+        #ofh.write("Input: "+phenotypes+"\n")
+        for phenoInfo in phenoParts:
+            #print("pheno: ", phenoInfo)
+            phenotype, phenoId, mapKey, inherMode = splitPheno(phenoInfo)
+            # output format:
+            # uint omimId;                    "OMIM ID"
+            # string description;             "phenotype description"
+            # uint phenotypeId;               "phenotype ID"
+            # uint omimPhenoMapKey;           "phenotype class"
+            # string inhMode; "Inheritance mode of phenotype, can be empty"
+            if phenoId=="":
+                phenoId="-1"
+            if mapKey=="":
+                mapKey="-1"
+            row = (mimNo, phenotype, phenoId, mapKey, inherMode)
+            ofh.write("\t".join(row)+"\n")
+
+# ----------- main --------------
+def main():
+    args, options = parseArgs()
+
+    inFname, outFname = args
+    genemapToInheritance(inFname, outFname)
+    #if options.test:
+        #logging.debug("test is set")
+        #f = open(options.file, "r")
+
+main()
