@@ -37,18 +37,17 @@ cd $runDir
 chmod 444 ncov.$ncovTime.json
 ln -sf ncov.$ncovTime.json ncov.json
 
-#Generate bed and VCF files
+# remove older result files in case a clade went away, as A2 did in ncov.2020-05-27-08:06.json
+rm -f *.vcf.gz* *.bedGraph *.bigWig *.nh
+
+#Generate bed, VCF etc. files
 $ottoDir/nextstrain.py
 
 # bgzip & tabix the VCF files
-bgzip -f nextstrainSamples.vcf
-tabix -p vcf nextstrainSamples.vcf.gz
-for clade in A1a A2 A2a A3 A6 A7 B B1 B2 B4; do
-  bgzip -f nextstrainSamples$clade.vcf
-  tabix -p vcf nextstrainSamples$clade.vcf.gz
+for f in nextstrain*.vcf; do
+  bgzip -f $f
+  tabix -p vcf $f.gz
 done
-bgzip -f nextstrainRecurrentBiallelic.vcf
-tabix -p vcf nextstrainRecurrentBiallelic.vcf.gz
 
 # bigBed-ify the gene names, "clades" and discarded/blacklisted/informative tracks for David
 bedToBigBed -type=bed4 -tab -verbose=0 nextstrainGene.bed $chromSizes \
@@ -84,13 +83,18 @@ for i in nextstrainSamples*.vcf.gz; do
     bedGraphToBigWig $base.bedGraph $chromSizes $base.bigWig
 done
 
-# Install
-mkdir -p $ottoDir/current
+# Install public track files
+mkdir $ottoDir/install
 cp -pf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
     $runDir/nextstrain*.vcf.gz{,.tbi} \
     $runDir/nextstrain*.nh \
     $runDir/nextstrainSamples*.bigWig \
-    $ottoDir/current/
+    $ottoDir/install/
+rm -f $ottoDir/current.bak
+mv -f $ottoDir/current $ottoDir/current.bak
+mv $ottoDir/install $ottoDir/current
+rm -r $gbdbDir
+mkdir $gbdbDir
 ln -sf $ottoDir/current/nextstrainGene.bb $ottoDir/current/nextstrainClade.bb \
     $ottoDir/current/nextstrain*.vcf.gz{,.tbi} \
     $ottoDir/current/nextstrain*.nh \
@@ -107,6 +111,7 @@ ln -sf $ottoDir/current/nextstrain{Discarded,Blacklisted,Informative}.bb \
 
 # Daily archive (may overwrite files from earlier today)
 mkdir -p $ottoDir/archive/$today
+rm -f $ottoDir/archive/$today/*
 cp -pf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
     $runDir/nextstrain*.vcf.gz{,.tbi} \
     $runDir/nextstrain*.nh \
