@@ -187,7 +187,7 @@ return 0; // OK
 }
 
 
-static int netConnectWithTimeout(char *hostName, int port, long msTimeout)
+int netConnectWithTimeout(char *hostName, int port, long msTimeout)
 /* In order to avoid a very long default timeout (several minutes) for hosts that will
 * not answer the port, we are forced to connect non-blocking.
 * After the connection has been established, we return to blocking mode.
