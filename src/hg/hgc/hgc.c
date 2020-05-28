@@ -10666,8 +10666,6 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 char *url = tdb->url;
-char *title1 = NULL;
-char *geneSymbol = NULL;
 char *chrom, *chromStart, *chromEnd;
 
 chrom      = cartOptionalString(cart, "c");
@@ -10679,24 +10677,7 @@ if (url != NULL && url[0] != 0)
     {
     printf("<B>MIM gene number: ");
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
-    printf("%s</A></B>", itemName);
-    sqlSafef(query, sizeof(query),
-          "select geneName from omimGeneMap2 where omimId=%s;", itemName);
-    sr = sqlMustGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-        {
-        if (row[0] != NULL)
-            {
-            title1 = cloneString(row[0]);
-                printf(" %s", title1);
-            }
-        }
-    else
-        {
-	printf("<BR>");
-	}
-    sqlFreeResult(&sr);
+    printf("%s</A></B><BR>", itemName);
 
     // disable NCBI link until they work it out with OMIM
     /*
@@ -10706,31 +10687,42 @@ if (url != NULL && url[0] != 0)
     printf("%s</A></B>", itemName);
     */
 
-    // can use NOSQLINJ since itemName has already been checked to be a number
     struct dyString *symQuery = newDyString(1024);
     sqlDyStringPrintf(symQuery, "SELECT approvedSymbol from omimGeneMap2 where omimId=%s", itemName);
     char *approvSym = sqlQuickString(conn, symQuery->string);
     if (approvSym) {
-	printf("<BR><B>HGNC-approved symbol:</B> %s<BR>", approvSym);
-        freez(&approvSym);
+	printf("<B>HGNC-approved symbol:</B> %s", approvSym);
     }
+
+    sqlSafef(query, sizeof(query),
+          "select geneName from omimGeneMap2 where omimId=%s;", itemName);
+    char *longName = sqlQuickString(conn, query);
+    if (longName) {
+	printf(" &mdash; %s", longName);
+        freez(&longName);
+    }
+    puts("<BR>");
+
     printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
 
     sqlSafef(query, sizeof(query),
           "select geneSymbol from omimGeneMap2 where omimId=%s;", itemName);
-    sr = sqlMustGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-        {
-	geneSymbol = cloneString(row[0]);
-        }
-    sqlFreeResult(&sr);
+    char *altSyms = sqlQuickString(conn, query);
 
-    if (geneSymbol!= NULL)
+    if (altSyms)
         {
-	printf("<BR><B>Alternative symbols:</B> %s", geneSymbol);
+        if (approvSym) 
+            {
+            char symRe[255];
+            safef(symRe, sizeof(symRe), "^%s, ", approvSym);
+            altSyms = replaceRegEx(altSyms, "", symRe, 0);
+            }
+	printf("<B>Alternative symbols:</B> %s", altSyms);
 	printf("<BR>\n");
+        freez(&altSyms);
         }
+    if (approvSym)
+        freez(&approvSym);
 
     // show RefSeq Gene link(s)
     sqlSafef(query, sizeof(query),

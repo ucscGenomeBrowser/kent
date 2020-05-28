@@ -204,12 +204,11 @@ table.omimTbl, table.omimTbl th, table.omimTbl td {
     vertical-align: top;
     padding: 5px;
 }
-table.omimTbl td:first-child {
-    width: 200px;
+table.omimTbl thead {
     font-weight: bold;
 }
 table.omimTbl tbody {
-    background-color: #fffadb;
+    //background-color: #EEE;
 }
 
 table.hgBlatTable td {
