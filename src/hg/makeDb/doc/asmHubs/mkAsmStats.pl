@@ -5,23 +5,24 @@ use warnings;
 use File::stat;
 
 my $argc = scalar(@ARGV);
-if ($argc != 2) {
-  printf STDERR "mkAsmStats Name asmName\n";
-  printf STDERR "e.g.: mkAsmStats Mammals mammals\n";
+if ($argc != 3) {
+  printf STDERR "mkAsmStats Name asmHubName [two column name list]\n";
+  printf STDERR "e.g.: mkAsmStats Mammals mammals mammals.asmId.commonName.tsv\n";
+  printf STDERR "the name list is found in \$HOME/kent/src/hg/makeDb/doc/asmHubs/\n";
+  printf STDERR "\nthe two columns are 1: asmId (accessionId_assemblyName)\n";
+  printf STDERR "column 2: common name for species, columns separated by tab\n";
   exit 255;
 }
 my $Name = shift;
 my $asmHubName = shift;
+my $commonNameOrder = shift;
 
 my $home = $ENV{'HOME'};
 my $toolsDir = "$home/kent/src/hg/makeDb/doc/asmHubs";
 
-my $commonNameList = "$asmHubName.asmId.commonName.tsv";
-my $commonNameOrder = "$asmHubName.commonName.asmId.orderList.tsv";
-my @orderList;	# asmId of the assemblies in order from the *.list files
-# the order to read the different .list files:
-my %betterName;	# key is asmId, value is better common name than found in
-		# assembly_report
+my @orderList;	# asmId of the assemblies in order from the commonNameOrder file
+my %commonName;	# key is asmId, value is a common name, perhaps more appropriate
+                # than found in assembly_report file
 my $vgpIndex = 0;
 $vgpIndex = 1 if ($Name =~ m/vgp/i);
 
@@ -252,7 +253,8 @@ sub gapStats($$) {
 ##############################################################################
 sub tableContents() {
 
-  foreach my $asmId (reverse(@orderList)) {
+  foreach my $asmId (@orderList) {
+printf STDERR "# asmId: '%s'\n", $asmId;
     my ($gcPrefix, $asmAcc, $asmName) = split('_', $asmId, 3);
     my $accessionId = sprintf("%s_%s", $gcPrefix, $asmAcc);
     my $accessionDir = substr($asmId, 0 ,3);
@@ -327,7 +329,7 @@ sub tableContents() {
            $sciName = $line;
            $commonName =~ s/.*\(//;
            $commonName =~ s/\)//;
-           $commonName = $betterName{$asmId} if (exists($betterName{$asmId}));
+           $commonName = $commonName{$asmId} if (exists($commonName{$asmId}));
            $sciName =~ s/.*:\s+//;
            $sciName =~ s/\s+\(.*//;
         }
@@ -363,9 +365,9 @@ open (FH, "<$toolsDir/${commonNameOrder}") or die "can not read ${commonNameOrde
 while (my $line = <FH>) {
   next if ($line =~ m/^#/);
   chomp $line;
-  my ($commonName, $asmId) = split('\t', $line);
+  my ($asmId, $commonName) = split('\t', $line);
   push @orderList, $asmId;
-  $betterName{$asmId} = $commonName;
+  $commonName{$asmId} = $commonName;
   ++$assemblyTotal;
 }
 close (FH);
