@@ -4,18 +4,25 @@ use strict;
 use warnings;
 
 my $argc = scalar(@ARGV);
-if ($argc != 3) {
-  printf STDERR "mkAsmStats Name asmName\n";
-  printf STDERR "e.g.: mkHubIndex Primates primates GCF_000001405.39_GRCh38.p13\n";
+if ($argc != 4) {
+  printf STDERR "mkHubIndex.pl Name asmName defaultAsmId [two column name list] > index.html\n";
+  printf STDERR "e.g.: mkHubIndex Primates primates GCF_000001405.39_GRCh38.p13 primates.commonName.asmId.orderList.tsv\n";
+  printf STDERR "the name list is found in \$HOME/kent/src/hg/makeDb/doc/asmHubs/\n";
+  printf STDERR "\nthe two columns are 1: asmId (accessionId_assemblyName)\n";
+  printf STDERR "column 2: common name for species, columns separated by tab\n";
+  printf STDERR "The result prints to stdout the index.html page for this set of assemblies\n";
   exit 255;
 }
+
 my $Name = shift;
 my $asmHubName = shift;
 my $defaultAssembly = shift;
+my $commonNameOrder = shift;
+
+printf STDERR "# mkHubIndex %s %s %s %s\n", $Name, $asmHubName, $defaultAssembly, $commonNameOrder;
 
 my $home = $ENV{'HOME'};
 my $toolsDir = "$home/kent/src/hg/makeDb/doc/asmHubs";
-my $commonNameOrder = "$asmHubName.commonName.asmId.orderList.tsv";
 my $vgpIndex = 0;
 $vgpIndex = 1 if ($Name =~ m/vgp/i);
 my %vgpClass;	# key is asmId, value is taxon 'class' as set by VGP project
@@ -32,8 +39,8 @@ if ($vgpIndex) {
 my @orderList;	# asmId of the assemblies in order from the *.list files
 # the order to read the different .list files:
 my $assemblyCount = 0;
-my %betterName;	# key is asmId, value is a common name better than found
-			# in assembly_report file
+my %commonName;	# key is asmId, value is a common name, perhaps more appropriate
+                # than found in assembly_report file
 
 ##############################################################################
 # from Perl Cookbook Recipe 2.17, print out large numbers with comma delimiters:
@@ -106,11 +113,11 @@ Options:
       the genome browser with the following links depending upon which of
       our mirror site browsers you prefer to use:
     <ul>
-    <li><a href="https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=GCF_000001405.39"
+    <li><a href="https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
         target="_blank">genome.ucsc.edu</a></li>
-    <li><a href="https://genome-euro.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=GCF_000001405.39"
+    <li><a href="https://genome-euro.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
         target="_blank">genome-euro.ucsc.edu</a></li>
-    <li><a href="https://genome-asia.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=GCF_000001405.39"
+    <li><a href="https://genome-asia.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
         target="_blank">genome-asia.ucsc.edu</a></li>
     </ul>
   </li>
@@ -232,7 +239,7 @@ END
 ##############################################################################
 sub tableContents() {
   my $rowCount = 0;
-  foreach my $asmId (reverse(@orderList)) {
+  foreach my $asmId (@orderList) {
     my ($gcPrefix, $asmAcc, $asmName) = split('_', $asmId, 3);
     my $accessionId = sprintf("%s_%s", $gcPrefix, $asmAcc);
     my $accessionDir = substr($asmId, 0 ,3);
@@ -287,7 +294,7 @@ sub tableContents() {
            $sciName = $line;
            $commonName =~ s/.*\(//;
            $commonName =~ s/\)//;
-           $commonName = $betterName{$asmId} if (exists($betterName{$asmId}));
+           $commonName = $commonName{$asmId} if (exists($commonName{$asmId}));
            $sciName =~ s/.*:\s+//;
            $sciName =~ s/\s+\(.*//;
         }
@@ -311,13 +318,21 @@ sub tableContents() {
     } else {
     printf "    <td align=left>n/a</td>\n";
     }
-    printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/bioproject/?term=%s' target=_blank>%s</a></td>\n", $bioProject, $bioProject;
+    if ($bioProject eq "notFound") {
+      printf "    <td align=left>%s</td>\n", $bioProject;
+    } else {
+      printf "    <td align=left><a href='https://www.ncbi.nlm.nih.gov/bioproject/?term=%s' target=_blank>%s</a></td>\n", $bioProject, $bioProject;
+    }
     printf "    <td align=center><a href='%s' target=_blank>%s</a></td>\n", $ncbiFtpLink, $asmDate;
     if ($vgpIndex) {
       my $sciNameUnderscore = $sciName;
       $sciNameUnderscore =~ s/ /_/g;
       $sciNameUnderscore = "Strigops_habroptilus" if ($sciName =~ m/Strigops habroptila/);
 
+      if (! defined($vgpClass{$asmId})) {
+         printf STDERR "# ERROR: no 'class' defined for VGP assembly %s\n", $asmId;
+         exit 255;
+      }
       printf "    <td align=center><a href='https://vgp.github.io/genomeark/%s/' target=_blank>%s</a></td>\n", $sciNameUnderscore, $vgpClass{$asmId}
     }
     printf "</tr>\n";
@@ -332,9 +347,9 @@ open (FH, "<$toolsDir/${commonNameOrder}") or die "can not read ${commonNameOrde
 while (my $line = <FH>) {
   next if ($line =~ m/^#/);
   chomp $line;
-  my ($commonName, $asmId) = split('\t', $line);
+  my ($asmId, $commonName) = split('\t', $line);
   push @orderList, $asmId;
-  $betterName{$asmId} = $commonName;
+  $commonName{$asmId} = $commonName;
   ++$assemblyCount;
 }
 close (FH);

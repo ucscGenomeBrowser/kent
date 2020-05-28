@@ -1,20 +1,20 @@
 name user
-label Custom
+label Custom Tracks
 priority 1
 defaultIsClosed 1
 
 name map
-label Mapping
+label Mapping and Sequencing
 priority 2
 defaultIsClosed 0
 
 name genes
-label Genes
+label Genes and Gene Predictions
 priority 3
 defaultIsClosed 0
 
 name rna
-label mRNA
+label mRNA and EST
 priority 4
 defaultIsClosed 0
 
@@ -24,7 +24,7 @@ priority 5
 defaultIsClosed 0
 
 name compGeno
-label Comparative
+label Comparative Genomics
 priority 6
 defaultIsClosed 0
 

@@ -1665,7 +1665,7 @@ printf(
 cartSaveSession(cart);
 puts("\n");
 puts("<INPUT TYPE=HIDDEN NAME=changeInfo VALUE=\"\">\n");
-puts("<TABLE BORDER=0 WIDTH=80>\n");
+puts("<TABLE class='hgBlatTable' BORDER=0 WIDTH=80>\n");
 printf("<TR>\n");
 printf("<TD ALIGN=CENTER style='overflow:hidden;white-space:nowrap;'>Genome:");
 printf(" <INPUT TYPE=CHECKBOX id=allGenomes NAME=allGenomes VALUE=\"\">");
@@ -1705,14 +1705,14 @@ printf("</TD>\n");
 printf("</TR>\n<TR>\n");
 userSeq = cartUsualString(cart, "userSeq", "");
 printf("<TD COLSPAN=5 ALIGN=CENTER>\n");
-htmlPrintf("<TEXTAREA NAME=userSeq ROWS=14 COLS=80>%s</TEXTAREA>\n", userSeq);
+htmlPrintf("<TEXTAREA NAME=userSeq ROWS=14 COLS=140>%s</TEXTAREA>\n", userSeq);
 printf("</TD>\n");
 printf("</TR>\n");
 
 printf("<TR>\n");
-printf("<TD COLSPAN=1 ALIGN=CENTER style='overflow:hidden;white-space:nowrap;'>\n");
+printf("<TD COLSPAN=1 ALIGN=CENTER style='overflow:hidden;white-space:nowrap;font-size:0.9em'>\n");
 cgiMakeCheckBoxWithId("allResults", allResults, "allResults");
-printf(" <span id=allResultsText> All Results<br> (no minimum score)<span>");
+printf("<span id=allResultsText>All Results (no minimum score of 20bp)<span>");
 // clicking on the All Results text clicks the checkbox.
 jsOnEventById("click", "allResultsText", 
     "document.mainForm.allResults.click();"
@@ -1720,10 +1720,10 @@ jsOnEventById("click", "allResultsText",
     );
 printf("</TD>\n");
 
-printf("<TD COLSPAN=4 ALIGN=LEFT>\n");
-printf("<INPUT TYPE=SUBMIT NAME=Submit VALUE=submit>\n");
-printf("<INPUT TYPE=SUBMIT NAME=Lucky VALUE=\"I'm feeling lucky\">\n");
-printf("<INPUT TYPE=SUBMIT NAME=Clear VALUE=clear>\n");
+printf("<TD COLSPAN=4 style='text-align:right'>\n");
+printf("<INPUT style='height:1.5em; width:100px; font-size:1.2em' TYPE=SUBMIT NAME=Submit VALUE=Submit>\n");
+printf("<INPUT style='font-size:1.2em' TYPE=SUBMIT NAME=Lucky VALUE=\"I'm feeling lucky\">\n");
+printf("<INPUT style='font-size:1.2em' TYPE=SUBMIT NAME=Clear VALUE=Clear>\n");
 printf("</TD>\n");
 printf("</TR>\n");
 

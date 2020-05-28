@@ -235,6 +235,13 @@ compositeTrack on
         autoScale on
         parent nanoCov
 
+track lollySarsCov2
+shortLabel Sars Cov 2 Variants 
+longLabel  Sars Cov 2 Variants 
+bigDataUrl /gbdb/wuhCor1/lollySarsCov2.bb
+type bigLolly
+group compGeno
+autoScale on
 
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
@@ -245,11 +252,4 @@ include trackDb.uniprot.ra
 include trackDb.nextstrain.ra
 include kim2020.ra
 include trackDb.7way.ra
-
-track lollySarsCov2
-shortLabel Sars Cov 2 Variants 
-longLabel  Sars Cov 2 Variants 
-bigDataUrl /gbdb/wuhCor1/lollySarsCov2.bb
-type bigLolly
-group compGeno
-autoScale on
+include phylocsf.ra

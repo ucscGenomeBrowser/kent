@@ -87,7 +87,7 @@ if (blkIx >= psl->blockCount - 1 || blkIx < 0)
 int tGapLen = psl->tStarts[blkIx+1] - psl->tStarts[blkIx] - psl->blockSizes[blkIx];
 int qGapLen = psl->qStarts[blkIx+1] - psl->qStarts[blkIx] - psl->blockSizes[blkIx];
 int intronLen = tGapLen - qGapLen;
-return (intronLen < minIntronSize);
+return (intronLen > 0) && (intronLen < minIntronSize);
 }
 
 void vpPosGenoToTx(uint gOffset, struct psl *txAli, struct vpTxPosition *txPos, boolean isTxEnd)
