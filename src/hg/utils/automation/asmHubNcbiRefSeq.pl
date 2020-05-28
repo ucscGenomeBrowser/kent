@@ -188,10 +188,10 @@ target="_blank">here</a>.
 
 <h2>Track statistics summary</h2>
 <p>
-<b>Total genome size: </b>$totalBasesCmfy <b>bases<b></br><br>
+<b>Total genome size: </b>$totalBasesCmfy <b>bases</b><br><br>
 <b>Curated and Predicted Gene count: </b>$itemCount<br>
-<b>Bases in these genes: </b>$basesCovered</br>
-<b>Percent genome coverage: </b>% $percentCoverage</br>
+<b>Bases in these genes: </b>$basesCovered<br>
+<b>Percent genome coverage: </b>% $percentCoverage<br>
 </p>
 
 _EOF_
@@ -207,8 +207,8 @@ if ( -s "$trackDataDir/ncbiRefSeq/${asmId}.ncbiRefSeqCurated.stats.txt" ) {
   printf <<_EOF_
 <p>
 <b>Curated gene count: </b>$itemCount<br>
-<b>Bases in curated genes: </b>$basesCovered</br>
-<b>Percent genome coverage: </b>% $percentCoverage</br>
+<b>Bases in curated genes: </b>$basesCovered<br>
+<b>Percent genome coverage: </b>% $percentCoverage<br>
 </p>
 _EOF_
 } else {
@@ -229,8 +229,8 @@ if ( -s "$trackDataDir/ncbiRefSeq/${asmId}.ncbiRefSeqPredicted.stats.txt" ) {
   printf <<_EOF_
 <p>
 <b>Predicted gene count: </b>$itemCount<br>
-<b>Bases in genes: </b>$basesCovered</br>
-<b>Percent genome coverage: </b>% $percentCoverage</br>
+<b>Bases in genes: </b>$basesCovered<br>
+<b>Percent genome coverage: </b>% $percentCoverage<br>
 </p>
 _EOF_
 } else {
@@ -251,8 +251,8 @@ if ( -s "$trackDataDir/ncbiRefSeq/${asmId}.ncbiRefSeqOther.stats.txt" ) {
   printf <<_EOF_
 <p>
 <b>Other annotation count: </b>$itemCount<br>
-<b>Bases in other annotations: </b>$basesCovered</br>
-<b>Percent genome coverage: </b>% $percentCoverage</br>
+<b>Bases in other annotations: </b>$basesCovered<br>
+<b>Percent genome coverage: </b>% $percentCoverage<br>
 </p>
 _EOF_
 }

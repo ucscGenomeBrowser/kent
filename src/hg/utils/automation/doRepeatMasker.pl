@@ -393,7 +393,6 @@ printf "\\nPARAMETERS:\\
 $RepeatMasker $RepeatMaskerEngine -align $repeatLib\\n" >> ../versionInfo.txt
 
 $gensub2 $partDir/partitions.lst single gsub jobList
-exit 0
 $binPara $parasolRAM make jobList
 $binPara check
 $binPara time > run.time

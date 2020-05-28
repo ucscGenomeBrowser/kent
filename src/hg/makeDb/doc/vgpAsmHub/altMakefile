@@ -1,0 +1,26 @@
+
+## makefile definitions for a VGP subset of genomes with user supplied
+## data tracks
+
+destDir=/hive/data/genomes/asmHubs/vgp
+srcDir=${HOME}/kent/src/hg/makeDb/doc/vgpAsmHub
+orderList=vgp.alternate.orderList.tsv
+
+indexName=vgpAlt
+testIndexName=testVgpAlt
+statsName=vgpAltStats
+testStatsName=testVgpAltStats
+dataName=vgpAltData
+testDataName=testVgpAltData
+genomesTxt=altGenomes
+hubFile=altHub
+testHubFile=testAltHub
+
+# these names trigger special behavior in the index page creation scripts:
+Name=VGP
+name=vgp
+
+# GCA_009859025.1_bTaeGut2.p.v1.alt	zebra finch
+defaultAssembly=GCA_009859025.1_bTaeGut2.p.v1.alt
+
+include ../asmHubs/asmHubs.mk

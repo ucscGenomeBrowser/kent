@@ -79,6 +79,7 @@
 9739	GCA_011762535.1_mTurTru1.mat	mammals
 61156	GCA_011762545.1_mArvNil1.pat	mammals
 9739	GCA_011762595.1_mTurTru1.mat.Y	mammals
+9739	GCF_011762595.1_mTurTru1.mat.Y	mammals
 13146	GCA_012275265.1_bMelUnd1.mat	birds
 13146	GCA_012275275.1_bMelUnd1.pat	birds
 13146	GCA_012275295.1_bMelUnd1.mat.Z	birds
@@ -112,6 +113,7 @@
 7604	GCA_902459445.1_eAstRub1.2_alternate_haplotype	echinoderm
 260995	GCA_902459495.1_aGeoSer1.1_alternate_haplotype	amphibians
 260995	GCA_902459505.1_aGeoSer1.1	amphibians
+260995	GCF_902459505.1_aGeoSer1.1	amphibians
 390379	GCA_902500245.1_fThaAma1.1_alternate_haplotype	fish
 390379	GCA_902500255.1_fThaAma1.1	fish
 55149	GCA_902685485.1_mSciVul1.1_alternate_haplotype	mammals

@@ -192,6 +192,32 @@ TABLE.hgcCcds CAPTION {
     font: medium bold;
 }
 
+/* used by OMIM track table */
+table.omimTbl, table.omimTbl th {
+    width: 90%;
+    table-layout: fixed;
+}
+table.omimTbl, table.omimTbl th, table.omimTbl td {
+    border: 1px solid #909090;
+    border-collapse: collapse;
+    text-align: left;
+    vertical-align: top;
+    padding: 5px;
+}
+table.omimTbl td:first-child {
+    width: 200px;
+    font-weight: bold;
+}
+table.omimTbl tbody {
+    background-color: #fffadb;
+}
+
+table.hgBlatTable td {
+    text-align: left;
+
+}
+/* end OMIM table */
+
 /* used by bed extra fields in hgc */
 table.bedExtraTbl, table.bedExtraTbl th {
     width: 90%;

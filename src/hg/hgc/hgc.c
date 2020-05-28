@@ -10569,6 +10569,95 @@ printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
 
 #include "omim.h"
 
+static void showOmimDisorderTable(struct sqlConnection *conn, char *url, char *itemName)
+{
+/* display disorder(s) as a table, in the same format as on the OMIM webpages, 
+ * e.g. see the "Gene-Phenotype-Relationships" table at https://www.omim.org/entry/601542 */
+struct sqlResult *sr;
+char query[256];
+char **row;
+
+// be tolerant of old table schema
+if (sqlColumnExists(conn, "omimPhenotype", "inhMode"))
+    sqlSafef(query, sizeof(query),
+          "select description, %s, phenotypeId, inhMode from omimPhenotype where omimId=%s order by description",
+          omimPhenotypeClassColName, itemName);
+else
+    // E.g. on a mirror that has not updated their OMIM tables yet
+    sqlSafef(query, sizeof(query),
+          "select description, %s, phenotypeId, 'data-missing' from omimPhenotype where omimId=%s order by description",
+          omimPhenotypeClassColName, itemName);
+
+sr = sqlMustGetResult(conn, query);
+char *phenotypeClass, *phenotypeId, *disorder, *inhMode;
+
+printf("<table class='omimTbl'>\n");
+printf("<thead>\n");
+printf("<th>Phenotype</th>\n");
+printf("<th style='width:100px'>Phenotype MIM Number</th>\n");
+printf("<th>Inheritance</th>\n");
+printf("<th>Phenotype Key</th>\n");
+printf("</thead>\n");
+
+printf("<tbody>\n");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    disorder       = row[0];
+    phenotypeClass = row[1];
+    phenotypeId    = row[2];
+    inhMode        = row[3];
+
+    puts("<tr>\n");
+
+    puts("<td>");
+    if (disorder)
+        puts(disorder);
+    puts("</td>\n");
+
+    puts("<td>");
+    if (phenotypeId && (!sameWord(phenotypeId, "-1")))
+        printf("<a HREF=\"%s%s\" target=_blank>%s</a>", url, phenotypeId, phenotypeId);
+    puts("</td>\n");
+
+    puts("<td>");
+    if (inhMode)
+        puts(inhMode);
+    puts("</td>");
+
+    puts("<td>");
+    if (phenotypeClass && !sameWord(phenotypeClass, "-1"))
+        {
+        puts(phenotypeClass);
+        if (isdigit(phenotypeClass[0]))
+            {
+            int phenoClass = atoi(phenotypeClass);
+            char* descs[] = 
+                { 
+                "disease was positioned by mapping of the wild-type gene",
+                "disorder itself was mapped",
+                "molecular basis of the disease is known",
+                "disorder is a chromosome deletion of duplication syndrome"
+                };
+            if (phenoClass>=1 && phenoClass<=4)
+                {
+                puts(" - ");
+                puts(descs[phenoClass-1]);
+                }
+            else
+                // just in case that they ever add another class in the future
+                puts(phenotypeClass);
+            }
+        }
+    puts("</td>");
+
+    puts("</tr>");
+    }
+
+sqlFreeResult(&sr);
+printf("<tbody>\n");
+printf("</table>\n");
+}
+
 void printOmimGene2Details(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of an omimGene2 entry. */
 {
@@ -10585,9 +10674,10 @@ chrom      = cartOptionalString(cart, "c");
 chromStart = cartOptionalString(cart, "o");
 chromEnd   = cartOptionalString(cart, "t");
 
+printf("<div id='omimText'>");
 if (url != NULL && url[0] != 0)
     {
-    printf("<B>OMIM: ");
+    printf("<B>MIM gene number: ");
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     sqlSafef(query, sizeof(query),
@@ -10616,6 +10706,16 @@ if (url != NULL && url[0] != 0)
     printf("%s</A></B>", itemName);
     */
 
+    // can use NOSQLINJ since itemName has already been checked to be a number
+    struct dyString *symQuery = newDyString(1024);
+    sqlDyStringPrintf(symQuery, "SELECT approvedSymbol from omimGeneMap2 where omimId=%s", itemName);
+    char *approvSym = sqlQuickString(conn, symQuery->string);
+    if (approvSym) {
+	printf("<BR><B>HGNC-approved symbol:</B> %s<BR>", approvSym);
+        freez(&approvSym);
+    }
+    printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
+
     sqlSafef(query, sizeof(query),
           "select geneSymbol from omimGeneMap2 where omimId=%s;", itemName);
     sr = sqlMustGetResult(conn, query);
@@ -10623,56 +10723,14 @@ if (url != NULL && url[0] != 0)
     if (row != NULL)
         {
 	geneSymbol = cloneString(row[0]);
-	}
+        }
     sqlFreeResult(&sr);
 
     if (geneSymbol!= NULL)
         {
-	boolean disorderShown;
-	char *phenotypeClass, *phenotypeId, *disorder;
-
-	printf("<BR><B>Gene symbol(s):</B> %s", geneSymbol);
+	printf("<BR><B>Alternative symbols:</B> %s", geneSymbol);
 	printf("<BR>\n");
-
-	/* display disorder(s) */
-        sqlSafef(query, sizeof(query),
-	      "select description, %s, phenotypeId from omimPhenotype where omimId=%s order by description",
-	      omimPhenotypeClassColName, itemName);
-	sr = sqlMustGetResult(conn, query);
-	disorderShown = FALSE;
-        while ((row = sqlNextRow(sr)) != NULL)
-            {
-	    if (!disorderShown)
-                {
-                printf("<B>Disorder(s):</B><UL>\n");
-		disorderShown = TRUE;
-		}
-	    disorder       = row[0];
-            phenotypeClass = row[1];
-            phenotypeId    = row[2];
-            printf("<LI>%s", disorder);
-            if (phenotypeId != NULL)
-                {
-                if (!sameWord(phenotypeId, "-1"))
-                    {
-                    printf(" (phenotype <A HREF=\"%s%s\" target=_blank>", url, phenotypeId);
-                    printf("%s</A></B>", phenotypeId);
-		    // show phenotype class if available
-		    if (!sameWord(phenotypeClass, "-1")) printf(" (%s)", phenotypeClass);
-		    printf(")");
-		    }
-		else
-		    {
-		    // show phenotype class if available, even phenotypeId is not available
-		    if (!sameWord(phenotypeClass, "-1")) printf(" (%s)", phenotypeClass);
-		    }
-
-		}
-	    printf("<BR>\n");
-	    }
-	if (disorderShown) printf("</UL>\n");
-        sqlFreeResult(&sr);
-	}
+        }
 
     // show RefSeq Gene link(s)
     sqlSafef(query, sizeof(query),
@@ -10721,7 +10779,7 @@ if (url != NULL && url[0] != 0)
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    if (printedCnt < 1)
-		printf("<B>Related UCSC Gene(s): </B>");
+		printf("<B>Related Transcripts: </B>");
 	    else
 		printf(", ");
             printf("<A HREF=\"%s%s&hgg_chrom=none\">", "../cgi-bin/hgGene?hgg_gene=", row[0]);
@@ -10749,10 +10807,10 @@ if (url != NULL && url[0] != 0)
         sqlFreeResult(&sr);
         }
 
+    showOmimDisorderTable(conn, url, itemName);
     }
 
-printf("<HR>");
-printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
+printf("</div>"); // #omimText
 }
 
 void printOmimLocationDetails(struct trackDb *tdb, char *itemName, boolean encode)
@@ -11108,7 +11166,7 @@ printTrackHtml(tdb);
 void doOmimGene2(struct trackDb *tdb, char *item)
 /* Put up OmimGene track info. */
 {
-genericHeader(tdb, item);
+cartWebStart(cart, database, "OMIM genes - %s", item);
 printOmimGene2Details(tdb, item, FALSE);
 printTrackHtml(tdb);
 }
