@@ -3163,6 +3163,7 @@ for (childRef = tdbParent->children; childRef != NULL; childRef = childRef->next
 printf("</table>");
 jsEndCollapsibleSection();
 printf("</table>"); // required by jsCollapsible
+printf("<hr>");
 printf("</p>");
 }
 
