@@ -90,7 +90,7 @@ cp -pf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
     $runDir/nextstrain*.nh \
     $runDir/nextstrainSamples*.bigWig \
     $ottoDir/install/
-rm -f $ottoDir/current.bak
+rm -rf $ottoDir/current.bak
 mv -f $ottoDir/current $ottoDir/current.bak
 mv $ottoDir/install $ottoDir/current
 rm -r $gbdbDir
