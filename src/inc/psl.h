@@ -363,5 +363,8 @@ extern char *pslSortList[5];
 
 void pslSortListByVar(struct psl **pslList, char *sort);
 /* Sort a list of psls using the method definied in the sort string. */
+
+void pslRemoveFrameShifts(struct psl *psl);
+/* Remove any frameshits if present. Changes in place, doesn't update statistics in first nine fields. */
 #endif /* PSL_H */
 
