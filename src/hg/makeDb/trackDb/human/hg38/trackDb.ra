@@ -541,45 +541,74 @@ release alpha
 group varRep
 compositeTrack on
 
-    track tgpY117_YRI
+    track tgpNA19685_m011_MXL
     parent tgpTrios
-    visibility pack
     chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
     type vcfPhasedTrio
-    shortLabel 1000 Genomes Yoruban Trio
-    longLabel 1000 Genomes Yoruban Trio
-    vcfChildSample NA19240|child
-    vcfParentSamples NA19239|mother,NA19238|father
+    shortLabel m011 MXL Trio
+    longLabel 1000 Genomes m011 Mexican Ancestry from Los Angeles Trio
+    vcfChildSample NA19685|child
+    vcfParentSamples NA19660|mother,NA19661|father
     release alpha
 
-    track tgp1463_CEU
+    track tgpNA19675_m004_MXL
     parent tgpTrios
     chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
     type vcfPhasedTrio
-    shortLabel 1000 Genomes CEPH Utah Trio
-    longLabel 1000 Genomes CEPH Utah Trio
+    shortLabel m004 MXL Trio
+    longLabel 1000 Genomes m004 Mexican Ancestry from Los Angeles Trio
+    vcfChildSample NA19675|child
+    vcfParentSamples NA19678|mother,NA19679|father
+    release alpha
+
+    track tgpNA19240_Y117_YRI
+    parent tgpTrios
+    chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+    type vcfPhasedTrio
+    shortLabel Y117 YRI Trio
+    longLabel 1000 Genomes Yoruban in Ibadan, Nigeria Trio
+    vcfChildSample NA19240|child
+    vcfParentSamples NA19238|mother,NA19239|father
+    release alpha
+
+    track tgpNA12878_1463_CEU
+    parent tgpTrios
+    chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+    type vcfPhasedTrio
+    shortLabel 1463 CEU Trio
+    longLabel 1000 Genomes Utah CEPH Trio
     vcfChildSample NA12878|child
     vcfParentSamples NA12892|mother,NA12891|father
     release alpha
 
-    track tgpPR05_PUR
+    track tgpHG02024_VN049_KHV
     parent tgpTrios
     chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
     type vcfPhasedTrio
-    shortLabel 1000 Genomes Puerto Rico Trio
-    longLabel 1000 Genomes Puerto Rico Trio
+    shortLabel VN049 KHV Trio
+    longLabel 1000 Genomes Kinh in Ho Chi Minh City, Vietnam Trio
+    vcfChildSample HG02024|child
+    vcfParentSamples HG02025|mother,HG02026|father
+    release alpha
+
+    track tgpHG00733_PR05_PUR
+    parent tgpTrios
+    chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+    type vcfPhasedTrio
+    shortLabel PR05 PUR Trio
+    longLabel 1000 Genomes Puerto Ricans from Puerto Rico Trio
     vcfChildSample HG00733|child
     vcfParentSamples HG00732|mother,HG00731|father
     release alpha
 
-    track tgpVN049_KHV
+    track tgpHG00702_SH089_CHS
     parent tgpTrios
     chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
     type vcfPhasedTrio
-    shortLabel 1000 Genomes Vietnamese Trio
-    longLabel 1000 Genomes Vietnamese Trio
-    vcfChildSample HG02024|child
-    vcfParentSamples HG02025|mother,HG02026|father
+    shortLabel SH089 CHS Trio
+    longLabel 1000 Genomes Southern Han Chinese Trio
+    vcfChildSample HG00702|child
+    vcfParentSamples HG00657|mother,HG00656|father
     release alpha
 
 track genomicSuperDups override

@@ -17702,3 +17702,72 @@ TMPDIR=/dev/shm
     # 740357755 bases of 2481941580 (29.830%) in intersection
 
 ##############################################################################
+# LASTZ woodchuck/Marmota monax/GCA_901343595.1 (DONE - 2020-05-29 - Hiram)
+    #	establish a screen to control this job
+    mkdir /hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29
+    cd /hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29
+
+    printf '# woodchuck/Marmota monax/GCA_901343595.1 vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: woodchuck/Marmota monax/GCA_901343595.1
+SEQ2_DIR=/hive/data/genomes/asmHubs/genbankBuild/GCA/901/343/595/GCA_901343595.1_MONAX5/GCA_901343595.1_MONAX5.2bit
+SEQ2_LEN=/hive/data/genomes/asmHubs/genbankBuild/GCA/901/343/595/GCA_901343595.1_MONAX5/GCA_901343595.1_MONAX5.chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-noDbNameCheck -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+XXX - running - Fri May 29 11:19:19 PDT 2020
+    #	real    483m10.607s
+
+    cat fb.mm10.chainCanFam4Link.txt
+    #	777883731 bases of 2652783500 (29.323%) in intersection
+    cat fb.mm10.chainSynCanFam4Link.txt
+    #   736602602 bases of 2652783500 (27.767%) in intersection
+
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm10 canFam4 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    #	real    219m16.168s
+
+    cat fb.mm10.chainRBest.CanFam4.txt
+    # 741307883 bases of 2652783500 (27.945%) in intersection
+
+    mkdir /hive/data/genomes/canFam4/bed/blastz.mm10.swap
+    cd /hive/data/genomes/canFam4/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCanFam4.2020-05-29/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    50m20.639s
+
+    cat fb.canFam4.chainMm10Link.txt
+    #	772902855 bases of 2481941580 (31.141%) in intersection
+    cat fb.canFam4.chainSynMm10Link.txt
+    #   737924732 bases of 2481941580 (29.732%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev canFam4 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    173m38.016s
+
+    cat fb.canFam4.chainRBest.Mm10.txt
+    # 740357755 bases of 2481941580 (29.830%) in intersection
+
+##############################################################################

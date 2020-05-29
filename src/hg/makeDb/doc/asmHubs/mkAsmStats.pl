@@ -2,6 +2,9 @@
 
 use strict;
 use warnings;
+use FindBin qw($Bin);
+use lib "$Bin";
+use commonHtml;
 use File::stat;
 
 my $argc = scalar(@ARGV);
@@ -13,14 +16,19 @@ if ($argc != 3) {
   printf STDERR "column 2: common name for species, columns separated by tab\n";
   exit 255;
 }
-my $Name = shift;
-my $asmHubName = shift;
-my $commonNameOrder = shift;
 
 my $home = $ENV{'HOME'};
 my $toolsDir = "$home/kent/src/hg/makeDb/doc/asmHubs";
 
-my @orderList;	# asmId of the assemblies in order from the commonNameOrder file
+my $Name = shift;
+my $asmHubName = shift;
+my $inputList = shift;
+my $orderList = $inputList;
+if ( ! -s "$orderList" ) {
+  $orderList = $toolsDir/$inputList;
+}
+
+my @orderList;	# asmId of the assemblies in order from the orderList file
 my %commonName;	# key is asmId, value is a common name, perhaps more appropriate
                 # than found in assembly_report file
 my $vgpIndex = 0;
@@ -56,6 +64,14 @@ if ($asmHubName eq "vertebrate") {
 }
 
 if ($vgpIndex) {
+  my $vgpSubset = "(set of primary assemblies)";
+  if ($orderList =~ m/vgp.alternate/) {
+     $vgpSubset = "(set of alternate/haplotype assemblies)";
+  } elsif ($orderList =~ m/vgp.trio/) {
+     $vgpSubset = "(set of trio assemblies, maternal/paternal)";
+  } elsif ($orderList =~ m/vgp.legacy/) {
+     $vgpSubset = "(set of legacy/superseded assemblies)";
+  }
   print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
 <!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly hubs, assembly statistics" -->
@@ -70,7 +86,7 @@ if ($vgpIndex) {
 <p>
 This assembly hub contains assemblies released
 by the <a href='https://vertebrategenomesproject.org/' target=_blank>
-Vertebrate Genomes Project.</a>
+Vertebrate Genomes Project.</a> $vgpSubset
 </p>
 
 END
@@ -174,44 +190,9 @@ if ($assemblyTotal > 1) {
 ##############################################################################
 sub endHtml() {
 
-# do not print these links for VGP index
+&commonHtml::otherHubLinks($vgpIndex, $asmHubName);
+&commonHtml::htmlFooter($vgpIndex, $asmHubName);
 
-if ((0 == $vgpIndex) && ($asmHubName ne "viral")) {
-  printf "<p>\n<table border='1'><thead>\n";
-  printf "<tr><th colspan=6 style='text-align:center;'>Additional hubs with collections of assemblies</th></tr>\n";
-  printf "<tr><th>Assembly hubs index pages:&nbsp;</th>\n";
-  printf "<th><a href='../primates/index.html'>Primates</a></th>\n";
-  printf "<th><a href='../mammals/index.html'>Mammals</a></th>\n";
-  printf "<th><a href='../birds/index.html'>Birds</a></th>\n";
-  printf "<th><a href='../fish/index.html'>Fish</a></th>\n";
-  printf "<th><a href='../vertebrate/index.html'>other vertebrates</a></th>\n";
-
-  printf "</tr><tr>\n";
-  printf "<th>Hubs assembly statistics:&nbsp;</th>\n";
-  printf "<th><a href='../primates/asmStats.html'>Primates</a></th>\n";
-  printf "<th><a href='../mammals/asmStats.html'>Mammals</a></th>\n";
-  printf "<th><a href='../birds/asmStats.html'>Birds</a></th>\n";
-  printf "<th><a href='../fish/asmStats.html'>Fish</a></th>\n";
-  printf "<th><a href='../vertebrate/asmStats.html'>other vertebrates</a></th>\n";
-
-  printf "</tr><tr>\n";
-  printf "<th>Hubs track statistics:&nbsp;</th>\n";
-  printf "<th><a href='../primates/trackData.html'>Primates</a></th>\n";
-  printf "<th><a href='../mammals/trackData.html'>Mammals</a></th>\n";
-  printf "<th><a href='../birds/trackData.html'>Birds</a></th>\n";
-  printf "<th><a href='../fish/trackData.html'>Fish</a></th>\n";
-  printf "<th><a href='../vertebrate/trackData.html'>other vertebrates</a></th>\n";
-
-  printf "</tr></thead>\n</table>\n</p>\n";
-}
-
-print <<"END"
-</div><!-- closing gbsPage from gbPageStartHardcoded.html -->
-</div><!-- closing container-fluid from gbPageStartHardcoded.html -->
-<!--#include virtual="\$ROOT/inc/gbFooterHardcoded.html"-->
-<script type="text/javascript" src="/js/sorttable.js"></script>
-</body></html>
-END
 }
 
 sub asmCounts($) {
@@ -361,7 +342,7 @@ printf STDERR "# asmId: '%s'\n", $asmId;
 ### main()
 ##############################################################################
 
-open (FH, "<$toolsDir/${commonNameOrder}") or die "can not read ${commonNameOrder}";
+open (FH, "<${orderList}") or die "can not read ${orderList}";
 while (my $line = <FH>) {
   next if ($line =~ m/^#/);
   chomp $line;

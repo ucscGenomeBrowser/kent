@@ -10588,18 +10588,24 @@ else
           "select description, %s, phenotypeId, 'data-missing' from omimPhenotype where omimId=%s order by description",
           omimPhenotypeClassColName, itemName);
 
-sr = sqlMustGetResult(conn, query);
+sr = sqlStoreResult(conn, query);
+
+if (sqlCountRows(sr)==0) {
+    sqlFreeResult(&sr);
+    return;
+}
+
 char *phenotypeClass, *phenotypeId, *disorder, *inhMode;
 
-printf("<table class='omimTbl'>\n");
-printf("<thead>\n");
-printf("<th>Phenotype</th>\n");
-printf("<th style='width:100px'>Phenotype MIM Number</th>\n");
-printf("<th>Inheritance</th>\n");
-printf("<th>Phenotype Key</th>\n");
-printf("</thead>\n");
+puts("<table style='margin-top: 15px' class='omimTbl'>\n");
+puts("<thead>\n");
+puts("<th>Phenotype</th>\n");
+puts("<th style='width:100px'>Phenotype MIM Number</th>\n");
+puts("<th>Inheritance</th>\n");
+puts("<th>Phenotype Key</th>\n");
+puts("</thead>\n");
 
-printf("<tbody>\n");
+puts("<tbody>\n");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     disorder       = row[0];
@@ -10654,8 +10660,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 
 sqlFreeResult(&sr);
-printf("<tbody>\n");
-printf("</table>\n");
+puts("<tbody>\n");
+puts("</table>\n");
 }
 
 void printOmimGene2Details(struct trackDb *tdb, char *itemName, boolean encode)
@@ -10701,7 +10707,7 @@ if (url != NULL && url[0] != 0)
 	printf(" &mdash; %s", longName);
         freez(&longName);
     }
-    puts("<BR>");
+    puts("<BR><BR>");
 
     printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
 

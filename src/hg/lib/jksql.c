@@ -2254,6 +2254,14 @@ for (i = 0; i < numFields; i++)
 return -1;
 }
 
+int sqlCountRows(struct sqlResult *sr)
+/* From a sqlResult that was obtained with sqlStoreResult, return the number of rows */
+{
+if(sr != NULL)
+    return mysql_num_rows(sr->result);
+return 0;
+}
+
 int sqlCountColumns(struct sqlResult *sr)
 /* Count the number of columns in result. */
 {
