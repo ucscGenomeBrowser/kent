@@ -443,7 +443,7 @@ sub doCat {
     $zippedSource = 1 if ($ncbiRmsk =~ m/.gz$/);
     my $liftOpts = "";
     if (-s "${liftSpec}" ) {
-      $liftOpts = "| liftUp -type=.out stdout $liftSpec carry stdin";
+      $liftOpts = "| liftUp -type=.out stdout $liftSpec warn stdin";
     }
     $bossScript->add(<<_EOF_
 export db="${db}"
