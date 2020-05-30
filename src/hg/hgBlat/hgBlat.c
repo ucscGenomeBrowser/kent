@@ -1712,7 +1712,7 @@ printf("</TR>\n");
 printf("<TR>\n");
 printf("<TD COLSPAN=1 ALIGN=CENTER style='overflow:hidden;white-space:nowrap;font-size:0.9em'>\n");
 cgiMakeCheckBoxWithId("allResults", allResults, "allResults");
-printf("<span id=allResultsText>All Results (no minimum score of 20bp)<span>");
+printf("<span id=allResultsText>All Results (no minimum matches)");
 // clicking on the All Results text clicks the checkbox.
 jsOnEventById("click", "allResultsText", 
     "document.mainForm.allResults.click();"
@@ -1752,6 +1752,11 @@ printf("%s",
 printf("%s", 
 "<P>The <b>Search all</b> checkbox allows you to search all\n"
 "genomes at the same time. It will query the default assembly of every organism and BLAT servers of attached hubs.\n");
+
+printf("<P>The <b>All Results</b> checkbox disables minimum matches filtering so all results are seen." 
+" For example, with a human dna search, 20 is minimum matches required, based on the genome size, to filter out lower-quality results.\n"
+"This checkbox can be useful with short queries and with the tiny genomes of microorganisms. \n"
+);
 
 if (hgPcrOk(db))
     printf("<P>For locating PCR primers, use <A HREF=\"../cgi-bin/hgPcr?db=%s\">In-Silico PCR</A>"
