@@ -17707,6 +17707,10 @@ TMPDIR=/dev/shm
     mkdir /hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29
     cd /hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29
 
+    # do NOT want dots in the name of the sequence, eliminate the .1 -> v1
+    ln -s /hive/data/genomes/asmHubs/genbankBuild/GCA/901/343/595/GCA_901343595.1_MONAX5/GCA_901343595.1_MONAX5.2bit GCA_901343595v1_MONAX5.2bit
+    ln -s /hive/data/genomes/asmHubs/genbankBuild/GCA/901/343/595/GCA_901343595.1_MONAX5/GCA_901343595.1_MONAX5.chrom.sizes GCA_901343595v1_MONAX5.chrom.sizes
+
     printf '# woodchuck/Marmota monax/GCA_901343595.1 vs mouse
 BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
 BLASTZ_M=254
@@ -17719,8 +17723,8 @@ SEQ1_LAP=10000
 SEQ1_LIMIT=40
 
 # QUERY: woodchuck/Marmota monax/GCA_901343595.1
-SEQ2_DIR=/hive/data/genomes/asmHubs/genbankBuild/GCA/901/343/595/GCA_901343595.1_MONAX5/GCA_901343595.1_MONAX5.2bit
-SEQ2_LEN=/hive/data/genomes/asmHubs/genbankBuild/GCA/901/343/595/GCA_901343595.1_MONAX5/GCA_901343595.1_MONAX5.chrom.sizes
+SEQ2_DIR=/hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29/GCA_901343595v1_MONAX5.2bit
+SEQ2_LEN=/hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29/GCA_901343595v1_MONAX5.chrom.sizes
 SEQ2_CHUNK=10000000
 SEQ2_LIMIT=400
 SEQ2_LAP=0
@@ -17733,8 +17737,27 @@ TMPDIR=/dev/shm
 	-noDbNameCheck -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
-XXX - running - Fri May 29 11:19:19 PDT 2020
+XXX - running - Fri May 29 17:11:31 PDT 2020
+    #  real    98m5.996s
+
+    # slight problem with the resulting chain table name:
+    #    chainGCA_901343595.1_MONAX5
+    # can not have a table name with .1 like that, MySQL thought
+    # that was database chainGCA_901343595 taable 1_MONAX5
+    # fixed up loadUp.csh to do that correctly with name:
+    #   chainGCA_901343595v1_MONAX5
+    # would need to change the SEQ2_DIR name
+    # make some symLinks and have settings:
+# SEQ2_DIR=/hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29/GCA_901343595v1_MONAX5.2bit
+# SEQ2_LEN=/hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29/GCA_901343595v1_MONAX5.chrom.sizes
     #	real    483m10.607s
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=download -noDbNameCheck -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > download.log 2>&1 &
+
+    cat fb.mm10.chainGCA_901343595v1_MONAX5Link.txt
+    # 923698956 bases of 2652783500 (34.820%) in intersection
 
     cat fb.mm10.chainCanFam4Link.txt
     #	777883731 bases of 2652783500 (29.323%) in intersection
