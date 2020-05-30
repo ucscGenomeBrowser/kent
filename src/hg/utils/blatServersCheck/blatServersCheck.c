@@ -300,7 +300,7 @@ if (totalRows==0)
 
 int errCount = 0;
 
-sqlSafef(query,sizeof(query), "select db, host, port, isTrans from %s", blatServersTableName);
+sqlSafef(query,sizeof(query), "select db, host, port, isTrans from %s order by db,port", blatServersTableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
