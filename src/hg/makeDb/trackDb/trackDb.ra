@@ -12,6 +12,7 @@ include trackDb.chainNet.sarcopterygii.ra
 include trackDb.chainNet.fish.ra
 include trackDb.chainNet.insects.ra
 include trackDb.chainNet.other.ra
+include trackDb.chainNet.asmHub.ra
 
 include trackDb.encode3.ra
 
