@@ -3310,7 +3310,7 @@ done
       /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/phyloP124way
 
 #############################################################################
-# hgPal downloads (DONE - 2018-11-27 - Hiram)
+# hgPal downloads (DONE - 2018-11-27 - Hiram, REDONE 2010-06-01)
 #   FASTA from 124-way for knownGene, refGene and knownCanonical
 
     ssh hgwdev
@@ -3336,7 +3336,7 @@ done
         mkdir -p exonAA/${dNum} > /dev/null
 	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/${dNum}/$C.exonNuc.fa.gz &"
 	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/${dNum}/$C.exonAA.fa.gz &"
-        if [ $I -gt 16 ]; then
+        if [ $I -gt 32 ]; then
             echo "date"
             echo "wait"
             I=0
