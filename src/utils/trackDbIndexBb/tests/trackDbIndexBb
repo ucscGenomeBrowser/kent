@@ -375,8 +375,9 @@ cut -f 1-5 > {outDir}/{trackName}.multiBed.bed".format(bedtools=bedtools,tempFil
           "/{trackName}.multiBedSources.tab\n\nPlace the files in their final " + \
           "directory and add the following line to the top trackDb stanza" + \
           ":".format(outDir=outDir,trackName=trackName))
-    print("hideEmptySubtracks on $myPath/{trackName}.multiBed.bb $myPath/{trackName}" + \
-          ".multiBedSources.tab".format(trackName=trackName))  
+    print("hideEmptySubtracks on\n" + \
+          "hideEmptySubtracksMultiBedUrl $myPath/{trackName}.multiBed.bb\n" + \
+          "hideEmptySubtracksSourcesUrl $myPath/{trackName}.multiBedSources.tab".format(trackName=trackName))  
         
 def main():
     """
