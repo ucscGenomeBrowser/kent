@@ -21,7 +21,7 @@ html gnomad
     bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r3.0.sites.vcf.gz
     priority 1
     visibility dense
-    release beta,public
+    release public
 
     track gnomadGenomesVariantsV3
     parent gnomadVariants
@@ -38,7 +38,7 @@ html gnomad
     visibility dense
     url http://gnomad.broadinstitute.org/variant/$s-$<pos>-$<ref>-$<firstAlt>?dataset=gnomad_r3&ignore=$$
     urlLabel gnomAD: 
-    release alpha
+    release alpha,beta
 
     track gnomadVariantsV2
     parent gnomadVariants 
