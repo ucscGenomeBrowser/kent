@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser Trix Indices" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<h1>trackDbIndexBb</h1> 
+<p>
+When there are many subtracks in a composite view, it may be useful to limit the 
+display to only those with data in the current viewing window. The trackDb setting, 
+<a target="_blank" 
+href="/goldenPath/help/trackDb/trackDbHub.html#hideEmptySubtracks">hideEmptySubtracks</a>,
+does just that. This track setting produces a checkbox on the track configuration 
+page allowing the user to enable or disable this feature. If it is configured to 'on', 
+then the feature will be on by default (the checkbox is checked). In order to take 
+full advantage of this setting it is helpful, though not always required, to index the 
+underlying bigBed files. The <code>trackDbIndexBb</code> utility facilitates the indexing 
+process. There are two instances in which the index file is helpful or required:</p>
+<ul>
+<li><b>(helpful)</b> In large composites (dozens or hundreds of tracks), especially when subtrack
+data is sparse, an index file will provide a substantial performance improvement.</li>
+<li><b>(required)</b> In order to build track associations. An example of this is when peak and
+signal tracks wish to be displayed together. Since <code>hideEmptySubtracks</code> works
+only on bigBed tracks (peaks), associated tracks (such as bigWig peaks) can be designated
+to be displayed alongside the bigBeds with data.</li>
+</ul>
+
+<p>
+In order to build the index files, you must first download the <code>trackDbIndexBb</code> utility. 
+For more information on downloading our command line utilities, see these 
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">instructions</a>.</p> 
+<p>
+There are 3 other programs needed to run <code>trackDbIndexBb</code>. Two of them can be found
+in the same downloads directory above: <code>bedToBigBed</code> and <code>bigBedToBed</code>.
+The final dependency, <b>bedtools</b>, can be found on the <a target="_blank" 
+href="https://bedtools.readthedocs.io/en/latest/">bedtools site</a>.</p>
+
+<h2>Parameters</h2>
+<p>
+Kent utilities can be run with no parameters in order to display a usage message. 
+<code>trackDbIndexBb</code> can be run this way, and additionally can be passed the
+<code>- h</code> flag in order to display a more verbose help message.</p>
+<pre>
+./trackDbIndexBb
+./trackDbIndexBb -h
+</pre>
+<p> 
+Below is a short description of the parameters:</p>
+<ul>
+<li><b>trackName</b> | This is the name of the composite that contains the bigBed tracks
+to be indexed. Higher-level composite names may be used in order to build track associations.
+This means that all tracks <em>below</em> the name given will be searched for indexing and
+associations.</li>
+<li><b>raFile</b> | This is the location of the trackDb.ra file containing the bigDataUrls
+of the bigBeds to be indexed.</li>
+<li><b>chromSizes</b> | Location of the chrom.sizes file. This is a file containing the names
+and sizes of the chromosomes for the working assembly. This can be generated from the 2bit genome, 
+downloaded from the respective assembly on our <a target="_blank" 
+href="http://hgdownload.soe.ucsc.edu/downloads.html">download server</a>, or fetched using the 
+<code>fetchChromSizes</code> utility found in the same directory as <code>trackDbIndexBb</code>.</li>
+<li><b>-o --out</b> | (Optional) Path to the output directory where the resulting files will 
+be placed. Defaults to current directory.</li>
+<li><b>-p --pathTools</b> | (Optional) Location where the dependent programs can be found. 
+Will automatically check current directory and user's path. <code>trackDbIndexBb</code> 
+has three dependencies listed above. Note that bedtools must be downloaded from an 
+external group.</li>
+<li><b>-n --noDelete</b> | (Optional) Keep intermediary multiBed file.</li>
+<li><b>-m --metaDataVar</b> | (Optional) Used only when building track associations. The variable
+designated here will be a trackDb variable which can be used to associate tracks. Default value is
+<em>subGroups</em>, though <em>metaData</em> is also commonly used. See example below for more 
+information.</li>
+<li><b>-s --subGroupRemove</b> | (Optional) Used only when building track associations. In 
+conjunction with <b>--metaDataVar</b>, this variable is used to build track associations. The
+value designated will be excluded as a matching requirement from the trackDb parameter. By 
+default <em>view</em> is used, though this can change depending on data and organization. 
+See example below for more information.</li>
+</ul>
+
+<h2>Example 1</h2>
+<p>
+In this first example, we are looking to build an index file for a composite track
+containing 12 bigBed files. An index file is not required for performance
+reasons for a track with such few files, however, the steps would be the same
+on a larger track.</p>
+<p>
+First, we can take a look at the header stanza for the composite. The complete
+trackDb.ra file is available <a target=_blank" 
+href="/goldenPath/help/examples/trackDbIndexBb/smallExampleTrackDb.ra">here</a>.</p>
+<pre>
+track problematic
+shortLabel Problematic Regions
+longLabel Problematic Regions for NGS or Sanger sequencing or very variable regions
+compositeTrack on
+hideEmptySubtracks off
+group map
+visibility hide
+type bigBed 3 +
+</pre>
+<p>
+We can see that the <code>hideEmptySubtracks</code> setting is already enabled,
+set off by default. The index we are building is not required, but instead
+improves the performance of the feature. The other key information here is
+the composite track name, <em>problematic</em>. This is what we will want to
+pass for our <b>trackName</b> variable.</p>
+<p>
+The other two required parameters are the path to the trackDb.ra file, 
+and the chrom.sizes file. If we assume both of those are in the current directory,
+and that the required dependencies are present in the path, we can run
+<code>trackDbIndexBb</code> as such:</p>
+<pre>
+./trackDbIndexBb problematic smallExampleTrackDb.ra hg19.chrom.sizes
+</pre>
+<p>
+This will result in two files being generated in the current directory:</p>
+<pre>
+problematic.multiBed.bb
+problematic.multiBedSources.tab
+</pre>
+<p>
+We can then enable the use of these index files for <code>hideEmptySubtracks</code> by
+adding the following two lines to our trackDb.ra file, adjusting the path to the file
+if needed:</p>
+<pre>
+hideEmptySubtracks off
+hideEmptySubtracksMultiBedUrl problematic.multiBed.bb
+hideEmptySubtracksSourcesUrl problematic.multiBedSources.tab
+</pre>
+
+<h2>Example 2</h2>
+<p>
+In this longer example, we are looking to build an index file with track associations between 
+DNase-seq peak and signal tracks. There are 2 bigBed peak tracks, and 4 bigWig signal tracks.
+The complete trackDb for the example can be found <a target=_blank" 
+href="/goldenPath/help/examples/trackDbIndexBb/exampleTrackDb.ra">here</a>.</p> 
+<p>
+Looking at the
+top level stanza, we see that the track is a composite track with two views, one for
+peaks and one for signals. The data are associated with a few different subGroups:</p>
+<pre>
+track uniformDnase
+subGroup4 lab Lab Duke=Duke UW=UW UWDuke=UW-Duke
+subGroup3 view View Peaks=Peaks Signal=Signal
+subGroup2 cellType Cell_Line GM12878=GM12878 H1-hESC=H1-hESC
+</pre>
+<p>
+In order to decide how to best make these associations, let us see what the relevant parts of
+the peak and signal stanzas we would like to associate:</p>
+<pre>
+                track wgEncodeUWDukeDnaseGM12878FdrPeaks
+                type bigBed 6 +
+                parent uniformDnasePeaks on
+                bigDataUrl wgEncodeUWDukeDnaseGM12878.fdr01peaks.hg19.bb
+                subGroups view=Peaks tier=t1 cellType=GM12878 lab=UWDuke
+                metadata cell=GM12878
+
+                track wgEncodeDukeDnaseGM12878FdrSignal
+                type bigWig
+                parent uniformDnaseSignal on
+                bigDataUrl wgEncodeOpenChromDnaseGm12878Aln_5Reps.norm5.rawsignal.bw
+                subGroups view=Signal tier=t1 cellType=GM12878 lab=Duke
+                metadata cell=GM12878 lab=Duke
+
+                track wgEncodeUWDnaseGM12878FdrSignal
+                type bigWig
+                parent uniformDnaseSignal on
+                bigDataUrl wgEncodeUwDnaseGm12878Aln_2Reps.norm5.rawsignal.bw
+                subGroups view=Signal tier=t1 cellType=GM12878 lab=UW
+                metadata cell=GM12878 lab=UW
+</pre>
+<p>
+The first track is the bigBed peaks track, part of the peaks view, and the second
+and third are bigWig signal tracks, part of the signal view. <code>hideEmptySubtracks</code>
+allows for two optional variables to build track associations. The first, <b>-m --metaDataVar</b>,
+designates which trackDb variable will be used to build the association. In this example, the peak
+tracks are called on a combination of the signal tracks for each cell. So we would like to display 
+both of the signal tracks when the peak track has data.</p>
+<p>
+The <b>subGroups</b> parameter could be used, however, we see that there are two variables that 
+differ between the peak and signal stanzas, <em>view</em> and <em>lab</em>. We would have to strip 
+both of those in order to have matching parameters variables and build an association. On the 
+other hand, we could use the <b>metaData</b> parameter. This parameter associates the tracks 
+by the <em>cell</em>, with only the <em>lab</em> variable differing. This would be the best 
+choice.</p>
+<p>
+Now that we know which parameter we would like to use to build associations, we need to use the
+second optional parameter, <b>-s --subGroupRemove</b>, to tell <code>hideEmptySubtracks</code>
+which variables to strip out in making the association. In this case, we would like to
+keep the <em>cell</em> variable, but strip the <em>lab</em>. This means that <em>lab</em> 
+will be the parameter passed. In this way, associations will be made between any tracks that 
+match the contents of their <b>metaData</b> parameter once the <em>lab</em> variable has been 
+stripped out.</p>
+<p>
+Now that we have chosen our parameters, we will run the utility assuming our chrom.sizes file,
+our trackDb.ra file, and all the supporting programs (bedToBigBed, bigBedToBed, bedtools) are
+present in the current directory. We will also choose the output to be the current directory:</p>
+<pre>
+./trackDbIndexBb uniformDnase exampleTrackDb.ra chrom.sizes -o . -p . -m metadata -s lab
+</pre>
+<p>
+Note that in this case, we did not need to specify the <b>-o</b> or <b>-p</b> values as the 
+current directory is the default for both.</p>
+<p>
+In this small example, the utility would run in a few seconds. But larger inputs containing
+hundreds of tracks can take hours. Upon completion, two files will be generated:</p>
+<pre>
+uniformDnase.multiBed.bb
+uniformDnase.multiBedSources.tab
+</pre>
+<p>
+The .bb file will be a big multibed containing the coordinates where the tracks intersect, 
+expediting data lookup, and the .tab file will serve as an index for the multibed while
+also containing the track associations. The .tab file can be quickly examined to ensure
+proper generation as it should contain a numerical first column, followed by the bigBed
+track, then any number of desired track associations, e.x.</p>
+<pre>
+1	wgEncodeUWDukeDnaseGM12878FdrPeaks	wgEncodeDukeDnaseGM12878FdrSignal	wgEncodeUWDnaseGM12878FdrSignal
+2	wgEncodeUWDukeDnaseH1hESCFdrPeaks	wgEncodeDukeDnaseH1hESCFdrSignal	wgEncodeUWDnaseH1hESCFdrSignal
+</pre>
+<p>
+Finally, <a target="_blank" 
+href="/goldenPath/help/trackDb/trackDbHub.html#hideEmptySubtracks">hideEmptySubtracks</a> can be 
+enabled and pointed to the newly generated files on the top composite stanza:</p>
+<pre>
+hideEmptySubtracks on
+hideEmptySubtracksMultiBedUrl uniformDnase.multiBed.bb 
+hideEmptySubtracksSourcesUrl uniformDnase.multiBedSources.tab
+</pre>
+<p>
+More information on how to use track hubs can be found in the <a target="_blank"
+href="/goldenPath/help/hgTrackHubHelp.html">Track Hub help page</a> as well as the
+<a target="_blank" href="trackDb/trackDbHub.html#searchTrix">
+Track Database Definition Document</a>.</p>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
