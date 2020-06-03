@@ -1,0 +1,14 @@
+# Unable to parse HGVS description in 'NM_003981(PRC1):c.1351-124_1351-123insoAC068831.17:g.63209_63266': couldn't parse HGVS nucleotide change string 'insoAC068831.17:g.63209_63266'; bad token after 'ins' at 'oAC068831.17:g.63209_63266'
+# Can't convert 'NM_003981(PRC1):c.1351-124_1351-123insAC068831.17:g.63209_63266' to VCF: Unable to get alternate sequence
+# Unable to parse HGVS description in 'NM_000251(MSH2):c.1277-?_*(272_?)inv': couldn't parse HGVS nucleotide change string '-?_*(272_?)inv'
+# Can't convert 'NM_000251(MSH2):c.1311_1334del24insNM_000251.1:c.1338_1361inv24' to VCF: Unable to get alternate sequence
+# Can't convert 'NM_014813(LRIG2):c.1980_1981insJX891452.1:g.1_371' to VCF: Unable to get alternate sequence
+# Can't convert 'NM_001033952(CALCA):c.*727_*730T[4]' to VCF: HGVS repeat notation is not supported.
+# Can't convert 'NM_024312(GNPTAB):c.1738_1741[3]' to VCF: HGVS repeat notation is not supported.
+# Can't convert 'NM_001039958(MESP2):c.535_546[(2_4)]' to VCF: HGVS repeat notation is not supported.
+# Can't convert 'NM_014740(EIF4A3):c.-98_-81del18insTCGGCAGCGGCACAGCGAGG[10]' to VCF: Unable to get alternate sequence
+# Can't convert 'NM_000095(COMP):c.1405_1407GAC[7]' to VCF: HGVS repeat notation is not supported.
+# Can't convert 'NM_000100(CSTB):c.-210_-199(30_125)' to VCF: HGVS repeat notation is not supported.
+# Unable to map 'NM_002111.6(HTT):c.52_54(?_25)' to reference hg38: Can't find sequence for accession 'NM_002111.6'
+# Can't convert 'NM_000100(CSTB):c.-210CCCCGCCCCGCG(2_3)' to VCF: HGVS repeat notation is not supported.
+# Can't convert 'NM_001081560(DMPK):c.*224_*226CTG(51_?)' to VCF: HGVS repeat notation is not supported.
