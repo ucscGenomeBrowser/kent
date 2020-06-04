@@ -628,3 +628,56 @@ featureBits hg38 -chrom=chr1 wgEncodeRegDnaseClusteredLifted
     mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegTxn
     mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg
     liftManyBigWigs /cluster/home/ceisenhart/kent/src/hg/utils/liftList/bigWigList.ra
+
+##############################################################################
+# ENCODE Registry of Candidate cis-Regulatory Elements
+#
+# 2020-04-14  kate
+#
+# From ENCODE 3 Data Analysis Center at U Mass Med Center (Zlab)
+# Data contacts:  Henry Pratt, Jill Moore, Zhiping Weng PI
+#
+# RM #24668
+#
+# Download BED file (hosted on their integrative hub)
+
+cd /hive/data/outside/encode3/ccre
+wget http://gcp.wenglab.org/hubs/integrative1/data/GRCh38/CTA/GRCh38-ccREs.bigBed
+
+# Later Jill asked to add scores, download that
+
+wget -nd https://users.wenglab.org/moorej3/Human-maxZ-DNase.txt.gz
+gunzip Human-maxZ-DNase.txt.gz
+
+# check score distribution
+textHistogram -real -col=2 Human-maxZ-DNase.txt
+1.000000 ***************** 102913
+2.000000 ************************************************************ 362463
+3.000000 ************************************************* 294351
+4.000000 ********************* 128201
+5.000000 ***** 29345
+6.000000 * 6991
+7.000000  2096
+8.000000  168
+9.000000  5
+10.000000  2
+
+# noting that order of accessions in score file doesn't match bed file ;-(
+sort Human-maxZ-DNase.txt > Human-maxZ-DNase.sorted.txt
+sort -k 4 GRCh38-ccREs.bed > GRCh38-ccREs.sorted.bed
+
+paste GRCh38-ccREs.sorted.bed Human-maxZ-DNase.sorted.txt > ccres.prescored.bed
+# manually sanity check start and end of file to see that accessions match
+
+# score using zscore,  min(zscore*100),1000), and reformat
+awk '{OFS="\t"; print $1, $2, $3, $4, ($13>10)? 1000 : int($13 * 100), $6, $7, $8, $9, $10, $13}' \
+        ccres.prescored.bed | bedSort stdin ccres.scored.bed
+
+# Reformat to add fields for filtering and mouseover, etc.
+set f = encodeCcreCombined
+perl makeCcreCombined.pl < ccres.scored.bed > $f.bed
+bedToBigBed -tab -type=bed9+6 -as=$f.as $f.bed /hive/data/genomes/hg38/chrom.sizes $f.bb
+ln -s `pwd`/$f.bb /gbdb/hg38/encode3/ccre/
+
+###############################
+

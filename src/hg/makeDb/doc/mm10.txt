@@ -17794,3 +17794,44 @@ XXX - running - Fri May 29 17:11:31 PDT 2020
     # 740357755 bases of 2481941580 (29.830%) in intersection
 
 ##############################################################################
+# ENCODE Registry of Candidate cis-Regulatory Elements
+#
+# 2020-05-12  kate
+#
+# From ENCODE 3 Data Analysis Center at U Mass Med Center (Zlab)
+# Data contacts:  Henry Pratt, Jill Moore, Zhiping Weng PI
+#
+# RM #24668
+#
+# Download BED file (hosted on their integrative hub)
+
+cd /hive/data/outside/encode3/ccre
+mkdir mouse
+cd mouse
+wget http://gcp.wenglab.org/hubs/integrative1/data/mm10/cta/mm10-ccres.bigbed
+
+###
+# Add scores
+wget -nd https://users.wenglab.org/moorej3/mouse-maxz-dnase.txt.gz
+gunzip Mouse-maxZ-DNase.txt.gz
+
+sort Mouse-maxZ-DNase.txt > Mouse-maxZ-DNase.sorted.txt
+# noting that order of accessions in score file doesn't match bed file ;-(
+sort -k 4 mm10-ccREs.bed > mm10-ccREs.sorted.bed
+paste mm10-ccREs.sorted.bed Mouse-maxZ-DNase.sorted.txt > ccres.prescored.bed
+# sanity check ids match
+
+# score using zscore,  min(zscore*100),1000), and reformat
+awk '{OFS="\t"; print $1, $2, $3, $4, ($13>10)? 1000 : int($13 * 100), $6, $7, $8, $9, $10, $13}' \
+        ccres.prescored.bed | bedSort stdin ccres.scored.bed
+set f = encodeCcreCombined
+
+# Reformat to add fields for filtering and mouseover, etc.
+perl ../makeCcreCombined.pl < ccres.scored.bed > $f.bed
+bedToBigBed -tab -type=bed9+6 -as=../$f.as $f.bed /hive/data/genomes/mm10/chrom.sizes $f.bb
+mkdir -p /gbdb/mm10/encode3/ccre
+ln -s `pwd`/$f.bb /gbdb/mm10/encode3/ccre
+
+
+##############################################################################
+
