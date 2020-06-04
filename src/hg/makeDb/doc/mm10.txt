@@ -17827,8 +17827,10 @@ awk '{OFS="\t"; print $1, $2, $3, $4, ($13>10)? 1000 : int($13 * 100), $6, $7, $
 set f = encodeCcreCombined
 
 # Reformat to add fields for filtering and mouseover, etc.
-perl ../makeCcreCombined.pl < ccres.scored.bed > $f.bed
-bedToBigBed -tab -type=bed9+6 -as=../$f.as $f.bed /hive/data/genomes/mm10/chrom.sizes $f.bb
+set bin = ~/kent/src/hg/makeDb/outside/encode3/ccre
+perl $bin/makeCcreCombined.pl < ccres.scored.bed > $f.bed
+set lib = ~/kent/src/hg/lib
+bedToBigBed -tab -type=bed9+6 -as=$lib/$f.as $f.bed /hive/data/genomes/mm10/chrom.sizes $f.bb
 mkdir -p /gbdb/mm10/encode3/ccre
 ln -s `pwd`/$f.bb /gbdb/mm10/encode3/ccre
 
