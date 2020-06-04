@@ -1873,4 +1873,99 @@ EOF
     cd /gbdb/hg38/dgv
     ln -s /hive/data/genomes/hg38/bed/dgv/160906/dgvMerged.bb
     ln -s /hive/data/genomes/hg38/bed/dgv/160906/dgvSupporting.bb
+
+##############################################################################
+# Trios for 1000 Genomes Phase 3 Data - DONE 05/28/20 - ChrisL
+
+    # download the related samples
+    cd /hive/data/genomes/hg38/bed/1000GenomesPhase3
+    mkdir related_samples
+    cd related_samples/
+
+    wget http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000_genomes_project/release/20190312_biallelic_SNV_and_INDEL/20190312_biallelic_SNV_and_INDEL_README.txt
+    wget http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000_genomes_project/release/20190312_biallelic_SNV_and_INDEL/20190312_biallelic_SNV_and_INDEL_MANIFEST.txt
+    time for i in {1..22}; do wget --timestamping http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000_genomes_project/release/20190312_biallelic_SNV_and_INDEL/supporting/related_samples/ALL.chr${i}.shapeit2_integrated_snvindels_v2a_related_samples_27022019.GRCh38.phased.vcf.gz; done &> wget.log
+    # real    43m6.593s
+    # user    0m2.132s
+    # sys 0m16.292s
+    wget --timestamping http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000_genomes_project/release/20190312_biallelic_SNV_and_INDEL/supporting/related_samples/ALL.chrX.shapeit2_integrated_snvindels_v2a_related_samples_27022019.GRCh38.phased.vcf.gz                  
+
+    # Check md5sums
+    tawk '{print $3, $1;}' 20190312_related_biallelic_SNV_and_INDEL_MANIFEST.txt | grep -v tbi > md5sums.check
+    md5sum -c md5sums.check
+    #./ALL.chr1.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz: OK
+    #...
+    #./ALL.chrX.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz: OK
+    # Index them locally instead of downloading, probably quicker.
+
+    for f in *.vcf.gz; do
+      echo indexing $f
+      tabix -p vcf $f
+    done
+
+    # Download 1000 Genomes Family tree info and find existing trios:
+    wget http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v2.20130502.ALL.ped
+    tawk '{if ($2 != 0 && $3 != 0 && $4 != 0) printf "%s\t%s,%s\t%s_%s_%s\n", $2,$4,$3,$2,$1,$7 }' integrated_call_samples_v2.20130502.ALL.ped > allTrios.txt
+
+    # this is not strictly "child" IDs if there are grandparents or something but close enough
+    cut -f1 allTrios.txt | tail -n +2 > childIds.txt
+    bcftools query -l ../related_samples/ALL.chr22.shapeit2_integrated_snvindels_v2a_related_samples_27022019.GRCh38.phased.vcf.gz | grep -Fwf childIds.txt  - | grep -wf - allTrios.txt > trackTrios.txt
+    bcftools query -l ../ALL.chr22.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz | grep -Fwf childIds.txt  - | grep -wf - allTrios.txt >> trackTrios.txt
+
+    # this below script runs the various bcftools commands to merge VCFs together:
+    # subset sample: bcftools view --no-version -s 'sample1,sample2,...'
+    # merge two VCFs: "bcftools merge --no-version file1 file2
+    # remove homozygous reference variants (artifacts of subsetting the whole pop dataset):
+    #   bcftools view --no-version -i \"GT[*]!='RR'\" "
+    # this is a parasol run as it can take ~20 minutes to run on one chromosome
+
+    # first make a configuration file so we know where the VCFs are and stuff:
+    cat << _EOF > conf.txt
+    relationshipFile=trackTrios.txt
+    primaryVCF=/hive/data/genomes/hg38/bed/1000GenomesPhase3/ALL.*.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz
+    suppVCF=/hive/data/genomes/hg38/bed/1000GenomesPhase3/related_samples/ALL.*.shapeit2_integrated_snvindels_v2a_related_samples_27022019.GRCh38.phased.vcf.gz
+    _EOF
+
+    ./makeTrio.py -v conf.txt
+
+    cd work
+    para time
+    # 161 jobs in batch
+    # 0 jobs (including everybody's) in Parasol queue or running.
+    # Checking finished jobs
+    # Completed: 161 of 161 jobs
+    # CPU time in finished jobs:     277100s    4618.34m    76.97h    3.21d  0.009 y
+    # IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+    # Average job time:                1634s      27.23m     0.45h    0.02d
+    # Longest finished job:            3753s      62.55m     1.04h    0.04d
+    # Submission to last job:          3766s      62.77m     1.05h    0.04d
+    # Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+    # now load the per chrom VCF tables:
+    ./loadTables.sh
+
+    # Get some stats:
+    for d in output/*; do echo $d; for f in $d/*.vcf.gz; do zgrep -v "^#"  $f | cut -f8 | sed -re 's/.*VT=//; s/;.*//' | sort | uniq -c; done | awk '{arr[$2] += $1}END{for (i in arr){printf "%s: %d\n", i, arr[i]}}'; done
+    output/HG00702_SH089_CHS
+    SNP: 4522294
+    INDEL: 589214
+    output/HG00733_PR05_PUR
+    SNP: 4783649
+    INDEL: 621948
+    output/HG02024_VN049_KHV
+    SNP: 4554542
+    INDEL: 597609
+    output/NA12878_1463_CEU
+    SNP: 4565394
+    INDEL: 593052
+    output/NA19240_Y117_YRI
+    SNP: 5954728
+    INDEL: 728480
+    output/NA19675_m004_MXL
+    SNP: 4763107
+    INDEL: 619293
+    output/NA19685_m011_MXL
+    SNP: 4758396
+    INDEL: 619294
+
 ##############################################################################

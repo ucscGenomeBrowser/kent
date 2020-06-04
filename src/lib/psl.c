@@ -2129,3 +2129,24 @@ else
     slSort(pslList, pslCmpQueryScore);
     }
 }
+
+void pslRemoveFrameShifts(struct psl *psl)
+/* Remove any frameshits if present. Changes in place, doesn't update statistics in first nine fields. */
+{
+unsigned prevEnd = psl->tStarts[0];
+int ii;
+
+for(ii = 0; ii < psl->blockCount; ii++)
+    {
+    int diff = prevEnd - psl->tStarts[ii];
+    if (diff > 0)
+        {
+        if (diff > psl->blockSizes[ii])
+            errAbort("frame shift (%d) larger than block size (%d)", diff, psl->blockSizes[ii]);
+        psl->blockSizes[ii] -= diff;
+        psl->tStarts[ii] += diff;
+        psl->qStarts[ii] += diff;
+        }
+    prevEnd = psl->tStarts[ii] + psl->blockSizes[ii];
+    }
+}

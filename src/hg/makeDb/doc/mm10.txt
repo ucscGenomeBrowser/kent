@@ -17702,3 +17702,138 @@ TMPDIR=/dev/shm
     # 740357755 bases of 2481941580 (29.830%) in intersection
 
 ##############################################################################
+# LASTZ woodchuck/Marmota monax/GCA_901343595.1 (DONE - 2020-05-29 - Hiram)
+    #	establish a screen to control this job
+    mkdir /hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29
+    cd /hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29
+
+    # do NOT want dots in the name of the sequence, eliminate the .1 -> v1
+    ln -s /hive/data/genomes/asmHubs/genbankBuild/GCA/901/343/595/GCA_901343595.1_MONAX5/GCA_901343595.1_MONAX5.2bit GCA_901343595v1_MONAX5.2bit
+    ln -s /hive/data/genomes/asmHubs/genbankBuild/GCA/901/343/595/GCA_901343595.1_MONAX5/GCA_901343595.1_MONAX5.chrom.sizes GCA_901343595v1_MONAX5.chrom.sizes
+
+    printf '# woodchuck/Marmota monax/GCA_901343595.1 vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: woodchuck/Marmota monax/GCA_901343595.1
+SEQ2_DIR=/hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29/GCA_901343595v1_MONAX5.2bit
+SEQ2_LEN=/hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29/GCA_901343595v1_MONAX5.chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-noDbNameCheck -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+XXX - running - Fri May 29 17:11:31 PDT 2020
+    #  real    98m5.996s
+
+    # slight problem with the resulting chain table name:
+    #    chainGCA_901343595.1_MONAX5
+    # can not have a table name with .1 like that, MySQL thought
+    # that was database chainGCA_901343595 taable 1_MONAX5
+    # fixed up loadUp.csh to do that correctly with name:
+    #   chainGCA_901343595v1_MONAX5
+    # would need to change the SEQ2_DIR name
+    # make some symLinks and have settings:
+# SEQ2_DIR=/hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29/GCA_901343595v1_MONAX5.2bit
+# SEQ2_LEN=/hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29/GCA_901343595v1_MONAX5.chrom.sizes
+    #	real    483m10.607s
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=download -noDbNameCheck -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > download.log 2>&1 &
+
+    cat fb.mm10.chainGCA_901343595v1_MONAX5Link.txt
+    # 923698956 bases of 2652783500 (34.820%) in intersection
+
+    cat fb.mm10.chainCanFam4Link.txt
+    #	777883731 bases of 2652783500 (29.323%) in intersection
+    cat fb.mm10.chainSynCanFam4Link.txt
+    #   736602602 bases of 2652783500 (27.767%) in intersection
+
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm10 canFam4 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    #	real    219m16.168s
+
+    cat fb.mm10.chainRBest.CanFam4.txt
+    # 741307883 bases of 2652783500 (27.945%) in intersection
+
+    mkdir /hive/data/genomes/canFam4/bed/blastz.mm10.swap
+    cd /hive/data/genomes/canFam4/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCanFam4.2020-05-29/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    50m20.639s
+
+    cat fb.canFam4.chainMm10Link.txt
+    #	772902855 bases of 2481941580 (31.141%) in intersection
+    cat fb.canFam4.chainSynMm10Link.txt
+    #   737924732 bases of 2481941580 (29.732%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev canFam4 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    173m38.016s
+
+    cat fb.canFam4.chainRBest.Mm10.txt
+    # 740357755 bases of 2481941580 (29.830%) in intersection
+
+##############################################################################
+# ENCODE Registry of Candidate cis-Regulatory Elements
+#
+# 2020-05-12  kate
+#
+# From ENCODE 3 Data Analysis Center at U Mass Med Center (Zlab)
+# Data contacts:  Henry Pratt, Jill Moore, Zhiping Weng PI
+#
+# RM #24668
+#
+# Download BED file (hosted on their integrative hub)
+
+cd /hive/data/outside/encode3/ccre
+mkdir mouse
+cd mouse
+wget http://gcp.wenglab.org/hubs/integrative1/data/mm10/cta/mm10-ccres.bigbed
+
+###
+# Add scores
+wget -nd https://users.wenglab.org/moorej3/mouse-maxz-dnase.txt.gz
+gunzip Mouse-maxZ-DNase.txt.gz
+
+sort Mouse-maxZ-DNase.txt > Mouse-maxZ-DNase.sorted.txt
+# noting that order of accessions in score file doesn't match bed file ;-(
+sort -k 4 mm10-ccREs.bed > mm10-ccREs.sorted.bed
+paste mm10-ccREs.sorted.bed Mouse-maxZ-DNase.sorted.txt > ccres.prescored.bed
+# sanity check ids match
+
+# score using zscore,  min(zscore*100),1000), and reformat
+awk '{OFS="\t"; print $1, $2, $3, $4, ($13>10)? 1000 : int($13 * 100), $6, $7, $8, $9, $10, $13}' \
+        ccres.prescored.bed | bedSort stdin ccres.scored.bed
+set f = encodeCcreCombined
+
+# Reformat to add fields for filtering and mouseover, etc.
+set bin = ~/kent/src/hg/makeDb/outside/encode3/ccre
+perl $bin/makeCcreCombined.pl < ccres.scored.bed > $f.bed
+set lib = ~/kent/src/hg/lib
+bedToBigBed -tab -type=bed9+6 -as=$lib/$f.as $f.bed /hive/data/genomes/mm10/chrom.sizes $f.bb
+mkdir -p /gbdb/mm10/encode3/ccre
+ln -s `pwd`/$f.bb /gbdb/mm10/encode3/ccre
+
+
+##############################################################################
+

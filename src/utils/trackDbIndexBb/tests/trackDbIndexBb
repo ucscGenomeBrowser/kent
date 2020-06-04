@@ -25,10 +25,10 @@ specified using the optional flags.
 
     
 Example run:
-    trackDbIndexBb -t mm10HMMdata -r mm10HMMdata.ra -c mm10chrom.sizes
-    trackDbIndexBb -t hg19peaks -r hg19peaks.ra -c hg19chrom.sizes -o ./hg19peaks/output -p /user/bin
+    trackDbIndexBb mm10HMMdata mm10HMMdata.ra mm10chrom.sizes
+    trackDbIndexBb hg19peaks hg19peaks.ra hg19chrom.sizes -o ./hg19peaks/output -p /user/bin
 """
-import subprocess, os, shutil, tempfile, atexit, argparse
+import subprocess, os, shutil, tempfile, atexit, argparse, sys
 from distutils.spawn import find_executable
 from collections import OrderedDict 
 
@@ -41,12 +41,12 @@ def parseArgs():
     optional = parser._action_groups.pop()
     required = parser.add_argument_group('required arguments')
     
-    required.add_argument ("-t", "--trackName", dest = "trackName",
+    required.add_argument ("trackName",
         help = "Track name for top level coposite which contains the bigBed tracks.")
-    required.add_argument ("-r", "--raFile", dest = "trackDbRaFile",
+    required.add_argument ("raFile",
         help = "Relative or absolute path to trackDb.ra file containing the " + \
             "composite track with bigDataUrls.")
-    required.add_argument ("-c", "--chromSizes", dest = "chromSizes",
+    required.add_argument ("chromSizes",
         help = "Chrom.sizes for database which the track belongs to. Needed " + \
             "to build final bigBed file.")
     # Optional arguments
@@ -77,10 +77,8 @@ def parseArgs():
             "case, you would want to exclude the 'view' varaible to make histone " + \
             "mark associations (A6_H3K36me3). This flag can be used to pass a " + \
             "different exclusionary variable than the default 'view'") 
-    parser._action_groups.append(optional)
-    options = parser.parse_args()
 
-    if options.trackName is None or options.trackDbRaFile is None or options.chromSizes is None:
+    if (len(sys.argv) == 1):
         parser.print_usage()
         # Print concise help message and usage statement when no arguments passed.
         print("\nGiven a track name, a trackDb.ra composite of bigBeds, and a chrom.sizes\n" + \
@@ -88,20 +86,20 @@ def parseArgs():
         "Depending on size and quantity of files, can take over 60 minutes.\n\n" + \
         "For a more verbose help message, run with help flag: trackDbIndexBb -h\n\n" + \
         "Example run:\n" + \
-        "    trackDbIndexBb -t mm10HMMdata -r mm10HMMdata.ra -c mm10chrom.sizes\n" + \
-        "    trackDbIndexBb -t hg19peaks -r hg19peaks.ra -c hg19chrom.sizes " + \
+        "    trackDbIndexBb mm10HMMdata mm10HMMdata.ra mm10chrom.sizes\n" + \
+        "    trackDbIndexBb hg19peaks hg19peaks.ra hg19chrom.sizes -o ./hg19peaks/output -p /user/bin" + \
         "-o ./hg19peaks/output -p /user/bin\n\n" + \
         "required arguments:\n" + \
-        "  -t TRACKNAME, --trackName TRACKNAME\n" + \
-        "                        Track name for top level coposite which contains the\n" + \
+        "  trackName             Track name for top level coposite which contains the\n" + \
         "                        bigBed tracks.\n" + \
-        "  -r TRACKDBRAFILE, --raFile TRACKDBRAFILE\n" + \
-        "                        Relative or absolute path to trackDb.ra file\n" + \
+        "  raFile                Relative or absolute path to trackDb.ra file\n" + \
         "                        containing the composite track with bigDataUrls.\n" + \
-        "  -c CHROMSIZES, --chromSizes CHROMSIZES\n" + \
-        "                        Chrom.sizes for database which the track belongs to.\n" + \
+        "  chromSizes            Chrom.sizes for database which the track belongs to.\n" + \
         "                        Needed to build final bigBed file.\n")
         exit(0)
+
+    parser._action_groups.append(optional)
+    options = parser.parse_args()
 
     return  options
 
@@ -375,8 +373,9 @@ cut -f 1-5 > {outDir}/{trackName}.multiBed.bed".format(bedtools=bedtools,tempFil
           "/{trackName}.multiBedSources.tab\n\nPlace the files in their final " + \
           "directory and add the following line to the top trackDb stanza" + \
           ":".format(outDir=outDir,trackName=trackName))
-    print("hideEmptySubtracks on $myPath/{trackName}.multiBed.bb $myPath/{trackName}" + \
-          ".multiBedSources.tab".format(trackName=trackName))  
+    print("hideEmptySubtracks on\n" + \
+          "hideEmptySubtracksMultiBedUrl $myPath/{trackName}.multiBed.bb\n" + \
+          "hideEmptySubtracksSourcesUrl $myPath/{trackName}.multiBedSources.tab".format(trackName=trackName))  
         
 def main():
     """
@@ -385,7 +384,7 @@ def main():
     options = parseArgs()
 
     trackName = options.trackName
-    trackDbRaFile = options.trackDbRaFile
+    trackDbRaFile = options.raFile
     chromSizes = options.chromSizes
     outDir = options.outDir
     toolsPath  = options.toolsPath

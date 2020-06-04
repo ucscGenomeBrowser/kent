@@ -1,9 +1,9 @@
-#DONE braney 2019-07-23
+#DONE braney 2020-06-01
 
-mkdir /cluster/data/hg38/bed/mane.0.6
-cd /cluster/data/hg38/bed/mane.0.6
+mkdir /cluster/data/hg38/bed/mane.0.9
+cd /cluster/data/hg38/bed/mane.0.9
 
-bigBedToBed https://ftp.ncbi.nlm.nih.gov/refseq/MANE/trackhub/data/release_0.6/MANE.GRCh38.v0.6.select.bb mane.bed
+bigBedToBed https://ftp.ncbi.nlm.nih.gov/refseq/MANE/trackhub/data/release_0.9/MANE.GRCh38.v0.9.select.bb mane.bed
 tawk '{if (NR % 2) print}' mane.bed > ens.mane.bed
 tawk '{if ((NR % 2) == 0) print}' mane.bed > nm.mane.bed
 
@@ -15,9 +15,9 @@ paste ens.mane.bed nm.extra | awk '{if ($19 != $25) print}'
 paste ens.mane.bed nm.extra | cut -f 1-24  > our.bed
 bedToBigBed -extraIndex=name our.bed /cluster/data/hg38/chrom.sizes our.bb -type=bed12+12 -as=$HOME/kent/src/hg/lib/mane.as -tab
 mkdir /gbdb/hg38/mane
-ln -s `pwd`/our.bb /gbdb/hg38/mane/mane.0.6.bb
+ln -s `pwd`/our.bb /gbdb/hg38/mane/mane.0.9.bb
 
 tawk '{print $13, $18, $19, $21, $22, $23, $24}' our.bed > our.ixInput
-ixIxx our.ixInput mane.0.6.ix mane.0.6.ixx
-ln -s `pwd`/mane.0.6.ix /gbdb/hg38/mane
-ln -s `pwd`/mane.0.6.ixx /gbdb/hg38/mane
+ixIxx our.ixInput mane.0.9.ix mane.0.9.ixx
+ln -s `pwd`/mane.0.9.ix /gbdb/hg38/mane
+ln -s `pwd`/mane.0.9.ixx /gbdb/hg38/mane

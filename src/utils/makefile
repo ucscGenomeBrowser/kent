@@ -77,6 +77,7 @@ UTILS_APPLIST = \
 	paraSync \
 	pslLiftSubrangeBlat \
 	pslPosTarget \
+	pslRemoveFrameShifts \
 	pslScore \
 	pslToPslx \
 	randomLines \

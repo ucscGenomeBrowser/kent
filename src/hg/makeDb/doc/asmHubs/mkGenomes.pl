@@ -18,17 +18,22 @@ if ($argc != 1) {
   printf STDERR "index file for all genomes in the given list\n";
   exit 255;
 }
-my $commonNameOrder = shift;
 
 my $home = $ENV{'HOME'};
 my $toolsDir = "$home/kent/src/hg/makeDb/doc/asmHubs";
+
+my $inputList = shift;
+my $orderList = $inputList;
+if ( ! -s "$orderList" ) {
+  $orderList = $toolsDir/$inputList;
+}
 
 my %commonName;	# key is asmId, value is common name
 my @orderList;	# asmId of the assemblies in order from the *.list files
 # the order to read the different .list files:
 my $assemblyCount = 0;
 
-open (FH, "<$toolsDir/${commonNameOrder}") or die "can not read ${commonNameOrder}";
+open (FH, "<${orderList}") or die "can not read ${orderList}";
 while (my $line = <FH>) {
   next if ($line =~ m/^#/);
   chomp $line;
