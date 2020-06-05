@@ -34,123 +34,15 @@
 <p class="p3"><br></p>
 <p class="p4">The <b>PhyloCSF Power</b> track shows the branch length score at each codon, i.e., the ratio of the branch length of the species present in the local alignment to the total branch length of all species in the full genome alignment. It is an indication of the statistical power available to PhyloCSF. Codons with branch length score less than 0.1 have been excluded altogether (from all tracks) because PhyloCSF does not have sufficient power to get a meaningful score at these codons. Codons with branch length score greater than 0.1 but much less than 1 should be considered less certain.</p>
 <p class="p3"><br></p>
-<p class="p2"><b>Caveats</b></p>
+<p class="p2"><b>SCaveats</b></p>
 <ul class="ul1">
-  <li class="li4">Around 10% of annotated protein-coding regions get score less than 0. This can happen for various reasons. For example, the region could be coding in the reference species but not in other species, or the alignment does not represent a true orthology relationship between the species.</li>
+  <li class="li4">Around 10% of annotated protein-coding regions in human get score less than 0. This can happen for various reasons. For example, the region could be coding in the reference species but not in other species, or the alignment does not represent a true orthology relationship between the species.</li>
   <li class="li4">Protein-coding regions will often have positive score on the reverse strand in the frame in which the third codon positions match up (the "antisense" frame), though the score will usually be higher on the correct strand.</li>
 </ul>
 <p class="p3"><br></p>
 <p class="p2"><b>Methods</b></p>
 <p class="p3"><br></p>
-<p class="p4">PhyloCSF was run with the "fixed" strategy on every codon in every frame on each strand in the assembly.</p>
-<p class="p3"><br></p>
-<p class="p4">The alignments and PhyloCSF parameters for the various assemblies are as follows:</p>
-<table cellspacing="0" cellpadding="0" class="t1">
-  <tbody>
-    <tr>
-      <td valign="middle" class="td1">
-        <p class="p4"><span class="s2">Assembly</span></p>
-      </td>
-      <td valign="middle" class="td2">
-        <p class="p4"><span class="s2">PhyloCSF Parameters</span></p>
-      </td>
-      <td valign="middle" class="td3">
-        <p class="p4"><span class="s2">Alignments</span></p>
-      </td>
-    </tr>
-    <tr>
-      <td valign="middle" class="td1">
-        <p class="p4">hg19</p>
-      </td>
-      <td valign="middle" class="td2">
-        <p class="p4">29mammals</p>
-      </td>
-      <td valign="middle" class="td3">
-        <p class="p4">29-mammals subset of the 46-vertebrates hg19 alignment</p>
-      </td>
-    </tr>
-    <tr>
-      <td valign="middle" class="td1">
-        <p class="p4">hg38</p>
-      </td>
-      <td valign="middle" class="td2">
-        <p class="p4">58mammals</p>
-      </td>
-      <td valign="middle" class="td3">
-        <p class="p4">58-mammals subset of the 100-vertebrates hg38 alignment</p>
-      </td>
-    </tr>
-    <tr>
-      <td valign="middle" class="td1">
-        <p class="p4">mm10</p>
-      </td>
-      <td valign="middle" class="td2">
-        <p class="p4">29mammals</p>
-      </td>
-      <td valign="middle" class="td3">
-        <p class="p4">29-mammals subset of the 60-vertebrates mm10 alignment</p>
-      </td>
-    </tr>
-    <tr>
-      <td valign="middle" class="td1">
-        <p class="p4">dm6</p>
-      </td>
-      <td valign="middle" class="td2">
-        <p class="p4">23flies</p>
-      </td>
-      <td valign="middle" class="td3">
-        <p class="p4">23-<I>Drosophila</I> subset of the 27-insect dm6 alignment</p>
-      </td>
-    </tr>
-    <tr>
-      <td valign="middle" class="td1">
-        <p class="p4">ce11</p>
-      </td>
-      <td valign="middle" class="td2">
-        <p class="p4">8worms</p>
-      </td>
-      <td valign="middle" class="td3">
-        <p class="p4">8-<I>Caenorhabditis</I> subset of the 26-worm ce11 alignment</p>
-      </td>
-    </tr>
-    <tr>
-      <td valign="middle" class="td1">
-        <p class="p4">galGal4</p>
-      </td>
-      <td valign="middle" class="td2">
-        <p class="p4">49birds</p>
-      </td>
-      <td valign="middle" class="td3">
-        <p class="p4">49 sauropsids alignment (unpublished)</p>
-      </td>
-    </tr>
-    <tr>
-      <td valign="middle" class="td1">
-        <p class="p4">galGal6</p>
-      </td>
-      <td valign="middle" class="td2">
-        <p class="p4">53birds</p>
-      </td>
-      <td valign="middle" class="td3">
-        <p class="p4">53-bird subset of the 77-vertebrates galGal6 alignment</p>
-      </td>
-    </tr>
-    <tr>
-      <td valign="middle" class="td1">
-        <p class="p4">wuhCor1 (SARS-CoV-2)</p>
-      </td>
-      <td valign="middle" class="td2">
-        <p class="p4">29mammals</p>
-      </td>
-      <td valign="middle" class="td3">
-        <p class="p4">44 Sarbecovirus genomes</p>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<p class="p4">The scores were smoothed using a Hidden Markov Model (HMM) with 4 states, one representing coding regions and three representing non-coding regions. The emission of each codon is its PhyloCSF score. The ratio of the emissions probabilities for the coding and non-coding models are computed from the PhyloCSF score, since it represents the log-likelihood ratio of the alignment under the coding and non-coding models. The three non-coding states have the same emissions probabilities but different transition probabilities (they can only transition to coding) to better capture the multimodal distribution of gaps between same-frame coding exons. These transition probabilities represent the best approximation of this gap distribution as a mixture model of three exponential distributions, computed using Expectation Maximization.</p>
-<p class="p3"><br></p>
-<p class="p4">The HMM defines a probability that each codon is coding, based on the PhyloCSF scores of that codon and nearby codons on the same strand in the same frame, without taking into account start codons, stop codons, or potential splice sites. PhyloCSF+0 shows the log-odds that codons in frame 0 on the '+' strand are in the coding state according to the HMM, and similarly for strand '-' and frames 1 and 2. The PhyloCSF Regions tracks show the genomic intervals that are in the protein-coding state in the most likely path through the HMM.</p>
+<p class="p4">Tracks were constructed as described in Mudge et al. 2019 [2] and Jungreis et al. 2020 [3]. In brief, PhyloCSF was run with the "fixed" strategy on every codon in every frame on each strand in the wuhCor1/SARS-CoV-2 assembly using an alignment of 44 Sarbecovirus genomes, using the PhyloCSF parameters for 29mammals with the tree replaced with a tree of the 44 Sarbecovirus genomes. The scores were smoothed using a Hidden Markov Model (HMM) with 4 states, one representing coding regions and three representing non-coding regions. The emission of each codon is its PhyloCSF score. The ratio of the emissions probabilities for the coding and non-coding models are computed from the PhyloCSF score, since it represents the log-likelihood ratio of the alignment under the coding and non-coding models. The three non-coding states have the same emissions probabilities but different transition probabilities (they can only transition to coding) to better capture the multimodal distribution of gaps between same-frame coding exons. These transition probabilities represent the best approximation of this gap distribution as a mixture model of three exponential distributions, computed using Expectation Maximization. The HMM defines a probability that each codon is coding, based on the PhyloCSF scores of that codon and nearby codons on the same strand in the same frame, without taking into account start codons, stop codons, or potential splice sites. PhyloCSF+0 shows the log-odds that codons in frame 0 on the '+' strand are in the coding state according to the HMM, and similarly for strand '-' and frames 1 and 2.</p>
 <p class="p3"><br></p>
 <p class="p2"><b>Credits</b></p>
 <p class="p3"><br></p>
@@ -158,14 +50,12 @@
 <p class="p3"><br></p>
 <p class="p2"><b>Citing the PhyloCSF Tracks</b></p>
 <p class="p3"><br></p>
-<p class="p4">If you use the PhyloCSF browser tracks, please cite Mudge et al. 2019 [4].</p>
+<p class="p4">If you use the PhyloCSF browser tracks, please cite Mudge et al. 2019 [2] and Jungreis et al. 2020 [3].</p>
 <p class="p3"><br></p>
 <p class="p2"><b>References</b></p>
 <p class="p3"><br></p>
-<p class="p5"><span class="s3">[1] </span>Jungreis I, Saelfon R and Kellis M (2020). Sarbecovirus comparative genomics elucidates gene content of SARS-CoV-2 and functional impact of COVID-19 pandemic mutations. <a href="https://www.biorxiv.org/content/10.1101/2020.06.02.130955v1"><span class="s4"><i>Biorxiv</i></span><span class="s1"> 2020</span></a>.</p>
 <p class="p5"><span class="s3">[1] </span>Lin MF, Jungreis I, and Kellis M (2011). PhyloCSF: a comparative genomics method to distinguish protein-coding and non-coding regions. <a href="http://bioinformatics.oxfordjournals.org/content/27/13/i275.abstract"><span class="s4"><i>Bioinformatics</i></span><span class="s1"> 27:i275-i282</span></a> (ISMB/ECCB 2011).</p>
-<p class="p5"><span class="s3">[2] </span>Jungreis I, Lin MF, Chan CS, Kellis M (2016). CodAlignView: The Codon Alignment Viewer [Internet]. Available from: <a href="http://data.broadinstitute.org/compbio1/cav.php"><span class="s4">http://data.broadinstitute.org/compbio1/cav.php</span></a>.</p>
-<p class="p5"><span class="s3">[3] </span>Yeo G, Burge CB (2004). Maximum entropy modeling of short sequence motifs with applications to RNA splicing signals. <a href="http://online.liebertpub.com/doi/abs/10.1089/1066527041410418"><span class="s4"><i>Journal of Computational Biology : a Journal of Computational Molecular Cell Biology</i></span><span class="s1"> 11(2-3), 377–394</span></a>.</p>
-<p class="p5"><span class="s3">[4] </span>Mudge JM, Jungreis I, Hunt T, Gonzalez JM, Wright J, Kay M, Davidson C, Fitzgerald S, Seal R, Tweedie S, He L, Waterhouse RM, Li Y, Bruford E, Choudhary J, Frankish A, Kellis M (2019). Discovery of high-confidence human protein-coding genes and exons by whole-genome PhyloCSF helps elucidate 118 GWAS loci. <a href="https://genome.cshlp.org/content/early/2019/09/19/gr.246462.118.abstract"><em>Genome Research</em> gr-246462. doi: 10.1101/gr.246462.118</a>.</p>
+<p class="p5"><span class="s3">[2] </span>Mudge JM, Jungreis I, Hunt T, Gonzalez JM, Wright J, Kay M, Davidson C, Fitzgerald S, Seal R, Tweedie S, He L, Waterhouse RM, Li Y, Bruford E, Choudhary J, Frankish A, Kellis M (2019). Discovery of high-confidence human protein-coding genes and exons by whole-genome PhyloCSF helps elucidate 118 GWAS loci. <a href="https://genome.cshlp.org/content/early/2019/09/19/gr.246462.118.abstract"><em>Genome Research</em> gr-246462. doi: 10.1101/gr.246462.118</a>.</p>
+<p class="p5"><span class="s3">[3] </span>Jungreis I, Saelfon R and Kellis M (2020). Sarbecovirus comparative genomics elucidates gene content of SARS-CoV-2 and functional impact of COVID-19 pandemic mutations. <a href="https://www.biorxiv.org/content/10.1101/2020.06.02.130955v1"><span class="s4"><i>Biorxiv</i></span><span class="s1"> 2020</span></a>.</p>
 </body>
 </html>
