@@ -1,6 +1,5 @@
 # mostly copied from https://data.broadinstitute.org/compbio1/PhyloCSFtracks/trackHub/hub.txt
 track PhyloCSF_smooth
-superTrack on show
 shortLabel Smoothed PhyloCSF
 longLabel Smoothed PhyloCSF
 group compGeno
@@ -12,6 +11,7 @@ graphTypeDefault bar
 yLineMark 0
 yLineOnOff on
 priority 20
+superTrack on show
 
     track PhyloCSF_plus_1
     parent PhyloCSF_smooth
@@ -49,7 +49,7 @@ priority 20
     shortLabel PhyloCSF-1
     longLabel Smoothed PhyloCSF  Strand -  Frame 1
     color 200,0,0
-    visibility full
+    visibility hide
     graphTypeDefault bar
     priority 20
 
@@ -59,7 +59,7 @@ priority 20
     shortLabel PhyloCSF-2
     longLabel Smoothed PhyloCSF  Strand -  Frame 2
     color 200,0,0
-    visibility full
+    visibility hide
     graphTypeDefault bar
     priority 20
 
@@ -69,7 +69,7 @@ priority 20
     shortLabel PhyloCSF-3
     longLabel Smoothed PhyloCSF  Strand -  Frame 3
     color 200,0,0
-    visibility full
+    visibility hide
     graphTypeDefault bar
     priority 20
 
