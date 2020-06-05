@@ -7,7 +7,7 @@ superTrack on
     track dosageSensitivity
     parent clinGenSuper on
     shortLabel ClinGen Dosage Sensitivity
-    longLabel Clinical Genome Resource Dosage Sensitivity 
+    longLabel Clinical Genome Resource Dosage Sensitivity Map 
     visibility pack
     type bigBed 9 +
     itemRgb on
@@ -15,30 +15,30 @@ superTrack on
 
         track clinGenHaplo
         parent dosageSensitivity
-        shortLabel ClinGen Haplo Insufficiency
-        longLabel ClinGen Haplo Insufficiency
+        shortLabel ClinGen Haploinsufficiency
+        longLabel ClinGen Dosage Sensitivity Map - Haploinsufficiency
         visibility dense
         type bigBed 9 +
         bigDataUrl /gbdb/$D/bbi/clinGen/clinGenHaplo.bb
         mouseOverField _mouseOver
         filterValues.haploScore 0|No evidence available,1|Little evidence for dosage pathogenicity,2|Some evidence for dosage pathogenicity,3|Sufficient evidence for dosage pathogenicity,30|Gene associated with autosomal recessive phenotype,40|Dosage sensitivity unlikely
-        filterLabel.haploScore Haplosensitivity Score
+        filterLabel.haploScore Dosage Sensitivity Score
 
         track clinGenTriplo
         parent dosageSensitivity
-        shortLabel ClinGen Triplo Sensitivity
-        longLabel ClinGen Triplo Sensitivity
+        shortLabel ClinGen Triplosensitivity
+        longLabel ClinGen Dosage Sensitivity Map - Triplosensitivity
         visibility dense
         type bigBed 9 +
         bigDataUrl /gbdb//$D/bbi/clinGen/clinGenTriplo.bb
         mouseOverField _mouseOver
         filterValues.triploScore 0|No evidence available,1|Little evidence for dosage pathogenicity,2|Some evidence for dosage pathogenicity,3|Sufficient evidence for dosage pathogenicity,30|Gene associated with autosomal recessive phenotype,40|Dosage sensitivity unlikely
-        filterLabel.triploScore Triplosensitivity Score
+        filterLabel.triploScore Dosage Sensitivity Score
 
     track clinGenCnv
     parent clinGenSuper off
-    shortLabel ClinGen Copy Number Variants
-    longLabel Clinical Genome Resource Copy Number Variants
+    shortLabel ClinGen Structural Variants
+    longLabel Clinical Genome Resource Structural Variants
     type bigBed 9 +
     itemRgb on
     visibility dense
@@ -47,9 +47,9 @@ superTrack on
     mouseOverField _mouseOver
     filterLabel.size Variant Size
     filterValues.variantType copy_number_loss|loss,copy_number_gain|gain
-    filterLabel.variantType Copy Number Type (gain or loss)
+    filterLabel.variantType Variant Type
     filterValues.clinicalInterpretation Pathogenic|pathogenic,Benign|benign
-    filterLabel.clinicalInterpretation Benign or Pathogenic
+    filterLabel.clinicalInterpretation Clinical Significance
     url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
     urlLabel NCBI DbVar:
     urls pubMed="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" clinGenId="https://dosage.clinicalgenome.org/clingen_region.cgi?id=$$&page=print"
