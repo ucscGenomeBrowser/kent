@@ -17737,61 +17737,57 @@ TMPDIR=/dev/shm
 	-noDbNameCheck -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
-XXX - running - Fri May 29 17:11:31 PDT 2020
-    #  real    98m5.996s
-
-    # slight problem with the resulting chain table name:
-    #    chainGCA_901343595.1_MONAX5
-    # can not have a table name with .1 like that, MySQL thought
-    # that was database chainGCA_901343595 taable 1_MONAX5
-    # fixed up loadUp.csh to do that correctly with name:
-    #   chainGCA_901343595v1_MONAX5
-    # would need to change the SEQ2_DIR name
-    # make some symLinks and have settings:
-# SEQ2_DIR=/hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29/GCA_901343595v1_MONAX5.2bit
-# SEQ2_LEN=/hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29/GCA_901343595v1_MONAX5.chrom.sizes
-    #	real    483m10.607s
-    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
-	-continue=download -noDbNameCheck -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-	-chainMinScore=3000 -chainLinearGap=medium) > download.log 2>&1 &
+    #  real    125m59.598s
 
     cat fb.mm10.chainGCA_901343595v1_MONAX5Link.txt
     # 923698956 bases of 2652783500 (34.820%) in intersection
+    cat fb.mm10.chainSynGCA_901343595v1_MONAX5Link.txt
+    # 851857022 bases of 2652783500 (32.112%) in intersection
 
-    cat fb.mm10.chainCanFam4Link.txt
-    #	777883731 bases of 2652783500 (29.323%) in intersection
-    cat fb.mm10.chainSynCanFam4Link.txt
-    #   736602602 bases of 2652783500 (27.767%) in intersection
-
-
-    time (doRecipBest.pl -load -workhorse=hgwdev mm10 canFam4 \
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -load \
+       -workhorse=hgwdev mm10 GCA_901343595v1_MONAX5 \
+      -query2Bit=/hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29/GCA_901343595v1_MONAX5.2bit \
+      -querySizes=/hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29/GCA_901343595v1_MONAX5.chrom.sizes \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    #	real    219m16.168s
+    #	real    226m4.391s
 
-    cat fb.mm10.chainRBest.CanFam4.txt
-    # 741307883 bases of 2652783500 (27.945%) in intersection
+    cat fb.mm10.chainRBest.GCA_901343595v1_MONAX5.txt
+    # 877175980 bases of 2652783500 (33.066%) in intersection
 
-    mkdir /hive/data/genomes/canFam4/bed/blastz.mm10.swap
-    cd /hive/data/genomes/canFam4/bed/blastz.mm10.swap
+    mkdir /hive/data/genomes/asmHubs/genbankBuild/GCA/901/343/595/GCA_901343595.1_MONAX5/trackData/blastz.mm10.swap
+    cd /hive/data/genomes/asmHubs/genbankBuild/GCA/901/343/595/GCA_901343595.1_MONAX5/trackData/blastz.mm10.swap
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzCanFam4.2020-05-29/DEF \
+	/hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29/DEF \
+        -noDbNameCheck -swapDir=`pwd` -skipDownload -trackHub \
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
-    #	real    50m20.639s
 
-    cat fb.canFam4.chainMm10Link.txt
-    #	772902855 bases of 2481941580 (31.141%) in intersection
-    cat fb.canFam4.chainSynMm10Link.txt
-    #   737924732 bases of 2481941580 (29.732%) in intersection
+    # real    25m28.210s
+    # ran into problem of expired certificate at genome-source.gi.ucsc.edu
+    # finished netChains.csh manually, then continuing:
+    time (~/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29/DEF \
+        -noDbNameCheck -swapDir=`pwd` -skipDownload -trackHub \
+	-continue=load -swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > load.log 2>&1 &
+    #	real    37m23.399s
 
-    time (doRecipBest.pl -load -workhorse=hgwdev canFam4 mm10 \
+    cat fb.GCA_901343595v1_MONAX5.chain.Mm10Link.txt
+    # 974411924 bases of 2625891882 (37.108%) in intersection
+    cat fb.GCA_901343595v1_MONAX5.chainSyn.Mm10Link.txt
+    # 865165537 bases of 2625891882 (32.947%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl -load \
+      -skipDownload -trackHub -workhorse=hgwdev GCA_901343595v1_MONAX5 mm10 \
+      -target2Bit=/hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29/GCA_901343595v1_MONAX5.2bit \
+      -targetSizes=/hive/data/genomes/mm10/bed/lastzGCA_901343595v1.2020-05-29/GCA_901343595v1_MONAX5.chrom.sizes \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    173m38.016s
+    # real    277m4.130s
 
-    cat fb.canFam4.chainRBest.Mm10.txt
-    # 740357755 bases of 2481941580 (29.830%) in intersection
+    cat fb.GCA_901343595v1_MONAX5.chainRBest.Mm10.txt
+    # 877160501 bases of 2625891882 (33.404%) in intersection
 
 ##############################################################################
 # ENCODE Registry of Candidate cis-Regulatory Elements
