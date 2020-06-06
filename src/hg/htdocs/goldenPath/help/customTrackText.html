@@ -670,41 +670,41 @@ track type=bigBed name="bigBed Example One" description="A bigBed file" bigDataU
 To make your Genome Browser annotation track viewable by people on other machines or at other sites,
 follow the steps below.</p>
 <p>
-<strong>Step 1.</strong> Put your formatted annotation file on your web site. Be sure that the file 
+<strong>Step 1.</strong> Put your formatted annotation file on your web site. Be sure that the file
 permissions allow it to be read by others.</p>
 <p>
-<strong>Step 2.</strong> Construct a URL that will link this annotation file to the Genome Browser. 
-The URL must contain 3 pieces of information specific to your annotation data:</p> 
+<strong>Step 2.</strong> Construct a URL that will link this annotation file to the Genome Browser.
+The URL must contain 3 pieces of information specific to your annotation data:</p>
 <ul>
   <li>
-  The species or genome assembly on which your annotation data is based. To automatically display 
-  the most recent assembly for a given organism, set the <em>org</em> parameter: <em>e.g.</em> 
-  <code>org=human</code>. To specify a particular genome assembly for an organism, use the 
-  <em>db</em> parameter, <code>db=database_name</code>, where <em>database_name</em> is the UCSC 
-  code for the genome assembly. For a list of these codes, see the Genome Browser 
-  <a href="/FAQ/FAQreleases.html#release1" target="_blank">FAQ</a>. Examples of this include: 
-  db=hg16 (Human July 2003 assembly), db=mm6 (Mouse Mar. 2005 assembly).</li>
+  The species or genome assembly on which your annotation data is based. To automatically display
+  the most recent assembly for a given organism, set the <em>org</em> parameter: <em>e.g.</em>
+  <code>org=human</code>. To specify a particular genome assembly for an organism, use the
+  <em>db</em> parameter, <code>db=&lt;databaseName&gt;</code>, where <em>databaseName</em> is the UCSC
+  code for the genome assembly. For a list of these codes, see the Genome Browser
+  <a href="/FAQ/FAQreleases.html#release1" target="_blank">FAQ</a>. Examples of this include:
+  db=hg38 (Human Dec. 2013 assembly = GRCh38), db=mm10 (Mouse Dec. 2011 assembly = GRCm38).</li>
   <li>Additionally, particular genome assemblies, including assemblies in assembly hubs, can be specified using
-  the <em>genome</em> parameter, <code>genome=database_name</code>, which acts in the same manner as
+  the <em>genome</em> parameter, <code>genome=&lt;databaseName&gt;</code>, which acts in the same manner as
   the <em>db</em> parameter. Here is an example using the house mouse (<i>Mus musculus</i>, 129S1_SvImJ)
   assembly hub:
   <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?genome=129S1_SvImJ&hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt"
   target="_blank">http://genome.ucsc.edu/cgi-bin/hgTracks?genome=129S1_SvImJ&hubUrl=http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hub.txt</a></li>
   <li>
-  The genome position to which the Genome Browser should initially open. This information is of the 
-  form <code>position=chr_position</code>, where <em>chr_position</em> is a chromosome number, with 
-  or without a set of coordinates. Examples of this include: position=chr22, 
+  The genome position to which the Genome Browser should initially open. This information is of the
+  form <code>position=&lt;chrPosition&gt;</code>, where <em>chrPosition</em> is a chromosome number, with
+  or without a set of coordinates. Examples of this include: position=chr22,
   position=chr22:15916196-31832390.</li>
   <li>
-  The URL of the annotation file on your web site. This information is of the form 
-  <code>hgt.customText=URL</code>, where <em>URL</em> points to the annotation file on your website.
-  An example of an annotation file URL is <a href="test.bed" 
-  target="_blank">http://genome.ucsc.edu/goldenPath/help/test.bed</a>.</li>  
+  The URL of the annotation file on your web site. This information is of the form
+  <code>hgt.customText=&lt;url&gt;</code>, where <em>url</em> points to the annotation file on your website.
+  An example of an annotation file URL is <a href="test.bed"
+  target="_blank">http://genome.ucsc.edu/goldenPath/help/test.bed</a>.</li>
 </ul>
 
 <a name="optParams"></a>
 <p>
-You can add other optional parameters to the URL: (Note: Display may vary if you have conflicting 
+You can add other optional parameters to the URL: (Note: Display may vary if you have conflicting
 cart variables, for example having both hide all and highlight features.)
 <ul>
   <li>
@@ -712,7 +712,7 @@ cart variables, for example having both hide all and highlight features.)
   <a href="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&guidelines=off" 
   target="_blank">example link</a> to switch off blue guidelines</li>
   <li>
-  <code>hgFind.matches=listOfNames</code> - highlight features given their names - 
+  <code>hgFind.matches=&lt;listOfNames&gt;</code> - highlight features given their names -
   <a href="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hgFind.matches=uc010naf.1,uc011mcz.1" 
   target="_blank">example link</a> to highlight two transcripts of the ABO gene</li>
   <li>
@@ -737,7 +737,7 @@ cart variables, for example having both hide all and highlight features.)
   <a href="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hideTracks=1&cytoBand=pack" 
   target="_blank">example link</a> to show only the Chromosome Bands track and nothing else</li>
   <li>
-  <code>highlight=&lt;DB&gt;.&lt;CHROM&gt;:&lt;START&gt;-&lt;END&gt;#&lt;COLOR&gt;|...</code> - 
+  <code>highlight=&lt;db&gt;.&lt;chrom&gt;:&lt;chromStart&gt;-&lt;chromEnd&gt;#&lt;color&gt;|...</code> - 
   highlight one or more regions in a given color on the image. Note that the arguments have to be 
   URL-encoded for Internet browsers, so &quot;:&quot; becomes &quot;%3A&quot;, &quot;#&quot;
   becomes &quot;%23&quot; and &quot;|&quot; becomes &quot;%7&quot;C. - 
@@ -748,7 +748,7 @@ cart variables, for example having both hide all and highlight features.)
   tracks, and track hubs - <a href="../../cgi-bin/hgTracks?db=hg19&ignoreCookie=1" 
   target="_blank">example link</a> to show the default tracks and positions for hg19</li>
   <li>
-  <code>oligoMatch=pack&amp;hgt.oligoMatch=DNASEQ</code> - switch on the Short Match track and 
+  <code>oligoMatch=pack&amp;hgt.oligoMatch=&lt;dnaSeq&gt;</code> - switch on the Short Match track and 
   highlight a matching sequence - 
   <a href="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&oligoMatch=pack&hgt.oligoMatch=TATAWAR" 
   target="_blank">example link</a> to highlight the TATAWAR motif in the ABO locus</li>
@@ -803,7 +803,7 @@ target="_blank">http://genome.ucsc.edu/cgi-bin/hgRenderTracks?db=hg19&position=c
 <p>
 Combine the above pieces of information into a URL of the following format (the information
 specific to your annotation file is highlighted):</p>
-<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?org=<font color="000099"><em>organism_name</em></font>&amp;position=<font color="000099"><em>chr_position</em></font>&amp;hgt.customText=<font color="000099"><em>URL</em></font></code></pre>
+<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?org=<font color="000099"><em>&lt;organismName&gt;</em></font>&amp;position=<font color="000099"><em>&lt;chrPosition&gt;</em></font>&amp;hgt.customText=<font color="000099"><em>&lt;url&gt;</em></font></code></pre>
 <p>
 <strong><em>Example #5:</em></strong><br>
 The following URL will open up the Genome Browser window to display chr22 of the latest human
