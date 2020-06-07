@@ -21,10 +21,12 @@ noScoreFilter on
     filterType._clinSignCode singleList
     filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,NOVO|de novo,UNK|unknown
     filterType._originCode singleList
-    filterValues._allTypeCode SNV|single nucleotide variant,INS|insertion,DEL|deletion,INDEL|insertion-deletion,dupl|duplication,OTH|other
+    filterLabel._originCode Alelle Origin
+    filterValues._allTypeCode SNV|single nucleotide variant - SNV,INS|insertion - INS,DEL|deletion - DEL,INDEL|insertion-deletion - INDEL,dupl|duplication - DUPL,OTH|other - OTH
     filterType._allTypeCode singleList
-    filterByRange._valLen on
-    filterLimits._varLen 0:99999999
+    filter._varLen 0
+    filterByRange._varLen on
+    filterLimits._varLen 0:49
     filterValues.molConseq genic downstream transcript variant|genic downstream transcript variant,no sequence alteration|no sequence alteration,inframe indel|inframe indel,stop lost|stop lost,genic upstream transcript variant|genic upstream transcript variant,initiatior codon variant|initiatior codon variant,inframe insertion|inframe insertion,inframe deletion|inframe deletion,splice acceptor variant|splice acceptor variant,splice donor variant|splice donor variant,5 prime UTR variant|5 prime UTR variant,nonsense|nonsense,non-coding transcript variant|non-coding transcript variant,3 prime UTR variant|3 prime UTR variant,frameshift variant|frameshift variant,intron variant|intron variant,synonymous variant|synonymous variant,missense variant|missense variant,|unknown
     mouseOverField _mouseOver
     bigDataUrl /gbdb/$D/bbi/clinvar/clinvarMain.bb
@@ -38,15 +40,14 @@ noScoreFilter on
     priority 2
     filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,NOVO|de novo,UNK|unknown
     filterType._originCode singleList
-    filterValues._allTypeCode SNV|single nucleotide variant,INS|insertion,DEL|deletion,INDEL|insertion-deletion,dupl|duplication,OTH|other
+    filterLabel._originCode Alelle Origin
+    filterValues._allTypeCode INS|insertion - INS,DEL|deletion - DEL,INDEL|insertion-deletion - INDEL,dupl|duplication - DUPL,OTH|other - OTH
     filterType._allTypeCode singleList
     filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other
     filterType._clinSign singleList
-    filterValues.origin not-reported,uniparental,tested-inconclusive,biparental,not applicable,paternal,maternal,inherited,de novo,somatic,not provided,unknown,germline
-    filterType.origin multipleListOnlyOr
-    filter._varLen 0
+    filter._varLen 50:999999999
     filterByRange._varLen on
-    filterLimits._varLen 0:99999999
+    filterLimits._varLen 50:999999999
     mouseOverField _mouseOver
     bigDataUrl /gbdb/$D/bbi/clinvar/clinvarCnv.bb
     mergeSpannedItems on
