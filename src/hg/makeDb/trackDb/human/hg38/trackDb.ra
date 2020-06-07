@@ -540,6 +540,7 @@ track tgpTrios
 type vcfPhasedTrio
 release alpha
 group varRep
+maxWindowToDraw 5000000
 compositeTrack on
 
     track tgpNA19685_m011_MXL
@@ -550,6 +551,7 @@ compositeTrack on
     longLabel 1000 Genomes m011 Mexican Ancestry from Los Angeles Trio
     vcfChildSample NA19685|child
     vcfParentSamples NA19660|mother,NA19661|father
+    visibility full
     release alpha
 
     track tgpNA19675_m004_MXL
@@ -560,6 +562,7 @@ compositeTrack on
     longLabel 1000 Genomes m004 Mexican Ancestry from Los Angeles Trio
     vcfChildSample NA19675|child
     vcfParentSamples NA19678|mother,NA19679|father
+    visibility full
     release alpha
 
     track tgpNA19240_Y117_YRI
@@ -570,6 +573,7 @@ compositeTrack on
     longLabel 1000 Genomes Yoruban in Ibadan, Nigeria Trio
     vcfChildSample NA19240|child
     vcfParentSamples NA19238|mother,NA19239|father
+    visibility full
     release alpha
 
     track tgpNA12878_1463_CEU
@@ -580,6 +584,7 @@ compositeTrack on
     longLabel 1000 Genomes Utah CEPH Trio
     vcfChildSample NA12878|child
     vcfParentSamples NA12892|mother,NA12891|father
+    visibility full
     release alpha
 
     track tgpHG02024_VN049_KHV
@@ -590,6 +595,7 @@ compositeTrack on
     longLabel 1000 Genomes Kinh in Ho Chi Minh City, Vietnam Trio
     vcfChildSample HG02024|child
     vcfParentSamples HG02025|mother,HG02026|father
+    visibility full
     release alpha
 
     track tgpHG00733_PR05_PUR
@@ -600,6 +606,7 @@ compositeTrack on
     longLabel 1000 Genomes Puerto Ricans from Puerto Rico Trio
     vcfChildSample HG00733|child
     vcfParentSamples HG00732|mother,HG00731|father
+    visibility full
     release alpha
 
     track tgpHG00702_SH089_CHS
@@ -610,6 +617,7 @@ compositeTrack on
     longLabel 1000 Genomes Southern Han Chinese Trio
     vcfChildSample HG00702|child
     vcfParentSamples HG00657|mother,HG00656|father
+    visibility full
     release alpha
 
 track genomicSuperDups override

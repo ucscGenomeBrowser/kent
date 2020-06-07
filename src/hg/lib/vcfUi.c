@@ -475,16 +475,16 @@ if (hasSampleAliases(tdb))
     safef(defaultLabel, sizeof(defaultLabel), "%s.%s", name, VCF_PHASED_DEFAULT_LABEL_VAR);
     safef(aliasLabel, sizeof(aliasLabel), "%s.%s", name, VCF_PHASED_ALIAS_LABEL_VAR);
     boolean isDefaultChecked = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_DEFAULT_LABEL_VAR, TRUE);
-    boolean isAliasChecked = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_ALIAS_LABEL_VAR, FALSE);
+    boolean isAliasChecked = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_ALIAS_LABEL_VAR, TRUE);
     cgiMakeCheckBox(defaultLabel, isDefaultChecked);
     printf("VCF file sample names &nbsp;");
     cgiMakeCheckBox(aliasLabel, isAliasChecked);
-    printf("aliases");
+    printf("Family Labels");
     printf("<br>");
     }
 if (trackDbSetting(tdb,VCF_PHASED_PARENTS_SAMPLE_SETTING))
     {
-    printf("<b>Hide parent/other sample(s)");
+    printf("<b>Hide parent sample(s)");
     char hideVarName[1024];
     safef(hideVarName, sizeof(hideVarName), "%s.%s", name, VCF_PHASED_HIDE_OTHER_VAR);
     boolean hidingOtherSamples = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_HIDE_OTHER_VAR, FALSE);

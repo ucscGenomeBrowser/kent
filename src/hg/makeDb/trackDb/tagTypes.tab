@@ -273,7 +273,7 @@ maxHeightPixels *
 maxItems *
 maxLimit *
 maxScore broadPeak narrowPeak
-maxWindowToDraw bam big* rmsk joinedRmsk bed narrowPeak broadPeak bedlogR genepred vcf vcfTabix factorSource
+maxWindowToDraw bam big* rmsk joinedRmsk bed narrowPeak broadPeak bedlogR genepred vcf vcfTabix vcfPhasedTrio factorSource
 maxWindowToQuery bigWig bed bedlogR
 metadata *
 mouseOverField big*

@@ -2028,7 +2028,7 @@ struct rgbColor yellow = lightRainbowAtPos(0.2);
 int transYellow = MAKECOLOR_32_A(yellow.r, yellow.g, yellow.b, 100);
 
 boolean useDefaultLabel = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_DEFAULT_LABEL_VAR, TRUE);
-boolean useAliasLabel = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_ALIAS_LABEL_VAR, FALSE);
+boolean useAliasLabel = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_ALIAS_LABEL_VAR, TRUE);
 
 for (name = sampleNames, i = 0; name != NULL; name = name->next, i++)
     {
@@ -2099,6 +2099,8 @@ int vcfPhasedTrackHeight(struct track *tg, enum trackVisibility vis)
 {
 const struct vcfFile *vcff = tg->extraUiData;
 // when doing composite track height, vcfPhasedLoadItems won't have been called yet!
+if (vis == tvDense)
+    return pgSnpHeight(tg, vis);
 if (!vcff || vcff->records == NULL)
     return 0;
 int totalSamples = slCount(vcfPhasedGetSampleOrder(cart, tg->tdb, FALSE));

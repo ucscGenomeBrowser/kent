@@ -1532,6 +1532,8 @@ void pgSnpMethods (struct track *tg);
 /* Personal Genome SNPs: show two alleles with stacked color bars for base alleles and
  * (if available) allele counts in mouseover. */
 
+int pgSnpHeight(struct track *tg, enum trackVisibility vis);
+
 void pgSnpCtMethods (struct track *tg);
 /* Load pgSnp track from custom tracks */
 
