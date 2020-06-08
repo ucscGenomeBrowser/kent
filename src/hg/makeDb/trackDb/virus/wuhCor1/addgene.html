@@ -1,0 +1,34 @@
+<H2>Description</H2>
+<p>
+<p>This track shows sequences contained in plasmids that can be ordered through
+<a href="https://www.addgene.org" target=_blank>Addgene</a>. Many plasmids
+containing SARS-CoV-2 sequences are now available and more are currently
+undergoing quality control analysis. Some of these plasmids are described in
+preprints, published articles, and summaries. For a more detailed description
+of some of these collections, please see the links to Addgene's webpage for
+each plasmid.</a> <p>Some of the following plasmids are available to industry,
+in addition to academics and nonprofits. For more information on ordering the
+link to each plasmid's homepage has been provided.</p>
+
+<H2>Display Conventions and Configuration</H2>
+
+<p>Shown on the genome are regions that can be aligned to a plasmid. The 
+feature label is the AddGene identifier. A click on a feature shows a 
+brief description and link to the full webpage for ordering them.</p>
+
+<H2>Methods</H2>
+
+<p>Genbank files were downloaded from the Addgene webpage and were parsed to
+extract relevant data fields and the plasmid nucleotide sequence. The reference
+sequence, SARS-CoV-2 (wuhCor1 - NC_045512v2), was then downloaded from UCSC
+browser and a reference database for blast alignment was created using
+makeblastdb. The viral region of each plasmid was then aligned using blastn.
+Alignments exceeding an expected value of 0.00001 were considered. The aligned
+sequences were then converted to bed format and the relevant Genbank data field
+were added. Finally, bedToBigBed was used to create the BigBed track.</p>
+
+<H2>Credits</H2>
+Thanks to Nathan Mauldin and Jason Fernandes for making this track.
+
+<H2>References</H2>
+<p>References can be found on the specific plasmid's webpage. Each plasmid is hosted by https://www.addgene.org.

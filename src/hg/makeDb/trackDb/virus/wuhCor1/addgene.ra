@@ -1,0 +1,11 @@
+track addgene
+shortLabel Addgene Plasmids
+longLabel Addgene Plasmid Sequences alignable to the Genome
+visibility hide
+group map
+url     "https://www.addgene.org/$$/"
+urlLabel Link to the Addgene plasmid page
+urls name="https://www.addgene.org/$$/"
+type bigBed
+priority 1
+bigDataUrl /gbdb/wuhCor1/bbi/addgene.bb
