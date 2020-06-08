@@ -5,7 +5,7 @@ visibility hide
 group map
 url     "https://www.addgene.org/$$/"
 urlLabel Link to the Addgene plasmid page
-urls name="https://www.addgene.org/$$/"
+skipFields addgeneLink
 type bigBed
 priority 1
 bigDataUrl /gbdb/wuhCor1/bbi/addgene.bb
