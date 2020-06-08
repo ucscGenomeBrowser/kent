@@ -65,16 +65,17 @@ def parseLength(treeString, offset):
     else:
         return ('', offset)
 
-def parseBranch(treeString, offset):
+def parseBranch(treeString, offset, internalNode):
     """Recursively parse Newick branch (x, y, z)[label][:length] from treeString at offset"""
     if (treeString[offset] != '('):
         die("parseBranch called on treeString that doesn't begin with '(': '" +
             treeString + "'")
     branchStart = offset
-    branch = { 'kids': [],  'label': '', 'length': '' }
+    internalNode += 1
+    branch = { 'kids': [],  'label': '', 'length': '', 'inode': internalNode }
     offset = skipSpaces(treeString, offset + 1)
     while (offset != len(treeString) and treeString[offset] != ')' and treeString[offset] != ';'):
-        (child, offset) = parseString(treeString, offset)
+        (child, offset, internalNode) = parseString(treeString, offset, internalNode)
         branch['kids'].append(child)
         if (treeString[offset] == ','):
             offset = skipSpaces(treeString, offset + 1)
@@ -87,18 +88,18 @@ def parseBranch(treeString, offset):
             "instead got '" + treeString[offset:offset+100] + "'")
     (branch['label'], offset) = parseLabel(treeString, offset)
     (branch['length'], offset) = parseLength(treeString, offset)
-    return (branch, offset)
+    return (branch, offset, internalNode)
 
-def parseString(treeString, offset=0):
+def parseString(treeString, offset=0, internalNode=0):
     """Recursively parse Newick tree from treeString"""
     offset = skipSpaces(treeString, offset)
     if (treeString[offset] == '('):
-        return parseBranch(treeString, offset)
+        return parseBranch(treeString, offset, internalNode)
     else:
         (label, offset) = parseLabel(treeString, offset)
         (length, offset) = parseLength(treeString, offset)
         leaf = { 'kids': None, 'label': label, 'length': length }
-        return (leaf, offset)
+        return (leaf, offset, internalNode)
 
 def parseFile(treeFile):
     """Read Newick file, return tree object"""
@@ -106,7 +107,7 @@ def parseFile(treeFile):
         line1 = treeF.readline().strip()
         if (line1 == ''):
             return None
-        (tree, offset) = parseString(line1)
+        (tree, offset, internalNode) = parseString(line1)
         if (offset != len(line1) and line1[offset] != ';'):
             die("Tree terminated without ';' before '" + line1[offset:offset+100] + "'")
         treeF.close()

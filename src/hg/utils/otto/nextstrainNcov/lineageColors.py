@@ -15,19 +15,33 @@
 # 15 lineages were in the top 20 either with or without UK samples:
 # comm -12 1 2 > top20WithOrWithoutUk
 
-from collections import defaultdict;
+# Repeating the analysis with the 2020-05-19 release, 16 were in both top 20's... excluded
+# B.2.1 because its excluding-UK count was so low.
+# http://www.perbang.dk/rgbgradient/ is handy for making color spectra.
 
-spectrumColors = [0x0018E2, 0x3F00DF, 0x9500DD, 0xDA00CC, 0xD80075,
-                  0xD50020, 0xD33200, 0xD08400, 0xC9CE00, 0x77CB00,
-                  0x26C900, 0x00C627, 0x00C473, 0x00C1BD, 0x0078BF]
+from collections import defaultdict
+import logging
+
+# Use Nextstrain colors where there's a good match, avoid Nextstrain colors where there's not.
+topLineageColors = { 'A':   0xe9cd4a, # Nextstrain B yellow
+                     'A.1': 0xffb041, # Nextstrain B1 light orange
+                     'A.2': 0xe2ec04, # neon yellow (orange and red are taken)
+                     'A.3': 0xff66da, # pink
+                     # Purple-to-green spectrum for B lineages / A clades
+                     'B':       0xce66ff, # light purple
+                     'B.1':     0x5cadcf, # Nextstrain A2a turquoise
+                     'B.1.1':   0x975bfd,
+                     'B.1.p2':  0x5a51fb,
+                     'B.1.3':   0x29f3c7,
+                     'B.1.5':   0x1ff181,
+                     'B.1.p21': 0x16ef36,
+                     'B.2':     0x494be1, # Nextstrain A1a darkish blue
+                     'B.3':     0x33ed0d,
+                     'B.4':     0x77c7a4, # Nextstrain A3 greenish aqua
+                     'B.6':     0x74ec03
+                 }
 
 defaultColor = 0x000000
-
-# Break top lineages into their hierarchy components so that when a lineage is not in the top
-# 15, it can be assigned to its nearest ancestor, e.g. B.1.50 can be lumped in with B.1.
-topLineages = [ 'A', 'A.1', 'A.2', 'B', 'B.1',
-                'B.1.2', 'B.1.21', 'B.1.3', 'B.1.5', 'B.1.5.1',
-                'B.2', 'B.2.1', 'B.3', 'B.4', 'B.6' ]
 
 def newnode():
     """Return a new node of a tree mapping hierarchical lineages to colors"""
@@ -37,7 +51,7 @@ def lineagesToTree(lineages):
     """Given parallel lists of lineages and colors, build a tree with the lineages in
     ancestor/descendant hierarchy and associate a color with each node."""
     tree = newnode()
-    for lineage, color in zip(lineages, spectrumColors):
+    for lineage, color in topLineageColors.items():
         node = tree
         linList = lineage.split('.')
         for linLevel in linList:
@@ -47,7 +61,7 @@ def lineagesToTree(lineages):
         node['color'] = color
     return tree
 
-topLineageTree = lineagesToTree(topLineages)
+topLineageTree = lineagesToTree(topLineageColors)
 
 def lineageToColor(lineage):
     """Given a lineage like 'A' or 'B.1.34', find the lineage or its nearest ancestor in
@@ -77,7 +91,11 @@ def addLineagesAsBogusLength(node, labelToLineage):
                 node['label'] = node['lineage']
     else:
         # Leaf: look up lineage by label
-        node['lineage'] = labelToLineage[node['label']]
+        lineage = labelToLineage.get(node['label'])
+        if (not lineage):
+            logging.warn('No lineage for "' + node['label'] + '"')
+            lineage = defaultColor
+        node['lineage'] = lineage
     # Update length based on lineage (or lack thereof):
     lineage = node.get('lineage')
     if (lineage):

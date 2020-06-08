@@ -4,29 +4,7 @@ import logging, argparse, sys
 import random
 from collections import defaultdict
 from utils import die
-import newick, cladeColors, virusNames
-
-def readVcfSamples(vcfFile):
-    """Read VCF sample IDs from the #CHROM line, and parse out clades from the first row GT cols"""
-    samples = []
-    sampleClades = defaultdict()
-    with open(vcfFile, 'r') as vcfF:
-        line = vcfF.readline().strip()
-        while (line):
-            if (line.startswith('#CHROM')):
-                samples = line.split('\t')[9:]
-            elif (not line.startswith('#')):
-                gts = line.split('\t')[9:]
-                if (len(gts) != len(samples)):
-                    die("VCF file '%s' has %d samples but %d genotypes in first row" %
-                        (vcfFile, len(samples), len(gts)));
-                for sample, gt in zip(samples, gts):
-                    gtVal, clade = gt.split(':')
-                    sampleClades[sample] = clade
-                break
-            line = vcfF.readline().strip()
-        vcfF.close()
-    return samples, sampleClades
+import newick, cladeColors, nextstrainVcf, virusNames
 
 def treeIntersectIds(node, idLookup, sampleSet):
     """For each leaf in node, attempt to look up its label in idLookup; replace if found.
@@ -104,7 +82,7 @@ prune tree to only branches with leaves found in VCF, output pruned tree with VC
     sys.setrecursionlimit(100000)
     # logging.basicConfig(level=logging.DEBUG, filename='intersect.log')
     tree = newick.parseFile(args.treeFile)
-    (vcfSamples, vcfSampleClades) = readVcfSamples(args.vcfFile)
+    (vcfSamples, vcfSampleClades) = nextstrainVcf.readVcfSamples(args.vcfFile)
     idLookup = virusNames.makeIdLookup(vcfSamples)
     for key in idLookup:
         values = idLookup[key]
