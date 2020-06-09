@@ -1,0 +1,55 @@
+hub CODIS
+shortLabel CODIS
+longLabel CODIS regions, markers, primers and repeat sequences
+genomesFile hubComposite.txt
+email hclawson@ucsc.edu
+descriptionUrl codis.html
+
+genome hg38
+trackDb hubComposite.txt
+
+track codis
+compositeTrack on
+shortLabel CODIS regions
+longLabel CODIS region locations, markers, STR repeats, primers
+group user
+type bigBed 3
+html codis.html
+visibility pack
+colorByStrand 64,64,255 255,64,64
+
+    track regions
+    parent codis on
+    shortLabel CODIS regions
+    longLabel CODIS regions
+    type bigBed 4
+    visibility pack
+    bigDataUrl primerRange.bb
+    priority 1
+
+    track markers
+    parent codis on
+    shortLabel CODIS markers
+    longLabel STS markers in CODIS regions
+    type bigBed 6
+    visibility pack
+    bigDataUrl codisMarkers.bb
+    priority 2
+
+    track primers
+    parent codis on
+    shortLabel CODIS primers
+    longLabel Primers for CODIS regions
+    type bigBed 12
+    visibility pack
+    bigDataUrl codisPrimers.bb
+    priority 3
+
+    track repeats
+    parent codis on
+    shortLabel CODIS repeats
+    longLabel Repeats in CODIS regions
+    type bigBed 6
+    visibility pack
+    bigDataUrl codisRepeats.bb
+    priority 4
