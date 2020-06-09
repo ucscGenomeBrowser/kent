@@ -35,8 +35,8 @@ mach = $(shell uname -m)
 # - ensemblPrevVersion is use to get chrom name mappings for pre-release,
 #   as this doesn't change between release.
 ##
-db = hg38
-#db = hg19
+#db = hg38
+db = hg19
 #db = mm10
 #preRelease = no
 preRelease = yes
@@ -419,9 +419,13 @@ define checkForIncorrect
 awk 'END{if (NR != 0) {print "Incorrect data, see " FILENAME>"/dev/stderr"; exit 1}}' $(basename $@).incorrect
 endef
 
-checkSanity: ${checkDir}/${tableGeneSource}.checked ${checkDir}/${tableTranscriptSource}.checked \
-	${checkDir}/${tableBasic}.checked ${checkDir}/${tableBasic}.pseudo.checked \
+checkSanity:: ${checkDir}/${tableBasic}.checked ${checkDir}/${tableBasic}.pseudo.checked \
 	${checkDir}/${tableComp}.pseudo.checked
+
+# backmap does have all gene/transcript source entries.
+ifneq (${isBackmap},yes)
+checkSanity:: ${checkDir}/${tableGeneSource}.checked   ${checkDir}/${tableTranscriptSource}.checked
+endif
 
 # are gene source all in attrs
 ${checkDir}/${tableGeneSource}.checked: ${loadedDir}/${tableGeneSource}.tab.loaded ${loadedDir}/${tableAttrs}.tab.loaded
