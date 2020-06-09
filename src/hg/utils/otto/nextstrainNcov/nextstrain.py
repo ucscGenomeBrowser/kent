@@ -97,9 +97,12 @@ def cladeFromVariants(name, variants, varStr):
 
 def addDatesToClade(clade, numDateAttrs):
     """Add the numeric dates from ncov.json node_attrs.num_date to clade record"""
-    clade['dateInferred'] = numDateAttrs['value']
-    clade['dateConfMin'] = numDateAttrs['confidence'][0]
-    clade['dateConfMax'] = numDateAttrs['confidence'][1]
+    if (numDateAttrs):
+        clade['dateInferred'] = numDateAttrs['value']
+        clade['dateConfMin'] = numDateAttrs['confidence'][0]
+        clade['dateConfMax'] = numDateAttrs['confidence'][1]
+    else:
+        clade['dateInferred'] = clade['dateConfMin'] = clade['dateConfMax'] = ''
 
 def addCountryToClade(clade, countryAttrs):
     """Add country data from ncov.json node_attrs.country to clade"""
@@ -115,7 +118,7 @@ def processClade(branch, tag, branchVariants, branchVarStr, clades):
         cladeName = nodeAttrs[tag]['value']
         if (cladeName != 'unassigned' and not cladeName in clades):
             clades[cladeName] = cladeFromVariants(cladeName, branchVariants, branchVarStr)
-            addDatesToClade(clades[cladeName], nodeAttrs['num_date'])
+            addDatesToClade(clades[cladeName], nodeAttrs.get('num_date'))
             if (nodeAttrs.get('country')):
                 addCountryToClade(clades[cladeName], nodeAttrs['country'])
             elif (nodeAttrs.get('division')):
@@ -161,6 +164,8 @@ months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 
 
 def numDateToMonthDay(numDate):
     """Transform decimal year timestamp to string with only month and day"""
+    if not numDate:
+        return '?'
     year, month, day = numDateToYmd(numDate)
     return months[month] + str(day)
 
@@ -241,11 +246,15 @@ def rUnpackNextstrainTree(branch, parentVariants, parentVarStr):
             oldClade = nodeAttrs['legacy_clade_membership']['value']
         else:
             oldClade = ''
-        samples.append({ 'id': nodeAttrs['gisaid_epi_isl']['value'],
+        epiNode = nodeAttrs.get('gisaid_epi_isl')
+        epiId = epiNode['value'] if epiNode else branch['name']
+        numDateNode = nodeAttrs.get('num_date')
+        numDate = numDateNode['value'] if numDateNode else ''
+        samples.append({ 'id': epiId,
                          'name': branch['name'],
                          'clade': nodeAttrs['clade_membership']['value'],
                          'oldClade': oldClade,
-                         'date': numDateToMonthDay(nodeAttrs['num_date']['value']),
+                         'date': numDateToMonthDay(numDate),
                          'lab': lab,
                          'variants': branchVariants,
                          'varStr': branchVarStr })
@@ -389,7 +398,8 @@ def sampleIdsFromNode(node, cladeTops=()):
             if (kid not in cladeTops):
                 sampleIds += sampleIdsFromNode(kid, cladeTops)
     else:
-        sampleId = node['node_attrs']['gisaid_epi_isl']['value']
+        epiNode = node['node_attrs'].get('gisaid_epi_isl')
+        sampleId = epiNode['value'] if epiNode else node['name']
         sampleIds = [sampleId]
     return sampleIds
 
@@ -526,9 +536,11 @@ def rNextstrainToNewick(node, cladeColors, cladeTops=(), parentClade=None, paren
         treeString = '(' + descendants + ')' + label + ':' + color
     else:
         nodeAttrs = node['node_attrs']
-        gId = nodeAttrs['gisaid_epi_isl']['value']
+        epiNode = nodeAttrs.get('gisaid_epi_isl')
+        gId = epiNode['value'] if epiNode else node['name']
         name = node['name']
-        date = numDateToMonthDay(nodeAttrs['num_date']['value'])
+        numDateNode = nodeAttrs.get('num_date')
+        date = numDateNode['value'] if numDateNode else ''
         cladeName = nodeAttrs['clade_membership']['value']
         color = str(cladeRgbFromName(cladeName, cladeColors))
         treeString = sampleName({ 'id': gId, 'name': name, 'date': date }) + ':' + color
