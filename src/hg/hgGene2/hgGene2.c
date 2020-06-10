@@ -14,6 +14,7 @@
 #include "genbank.h"
 
 #include "assoc.h"
+#include "sections.h"
 
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */
@@ -21,9 +22,10 @@ struct hash *oldVars = NULL;
 char *database = NULL;
 
 
+
 static void doPage(struct cart *cart, char *id)
 {
-//struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = hAllocConn(database);
 
 char *table = cartUsualString(cart, "hgg_type" , NULL);
 struct trackDb *tdb = hTrackDbForTrack(database, table);
@@ -63,6 +65,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         }
     }
 
+doAssociations(conn, tdb, gene);
+doSections(conn, tdb, gene);
 }
 
 void doMiddle(struct cart *theCart)

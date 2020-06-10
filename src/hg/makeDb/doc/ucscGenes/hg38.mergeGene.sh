@@ -37,6 +37,12 @@ hgMapToGene -type=psl -all -tempDb=$tempDb $db all_mrna knownGene knownToMrna
 hgMapToGene -tempDb=$tempDb $db refGene knownGene knownToRefSeq
 hgMapToGene -type=psl -tempDb=$tempDb $db all_mrna knownGene knownToMrnaSingle
 makeUcscGeneTables $db $tempDb $GENCODE_VERSION txToAcc.tab
+hgLoadSqlTab -notOnServer $tempDb knownCanonical $kent/src/hg/lib/knownCanonical.sql knownCanonical.tab
+sort knownIsoforms.tab | uniq | hgLoadSqlTab -notOnServer $tempDb knownIsoforms $kent/src/hg/lib/knownIsoforms.sql stdin
+genePredToProt knownGeneExt.gp /cluster/data/$db/$db.2bit tmp.faa
+faFilter -uniq tmp.faa ucscGenes.faa
+hgPepPred $tempDb generic knownGenePep ucscGenes.faa
+
 
 hgLoadSqlTab -notOnServer $tempDb kgXref $kent/src/hg/lib/kgXref.sql kgXref.tab
 
