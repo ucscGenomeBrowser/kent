@@ -226,8 +226,7 @@ jQuery.tableDnD = {
 
         var docPos    = this.getPosition(target);
         var mousePos  = this.mouseCoords(ev);
-        ///////return {x:mousePos.x - docPos.x, y:mousePos.y - docPos.y};
-        return {x:mousePos.x - docPos.x, y:$(target).height()/2}; ///////// y offest is middle of row.  Modified by tim because of tall tracks.
+        return {x:mousePos.x - docPos.x, y:mousePos.y - docPos.y};
     },
 
     /** Get the position of an element by going up the DOM tree and adding up all the offsets */

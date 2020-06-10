@@ -53,6 +53,7 @@
 #define VCF_PHASED_HIDE_OTHER_VAR "hideParents"
 #define VCF_PHASED_TDB_USE_ALT_NAMES "vcfUseAltSampleNames"
 #define VCF_PHASED_HIGHLIGHT_INCONSISTENT "vcfHighlightDiffs"
+#define VCF_PHASED_CHILD_BELOW_VAR "sortChildBelow"
 
 void vcfCfgHaplotypeCenter(struct cart *cart, struct trackDb *tdb, char *track,
 			   boolean parentLevel, struct vcfFile *vcff,
@@ -60,7 +61,7 @@ void vcfCfgHaplotypeCenter(struct cart *cart, struct trackDb *tdb, char *track,
 /* If vcff has genotype data, show status and controls for choosing the center variant
  * for haplotype clustering/sorting in hgTracks. */
 
-struct slPair *vcfPhasedGetSampleOrder(struct cart *cart, struct trackDb *tdb, boolean parentLevel);
+struct slPair *vcfPhasedGetSampleOrder(struct cart *cart, struct trackDb *tdb, boolean parentLevel, boolean hideOtherSamples);
 /* Parse out a trio sample order from trackDb */
 
 void vcfCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);

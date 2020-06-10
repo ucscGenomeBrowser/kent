@@ -3180,6 +3180,7 @@ if (!ajax)
     jsIncludeFile("utils.js",NULL);
     webIncludeResourceFile("spectrum.min.css");
     jsIncludeFile("spectrum.min.js",NULL);
+    jsIncludeFile("jquery.tablednd.js", NULL);
     jsonObjectAddGlobal("track", newJsonString(tdb->track));
     jsonObjectAddGlobal("db", newJsonString(database));
     }
