@@ -4059,6 +4059,7 @@ var imageV2 = {
                             $("#suggestTrack").length > 0,
                             function (item) {
                                 genomePos.set(item.id, getSizeFromCoordinates(item.id));
+                                $("#goButton").click();
                             },
                             function (position) {
                                 genomePos.set(position, getSizeFromCoordinates(position));
@@ -4702,7 +4703,7 @@ var imageV2 = {
         
         // With history support it is best that most position changes will ajax-update the image
         // This ensures that the 'go' and 'refresh' button will do so unless the chrom changes.
-        $("input[value='go'],input[value='refresh']").click(function () {
+        $("#goButton,input[value='refresh']").click(function () {
             var newPos = genomePos.get().replace(/,/g,'');
             if (newPos.length > 2000) {
                alert("Sorry, you cannot paste identifiers or sequences with more than 2000 characters into this box.");

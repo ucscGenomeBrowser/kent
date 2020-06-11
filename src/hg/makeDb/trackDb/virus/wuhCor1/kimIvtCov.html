@@ -1,0 +1,37 @@
+<h2>Description</h2>
+
+<p> This track shows the coverage of Nanopore sequences from 
+<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/pmid/32330414/" target=_blank>Kim et al. 2020</a>
+obtained after in-vitro reverse transcription and tiling PCR of SARS-CoV-2
+genomes. This is not direct RNA sequencing, but multiplex PCR on DNA, followed by
+sequencing. The coverage shown here does not allow to draw conclusions on RNA
+modifications or RNA editing, but indicates regions of the genome that are
+harder to sequence with Nanopore sequencing.
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Sequence coverage of every bp is shown. All reads were used.
+
+<h2>Related tracks</h2>
+<ul>
+    <li><b>ARTIC primers</b>: a set of well-known primers used for PCR + Nanopore sequencing. 
+    <li><b>Kim Transcripts</b>: transcripts as determined with direct RNA sequencing by Kim et al. 2020
+    <li><b>Kim RNA Brkpts</b>: locations where RNA tends to break, as determined by direct sequencing by Kim et al. 2020
+    <li><b>Kim RNA Modif</b>: modified bases in the direct RNA sequencing relative to the IVT sequences.
+</ul>
+
+<h2>Methods</h2>
+<p>
+Minimap2 alignments BAM files were processed with bamCoverage.
+
+<h2>References</h2>
+<p>
+Kim D, Lee JY, Yang JS, Kim JW, Kim VN, Chang H.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32330414" target="_blank">
+    The Architecture of SARS-CoV-2 Transcriptome</a>.
+<em>Cell</em>. 2020 May 14;181(4):914-921.e10.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32330414" target="_blank">32330414</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7179501/" target="_blank">PMC7179501</a>
+</p>
+
