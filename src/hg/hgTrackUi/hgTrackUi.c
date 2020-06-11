@@ -3103,36 +3103,38 @@ printf("<b>Track collection: "
             "<a href='%s?%s=%s&c=%s&g=%s'>%s </b></a>",
             hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
             chromosome, cgiEncode(tdbParent->track), tdbParent->longLabel);
-
-// collapsed panel for Description
-
 printf("<p>");
-printf("<p><table>");  // required by jsCollapsible
-jsBeginCollapsibleSectionFontSize(cart, tdb->track, "superDescription", "Description", FALSE,
-                                        "medium");
-char *html = replaceChars(tdbParent->html, "<H", "<h");
-html = replaceChars(html, "</H", "</h");
 
-// remove Description header
-html = replaceChars(html, "<h2>Description</h2>", "");
-html = replaceChars(html, "<h3>Description</h3>", "");
-html = replaceChars(html, "<h1>Description</h1>", "");
+if (tdbParent->html)
+    {
+    // collapsed panel for Description
+    printf("<p><table>");  // required by jsCollapsible
+    jsBeginCollapsibleSectionFontSize(cart, tdb->track, "superDescription", "Description", FALSE,
+                                            "medium");
+    char *html = replaceChars(tdbParent->html, "<H", "<h");
+    html = replaceChars(html, "</H", "</h");
 
-// remove everything after Description text
-char *end = stringIn("<h2>", html);
-if (!end)
-    end = stringIn("<h1>", html);
-if (!end)
-    end = stringIn("<h3>", html);
-if (end)
-    *end = '\0';
-printf("%s", html);
-printf("<p><i>To view the full description, click "
-            "<a target='_blank' href='%s?%s=%s&c=%s&g=%s#TRACK_HTML'>here.</i></a>\n",
-                    hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-                    chromosome, cgiEncode(tdbParent->track));
-jsEndCollapsibleSection();
-printf("</table>"); // required by jsCollapsible
+    // remove Description header
+    html = replaceChars(html, "<h2>Description</h2>", "");
+    html = replaceChars(html, "<h3>Description</h3>", "");
+    html = replaceChars(html, "<h1>Description</h1>", "");
+
+    // remove everything after Description text
+    char *end = stringIn("<h2>", html);
+    if (!end)
+        end = stringIn("<h1>", html);
+    if (!end)
+        end = stringIn("<h3>", html);
+    if (end)
+        *end = '\0';
+    printf("%s", html);
+    printf("<p><i>To view the full description, click "
+                "<a target='_blank' href='%s?%s=%s&c=%s&g=%s#TRACK_HTML'>here.</i></a>\n",
+                        hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+                        chromosome, cgiEncode(tdbParent->track));
+    jsEndCollapsibleSection();
+    printf("</table>"); // required by jsCollapsible
+    }
 
 // collapsed panel for list of other tracks in the supertrack
 
