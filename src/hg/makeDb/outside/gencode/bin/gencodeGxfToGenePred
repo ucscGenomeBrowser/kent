@@ -75,26 +75,6 @@ def copyChrMToChrMT(tmpGp, verbose, outGpFh):
         print(*cpCmd, file=sys.stderr)
     pipettor.run(cpCmd, stdout=outGpFh)
 
-def convert(inGxf, liftFile, outGenePred, unmappedGenePred, verbose, warnAndContinue):
-    # Need to ignore GTF groups formed with only gene records
-    # Need to update transcript id if it's for of the PAR hacked ids
-    if inGxf.find(".gff3") > 0:
-        toGenePredCmd = ["gff3ToGenePred", "-geneNameAttr=gene_name", "-rnaNameAttr=transcript_id", inGxf, "stdout"]
-        if warnAndContinue:
-            toGenePredCmd.append("-warnAndContinue")
-    else:
-        toGenePredCmd = ["gtfToGenePred", "-genePredExt", "-geneNameAsName2", "-ignoreGroupsWithoutExons", inGxf, "stdout"]
-
-    liftOver = GencodeLiftOver("genePred", liftFile, unmappedGenePred)
-    cnvPipe = pipettor.Pipeline([toGenePredCmd, getEditIdCmd(0), liftOver.getLiftoverCmd(stdout=outGenePred)])
-    if verbose:
-        print(str(cnvPipe), file=sys.stderr)
-    cnvPipe.wait()
-    unmappedInfo = liftOver.getLiftOverUnmappedInfo()
-    liftOver.removeTmp()
-    unmappedInfo.report()
-
-
 def convert(hgdb, inGxf, liftFile, outGenePred, unmappedGenePred, verbose, warnAndContinue):
     # Need to update transcript id if it's for of the PAR hacked ids
     tmpGp = gxfToGenePred(inGxf, verbose, warnAndContinue)

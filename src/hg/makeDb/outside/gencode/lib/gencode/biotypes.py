@@ -66,6 +66,7 @@ class BioType(SymEnum):
     unitary_pseudogene = auto()
     unprocessed_pseudogene = auto()
     vaultRNA = auto()
+    vault_RNA = auto()
 
 
 GencodeFunction = SymEnum("GencodeFunction", ("pseudo", "coding", "nonCoding", "other"))
@@ -104,6 +105,7 @@ bioTypesNonCoding = frozenset([BioType.antisense,
                                BioType.scaRNA,
                                BioType.sRNA,
                                BioType.vaultRNA,
+                               BioType.vault_RNA,
                                BioType.bidirectional_promoter_lncRNA])
 bioTypesOther = frozenset([BioType.retained_intron,
                            BioType.TEC])

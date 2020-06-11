@@ -54,13 +54,13 @@ ifeq (${db},mm10)
     ensemblCDnaDb = mus_musculus_cdna_${ensemblPrevVer}
 else ifeq (${db},hg38)
     grcRefAssembly = GRCh38
-    ver = 32
-    prevVer = 31
+    ver = 35
+    prevVer = 34
     gencodeOrg = Gencode_human
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 97_39
-    ensemblPrevVer = 96_38
+    ensemblVer = 101_39
+    ensemblPrevVer = 100_38
     ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
