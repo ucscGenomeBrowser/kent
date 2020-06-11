@@ -1,0 +1,7 @@
+wget http://public.gi.ucsc.edu/~miten/covid-19/IVT.sorted.bam
+wget http://public.gi.ucsc.edu/~miten/covid-19/IVT.sorted.bam.bai
+# sigh... need to change chrom name for UCSC
+samtools view -h IVT.sorted.bam | sed -e 's/NC_045512.2/NC_045512v2/' | samtools view -Sb > IVT.ucsc.s.bam
+samtools index IVT.ucsc.s.bam
+bamCoverage -b IVT.ucsc.s.bam -o IVT.bw --binSize=1 -p 8
+ln -s `pwd`/IVT.bw /gbdb/wuhCor1/bbi/IVT.bw
