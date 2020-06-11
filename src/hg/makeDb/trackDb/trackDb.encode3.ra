@@ -1,7 +1,6 @@
 # ENCODE 3 tracks
 
 track encodeCcreCombined
-release alpha,beta
 type bigBed 9 +
 shortLabel ENCODE cCREs
 longLabel ENCODE Candidate Cis-Regulatory Elements (cCREs) combined from all cell types
