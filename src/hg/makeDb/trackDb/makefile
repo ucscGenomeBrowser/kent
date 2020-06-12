@@ -149,7 +149,7 @@ DBS = \
 	otoGar1 otoGar3 \
 	oviAri1 oviAri3 oviAri4 \
 	oxyTri2 \
-	panPan1 panPan2 \
+	panPan1 panPan2 panPan3 \
 	panRed1 \
 	panTro1 panTro2 panTro3 panTro4 panTro5 panTro6 \
 	papHam1 papAnu2 papAnu3 papAnu4 \
