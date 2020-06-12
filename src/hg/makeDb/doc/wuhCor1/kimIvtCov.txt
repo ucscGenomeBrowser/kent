@@ -1,3 +1,10 @@
+# from Miten:
+# I downloaded the fastq file from https://osf.io/8f6n9/
+# went to folder 20200302.... and download file IVT1.fastq.zst
+# extract and replace Us with Ts in the fastq (!)
+# align to genome with minimap2 -ax map-ont
+# Make bam using samtools
+# I got this BAM file from Miten:
 wget http://public.gi.ucsc.edu/~miten/covid-19/IVT.sorted.bam
 wget http://public.gi.ucsc.edu/~miten/covid-19/IVT.sorted.bam.bai
 # sigh... need to change chrom name for UCSC
