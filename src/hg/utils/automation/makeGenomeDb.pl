@@ -1389,6 +1389,8 @@ $HgAutomate::git archive --remote=git://genome-source.soe.ucsc.edu/kent.git \\
 src/hg/makeDb/trackDb/$dbDbSpeciesDir \\
 src/hg/makeDb/trackDb/trackDb.transMap.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.ra \\
+src/hg/makeDb/trackDb/trackDb.encode3.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.asmHub.ra \\
 src/hg/makeDb/trackDb/crisprAll.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.primates.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.other.ra \\

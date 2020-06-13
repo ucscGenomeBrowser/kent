@@ -58,6 +58,8 @@ static char *geneCardsUrl = "http://www.genecards.org/cgi-bin/carddisp.pl?gene=%
 static char *apprisHomeUrl = "http://appris-tools.org/";
 static char *apprisGeneUrl = "http://appris-tools.org/#/database/id/%s/%s?sc=ensembl";
 
+static char* UNKNOWN = "unknown";
+
 static char *getBaseAcc(char *acc, char *accBuf, int accBufSize)
 /* get the accession with version number dropped. */
 {
@@ -191,6 +193,8 @@ return a->dataset - b->dataset;
 static char *getMethodDesc(char *source)
 /* return the annotation method name based gene or transcript source */
 {
+// sometimes backmap doesn't get every entry method entry mapped.  Until that
+// is fixed, allow it to be missing
 // looks for being havana and/or ensembl
 // classifies other sources as automatic (mt_genbank_import ncrna ncrna_pseudogene)
 bool hasHav = containsStringNoCase(source, "havana") != NULL;
@@ -422,7 +426,9 @@ printf("<tr><th><a href=\"%s\" target = _blank>Biotype</a><td>%s<td>%s</tr>\n", 
 
 printf("<tr><th>Annotation Level<td>%s (%d)<td></tr>\n", getLevelDesc(transAttrs->level), transAttrs->level);
 
-printf("<tr><th>Annotation Method<td>%s<td>%s</tr>\n", getMethodDesc(transcriptSource->source), getMethodDesc(geneSource->source));
+char *transSrcDesc = (transcriptSource != NULL) ? getMethodDesc(transcriptSource->source) : UNKNOWN;
+char *geneSrcDesc = (geneSource != NULL) ? getMethodDesc(geneSource->source) : UNKNOWN;
+printf("<tr><th>Annotation Method<td>%s<td>%s</tr>\n", transSrcDesc, geneSrcDesc);
 
 if (haveTsl)
     {
@@ -834,8 +840,8 @@ static void doGencodeGeneTrack(struct trackDb *tdb, char *gencodeId, struct sqlC
 {
 struct wgEncodeGencodeAttrs *transAttrs = transAttrsLoad(tdb, conn, gencodeId);
 char *gencodeGeneId = transAttrs->geneId;
-struct wgEncodeGencodeGeneSource *geneSource = metaDataLoad(tdb, conn, gencodeGeneId, "wgEncodeGencodeGeneSource", "geneId", sqlQueryMust|sqlQuerySingle, (sqlLoadFunc)wgEncodeGencodeGeneSourceLoad);
-struct wgEncodeGencodeTranscriptSource *transcriptSource = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeTranscriptSource", "transcriptId", sqlQueryMust|sqlQuerySingle, (sqlLoadFunc)wgEncodeGencodeTranscriptSourceLoad);
+struct wgEncodeGencodeGeneSource *geneSource = metaDataLoad(tdb, conn, gencodeGeneId, "wgEncodeGencodeGeneSource", "geneId", sqlQuerySingle, (sqlLoadFunc)wgEncodeGencodeGeneSourceLoad);
+struct wgEncodeGencodeTranscriptSource *transcriptSource = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeTranscriptSource", "transcriptId", sqlQuerySingle, (sqlLoadFunc)wgEncodeGencodeTranscriptSourceLoad);
 bool haveRemarks = haveGencodeTable(tdb, "wgEncodeGencodeAnnotationRemark");
 struct wgEncodeGencodeAnnotationRemark *remarks = haveRemarks ? metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeAnnotationRemark", "transcriptId", 0, (sqlLoadFunc)wgEncodeGencodeAnnotationRemarkLoad) : NULL;
 struct wgEncodeGencodePdb *pdbs = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodePdb", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodePdbLoad);

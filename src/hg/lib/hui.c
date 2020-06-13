@@ -4942,7 +4942,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	dividers_t *dividers = dividersSettingGet(parentTdb);
 	if (dividers)
 	    lastDivide = needMem(sizeof(char*)*dividers->count);
-	if (divisionIfNeeded(lastDivide,dividers,membership) )
+	if (membership && divisionIfNeeded(lastDivide,dividers,membership) )
 	    colorIx = (colorIx == COLOR_BG_DEFAULT_IX ? COLOR_BG_ALTDEFAULT_IX
 						      : COLOR_BG_DEFAULT_IX);
 	dividersFree(&dividers);

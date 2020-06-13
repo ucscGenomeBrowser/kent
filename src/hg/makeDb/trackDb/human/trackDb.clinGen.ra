@@ -3,6 +3,7 @@ shortLabel ClinGen
 longLabel Clinical Genome Resource
 group phenDis
 superTrack on
+html clinGen 
 
     track dosageSensitivity
     parent clinGenSuper on
@@ -12,6 +13,7 @@ superTrack on
     type bigBed 9 +
     itemRgb on
     compositeTrack on
+    html clinGenDosage
 
         track clinGenHaplo
         parent dosageSensitivity
@@ -39,6 +41,7 @@ superTrack on
     parent clinGenSuper off
     shortLabel ClinGen Structural Variants
     longLabel Clinical Genome Resource Structural Variants
+    html clinGenSv
     type bigBed 9 +
     itemRgb on
     visibility dense

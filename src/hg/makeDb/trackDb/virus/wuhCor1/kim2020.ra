@@ -183,3 +183,14 @@ compositeTrack on
         type bigBed 12 .
         bigDataUrl /gbdb/wuhCor1/bbi/kim2020/Kim_notTRS.bb
         priority 5
+
+track kimIvtCov
+shortLabel Kim IVT Cov
+longLabel Kim 2020 in-vitro-transcribed RNA seq + PCR: Nanopore coverage
+type bigWig
+visibility hide
+group map
+autoScale on
+priority 4
+bigDataUrl /gbdb/wuhCor1/bbi/IVT.bw
+
