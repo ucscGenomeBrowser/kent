@@ -819,13 +819,14 @@ panPan3.genbank.est.native.load = no
     # 883663662 bases of 2999027915 (29.465%) in intersection
 
 #############################################################################
-# augustus gene track (TBD - 2019-11-20 - Hiram)
+# augustus gene track (DONE - 2020-06-15 - Hiram)
 
     mkdir /hive/data/genomes/panPan3/bed/augustus
     cd /hive/data/genomes/panPan3/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev panPan3) > do.log 2>&1
+XXX - running - Mon Jun 15 10:21:59 PDT 2020
     # real    139m55.244s
 
     cat fb.panPan3.augustusGene.txt
@@ -840,15 +841,15 @@ panPan3.genbank.est.native.load = no
       -bigClusterHub=ku -dbHost=hgwdev \
       -fileServer=hgwdev -smallClusterHub=hgwdev -workhorse=hgwdev \
       GCF_013052645.1_Mhudiblu_PPA_v0 panPan3) > do.log 2>&1 &
-XXX - running - Sat Jun 13 10:10:09 PDT 2020
-    # real    1m37.523s
+    # real    5m43.954s
 
     cat fb.ncbiRefSeq.panPan3.txt
-    #  74279781 bases of 2999027915 (2.477%) in intersection
+    #  91843495 bases of 3015350297 (3.046%) in intersection
 
     # add: include ../../refSeqComposite.ra alpha
-    # to the gorilla/panPan3/trackDb.ra to turn on the track in the browser
+    # to the bonobo/panPan3/trackDb.ra to turn on the track in the browser
 
+    # XXX TBD when genbank run is complete
     featureBits -enrichment panPan3 refGene ncbiRefSeq 
  # refGene 0.006%, ncbiRefSeq 2.477%, both 0.006%, cover 99.87%, enrich 40.32x
 
@@ -862,41 +863,44 @@ XXX - running - Sat Jun 13 10:10:09 PDT 2020
  # refGene 0.006%, ncbiRefSeqCurated 0.007%, both 0.006%, cover 99.87%, enrich 14956.14x
 
 #########################################################################
-# LIFTOVER TO gorGor5 (TBD - 2019-11-20 - Hiram)
+# LIFTOVER TO panPan2 (DONE - 2020-06-15 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/panPan3/bed/blat.gorGor5.2019-11-20
-    cd /hive/data/genomes/panPan3/bed/blat.gorGor5.2019-11-20
+    mkdir /hive/data/genomes/panPan3/bed/blat.panPan2.2020-06-15
+    cd /hive/data/genomes/panPan3/bed/blat.panPan2.2020-06-15
     doSameSpeciesLiftOver.pl -verbose=2 \
         -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/panPan3/jkStuff/panPan3.11.ooc \
-         panPan3 gorGor5
+         panPan3 panPan2
     time (doSameSpeciesLiftOver.pl -verbose=2 \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/panPan3/jkStuff/panPan3.11.ooc \
-         panPan3 gorGor5) > doLiftOverToGorGor5.log 2>&1
+         panPan3 panPan2) > doLiftOverToPanPan2.log 2>&1
+XXX - running - Mon Jun 15 10:25:21 PDT 2020
     # real    936m35.524s
 
-    # see if the liftOver menus function in the browser from panPan3 to gorGor5
+    # see if the liftOver menus function in the browser from panPan3 to panPan2
 
 #########################################################################
-# LIFTOVER TO gorGor4 (TBD - 2019-11-20 - Hiram)
+# LIFTOVER TO panPan1 (DONE - 2020-06-15 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/panPan3/bed/blat.gorGor4.2019-11-20
-    cd /hive/data/genomes/panPan3/bed/blat.gorGor4.2019-11-20
+    mkdir /hive/data/genomes/panPan3/bed/blat.panPan1.2020-06-15
+    cd /hive/data/genomes/panPan3/bed/blat.panPan1.2020-06-15
     doSameSpeciesLiftOver.pl -verbose=2 \
         -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/panPan3/jkStuff/panPan3.11.ooc \
-         panPan3 gorGor4
+         panPan3 panPan1
     time (doSameSpeciesLiftOver.pl -verbose=2 \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/panPan3/jkStuff/panPan3.11.ooc \
-         panPan3 gorGor4) > doLiftOverToGorGor4.log 2>&1
+         panPan3 panPan1) > doLiftOverToPanPan1.log 2>&1
+XXX - running - Mon Jun 15 10:26:22 PDT 2020
     # real    654m46.645s
 
-    # see if the liftOver menus function in the browser from panPan3 to gorGor4
+    # see if the liftOver menus function in the browser from panPan3 to panPan1
 
 #########################################################################
 #  BLATSERVERS ENTRY (TBD - 2019-11-20 - Hiram)
+XXX - requested - Mon Jun 15 10:31:11 PDT 2020
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
@@ -917,16 +921,18 @@ XXX - running - Sat Jun 13 10:10:09 PDT 2020
 	where name="panPan3";' hgcentraltest
 
 ##############################################################################
-# crispr whole genome (TBD - 2019-11-20 - Hiram)
+# crispr whole genome (DONE - 2020-06-15 - Hiram)
     mkdir /hive/data/genomes/panPan3/bed/crisprAll
     cd /hive/data/genomes/panPan3/bed/crisprAll
 
     # the large shoulder argument will cause the entire genome to be scanned
     # this takes a while for a new genome to get the bwa indexing done
     time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 -stop=ranges \
-    panPan3 ncbiRefSeq -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
-    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
-      -workhorse=hgwdev) > ranges.log 2>&1
+       panPan3 ncbiRefSeq -shoulder=250000000 -tableName=crisprAll \
+         -fileServer=hgwdev -buildDir=`pwd` -smallClusterHub=hgwdev \
+           -bigClusterHub=ku \
+              -workhorse=hgwdev) > ranges.log 2>&1
+XXX - running - Mon Jun 15 10:32:36 PDT 2020
     # real    72m58.740s
 
     time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
@@ -985,7 +991,7 @@ Submission to last job:        274925s    4582.08m    76.37h    3.18d
 # Submission to last job:          4266s      71.10m     1.19h    0.05d
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (WORKING - 2019-11-20 - Hiram)
+# all.joiner update, downloads and in pushQ - (WORKING - 2020-06-15 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # verify all the business is done for release
     ~/kent/src/hg/utils/automation/verifyBrowser.pl panPan3
@@ -996,11 +1002,12 @@ Submission to last job:        274925s    4582.08m    76.37h    3.18d
     joinerCheck -database=panPan3 -keys all.joiner
 
     # when clean, check in:
-    git commit -m 'adding rules for panPan3 refs #24524' all.joiner
+    git commit -m 'adding rules for panPan3 refs #25720' all.joiner
     git push
     # run up a 'make alpha' in hg/hgTables to get this all.joiner file
     # into the hgwdev/genome-test system
 
+XXX - ready - Mon Jun 15 10:35:45 PDT 2020
     cd /hive/data/genomes/panPan3
     time (~/kent/src/hg/utils/automation/makeDownloads.pl panPan3) > downloads.log 2>&1
     #  real    17m56.213s
