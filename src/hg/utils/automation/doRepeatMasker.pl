@@ -323,12 +323,12 @@ VERSION:\\n" > ../versionInfo.txt
 
 ./dummyRun.csh | grep -v "dev/null" >> ../versionInfo.txt
 
-grep 'version of RepeatMasker\$' $RepeatMasker >> ../versionInfo.txt
+$RepeatMasker -v >> ../versionInfo.txt
 grep RELEASE $RepeatMaskerPath/Libraries/RepeatMaskerLib.embl >> ../versionInfo.txt
 printf "# RepeatMasker engine: %s\\n" "${RepeatMaskerEngine}" >> ../versionInfo.txt
 
 ls -ld $RepeatMaskerPath $RepeatMasker
-grep 'version of RepeatMasker\$' $RepeatMasker
+$RepeatMasker -v
 grep RELEASE $RepeatMaskerPath/Libraries/RepeatMaskerLib.embl
 echo "# RepeatMasker engine: $RepeatMaskerEngine"
 _EOF_
