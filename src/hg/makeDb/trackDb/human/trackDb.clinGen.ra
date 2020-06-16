@@ -1,6 +1,6 @@
 track clinGenSuper
 shortLabel ClinGen
-longLabel Clinical Genome Resource
+longLabel Clinical Genome Resource (ClinGen)
 group phenDis
 superTrack on
 html clinGen 
@@ -8,7 +8,7 @@ html clinGen
     track dosageSensitivity
     parent clinGenSuper on
     shortLabel ClinGen Dosage Sensitivity
-    longLabel Clinical Genome Resource Dosage Sensitivity Map 
+    longLabel Clinical Genome Resource (ClinGen) Dosage Sensitivity Map 
     visibility pack
     type bigBed 9 +
     itemRgb on
@@ -40,7 +40,7 @@ html clinGen
     track clinGenCnv
     parent clinGenSuper off
     shortLabel ClinGen Structural Variants
-    longLabel Clinical Genome Resource Structural Variants
+    longLabel Clinical Genome Resource (ClinGen) Structural Variants
     html clinGenSv
     type bigBed 9 +
     itemRgb on
