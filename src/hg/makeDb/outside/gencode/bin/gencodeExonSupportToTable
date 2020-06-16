@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
+sys.path.append(os.path.join(myBinDir, "../lib"))
+sys.path.append(os.path.expanduser("~markd/compbio/code/pycbio/lib"))
+import argparse
+from pycbio.sys import fileOps
+import pipettor
+from gencode.gencodeProcess import GencodeLiftOver, getEditIdCmd
+
+def parseArgs():
+    desc = """Convert GENCODE exon support to a table.  This deals with exon coordinates
+mappings.
+
+The chains can be generated with
+  ensToUcscMkLift hg19 ensemblToUcscChain
+"""
+    parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument("--verbose", dest="verbose", action="store_true", default=False,
+                        help="verbose output for debugging")
+    parser.add_argument("exonSupportIn",
+                        help="Exon support metadata from GENCODE distribution.  Maybe compressed.")
+    parser.add_argument("ensemblToUcscChain",
+                        help="chain file to lift over to UCSC chromosome names")
+    parser.add_argument("exonSupportTab",
+                        help="mapped exon support file")
+    return parser.parse_args()
+
+def convert(liftFile, exonSupportIn, exonSupportTab, verbose):
+    tawkCmd = ('awk', '-v', 'FS=\\t', '-v', 'OFS=\\t')
+
+    # ENST00000431238.1	Q9I922.1	Uniprot/SWISSPROT	ENSE00001650387.1	chrX:172682-172712
+
+    # convert coordinated and format to a BED+ so it can be lifted and fix
+    # up accessions
+    catCmd = ["zcat" if exonSupportIn.endswith(".gz") else "cat", exonSupportIn]
+    toBedCmd = list(tawkCmd) + ['{split($5,coord,":|-"); print coord[1],coord[2]-1,coord[3],$1,$2,$3,$4}']
+    liftOver = GencodeLiftOver("bedPlus=3", liftFile)
+    toTable = list(tawkCmd) + ["{print $4,$5,$6,$7,$1,$2,$3}"]
+    editIdCmd = getEditIdCmd(0)
+    cnvPipe = pipettor.Pipeline([catCmd, toBedCmd, liftOver.getLiftoverCmd(), toTable, editIdCmd], stdout=exonSupportTab)
+    if verbose:
+        fileOps.prErr(cnvPipe)
+    cnvPipe.wait()
+    unmappedInfo = liftOver.getLiftOverUnmappedInfo()
+    liftOver.removeTmp()
+    unmappedInfo.report()
+
+
+def gencodeExonSupportToTable(opts):
+    convert(opts.ensemblToUcscChain, opts.exonSupportIn, opts.exonSupportTab, opts.verbose)
+
+
+gencodeExonSupportToTable(parseArgs())

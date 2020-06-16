@@ -117,7 +117,13 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     zdobnovSynt.o oreganno.o \
     oregannoUi.o gvUi.o gv.o omicia.o protVar.o pgSnp.o \
     alignInfo.o cddInfo.o loweutils.o cddDesc.o arCOGs.o arcogdesc.o geneTree.o \
-    megablastInfo.o pgPhenoAssoc.o pgSiftPred.o pgPolyphenPred.o userRegions.o variome.o
+    megablastInfo.o pgPhenoAssoc.o pgSiftPred.o pgPolyphenPred.o userRegions.o variome.o \
+    gencodeAnnotationRemark.o gencodeAttrs.o gencodeToEntrezGene.o \
+    gencodeExonSupport.o gencodeGeneSource.o gencodeToGeneSymbol.o gencodeToPdb.o \
+    gencodeToPubMed.o gencodeToRefSeq.o gencodeTag.o \
+    gencodeTranscriptionSupportLevel.o gencodeTranscriptSource.o \
+    gencodeTranscriptSupport.o gencodeToUniProt.o
+
 
 ifeq (${USE_HIC}, 1)
   O += straw.o

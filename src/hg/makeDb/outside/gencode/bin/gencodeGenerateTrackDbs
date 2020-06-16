@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 """
 Generate GENCODE trackDb .ra and .html files and git add them.
 Also generate blurb to section to edit into joinerCheck.
@@ -10,7 +10,6 @@ In order to easily track priority numbers in one place, this file is edited to a
 commenting out
 rather than
 """
-from __future__ import print_function
 import os
 import re
 import subprocess
@@ -103,7 +102,7 @@ def trackDbTemplateGen(params):
         "    itemClassTbl wgEncodeGencodeAttrsV{gencodeVer}",
         "    itemClassNameColumn transcriptId",
         "    itemClassClassColumn transcriptClass",
-        "    cdsDrawDefault genomic\ codons",
+        "    cdsDrawDefault genomic\\ codons",
         "    baseColorUseCds given",
         "    baseColorDefault genomicCodons",
         "    geneClasses coding nonCoding pseudo problem",
@@ -504,7 +503,7 @@ def joinerCheckTemplateGen(params):
         '"Link together Gencode UniProt Support table with Attributes table"',
         "    {orgHgDb}.wgEncodeGencodeEntrezGeneV{gencodeVer}.transcriptId dupeOk",
         "    {orgHgDb}.wgEncodeGencodeEntrezGeneV{gencodeVer}.transcriptId minCheck=0.35",
-    ""))
+        ""))
     yield forStd(params, (
         "identifier wgEncodeGencodeExonSupportV{gencodeVer}",
         '"Link together Gencode Exon Support table with Attributes table"',
@@ -556,7 +555,7 @@ class GencodeParams(object):
         self.gencodeDate = gencodeDate
         m = re.match("M?([0-9]+)(lift37)?$", gencodeVer)
         self.numVersion = int(m.group(1))  # for constructing priorities
-        self.gencodeReleaseUrl =  "{}/{}/release_{}.html".format(self.gencodeGenesUrl, self.orgName, gencodeVer)
+        self.gencodeReleaseUrl = "{}/{}/release_{}.html".format(self.gencodeGenesUrl, self.orgName, gencodeVer)
         self.ensemblTransIdRegex = ensemblTransIdRegex
         self.havanaTransIdRegex = havanaTransIdRegex
         self.ensemblGeneIdRegex = ensemblGeneIdRegex
@@ -574,7 +573,7 @@ class GencodeParams(object):
 
         self.superTrackPriority = superTrackBasePriority - (0.001 * self.numVersion)
 
-        self.searchPriority =  searchBasePriority - (0.001 * self.numVersion)
+        self.searchPriority = searchBasePriority - (0.001 * self.numVersion)
         self.nextPriorityOff = 0.00000  # incremented when each priority is allocated
 
         self.basicSearchPriority = self.nextPriority()
@@ -623,18 +622,18 @@ class GencodeParams(object):
 def getHumanGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
     "create GENCODE parameters for human GENCODE"
     return GencodeParams("human", orgHgDb, gencodeVer, ensemblVer, gencodeDate,
-                          34.205, 2.29701,
-                          "ENST[0-9.]+", "OTTHUMT[0-9.]+",
-                          "ENSG[0-9.]+", "OTTHUMG[0-9.]+",
-                          "ENSP[0-9.]+", "PGOHUM[0-9.]+")
+                         34.205, 2.29701,
+                         "ENST[0-9.]+", "OTTHUMT[0-9.]+",
+                         "ENSG[0-9.]+", "OTTHUMG[0-9.]+",
+                         "ENSP[0-9.]+", "PGOHUM[0-9.]+")
 
 def getHumanBackmapGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
     "create GENCODE parameters for human backmapped GENCODE"
     return GencodeParams("human", orgHgDb, gencodeVer, ensemblVer, gencodeDate,
-                          34.205, 2.29701,
-                          "ENST[0-9._]+", "OTTHUMT[0-9._]+",
-                          "ENSG[0-9._]+", "OTTHUMG[0-9._]+",
-                          None, None)
+                         34.205, 2.29701,
+                         "ENST[0-9._]+", "OTTHUMT[0-9._]+",
+                         "ENSG[0-9._]+", "OTTHUMG[0-9._]+",
+                         None, None)
 
 def getMouseGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
     "create GENCODE parameters for mouse GENCODE"
@@ -699,5 +698,6 @@ def parseArgs():
     if re.match(verRe, opts.gencodeVer) is None:
         raise Exception("GENCODE version should match {}, got `{}'".format(verRe, opts.gencodeVer))
     return opts
+
 
 gencodeGenerateTrackDbs(parseArgs())

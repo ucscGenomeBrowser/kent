@@ -6552,6 +6552,15 @@ else
     return knownGeneColorCalc(tg, item, hvg);
 }
 
+void gencodeMethods(struct track *tg)
+/* Make track of known genes. */
+{
+tg->loadItems   = loadKnownGene;
+tg->itemName    = knownGeneName;
+tg->mapItemName = knownGeneMapName;
+tg->itemColor   = knownGeneColor;
+}
+
 void knownGeneMethods(struct track *tg)
 /* Make track of known genes. */
 {
