@@ -9,5 +9,5 @@ group genes
 directUrl /cgi-bin/hgGene2?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 labelFields geneName, name2, name
 #itemRgb on
-associations /gbdb/hg38/mergedBGP/associations.txt
-sections /gbdb/hg38/mergedBGP/sections.txt
+#associations /gbdb/hg38/mergedBGP/associations.txt
+#sections /gbdb/hg38/mergedBGP/sections.txt
