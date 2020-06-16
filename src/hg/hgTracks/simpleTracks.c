@@ -6140,7 +6140,7 @@ struct hashEl *knownGeneLabels = cartFindPrefix(cart, "knownGene.label");
 struct hashEl *label;
 boolean labelStarted = FALSE;
 
-if (hTableExists(database, "kgXref"))
+if (isBigGenePred || hTableExists(database, "kgXref"))
     {
     char omimLabel[48];
     safef(omimLabel, sizeof(omimLabel), "omim%s", cartString(cart, "db"));
