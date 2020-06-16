@@ -695,4 +695,23 @@ panPan2.genbank.est.native.load = no
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
 
+##############################################################################
+# LIFTOVER TO panPan3 (DONE - 2020-06-15 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/panPan2/bed/blat.panPan3.2020-06-15
+    cd /hive/data/genomes/panPan2/bed/blat.panPan3.2020-06-15
+
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -ooc=/hive/data/genomes/panPan2/jkStuff/panPan2.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         panPan2 panPan3
+
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -ooc=/hive/data/genomes/panPan2/jkStuff/panPan2.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         panPan2 panPan3) > doLiftOverToPanPan3.log 2>&1
+    # real    312m42.976s
+
+    # verify this functions in the genome browser from panPan2 to panPan3
+
 #########################################################################
