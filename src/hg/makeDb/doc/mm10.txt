@@ -17864,19 +17864,20 @@ TMPDIR=/dev/shm
 
     time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
         -chainMinScore=3000 -chainLinearGap=medium \
-          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Mon Jun 15 10:19:12 PDT 2020
-    # real    360m9.534s
+    # real    385m29.712s
 
     cat fb.mm10.chainPanPan3Link.txt
-    # 928638440 bases of 2652783500 (35.006%) in intersection
+    # 935579510 bases of 2652783500 (35.268%) in intersection
     cat fb.mm10.chainSynPanPan3Link.txt
+    # 888900388 bases of 2652783500 (33.508%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 panPan3) \
       > rbest.log 2>&1 &
-    # real    765m26.648s
+    # real    329m28.051s
     cat fb.mm10.chainRBest.PanPan3.txt
+    # 890894306 bases of 2652783500 (33.583%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/panPan3/bed/blastz.mm10.swap
@@ -17885,15 +17886,20 @@ XXX - running - Mon Jun 15 10:19:12 PDT 2020
     time (doBlastzChainNet.pl -verbose=2 \
       /hive/data/genomes/mm10/bed/lastzPanPan3.2020-06-15/DEF \
         -swap -chainMinScore=3000 -chainLinearGap=medium \
-          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    106m54.032s
+    #  real    55m23.982s
 
     cat fb.panPan3.chainMm10Link.txt
-    # 911279510 bases of 2725937399 (33.430%) in intersection
+    # 954214151 bases of 3015350297 (31.645%) in intersection
+    cat fb.panPan3.chainSynMm10Link.txt
+    # 887980807 bases of 3015350297 (29.449%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panPan3 mm10) \
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` panPan3 mm10) \
        > rbest.log 2>&1
+XXX - running - Tue Jun 16 12:57:31 PDT 2020
     # real    620m0.039s
+
+    cat fb.panPan3.chainRBest.Mm01.txt
 
 ##############################################################################
