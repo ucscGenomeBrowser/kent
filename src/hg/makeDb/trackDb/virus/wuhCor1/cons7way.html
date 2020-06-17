@@ -1,24 +1,18 @@
-<p>
-Downloads for data in this track are available:
-<ul>
-<li>
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/wuhCor1/multiz7way/">Multiz alignments</a> (MAF format), and phylogenetic trees</li>
-</ul></p>
-
 <H2>Description</H2>
 <p>
 This track shows multiple alignments of 7 human coronavirus sequences,
-aligned to the $Organism reference sequence SARS-CoV-2/NC_045512.2,
-genome assembly assembly GCF_009858895.2_ASM985889v3.
+aligned to the $Organism NCBI reference sequence SARS-CoV-2 for 
+<a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512" target="_blank">NC_045512.2</a>,
+genome assembly GCF_009858895.2_ASM985889v3.
 
-The multiple alignments were generated using multiz and
+The multiple alignments were generated using Multiz and
 other tools in the UCSC/<a href="http://www.bx.psu.edu/miller_lab/"
 target="_blank">Penn State Bioinformatics</a>
 comparative genomics alignment pipeline.
 </p>
 
 <p>
-In the track display, the sequence is labeled using a common name.
+In the track display, the sequences are labeled using common names.
 Note the table below to relate these common names to the NCBI assembly
 accession identifier.
 </p>
@@ -35,31 +29,31 @@ In pack mode, regions that align with 100% identity are not shown.   When there 
 identity, blocks of four colors are drawn.
 <ul>
 <li><span style="color: #ff0000; font-weight: bold;">Red</span> blocks are
-drawn when a polymorphism in a coding region results in a change in the amino
+drawn when a polymorphism in a coding region results in a <strong>change in the amino</strong>
 acid that is generated.</li>
-<li><span style="color: #00ff00; font-weight: bold;">Green</span> blocks are
-drawn when a polymorphism in a coding region results in no change to the amino
-acid that is generated.</li>
+<li><span style="color: #00cc00; font-weight: bold;">Green</span> blocks are
+drawn when a polymorphism in a coding region results in <strong>no change to the amino
+acid</strong> that is generated.</li>
 <li><span style="color: #0000ff; font-weight: bold;">Blue</span> blocks are
-drawn when a polymorphism is outside a coding region.</li>
+drawn when a polymorphism is <strong>outside a coding region</strong>.</li>
 <li><span style="color: #cccc33; font-weight: bold;">Pale yellow</span> blocks
-are drawn when there are no aligning bases to that region in the reference
+are drawn when there are <strong>no aligning bases</strong> to that region in the reference
 genome.</li>
 </ul>
 <P>
 Checkboxes on the track configuration page allow selection of the
 species to include in the pairwise display.
 Configuration buttons are available to select all of the species
-(<EM>Set all</EM>), deselect all of the species (<EM>Clear all</EM>), or
-use the default settings (<EM>Set defaults</EM>).
+(<EM>+</EM>), deselect all of the species (<EM>-</EM>), or
+use the default settings (<EM>Reset to defaults</EM>).
 <P>
-To view detailed information about the alignments at a specific
-position, zoom the display in to 30,000 or fewer bases, then click on
-the alignment.</P>
+For text nucleotide alignments, click on
+the alignment tracks. To view detailed information about the alignments at a specific
+position, zoom to a small region or click the 'base' button to see amino acid alignments.</P>
 
 <H3>Base Level</H3>
 <P>
-When zoomed-in to the base-level display, the track shows the base
+When zoomed-in to the base-level display, the track shows the amino acid
 composition of each alignment.
 The numbers and symbols on the Gaps
 line indicate the lengths of gaps in the $Organism sequence at those
@@ -68,9 +62,8 @@ If there is sufficient space in the display, the size of the gap is shown.
 If the space is insufficient and the gap size is a multiple of 3, a
 &quot;*&quot; is displayed; other gap sizes are indicated by &quot;+&quot;.</P>
 <P>
-Codon translation is available in base-level display mode if the
-displayed region is identified as a coding segment. To display this annotation, select the species
-for translation from the pull-down menu in the Codon
+Codon translation can be turned off in base-level display mode if desired. 
+You can select the species for translation from the pull-down menu in the Codon
 Translation configuration section at the top of the page. Then, select one of
 the following modes:
 <UL>
@@ -95,8 +88,8 @@ species are translated using the default species annotation.
 <H2>Methods</H2>
 <P>
 Pairwise alignments with the reference sequence were generated for
-each sequence using lastz version 1.04.03.
-Parameters used for each lastz alignment:
+each sequence using LASTZ version 1.04.03.
+Parameters used for each LASTZ alignment:
 <pre>
 # hsp_threshold      = 3000
 # gapped_threshold   = 3000 = L
@@ -115,8 +108,9 @@ Parameters used for each lastz alignment:
 Pairwise alignments were then linked into chains using a dynamic programming
 algorithm that finds maximally scoring chains of gapless subsections
 of the alignments organized in a kd-tree.  Parameters used in
-the chaining (axtChain) step: -minScore=1000 -linearGap=loose
-</P>
+the chaining (axtChain) step:
+<pre>
+-minScore=1000 -linearGap=loose</pre></p>
 <P>
 High-scoring chains were then placed along the genome, with
 gaps filled by lower-scoring chains, to produce an alignment net.
@@ -140,11 +134,11 @@ gaps filled by lower-scoring chains, to produce an alignment net.
 The multiple alignment was constructed from the resulting
 pairwise alignments progressively aligned using
 <a href='http://www.bx.psu.edu/miller_lab/'
-target=_blank>multiz/autoMZ</a>.
+target=_blank>MultiZ/autoMZ</a>.
 The phylogenetic tree was calculated on 31mer frequency similarity
 and neighbor joining that distance matrix with the
 <a href='http://evolution.genetics.washington.edu/phylip.html'
-target=_blank>phylip</a> toolset command:
+target=_blank>PHYLIP</a> toolset command:
 <a href='http://evolution.genetics.washington.edu/phylip/progs.data.dist.html'
 target=_blank>neighbor</a>.  The reference sequence NC_045512v2 is at the
 top of the tree:
@@ -153,12 +147,22 @@ top of the tree:
 </pre>
 Framing tables from the genes were constructed to enable
 visualization of codons in the multiple alignment display.</P>
+<h2>Data Access</h2>
+<p>
+Downloads for data in this track are available:
+<ul>
+<li>
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/wuhCor1/multiz7way/">Multiz alignments</a>
+(MAF format), and phylogenetic trees</li>
+</ul></p>
+
 
 <H2>Credits</H2>
 <P> This track was created using the following programs:
 <UL>
-<LI> Alignment tools: lastz (formerly blastz) and multiz by Minmei Hou, Scott Schwartz, Robert Harris, and
-Webb Miller of the <A HREF="http://www.bx.psu.edu/miller_lab/"
+<LI> Alignment tools: LASTZ (formerly Blastz) and MultiZ by Minmei Hou, 
+Scott Schwartz, Robert Harris, and Webb Miller of the 
+<A HREF="http://www.bx.psu.edu/miller_lab/"
 TARGET=_blank>Penn State Bioinformatics Group</A>
 <LI> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
 other programs in PHAST by
@@ -258,7 +262,7 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/15060014" target="_blank">150
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC383317/" target="_blank">PMC383317</a>
 </p>
 
-<h3>Lastz (formerly Blastz):</h3>
+<h3>LASTZ (formerly Blastz):</h3>
 <p>
 Chiaromonte F, Yap VB, Miller W.
 <a href="http://psb.stanford.edu/psb-online/proceedings/psb02/chiaromonte.pdf"
