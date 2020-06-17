@@ -126,18 +126,23 @@ Options:
 <ol>
   <li>The links to the genome browser in the table below will attach that
       one specific assembly to the genome browser.  This is most likely what
-      you want.</li>
-  <li>Instead, you can attach the entire set of assemblies as one group to
-      the genome browser with the following links depending upon which of
-      our mirror site browsers you prefer to use:
-    <ul>
-    <li><a href="https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
-        target="_blank">genome.ucsc.edu</a></li>
-    <li><a href="https://genome-euro.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
-        target="_blank">genome-euro.ucsc.edu</a></li>
-    <li><a href="https://genome-asia.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
-        target="_blank">genome-asia.ucsc.edu</a></li>
-    </ul>
+      you want.  Alternatively, the entire set of assemblies can be attached
+      as one group to the genome browser with the following links depending
+      upon which of our mirror site browsers you prefer to use:
+<table border="1">
+<tr>
+  <th>attach all assemblies to selected site:</th>
+  <th>&nbsp;</th>
+  <th><a href="https://genome.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
+        target="_blank">genome.ucsc.edu</a></th>
+  <th>&nbsp;</th>
+  <th><a href="https://genome-euro.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
+        target="_blank">genome-euro.ucsc.edu</a></th>
+  <th>&nbsp;</th>
+  <th><a href="https://genome-asia.ucsc.edu/cgi-bin/hgGateway?hubUrl=https://hgdownload.soe.ucsc.edu/hubs/$asmHubName/hub.txt&amp;genome=$defaultAssembly"
+        target="_blank">genome-asia.ucsc.edu</a></th>
+</tr>
+</table>
   </li>
   <li>To manually attach all the assemblies in this hub to genome browsers
       that are not one of the three UCSC mirror sites:
@@ -163,15 +168,13 @@ Instead of adding all the assemblies in one collected group, use the individual
 </p>
 <h3>See also: <a href='asmStats.html'>assembly statistics</a>,&nbsp;<a href='trackData.html'>track statistics</a> <== additional information for these assemblies.</h3><br>
 <h3>Data resource links</h3>
-<p>
 NOTE: <em>Click on the column headers to sort the table by that column</em><br>
-The <em>common name/view in browser</em> will attach only that single assembly to
+The <em>common name and view in browser</em> will attach only that single assembly to
 the genome browser.<br>
-The <em>scientific name/and data download</em> link provides access to the files for that one
+The <em>scientific name and data download</em> link provides access to the files for that one
 assembly hub.<br>
-The <em>class/VGP link</em> provides access to the VGP GenomeArk page for that genome<br>
+The <em>class VGP link</em> provides access to the VGP GenomeArk page for that genome.<br>
 The other links provide access to NCBI resources for these assemblies.
-</p>
 END
 }	#	sub startHtml()
 
@@ -185,7 +188,7 @@ print '
   <th>common&nbsp;name&nbsp;and<br>view&nbsp;in&nbsp;browser</th>
   <th>scientific name<br>and&nbsp;data&nbsp;download</th>
   <th>NCBI&nbsp;assembly</th>
-  <th>bioSample</th><th>bioProject</th>
+  <th>BioSample</th><th>BioProject</th>
   <th>assembly&nbsp;date,<br>source&nbsp;link</th>
 ';
 
@@ -301,6 +304,8 @@ sub tableContents() {
     } else {
     printf "    <td align=left>n/a</td>\n";
     }
+    # one broken assembly_report
+    $bioProject= "PRJEB25768" if ($accessionId eq "GCA_900324465.2");
     if ($bioProject eq "notFound") {
       printf "    <td align=left>%s</td>\n", $bioProject;
     } else {
