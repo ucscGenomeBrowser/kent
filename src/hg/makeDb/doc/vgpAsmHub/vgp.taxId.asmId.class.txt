@@ -23,8 +23,8 @@
 1203425	GCA_009762535.1_fNotCel1.pri	fish
 1203425	GCA_009762545.1_fNotCel1.alt	fish
 27794	GCA_009762595.1_rDerCor1.alt	reptiles
-685728	GCA_009764475.1_sPriPec2.pri	snakes
-685728	GCA_009764485.1_sPriPec2.alt	snakes
+685728	GCA_009764475.1_sPriPec2.pri	sharks
+685728	GCA_009764485.1_sPriPec2.alt	sharks
 121530	GCA_009764505.1_bTauEry1.alt	birds
 135433	GCA_009764545.1_bGeoTri1.alt	birds
 27794	GCA_009764565.1_rDerCor1.pri	reptiles
@@ -61,8 +61,8 @@
 59729	GCA_009859025.1_bTaeGut2.p.v1.alt	birds
 59729	GCA_009859065.2_bTaeGut2.pri.v2	birds
 9771	GCA_009873245.2_mBalMus1.v2	mammals
-386614	GCA_010909765.1_sAmbRad1.pri	snakes
-386614	GCA_010909745.1_sAmbRad1.alt	snakes
+386614	GCA_010909765.1_sAmbRad1.pri	sharks
+386614	GCA_010909745.1_sAmbRad1.alt	sharks
 7757	GCA_010993595.1_kPetMar1.alt	otherChordates
 8010	GCA_011004835.1_fEsoLuc1.alt	fish
 8010	GCA_011004845.1_fEsoLuc1.pri	fish
@@ -141,7 +141,7 @@
 91951	GCF_009819885.1_bCatUst1.pri	birds
 296741	GCF_009829145.1_bChiLan1.pri	birds
 36723	GCF_009829155.1_mMusErm1.Pri	mammals
-386614	GCF_010909765.1_sAmbRad1.pri	snakes
+386614	GCF_010909765.1_sAmbRad1.pri	sharks
 7757	GCF_010993605.1_kPetMar1.pri	otherChordates
 8154	GCF_900246225.1_fAstCal1.2	fish
 64144	GCF_900324465.2_fAnaTes1.2	fish
