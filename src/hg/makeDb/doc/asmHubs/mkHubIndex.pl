@@ -169,6 +169,7 @@ Instead of adding all the assemblies in one collected group, use the individual
 <h3>See also: <a href='asmStats.html'>assembly statistics</a>,&nbsp;<a href='trackData.html'>track statistics</a> <== additional information for these assemblies.</h3><br>
 <h3>Data resource links</h3>
 NOTE: <em>Click on the column headers to sort the table by that column</em><br>
+<br>
 The <em>common name and view in browser</em> will attach only that single assembly to
 the genome browser.<br>
 The <em>scientific name and data download</em> link provides access to the files for that one
