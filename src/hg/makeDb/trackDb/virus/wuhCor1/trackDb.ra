@@ -207,7 +207,6 @@ type bigWig
 visibility hide
 group x
 compositeTrack on
-html kimIvtCov
 
         track nanoCovKim
         shortLabel Kim 2020
@@ -217,7 +216,6 @@ html kimIvtCov
         autoScale on
         visibility full
         parent nanoCov
-        html kimIvtCov
 
         track nanoCovDavidson
         shortLabel Davidson 2020
@@ -227,7 +225,6 @@ html kimIvtCov
         visibility full
         autoScale on
         parent nanoCov
-        html kimIvtCov
 
         track nanoCovTaiaora
         shortLabel Taiaora 2020
@@ -237,7 +234,6 @@ html kimIvtCov
         visibility full
         autoScale on
         parent nanoCov
-        html kimIvtCov
 
 track lollySarsCov2
 shortLabel Sars Cov 2 Variants 
