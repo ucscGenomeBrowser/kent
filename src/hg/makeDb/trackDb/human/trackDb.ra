@@ -3586,7 +3586,7 @@ tableBrowser noGenome omimGeneMap omimGeneMap2 omimPhenotype omimGeneSymbol omim
 
 track omimAvSnp
 shortLabel OMIM Alleles
-longLabel OMIM Allelic Variants Phenotypes
+longLabel OMIM Allelic Variant Phenotypes
 group phenDis
 visibility hide
 color 0, 80, 0

@@ -22,20 +22,20 @@ symLinks::
 	${toolsDir}/mkSymLinks.pl ${orderList}
 
 hubIndex::
-	${toolsDir}/mkHubIndex.pl ${Name} ${name} ${defaultAssembly} ${orderList} | sed -e 's#asmStats.html#${statsName}.html#; s#trackData.html#${dataName}.html#; s#${name}/hub.txt#${name}/${hubFile}.txt#;' > ${destDir}/${indexName}.html
-	sed -e "s#genome.ucsc.edu/h/#genome-test.gi.ucsc.edu/h/#g; s/hgdownload.soe/hgdownload-test.gi/g; s#/${indexName}.html#/${testIndexName}.html#; s#${name}/${hubFile}.txt#${name}/${testHubFile}.txt#; s/${statsName}/${testStatsName}/; s#${dataName}.html#${testDataName}.html#;" ${destDir}/${indexName}.html > ${destDir}/${testIndexName}.html
+	${toolsDir}/mkHubIndex.pl ${Name} ${name} ${defaultAssembly} ${orderList} | sed -e 's#${name}/hub.txt#${name}/${hubFile}.txt#;' > ${destDir}/${indexName}.html
+	sed -e "s#genome.ucsc.edu/h/#genome-test.gi.ucsc.edu/h/#g; s/hgdownload.soe/hgdownload-test.gi/g; s#/${indexName}.html#/${testIndexName}.html#; s#${name}/${hubFile}.txt#${name}/${testHubFile}.txt#; s/asmStats/${testStatsName}/; s#${dataName}.html#${testDataName}.html#;" ${destDir}/${indexName}.html > ${destDir}/${testIndexName}.html
 	chmod +x ${destDir}/${indexName}.html ${destDir}/${testIndexName}.html
 
 asmStats::
 	rm -f ${destDir}/${statsName}.html ${destDir}/${testStatsName}.html
-	${toolsDir}/mkAsmStats.pl ${Name} ${name} ${orderList} | sed -e 's#index.html#${indexName}.html#; s#trackData.html#${dataName}.html#;' > ${destDir}/${statsName}.html
+	${toolsDir}/mkAsmStats.pl ${Name} ${name} ${orderList} > ${destDir}/${statsName}.html
 	sed -e "s/hgdownload.soe/hgdownload-test.gi/g; s/index.html/${testIndexName}.html/; s#/${statsName}#/${testStatsName}#; s#${dataName}.html#${testDataName}.html#;" ${destDir}/${statsName}.html > ${destDir}/${testStatsName}.html
 	chmod +x ${destDir}/${statsName}.html ${destDir}/${testStatsName}.html
 
 # trackData makes different tables for the test vs. production version
 # mkHubIndex.pl and mkAsmStats.pl should do this too . . .  TBD
 trackData::
-	${toolsDir}/trackData.pl ${Name} ${name} ${orderList} | sed -e 's#index.html#${indexName}.html#; s#asmStats.html#${statsName}.html#;' > ${destDir}/${dataName}.html
+	${toolsDir}/trackData.pl ${Name} ${name} ${orderList} > ${destDir}/${dataName}.html
 	${toolsDir}/trackData.pl -test ${Name} ${name} ${orderList} | sed -e "s#testIndex.html#${testIndexName}.html#; s#testAsmStats.html#${testStatsName}.html#;" > ${destDir}/${testDataName}.html
 	chmod +x ${destDir}/${dataName}.html
 	chmod +x ${destDir}/${testDataName}.html
