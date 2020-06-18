@@ -4171,12 +4171,21 @@ if (doCache)
 
     hFreeConn(&conn);
 
-    struct trackDb *cacheTdb = trackDbCache(db, tdbPathString, newestTime);
+    long now = clock1();
 
-    if (cacheTdb != NULL)
-        return cacheTdb;
-    
-    memCheckPoint(); // we want to know how much memory is used to build the tdbList
+    // if the trackDb table has changed in the last five minutes, avoid caching because the table may
+    // not be done changing.  Updates are not atomic.
+    if (now - newestTime < 5 * 60)
+        doCache = 0;
+    else
+        {
+        struct trackDb *cacheTdb = trackDbCache(db, tdbPathString, newestTime);
+
+        if (cacheTdb != NULL)
+            return cacheTdb;
+        
+        memCheckPoint(); // we want to know how much memory is used to build the tdbList
+        }
     }
 
 tdbList = loadTrackDb(db, NULL);
