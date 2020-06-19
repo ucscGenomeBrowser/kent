@@ -3183,3 +3183,22 @@ http://genome.crg.es/genepredictions/P.paniscus/panPan1/geneid_v1.4/panPan1.gene
     # verify this functions in the genome browser from panPan1 to panPan2
 
 ##############################################################################
+# LIFTOVER TO panPan3 (DONE - 2020-06-15 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/panPan1/bed/blat.panPan3.2020-06-15
+    cd /hive/data/genomes/panPan1/bed/blat.panPan3.2020-06-15
+
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -ooc=/hive/data/genomes/panPan1/jkStuff/panPan1.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         panPan1 panPan3
+
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -ooc=/hive/data/genomes/panPan1/jkStuff/panPan1.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         panPan1 panPan3) > doLiftOverToPanPan3.log 2>&1
+    # real    483m25.092s
+
+    # verify this functions in the genome browser from panPan1 to panPan3
+
+##############################################################################

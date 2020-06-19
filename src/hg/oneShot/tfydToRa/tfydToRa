@@ -1,0 +1,104 @@
+#!/usr/bin/env python
+
+import logging, sys, optparse
+from collections import defaultdict
+from os.path import join, basename, dirname, isfile
+
+# ==== functions =====
+    
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("usage: %prog [options] inFname outFname - convert the 'trackDb for your datahub' format aka. trackDbLibrary.shtml to an .ra file")
+
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    #parser.add_option("-f", "--file", dest="file", action="store", help="run on file") 
+    #parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+    (options, args) = parser.parse_args()
+
+    if args==[]:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+        logging.getLogger().setLevel(logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+        logging.getLogger().setLevel(logging.INFO)
+
+    return args, options
+# ----------- main --------------
+# there is no need to make this clean code. The plan is to run this script once and then be done
+# with trackDbLibrary forever. Do not overdo codereview on this script, possibly no code review at all
+# is fine.
+def main():
+    args, options = parseArgs()
+
+    filename = args[0]
+
+    #ofh = open(outFname, "w")
+    descLines = []
+    relTags = []
+
+    grabDesc = False
+    isIntro = False
+    foundStart = False
+    skipDiv = False
+    for line in open(filename):
+        # <DIV class="track"><span class="types all"></span>
+        # <div class="format all"><code>track</code></div>
+        #       <P class="isRequired">Required: <span class="red">Yes</span></P>
+        #print("* ", line)
+        line = line.rstrip("\n")
+        if line.startswith("<!--"):
+            continue
+        elif line=="":
+            continue
+        elif line.startswith("<DIV class="):
+            parts = line.split('"')
+            if parts[1].endswith("_intro"):
+                skipDiv = True
+                continue
+            foundStart = True
+            cfgName = parts[1]
+            if cfgName=="type_for_hubs":
+                cfgName = "type"
+            typeList = parts[3].replace("types ", "").replace(" ", ",")
+            isIntro = False
+        elif line.strip().startswith('<div class="format'):
+            # <div class="format all"><code>track</code></div>
+            #print("FORMAT ", line)
+            formatStr = line.replace('<div class="format">','').replace('</div>', '')
+            grabDesc = True
+            isIntro = False
+
+        elif line.strip().startswith("<A onclick"):
+            # <A onclick="return jumpTo(this);" HREF="#">bam/cram</A>,
+            relTag = line.split(">")[1].split("<")[0]
+            relTags.append(relTag)
+        elif line == "</DIV>":
+            grabDesc = False
+
+            if not skipDiv:
+                print("tag %s" % cfgName)
+                print("types %s" % typeList)
+
+                for l in descLines:
+                    if l!="Valid settings:" and l!="":
+                        print("desc %s" % l)
+                for t in relTags:
+                    print("value %s" % t)
+                print()
+            descLines = []
+            relTags = []
+            skipDiv = False
+        else:
+            if grabDesc and foundStart and not skipDiv:
+                line = line.strip().replace("<P>","").replace("</P>", "")
+                descLines.append(line)
+            else:
+                if foundStart and line!="\n" and not skipDiv:
+                    print("NO CAPT", line)
+                    assert(False)
+
+main()

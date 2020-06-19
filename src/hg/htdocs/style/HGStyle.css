@@ -206,9 +206,10 @@ table.omimTbl, table.omimTbl th, table.omimTbl td {
 }
 table.omimTbl thead {
     font-weight: bold;
+    background-color: #fffadb;
 }
 table.omimTbl tbody {
-    //background-color: #EEE;
+    background-color: #fffadb;
 }
 
 table.hgBlatTable td {

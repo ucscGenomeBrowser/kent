@@ -1,6 +1,6 @@
 track clinGenSuper
 shortLabel ClinGen
-longLabel Clinical Genome Resource
+longLabel Clinical Genome Resource (ClinGen)
 group phenDis
 superTrack on
 html clinGen 
@@ -8,7 +8,7 @@ html clinGen
     track dosageSensitivity
     parent clinGenSuper on
     shortLabel ClinGen Dosage Sensitivity
-    longLabel Clinical Genome Resource Dosage Sensitivity Map 
+    longLabel Clinical Genome Resource (ClinGen) Dosage Sensitivity Map 
     visibility pack
     type bigBed 9 +
     itemRgb on
@@ -25,6 +25,7 @@ html clinGen
         mouseOverField _mouseOver
         filterValues.haploScore 0|No evidence available,1|Little evidence for dosage pathogenicity,2|Some evidence for dosage pathogenicity,3|Sufficient evidence for dosage pathogenicity,30|Gene associated with autosomal recessive phenotype,40|Dosage sensitivity unlikely
         filterLabel.haploScore Dosage Sensitivity Score
+        urls haploPMID1="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" haploPMID2="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" haploPMID3="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$"
 
         track clinGenTriplo
         parent dosageSensitivity
@@ -36,11 +37,12 @@ html clinGen
         mouseOverField _mouseOver
         filterValues.triploScore 0|No evidence available,1|Little evidence for dosage pathogenicity,2|Some evidence for dosage pathogenicity,3|Sufficient evidence for dosage pathogenicity,30|Gene associated with autosomal recessive phenotype,40|Dosage sensitivity unlikely
         filterLabel.triploScore Dosage Sensitivity Score
+        urls triploPMID1="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" triploPMID2="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" triploPMID3="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$"
 
     track clinGenCnv
     parent clinGenSuper off
     shortLabel ClinGen Structural Variants
-    longLabel Clinical Genome Resource Structural Variants
+    longLabel Clinical Genome Resource (ClinGen) Structural Variants
     html clinGenSv
     type bigBed 9 +
     itemRgb on
@@ -48,6 +50,7 @@ html clinGen
     mergeSpannedItems off
     bigDataUrl /gbdb/$D/bbi/clinGen/clinGenCnv.bb
     mouseOverField _mouseOver
+    filterByRange.size on
     filterLabel.size Variant Size
     filterValues.variantType copy_number_loss|loss,copy_number_gain|gain
     filterLabel.variantType Variant Type
@@ -55,4 +58,4 @@ html clinGen
     filterLabel.clinicalInterpretation Clinical Significance
     url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
     urlLabel NCBI DbVar:
-    urls pubMed="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" clinGenId="https://dosage.clinicalgenome.org/clingen_region.cgi?id=$$&page=print"
+    urls pubMed="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" clinGenId="$$"

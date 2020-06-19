@@ -1,0 +1,185 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
+sys.path.extend((os.path.join(myBinDir, "../lib"),
+                os.path.expanduser("~markd/compbio/code/pycbio/lib")))
+from collections import defaultdict
+from dataclasses import dataclass
+import argparse
+from pycbio.sys import fileOps
+from gencode import gencodeGxfParserFactory
+from gencode.gencodeGxfParser import ParseException
+from gencode.biotypes import BioType, getTranscriptFunction
+
+def parseArgs():
+    desc = """Extract attributes from a GENCODE GTF or GFF3 into a tab-separate file for loading into
+the gencodeAttrs, gencodeTranscriptSupport (TSL), and gencodeTag tables.  It
+also output the attributes in TSV format for use by other programs before loading
+into the table.
+"""
+    parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument("gencodeGxf",
+                        help="""GENCODE GTF or GFF3 file""")
+    parser.add_argument("attrsTsv",
+                        help="""write attributes to this TSV file""")
+    parser.add_argument("attrsTab",
+                        help="""write attributes to this file""")
+    parser.add_argument("tslTab",
+                        help="""write TSLs to this file""")
+    parser.add_argument("tagTab",
+                        help="""write tags to this file""")
+    return parser.parse_args()
+
+def emptyIfNone(v):
+    return v if v is not None else ""
+
+@dataclass
+class Transcript:
+    """attributes collect from one transcript"""
+    transcriptId: str
+    transcriptName: str
+    transcriptType: str
+    geneId: str
+    geneName: str
+    geneType: str
+    ccdsId: str
+    level: int
+    transcriptSupportLevel: str
+    proteinId: str
+    tags: set
+
+    def writeAttrs(self, fh):
+        "must match autoSql"
+        fileOps.prRowv(fh, self.geneId, self.geneName, self.geneType,
+                       self.transcriptId, self.transcriptName, self.transcriptType,
+                       emptyIfNone(self.ccdsId), self.level, emptyIfNone(self.proteinId),
+                       self.transcriptClass)
+
+    def writeTsl(self, fh):
+        fileOps.prRowv(fh, self.transcriptId, self.transcriptSupportLevel)
+
+    def writeTags(self, fh):
+        for tag in sorted(self.tags):
+            fileOps.prRowv(fh, self.transcriptId, tag)
+
+
+class GencodeGxfToAttrs(object):
+    def __init__(self, gxfParser):
+        self.gxfParser = gxfParser
+        self.errorCnt = 0
+        self.unknownGeneTypes = set()
+        self.unknownTranscriptTypes = set()
+        self.geneTags = defaultdict(set)  # collect gene tags
+        self.transcripts = {}
+
+    def _processGeneRec(self, rec):
+        geneTags = self.geneTags[rec.attributes.gene_id]
+        for tag in rec.attributes.tags:
+            geneTags.add(tag)
+
+    def _processTransRec(self, rec):
+        attrs = rec.attributes
+        trans = self.transcripts.get(attrs.transcript_id)
+        if trans is None:
+            trans = Transcript(transcriptId=attrs.transcript_id,
+                               transcriptName=attrs.transcript_name,
+                               transcriptType=attrs.transcript_type,
+                               geneId=attrs.gene_id,
+                               geneName=attrs.gene_name,
+                               geneType=attrs.gene_type,
+                               ccdsId=attrs.ccdsid,
+                               level=attrs.level,
+                               transcriptSupportLevel=attrs.transcript_support_level,
+                               proteinId=attrs.protein_id,
+                               tags=set())
+            self.transcripts[attrs.transcript_id] = trans
+        # due to PAR, we have to handle multiple tags for the same
+        # transcript_id, which might be different (mainly the PAR tag), so
+        # always add
+        for tag in attrs.tags:
+            trans.tags.add(tag)
+
+    def _processRec(self, rec):
+        try:
+            if rec.feature == "gene":
+                self._processGeneRec(rec)
+            elif rec.feature == "transcript":
+                self._processTransRec(rec)
+        except ParseException as ex:
+            sys.stderr.write("Error: {}: {}\n".format(str(ex), rec))
+            self.errorCnt += 1
+
+    def _mergeGeneTags(self):
+        for trans in self.transcripts.values():
+            trans.tags |= self.geneTags[trans.geneId]
+
+    def _assignFunction(self, trans):
+        # convert and report unknown biotypes, only report once
+        try:
+            geneBioType = BioType(trans.geneType)
+        except ValueError:
+            if trans.geneType not in self.unknownGeneTypes:
+                sys.stderr.write("Error: unknown gene biotype, update gencode/biotypes.py: {}\n".format(trans.geneType))
+                self.unknownGeneTypes.add(trans.geneType)
+            self.errorCnt += 1
+            return
+        try:
+            transcriptBioType = BioType(trans.transcriptType)
+        except ValueError:
+            if trans.transcriptType not in self.unknownTranscriptTypes:
+                sys.stderr.write("Error: unknown transcript biotype, update gencode/biotypes.py: {}\n".format(trans.transcriptType))
+                self.unknownTranscriptType.add(trans.transcriptType)
+            self.errorCnt += 1
+            return
+        trans.transcriptClass = getTranscriptFunction(geneBioType, transcriptBioType)
+
+    def _assignFunctions(self):
+        for trans in self.transcripts.values():
+            self._assignFunction(trans)
+        if self.errorCnt > 0:
+            raise Exception("{} biotypes errors in {}".format(self.errorCnt, self.gxfParser.getFileName()))
+
+    def parse(self):
+        for rec in self.gxfParser.reader():
+            self._processRec(rec)
+            if self.errorCnt >= 100:
+                break
+        if self.errorCnt > 0:
+            raise Exception("{} parse errors in {}".format(self.errorCnt, self.gxfParser.getFileName()))
+        self._mergeGeneTags()
+        self._assignFunctions()
+
+    def writeAttrs(self, fh):
+        for transId in sorted(self.transcripts.keys()):
+            self.transcripts[transId].writeAttrs(fh)
+
+    def writeAttrsTsv(self, fh):
+        fileOps.prRowv(fh, "geneId", "geneName", "geneType", "transcriptId", "transcriptName",
+                       "transcriptType", "ccdsId", "level", "proteinId", "transcriptClass")
+        self.writeAttrs(fh)
+
+    def writeTsls(self, fh):
+        for transId in sorted(self.transcripts.keys()):
+            self.transcripts[transId].writeTsl(fh)
+
+    def writeTags(self, fh):
+        for transId in sorted(self.transcripts.keys()):
+            self.transcripts[transId].writeTags(fh)
+
+
+def gencodeGxfToAttrs(opts):
+    parser = GencodeGxfToAttrs(gencodeGxfParserFactory(opts.gencodeGxf, ignoreUnknownAttrs=True))
+    parser.parse()
+    with open(opts.attrsTsv, "w") as fh:
+        parser.writeAttrsTsv(fh)
+    with open(opts.attrsTab, "w") as fh:
+        parser.writeAttrs(fh)
+    with open(opts.tslTab, "w") as fh:
+        parser.writeTsls(fh)
+    with open(opts.tagTab, "w") as fh:
+        parser.writeTags(fh)
+
+
+gencodeGxfToAttrs(parseArgs())

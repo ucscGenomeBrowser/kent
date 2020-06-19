@@ -1,7 +1,7 @@
 
 destDir=/hive/data/genomes/asmHubs/vgp
 srcDir=${HOME}/kent/src/hg/makeDb/doc/vgpAsmHub
-orderList=vgp.primary.orderList.tsv
+orderList=$(CURDIR)/vgp.primary.orderList.tsv
 
 indexName=index
 testIndexName=testIndex
@@ -12,9 +12,10 @@ testDataName=testTrackData
 genomesTxt=genomes
 hubFile=hub
 testHubFile=testHub
+hubTxtFile=hub.txt
 
 Name=VGP
-name=vgp
+name=VGP
 
 # GCA_009859065.2_bTaeGut2.pri.v2	zebra finch
 defaultAssembly=GCA_009859065.2
@@ -29,3 +30,6 @@ alt:
 
 trio:
 	make -f trioMakefile
+
+legacy:
+	make -f legacyMakefile

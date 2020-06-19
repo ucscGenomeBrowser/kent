@@ -4,7 +4,7 @@
 
 destDir=/hive/data/genomes/asmHubs/vgp
 srcDir=${HOME}/kent/src/hg/makeDb/doc/vgpAsmHub
-orderList=vgp.userTracks.tsv
+orderList=$(CURDIR)/vgp.userTracks.tsv
 
 indexName=userTracks
 testIndexName=testUserTracks
@@ -15,10 +15,11 @@ testDataName=testUserData
 genomesTxt=userGenomes
 hubFile=userHub
 testHubFile=testUserHub
+hubTxtFile=hub.txt
 
 # these names trigger special behavior in the index page creation scripts:
 Name=VGP
-name=vgp
+name=VGP
 
 # bCalAnn1_v1.p	Anna's hummingbird
 defaultAssembly=GCA_003957555.2

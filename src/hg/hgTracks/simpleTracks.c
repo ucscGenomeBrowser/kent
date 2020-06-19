@@ -6140,7 +6140,7 @@ struct hashEl *knownGeneLabels = cartFindPrefix(cart, "knownGene.label");
 struct hashEl *label;
 boolean labelStarted = FALSE;
 
-if (hTableExists(database, "kgXref"))
+if (isBigGenePred || hTableExists(database, "kgXref"))
     {
     char omimLabel[48];
     safef(omimLabel, sizeof(omimLabel), "omim%s", cartString(cart, "db"));
@@ -6550,6 +6550,15 @@ if (hTableExists(database, "kgColor"))
     }
 else
     return knownGeneColorCalc(tg, item, hvg);
+}
+
+void gencodeMethods(struct track *tg)
+/* Make track of known genes. */
+{
+tg->loadItems   = loadKnownGene;
+tg->itemName    = knownGeneName;
+tg->mapItemName = knownGeneMapName;
+tg->itemColor   = knownGeneColor;
 }
 
 void knownGeneMethods(struct track *tg)

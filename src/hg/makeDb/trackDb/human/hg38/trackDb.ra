@@ -6,10 +6,11 @@ include hoffMap.ra
 
 include cancerExpr.ra
 
-include mane.alpha.ra alpha
-include mane.ra beta,public
+include mane.ra
 
 include gdcCancer.ra
+
+include mergedBGP.ra
 
 track miRnaAtlas
 compositeTrack on
@@ -540,12 +541,12 @@ track tgpTrios
 type vcfPhasedTrio
 release alpha
 group varRep
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 maxWindowToDraw 5000000
 compositeTrack on
 
     track tgpNA19685_m011_MXL
     parent tgpTrios
-    chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
     type vcfPhasedTrio
     shortLabel m011 MXL Trio
     longLabel 1000 Genomes m011 Mexican Ancestry from Los Angeles Trio
@@ -556,7 +557,6 @@ compositeTrack on
 
     track tgpNA19675_m004_MXL
     parent tgpTrios
-    chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
     type vcfPhasedTrio
     shortLabel m004 MXL Trio
     longLabel 1000 Genomes m004 Mexican Ancestry from Los Angeles Trio
@@ -567,7 +567,6 @@ compositeTrack on
 
     track tgpNA19240_Y117_YRI
     parent tgpTrios
-    chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
     type vcfPhasedTrio
     shortLabel Y117 YRI Trio
     longLabel 1000 Genomes Yoruban in Ibadan, Nigeria Trio
@@ -578,7 +577,6 @@ compositeTrack on
 
     track tgpNA12878_1463_CEU
     parent tgpTrios
-    chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
     type vcfPhasedTrio
     shortLabel 1463 CEU Trio
     longLabel 1000 Genomes Utah CEPH Trio
@@ -589,7 +587,6 @@ compositeTrack on
 
     track tgpHG02024_VN049_KHV
     parent tgpTrios
-    chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
     type vcfPhasedTrio
     shortLabel VN049 KHV Trio
     longLabel 1000 Genomes Kinh in Ho Chi Minh City, Vietnam Trio
@@ -600,7 +597,6 @@ compositeTrack on
 
     track tgpHG00733_PR05_PUR
     parent tgpTrios
-    chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
     type vcfPhasedTrio
     shortLabel PR05 PUR Trio
     longLabel 1000 Genomes Puerto Ricans from Puerto Rico Trio
@@ -611,7 +607,6 @@ compositeTrack on
 
     track tgpHG00702_SH089_CHS
     parent tgpTrios
-    chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
     type vcfPhasedTrio
     shortLabel SH089 CHS Trio
     longLabel 1000 Genomes Southern Han Chinese Trio
@@ -927,3 +922,4 @@ baseColorDefault genomicCodons
 
 track clinGenCnv override
 filter.size 773:11309456
+filterLimits.size 773:11309456
