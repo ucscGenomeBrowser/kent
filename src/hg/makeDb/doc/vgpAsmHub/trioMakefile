@@ -15,6 +15,7 @@ testDataName=testVgpTrioData
 genomesTxt=trioGenomes
 hubFile=trioHub
 testHubFile=testTrioHub
+hubTxtFile=vgpTrioHub.txt
 
 # these names trigger special behavior in the index page creation scripts:
 Name=VGP
