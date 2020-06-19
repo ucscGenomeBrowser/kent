@@ -15,6 +15,7 @@ testDataName=testVgpLegacyData
 genomesTxt=legacyGenomes
 hubFile=legacyHub
 testHubFile=testLegacyHub
+hubTxtFile=vgpLegacyHub.txt
 
 # these names trigger special behavior in the index page creation scripts:
 Name=VGP
