@@ -75,15 +75,19 @@ def lineageToColor(lineage):
             break
     return node['color']
 
-def addLineagesAsBogusLength(node, labelToLineage):
+def addLineagesAsBogusLength(node, labelToLineage, cumulativeNoLineageCount=0):
     """Associate a lineage with each leaf in tree, overwriting the branch length with an RGB
     color encoded as an int.  Then on the way back up, assign lineage (and length) to each
-    internal node if its descendants all have the same lineage."""
+    internal node if its descendants all have the same lineage.  Return the number of leaves
+    for which we were unable to assign a lineage."""
+    noLineageCount = 0
     if (node['kids']):
         # Internal node: do all descendants have same lineage?
         kids = node['kids']
         for kid in kids:
-            addLineagesAsBogusLength(kid, labelToLineage)
+            kidNoLinCount = addLineagesAsBogusLength(kid, labelToLineage, cumulativeNoLineageCount)
+            noLineageCount += kidNoLinCount
+            cumulativeNoLineageCount += kidNoLinCount
         kidLineages = set([ kid.get('lineage') for kid in kids ]);
         if (len(kidLineages) == 1):
             node['lineage'] = list(kidLineages)[0]
@@ -93,8 +97,10 @@ def addLineagesAsBogusLength(node, labelToLineage):
         # Leaf: look up lineage by label
         lineage = labelToLineage.get(node['label'])
         if (not lineage):
-            logging.warn('No lineage for "' + node['label'] + '"')
+            if ((cumulativeNoLineageCount + noLineageCount) < 10):
+                logging.warn('No lineage for "' + node['label'] + '"')
             lineage = defaultColor
+            noLineageCount += 1
         node['lineage'] = lineage
     # Update length based on lineage (or lack thereof):
     lineage = node.get('lineage')
@@ -102,4 +108,4 @@ def addLineagesAsBogusLength(node, labelToLineage):
         node['length'] = str(lineageToColor(lineage))
     else:
         node['length'] = str(defaultColor)
-
+    return noLineageCount

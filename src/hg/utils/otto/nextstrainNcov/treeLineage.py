@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import logging, argparse, sys
-import lineageColors, newick, nextstrainVcf, utils, virusNames
+import lineageColors, newick, vcf, utils, virusNames
 
 def assignColors(node, idLookup, labelToLineage):
     if (node['kids']):
@@ -37,7 +37,7 @@ def main():
     parser = argparse.ArgumentParser(description="""
 Read tree from Newick treeFile.
 Read sample IDs that are a concatenation of EPI ID, sample name and approximate date,
-for resolving sampleFile IDs and lineageFile IDs, from a Nextstrain VCF file.
+for resolving sampleFile IDs and lineageFile IDs, from a VCF file.
 Read lineage assignments from lineageFile.
 Figure out what lineage and color (if any) are assigned to each leaf, and then work
 back towards root assigning color to each named node whose descendants all have same color.
@@ -45,13 +45,13 @@ Write out 3 tab-sep columns:
 sampleOrNode, lineage, lineageColor.
 """
     )
-    parser.add_argument('treeFile', help='File containing sample IDs')
-    parser.add_argument('vcfFile', help='VCF file derived from Nextstrain data')
+    parser.add_argument('treeFile', help='Newick tree whose leaf labels are sample IDs')
+    parser.add_argument('vcfFile', help='VCF file with genotype columns for the sample samples')
     parser.add_argument('lineageFile', help='Two-column tab-sep file mapping sample to lineage')
     args = parser.parse_args()
 
     tree = newick.parseFile(args.treeFile)
-    (vcfSamples, vcfSampleClades) = nextstrainVcf.readVcfSamples(args.vcfFile)
+    vcfSamples = vcf.readSamples(args.vcfFile)
     idLookup = virusNames.makeIdLookup(vcfSamples)
     lineages = utils.dictFromFile(args.lineageFile)
     nsLineages = dict([ (virusNames.maybeLookupSeqName(name, idLookup), lin)

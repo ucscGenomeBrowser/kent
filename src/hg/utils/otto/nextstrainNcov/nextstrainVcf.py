@@ -3,7 +3,7 @@
 
 from collections import defaultdict
 
-def readVcfSamples(vcfFile):
+def readVcfSampleClades(vcfFile):
     """Read VCF sample IDs from the #CHROM line, and parse out clades from the first row GT cols"""
     samples = []
     sampleClades = defaultdict()

@@ -14,7 +14,7 @@ NS sample ID, clade, lineage.
     parser.add_argument('lineageFile', help='Two-column tab-sep file mapping sample to lineage')
     args = parser.parse_args()
 
-    (vcfSamples, vcfSampleClades) = nextstrainVcf.readVcfSamples(args.vcfFile)
+    (vcfSamples, vcfSampleClades) = nextstrainVcf.readVcfSampleClades(args.vcfFile)
     idLookup = virusNames.makeIdLookup(vcfSamples)
     lineages = utils.dictFromFile(args.lineageFile)
     nsLineages = dict([ (virusNames.maybeLookupSeqName(name, idLookup), lin)
