@@ -59,5 +59,38 @@ switch (tolower(c))
 return FALSE;
 }
 
+INLINE char *iupacAmbiguousToString(char c)
+/* Return a static string of [acgt] bases that C would resolve to. */
+{
+switch (tolower(c))
+    {
+    case 'r':
+        return "ag";
+    case 'y':
+        return "ct";
+    case 's':
+        return "cg";
+    case 'w':
+        return "at";
+    case 'k':
+        return "gt";
+    case 'm':
+        return "ac";
+    case 'b':
+        return "cgt";
+    case 'd':
+        return "agt";
+    case 'h':
+        return "act";
+    case 'v':
+        return "acg";
+    case 'n':
+        return "acgt";
+    default:
+        errAbort("iupacAmbiguousToString: unrecognized character '%c'", c);
+    }
+return NULL;
+}
+
 #endif /* IUPAC_H */
 
