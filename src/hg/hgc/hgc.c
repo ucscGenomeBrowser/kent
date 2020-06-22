@@ -1463,6 +1463,8 @@ for (itemId = slIds; itemId!=NULL; itemId = itemId->next)
         itemName = parts[1];
         encode = FALSE; // assume the link is already encoded
         }
+    if (startsWith("http", itemName)) // the ID may be a full URL already, encoding would destroy it
+        encode = FALSE;
 
     char *idUrl = replaceInUrl(url, idForUrl, cart, database, seqName, winStart, 
                     winEnd, tdb->track, encode, NULL);
