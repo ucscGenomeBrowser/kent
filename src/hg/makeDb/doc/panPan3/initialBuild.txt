@@ -633,11 +633,10 @@ searchPriority 8
     cd /hive/data/genomes/panPan3/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku panPan3) > do.log 2>&1
-XXX - running - Mon Jun 15 09:08:28 PDT 2020
-    # real    4m0.657s
+    # real    4m8.773s
 
     cat fb.panPan3.cpgIslandExt.txt
-    # 20339043 bases of 2999027915 (0.678%) in intersection
+    # 21946791 bases of 3015350297 (0.728%) in intersection
 
 ##############################################################################
 # genscan - (DONE - 2020-06-15 - Hiram)
@@ -645,17 +644,16 @@ XXX - running - Mon Jun 15 09:08:28 PDT 2020
     cd /hive/data/genomes/panPan3/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku panPan3) > do.log 2>&1
-XXX - running - Mon Jun 15 09:09:06 PDT 2020
-    # real    100m37.264s
+    # real    250m19.909s
 
     cat fb.panPan3.genscan.txt
-    # 51534246 bases of 2999027915 (1.718%) in intersection
+    # 53138526 bases of 3015350297 (1.762%) in intersection
 
     cat fb.panPan3.genscanSubopt.txt
-    # 53019930 bases of 2999027915 (1.768%) in intersection
+    # 51253170 bases of 3015350297 (1.700%) in intersection
 
 #########################################################################
-# Create kluster run files (TBD - 2019-11-20 - Hiram)
+# Create kluster run files (DONE - 2020-06-15 - Hiram)
 
     # numerator is panPan3 gapless bases "real" as reported by:
     featureBits -noRandom -noHap panPan3 gap
@@ -750,75 +748,85 @@ panPan3.genbank.est.native.load = no
     # appear
 
 ########################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2019-11-20 - Hiram)
+# lastz/chain/net swap human/hg38 (DONE - 2020-06-15 - Hiram)
 
     # original alignment
-    cd /hive/data/genomes/hg38/bed/lastzPanPan3.2019-11-20
+    cd /hive/data/genomes/hg38/bed/lastzPanPan3.2020-06-15
 
     cat fb.hg38.chainPanPan3Link.txt
-    # 2908900659 bases of 3095998939 (93.957%) in intersection
+    # 2897225010 bases of 3110768607 (93.135%) in intersection
     cat fb.hg38.chainSynPanPan3Link.txt
-    # 2885980361 bases of 3095998939 (93.216%) in intersection
+    # 2880116277 bases of 3110768607 (92.585%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	hg38 panPan3) > rbest.log 2>&1 &
+    # real    68m45.187s
     cat fb.hg38.chainRBest.PanPan3.txt
-    # 2693876207 bases of 3095998939 (87.012%) in intersection
+    # 2727319248 bases of 3110768607 (87.673%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/panPan3/bed/blastz.hg38.swap
     cd /hive/data/genomes/panPan3/bed/blastz.hg38.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzPanPan3.2019-11-20/DEF \
+      /hive/data/genomes/hg38/bed/lastzPanPan3.2020-06-15/DEF \
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    63m46.473s
+    #  real    73m50.456s
 
     cat fb.panPan3.chainHg38Link.txt
-    # 2738870921 bases of 2999027915 (91.325%) in intersection
+    # 2777869191 bases of 3015350297 (92.124%) in intersection
     cat fb.panPan3.chainSynHg38Link.txt
-    # 2728591501 bases of 2999027915 (90.983%) in intersection
+    # 2768018012 bases of 3015350297 (91.798%) in intersection
 
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` panPan3 hg38) \
-       > rbest.log 2>&1
-    # real    62m14.470s
-
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+      panPan3 hg38) > rbest.log 2>&1 &
+    # real    66m52.340s
     cat fb.panPan3.chainRBest.Hg38.txt
-    # 2697792568 bases of 2999027915 (89.956%) in intersection
+    # 2732415393 bases of 3015350297 (90.617%) in intersection
 
 ###########################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2019-11-21 - Hiram)
+# lastz/chain/net swap mouse/mm10 (DONE - 2020-06-15 - Hiram)
 
     # original alignment
-    cd /hive/data/genomes/mm10/bed/lastzPanPan3.2019-11-20
-    cat fb.mm10.chainPanPan3Link.txt
-    #	929953885 bases of 2652783500 (35.056%) in intersection
-    cat fb.mm10.chainSynPanPan3Link.txt
-    #   882047357 bases of 2652783500 (33.250%) in intersection
-    cat fb.mm10.chainRBest.PanPan3.txt
-    # 885135149 bases of 2652783500 (33.366%) in intersection
+    cd /hive/data/genomes/mm10/bed/lastzPanPan3.2020-06-15
 
+    cat fb.mm10.chainPanPan3Link.txt
+    # 935579510 bases of 2652783500 (35.268%) in intersection
+    cat fb.mm10.chainSynPanPan3Link.txt
+    # 888900388 bases of 2652783500 (33.508%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 panPan3) \
+      > rbest.log 2>&1 &
+    # real    329m28.051s
+    cat fb.mm10.chainRBest.PanPan3.txt
+    # 890894306 bases of 2652783500 (33.583%) in intersection
+
+    # and for the swap:
     mkdir /hive/data/genomes/panPan3/bed/blastz.mm10.swap
     cd /hive/data/genomes/panPan3/bed/blastz.mm10.swap
+
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzPanPan3.2019-11-20/DEF \
-	-swap -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
-	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
-    #	real    72m34.088s
+      /hive/data/genomes/mm10/bed/lastzPanPan3.2020-06-15/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    55m23.982s
 
     cat fb.panPan3.chainMm10Link.txt
-    #	1017872526 bases of 2999027915 (33.940%) in intersection
+    # 954214151 bases of 3015350297 (31.645%) in intersection
     cat fb.panPan3.chainSynMm10Link.txt
-    #    880983055 bases of 2999027915 (29.376%) in intersection
+    # 887980807 bases of 3015350297 (29.449%) in intersection
 
-    time (doRecipBest.pl -load -workhorse=hgwdev panPan3 mm10 \
-      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    237m38.959s
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` panPan3 mm10) \
+       > rbest.log 2>&1
+    # real    305m11.756s
 
     cat fb.panPan3.chainRBest.Mm10.txt
-    # 883663662 bases of 2999027915 (29.465%) in intersection
+    # 889360051 bases of 3015350297 (29.494%) in intersection
 
-#############################################################################
+##############################################################################
 # augustus gene track (DONE - 2020-06-15 - Hiram)
 
     mkdir /hive/data/genomes/panPan3/bed/augustus
@@ -826,11 +834,10 @@ panPan3.genbank.est.native.load = no
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev panPan3) > do.log 2>&1
-XXX - running - Mon Jun 15 10:21:59 PDT 2020
-    # real    139m55.244s
+    # real    124m57.738s
 
     cat fb.panPan3.augustusGene.txt
-    # 55005426 bases of 2999027915 (1.834%) in intersection
+    # 55220084 bases of 3015350297 (1.831%) in intersection
 
 #########################################################################
 # ncbiRefSeq (DONE - 2020-06-13 - Hiram)
@@ -849,18 +856,17 @@ XXX - running - Mon Jun 15 10:21:59 PDT 2020
     # add: include ../../refSeqComposite.ra alpha
     # to the bonobo/panPan3/trackDb.ra to turn on the track in the browser
 
-    # XXX TBD when genbank run is complete
     featureBits -enrichment panPan3 refGene ncbiRefSeq 
- # refGene 0.006%, ncbiRefSeq 2.477%, both 0.006%, cover 99.87%, enrich 40.32x
+ # refGene 0.004%, ncbiRefSeq 3.046%, both 0.004%, cover 99.99%, enrich 32.83x
 
     featureBits -enrichment panPan3 ncbiRefSeq refGene
- # ncbiRefSeq 2.477%, refGene 0.006%, both 0.006%, cover 0.25%, enrich 40.32x
+ # ncbiRefSeq 3.046%, refGene 0.004%, both 0.004%, cover 0.11%, enrich 32.83x
 
     featureBits -enrichment panPan3 ncbiRefSeqCurated refGene
- # ncbiRefSeqCurated 0.007%, refGene 0.006%, both 0.006%, cover 94.29%, enrich 14956.14x
+ # ncbiRefSeqCurated 0.004%, refGene 0.004%, both 0.003%, cover 90.24%, enrich 25764.34x
 
     featureBits -enrichment panPan3 refGene ncbiRefSeqCurated
- # refGene 0.006%, ncbiRefSeqCurated 0.007%, both 0.006%, cover 99.87%, enrich 14956.14x
+ # refGene 0.004%, ncbiRefSeqCurated 0.004%, both 0.003%, cover 99.48%, enrich 25764.34x
 
 #########################################################################
 # LIFTOVER TO panPan2 (DONE - 2020-06-15 - Hiram)
@@ -875,8 +881,7 @@ XXX - running - Mon Jun 15 10:21:59 PDT 2020
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/panPan3/jkStuff/panPan3.11.ooc \
          panPan3 panPan2) > doLiftOverToPanPan2.log 2>&1
-XXX - running - Mon Jun 15 10:25:21 PDT 2020
-    # real    936m35.524s
+    # real    273m17.026s
 
     # see if the liftOver menus function in the browser from panPan3 to panPan2
 
@@ -893,32 +898,30 @@ XXX - running - Mon Jun 15 10:25:21 PDT 2020
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/panPan3/jkStuff/panPan3.11.ooc \
          panPan3 panPan1) > doLiftOverToPanPan1.log 2>&1
-XXX - running - Mon Jun 15 10:26:22 PDT 2020
-    # real    654m46.645s
+    # real    275m17.469s
 
     # see if the liftOver menus function in the browser from panPan3 to panPan1
 
 #########################################################################
-#  BLATSERVERS ENTRY (TBD - 2019-11-20 - Hiram)
-XXX - requested - Mon Jun 15 10:31:11 PDT 2020
+#  BLATSERVERS ENTRY (DONE - 2020-06-16 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("panPan3", "blat1c", "17914", "1", "0"); \
+	VALUES ("panPan3", "blat1a", "17900", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("panPan3", "blat1c", "17915", "0", "1");' \
+	VALUES ("panPan3", "blat1a", "17901", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
-## reset default position similar to gorGor5 found via blat of NR_046473.1 mRNA
-##  (TBD - 2019-11-20 - Hiram)
+## reset default position similar to panPan2 found via blat of FOXP2 protein
+##  (DONE - 2020-06-16 - Hiram)
 
-    # as found from the galGal5 to panPan3 liftOver
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr14:81559118-81601404"
+    hgsql -e 'update dbDb set defaultPos="chr7:106336524-106733879"
 	where name="panPan3";' hgcentraltest
+
 
 ##############################################################################
 # crispr whole genome (DONE - 2020-06-15 - Hiram)
@@ -932,39 +935,32 @@ XXX - requested - Mon Jun 15 10:31:11 PDT 2020
          -fileServer=hgwdev -buildDir=`pwd` -smallClusterHub=hgwdev \
            -bigClusterHub=ku \
               -workhorse=hgwdev) > ranges.log 2>&1
-XXX - running - Mon Jun 15 10:32:36 PDT 2020
-    # real    72m58.740s
+    # real    80m34.161s
 
     time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
        -continue=guides -stop=specScores panPan3 ncbiRefSeq \
 	-shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev) > specScores.log 2>&1
-    # real    8m40.172s
+    # Number of specScores: 232496133
+    # real    6369m47.263s
 
     cat guides/run.time | sed -e 's/^/# /;'
 # Completed: 100 of 100 jobs
-# CPU time in finished jobs:      12309s     205.15m     3.42h    0.14d  0.000 y
-# IO & Wait Time:                   290s       4.83m     0.08h    0.00d  0.000 y
-# Average job time:                 126s       2.10m     0.03h    0.00d
-# Longest finished job:             380s       6.33m     0.11h    0.00d
-# Submission to last job:           386s       6.43m     0.11h    0.00d
+# CPU time in finished jobs:      17860s     297.67m     4.96h    0.21d  0.001 y
+# IO & Wait Time:                   389s       6.48m     0.11h    0.00d  0.000 y
+# Average job time:                 182s       3.04m     0.05h    0.00d
+# Longest finished job:             575s       9.58m     0.16h    0.01d
+# Submission to last job:           583s       9.72m     0.16h    0.01d
 
     cat specScores/run.time | sed -e 's/^/# /;'
-# Completed: 3041114 of 3041114 jobs
-# CPU time in finished jobs:  282305886s 4705098.10m 78418.30h 3267.43d  8.952 y
-# IO & Wait Time:              84009113s 1400151.88m 23335.86h  972.33d  2.664 y
-# Average job time:                 120s       2.01m     0.03h    0.00d
-# Longest finished job:             498s       8.30m     0.14h    0.01d
-# Submission to last job:        381920s    6365.33m   106.09h    4.42d
+# Completed: 3104861 of 3104861 jobs
+# CPU time in finished jobs:  310874778s 5181246.29m 86354.10h 3598.09d  9.858 y
+# IO & Wait Time:               8751069s  145851.16m  2430.85h  101.29d  0.277 y
+# Average job time:                 103s       1.72m     0.03h    0.00d
+# Longest finished job:             414s       6.90m     0.12h    0.00d
+# Submission to last job:        314519s    5241.98m    87.37h    3.64d
 
-Submission to last job:        274925s    4582.08m    76.37h    3.18d
-
-# Number of specScores: 227564780
-
-# real    7482m37.507s
-# user    0m2.047s
-# sys     0m2.110s
 
     ### remember to get back to hgwdev to run this
     time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
@@ -972,29 +968,47 @@ Submission to last job:        274925s    4582.08m    76.37h    3.18d
     -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev) > load.log 2>&1
-    # real    1081m16.460s
+    # real    1633m51.680s
 
     cat effScores/run.time | sed -e 's/^/# /;'
-# Completed: 27933 of 27933 jobs
-# CPU time in finished jobs:   13825593s  230426.55m  3840.44h  160.02d  0.438 y
-# IO & Wait Time:                172582s    2876.37m    47.94h    2.00d  0.005 y
-# Average job time:                 501s       8.35m     0.14h    0.01d
-# Longest finished job:           20199s     336.65m     5.61h    0.23d
-# Submission to last job:         22274s     371.23m     6.19h    0.26d
+# Completed: 28661 of 28661 jobs
+# CPU time in finished jobs:   13143908s  219065.14m  3651.09h  152.13d  0.417 y
+# IO & Wait Time:                 68503s    1141.71m    19.03h    0.79d  0.002 y
+# Average job time:                 461s       7.68m     0.13h    0.01d
+# Longest finished job:           10393s     173.22m     2.89h    0.12d
+# Submission to last job:         54285s     904.75m    15.08h    0.63d
 
     cat offTargets/run.time | sed -e 's/^/# /;'
-# Completed: 152056 of 152056 jobs
-# CPU time in finished jobs:    2009038s   33483.97m   558.07h   23.25d  0.064 y
-# IO & Wait Time:               2321685s   38694.75m   644.91h   26.87d  0.074 y
-# Average job time:                  28s       0.47m     0.01h    0.00d
-# Longest finished job:              53s       0.88m     0.01h    0.00d
-# Submission to last job:          4266s      71.10m     1.19h    0.05d
+# Completed: 155244 of 155244 jobs
+# CPU time in finished jobs:    2205628s   36760.46m   612.67h   25.53d  0.070 y
+# IO & Wait Time:                825117s   13751.95m   229.20h    9.55d  0.026 y
+# Average job time:                  20s       0.33m     0.01h    0.00d
+# Longest finished job:             157s       2.62m     0.04h    0.00d
+# Submission to last job:          5940s      99.00m     1.65h    0.07d
 
 #########################################################################
 # all.joiner update, downloads and in pushQ - (WORKING - 2020-06-15 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # verify all the business is done for release
     ~/kent/src/hg/utils/automation/verifyBrowser.pl panPan3
+# 64 tables in database panPan3 - Bonobo, Pan paniscus
+# verified 62 tables in database panPan3, 2 extra tables, 24 optional tables
+# NCBI RefSeq genes     10 optional tables
+# chainNetRBestHg38     3 optional tables
+# chainNetRBestMm10     3 optional tables
+# chainNetSynHg38       3 optional tables
+# chainNetSynMm10       3 optional tables
+# gapOverlap    1 optional tables
+# tandemDups    1 optional tables
+# 1     crisprAllRanges - extra table
+# 2     crisprAllTargets        - extra table
+# 9 genbank tables found
+# verified 29 required tables, 0 missing tables
+# hg38 chainNet to panPan3 found 3 required tables
+# mm10 chainNet to panPan3 found 3 required tables
+# hg38 chainNet RBest and syntenic to panPan3 found 6 optional tables
+# mm10 chainNet RBest and syntenic to panPan3 found 3 optional tables
+# liftOver to previous versions: 2, from previous versions: 2
 
     # fixup all.joiner until this is a clean output
     joinerCheck -database=panPan3 -tableCoverage all.joiner
@@ -1007,7 +1021,6 @@ Submission to last job:        274925s    4582.08m    76.37h    3.18d
     # run up a 'make alpha' in hg/hgTables to get this all.joiner file
     # into the hgwdev/genome-test system
 
-XXX - ready - Mon Jun 15 10:35:45 PDT 2020
     cd /hive/data/genomes/panPan3
     time (~/kent/src/hg/utils/automation/makeDownloads.pl panPan3) > downloads.log 2>&1
     #  real    17m56.213s
@@ -1016,7 +1029,7 @@ XXX - ready - Mon Jun 15 10:35:45 PDT 2020
     mkdir /hive/data/genomes/panPan3/pushQ
     cd /hive/data/genomes/panPan3/pushQ
  time ($HOME/kent/src/hg/utils/automation/makePushQSql.pl -redmineList panPan3) > panPan3.pushQ.sql 2> stderr.out
-    # real    15m52.548s
+    # real    13m55.634s
 
     # remove the tandemDups and gapOverlap from the file list:
     sed -i -e "/tandemDups/d" redmine.panPan3.table.list
@@ -1025,12 +1038,8 @@ XXX - ready - Mon Jun 15 10:35:45 PDT 2020
     sed -i -e "/Gap Overlaps/d" redmine.panPan3.releaseLog.txt
 
     #   check for errors in stderr.out, some are OK, e.g.:
-    # WARNING: hgwdev does not have /gbdb/panPan3/wib/gc5Base.wib
-    # WARNING: hgwdev does not have /gbdb/panPan3/wib/quality.wib
-    # WARNING: hgwdev does not have /gbdb/panPan3/bbi/quality.bw
     # WARNING: panPan3 does not have seq
     # WARNING: panPan3 does not have extFile
-
 
     # verify the file list does correctly match to files
     cat redmine.panPan3.file.list | while read L
@@ -1041,11 +1050,11 @@ done
 
     # verify database tables, how many to expect:
     wc -l redmine.panPan3.table.list
-    # 63 redmine.panPan3.table.list
+    # 53 redmine.panPan3.table.list
 
     # how many actual:
     awk -F'.' '{printf "hgsql -N %s -e '"'"'show table status like \"%s\";'"'"'\n", $1, $2}' redmine.panPan3.table.list | sh | wc -l
-    # 63
+    # 53
 
     # would be a smaller number actual if some were missing
 
