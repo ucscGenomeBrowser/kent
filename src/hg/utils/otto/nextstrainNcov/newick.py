@@ -1,5 +1,6 @@
 # Parse Newick-formatted file into tree of { 'kids': [], 'label': '', 'length': '' }
 
+import logging
 from utils import die
 
 def skipSpaces(treeString, offset):
@@ -65,16 +66,17 @@ def parseLength(treeString, offset):
     else:
         return ('', offset)
 
-def parseBranch(treeString, offset):
+def parseBranch(treeString, offset, internalNode):
     """Recursively parse Newick branch (x, y, z)[label][:length] from treeString at offset"""
     if (treeString[offset] != '('):
         die("parseBranch called on treeString that doesn't begin with '(': '" +
             treeString + "'")
     branchStart = offset
-    branch = { 'kids': [],  'label': '', 'length': '' }
+    internalNode += 1
+    branch = { 'kids': [],  'label': '', 'length': '', 'inode': internalNode }
     offset = skipSpaces(treeString, offset + 1)
     while (offset != len(treeString) and treeString[offset] != ')' and treeString[offset] != ';'):
-        (child, offset) = parseString(treeString, offset)
+        (child, offset, internalNode) = parseString(treeString, offset, internalNode)
         branch['kids'].append(child)
         if (treeString[offset] == ','):
             offset = skipSpaces(treeString, offset + 1)
@@ -87,18 +89,18 @@ def parseBranch(treeString, offset):
             "instead got '" + treeString[offset:offset+100] + "'")
     (branch['label'], offset) = parseLabel(treeString, offset)
     (branch['length'], offset) = parseLength(treeString, offset)
-    return (branch, offset)
+    return (branch, offset, internalNode)
 
-def parseString(treeString, offset=0):
+def parseString(treeString, offset=0, internalNode=0):
     """Recursively parse Newick tree from treeString"""
     offset = skipSpaces(treeString, offset)
     if (treeString[offset] == '('):
-        return parseBranch(treeString, offset)
+        return parseBranch(treeString, offset, internalNode)
     else:
         (label, offset) = parseLabel(treeString, offset)
         (length, offset) = parseLength(treeString, offset)
         leaf = { 'kids': None, 'label': label, 'length': length }
-        return (leaf, offset)
+        return (leaf, offset, internalNode)
 
 def parseFile(treeFile):
     """Read Newick file, return tree object"""
@@ -106,7 +108,7 @@ def parseFile(treeFile):
         line1 = treeF.readline().strip()
         if (line1 == ''):
             return None
-        (tree, offset) = parseString(line1)
+        (tree, offset, internalNode) = parseString(line1)
         if (offset != len(line1) and line1[offset] != ';'):
             die("Tree terminated without ';' before '" + line1[offset:offset+100] + "'")
         treeF.close()
@@ -115,6 +117,8 @@ def parseFile(treeFile):
 def treeToString(node, pretty=False, indent=0):
     """Return a Newick string encoding node and its descendants, optionally pretty-printing with
     newlines and indentation.  String is not ';'-terminated, caller must do that."""
+    if not node:
+        return ''
     labelLen = ''
     if (node['label']):
         labelLen += node['label']
@@ -145,4 +149,44 @@ def leafNames(node):
         return [ leaf for kid in node['kids'] for leaf in leafNames(kid) ]
     else:
         return [ node['label'] ]
+
+def treeIntersectIds(node, idLookup, sampleSet, lookupFunc=None):
+    """For each leaf in node, attempt to look up its label in idLookup; replace if found.
+    Prune nodes with no matching leaves.  Store new leaf labels in sampleSet.
+    If lookupFunc is given, it is passed two arguments (label, idLookup) and returns a
+    possible empty list of matches."""
+    if (node['kids']):
+        # Internal node: prune
+        prunedKids = []
+        for kid in (node['kids']):
+            kidIntersected = treeIntersectIds(kid, idLookup, sampleSet, lookupFunc)
+            if (kidIntersected):
+                prunedKids.append(kidIntersected)
+        if (len(prunedKids) > 1):
+            node['kids'] = prunedKids
+        elif (len(prunedKids) == 1):
+            node = prunedKids[0]
+        else:
+            node = None
+    else:
+        # Leaf: lookup, prune if not found
+        label = node['label']
+        if (lookupFunc):
+            matchList = lookupFunc(node['label'], idLookup)
+        elif label in idLookup:
+            matchList = idLookup[label]
+        else:
+            matchList = []
+        if (not matchList):
+            logging.info("No match for leaf '" + label + "'")
+            node = None
+        else:
+            if (len(matchList) != 1):
+                logging.warn("Non-unique match for leaf '" + label + "': ['" +
+                             "', '".join(matchList) + "']")
+            else:
+                logging.debug(label + ' --> ' + matchList[0]);
+            node['label'] = matchList[0]
+            sampleSet.add(matchList[0])
+    return node
 

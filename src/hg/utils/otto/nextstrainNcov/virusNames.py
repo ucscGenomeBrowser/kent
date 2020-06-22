@@ -11,15 +11,15 @@ from collections import defaultdict
 
 # Regular expressions for picking out name components
 # GISAID ID:
-epiRe = re.compile('.*?(EPI_ISL_\d+)')
+epiRe = re.compile(r'.*?(EPI_ISL_\d+)')
 # Slash-separated country/localId/year name often shared by GISAID, NCBI, CNCB, COG-UK:
-slashRe = re.compile('.*?(\w+(\/([\w.-]+)\/20\d\d?))')
+slashRe = re.compile(r'.*?(\w+(\/([\w.-]+)\/20\d\d?\b))')
 # Slash-separated but with slashes replaced by underscores:
-undRe = re.compile('.*?([A-Za-z]+)_([\w.-]+?)_(20\d\d?)')
+undRe = re.compile(r'.*?([A-Za-z]+)_([\w.-]+?)_(20\d\d?\b)')
 # Slash-sep with underscores in country name
-slashUndRe = re.compile('.*?([A-Za-z]+_[A-Za-z]+\w+)(\/[\w-]+\/20\d\d?)')
+slashUndRe = re.compile(r'.*?([A-Za-z]+_[A-Za-z]+\w+)(\/[\w-]+\/20\d\d?\b)')
 # AZ-TGEN-TG or just AZ-TG?
-azTgenRe = re.compile('.*?USA\/AZ-TG\d+\/20\d\d?')
+azTgenRe = re.compile(r'.*?USA\/AZ-TG\d+\/20\d\d?')
 
 def makeIdLookup(seqNames):
     """Return a dict mapping sequence names, and components of those names like
@@ -51,7 +51,7 @@ def makeIdLookup(seqNames):
                 idLookup['China/Wuhan-Hu-1/2019'].append(seqName)
                 idLookup['Wuhan-Hu-1'].append(seqName)
             else:
-                logging.warn('No slashMatch for "' + seqName + '"')
+                logging.debug('No slashMatch for "' + seqName + '"')
     return idLookup
 
 def checkEpiIds(resultList, origEpiMatch, label):

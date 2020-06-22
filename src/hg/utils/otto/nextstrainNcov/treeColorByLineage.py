@@ -21,7 +21,9 @@ add colors corresponding to lineages.
     idLookup = virusNames.makeIdLookup(treeNames)
     treeLineages = dict([ (virusNames.maybeLookupSeqName(name, idLookup), lin)
                           for name, lin in sampleLineages.items() ])
-    lineageColors.addLineagesAsBogusLength(tree, treeLineages)
+    noLinCount = lineageColors.addLineagesAsBogusLength(tree, treeLineages)
+    if (noLinCount):
+        logging.warn("%d samples had no lineage in %s" % (noLinCount, args.lineageFile))
     newick.printTree(tree)
 
 main()
