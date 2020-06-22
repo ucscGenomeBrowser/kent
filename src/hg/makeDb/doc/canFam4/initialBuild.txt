@@ -440,7 +440,7 @@ chrX    45160089        45162189        chrX:45160090-45162189  1000    +      4
     # 2482000080 bases of 2482000080 (100.000%) in intersection
 
 #########################################################################
-# add chromAlias table (DONE - 2020-04-02 - Hiram)
+# add chromAlias table (DONE - 2020-05-20 - Hiram)
 
     mkdir /hive/data/genomes/canFam4/bed/chromAlias
     cd /hive/data/genomes/canFam4/bed/chromAlias
@@ -451,14 +451,12 @@ chrX    45160089        45162189        chrX:45160090-45162189  1000    +      4
         | sort -k1,1 > ucsc.genbank.tab
 
     wc -l *.tab
-    #	5486 ucsc.genbank.tab
-    #	5486 ucsc.refseq.tab
-
+    #	2198 ucsc.genbank.tab
 
     ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
         > canFam4.chromAlias.tab
 
-for t in refseq genbank
+for t in genbank
 do
   c0=`cat ucsc.$t.tab | wc -l`
   c1=`grep $t canFam4.chromAlias.tab | wc -l`
@@ -468,13 +466,11 @@ do
   fi
   printf "# checking $t: $c0 =? $c1 $ok\n"
 done
-# checking refseq: 5486 =? 5486 OK
-# checking genbank: 5486 =? 5486 OK
+# checking genbank: 2198 =? 2198 OK
 
     # verify chrM is here properly:
     grep chrM canFam4.chromAlias.tab 
-# NC_011120.1     chrM    refseq
-# X93347.1        chrM    genbank
+# CM022001.1      chrM    genbank
 
     hgLoadSqlTab canFam4 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         canFam4.chromAlias.tab
@@ -930,12 +926,11 @@ canFam4.perChromTables = no
     #	test it with some sequence
 
 ############################################################################
-## reset default position similar to canFam3 found via blat
-##	of NM_001003070.1 mRNA
-##  (DONE - 2020-04-02 - Hiram)
+## reset default position to gene: CDH2 upon recommendation from Kerstin
+##  (DONE - 2020-06-22 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr14:7969766-7997673"
+    hgsql -e 'update dbDb set defaultPos="chr7:60744942-60958801"
 	where name="canFam4";' hgcentraltest
 
 ##############################################################################
@@ -1006,8 +1001,32 @@ canFam4.perChromTables = no
     cd $HOME/kent/src/hg/makeDb/schema
     # verify all the business is done for release
     ~/kent/src/hg/utils/automation/verifyBrowser.pl canFam4
+# 66 tables in database canFam4 - Dog, Canis lupus familiaris
+# verified 55 tables in database canFam4, 11 extra tables, 14 optional tables
+# chainNetRBestHg38     3 optional tables
+# chainNetRBestMm10     3 optional tables
+# chainNetSynHg38       3 optional tables
+# chainNetSynMm10       3 optional tables
+# gapOverlap    1 optional tables
+# tandemDups    1 optional tables
+# 1     chainCanFam3    - extra table
+# 2     chainCanFam3Link        - extra table
+# 3     chainRBestCanFam3       - extra table
+# 4     chainRBestCanFam3Link   - extra table
+# . . . etc . . .
+# 8     crisprAllTargets        - extra table
+# 9     netCanFam3      - extra table
+# 10    netRBestCanFam3 - extra table
+# 11    netSynCanFam3   - extra table
+# 13 genbank tables found
+# verified 28 required tables, 1 missing tables
+# 1     ucscToRefSeq    - missing table
+# hg38 chainNet to canFam4 found 3 required tables
+# mm10 chainNet to canFam4 found 3 required tables
+# hg38 chainNet RBest and syntenic to canFam4 found 6 optional tables
+# mm10 chainNet RBest and syntenic to canFam4 found 3 optional tables
+# liftOver to previous versions: 1, from previous versions: 1
 
-XXX - wait for genbank to be loaded
     # fixup all.joiner until this is a clean output
     joinerCheck -database=canFam4 -tableCoverage all.joiner
     joinerCheck -database=canFam4 -times all.joiner
@@ -1021,13 +1040,14 @@ XXX - wait for genbank to be loaded
 
     cd /hive/data/genomes/canFam4
     time (makeDownloads.pl canFam4) > downloads.log 2>&1
-    #  real    17m47.024s
+    #  real    16m11.233s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/canFam4/pushQ
     cd /hive/data/genomes/canFam4/pushQ
  time ($HOME/kent/src/hg/utils/automation/makePushQSql.pl -redmineList canFam4) > canFam4.pushQ.sql 2> stderr.out
-    # real    15m52.548s
+    # real    15m2.385s
+XXXX
 
     # remove the tandemDups and gapOverlap from the file list:
     sed -i -e "/tandemDups/d" redmine.canFam4.table.list
@@ -1036,12 +1056,14 @@ XXX - wait for genbank to be loaded
     sed -i -e "/Gap Overlaps/d" redmine.canFam4.releaseLog.txt
 
     #   check for errors in stderr.out, some are OK, e.g.:
-    # WARNING: hgwdev does not have /gbdb/canFam4/wib/gc5Base.wib
-    # WARNING: hgwdev does not have /gbdb/canFam4/wib/quality.wib
-    # WARNING: hgwdev does not have /gbdb/canFam4/bbi/quality.bw
-    # WARNING: canFam4 does not have seq
-    # WARNING: canFam4 does not have extFile
-
+  # WARNING: canFam4 does not have ucscToRefSeq
+  # WARNING: hgwdev does not have /gbdb/canFam4/ncbiRefSeq/ncbiRefSeqVersion.txt
+  # WARNING: hgwdev does not have /gbdb/canFam4/ncbiRefSeq/ncbiRefSeqOther.bb
+  # WARNING: hgwdev does not have /gbdb/canFam4/ncbiRefSeq/ncbiRefSeqOther.ix
+  # WARNING: hgwdev does not have /gbdb/canFam4/ncbiRefSeq/ncbiRefSeqOther.ixx
+  # WARNING: hgwdev does not have /gbdb/canFam4/ncbiRefSeq/seqNcbiRefSeq.rna.fa
+  # WARNING: canFam4 does not have seq
+  # WARNING: canFam4 does not have extFile
 
     # verify the file list does correctly match to files
     cat redmine.canFam4.file.list | while read L
@@ -1052,11 +1074,11 @@ done
 
     # verify database tables, how many to expect:
     wc -l redmine.canFam4.table.list
-    # 63 redmine.canFam4.table.list
+    # 52 redmine.canFam4.table.list
 
     # how many actual:
     awk -F'.' '{printf "hgsql -N %s -e '"'"'show table status like \"%s\";'"'"'\n", $1, $2}' redmine.canFam4.table.list | sh | wc -l
-    # 63
+    # 52
 
     # would be a smaller number actual if some were missing
 
