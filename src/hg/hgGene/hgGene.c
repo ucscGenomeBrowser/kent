@@ -719,7 +719,13 @@ else
     /* if kgProtMap2 table exists, this means we are doing KG III */
     if (hTableExists(database, "kgProtMap2")) kgVersion = KG_III;
 
-    conn = hAllocConn(database);
+    char *tableName = cartUsualString(cart, hggType, NULL);
+    struct trackDb *tdb = hTrackDbForTrack(database, tableName);
+    char *externalDb = trackDbSetting(tdb, "externalDb");
+    if (externalDb != NULL)
+        conn = hAllocConn(externalDb);
+    else
+        conn = hAllocConn(database);
     curGeneId = findGeneId(conn, geneName);
     getGenePosition(conn);
     curGenePred = getCurGenePred(conn);
@@ -746,7 +752,6 @@ else
 	{
 	/* Default case - start fancy web page. */
 	measureTiming =  isNotEmpty(cartOptionalString(cart, "measureTiming"));
-        struct trackDb *tdb = hTrackDbForTrack(database, genomeSetting("knownGene"));
         isGencode = trackDbSettingOn(tdb, "isGencode");
         isGencode2 = trackDbSettingOn(tdb, "isGencode2");
 	cartWebStart(cart, database, "%s Gene %s (%s) Description and Page Index",
