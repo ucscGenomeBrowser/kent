@@ -161,7 +161,7 @@ if ($assemblyTotal > 1) {
 ";
 
   # try extra column headers as last row for this very large index page
-  if ($vgpIndex) {
+  if ($vgpIndex && ($asmCount > 15)) {
   print "<tr><th>count</th>
   <th>common name<br>link&nbsp;to&nbsp;genome&nbsp;browser</th>
   <th>scientific name<br>and&nbsp;data&nbsp;download</th>

@@ -1,0 +1,6 @@
+hub VGP
+shortLabel VGP Alternate Hap
+longLabel Vertebrate Genomes Project alternate/haplotype assemblies
+genomesFile genomes.txt
+email genome-www@soe.ucsc.edu
+descriptionUrl index.html

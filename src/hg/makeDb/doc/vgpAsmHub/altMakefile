@@ -4,7 +4,7 @@
 
 destDir=/hive/data/genomes/asmHubs/vgp
 srcDir=${HOME}/kent/src/hg/makeDb/doc/vgpAsmHub
-orderList=vgp.alternate.orderList.tsv
+orderList=$(CURDIR)/vgp.alternate.orderList.tsv
 
 indexName=vgpAlt
 testIndexName=testVgpAlt
@@ -15,10 +15,11 @@ testDataName=testVgpAltData
 genomesTxt=altGenomes
 hubFile=altHub
 testHubFile=testAltHub
+hubTxtFile=vgpAltHub.txt
 
 # these names trigger special behavior in the index page creation scripts:
 Name=VGP
-name=vgp
+name=VGP
 
 # GCA_009859025.1_bTaeGut2.p.v1.alt	zebra finch
 defaultAssembly=GCA_009859025.1_bTaeGut2.p.v1.alt

@@ -1,106 +1,21 @@
-track cons7way
-compositeTrack on
+track multiz7way
 shortLabel Human CoV
 longLabel Multiz Alignment and Conservation of 7 Strains of human coronavirus
-subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
-dragAndDrop subTracks
 visibility hide
-priority 1
-type bed 4
 group compGeno
-
-    track cons7wayViewalign
-    shortLabel Multiz Alignments
-    view align
-    visibility pack
-    viewUi on
-    subTrack cons7way
-
-        track multiz7way
-        subTrack cons7wayViewalign on
-        shortLabel Bat CoV multiz
-        longLabel Multiz Alignment of 7 strains of human CoV: red=nonsyn green=syn blue=noncod yellow=noalign
-        subGroups view=align
-        noInherit on
-        frames multiz7wayFrames
-        group compGeno
-        color 0, 10, 100
-        altColor 0,90,10
-        mafDot on
-	snpTable mafSnp7way
-	mafShowSnp on
-	snpMode on
-        type wigMaf 0.0 1.0
-        speciesCodonDefault wuhCor1
-        speciesGroups CoV_2019
-        sGroup_CoV_2019 SARS_CoV_1 MERS OC43 HKU1 CoV229E NL63
-        speciesDefaultOn SARS_CoV_1 MERS OC43 HKU1 CoV229E NL63
-        itemFirstCharCase noChange
-        priority 100
-        treeImage phylo/wuhCor1_7way.png
-
-    # PhyloP conservation
-    track cons7wayViewphyloP
-    shortLabel Basewise Bat Strain Conservation (phyloP)
-    view phyloP
-    visibility hide
-    subTrack cons7way
-    viewLimits -4:5
-    viewLimitsMax -11.968:4.256
-
-        track phyloP7way
-        subTrack cons7wayViewphyloP on
-        subGroups view=phyloP
-        shortLabel Bat PhyloP
-        longLabel 7 Bat virus strains Basewise Conservation by PhyloP
-        noInherit on
-        configurable on
-        type wig -11.968 4.256
-        maxHeightPixels 100:50:11
-        viewLimits -11.968:4.256
-        autoScale off
-        spanList 1
-        windowingFunction mean
-        color 60,60,140
-        altColor 140,60,60
-        priority 4
-
-    # phastCons conservation
-    track cons7wayViewphastcons
-    shortLabel Bat Element Conservation (phastCons)
-    view phastcons
-    visibility dense
-    subTrack cons7way
-
-        track phastCons7way
-        subTrack cons7wayViewphastcons on
-        subGroups view=phastcons
-        shortLabel Bat PhastCons
-        longLabel 7 bat virus strains Basewise Conservation by PhastCons
-        noInherit on
-        configurable on
-        type wig 0 1
-        maxHeightPixels 100:40:11
-        autoScale off
-        spanList 1
-        windowingFunction mean
-        color 70,130,70
-        altColor 130,70,70
-        priority 13
-
-    # Conserved Elements (Most Conserved)
-    #track cons7wayViewelements
-    #shortLabel Bat Conserved Elements
-    #view elements
-    #visibility hide
-    #subTrack cons7way
-
-        #track phastConsElements7way
-        #subTrack cons7wayViewelements on
-        #subGroups view=elements
-        #shortLabel Bat Cons. El.
-        #longLabel 7 bat virus strains Conserved Elements
-        #noInherit on
-        #color 110,10,40
-        #type bed 5 .
-        #priority 23
+frames multiz7wayFrames
+color 0, 10, 100
+altColor 0,90,10
+mafDot on
+snpTable mafSnp7way
+mafShowSnp on
+snpMode on
+type wigMaf 0.0 1.0
+speciesCodonDefault wuhCor1
+speciesGroups CoV_2019
+sGroup_CoV_2019 SARS_CoV_1 MERS OC43 HKU1 NL63 CoV229E
+speciesDefaultOn SARS_CoV_1 MERS OC43 HKU1 NL63 CoV229E
+itemFirstCharCase noChange
+treeImage phylo/wuhCor1_7way.png
+html cons7way
+pennantIcon New red ../goldenPath/releaseLog.html  Released June 2020

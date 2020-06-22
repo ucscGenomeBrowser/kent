@@ -299,17 +299,17 @@ struct cwaExtraData
 struct hapCluster
 {
     struct hapCluster *next;   // hacTree wants slList of items
-    unsigned short *refCounts; // per-variant count of reference alleles observed
-    unsigned short *unkCounts; // per-variant count of unknown (or unphased het) alleles
-    unsigned short leafCount;  // number of leaves under this node (or 1 if leaf)
-    unsigned short gtHapIx;    // if leaf, (genotype index << 1) + hap (0 or 1 for diploid)
+    unsigned int *refCounts; // per-variant count of reference alleles observed
+    unsigned int *unkCounts; // per-variant count of unknown (or unphased het) alleles
+    unsigned int leafCount;  // number of leaves under this node (or 1 if leaf)
+    unsigned int gtHapIx;    // if leaf, (genotype index << 1) + hap (0 or 1 for diploid)
 };
 
 INLINE boolean isRef(const struct hapCluster *c, int varIx)
 // Return TRUE if the leaves of cluster have at least as many reference alleles
 // as alternate alleles for variant varIx.
 {
-unsigned short altCount = c->leafCount - c->refCounts[varIx] - c->unkCounts[varIx];
+unsigned int altCount = c->leafCount - c->refCounts[varIx] - c->unkCounts[varIx];
 return (c->refCounts[varIx] >= altCount);
 }
 
@@ -346,8 +346,8 @@ static struct hapCluster *lmHapCluster(struct cwaExtraData *helper)
 /* Use localMem to allocate a new cluster of the given len. */
 {
 struct hapCluster *c = lmAlloc(helper->localMem, sizeof(struct hapCluster));
-c->refCounts = lmAlloc(helper->localMem, helper->len * sizeof(unsigned short));
-c->unkCounts = lmAlloc(helper->localMem, helper->len * sizeof(unsigned short));
+c->refCounts = lmAlloc(helper->localMem, helper->len * sizeof(unsigned int));
+c->unkCounts = lmAlloc(helper->localMem, helper->len * sizeof(unsigned int));
 return c;
 }
 
@@ -395,7 +395,7 @@ hapClusterToString(c2, s2, helper->len);
 return strcmp(s1, s2);
 }
 
-void rSetGtHapOrder(struct hacTree *ht, unsigned short *gtHapOrder, unsigned short *retGtHapEnd)
+void rSetGtHapOrder(struct hacTree *ht, unsigned int *gtHapOrder, unsigned int *retGtHapEnd)
 /* Traverse hacTree and build an ordered array of genotype + haplotype indices. */
 {
 if (ht->left == NULL && ht->right == NULL)
@@ -424,9 +424,9 @@ else
     }
 }
 
-static unsigned short *clusterHaps(const struct vcfFile *vcff, int centerIx,
+static unsigned int *clusterHaps(const struct vcfFile *vcff, int centerIx,
 				   int startIx, int endIx,
-				   unsigned short *retGtHapEnd, struct hacTree **retTree)
+				   unsigned int *retGtHapEnd, struct hacTree **retTree)
 /* Given a bunch of VCF records with phased genotypes, build up one haplotype string
  * per chromosome that is the sequence of alleles in all variants (simplified to one base
  * per variant).  Each individual/sample will have two haplotype strings (unless haploid
@@ -509,7 +509,7 @@ for (varIx = 0, rec = vcff->records;  rec != NULL && varIx < endIx;  varIx++, re
     }
 struct hacTree *ht = hacTreeFromItems((struct slList *)(hapArray[0]), lm,
 				      cwaDistance, cwaMerge, cwaCmp, &helper);
-unsigned short *gtHapOrder = needMem(vcff->genotypeCount * ploidy * sizeof(unsigned short));
+unsigned int *gtHapOrder = needMem(vcff->genotypeCount * ploidy * sizeof(unsigned int));
 rSetGtHapOrder(ht, gtHapOrder, retGtHapEnd);
 *retTree = ht;
 return gtHapOrder;
@@ -682,7 +682,7 @@ return shadesOfGray[5];
 // tg->height needs an extra pixel at the bottom; it's eaten by the clipping rectangle:
 #define CLIP_PAD 1
 
-static void drawOneRec(struct vcfRecord *rec, unsigned short *gtHapOrder, unsigned short gtHapCount,
+static void drawOneRec(struct vcfRecord *rec, unsigned int *gtHapOrder, unsigned int gtHapCount,
 		       struct track *tg, struct hvGfx *hvg, int xOff, int yOff, int width,
 		       boolean isClustered, boolean isCenter, enum hapColorMode colorMode)
 /* Draw a stack of genotype bars for this record */
@@ -958,19 +958,19 @@ return y;
 struct yFromNodeHelper
 /* Pre-computed mapping from cluster nodes' gtHapIx to pixel heights. */
     {
-    unsigned short gtHapCount;
-    unsigned short *gtHapIxToPxStart;
-    unsigned short *gtHapIxToPxEnd;
+    unsigned int gtHapCount;
+    unsigned int *gtHapIxToPxStart;
+    unsigned int *gtHapIxToPxEnd;
     };
 
 void initYFromNodeHelper(struct yFromNodeHelper *helper, int yOff, int height,
-			 unsigned short gtHapCount, unsigned short *gtHapOrder,
+			 unsigned int gtHapCount, unsigned int *gtHapOrder,
 			 int genotypeCount)
 /* Build a mapping of genotype and haplotype to pixel y coords. */
 {
 helper->gtHapCount = gtHapCount;
-helper->gtHapIxToPxStart = needMem(genotypeCount * 2 * sizeof(unsigned short));
-helper->gtHapIxToPxEnd = needMem(genotypeCount * 2 * sizeof(unsigned short));
+helper->gtHapIxToPxStart = needMem(genotypeCount * 2 * sizeof(unsigned int));
+helper->gtHapIxToPxEnd = needMem(genotypeCount * 2 * sizeof(unsigned int));
 double pxPerHap = (double)height / gtHapCount;
 int i;
 for (i = 0;  i < gtHapCount;  i++)
@@ -990,7 +990,7 @@ static int yFromHapNode(const struct slList *itemOrCluster, void *extraData,
 /* Extract the gtHapIx from hapCluster (hacTree node item), find out its relative order
  * and translate that to a pixel height. */
 {
-unsigned short gtHapIx = ((const struct hapCluster *)itemOrCluster)->gtHapIx;
+unsigned int gtHapIx = ((const struct hapCluster *)itemOrCluster)->gtHapIx;
 struct yFromNodeHelper *helper = extraData;
 int y;
 if (yType == yrtStart)
@@ -1098,7 +1098,7 @@ enum hapColorMode colorMode;
 if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode))
     return;
 purple = hvGfxFindColorIx(hvg, 0x99, 0x00, 0xcc);
-unsigned short gtHapCount = 0;
+unsigned int gtHapCount = 0;
 int nRecords = slCount(vcff->records);
 int centerIx = getCenterVariantIx(tg, seqStart, seqEnd, vcff->records);
 // Limit the number of variants that we compare, to keep from timing out:
@@ -1108,7 +1108,7 @@ int maxVariantsPerSide = 50;
 int startIx = max(0, centerIx - maxVariantsPerSide);
 int endIx = min(nRecords, centerIx+1 + maxVariantsPerSide);
 struct hacTree *ht = NULL;
-unsigned short *gtHapOrder = clusterHaps(vcff, centerIx, startIx, endIx, &gtHapCount, &ht);
+unsigned int *gtHapOrder = clusterHaps(vcff, centerIx, startIx, endIx, &gtHapCount, &ht);
 struct vcfRecord *centerRec = NULL;
 struct vcfRecord *rec;
 int ix;
@@ -1149,7 +1149,7 @@ drawTreeInLabelArea(ht, hvg, yOff+extraPixel, hapHeight+CLIP_PAD, &yHelper, &tit
 
 static void drawSampleLabels(struct vcfFile *vcff, struct hvGfx *hvg,
                              boolean isAllDiploid, int yStart, int height,
-                             unsigned short *gtHapOrder, int gtHapCount, MgFont *font, Color color,
+                             unsigned int *gtHapOrder, int gtHapCount, MgFont *font, Color color,
                              char *track)
 /* Draw sample names as left labels. */
 {
@@ -1193,7 +1193,7 @@ hvGfxSetClip(hvgLL, clipXBak, clipYBak, clipWidthBak, clipHeightBak);
 }
 
 static void drawSampleTitles(struct vcfFile *vcff, int yStart, int height,
-                             unsigned short *gtHapOrder, int gtHapCount, char *track)
+                             unsigned int *gtHapOrder, int gtHapCount, char *track)
 /* Draw mouseover labels / titles with the samples that are drawn at each pixel y offset */
 {
 double hapPerPx = (double)gtHapCount / height;
@@ -1226,13 +1226,13 @@ for (y = 0;  y < height;  y++)
     }
 }
 
-static unsigned short *gtHapOrderFromGtOrder(struct vcfFile *vcff,
+static unsigned int *gtHapOrderFromGtOrder(struct vcfFile *vcff,
                                              boolean *retIsAllDiploid, int *retGtHapCount)
 {
 int ploidy = 2; // Assuming diploid genomes here, no XXY, tetraploid etc.
 int gtCount = vcff->genotypeCount;
 boolean isAllDiploid = TRUE;
-unsigned short *gtHapOrder = needMem(gtCount * ploidy * sizeof(unsigned short));
+unsigned int *gtHapOrder = needMem(gtCount * ploidy * sizeof(unsigned int));
 int orderIx = 0;
 int gtIx;
 // Determine the number of chromosome rows; for chrX, can be mix of diploid and haploid.
@@ -1274,7 +1274,7 @@ if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode))
     return;
 boolean isAllDiploid;
 int gtHapCount;
-unsigned short *gtHapOrder = gtHapOrderFromGtOrder(vcff, &isAllDiploid, &gtHapCount);
+unsigned int *gtHapOrder = gtHapOrderFromGtOrder(vcff, &isAllDiploid, &gtHapCount);
 struct vcfRecord *rec;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     drawOneRec(rec, gtHapOrder, gtHapCount, tg, hvg, xOff, yOff, width, FALSE, FALSE,
@@ -1328,9 +1328,9 @@ return gtIx;
 
 static void rSetGtHapOrderFromTree(struct phyloTree *node, struct vcfFile *vcff,
                                    struct hash *sampleToIx,
-                                   unsigned short *gtHapOrder, int *pGtHapCount,
-                                   unsigned short *leafOrderToHapOrderStart,
-                                   unsigned short *leafOrderToHapOrderEnd, int *pLeafCount)
+                                   unsigned int *gtHapOrder, int *pGtHapCount,
+                                   unsigned int *leafOrderToHapOrderStart,
+                                   unsigned int *leafOrderToHapOrderEnd, int *pLeafCount)
 /* Set gtHapOrder to sample gt & hap indices in the order we encounter the samples in tree. */
 {
 if (node->numEdges > 0)
@@ -1363,9 +1363,9 @@ else
     }
 }
 
-static unsigned short *gtHapOrderFromTree(struct vcfFile *vcff, struct phyloTree *tree,
-                                          unsigned short **retLeafOrderToHapOrderStart,
-                                          unsigned short **retLeafOrderToHapOrderEnd,
+static unsigned int *gtHapOrderFromTree(struct vcfFile *vcff, struct phyloTree *tree,
+                                          unsigned int **retLeafOrderToHapOrderStart,
+                                          unsigned int **retLeafOrderToHapOrderEnd,
                                           int *retGtHapCount)
 /* Alloc & return gtHapOrder, set to samples in the order we encounter them in tree.
  * Also build up maps of leaf order to low and high gtHapIx, for drawing the tree later. */
@@ -1373,9 +1373,9 @@ static unsigned short *gtHapOrderFromTree(struct vcfFile *vcff, struct phyloTree
 struct hash *sampleToIx = makeSampleToIx(vcff);
 int ploidy = 2; // Assuming diploid genomes here, no XXY, tetraploid etc.
 int gtCount = vcff->genotypeCount;
-unsigned short *gtHapOrder = needMem(gtCount * ploidy * sizeof(unsigned short));
-*retLeafOrderToHapOrderStart = needMem(gtCount * sizeof(unsigned short));
-*retLeafOrderToHapOrderEnd = needMem(gtCount * sizeof(unsigned short));
+unsigned int *gtHapOrder = needMem(gtCount * ploidy * sizeof(unsigned int));
+*retLeafOrderToHapOrderStart = needMem(gtCount * sizeof(unsigned int));
+*retLeafOrderToHapOrderEnd = needMem(gtCount * sizeof(unsigned int));
 *retGtHapCount = 0;
 int leafCount = 0;
 rSetGtHapOrderFromTree(tree, vcff, sampleToIx, gtHapOrder, retGtHapCount,
@@ -1395,8 +1395,8 @@ struct nodeCoords
     };
 
 static int phyloTreeAddNodeCoords(struct phyloTree *node,
-                                  unsigned short *leafOrderToHapOrderStart,
-                                  unsigned short *leafOrderToHapOrderEnd,
+                                  unsigned int *leafOrderToHapOrderStart,
+                                  unsigned int *leafOrderToHapOrderEnd,
                                   int leafIx)
 /* Recursively annotate node and descendants with nodeCoords to prepare for drawing the tree. */
 {
@@ -1483,8 +1483,8 @@ else
 static void drawPhyloTreeInLabelArea(struct phyloTree *tree, struct hvGfx *hvg, int yOff,
                                      int clipHeight, int gtHapCount,
                                      MgFont *font, boolean drawRectangle,
-                                     unsigned short *leafOrderToHapOrderStart,
-                                     unsigned short *leafOrderToHapOrderEnd)
+                                     unsigned int *leafOrderToHapOrderStart,
+                                     unsigned int *leafOrderToHapOrderEnd)
 {
 struct hvGfx *hvgLL = (hvgSide != NULL) ? hvgSide : hvg;
 int clipXBak, clipYBak, clipWidthBak, clipHeightBak;
@@ -1514,8 +1514,8 @@ if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode))
     return;
 struct phyloTree *tree = getTreeFromFile(tg->tdb);
 int gtHapCount;
-unsigned short *leafOrderToHapOrderStart, *leafOrderToHapOrderEnd;
-unsigned short *gtHapOrder = gtHapOrderFromTree(vcff, tree,
+unsigned int *leafOrderToHapOrderStart, *leafOrderToHapOrderEnd;
+unsigned int *gtHapOrder = gtHapOrderFromTree(vcff, tree,
                                                 &leafOrderToHapOrderStart, &leafOrderToHapOrderEnd,
                                                 &gtHapCount);
 struct vcfRecord *rec;
@@ -1668,8 +1668,8 @@ struct hapDistanceMatrixCell
     struct hapDistanceMatrixCell *next;
     char *sampleId; // name of this sample
     char *otherId; // name of other sample
-    short alleleIx; // index into vcfRecord->genotypes
-    short otherAlleleIx; // index into vcfRecord->genotypes for other sample
+    int alleleIx; // index into vcfRecord->genotypes
+    int otherAlleleIx; // index into vcfRecord->genotypes for other sample
     double dist;   // distance between this sample/allele and another sample/allele
 };
 
@@ -1679,7 +1679,7 @@ struct hapDistanceMatrix
  * between two different alleles */
     struct hapDistanceMatrix *next; // next row in matrix
     char *sampleId;  // name of this sample
-    short alleleIx; // allele id of this sample, 0 or 1
+    int alleleIx; // allele id of this sample, 0 or 1
     struct hapDistanceMatrixCell *row;  // a row of cwaDistance scores
 };
 
@@ -1717,13 +1717,13 @@ slSort(&cellList, hapDistanceMatrixCellCmp);
 return cellList;
 }
 
-static unsigned short toggleShort(unsigned short s)
+static unsigned int toggleInt(unsigned int s)
 /* Add or subtract one */
 {
 return s & 1 ? s - 1 : s + 1;
 }
 
-static void fillOutHapOrder(unsigned short *hapOrder, unsigned short hapCount, struct hapDistanceMatrixCell *c1, struct hapDistanceMatrixCell *c2)
+static void fillOutHapOrder(unsigned int *hapOrder, unsigned int hapCount, struct hapDistanceMatrixCell *c1, struct hapDistanceMatrixCell *c2)
 /* Assign indices to hapOrder in the order we should draw the alleles. Allows for the second parent
  * cell to be NULL */
 {
@@ -1733,10 +1733,10 @@ int numSamplesToDraw = hapCount / 2;
 int i;
 for (i = 0; i < numSamplesToDraw; i++)
     {
-    short hapIx = 2*i;
+    int hapIx = 2*i;
     if (i == 0) // top set of lines
         {
-        hapOrder[hapIx] = toggleShort(c1->alleleIx);
+        hapOrder[hapIx] = toggleInt(c1->alleleIx);
         hapOrder[hapIx+1] = c1->alleleIx;
         }
     else if (i + 1 == numSamplesToDraw) // last set of lines
@@ -1744,12 +1744,12 @@ for (i = 0; i < numSamplesToDraw; i++)
         if (c2)
             {
             hapOrder[hapIx] = c2->alleleIx;
-            hapOrder[hapIx+1] = toggleShort(c2->alleleIx);
+            hapOrder[hapIx+1] = toggleInt(c2->alleleIx);
             }
         else
             {
             hapOrder[hapIx] = c1->otherAlleleIx;
-            hapOrder[hapIx+1] = toggleShort(c1->otherAlleleIx);
+            hapOrder[hapIx+1] = toggleInt(c1->otherAlleleIx);
             }
         }
     else // orient based on above and below
@@ -1760,7 +1760,7 @@ for (i = 0; i < numSamplesToDraw; i++)
     }
 }
 
-static void setHapOrderFromMatrix(unsigned short *hapOrder, unsigned short hapCount,
+static void setHapOrderFromMatrix(unsigned int *hapOrder, unsigned int hapCount,
                                 struct hapDistanceMatrix *matrix, struct hapCluster **hapArray,
                                 struct vcfFile *vcff, char *childName, char **sampleDrawOrder)
 /* Given a matrix where each row is an allele of the child, and each column
@@ -1809,7 +1809,7 @@ else
     }
 }
 
-static void assignHapArrayIx(short *ret, struct hapCluster **hapArray, struct vcfFile *vcff, char *sample, boolean doChild)
+static void assignHapArrayIx(int *ret, struct hapCluster **hapArray, struct vcfFile *vcff, char *sample, boolean doChild)
 {
 int i;
 struct vcfRecord *rec = vcff->records;
@@ -1829,12 +1829,12 @@ static struct hapDistanceMatrix *fillOutDistanceMatrix(struct hapCluster **hapAr
 /* Allocates and fill out a struct hapDistanceMatrix, one row per child allele, and a
  * hapDistanceMatrixCell per parent allele */
 {
-short parGtCount = (gtCount - 1) * 2;
+int parGtCount = (gtCount - 1) * 2;
 int i,j;
 struct vcfRecord *rec = vcff->records;
 struct hapDistanceMatrix *matrix = NULL;
-short childHapArrayIndices[2];
-short parentHapArrayIndices[parGtCount];
+int childHapArrayIndices[2];
+int parentHapArrayIndices[parGtCount];
 assignHapArrayIx(childHapArrayIndices, hapArray, vcff, sample, TRUE);
 assignHapArrayIx(parentHapArrayIndices, hapArray, vcff, sample, FALSE);
 for (i = 0; i < 2; i++)
@@ -1860,7 +1860,7 @@ for (i = 0; i < 2; i++)
 return matrix;
 }
 
-unsigned short *computeHapDist(struct vcfFile *vcff, int centerIx, int startIx, int endIx, char *sample, int gtCount, char **sampleDrawOrder)
+unsigned int *computeHapDist(struct vcfFile *vcff, int centerIx, int startIx, int endIx, char *sample, int gtCount, char **sampleDrawOrder)
 // similar to clusterHaps(), but instead of making a hacTree at the end, call cwaDistance
 // on each of the pairs in hapArray to make a distance matrix, then compute a hapOrder from that
 {
@@ -1939,8 +1939,8 @@ for (varIx = 0, rec = vcff->records;  rec != NULL && varIx < endIx;  varIx++, re
 
 // now fill out a distance matrix based on the cwaDistance between all the pairs in hapArray
 struct hapDistanceMatrix *hapDistMatrix = fillOutDistanceMatrix(hapArray, vcff, sample, &helper, gtCount);
-unsigned short hapCount = 2 * gtCount;
-unsigned short *hapOrder = needMem(sizeof(unsigned short) * hapCount);
+unsigned int hapCount = 2 * gtCount;
+unsigned int *hapOrder = needMem(sizeof(unsigned int) * hapCount);
 setHapOrderFromMatrix(hapOrder, hapCount, hapDistMatrix, hapArray, vcff, sample, sampleDrawOrder);
 return hapOrder;
 }
@@ -1949,7 +1949,7 @@ return hapOrder;
 
 
 void vcfPhasedDrawOneRecord(struct track *track, struct hvGfx *hvg, struct vcfRecord *rec, void *item,
-                            unsigned short *gtHapOrder, int gtHapCount, int xOff, int yOffsets[],
+                            unsigned int *gtHapOrder, int gtHapCount, int xOff, int yOffsets[],
                             char *sampleOrder[], double scale)
 // Draw a record's haplotypes on the appropriate lines
 {
@@ -2081,7 +2081,7 @@ int nRecords = slCount(vcff->records);
 int centerIx = getCenterVariantIx(track, seqStart, seqEnd, vcff->records);
 int startIx = 0;
 int endIx = nRecords;
-unsigned short *hapOrder = computeHapDist(vcff, centerIx, startIx, endIx, childSample, gtCount, sampleOrder);
+unsigned int *hapOrder = computeHapDist(vcff, centerIx, startIx, endIx, childSample, gtCount, sampleOrder);
 struct vcfRecord *rec = NULL;
 struct slList *item = NULL;
 for (rec = vcff->records, item = track->items; rec != NULL && item != NULL; rec = rec->next, item = item->next)

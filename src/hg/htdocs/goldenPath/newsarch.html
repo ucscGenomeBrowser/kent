@@ -52,6 +52,93 @@
 <!-- ============= 2020 archived news ============= -->
 <a name="2020"></a>
 
+<a name="061920"></a>
+<h2>Jun. 19, 2020 &nbsp;&nbsp; Updated Self Chain track for human (GRCh38/hg38)</h2>
+<p>
+We have updated the <a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&c=chr16&g=chainSelf">
+Self Chain</a> track for the human GRCh38/hg38 assembly. The Self Chain track shows
+alignments of the human genome with itself, using a gap scoring system that allows longer
+gaps than traditional affine gap scoring systems. After filtering out the alignments produced
+when identical locations of the genome map to one another (e.g. chrN mapping to chrN), the
+remaining alignments point out areas of duplication within the human genome.</p>
+<p>
+The updated
+track now includes 33,039,051 chains, and should provide improved sensitivity for pseudogenes
+and other homologous regions. For more information, see the track <a target="_blank" 
+href="/cgi-bin/hgTrackUi?db=hg38&c=chr16&g=chainSelf">description page</a>.</p>
+<p>
+We would like to thank Angie Hinrichs, Anna Benet-Pages, and Lou Nassar for the development
+and release of this track.</p>
+
+<a name="061820"></a>
+<h2>Jun. 18, 2020 &nbsp;&nbsp; New ENCODE cCREs track available for human and mouse (hg38 and mm10)
+</h2>
+<p>
+We are pleased to announce the <em>ENCODE Registry of candidate cis-Regulatory Elements</em> (cCREs)
+track for the human and mouse genomes
+(<a href="../../cgi-bin/hgTrackUi?db=hg38&c=chrX&g=encodeCcreCombined"
+target="_blank">GRCh37/hg19</a> and
+<a href="../../cgi-bin/hgTrackUi?db=mm10&c=chrX&g=encodeCcreCombined"
+target="_blank">GRCm38/mm10</a>).
+cCREs are the subset of representative DNase hypersensitive sites across ENCODE and Roadmap
+Epigenomics samples that are supported by either histone modifications (H3K4me3 and H3K27ac) or
+CTCF-binding data. The Registry of cCREs is one of the core components of the integrative level of
+the <a href="https://www.encodeproject.org/" target="_blank">ENCODE Encyclopedia of DNA
+Elements</a>. A total of 926,535 elements for human and 339,815 elements for mouse were identified
+and classified by the ENCODE Data Analysis Center according to biochemical signatures.</p>
+
+<a href="http://genome.ucsc.edu/s/Kate/hg38%20ENCODE%20cCRE%20announcement%20largeprint"
+target="_blank">
+<img style="margin-left" width="950px"  src="../images/ccreAnnouncementScreenshot.png"></a>
+
+<p>
+CCREs are colored and labeled according to classification by regulatory signature:
+<p>
+<table cellpadding='2'>
+  
+  <tr>
+    <th style="border-bottom: 2px solid;">Color</th>
+    <th style="border-bottom: 2px solid;"></th>
+    <th style="border-bottom: 2px solid;">UCSC label</th>
+    <th style="border-bottom: 2px solid;">ENCODE classification</th>
+    <th style="border-bottom: 2px solid;">ENCODE label</th>
+  </tr>
+  </thead>
+
+<tr><td style='background-color: #FF0000;'></td><td>red</td>
+        <td>prom</td>
+        <td>promoter-like signature</td>
+        <td>PLS</td></tr>
+<tr><td style='background-color: #FFA700;'></td><td>orange</td>
+        <td>enhP</td>
+        <td>proximal enhancer-like signature</td>
+        <td>pELS</td></tr>
+<tr><td style='background-color: #FFCD00;'></td><td>yellow</td>
+        <td>enhD</td>
+        <td>distal enhancer-like signature</td>
+        <td>dELS</td></tr>
+<tr><td style='background-color: #FFAAAA;'></td><td>pink</td>
+        <td>K4m3</td>
+        <td>DNase-H3K4me3</td>
+        <td>DNase-H3K4me3</td></tr>
+<tr><td style='background-color: #00B0F0;'</td><td>blue</td>
+        <td>CTCF</td>
+        <td>CTCF-only</td>
+        <td>CTCF-only</td></tr>
+</table>
+</p>
+
+<p>
+This dataset was produced by the ENCODE Data Analysis Center
+(<a href="https://www.umassmed.edu/zlab/" target="_blank">Zlab</a> at UMass Medical Center). Thanks
+to Henry Pratt, Jill Moore, Michael Purcaro, and Zhiping Weng, PI for providing this data and
+initial version of the track. Thanks also to the ENCODE Consortium, the ENCODE production
+laboratories, and the ENCODE Data Coordination Center for generating and processing the datasets
+used here. Thanks to Kate Rosenbloom and Jairo Navarro for the development and release of these
+tracks.</p>
+
+
+
 <a name="052720"></a>
 <h2>May 26, 2020 &nbsp;&nbsp; New video on the Browser's YouTube channel</h2>
 
@@ -595,7 +682,7 @@ these data available. We would also like to thank Christopher Lee, Maximilian Ha
 Jairo Navarro, Robert Kuhn and Anna Benet-Pages for their effort in the creation of these tracks.
 </p>
 
-<a name="042020"></a
+<a name="042020"></a>
 <h2>Apr. 20, 2020 &nbsp;&nbsp; New video on the Browser's YouTube channel</h2>
 
 <p>

@@ -6,8 +6,7 @@ include hoffMap.ra
 
 include cancerExpr.ra
 
-include mane.alpha.ra alpha
-include mane.ra beta,public
+include mane.ra
 
 include gdcCancer.ra
 
@@ -923,3 +922,4 @@ baseColorDefault genomicCodons
 
 track clinGenCnv override
 filter.size 773:11309456
+filterLimits.size 773:11309456
