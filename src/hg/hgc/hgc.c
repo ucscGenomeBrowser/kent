@@ -25788,7 +25788,7 @@ else if (sameWord(table, "omimGeneClass2"))
     {
     doOmimGene2(tdb, item);
     }
-else if (sameWord(table, "omimGene2"))
+else if (sameAltWords(table, handler, "omimGene2", "omimGene2bb", NULL))
     {
     doOmimGene2(tdb, item);
     }
