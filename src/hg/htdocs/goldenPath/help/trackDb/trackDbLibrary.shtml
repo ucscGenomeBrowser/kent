@@ -5068,34 +5068,6 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     Note: This setting will not work correctly if 'container multiWig' is specified.</P>
 </DIV>
 
-<DIV class="indelDoubleInsert"><span class="types bam"></span>
-<div class="format">
-    <code>indelDoubleInsert &lt;off/on&gt;</code><BR>
-    <code>indelQueryInsert &lt;off/on&gt;</code><BR>
-    <code>indelPolyA &lt;off/on&gt;</code></div>
-    <P>Insertion and deletion
-    differences between tag sequences and the reference genome can be
-    highlighted with the use of these settings. These options may be
-    set by the user.</P>
-    <UL>
-    <LI> <code>indelDoubleInsert</code>: Use to highlight alignment gaps in both the target
-    (reference) and query (tag) sequence with double (<B>=</B>) lines.</LI>
-    <LI> <code>indelQueryInsert</code>: Use to highlight an insert in the query
-    sequence only by drawing an orange (<B style="color:orange;">|</B>)
-    or purple (<B style="color:purple;">|</B>) vertical line.
-    Orange lines show unalignable regions in the middle of a sequence,
-    and purple highlights regions at the end of the query sequence.</LI>
-    <LI><code>indelPolyA</code>: Use to highlight an apparently valid
-    poly-a tail by drawing a vertical green line (<B style="color:green;">|</B>).</LI>
-    </UL>
-    <P><B>Example:</B></P>
-    <pre>
-    baseColorUseSequence genbank
-    indelDoubleInsert on
-    indelQueryInsert on
-    indelPolyA on    </pre>
-</DIV>
-
 <DIV class="hideEmptySubtracks"><span class="types compositeTrack"></span>
 <div class="format">
         <code>hideEmptySubtracks &lt;on/off&gt;</code></div>

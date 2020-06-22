@@ -58,6 +58,13 @@ bedToBigBed -as=$ottoDir/nextstrainClade.as -type=bed12+7 -tab -verbose=0 \
     nextstrainClade.sorted.bed $chromSizes \
     nextstrainClade.bb
 
+if [ -f nextstrainOldClade.bed ]; then
+    sort -k2n,2n nextstrainOldClade.bed > nextstrainOldClade.sorted.bed
+    bedToBigBed -as=$ottoDir/nextstrainClade.as -type=bed12+7 -tab -verbose=0 \
+        nextstrainOldClade.sorted.bed $chromSizes \
+        nextstrainOldClade.bb
+fi
+
 bedToBigBed -type=bed4 -tab -verbose=0 nextstrainDiscarded.bed $chromSizes \
     nextstrainDiscarded.bb
 
@@ -85,7 +92,7 @@ done
 
 # Install public track files
 mkdir $ottoDir/install
-cp -pf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
+cp -pf $runDir/nextstrainGene.bb $runDir/nextstrain*Clade.bb \
     $runDir/nextstrain*.vcf.gz{,.tbi} \
     $runDir/nextstrain*.nh \
     $runDir/nextstrainSamples*.bigWig \
@@ -95,7 +102,7 @@ mv -f $ottoDir/current $ottoDir/current.bak
 mv $ottoDir/install $ottoDir/current
 rm -r $gbdbDir
 mkdir $gbdbDir
-ln -sf $ottoDir/current/nextstrainGene.bb $ottoDir/current/nextstrainClade.bb \
+ln -sf $ottoDir/current/nextstrainGene.bb $ottoDir/current/nextstrain*Clade.bb \
     $ottoDir/current/nextstrain*.vcf.gz{,.tbi} \
     $ottoDir/current/nextstrain*.nh \
     $ottoDir/current/nextstrainSamples*.bigWig \
@@ -112,10 +119,10 @@ ln -sf $ottoDir/current/nextstrain{Discarded,Blacklisted,Informative}.bb \
 # Daily archive (may overwrite files from earlier today)
 mkdir -p $ottoDir/archive/$today
 rm -f $ottoDir/archive/$today/*
-cp -pf $runDir/nextstrainGene.bb $runDir/nextstrainClade.bb \
+cp -pf $runDir/nextstrainGene.bb $runDir/nextstrain*Clade.bb \
     $runDir/nextstrain*.vcf.gz{,.tbi} \
     $runDir/nextstrain*.nh \
     $runDir/nextstrainSamples*.bigWig \
     $ottoDir/archive/$today
 
-echo "Updated nextstrain/ncov `date` (ncov.json date $latestDate)"
+echo "Updated nextstrain/ncov `date` (ncov.json dated $ncovTime)"

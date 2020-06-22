@@ -15,6 +15,7 @@ testDataName=testVgpAltData
 genomesTxt=altGenomes
 hubFile=altHub
 testHubFile=testAltHub
+hubTxtFile=vgpAltHub.txt
 
 # these names trigger special behavior in the index page creation scripts:
 Name=VGP

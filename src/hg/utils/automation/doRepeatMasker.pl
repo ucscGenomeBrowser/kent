@@ -451,6 +451,20 @@ export ncbiRmOutFile="${ncbiRmsk}"
 cat /dev/null > "\${db}.sorted.fa.out"
 _EOF_
     );
+    if (! -s "${liftSpec}" ) {
+    printf STDERR "# WARNING: no liftSpec given with ncbiRmsk file, probably will need one ?\n";
+    $bossScript->add(<<_EOF_
+#########
+# WARNING: no liftSpec given with ncbiRmsk file, probably will need one ?
+#########
+
+printf "   SW  perc perc perc  query      position in query           matching       repeat              position in  repeat
+score  div. del. ins.  sequence    begin     end    (left)    repeat         class/family         begin  end (left)   ID
+
+" >> "\${db}.sorted.fa.out"
+_EOF_
+    );
+    }
     if ($zippedSource) {
     $bossScript->add(<<_EOF_
 zcat "\${ncbiRmOutFile}" | tail -n +4 | sort -k5,5 -k6,6n $liftOpts >> "\${db}.sorted.fa.out"

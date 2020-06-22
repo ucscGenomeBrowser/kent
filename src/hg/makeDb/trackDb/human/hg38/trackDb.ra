@@ -920,3 +920,4 @@ baseColorDefault genomicCodons
 
 track clinGenCnv override
 filter.size 773:11309456
+filterLimits.size 773:11309456
