@@ -142,7 +142,7 @@ if (sameString(link->name, "family"))
 if (sameString(link->name, "tbSchema"))
     {
     char *geneTable = genomeSetting("knownGene");
-    struct trackDb *tdb = hTrackDbForTrack(sqlGetDatabase(conn), geneTable);
+    struct trackDb *tdb = hTrackDbForTrack(database, geneTable);
     struct dyString *dy = NULL;
     if (tdb == NULL)
 	return NULL;

@@ -10,7 +10,7 @@ include mane.ra
 
 include gdcCancer.ra
 
-include mergedBGP.ra
+include gencodeV35.ra alpha
 
 track miRnaAtlas
 compositeTrack on

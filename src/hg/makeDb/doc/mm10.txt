@@ -17897,9 +17897,9 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` panPan3 mm10) \
        > rbest.log 2>&1
-XXX - running - Tue Jun 16 12:57:31 PDT 2020
-    # real    620m0.039s
+    # real    305m11.756s
 
-    cat fb.panPan3.chainRBest.Mm01.txt
+    cat fb.panPan3.chainRBest.Mm10.txt
+    # 889360051 bases of 3015350297 (29.494%) in intersection
 
 ##############################################################################

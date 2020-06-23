@@ -197,7 +197,7 @@ track microdel
 shortLabel Microdeletions
 longLabel Microdeletions
 type bed 6
-group compGeno
+group varRep
 spectrum on
 
 track nanoCov

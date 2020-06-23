@@ -2044,10 +2044,11 @@ for (name = sampleNames, i = 0; name != NULL; name = name->next, i++)
     hvGfxLine(hvg, xOff, y1, xOff+width, y1, MG_BLACK);
     hvGfxLine(hvg, xOff, y2, xOff+width, y2, MG_BLACK);
     struct dyString *label = dyStringNew(0);
+    boolean hasAlias = isNotEmpty((char *)name->val);
     dyStringPrintf(label, "%s%s%s",
         useDefaultLabel ? name->name : "",
-        useDefaultLabel && useAliasLabel ? "/" : "",
-        useAliasLabel ? (char *)name->val : "");
+        useDefaultLabel && useAliasLabel && hasAlias ? "/" : "",
+        useAliasLabel && hasAlias ? (char *)name->val : "");
     vcfPhasedAddLabel(track, hvg, label->string, yOff, round(((y1 + y2) / 2) - (track->lineHeight / 2)), font, MG_BLACK);
     }
 }
