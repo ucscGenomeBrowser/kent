@@ -293,6 +293,7 @@ void doSamT02(char *proteinId, char *database);
 #define hggProt "hgg_prot"      /* Main protein id. */
 #define hggChrom "hgg_chrom"	/* Chromosome gene is on. */
 #define hggStart "hgg_start"	/* Start position. */
+#define hggType "hgg_type"	/* Table name */
 #define hggEnd	"hgg_end"	/* End position. */
 #define hggItem	"hgg_item"	/* Gene item, used for ccdsGene */
 #define hggExpRatioColors "hgg_expRatioColors" /* Expression Ratio coloring. */
