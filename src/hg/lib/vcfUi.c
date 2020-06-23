@@ -299,7 +299,7 @@ if (vcff != NULL && vcff->genotypeCount > 1)
     int cartHeight = cartOrTdbInt(cart, tdb, VCF_HAP_HEIGHT_VAR, VCF_DEFAULT_HAP_HEIGHT);
     char varName[1024];
     safef(varName, sizeof(varName), "%s." VCF_HAP_HEIGHT_VAR, name);
-    cgiMakeIntVarInRange(varName, cartHeight, "Height (in pixels) of track", 5, "4", "2500");
+    cgiMakeIntVarInRange(varName, cartHeight, "Height (in pixels) of track", 5, "4", "10000");
     puts("<BR>");
     }
 }
