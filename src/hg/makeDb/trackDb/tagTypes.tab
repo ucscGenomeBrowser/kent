@@ -129,6 +129,7 @@ expScale bed expRatio
 expStep bed expRatio
 expTable bed expRatio
 extTable *
+externalDb bigGenePred
 fieldCount customTracks
 filePos *
 fileSortOrder *
@@ -245,7 +246,7 @@ itemCount customTracks
 itemDetailsHtmlTable genePred psl bed bigPsl
 itemFirstCharCase wigMafProt wigMaf
 itemImagePath bed
-itemRgb bedDetail bedGraph bed bedLogR bigBed bigPsl interact bigInteract
+itemRgb bedDetail bedGraph bed bedLogR bigBed bigPsl interact bigInteract bigGenePred
 lfPslTable bed
 linesAt chromGraph
 linkDataUrl  bigChain

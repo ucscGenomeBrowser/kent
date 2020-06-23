@@ -45,6 +45,7 @@
 #include "hubConnect.h"
 #include "trix.h"
 #include "vcf.h"
+#include "vcfUi.h"
 #include "htmshell.h"
 #include "bigBedFind.h"
 #include "customComposite.h"
@@ -838,6 +839,7 @@ else
                   startsWithWord("halSnake", type) ||
 #endif
                   startsWithWord("vcfTabix", type) ||
+                  startsWithWord("vcfPhasedTrio", type) ||
                   startsWithWord("bigPsl", type) ||
                   startsWithWord("bigMaf", type) ||
                   startsWithWord("longTabix", type) ||
@@ -860,6 +862,8 @@ else
 
         if (sameString("barChart", type) || sameString("bigBarChart", type))
             requireBarChartBars(hub, genome, tdb);
+        if (sameString("vcfPhasedTrio", type))
+            requiredSetting(hub, genome, tdb, VCF_PHASED_CHILD_SAMPLE_SETTING);
         }
     }
 }
@@ -1226,7 +1230,7 @@ if (relativeUrl != NULL)
             }
         bbiFileClose(&bbi);
         }
-    else if (startsWithWord("vcfTabix", type))
+    else if (startsWithWord("vcfTabix", type) || startsWithWord("vcfPhasedTrio", type))
         {
         /* Just open and close to verify file exists and is correct type. */
         struct vcfFile *vcf = vcfTabixFileAndIndexMayOpen(bigDataUrl, bigDataIndex, NULL, 0, 0, 1, 1);

@@ -300,12 +300,12 @@ else
 if (isRgdGene(conn))
     {
     sqlSafefFrag(condStr, sizeof(condStr), "name='%s'", geneId);
-    spID = sqlGetField(database, "rgdGene2ToUniProt", "value", condStr);
+    spID = sqlGetField(sqlGetDatabase(conn), "rgdGene2ToUniProt", "value", condStr);
     }
 else
     {
     sqlSafefFrag(condStr, sizeof(condStr), "kgID='%s'", geneId);
-    spID = sqlGetField(database, "kgXref", "spID", condStr);
+    spID = sqlGetField(sqlGetDatabase(conn), "kgXref", "spID", condStr);
     }
 
 if (spID != NULL)
@@ -319,13 +319,13 @@ if (spID != NULL)
         {
         sqlSafef(query, sizeof(query), 
 	  "select count(*) from %s.spReactomeEvent, %s.spVariant, %s.kgXref where kgID='%s' and kgXref.spID=variant and variant = '%s' and spReactomeEvent.spID=parent", 
-	  PROTEOME_DB_NAME, PROTEOME_DB_NAME, database, geneId, origSpID);
+	  PROTEOME_DB_NAME, PROTEOME_DB_NAME, sqlGetDatabase(conn), geneId, origSpID);
 	}
     else
     	{
         sqlSafef(query, sizeof(query), 
 	  "select count(*) from %s.spReactomeEvent, %s.spVariant, %s.rgdGene2ToUniProt where name='%s' and value=variant and variant = '%s' and spReactomeEvent.spID=parent", 
-	  PROTEOME_DB_NAME, PROTEOME_DB_NAME, database, geneId, origSpID);
+	  PROTEOME_DB_NAME, PROTEOME_DB_NAME, sqlGetDatabase(conn), geneId, origSpID);
 	}
 
     ret = sqlQuickNum(conn, query);
