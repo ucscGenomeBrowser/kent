@@ -493,7 +493,7 @@ else if (regexMatch(rec->name, "^[en]ss?v[0-9]+$"))
 	   "TARGET=_BLANK>%s</A><BR>\n", rec->name, rec->name);
     }
 boolean hapClustEnabled = cartOrTdbBoolean(cart, tdb, VCF_HAP_ENABLED_VAR, TRUE);
-if (hapClustEnabled && rec->file != NULL && rec->file->genotypeCount > 1)
+if (hapClustEnabled && rec->file != NULL && rec->file->genotypeCount > 1 && differentString(tdb->type, "vcfPhasedTrio"))
     {
     char *hapMethod = cartOrTdbString(cart, tdb, VCF_HAP_METHOD_VAR, VCF_DEFAULT_HAP_METHOD);
     char *hapOrSample = vcfHaplotypeOrSample(cart);
