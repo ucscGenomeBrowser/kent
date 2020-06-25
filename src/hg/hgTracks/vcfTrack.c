@@ -2027,8 +2027,9 @@ int i, y1, y2;
 struct rgbColor yellow = lightRainbowAtPos(0.2);
 int transYellow = MAKECOLOR_32_A(yellow.r, yellow.g, yellow.b, 100);
 
-boolean useDefaultLabel = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_DEFAULT_LABEL_VAR, TRUE);
-boolean useAliasLabel = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_ALIAS_LABEL_VAR, TRUE);
+boolean useDefaultLabel = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_DEFAULT_LABEL_VAR, FALSE);
+boolean cartUseAliasLabel = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_ALIAS_LABEL_VAR, FALSE);
+boolean useAliasLabel = trackDbSettingOn(track->tdb, VCF_PHASED_TDB_USE_ALT_NAMES) || cartUseAliasLabel;
 
 for (name = sampleNames, i = 0; name != NULL; name = name->next, i++)
     {

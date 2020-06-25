@@ -339,6 +339,7 @@ ucscRetroInfo psl bigPsl
 ucscRetroParentTables *
 vcfChildSample vcfPhasedTrio
 vcfParentSamples vcfPhasedTrio
+vcfUseAltSampleNames vcfPhasedTrio
 sGroup_Afrotheria wigMaf
 sGroup_Aves wigMaf
 sGroup_bird wigMaf
