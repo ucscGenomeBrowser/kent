@@ -243,13 +243,23 @@ type bigLolly
 group compGeno
 autoScale on
 
+track labAssocMutsNs419
+shortLabel Lab-Assoc Muts 4/19
+longLabel Lab-Associated Mutations Discovered in Nextstrain April 19th Alignment and Tree
+type bigBed 4 +
+bigDataUrl /gbdb/wuhCor1/phylogenetics/labAssocMuts.bb
+group varRep
+visibility hide
+release alpha
+
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
 include epitopes.ra
 include trackDb.44way.ra
 include trackDb.strainName44way.ra
 include trackDb.uniprot.ra
-include trackDb.nextstrain.ra
+include trackDb.nextstrain.v1.ra beta,public
+include trackDb.nextstrain.ra alpha
 include kim2020.ra
 include trackDb.7way.ra
 include phylocsf.ra

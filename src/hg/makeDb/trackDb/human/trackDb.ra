@@ -3601,6 +3601,7 @@ mouseOverField _mouseOver
 noScoreFilter on
 labelFields name,mainSym
 defaultLabelFields name,mainSym
+html omimGene2 
 
 track omimAvSnp
 shortLabel OMIM Alleles
