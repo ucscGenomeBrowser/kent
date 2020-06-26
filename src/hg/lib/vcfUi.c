@@ -490,6 +490,12 @@ if (trackDbSetting(tdb,VCF_PHASED_PARENTS_SAMPLE_SETTING))
     boolean hidingOtherSamples = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_HIDE_OTHER_VAR, FALSE);
     cgiMakeCheckBox(hideVarName, hidingOtherSamples);
     }
+printf("<br>");
+printf("Highlight child variants that are inconsistent with phasing red");
+char shadeByDiffs[1024];
+safef(shadeByDiffs, sizeof(shadeByDiffs), "%s.%s", name, VCF_PHASED_HIGHLIGHT_INCONSISTENT);
+boolean highlightChildDiffs = cartUsualBooleanClosestToHome(cart, tdb, FALSE, VCF_PHASED_HIGHLIGHT_INCONSISTENT, FALSE);
+cgiMakeCheckBox(shadeByDiffs, highlightChildDiffs);
 }
 
 void vcfCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)

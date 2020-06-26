@@ -1948,9 +1948,54 @@ return hapOrder;
 #define VCFPHASED_UNPHASED_COLOR MG_RED
 
 
+static int getChildAlleleColor(struct track *track, struct vcfRecord *rec, int childHapIx,
+                               int alleleIx, int nameIx, int gtHapCount, unsigned int *gtHapOrder,
+                               char *sampleOrder[])
+/* Return the color we should use for this variant, depending on whether the allele
+ * of the child matches what the parent transmitted or if there was some kind of
+ * 'mendelian inconsistency' */
+{
+// if there are no parents to draw then no concept of transmitted vs unstransmitted
+if (gtHapCount <= 2)
+    return MG_BLACK;
+int parIx = 0;
+if (nameIx == 0)
+    {
+    if (alleleIx % 2 == 0)
+        parIx = alleleIx + 2;
+    else
+        parIx = alleleIx + 3;
+    }
+else if (nameIx == 1)
+    {
+    if (alleleIx % 2 == 0)
+        parIx = alleleIx - 1;
+    else
+        parIx = alleleIx + 1;
+    }
+else
+    {
+    if (alleleIx % 2 == 0)
+        parIx = alleleIx - 3;
+    else
+        parIx = alleleIx - 2;
+    }
+struct vcfGenotype *parentGt = &(rec->genotypes[gtHapOrder[parIx] >> 1]);
+if (parentGt->isPhased || (parentGt->hapIxA == 1 && parentGt->hapIxB == 1))
+    {
+    int parentAlleleIx = gtHapOrder[parIx] & 1 ? parentGt->hapIxB : parentGt->hapIxA;
+    if (rec->alleles[childHapIx] != rec->alleles[parentAlleleIx]) // if they disagree mark as red
+        return MG_RED;
+    else
+        return MG_BLACK;
+    }
+return MG_BLACK;
+}
+
 void vcfPhasedDrawOneRecord(struct track *track, struct hvGfx *hvg, struct vcfRecord *rec, void *item,
                             unsigned int *gtHapOrder, int gtHapCount, int xOff, int yOffsets[],
-                            char *sampleOrder[], double scale)
+                            char *sampleOrder[], char *childSample, boolean highlightChildDiffs,
+                            double scale)
 // Draw a record's haplotypes on the appropriate lines
 {
 int i;
@@ -1970,10 +2015,12 @@ for (i = 0; i < gtHapCount ; i++)
         {
         int alIx = gtHapOrder[i] & 1 ? gt->hapIxB : gt->hapIxA;
         int tickColor = MG_BLACK;
+        if (sameString(childSample, gt->id) && highlightChildDiffs)
+            tickColor = getChildAlleleColor(track, rec, alIx, i, nameIx, gtHapCount, gtHapOrder, sampleOrder);
         dyStringPrintf(mouseover, "%s ", gt->id);
         if (alIx != 0) // non-reference allele
             {
-            if (i > 1 && i < 4) // we're drawing child ticks
+            if (sameString(childSample, gt->id)) // we're drawing child ticks
                 {
                 dyStringPrintf(mouseover, "allele: %s", rec->alleles[alIx]);
                 }
@@ -2088,11 +2135,12 @@ int centerIx = getCenterVariantIx(track, seqStart, seqEnd, vcff->records);
 int startIx = 0;
 int endIx = nRecords;
 unsigned int *hapOrder = computeHapDist(vcff, centerIx, startIx, endIx, childSample, gtCount, sampleOrder);
+boolean highlightChildDiffs = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_HIGHLIGHT_INCONSISTENT, FALSE);
 struct vcfRecord *rec = NULL;
 struct slList *item = NULL;
 for (rec = vcff->records, item = track->items; rec != NULL && item != NULL; rec = rec->next, item = item->next)
     {
-    vcfPhasedDrawOneRecord(track, hvg, rec, item, hapOrder, gtCount * 2, xOff, yOffsets, sampleOrder, scale);
+    vcfPhasedDrawOneRecord(track, hvg, rec, item, hapOrder, gtCount * 2, xOff, yOffsets, sampleOrder, childSample, highlightChildDiffs, scale);
     }
 }
 

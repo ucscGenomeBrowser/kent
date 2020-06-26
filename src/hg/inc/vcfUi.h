@@ -52,6 +52,7 @@
 #define VCF_PHASED_ALIAS_LABEL_VAR "doAliasLabel"
 #define VCF_PHASED_HIDE_OTHER_VAR "hideParents"
 #define VCF_PHASED_TDB_USE_ALT_NAMES "vcfUseAltSampleNames"
+#define VCF_PHASED_HIGHLIGHT_INCONSISTENT "vcfHighlightDiffs"
 
 void vcfCfgHaplotypeCenter(struct cart *cart, struct trackDb *tdb, char *track,
 			   boolean parentLevel, struct vcfFile *vcff,
