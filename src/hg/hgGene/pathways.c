@@ -166,7 +166,7 @@ if (isRgdGene(conn))
 else
     {
     sqlSafefFrag(condStr, sizeof(condStr), "kgID='%s'", geneId);
-    spID = sqlGetField(database, "kgXref", "spID", condStr);
+    spID = sqlGetField(sqlGetDatabase(conn), "kgXref", "spID", condStr);
     }
 
 if (spID != NULL)

@@ -474,7 +474,7 @@ if (hasSampleAliases(tdb))
     char defaultLabel[1024], aliasLabel[1024];
     safef(defaultLabel, sizeof(defaultLabel), "%s.%s", name, VCF_PHASED_DEFAULT_LABEL_VAR);
     safef(aliasLabel, sizeof(aliasLabel), "%s.%s", name, VCF_PHASED_ALIAS_LABEL_VAR);
-    boolean isDefaultChecked = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_DEFAULT_LABEL_VAR, TRUE);
+    boolean isDefaultChecked = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_DEFAULT_LABEL_VAR, FALSE);
     boolean isAliasChecked = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_ALIAS_LABEL_VAR, TRUE);
     cgiMakeCheckBox(defaultLabel, isDefaultChecked);
     printf("VCF file sample names &nbsp;");

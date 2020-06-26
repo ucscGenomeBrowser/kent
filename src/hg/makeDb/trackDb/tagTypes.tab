@@ -235,7 +235,7 @@ interactUp interact bigInteract
 interactMultiRegion interact bigInteract
 intronGap psl genePred bigPsl
 irows wigMaf
-isGencode2 genePred
+isGencode2 genePred bigGenePred
 isGencode genePred
 itemAttrTbl genePred
 itemBigImagePath bed
@@ -339,6 +339,7 @@ ucscRetroInfo psl bigPsl
 ucscRetroParentTables *
 vcfChildSample vcfPhasedTrio
 vcfParentSamples vcfPhasedTrio
+vcfUseAltSampleNames vcfPhasedTrio
 sGroup_Afrotheria wigMaf
 sGroup_Aves wigMaf
 sGroup_bird wigMaf

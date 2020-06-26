@@ -51,6 +51,7 @@
 #define VCF_PHASED_DEFAULT_LABEL_VAR "doDefaultLabel"
 #define VCF_PHASED_ALIAS_LABEL_VAR "doAliasLabel"
 #define VCF_PHASED_HIDE_OTHER_VAR "hideParents"
+#define VCF_PHASED_TDB_USE_ALT_NAMES "vcfUseAltSampleNames"
 
 void vcfCfgHaplotypeCenter(struct cart *cart, struct trackDb *tdb, char *track,
 			   boolean parentLevel, struct vcfFile *vcff,
