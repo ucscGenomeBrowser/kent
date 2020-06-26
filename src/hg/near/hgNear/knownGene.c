@@ -329,7 +329,7 @@ static struct searchResult *knownNameSimpleSearch(struct column *col,
 {
 struct kgAlias *ka, *kaList;
 struct searchResult *srList = NULL, *sr;
-kaList = findKGAlias(database, search, "F");
+kaList = findKGAlias(sqlGetDatabase(conn), search, "F");
 for (ka = kaList; ka != NULL; ka = ka->next)
     {
     sr = knownGeneSearchResult(conn, ka->kgID, ka->alias);
