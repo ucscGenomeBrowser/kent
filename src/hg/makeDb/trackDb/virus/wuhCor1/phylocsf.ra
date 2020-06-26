@@ -1,7 +1,7 @@
 # mostly copied from https://data.broadinstitute.org/compbio1/PhyloCSFtracks/trackHub/hub.txt
 track PhyloCSF_smooth
-shortLabel Smoothed PhyloCSF
-longLabel Smoothed PhyloCSF
+shortLabel PhyloCSF
+longLabel PhyloCSF
 group compGeno
 type bigWig
 autoScale off
@@ -16,7 +16,7 @@ superTrack on show
     track PhyloCSF_plus_1
     parent PhyloCSF_smooth
     bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/PhyloCSF+1.bw
-    shortLabel PhyloCSF+1
+    shortLabel Smoothed PhyloCSF+1
     longLabel Smoothed PhyloCSF  Strand +  Frame 1
     color 0,175,0
     visibility full
@@ -26,7 +26,7 @@ superTrack on show
     track PhyloCSF_plus_2
     parent PhyloCSF_smooth
     bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/PhyloCSF+2.bw
-    shortLabel PhyloCSF+2
+    shortLabel Smoothed PhyloCSF+2
     longLabel Smoothed PhyloCSF  Strand +  Frame 2
     color 0,175,0
     visibility full
@@ -36,7 +36,7 @@ superTrack on show
     track PhyloCSF_plus_3
     parent PhyloCSF_smooth
     bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/PhyloCSF+3.bw
-    shortLabel PhyloCSF+3
+    shortLabel Smoothed PhyloCSF+3
     longLabel Smoothed PhyloCSF  Strand +  Frame 3
     color 0,175,0
     visibility full
@@ -46,7 +46,7 @@ superTrack on show
     track PhyloCSF_minus_1
     parent PhyloCSF_smooth
     bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/PhyloCSF-1.bw
-    shortLabel PhyloCSF-1
+    shortLabel Smoothed PhyloCSF-1
     longLabel Smoothed PhyloCSF  Strand -  Frame 1
     color 200,0,0
     visibility hide
@@ -56,7 +56,7 @@ superTrack on show
     track PhyloCSF_minus_2
     parent PhyloCSF_smooth
     bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/PhyloCSF-2.bw
-    shortLabel PhyloCSF-2
+    shortLabel Smoothed PhyloCSF-2
     longLabel Smoothed PhyloCSF  Strand -  Frame 2
     color 200,0,0
     visibility hide
@@ -66,27 +66,28 @@ superTrack on show
     track PhyloCSF_minus_3
     parent PhyloCSF_smooth
     bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/PhyloCSF-3.bw
-    shortLabel PhyloCSF-3
+    shortLabel Smoothed PhyloCSF-3
     longLabel Smoothed PhyloCSF  Strand -  Frame 3
     color 200,0,0
     visibility hide
     graphTypeDefault bar
     priority 20
 
-track PhyloCSFpower
-bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/PhyloCSFpower.bw
-shortLabel PhyloCSF Power
-longLabel Relative branch length of local alignment, a measure of PhyloCSF statistical power
-type bigWig
-autoScale off
-viewLimits 0:1
-maxHeightPixels 60:30:12
-graphTypeDefault bar
-yLineMark 0.5
-yLineOnOff on
-color 0,0,0
-visibility hide
-group compGeno
+    track PhyloCSFpower
+    bigDataUrl /gbdb/wuhCor1/bbi/phylocsf/PhyloCSFpower.bw
+    shortLabel PhyloCSF Power
+    longLabel Relative branch length of local alignment, a measure of PhyloCSF statistical power
+    type bigWig
+    autoScale off
+    viewLimits 0:1
+    maxHeightPixels 60:30:12
+    graphTypeDefault bar
+    yLineMark 0.5
+    yLineOnOff on
+    color 0,0,0
+    visibility hide
+    group compGeno
+    parent PhyloCSF_smooth
 
 #track PhyloCSF_raw
 #superTrack on hide

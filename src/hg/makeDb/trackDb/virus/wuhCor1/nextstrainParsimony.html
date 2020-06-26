@@ -1,0 +1,83 @@
+<h2>Description</h2>
+<p>
+<a href="https://nextstrain.org/ncov" target=_blank>Nextstrain.org</a> displays
+data about single nucleotide variant alleles in the SARS-CoV-2 RNA and protein sequences that have
+occurred in different samples of the virus during the current 2019/2020 outbreak.
+Nextstrain has a powerful user interface for viewing the time stamped phylogenetic tree
+that it infers from the patterns of variants in sequences worldwide.
+Nextstrain maintains an ongoing pipeline that continuously obtains SARS-CoV-2 genome sequences
+and metadata from
+<a href="https://gisaid.org" target=_blank>GISAID</a>,
+aligns them against the reference genome
+(<a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2" target=_blank>NC_045512.2</a>),
+collects single-nucleotide variants (SNVs), and infers a phylogenetic tree.
+</p>
+<p>
+A <a href="https://en.wikipedia.org/wiki/Maximum_parsimony_(phylogenetics)"
+     target=_blank>parsimony</a> score
+can be computed for each mutation as the minimum number of nucleotide changes along branches
+of the tree that would lead to the observed sample genotypes at the leaves of the tree.
+For example, if there is a branch for which all leaves have a mutation, and no other leaves of
+the tree have the mutation, then the mutation presumably occurred once on that branch and the
+parsimony score would be one.  However, when a mutation appears on leaves belonging to several
+branches whose other leaves do not have the mutation, then the mutation would need to occur
+on multiple branches in the tree, increasing the parsimony score.  Mutations with a parsimony
+score that is relatively high, especially when compared to alternate allele count (the number 
+of samples/leaves with the mutation), may be of interest when identifying systematic errors
+and/or sites of recurrent mutations.
+</p>
+<p>
+This track shows the parsimony score of each SNV reported by Nextstrain as a bar graph
+with the height indicating the score.
+(The <em>Nextstrain Variants</em> track displays the phylogenetic tree and sample genotypes
+from which the parsimony scores were generated.
+</p>
+
+
+<h2>Methods</h2>
+<p>Nextstrain downloads SARS-CoV-2 genomes from
+  <a href="https://gisaid.org/" target=_blank>GISAID</a>
+  as they are submitted by labs worldwide.
+  The sequences are processed by an
+  <a href="https://github.com/nextstrain/ncov" target=_blank>automated pipeline</a>
+  and annotations are written to a data file
+  that UCSC downloads and extracts annotations for display.
+  UCSC computes parsimony scores using the phylogenetic tree and variants extracted
+  from Nextstrain.</p>
+
+<h2>Data Access</h2>
+<p>
+You can download the bigWig file underlying this track (nextstrainParsimony.bw) from our
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/nextstrain/" 
+target=_blank>Download Server</a>. The data can be explored interactively with the 
+<a href="../cgi-bin/hgTables">Table Browser</a>
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be
+accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>.
+</p>
+<p>
+<a href="https://nextstrain.org/ncov" target=_blank>nextstrain.org</a>
+offers phylogenetic trees and metadata files:
+scroll to the bottom of the page and click "DOWNLOAD DATA",
+and a dialog with download options appears.
+</p>
+
+<h2>Credits</h2>
+<p>This work is made possible by the open sharing of genetic data by research
+groups from all over the world. We gratefully acknowledge their contributions.
+Special thanks to
+  <a href="https://nextstrain.org/ncov" target=_blank>nextstrain.org</a> for
+  sharing its analysis of genomes collected by
+  <a href="https://gisaid.org/" target=_blank>GISAID</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Hadfield J, Megill C, Bell SM, Huddleston J, Potter B, Callender C, Sagulenko P, Bedford T, Neher
+RA.
+<a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/bty407"
+    target="_blank">
+    Nextstrain: real-time tracking of pathogen evolution</a>.
+<em>Bioinformatics</em>. 2018 Dec 1;34(23):4121-4123.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29790939" target="_blank">29790939</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6247931/" target="_blank">PMC6247931</a>
+</p>

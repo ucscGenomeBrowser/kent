@@ -658,10 +658,10 @@ if (curTrack == NULL)
 if (isHicTable(curTable))
     hicMainPageConfig(cart, hTrackDbForTrack(database,curTable));
 
-hPrintf("<tr><td><DIV style='display:none; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px' id='snpTablesNote'>"
+hPrintf("<tr><td><DIV style='background-color: #faf2bb; display:none; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px' id='snpTablesNote'>"
         "<b>Note:</b> Most dbSNP tables are huge. Trying to download them through the Table Browser "
         "usually leads to a timeout.<br> "
-        "Please see our <a href='https://genome.ucsc.edu/FAQ/FAQdownloads.html#download36'>Data Access FAQ</a> "
+        "Please see our <a href='../FAQ/FAQdownloads.html#snp'>Data Access FAQ</a> "
         "on how to download dbSNP data.</DIV></td></tr>");
 
 /* Region line */
