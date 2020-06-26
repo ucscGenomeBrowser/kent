@@ -5,78 +5,18 @@ data about variants that occur in the current 2019/2020 outbreak.
 Nextstrain has a powerful user interface for viewing the timestamped molecular phylogeny tree
 that it infers from the patterns of variants in sequences worldwide using the
 <a href="https://github.com/neherlab/treetime" target=_blank>TreeTime</a> algorithm.
-Nextstrain also produces weekly situation reports (e.g.
-<a href="https://nextstrain.org/narratives/ncov/sit-rep/2020-03-20"
-   target=_blank>March 20th, 2020</a>), in which they highlight certain branches of
-the tree.  They define clades in terms of a small number of
-variants that define the branches as the mechanism to highlight the branches of interest
-in the situation reports.
-Nextstrain cautions that these clades
-<a href="https://github.com/nextstrain/ncov/issues/208#issuecomment-600491195"
-   target=_blank>are not officially recognized</a> and
-<a href="https://github.com/nextstrain/ncov/issues/207#issuecomment-600756907"
-   target=_blank>should not be over-interpreted</a>,
-but since the clades are an interesting feature of Nextstrain and can be used to
-label and color nodes in Nextstrain's tree display, we display each clade
-as a feature that spans the genome, with tall boxes at the locations of
-mutations that occurred on the path from the reference to the clade.
 </p>
-
+<p>
+Nextstrain defines clades named by year and letter, anticipating that SARS-CoV-2 will
+become a seasonal virus in the coming years.  For more information about the rationale
+and properties of current clades, see
+<a href="https://github.com/nextstrain/ncov/blob/master/docs/naming_clades.md"
+   target=_blank>https://github.com/nextstrain/ncov/blob/master/docs/naming_clades.md</a>.
+</p>
 <p>
 The <em>Nextstrain Variants</em> track contains all variants shown on Nextstrain,
 of which this track's variants are a very small subset.
 </p>
-
-<table class="descTbl">
-  <tr><th>clade</th><th>Situation report section & date</th></tr>
-  <tr><td>A1a</td>
-    <td>
-      <a href="https://nextstrain.org/narratives/ncov/sit-rep/2020-03-05?n=8"
-         target=_blank>Possible hidden transmission in Italy (2020-03-05)</a>;<br>
-      <a href="https://nextstrain.org/narratives/ncov/sit-rep/2020-03-20?n=6"
-         target=_blank>Sequence data can cross-check travel histories (2020-03-20)</a>
-    </td></tr>
-  <tr><td>A2</td>
-    <td>
-      <a href="https://nextstrain.org/narratives/ncov/sit-rep/2020-03-05?n=9"
-         target=_blank>Global Spread from Lombardy, Italy (2020-03-05)</a>;<br>
-      <a href="https://nextstrain.org/narratives/ncov/sit-rep/2020-03-13?n=4"
-         target=_blank>Circulation across Europe (2020-03-13)</a>
-    </td></tr>
-  <tr><td>A2a</td>
-    <td>
-      <a href="https://nextstrain.org/narratives/ncov/sit-rep/2020-03-27?n=16"
-         target=_blank>Evidence for local transmission in Kinshasa, Congo (2020-03-27)</a>
-    </td></tr>
-  <tr><td>A3</td>
-    <td>
-      <a href="https://nextstrain.org/narratives/ncov/sit-rep/2020-03-27?n=14"
-         target=_blank>Export of COVID-19 from Iran (2020-03-27)</a>; <br>
-      <a href="https://nextstrain.org/narratives/ncov/sit-rep/2020-03-27?n=18"
-         target=_blank>Local transmission in New South Wales (2020-03-27)</a>
-    </td></tr>
-  <tr><td>A6</td>
-    <td>(not used in any situation report as of March 30, 2020)</td></tr>
-  <tr><td>A7</td>
-    <td>
-      <a href="https://nextstrain.org/narratives/ncov/sit-rep/2020-03-27?n=10"
-         target=_blank>Likely two local transmission chains in California (2020-03-27)</a>
-    </td></tr>
-  <tr><td>B</td>
-    <td>(not used in any situation report as of March 30, 2020)</td></tr>
-  <tr><td>B1</td>
-    <td>
-      <a href="https://nextstrain.org/narratives/ncov/sit-rep/2020-03-20?n=10"
-         target=_blank>How outbreaks grow: an example (2020-03-20)</a>;<br>
-      <a href="https://nextstrain.org/narratives/ncov/sit-rep/2020-03-27?n=8"
-         target=_blank>Transmission across the U.S. is complex and not well-understood (2020-03-27)</a>
-    </td></tr>
-  <tr><td>B2</td>
-    <td>(not used in any situation report as of March 30, 2020)</td></tr>
-  <tr><td>B4</td>
-    <td>(not used in any situation report as of March 30, 2020)</td></tr>
-</table>
-
 
 <h2>Methods</h2>
 <p>Nextstrain downloads SARS-CoV-2 genomes from
@@ -91,7 +31,7 @@ of which this track's variants are a very small subset.
   that UCSC downloads and extracts annotations for display.</p>
 
 <h2>Data Access</h2>
-<p>You can download the VCF files underlying this track (nextstrainClade) from our 
+<p>You can download the bigBed file underlying this track (nextstrainClade.bb) from our 
 <a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/nextstrain/" 
 target=_blank>Download Server</a>. The data can be explored interactively with the 
 <a href="../cgi-bin/hgTables">Table Browser</a>

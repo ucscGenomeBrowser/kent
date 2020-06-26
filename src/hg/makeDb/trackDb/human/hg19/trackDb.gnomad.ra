@@ -52,12 +52,13 @@ html gnomad
     longLabel Genome Aggregation Database (gnomAD) - Genome and Exome Sample Coverage
     group varRep
     dataVersion Release 2.0.2
+    visibility dense
     subGroup1 view Views gAvg=GenomesAverage eAvg=ExomesAverage gRDepth=GenomesReadDepth eRDepth=ExomesReadDepth
     type bigWig
     html gnomadCoverage
 
         track gnomadGenomesAvgCoverage
-        parent gnomadCoverage
+        parent gnomadCoverage on
         shortLabel Genome Avg Cover
         longLabel Genome Aggregation Database (gnomAD) Average Genome Sample Coverage
         view gAvg
@@ -67,13 +68,14 @@ html gnomad
         maxHeightPixels 100:50:8
         viewLimits 0:50
         chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
-        visibility full
+        visibility dense
         html gnomad
 
             track gnomadGenomesMeanCoverage
             shortLabel Mean Coverage
             longLabel gnomAD Mean Genome Sample Coverage
             parent gnomadGenomesAvgCoverage on
+            visibility dense
             color 255,0,0
             bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.genomes.coverage.mean.bw
             subGroups view=gAvg
@@ -311,6 +313,7 @@ html gnomad
     shortLabel gnomAD Structural Variants
     longLabel Genome Aggregation Database (gnomAD) - Structural Variants
     compositeTrack on
+    visibility dense
     group varRep
     type bigBed 9 +
     dataVersion Release 2.1
@@ -323,6 +326,7 @@ html gnomad
         longLabel gnomAD Structural Variants All
         type bigBed 9 +
         itemRgb on
+        visibility dense
         url https://gnomad.broadinstitute.org/variant/$$?dataset=gnomad_sv_r2_1
         urlLabel gnomAD Structural Variant Browser
         filterLabel.svtype Type of Variation

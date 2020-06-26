@@ -2027,8 +2027,13 @@ int i, y1, y2;
 struct rgbColor yellow = lightRainbowAtPos(0.2);
 int transYellow = MAKECOLOR_32_A(yellow.r, yellow.g, yellow.b, 100);
 
-boolean useDefaultLabel = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_DEFAULT_LABEL_VAR, TRUE);
-boolean useAliasLabel = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_ALIAS_LABEL_VAR, TRUE);
+boolean useDefaultLabel = FALSE;
+if (cartVarExistsAnyLevel(cart, track->tdb, FALSE, VCF_PHASED_DEFAULT_LABEL_VAR))
+    useDefaultLabel = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_DEFAULT_LABEL_VAR, FALSE);
+
+boolean useAliasLabel = trackDbSettingOn(track->tdb, VCF_PHASED_TDB_USE_ALT_NAMES);
+if (cartVarExistsAnyLevel(cart, track->tdb, FALSE, VCF_PHASED_ALIAS_LABEL_VAR))
+    useAliasLabel = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_ALIAS_LABEL_VAR, FALSE);
 
 for (name = sampleNames, i = 0; name != NULL; name = name->next, i++)
     {
@@ -2044,10 +2049,11 @@ for (name = sampleNames, i = 0; name != NULL; name = name->next, i++)
     hvGfxLine(hvg, xOff, y1, xOff+width, y1, MG_BLACK);
     hvGfxLine(hvg, xOff, y2, xOff+width, y2, MG_BLACK);
     struct dyString *label = dyStringNew(0);
+    boolean hasAlias = isNotEmpty((char *)name->val);
     dyStringPrintf(label, "%s%s%s",
         useDefaultLabel ? name->name : "",
-        useDefaultLabel && useAliasLabel ? "/" : "",
-        useAliasLabel ? (char *)name->val : "");
+        useDefaultLabel && useAliasLabel && hasAlias ? "/" : "",
+        useAliasLabel && hasAlias ? (char *)name->val : "");
     vcfPhasedAddLabel(track, hvg, label->string, yOff, round(((y1 + y2) / 2) - (track->lineHeight / 2)), font, MG_BLACK);
     }
 }

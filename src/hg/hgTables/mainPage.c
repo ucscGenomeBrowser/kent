@@ -406,6 +406,17 @@ jsInline("function checkGtfNote() {"
 );
 jsOnEventById("change", "outputTypeDropdown", "checkGtfNote()");
 
+jsInline("function checkSnpTablesNote() {"  
+    "var trackName = document.getElementById('hgta_track').value;"
+    "if (trackName.startsWith('dbSnp') || trackName.startsWith('snp')) "
+    "    document.getElementById('snpTablesNote').style.display=''; "
+    "else "
+    "    document.getElementById('snpTablesNote').style.display='none'; "
+    "}"
+    "$(document).ready(checkSnpTablesNote);\n"
+);
+jsOnEventById("change", "outputTypeDropdown", "checkSnpTablesNote()");
+
 if (!cfgOptionBooleanDefault("hgta.disableSendOutput", FALSE))
     {
     hPrintf(" Send output to ");
@@ -646,6 +657,12 @@ if (curTrack == NULL)
 /* Table-specific options */
 if (isHicTable(curTable))
     hicMainPageConfig(cart, hTrackDbForTrack(database,curTable));
+
+hPrintf("<tr><td><DIV style='display:none; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px' id='snpTablesNote'>"
+        "<b>Note:</b> Most dbSNP tables are huge. Trying to download them through the Table Browser "
+        "usually leads to a timeout.<br> "
+        "Please see our <a href='https://genome.ucsc.edu/FAQ/FAQdownloads.html#download36'>Data Access FAQ</a> "
+        "on how to download dbSNP data.</DIV></td></tr>");
 
 /* Region line */
 {

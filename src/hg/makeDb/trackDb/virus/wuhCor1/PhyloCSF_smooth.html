@@ -42,7 +42,7 @@
 <p class="p3"><br></p>
 <p class="p2"><b>Methods</b></p>
 <p class="p3"><br></p>
-<p class="p4">Tracks were constructed as described in Mudge et al. 2019 [2] and Jungreis et al. 2020 [3]. In brief, PhyloCSF was run with the "fixed" strategy on every codon in every frame on each strand in the wuhCor1/SARS-CoV-2 assembly using an alignment of 44 Sarbecovirus genomes, using the PhyloCSF parameters for 29mammals with the tree replaced with a tree of the 44 Sarbecovirus genomes. The scores were smoothed using a Hidden Markov Model (HMM) with 4 states, one representing coding regions and three representing non-coding regions. The emission of each codon is its PhyloCSF score. The ratio of the emissions probabilities for the coding and non-coding models are computed from the PhyloCSF score, since it represents the log-likelihood ratio of the alignment under the coding and non-coding models. The three non-coding states have the same emissions probabilities but different transition probabilities (they can only transition to coding) to better capture the multimodal distribution of gaps between same-frame coding exons. These transition probabilities represent the best approximation of this gap distribution as a mixture model of three exponential distributions, computed using Expectation Maximization. The HMM defines a probability that each codon is coding, based on the PhyloCSF scores of that codon and nearby codons on the same strand in the same frame, without taking into account start codons, stop codons, or potential splice sites. PhyloCSF+0 shows the log-odds that codons in frame 0 on the '+' strand are in the coding state according to the HMM, and similarly for strand '-' and frames 1 and 2.</p>
+<p class="p4">Tracks were constructed as described in Mudge et al. 2019 [2] and Jungreis et al. 2020 [3]. In brief, PhyloCSF was run with the "fixed" strategy on every codon in every frame on each strand in the wuhCor1/SARS-CoV-2 assembly using an alignment of 44 Sarbecovirus genomes, using the PhyloCSF parameters for 29mammals with the tree replaced with a tree of the 44 Sarbecovirus genomes. The scores were smoothed using a Hidden Markov Model (HMM) with 4 states, one representing coding regions and three representing non-coding regions. The emission of each codon is its PhyloCSF score. The ratio of the emissions probabilities for the coding and non-coding models are computed from the PhyloCSF score, since it represents the log-likelihood ratio of the alignment under the coding and non-coding models. The three non-coding states have the same emissions probabilities but different transition probabilities (they can only transition to coding) to better capture the multimodal distribution of gaps between same-frame coding exons. These transition probabilities represent the best approximation of this gap distribution as a mixture model of three exponential distributions, computed using Expectation Maximization. The HMM defines a probability that each codon is coding, based on the PhyloCSF scores of that codon and nearby codons on the same strand in the same frame, without taking into account start codons, stop codons, or potential splice sites. PhyloCSF+1 shows the log-odds that codons in frame 1 (sometimes called frame 0) on the '+' strand are in the coding state according to the HMM, and similarly for strand '-' and frames 2 and 3.</p>
 <p class="p3"><br></p>
 <p class="p2"><b>Credits</b></p>
 <p class="p3"><br></p>
@@ -54,8 +54,12 @@
 <p class="p3"><br></p>
 <p class="p2"><b>References</b></p>
 <p class="p3"><br></p>
-<p class="p5"><span class="s3">[1] </span>Lin MF, Jungreis I, and Kellis M (2011). PhyloCSF: a comparative genomics method to distinguish protein-coding and non-coding regions. <a href="http://bioinformatics.oxfordjournals.org/content/27/13/i275.abstract"><span class="s4"><i>Bioinformatics</i></span><span class="s1"> 27:i275-i282</span></a> (ISMB/ECCB 2011).</p>
-<p class="p5"><span class="s3">[2] </span>Mudge JM, Jungreis I, Hunt T, Gonzalez JM, Wright J, Kay M, Davidson C, Fitzgerald S, Seal R, Tweedie S, He L, Waterhouse RM, Li Y, Bruford E, Choudhary J, Frankish A, Kellis M (2019). Discovery of high-confidence human protein-coding genes and exons by whole-genome PhyloCSF helps elucidate 118 GWAS loci. <a href="https://genome.cshlp.org/content/early/2019/09/19/gr.246462.118.abstract"><em>Genome Research</em> gr-246462. doi: 10.1101/gr.246462.118</a>.</p>
-<p class="p5"><span class="s3">[3] </span>Jungreis I, Saelfon R and Kellis M (2020). Sarbecovirus comparative genomics elucidates gene content of SARS-CoV-2 and functional impact of COVID-19 pandemic mutations. <a href="https://www.biorxiv.org/content/10.1101/2020.06.02.130955v1"><span class="s4"><i>Biorxiv</i></span><span class="s1"> 2020</span></a>.</p>
-</body>
-</html>
+<p>
+Lin MF, Jungreis I, Kellis M.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/21685081" target="_blank">
+    PhyloCSF: a comparative genomics method to distinguish protein coding and non-coding regions</a>.
+<em>Bioinformatics</em>. 2011 Jul 1;27(13):i275-82.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/21685081" target="_blank">21685081</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3117341/" target="_blank">PMC3117341</a>
+</p>
+<!-- Can't find original article link for https://www.ncbi.nlm.nih.gov/pubmed/21685081 -->
