@@ -1976,7 +1976,7 @@ void gfMakeOoc(char *outName, char *files[], int fileCount,
 boolean dbIsPep = (tType == gftProt || tType == gftDnaX || tType == gftRnaX);
 struct genoFind *gf = gfNewEmpty(gfMinMatch, gfMaxGap, tileSize, tileSize,
 	maxPat, NULL, dbIsPep, FALSE, noSimpRepMask);
-gfOffset *sizes = gf->listSizes;
+bits32 *sizes = gf->listSizes;
 int tileSpaceSize = gf->tileSpaceSize;
 bioSeq *seq, *seqList;
 bits32 sig = oocSig, psz = tileSize;
