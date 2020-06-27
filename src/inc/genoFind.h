@@ -119,11 +119,37 @@ struct genoFind
 					  * extra gigabyte of RAM. */
     };
 
+
 void genoFindFree(struct genoFind **pGenoFind);
 /* Free up a genoFind index. */
 
 struct gfSeqSource *gfFindNamedSource(struct genoFind *gf, char *name);
 /* Find target of given name.  Return NULL if none. */
+
+struct genoFindIndex
+/* container for genoFind indexes, sorting either an untranslated index on six translated indexes.
+ * these can be created in memory or saved to a file to quickly mmap */
+{
+    void *memMapped;    /* memory mapped if non-NULL, with amount allocated */
+    size_t memLength;
+    bool isTrans;       /* is this translated? */                
+    struct genoFind *untransGf;
+    struct genoFind *transGf[2][3];
+};
+
+struct genoFindIndex* genoFindIndexBuild(int fileCount, char *seqFiles[],
+                                         int minMatch, int maxGap, int tileSize,
+                                         int repMatch, boolean doTrans, char *oocFile,
+                                         boolean allowOneMismatch, boolean doMask,
+                                         int stepSize, boolean noSimpRepMask);
+/* build a untranslated or translated index */
+
+void genoFindIndexWrite(struct genoFindIndex *gfIdx, char *fileName);
+/* write index to file that can be mapped */
+
+struct genoFindIndex* genoFindIndexLoad(char *fileName, boolean isTrans);
+/* load indexes from file. */
+
 
 /* ---  Stuff for saving results ---- */
 

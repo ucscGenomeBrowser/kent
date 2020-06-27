@@ -3,6 +3,8 @@
 
 #include "common.h"
 #include <signal.h>
+#include <sys/mman.h>
+#include "portable.h"
 #include "obscure.h"
 #include "dnautil.h"
 #include "dnaseq.h"
@@ -17,6 +19,7 @@
 #include "trans3.h"
 #include "binRange.h"
 
+static char indexMagic[] = "genoFind";
 
 char *gfSignature()
 /* Return signature that starts each command to gfServer. Helps defend 
@@ -63,6 +66,64 @@ while (totalRead < size)
 return totalRead;
 }
 
+static void genoFindWrite(struct genoFind *gf, FILE *f)
+/* write one genoFind structure */
+{
+// write out the parameters
+mustWrite(f, &gf->maxPat, sizeof(gf->maxPat));
+mustWrite(f, &gf->minMatch, sizeof(gf->minMatch));
+mustWrite(f, &gf->maxGap, sizeof(gf->maxGap));
+mustWrite(f, &gf->tileSize, sizeof(gf->tileSize));
+mustWrite(f, &gf->stepSize, sizeof(gf->stepSize));
+mustWrite(f, &gf->tileSpaceSize, sizeof(gf->tileSpaceSize));
+mustWrite(f, &gf->tileMask, sizeof(gf->tileMask));
+mustWrite(f, &gf->sourceCount, sizeof(gf->sourceCount));
+mustWrite(f, &gf->isPep, sizeof(gf->isPep));
+mustWrite(f, &gf->allowOneMismatch, sizeof(gf->allowOneMismatch));
+mustWrite(f, &gf->segSize, sizeof(gf->segSize));
+mustWrite(f, &gf->totalSeqSize, sizeof(gf->totalSeqSize));
+// now write out the variable-size arrays. The ones we need to
+// keep are listSizes and allocated--endLists/lists are generated
+// at load time, and in fact *must* be as they are
+// pointer-to-pointers which cannot be mmapped properly.
+
+// sources: length = gf->sourceCount
+int i;
+for (i = 0; i < gf->sourceCount; i++)
+    {
+    struct gfSeqSource *ss = gf->sources + i;
+    size_t fileNameLen = ss->fileName ? strlen(ss->fileName) + 1 : 0;
+    mustWrite(f, &fileNameLen, sizeof(fileNameLen));
+    if (fileNameLen != 0)
+        mustWrite(f, ss->fileName, fileNameLen);
+    mustWrite(f, &ss->start, sizeof(bits32));
+    mustWrite(f, &ss->end, sizeof(bits32));
+    // no masking information written/read yet.
+    }
+// listSizes: length = gf->tileSpaceSize
+mustWrite(f, gf->listSizes, gf->tileSpaceSize * sizeof(gf->listSizes[0]));
+
+if (gf->segSize == 0)
+    {
+    // use lists
+    size_t count = 0;
+    for (i = 0; i < gf->tileSpaceSize; i++)
+        {
+        if (gf->listSizes[i] < gf->maxPat)
+            count += gf->listSizes[i];
+        }
+    mustWrite(f, gf->allocated, count*sizeof(bits32));
+    }
+else
+    {
+    // use endLists
+    size_t count = 0;
+    for (i = 0; i < gf->tileSpaceSize; i++)
+        count += gf->listSizes[i];
+    mustWrite(f, gf->allocated, 3*count*sizeof(bits16));
+    }
+}
+
 void genoFindFree(struct genoFind **pGenoFind)
 /* Free up a genoFind index. */
 {
@@ -82,6 +143,180 @@ if (gf != NULL)
 	}
     freez(pGenoFind);
     }
+}
+
+static struct genoFind *loadGenoFind(FILE *f, void *memMapped)
+/* construct one genoFind from mapped file */
+{
+struct genoFind *gf;
+AllocVar(gf);
+
+// read the parameters
+mustRead(f, &gf->maxPat, sizeof(gf->maxPat));
+mustRead(f, &gf->minMatch, sizeof(gf->minMatch));
+mustRead(f, &gf->maxGap, sizeof(gf->maxGap));
+mustRead(f, &gf->tileSize, sizeof(gf->tileSize));
+mustRead(f, &gf->stepSize, sizeof(gf->stepSize));
+mustRead(f, &gf->tileSpaceSize, sizeof(gf->tileSpaceSize));
+mustRead(f, &gf->tileMask, sizeof(gf->tileMask));
+mustRead(f, &gf->sourceCount, sizeof(gf->sourceCount));
+mustRead(f, &gf->isPep, sizeof(gf->isPep));
+mustRead(f, &gf->allowOneMismatch, sizeof(gf->allowOneMismatch));
+mustRead(f, &gf->segSize, sizeof(gf->segSize));
+mustRead(f, &gf->totalSeqSize, sizeof(gf->totalSeqSize));
+
+// sources: length = gf->sourceCount
+gf->sources = needLargeMem(gf->sourceCount * sizeof(struct gfSeqSource));
+int i;
+for (i = 0; i < gf->sourceCount; i++)
+    {
+    struct gfSeqSource *ss = gf->sources + i;
+    size_t fileNameLen;
+    mustRead(f, &fileNameLen, sizeof(fileNameLen));
+    if (fileNameLen != 0)
+        {
+        ss->fileName = malloc(fileNameLen);
+        mustRead(f, ss->fileName, fileNameLen);
+        }
+    mustRead(f, &ss->start, sizeof(bits32));
+    mustRead(f, &ss->end, sizeof(bits32));
+    // no seq information written/read
+    // no masking information written/read
+    }
+
+// listSizes: length = (gf->tileSpaceSize)
+gf->listSizes = memMapped + ftell(f);
+mustSeek(f, (gf->tileSpaceSize * sizeof(gf->listSizes[0])), SEEK_CUR);
+gf->allocated = memMapped + ftell(f);
+if (gf->segSize == 0)
+    {
+    // use lists
+    gf->lists = needHugeZeroedMem(gf->tileSpaceSize * sizeof(gf->lists[0]));
+    bits32 *cur = gf->allocated;
+    size_t count = 0;
+    for (i = 0; i < gf->tileSpaceSize; i++)
+        {
+        if (gf->listSizes[i] < gf->maxPat)
+             {
+            gf->lists[i] = cur;
+            cur += gf->listSizes[i];
+            count += gf->listSizes[i];
+            }
+        }
+    mustSeek(f, count*sizeof(bits32), SEEK_CUR);
+    }
+else
+    {
+    // use endLists
+    gf->endLists = needHugeZeroedMem(gf->tileSpaceSize * sizeof(gf->endLists[0]));
+    bits16 *cur = gf->allocated;
+    size_t count = 0;
+    for (i = 0; i < gf->tileSpaceSize; i++)
+        {
+        gf->endLists[i] = cur;
+        cur += 3 * gf->listSizes[i];
+        count += gf->listSizes[i];
+        }
+    mustSeek(f, 3*count*sizeof(bits16), SEEK_CUR);
+    }
+return gf;
+}
+
+static struct genoFindIndex* genoFindIndexNew()
+/* construct an empty genoFindIndex */
+{
+struct genoFindIndex *gfIdx;
+AllocVar(gfIdx);
+return gfIdx;
+}
+
+struct genoFindIndex* genoFindIndexBuild(int fileCount, char *seqFiles[],
+                                         int minMatch, int maxGap, int tileSize,
+                                         int repMatch, boolean doTrans, char *oocFile,
+                                         boolean allowOneMismatch, boolean doMask,
+                                         int stepSize, boolean noSimpRepMask)
+/* build a untranslated or translated index */
+{
+struct genoFindIndex* gfIdx = genoFindIndexNew();
+gfIdx->isTrans = doTrans;
+if (doTrans)
+    {
+    gfIndexTransNibsAndTwoBits(gfIdx->transGf, fileCount, seqFiles,
+                               minMatch, maxGap, tileSize, repMatch, oocFile, allowOneMismatch, 
+                               doMask, stepSize, noSimpRepMask);
+    }
+else
+    {
+    gfIdx->untransGf = gfIndexNibsAndTwoBits(fileCount, seqFiles, minMatch,
+                                             maxGap, tileSize, repMatch, oocFile, allowOneMismatch,
+                                             stepSize, noSimpRepMask);
+    }
+return gfIdx;
+}
+
+void genoFindIndexWrite(struct genoFindIndex *gfIdx, char *fileName)
+/* write index to file that can be mapped */
+{
+// create in atomic matter so we don't end up with partial index
+char fileNameTmp[PATH_LEN];
+safef(fileNameTmp, sizeof(fileNameTmp), "%s.%s.%d.tmp", fileName, getHost(), getpid());
+unlink(fileNameTmp);
+
+FILE *f = mustOpen(fileNameTmp, "w");
+
+mustWrite(f, indexMagic, sizeof(indexMagic));
+mustWrite(f, &gfIdx->isTrans, sizeof(gfIdx->isTrans));
+
+if (gfIdx->isTrans)
+    {
+    int i, j;
+    for (i = 0; i < 2; i++)
+        for (j = 0; j < 3; j++)
+            genoFindWrite(gfIdx->transGf[i][j], f);
+    }
+else
+    {
+    genoFindWrite(gfIdx->untransGf, f);
+    }
+
+carefulClose(&f);
+mustRename(fileNameTmp, fileName);
+}
+
+struct genoFindIndex* genoFindIndexLoad(char *fileName, boolean isTrans)
+/* load indexes from file. */
+{
+struct genoFindIndex* gfIdx = genoFindIndexNew();
+
+FILE *f = mustOpen(fileName, "r");
+char fileMagic[sizeof(indexMagic) + 1];
+mustRead(f, fileMagic, sizeof(indexMagic));
+fileMagic[sizeof(indexMagic)] = '\0';
+if (strcmp(fileMagic, indexMagic))
+    errAbort("wrong magic string for index file");
+mustRead(f, &gfIdx->isTrans, sizeof(gfIdx->isTrans));
+if (isTrans != gfIdx->isTrans)
+    errAbort("index file isTrans==%d and -trans==%d", gfIdx->isTrans, isTrans);
+gfIdx->memLength = fileSize(fileName);
+gfIdx->memMapped = mmap(NULL, gfIdx->memLength, PROT_READ, MAP_SHARED, fileno(f), 0);
+if (gfIdx->memMapped == MAP_FAILED)
+    errnoAbort("mmap of index file failed: %s", fileName);
+if (madvise(gfIdx->memMapped, gfIdx->memLength, MADV_RANDOM | MADV_WILLNEED) < 0)
+    errnoAbort("madvise of index file failed: %s", fileName);
+
+if (isTrans)
+    {
+    int i, j;
+    for (i = 0; i < 2; i++)
+        for (j = 0; j < 3; j++)
+            gfIdx->transGf[i][j] = loadGenoFind(f, gfIdx->memMapped);
+    }
+else
+    {
+    gfIdx->untransGf = loadGenoFind(f, gfIdx->memMapped);
+    }
+carefulClose(&f);
+return gfIdx;
 }
 
 int gfPowerOf20(int n)
