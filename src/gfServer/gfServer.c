@@ -45,7 +45,6 @@ static struct optionSpec optionSpecs[] = {
     {"syslog", OPTION_BOOLEAN},
     {"perSeqMax", OPTION_STRING},
     {"noSimpRepMask", OPTION_BOOLEAN},
-    {"writeIndex", OPTION_BOOLEAN},
     {"indexFile", OPTION_STRING},
     {NULL, 0}
 };
@@ -97,6 +96,12 @@ errAbort(
   "      gfServer status host port\n"
   "   To get input file list:\n"
   "      gfServer files host port\n"
+  "   To generate a precomputed index:\n"
+  "      gfServer index gfidx file(s)\n"
+  "     where the files are .2bit or .nib format files.  Separate indexes must be created\n"
+  "     for untranslated and translated queries.  These can be used with a persistent server\n"
+  "     as with 'start -indexFile or a dynamic server. They must follow the naming convention for\n"
+  "     for dynamic servers.\n"
   "options:\n"
   "   -tileSize=N     Size of n-mers to index.  Default is 11 for nucleotides, 4 for\n"
   "                   proteins (or translated nucleotides).\n"
@@ -130,7 +135,6 @@ errAbort(
   "                   have at most maxDnaHits/2 hits.\n"
   "                   Useful for assemblies with many alternate/patch sequences.\n"
   "   -canStop        If set, a quit message will actually take down the server.\n"
-  "   -writeIndex     Write the in-memory index to indexFile after building and exit.\n"
   "   -indexFile      File for index.  If -writeIndex is specified, the file is created,\n"
   "                   otherwise it is loaded from this file.  Saving index can speed up\n"
   "                   gfServer startup by two orders of magnitude.  The parameters must\n"
@@ -591,7 +595,7 @@ logInfo("gfServer version %s on host %s, port %s  (%s)", gfVersion,
 struct hash *perSeqMaxHash = maybePerSeqMax(fileCount, seqFiles);
 
 time_t startIndexTime = clock1000();
-if (writeIndex || (!writeIndex && (indexFile == NULL)))
+if (indexFile == NULL)
     {
     char *desc = doTrans ? "translated" : "untranslated";
     uglyf("starting %s server...\n", desc);
@@ -599,12 +603,6 @@ if (writeIndex || (!writeIndex && (indexFile == NULL)))
     gfIdx = genoFindIndexBuild(fileCount, seqFiles, minMatch, maxGap, tileSize, repMatch, doTrans, NULL,
                                allowOneMismatch, doMask, stepSize, noSimpRepMask);
     logInfo("indexing building complete in  %4.3f seconds", 0.001 * (clock1000() - startIndexTime));
-    if (writeIndex)
-        {
-        genoFindIndexWrite(gfIdx, indexFile);
-        logInfo("index file built, exiting: %s", indexFile);
-        exit(0);
-        }
     }
 else
     {
@@ -1003,6 +1001,15 @@ if (netGetString(sd, buf) != NULL)
 close(sd);
 }
 
+static void buildIndex(char *gfxFile, int fileCount, char *seqFiles[])
+/* build pre-computed index for seqFiles and write to gfxFile */
+{
+struct genoFindIndex *gfIdx = genoFindIndexBuild(fileCount, seqFiles, minMatch, maxGap, tileSize,
+                                                 repMatch, doTrans, NULL, allowOneMismatch, doMask, stepSize, noSimpRepMask);
+genoFindIndexWrite(gfIdx, gfxFile);
+}
+
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -1111,6 +1118,12 @@ else if (sameWord(command, "files"))
     if (argc != 4)
 	usage();
     getFileList(argv[2], argv[3]);
+    }
+else if (sameWord(command, "index"))
+    {
+    if (argc < 4)
+        usage();
+    buildIndex(argv[2], argc-3, argv+3);
     }
 else
     {

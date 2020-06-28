@@ -2,7 +2,7 @@
 idx=output/testIndexRna.blatidx
 rm -f $idx
 # build index and stop
-gfServer start -writeIndex -indexFile=$idx localhost 17768 -canStop input/creaGeno.2bit >/dev/null
+gfServer index $idx input/creaGeno.2bit >/dev/null
 
 # read index
 gfServer start -indexFile=$idx localhost 17768 -canStop input/creaGeno.2bit >/dev/null &
