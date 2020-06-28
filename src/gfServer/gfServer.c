@@ -3,6 +3,7 @@
 /* Copyright 2001-2003 Jim Kent.  All rights reserved. */
 #include "common.h"
 #include <signal.h>
+#include <stdarg.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
@@ -102,6 +103,14 @@ errAbort(
   "     for untranslated and translated queries.  These can be used with a persistent server\n"
   "     as with 'start -indexFile or a dynamic server. They must follow the naming convention for\n"
   "     for dynamic servers.\n"
+  "   To run a dynamic server (usually called by xinet):\n"
+  "      gfServer dynserver rootdir\n"
+  "     The root directory must contain directories for each genome with the twobit and index\n"
+  "     files following the convention:\n"
+  "         $genome/$genome.2bit\n"
+  "         $genome/$genome.untrans.gfidx\n"
+  "         $genome/$genome.trans.gfidx\n"
+  "\n"
   "options:\n"
   "   -tileSize=N     Size of n-mers to index.  Default is 11 for nucleotides, 4 for\n"
   "                   proteins (or translated nucleotides).\n"
@@ -255,9 +264,10 @@ int missCount = 0;
 int trimCount = 0;
 
 void dnaQuery(struct genoFind *gf, struct dnaSeq *seq, 
-              int connectionHandle, char buf[256], struct hash *perSeqMaxHash)
+              int connectionHandle, struct hash *perSeqMaxHash)
 /* Handle a query for DNA/DNA match. */
 {
+char buf[256];
 struct gfClump *clumpList = NULL, *clump;
 int limit = 1000;
 int clumpCount = 0, hitCount = -1;
@@ -293,9 +303,10 @@ logDebug("%lu %d clumps, %d hits", clock1000(), clumpCount, hitCount);
 }
 
 void transQuery(struct genoFind *transGf[2][3], aaSeq *seq, 
-	int connectionHandle, char buf[256])	
+	int connectionHandle)
 /* Handle a query for protein/translated DNA match. */
 {
+char buf[256];
 struct gfClump *clumps[3], *clump;
 int isRc, frame;
 char strand;
@@ -343,9 +354,10 @@ logDebug("%lu %d clumps, %d hits", clock1000(), clumpCount, hitCount);
 }
 
 void transTransQuery(struct genoFind *transGf[2][3], struct dnaSeq *seq, 
-	int connectionHandle, char buf[256])	
+	int connectionHandle)
 /* Handle a query for protein/translated DNA match. */
 {
+char buf[256];
 struct gfClump *clumps[3][3], *clump;
 int isRc, qFrame, tFrame;
 char strand;
@@ -483,12 +495,12 @@ if (status == 0)    /* Always true except after long jump. */
     if (doTrans)
        {
        if (queryIsProt)
-	    transQuery(gfIdx->transGf, seq, connectionHandle, buf);
+	    transQuery(gfIdx->transGf, seq, connectionHandle);
        else
-	    transTransQuery(gfIdx->transGf, seq, connectionHandle, buf);
+	    transTransQuery(gfIdx->transGf, seq, connectionHandle);
        }
     else
-	dnaQuery(gfIdx->untransGf, seq, connectionHandle, buf, perSeqMaxHash);
+	dnaQuery(gfIdx->untransGf, seq, connectionHandle, perSeqMaxHash);
     errorSafeCleanup();
     }
 else    /* They long jumped here because of an error. */
@@ -1010,6 +1022,141 @@ genoFindIndexWrite(gfIdx, gfxFile);
 }
 
 
+static void dynErrorVa(char* msg, va_list args)
+/* send back an error response and exit */
+{
+char buf[4096];
+int msgLen = vsnprintf(buf, sizeof(buf) - 1, msg, args);
+buf[msgLen] = '\0';
+logDebug("Error: %s", buf);
+printf("Error: %s\n", msg);
+exit(1);
+}
+
+static void dynError(char* msg, ...)
+/* send back an error response and exit */
+{
+va_list args;
+va_start(args, msg);
+dynErrorVa(msg, args);
+va_end(args);
+exit(1);
+}
+
+static void dynReadBytes(char *buf, int bufSize)
+/* read pending bytes */
+{
+int readSize = read(STDIN_FILENO, buf, bufSize-1);
+if (readSize < 0)
+    dynError("EOF from client");
+buf[readSize] = '\0';
+}
+
+
+static void dynReadQuery(char **commandRet, int *qsizeRet, char **genomeNameRet)
+/* read query request from stdin, same as server expect includes database
+ * Format is:
+ *  signature command qsize genome
+ */
+{
+char buf[256];
+dynReadBytes(buf, sizeof(buf));
+logDebug("query: %s", buf);
+
+static int nwords = 4;
+char *words[nwords];
+int numWords = chopByWhite(buf, words, nwords);
+if (numWords != nwords)
+    dynError("expected %d words in request, got %d", nwords, numWords);
+if (!sameString(words[0], gfSignature()))
+    dynError("query does not start with signature, got '%s'", words[0]);
+
+if (!(sameString("query", words[1]) || 
+      sameString("protQuery", words[1]) || sameString("transQuery", words[1])))
+    dynError("invalid command '%s'", words[1]);
+*commandRet = cloneString(words[1]);
+*qsizeRet = atoi(words[2]);
+*genomeNameRet = cloneString(words[3]);
+}
+
+static struct dnaSeq* dynReadQuerySeq(int qSize, boolean isTrans, boolean queryIsProt)
+/* read the DNA sequence from the query, filtering junk  */
+{
+struct dnaSeq *seq;
+AllocVar(seq);
+seq->size = qSize;
+seq->dna = needLargeMem(qSize+1);
+if (gfReadMulti(STDIN_FILENO, seq->dna, qSize) != qSize)
+    dynError("read of %d bytes of query sequence failed", qSize);
+
+if (queryIsProt)
+    {
+    seq->size = aaFilteredSize(seq->dna);
+    aaFilter(seq->dna, seq->dna);
+    }
+else
+    {
+    seq->size = dnaFilteredSize(seq->dna);
+    dnaFilter(seq->dna, seq->dna);
+    }
+int maxSize = (isTrans ? maxAaSize : maxNtSize);
+if (seq->size > maxSize)
+    {
+    seq->size = maxSize;
+    seq->dna[maxSize] = 0;
+    }
+
+return seq;
+}
+
+static void dynGetDataFiles(char *rootDir, char* genomeName, boolean isTrans, char seqFile[PATH_LEN], char gfIdxFile[PATH_LEN])
+/* get paths for sequence files to handle requests and validate they exist */
+{
+safef(seqFile, PATH_LEN, "%s/%s/%s.2bit", rootDir, genomeName, genomeName);
+if (!fileExists(seqFile))
+    dynError("sequence file for %s does not exist: %s", genomeName, seqFile);
+safef(gfIdxFile, PATH_LEN, "%s/%s/%s.%s.gfidx", rootDir, genomeName, genomeName, isTrans ? "trans" : "untrans");
+if (!fileExists(gfIdxFile))
+    dynError("gf index file for %s does not exist: %s", genomeName, gfIdxFile);
+}
+
+
+void dynamicServer(char* rootDir)
+/* dynamic server for inetd. Read query from stdin, open index, query, respond, exit.
+ * only one query at a time */
+{
+char *command, *genomeName;
+int qSize;
+dynReadQuery(&command, &qSize, &genomeName);
+
+boolean isTrans = sameString("protQuery", command) || sameString("transQuery", command);
+boolean queryIsProt = sameString(command, "protQuery");
+
+char seqFile[PATH_LEN];
+char *seqFiles[1] = {seqFile};  // functions expect list of files
+char gfIdxFile[PATH_LEN];
+dynGetDataFiles(rootDir, genomeName, isTrans, seqFiles[0], gfIdxFile);
+
+
+struct genoFindIndex *gfIdx = genoFindIndexLoad(gfIdxFile, isTrans);
+mustWriteFd(STDOUT_FILENO, "Y", 1);
+
+struct dnaSeq* seq = dynReadQuerySeq(qSize, isTrans, queryIsProt);
+if (isTrans)
+    {
+    if (queryIsProt)
+        transQuery(gfIdx->transGf, seq, STDOUT_FILENO);
+    else
+        transTransQuery(gfIdx->transGf, seq, STDOUT_FILENO);
+    }
+else
+    {
+    struct hash *perSeqMaxHash = maybePerSeqMax(1, seqFiles);
+    dnaQuery(gfIdx->untransGf, seq, STDOUT_FILENO, perSeqMaxHash);
+    }
+logDebug("query done");
+netSendString(STDOUT_FILENO, "end");
+}
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -1124,6 +1271,12 @@ else if (sameWord(command, "index"))
     if (argc < 4)
         usage();
     buildIndex(argv[2], argc-3, argv+3);
+    }
+else if (sameWord(command, "dynserver"))
+    {
+    if (argc < 3)
+        usage();
+    dynamicServer(argv[2]);
     }
 else
     {

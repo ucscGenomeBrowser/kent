@@ -145,7 +145,7 @@ if (gf != NULL)
     }
 }
 
-static struct genoFind *loadGenoFind(FILE *f, void *memMapped)
+static struct genoFind *genoFindLoad(FILE *f, void *memMapped)
 /* construct one genoFind from mapped file */
 {
 struct genoFind *gf;
@@ -309,11 +309,11 @@ if (isTrans)
     int i, j;
     for (i = 0; i < 2; i++)
         for (j = 0; j < 3; j++)
-            gfIdx->transGf[i][j] = loadGenoFind(f, gfIdx->memMapped);
+            gfIdx->transGf[i][j] = genoFindLoad(f, gfIdx->memMapped);
     }
 else
     {
-    gfIdx->untransGf = loadGenoFind(f, gfIdx->memMapped);
+    gfIdx->untransGf = genoFindLoad(f, gfIdx->memMapped);
     }
 carefulClose(&f);
 return gfIdx;

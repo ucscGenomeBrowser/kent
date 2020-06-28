@@ -1,0 +1,13 @@
+#!/bin/bash -e
+
+# build index
+gfDir=output/rootDynServer/crea
+rm -rf $gfDir
+mkdir -p $gfDir
+cp -f input/creaGeno.2bit $gfDir/crea.2bit
+gfServer index $gfDir/crea.untrans.gfidx $gfDir/crea.2bit >/dev/null
+
+# test query
+
+./dynTester $(dirname $gfDir) query crea input/crea.mrna output/testDynServer
+diff expected/testDynServer output/testDynServer

@@ -1,11 +1,13 @@
 #!/bin/bash -e
-idx=output/testIndexRna.blatidx
-rm -f $idx
-# build index and stop
-gfServer index $idx input/creaGeno.2bit >/dev/null
+
+# build index
+gfIdx=output/testIndexRna.gfidx
+rm -f $gfIdx
+mkdir -p output
+gfServer index $gfIdx input/creaGeno.2bit >/dev/null
 
 # read index
-gfServer start -indexFile=$idx localhost 17768 -canStop input/creaGeno.2bit >/dev/null &
+gfServer start -indexFile=$gfIdx localhost 17768 -canStop input/creaGeno.2bit >/dev/null &
 sleep 1
 gfServer query localhost 17768 input/mCrea.mrna > $1
 gfServer stop localhost 17768 > /dev/null

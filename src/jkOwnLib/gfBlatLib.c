@@ -109,7 +109,7 @@ static void startSeqQuery(int conn, bioSeq *seq, char *type)
 /* Send a query that involves some sequence. */
 {
 char buf[256];
-sprintf(buf, "%s%s %d", gfSignature(), type, seq->size);
+safef(buf, sizeof(buf), "%s%s %d", gfSignature(), type, seq->size);
 mustWriteFd(conn, buf, strlen(buf));
 if (read(conn, buf, 1) < 0)
     errAbort("startSeqQuery: read failed: %s", strerror(errno));
