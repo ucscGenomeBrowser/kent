@@ -369,28 +369,28 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	gvo->reportTargetStrand = TRUE;
 	if (protQuery)
 	    {
-	    gfAlignTrans(&conn, server->seqDir, seq, 5, tFileCache, gvo);
+	    gfAlignTrans(&conn, server->seqDir, seq, 5, tFileCache, gvo, NULL);
 	    }
 	else
 	    {
 	    boolean isRna = sameWord(type, "RNA");
 	    gfAlignTransTrans(&conn, server->seqDir, seq, FALSE, 5,
-			    tFileCache, gvo, isRna);
+			    tFileCache, gvo, isRna, NULL);
 	    if (!isRna)
 	        {
 		reverseComplement(seq->dna, seq->size);
 		conn = gfConnect(server->host, server->port);
 		gfAlignTransTrans(&conn, server->seqDir, seq, TRUE, 5,
-		                        tFileCache, gvo, FALSE);
+		                        tFileCache, gvo, FALSE, NULL);
 		}
 	    }
 	}
     else
         {
-	gfAlignStrand(&conn, server->seqDir, seq, FALSE, 16, tFileCache, gvo);
+	gfAlignStrand(&conn, server->seqDir, seq, FALSE, 16, tFileCache, gvo, NULL);
 	reverseComplement(seq->dna, seq->size);
 	conn = gfConnect(server->host, server->port);
-	gfAlignStrand(&conn, server->seqDir, seq, TRUE, 16, tFileCache, gvo);
+	gfAlignStrand(&conn, server->seqDir, seq, TRUE, 16, tFileCache, gvo, NULL);
 	}
     gfOutputQuery(gvo, f);
     }

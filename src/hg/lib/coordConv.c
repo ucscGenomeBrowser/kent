@@ -267,10 +267,10 @@ gfOutputHead(gvo, f);
 
 /* align to genome, both strands */
 conn = gfConnect(blatHost, port);
-gfAlignStrand(&conn, nibDir, seq, FALSE, 20, tFileCache, gvo);
+gfAlignStrand(&conn, nibDir, seq, FALSE, 20, tFileCache, gvo, NULL);
 reverseComplement(seq->dna, seq->size);
 conn = gfConnect(blatHost, port);
-gfAlignStrand(&conn, nibDir, seq, TRUE, 20 , tFileCache, gvo);
+gfAlignStrand(&conn, nibDir, seq, TRUE, 20 , tFileCache, gvo, NULL);
 gfOutputQuery(gvo, f);
 carefulClose(&f);
 pslList = pslLoadAll(pslTn.forCgi);

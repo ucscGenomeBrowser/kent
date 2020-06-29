@@ -1595,7 +1595,7 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	    if (allGenomes)
 		queryServer(conn, db, seq, "transQuery", xType, TRUE, FALSE, FALSE, seqNumber);
 	    else
-		gfAlignTransTrans(&conn, serve->nibDir, seq, FALSE, 5, tFileCache, gvo, !txTxBoth);
+		gfAlignTransTrans(&conn, serve->nibDir, seq, FALSE, 5, tFileCache, gvo, !txTxBoth, NULL);
 	    if (txTxBoth)
 		{
 		reverseComplement(seq->dna, seq->size);
@@ -1603,7 +1603,7 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 		if (allGenomes)
 		    queryServer(conn, db, seq, "transQuery", xType, TRUE, FALSE, TRUE, seqNumber);
 		else
-		    gfAlignTransTrans(&conn, serve->nibDir, seq, TRUE, 5, tFileCache, gvo, FALSE);
+		    gfAlignTransTrans(&conn, serve->nibDir, seq, TRUE, 5, tFileCache, gvo, FALSE, NULL);
 		}
 	    }
 	else
@@ -1611,7 +1611,7 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	    if (allGenomes)
 		queryServer(conn, db, seq, "protQuery", xType, TRUE, TRUE, FALSE, seqNumber);
 	    else
-		gfAlignTrans(&conn, serve->nibDir, seq, 5, tFileCache, gvo);
+		gfAlignTrans(&conn, serve->nibDir, seq, 5, tFileCache, gvo, NULL);
 	    }
 	}
     else
@@ -1619,13 +1619,13 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	if (allGenomes)
 	    queryServer(conn, db, seq, "query", xType, FALSE, FALSE, FALSE, seqNumber);
 	else
-	    gfAlignStrand(&conn, serve->nibDir, seq, FALSE, minMatchShown, tFileCache, gvo);
+	    gfAlignStrand(&conn, serve->nibDir, seq, FALSE, minMatchShown, tFileCache, gvo, NULL);
 	reverseComplement(seq->dna, seq->size);
 	conn = gfConnectEx(serve->host, serve->port);
 	if (allGenomes)
 	    queryServer(conn, db, seq, "query", xType, FALSE, FALSE, TRUE, seqNumber);
 	else
-	    gfAlignStrand(&conn, serve->nibDir, seq, TRUE, minMatchShown, tFileCache, gvo);
+	    gfAlignStrand(&conn, serve->nibDir, seq, TRUE, minMatchShown, tFileCache, gvo, NULL);
 	}
     gfOutputQuery(gvo, f);
     ++seqNumber;
