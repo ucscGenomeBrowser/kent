@@ -20,6 +20,7 @@ static struct optionSpec optionSpecs[] = {
     {"out", OPTION_STRING},
     {"maxIntron", OPTION_INT},
     {"nohead", OPTION_BOOLEAN},
+    {"genome", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -30,6 +31,7 @@ double minIdentity = 90;
 char *outputFormat = "psl";
 char *qType = "dna";
 char *tType = "dna";
+char *genome = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -75,7 +77,8 @@ printf(
   "                   blast - similar to NCBI blast format\n"
   "                   blast8- NCBI blast tabular format\n"
   "                   blast9 - NCBI blast tabular format with comments\n"
-  "   -maxIntron=N   Sets maximum intron size. Default is %d.\n",
+  "   -maxIntron=N   Sets maximum intron size. Default is %d.\n"
+  "   -genome=name   When using a dynamic gfServer, this is the name of the genome to query\n",
                         gfVersion, ffIntronMaxDefault);
 exit(-1);
 }
@@ -116,28 +119,28 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt)
     if (qType == gftProt && (tType == gftDnaX || tType == gftRnaX))
         {
 	gvo->reportTargetStrand = TRUE;
-	gfAlignTrans(&conn, tSeqDir, &seq, minScore, tFileCache, gvo);
+	gfAlignTrans(&conn, tSeqDir, &seq, minScore, tFileCache, gvo, genome);
 	}
     else if ((qType == gftRnaX || qType == gftDnaX) && (tType == gftDnaX || tType == gftRnaX))
         {
 	gvo->reportTargetStrand = TRUE;
 	gfAlignTransTrans(&conn, tSeqDir, &seq, FALSE, minScore, tFileCache, 
-		gvo, qType == gftRnaX);
+		gvo, qType == gftRnaX, genome);
 	if (qType == gftDnaX)
 	    {
 	    reverseComplement(seq.dna, seq.size);
 	    close(conn);
 	    conn = gfConnect(hostName, portName);
 	    gfAlignTransTrans(&conn, tSeqDir, &seq, TRUE, minScore, tFileCache,
-	    	gvo, FALSE);
+	    	gvo, FALSE, genome);
 	    }
 	}
     else if ((tType == gftDna || tType == gftRna) && (qType == gftDna || qType == gftRna))
 	{
-	gfAlignStrand(&conn, tSeqDir, &seq, FALSE, minScore, tFileCache, gvo);
+	gfAlignStrand(&conn, tSeqDir, &seq, FALSE, minScore, tFileCache, gvo, genome);
 	conn = gfConnect(hostName, portName);
 	reverseComplement(seq.dna, seq.size);
-	gfAlignStrand(&conn, tSeqDir, &seq, TRUE,  minScore, tFileCache, gvo);
+	gfAlignStrand(&conn, tSeqDir, &seq, TRUE,  minScore, tFileCache, gvo, genome);
 	}
     else
         {
@@ -167,6 +170,8 @@ minIdentity = optionFloat("minIdentity", minIdentity);
 minScore = optionInt("minScore", minScore);
 dots = optionInt("dots", 0);
 outputFormat = optionVal("out", outputFormat);
+genome = optionVal("genome", genome);
+
 /* set global for fuzzy find functions */
 setFfIntronMax(optionInt("maxIntron", ffIntronMaxDefault));
 gfClient(argv[1], argv[2], argv[3], argv[4], argv[5], tType, qType);

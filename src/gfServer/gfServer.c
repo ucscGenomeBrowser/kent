@@ -1063,20 +1063,21 @@ char buf[256];
 dynReadBytes(buf, sizeof(buf));
 logDebug("query: %s", buf);
 
-static int nwords = 4;
+if (!startsWith(gfSignature(), buf))
+    dynError("query does not start with signature, got '%s'", buf);
+
+static int nwords = 3;
 char *words[nwords];
 int numWords = chopByWhite(buf, words, nwords);
 if (numWords != nwords)
     dynError("expected %d words in request, got %d", nwords, numWords);
-if (!sameString(words[0], gfSignature()))
-    dynError("query does not start with signature, got '%s'", words[0]);
-
-if (!(sameString("query", words[1]) || 
-      sameString("protQuery", words[1]) || sameString("transQuery", words[1])))
-    dynError("invalid command '%s'", words[1]);
-*commandRet = cloneString(words[1]);
-*qsizeRet = atoi(words[2]);
-*genomeNameRet = cloneString(words[3]);
+char *command = buf + strlen(gfSignature());
+if (!(sameString("query", command) || 
+      sameString("protQuery", command) || sameString("transQuery", command)))
+    dynError("invalid command '%s'", command);
+*commandRet = cloneString(command);
+*qsizeRet = atoi(words[1]);
+*genomeNameRet = cloneString(words[2]);
 }
 
 static struct dnaSeq* dynReadQuerySeq(int qSize, boolean isTrans, boolean queryIsProt)

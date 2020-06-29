@@ -92,13 +92,21 @@ int i;
 for (i = 0; i < gf->sourceCount; i++)
     {
     struct gfSeqSource *ss = gf->sources + i;
-    size_t fileNameLen = ss->fileName ? strlen(ss->fileName) + 1 : 0;
+    char *fileName = ss->fileName;
+    if (fileName != NULL)
+        {
+        // don't include directories
+        char *s = strrchr(fileName, '/');
+        if (s != NULL)
+            fileName = s + 1;
+        }
+    size_t fileNameLen = fileName ? strlen(fileName) + 1 : 0;
     mustWrite(f, &fileNameLen, sizeof(fileNameLen));
     if (fileNameLen != 0)
-        mustWrite(f, ss->fileName, fileNameLen);
+        mustWrite(f, fileName, fileNameLen);
     mustWrite(f, &ss->start, sizeof(bits32));
     mustWrite(f, &ss->end, sizeof(bits32));
-    // no masking information written/read yet.
+    // FIXME: no masking information written/read yet.
     }
 // listSizes: length = gf->tileSpaceSize
 mustWrite(f, gf->listSizes, gf->tileSpaceSize * sizeof(gf->listSizes[0]));
