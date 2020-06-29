@@ -11,7 +11,7 @@ graphTypeDefault bar
 yLineMark 0
 yLineOnOff on
 priority 20
-superTrack on show
+superTrack on 
 
     track PhyloCSF_plus_1
     parent PhyloCSF_smooth
