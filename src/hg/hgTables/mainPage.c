@@ -664,6 +664,7 @@ hPrintf("<tr><td><DIV style='background-color: #faf2bb; display:none; opacity:0.
         "Please see our <a href='../FAQ/FAQdownloads.html#snp'>Data Access FAQ</a> "
         "on how to download dbSNP data.</DIV></td></tr>");
 
+
 /* Region line */
 {
 char *regionType;
@@ -673,6 +674,7 @@ else
     regionType = cartUsualString(cart, hgtaRegionType, hgtaRegionTypeGenome);
 
 char *range = cartUsualString(cart, hgtaRange, "");
+
 if (isPositional)
     {
     boolean doEncode = FALSE; 
@@ -729,6 +731,19 @@ if (isPositional)
     else
 	cgiMakeButton(hgtaDoSetUserRegions, "define regions");
     hPrintf("</TD></TR>\n");
+
+    printf("noGenome? %d", (int)disableGenome);
+    if (disableGenome) { // no need to check curTrack for NULL, disableGenome can only be set if curTable is set
+        hPrintf("<tr><td><DIV style='background-color: #faf2bb; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px'>");
+        char *noGenomeNote = trackDbSettingClosestToHome(curTrack, "noGenomeReason");
+        hPrintf("<b>Note:</b> This track is unavailable for genome-wide download. ");
+        if (noGenomeNote)
+            hPrintf("Reason: %s", noGenomeNote);
+        else
+            hPrintf("Usually, this is due to distribution restrictions of the source database or the size of the track. Please see the track documentation for more details. Contact us if you are still unable to access the data. ");
+        hPrintf("</DIV></td></tr>");
+    }
+
     }
 else
     {

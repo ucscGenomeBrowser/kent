@@ -3572,6 +3572,7 @@ type bed 4
 hgsid on
 url http://www.omim.org/entry/
 tableBrowser noGenome
+noGenomeReason Distribution restrictions by OMIM. See the track documentation for details. You can download the complete OMIM dataset for free from omim.org
 
 track omimGene2
 shortLabel OMIM Genes
@@ -3583,6 +3584,7 @@ type bed 4
 hgsid on
 url http://www.omim.org/entry/
 tableBrowser noGenome omimGeneMap omimGeneMap2 omimPhenotype omimGeneSymbol omim2gene
+noGenomeReason Distribution restrictions by OMIM. See the track documentation for details. You can download the complete OMIM dataset for free from omim.org
 
 track omimGene2bb
 shortLabel OMIM Genes (New)
@@ -3602,6 +3604,7 @@ noScoreFilter on
 labelFields name,mainSym
 defaultLabelFields name,mainSym
 html omimGene2 
+noGenomeReason Distribution restrictions by OMIM. See the track documentation for details. You can download the complete OMIM dataset for free from omim.org
 
 track omimAvSnp
 shortLabel OMIM Alleles
@@ -3613,6 +3616,7 @@ type bed 4
 hgsid on
 url http://www.omim.org/entry/
 tableBrowser noGenome omimAv omimAvRepl
+noGenomeReason Distribution restrictions by OMIM. See the track documentation for details. You can download the complete OMIM dataset for free from omim.org
 
 track cosmic
 shortLabel COSMIC

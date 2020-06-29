@@ -302,6 +302,7 @@ noInherit *
 nonBedFieldsLabel bigBed
 noScoreFilter bedGraph bed bedLogR gvf bedDetail bigBed bigPsl interact bigInteract
 notNCBI bed
+noGenomeReason *
 ococci bed
 offset customTracks
 oldToNew genePred
