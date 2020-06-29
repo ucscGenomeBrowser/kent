@@ -2633,9 +2633,9 @@ if (size != 0 && fread(buf, size, 1, file) != 1)
 }
 
 void writeString(FILE *f, char *s)
-/* Write a 255 or less character string to a file.
- * This will write the length of the string in the first
- * byte then the string itself. */
+/* Write a 255 or less character string to a file.  Truncate if longer.  This
+ * will write the length of the string in the first byte then the string
+ * itself. */
 {
 UBYTE bLen;
 int len = strlen(s);
@@ -2649,6 +2649,17 @@ bLen = len;
 writeOne(f, bLen);
 mustWrite(f, s, len);
 }
+
+void writeStringSafe(FILE *f, char *s)
+/* Write a 255 or less character string to a file.  Generate an error if
+ * longer.  This will write the length of the string in the first byte then
+ * the string itself. */
+{
+if (strlen(s) > 255)
+    errAbort("attempt to write string longer than 255 bytes");
+writeString(f, s);
+}
+
 
 char *readString(FILE *f)
 /* Read a string (written with writeString) into

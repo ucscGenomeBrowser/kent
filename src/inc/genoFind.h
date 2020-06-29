@@ -86,7 +86,10 @@ void gfClumpFreeList(struct gfClump **pList);
 /* Free a list of dynamically allocated gfClump's */
 
 struct genoFind
-/* An index of all K-mers in the genome. */
+/* An index of all K-mers in the genome.  
+ * WARNING: MUST MODIFY CODE TO STORE/LOAD INDEX TO FILES IF THIS STRUCTURE IS
+ * MODIFIED!!!
+ */
     {
     int maxPat;                          /* Max # of times pattern can occur
                                           * before it is ignored. */
@@ -98,11 +101,11 @@ struct genoFind
     int tileSpaceSize;                   /* Number of N-mer values. */
     int tileMask;			 /* 1-s for each N-mer. */
     int sourceCount;			 /* Count of source files. */
-    struct gfSeqSource *sources;         /* List of sequence sources. */
     bool isPep;			 	 /* Is a peptide. */
     bool allowOneMismatch;		 /* Allow a single mismatch? */
     bool noSimpRepMask;			  /* Dis-Allow simple repeat masking. */
     int segSize;			 /* Index is segmented if non-zero. */
+    struct gfSeqSource *sources;         /* List of sequence sources. */
     bits32 totalSeqSize;		 /* Total size of all sequences. */
     bits32 *listSizes;                   /* Size of list for each N-mer */
     void *allocated;                     /* Storage space for all lists. */

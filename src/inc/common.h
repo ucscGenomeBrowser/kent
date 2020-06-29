@@ -1194,6 +1194,11 @@ void writeString(FILE *f, char *s);
  * This will write the length of the string in the first
  * byte then the string itself. */
 
+void writeStringSafe(FILE *f, char *s);
+/* Write a 255 or less character string to a file.  Generate an error if
+ * longer.  This will write the length of the string in the first byte then
+ * the string itself. */
+
 char *readString(FILE *f);
 /* Read a string (written with writeString) into
  * memory.  freeMem the result when done. Returns
