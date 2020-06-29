@@ -169,7 +169,8 @@ static void filterRefOnlyAlleles(struct vcfFile *vcff, struct trackDb *tdb)
 struct vcfRecord *rec, *nextRecord, *retList = NULL;
 const struct vcfGenotype *gt;
 
-struct slPair *sample, *sampleOrder = vcfPhasedGetSampleOrder(cart, tdb, FALSE);
+boolean hideOtherSamples = cartUsualBooleanClosestToHome(cart, tdb, FALSE, VCF_PHASED_HIDE_OTHER_VAR, FALSE);
+struct slPair *sample, *sampleOrder = vcfPhasedGetSampleOrder(cart, tdb, FALSE, hideOtherSamples);
 for (rec = vcff->records; rec != NULL; rec = nextRecord)
     {
     nextRecord = rec->next;
@@ -232,7 +233,10 @@ int maxLen = 33;
 int maxAlCount = 5;
 struct slPair *sample = NULL, *phasedSamples = NULL;
 if (sameString(tdb->type, "vcfPhasedTrio"))
-    phasedSamples = vcfPhasedGetSampleOrder(cart, tdb, FALSE);
+    {
+    boolean hideOtherSamples = cartUsualBooleanClosestToHome(cart, tdb, FALSE, VCF_PHASED_HIDE_OTHER_VAR, FALSE);
+    phasedSamples = vcfPhasedGetSampleOrder(cart, tdb, FALSE, hideOtherSamples);
+    }
 
 vcff->allPhased = TRUE;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
@@ -1723,40 +1727,57 @@ static unsigned int toggleInt(unsigned int s)
 return s & 1 ? s - 1 : s + 1;
 }
 
-static void fillOutHapOrder(unsigned int *hapOrder, unsigned int hapCount, struct hapDistanceMatrixCell *c1, struct hapDistanceMatrixCell *c2)
+static void fillOutHapOrder(unsigned int  *hapOrder, unsigned int hapCount, struct hapDistanceMatrixCell *c1, struct hapDistanceMatrixCell *c2, char **sampleDrawOrder)
 /* Assign indices to hapOrder in the order we should draw the alleles. Allows for the second parent
  * cell to be NULL */
 {
 if (c1 == NULL)
     errAbort("Error: fillOutHapOrder passed NULL parent");
 int numSamplesToDraw = hapCount / 2;
+char *childSampleName = c1->otherId;
+int childIx = stringArrayIx(childSampleName, sampleDrawOrder, numSamplesToDraw);
 int i;
 for (i = 0; i < numSamplesToDraw; i++)
     {
-    int hapIx = 2*i;
-    if (i == 0) // top set of lines
+    char *thisSample = sampleDrawOrder[i];
+    struct hapDistanceMatrixCell *thisCell = c2 != NULL && sameString(c2->sampleId,thisSample) ? c2 : c1;
+    short hapIx = 2*i;
+    if (i != childIx) // fill out the parent indices, which may be above or below the child
         {
-        hapOrder[hapIx] = toggleInt(c1->alleleIx);
-        hapOrder[hapIx+1] = c1->alleleIx;
-        }
-    else if (i + 1 == numSamplesToDraw) // last set of lines
-        {
-        if (c2)
+        if (i < childIx)
             {
-            hapOrder[hapIx] = c2->alleleIx;
-            hapOrder[hapIx+1] = toggleInt(c2->alleleIx);
+            hapOrder[hapIx] = toggleInt(thisCell->alleleIx);
+            hapOrder[hapIx+1] = thisCell->alleleIx;
             }
-        else
+        else // below the child
             {
-            hapOrder[hapIx] = c1->otherAlleleIx;
-            hapOrder[hapIx+1] = toggleInt(c1->otherAlleleIx);
+            hapOrder[hapIx] = thisCell->alleleIx;
+            hapOrder[hapIx+1] = toggleInt(thisCell->alleleIx);
             }
         }
-    else // orient based on above and below
+    else // fill out the child indices
         {
         hapOrder[hapIx] = c1->otherAlleleIx;
-        hapOrder[hapIx+1] = c2->otherAlleleIx;
+        if (c2)
+            hapOrder[hapIx+1] = c2->otherAlleleIx;
+        else
+            hapOrder[hapIx+1] = toggleInt(c1->otherAlleleIx);
         }
+    }
+}
+
+static void maybeRollBackCell(struct hapDistanceMatrixCell *c1, struct hapDistanceMatrixCell *c2,
+                              struct hapDistanceMatrixCell *c1Copy, struct hapDistanceMatrixCell *c2Copy)
+/* At this point c1->otherAlleleIx != c2->otherAlleleIx, however, it may be the case that c2 has a
+ * better scoring match to c1->otherAlleleIx, so try to find it and reset the values */
+{
+struct hapDistanceMatrixCell *tmp = c2;
+while (tmp->otherAlleleIx != c1->otherAlleleIx)
+    tmp = tmp->next;
+if (tmp->dist < c1->dist)
+    {
+    *c2 = *tmp;
+    *c1 = *c1Copy;
     }
 }
 
@@ -1787,20 +1808,29 @@ if (hapCount > 2) // is there a trio or at least part of one?
         {
         if (c1->otherAlleleIx == c2->otherAlleleIx)
             {
-            // first choose the lowest score, if a tie then just advance c1
+            struct hapDistanceMatrixCell *c1Copy = c1;
+            struct hapDistanceMatrixCell *c2Copy = c2;
             if (c1->dist >= c2->dist)
                 {
                 while (c1->dist >= c2->dist && c1->otherAlleleIx == c2->otherAlleleIx)
                     c1 = c1->next;
+                // at this point c1->otherAlleleIx != c2>otherAlleleIx, BUT c2 may have a better
+                // scoring match to this allele and we shouldn't have advanced c1 to begin with!
+                // This case is exercised at the following location (chr1:53896598-53897933) in
+                // the following file: /gbdb/hg38/1000Genomes/trio/NA12878_1463_CEU/NA12878_1463_CEUTrio.chr1.vcf.gz
+                // where the child's haplotypes are identical to both of the mother's haplotypes!
+                maybeRollBackCell(c1, c2, c1Copy, c2Copy);
                 }
             else
                 {
                 while (c1->dist < c2->dist && c1->otherAlleleIx == c2->otherAlleleIx)
                     c2 = c2->next;
+                // similar to above case but swap c1 and c2
+                maybeRollBackCell(c2, c1, c2Copy, c1Copy);
                 }
             }
         }
-    fillOutHapOrder(hapOrder, hapCount, c1, c2);
+    fillOutHapOrder(hapOrder, hapCount, c1, c2, sampleDrawOrder);
     }
 else
     {
@@ -1948,9 +1978,54 @@ return hapOrder;
 #define VCFPHASED_UNPHASED_COLOR MG_RED
 
 
+static int getChildAlleleColor(struct track *track, struct vcfRecord *rec, int childHapIx,
+                               int alleleIx, int nameIx, int gtHapCount, unsigned int *gtHapOrder,
+                               char *sampleOrder[])
+/* Return the color we should use for this variant, depending on whether the allele
+ * of the child matches what the parent transmitted or if there was some kind of
+ * 'mendelian inconsistency' */
+{
+// if there are no parents to draw then no concept of transmitted vs unstransmitted
+if (gtHapCount <= 2)
+    return MG_BLACK;
+int parIx = 0;
+if (nameIx == 0)
+    {
+    if (alleleIx % 2 == 0)
+        parIx = alleleIx + 2;
+    else
+        parIx = alleleIx + 3;
+    }
+else if (nameIx == 1)
+    {
+    if (alleleIx % 2 == 0)
+        parIx = alleleIx - 1;
+    else
+        parIx = alleleIx + 1;
+    }
+else
+    {
+    if (alleleIx % 2 == 0)
+        parIx = alleleIx - 3;
+    else
+        parIx = alleleIx - 2;
+    }
+struct vcfGenotype *parentGt = &(rec->genotypes[gtHapOrder[parIx] >> 1]);
+if (parentGt->isPhased || (parentGt->hapIxA == 1 && parentGt->hapIxB == 1))
+    {
+    int parentAlleleIx = gtHapOrder[parIx] & 1 ? parentGt->hapIxB : parentGt->hapIxA;
+    if (rec->alleles[childHapIx] != rec->alleles[parentAlleleIx]) // if they disagree mark as red
+        return MG_RED;
+    else
+        return MG_BLACK;
+    }
+return MG_BLACK;
+}
+
 void vcfPhasedDrawOneRecord(struct track *track, struct hvGfx *hvg, struct vcfRecord *rec, void *item,
                             unsigned int *gtHapOrder, int gtHapCount, int xOff, int yOffsets[],
-                            char *sampleOrder[], double scale)
+                            char *sampleOrder[], char *childSample, boolean highlightChildDiffs,
+                            double scale)
 // Draw a record's haplotypes on the appropriate lines
 {
 int i;
@@ -1970,10 +2045,12 @@ for (i = 0; i < gtHapCount ; i++)
         {
         int alIx = gtHapOrder[i] & 1 ? gt->hapIxB : gt->hapIxA;
         int tickColor = MG_BLACK;
+        if (sameString(childSample, gt->id) && highlightChildDiffs)
+            tickColor = getChildAlleleColor(track, rec, alIx, i, nameIx, gtHapCount, gtHapOrder, sampleOrder);
         dyStringPrintf(mouseover, "%s ", gt->id);
         if (alIx != 0) // non-reference allele
             {
-            if (i > 1 && i < 4) // we're drawing child ticks
+            if (sameString(childSample, gt->id)) // we're drawing child ticks
                 {
                 dyStringPrintf(mouseover, "allele: %s", rec->alleles[alIx]);
                 }
@@ -2069,30 +2146,36 @@ if (vcff->records == NULL)
     return;
 
 const double scale = scaleForPixels(width);
-struct slPair *pair, *sampleNames = vcfPhasedGetSampleOrder(cart, track->tdb, FALSE);
+boolean hideOtherSamples = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_HIDE_OTHER_VAR, FALSE);
+struct slPair *pair, *sampleNames = vcfPhasedGetSampleOrder(cart, track->tdb, FALSE, hideOtherSamples);
 int gtCount = slCount(sampleNames);
 int yOffsets[gtCount * 2]; // y offsets of each haplotype line
 char *sampleOrder[gtCount]; // order of sampleName lines
 int i;
 for (pair = sampleNames, i = 0; pair != NULL && i < gtCount; pair = pair->next, i++)
     sampleOrder[i] = pair->name;
-// child sample is required to be in the middle/bottom of the trio
-char *childSample = gtCount > 2 ? sampleOrder[1] : sampleOrder[0];
+
+char *childSample = cloneString(trackDbSetting(track->tdb, VCF_PHASED_CHILD_SAMPLE_SETTING));
+char *pt = strchr(childSample, '|');
+if (pt != NULL)
+    *pt = '\0';
 
 // set up the "haplotype" lines and the transparent yellow box to delineate samples
 vcfPhasedSetupHaplotypesLines(track, hvg, xOff, yOff, width, yOffsets, sampleNames, font);
 
-// sort the variants by haplotype then draw ticks
+// maybe sort the variants by haplotype then draw ticks
+unsigned int *hapOrder = needMem(sizeof(short) * gtCount * 2);
 int nRecords = slCount(vcff->records);
 int centerIx = getCenterVariantIx(track, seqStart, seqEnd, vcff->records);
 int startIx = 0;
 int endIx = nRecords;
-unsigned int *hapOrder = computeHapDist(vcff, centerIx, startIx, endIx, childSample, gtCount, sampleOrder);
+hapOrder = computeHapDist(vcff, centerIx, startIx, endIx, childSample, gtCount, sampleOrder);
+boolean highlightChildDiffs = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_HIGHLIGHT_INCONSISTENT, FALSE);
 struct vcfRecord *rec = NULL;
 struct slList *item = NULL;
 for (rec = vcff->records, item = track->items; rec != NULL && item != NULL; rec = rec->next, item = item->next)
     {
-    vcfPhasedDrawOneRecord(track, hvg, rec, item, hapOrder, gtCount * 2, xOff, yOffsets, sampleOrder, scale);
+    vcfPhasedDrawOneRecord(track, hvg, rec, item, hapOrder, gtCount * 2, xOff, yOffsets, sampleOrder, childSample, highlightChildDiffs, scale);
     }
 }
 
@@ -2109,7 +2192,8 @@ if (vis == tvDense)
     return pgSnpHeight(tg, vis);
 if (!vcff || vcff->records == NULL)
     return 0;
-int totalSamples = slCount(vcfPhasedGetSampleOrder(cart, tg->tdb, FALSE));
+boolean hideOtherSamples = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, VCF_PHASED_HIDE_OTHER_VAR, FALSE);
+int totalSamples = slCount(vcfPhasedGetSampleOrder(cart, tg->tdb, FALSE, hideOtherSamples));
 tg->lineHeight = tl.fontHeight + 1;
 tg->heightPer = tl.fontHeight;
 // if all variants in view are phased, then 3 lines per sample,

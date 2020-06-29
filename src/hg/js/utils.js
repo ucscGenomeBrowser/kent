@@ -806,6 +806,15 @@ function getAllVars(obj,subtrackName)
             urlData[name] = val;
         }
     });
+    // special case the vcfSampleOrder variable because it is a hidden input type that
+    // changes based on click-drag
+    $(inp).filter('[name$="vcfSampleOrder"]').each(function (i) {
+        var name  = $(this).attr('name');
+        var val = $(this).val();
+        if (name && name !== "Submit" && val !== undefined && val !== null) {
+            urlData[name] = val;
+        }
+    });
     $(sel).filter('[name]:enabled').each(function (i) {
         var name  = $(this).attr('name');
         var val = $(this).val();
@@ -3104,3 +3113,398 @@ function preloadImg(url)  // DEAD CODE?
     preloadImages[preloadImageCount].src = url;
     preloadImageCount++;
 }
+
+
+  ///////////////////
+ /////  mouse  /////
+///////////////////
+var mouse = {
+
+    savedOffset: {x:0, y:0},
+
+    saveOffset: function (ev)
+    {   // Save the mouse offset associated with this event
+        mouse.savedOffset = {x: ev.clientX, y: ev.clientY};
+    },
+
+    hasMoved: function (ev)
+    {   // return true if mouse has moved a significant amount
+        var minPixels = 10;
+        var movedX = ev.clientX - mouse.savedOffset.x;
+        var movedY = ev.clientY - mouse.savedOffset.y;
+        if (arguments.length === 2) {
+            var num = Number(arguments[1]);
+            if (isNaN(num)) {
+                if ( arguments[1].toLowerCase() === "x" )
+                    return (movedX > minPixels || movedX < (minPixels * -1));
+                if ( arguments[1].toLowerCase() === "y" )
+                    return (movedY > minPixels || movedY < (minPixels * -1));
+            }
+            else
+                minPixels = num;
+        }
+        return (   movedX > minPixels || movedX < (minPixels * -1)
+                || movedY > minPixels || movedY < (minPixels * -1));
+    }
+};
+
+  ///////////////////////////
+ //// Drag Reorder Code ////
+///////////////////////////
+var dragReorder = {
+
+    setOrder: function (table)
+    {   // Sets the 'order' value for the image table after a drag reorder
+        var varsToUpdate = {};
+        $("tr.imgOrd").each(function (i) {
+            if ($(this).attr('abbr') !== $(this).attr('rowIndex').toString()) {
+                $(this).attr('abbr',$(this).attr('rowIndex').toString());
+                var name = this.id.substring('tr_'.length) + '_imgOrd';
+                varsToUpdate[name] = $(this).attr('abbr');
+            }
+        });
+        if (objNotEmpty(varsToUpdate)) {
+            cart.setVarsObj(varsToUpdate);
+            imageV2.markAsDirtyPage();
+        }
+    },
+
+    sort: function (table)
+    {   // Sets the table row order to match the order of the abbr attribute.
+        // This is needed for back-button, and for visBox changes combined with refresh.
+        var tbody = $(table).find('tbody')[0];
+        if (!tbody)
+            tbody = table;
+
+        // Do we need to sort?
+        var trs = tbody.rows;
+        var needToSort = false;
+        $(trs).each(function(ix) {
+            if ($(this).attr('abbr') !== $(this).attr('rowIndex').toString()) {
+                needToSort = true;
+                return false;  // break for each() loops
+            }
+        });
+        if (!needToSort)
+            return false;
+
+        // Create array of tr holders to sort
+        var ary = [];
+        $(trs).each(function(ix) {  // using sortTable found in utils.js
+            ary.push(new sortTable.field(parseInt($(this).attr('abbr')),false,this));
+        });
+
+        // Sort the array
+        ary.sort(sortTable.fieldCmp);
+
+        // most efficient reload of sorted rows I have found
+        var sortedRows = jQuery.map(ary, function(ary, i) { return ary.row; });
+        $(tbody).append( sortedRows ); // removes tr from current position and adds to end.
+        return true;
+    },
+
+    showCenterLabel: function (tr, show)
+    {   // Will show or hide centerlabel as requested
+        // adjust button, sideLabel height, sideLabelOffset and centerlabel display
+
+        if (!$(tr).hasClass('clOpt'))
+            return;
+        var center = normed($(tr).find(".sliceDiv.cntrLab"));
+        if (!center)
+            return;
+        var seen = ($(center).css('display') !== 'none');
+        if (show === seen)
+            return;
+
+        var centerHeight = $(center).height();
+
+        var btn = normed($(tr).find("p.btn"));
+        var side = normed($(tr).find(".sliceDiv.sideLab"));
+        if (btn && side) {
+            var sideImg = normed($(side).find("img"));
+            if (sideImg) {
+                var top = parseInt($(sideImg).css('top'));
+                if (show) {
+                    $(btn).css('height',$(btn).height() + centerHeight);
+                    $(side).css('height',$(side).height() + centerHeight);
+                    top += centerHeight; // top is a negative number
+                    $(sideImg).css( {'top': top.toString() + "px" });
+                    $( center ).show();
+                } else if (!show) {
+                    $(btn).css('height',$(btn).height() - centerHeight);
+                    $(side).css('height',$(side).height() - centerHeight);
+                    top -= centerHeight; // top is a negative number
+                    $(sideImg).css( {'top': top.toString() + "px" });
+                    $( center ).hide();
+                }
+            }
+        }
+    },
+
+    getContiguousRowSet: function (row)
+    {   // Returns the set of rows that are of the same class and contiguous
+        if (!row)
+            return null;
+        var btn = $( row ).find("p.btn");
+        if (btn.length === 0)
+            return null;
+        var classList = $( btn ).attr("class").split(" ");
+        var matchClass = classList[0];
+        var table = $(row).parents('table#imgTbl')[0];
+        var rows = $(table).find('tr');
+
+        // Find start index
+        var startIndex = $(row).attr('rowIndex');
+        var endIndex = startIndex;
+        for (var ix=startIndex-1; ix >= 0; ix--) {
+            btn = $( rows[ix] ).find("p.btn");
+            if (btn.length === 0)
+                break;
+            classList = $( btn ).attr("class").split(" ");
+            if (classList[0] !== matchClass)
+                break;
+            startIndex = ix;
+        }
+
+        // Find end index
+        for (var rIx=endIndex; rIx<rows.length; rIx++) {
+            btn = $( rows[rIx] ).find("p.btn");
+            if (btn.length === 0)
+                break;
+            classList = $( btn ).attr("class").split(" ");
+            if (classList[0] !== matchClass)
+                break;
+            endIndex = rIx;
+        }
+        return rows.slice(startIndex,endIndex+1); // endIndex is 1 based!
+    },
+
+    getCompositeSet: function (row)
+    {   // Returns the set of rows that are of the same class and contiguous
+        if (!row)
+            return null;
+        var rowId = $(row).attr('id').substring('tr_'.length);
+        var rec = hgTracks.trackDb[rowId];
+        if (tdbIsSubtrack(rec) === false)
+            return null;
+
+        var rows = $('tr.trDraggable:has(p.' + rec.parentTrack+')');
+        return rows;
+    },
+
+    zipButtons: function (table)
+    {   // Goes through the image and binds composite track buttons when adjacent
+        var rows = $(table).find('tr');
+        var lastClass="";
+        var lastBtn = null;
+        var lastSide = null;
+        var lastMatchesLast=false;
+        var lastBlue=true;
+        var altColors=false;
+        var count=0;
+        var countN=0;
+        for (var ix=0; ix<rows.length; ix++) {    // Need to have buttons in order
+            var btn = $( rows[ix] ).find("p.btn");
+            var side = $( rows[ix] ).find(".sliceDiv.sideLab"); // added by GALT
+            if (btn.length === 0)
+                continue;
+            var classList = $( btn ).attr("class").split(" ");
+            var curMatchesLast=(classList[0] === lastClass);
+
+            // centerLabels may be conditionally seen
+            if ($( rows[ix] ).hasClass('clOpt')) {
+                // if same composite and previous also centerLabel optional then hide center label
+                if (curMatchesLast && $( rows[ix - 1] ).hasClass('clOpt'))
+                    dragReorder.showCenterLabel(rows[ix],false);
+                else
+                    dragReorder.showCenterLabel(rows[ix],true);
+            }
+
+            // On with buttons
+            if (lastBtn) {
+                $( lastBtn ).removeClass('btnN btnU btnL btnD');
+                if (curMatchesLast && lastMatchesLast) {
+                    $( lastBtn ).addClass('btnL');
+                    $( lastBtn ).css('height', $( lastSide ).height() - 0);  // added by GALT
+                } else if (lastMatchesLast) {
+                    $( lastBtn ).addClass('btnU');
+                    $( lastBtn ).css('height', $( lastSide ).height() - 1);  // added by GALT
+                } else if (curMatchesLast) {
+                    $( lastBtn ).addClass('btnD');
+                    $( lastBtn ).css('height', $( lastSide ).height() - 2);  // added by GALT
+                } else {
+                    $( lastBtn ).addClass('btnN');
+                    $( lastBtn ).css('height', $( lastSide ).height() - 3);  // added by GALT
+                    countN++;
+                }
+                count++;
+                if (altColors) {
+                    // lastMatch and lastBlue or not lastMatch and notLastBlue
+                    lastBlue = (lastMatchesLast === lastBlue);
+                    if (lastBlue)    // Too  smart by 1/3rd
+                        $( lastBtn ).addClass(    'btnBlue' );
+                    else
+                        $( lastBtn ).removeClass( 'btnBlue' );
+                }
+            }
+            lastMatchesLast = curMatchesLast;
+            lastClass = classList[0];
+            lastBtn = btn;
+            lastSide = side;
+        }
+        if (lastBtn) {
+            $( lastBtn ).removeClass('btnN btnU btnL btnD');
+            if (lastMatchesLast) {
+                $( lastBtn ).addClass('btnU');
+                $( lastBtn ).css('height', $( lastSide ).height() - 1);  // added by GALT
+            } else {
+                $( lastBtn ).addClass('btnN');
+                $( lastBtn ).css('height', $( lastSide ).height() - 3);  // added by GALT
+                countN++;
+            }
+            if (altColors) {
+                // lastMatch and lastBlue or not lastMatch and notLastBlue
+                lastBlue = (lastMatchesLast === lastBlue);
+                if (lastBlue)    // Too  smart by 1/3rd
+                    $( lastBtn ).addClass(    'btnBlue' );
+                else
+                    $( lastBtn ).removeClass( 'btnBlue' );
+            }
+            count++;
+        }
+        //warn("Zipped "+count+" buttons "+countN+" are independent.");
+    },
+
+    dragHandleMouseOver: function ()
+    {   // Highlights a single row when mouse over a dragHandle column (sideLabel and buttons)
+        if ( ! jQuery.tableDnD ) {
+            //var handle = $("td.dragHandle");
+            //$(handle)
+            //    .unbind('mouseenter')//, jQuery.tableDnD.mousemove);
+            //    .unbind('mouseleave');//, jQuery.tableDnD.mouseup);
+            return;
+        }
+        if ( ! jQuery.tableDnD.dragObject ) {
+            $( this ).parents("tr.trDraggable").addClass("trDrag");
+        }
+    },
+
+    dragHandleMouseOut: function ()
+    {   // Ends row highlighting by mouse over
+        $( this ).parents("tr.trDraggable").removeClass("trDrag");
+    },
+
+    buttonMouseOver: function ()
+    {   // Highlights a composite set of buttons, regarless of whether tracks are adjacent
+        if ( ! jQuery.tableDnD || ! jQuery.tableDnD.dragObject ) {
+            var classList = $( this ).attr("class").split(" ");
+            var btns = $( "p." + classList[0] );
+            $( btns ).removeClass('btnGrey');
+            $( btns ).addClass('btnBlue');
+            if (jQuery.tableDnD) {
+                var rows = dragReorder.getContiguousRowSet($(this).parents('tr.trDraggable')[0]);
+                if (rows)
+                    $( rows ).addClass("trDrag");
+            }
+        }
+    },
+
+    buttonMouseOut: function ()
+    {   // Ends composite highlighting by mouse over
+        var classList = $( this ).attr("class").split(" ");
+        var btns = $( "p." + classList[0] );
+        $( btns ).removeClass('btnBlue');
+        $( btns ).addClass('btnGrey');
+        if (jQuery.tableDnD) {
+            var rows = dragReorder.getContiguousRowSet($(this).parents('tr.trDraggable')[0]);
+            if (rows)
+            $( rows ).removeClass("trDrag");
+        }
+    },
+
+    trMouseOver: function (e)
+    {   // Trying to make sure there is always a imageV2.lastTrack so that we know where we are
+        var id = '';
+        var a = /tr_(.*)/.exec($(this).attr('id'));  // voodoo
+        if (a && a[1]) {
+            id = a[1];
+        }
+        if (id.length > 0) {
+            if ( ! imageV2.lastTrack || imageV2.lastTrack.id !== id)
+                imageV2.lastTrack = rightClick.makeMapItem(id);
+                // currentMapItem gets set by mapItemMapOver.   This is just backup
+        }
+    },
+
+    mapItemMouseOver: function ()
+    {
+        // Record data for current map area item
+        var id = this.id;
+        if (!id || id.length === 0) {
+            id = '';
+            var tr = $( this ).parents('tr.imgOrd');
+            if ( $(tr).length === 1 ) {
+                var a = /tr_(.*)/.exec($(tr).attr('id'));  // voodoo
+                if (a && a[1]) {
+                    id = a[1];
+                }
+            }
+        }
+        if (id.length > 0) {
+            rightClick.currentMapItem = rightClick.makeMapItem(id);
+            if (rightClick.currentMapItem) {
+                rightClick.currentMapItem.href = this.href;
+                rightClick.currentMapItem.title = this.title;
+
+                // Handle linked features with separate clickmaps for each exon/intron
+                if ((this.title.indexOf('Exon ') === 0) || (this.title.indexOf('Intron ') === 0)) {
+                    // if the title is Exon ... or Intron ...
+                    // then search for the sibling with the same href
+                    // that has the real title item label
+                    var elem = this.parentNode.firstChild;
+                    while (elem) {
+                        if ((elem.href === this.href)
+                            && !((elem.title.indexOf('Exon ') === 0) || (elem.title.indexOf('Intron ') === 0))) {
+                            rightClick.currentMapItem.title = elem.title;
+                            break;
+                        }
+                        elem = elem.nextSibling;
+                    }
+                }
+
+            }
+        }
+    },
+
+    mapItemMouseOut: function ()
+    {
+        imageV2.lastTrack = rightClick.currentMapItem; // Just a backup
+        rightClick.currentMapItem = null;
+    },
+
+    init: function ()
+    {   // Make side buttons visible (must also be called when updating rows in the imgTbl).
+        var btns = $("p.btn");
+        if (btns.length > 0) {
+            dragReorder.zipButtons($('#imgTbl'));
+            $(btns).mouseenter( dragReorder.buttonMouseOver );
+            $(btns).mouseleave( dragReorder.buttonMouseOut  );
+            $(btns).show();
+        }
+        var handle = $("td.dragHandle");
+        if (handle.length > 0) {
+            $(handle).mouseenter( dragReorder.dragHandleMouseOver );
+            $(handle).mouseleave( dragReorder.dragHandleMouseOut  );
+        }
+
+        // setup mouse callbacks for the area tags
+        $("#imgTbl").find("tr").mouseover( dragReorder.trMouseOver );
+
+
+        $(".area").each( function(t) {
+                            this.onmouseover = dragReorder.mapItemMouseOver;
+                            this.onmouseout = dragReorder.mapItemMouseOut;
+                            this.onclick = posting.mapClk;
+                        });
+    }
+};
