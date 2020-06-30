@@ -1740,10 +1740,10 @@ int i;
 for (i = 0; i < numSamplesToDraw; i++)
     {
     char *thisSample = sampleDrawOrder[i];
-    struct hapDistanceMatrixCell *thisCell = c2 != NULL && sameString(c2->sampleId,thisSample) ? c2 : c1;
     short hapIx = 2*i;
     if (i != childIx) // fill out the parent indices, which may be above or below the child
         {
+        struct hapDistanceMatrixCell *thisCell = c2 != NULL && sameString(c2->sampleId,thisSample) ? c2 : c1;
         if (i < childIx)
             {
             hapOrder[hapIx] = toggleInt(thisCell->alleleIx);
@@ -1757,11 +1757,27 @@ for (i = 0; i < numSamplesToDraw; i++)
         }
     else // fill out the child indices
         {
-        hapOrder[hapIx] = c1->otherAlleleIx;
-        if (c2)
-            hapOrder[hapIx+1] = c2->otherAlleleIx;
+        if (i == 0)
+            {
+            if (c2)
+                hapOrder[hapIx] = c2->otherAlleleIx;
+            else
+                hapOrder[hapIx] = toggleInt(c1->otherAlleleIx);
+            hapOrder[hapIx+1] = c1->otherAlleleIx;
+            }
+        else if (i == 1)
+            {
+            hapOrder[hapIx] = c1->otherAlleleIx;
+            if (c2)
+                hapOrder[hapIx+1] = c2->otherAlleleIx;
+            else
+                hapOrder[hapIx+1] = toggleInt(c1->otherAlleleIx);
+            }
         else
-            hapOrder[hapIx+1] = toggleInt(c1->otherAlleleIx);
+            {
+            hapOrder[hapIx] = c2->otherAlleleIx;
+            hapOrder[hapIx+1] = c1->otherAlleleIx;
+            }
         }
     }
 }
@@ -1988,27 +2004,33 @@ static int getChildAlleleColor(struct track *track, struct vcfRecord *rec, int c
 // if there are no parents to draw then no concept of transmitted vs unstransmitted
 if (gtHapCount <= 2)
     return MG_BLACK;
-int parIx = 0;
+int parIx = alleleIx;
+int numSamples = gtHapCount / 2;
+boolean isEven = (alleleIx % 2) == 0;
+const int adjacentLineSet = 1;
+// how many haplotype "lines" away is the second parent if we are drawing in either
+// parent1,parent2,child or child,parent1,parent2 order:
+const int otherLineSet = 4;
 if (nameIx == 0)
     {
-    if (alleleIx % 2 == 0)
-        parIx = alleleIx + 2;
-    else
-        parIx = alleleIx + 3;
+    if (!isEven)
+        parIx = alleleIx + adjacentLineSet;
+    else if (numSamples > 2)
+            parIx = alleleIx + otherLineSet;
     }
 else if (nameIx == 1)
     {
-    if (alleleIx % 2 == 0)
-        parIx = alleleIx - 1;
-    else
-        parIx = alleleIx + 1;
+    if (isEven)
+        parIx = alleleIx - adjacentLineSet;
+    else if (numSamples > 2) // don't compare the allele the child to a missing parent
+        parIx = alleleIx + adjacentLineSet;
     }
 else
     {
-    if (alleleIx % 2 == 0)
-        parIx = alleleIx - 3;
+    if (isEven)
+        parIx = alleleIx - adjacentLineSet;
     else
-        parIx = alleleIx - 2;
+        parIx = alleleIx - otherLineSet;
     }
 struct vcfGenotype *parentGt = &(rec->genotypes[gtHapOrder[parIx] >> 1]);
 if (parentGt->isPhased || (parentGt->hapIxA == 1 && parentGt->hapIxB == 1))
