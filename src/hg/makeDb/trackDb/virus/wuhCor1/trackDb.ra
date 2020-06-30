@@ -247,7 +247,7 @@ track labAssocMutsNs419
 shortLabel Lab-Assoc Muts 4/19
 longLabel Lab-Associated Mutations Discovered in Nextstrain April 19th Alignment and Tree
 type bigBed 4 +
-bigDataUrl /gbdb/wuhCor1/phylogenetics/labAssocMuts.bb
+bigDataUrl /gbdb/wuhCor1/phylogenetics/labAssocMutsNs419.bb
 group varRep
 visibility hide
 release alpha
