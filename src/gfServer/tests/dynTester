@@ -1,0 +1,143 @@
+#!/usr/bin/env python3
+
+# Test driver for dynamic server.  This is required because of the need to interact on stdin/stdout
+# using a somewhat binary protocol.
+
+import sys
+import argparse
+import subprocess
+
+debug = False
+
+def parseArgs():
+    usage = """Run a test of qfServer dynserver"""
+    parser = argparse.ArgumentParser(description=usage)
+    parser.add_argument('--debug', action="store_true", default=False,
+                        help="enable debug tracing")
+    parser.add_argument('rootDir', type=str,
+                        help="data root directory")
+    parser.add_argument('queryType', type=str, choices=("query", "protQuery", "transQuery"),
+                        help="query request: query, protQuery, or transQuery")
+    parser.add_argument('genome', type=str,
+                        help="genome name")
+    parser.add_argument('queryFa', type=str,
+                        help="query fasta")
+    parser.add_argument('resultsOut', type=str,
+                        help="out is saved here for checking ")
+    args = parser.parse_args()
+    global debug
+    debug = args.debug
+    return args
+
+gfSignature = "0ddf270562684f29"
+
+def readFastaSeqsFh(faFh):
+    """read from one sequence from fasta"""
+    seqs = []
+    seq = ""
+    for line in faFh:
+        line = line.strip()
+        if line.startswith('>'):
+            if len(seq) > 0:
+                seqs.append(seq)
+                seq = ""
+        elif len(line) > 0:
+            seq = seq + line
+    if len(seq) > 0:
+        seqs.append(bytes(seq, encoding="latin-1"))
+    return seqs
+
+def readFastaSeqs(queryFa):
+    """simplistic FASTA reader, just code here to avoid added dependency"""
+    with open(queryFa) as faFh:
+        return readFastaSeqsFh(faFh)
+
+def readBytes(fh, count):
+    "read specified number of bytes, handing incomplete reads"
+    buf = bytes()
+    while len(buf) < count:
+        resp = fh.read(count - len(buf))
+        if len(resp) == 0:
+            raise Exception("unexpected EOF from server")
+        buf += resp
+    if debug:
+        print("debug: read:", str(buf, encoding="latin-1"), file=sys.stderr)
+    return buf
+
+def writeBytes(fh, buf):
+    "write bytes with debug tracing and byte conversion"
+    if not isinstance(buf, bytes):
+        buf = bytes(buf, encoding="utf8")
+    if debug:
+        print("debug: write:", str(buf, encoding="latin-1"), file=sys.stderr)
+    fh.write(buf)
+
+def netSendString(fh, data):
+    "Send a string down a socket - length byte first. (matches net.c)"
+    fh.write(fh, bytes(len(data)))
+    fh.write(data)
+
+def netRecieveString(fd):
+    "Read string return it (matches net.c)"
+    buf = readBytes(fd, 1)
+    return readBytes(fd, buf[0])
+
+def serverStart(rootDir):
+    "start server process"
+    # unbuffered is required, as protocol is not line-terminate
+    cmd = ["gfServer"]
+    if debug:
+        cmd += ["-log=/dev/stderr", "-debugLog"]
+    cmd += ["dynserver", rootDir]
+    if debug:
+        print("debug: start:", " ".join(cmd), file=sys.stderr)
+    return subprocess.Popen(cmd, bufsize=0,
+                            stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+
+def serverWait(gfServer):
+    "wait for server process to exit"
+    gfServer.wait()
+    if gfServer.returncode != 0:
+        raise Exception("gfServer process exited with {}".format(gfServer.returncode))
+
+def readResults(gfServer, resultsFh):
+    "read the results, which come back using the net string stuff"
+    while True:
+        resp = netRecieveString(gfServer.stdout)
+        if len(resp) > 0:
+            print(str(resp, encoding="latin-1"), file=resultsFh)
+        if resp == b'end':
+            break
+
+def makeQuery(gfServer, queryType, genome, seq, resultsFh):
+    "make a query to the server"
+    query = "{}{} {} {}\n".format(gfSignature, queryType, len(seq), genome)
+    print(query, file=resultsFh)
+    writeBytes(gfServer.stdin, query)
+
+    resp = readBytes(gfServer.stdout, 1)
+    if resp != b"Y":
+        raise Exception("expected 'Y' from gfServer, got '{}'".format(resp))
+    writeBytes(gfServer.stdin, seq)
+    readResults(gfServer, resultsFh)
+
+def queryServer(rootDir, queryType, genome, seq, resultsFh):
+    """on round of starting server, making a query, and stopping"""
+    gfServer = serverStart(rootDir)
+    makeQuery(gfServer, queryType, genome, seq, resultsFh)
+    serverWait(gfServer)
+
+def dynTester(rootDir, queryType, genome, queryFa, resultsFh):
+    "run tests"
+    seqs = readFastaSeqs(queryFa)
+    if len(seqs) == 0:
+        raise Exception("no sequences found in {}".format(queryFa))
+    for seq in seqs:
+        queryServer(rootDir, queryType, genome, seq, resultsFh)
+
+def main():
+    args = parseArgs()
+    with open(args.resultsOut, "w") as resultsFh:
+        dynTester(args.rootDir, args.queryType, args.genome, args.queryFa, resultsFh)
+
+main()
