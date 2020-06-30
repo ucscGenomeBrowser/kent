@@ -642,25 +642,33 @@ following the ampersand). To restore the default timeout, a warning message will
 with a link to clear the udcTimeout variable.</p>
 
 <a name="validate"></a>
-<h3>Check hub settings using Validate Hub tool</h3>
+<h3>Check hub settings using Hub Development tool</h3>
 <p>
 Hubs can be checked for valid file configuration, trackDb keywords, and composite or super track 
-settings with the Validate Hub tool. This tool can be accessed from the Track Hub page under 
-<a href="../../cgi-bin/hgHubConnect?#validateHub">the
-Validate Hub tab</a>. After entering your URL in the search box, 
-the tool runs hubCheck like so:</p>
+settings with the Hub Development tool. This tool can be accessed from the Track Hub page under 
+<a href="../../cgi-bin/hgHubConnect?#hubDeveloper">the
+Hub Development tab</a>. After entering your URL in the search box, 
+the tool runs the <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" 
+target="_blank">hubCheck utility</a> program equivalent to:</p>
 <pre>hubCheck -noTracks http://url.to.hub.txt</pre>
 <p>
 The noTracks setting speeds up the validation process but does not check for 
-the presence of your remotely hosted data track files. This tool checks your hub.txt, 
-genome.txt, and trackDb.txt settings and displays errors in bright red font, such 
-as "<font color="red">Missing required setting...</font>" and "<font color="red">Cannot open...</font>". The following picture shows 
+the presence or validity of your remotely hosted data track files. This tool checks your hub.txt,
+genome.txt, and trackDb.txt settings and displays warnings and errors in bright red font, such 
+as "<font color="red">Missing required setting...</font>" and 
+"<font color="red">Cannot open...</font>". The "Display load times" and "Enable
+hub refresh" optional settings show the load timing at the bottom of the Genome Browser page
+and allow instant hub refresh instead of 5 minute refresh. These options can be checked and
+activated by clicking "View Hub on Genome Browser". The following picture shows 
 <a href="examples/hubExamples/hubGroupings/hub.txt">the example track grouping hub</a>
-with no configuration errors:</p>
+with the warning that the hub has no hub description page, no configuration errors,
+and "Dispay load times" checked:</p>
 
 <p class='text-center'>
-  <img class='text-center' src="../../images/validateHub.png" alt="Validate hub tool checks config setting" width="749" height="249">
-  <p class='gbsCaption text-center'>The Validate Hub tool checks for proper configuration files and track hub settings.</p>
+  <img class='text-center' src="../../images/hubDevelopment.png" 
+alt="The Hub Development tool checks config setting" width="749" height="249">
+  <p class='gbsCaption text-center'>The Hub Development tool checks for proper configuration 
+files and track hub settings, and allows access to debugging settings.</p>
 </p>
 
 <h3>Check hub settings using hubCheck utility</h3>
@@ -750,7 +758,7 @@ There are four required variables for your URL to load a session with a hub and 
 <pre>http://genome.ucsc.edu/cgi-bin/hgTracks<strong>?db=</strong>hg19<strong>&hubUrl=</strong>http://myLab.org/myHub.txt<strong>&hgS_loadUrlName=</strong>http://mySession<strong>&hgS_doLoadUrl=submit</strong> </pre>
 <p>
 Another feature one can use in place of &quot;<strong>&hubUrl=</strong>&quot; is 
-&quot<strong>&hubClear=</strong>&quot;, which will load a hub while simultaneously disconnecting
+&quot;<strong>&hubClear=</strong>&quot;, which will load a hub while simultaneously disconnecting
  or clearing, hubs located at the same location. For example adding 
 <code>&hubClear=http://university.edu/lab/folder/hub10.txt</code> would connect the 
 referenced hub10.txt while simultaneously disconnecting any hubs that might be displayed from 
@@ -759,7 +767,7 @@ ect.). This feature can be useful for dynamically generated hubs that might coll
 otherwise.</p>
 
 <p>
-Beyond the URL options of &quot<strong>&hubUrl=</strong>&quot; and &quot<strong>&hubClear=</strong>&quot;
+Beyond the URL options of &quot;<strong>&hubUrl=</strong>&quot; and &quot;<strong>&hubClear=</strong>&quot;
 there are many other <a href="../../FAQ/FAQlink.html" target="_blank">ways to link to the Browser</a>
 including a list of <a href="../help/customTrack.html#optParams"
 target="_blank">URL optional parameters</a> described in the the Custom Tracks User's Guide.</p>
