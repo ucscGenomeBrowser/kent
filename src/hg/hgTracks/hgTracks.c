@@ -8274,7 +8274,7 @@ if (!hideControls)
     hPrintf("<INPUT TYPE=IMAGE BORDER=0 NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\">");
     /* Put up scroll and zoom controls. */
 #ifndef USE_NAVIGATION_LINKS
-    hWrites("move ");
+    hWrites("Move ");
     hButtonWithOnClick("hgt.left3", "<<<", "move 95% to the left",
                        "return imageV2.navigateButtonClick(this);");
     hButtonWithOnClick("hgt.left2", " <<", "move 47.5% to the left",
@@ -8287,13 +8287,13 @@ if (!hideControls)
                        "return imageV2.navigateButtonClick(this);");
     hButtonWithOnClick("hgt.right3", ">>>", "move 95% to the right",
                        "return imageV2.navigateButtonClick(this);");
-    hWrites(" zoom in ");
+    hWrites(" Zoom in ");
     /* use button maker that determines padding, so we can share constants */
     topButton("hgt.in1", ZOOM_1PT5X);
     topButton("hgt.in2", ZOOM_3X);
     topButton("hgt.in3", ZOOM_10X);
     topButton("hgt.inBase", ZOOM_BASE);
-    hWrites(" zoom out ");
+    hWrites(" Zoom out ");
     topButton("hgt.out1", ZOOM_1PT5X);
     topButton("hgt.out2", ZOOM_3X);
     topButton("hgt.out3", ZOOM_10X);
@@ -8367,7 +8367,7 @@ if (!hideControls)
 	hPrintf(" <span id='size'>%s</span> bp. ", buf);
 	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='60'>\n");
 	hWrites(" ");
-	hButton("goButton", "go");
+	hButton("goButton", "Go");
 	if (!trackHubDatabase(database))
 	    {
             jsonObjectAdd(jsonForClient, "assemblySupportsGeneSuggest", newJsonBoolean(assemblySupportsGeneSuggest(database)));
@@ -8513,14 +8513,14 @@ if (!hideControls)
         cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
         hPrintf(" ");
         }
-    hButtonWithMsg("hgt.reset", "default tracks","Display only default tracks");
+    hButtonWithMsg("hgt.reset", "Default tracks","Display only default tracks");
     hPrintf("&nbsp;");
-    hButtonWithMsg("hgt.defaultImgOrder", "default order",
+    hButtonWithMsg("hgt.defaultImgOrder", "Default order",
                    "Display current tracks in their default order");
     // if (showTrackControls)  - always show "hide all", Hiram 2008-06-26
         {
         hPrintf("&nbsp;");
-        hButtonWithMsg("hgt.hideAll", "hide all","Hide all currently visibile tracks");
+        hButtonWithMsg("hgt.hideAll", "Hide all","Hide all currently visibile tracks");
         }
 
     hPrintf(" ");
@@ -8532,30 +8532,30 @@ if (!hideControls)
     hPrintf(" ");
     if (hubConnectTableExists())
         {
-        hPrintf("<INPUT TYPE='button' id='th_form' VALUE='track hubs'"
+        hPrintf("<INPUT TYPE='button' id='th_form' VALUE='Track hubs'"
                 "return false;' title='Import tracks from hubs'>");
 	jsOnEventById("click", "th_form", "document.trackHubForm.submit();");
         hPrintf(" ");
         }
 
-    hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
+    hButtonWithMsg("hgTracksConfigPage", "Configure","Configure image and track selection");
     hPrintf(" ");
 
-    hButtonMaybePressed("hgTracksConfigMultiRegionPage", "multi-region", 
+    hButtonMaybePressed("hgTracksConfigMultiRegionPage", "Multi-region", 
                         "Configure multi-region display options", 
                         "popUpHgt.hgTracks('multi-region config'); return false;", virtMode);
     hPrintf(" ");
 
-    hButtonMaybePressed("hgt.toggleRevCmplDisp", "reverse",
+    hButtonMaybePressed("hgt.toggleRevCmplDisp", "Reverse",
                            revCmplDisp ? "Show forward strand at this location"
                                        : "Show reverse strand at this location",
                            NULL, revCmplDisp);
     hPrintf(" ");
 
-    hButtonWithOnClick("hgt.setWidth", "resize", "Resize image width to browser window size", "hgTracksSetWidth()");
+    hButtonWithOnClick("hgt.setWidth", "Resize", "Resize image width to browser window size", "hgTracksSetWidth()");
     hPrintf(" ");
 
-    hButtonWithMsg("hgt.refresh", "refresh","Refresh image");
+    hButtonWithMsg("hgt.refresh", "Refresh","Refresh image");
 
     hPrintf("<BR>\n");
 
@@ -8590,7 +8590,7 @@ if (!hideControls)
         hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
         hPrintf("<tr><td align='left'>\n");
 
-        hButtonWithOnClick("hgt.collapseGroups", "collapse all", "collapse all track groups",
+        hButtonWithOnClick("hgt.collapseGroups", "Collapse all", "collapse all track groups",
                            "return vis.expandAllGroups(false)");
         hPrintf("</td>");
 
@@ -8601,7 +8601,7 @@ if (!hideControls)
                 "more compact modes.</td>\n", MAX_CONTROL_COLUMNS - 2);
 
         hPrintf("<td align='right'>");
-        hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups",
+        hButtonWithOnClick("hgt.expandGroups", "Expand all", "expand all track groups",
                            "return vis.expandAllGroups(true)");
         hPrintf("</td></tr>");
 
@@ -8658,7 +8658,7 @@ if (!hideControls)
 		    group->name + strlen(hubTrackPrefix));
 		}
 
-            hPrintf("<input type='submit' name='hgt.refresh' value='refresh' "
+            hPrintf("<input type='submit' name='hgt.refresh' value='Refresh' "
                     "title='Update image with your changes'>\n");
             hPrintf("</td></tr></table></th>\n");
             controlGridEndRow(cg);
@@ -8745,7 +8745,7 @@ if (!hideControls)
     hPrintf("</DIV>\n");
     }
 if (showTrackControls)
-    hButton("hgt.refresh", "refresh");
+    hButton("hgt.refresh", "Refresh");
 hPrintf("</CENTER>\n");
 
 #ifdef SLOW
