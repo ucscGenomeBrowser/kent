@@ -3634,6 +3634,14 @@ var imageV2 = {
         return false;
     },
 
+    moveTiming: function() 
+    {    // move measure timing messages to the end of the page
+        if ($(".timing").length > 0) {
+            $("body").append("<div id='timingDiv'></div>");
+            $(".timing").detach().appendTo('#timingDiv');
+        }
+    },
+
     updateTiming: function (response)
     {   // update measureTiming text on current page based on what's in the response
         var reg = new RegExp("(<span class='timing'>.+?</span>)", "g");
@@ -3644,7 +3652,7 @@ var imageV2 = {
         if (strs.length > 0) {
             $('.timing').remove();
             for (var ix = strs.length; ix > 0; ix--) {
-                $('body').prepend(strs[ix - 1]);
+                $('#timingDiv').append(strs[ix - 1]);
             }
         }
         reg = new RegExp("(<span class='trackTiming'>[\\S\\s]+?</span>)");
@@ -4477,6 +4485,8 @@ var trackSearch = {
 ///////////////
 $(document).ready(function()
 {
+    imageV2.moveTiming();
+
     // on Safari the back button doesn't call the ready function.  Reload the page if
     // the back button was pressed.
     $(window).bind("pageshow", function(event) {
