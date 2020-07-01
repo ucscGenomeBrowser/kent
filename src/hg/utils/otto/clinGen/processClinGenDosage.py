@@ -140,20 +140,30 @@ def makeBedLine(chrom, chromStart, chromEnd, name, score, dosageType):
 
 def processClinGenDosage(inf, dosageType):
     global bedLines
+    lineCount = 1
     for line in inf:
         if line.startswith('#') or line.startswith('track') or line.startswith('browser'):
+            lineCount += 1
             continue
         trimmed = line.strip()
-        chrom, chromStart, chromEnd, name, score = trimmed.split("\t")
+        try:
+            chrom, chromStart, chromEnd, name, score = trimmed.split("\t")
+        except ValueError:
+            sys.stderr.write("Error: ignoring ill formatted bed line %s:%d\n" % (inf.name, lineCount))
+            lineCount += 1
+            continue
         try:
             bedLines[name] = makeBedLine(chrom, int(chromStart), int(chromEnd), name, int(score), dosageType)
         except:
+            # error here comes from something to do with the associated gene_curation_list and not
+            # the dosage file itself
             if score.startswith("Not"):
                 bedLines[name] = makeBedLine(chrom, int(chromStart), int(chromEnd), name, -1, dosageType)
             else:
                 print(sys.exc_info()[0])
                 sys.stderr.write("bad input line:\n%s\n" % line)
                 sys.exit(1)
+        lineCount += 1
     dumpBedLines(dosageType)
 
 def main():
