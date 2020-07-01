@@ -561,4 +561,73 @@ droSim2.downloadDir = droSim2
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
 
-#########################################################################
+###########################################################################
+# LASTZ D. schellia droSec1 (DONE 2020-06-30 - Hiram)
+    mkdir /hive/data/genomes/droSim2/bed/lastzDroSec1.2020-06-30
+    cd /hive/data/genomes/droSim2/bed/lastzDroSec1.2020-06-30
+
+    cat << '_EOF_' > DEF
+    printf '# D. simulans vs. D. schellia
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/hive/data/staging/data/blastz/HoxD55.q
+
+# TARGET - D. simulans
+SEQ1_DIR=/hive/data/genomes/droSim2/droSim2.2bit
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_LEN=/hive/data/genomes/droSim2/chrom.sizes
+
+# QUERY - D. schellia
+SEQ2_DIR=/hive/data/genomes/droSec1/droSec1.2bit
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+SEQ2_LEN=/hive/data/genomes/droSec1/chrom.sizes
+
+BASE=/hive/data/genomes/droSim2/bed/lastzDroSec1.2020-06-30
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000  -chainLinearGap=loose \
+        -syntenicNet -fileServer=hgwdev \
+    -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku) > do.log 2>&1
+    # real    170m54.091s
+
+    cat fb.droSim2.chainDroSec1Link.txt
+    # 117906809 bases of 124963774 (94.353%) in intersection
+
+    cat fb.droSim2.chainSynDroSec1Link.txt
+    # 110785279 bases of 124963774 (88.654%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` droSim2 droSec1) > rbest.log 2>&1 &
+    # real    3m47.266s
+
+    cat fb.droSim2.chainRBest.DroSec1.txt
+    # 113514069 bases of 124963774 (90.838%) in intersection
+
+    #   running the swap
+    mkdir /hive/data/genomes/droSec1/bed/blastz.droSim2.swap
+    cd /hive/data/genomes/droSec1/bed/blastz.droSim2.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/droSim2/bed/lastzDroSec1.2020-06-30/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1 &
+    # real    6m22.506s
+
+    cat fb.droSec1.chainDroSim2Link.txt
+    # 134191023 bases of 157238575 (85.342%) in intersection
+    cat fb.droSec1.chainSynDroSim2Link.txt
+    # 112329362 bases of 157238575 (71.439%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` droSec1 droSim2) > rbest.log 2>&1 &
+    # real    4m15.291s
+
+    cat fb.droSec1.chainRBest.DroSim2.txt
+    # 113366730 bases of 157238575 (72.099%) in intersection
+
+###########################################################################

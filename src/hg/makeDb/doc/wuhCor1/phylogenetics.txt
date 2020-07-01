@@ -1,0 +1,43 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes tracks built for the manuscript by Yatish Turakhia, Russ Corbet-Detig
+# et al. about apparent recurrent mutations (some erroneous, some real) that can cause trouble for
+# phylogenetic analyses, and comparisons of phylogenetic trees from different groups
+# (mainly Nextstrain and COG-UK).
+# Relevant github repos:
+# https://github.com/yatisht/strain_phylogenetics
+# https://github.com/lgozasht/COVID-19-Lab-Specific-Bias-Filter
+
+#########################################################################
+# Lab-associated mutations (DONE - 2020-06-03 - Angie)
+
+    mkdir /hive/data/genomes/wuhCor1/bed/labAssocMuts
+    cd /hive/data/genomes/wuhCor1/bed/labAssocMuts
+    # Saved file '2020-04-19 - Table_S1_Lab_Associated.tsv' emailed from Landen Gozashti
+    # Convert file to bed & bigBed with labAssocMuts.as:
+    perl -wne 's/[\r\n]//g;
+        @w = split("\t");
+        next unless (@w and $w[0] =~ m/^[A-Z](\d+)[A-Z]$/);
+        $pos = $1;
+        # Tweak columns to match output of github.com/lgozasht/COVID-19-Lab-Specific-Bias-Filter
+        ($name, $aaChange, $articPrimer, $altCount, $pars, $comment, $maf) = @w;
+        $name =~ s/T/U/;
+        $aaChange =~ s/^AACHANGE=//;
+        $articPrimer =~ s/left/LEFT/g;
+        $articPrimer =~ s/right/RIGHT/g;
+        $articPrimer =~ s/^/nCoV-2019_/ if ($articPrimer ne "");
+        $articPrimer =~ s/, /,nCoV-2019_/g;
+        print join("\t", "NC_045512v2", ($pos-1), $pos, $name, $pars, $altCount, $maf,
+                   $articPrimer, $aaChange, $comment) . "\n";' \
+     '2020-04-19 - Table_S1_Lab_Associated.tsv' \
+    | sort -k2n,2n \
+      > labAssocMutsNs419.bed
+    bedToBigBed -tab -type=bed4+9 -as=$HOME/kent/src/hg/lib/labAssocMuts.as \
+      labAssocMutsNs419.bed ../../chrom.sizes labAssocMutsNs419.bb
+
+    # Install in /gbdb
+    mkdir /gbdb/wuhCor1/phylogenetics/
+    ln -s `pwd`/labAssocMutsNs419.bb /gbdb/wuhCor1/phylogenetics/
+
+
+#########################################################################

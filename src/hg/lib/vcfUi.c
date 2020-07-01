@@ -384,6 +384,16 @@ cgiMakeDoubleVarInRange(varName, cartMinFreq, "minor allele frequency between 0.
 puts("<BR>");
 }
 
+static char *getChildSample(struct trackDb *tdb)
+/* Return just the VCF sample name of the phased trio child setting */
+{
+char *childSampleMaybeAlias = cloneString(trackDbLocalSetting(tdb, VCF_PHASED_CHILD_SAMPLE_SETTING));
+char *pt = strchr(childSampleMaybeAlias, '|');
+if (pt != NULL)
+    *pt = '\0';
+return childSampleMaybeAlias;
+}
+
 static struct slPair *vcfPhasedGetSamplesFromTdb(struct trackDb *tdb, boolean hideOtherSamples)
 /* Get the different VCF Phased Trio setings out of trackDb onto a list */
 {
@@ -431,30 +441,54 @@ slReverse(&ret);
 return ret;
 }
 
-struct slPair *vcfPhasedGetSampleOrder(struct cart *cart, struct trackDb *tdb, boolean parentLevel)
-/* Parse out a trio sample order from either trackDb or the cart */
+struct slPair *vcfPhasedGetSampleOrder(struct cart *cart, struct trackDb *tdb, boolean parentLevel, boolean hideOtherSamples)
+/* Parse out a trio sample order from either trackDb or the cart.
+ * If the trackName.sortChildBelow cart variable is true, then ensure
+ * the vcfChildSample sample is last in the order, otherwise, use what's
+ * in the trackName.vcfSampleOrder cart variable. */
 {
-char sampleOrderVar[1028],hideParentsVar[1028];
+char sampleOrderVar[1024];
 safef(sampleOrderVar, sizeof(sampleOrderVar), "%s.%s", tdb->track, VCF_PHASED_SAMPLE_ORDER_VAR);
-safef(hideParentsVar, sizeof(hideParentsVar), "%s.%s", tdb->track, VCF_PHASED_HIDE_OTHER_VAR);
-boolean hideOtherSamples = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_HIDE_OTHER_VAR, FALSE);
 char *cartOrder = cartOptionalString(cart, sampleOrderVar);
+boolean childBelow = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_CHILD_BELOW_VAR, FALSE);
 struct slPair *tdbOrder = vcfPhasedGetSamplesFromTdb(tdb, hideOtherSamples);
-if (cartOrder != NULL && !hideOtherSamples)
+if (!hideOtherSamples)
     {
-    struct slName *name;
-    struct slName *fromCart = slNameListFromComma(cartOrder);
-    struct slPair *ret = NULL;
-    for (name = fromCart; name != NULL; name = name->next)
+    // if the user used drag and drop to reorder the trios then that takes precedence
+    // over the childBelow checkbox
+    if (cartOrder != NULL)
         {
-        struct slPair *temp = slPairFind(tdbOrder, name->name);
-        slAddHead(&ret, temp);
+        struct slName *name, *fromCart = slNameListFromComma(cartOrder);
+        struct slPair *ret = NULL;
+        for (name = fromCart; name != NULL; name = name->next)
+            {
+            struct slPair *temp = slPairFind(tdbOrder, name->name);
+            struct slPair *toAdd = slPairNew(temp->name, temp->val);
+            slAddHead(&ret, toAdd);
+            }
+        slReverse(&ret);
+        return ret;
         }
-    slReverse(ret);
-    return ret;
+    else if (childBelow)
+        {
+        char *childName = getChildSample(tdb);
+        struct slPair *ret = NULL, *child = NULL, *temp = NULL;
+        for (temp = tdbOrder; temp != NULL; temp = temp->next)
+            {
+            struct slPair *toAdd = slPairNew(temp->name, temp->val);
+            if (sameString(temp->name, childName))
+                child = toAdd;
+            else
+                slAddHead(&ret, toAdd);
+            }
+        if (child)
+            slAddHead(&ret, child);
+        slReverse(&ret);
+        return ret;
+        }
     }
-else
-    return tdbOrder;
+// we're hiding the parents OR (we unchecked the childBelow checkbox AND we didn't drag reorder)
+return tdbOrder;
 }
 
 static boolean hasSampleAliases(struct trackDb *tdb)
@@ -464,17 +498,91 @@ struct slPair *nameVals = vcfPhasedGetSamplesFromTdb(tdb,FALSE);
 return nameVals->val != NULL;
 }
 
+static void vcfPhasedSampleSortUi(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff, char *name,
+                                    boolean parentLevel)
+/* Put up the UI for sorting the samples */
+{
+struct dyString *sortOrder = dyStringNew(0);
+struct slPair *pair, *tdbOrder = vcfPhasedGetSampleOrder(cart, tdb, parentLevel, FALSE);
+if (slCount(tdbOrder) == 1) // no sorting if there are no parents
+    return;
+char childBelowSortOrder[1024];
+safef(childBelowSortOrder, sizeof(childBelowSortOrder), "%s.%s", name, VCF_PHASED_CHILD_BELOW_VAR);
+boolean isBelowChecked = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_CHILD_BELOW_VAR, FALSE);
+printf("<b>Show child haplotypes below parents:</b>\n");
+cgiMakeCheckBox(childBelowSortOrder, isBelowChecked);
+char *infoText = "Check this box to sort the child haplotypes below the parents, leave unchecked"
+    " to use the default sort order of the child in the middle. Click into each subtrack to arbitrarily"
+    " order the samples which overrides this setting.";
+printInfoIcon(infoText);
+printf("<br>");
+if (!parentLevel)
+    {
+    printf("<b>or:</b><br>\n");
+    printf("<b>Click and drag to change order:</b>\n");
+    printf("<div>\n");
+    printf("<table id=\"%s_table\" class=\"tableWithDragAndDrop\">\n", tdb->track);
+    for (pair = tdbOrder; pair != NULL; pair = pair->next)
+        {
+        char id[256];
+        safef(id, sizeof(id), "%s_drag", pair->name);
+        printf("<tr id=\"%s_row\" class=\"trDraggable\"><td id=\"%s\" class=\"dragHandle\">%s - %s</td></tr>\n", pair->name, id, pair->name, (char *)pair->val);
+        dyStringPrintf(sortOrder, "%s,", pair->name);
+        }
+    printf("</table>\n");
+    printf("</div>\n");
+    printf("<input type=\"hidden\" name=\"%s.%s\" value=\"%s\">",tdb->track, VCF_PHASED_SAMPLE_ORDER_VAR, dyStringCannibalize(&sortOrder));
+    // add the hidden variable for setting the order and the javascript to change it
+    jsInlineF(""
+    "dragReorder.init();\n"
+    "var imgTable = $(\"#%s_table\");\n"
+    "if ($(imgTable).length > 0) {\n"
+    "   $(imgTable).tableDnD({\n"
+    "       onDragClass: \"trDrag\",\n"
+    "       dragHandle: \"dragHandle\",\n"
+    "       scrollAmount: 40,\n"
+    "       onDragStart: function(ev, table, row) {\n"
+    "           mouse.saveOffset(ev);\n"
+    "           table.tableDnDConfig.dragObjects = [ row ]; // defaults to just the one\n"
+    "       },\n"
+    "       onDrop: function(table, row, dragStartIndex) {\n"
+    "           if ($(row).attr('rowIndex') !== dragStartIndex) {\n"
+    "               // NOTE Even if dragging a contiguous set of rows,\n"
+    "               // still only need to check the one under the cursor.\n"
+    "               if (dragReorder.setOrder) {\n"
+    "                   dragReorder.setOrder(table);\n"
+    "               }\n"
+    "               // save the order of the samples into the input variable named above\n"
+    "               var newVal = \"\";\n"
+    "               var inp = $(\"input[name='%s.%s']\")[0];\n"
+    "               for (i = 0; i < table.rows.length; i++) {\n"
+    "                   newVal += table.rows[i].id.slice(0,-4) + \",\";\n"
+    "               }\n"
+    "               if (newVal.slice(-1) === \",\") {\n"
+    "                   newVal = newVal.slice(0,-1);\n"
+    "               }\n"
+    "               inp.value = newVal;\n"
+    "           }\n"
+    "       }\n"
+    "   });\n"
+    "}\n"
+    "", tdb->track, tdb->track, VCF_PHASED_SAMPLE_ORDER_VAR);
+    }
+}
+
 static void vcfCfgPhasedTrioUi(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff, char *name,
                                 boolean parentLevel)
 /* Put up the phased trio specific config settings */
 {
+//if (!parentLevel) // don't put up this display at the composite level
+vcfPhasedSampleSortUi(cart, tdb, vcff, name, parentLevel);
 if (hasSampleAliases(tdb))
     {
     printf("<b>Label samples by:</b>");
     char defaultLabel[1024], aliasLabel[1024];
     safef(defaultLabel, sizeof(defaultLabel), "%s.%s", name, VCF_PHASED_DEFAULT_LABEL_VAR);
     safef(aliasLabel, sizeof(aliasLabel), "%s.%s", name, VCF_PHASED_ALIAS_LABEL_VAR);
-    boolean isDefaultChecked = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_DEFAULT_LABEL_VAR, TRUE);
+    boolean isDefaultChecked = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_DEFAULT_LABEL_VAR, FALSE);
     boolean isAliasChecked = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_ALIAS_LABEL_VAR, TRUE);
     cgiMakeCheckBox(defaultLabel, isDefaultChecked);
     printf("VCF file sample names &nbsp;");
@@ -490,6 +598,12 @@ if (trackDbSetting(tdb,VCF_PHASED_PARENTS_SAMPLE_SETTING))
     boolean hidingOtherSamples = cartUsualBooleanClosestToHome(cart, tdb, parentLevel, VCF_PHASED_HIDE_OTHER_VAR, FALSE);
     cgiMakeCheckBox(hideVarName, hidingOtherSamples);
     }
+printf("<br>");
+printf("Highlight child variants that are inconsistent with phasing red");
+char shadeByDiffs[1024];
+safef(shadeByDiffs, sizeof(shadeByDiffs), "%s.%s", name, VCF_PHASED_HIGHLIGHT_INCONSISTENT);
+boolean highlightChildDiffs = cartUsualBooleanClosestToHome(cart, tdb, FALSE, VCF_PHASED_HIGHLIGHT_INCONSISTENT, FALSE);
+cgiMakeCheckBox(shadeByDiffs, highlightChildDiffs);
 }
 
 void vcfCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)

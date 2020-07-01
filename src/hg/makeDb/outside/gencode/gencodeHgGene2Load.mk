@@ -404,7 +404,7 @@ gencode-cmp.tsv: loadTables
 
 joinerCheck: loadTables
 	@mkdir -p check
-	for tbl in $$(hgsql -Ne 'show tables like "gencode%V${ver}"' ${db} ; do \
+	for tbl in $$(hgsql -Ne 'show tables like "gencode%V${ver}"' ${db}) ; do \
 	    echo  table=$$tbl; \
 	    runJoiner.csh ${db} $$tbl ~/kent/src/hg/makeDb/schema/all.joiner noTimes; \
 	    done >check/joiner.out 2>&1
