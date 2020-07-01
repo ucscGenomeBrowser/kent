@@ -2114,7 +2114,7 @@ hvGfxSetClip(hvgLL, clipXBak, clipYBak, clipWidthBak, clipHeightBak);
 
 static void vcfPhasedSetupHaplotypesLines(struct track *track, struct hvGfx *hvg, int xOff,
                             int yOff, int width, int *retYOffsets, struct slPair *sampleNames,
-                            MgFont *font)
+                            char *childSample, MgFont *font)
 /* Setup the background for drawing the ticks, the two haplotype lines for each sample, and the
  * transparent gray box to help distinguish between consecutive samples */
 {
@@ -2141,7 +2141,7 @@ for (name = sampleNames, i = 0; name != NULL; name = name->next, i++)
     retYOffsets[2*i] = y1;
     retYOffsets[(2*i) + 1] = y2;
     // make the background of every other lane light yellow, but only when NOT doing PDF/EPS output
-    if ((hvg->pixelBased && i & 1))
+    if (hvg->pixelBased && sameString(childSample, name->name))
         {
         hvGfxBox(hvg, xOff, y1-(track->lineHeight), width, (y2 + track->lineHeight) - (y1-track->lineHeight), transYellow);
         }
@@ -2183,7 +2183,7 @@ if (pt != NULL)
     *pt = '\0';
 
 // set up the "haplotype" lines and the transparent yellow box to delineate samples
-vcfPhasedSetupHaplotypesLines(track, hvg, xOff, yOff, width, yOffsets, sampleNames, font);
+vcfPhasedSetupHaplotypesLines(track, hvg, xOff, yOff, width, yOffsets, sampleNames, childSample, font);
 
 // maybe sort the variants by haplotype then draw ticks
 unsigned int *hapOrder = needMem(sizeof(short) * gtCount * 2);
