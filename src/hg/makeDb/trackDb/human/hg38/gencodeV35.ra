@@ -15,4 +15,4 @@ defaultLabelFields geneName
 itemRgb on
 filterValues.transcriptClass coding,nonCoding,other,pseudo
 externalDb knownGeneV35
-
+maxItems 50000
