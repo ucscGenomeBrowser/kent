@@ -108,7 +108,7 @@ return diff;
 static void startSeqQuery(int conn, bioSeq *seq, char *type, char *dynGenome)
 /* Send a query that involves some sequence. */
 {
-char buf[256];
+char buf[1024]; // room for error message if we need it.
 safef(buf, sizeof(buf), "%s%s %d", gfSignature(), type, seq->size);
 if (dynGenome != NULL)
     {
@@ -119,7 +119,13 @@ mustWriteFd(conn, buf, strlen(buf));
 if (read(conn, buf, 1) < 0)
     errAbort("startSeqQuery: read failed: %s", strerror(errno));
 if (buf[0] != 'Y')
-    errAbort("Expecting 'Y' from server, got %c", buf[0]);
+    {
+    // try to get read of message, might be an a useful error
+    int n = read(conn, buf+1, sizeof(buf)-2);
+    if (n >= 0)
+        buf[n+1] = '\0';
+    errAbort("Expecting 'Y' from server, got %s", buf);
+    }
 mustWriteFd(conn, seq->dna, seq->size);
 }
 

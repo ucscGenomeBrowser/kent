@@ -1165,28 +1165,39 @@ else
 findBigBedPosInTdbList(cart, db, tdbList, term, hgp, NULL);
 }
 
-boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost, char **pPort)
+boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost, char **pPort, boolean* pDynamic)
 {
-char *hostPort;
+char *setting;
 
 if (isTrans)
     {
-    hostPort = trackHubAssemblyField(database, "transBlat");
+    setting = trackHubAssemblyField(database, "transBlat");
     }
 else
     {
-    hostPort = trackHubAssemblyField(database, "blat");
+    setting = trackHubAssemblyField(database, "blat");
     }
 
-if (hostPort == NULL)
+if (setting == NULL)
     return FALSE;
    
-hostPort = cloneString(hostPort);
+char *conf = trimSpaces(cloneString(setting));
+int numWords = chopByWhite(conf, NULL, 4);
+if ((numWords < 2) || (numWords > 3))
+    errAbort("invalid configuration for hub BLAT server, expect 2 or 3 words: %s", setting);
+char *words[3];
+chopByWhite(conf, words, numWords);
 
-*pHost = nextWord(&hostPort);
-if (hostPort == NULL)
-    return FALSE;
-*pPort = hostPort;
+*pHost = words[0];
+*pPort = words[1];
+if (numWords > 2)
+    {
+    if (!sameString(words[2], "dynamic"))
+        errAbort("invalid configuration for hub BLAT server, third argument should be 'dynamic' or omitted, got: %s", words[2]);
+    *pDynamic = TRUE;
+    }
+else
+    *pDynamic = FALSE;
 
 return TRUE;
 }

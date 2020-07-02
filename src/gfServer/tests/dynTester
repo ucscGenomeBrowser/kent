@@ -106,7 +106,7 @@ def readResults(gfServer, resultsFh):
         resp = netRecieveString(gfServer.stdout)
         if len(resp) > 0:
             print(str(resp, encoding="latin-1"), file=resultsFh)
-        if resp == b'end':
+        if resp == b'trailerEnd':
             break
 
 def makeQuery(gfServer, queryType, genome, seq, resultsFh):

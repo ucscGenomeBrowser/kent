@@ -121,6 +121,11 @@ referring to yourAssembly, that would have matching port numbers:</p>
 <pre><code>transBlat yourLab.yourInstitution.edu 17777
 blat yourLab.yourInstitution.edu 17779 </code></pre>
 <p>
+An addition argument of the string <code>dynamic</code> to the <code>blat</code>
+or <code>transBlat</code> specification indicates that the BLAT server is dynamic and
+started by <code>xinetd</code>.  See <code>gfServer</code> documentation for the details
+of configuring a dynamic BLAT server.
+  
 See an example genomes.txt with commented out lines 
 <a href="http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/genomes.txt"
 target="_blank">here</a>, and please note the uppercase &quot;B&quot; in transBlat. For more 

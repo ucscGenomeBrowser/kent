@@ -20,6 +20,12 @@
 1180	1246	crea.2bit:mCreatGeno	6523	6589	3
 1528	1540	crea.2bit:mCreatGeno	4092	4103	2
 end
+version 36x7
+type nucleotide
+tileSize 11
+stepSize 11
+minMatch 2
+trailerEnd
 0ddf270562684f29query 1606 crea
 
 3	355	crea.2bit:mCreatGeno	2365	2717	32
@@ -42,3 +48,9 @@ end
 575	597	crea.2bit:hCreaGeno	1573	1595	2
 1588	1606	crea.2bit:mCreatGeno	4092	4103	8
 end
+version 36x7
+type nucleotide
+tileSize 11
+stepSize 11
+minMatch 2
+trailerEnd

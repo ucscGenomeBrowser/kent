@@ -1020,26 +1020,14 @@ struct genoFindIndex *gfIdx = genoFindIndexBuild(fileCount, seqFiles, minMatch, 
 genoFindIndexWrite(gfIdx, gfxFile);
 }
 
-
-static void dynErrorVa(char* msg, va_list args)
-/* send back an error response and exit */
+static void dynWarnErrorVa(char* msg, va_list args)
+/* warnHandler to log and send back an error response */
 {
 char buf[4096];
 int msgLen = vsnprintf(buf, sizeof(buf) - 1, msg, args);
 buf[msgLen] = '\0';
-logDebug("Error: %s", buf);
-printf("Error: %s\n", msg);
-exit(1);
-}
-
-static void dynError(char* msg, ...)
-/* send back an error response and exit */
-{
-va_list args;
-va_start(args, msg);
-dynErrorVa(msg, args);
-va_end(args);
-exit(1);
+logError("%s", buf);
+printf("Error: %s\n", buf);
 }
 
 static void dynReadBytes(char *buf, int bufSize)
@@ -1047,7 +1035,7 @@ static void dynReadBytes(char *buf, int bufSize)
 {
 int readSize = read(STDIN_FILENO, buf, bufSize-1);
 if (readSize < 0)
-    dynError("EOF from client");
+    errAbort("EOF from client");
 buf[readSize] = '\0';
 }
 
@@ -1063,17 +1051,17 @@ dynReadBytes(buf, sizeof(buf));
 logDebug("query: %s", buf);
 
 if (!startsWith(gfSignature(), buf))
-    dynError("query does not start with signature, got '%s'", buf);
+    errAbort("query does not start with signature, got '%s'", buf);
 
 static int nwords = 3;
 char *words[nwords];
 int numWords = chopByWhite(buf, words, nwords);
 if (numWords != nwords)
-    dynError("expected %d words in request, got %d", nwords, numWords);
+    errAbort("expected %d words in request, got %d", nwords, numWords);
 char *command = buf + strlen(gfSignature());
 if (!(sameString("query", command) || 
       sameString("protQuery", command) || sameString("transQuery", command)))
-    dynError("invalid command '%s'", command);
+    errAbort("invalid command '%s'", command);
 *commandRet = cloneString(command);
 *qsizeRet = atoi(words[1]);
 *genomeNameRet = cloneString(words[2]);
@@ -1087,7 +1075,7 @@ AllocVar(seq);
 seq->size = qSize;
 seq->dna = needLargeMem(qSize+1);
 if (gfReadMulti(STDIN_FILENO, seq->dna, qSize) != qSize)
-    dynError("read of %d bytes of query sequence failed", qSize);
+    errAbort("read of %d bytes of query sequence failed", qSize);
 
 if (queryIsProt)
     {
@@ -1114,17 +1102,39 @@ static void dynGetDataFiles(char *rootDir, char* genomeName, boolean isTrans, ch
 {
 safef(seqFile, PATH_LEN, "%s/%s/%s.2bit", rootDir, genomeName, genomeName);
 if (!fileExists(seqFile))
-    dynError("sequence file for %s does not exist: %s", genomeName, seqFile);
+    errAbort("sequence file for %s does not exist: %s", genomeName, seqFile);
 safef(gfIdxFile, PATH_LEN, "%s/%s/%s.%s.gfidx", rootDir, genomeName, genomeName, isTrans ? "trans" : "untrans");
 if (!fileExists(gfIdxFile))
-    dynError("gf index file for %s does not exist: %s", genomeName, gfIdxFile);
+    errAbort("gf index file for %s does not exist: %s", genomeName, gfIdxFile);
 }
 
+static void dynWriteTrailer(struct genoFindIndex *gfIdx)
+/* write trailer information, which is a subset of what status would return.
+ * This avoids the need to reconnect and reload index.
+ */
+{
+char buf[256];
+struct genoFind *gf = gfIdx->isTrans ? gfIdx->transGf[0][0] : gfIdx->untransGf;
+sprintf(buf, "version %s", gfVersion);
+netSendString(STDOUT_FILENO, buf);
+sprintf(buf, "type %s", (gfIdx->isTrans ? "translated" : "nucleotide"));
+netSendString(STDOUT_FILENO, buf);
+sprintf(buf, "tileSize %d", gf->tileSize);
+netSendString(STDOUT_FILENO, buf);
+sprintf(buf, "stepSize %d", gf->stepSize);
+netSendString(STDOUT_FILENO, buf);
+sprintf(buf, "minMatch %d", gf->minMatch);
+netSendString(STDOUT_FILENO, buf);
+netSendString(STDOUT_FILENO, "trailerEnd");
+}
 
 void dynamicServer(char* rootDir)
 /* dynamic server for inetd. Read query from stdin, open index, query, respond, exit.
  * only one query at a time */
 {
+// make sure error is logged, protocol doesn't allow reporting error to user
+pushWarnHandler(dynWarnErrorVa);
+
 char *command, *genomeName;
 int qSize;
 dynReadQuery(&command, &qSize, &genomeName);
@@ -1154,9 +1164,11 @@ else
     struct hash *perSeqMaxHash = maybePerSeqMax(1, seqFiles);
     dnaQuery(gfIdx->untransGf, seq, STDOUT_FILENO, perSeqMaxHash);
     }
-logDebug("query done");
 netSendString(STDOUT_FILENO, "end");
+dynWriteTrailer(gfIdx);
+logDebug("query done");
 }
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
