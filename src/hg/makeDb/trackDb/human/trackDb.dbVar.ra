@@ -2,8 +2,8 @@ track dbVarSv
 superTrack on
 group varRep
 html dbVarCurated
-shortLabel dbVar Curated Structural Variants
-longLabel NCBI Curated Structural Variants from dbVar
+shortLabel dbVar Curated Common Structural Variants
+longLabel NCBI Curated Common Structural Variants from dbVar
 
     track dbVar_common
     superTrack  dbVarSv pack
