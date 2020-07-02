@@ -110,6 +110,7 @@ errAbort(
   "         $genome/$genome.2bit\n"
   "         $genome/$genome.untrans.gfidx\n"
   "         $genome/$genome.trans.gfidx\n"
+  "     Both indexes must exist.\n"
   "\n"
   "options:\n"
   "   -tileSize=N     Size of n-mers to index.  Default is 11 for nucleotides, 4 for\n"
@@ -1039,11 +1040,12 @@ if (readSize < 0)
 buf[readSize] = '\0';
 }
 
-
-static void dynReadQuery(char **commandRet, int *qsizeRet, char **genomeNameRet)
+static void dynReadCommand(char **commandRet, int *qsizeRet, boolean *isTransRet, char **genomeNameRet)
 /* read query request from stdin, same as server expect includes database
- * Format is:
- *  signature command qsize genome
+ * Format for query commands:
+ *  signature+command qsize genome
+ * Formats for info command:
+ *  signature+command genome
  */
 {
 char buf[256];
@@ -1053,18 +1055,32 @@ logDebug("query: %s", buf);
 if (!startsWith(gfSignature(), buf))
     errAbort("query does not start with signature, got '%s'", buf);
 
-static int nwords = 3;
-char *words[nwords];
-int numWords = chopByWhite(buf, words, nwords);
-if (numWords != nwords)
-    errAbort("expected %d words in request, got %d", nwords, numWords);
+char *words[5];
+int numWords = chopByWhite(buf, words, ArraySize(words));
+if (numWords == 0)
+    errAbort("empty command");
 char *command = buf + strlen(gfSignature());
-if (!(sameString("query", command) || 
-      sameString("protQuery", command) || sameString("transQuery", command)))
-    errAbort("invalid command '%s'", command);
 *commandRet = cloneString(command);
-*qsizeRet = atoi(words[1]);
-*genomeNameRet = cloneString(words[2]);
+*isTransRet = sameString("protQuery", command) || sameString("transQuery", command)
+    || sameString("transInfo", command);
+
+if (sameString("query", command) || sameString("protQuery", command)
+      || sameString("transQuery", command))
+    {
+    if (numWords != 3)
+        errAbort("expected 3 words in query command, got %d", numWords);
+    *qsizeRet = atoi(words[1]);
+    *genomeNameRet = cloneString(words[2]);
+    }
+else if (sameString("untransInfo", command) || sameString("transInfo", command))
+    {
+    if (numWords != 2)
+        errAbort("expected 2 words in query command, got %d", numWords);
+    *qsizeRet = 0;
+    *genomeNameRet = cloneString(words[1]);
+    }
+else
+    errAbort("invalid command '%s'", command);
 }
 
 static struct dnaSeq* dynReadQuerySeq(int qSize, boolean isTrans, boolean queryIsProt)
@@ -1108,10 +1124,32 @@ if (!fileExists(gfIdxFile))
     errAbort("gf index file for %s does not exist: %s", genomeName, gfIdxFile);
 }
 
-static void dynWriteTrailer(struct genoFindIndex *gfIdx)
-/* write trailer information, which is a subset of what status would return.
- * This avoids the need to reconnect and reload index.
- */
+static void dynamicServerQuery(char *command, int qSize, char *genomeName,
+                               char *seqFiles[1], struct genoFindIndex *gfIdx)
+/* handle search queries */
+{
+mustWriteFd(STDOUT_FILENO, "Y", 1);
+
+boolean queryIsProt = sameString(command, "protQuery");
+struct dnaSeq* seq = dynReadQuerySeq(qSize, gfIdx->isTrans, queryIsProt);
+if (gfIdx->isTrans)
+    {
+    if (queryIsProt)
+        transQuery(gfIdx->transGf, seq, STDOUT_FILENO);
+    else
+        transTransQuery(gfIdx->transGf, seq, STDOUT_FILENO);
+    }
+else
+    {
+    struct hash *perSeqMaxHash = maybePerSeqMax(1, seqFiles);
+    dnaQuery(gfIdx->untransGf, seq, STDOUT_FILENO, perSeqMaxHash);
+    }
+netSendString(STDOUT_FILENO, "end");
+logDebug("query done");
+}
+
+static void dynamicServerInfo(char *command, char *genomeName, struct genoFindIndex *gfIdx)
+/* handle one of the info commands */
 {
 char buf[256];
 struct genoFind *gf = gfIdx->isTrans ? gfIdx->transGf[0][0] : gfIdx->untransGf;
@@ -1125,48 +1163,31 @@ sprintf(buf, "stepSize %d", gf->stepSize);
 netSendString(STDOUT_FILENO, buf);
 sprintf(buf, "minMatch %d", gf->minMatch);
 netSendString(STDOUT_FILENO, buf);
-netSendString(STDOUT_FILENO, "trailerEnd");
+netSendString(STDOUT_FILENO, "end");
 }
 
-void dynamicServer(char* rootDir)
+static void dynamicServer(char* rootDir)
 /* dynamic server for inetd. Read query from stdin, open index, query, respond, exit.
  * only one query at a time */
 {
-// make sure error is logged, protocol doesn't allow reporting error to user
+// make sure error is logged
 pushWarnHandler(dynWarnErrorVa);
 
 char *command, *genomeName;
 int qSize;
-dynReadQuery(&command, &qSize, &genomeName);
-
-boolean isTrans = sameString("protQuery", command) || sameString("transQuery", command);
-boolean queryIsProt = sameString(command, "protQuery");
+boolean isTrans;
+dynReadCommand(&command, &qSize, &isTrans, &genomeName);
 
 char seqFile[PATH_LEN];
 char *seqFiles[1] = {seqFile};  // functions expect list of files
 char gfIdxFile[PATH_LEN];
 dynGetDataFiles(rootDir, genomeName, isTrans, seqFiles[0], gfIdxFile);
 
-
 struct genoFindIndex *gfIdx = genoFindIndexLoad(gfIdxFile, isTrans);
-mustWriteFd(STDOUT_FILENO, "Y", 1);
-
-struct dnaSeq* seq = dynReadQuerySeq(qSize, isTrans, queryIsProt);
-if (isTrans)
-    {
-    if (queryIsProt)
-        transQuery(gfIdx->transGf, seq, STDOUT_FILENO);
-    else
-        transTransQuery(gfIdx->transGf, seq, STDOUT_FILENO);
-    }
+if (endsWith(command, "Info"))
+    dynamicServerInfo(command, genomeName, gfIdx);
 else
-    {
-    struct hash *perSeqMaxHash = maybePerSeqMax(1, seqFiles);
-    dnaQuery(gfIdx->untransGf, seq, STDOUT_FILENO, perSeqMaxHash);
-    }
-netSendString(STDOUT_FILENO, "end");
-dynWriteTrailer(gfIdx);
-logDebug("query done");
+    dynamicServerQuery(command, qSize, genomeName, seqFiles, gfIdx);
 }
 
 int main(int argc, char *argv[])

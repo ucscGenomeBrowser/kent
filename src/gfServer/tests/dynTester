@@ -106,7 +106,7 @@ def readResults(gfServer, resultsFh):
         resp = netRecieveString(gfServer.stdout)
         if len(resp) > 0:
             print(str(resp, encoding="latin-1"), file=resultsFh)
-        if resp == b'trailerEnd':
+        if resp == b'end':
             break
 
 def makeQuery(gfServer, queryType, genome, seq, resultsFh):
@@ -117,14 +117,28 @@ def makeQuery(gfServer, queryType, genome, seq, resultsFh):
 
     resp = readBytes(gfServer.stdout, 1)
     if resp != b"Y":
+        resp += gfServer.stdout.read()
         raise Exception("expected 'Y' from gfServer, got '{}'".format(resp))
     writeBytes(gfServer.stdin, seq)
     readResults(gfServer, resultsFh)
 
-def queryServer(rootDir, queryType, genome, seq, resultsFh):
+def serverQuery(rootDir, queryType, genome, seq, resultsFh):
     """on round of starting server, making a query, and stopping"""
     gfServer = serverStart(rootDir)
     makeQuery(gfServer, queryType, genome, seq, resultsFh)
+    serverWait(gfServer)
+
+def makeInfo(gfServer, infoType, genome, resultsFh):
+    "info request to the server"
+    query = "{}{} {}\n".format(gfSignature, infoType, genome)
+    print(query, file=resultsFh)
+    writeBytes(gfServer.stdin, query)
+    readResults(gfServer, resultsFh)
+
+def serverInfo(rootDir, infoType, genome, resultsFh):
+    """make an info request to the server"""
+    gfServer = serverStart(rootDir)
+    makeInfo(gfServer, infoType, genome, resultsFh)
     serverWait(gfServer)
 
 def dynTester(rootDir, queryType, genome, queryFa, resultsFh):
@@ -133,7 +147,9 @@ def dynTester(rootDir, queryType, genome, queryFa, resultsFh):
     if len(seqs) == 0:
         raise Exception("no sequences found in {}".format(queryFa))
     for seq in seqs:
-        queryServer(rootDir, queryType, genome, seq, resultsFh)
+        serverQuery(rootDir, queryType, genome, seq, resultsFh)
+    infoType = "untransInfo" if queryType == "query" else "transInfo"
+    serverInfo(rootDir, infoType, genome, resultsFh)
 
 def main():
     args = parseArgs()

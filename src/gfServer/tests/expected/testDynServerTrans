@@ -90,12 +90,6 @@ tileSize 11
 171	191	crea.2bit:hCreaGeno	520	540	4	+	2	2
  171 520 179 528 183 532 187 536
 end
-version 36x7
-type translated
-tileSize 4
-stepSize 4
-minMatch 3
-trailerEnd
 0ddf270562684f29transQuery 1606 crea
 
 tileSize 11
@@ -192,9 +186,11 @@ tileSize 11
 292	320	crea.2bit:mCreatGeno	1536	1564	7	+	2	2
  292 1536 296 1540 300 1544 304 1548 308 1552 312 1556 316 1560
 end
+0ddf270562684f29transInfo crea
+
 version 36x7
 type translated
 tileSize 4
 stepSize 4
 minMatch 3
-trailerEnd
+end
