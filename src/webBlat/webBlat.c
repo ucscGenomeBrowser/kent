@@ -369,7 +369,7 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	gvo->reportTargetStrand = TRUE;
 	if (protQuery)
 	    {
-	    gfAlignTrans(&conn, server->seqDir, seq, 5, tFileCache, gvo, NULL);
+	    gfAlignTrans(&conn, server->seqDir, seq, 5, tFileCache, gvo, server->dynGenome);
 	    }
 	else
 	    {
@@ -381,16 +381,16 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 		reverseComplement(seq->dna, seq->size);
 		conn = gfConnect(server->host, server->port);
 		gfAlignTransTrans(&conn, server->seqDir, seq, TRUE, 5,
-		                        tFileCache, gvo, FALSE, NULL);
+		                        tFileCache, gvo, FALSE, server->dynGenome);
 		}
 	    }
 	}
     else
         {
-	gfAlignStrand(&conn, server->seqDir, seq, FALSE, 16, tFileCache, gvo, NULL);
+	gfAlignStrand(&conn, server->seqDir, seq, FALSE, 16, tFileCache, gvo, server->dynGenome);
 	reverseComplement(seq->dna, seq->size);
 	conn = gfConnect(server->host, server->port);
-	gfAlignStrand(&conn, server->seqDir, seq, TRUE, 16, tFileCache, gvo, NULL);
+	gfAlignStrand(&conn, server->seqDir, seq, TRUE, 16, tFileCache, gvo, server->dynGenome);
 	}
     gfOutputQuery(gvo, f);
     }
