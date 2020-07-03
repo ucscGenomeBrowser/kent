@@ -148,6 +148,15 @@ hgMapToGene -tempDb=$tempDb $db affyU95 knownGene knownToU95
 hgsql $tempDb -Ne "create view all_mrna as select * from $db.all_mrna"
 hgsql $tempDb -Ne "create view ensGene as select * from $db.ensGene"
 hgsql $tempDb -Ne "create view gtexGene as select * from $db.gtexGene"
+hgsql $tempDb -Ne "create view gencodeAnnotV35 as select * from $db.gencodeAnnotV35"
+hgsql $tempDb -Ne "create view gencodeAttrsV35 as select * from $db.gencodeAttrsV35"
+hgsql $tempDb -Ne "create view gencodeGeneSourceV35 as select * from $db.gencodeGeneSourceV35"
+hgsql $tempDb -Ne "create view gencodeTranscriptSourceV35 as select * from $db.gencodeTranscriptSourceV35"
+hgsql $tempDb -Ne "create view gencodeToPdbV35 as select * from $db.gencodeToPdbV35"
+hgsql $tempDb -Ne "create view gencodeToPubMedV35 as select * from $db.gencodeToPubMedV35"
+hgsql $tempDb -Ne "create view gencodeToRefSeqV35 as select * from $db.gencodeToRefSeqV35"
+hgsql $tempDb -Ne "create view gencodeTagV35 as select * from $db.gencodeTagV35"
+hgsql $tempDb -Ne "create view gencodeTranscriptSupportV35 as select * from $db.gencodeTranscriptSupportV35"
 
 bioCycDir=/hive/data/outside/bioCyc/190905/download/humancyc/21.0/data
 mkdir $dir/bioCyc

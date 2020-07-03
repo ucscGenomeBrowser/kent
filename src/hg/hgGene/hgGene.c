@@ -34,6 +34,7 @@ char *curGeneId;	/* Current Gene Id. */
 char *curGeneName;		/* Biological name of gene. */
 char *curGeneChrom;	/* Chromosome current gene is on. */
 char *curAlignId;       /* Align id from knownGene genePred */
+struct trackDb *globalTdb;
 struct genePred *curGenePred;	/* Current gene prediction structure. */
 boolean isGencode;              /* is this based on the Gencode models */
 boolean isGencode2;             /* is this based on the Gencode models and use ensembl id as primary id */
@@ -443,6 +444,7 @@ addGoodSection(flyBasePhenotypesSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(flyBaseSynonymsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(bdgpExprInSituSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(goSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(gencodeSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(infoSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(methodSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(localizationSection(conn, sectionRa), conn, &sectionList);
@@ -721,6 +723,7 @@ else
 
     char *tableName = cartUsualString(cart, hggType, NULL);
     struct trackDb *tdb = hTrackDbForTrack(database, tableName);
+    globalTdb = tdb;
     char *externalDb = trackDbSetting(tdb, "externalDb");
     if (externalDb != NULL)
         conn = hAllocConn(externalDb);

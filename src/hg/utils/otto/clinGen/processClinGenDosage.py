@@ -75,21 +75,21 @@ def parseExtraFile(fname, dosageType):
 def getColor(bed, dosageType):
     """Return the shade of the item according to it's variant type."""
     if dosageType == "haplo":
-        if bed["score"] == -1: return "128,128,128"
-        if bed["score"] == 0: return "191,191,191"
-        if bed["score"] == 1: return "191,115,115"
-        if bed["score"] == 2: return "191,93,96"
-        if bed["score"] == 3: return  "255,51,0"
-        if bed["score"] == 30: return "160,136,246"
-        if bed["score"] == 40: return "255,204,204"
+        if bed["score"] == -1: return "218,215,215"
+        if bed["score"] == 0: return "130,128,128"
+        if bed["score"] == 1: return "232,104,111"
+        if bed["score"] == 2: return "218,44,55"
+        if bed["score"] == 3: return  "180,3,16"
+        if bed["score"] == 30: return "137,93,189"
+        if bed["score"] == 40: return "238,146,148"
     if dosageType == "triplo":
-        if bed["score"] == -1: return "128,128,128"
-        if bed["score"] == 0: return "191,191,191"
-        if bed["score"] == 1: return "180,198,231"
-        if bed["score"] == 2: return "142,169,219"
-        if bed["score"] == 3: return "48,84,150"
-        if bed["score"] == 30: return "160,136,246"
-        if bed["score"] == 40: return "217,255,242"
+        if bed["score"] == -1: return "218,215,215"
+        if bed["score"] == 0: return "130,128,128"
+        if bed["score"] == 1: return "88,131,211"
+        if bed["score"] == 2: return "41,78,174"
+        if bed["score"] == 3: return "17,44,138"
+        if bed["score"] == 30: return "137,93,189"
+        if bed["score"] == 40: return "122,165,211"
 
 def getMouseover(bed, dosageType):
     """Return the mouseOver string for this bed record."""
@@ -140,20 +140,30 @@ def makeBedLine(chrom, chromStart, chromEnd, name, score, dosageType):
 
 def processClinGenDosage(inf, dosageType):
     global bedLines
+    lineCount = 1
     for line in inf:
         if line.startswith('#') or line.startswith('track') or line.startswith('browser'):
+            lineCount += 1
             continue
         trimmed = line.strip()
-        chrom, chromStart, chromEnd, name, score = trimmed.split("\t")
+        try:
+            chrom, chromStart, chromEnd, name, score = trimmed.split("\t")
+        except ValueError:
+            sys.stderr.write("Error: ignoring ill formatted bed line %s:%d\n" % (inf.name, lineCount))
+            lineCount += 1
+            continue
         try:
             bedLines[name] = makeBedLine(chrom, int(chromStart), int(chromEnd), name, int(score), dosageType)
         except:
+            # error here comes from something to do with the associated gene_curation_list and not
+            # the dosage file itself
             if score.startswith("Not"):
                 bedLines[name] = makeBedLine(chrom, int(chromStart), int(chromEnd), name, -1, dosageType)
             else:
                 print(sys.exc_info()[0])
                 sys.stderr.write("bad input line:\n%s\n" % line)
                 sys.exit(1)
+        lineCount += 1
     dumpBedLines(dosageType)
 
 def main():

@@ -56,6 +56,10 @@ struct section *sectionNew(struct hash *sectionRa, char *name);
 /* Create a section loading all common parts but the methods 
  * sectionRa. */
 
+struct section *gencodeSection(struct sqlConnection *conn, 
+	struct hash *sectionRa);
+/* Create gencode section. */
+
 struct section *linksSection(struct sqlConnection *conn, 
 	struct hash *sectionRa);
 /* Create links section. */
