@@ -732,7 +732,6 @@ if (isPositional)
 	cgiMakeButton(hgtaDoSetUserRegions, "define regions");
     hPrintf("</TD></TR>\n");
 
-    printf("noGenome? %d", (int)disableGenome);
     if (disableGenome) { // no need to check curTrack for NULL, disableGenome can only be set if curTable is set
         hPrintf("<tr><td><DIV style='background-color: #faf2bb; opacity:0.9; border: 1px solid #EEE; margin: 2px; padding: 4px'>");
         char *noGenomeNote = trackDbSettingClosestToHome(curTrack, "noGenomeReason");
