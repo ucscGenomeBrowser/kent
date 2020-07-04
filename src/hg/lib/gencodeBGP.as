@@ -1,5 +1,5 @@
-table bigGenePred
-"bigGenePred gene models"
+table gencodeBGP
+"GENCODE bigGenePred"
    (
    string chrom;       "Reference sequence chromosome or scaffold"
    uint   chromStart;  "Start position in chromosome"
