@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Euarch Chain/Net
 longLabel Euarchontoglire Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aTShrew=Tree_shrew bBushbaby=Bushbaby bMouseLemur=Mouse_Lemur cTarsier=Tarsier dMarmoset=Marmoset eSquirrelMonkey=Squirrel_Monkey fBaboon=Baboon gRhesus=Rhesus hGibbon=Gibbon iaOrangutan=Orangutan ibOrangutan=Orangutan jaGorilla=Gorilla jbGorilla=Gorilla kaChimp=Chimp kbChimp=Chimp lHuman=Human
+subGroup2 species Species aTShrew=Tree_shrew bBushbaby=Bushbaby bMouseLemur=Mouse_Lemur cTarsier=Tarsier dMarmoset=Marmoset eSquirrelMonkey=Squirrel_Monkey fBaboon=Baboon gRhesus=Rhesus hGibbon=Gibbon iaOrangutan=Orangutan ibOrangutan=Orangutan jaGorilla=Gorilla jbGorilla=Gorilla jcBonobo=Bonobo kaChimp=Chimp kbChimp=Chimp lHuman=Human
 subGroup3 clade Clade aHom=Hominidae bCerco=Cercopithecinae cPlaty=Platyrrhini dHaplo=Haplorrhini eStrep=Strepsirrhini fScan=Scandentia
 dragAndDrop subTracks
 visibility hide
@@ -134,6 +134,14 @@ include chainNetRheMac8.ra
         type chain gorGor3
         otherDb gorGor3
 
+        track chainPanPan3
+        subTrack euarchontoglireChainNetViewchain off
+        subGroups view=chain species=jcBonobo clade=aHom
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain panPan3
+        otherDb panPan3
+
         track chainPanTro6
         subTrack euarchontoglireChainNetViewchain off
         subGroups view=chain species=kaChimp clade=aHom
@@ -262,6 +270,14 @@ include hg38ChainNet.ra
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign gorGor3 chainGorGor3
         otherDb gorGor3
+
+        track netPanPan3
+        subTrack euarchontoglireChainNetViewnet on
+        subGroups view=net species=jcBonobo clade=aHom
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign panPan3 chainPanPan3
+        otherDb panPan3
 
         track netPanTro6
         subTrack euarchontoglireChainNetViewnet on
