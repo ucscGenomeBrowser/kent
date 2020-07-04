@@ -3785,6 +3785,9 @@ return filterByList;
 filterBy_t *filterBySetGetGuts(struct trackDb *tdb, struct cart *cart, char *name, char *subName, char *settingName)
 // Gets one or more "filterBy" settings (ClosestToHome).  returns NULL if not found
 {
+if (sameString(subName, "highlightBy"))
+    return NULL;   // not supported currently
+
 // first check to see if this tdb is using "new" FilterValues cart variables
 struct trackDbFilter *trackDbFilters = tdbGetTrackFilterByFilters( tdb);
 if (trackDbFilters)

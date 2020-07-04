@@ -92,9 +92,14 @@ hgsql $db -Ne "select transcriptId, tag from gencodeTag$GENCODE_VERSION" | sort 
 join -t $'\t' -a 1  -e"none" -o auto   join4 tags.txt > join5
 hgsql $db -Ne "select transcriptId, level from gencodeAttrs$GENCODE_VERSION" | sort > level.txt
 join -t $'\t'   join5 level.txt > join6
-cut -f 2- -d $'\t' join6 | sort -k1,1 -k2,2n > bgpInput.txt
+grep basic tags.txt | tawk '{print $1, 1, "basic"}' > basic.txt
+tawk '{print $5,0,"canonical"}'  knownCanonical.tab | sort > canonical.txt
+tawk '{print $4,2,"all"}' gencodeAnnot$GENCODE_VERSION.bgpInput | sort > all.txt
+sort -k1,1 -k2,2n basic.txt canonical.txt all.txt | tawk '{if ($1 != last) {print last,buff; buff=$3}else {buff=buff "," $3} last=$1} END {print last,buff}' | tail -n +2  > tier.txt
+join -t $'\t'   join6 tier.txt > join7
+cut -f 2- -d $'\t' join7 | sort -k1,1 -k2,2n > bgpInput.txt
 
-bedToBigBed -type=bed12+15 -tab -as=$HOME/kent/src/hg/lib/gencodeBGP.as bgpInput.txt /cluster/data/$db/chrom.sizes $db.gencode$GENCODE_VERSION.bb
+bedToBigBed -type=bed12+16 -tab -as=$HOME/kent/src/hg/lib/gencodeBGP.as bgpInput.txt /cluster/data/$db/chrom.sizes $db.gencode$GENCODE_VERSION.bb
 
 ln -s `pwd`/$db.gencode$GENCODE_VERSION.bb /gbdb/$db/gencode/gencode$GENCODE_VERSION.bb
 
@@ -157,6 +162,7 @@ hgsql $tempDb -Ne "create view gencodeToPubMedV35 as select * from $db.gencodeTo
 hgsql $tempDb -Ne "create view gencodeToRefSeqV35 as select * from $db.gencodeToRefSeqV35"
 hgsql $tempDb -Ne "create view gencodeTagV35 as select * from $db.gencodeTagV35"
 hgsql $tempDb -Ne "create view gencodeTranscriptSupportV35 as select * from $db.gencodeTranscriptSupportV35"
+hgsql $tempDb -Ne "create view gencodeToUniProtV35 as select * from $db.gencodeToUniProtV35"
 
 bioCycDir=/hive/data/outside/bioCyc/190905/download/humancyc/21.0/data
 mkdir $dir/bioCyc
