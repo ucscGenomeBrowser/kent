@@ -105,8 +105,8 @@ struct genoFind
     bool allowOneMismatch;		 /* Allow a single mismatch? */
     bool noSimpRepMask;			  /* Dis-Allow simple repeat masking. */
     int segSize;			 /* Index is segmented if non-zero. */
-    struct gfSeqSource *sources;         /* List of sequence sources. */
     bits32 totalSeqSize;		 /* Total size of all sequences. */
+    struct gfSeqSource *sources;         /* List of sequence sources. */
     bits32 *listSizes;                   /* Size of list for each N-mer */
     void *allocated;                     /* Storage space for all lists. */
     bits32 **lists;                      /* A list for each N-mer. Used if
@@ -133,9 +133,10 @@ struct genoFindIndex
 /* container for genoFind indexes, sorting either an untranslated index on six translated indexes.
  * these can be created in memory or saved to a file to quickly mmap */
 {
-    void *memMapped;    /* memory mapped if non-NULL, with amount allocated */
+    void *memMapped;     /* memory mapped if non-NULL, with amount allocated */
     size_t memLength;
-    bool isTrans;       /* is this translated? */                
+    bool isTrans;        /* is this translated? */
+    bool noSimpRepMask;  /* Suppresses simple repeat masking for very small genomes */
     struct genoFind *untransGf;
     struct genoFind *transGf[2][3];
 };

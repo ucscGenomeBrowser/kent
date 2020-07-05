@@ -56,7 +56,7 @@ while (totalRead < size)
     oneRead = read(sd, buf + totalRead, size - totalRead);
     if (oneRead < 0)
         {
-	perror("Couldn't finish large read");
+	errAbort("Couldn't finish large read");
 	return oneRead;
 	}
     else if (oneRead == 0)
@@ -117,11 +117,16 @@ struct genoFindFileHdr
     bool allowOneMismatch;
     bool noSimpRepMask;
     int segSize;
+    int totalSeqSize;
 
     off_t sourcesOff;     // offset of sequences sources
     off_t listSizesOff;   // offset of listSizes
     off_t listsOff;       // offset of lists or endLists
     off_t endListsOff;
+
+    // Reserved area. This is really padding, as all structures are accessed via
+    // offsets, so fields can be added without decreasing padding as long as the
+    // reserved is not consumed.
     bits64 reserved[32];  // vesion 1.0: 32
 };
 
@@ -142,6 +147,7 @@ hdr->isPep = gf->isPep;
 hdr->allowOneMismatch = gf->allowOneMismatch;
 hdr->noSimpRepMask = gf->noSimpRepMask;
 hdr->segSize = gf->segSize;
+hdr->totalSeqSize = gf->totalSeqSize;
 }                        
     
 static void genoFindReadHdr(struct genoFindFileHdr *hdr,
@@ -160,6 +166,7 @@ gf->isPep = hdr->isPep;
 gf->allowOneMismatch = hdr->allowOneMismatch;
 gf->noSimpRepMask = hdr->noSimpRepMask;
 gf->segSize = hdr->segSize;
+gf->totalSeqSize = hdr->totalSeqSize;
 }                        
     
 static void genoFindWriteSource(struct gfSeqSource *ss, FILE *f)
@@ -371,6 +378,10 @@ struct genoFindIndexFileHdr
     // offsets to data, only one is filed in based on being translated or note
     off_t untransOff;
     off_t transOff[2][3];
+
+    // Reserved area. This is really padding, as all structures are accessed via
+    // offsets, so fields can be added without decreasing padding as long as the
+    // reserved is not consumed.
     bits64 reserved[32];  // vesion 1.0: 32
 };
 
@@ -1768,6 +1779,7 @@ AllocArray(buckets, bucketCount);
 for (hit = hitList; hit != NULL; hit = nextHit)
     {
     nextHit = hit->next;
+    assert((hit->tStart >> bucketShift) < bucketCount);
     pb = buckets + (hit->tStart >> bucketShift);
     slAddHead(pb, hit);
     }

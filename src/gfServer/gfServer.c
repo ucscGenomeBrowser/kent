@@ -68,7 +68,6 @@ boolean seqLog = FALSE;
 boolean ipLog = FALSE;
 boolean doMask = FALSE;
 boolean canStop = FALSE;
-boolean writeIndex = FALSE;
 char *indexFile = NULL;
 
 void usage()
@@ -1017,7 +1016,8 @@ static void buildIndex(char *gfxFile, int fileCount, char *seqFiles[])
 /* build pre-computed index for seqFiles and write to gfxFile */
 {
 struct genoFindIndex *gfIdx = genoFindIndexBuild(fileCount, seqFiles, minMatch, maxGap, tileSize,
-                                                 repMatch, doTrans, NULL, allowOneMismatch, doMask, stepSize, noSimpRepMask);
+                                                 repMatch, doTrans, NULL, allowOneMismatch, doMask, stepSize,
+                                                 noSimpRepMask);
 genoFindIndexWrite(gfIdx, gfxFile);
 }
 
@@ -1092,6 +1092,7 @@ seq->size = qSize;
 seq->dna = needLargeMem(qSize+1);
 if (gfReadMulti(STDIN_FILENO, seq->dna, qSize) != qSize)
     errAbort("read of %d bytes of query sequence failed", qSize);
+seq->dna[qSize] = '\0';
 
 if (queryIsProt)
     {
@@ -1223,10 +1224,8 @@ ipLog = optionExists("ipLog");
 doMask = optionExists("mask");
 canStop = optionExists("canStop");
 noSimpRepMask = optionExists("noSimpRepMask");
-writeIndex = optionExists("writeIndex");
 indexFile = optionVal("indexFile", NULL);
-if (writeIndex && (indexFile == NULL))
-    errAbort("-writeIndex options requires -indexFile");
+
 if (argc < 2)
     usage();
 if (optionExists("log"))

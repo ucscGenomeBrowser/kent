@@ -8,12 +8,15 @@ import argparse
 import subprocess
 
 debug = False
+valGrind = False
 
 def parseArgs():
     usage = """Run a test of qfServer dynserver"""
     parser = argparse.ArgumentParser(description=usage)
     parser.add_argument('--debug', action="store_true", default=False,
                         help="enable debug tracing")
+    parser.add_argument('--valgrind', action="store_true", default=False,
+                        help="run valgrind on gfServer without to valgrind.out")
     parser.add_argument('rootDir', type=str,
                         help="data root directory")
     parser.add_argument('queryType', type=str, choices=("query", "protQuery", "transQuery"),
@@ -25,8 +28,9 @@ def parseArgs():
     parser.add_argument('resultsOut', type=str,
                         help="out is saved here for checking ")
     args = parser.parse_args()
-    global debug
+    global debug, valgrind
     debug = args.debug
+    valgrind = args.valgrind
     return args
 
 gfSignature = "0ddf270562684f29"
@@ -85,7 +89,10 @@ def netRecieveString(fd):
 def serverStart(rootDir):
     "start server process"
     # unbuffered is required, as protocol is not line-terminate
-    cmd = ["gfServer"]
+    cmd = []
+    if valgrind:
+        cmd += ["valgrind", "--log-file=valgrind.out"]
+    cmd += ["gfServer"]
     if debug:
         cmd += ["-log=/dev/stderr", "-debugLog"]
     cmd += ["dynserver", rootDir]

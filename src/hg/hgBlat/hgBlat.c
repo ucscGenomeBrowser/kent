@@ -347,7 +347,7 @@ if (trackHubDatabase(db))
 
 static struct serverTable st;
 struct sqlConnection *conn = hConnectCentral();
-char query[256];
+char query[512];
 struct sqlResult *sr;
 char **row;
 char dbActualName[32];
@@ -361,12 +361,17 @@ if (!sqlExists(conn, query))
         db = dbActualName;
     }
 
-/* Do a little join to get data to fit into the serverTable and grab dbDb.nibPath too. */
-sqlSafef(query, sizeof(query), "select dbDb.name,dbDb.description,blatServers.isTrans,"
-               "blatServers.host,blatServers.port,dbDb.nibPath "
-	       "from dbDb,blatServers where blatServers.isTrans = %d and "
-	       "dbDb.name = '%s' and dbDb.name = blatServers.db", 
-	       isTrans, db);
+/* Do a little join to get data to fit into the serverTable and grab
+ * dbDb.nibPath too.  check for newer dynamic flag.  sqlSafef doesn't lets us
+ * format in comma in field spec, so need to do this in two steps. */
+char queryTmpl[512];
+boolean haveDynamic = sqlColumnExists(conn, "blatServers", "dynamic");
+safef(queryTmpl, sizeof(queryTmpl), "select dbDb.name,dbDb.description,blatServers.isTrans,"
+      "blatServers.host,blatServers.port,dbDb.nibPath %s "
+      "from dbDb,blatServers where blatServers.isTrans = %%d and "
+      "dbDb.name = '%%s' and dbDb.name = blatServers.db", 
+         (haveDynamic ? ", blatServers.dynamic" : ""));
+sqlSafef(query, sizeof(query), queryTmpl, isTrans, db);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     {
@@ -382,6 +387,8 @@ st.isTrans = atoi(row[2]);
 st.host = cloneString(row[3]);
 st.port = cloneString(row[4]);
 st.nibDir = hReplaceGbdbSeqDir(row[5], st.db);
+if (haveDynamic && atoi(row[6]))
+    st.dynGenome = cloneString(db);
 
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
