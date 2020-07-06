@@ -150,8 +150,19 @@ shortLabel ARTIC Primers
 longLabel ARTIC Oxford Nanopore sequencing primers
 visibility hide
 group map
+priority 5
 type bigBed 4 +
 bigDataUrl /gbdb/wuhCor1/bbi/artic.bb
+noScoreFilter on
+
+track rapid
+shortLabel RAPID Primers
+longLabel RAPID Oxford Nanopore sequencing primers
+visibility hide
+group map
+priority 5
+type bigBed 6 +
+bigDataUrl /gbdb/wuhCor1/bbi/rapid.bb
 noScoreFilter on
 
 track conticello
