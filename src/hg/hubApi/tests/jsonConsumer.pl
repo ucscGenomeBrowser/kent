@@ -61,6 +61,7 @@ printf STDERR "arguments:
    /list/hubGenomes - list genomes from a specified hub (with hubUrl=...)
    /list/tracks - list data tracks available in specified hub or database genome
    /list/chromosomes - list chromosomes from specified data track
+   /list/schema - show schema from specified data track in hubUrl or database
    /getData/sequence - return sequence from specified hub or database genome
    /getData/track - return data from specified track in hub or database genome
 ";

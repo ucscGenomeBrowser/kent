@@ -35,7 +35,7 @@ errorTests: err01 err02 err03 err04 err05 err06 err07 err08 err09 err10 \
 
 notSupported: notSup01 notSup02 notSup03 notSup07 notSup10
 
-bugReports: redmine23733 redmine24089a redmine24089b redmine24666
+bugReports: redmine23733 redmine24089a redmine24089b redmine24666 redmine25840
 
 setOutput:
 	@if [ ! -d testOutput ]; then mkdir testOutput; fi
@@ -1067,6 +1067,12 @@ redmine24089b: setOutput
 redmine24666: setOutput
 	@printf "### $@ 'https://api-test.gi.ucsc.edu/getData/sequence?genome=ci2;chrom=scaffold_8534'\n"
 	@./jsonConsumer.pl -endpoint="/getData/sequence" -genome=ci2 -chrom=scaffold_8534 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" |  gzip -c > testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# full chromosome fetch from a NIB based genom
+redmine25840: setOutput
+	@printf "### $@ 'https://api-test.gi.ucsc.edu/getData/track?genome=hg18;track=cnpSebat2'\n"
+	@./jsonConsumer.pl -endpoint="/getData/track" -genome="hg18" -track="cnpSebat2" | egrep -v "${excludeLines}" | gzip -c > testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 #	curl -L "https://api-test.gi.ucsc.edu/getData/sequence?genome=ci2;chrom=scaffold_8534" 2>&1 | sed -e 's/, /,\n/g;' | egrep -v "${excludeLines}" | tail -5 | gzip -c > testOutput/$@.gz
