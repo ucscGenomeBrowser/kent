@@ -613,12 +613,12 @@ if (indexFile == NULL)
     logInfo("setting up %s index", desc);
     gfIdx = genoFindIndexBuild(fileCount, seqFiles, minMatch, maxGap, tileSize, repMatch, doTrans, NULL,
                                allowOneMismatch, doMask, stepSize, noSimpRepMask);
-    logInfo("indexing building complete in  %4.3f seconds", 0.001 * (clock1000() - startIndexTime));
+    logInfo("index building completed in %4.3f seconds", 0.001 * (clock1000() - startIndexTime));
     }
 else
     {
     gfIdx = genoFindIndexLoad(indexFile, doTrans);
-    logInfo("indexing loading complete in  %4.3f seconds", 0.001 * (clock1000() - startIndexTime));
+    logInfo("index loading completed in %4.3f seconds", 0.001 * (clock1000() - startIndexTime));
     }
 
 /* Set up socket.  Get ready to listen to it. */
@@ -1178,17 +1178,22 @@ char *command, *genomeName;
 int qSize;
 boolean isTrans;
 dynReadCommand(&command, &qSize, &isTrans, &genomeName);
+logInfo("dynserver: %s %s %s size=%d ", command, genomeName, (isTrans ? "trans" : "untrans"), qSize);
 
+time_t startTime = clock1000();
 char seqFile[PATH_LEN];
 char *seqFiles[1] = {seqFile};  // functions expect list of files
 char gfIdxFile[PATH_LEN];
 dynGetDataFiles(rootDir, genomeName, isTrans, seqFiles[0], gfIdxFile);
+logInfo("dynserver: index loading completed in %4.3f seconds", 0.001 * (clock1000() - startTime));
+startTime = clock1000();
 
 struct genoFindIndex *gfIdx = genoFindIndexLoad(gfIdxFile, isTrans);
 if (endsWith(command, "Info"))
     dynamicServerInfo(command, genomeName, gfIdx);
 else
     dynamicServerQuery(command, qSize, genomeName, seqFiles, gfIdx);
+logInfo("dynserver: %s completed in %4.3f seconds", command, 0.001 * (clock1000() - startTime));
 }
 
 int main(int argc, char *argv[])

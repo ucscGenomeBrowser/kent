@@ -304,17 +304,72 @@ char *outputList[] = {"hyperlink", "psl", "psl no header"};
 
 int minMatchShown = 0;
 
+static struct serverTable *databaseServerTable(char *db, boolean isTrans)
+/* Load blat table for a database */
+{
+struct sqlConnection *conn = hConnectCentral();
+char query[512];
+struct sqlResult *sr;
+char **row;
+char dbActualName[32];
+
+/* If necessary convert database description to name. */
+sqlSafef(query, sizeof(query), "select name from dbDb where name = '%s'", db);
+if (!sqlExists(conn, query))
+    {
+    sqlSafef(query, sizeof(query), "select name from dbDb where description = '%s'", db);
+    if (sqlQuickQuery(conn, query, dbActualName, sizeof(dbActualName)) != NULL)
+        db = dbActualName;
+    }
+
+struct serverTable *st;
+AllocVar(st);
+
+/* Do a little join to get data to fit into the serverTable and grab
+ * dbDb.nibPath too.  check for newer dynamic flag.  sqlSafef doesn't lets us
+ * format in comma in field spec, so need to do this in two steps. */
+char *blatServersTbl = "blatServers"; // this can be hack to use another db.table for debugging
+char queryTmpl[512];
+boolean haveDynamic = sqlColumnExists(conn, blatServersTbl, "dynamic");
+safef(queryTmpl, sizeof(queryTmpl), "select dbDb.name, dbDb.description, blatServers.isTrans,"
+      "blatServers.host, blatServers.port, dbDb.nibPath %s "
+      "from dbDb, %s blatServers where blatServers.isTrans = %%d and "
+      "dbDb.name = '%%s' and dbDb.name = blatServers.db", 
+      (haveDynamic ? ", blatServers.dynamic" : ""), blatServersTbl);
+sqlSafef(query, sizeof(query), queryTmpl, isTrans, db);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    {
+    errAbort("Can't find a server for %s database %s.  Click "
+	     "<A HREF=\"/cgi-bin/hgBlat?%s&command=start&db=%s\">here</A> "
+	     "to reset to default database.",
+	     (isTrans ? "translated" : "DNA"), db,
+	     cartSidUrlString(cart), hDefaultDb());
+    }
+st->db = cloneString(row[0]);
+st->genome = cloneString(row[1]);
+st->isTrans = atoi(row[2]);
+st->host = cloneString(row[3]);
+st->port = cloneString(row[4]);
+st->nibDir = hReplaceGbdbSeqDir(row[5], st->db);
+if (haveDynamic && atoi(row[6]))
+    st->dynGenome = cloneString(db);
+
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+return st;
+}
+
 static struct serverTable *trackHubServerTable(char *db, boolean isTrans)
-/* Find out if database is a track hub with a blat server */
+/* Load blat table for a hub */
 {
 char *host, *port;
 boolean dynamic;
 
 if (!trackHubGetBlatParams(db, isTrans, &host, &port, &dynamic))
-    return NULL;
+    errAbort("Cannot get blat server parameters for track hub with database %s", db);
 
 struct serverTable *st;
-
 AllocVar(st);
 
 st->db = cloneString(db);
@@ -338,61 +393,9 @@ struct serverTable *findServer(char *db, boolean isTrans)
  * database name or description. */
 {
 if (trackHubDatabase(db))
-    {
-    struct serverTable *hubSt = trackHubServerTable(db, isTrans);
-    if (hubSt != NULL)
-	return hubSt;
-    errAbort("Cannot get blat server parameters for track hub with database %s\n", db);
-    }
-
-static struct serverTable st;
-struct sqlConnection *conn = hConnectCentral();
-char query[512];
-struct sqlResult *sr;
-char **row;
-char dbActualName[32];
-
-/* If necessary convert database description to name. */
-sqlSafef(query, sizeof(query), "select name from dbDb where name = '%s'", db);
-if (!sqlExists(conn, query))
-    {
-    sqlSafef(query, sizeof(query), "select name from dbDb where description = '%s'", db);
-    if (sqlQuickQuery(conn, query, dbActualName, sizeof(dbActualName)) != NULL)
-        db = dbActualName;
-    }
-
-/* Do a little join to get data to fit into the serverTable and grab
- * dbDb.nibPath too.  check for newer dynamic flag.  sqlSafef doesn't lets us
- * format in comma in field spec, so need to do this in two steps. */
-char queryTmpl[512];
-boolean haveDynamic = sqlColumnExists(conn, "blatServers", "dynamic");
-safef(queryTmpl, sizeof(queryTmpl), "select dbDb.name,dbDb.description,blatServers.isTrans,"
-      "blatServers.host,blatServers.port,dbDb.nibPath %s "
-      "from dbDb,blatServers where blatServers.isTrans = %%d and "
-      "dbDb.name = '%%s' and dbDb.name = blatServers.db", 
-         (haveDynamic ? ", blatServers.dynamic" : ""));
-sqlSafef(query, sizeof(query), queryTmpl, isTrans, db);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) == NULL)
-    {
-    errAbort("Can't find a server for %s database %s.  Click "
-	     "<A HREF=\"/cgi-bin/hgBlat?%s&command=start&db=%s\">here</A> "
-	     "to reset to default database.",
-	     (isTrans ? "translated" : "DNA"), db,
-	     cartSidUrlString(cart), hDefaultDb());
-    }
-st.db = cloneString(row[0]);
-st.genome = cloneString(row[1]);
-st.isTrans = atoi(row[2]);
-st.host = cloneString(row[3]);
-st.port = cloneString(row[4]);
-st.nibDir = hReplaceGbdbSeqDir(row[5], st.db);
-if (haveDynamic && atoi(row[6]))
-    st.dynGenome = cloneString(db);
-
-sqlFreeResult(&sr);
-hDisconnectCentral(&conn);
-return &st;
+    return trackHubServerTable(db, isTrans);
+else
+    return databaseServerTable(db, isTrans);
 }
 
 void findClosestServer(char **pDb, char **pOrg)
