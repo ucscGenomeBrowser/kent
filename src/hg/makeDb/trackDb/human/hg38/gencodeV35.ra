@@ -9,10 +9,11 @@ bigDataUrl /gbdb/hg38/gencode/gencodeV35.bb
 group genes
 isGencode2 on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
-#labelFields geneName,name2,name
 labelFields geneName,name,geneName2,name2
 defaultLabelFields geneName
 itemRgb on
 filterValues.transcriptClass coding,nonCoding,other,pseudo
+filterValues.tier basic,canonical
+filterType.tier multipleListOnlyOr
 externalDb knownGeneV35
 maxItems 50000
