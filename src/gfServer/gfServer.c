@@ -109,7 +109,9 @@ errAbort(
   "         $rootdir/$genome/$genome.2bit\n"
   "         $rootdir/$genome/$genome.untrans.gfidx\n"
   "         $rootdir/$genome/$genome.trans.gfidx\n"
-  "     Both indexes must exist.\n"
+  "     The -perSeqMax functionality can be implemented by creating a file\n"
+  "         $rootdir/$genome/$genome.perseqmax\n"
+  "     Note: the dynamic, the file names in the perseqmax file MUST NOT contain directories.\n"
   "\n"
   "options:\n"
   "   -tileSize=N     Size of n-mers to index.  Default is 11 for nucleotides, 4 for\n"
@@ -540,34 +542,40 @@ while ((c = *s++) != 0)
 return FALSE;
 }
 
+static struct hash *buildPerSeqMax(int fileCount, char *seqFiles[], char* perSeqMaxFile)
+/* do work of building perSeqMaxhash */
+{
+struct hash *perSeqMaxHash = hashNew(0);
+struct lineFile *lf = lineFileOpen(perSeqMaxFile, TRUE);
+char *line;
+while (lineFileNextReal(lf, &line))
+    {
+    // Make sure line contains a valid seq filename (before optional ':seq')
+    char *seqFile = trimSpaces(line);
+    char copy[strlen(seqFile)+1];
+    safecpy(copy, sizeof copy, seqFile);
+    char *colon = strrchr(copy, ':');
+    if (colon)
+        *colon = '\0';
+    if (stringArrayIx(copy, seqFiles, fileCount) < 0)
+        lineFileAbort(lf, "'%s' does not appear to be a sequence file from the "
+                      "command line", copy);
+    hashAddInt(perSeqMaxHash, seqFile, 0);
+    }
+lineFileClose(&lf);
+return perSeqMaxHash;
+}
+    
+
 static struct hash *maybePerSeqMax(int fileCount, char *seqFiles[])
 /* If options include -perSeqMax=file, then read the sequences named in the file into a hash
  * for testing membership in the set of sequences to exclude from -maxDnaHits accounting. */
 {
-struct hash *perSeqMaxHash = NULL;
 char *fileName = optionVal("perSeqMax", NULL);
 if (isNotEmpty(fileName))
-    {
-    perSeqMaxHash = hashNew(0);
-    struct lineFile *lf = lineFileOpen(fileName, TRUE);
-    char *line;
-    while (lineFileNextReal(lf, &line))
-        {
-        // Make sure line contains a valid seq filename (before optional ':seq')
-        char *seqFile = trimSpaces(line);
-        char copy[strlen(seqFile)+1];
-        safecpy(copy, sizeof copy, seqFile);
-        char *colon = strrchr(copy, ':');
-        if (colon)
-            *colon = '\0';
-        if (stringArrayIx(copy, seqFiles, fileCount) < 0)
-            lineFileAbort(lf, "'%s' does not appear to be a sequence file from the "
-                          "command line", copy);
-        hashAddInt(perSeqMaxHash, seqFile, 0);
-        }
-    lineFileClose(&lf);
-    }
-return perSeqMaxHash;
+    return buildPerSeqMax(fileCount, seqFiles, fileName);
+else
+    return NULL;
 }
 
 static void hashZeroVals(struct hash *hash)
@@ -1114,19 +1122,33 @@ if (seq->size > maxSize)
 return seq;
 }
 
-static void dynGetDataFiles(char *rootDir, char* genomeName, boolean isTrans, char seqFile[PATH_LEN], char gfIdxFile[PATH_LEN])
+static void dynGetDataFiles(char *rootDir, char* genomeName, boolean isTrans, char gfIdxFile[PATH_LEN],
+                            struct hash **perSeqMaxHashRet)
 /* get paths for sequence files to handle requests and validate they exist */
 {
+char seqFile[PATH_LEN];
 safef(seqFile, PATH_LEN, "%s/%s/%s.2bit", rootDir, genomeName, genomeName);
 if (!fileExists(seqFile))
     errAbort("sequence file for %s does not exist: %s", genomeName, seqFile);
+
 safef(gfIdxFile, PATH_LEN, "%s/%s/%s.%s.gfidx", rootDir, genomeName, genomeName, isTrans ? "trans" : "untrans");
 if (!fileExists(gfIdxFile))
     errAbort("gf index file for %s does not exist: %s", genomeName, gfIdxFile);
+
+char perSeqMaxFile[PATH_LEN];
+safef(perSeqMaxFile, PATH_LEN, "%s/%s/%s.perseqmax", rootDir, genomeName, genomeName);
+*perSeqMaxHashRet = NULL;
+if (fileExists(perSeqMaxFile))
+    {
+    /* only the basename of the file is saved in the index */
+    char *slash = strrchr(seqFile, '/');
+    char *seqFiles[1] = {(slash != NULL) ? slash + 1 : seqFile};
+    *perSeqMaxHashRet = buildPerSeqMax(1, seqFiles, perSeqMaxFile);
+    }
 }
 
 static void dynamicServerQuery(char *command, int qSize, char *genomeName,
-                               char *seqFiles[1], struct genoFindIndex *gfIdx)
+                               struct genoFindIndex *gfIdx, struct hash *perSeqMaxHash)
 /* handle search queries */
 {
 mustWriteFd(STDOUT_FILENO, "Y", 1);
@@ -1142,7 +1164,6 @@ if (gfIdx->isTrans)
     }
 else
     {
-    struct hash *perSeqMaxHash = maybePerSeqMax(1, seqFiles);
     dnaQuery(gfIdx->untransGf, seq, STDOUT_FILENO, perSeqMaxHash);
     }
 netSendString(STDOUT_FILENO, "end");
@@ -1181,10 +1202,9 @@ dynReadCommand(&command, &qSize, &isTrans, &genomeName);
 logInfo("dynserver: %s %s %s size=%d ", command, genomeName, (isTrans ? "trans" : "untrans"), qSize);
 
 time_t startTime = clock1000();
-char seqFile[PATH_LEN];
-char *seqFiles[1] = {seqFile};  // functions expect list of files
 char gfIdxFile[PATH_LEN];
-dynGetDataFiles(rootDir, genomeName, isTrans, seqFiles[0], gfIdxFile);
+struct hash *perSeqMaxHash = NULL;
+dynGetDataFiles(rootDir, genomeName, isTrans, gfIdxFile, &perSeqMaxHash);
 logInfo("dynserver: index loading completed in %4.3f seconds", 0.001 * (clock1000() - startTime));
 startTime = clock1000();
 
@@ -1192,7 +1212,7 @@ struct genoFindIndex *gfIdx = genoFindIndexLoad(gfIdxFile, isTrans);
 if (endsWith(command, "Info"))
     dynamicServerInfo(command, genomeName, gfIdx);
 else
-    dynamicServerQuery(command, qSize, genomeName, seqFiles, gfIdx);
+    dynamicServerQuery(command, qSize, genomeName, gfIdx, perSeqMaxHash);
 logInfo("dynserver: %s completed in %4.3f seconds", command, 0.001 * (clock1000() - startTime));
 }
 

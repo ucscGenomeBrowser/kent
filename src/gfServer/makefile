@@ -7,17 +7,21 @@ L += -lm $(SOCKETLIB)
 test::
 	${MKDIR} tests/output
 	${DESTBINDIR}/${A} direct tests/input/mCrea.mrna tests/input/hCreaGeno.nib \
-		tests/input/mCreaGeno.nib > tests/output/testNib
+		tests/input/mCreaGeno.nib > tests/output/testNib.out
+	diff tests/expected/testNib.out tests/output/testNib.out
 	${DESTBINDIR}/${A} direct tests/input/mCrea.mrna tests/input/creaGeno.2bit \
-		>tests/output/testTwoBit
-	cd tests && ./testProtNib output/testProtNib
-	cd tests && ./testProtTwoBit output/testProtTwoBit
-	cd tests && ./testTransNib output/testTransNib
-	cd tests && ./testTransTwoBit output/testTransTwoBit
-	cd tests && ./testPcr output/testPcr
-	cd tests && ./testIndexFile output/testIndexFile
-	cd tests && ./testIndexFileTrans output/testIndexFileTrans
-	rm -r tests/output
+		>tests/output/testTwoBit.out
+	diff tests/expected/testTwoBit.out tests/output/testTwoBit.out
+	cd tests && ./testProtNib
+	cd tests && ./testProtTwoBit
+	cd tests && ./testTransNib
+	cd tests && ./testTransTwoBit
+	cd tests && ./testPcr
+	cd tests && ./testIndexFile
+	cd tests && ./testIndexFileTrans
+	cd tests && ./testDynServer
+	cd tests && ./testDynServerTrans
+	cd tests && ./testDynServerPerSeqMax
 
 clean::
 	rm -fr ${O} tests/output

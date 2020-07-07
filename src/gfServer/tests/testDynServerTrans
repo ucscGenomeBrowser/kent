@@ -9,5 +9,5 @@ gfServer index -trans $gfDir/crea.trans.gfidx $gfDir/crea.2bit >/dev/null
 
 # test query
 
-./dynTester $(dirname $gfDir) transQuery crea input/crea.mrna output/testDynServerTrans
-diff expected/testDynServerTrans output/testDynServerTrans
+./dynTester $(dirname $gfDir) transQuery crea input/crea.mrna output/testDynServerTrans.out
+diff expected/testDynServerTrans.out output/testDynServerTrans.out

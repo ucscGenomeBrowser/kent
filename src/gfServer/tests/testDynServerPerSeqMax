@@ -1,11 +1,13 @@
 #!/bin/bash -e
 
 # build index
-gfDir=output/rootDynServer/crea
+gfDir=output/rootDynServerPerSeqmax/crea
 rm -rf $gfDir
 mkdir -p $gfDir
 cp -f input/creaGeno.2bit $gfDir/crea.2bit
 gfServer index $gfDir/crea.untrans.gfidx $gfDir/crea.2bit >/dev/null
+echo "crea.2bit:hCreaGeno" >$gfDir/crea.perseqmax
+echo "crea.2bit:mCreatGeno2" >>$gfDir/crea.perseqmax
 
 # test query
 
