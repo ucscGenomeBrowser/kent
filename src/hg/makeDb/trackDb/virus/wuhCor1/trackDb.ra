@@ -210,6 +210,8 @@ longLabel Microdeletions
 type bed 6
 group varRep
 spectrum on
+pennantIcon New red ../goldenPath/newsarch.html#070720 "Released Jul. 07, 2020"
+
 
 track nanoCov
 shortLabel Nanopore Coverage
