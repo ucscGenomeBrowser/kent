@@ -359,21 +359,21 @@ void gfFileCacheFree(struct hash **pCache);
 
 void gfAlignStrand(int *pConn, char *nibDir, struct dnaSeq *seq,
     boolean isRc,  int minMatch, 
-    struct hash *tFileCache, struct gfOutput *out, char *dynGenome);
+    struct hash *tFileCache, struct gfOutput *out, char *dynGenomeDir);
 /* Search genome on server with one strand of other sequence to find homology. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found.  gfSavePsl is a handy
  * outFunction to use. */
 
 void gfAlignTrans(int *pConn, char *nibDir, aaSeq *seq,
-    int minMatch, struct hash *tFileHash, struct gfOutput *out, char *dynGenome);
+    int minMatch, struct hash *tFileHash, struct gfOutput *out, char *dynGenomeDir);
 /* Search indexed translated genome on server with an amino acid sequence. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found. */
 
 void gfAlignTransTrans(int *pConn, char *nibDir, struct dnaSeq *seq, 
 	boolean qIsRc, int minMatch, struct hash *tFileCache, 
-	struct gfOutput *out, boolean isRna, char *dynGenome);
+	struct gfOutput *out, boolean isRna, char *dynGenomeDir);
 /* Search indexed translated genome on server with an dna sequence.  Translate
  * this sequence in three frames. Load homologous bits of genome locally
  * and do detailed alignment.  Call 'outFunction' with each alignment

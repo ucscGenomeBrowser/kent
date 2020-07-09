@@ -1165,7 +1165,7 @@ else
 findBigBedPosInTdbList(cart, db, tdbList, term, hgp, NULL);
 }
 
-boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost, char **pPort, boolean* pDynamic)
+boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost, char **pPort, char **pDynGenomeDir)
 {
 char *setting;
 
@@ -1182,10 +1182,10 @@ if (setting == NULL)
     return FALSE;
    
 char *conf = trimSpaces(cloneString(setting));
-int numWords = chopByWhite(conf, NULL, 4);
-if ((numWords < 2) || (numWords > 3))
-    errAbort("invalid configuration for hub BLAT server, expect 2 or 3 words: %s", setting);
-char *words[3];
+int numWords = chopByWhite(conf, NULL, 5);
+if ((numWords < 2) || (numWords > 4))
+    errAbort("invalid configuration for hub BLAT server, expect 2 or 4 arguments: %s", setting);
+char *words[4];
 chopByWhite(conf, words, numWords);
 
 *pHost = words[0];
@@ -1194,10 +1194,10 @@ if (numWords > 2)
     {
     if (!sameString(words[2], "dynamic"))
         errAbort("invalid configuration for hub BLAT server, third argument should be 'dynamic' or omitted, got: %s", words[2]);
-    *pDynamic = TRUE;
+    *pDynGenomeDir = words[3];
     }
 else
-    *pDynamic = FALSE;
+    *pDynGenomeDir = NULL;
 
 return TRUE;
 }

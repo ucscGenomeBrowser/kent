@@ -21,6 +21,7 @@ test::
 	cd tests && ./testIndexFileTrans
 	cd tests && ./testDynServer
 	cd tests && ./testDynServerTrans
+	cd tests && ./testDynServerWithDir
 	cd tests && ./testDynServerPerSeqMax
 
 clean::

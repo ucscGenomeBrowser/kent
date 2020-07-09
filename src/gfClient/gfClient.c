@@ -78,8 +78,9 @@ printf(
   "                   blast8- NCBI blast tabular format\n"
   "                   blast9 - NCBI blast tabular format with comments\n"
   "   -maxIntron=N   Sets maximum intron size. Default is %d.\n"
-  "   -genome=name   When using a dynamic gfServer, this is the name of the genome to query\n",
-                        gfVersion, ffIntronMaxDefault);
+  "   -genome=name   When using a dynamic gfServer, this is the name of the genome to query.\n"
+  "                  It maybe prefixed by containing directory as needed (see gfServer).\n",
+  gfVersion, ffIntronMaxDefault);
 exit(-1);
 }
 

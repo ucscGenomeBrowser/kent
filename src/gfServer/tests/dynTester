@@ -22,7 +22,7 @@ def parseArgs():
     parser.add_argument('queryType', type=str, choices=("query", "protQuery", "transQuery"),
                         help="query request: query, protQuery, or transQuery")
     parser.add_argument('genome', type=str,
-                        help="genome name")
+                        help="genome name, can include containing dirs")
     parser.add_argument('queryFa', type=str,
                         help="query fasta")
     parser.add_argument('resultsOut', type=str,

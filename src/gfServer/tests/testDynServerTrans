@@ -1,7 +1,10 @@
 #!/bin/bash -e
 
+testName=$(basename $0)
+
 # build index
-gfDir=output/rootDynServerTrans/crea
+gfRootDir=output/${testName}_root
+gfDir=${gfRootDir}/crea
 rm -rf $gfDir
 mkdir -p $gfDir
 cp -f input/creaGeno.2bit $gfDir/crea.2bit
@@ -9,5 +12,5 @@ gfServer index -trans $gfDir/crea.trans.gfidx $gfDir/crea.2bit >/dev/null
 
 # test query
 
-./dynTester $(dirname $gfDir) transQuery crea input/crea.mrna output/testDynServerTrans.out
-diff expected/testDynServerTrans.out output/testDynServerTrans.out
+./dynTester $gfRootDir transQuery crea input/crea.mrna output/${testName}.out
+diff expected/${testName}.out output/${testName}.out

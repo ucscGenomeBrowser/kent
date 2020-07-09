@@ -77,7 +77,7 @@ struct genomeHits
     boolean queryRC;    /* is the query reverse-complemented */
     boolean complex;    /* is the query complex */
     boolean isProt;     /* is the protein query */
-    char *dynGenome;    /* genome for dynamic server */
+    char *dynGenomeDir; /* relative genome directory for dynamic server */
    
     int maxGeneHits;    /* Highest gene hit-count */
     char *maxGeneChrom; /* Target Chrom for gene with max gene hits */
@@ -296,7 +296,7 @@ struct serverTable
     int tileSize;       /* gfServer -tileSize */
     int stepSize;       /* gfServer -stepSize */
     int minMatch;       /* gfServer -minMatch */
-    char* dynGenome;    /* genome name for dynamic gfServer  */
+    char* dynGenomeDir; /* genome name for dynamic gfServer  */
     };
 
 char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "translated DNA"};
@@ -353,7 +353,7 @@ st->host = cloneString(row[3]);
 st->port = cloneString(row[4]);
 st->nibDir = hReplaceGbdbSeqDir(row[5], st->db);
 if (haveDynamic && atoi(row[6]))
-    st->dynGenome = cloneString(db);
+    st->dynGenomeDir = cloneString(db);
 
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
@@ -364,9 +364,9 @@ static struct serverTable *trackHubServerTable(char *db, boolean isTrans)
 /* Load blat table for a hub */
 {
 char *host, *port;
-boolean dynamic;
+char *dynGenomeDir;
 
-if (!trackHubGetBlatParams(db, isTrans, &host, &port, &dynamic))
+if (!trackHubGetBlatParams(db, isTrans, &host, &port, &dynGenomeDir))
     errAbort("Cannot get blat server parameters for track hub with database %s", db);
 
 struct serverTable *st;
@@ -383,8 +383,7 @@ char *ptr = strrchr(st->nibDir, '/');
 // we only want the directory name
 if (ptr != NULL)
     *ptr = 0;
-if (dynamic)
-    st->dynGenome = cloneString(trackHubAssemblyField(db, "genome"));
+st->dynGenomeDir = dynGenomeDir;
 return st;
 }
 
@@ -860,7 +859,7 @@ else
 }
 
 void queryServerSetup(int conn, char *db, struct dnaSeq *seq, char *type, char *xType,
-                      boolean complex, boolean isProt, boolean queryRC, int seqNumber, char *dynGenome)
+                      boolean complex, boolean isProt, boolean queryRC, int seqNumber, char *dynGenomeDir)
 /* Setup query to server.
  * queryRC is true when the query has been reverse-complemented */
 {
@@ -878,7 +877,7 @@ gH->xType = cloneString(xType);
 gH->queryRC = queryRC;
 gH->complex = complex;
 gH->isProt = isProt;
-gH->dynGenome = dynGenome;
+gH->dynGenomeDir = dynGenomeDir;
 gH->sd = conn;
 if (gH->sd == -1)
     {
@@ -1000,10 +999,10 @@ int matchCount = 0;
 dyStringPrintf(gH->dbg,"query strand %s qsize %d<br>\n", gH->queryRC ? "-" : "+", gH->dnaSize);
 
 /* Put together query command. */
-if (gH->dynGenome == NULL)
+if (gH->dynGenomeDir == NULL)
     safef(buf, sizeof buf, "%s%s %d", gfSignature(), gH->type, gH->dnaSize);
 else
-    safef(buf, sizeof buf, "%s%s %d %s", gfSignature(), gH->type, gH->dnaSize, gH->dynGenome);
+    safef(buf, sizeof buf, "%s%s %d %s", gfSignature(), gH->type, gH->dnaSize, gH->dynGenomeDir);
 mustWriteFd(gH->sd, buf, strlen(buf));
 
 if (read(gH->sd, buf, 1) < 0)
@@ -1326,11 +1325,11 @@ int ret = 0;
 
 /* Put together command. */
 sd = gfConnectEx(serve->host, serve->port);
-if (serve->dynGenome == NULL)
+if (serve->dynGenomeDir == NULL)
     sprintf(buf, "%sstatus", gfSignature());
 else
     sprintf(buf, "%s%s %s", gfSignature(), (serve->isTrans ? "transInfo" : "untransInfo"),
-            serve->dynGenome);
+            serve->dynGenomeDir);
 mustWriteFd(sd, buf, strlen(buf));
 
 for (;;)
@@ -1617,48 +1616,48 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	    {
 	    if (allGenomes)
 		queryServerSetup(conn, db, seq, "transQuery", xType, TRUE, FALSE, FALSE, seqNumber,
-                                 serve->dynGenome);
+                                 serve->dynGenomeDir);
 	    else
 		gfAlignTransTrans(&conn, serve->nibDir, seq, FALSE, 5, tFileCache, gvo, !txTxBoth,
-                                  serve->dynGenome);
+                                  serve->dynGenomeDir);
 	    if (txTxBoth)
 		{
 		reverseComplement(seq->dna, seq->size);
 		conn = gfConnectEx(serve->host, serve->port);
 		if (allGenomes)
 		    queryServerSetup(conn, db, seq, "transQuery", xType, TRUE, FALSE, TRUE, seqNumber,
-                                     serve->dynGenome);
+                                     serve->dynGenomeDir);
 		else
 		    gfAlignTransTrans(&conn, serve->nibDir, seq, TRUE, 5, tFileCache, gvo, FALSE,
-                                      serve->dynGenome);
+                                      serve->dynGenomeDir);
 		}
 	    }
 	else
 	    {
 	    if (allGenomes)
 		queryServerSetup(conn, db, seq, "protQuery", xType, TRUE, TRUE, FALSE, seqNumber,
-                                 serve->dynGenome);
+                                 serve->dynGenomeDir);
 	    else
 		gfAlignTrans(&conn, serve->nibDir, seq, 5, tFileCache, gvo,
-                             serve->dynGenome);
+                             serve->dynGenomeDir);
 	    }
 	}
     else
 	{
 	if (allGenomes)
 	    queryServerSetup(conn, db, seq, "query", xType, FALSE, FALSE, FALSE, seqNumber,
-                             serve->dynGenome);
+                             serve->dynGenomeDir);
 	else
 	    gfAlignStrand(&conn, serve->nibDir, seq, FALSE, minMatchShown, tFileCache, gvo,
-                          serve->dynGenome);
+                          serve->dynGenomeDir);
 	reverseComplement(seq->dna, seq->size);
 	conn = gfConnectEx(serve->host, serve->port);
 	if (allGenomes)
 	    queryServerSetup(conn, db, seq, "query", xType, FALSE, FALSE, TRUE, seqNumber,
-                             serve->dynGenome);
+                             serve->dynGenomeDir);
 	else
 	    gfAlignStrand(&conn, serve->nibDir, seq, TRUE, minMatchShown, tFileCache, gvo,
-                          serve->dynGenome);
+                          serve->dynGenomeDir);
 	}
     gfOutputQuery(gvo, f);
     ++seqNumber;

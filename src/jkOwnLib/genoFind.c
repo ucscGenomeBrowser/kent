@@ -970,7 +970,7 @@ for (i=0; i<fileCount; ++i)
     if (nibIsFile(fileName))
 	{
 	nibSize = gfAddTilesInNib(gf, fileName, offset, stepSize);
-	ss->fileName = fileName;
+	ss->fileName = cloneString(findTail(fileName, '/'));
 	ss->start = offset;
 	offset += nibSize;
 	ss->end = offset;
@@ -986,7 +986,7 @@ for (i=0; i<fileCount; ++i)
 	    struct dnaSeq *seq = twoBitReadSeqFragLower(tbf, index->name, 0,0);
 	    gfAddSeq(gf, seq, offset);
 	    safef(nameBuf, sizeof(nameBuf), "%s:%s", fileName, index->name);
-	    ss->fileName = cloneString(nameBuf);
+	    ss->fileName = cloneString(findTail(nameBuf, '/'));
 	    ss->start = offset;
 	    offset += seq->size;
 	    ss->end = offset;

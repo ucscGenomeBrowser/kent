@@ -105,15 +105,15 @@ if (diff == 0)
 return diff;
 }
 
-static void startSeqQuery(int conn, bioSeq *seq, char *type, char *dynGenome)
+static void startSeqQuery(int conn, bioSeq *seq, char *type, char *dynGenomeDir)
 /* Send a query that involves some sequence. */
 {
 char buf[1024]; // room for error message if we need it.
 safef(buf, sizeof(buf), "%s%s %d", gfSignature(), type, seq->size);
-if (dynGenome != NULL)
+if (dynGenomeDir != NULL)
     {
     safecat(buf, sizeof(buf), " ");
-    safecat(buf, sizeof(buf), dynGenome);
+    safecat(buf, sizeof(buf), dynGenomeDir);
     }
 mustWriteFd(conn, buf, strlen(buf));
 if (read(conn, buf, 1) < 0)
@@ -135,14 +135,14 @@ static void gfServerWarn(bioSeq *seq, char *warning)
 warn("couldn't process %s: %s", seq->name, warning);
 }
 
-static struct gfRange *gfQuerySeq(int conn, struct dnaSeq *seq, char *dynGenome)
+static struct gfRange *gfQuerySeq(int conn, struct dnaSeq *seq, char *dynGenomeDir)
 /* Ask server for places sequence hits. */
 {
 struct gfRange *rangeList = NULL, *range;
 char buf[256], *row[6];
 int rowSize;
 
-startSeqQuery(conn, seq, "query", dynGenome);
+startSeqQuery(conn, seq, "query", dynGenomeDir);
 
 /* Read results line by line and save in list, and return. */
 for (;;)
@@ -219,7 +219,7 @@ return hitList;
 }
 
 static void gfQuerySeqTrans(int conn, aaSeq *seq, struct gfClump *clumps[2][3], 
-    struct lm *lm, struct gfSeqSource **retSsList, int *retTileSize, char *dynGenome)
+    struct lm *lm, struct gfSeqSource **retSsList, int *retTileSize, char *dynGenomeDir)
 /* Query server for clumps where aa sequence hits translated index. */
 {
 int frame, isRc, rowSize;
@@ -234,7 +234,7 @@ for (isRc = 0; isRc <= 1; ++isRc)
 	clumps[isRc][frame] = NULL;
 
 /* Send sequence to server. */
-startSeqQuery(conn, seq, "protQuery", dynGenome);
+startSeqQuery(conn, seq, "protQuery", dynGenomeDir);
 line = netRecieveString(conn, buf);
 if (!startsWith("Error:", line))
     {
@@ -290,7 +290,7 @@ else
 static void gfQuerySeqTransTrans(int conn, struct dnaSeq *seq, 
     struct gfClump *clumps[2][3][3], 
     struct lm *lm, struct gfSeqSource **retSsList, int *retTileSize,
-    char *dynGenome)
+    char *dynGenomeDir)
 /* Query server for clumps where translated DNA sequence hits translated 
  * index. */
 {
@@ -307,7 +307,7 @@ for (isRc = 0; isRc <= 1; ++isRc)
 	    clumps[isRc][qFrame][tFrame] = NULL;
 
 /* Send sequence to server. */
-startSeqQuery(conn, seq, "transQuery", dynGenome);
+startSeqQuery(conn, seq, "transQuery", dynGenomeDir);
 line = netRecieveString(conn, buf);
 if (!startsWith("Error:", line))
     {
@@ -560,7 +560,7 @@ else
 
 void gfAlignStrand(int *pConn, char *tSeqDir, struct dnaSeq *seq,
     boolean isRc, int minMatch, struct hash *tFileCache, struct gfOutput *out,
-    char *dynGenome)
+    char *dynGenomeDir)
 /* Search genome on server with one strand of other sequence to find homology. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found. */
@@ -570,7 +570,7 @@ struct gfRange *rangeList = NULL, *range;
 struct dnaSeq *targetSeq;
 char targetName[PATH_LEN];
 
-rangeList = gfQuerySeq(*pConn, seq, dynGenome);
+rangeList = gfQuerySeq(*pConn, seq, dynGenomeDir);
 close(*pConn);
 *pConn = -1;
 slSort(&rangeList, gfRangeCmpTarget);
@@ -1049,7 +1049,7 @@ for (range = rangeList; range != NULL; range = range->next)
 
 
 void gfAlignTrans(int *pConn, char *tSeqDir, aaSeq *seq, int minMatch, 
-    struct hash *tFileCache, struct gfOutput *out, char *dynGenome)
+    struct hash *tFileCache, struct gfOutput *out, char *dynGenomeDir)
 /* Search indexed translated genome on server with an amino acid sequence. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found. */
@@ -1068,7 +1068,7 @@ struct trans3 *t3;
 struct lm *lm = lmInit(0);
 
 /* Get clumps from server. */
-gfQuerySeqTrans(*pConn, seq, clumps, lm, &ssList, &tileSize, dynGenome);
+gfQuerySeqTrans(*pConn, seq, clumps, lm, &ssList, &tileSize, dynGenomeDir);
 close(*pConn);
 *pConn = -1;
 
@@ -1171,7 +1171,7 @@ for (range = rangeList; range != NULL; range = range->next)
 
 void gfAlignTransTrans(int *pConn, char *tSeqDir, struct dnaSeq *qSeq, 
 	boolean qIsRc, int minMatch, struct hash *tFileCache, 
-	struct gfOutput *out, boolean isRna, char *dynGenome)
+	struct gfOutput *out, boolean isRna, char *dynGenomeDir)
 /* Search indexed translated genome on server with an dna sequence.  Translate
  * this sequence in three frames. Load homologous bits of genome locally
  * and do detailed alignment.  Call 'outFunction' with each alignment
@@ -1191,7 +1191,7 @@ struct dnaSeq *tSeqList = NULL;
 enum ffStringency stringency = (isRna ? ffCdna : ffLoose);
 
 /* Query server for clumps. */
-gfQuerySeqTransTrans(*pConn, qSeq, clumps, lm, &ssList, &tileSize, dynGenome);
+gfQuerySeqTransTrans(*pConn, qSeq, clumps, lm, &ssList, &tileSize, dynGenomeDir);
 close(*pConn);
 *pConn = -1;
 

@@ -1135,6 +1135,14 @@ char *chopPrefix(char *s);
 char *chopPrefixAt(char *s, char c);
 /* Like chopPrefix, but can chop on any character, not just '.' */
 
+INLINE char *findTail(char *s, char c)
+/* find the start of the string following the last occurrence of c.
+ * return the whole string if not found.  Does not modify the string. */
+{
+char *cp = strrchr(s, c);
+return (cp == NULL) ? s : cp+1;
+}
+
 FILE *mustOpen(char *fileName, char *mode);
 /* Open a file - or squawk and die. */
 
