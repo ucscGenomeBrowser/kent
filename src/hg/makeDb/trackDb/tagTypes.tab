@@ -191,6 +191,7 @@ gClass_pseudo genePred
 gClass_problem genePred
 gainColor bed
 geneClasses bed genePred
+geneTrack vcfTabix vcf
 genome customTracks
 graphType bed5FloatScore bedGraph
 graphTypeDefault wig bigWig

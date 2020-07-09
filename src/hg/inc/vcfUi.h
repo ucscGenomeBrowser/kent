@@ -22,6 +22,7 @@
 
 #define VCF_HAP_COLORBY_VAR "hapClusterColorBy"
 #define VCF_HAP_COLORBY_ALTONLY "altOnly"
+#define VCF_HAP_COLORBY_FUNCTION "function"
 #define VCF_HAP_COLORBY_REFALT "refAlt"
 #define VCF_HAP_COLORBY_BASE "base"
 #define VCF_DEFAULT_HAP_COLORBY VCF_HAP_COLORBY_ALTONLY
