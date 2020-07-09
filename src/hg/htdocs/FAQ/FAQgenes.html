@@ -349,22 +349,32 @@ indicating unalignable transcript sequence.
 <a name="mito"></a>
 <h2>What is the best gene track for mitochondrial gene annotations</h2>
 <p>
-The mitochondrial sequence included in assembly sequence files is a very
-special genome and most of what has been explained on this page does not apply
+The mitochondrial sequence included in assembly sequence files is very
+special and most of what has been explained on this page does not apply
 to the mitochondrial gene annotations. For most assemblies in the Genome
 Browser, the sequence name of the mitochondrial genome is "chrM".<p>
 <p>
-Sidenote: if you use hg19, note that hg19 in the UCSC Genome Browser had a chrM sequence
-that was not the mitochondrial genome sequence selected by NCBI later for GRCh37. This
-is why the current hg19 version of the Genome Browser contains two mitochondrial sequences,
-the old one called "chrM" and the one that is part of the GRCh37 reference, called "chrMT". The issue
-is described in detail in our <a target=_blank href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/README.txt">
-hg19 Download instructions</a>. If you use hg19 today, chrMT should be
-considered the mitochondrial genome, chrM is only supported for backwards
+For hg19, no mitochondrial genome was originally published.
+The UCSC Genome Browser added a chrM sequence
+that was not the mitochondrial genome sequence later selected by NCBI for GRCh37. This
+is why <strong>the current hg19 version contains two mitochondrial sequences,
+the old one called &quot;chrM&quot; and the current GRCh37 reference, 
+called &quot;chrMT&quot;</strong>. The issue is described in detail in our 
+<a target=_blank href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/README.txt">
+hg19 sequence download instructions</a>. If you use hg19 today, chrMT should be
+considered the current mitochondrial sequence, chrM is only supported for backwards
 compatibility and legacy annotation files. 
 <p>
-For chrM or chrMT (on hg19), the NCBI RefSeq or Ensembl/Gencode tracks contain the same gene annotations. 
-Both databases import their mitochondrial gene annotation directly from the rCRS RefSeq record <a target=_blank href="https://www.ncbi.nlm.nih.gov/nuccore/251831106">NC_012920.1</a>. The annotation was provided by <a target=_blank href="https://www.mitomap.org/MITOMAP">Mitomap.org</a>, which provides detailed documentation about the <a href="https://www.mitomap.org/foswiki/bin/view/MITOMAP/MitoSeqs" target=_blank>the history of this sequence</a>.
+For chrM or chrMT (on hg19), the GENCODE tracks contain the same gene
+annotations, but RefSeq annotations only exist on chrM. Both databases 
+import their mitochondrial gene annotation directly from the rCRS 
+RefSeq record 
+<a target=_blank href="https://www.ncbi.nlm.nih.gov/nuccore/251831106">NC_012920.1</a>. 
+The annotation was provided by 
+<a target=_blank href="https://www.mitomap.org/MITOMAP">Mitomap.org</a>, which provides detailed
+documentation about the 
+<a href="https://www.mitomap.org/foswiki/bin/view/MITOMAP/MitoSeqs" 
+target=_blank>the history of this sequence</a>.
 
 
 <a name="report"></a>
