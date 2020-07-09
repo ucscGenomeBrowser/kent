@@ -356,6 +356,7 @@ include trackDb.17way.ra alpha
 include trackDb.20way.ra
 include trackDb.27way.ra alpha
 include trackDb.30way.ra
+include trackDb.mito204way.ra
 
 track ucscRetroAli8
 shortLabel Retroposed Genes 8.0
