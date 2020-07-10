@@ -261,6 +261,17 @@ char varName[1024];
 safef(varName, sizeof(varName), "%s." VCF_HAP_COLORBY_VAR, name);
 cgiMakeRadioButton(varName, VCF_HAP_COLORBY_ALTONLY, sameString(colorBy, VCF_HAP_COLORBY_ALTONLY));
 printf("reference alleles invisible, alternate alleles in black<BR>\n");
+char *geneTrack = cartOrTdbString(cart, tdb, "geneTrack", NULL);
+if (isNotEmpty(geneTrack))
+    {
+    cgiMakeRadioButton(varName, VCF_HAP_COLORBY_FUNCTION,
+                       sameString(colorBy, VCF_HAP_COLORBY_FUNCTION));
+    printf("reference alleles invisible, alternate alleles in "
+           "<span style='color:red'>red</span> for non-synonymous, "
+           "<span style='color:green'>green</span> for synonymous, "
+           "<span style='color:blue'>blue</span> for UTR/noncoding, "
+           "black otherwise<BR>\n");
+    }
 cgiMakeRadioButton(varName, VCF_HAP_COLORBY_REFALT, sameString(colorBy, VCF_HAP_COLORBY_REFALT));
 printf("reference alleles in blue, alternate alleles in red<BR>\n");
 cgiMakeRadioButton(varName, VCF_HAP_COLORBY_BASE, sameString(colorBy, VCF_HAP_COLORBY_BASE));
@@ -519,7 +530,7 @@ printf("<br>");
 if (!parentLevel)
     {
     printf("<b>or:</b><br>\n");
-    printf("<b>Click and drag to change order:</b>\n");
+    printf("<b>Drag to change order:</b>\n");
     printf("<div>\n");
     printf("<table id=\"%s_table\" class=\"tableWithDragAndDrop\">\n", tdb->track);
     for (pair = tdbOrder; pair != NULL; pair = pair->next)
@@ -599,11 +610,15 @@ if (trackDbSetting(tdb,VCF_PHASED_PARENTS_SAMPLE_SETTING))
     cgiMakeCheckBox(hideVarName, hidingOtherSamples);
     }
 printf("<br>");
-printf("Highlight child variants that are inconsistent with phasing red");
+printf("Highlight child variants that are inconsistent with phasing");
 char shadeByDiffs[1024];
 safef(shadeByDiffs, sizeof(shadeByDiffs), "%s.%s", name, VCF_PHASED_HIGHLIGHT_INCONSISTENT);
 boolean highlightChildDiffs = cartUsualBooleanClosestToHome(cart, tdb, FALSE, VCF_PHASED_HIGHLIGHT_INCONSISTENT, FALSE);
 cgiMakeCheckBox(shadeByDiffs, highlightChildDiffs);
+char *infoText = "Check this box to color child variants red if they do not agree with the implied "
+    "parental transmitted allele at this location. This configuration is only available when parent "
+    "haplotypes are displayed.";
+printInfoIcon(infoText);
 }
 
 void vcfCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)

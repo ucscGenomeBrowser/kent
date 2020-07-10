@@ -47,6 +47,9 @@ do
 	echo "========   ${F}   ===================================="
 	echo "================================================================"
         case "${F}" in
+           ucscApiClient|trackDbIndexBb|chromToUcsc|tdbRename|tdbSort)
+	     ./${F} -h
+             ;;
            ameme|aveCols|catUncomment|fetchChromSizes|gmtime|localtime|hgsqldump|pslPairs|qaToQac|bedJoinTabOffset|expMatrixToBarchartBed|webSync|vai.pl)
 	     ./${F}
              ;;

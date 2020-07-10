@@ -11,6 +11,7 @@ graphTypeDefault bar
 yLineMark 0
 yLineOnOff on
 priority 20
+pennantIcon New red ../goldenPath/newsarch.html#070720 "Released Jul. 07, 2020"
 superTrack on 
 
     track PhyloCSF_plus_1

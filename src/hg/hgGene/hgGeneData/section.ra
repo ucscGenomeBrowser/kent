@@ -84,6 +84,11 @@ shortLabel Pathways
 longLabel Biochemical and Signaling Pathways
 priority 130
 
+name gencode
+shortLabel GENCODE
+longLabel GENCODE Transcript Annotation
+priority 132
+
 name synonym
 shortLabel Other Names
 longLabel Other Names for This Gene

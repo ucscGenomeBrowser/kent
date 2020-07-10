@@ -1,0 +1,143 @@
+track mito204way
+compositeTrack on
+shortLabel Mito Cons 204
+longLabel Vertebrate Mitochondria Multiz Alignment & Conservation (204 vertebrates)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility hide
+priority 3
+type bed 4
+group compGeno
+
+    track mito204wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack mito204way
+
+        track multizMito204way
+        subTrack mito204wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 204 vertebrate mitochondria
+        subGroups view=align
+        noInherit on
+        irows on
+	#snpTable mafSnpMito204way
+        summary multizMito204waySummary
+#         frames multizMito204wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault hg38
+        speciesGroups Vertebrates
+        sGroup_Vertebrates NC_008066v1 NC_012670v1 NC_005943v1 NC_011120v1 NC_002083v1 NC_001644v1 NC_001643v1 NC_015486v1 NC_008218v1 NC_019802v1 NC_020006v2 NC_012346v1 NC_006853v1 NC_005971v1 NC_001941v1 NC_006295v1 NC_036018v1 NC_035426v1 NC_012059v1 NC_019441v1 NC_007629v1 NC_034236v1 NC_026456v1 NC_007441v1 NC_014682v1 NC_023889v1 NC_005271v1 NC_013276v1 NC_007936v1 NC_005089v1 NC_042243v1 NC_025268v1 NC_015247v1 NC_001665v2 NC_037180v1 NC_023263v1 NC_018096v1 NC_020754v1 NC_005358v1 NC_015112v1 NC_004693v1 NC_004744v1 NC_021386v1 NC_018116v1 NC_023515v1 NC_009692v1 NC_016470v1 NC_026781v1 NC_025516v1 NC_005314v1 NC_008615v1 NC_024030v1 NC_008424v1 NC_020638v1 NC_004029v2 NC_016869v1 NC_002504v1 NC_001640v1 NC_002631v2 NC_001788v1 NC_022423v1 NC_004920v1 NC_004299v1 NC_004030v2 NC_007439v1 NC_004031v1 NC_016870v1 NC_009849v1 NC_018540v1 NC_009628v2 NC_011710v1 NC_008415v3 NC_020661v1 NC_001804v1 NC_000884v1 NC_008416v1 NC_009629v2 NC_024752v1 NC_023122v1 NC_001808v1 NC_001700v1 NC_028088v1 NC_001606v1 NC_002078v1 NC_008421v1 NC_004412v1 NC_011379v1 NC_028083v1 NC_002008v4 NC_044782v1 NC_007393v1 NC_005212v1 NC_018560v1 NC_012312v1 NC_002079v1 NC_023977v1 NC_024238v1 NC_019572v1 NC_003489v1 NC_015888v1 NC_020336v1 NC_006380v3 NC_027944v1 NC_026533v1 NC_009062v1 NC_010642v1 NC_008133v1 NC_009065v1 NC_010641v1 NC_013663v1 NC_000934v1 NC_027168v1 NC_013750v1 NC_022508v1 NC_010302v1 NC_013189v1 NC_008434v1 NC_027169v1 NC_002503v2 NC_012774v1 NC_002333v2 NC_002980v1 NC_024236v1 NC_001821v1 NC_007012v1 NC_000861v1 NC_000886v1 NC_001717v1 NC_009263v1 NC_002081v1 NC_024032v1 NC_001960v1 NC_028718v1 NC_003192v1 NC_015840v1 NC_009577v1 NC_011053v1 NC_005251v1 NC_001922v1 NC_004593v1 NC_004387v1 NC_002785v1 NC_006303v1 NC_003428v1 NC_003427v1 NC_034374v1 NC_008132v1 NC_012825v1 NC_023890v1 NC_000845v1 NC_026581v1 NC_003408v1 NC_015526v1 NC_014285v1 NC_001913v1 NC_010195v2 NC_028035v1 NC_023455v1 NC_018546v1 NC_008143v1 NC_029475v1 NC_021621v1 NC_020569v1 NC_014341v1 NC_023375v1 NC_023832v1 NC_002784v1 NC_044186v1 NC_009492v1 NC_007897v1 NC_002386v1 NC_004448v1 NC_016195v1 NC_002080v2 NC_000891v1 NC_003322v1 NC_001323v1 NC_040902v1 NC_008241v1 NC_006299v1 NC_003290v1 NC_009684v1 NC_024595v1 NC_006132v1 NC_026293v1 NC_040875v1 NC_011607v1 NC_010972v2 NC_006839v1 NC_024698v1 NC_013978v1 NC_001573v1 NC_021412v1 NC_023981v1 NC_021479v1 NC_026789v1 NC_000878v1 NC_021137v1 NC_024087v1 NC_007007v1 NC_015653v1 NC_009134v1 NC_011814v1
+        itemFirstCharCase noChange
+        treeImage phylo/hg38_Mito204way.png
+        priority 100
+
+    # PhyloP conservation
+    track mito204wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack mito204way
+    viewLimits -3:1
+    viewLimitsMax -14.191:1.199
+
+        track phyloPMito204way
+        subTrack mito204wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel Cons 204 mito
+        longLabel Vertebrate mitochondria Basewise Conservation by PhyloP (204 vertebrates)
+        noInherit on
+        configurable on
+        type wig -14.191 1.199
+        maxHeightPixels 100:50:11
+        viewLimits -3:1
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track mito204wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack mito204way
+
+        track phastConsMito204way
+        subTrack mito204wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel Cons 204 mito
+        longLabel Vertebrate mitochondria conservation by PhastCons (204 vertebrates)
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track mito204wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack mito204way
+
+        track phastConsElementsMito204way
+        subTrack mito204wayViewelements on
+        subGroups view=elements
+        shortLabel 204-way El
+        longLabel Vertebrate mitochondria Conserved Elements (204 vertebrates)
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23
+
+track tba204way
+compositeTrack on
+shortLabel TBA Cons 204
+longLabel Vertebrate Mitochondria TBA Alignment & Conservation (204 vertebrates)
+subGroup1 view Views align=Multiz_Alignments
+dragAndDrop subTracks
+visibility hide
+priority 3
+type bed 4
+group compGeno
+
+    track tba204wayViewalign
+    shortLabel TBA Alignment
+    view align
+    visibility pack
+    viewUi on
+    subTrack tba204way
+
+        track tbaMito204way
+        subTrack tba204wayViewalign on
+        shortLabel TBA Align
+        longLabel TBA Alignments of 204 vertebrate mitochondria
+        subGroups view=align
+        noInherit on
+        irows on
+	#snpTable mafSnpMito204way
+        summary tbaMito204waySummary
+#         frames multizMito204wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault hg38
+        speciesGroups Vertebrates
+        sGroup_Vertebrates NC_008066v1 NC_012670v1 NC_005943v1 NC_011120v1 NC_002083v1 NC_001644v1 NC_001643v1 NC_015486v1 NC_008218v1 NC_019802v1 NC_020006v2 NC_012346v1 NC_006853v1 NC_005971v1 NC_001941v1 NC_006295v1 NC_036018v1 NC_035426v1 NC_012059v1 NC_019441v1 NC_007629v1 NC_034236v1 NC_026456v1 NC_007441v1 NC_014682v1 NC_023889v1 NC_005271v1 NC_013276v1 NC_007936v1 NC_005089v1 NC_042243v1 NC_025268v1 NC_015247v1 NC_001665v2 NC_037180v1 NC_023263v1 NC_018096v1 NC_020754v1 NC_005358v1 NC_015112v1 NC_004693v1 NC_004744v1 NC_021386v1 NC_018116v1 NC_023515v1 NC_009692v1 NC_016470v1 NC_026781v1 NC_025516v1 NC_005314v1 NC_008615v1 NC_024030v1 NC_008424v1 NC_020638v1 NC_004029v2 NC_016869v1 NC_002504v1 NC_001640v1 NC_002631v2 NC_001788v1 NC_022423v1 NC_004920v1 NC_004299v1 NC_004030v2 NC_007439v1 NC_004031v1 NC_016870v1 NC_009849v1 NC_018540v1 NC_009628v2 NC_011710v1 NC_008415v3 NC_020661v1 NC_001804v1 NC_000884v1 NC_008416v1 NC_009629v2 NC_024752v1 NC_023122v1 NC_001808v1 NC_001700v1 NC_028088v1 NC_001606v1 NC_002078v1 NC_008421v1 NC_004412v1 NC_011379v1 NC_028083v1 NC_002008v4 NC_044782v1 NC_007393v1 NC_005212v1 NC_018560v1 NC_012312v1 NC_002079v1 NC_023977v1 NC_024238v1 NC_019572v1 NC_003489v1 NC_015888v1 NC_020336v1 NC_006380v3 NC_027944v1 NC_026533v1 NC_009062v1 NC_010642v1 NC_008133v1 NC_009065v1 NC_010641v1 NC_013663v1 NC_000934v1 NC_027168v1 NC_013750v1 NC_022508v1 NC_010302v1 NC_013189v1 NC_008434v1 NC_027169v1 NC_002503v2 NC_012774v1 NC_002333v2 NC_002980v1 NC_024236v1 NC_001821v1 NC_007012v1 NC_000861v1 NC_000886v1 NC_001717v1 NC_009263v1 NC_002081v1 NC_024032v1 NC_001960v1 NC_028718v1 NC_003192v1 NC_015840v1 NC_009577v1 NC_011053v1 NC_005251v1 NC_001922v1 NC_004593v1 NC_004387v1 NC_002785v1 NC_006303v1 NC_003428v1 NC_003427v1 NC_034374v1 NC_008132v1 NC_012825v1 NC_023890v1 NC_000845v1 NC_026581v1 NC_003408v1 NC_015526v1 NC_014285v1 NC_001913v1 NC_010195v2 NC_028035v1 NC_023455v1 NC_018546v1 NC_008143v1 NC_029475v1 NC_021621v1 NC_020569v1 NC_014341v1 NC_023375v1 NC_023832v1 NC_002784v1 NC_044186v1 NC_009492v1 NC_007897v1 NC_002386v1 NC_004448v1 NC_016195v1 NC_002080v2 NC_000891v1 NC_003322v1 NC_001323v1 NC_040902v1 NC_008241v1 NC_006299v1 NC_003290v1 NC_009684v1 NC_024595v1 NC_006132v1 NC_026293v1 NC_040875v1 NC_011607v1 NC_010972v2 NC_006839v1 NC_024698v1 NC_013978v1 NC_001573v1 NC_021412v1 NC_023981v1 NC_021479v1 NC_026789v1 NC_000878v1 NC_021137v1 NC_024087v1 NC_007007v1 NC_015653v1 NC_009134v1 NC_011814v1
+        itemFirstCharCase noChange
+        treeImage phylo/hg38_Mito204way.png
+        priority 100

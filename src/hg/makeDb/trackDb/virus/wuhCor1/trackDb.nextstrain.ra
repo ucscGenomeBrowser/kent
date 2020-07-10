@@ -37,6 +37,8 @@ hapClusterEnabled on
 hapClusterHeight 500
 group varRep
 priority 0.51
+hapClusterColorBy function
+geneTrack ncbiGeneBGP
 html nextstrainSamplesDevOnly
 subGroup1 view Views all=All_Samples newClades=New_Clades(19A,_19B_etc.) oldClades=Old_Clades_(A1a,_A2_etc.)
 compositeTrack on

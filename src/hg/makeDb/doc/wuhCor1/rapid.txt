@@ -1,0 +1,3 @@
+cat rapid.tab | tawk '{start=$7; end=$8; strand = "+"; if (start>end) { d=start; start=end; end=d; strand="-"; } print "NC_045512v2", start, end, $1, "0", strand, $2,$3,$4,$5,$6}' > rapid2.tab
+tabToBed rapid2.tab rapid.bed rapid.as -t bed6
+bedToBigBed rapid.bed /hive/data/genomes/wuhCor1/chrom.sizes rapid.bb -tab -type=bed6+ -as=rapid.as

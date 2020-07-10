@@ -30,7 +30,7 @@ test::  attrsTests ensToUcscMkLiftTests genePredTests exonSupportTests
 # attributes tests
 ##
 attrsTests: attrsSet1GtfTest attrsV21GtfTest attrsV21Gff3Test attrsV27ParGtfTest attrsV27ParGff3Test \
-	attrsV19GtfTest attrsTagGtfTests attrsTagGff3Tests
+	attrsV19GtfTest attrsTagGtfTests attrsTagGff3Tests attrsPseudoGff3Tests
 
 attrsSet1GtfTest: mkdirs
 	${gencodeGxfToAttrs} input/set1.gtf output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
@@ -89,6 +89,14 @@ attrsTagGff3Tests: mkdirs
 	${diff} expected/$@.tsl output/$@.tsl
 	${diff} expected/$@.tags output/$@.tags
 
+
+# ENST00000422009.5 pseudo was ending up with wrong transcriptClass
+attrsPseudoGff3Tests: mkdirs
+	${gencodeGxfToAttrs} input/pseudo.gff3 output/$@.tsv output/$@.attrs output/$@.tsl output/$@.tags
+	${diff} expected/$@.tsv output/$@.tsv
+	${diff} expected/$@.attrs output/$@.attrs
+	${diff} expected/$@.tsl output/$@.tsl
+	${diff} expected/$@.tags output/$@.tags
 
 ###
 # ensembl/gencode to UCSC liftover

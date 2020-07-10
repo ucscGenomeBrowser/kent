@@ -44,6 +44,8 @@
 #endif /* ITEMATTR_H */
 #endif /* GBROWSE */
 
+#include "soTerm.h"
+
 /* A few hgGenome cart constant defaults copied from */
 #define hggPrefix "hgGenome_"
 #define hggGraphPrefix hggPrefix "graph"
@@ -1702,6 +1704,10 @@ Color blackItemNameColor(struct track *tg, void *item, struct hvGfx *hvg);
 void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height);
+
+Color colorFromSoTerm(enum soTerm term);
+/* Assign a Color according to soTerm: red for non-synonymous, green for synonymous, blue for
+ * UTR/noncoding, black otherwise. */
 
 #endif /* HGTRACKS_H */
 
