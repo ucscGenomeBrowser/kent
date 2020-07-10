@@ -261,6 +261,17 @@ char varName[1024];
 safef(varName, sizeof(varName), "%s." VCF_HAP_COLORBY_VAR, name);
 cgiMakeRadioButton(varName, VCF_HAP_COLORBY_ALTONLY, sameString(colorBy, VCF_HAP_COLORBY_ALTONLY));
 printf("reference alleles invisible, alternate alleles in black<BR>\n");
+char *geneTrack = cartOrTdbString(cart, tdb, "geneTrack", NULL);
+if (isNotEmpty(geneTrack))
+    {
+    cgiMakeRadioButton(varName, VCF_HAP_COLORBY_FUNCTION,
+                       sameString(colorBy, VCF_HAP_COLORBY_FUNCTION));
+    printf("reference alleles invisible, alternate alleles in "
+           "<span style='color:red'>red</span> for non-synonymous, "
+           "<span style='color:green'>green</span> for synonymous, "
+           "<span style='color:blue'>blue</span> for UTR/noncoding, "
+           "black otherwise<BR>\n");
+    }
 cgiMakeRadioButton(varName, VCF_HAP_COLORBY_REFALT, sameString(colorBy, VCF_HAP_COLORBY_REFALT));
 printf("reference alleles in blue, alternate alleles in red<BR>\n");
 cgiMakeRadioButton(varName, VCF_HAP_COLORBY_BASE, sameString(colorBy, VCF_HAP_COLORBY_BASE));

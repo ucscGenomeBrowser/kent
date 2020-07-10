@@ -141,28 +141,33 @@ the gene details page. Note that the page offers links to translated protein, pr
 and genomic sequence.</p>
 
 <a name="Example2"></a>
-<h3>Example &num;2: Display Amino Acids</h3>
+<h3>Example &num;2: Display Amino Acids and Codon Numbers</h3>
 <p>
-In this example, you will configure the bigGenePred track loaded in Example #1 to display codons and
-amino acid numbering:
+In this example, you will configure the bigGenePred track loaded in Example #1 to display 
+amino acids and codon numbering:
 <ol>
   <li>
-  On the bottom of the gene details page, click the &quot;Go to User Track track controls&quot; link.</li>
+  Access the track configuration page by right-clicking track and clicking 
+  &quot;Configure User Track&quot; or alternately, from 
+  the bottom  of a gene's details page, click the &quot;Go to User Track track 
+  controls&quot; link.</li>
   <li>
-  Change the &quot;Color track by codons:&quot; option from &quot;OFF&quot; to &quot;genomic 
-  codons&quot; and change the display mode to &quot;full&quot;. Then click 
-  <button>Submit</button>. 
+  Making sure the display is in pack or full, change the &quot;Color track by codons:&quot; 
+  option from &quot;OFF&quot; to &quot;genomic 
+  codons&quot;. Then click 
+  <button>Submit</button> or <button>Ok</button>.</li>
   <li>
   Zoom to a region with track data, such as 
   <code>chr9:133,255,650-133,255,700</code>, and note that the track now displays amino acids. 
   <li>
-  Return to the track controls page and click the box next to &quot;Show codon numbering&quot;, 
+  Return to the track configuration page and check the box next to &quot;Show codon numbering&quot;, 
   then click <button>Submit</button>. The Browser tracks display will now show amino acid
-  letters and numbering.</li>
+  letters and codon numbering when sufficiently zoomed in.</li>
 </ol>
 <p>
-Alternatively, you can also add a parameter in the custom track line, <code>baseColorDefault=genomicCodons</code>, 
-to set amino acids to display by default:</p>
+Alternatively, you can also add a parameter in the custom track line, 
+<strong><code>baseColorDefault=genomicCodons</code></strong>, 
+to set amino acids and codon numbering to display by default:</p>
 <pre><code>browser position chr10:67,884,600-67,884,900
 track type=bigGenePred baseColorDefault=genomicCodons name="bigGenePred Example Two" description="A bigGenePred file" visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb </code></pre>
 <p>

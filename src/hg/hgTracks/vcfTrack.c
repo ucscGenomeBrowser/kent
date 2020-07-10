@@ -8,18 +8,25 @@
 #include "dystring.h"
 #include "rainbow.h"
 #include "errCatch.h"
+#include "fa.h"
+#include "genePredReader.h"
 #include "hacTree.h"
 #include "hdb.h"
 #include "hgColors.h"
 #include "hgTracks.h"
 #include "pgSnp.h"
 #include "phyloTree.h"
+#include "trackHub.h"
 #include "trashDir.h"
+#include "variantProjector.h"
 #include "vcf.h"
 #include "vcfUi.h"
 #include "knetUdc.h"
 #include "udc.h"
 #include "memgfx.h"
+
+// Russ Corbett-Detig suggested darker shades for coloring non-synonymous variants green
+Color darkerShadesOfGreenOnWhite[EXPR_DATA_SHADES];
 
 static boolean getMinQual(struct trackDb *tdb, double *retMinQual)
 /* Return TRUE and set retMinQual if cart contains minimum QUAL filter */
@@ -644,16 +651,26 @@ enum hapColorMode
     {
     altOnlyMode,
     refAltMode,
-    baseMode
+    baseMode,
+    functionMode
     };
 
-static Color colorByAltOnly(int refs, int alts, int unks)
-/* Coloring alternate alleles only: shade by proportion of alt alleles to refs, unknowns */
+static Color colorByAltShade(int refs, int alts, int unks, Color colorShades[], int colorShadeCount)
+/* Coloring alternate alleles only by shades of color: shade by proportion of alts */
 {
 if (unks > (refs + alts))
     return undefYellow;
-int grayIx = hGrayInRange(alts, 0, alts+refs+unks, maxShade+1) - 1; // undo force to 1
-return shadesOfGray[grayIx];
+int total = refs + alts + unks;
+int shadeIx = (alts * colorShadeCount) / total;
+if (shadeIx == colorShadeCount)
+    shadeIx--;
+return colorShades[shadeIx];
+}
+
+static Color colorByAltOnly(int refs, int alts, int unks)
+/* Coloring alternate alleles only: shade by proportion of alt alleles */
+{
+return colorByAltShade(refs, alts, unks, shadesOfGray, maxShade+1);
 }
 
 static Color colorByRefAlt(int refs, int alts, int unks)
@@ -683,12 +700,386 @@ if (refs > fudgeFactor * alts)
 return shadesOfGray[5];
 }
 
+static struct dnaSeq *genePredToGenomicSequence(struct genePred *pred, struct seqWindow *gSeqWin)
+/* Return concatenated genomic sequence of exons of pred. */
+{
+int txLen = 0;
+int i;
+for (i=0; i < pred->exonCount; i++)
+    txLen += (pred->exonEnds[i] - pred->exonStarts[i]);
+char *seq = needMem(txLen + 1);
+int offset = 0;
+for (i=0; i < pred->exonCount; i++)
+    {
+    int exonStart = pred->exonStarts[i];
+    int exonEnd = pred->exonEnds[i];
+    int exonLen = exonEnd - exonStart;
+    seqWindowCopy(gSeqWin, exonStart, exonLen, seq+offset, txLen+1-offset);
+    offset += exonLen;
+    }
+if(pred->strand[0] == '-')
+    reverseComplement(seq, txLen);
+struct dnaSeq *txSeq = NULL;
+AllocVar(txSeq);
+txSeq->name = cloneString(pred->name);
+txSeq->dna = seq;
+txSeq->size = txLen;
+return txSeq;
+}
+
+struct txInfo
+/* Transcript sequence and alignment needed for prediction of functional effect/consequences */
+    {
+    struct txInfo *next;
+    struct psl *psl;            // alignment of transcript to genome
+    struct dnaSeq *txSeq;       // transcript sequence
+    struct genbankCds *cds;     // transcript CDS (possible none)
+    struct dnaSeq *protSeq;     // transcript protein sequence (possibly NULL)
+
+    };
+
+static struct txInfo *txInfoFromGenePred(struct genePred *gp, struct seqWindow *gSeqWin)
+/* Use gp and gSeqWin to construct transcript alignment, sequence and protein sequence if applic. */
+{
+struct txInfo *txi;
+AllocVar(txi);
+AllocVar(txi->cds);
+genePredToCds(gp, txi->cds);
+txi->txSeq = genePredToGenomicSequence(gp, gSeqWin);
+int chromSize = 0;  // unused
+txi->psl = genePredToPsl(gp, chromSize, txi->txSeq->size);
+pslRemoveFrameShifts(txi->psl);
+vpExpandIndelGaps(txi->psl, gSeqWin, txi->txSeq);
+txi->protSeq = NULL;
+if (txi->cds->end > txi->cds->start && txi->cds->startComplete)
+    {
+    txi->protSeq = translateSeq(txi->txSeq, txi->cds->start, FALSE);
+    aaSeqZToX(txi->protSeq);
+    }
+return txi;
+}
+
+static struct hash *hashExtNcbiRefSeq(struct sqlConnection *conn)
+/* Despite the seq/extFile structure, there is only one external file and we don't want to
+ * keep opening and closing the file each time.  Just in case there are multiple files someday,
+ * hash extNcbiRefSeq id to open udc file handle(s). */
+{
+struct hash *extNcbi = hashNew(0);
+char query[1024];
+sqlSafef(query, sizeof query, "select id, path from extNcbiRefSeq");
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *extId = row[0];
+    char *path = row[1];
+    struct udcFile *udcF = udcFileOpen(path, NULL);
+    hashAdd(extNcbi, extId, udcF);
+    }
+sqlFreeResult(&sr);
+return extNcbi;
+}
+
+static void freeExtNcbiHash(struct hash **pExtNcbi)
+/* Clean up hash of open udcFiles created by hashExtNcbiRefSeq. */
+{
+if (pExtNcbi && *pExtNcbi)
+    {
+    struct hash *hash = *pExtNcbi;
+    struct hashCookie cookie = hashFirst(hash);
+    struct hashEl *hel;
+    while ((hel = hashNext(&cookie)) != NULL)
+        udcFileClose((struct udcFile **)&hel->val);
+    hashFree(pExtNcbi);
+    }
+}
+
+static struct txInfo *txInfoInitFromPsl(struct sqlConnection *conn, char *pslTable,
+                                        char *extraWhere, struct hash **retTxiHash)
+/* Alloc and return a list of txInfo with only psl populated, from pslTable in the current window.
+ * Also return a hash of transcript ID to txInfo (retTxiHash). */
+{
+struct txInfo *txiList = NULL;
+struct hash *txiHash = hashNew(0);
+int binOffset = 0;
+int start = max(0, winStart - GPRANGE);
+int end = winEnd + GPRANGE;
+struct sqlResult *sr = hRangeQuery(conn, pslTable, chromName, start, end, extraWhere, &binOffset);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct txInfo *txi;
+    AllocVar(txi);
+    txi->psl = pslLoad(row+binOffset);
+    slAddHead(&txiList, txi);
+    hashAdd(txiHash, txi->psl->qName, txi);
+    }
+sqlFreeResult(&sr);
+*retTxiHash = txiHash;
+return txiList;
+}
+
+static void txiInfoAppendIdList(struct dyString *query, struct txInfo *txiList)
+/* Append a paren-enclosed list of quoted transcript IDs to query. */
+{
+dyStringAppendC(query, '(');
+struct txInfo *txi;
+for (txi = txiList;  txi != NULL;  txi = txi->next)
+    {
+    if (txi != txiList)
+        dyStringAppend(query, ", ");
+    dyStringPrintf(query, "'%s'", txi->psl->qName);
+    }
+dyStringAppendC(query, ')');
+}
+
+static void txInfoAddCdsFromQuery(struct hash *txiHash, struct sqlConnection *conn, char *query)
+/* Perform query; results have two fields, transcript name (which must be found in txiHash) and
+ * GenBank-formatted CDS string.  For reach row from the query, parse the CDS string into the cds
+ * in the struct txInfo for the appropriate transcript. */
+{
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *name = row[0];
+    char *cdsStr = row[1];
+    struct txInfo *txi = hashMustFindVal(txiHash, name);
+    AllocVar(txi->cds);
+    genbankCdsParse(cdsStr, txi->cds);
+    }
+sqlFreeResult(&sr);
+}
+
+static struct txInfo *txInfoLoadNcbiRefSeq(struct seqWindow *gSeqWin, struct trackDb *gTdb)
+/* Load ncbiRefSeq[Curated] PSL (+ CDS and sequence) in current window and make txInfo for each. */
+{
+struct txInfo *txiList = NULL;
+if (!trackHubDatabase(database) && hDbHasNcbiRefSeq(database))
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    struct hash *txiHash = hashNew(0);
+    char *extraWhere = NULL;
+    if (sameString(gTdb->track, "ncbiRefSeqCurated"))
+        extraWhere = "qName not like 'X%'";
+    else if (sameString(gTdb->track, "ncbiRefSeqPredicted"))
+        extraWhere = "qName like 'X%'";
+    txiList = txInfoInitFromPsl(conn, "ncbiRefSeqPsl", extraWhere, &txiHash);
+    // Now get CDS for each psl/txi:
+    struct dyString *query = sqlDyStringCreate("select * from ncbiRefSeqCds where id in ");
+    txiInfoAppendIdList(query, txiList);
+    txInfoAddCdsFromQuery(txiHash, conn, query->string);
+    // Now get transcript sequence for each psl/txi:
+    struct hash *extNcbi = hashExtNcbiRefSeq(conn);
+    dyStringClear(query);
+    sqlDyStringPrintf(query, "select acc,extFile,file_offset,file_size from seqNcbiRefSeq "
+                      "where acc in ");
+    txiInfoAppendIdList(query, txiList);
+    struct sqlResult *sr = sqlGetResult(conn, query->string);
+    char **row;
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        char *name = row[0];
+        char *extId = row[1];
+        off_t offset = sqlLongLong(row[2]);
+        size_t size = sqlUnsigned(row[3]);
+        struct udcFile *udcF = hashMustFindVal(extNcbi, extId);
+        char *buf = needMem(size+1);
+        udcSeek(udcF, offset);
+        udcRead(udcF, buf, size);
+        struct txInfo *txi = hashMustFindVal(txiHash, name);
+        txi->txSeq = faSeqFromMemText(buf, TRUE);
+        }
+    sqlFreeResult(&sr);
+    freeExtNcbiHash(&extNcbi);
+    // Now get protein sequence (if applicable) for each psl/txi:
+    dyStringClear(query);
+    sqlDyStringPrintf(query, "select id, protAcc, seq from ncbiRefSeqLink nl, ncbiRefSeqPepTable np "
+                      "where nl.protAcc = np.name and id in ");
+    txiInfoAppendIdList(query, txiList);
+    sr = sqlGetResult(conn, query->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        char *txId = row[0];
+        char *protId = row[1];
+        char *protSeq = cloneString(row[2]);
+        struct txInfo *txi = hashMustFindVal(txiHash, txId);
+        txi->protSeq = newDnaSeq(protSeq, strlen(protSeq), protId);
+        }
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+return txiList;
+}
+
+static struct txInfo *txInfoLoadRefGene(struct seqWindow *gSeqWin, struct trackDb *gTdb)
+/* Load refSeqAli PSL (+ genbank CDS and sequence) in current window and make txInfo for each. */
+{
+struct txInfo *txiList = NULL;
+if (!trackHubDatabase(database))
+    {
+    initGenbankTableNames(database);
+    struct sqlConnection *conn = hAllocConn(database);
+    struct hash *txiHash = NULL;
+    txiList = txInfoInitFromPsl(conn, "refSeqAli", NULL, &txiHash);
+    // Now get CDS for each psl/txi:
+    struct dyString *query = sqlDyStringCreate("select i.acc, c.name from %s i, %s c "
+                                               "where c.id = i.cds and i.acc in ",
+                                               gbCdnaInfoTable, cdsTable);
+    txiInfoAppendIdList(query, txiList);
+    txInfoAddCdsFromQuery(txiHash, conn, query->string);
+    // Now get transcript and translated sequence for each psl/txi:
+    struct txInfo *txi;
+    for (txi = txiList;  txi != NULL;  txi = txi->next)
+        {
+        txi->txSeq = hGenBankGetMrna(database, txi->psl->qName, NULL);
+        if (txi->cds->end > txi->cds->start && txi->cds->startComplete)
+            {
+            txi->protSeq = translateSeq(txi->txSeq, txi->cds->start, FALSE);
+            aaSeqZToX(txi->protSeq);
+            }
+        }
+    }
+return txiList;
+}
+
+static struct txInfo *txInfoLoadBigGenePred(struct seqWindow *gSeqWin, struct trackDb *gTdb)
+/* Load up bigGenePred items in current window and make txInfo for each. */
+{
+struct txInfo *txiList = NULL;
+char *fileName = cloneString(trackDbSetting(gTdb, "bigDataUrl"));
+if (fileName == NULL)
+    fileName = cloneString(trackDbSetting(gTdb, "bigGeneDataUrl"));
+if (isNotEmpty(fileName))
+    {
+    struct bbiFile *bbi = bigBedFileOpen(fileName);
+    struct lm *lm = lmInit(0);
+    struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chromName, winStart,
+                                                        winEnd, 0, lm);
+    struct bigBedInterval *bb;
+    for (bb = bbList; bb != NULL; bb = bb->next)
+        {
+        struct genePredExt *gp = genePredFromBigGenePred(chromName, bb);
+        struct txInfo *txi = txInfoFromGenePred((struct genePred *)gp, gSeqWin);
+        slAddHead(&txiList, txi);
+        }
+    bbiFileClose(&bbi);
+    lmCleanup(&lm);
+    }
+return txiList;
+}
+
+static struct txInfo *txInfoLoadGenePred(struct seqWindow *gSeqWin, struct trackDb *gTdb)
+/* Load genePreds in current window and make txInfo for each. */
+{
+struct txInfo *txiList = NULL;
+if (! trackHubDatabase(database))
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    struct genePredReader *gpr = genePredReaderRangeQuery(conn, gTdb->table,
+                                                          chromName, winStart, winEnd, NULL);
+    struct genePred *gp = NULL;
+    while ((gp = genePredReaderNext(gpr)) != NULL)
+        {
+        struct txInfo *txi = txInfoFromGenePred(gp, gSeqWin);
+        slAddHead(&txiList, txi);
+        }
+    genePredReaderFree(&gpr);
+    hFreeConn(&conn);
+    }
+return txiList;
+}
+
+static struct txInfo *txInfoLoad(struct seqWindow *gSeqWin, struct trackDb *tdb)
+/* Return a list of transcript sequences and alignments for all transcripts in the current
+ * window for all enabled gene tracks. */
+{
+struct txInfo *txiList = NULL;
+char *geneTrack = cartOrTdbString(cart, tdb, "geneTrack", NULL);
+struct track *gTrack = hashFindVal(trackHash, geneTrack);
+if (gTrack)
+    {
+    struct trackDb *gTdb = gTrack->tdb;
+    // If independent transcript sequence and PSL are available, use them.
+    if (startsWith("ncbiRefSeq", geneTrack))
+        {
+        txiList = txInfoLoadNcbiRefSeq(gSeqWin, gTdb);
+        }
+    else if (sameString(geneTrack, "refGene"))
+        {
+        txiList = txInfoLoadRefGene(gSeqWin, gTdb);
+        }
+    else if (sameString(gTdb->type, "genePred") || sameString(gTdb->type, "bigGenePred"))
+        {
+        // If the track is visible, then struct genePred items have already been loaded so
+        // just use them.  Otherwise load up.
+        if (gTrack->items)
+            {
+            struct linkedFeatures *lf;
+            for (lf = gTrack->items;  lf != NULL;  lf = lf->next)
+                {
+                struct genePred *gp = lf->original;
+                struct txInfo *txi = txInfoFromGenePred(gp, gSeqWin);
+                slAddHead(&txiList, txi);
+                }
+            }
+        else if (sameString(gTdb->type, "bigGenePred"))
+            txiList = txInfoLoadBigGenePred(gSeqWin, gTdb);
+        else
+            txiList = txInfoLoadGenePred(gSeqWin, gTdb);
+        }
+    else
+        errAbort("VCF txInfoLoad: expecting type 'genePred' or 'bigGenePred' for track '%s' "
+                 "in geneTrack setting, but got type '%s'",
+                 geneTrack, gTdb->type);
+    }
+return txiList;
+}
+
+static enum soTerm functionForRecord(struct vcfRecord *rec, struct seqWindow *gSeqWin,
+                                     struct txInfo *txiList)
+/* Return the most severe functional consequence of rec for any transcript in txiList. */
+{
+struct lm *lm = lmInit(0);
+// Can't use rec->chrom because that might be just "1" instead of "chr1":
+struct bed3 variantBed3 = { NULL, chromName, rec->chromStart, rec->chromEnd };
+enum soTerm maxImpactTerm = soUnknown;
+struct txInfo *txi;
+for (txi = txiList;  txi != NULL;  txi = txi->next)
+    {
+    int alIx;
+    // Sometimes reference allele is actually a change to the transcript
+    for (alIx = 0;  alIx < rec->alleleCount;  alIx++)
+        {
+        char *allele = rec->alleles[alIx];
+        // Watch out for weird symbolic alleles like "<INS:ME:ALU>".
+        if (sameString(allele, "<DEL>"))
+            allele = "";
+        else if (allele[0] == '<')
+            continue;
+        struct vpTx *vpTx = vpGenomicToTranscript(gSeqWin, &variantBed3, allele,
+                                                  txi->psl, txi->txSeq);
+        struct vpPep *vpPep = vpTranscriptToProtein(vpTx, txi->cds, txi->txSeq, txi->protSeq);
+        struct gpFx *gpFx = vpTranscriptToGpFx(vpTx, txi->psl, txi->cds, txi->txSeq, vpPep,
+                                               txi->protSeq, lm);
+        enum soTerm term = gpFx->soNumber;
+        if (soTermCmp(&term, &maxImpactTerm) < 0)
+            maxImpactTerm = term;
+        vpPepFree(&vpPep);
+        vpTxFree(&vpTx);
+        }
+    }
+lmCleanup(&lm);
+return maxImpactTerm;
+}
+
 // tg->height needs an extra pixel at the bottom; it's eaten by the clipping rectangle:
 #define CLIP_PAD 1
 
 static void drawOneRec(struct vcfRecord *rec, unsigned int *gtHapOrder, unsigned int gtHapCount,
 		       struct track *tg, struct hvGfx *hvg, int xOff, int yOff, int width,
-		       boolean isClustered, boolean isCenter, enum hapColorMode colorMode)
+		       boolean isClustered, boolean isCenter, enum hapColorMode colorMode,
+                       enum soTerm funcTerm)
 /* Draw a stack of genotype bars for this record */
 {
 unsigned int chromStartMap = vcfRecordTrimIndelLeftBase(rec);
@@ -706,7 +1097,7 @@ if (w <= 1)
 // to show the locations of variants, since the reference alleles are invisible:
 int extraPixel = 0;
 int hapHeight = tg->height - CLIP_PAD;
-if (colorMode == altOnlyMode)
+if (colorMode == altOnlyMode || colorMode == functionMode)
     {
     hvGfxLine(hvg, x1, yOff, x2, yOff, (isClustered ? purple : shadesOfGray[5]));
     extraPixel = 1;
@@ -747,6 +1138,28 @@ for (pixIx = 0;  pixIx < hapHeight;  pixIx++)
 	col = colorByBase(refs, alts, unks, rec->alleles[0], rec->alleles[1]);
     else if (colorMode == refAltMode)
 	col = colorByRefAlt(refs, alts, unks);
+    else if (colorMode == functionMode)
+        {
+        Color *funcShades = shadesOfGray;
+        int funcShadeCount = maxShade+1;
+        Color funcColor = colorFromSoTerm(funcTerm);
+        if (funcColor == MG_RED)
+            {
+            funcShades = shadesOfRedOnWhite;
+            funcShadeCount = ArraySize(shadesOfRedOnWhite);
+            }
+        else if (funcColor == MG_GREEN)
+            {
+            funcShades = darkerShadesOfGreenOnWhite;
+            funcShadeCount = ArraySize(darkerShadesOfGreenOnWhite);
+            }
+        else if (funcColor == MG_BLUE)
+            {
+            funcShades = shadesOfBlueOnWhite;
+            funcShadeCount = ArraySize(shadesOfBlueOnWhite);
+            }
+        col = colorByAltShade(refs, alts, unks, funcShades, funcShadeCount);
+        }
     else
 	col = colorByAltOnly(refs, alts, unks);
     if (col != MG_WHITE)
@@ -755,7 +1168,7 @@ for (pixIx = 0;  pixIx < hapHeight;  pixIx++)
 int yBot = yOff + tg->height - CLIP_PAD - 1;
 if (isCenter)
     {
-    if (colorMode == altOnlyMode)
+    if (colorMode == altOnlyMode || colorMode == functionMode)
 	{
 	// Colorful outline to distinguish this variant:
 	hvGfxLine(hvg, x1-1, yOff, x1-1, yBot, purple);
@@ -780,7 +1193,7 @@ else
     mapBoxHgcOrHgGene(hvg, chromStartMap, chromEndMap, x1, yOff, w, tg->height, tg->track,
 		      rec->name, dy->string, NULL, TRUE, NULL);
     }
-if (colorMode == altOnlyMode)
+if (colorMode == altOnlyMode || colorMode == functionMode)
     hvGfxLine(hvg, x1, yBot, x2, yBot, (isClustered ? purple : shadesOfGray[5]));
 }
 
@@ -1071,11 +1484,20 @@ else if (sameString(colorBy, VCF_HAP_COLORBY_REFALT))
     colorMode = refAltMode;
 else if (sameString(colorBy, VCF_HAP_COLORBY_BASE))
     colorMode = baseMode;
+else
+    {
+    char *geneTrack = cartOrTdbString(cart, tdb, "geneTrack", NULL);
+    if (isNotEmpty(geneTrack) && sameString(colorBy, VCF_HAP_COLORBY_FUNCTION))
+        colorMode = functionMode;
+    }
 return colorMode;
 }
 
+#define GENE_SIZE_FUDGE 2500000
+
 static boolean vcfHapClusterDrawInit(struct track *tg, struct vcfFile *vcff, struct hvGfx *hvg,
-                                     enum hapColorMode *retHapColorMode)
+                                     enum hapColorMode *retHapColorMode,
+                                     struct seqWindow **retGSeqWin, struct txInfo **retTxiList)
 /* Parse vcff's genotypes and get ready to draw haplotypes.  Return FALSE if nothing to draw. */
 {
 if (vcff->records == NULL)
@@ -1088,6 +1510,32 @@ struct vcfRecord *rec;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     vcfParseGenotypes(rec);
 popWarnHandler();
+if (*retHapColorMode == functionMode)
+    {
+    if (!exprBedColorsMade)
+        {
+        makeRedGreenShades(hvg);
+        // Make darkerShadesOfGreenOnWhite for local use
+        static struct rgbColor white  = {255, 255, 255};
+        static struct rgbColor darkerGreen  = {0, 210, 0};
+        hvGfxMakeColorGradient(hvg, &white, &darkerGreen,  EXPR_DATA_SHADES,
+                               darkerShadesOfGreenOnWhite);
+        }
+    int gStart = winStart - GENE_SIZE_FUDGE;
+    if (gStart < 0)
+        gStart = 0;
+    int gEnd = winEnd + GENE_SIZE_FUDGE;
+    int chromSize = hChromSize(database, chromName);
+    if (gEnd > chromSize)
+        gEnd = chromSize;
+    *retGSeqWin = chromSeqWindowNew(database, chromName, gStart, gEnd);
+    *retTxiList = txInfoLoad(*retGSeqWin, tg->tdb);
+    }
+else
+    {
+    *retGSeqWin = NULL;
+    *retTxiList = NULL;
+    }
 return TRUE;
 }
 
@@ -1099,7 +1547,9 @@ static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
 {
 struct vcfFile *vcff = tg->extraUiData;
 enum hapColorMode colorMode;
-if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode))
+struct seqWindow *gSeqWin;
+struct txInfo *txiList;
+if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode, &gSeqWin, &txiList))
     return;
 purple = hvGfxFindColorIx(hvg, 0x99, 0x00, 0xcc);
 unsigned int gtHapCount = 0;
@@ -1131,14 +1581,22 @@ for (rec = vcff->records, ix=0;  rec != NULL;  rec = rec->next, ix++)
     {
     boolean isClustered = (ix >= startIx && ix < endIx);
     if (ix != centerIx)
+        {
+        enum soTerm funcTerm = soUnknown;
+        if (colorMode == functionMode)
+            funcTerm = functionForRecord(rec, gSeqWin, txiList);
 	drawOneRec(rec, gtHapOrder, gtHapCount, tg, hvg, xOff, yOff, width, isClustered, FALSE,
-		   colorMode);
+		   colorMode, funcTerm);
+        }
     }
 // Draw the center rec on top, outlined with black lines, to make sure it is very visible:
+enum soTerm funcTerm = soUnknown;
+if (colorMode == functionMode)
+    funcTerm = functionForRecord(centerRec, gSeqWin, txiList);
 drawOneRec(centerRec, gtHapOrder, gtHapCount, tg, hvg, xOff, yOff, width, TRUE, TRUE,
-	   colorMode);
+	   colorMode, funcTerm);
 // Draw as much of the tree as can fit in the left label area:
-int extraPixel = (colorMode == altOnlyMode) ? 1 : 0;
+int extraPixel = (colorMode == altOnlyMode || colorMode == functionMode) ? 1 : 0;
 int hapHeight = tg->height- CLIP_PAD - 2*extraPixel;
 struct yFromNodeHelper yHelper = {0, NULL, NULL};
 initYFromNodeHelper(&yHelper, yOff+extraPixel, hapHeight, gtHapCount, gtHapOrder,
@@ -1274,18 +1732,25 @@ static void vcfGtHapFileOrderDraw(struct track *tg, int seqStart, int seqEnd,
 {
 struct vcfFile *vcff = tg->extraUiData;
 enum hapColorMode colorMode;
-if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode))
+struct seqWindow *gSeqWin;
+struct txInfo *txiList;
+if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode, &gSeqWin, &txiList))
     return;
 boolean isAllDiploid;
 int gtHapCount;
 unsigned int *gtHapOrder = gtHapOrderFromGtOrder(vcff, &isAllDiploid, &gtHapCount);
 struct vcfRecord *rec;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
+    {
+    enum soTerm funcTerm = soUnknown;
+    if (colorMode == functionMode)
+        funcTerm = functionForRecord(rec, gSeqWin, txiList);
     drawOneRec(rec, gtHapOrder, gtHapCount, tg, hvg, xOff, yOff, width, FALSE, FALSE,
-               colorMode);
+               colorMode, funcTerm);
+    }
 // If height is sufficient, draw sample names as left labels; otherwise make mouseover titles
 // with sample names for each pixel y offset.
-int extraPixel = (colorMode == altOnlyMode) ? 1 : 0;
+int extraPixel = (colorMode == altOnlyMode || colorMode == functionMode) ? 1 : 0;
 int hapHeight = tg->height - CLIP_PAD - 2*extraPixel;
 int minHeightForLabels;
 if (isAllDiploid)
@@ -1514,7 +1979,9 @@ static void vcfGtHapTreeFileDraw(struct track *tg, int seqStart, int seqEnd,
 {
 struct vcfFile *vcff = tg->extraUiData;
 enum hapColorMode colorMode;
-if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode))
+struct seqWindow *gSeqWin;
+struct txInfo *txiList;
+if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode, &gSeqWin, &txiList))
     return;
 struct phyloTree *tree = getTreeFromFile(tg->tdb);
 int gtHapCount;
@@ -1524,9 +1991,14 @@ unsigned int *gtHapOrder = gtHapOrderFromTree(vcff, tree,
                                                 &gtHapCount);
 struct vcfRecord *rec;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
+    {
+    enum soTerm funcTerm = soUnknown;
+    if (colorMode == functionMode)
+        funcTerm = functionForRecord(rec, gSeqWin, txiList);
     drawOneRec(rec, gtHapOrder, gtHapCount, tg, hvg, xOff, yOff, width, FALSE, FALSE,
-               colorMode);
-int extraPixel = (colorMode == altOnlyMode) ? 1 : 0;
+               colorMode, funcTerm);
+    }
+int extraPixel = (colorMode == altOnlyMode || colorMode == functionMode) ? 1 : 0;
 int hapHeight = tg->height - CLIP_PAD - 2*extraPixel;
 char *treeAngle = cartOrTdbString(cart, tg->tdb, VCF_HAP_TREEANGLE_VAR, VCF_DEFAULT_HAP_TREEANGLE);
 boolean drawRectangle = sameString(treeAngle, VCF_HAP_TREEANGLE_RECTANGLE);
@@ -1551,7 +2023,8 @@ if (isNotEmpty(tdbHeight))
 int cartHeight = cartOrTdbInt(cart, tg->tdb, VCF_HAP_HEIGHT_VAR, defaultHeight);
 if (tg->visibility == tvSquish)
     cartHeight /= 2;
-int extraPixel = (getColorMode(tg->tdb) == altOnlyMode) ? 1 : 0;
+enum hapColorMode colorMode = getColorMode(tg->tdb);
+int extraPixel = (colorMode == altOnlyMode || colorMode == functionMode) ? 1 : 0;
 int totalHeight = cartHeight + CLIP_PAD + 2*extraPixel;
 tg->height = min(totalHeight, maximumTrackHeight(tg));
 return tg->height;

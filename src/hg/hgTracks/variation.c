@@ -2547,8 +2547,9 @@ tg->itemNameColor = delHindsItemColor;
 #define bigDbSnpColorSyn MG_GREEN
 #define bigDbSnpColorUtrNc MG_BLUE
 
-static Color lfColorFromSoTerm(enum soTerm term)
-/* Assign a Color according to soTerm. */
+Color colorFromSoTerm(enum soTerm term)
+/* Assign a Color according to soTerm: red for non-synonymous, green for synonymous, blue for
+ * UTR/noncoding, black otherwise. */
 {
 Color color = MG_BLACK;
 switch (term)
@@ -2816,7 +2817,7 @@ if (bigBedFilterInterval(bedRow, filters))
     lf->tallEnd = lf ->end = lf->components->end = bds->chromEnd;
     lf->label = bdsLabel(tdb, bds);
     lf->mouseOver = bdsMouseOver(bds);
-    lf->filterColor = lfColorFromSoTerm(bds->maxFuncImpact);
+    lf->filterColor = colorFromSoTerm(bds->maxFuncImpact);
     lf->original = bds;
     // MNVs in dbSNP are usually linked SNVs; if so, use one sf component for each SNV.
     if (bds->class == bigDbSnpMnv && bds->chromEnd - bds->chromStart > 2)
