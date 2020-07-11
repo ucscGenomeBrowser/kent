@@ -1,4 +1,4 @@
-0ddf270562684f29query 1540 extra/stuff/crea
+0ddf270562684f29query 1540 crea extra/stuff/crea
 
 2	310	crea.2bit:hCreaGeno	242	550	28
 1304	1524	crea.2bit:hCreaGeno	5346	5566	20
@@ -20,7 +20,7 @@
 1180	1246	crea.2bit:mCreatGeno	6523	6589	3
 1528	1540	crea.2bit:mCreatGeno	4092	4103	2
 end
-0ddf270562684f29query 1606 extra/stuff/crea
+0ddf270562684f29query 1606 crea extra/stuff/crea
 
 3	355	crea.2bit:mCreatGeno	2365	2717	32
 1352	1583	crea.2bit:mCreatGeno	7040	7271	21
@@ -42,7 +42,7 @@ end
 575	597	crea.2bit:hCreaGeno	1573	1595	2
 1588	1606	crea.2bit:mCreatGeno	4092	4103	8
 end
-0ddf270562684f29untransInfo extra/stuff/crea
+0ddf270562684f29untransInfo crea extra/stuff/crea
 
 version 36x7
 type nucleotide

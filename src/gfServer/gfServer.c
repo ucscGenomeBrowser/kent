@@ -98,20 +98,25 @@ errAbort(
   "      gfServer files host port\n"
   "   To generate a precomputed index:\n"
   "      gfServer index gfidx file(s)\n"
-  "     where the files are .2bit or .nib format files.  Separate indexes must be created\n"
-  "     for untranslated and translated queries.  These can be used with a persistent server\n"
-  "     as with 'start -indexFile or a dynamic server. They must follow the naming convention for\n"
-  "     for dynamic servers.\n"
-  "   To run a dynamic server (usually called by xinet):\n"
+  "     where the files are .2bit or .nib format files.  Separate indexes are\n"
+  "     be created for untranslated and translated queries.  These can be used\n"
+  "     with a persistent server as with 'start -indexFile or a dynamic server.\n"
+  "     They must follow the naming convention for for dynamic servers.\n"
+  "   To run a dynamic server (usually called by xinetd):\n"
   "      gfServer dynserver rootdir\n"
-  "     The root directory must contain directories for each genome with the twobit and index\n"
-  "     files following the convention:\n"
-  "         $rootdir/$containingDirs/$genome/$genome.2bit\n"
-  "         $rootdir/$containingDirs/$genome/$genome.untrans.gfidx\n"
-  "         $rootdir/$containingDirs/$genome/$genome.trans.gfidx\n"
+  "     Data files for genomes are found relative to the root directory.\n"
+  "     Queries are made using the prefix of the file path relative to the root\n"
+  "     directory.  The files $genome.2bit, $genome.untrans.gfidx, and\n"
+  "     $genome.trans.gfidx are required. Typically the structure will be in\n"
+  "     the form:\n"
+  "         $rootdir/$genomeDataDir/$genome.2bit\n"
+  "         $rootdir/$genomeDataDir/$genome.untrans.gfidx\n"
+  "         $rootdir/$genomeDataDir/$genome.untrans.gfidx\n"
+  "     in this case, one would call gfClient with \n"
+  "         -genome=$genome -genomeDataDir=$genomeDataDir\n"
   "     Where the contain directories are optional.\n"
   "     The -perSeqMax functionality can be implemented by creating a file\n"
-  "         $rootdir/$genome/$genome.perseqmax\n"
+  "         $rootdir/$genomeDataDir/$genome.perseqmax\n"
   "\n"
   "options:\n"
   "   -tileSize=N     Size of n-mers to index.  Default is 11 for nucleotides, 4 for\n"
@@ -1060,12 +1065,12 @@ buf[readSize] = '\0';
 }
 
 static void dynReadCommand(char **commandRet, int *qsizeRet, boolean *isTransRet,
-                           char **genomeNameRet, char **dynGenomeDirRet)
+                           char **genomeRet, char **genomeDataDirRet)
 /* read query request from stdin, same as server expect includes database
  * Format for query commands:
- *  signature+command qsize dynGenomeDir
+ *  signature+command qsize genome genomeDataDir
  * Formats for info command:
- *  signature+command dynGenomeDir
+ *  signature+command genome genomeDataDir
  */
 {
 char buf[256];
@@ -1075,7 +1080,7 @@ logDebug("query: %s", buf);
 if (!startsWith(gfSignature(), buf))
     errAbort("query does not start with signature, got '%s'", buf);
 
-char *words[5];
+char *words[6];
 int numWords = chopByWhite(buf, words, ArraySize(words));
 if (numWords == 0)
     errAbort("empty command");
@@ -1087,23 +1092,22 @@ char *command = buf + strlen(gfSignature());
 if (sameString("query", command) || sameString("protQuery", command)
       || sameString("transQuery", command))
     {
-    if (numWords != 3)
-        errAbort("expected 3 words in query command, got %d", numWords);
+    if (numWords != 4)
+        errAbort("expected 4 words in query command, got %d", numWords);
     *qsizeRet = atoi(words[1]);
-    *dynGenomeDirRet = cloneString(words[2]);
+    *genomeRet = cloneString(words[2]);
+    *genomeDataDirRet = cloneString(words[3]);
     }
 else if (sameString("untransInfo", command) || sameString("transInfo", command))
     {
-    if (numWords != 2)
-        errAbort("expected 2 words in query command, got %d", numWords);
+    if (numWords != 3)
+        errAbort("expected 3 words in query command, got %d", numWords);
     *qsizeRet = 0;
-    *dynGenomeDirRet = cloneString(words[1]);
+    *genomeRet = cloneString(words[1]);
+    *genomeDataDirRet = cloneString(words[2]);
     }
 else
     errAbort("invalid command '%s'", command);
-
-// parse genomeName out of directory
-*genomeNameRet = cloneString(findTail(*dynGenomeDirRet, '/'));
 }
 
 static struct dnaSeq* dynReadQuerySeq(int qSize, boolean isTrans, boolean queryIsProt)
@@ -1137,22 +1141,22 @@ if (seq->size > maxSize)
 return seq;
 }
 
-static void dynGetDataFiles(char *rootDir, char *genomeName, char *dynGenomeDir,
+static void dynGetDataFiles(char *rootDir, char *genome, char *genomeDataDir,
                             boolean isTrans, char gfIdxFile[PATH_LEN],
                             struct hash **perSeqMaxHashRet)
 /* get paths for sequence files to handle requests and validate they exist */
 {
 char seqFile[PATH_LEN];
-safef(seqFile, PATH_LEN, "%s/%s/%s.2bit", rootDir, dynGenomeDir, genomeName);
+safef(seqFile, PATH_LEN, "%s/%s/%s.2bit", rootDir, genomeDataDir, genome);
 if (!fileExists(seqFile))
-    errAbort("sequence file for %s does not exist: %s", genomeName, seqFile);
+    errAbort("sequence file for %s does not exist: %s", genome, seqFile);
 
-safef(gfIdxFile, PATH_LEN, "%s/%s/%s.%s.gfidx", rootDir, dynGenomeDir, genomeName, isTrans ? "trans" : "untrans");
+safef(gfIdxFile, PATH_LEN, "%s/%s/%s.%s.gfidx", rootDir, genomeDataDir, genome, isTrans ? "trans" : "untrans");
 if (!fileExists(gfIdxFile))
-    errAbort("gf index file for %s does not exist: %s", genomeName, gfIdxFile);
+    errAbort("gf index file for %s does not exist: %s", genome, gfIdxFile);
 
 char perSeqMaxFile[PATH_LEN];
-safef(perSeqMaxFile, PATH_LEN, "%s/%s/%s.perseqmax", rootDir, dynGenomeDir, genomeName);
+safef(perSeqMaxFile, PATH_LEN, "%s/%s/%s.perseqmax", rootDir, genomeDataDir, genome);
 *perSeqMaxHashRet = NULL;
 if (fileExists(perSeqMaxFile))
     {
@@ -1163,8 +1167,7 @@ if (fileExists(perSeqMaxFile))
     }
 }
 
-static void dynamicServerQuery(char *command, int qSize, char *genomeName,
-                               struct genoFindIndex *gfIdx, struct hash *perSeqMaxHash)
+static void dynamicServerQuery(char *command, int qSize, struct genoFindIndex *gfIdx, struct hash *perSeqMaxHash)
 /* handle search queries */
 {
 mustWriteFd(STDOUT_FILENO, "Y", 1);
@@ -1186,7 +1189,7 @@ netSendString(STDOUT_FILENO, "end");
 logDebug("query done");
 }
 
-static void dynamicServerInfo(char *command, char *genomeName, struct genoFindIndex *gfIdx)
+static void dynamicServerInfo(char *command, struct genoFindIndex *gfIdx)
 /* handle one of the info commands */
 {
 char buf[256];
@@ -1211,24 +1214,24 @@ static void dynamicServer(char* rootDir)
 // make sure error is logged
 pushWarnHandler(dynWarnErrorVa);
 
-char *command, *genomeName, *dynGenomeDir;
+char *command, *genome, *genomeDataDir;
 int qSize;
 boolean isTrans;
-dynReadCommand(&command, &qSize, &isTrans, &genomeName, &dynGenomeDir);
-logInfo("dynserver: %s %s %s %s size=%d ", command, genomeName, dynGenomeDir, (isTrans ? "trans" : "untrans"), qSize);
+dynReadCommand(&command, &qSize, &isTrans, &genome, &genomeDataDir);
+logInfo("dynserver: %s %s %s %s size=%d ", command, genome, genomeDataDir, (isTrans ? "trans" : "untrans"), qSize);
 
 time_t startTime = clock1000();
 char gfIdxFile[PATH_LEN];
 struct hash *perSeqMaxHash = NULL;
-dynGetDataFiles(rootDir, genomeName, dynGenomeDir, isTrans, gfIdxFile, &perSeqMaxHash);
+dynGetDataFiles(rootDir, genome, genomeDataDir, isTrans, gfIdxFile, &perSeqMaxHash);
 logInfo("dynserver: index loading completed in %4.3f seconds", 0.001 * (clock1000() - startTime));
 startTime = clock1000();
 
 struct genoFindIndex *gfIdx = genoFindIndexLoad(gfIdxFile, isTrans);
 if (endsWith(command, "Info"))
-    dynamicServerInfo(command, genomeName, gfIdx);
+    dynamicServerInfo(command, gfIdx);
 else
-    dynamicServerQuery(command, qSize, genomeName, gfIdx, perSeqMaxHash);
+    dynamicServerQuery(command, qSize, gfIdx, perSeqMaxHash);
 logInfo("dynserver: %s completed in %4.3f seconds", command, 0.001 * (clock1000() - startTime));
 }
 

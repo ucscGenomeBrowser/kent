@@ -17,15 +17,17 @@ def parseArgs():
                         help="enable debug tracing")
     parser.add_argument('--valgrind', action="store_true", default=False,
                         help="run valgrind on gfServer without to valgrind.out")
-    parser.add_argument('rootDir', type=str,
+    parser.add_argument('rootDir',
                         help="data root directory")
-    parser.add_argument('queryType', type=str, choices=("query", "protQuery", "transQuery"),
+    parser.add_argument('queryType', choices=("query", "protQuery", "transQuery"),
                         help="query request: query, protQuery, or transQuery")
-    parser.add_argument('genome', type=str,
-                        help="genome name, can include containing dirs")
-    parser.add_argument('queryFa', type=str,
+    parser.add_argument('genome',
+                        help="genome name")
+    parser.add_argument('genomeDataDir',
+                        help="directory for genome files")
+    parser.add_argument('queryFa',
                         help="query fasta")
-    parser.add_argument('resultsOut', type=str,
+    parser.add_argument('resultsOut',
                         help="out is saved here for checking ")
     args = parser.parse_args()
     global debug, valgrind
@@ -116,9 +118,9 @@ def readResults(gfServer, resultsFh):
         if resp == b'end':
             break
 
-def makeQuery(gfServer, queryType, genome, seq, resultsFh):
+def makeQuery(gfServer, queryType, genome, genomeDataDir, seq, resultsFh):
     "make a query to the server"
-    query = "{}{} {} {}\n".format(gfSignature, queryType, len(seq), genome)
+    query = "{}{} {} {} {}\n".format(gfSignature, queryType, len(seq), genome, genomeDataDir)
     print(query, file=resultsFh)
     writeBytes(gfServer.stdin, query)
 
@@ -129,38 +131,38 @@ def makeQuery(gfServer, queryType, genome, seq, resultsFh):
     writeBytes(gfServer.stdin, seq)
     readResults(gfServer, resultsFh)
 
-def serverQuery(rootDir, queryType, genome, seq, resultsFh):
+def serverQuery(rootDir, queryType, genome, genomeDataDir, seq, resultsFh):
     """on round of starting server, making a query, and stopping"""
     gfServer = serverStart(rootDir)
-    makeQuery(gfServer, queryType, genome, seq, resultsFh)
+    makeQuery(gfServer, queryType, genome, genomeDataDir, seq, resultsFh)
     serverWait(gfServer)
 
-def makeInfo(gfServer, infoType, genome, resultsFh):
+def makeInfo(gfServer, infoType, genome, genomeDataDir, resultsFh):
     "info request to the server"
-    query = "{}{} {}\n".format(gfSignature, infoType, genome)
+    query = "{}{} {} {}\n".format(gfSignature, infoType, genome, genomeDataDir)
     print(query, file=resultsFh)
     writeBytes(gfServer.stdin, query)
     readResults(gfServer, resultsFh)
 
-def serverInfo(rootDir, infoType, genome, resultsFh):
+def serverInfo(rootDir, infoType, genome, genomeDataDir, resultsFh):
     """make an info request to the server"""
     gfServer = serverStart(rootDir)
-    makeInfo(gfServer, infoType, genome, resultsFh)
+    makeInfo(gfServer, infoType, genome, genomeDataDir, resultsFh)
     serverWait(gfServer)
 
-def dynTester(rootDir, queryType, genome, queryFa, resultsFh):
+def dynTester(rootDir, queryType, genome, genomeDataDir, queryFa, resultsFh):
     "run tests"
     seqs = readFastaSeqs(queryFa)
     if len(seqs) == 0:
         raise Exception("no sequences found in {}".format(queryFa))
     for seq in seqs:
-        serverQuery(rootDir, queryType, genome, seq, resultsFh)
+        serverQuery(rootDir, queryType, genome, genomeDataDir, seq, resultsFh)
     infoType = "untransInfo" if queryType == "query" else "transInfo"
-    serverInfo(rootDir, infoType, genome, resultsFh)
+    serverInfo(rootDir, infoType, genome, genomeDataDir, resultsFh)
 
 def main():
     args = parseArgs()
     with open(args.resultsOut, "w") as resultsFh:
-        dynTester(args.rootDir, args.queryType, args.genome, args.queryFa, resultsFh)
+        dynTester(args.rootDir, args.queryType, args.genome, args.genomeDataDir, args.queryFa, resultsFh)
 
 main()

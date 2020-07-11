@@ -131,23 +131,26 @@ memory at all times.
 </p>
 A dynamic BLAT server is specified with the <code>dynamic</code> argument to
 the <code>blat</code> or <code>transBlat</code> specification, followed by
-the <code>gfServer</code> dynamic root-relative directory contain the
-<code>2bit</code> and <code>gfidx</code> files.   The final genome
-directory and base name of the data files must be the same as the
-genome name.
+the <code>gfServer</code> dynamic root-relative path of the directory
+containing the <code>2bit</code> and <code>gfidx</code> files, named in the form
+<ul>
+  <li><code><em>myGenome</em>.2bit</code> - two-bit format genomic sequence
+  <li><code><em>myGenome</em>.untrans.gfidx</code> - untranslated index, built by <code>gfServer index</code>
+  <li><code><em>myGenome</em>.trans.gfidx</code> - translated index, built by <code>gfServer -trans index</code>
+</ul>
 <p>
 For example:
 <pre>
-   transBlat yourLab.yourInstitution.edu 4096 dynamic myGenome
-   blat yourLab.yourInstitution.edu 4096 dynamic myGenome
+   transBlat yourLab.yourInstitution.edu 4096 dynamic jillLab
+   blat yourLab.yourInstitution.edu 4096 dynamic jillLab
 </pre>
 </p>
 <p>
-for files store in the form:
+for files names in the form:
 <pre>
-    $rootdir/myGenome/myGenome.2bit
-    $rootdir/myGenome/myGenome.untrans.gfidx
-    $rootdir/myGenome/myGenome.trans.gfidx
+    $rootdir/jillLab/myGenome.2bit
+    $rootdir/jillLab/myGenome.untrans.gfidx
+    $rootdir/jillLab/myGenome.trans.gfidx
 </pre>
 </p>
 

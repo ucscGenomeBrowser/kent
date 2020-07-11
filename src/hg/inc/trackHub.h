@@ -180,7 +180,7 @@ struct trackHubGenome *trackHubGetGenome(char *database);
 /* get genome structure for an assembly in a trackHub */
 
 boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost,
-    char **pPort, char **pDynGenomeDir);
+    char **pPort, char **pGenomeDataDir);
 /* get "blat" and "transBlat" entries (if any) for an assembly hub */
 
 struct dbDb *trackHubGetBlatDbDbs();

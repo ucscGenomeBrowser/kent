@@ -31,7 +31,8 @@ double minIdentity = 90;
 char *outputFormat = "psl";
 char *qType = "dna";
 char *tType = "dna";
-char *genomeDir = NULL;
+char *genome = NULL;
+char *genomeDataDir = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -78,9 +79,13 @@ printf(
   "                   blast8- NCBI blast tabular format\n"
   "                   blast9 - NCBI blast tabular format with comments\n"
   "   -maxIntron=N   Sets maximum intron size. Default is %d.\n"
-  "   -genomeDir=name  When using a dynamic gfServer, this is the root-relative directory\n"
-  "                    of the genome query. It maybe prefixed by containing directory as\n"
-  "                    needed (see gfServer).\n",
+  "   -genome=name  When using a dynamic gfServer, The genome name is used to \n"
+  "                 find the data files relative to the dynamic gfServer root, named \n"
+  "                 in the form $genome.2bit, $genome.untrans.gfidx, and $genome.trans.gfidx, \n"
+  "   -genomeDataDir=path\n"
+  "                 When using a dynamic gfServer, this is the dynamic gfServer root directory\n"
+  "                 that contained the genome data files.  Defaults to being the root directory.\n"
+  "                \n",
   gfVersion, ffIntronMaxDefault);
 exit(-1);
 }
@@ -121,28 +126,28 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt)
     if (qType == gftProt && (tType == gftDnaX || tType == gftRnaX))
         {
 	gvo->reportTargetStrand = TRUE;
-	gfAlignTrans(&conn, tSeqDir, &seq, minScore, tFileCache, gvo, genomeDir);
+	gfAlignTrans(&conn, tSeqDir, &seq, minScore, tFileCache, gvo, genome, genomeDataDir);
 	}
     else if ((qType == gftRnaX || qType == gftDnaX) && (tType == gftDnaX || tType == gftRnaX))
         {
 	gvo->reportTargetStrand = TRUE;
 	gfAlignTransTrans(&conn, tSeqDir, &seq, FALSE, minScore, tFileCache, 
-		gvo, qType == gftRnaX, genomeDir);
+		gvo, qType == gftRnaX, genome, genomeDataDir);
 	if (qType == gftDnaX)
 	    {
 	    reverseComplement(seq.dna, seq.size);
 	    close(conn);
 	    conn = gfConnect(hostName, portName);
 	    gfAlignTransTrans(&conn, tSeqDir, &seq, TRUE, minScore, tFileCache,
-	    	gvo, FALSE, genomeDir);
+	    	gvo, FALSE, genome, genomeDataDir);
 	    }
 	}
     else if ((tType == gftDna || tType == gftRna) && (qType == gftDna || qType == gftRna))
 	{
-	gfAlignStrand(&conn, tSeqDir, &seq, FALSE, minScore, tFileCache, gvo, genomeDir);
+	gfAlignStrand(&conn, tSeqDir, &seq, FALSE, minScore, tFileCache, gvo, genome, genomeDataDir);
 	conn = gfConnect(hostName, portName);
 	reverseComplement(seq.dna, seq.size);
-	gfAlignStrand(&conn, tSeqDir, &seq, TRUE,  minScore, tFileCache, gvo, genomeDir);
+	gfAlignStrand(&conn, tSeqDir, &seq, TRUE,  minScore, tFileCache, gvo, genome, genomeDataDir);
 	}
     else
         {
@@ -172,7 +177,13 @@ minIdentity = optionFloat("minIdentity", minIdentity);
 minScore = optionInt("minScore", minScore);
 dots = optionInt("dots", 0);
 outputFormat = optionVal("out", outputFormat);
-genomeDir = optionVal("genomeDir", NULL);
+genome = optionVal("genome", NULL);
+genomeDataDir = optionVal("genomeDataDir", NULL);
+if ((genomeDataDir != NULL) && (genome == NULL))
+    errAbort("-genomeDataDir requires the -genome option");
+if ((genome == NULL) && (genomeDataDir != NULL))
+    genomeDataDir = ".";
+
 
 /* set global for fuzzy find functions */
 setFfIntronMax(optionInt("maxIntron", ffIntronMaxDefault));

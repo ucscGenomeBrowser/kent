@@ -1165,7 +1165,7 @@ else
 findBigBedPosInTdbList(cart, db, tdbList, term, hgp, NULL);
 }
 
-boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost, char **pPort, char **pDynGenomeDir)
+boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost, char **pPort, char **pGenomeDataDir)
 {
 char *setting;
 
@@ -1194,10 +1194,10 @@ if (numWords > 2)
     {
     if (!sameString(words[2], "dynamic"))
         errAbort("invalid configuration for hub BLAT server, third argument should be 'dynamic' or omitted, got: %s", words[2]);
-    *pDynGenomeDir = words[3];
+    *pGenomeDataDir = words[3];
     }
 else
-    *pDynGenomeDir = NULL;
+    *pGenomeDataDir = NULL;
 
 return TRUE;
 }

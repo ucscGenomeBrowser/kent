@@ -14,5 +14,5 @@ echo "crea.2bit:mCreatGeno2" >>$gfDir/crea.perseqmax
 
 # test query
 
-./dynTester $gfRootDir query crea input/crea.mrna output/${testName}.out
+./dynTester $gfRootDir query crea crea input/crea.mrna output/${testName}.out
 diff expected/${testName}.out output/${testName}.out

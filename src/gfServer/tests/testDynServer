@@ -12,5 +12,5 @@ gfServer index $gfDir/crea.untrans.gfidx $gfDir/crea.2bit >/dev/null
 
 # test query
 
-./dynTester $gfRootDir query crea input/crea.mrna output/${testName}.out
+./dynTester $gfRootDir query crea crea input/crea.mrna output/${testName}.out
 diff expected/${testName}.out output/${testName}.out
