@@ -29,8 +29,6 @@
 #include "gencodeAnnotationRemark.h"
 #include "gencodeTranscriptionSupportLevel.h"
 
-extern struct trackDb *globalTdb;
-
 char *entrezUidFormat = "https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=%s&list_uids=%d&dopt=%s&tool=genome.ucsc.edu";
 
 static void printEntrezPubMedUidUrl(FILE *f, int pmid)
@@ -117,9 +115,10 @@ static char *getGencodeTable(struct trackDb *tdb, char *tableBase)
 /* get a table name from the settings. */
 {
 char buffer[strlen(tableBase) + 10];
-safef(buffer, sizeof buffer, "%sV35",tableBase);
+// the version number is after the table name base
+char *tableVersion = &tdb->table[strlen("gencodeAnnot")];
+safef(buffer, sizeof buffer, "%s%s",tableBase,tableVersion);
 return cloneString(buffer);
-//return trackDbRequiredSetting(tdb, tableBase);
 }
 
 static char* getGencodeVersion(struct trackDb *tdb)

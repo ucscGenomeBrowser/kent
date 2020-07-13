@@ -1,14 +1,13 @@
 <h2>Description</h2>
 <p>
-<a href="https://nextstrain.org/ncov" target=_blank>Nextstrain.org</a> displays
+<a href="https://nextstrain.org/ncov" target="_blank">Nextstrain.org</a> displays
 data about variants that have occurred in the current 2019/2020 outbreak of SARS-CoV-2.
 Nextstrain has a powerful user interface for viewing the time stamped phylogenetic tree
 that it infers from the patterns of variants in sequences worldwide.
 Nextstrain maintains an ongoing pipeline that continuously obtains SARS-CoV-2 genome sequences
-and metadata from
-<a href="https://gisaid.org" target=_blank>GISAID</a>,
+and metadata from <a href="https://gisaid.org" target="_blank">GISAID</a>,
 aligns them against the reference genome
-(<a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2" target=_blank>NC_045512.2</a>),
+(<a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2" target="_blank">NC_045512.2</a>),
 collects single-nucleotide variants (SNVs), and infers a phylogenetic tree.
 </p>
 <p>
@@ -21,10 +20,10 @@ phylogenetic tree.)
 
 <h2>Methods</h2>
 <p>Nextstrain downloads SARS-CoV-2 genomes from
-  <a href="https://gisaid.org/" target=_blank>GISAID</a>
+  <a href="https://gisaid.org/" target="_blank">GISAID</a>
   as they are submitted by labs worldwide.
   The sequences are processed by an
-  <a href="https://github.com/nextstrain/ncov" target=_blank>automated pipeline</a>
+  <a href="https://github.com/nextstrain/ncov" target="_blank">automated pipeline</a>
   and annotations are written to a data file
   that UCSC downloads and extracts annotations for display.</p>
 
@@ -32,11 +31,19 @@ phylogenetic tree.)
 <p>
 You can download the bigBed file underlying this track (nextstrainSamples*.bigWig) from our
 <a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/nextstrain/"
-target=_blank>Download Server</a>. The data can be explored interactively with the
+target="_blank">Download Server</a>. The data can be explored interactively with the
 <a href="../cgi-bin/hgTables">Table Browser</a>
 or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be
 accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>.
-</p>
+Command-line extraction can be accomplished using an example like the following command:
+<pre>
+bigWigToWig -udcDir=. -chrom=NC_045512v2 -start=100 end=7875 /gbdb/wuhCor1/nextstrain/nextstrainSamples.bigWig myOutput.wig
+</pre></p>
+<p>
+Please refer to our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list archives</a> for questions, or our
+<a href="../FAQ/FAQdownloads.html#download36" target="_blank">Data Access FAQ</a> for more
+information.</p>
 
 <h2>Data usage policy</h2>
 The data presented here is intended to rapidly disseminate analysis of
@@ -44,18 +51,18 @@ important pathogens. Unpublished data is included with permission of the data
 generators, and does not impact their right to publish. Please contact the
 respective authors (available via the
 <a href="https://github.com/nextstrain/ncov/blob/master/data/metadata.tsv"
-   target=_blank>Nextstrain metadata.tsv file</a>)
+   target="_blank">Nextstrain metadata.tsv file</a>)
 if you intend to carry out further research using their data.
 Derived data, such as phylogenies, can be downloaded from
-<a href="https://nextstrain.org/ncov" target=_blank>nextstrain.org</a>
-(see "DOWNLOAD DATA" link at bottom of page) -
+<a href="https://nextstrain.org/ncov" target="_blank">nextstrain.org</a>
+(see &quot;DOWNLOAD DATA&quot; link at bottom of page) -
 please contact the relevant authors where appropriate.
 
 <h2>Credits</h2>
 <p>Thanks to
-  <a href="https://nextstrain.org/ncov" target=_blank>nextstrain.org</a> for
+  <a href="https://nextstrain.org/ncov" target="_blank">nextstrain.org</a> for
   sharing its analysis of genomes collected by
-  <a href="https://gisaid.org/" target=_blank>GISAID</a>,
+  <a href="https://gisaid.org/" target="_blank">GISAID</a>,
   and to researchers worldwide for sharing their SARS-CoV-2 genome sequences.
 </p>
 

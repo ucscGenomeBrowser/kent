@@ -114,7 +114,12 @@ if(ptr > start)
 if (*ptr == ':')
     {
     ptr++;
-    sscanf(ptr, "%lg", &pName->length);
+    char *lStart = ptr;
+    while (isdigit(*ptr) || *ptr == '.' || *ptr == 'e' || *ptr == 'E' || *ptr == '+' || *ptr == '-')
+        ptr++;
+    int lSize = ptr - lStart;
+    if (lSize)
+        pName->length = strtod(lStart, NULL);
     while ((*ptr != '[') && (*ptr != ')') && (*ptr != ',') && (*ptr != ';'))
 	ptr++;
     }
