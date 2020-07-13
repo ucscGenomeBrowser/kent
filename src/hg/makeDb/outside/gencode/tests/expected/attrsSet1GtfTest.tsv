@@ -23,7 +23,7 @@ ENSG00000142149.4	HUNK	protein_coding	ENST00000439107.1	HUNK-004	protein_coding	
 ENSG00000233750.2	RP11-34P13.10	pseudogene	ENST00000442987.2	RP11-34P13.10-001	processed_pseudogene		1		pseudo
 ENSG00000223972.4	DDX11L1	pseudogene	ENST00000450305.2	DDX11L1-001	transcribed_unprocessed_pseudogene		2		pseudo
 ENSG00000187634.6	SAMD11	protein_coding	ENST00000455979.1	SAMD11-004	protein_coding		2		coding
-ENSG00000223972.4	DDX11L1	pseudogene	ENST00000456328.2	DDX11L1-002	processed_transcript		2		nonCoding
+ENSG00000223972.4	DDX11L1	pseudogene	ENST00000456328.2	DDX11L1-002	processed_transcript		2		pseudo
 ENSG00000182484.9	WASH6P	protein_coding	ENST00000460206.1	WASH6P-014	processed_transcript		2		nonCoding
 ENSG00000182484.9	WASH6P	protein_coding	ENST00000461007.1	WASH6P-016	processed_transcript		2		nonCoding
 ENSG00000182484.9	WASH6P	protein_coding	ENST00000464205.1	WASH6P-011	processed_transcript		2		nonCoding
