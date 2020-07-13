@@ -1206,7 +1206,7 @@ sub makeDownloads {
   return if ($opt_skipDownload);
   # Make an md5sum.txt file.
   my $net = $isSelf ? "" : "$tDb.$qDb.net.gz";
-  if (! -s "$net") {
+  if (! -s "$runDir/$net") {
      $net = "";
   }
   my $whatItDoes =
