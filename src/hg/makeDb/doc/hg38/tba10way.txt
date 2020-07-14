@@ -479,7 +479,7 @@ do
 done
     # make sure they all are successful symLinks:
     ls -ogrtL *.bed | wc -l
-    # 30
+    # 10
 
     screen -S hg38      # use a screen to control this longish job
     ssh ku
@@ -766,6 +766,200 @@ do
   twoBitToFa /hive/data/genomes/$S/$S.2bit:chrX stdout \
     | sed -e "s#>.*#>$S:chrX:1:+:$size##;" > fasta/$S.fa
 done
+
+    # the other four require multiple contigs in order to get some matching
+    # sequence to hg38.chrX.  From a survey of the resulting chrX.maf as
+    # computed above, the following contigs were selected as the set to
+    # match with hg38.chrX sequence:
+
+export S="loxAfr3"
+for C in scaffold_32 scaffold_39 scaffold_24 scaffold_56 scaffold_82 scaffold_81 scaffold_78 scaffold_89 scaffold_100 scaffold_94 scaffold_111 scaffold_85 scaffold_120 scaffold_130
+do
+  size=`grep -w "${C}" /hive/data/genomes/${S}/chrom.sizes | awk '{print $2}'`
+  twoBitToFa /hive/data/genomes/$S/$S.2bit:${C} stdout \
+    | sed -e "s#>.*#>$S:${C}:1:+:$size##;"
+  printf "%s.%s\n" "${S}" "${C}" 1>&2
+done > fasta/${S}.fa
+
+export S="neoSch1"
+for C in chrX_NW_018726553v1_random chrX_NW_018726535v1_random chrX_NW_018726533v1_random chrX_NW_018726541v1_random chrX_NW_018726552v1_random chrX_NW_018726532v1_random chrX_NW_018726536v1_random chrX_NW_018726539v1_random chrX_NW_018726538v1_random chrX_NW_018726551v1_random chrX_NW_018726550v1_random chrX_NW_018726549v1_random chrX_NW_018726548v1_random chrX_NW_018726540v1_random chrX_NW_018726546v1_random chrX_NW_018726534v1_random chrX_NW_018726547v1_random chrX_NW_018726545v1_random chrX_NW_018726543v1_random chrX_NW_018726542v1_random chrX_NW_018726544v1_random NW_018729802v1 chrX_NW_018726537v1_random NW_018729761v1
+do
+  size=`grep -w "${C}" /hive/data/genomes/${S}/chrom.sizes | awk '{print $2}'`
+  twoBitToFa /hive/data/genomes/$S/$S.2bit:${C} stdout \
+    | sed -e "s#>.*#>$S:${C}:1:+:$size##;"
+  printf "%s.%s\n" "${S}" "${C}" 1>&2
+done > fasta/${S}.fa
+
+export S="ornAna2"
+for C in chrX1 chrX5 chrX3 chrX2 chrUn_DS181337v1 chrUn_DS181394v1 chrUn_DS181098v1 chrUn_DS181265v1 chrUn_DS180891v1 chrUn_DS181278v1 chrUn_DS180962v1 chrUn_DS180974v1 chrUn_DS181276v1 chrUn_DS181171v1 chrUn_DS181191v1
+do
+  size=`grep -w "${C}" /hive/data/genomes/${S}/chrom.sizes | awk '{print $2}'`
+  twoBitToFa /hive/data/genomes/$S/$S.2bit:${C} stdout \
+    | sed -e "s#>.*#>$S:${C}:1:+:$size##;"
+  printf "%s.%s\n" "${S}" "${C}" 1>&2
+done > fasta/${S}.fa
+
+export S="pteAle1"
+for C in KB030639 KB031147 KB030981 KB030535 KB030400 KB031071 KB030344 KB030533 KB030633 KB030676 KB030941 KB030758 KB030280 KB030859 KB031069 KB031066 KB030496 KB030969 KB030414 KB030261 KB031044 KB030442 KB030674 KB030794
+do
+  size=`grep -w "${C}" /hive/data/genomes/${S}/chrom.sizes | awk '{print $2}'`
+  twoBitToFa /hive/data/genomes/$S/$S.2bit:${C} stdout \
+    | sed -e "s#>.*#>$S:${C}:1:+:$size##;"
+  printf "%s.%s\n" "${S}" "${C}" 1>&2
+done > fasta/${S}.fa
+
+   # Now, to run all by all lastz comparisons with these sequences, this
+   # set of 45 commands are run:
+./runOne hg38 panTro6 "T=2 O=600 E=150 M=254 K=4500 L=4500 Y=15000 Q=/scratch/data/blastz/human_chimp.v2.q"
+./runOne hg38 rheMac10 "M=254 Q=/hive/data/staging/data/blastz/human_chimp.v2.q O=600 E=150 K=4500 Y=15000 T=2"
+./runOne hg38 mm10 ""
+./runOne hg38 canFam4 "M=254"
+./runOne hg38 neoSch1 "O=400 E=30 M=254"
+./runOne hg38 pteAle1 "O=400 E=30 M=254"
+./runOne hg38 loxAfr3 "O=400 E=30 M=254"
+./runOne hg38 monDom5 "M=50 Y=3400 L=6000 K=2200 Q=/scratch/data/blastz/HoxD55.q"
+./runOne hg38 ornAna2 "O=400 E=30 Y=3400 L=6000 K=2200 M=50 Q=/scratch/data/blastz/HoxD55.q"
+./runOne panTro6 rheMac10 "M=254 Q=/hive/data/staging/data/blastz/human_chimp.v2.q O=600 E=150 K=4500 Y=15000 T=2"
+./runOne panTro6 mm10 "M=254"
+./runOne panTro6 canFam4 "M=254"
+./runOne panTro6 neoSch1 "M=254"
+./runOne panTro6 pteAle1 "M=254"
+./runOne panTro6 loxAfr3 "M=254"
+./runOne panTro6 monDom5 "E=30 Y=3400 L=6000 K=2200 M=50 Q=/hive/data/staging/data/blastz/HoxD55.q"
+./runOne panTro6 ornAna2 "E=30 Y=3400 L=6000 K=2200 M=50 Q=/hive/data/staging/data/blastz/HoxD55.q"
+./runOne rheMac10 mm10 "M=254"
+./runOne rheMac10 canFam4 "M=254"
+./runOne rheMac10 neoSch1 "M=254"
+./runOne rheMac10 pteAle1 "M=254"
+./runOne rheMac10 loxAfr3 "M=254"
+./runOne rheMac10 monDom5 "E=30 Y=3400 L=6000 K=2200 M=50 Q=/hive/data/staging/data/blastz/HoxD55.q"
+./runOne rheMac10 ornAna2 "E=30 Y=3400 L=6000 K=2200 M=50 Q=/hive/data/staging/data/blastz/HoxD55.q"
+./runOne mm10 canFam4 "M=254"
+./runOne mm10 neoSch1 "M=254"
+./runOne mm10 pteAle1 "M=254"
+./runOne mm10 loxAfr3 "M=254"
+./runOne mm10 monDom5 "Y=3400 L=6000 K=2200 Q=/scratch/data/blastz/HoxD55.q"
+./runOne mm10 ornAna2 "Y=3400 L=6000 K=2200 Q=/scratch/data/blastz/HoxD55.q"
+./runOne canFam4 neoSch1 "M=254"
+./runOne canFam4 pteAle1 "M=254"
+./runOne canFam4 loxAfr3 "M=254"
+./runOne canFam4 monDom5 "Y=3400 L=6000 K=2200 Q=/scratch/data/blastz/HoxD55.q"
+./runOne canFam4 ornAna2 "Y=3400 L=6000 K=2200 Q=/scratch/data/blastz/HoxD55.q"
+./runOne neoSch1 pteAle1 "M=254"
+./runOne neoSch1 loxAfr3 "M=254"
+./runOne neoSch1 monDom5 "Y=3400 L=6000 K=2200 Q=/scratch/data/blastz/HoxD55.q"
+./runOne neoSch1 ornAna2 "Y=3400 L=6000 K=2200 Q=/scratch/data/blastz/HoxD55.q"
+./runOne pteAle1 loxAfr3 "M=254"
+./runOne pteAle1 monDom5 "Y=3400 L=6000 K=2200 Q=/scratch/data/blastz/HoxD55.q"
+./runOne pteAle1 ornAna2 "Y=3400 L=6000 K=2200 Q=/scratch/data/blastz/HoxD55.q"
+./runOne loxAfr3 monDom5 "Y=3400 L=6000 K=2200 Q=/scratch/data/blastz/HoxD55.q"
+./runOne loxAfr3 ornAna2 "Y=3400 L=6000 K=2200 Q=/scratch/data/blastz/HoxD55.q"
+./runOne monDom5 ornAna2 "H=2000 Y=3400 L=8000 K=2200 Q=/hive/data/staging/data/blastz/HoxD55.q"
+
+    # where the runOne script is:
+
+#!/bin/bash
+
+PATH=/cluster/bin/penn/multiz.2009-01-21_patched:/cluster/bin/penn/lastz-distrib-1.04.03/bin:$PATH
+
+if [ $# -lt 3 ]; then
+  printf "usage: runOne target query lastzArgs...\n" 1>&2
+  exit 255
+fi
+
+export target=$1
+export query=$2
+shift 2
+export lastzArgs=$*
+
+mkdir -p "${target}"
+cd "${target}"
+rm -f ${target}.${query}.sing.maf
+rm -f "${query}"
+
+if [ ! -s "${target}" ]; then
+  ln -s ../fasta/${target}.fa ${target}
+fi
+ln -s ../fasta/${query}.fa ${query}
+
+lastzWrapper "${target}" "${query}" $lastArgs \
+    | lav2maf "/dev/stdin" "${target}" "${query}" \
+      | maf_sort "/dev/stdin" "${target}" \
+        > "${target}.${query}.orig.maf"
+single_cov2 ${target}.${query}.orig.maf > ${target}.${query}.sing.maf
+
+    # with all the *.sing.maf results, make a working directory
+    # on /dev/shm to run the tba procedure
+
+    mkdir /dev/shm/chrX.10way
+    cp -p */*.sing.maf /dev/shm/chrX.10way
+    # and the procedure needs the sequences in files with their sequence names:
+    for S in canFam4 hg38 loxAfr3 mm10 monDom5 neoSch1 ornAna2 panTro6 pteAle1 rheMac10
+do
+    cp -p fasta/${S}.fa /dev/shm/chrX.10way/${S}
+done
+
+    # now, can run the tba command:
+    cd /dev/shm/chrX.10way
+
+PATH=/cluster/bin/penn/multiz.2009-01-21_patched:/cluster/bin/penn/lastz-distrib-1.04.03/bin:$PATH
+
+time tba "(((((((hg38 panTro6) rheMac10) mm10) ((canFam4 neoSch1) pteAle1)) loxAfr3) monDom5) ornAna2)" *.sing.maf chrX.tba10way.maf
+
+    # real    154m33.929s
+
+    # the resulting maf file:
+-rw-rw-r-- 1 1634826703 Jul 14 11:13 chrX.tba10way.maf
+
+    # extract the hg38 reference from that:
+
+PATH=/cluster/bin/penn/multiz.2009-01-21_patched:/cluster/bin/penn/lastz-distrib-1.04.03/bin:$PATH
+
+maf_project chrX.tba10way.maf hg38 > hg38.chrX.tba10way.maf
+
+    # add iRows to this maf file:
+    mkdir /hive/data/genomes/hg38/bed/tba10way/chrX/anno
+    cd /hive/data/genomes/hg38/bed/tba10way/chrX/anno
+    for DB in hg38 panTro6 rheMac10 mm10 canFam4 neoSch1 pteAle1 loxAfr3 monDom5 ornAna2
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL *.bed | wc -l
+
+time mafAddIRows -nBeds=nBeds ../hg38.chrX.tba10way.maf /hive/data/genomes/hg38/hg38.2bit hg38.chrX.irows.maf
+    # real    0m10.997s
+
+    # verify how many iRows for each species:
+    grep "^i " hg38.chrX.irows.maf | awk '{print $2}' \
+      | awk -F'.' '{print $1}' | sort | uniq -c
+#  147436 canFam4
+#  132536 loxAfr3
+#   86472 mm10
+#   16095 monDom5
+#  145321 neoSch1
+#    9881 ornAna2
+#  212809 panTro6
+#   92233 pteAle1
+#  204033 rheMac10
+
+    # loading this maf file:
+
+    ln -s `pwd`/hg38.chrX.irows.maf /gbdb/hg38/tba10way/chrX.tba10way.maf
+
+    time hgLoadMaf -loadFile=/gbdb/hg38/tba10way/chrX.tba10way.maf hg38 tba10way
+    # Loaded 219436 mafs in 1 files from /gbdb/hg38/tba10way/
+    # real    0m5.446s
+
+    time (cat /gbdb/hg38/tba10way/chrX.tba10way.maf \
+        | hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 hg38 tba10waySummary stdin)
+#Created 65148 summary blocks from 1046816 components and 219436 mafs from stdin
+# real    0m11.363s
 
 #########################################################################
 # Phylogenetic tree from 30-way (DONE - 2013-09-13 - Hiram)
