@@ -8,7 +8,7 @@ bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainGene.bb
 
 track nextstrainClade
 shortLabel Nextstrain Clades
-longLabel Situation report zoom "clades" from nextstrain.org/ncov
+longLabel Nextstrain year-letter clade designations (19A, 19B, 20A, etc.) from nextstrain.org/ncov
 type bigBed 12 +
 itemRgb on
 visibility hide
@@ -18,157 +18,226 @@ bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainClade.bb
 url https://nextstrain.org/ncov?d=tree&m=div&label=clade:$$
 urlLabel View in Nextstrain: 
 
+track nextstrainOldClade
+shortLabel Nextstrn Old Clades
+longLabel Old (March 2020) Nextstrain clades designations (A1a, A2, etc.) from nextstrain.org/ncov
+type bigBed 12 +
+itemRgb on
+visibility hide
+group varRep
+priority 0.505
+bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainOldClade.bb
+
 track nextstrainSamples
 shortLabel Nextstrain Variants
 longLabel Nextstrain/GISAID Sample Variants from nextstrain.org/ncov
 type vcfTabix
 visibility pack
 hapClusterEnabled on
+hapClusterHeight 500
 group varRep
-priority 0.5
+priority 0.51
+hapClusterColorBy function
+geneTrack ncbiGeneBGP
 html nextstrainSamplesDevOnly
+subGroup1 view Views all=All_Samples newClades=New_Clades(19A,_19B_etc.) oldClades=Old_Clades_(A1a,_A2_etc.)
 compositeTrack on
-release alpha
 
-track nextstrainSamples
-shortLabel Nextstrain Variants
-longLabel Nextstrain/GISAID Sample Variants from nextstrain.org/ncov
-type vcfTabix
-visibility pack
-hapClusterEnabled on
-group varRep
-priority 0.5
-html nextstrainSamples
-compositeTrack on
-release beta,public
+    track nextstrainSamplesViewAll
+    view all
+    parent nextstrainSamples
+    shortLabel All Samples
+    visibility pack
 
-    track nextstrainSamplesRb
-    parent nextstrainSamples on
-    shortLabel Rec Bi-allelic
-    longLabel Recurrent Bi-allelic Variants in all Nextstrain/GISAID Samples from nextstrain.org/ncov
-    hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain.nh
-    hapClusterHeight 500
-    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainRecurrentBiallelic.vcf.gz
-    priority 1
-    release alpha
+        track nextstrainSamplesRb
+        parent nextstrainSamplesViewAll on
+        subGroups view=all
+        shortLabel Rec Bi-allelic
+        longLabel Recurrent Bi-allelic Variants in all Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain.nh
+        hapClusterHeight 500
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainRecurrentBiallelic.vcf.gz
+        priority 1
 
-    track nextstrainSamplesAll
-    parent nextstrainSamples on
-    shortLabel All Variants
-    longLabel Variants in All Nextstrain/GISAID Samples from nextstrain.org/ncov
-    hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain.nh
-    hapClusterHeight 500
-    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples.vcf.gz
-    priority 2
-    release beta,public
+        track nextstrainSamplesAll
+        parent nextstrainSamplesViewAll off
+        subGroups view=all
+        shortLabel All Variants
+        longLabel Variants in All Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain.nh
+        hapClusterHeight 500
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples.vcf.gz
+        priority 2
 
-    track nextstrainSamplesAll
-    parent nextstrainSamples off
-    shortLabel All Variants
-    longLabel Variants in All Nextstrain/GISAID Samples from nextstrain.org/ncov
-    hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain.nh
-    hapClusterHeight 500
-    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples.vcf.gz
-    priority 2
-    release alpha
+    track nextstrainSamplesViewNewClades
+    view newClades
+    parent nextstrainSamples
+    shortLabel New Clades (19A, 19B, etc.)
+    visibility hide
 
-    track nextstrainSamplesA1a
-    parent nextstrainSamples off
-    shortLabel A1a Variants
-    longLabel Variants in Clade A1a Nextstrain/GISAID Samples from nextstrain.org/ncov
-    hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA1a.nh
-    hapClusterHeight 49
-    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA1a.vcf.gz
-    priority 10
+        track nextstrainSamples19A
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 19A Variants
+        longLabel Variants in Clade 19A Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain19A.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples19A.vcf.gz
+        priority 10
 
-    track nextstrainSamplesA2
-    parent nextstrainSamples off
-    shortLabel A2 Variants
-    longLabel Variants in Clade A2 Nextstrain/GISAID Samples from nextstrain.org/ncov
-    hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA2.nh
-    hapClusterHeight 240
-    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA2.vcf.gz
-    priority 20
+        track nextstrainSamples19B
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 19B Variants
+        longLabel Variants in Clade 19B Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain19B.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples19B.vcf.gz
+        priority 20
 
-    track nextstrainSamplesA2a
-    parent nextstrainSamples off
-    shortLabel A2a Variants
-    longLabel Variants in Clade A2a Nextstrain/GISAID Samples from nextstrain.org/ncov
-    hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA2a.nh
-    hapClusterHeight 239
-    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA2a.vcf.gz
-    priority 30
+        track nextstrainSamples20A
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 20A Variants
+        longLabel Variants in Clade 20A Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain20A.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20A.vcf.gz
+        priority 30
 
-    track nextstrainSamplesA3
-    parent nextstrainSamples off
-    shortLabel A3 Variants
-    longLabel Variants in Clade A3 Nextstrain/GISAID Samples from nextstrain.org/ncov
-    hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA3.nh
-    hapClusterHeight 14
-    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA3.vcf.gz
-    priority 40
+        track nextstrainSamples20B
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 20B Variants
+        longLabel Variants in Clade 20B Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain20B.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20B.vcf.gz
+        priority 40
 
-    track nextstrainSamplesA6
-    parent nextstrainSamples off
-    shortLabel A6 Variants
-    longLabel Variants in Clade A6 Nextstrain/GISAID Samples from nextstrain.org/ncov
-    hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA6.nh
-    hapClusterHeight 11
-    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA6.vcf.gz
-    priority 50
+        track nextstrainSamples20C
+        parent nextstrainSamplesViewNewClades on
+        subGroups view=newClades
+        shortLabel 20C Variants
+        longLabel Variants in Clade 20C Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrain20C.nh
+        hapClusterHeight 300
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20C.vcf.gz
+        priority 50
 
-    track nextstrainSamplesA7
-    parent nextstrainSamples off
-    shortLabel A7 Variants
-    longLabel Variants in Clade A7 Nextstrain/GISAID Samples from nextstrain.org/ncov
-    hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA7.nh
-    hapClusterHeight 1
-    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA7.vcf.gz
-    priority 60
+    track nextstrainSamplesViewOldClades
+    view oldClades
+    parent nextstrainSamples
+    shortLabel Old Clades (A1a, A2, etc.)
+    visibility hide
 
-    track nextstrainSamplesB
-    parent nextstrainSamples off
-    shortLabel B Variants
-    longLabel Variants in Clade B Nextstrain/GISAID Samples from nextstrain.org/ncov
-    hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainB.nh
-    hapClusterHeight 103
-    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB.vcf.gz
-    priority 70
+        track nextstrainSamplesA1a
+        parent nextstrainSamplesViewOldClades on
+        subGroups view=oldClades
+        shortLabel A1a Variants
+        longLabel Variants in Clade A1a Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA1a.nh
+        hapClusterHeight 49
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA1a.vcf.gz
+        priority 110
 
-    track nextstrainSamplesB1
-    parent nextstrainSamples off
-    shortLabel B1 Variants
-    longLabel Variants in Clade B1 Nextstrain/GISAID Samples from nextstrain.org/ncov
-    hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainB1.nh
-    hapClusterHeight 71
-    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB1.vcf.gz
-    priority 80
+        track nextstrainSamplesA2
+        parent nextstrainSamplesViewOldClades on
+        subGroups view=oldClades
+        shortLabel A2 Variants
+        longLabel Variants in Clade A2 Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA2.nh
+        hapClusterHeight 240
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA2.vcf.gz
+        priority 120
 
-    track nextstrainSamplesB2
-    parent nextstrainSamples off
-    shortLabel B2 Variants
-    longLabel Variants in Clade B2 Nextstrain/GISAID Samples from nextstrain.org/ncov
-    hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainB2.nh
-    hapClusterHeight 4
-    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB2.vcf.gz
-    priority 90
+        track nextstrainSamplesA2a
+        parent nextstrainSamplesViewOldClades on
+        subGroups view=oldClades
+        shortLabel A2a Variants
+        longLabel Variants in Clade A2a Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA2a.nh
+        hapClusterHeight 239
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA2a.vcf.gz
+        priority 130
 
-    track nextstrainSamplesB4
-    parent nextstrainSamples off
-    shortLabel B4 Variants
-    longLabel Variants in Clade B4 Nextstrain/GISAID Samples from nextstrain.org/ncov
-    hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainB4.nh
-    hapClusterHeight 4
-    bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB4.vcf.gz
-    priority 100
+        track nextstrainSamplesA3
+        parent nextstrainSamplesViewOldClades on
+        subGroups view=oldClades
+        shortLabel A3 Variants
+        longLabel Variants in Clade A3 Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA3.nh
+        hapClusterHeight 14
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA3.vcf.gz
+        priority 140
+
+        track nextstrainSamplesA6
+        parent nextstrainSamplesViewOldClades on
+        subGroups view=oldClades
+        shortLabel A6 Variants
+        longLabel Variants in Clade A6 Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA6.nh
+        hapClusterHeight 11
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA6.vcf.gz
+        priority 150
+
+        track nextstrainSamplesA7
+        parent nextstrainSamplesViewOldClades on
+        subGroups view=oldClades
+        shortLabel A7 Variants
+        longLabel Variants in Clade A7 Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainA7.nh
+        hapClusterHeight 1
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA7.vcf.gz
+        priority 160
+
+        track nextstrainSamplesB
+        parent nextstrainSamplesViewOldClades on
+        subGroups view=oldClades
+        shortLabel B Variants
+        longLabel Variants in Clade B Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainB.nh
+        hapClusterHeight 103
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB.vcf.gz
+        priority 170
+
+        track nextstrainSamplesB1
+        parent nextstrainSamplesViewOldClades on
+        subGroups view=oldClades
+        shortLabel B1 Variants
+        longLabel Variants in Clade B1 Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainB1.nh
+        hapClusterHeight 71
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB1.vcf.gz
+        priority 180
+
+        track nextstrainSamplesB2
+        parent nextstrainSamplesViewOldClades on
+        subGroups view=oldClades
+        shortLabel B2 Variants
+        longLabel Variants in Clade B2 Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainB2.nh
+        hapClusterHeight 4
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB2.vcf.gz
+        priority 190
+
+        track nextstrainSamplesB4
+        parent nextstrainSamplesViewOldClades on
+        subGroups view=oldClades
+        shortLabel B4 Variants
+        longLabel Variants in Clade B4 Nextstrain/GISAID Samples from nextstrain.org/ncov
+        hapClusterMethod treeFile /gbdb/wuhCor1/nextstrain/nextstrainB4.nh
+        hapClusterHeight 4
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB4.vcf.gz
+        priority 200
 
 
 track nextstrainFreq
 shortLabel Nextstrain Frequency
 longLabel Nextstrain Variants Alternate Allele Frequency
-release alpha
 type bigWig
 compositeTrack on
+subGroup1 view Views all=All_Samples newClades=New_Clades(19A,_19B_etc.) oldClades=Old_Clades_(A1a,_A2_etc.)
 visibility hide
 group varRep
 autoScale off
@@ -176,112 +245,192 @@ viewLimits 0:1.0
 viewLimitsMax 0:1.0
 maxHeightPixels 100:40:8
 
+    track nextstrainFreqViewAll
+    view all
+    parent nextstrainFreq
+    shortLabel All Samples
+    visibility pack
+
         track nextstrainFreqAll
-        shortLabel All Frequency
+        shortLabel All
         longLabel Nextstrain, all samples: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples.bigWig
         visibility dense
-        release alpha
-        parent nextstrainFreq
+        parent nextstrainFreqViewAll
+        subGroups view=all
         priority 1
 
+    track nextstrainFreqViewNewClades
+    view newClades
+    parent nextstrainFreq
+    shortLabel New Clades (19A, 19B, etc.)
+    visibility hide
+
+        track nextstrainFreq19A
+        shortLabel 19A
+        longLabel Nextstrain, 19A clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples19A.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 10
+
+        track nextstrainFreq19B
+        shortLabel 19B
+        longLabel Nextstrain, 19B clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples19B.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 20
+
+        track nextstrainFreq20A
+        shortLabel 20A
+        longLabel Nextstrain, 20A clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20A.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 30
+
+        track nextstrainFreq20B
+        shortLabel 20B
+        longLabel Nextstrain, 20B clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20B.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 40
+
+        track nextstrainFreq20C
+        shortLabel 20C
+        longLabel Nextstrain, 20C clade: Alternate allele frequency
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamples20C.bigWig
+        visibility dense
+        parent nextstrainFreqViewNewClades
+        subGroups view=newClades
+        priority 50
+
+    track nextstrainFreqViewOldClades
+    view oldClades
+    parent nextstrainFreq
+    shortLabel Old Clades (A1a, A2, etc.)
+    visibility hide
+
         track nextstrainFreqA1
-        shortLabel A1a Frequency
+        shortLabel A1a
         longLabel Nextstrain, A1a clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA1a.bigWig
         visibility dense
-        parent nextstrainFreq
-        priority 10
-        release alpha
+        parent nextstrainFreqViewOldClades
+        subGroups view=oldClades
+        priority 110
 
         track nextstrainFreqA2
-        shortLabel A2 Frequency
+        shortLabel A2
         longLabel Nextstrain, A2 clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA2.bigWig
         visibility dense
-        parent nextstrainFreq
-        priority 20
-        release alpha
+        parent nextstrainFreqViewOldClades
+        subGroups view=oldClades
+        priority 120
 
         track nextstrainFreqA2a
-        shortLabel A2a Frequency
+        shortLabel A2a
         longLabel Nextstrain, A2a clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA2a.bigWig
         visibility dense
-        parent nextstrainFreq
-        priority 30
-        release alpha
+        parent nextstrainFreqViewOldClades
+        subGroups view=oldClades
+        priority 130
 
         track nextstrainFreqA3
-        shortLabel A3 Frequency
+        shortLabel A3
         longLabel Nextstrain, A3 clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA3.bigWig
         visibility dense
-        parent nextstrainFreq
-        priority 40
-        release alpha
+        parent nextstrainFreqViewOldClades
+        subGroups view=oldClades
+        priority 140
 
         track nextstrainFreqA6
-        shortLabel A6 Frequency
+        shortLabel A6
         longLabel Nextstrain, A6 clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA6.bigWig
         visibility dense
-        parent nextstrainFreq
-        priority 50
-        release alpha
+        parent nextstrainFreqViewOldClades
+        subGroups view=oldClades
+        priority 150
 
         track nextstrainFreqA7
-        shortLabel A7 Frequency
+        shortLabel A7
         longLabel Nextstrain, A7 clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesA7.bigWig
         visibility dense
-        parent nextstrainFreq
-        priority 60
-        release alpha
+        parent nextstrainFreqViewOldClades
+        subGroups view=oldClades
+        priority 160
 
         track nextstrainFreqB
-        shortLabel B Frequency
+        shortLabel B
         longLabel Nextstrain, B clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB.bigWig
         visibility dense
-        parent nextstrainFreq
-        priority 70
-        release alpha
+        parent nextstrainFreqViewOldClades
+        subGroups view=oldClades
+        priority 170
 
         track nextstrainFreqB1
-        shortLabel B1 Frequency
+        shortLabel B1
         longLabel Nextstrain, B1 clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB1.bigWig
         visibility dense
-        parent nextstrainFreq
-        priority 80
-        release alpha
+        parent nextstrainFreqViewOldClades
+        subGroups view=oldClades
+        priority 180
 
         track nextstrainFreqB2
-        shortLabel B2 Frequency
+        shortLabel B2
         longLabel Nextstrain, B2 clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB2.bigWig
         visibility dense
-        parent nextstrainFreq
-        priority 90
-        release alpha
+        parent nextstrainFreqViewOldClades
+        subGroups view=oldClades
+        priority 190
 
         track nextstrainFreqB4
-        shortLabel B4 Frequency
+        shortLabel B4
         longLabel Nextstrain, B4 clade: Alternate allele frequency
         type bigWig
         bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainSamplesB4.bigWig
         visibility dense
-        parent nextstrainFreq
-        priority 100
-        release alpha
+        parent nextstrainFreqViewOldClades
+        subGroups view=oldClades
+        priority 200
+
+track nextstrainParsimony
+shortLabel Nextstrain Parsimony
+longLabel Parsimony Scores for Nextstrain Variants and Phylogenetic Tree
+type bigWig
+bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainParsimony.bw
+group varRep
+visibility hide
+autoScale off
+viewLimits 0:20
+viewLimitsMax 0:100
+maxHeightPixels 100:40:8

@@ -129,6 +129,7 @@ expScale bed expRatio
 expStep bed expRatio
 expTable bed expRatio
 extTable *
+externalDb bigGenePred
 fieldCount customTracks
 filePos *
 fileSortOrder *
@@ -190,6 +191,7 @@ gClass_pseudo genePred
 gClass_problem genePred
 gainColor bed
 geneClasses bed genePred
+geneTrack vcfTabix vcf
 genome customTracks
 graphType bed5FloatScore bedGraph
 graphTypeDefault wig bigWig
@@ -234,7 +236,7 @@ interactUp interact bigInteract
 interactMultiRegion interact bigInteract
 intronGap psl genePred bigPsl
 irows wigMaf
-isGencode2 genePred
+isGencode2 genePred bigGenePred
 isGencode genePred
 itemAttrTbl genePred
 itemBigImagePath bed
@@ -245,7 +247,7 @@ itemCount customTracks
 itemDetailsHtmlTable genePred psl bed bigPsl
 itemFirstCharCase wigMafProt wigMaf
 itemImagePath bed
-itemRgb bedDetail bedGraph bed bedLogR bigBed bigPsl interact bigInteract
+itemRgb bedDetail bedGraph bed bedLogR bigBed bigPsl interact bigInteract bigGenePred
 lfPslTable bed
 linesAt chromGraph
 linkDataUrl  bigChain
@@ -301,6 +303,7 @@ noInherit *
 nonBedFieldsLabel bigBed
 noScoreFilter bedGraph bed bedLogR gvf bedDetail bigBed bigPsl interact bigInteract
 notNCBI bed
+noGenomeReason *
 ococci bed
 offset customTracks
 oldToNew genePred
@@ -338,6 +341,7 @@ ucscRetroInfo psl bigPsl
 ucscRetroParentTables *
 vcfChildSample vcfPhasedTrio
 vcfParentSamples vcfPhasedTrio
+vcfUseAltSampleNames vcfPhasedTrio
 sGroup_Afrotheria wigMaf
 sGroup_Aves wigMaf
 sGroup_bird wigMaf

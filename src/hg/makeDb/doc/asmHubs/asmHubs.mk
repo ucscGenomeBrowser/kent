@@ -42,8 +42,8 @@ trackData::
 
 hubTxt:
 	rm -f ${destDir}/${hubFile}.txt
-	sed -e "s#index.html#${indexName}.html#; s#genomes.txt#${genomesTxt}.txt#;" ${srcDir}/hub.txt > ${destDir}/${hubFile}.txt
-	sed -e 's/index.html/${testIndexName}.html/; s#genomes.txt#${genomesTxt}.txt#;' ${srcDir}/hub.txt > ${destDir}/${testHubFile}.txt
+	sed -e "s#index.html#${indexName}.html#; s#genomes.txt#${genomesTxt}.txt#;" ${srcDir}/${hubTxtFile} > ${destDir}/${hubFile}.txt
+	sed -e 's/index.html/${testIndexName}.html/; s#genomes.txt#${genomesTxt}.txt#;' ${srcDir}/${hubTxtFile} > ${destDir}/${testHubFile}.txt
 
 # all hubs have the same set of groups, no need for any name customization
 groupsTxt:

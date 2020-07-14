@@ -403,7 +403,7 @@ if (! sameString(exp1, words[ix]))
 #define expectColumnName(vcff, exp, words, ix) expectColumnName2(vcff, exp, NULL, words, ix)
 
 // There might be a whole lot of genotype columns...
-#define VCF_MAX_COLUMNS 16 * 1024
+#define VCF_MAX_COLUMNS 64 * 1024
 #define VCF_MIN_COLUMNS 8
 
 char *vcfDefaultHeader = "#CHROM POS ID REF ALT QUAL FILTER INFO";

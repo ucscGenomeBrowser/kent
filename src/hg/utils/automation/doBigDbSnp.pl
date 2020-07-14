@@ -590,9 +590,12 @@ _EOF_
 pids=""
 _EOF_
                   );
+  # Increase max memory allocation from default (on 64-bit machines) of 16GB (exceeded b154):
+  my $maxAlloc = 64 * 1024 * 1024 * 1024;
   foreach my $db (@dbList) {
     $bossScript->add(<<_EOF_
 time bedToBigBed -tab -as=\$HOME/kent/src/hg/lib/bigDbSnp.as -type=bed4+ -extraIndex=name \\
+            -maxAlloc=$maxAlloc \\
             $db.$outRoot.checked.bigDbSnp /hive/data/genomes/$db/chrom.sizes $db.$outRoot.bb &
 pids+=" \$!"
 time bedToBigBed -tab -type=bed4 -extraIndex=name \\

@@ -454,7 +454,7 @@ printf("<label for=\"addMeasureTiming\">Display load times</label>\n");
 // and a tooltip explaining this checkbox
 printf("<div class=\"tooltip\"> (?)\n");
 printf("<span class=\"tooltiptext\">"
-    "Checking this box shows the timing measurements below the Genome Browser image. "
+    "Checking this box shows the timing measurements at the bottom of the Genome Browser page. "
     "Useful for determining slowdowns to loading or drawing tracks."
     "</span>\n");
 printf("</div></li>\n"); // tooltip div

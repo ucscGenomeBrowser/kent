@@ -180,7 +180,7 @@ def getFunctionForBioType(bt):
 
 def getTranscriptFunction(geneBioType, transcriptBioType):
     # all transcripts in pseudogenes are psuedogene transcripts
-    if geneBioType == GencodeFunction.pseudo:
+    if geneBioType in bioTypesPseudo:
         return GencodeFunction.pseudo
     else:
         return getFunctionForBioType(transcriptBioType)

@@ -3,9 +3,11 @@ shortLabel Addgene Plasmids
 longLabel Addgene Plasmid Sequences alignable to the Genome
 visibility hide
 group map
-url     "https://www.addgene.org/$$/"
+url https://www.addgene.org/$$
 urlLabel Link to the Addgene plasmid page
 skipFields addgeneLink
-type bigBed
-priority 1
+type bigBed 6 +
+color 0,97,168
+noScoreFilter on
+exonArrows off
 bigDataUrl /gbdb/wuhCor1/bbi/addgene.bb

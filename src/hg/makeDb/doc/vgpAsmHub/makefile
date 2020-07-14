@@ -9,9 +9,10 @@ statsName=asmStats
 testStatsName=testAsmStats
 dataName=trackData
 testDataName=testTrackData
-genomesTxt=primaryGenomes
-hubFile=primaryHub
-testHubFile=testPrimaryHub
+genomesTxt=genomes
+hubFile=hub
+testHubFile=testHub
+hubTxtFile=hub.txt
 
 Name=VGP
 name=VGP

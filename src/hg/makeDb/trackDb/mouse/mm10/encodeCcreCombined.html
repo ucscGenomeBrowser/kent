@@ -37,7 +37,6 @@ CCREs are colored and labeled according to classification by regulatory signatur
     <th style="border-bottom: 2px solid;">UCSC label</th>
     <th style="border-bottom: 2px solid;">ENCODE classification</th>
     <th style="border-bottom: 2px solid;">ENCODE label</th>
-    <th style="border-bottom: 2px solid;"></th>
   </tr>
   </thead>
 
@@ -116,16 +115,15 @@ The data can be accessed from scripts through our
 <p>
 For automated download and analysis, this annotation is stored in a bigBed file that
 can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/" target="_blank">our download server</a>.
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/encode3/ccre/" target="_blank">our download server</a>.
 The file for this track is called <tt>encodeCcreCombined.bb</tt>. 
 Individual regions or the whole genome annotation can be obtained using our tool 
 <tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
 binary for your system. 
 Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
-The tool can also be used to obtain only features within a given range, e.g. 
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/mm10/bbi/encodeCcreCombined.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
-</p>
+The tool can also be used to obtain only features within a given range, e.g.<br><br>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/mm10/encode3/ccre/encodeCcreCombined.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
 
 <h2>Release Notes</h2>
 <p>

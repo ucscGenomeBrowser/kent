@@ -468,6 +468,7 @@ static struct asObject *asParseLineFile(struct lineFile *lf)
 /* Parse open line file.  Closes lf as a side effect. */
 {
 struct tokenizer *tkz = tokenizerOnLineFile(lf);
+tkz->uncommentShell = TRUE; /* Take out # style comments. */
 struct asObject *objList = asParseTokens(tkz);
 tokenizerFree(&tkz);
 return objList;

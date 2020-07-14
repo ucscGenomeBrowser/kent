@@ -1,0 +1,6 @@
+hub VGP
+shortLabel VGP Trios
+longLabel Vertebrate Genomes Project trio assemblies
+genomesFile genomes.txt
+email genome-www@soe.ucsc.edu
+descriptionUrl index.html

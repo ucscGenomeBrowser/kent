@@ -209,15 +209,19 @@ DATA_TRIX = /data/trix
 ALPHA_MACHINE = hgwdev.gi.ucsc.edu
 BETA_MACHINE = qateam@hgwbeta.soe.ucsc.edu
 
+# For the new demo-$USER machines, the "USER" passed in to makefile contains a hyphen which
+# needs to be replaced with an underscore for mysql table names.
+USERTABLE = $(shell echo ${USER} | sed -e 's/-/_/g')
+
 update: ${DBS:%=%_update}
 	${MKDIR} ${CGI_BIN}-${USER}/encode
 %_update:
-	./loadTracks ${EXTRA} trackDb_${USER} hgFindSpec_${USER} $*
-	./checkMetaDb alpha metaDb_${USER} $*
+	./loadTracks ${EXTRA} trackDb_${USERTABLE} hgFindSpec_${USERTABLE} $*
+	./checkMetaDb alpha metaDb_${USERTABLE} $*
 
 #  if you want to test track search tool with your own trix file
-#	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb_${USER}.{ixx,ix}}
-#	HGDB_TRACKDB=trackDb_${USER} ${BUILD_TRIX} trackDb_${USER} metaDb_${USER} ${CGI_BIN}-${USER}/encode/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} ${DBS}
+#	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb_${USERTABLE}.{ixx,ix}}
+#	HGDB_TRACKDB=trackDb_${USERTABLE} ${BUILD_TRIX} trackDb_${USERTABLE} metaDb_${USERTABLE} ${CGI_BIN}-${USER}/encode/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} ${DBS}
 # you'll also need to set browser.trixPath to point to your trix file
 # see kent/src/product/ex.hg/conf for details
 

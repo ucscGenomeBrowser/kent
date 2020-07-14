@@ -8,18 +8,25 @@
 #include "dystring.h"
 #include "rainbow.h"
 #include "errCatch.h"
+#include "fa.h"
+#include "genePredReader.h"
 #include "hacTree.h"
 #include "hdb.h"
 #include "hgColors.h"
 #include "hgTracks.h"
 #include "pgSnp.h"
 #include "phyloTree.h"
+#include "trackHub.h"
 #include "trashDir.h"
+#include "variantProjector.h"
 #include "vcf.h"
 #include "vcfUi.h"
 #include "knetUdc.h"
 #include "udc.h"
 #include "memgfx.h"
+
+// Russ Corbett-Detig suggested darker shades for coloring non-synonymous variants green
+Color darkerShadesOfGreenOnWhite[EXPR_DATA_SHADES];
 
 static boolean getMinQual(struct trackDb *tdb, double *retMinQual)
 /* Return TRUE and set retMinQual if cart contains minimum QUAL filter */
@@ -169,7 +176,8 @@ static void filterRefOnlyAlleles(struct vcfFile *vcff, struct trackDb *tdb)
 struct vcfRecord *rec, *nextRecord, *retList = NULL;
 const struct vcfGenotype *gt;
 
-struct slPair *sample, *sampleOrder = vcfPhasedGetSampleOrder(cart, tdb, FALSE);
+boolean hideOtherSamples = cartUsualBooleanClosestToHome(cart, tdb, FALSE, VCF_PHASED_HIDE_OTHER_VAR, FALSE);
+struct slPair *sample, *sampleOrder = vcfPhasedGetSampleOrder(cart, tdb, FALSE, hideOtherSamples);
 for (rec = vcff->records; rec != NULL; rec = nextRecord)
     {
     nextRecord = rec->next;
@@ -232,7 +240,10 @@ int maxLen = 33;
 int maxAlCount = 5;
 struct slPair *sample = NULL, *phasedSamples = NULL;
 if (sameString(tdb->type, "vcfPhasedTrio"))
-    phasedSamples = vcfPhasedGetSampleOrder(cart, tdb, FALSE);
+    {
+    boolean hideOtherSamples = cartUsualBooleanClosestToHome(cart, tdb, FALSE, VCF_PHASED_HIDE_OTHER_VAR, FALSE);
+    phasedSamples = vcfPhasedGetSampleOrder(cart, tdb, FALSE, hideOtherSamples);
+    }
 
 vcff->allPhased = TRUE;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
@@ -299,17 +310,17 @@ struct cwaExtraData
 struct hapCluster
 {
     struct hapCluster *next;   // hacTree wants slList of items
-    unsigned short *refCounts; // per-variant count of reference alleles observed
-    unsigned short *unkCounts; // per-variant count of unknown (or unphased het) alleles
-    unsigned short leafCount;  // number of leaves under this node (or 1 if leaf)
-    unsigned short gtHapIx;    // if leaf, (genotype index << 1) + hap (0 or 1 for diploid)
+    unsigned int *refCounts; // per-variant count of reference alleles observed
+    unsigned int *unkCounts; // per-variant count of unknown (or unphased het) alleles
+    unsigned int leafCount;  // number of leaves under this node (or 1 if leaf)
+    unsigned int gtHapIx;    // if leaf, (genotype index << 1) + hap (0 or 1 for diploid)
 };
 
 INLINE boolean isRef(const struct hapCluster *c, int varIx)
 // Return TRUE if the leaves of cluster have at least as many reference alleles
 // as alternate alleles for variant varIx.
 {
-unsigned short altCount = c->leafCount - c->refCounts[varIx] - c->unkCounts[varIx];
+unsigned int altCount = c->leafCount - c->refCounts[varIx] - c->unkCounts[varIx];
 return (c->refCounts[varIx] >= altCount);
 }
 
@@ -346,8 +357,8 @@ static struct hapCluster *lmHapCluster(struct cwaExtraData *helper)
 /* Use localMem to allocate a new cluster of the given len. */
 {
 struct hapCluster *c = lmAlloc(helper->localMem, sizeof(struct hapCluster));
-c->refCounts = lmAlloc(helper->localMem, helper->len * sizeof(unsigned short));
-c->unkCounts = lmAlloc(helper->localMem, helper->len * sizeof(unsigned short));
+c->refCounts = lmAlloc(helper->localMem, helper->len * sizeof(unsigned int));
+c->unkCounts = lmAlloc(helper->localMem, helper->len * sizeof(unsigned int));
 return c;
 }
 
@@ -395,7 +406,7 @@ hapClusterToString(c2, s2, helper->len);
 return strcmp(s1, s2);
 }
 
-void rSetGtHapOrder(struct hacTree *ht, unsigned short *gtHapOrder, unsigned short *retGtHapEnd)
+void rSetGtHapOrder(struct hacTree *ht, unsigned int *gtHapOrder, unsigned int *retGtHapEnd)
 /* Traverse hacTree and build an ordered array of genotype + haplotype indices. */
 {
 if (ht->left == NULL && ht->right == NULL)
@@ -424,9 +435,9 @@ else
     }
 }
 
-static unsigned short *clusterHaps(const struct vcfFile *vcff, int centerIx,
+static unsigned int *clusterHaps(const struct vcfFile *vcff, int centerIx,
 				   int startIx, int endIx,
-				   unsigned short *retGtHapEnd, struct hacTree **retTree)
+				   unsigned int *retGtHapEnd, struct hacTree **retTree)
 /* Given a bunch of VCF records with phased genotypes, build up one haplotype string
  * per chromosome that is the sequence of alleles in all variants (simplified to one base
  * per variant).  Each individual/sample will have two haplotype strings (unless haploid
@@ -509,7 +520,7 @@ for (varIx = 0, rec = vcff->records;  rec != NULL && varIx < endIx;  varIx++, re
     }
 struct hacTree *ht = hacTreeFromItems((struct slList *)(hapArray[0]), lm,
 				      cwaDistance, cwaMerge, cwaCmp, &helper);
-unsigned short *gtHapOrder = needMem(vcff->genotypeCount * ploidy * sizeof(unsigned short));
+unsigned int *gtHapOrder = needMem(vcff->genotypeCount * ploidy * sizeof(unsigned int));
 rSetGtHapOrder(ht, gtHapOrder, retGtHapEnd);
 *retTree = ht;
 return gtHapOrder;
@@ -640,16 +651,26 @@ enum hapColorMode
     {
     altOnlyMode,
     refAltMode,
-    baseMode
+    baseMode,
+    functionMode
     };
 
-static Color colorByAltOnly(int refs, int alts, int unks)
-/* Coloring alternate alleles only: shade by proportion of alt alleles to refs, unknowns */
+static Color colorByAltShade(int refs, int alts, int unks, Color colorShades[], int colorShadeCount)
+/* Coloring alternate alleles only by shades of color: shade by proportion of alts */
 {
 if (unks > (refs + alts))
     return undefYellow;
-int grayIx = hGrayInRange(alts, 0, alts+refs+unks, maxShade+1) - 1; // undo force to 1
-return shadesOfGray[grayIx];
+int total = refs + alts + unks;
+int shadeIx = (alts * colorShadeCount) / total;
+if (shadeIx == colorShadeCount)
+    shadeIx--;
+return colorShades[shadeIx];
+}
+
+static Color colorByAltOnly(int refs, int alts, int unks)
+/* Coloring alternate alleles only: shade by proportion of alt alleles */
+{
+return colorByAltShade(refs, alts, unks, shadesOfGray, maxShade+1);
 }
 
 static Color colorByRefAlt(int refs, int alts, int unks)
@@ -679,12 +700,386 @@ if (refs > fudgeFactor * alts)
 return shadesOfGray[5];
 }
 
+static struct dnaSeq *genePredToGenomicSequence(struct genePred *pred, struct seqWindow *gSeqWin)
+/* Return concatenated genomic sequence of exons of pred. */
+{
+int txLen = 0;
+int i;
+for (i=0; i < pred->exonCount; i++)
+    txLen += (pred->exonEnds[i] - pred->exonStarts[i]);
+char *seq = needMem(txLen + 1);
+int offset = 0;
+for (i=0; i < pred->exonCount; i++)
+    {
+    int exonStart = pred->exonStarts[i];
+    int exonEnd = pred->exonEnds[i];
+    int exonLen = exonEnd - exonStart;
+    seqWindowCopy(gSeqWin, exonStart, exonLen, seq+offset, txLen+1-offset);
+    offset += exonLen;
+    }
+if(pred->strand[0] == '-')
+    reverseComplement(seq, txLen);
+struct dnaSeq *txSeq = NULL;
+AllocVar(txSeq);
+txSeq->name = cloneString(pred->name);
+txSeq->dna = seq;
+txSeq->size = txLen;
+return txSeq;
+}
+
+struct txInfo
+/* Transcript sequence and alignment needed for prediction of functional effect/consequences */
+    {
+    struct txInfo *next;
+    struct psl *psl;            // alignment of transcript to genome
+    struct dnaSeq *txSeq;       // transcript sequence
+    struct genbankCds *cds;     // transcript CDS (possible none)
+    struct dnaSeq *protSeq;     // transcript protein sequence (possibly NULL)
+
+    };
+
+static struct txInfo *txInfoFromGenePred(struct genePred *gp, struct seqWindow *gSeqWin)
+/* Use gp and gSeqWin to construct transcript alignment, sequence and protein sequence if applic. */
+{
+struct txInfo *txi;
+AllocVar(txi);
+AllocVar(txi->cds);
+genePredToCds(gp, txi->cds);
+txi->txSeq = genePredToGenomicSequence(gp, gSeqWin);
+int chromSize = 0;  // unused
+txi->psl = genePredToPsl(gp, chromSize, txi->txSeq->size);
+pslRemoveFrameShifts(txi->psl);
+vpExpandIndelGaps(txi->psl, gSeqWin, txi->txSeq);
+txi->protSeq = NULL;
+if (txi->cds->end > txi->cds->start && txi->cds->startComplete)
+    {
+    txi->protSeq = translateSeq(txi->txSeq, txi->cds->start, FALSE);
+    aaSeqZToX(txi->protSeq);
+    }
+return txi;
+}
+
+static struct hash *hashExtNcbiRefSeq(struct sqlConnection *conn)
+/* Despite the seq/extFile structure, there is only one external file and we don't want to
+ * keep opening and closing the file each time.  Just in case there are multiple files someday,
+ * hash extNcbiRefSeq id to open udc file handle(s). */
+{
+struct hash *extNcbi = hashNew(0);
+char query[1024];
+sqlSafef(query, sizeof query, "select id, path from extNcbiRefSeq");
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *extId = row[0];
+    char *path = row[1];
+    struct udcFile *udcF = udcFileOpen(path, NULL);
+    hashAdd(extNcbi, extId, udcF);
+    }
+sqlFreeResult(&sr);
+return extNcbi;
+}
+
+static void freeExtNcbiHash(struct hash **pExtNcbi)
+/* Clean up hash of open udcFiles created by hashExtNcbiRefSeq. */
+{
+if (pExtNcbi && *pExtNcbi)
+    {
+    struct hash *hash = *pExtNcbi;
+    struct hashCookie cookie = hashFirst(hash);
+    struct hashEl *hel;
+    while ((hel = hashNext(&cookie)) != NULL)
+        udcFileClose((struct udcFile **)&hel->val);
+    hashFree(pExtNcbi);
+    }
+}
+
+static struct txInfo *txInfoInitFromPsl(struct sqlConnection *conn, char *pslTable,
+                                        char *extraWhere, struct hash **retTxiHash)
+/* Alloc and return a list of txInfo with only psl populated, from pslTable in the current window.
+ * Also return a hash of transcript ID to txInfo (retTxiHash). */
+{
+struct txInfo *txiList = NULL;
+struct hash *txiHash = hashNew(0);
+int binOffset = 0;
+int start = max(0, winStart - GPRANGE);
+int end = winEnd + GPRANGE;
+struct sqlResult *sr = hRangeQuery(conn, pslTable, chromName, start, end, extraWhere, &binOffset);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct txInfo *txi;
+    AllocVar(txi);
+    txi->psl = pslLoad(row+binOffset);
+    slAddHead(&txiList, txi);
+    hashAdd(txiHash, txi->psl->qName, txi);
+    }
+sqlFreeResult(&sr);
+*retTxiHash = txiHash;
+return txiList;
+}
+
+static void txiInfoAppendIdList(struct dyString *query, struct txInfo *txiList)
+/* Append a paren-enclosed list of quoted transcript IDs to query. */
+{
+dyStringAppendC(query, '(');
+struct txInfo *txi;
+for (txi = txiList;  txi != NULL;  txi = txi->next)
+    {
+    if (txi != txiList)
+        dyStringAppend(query, ", ");
+    dyStringPrintf(query, "'%s'", txi->psl->qName);
+    }
+dyStringAppendC(query, ')');
+}
+
+static void txInfoAddCdsFromQuery(struct hash *txiHash, struct sqlConnection *conn, char *query)
+/* Perform query; results have two fields, transcript name (which must be found in txiHash) and
+ * GenBank-formatted CDS string.  For reach row from the query, parse the CDS string into the cds
+ * in the struct txInfo for the appropriate transcript. */
+{
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *name = row[0];
+    char *cdsStr = row[1];
+    struct txInfo *txi = hashMustFindVal(txiHash, name);
+    AllocVar(txi->cds);
+    genbankCdsParse(cdsStr, txi->cds);
+    }
+sqlFreeResult(&sr);
+}
+
+static struct txInfo *txInfoLoadNcbiRefSeq(struct seqWindow *gSeqWin, struct trackDb *gTdb)
+/* Load ncbiRefSeq[Curated] PSL (+ CDS and sequence) in current window and make txInfo for each. */
+{
+struct txInfo *txiList = NULL;
+if (!trackHubDatabase(database) && hDbHasNcbiRefSeq(database))
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    struct hash *txiHash = hashNew(0);
+    char *extraWhere = NULL;
+    if (sameString(gTdb->track, "ncbiRefSeqCurated"))
+        extraWhere = "qName not like 'X%'";
+    else if (sameString(gTdb->track, "ncbiRefSeqPredicted"))
+        extraWhere = "qName like 'X%'";
+    txiList = txInfoInitFromPsl(conn, "ncbiRefSeqPsl", extraWhere, &txiHash);
+    // Now get CDS for each psl/txi:
+    struct dyString *query = sqlDyStringCreate("select * from ncbiRefSeqCds where id in ");
+    txiInfoAppendIdList(query, txiList);
+    txInfoAddCdsFromQuery(txiHash, conn, query->string);
+    // Now get transcript sequence for each psl/txi:
+    struct hash *extNcbi = hashExtNcbiRefSeq(conn);
+    dyStringClear(query);
+    sqlDyStringPrintf(query, "select acc,extFile,file_offset,file_size from seqNcbiRefSeq "
+                      "where acc in ");
+    txiInfoAppendIdList(query, txiList);
+    struct sqlResult *sr = sqlGetResult(conn, query->string);
+    char **row;
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        char *name = row[0];
+        char *extId = row[1];
+        off_t offset = sqlLongLong(row[2]);
+        size_t size = sqlUnsigned(row[3]);
+        struct udcFile *udcF = hashMustFindVal(extNcbi, extId);
+        char *buf = needMem(size+1);
+        udcSeek(udcF, offset);
+        udcRead(udcF, buf, size);
+        struct txInfo *txi = hashMustFindVal(txiHash, name);
+        txi->txSeq = faSeqFromMemText(buf, TRUE);
+        }
+    sqlFreeResult(&sr);
+    freeExtNcbiHash(&extNcbi);
+    // Now get protein sequence (if applicable) for each psl/txi:
+    dyStringClear(query);
+    sqlDyStringPrintf(query, "select id, protAcc, seq from ncbiRefSeqLink nl, ncbiRefSeqPepTable np "
+                      "where nl.protAcc = np.name and id in ");
+    txiInfoAppendIdList(query, txiList);
+    sr = sqlGetResult(conn, query->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        char *txId = row[0];
+        char *protId = row[1];
+        char *protSeq = cloneString(row[2]);
+        struct txInfo *txi = hashMustFindVal(txiHash, txId);
+        txi->protSeq = newDnaSeq(protSeq, strlen(protSeq), protId);
+        }
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+return txiList;
+}
+
+static struct txInfo *txInfoLoadRefGene(struct seqWindow *gSeqWin, struct trackDb *gTdb)
+/* Load refSeqAli PSL (+ genbank CDS and sequence) in current window and make txInfo for each. */
+{
+struct txInfo *txiList = NULL;
+if (!trackHubDatabase(database))
+    {
+    initGenbankTableNames(database);
+    struct sqlConnection *conn = hAllocConn(database);
+    struct hash *txiHash = NULL;
+    txiList = txInfoInitFromPsl(conn, "refSeqAli", NULL, &txiHash);
+    // Now get CDS for each psl/txi:
+    struct dyString *query = sqlDyStringCreate("select i.acc, c.name from %s i, %s c "
+                                               "where c.id = i.cds and i.acc in ",
+                                               gbCdnaInfoTable, cdsTable);
+    txiInfoAppendIdList(query, txiList);
+    txInfoAddCdsFromQuery(txiHash, conn, query->string);
+    // Now get transcript and translated sequence for each psl/txi:
+    struct txInfo *txi;
+    for (txi = txiList;  txi != NULL;  txi = txi->next)
+        {
+        txi->txSeq = hGenBankGetMrna(database, txi->psl->qName, NULL);
+        if (txi->cds->end > txi->cds->start && txi->cds->startComplete)
+            {
+            txi->protSeq = translateSeq(txi->txSeq, txi->cds->start, FALSE);
+            aaSeqZToX(txi->protSeq);
+            }
+        }
+    }
+return txiList;
+}
+
+static struct txInfo *txInfoLoadBigGenePred(struct seqWindow *gSeqWin, struct trackDb *gTdb)
+/* Load up bigGenePred items in current window and make txInfo for each. */
+{
+struct txInfo *txiList = NULL;
+char *fileName = cloneString(trackDbSetting(gTdb, "bigDataUrl"));
+if (fileName == NULL)
+    fileName = cloneString(trackDbSetting(gTdb, "bigGeneDataUrl"));
+if (isNotEmpty(fileName))
+    {
+    struct bbiFile *bbi = bigBedFileOpen(fileName);
+    struct lm *lm = lmInit(0);
+    struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chromName, winStart,
+                                                        winEnd, 0, lm);
+    struct bigBedInterval *bb;
+    for (bb = bbList; bb != NULL; bb = bb->next)
+        {
+        struct genePredExt *gp = genePredFromBigGenePred(chromName, bb);
+        struct txInfo *txi = txInfoFromGenePred((struct genePred *)gp, gSeqWin);
+        slAddHead(&txiList, txi);
+        }
+    bbiFileClose(&bbi);
+    lmCleanup(&lm);
+    }
+return txiList;
+}
+
+static struct txInfo *txInfoLoadGenePred(struct seqWindow *gSeqWin, struct trackDb *gTdb)
+/* Load genePreds in current window and make txInfo for each. */
+{
+struct txInfo *txiList = NULL;
+if (! trackHubDatabase(database))
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    struct genePredReader *gpr = genePredReaderRangeQuery(conn, gTdb->table,
+                                                          chromName, winStart, winEnd, NULL);
+    struct genePred *gp = NULL;
+    while ((gp = genePredReaderNext(gpr)) != NULL)
+        {
+        struct txInfo *txi = txInfoFromGenePred(gp, gSeqWin);
+        slAddHead(&txiList, txi);
+        }
+    genePredReaderFree(&gpr);
+    hFreeConn(&conn);
+    }
+return txiList;
+}
+
+static struct txInfo *txInfoLoad(struct seqWindow *gSeqWin, struct trackDb *tdb)
+/* Return a list of transcript sequences and alignments for all transcripts in the current
+ * window for all enabled gene tracks. */
+{
+struct txInfo *txiList = NULL;
+char *geneTrack = cartOrTdbString(cart, tdb, "geneTrack", NULL);
+struct track *gTrack = hashFindVal(trackHash, geneTrack);
+if (gTrack)
+    {
+    struct trackDb *gTdb = gTrack->tdb;
+    // If independent transcript sequence and PSL are available, use them.
+    if (startsWith("ncbiRefSeq", geneTrack))
+        {
+        txiList = txInfoLoadNcbiRefSeq(gSeqWin, gTdb);
+        }
+    else if (sameString(geneTrack, "refGene"))
+        {
+        txiList = txInfoLoadRefGene(gSeqWin, gTdb);
+        }
+    else if (sameString(gTdb->type, "genePred") || sameString(gTdb->type, "bigGenePred"))
+        {
+        // If the track is visible, then struct genePred items have already been loaded so
+        // just use them.  Otherwise load up.
+        if (gTrack->items)
+            {
+            struct linkedFeatures *lf;
+            for (lf = gTrack->items;  lf != NULL;  lf = lf->next)
+                {
+                struct genePred *gp = lf->original;
+                struct txInfo *txi = txInfoFromGenePred(gp, gSeqWin);
+                slAddHead(&txiList, txi);
+                }
+            }
+        else if (sameString(gTdb->type, "bigGenePred"))
+            txiList = txInfoLoadBigGenePred(gSeqWin, gTdb);
+        else
+            txiList = txInfoLoadGenePred(gSeqWin, gTdb);
+        }
+    else
+        errAbort("VCF txInfoLoad: expecting type 'genePred' or 'bigGenePred' for track '%s' "
+                 "in geneTrack setting, but got type '%s'",
+                 geneTrack, gTdb->type);
+    }
+return txiList;
+}
+
+static enum soTerm functionForRecord(struct vcfRecord *rec, struct seqWindow *gSeqWin,
+                                     struct txInfo *txiList)
+/* Return the most severe functional consequence of rec for any transcript in txiList. */
+{
+struct lm *lm = lmInit(0);
+// Can't use rec->chrom because that might be just "1" instead of "chr1":
+struct bed3 variantBed3 = { NULL, chromName, rec->chromStart, rec->chromEnd };
+enum soTerm maxImpactTerm = soUnknown;
+struct txInfo *txi;
+for (txi = txiList;  txi != NULL;  txi = txi->next)
+    {
+    int alIx;
+    // Sometimes reference allele is actually a change to the transcript
+    for (alIx = 0;  alIx < rec->alleleCount;  alIx++)
+        {
+        char *allele = rec->alleles[alIx];
+        // Watch out for weird symbolic alleles like "<INS:ME:ALU>".
+        if (sameString(allele, "<DEL>"))
+            allele = "";
+        else if (allele[0] == '<')
+            continue;
+        struct vpTx *vpTx = vpGenomicToTranscript(gSeqWin, &variantBed3, allele,
+                                                  txi->psl, txi->txSeq);
+        struct vpPep *vpPep = vpTranscriptToProtein(vpTx, txi->cds, txi->txSeq, txi->protSeq);
+        struct gpFx *gpFx = vpTranscriptToGpFx(vpTx, txi->psl, txi->cds, txi->txSeq, vpPep,
+                                               txi->protSeq, lm);
+        enum soTerm term = gpFx->soNumber;
+        if (soTermCmp(&term, &maxImpactTerm) < 0)
+            maxImpactTerm = term;
+        vpPepFree(&vpPep);
+        vpTxFree(&vpTx);
+        }
+    }
+lmCleanup(&lm);
+return maxImpactTerm;
+}
+
 // tg->height needs an extra pixel at the bottom; it's eaten by the clipping rectangle:
 #define CLIP_PAD 1
 
-static void drawOneRec(struct vcfRecord *rec, unsigned short *gtHapOrder, unsigned short gtHapCount,
+static void drawOneRec(struct vcfRecord *rec, unsigned int *gtHapOrder, unsigned int gtHapCount,
 		       struct track *tg, struct hvGfx *hvg, int xOff, int yOff, int width,
-		       boolean isClustered, boolean isCenter, enum hapColorMode colorMode)
+		       boolean isClustered, boolean isCenter, enum hapColorMode colorMode,
+                       enum soTerm funcTerm)
 /* Draw a stack of genotype bars for this record */
 {
 unsigned int chromStartMap = vcfRecordTrimIndelLeftBase(rec);
@@ -702,7 +1097,7 @@ if (w <= 1)
 // to show the locations of variants, since the reference alleles are invisible:
 int extraPixel = 0;
 int hapHeight = tg->height - CLIP_PAD;
-if (colorMode == altOnlyMode)
+if (colorMode == altOnlyMode || colorMode == functionMode)
     {
     hvGfxLine(hvg, x1, yOff, x2, yOff, (isClustered ? purple : shadesOfGray[5]));
     extraPixel = 1;
@@ -743,6 +1138,28 @@ for (pixIx = 0;  pixIx < hapHeight;  pixIx++)
 	col = colorByBase(refs, alts, unks, rec->alleles[0], rec->alleles[1]);
     else if (colorMode == refAltMode)
 	col = colorByRefAlt(refs, alts, unks);
+    else if (colorMode == functionMode)
+        {
+        Color *funcShades = shadesOfGray;
+        int funcShadeCount = maxShade+1;
+        Color funcColor = colorFromSoTerm(funcTerm);
+        if (funcColor == MG_RED)
+            {
+            funcShades = shadesOfRedOnWhite;
+            funcShadeCount = ArraySize(shadesOfRedOnWhite);
+            }
+        else if (funcColor == MG_GREEN)
+            {
+            funcShades = darkerShadesOfGreenOnWhite;
+            funcShadeCount = ArraySize(darkerShadesOfGreenOnWhite);
+            }
+        else if (funcColor == MG_BLUE)
+            {
+            funcShades = shadesOfBlueOnWhite;
+            funcShadeCount = ArraySize(shadesOfBlueOnWhite);
+            }
+        col = colorByAltShade(refs, alts, unks, funcShades, funcShadeCount);
+        }
     else
 	col = colorByAltOnly(refs, alts, unks);
     if (col != MG_WHITE)
@@ -751,7 +1168,7 @@ for (pixIx = 0;  pixIx < hapHeight;  pixIx++)
 int yBot = yOff + tg->height - CLIP_PAD - 1;
 if (isCenter)
     {
-    if (colorMode == altOnlyMode)
+    if (colorMode == altOnlyMode || colorMode == functionMode)
 	{
 	// Colorful outline to distinguish this variant:
 	hvGfxLine(hvg, x1-1, yOff, x1-1, yBot, purple);
@@ -776,7 +1193,7 @@ else
     mapBoxHgcOrHgGene(hvg, chromStartMap, chromEndMap, x1, yOff, w, tg->height, tg->track,
 		      rec->name, dy->string, NULL, TRUE, NULL);
     }
-if (colorMode == altOnlyMode)
+if (colorMode == altOnlyMode || colorMode == functionMode)
     hvGfxLine(hvg, x1, yBot, x2, yBot, (isClustered ? purple : shadesOfGray[5]));
 }
 
@@ -958,19 +1375,19 @@ return y;
 struct yFromNodeHelper
 /* Pre-computed mapping from cluster nodes' gtHapIx to pixel heights. */
     {
-    unsigned short gtHapCount;
-    unsigned short *gtHapIxToPxStart;
-    unsigned short *gtHapIxToPxEnd;
+    unsigned int gtHapCount;
+    unsigned int *gtHapIxToPxStart;
+    unsigned int *gtHapIxToPxEnd;
     };
 
 void initYFromNodeHelper(struct yFromNodeHelper *helper, int yOff, int height,
-			 unsigned short gtHapCount, unsigned short *gtHapOrder,
+			 unsigned int gtHapCount, unsigned int *gtHapOrder,
 			 int genotypeCount)
 /* Build a mapping of genotype and haplotype to pixel y coords. */
 {
 helper->gtHapCount = gtHapCount;
-helper->gtHapIxToPxStart = needMem(genotypeCount * 2 * sizeof(unsigned short));
-helper->gtHapIxToPxEnd = needMem(genotypeCount * 2 * sizeof(unsigned short));
+helper->gtHapIxToPxStart = needMem(genotypeCount * 2 * sizeof(unsigned int));
+helper->gtHapIxToPxEnd = needMem(genotypeCount * 2 * sizeof(unsigned int));
 double pxPerHap = (double)height / gtHapCount;
 int i;
 for (i = 0;  i < gtHapCount;  i++)
@@ -990,7 +1407,7 @@ static int yFromHapNode(const struct slList *itemOrCluster, void *extraData,
 /* Extract the gtHapIx from hapCluster (hacTree node item), find out its relative order
  * and translate that to a pixel height. */
 {
-unsigned short gtHapIx = ((const struct hapCluster *)itemOrCluster)->gtHapIx;
+unsigned int gtHapIx = ((const struct hapCluster *)itemOrCluster)->gtHapIx;
 struct yFromNodeHelper *helper = extraData;
 int y;
 if (yType == yrtStart)
@@ -1067,11 +1484,20 @@ else if (sameString(colorBy, VCF_HAP_COLORBY_REFALT))
     colorMode = refAltMode;
 else if (sameString(colorBy, VCF_HAP_COLORBY_BASE))
     colorMode = baseMode;
+else
+    {
+    char *geneTrack = cartOrTdbString(cart, tdb, "geneTrack", NULL);
+    if (isNotEmpty(geneTrack) && sameString(colorBy, VCF_HAP_COLORBY_FUNCTION))
+        colorMode = functionMode;
+    }
 return colorMode;
 }
 
+#define GENE_SIZE_FUDGE 2500000
+
 static boolean vcfHapClusterDrawInit(struct track *tg, struct vcfFile *vcff, struct hvGfx *hvg,
-                                     enum hapColorMode *retHapColorMode)
+                                     enum hapColorMode *retHapColorMode,
+                                     struct seqWindow **retGSeqWin, struct txInfo **retTxiList)
 /* Parse vcff's genotypes and get ready to draw haplotypes.  Return FALSE if nothing to draw. */
 {
 if (vcff->records == NULL)
@@ -1084,6 +1510,32 @@ struct vcfRecord *rec;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     vcfParseGenotypes(rec);
 popWarnHandler();
+if (*retHapColorMode == functionMode)
+    {
+    if (!exprBedColorsMade)
+        {
+        makeRedGreenShades(hvg);
+        // Make darkerShadesOfGreenOnWhite for local use
+        static struct rgbColor white  = {255, 255, 255};
+        static struct rgbColor darkerGreen  = {0, 210, 0};
+        hvGfxMakeColorGradient(hvg, &white, &darkerGreen,  EXPR_DATA_SHADES,
+                               darkerShadesOfGreenOnWhite);
+        }
+    int gStart = winStart - GENE_SIZE_FUDGE;
+    if (gStart < 0)
+        gStart = 0;
+    int gEnd = winEnd + GENE_SIZE_FUDGE;
+    int chromSize = hChromSize(database, chromName);
+    if (gEnd > chromSize)
+        gEnd = chromSize;
+    *retGSeqWin = chromSeqWindowNew(database, chromName, gStart, gEnd);
+    *retTxiList = txInfoLoad(*retGSeqWin, tg->tdb);
+    }
+else
+    {
+    *retGSeqWin = NULL;
+    *retTxiList = NULL;
+    }
 return TRUE;
 }
 
@@ -1095,10 +1547,12 @@ static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
 {
 struct vcfFile *vcff = tg->extraUiData;
 enum hapColorMode colorMode;
-if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode))
+struct seqWindow *gSeqWin;
+struct txInfo *txiList;
+if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode, &gSeqWin, &txiList))
     return;
 purple = hvGfxFindColorIx(hvg, 0x99, 0x00, 0xcc);
-unsigned short gtHapCount = 0;
+unsigned int gtHapCount = 0;
 int nRecords = slCount(vcff->records);
 int centerIx = getCenterVariantIx(tg, seqStart, seqEnd, vcff->records);
 // Limit the number of variants that we compare, to keep from timing out:
@@ -1108,7 +1562,7 @@ int maxVariantsPerSide = 50;
 int startIx = max(0, centerIx - maxVariantsPerSide);
 int endIx = min(nRecords, centerIx+1 + maxVariantsPerSide);
 struct hacTree *ht = NULL;
-unsigned short *gtHapOrder = clusterHaps(vcff, centerIx, startIx, endIx, &gtHapCount, &ht);
+unsigned int *gtHapOrder = clusterHaps(vcff, centerIx, startIx, endIx, &gtHapCount, &ht);
 struct vcfRecord *centerRec = NULL;
 struct vcfRecord *rec;
 int ix;
@@ -1127,14 +1581,22 @@ for (rec = vcff->records, ix=0;  rec != NULL;  rec = rec->next, ix++)
     {
     boolean isClustered = (ix >= startIx && ix < endIx);
     if (ix != centerIx)
+        {
+        enum soTerm funcTerm = soUnknown;
+        if (colorMode == functionMode)
+            funcTerm = functionForRecord(rec, gSeqWin, txiList);
 	drawOneRec(rec, gtHapOrder, gtHapCount, tg, hvg, xOff, yOff, width, isClustered, FALSE,
-		   colorMode);
+		   colorMode, funcTerm);
+        }
     }
 // Draw the center rec on top, outlined with black lines, to make sure it is very visible:
+enum soTerm funcTerm = soUnknown;
+if (colorMode == functionMode)
+    funcTerm = functionForRecord(centerRec, gSeqWin, txiList);
 drawOneRec(centerRec, gtHapOrder, gtHapCount, tg, hvg, xOff, yOff, width, TRUE, TRUE,
-	   colorMode);
+	   colorMode, funcTerm);
 // Draw as much of the tree as can fit in the left label area:
-int extraPixel = (colorMode == altOnlyMode) ? 1 : 0;
+int extraPixel = (colorMode == altOnlyMode || colorMode == functionMode) ? 1 : 0;
 int hapHeight = tg->height- CLIP_PAD - 2*extraPixel;
 struct yFromNodeHelper yHelper = {0, NULL, NULL};
 initYFromNodeHelper(&yHelper, yOff+extraPixel, hapHeight, gtHapCount, gtHapOrder,
@@ -1149,7 +1611,7 @@ drawTreeInLabelArea(ht, hvg, yOff+extraPixel, hapHeight+CLIP_PAD, &yHelper, &tit
 
 static void drawSampleLabels(struct vcfFile *vcff, struct hvGfx *hvg,
                              boolean isAllDiploid, int yStart, int height,
-                             unsigned short *gtHapOrder, int gtHapCount, MgFont *font, Color color,
+                             unsigned int *gtHapOrder, int gtHapCount, MgFont *font, Color color,
                              char *track)
 /* Draw sample names as left labels. */
 {
@@ -1193,7 +1655,7 @@ hvGfxSetClip(hvgLL, clipXBak, clipYBak, clipWidthBak, clipHeightBak);
 }
 
 static void drawSampleTitles(struct vcfFile *vcff, int yStart, int height,
-                             unsigned short *gtHapOrder, int gtHapCount, char *track)
+                             unsigned int *gtHapOrder, int gtHapCount, char *track)
 /* Draw mouseover labels / titles with the samples that are drawn at each pixel y offset */
 {
 double hapPerPx = (double)gtHapCount / height;
@@ -1226,13 +1688,13 @@ for (y = 0;  y < height;  y++)
     }
 }
 
-static unsigned short *gtHapOrderFromGtOrder(struct vcfFile *vcff,
+static unsigned int *gtHapOrderFromGtOrder(struct vcfFile *vcff,
                                              boolean *retIsAllDiploid, int *retGtHapCount)
 {
 int ploidy = 2; // Assuming diploid genomes here, no XXY, tetraploid etc.
 int gtCount = vcff->genotypeCount;
 boolean isAllDiploid = TRUE;
-unsigned short *gtHapOrder = needMem(gtCount * ploidy * sizeof(unsigned short));
+unsigned int *gtHapOrder = needMem(gtCount * ploidy * sizeof(unsigned int));
 int orderIx = 0;
 int gtIx;
 // Determine the number of chromosome rows; for chrX, can be mix of diploid and haploid.
@@ -1270,18 +1732,25 @@ static void vcfGtHapFileOrderDraw(struct track *tg, int seqStart, int seqEnd,
 {
 struct vcfFile *vcff = tg->extraUiData;
 enum hapColorMode colorMode;
-if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode))
+struct seqWindow *gSeqWin;
+struct txInfo *txiList;
+if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode, &gSeqWin, &txiList))
     return;
 boolean isAllDiploid;
 int gtHapCount;
-unsigned short *gtHapOrder = gtHapOrderFromGtOrder(vcff, &isAllDiploid, &gtHapCount);
+unsigned int *gtHapOrder = gtHapOrderFromGtOrder(vcff, &isAllDiploid, &gtHapCount);
 struct vcfRecord *rec;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
+    {
+    enum soTerm funcTerm = soUnknown;
+    if (colorMode == functionMode)
+        funcTerm = functionForRecord(rec, gSeqWin, txiList);
     drawOneRec(rec, gtHapOrder, gtHapCount, tg, hvg, xOff, yOff, width, FALSE, FALSE,
-               colorMode);
+               colorMode, funcTerm);
+    }
 // If height is sufficient, draw sample names as left labels; otherwise make mouseover titles
 // with sample names for each pixel y offset.
-int extraPixel = (colorMode == altOnlyMode) ? 1 : 0;
+int extraPixel = (colorMode == altOnlyMode || colorMode == functionMode) ? 1 : 0;
 int hapHeight = tg->height - CLIP_PAD - 2*extraPixel;
 int minHeightForLabels;
 if (isAllDiploid)
@@ -1328,9 +1797,9 @@ return gtIx;
 
 static void rSetGtHapOrderFromTree(struct phyloTree *node, struct vcfFile *vcff,
                                    struct hash *sampleToIx,
-                                   unsigned short *gtHapOrder, int *pGtHapCount,
-                                   unsigned short *leafOrderToHapOrderStart,
-                                   unsigned short *leafOrderToHapOrderEnd, int *pLeafCount)
+                                   unsigned int *gtHapOrder, int *pGtHapCount,
+                                   unsigned int *leafOrderToHapOrderStart,
+                                   unsigned int *leafOrderToHapOrderEnd, int *pLeafCount)
 /* Set gtHapOrder to sample gt & hap indices in the order we encounter the samples in tree. */
 {
 if (node->numEdges > 0)
@@ -1363,9 +1832,9 @@ else
     }
 }
 
-static unsigned short *gtHapOrderFromTree(struct vcfFile *vcff, struct phyloTree *tree,
-                                          unsigned short **retLeafOrderToHapOrderStart,
-                                          unsigned short **retLeafOrderToHapOrderEnd,
+static unsigned int *gtHapOrderFromTree(struct vcfFile *vcff, struct phyloTree *tree,
+                                          unsigned int **retLeafOrderToHapOrderStart,
+                                          unsigned int **retLeafOrderToHapOrderEnd,
                                           int *retGtHapCount)
 /* Alloc & return gtHapOrder, set to samples in the order we encounter them in tree.
  * Also build up maps of leaf order to low and high gtHapIx, for drawing the tree later. */
@@ -1373,9 +1842,9 @@ static unsigned short *gtHapOrderFromTree(struct vcfFile *vcff, struct phyloTree
 struct hash *sampleToIx = makeSampleToIx(vcff);
 int ploidy = 2; // Assuming diploid genomes here, no XXY, tetraploid etc.
 int gtCount = vcff->genotypeCount;
-unsigned short *gtHapOrder = needMem(gtCount * ploidy * sizeof(unsigned short));
-*retLeafOrderToHapOrderStart = needMem(gtCount * sizeof(unsigned short));
-*retLeafOrderToHapOrderEnd = needMem(gtCount * sizeof(unsigned short));
+unsigned int *gtHapOrder = needMem(gtCount * ploidy * sizeof(unsigned int));
+*retLeafOrderToHapOrderStart = needMem(gtCount * sizeof(unsigned int));
+*retLeafOrderToHapOrderEnd = needMem(gtCount * sizeof(unsigned int));
 *retGtHapCount = 0;
 int leafCount = 0;
 rSetGtHapOrderFromTree(tree, vcff, sampleToIx, gtHapOrder, retGtHapCount,
@@ -1395,8 +1864,8 @@ struct nodeCoords
     };
 
 static int phyloTreeAddNodeCoords(struct phyloTree *node,
-                                  unsigned short *leafOrderToHapOrderStart,
-                                  unsigned short *leafOrderToHapOrderEnd,
+                                  unsigned int *leafOrderToHapOrderStart,
+                                  unsigned int *leafOrderToHapOrderEnd,
                                   int leafIx)
 /* Recursively annotate node and descendants with nodeCoords to prepare for drawing the tree. */
 {
@@ -1483,8 +1952,8 @@ else
 static void drawPhyloTreeInLabelArea(struct phyloTree *tree, struct hvGfx *hvg, int yOff,
                                      int clipHeight, int gtHapCount,
                                      MgFont *font, boolean drawRectangle,
-                                     unsigned short *leafOrderToHapOrderStart,
-                                     unsigned short *leafOrderToHapOrderEnd)
+                                     unsigned int *leafOrderToHapOrderStart,
+                                     unsigned int *leafOrderToHapOrderEnd)
 {
 struct hvGfx *hvgLL = (hvgSide != NULL) ? hvgSide : hvg;
 int clipXBak, clipYBak, clipWidthBak, clipHeightBak;
@@ -1510,19 +1979,26 @@ static void vcfGtHapTreeFileDraw(struct track *tg, int seqStart, int seqEnd,
 {
 struct vcfFile *vcff = tg->extraUiData;
 enum hapColorMode colorMode;
-if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode))
+struct seqWindow *gSeqWin;
+struct txInfo *txiList;
+if (!vcfHapClusterDrawInit(tg, vcff, hvg, &colorMode, &gSeqWin, &txiList))
     return;
 struct phyloTree *tree = getTreeFromFile(tg->tdb);
 int gtHapCount;
-unsigned short *leafOrderToHapOrderStart, *leafOrderToHapOrderEnd;
-unsigned short *gtHapOrder = gtHapOrderFromTree(vcff, tree,
+unsigned int *leafOrderToHapOrderStart, *leafOrderToHapOrderEnd;
+unsigned int *gtHapOrder = gtHapOrderFromTree(vcff, tree,
                                                 &leafOrderToHapOrderStart, &leafOrderToHapOrderEnd,
                                                 &gtHapCount);
 struct vcfRecord *rec;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
+    {
+    enum soTerm funcTerm = soUnknown;
+    if (colorMode == functionMode)
+        funcTerm = functionForRecord(rec, gSeqWin, txiList);
     drawOneRec(rec, gtHapOrder, gtHapCount, tg, hvg, xOff, yOff, width, FALSE, FALSE,
-               colorMode);
-int extraPixel = (colorMode == altOnlyMode) ? 1 : 0;
+               colorMode, funcTerm);
+    }
+int extraPixel = (colorMode == altOnlyMode || colorMode == functionMode) ? 1 : 0;
 int hapHeight = tg->height - CLIP_PAD - 2*extraPixel;
 char *treeAngle = cartOrTdbString(cart, tg->tdb, VCF_HAP_TREEANGLE_VAR, VCF_DEFAULT_HAP_TREEANGLE);
 boolean drawRectangle = sameString(treeAngle, VCF_HAP_TREEANGLE_RECTANGLE);
@@ -1547,7 +2023,8 @@ if (isNotEmpty(tdbHeight))
 int cartHeight = cartOrTdbInt(cart, tg->tdb, VCF_HAP_HEIGHT_VAR, defaultHeight);
 if (tg->visibility == tvSquish)
     cartHeight /= 2;
-int extraPixel = (getColorMode(tg->tdb) == altOnlyMode) ? 1 : 0;
+enum hapColorMode colorMode = getColorMode(tg->tdb);
+int extraPixel = (colorMode == altOnlyMode || colorMode == functionMode) ? 1 : 0;
 int totalHeight = cartHeight + CLIP_PAD + 2*extraPixel;
 tg->height = min(totalHeight, maximumTrackHeight(tg));
 return tg->height;
@@ -1668,8 +2145,8 @@ struct hapDistanceMatrixCell
     struct hapDistanceMatrixCell *next;
     char *sampleId; // name of this sample
     char *otherId; // name of other sample
-    short alleleIx; // index into vcfRecord->genotypes
-    short otherAlleleIx; // index into vcfRecord->genotypes for other sample
+    int alleleIx; // index into vcfRecord->genotypes
+    int otherAlleleIx; // index into vcfRecord->genotypes for other sample
     double dist;   // distance between this sample/allele and another sample/allele
 };
 
@@ -1679,7 +2156,7 @@ struct hapDistanceMatrix
  * between two different alleles */
     struct hapDistanceMatrix *next; // next row in matrix
     char *sampleId;  // name of this sample
-    short alleleIx; // allele id of this sample, 0 or 1
+    int alleleIx; // allele id of this sample, 0 or 1
     struct hapDistanceMatrixCell *row;  // a row of cwaDistance scores
 };
 
@@ -1717,50 +2194,83 @@ slSort(&cellList, hapDistanceMatrixCellCmp);
 return cellList;
 }
 
-static unsigned short toggleShort(unsigned short s)
+static unsigned int toggleInt(unsigned int s)
 /* Add or subtract one */
 {
 return s & 1 ? s - 1 : s + 1;
 }
 
-static void fillOutHapOrder(unsigned short *hapOrder, unsigned short hapCount, struct hapDistanceMatrixCell *c1, struct hapDistanceMatrixCell *c2)
+static void fillOutHapOrder(unsigned int  *hapOrder, unsigned int hapCount, struct hapDistanceMatrixCell *c1, struct hapDistanceMatrixCell *c2, char **sampleDrawOrder)
 /* Assign indices to hapOrder in the order we should draw the alleles. Allows for the second parent
  * cell to be NULL */
 {
 if (c1 == NULL)
     errAbort("Error: fillOutHapOrder passed NULL parent");
 int numSamplesToDraw = hapCount / 2;
+char *childSampleName = c1->otherId;
+int childIx = stringArrayIx(childSampleName, sampleDrawOrder, numSamplesToDraw);
 int i;
 for (i = 0; i < numSamplesToDraw; i++)
     {
+    char *thisSample = sampleDrawOrder[i];
     short hapIx = 2*i;
-    if (i == 0) // top set of lines
+    if (i != childIx) // fill out the parent indices, which may be above or below the child
         {
-        hapOrder[hapIx] = toggleShort(c1->alleleIx);
-        hapOrder[hapIx+1] = c1->alleleIx;
-        }
-    else if (i + 1 == numSamplesToDraw) // last set of lines
-        {
-        if (c2)
+        struct hapDistanceMatrixCell *thisCell = c2 != NULL && sameString(c2->sampleId,thisSample) ? c2 : c1;
+        if (i < childIx)
             {
-            hapOrder[hapIx] = c2->alleleIx;
-            hapOrder[hapIx+1] = toggleShort(c2->alleleIx);
+            hapOrder[hapIx] = toggleInt(thisCell->alleleIx);
+            hapOrder[hapIx+1] = thisCell->alleleIx;
+            }
+        else // below the child
+            {
+            hapOrder[hapIx] = thisCell->alleleIx;
+            hapOrder[hapIx+1] = toggleInt(thisCell->alleleIx);
+            }
+        }
+    else // fill out the child indices
+        {
+        if (i == 0)
+            {
+            if (c2)
+                hapOrder[hapIx] = c2->otherAlleleIx;
+            else
+                hapOrder[hapIx] = toggleInt(c1->otherAlleleIx);
+            hapOrder[hapIx+1] = c1->otherAlleleIx;
+            }
+        else if (i == 1)
+            {
+            hapOrder[hapIx] = c1->otherAlleleIx;
+            if (c2)
+                hapOrder[hapIx+1] = c2->otherAlleleIx;
+            else
+                hapOrder[hapIx+1] = toggleInt(c1->otherAlleleIx);
             }
         else
             {
-            hapOrder[hapIx] = c1->otherAlleleIx;
-            hapOrder[hapIx+1] = toggleShort(c1->otherAlleleIx);
+            hapOrder[hapIx] = c2->otherAlleleIx;
+            hapOrder[hapIx+1] = c1->otherAlleleIx;
             }
-        }
-    else // orient based on above and below
-        {
-        hapOrder[hapIx] = c1->otherAlleleIx;
-        hapOrder[hapIx+1] = c2->otherAlleleIx;
         }
     }
 }
 
-static void setHapOrderFromMatrix(unsigned short *hapOrder, unsigned short hapCount,
+static void maybeRollBackCell(struct hapDistanceMatrixCell *c1, struct hapDistanceMatrixCell *c2,
+                              struct hapDistanceMatrixCell *c1Copy, struct hapDistanceMatrixCell *c2Copy)
+/* At this point c1->otherAlleleIx != c2->otherAlleleIx, however, it may be the case that c2 has a
+ * better scoring match to c1->otherAlleleIx, so try to find it and reset the values */
+{
+struct hapDistanceMatrixCell *tmp = c2;
+while (tmp->otherAlleleIx != c1->otherAlleleIx)
+    tmp = tmp->next;
+if (tmp->dist < c1->dist)
+    {
+    *c2 = *tmp;
+    *c1 = *c1Copy;
+    }
+}
+
+static void setHapOrderFromMatrix(unsigned int *hapOrder, unsigned int hapCount,
                                 struct hapDistanceMatrix *matrix, struct hapCluster **hapArray,
                                 struct vcfFile *vcff, char *childName, char **sampleDrawOrder)
 /* Given a matrix where each row is an allele of the child, and each column
@@ -1787,20 +2297,29 @@ if (hapCount > 2) // is there a trio or at least part of one?
         {
         if (c1->otherAlleleIx == c2->otherAlleleIx)
             {
-            // first choose the lowest score, if a tie then just advance c1
+            struct hapDistanceMatrixCell *c1Copy = c1;
+            struct hapDistanceMatrixCell *c2Copy = c2;
             if (c1->dist >= c2->dist)
                 {
                 while (c1->dist >= c2->dist && c1->otherAlleleIx == c2->otherAlleleIx)
                     c1 = c1->next;
+                // at this point c1->otherAlleleIx != c2>otherAlleleIx, BUT c2 may have a better
+                // scoring match to this allele and we shouldn't have advanced c1 to begin with!
+                // This case is exercised at the following location (chr1:53896598-53897933) in
+                // the following file: /gbdb/hg38/1000Genomes/trio/NA12878_1463_CEU/NA12878_1463_CEUTrio.chr1.vcf.gz
+                // where the child's haplotypes are identical to both of the mother's haplotypes!
+                maybeRollBackCell(c1, c2, c1Copy, c2Copy);
                 }
             else
                 {
                 while (c1->dist < c2->dist && c1->otherAlleleIx == c2->otherAlleleIx)
                     c2 = c2->next;
+                // similar to above case but swap c1 and c2
+                maybeRollBackCell(c2, c1, c2Copy, c1Copy);
                 }
             }
         }
-    fillOutHapOrder(hapOrder, hapCount, c1, c2);
+    fillOutHapOrder(hapOrder, hapCount, c1, c2, sampleDrawOrder);
     }
 else
     {
@@ -1809,7 +2328,7 @@ else
     }
 }
 
-static void assignHapArrayIx(short *ret, struct hapCluster **hapArray, struct vcfFile *vcff, char *sample, boolean doChild)
+static void assignHapArrayIx(int *ret, struct hapCluster **hapArray, struct vcfFile *vcff, char *sample, boolean doChild)
 {
 int i;
 struct vcfRecord *rec = vcff->records;
@@ -1829,12 +2348,12 @@ static struct hapDistanceMatrix *fillOutDistanceMatrix(struct hapCluster **hapAr
 /* Allocates and fill out a struct hapDistanceMatrix, one row per child allele, and a
  * hapDistanceMatrixCell per parent allele */
 {
-short parGtCount = (gtCount - 1) * 2;
+int parGtCount = (gtCount - 1) * 2;
 int i,j;
 struct vcfRecord *rec = vcff->records;
 struct hapDistanceMatrix *matrix = NULL;
-short childHapArrayIndices[2];
-short parentHapArrayIndices[parGtCount];
+int childHapArrayIndices[2];
+int parentHapArrayIndices[parGtCount];
 assignHapArrayIx(childHapArrayIndices, hapArray, vcff, sample, TRUE);
 assignHapArrayIx(parentHapArrayIndices, hapArray, vcff, sample, FALSE);
 for (i = 0; i < 2; i++)
@@ -1860,7 +2379,7 @@ for (i = 0; i < 2; i++)
 return matrix;
 }
 
-unsigned short *computeHapDist(struct vcfFile *vcff, int centerIx, int startIx, int endIx, char *sample, int gtCount, char **sampleDrawOrder)
+unsigned int *computeHapDist(struct vcfFile *vcff, int centerIx, int startIx, int endIx, char *sample, int gtCount, char **sampleDrawOrder)
 // similar to clusterHaps(), but instead of making a hacTree at the end, call cwaDistance
 // on each of the pairs in hapArray to make a distance matrix, then compute a hapOrder from that
 {
@@ -1939,8 +2458,8 @@ for (varIx = 0, rec = vcff->records;  rec != NULL && varIx < endIx;  varIx++, re
 
 // now fill out a distance matrix based on the cwaDistance between all the pairs in hapArray
 struct hapDistanceMatrix *hapDistMatrix = fillOutDistanceMatrix(hapArray, vcff, sample, &helper, gtCount);
-unsigned short hapCount = 2 * gtCount;
-unsigned short *hapOrder = needMem(sizeof(unsigned short) * hapCount);
+unsigned int hapCount = 2 * gtCount;
+unsigned int *hapOrder = needMem(sizeof(unsigned int) * hapCount);
 setHapOrderFromMatrix(hapOrder, hapCount, hapDistMatrix, hapArray, vcff, sample, sampleDrawOrder);
 return hapOrder;
 }
@@ -1948,9 +2467,60 @@ return hapOrder;
 #define VCFPHASED_UNPHASED_COLOR MG_RED
 
 
+static int getChildAlleleColor(struct track *track, struct vcfRecord *rec, int childHapIx,
+                               int alleleIx, int nameIx, int gtHapCount, unsigned int *gtHapOrder,
+                               char *sampleOrder[])
+/* Return the color we should use for this variant, depending on whether the allele
+ * of the child matches what the parent transmitted or if there was some kind of
+ * 'mendelian inconsistency' */
+{
+// if there are no parents to draw then no concept of transmitted vs unstransmitted
+if (gtHapCount <= 2)
+    return MG_BLACK;
+int parIx = alleleIx;
+int numSamples = gtHapCount / 2;
+boolean isEven = (alleleIx % 2) == 0;
+const int adjacentLineSet = 1;
+// how many haplotype "lines" away is the second parent if we are drawing in either
+// parent1,parent2,child or child,parent1,parent2 order:
+const int otherLineSet = 4;
+if (nameIx == 0)
+    {
+    if (!isEven)
+        parIx = alleleIx + adjacentLineSet;
+    else if (numSamples > 2)
+            parIx = alleleIx + otherLineSet;
+    }
+else if (nameIx == 1)
+    {
+    if (isEven)
+        parIx = alleleIx - adjacentLineSet;
+    else if (numSamples > 2) // don't compare the allele the child to a missing parent
+        parIx = alleleIx + adjacentLineSet;
+    }
+else
+    {
+    if (isEven)
+        parIx = alleleIx - adjacentLineSet;
+    else
+        parIx = alleleIx - otherLineSet;
+    }
+struct vcfGenotype *parentGt = &(rec->genotypes[gtHapOrder[parIx] >> 1]);
+if (parentGt->isPhased || (parentGt->hapIxA == 1 && parentGt->hapIxB == 1))
+    {
+    int parentAlleleIx = gtHapOrder[parIx] & 1 ? parentGt->hapIxB : parentGt->hapIxA;
+    if (rec->alleles[childHapIx] != rec->alleles[parentAlleleIx]) // if they disagree mark as red
+        return MG_RED;
+    else
+        return MG_BLACK;
+    }
+return MG_BLACK;
+}
+
 void vcfPhasedDrawOneRecord(struct track *track, struct hvGfx *hvg, struct vcfRecord *rec, void *item,
-                            unsigned short *gtHapOrder, int gtHapCount, int xOff, int yOffsets[],
-                            char *sampleOrder[], double scale)
+                            unsigned int *gtHapOrder, int gtHapCount, int xOff, int yOffsets[],
+                            char *sampleOrder[], char *childSample, boolean highlightChildDiffs,
+                            double scale)
 // Draw a record's haplotypes on the appropriate lines
 {
 int i;
@@ -1970,10 +2540,12 @@ for (i = 0; i < gtHapCount ; i++)
         {
         int alIx = gtHapOrder[i] & 1 ? gt->hapIxB : gt->hapIxA;
         int tickColor = MG_BLACK;
+        if (sameString(childSample, gt->id) && highlightChildDiffs)
+            tickColor = getChildAlleleColor(track, rec, alIx, i, nameIx, gtHapCount, gtHapOrder, sampleOrder);
         dyStringPrintf(mouseover, "%s ", gt->id);
         if (alIx != 0) // non-reference allele
             {
-            if (i > 1 && i < 4) // we're drawing child ticks
+            if (sameString(childSample, gt->id)) // we're drawing child ticks
                 {
                 dyStringPrintf(mouseover, "allele: %s", rec->alleles[alIx]);
                 }
@@ -2015,7 +2587,7 @@ hvGfxSetClip(hvgLL, clipXBak, clipYBak, clipWidthBak, clipHeightBak);
 
 static void vcfPhasedSetupHaplotypesLines(struct track *track, struct hvGfx *hvg, int xOff,
                             int yOff, int width, int *retYOffsets, struct slPair *sampleNames,
-                            MgFont *font)
+                            char *childSample, MgFont *font)
 /* Setup the background for drawing the ticks, the two haplotype lines for each sample, and the
  * transparent gray box to help distinguish between consecutive samples */
 {
@@ -2027,8 +2599,13 @@ int i, y1, y2;
 struct rgbColor yellow = lightRainbowAtPos(0.2);
 int transYellow = MAKECOLOR_32_A(yellow.r, yellow.g, yellow.b, 100);
 
-boolean useDefaultLabel = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_DEFAULT_LABEL_VAR, TRUE);
-boolean useAliasLabel = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_ALIAS_LABEL_VAR, TRUE);
+boolean useDefaultLabel = FALSE;
+if (cartVarExistsAnyLevel(cart, track->tdb, FALSE, VCF_PHASED_DEFAULT_LABEL_VAR))
+    useDefaultLabel = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_DEFAULT_LABEL_VAR, FALSE);
+
+boolean useAliasLabel = trackDbSettingOn(track->tdb, VCF_PHASED_TDB_USE_ALT_NAMES);
+if (cartVarExistsAnyLevel(cart, track->tdb, FALSE, VCF_PHASED_ALIAS_LABEL_VAR))
+    useAliasLabel = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_ALIAS_LABEL_VAR, FALSE);
 
 for (name = sampleNames, i = 0; name != NULL; name = name->next, i++)
     {
@@ -2037,17 +2614,18 @@ for (name = sampleNames, i = 0; name != NULL; name = name->next, i++)
     retYOffsets[2*i] = y1;
     retYOffsets[(2*i) + 1] = y2;
     // make the background of every other lane light yellow, but only when NOT doing PDF/EPS output
-    if ((hvg->pixelBased && i & 1))
+    if (hvg->pixelBased && sameString(childSample, name->name))
         {
         hvGfxBox(hvg, xOff, y1-(track->lineHeight), width, (y2 + track->lineHeight) - (y1-track->lineHeight), transYellow);
         }
     hvGfxLine(hvg, xOff, y1, xOff+width, y1, MG_BLACK);
     hvGfxLine(hvg, xOff, y2, xOff+width, y2, MG_BLACK);
     struct dyString *label = dyStringNew(0);
+    boolean hasAlias = isNotEmpty((char *)name->val);
     dyStringPrintf(label, "%s%s%s",
         useDefaultLabel ? name->name : "",
-        useDefaultLabel && useAliasLabel ? "/" : "",
-        useAliasLabel ? (char *)name->val : "");
+        useDefaultLabel && useAliasLabel && hasAlias ? "/" : "",
+        useAliasLabel && hasAlias ? (char *)name->val : "");
     vcfPhasedAddLabel(track, hvg, label->string, yOff, round(((y1 + y2) / 2) - (track->lineHeight / 2)), font, MG_BLACK);
     }
 }
@@ -2063,30 +2641,36 @@ if (vcff->records == NULL)
     return;
 
 const double scale = scaleForPixels(width);
-struct slPair *pair, *sampleNames = vcfPhasedGetSampleOrder(cart, track->tdb, FALSE);
+boolean hideOtherSamples = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_HIDE_OTHER_VAR, FALSE);
+struct slPair *pair, *sampleNames = vcfPhasedGetSampleOrder(cart, track->tdb, FALSE, hideOtherSamples);
 int gtCount = slCount(sampleNames);
 int yOffsets[gtCount * 2]; // y offsets of each haplotype line
 char *sampleOrder[gtCount]; // order of sampleName lines
 int i;
 for (pair = sampleNames, i = 0; pair != NULL && i < gtCount; pair = pair->next, i++)
     sampleOrder[i] = pair->name;
-// child sample is required to be in the middle/bottom of the trio
-char *childSample = gtCount > 2 ? sampleOrder[1] : sampleOrder[0];
+
+char *childSample = cloneString(trackDbSetting(track->tdb, VCF_PHASED_CHILD_SAMPLE_SETTING));
+char *pt = strchr(childSample, '|');
+if (pt != NULL)
+    *pt = '\0';
 
 // set up the "haplotype" lines and the transparent yellow box to delineate samples
-vcfPhasedSetupHaplotypesLines(track, hvg, xOff, yOff, width, yOffsets, sampleNames, font);
+vcfPhasedSetupHaplotypesLines(track, hvg, xOff, yOff, width, yOffsets, sampleNames, childSample, font);
 
-// sort the variants by haplotype then draw ticks
+// maybe sort the variants by haplotype then draw ticks
+unsigned int *hapOrder = needMem(sizeof(short) * gtCount * 2);
 int nRecords = slCount(vcff->records);
 int centerIx = getCenterVariantIx(track, seqStart, seqEnd, vcff->records);
 int startIx = 0;
 int endIx = nRecords;
-unsigned short *hapOrder = computeHapDist(vcff, centerIx, startIx, endIx, childSample, gtCount, sampleOrder);
+hapOrder = computeHapDist(vcff, centerIx, startIx, endIx, childSample, gtCount, sampleOrder);
+boolean highlightChildDiffs = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_HIGHLIGHT_INCONSISTENT, FALSE);
 struct vcfRecord *rec = NULL;
 struct slList *item = NULL;
 for (rec = vcff->records, item = track->items; rec != NULL && item != NULL; rec = rec->next, item = item->next)
     {
-    vcfPhasedDrawOneRecord(track, hvg, rec, item, hapOrder, gtCount * 2, xOff, yOffsets, sampleOrder, scale);
+    vcfPhasedDrawOneRecord(track, hvg, rec, item, hapOrder, gtCount * 2, xOff, yOffsets, sampleOrder, childSample, highlightChildDiffs, scale);
     }
 }
 
@@ -2103,7 +2687,8 @@ if (vis == tvDense)
     return pgSnpHeight(tg, vis);
 if (!vcff || vcff->records == NULL)
     return 0;
-int totalSamples = slCount(vcfPhasedGetSampleOrder(cart, tg->tdb, FALSE));
+boolean hideOtherSamples = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, VCF_PHASED_HIDE_OTHER_VAR, FALSE);
+int totalSamples = slCount(vcfPhasedGetSampleOrder(cart, tg->tdb, FALSE, hideOtherSamples));
 tg->lineHeight = tl.fontHeight + 1;
 tg->heightPer = tl.fontHeight;
 // if all variants in view are phased, then 3 lines per sample,

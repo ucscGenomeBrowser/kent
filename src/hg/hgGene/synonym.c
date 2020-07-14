@@ -362,7 +362,7 @@ if (protAcc != NULL)
     	{
     	sqlSafefFrag(condStr, sizeof(condStr), "name = '%s' and chrom = '%s' and txStart=%d and txEnd=%d", 
 	        id, curGeneChrom, curGeneStart, curGeneEnd);
-    	kgProteinID = sqlGetField(database, "knownGene", "proteinID", condStr);
+    	kgProteinID = sqlGetField(sqlGetDatabase(conn), "knownGene", "proteinID", condStr);
     	}
 
     hPrintf("<B>Protein: ");

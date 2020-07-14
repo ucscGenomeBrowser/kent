@@ -1,23 +1,56 @@
 <H2>Description</H2>
-This track shows deletions that have been found in the sequences uploaded to the GISAID database. Three confidence levels of deletion calls are shown: <span style="color: rgb(170,170,170)"><b>deletions found in at least 1 GISAID sequence</b></span> , <span style="color: rgb(85,85,85)"><b>deletions found in at least 2 GISAID sequences</b></span>, and <span style="color: rgb(0,0,0)"><b>deletions found in at least 2 GISAID sequences that were able to be validated with raw reads.</b></span>
-<P>
-
+<p>This track shows deletions that have been found in the sequences uploaded to the GISAID database.
+Three confidence levels of deletion calls are shown: </p>
+<ul>
+<li><span style="color: rgb(170,170,170)"><b>deletions found in at least 1 
+GISAID sequence</b></span></li>
+<li> <span style="color: rgb(85,85,85)"><b>deletions found in at least 2 GISAID
+sequences</b></span></li>
+<li><span style="color: rgb(0,0,0)"><b>deletions found in at least 2 GISAID sequences that
+were able to be validated with raw reads.</b></span></li></ul>
 
 <H2>Methods</H2>
-    We accessed all GISAID SARS-CoV-2 sequences on May 7, 2020. We filtered to high coverage reads encompassing the entire SARS-CoV-2 genome (>=29000 bps), leaving 12,403 sequences. We aligned the reads using MAFFT.
-<P>
-
+<p>
+We accessed all GISAID SARS-CoV-2 sequences on May 7, 2020. We filtered to high coverage 
+reads encompassing the entire SARS-CoV-2 genome (&gt;=29000 bps), leaving 12,403 sequences.
+We aligned the reads using MAFFT.</p>
 
 <H2>Verification</H2>
-    We validated several deletions with the raw reads from NCBI's SRA Run browser. Additionally, NYU Langone Health provided us with the aligned reads for many of their sequences.
-<P>
+<p>We validated several deletions with the raw reads from NCBI's SRA Run browser. 
+Additionally, NYU Langone Health provided us with the aligned reads for many of 
+their sequences.</p>
 
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables">Table Browser</a>, combined with other datasets in the
+<a href="hgIntegrator">Data Integrator</a> tool, 
+or downloaded directly as &quot;microdel.txt.gz&quot; from
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/wuhCor1/database">the download server</a>.
+Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our
+<a href="../../FAQ/FAQdownloads.html#download36">Data Access FAQ</a>
+for more information.</p>
 
 <H2>Credits</H2>
-We thank all of the labs that submitted their sequences to the GISAID database. The full acknowledgement table can be found at <A HREF="https://github.com/briannachrisman/SARS-CoV-2_Microdeletions/blob/master/acknowledgments.pdf" TARGET=ucscSchema title='Open table schema in new window'>https://github.com/briannachrisman/SARS-CoV-2_Microdeletions/blob/master/acknowledgments.pdf</A>.  We thank the public health laboratories VIDRL and MDU-PHL at The Peter Doherty Institute for Infection and Immunity for providing over 1000 high quality raw reads to NCBI. Thank you NYU Langone SARS-CoV2 Sequencing Team's Matthew T Maurano, Matija Snuderl, and Adriana Heguy for providing many of their raw reads.
-<P>
+<p>
+We thank all of the labs that submitted their sequences to the GISAID database. 
+The full acknowledgement table can be found at <A 
+HREF="https://github.com/briannachrisman/SARS-CoV-2_Microdeletions/blob/master/acknowledgments.pdf" 
+TARGET=ucscSchema title='Open table schema in new window'>
+https://github.com/briannachrisman/SARS-CoV-2_Microdeletions/blob/master/acknowledgments.pdf</A>.
+We thank the public health laboratories VIDRL and MDU-PHL at The Peter Doherty Institute for 
+Infection and Immunity for providing over 1000 high quality raw reads to NCBI. 
+Thank you NYU Langone SARS-CoV2 Sequencing Team's Matthew T Maurano, Matija Snuderl, and 
+Adriana Heguy for providing many of their raw reads.
+</p>
 
 
 <H2>References</H2>
-    Brianna Sierra Chrisman, Kelley Paskov, Nate Stockham, Jae-Yoon Jung, Maya Varma, Peter Washington, Dennis P. Wall. <A HREF="http://virological.org/t/common-microdeletions-in-sars-cov-2-sequences" TARGET=ucscSchema title='Open table schema in new window'>"Common Microdeletions in SARS-CoV-2 Sequences."</A>  Virological.org. May 15, 2020. 
-<P>
+<p>Brianna Sierra Chrisman, Kelley Paskov, Nate Stockham, Jae-Yoon Jung, Maya Varma, 
+Peter Washington, Dennis P. Wall. 
+<A HREF="http://virological.org/t/common-microdeletions-in-sars-cov-2-sequences" 
+TARGET=ucscSchema title='Open table schema in new window'>
+"Common Microdeletions in SARS-CoV-2 Sequences."</A>  
+Virological.org. May 15, 2020.</p>

@@ -19,4 +19,14 @@ while [[ $1 == -* ]] ; do
     esac
 done
 
-git ls-tree -r --name-only HEAD "$@"
+if git --version > /dev/null 2>&1
+then
+    if  git rev-parse --git-dir > /dev/null 2>&1
+    then
+        git ls-tree -r --name-only HEAD "$@"
+    else
+        find "$@"
+    fi
+else
+    find "$@"
+fi

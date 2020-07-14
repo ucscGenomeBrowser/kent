@@ -26,21 +26,29 @@ with open('nextstrainGene.bed', 'w') as outG:
 
 # Variants and "clades"
 
-snvRe = re.compile('^([ACGT])([0-9]+)([ACGT])$')
-snvAaRe = re.compile('^([A-Z*])([0-9]+)([A-Z*])$')
+snvRe = re.compile('^([ACGT-])([0-9]+)([ACGT-])$')
+snvAaRe = re.compile('^([A-Z*-])([0-9]+)([A-Z*-])$')
 
-clades = {}
-cladeNodes = {}
+newClades = {}
+oldClades = {}
 variantCounts = {}
 variantAaChanges = {}
 samples = []
 
-cladeColors = { 'A1a': '73,75,225', 'A2': '75,131,233', 'A2a': '92,173,207',
-                'A3': '119,199,164', 'A6': '154,212,122', 'A7': '173,189,81',
-                'B': '233,205,74', 'B1': '255,176,65', 'B2': '255,122,53',
-                'B4': '249,53,41' }
+# Clades from March 15th, 2020 to early morning of June 2nd, 2020:
+oldCladeColors = { 'A1a': '73,75,225', 'A2': '75,131,233', 'A2a': '92,173,207',
+                   'A3': '119,199,164', 'A6': '154,212,122', 'A7': '173,189,81',
+                   'B': '233,205,74', 'B1': '255,176,65', 'B2': '255,122,53',
+                   'B4': '249,53,41' }
 
-def cladeColorFromName(cladeName):
+# Clades from late morning of June 2nd, 2020:
+newCladeColors = { '19A': '76,135,232',
+                   '19B': '110,194,178',
+                   '20A': '168,214,110',
+                   '20B': '232,206,75',
+                   '20C': '255,146,58' }
+
+def cladeColorFromName(cladeName, cladeColors):
     color = cladeColors.get(cladeName);
     if (not color):
         color = '0,0,0'
@@ -71,6 +79,8 @@ def cladeFromVariants(name, variants, varStr):
                 ix = len(snvEnds)
                 changesByPos[pos] = (ix, ref, alt)
                 snvEnds.append(int(pos))
+        else:
+            warn("cladeFromVariants: no match for SNV '%s'" % (varName))
     if ixsToRemove:
         ixsToRemove.sort(reverse=True)
         for ix in ixsToRemove:
@@ -82,7 +92,6 @@ def cladeFromVariants(name, variants, varStr):
         clade['thickStart'] = min(snvStarts)
         clade['thickEnd'] = max(snvEnds)
         clade['name'] = name
-        clade['color'] = cladeColorFromName(name)
         clade['varSizes'] = snvSizes
         clade['varStarts'] = snvStarts
         clade['varNames'] = varStr
@@ -90,19 +99,33 @@ def cladeFromVariants(name, variants, varStr):
 
 def addDatesToClade(clade, numDateAttrs):
     """Add the numeric dates from ncov.json node_attrs.num_date to clade record"""
-    clade['dateInferred'] = numDateAttrs['value']
-    clade['dateConfMin'] = numDateAttrs['confidence'][0]
-    clade['dateConfMax'] = numDateAttrs['confidence'][1]
+    if (numDateAttrs):
+        clade['dateInferred'] = numDateAttrs['value']
+        clade['dateConfMin'] = numDateAttrs['confidence'][0]
+        clade['dateConfMax'] = numDateAttrs['confidence'][1]
+    else:
+        clade['dateInferred'] = clade['dateConfMin'] = clade['dateConfMax'] = ''
 
 def addCountryToClade(clade, countryAttrs):
     """Add country data from ncov.json node_attrs.country to clade"""
     clade['countryInferred'] = countryAttrs['value']
-    confString = ''
-    for country, conf in countryAttrs['confidence'].items():
-        if (len(confString)):
-            confString += ', '
-        confString += "%s: %0.5f" % (country, conf)
-    clade['countryConf'] = confString
+    conf = countryAttrs.get('confidence')
+    clade['countryConf'] = ', '.join([ "%s: %0.5f" % (country, conf)
+                                       for country, conf in conf.items()]) if conf else ''
+
+def processClade(branch, tag, branchVariants, branchVarStr, clades):
+    """If this is the first time we've seen (old or new) clade, add it to clades"""
+    nodeAttrs = branch['node_attrs']
+    if (nodeAttrs.get(tag)):
+        cladeName = nodeAttrs[tag]['value']
+        if (cladeName != 'unassigned' and not cladeName in clades):
+            clades[cladeName] = cladeFromVariants(cladeName, branchVariants, branchVarStr)
+            addDatesToClade(clades[cladeName], nodeAttrs.get('num_date'))
+            if (nodeAttrs.get('country')):
+                addCountryToClade(clades[cladeName], nodeAttrs['country'])
+            elif (nodeAttrs.get('division')):
+                addCountryToClade(clades[cladeName], nodeAttrs['division'])
+            clades[cladeName]['topNode'] = branch
 
 def numDateToYmd(numDate):
     """Convert numeric date (decimal year) to integer year, month, day"""
@@ -143,13 +166,18 @@ months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 
 
 def numDateToMonthDay(numDate):
     """Transform decimal year timestamp to string with only month and day"""
+    if not numDate:
+        return '?'
     year, month, day = numDateToYmd(numDate)
     return months[month] + str(day)
 
 def numDateToYmdStr(numDate):
     """Convert decimal year to YY-MM-DD string"""
-    year, month, day = numDateToYmd(numDate)
-    return "%02d-%02d-%02d" % (year, month+1, day)
+    if numDate:
+        year, month, day = numDateToYmd(numDate)
+        return "%02d-%02d-%02d" % (year, month+1, day)
+    else:
+        return ''
 
 def rUnpackNextstrainTree(branch, parentVariants, parentVarStr):
     """Recursively descend ncov.tree and build data structures for genome browser tracks"""
@@ -163,6 +191,8 @@ def rUnpackNextstrainTree(branch, parentVariants, parentVarStr):
                 localVariants.append(varName)
                 if (not variantCounts.get(varName)):
                     variantCounts[varName] = 0;
+            else:
+                warn("rUnpackNextstrainTree: no snvRe match for '%s'" % (varName))
         # Amino acid variants: figure out which nucleotide variant goes with each
         for geneName in branch['branch_attrs']['mutations'].keys():
             if (geneName != 'nuc'):
@@ -202,19 +232,8 @@ def rUnpackNextstrainTree(branch, parentVariants, parentVarStr):
         branchVarStr = parentVarStr + '; ' + branchVarStr
     elif (not len(branchVarStr)):
         branchVarStr = parentVarStr
-    nodeAttrs = branch['node_attrs']
-    if (nodeAttrs.get('clade_membership')):
-        cladeName = nodeAttrs['clade_membership']['value']
-        if (cladeName != 'unassigned' and not cladeName in clades):
-            clades[cladeName] = cladeFromVariants(cladeName, branchVariants, branchVarStr)
-            addDatesToClade(clades[cladeName], nodeAttrs['num_date'])
-            if (nodeAttrs.get('country')):
-                addCountryToClade(clades[cladeName], nodeAttrs['country'])
-            elif (nodeAttrs.get('division')):
-                addCountryToClade(clades[cladeName], nodeAttrs['division'])
-            else:
-                warn('No country or division for new clade ' + cladeName)
-            cladeNodes[cladeName] = branch
+    processClade(branch, 'clade_membership', branchVariants, branchVarStr, newClades)
+    processClade(branch, 'legacy_clade_membership', branchVariants, branchVarStr, oldClades)
     kids = branch.get('children')
     if (kids):
         for child in kids:
@@ -222,14 +241,24 @@ def rUnpackNextstrainTree(branch, parentVariants, parentVarStr):
     else:
         for varName in branchVariants:
             variantCounts[varName] += 1
+        nodeAttrs = branch['node_attrs']
         if (nodeAttrs.get('submitting_lab')):
             lab = nodeAttrs['submitting_lab']['value']
         else:
             lab = ''
-        samples.append({ 'id': nodeAttrs['gisaid_epi_isl']['value'],
+        if (nodeAttrs.get('legacy_clade_membership')):
+            oldClade = nodeAttrs['legacy_clade_membership']['value']
+        else:
+            oldClade = ''
+        epiNode = nodeAttrs.get('gisaid_epi_isl')
+        epiId = epiNode['value'] if epiNode else branch['name']
+        numDateNode = nodeAttrs.get('num_date')
+        numDate = numDateNode['value'] if numDateNode else ''
+        samples.append({ 'id': epiId,
                          'name': branch['name'],
                          'clade': nodeAttrs['clade_membership']['value'],
-                         'date': numDateToMonthDay(nodeAttrs['num_date']['value']),
+                         'oldClade': oldClade,
+                         'date': numDateToMonthDay(numDate),
                          'lab': lab,
                          'variants': branchVariants,
                          'varStr': branchVarStr })
@@ -260,7 +289,8 @@ def parsedVarAlleleCount(pv):
     return variantCounts[pv[1]]
 
 def mergeVariants(pvList):
-    """Given a list of parsedVars [pos, varName, ref, alt] at the same pos, resolve the actual allele at each sample, handling back-mutations and serial mutations."""
+    """Given a list of parsedVars [pos, varName, ref, alt] at the same pos, resolve the actual
+    allele at each sample, handling back-mutations and serial mutations."""
     # Sort by descending allele count, assuming that the ref allele of the most frequently
     # observed variant is the true ref allele.  For back-muts, ref and alt are swapped;
     # for serial muts, alt of the first is ref of the second.
@@ -277,6 +307,9 @@ def mergeVariants(pvList):
         if (thisAlt == trueRef):
             # Back-mutation, not a true alt
             alIx = 0
+        elif (thisAlt == '-'):
+            # No-call, not a true alt
+            alIx = -1
         else:
             # Add to list of alts - unless it's an alt we've already seen, but from a different
             # serial mutation.  For example, there might be T>A but also T>G+G>A; don't add A twice.
@@ -288,13 +321,19 @@ def mergeVariants(pvList):
         for ix, sample in enumerate(samples):
             if (sample['variants'].get(thisName)):
                 sampleAlleles[ix] = alIx
-                if (alIx == 0):
+                if (alIx == 0 and thisRef != '-'):
                     backMutSamples.append(sampleName(sample))
     # After handling back- and serial mutations, figure out true counts of each alt allele:
     altCounts = [ 0 for alt in alts ]
     for alIx in sampleAlleles:
         if (alIx > 0):
             altCounts[alIx - 1] += 1
+    startDash = trueRef + str(pos) + '-,'
+    dashToDash = startDash + '-'
+    if varName.startswith(dashToDash):
+        varName = trueRef + varName[len(dashToDash):]
+    elif varName.startswith(startDash):
+        varName = varName[len(startDash):]
     return [ [pos, varName, trueRef, ','.join(alts)],
              alts, altCounts, sampleAlleles, backMutSamples ]
 
@@ -306,9 +345,13 @@ for pv in parsedVars:
     if (len(variantsAtPos) == 0 or pos == variantsAtPos[0][0]):
         variantsAtPos.append(pv)
     else:
-        mergedVars.append(mergeVariants(variantsAtPos))
+        mv = mergeVariants(variantsAtPos)
+        if (mv[1]):
+            mergedVars.append(mv)
         variantsAtPos = [pv]
-mergedVars.append(mergeVariants(variantsAtPos))
+mv = mergeVariants(variantsAtPos)
+if (mv[1]):
+    mergedVars.append(mv)
 
 def writeVcfHeaderExceptSamples(outF):
     """Write VCF header lines -- except for sample names (this ends with a \t not a \n)."""
@@ -336,112 +379,196 @@ def tallyAaChanges(varNameMerged):
     return aaChangeStr
 
 # VCF
-with open('nextstrainSamples.vcf', 'w') as outC:
-    writeVcfHeaderExceptSamples(outC)
-    outC.write('\t'.join(sampleNames) + '\n')
-    for mv in mergedVars:
-        pv, alts, altCounts, sampleAlleles, backMutSamples = mv
-        info = 'AC=' + ','.join(map(str, altCounts)) + ';AN=' + str(sampleCount)
-        varNameMerged = pv[1]
-        aaChange = tallyAaChanges(varNameMerged)
-        if (len(aaChange)):
-            info += ';AACHANGE=' + aaChange
-        if (len(backMutSamples)):
-            info += ';BACKMUTS=' + ','.join(backMutSamples)
-        genotypes = []
-        for sample, alIx in zip(samples, sampleAlleles):
-            gt = str(alIx)
-            genotypes.append(gt + ':' + sample['clade'])
-        outC.write('\t'.join([ chrom,
-                               '\t'.join(map(str, pv)),
-                               '\t'.join(['.', 'PASS', info, 'GT:CLADE']),
-                               '\t'.join(genotypes) ]) + '\n')
+def vcfForAll(fileName, cladeTag):
+    with open(fileName, 'w') as outC:
+        writeVcfHeaderExceptSamples(outC)
+        outC.write('\t'.join(sampleNames) + '\n')
+        for mv in mergedVars:
+            pv, alts, altCounts, sampleAlleles, backMutSamples = mv
+            info = 'AC=' + ','.join(map(str, altCounts)) + ';AN=' + str(sampleCount)
+            varNameMerged = pv[1]
+            aaChange = tallyAaChanges(varNameMerged)
+            if (len(aaChange)):
+                info += ';AACHANGE=' + aaChange
+            if (len(backMutSamples)):
+                info += ';BACKMUTS=' + ','.join(backMutSamples)
+            genotypes = []
+            for sample, alIx in zip(samples, sampleAlleles):
+                gt = '.' if alIx < 0 else str(alIx)
+                genotypes.append(gt + ':' + sample[cladeTag])
+            outC.write('\t'.join([ chrom,
+                                   '\t'.join(map(str, pv)),
+                                   '\t'.join(['.', 'PASS', info, 'GT:CLADE']),
+                                   '\t'.join(genotypes) ]) + '\n')
+
+vcfForAll('nextstrainSamples.vcf', 'clade')
+# I'll skip writing an enormous file with wasteful clades-in-genotypes... really need
+# a sample metadata file!
 
 # Assign samples to clades; a sample can appear in multiple clades if they are nested.
-cladeSamples = {}
+
+def sampleIdsFromNode(node, cladeTops=()):
+    """Return a list of IDs of all samples found under node."""
+    kids = node.get('children')
+    if (kids):
+        sampleIds = []
+        for kid in kids:
+            if (kid not in cladeTops):
+                sampleIds += sampleIdsFromNode(kid, cladeTops)
+    else:
+        epiNode = node['node_attrs'].get('gisaid_epi_isl')
+        sampleId = epiNode['value'] if epiNode else node['name']
+        sampleIds = [sampleId]
+    return sampleIds
+
 cladeSampleCounts = {}
 cladeSampleNames = {}
 
-def sampleIdsFromNode(node, ids):
-    """Fill in a dict of IDs of all samples found under node."""
-    kids = node.get('children')
-    if (kids):
-        for kid in kids:
-            sampleIdsFromNode(kid, ids)
-    else:
-        sampleId = node['node_attrs']['gisaid_epi_isl']['value']
-        ids[sampleId] = 1
+def vcfForClades(clades, cladeTops=()):
+    """Given a set of clades (old or new), dump out VCF for each clade.
+    Stop at nodes in cladeTops (for Nextstrain's new clade scheme where 19A is root, 20A fully
+    contains 20B and 20C, etc."""
+    for cladeName in clades:
+        node = clades[cladeName]['topNode']
+        cladeSampleIds = set(sampleIdsFromNode(node, cladeTops))
+        cladeSampleList = [ sample for sample in samples if sample['id'] in cladeSampleIds ]
+        cladeSampleCounts[cladeName] = len(cladeSampleList)
+        cladeSampleNames[cladeName] = [ sampleName(sample) for sample in cladeSampleList ]
+        with open('nextstrainSamples' + cladeName + '.vcf', 'w') as outV:
+            writeVcfHeaderExceptSamples(outV)
+            outV.write('\t'.join(cladeSampleNames[cladeName]) + '\n')
+            for mv in mergedVars:
+                pv, alts, overallAltCounts, sampleAlleles, backMutSamples = mv
+                varNameMerged = pv[1]
+                genotypes = []
+                altCounts = [ 0 for alt in alts ]
+                acTotal=0
+                for sample, alIx in zip(samples, sampleAlleles):
+                    if (sample['id'] in cladeSampleIds):
+                        gt = '.' if (alIx < 0) else str(alIx)
+                        genotypes.append(gt + ':' + cladeName)
+                        if (alIx > 0):
+                            altCounts[alIx - 1] += 1
+                            acTotal += 1
+                if (acTotal > 0):
+                    info = 'AC=' + ','.join(map(str, altCounts))
+                    info += ';AN=' + str(cladeSampleCounts[cladeName])
+                    aaChange = tallyAaChanges(varNameMerged)
+                    if (len(aaChange)):
+                        info += ';AACHANGE=' + aaChange
+                    cladeBackMuts = [ sampleName for sampleName in backMutSamples
+                                      if sampleName in cladeSampleNames[cladeName] ]
+                    if (len(cladeBackMuts)):
+                        info += ';BACKMUTS=' + ','.join(cladeBackMuts)
+                    outV.write('\t'.join([ chrom,
+                                           '\t'.join(map(str, pv)),
+                                           '\t'.join(['.', 'PASS', info, 'GT:CLADE']),
+                                           '\t'.join(genotypes) ]) + '\n')
 
-for cladeName, node in cladeNodes.items():
-    sampleIds = {}
-    sampleIdsFromNode(node, sampleIds)
-    cladeSampleList = [ sample for sample in samples if sample['id'] in sampleIds ]
-    cladeSamples[cladeName] = sampleIds
-    cladeSampleCounts[cladeName] = len(cladeSampleList)
-    cladeSampleNames[cladeName] = [ sampleName(sample) for sample in cladeSampleList ]
-
-# Per-clade VCF subset
-for cladeName, cladeSampleIds in cladeSamples.items():
-    with open('nextstrainSamples' + cladeName + '.vcf', 'w') as outV:
-        writeVcfHeaderExceptSamples(outV)
-        outV.write('\t'.join(cladeSampleNames[cladeName]) + '\n')
-        for mv in mergedVars:
-            pv, alts, overallAltCounts, sampleAlleles, backMutSamples = mv
-            varNameMerged = pv[1]
-            genotypes = []
-            altCounts = [ 0 for alt in alts ]
-            acTotal=0
-            for sample, alIx in zip(samples, sampleAlleles):
-                if (sample['id'] in cladeSampleIds):
-                    gt = str(alIx)
-                    genotypes.append(gt + ':' + cladeName)
-                    if (alIx > 0):
-                        altCounts[alIx - 1] += 1
-                        acTotal += 1
-            if (acTotal > 0):
-                info = 'AC=' + ','.join(map(str, altCounts))
-                info += ';AN=' + str(cladeSampleCounts[cladeName])
-                aaChange = tallyAaChanges(varNameMerged)
-                if (len(aaChange)):
-                    info += ';AACHANGE=' + aaChange
-                cladeBackMuts = [ sampleName for sampleName in backMutSamples
-                                  if sampleName in cladeSampleNames[cladeName] ]
-                if (len(cladeBackMuts)):
-                    info += ';BACKMUTS=' + ','.join(cladeBackMuts)
-                outV.write('\t'.join([ chrom,
-                                       '\t'.join(map(str, pv)),
-                                       '\t'.join(['.', 'PASS', info, 'GT:CLADE']),
-                                       '\t'.join(genotypes) ]) + '\n')
-
-# BED+ file for clades
-with open('nextstrainClade.bed', 'w') as outC:
-    for name, clade in clades.items():
-        if (clade.get('thickStart')):
+def bedForClades(fileName, clades, cladeColors):
+    """Make a BED file summarizing each clade"""
+    with open(fileName, 'w') as outC:
+        for name, clade in clades.items():
+            if (not clade.get('thickStart')):
+                # "Clade" 19A encompasses the entire tree (minus the parts assigned to
+                # other "clades").  It has no identifying variants, and (as of June 7)
+                # no dates assigned.
+                clade['thickStart'] = clade['thickEnd'] = 0
+                clade['varStarts'] = clade['varSizes'] = []
+                clade['varNames'] = ''
+                clade['dateInferred'] = clade['dateConfMin'] = clade['dateConfMax'] = 0
+            countryConf = clade.get('countryConf')
+            if (not countryConf):
+                countryConf = ''
+            countryInferred = clade.get('countryInferred')
+            if (not countryInferred):
+                countryInferred = ''
             outC.write('\t'.join(map(str,
                                      [ chrom, 0, 29903, name, 0, '.',
-                                       clade['thickStart'], clade['thickEnd'], clade['color'],
+                                       clade['thickStart'], clade['thickEnd'],
+                                       cladeColorFromName(name, cladeColors),
                                        len(clade['varSizes']) + 2,
-                                       '1,' + ','.join(map(str, clade['varSizes'])) + ',1,',
-                                       '0,' + ','.join(map(str, clade['varStarts'])) + ',29902,',
+                                       ','.join(map(str, ([1] + clade['varSizes']) + [1])),
+                                       ','.join(map(str, ([0] + clade['varStarts']) + [29902])),
                                        clade['varNames'],
                                        numDateToYmdStr(clade['dateInferred']),
                                        numDateToYmdStr(clade['dateConfMin']),
                                        numDateToYmdStr(clade['dateConfMax']),
-                                       clade['countryInferred'],
-                                       clade['countryConf'],
+                                       countryInferred,
+                                       countryConf,
                                        cladeSampleCounts[name],
                                        ', '.join(cladeSampleNames[name]) ])) + '\n')
 
+if (len(oldClades) == 0):
+    # This ncov.json must be from when old clades were the new clades, and the new clades
+    # had not yet arrived.  Revert to old colors and don't exclude subclades.
+    newCladeColors = oldCladeColors
+    newCladeTops = ()
+else:
+    newCladeTops = [ newClades[cladeName]['topNode'] for cladeName in newClades ]
+vcfForClades(newClades, newCladeTops)
+bedForClades('nextstrainClade.bed', newClades, newCladeColors)
+if (len(oldClades)):
+    vcfForClades(oldClades)
+    bedForClades('nextstrainOldClade.bed', oldClades, oldCladeColors)
+
 # Newick-formatted tree of samples for VCF display
-def cladeRgbFromName(cladeName):
+def cladeRgbFromName(cladeName, cladeColors):
     """Look up the r,g,b string color for clade; convert to int RGB."""
-    rgbCommaStr = cladeColorFromName(cladeName)
+    rgbCommaStr = cladeColorFromName(cladeName, cladeColors)
     r, g, b = [ int(x) for x in rgbCommaStr.split(',') ]
     rgb = (r << 16) | (g << 8) | b
     return rgb
 
-def rNextstrainToNewick(node, parentClade=None, parentVarStr=''):
-    """Recursively descend ncov.tree and build Newick tree string of samples to file"""
+def resolveVarStrDashMuts(varStr):
+    """If there is a sequence of mutations like T28144- followed by -28144C, get rid of the T>-
+    and replace the ->C with T>C.  Get rid of solo basePos- because they can occur in very long
+    lists when samples have long stretches of Ns, not helpful."""
+    if (not varStr):
+        return varStr
+    nodes = [ node.split('+') for node in varStr.split('$') ]
+    posWithDash = defaultdict(list)
+    for node in nodes:
+        for varName in node:
+            (ref, pos, alt) = snvRe.match(varName).groups()
+            if ref == '-' or alt == '-':
+                posWithDash[pos].append([ref, alt])
+    if (len(posWithDash)):
+        removals = set()
+        replacements = {}
+        for pos, changes in posWithDash.items():
+            firstRef, firstAlt = changes[0]
+            if (len(changes) == 1):
+                if (firstAlt == '-'):
+                    removals.add(firstRef + pos + firstAlt)
+            elif (len(changes) == 2):
+                secondRef, secondAlt = changes[1]
+                if (firstAlt == '-' and secondRef == '-'):
+                    removals.add(firstRef + pos + firstAlt)
+                    replacements[secondRef + pos + secondAlt] = firstRef + pos + secondAlt
+                else:
+                    warn("resolveVarStrDashMuts: what do I do with %s%s%s, %s%s%s in %s?" %
+                         (firstRef, pos, firstAlt, secondRef, pos, secondAlt, varStr))
+            else:
+                warn("resolveVarStrDashMuts: more changes at %s than expected: %s" %
+                     (pos, varStr))
+        if (removals or replacements):
+            newNodes = []
+            for node in nodes:
+                newVars = []
+                for varName in node:
+                    if varName in replacements:
+                        newVars.append(replacements[varName])
+                    elif varName not in removals:
+                        newVars.append(varName)
+                if (newVars):
+                    newNodes.append(newVars)
+            varStr = '$'.join([ '+'.join(node) for node in newNodes ])
+    return varStr
+
+def rNextstrainToNewick(node, cladeColors, cladeTops=(), parentClade=None, parentVarStr=''):
+    """Recursively descend ncov.tree and build Newick tree string of samples to file.
+    Exclude nodes in cladeTops."""
     kids = node.get('children')
     if (kids):
         # Make a more concise variant path string than the one we make for the clade track,
@@ -465,27 +592,41 @@ def rNextstrainToNewick(node, parentClade=None, parentVarStr=''):
             cladeName = parentClade
         else:
             cladeName = 'unassigned'
-        color = str(cladeRgbFromName(cladeName))
-        descendants = ','.join([ rNextstrainToNewick(child, cladeName, varStr) for child in kids ])
-        label = '#'.join([cladeName, varStr])
+        color = str(cladeRgbFromName(cladeName, cladeColors))
+        descendants = ','.join([ rNextstrainToNewick(child, cladeColors, cladeTops, cladeName,
+                                                     varStr)
+                                 for child in kids if child not in cladeTops ])
+        label = '#'.join([cladeName, resolveVarStrDashMuts(varStr)])
         treeString = '(' + descendants + ')' + label + ':' + color
     else:
         nodeAttrs = node['node_attrs']
-        gId = nodeAttrs['gisaid_epi_isl']['value']
+        epiNode = nodeAttrs.get('gisaid_epi_isl')
+        gId = epiNode['value'] if epiNode else node['name']
         name = node['name']
-        date = numDateToMonthDay(nodeAttrs['num_date']['value'])
+        numDateNode = nodeAttrs.get('num_date')
+        date = numDateToMonthDay(numDateNode['value'] if numDateNode else '')
         cladeName = nodeAttrs['clade_membership']['value']
-        color = str(cladeRgbFromName(cladeName))
+        color = str(cladeRgbFromName(cladeName, cladeColors))
         treeString = sampleName({ 'id': gId, 'name': name, 'date': date }) + ':' + color
     return treeString
 
 with open('nextstrain.nh', 'w') as outF:
-    outF.write(rNextstrainToNewick(ncov['tree']) + ';\n')
+    outF.write(rNextstrainToNewick(ncov['tree'], newCladeColors) + ';\n')
 
-for cladeName, node in cladeNodes.items():
-    filename = 'nextstrain' + cladeName + '.nh'
-    with open(filename, 'w') as outF:
-        outF.write(rNextstrainToNewick(node) + ';\n')
+if (len(oldClades)):
+    with open('nextstrainOldCladeColors.nh', 'w') as outF:
+        outF.write(rNextstrainToNewick(ncov['tree'], oldCladeColors) + ';\n')
+
+def newickForClades(clades, cladeColors, cladeTops=()):
+    for cladeName in clades:
+        filename = 'nextstrain' + cladeName + '.nh'
+        node = clades[cladeName]['topNode']
+        with open(filename, 'w') as outF:
+            outF.write(rNextstrainToNewick(node, cladeColors, cladeTops) + ';\n')
+
+newickForClades(newClades, newCladeColors, newCladeTops)
+if (len(oldClades)):
+    newickForClades(oldClades, oldCladeColors)
 
 # File with samples and their clades, labs and variant paths
 
@@ -562,6 +703,8 @@ def refAltCosts(node, pos, ref, alt, parentValue):
                 if (mPos == pos and (mAlt == ref or mAlt == alt)):
                     nodeValue = mAlt
                     mutCount += 1
+            else:
+                warn("refAltCosts: no snvRe match for '%s'" % (varName))
     kids = node.get('children')
     if (kids):
         refCost, altCost = [0, 0]
@@ -639,7 +782,7 @@ with open('nextstrainRecurrentBiallelic.vcf', 'w') as outF:
             info += ';BACKMUTS=' + ','.join(backMutSamples)
         genotypes = []
         for sample, alIx in zip(samples, sampleAlleles):
-            gt = str(alIx)
+            gt = '.' if (alIx < 0) else str(alIx)
             genotypes.append(gt + ':' + sample['clade'])
         outF.write('\t'.join([ '\t'.join([ chrom, str(pos), varName, ref, alt,
                                            '.', 'PASS', info, 'GT:CLADE']),

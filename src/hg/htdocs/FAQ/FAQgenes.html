@@ -23,6 +23,7 @@
 		    "GENCODE" and "All GENCODE" tracks?</a></li>
 <li><a href="#gencode">What is the difference between GENCODE comprehensive and basic?</a></li>
 <li><a href="#ncbiRefseq">What is the difference between "NCBI RefSeq" and "UCSC RefSeq"?</a></li>
+<li><a href="#mito">What is the best gene track for mitochondrial gene annotations?</a></li>
 <li><a href="#report">How shall I report a gene transcript in a manuscript?</a></li>
 <li><a href="#ccds">What is CCDS?</a></li>
 <li><a href="#justsingle">How can I show a single transcript per gene?</a></li>
@@ -313,10 +314,22 @@ the genome. They need to be aligned to the genome to create transcript models.
 Traditionally, UCSC has aligned RefSeq with BLAT (UCSC RefSeq sub-track) and NCBI has aligned with 
 splign. The advantages of the UCSC alignments are that
 they are updated more frequently and are available for older assemblies (like
-GRCh37/hg19), but they are less stable and they are not the official alignments.
-Therefore we recommend working with the NCBI annotations.
+GRCh37/hg19), but they are not placed manually to a chromosome location and are not the official alignments.
+Therefore, we recommend working with the NCBI annotations.
 When an assembly has an &quot;NCBI RefSeq&quot; track, we show it by default and hide the
 &quot;UCSC RefSeq&quot; track.
+</p>
+
+<p>
+NCBI transcripts are manually tied to a chromosome band or location. The advantage is that
+when there are two almost-identical transcripts in RefSeq, each one will be
+placed to the official reference location in the NCBI annotations. For example, 
+the transcript NM_001012276 has three almost-identical possible
+placements to the genome in the UCSC RefSeq track (as it is entirely alignment-based),
+but NM_001012276.3 is shown at a single location in the NCBI RefSeq track. It
+may be good to know about the almost-identical alignments when doing genomics
+analysis, but for clinical reporting purposes, it is preferable to use the NCBI
+RefSeq track.
 </p>
 
 <p>
@@ -344,6 +357,37 @@ The <a target=_blank href="../cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite">RefSe
 subtrack makes the problematic region very clear with double lines
 indicating unalignable transcript sequence.
 </p>
+
+<a name="mito"></a>
+<h2>What is the best gene track for mitochondrial gene annotations</h2>
+<p>
+The mitochondrial sequence included in assembly sequence files is very
+special and most of what has been explained on this page does not apply
+to the mitochondrial gene annotations. For most assemblies in the Genome
+Browser, the sequence name of the mitochondrial genome is "chrM".<p>
+<p>
+For hg19, no mitochondrial genome was originally published.
+The UCSC Genome Browser added a chrM sequence
+that was not the mitochondrial genome sequence later selected by NCBI for GRCh37. This
+is why <strong>the current hg19 version contains two mitochondrial sequences,
+the old one called &quot;chrM&quot; and the current GRCh37 reference, 
+called &quot;chrMT&quot;</strong>. The issue is described in detail in our 
+<a target=_blank href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/README.txt">
+hg19 sequence download instructions</a>. If you use hg19 today, chrMT should be
+considered the current mitochondrial sequence, chrM is only supported for backwards
+compatibility and legacy annotation files. 
+<p>
+For chrM or chrMT (on hg19), the GENCODE tracks contain the same gene
+annotations, but RefSeq annotations only exist on chrM. Both databases 
+import their mitochondrial gene annotation directly from the rCRS 
+RefSeq record 
+<a target=_blank href="https://www.ncbi.nlm.nih.gov/nuccore/251831106">NC_012920.1</a>. 
+The annotation was provided by 
+<a target=_blank href="https://www.mitomap.org/MITOMAP">Mitomap.org</a>, which provides detailed
+documentation about the 
+<a href="https://www.mitomap.org/foswiki/bin/view/MITOMAP/MitoSeqs" 
+target=_blank>the history of this sequence</a>.
+
 
 <a name="report"></a>
 <h2>How shall I report a gene transcript in a manuscript?</h2>
