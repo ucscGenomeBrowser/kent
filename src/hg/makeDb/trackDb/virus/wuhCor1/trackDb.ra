@@ -28,7 +28,6 @@ type bed 6 +
 exonArrows off
 noScoreFilter .
 
-
 track primers
 shortLabel RT-PCR Primers
 longLabel RT-PCR Detection Kit Primer Sets
@@ -271,8 +270,7 @@ include epitopes.ra
 include trackDb.44way.ra
 include trackDb.strainName44way.ra
 include trackDb.uniprot.ra
-include trackDb.nextstrain.v1.ra beta,public
-include trackDb.nextstrain.ra alpha
+include trackDb.nextstrain.ra
 include kim2020.ra
 include trackDb.7way.ra
 include phylocsf.ra
