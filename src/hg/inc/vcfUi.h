@@ -37,11 +37,15 @@
 #define VCF_APPLY_MIN_QUAL_VAR "applyMinQual"
 #define VCF_DEFAULT_APPLY_MIN_QUAL FALSE
 
+#define VCF_DO_QUAL_UI "vcfNoQual"
 #define VCF_MIN_QUAL_VAR "minQual"
 #define VCF_DEFAULT_MIN_QUAL 0
 
+#define VCF_DO_FILTER_UI "vcfNoFilter"
+
 #define VCF_EXCLUDE_FILTER_VAR "excludeFilterValues"
 
+#define VCF_DO_MAF_UI "vcfNoMaf"
 #define VCF_MIN_ALLELE_FREQ_VAR "minFreq"
 #define VCF_DEFAULT_MIN_ALLELE_FREQ 0.0
 

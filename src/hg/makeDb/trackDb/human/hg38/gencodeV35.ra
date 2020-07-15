@@ -1,8 +1,8 @@
 
 track gencodeV35
 table gencodeAnnotV35
-shortLabel Gencode V35
-longLabel Gencode V35
+shortLabel GENCODE V35
+longLabel GENCODE V35
 visibility pack
 type bigGenePred
 bigDataUrl /gbdb/hg38/gencode/gencodeV35.bb
@@ -17,3 +17,17 @@ filterValues.tier basic,canonical
 filterType.tier multipleListOnlyOr
 externalDb knownGeneV35
 maxItems 50000
+
+#searchName knownGeneAcc
+#searchTable gencodeV35
+#searchMethod exact
+#searchType knownGene
+#shortCircuit 1
+#semiShortCircuit 1
+#termRegex ENST[0-9.]+
+#searchPriority 9
+
+searchName gencodeV35
+searchTable gencodeAnnotV35
+searchType knownGene
+searchPriority 1
