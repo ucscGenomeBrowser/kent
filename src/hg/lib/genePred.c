@@ -832,8 +832,8 @@ static struct genePred *mkFromGroupedGxf(struct gffFile *gff, struct gffGroup *g
  * code the other way. Options are from genePredFromGxfOpts */
 {
 struct genePred *gp;
-int stopCodonStart = -1, stopCodonEnd = -1;
-int cdsStart = BIGNUM, cdsEnd = -BIGNUM;
+long stopCodonStart = -1, stopCodonEnd = -1;
+long cdsStart = -1, cdsEnd = -1;
 int exonCount = 0;
 boolean haveStartCodon = FALSE, haveStopCodon = FALSE;
 struct gffLine *gl;
@@ -859,9 +859,9 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
     if (isCds(gl->feature))
         {
 	exonishLine = TRUE;
-	if (gl->start < cdsStart)
+	if ((cdsStart < 0) || (gl->start < cdsStart))
             cdsStart = gl->start;
-	if (gl->end > cdsEnd)
+	if ((cdsEnd < 0) || (gl->end > cdsEnd))
             cdsEnd = gl->end;
 	}
     if (exonishLine)
