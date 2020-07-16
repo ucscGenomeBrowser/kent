@@ -271,7 +271,7 @@ compositeTrack on
 type vcfTabix
 hapClusterEnabled on
 hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.ft_FBP.linCol.nh
-hapClusterHeight 400
+hapClusterHeight 500
 hapClusterColorBy function
 geneTrack ncbiGeneBGP
 group varRep
@@ -281,7 +281,7 @@ release alpha
 
     track sarsCov2PhyloMinAf01
     shortLabel Min alt AF 1%
-    longLabel Alternate allele frequency >= 1%
+    longLabel SNVs in GISAID sequences with alternate allele frequency >= 1%
     parent sarsCov2Phylo on
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.01.vcf.gz
     type vcfTabix
@@ -290,7 +290,7 @@ release alpha
 
     track sarsCov2PhyloMinAf001
     shortLabel Min alt AF 0.1%
-    longLabel Alternate allele frequency >= 0.1%
+    longLabel SNVs in GISAID sequences with alternate allele frequency >= 0.1%
     parent sarsCov2Phylo off
     type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.001.vcf.gz
@@ -299,7 +299,7 @@ release alpha
 
     track sarsCov2PhyloFull
     shortLabel All (slow!)
-    longLabel All variants including rare (slow at whole-genome scale)
+    longLabel All SNVs in GISAID sequences (slow at whole-genome scale)
     parent sarsCov2Phylo off
     type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.ambigToN.vcf.gz
