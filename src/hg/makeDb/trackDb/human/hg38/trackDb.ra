@@ -543,7 +543,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr
 
 track tgpTrios
 type vcfPhasedTrio
-release alpha
+release alpha,beta
 group varRep
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 maxWindowToDraw 5000000
@@ -563,7 +563,7 @@ compositeTrack on
     vcfChildSample NA19685|child
     vcfParentSamples NA19660|mother,NA19661|father
     visibility full
-    release alpha
+    release alpha,beta
 
     track tgpNA19675_m004_MXL
     parent tgpTrios
@@ -573,7 +573,7 @@ compositeTrack on
     vcfChildSample NA19675|child
     vcfParentSamples NA19678|mother,NA19679|father
     visibility full
-    release alpha
+    release alpha,beta
 
     track tgpNA19240_Y117_YRI
     parent tgpTrios
@@ -583,7 +583,7 @@ compositeTrack on
     vcfChildSample NA19240|child
     vcfParentSamples NA19238|mother,NA19239|father
     visibility full
-    release alpha
+    release alpha,beta
 
     track tgpNA12878_1463_CEU
     parent tgpTrios
@@ -593,7 +593,7 @@ compositeTrack on
     vcfChildSample NA12878|child
     vcfParentSamples NA12892|mother,NA12891|father
     visibility full
-    release alpha
+    release alpha,beta
 
     track tgpHG02024_VN049_KHV
     parent tgpTrios
@@ -603,7 +603,7 @@ compositeTrack on
     vcfChildSample HG02024|child
     vcfParentSamples HG02025|mother,HG02026|father
     visibility full
-    release alpha
+    release alpha,beta
 
     track tgpHG00733_PR05_PUR
     parent tgpTrios
@@ -613,7 +613,7 @@ compositeTrack on
     vcfChildSample HG00733|child
     vcfParentSamples HG00732|mother,HG00731|father
     visibility full
-    release alpha
+    release alpha,beta
 
     track tgpHG00702_SH089_CHS
     parent tgpTrios
@@ -623,7 +623,7 @@ compositeTrack on
     vcfChildSample HG00702|child
     vcfParentSamples HG00657|mother,HG00656|father
     visibility full
-    release alpha
+    release alpha,beta
 
 track genomicSuperDups override
 group rep

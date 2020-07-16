@@ -54,9 +54,15 @@ parent 2 untransmitted haploytpe
 </pre>
 
 <p>
-Track configuration options include rearranging the family order for each subtracks, 
-hiding the parent haplotypes, and toggling the
-haplotype labels with mother/father/child or VCF sample names.
+Track configuration options showing the child haplotypes below the parent,
+toggling the haplotype labels with mother/father/child or VCF sample names,
+hiding the parent samples, and red highlighting the child variants that are
+inconsistent with phasing (including de-novo mutations). This red highlighting
+is less applicable for large regions that may have crossing over where simple
+phasing inheritance fails. </p>
+<p>
+From the subtrack configure menu, there is the option to manually rearrange 
+the family order for each trio by dragging haplotypes. 
 </p>
 
 <p>
@@ -71,8 +77,8 @@ The genomes of 2,504 individuals were sequenced using both whole-genome sequenci
 Sequence reads were aligned to the reference genome using alt-aware BWA-MEM
 (Zheng-Bradley <em>et al.</em>).
 Variant discovery and quality control were performed as described in
-Lowy-Gallego <em>et al.</em>.
-
+Lowy-Gallego <em>et al.</em></p>
+<p>
 See also:
 <ul>
 <li><a href="https://www.internationalgenome.org/analysis"
