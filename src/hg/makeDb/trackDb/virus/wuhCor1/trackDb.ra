@@ -284,12 +284,14 @@ release alpha
     longLabel Alternate allele frequency >= 1%
     parent sarsCov2Phylo on
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.01.vcf.gz
+    type vcfTabix
     priority 10
 
     track sarsCov2PhyloMinAf001
     shortLabel Min alt AF 0.1%
     longLabel Alternate allele frequency >= 0.1%
     parent sarsCov2Phylo off
+    type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.001.vcf.gz
     priority 20
 
@@ -297,6 +299,7 @@ release alpha
     shortLabel All (slow!)
     longLabel All variants including rare (slow at whole-genome scale)
     parent sarsCov2Phylo off
+    type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.ambigToN.vcf.gz
     priority 30
 
