@@ -264,6 +264,42 @@ group varRep
 visibility hide
 release alpha
 
+track sarsCov2Phylo
+shortLabel SARS-CoV-2 Phylogeny
+longLabel Phylogenetic tree and common variants from complete high-coverage sequences in GISAID
+compositeTrack on
+type vcfTabix
+hapClusterEnabled on
+hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.ft_FBP.linCol.nh
+hapClusterHeight 400
+hapClusterColorBy function
+geneTrack ncbiGeneBGP
+group varRep
+visibility pack
+dataVersion 7-11-20
+release alpha
+
+    track sarsCov2PhyloMinAf01
+    shortLabel Min alt AF 1%
+    longLabel Alternate allele frequency >= 1%
+    parent sarsCov2Phylo on
+    bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.01.vcf.gz
+    priority 10
+
+    track sarsCov2PhyloMinAf001
+    shortLabel Min alt AF 0.1%
+    longLabel Alternate allele frequency >= 0.1%
+    parent sarsCov2Phylo off
+    bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.001.vcf.gz
+    priority 20
+
+    track sarsCov2PhyloFull
+    shortLabel All (slow!)
+    longLabel All variants including rare (slow at whole-genome scale)
+    parent sarsCov2Phylo off
+    bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.ambigToN.vcf.gz
+    priority 30
+
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
 include epitopes.ra
