@@ -286,6 +286,7 @@ release alpha
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.01.vcf.gz
     type vcfTabix
     priority 10
+    release alpha
 
     track sarsCov2PhyloMinAf001
     shortLabel Min alt AF 0.1%
@@ -294,6 +295,7 @@ release alpha
     type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.001.vcf.gz
     priority 20
+    release alpha
 
     track sarsCov2PhyloFull
     shortLabel All (slow!)
@@ -302,6 +304,7 @@ release alpha
     type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.ambigToN.vcf.gz
     priority 30
+    release alpha
 
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
