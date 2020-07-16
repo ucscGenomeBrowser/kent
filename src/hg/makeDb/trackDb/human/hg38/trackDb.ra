@@ -550,9 +550,9 @@ maxWindowToDraw 5000000
 shortLabel 1000 Genomes Trios
 longLabel Thousand Genomes Project Family VCF Trios
 vcfUseAltSampleNames on
-vcfNoFilter off
-vcfNoQual off
-vcfNoMaf off
+vcfDoFilter off
+vcfDoQual off
+vcfDoMaf off
 compositeTrack on
 
     track tgpNA19685_m011_MXL

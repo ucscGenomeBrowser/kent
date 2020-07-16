@@ -4088,22 +4088,22 @@ There are no extra options that can appear on the type hic line.
     </P>
 </DIV>
 
-<DIV class="vcfNoFilter"><span class="type vcf vcfTabix"></span>
-<div class="format"><code>vcfNoFilter &lt;on/off&gt;</code></div>
+<DIV class="vcfDoFilter"><span class="type vcf vcfTabix"></span>
+<div class="format"><code>vcfDoFilter &lt;on/off&gt;</code></div>
     <p>
     Turn on/off the FILTER options available by default for VCF tracks
     </p>
 </DIV>
 
-<DIV class="vcfNoQual"><span class="type vcf vcfTabix"></span>
-<div class="format"><code>vcfNoQual &lt;on/off&gt;</code></div>
+<DIV class="vcfDoQual"><span class="type vcf vcfTabix"></span>
+<div class="format"><code>vcfDoQual &lt;on/off&gt;</code></div>
     <p>
     Turns on/off the QUAL filter options available by default for VCF tracks
     </p>
 </DIV>
 
-<DIV class="vcfNoMaf"><span class="type vcf vcfTabix"></span>
-<div class="format"><code>vcfNoMaf &lt;on/off&gt;</code></div>
+<DIV class="vcfDoMaf"><span class="type vcf vcfTabix"></span>
+<div class="format"><code>vcfDoMaf &lt;on/off&gt;</code></div>
     <p>
     Turns on/off the Minor Allele Frequency filter options available by default for VCF tracks
     </p>
