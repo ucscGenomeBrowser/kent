@@ -163,6 +163,7 @@ priority 5
 type bigBed 6 +
 bigDataUrl /gbdb/wuhCor1/bbi/rapid.bb
 noScoreFilter on
+pennantIcon New red ../goldenPath/newsarch.html#071720 "Released Jul. 17, 2020"
 
 track conticello
 shortLabel RNA editing
