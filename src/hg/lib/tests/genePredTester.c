@@ -308,7 +308,7 @@ fprintf(stderr, "Warning: Can't convert %s to genePred: %s\n",
         (isGtf ? "GTF" : "GFF"), gxfFile);
 for (line = group->lineList; line != NULL; line = line->next)
     {
-    fprintf(stderr, "\t%s\t%s\t%s\t%d\t%d\t%g\t%c\t%c\t%s\t%s\t%s\t%d\n",
+    fprintf(stderr, "\t%s\t%s\t%s\t%ld\t%ld\t%g\t%c\t%c\t%s\t%s\t%s\t%d\n",
             line->seq, line->source, line->feature, line->start, line->end,
             line->score, line->strand, line->frame, line->group, line->geneId,
             line->exonId, line->exonNumber);

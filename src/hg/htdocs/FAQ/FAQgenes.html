@@ -314,10 +314,22 @@ the genome. They need to be aligned to the genome to create transcript models.
 Traditionally, UCSC has aligned RefSeq with BLAT (UCSC RefSeq sub-track) and NCBI has aligned with 
 splign. The advantages of the UCSC alignments are that
 they are updated more frequently and are available for older assemblies (like
-GRCh37/hg19), but they are less stable and they are not the official alignments.
-Therefore we recommend working with the NCBI annotations.
+GRCh37/hg19), but they are not placed manually to a chromosome location and are not the official alignments.
+Therefore, we recommend working with the NCBI annotations.
 When an assembly has an &quot;NCBI RefSeq&quot; track, we show it by default and hide the
 &quot;UCSC RefSeq&quot; track.
+</p>
+
+<p>
+NCBI transcripts are manually tied to a chromosome band or location. The advantage is that
+when there are two almost-identical transcripts in RefSeq, each one will be
+placed to the official reference location in the NCBI annotations. For example, 
+the transcript NM_001012276 has three almost-identical possible
+placements to the genome in the UCSC RefSeq track (as it is entirely alignment-based),
+but NM_001012276.3 is shown at a single location in the NCBI RefSeq track. It
+may be good to know about the almost-identical alignments when doing genomics
+analysis, but for clinical reporting purposes, it is preferable to use the NCBI
+RefSeq track.
 </p>
 
 <p>

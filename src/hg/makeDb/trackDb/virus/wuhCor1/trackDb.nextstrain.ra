@@ -20,7 +20,7 @@ urlLabel View in Nextstrain:
 
 track nextstrainOldClade
 shortLabel Nextstrn Old Clades
-longLabel Old (March 2020) Nextstrain clades designations (A1a, A2, etc.) from nextstrain.org/ncov
+longLabel Old (March 2020) Nextstrain clade designations (A1a, A2, etc.) from nextstrain.org/ncov
 type bigBed 12 +
 itemRgb on
 visibility hide
@@ -35,13 +35,15 @@ type vcfTabix
 visibility pack
 hapClusterEnabled on
 hapClusterHeight 500
+vcfDoQual off
+vcfDoFilter off
 group varRep
 priority 0.51
 hapClusterColorBy function
 geneTrack ncbiGeneBGP
-html nextstrainSamplesDevOnly
 subGroup1 view Views all=All_Samples newClades=New_Clades(19A,_19B_etc.) oldClades=Old_Clades_(A1a,_A2_etc.)
 compositeTrack on
+pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Updated Jul. 17, 2020"
 
     track nextstrainSamplesViewAll
     view all

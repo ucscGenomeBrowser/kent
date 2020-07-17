@@ -630,21 +630,27 @@ struct vcfFile *vcff = vcfHopefullyOpenHeader(cart, tdb);
 if (vcff != NULL)
     {
     boolean parentLevel = isNameAtParentLevel(tdb, name);
+    boolean doVcfFilterUi = cartOrTdbBoolean(cart, tdb, VCF_DO_FILTER_UI, TRUE);
+    boolean doVcfQualUi = cartOrTdbBoolean(cart, tdb, VCF_DO_QUAL_UI, TRUE);
+    boolean doVcfMafUi = cartOrTdbBoolean(cart, tdb, VCF_DO_MAF_UI, TRUE);
     if (vcff->genotypeCount > 1 && !sameString(tdb->type, "vcfPhasedTrio"))
-	{
-	vcfCfgHapCluster(cart, tdb, vcff, name, parentLevel);
-	}
+        {
+        vcfCfgHapCluster(cart, tdb, vcff, name, parentLevel);
+        }
     if (sameString(tdb->type, "vcfPhasedTrio"))
         {
         vcfCfgPhasedTrioUi(cart, tdb, vcff, name, parentLevel);
         }
-    if (differentString(tdb->track,"evsEsp6500"))
+    if (differentString(tdb->track,"evsEsp6500") && (doVcfFilterUi || doVcfQualUi))
         {
         puts("<H3>Filters</H3>");
-        vcfCfgMinQual(cart, tdb, vcff, name, parentLevel);
-        vcfCfgFilterColumn(cart, tdb, vcff, name, parentLevel);
+        if (doVcfQualUi)
+            vcfCfgMinQual(cart, tdb, vcff, name, parentLevel);
+        if (doVcfFilterUi)
+            vcfCfgFilterColumn(cart, tdb, vcff, name, parentLevel);
         }
-    vcfCfgMinAlleleFreq(cart, tdb, vcff, name, parentLevel);
+    if (doVcfMafUi)
+        vcfCfgMinAlleleFreq(cart, tdb, vcff, name, parentLevel);
     }
 else
     {

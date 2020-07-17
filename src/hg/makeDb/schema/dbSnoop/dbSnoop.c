@@ -13,6 +13,8 @@
 
 char *profile = NULL;
 
+boolean sortAlpha = FALSE;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -25,7 +27,9 @@ errAbort(
   "   -noNumberCommas - if set will leave out commas in big numbers\n"
   "   -justSchema - only schema parts, no contents\n"
   "   -skipTable=tableName - if set skip a given table name\n"
-  "   -profile=profileName - use profile for connection settings, default = '%s'\n", profile
+  "   -profile=profileName - use profile for connection settings, default = '%s'\n"
+  "   -sortAlpha - if set changes output order of fields to make comparisons between databases which have field order swapped easier.\n"
+  , profile
   );
 }
 
@@ -38,6 +42,7 @@ static struct optionSpec options[] = {
    {"host", OPTION_STRING},
    {"user", OPTION_STRING},
    {"password", OPTION_STRING},
+   {"sortAlpha", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -119,6 +124,14 @@ int fieldInfoCmp(const void *va, const void *vb)
 const struct fieldInfo *a = *((struct fieldInfo **)va);
 const struct fieldInfo *b = *((struct fieldInfo **)vb);
 return b->tableCount - a->tableCount;
+}
+
+int fieldInfoCmpName(const void *va, const void *vb)
+/* Compare two fieldInfo on name. */
+{
+const struct fieldInfo *a = *((struct fieldInfo **)va);
+const struct fieldInfo *b = *((struct fieldInfo **)vb);
+return strcmp(a->name, b->name);
 }
 
 void noteField(struct hash *hash, char *table, char *field,
@@ -330,6 +343,15 @@ const struct indexGroup *b = *((struct indexGroup **)vb);
 return strcmp(a->name, b->name);
 }
 
+int indexInfoCmp(const void *va, const void *vb)
+/* Compare two index groups to order by name */
+{
+const struct indexInfo *a = *((struct indexInfo **)va);
+const struct indexInfo *b = *((struct indexInfo **)vb);
+return a->seqInIndex - b->seqInIndex;
+}
+
+
 void printIndexes(FILE *f, struct sqlConnection *conn, struct tableInfo *ti)
 /* Print info about indexes on table to file. */
 {
@@ -368,11 +390,11 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ii = indexInfoLoad(row);
-    group = hashFindVal(groupHash, ii->field);
+    group = hashFindVal(groupHash, ii->indexName);
     if (group == NULL)
         {
 	AllocVar(group);
-	hashAddSaveName(groupHash, ii->field, group, &group->name);
+	hashAddSaveName(groupHash, ii->indexName, group, &group->name);
 	slAddTail(&groupList, group);
 	}
     slAddTail(&group->fieldList, ii);
@@ -389,11 +411,13 @@ for (group = groupList; group != NULL; group = group->next)
     {
     long long maxCardinality = 0, nonUnique = FALSE;
     fprintf(f, "\t");
+    fprintf(f, "%s: ", group->name);
+    slSort(&group->fieldList, indexInfoCmp);
     for (ii=group->fieldList; ii != NULL; ii = ii->next)
         {
-	fprintf(f, "%s.%s", ti->name, ii->field);
+	fprintf(f, "%s", ii->field);
 	if (ii->next != NULL)
-	    fprintf(f, ",");
+	    fprintf(f, "+");
 	if (ii->cardinality > maxCardinality)
 	    maxCardinality = ii->cardinality;
 	nonUnique = ii->nonUnique;
@@ -523,9 +547,11 @@ fprintf(f, "TABLE FIELDS SUMMARY:\n");
 fprintf(f, "%s\t%s\n", "#name", "fields");
 for (ti = tiList; ti != NULL; ti = ti->next)
     {
-    struct fieldDescription *field;
-    slReverse(&ti->fieldList);
     fprintf(f, "%s\t", ti->name);
+    slReverse(&ti->fieldList);
+    if (sortAlpha)
+	slSort(&ti->fieldList, fieldInfoCmpName);
+    struct fieldDescription *field;
     for (field = ti->fieldList; field != NULL; field = field->next)
 	fprintf(f, "%s,", field->name);
     fprintf(f, "\n");
@@ -584,6 +610,7 @@ noNumberCommas = optionExists("noNumberCommas");
 unsplit = optionExists("unsplit");
 justSchema = optionExists("justSchema");
 skipTable = optionVal("skipTable", skipTable);
+sortAlpha = optionExists("sortAlpha");
 dbSnoop(argv[1], argv[2]);
 return 0;
 }

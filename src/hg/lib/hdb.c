@@ -5803,3 +5803,45 @@ if (seqAcc == NULL)
     seqAcc = cloneString(chrom);
 return seqAcc;
 }
+
+char *hdbGetMasterGeneTrack(char *knownDb)
+/* Get the native gene track for a knownGene database. */
+{
+static char *masterGeneTrack = NULL;
+
+if (masterGeneTrack)            // if we already know it, return it.
+    return masterGeneTrack;
+
+struct sqlConnection *conn = hAllocConn(knownDb);
+
+char query[4096];
+sqlSafef(query, ArraySize(query), "select name from masterGeneTrack");
+masterGeneTrack = sqlQuickString(conn, query);
+hFreeConn(&conn);
+
+return masterGeneTrack;
+}
+
+char *hdbDefaultKnownDb(char *db)
+/* Get the default knownGene database from the defaultKnown table. */
+{
+static char *knownDb = NULL;
+
+if (knownDb)            // if we already know it, return it.
+    return knownDb;
+
+struct sqlConnection *conn = hAllocConn(db);
+
+if (sqlTableExists(conn, "defaultKnown"))
+    {
+    char query[4096];
+    sqlSafef(query, ArraySize(query), "select name from defaultKnown");
+    knownDb = sqlQuickString(conn, query);
+    }
+hFreeConn(&conn);
+
+if (knownDb == NULL)
+    knownDb = db;
+
+return knownDb;
+}

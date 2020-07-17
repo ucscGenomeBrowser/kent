@@ -14,6 +14,7 @@ errAbort(
   "usage:\n"
   "   faToVcf in.fa out.vcf\n"
   "options:\n"
+  "   -ambiguousToN         Treat all IUPAC ambiguous bases (N, R, V etc) as N (no call).\n"
   "   -excludeFile=file     Exclude sequences named in file which has one sequence name per line\n"
   "   -includeRef           Include the reference in the genotype columns\n"
   "                         (default: omitted as redundant)\n"
@@ -34,6 +35,7 @@ errAbort(
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+    { "ambiguousToN", OPTION_BOOLEAN },
     { "excludeFile", OPTION_STRING },
     { "includeRef", OPTION_BOOLEAN },
     { "minAc", OPTION_INT },
@@ -189,16 +191,21 @@ for (chromStart = 0;  chromStart < seqSize;  chromStart++)
         char al = toupper(seq->dna[chromStart]);
         if (al == 'U')
             al = 'T';
-        if (isIupacAmbiguous(al) && optionExists("resolveAmbiguous"))
+        if (isIupacAmbiguous(al))
             {
-            char *bases = iupacAmbiguousToString(al);
-            if (strlen(bases) > 2 ||
-                (toupper(bases[0]) != ref && toupper(bases[1]) != ref))
+            if (optionExists("ambiguousToN"))
                 al = 'N';
-            else if (toupper(bases[0]) == ref)
-                al = toupper(bases[1]);
-            else
-                al = toupper(bases[0]);
+            else if (optionExists("resolveAmbiguous"))
+                {
+                char *bases = iupacAmbiguousToString(al);
+                if (strlen(bases) > 2 ||
+                    (toupper(bases[0]) != ref && toupper(bases[1]) != ref))
+                    al = 'N';
+                else if (toupper(bases[0]) == ref)
+                    al = toupper(bases[1]);
+                else
+                    al = toupper(bases[0]);
+                }
             }
         if (al == 'N' || al == '-')
             missing[gtIx] = TRUE;
@@ -309,6 +316,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+if (optionExists("ambiguousToN") && optionExists("resolveAmbiguous"))
+    errAbort("-ambiguousToN and -resolveAmbiguous conflict with each other; "
+             "please use only one.");
 if (argc != 3)
     usage();
 faToVcf(argv[1], argv[2]);
