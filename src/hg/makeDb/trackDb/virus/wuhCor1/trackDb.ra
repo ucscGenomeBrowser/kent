@@ -255,6 +255,16 @@ type bigLolly
 group compGeno
 autoScale on
 
+track contacts
+shortLabel PDB Contacts
+longLabel Potential contact residues in PDB structures of viral proteins
+visibility pack
+type bigBed 12 +
+bigDataUrl /gbdb/wuhCor1/bbi/contacts.bb
+mouseOverField _mouseOver
+url http://soe.ucsc.edu/~afyfe/covid/hub/t12.html?struct=$$
+urlLabel Link to 3D structure viewer:
+
 track labAssocMutsNs419
 shortLabel Lab-Assoc Muts 4/19
 longLabel Lab-Associated Mutations Discovered in Nextstrain April 19th Alignment and Tree
