@@ -962,6 +962,134 @@ time mafAddIRows -nBeds=nBeds ../hg38.chrX.tba10way.maf /hive/data/genomes/hg38/
 # real    0m11.363s
 
 #########################################################################
+# extract other references from the primary tba file:
+ 
+    mkdir /hive/data/genomes/hg38/bed/tba10way/chrX/eachReference
+    cd /hive/data/genomes/hg38/bed/tba10way/chrX/eachReference
+
+PATH=/cluster/bin/penn/multiz.2009-01-21_patched:/cluster/bin/penn/lastz-distrib-1.04.03/bin:$PATH
+
+time for S in panTro6 rheMac10 mm10 canFam4 monDom5
+do
+   printf "maf_project ../chrX.tba10way.maf ${S} > ${S}.chrX.tba10way.maf\n"
+   maf_project ../chrX.tba10way.maf ${S} > ${S}.chrX.tba10way.maf
+done
+# real    67m58.091s
+# -rw-rw-r-- 1 936990477 Jul 16 09:26 panTro6.chrX.tba10way.maf
+# -rw-rw-r-- 1 921988358 Jul 16 09:38 rheMac10.chrX.tba10way.maf
+# -rw-rw-r-- 1 569699889 Jul 16 09:57 mm10.chrX.tba10way.maf
+# -rw-rw-r-- 1 783347380 Jul 16 10:13 canFam4.chrX.tba10way.maf
+# -rw-rw-r-- 1 137853424 Jul 16 10:22 monDom5.chrX.tba10way.maf
+
+    # add iRows to each maf file:
+for S in panTro6 rheMac10 mm10 canFam4 monDom5
+do
+ mkdir /hive/data/genomes/hg38/bed/tba10way/chrX/eachReference/anno.${S}
+ cd /hive/data/genomes/hg38/bed/tba10way/chrX/eachReference/anno.${S}
+    for DB in hg38 panTro6 rheMac10 mm10 canFam4 neoSch1 pteAle1 loxAfr3 monDom5 ornAna2
+  do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+  done
+  time mafAddIRows -nBeds=nBeds ../$S.chrX.tba10way.maf /hive/data/genomes/${S}/${S}.2bit ${S}.chrX.irows.maf
+done
+
+# -rw-rw-r-- 1 1023324141 Jul 16 12:07 anno.panTro6/panTro6.chrX.irows.maf
+# -rw-rw-r-- 1 1008627672 Jul 16 12:08 anno.rheMac10/rheMac10.chrX.irows.maf
+# -rw-rw-r-- 1  619033378 Jul 16 12:08 anno.mm10/mm10.chrX.irows.maf
+# -rw-rw-r-- 1  864191117 Jul 16 12:08 anno.canFam4/canFam4.chrX.irows.maf
+# -rw-rw-r-- 1  148826717 Jul 16 12:08 anno.monDom5/monDom5.chrX.irows.maf
+
+    # verify how many iRows for each species:
+for S in panTro6 rheMac10 mm10 canFam4 monDom5
+do
+    printf "#### %s\n" "${S}"
+    grep "^i " anno.${S}/${S}.chrX.irows.maf | awk '{print $2}' \
+      | awk -F'.' '{print $1}' | sort | uniq -c
+done
+#### panTro6
+ 144828 canFam4
+ 212814 hg38
+ 130394 loxAfr3
+  85172 mm10
+  15781 monDom5
+ 142903 neoSch1
+   9711 ornAna2
+  90581 pteAle1
+ 200286 rheMac10
+#### rheMac10
+ 145304 canFam4
+ 204121 hg38
+ 130794 loxAfr3
+  85775 mm10
+  15981 monDom5
+ 143364 neoSch1
+   9804 ornAna2
+ 200375 panTro6
+  91252 pteAle1
+#### mm10
+  77338 canFam4
+  87110 hg38
+  73960 loxAfr3
+  13369 monDom5
+  76255 neoSch1
+   7848 ornAna2
+  85790 panTro6
+  51639 pteAle1
+  86370 rheMac10
+#### canFam4
+ 148757 hg38
+ 119363 loxAfr3
+  77434 mm10
+  14307 monDom5
+ 174404 neoSch1
+   8862 ornAna2
+ 146153 panTro6
+  97206 pteAle1
+ 146559 rheMac10
+#### monDom5
+  14647 canFam4
+  16511 hg38
+  15950 loxAfr3
+  13618 mm10
+  14652 neoSch1
+   4316 ornAna2
+  16183 panTro6
+   9169 pteAle1
+  16381 rheMac10
+
+    # load each maf file:
+for S in panTro6 rheMac10 mm10 canFam4 monDom5
+do
+  mkdir -p /gbdb/${S}/tba10way
+  rm -f /gbdb/${S}/tba10way/chrX.tba10way.maf
+  ln -s `pwd`/anno.${S}/${S}.chrX.irows.maf /gbdb/${S}/tba10way/chrX.tba10way.maf
+  printf "#### %s\n" "${S}"
+  hgLoadMaf -loadFile=/gbdb/${S}/tba10way/chrX.tba10way.maf ${S} tba10way
+  cat /gbdb/${S}/tba10way/chrX.tba10way.maf \
+        | hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 ${S} tba10waySummary stdin
+done
+# #### panTro6
+# Loaded 215299 mafs in 1 files from /gbdb/panTro6/tba10way/
+#Created 64264 summary blocks from 1032470 components and 215299 mafs from stdin
+# #### rheMac10
+# Loaded 215752 mafs in 1 files from /gbdb/rheMac10/tba10way/
+#Created 65625 summary blocks from 1026770 components and 215752 mafs from stdin
+# #### mm10
+# Loaded 119058 mafs in 1 files from /gbdb/mm10/tba10way/
+# Created 79395 summary blocks from 559679 components and 119058 mafs from stdin
+# #### canFam4
+# Loaded 202205 mafs in 1 files from /gbdb/canFam4/tba10way/
+# Created 60026 summary blocks from 933045 components and 202205 mafs from stdin
+# #### monDom5
+# Loaded 26098 mafs in 1 files from /gbdb/monDom5/tba10way/
+# Created 40309 summary blocks from 121427 components and 26098 mafs from stdin
+
+#########################################################################
 # Phylogenetic tree from 30-way (DONE - 2013-09-13 - Hiram)
     mkdir /hive/data/genomes/hg38/bed/tba10way/4d
     cd /hive/data/genomes/hg38/bed/tba10way/4d

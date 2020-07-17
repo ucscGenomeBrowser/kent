@@ -506,9 +506,9 @@ urlLabel *
 urlName genePred psl bigPsl
 urls bigBed bed bigPsl genePred psl bigBarChart bigGenePred bigLolly
 useScore *
-vcfNoFilter vcf vcfTabix vcfPhasedTrio
-vcfNoQual vcf vcfTabix vcfPhasedTrio
-vcfNoMaf vcf vcfTabix vcfPhasedTrio
+vcfDoFilter vcf vcfTabix vcfPhasedTrio
+vcfDoQual vcf vcfTabix vcfPhasedTrio
+vcfDoMaf vcf vcfTabix vcfPhasedTrio
 view *
 viewLimits *
 viewLimitsMax bed bedGraph wig bigWig
