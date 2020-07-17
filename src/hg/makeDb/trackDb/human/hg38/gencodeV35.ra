@@ -3,7 +3,7 @@ track gencodeV35
 table gencodeAnnotV35
 shortLabel GENCODE V35
 longLabel GENCODE V35
-visibility pack
+visibility hide
 type bigGenePred
 bigDataUrl /gbdb/hg38/gencode/gencodeV35.bb
 group genes
