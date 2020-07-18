@@ -1033,6 +1033,23 @@ if (gTrack)
                  "in geneTrack setting, but got type '%s'",
                  geneTrack, gTdb->type);
     }
+else if (trackImgOnly)
+    {
+    // For AJAX requests to redraw a single track, we have not loaded the whole trackDb,
+    // so see if we can find tdb for geneTrack, and load its items.
+    struct trackDb *gTdb = hTrackDbForTrack(database, geneTrack);
+    if (gTdb)
+        {
+        if (startsWith("ncbiRefSeq", geneTrack))
+            txiList = txInfoLoadNcbiRefSeq(gSeqWin, gTdb);
+        else if (sameString(geneTrack, "refGene"))
+            txiList = txInfoLoadRefGene(gSeqWin, gTdb);
+        else if (sameString(gTdb->type, "bigGenePred"))
+            txiList = txInfoLoadBigGenePred(gSeqWin, gTdb);
+        else
+            txiList = txInfoLoadGenePred(gSeqWin, gTdb);
+        }
+    }
 return txiList;
 }
 

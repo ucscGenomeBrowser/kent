@@ -149,10 +149,11 @@ set wuhCor wuhCor1
 set xenLae xenLae2
 set xenTro xenTro1,xenTro2,xenTro3,xenTro7,xenTro9
 set xipMac xipMac1
+set braNey braNey38
 
 
 # Define all organism/assembly-specific databases.
-set gbd $ailMel,$allMis,$ambMex,$anaPla,$anoCar,$anoGam,$aotNan,$apiMel,$aplCal,$aptMan,$aquChr,$astMex,$balAcu,$bisBis,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$canFam,$calJac,$calMil,$casCan,$cavApe,$cavPor,$cb,$ce,$cebCap,$cerAty,$cerSim,$chiLan,$choHof,$chlSab,$chrPic,$ci,$cioSav,$colAng,$cotJap,$criGri,$danRer,$dasNov,$dipOrd,$dm,$dp,$droMult,$droYak,$eboVir,$echTel,$enhLutNer,$equCab,$eriEur,$eulFla,$eulMac,$felCat,$ficAlb,$fr,$fukDam,$gadMor,$galGal,$gasAcu,$galVar,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$jacJac,$latCha,$lepOcu,$loxAfr,$manPen,$macEug,$macNem,$macFas,$manLeu,$melGal,$melHap,$melInc,$melUnd,$mesAur,$micMur,$micOch,$mm,$monDom,$musFur,$myoLuc,$nanGal,$nanPar,$nasLar,$neoSch,$nomLeu,$ochPri,$octDeg,$orcOrc,$oreNil,$ornAna,$oryCun,$oryLat,$otoGar,$oviAri,$oxyTri,$panPan,$panManBai,$panTro,$papAnu,$papHam,$pelSin,$petMar,$perMan,$poeFor,$ponAbe,$priPac,$proCap,$proCoq,$pteVam,$rheMac,$rhiBie,$rhiRox,$rn,$rouAeg,$sacCer,$saiBol,$sarHar,$sorAra,$speTri,$staAur,$strPur,$susScr,$taeGut,$tarSyr,$tetNig,$thaSir,$triMan,$tupBel,$tupChi,$turTru,$vicPac,$wuhCor,$xenLae,$xenTro,$xipMac
+set gbd $ailMel,$allMis,$ambMex,$anaPla,$anoCar,$anoGam,$aotNan,$apiMel,$aplCal,$aptMan,$aquChr,$astMex,$balAcu,$bisBis,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$canFam,$calJac,$calMil,$casCan,$cavApe,$cavPor,$cb,$ce,$cebCap,$cerAty,$cerSim,$chiLan,$choHof,$chlSab,$chrPic,$ci,$cioSav,$colAng,$cotJap,$criGri,$danRer,$dasNov,$dipOrd,$dm,$dp,$droMult,$droYak,$eboVir,$echTel,$enhLutNer,$equCab,$eriEur,$eulFla,$eulMac,$felCat,$ficAlb,$fr,$fukDam,$gadMor,$galGal,$gasAcu,$galVar,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$jacJac,$latCha,$lepOcu,$loxAfr,$manPen,$macEug,$macNem,$macFas,$manLeu,$melGal,$melHap,$melInc,$melUnd,$mesAur,$micMur,$micOch,$mm,$monDom,$musFur,$myoLuc,$nanGal,$nanPar,$nasLar,$neoSch,$nomLeu,$ochPri,$octDeg,$orcOrc,$oreNil,$ornAna,$oryCun,$oryLat,$otoGar,$oviAri,$oxyTri,$panPan,$panManBai,$panTro,$papAnu,$papHam,$pelSin,$petMar,$perMan,$poeFor,$ponAbe,$priPac,$proCap,$proCoq,$pteVam,$rheMac,$rhiBie,$rhiRox,$rn,$rouAeg,$sacCer,$saiBol,$sarHar,$sorAra,$speTri,$staAur,$strPur,$susScr,$taeGut,$tarSyr,$tetNig,$thaSir,$triMan,$tupBel,$tupChi,$turTru,$vicPac,$wuhCor,$xenLae,$xenTro,$xipMac,$braNey
 
 set metaGbd $gbd
 
@@ -5412,82 +5413,28 @@ identifier wgEncodeGencodeExonSupportVM25
 
 # end Gencode VM25
 
-# begin Gencode V35 (2020 reorganization)
-
-identifier gencodeAnnotAttrsV35
+identifier gencodeAnnotV35
 "Link together Gencode Annotation Table with Attributes table"
-    hg38.gencodeAttrsV35.transcriptId
-    hg38.gencodeAnnotV35.name
+    $gbd.gencodeAttrsV35.transcriptId
+    $gbd.gencodeGeneSymbolV35.transcriptId 
+    $gbd.gencodePdbV35.transcriptId 
+    $gbd.gencodePubMedV35.transcriptId 
+    $gbd.gencodeRefSeqV35.transcriptId 
+    $gbd.gencodeTagV35.transcriptId 
+    $gbd.gencodeRefSeqV35.transcriptId minCheck=0.9
+    $gbd.gencodeTranscriptSourceV35.transcriptId minCheck=0.9
+    $gbd.gencodeTranscriptSupportV35.transcriptId 
+    $gbd.gencodeTranscriptionSupportLevelV35.transcriptId 
+    $gbd.gencodeUniProtV35.transcriptId 
+    $gbd.gencodeAnnotationRemarkV35.transcriptId  minCheck=0.9
+    $gbd.gencodeEntrezGeneV35.transcriptId 
+    $gbd.gencodeExonSupportV35.transcriptId 
+    $gbd.gencodeAnnotV35.name
 
-# gencode association tables (joined through gencodeAttrsV35)
-identifier gencodeGeneSourceV35
-"Link together Gencode Gene Source table with Attributes table"
-    hg38.gencodeGeneSourceV35.geneId
-    hg38.gencodeAttrsV35.geneId
-
-identifier gencodeGeneSymbolV35
-"Link together Gencode gene symbol table with Attributes table"
-    hg38.gencodeGeneSymbolV35.transcriptId dupeOk
-    hg38.gencodeAttrsV35.transcriptId minCheck=0.20
-
-identifier gencodePdbV35
-"Link together Gencode Pdb table with Attributes table"
-    hg38.gencodePdbV35.transcriptId dupeOk
-    hg38.gencodeAttrsV35.transcriptId minCheck=0.015
-
-identifier gencodePubMedV35
-"Link together Gencode Pubmed table with Attributes table"
-    hg38.gencodePubMedV35.transcriptId dupeOk
-    hg38.gencodeAttrsV35.transcriptId  minCheck=0.63
-
-identifier gencodeRefSeqV35
-"Link together Gencode RefSeq table with Attributes table"
-    hg38.gencodeRefSeqV35.transcriptId dupeOk
-    hg38.gencodeAttrsV35.transcriptId minCheck=0.05
-
-identifier gencodeTagV35
-"Link together Gencode Tag table with Attributes table"
-    hg38.gencodeTagV35.transcriptId dupeOk
-    hg38.gencodeAttrsV35.transcriptId minCheck=0.36
-    hg38.gencodeRefSeqV35.transcriptId minCheck=0.9
-
-identifier gencodeTranscriptSourceV35
-"Link together Gencode Transcript Source table with Attributes table"
-    hg38.gencodeTranscriptSourceV35.transcriptId
-    hg38.gencodeAttrsV35.transcriptId
-
-identifier gencodeTranscriptSupportV35
-"Link together Gencode Transcript Support table with Attributes table"
-    hg38.gencodeTranscriptSupportV35.transcriptId dupeOk
-    hg38.gencodeAttrsV35.transcriptId minCheck=0.20
-
-identifier gencodeTranscriptionSupportLevelV35
-"Link together Gencode Transcription Support Level table with Attributes table"
-    hg38.gencodeTranscriptionSupportLevelV35.transcriptId dupeOk
-    hg38.gencodeAttrsV35.transcriptId minCheck=0.30
-
-identifier gencodeUniProtV35
-"Link together Gencode UniProt Support table with Attributes table"
-    hg38.gencodeUniProtV35.transcriptId dupeOk
-    hg38.gencodeAttrsV35.transcriptId minCheck=0.35
-
-identifier gencodeAnnotationRemarkV35
-"Link together Gencode Annotation Remark table with Attributes table"
-    hg38.gencodeAnnotationRemarkV35.transcriptId dupeOk
-    hg38.gencodeAttrsV35.transcriptId minCheck=0.10
-
-identifier gencodeEntrezGeneV35
-"Link together Gencode UniProt Support table with Attributes table"
-    hg38.gencodeEntrezGeneV35.transcriptId dupeOk
-    hg38.gencodeEntrezGeneV35.transcriptId minCheck=0.35
-
-identifier gencodeExonSupportV35
-"Link together Gencode Exon Support table with Attributes table"
-    hg38.gencodeExonSupportV35.transcriptId dupeOk
-    hg38.gencodeAttrsV35.transcriptId minCheck=0.80
-
-# end Gencode V35 (2020 reorganization)
-
+identifier gencodeAnnotV35Gene
+"Link together Gencode Annotation Table with Attributes table"
+    $gbd.gencodeGeneSourceV35.geneId
+    $gbd.gencodeAttrsV35.geneId
 
 identifier wgEncodeGencodeClassesV3Hg19
 "Link together Gencode gene model (Known) and class for July 2009 Data Version"

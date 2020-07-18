@@ -1164,32 +1164,45 @@ function parsePosition(position)
 }
 
 function parsePositionWithDb(position)
-// Parse db.chr:start-end string into a db, chrom, start, end object
-// Also supports be db.chr:start-end#color string
-// Doesn't work right with db's with '.'s in them.  Is this ever
-// used when the db isn't the same one as getDb() would return?
+// returns an object with chrom, start, end and optionally color attributes
+// position is a string and can be in one of five different formats:
+// 0) chr:start-end 
+// 1) db.chr:start-end 
+// 2) db.chr:start-end#color
+// 4) db#chr#start#end#color
+// Formats 0-2 are only supported for backwards compatibility with old carts
+// Original comment: Is this ever used when the db isn't the same one as getDb() would return?
 {
     var out = {};
-    var parts = position.split(".");
-    if (parts.length === 2) {
-        out.db = parts[0];
-        position = parts[1];
+    var parts = null;
+    if (position.split("#").length !==5 ) {
+        parts = position.split(".");
+        if (parts.length === 2) {
+            out.db = parts[0];
+            position = parts[1];
+        } else {
+            out.db = getDb(); // default the db 
+        }
+        parts = position.split("#"); // Highlight Region may carry its color
+        if (parts.length === 2) {
+            position = parts[0];
+            out.color = '#' + parts[1];
+        }
+        var pos = parsePosition(position);
+        if (pos) {
+            out.chrom = pos.chrom;
+            out.start = pos.start;
+            out.end   = pos.end;
+        }
     } else {
-        out.db = getDb(); // default the db 
+        parts = position.split("#");
+        out.db = parts[0];
+        out.chrom = parts[1];
+        out.start = parts[2];
+        out.end = parts[3];
+        out.color = "#" + parts[4];
     }
-    parts = position.split("#"); // Highlight Region may carry its color
-    if (parts.length === 2) {
-        position = parts[0];
-        out.color = '#' + parts[1];
-    }
-    var pos = parsePosition(position);
-    if (pos) {
-        out.chrom = pos.chrom;
-        out.start = pos.start;
-        out.end   = pos.end;
-        return out;
-    }
-    return null;
+    return out;
 }
 
 function getSizeFromCoordinates(position)

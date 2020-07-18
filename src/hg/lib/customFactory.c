@@ -3421,9 +3421,9 @@ if (hasUnprintable(line, 6))
 	{
 	if (endsWith(fileName, ".bam"))
 	    type = "bam";
-	else if (endsWith(fileName, ".bb"))
+	else if (endsWith(fileName, ".bb") || endsWith(fileName, ".bigBed"))
 	    type = "bigBed";
-	else if (endsWith(fileName, ".bw"))
+	else if (endsWith(fileName, ".bw") || endsWith(fileName, ".bigWig"))
 	    type = "bigWig";
 	}
     char *docUrl = NULL;
@@ -3439,7 +3439,11 @@ if (hasUnprintable(line, 6))
     if (docUrl)
 	errAbort("It appears that you are directly uploading binary data of type %s%s.  "
 		 "Custom tracks of this type require the files to be accessible by "
-		 "public http/https/ftp, and file URLs must be passed as the bigDataUrl "
+		 "public http/https/ftp. Our <a href='../goldenPath/help/hgTrackHubHelp.html#Hosting' target=_blank>track hub documentation</a>"
+                 "lists third-party services where you can "
+                 "store custom track or track hub files. "
+                 "Once the files are available on the internet, file URLs can be entered as-is, one per line, "
+                 "or via the bigDataUrl "
 		 "setting on a &quot;track&quot; line.  "
 		 "See <A HREF='%s' TARGET=_BLANK>%s custom track documentation</A> for "
 		 "more information and examples.",

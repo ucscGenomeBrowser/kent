@@ -985,8 +985,8 @@ var vis = {
 ////////////////////////////////////////////////////////////
 var dragSelect = {
 
-    hlColorDefault: '#aaedff', // default highlight color, if nothing specified
-    hlColor :       '#aaedff', // current highlight color
+    hlColorDefault: '#a5e7f8', // default highlight color, if nothing specified
+    hlColor :       '#a5e7f8', // current highlight color
     areaSelector:    null, // formerly "imgAreaSelect". jQuery element used for imgAreaSelect
     originalCursor:  null,
     startTime:       null,
@@ -1051,7 +1051,7 @@ var dragSelect = {
         var pos = parsePosition(newPosition);
         var start = pos.start;
         var end = pos.end;
-        var newHighlight = getDb() + "." + pos.chrom + ":" + start + "-" + end + hlColorName;
+        var newHighlight = getDb() + "#" + pos.chrom + "#" + start + "#" + end + hlColorName;
         newHighlight = imageV2.disguiseHighlight(newHighlight);
         var oldHighlight = hgTracks.highlight;
         if (oldHighlight===undefined || doAdd===undefined || doAdd===false || oldHighlight==="") {
@@ -1092,7 +1092,7 @@ var dragSelect = {
                 }
             }
             if (nonVirtChrom !== "")
-                cartSettings.nonVirtHighlight = getDb() + '.' + nonVirtChrom + ':' + nonVirtStart + '-' + (nonVirtEnd+1) + hlColorName;
+                cartSettings.nonVirtHighlight = getDb() + '#' + nonVirtChrom + '#' + nonVirtStart + '#' + (nonVirtEnd+1) + hlColorName;
         } else if (hgTracks.windows && hgTracks.virtualSingleChrom) {
                 cartSettings.nonVirtHighlight = hgTracks.highlight;
         }
@@ -4199,7 +4199,7 @@ var imageV2 = {
             pos.start = newPos.start;
             pos.end   = newPos.end;
         }
-        return pos.db+"."+pos.chrom+":"+pos.start+"-"+pos.end+pos.color;
+        return pos.db+"#"+pos.chrom+"#"+pos.start+"#"+pos.end+pos.color;
     },
 
     undisguiseHighlight: function(pos)

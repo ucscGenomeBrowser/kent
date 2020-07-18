@@ -1,0 +1,213 @@
+track cons10way
+compositeTrack on
+shortLabel Cons 10
+longLabel Multiz Alignment & Conservation (10 species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility hide
+priority 3
+type bed 4
+group compGeno
+
+    track cons10wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons10way
+
+        track multiz10way
+        subTrack cons10wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 10 species
+        subGroups view=align
+        noInherit on
+        irows on
+	#snpTable mafSnp10way
+        summary multiz10waySummary
+        frames multiz10wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault hg38
+        speciesGroups Primates Mammals Placental
+        sGroup_Primates panTro5 rheMac10
+        sGroup_Mammals canFam4 pteAle1 loxAfr3 neoSch1 mm10
+        sGroup_Placental monDom5 ornAna2
+        itemFirstCharCase noChange
+        treeImage phylo/hg38_10way.png
+        priority 100
+
+    # PhyloP conservation
+    track cons10wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons10way
+    viewLimits -3:1
+    viewLimitsMax -14.191:1.199
+
+        track phyloP10way
+        subTrack cons10wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel Cons 30 Mammals
+        longLabel 30 mammals Basewise Conservation by PhyloP (27 primates)
+        noInherit on
+        configurable on
+        type wig -14.191 1.199
+        maxHeightPixels 100:50:11
+        viewLimits -3:1
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons10wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons10way
+
+        track phastCons10way
+        subTrack cons10wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel Cons 30 Mammals
+        longLabel 30 mammals conservation by PhastCons (27 primates)
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons10wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons10way
+
+        track phastConsElements10way
+        subTrack cons10wayViewelements on
+        subGroups view=elements
+        shortLabel 30-way El
+        longLabel 30 mammals Conserved Elements (27 primates)
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23
+
+track tbaTest10way
+compositeTrack on
+shortLabel TBA Cons 10
+longLabel TBA Alignment & Conservation (10 species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility hide
+priority 3
+type bed 4
+group compGeno
+
+    track tbaTest10wayViewalign
+    shortLabel TBA Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack tbaTest10way
+
+        track tba10way
+        subTrack tbaTest10wayViewalign on
+        shortLabel TBA Align
+        longLabel TBA Alignments of 10 species
+        subGroups view=align
+        noInherit on
+        irows on
+	#snpTable mafSnp10way
+        summary tba10waySummary
+        frames multiz10wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault hg38
+        speciesGroups Primates Mammals Placental
+        sGroup_Primates panTro5 rheMac10
+        sGroup_Mammals canFam4 pteAle1 loxAfr3 neoSch1 mm10
+        sGroup_Placental monDom5 ornAna2
+        itemFirstCharCase noChange
+        treeImage phylo/hg38_10way.png
+        priority 100
+
+    # PhyloP conservation
+    track tbaTest10wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack tbaTest10way
+    viewLimits -3:1
+    viewLimitsMax -14.191:1.199
+
+        track phyloPtba10way
+        subTrack tbaTest10wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel Cons 30 Mammals
+        longLabel 30 mammals Basewise Conservation by PhyloP (27 primates)
+        noInherit on
+        configurable on
+        type wig -14.191 1.199
+        maxHeightPixels 100:50:11
+        viewLimits -3:1
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track tbaTest10wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack tbaTest10way
+
+        track phastConsTba10way
+        subTrack tbaTest10wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel Cons 30 Mammals
+        longLabel 30 mammals conservation by PhastCons (27 primates)
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track tbaTest10wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack tbaTest10way
+
+        track phastConsTbaElements10way
+        subTrack tbaTest10wayViewelements on
+        subGroups view=elements
+        shortLabel 30-way El
+        longLabel 30 mammals Conserved Elements (27 primates)
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23
