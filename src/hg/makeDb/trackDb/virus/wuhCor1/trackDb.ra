@@ -279,7 +279,7 @@ release alpha
 
 track sarsCov2Phylo
 shortLabel SARS-CoV-2 Phylogeny
-longLabel Phylogenetic tree and common variants from complete high-coverage sequences in GISAID
+longLabel Phylogenetic tree and common variants from high-coverage sequences in GISAID
 compositeTrack on
 type vcfTabix
 hapClusterEnabled on
