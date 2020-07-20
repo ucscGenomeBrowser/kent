@@ -2144,7 +2144,11 @@ char *hexColor;
 
 struct highlightVar *parseHighlightInfo()
 // Parse highlight info from cart var to a linked list of highlightVar structs
-// db.chrom:start-end#hexColor|db.chrom:start-end#hexColor|...
+// Accepts three input formats for the highlight variable:
+// 1) db.chrom:start-end (format in very old carts)
+// 2) db.chrom:start-end#hexColor|db.chrom:start-end#hexColor|... (old format)
+// 3) db#chrom#start#end#hexColor|db#chrom#start#end#hexColor|... (current format, to allow . in seq names)
+//
 {
 struct highlightVar *hlList = NULL;
 char *highlightDef = cartOptionalString(cart, "highlight");
@@ -2157,19 +2161,43 @@ if(highlightDef)
         {
         char *oneHl = hlArr[i];
         struct highlightVar *h;
+        char *chromStart, *chromEnd;
         AllocVar(h);
-        h->db     = cloneNextWordByDelimiter(&oneHl,'.');
-        h->chrom  = cloneNextWordByDelimiter(&oneHl,':');
-        // long to handle virt chrom coordinates
-        h->chromStart = atol(cloneNextWordByDelimiter(&oneHl,'-'));
-        h->chromEnd   = atol(cloneNextWordByDelimiter(&oneHl,'#'));
-        h->chromStart--; // Not zero based
-        if (highlightDef && *highlightDef != '\0')
+        if (countSeparatedItems(oneHl, '#')==5)
+            // the new format: db#chrom#start#end#color
+            {
+            h->db     = cloneNextWordByDelimiter(&oneHl,'#');
+            h->chrom  = cloneNextWordByDelimiter(&oneHl,'#');
+            chromStart = cloneNextWordByDelimiter(&oneHl,'#');
+            chromEnd = cloneNextWordByDelimiter(&oneHl,'#');
             h->hexColor = cloneString(oneHl);
-        slAddHead(&hlList, h);
+            }
+        else  // the syntax only used in old saved sessions
+            // the old format: db.chr:start-end followed optionally by #color
+            {
+            h->db     = cloneNextWordByDelimiter(&oneHl,'.');
+            h->chrom  = cloneNextWordByDelimiter(&oneHl,':');
+            chromStart = cloneNextWordByDelimiter(&oneHl,'-');
+            chromEnd = cloneNextWordByDelimiter(&oneHl,'#');
+            if (oneHl && *oneHl != '\0')
+                h->hexColor = cloneString(oneHl);
+            }
+
+        if (!isEmpty(chromStart) && !isEmpty(chromEnd) && 
+                isNumericString(chromStart) && isNumericString(chromEnd) &&
+                !isEmpty(h->db) && !isEmpty(h->chrom))
+            {
+            // long to handle virt chrom coordinates
+            h->chromStart = atol(chromStart);
+            h->chromEnd   = atol(chromEnd);
+            h->chromStart--; // Not zero based
+            slAddHead(&hlList, h);
+            }
         }
+
     slReverse(&hlList);
     }
+
 return hlList;
 }
 
@@ -8487,12 +8515,14 @@ if (!hideControls)
     hPrintf("<td width='30'>&nbsp;</td>\n");
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("<TD class='infoText' COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
-    hWrites("Click on a feature for details. ");
-    hWrites("Click or drag in the base position track to zoom in. ");
-    hWrites("Click side bars for track options. ");
-    hWrites("Drag side bars or labels up or down to reorder tracks. ");
-    hWrites("Drag tracks left or right to new position. ");
-    hWrites("Press \"?\" for keyboard shortcuts. ");
+    //hWrites("Click on a feature for details. ");
+    //hWrites("Click or drag in the base position track to zoom in. ");
+    //hWrites("Click side bars for track options. ");
+    //hWrites("Drag side bars or labels up or down to reorder tracks. ");
+    //hWrites("Drag tracks left or right to new position. ");
+    //hWrites("Press \"?\" for keyboard shortcuts. ");
+    hWrites("Unsure how to use the Genome Browser? ");
+    hWrites("Have a look at our <a href='../goldenPath/help/hgTracksHelp.html#FineTuning'>Tutorial</a>");
     hPrintf("</TD>");
 #ifndef USE_NAVIGATION_LINKS
     hPrintf("<td width='30'>&nbsp;</td>\n");
@@ -8596,9 +8626,9 @@ if (!hideControls)
 
         hPrintf("<td colspan='%d' class='infoText' align='CENTER' nowrap>"
                 "Use drop-down controls below and press refresh to alter tracks "
-                "displayed.<BR>"
-                "Tracks with lots of items will automatically be displayed in "
-                "more compact modes.</td>\n", MAX_CONTROL_COLUMNS - 2);
+                "displayed.<BR>", MAX_CONTROL_COLUMNS -2 );
+                //"Tracks with lots of items will automatically be displayed in "
+                //"more compact modes.</td>\n", MAX_CONTROL_COLUMNS - 2);
 
         hPrintf("<td align='right'>");
         hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups",
