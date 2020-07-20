@@ -9177,7 +9177,7 @@ if (h && h->db && sameString(h->db, database))
 	{
 	// save new highlight position to cart var
 	char cartVar[1024];
-	safef(cartVar, sizeof cartVar, "%s.%s:%ld-%ld#%s", h->db, "virt", virtStart, virtEnd, h->hexColor);
+	safef(cartVar, sizeof cartVar, "%s#%s#%ld#%ld#%s", h->db, "virt", virtStart, virtEnd, h->hexColor);
 	cartSetString(cart, "highlight", cartVar);
 	}
     else
@@ -10350,7 +10350,8 @@ jsonObjectAdd(jsonForClient, "measureTiming", newJsonBoolean(measureTiming));
 // js code needs to know if a highlightRegion is defined for this db
 checkAddHighlight(); // call again in case tracksDisplay's call to resolvePosition changed vars
 char *highlightDef = cartOptionalString(cart, "highlight");
-if (highlightDef && startsWith(database,highlightDef) && highlightDef[strlen(database)] == '.')
+if (highlightDef && startsWith(database,highlightDef) && 
+        (highlightDef[strlen(database)] == '.' || highlightDef[strlen(database)] == '#'))
     jsonObjectAdd(jsonForClient, "highlight", newJsonString(highlightDef));
 jsonObjectAdd(jsonForClient, "enableHighlightingDialog",
 	      newJsonBoolean(cartUsualBoolean(cart, "enableHighlightingDialog", TRUE)));
