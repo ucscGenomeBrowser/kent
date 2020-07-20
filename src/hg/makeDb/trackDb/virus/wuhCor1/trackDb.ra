@@ -291,6 +291,7 @@ vcfDoFilter off
 geneTrack ncbiGeneBGP
 group varRep
 visibility pack
+priority 0.2
 dataVersion 7-11-20
 release alpha
 
