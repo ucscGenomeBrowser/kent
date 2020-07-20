@@ -322,6 +322,36 @@ release alpha
     priority 30
     release alpha
 
+track problematicSites
+shortLabel Problematic Sites
+longLabel Problematic sites where masking or caution are recommended for analysis
+compositeTrack on
+type bigBed
+skipEmptyFields on
+group map
+dataVersion 2020-07-15
+release alpha
+
+    track problematicSitesMask
+    shortLabel Mask
+    longLabel Problematic sites where masking is recommended for analysis
+    parent problematicSites
+    type bigBed
+    color 255,0,0
+    bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesMask.bb
+    priority 10
+    release alpha
+
+    track problematicSitesCaution
+    shortLabel Caution
+    longLabel Problematic sites where caution is recommended for analysis
+    parent problematicSites
+    type bigBed
+    color 240,160,0
+    bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesCaution.bb
+    priority 20
+    release alpha
+
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
 include epitopes.ra
