@@ -2,11 +2,12 @@
 # we want to backup our current geoIp tables for comparison after update
 
 # just create the db first if it does not exist
-#hgsql hgFixed -e "create database geoIpOld"
+hgsql geoIp -e "drop database geoIpOld"
+hgsql geoIp -e "create database geoIpOld"
 
 
 foreach f ( *.as )
     echo $f
     #hgsql geoIpOld -e "drop table $f:r"
-    hgsql geoIpOld -e "CREATE TABLE $f:r SELECT * FROM hgFixed.$f:r"
+    hgsql geoIpOld -e "CREATE TABLE $f:r SELECT * FROM geoIp.$f:r"
 end

@@ -65,7 +65,8 @@ else
                  "order by r.name2, r.chrom, r.txStart",
                  table, gbCdnaInfoTable, descriptionTable, prefix);
     }
-struct sqlConnection *conn = hAllocConn(database);
+char *knownDatabase = hdbDefaultKnownDb(database);
+struct sqlConnection *conn = hAllocConn(knownDatabase);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 int count = 0;
@@ -237,7 +238,8 @@ if (isNotEmpty(type) && differentString(type, ALT_OR_PATCH))
 char *table = NULL;
 if (! sameOk(type, ALT_OR_PATCH))
     {
-    struct sqlConnection *conn = hAllocConn(database);
+    char *knownDatabase = hdbDefaultKnownDb(database);
+    struct sqlConnection *conn = hAllocConn(knownDatabase);
     table = connGeneSuggestTable(conn);
     hFreeConn(&conn);
     if(table == NULL)

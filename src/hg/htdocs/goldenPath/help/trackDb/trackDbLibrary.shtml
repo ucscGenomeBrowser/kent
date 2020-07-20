@@ -4011,18 +4011,49 @@ There are no extra options that can appear on the type hic line.
     </P>
 </DIV>
 
+<div class="hapClusterMethod"><span class="types vcf"></span>
+<div class="format"><code>hapClusterMethod &lt;centerWeighted|fileOrder|treeFile <em>url</em>&gt;</code></div>
+    <p>Assuming <code>hapClusterEnabled</code> is <code>true</code>, this specifies how
+    genotypes are ordered for display:
+      <ul>
+        <li><code>centerWeighted</code>: For diploid organisms, this separates the two haplotypes
+          from each sample and dynamically clusters all haplotypes by similarity, weighted by
+          proximity to a central variant.  The clustering tree will be drawn in the left label area.
+          This works best for phased genotypes.
+        <li><code>fileOrder</code>: Genotypes are displayed in the order in which they appear in
+          the VCF file.
+        <li><code>treeFile <em>url</em></code>: Genotypes are displayed in the order in which they
+          appear in <code><em>url</em></code>, a
+          <a href="https://en.wikipedia.org/wiki/Newick_format">Newick</a>-formatted tree file
+          whose leaf node IDs are the same as the genotype column IDs in the VCF file.
+          The tree will be drawn in the left label area.
+      </ul>
+    </p>
+</div>
+
 <DIV class="hapClusterColorBy"><span class="types vcf"></span>
-<div class="format"><code>hapClusterColorBy &lt;altOnly|refAlt|base&gt;</code></div>
+<div class="format"><code>hapClusterColorBy &lt;altOnly|function|refAlt|base&gt;</code></div>
     <P>Assuming <code>hapClusterEnabled</code> is <code>true</code>,
     this specifies one of three ways that reference and alternate alleles are colored:
     <UL>
       <LI><code>altOnly</code>: reference allele is white (invisible),
 	alternate allele is black.  This emphasizes haplotypes with alternate alleles.  (default)
+      <LI><code>function</code>: If the <code>geneTrack</code> setting is also provided, then
+        reference allele is white (invisible) and alternate allele is red if the variant changes
+        the protein sequence of a gene, green if the variant falls within a gene but does not
+        change the protein sequence, blue if the variant falls within the UTR of a protein-coding
+        gene or within a non-coding gene, and black if intronic or intergenic.
       <LI><code>refAlt</code>: reference allele is blue, alternate allele is red.
       <LI><code>base</code>: A is red, C is blue, G is green and T is magenta.
     </UL>
     </P>
 </DIV>
+
+<div class="geneTrack"><span class="types vcf"></span>
+<div class="format"><code>geneTrack &lt;<em>track</em>&gt;</code></div>
+    <p>This is for use with <code>hapClusterColorBy function</code>; it specifies the gene track
+    to use when determining the functional effect of each variant.</p>
+</div>
 
 <DIV class="hapClusterTreeAngle"><span class="types vcf"></span>
 <div class="format"><code>hapClusterTreeAngle &lt;triangle|rectangle&gt;</code></div>

@@ -1,7 +1,7 @@
 # This doc assumes that the gencode* tables have been built on $db
 db=hg38
 GENCODE_VERSION=V35
-dir=/hive/data/genomes/$db/bed/gencode$GENCODE_VERSION
+dir=/hive/data/genomes/$db/bed/gencode$GENCODE_VERSION/build
 genomes=/hive/data/genomes
 tempDb=knownGeneV35
 kent=$HOME/kent
@@ -99,7 +99,7 @@ sort -k1,1 -k2,2n basic.txt canonical.txt all.txt | tawk '{if ($1 != last) {prin
 join -t $'\t'   join6 tier.txt > join7
 cut -f 2- -d $'\t' join7 | sort -k1,1 -k2,2n > bgpInput.txt
 
-bedToBigBed -type=bed12+16 -tab -as=$HOME/kent/src/hg/lib/gencodeBGP.as bgpInput.txt /cluster/data/$db/chrom.sizes $db.gencode$GENCODE_VERSION.bb
+bedToBigBed -extraIndex=name -type=bed12+16 -tab -as=$HOME/kent/src/hg/lib/gencodeBGP.as bgpInput.txt /cluster/data/$db/chrom.sizes $db.gencode$GENCODE_VERSION.bb
 
 ln -s `pwd`/$db.gencode$GENCODE_VERSION.bb /gbdb/$db/gencode/gencode$GENCODE_VERSION.bb
 
@@ -278,3 +278,12 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para time"
     rm -r split fold err batch.bak
     cd ../utr5
     rm -r split fold err batch.bak
+
+hgKgGetText $tempDb tempSearch.txt
+sort tempSearch.txt > tempSearch2.txt
+tawk '{split($2,a,"."); printf "%s\t", $1;for(ii = 1; ii <= a[2]; ii++) printf "%s ",a[1] "." ii; printf "\n" }' txToAcc.tab | sort > tempSearch3.txt
+join tempSearch2.txt tempSearch3.txt | sort > knownGene.txt
+ixIxx knownGene.txt knownGene${GENCODE_VERSION}.ix knownGene${GENCODE_VERSION}.ixx
+ rm -rf /gbdb/$db/knownGene${GENCODE_VERSION}.ix /gbdb/$db/knownGene${GENCODE_VERSION}.ixx
+ln -s $dir/knownGene${GENCODE_VERSION}.ix  /gbdb/$db/knownGene${GENCODE_VERSION}.ix
+ln -s $dir/knownGene${GENCODE_VERSION}.ixx /gbdb/$db/knownGene${GENCODE_VERSION}.ixx  
