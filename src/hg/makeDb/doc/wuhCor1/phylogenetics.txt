@@ -170,3 +170,88 @@
 
 
 #########################################################################
+# PROBLEMATIC SITES (DONE - 2020-07-17 - Angie)
+
+    today=$(date +%y-%m-%d)
+    mkdir -p /hive/data/genomes/wuhCor1/bed/problematicSites/$today
+    cd /hive/data/genomes/wuhCor1/bed/problematicSites/$today
+    # They call the format VCF, but it is really just VCF-like with extra tab-sep columns.
+    wget https://raw.githubusercontent.com/W-L/ProblematicSites_SARS-CoV2/master/problematic_sites_sarsCov2.vcf
+    # Make a bigBed4+.  First make sure the columns haven't changed since last time.
+    columns=$(grep ^#CHROM problematic_sites_sarsCov2.vcf)
+    expected=$(cat ../columns.expected)
+    if [ "$columns" != "$expected" ]; then
+      echo "STOP!  COLUMNS CHANGED!  Change the script."
+    fi
+    perl -we \
+      'while (<>) {
+         chomp; chomp;
+         # The header defines some keywords and expanded values; store those for later use.
+         if (/^##\s+(\w+) = (.+)/) {
+           ($key, $val) = ($1, $2);
+           $val =~ s/,/%2C/g;
+           $expand{$key} = $val;
+         }
+         if (/^#/) {
+           next;
+         }
+         (undef, $pos, undef, $ref, $alt, undef, $filter,
+          $contrib, $exc, $country, $lab, $gene, $aaPos, $aaRef, $aaAlt) = split("\t");
+         # Expand keywords used in a couple of the columns.
+         @contribs = map { $expand{$_} || $_ } split(";", $contrib);
+         if ($lab eq ".") {
+           $lab = "";
+         }
+         @labs = map { $expand{$_} || $_ } split(";", $lab);
+         if ($lab ne "") {
+            @countries = split(";", $country);
+            if (scalar @labs != scalar @countries) {
+              die "Differing numbers of countries and labs";
+            } else {
+              for ($i = 0;  $i < @labs;  $i++) {
+                $labs[$i] .= " ($countries[$i])"
+              }
+            }
+         }
+         $gene =~ s/gene-//g;
+         # Print out one joined record for each sequence of "seq_end" single-base annotations.
+         if (defined $seqEndStart && $exc !~ /seq_end/) {
+           print join("\t", "NC_045512v2", $seqEndStart, $seqEndEnd, "seq_end", "mask", "", "",
+                      $expand{"NDM"}, "", "", "", "", "") . "\n";
+           $seqEndStart = $seqEndEnd = undef;
+         }
+         @exceptions = split(";", $exc);
+         foreach $exception (@exceptions) {
+           if ($exception eq "seq_end") {
+             if (! defined $seqEndStart) {
+               $seqEndStart = $pos-1;
+             }
+             $seqEndEnd = $pos;
+           } else {
+             print join("\t", "NC_045512v2", $pos-1, $pos, $exception, $filter, $ref, $alt,
+                        join(", ", @contribs), join(", ", @labs),
+                        $gene, $aaPos, $aaRef, $aaAlt) . "\n";
+           }
+         }
+       }
+       if (defined $seqEndStart) {
+         print join("\t", "NC_045512v2", $seqEndStart, $seqEndEnd, "seq_end", "mask", "", "",
+                    $expand{"NDM"}, "", "", "", "", "") . "\n";
+       }' problematic_sites_sarsCov2.vcf \
+         > problematicSites.bed
+    tawk '$5 == "mask"' problematicSites.bed | cut -f 1-4,6- \
+    | sort -k2n > problematicSitesMask.bed
+    tawk '$5 == "caution"' problematicSites.bed | cut -f 1-4,6- \
+    | sort -k2n > problematicSitesCaution.bed
+    # Split into two subtracks so we can color them differently: red for mask, orange for caution
+    bedToBigBed -type=bed4+ -as=$HOME/kent/src/hg/lib/problematicSites.as -tab \
+      problematicSitesMask.bed ../../../chrom.sizes problematicSitesMask.bb
+    bedToBigBed -type=bed4+ -as=$HOME/kent/src/hg/lib/problematicSites.as -tab \
+      problematicSitesCaution.bed ../../../chrom.sizes problematicSitesCaution.bb
+
+    # Install files
+    mkdir -p /gbdb/wuhCor1/problematicSites
+    ln -sf `pwd`/problematicSites{Mask,Caution}.bb /gbdb/wuhCor1/problematicSites/
+
+
+#########################################################################

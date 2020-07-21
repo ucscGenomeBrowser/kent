@@ -1163,26 +1163,35 @@ function parsePosition(position)
     return null;
 }
 
+function makeHighlightString(db, chrom, start, end, color) {
+/* given db and a range on it and a color (color must be prefixed by #),
+ * return the highlight string in the cart for it. See parsePositionWithDb for the history
+ * of the various accepted highlight strings */
+    return db+"#"+chrom+"#"+start+"#"+end+color;
+}
+
 function parsePositionWithDb(position)
 // returns an object with chrom, start, end and optionally color attributes
 // position is a string and can be in one of five different formats:
 // 0) chr:start-end 
 // 1) db.chr:start-end 
 // 2) db.chr:start-end#color
-// 4) db#chr#start#end#color
+// 3) db#chr#start#end#color
 // Formats 0-2 are only supported for backwards compatibility with old carts
-// Original comment: Is this ever used when the db isn't the same one as getDb() would return?
 {
     var out = {};
     var parts = null;
     if (position.split("#").length !==5 ) {
+        // formats of old carts: 0-2
         parts = position.split(".");
+        // handle the db part
         if (parts.length === 2) {
             out.db = parts[0];
             position = parts[1];
         } else {
             out.db = getDb(); // default the db 
         }
+        // position now contains chr:start-end#color
         parts = position.split("#"); // Highlight Region may carry its color
         if (parts.length === 2) {
             position = parts[0];
@@ -1195,6 +1204,7 @@ function parsePositionWithDb(position)
             out.end   = pos.end;
         }
     } else {
+        // new format
         parts = position.split("#");
         out.db = parts[0];
         out.chrom = parts[1];

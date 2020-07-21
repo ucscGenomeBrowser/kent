@@ -2144,7 +2144,12 @@ char *hexColor;
 
 struct highlightVar *parseHighlightInfo()
 // Parse highlight info from cart var to a linked list of highlightVar structs
-// db.chrom:start-end#hexColor|db.chrom:start-end#hexColor|...
+// Accepts four input formats for the highlight variable:
+// 0) chrom:start-end (format in very old carts)
+// 1) db.chrom:start-end (format in very old carts)
+// 2) db.chrom:start-end#hexColor|db.chrom:start-end#hexColor|... (old format)
+// 3) db#chrom#start#end#hexColor|db#chrom#start#end#hexColor|... (current format, to allow . in seq names)
+//
 {
 struct highlightVar *hlList = NULL;
 char *highlightDef = cartOptionalString(cart, "highlight");
@@ -2157,19 +2162,48 @@ if(highlightDef)
         {
         char *oneHl = hlArr[i];
         struct highlightVar *h;
+        char *chromStart, *chromEnd;
         AllocVar(h);
-        h->db     = cloneNextWordByDelimiter(&oneHl,'.');
-        h->chrom  = cloneNextWordByDelimiter(&oneHl,':');
-        // long to handle virt chrom coordinates
-        h->chromStart = atol(cloneNextWordByDelimiter(&oneHl,'-'));
-        h->chromEnd   = atol(cloneNextWordByDelimiter(&oneHl,'#'));
-        h->chromStart--; // Not zero based
-        if (highlightDef && *highlightDef != '\0')
+        if (countSeparatedItems(oneHl, '#')==5)
+            // the new format: db#chrom#start#end#color
+            {
+            h->db     = cloneNextWordByDelimiter(&oneHl,'#');
+            h->chrom  = cloneNextWordByDelimiter(&oneHl,'#');
+            chromStart = cloneNextWordByDelimiter(&oneHl,'#');
+            chromEnd = cloneNextWordByDelimiter(&oneHl,'#');
             h->hexColor = cloneString(oneHl);
-        slAddHead(&hlList, h);
+            }
+        else  // the syntax only used in old saved sessions
+            // the old format: db.chr:start-end followed optionally by #color
+            // or just chr:start-end
+            {
+            if (strchr(oneHl, '.')== NULL)
+                h->db = database;
+             else
+                h->db     = cloneNextWordByDelimiter(&oneHl,'.');
+
+            h->chrom  = cloneNextWordByDelimiter(&oneHl,':');
+            chromStart = cloneNextWordByDelimiter(&oneHl,'-');
+            chromEnd = cloneNextWordByDelimiter(&oneHl,'#');
+            if (oneHl && *oneHl != '\0')
+                h->hexColor = cloneString(oneHl);
+            }
+
+        if (!isEmpty(chromStart) && !isEmpty(chromEnd) &&
+                isNumericString(chromStart) && isNumericString(chromEnd) &&
+                !isEmpty(h->db) && !isEmpty(h->chrom))
+            {
+            // long to handle virt chrom coordinates
+            h->chromStart = atol(chromStart);
+            h->chromEnd   = atol(chromEnd);
+            h->chromStart--; // Not zero based
+            slAddHead(&hlList, h);
+            }
         }
+
     slReverse(&hlList);
     }
+
 return hlList;
 }
 
@@ -10320,7 +10354,7 @@ jsonObjectAdd(jsonForClient, "measureTiming", newJsonBoolean(measureTiming));
 // js code needs to know if a highlightRegion is defined for this db
 checkAddHighlight(); // call again in case tracksDisplay's call to resolvePosition changed vars
 char *highlightDef = cartOptionalString(cart, "highlight");
-if (highlightDef && startsWith(database,highlightDef) && highlightDef[strlen(database)] == '.')
+if (highlightDef)
     jsonObjectAdd(jsonForClient, "highlight", newJsonString(highlightDef));
 jsonObjectAdd(jsonForClient, "enableHighlightingDialog",
 	      newJsonBoolean(cartUsualBoolean(cart, "enableHighlightingDialog", TRUE)));

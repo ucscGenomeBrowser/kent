@@ -985,8 +985,8 @@ var vis = {
 ////////////////////////////////////////////////////////////
 var dragSelect = {
 
-    hlColorDefault: '#a5e7f8', // default highlight color, if nothing specified
-    hlColor :       '#a5e7f8', // current highlight color
+    hlColorDefault: '#aaedff', // default highlight color, if nothing specified
+    hlColor :       '#aaedff', // current highlight color
     areaSelector:    null, // formerly "imgAreaSelect". jQuery element used for imgAreaSelect
     originalCursor:  null,
     startTime:       null,
@@ -1051,7 +1051,7 @@ var dragSelect = {
         var pos = parsePosition(newPosition);
         var start = pos.start;
         var end = pos.end;
-        var newHighlight = getDb() + "#" + pos.chrom + "#" + start + "#" + end + hlColorName;
+        var newHighlight = makeHighlightString(getDb(), pos.chrom, start, end, hlColorName);
         newHighlight = imageV2.disguiseHighlight(newHighlight);
         var oldHighlight = hgTracks.highlight;
         if (oldHighlight===undefined || doAdd===undefined || doAdd===false || oldHighlight==="") {
@@ -1092,7 +1092,7 @@ var dragSelect = {
                 }
             }
             if (nonVirtChrom !== "")
-                cartSettings.nonVirtHighlight = getDb() + '#' + nonVirtChrom + '#' + nonVirtStart + '#' + (nonVirtEnd+1) + hlColorName;
+                cartSettings.nonVirtHighlight = makeHighlightString(getDb(), nonVirtChrom, nonVirtStart, (nonVirtEnd+1), hlColorName);
         } else if (hgTracks.windows && hgTracks.virtualSingleChrom) {
                 cartSettings.nonVirtHighlight = hgTracks.highlight;
         }
@@ -1104,7 +1104,7 @@ var dragSelect = {
     selectionEndDialog: function (newPosition)
     // Let user choose between zoom-in and highlighting.
     {   
-        // if the user hit Escape just before, do not show this dialog
+        // if the user hit Escape just before, do not show this dialo
         if (dragSelect.startTime===null)
             return;
         var dragSelectDialog = $("#dragSelectDialog")[0];
@@ -4199,7 +4199,7 @@ var imageV2 = {
             pos.start = newPos.start;
             pos.end   = newPos.end;
         }
-        return pos.db+"#"+pos.chrom+"#"+pos.start+"#"+pos.end+pos.color;
+        return makeHighlightString(pos.db, pos.chrom, pos.start, pos.end, pos.color);
     },
 
     undisguiseHighlight: function(pos)
