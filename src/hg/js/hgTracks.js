@@ -1051,7 +1051,7 @@ var dragSelect = {
         var pos = parsePosition(newPosition);
         var start = pos.start;
         var end = pos.end;
-        var newHighlight = getDb() + "#" + pos.chrom + "#" + start + "#" + end + hlColorName;
+        var newHighlight = makeHighlightString(getDb(), pos.chrom, start, end, hlColorName);
         newHighlight = imageV2.disguiseHighlight(newHighlight);
         var oldHighlight = hgTracks.highlight;
         if (oldHighlight===undefined || doAdd===undefined || doAdd===false || oldHighlight==="") {
@@ -1092,7 +1092,7 @@ var dragSelect = {
                 }
             }
             if (nonVirtChrom !== "")
-                cartSettings.nonVirtHighlight = getDb() + '#' + nonVirtChrom + '#' + nonVirtStart + '#' + (nonVirtEnd+1) + hlColorName;
+                cartSettings.nonVirtHighlight = makeHighlightString(getDb(), nonVirtChrom, nonVirtStart, (nonVirtEnd+1), hlColorName);
         } else if (hgTracks.windows && hgTracks.virtualSingleChrom) {
                 cartSettings.nonVirtHighlight = hgTracks.highlight;
         }
@@ -4199,7 +4199,7 @@ var imageV2 = {
             pos.start = newPos.start;
             pos.end   = newPos.end;
         }
-        return pos.db+"#"+pos.chrom+"#"+pos.start+"#"+pos.end+pos.color;
+        return makeHighlightString(pos.db, pos.chrom, pos.start, pos.end, pos.color);
     },
 
     undisguiseHighlight: function(pos)

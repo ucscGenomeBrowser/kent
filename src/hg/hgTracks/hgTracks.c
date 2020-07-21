@@ -2144,7 +2144,8 @@ char *hexColor;
 
 struct highlightVar *parseHighlightInfo()
 // Parse highlight info from cart var to a linked list of highlightVar structs
-// Accepts three input formats for the highlight variable:
+// Accepts four input formats for the highlight variable:
+// 0) chrom:start-end (format in very old carts)
 // 1) db.chrom:start-end (format in very old carts)
 // 2) db.chrom:start-end#hexColor|db.chrom:start-end#hexColor|... (old format)
 // 3) db#chrom#start#end#hexColor|db#chrom#start#end#hexColor|... (current format, to allow . in seq names)
@@ -2174,8 +2175,13 @@ if(highlightDef)
             }
         else  // the syntax only used in old saved sessions
             // the old format: db.chr:start-end followed optionally by #color
+            // or just chr:start-end
             {
-            h->db     = cloneNextWordByDelimiter(&oneHl,'.');
+            if (strchr(oneHl, '.')== NULL)
+                h->db = database;
+             else
+                h->db     = cloneNextWordByDelimiter(&oneHl,'.');
+
             h->chrom  = cloneNextWordByDelimiter(&oneHl,':');
             chromStart = cloneNextWordByDelimiter(&oneHl,'-');
             chromEnd = cloneNextWordByDelimiter(&oneHl,'#');
@@ -10348,8 +10354,7 @@ jsonObjectAdd(jsonForClient, "measureTiming", newJsonBoolean(measureTiming));
 // js code needs to know if a highlightRegion is defined for this db
 checkAddHighlight(); // call again in case tracksDisplay's call to resolvePosition changed vars
 char *highlightDef = cartOptionalString(cart, "highlight");
-if (highlightDef && startsWith(database,highlightDef) &&
-       (highlightDef[strlen(database)] == '.' || highlightDef[strlen(database)] == '#'))
+if (highlightDef)
     jsonObjectAdd(jsonForClient, "highlight", newJsonString(highlightDef));
 jsonObjectAdd(jsonForClient, "enableHighlightingDialog",
 	      newJsonBoolean(cartUsualBoolean(cart, "enableHighlightingDialog", TRUE)));
