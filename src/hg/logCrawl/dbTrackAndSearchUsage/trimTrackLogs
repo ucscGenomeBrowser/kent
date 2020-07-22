@@ -25,7 +25,11 @@ def addOrMergeUsage(date, pid, ip, logPart, db, hgsid, tracks):
         val = "|".join([date,db,tracks])
         useDict[key].append(val)
     else:
-        useDict[key][-1] += tracks
+        # be sure to add a comma in case apache failed to add a referer:
+        if useDict[key][-1][-1] != ",":
+            useDict[key][-1] += "," + tracks
+        else:
+            useDict[key][-1] += tracks
 
 def processPrefix(line):
     """Split the apache error log parts between brackets into a list of elements."""
