@@ -109,7 +109,7 @@ exonNumbers off
 priority 30
 
 track contacts
-shortLabel PDB Contacts
+shortLabel PDB Ligand Contacts
 longLabel Potential contact residues in PDB structures of viral proteins
 visibility pack
 group genes
