@@ -293,7 +293,7 @@ group varRep
 visibility pack
 priority 0.2
 dataVersion 7-11-20
-release alpha
+pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 21, 2020"
 
     track sarsCov2PhyloMinAf01
     shortLabel Min alt AF 1%
@@ -302,7 +302,6 @@ release alpha
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.01.vcf.gz
     type vcfTabix
     priority 10
-    release alpha
 
     track sarsCov2PhyloMinAf001
     shortLabel Min alt AF 0.1%
@@ -311,7 +310,6 @@ release alpha
     type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.001.vcf.gz
     priority 20
-    release alpha
 
     track sarsCov2PhyloFull
     shortLabel All (slow!)
@@ -320,7 +318,6 @@ release alpha
     type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.ambigToN.vcf.gz
     priority 30
-    release alpha
 
 track problematicSites
 shortLabel Problematic Sites

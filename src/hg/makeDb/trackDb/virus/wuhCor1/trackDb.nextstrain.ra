@@ -49,7 +49,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Updated Jul. 17, 202
     view all
     parent nextstrainSamples
     shortLabel All Samples
-    visibility pack
+    visibility hide
 
         track nextstrainSamplesRb
         parent nextstrainSamplesViewAll on
