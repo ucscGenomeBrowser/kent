@@ -41,7 +41,9 @@
 
 
 #########################################################################
-# SARS-CoV-2 PHYLOGENY (DONE - 2020-07-15 - Angie)
+# SARS-CoV-2 PHYLOGENY (DONE - 2020-07-22 - Angie)
+# First done 2020-07-15; updated 202-07-22 with tree from Yatish Turakhia, collapsed to keep
+# only nodes with associated mutations.
 
     releaseLabel=11-7-20
     mkdir -p /hive/data/genomes/wuhCor1/bed/sarsCov2Phylo/$releaseLabel
@@ -166,6 +168,16 @@
       ln -sf `pwd`/$f.tbi /gbdb/wuhCor1/sarsCov2Phylo/$destName.tbi
     done
     ln -sf `pwd`/rob-$releaseLabel.ft_FBP.linCol.nh \
+      /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.ft_FBP.linCol.nh
+
+    # 2020-07-22 Yatish provided a version of Rob's tree with nodes collapsed if there was
+    # no new variant at the node, collapsed-rob-11-7-20.ft_FBP.nh.  Add lineage colors:
+    ~/kent/src/hg/utils/otto/nextstrainNcov/treeColorByLineage.py collapsed-rob-11-7-20.ft_FBP.nh \
+      /hive/users/angie/gisaid/metadata_2020-07-13.epiToLineage \
+    | perl -wpi -e 's@hCoV-19/@@g;  s@\|20(\d\d)@|$1@g;' \
+      > collapsed-rob-$releaseLabel.ft_FBP.linCol.nh
+    # (same warnings about sequences not in metadata)
+    ln -sf `pwd`/collapsed-rob-$releaseLabel.ft_FBP.linCol.nh \
       /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.ft_FBP.linCol.nh
 
 

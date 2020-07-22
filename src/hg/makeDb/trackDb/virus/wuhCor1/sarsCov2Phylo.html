@@ -7,15 +7,15 @@ in at least 1% of samples) are displayed, but other subtracks may be made visibl
 more rare variants.
 The phylogenetic tree is inferred by Rob Lanfear's
 <a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a> pipeline.
+For display in the narrow space to the left of the main genome browser image, nodes in the tree
+are collapsed unless a mutation is associated with a node; i.e. the only branching points displayed
+are those at which mutations occurred.
 </p>
 <p>
 The tree is colored according to major
 <a href="https://github.com/cov-lineages/lineages/" target=_blank>lineages</a> assigned by the
 <a href="https://github.com/cov-lineages/pangolin/" target=_blank>pangolin</a> tool
 (Rambaut <em>et al.</em>).
-Since the tree is so wide, most of it is cut-off by default unless the left label area is expanded
-by clicking on the &quot;configure&quot; button below the Genome Browser image and increasing the
-&quot;label area width&quot; value to the maximum of 79 characters.
 </p>
 
 <h2>Display Conventions</h2>
@@ -76,6 +76,10 @@ The tree is re-rooted to hCoV-19/Wuhan/WH04/2020|EPI_ISL_406801|2020-01-05.
 For full details, see the
 <a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a>
 documentation.
+</p>
+<p>Collapsing of nodes that do not have an associated mutation is done using
+<a href="https://github.com/yatisht/strain_phylogenetics" target=_blank>strain_phylogenetics</a>
+(Turakhia <em>et al.</em>).
 </p>
 
 <h2>Data Access</h2>
