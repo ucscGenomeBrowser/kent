@@ -1,0 +1,6 @@
+# received data as xlsx by email from Qiangfeng Cliff Zhang qczhang@mail.tsinghua.edu.cn on July 23 2020
+# and saved into two text files
+cat invivo.txt | grep -v score | tawk '{$1=$1-1; $2=$1+1; $4=$3; $3=$2; $2=$1; $1="NC_045512v2"; print}' | grep -v NULL > invivo.bed
+cat invitro.txt | grep -v score | tawk '{$1=$1-1; $2=$1+1; $4=$3; $3=$2; $2=$1; $1="NC_045512v2"; print}' | grep -v NULL > invitro.bed
+bedGraphToBigWig invivo.bed ../../chrom.sizes invivo.bw
+bedGraphToBigWig invitro.bed ../../chrom.sizes invitro.bw

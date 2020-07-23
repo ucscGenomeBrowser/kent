@@ -7,15 +7,78 @@ in at least 1% of samples) are displayed, but other subtracks may be made visibl
 more rare variants.
 The phylogenetic tree is inferred by Rob Lanfear's
 <a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a> pipeline.
+For display in the narrow space to the left of the main genome browser image, nodes in the tree
+are collapsed unless a mutation is associated with a node; i.e. the only branching points displayed
+are those at which mutations occurred.
 </p>
 <p>
 The tree is colored according to major
 <a href="https://github.com/cov-lineages/lineages/" target=_blank>lineages</a> assigned by the
 <a href="https://github.com/cov-lineages/pangolin/" target=_blank>pangolin</a> tool
-(Rambaut <em>et al.</em>).
-Since the tree is so wide, most of it is cut-off by default unless the left label area is expanded
-by clicking on the &quot;configure&quot; button below the Genome Browser image and increasing the
-&quot;label area width&quot; value to the maximum of 79 characters.
+(Rambaut <em>et al.</em>):
+<table style="border-spacing: 20px 2px;">
+  <tr><th>color</th><th>major lineage</th><th>other lineages included</th></tr>
+  <tr>
+    <td><span style="background-color: #ffb041;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>A.1</td>
+    <td>A.1.*</td></tr>
+  <tr>
+    <td><span style="background-color: #e2ec04;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>A.2</td>
+    <td></td></tr>
+  <tr>
+    <td><span style="background-color: #ff66da;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>A.3</td>
+    <td></td></tr>
+  <tr>
+    <td><span style="background-color: #e9cd4a;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>A</td>
+    <td>A.* other than A.1*, A.2* and A.3*</td></tr>
+  <tr>
+    <td><span style="background-color: #975bfd;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B.1.1</td>
+    <td></td></tr>
+  <tr>
+    <td><span style="background-color: #5cadcf;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B.1</td>
+    <td>B.1.*</td></tr>
+  <tr>
+    <td><span style="background-color: #5a51fb;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B.1.p2</td>
+    <td></td></tr>
+  <tr>
+    <td><span style="background-color: #29f3c7;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B.1.3</td>
+    <td></td></tr>
+  <tr>
+    <td><span style="background-color: #1ff181;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B.1.5</td>
+    <td>B.1.5.*</td></tr>
+  <tr>
+    <td><span style="background-color: #16ef36;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B.1.p21</td>
+    <td></td></tr>
+  <tr>
+    <td><span style="background-color: #494be1;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B.2</td>
+    <td>B.2.*</td></tr>
+  <tr>
+    <td><span style="background-color: #33ed0d;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B.3</td>
+    <td></td></tr>
+  <tr>
+    <td><span style="background-color: #77c7a4;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B.4</td>
+    <td></td></tr>
+  <tr>
+    <td><span style="background-color: #74ec03;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B.6</td>
+    <td></td></tr>
+  <tr>
+    <td><span style="background-color: #ce66ff;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B</td>
+    <td>B.* aside from lineages listed above</td></tr>
+</table>
 </p>
 
 <h2>Display Conventions</h2>
@@ -76,6 +139,10 @@ The tree is re-rooted to hCoV-19/Wuhan/WH04/2020|EPI_ISL_406801|2020-01-05.
 For full details, see the
 <a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a>
 documentation.
+</p>
+<p>Collapsing of nodes that do not have an associated mutation is done using
+<a href="https://github.com/yatisht/strain_phylogenetics" target=_blank>strain_phylogenetics</a>
+(Turakhia <em>et al.</em>).
 </p>
 
 <h2>Data Access</h2>
