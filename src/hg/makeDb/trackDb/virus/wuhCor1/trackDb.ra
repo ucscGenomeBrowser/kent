@@ -349,6 +349,38 @@ release alpha
     priority 20
     release alpha
 
+track icshape
+shortLabel icSHAPE RNA Struct
+longLabel icSHAPE RNA Structure
+type bigWig
+visibility hide
+group rna
+compositeTrack on
+
+        track icshapeInvivo
+        shortLabel icSHAPE In-vivo
+        longLabel icSHAPE In-vivo
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/bbi/icshape/invivo.bw
+        autoScale off
+        viewLimits 0.0:1.0
+        visibility full
+        parent icshape
+        maxHeightPixels 100:40:8
+        color 100,50,20
+
+        track icshapeInvitro
+        shortLabel icSHAPE In-vitro
+        longLabel icSHAPE In-vitro
+        type bigWig
+        bigDataUrl /gbdb/wuhCor1/bbi/icshape/invitro.bw
+        autoScale off
+        viewLimits 0.0:1.0
+        visibility full
+        parent icshape
+        maxHeightPixels 100:40:8
+        color 100,80,40
+
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
 include epitopes.ra
