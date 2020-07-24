@@ -784,6 +784,23 @@ var cart = {
     // takes precedence.  WARNING: be careful creating an object with variables on the fly:
     // cart.setVarsObj({track: vis}) is invalid but cart.setVarsObj({'knownGene': vis}) is ok! 
 
+    updateSessionPanel: function()
+    {
+    // change color of text
+    $('span.gbSessionChangeIndicator').addClass('gbSessionChanged');
+
+    // change mouseover on the panel.  A bit fragile here inserting text in the mouseover specified in
+    // hgTracks.js, so depends on match with text there, and should present same message as C code
+    // (Perhaps this could be added as a script tag, so not duplicated)
+    var txt = $('span.gbSessionLabelPanel').attr('title');
+    if (!txt.match(/with changes/)) {
+        $('span.gbSessionLabelPanel').attr('title', txt.replace(
+                                   "track set", 
+                                   "track set, with changes (added or removed tracks) you have requested"));
+        }
+    return true;
+    },
+
     updateQueue: {},
     
     updatesWaiting: function ()
@@ -847,6 +864,7 @@ var cart = {
     
     setVars: function (names, values, errFunc, async)
     {   // ajax updates the cart, and includes any queued updates.
+        cart.updateSessionPanel();      // handles hide from left minibutton
         cart.setVarsObj(arysToObj(names, values), errFunc, async);
     },
 
@@ -956,6 +974,7 @@ var vis = {
                     rec.visibility = 0;
                 // else Would be nice to hide subtracks as well but that may be overkill
                 $(document.getElementById('tr_' + track)).remove();
+                cart.updateSessionPanel();
                 imageV2.highlightRegion();
                 $(this).attr('class', 'hiddenText');
             } else
@@ -2540,7 +2559,7 @@ var rightClick = {
             } else {
                 args[key] = 1;
                 updateObj[key] = 1;
-                cart.setVars(updateObj,null,false);
+                cart.setVarsObj(updateObj,null,false);
                 imageV2.requestImgUpdate(id, id + ".doMergeItems=1");
             }
         } else {   // if ( cmd in 'hide','dense','squish','pack','full','show' )
@@ -3257,6 +3276,21 @@ var popUpHgt = {
     }
 };
 
+// Show the recommended track sets popup
+function showRecTrackSetsPopup() {
+    // Populate links with position
+    $('a.recTrackSetLink').each(function() {
+        var $this = $(this);
+        var _href = $this.attr("href");
+        $this.attr("href", _href + genomePos.original);
+    });
+    $('#recTrackSetsPopup').dialog({width:'650'});
+}
+
+function removeSessionPanel() {
+    $('#recTrackSetsPanel').remove();
+}
+
 // A function to show the keyboard help dialog box, bound to ? and called from the menu bar
 function showHotkeyHelp() {
     $("#hotkeyHelp").dialog({width:'600'});
@@ -3442,6 +3476,7 @@ var popUp = {
                     cart.setVarsObj(changedVars);
                 $(document.getElementById('tr_' + trackName)).remove();
                 imageV2.afterImgChange(true);
+                cart.updateSessionPanel();
             } else {
                 // Keep local state in sync if user changed visibility
                 if (newVis) {
@@ -3802,8 +3837,11 @@ var imageV2 = {
                 if (imageV2.backSupport) {
                     $(imgTbl).append("<tr id='tr_" + id + "' abbr='0'" + // abbr gets filled in
                                         " class='imgOrd trDraggable'></tr>");
-                    if (!imageV2.updateImgForId(response, id, true, newJsonRec))
+                    if (!imageV2.updateImgForId(response, id, true, newJsonRec)) {
                         warn("Couldn't insert new image for id: " + id);
+                    } else {
+                        cart.updateSessionPanel();
+                    }
                 }
             }
         }
@@ -3954,6 +3992,8 @@ var imageV2 = {
                     var rec = oldJson.trackDb[this.id];
                     rec.limitedVis = newJson.trackDb[this.id].limitedVis;
                     vis.update(this.id, visibility);
+                    if (visibility === "hide")
+                        cart.updateSessionPanel(); // notify when vis change to hide track
                     valid = true;
                 } else {
                     // what got returned from the AJAX request was a different

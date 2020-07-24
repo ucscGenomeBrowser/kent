@@ -1705,6 +1705,15 @@ void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height);
 
+boolean recTrackSetsEnabled();
+/* Return TRUE if feature is available */
+
+int recTrackSetsForDb();
+/* Return number of recommended track sets for this database */
+
+void printRecTrackSets();
+/* Create dialog with list of sessions */
+
 Color colorFromSoTerm(enum soTerm term);
 /* Assign a Color according to soTerm: red for non-synonymous, green for synonymous, blue for
  * UTR/noncoding, black otherwise. */
