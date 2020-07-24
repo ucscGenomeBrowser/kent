@@ -187,6 +187,39 @@ bigDataUrl /gbdb/wuhCor1/bbi/conticello.bb
 noScoreFilter on
 filter.freq 0.01
 
+# original source for this composite: 
+# https://data.broadinstitute.org/compbio1/SARS-CoV-2_PhyloCSF_Genes/trackHub/wuhCor1/trackDb.txt
+track phyloGenes
+type bigGenePred
+itemRgb on
+compositeTrack on
+shortLabel PhyloCSF Genes
+longLabel PhyloCSF Genes - Curated conserved genes
+baseColorDefault genomicCodons
+exonNumbers on
+noScoreFilter on
+
+        track PhyloCSFgenes
+        type bigGenePred
+        #bigDataUrl https://data.broadinstitute.org/compbio1/SARS-CoV-2_PhyloCSF_Genes/PhyloCSFgenes.bb
+        bigDataUrl /gbdb/wuhCor1/bbi/phyloGenes/PhyloCSFgenes.bb
+        shortLabel PhyloCSF Genes
+        longLabel PhyloCSF Genes - curated conserved genes
+        visibility pack
+        priority 10
+        parent phyloGenes
+
+        track PhyloCSFrejected
+        type bigGenePred
+        itemRgb on
+        #bigDataUrl https://data.broadinstitute.org/compbio1/SARS-CoV-2_PhyloCSF_Genes/PhyloCSFrejectedGenes.bb
+        bigDataUrl /gbdb/wuhCor1/bbi/phyloGenes/PhyloCSFrejectedGenes.bb
+        shortLabel PhyloCSF Rejected Genes
+        longLabel Genes rejected from PhyloCSF genes list
+        visibility hide
+        priority 10
+        parent phyloGenes off
+
 track stringtieKim
 shortLabel StringTie-Kim
 longLabel StringTie results from minimap of Kim 2020 reads
