@@ -436,3 +436,4 @@ autoScale off
 viewLimits 0:20
 viewLimitsMax 0:100
 maxHeightPixels 100:40:8
+pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 27, 2020"
