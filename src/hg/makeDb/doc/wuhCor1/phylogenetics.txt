@@ -144,20 +144,26 @@
     bgzip -f gisaid-$releaseLabel.minAf.01.vcf
     tabix -p vcf gisaid-$releaseLabel.minAf.01.vcf.gz
 
-#*** TODO: add instructions for making the epiToLineage (or better yet, more metadata) file. ***
+    # Get sample metadata from GISAID so we can color samples & branches by lineage.
+    # This requires registering with gisaid.org.  Then go to https://www.epicov.org/epi3/frontend,
+    # log in, click Downloads, and click "nextmeta" in the dialog that pops up.  That downloads
+    # a local file with timestamp name, in this case metadata_2020-07-13_15-16.tsv.gz .
+    # Extract the EPI_ ID and lineage columns:
+    zcat metadata_2020-07-13*.tsv.gz | tail -n +2 | cut -f3,18 | tawk '$2 != ""' \
+      > metadata_2020-07-13.epiToLineage
 
     # Add lineage colors.
     # I really want to replace this with proper tab-sep metadata, but for now, continue to use
     # the icky branch-length-RGB hack.
     ~/kent/src/hg/utils/otto/nextstrainNcov/treeColorByLineage.py ft_FBP.tree \
-      /hive/users/angie/gisaid/metadata_2020-07-13.epiToLineage \
+      metadata_2020-07-13.epiToLineage \
       > rob-$releaseLabel.ft_FBP.linCol.nh
     # There are a few sequences that are not in the gisaid (Nextstrain?) metadata for some reason.
 #WARNING:root:No lineage for "hCoV-19/Korea/KCDC2003/2020|EPI_ISL_426167|2020-02-23"
 #WARNING:root:No lineage for "hCoV-19/Sichuan/SC-WCH2-006/2020|EPI_ISL_451377|2020-02-08"
 #WARNING:root:No lineage for "hCoV-19/Canada/NB-235/2020|EPI_ISL_479649|2020-03-31"
 #WARNING:root:No lineage for "hCoV-19/USA/CT-Yale-011/2020|EPI_ISL_428369|2020-03-11"
-#WARNING:root:4 samples had no lineage in /hive/users/angie/gisaid/metadata_2020-07-13.epiToLineage
+#WARNING:root:4 samples had no lineage in metadata_2020-07-13.epiToLineage
     perl -wpi -e 's@hCoV-19/@@g;  s@\|20(\d\d)@|$1@g;' rob-$releaseLabel.ft_FBP.linCol.nh
 
     # Install files in /gbdb.
@@ -173,7 +179,7 @@
     # 2020-07-22 Yatish provided a version of Rob's tree with nodes collapsed if there was
     # no new variant at the node, collapsed-rob-11-7-20.ft_FBP.nh.  Add lineage colors:
     ~/kent/src/hg/utils/otto/nextstrainNcov/treeColorByLineage.py collapsed-rob-11-7-20.ft_FBP.nh \
-      /hive/users/angie/gisaid/metadata_2020-07-13.epiToLineage \
+      metadata_2020-07-13.epiToLineage \
     | perl -wpi -e 's@hCoV-19/@@g;  s@\|20(\d\d)@|$1@g;' \
       > collapsed-rob-$releaseLabel.ft_FBP.linCol.nh
     # (same warnings about sequences not in metadata)
