@@ -945,3 +945,27 @@ input[type="submit"].pressed {
     border-radius: 4px;
 }
 
+/* Session label in a box */
+
+span.gbSessionLabelPanel {
+    background-color: #e0e0e0;
+    border-style: solid;
+    border-color: #c2c2c2;
+    border-width: 1px;
+    padding: 3px;
+    padding-top: 1px;
+    margin-left: 10px;
+    cursor: default;
+}
+
+span.gbSessionLabelPanel:hover {
+      background-color: #d4d4d4;
+}
+
+span.gbSessionLabelText {
+    color: darkblue;
+}
+
+span.gbSessionChanged {
+    color: darkslategray !important;
+}
