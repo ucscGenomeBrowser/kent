@@ -191,7 +191,7 @@ if (*ptr == '(')
     node->ident = parseIdent(&ptr);
     }
 else 
-    if ((*ptr == ':') || (isalpha(*ptr))|| (isdigit(*ptr)) 
+    if ((*ptr == ':') || (isalpha(*ptr))|| (isdigit(*ptr)) || (*ptr == '_')
 	 || (*ptr == '\'') || (*ptr == '.')) 
 	node->ident = parseIdent(&ptr);
 else
@@ -494,5 +494,19 @@ if (tree->numEdges == 0)
 for (ii=0; ii < tree->numEdges; ii++)
     count += phyloCountLeaves(tree->edges[ii]);
 
+return count;
+}
+
+int phyloCountInternalNodes(struct phyloTree *node)
+/* Return the number of internal nodes (not leaf nodes) in tree. */
+{
+int count = 0;
+if (node->numEdges > 0)
+    {
+    count = 1;
+    int ii;
+    for (ii = 0;  ii < node->numEdges;  ii++)
+        count += phyloCountInternalNodes(node->edges[ii]);
+    }
 return count;
 }
