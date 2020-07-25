@@ -498,7 +498,8 @@ while (geneBed != NULL)
     char query[256];
     sqlSafef(query, sizeof(query),
             "select kgXref.description from kgXref where geneSymbol='%s'", geneBed->name);
-    struct sqlConnection *conn = hAllocConn(database);
+    char *knownDatabase = hdbDefaultKnownDb(database);
+    struct sqlConnection *conn = hAllocConn(knownDatabase);
     char *desc = sqlQuickString(conn, query);
     hFreeConn(&conn);
     if (desc)
