@@ -12,9 +12,9 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 labelFields geneName,name,geneName2,name2
 defaultLabelFields geneName
 itemRgb on
-filterValues.transcriptClass coding,nonCoding,other,pseudo
-filterValues.tier basic,canonical
-filterType.tier multipleListOnlyOr
+#filterValues.transcriptClass coding,nonCoding,other,pseudo
+#filterValues.tier basic,canonical
+#filterType.tier multipleListOnlyOr
 externalDb knownGeneV35
 #searchIndex name
 #searchTrix /gbdb/hg38/gencode/gencodeV35.ix
