@@ -192,6 +192,7 @@ filter.freq 0.01
 track phyloGenes
 type bigGenePred
 itemRgb on
+group genes
 compositeTrack on
 shortLabel PhyloCSF Genes
 longLabel PhyloCSF Genes - Curated conserved genes
