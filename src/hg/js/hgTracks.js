@@ -792,13 +792,13 @@ var cart = {
     // change mouseover on the panel.  A bit fragile here inserting text in the mouseover specified in
     // hgTracks.js, so depends on match with text there, and should present same message as C code
     // (Perhaps this could be added as a script tag, so not duplicated)
-    var txt = $('span.gbSessionLabelPanel').attr('title');
-    if (!txt.match(/with changes/)) {
-        $('span.gbSessionLabelPanel').attr('title', txt.replace(
-                                   "track set", 
-                                   "track set, with changes (added or removed tracks) you have requested"));
-        }
-    return true;
+// Emergency whack -- causing hang on genome-test.  Investigating...
+    //var txt = $('span.gbSessionLabelPanel').attr('title');
+    //if (!txt.match(/with changes/)) {
+        //$('span.gbSessionLabelPanel').attr('title', txt.replace(
+                                   //"track set", 
+                                   //"track set, with changes (added or removed tracks) you have requested"));
+        //}
     },
 
     updateQueue: {},
