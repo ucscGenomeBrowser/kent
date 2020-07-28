@@ -111,7 +111,7 @@ priority 30
 track contacts
 shortLabel PDB Ligand Contacts
 longLabel Potential contact residues in PDB structures of viral proteins
-visibility pack
+visibility hide
 group genes
 type bigBed 12 +
 bigDataUrl /gbdb/wuhCor1/bbi/contacts.bb
