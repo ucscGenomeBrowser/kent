@@ -3288,6 +3288,7 @@ function showRecTrackSetsPopup() {
 
 function removeSessionPanel() {
     $('#recTrackSetsPanel').remove();
+    setCartVar("hgS_otherUserSessionLabel", "off", null, false);
 }
 
 // A function to show the keyboard help dialog box, bound to ? and called from the menu bar
