@@ -3439,7 +3439,7 @@ if (hasUnprintable(line, 6))
     if (docUrl)
 	errAbort("It appears that you are directly uploading binary data of type %s%s.  "
 		 "Custom tracks of this type require the files to be accessible by "
-		 "public http/https/ftp. Our <a href='../goldenPath/help/hgTrackHubHelp.html#Hosting' target=_blank>track hub documentation</a>"
+		 "public http/https/ftp. Our <a href='../goldenPath/help/hgTrackHubHelp.html#Hosting' target=_blank>track hub documentation</a> "
                  "lists third-party services where you can "
                  "store custom track or track hub files. "
                  "Once the files are available on the internet, file URLs can be entered as-is, one per line, "
