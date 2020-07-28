@@ -119,6 +119,7 @@ mouseOverField _mouseOver
 url http://soe.ucsc.edu/~afyfe/covid/hub/t12.html?struct=$$
 urlLabel Link to 3D structure viewer:
 priority 31
+pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 28, 2020"
 
 track cas13Crispr
 shortLabel Cas13 CRISPR
@@ -199,6 +200,7 @@ longLabel PhyloCSF Genes - Curated conserved genes
 baseColorDefault genomicCodons
 exonNumbers on
 noScoreFilter on
+pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 28, 2020"
 
         track PhyloCSFgenes
         type bigGenePred
