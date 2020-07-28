@@ -8469,9 +8469,14 @@ if (!hideControls)
 	}
     hPrintf("</B></SPAN>");
 
-    if (defaultTracks || hideAll)
-        cartRemove(cart, "hgS_otherUserSessionLabel");
-    char *sessionLabel = cartOptionalString(cart, "hgS_otherUserSessionLabel");
+    // Disable recommended track set panel when changing tracks, session, database
+    char *sessionLabel = cartOptionalString(cart, hgsOtherUserSessionLabel);
+    char *oldDb = hashFindVal(oldVars, "db");
+    if (defaultTracks || hideAll || 
+        (oldDb && differentString(database, oldDb)) ||
+        (sessionLabel && sameString(sessionLabel, "off")))
+                cartRemove(cart, hgsOtherUserSessionLabel);
+    sessionLabel = cartOptionalString(cart, hgsOtherUserSessionLabel);
     if (sessionLabel)
         {
         char *panel = "recTrackSetsPanel";
