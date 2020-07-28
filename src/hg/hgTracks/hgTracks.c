@@ -7150,8 +7150,20 @@ static void pruneRedundantCartVis(struct track *trackList)
 struct track *track;
 for (track = trackList; track != NULL; track = track->next)
     {
+    if (track->parent)  // has super track
+        pruneRedundantCartVis(track->parent);
+        
     char *cartVis = cartOptionalString(cart, track->track);
-    if (cartVis != NULL && hTvFromString(cartVis) == track->tdb->visibility)
+    if (cartVis == NULL)
+        continue;
+
+    if (tdbIsSuper(track->tdb))
+        {
+        if ((sameString("hide", cartVis) && (track->tdb->isShow == 0)) ||
+            (sameString("show", cartVis) && (track->tdb->isShow == 1)))
+            cartRemove(cart, track->track);
+        }
+    else if (hTvFromString(cartVis) == track->tdb->visibility)
         cartRemove(cart, track->track);
     }
 }
