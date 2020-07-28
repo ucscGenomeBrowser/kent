@@ -2653,7 +2653,8 @@ static boolean searchKnownCanonical(char *db, char *term, struct hgPositions *hg
  * knownGene.name in hgp. */
 {
 boolean foundIt = FALSE;
-struct sqlConnection *conn = hAllocConn(db);
+char *knownDatabase = hdbDefaultKnownDb(db);
+struct sqlConnection *conn = hAllocConn(knownDatabase);
 if (sqlTableExists(conn, "knownGene") && sqlTableExists(conn, "knownCanonical") &&
     sqlTableExists(conn, "kgXref"))
     {
