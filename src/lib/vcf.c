@@ -1458,6 +1458,37 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 record->genotypeUnparsedStrings = NULL;
 }
 
+void vcfParseGenotypesGtOnly(struct vcfRecord *record)
+/* Translate record->genotypesUnparsedStrings[] into proper struct vcfGenotype[], but ignore
+ * genotype info elements, IDs, etc; parse only the genotypes (e.g. for quick display in hgTracks).
+ * This destroys genotypesUnparsedStrings. */
+{
+if (record->genotypeUnparsedStrings == NULL)
+    return;
+struct vcfFile *vcff = record->file;
+record->genotypes = vcfFileAlloc(vcff, vcff->genotypeCount * sizeof(struct vcfGenotype));
+int i;
+for (i = 0;  i < vcff->genotypeCount;  i++)
+    {
+    // Parse (.|[0-9])([/|](.|[0-9]))? in first one to four characters
+    char *string = record->genotypeUnparsedStrings[i];
+    struct vcfGenotype *gt = &(record->genotypes[i]);
+    gt->hapIxA = gt->hapIxB = -1;
+    if (string[0] != '.' && isdigit(string[0]))
+        gt->hapIxA = atoi(string);
+    if (string[1] == '/' || string[1] == '|')
+        {
+        if (isdigit(string[2]))
+            gt->hapIxB = atoi(string+2);
+        if (string[1] == '|')
+            gt->isPhased = TRUE;
+        }
+    else
+        gt->isHaploid = TRUE;
+    }
+record->genotypeUnparsedStrings = NULL;
+}
+
 const struct vcfGenotype *vcfRecordFindGenotype(struct vcfRecord *record, char *sampleId)
 /* Find the genotype and associated info for the individual, or return NULL.
  * This calls vcfParseGenotypes if it has not already been called. */

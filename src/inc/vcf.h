@@ -299,6 +299,11 @@ void vcfParseGenotypes(struct vcfRecord *record);
 /* Translate record->genotypesUnparsedStrings[] into proper struct vcfGenotype[].
  * This destroys genotypesUnparsedStrings. */
 
+void vcfParseGenotypesGtOnly(struct vcfRecord *record);
+/* Translate record->genotypesUnparsedStrings[] into proper struct vcfGenotype[], but ignore
+ * genotype info elements, IDs, etc; parse only the actual genotypes (e.g. for quick display
+ * in hgTracks).  This destroys genotypesUnparsedStrings. */
+
 const struct vcfGenotype *vcfRecordFindGenotype(struct vcfRecord *record, char *sampleId);
 /* Find the genotype and associated info for the individual, or return NULL.
  * This calls vcfParseGenotypes if it has not already been called. */
