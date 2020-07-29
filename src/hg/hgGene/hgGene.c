@@ -722,7 +722,24 @@ else
     if (hTableExists(database, "kgProtMap2")) kgVersion = KG_III;
 
     char *tableName = cartUsualString(cart, hggType, NULL);
+    char *knownDb = hdbDefaultKnownDb(database);
+
+    // if no table has been given to us, try knownGene
+    if (tableName == NULL)
+        tableName = "knownGene";
+    
     struct trackDb *tdb = hTrackDbForTrack(database, tableName);
+
+    if ((tdb == NULL) && sameString(tableName, "knownGene") && differentString(database, knownDb))
+        {
+        // if no table or knownGene has been given to us, and knownGene doesn't work, try the default gene track.
+        tableName = hdbGetMasterGeneTrack(knownDb);
+        tdb = hTrackDbForTrack(database, tableName);
+        }
+
+    if (tdb == NULL)
+	hUserAbort("Error: cannot open gene track %s.", tableName);
+
     globalTdb = tdb;
     char *externalDb = trackDbSetting(tdb, "externalDb");
     if (externalDb != NULL)
