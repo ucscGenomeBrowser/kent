@@ -897,6 +897,23 @@ canFam4.perChromTables = no
  # refGene 0.402%, ncbiRefSeqCurated 0.401%, both 0.400%, cover 99.33%, enrich 247.79x
 
 #########################################################################
+# LIFTOVER TO canFam5 (DONE - 2020-07-28 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/canFam4/bed/blat.canFam5.2020-07-28
+    cd /hive/data/genomes/canFam4/bed/blat.canFam5.2020-07-28
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/canFam4/jkStuff/canFam4.11.ooc \
+         canFam4 canFam5
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/canFam4/jkStuff/canFam4.11.ooc \
+         canFam4 canFam5) > doLiftOverToCanFam5.log 2>&1
+    # real    286m56.444s
+
+    # see if the liftOver menus function in the browser from canFam4 to canFam5
+
+#########################################################################
 # LIFTOVER TO canFam3 (DONE - 2020-04-02 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/canFam4/bed/blat.canFam3.2020-04-02
@@ -930,7 +947,7 @@ canFam4.perChromTables = no
 ##  (DONE - 2020-06-22 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr7:60744942-60958801"
+    hgsql -e 'update dbDb set defaultPos="chr7:60683331-61003907"
 	where name="canFam4";' hgcentraltest
 
 ##############################################################################
@@ -1047,7 +1064,6 @@ canFam4.perChromTables = no
     cd /hive/data/genomes/canFam4/pushQ
  time ($HOME/kent/src/hg/utils/automation/makePushQSql.pl -redmineList canFam4) > canFam4.pushQ.sql 2> stderr.out
     # real    15m2.385s
-XXXX
 
     # remove the tandemDups and gapOverlap from the file list:
     sed -i -e "/tandemDups/d" redmine.canFam4.table.list
