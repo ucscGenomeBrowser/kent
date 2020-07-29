@@ -405,6 +405,7 @@ if (!checkedCache)
     if (isNotEmpty(trackDbCacheDir))
         {
         makeDirsOnPath(trackDbCacheDir);
+        chmod(trackDbCacheDir, 0777);
         doCache = TRUE;
         }
 

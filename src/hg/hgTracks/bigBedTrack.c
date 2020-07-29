@@ -172,6 +172,69 @@ for(; choices; choices = choices->next)
 return filter;
 }
 
+static void addGencodeFilters(struct cart *cart, struct trackDb *tdb, struct bigBedFilter **pFilters)
+/* Add GENCODE custom bigBed filters. */
+{
+struct bigBedFilter *filter;
+char varName[64];
+struct hash *hash;
+
+/* canonical */
+safef(varName, sizeof(varName), "%s.show.spliceVariants", tdb->track);
+boolean option = cartUsualBoolean(cart, varName, TRUE);
+if (!option)
+    {
+    AllocVar(filter);
+    slAddHead(pFilters, filter);
+    filter->fieldNum = 25;
+    filter->comparisonType = COMPARE_HASH_LIST_OR;
+    hash = newHash(5);
+    filter->valueHash = hash;
+    filter->numValuesInHash = 1;
+    hashStore(hash, "canonical" );
+    }
+
+/* transcript class */
+AllocVar(filter);
+slAddHead(pFilters, filter);
+filter->fieldNum = 20;
+filter->comparisonType = COMPARE_HASH;
+hash = newHash(5);
+filter->valueHash = hash;
+filter->numValuesInHash = 1;
+hashStore(hash,"coding");  // coding is always included
+
+safef(varName, sizeof(varName), "%s.show.noncoding", tdb->track);
+if (cartUsualBoolean(cart, varName, TRUE))
+    {
+    filter->numValuesInHash++;
+    hashStore(hash,"nonCoding");
+    }
+
+safef(varName, sizeof(varName), "%s.show.pseudo", tdb->track);
+if (cartUsualBoolean(cart, varName, FALSE))
+    {
+    filter->numValuesInHash++;
+    hashStore(hash,"pseudo");
+    }
+
+/* tagged sets */
+safef(varName, sizeof(varName), "%s.show.set", tdb->track);
+char *setString = cartUsualString(cart, varName, "basic");
+
+if (differentString(setString, "all"))
+    {
+    AllocVar(filter);
+    slAddHead(pFilters, filter);
+    filter->fieldNum = 23;
+    filter->comparisonType = COMPARE_HASH_LIST_OR;
+    hash = newHash(5);
+    filter->valueHash = hash;
+    filter->numValuesInHash = 1;
+    hashStore(hash, setString);
+    }
+}
+
 struct bigBedFilter *bigBedBuildFilters(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb)
 /* Build all the numeric and filterBy filters for a bigBed */
 {
@@ -213,6 +276,10 @@ for (;filterBy != NULL; filterBy = filterBy->next)
             slAddHead(&filters, filter);
         }
     }
+
+/* custom gencode filters */
+if (startsWith("gencodeV", tdb->track))
+    addGencodeFilters(cart, tdb, &filters);
 
 return filters;
 }

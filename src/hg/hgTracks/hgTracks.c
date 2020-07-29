@@ -72,6 +72,9 @@
 #include "hex.h"
 #include <openssl/sha.h>
 #include "customComposite.h"
+
+boolean isSessChanged = FALSE;
+
 //#include "bed3Sources.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
@@ -650,7 +653,7 @@ if(ideoTrack == NULL)
     {
     doIdeo = FALSE;
     }
-else if(trackImgOnly && !ideogramToo)
+else if (trackImgOnly && !ideogramToo)
     {
     doIdeo = FALSE;
     }
@@ -7147,8 +7150,20 @@ static void pruneRedundantCartVis(struct track *trackList)
 struct track *track;
 for (track = trackList; track != NULL; track = track->next)
     {
+    if (track->parent)  // has super track
+        pruneRedundantCartVis(track->parent);
+        
     char *cartVis = cartOptionalString(cart, track->track);
-    if (cartVis != NULL && hTvFromString(cartVis) == track->tdb->visibility)
+    if (cartVis == NULL)
+        continue;
+
+    if (tdbIsSuper(track->tdb))
+        {
+        if ((sameString("hide", cartVis) && (track->tdb->isShow == 0)) ||
+            (sameString("show", cartVis) && (track->tdb->isShow == 1)))
+            cartRemove(cart, track->track);
+        }
+    else if (hTvFromString(cartVis) == track->tdb->visibility)
         cartRemove(cart, track->track);
     }
 }
@@ -7778,6 +7793,155 @@ if (hubFile != NULL)
     }
 }
 
+// TODO: move to a file in lib (cheapcgi?)
+char *cgiVarStringSort(char *cgiVarString)
+/* Return cgi var string sorted alphabetically by vars */
+{
+struct slName *vars = slNameListFromString(cgiVarString, '&');
+slNameSort(&vars);
+char *cgiString = slNameListToString(vars, '&');
+return cgiString;
+}
+
+char *cgiTrackVisString(char *cgiVarString)
+/* Filter cgi var string (var=val&) to just track visibilities, but equivalence
+ * dense/pack/squish/full by replacing as 'on'.
+ * Return string with track data vars in alphabetic order */
+{
+// TODO: use cheapcgi.cgiParsedVarsNew() to parse and get list ?
+#define MAX_CGI_VARS 1000
+// NOTE: Ana featured sessions have: 473, 308, 288
+char *cgiVars[MAX_CGI_VARS];
+int ct = chopByChar(cgiVarString, '&', cgiVars, sizeof cgiVars);
+
+char *cgiVar = NULL;
+char *val = NULL;
+int i;
+struct dyString *dsCgiTrackVis = dyStringCreate("db=%s", database);
+for (i=0; i<ct; i++)
+    {
+    // TODO: attention to memory allocation
+    cgiVar = cloneString(cgiVars[i]);
+    val = rStringIn("=", cgiVar);
+    if (!val)     // expect always
+        continue;
+    val++;
+    if (sameString(val, "hide") || sameString(val, "dense") || sameString(val, "squish") ||
+        sameString(val, "pack") || sameString(val, "full") || sameString(val, "show"))
+        {
+        char *p = val;
+        *--p = 0;
+        dyStringPrintf(dsCgiTrackVis, "&%s=%s", cgiVar, sameString(val, "hide") ? "hide" : "on");
+        }
+    else if (stringIn("_sel=", cgiVar) && sameString(val, "1"))
+        {
+    val -= 5;
+    *val = 0;
+        dyStringAppend(dsCgiTrackVis, "&");
+        dyStringAppend(dsCgiTrackVis, cloneString(cgiVars[i]));
+        }
+    else
+        {
+        val = rStringIn("_imgOrd=", cgiVar);
+        if (!val)
+            val = rStringIn(".showCfg=", cgiVar);
+        if (!val)
+            continue;
+        *val = 0;
+        }
+    }
+return cgiVarStringSort(dyStringCannibalize(&dsCgiTrackVis));
+}
+
+// TODO: move to lib. Used by hgSession and hgTracks
+static void outIfNotPresent(struct cart *cart, struct dyString *dy, char *track, int tdbVis)
+/* Output default trackDb visibility if it's not mentioned in the cart. */
+{
+char *cartVis = cartOptionalString(cart, track);
+if (cartVis == NULL)
+    {
+    if (dy)
+        dyStringPrintf(dy,"&%s=%s", track, hStringFromTv(tdbVis));
+    else
+        printf("%s %s\n", track, hStringFromTv(tdbVis));
+    }
+}
+
+// TODO: move to lib. Used by hgSession and hgTracks
+static void outDefaultTracks(struct cart *cart, struct dyString *dy)
+/* Output the default trackDb visibility for all tracks
+ * in trackDb if the track is not mentioned in the cart. */
+{
+struct hash *parentHash = newHash(5);
+struct track *track;
+for (track=trackList; track; track=track->next)
+    {
+    struct trackDb *parent = track->tdb->parent;
+    if (parent)
+        {
+        if (hashLookup(parentHash, parent->track) == NULL)
+            {
+            hashStore(parentHash, parent->track);
+            if (parent->isShow)
+                outIfNotPresent(cart, dy, parent->track, tvShow);
+            }
+        }
+    if (track->tdb->visibility != tvHide)
+        outIfNotPresent(cart, dy, track->tdb->track, track->tdb->visibility);
+    }
+// Put a variable in the cart that says we put the default 
+// visibilities in it.
+if (dy)
+    dyStringPrintf(dy,"&%s=on", CART_HAS_DEFAULT_VISIBILITY);
+else
+    printf("%s on", CART_HAS_DEFAULT_VISIBILITY);
+}
+
+boolean hasSessionChanged()
+{
+/* Have any tracks been hidden or added ? */
+
+// get featured session from database
+char *sessionName = cartString(cart, "hgS_otherUserSessionName");
+if (!sessionName)
+    return FALSE;
+struct sqlConnection *conn = hConnectCentral();
+char query[1000];
+sqlSafef(query, sizeof query,
+        "SELECT contents FROM namedSessionDb where sessionName='%s'",
+                replaceChars(sessionName, " ", "%20"));
+char *cartString = sqlQuickNonemptyString(conn, query);
+hDisconnectCentral(&conn);
+
+// TODO: use cheapcgi.cgiParsedVarsNew() to parse and get list ?
+#define MAX_SESSION_LEN 100000
+char *curSessCart = (char *)needMem(MAX_SESSION_LEN);
+cgiDecodeFull(cartString, curSessCart, MAX_SESSION_LEN);
+char *curSessVisTracks = cgiTrackVisString(curSessCart);
+
+// get track-related vars from current cart
+struct dyString *dsCgiVars = newDyString(0);
+cartEncodeState(cart, dsCgiVars);
+outDefaultTracks(cart, dsCgiVars);
+char *this = dyStringCannibalize(&dsCgiVars);
+// TODO: again, better parsing
+char *this2 = replaceChars(this, "%2D", "-");
+char *thisSessVars = replaceChars(this2, "%2B", "+");
+char *thisSessVisTracks = cgiTrackVisString(thisSessVars);
+
+//freeMem(curSessCart);
+boolean isSessChanged = FALSE;
+if (differentString(curSessVisTracks, thisSessVisTracks))
+    {
+    isSessChanged = TRUE;
+    #ifdef DEBUG
+    uglyf("<br>curSess vis tracks: %s", curSessVisTracks);
+    uglyf("<br>thsSess vis tracks: %s", thisSessVisTracks);
+    #endif
+    }
+return isSessChanged;
+}
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -8262,6 +8426,7 @@ if ((trackImgOnly && !ideogramToo)
 
 if (trackImgOnly && !ideogramToo)
     {
+    // right-click to change viz 
     makeActiveImage(trackList, psOutput);
     fflush(stdout);
     return;  // bail out b/c we are done
@@ -8275,7 +8440,7 @@ if (!hideControls)
     printMenuBar();
     //menuBarAppendExtTools();
 
-    /* Show title . */
+    /* Show title */
     freezeName = hFreezeFromDb(database);
     if(freezeName == NULL)
         freezeName = "Unknown";
@@ -8301,8 +8466,44 @@ if (!hideControls)
 		hPrintf("%s %s on %s %s Assembly (%s)",
 			organization, browserName, trackHubSkipHubName(organism), freezeName, trackHubSkipHubName(database));
 	    }
+	}
+    hPrintf("</B></SPAN>");
+
+    // Disable recommended track set panel when changing tracks, session, database
+    char *sessionLabel = cartOptionalString(cart, hgsOtherUserSessionLabel);
+    char *oldDb = hashFindVal(oldVars, "db");
+    if (defaultTracks || hideAll || 
+        (oldDb && differentString(database, oldDb)) ||
+        (sessionLabel && sameString(sessionLabel, "off")))
+                cartRemove(cart, hgsOtherUserSessionLabel);
+    sessionLabel = cartOptionalString(cart, hgsOtherUserSessionLabel);
+    if (sessionLabel)
+        {
+        char *panel = "recTrackSetsPanel";
+        isSessChanged = hasSessionChanged();
+
+        struct dyString *hoverText = dyStringNew(0);
+        dyStringPrintf(hoverText, "Your browser is displaying the %s track set%s. "
+                                " Click to change to another.", sessionLabel,
+                                isSessChanged ? 
+                                ", with changes (added or removed tracks) you have requested" : "");
+        // TODO: cleanup layout tweaking for FF on IE10
+        hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
+        hPrintf("<span id='spacer' style='display: inline; padding-left: 10px;' >&nbsp;</span>");
+
+        hPrintf("<span id='%s' class='gbSessionLabelPanel' style='display: inline-block;' title='%s'>",
+                        panel, dyStringCannibalize(&hoverText));
+        hPrintf("<span id='recTrackSetLabel' class='gbSessionLabelText gbSessionChangeIndicator %s' "
+                        "style='margin-right: 3px;'>%s</span>",
+                        isSessChanged ? "gbSessionChanged" : "", sessionLabel);
+        hPrintf("<i id='removeSessionPanel' title='Close' class='fa fa-remove' "
+                        "style='color: #a9a9a9; font-size:smaller; vertical-align: super;'></i>");
+        hPrintf("</span>");
+
+        jsOnEventById("click", "recTrackSetLabel", "showRecTrackSetsPopup(); return false;");
+        jsOnEventById("click", "removeSessionPanel", "removeSessionPanel(); return false;");
         }
-    hPrintf("</B></span><BR>\n");
+    hPrintf("<BR>\n");
 
     /* This is a clear submit button that browsers will use by default when enter is pressed in position box. */
     hPrintf("<INPUT TYPE=IMAGE BORDER=0 NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\">");
@@ -8487,11 +8688,12 @@ hPrintf("<td width='40' align='right'><a href='?hgt.right3=1' """
 hPrintf("</tr></table>\n");
 #endif///def USE_NAVIGATION_LINKS
 
+
 /* Make clickable image and map. */
 makeActiveImage(trackList, psOutput);
 fflush(stdout);
 
-if(trackImgOnly)
+if (trackImgOnly)
     {
     // bail out b/c we are done
     if (measureTiming)
@@ -9682,7 +9884,8 @@ boolean gotExtTools = extToolsEnabled();
 setupHotkeys(gotExtTools);
 if (gotExtTools)
     printExtMenuData(chromName);
-
+if (recTrackSetsEnabled())
+    printRecTrackSets();
 }
 
 void chromInfoTotalRow(int count, long long total)

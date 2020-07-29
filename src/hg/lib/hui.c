@@ -7000,6 +7000,39 @@ for (i = 0; labelsNames[i][0] != NULL; i++)
     }
 }
 
+static void newGencodeShowOptions(struct cart *cart, struct trackDb *tdb)
+/* Put up line of controls that describe what parts to show. */
+{
+char varName[64];
+
+printf("<BR><B>Show:</B> ");
+
+safef(varName, sizeof(varName), "%s.show.noncoding", tdb->track);
+boolean option = cartUsualBoolean(cart, varName, TRUE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "non-coding genes");
+
+safef(varName, sizeof(varName), "%s.show.spliceVariants", tdb->track);
+option = cartUsualBoolean(cart, varName, TRUE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "splice variants");
+
+safef(varName, sizeof(varName), "%s.show.pseudo", tdb->track);
+option = cartUsualBoolean(cart, varName, FALSE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "pseudogenes");
+
+printf("<BR><B>Tagged Sets:</B> ");
+safef(varName, sizeof(varName), "%s.show.set", tdb->track);
+char *setString = cartUsualString(cart, varName, "basic");
+cgiMakeRadioButton(varName, "MANE_Select", sameString(setString, "MANE_Select"));
+printf(" %s&nbsp;&nbsp;&nbsp;", "MANE only");
+cgiMakeRadioButton(varName, "basic", sameString(setString, "basic"));
+printf(" %s&nbsp;&nbsp;&nbsp;", "BASIC only");
+cgiMakeRadioButton(varName, "all", sameString(setString, "all"));
+printf(" %s&nbsp;&nbsp;&nbsp;", "All");
+}
+
 void genePredCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* Put up genePred-specific controls */
 {
@@ -7016,6 +7049,10 @@ if (sameString(name, "acembly"))
     printf("<p><b>Gene Class: </b>");
     acemblyDropDown("acembly.type", acemblyClass);
     printf("  ");
+    }
+else if (startsWith("gencodeV", name))
+    {
+    newGencodeShowOptions(cart, tdb);
     }
 else if (startsWith("wgEncodeGencode", name))
     {

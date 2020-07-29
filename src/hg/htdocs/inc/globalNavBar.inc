@@ -27,6 +27,7 @@
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a id="configureMenuLink" href="../cgi-bin/hgTracks?hgTracksConfigPage=configure">Configure</a></li>
 	<li><a id="trackSearchMenuLink" href="../cgi-bin/hgTracks?hgt_tSearch=track+search">Track Search</a></li>
+        <!-- OPTIONAL_RECOMMENDED_TRACK_SETS_MENU -->
 	<li><a id="cartResetMenuLink" href="../cgi-bin/cartReset">Reset All User Settings</a></li>
         </ul>
 </li>

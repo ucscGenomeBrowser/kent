@@ -2653,7 +2653,8 @@ static boolean searchKnownCanonical(char *db, char *term, struct hgPositions *hg
  * knownGene.name in hgp. */
 {
 boolean foundIt = FALSE;
-struct sqlConnection *conn = hAllocConn(db);
+char *knownDatabase = hdbDefaultKnownDb(db);
+struct sqlConnection *conn = hAllocConn(knownDatabase);
 if (sqlTableExists(conn, "knownGene") && sqlTableExists(conn, "knownCanonical") &&
     sqlTableExists(conn, "kgXref"))
     {
@@ -2664,7 +2665,9 @@ if (sqlTableExists(conn, "knownGene") && sqlTableExists(conn, "knownCanonical") 
     char **row;
     if ((row = sqlNextRow(sr)) != NULL)
 	{
-	singlePos(hgp, "UCSC Genes", term, "knownGene", row[3], row[3],
+        char buffer[4096];
+        safef(buffer, sizeof buffer, "%s.knownGene", knownDatabase);
+	singlePos(hgp, "GENCODE Genes", term, cloneString(buffer), row[3], row[3],
 		  cloneString(row[0]), atoi(row[1]), atoi(row[2]));
 	foundIt = TRUE;
 	}

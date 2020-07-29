@@ -10768,9 +10768,10 @@ if (url != NULL && url[0] != 0)
         }
 
     // show Related UCSC Gene links
+    char *knownDatabase = hdbDefaultKnownDb(database);
     sqlSafef(query, sizeof(query),
-          "select distinct kgId from kgXref x, %s l, omim2gene g where x.refseq = mrnaAcc and l.omimId=%s and g.omimId=l.omimId and g.entryType='gene'",
-	  refLinkTable, itemName);
+          "select distinct kgId from %s.kgXref x, %s l, omim2gene g where x.refseq = mrnaAcc and l.omimId=%s and g.omimId=l.omimId and g.entryType='gene'",
+	  knownDatabase, refLinkTable, itemName);
     sr = sqlMustGetResult(conn, query);
     if (sr != NULL)
 	{

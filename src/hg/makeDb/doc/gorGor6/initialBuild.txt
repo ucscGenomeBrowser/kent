@@ -675,107 +675,73 @@ searchPriority 8
     #	5706 jkStuff/gorGor6.nonBridged.lft
 
 ########################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2019-07-03 - Hiram)
+# lastz/chain/net swap human/hg38 (DONE - 2019-11-20 - Hiram)
+
     # original alignment
-    cd /hive/data/genomes/hg38/bed/lastzGorGor6.2019-07-03
+    cd /hive/data/genomes/hg38/bed/lastzGorGor6.2019-11-20
 
     cat fb.hg38.chainGorGor6Link.txt
-    # 2596157811 bases of 3095998939 (83.855%) in intersection
+    # 2908900659 bases of 3095998939 (93.957%) in intersection
     cat fb.hg38.chainSynGorGor6Link.txt
-    # 2564291936 bases of 3095998939 (82.826%) in intersection
+    # 2885980361 bases of 3095998939 (93.216%) in intersection
     cat fb.hg38.chainRBest.GorGor6.txt
-    # 2422981614 bases of 3095998939 (78.262%) in intersection
+    # 2693876207 bases of 3095998939 (87.012%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/gorGor6/bed/blastz.hg38.swap
     cd /hive/data/genomes/gorGor6/bed/blastz.hg38.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzGorGor6.2019-07-03/DEF \
-        -swap -chainMinScore=5000 -chainLinearGap=medium \
-          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+      /hive/data/genomes/hg38/bed/lastzGorGor6.2019-11-20/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    61m39.505s
+    #  real    63m46.473s
 
     cat fb.gorGor6.chainHg38Link.txt
-    # 2485840115 bases of 2936892733 (84.642%) in intersection
+    # 2738870921 bases of 2999027915 (91.325%) in intersection
     cat fb.gorGor6.chainSynHg38Link.txt
-    # 2465210442 bases of 2936892733 (83.939%) in intersection
+    # 2728591501 bases of 2999027915 (90.983%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` gorGor6 hg38) > rbest.log 2>&1
-    # real    126m29.919s
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` gorGor6 hg38) \
+       > rbest.log 2>&1
+    # real    62m14.470s
 
     cat fb.gorGor6.chainRBest.Hg38.txt
-    # 2424028492 bases of 2936892733 (82.537%) in intersection
+    # 2697792568 bases of 2999027915 (89.956%) in intersection
 
-#########################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2019-07-09 - Hiram)
+###########################################################################
+# lastz/chain/net swap mouse/mm10 (DONE - 2019-11-21 - Hiram)
 
     # original alignment
-    cd /hive/data/genomes/mm10/bed/lastzGorGor6.2019-07-03
-
+    cd /hive/data/genomes/mm10/bed/lastzGorGor6.2019-11-20
     cat fb.mm10.chainGorGor6Link.txt
-    #	923559693 bases of 2652783500 (34.815%) in intersection
+    #	929953885 bases of 2652783500 (35.056%) in intersection
     cat fb.mm10.chainSynGorGor6Link.txt
-    #   878479553 bases of 2652783500 (33.115%) in intersection
+    #   882047357 bases of 2652783500 (33.250%) in intersection
     cat fb.mm10.chainRBest.GorGor6.txt
-    # 879885863 bases of 2652783500 (33.168%) in intersection
+    # 885135149 bases of 2652783500 (33.366%) in intersection
 
     mkdir /hive/data/genomes/gorGor6/bed/blastz.mm10.swap
     cd /hive/data/genomes/gorGor6/bed/blastz.mm10.swap
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzGorGor6.2019-07-03/DEF \
+	/hive/data/genomes/mm10/bed/lastzGorGor6.2019-11-20/DEF \
 	-swap -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
-    #	real    52m48.045s
+    #	real    72m34.088s
 
     cat fb.gorGor6.chainMm10Link.txt
-    #	918551088 bases of 2936892733 (31.276%) in intersection
+    #	1017872526 bases of 2999027915 (33.940%) in intersection
     cat fb.gorGor6.chainSynMm10Link.txt
-    #   876230433 bases of 2936892733 (29.835%) in intersection
+    #    880983055 bases of 2999027915 (29.376%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` gorGor6 mm10) > rbest.log 2>&1
-    # real    303m40.303s
+    time (doRecipBest.pl -load -workhorse=hgwdev gorGor6 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    237m38.959s
 
     cat fb.gorGor6.chainRBest.Mm10.txt
-    # 878542993 bases of 2936892733 (29.914%) in intersection
-
-
-#########################################################################
-# lastz/chain/net swap human/hg19 (TBD - 2019-07-09 - Hiram)
-
-    # original alignment
-    cd /hive/data/genomes/hg19/bed/lastzGorGor6.2019-07-09
-
-    cat fb.hg19.chainGorGor6Link.txt
-    # 2604364199 bases of 2991694177 (87.053%) in intersection
-    cat fb.hg19.chainSynGorGor6Link.txt
-    # 2570126144 bases of 2991694177 (85.909%) in intersection
-    cat fb.hg19.chainRBest.GorGor6.txt
-    # 2421810991 bases of 2991694177 (80.951%) in intersection
-
-    # and for the swap:
-    mkdir /hive/data/genomes/gorGor6/bed/blastz.hg19.swap
-    cd /hive/data/genomes/gorGor6/bed/blastz.hg19.swap
-
-    time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg19/bed/lastzGorGor6.2019-07-09/DEF \
-        -swap -chainMinScore=5000 -chainLinearGap=medium \
-          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > swap.log 2>&1
-    #  real    56m29.163s
-
-    cat fb.gorGor6.chainHg19Link.txt
-    # 2483311773 bases of 2936892733 (84.556%) in intersection
-    cat fb.gorGor6.chainSynHg19Link.txt
-    # 2461925388 bases of 2936892733 (83.828%) in intersection
-
-    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` gorGor6 hg19) > rbest.log 2>&1
-    # real    112m15.825s
-
-    cat fb.gorGor6.chainRBest.Hg19.txt
-    # 2423781773 bases of 2936892733 (82.529%) in intersection
+    # 883663662 bases of 2999027915 (29.465%) in intersection
 
 ##############################################################################
 # GENBANK AUTO UPDATE (DONE - 2019-11-20 - Hiram)
@@ -882,18 +848,17 @@ gorGor6.downloadDir = gorGor6
     # add: include ../../refSeqComposite.ra alpha
     # to the gorilla/gorGor6/trackDb.ra to turn on the track in the browser
 
-    # XXX 2019-11-20 - ready for this after genbank runs
-
     featureBits -enrichment gorGor6 refGene ncbiRefSeq 
- # refGene 0.402%, ncbiRefSeq 3.148%, both 0.402%, cover 99.90%, enrich 31.73x
+ # refGene 0.006%, ncbiRefSeq 2.477%, both 0.006%, cover 99.87%, enrich 40.32x
+
     featureBits -enrichment gorGor6 ncbiRefSeq refGene
- # ncbiRefSeq 3.148%, refGene 0.402%, both 0.402%, cover 12.76%, enrich 31.73x
+ # ncbiRefSeq 2.477%, refGene 0.006%, both 0.006%, cover 0.25%, enrich 40.32x
 
     featureBits -enrichment gorGor6 ncbiRefSeqCurated refGene
- # ncbiRefSeqCurated 0.401%, refGene 0.402%, both 0.400%, cover 99.66%, enrich 247.79x
+ # ncbiRefSeqCurated 0.007%, refGene 0.006%, both 0.006%, cover 94.29%, enrich 14956.14x
 
     featureBits -enrichment gorGor6 refGene ncbiRefSeqCurated
- # refGene 0.402%, ncbiRefSeqCurated 0.401%, both 0.400%, cover 99.33%, enrich 247.79x
+ # refGene 0.006%, ncbiRefSeqCurated 0.007%, both 0.006%, cover 99.87%, enrich 14956.14x
 
 #########################################################################
 # LIFTOVER TO gorGor5 (DONE - 2019-11-20 - Hiram)
@@ -968,7 +933,7 @@ gorGor6.downloadDir = gorGor6
 	-shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev) > specScores.log 2>&1
-XXX - running - Thu Nov 21 08:09:23 PST 2019
+    # real    8m40.172s
 
     cat guides/run.time | sed -e 's/^/# /;'
 # Completed: 100 of 100 jobs
@@ -979,99 +944,47 @@ XXX - running - Thu Nov 21 08:09:23 PST 2019
 # Submission to last job:           386s       6.43m     0.11h    0.00d
 
     cat specScores/run.time | sed -e 's/^/# /;'
-    # real    8m40.172s
-    Completed: 100 of 100 jobs
-CPU time in finished jobs:      11503s     191.72m     3.20h    0.13d  0.000 y
-IO & Wait Time:                   254s       4.23m     0.07h    0.00d  0.000 y
-Average job time:                 118s       1.96m     0.03h    0.00d
-Longest finished job:             386s       6.43m     0.11h    0.00d
-Submission to last job:           387s       6.45m     0.11h    0.00d
+# Completed: 3041114 of 3041114 jobs
+# CPU time in finished jobs:  282305886s 4705098.10m 78418.30h 3267.43d  8.952 y
+# IO & Wait Time:              84009113s 1400151.88m 23335.86h  972.33d  2.664 y
+# Average job time:                 120s       2.01m     0.03h    0.00d
+# Longest finished job:             498s       8.30m     0.14h    0.01d
+# Submission to last job:        381920s    6365.33m   106.09h    4.42d
 
-    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
-       -continue=specScoreJobList -stop=specScores \
-    gorGor6 ncbiRefSeq -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
-    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
-      -workhorse=hgwdev) > specScores.log 2>&1
-Completed: 2947877 of 2947877 jobs
-CPU time in finished jobs:  262070681s 4367844.69m 72797.41h 3033.23d  8.310 y
-IO & Wait Time:               6243499s  104058.31m  1734.31h   72.26d  0.198 y
-Average job time:                  91s       1.52m     0.03h    0.00d
-Longest finished job:             217s       3.62m     0.06h    0.00d
 Submission to last job:        274925s    4582.08m    76.37h    3.18d
 
-# Number of specScores: 220282678
+# Number of specScores: 227564780
 
-# real    5619m9.026s
-# user    617m24.869s
-# sys     52m8.371s
+# real    7482m37.507s
+# user    0m2.047s
+# sys     0m2.110s
 
     ### remember to get back to hgwdev to run this
     time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
-       -continue=effScores -stop=load \
-    gorGor6 ncbiRefSeq -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
+       -continue=effScores -stop=load gorGor6 ncbiRefSeq \
+    -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev) > load.log 2>&1
-    # real    970m21.487s
-    # user    0m0.983s
-    # sys     0m2.219s
+    # real    1081m16.460s
 
-# effScores:
-Completed: 27697 of 27697 jobs
-CPU time in finished jobs:   14348277s  239137.94m  3985.63h  166.07d  0.455 y
-IO & Wait Time:                150120s    2502.01m    41.70h    1.74d  0.005 y
-Average job time:                 523s       8.72m     0.15h    0.01d
-Longest finished job:            1966s      32.77m     0.55h    0.02d
-Submission to last job:         15067s     251.12m     4.19h    0.17d
+    cat effScores/run.time | sed -e 's/^/# /;'
+# Completed: 27933 of 27933 jobs
+# CPU time in finished jobs:   13825593s  230426.55m  3840.44h  160.02d  0.438 y
+# IO & Wait Time:                172582s    2876.37m    47.94h    2.00d  0.005 y
+# Average job time:                 501s       8.35m     0.14h    0.01d
+# Longest finished job:           20199s     336.65m     5.61h    0.23d
+# Submission to last job:         22274s     371.23m     6.19h    0.26d
 
-# offTargets:
-Completed: 147394 of 147394 jobs
-CPU time in finished jobs:    2213680s   36894.66m   614.91h   25.62d  0.070 y
-IO & Wait Time:               2663355s   44389.25m   739.82h   30.83d  0.084 y
-Average job time:                  33s       0.55m     0.01h    0.00d
-Longest finished job:              68s       1.13m     0.02h    0.00d
-
-#########################################################################
-# crispr ALL (TBD - 2018-10-16 - Hiram)
-    # working on this script, adding the indexFa step:
-    time (~/kent/src/hg/utils/automation/doCrispr.pl \
-	-stop=indexFa -buildDir=`pwd` -smallClusterHub=ku gorGor6 ncbiRefSeq) \
-	> indexFa.log 2>&1
-    # real    23m26.694s
-
-    time (~/kent/src/hg/utils/automation/doCrispr.pl \
-       -continue=ranges -stop=guides -buildDir=`pwd` -smallClusterHub=ku \
-           gorGor6 ncbiRefSeq) > guides.log 2>&1
-    # real    2m50.758s
-
-    # adding the /dev/shm/ setup rsync for the indexed Fa
-    # performed manually to work out the procedure
-    time (~/kent/src/hg/utils/automation/doCrispr.pl \
-        -continue=specScores -stop=specScores -buildDir=`pwd` \
-           -smallClusterHub=ku gorGor6 ncbiRefSeq) > specScores.log
-
-    # had about half of ku for about half this time:
-# Completed: 884922 of 884922 jobs
-# CPU time in finished jobs:  35872791s  597879.85m  9964.66h  415.19d  1.138 y
-# IO & Wait Time:               899261s   14987.69m   249.79h   10.41d  0.029 y
-# Average job time:                 42s       0.69m     0.01h    0.00d
-# Longest finished job:             88s       1.47m     0.02h    0.00d
-# Submission to last job:        48045s     800.75m    13.35h    0.56d
-
-
-    time find tmp/outGuides -type f | xargs cut -f3-6 > ../specScores.tab
-    # real    236m17.220s
-    wc -l specScores.tab
-    # 66451712 specScores.tab
-
-    time (~/kent/src/hg/utils/automation/doCrispr.pl \
-	-continue=effScores -stop=load \
-	    -buildDir=`pwd` -smallClusterHub=ku gorGor6 ncbiRefSeq) \
-	> load.log
-    # real    307m41.143s
+    cat offTargets/run.time | sed -e 's/^/# /;'
+# Completed: 152056 of 152056 jobs
+# CPU time in finished jobs:    2009038s   33483.97m   558.07h   23.25d  0.064 y
+# IO & Wait Time:               2321685s   38694.75m   644.91h   26.87d  0.074 y
+# Average job time:                  28s       0.47m     0.01h    0.00d
+# Longest finished job:              53s       0.88m     0.01h    0.00d
+# Submission to last job:          4266s      71.10m     1.19h    0.05d
 
 #########################################################################
 # all.joiner update, downloads and in pushQ - (WORKING - 2019-11-20 - Hiram)
-xyz
     cd $HOME/kent/src/hg/makeDb/schema
     # verify all the business is done for release
     ~/kent/src/hg/utils/automation/verifyBrowser.pl gorGor6
@@ -1087,16 +1000,16 @@ xyz
     # run up a 'make alpha' in hg/hgTables to get this all.joiner file
     # into the hgwdev/genome-test system
 
-XXX - continue here when ready
     cd /hive/data/genomes/gorGor6
-    time (makeDownloads.pl gorGor6) > downloads.log 2>&1
-    #  real    17m47.024s
+    time (~/kent/src/hg/utils/automation/makeDownloads.pl gorGor6) > downloads.log 2>&1
+    #  real    19m20.834s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/gorGor6/pushQ
     cd /hive/data/genomes/gorGor6/pushQ
  time ($HOME/kent/src/hg/utils/automation/makePushQSql.pl -redmineList gorGor6) > gorGor6.pushQ.sql 2> stderr.out
-    # real    15m52.548s
+XXX - running - Tue Jul 28 10:15:28 PDT 2020
+    # real    13m56.689s
 
     # remove the tandemDups and gapOverlap from the file list:
     sed -i -e "/tandemDups/d" redmine.gorGor6.table.list
@@ -1121,11 +1034,11 @@ done
 
     # verify database tables, how many to expect:
     wc -l redmine.gorGor6.table.list
-    # 63 redmine.gorGor6.table.list
+    # 53 redmine.gorGor6.table.list
 
     # how many actual:
     awk -F'.' '{printf "hgsql -N %s -e '"'"'show table status like \"%s\";'"'"'\n", $1, $2}' redmine.gorGor6.table.list | sh | wc -l
-    # 63
+    # 53
 
     # would be a smaller number actual if some were missing
 

@@ -235,6 +235,19 @@ menuStr = menuBar(cart, database);
 menuStr = replaceChars(menuStr, "<!-- OPTIONAL_PROJECT_MENU_START -->", "<!-- OPTIONAL_PROJECT_MENU_START");
 menuStr = replaceChars(menuStr, "<!--OPTIONAL_PROJECT_MENU_END -->", "OPTIONAL_PROJECT_MENU_END -->");
 
+// Add Recommended Track Sets to Genome Browser menu (if any for this assembly)
+// TODO: consider splitting the recommended track sets config file into separate files by database,
+//       so we don't need to read file to see whether to add menu item
+if (recTrackSetsEnabled() && recTrackSetsForDb())
+    {
+    #define recTrackSetsMenuItemId     "recTrackSetsMenuItem"
+    struct dyString *menuItemDs = dyStringCreate("<li><a href='#' id='%s'>Recommended Track Sets</a></li>",
+                                       recTrackSetsMenuItemId);
+    menuStr = replaceChars(menuStr, "<!-- OPTIONAL_RECOMMENDED_TRACK_SETS_MENU -->", 
+                                dyStringCannibalize(&menuItemDs));
+    jsOnEventById("click", recTrackSetsMenuItemId, "showRecTrackSetsPopup(); return false;");
+    }
+
 // Create top items in view menu
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.psOutput=on", uiVars);
 appendLink(&links, buf, "PDF/PS", "pdfLink", FALSE);

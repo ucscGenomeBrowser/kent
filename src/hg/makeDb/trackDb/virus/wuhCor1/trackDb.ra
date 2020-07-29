@@ -111,7 +111,7 @@ priority 30
 track contacts
 shortLabel PDB Ligand Contacts
 longLabel Potential contact residues in PDB structures of viral proteins
-visibility pack
+visibility hide
 group genes
 type bigBed 12 +
 bigDataUrl /gbdb/wuhCor1/bbi/contacts.bb
@@ -119,6 +119,7 @@ mouseOverField _mouseOver
 url http://soe.ucsc.edu/~afyfe/covid/hub/t12.html?struct=$$
 urlLabel Link to 3D structure viewer:
 priority 31
+pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 28, 2020"
 
 track cas13Crispr
 shortLabel Cas13 CRISPR
@@ -186,6 +187,41 @@ type bigBed 9 +
 bigDataUrl /gbdb/wuhCor1/bbi/conticello.bb
 noScoreFilter on
 filter.freq 0.01
+
+# original source for this composite: 
+# https://data.broadinstitute.org/compbio1/SARS-CoV-2_PhyloCSF_Genes/trackHub/wuhCor1/trackDb.txt
+track phyloGenes
+type bigGenePred
+itemRgb on
+group genes
+compositeTrack on
+shortLabel PhyloCSF Genes
+longLabel PhyloCSF Genes - Curated conserved genes
+baseColorDefault genomicCodons
+exonNumbers on
+noScoreFilter on
+pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 28, 2020"
+
+        track PhyloCSFgenes
+        type bigGenePred
+        #bigDataUrl https://data.broadinstitute.org/compbio1/SARS-CoV-2_PhyloCSF_Genes/PhyloCSFgenes.bb
+        bigDataUrl /gbdb/wuhCor1/bbi/phyloGenes/PhyloCSFgenes.bb
+        shortLabel PhyloCSF Genes
+        longLabel PhyloCSF Genes - curated conserved genes
+        visibility pack
+        priority 10
+        parent phyloGenes
+
+        track PhyloCSFrejected
+        type bigGenePred
+        itemRgb on
+        #bigDataUrl https://data.broadinstitute.org/compbio1/SARS-CoV-2_PhyloCSF_Genes/PhyloCSFrejectedGenes.bb
+        bigDataUrl /gbdb/wuhCor1/bbi/phyloGenes/PhyloCSFrejectedGenes.bb
+        shortLabel PhyloCSF Rejected Genes
+        longLabel Genes rejected from PhyloCSF genes list
+        visibility hide
+        priority 10
+        parent phyloGenes off
 
 track stringtieKim
 shortLabel StringTie-Kim
@@ -327,7 +363,7 @@ type bigBed
 skipEmptyFields on
 group map
 dataVersion 2020-07-15
-release alpha
+pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 29, 2020"
 
     track problematicSitesMask
     shortLabel Mask
@@ -337,7 +373,6 @@ release alpha
     color 255,0,0
     bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesMask.bb
     priority 10
-    release alpha
 
     track problematicSitesCaution
     shortLabel Caution
@@ -347,7 +382,6 @@ release alpha
     color 240,160,0
     bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesCaution.bb
     priority 20
-    release alpha
 
 track icshape
 shortLabel icSHAPE RNA Struct
@@ -392,3 +426,4 @@ include kim2020.ra
 include trackDb.7way.ra
 include phylocsf.ra
 include addgene.ra
+include pond.ra
