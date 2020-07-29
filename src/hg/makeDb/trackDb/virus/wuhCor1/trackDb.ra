@@ -363,7 +363,7 @@ type bigBed
 skipEmptyFields on
 group map
 dataVersion 2020-07-15
-release alpha
+pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 29, 2020"
 
     track problematicSitesMask
     shortLabel Mask
@@ -373,7 +373,6 @@ release alpha
     color 255,0,0
     bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesMask.bb
     priority 10
-    release alpha
 
     track problematicSitesCaution
     shortLabel Caution
@@ -383,7 +382,6 @@ release alpha
     color 240,160,0
     bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesCaution.bb
     priority 20
-    release alpha
 
 track icshape
 shortLabel icSHAPE RNA Struct
