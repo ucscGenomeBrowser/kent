@@ -466,6 +466,7 @@ void cartSetDbDisconnector(DbDisconnect disconnector);
 
 #define hgsOtherUserName hgSessionPrefix "otherUserName"
 #define hgsOtherUserSessionName hgSessionPrefix "otherUserSessionName"
+#define hgsOtherUserSessionLabel hgSessionPrefix "otherUserSessionLabel"
 #define hgsDoOtherUser hgSessionPrefix "doOtherUser"
 
 #define hgsLoadUrlName hgSessionPrefix "loadUrlName"

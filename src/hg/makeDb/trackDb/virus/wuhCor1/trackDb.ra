@@ -111,7 +111,7 @@ priority 30
 track contacts
 shortLabel PDB Ligand Contacts
 longLabel Potential contact residues in PDB structures of viral proteins
-visibility pack
+visibility hide
 group genes
 type bigBed 12 +
 bigDataUrl /gbdb/wuhCor1/bbi/contacts.bb
@@ -119,6 +119,7 @@ mouseOverField _mouseOver
 url http://soe.ucsc.edu/~afyfe/covid/hub/t12.html?struct=$$
 urlLabel Link to 3D structure viewer:
 priority 31
+pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 28, 2020"
 
 track cas13Crispr
 shortLabel Cas13 CRISPR
@@ -199,6 +200,7 @@ longLabel PhyloCSF Genes - Curated conserved genes
 baseColorDefault genomicCodons
 exonNumbers on
 noScoreFilter on
+pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 28, 2020"
 
         track PhyloCSFgenes
         type bigGenePred
@@ -361,7 +363,7 @@ type bigBed
 skipEmptyFields on
 group map
 dataVersion 2020-07-15
-release alpha
+pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 29, 2020"
 
     track problematicSitesMask
     shortLabel Mask
@@ -371,7 +373,6 @@ release alpha
     color 255,0,0
     bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesMask.bb
     priority 10
-    release alpha
 
     track problematicSitesCaution
     shortLabel Caution
@@ -381,7 +382,6 @@ release alpha
     color 240,160,0
     bigDataUrl /gbdb/wuhCor1/problematicSites/problematicSitesCaution.bb
     priority 20
-    release alpha
 
 track icshape
 shortLabel icSHAPE RNA Struct

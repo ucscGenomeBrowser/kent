@@ -7150,8 +7150,20 @@ static void pruneRedundantCartVis(struct track *trackList)
 struct track *track;
 for (track = trackList; track != NULL; track = track->next)
     {
+    if (track->parent)  // has super track
+        pruneRedundantCartVis(track->parent);
+        
     char *cartVis = cartOptionalString(cart, track->track);
-    if (cartVis != NULL && hTvFromString(cartVis) == track->tdb->visibility)
+    if (cartVis == NULL)
+        continue;
+
+    if (tdbIsSuper(track->tdb))
+        {
+        if ((sameString("hide", cartVis) && (track->tdb->isShow == 0)) ||
+            (sameString("show", cartVis) && (track->tdb->isShow == 1)))
+            cartRemove(cart, track->track);
+        }
+    else if (hTvFromString(cartVis) == track->tdb->visibility)
         cartRemove(cart, track->track);
     }
 }
@@ -8457,9 +8469,14 @@ if (!hideControls)
 	}
     hPrintf("</B></SPAN>");
 
-    if (defaultTracks || hideAll)
-        cartRemove(cart, "hgS_otherUserSessionLabel");
-    char *sessionLabel = cartOptionalString(cart, "hgS_otherUserSessionLabel");
+    // Disable recommended track set panel when changing tracks, session, database
+    char *sessionLabel = cartOptionalString(cart, hgsOtherUserSessionLabel);
+    char *oldDb = hashFindVal(oldVars, "db");
+    if (defaultTracks || hideAll || 
+        (oldDb && differentString(database, oldDb)) ||
+        (sessionLabel && sameString(sessionLabel, "off")))
+                cartRemove(cart, hgsOtherUserSessionLabel);
+    sessionLabel = cartOptionalString(cart, hgsOtherUserSessionLabel);
     if (sessionLabel)
         {
         char *panel = "recTrackSetsPanel";
