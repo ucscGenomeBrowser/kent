@@ -553,6 +553,7 @@ vcfDoFilter off
 vcfDoQual off
 vcfDoMaf off
 compositeTrack on
+geneTrack ncbiRefSeqCurated
 pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 21, 2020"
 
 

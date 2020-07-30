@@ -57,8 +57,13 @@
 #define VCF_PHASED_ALIAS_LABEL_VAR "doAliasLabel"
 #define VCF_PHASED_HIDE_OTHER_VAR "hideParents"
 #define VCF_PHASED_TDB_USE_ALT_NAMES "vcfUseAltSampleNames"
-#define VCF_PHASED_HIGHLIGHT_INCONSISTENT "vcfHighlightDiffs"
 #define VCF_PHASED_CHILD_BELOW_VAR "sortChildBelow"
+
+#define VCF_PHASED_COLORBY_VAR "vcfPhasedColorBy"
+#define VCF_PHASED_COLORBY_MENDEL_DIFF "mendelDiff"
+#define VCF_PHASED_COLORBY_DE_NOVO "deNovo"
+#define VCF_PHASED_COLORBY_FUNCTION "function"
+#define VCF_PHASED_COLORBY_DEFAULT "noColor"
 
 void vcfCfgHaplotypeCenter(struct cart *cart, struct trackDb *tdb, char *track,
 			   boolean parentLevel, struct vcfFile *vcff,
