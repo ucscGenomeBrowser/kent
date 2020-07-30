@@ -92,6 +92,22 @@ zgrep -v "^#" *gaps.txt.gz | awk '{print $3-$2+1}' | ave stdin \
 # total 73600614.000000
 # standard deviation 667296.516291
 
+     # survey the sequence to see if it has IUPAC characters:
+     time zgrep -v "^>" GCA_000001635.9_GRCm39_genomic.fna.gz \
+        | perl -ne '{print join("\n",split(//))}' \
+           | sed -e '/^$/d' | sort | uniq -c | sort -rn | sed -e 's/^/# /;'
+# 482676636 T
+# 482443877 A
+# 361138526 G
+# 361105901 C
+# 292069876 t
+# 291366772 a
+# 191917431 g
+# 191902764 c
+# 73600668 N
+
+# real    29m14.860s
+
 #############################################################################
 # establish config.ra file (DONE - 2020-07-27 - Hiram)
     cd /hive/data/genomes/mm39
@@ -111,7 +127,7 @@ assemblyLabel Genome Reference Consortium
 to
 assemblyLabel Genome Reference Consortium Mouse Build 39 (GCA_000001635.9)
 
-    # XXX THERE IS NO BIOSAMPLE !!!
+    # XXX THERE IS NO BIOSAMPLE !!!  (actually, there appear to be multiple)
 
     # compare with previous version to see if it is sane:
     diff mm39.config.ra ../mm10/mm10.config.ra
@@ -356,7 +372,7 @@ real    11m14.469s
     ln -s `pwd`/mm39.unmasked.2bit /gbdb/mm39/mm39.2bit
 
 #############################################################################
-# verify gap table vs NCBI gap file (TBD - 2020-07-17 - Hiram)
+# verify gap table vs NCBI gap file (DONE - 2020-07-27 - Hiram)
     mkdir /hive/data/genomes/mm39/bed/gap
     cd /hive/data/genomes/mm39/bed/gap
 
@@ -441,11 +457,10 @@ real    11m14.469s
     time (doIdKeys.pl \
         -twoBit=/hive/data/genomes/mm39/mm39.unmasked.2bit \
         -buildDir=`pwd` mm39) > do.log 2>&1 &
-XXX - running - Mon Jul 27 15:15:44 PDT 2020
-    # real    3m22.298s
+    # real    0m45.175s
 
     cat mm39.keySignature.txt
-    #  174191aae5515d1114a9d6320b152b1a
+    #  804f78d880a5a7f049c472046b563601
 
 #############################################################################
 # gapOverlap (DONE - 2020-07-27 - Hiram)
@@ -454,20 +469,16 @@ XXX - running - Mon Jul 27 15:15:44 PDT 2020
     time (doGapOverlap.pl \
         -twoBit=/hive/data/genomes/mm39/mm39.unmasked.2bit mm39 ) \
         > do.log 2>&1 &
-XXX - running - Mon Jul 27 15:15:36 PDT 2020
-    # real    1m49.489s
+    # real    1m49.446s
 
-    # there only only nine:
+    # there is one only:
     wc -l bed.tab
-    # 9 bed.tab
+    # 1 bed.tab
     cut -f2- bed.tab
-chr1    41008264        41010364        chr1:41008265-41010364  1000    +      41008264 41010364        0       2       1000,1000       0,1100
-chr17   58049274        58051374        chr17:58049275-58051374 1000    +      58049274 58051374        0       2       1000,1000       0,1100
-... etc ...
-chrX    45160089        45162189        chrX:45160090-45162189  1000    +      45160089 45162189        0       2       1000,1000       0,1100
+chr6    47663669        47714277        chr6:47663670-47714277  304     +      47663669 47714277        0       2       304,304 0,50304
 
     cat fb.mm39.gapOverlap.txt
-    # 16158 bases of 2482000080 (0.001%) in intersection
+    # 608 bases of 2728222451 (0.000%) in intersection
 
 #############################################################################
 # tandemDups (DONE - 2020-07-27 - Hiram)
@@ -476,8 +487,18 @@ chrX    45160089        45162189        chrX:45160090-45162189  1000    +      4
     time (~/kent/src/hg/utils/automation/doTandemDup.pl \
   -twoBit=/hive/data/genomes/mm39/mm39.unmasked.2bit mm39) \
         > do.log 2>&1 &
-XXX - running - Mon Jul 27 15:16:22 PDT 2020
-    # real    188m34.598s
+    # real    440m10.886s
+
+    # one job in pairedEnds needs more memory:
+    time ./runOne 29 20000 chrY tmp/chrY.bed.gz
+    # real    28m57.353s
+
+    # continuing
+    time (~/kent/src/hg/utils/automation/doTandemDup.pl \
+	-continue=collapsePairedEnds \
+	    -twoBit=/hive/data/genomes/mm39/mm39.unmasked.2bit mm39) \
+        > collapsePairedEnds.log 2>&1 &
+XXX - running - Thu Jul 30 09:19:46 PDT 2020
 
     cat fb.mm39.tandemDups.txt
     # 155315479 bases of 3044872214 (5.101%) in intersection
@@ -509,10 +530,10 @@ XXX - running - Mon Jul 27 15:16:22 PDT 2020
 
     time (doIdKeys.pl -buildDir=`pwd` \
         -twoBit=`pwd`/mm39.genbank.2bit genbankMm39)  > do.log 2>&1 &
-    # real    3m30.599s
+    # real    0m45.317s
 
     cat genbankMm39.keySignature.txt
-    #  174191aae5515d1114a9d6320b152b1a
+    #  804f78d880a5a7f049c472046b563601
 
     mkdir /hive/data/genomes/mm39/bed/chromAlias
     cd /hive/data/genomes/mm39/bed/chromAlias
@@ -525,12 +546,12 @@ XXX - running - Mon Jul 27 15:16:22 PDT 2020
 
     # should be same line counts throughout:
     wc -l * ../../chrom.sizes
-    #   2198 ucscToINSDC.bed
-    #	2198 ../../chrom.sizes
+    #   61 ucscToINSDC.bed
+    #	61 ../../chrom.sizes
 
     export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
     echo $chrSize
-    # 23
+    # 22
     # use the $chrSize in this sed
     sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
          | hgLoadSqlTab mm39 ucscToINSDC stdin ucscToINSDC.bed
@@ -540,26 +561,36 @@ XXX - running - Mon Jul 27 15:16:22 PDT 2020
 
     # should cover %100 entirely:
     featureBits -countGaps mm39 ucscToINSDC
-    # 2482000080 bases of 2482000080 (100.000%) in intersection
+    # 2728222451 bases of 2728222451 (100.000%) in intersection
 
 #########################################################################
-# add chromAlias table (TBD - 2020-05-20 - Hiram)
+# add chromAlias table (DONE - 2020-07-27 - Hiram)
 
     mkdir /hive/data/genomes/mm39/bed/chromAlias
     cd /hive/data/genomes/mm39/bed/chromAlias
 
-    hgsql -N -e 'select chrom,name from ucscToRefSeq;' mm39 \
-        | sort -k1,1 > ucsc.refseq.tab
+    grep -v "^#" ../../genbank/GCA_000001635.9_GRCm39_assembly_report.txt \
+	| awk '{printf "%s\t%s\n", $5,$1}' | sort > ncbi.assembly.txt
+
     hgsql -N -e 'select chrom,name from ucscToINSDC;' mm39 \
         | sort -k1,1 > ucsc.genbank.tab
 
+    join -t$'\t' -1 2 <(sort -k2,2 ucsc.genbank.tab) ncbi.assembly.txt
+
+    # lookup the chrM sequence in the assembly to determine the RefSeq ID:
+    printf "chrM\tNC_005089.1\n" > ucsc.refseq.tab
+
     wc -l *.tab
-    #	2198 ucsc.genbank.tab
+    #  61 ucsc.assembly.tab
+    #  61 ucsc.genbank.tab
+    #   1 ucsc.refseq.tab
 
     ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
         > mm39.chromAlias.tab
+# working: assembly
+# working: genbank
 
-for t in genbank
+for t in assembly genbank
 do
   c0=`cat ucsc.$t.tab | wc -l`
   c1=`grep $t mm39.chromAlias.tab | wc -l`
@@ -569,42 +600,63 @@ do
   fi
   printf "# checking $t: $c0 =? $c1 $ok\n"
 done
-# checking genbank: 2198 =? 2198 OK
+# checking assembly: 61 =? 61 OK
+# checking genbank: 61 =? 61 OK
 
     # verify chrM is here properly:
     grep chrM mm39.chromAlias.tab 
-# CM022001.1      chrM    genbank
+# AY172335.1      chrM    genbank
+# MT      chrM    assembly
+# NC_005089.1     chrM    refseq
 
     hgLoadSqlTab mm39 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         mm39.chromAlias.tab
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2020-07-17 - Hiram)
-    cd ~/kent/src/hg/makeDb/trackDb/dog/mm39
+# fixup search rule for assembly track/gold table (DONE - 2020-07-27 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/mouse/mm39
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" mm39 \
-      | sed -e 's/[0-9_.]\+//;' | sort | uniq -c 
-   1037 CM
-    758 REHQ
+      | sed -e 's/[0-9.]\+//;' | sort | uniq -c | sed -e 's/^/# /;'
+#   15228 AC
+#     816 AEKQ
+#       8 AEKR
+#       1 AF
+#    3876 AL
+#       1 AY
+#     844 BX
+#     191 CAAA
+#     135 CR
+#     684 CT
+#      63 CU
+#      37 FO
+#       3 FP
+#      29 FQ
+#      14 LO
+#     249 LXEJ
+#      30 MF
+#      44 MG
+#      18 MH
+#       2 MN
 
-    # implies a rule: '[CR][ME][HQ0-9]+(\.[0-9_]+)?'
+    # implies a rule: '[ABCFLM][ACEFGHLNOPQRTUXY][AEKJQR0-9]+(\.[0-9_]+)?'
 
     # verify this rule will find them all and eliminate them all:
     hgsql -N -e "select frag from gold;" mm39 | wc -l
+    # 22273
+
+    hgsql -N -e "select frag from gold;" mm39 \
+       | egrep -e '[ABCFLM][ACEFGHLNOPQRTUXY][AEKJQR0-9]+(\.[0-9_]+)?' | wc -l
     # 1795
 
     hgsql -N -e "select frag from gold;" mm39 \
-       | egrep -e '[CR][ME][HQ0-9]+(\.[0-9_]+)?' | wc -l
-    # 1795
-
-    hgsql -N -e "select frag from gold;" mm39 \
-       | egrep -v -e '[CR][ME][HQ0-9]+(\.[0-9_]+)?' | wc -l
+      | egrep -v -e '[ABCFLM][ACEFGHLNOPQRTUXY][AEKJQR0-9]+(\.[0-9_]+)?' | wc -l
     # 0
 
     # hence, add to trackDb/rhesus/mm39/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [CR][ME][HQ0-9]+(\.[0-9_]+)?
+termRegex [ABCFLM][ACEFGHLNOPQRTUXY][AEKJQR0-9]+(\.[0-9_]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
@@ -614,33 +666,54 @@ searchPriority 8
        trackDb.ra
 
 ##########################################################################
-# running repeat masker (DONE - 2020-07-27 - Hiram)
+# running repeat masker (DONE - 2020-07-29 - Hiram)
+    # using new repeat masker version 4.1.0
     mkdir /hive/data/genomes/mm39/bed/repeatMasker
     cd /hive/data/genomes/mm39/bed/repeatMasker
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku mm39) > do.log 2>&1
-XXX - running - Mon Jul 27 14:48:56 PDT 2020
-    # real    293m51.353s
+    # real    1175m35.646s
 
     cat faSize.rmsk.txt
-# 2482000080 bases (58500 N's 2481941580 real 1403544550 upper
-#	1078397030 lower) in 2198 sequences in 1 files
-# Total size: mean 1129208.4 sd 8542765.0 min 13084 (chrUn_JAAHUQ010000994v1)
-#	max 124992030 (chrX) median 43246
-# %43.45 masked total, %43.45 masked real
+# 2728222451 bases (73600668 N's 2654621783 real 1461962151 upper
+#	1192659632 lower) in 61 sequences in 1 files
+# Total size: mean 44724958.2 sd 64970951.3 min 1976 (chr4_JH584295v1_random)
+#	max 195154279 (chr1) median 182347
+# %43.72 masked total, %44.93 masked real
 
     egrep -i "versi|relea" do.log
-# RepeatMasker version development-$Id: RepeatMasker,v 1.332 2017/04/17 19:01:11 rhubley Exp $
-# grep version of RepeatMasker$ /hive/data/staging/data/RepeatMasker/RepeatMasker
-# February 01 2017 (open-4-0-8) 1.332 version of RepeatMasker
-# grep RELEASE /hive/data/staging/data/RepeatMasker/Libraries/RepeatMaskerLib.embl
-# CC    Dfam_Consensus RELEASE 20181026;                            *
-# CC    RepBase RELEASE 20181026;                                   *
+# RepeatMasker version 4.1.0
+# CC    Artefacts RELEASE 20190301;
+# CC    Dfam RELEASE Dfam_3.1;
+
+    sed -e 's/^/# /;' versionInfo.txt 
+# The repeat files provided for this assembly were generated using RepeatMasker.
+#   Smit, AFA, Hubley, R & Green, P.,
+#   RepeatMasker Open-4.1.
+#   1996-2010 <http://www.repeatmasker.org>.
+# 
+# VERSION:
+# RepeatMasker version 4.1.0
+# Search Engine: Crossmatch [ 1.090518 ]
+# Master RepeatMasker Database: /hive/data/staging/data/RepeatMasker191030/Libraries/RepeatMaskerLib.embl ( Complete Database: CONS-Dfam_3.1 )
+# 
+# Building general libraries in: /hive/data/staging/data/RepeatMasker191030/Libraries/CONS-Dfam_3.1/general
+# Building species libraries in: /hive/data/staging/data/RepeatMasker191030/Libraries/CONS-Dfam_3.1/mus_musculus
+#    - 1259 ancestral and ubiquitous sequence(s) for mus musculus
+#    - 121 lineage specific sequence(s) for mus musculus
+# RepeatMasker version 4.1.0
+# CC    Artefacts RELEASE 20190301;                                 *
+# CC    Dfam RELEASE Dfam_3.1;                                      *
+# # RepeatMasker engine: -engine crossmatch -s
+# # RepeatMasker library options: -species 'Mus musculus'
+# 
+# PARAMETERS:
+# /hive/data/staging/data/RepeatMasker191030/RepeatMasker -engine crossmatch -s -align -species 'Mus musculus'
 
     time featureBits -countGaps mm39 rmsk
-    # 1078398935 bases of 2482000080 (43.449%) in intersection
-    # real    0m35.578s
+    # 1192661541 bases of 2728222451 (43.716%) in intersection
+    # real    0m24.596s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the faSize count above
@@ -649,8 +722,8 @@ XXX - running - Mon Jul 27 14:48:56 PDT 2020
     # faster way to get the same result on high contig count assemblies:
     time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' mm39 \
         | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
-    #  total 1078398935.000000
-    #  real    0m22.013s
+    # total 1192661541.000000
+    # real    0m22.917s
 
 ##########################################################################
 # running simple repeat (DONE - 2020-07-27 - Hiram)
@@ -660,13 +733,11 @@ XXX - running - Mon Jul 27 14:48:56 PDT 2020
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         -trf409=6 mm39) > do.log 2>&1
-XXX - running - Mon Jul 27 14:49:35 PDT 2020
-    # real    7m53.400s
+    # real    78m39.043s
 
     cat fb.simpleRepeat
-    # 42156507 bases of 2337131234 (1.804%) in intersection
+    # 93129149 bases of 2654624157 (3.508%) in intersection
 
-XXX - ready for masking - 2020-07-17
     cd /hive/data/genomes/mm39
     # if using the Window Masker result:
     cd /hive/data/genomes/mm39
@@ -680,29 +751,30 @@ XXX - ready for masking - 2020-07-17
     #   you can safely ignore the warning about fields >= 13
     twoBitToFa mm39.2bit stdout | faSize stdin > faSize.mm39.2bit.txt
     cat faSize.mm39.2bit.txt
-# 2482000080 bases (58500 N's 2481941580 real 1401386884 upper
-#	1080554696 lower) in 2198 sequences in 1 files
-# Total size: mean 1129208.4 sd 8542765.0 min 13084 (chrUn_JAAHUQ010000994v1)
-#	max 124992030 (chrX) median 43246
-# %43.54 masked total, %43.54 masked real
+# 2728222451 bases (73600668 N's 2654621783 real 1460027726 upper
+#	1194594057 lower) in 61 sequences in 1 files
+# Total size: mean 44724958.2 sd 64970951.3 min 1976 (chr4_JH584295v1_random)
+#	max 195154279 (chr1) median 182347
+# %43.79 masked total, %45.00 masked real
+
 
     rm /gbdb/mm39/mm39.2bit
     ln -s `pwd`/mm39.2bit /gbdb/mm39/mm39.2bit
 
 #########################################################################
-# CREATE MICROSAT TRACK (TBD - 2020-03-31 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2020-07-27 - Hiram)
     ssh hgwdev
-    mkdir /cluster/data/mm39/bed/microsat
-    cd /cluster/data/mm39/bed/microsat
+    mkdir /hive/data/genomes/mm39/bed/microsat
+    cd /hive/data/genomes/mm39/bed/microsat
 
     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
          ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
     hgLoadBed mm39 microsat microsat.bed
-    # Read 65981 elements of size 4 from microsat.bed
+    # Read 197239 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2020-03-31 - Hiram)
+## WINDOWMASKER (DONE - 2020-07-28 - Hiram)
 
     mkdir /hive/data/genomes/mm39/bed/windowMasker
     cd /hive/data/genomes/mm39/bed/windowMasker
@@ -718,26 +790,34 @@ XXX - ready for masking - 2020-07-17
 #	max 124992030 (chrX) median 43246
 # %34.30 masked total, %34.30 masked real
 
+    # completed before rmsk was done, to finish:
+    featureBits -countGaps mm39 rmsk windowmaskerSdust 2> fb.mm39.rmsk.windowmaskerSdust.txt
     cat fb.mm39.rmsk.windowmaskerSdust.txt
-    # 598271411 bases of 2482000080 (24.104%) in intersection
+    # 753903955 bases of 2728222451 (27.634%) in intersection
+
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -continue=cleanup -dbHost=hgwdev mm39) > cleanup.log 2>&1
+    # real    1m7.841s
 
 ##########################################################################
-# cpgIslands - (TBD - 2020-04-02 - Hiram)
+# cpgIslands - (DONE - 2020-07-30 - Hiram)
     mkdir /hive/data/genomes/mm39/bed/cpgIslands
     cd /hive/data/genomes/mm39/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku mm39) > do.log 2>&1
+XXX - running - Thu Jul 30 09:20:26 PDT 2020
     # real    3m29.034s
 
     cat fb.mm39.cpgIslandExt.txt
     # 47618882 bases of 2481941580 (1.919%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2020-04-02 - Hiram)
+# genscan - (DONE - 2020-07-30 - Hiram)
     mkdir /hive/data/genomes/mm39/bed/genscan
     cd /hive/data/genomes/mm39/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku mm39) > do.log 2>&1
+XXX - running - Thu Jul 30 09:20:55 PDT 2020
     # real    8m19.775s
 
     # two jobs broken:
@@ -757,50 +837,96 @@ wait
     # 50129491 bases of 2481941580 (2.020%) in intersection
 
 #########################################################################
-# Create kluster run files (TBD - 2020-04-02 - Hiram)
+# Create kluster run files (DONE - 2020-07-30 - Hiram)
 
     # numerator is mm39 gapless bases "real" as reported by:
     featureBits -noRandom -noHap mm39 gap
-    # 36700 bases of 2353522726 (0.002%) in intersection
+    # 73490654 bases of 2649940489 (2.773%) in intersection
     #                      ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 2353522726 / 2861349177 \) \* 1024
-    #  ( 2353522726 / 2861349177 ) * 1024 = 842.262556
+    calc \( 2649940489 / 2861349177 \) \* 1024
+    #  ( 2649940489 / 2861349177 ) * 1024 = 948.342510
 
-    # ==> use -repMatch=800 according to size scaled down from 1024 for human.
+    # ==> use -repMatch=900 according to size scaled down from 1024 for human.
     #   and rounded down to nearest 50
     cd /hive/data/genomes/mm39
     time blat mm39.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/mm39.11.ooc \
-        -repMatch=800
-    #	Wrote 34718 overused 11-mers to jkStuff/mm39.11.ooc
-    #	real    0m21.985s
+        -repMatch=900
+    #	Wrote 31807 overused 11-mers to jkStuff/mm39.11.ooc
+    #	real    0m23.024s
 
-    # canFam3 at repMatch=900:
-    #   Wrote 24788 overused 11-mers to jkStuff/canFam3.11.ooc
-    #	real    1m11.629s
+    # mm10 at repMatch=1000:
+    #	Wrote 27208 overused 11-mers to jkStuff/mm10.11.ooc
+    #	real    2m9.568s
 
-    #   there are no non-bridged gaps
-    hgsql -N \
-        -e 'select * from gap where bridge="no" order by size;' mm39 \
+    # survey sizes of non-bridged gaps:
+    hgsql -N -e 'select size from gap where bridge="no" order by size;' \
+	mm39  | sort | uniq -c | sort -k2,2n | sed -e 's/^/# /;'
+#       1 8000
+#      21 10000
+#       2 30000
+#      43 50000
+#       3 60000
+#       1 61000
+#       2 63000
+#       1 66000
+#       1 71000
+#       1 81000
+#      42 100000
+#       1 140000
+#       1 174000
+#       1 300000
+#       1 350000
+#       1 500000
+#      20 2890000
 
-    # HOWEVER, every gap in this assembly is the same 'within scaffold'
-    # at size 100:
-    hgsql -N -e 'select size from gap where bridge="yes" order by size;'
-     mm39  | sort | uniq -c
-    # 585 100
+    # and survey the bridged gaps over 5,000 bases:
+    hgsql -N -e 'select size from gap where bridge="yes" and size > 4999;' \
+	mm39  | sort | uniq -c | sort -k2,2n | sed -e 's/^/# /;'
+#       2 5000
+#       1 7000
+#       1 15000
+#       1 15500
+#       1 16000
+#       1 18000
+#       1 18500
+#       1 19208
+#       1 20000
+#       1 25500
+#       1 30000
+#       1 49000
+#      44 50000
+#       1 79000
+#       2 100000
+#       1 135500
+#       1 145000
+#       1 166000
+#       1 200000
+#       1 222000
+#       1 225000
+#       1 285000
+#       1 295000
+#       3 300000
+#       1 360000
+#       1 425000
+#       1 430000
+#       1 522000
 
-    # using these gaps to make a lift file
-    # minimum gap size is 100 and produces a reasonable number of lifts
-    gapToLift -verbose=2 -minGap=100 mm39 jkStuff/mm39.nonBridged.lft \
-        -bedFile=jkStuff/mm39.nonBridged.bed
-    wc -l jkStuff/mm39.nonBri*
-    #	2198 jkStuff/mm39.nonBridged.bed
-    #	2198 jkStuff/mm39.nonBridged.lft
+    # use gap size of 5000 to construct a lift file:
+    gapToLift -allowBridged -verbose=2 -minGap=5000 mm39 \
+	jkStuff/mm39.5Kgaps.lft -bedFile=jkStuff/mm39.5Kgaps.bed
+    wc -l jkStuff/mm39.5Kgaps*
+    #	176 jkStuff/mm39.5Kgaps.bed
+    #	176 jkStuff/mm39.5Kgaps.lft
+
+    # to see the gaps used:
+    bedInvert.pl chrom.sizes jkStuff/mm39.5Kgaps.bed \
+	| cut -f4 | sort -n | uniq -c | less
 
 ########################################################################
 # lastz/chain/net swap human/hg38 (TBD - 2020-04-10 - Hiram)
@@ -881,51 +1007,55 @@ wait
     # 740357755 bases of 2481941580 (29.830%) in intersection
 
 ##############################################################################
-# GENBANK AUTO UPDATE (TBD - 2020-04-09 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2020-07-30 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # organism       mrnaCnt estCnt  refSeqCnt
-    # Canis latrans   2       0       0
-    # Canis lupus     36      0       0
-    # Canis lupus familiaris  3351    382644  1718
-    # Canis lupus laniger     2       0       0
-    # Canis lupus lupus       2       0       0
-    # Canis mesomelas 1       0       0
-    # Canis sp.       45      0       0
+    # Mus musculus    581990  4871398 37663
+    # Mus musculus albula     4       0       0
+    # Mus musculus bactrianus 4       0       0
+    # Mus musculus brevirostris       2       0       0
+    # Mus musculus castaneus  28      2       0
+    # Mus musculus domesticus 1703    70      0
+    # Mus musculus kobuvirus  2       0       0
+    # Mus musculus molossinus 38      0       0
+    # Mus musculus musculus   71      4       0
+    # Mus musculus musculus x M. m. castaneus 1       0       0
+    # Mus musculus papillomavirus type 1      10      0       0
+    # Mus musculus picornavirus       3       0       0
+    # Mus musculus wagneri    2       0       0
 
-    # the latrans is the Coyota, the mesomelas
-    # is the Black-backed jackal from Africa and the langier is the Tibetan wolf
-    # lupus lupus is the Eurasian wolf
+    # edit etc/genbank.conf to add mm39 just after mm10
 
-    # edit etc/genbank.conf to add mm39 just after canFam3
-
-# mm39 (German shepard - GCA_011100685.1 - UU_Cfam_GSD_1.0)
+# mm39 - (house mouse - GCA_000001635.9 - GRCm39)
 mm39.serverGenome = /hive/data/genomes/mm39/mm39.2bit
 mm39.ooc = /hive/data/genomes/mm39/jkStuff/mm39.11.ooc
-mm39.lift = /hive/data/genomes/mm39/jkStuff/mm39.nonBridged.lft
-mm39.align.unplacedChroms = chrUn_*
+mm39.lift = /hive/data/genomes/mm39/jkStuff/mm39.5Kgaps.lft
 mm39.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
 mm39.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
 mm39.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
 mm39.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
 mm39.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
-mm39.refseq.mrna.native.load = yes
-mm39.refseq.mrna.xeno.load = yes
-# DO NOT NEED genbank.mrna.xeno except for human, mouse
-mm39.genbank.mrna.xeno.load = yes
 mm39.downloadDir = mm39
+mm39.refseq.mrna.xeno.load  = yes
+mm39.refseq.mrna.xeno.loadDesc = yes
+mm39.genbank.mrna.xeno.load  = yes
+mm39.genbank.mrna.blatTargetDb = yes
 mm39.upstreamGeneTbl = refGene
-mm39.perChromTables = no
+# mm39.mgc = yes
+# mm39.orfeome = yes
+# mm39.ccds.buildId = 21
+# mm39.upstreamMaf = multiz60way /hive/data/genomes/mm39/bed/multiz60way/species.list
 
     # verify the files specified exist before checking in the file:
   grep ^mm39 etc/genbank.conf | grep hive | awk '{print $NF}' | xargs ls -og
-# -rw-rw-r-- 1 651703337 Apr  2 08:57 /hive/data/genomes/mm39/mm39.2bit
-# -rw-rw-r-- 1    138880 Apr  2 09:51 /hive/data/genomes/mm39/jkStuff/mm39.11.ooc
-# -rw-rw-r-- 1    139818 Apr  2 09:56 /hive/data/genomes/mm39/jkStuff/mm39.nonBridged.lft
+# -rw-rw-r-- 1    127236 Jul 30 09:23 /hive/data/genomes/mm39/jkStuff/mm39.11.ooc
+# -rw-rw-r-- 1      7714 Jul 30 09:50 /hive/data/genomes/mm39/jkStuff/mm39.5Kgaps.lft
+# -rw-rw-r-- 1 714181470 Jul 30 09:03 /hive/data/genomes/mm39/mm39.2bit
 
-    git commit -m "Added mm39 dog; refs #22271" etc/genbank.conf
+    git commit -m "Added mm39 mouse; refs #22271" etc/genbank.conf
     git push
 
     # update /cluster/data/genbank/:
@@ -936,7 +1066,7 @@ mm39.perChromTables = no
     git pull
     # add mm39 to:
     #   etc/hgwdev.dbs etc/align.dbs
-    git commit -m "Added mm39 - dog refs #22271" etc/hgwdev.dbs etc/align.dbs
+    git commit -m "Added mm39 - mouse refs #22271" etc/hgwdev.dbs etc/align.dbs
     git push
     make etc-update
 
@@ -944,17 +1074,17 @@ mm39.perChromTables = no
     # appear
 
 #############################################################################
-# augustus gene track (TBD - 2020-04-10 - Hiram)
+# augustus gene track (DONE - 2020-07-30 - Hiram)
 
     mkdir /hive/data/genomes/mm39/bed/augustus
     cd /hive/data/genomes/mm39/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev mm39) > do.log 2>&1
-    # real    74m39.734s
+    # real    119m8.866s
 
     cat fb.mm39.augustusGene.txt
-    # 49999966 bases of 2481941580 (2.015%) in intersection
+    # 49120541 bases of 2654624157 (1.850%) in intersection
 
 #########################################################################
 # ncbiRefSeq (TBD - 2019-11-20 - Hiram)
@@ -1003,24 +1133,28 @@ mm39.perChromTables = no
     featureBits -enrichment mm39 refGene ncbiRefSeqCurated
  # refGene 0.402%, ncbiRefSeqCurated 0.401%, both 0.400%, cover 99.33%, enrich 247.79x
 
-#########################################################################
-# LIFTOVER TO canFam3 (TBD - 2020-04-02 - Hiram)
+##############################################################################
+# LIFTOVER TO mm10 (DONE - 2020-07-30 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/mm39/bed/blat.canFam3.2020-04-02
-    cd /hive/data/genomes/mm39/bed/blat.canFam3.2020-04-02
+    mkdir /hive/data/genomes/mm39/bed/blat.mm10.2020-07-30
+    cd /hive/data/genomes/mm39/bed/blat.mm10.2020-07-30
     doSameSpeciesLiftOver.pl -verbose=2 \
         -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -query2Bit=/hive/data/genomes/mm10/mm10.2bit \
+        -querySizes=/hive/data/genomes/mm10/chrom.sizes \
         -ooc=/hive/data/genomes/mm39/jkStuff/mm39.11.ooc \
-         mm39 canFam3
+         mm39 mm10
     time (doSameSpeciesLiftOver.pl -verbose=2 \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -query2Bit=/hive/data/genomes/mm10/mm10.2bit \
+        -querySizes=/hive/data/genomes/mm10/chrom.sizes \
         -ooc=/hive/data/genomes/mm39/jkStuff/mm39.11.ooc \
-         mm39 canFam3) > doLiftOverToCanFam3.log 2>&1
-    # real    1100m17.743s
+         mm39 mm10) > doLiftOverToMm10.log 2>&1
+    # real    257m18.898s
 
-    # see if the liftOver menus function in the browser from mm39 to canFam3
+    # see if the liftOver menus function in the browser from mm39 to mm10
 
-#########################################################################
+##############################################################################
 #  BLATSERVERS ENTRY (TBD - 2020-04-02 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
@@ -1041,17 +1175,18 @@ mm39.perChromTables = no
 	where name="mm39";' hgcentraltest
 
 ##############################################################################
-# crispr whole genome (TBD - 2020-04-09 - Hiram)
+# crispr whole genome (DONE - 2020-07-30 - Hiram)
     mkdir /hive/data/genomes/mm39/bed/crisprAll
     cd /hive/data/genomes/mm39/bed/crisprAll
 
     # the large shoulder argument will cause the entire genome to be scanned
     # this takes a while for a new genome to get the bwa indexing done
     time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 -stop=ranges \
-    mm39 genscan -shoulder=250000000 -tableName=crisprAll \
+    mm39 augustusGene -shoulder=250000000 -tableName=crisprAll \
     -fileServer=hgwdev \
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
-      -workhorse=hgwdev) > ranges.log 2>&1
+      -workhorse=hgwdev) >> ranges.log 2>&1
+XXX - running - Thu Jul 30 10:12:03 PDT 2020
     # real    1m16.539s
 
     time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
@@ -1154,7 +1289,6 @@ mm39.perChromTables = no
     cd /hive/data/genomes/mm39/pushQ
  time ($HOME/kent/src/hg/utils/automation/makePushQSql.pl -redmineList mm39) > mm39.pushQ.sql 2> stderr.out
     # real    15m2.385s
-XXXX
 
     # remove the tandemDups and gapOverlap from the file list:
     sed -i -e "/tandemDups/d" redmine.mm39.table.list
