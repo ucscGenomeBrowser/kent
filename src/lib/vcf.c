@@ -264,7 +264,7 @@ return vcfInfoString;
 }
 
 // Regular expressions to check format and extract information from header lines:
-static const char *fileformatRegex = "^##(file)?format=VCFv([0-9]+)(\\.([0-9]+))?$";
+static const char *fileformatRegex = "^##(file)?format=VCFv([0-9]+)(\\.([0-9]+))?";
 static const char *infoOrFormatRegex =
     "^##(INFO|FORMAT)="
     "<ID=([\\.+A-Za-z0-9_:-]+),"
