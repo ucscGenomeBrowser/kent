@@ -340,6 +340,7 @@ char *vcfFilePooledStr(struct vcfFile *vcff, char *str);
 /* Allocate memory for a string from vcff's shared string pool. */
 
 #define VCF_NUM_COLS 10
+#define VCF_NUM_COLS_BEFORE_GENOTYPES 9
 
 struct asObject *vcfAsObj();
 // Return asObject describing fields of VCF
