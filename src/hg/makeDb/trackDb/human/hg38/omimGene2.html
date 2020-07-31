@@ -81,19 +81,18 @@ for more information.</p>
 
 <h4>Example: Retrieve phenotype, Mode of Inheritance, and other OMIM data within a range</h4>
 <ol>
-<li>Go to <a href="hgTables">Table Browser</a>, make sure the following options are selected:
+<li>Go to <a href="hgTables">Table Browser</a>, make sure the right dataset is selected:
 group: Phenotype and Literature, track: OMIM Genes, table: <tt>omimGene2</tt>.</li>
-<li>Enter coordinates or a gene symbol into the &quot;Position&quot; textbox, such as
-chr1:11,106,535-11,262,551 or MTOR.</li>
-<li>Change the &quot;Output format&quot; dropdown to &quot;selected fields from primary 
-and related Tables&quot; and click <button>get output</button>. Instead of returning 
-the standard formatted dataset from the <tt>omimGene2</tt> table, this 
-bring up the data field and linked table selection page.</li>
-<li>Select chrom, chromStart, chromEnd,and name from omimGene2 table. Then select the related tables <tt>omim2gene</tt> 
+<li>Define region of interest by entering coordinates or a gene symbol into the &quot;Position&quot; textbox, such as
+chr1:11,106,535-11,262,551 or MTOR, or upload a list.</li>
+<li>Format your data by setting the &quot;Output format&quot; dropdown to &quot;selected fields from primary
+and related Tables&quot; and click <button>get output</button>. This    
+brings up the data field and linked table selection page.</li>
+<li>Select chrom, chromStart, chromEnd,and name from omimGene2 table. Then select the related tables <tt>omim2gene</tt>
 and <tt>omimPhenotype</tt> and click <button>allow selection from check tables</button>.
 This brings up the fields of the linked tables, where you can select approvedGeneSymbol,
 omimID, description, omimPhenotypeMapKey, and inhMode. </li>
-<li>Click on the <button>get output</button> will bring you to the results page:
+<li>Click on the <button>get output</button> to proceed to the results page:
 <pre>chr1	11106534	11262551	MTOR	601231,	Smith-Kingsmore syndrome,Focal cortical dysplasia, type II, somatic,	3,	Autosomal dominant</pre></li></ol>
 <p>For a quick link to pre-fill these options, click 
 <a href="http://genome.ucsc.edu/cgi-bin/hgTables?hgS_doOtherUser=submit&hgS_otherUserName=dschmelt&hgS_otherUserSessionName=omimPhenotypeTableBrowserEx">
