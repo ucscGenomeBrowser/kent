@@ -3277,11 +3277,11 @@ var popUpHgt = {
 
 // Show the recommended track sets popup
 function showRecTrackSetsPopup() {
-    // Populate links with position
+    // Update links with current position
     $('a.recTrackSetLink').each(function() {
         var $this = $(this);
-        var _href = $this.attr("href");
-        $this.attr("href", _href + genomePos.original);
+        var link = $this.attr("href").replace(/position=.*/, 'position=');
+        $this.attr("href", link + genomePos.original);
     });
     $('#recTrackSetsPopup').dialog({width:'650'});
 }
