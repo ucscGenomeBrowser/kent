@@ -7,6 +7,7 @@
 #include "common.h"
 #include "dystring.h"
 #include "hCommon.h"
+#include "hgConfig.h"
 #include "htmshell.h"
 #include "hash.h"
 #include "web.h"
@@ -55,6 +56,15 @@ boolean recTrackSetsEnabled()
 return fileExists(recTrackSetsFile());
 }
 
+boolean recTrackSetsChangeDetectEnabled()
+/* Return TRUE if feature is available, in hgConf */
+{
+char *cfgChanges = cfgOption("browser.recTrackSetsDetectChange");
+if (cfgChanges && (sameString(cfgChanges, "on") || sameString(cfgChanges, "true")))
+    return TRUE;
+return FALSE;
+}
+
 struct recTrackSet *loadRecTrackSets()
 /* Read from tab-sep file.  Return list or NULL if no track sets for this database */
 {
@@ -93,6 +103,9 @@ if (!recTrackSetsEnabled())
 struct recTrackSet *recTrackSet, *recTrackSets = loadRecTrackSets();
 if (!recTrackSets)
     return;
+
+if (recTrackSetsChangeDetectEnabled())
+    jsInline("var recTrackSetsDetectChanges = true;");
 
 hPrintf("<div style='display:none;' id='recTrackSetsPopup' title='Recommended Track Sets'>\n");
 
