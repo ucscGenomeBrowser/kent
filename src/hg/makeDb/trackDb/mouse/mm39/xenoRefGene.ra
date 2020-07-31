@@ -1,0 +1,12 @@
+track xenoRefGene
+shortLabel RefSeq mRNAs
+longLabel RefSeq mRNAs mapped to this assembly
+group rna
+visibility pack
+color 180,0,0
+type bigGenePred
+bigDataUrl /gbdb/mm39/xenoRefGene/mm39.xenoRefGene.bb
+labelFields name,geneName,geneName2
+searchIndex name
+searchTrix /gbdb/mm39/xenoRefGene/mm39.xenoRefGene.ix
+html xenoRefGene
