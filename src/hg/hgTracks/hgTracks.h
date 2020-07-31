@@ -1708,6 +1708,9 @@ void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 boolean recTrackSetsEnabled();
 /* Return TRUE if feature is available */
 
+boolean recTrackSetsChangeDetectEnabled();
+/* Return TRUE if feature is available, in hgConf */
+
 int recTrackSetsForDb();
 /* Return number of recommended track sets for this database */
 
