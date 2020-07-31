@@ -1,4 +1,4 @@
-track xenoRefGene
+track xenoMRnas
 shortLabel RefSeq mRNAs
 longLabel RefSeq mRNAs mapped to this assembly
 group rna
