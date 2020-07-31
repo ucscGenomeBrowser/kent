@@ -12,11 +12,12 @@ bed8Fields = ["chrom", "chromStart", "chromEnd", "name", "score", "strand", "thi
     "thickEnd"]
 
 # we only use some of these fields depending on whether we are working with haplo or triplo scores
-commonFields = ["cytoBand", "Genomic Location", "Haploinsufficiency Score", "Haploinsufficiency Description", "Haploinsufficiency PMID1", "Haploinsufficiency PMID2", "Haploinsufficiency PMID3", "Triplosensitivity Score", "Triplosensitivity Description", "Triplosensitivity PMID1", "Triplosensitivity PMID2", "Triplosensitivity PMID3", "Date Last Evaluated", "OMIM ID", "OMIM Description"]
+commonFields = ["cytoBand", "Genomic Location", "Haploinsufficiency Score", "Haploinsufficiency Description", "Haploinsufficiency PMID1", "Haploinsufficiency PMID2", "Haploinsufficiency PMID3", "Triplosensitivity Score", "Triplosensitivity Description", "Triplosensitivity PMID1", "Triplosensitivity PMID2", "Triplosensitivity PMID3", "Date Last Evaluated", "Loss phenotype OMIM ID", "Triplosensitive phenotype OMIM ID"] #, 
 haploFields = ["Haploinsufficiency Score", "Haploinsufficiency Description", "Haploinsufficiency PMID1", "Haploinsufficiency PMID2", "Haploinsufficiency PMID3"]
 triploFields = ["Triplosensitivity Score", "Triplosensitivity Description", "Triplosensitivity PMID1", "Triplosensitivity PMID2", "Triplosensitivity PMID3"]
 geneListFields = ["Gene Symbol", "Gene ID"]
 regionListFields = ["ISCA ID", "ISCA Region Name"]
+omimOutFields = ["OMIM ID", "OMIM Description"]
 
 # the gene and region files get merged:
 combinedFields = ["Gene Symbol/ISCA ID", "Gene ID/ISCA Region Name"]
@@ -37,11 +38,15 @@ scoreExplanation = {
 # the input data keyed by "Gene Symbol" or "ISCA ID", and further keyed by each field name
 inData = {}
 
+# omim phenotype info
+omimData = {}
+
 def setupCommandLine():
     parser = argparse.ArgumentParser(description="Transform ClinGen region and gene lists into a bed file",
         add_help=True, usage = "%(prog)s [options]")
     parser.add_argument("regionFile", action="store", default=None, help="a ClinGen_region_curation_list file")
     parser.add_argument("geneFile", action="store", default=None, help="a ClinGen_gene_curation_list file")
+    parser.add_argument("omimPhenotypesFile", action="store", default=None, help="two column tab-sep file with omim ids and phenotypes")
     parser.add_argument("outFileBase", action="store", default=None, help="the base file name for the two output files: outFileBase.haplo.bed and outFileBase.triplo.bed will be created.")
     args = parser.parse_args()
     if args.regionFile == "stdin" and args.geneFile == "stdin":
@@ -54,7 +59,7 @@ def getColor(bed):
         else gray."""
     retColors = {"haplo": "128,128,128", "triplo": "128,128,128"}
     if bed["Haploinsufficiency Score"] == "3": retColors["haplo"] = "255,0,0"
-    if bed["Triplosensitivity Score"] == "3": retColors["triplo"] = "0,255,0"
+    if bed["Triplosensitivity Score"] == "3": retColors["triplo"] = "0,0,255"
     return retColors
 
 def getMouseover(bed):
@@ -113,7 +118,7 @@ def dumpBedLines(ofBase):
     extraFields = ["clinGen URL"] + [x for x in combined if x != "Genomic Location"]
 
     # some fields differ depending on which file we are writing to, so remove them:
-    for field in haploFields + triploFields:
+    for field in haploFields + triploFields + ["Loss phenotype OMIM ID", "Triplosensitive phenotype OMIM ID"]:
         extraFields.remove(field)
 
     if not ofBase.endswith("."):
@@ -122,8 +127,8 @@ def dumpBedLines(ofBase):
     triploOfh = ofBase + "triplo.bed"
     haploFile = open(haploOfh, "w")
     triploFile = open(triploOfh, "w")
-    print("#%s" % ("\t".join(bed8Fields + ["itemRgb"] + extraFields + haploFields + ["_mouseOver"])), file=haploFile)
-    print("#%s" % ("\t".join(bed8Fields + ["itemRgb"] + extraFields + triploFields + ["_mouseOver"])), file=triploFile)
+    print("#%s" % ("\t".join(bed8Fields + ["itemRgb"] + extraFields + omimOutFields + haploFields + ["_mouseOver"])), file=haploFile)
+    print("#%s" % ("\t".join(bed8Fields + ["itemRgb"] + extraFields + omimOutFields + triploFields + ["_mouseOver"])), file=triploFile)
     for bed in bedLines:
         finalBed = []
         haploBed = []
@@ -161,6 +166,20 @@ def dumpBedLines(ofBase):
                 sys.stderr.write("ill formed bed:\n%s\n" % (bed))
                 sys.exit(1)
 
+        # the OMIM fields
+        haploId = bed["Loss phenotype OMIM ID"]
+        haploBed.append(str(haploId))
+        if haploId and haploId in omimData:
+                haploBed.append(str(omimData[haploId]))
+        else:
+            haploBed.append("")
+        triploId = bed["Triplosensitive phenotype OMIM ID"]
+        triploBed.append(str(triploId))
+        if triploId and triploId in omimData:
+            triploBed.append(str(omimData[triploId]))
+        else:
+            triploBed.append("")
+
         # then the differing extra fields:
         haploBed += [bed[field] for field in haploFields] + [bed["_mouseOver"]["haplo"]]
         triploBed += [bed[field] for field in triploFields] + [bed ["_mouseOver"]["triplo"]]
@@ -168,6 +187,12 @@ def dumpBedLines(ofBase):
         print("\t".join(triploBed), file=triploFile)
     haploFile.close()
     triploFile.close()
+
+def parseOmim(infh):
+    with open(infh) as f:
+        for line in f:
+            omimId,phenotype = line.strip().split('\t')
+            omimData[omimId] = phenotype
 
 def parseInFile(fname, fileType="gene"):
     if fname != "stdin":
@@ -211,6 +236,7 @@ def main():
     args = setupCommandLine()
     parseInFile(args.geneFile, "gene")
     parseInFile(args.regionFile, "region")
+    parseOmim(args.omimPhenotypesFile)
     dumpBedLines(args.outFileBase)
 
 if __name__=="__main__":
