@@ -2481,63 +2481,141 @@ setHapOrderFromMatrix(hapOrder, hapCount, hapDistMatrix, hapArray, vcff, sample,
 return hapOrder;
 }
 
-#define VCFPHASED_UNPHASED_COLOR MG_RED
+static void setTransmitOrder(unsigned int *gtHapOrder, char **transmitOrder, int gtHapCount, struct vcfRecord *rec, char **sampleOrder, char *childSample)
+/* Fill out an array of "transmitted", "untransmitted" strings for mouseover and color lookup */
+{
+int i;
+int childSampleIx = stringArrayIx(childSample, sampleOrder, gtHapCount / 2);
+for (i = 0; i < gtHapCount; i++)
+    {
+    int gtIx = gtHapOrder[i];
+    struct vcfGenotype *gt = &(rec->genotypes[gtIx >> 1]);
+    int alleleSampleIx = stringArrayIx(gt->id, sampleOrder, gtHapCount / 2);
+    if (alleleSampleIx != childSampleIx)
+        if (alleleSampleIx > childSampleIx)
+            {
+            transmitOrder[i] = i % 2 == 0 ? "transmitted" : "untransmitted";
+            }
+        else
+            {
+            transmitOrder[i] = i % 2 == 0 ? "untransmitted" : "transmitted";
+            }
+    else
+        transmitOrder[i] = "child";
+    }
+for (i = 0; i < gtHapCount; i++)
+    fprintf(stderr, "%s, ", transmitOrder[i]);
+fprintf(stderr, "\n");
+}
 
+enum phasedColorMode
+    {
+    noColorMode,
+    mendelDiffMode,
+    deNovoOnlyMode,
+    phasedFunctionMode
+    };
 
-static int getChildAlleleColor(struct track *track, struct vcfRecord *rec, int childHapIx,
-                               int alleleIx, int nameIx, int gtHapCount, unsigned int *gtHapOrder,
-                               char *sampleOrder[])
-/* Return the color we should use for this variant, depending on whether the allele
- * of the child matches what the parent transmitted or if there was some kind of
- * 'mendelian inconsistency' */
+static enum phasedColorMode getPhasedColorMode(struct trackDb *tdb)
+/* Get the coloring mode for phased trio tracks */
+{
+enum phasedColorMode colorMode = noColorMode;
+char *colorBy = cartOrTdbString(cart, tdb, VCF_PHASED_COLORBY_VAR, VCF_PHASED_COLORBY_VAR);
+if (sameString(colorBy, VCF_PHASED_COLORBY_MENDEL_DIFF))
+    colorMode = mendelDiffMode;
+else if (sameString(colorBy, VCF_PHASED_COLORBY_DE_NOVO))
+    colorMode = deNovoOnlyMode;
+else
+    {
+    char *geneTrack = cartOrTdbString(cart, tdb, "geneTrack", NULL);
+    if (isNotEmpty(geneTrack) && sameString(colorBy, VCF_PHASED_COLORBY_FUNCTION))
+        colorMode = phasedFunctionMode;
+    }
+return colorMode;
+}
+
+static int getTickColor(struct track *track, struct vcfRecord *rec, int alleleIx, int nameIx, int gtHapCount, unsigned int *gtHapOrder, char *childSampleName, char *sampleOrder[], enum phasedColorMode colorMode, enum soTerm funcTerm)
+/* Return the color we should use for this variant */
 {
 // if there are no parents to draw then no concept of transmitted vs unstransmitted
-if (gtHapCount <= 2)
-    return MG_BLACK;
-int parIx = alleleIx;
-int numSamples = gtHapCount / 2;
-boolean isEven = (alleleIx % 2) == 0;
-const int adjacentLineSet = 1;
-// how many haplotype "lines" away is the second parent if we are drawing in either
-// parent1,parent2,child or child,parent1,parent2 order:
-const int otherLineSet = 4;
-if (nameIx == 0)
+Color col = MG_BLACK;
+if (colorMode == noColorMode)
+    col = MG_BLACK;
+else if (colorMode == phasedFunctionMode)
     {
-    if (!isEven)
-        parIx = alleleIx + adjacentLineSet;
-    else if (numSamples > 2)
-            parIx = alleleIx + otherLineSet;
-    }
-else if (nameIx == 1)
-    {
-    if (isEven)
-        parIx = alleleIx - adjacentLineSet;
-    else if (numSamples > 2) // don't compare the allele the child to a missing parent
-        parIx = alleleIx + adjacentLineSet;
+    col = colorFromSoTerm(funcTerm);
     }
 else
     {
-    if (isEven)
-        parIx = alleleIx - adjacentLineSet;
+    if (gtHapCount <= 2)
+        col = MG_BLACK;
     else
-        parIx = alleleIx - otherLineSet;
+        {
+        char *sampleName = sampleOrder[nameIx];
+        if (!sameString(sampleName, childSampleName)) // parents only have shading in funcMode
+            col = MG_BLACK;
+        else // maybe draw child ticks red
+            {
+            struct vcfGenotype *childGt = &(rec->genotypes[gtHapOrder[alleleIx] >> 1]);
+            int childHapIx = gtHapOrder[alleleIx] & 1 ? childGt->hapIxB : childGt->hapIxA;
+            int parIx = alleleIx;
+            int numSamples = gtHapCount / 2;
+            boolean isEven = (alleleIx % 2) == 0;
+            const int adjacentLineSet = 1;
+            // how many haplotype "lines" away is the second parent if we are drawing in either
+            // parent1,parent2,child or child,parent1,parent2 order:
+            const int otherLineSet = 4;
+            if (nameIx == 0)
+                {
+                if (!isEven)
+                    parIx = alleleIx + adjacentLineSet;
+                else if (numSamples > 2)
+                        parIx = alleleIx + otherLineSet;
+                }
+            else if (nameIx == 1)
+                {
+                if (isEven)
+                    parIx = alleleIx - adjacentLineSet;
+                else if (numSamples > 2) // don't compare the allele the child to a missing parent
+                    parIx = alleleIx + adjacentLineSet;
+                }
+            else
+                {
+                if (isEven)
+                    parIx = alleleIx - adjacentLineSet;
+                else
+                    parIx = alleleIx - otherLineSet;
+                }
+            struct vcfGenotype *parentGt = &(rec->genotypes[gtHapOrder[parIx] >> 1]);
+            if (parentGt->isPhased || (parentGt->hapIxA == 1 && parentGt->hapIxB == 1))
+                {
+                int transmittedIx = gtHapOrder[parIx] & 1 ? parentGt->hapIxB : parentGt->hapIxA;
+                int untransmittedIx = gtHapOrder[parIx] & 1 ? parentGt->hapIxA : parentGt->hapIxB;
+                col = MG_BLACK;
+                if (colorMode == mendelDiffMode)
+                    {
+                    if (rec->alleles[childHapIx] != rec->alleles[transmittedIx] &&
+                        rec->alleles[childHapIx] == rec->alleles[untransmittedIx])
+                        col = MG_RED;
+                    }
+                else
+                    {
+                    if (rec->alleles[childHapIx] != rec->alleles[transmittedIx] &&
+                        rec->alleles[childHapIx] != rec->alleles[untransmittedIx])
+                        col = MG_RED;
+                    }
+                }
+            }
+        }
     }
-struct vcfGenotype *parentGt = &(rec->genotypes[gtHapOrder[parIx] >> 1]);
-if (parentGt->isPhased || (parentGt->hapIxA == 1 && parentGt->hapIxB == 1))
-    {
-    int parentAlleleIx = gtHapOrder[parIx] & 1 ? parentGt->hapIxB : parentGt->hapIxA;
-    if (rec->alleles[childHapIx] != rec->alleles[parentAlleleIx]) // if they disagree mark as red
-        return MG_RED;
-    else
-        return MG_BLACK;
-    }
-return MG_BLACK;
+return col;
 }
 
-void vcfPhasedDrawOneRecord(struct track *track, struct hvGfx *hvg, struct vcfRecord *rec, void *item,
-                            unsigned int *gtHapOrder, int gtHapCount, int xOff, int yOffsets[],
-                            char *sampleOrder[], char *childSample, boolean highlightChildDiffs,
-                            double scale)
+void vcfPhasedDrawOneRecord(struct track *track, struct hvGfx *hvg, struct vcfRecord *rec,
+                            void *item, unsigned int *gtHapOrder, int gtHapCount, int xOff,
+                            int yOffsets[], char *sampleOrder[], char *childSample, double scale,
+                            char *transmitOrder[], enum phasedColorMode colorMode,
+                            enum soTerm funcTerm)
 // Draw a record's haplotypes on the appropriate lines
 {
 int i;
@@ -2553,12 +2631,10 @@ for (i = 0; i < gtHapCount ; i++)
     struct vcfGenotype *gt = &(rec->genotypes[gtHapOrder[i] >> 1]);
     int nameIx = stringArrayIx(gt->id, sampleOrder, track->customInt);
     struct dyString *mouseover = dyStringNew(0);
+    int tickColor = getTickColor(track, rec, i, nameIx, gtHapCount, gtHapOrder, childSample, sampleOrder, colorMode, funcTerm);
     if (gt->isPhased || (gt->hapIxA == 1 && gt->hapIxB == 1)) // if phased or homozygous alt
         {
         int alIx = gtHapOrder[i] & 1 ? gt->hapIxB : gt->hapIxA;
-        int tickColor = MG_BLACK;
-        if (sameString(childSample, gt->id) && highlightChildDiffs)
-            tickColor = getChildAlleleColor(track, rec, alIx, i, nameIx, gtHapCount, gtHapOrder, sampleOrder);
         dyStringPrintf(mouseover, "%s ", gt->id);
         if (alIx != 0) // non-reference allele
             {
@@ -2568,7 +2644,13 @@ for (i = 0; i < gtHapCount ; i++)
                 }
             else
                 {
-                dyStringPrintf(mouseover, "%s allele: %s", i == 0 || i == 5 ? "untransmitted" : "transmitted", rec->alleles[alIx]);
+                if (gt->isPhased)
+                    dyStringPrintf(mouseover, "likely %s allele: %s", transmitOrder[i], rec->alleles[alIx]);
+                else
+                    {
+                    int otherIx = (alIx == gt->hapIxB ? gt->hapIxA : gt->hapIxB);
+                    dyStringPrintf(mouseover, "unphased alleles: %s/%s", rec->alleles[alIx], rec->alleles[otherIx]);
+                    }
                 }
             int y = yOffsets[i] - (tickHeight/2);
             hvGfxBox(hvg, x1, y, w, tickHeight, tickColor);
@@ -2578,8 +2660,8 @@ for (i = 0; i < gtHapCount ; i++)
     else if (gt->hapIxA != 0 || gt->hapIxB != 0)// draw the tick between the two haplotype lines
         {
         int yMid = ((yOffsets[2*nameIx] + yOffsets[(2*nameIx)+1]) / 2); // midpoint of two haplotype lines
-        hvGfxBox(hvg, x1, yMid - (tickHeight / 2), w, tickHeight, VCFPHASED_UNPHASED_COLOR);
-        dyStringPrintf(mouseover, "%s Unphased genotype: %s/%s", gt->id, rec->alleles[0], rec->alleles[1]);
+        hvGfxBox(hvg, x1, yMid - (tickHeight / 2), w, tickHeight, tickColor);
+        dyStringPrintf(mouseover, "%s unphased genotype: %s/%s", gt->id, rec->alleles[0], rec->alleles[1]);
         vcfPhasedAddMapBox(hvg, rec, psvs, mouseover->string, x1, yMid, w, tickHeight, track);
         }
     }
@@ -2657,11 +2739,17 @@ struct vcfFile *vcff = track->extraUiData;
 if (vcff->records == NULL)
     return;
 
+struct txInfo *txiList = NULL;
+struct seqWindow *gSeqWin = chromSeqWindowNew(database, chromName, seqStart, seqEnd);
+enum phasedColorMode colorMode = getPhasedColorMode(track->tdb);
+if (colorMode == phasedFunctionMode)
+    txiList = txInfoLoad(gSeqWin, track->tdb);
 const double scale = scaleForPixels(width);
 boolean hideOtherSamples = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_HIDE_OTHER_VAR, FALSE);
 struct slPair *pair, *sampleNames = vcfPhasedGetSampleOrder(cart, track->tdb, FALSE, hideOtherSamples);
 int gtCount = slCount(sampleNames);
-int yOffsets[gtCount * 2]; // y offsets of each haplotype line
+int gtHapCount = gtCount * 2;
+int yOffsets[gtHapCount]; // y offsets of each haplotype line
 char *sampleOrder[gtCount]; // order of sampleName lines
 int i;
 for (pair = sampleNames, i = 0; pair != NULL && i < gtCount; pair = pair->next, i++)
@@ -2676,18 +2764,25 @@ if (pt != NULL)
 vcfPhasedSetupHaplotypesLines(track, hvg, xOff, yOff, width, yOffsets, sampleNames, childSample, font);
 
 // maybe sort the variants by haplotype then draw ticks
-unsigned int *hapOrder = needMem(sizeof(short) * gtCount * 2);
+unsigned int *hapOrder = needMem(sizeof(short) * gtHapCount);
 int nRecords = slCount(vcff->records);
 int centerIx = getCenterVariantIx(track, seqStart, seqEnd, vcff->records);
 int startIx = 0;
 int endIx = nRecords;
 hapOrder = computeHapDist(vcff, centerIx, startIx, endIx, childSample, gtCount, sampleOrder);
-boolean highlightChildDiffs = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, VCF_PHASED_HIGHLIGHT_INCONSISTENT, FALSE);
 struct vcfRecord *rec = NULL;
 struct slList *item = NULL;
+
+// array of "trans", "untrans", etc for mouseovers
+char *transmitOrder[gtHapCount];
+setTransmitOrder(hapOrder, transmitOrder, gtHapCount, vcff->records, sampleOrder, childSample);
+
 for (rec = vcff->records, item = track->items; rec != NULL && item != NULL; rec = rec->next, item = item->next)
     {
-    vcfPhasedDrawOneRecord(track, hvg, rec, item, hapOrder, gtCount * 2, xOff, yOffsets, sampleOrder, childSample, highlightChildDiffs, scale);
+    enum soTerm funcTerm = soUnknown;
+    if (colorMode == phasedFunctionMode)
+        funcTerm = functionForRecord(rec, gSeqWin, txiList);
+    vcfPhasedDrawOneRecord(track, hvg, rec, item, hapOrder, gtHapCount, xOff, yOffsets, sampleOrder, childSample, scale, transmitOrder, colorMode, funcTerm);
     }
 }
 

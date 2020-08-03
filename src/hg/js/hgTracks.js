@@ -784,22 +784,6 @@ var cart = {
     // takes precedence.  WARNING: be careful creating an object with variables on the fly:
     // cart.setVarsObj({track: vis}) is invalid but cart.setVarsObj({'knownGene': vis}) is ok! 
 
-    updateSessionPanel: function()
-    {
-    // change color of text
-    $('span.gbSessionChangeIndicator').addClass('gbSessionChanged');
-
-    // change mouseover on the panel.  A bit fragile here inserting text in the mouseover specified in
-    // hgTracks.js, so depends on match with text there, and should present same message as C code
-    // (Perhaps this could be added as a script tag, so not duplicated)
-    var txt = $('span.gbSessionLabelPanel').attr('title');
-    if (txt && !txt.match(/with changes/)) {
-        $('span.gbSessionLabelPanel').attr('title', txt.replace(
-                                   "track set", 
-                                   "track set, with changes (added or removed tracks) you have requested"));
-        }
-    },
-
     updateQueue: {},
     
     updatesWaiting: function ()
@@ -890,6 +874,25 @@ var cart = {
     addVarsToQueue: function (names,values)
     {   // creates a string of updates to save for ajax batch or a submit
         cart.queueVarsObj(arysToObj(names,values));
+    },
+
+    updateSessionPanel: function()
+    {
+    if (typeof recTrackSetsDetectChanges === 'undefined' || recTrackSetsDetectChanges === null)
+        return;
+
+    // change color of text
+    $('span.gbSessionChangeIndicator').addClass('gbSessionChanged');
+
+    // change mouseover on the panel.  A bit fragile here inserting text in the mouseover specified in
+    // hgTracks.js, so depends on match with text there, and should present same message as C code
+    // (Perhaps this could be added as a script tag, so not duplicated)
+    var txt = $('span.gbSessionLabelPanel').attr('title');
+    if (txt && !txt.match(/with changes/)) {
+        $('span.gbSessionLabelPanel').attr('title', txt.replace(
+                                   "track set", 
+                                   "track set, with changes (added or removed tracks) you have requested"));
+        }
     }
 };
 
@@ -3277,11 +3280,11 @@ var popUpHgt = {
 
 // Show the recommended track sets popup
 function showRecTrackSetsPopup() {
-    // Populate links with position
+    // Update links with current position
     $('a.recTrackSetLink').each(function() {
         var $this = $(this);
-        var _href = $this.attr("href");
-        $this.attr("href", _href + genomePos.original);
+        var link = $this.attr("href").replace(/position=.*/, 'position=');
+        $this.attr("href", link + genomePos.original);
     });
     $('#recTrackSetsPopup').dialog({width:'650'});
 }

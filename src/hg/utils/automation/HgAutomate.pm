@@ -425,6 +425,7 @@ my $defaultVerbose = 1;
     $opt_dbHost
     $opt_bigClusterHub
     $opt_smallClusterHub
+    $opt_priority
     $opt_debug
     $opt_verbose
     $opt_help
@@ -435,6 +436,7 @@ my $defaultVerbose = 1;
 		     "dbHost=s",
 		     "bigClusterHub=s",
 		     "smallClusterHub=s",
+		     "priority=n",
 		     "verbose=n",
 		     "debug",
 		     "help",
@@ -458,6 +460,8 @@ my %optionHelpText = ( 'workhorse' =>
 		       'smallClusterHub' =>
 '    -smallClusterHub mach Use mach (default: %s) as parasol hub
                           for cluster runs with smallish job counts.
+',
+'    -priority num        Use this priority fo= parasol jobs.
 ',
 		       'debug' =>
 '    -debug                Don\'t actually run commands, just display them.
@@ -593,8 +597,12 @@ sub paraRun {
  if ( ! -e "$para" ) {
     # allow PATH to find the para command
     $para = "para";
-  }
- return ("$para make jobList\n" .
+ }
+ my $pargs = "";
+ if (defined $main::opt_priority) {
+     $pargs .= "-priority=$main::opt_priority";
+ }
+ return ("$para make $pargs jobList\n" .
 "$para check\n" .
 "$para time > run.time\n" .
 'cat run.time');

@@ -17903,3 +17903,92 @@ TMPDIR=/dev/shm
     # 889360051 bases of 3015350297 (29.494%) in intersection
 
 ##############################################################################
+# LASTZ Great Dane canFam5 (DONE - 2020-07-29 - Hiram)
+    #	establish a screen to control this job
+    mkdir /hive/data/genomes/mm10/bed/lastzCanFam5.2020-07-29
+    cd /hive/data/genomes/mm10/bed/lastzCanFam5.2020-07-29
+
+    printf '# German shepard canFam5 vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: German shepard canFam5
+SEQ2_DIR=/hive/data/genomes/canFam5/canFam5.2bit
+SEQ2_LEN=/hive/data/genomes/canFam5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzCanFam5.2020-07-29
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+XXX - running - Wed Jul 29 13:30:41 PDT 2020
+    #	real    483m10.607s
+
+    cat fb.mm10.chainCanFam5Link.txt
+    #	777883731 bases of 2652783500 (29.323%) in intersection
+    cat fb.mm10.chainSynCanFam5Link.txt
+    #   736602602 bases of 2652783500 (27.767%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm10 canFam5 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    #	real    219m16.168s
+
+    cat fb.mm10.chainRBest.CanFam5.txt
+    # 741307883 bases of 2652783500 (27.945%) in intersection
+
+    mkdir /hive/data/genomes/canFam5/bed/blastz.mm10.swap
+    cd /hive/data/genomes/canFam5/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCanFam5.2020-07-29/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    50m20.639s
+
+    cat fb.canFam5.chainMm10Link.txt
+    #	772902855 bases of 2481941580 (31.141%) in intersection
+    cat fb.canFam5.chainSynMm10Link.txt
+    #   737924732 bases of 2481941580 (29.732%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev canFam5 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    173m38.016s
+
+    cat fb.canFam5.chainRBest.Mm10.txt
+    # 740357755 bases of 2481941580 (29.830%) in intersection
+
+##############################################################################
+# LIFTOVER TO mm39 (DONE - 2020-07-30 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/mm10/bed/blat.mm39.2020-07-30
+    cd /hive/data/genomes/mm10/bed/blat.mm39.2020-07-30
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/mm10/jkStuff/mm10.11.ooc \
+        -target2Bit=/hive/data/genomes/mm10/mm10.2bit \
+        -targetSizes=/hive/data/genomes/mm10/chrom.sizes \
+         mm10 mm39
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/mm10/mm10.2bit \
+        -targetSizes=/hive/data/genomes/mm10/chrom.sizes \
+        -ooc=/hive/data/genomes/mm10/jkStuff/mm10.11.ooc \
+         mm10 mm39) > doLiftOverToMm39.log 2>&1
+    # real    257m19.983s
+
+    # see if the liftOver menus function in the browser from mm10 to mm39
+
+##############################################################################
