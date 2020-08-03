@@ -13,6 +13,7 @@
 #include "jksql.h"
 #include "obscure.h"
 #include "visiGene.h"
+#include "hdb.h"
 
 
 char *db = "visiGene";
@@ -117,7 +118,8 @@ nameToKnown = hashNew(18);
 for (i=0; i<knownDbCount; i += 1)
     {
     char *gdb = knownDbs[i];
-    struct sqlConnection *conn = sqlConnect(gdb);
+    char *knownDatabase = hdbDefaultKnownDb(gdb);
+    struct sqlConnection *conn = sqlConnect(knownDatabase);
     struct sqlResult *sr;
     char **row;
 
