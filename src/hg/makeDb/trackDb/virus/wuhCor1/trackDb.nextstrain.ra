@@ -17,6 +17,7 @@ priority 0.5
 bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainClade.bb
 url https://nextstrain.org/ncov?d=tree&m=div&label=clade:$$
 urlLabel View in Nextstrain: 
+pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
 
 track nextstrainOldClade
 shortLabel Nextstrn Old Clades
@@ -27,6 +28,7 @@ visibility hide
 group varRep
 priority 0.505
 bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainOldClade.bb
+pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
 
 track nextstrainSamples
 shortLabel Nextstrain Variants
@@ -43,7 +45,7 @@ hapClusterColorBy function
 geneTrack ncbiGeneBGP
 subGroup1 view Views all=All_Samples newClades=New_Clades(19A,_19B_etc.) oldClades=Old_Clades_(A1a,_A2_etc.)
 compositeTrack on
-pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Updated Jul. 17, 2020"
+pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
 
     track nextstrainSamplesViewAll
     view all
@@ -246,6 +248,7 @@ autoScale off
 viewLimits 0:1.0
 viewLimitsMax 0:1.0
 maxHeightPixels 100:40:8
+pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
 
     track nextstrainFreqViewAll
     view all
@@ -436,4 +439,4 @@ autoScale off
 viewLimits 0:20
 viewLimitsMax 0:100
 maxHeightPixels 100:40:8
-pennantIcon New red ../goldenPath/newsarch.html "Released Jul. 27, 2020"
+pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
