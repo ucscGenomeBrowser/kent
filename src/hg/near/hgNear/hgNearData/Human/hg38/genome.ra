@@ -1,3 +1,3 @@
 name global
-externalDb knownGeneV35
+#externalDb knownGeneV35
 mrnaTable knownGeneMrna
