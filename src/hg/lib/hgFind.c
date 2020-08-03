@@ -2300,7 +2300,7 @@ touppers(upcTerm);
 if (sameString(hfs->searchType, "knownGene"))
     {
     char *knownDatabase = hdbDefaultKnownDb(db);
-    char *name = (knownDatabase == db) ? "knownGene" : knownDatabase;
+    char *name = (sameString(knownDatabase, db)) ? "knownGene" : knownDatabase;
     if (gotFullText(db, name))
 	found = findKnownGeneFullText(db, term, hgp, name);
     }
