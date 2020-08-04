@@ -629,13 +629,16 @@ if (isNotEmpty(geneTrack))
            "black otherwise<BR>\n");
     }
 cgiMakeRadioButton(varName, VCF_PHASED_COLORBY_DE_NOVO, sameString(colorBy, VCF_PHASED_COLORBY_DE_NOVO));
-printf("predicted de novo child mutations <span style='color:red'>red</span><br>");
+printf("predicted de novo child mutations <span style='color:red'>red</span>");
+char *deNovoInfoText = "Check this box to color child variants red if they are unique to the child";
+printInfoIcon(deNovoInfoText);
+printf("<br>");
 cgiMakeRadioButton(varName, VCF_PHASED_COLORBY_MENDEL_DIFF, sameString(colorBy, VCF_PHASED_COLORBY_MENDEL_DIFF));
 printf("child variants that are inconsistent with phasing <span style='color:red'>red</span>");
-char *infoText = "Check this box to color child variants red if they do not agree with the implied "
+char *phasedInfoText = "Check this box to color child variants red if they do not agree with the implied "
     "parental transmitted allele at this location. This configuration is only available when parent "
     "haplotypes are displayed.";
-printInfoIcon(infoText);
+printInfoIcon(phasedInfoText);
 }
 
 void vcfCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)

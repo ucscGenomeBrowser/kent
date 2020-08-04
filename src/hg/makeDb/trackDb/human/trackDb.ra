@@ -3673,9 +3673,43 @@ longLabel Leiden Open Variation Database Public Variants
 group phenDis
 visibility hide
 compositeTrack on
-type bedDetail 6
+type bigBed 4 +
 tableBrowser off lovdComp
 html lovdComp
+release alpha
+
+        track lovdShort
+        shortLabel LOVD Variants < 50bp
+        longLabel Leiden Open Variation Database, short < 50bp variants
+        group phenDis
+        visibility hide
+        urls id="http://varcache.lovd.nl/redirect/$$"
+        noScoreFilter on
+        bigDataUrl /gbdb/$D/lovd/lovd.$D.short.bb
+        parent lovdComp
+        release alpha
+
+        track lovdLong
+        shortLabel LOVD Variants >= 50bp
+        longLabel Leiden Open Variation Database Public Variants, long >= 50bp variants
+        group phenDis
+        visibility hide
+        urls id="http://varcache.lovd.nl/redirect/$$"
+        noScoreFilter on
+        bigDataUrl /gbdb/$D/lovd/lovd.$D.long.bb
+        parent lovdComp
+        release alpha
+
+track lovdComp
+shortLabel LOVD Variants
+longLabel Leiden Open Variation Database Public Variants
+group phenDis
+visibility hide
+compositeTrack on
+type bedDetail
+tableBrowser off lovdComp
+html lovdComp
+release beta,public
 
         track lovdShort
         shortLabel LOVD Variants < 50bp
@@ -3687,6 +3721,7 @@ html lovdComp
         urlLabel Link to LOVD:
         noScoreFilter on
         parent lovdComp
+        release beta,public
 
         track lovdLong
         shortLabel LOVD Variants >= 50bp
@@ -3698,6 +3733,7 @@ html lovdComp
         urlLabel Link to LOVD:
         noScoreFilter on
         parent lovdComp
+        release beta,public
 
 
 track hgmd
