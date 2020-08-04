@@ -1,0 +1,16 @@
+# no rsync server so have to use complex wget, see download.sh
+./download.sh
+
+# the Chinese Trio headers are incorrect, and say "INTEGRATION"
+# instead of the sample name, reheader those:
+for db in hg38 hg19; do
+    pushd ${db}/ChineseTrio
+    for parent in HG006 HG007; do
+        echo ${parent} | bcftools reheader -s - ${parent}*.vcf.gz -o ${parent}.vcf.gz
+        tabix -p vcf ${parent}.vcf.gz
+    done
+    popd
+done
+
+# now merge all the different samples together for each trio:
+./mergeVcfs.sh

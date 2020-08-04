@@ -30,6 +30,9 @@ include trackDb.dbVar.ra
 # ClinGen
 include trackDb.clinGen.ra alpha
 
+# Genome In a Bottle
+include trackDb.giab.ra alpha
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)
