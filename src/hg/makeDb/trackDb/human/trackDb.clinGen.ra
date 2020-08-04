@@ -1,12 +1,12 @@
 track clinGenComp
-shortLabel ClinGen CNV and Dosage
+shortLabel ClinGen
 longLabel Clinical Genome Resource (ClinGen) Dosage Sensitivity Map and Structural Variants
 visibility pack
 type bigBed 9 +
 group phenDis
 itemRgb on
 compositeTrack on
-html clinGenDosage
+html clinGen
 
     track clinGenHaplo
     parent clinGenComp on
@@ -35,7 +35,7 @@ html clinGenDosage
     track clinGenCnv
     parent clinGenComp on
     shortLabel ClinGen Structural Variants
-    longLabel Clinical Genome Resource (ClinGen) Structural Variants
+    longLabel ClinGen Structural Variants
     html clinGenSv
     type bigBed 9 +
     itemRgb on
