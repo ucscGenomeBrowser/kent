@@ -336,7 +336,7 @@ static int cmpOnFilePos(const void *va, const void *vb)
 {
 const struct fofBatch *a = *((struct fofBatch **)va);
 const struct fofBatch *b = *((struct fofBatch **)vb);
-int dif = a->f - b->f;
+int dif = fileno(a->f) - fileno(b->f);
 if (dif == 0)
     dif = a->offset - b->offset;
 return dif;
