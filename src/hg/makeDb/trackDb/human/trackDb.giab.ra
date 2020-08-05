@@ -1,0 +1,65 @@
+track giab
+shortLabel Genome In a Bottle
+longLabel Genome In a Bottle Structural Variants and Trios
+compositeTrack on
+visibility hide
+subGroup1 view Views trios=trios sv=Structural_Variants
+type bed 3
+group varRep
+
+    track svView
+    shortLabel Genome In a Bottle Structural Variants
+    longLabel Genome in a Bottle Structural Variants (dbVar nstd175)
+    view sv
+    type bigBed 9 +
+    parent giab
+
+        track giabSv
+        parent svView
+        shortLabel Genome In a Bottle Structural Variants
+        longLabel Genome in a Bottle Structural Variants (dbVar nstd175)
+        type bigBed 9 +
+        subGroups view=sv
+        itemRgb on
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/#VariantDetails
+        urlLabel dbVar Variant Details:
+        urls dbVarUrl="$$"
+        mouseOverField _mouseOver
+        bigDataUrl /gbdb/$D/giab/structuralVariants/giabSv.bb
+
+    track triosView
+    shortLabel Genome In a Bottle Trios
+    longLabel Genome in a Bottle Ashkenazim and Chinese Trios
+    view trios
+    type vcfPhasedTrio
+    parent giab
+
+        track ashkenazimTrio
+        parent triosView
+        shortLabel Ashkenazim Trio
+        longLabel Genome In a Bottle Ashkenazim Trio
+        type vcfPhasedTrio
+        subGroups view=trios
+        bigDataUrl /gbdb/$D/giab/AshkenazimTrio/merged.vcf.gz
+        maxWindowToDraw 5000000
+        vcfUseAltSampleNames on
+        vcfDoFilter off
+        vcfDoQual off
+        vcfDoMaf off
+        vcfChildSample HG002|son
+        vcfParentSamples HG003|father,HG004|mother
+
+        track chineseTrio
+        parent triosView
+        shortLabel Chinese  Trio
+        longLabel Genome In a Bottle Chinese  Trio
+        type vcfPhasedTrio
+        subGroups view=trios
+        bigDataUrl /gbdb/$D/giab/ChineseTrio/merged.vcf.gz
+        maxWindowToDraw 5000000
+        vcfUseAltSampleNames on
+        vcfDoFilter off
+        vcfDoQual off
+        vcfDoMaf off
+        vcfChildSample HG005|son
+        vcfParentSamples HG006|father,HG007|mother
