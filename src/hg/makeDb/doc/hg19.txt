@@ -33689,3 +33689,7 @@ join -t $'\t' sort.main.bed clinSign.txt   | uniq -c | sed 's/^ *//' | sed 's/ /
 tawk -f fawk sorted.bed > bigBedInput.bed
 bedToBigBed -tab bigBedInput.bed /cluster/data/hg19/chrom.sizes clinsub.bb
 ln -s `pwd`/clinsub.bb /gbdb/hg19
+
+#############################################################################
+# Trios for Genome In a Bottle - DONE 08/04/2020 ChrisL
+# see ~/kent/src/hg/makeDb/giab/make.txt
