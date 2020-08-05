@@ -7,6 +7,26 @@ subGroup1 view Views trios=trios sv=Structural_Variants
 type bed 3
 group varRep
 
+    track svView
+    shortLabel Genome In a Bottle Structural Variants
+    longLabel Genome in a Bottle Structural Variants (dbVar nstd175)
+    view sv
+    type bigBed 9 +
+    parent giab
+
+        track giabSv
+        parent svView
+        shortLabel Genome In a Bottle Structural Variants
+        longLabel Genome in a Bottle Structural Variants (dbVar nstd175)
+        type bigBed 9 +
+        subGroups view=sv
+        itemRgb on
+        url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/#VariantDetails
+        urlLabel dbVar Variant Details:
+        urls dbVarUrl="$$"
+        mouseOverField _mouseOver
+        bigDataUrl /gbdb/$D/giab/structuralVariants/giabSv.bb
+
     track triosView
     shortLabel Genome In a Bottle Trios
     longLabel Genome in a Bottle Ashkenazim and Chinese Trios
