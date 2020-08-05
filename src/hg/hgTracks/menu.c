@@ -245,7 +245,8 @@ if (recTrackSetsEnabled() && recTrackSetsForDb())
                                        recTrackSetsMenuItemId);
     menuStr = replaceChars(menuStr, "<!-- OPTIONAL_RECOMMENDED_TRACK_SETS_MENU -->", 
                                 dyStringCannibalize(&menuItemDs));
-    jsOnEventById("click", recTrackSetsMenuItemId, "showRecTrackSetsPopup(); return false;");
+    if (stringIn(recTrackSetsMenuItemId, menuStr))
+        jsOnEventById("click", recTrackSetsMenuItemId, "showRecTrackSetsPopup(); return false;");
     }
 
 // Create top items in view menu
