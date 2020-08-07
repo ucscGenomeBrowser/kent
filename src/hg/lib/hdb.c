@@ -5841,7 +5841,7 @@ if (sqlTableExists(conn, "defaultKnown"))
 hFreeConn(&conn);
 
 if (knownDb == NULL)
-    knownDb = db;
+    knownDb = cloneString(db);
 
 return knownDb;
 }

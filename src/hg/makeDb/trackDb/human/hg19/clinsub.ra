@@ -1,0 +1,6 @@
+track clinsub
+shortLabel clinsub
+longLabel clinsub
+bigDataUrl /gbdb/hg19/clinsub.bb
+type bigLolly
+group varRep

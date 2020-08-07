@@ -53,20 +53,67 @@ as a mechanism for disease from the dbVar study
 <a target="_blank" href="https://www.ncbi.nlm.nih.gov/dbvar/studies/nstd45/">nstd45</a>
 (ClinGen Curated Dosage Sensitivity Map-obsoleted).
 </li>
-<li><b>Clinical Genome Resource Dosage Sensitivity (ClinGen Dosage Sensitivity)</b> -
+<li><b>Clinical Genome Resource Dosage Sensitivity Map Haploinsufficiency (ClinGen Haploinsufficiency) and -Triplosensitivity (ClinGen Triplosensitivity)</b> -
 Shows evidence supporting or refuting haploinsufficiency (loss) and triplosensitivity (gain) as 
 mechanisms for disease at gene-level and larger genomic regions.
 </li>
 </ul>
 </p>
-
+<p>
+A <b>rating system</b> is used to classify the <b>evidence</b> supporting or refuting dosage
+ sensitivity for individual genes and regions, which takes in consideration the following criteria:
+number of causative mutations reported, patterns of inheritance, consistency of phenotype, evidence
+from large-scale case-control studies, mutational mechanisms, data from public genome variation 
+databases, and expert consensus opinion.
+</p>
+<p>
+The system is intended to be of a "dynamic nature", with regions being reevaluated periodically to 
+incorporate emerging evidence. The evidence collected is displayed within a publicly available 
+<a target="_blank" href="https://search.clinicalgenome.org/kb/gene-dosage">database</a>. 
+Evidence that haploinsufficiency or triplosensitivity of a gene is associated with a specific 
+phenotype will aid in the interpretive assessment of CNVs including that gene.
+</p>
 <h2>Display Conventions</h2>
+<p>
+<b>Structural Variants</b> are shaded according to variant type, 
+<b><font color="red">red</font color></b> for CNV loss, <b><font color="blue"> blue</font color></b>
+for CNV gain.
+<p>
+Mouseover on items indicates affected protein-coding genes, size of the variant, variant type, and 
+associated phenotype. When more than 2 genes are affected by a variant, the full 
+list can be obtained by clicking on the item and reading the details page.
+</p>
+<p>
+All tracks can be filtered according to the size of the variant, variant type (loss or gain), and 
+clinical significance (benign or pathogenic).
+</p>
+<p>
+<b>Dosage Scores</b> are used to classify the evidence of the supporting dosage sensitivity map:
+<dl>
+<dd><b>0</b> - no evidence available</dd>
+<dd><b>1</b> - little evidence for dosage pathogenicity</dd>
+<dd><b>2</b> - some evidence for dosage pathogenicity</dd>
+<dd><b>3</b> - sufficient evidence for dosage pathogenicity</dd>
+<dd><b>30</b> - gene associated with autosomal recessive phenotype</dd>
+<dd><b>40</b> - dosage sensitivity unlikely</dd>
+</dl>
+</p>
+For more information on the use of the scores see the ClinGen
+<a target="_blank" href="https://clinicalgenome.org/tools/cnv-webinar/faq/">FAQs</a>.
+Items are shaded according to dosage sensitivity type. <b><font color="red">red</font></b> for haploinsufficiency,
+<b><font color="blue">blue</font></b> for triplosensitivity, 
+and <B><font color="#a8a8a8">grey</font></b> for other evidence scores or 
+for genes/regions that have not been evaluated yet or no evidence is available. A light to dark
+gradient color is used according to the degree of supporting evidence.
+</p>
+<p>
+Mouseover on items shows the supporting evidence of dosage sensitivity and respective scores. All
+tracks can be filtered according to the supporting evidence of dosage sensitivity.
+</p>
 <p>
 These tracks are multi-view composite tracks that contain multiple data types (views). Each view 
 within a track has separate display controls, as described 
-<a href="../goldenPath/help/multiView.html">here</a>. Some ClinGen tracks contain multiple 
-subtracks, corresponding to subsets of data. The user can select which subtracks are displayed via 
-the display controls on the track details page.
+<a href="../goldenPath/help/multiView.html">here</a>.
 </p>
  
 <h2>Data Access</h2>

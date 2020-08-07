@@ -7,6 +7,7 @@ tempDb=knownGeneV35
 kent=$HOME/kent
 spDb=sp180404
 cpuFarm=ku
+export curVer=13
 
 mkdir -p $dir
 cd $dir
@@ -287,3 +288,44 @@ ixIxx knownGene.txt knownGene${GENCODE_VERSION}.ix knownGene${GENCODE_VERSION}.i
  rm -rf /gbdb/$db/knownGene${GENCODE_VERSION}.ix /gbdb/$db/knownGene${GENCODE_VERSION}.ixx
 ln -s $dir/knownGene${GENCODE_VERSION}.ix  /gbdb/$db/knownGene${GENCODE_VERSION}.ix
 ln -s $dir/knownGene${GENCODE_VERSION}.ixx /gbdb/$db/knownGene${GENCODE_VERSION}.ixx  
+
+#zcat gencode${GENCODE_VERSION}.bed.gz > ucscGenes.bed
+#jtwoBitToFa -noMask /cluster/data/$db/$db.2bit -bed=ucscGenes.bed stdout | faFilter -uniq stdin  ucscGenes.fa
+#jhgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
+bedToPsl /cluster/data/$db/chrom.sizes ucscGenes.bed ucscGenes.psl
+pslRecalcMatch ucscGenes.psl /cluster/data/$db/$db.2bit ucscGenes.fa kgTargetAli.psl
+# should be zero
+awk '$11 != $1 + $3+$4' kgTargetAli.psl
+hgLoadPsl $tempDb kgTargetAli.psl
+
+cd $dir
+# Make PCR target for UCSC Genes, Part 1.
+# 1. Get a set of IDs that consist of the UCSC Gene accession concatenated with the
+#    gene symbol, e.g. uc010nxr.1__DDX11L1
+hgsql $tempDb -N -e 'select kgId,geneSymbol from kgXref' \
+    | perl -wpe 's/^(\S+)\t(\S+)/$1\t${1}__$2/ || die;' \
+      | sort -u > idSub.txt 
+# 2. Get a file of per-transcript fasta sequences that contain the sequences of each UCSC Genes transcript, with this new ID in the place of the UCSC Genes accession.   Convert that file to TwoBit format and soft-link it into /gbdb/hg38/targetDb/ 
+awk '{if (!found[$4]) print; found[$4]=1 }' ucscGenes.bed > nodups.bed
+subColumn 4 nodups.bed idSub.txt ucscGenesIdSubbed.bed 
+sequenceForBed -keepName -db=$db -bedIn=ucscGenesIdSubbed.bed -fastaOut=stdout  | faToTwoBit stdin ${db}KgSeq${curVer}.2bit
+mkdir -p /gbdb/$db/targetDb/ 
+rm -f /gbdb/$db/targetDb/${db}KgSeq${curVer}.2bit
+ln -s $dir/${db}KgSeq${curVer}.2bit /gbdb/$db/targetDb/
+# Load the table kgTargetAli, which shows where in the genome these targets are.
+cut -f 1-10 knownGene.gp | genePredToFakePsl $tempDb stdin kgTargetAli.psl /dev/null
+hgLoadPsl $tempDb kgTargetAli.psl
+
+# 3. Ask cluster-admin to start an untranslated, -stepSize=5 gfServer on       
+# /gbdb/$db/targetDb/${db}KgSeq${curVer}.2bit 
+
+# 4. On hgwdev, insert new records into blatServers and targetDb, using the 
+# host (field 2) and port (field 3) specified by cluster-admin.  Identify the
+# blatServer by the keyword "$db"Kg with the version number appended
+# untrans gfServer for hg38KgSeq12 on host blat1b, port 17897
+hgsql hgcentraltest -e \
+      'INSERT into blatServers values ("hg38KgSeq13", "blat1b", 1909, 0, 1);'
+hgsql hgcentraltest -e \
+            'INSERT into targetDb values("hg38KgSeq13", "GENCODE Genes", \
+                     "hg38", "knownGeneV35.kgTargetAli", "", "", \
+                              "/gbdb/hg38/targetDb/hg38KgSeq13.2bit", 1, now(), "");'

@@ -1,57 +1,44 @@
 track clinGenComp
-shortLabel ClinGen CNV and Dosage
+shortLabel ClinGen
 longLabel Clinical Genome Resource (ClinGen) Dosage Sensitivity Map and Structural Variants
 visibility pack
 type bigBed 9 +
 group phenDis
 itemRgb on
 compositeTrack on
-html clinGenDosage
+html clinGen
 
     track clinGenHaplo
+    priority 1
     parent clinGenComp on
-    shortLabel ClinGen Haploinsufficiency Old
-    longLabel ClinGen Dosage Sensitivity Map - Haploinsufficiency Old
+    shortLabel ClinGen Haploinsufficiency
+    longLabel ClinGen Dosage Sensitivity Map - Haploinsufficiency
     visibility pack
     type bigBed 9 +
     bigDataUrl /gbdb/$D/bbi/clinGen/clinGenHaplo.bb
     mouseOverField _mouseOver
     filterValues.haploScore 0|No evidence available,1|Little evidence for dosage pathogenicity,2|Some evidence for dosage pathogenicity,3|Sufficient evidence for dosage pathogenicity,30|Gene associated with autosomal recessive phenotype,40|Dosage sensitivity unlikely
     filterLabel.haploScore Dosage Sensitivity Score
-    urls haploPMID1="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" haploPMID2="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" haploPMID3="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$"
+    urls url="$$" PMID1="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" PMID2="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" PMID3="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" omimID="https://omim.org/entry/$$"
 
     track clinGenTriplo
+    priority 2
     parent clinGenComp on
-    shortLabel ClinGen Triplosensitivity Old
-    longLabel ClinGen Dosage Sensitivity Map - Triplosensitivity Old
+    shortLabel ClinGen Triplosensitivity
+    longLabel ClinGen Dosage Sensitivity Map - Triplosensitivity
     visibility pack
     type bigBed 9 +
     bigDataUrl /gbdb//$D/bbi/clinGen/clinGenTriplo.bb
     mouseOverField _mouseOver
     filterValues.triploScore 0|No evidence available,1|Little evidence for dosage pathogenicity,2|Some evidence for dosage pathogenicity,3|Sufficient evidence for dosage pathogenicity,30|Gene associated with autosomal recessive phenotype,40|Dosage sensitivity unlikely
     filterLabel.triploScore Dosage Sensitivity Score
-    urls triploPMID1="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" triploPMID2="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" triploPMID3="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$"
-
-    track clinGenDosage
-    parent clinGenComp on
-    shortLabel ClinGen Dosage Sensitivity
-    longLabel ClinGen Dosage Sensitivity
-    visibility pack
-    type bigBed 9 +
-    bigDataUrl /gbdb//$D/bbi/clinGen/clinGenDosage.bb
-    mouseOverField _mouseOver
-    filterValues.dosageType haplo|Likely Haplosensitive (Haploinsufficiency score >= 2 and Triplosensitivity score < 2),triplo|Likely Triplosensitive (Triplosensitivity score >= 2 and Haploinsufficiency score < 2),both|Haplo and Triplo Sensitive (Both scores >= 2),none|Little to no evidence for dosage sensitivity (Both scores < 2)
-    filterLabel.dosageType Type of dosage sensitivity
-    filterValues.haploScore 0|0 - No evidence available,1|1 - Little evidence for dosage pathogenicity,2|2 - Some evidence for dosage pathogenicity,3|3 - Sufficient evidence for dosage pathogenicity,30|30 - Gene associated with autosomal recessive phenotype,40|40 - Dosage sensitivity unlikely
-    filterLabel.haploScore Haplosensitivity Score
-    filterValues.triploScore 0|0 - No evidence available,1|1 - Little evidence for dosage pathogenicity,2|2 - Some evidence for dosage pathogenicity,3|3 - Sufficient evidence for dosage pathogenicity,30|30 - Gene associated with autosomal recessive phenotype,40|40 - Dosage sensitivity unlikely
-    filterLabel.triploScore Triplosensitivity Score
-    urls clinGenUrl="$$" haploPMID1="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" haploPMID2="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" haploPMID3="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" triploPMID1="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" triploPMID2="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" triploPMID3="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$"
+    urls url="$$" PMID1="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" PMID2="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" PMID3="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" omimID="https://omim.org/entry/$$"
 
     track clinGenCnv
+    priority 3
     parent clinGenComp on
     shortLabel ClinGen Structural Variants
-    longLabel Clinical Genome Resource (ClinGen) Structural Variants
+    longLabel ClinGen Structural Variants
     html clinGenSv
     type bigBed 9 +
     itemRgb on

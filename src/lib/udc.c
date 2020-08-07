@@ -1001,9 +1001,9 @@ udcParseUrlFull(url, retProtocol, retAfterProtocol, retColon, NULL);
 
 static void addElementToDy(struct dyString *dy, char *name)
 /* add one element of a path to a dyString, hashing it if it's longer 
- * than MAXNAMLEN */
+ * than NAME_MAX */
 {
-if (strlen(name) > MAXNAMLEN)
+if (strlen(name) > pathconf(name, _PC_NAME_MAX))
     {
     unsigned char hash[SHA_DIGEST_LENGTH];
     char newName[(SHA_DIGEST_LENGTH + 1) * 2];
@@ -1018,7 +1018,7 @@ else
 }
 
 static char *longDirHash(char *name)
-/* take a path and hash the elements that are longer than MAXNAMLEN */
+/* take a path and hash the elements that are longer than NAME_MAX */
 {
 struct dyString *dy = newDyString(strlen(name));
 char *ptr = strchr(name, '/');

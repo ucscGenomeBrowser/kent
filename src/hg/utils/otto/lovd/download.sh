@@ -22,8 +22,8 @@ cd $today
 # http request needs to come from hgwdev IP address otherwise file not found error
 for db in hg38 hg19
 do
-    wget -q 'http://varcache.lovd.nl/bed/'${db}'?add_id_ncbi=1&add_annotation=1' -O - | grep -v track | grep -v ^$ > lovd.${db}.bed
-    sed -i s/^/chr/g lovd.${db}.bed
-    sed -i 's/effect:/Variant Effect: /g' lovd.${db}.bed
-    sed -i 's/;lovd_count:/<br>Number of LOVD Installations reporting this variant: /g' lovd.${db}.bed
+    wget -q 'http://varcache.lovd.nl/bed/'${db}'?add_id_ncbi=1&add_annotation=1' -O - | \
+        grep -v track | grep -v ^$ | sed -e s/^/chr/g | \
+        tawk '{gsub(";",FS,$6); gsub("effect:|lovd_count:","",$6); print }' | \
+        sort -k1,1 -k2,2n > lovd.${db}.bed
 done

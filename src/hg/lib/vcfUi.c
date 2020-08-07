@@ -610,15 +610,35 @@ if (trackDbSetting(tdb,VCF_PHASED_PARENTS_SAMPLE_SETTING))
     cgiMakeCheckBox(hideVarName, hidingOtherSamples);
     }
 printf("<br>");
-printf("Highlight child variants that are inconsistent with phasing");
-char shadeByDiffs[1024];
-safef(shadeByDiffs, sizeof(shadeByDiffs), "%s.%s", name, VCF_PHASED_HIGHLIGHT_INCONSISTENT);
-boolean highlightChildDiffs = cartUsualBooleanClosestToHome(cart, tdb, FALSE, VCF_PHASED_HIGHLIGHT_INCONSISTENT, FALSE);
-cgiMakeCheckBox(shadeByDiffs, highlightChildDiffs);
-char *infoText = "Check this box to color child variants red if they do not agree with the implied "
+printf("Allele coloring scheme:");
+printf("<br>");
+char *colorBy = cartOrTdbString(cart, tdb, VCF_PHASED_COLORBY_VAR, VCF_PHASED_COLORBY_DEFAULT);
+char varName[1024];
+safef(varName, sizeof(varName), "%s.%s", name, VCF_PHASED_COLORBY_VAR);
+cgiMakeRadioButton(varName, VCF_PHASED_COLORBY_DEFAULT, sameString(colorBy, VCF_PHASED_COLORBY_DEFAULT));
+printf("No color<br>");
+char *geneTrack = cartOrTdbString(cart, tdb, "geneTrack", NULL);
+if (isNotEmpty(geneTrack))
+    {
+    cgiMakeRadioButton(varName, VCF_PHASED_COLORBY_FUNCTION, sameString(colorBy, VCF_PHASED_COLORBY_FUNCTION));
+    printf("predicted functional affect: ");
+    printf("reference alleles invisible, alternate alleles in "
+           "<span style='color:red'>red</span> for non-synonymous, "
+           "<span style='color:green'>green</span> for synonymous, "
+           "<span style='color:blue'>blue</span> for UTR/noncoding, "
+           "black otherwise<BR>\n");
+    }
+cgiMakeRadioButton(varName, VCF_PHASED_COLORBY_DE_NOVO, sameString(colorBy, VCF_PHASED_COLORBY_DE_NOVO));
+printf("predicted de novo child mutations <span style='color:red'>red</span>");
+char *deNovoInfoText = "Check this box to color child variants red if they are unique to the child";
+printInfoIcon(deNovoInfoText);
+printf("<br>");
+cgiMakeRadioButton(varName, VCF_PHASED_COLORBY_MENDEL_DIFF, sameString(colorBy, VCF_PHASED_COLORBY_MENDEL_DIFF));
+printf("child variants that are inconsistent with phasing <span style='color:red'>red</span>");
+char *phasedInfoText = "Check this box to color child variants red if they do not agree with the implied "
     "parental transmitted allele at this location. This configuration is only available when parent "
     "haplotypes are displayed.";
-printInfoIcon(infoText);
+printInfoIcon(phasedInfoText);
 }
 
 void vcfCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)

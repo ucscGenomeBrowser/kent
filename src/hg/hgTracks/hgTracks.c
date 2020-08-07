@@ -73,8 +73,6 @@
 #include <openssl/sha.h>
 #include "customComposite.h"
 
-boolean isSessChanged = FALSE;
-
 //#include "bed3Sources.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
@@ -8480,8 +8478,9 @@ if (!hideControls)
     if (sessionLabel)
         {
         char *panel = "recTrackSetsPanel";
-        isSessChanged = hasSessionChanged();
-
+        boolean isSessChanged = FALSE;
+        if (recTrackSetsChangeDetectEnabled())
+            isSessChanged = hasSessionChanged();
         struct dyString *hoverText = dyStringNew(0);
         dyStringPrintf(hoverText, "Your browser is displaying the %s track set%s. "
                                 " Click to change to another.", sessionLabel,
