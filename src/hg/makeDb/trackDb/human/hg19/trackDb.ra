@@ -142,6 +142,9 @@ searchPriority 2.07207
 searchType bigBed
 searchDescription COSMIC Regions
 
+# clinsub track
+include clinsub.ra alpha
+
 # chainNet tracks
 include trackDb.chainNet.ra
 include trackDb.denisova.ra
