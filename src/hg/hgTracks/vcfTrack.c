@@ -2503,9 +2503,6 @@ for (i = 0; i < gtHapCount; i++)
     else
         transmitOrder[i] = "child";
     }
-for (i = 0; i < gtHapCount; i++)
-    fprintf(stderr, "%s, ", transmitOrder[i]);
-fprintf(stderr, "\n");
 }
 
 enum phasedColorMode
