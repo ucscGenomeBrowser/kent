@@ -17,7 +17,7 @@ echo "Build 64-BIT userApps complete  [${0}: START=${ScriptStart} END=`date`]"
 
 
 echo
-echo "hgdownload userApps utils scp'd to hgdownload and hgdownload-sd"
+echo "hgdownload userApps utils scp'd to hgdownload"
 #
 exit 0
 
