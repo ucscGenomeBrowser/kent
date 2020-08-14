@@ -65,17 +65,13 @@ def getColor(bed):
 def getMouseover(bed):
     """Return the mouseOver strings for this bed record."""
     hapScore = bed["Haploinsufficiency Score"]
-    if not hapScore or hapScore == "Not yet evaluated":
-        hapScore = -1
     tripScore = bed["Triplosensitivity Score"]
-    if not tripScore or tripScore == "Not yet evaluated":
-        tripScore = -1
     ret = {"haplo": "", "triplo": ""}
     mouseOver = "Gene/ISCA ID: %s" % bed["name"]
     ret["triplo"] = mouseOver + ", Triplosensitivity: "
-    ret["triplo"] += "%s - %s" % (tripScore, scoreExplanation[int(tripScore)])
+    ret["triplo"] += "%s - %s" % (tripScore, scoreExplanation[int(tripScore)] if tripScore and tripScore != "Not yet evaluated" else -1)
     ret["haplo"] = mouseOver + ", Haploinsufficiency: "
-    ret["haplo"] += "%s - %s" % (hapScore, scoreExplanation[int(hapScore)])
+    ret["haplo"] += "%s - %s" % (hapScore, scoreExplanation[int(hapScore)] if hapScore and hapScore != "Not yet evaluated" else -1)
     return ret
 
 def parsePosition(posStr):
@@ -201,9 +197,7 @@ def parseOmim(infh):
 def parseInFile(fname, fileType="gene"):
     if fname != "stdin":
         f = open(fname)
-    else:
-        f = sys.stdin
-    lineNumber = 0
+    lineNumber = 1
     for line in f:
         lineNumber += 1
         bizarreRecord = False
