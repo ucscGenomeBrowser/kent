@@ -33679,6 +33679,37 @@ hgLoadBed hg19 -noBin -tab -type=bed6+4 \
 
 # TODO: Add to gene sorter
 
+#############################################################################
+# Build ncbiRefSeqGenomicDiff (DONE - 2020-06-10 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/ncbiRefSeqAnomalies.p13
+    cd /hive/data/genomes/hg19/bed/ncbiRefSeqAnomalies.p13
+
+    db=hg19
+    pre=ncbiRefSeqGenomicDiff
+    buildDir=/hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2020-01-21
+    asmId=GCF_000001405.25_GRCh37.p13
+
+    time (zcat $buildDir/process/$asmId.rna.cds.gz \
+        | egrep '[0-9]+\.\.[0-9]+' \
+        | pslMismatchGapToBed -cdsFile=stdin -db=$db -ignoreQNamePrefix=X \
+            $buildDir/process/$asmId.$db.psl.gz \
+            /hive/data/genomes/$db/$db.2bit \
+            $buildDir/$db.rna.fa \
+            $pre)
+
+# pslMismatchGapToBed: NM_001365372.1 gapIx 9 shifted right 74 bases, but next block size is only 38; report to NCBI
+# pslMismatchGapToBed: NM_001288811.1 gapIx 1 shifted left 6 bases, but previous block size is only 5; report to NCBI
+
+#  real    0m21.265s
+
+ bedToBigBed -type=bed9+ -tab -as=$HOME/kent/src/hg/lib/txAliDiff.as $pre.bed \
+        /hive/data/genomes/$db/chrom.sizes $pre.bb
+# pass1 - making usageList (180 chroms): 77 millis
+# pass2 - checking and writing primary data (27362 records, 20 fields): 234 millis
+    ln -sf `pwd`/$pre.bb /gbdb/hg19/ncbiRefSeq/$pre.bb
+
+#############################################################################
+
 # clinvarSub track  IN PROGRESS BRANEY 8/4/20
 mkdir /cluster/data/hg19/bed/clinvarSub
 cd /cluster/data/hg19/bed/clinvarSub
