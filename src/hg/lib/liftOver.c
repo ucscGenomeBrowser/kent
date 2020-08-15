@@ -897,7 +897,10 @@ for (;;)
 	}
     if (done) 
 	break;
-    if (b->tEnd < r->end)
+
+    // May have multiple small chain segments spanned by one exon, 
+    // so advance one exon if we are in the middle of a run, have start but no end yet.
+    if (b->tEnd < r->end && gotStart)
 	{
 	b = b->next;
 	if (b == NULL)
