@@ -53,7 +53,9 @@ return cloneString(buf);
 boolean recTrackSetsEnabled()
 /* Return TRUE if feature is available */
 {
-return fileExists(recTrackSetsFile());
+char *cfgEnabled = cfgOption("browser.recTrackSets");
+return cfgEnabled && (sameString(cfgEnabled, "on") || sameString(cfgEnabled, "true")) &&
+        fileExists(recTrackSetsFile());
 }
 
 boolean recTrackSetsChangeDetectEnabled()
@@ -94,12 +96,32 @@ int recTrackSetsForDb()
 return slCount(loadRecTrackSets());
 }
 
+boolean hasRecTrackSet(struct cart *cart)
+/* Check if currently loaded session is in the recommended track set */
+{
+if (!recTrackSetsEnabled())
+    return FALSE;
+struct recTrackSet *ts, *recTrackSets = loadRecTrackSets();
+if (!recTrackSets)
+    return FALSE;
+char *session = cartOptionalString(cart, hgsOtherUserSessionName);
+char *user = cartOptionalString(cart, hgsOtherUserName);
+if (!session || !user)
+    return FALSE;
+for (ts = recTrackSets; ts; ts = ts->next)
+    {
+    if (sameString(replaceChars(ts->sessionName, "%20", " "), session) && 
+        sameString(ts->userName, user))
+            return TRUE;
+    }
+return FALSE;
+}
+
 void printRecTrackSets()
 /* Create dialog with list of recommended track sets */
 {
 if (!recTrackSetsEnabled())
     return;
-
 struct recTrackSet *recTrackSet, *recTrackSets = loadRecTrackSets();
 if (!recTrackSets)
     return;

@@ -118,7 +118,6 @@ def fixupFieldName(key):
 
 def processNstd175(inf):
     global bedLines
-    extraHash = {}
     for line in inf:
         if line.startswith('#') or line.startswith('track') or line.startswith('browser'):
             continue
@@ -126,6 +125,7 @@ def processNstd175(inf):
         fields = trimmed.split(maxsplit=8)
         extraFields = fields[-1].split(';')
         itemName = extraFields[1].split('=')[1]
+        extraHash = {}
         for f in extraFields:
             k,v = f.strip().split('=')
             fixedName = fixupFieldName(k)

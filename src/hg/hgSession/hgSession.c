@@ -176,9 +176,6 @@ else
     dyStringPrintf(dyTmp, "%shgTracks?hgS_doOtherUser=submit&"
 	       "hgS_otherUserName=%s&hgS_otherUserSessionName=%s",
 	       hLocalHostCgiBinUrl(), userName, sessionName);
-// switch off recommended track set panel when changing sessions
-dyStringPrintf(dyTmp, "&%s=off", hgsOtherUserSessionLabel);
-
 if (encode)
     {
     dyStringPrintf(dy, "%s", cgiEncodeFull(dyTmp->string));

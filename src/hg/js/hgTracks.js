@@ -4669,7 +4669,9 @@ $(document).ready(function()
 
     // ensure clicks into hgTrackUi save the cart state
     $("td a").each( function (tda) {
-        this.onclick = posting.saveSettings;
+        if (this.href && this.href.indexOf("hgTrackUi") !== -1) {
+            this.onclick = posting.saveSettings;
+        }
     });
 
 });

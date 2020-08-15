@@ -6,6 +6,7 @@ visibility hide
 subGroup1 view Views trios=trios sv=Structural_Variants
 type bed 3
 group varRep
+html giab
 
     track svView
     shortLabel Genome In a Bottle Structural Variants

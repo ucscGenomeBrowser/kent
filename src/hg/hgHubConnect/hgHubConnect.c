@@ -1278,12 +1278,12 @@ if (hubSearchResult != NULL)
     struct trackHub *hub = fetchTrackHub(hubInfo);
     if (hub != NULL)
         {
-        printf("<div class=\"hubTdbTree\">\n");
-        printf("<div id='tracks%d'></div>", hubInfo->id); // div for the jstree for this hub's search result(s)
-        printf("</div>\n");
         struct hubOutputStructure *hubOut = buildHubSearchOutputStructure(hub, hubSearchResult);
         if (dyStringIsEmpty(hubOut->descriptionMatch) && (hubOut->genomes == NULL))
             return; // no detailed search results; hit must have been to hub short label or something
+        printf("<div class=\"hubTdbTree\">\n");
+        printf("<div id='tracks%d'></div>", hubInfo->id); // div for the jstree for this hub's search result(s)
+        printf("</div>\n");
         printHubOutputStructure(hubOut, hubInfo);
         }
     }

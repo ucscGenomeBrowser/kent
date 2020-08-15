@@ -1714,8 +1714,11 @@ boolean recTrackSetsChangeDetectEnabled();
 int recTrackSetsForDb();
 /* Return number of recommended track sets for this database */
 
+boolean hasRecTrackSet(struct cart *cart);
+/* Check if currently loaded session is in the recommended track set */
+
 void printRecTrackSets();
-/* Create dialog with list of sessions */
+/* Create dialog with list of recommended track sets */
 
 Color colorFromSoTerm(enum soTerm term);
 /* Assign a Color according to soTerm: red for non-synonymous, green for synonymous, blue for

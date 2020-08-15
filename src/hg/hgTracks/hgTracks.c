@@ -8470,10 +8470,14 @@ if (!hideControls)
     // Disable recommended track set panel when changing tracks, session, database
     char *sessionLabel = cartOptionalString(cart, hgsOtherUserSessionLabel);
     char *oldDb = hashFindVal(oldVars, "db");
-    if (defaultTracks || hideAll || 
-        (oldDb && differentString(database, oldDb)) ||
-        (sessionLabel && sameString(sessionLabel, "off")))
+    if (sessionLabel)
+        {
+        if (defaultTracks || hideAll || 
+            (oldDb && differentString(database, oldDb)) ||
+            !hasRecTrackSet(cart) ||
+            sameString(sessionLabel, "off"))
                 cartRemove(cart, hgsOtherUserSessionLabel);
+        }
     sessionLabel = cartOptionalString(cart, hgsOtherUserSessionLabel);
     if (sessionLabel)
         {
