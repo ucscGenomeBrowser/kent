@@ -292,6 +292,14 @@ int genePredBases(struct genePred *gp);
 int genePredCodingBases(struct genePred *gp);
 /* Count up the number of coding bases in gene prediction. */
 
+INLINE int genePredCdsSize(struct genePred *gp)
+/* Count up the number of coding bases in gene prediction.
+ * This function is redundant. */
+{
+return genePredCodingBases(gp);
+}
+
+
 boolean genePredCdsExon(struct genePred *gp, int iExon, int *startPtr, int *endPtr);
 /* Get the CDS range in an exon.  If there is no CDS, return FALSE and then
  * set start == end */
@@ -326,9 +334,6 @@ void genePredRc(struct genePred *gp, int chromSize);
 /* Reverse complement a genePred (project it to the opposite strand).  Useful
  * when doing analysis that is simplified by having things on the same strand.
  */
-
-int genePredCdsSize(struct genePred *gp);
-/* compute the number of bases of CDS */
 
 struct genePred *genePredNew(char *name, char *chrom, char strand,
                              unsigned txStart, unsigned txEnd,
