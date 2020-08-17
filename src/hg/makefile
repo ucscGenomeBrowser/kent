@@ -3,8 +3,6 @@
 kentSrc = ..
 include ${kentSrc}/inc/localEnvironment.mk
 
-# 	$Id: makefile,v 1.156 2010/03/03 02:53:30 markd Exp $
-
 BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgCollection hgConvert \
 	hgHubConnect hgGateway hgGene hgGenome hgIntegrator hgLogin hgPcr \
 	hgSession hgSuggest hgTables hgTracks hgTrackUi hgUserSuggestion \

@@ -193,16 +193,31 @@ function setCartVars(names, values, errFunc, async)
     } else {
         type = "GET";
     }
-    $.ajax({
-               type: type,
-               async: async,
-               url: loc,
-               data: data,
-               trueSuccess: function () {},
-               success: catchErrorOrDispatch,
-               error: errFunc,
-               cache: false
-           });
+
+    if (typeof bowser === 'undefined') {
+        bowserScript = document.createElement('script');
+        bowserScript.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/bowser/1.6.1/bowser.min.js');
+        document.head.appendChild(bowserScript);
+    }
+
+    if (!async || (typeof bowser !== 'undefined' && bowser.msie)) {
+        // XmlHttpRequest is used for all synchronous updates and for async updates in IE,
+        // because IE doesn't support sendBeacon.  If access to bowser is blocked, the default
+        // is to assume the browser is not IE.
+        $.ajax({
+                   type: type,
+                   async: async,
+                   url: loc,
+                   data: data,
+                   trueSuccess: function () {},
+                   success: catchErrorOrDispatch,
+                   error: errFunc,
+                   cache: false
+               });
+    }
+    else {
+        navigator.sendBeacon(loc, data);
+    }
 }
 
 function setCartVar(name, value, errFunc, async)

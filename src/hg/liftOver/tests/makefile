@@ -3,7 +3,7 @@ include ../../../inc/common.mk
 
 # make VERBOSE=-verbose=2 will echo out positions as they convert
 
-test:   bin bedPlus3 bed8 simpleTest minus enm001 chuckTest chuckBigTest enr223 scaffoldEndBug
+test:   bin bedPlus3 bed8 bed12 simpleTest minus enm001 chuckTest chuckBigTest enr223 scaffoldEndBug
 
 # tests too slow to use in default test suite
 testSlow: mm3 multiple
@@ -12,9 +12,9 @@ liftOver=${DESTBINDIR}/liftOver
 liftOverMerge=${DESTBINDIR}/liftOverMerge
 
 bed12:	mkdirs
-	${liftOver} -hasBin -bedPlus=12 \
+	${liftOver} \
             input/bed12.bed \
-            /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain \
+            /cluster/data/hg38/bed/liftOver/hg38ToPanTro6.over.chain.gz \
                 output/bed12.good.bed output/bed12.bad.bed 2> /dev/null
 	cat output/bed12.{good,bad}.bed | \
                 diff - expected/bed12.bed 1>&2

@@ -124,6 +124,31 @@ tableBrowser off decipherRaw knownToDecipher knownCanonToDecipher
 prevExonText Left edge
 nextExonText Right edge
 
+track decipherCnv
+shortLabel Decipher CNV New
+longLabel Decipher CNV New
+group phenDis
+visibility hide
+type bigBed 9 +
+itemRgb on
+tableBrowser off
+bigDataUrl /gbdb/$D/decipher/decipherCnv.bb
+url https://decipher.sanger.ac.uk/patient/$$
+urlLabel Decipher Patient View:
+filter.size 0
+filterByRange.size on
+filterLimits.size 2:170487333
+filterValues.variant_class Amplification,Copy-Number Gain,Deletion,Duplication,Duplication/Triplication,Triplication
+filterValues.pathogenicity Benign,Likely Benign,Likely Pathogenic,Pathogenic,Uncertain,Unknown
+mergeSpannedItems on
+searchIndex name
+mouseOverField _mouseOver
+release alpha
+
+searchTable  decipherCnv
+searchMethod exact
+searchType bigBed
+
 track decipherSnvs
 shortLabel DECIPHER SNVs
 longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans (SNVs)
@@ -3682,8 +3707,8 @@ html lovdComp
 release alpha
 
         track lovdShort
-        shortLabel LOVD Variants < 50bp
-        longLabel Leiden Open Variation Database, short < 50bp variants
+        shortLabel LOVD Variants < 50 bp
+        longLabel Leiden Open Variation Database, short < 50 bp variants
         group phenDis
         visibility hide
         urls id="http://varcache.lovd.nl/redirect/$$"
@@ -3693,8 +3718,8 @@ release alpha
         release alpha
 
         track lovdLong
-        shortLabel LOVD Variants >= 50bp
-        longLabel Leiden Open Variation Database Public Variants, long >= 50bp variants
+        shortLabel LOVD Variants >= 50 bp
+        longLabel Leiden Open Variation Database Public Variants, long >= 50 bp variants
         group phenDis
         visibility hide
         urls id="http://varcache.lovd.nl/redirect/$$"

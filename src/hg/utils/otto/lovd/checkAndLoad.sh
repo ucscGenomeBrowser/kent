@@ -38,25 +38,27 @@ do
         $KENTBIN/bedClip lovd.${db}.bed /cluster/data/${db}/chrom.sizes lovd.${db}.clipped.bed
     fi
 
+    sort -k1,1 -k2,2n lovd.${db}.clipped.bed | awk '(($3-$2)<50)' > lovd.${db}.short.bed
+    sort -k1,1 -k2,2n lovd.${db}.clipped.bed | awk '(($3-$2)>=50)' > lovd.${db}.long.bed
     if [ ${db} == "hg19" ]
     then
         echo -e 'chrM\t0\t16571\tCheck chrMT\tPlease look at chrMT, not chrM, for LOVD annotations.\t\t' >> lovd.${db}.short.bed
         echo -e 'chrM\t0\t16571\tCheck chrMT\tPlease look at chrMT, not chrM, for LOVD annotations.\t\t' >> lovd.${db}.long.bed
     fi
-    sort -k1,1 -k2,2n lovd.${db}.clipped.bed | awk '(($3-$2)<50)' > lovd.${db}.short.bed
-    sort -k1,1 -k2,2n lovd.${db}.clipped.bed | awk '(($3-$2)>=50)' > lovd.${db}.long.bed
 
+    sort -k1,1 -k2,2n lovd.${db}.short.bed > lovd.${db}.short.bed.sorted
+    sort -k1,1 -k2,2n lovd.${db}.long.bed > lovd.${db}.long.bed.sorted
     oldShortLc=`bigBedToBed ../release/${db}/lovd.${db}.short.bb stdout | wc -l`
     oldLongLc=`bigBedToBed ../release/${db}/lovd.${db}.long.bb stdout | wc -l`
-    newShortLc=`wc -l lovd.${db}.short.bed | cut -d' ' -f1`
-    newLongLc=`wc -l lovd.${db}.long.bed | cut -d' ' -f1`
+    newShortLc=`wc -l lovd.${db}.short.bed.sorted | cut -d' ' -f1`
+    newLongLc=`wc -l lovd.${db}.long.bed.sorted | cut -d' ' -f1`
     echo ${db} short rowcount: old $oldShortLc new: $newShortLc
     echo ${db} long rowcount: old $oldLongLc new: $newLongLc
     echo $oldShortLc $newShortLc | awk -v d=${db} '{if (($2-$1)/$1 > 0.1) {printf "validate on %s LOVD short failed: old count: %d, new count: %d\n", d,$1,$2; exit 1;}}'
     echo $oldLongLc $newLongLc | awk -v d=${db} '{if (($2-$1)/$1 > 0.1) {printf "validate on %s LOVD long failed: old count: %d, new count: %d\n", d,$1,$2; exit 1;}}'
 
-    bedToBigBed -type=bed4+3 -tab -as=../lovd.as lovd.${db}.short.bed /cluster/data/${db}/chrom.sizes lovd.${db}.short.bb
-    bedToBigBed -type=bed4+3 -tab -as=../lovd.as lovd.${db}.long.bed /cluster/data/${db}/chrom.sizes lovd.${db}.long.bb
+    bedToBigBed -type=bed4+3 -tab -as=../lovd.as lovd.${db}.short.bed.sorted /cluster/data/${db}/chrom.sizes lovd.${db}.short.bb
+    bedToBigBed -type=bed4+3 -tab -as=../lovd.as lovd.${db}.long.bed.sorted /cluster/data/${db}/chrom.sizes lovd.${db}.long.bb
     mkdir -p ${WORKDIR}/release/${db}
     cp lovd.${db}.{short,long}.bb ${WORKDIR}/release/${db}/
 done
