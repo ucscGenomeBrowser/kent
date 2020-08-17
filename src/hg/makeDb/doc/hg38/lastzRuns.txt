@@ -12771,4 +12771,77 @@ XXX - running - Mon Aug 17 12:42:53 PDT 2020
     cat fb.canFam5.chainRBest.Hg38.txt
     # 1425296830 bases of 2481941580 (57.427%) in intersection
 
+############################################################################
+# LASTZ MOUSE Mm39 (DONE - 2020-08-17 - Hiram)
+    # can no longer use the lineage specific repeats with the new lastz
+    # use a screen to manage this longish job:
+    screen -S hg38Mm39
+
+    mkdir /hive/data/genomes/hg38/bed/lastzMm39.2020-08-17
+    cd /hive/data/genomes/hg38/bed/lastzMm39.2020-08-17
+
+    # best to always specify an exact path to lastz so we know which one is used
+    # lastz default parameters are human-mouse parameters
+
+    printf '# human vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+
+# TARGET: Human Hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse Mm39
+SEQ2_DIR=/hive/data/genomes/mm39/mm39.2bit
+SEQ2_LEN=/hive/data/genomes/mm39/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzMm39.2020-08-17
+TMPDIR=/dev/shm
+' > DEF
+
+    # verify files exist:
+    grep "=" DEF | cut -d= -f2 | xargs ls -ogd
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+XXX - running - Mon Aug 17 13:12:52 PDT 2020
+
+    cat fb.hg38.chainMm39Link.txt
+    # 964465044 bases of 3049335806 (31.629%) in intersection
+
+    cat fb.hg38.chainSynMm39Link.txt
+    # 1484758745 bases of 3110768607 (47.730%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	hg38 mm39) > rbest.log 2>&1 &
+
+    #	and the swap
+    mkdir /hive/data/genomes/mm39/bed/blastz.hg38.swap
+    cd /hive/data/genomes/mm39/bed/blastz.hg38.swap
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+            -swap -syntenicNet) > swap.log 2>&1
+    #   real    83m28.397s
+
+    cat fb.mm39.chainHg38Link.txt
+    # 1493209286 bases of 2481941580 (60.163%) in intersection
+    cat fb.mm39.chainSynHg38Link.txt
+    # 1448164376 bases of 2481941580 (58.348%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	mm39 hg38) > rbest.log 2>&1 &
+    # real    257m59.713s
+
+    cat fb.mm39.chainRBest.Hg38.txt
+    # 1425296830 bases of 2481941580 (57.427%) in intersection
+
 #########################################################################
