@@ -49,7 +49,9 @@ then
     gpg --batch --passphrase-file "../gpg.pwd.new" ${CNV}
     gpg --batch --passphrase-file "../gpg.pwd.new" ${SNV}
 
-    # build the new DECIPHER track tables
+    mkdir -p ${WORKDIR}/release/hg19
+
+    # build the new DECIPHER track tables (builds bigBed for cnv's)
     ../buildDecipher `basename $CNV .gpg` `basename $SNV .gpg`
     ../validateDecipher.sh hg19
 
@@ -59,20 +61,6 @@ then
 	n=$i"New"
 	o=$i"Old"
 	hgsqlSwapTables hg19 $n $i $o -dropTable3
-    done
-
-    # now archive
-    if [ ! -d ${WORKDIR}/archive ]; then
-        mkdir -p ${WORKDIR}/archive
-    fi
-    cd ${WORKDIR}/archive
-    mkdir -p hg19/${today}
-    cd hg19/${today}
-    printf "This directory contains a backup of the Decipher track data tables built on %s\n" "${today}" > README 
-    for i in `cat ${WORKDIR}/decipher.tables`
-    do
-        hgsql --raw -Ne "show create table ${i}" hg19 > ${i}.sql
-        hgsql -Ne "select * from ${i}" hg19 | gzip >  ${i}.txt.gz
     done
 
     echo "DECIPHER Installed `date`" 
