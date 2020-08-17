@@ -810,13 +810,6 @@ var cart = {
         return url;
     },
     
-    beforeUnload: function ()
-    {   // named function that can be bound and unbound to beforeunload event
-        // Makes sure any outstanding queued updates are sent before leaving the page.
-        //console.log('cart.beforeUnload: '+objKeyCount(cart.updateQueue)+' vars');
-        cart.setVarsObj( {}, null, false ); // synchronous
-    },
-    
     varsToUrlData: function (varsObj)
     {   // creates a url data (var1=val1&var2=val2...) string from vars object and queue
         // The queue will be emptied by this call.
@@ -834,6 +827,7 @@ var cart = {
     
     setVarsObj: function (varsObj, errFunc, async)
     {   // Set all vars in a var hash, appending any queued updates
+        // The default behavior is async = true
         //console.log('cart.setVarsObj: were:'+objKeyCount(cart.updateQueue) + 
         //            ' new:'+objKeyCount(varsObj);
         cart.queueVarsObj(varsObj); // lay ontop of queue, to give new values precedence
@@ -859,18 +853,10 @@ var cart = {
             //            ' new:'+objKeyCount(varsObj));
             for (var name in varsObj) {
                 cart.updateQueue[name] = varsObj[name];
-                
-                // Could update in background, however, failing to hit "refresh" is user choice
-                // first in queue, schedule background update
-                if (objKeyCount(cart.updateQueue) === 1) {
-                    // By unbind/bind, we assure that there is only one instance bound
-                    $(window).unbind('beforeunload', cart.beforeUnload); 
-                    $(window).bind(  'beforeunload', cart.beforeUnload); 
-                }
             }
         }
     },
-    
+
     addVarsToQueue: function (names,values)
     {   // creates a string of updates to save for ajax batch or a submit
         cart.queueVarsObj(arysToObj(names,values));
@@ -936,6 +922,7 @@ var vis = {
 
     makeTrackVisible: function (track)
     {   // Sets the vis box to visible, and ques a cart update, but does not update the image
+        // Trusts that the cart update will be submitted later.
         if (track && vis.get(track) !== "full") {
             vis.update(track, 'pack');
             cart.addVarsToQueue([track], ['pack']);
@@ -982,7 +969,7 @@ var vis = {
             } else
                 $(this).attr('class', 'normalText');
             
-            cart.addVarsToQueue([track], [$(this).val()]);
+            cart.setVars([track], [$(this).val()]);
             imageV2.markAsDirtyPage();
             return false;
         });
@@ -2326,7 +2313,8 @@ var rightClick = {
                             else
                                 ele = document.TrackHeaderForm;
                             if (name)
-                                cart.addVarsToQueue(['hgFind.matches'], [name]);
+                                // Add or update form input with gene to highlight
+                                suggestBox.updateFindMatches(name);
                             ele.submit();
                         }
                     }
@@ -2593,7 +2581,7 @@ var rightClick = {
                     document.TrackForm.submit();
                 } else {
                         // Add vis update to queue then submit
-                        cart.addVarsToQueue([id], [cmd]);
+                        cart.setVars([id], [cmd], null, false); // synchronous
                         document.TrackHeaderForm.submit();
                 }
             } else {
@@ -3704,23 +3692,23 @@ var imageV2 = {
     {
         if ($('#positionInput').length) {
             if (!suggestBox.initialized) { // only call init once
-                 suggestBox.init(getDb(), 
+                suggestBox.init(getDb(),
                             $("#suggestTrack").length > 0,
                             function (item) {
                                 genomePos.set(item.id, getSizeFromCoordinates(item.id));
+                                if ($("#suggestTrack").length && $('#hgFindMatches').length) {
+                                    // Set cart variables to open the hgSuggest gene track and highlight
+                                    // the chosen transcript.  These variables will be submittted by the goButton
+                                    // click handler.
+                                    vis.makeTrackVisible($("#suggestTrack").val());
+                                    cart.addVarsToQueue(["hgFind.matches"],[$('#hgFindMatches').val()]);
+                                }
                                 $("#goButton").click();
                             },
                             function (position) {
                                 genomePos.set(position, getSizeFromCoordinates(position));
-                            });
-            }
-            // Make sure suggestTrack is visible when user chooses via gene select (#3484).
-            if ($("#suggestTrack").length) {
-                $(document.TrackForm || document.TrackHeaderForm).submit(function(event) {
-                                               if ($('#hgFindMatches').length) {
-                                                   vis.makeTrackVisible($("#suggestTrack").val());
-                                               }
-                                           });
+                            }
+                );
             }
         }
     },
@@ -4193,10 +4181,6 @@ var imageV2 = {
             return false;  // Shouldn't return from fullReload but I have seen it in FF
         }
     
-        // If UCSC Genes (or any suggestion) is supposed to be made visible, then do so
-        if ($("#suggestTrack").length && $('#hgFindMatches').length)
-            vis.makeTrackVisible($("#suggestTrack").val());
-
         jQuery('body').css('cursor', 'wait');
         var currentId, currentIdYOffset;
         if (keepCurrentTrackVisible) {

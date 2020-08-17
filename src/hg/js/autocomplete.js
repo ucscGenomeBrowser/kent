@@ -104,9 +104,9 @@ var suggestBox = {
                     }
                 },
                 select: function(event, ui) {
-                    selectCallback(ui.item);
                     lastSelected = ui.item.value;
                     suggestBox.updateFindMatches(ui.item.internalId);
+                    selectCallback(ui.item);
                     // jQuery('body').css('cursor', 'wait');
                     // document.TrackHeaderForm.submit();
                 }
