@@ -12696,3 +12696,79 @@ TMPDIR=/dev/shm
     # 2732415393 bases of 3015350297 (90.617%) in intersection
 
 #########################################################################
+# LASTZ human/hg38 vs. Great Dane/canFam5
+#	(DONE - 2020-07-29 - Hiram)
+
+    mkdir /hive/data/genomes/hg38/bed/lastzCanFam5.2020-07-29
+    cd /hive/data/genomes/hg38/bed/lastzCanFam5.2020-07-29
+
+    printf '# human vs. Great Dane
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_M=254
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=20
+SEQ1_LAP=10000
+
+# QUERY: Great Dane Zoey/canFam5
+SEQ2_DIR=/hive/data/genomes/canFam5/canFam5.2bit
+SEQ2_LEN=/hive/data/genomes/canFam5/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzCanFam5.2020-07-29
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    1038m20.721s
+
+    cat fb.hg38.chainCanFam5Link.txt
+    # 1545648756 bases of 3110768607 (49.687%) in intersection
+
+    cat fb.hg38.chainSynCanFam5Link.txt
+    # 1484758745 bases of 3110768607 (47.730%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	hg38 canFam5) > rbest.log 2>&1 &
+XXX - running - Mon Aug 17 12:41:45 PDT 2020
+    # real    310m32.196s
+
+    cat fb.hg38.chainRBest.CanFam5.txt
+    # 1425406620 bases of 3110768607 (45.822%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/canFam5/bed/blastz.hg38.swap
+    cd /hive/data/genomes/canFam5/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzCanFam5.2020-07-29/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+XXX - running - Mon Aug 17 12:42:53 PDT 2020
+    #  real    99m10.990s
+
+    cat fb.canFam5.chainHg38Link.txt
+    # 1493209286 bases of 2481941580 (60.163%) in intersection
+    cat fb.canFam5.chainSynHg38Link.txt
+    # 1448164376 bases of 2481941580 (58.348%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	canFam5 hg38) > rbest.log 2>&1 &
+    # real    257m59.713s
+
+    cat fb.canFam5.chainRBest.Hg38.txt
+    # 1425296830 bases of 2481941580 (57.427%) in intersection
+
+#########################################################################
