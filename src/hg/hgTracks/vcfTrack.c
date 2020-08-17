@@ -14,6 +14,7 @@
 #include "hdb.h"
 #include "hgColors.h"
 #include "hgTracks.h"
+#include "iupac.h"
 #include "pgSnp.h"
 #include "phyloTree.h"
 #include "trackHub.h"
@@ -1074,6 +1075,9 @@ for (txi = txiList;  txi != NULL;  txi = txi->next)
             allele = "";
         else if (allele[0] == '<')
             continue;
+        // Ignore IUPAC ambiguous values in alts (can leak in from hgPhyloPlace)
+        if (anyIupac(allele))
+            continue;
         struct vpTx *vpTx = vpGenomicToTranscript(gSeqWin, &variantBed3, allele,
                                                   txi->psl, txi->txSeq);
         struct vpPep *vpPep = vpTranscriptToProtein(vpTx, txi->cds, txi->txSeq, txi->protSeq);
@@ -1967,7 +1971,7 @@ else
         yText += 2;
     if (highlightSamples && node->ident->name && hashLookup(highlightSamples, node->ident->name))
         hvGfxBox(hvg, leftLabelX, yBox, leftLabelWidth, pxPerHap,
-                 MAKECOLOR_32(170, 255, 255));
+                 MAKECOLOR_32_A(170, 255, 255, 128));
     hvGfxLine(hvg, x, yLine, x+branchW, yLine, color);
     int textX = x + branchW + 3;
     if (pxPerHap >= tl.fontHeight+1 && textX < labelEnd)
@@ -2013,7 +2017,7 @@ else
         {
         struct nodeCoords *coords = node->priv;
         int y = yOff + (coords->rank * pxPerHap);
-        hvGfxBox(hvg, insideX, y, insideWidth, pxPerHap, MAKECOLOR_32(170, 255, 255));
+        hvGfxBox(hvg, insideX, y, insideWidth, pxPerHap, MAKECOLOR_32_A(170, 255, 255, 128));
         }
     }
 }
