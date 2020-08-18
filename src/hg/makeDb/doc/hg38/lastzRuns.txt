@@ -12741,11 +12741,10 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
 	hg38 canFam5) > rbest.log 2>&1 &
-XXX - running - Mon Aug 17 12:41:45 PDT 2020
-    # real    310m32.196s
+    # real    283m55.399s
 
     cat fb.hg38.chainRBest.CanFam5.txt
-    # 1425406620 bases of 3110768607 (45.822%) in intersection
+    # 1422619513 bases of 3110768607 (45.732%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/canFam5/bed/blastz.hg38.swap
@@ -12756,20 +12755,19 @@ XXX - running - Mon Aug 17 12:41:45 PDT 2020
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-XXX - running - Mon Aug 17 12:42:53 PDT 2020
-    #  real    99m10.990s
+    #  real    78m37.078s
 
     cat fb.canFam5.chainHg38Link.txt
-    # 1493209286 bases of 2481941580 (60.163%) in intersection
+    # 1460025525 bases of 2337131234 (62.471%) in intersection
     cat fb.canFam5.chainSynHg38Link.txt
-    # 1448164376 bases of 2481941580 (58.348%) in intersection
+    # 1423305734 bases of 2337131234 (60.900%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
 	canFam5 hg38) > rbest.log 2>&1 &
-    # real    257m59.713s
+    # real    255m9.076s
 
     cat fb.canFam5.chainRBest.Hg38.txt
-    # 1425296830 bases of 2481941580 (57.427%) in intersection
+    # 1422612399 bases of 2337131234 (60.870%) in intersection
 
 ############################################################################
 # LASTZ MOUSE Mm39 (DONE - 2020-08-17 - Hiram)
