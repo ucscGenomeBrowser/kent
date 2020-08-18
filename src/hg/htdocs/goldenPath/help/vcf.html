@@ -24,6 +24,10 @@ Track Hub Help documentation.</p>
 
 <p>The UCSC tools support VCF versions 3.3 and greater.</p>
 
+<p>If you have VCF trio data, you may be interested in formatting your track as a
+<a href="#trio">Phased Trios</a> track instead. Please see the Phased Trio section
+<a href="#trio">below</a> for more information.
+
 <h2>Generating a VCF track</h2>
 <p>
 The typical workflow for generating a VCF custom track is this:</p>
@@ -116,6 +120,43 @@ Other optional settings are not specific to VCF, but relevant:</p>
 The <a target="_blank" href="hgVcfTrackHelp.html">VCF track configuration</a> help page
 describes the VCF track configuration page options.</p>
 
+<a name="trio"></a>
+<h2>Phased Trio format</h2>
+<p>The vcfPhasedTrio track type is available for users whose VCF contains genotype data from one
+to three individuals. The underlying VCF follows the standard VCF format as described above, with
+the added caveat that there must be GENOTYPE columns for each of the individuals present. An
+example of the trio display is show below for the 1000 Genomes Trio track on Human/GRCh38:
+</p>
+<div class="text-center">
+<img width="80%" height="80%" src="../../images/trioExample.png" alt="3 VCF Phased Trio tracks along with the GENCODE v32 genes from the Human/GRCh38 assembly. Each of two diploid haplotypes for each individual in a trio is drawn as a black lane, with snps as vertical ticks on the haplotype they fall on. Ticks are shaded blue,red,green or black according to their predicted functional effect.">
+</div>
+</p>
+<p>
+Unlike a regular genome browser track, Trio tracks display the genome variants of each individual
+as two haplotypes; SNPs, small insertions and deletions are mapped to each haplotype based on the
+phasing information of the VCF file. Each haplotype is displayed as two separate black lanes for
+the browser window region. Each variant is drawn as a vertical dash. Homozygous variants will
+show two identical dashes on both haplotype lanes. Phased heterozygous variants are placed on one
+of the haplotype lanes and unphased heterozygous variants are displayed in the area between the
+two haplotype lanes.
+</p>
+
+<p>
+After generating this VCF and moving the file to a web accessible location as described above,
+then you can use the following required vcfPhasedTrio trackDb settings to get the trio display:
+<pre><code><strong>type                   </strong><em>vcfPhasedTrio                </em> # The track type is required and must be &quot;vcfPhasedTrio&quot;
+<strong>bigDataUrl             </strong><em>http://url.to.vcfFile        </em> The bigDataUrl is rquired
+<strong>vcfChildSample         </strong><em>GT ID|alias                  </em> # the Genotype column ID of the "child" sample, with an optional &quot;|&quot; followed by a human readable alias for the ID
+</code></pre>
+<p>There are also two optional settings for vcfPhasedTrio tracks:</p>
+<pre><code><strong>vcfParentSamples        </strong><em>GT ID1|alias1,GT ID2|alias2  </em> # comma separated (no spaces) list of the &quot;parent&quot; samples, with optional aliases
+<strong>vcfUseAltSampleNames   </strong><em>GT ID                        </em> # Use the aliases in the display by default instead of the Genotype column ID
+</code></pre>
+<p>Other optional settings are not specific to VCF, but relevant:</p>
+<pre><code><strong>maxWindowToDraw </strong><em>N                          </em> # don't display track when viewing more than N bases
+<strong>chromosomes     </strong><em>chr1,chr2,...              </em> # track contains data only on listed reference assembly sequences </code></pre>
+
+<h2>Examples</h2>
 <h3>Example #1</h3>
 <p>
 In this example, you will create a custom track for an indexed VCF file that is already on a public 

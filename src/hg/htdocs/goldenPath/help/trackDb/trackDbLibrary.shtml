@@ -356,7 +356,7 @@
     <P>The location of a remote data file containing the chain link data.</P>
 </DIV>
 
-<DIV class="bigDataUrl"><span class="types bigBarChart bigBed bigChain bigInteract bigMaf bigPsl bigWig bam hic vcfTabix"></span>
+<DIV class="bigDataUrl"><span class="types bigBarChart bigBed bigChain bigInteract bigMaf bigPsl bigWig bam hic vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
     <P class="isRequired">Required: <span class="red">For Hubs</span></P>
     <P>The location of a remote data file containing the bulk of the data for the track.
@@ -366,7 +366,7 @@
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
     the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigInteract, bigMaf, bigPsl, bigGenePred, bigNarrowPeak, bigWig or
-    vcfTabix.  Note that bam/cram and vcfTabix types require a separate
+    vcfTabix.  Note that bam/cram and vcfTabix/vcfPhasedTrio types require a separate
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively), unless <A
     <A onclick="jumpTo(this)" HREF="#">bigDataIndex</A> is used.
@@ -381,7 +381,7 @@
     <pre>   bigDataUrl biBrainH3K4me1.bb</pre>
 </DIV>
 
-<DIV class="bigDataIndex"><span class="types bam vcfTabix"></span>
+<DIV class="bigDataIndex"><span class="types bam vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>bigDataIndex &lt;url/relativePath&gt;</code></div>
     <P>The location of a remote data file containing the index. This setting
     can be used when the index cannot be placed alongside the big data file,
@@ -4049,7 +4049,7 @@ There are no extra options that can appear on the type hic line.
     </P>
 </DIV>
 
-<div class="geneTrack"><span class="types vcf"></span>
+<div class="geneTrack"><span class="types vcf vcfPhasedTrio"></span>
 <div class="format"><code>geneTrack &lt;<em>track</em>&gt;</code></div>
     <p>This is for use with <code>hapClusterColorBy function</code>; it specifies the gene track
     to use when determining the functional effect of each variant.</p>
@@ -4119,21 +4119,21 @@ There are no extra options that can appear on the type hic line.
     </P>
 </DIV>
 
-<DIV class="vcfDoFilter"><span class="type vcf vcfTabix"></span>
+<DIV class="vcfDoFilter"><span class="type vcf vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>vcfDoFilter &lt;on/off&gt;</code></div>
     <p>
     Turn on/off the FILTER options available by default for VCF tracks
     </p>
 </DIV>
 
-<DIV class="vcfDoQual"><span class="type vcf vcfTabix"></span>
+<DIV class="vcfDoQual"><span class="type vcf vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>vcfDoQual &lt;on/off&gt;</code></div>
     <p>
     Turns on/off the QUAL filter options available by default for VCF tracks
     </p>
 </DIV>
 
-<DIV class="vcfDoMaf"><span class="type vcf vcfTabix"></span>
+<DIV class="vcfDoMaf"><span class="type vcf vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>vcfDoMaf &lt;on/off&gt;</code></div>
     <p>
     Turns on/off the Minor Allele Frequency filter options available by default for VCF tracks
@@ -4152,6 +4152,64 @@ There are no extra options that can appear on the type hic line.
     <P>The data for this VCF track is stored in the remote file,
     "myVcf.gz".  That file is paired with a tabix-generated index file named
     "myVcf.gz.tbi" found in the same remote location.
+    </P>
+</DIV>
+
+<!-- - - - - - - - VCFPHASEDTRIO settings - - - - - - - -->
+<DIV class="vcfPhasedTrio_intro">
+<H3>vcfPhasedTrio: VCF+tabix with extra metadata</H3>
+<P>
+After preparing a VCF file as noted in the <A HREF="vcfTabix">VCF</A> section, if your
+data contains information on trios, you may want to use the vcfPhasedTrio track type to obtain
+a haplotype display. For more information on this display, please see the
+<A HREF="../vcf.html#trio">VCF Trio</a> documentation for a full explanation of the vcfPhasedTrio track type.
+</P>
+</DIV>
+
+<DIV class="vcfPhasedTrio"><span class="types vcfPhasedTrio"></span>
+<div class="format"><code>type vcfPhasedTrio</code></div>
+    <P>
+    blah
+    </P>
+</DIV>
+
+<DIV class="vcfChildSample"><span class="types vcfPhasedTrio"></span>
+<div class="format"><code>vcfChildSample &lt;sampleName|altName&gt;</code></div>
+    <P>
+    The VCF Genotype column ID of the &quot;child&quot; sample, followed optionally by a &quot;|&quot; character and an alias for the display. This sample will become the center haplotype if parents are also specified.
+    </P>
+</DIV>
+
+<div class="vcfParentSamples"><span class="types vcfPhasedTrio"></span>
+<div class="format"><code>vcfParentSamples &lt;sampleName|altName,sampleName|altName&gt;</code></div>
+    <P>
+    A comma separated (no spaces) list of the VCF Genotype column IDs of the &quot;parents&quot;, followed optionally by a &quot;|&quot; character and an alias for the display. This setting is optinonal, and supports one or both parents.
+    </P>
+</div>
+
+<DIV class="vcfUseAltSampleNames"><span class="types vcfPhasedTrio"></span>
+<div class="format"><code>vcfUseAltSampleNames &lt;on/off&gt;</code></div>
+    <P>
+    Make the display use the aliases as the default labels for each haplotype lane instead of the
+    ID from the VCF.
+    </P>
+</DIV>
+
+<DIV class="vcfPhasedTrio_example"><span class="types vcfPhasedTrio"></span>
+<div class="format"><B>Example of a VCF Phased Trio track</B></div>
+    <pre>
+    track myVcf
+    type vcfPhasedTrio
+    bigDataUrl http://myorg.edu/mylab/myVcf.gz
+    vcfChildSample NA123456|son
+    vcfParentSamples NA654321|mother,NA321654|father
+    vcfUseAltSampleNames on
+      ...    </pre>
+    <P>The data for this VCF track is stored in the remote file,
+    "myVcf.gz".  That file is paired with a tabix-generated index file named
+    "myVcf.gz.tbi" found in the same remote location. "NA123456" is the ID of one
+    of the Genotype columns in the VCF, and the parent haplotypes will displayed
+    relative to their similarity to this sample.
     </P>
 </DIV>
 

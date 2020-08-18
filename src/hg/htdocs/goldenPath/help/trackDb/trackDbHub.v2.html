@@ -142,6 +142,7 @@ in the sections below.</I>
         <LI><A HREF="#hic">hic</A>: Hi-C contact matrices</LI>
         <LI><A HREF="#halSnake">halSnake</A>: HAL Snake Format</LI>
         <LI><A HREF="#vcfTabix">vcfTabix</A>: Variant Call Format</LI>
+        <LI><A HREF="#vcfPhasedTrio">vcfPhasedTrio</A>: Variant Call Format Trios</LI>
     </UL></LI>
     <LI><A HREF="#groupingTracks">Grouping tracks into sets and hierarchies</A>
         &ndash; with examples
@@ -971,6 +972,56 @@ are described below along with settings specific to their types.</P>
     </TD></TR>
 </TABLE>
 <BR><BR>
+
+<A name="vcfPhasedTrio"></A>
+<TABLE class="settingsTable" id="vcfPhasedTrio_-_Variant_Call_Format_Track_Settings">
+<THEAD><TR><TD><DIV ID="vcfPhasedTrio_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'/>
+        &nbsp;vcfPhasedTrio - Variant Call Format Trio track settings
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="vcfPhasedTrio"><IMG class='toggle detail'>
+        <div class="format"><code>type vcfPhasedTrio</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="vcfChildSample"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">vcfChildSample &lt;sampleName|altName&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataIndex"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">bigDataIndex &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+
+    <TR VALIGN=TOP><TD class="vcfParentSamples"><A NAME="vcfParentSamples"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">vcfParentSamples &lt;sampleName|altName,sampleName|altName&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="vcfUseAltSampleNames"><A NAME="vcfUseAltSampleNames"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">vcfUseAltSampleNames &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="geneTrack"><A NAME="geneTrack"><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">geneTrack &lt;track&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="vcfDoFilter"><A NAME="vcfDoFilter"><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">vcfDoFilter &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="vcfDoQual"><A NAME="vcfDoQual"><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">vcfDoQual &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="vcfDoMaf"><A NAME="vcfDoQual"><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">vcfDoQual &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD>
+            <P>Additional settings found in the "Item or
+            region tracks" section are also available for displaying
+            Variant Call Format tracks.</P>
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>
+        </DIV>
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="vcfPhasedTrio_example">
+        <IMG class='toggle detail'>
+        <div class="format"><B>Example of a VCF Phased Trio track</B></div>
+    </TD></TR>
+</TABLE>
 
 </div></div>
 
