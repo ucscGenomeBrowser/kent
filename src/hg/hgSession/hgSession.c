@@ -165,7 +165,9 @@ void addSessionLink(struct dyString *dy, char *userName, char *sessionName,
  * If encode, cgiEncodeFull the URL. 
  * If tryShortLink, print a shortened link that apache can redirect.
  * The link is an absolute link that includes the server name so people can
- * copy-paste it into emails.  */
+ * copy-paste it into emails.
+ *
+ * NOTE: Do not append CGI variables here, as it will break short links if they are enabled. */
 {
 struct dyString *dyTmp = dyStringNew(1024);
 if (tryShortLink && cfgOptionBooleanDefault("hgSession.shortLink", FALSE) &&
