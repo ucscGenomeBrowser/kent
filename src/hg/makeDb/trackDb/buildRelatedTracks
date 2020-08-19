@@ -1,0 +1,25 @@
+#!/bin/bash
+# Build the relatedTracks table for each assembly
+set -beEu -o pipefail
+
+function usage() {
+    printf "Usage: %s relatedTrack_name db1 db2 ...\n" "`basename $0`"
+    printf "Build the relatedTrack tables for each assembly listed in relatedTracks.ra\n"
+    printf "The first argument must be the name of the table to build, followed by all\nthe"
+    printf "assemblies to update (similar to trackDb update process)\n"
+}
+
+if [ $# -lt 2 ] ; then
+    echo "wrong # args" >&2
+    usage >&2
+    exit 1
+fi
+
+tbl="$1"; shift;
+
+for db in $*; do
+    grep "^$db" relatedTracks.ra | cut -d' ' -f2- \
+        | sed -e 's/ /\t/' -e 's/ /\t/' | sort -k1 -k2 \
+        | hgLoadSqlTab "$db" "$tbl" ~/kent/src/hg/lib/relatedTrack.sql stdin
+    printf "done building relatedTrack table for %s\n" "$db"
+done

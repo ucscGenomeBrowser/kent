@@ -9604,3 +9604,52 @@ if (isNotEmpty(version))
     printf("<B>Data version:</B> %s <BR>\n", version);
 }
 
+void printRelatedTracks(char *database, struct hash *trackHash, struct trackDb *tdb, struct cart *cart)
+/* Maybe print a "related track" section */
+{
+struct sqlConnection *conn = hAllocConn(database);
+char *relatedTrackTable = cfgOptionDefault("db.relatedTrack","relatedTrack");
+if (!sqlTableExists(conn, relatedTrackTable))
+    {
+    hFreeConn(&conn);
+    return;
+    }
+
+char query[256];
+sqlSafef(query, sizeof(query),
+    "select track1, track2, why from %s where track1='%s' or track2='%s'", relatedTrackTable, tdb->track, tdb->track);
+
+char **row;
+struct sqlResult *sr;
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    puts("<b>Related tracks</b>\n");
+    puts("<ul>\n");
+    char *track1, *track2, *why, *otherTrack;
+    for (; row != NULL; row = sqlNextRow(sr))
+        {
+        track1 = row[0];
+        track2 = row[1];
+        why    = row[2];
+
+        if (sameWord(track1, tdb->track))
+            otherTrack = track2;
+        else
+            otherTrack = track1;
+
+        struct trackDb *otherTdb = hashFindVal(trackHash, otherTrack);
+        if (otherTdb)
+            {
+            puts("<li>");
+            printf("<a href=\"%s?g=%s&%s\">%s</a>", hTrackUiForTrack(otherTdb->track), otherTdb->track, cartSidUrlString(cart), otherTdb->shortLabel);
+            puts(": ");
+            puts(why);
+            }
+        }
+    puts("</ul>\n");
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}

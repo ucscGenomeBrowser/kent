@@ -3134,79 +3134,6 @@ for (;tdb != NULL; tdb = tdb->parent)
 return NULL;
 }
 
-void printHtmlAddRelated(struct trackDb *tdb, char *html)
-/* print the track description html and try to inject the "related track" section */
-{
-struct sqlConnection *conn = hAllocConn(database);
-if (!sqlTableExists(conn, "relatedTrack"))
-    {
-    puts(html);
-    hFreeConn(&conn);
-    return;
-    }
-
-char query[256];
-sqlSafef(query, sizeof(query),
-    "select track1, track2, why from relatedTrack where track1='%s' or track2='%s'",  tdb->track, tdb->track);
-
-char **row;
-struct sqlResult *sr;
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row == NULL)
-    {
-    puts(html);
-    hFreeConn(&conn);
-    sqlFreeResult(&sr);
-    return;
-    }
-
-char *lines[10000];
-int lineCount = chopByChar(html, '\n', lines, ArraySize(lines));
-
-char* refLine1 = "<H2>References</H2>";
-char* refLine2 = "<h2>References</h2>";
-
-int lineIdx;
-for (lineIdx = 0; lineIdx < lineCount; lineIdx++)
-    {
-    char *line = lines[lineIdx];
-    if ( !sameWord(line, "<RELATED>") && !sameWord(line, refLine1) && !sameWord(line, refLine2))
-        {
-        puts(line);
-        continue;
-        } 
-
-    puts("<H2>Related tracks</H2>\n");
-    puts("<ul>\n");
-    do
-        {
-        char *track1 = row[0];
-        char *track2 = row[1];
-        char *why    = row[2];
-
-        char* otherTrack;
-        if (sameWord(track1, tdb->track))
-            otherTrack = track2;
-        else
-            otherTrack = track1;
-
-        struct trackDb *otherTdb = hashFindVal(trackHash, otherTrack);
-        puts("<li>");
-        puts(otherTdb->shortLabel);
-        puts(": ");
-        puts(why);
-        } while ((row = sqlNextRow(sr)) != NULL);
-    puts("</ul>\n");
-
-    if (sameWord(line, refLine1) || sameWord(line, refLine2))
-        puts(line);
-    }
-
-hFreeConn(&conn);
-sqlFreeResult(&sr);
-}
-
 void printTrackHtml(struct trackDb *tdb)
 /* If there's some html associated with track print it out. Also print
  * last update time for data table and make a link
@@ -3214,6 +3141,7 @@ void printTrackHtml(struct trackDb *tdb)
 {
 if (!isCustomTrack(tdb->track))
     {
+    printRelatedTracks(database, trackHash, tdb, cart);
     extraUiLinks(database, tdb);
     printTrackUiLink(tdb);
     printOrigAssembly(tdb);
@@ -3232,10 +3160,7 @@ if (html != NULL && html[0] != 0)
     // Wrap description html in div with limited width, so when the page is very wide
     // due to long details, the user doesn't have to scroll right to read the description.
     puts("<div class='readableWidth'>");
-    if (trackHubDatabase(database))
-        puts(html);
-    else
-        printHtmlAddRelated(tdb, html);
+    puts(html);
     puts("</div>");
     }
 hPrintf("<BR>\n");
