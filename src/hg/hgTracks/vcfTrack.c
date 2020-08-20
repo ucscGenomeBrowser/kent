@@ -1529,7 +1529,9 @@ if (retHapColorMode)
 pushWarnHandler(ignoreEm);
 struct vcfRecord *rec;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
-    vcfParseGenotypes(rec);
+    {
+    vcfParseGenotypesGtOnly(rec);
+    }
 popWarnHandler();
 if (*retHapColorMode == functionMode)
     {
