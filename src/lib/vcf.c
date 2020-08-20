@@ -927,8 +927,12 @@ static boolean chromsMatch(char *chromA, char *chromB)
 // Return TRUE if chromA and chromB are non-NULL and identical, possibly ignoring
 // "chr" at the beginning of one but not the other.
 {
+// Allow SARS-CoV-2 VCF to use GenBank or RefSeq ID instead of our chromified RefSeq ID:
+static char *sarsCoV2Ids[] = {"NC_045512v2", "MN908947.3", "NC_045512.2"};
 if (chromA == NULL || chromB == NULL)
     return FALSE;
+else if (stringIx(chromA, sarsCoV2Ids) >= 0 && stringIx(chromB, sarsCoV2Ids) >= 0)
+    return TRUE;
 char *chromAPlus = startsWith("chr", chromA) ? chromA+3 : chromA;
 char *chromBPlus = startsWith("chr", chromB) ? chromB+3 : chromB;
 return sameString(chromAPlus, chromBPlus);

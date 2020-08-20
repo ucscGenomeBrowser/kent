@@ -280,6 +280,13 @@ int tabixSeqId = ti_get_tid(lf->tabix, seqName);
 if (tabixSeqId < 0 && startsWith("chr", seqName))
     // We will get some files that have chr-less Ensembl chromosome names:
     tabixSeqId = ti_get_tid(lf->tabix, seqName+strlen("chr"));
+// Allow SARS-CoV-2 VCF to use GenBank or RefSeq ID instead of our chromified RefSeq ID:
+if (tabixSeqId < 0 && sameString(seqName, "NC_045512v2"))
+    {
+    tabixSeqId = ti_get_tid(lf->tabix, "MN908947.3");
+    if (tabixSeqId < 0)
+        tabixSeqId = ti_get_tid(lf->tabix, "NC_045512.2");
+    }
 if (tabixSeqId < 0)
     return FALSE;
 ti_iter_t *iter = ti_queryi((tbx_t *)lf->tabix, tabixSeqId, start, end);
