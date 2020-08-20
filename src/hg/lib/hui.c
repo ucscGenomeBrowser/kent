@@ -5174,6 +5174,11 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     // End of row and free ourselves of this subtrack
     puts("</TD></TR>\n");
     checkBoxIdFree(&id);
+
+    boolean showCfg = trackDbSettingOn(subtrack, "showCfg");
+    if (showCfg)
+        jsInlineF(" subCfg.cfgToggle(document.getElementById(\"%s_toggle\"),\"%s\");",  subtrack->track, subtrack->track);
+
     }
 
 // End of the table
@@ -6374,7 +6379,17 @@ void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, ch
 // Put up UI for filtering bed track based on a score
 {
 char option[256];
+if (cartOptionalString(cart, "ajax") == NULL)
+    {
+    webIncludeResourceFile("ui.dropdownchecklist.css");
+    jsIncludeFile("ui.dropdownchecklist.js",NULL);
+    jsIncludeFile("ddcl.js",NULL);
+    }
+
 boolean parentLevel = isNameAtParentLevel(tdb,name);
+if (parentLevel)
+    if (trackDbSettingOn(tdb->parent, "noParentConfig"))
+        return;
 boolean skipScoreFilter = FALSE;
 
 // Numeric filters are first
@@ -6384,13 +6399,6 @@ if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name,
 
 if (textFiltersShowAll(db, cart, tdb))
     skipScoreFilter = TRUE;
-
-if (cartOptionalString(cart, "ajax") == NULL)
-    {
-    webIncludeResourceFile("ui.dropdownchecklist.css");
-    jsIncludeFile("ui.dropdownchecklist.js",NULL);
-    jsIncludeFile("ddcl.js",NULL);
-    }
 
 // Add any multi-selects next
 filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);

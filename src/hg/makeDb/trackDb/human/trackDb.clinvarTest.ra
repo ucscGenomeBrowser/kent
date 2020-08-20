@@ -5,6 +5,7 @@ longLabel ClinVar Variants
 group phenDis
 visibility hide
 type bed 12 +
+noParentConfig on
 itemRgb on
 urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
 scoreLabel ClinVar Star-Rating (0-4)
@@ -18,6 +19,7 @@ scoreLabel ClinVar Star-Rating (0-4)
         itemRgb on
         priority 1
         type bigBed 12 +
+        showCfg on
         filterValues._clinSignCode BN|benign,LB|likely benign,CF|conflicting,PG|pathogenic,LP|likely pathogenic,UC|uncertain,OT|other
         filterType._clinSignCode singleList
         filterValues._originCode GERM|germline,SOM|somatic,GERMSOM|germline/somatic,NOVO|de novo,UNK|unknown
