@@ -620,11 +620,11 @@ if (alias != NULL && sqlTableExists(conn, alias))
      sqlSafef(query, sizeof(query), "select kgID from %s where alias = '%s'", alias, name);
      char *id = sqlQuickString(conn, query);
      if (id == NULL)
-         hUserAbort("Couldn't find %s in %s.%s or %s.%s", name, database, mainTable, database, alias);
+         hUserAbort("Couldn't find %s in %s.%s or %s.%s", name, sqlGetDatabase(conn), mainTable, sqlGetDatabase(conn), alias);
      return id;
      }
 else
-     hUserAbort("Couldn't find %s in %s.%s", name, database, mainTable);
+     hUserAbort("Couldn't find %s in %s.%s", name, sqlGetDatabase(conn), mainTable);
 return NULL;
 }
 
