@@ -17,24 +17,35 @@ def parseArgs():
     " setup logging, parse command line arguments and options. -h shows auto-generated help page "
     parser = optparse.OptionParser("""usage: %prog [options] filename - change NCBI or Ensembl chromosome names to UCSC names using the chromAlias table of the genome browser.
 
-    Examples:
-        %prog -g hg19 --get              # download the file hg19.chromAlias.tsv into current directory
-        %prog -i test2.bed -o test2.ucsc.bed -a hg19.chromAlias.tsv -g hg19
-        cat test.bed | %prog -a mm10.chromAlias.tsv > test.ucsc.bed
+    Requires a <genome>.chromAlias.tsv file which can be downloaded like this:
+        %prog --get hg19              # download the file hg19.chromAlias.tsv into current directory
 
     If you do not want to use the --get option to retrieve the mapping tables, you can also download the alias mapping
-    files yourself, e.g. for mm10 with 'wget http://hgdownload.soe.ucsc.edu/goldenPath/mm10/database/chromAlias.txt.gz'
+    files yourself, e.g. for mm10 with 'wget https://hgdownload.soe.ucsc.edu/goldenPath/mm10/database/chromAlias.txt.gz'
+
+    Then the script can be run like this:
+        %prog -i in.bed -o out.bed -a hg19.chromAlias.tsv
+        %prog -i in.bed -o out.bed -a https://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/chromAlias.txt.gz
+    Or in pipes, like this:
+        cat test.bed | %prog -a mm10.chromAlias.tsv > test.ucsc.bed
+
     """)
 
-    parser.add_option("", "--get", dest="doDownload", action="store_true", help="download a chrom alias table from UCSC for --genomeDb into the current directory and exit")
-    parser.add_option("-a", "--chromAlias", dest="aliasFname", action="store", help="a UCSC chromAlias table in tab-sep format. The alias tables for hg19 or hg38 are hardcoded in the script, they do not require a chromAlias table. Use the -g option for those.")
-    parser.add_option("-g", "--genomeDb", dest="db", action="store", help="a UCSC assembly ID, like hg19. Not required. Activates assembly-specific warning messages, only for hg19 right now.")
+    parser.add_option("", "--get", dest="doDownload", action="store", help="download a chrom alias table from UCSC for the genomeDb into the current directory and exit")
+    parser.add_option("-a", "--chromAlias", dest="aliasFname", action="store", help="a UCSC chromAlias file in tab-sep format. or a URL to one")
     parser.add_option("-i", "--in", dest="inFname", action="store", help="input filename, default: /dev/stdin")
     parser.add_option("-o", "--out", dest="outFname", action="store", help="output filename, default: /dev/stdout")
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    parser.add_option("-k", "--field", dest="fieldNo", action="store", type="int", \
+            help="index of field to convert, default is %default (1-based), for most formats, e.g. BED. For genePred, the chromosome is field 2, for PSL it is 10 or 14.", default=1)
+
     (options, args) = parser.parse_args()
 
-    if options.db is None and options.aliasFname is None:
+    if options.doDownload and not options.db:
+        print("If you use --get you need to provide a genome assembly code like 'mm10' with the -g option")
+        exit(1)
+
+    if options.doDownload is None and options.aliasFname is None:
         parser.print_help()
         exit(1)
 
@@ -56,21 +67,32 @@ def splitLines(ifh):
                 sep = "\t"
             else:
                 sep = None # = split on any whitespace, consec. whitespc counts as one
-        chrom, rest = line.split(sep, 1)
+        #chrom, rest = line.split(sep, 1)
+        row = line.rstrip("\n\t").split(sep)
         lineNo += 1
-        yield lineNo, sep, chrom, rest
+        yield lineNo, sep, row
 
 def parseAlias(fname):
     " parse tsv file with at least two columns, orig chrom name and new chrom name "
     toUcsc = {}
-    for line in open(fname):
+    if fname.startswith("http://") or fname.startswith("https://"):
+        ifh = urlopen(fname)
+        if fname.endswith(".gz"):
+            data = gzip.GzipFile(fileobj=ifh).read().decode()
+            ifh = data.splitlines()
+    elif fname.endswith(".gz"):
+        ifh = gzip.open(fname)
+    else:
+        ifh = open(fname)
+
+    for line in ifh:
         if line.startswith("alias"):
             continue
         row = line.rstrip("\n").split("\t")
         toUcsc[row[0]] = row[1]
     return toUcsc
 
-def chromToUcsc(db, aliasFname, ifh, ofh):
+def chromToUcsc(aliasFname, fieldIdx, ifh, ofh):
     " convert the first column to UCSC-style chrom names "
     toUcsc = parseAlias(aliasFname)
 
@@ -78,29 +100,24 @@ def chromToUcsc(db, aliasFname, ifh, ofh):
 
     mtSkipCount = 0
 
-    isHg19 = (db=="hg19" or basename(aliasFname).startswith("hg19"))
-
-    for lineNo, sep, chrom, rest in splitLines(ifh):
+    for lineNo, sep, row in splitLines(ifh):
         # just pass through any UCSC chrom names
+        chrom = row[fieldIdx]
         if chrom in ucscChroms:
             ucscChrom = chrom
         else:
-            if isHg19 and (chrom=="MT" or chrom=="M"):
-                mtSkipCount += 1
-                continue
-
             ucscChrom = toUcsc.get(chrom)
             if ucscChrom is None:
                 logging.error("line %d: chrom name %s is not in chromAlias table" % (lineNo, repr(chrom)))
                 exit(1)
                 continue
 
-        ofh.write(ucscChrom)
-        ofh.write(sep)
-        ofh.write(rest)
+        row[fieldIdx] = ucscChrom
+        ofh.write(sep.join(row))
+        ofh.write("\n")
 
     if mtSkipCount!=0:
-        stderr.write("%d features were skipped because they were located on the M or MT chromosome. hg19 includes an older version of the mitochondrial genome and these features cannot be mapped yet.\n" % mtSkipCount)
+        stderr.write("%d features were skipped because they were located on the M chromosome. hg19 includes an older version of the mitochondrial genome and these features cannot be mapped yet.\n" % mtSkipCount)
 
 def download(db):
     url = "http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/chromAlias.txt.gz" % db
@@ -114,13 +131,13 @@ def download(db):
     data = gzip.GzipFile(fileobj=data).read().decode()
     outFname = db+".chromAlias.tsv"
     open(outFname, "w").write(data)
-    print("Wrote %s" % outFname)
+    print("Wrote %s to %s" % (url, outFname))
+    print("You can now convert a file with 'chromToUcsc -a %s -i infile.bed -o outfile.bed'" % outFname)
     exit(0)
 
 def main():
     args, options = parseArgs()
 
-    db = options.db
     aliasFname = options.aliasFname
     inFname = options.inFname
     outFname = options.outFname
@@ -129,7 +146,7 @@ def main():
         download(db)
 
     if aliasFname is None:
-        logging.error("You need to provide an alias table with the -a option")
+        logging.error("You need to provide an alias table with the -a option or use --get to download one.")
         exit(1)
 
     if inFname is None:
@@ -142,6 +159,7 @@ def main():
     else:
         ofh = open(outFname, "w")
 
-    chromToUcsc(db, aliasFname, ifh, ofh)
+    fieldIdx = options.fieldNo-1
+    chromToUcsc(aliasFname, fieldIdx, ifh, ofh)
 
 main()
