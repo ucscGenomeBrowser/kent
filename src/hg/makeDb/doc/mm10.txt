@@ -17934,41 +17934,41 @@ TMPDIR=/dev/shm
 	-syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
-XXX - running - Wed Jul 29 13:30:41 PDT 2020
-    #	real    483m10.607s
+    #	real    1052m41.484s
 
     cat fb.mm10.chainCanFam5Link.txt
-    #	777883731 bases of 2652783500 (29.323%) in intersection
+    #	776486006 bases of 2652783500 (29.271%) in intersection
     cat fb.mm10.chainSynCanFam5Link.txt
-    #   736602602 bases of 2652783500 (27.767%) in intersection
+    #   735561772 bases of 2652783500 (27.728%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev mm10 canFam5 \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    #	real    219m16.168s
+    #	real    214m12.449s
 
     cat fb.mm10.chainRBest.CanFam5.txt
-    # 741307883 bases of 2652783500 (27.945%) in intersection
+    # 740117947 bases of 2652783500 (27.900%) in intersection
 
     mkdir /hive/data/genomes/canFam5/bed/blastz.mm10.swap
     cd /hive/data/genomes/canFam5/bed/blastz.mm10.swap
+
     time (doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/mm10/bed/lastzCanFam5.2020-07-29/DEF \
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
-    #	real    50m20.639s
+    #	real    44m9.935s
 
     cat fb.canFam5.chainMm10Link.txt
-    #	772902855 bases of 2481941580 (31.141%) in intersection
+    #	759821061 bases of 2337131234 (32.511%) in intersection
     cat fb.canFam5.chainSynMm10Link.txt
-    #   737924732 bases of 2481941580 (29.732%) in intersection
+    #   731350605 bases of 2337131234 (31.293%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev canFam5 mm10 \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    173m38.016s
+    # real    162m30.634s
 
     cat fb.canFam5.chainRBest.Mm10.txt
-    # 740357755 bases of 2481941580 (29.830%) in intersection
+    # 739177732 bases of 2337131234 (31.628%) in intersection
 
 ##############################################################################
 # LIFTOVER TO mm39 (DONE - 2020-07-30 - Hiram)

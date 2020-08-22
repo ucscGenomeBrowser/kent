@@ -37,6 +37,7 @@ type vcfTabix
 visibility pack
 hapClusterEnabled on
 hapClusterHeight 500
+tableBrowser off
 vcfDoQual off
 vcfDoFilter off
 group varRep

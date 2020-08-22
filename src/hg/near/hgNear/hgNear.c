@@ -1897,11 +1897,8 @@ cart = theCart;
 getDbAndGenome(cart, &database, &genome, oldVars);
 makeSureDbHasHgNear();
 getGenomeSettings();
-char *externalDb = genomeOptionalSetting("externalDb");
-if (externalDb == NULL)
-    conn = hAllocConn(database);
-else
-    conn = hAllocConn(externalDb);
+char *knownDb = hdbDefaultKnownDb(database);
+conn = hAllocConn(knownDb);
 
 /* if kgProtMap2 table exists, this means we are doing KG III */
 if (hTableExists(database, "kgProtMap2")) kgVersion = KG_III;

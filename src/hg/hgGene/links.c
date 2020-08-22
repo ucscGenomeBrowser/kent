@@ -88,7 +88,7 @@ for (ra = raList; ra != NULL; ra = ra->next)
 	    link->idSql = linkRequiredField(ra, "idSql");
 	    link->nameSql = linkOptionalField(ra, "nameSql");
 	    link->nameFormat = linkOptionalField(ra, "nameFormat");
-	    link->url = linkRequiredField(ra, "url");
+	    link->url = replaceChars(linkRequiredField(ra, "url"), "KNOWNDB",sqlGetDatabase(conn));
 	    link->useHgsid = (linkOptionalField(ra, "hgsid") != NULL);
 	    link->useDb = (linkOptionalField(ra, "dbInUrl") != NULL);
 	    link->preCutAt = linkOptionalField(ra, "preCutAt");

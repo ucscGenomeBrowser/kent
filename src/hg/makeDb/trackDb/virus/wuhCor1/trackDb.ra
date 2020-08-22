@@ -322,6 +322,7 @@ hapClusterEnabled on
 hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.ft_FBP.linCol.nh
 hapClusterHeight 500
 hapClusterColorBy function
+tableBrowser off
 vcfDoQual off
 vcfDoFilter off
 geneTrack ncbiGeneBGP

@@ -38,7 +38,13 @@ hFreeConn(&conn);
 if(table != NULL)
     {
     if(sameString(table, "knownCanonical"))
+        {
+        if (differentString(knownDatabase, database))
+            {
+            return hdbGetMasterGeneTrack(knownDatabase);
+            }
         return "knownGene";
+        }
     else
         return "refGene";
     }

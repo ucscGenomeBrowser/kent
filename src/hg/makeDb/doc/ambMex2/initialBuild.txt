@@ -233,6 +233,9 @@ XXX
           -maskedSeq=/hive/data/genomes/ambMex2/ambMex2.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku ambMex2) > do.log 2>&1
 XXX - running - Fri Apr 12 23:24:42 PDT 2019
+XXX - something is too large:
+MALLOC failure reqesting -2147483648 bytes - aborting
+
     # real    2m11.881s
 
     cat fb.ambMex2.cpgIslandExtUnmasked.txt
@@ -245,33 +248,33 @@ XXX - running - Fri Apr 12 23:24:42 PDT 2019
     makeCytoBandIdeo.csh ambMex2
 
 #############################################################################
-# run up idKeys files for chromAlias/ncbiRefSeq (DONE - 2019-04-12 - Hiram)
+# run up idKeys files for chromAlias/ncbiRefSeq (DONE - 2019-04-15 - Hiram)
     mkdir /hive/data/genomes/ambMex2/bed/idKeys
     cd /hive/data/genomes/ambMex2/bed/idKeys
 
     time (doIdKeys.pl \
         -twoBit=/hive/data/genomes/ambMex2/ambMex2.unmasked.2bit \
         -buildDir=`pwd` ambMex2) > do.log 2>&1 &
-XXX - running - Fri Apr 12 23:26:32 PDT 2019
-    # real    0m47.105s
+    # real    29m20.505s
 
     cat ambMex2.keySignature.txt
-    #  7850e2d5dabb6134fdc9d7083f1a3a54
+    #  72abcdcc8a28b54cad2ff751c3494bed
 
 #############################################################################
-# gapOverlap (DONE - 2019-04-12 - Hiram)
+# gapOverlap (DONE - 2019-04-15 - Hiram)
     mkdir /hive/data/genomes/ambMex2/bed/gapOverlap
     cd /hive/data/genomes/ambMex2/bed/gapOverlap
     time (doGapOverlap.pl \
         -twoBit=/hive/data/genomes/ambMex2/ambMex2.unmasked.2bit ambMex2 ) \
         > do.log 2>&1 &
-XXX - running - Fri Apr 12 23:26:32 PDT 2019
-    # real    1m40.205s
+    # real    4m30.732s
 
-    # results are empty, there are none found.
+    # only a few:
+    wc -l bed.tab
+    # 64 bed.tab
 
     cat fb.ambMex2.gapOverlap.txt
-    # 97216 bases of 2615516299 (0.004%) in intersection
+    # 16776 bases of 32396387346 (0.000%) in intersection
 
 #############################################################################
 # tandemDups (DONE - 2019-04-12 - Hiram)
@@ -473,22 +476,22 @@ searchPriority 8
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku ambMex2) > do.log 2>&1
-XXX - running - Fri Apr 12 23:27:57 PDT 2019
-    # real    48m25.181s
+    # real    216m7.175s
 
     cat faSize.rmsk.txt
-# 1065365425 bases (9784466 N's 1055580959 real 922186059 upper
-#	133394900 lower) in 464 sequences in 1 files
-# Total size: mean 2296046.2 sd 14494999.8 min 87 (chrUn_NW_020109844v1)
-#	max 197608386 (chr1) median 10066
-# %12.52 masked total, %12.64 masked real
+# 32396387346 bases (4029676509 N's 28366710837 real 28112571951 upper
+#    254138886 lower) in 98071 sequences in 1 files
+# Total size: mean 330336.1 sd 20104017.6 min 1033 (chrUn_PGSH01113832v1)
+#    max 2030161756 (chr7) median 40920
+# %0.78 masked total, %0.90 masked real
 
     egrep -i "versi|relea" do.log
-    # RepeatMasker version open-4.0.7
-    #    February 01 2017 (open-4-0-7) 1.331 version of RepeatMasker
-    # CC    Dfam_Consensus RELEASE 20170127;                            *
-    # CC    RepBase RELEASE 20170127;     
+# RepeatMasker version development-$Id: RepeatMasker,v 1.332 2017/04/17 19:01:11 rhubley Exp $
+#    February 01 2017 (open-4-0-8) 1.332 version of RepeatMasker
+# CC    Dfam_Consensus RELEASE 20181026;                            *
+# CC    RepBase RELEASE 20181026;       
 
+XXX - this standard run is useless, note the custom library used next procedure
     time featureBits -countGaps ambMex2 rmsk
     # 133395265 bases of 1065365425 (12.521%) in intersection
     # real    0m4.226s
@@ -503,44 +506,98 @@ XXX - running - Fri Apr 12 23:27:57 PDT 2019
     # total 133395265.000000
     #   real    0m3.198s
 
-##########################################################################
-# running simple repeat (DONE - 2019-04-12 - Hiram)
+###############################################################################
+# running repeat masker (DONE - 2020-06-19 - 2020-08-15 - Hiram)
+    # using a custom library from Jermiah Smith they developed with
+    # Repeat Modeller
+
+    mkdir /hive/data/genomes/ambMex2/bed/repeatModeler
+    cd /hive/data/genomes/ambMex2/bed/repeatModeler
+
+    # note the file used for customLib, this took almost two months running
+    # time with little interference on the ku kluster
+
+    doRepeatMasker.pl -buildDir=`pwd` -customLib=`pwd`/LTRs_all_repeats.fa \
+       -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+          -smallClusterHub=hgwdev ambMex2
+    cat run.cluster/run.time
+# Completed: 65638 of 65638 jobs
+# CPU time in finished jobs:  4047318392s 67455306.53m 1124255.11h 46843.96d 128.340 y
+# IO & Wait Time:              11101559s  185025.99m  3083.77h  128.49d  0.352 y
+# Average job time:               61830s    1030.51m    17.18h    0.72d
+# Longest finished job:           77503s    1291.72m    21.53h    0.90d
+# Submission to last job:       4811964s   80199.40m  1336.66h   55.69d
+
+    # continuing after the kluster run is complete:
+    doRepeatMasker.pl -buildDir=`pwd` -customLib=`pwd`/LTRs_all_repeats.fa \
+       -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+          -continue=cat -smallClusterHub=hgwdev ambMex2
+    # real    329m25.992s
+
+    # much better result with this custom library:
+    cat faSize.rmsk.txt
+# 32396387346 bases (4029676509 N's 28366710837 real 10003444277 upper
+#    18363266560 lower) in 98071 sequences in 1 files
+# Total size: mean 330336.1 sd 20104017.6 min 1033 (chrUn_PGSH01113832v1)
+#    max 2030161756 (chr7) median 40920
+# %56.68 masked total, %64.74 masked real
+
+    egrep -i "versi|relea" do.log
+# RepeatMasker version development-$Id: RepeatMasker,v 1.332 2017/04/17 19:01:11 rhubley Exp $
+# CC    Dfam_Consensus RELEASE 20181026;                            *
+# CC    RepBase RELEASE 20181026;                                   *
+
+    time featureBits -countGaps ambMex2 rmsk
+    # 18368951822 bases of 32396387346 (56.701%) in intersection
+    # real    4m34.562s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' ambMex2 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 18368951822.000000
+    # real    2m8.428s
+
+###############################################################################
+# running simple repeat (DONE - 2019-04-15 - Hiram)
 
     mkdir /hive/data/genomes/ambMex2/bed/simpleRepeat
     cd /hive/data/genomes/ambMex2/bed/simpleRepeat
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         -trf409=6 ambMex2) > do.log 2>&1
-XXX - running - Fri Apr 12 23:28:56 PDT 2019
-    # real    58m3.288s
+    # real    30m12.201s
 
     cat fb.simpleRepeat
-    # 31110690 bases of 1055588482 (2.947%) in intersection
+    # 1399134851 bases of 32393621946 (4.319%) in intersection
 
     cd /hive/data/genomes/ambMex2
-    # using the Window Masker result:
+    # if using the Window Masker result:
     cd /hive/data/genomes/ambMex2
     twoBitMask bed/windowMasker/ambMex2.cleanWMSdust.2bit \
        -add bed/simpleRepeat/trfMask.bed  ambMex2.2bit
     #   you can safely ignore the warning about fields >= 13
 
-    # add to rmsk after it is done:
-#     twoBitMask ambMex2.rmsk.2bit \
-#         -add bed/simpleRepeat/trfMask.bed ambMex2.2bit
+    # or using RepeatMasker result add to rmsk after it is done:
+    twoBitMask ambMex2.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed ambMex2.2bit
     #   you can safely ignore the warning about fields >= 13
     twoBitToFa ambMex2.2bit stdout | faSize stdin > faSize.ambMex2.2bit.txt
     cat faSize.ambMex2.2bit.txt
-# 1065365425 bases (9784466 N's 1055580959 real 829559086 upper
-#	226021873 lower) in 464 sequences in 1 files
-# Total size: mean 2296046.2 sd 14494999.8 min 87 (chrUn_NW_020109844v1)
-#	max 197608386 (chr1) median 10066
-# %21.22 masked total, %21.41 masked real
+# 32396387346 bases (4029676509 N's 28366710837 real 9998218507 upper
+#	18368492330 lower) in 98071 sequences in 1 files
+# Total size: mean 330336.1 sd 20104017.6 min 1033 (chrUn_PGSH01113832v1)
+#	max 2030161756 (chr7) median 40920
+# %56.70 masked total, %64.75 masked real
 
     rm /gbdb/ambMex2/ambMex2.2bit
     ln -s `pwd`/ambMex2.2bit /gbdb/ambMex2/ambMex2.2bit
 
 #########################################################################
-# CREATE MICROSAT TRACK (TBD - 2018-10-11 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2020-08-17 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/ambMex2/bed/microsat
     cd /cluster/data/ambMex2/bed/microsat
@@ -549,28 +606,27 @@ XXX - running - Fri Apr 12 23:28:56 PDT 2019
        ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
     hgLoadBed ambMex2 microsat microsat.bed
-    # Read 1745 elements of size 4 from microsat.bed
+    # Read 56937 elements of size 4 from microsat.bed
 
 ##########################################################################
 ## WINDOWMASKER (DONE - 2019-04-15 - Hiram)
-
+    # Odd result here, WM masked all but 703 bases ?
     mkdir /hive/data/genomes/ambMex2/bed/windowMasker
     cd /hive/data/genomes/ambMex2/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev ambMex2) > do.log 2>&1
-XXX - running - Mon Apr 15 22:55:39 PDT 2019
-    # real    26m58.753s
+    # real    1747m17.123s
 
     # Masking statistics
     cat faSize.ambMex2.cleanWMSdust.txt
-# 1065365425 bases (9784466 N's 1055580959 real 830149186 upper
-#	225431773 lower) in 464 sequences in 1 files
-# Total size: mean 2296046.2 sd 14494999.8 min 87 (chrUn_NW_020109844v1)
-#	max 197608386 (chr1) median 10066
-# %21.16 masked total, %21.36 masked real
+# 32396387346 bases (4029676509 N's 28366710837 real 703 upper 28366710134
+#	lower) in 98071 sequences in 1 files
+# Total size: mean 330336.1 sd 20104017.6 min 1033 (chrUn_PGSH01113832v1)
+#	max 2030161756 (chr7) median 40920
+# %87.56 masked total, %100.00 masked real
 
     cat fb.ambMex2.rmsk.windowmaskerSdust.txt
-    # 86091413 bases of 1065365425 (8.081%) in intersection
+    # 18368939458 bases of 32396387346 (56.701%) in intersection
 
 ##########################################################################
 # cpgIslands - (TBD - 2018-10-11 - Hiram)
@@ -584,7 +640,8 @@ XXX - running - Mon Apr 15 22:55:39 PDT 2019
     # 16395346 bases of 1055588482 (1.553%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2018-10-11 - Hiram)
+# genscan - (DONE - 2020-08-17 - Hiram)
+XXX - waiting for ku to return after power fails - Mon Aug 17 12:11:48 PDT 2020
     mkdir /hive/data/genomes/ambMex2/bed/genscan
     cd /hive/data/genomes/ambMex2/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
@@ -598,38 +655,67 @@ XXX - running - Mon Apr 15 22:55:39 PDT 2019
     # 24521608 bases of 1055588482 (2.323%) in intersection
 
 #########################################################################
-# Create kluster run files (TBD - 2018-10-11 - Hiram)
+# Create kluster run files (DONE - 2020-08-17 - Hiram)
 
     # numerator is ambMex2 gapless bases "real" as reported by:
     featureBits -noRandom -noHap ambMex2 gap
-    # 9758843 bases of 1040397755 (0.938%) in intersection
+    # 2765400 bases of 27505544706 (0.010%) in intersection
     #                   ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 1040397755 / 2861349177 \) \* 1024
-    #  ( 1040397755 / 2861349177 ) * 1024 = 372.330406
+    calc \( 27505544706 / 2861349177 \) \* 1024
+    #  ( 27505544706 / 2861349177 ) * 1024 = 9843.495511
 
-    # ==> use -repMatch=350 according to size scaled down from 1024 for human.
-    #   and rounded down to nearest 50
+    # ==> use -repMatch=9000 according to size scaled up from 1024 for human.
+    #   and rounded down to nearest 1000
+    # experiment with 9000, 8000, 7000 - using 7000 as it makes a
+    #   reasonable number
     cd /hive/data/genomes/ambMex2
-    blat ambMex2.2bit \
+    time blat ambMex2.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/ambMex2.11.ooc \
-        -repMatch=350
-    #   Wrote 18169 overused 11-mers to jkStuff/ambMex2.11.ooc
+        -repMatch=7000
+    # real    4m11.198s
 
-    #   check non-bridged gaps to see what the typical size is:
-    hgsql -N \
-        -e 'select * from gap where bridge="no" order by size;' ambMex2 \
-        | sort -k7,7nr | ave -col=7 stdin
-    # minimum gap size is 10 and produces a reasonable number of lifts
-    gapToLift -verbose=2 -minGap=10 ambMex2 jkStuff/nonBridged.lft \
-        -bedFile=jkStuff/nonBridged.bed
-    wc -l jkStuff/nonBri*
-    # 525 jkStuff/nonBridged.bed
-    # 525 jkStuff/nonBridged.lft
+    # at repMatch 9000
+    # Wrote 9042 overused 11-mers to jkStuff/ambMex2.11.ooc
+    # at repMatch 8000
+    # Wrote 13163 overused 11-mers to jkStuff/ambMex2.11.ooc
+    # at repMatch 7000
+    # Wrote 20332 overused 11-mers to jkStuff/ambMex2.11.ooc
+
+    # there are no non-bridged gaps
+    hgsql -N -e 'select bridge from gap;' ambMex2  | sort | uniq -c
+    #  27654 yes
+    # survey gap sizes:
+    # all gaps are size 100
+    hgsql -N -e 'select size from gap where bridge="yes" order by size;' \
+       ambMex2  | ave stdin | sed -e 's/^/# /;'
+# Q1 100.000000
+# median 100.000000
+# Q3 100.000000
+# average 100.000000
+# min 100.000000
+# max 100.000000
+# count 27654
+# total 2765400.000000
+# standard deviation 0.000000
+
+    # minimum gap size is 100:
+    gapToLift -verbose=2 -minGap=100 ambMex2 jkStuff/ambMex2.100baseGaps.lft \
+        -allowBridged -bedFile=jkStuff/ambMex2.100baseGaps.bed
+    wc -l jkStuff/ambMex*
+    # 125725 jkStuff/ambMex2.100baseGaps.bed
+    # 125725 jkStuff/ambMex2.100baseGaps.lft
+
+    # to see the gaps used:
+    bedInvert.pl chrom.sizes jkStuff/ambMex2.100baseGaps.bed | less
+    # and their sizes:
+    bedInvert.pl chrom.sizes jkStuff/ambMex2.100baseGaps.bed \
+	| cut -f4 | sort -n | uniq -c | less
+    #   27654 100
 
 ########################################################################
 # lastz/chain/net swap human/hg38 (TBD - 2018-10-12 - Hiram)
@@ -704,38 +790,41 @@ XXX - running - Mon Apr 15 22:55:39 PDT 2019
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
-    # #organism       mrnaCnt estCnt  refSeqCnt
-    # Gallus gallus	30708	600485	6392
+    # organism               mrnaCnt estCnt  refSeqCnt
+    # Ambystoma mexicanum     7749    43323   0
 
-    # edit etc/genbank.conf to add ambMex2 just before galGal5
+    # edit etc/genbank.conf to add ambMex2 just before ambMex2
 
-# ambMex2 (chicken/GCF_000002315.5_GRCg6a)
+# ambMex2 (Axolotl - Ambystoma mexicanum) GCA_002915635.2 - 30Gb total
 ambMex2.serverGenome = /hive/data/genomes/ambMex2/ambMex2.2bit
-ambMex2.clusterGenome = /hive/data/genomes/ambMex2/ambMex2.2bit
 ambMex2.ooc = /hive/data/genomes/ambMex2/jkStuff/ambMex2.11.ooc
-ambMex2.lift = /hive/data/genomes/ambMex2/jkStuff/nonBridged.lft
+ambMex2.lift = /hive/data/genomes/ambMex2/jkStuff/ambMex2.100baseGaps.lft
 ambMex2.perChromTables = no
-ambMex2.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
-ambMex2.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
-ambMex2.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
-ambMex2.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
-ambMex2.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
-ambMex2.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
-ambMex2.refseq.mrna.native.load = yes
-ambMex2.refseq.mrna.xeno.load = yes
-ambMex2.genbank.mrna.xeno.load = yes
 ambMex2.downloadDir = ambMex2
-# ambMex2.upstreamGeneTbl = refGene
-# ambMex2.upstreamMaf = multiz7way /hive/data/genomes/galGal4/bed/multiz7way/species.lst
+ambMex2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+ambMex2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+ambMex2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+ambMex2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+ambMex2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+ambMex2.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+# defaults yes: genbank.mrna.native.load genbank.mrna.native.loadDesc
+# yes: genbank.est.native.load refseq.mrna.native.load
+# yes: refseq.mrna.native.loadDesc refseq.mrna.xeno.load
+# yes: refseq.mrna.xeno.loadDesc
+# defaults no: genbank.mrna.xeno.load genbank.mrna.xeno.loadDesc
+# no: genbank.est.native.loadDesc genbank.est.xeno.load
+# no: genbank.est.xeno.loadDesc
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+# ambMex2.upstreamGeneTbl = ensGene
+# ambMex2.upstreamMaf = multiz6way /hive/data/genomes/ambMex2/bed/multiz6way/species.list
 
     # verify the files specified exist before checking in the file:
   grep ^ambMex2 etc/genbank.conf | grep hive | awk '{print $NF}' | xargs ls -og
-# -rw-rw-r-- 1 313201328 Oct 11 15:51 /hive/data/genomes/ambMex2/ambMex2.2bit
-# -rw-rw-r-- 1 313201328 Oct 11 15:51 /hive/data/genomes/ambMex2/ambMex2.2bit
-# -rw-rw-r-- 1     72684 Oct 11 15:56 /hive/data/genomes/ambMex2/jkStuff/ambMex2.11.ooc
-# -rw-rw-r-- 1     29513 Oct 11 15:57 /hive/data/genomes/ambMex2/jkStuff/nonBridged.lft
+-rw-rw-r-- 1 8271637678 Aug 17 10:51 /hive/data/genomes/ambMex2/ambMex2.2bit
+-rw-rw-r-- 1    7002521 Aug 17 12:05 /hive/data/genomes/ambMex2/jkStuff/ambMex2.100baseGaps.lft
+-rw-rw-r-- 1      81336 Aug 17 11:46 /hive/data/genomes/ambMex2/jkStuff/ambMex2.11.ooc
 
-    git commit -m "Added ambMex2; refs #22113" etc/genbank.conf
+    git commit -m "Added ambMex2; refs #23367" etc/genbank.conf
     git push
     # update /cluster/data/genbank/:
     make etc-update
@@ -745,13 +834,11 @@ ambMex2.downloadDir = ambMex2
     git pull
     # add ambMex2 to:
     #   etc/align.dbs etc/hgwdev.dbs
-    git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added ambMex2 - chicken refs #22113" etc/hgwdev.dbs
+    git commit -m "Added ambMex2 refs #23367" etc/hgwdev.dbs etc/align.dbs
     git push
     make etc-update
 
-    # wait a few days for genbank magic to take place, the tracks will
-    # appear
+    # Notify Chris this is ready to go 2020-08-17
 
 #############################################################################
 # augustus gene track (TBD - 2018-10-12 - Hiram)
@@ -926,7 +1013,7 @@ xyz
     joinerCheck -database=ambMex2 -keys all.joiner
 
     # when clean, check in:
-    git commit -m 'adding rules for ambMex2 refs #22113' all.joiner
+    git commit -m 'adding rules for ambMex2 refs #23367' all.joiner
     git push
     # run up a 'make alpha' in hg/hgTables to get this all.joiner file
     # into the hgwdev/genome-test system

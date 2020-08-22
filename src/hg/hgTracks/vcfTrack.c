@@ -14,6 +14,7 @@
 #include "hdb.h"
 #include "hgColors.h"
 #include "hgTracks.h"
+#include "iupac.h"
 #include "pgSnp.h"
 #include "phyloTree.h"
 #include "trackHub.h"
@@ -1074,6 +1075,9 @@ for (txi = txiList;  txi != NULL;  txi = txi->next)
             allele = "";
         else if (allele[0] == '<')
             continue;
+        // Ignore IUPAC ambiguous values in alts (can leak in from hgPhyloPlace)
+        if (anyIupac(allele))
+            continue;
         struct vpTx *vpTx = vpGenomicToTranscript(gSeqWin, &variantBed3, allele,
                                                   txi->psl, txi->txSeq);
         struct vpPep *vpPep = vpTranscriptToProtein(vpTx, txi->cds, txi->txSeq, txi->protSeq);
@@ -1525,7 +1529,9 @@ if (retHapColorMode)
 pushWarnHandler(ignoreEm);
 struct vcfRecord *rec;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
-    vcfParseGenotypes(rec);
+    {
+    vcfParseGenotypesGtOnly(rec);
+    }
 popWarnHandler();
 if (*retHapColorMode == functionMode)
     {
@@ -1924,7 +1930,7 @@ return leafIx;
 
 static void rDrawPhyloTreeInLabelArea(struct phyloTree *node, struct hvGfx *hvg, int x,
                                       int yOff, double pxPerHap, MgFont *font,
-                                      boolean drawRectangle)
+                                      struct hash *highlightSamples)
 /* Recursively draw the tree in the left label area. */
 {
 const int branchW = 4;
@@ -1942,7 +1948,7 @@ if (node->numEdges > 0)
     for (ix = 0;  ix < node->numEdges;  ix++)
         {
         struct phyloTree *child = node->edges[ix];
-        rDrawPhyloTreeInLabelArea(child, hvg, x+branchW, yOff, pxPerHap, font, drawRectangle);
+        rDrawPhyloTreeInLabelArea(child, hvg, x+branchW, yOff, pxPerHap, font, highlightSamples);
         struct nodeCoords *childCoords = child->priv;
         int childY = yOff + ((0.5 + childCoords->rank) * pxPerHap);
         hvGfxLine(hvg, x, childY, x+branchW, childY, color);
@@ -1958,34 +1964,77 @@ else
     {
     // Leaf node -- draw a horizontal line, and label if there is space to right of tree
     struct nodeCoords *coords = node->priv;
-    int y = yOff + ((0.5 + coords->rank) * pxPerHap);
-    hvGfxLine(hvg, x, y, x+branchW, y, color);
+    int yLine = yOff + ((0.5 + coords->rank) * pxPerHap);
+    int yBox = yLine - pxPerHap / 2;
+    int yText = yLine - tl.fontHeight / 2;
+    // Dunno why but the default font seems to draw with the baseline at y while the other fonts
+    // draw with the mid line at y.
+    if (sameOk(tl.textSize, "8"))
+        yText += 2;
+    if (highlightSamples && node->ident->name && hashLookup(highlightSamples, node->ident->name))
+        hvGfxBox(hvg, leftLabelX, yBox, leftLabelWidth, pxPerHap,
+                 MAKECOLOR_32_A(170, 255, 255, 128));
+    hvGfxLine(hvg, x, yLine, x+branchW, yLine, color);
     int textX = x + branchW + 3;
     if (pxPerHap >= tl.fontHeight+1 && textX < labelEnd)
-        hvGfxText(hvg, textX, y, MG_BLACK, font, node->ident->name);
+        hvGfxText(hvg, textX, yText, MG_BLACK, font, node->ident->name);
     }
 }
 
 static void drawPhyloTreeInLabelArea(struct phyloTree *tree, struct hvGfx *hvg, int yOff,
                                      int clipHeight, int gtHapCount,
-                                     MgFont *font, boolean drawRectangle,
-                                     unsigned int *leafOrderToHapOrderStart,
-                                     unsigned int *leafOrderToHapOrderEnd)
+                                     MgFont *font, struct hash *highlightSamples)
 {
 struct hvGfx *hvgLL = (hvgSide != NULL) ? hvgSide : hvg;
 int clipXBak, clipYBak, clipWidthBak, clipHeightBak;
 hvGfxGetClip(hvgLL, &clipXBak, &clipYBak, &clipWidthBak, &clipHeightBak);
 hvGfxUnclip(hvgLL);
 hvGfxSetClip(hvgLL, leftLabelX, yOff, leftLabelWidth, clipHeight);
-// Figure out rank (vertical position) and depth (horizontal position) of every node in tree:
-phyloTreeAddNodeCoords(tree, leafOrderToHapOrderStart, leafOrderToHapOrderEnd, 0);
 // Draw the tree:
 int x = leftLabelX;
 double pxPerHap = (double)clipHeight / gtHapCount;
-rDrawPhyloTreeInLabelArea(tree, hvgLL, x, yOff, pxPerHap, font, drawRectangle);
+rDrawPhyloTreeInLabelArea(tree, hvgLL, x, yOff, pxPerHap, font, highlightSamples);
 // Restore the prior clipping:
 hvGfxUnclip(hvgLL);
 hvGfxSetClip(hvgLL, clipXBak, clipYBak, clipWidthBak, clipHeightBak);
+}
+
+static void rHighlightSampleRows(struct phyloTree *node, struct hvGfx *hvg, int yOff,
+                                 double pxPerHap, struct hash *highlightSamples)
+/* For each leaf node, if it is in highlightSamples then draw a highlight box for it. */
+{
+if (node->numEdges > 0)
+    {
+    int ix;
+    for (ix = 0;  ix < node->numEdges;  ix++)
+        {
+        struct phyloTree *child = node->edges[ix];
+        rHighlightSampleRows(child, hvg, yOff, pxPerHap, highlightSamples);
+        }
+    }
+else
+    {
+    // leaf node; highlight if it's in highlightSamples
+    if (node->ident->name && hashLookup(highlightSamples, node->ident->name))
+        {
+        struct nodeCoords *coords = node->priv;
+        int y = yOff + (coords->rank * pxPerHap);
+        hvGfxBox(hvg, insideX, y, insideWidth, pxPerHap, MAKECOLOR_32_A(170, 255, 255, 128));
+        }
+    }
+}
+
+struct hash *getHighlightSamples(struct trackDb *tdb)
+/* Return a hash of node IDs to highlight in the phylo tree display, or NULL if none specified. */
+{
+struct hash *highlightSamples = NULL;
+char *setting = cartOrTdbString(cart, tdb, "highlightIds", NULL);
+if (isNotEmpty(setting))
+    {
+    struct slName *list = slNameListFromComma(setting);
+    highlightSamples = hashFromSlNameList(list);
+    }
+return highlightSamples;
 }
 
 static void vcfGtHapTreeFileDraw(struct track *tg, int seqStart, int seqEnd,
@@ -2006,6 +2055,16 @@ unsigned int *leafOrderToHapOrderStart, *leafOrderToHapOrderEnd;
 unsigned int *gtHapOrder = gtHapOrderFromTree(vcff, tree,
                                                 &leafOrderToHapOrderStart, &leafOrderToHapOrderEnd,
                                                 &gtHapCount);
+// Figure out rank (vertical position) and depth (horizontal position) of every node in tree:
+phyloTreeAddNodeCoords(tree, leafOrderToHapOrderStart, leafOrderToHapOrderEnd, 0);
+int extraPixel = (colorMode == altOnlyMode || colorMode == functionMode) ? 1 : 0;
+int hapHeight = tg->height - CLIP_PAD - 2*extraPixel;
+struct hash *highlightSamples = getHighlightSamples(tg->tdb);
+if (highlightSamples)
+    {
+    double pxPerHap = (double)hapHeight / gtHapCount;
+    rHighlightSampleRows(tree, hvg, yOff+extraPixel, pxPerHap, highlightSamples);
+    }
 struct vcfRecord *rec;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     {
@@ -2015,12 +2074,7 @@ for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     drawOneRec(rec, gtHapOrder, gtHapCount, tg, hvg, xOff, yOff, width, FALSE, FALSE,
                colorMode, funcTerm);
     }
-int extraPixel = (colorMode == altOnlyMode || colorMode == functionMode) ? 1 : 0;
-int hapHeight = tg->height - CLIP_PAD - 2*extraPixel;
-char *treeAngle = cartOrTdbString(cart, tg->tdb, VCF_HAP_TREEANGLE_VAR, VCF_DEFAULT_HAP_TREEANGLE);
-boolean drawRectangle = sameString(treeAngle, VCF_HAP_TREEANGLE_RECTANGLE);
-drawPhyloTreeInLabelArea(tree, hvg, yOff+extraPixel, hapHeight, gtHapCount, font,
-                         drawRectangle, leafOrderToHapOrderStart, leafOrderToHapOrderEnd);
+drawPhyloTreeInLabelArea(tree, hvg, yOff+extraPixel, hapHeight, gtHapCount, font, highlightSamples);
 drawSampleTitles(vcff, yOff+extraPixel, hapHeight, gtHapOrder, gtHapCount, tg->track);
 }
 

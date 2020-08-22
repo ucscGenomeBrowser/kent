@@ -1828,19 +1828,6 @@ if (gp->optFields & genePredExonFramesFld)
     reverseInts(gp->exonFrames, gp->exonCount);
 }
 
-int genePredCdsSize(struct genePred *gp)
-/* compute the number of bases of CDS */
-{
-int iExon, start, end, cdsBases = 0;
-
-for (iExon = 0; iExon < gp->exonCount; iExon++)
-    {
-    if (genePredCdsExon(gp, iExon, &start, &end))
-        cdsBases += (end - start);
-    }
-return cdsBases;
-}
-
 struct genePred *genePredNew(char *name, char *chrom, char strand,
                              unsigned txStart, unsigned txEnd,
                              unsigned cdsStart, unsigned cdsEnd,

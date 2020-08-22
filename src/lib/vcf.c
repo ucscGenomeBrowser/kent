@@ -927,8 +927,12 @@ static boolean chromsMatch(char *chromA, char *chromB)
 // Return TRUE if chromA and chromB are non-NULL and identical, possibly ignoring
 // "chr" at the beginning of one but not the other.
 {
+// Allow SARS-CoV-2 VCF to use GenBank or RefSeq ID instead of our chromified RefSeq ID:
+static char *sarsCoV2Ids[] = {"NC_045512v2", "MN908947.3", "NC_045512.2"};
 if (chromA == NULL || chromB == NULL)
     return FALSE;
+else if (stringIx(chromA, sarsCoV2Ids) >= 0 && stringIx(chromB, sarsCoV2Ids) >= 0)
+    return TRUE;
 char *chromAPlus = startsWith("chr", chromA) ? chromA+3 : chromA;
 char *chromBPlus = startsWith("chr", chromB) ? chromB+3 : chromB;
 return sameString(chromAPlus, chromBPlus);
@@ -1450,6 +1454,37 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
     if (i == 0 && !foundGT)
         vcfFileErr(vcff,
                    "Genotype FORMAT column includes neither GT nor PL; unable to parse genotypes.");
+    }
+record->genotypeUnparsedStrings = NULL;
+}
+
+void vcfParseGenotypesGtOnly(struct vcfRecord *record)
+/* Translate record->genotypesUnparsedStrings[] into proper struct vcfGenotype[], but ignore
+ * genotype info elements, IDs, etc; parse only the genotypes (e.g. for quick display in hgTracks).
+ * This destroys genotypesUnparsedStrings. */
+{
+if (record->genotypeUnparsedStrings == NULL)
+    return;
+struct vcfFile *vcff = record->file;
+record->genotypes = vcfFileAlloc(vcff, vcff->genotypeCount * sizeof(struct vcfGenotype));
+int i;
+for (i = 0;  i < vcff->genotypeCount;  i++)
+    {
+    // Parse (.|[0-9])([/|](.|[0-9]))? in first one to four characters
+    char *string = record->genotypeUnparsedStrings[i];
+    struct vcfGenotype *gt = &(record->genotypes[i]);
+    gt->hapIxA = gt->hapIxB = -1;
+    if (string[0] != '.' && isdigit(string[0]))
+        gt->hapIxA = atoi(string);
+    if (string[1] == '/' || string[1] == '|')
+        {
+        if (isdigit(string[2]))
+            gt->hapIxB = atoi(string+2);
+        if (string[1] == '|')
+            gt->isPhased = TRUE;
+        }
+    else
+        gt->isHaploid = TRUE;
     }
 record->genotypeUnparsedStrings = NULL;
 }
