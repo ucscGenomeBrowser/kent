@@ -5825,10 +5825,12 @@ return masterGeneTrack;
 char *hdbDefaultKnownDb(char *db)
 /* Get the default knownGene database from the defaultKnown table. */
 {
+static char *checkedDb = NULL;
 static char *knownDb = NULL;
 
-if (knownDb)            // if we already know it, return it.
+if (sameOk(checkedDb, db))            // if we already know it, return it.
     return knownDb;
+knownDb = NULL;
 
 struct sqlConnection *conn = hAllocConn(db);
 
@@ -5842,6 +5844,8 @@ hFreeConn(&conn);
 
 if (knownDb == NULL)
     knownDb = cloneString(db);
+
+checkedDb = cloneString(db);
 
 return knownDb;
 }
