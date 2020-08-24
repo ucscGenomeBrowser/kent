@@ -866,49 +866,52 @@ if (!trackHubDatabase(database) && hDbHasNcbiRefSeq(database))
     else if (sameString(gTdb->track, "ncbiRefSeqPredicted"))
         extraWhere = "qName like 'X%'";
     txiList = txInfoInitFromPsl(conn, "ncbiRefSeqPsl", extraWhere, &txiHash);
-    // Now get CDS for each psl/txi:
-    struct dyString *query = sqlDyStringCreate("select * from ncbiRefSeqCds where id in ");
-    txiInfoAppendIdList(query, txiList);
-    txInfoAddCdsFromQuery(txiHash, conn, query->string);
-    // Now get transcript sequence for each psl/txi:
-    struct hash *extNcbi = hashExtNcbiRefSeq(conn);
-    dyStringClear(query);
-    sqlDyStringPrintf(query, "select acc,extFile,file_offset,file_size from seqNcbiRefSeq "
-                      "where acc in ");
-    txiInfoAppendIdList(query, txiList);
-    struct sqlResult *sr = sqlGetResult(conn, query->string);
-    char **row;
-    while ((row = sqlNextRow(sr)) != NULL)
+    if (txiList)
         {
-        char *name = row[0];
-        char *extId = row[1];
-        off_t offset = sqlLongLong(row[2]);
-        size_t size = sqlUnsigned(row[3]);
-        struct udcFile *udcF = hashMustFindVal(extNcbi, extId);
-        char *buf = needMem(size+1);
-        udcSeek(udcF, offset);
-        udcRead(udcF, buf, size);
-        struct txInfo *txi = hashMustFindVal(txiHash, name);
-        txi->txSeq = faSeqFromMemText(buf, TRUE);
+        // Now get CDS for each psl/txi:
+        struct dyString *query = sqlDyStringCreate("select * from ncbiRefSeqCds where id in ");
+        txiInfoAppendIdList(query, txiList);
+        txInfoAddCdsFromQuery(txiHash, conn, query->string);
+        // Now get transcript sequence for each psl/txi:
+        struct hash *extNcbi = hashExtNcbiRefSeq(conn);
+        dyStringClear(query);
+        sqlDyStringPrintf(query, "select acc,extFile,file_offset,file_size from seqNcbiRefSeq "
+                          "where acc in ");
+        txiInfoAppendIdList(query, txiList);
+        struct sqlResult *sr = sqlGetResult(conn, query->string);
+        char **row;
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            char *name = row[0];
+            char *extId = row[1];
+            off_t offset = sqlLongLong(row[2]);
+            size_t size = sqlUnsigned(row[3]);
+            struct udcFile *udcF = hashMustFindVal(extNcbi, extId);
+            char *buf = needMem(size+1);
+            udcSeek(udcF, offset);
+            udcRead(udcF, buf, size);
+            struct txInfo *txi = hashMustFindVal(txiHash, name);
+            txi->txSeq = faSeqFromMemText(buf, TRUE);
+            }
+        sqlFreeResult(&sr);
+        freeExtNcbiHash(&extNcbi);
+        // Now get protein sequence (if applicable) for each psl/txi:
+        dyStringClear(query);
+        sqlDyStringPrintf(query, "select id, protAcc, seq from ncbiRefSeqLink nl, ncbiRefSeqPepTable np "
+                          "where nl.protAcc = np.name and id in ");
+        txiInfoAppendIdList(query, txiList);
+        sr = sqlGetResult(conn, query->string);
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            char *txId = row[0];
+            char *protId = row[1];
+            char *protSeq = cloneString(row[2]);
+            struct txInfo *txi = hashMustFindVal(txiHash, txId);
+            txi->protSeq = newDnaSeq(protSeq, strlen(protSeq), protId);
+            }
+        sqlFreeResult(&sr);
+        hFreeConn(&conn);
         }
-    sqlFreeResult(&sr);
-    freeExtNcbiHash(&extNcbi);
-    // Now get protein sequence (if applicable) for each psl/txi:
-    dyStringClear(query);
-    sqlDyStringPrintf(query, "select id, protAcc, seq from ncbiRefSeqLink nl, ncbiRefSeqPepTable np "
-                      "where nl.protAcc = np.name and id in ");
-    txiInfoAppendIdList(query, txiList);
-    sr = sqlGetResult(conn, query->string);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        char *txId = row[0];
-        char *protId = row[1];
-        char *protSeq = cloneString(row[2]);
-        struct txInfo *txi = hashMustFindVal(txiHash, txId);
-        txi->protSeq = newDnaSeq(protSeq, strlen(protSeq), protId);
-        }
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
     }
 return txiList;
 }
@@ -923,21 +926,24 @@ if (!trackHubDatabase(database))
     struct sqlConnection *conn = hAllocConn(database);
     struct hash *txiHash = NULL;
     txiList = txInfoInitFromPsl(conn, "refSeqAli", NULL, &txiHash);
-    // Now get CDS for each psl/txi:
-    struct dyString *query = sqlDyStringCreate("select i.acc, c.name from %s i, %s c "
-                                               "where c.id = i.cds and i.acc in ",
-                                               gbCdnaInfoTable, cdsTable);
-    txiInfoAppendIdList(query, txiList);
-    txInfoAddCdsFromQuery(txiHash, conn, query->string);
-    // Now get transcript and translated sequence for each psl/txi:
-    struct txInfo *txi;
-    for (txi = txiList;  txi != NULL;  txi = txi->next)
+    if (txiList)
         {
-        txi->txSeq = hGenBankGetMrna(database, txi->psl->qName, NULL);
-        if (txi->cds->end > txi->cds->start && txi->cds->startComplete)
+        // Now get CDS for each psl/txi:
+        struct dyString *query = sqlDyStringCreate("select i.acc, c.name from %s i, %s c "
+                                                   "where c.id = i.cds and i.acc in ",
+                                                   gbCdnaInfoTable, cdsTable);
+        txiInfoAppendIdList(query, txiList);
+        txInfoAddCdsFromQuery(txiHash, conn, query->string);
+        // Now get transcript and translated sequence for each psl/txi:
+        struct txInfo *txi;
+        for (txi = txiList;  txi != NULL;  txi = txi->next)
             {
-            txi->protSeq = translateSeq(txi->txSeq, txi->cds->start, FALSE);
-            aaSeqZToX(txi->protSeq);
+            txi->txSeq = hGenBankGetMrna(database, txi->psl->qName, NULL);
+            if (txi->cds->end > txi->cds->start && txi->cds->startComplete)
+                {
+                txi->protSeq = translateSeq(txi->txSeq, txi->cds->start, FALSE);
+                aaSeqZToX(txi->protSeq);
+                }
             }
         }
     }
