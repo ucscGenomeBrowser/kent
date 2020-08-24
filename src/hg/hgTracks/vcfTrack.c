@@ -2860,7 +2860,7 @@ int heightPerSample;
 if (vcff->allPhased)
     heightPerSample = (3 * tg->lineHeight) + 2;
 else
-    heightPerSample = (4 * tg->lineHeight) + 2;
+    heightPerSample = (4 * tg->lineHeight);
 tg->height = totalSamples * heightPerSample;
 tg->itemHeight = vcfPhasedItemHeight;
 // custom int is reserved for doing pgSnp coloring but as far as I can tell is
