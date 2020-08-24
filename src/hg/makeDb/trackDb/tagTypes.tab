@@ -257,6 +257,8 @@ labelOnFeature bed bigBed
 labelSeparator bigBed bigPsl bigGenePred
 lollipopField bigBed bigLolly
 lollyField bigBed bigLolly
+lollyMaxSize bigBed bigLolly
+lollySizeField bigBed bigLolly
 longLabel *
 longlabel genePred
 longLabelClip *
@@ -305,6 +307,7 @@ noScoreFilter bedGraph bed bedLogR gvf bedDetail bigBed bigPsl interact bigInter
 noParentConfig bed bigBed
 notNCBI bed
 noGenomeReason *
+noStems bigBed bigLolly
 ococci bed
 offset customTracks
 oldToNew genePred
@@ -541,6 +544,13 @@ windowingFunction *
 yalePseudoAssoc *
 yaleUrl *
 yalePseudoUrl *
+yLabel0 bigBed bigLolly
+yLabel1 bigBed bigLolly
+yLabel2 bigBed bigLolly
+yLabel3 bigBed bigLolly
+yLabel4 bigBed bigLolly
+yLabel5 bigBed bigLolly
 yLinOnOff wigMaf
 yLineMark *
 yLineOnOff *
+yNumLabels bigBed bigLolly
