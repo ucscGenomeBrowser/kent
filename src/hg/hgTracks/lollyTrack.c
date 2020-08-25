@@ -25,6 +25,7 @@ unsigned end;     /* genomic end address */
 unsigned radius;  /* radius of the top of the lolly */
 unsigned height;  /* height of the lolly */
 Color color;      /* color of the lolly */
+char *mouseOver;
 };
 
 static unsigned getLollyColor( struct hvGfx *hvg, unsigned color)
@@ -126,7 +127,7 @@ for (pop = popList; pop; pop = pop->next)
         hvGfxCircle(hvg, sx, yOff + (usableHeight - (pop->height )), pop->radius, MG_BLACK, FALSE);
     if (!noMapBoxes)
         mapBoxHgcOrHgGene(hvg, pop->start, pop->end, sx - pop->radius, yOff + usableHeight - pop->radius - pop->height, 2 * pop->radius,2 * pop->radius,
-                          tg->track, pop->name, pop->name, NULL, TRUE, NULL);
+                          tg->track, pop->mouseOver, pop->mouseOver, NULL, TRUE, NULL);
     }
 }
 
@@ -229,6 +230,8 @@ unsigned count = 0;
 
 int trackHeight = tg->lollyCart->height;
 struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, tg->tdb);
+char *mouseOverField = cartOrTdbString(cart, tg->tdb, "mouseOverField", NULL);
+int mouseOverIdx = bbExtraFieldIndex(bbi, mouseOverField) ;
                     
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
@@ -260,6 +263,11 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         pop->radius = radius;
         }
     pop->color = 0;
+
+    pop->mouseOver = pop->name;
+    extern char* restField(struct bigBedInterval *bb, int fieldIdx) ;
+    if (mouseOverIdx > 0)
+        pop->mouseOver   = restField(bb, mouseOverIdx);
 
     if (bbi->fieldCount > 8)
         pop->color = itemRgbColumn(bedRow[8]);
