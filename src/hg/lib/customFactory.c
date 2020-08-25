@@ -92,7 +92,6 @@ static char *customFactoryCheckChromNameAliasDb(char *genomeDb, char *word, stru
 {
 static char *aliasName = NULL;
 aliasName = hgOfficialChromName(genomeDb, word);
-verbose(1,"# DBG: alias name check '%s' returned '%s'\n", word, aliasName);
 if (! aliasName)
     lineFileAbort(lf, "'%s' is not a valid sequence name in %s", word, genomeDb);
 return aliasName;
