@@ -461,7 +461,8 @@ my %optionHelpText = ( 'workhorse' =>
 '    -smallClusterHub mach Use mach (default: %s) as parasol hub
                           for cluster runs with smallish job counts.
 ',
-'    -priority num        Use this priority fo= parasol jobs.
+		       'priority' =>
+'    -priority num        Use this priority for parasol jobs.
 ',
 		       'debug' =>
 '    -debug                Don\'t actually run commands, just display them.
@@ -476,6 +477,7 @@ my %optionHelpText = ( 'workhorse' =>
 
 my %optionDefaultDefaults = ( 'workhorse' => 'least loaded',
 			      'dbHost' => $defaultDbHost,
+			      'priority' => '10',
 			      'bigClusterHub' => 'most available',
 			      'smallClusterHub' => 'most available',
 			      'verbose' => $defaultVerbose,
