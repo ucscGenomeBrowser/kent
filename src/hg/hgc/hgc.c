@@ -4369,8 +4369,7 @@ else if (wordCount > 0)
         }
     else if (sameString(type, "bigLolly") )
 	{
-	int num = 12;
-        genericBigBedClick(conn, tdb, item, start, end, num);
+        genericBigBedClick(conn, tdb, item, start, end, 0);
 	}
     else if (sameString(type, "bigDbSnp") )
 	{
