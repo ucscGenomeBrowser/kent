@@ -18,7 +18,7 @@ table all_mrna
 shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from GenBank 
 group rna
-visibility pack
+visibility hide
 type psl .
 baseColorUseCds genbank
 baseColorUseSequence genbank
