@@ -60,7 +60,12 @@ foreach my $ucscName (sort keys %chromSizes) {
   if (!defined($ucscUsed{$ucscName})) {
     printf "%s\t0\t%s\tnoAlias\n", $ucscName, $chromSizes{$ucscName};
   } else {
-    printf "%s\t0\t%s\t%s\n", $ucscName, $chromSizes{$ucscName}, $ucscUsed{$ucscName};
+    if (length($ucscUsed{$ucscName}) > 254) {
+      my $limit254 = substr($ucscUsed{$ucscName},0,254);
+      printf "%s\t0\t%s\t%s\n", $ucscName, $chromSizes{$ucscName}, $limit254;
+    } else {
+      printf "%s\t0\t%s\t%s\n", $ucscName, $chromSizes{$ucscName}, $ucscUsed{$ucscName};
+    }
   }
 }
 
