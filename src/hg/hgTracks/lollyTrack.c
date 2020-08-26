@@ -127,7 +127,7 @@ for (pop = popList; pop; pop = pop->next)
         hvGfxCircle(hvg, sx, yOff + (usableHeight - (pop->height )), pop->radius, MG_BLACK, FALSE);
     if (!noMapBoxes)
         mapBoxHgcOrHgGene(hvg, pop->start, pop->end, sx - pop->radius, yOff + usableHeight - pop->radius - pop->height, 2 * pop->radius,2 * pop->radius,
-                          tg->track, pop->mouseOver, pop->mouseOver, NULL, TRUE, NULL);
+                          tg->track, pop->name, pop->mouseOver, NULL, TRUE, NULL);
     }
 }
 
