@@ -47,7 +47,7 @@ close (FH);
 my %ucscUsed;	# key is UCSC name, value is csv list of external names
 foreach my $external (sort keys %chromAlias) {
   my $ucscName = $chromAlias{$external};
-  printf "%s\t0\t%s\t%s\n", $external, $chromSizes{$ucscName}, $ucscName;
+  printf "%s\t0\t%s\t%s\n", $external, $chromSizes{$ucscName}, $external;
   if (defined($ucscUsed{$ucscName})) {
     $ucscUsed{$ucscName} .= "," . $external;
   } else {
