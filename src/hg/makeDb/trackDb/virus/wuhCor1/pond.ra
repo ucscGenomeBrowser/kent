@@ -1,7 +1,7 @@
 track pond
 shortLabel Natural Selection
 longLabel Natural selection analysis from Sergei Pond's research group
-visibility dense
+visibility hide
 type bigBed
 priority 1
 compositeTrack on       
