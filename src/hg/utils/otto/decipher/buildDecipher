@@ -34,7 +34,7 @@ cp decipherCnv.bb ../release/hg19/
 
 # SNVs pipeline
 
-sort $2| grep -v '#' | tawk '$2 == "MT" {$2 = "M";}; {print;}' | sort -u >  decipherSnvsRawNew.txt 
+sort $2| grep -v '#' | tawk '$2 == "MT" {$2 = "M";}; {print;}' | sort -u >  decipherSnvsRawNew.txt
 
 hgsql hg19 -e 'drop table if exists decipherSnvsRawNew'
 hgLoadSqlTab hg19 decipherSnvsRawNew ../decipherSnvsRaw.sql decipherSnvsRawNew.txt
