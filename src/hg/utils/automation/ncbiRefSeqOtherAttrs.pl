@@ -88,7 +88,7 @@ while (<$ATTRS>) {
     # Dbxref is one attribute, but split it up into multiple output columns for URL generation
     my @xrefs = split(',', $val);
     foreach my $xref (@xrefs) {
-      foreach my $source qw(GeneID MIM HGNC MGI miRBase WormBase XenBase BGD RGD SGD ZFIN FLYBASE) {
+      foreach my $source ( qw(GeneID MIM HGNC MGI miRBase WormBase XenBase BGD RGD SGD ZFIN FLYBASE) ) {
         if ($xref =~ s/^$source://) {
           my $ix = $attrToIx{$source};
           $itemAttrs{$id}->[$ix] = $xref if (! defined $itemAttrs{$id}->[$ix]);

@@ -855,6 +855,10 @@ if [ "\$checkAgp" != "All AGP and FASTA entries agree - both files are valid" ];
   printf "# ERROR: checkAgpAndFa \$asmId.agp.gz \$asmId.2bit failing\\n" 1>&2
   exit 255
 fi
+_EOF_
+  );
+  if ($ucscNames) {
+    $bossScript->add(<<_EOF_
 join -t\$'\\t' <(sort ../\$asmId.chrom.sizes) <(sort \${asmId}*.names) | awk '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$3,\$2,\$1,\$2}' > \$asmId.ncbiToUcsc.lift
 join -t\$'\\t' <(sort ../\$asmId.chrom.sizes) <(sort \${asmId}*.names) | awk '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$1,\$2,\$3,\$2}' > \$asmId.ucscToNcbi.lift
 export c0=`cat \$asmId.ncbiToUcsc.lift | wc -l`
@@ -869,6 +873,10 @@ if [ "\$c1" -ne "\$c2" ]; then
   printf "# ERROR: not all names accounted for in \$asmId.ucscToNcbi.lift" 1>&2
   exit 255
 fi
+_EOF_
+    );
+  }
+  $bossScript->add(<<_EOF_
 twoBitToFa ../\$asmId.2bit stdout | faCount stdin | gzip -c > \$asmId.faCount.txt.gz
 touch -r ../\$asmId.2bit \$asmId.faCount.txt.gz
 zgrep -P "^total\t" \$asmId.faCount.txt.gz > \$asmId.faCount.signature.txt
@@ -1486,9 +1494,11 @@ sub doNcbiGene {
     &HgAutomate::verbose(1, "# step ncbiGene: no gff file found at:\n#  $gffFile\n");
     return;
   }
-  if ( ! -s "$buildDir/sequence/$asmId.ncbiToUcsc.lift" ) {
-    &HgAutomate::verbose(1, "# ERROR: ncbiGene: can not find $buildDir/sequence/$asmId.ncbiToUcsc.lift\n");
-    exit 255;
+  if ($ucscNames) {
+    if ( ! -s "$buildDir/sequence/$asmId.ncbiToUcsc.lift" ) {
+      &HgAutomate::verbose(1, "# ERROR: ncbiGene: can not find $buildDir/sequence/$asmId.ncbiToUcsc.lift\n");
+      exit 255;
+    }
   }
   my $runDir = "$buildDir/trackData/ncbiGene";
   if (-d "${runDir}" ) {
@@ -1533,21 +1543,31 @@ if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
      cleanUp
      exit 0
   fi
+  export ncbiGenePred="\$asmId.ncbiGene.genePred.gz"
+_EOF_
+  );
+  if ($ucscNames) {
+    $bossScript->add(<<_EOF_
   liftUp -extGenePred -type=.gp stdout \\
-      ../../sequence/\$asmId.ncbiToUcsc.lift warn \\
-       \$asmId.ncbiGene.genePred.gz | gzip -c \\
-          > \$asmId.ncbiGene.ucsc.genePred.gz
-  genePredToBed -tab -fillSpace \$asmId.ncbiGene.ucsc.genePred.gz stdout \\
+    ../../sequence/\$asmId.ncbiToUcsc.lift warn \\
+      \$asmId.ncbiGene.genePred.gz | gzip -c \\
+        > \$asmId.ncbiGene.ucsc.genePred.gz
+  ncbiGenePred="\$asmId.ncbiGene.ucsc.genePred.gz"
+_EOF_
+      );
+  }
+  $bossScript->add(<<_EOF_
+  genePredToBed -tab -fillSpace \$ncbiGenePred stdout \\
     | bedToExons stdin stdout | bedSingleCover.pl stdin > \$asmId.exons.bed
   export baseCount=`awk '{sum+=\$3-\$2}END{printf "%d", sum}' \$asmId.exons.bed`
   export asmSizeNoGaps=`grep sequences ../../\$asmId.faSize.txt | awk '{print \$5}'`
   export perCent=`echo \$baseCount \$asmSizeNoGaps | awk '{printf "%.3f", 100.0*\$1/\$2}'`
   rm -f \$asmId.exons.bed
-  ~/kent/src/hg/utils/automation/gpToIx.pl \$asmId.ncbiGene.ucsc.genePred.gz \\
+  ~/kent/src/hg/utils/automation/gpToIx.pl \$ncbiGenePred \\
     | sort -u > \$asmId.ncbiGene.ix.txt
   ixIxx \$asmId.ncbiGene.ix.txt \$asmId.ncbiGene.ix \$asmId.ncbiGene.ixx
   rm -f \$asmId.ncbiGene.ix.txt
-  genePredToBigGenePred \$asmId.ncbiGene.ucsc.genePred.gz stdout \\
+  genePredToBigGenePred \$ncbiGenePred stdout \\
       | sort -k1,1 -k2,2n > \$asmId.ncbiGene.bed
   (bedToBigBed -type=bed12+8 -tab -as=\$HOME/kent/src/hg/lib/bigGenePred.as \\
       -extraIndex=name \$asmId.ncbiGene.bed \\
@@ -1601,17 +1621,20 @@ sub doNcbiRefSeq {
   my $bossScript = newBash HgRemoteScript("$runDir/doNcbiRefSeq.bash",
                     $workhorse, $runDir, $whatItDoes);
 
+  my $liftSpec = "";
+  if ($ucscNames) {
+    $liftSpec="-liftFile=\"\$buildDir/sequence/\$asmId.ncbiToUcsc.lift\"";
+  }
   $bossScript->add(<<_EOF_
 export asmId="$asmId"
 export buildDir="$buildDir"
-export liftFile="\$buildDir/sequence/\$asmId.ncbiToUcsc.lift"
+export liftSpec="$liftSpec"
 export target2bit="\$buildDir/\$asmId.2bit"
 
 if [ $buildDir/\$asmId.2bit -nt \$asmId.ncbiRefSeq.bb ]; then
 
 ~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -toGpWarnOnly -buildDir=`pwd` \\
-      -bigClusterHub=$bigClusterHub -dbHost=$dbHost \\
-      -liftFile="\$liftFile" \\
+      -assemblyHub -bigClusterHub=$bigClusterHub -dbHost=$dbHost $liftSpec \\
       -target2bit="\$target2bit" \\
       -stop=load -fileServer=$fileServer -smallClusterHub=$smallClusterHub -workhorse=$workhorse \\
       \$asmId \$asmId
