@@ -11,11 +11,21 @@ diagnosis and for answers to personal questions.</p>
 </div>
 
 <p>
-This track shows the genomic positions of variants in the
+These tracks show the genomic positions of variants in the
 <a href="https://www.ncbi.nlm.nih.gov/clinvar/" target="_blank">ClinVar database</a>. 
 ClinVar is a free, public archive of reports
 of the relationships among human variations and phenotypes, with supporting
-evidence. The track is updated after every ClinVar release, once a month.</p>
+evidence. </p>
+
+<p>
+The <b>ClinVar CNVs track</b> displays copy number variants 
+(CNVs) equal or larger than 50 bp, and the <b>ClinVar SNVs track</b> displays substitutions and 
+indels shorter than 50 bp. 
+Until October 2017, all variants with the ClinVar types 
+<em>copy number gain/loss</em> and <em>DbVar "nsv" accessions</em> were assigned in the CNV 
+category. Because the ClinVar type no longer captures this information, any variation equal or 
+larger than 50 bp is now considered a CNV.
+</p>
 
 <p>
 <b>Note:</b> The data in the track are obtained directly from ClinVar's FTP site.
@@ -29,40 +39,34 @@ to make ClinVar more comparable to VCF files.</p>
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-Genomic locations of ClinVar variants are labeled with the ClinVar variant
-descriptions. All information related to each is variant is shown on that
-variant's details page.  Leave the mouse over a feature for more than 2 seconds
-to show the clinical significance of a variant.
-</p>
-
-<p>The track is divided into two subtracks, one for copy number variants (CNVs), which are all 
-variants longer than 50bp, and a second track for shorter substitutions and indels.</p>
-
-<p>
-Until October 2017, all variants with the ClinVar types copy number gain/loss
-and DbVar "nsv" accessions were put in the CNV category.  Due
-to the ClinVar type no longer capturing this information, anything longer
-than 50bp is now considered a CNV.</p>
-
-<p>
-Entries in the ClinVar CNV track are colored
-<b><font color="red">red for loss</font></b> and
-<B><font color="blue">blue for gain</font></b>.
+The genomic locations of ClinVar variants are labelled with the ClinVar variant descriptions. 
+<b>Mouseover</b> on items shows variant details, clinical interpretation, and associated conditions. 
+Further information on each variant is displayed on the details page by a click onto any variant.
 </p>
 
 <p>
-Entries in the ClinVar short variants track are shaded by clinical annotation:
+Entries in the <b>ClinVar CNV track</b> are colored by <b>type of variant</b>:
+<b><font color="da2c37">red for loss</font></b>,
+<b><font color="294eae">blue for gain</font></b>, and
+<b><font color="840876">purple for insertion</font></b>.
+A light to dark color gradient indicates the clinical significance of each variant, with the 
+lightest shade being benign, or others, to the darkest shade being pathogenic.
+</p>
+
+<p>
+Entries in the <b>ClinVar SNVs track</b> are colored by <b>clinical significance</b>:
 <b><font color="red">red for pathogenic</font></b>,
-<B><font color="#888">dark grey for uncertain significance or not provided</font></b> and
-<B><font color="#000088">dark blue for variant of uncertain significance</font></b> and
-<B><font color="#ADD8E6">light blue for conflicting</font></b> and
-<B><font color="green">green for benign</font></b>.
+<b><font color="000088">dark blue for variant of uncertain significance</font></b>,
+<B><font color="#green">green for benign</font></b>,
+<B><font color="#888">dark grey for not provided</font></b>, and
+<B><font color="#ADD8E6">light blue for conflicting</font></b>.
 </p>
 
 <p>
-The score of the variants is the number of "stars" in ClinVar. On the track configuration page (above), you can filter the track to show only variants with more than a certain number of stars. For more information on the star rating, see the <a href="https://www.ncbi.nlm.nih.gov/clinvar/docs/review_status/"
-target="_blank">ClinVar documentation</a>.
-</p>
+Items can be filtered according to the size of the variant, variant type, clinical significance, 
+allele origin, and molecular consequence, using the track <b>Configure</b> options. 
+Each subtrack has separate display controls, as described 
+<a href="https://genome.ucsc.edu/goldenPath/help/multiView.html">here</a>.
 
 <p>For the human genome version hg19: the hg19 genome released by UCSC in 2009 had a 
 mitochondrial genome "chrM" that was not the same as the one later used for most
