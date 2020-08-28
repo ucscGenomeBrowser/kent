@@ -86,6 +86,17 @@ if (line != NULL && startsWithWord("track", line))
 return line;
 }
 
+static char *customFactoryCheckChromNameAliasDb(char *genomeDb, char *word, struct lineFile *lf)
+/* Abort if word is not a valid sequence name for genomeDb.  If word is a recognizable alias
+ * or case-sensitive variant of a valid sequence, suggest that to the user. */
+{
+static char *aliasName = NULL;
+aliasName = hgOfficialChromName(genomeDb, word);
+if (! aliasName)
+    lineFileAbort(lf, "'%s' is not a valid sequence name in %s", word, genomeDb);
+return aliasName;
+}
+
 void customFactoryCheckChromNameDb(char *genomeDb, char *word, struct lineFile *lf)
 /* Abort if word is not a valid sequence name for genomeDb.  If word is a recognizable alias
  * or case-sensitive variant of a valid sequence, suggest that to the user. */
@@ -250,6 +261,7 @@ if (! officialChrom)
         dyStringPrintf(reason, "'%s' is not a valid sequence name in %s", row[0], db);
     return FALSE;
     }
+#ifdef OBSOLETE_TO_BE_REMOVED
 else if (differentString(row[0], officialChrom))
     {
     if (reason)
@@ -258,6 +270,7 @@ else if (differentString(row[0], officialChrom))
     freeMem(officialChrom);
     return FALSE;
     }
+#endif
 freeMem(officialChrom);
 if (! isAllDigits(row[1]))
     {
@@ -459,13 +472,13 @@ return bed;
 }
 
 static struct bed *customTrackBedOld(char *db, char *row[13], int wordCount,
-	struct hash *chromHash, struct lineFile *lf)
+	struct hash *chromHash, struct lineFile *lf, char *aliasName)
 /* Convert a row of strings to a bed. */
 {
 struct bed * bed;
 int count;
 AllocVar(bed);
-bed->chrom = hashStoreName(chromHash, row[0]);
+bed->chrom = hashStoreName(chromHash, aliasName);
 customFactoryCheckChromNameDb(db, bed->chrom, lf);
 
 bed->chromStart = lineFileNeedNum(lf, row, 1);
@@ -601,6 +614,7 @@ static struct customTrack *bedLoader(struct customFactory *fac,
 char *line;
 char *db = ctGenomeOrCurrent(track);
 char *lastChrom = NULL;
+char *aliasName = NULL;
 int chromSize = -1;
 boolean newCustomTrackValidate = sameOk(cfgOption("newCustomTrackValidate"), "on");
 while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
@@ -613,8 +627,8 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     /* since rows are often sorted, we can reduce repetitive checking */
     if (differentStringNullOk(row[0], lastChrom))
 	{
-	customFactoryCheckChromNameDb(db, row[0], lf);
-	chromSize = hChromSize(db, row[0]);
+	aliasName = customFactoryCheckChromNameAliasDb(db, row[0], lf);
+	chromSize = hChromSize(db, aliasName);
 	freez(&lastChrom);
 	lastChrom = cloneString(row[0]);
 	}
@@ -625,11 +639,11 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     if (newCustomTrackValidate)
 	{
 	bed = customTrackBed(row, wordCount, chromSize, lf);
-	bed->chrom = hashStoreName(chromHash, row[0]);
+	bed->chrom = hashStoreName(chromHash, aliasName);
 	}
     else
 	{
-	bed = customTrackBedOld(db, row, wordCount, chromHash, lf);
+	bed = customTrackBedOld(db, row, wordCount, chromHash, lf, aliasName);
 	}
 
     slAddHead(&track->bedList, bed);

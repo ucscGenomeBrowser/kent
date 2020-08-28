@@ -431,8 +431,9 @@ void testDb(struct htmlPage *orgPage, char *org, char *db)
 struct hash *genomeRa = hgReadRa(org, db, dataDir, "genome.ra", NULL);
 char *canonicalTable = hashMustFindVal(genomeRa, "canonicalTable");
 char *accColumn = hashMustFindVal(genomeRa, "idColumn");
+char *knownDatabase = hdbDefaultKnownDb(db);
 
-struct slName *geneList = sqlRandomSampleWithSeed(db, canonicalTable, "transcript", clRepeat, seed);
+struct slName *geneList = sqlRandomSampleWithSeed(knownDatabase, canonicalTable, "transcript", clRepeat, seed);
 struct htmlPage *dbPage;
 struct slName *ptr;
 

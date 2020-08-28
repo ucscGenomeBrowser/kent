@@ -34,7 +34,7 @@ track nextstrainSamples
 shortLabel Nextstrain Variants
 longLabel Nextstrain/GISAID Sample Variants from nextstrain.org/ncov
 type vcfTabix
-visibility pack
+visibility hide
 hapClusterEnabled on
 hapClusterHeight 500
 tableBrowser off
@@ -52,7 +52,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
     view all
     parent nextstrainSamples
     shortLabel All Samples
-    visibility hide
+    visibility squish
 
         track nextstrainSamplesRb
         parent nextstrainSamplesViewAll on

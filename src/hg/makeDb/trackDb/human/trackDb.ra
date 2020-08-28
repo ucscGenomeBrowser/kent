@@ -124,31 +124,6 @@ tableBrowser off decipherRaw knownToDecipher knownCanonToDecipher
 prevExonText Left edge
 nextExonText Right edge
 
-track decipherCnv
-shortLabel Decipher CNV New
-longLabel Decipher CNV New
-group phenDis
-visibility hide
-type bigBed 9 +
-itemRgb on
-tableBrowser off
-bigDataUrl /gbdb/$D/decipher/decipherCnv.bb
-url https://decipher.sanger.ac.uk/patient/$$
-urlLabel Decipher Patient View:
-filter.size 0
-filterByRange.size on
-filterLimits.size 2:170487333
-filterValues.variant_class Amplification,Copy-Number Gain,Deletion,Duplication,Duplication/Triplication,Triplication
-filterValues.pathogenicity Benign,Likely Benign,Likely Pathogenic,Pathogenic,Uncertain,Unknown
-mergeSpannedItems on
-searchIndex name
-mouseOverField _mouseOver
-release alpha
-
-searchTable  decipherCnv
-searchMethod exact
-searchType bigBed
-
 track decipherSnvs
 shortLabel DECIPHER SNVs
 longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans (SNVs)
@@ -5492,3 +5467,4 @@ termRegex nssv[0-9]+
 searchType bed
 searchPriority 50
 
+include covidGwas.ra alpha

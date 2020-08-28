@@ -1,0 +1,33 @@
+track covidGwas
+shortLabel COVID-19 GWAS
+longLabel GWAS meta-analyses from the Covid-19 Host Genetics Initiative
+compositeTrack on
+group phenDis
+visibility hide
+autoScale on
+maxHeightPixels 64:90:128
+pennantIcon New red
+type bigLolly 9 +
+lollyField 18
+mouseOverField _mouseOver
+maxItems 500000
+filter.sourceCount 1
+filterLabel.sourceCount Minimum number of studies
+filter.pValue 3
+filter.effectSize -10:10
+filterByRange.effectSize on
+filterLimits.effectSize -10:10
+noScoreFilter on
+
+    track covidGwasC2
+    parent covidGwas
+    shortLabel COVID GWAS
+    longLabel COVID GWAS from the Covid-19 Host Genetics Initiative (6696 cases, 18 studies)
+    bigDataUrl /gbdb/hg19/covidGwas/covidGwasC2.all.bb
+
+    track covidGwasB2
+    parent covidGwas
+    shortLabel Hosp COVID GWAS
+    longLabel Hospitalized COVID GWAS from the Covid-19 Host Genetics Initiative (3199 cases, 8 studies)
+    bigDataUrl /gbdb/hg19/covidGwas/covidGwasB2.all.bb
+

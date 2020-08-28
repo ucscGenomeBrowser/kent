@@ -14,9 +14,11 @@
 /* command line options and values */
 static struct optionSpec optionSpecs[] =
 {
+    {"partSize", OPTION_INT},
     {"parallel", OPTION_INT},
     {NULL, 0}
 };
+static int gPartSize = 1;
 static int gParallel = 0;
 
 static void usage()
@@ -31,6 +33,9 @@ errAbort("bedPartition - split BED ranges into non-overlapping ranges\n"
   "The bedFile maybe compressed and no ordering is assumed.\n"
   "\n"
   "options:\n"
+  "   -partSize=1 - will combine non-overlapping partitions, up to\n"
+  "    this number of ranges.\n"
+  "    per set of overlapping records.\n"
   "   -parallel=n - use this many cores for parallel sorting\n");
 }
 
@@ -94,12 +99,19 @@ if (bi->pending)
 bi->pending = bed;
 }
 
+static boolean sameChrom(struct bed3 *bed, struct bed3 *bedPart)
+/* chrom the same? */
+{
+return sameString(bed->chrom, bedPart->chrom);
+}
+
 static boolean isOverlapped(struct bed3 *bed, struct bed3 *bedPart)
 /* determine if a bed is in the partition */
 {
 return (bed->chromStart < bedPart->chromEnd) && (bed->chromEnd > bedPart->chromStart)
-    && sameString(bed->chrom, bedPart->chrom);
+    && sameChrom(bed, bedPart);
 }
+
 
 static struct bed3 *readPartition(struct bedInput *bi)
 /* read next set of overlapping beds */
@@ -109,14 +121,20 @@ struct bed3 *bed;
 
 if (bedPart == NULL)
     return NULL;  /* no more */
-/* add more beds while they overlap, easy since input is sorted */
+/* add more beds while they overlap, due to way input is sorted
+ * with by start and then reverse end */
+
+int partCnt = 1; // already have one
 while ((bed = bedInputNext(bi)) != NULL)
     {
-    if (isOverlapped(bed, bedPart))
+    boolean samePart = isOverlapped(bed, bedPart);
+    if (samePart || ((partCnt < gPartSize) && sameChrom(bed, bedPart)))
         {
         bedPart->chromStart = min(bedPart->chromStart, bed->chromStart);
         bedPart->chromEnd = max(bedPart->chromEnd, bed->chromEnd);
         bed3Free(&bed);
+        if (!samePart)
+            partCnt++;
         }
     else
         {
@@ -124,7 +142,6 @@ while ((bed = bedInputNext(bi)) != NULL)
         break;
         }
     }
-
 return bedPart;
 }
 
@@ -150,6 +167,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc != 3)
     usage();
+gPartSize = optionInt("partSize", gPartSize);
 gParallel = optionInt("parallel", gParallel);
 bedPartition(argv[1], argv[2]);
 return 0;

@@ -188,7 +188,7 @@
 
 
 #########################################################################
-# PROBLEMATIC SITES (DONE - 2020-07-17 - Angie)
+# PROBLEMATIC SITES (DONE - 2020-08-26 - Angie)
 
     today=$(date +%y-%m-%d)
     mkdir -p /hive/data/genomes/wuhCor1/bed/problematicSites/$today
@@ -207,49 +207,56 @@
          # The header defines some keywords and expanded values; store those for later use.
          if (/^##\s+(\w+) = (.+)/) {
            ($key, $val) = ($1, $2);
-           $val =~ s/,/%2C/g;
+           if (exists $expand{$key}) { warn "Clash for key {$key}: |$expand{$key}| vs |$val|\n"; }
            $expand{$key} = $val;
          }
          if (/^#/) {
            next;
          }
-         (undef, $pos, undef, $ref, $alt, undef, $filter,
-          $contrib, $exc, $country, $lab, $gene, $aaPos, $aaRef, $aaAlt) = split("\t");
-         # Expand keywords used in a couple of the columns.
-         @contribs = map { $expand{$_} || $_ } split(";", $contrib);
-         if ($lab eq ".") {
-           $lab = "";
+         (undef, $pos, undef, $ref, $alt, undef, $filter, $info) = split("\t");
+         %info = map { ($key, $val) = split("="); $key => $val } split(";", $info);
+         # Used to be columns: $contrib, $exc, $country, $lab, $gene, $aaPos, $aaRef, $aaAlt)
+         # Now in info: SUB (submitter), EXC, SRC_COUNTRY, SRC_LAB, GENE, AA_POS, AA_REF, AA_ALT
+         foreach $tag (qw/SRC_COUNTRY SRC_LAB GENE AA_POS AA_REF AA_ALT/) {
+           if (! exists $info{$tag} || $info{$tag} eq ".") {
+             $info{$tag} = "";
+           }
          }
-         @labs = map { $expand{$_} || $_ } split(";", $lab);
-         if ($lab ne "") {
-            @countries = split(";", $country);
+         # Expand keywords used in a couple of the columns.
+         @contribs = map { $expand{$_} || $_ } split(",", $info{SUB});
+         @labs = map { $expand{$_} || $_ } split(",", $info{SRC_LAB});
+         if ($info{SRC_LAB} ne "") {
+            @countries = split(",", $info{SRC_COUNTRY});
             if (scalar @labs != scalar @countries) {
-              die "Differing numbers of countries and labs";
+              if (scalar @countries == 1) {
+                for ($i = 1;  $i < @labs;  $i++) {
+                  $countries[$i] = $countries[0];
+                }
+              } else {
+                die "Differing numbers of countries and labs";
+              }
             } else {
               for ($i = 0;  $i < @labs;  $i++) {
                 $labs[$i] .= " ($countries[$i])"
               }
             }
          }
-         $gene =~ s/gene-//g;
+         $info{GENE} =~ s/gene-//g;
          # Print out one joined record for each sequence of "seq_end" single-base annotations.
-         if (defined $seqEndStart && $exc !~ /seq_end/) {
+         if (defined $seqEndStart && $info{EXC} !~ /seq_end/) {
            print join("\t", "NC_045512v2", $seqEndStart, $seqEndEnd, "seq_end", "mask", "", "",
                       $expand{"NDM"}, "", "", "", "", "") . "\n";
            $seqEndStart = $seqEndEnd = undef;
          }
-         @exceptions = split(";", $exc);
-         foreach $exception (@exceptions) {
-           if ($exception eq "seq_end") {
-             if (! defined $seqEndStart) {
-               $seqEndStart = $pos-1;
-             }
-             $seqEndEnd = $pos;
-           } else {
-             print join("\t", "NC_045512v2", $pos-1, $pos, $exception, $filter, $ref, $alt,
-                        join(", ", @contribs), join(", ", @labs),
-                        $gene, $aaPos, $aaRef, $aaAlt) . "\n";
+         if ($info{EXC} eq "seq_end") {
+           if (! defined $seqEndStart) {
+             $seqEndStart = $pos-1;
            }
+           $seqEndEnd = $pos;
+         } else {
+           print join("\t", "NC_045512v2", $pos-1, $pos, $info{EXC}, $filter, $ref, $alt,
+                      join(", ", @contribs), join(", ", @labs),
+                      $info{GENE}, $info{AA_POS}, $info{AA_REF}, $info{AA_ALT}) . "\n";
          }
        }
        if (defined $seqEndStart) {
@@ -266,6 +273,7 @@
       problematicSitesMask.bed ../../../chrom.sizes problematicSitesMask.bb
     bedToBigBed -type=bed4+ -as=$HOME/kent/src/hg/lib/problematicSites.as -tab \
       problematicSitesCaution.bed ../../../chrom.sizes problematicSitesCaution.bb
+    echo "$columns" > ../columns.expected
 
     # Install files
     mkdir -p /gbdb/wuhCor1/problematicSites
