@@ -1794,7 +1794,7 @@ There are no extra options that can appear on the type hic line.
     <!-- DONNA -- what should they use instead?  TIM ANSWERS: The implicit score filtering 
     bases upon '.' or '+' is confusing and not used by other item based tracks.  
     Ideally, score filtering is specifically requested by "scoreFilter #", which 
-    would make "noScoreFilter on" the unneeded default. -->
+    would make "noScoreFilter on" the unneeded default. -- -->
     <P><B>Example:</B></P>
     <pre>
     type bigBed 6 +
@@ -1826,8 +1826,10 @@ There are no extra options that can appear on the type hic line.
     can be used to set the level of the lightest shade</LI>
     <LI> <code>scoreMin</code>
     and <code>scoreMax</code> can be used to define the lower and upper limits of 
-    the range that will receive graded shading</LI>
-    </UL>
+    the range that will receive graded shading</LI></UL>
+    <p><b>Note:</b> The file type must be <b>type bigBed x</b> where x is at least
+    bigBed 5. If only <b>type bigBed</b> is used, the setting will not work as
+    it is assumed to be a bigBed 3.</p>
     <P><B>Example:</B></P>
     <pre>
     spectrum on
