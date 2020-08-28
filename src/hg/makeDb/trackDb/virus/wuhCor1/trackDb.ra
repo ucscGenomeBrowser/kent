@@ -416,6 +416,13 @@ compositeTrack on
         maxHeightPixels 100:40:8
         color 100,80,40
 
+track potPathoIndel
+shortLabel Pot. pathogenic indels
+longLabel Potential pathogenic insertions and deletions from Gussow et al, PNAS 2020
+type bigBed 4
+bigDataUrl /gbdb/wuhCor1/bbi/potPathoIndel.bb
+group varRep
+
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
 include epitopes.ra
