@@ -1733,6 +1733,12 @@ There are no extra options that can appear on the type hic line.
      <code>type bigBed 9</code>, or, <code>type bigBed 9+</code>, for additional
     <A HREF="../../../FAQ/FAQformat.html#format1" target="_blank">non-standard columns</A>, 
     in the trackDb stanza for the bigBed file.</P>
+    <P>Note that the display of color is affected by the <code>maxItems</code> option.
+    When the track is zoomed to the point that the number of items to display
+    exceeds <code>maxItems</code>, the track is force into dense mode and the items
+    are drawn from the bigBed summary in the default track color rather than using
+    the <code>itemRgb column</code>.
+  </P>
     <P><B>Example:</B></P>
     <pre>   itemRgb on</pre>
 </DIV>
