@@ -2,17 +2,20 @@ track pond
 shortLabel Natural Selection
 longLabel Natural selection analysis from Sergei Pond's research group
 visibility hide
-type bigBed
+type bigBed 6 +
 priority 1
 compositeTrack on       
 group varRep
+spectrum on
+exonArrows off
+pennantIcon New red ../goldenPath/newsarch.html "Released Aug. 28, 2020"
         
         track Common_Variants
         parent pond
         shortLabel Common Variants
         longLabel Common Variants implicated in data from Sergei Pond's research group
         visibility dense
-        type bigBed
+        type bigBed 6 +
         priority 1
         bigDataUrl /gbdb/wuhCor1/bbi/pond/Common_Variant.bb
 
@@ -22,7 +25,7 @@ group varRep
         shortLabel Increasing frequency
         longLabel Increasing frequency sites implicated in data from Sergei Pond's research group
         visibility dense
-        type bigBed
+        type bigBed 6 +
         priority 1
         bigDataUrl /gbdb/wuhCor1/bbi/pond/Increasing_frequency.bb
         
@@ -31,7 +34,7 @@ group varRep
         shortLabel Intra host variants
         longLabel Intra-host variants implicated in data from Sergei Pond's research group
         visibility dense
-        type bigBed
+        type bigBed 6 +
         priority 1
         bigDataUrl /gbdb/wuhCor1/bbi/pond/Intra_host_variants.bb
         
@@ -40,7 +43,7 @@ group varRep
         shortLabel Multiple Clades
         longLabel Sites implicated in multiple clades by Sergei Pond's research group
         visibility dense
-        type bigBed
+        type bigBed 6 +
         priority 1
         bigDataUrl /gbdb/wuhCor1/bbi/pond/Multiple_Clades.bb
 
@@ -49,7 +52,7 @@ group varRep
         shortLabel Negative Selection
         longLabel Sites of negative selection implicated in data from Sergei Pond's research group
         visibility dense
-        type bigBed
+        type bigBed 6 +
         priority 1
         bigDataUrl /gbdb/wuhCor1/bbi/pond/Negative_Selection.bb
         
@@ -58,7 +61,7 @@ group varRep
         shortLabel New
         longLabel Sites implicated in data from Sergei Pond's research group
         visibility dense
-        type bigBed
+        type bigBed 6 +
         priority 1
         bigDataUrl /gbdb/wuhCor1/bbi/pond/New.bb
         
@@ -67,7 +70,7 @@ group varRep
         shortLabel Positive Selection
         longLabel Sites of positive selection implicated in data from Sergei Pond's research group
         visibility dense
-        type bigBed
+        type bigBed 6 +
         priority 1
         bigDataUrl /gbdb/wuhCor1/bbi/pond/Positive_Selection.bb
         
@@ -76,7 +79,7 @@ group varRep
         shortLabel predicted CTL epitopes
         longLabel Predicted CTL epitopes implicated in data from Sergei Pond's research group
         visibility dense
-        type bigBed
+        type bigBed 6 +
         priority 1
         bigDataUrl /gbdb/wuhCor1/bbi/pond/predicted_CTL_epitopes.bb
         
@@ -85,7 +88,7 @@ group varRep
         shortLabel Selected in animals
         longLabel Sites of selection in animals implicated in data from Sergei Pond's research group
         visibility dense
-        type bigBed
+        type bigBed 6 +
         priority 1
         bigDataUrl /gbdb/wuhCor1/bbi/pond/Selected_in_animals.bb
         
@@ -94,7 +97,7 @@ group varRep
         shortLabel Selection Sites
         longLabel Sites of selection implicated in data from Sergei Pond's research group
         visibility dense
-        type bigBed
+        type bigBed 6 +
         priority 1
         bigDataUrl /gbdb/wuhCor1/bbi/pond/Selection.bb
         
@@ -103,6 +106,6 @@ group varRep
         shortLabel Unexpected residues
         longLabel Unexpected residues implicated in data from Sergei Pond's research group
         visibility dense
-        type bigBed
+        type bigBed 6 +
         priority 1
         bigDataUrl /gbdb/wuhCor1/bbi/pond/Unexpected_residues.bb

@@ -1,0 +1,173 @@
+
+idKeys for Ensembl assemblies were
+calculated in:  /hive/data/outside/ensembl/genomes/release-101/
+
+New assemblies have been built for genbank, refseq and ucsc
+
+Working in:
+mkdir /hive/data/inside/assemblyEquivalence/2020-08-31
+cd /hive/data/inside/assemblyEquivalence/2020-08-31
+
+mkdir ensembl refseq genbank ucsc
+
+###########  Ensembl keys  ##################
+cd ensembl
+
+wget --timestamping  \
+ftp://ftp.ensembl.org/pub/release-101/species_EnsemblVertebrates.txt
+
+# does not always work
+# rsync -av --stats \
+# rsync://ftp.ensembl.org/ensembl/pub/release-101/species_EnsemblVertebrates.txt \
+#    ./
+
+find -L /hive/data/outside/ensembl/genomes/release-101/idKeys -type f \
+  | grep keySignature.txt | while read K
+do
+  idKeysDir=`dirname "${K}"`
+  id=`basename "${K}" | sed -e 's/.keySignature.txt//;'`
+  idKeys="$idKeysDir/$id.idKeys.txt"
+  fullCount=`cat $idKeys | wc -l`
+  uniqueCount=`cut -f1 $idKeys | sort -u | wc -l`
+  keySig=`cat "${K}"`
+  printf "%s\t%s\t%d\t%d\n" "${keySig}" "${id}" "${fullCount}" "${uniqueCount}"
+done | sort -k1,1 > ensembl-101.keySignatures.txt
+
+find /hive/data/outside/ensembl/genomes/release-100/idKeys -type f \
+  | grep keySignature.txt | while read K
+do
+  idKeysDir=`dirname "${K}"`
+  id=`basename "${K}" | sed -e 's/.keySignature.txt//;'`
+  idKeys="$idKeysDir/$id.idKeys.txt"
+  fullCount=`cat $idKeys | wc -l`
+  uniqueCount=`cut -f1 $idKeys | sort -u | wc -l`
+  keySig=`cat "${K}"`
+  printf "%s\t%s\t%d\t%d\n" "${keySig}" "${id}" "${fullCount}" "${uniqueCount}"
+done | sort -k1,1 > ensembl-100.keySignatures.txt
+
+
+find /hive/data/outside/ensembl/genomes/release-99/idKeys -type f \
+  | grep keySignature.txt | while read K
+do
+  idKeysDir=`dirname "${K}"`
+  id=`basename "${K}" | sed -e 's/.keySignature.txt//;'`
+  idKeys="$idKeysDir/$id.idKeys.txt"
+  fullCount=`cat $idKeys | wc -l`
+  uniqueCount=`cut -f1 $idKeys | sort -u | wc -l`
+  keySig=`cat "${K}"`
+  printf "%s\t%s\t%d\t%d\n" "${keySig}" "${id}" "${fullCount}" "${uniqueCount}"
+done | sort -k1,1 > ensembl-99.keySignatures.txt
+
+sort -u ensembl-101.keySignatures.txt ensembl-100.keySignatures.txt \
+  ensembl-99.keySignatures.txt > ensembl.keySignatures.txt
+
+###########  refseq keys  ##################
+cd ../refseq
+
+find /hive/data/genomes/asmHubs/refseqBuild/GCF \
+    -maxdepth 4 -mindepth 4 -type d | while read buildDir
+do
+  asmId=`basename "${buildDir}"`
+  keySig="${buildDir}/idKeys/${asmId}.keySignature.txt"
+  idKeysDir=`dirname "${keySig}"`
+  if [ -s "${keySig}" ]; then
+     idKeys="$idKeysDir/$asmId.idKeys.txt"
+     fullCount=`cat $idKeys | wc -l`
+     uniqueCount=`cut -f1 $idKeys | sort -u | wc -l`
+     keySig=`cat "${keySig}"`
+  printf "%s\t%s\t%d\t%d\n" "${keySig}" "${asmId}" "${fullCount}" "${uniqueCount}"
+  fi
+done | sort -k1,1 > refseq.keySignatures.txt
+
+###########  genbank keys  ##################
+cd ../genbank
+
+find /hive/data/genomes/asmHubs/genbankBuild/GCA \
+    -maxdepth 4 -mindepth 4 -type d | while read buildDir
+do
+  asmId=`basename "${buildDir}"`
+  keySig="${buildDir}/idKeys/${asmId}.keySignature.txt"
+  idKeysDir=`dirname "${keySig}"`
+  if [ -s "${keySig}" ]; then
+     idKeys="$idKeysDir/$asmId.idKeys.txt"
+     fullCount=`cat $idKeys | wc -l`
+     uniqueCount=`cut -f1 $idKeys | sort -u | wc -l`
+     keySig=`cat "${keySig}"`
+ printf "%s\t%s\t%d\t%d\n" "${keySig}" "${asmId}" "${fullCount}" "${uniqueCount}"
+  fi
+done | sort -k1,1 > genbank.keySignatures.txt
+
+###########  UCSC keys  ##################
+cd ../ucsc
+
+ls -d /hive/data/genomes/* | while read dbDir
+do
+  db=`basename "${dbDir}"`
+  keySig="${dbDir}/bed/idKeys/${db}.keySignature.txt"
+  idKeysDir=`dirname "${keySig}"`
+  if [ -s "${keySig}" ]; then
+     idKeys="$idKeysDir/$db.idKeys.txt"
+     fullCount=`cat $idKeys | wc -l`
+     uniqueCount=`cut -f1 $idKeys | sort -u | wc -l`
+     keySig=`cat "${keySig}"`
+   printf "%s\t%s\t%d\t%d\n" "${keySig}" "${db}" "${fullCount}" "${uniqueCount}"
+  fi
+done | sort -k1,1 > ucsc.keySignatures.txt
+
+cd /hive/data/inside/assemblyEquivalence/2020-08-31
+ln -s /cluster/home/hiram/kent/src/hg/makeDb/doc/assemblyEquivalence/exact.sh .
+
+###########  Exact matches  ##################
+
+./exact.sh
+
+~/kent/src/hg/makeDb/doc/assemblyEquivalence/exactTableTsv.pl \
+  | sort > table.2020-08-31.tsv
+
+###########  Near matches  ##################
+
+mkdir /hive/data/inside/assemblyEquivalence/2020-08-31/notExact
+cd /hive/data/inside/assemblyEquivalence/2020-08-31/notExact
+
+ln -s /cluster/home/hiram/kent/src/hg/makeDb/doc/assemblyEquivalence/runOne ./
+
+time ~/kent/src/hg/makeDb/doc/assemblyEquivalence/allByAll.sh
+# real    9m46.971s
+
+sed -e 's/\tcount A .*//;' results/match.*.txt > notExact.table.2020-08-31.tsv
+
+###########  Table contents to load  ##################
+
+sort -u notExact.table.2020-08-31.tsv ../table.2020-08-31.tsv \
+    > hgFixed.asmEquivalent.tsv
+
+### Compare to existing:
+hgsql -N -e 'select * from asmEquivalent;' hgFixed | sort \
+   > existing.2020-08-31.tsv
+
+### most should be identical to before
+join hgFixed.asmEquivalent.tsv existing.2020-08-31.tsv | wc
+      5100   66300  702561
+
+### probably should *not* be losing any from before:
+join -v 2 hgFixed.asmEquivalent.tsv existing.2020-08-31.tsv | wc -l
+      0
+
+# if not 0, investigate.  Sometimes a new assembly is now an
+# exact match to something where it was a near match before to
+# a previous assembly of that organism.
+
+### there should be some new ones
+join -v 1 hgFixed.asmEquivalent.tsv existing.2020-08-31.tsv | wc
+         20     140    1784
+
+#### To load up new table contents:
+hgLoadSqlTab hgFixed asmEquivalent ~/kent/src/hg/lib/asmEquivalent.sql \
+   hgFixed.asmEquivalent.tsv
+
+hgsql -N -e 'select * from asmEquivalent;' hgFixed \
+   | sort > updated.2020-08-31.tsv
+
+wc -l updated.2020-08-31.tsv existing.2020-08-31.tsv
+  2344 updated.2020-08-31.tsv
+  2320 existing.2020-08-31.tsv
