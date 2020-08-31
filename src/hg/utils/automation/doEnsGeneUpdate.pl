@@ -33,6 +33,7 @@ my $stepper = new HgStepManager(
       { name => 'process',   func => \&doProcess },
       { name => 'load',   func => \&doLoad },
       { name => 'cleanup', func => \&doCleanup },
+      { name => 'goldenPath', func => \&doGoldenPath },
       { name => 'makeDoc', func => \&doMakeDoc },
     ]
 );
@@ -266,6 +267,8 @@ $identicalToPrevious = 0;
 
   $bossScript->add(<<_EOF_
 export db="$db"
+
+genePredToGtf -utr file process/\$db.allGenes.gp.gz stdout | gzip -c > process/\$db.ensGene.v$ensVersion.gtf.gz
 
 _EOF_
 	  );
@@ -600,7 +603,7 @@ genePredCheck -db=\$db \$db.allGenes.gp.gz
 _EOF_
          );
       }
-  }
+  }	# if (! defined $skipInvalid)
   $bossScript->execute() if (! $opt_debug);
 } # doProcess
 
@@ -670,6 +673,38 @@ _EOF_
   }
   $bossScript->execute() if (! $opt_debug);
 } # doCleanup
+
+#########################################################################
+# * step: goldenPath [dbHost]
+sub doGoldenPath {
+  my $runDir = "$buildDir";
+  if (! -s "$runDir/process/$db.ensGene.v$ensVersion.gtf.gz" ) {
+    die "ERROR: step goldenPath can not find process/$db.ensGene.v$ensVersion.gtf.gz\n" .
+        "\tcheck if processing step has completed\n";
+  }
+
+  my $whatItDoes = "Create symlinks to make gtf files appear in goldenPath.";
+  my $gpGeneDir = "$HgAutomate::goldenPath/$db/bigZips/genes";
+  my $gpArchiveDir = "$HgAutomate::goldenPath/archive/$db/ensGene";
+  my $bossScript = newBash HgRemoteScript("$runDir/doGoldenPath.bash", $dbHost,
+				      $runDir, $whatItDoes);
+
+  &HgAutomate::mustMkdir($gpGeneDir);
+  &HgAutomate::mustMkdir($gpArchiveDir);
+
+  $bossScript->add(<<_EOF_
+export db="$db"
+rm -f $gpArchiveDir/\$db.ensGene.v$ensVersion.gtf.gz
+rm -f $gpArchiveDir/\$db.ensGene.v$ensVersion.genePred.gz
+ln -s `pwd`/process/\$db.ensGene.v$ensVersion.gtf.gz  $gpArchiveDir/
+ln -s `pwd`/process/\$db.allGenes.genePred.gz  $gpArchiveDir/\$db.ensGene.v$ensVersion.genePred.gz
+rm -f $gpGeneDir/\$db.ensGene.gtf.gz
+ln -s `pwd`/process/\$db.ensGene.v$ensVersion.gtf.gz  $gpGeneDir/\$db.ensGene.gtf.gz
+_EOF_
+	  );
+
+  $bossScript->execute() if (! $opt_debug);
+} # doGoldenPath
 
 #########################################################################
 # * step: makeDoc [dbHost]
