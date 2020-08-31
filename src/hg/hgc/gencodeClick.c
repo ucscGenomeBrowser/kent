@@ -12,6 +12,7 @@
 #include "htmshell.h"
 #include "jksql.h"
 #include "regexHelper.h"
+#include "gencodeAttrs.h"
 #include "encode/wgEncodeGencodeAttrs.h"
 #include "encode/wgEncodeGencodeGeneSource.h"
 #include "encode/wgEncodeGencodePdb.h"
@@ -70,28 +71,57 @@ if (dot != NULL)
 return accBuf;
 }
 
+static char* getGencodeOldName(char *baseName)
+/* get the old variable or table name starting with wgEncodeGencode as opposed
+ * to 'gencode'.  WARNING: static return. */
+{
+static char buf[256];
+safef(buf, sizeof(buf), "wgEncode%s", baseName);
+toUpperN(buf + 8, 1);  // g -> G
+return buf;
+}
+  
+static char *getGencodeTableVar(struct trackDb *tdb, char *tableBase)
+/* return value table variable name, of NULL if in trackDb */
+{
+char* tbl = trackDbSetting(tdb, tableBase);
+if (tbl == NULL)
+    tbl = trackDbSetting(tdb, getGencodeOldName(tableBase));
+return tbl;
+}
+
 static bool haveGencodeTable(struct trackDb *tdb, char *tableBase)
 /* determine if table is in settings and thus in this gencode release */
 {
-return trackDbSetting(tdb, tableBase) != NULL;
+return getGencodeTableVar(tdb, tableBase) != NULL;
 }
 
 static char *getGencodeTable(struct trackDb *tdb, char *tableBase)
-/* get a table name from the settings. */
+/* get a table name from the settings or error. */
 {
-return trackDbRequiredSetting(tdb, tableBase);
+char* tbl = getGencodeTableVar(tdb, tableBase);
+if (tbl == NULL)
+    errAbort("Missing table variable for track %s (%s or %s)",
+             tdb->track, tableBase, getGencodeOldName(tableBase));
+return tbl;
 }
 
 static char* getGencodeVersion(struct trackDb *tdb)
 /* get the GENCODE version or NULL for < V7, which is not supported
  * by this module. */
 {
-return trackDbSetting(tdb, "wgEncodeGencodeVersion");
+return getGencodeTableVar(tdb, "gencodeVersion");
 }
+
+static boolean isHuman()
+/* are we human (otherwise mouse) */
 
 static boolean isGrcH37Native(struct trackDb *tdb)
 /* Is this GENCODE GRCh37 native build, which requires a different Ensembl site. */
 {
+return 
+}
+
 // check for non-lifted GENCODE on GRCh37/hg19
 if (sameString(database, "hg19"))
     return stringIn("lift37", getGencodeVersion(tdb)) == NULL;
@@ -139,19 +169,55 @@ slSort(&transAnno, transAnnoCmp);
 return transAnno;
 }
 
+static struct wgEncodeGencodeAttrs *transAttrsOldLoad(struct sqlResult *sr, char** row)
+/* load attributes from the wgEncodeGencodeAttrs format table */
+{
+// older version don't have proteinId column.
+struct wgEncodeGencodeAttrs *transAttrs = wgEncodeGencodeAttrsLoad(row, sqlCountColumns(sr));
+return transAttrs;
+}
+
+static struct wgEncodeGencodeAttrs *transAttrsNewLoad(char** row)
+/* load attributes from the gencodeAttrs format table, converting to the older format */
+{
+struct gencodeAttrs *transAttrs = gencodeAttrsLoad(row);
+struct wgEncodeGencodeAttrs *transAttrsOld;
+AllocVar(transAttrsOld);
+
+transAttrsOld->geneId = transAttrs->geneId;
+transAttrsOld->geneName = transAttrs->geneName;
+transAttrsOld->geneType = transAttrs->geneType;
+transAttrsOld->geneStatus = cloneString("");
+transAttrsOld->transcriptId = transAttrs->transcriptId;
+transAttrsOld->transcriptName = transAttrs->transcriptName;
+transAttrsOld->transcriptType = transAttrs->transcriptType;
+transAttrsOld->transcriptStatus = cloneString("");
+transAttrsOld->havanaGeneId = cloneString("");
+transAttrsOld->havanaTranscriptId = cloneString("");
+transAttrsOld->ccdsId = transAttrs->ccdsId;
+transAttrsOld->level = transAttrs->level;
+transAttrsOld->transcriptClass = transAttrs->transcriptClass;
+transAttrsOld->proteinId = transAttrs->proteinId;
+return transAttrsOld;
+}
+
 static struct wgEncodeGencodeAttrs *transAttrsLoad(struct trackDb *tdb, struct sqlConnection *conn, char *gencodeId)
 /* load the gencode attributes */
 {
 char query[1024];
 sqlSafef(query, sizeof(query), "select * from %s where transcriptId = \"%s\"",
-         getGencodeTable(tdb, "wgEncodeGencodeAttrs"), gencodeId);
+         getGencodeTable(tdb, "gencodeAttrs"), gencodeId);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = sqlNextRow(sr);
 if (row == NULL)
     errAbort("gencode transcript %s not found in %s", gencodeId,
-             getGencodeTable(tdb, "wgEncodeGencodeAttrs"));
+             getGencodeTable(tdb, "gencodeAttrs"));
 // older version don't have proteinId column.
-struct wgEncodeGencodeAttrs *transAttrs = wgEncodeGencodeAttrsLoad(row, sqlCountColumns(sr));
+struct wgEncodeGencodeAttrs *transAttrs;
+if (sqlFieldColumn(sr, "havanaGeneId") >= 0)
+    transAttrs = transAttrsOldLoad(sr, row);
+else
+    transAttrs = transAttrsNewLoad(row);
 sqlFreeResult(&sr);
 return transAttrs;
 }
@@ -322,8 +388,8 @@ char query[1024];
 sqlSafefFrag(query, sizeof(query),
       "%s tag where tag.tag like 'appris%%' and transcriptId in "
       "(select transcriptId from %s where geneId='%s')",
-      getGencodeTable(tdb, "wgEncodeGencodeTag"),
-      getGencodeTable(tdb, "wgEncodeGencodeAttrs"),
+      getGencodeTable(tdb, "gencodeTag"),
+      getGencodeTable(tdb, "gencodeAttrs"),
       transAttrs->geneId);
 return sqlRowCount(conn, query) > 0;
 }
@@ -840,25 +906,25 @@ static void doGencodeGeneTrack(struct trackDb *tdb, char *gencodeId, struct sqlC
 {
 struct wgEncodeGencodeAttrs *transAttrs = transAttrsLoad(tdb, conn, gencodeId);
 char *gencodeGeneId = transAttrs->geneId;
-struct wgEncodeGencodeGeneSource *geneSource = metaDataLoad(tdb, conn, gencodeGeneId, "wgEncodeGencodeGeneSource", "geneId", sqlQuerySingle, (sqlLoadFunc)wgEncodeGencodeGeneSourceLoad);
-struct wgEncodeGencodeTranscriptSource *transcriptSource = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeTranscriptSource", "transcriptId", sqlQuerySingle, (sqlLoadFunc)wgEncodeGencodeTranscriptSourceLoad);
-bool haveRemarks = haveGencodeTable(tdb, "wgEncodeGencodeAnnotationRemark");
-struct wgEncodeGencodeAnnotationRemark *remarks = haveRemarks ? metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeAnnotationRemark", "transcriptId", 0, (sqlLoadFunc)wgEncodeGencodeAnnotationRemarkLoad) : NULL;
-struct wgEncodeGencodePdb *pdbs = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodePdb", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodePdbLoad);
-struct wgEncodeGencodePubMed *pubMeds = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodePubMed", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodePubMedLoad);
-bool haveEntrezGene = haveGencodeTable(tdb, "wgEncodeGencodeEntrezGene");
-struct wgEncodeGencodeEntrezGene *entrezGenes = haveEntrezGene ? metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeEntrezGene", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeEntrezGeneLoad) : NULL;
-struct wgEncodeGencodeRefSeq *refSeqs = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeRefSeq", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeRefSeqLoad);
-struct wgEncodeGencodeTag *tags = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeTag", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeTagLoad);
-struct wgEncodeGencodeTranscriptSupport *transcriptSupports = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeTranscriptSupport", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeTranscriptSupportLoad);
+struct wgEncodeGencodeGeneSource *geneSource = metaDataLoad(tdb, conn, gencodeGeneId, "gencodeGeneSource", "geneId", sqlQuerySingle, (sqlLoadFunc)wgEncodeGencodeGeneSourceLoad);
+struct wgEncodeGencodeTranscriptSource *transcriptSource = metaDataLoad(tdb, conn, gencodeId, "gencodeTranscriptSource", "transcriptId", sqlQuerySingle, (sqlLoadFunc)wgEncodeGencodeTranscriptSourceLoad);
+bool haveRemarks = haveGencodeTable(tdb, "gencodeAnnotationRemark");
+struct wgEncodeGencodeAnnotationRemark *remarks = haveRemarks ? metaDataLoad(tdb, conn, gencodeId, "gencodeAnnotationRemark", "transcriptId", 0, (sqlLoadFunc)wgEncodeGencodeAnnotationRemarkLoad) : NULL;
+struct wgEncodeGencodePdb *pdbs = metaDataLoad(tdb, conn, gencodeId, "gencodePdb", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodePdbLoad);
+struct wgEncodeGencodePubMed *pubMeds = metaDataLoad(tdb, conn, gencodeId, "gencodePubMed", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodePubMedLoad);
+bool haveEntrezGene = haveGencodeTable(tdb, "gencodeEntrezGene");
+struct wgEncodeGencodeEntrezGene *entrezGenes = haveEntrezGene ? metaDataLoad(tdb, conn, gencodeId, "gencodeEntrezGene", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeEntrezGeneLoad) : NULL;
+struct wgEncodeGencodeRefSeq *refSeqs = metaDataLoad(tdb, conn, gencodeId, "gencodeRefSeq", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeRefSeqLoad);
+struct wgEncodeGencodeTag *tags = metaDataLoad(tdb, conn, gencodeId, "gencodeTag", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeTagLoad);
+struct wgEncodeGencodeTranscriptSupport *transcriptSupports = metaDataLoad(tdb, conn, gencodeId, "gencodeTranscriptSupport", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeTranscriptSupportLoad);
 struct wgEncodeGencodeExonSupport *exonSupports = NULL;
 // exonSupports not available in back mapped GENCODE releases
-if (haveGencodeTable(tdb, "wgEncodeGencodeExonSupport"))
-    exonSupports = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeExonSupport", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeExonSupportLoad);
-struct wgEncodeGencodeUniProt *uniProts = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeUniProt", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeUniProtLoad);
+if (haveGencodeTable(tdb, "gencodeExonSupport"))
+    exonSupports = metaDataLoad(tdb, conn, gencodeId, "gencodeExonSupport", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeExonSupportLoad);
+struct wgEncodeGencodeUniProt *uniProts = metaDataLoad(tdb, conn, gencodeId, "gencodeUniProt", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeUniProtLoad);
 slSort(&uniProts, uniProtDatasetCmp);
-bool haveTsl = haveGencodeTable(tdb, "wgEncodeGencodeTranscriptionSupportLevel");
-struct wgEncodeGencodeTranscriptionSupportLevel *tsl = haveTsl ? metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeTranscriptionSupportLevel", "transcriptId", 0, (sqlLoadFunc)wgEncodeGencodeTranscriptionSupportLevelLoad) : NULL;
+bool haveTsl = haveGencodeTable(tdb, "gencodeTranscriptionSupportLevel");
+struct wgEncodeGencodeTranscriptionSupportLevel *tsl = haveTsl ? metaDataLoad(tdb, conn, gencodeId, "gencodeTranscriptionSupportLevel", "transcriptId", 0, (sqlLoadFunc)wgEncodeGencodeTranscriptionSupportLevelLoad) : NULL;
 
 int geneChromStart, geneChromEnd;
 getGeneBounds(tdb, conn, transAnno, &geneChromStart, &geneChromEnd);
@@ -928,18 +994,27 @@ printf("<b>Annotation Type:</b> %s<br>",polyAAnno->name2);
 printPos(polyAAnno->chrom, polyAAnno->txStart, polyAAnno->txEnd, polyAAnno->strand, FALSE, NULL);
 }
 
+static boolean isGenecodeTrack(char* tableBase,
+                               struct trackDb *tdb)
+/* is this an gencode track? */
+{
+return startsWith(tableBase, tdb->track) ||
+    startsWith(getGencodeOldName(tableBase), tdb->track);
+}
+
 void doGencodeGene(struct trackDb *tdb, char *gencodeId)
 /* Process click on a GENCODE annotation. */
 {
 struct sqlConnection *conn = hAllocConn(database);
 struct genePred *anno = transAnnoLoad(conn, tdb, gencodeId);
-if (startsWith("wgEncodeGencodeBasic", tdb->track)
-    || startsWith("wgEncodeGencodeComp", tdb->track)
-    || startsWith("wgEncodeGencodePseudoGene", tdb->track))
+if (isGenecodeTrack("gencodeBasic", tdb)
+    || isGenecodeTrack("gencodeComp", tdb)
+    || isGenecodeTrack("gencodeAnnot", tdb)
+    || isGenecodeTrack("gencodePseudoGene", tdb))
     doGencodeGeneTrack(tdb, gencodeId, conn, anno);
-else if (startsWith("wgEncodeGencode2wayConsPseudo", tdb->track))
+else if (isGenecodeTrack("gencode2wayConsPseudo", tdb))
     doGencodeGene2WayPseudo(tdb, gencodeId, conn, anno);
-else if (startsWith("wgEncodeGencodePolya", tdb->track))
+else if (isGenecodeTrack("gencodePolya", tdb))
     doGencodeGenePolyA(tdb, gencodeId, conn, anno);
 else
     errAbort("doGencodeGene: track not handled: \"%s\"", tdb->track);

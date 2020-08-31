@@ -40,8 +40,8 @@ mach = $(shell uname -m)
 db = hg38
 #db = hg19
 #db = mm10
-#preRelease = no
-preRelease = yes
+preRelease = no
+#preRelease = yes
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
     ver = M23
@@ -96,7 +96,7 @@ relRootDir = release
 relDir = ${relRootDir}/release_${ver}
 annotationGff = ${relDir}/gencode.v${ver}.${annGffTypeName}.gff3.gz
 
-kentDir = /cluster/home/markd/compbio/gencode/projs/hggene-gencode/kent/src
+kentDir = ${HOME}/kent/src
 gencodeBinDir = ${kentDir}/hg/makeDb/outside/gencode/bin
 autoSqlDir = ${kentDir}/hg/lib
 gencodeExonSupportToTable = ${gencodeBinDir}/gencodeExonSupportToTable

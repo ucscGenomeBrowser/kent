@@ -190,6 +190,22 @@ gClass_nonCoding genePred
 gClass_pseudo genePred
 gClass_problem genePred
 gainColor bed
+gencodeVersion genePred
+gencodeAttrs genePred
+gencodeExonSupport genePred
+gencodeGeneSource genePred
+gencodeTranscriptSource genePred
+gencodeHgnc genePred
+gencodePdb genePred
+gencodePubMed genePred
+gencodeRefSeq genePred
+gencodeSymbol genePred
+gencodeTag genePred
+gencodeTranscriptSupport genePred
+gencodeUniProt genePred
+gencodeAnnotationRemark genePred
+gencodeTranscriptionSupportLevel genePred
+gencodeEntrezGene genePred
 geneClasses bed genePred
 geneTrack vcfTabix vcf vcfPhasedTrio
 genome customTracks

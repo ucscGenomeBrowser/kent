@@ -1,0 +1,58 @@
+track gencodeAnnotV35
+release alpha
+superTrack wgEncodeGencodeSuper pack
+shortLabel Core GENCODE V35
+longLabel Core GENCODE annotations from V35 (Ensembl 101)
+group genes
+priority 34.170
+visibility pack
+type genePred
+gencodeVersion 35
+gencodeAttrs gencodeAttrsV35
+gencodeExonSupport gencodeExonSupportV35
+gencodeGeneSource gencodeGeneSourceV35
+gencodeTranscriptSource gencodeTranscriptSourceV35
+gencodeSymbol gencodeToSymbolV35
+gencodePdb gencodeToPdbV35
+gencodePubMed gencodeToPubMedV35
+gencodeRefSeq gencodeToRefSeqV35
+gencodeTag gencodeTagV35
+gencodeTranscriptSupport gencodeTranscriptSupportV35
+gencodeUniProt gencodeToUniProtV35
+gencodeAnnotationRemark gencodeAnnotationRemarkV35
+gencodeTranscriptionSupportLevel gencodeTranscriptionSupportLevelV35
+gencodeEntrezGene gencodeToEntrezGeneV35
+
+# searches for annot
+searchName gencodeAnnotV35
+searchTable gencodeAnnotV35
+searchMethod prefix
+searchType genePred
+termRegex ENST[0-9.]+
+searchPriority 2.26201
+
+searchName gencodeAnnotGeneSymV35
+searchTable gencodeAnnotV35
+searchMethod exact
+searchType genePred
+searchPriority 2.26202
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName gencodeAnnotGeneV35
+searchTable gencodeAnnotV35
+searchMethod prefix
+searchType genePred
+termRegex ENSG[0-9.]+
+searchPriority 2.26203
+xrefTable gencodeAttrsV35
+xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
+
+searchName gencodeAnnotProtV35
+searchTable gencodeAnnotV35
+searchMethod prefix
+searchType genePred
+termRegex ENSP[0-9.]+
+searchPriority 2.26207
+xrefTable gencodeAttrsV35
+xrefQuery select transcriptId,proteinId from %s where proteinId like '%s%%'
+

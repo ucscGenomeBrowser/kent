@@ -674,7 +674,6 @@ cd kent/src/hg/makeDb/trackDb
 
 #########################################################################
 2020-06-05: import of UCSC GENCODE group processing of GENCODE V35 pre-release  (markd)
-    
     # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
 
     # download, build and load tables
@@ -706,4 +705,34 @@ cd kent/src/hg/makeDb/trackDb
     # commit all
     make DBS=hg38 alpha
     # if pushing public: create ticket and MARK QA READY
+#########################################################################
+2020-08-29: import of UCSC GENCODE group processing of GENCODE V35 final  (markd)
+    # use new process for hgGene gencode
+    # edit hg/makeDb/outside/gencode/gencodeHgGeneLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg38/bed/gencodeV35/import
+    pushd /hive/data/genomes/hg38/bed/gencodeV35/import
+
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeHgGeneLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd ~/kent/src/hg/makeDb/trackDb
+    ../outside/gencode/bin/gencodeGenerateTrackDbs hg38 35 101 'Aug 2020'
+
+    # edit human/hg38/trackDb.gencode.ra to add include of new gencodeCore*.ra
+    make DBS=hg38
+
+    ## only if being pushed to RR (may be there from pre-release)
+    # edit all.joiner to add ~/tmp/gencodeV35.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg38/bed/gencodeV35
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # check tracks in browser sandbox
+    # commit all
+    make DBS=hg38 alpha
 #########################################################################

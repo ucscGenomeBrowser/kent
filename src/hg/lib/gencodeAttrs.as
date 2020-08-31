@@ -9,6 +9,6 @@ table gencodeAttrs
     string transcriptType; "BioType of transcript"
     string ccdsId; "CCDS identifier if transcript is in CCDS"
     int level; "GENCODE level: 1 = experimental confirmed, 2 = manual, 3 = automated"
-    string proteinId; "Protein identifier (not loaded on many older versions of GENCODE)"
+    string proteinId; "Protein identifier"
     string transcriptClass; "high level type of transcript"
     )

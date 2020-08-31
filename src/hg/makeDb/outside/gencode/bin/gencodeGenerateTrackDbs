@@ -23,37 +23,42 @@ import argparse
 #  - both is normal and backmap.
 ##
 
+def joinLines(lines):
+    """join together lines to add to file, skipping in ones that are None"""
+    return "\n".join([l for l in lines if l is not None]) + "\n"
+
 def forStd(params, lines):
     """return lines merge into text if this is a standard release"""
     if not params.isLifted():
-        return "\n".join(lines) + "\n"
+        return joinLines(lines)
     else:
         return ""
 
 def forLift(params, lines):
     """return lines merge into text if this is a back-mapped release"""
     if params.isLifted():
-        return "\n".join(lines) + "\n"
+        return joinLines(lines)
     else:
         return ""
 
 def forBoth(params, lines):
     """return lines merge into text for any type of release"""
-    return "\n".join(lines) + "\n"
+    return joinLines(lines)
 
 def forStdHuman(params, lines):
-    """return lines merge into text if this is a huma nstandard release"""
+    """return lines merge into text if this is a human standard release"""
     if params.isHuman() and not params.isLifted():
-        return "\n".join(lines) + "\n"
+        return joinLines(lines)
     else:
         return ""
 
-def trackDbTemplateGen(params):
-    """Generate template for trackDb ra"""
+def trackDbTemplateGenNonHgGene(params):
+    """Generate template for trackDb ra for non-hgGene GENCODEs"""
+    # composite track
     yield forBoth(params, (
-        "track gencodeV{gencodeVer}",
+        "track gencodeCoreV{gencodeVer}",
         "compositeTrack on",
-        "superTrack gencodeSuper pack",))
+        "superTrack wgEncodeGencodeSuper pack"))
     yield forStd(params, (
         "shortLabel All GENCODE V{gencodeVer}",
         "longLabel All GENCODE annotations from V{gencodeVer} (Ensembl {ensemblVer})",))
@@ -71,7 +76,9 @@ def trackDbTemplateGen(params):
         "sortOrder name=+ view=+",
         "fileSortOrder labVersion=Contents dccAccession=UCSC_Accession",
         "type genePred",
-        "configurable off",
+        "configurable off"))
+    # table variables; hgc checks for names with and without wgEncode prefix
+    yield forBoth(params, (
         "gencodeVersion {gencodeVer}",
         "gencodeAttrs gencodeAttrsV{gencodeVer}"))
     yield forStd(params, (
@@ -86,11 +93,13 @@ def trackDbTemplateGen(params):
         "gencodeTag gencodeTagV{gencodeVer}",
         "gencodeTranscriptSupport gencodeTranscriptSupportV{gencodeVer}",
         "gencodeUniProt gencodeUniProtV{gencodeVer}",
-        "gencodePolyAFeature gencodePolyAFeatureV{gencodeVer}",
         "gencodeAnnotationRemark gencodeAnnotationRemarkV{gencodeVer}",
         "gencodeTranscriptionSupportLevel gencodeTranscriptionSupportLevelV{gencodeVer}",
         "gencodeEntrezGene gencodeEntrezGeneV{gencodeVer}",
-        "",
+        ""))
+
+    # tracks and views
+    yield forBoth(params, (
         "    track gencodeV{gencodeVer}ViewGenes",
         "    shortLabel Genes",
         "    view aGenes",
@@ -128,7 +137,18 @@ def trackDbTemplateGen(params):
         "                attrs.transcriptType:Transcript_Biotype={transBiotypes} \\",
         "                tag:Tag={tags} \\",
         "                supportLevel:Support_Level=tsl1,tsl2,tsl3,tsl4,tsl5,tslNA",
-        "",
+        ""))
+    yield forBoth(params, (
+        "        track gencodeAnnotV{gencodeVer}",
+        "        trackHandler gencode",
+        "        subTrack gencodeV{gencodeVer}ViewGenes on",
+        "        shortLabel Basic",
+        "        subGroups view=aGenes name=Basic",
+        "        longLabel Basic Gene Annotation Set from GENCODE Version {gencodeVer} (Ensembl {ensemblVer})",
+        "        type genePred",
+        "        priority 1",
+        ""))
+    yield forBoth(params, (
         "        track gencodeBasicV{gencodeVer}",
         "        trackHandler gencode",
         "        subTrack gencodeV{gencodeVer}ViewGenes on",
@@ -137,7 +157,8 @@ def trackDbTemplateGen(params):
         "        longLabel Basic Gene Annotation Set from GENCODE Version {gencodeVer} (Ensembl {ensemblVer})",
         "        type genePred",
         "        priority 1",
-        "",
+        ""))
+    yield forBoth(params, (
         "        track gencodeCompV{gencodeVer}",
         "        trackHandler gencode",
         "        subTrack gencodeV{gencodeVer}ViewGenes off",
@@ -146,7 +167,8 @@ def trackDbTemplateGen(params):
         "        longLabel Comprehensive Gene Annotation Set from GENCODE Version {gencodeVer} (Ensembl {ensemblVer})",
         "        type genePred",
         "        priority 2",
-        "",
+        ""))
+    yield forBoth(params, (
         "        track gencodePseudoGeneV{gencodeVer}",
         "        trackHandler gencode",
         "        subTrack gencodeV{gencodeVer}ViewGenes on",
@@ -165,7 +187,8 @@ def trackDbTemplateGen(params):
         "    subTrack gencodeV{gencodeVer}",
         "    type genePred",
         "    configurable off",
-        "",
+        ""))
+    yield forStd(params, (
         "        track gencode2wayConsPseudoV{gencodeVer}",
         "        trackHandler gencode",
         "        subTrack gencodeV{gencodeVer}View2Way off",
@@ -175,7 +198,8 @@ def trackDbTemplateGen(params):
         "        type genePred",
         "        color 255,51,255",
         "        priority 4",
-        "",
+        ""))
+    yield forStd(params, (
         "    track gencodeV{gencodeVer}ViewPolya",
         "    shortLabel PolyA",
         "    view cPolya",
@@ -183,7 +207,8 @@ def trackDbTemplateGen(params):
         "    subTrack gencodeV{gencodeVer}",
         "    type genePred",
         "    configurable off",
-        "",
+        ""))
+    yield forStd(params, (
         "        track gencodePolyaV{gencodeVer}",
         "        trackHandler gencode",
         "        subTrack gencodeV{gencodeVer}ViewPolya off",
@@ -202,14 +227,16 @@ def trackDbTemplateGen(params):
         "searchType genePred",
         "termRegex {ensemblTransIdRegex}",
         "searchPriority {basicSearchPriority:.5f}",
-        "",
+        ""))
+    yield forBoth(params, (
         "searchName gencodeBasicGeneSymV{gencodeVer}",
         "searchTable gencodeBasicV{gencodeVer}",
         "searchMethod exact",
         "searchType genePred",
         "searchPriority {basicGeneSymSearchPriority:.5f}",
         "query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'",
-        "",
+        ""))
+    yield forBoth(params, (
         "searchName gencodeBasicGeneV{gencodeVer}",
         "searchTable gencodeBasicV{gencodeVer}",
         "searchMethod prefix",
@@ -218,7 +245,8 @@ def trackDbTemplateGen(params):
         "searchPriority {basicGeneSearchPriority:.5f}",
         "xrefTable gencodeAttrsV{gencodeVer}",
         "xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'",
-        "",
+        ""))
+    yield forBoth(params, (
         "searchName gencodeBasicHavanaTranscriptV{gencodeVer}",
         "searchTable gencodeBasicV{gencodeVer}",
         "searchMethod prefix",
@@ -227,7 +255,8 @@ def trackDbTemplateGen(params):
         "searchPriority {basicHavanaTranscriptSearchPriority:.5f}",
         "xrefTable gencodeAttrsV{gencodeVer}",
         "xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'",
-        "",
+        ""))
+    yield forBoth(params, (
         "searchName gencodeBasicHavanaGeneV{gencodeVer}",
         "searchTable gencodeBasicV{gencodeVer}",
         "searchMethod prefix",
@@ -255,14 +284,16 @@ def trackDbTemplateGen(params):
         "searchType genePred",
         "termRegex {ensemblTransIdRegex}",
         "searchPriority {compSearchPriority:.5f}",
-        "",
+        ""))
+    yield forBoth(params, (
         "searchName gencodeCompGeneSymV{gencodeVer}",
         "searchTable gencodeCompV{gencodeVer}",
         "searchMethod exact",
         "searchType genePred",
         "searchPriority {compGeneSymSearchPriority:.5f}",
         "query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'",
-        "",
+        ""))
+    yield forBoth(params, (
         "searchName gencodeCompGeneV{gencodeVer}",
         "searchTable gencodeCompV{gencodeVer}",
         "searchMethod prefix",
@@ -271,7 +302,8 @@ def trackDbTemplateGen(params):
         "searchPriority {compGeneSearchPriority:.5f}",
         "xrefTable gencodeAttrsV{gencodeVer}",
         "xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'",
-        "",
+        ""))
+    yield forBoth(params, (
         "searchName gencodeCompHavanaTranscriptV{gencodeVer}",
         "searchTable gencodeCompV{gencodeVer}",
         "searchMethod prefix",
@@ -280,7 +312,8 @@ def trackDbTemplateGen(params):
         "searchPriority {compHavanaTranscriptSearchPriority:.5f}",
         "xrefTable gencodeAttrsV{gencodeVer}",
         "xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'",
-        "",
+        ""))
+    yield forBoth(params, (
         "searchName gencodeCompHavanaGeneV{gencodeVer}",
         "searchTable gencodeCompV{gencodeVer}",
         "searchMethod prefix",
@@ -308,14 +341,16 @@ def trackDbTemplateGen(params):
         "searchType genePred",
         "termRegex {ensemblTransIdRegex}",
         "searchPriority {pseudoGeneSearchPriority:.5f}",
-        "",
+        ""))
+    yield forBoth(params, (
         "searchName gencodePseudoGeneGeneSymV{gencodeVer}",
         "searchTable gencodePseudoGeneV{gencodeVer}",
         "searchMethod exact",
         "searchType genePred",
         "searchPriority {pseudoGeneGeneSymSearchPriority:.5f}",
         "query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'",
-        "",
+        ""))
+    yield forBoth(params, (
         "searchName gencodePseudoGeneGeneV{gencodeVer}",
         "searchTable gencodePseudoGeneV{gencodeVer}",
         "searchMethod prefix",
@@ -324,7 +359,8 @@ def trackDbTemplateGen(params):
         "searchPriority {pseudoGeneGeneSearchPriority:.5f}",
         "xrefTable gencodeAttrsV{gencodeVer}",
         "xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'",
-        "",
+        ""))
+    yield forBoth(params, (
         "searchName gencodePseudoGeneHavanaTranscriptV{gencodeVer}",
         "searchTable gencodePseudoGeneV{gencodeVer}",
         "searchMethod prefix",
@@ -333,7 +369,8 @@ def trackDbTemplateGen(params):
         "searchPriority {pseudoGeneHavanaTranscriptSearchPriority:.5f}",
         "xrefTable gencodeAttrsV{gencodeVer}",
         "xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'",
-        "",
+        ""))
+    yield forBoth(params, (
         "searchName gencodePseudoGeneHavanaGeneV{gencodeVer}",
         "searchTable gencodePseudoGeneV{gencodeVer}",
         "searchMethod prefix",
@@ -350,7 +387,78 @@ def trackDbTemplateGen(params):
         "searchMethod exact",
         "searchType genePred",
         "termRegex {twoWayPseudoIdRegex}",
-        "searchPriority {twoWayConsPseudoSearchPriority:.5f}"))
+        "searchPriority {twoWayConsPseudoSearchPriority:.5f}",
+        ""))
+
+def trackDbTemplateGenPostHgGene(params):
+    """Generate template for trackDb ra for local hgc after hgGene GENCODEs"""
+    # composite track
+    yield forBoth(params, (
+        "track gencodeAnnotV{gencodeVer}",
+        "release alpha",
+        "superTrack wgEncodeGencodeSuper pack",
+        "shortLabel Core GENCODE V{gencodeVer}",
+        "longLabel Core GENCODE annotations from V{gencodeVer} (Ensembl {ensemblVer})",
+        "group genes",
+        "priority {superTrackPriority:.3f}",
+        "visibility pack",
+        "type genePred"))
+    yield forBoth(params, (
+        "gencodeVersion {gencodeVer}",
+        "gencodeAttrs gencodeAttrsV{gencodeVer}"))
+    yield forStd(params, (
+        "gencodeExonSupport gencodeExonSupportV{gencodeVer}",))
+    yield forBoth(params, (
+        "gencodeGeneSource gencodeGeneSourceV{gencodeVer}",
+        "gencodeTranscriptSource gencodeTranscriptSourceV{gencodeVer}",
+        "gencodeSymbol gencodeToSymbolV{gencodeVer}",
+        "gencodePdb gencodeToPdbV{gencodeVer}",
+        "gencodePubMed gencodeToPubMedV{gencodeVer}",
+        "gencodeRefSeq gencodeToRefSeqV{gencodeVer}",
+        "gencodeTag gencodeTagV{gencodeVer}",
+        "gencodeTranscriptSupport gencodeTranscriptSupportV{gencodeVer}",
+        "gencodeUniProt gencodeToUniProtV{gencodeVer}",
+        "gencodeAnnotationRemark gencodeAnnotationRemarkV{gencodeVer}",
+        "gencodeTranscriptionSupportLevel gencodeTranscriptionSupportLevelV{gencodeVer}",
+        "gencodeEntrezGene gencodeToEntrezGeneV{gencodeVer}",
+        ""))
+    yield forBoth(params, (
+        "# searches for annot",
+        "searchName gencodeAnnotV{gencodeVer}",
+        "searchTable gencodeAnnotV{gencodeVer}",
+        "searchMethod prefix",
+        "searchType genePred",
+        "termRegex {ensemblTransIdRegex}",
+        "searchPriority {basicSearchPriority:.5f}",
+        ""))
+    yield forBoth(params, (
+        "searchName gencodeAnnotGeneSymV{gencodeVer}",
+        "searchTable gencodeAnnotV{gencodeVer}",
+        "searchMethod exact",
+        "searchType genePred",
+        "searchPriority {basicGeneSymSearchPriority:.5f}",
+        "query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'",
+        ""))
+    yield forBoth(params, (
+        "searchName gencodeAnnotGeneV{gencodeVer}",
+        "searchTable gencodeAnnotV{gencodeVer}",
+        "searchMethod prefix",
+        "searchType genePred",
+        "termRegex {ensemblGeneIdRegex}",
+        "searchPriority {basicGeneSearchPriority:.5f}",
+        "xrefTable gencodeAttrsV{gencodeVer}",
+        "xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'",
+        ""))
+    yield forStd(params, (
+        "searchName gencodeAnnotProtV{gencodeVer}",
+        "searchTable gencodeAnnotV{gencodeVer}",
+        "searchMethod prefix",
+        "searchType genePred",
+        "termRegex {ensemblProtIdRegex}",
+        "searchPriority {basicEnsemblProtSearchPriority:.5f}",
+        "xrefTable gencodeAttrsV{gencodeVer}",
+        "xrefQuery select transcriptId,proteinId from %s where proteinId like '%s%%'",
+        ""))
 
 def trackHtmlTemplateGen(params):
     """Generate template for track HTML"""
@@ -511,7 +619,7 @@ def getTags(orgHgDb, gencodeVer):
 class GencodeParams(object):
     """parameters to format info output files, base on GENCODE release.  Base
     priorities are the start point for generating actually priorities using
-    the version number.
+    the version number.  Logic on what to include is here.
     """
     def __init__(self, orgName, orgHgDb, gencodeVer, ensemblVer, gencodeDate,
                  superTrackBasePriority, searchBasePriority,
@@ -527,6 +635,8 @@ class GencodeParams(object):
             self.orgGrcRel = "GRCh37"
         elif orgHgDb == "mm10":
             self.orgGrcRel = "GRCm38"
+        elif orgHgDb == "mm39":
+            self.orgGrcRel = "GRCm39"
         else:
             raise Exception("not a GENCODE hgdb: {}".format(orgHgDb))
         self.gencodeVer = gencodeVer
@@ -584,6 +694,11 @@ class GencodeParams(object):
         else:
             self.displayHtml = "../../gencodeDisplay1.shared.html"
 
+        # GENCODE V35 was switch to using hgGene rather than hgc.  hgc
+        # is still support for checking initial import.  lift doesn't use
+        # hgc
+        self.isHgGene = (self.orgGrcRel == "GRCh38") and (self.numVersion >= 35)
+
     def nextPriority(self):
         """allocated the next search priority"""
         p = self.searchPriority + self.nextPriorityOff
@@ -591,7 +706,7 @@ class GencodeParams(object):
         return p
 
     def getTrackDbFileName(self, ext):
-        return os.path.join(self.orgName, self.orgHgDb, "gencodeV{}.{}".format(self.gencodeVer, ext))
+        return os.path.join(self.orgName, self.orgHgDb, "gencodeCoreV{}.{}".format(self.gencodeVer, ext))
 
     def isHuman(self):
         return self.orgName == "human"
@@ -638,24 +753,27 @@ def writePart(fh, templ, params):
     "output one section, formatting params"
     fh.write(templ.format(**vars(params)))
 
-def generateRaFile(params):
+def generateRaFile(params, addToGit):
     raFile = params.getTrackDbFileName("ra")
     print("generating {}".format(raFile))
+    genFunc = trackDbTemplateGenPostHgGene if params.isHgGene else trackDbTemplateGenNonHgGene
     with open(raFile, "w") as fh:
-        for part in trackDbTemplateGen(params):
+        for part in genFunc(params):
             writePart(fh, part, params)
-    gitAdd(raFile)
+    if addToGit:
+        gitAdd(raFile)
 
-def generateHtmlFile(params):
+def generateHtmlFile(params, addToGit):
     htmlFile = params.getTrackDbFileName("html")
     print("generating {}".format(htmlFile))
     with open(htmlFile, "w") as fh:
         for part in trackHtmlTemplateGen(params):
             writePart(fh, part, params)
-    gitAdd(htmlFile)
+    if addToGit:
+        gitAdd(htmlFile)
 
 def generateJoinerFile(params):
-    joinerFile = os.path.expanduser("~/tmp/gencodeV{}.joiner".format(params.gencodeVer))
+    joinerFile = os.path.expanduser("~/tmp/gencodeCoreV{}.joiner".format(params.gencodeVer))
     print("generating {}".format(joinerFile))
     with open(joinerFile, "w") as joinerFh:
         for part in joinerCheckTemplateGen(params):
@@ -663,12 +781,14 @@ def generateJoinerFile(params):
 
 def gencodeGenerateTrackDbs(opts):
     params = getGencodeParams(opts.hgDb, opts.gencodeVer, opts.ensemblVer, opts.gencodeDate)
-    generateRaFile(params)
-    generateHtmlFile(params)
+    generateRaFile(params, not opts.noGit)
+    generateHtmlFile(params, not opts.noGit)
     generateJoinerFile(params)
 
 def parseArgs():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--noGit", action="store_true",
+                        help="do not add generated files to git")
     parser.add_argument("hgDb", help="UCSC database")
     parser.add_argument("gencodeVer", help="GENCODE version number ")
     parser.add_argument("ensemblVer", help="Ensembl version number ")
