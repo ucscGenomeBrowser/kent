@@ -5,7 +5,7 @@
 #ifndef GENCODEATTRS_H
 #define GENCODEATTRS_H
 
-#define GENCODEATTRS_NUM_COLS 10
+#define GENCODEATTRS_NUM_COLS 14
 
 extern char *gencodeAttrsCommaSepFieldNames;
 
@@ -16,13 +16,17 @@ struct gencodeAttrs
     char *geneId;	/* Gene identifier */
     char *geneName;	/* Gene name */
     char *geneType;	/* BioType of gene */
+    char *unused1;	/* unused (was geneStatus in wgGencode tracks) */
     char *transcriptId;	/* Transcript identifier */
     char *transcriptName;	/* Transcript name */
     char *transcriptType;	/* BioType of transcript */
+    char *unused2;	/* unused (was transcriptStatus in wgGencode tracks) */
+    char *unused3;	/* unused (was havanaGeneId in wgGencode tracks) */
+    char *unused4;	/* unused (was havanaTranscriptId in wgGencode tracks) */
     char *ccdsId;	/* CCDS identifier if transcript is in CCDS */
     int level;	/* GENCODE level: 1 = experimental confirmed, 2 = manual, 3 = automated */
-    char *proteinId;	/* Protein identifier (not loaded on many older versions of GENCODE) */
     char *transcriptClass;	/* high level type of transcript */
+    char *proteinId;	/* Protein identifier (not loaded on many older versions of GENCODE) */
     };
 
 void gencodeAttrsStaticLoad(char **row, struct gencodeAttrs *ret);
