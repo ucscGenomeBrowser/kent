@@ -277,7 +277,7 @@ _EOF_
       $bossScript->add(<<_EOF_
 hgsql -e 'INSERT INTO trackVersion \\
     (db, name, who, version, updateTime, comment, source, dateReference) \\
-    VALUES("\$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
+    VALUES("$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
 	"identical to previous version $previousEnsVersion", \\
 	"identical to previous version $previousEnsVersion", \\
 	"$ensVersionDateReference" );' hgFixed
@@ -404,7 +404,7 @@ _EOF_
       $bossScript->add(<<_EOF_
 hgsql -e 'INSERT INTO trackVersion \\
     (db, name, who, version, updateTime, comment, source, dateReference) \\
-    VALUES("\$db", "vegaGene", "$ENV{'USER'}", "$ensVersion", now(), \\
+    VALUES("$db", "vegaGene", "$ENV{'USER'}", "$ensVersion", now(), \\
 	"with peptides $ensPepFile", \\
 	"$ensGtfUrl", \\
 	"$ensVersionDateReference" );' hgFixed
@@ -414,7 +414,7 @@ _EOF_
       $bossScript->add(<<_EOF_
 hgsql -e 'INSERT INTO trackVersion \\
     (db, name, who, version, updateTime, comment, source, dateReference) \\
-    VALUES("\$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
+    VALUES("$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
 	"with peptides $ensPepFile", \\
 	"$ensGtfUrl", \\
 	"$ensVersionDateReference" );' hgFixed
@@ -697,7 +697,7 @@ export db="$db"
 rm -f $gpArchiveDir/\$db.ensGene.v$ensVersion.gtf.gz
 rm -f $gpArchiveDir/\$db.ensGene.v$ensVersion.genePred.gz
 ln -s `pwd`/process/\$db.ensGene.v$ensVersion.gtf.gz  $gpArchiveDir/
-ln -s `pwd`/process/\$db.allGenes.genePred.gz  $gpArchiveDir/\$db.ensGene.v$ensVersion.genePred.gz
+ln -s `pwd`/process/\$db.allGenes.gp.gz  $gpArchiveDir/\$db.ensGene.v$ensVersion.genePred.gz
 rm -f $gpGeneDir/\$db.ensGene.gtf.gz
 ln -s `pwd`/process/\$db.ensGene.v$ensVersion.gtf.gz  $gpGeneDir/\$db.ensGene.gtf.gz
 _EOF_
