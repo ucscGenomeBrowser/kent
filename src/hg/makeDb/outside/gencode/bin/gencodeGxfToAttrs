@@ -32,6 +32,8 @@ into the table.
                         help="""write tags to this file""")
     return parser.parse_args()
 
+unused = ""
+
 def emptyIfNone(v):
     return v if v is not None else ""
 
@@ -51,11 +53,11 @@ class Transcript:
     tags: set
 
     def writeAttrs(self, fh):
-        "must match autoSql"
-        fileOps.prRowv(fh, self.geneId, self.geneName, self.geneType,
+        """must match autoSql, which includes unused columns to match old table"""
+        fileOps.prRowv(fh, self.geneId, self.geneName, self.geneType, unused,
                        self.transcriptId, self.transcriptName, self.transcriptType,
-                       emptyIfNone(self.ccdsId), self.level, emptyIfNone(self.proteinId),
-                       self.transcriptClass)
+                       unused, unused, unused, emptyIfNone(self.ccdsId), self.level,
+                       self.transcriptClass, emptyIfNone(self.proteinId))
 
     def writeTsl(self, fh):
         fileOps.prRowv(fh, self.transcriptId, self.transcriptSupportLevel)
@@ -156,8 +158,9 @@ class GencodeGxfToAttrs(object):
             self.transcripts[transId].writeAttrs(fh)
 
     def writeAttrsTsv(self, fh):
-        fileOps.prRowv(fh, "geneId", "geneName", "geneType", "transcriptId", "transcriptName",
-                       "transcriptType", "ccdsId", "level", "proteinId", "transcriptClass")
+        fileOps.prRowv(fh, "geneId", "geneName", "geneType", "unused1",
+                       "transcriptId", "transcriptName", "unused2", "unused3", "unused4",
+                       "transcriptType", "ccdsId", "level", "transcriptClass", "proteinId")
         self.writeAttrs(fh)
 
     def writeTsls(self, fh):
