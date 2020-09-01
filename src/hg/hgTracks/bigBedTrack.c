@@ -506,12 +506,27 @@ struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, track->tdb) ;
 if (compositeChildHideEmptySubtracks(cart, track->tdb, NULL, NULL))
    labelTrackAsHideEmpty(track);
 
+// mouseOvers can be built constructed via trackDb settings instead
+// of embedded directly in bigBed
+char *mouseOverPattern = NULL;
+char **fieldNames = NULL;
+if (!mouseOverIdx)
+    {
+    mouseOverPattern = cartOrTdbString(cart, track->tdb, "mouseOver", NULL);
+    AllocArray(fieldNames, bbi->fieldCount);
+    struct slName *field = NULL, *fields = bbFieldNames(bbi);
+    int i =  0;
+    for (field = fields; field != NULL; field = field->next)
+        fieldNames[i++] = field->name;
+    }
+
 // a fake item that is the union of the items that span the current  window
 struct linkedFeatures *spannedLf = NULL;
 unsigned filtered = 0;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     struct linkedFeatures *lf = NULL;
+    char *bedRow[bbi->fieldCount];
     if (sameString(track->tdb->type, "bigPsl"))
 	{
 	char *seq, *cds;
@@ -537,7 +552,6 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     else
 	{
         char startBuf[16], endBuf[16];
-        char *bedRow[bbi->fieldCount];
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
         if (bigBedFilterInterval(bedRow, filters))
             {
@@ -575,7 +589,10 @@ for (bb = bbList; bb != NULL; bb = bb->next)
                 // item would be. If multiple items are merged then the labels and mouseOvers
                 // will get fixed up later
                 tmp->label = bigBedMakeLabel(track->tdb, track->labelColumns,  bb, chromName);
-                tmp->mouseOver   = restField(bb, mouseOverIdx);
+                if (mouseOverIdx > 0)
+                    tmp->mouseOver = restField(bb, mouseOverIdx);
+                else if (mouseOverPattern)
+                    tmp->mouseOver = replaceFieldInPattern(mouseOverPattern, bbi->fieldCount, fieldNames, bedRow);
                 slAddHead(&spannedLf, tmp);
                 }
             continue; // lf will be NULL, but these items aren't "filtered", they're merged
@@ -597,8 +614,10 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
     if (lf->mouseOver == NULL)
         {
-        char* mouseOver = restField(bb, mouseOverIdx);
-        lf->mouseOver   = mouseOver; // leaks some memory, cloneString handles NULL ifself 
+        if (mouseOverIdx > 0)
+            lf->mouseOver = restField(bb, mouseOverIdx);
+        else if (mouseOverPattern)
+            lf->mouseOver = replaceFieldInPattern(mouseOverPattern, bbi->fieldCount, fieldNames, bedRow);
         }
     slAddHead(pLfList, lf);
     }
