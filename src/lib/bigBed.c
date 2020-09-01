@@ -532,6 +532,23 @@ if (bbi)
 return NULL;
 }
 
+struct slName *bbFieldNames(struct bbiFile *bbi)
+/* Get list of fields in bigBed */
+{
+if (!bbi)
+    return NULL;
+struct asObject *as = bigBedAs(bbi);
+if (!as)
+    return NULL;
+struct asColumn *col;
+struct slName *colNames = NULL;
+for (col = as->columnList; col; col = col->next)
+    slNameAddHead(&colNames, col->name);
+asObjectFree(&as);
+slReverse(&colNames);
+return colNames;
+}
+
 int bbFieldIndex(struct bbiFile *bbi, char* fieldName)
 /* return the index of a given field */
 {

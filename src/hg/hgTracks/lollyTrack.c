@@ -232,6 +232,18 @@ int trackHeight = tg->lollyCart->height;
 struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, tg->tdb);
 char *mouseOverField = cartOrTdbString(cart, tg->tdb, "mouseOverField", NULL);
 int mouseOverIdx = bbExtraFieldIndex(bbi, mouseOverField) ;
+
+char *mouseOverPattern = NULL;
+char **fieldNames = NULL;
+if (!mouseOverIdx)
+    {
+    mouseOverPattern = cartOrTdbString(cart, tg->tdb, "mouseOver", NULL);
+    AllocArray(fieldNames, bbi->fieldCount);
+    struct slName *field = NULL, *fields = bbFieldNames(bbi);
+    int i =  0;
+    for (field = fields; field != NULL; field = field->next)
+        fieldNames[i++] = field->name;
+    }
                     
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
@@ -268,6 +280,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     extern char* restField(struct bigBedInterval *bb, int fieldIdx) ;
     if (mouseOverIdx > 0)
         pop->mouseOver   = restField(bb, mouseOverIdx);
+    else if (mouseOverPattern)
+        pop->mouseOver = replaceFieldInPattern(mouseOverPattern, bbi->fieldCount, fieldNames, bedRow);
 
     if (bbi->fieldCount > 8)
         pop->color = itemRgbColumn(bedRow[8]);
