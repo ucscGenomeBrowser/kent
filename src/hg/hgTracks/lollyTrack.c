@@ -232,14 +232,30 @@ int trackHeight = tg->lollyCart->height;
 struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, tg->tdb);
 char *mouseOverField = cartOrTdbString(cart, tg->tdb, "mouseOverField", NULL);
 int mouseOverIdx = bbExtraFieldIndex(bbi, mouseOverField) ;
+
+char *mouseOverPattern = NULL;
+char **fieldNames = NULL;
+if (!mouseOverIdx)
+    {
+    mouseOverPattern = cartOrTdbString(cart, tg->tdb, "mouseOver", NULL);
+    AllocArray(fieldNames, bbi->fieldCount);
+    struct slName *field = NULL, *fields = bbFieldNames(bbi);
+    int i =  0;
+    for (field = fields; field != NULL; field = field->next)
+        fieldNames[i++] = field->name;
+    }
                     
+int filtered = 0;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
 
     // throw away items that don't pass the filters
     if (!bigBedFilterInterval(bedRow, filters))
+        {
+        filtered++;
         continue;
+        }
 
     // clip out lollies that aren't in our display range
     double val = atof(bedRow[lollyField - 1]);
@@ -268,6 +284,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     extern char* restField(struct bigBedInterval *bb, int fieldIdx) ;
     if (mouseOverIdx > 0)
         pop->mouseOver   = restField(bb, mouseOverIdx);
+    else if (mouseOverPattern)
+        pop->mouseOver = replaceFieldInPattern(mouseOverPattern, bbi->fieldCount, fieldNames, bedRow);
 
     if (bbi->fieldCount > 8)
         pop->color = itemRgbColumn(bedRow[8]);
@@ -277,6 +295,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if (val < minVal)
         minVal = val;
     }
+if (filtered)
+   labelTrackAsFilteredNumber(tg, filtered);
 
 if (count == 0)
     lollyCart->upperLimit = lollyCart->lowerLimit = NAN; // no lollies in range

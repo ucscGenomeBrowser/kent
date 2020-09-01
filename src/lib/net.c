@@ -15,6 +15,7 @@
 #include "linefile.h"
 #include "base64.h"
 #include "cheapcgi.h"
+#include "htmlPage.h"
 #include "https.h"
 #include "sqlNum.h"
 #include "obscure.h"
@@ -1546,7 +1547,7 @@ boolean netSkipHttpHeaderLinesWithRedirect(int sd, char *url, char **redirectedU
  * This is meant to be able work even with a re-passable stream handle,
  * e.g. can pass it to the pipes routines, which means we can't
  * attach a linefile since filling its buffer reads in more than just the http header.
- * Handles 300, 301, 302, 303, 307, 308 http redirects by setting *redirectedUrl to
+ * Handles 301, 302, 307, 308 http redirects by setting *redirectedUrl to
  * the new location. */
 {
 char buf[8192];
@@ -1793,20 +1794,31 @@ while (TRUE)
 	    warn("code 30x redirects: exceeded limit of 5 redirects, %s", newUrl);
 	    success = FALSE;
 	    }
-	else if (!startsWith("http://",newUrl) 
-              && !startsWith("https://",newUrl))
-	    {
-	    warn("redirected to non-http(s): %s", newUrl);
-	    success = FALSE;
-	    }
 	else 
 	    {
-	    newUrl = transferParamsToRedirectedUrl(url, newUrl);		
-	    sd = netUrlOpen(newUrl);
-	    if (sd < 0)
+	    // path may be relative
+	    if (!hasProtocol(newUrl))
 		{
-		warn("Couldn't open %s", newUrl);
+		char *newUrl2 = expandUrlOnBase(url, newUrl);
+		freeMem(newUrl);
+		newUrl = newUrl2;
+		}
+	    if (!startsWith("http://",newUrl) 
+              && !startsWith("https://",newUrl))
+		{
+		warn("redirected to non-http(s): %s", newUrl);
 		success = FALSE;
+		}
+	    else
+		{
+		// transfer password and byteranges if any
+		newUrl = transferParamsToRedirectedUrl(url, newUrl);
+		sd = netUrlOpen(newUrl);
+		if (sd < 0)
+		    {
+		    warn("Couldn't open %s", newUrl);
+		    success = FALSE;
+		    }
 		}
 	    }
 	}

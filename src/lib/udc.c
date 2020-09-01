@@ -34,6 +34,7 @@
 #include "sig.h"
 #include "net.h"
 #include "cheapcgi.h"
+#include "htmlPage.h"
 #include "udc.h"
 #include "hex.h"
 #include <dirent.h>
@@ -529,6 +530,8 @@ while (TRUE)
 	status = netUrlFakeHeadByGet(url, hash);
 	if (status == 206) 
 	    break;
+	if (status == 200)  // helps get more info to user
+	    break;
 	}
     if (status != 301 && status != 302 && status != 307 && status != 308)
 	return FALSE;
@@ -539,7 +542,23 @@ while (TRUE)
 	return FALSE;
 	}
     char *newUrl = hashFindValUpperCase(hash, "Location:");
-    retInfo->ci.redirUrl = cloneString(newUrl);
+     if (!newUrl)
+	{
+	warn("code %d redirects: redirect location missing, %s", status, url);
+	return FALSE;
+	}
+
+    // path may be relative
+    if (hasProtocol(newUrl))
+	{
+        newUrl = cloneString(newUrl);
+	}
+    else
+	{
+	newUrl = expandUrlOnBase(url, newUrl);
+	}
+
+    retInfo->ci.redirUrl = newUrl;
     url = transferParamsToRedirectedUrl(url, newUrl);		
     hashFree(&hash);
     }
