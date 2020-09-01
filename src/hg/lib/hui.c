@@ -9381,6 +9381,40 @@ slReverse(&list);
 return list;
 }
 
+static struct dyString *subMultiField(char *pattern, int fieldCount,
+                                 char *in[], char *out[])
+/* Substitute $in with out values in pattern */
+{
+int i;
+struct dyString *s = newDyString(256), *d = NULL;
+dyStringAppend(s, pattern);
+for (i=0; i<fieldCount; ++i)
+    {
+    if (out[i]==NULL)
+        continue;
+
+    // prefix field with $
+    char *field = in[i];
+    char *spec = needMem(strlen(field) + 2);
+    *spec = '$';
+    strcpy(spec + 1, field);
+
+    d = dyStringSub(s->string, spec, out[i]);
+    dyStringFree(&s);
+    freeMem(spec);
+    s = d;
+    d = NULL;
+    }
+return s;
+}
+
+char *replaceFieldInPattern(char *pattern, int fieldCount, char **fieldNames, char **fieldVals)
+/* Replace $fieldName in pattern with value.  Used in trackDb mouseOver setting */
+{
+struct dyString *ds = subMultiField(pattern, fieldCount, fieldNames, fieldVals);
+return dyStringCannibalize(&ds);
+}
+
 static struct dyString *subMulti(char *orig, int subCount,
                                  char *in[], char *out[])
 /* Perform multiple substitions on orig. */

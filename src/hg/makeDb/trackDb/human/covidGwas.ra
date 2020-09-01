@@ -9,7 +9,7 @@ maxHeightPixels 64:90:128
 pennantIcon New red
 type bigLolly 9 +
 lollyField 18
-mouseOverField _mouseOver
+mouseOver $name $ref/$alt effect $effectSize pval $pValue studies $sourceCount
 maxItems 500000
 filter.sourceCount 1
 filterLabel.sourceCount Minimum number of studies

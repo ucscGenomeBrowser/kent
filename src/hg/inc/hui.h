@@ -1535,6 +1535,9 @@ char *replaceInUrl(char *url, char *idInUrl, struct cart *cart, char *db, char *
                         int winStart, int winEnd, char *track, boolean encode, struct slPair *fields) ;
 /* replace $$ in url with idInUrl. Supports many other wildchards, and custom fields $<field> */
 
+char *replaceFieldInPattern(char *pattern, int fieldCount, char **fieldNames, char **fieldVals);
+/* Replace $fieldName in pattern with value.  Used in trackDb mouseOver setting */
+
 struct slPair *buildFieldList(struct trackDb *tdb, char *trackDbVar, struct asObject *as);
 /* Build up a hash of a list of fields in an AS file. */
 
