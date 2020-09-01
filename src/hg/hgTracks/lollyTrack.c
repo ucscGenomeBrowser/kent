@@ -245,13 +245,17 @@ if (!mouseOverIdx)
         fieldNames[i++] = field->name;
     }
                     
+int filtered = 0;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
 
     // throw away items that don't pass the filters
     if (!bigBedFilterInterval(bedRow, filters))
+        {
+        filtered++;
         continue;
+        }
 
     // clip out lollies that aren't in our display range
     double val = atof(bedRow[lollyField - 1]);
@@ -291,6 +295,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if (val < minVal)
         minVal = val;
     }
+if (filtered)
+   labelTrackAsFilteredNumber(tg, filtered);
 
 if (count == 0)
     lollyCart->upperLimit = lollyCart->lowerLimit = NAN; // no lollies in range
