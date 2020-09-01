@@ -161,6 +161,15 @@ join -v 2 hgFixed.asmEquivalent.tsv existing.2020-08-31.tsv | wc -l
 join -v 1 hgFixed.asmEquivalent.tsv existing.2020-08-31.tsv | wc
          20     140    1784
 
+### There should be no duplicate equivalents:
+cut -f1,2 hgFixed.asmEquivalent.tsv | sort | uniq -c | sort -rn | head
+      1 zonAlb1 Zonotrichia_albicollis.Zonotrichia_albicollis-1.0.1
+      1 zonAlb1 GCF_000385455.1_Zonotrichia_albicollis-1.0.1
+      1 zonAlb1 GCA_000385455.1_Zonotrichia_albicollis-1.0.1
+      1 xipMac1 GCA_000241075.1_Xiphophorus_maculatus-4.4.2
+      1 xenTro9 Xenopus_tropicalis.Xenopus_tropicalis_v9.1
+... etc ...
+
 #### To load up new table contents:
 hgLoadSqlTab hgFixed asmEquivalent ~/kent/src/hg/lib/asmEquivalent.sql \
    hgFixed.asmEquivalent.tsv
