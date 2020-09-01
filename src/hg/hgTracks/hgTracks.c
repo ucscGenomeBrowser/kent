@@ -10211,31 +10211,33 @@ void setupHotkeys(boolean gotExtTools)
 struct dyString *dy = dyStringNew(1024);
 // wire the keyboard hotkeys
 
+// the javascript click handler does not seem to call the submit handler, so I'm calling submit manually, every time.
+
 // left
-dyStringPrintf(dy,"Mousetrap.bind('ctrl+j', function() { $('input[name=\"hgt.left1\"]').click(); return false; }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('j', function() { $('input[name=\"hgt.left2\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('J', function() { $('input[name=\"hgt.left3\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('ctrl+j', function() { $('input[name=\"hgt.left1\"]').submit().click(); return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('j', function() { $('input[name=\"hgt.left2\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('J', function() { $('input[name=\"hgt.left3\"]').submit().click() }); \n");
 
 // right
-dyStringPrintf(dy,"Mousetrap.bind('ctrl+l', function() { $('input[name=\"hgt.right1\"]').click(); return false; }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('l', function() { $('input[name=\"hgt.right2\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('L', function() { $('input[name=\"hgt.right3\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('ctrl+l', function() { $('input[name=\"hgt.right1\"]').submit().click(); return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('l', function() { $('input[name=\"hgt.right2\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('L', function() { $('input[name=\"hgt.right3\"]').submit().click() }); \n");
 
 // zoom in
-dyStringPrintf(dy,"Mousetrap.bind('ctrl+i', function() { $('input[name=\"hgt.in1\"]').click(); return false; }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('i', function() { $('input[name=\"hgt.in2\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('I', function() { $('input[name=\"hgt.in3\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('b', function() { $('input[name=\"hgt.inBase\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('ctrl+i', function() { $('input[name=\"hgt.in1\"]').submit().click(); return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('i', function() { $('input[name=\"hgt.in2\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('I', function() { $('input[name=\"hgt.in3\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('b', function() { $('input[name=\"hgt.inBase\"]').submit().click() }); \n");
 
 // zoom out
 dyStringPrintf(dy,"Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').click(); return false; }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').click(); return false; }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').submit().click(); return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('1', function() { zoomTo(50);} ); \n");
 dyStringPrintf(dy,"Mousetrap.bind('2', function() { zoomTo(500);} ); \n");
 dyStringPrintf(dy,"Mousetrap.bind('3', function() { zoomTo(5000);} ); \n");
@@ -10244,17 +10246,17 @@ dyStringPrintf(dy,"Mousetrap.bind('5', function() { zoomTo(500000);} ); \n");
 dyStringPrintf(dy,"Mousetrap.bind('6', function() { zoomTo(5000000);} ); \n");
 
 // buttons
-dyStringPrintf(dy,"Mousetrap.bind('c f', function() { $('input[name=\"hgTracksConfigPage\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('t s', function() { $('input[name=\"hgt_tSearch\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('h a', function() { $('input[name=\"hgt.hideAll\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('d t', function() { $('input[name=\"hgt.reset\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('d o', function() { $('input[name=\"hgt.defaultImgOrder\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('c f', function() { $('input[name=\"hgTracksConfigPage\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('t s', function() { $('input[name=\"hgt_tSearch\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('h a', function() { $('input[name=\"hgt.hideAll\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('d t', function() { $('input[name=\"hgt.reset\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('d o', function() { $('input[name=\"hgt.defaultImgOrder\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('c t', function() { document.customTrackForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('t h', function() { document.trackHubForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('t c', function() { document.editHubForm.submit();return false; }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').submit().click(); }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('v d', gotoGetDnaPage); \n");
 
 // highlight
