@@ -33709,16 +33709,20 @@ hgLoadBed hg19 -noBin -tab -type=bed6+4 \
     ln -sf `pwd`/$pre.bb /gbdb/hg19/ncbiRefSeq/$pre.bb
 
 #############################################################################
-
 # clinvarSub track  IN PROGRESS BRANEY 8/4/20
 mkdir /cluster/data/hg19/bed/clinvarSub
 cd /cluster/data/hg19/bed/clinvarSub
 bigBedToBed /gbdb/hg19/bbi/clinvar/clinvarMain.bb stdout | tawk '{print $40, $1,$2,$2,$4}' | sort > sort.main.bed
 hgsql hg19 -Ne "select varId,clinSign from clinvarSub" | sort -n  > clinSign.txt
-join -t $'\t' sort.main.bed clinSign.txt   | uniq -c | sed 's/^ *//' | sed 's/ /\t/' | tawk '{print $3,$4,$5, $6, $7, $1}' | sort -k1,1 -k2,2n > sorted.bed
+
+join -t $'\t' sort.main.bed clinSign.txt | cut -f 2- | sort -k1,1 -k2,2n -k5,5 | tawk -f gawk   | tawk -f fawk > tmp1
+tawk '{print $1":"$2 + 1"-"$3"<BR>Variants (submissions):"$11}' tmp1 > tmp2
+paste tmp1 tmp2 > bigBedInput.bed
+
+#join -t $'\t' sort.main.bed clinSign.txt   | uniq -c | sed 's/^ *//' | sed 's/ /\t/' | tawk '{print $3,$4,$5, $6, $7, $1}' | sort -k1,1 -k2,2n > sorted.bed
 # fawk written by "hand" 
-tawk -f fawk sorted.bed > bigBedInput.bed
-bedToBigBed -tab bigBedInput.bed /cluster/data/hg19/chrom.sizes clinsub.bb
+#tawk -f fawk sorted.bed > bigBedInput.bed
+bedToBigBed -as=clinsub.as -type=bed9+2 -tab bigBedInput.bed /cluster/data/hg19/chrom.sizes clinsub.bb
 ln -s `pwd`/clinsub.bb /gbdb/hg19
 
 #############################################################################

@@ -3232,7 +3232,10 @@ if (html != NULL && html[0] != 0)
     // Wrap description html in div with limited width, so when the page is very wide
     // due to long details, the user doesn't have to scroll right to read the description.
     puts("<div class='readableWidth'>");
-    printHtmlAddRelated(tdb, html);
+    if (trackHubDatabase(database))
+        puts(html);
+    else
+        printHtmlAddRelated(tdb, html);
     puts("</div>");
     }
 hPrintf("<BR>\n");
@@ -4366,8 +4369,7 @@ else if (wordCount > 0)
         }
     else if (sameString(type, "bigLolly") )
 	{
-	int num = 12;
-        genericBigBedClick(conn, tdb, item, start, end, num);
+        genericBigBedClick(conn, tdb, item, start, end, 0);
 	}
     else if (sameString(type, "bigDbSnp") )
 	{

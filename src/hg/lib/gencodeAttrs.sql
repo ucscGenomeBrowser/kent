@@ -5,20 +5,25 @@
 
 #Basic set of attributes associated with all Gencode transcripts.
 CREATE TABLE gencodeAttrs (
-    geneId varchar(255) not null,	# Gene identifier
-    geneName varchar(255) not null,	# Gene name
-    geneType varchar(255) not null,	# BioType of gene
-    transcriptId varchar(255) not null,	# Transcript identifier
-    transcriptName varchar(255) not null,	# Transcript name
-    transcriptType varchar(255) not null,	# BioType of transcript
-    ccdsId varchar(255) not null,	# CCDS identifier if transcript is in CCDS
-    level int not null,	# GENCODE level: 1 = experimental confirmed, 2 = manual, 3 = automated
-    proteinId varchar(255) not null,	# Protein identifier (not loaded on many older versions of GENCODE)
-    transcriptClass varchar(255) not null,	# high level type of transcript
+    geneId varchar(255) default '',	# Gene identifier
+    geneName varchar(255) default '',	# Gene name
+    geneType varchar(255) default '',	# BioType of gene
+    unused1 varchar(255) default '',	# unused (was geneStatus in wgGencode tracks)
+    transcriptId varchar(255) default '',	# Transcript identifier
+    transcriptName varchar(255) default '',	# Transcript name
+    transcriptType varchar(255) default '',	# BioType of transcript
+    unused2 varchar(255) default '',	# unused (was transcriptStatus in wgGencode tracks)
+    unused3 varchar(255) default '',	# unused (was havanaGeneId in wgGencode tracks)
+    unused4 varchar(255) default '',	# unused (was havanaTranscriptId in wgGencode tracks)
+    ccdsId varchar(255) default '',	# CCDS identifier if transcript is in CCDS
+    level int default 0,	# GENCODE level: 1 = experimental confirmed, 2 = manual, 3 = automated
+    transcriptClass varchar(255) default '',	# high level type of transcript
+    proteinId varchar(255) default '',	# Protein identifier (not loaded on many older versions of GENCODE)
               #Indices
+    PRIMARY KEY(transcriptId),
+    index(transcriptName),
     index(geneId),
     index(geneName),
-    PRIMARY KEY(transcriptId),
     index(ccdsId),
     index(proteinId)
 );

@@ -257,6 +257,8 @@ labelOnFeature bed bigBed
 labelSeparator bigBed bigPsl bigGenePred
 lollipopField bigBed bigLolly
 lollyField bigBed bigLolly
+lollyMaxSize bigBed bigLolly
+lollySizeField bigBed bigLolly
 longLabel *
 longlabel genePred
 longLabelClip *
@@ -279,6 +281,7 @@ maxWindowToDraw bam big* rmsk joinedRmsk bed narrowPeak broadPeak bedlogR genepr
 maxWindowToQuery bigWig bed bedlogR
 metadata *
 mouseOverField big*
+mouseOver bigLolly
 mergeSpannedItems bigBed
 mgiUrl bed
 mgiUrlLabel bed
@@ -305,6 +308,7 @@ noScoreFilter bedGraph bed bedLogR gvf bedDetail bigBed bigPsl interact bigInter
 noParentConfig bed bigBed
 notNCBI bed
 noGenomeReason *
+noStems bigBed bigLolly
 ococci bed
 offset customTracks
 oldToNew genePred
@@ -544,3 +548,4 @@ yalePseudoUrl *
 yLinOnOff wigMaf
 yLineMark *
 yLineOnOff *
+yNumLabels bigBed bigLolly

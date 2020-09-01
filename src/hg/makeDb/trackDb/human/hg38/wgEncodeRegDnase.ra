@@ -1,7 +1,7 @@
 # DNase from ENCODE, processed by UCSC ENCODE Analysis Pipeline
 
 track wgEncodeRegDnaseClustered
-superTrack wgEncodeReg dense
+superTrack wgEncodeReg hide
 shortLabel DNase Clusters
 longLabel DNase I Hypersensitivity Peak Clusters from ENCODE (95 cell types)
 inputTableFieldDisplay cellType treatment

@@ -4,3 +4,16 @@ longLabel clinsub
 bigDataUrl /gbdb/hg19/clinsub.bb
 type bigLolly
 group varRep
+lollySizeField 10
+yNumLabels off
+noStems on
+configurable off
+yLabel.0 0 on 150,150,150 OTH
+yLabel.1 1 on 150,150,150 B
+yLabel.2 2 on 150,150,150 LB
+yLabel.3 3 on 150,150,150 VUS
+yLabel.4 4 on 150,150,150 LP
+yLabel.5 5 on 150,150,150 P
+lollyMaxSize 10
+viewLimits 0:5
+mouseOverField _mouseOver

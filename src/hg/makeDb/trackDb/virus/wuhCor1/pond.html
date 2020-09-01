@@ -1,39 +1,69 @@
 <H2>Description</H2>
 <P>
-<p>This track shows data from  Pond et al, 2020 <a href = "https://observablehq.com/@spond/natural-selection-analysis-of-sars-cov-2-covid-19">"Natural selection analysis of SARS-CoV-2/COVID-19"</a>
-<p>The authors use several statistical techniques to identify selection sites of interest in SARS-CoV-2 data from GISAID.
+<p>This track shows data from  Pond et al, 2020 <a target="_blank" 
+href = "https://observablehq.com/@spond/natural-selection-analysis-of-sars-cov-2-covid-19">
+"Natural selection analysis of SARS-CoV-2/COVID-19"</a>
+
+<p>The authors use several statistical techniques to identify selection sites of interest in 
+SARS-CoV-2 data from GISAID.
 
 <h2>Display Conventions and Configuration</h2>
 <p> 
-<p>The gray to black colorscale denotes increasing scores given by the authors for selection sites where each site has the potential to receive one additional point for each of the eight categories.  
+<p>The gray to black colorscale denotes increasing scores given by the authors for 
+selection sites where each site has the potential to receive one additional point 
+for each of the eight categories.</p>  
 
-<p>Positive Selection is described as follows:"on average along interior tree branches, this site has a dN/dS>1 is accumulating non-synonyomous changes (some of which might have a functional impact, but most probably don't) faster relative to synonymous changes than would be expected under neutral evolution."
+<p><b>Positive Selection</b> is described as follows: "on average along interior 
+tree branches, this site has a dN/dS&gt;1 is accumulating non-synonymous changes (
+some of which might have a functional impact, but most probably don't) faster 
+relative to synonymous changes than would be expected under neutral evolution."</p>
 
-<p>Negative Selection is described as follows:"on average along interior tree branches, this site has a dN/dS<1, meaning that it conserved, i.e. non-synonymous changes might be selected against. Note that sites with no changes (i.e. perfectly conserved sites) cannot be detected by dN/dS based methods"
+<p><b>Negative Selection</b> is described as follows: "on average along interior 
+tree branches, this site has a dN/dS&lt;1, meaning that it conserved, i.e. 
+non-synonymous changes might be selected against. Note that sites with no 
+changes (i.e. perfectly conserved sites) cannot be detected by dN/dS based methods"</p>
 
-<p>Multiple Clades is described as follows:"If a site belongs to this category, then at least two internal branches in the tree are inferred to be subject to positive selection, implying several selective events (not just a single introduction)"
+<p><b>Multiple Clades</b> is described as follows: "If a site belongs to this 
+category, then at least two internal branches in the tree are inferred to be 
+subject to positive selection, implying several selective events (not just a 
+single introduction)"</p>
 
-<p>Increasing frequency is described as follows:"When a site belongs to this category, alternative amino-acids at this site has an increasing frequency trend (based on applying the Jonckheere-Terpstra test to 10-day intervals)"
+<p><b>Increasing frequency</b> is described as follows: "When a site belongs to 
+this category, alternative amino-acids at this site has an increasing frequency 
+trend (based on applying the Jonckheere-Terpstra test to 10-day intervals)"</p>
 
-<p>predicted CTL epitopes is described as follows:"This site belongs to one or more CTL linear epitopes that are predicted to be recognized by one or more HLA alleles reported in Campbell et al"
+<p><b>Predicted CTL epitopes</b> is described as follows: "This site belongs to 
+one or more CTL linear epitopes that are predicted to be recognized by one or 
+more HLA alleles reported in Campbell et al"</p>
 
-<p>Intra-host variants is described as follows:"When a site belongs to this category, there is at least one deep sequencing dataset that shows the presence of intra-host variation at the same site at between 2 and 90%."
+<p><b>Intra-host variants</b> is described as follows: "When a site belongs to 
+this category, there is at least one deep sequencing dataset that shows the presence 
+of intra-host variation at the same site at between 2 and 90%."</p>
 
-<p>Unexpected residues is described as follows:"When a site belongs to this category, there is at least one amino-acid present in more than one sequence that was not predicted to occur at this site based on the evolution of other betacoronaviruses. It might indicate evolutionary events that we have not observed in similar viruses before."
+<p><b>Unexpected residues</b> is described as follows: "When a site belongs to 
+this category, there is at least one amino-acid present in more than one 
+sequence that was not predicted to occur at this site based on the evolution 
+of other betacoronaviruses. It might indicate evolutionary events that we 
+have not observed in similar viruses before."</p>
 
-<p>Selected in animals is described as follows:"There is evidence of positive selection or differential selection acting on the bat/pangolin isolates closely related to the SARS-CoV-2 genome based on data from Boni et al"
+<p><b>Selected in animals</b> is described as follows: "There is evidence of 
+positive selection or differential selection acting on the bat/pangolin isolates 
+closely related to the SARS-CoV-2 genome based on data from Boni et al"</p>
 
-<p>New is any site that was recently detected as of June 30th, 2020.  
+<p><b>New</b> is any site that was recently detected as of June 30th, 2020.</p>  
 
-<p>Selection is any site at which positive or negative selection occurs.
+<p><b>Selection</b> is any site at which positive or negative selection occurs.</p>
 
-<p> For representation purposes scores (0-7) have been scaled to 500-1000. 
+<p>For representation purposes scores (0-7) have been scaled to 500-1000.</p>
 
 <h2>Methods</h2>
-<p>The JSON used to generate the Genomic Coordinates of selection sites was parsed and the position, gene, site_in_gene, kind, score, and type fields were used to generate the resulting fields provided for each "kind" provided in the data.
-
+<p>The JSON used to generate the Genomic Coordinates of selection sites was parsed 
+and the position, gene, site_in_gene, kind, score, and type fields were used to 
+generate the resulting fields provided for each "kind" provided in the data.</p>
 
 <h2>References</h2>
-Pond et al, 2020 <a href = "https://observablehq.com/@spond/natural-selection-analysis-of-sars-cov-2-covid-19">"Natural selection analysis of SARS-CoV-2/COVID-19"</a>
+<p>Pond et al, 2020 <a target="_blank" 
+href = "https://observablehq.com/@spond/natural-selection-analysis-of-sars-cov-2-covid-19">
+"Natural selection analysis of SARS-CoV-2/COVID-19"</a></p>
 
-<p>Email nmauldin@ucsc.edu or jferna10@ucsc.edu
+<p>Email nmauldin@ucsc.edu or jferna10@ucsc.edu</p>
