@@ -58,7 +58,7 @@ DBS = \
 	caeSp51 \
 	caeSp71 \
 	caeSp91 \
-	calJac1 calJac3 \
+	calJac1 calJac3 calJac4 \
 	calMil1 \
 	canFam1 canFam2 canFamPoodle1 canFam3 canFam4 canFam5 \
 	casCan1 \
