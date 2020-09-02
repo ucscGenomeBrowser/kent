@@ -5,6 +5,213 @@
 #	Robert's experiments with an automated process.
 #
 ############################################################################
+# ensembl 101 update (DONE - 2020-08-31 - Hiram)
+############################################################################
+# when all done, reset the dateReference:  (DONE - 2020-09-01 - Hiram)
+     # next time, this first one will be 101 at 'aug2020'
+     hgsql -e \
+'update trackVersion set dateReference="jan2020" where name="ensGene" AND version="99";' hgFixed
+     hgsql -e \
+'update trackVersion set dateReference="current" where name="ensGene" AND version="101";' hgFixed
+
+# follow the procedure in assemblyEquivalence/update.2020-08-31.txt
+# to construct equivalence listings.  After that is completed and
+# the hgFixed.asmEquivalent table is reloaded, continue here:
+
+  mkdir /hive/data/outside/ensembl/ensGene/v101
+  cd /hive/data/outside/ensembl/ensGene/v101
+
+  hgsql -N -e 'select destination,source from asmEquivalent where sourceAuthority="ensembl";' hgFixed > ensembl.equivalents.asm.list
+
+# perl scripts to construct the listings for EnsGeneAutomate.pm
+############################################################################
+### ensGeneGtfFileNames_101
+############################################################################
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $ensVer="101";
+
+printf "my %%ensGeneGtfFileNames_%s = (\n", $ensVer;
+
+open (FH, "<ensembl.equivalents.asm.list") or die "can not read ensembl.equivalents.asm.list";
+while (my $line = <FH>) {
+  chomp $line;
+  my ($equiv, $ensName) = split('\s+', $line);
+  my ($ensSpecies, undef) = split('\.', $ensName, 2);
+  printf "'%s' => '%s/%s.%s.gtf.gz',\n", $equiv, lc($ensSpecies), $ensName, $ensVer;
+}
+close (FH);
+printf ");\n";
+
+############################################################################
+### ensGeneFtpPeptideFileNames_101
+############################################################################
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $ensVer="101";
+
+printf "my %%ensGeneFtpPeptideFileNames_%s = (\n", $ensVer;
+
+open (FH, "<ensembl.equivalents.asm.list") or die "can not read ensembl.equivalents.asm.list";
+while (my $line = <FH>) {
+  chomp $line;
+  my ($equiv, $ensName) = split('\s+', $line);
+  my ($ensSpecies, undef) = split('\.', $ensName, 2);
+  printf "'%s' => '%s/pep/%s.pep.all.fa.gz',\n", $equiv, lc($ensSpecies), $ensName;
+}
+close (FH);
+printf ");\n";
+
+############################################################################
+### ensGeneGtfFileNames_101
+############################################################################
+#!/bin/bash
+
+export ensVer="101"
+
+
+awk '{print $NF}' /cluster/home/hiram/kent/src/hg/utils/automation/release.101.MySQL.names | sed -e "s/'//g; s/,//g;" | while read L
+do
+  species=`echo $L | sed -e 's/_core_101_.*//;'`
+  printf "%s\t%s\n" "${species}" "${L}"
+done | sort > species.ensMySQL.txt
+
+./mySqlFileNames.pl | sort > species.MySql.equiv.txt
+
+printf "my %%ensGeneFtpMySqlFileNames_%s = (\n" "${ensVer}"
+
+join -t$'\t' species.MySql.equiv.txt species.ensMySQL.txt \
+  | cut -d$'\t' -f2,4 | tr '\t' "'" | sed -e "s/$/',/;"
+
+printf ");\n"
+
+############################################################################
+### mySqlFileNames.pl
+############################################################################
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $ensVer="101";
+
+open (FH, "<ensembl.equivalents.asm.list") or die "can not read ensembl.equivalents.asm.list";
+while (my $line = <FH>) {
+  chomp $line;
+  my ($equiv, $ensName) = split('\s+', $line);
+  my ($ensSpecies, undef) = split('\.', $ensName, 2);
+  printf "%s\t'%s' => \t'%s_core_%s_x',\n", lc($ensSpecies), $equiv, lc($ensSpecies), $ensVer;
+}
+close (FH);
+
+### Add the output of those scripts to EnsGeneAutomate.pm
+### can not run the update on all the databases
+cd /hive/data/outside/ensembl/ensGene/v101
+
+ensVersions 101 2>&1 | grep -v "NOT FOUND"  | grep "ensembl:101" \
+   | cut -f1 | sed -e "s/UCSC://; s/://;" \
+     | sort -u > ens.101.update.list
+
+sed -e 's#^#./runOne ##;' ens.101.update.list > jobList
+
+############################################################################
+### runOne - script to run a single update give a database name
+############################################################################
+#!/bin/bash
+
+# set -beEu -o pipefail
+
+export ensVer=101
+
+export db=$1
+cd /hive/data/genomes/$db
+
+export rc=0
+
+if [ ! -s "bed/ensGene.${ensVer}/doCleanup.csh" ]; then
+~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl -ensVersion=${ensVer} \
+   $db.ensGene.ra >> ensGene.${ensVer}.log 2>&1
+rc=$?
+
+cp -p ensGene.${ensVer}.log /hive/data/outside/ensembl/ensGene/v${ensVer}/${db}.${ensVer}.log
+fi
+
+exit $rc
+############################################################################
+### running v101 update given jobList
+time ($HOME/kent/src/hg/utils/automation/perlPara.pl 3 jobList) \
+   > do.all.log 2>&1
+
+### catch up with the failed ones.
+### New ones will need /hive/data/genomes/db/db.ensGene.ra files
+### There were very few failures, a couple needed updated db.ensGene.ra
+### files.
+
+ ../checkStatus.sh | grep -v "ALL DONE"
+
+### To create a new ensGene.ra file, for example:
+cd /hive/data/genomes/rheMac10/jkStuff
+
+############################################################################
+### create ensToUcsc.lift file
+############################################################################
+#!/bin/bash
+
+export db="rheMac10"
+export ensSpec="Macaca_mulatta"
+export ensAsmId="Macaca_mulatta.Mmul_10"
+export ensVer="101"
+
+join -t$'\t' ../bed/idKeys/$db.idKeys.txt \
+/hive/data/outside/ensembl/genomes/release-$ensVer/idKeys/$ensSpec/$ensAsmId.idKeys.txt | cut -f2- | sort \
+   | join -t$'\t' - <(sort -k1,1 ../chrom.sizes) \
+     | awk -F$'\t' '{printf "0\t%s\t%d\t%s\t%d\n", $2, $3, $1, $3}' \
+       > ensToUcsc.lift
+
+wc -l ensToUcsc.lift ../chrom.sizes /hive/data/outside/ensembl/genomes/release-$ensVer/idKeys/$ensSpec/$ensAsmId.idKeys.txt
+
+join -v 2 -t$'\t' ../bed/idKeys/$db.idKeys.txt \
+/hive/data/outside/ensembl/genomes/release-$ensVer/idKeys/$ensSpec/$ensAsmId.idKeys.txt > missing.ens.key
+
+if [ ! -s "missing.ens.key" ]; then
+  rm -f missing.ens.key
+fi
+
+join -v 1 -t$'\t' ../bed/idKeys/$db.idKeys.txt \
+/hive/data/outside/ensembl/genomes/release-$ensVer/idKeys/$ensSpec/$ensAsmId.idKeys.txt > not.in.ensembl
+
+if [ ! -s "not.in.ensembl" ]; then
+  rm -f not.in.ensembl
+fi
+
+exit $?
+############################################################################
+### with that lift file available, the ensGene.ra file is simple:
+
+# required db variable
+db rheMac10
+# lift Ensembl names to UCSC names
+# all the transformations are in this lift file generated from the idKeys
+#     joining results
+liftUp /hive/data/genomes/rheMac10/jkStuff/ensToUcsc.lift
+
+### A few of those need nameTranslation statements, for example
+### when Ensembl has MT sequence and UCSC does not: (cypVar1)
+nameTranslation "/^MT/d"
+
+### Or when duplicate contig sequences have been removed for UCSC browser but
+### not from Ensembl browser (neoBri1)
+nameTranslation "/^AFNY01109447.1/d; /^AFNY01112426.1/d; /^AFNY01112506.1/d; /^AFNY01113168.1/d; /^AFNY01115143.1/d; /^AFNY01115946.1/d; /^AFNY01116005.1/d; /^AFNY01116240.1/d; /^AFNY01116596.1/d; /^AFNY01116867.1/d; /^AFNY01117023.1/d; /^AFNY01117181.1/d; /^AFNY01117703.1/d; /^AFNY01118026.1/d; /^AFNY01118029.1/d; /^AFNY01118041.1/d;"
+
+############################################################################
+############################################################################
+############################################################################
 # ensembl 99 update (DONE - 2020-02-13 - Hiram)
 ############################################################################
 # when all done, reset the dateReference:  (DONE - 2020-02-13 - Hiram)

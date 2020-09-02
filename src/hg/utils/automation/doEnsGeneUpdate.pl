@@ -267,8 +267,15 @@ $identicalToPrevious = 0;
 
   $bossScript->add(<<_EOF_
 export db="$db"
+export buildDir=`pwd`
 
-genePredToGtf -utr file process/\$db.allGenes.gp.gz stdout | gzip -c > process/\$db.ensGene.v$ensVersion.gtf.gz
+mkdir -p /dev/shm/\$db
+zcat process/\$db.allGenes.gp.gz > /dev/shm/\$db/ensGene.v$ensVersion
+cd /dev/shm/\$db
+genePredToGtf -utr file ensGene.v$ensVersion stdout | gzip -c > \$buildDir/process/\$db.ensGene.v$ensVersion.gtf.gz
+cd \$buildDir
+rm -f /dev/shm/\$db/ensGene.v$ensVersion
+rmdir /dev/shm/\$db
 
 _EOF_
 	  );
