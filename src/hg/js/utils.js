@@ -1208,8 +1208,8 @@ function parsePositionWithDb(position)
         parts = position.split("#");
         out.db = parts[0];
         out.chrom = parts[1];
-        out.start = parts[2];
-        out.end = parts[3];
+        out.start = parseInt(parts[2]);
+        out.end = parseInt(parts[3]);
         out.color = "#" + parts[4];
     }
     return out;
