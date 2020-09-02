@@ -12810,36 +12810,41 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Mon Aug 17 13:12:52 PDT 2020
+    # real    209m17.257s
 
-    cat fb.hg38.chainMm39Link.txt
-    # 964465044 bases of 3049335806 (31.629%) in intersection
+    sed -e 's/^/    # /;' fb.hg38.chainMm39Link.txt
+    # 966592868 bases of 3110768607 (31.072%) in intersection
 
-    cat fb.hg38.chainSynMm39Link.txt
-    # 1484758745 bases of 3110768607 (47.730%) in intersection
+    sed -e 's/^/    # /;' fb.hg38.chainSynMm39Link.txt
+    # 913448433 bases of 3110768607 (29.364%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
 	hg38 mm39) > rbest.log 2>&1 &
+    # real    267m52.694s
+
+    sed -e 's/^/    # /;' fb.hg38.chainRBest.Mm39.txt
+    # 891660271 bases of 3110768607 (28.664%) in intersection
 
     #	and the swap
     mkdir /hive/data/genomes/mm39/bed/blastz.hg38.swap
     cd /hive/data/genomes/mm39/bed/blastz.hg38.swap
-    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzMm39.2020-08-17/DEF \
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
             -swap -syntenicNet) > swap.log 2>&1
-    #   real    83m28.397s
+    #   real    47m57.164s
 
-    cat fb.mm39.chainHg38Link.txt
-    # 1493209286 bases of 2481941580 (60.163%) in intersection
-    cat fb.mm39.chainSynHg38Link.txt
-    # 1448164376 bases of 2481941580 (58.348%) in intersection
+    sed -e 's/^/    # /;' fb.mm39.chainHg38Link.txt
+    # 939000954 bases of 2654624157 (35.372%) in intersection
+    sed -e 's/^/    # /;' fb.mm39.chainSynHg38Link.txt
+    # 891050480 bases of 2654624157 (33.566%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
 	mm39 hg38) > rbest.log 2>&1 &
     # real    257m59.713s
 
-    cat fb.mm39.chainRBest.Hg38.txt
-    # 1425296830 bases of 2481941580 (57.427%) in intersection
+    sed -e 's/^/    # /;' fb.mm39.chainRBest.Hg38.txt
+    # 893176796 bases of 2654624157 (33.646%) in intersection
 
 #########################################################################
