@@ -26,6 +26,7 @@
 #include "encode/wgEncodeGencodeEntrezGene.h"
 #include "encode/wgEncodeGencodeAnnotationRemark.h"
 #include "encode/wgEncodeGencodeTranscriptionSupportLevel.h"
+#include "encode/wgEncodeGencodeGeneSymbol.h"
 
 /*
  * General notes:
@@ -115,13 +116,14 @@ return getGencodeTableVar(tdb, "gencodeVersion");
 
 static boolean isHuman()
 /* are we human (otherwise mouse) */
+{
+return startsWith("hg", database);
+}
+
 
 static boolean isGrcH37Native(struct trackDb *tdb)
 /* Is this GENCODE GRCh37 native build, which requires a different Ensembl site. */
 {
-return 
-}
-
 // check for non-lifted GENCODE on GRCh37/hg19
 if (sameString(database, "hg19"))
     return stringIn("lift37", getGencodeVersion(tdb)) == NULL;
@@ -246,6 +248,15 @@ static void *metaDataLoad(struct trackDb *tdb, struct sqlConnection *conn, char 
 {
 return sqlQueryObjs(conn, loadFunc, queryOpts, "select * from %s where %s = \"%s\"",
                     getGencodeTable(tdb, tableBase), keyCol, gencodeId);
+}
+
+static void *metaDataLoadOptional(struct trackDb *tdb, struct sqlConnection *conn, char *gencodeId, char *tableBase, char *keyCol, unsigned queryOpts, sqlLoadFunc loadFunc)
+/* Load autoSql objects for gencode meta data from an optional gencode table. Probably older assembly  */
+{
+if (haveGencodeTable(tdb, tableBase))
+    return metaDataLoad(tdb, conn, gencodeId, tableBase, keyCol, queryOpts, loadFunc);
+else
+    return NULL;
 }
 
 static int uniProtDatasetCmp(const void *va, const void *vb)
@@ -442,11 +453,20 @@ else
 printf("</tr>\n");
 }
 
+static void writeGeneSymbolRow(struct wgEncodeGencodeAttrs *transAttrs)
+/* output HTML row for gene symbol if it makes sense */
+{
+printf("<tr><th>%s gene symbol<td colspan=2>", (isHuman() ? "HGNC" : "MGI"));
+if (!isFakeGeneSymbol(transAttrs->geneName))
+    prExtIdAnchor(transAttrs->geneName, hgncUrl);
+printf("</tr>\n");
+}
+
 static void writeBasicInfoHtml(struct sqlConnection *conn, struct trackDb *tdb, char *gencodeId, struct genePred *transAnno,
                                struct wgEncodeGencodeAttrs *transAttrs,
                                int geneChromStart, int geneChromEnd,
                                struct wgEncodeGencodeGeneSource *geneSource, struct wgEncodeGencodeTranscriptSource *transcriptSource,
-                               struct wgEncodeGencodeTag *tags, bool haveTsl, struct wgEncodeGencodeTranscriptionSupportLevel *tsl)
+                               struct wgEncodeGencodeTag *tags, struct wgEncodeGencodeTranscriptionSupportLevel *tsl)
 /* write basic HTML info for all genes */
 {
 // basic gene and transcript information
@@ -474,10 +494,13 @@ if (transAttrs->proteinId != NULL)
     printf("</tr>\n");
     }
 
-printf("<tr><th>HAVANA manual id");
-printf("<td>%s", transAttrs->havanaTranscriptId);
-printf("<td>%s", transAttrs->havanaGeneId);
-printf("</tr>\n");
+if (strlen(transAttrs->havanaTranscriptId) > 0)
+    {
+    printf("<tr><th>HAVANA manual id");
+    printf("<td>%s", transAttrs->havanaTranscriptId);
+    printf("<td>%s", transAttrs->havanaGeneId);
+    printf("</tr>\n");
+    }
 
 printf("<tr><th>Position");
 printf("<td>");
@@ -496,15 +519,12 @@ char *transSrcDesc = (transcriptSource != NULL) ? getMethodDesc(transcriptSource
 char *geneSrcDesc = (geneSource != NULL) ? getMethodDesc(geneSource->source) : UNKNOWN;
 printf("<tr><th>Annotation Method<td>%s<td>%s</tr>\n", transSrcDesc, geneSrcDesc);
 
-if (haveTsl)
+if (tsl != NULL)
     {
     char *tslDesc = getSupportLevelDesc(tsl);
     printf("<tr><th><a href=\"#tsl\">Transcription Support Level</a><td><a href=\"#%s\">%s</a><td></tr>\n", tslDesc, tslDesc);
     }
-printf("<tr><th>HGNC gene symbol<td colspan=2>");
-if (!isFakeGeneSymbol(transAttrs->geneName))
-    prExtIdAnchor(transAttrs->geneName, hgncUrl);
-printf("</tr>\n");
+writeGeneSymbolRow(transAttrs);
 
 printf("<tr><th>CCDS<td>");
 if (!isEmpty(transAttrs->ccdsId))
@@ -515,10 +535,13 @@ if (!isEmpty(transAttrs->ccdsId))
     }
 printf("<td></tr>\n");
 
-printf("<tr><th>GeneCards<td colspan=2>");
-if (!isFakeGeneSymbol(transAttrs->geneName))
-    prExtIdAnchor(transAttrs->geneName, geneCardsUrl);
-printf("</tr>\n");
+if (isHuman())
+    {
+    printf("<tr><th>GeneCards<td colspan=2>");
+    if (!isFakeGeneSymbol(transAttrs->geneName))
+        prExtIdAnchor(transAttrs->geneName, geneCardsUrl);
+    printf("</tr>\n");
+    }
 
 if (isProteinCodingTrans(transAttrs))
     writeAprrisRow(conn, tdb, transAttrs, tags);
@@ -908,23 +931,18 @@ struct wgEncodeGencodeAttrs *transAttrs = transAttrsLoad(tdb, conn, gencodeId);
 char *gencodeGeneId = transAttrs->geneId;
 struct wgEncodeGencodeGeneSource *geneSource = metaDataLoad(tdb, conn, gencodeGeneId, "gencodeGeneSource", "geneId", sqlQuerySingle, (sqlLoadFunc)wgEncodeGencodeGeneSourceLoad);
 struct wgEncodeGencodeTranscriptSource *transcriptSource = metaDataLoad(tdb, conn, gencodeId, "gencodeTranscriptSource", "transcriptId", sqlQuerySingle, (sqlLoadFunc)wgEncodeGencodeTranscriptSourceLoad);
-bool haveRemarks = haveGencodeTable(tdb, "gencodeAnnotationRemark");
-struct wgEncodeGencodeAnnotationRemark *remarks = haveRemarks ? metaDataLoad(tdb, conn, gencodeId, "gencodeAnnotationRemark", "transcriptId", 0, (sqlLoadFunc)wgEncodeGencodeAnnotationRemarkLoad) : NULL;
+struct wgEncodeGencodeAnnotationRemark *remarks = metaDataLoadOptional(tdb, conn, gencodeId, "gencodeAnnotationRemark", "transcriptId", 0, (sqlLoadFunc)wgEncodeGencodeAnnotationRemarkLoad);
 struct wgEncodeGencodePdb *pdbs = metaDataLoad(tdb, conn, gencodeId, "gencodePdb", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodePdbLoad);
 struct wgEncodeGencodePubMed *pubMeds = metaDataLoad(tdb, conn, gencodeId, "gencodePubMed", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodePubMedLoad);
-bool haveEntrezGene = haveGencodeTable(tdb, "gencodeEntrezGene");
-struct wgEncodeGencodeEntrezGene *entrezGenes = haveEntrezGene ? metaDataLoad(tdb, conn, gencodeId, "gencodeEntrezGene", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeEntrezGeneLoad) : NULL;
+struct wgEncodeGencodeEntrezGene *entrezGenes = metaDataLoadOptional(tdb, conn, gencodeId, "gencodeEntrezGene", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeEntrezGeneLoad);
 struct wgEncodeGencodeRefSeq *refSeqs = metaDataLoad(tdb, conn, gencodeId, "gencodeRefSeq", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeRefSeqLoad);
 struct wgEncodeGencodeTag *tags = metaDataLoad(tdb, conn, gencodeId, "gencodeTag", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeTagLoad);
 struct wgEncodeGencodeTranscriptSupport *transcriptSupports = metaDataLoad(tdb, conn, gencodeId, "gencodeTranscriptSupport", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeTranscriptSupportLoad);
-struct wgEncodeGencodeExonSupport *exonSupports = NULL;
-// exonSupports not available in back mapped GENCODE releases
-if (haveGencodeTable(tdb, "gencodeExonSupport"))
-    exonSupports = metaDataLoad(tdb, conn, gencodeId, "gencodeExonSupport", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeExonSupportLoad);
+struct wgEncodeGencodeExonSupport *exonSupports = metaDataLoadOptional(tdb, conn, gencodeId, "gencodeExonSupport", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeExonSupportLoad);
 struct wgEncodeGencodeUniProt *uniProts = metaDataLoad(tdb, conn, gencodeId, "gencodeUniProt", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeUniProtLoad);
 slSort(&uniProts, uniProtDatasetCmp);
-bool haveTsl = haveGencodeTable(tdb, "gencodeTranscriptionSupportLevel");
-struct wgEncodeGencodeTranscriptionSupportLevel *tsl = haveTsl ? metaDataLoad(tdb, conn, gencodeId, "gencodeTranscriptionSupportLevel", "transcriptId", 0, (sqlLoadFunc)wgEncodeGencodeTranscriptionSupportLevelLoad) : NULL;
+struct wgEncodeGencodeTranscriptionSupportLevel *tsl = metaDataLoadOptional(tdb, conn, gencodeId, "gencodeTranscriptionSupportLevel", "transcriptId", 0, (sqlLoadFunc)wgEncodeGencodeTranscriptionSupportLevelLoad);
+
 
 int geneChromStart, geneChromEnd;
 getGeneBounds(tdb, conn, transAnno, &geneChromStart, &geneChromEnd);
@@ -940,16 +958,14 @@ else
 cartWebStart(cart, database, "%s", header);
 printf("<H2>%s</H2>\n", header);
 
-writeBasicInfoHtml(conn, tdb, gencodeId, transAnno, transAttrs, geneChromStart, geneChromEnd, geneSource, transcriptSource, tags, haveTsl, tsl);
+writeBasicInfoHtml(conn, tdb, gencodeId, transAnno, transAttrs, geneChromStart, geneChromEnd, geneSource, transcriptSource, tags, tsl);
 writeTagLinkHtml(tags);
 writeSequenceHtml(tdb, gencodeId, transAnno);
-if (haveRemarks)
-    writeAnnotationRemarkHtml(remarks);
+writeAnnotationRemarkHtml(remarks);
 if (isProteinCodingTrans(transAttrs))
     writePdbLinkHtml(pdbs);
 writePubMedLinkHtml(pubMeds);
-if (haveEntrezGene)
-    writeEntrezGeneLinkHtml(entrezGenes);
+writeEntrezGeneLinkHtml(entrezGenes);
 writeRefSeqLinkHtml(refSeqs);
 if (isProteinCodingTrans(transAttrs))
     writeUniProtLinkHtml(uniProts);

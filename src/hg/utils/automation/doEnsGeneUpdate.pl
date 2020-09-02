@@ -33,6 +33,7 @@ my $stepper = new HgStepManager(
       { name => 'process',   func => \&doProcess },
       { name => 'load',   func => \&doLoad },
       { name => 'cleanup', func => \&doCleanup },
+      { name => 'goldenPath', func => \&doGoldenPath },
       { name => 'makeDoc', func => \&doMakeDoc },
     ]
 );
@@ -266,6 +267,15 @@ $identicalToPrevious = 0;
 
   $bossScript->add(<<_EOF_
 export db="$db"
+export buildDir=`pwd`
+
+mkdir -p /dev/shm/\$db
+zcat process/\$db.allGenes.gp.gz > /dev/shm/\$db/ensGene.v$ensVersion
+cd /dev/shm/\$db
+genePredToGtf -utr file ensGene.v$ensVersion stdout | gzip -c > \$buildDir/process/\$db.ensGene.v$ensVersion.gtf.gz
+cd \$buildDir
+rm -f /dev/shm/\$db/ensGene.v$ensVersion
+rmdir /dev/shm/\$db
 
 _EOF_
 	  );
@@ -274,7 +284,7 @@ _EOF_
       $bossScript->add(<<_EOF_
 hgsql -e 'INSERT INTO trackVersion \\
     (db, name, who, version, updateTime, comment, source, dateReference) \\
-    VALUES("\$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
+    VALUES("$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
 	"identical to previous version $previousEnsVersion", \\
 	"identical to previous version $previousEnsVersion", \\
 	"$ensVersionDateReference" );' hgFixed
@@ -401,7 +411,7 @@ _EOF_
       $bossScript->add(<<_EOF_
 hgsql -e 'INSERT INTO trackVersion \\
     (db, name, who, version, updateTime, comment, source, dateReference) \\
-    VALUES("\$db", "vegaGene", "$ENV{'USER'}", "$ensVersion", now(), \\
+    VALUES("$db", "vegaGene", "$ENV{'USER'}", "$ensVersion", now(), \\
 	"with peptides $ensPepFile", \\
 	"$ensGtfUrl", \\
 	"$ensVersionDateReference" );' hgFixed
@@ -411,7 +421,7 @@ _EOF_
       $bossScript->add(<<_EOF_
 hgsql -e 'INSERT INTO trackVersion \\
     (db, name, who, version, updateTime, comment, source, dateReference) \\
-    VALUES("\$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
+    VALUES("$db", "ensGene", "$ENV{'USER'}", "$ensVersion", now(), \\
 	"with peptides $ensPepFile", \\
 	"$ensGtfUrl", \\
 	"$ensVersionDateReference" );' hgFixed
@@ -600,7 +610,7 @@ genePredCheck -db=\$db \$db.allGenes.gp.gz
 _EOF_
          );
       }
-  }
+  }	# if (! defined $skipInvalid)
   $bossScript->execute() if (! $opt_debug);
 } # doProcess
 
@@ -670,6 +680,38 @@ _EOF_
   }
   $bossScript->execute() if (! $opt_debug);
 } # doCleanup
+
+#########################################################################
+# * step: goldenPath [dbHost]
+sub doGoldenPath {
+  my $runDir = "$buildDir";
+  if (! -s "$runDir/process/$db.ensGene.v$ensVersion.gtf.gz" ) {
+    die "ERROR: step goldenPath can not find process/$db.ensGene.v$ensVersion.gtf.gz\n" .
+        "\tcheck if processing step has completed\n";
+  }
+
+  my $whatItDoes = "Create symlinks to make gtf files appear in goldenPath.";
+  my $gpGeneDir = "$HgAutomate::goldenPath/$db/bigZips/genes";
+  my $gpArchiveDir = "$HgAutomate::goldenPath/archive/$db/ensGene";
+  my $bossScript = newBash HgRemoteScript("$runDir/doGoldenPath.bash", $dbHost,
+				      $runDir, $whatItDoes);
+
+  &HgAutomate::mustMkdir($gpGeneDir);
+  &HgAutomate::mustMkdir($gpArchiveDir);
+
+  $bossScript->add(<<_EOF_
+export db="$db"
+rm -f $gpArchiveDir/\$db.ensGene.v$ensVersion.gtf.gz
+rm -f $gpArchiveDir/\$db.ensGene.v$ensVersion.genePred.gz
+ln -s `pwd`/process/\$db.ensGene.v$ensVersion.gtf.gz  $gpArchiveDir/
+ln -s `pwd`/process/\$db.allGenes.gp.gz  $gpArchiveDir/\$db.ensGene.v$ensVersion.genePred.gz
+rm -f $gpGeneDir/\$db.ensGene.gtf.gz
+ln -s `pwd`/process/\$db.ensGene.v$ensVersion.gtf.gz  $gpGeneDir/\$db.ensGene.gtf.gz
+_EOF_
+	  );
+
+  $bossScript->execute() if (! $opt_debug);
+} # doGoldenPath
 
 #########################################################################
 # * step: makeDoc [dbHost]
