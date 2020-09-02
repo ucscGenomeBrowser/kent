@@ -35,6 +35,7 @@ scoreLabel ClinVar Star-Rating (0-4)
         bigDataUrl /gbdb/$D/bbi/clinvar/clinvarMain.bb
         urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
         noScoreFilter on
+        searchIndex _dbVarSsvId
 
         track clinvarCnv
         parent clinvar
@@ -60,3 +61,13 @@ scoreLabel ClinVar Star-Rating (0-4)
         mergeSpannedItems on
         urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
         noScoreFilter on
+        searchIndex _dbVarSsvId
+
+searchTable clinvarCnv
+searchType bigBed
+searchDescription ClinVar Copy Number Variants 
+
+searchTable clinvarMain
+searchType bigBed
+searchDescription ClinVar Copy Number Variants 
+
