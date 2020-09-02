@@ -1,27 +1,30 @@
 <H2>Description</H2>
 <p>
 This track set shows <b>GWAS meta-analyses</b> from the 
-<a target=_blank href="https://www.covid19hg.org/"><b>COVID-19 host genetics initiative (COVID-19 hg)</b></a>, 
-a collaborative work intended to encourage the sharing of resources to
-facilitate Covid-19 host genetics research. COVID-19 hg organizes analytical activities across
-different studies to identify genetic determinants of SARS-CoV-2 infection susceptibility and 
-severity of disease, and provides a platform to share the results from such activities, as well as 
+<a target=_blank href="https://www.covid19hg.org/">
+<b>COVID-19 Host Genetics Initiative (COVID-19 HGI)</b></a>, 
+a collaborative project bringing together the human genetics community to facilitate 
+the generation, analysis and sharing of COVID-19 host genetics research.
+The <i>COVID-19 HGI</i> organizes meta-analyses across multiple studies contributed by 
+<a target="_blank" href="https://www.covid19hg.org/partners/">partners world-wide</a>
+to learn the genetic determinants of SARS-CoV-2 infection susceptibility, disease severity and 
+outcomes, and provides a platform to share the results from such activities, as well as 
 the individual-level data where possible.
 </p>
-
 <p>
-The studies are focused on specific phenotypes that can benefit
-from maximal sample size. The primary analysis focuses on Covid-19 disease severity.
-Two studies are represented in this track:
+The specific phenotypes studied by the <i>COVID-19 HGI</i> are those that benefit
+from maximal sample size. The primary analysis focuses on disease severity.
+Two meta-analyses are represented in this track:
 
 <ul>
-<li><b>ANA_B2_V2</b>: hospitalized covid vs. population (3199 cases from 8 studies)</li>
 <li><b>ANA_C2_V2</b>: covid vs. population (6696 cases from 18 studies)</li>
+<li><b>ANA_B2_V2</b>: hospitalized covid vs. population (3199 cases from 8 studies)</li>
 </ul>
 
 <H2>Display Conventions</H2>
 <p>
 Displayed items are colored by <b>GWAS effect</b>:  red for positive, blue for negative. 
+The height of the item reflects the <b>effect size</b> (log OR scale).
 The color saturation indicates <b>statistical significance</b>: greater than .05 pValue are 
 brightly colored (bright red
 <span style='background-color: #ff0000;'>&nbsp;&nbsp;</span>
@@ -37,12 +40,13 @@ those with less significance are paler (light red
 
 <p>
 Each track has separate display controls and data can be filtered according to the
-<b>number of studies</b>,<b>minimum -log10 p-value</b>, and the <b>effect size on log(OR) scale</b>,
-using the track <b>Configure</b> options.
+<b>number of studies</b>, <b>minimum -log10 p-value</b>, and the 
+<b>effect size on log(OR) scale</b>, using the track <b>Configure</b> options.
 </p>
 
 <p>
-<b>Mouseover</b> on items shows the rs ID, both the non-effect and effect alleles, 
+<b>Mouseover</b> on items shows the rs ID (or chrom:pos if none assigned), both the non-effect 
+and effect alleles, 
 the effect size on log(OR) scale, the -log10 p-value, and the number of studies.
 Further information on each variant is displayed on the details page by a click onto any item.
 </p>  
@@ -60,10 +64,10 @@ processing pipeline, results and data sharing can be found
 <H2>Data Access</H2>
 <p>
 The data underlying these tracks and summary statistics results are publicly available in 
-<a target=_blank href="https://www.covid19hg.org/results">Covid19 hg Release 3 (June 2020)</a>.
+<a target=_blank href="https://www.covid19hg.org/results">COVID19-hg Release 3 (June 2020)</a>.
 The raw data can be explored interactively with the <a target="_blank" href="../cgi-bin/hgTables">
-Table Browser</a>, or the <a target="_blank" href="../cgi-bin/hgIntegrator">Data Integrator</a>. For
-automated analysis, the data may be queried from our <a target="_blank"
+Table Browser</a>, or the <a target="_blank" href="../cgi-bin/hgIntegrator">Data Integrator</a>. 
+For automated analysis, the data may be queried from our <a target="_blank"
 href="/goldenPath/help/api.html">REST API</a>. Please refer to
 our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
 target="_blank">mailing list archives</a> for questions, or our <a target="_blank"
@@ -72,13 +76,15 @@ href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more informat
 
 <H2>Credits</H2>
 <p>
-Thanks to the COVID-19 host genetics initiative for making these data available. 
+Thanks to the COVID-19 Host Genetics Initiative contributors and project leads for making these 
+data available, and in particular to Rachel Liao and Juha Karjalainen at the Broad Institute for
+their review and input during browser track development.
 </p>
 
 <H2>References</H2>
 
 <p>
-COVID-19 Host Genetics Initiative..
+COVID-19 Host Genetics Initiative.
 <a href="https://www.ncbi.nlm.nih.gov/pubmed/32404885" target="_blank">
 The COVID-19 Host Genetics Initiative, a global initiative to elucidate the role of host genetic
 factors in susceptibility and severity of the SARS-CoV-2 virus pandemic</a>.
