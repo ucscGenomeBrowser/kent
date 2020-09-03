@@ -368,7 +368,7 @@ XXX - TBD - Wed Sep  2 07:44:09 PDT 2020
     # real    15m10.248s
 
     # check in the trackDb files created in TemporaryTrackDbCheckout/
-    #    and add calJac4 to trackDb/makefile   refs #22271
+    #    and add calJac4 to trackDb/makefile   refs #24074
     # fixing up the images reference to calJac4.jpg
 
     # temporary symlink until masked sequence is available
@@ -455,18 +455,17 @@ XXX - running - Wed Sep  2 10:08:50 PDT 2020
     makeCytoBandIdeo.csh calJac4
 
 #############################################################################
-# run up idKeys files for chromAlias/ncbiRefSeq (TBD - 2020-07-27 - Hiram)
+# run up idKeys files for chromAlias/ncbiRefSeq (DONE - 2020-09-02 - Hiram)
     mkdir /hive/data/genomes/calJac4/bed/idKeys
     cd /hive/data/genomes/calJac4/bed/idKeys
 
     time (doIdKeys.pl \
         -twoBit=/hive/data/genomes/calJac4/calJac4.unmasked.2bit \
         -buildDir=`pwd` calJac4) > do.log 2>&1 &
-XXX - running - Wed Sep  2 10:09:29 PDT 2020
-    # real    0m45.175s
+    # real    1m55.340s
 
     cat calJac4.keySignature.txt
-    #  804f78d880a5a7f049c472046b563601
+    #  01e329dd4e2641908a563b4ff1c8b648
 
 #############################################################################
 # gapOverlap (DONE - 2020-09-02 - Hiram)
@@ -475,8 +474,8 @@ XXX - running - Wed Sep  2 10:09:29 PDT 2020
     time (doGapOverlap.pl \
         -twoBit=/hive/data/genomes/calJac4/calJac4.unmasked.2bit calJac4 ) \
         > do.log 2>&1 &
-XXX - running - Wed Sep  2 10:10:14 PDT 2020
-    # real    1m49.446s
+    # XXX empty result ?? did it run in 54 seconds ?
+    # real    0m54.302s
 
     # there is one only:
     wc -l bed.tab
@@ -494,22 +493,10 @@ chr6    47663669        47714277        chr6:47663670-47714277  304     +      4
     time (~/kent/src/hg/utils/automation/doTandemDup.pl \
   -twoBit=/hive/data/genomes/calJac4/calJac4.unmasked.2bit calJac4) \
         > do.log 2>&1 &
-XXX - running - Wed Sep  2 10:10:14 PDT 2020
-    # real    440m10.886s
-
-    # one job in pairedEnds needs more memory:
-    time ./runOne 29 20000 chrY tmp/chrY.bed.gz
-    # real    28m57.353s
-
-    # continuing
-    time (~/kent/src/hg/utils/automation/doTandemDup.pl \
-	-continue=collapsePairedEnds \
-	    -twoBit=/hive/data/genomes/calJac4/calJac4.unmasked.2bit calJac4) \
-        > collapsePairedEnds.log 2>&1 &
-    # real    3m23.138s
+    # real    193m21.761s
 
     cat fb.calJac4.tandemDups.txt
-    # 66584052 bases of 2728222451 (2.441%) in intersection
+    # 80358205 bases of 2897824427 (2.773%) in intersection
 
     bigBedInfo calJac4.tandemDups.bb | sed -e 's/^/#  /;'
 #  version: 4
@@ -518,16 +505,16 @@ XXX - running - Wed Sep  2 10:10:14 PDT 2020
 #  isCompressed: yes
 #  isSwapped: 0
 #  extraIndexCount: 0
-#  itemCount: 858,983
-#  primaryDataSize: 22,513,298
-#  primaryIndexSize: 62,976
+#  itemCount: 1,402,773
+#  primaryDataSize: 36,657,311
+#  primaryIndexSize: 119,132
 #  zoomLevels: 9
-#  chromCount: 57
-#  basesCovered: 1,408,031,925
-#  meanDepth (of bases covered): 5.083425
+#  chromCount: 894
+#  basesCovered: 1,457,658,879
+#  meanDepth (of bases covered): 8.428920
 #  minDepth: 1.000000
-#  maxDepth: 240.000000
-#  std of depth: 8.811752
+#  maxDepth: 344.000000
+#  std of depth: 18.274027
 
 #########################################################################
 # ucscToINSDC and ucscToRefSeq table/track (DONE - 2020-09-01 - Hiram)
@@ -537,8 +524,9 @@ XXX - running - Wed Sep  2 10:10:14 PDT 2020
     faToTwoBit ../G*_1.1_genomic.fna.gz calJac4.refseq.2bit
     time (doIdKeys.pl -buildDir=`pwd` \
         -twoBit=`pwd`/calJac4.refseq.2bit refseqCalJac4)  > do.log 2>&1 &
+    # real    6m36.946s
 
-    sed -e 's/^/# /;' refseqCalJac4.keySignature.txt
+    sed -e 's/^/    # /;' refseqCalJac4.keySignature.txt
     # 01e329dd4e2641908a563b4ff1c8b648
 
     mkdir /hive/data/genomes/calJac4/genbank
@@ -550,68 +538,97 @@ XXX - running - Wed Sep  2 10:10:14 PDT 2020
 
     time (doIdKeys.pl -buildDir=`pwd` \
         -twoBit=`pwd`/calJac4.genbank.2bit genbankCalJac4)  > do.log 2>&1 &
-XXX - running - Wed Sep  2 09:23:10 PDT 2020
-    # real    0m45.317s
+    # real    2m56.082s
 
-    sed -e 's/^/# /;' genbankCalJac4.keySignature.txt
-    #  804f78d880a5a7f049c472046b563601
+    sed -e 's/^/    # /;' genbankCalJac4.keySignature.txt
+    # b89236d2c39771ea1089bd6bfa04ba4f
 
     mkdir /hive/data/genomes/calJac4/bed/chromAlias
     cd /hive/data/genomes/calJac4/bed/chromAlias
 
     join -t$'\t' ../idKeys/calJac4.idKeys.txt \
-        ../../genbank/idKeys/genbankCalJac4.idKeys.txt | cut -f2- \
+        ../../genbank/genbankCalJac4.idKeys.txt | cut -f2- \
           | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
             | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
                | sort -k1,1 -k2,2n > ucscToINSDC.bed
+    join -t$'\t' ../idKeys/calJac4.idKeys.txt \
+        ../../refseq/idKeys/refseqCalJac4.idKeys.txt | cut -f2- \
+          | sort -k1,1 | join -t$'\t' <(sort -k1,1 ../../chrom.sizes) - \
+            | awk '{printf "%s\t0\t%d\t%s\n", $1, $2, $3}' \
+               | sort -k1,1 -k2,2n > ucscToRefSeq.bed
+    # the genbank list is missing chrM, look it up in Entrez nucleotide, then:
+    grep chrM ucscToRefSeq.bed | sed -e 's/NC_025586.1/KM588314.1/;' \
+       >> ucscToINSDC.bed
+    # and re-sort
+    cat ucscToINSDC.bed | sort -k1,1 -k2,2n > t
+    mv t ucscToINSDC.bed
 
     # should be same line counts throughout:
     wc -l * ../../chrom.sizes
-    #   61 ucscToINSDC.bed
-    #	61 ../../chrom.sizes
+    # 964 ucscToINSDC.bed
+    # 964 ucscToRefSeq.bed
+    # 964 ../../chrom.sizes
 
     export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
     echo $chrSize
-    # 22
+    # 27
     # use the $chrSize in this sed
     sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
          | hgLoadSqlTab calJac4 ucscToINSDC stdin ucscToINSDC.bed
 
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' \
+         | hgLoadSqlTab calJac4 ucscToRefSeq stdin ucscToRefSeq.bed
+
     # should be quiet for all OK
-    checkTableCoords calJac4
+    checkTableCoords calJac4 ucscToINSDC
+    checkTableCoords calJac4 ucscToRefSeq
 
     # should cover %100 entirely:
     featureBits -countGaps calJac4 ucscToINSDC
-    # 2728222451 bases of 2728222451 (100.000%) in intersection
+    # 2897824427 bases of 2897824427 (100.000%) in intersection
+
+    featureBits -countGaps calJac4 ucscToRefSeq
+    # 2897824427 bases of 2897824427 (100.000%) in intersection
 
 #########################################################################
-# add chromAlias table (TBD - 2020-07-27 - Hiram)
+# add chromAlias table (DONE - 2020-09-03 - Hiram)
 
     mkdir /hive/data/genomes/calJac4/bed/chromAlias
     cd /hive/data/genomes/calJac4/bed/chromAlias
 
     grep -v "^#" ../../refseq/G*_1.1_assembly_report.txt \
-	| awk '{printf "%s\t%s\n", $5,$1}' | sort > ncbi.assembly.txt
+	| awk '{printf "%s\t%s\n", $5,$1}' | sort > ncbi.genbank.txt
+    grep -v "^#" ../../refseq/G*_1.1_assembly_report.txt \
+	| awk '{printf "%s\t%s\n", $7,$1}' | sort > ncbi.refseq.txt
 
     hgsql -N -e 'select chrom,name from ucscToINSDC;' calJac4 \
         | sort -k1,1 > ucsc.genbank.tab
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' calJac4 \
+        | sort -k1,1 > ucsc.refseq.tab
 
-    join -t$'\t' -1 2 <(sort -k2,2 ucsc.genbank.tab) ncbi.assembly.txt
+    # the awk removes lines where the UCSC name is identical to the NCBI name
+    join -t$'\t' -1 2 <(sort -k2,2 ucsc.refseq.tab) ncbi.refseq.txt \
+      | cut -f2-3 | awk '$1 != $2' | sort > ucsc.assembly.tab
 
-    # lookup the chrM sequence in the assembly to determine the RefSeq ID:
     printf "chrM\tNC_005089.1\n" > ucsc.refseq.tab
 
-    wc -l *.tab
-    #  61 ucsc.assembly.tab
-    #  61 ucsc.genbank.tab
-    #   1 ucsc.refseq.tab
+    # genbank and refseq should be the same, assembly can be less
+    wc -l *.tab ../../chrom.sizes
+    # 940 ucsc.assembly.tab
+    # 964 ucsc.genbank.tab
+    # 964 ucsc.refseq.tab
+    # 964 ../../chrom.sizes
 
     ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
         > calJac4.chromAlias.tab
 # working: assembly
 # working: genbank
+# working: refseq
 
-for t in assembly genbank
+for t in assembly genbank refseq
 do
   c0=`cat ucsc.$t.tab | wc -l`
   c1=`grep $t calJac4.chromAlias.tab | wc -l`
@@ -621,69 +638,53 @@ do
   fi
   printf "# checking $t: $c0 =? $c1 $ok\n"
 done
-# checking assembly: 61 =? 61 OK
-# checking genbank: 61 =? 61 OK
+# checking assembly: 940 =? 940 OK
+# checking genbank: 964 =? 964 OK
+# checking refseq: 964 =? 964 OK
 
     # verify chrM is here properly:
     grep chrM calJac4.chromAlias.tab 
-# AY172335.1      chrM    genbank
+# KM588314.1      chrM    genbank
 # MT      chrM    assembly
-# NC_005089.1     chrM    refseq
+# NC_025586.1     chrM    refseq
 
     hgLoadSqlTab calJac4 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         calJac4.chromAlias.tab
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2020-07-27 - Hiram)
-    cd ~/kent/src/hg/makeDb/trackDb/mouse/calJac4
+# fixup search rule for assembly track/gold table (DONE - 2020-09-03 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/marmoset/calJac4
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" calJac4 \
       | sed -e 's/[0-9.]\+//;' | sort | uniq -c | sed -e 's/^/# /;'
-#   15228 AC
-#     816 AEKQ
-#       8 AEKR
-#       1 AF
-#    3876 AL
-#       1 AY
-#     844 BX
-#     191 CAAA
-#     135 CR
-#     684 CT
-#      63 CU
-#      37 FO
-#       3 FP
-#      29 FQ
-#      14 LO
-#     249 LXEJ
-#      30 MF
-#      44 MG
-#      18 MH
-#       2 MN
+#      68 AC
+#       1 KM
+#    1360 WJHW
 
-    # implies a rule: '[ABCFLM][ACEFGHLNOPQRTUXY][AEKJQR0-9]+(\.[0-9_]+)?'
+    # implies a rule: '[AKW][CMJ][HW0-9]+(\.[0-9_]+)?'
 
     # verify this rule will find them all and eliminate them all:
     hgsql -N -e "select frag from gold;" calJac4 | wc -l
-    # 22273
+    # 1429
 
     hgsql -N -e "select frag from gold;" calJac4 \
-       | egrep -e '[ABCFLM][ACEFGHLNOPQRTUXY][AEKJQR0-9]+(\.[0-9_]+)?' | wc -l
-    # 1795
+       | egrep -e '[AKW][CMJ][HW0-9]+(\.[0-9_]+)?' | wc -l
+    # 1429
 
     hgsql -N -e "select frag from gold;" calJac4 \
-      | egrep -v -e '[ABCFLM][ACEFGHLNOPQRTUXY][AEKJQR0-9]+(\.[0-9_]+)?' | wc -l
+      | egrep -v -e '[AKW][CMJ][HW0-9]+(\.[0-9_]+)?' | wc -l
     # 0
 
     # hence, add to trackDb/rhesus/calJac4/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [ABCFLM][ACEFGHLNOPQRTUXY][AEKJQR0-9]+(\.[0-9_]+)?
+termRegex [AKW][CMJ][HW0-9]+(\.[0-9_]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
     # verify searches work in the position box
 
-    git commit -m 'adding search rule for gold/assembly track refs #22271' \
+    git commit -m 'adding search rule for gold/assembly track refs #24074' \
        trackDb.ra
 
 ##########################################################################
@@ -694,7 +695,6 @@ searchPriority 8
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=hgwdev calJac4) > do.log 2>&1
-XXX - running - Wed Sep  2 10:11:32 PDT 2020
     # real    402m37.300s
 
     cat faSize.rmsk.txt
@@ -757,8 +757,6 @@ XXX - running - Wed Sep  2 10:11:32 PDT 2020
     cat fb.simpleRepeat
     # 106897704 bases of 2859817025 (3.738%) in intersection
 
-XXX - when WM finished - Wed Sep  2 17:30:02 PDT 2020
-
     cd /hive/data/genomes/calJac4
     # if using the Window Masker result:
     cd /hive/data/genomes/calJac4
@@ -772,11 +770,11 @@ XXX - when WM finished - Wed Sep  2 17:30:02 PDT 2020
     #   you can safely ignore the warning about fields >= 13
     twoBitToFa calJac4.2bit stdout | faSize stdin > faSize.calJac4.2bit.txt
     cat faSize.calJac4.2bit.txt
-# 2728222451 bases (73600668 N's 2654621783 real 1460027726 upper
-#	1194594057 lower) in 61 sequences in 1 files
-# Total size: mean 44724958.2 sd 64970951.3 min 1976 (chr4_JH584295v1_random)
-#	max 195154279 (chr1) median 182347
-# %43.79 masked total, %45.00 masked real
+# 2897824427 bases (38007443 N's 2859816984 real 1454005411 upper
+#	1405811573 lower) in 964 sequences in 1 files
+# Total size: mean 3006041.9 sd 20298858.9 min 285 (chrUn_NW_023264940v1)
+#	max 217961735 (chr1) median 42174
+# %48.51 masked total, %49.16 masked real
 
 
     rm /gbdb/calJac4/calJac4.2bit
@@ -801,28 +799,16 @@ XXX - when WM finished - Wed Sep  2 17:30:02 PDT 2020
     cd /hive/data/genomes/calJac4/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev calJac4) > do.log 2>&1
-XXX - running - Wed Sep  2 17:31:19 PDT 2020
-    # real    90m16.169s
+    # real    119m59.049s
 
     # Masking statistics
     cat faSize.calJac4.cleanWMSdust.txt
-# 2482000080 bases (58500 N's 2481941580 real 1630728232 upper 851213348 lower)
-#	in 2198 sequences in 1 files
-# Total size: mean 1129208.4 sd 8542765.0 min 13084 (chrUn_JAAHUQ010000994v1)
-#	max 124992030 (chrX) median 43246
-# %34.30 masked total, %34.30 masked real
-
-    # completed before rmsk was done, to finish:
-    featureBits -countGaps calJac4 rmsk windowmaskerSdust 2> fb.calJac4.rmsk.windowmaskerSdust.txt
-    cat fb.calJac4.rmsk.windowmaskerSdust.txt
-    # 753903955 bases of 2728222451 (27.634%) in intersection
-
-    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
-        -continue=cleanup -dbHost=hgwdev calJac4) > cleanup.log 2>&1
-    # real    1m7.841s
+# 2897824427 bases (38007443 N's 2859816984 real 1756905691 upper 1102911293 lower) in 964 sequences in 1 files
+# Total size: mean 3006041.9 sd 20298858.9 min 285 (chrUn_NW_023264940v1) max 217961735 (chr1) median 42174
+# %38.06 masked total, %38.57 masked real
 
 ##########################################################################
-# cpgIslands - (TBD - 2020-07-30 - Hiram)
+# cpgIslands - (DONE - 2020-09-03 - Hiram)
     mkdir /hive/data/genomes/calJac4/bed/cpgIslands
     cd /hive/data/genomes/calJac4/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
@@ -833,11 +819,12 @@ XXX - running - Wed Sep  2 17:31:19 PDT 2020
     # 10571422 bases of 2654624157 (0.398%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2020-07-30 - Hiram)
+# genscan - (DONE - 2020-09-03 - Hiram)
     mkdir /hive/data/genomes/calJac4/bed/genscan
     cd /hive/data/genomes/calJac4/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku calJac4) > do.log 2>&1
+XXX - running - Thu Sep  3 11:46:01 PDT 2020
     # real    8m19.775s
 
     # one job broken:
@@ -856,7 +843,7 @@ XXX - running - Wed Sep  2 17:31:19 PDT 2020
     # 57607700 bases of 2654624157 (2.170%) in intersection
 
 #########################################################################
-# ncbiGene (WORKING - 2020-07-30 - Hiram)
+# ncbiGene (TBD - 2020-09-03 - Hiram)
 
     mkdir /hive/data/genomes/calJac4/bed/xenoRefGene
     cd /hive/data/genomes/calJac4/bed/xenoRefGene
@@ -866,95 +853,66 @@ XXX - running - Wed Sep  2 17:31:19 PDT 2020
     # real    67m18.015s
 
 #########################################################################
-# Create kluster run files (TBD - 2020-07-30 - Hiram)
+# Create kluster run files (DONE - 2020-09-03 - Hiram)
 
     # numerator is calJac4 gapless bases "real" as reported by:
     featureBits -noRandom -noHap calJac4 gap
-    # 73490654 bases of 2649940489 (2.773%) in intersection
+    # 36757259 bases of 2793460667 (1.316%) in intersection
     #                      ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 2649940489 / 2861349177 \) \* 1024
-    #  ( 2649940489 / 2861349177 ) * 1024 = 948.342510
+    calc \( 2793460667 / 2861349177 \) \* 1024
+    #  ( 2793460667 / 2861349177 ) * 1024 = 999.704526
 
-    # ==> use -repMatch=900 according to size scaled down from 1024 for human.
-    #   and rounded down to nearest 50
+    # ==> use -repMatch=1000 according to size scaled down from 1024 for human.
     cd /hive/data/genomes/calJac4
     time blat calJac4.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/calJac4.11.ooc \
-        -repMatch=900
-    #	Wrote 31807 overused 11-mers to jkStuff/calJac4.11.ooc
-    #	real    0m23.024s
+        -repMatch=1000
+    # Wrote 34987 overused 11-mers to jkStuff/calJac4.11.ooc
+    # real    0m29.438s
+    # calJac3 at repMatch=950
+    #	Wrote 32908 overused 11-mers to jkStuff/calJac3.11.ooc
 
-    # mm10 at repMatch=1000:
-    #	Wrote 27208 overused 11-mers to jkStuff/mm10.11.ooc
-    #	real    2m9.568s
+    # survey sizes of all gaps:
+    hgsql -N -e 'select size from gap;' calJac4 | ave stdin | sed -e 's/^/# /;'
+# Q1 100.000000
+# median 24230.500000
+# Q3 55834.000000
+# average 100548.682540
+# min 13.000000
+# max 1000000.000000
+# count 378
+# total 38007402.000000
+# standard deviation 237103.349286
+    hgsql -N -e 'select size from gap;' calJac4 | sort -n | uniq -c | sed -e 's/^/# /;'
 
     # survey sizes of non-bridged gaps:
     hgsql -N -e 'select size from gap where bridge="no" order by size;' \
 	calJac4  | sort | uniq -c | sort -k2,2n | sed -e 's/^/# /;'
-#       1 8000
-#      21 10000
-#       2 30000
-#      43 50000
-#       3 60000
-#       1 61000
-#       2 63000
-#       1 66000
-#       1 71000
-#       1 81000
-#      42 100000
-#       1 140000
-#       1 174000
-#       1 300000
-#       1 350000
-#       1 500000
-#      20 2890000
+#       7 100
+#       8 50000
+#      22 1000000
 
-    # and survey the bridged gaps over 5,000 bases:
-    hgsql -N -e 'select size from gap where bridge="yes" and size > 4999;' \
-	calJac4  | sort | uniq -c | sort -k2,2n | sed -e 's/^/# /;'
-#       2 5000
-#       1 7000
-#       1 15000
-#       1 15500
-#       1 16000
-#       1 18000
-#       1 18500
-#       1 19208
-#       1 20000
-#       1 25500
-#       1 30000
-#       1 49000
-#      44 50000
-#       1 79000
-#       2 100000
-#       1 135500
-#       1 145000
-#       1 166000
-#       1 200000
-#       1 222000
-#       1 225000
-#       1 285000
-#       1 295000
-#       3 300000
-#       1 360000
-#       1 425000
-#       1 430000
-#       1 522000
+    # and survey the number bridged gaps over 50,000 bases:
+    hgsql -N -e 'select size from gap where bridge="yes" and size > 49999;' \
+        calJac4 | wc -l
+    # 86
 
-    # use gap size of 5000 to construct a lift file:
-    gapToLift -allowBridged -verbose=2 -minGap=5000 calJac4 \
-	jkStuff/calJac4.5Kgaps.lft -bedFile=jkStuff/calJac4.5Kgaps.bed
-    wc -l jkStuff/calJac4.5Kgaps*
-    #	176 jkStuff/calJac4.5Kgaps.bed
-    #	176 jkStuff/calJac4.5Kgaps.lft
+    # forget the non-bridged of size 100, use 50,000 and allow bridged
 
-    # to see the gaps used:
-    bedInvert.pl chrom.sizes jkStuff/calJac4.5Kgaps.bed \
+    # use gap size of 50000 to construct a lift file:
+    gapToLift -allowBridged -verbose=2 -minGap=50000 calJac4 \
+	jkStuff/calJac4.gaps.lft -bedFile=jkStuff/calJac4.gaps.bed
+    wc -l jkStuff/calJac4.gaps*.
+    # 1073 jkStuff/calJac4.gaps.bed
+    # 1073 jkStuff/calJac4.gaps.lft
+
+    # to see the gaps sizes used:
+    bedInvert.pl chrom.sizes jkStuff/calJac4.gaps.bed \
 	| cut -f4 | sort -n | uniq -c | less
 
 ########################################################################
@@ -1036,55 +994,47 @@ XXX - running - Wed Sep  2 17:31:19 PDT 2020
     # 740357755 bases of 2481941580 (29.830%) in intersection
 
 ##############################################################################
-# GENBANK AUTO UPDATE (TBD - 2020-07-30 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2020-09-03 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # organism       mrnaCnt estCnt  refSeqCnt
-    # Mus musculus    581990  4871398 37663
-    # Mus musculus albula     4       0       0
-    # Mus musculus bactrianus 4       0       0
-    # Mus musculus brevirostris       2       0       0
-    # Mus musculus castaneus  28      2       0
-    # Mus musculus domesticus 1703    70      0
-    # Mus musculus kobuvirus  2       0       0
-    # Mus musculus molossinus 38      0       0
-    # Mus musculus musculus   71      4       0
-    # Mus musculus musculus x M. m. castaneus 1       0       0
-    # Mus musculus papillomavirus type 1      10      0       0
-    # Mus musculus picornavirus       3       0       0
-    # Mus musculus wagneri    2       0       0
+    # Callithrix geoffroyi	7	0	0
+    # Callithrix jacchus	1607	292992	221
+    # Callithrix kuhlii	1	0	0
+    # Callithrix penicillata	1	0	0
+    # Callithrix pygmaea	5	0	0
+    # Callithrix sp.	4	0	0
 
     # edit etc/genbank.conf to add calJac4 just after mm10
 
-# calJac4 - (house mouse - GCA_000001635.9 - GRCm39)
+# Marmoset - GCF_009663435.1 - Callithrix_jacchus_cj1700_1.1
 calJac4.serverGenome = /hive/data/genomes/calJac4/calJac4.2bit
 calJac4.ooc = /hive/data/genomes/calJac4/jkStuff/calJac4.11.ooc
-calJac4.lift = /hive/data/genomes/calJac4/jkStuff/calJac4.5Kgaps.lft
+calJac4.lift = /hive/data/genomes/calJac4/jkStuff/calJac4.gaps.lft
+calJac4.perChromTables = no
 calJac4.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
 calJac4.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
 calJac4.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
 calJac4.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
 calJac4.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+calJac4.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
 calJac4.downloadDir = calJac4
-calJac4.refseq.mrna.xeno.load  = yes
-calJac4.refseq.mrna.xeno.loadDesc = yes
+calJac4.refseq.mrna.native.load  = yes
+calJac4.refseq.mrna.xeno.load = yes
+calJac4.refseq.mrna.xeno.loadDesc  = yes
 calJac4.genbank.mrna.xeno.load  = yes
-calJac4.genbank.mrna.blatTargetDb = yes
-calJac4.upstreamGeneTbl = refGene
-# calJac4.mgc = yes
-# calJac4.orfeome = yes
-# calJac4.ccds.buildId = 21
-# calJac4.upstreamMaf = multiz60way /hive/data/genomes/calJac4/bed/multiz60way/species.list
+# calJac4.upstreamGeneTbl = ensGene
+# calJac4.upstreamMaf = multiz13way /hive/data/genomes/calJac4/bed/multiz13way/species.list
 
     # verify the files specified exist before checking in the file:
   grep ^calJac4 etc/genbank.conf | grep hive | awk '{print $NF}' | xargs ls -og
-# -rw-rw-r-- 1    127236 Jul 30 09:23 /hive/data/genomes/calJac4/jkStuff/calJac4.11.ooc
-# -rw-rw-r-- 1      7714 Jul 30 09:50 /hive/data/genomes/calJac4/jkStuff/calJac4.5Kgaps.lft
-# -rw-rw-r-- 1 714181470 Jul 30 09:03 /hive/data/genomes/calJac4/calJac4.2bit
+# -rw-rw-r-- 1 755819249 Sep  3 10:51 /hive/data/genomes/calJac4/calJac4.2bit
+# -rw-rw-r-- 1    139956 Sep  3 11:54 /hive/data/genomes/calJac4/jkStuff/calJac4.11.ooc
+# -rw-rw-r-- 1     61169 Sep  3 12:42 /hive/data/genomes/calJac4/jkStuff/calJac4.gaps.lft
 
-    git commit -m "Added calJac4 mouse; refs #22271" etc/genbank.conf
+    git commit -m "Added calJac4 marmoset; refs #24074" etc/genbank.conf
     git push
 
     # update /cluster/data/genbank/:
@@ -1095,7 +1045,7 @@ calJac4.upstreamGeneTbl = refGene
     git pull
     # add calJac4 to:
     #   etc/hgwdev.dbs etc/align.dbs
-    git commit -m "Added calJac4 - mouse refs #22271" etc/hgwdev.dbs etc/align.dbs
+    git commit -m "Added calJac4 - marmoset refs #24074" etc/hgwdev.dbs etc/align.dbs
     git push
     make etc-update
 
@@ -1103,7 +1053,7 @@ calJac4.upstreamGeneTbl = refGene
     # appear
 
 #############################################################################
-# augustus gene track (TBD - 2020-07-30 - Hiram)
+# augustus gene track (TBD - 2020-09-03 - Hiram)
 
     mkdir /hive/data/genomes/calJac4/bed/augustus
     cd /hive/data/genomes/calJac4/bed/augustus
@@ -1163,10 +1113,10 @@ calJac4.upstreamGeneTbl = refGene
  # refGene 0.402%, ncbiRefSeqCurated 0.401%, both 0.400%, cover 99.33%, enrich 247.79x
 
 ##############################################################################
-# LIFTOVER TO mm10 (TBD - 2020-07-30 - Hiram)
+# LIFTOVER TO mm10 (TBD - 2020-09-03 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/calJac4/bed/blat.mm10.2020-07-30
-    cd /hive/data/genomes/calJac4/bed/blat.mm10.2020-07-30
+    mkdir /hive/data/genomes/calJac4/bed/blat.mm10.2020-09-03
+    cd /hive/data/genomes/calJac4/bed/blat.mm10.2020-09-03
     doSameSpeciesLiftOver.pl -verbose=2 \
         -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -query2Bit=/hive/data/genomes/mm10/mm10.2bit \
@@ -1205,7 +1155,7 @@ calJac4.upstreamGeneTbl = refGene
 	where name="calJac4";' hgcentraltest
 
 ##############################################################################
-# crispr whole genome (TBD - 2020-07-30 - Hiram)
+# crispr whole genome (TBD - 2020-09-03 - Hiram)
     mkdir /hive/data/genomes/calJac4/bed/crisprAll
     cd /hive/data/genomes/calJac4/bed/crisprAll
 
@@ -1324,7 +1274,7 @@ calJac4.upstreamGeneTbl = refGene
     joinerCheck -database=calJac4 -keys all.joiner
 
     # when clean, check in:
-    git commit -m 'adding rules for calJac4 refs #22271' all.joiner
+    git commit -m 'adding rules for calJac4 refs #24074' all.joiner
     git push
     # run up a 'make alpha' in hg/hgTables to get this all.joiner file
     # into the hgwdev/genome-test system
