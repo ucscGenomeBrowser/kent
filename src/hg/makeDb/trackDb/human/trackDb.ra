@@ -4918,49 +4918,42 @@ release beta,public
 searchTable iscaCuratedBenign
 searchMethod exact
 searchType bed
-semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
 searchTable iscaBenign
 searchMethod exact
 searchType bed
-semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
 searchTable iscaLikelyBenign
 searchMethod exact
 searchType bed
-semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
 searchTable iscaCuratedPathogenic
 searchMethod exact
 searchType bed
-semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
 searchTable iscaPathogenic
 searchMethod exact
 searchType bed
-semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
 searchTable iscaLikelyPathogenic
 searchMethod exact
 searchType bed
-semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
 searchTable iscaUncertain
 searchMethod exact
 searchType bed
-semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
