@@ -724,6 +724,7 @@ cd kent/src/hg/makeDb/trackDb
     ../outside/gencode/bin/gencodeGenerateTrackDbs hg38 35 101 'Aug 2020'
 
     # edit human/hg38/trackDb.gencode.ra to add include of new gencodeCore*.ra
+    # include gencodeCoreV35.ra alpha
     make DBS=hg38
 
     ## only if being pushed to RR (may be there from pre-release)
