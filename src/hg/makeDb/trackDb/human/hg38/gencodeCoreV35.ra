@@ -22,6 +22,7 @@ gencodeUniProt gencodeToUniProtV35
 gencodeAnnotationRemark gencodeAnnotationRemarkV35
 gencodeTranscriptionSupportLevel gencodeTranscriptionSupportLevelV35
 gencodeEntrezGene gencodeToEntrezGeneV35
+gencodeGeneSymbol gencodeToGeneSymbolV35
 
 # searches for annot
 searchName gencodeAnnotV35

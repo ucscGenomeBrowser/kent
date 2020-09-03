@@ -55,7 +55,10 @@ static char *gencodeBiotypesUrl = "http://www.gencodegenes.org/pages/biotypes.ht
 static char *gencodeTagsUrl = "http://www.gencodegenes.org/pages/tags.html";
 
 static char *yalePseudoUrl = "http://tables.pseudogene.org/%s";
-static char *hgncUrl = " https://www.genenames.org/data/gene-symbol-report/#!/symbol/%s";
+static char *hgncSymbolUrl = "https://www.genenames.org/data/gene-symbol-report/#!/symbol/%s";
+static char *hgncIdUrl = "https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/%s";
+static char *mgiSymbolUrl = "http://www.informatics.jax.org/searchtool/Search.do?query=%s";
+static char *mgiIdUrl = "http://www.informatics.jax.org/accession/%s";
 static char *geneCardsUrl = "http://www.genecards.org/cgi-bin/carddisp.pl?gene=%s";
 static char *apprisHomeUrl = "http://appris-tools.org/";
 static char *apprisGeneUrl = "http://appris-tools.org/#/database/id/%s/%s?sc=ensembl";
@@ -324,25 +327,16 @@ subChar(sciNameSym, ' ', '_');
 return sciNameSym;
 }
 
-static void prExtIdAnchor(char *id, char *urlTemplate)
+static void prExtIdAnchor(char *name, char *id, char *urlTemplate)
 /* if an id to an external database is not empty, print an HTML anchor to it */
 {
 if (!isEmpty(id))
     {
     char urlBuf[512];
     safef(urlBuf, sizeof(urlBuf), urlTemplate, id);
-    printf("<a href=\"%s\" target=_blank>%s</a>", urlBuf, id);
+    printf("<a href=\"%s\" target=_blank>%s</a>", urlBuf, name);
     }
 }
-
-#if UNUSED
-static void prTdExtIdAnchor(char *id, char *urlTemplate)
-/* print a table data element with an anchor for a id */
-{
-printf("<td>");
-prExtIdAnchor(id, urlTemplate);
-}
-#endif
 
 static void prEnsIdAnchor(char *id, char *urlTemplate)
 /* if an id to an ensembl database is not empty, print an HTML anchor to it */
@@ -453,13 +447,60 @@ else
 printf("</tr>\n");
 }
 
-static void writeGeneSymbolRow(struct wgEncodeGencodeAttrs *transAttrs)
-/* output HTML row for gene symbol if it makes sense */
+// some labels for gene symbol rows
+static char *hgncSrcLabel = "HGNC gene symbol";
+static char *mgiSrcLabel = "MGI gene symbol";
+static char *genericSrcLabel = "Gene symbol";
+static char *fakeSrcLabel = "Generated gene symbol";
+
+static void writeGeneSymbolRowsOld(struct wgEncodeGencodeAttrs *transAttrs)
+/* Output HTML rows for gene symbol for older GENCODE that doesn't have HGNC|MGI ids */
 {
-printf("<tr><th>%s gene symbol<td colspan=2>", (isHuman() ? "HGNC" : "MGI"));
-if (!isFakeGeneSymbol(transAttrs->geneName))
-    prExtIdAnchor(transAttrs->geneName, hgncUrl);
+char *srcLabel = isFakeGeneSymbol(transAttrs->geneName) ? fakeSrcLabel
+    : (isHuman() ? hgncSrcLabel : mgiSrcLabel);
+
+printf("<tr><th>%s<td colspan=2>", srcLabel);
+if (isFakeGeneSymbol(transAttrs->geneName))
+    puts(transAttrs->geneName);
+else
+    prExtIdAnchor(transAttrs->geneName, transAttrs->geneName, (isHuman() ? hgncSymbolUrl : mgiSymbolUrl)) ;
 printf("</tr>\n");
+}
+
+static void writeGeneSymbolRowsNew(struct wgEncodeGencodeAttrs *transAttrs,
+                                  struct wgEncodeGencodeGeneSymbol *geneSymbol)
+/* Output HTML rows for gene symbol for new GENCODE that have HGNC|MGI ids */
+{
+boolean isFake = (geneSymbol == NULL) && isFakeGeneSymbol(transAttrs->geneName); // be sure it is fake
+char *srcLabel;
+if (geneSymbol != NULL)
+    srcLabel = (isHuman() ? hgncSrcLabel : mgiSrcLabel);
+else if (isFake)
+    srcLabel = fakeSrcLabel;
+else
+    srcLabel = genericSrcLabel;
+printf("<tr><th>%s<td colspan=2>", srcLabel);
+if (geneSymbol != NULL)
+    prExtIdAnchor(geneSymbol->symbol, geneSymbol->geneId,
+                  isHuman() ? hgncIdUrl : mgiIdUrl);
+else
+    puts(transAttrs->geneName);
+printf("</tr>\n");
+}
+
+static void writeGeneSymbolRows(struct sqlConnection *conn,
+                                struct trackDb *tdb,
+                                struct wgEncodeGencodeAttrs *transAttrs)
+/* Output HTML row for gene symbol if it makes sense */
+{
+if (haveGencodeTable(tdb, "gencodeGeneSymbol"))
+    {
+    struct wgEncodeGencodeGeneSymbol *geneSymbol = metaDataLoad(tdb, conn, transAttrs->transcriptId, "gencodeGeneSymbol", "transcriptId", 0, (sqlLoadFunc)wgEncodeGencodeGeneSymbolLoad);
+    writeGeneSymbolRowsNew(transAttrs, geneSymbol);
+    wgEncodeGencodeGeneSymbolFreeList(&geneSymbol);
+    }
+else
+    writeGeneSymbolRowsOld(transAttrs);
 }
 
 static void writeBasicInfoHtml(struct sqlConnection *conn, struct trackDb *tdb, char *gencodeId, struct genePred *transAnno,
@@ -524,7 +565,7 @@ if (tsl != NULL)
     char *tslDesc = getSupportLevelDesc(tsl);
     printf("<tr><th><a href=\"#tsl\">Transcription Support Level</a><td><a href=\"#%s\">%s</a><td></tr>\n", tslDesc, tslDesc);
     }
-writeGeneSymbolRow(transAttrs);
+writeGeneSymbolRows(conn, tdb, transAttrs);
 
 printf("<tr><th>CCDS<td>");
 if (!isEmpty(transAttrs->ccdsId))
@@ -539,7 +580,7 @@ if (isHuman())
     {
     printf("<tr><th>GeneCards<td colspan=2>");
     if (!isFakeGeneSymbol(transAttrs->geneName))
-        prExtIdAnchor(transAttrs->geneName, geneCardsUrl);
+        prExtIdAnchor(transAttrs->geneName, transAttrs->geneName, geneCardsUrl);
     printf("</tr>\n");
     }
 
@@ -993,7 +1034,7 @@ safef(header, sizeof(header), "GENCODE 2-way consensus pseudogene %s", gencodeId
 cartWebStart(cart, database, "%s", header);
 printf("<H2>%s</H2>\n", header);
 printf("<b>Yale id:</b> ");
-prExtIdAnchor(gencodeId, yalePseudoUrl);
+prExtIdAnchor(gencodeId, gencodeId, yalePseudoUrl);
 printf("<br>");
 printPos(pseudoAnno->chrom, pseudoAnno->txStart, pseudoAnno->txEnd, pseudoAnno->strand, FALSE, NULL);
 }

@@ -30,6 +30,7 @@ wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureVM22
 wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkVM22
 wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelVM22
 wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneVM22
+wgEncodeGencodeGeneSymbol wgEncodeGencodeGeneSymbolVM22
 
     track wgEncodeGencodeVM22ViewGenes
     shortLabel Genes

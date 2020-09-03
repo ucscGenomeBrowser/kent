@@ -30,6 +30,7 @@ wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureVM20
 wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkVM20
 wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelVM20
 wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneVM20
+wgEncodeGencodeGeneSymbol wgEncodeGencodeGeneSymbolVM20
 
     track wgEncodeGencodeVM20ViewGenes
     shortLabel Genes

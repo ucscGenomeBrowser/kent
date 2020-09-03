@@ -206,6 +206,7 @@ gencodeUniProt genePred
 gencodeAnnotationRemark genePred
 gencodeTranscriptionSupportLevel genePred
 gencodeEntrezGene genePred
+gencodeGeneSymbol genePred
 geneClasses bed genePred
 geneTrack vcfTabix vcf vcfPhasedTrio
 genome customTracks
@@ -553,6 +554,7 @@ wgEncodeGencodePolyAFeature genePred
 wgEncodeGencodeAnnotationRemark genePred
 wgEncodeGencodeTranscriptionSupportLevel genePred
 wgEncodeGencodeEntrezGene genePred
+wgEncodeGencodeGeneSymbol genePred
 wibFile customTracks
 wigColorBy wig
 wigFile customTracks
