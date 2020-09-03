@@ -40,7 +40,7 @@ scoreLabel ClinVar Star-Rating (0-4)
         track clinvarCnv
         parent clinvar
         shortLabel ClinVar CNVs
-        longLabel ClinVar Copy Number Variants  (mostly Copy-Number Variants)
+        longLabel ClinVar Copy Number Variants > 50bp
         visibility hide
         type bigBed 12 +
         itemRgb on
