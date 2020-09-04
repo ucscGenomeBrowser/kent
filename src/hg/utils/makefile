@@ -24,6 +24,7 @@ UTILS_APPLIST = \
 	bedWeedOverlapping \
 	bedMergeAdjacent \
 	bedPartition \
+	bigGenePredToGenePred \
 	bigMafToMaf \
 	bigPslToPsl \
 	binFromRange \
