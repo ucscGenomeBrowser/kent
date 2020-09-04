@@ -1,6 +1,6 @@
 track clinGenComp
 shortLabel ClinGen
-longLabel Clinical Genome Resource (ClinGen) Dosage Sensitivity Map and Structural Variants
+longLabel Clinical Genome Resource (ClinGen) Dosage Sensitivity Map
 visibility pack
 type bigBed 9 +
 group phenDis
@@ -33,25 +33,3 @@ html clinGen
     filterValues.triploScore 0|No evidence available,1|Little evidence for dosage pathogenicity,2|Some evidence for dosage pathogenicity,3|Sufficient evidence for dosage pathogenicity,30|Gene associated with autosomal recessive phenotype,40|Dosage sensitivity unlikely
     filterLabel.triploScore Dosage Sensitivity Score
     urls url="$$" PMID1="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" PMID2="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" PMID3="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" omimID="https://omim.org/entry/$$"
-
-    track clinGenCnv
-    priority 3
-    parent clinGenComp on
-    shortLabel ClinGen Structural Variants
-    longLabel ClinGen Structural Variants
-    html clinGenSv
-    type bigBed 9 +
-    itemRgb on
-    visibility dense
-    mergeSpannedItems off
-    bigDataUrl /gbdb/$D/bbi/clinGen/clinGenCnv.bb
-    mouseOverField _mouseOver
-    filterByRange.size on
-    filterLabel.size Variant Size
-    filterValues.variantType copy_number_loss|loss,copy_number_gain|gain
-    filterLabel.variantType Variant Type
-    filterValues.clinicalInterpretation Pathogenic|pathogenic,Benign|benign
-    filterLabel.clinicalInterpretation Clinical Significance
-    url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
-    urlLabel NCBI DbVar:
-    urls pubMed="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" clinGenId="$$"
