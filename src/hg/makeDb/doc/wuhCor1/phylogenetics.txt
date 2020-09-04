@@ -41,31 +41,27 @@
 
 
 #########################################################################
-# SARS-CoV-2 PHYLOGENY (DONE - 2020-07-22 - Angie)
-# First done 2020-07-15; updated 202-07-22 with tree from Yatish Turakhia, collapsed to keep
+# SARS-CoV-2 PHYLOGENY (DONE - 2020-09-03 - Angie)
+# First done 2020-07-15; updated 2020-07-22 with tree from Yatish Turakhia, collapsed to keep
 # only nodes with associated mutations.
+# Updated 2020-09-03 with latest release 28-08-20.
 
-    releaseLabel=11-7-20
+    releaseLabel=28-08-20
     mkdir -p /hive/data/genomes/wuhCor1/bed/sarsCov2Phylo/$releaseLabel
     cd /hive/data/genomes/wuhCor1/bed/sarsCov2Phylo/$releaseLabel
-    wget https://github.com/roblanf/sarscov2phylo/releases/download/$releaseLabel/dat.bin
-
-    # The full release file (including sequence alignments, not just the tree which is
-    # shared publicly) is encrypted with a password that Rob shares with other GISAID members.
-    openssl aes-256-cbc -md sha256 -salt -d -kfile /hive/users/angie/fromRob/kFileWithNl \
-      -in dat.bin -out dat.tar.gz
-    tar xvzf dat.tar.gz
+    wget https://github.com/roblanf/sarscov2phylo/releases/download/28-08-20/ft_SH.tree
+    # aln_global_unmasked.fa.xz emailed from Rob
 
     # Figure out what fasta sequences are not in the tree and therefore need to be excluded from VCF:
     xzcat aln_global_unmasked.fa.xz \
     | grep ^\> \
     | sed -re 's/^>//;' \
     | sort > fa.ids.sorted
-    sed -re 's/\)[0-9.]+:/\):/g; s/:[0-9e.:-]+//g; s/[\(\);]//g; s/,/\n/g;' ft_FBP.tree \
+    sed -re 's/\)[0-9.]+:/\):/g; s/:[0-9e.:-]+//g; s/[\(\);]//g; s/,/\n/g;'" s/'//g;" ft_SH.tree \
     | sort > tree.ids.sorted
     # How many samples?
     wc -l tree.ids.sorted
-#39342 tree.ids.sorted
+#59600 tree.ids.sorted
 
     # Make sure the number of samples in tree but not fasta is 0
     # (if not, probably need to fix sed command):
@@ -83,20 +79,20 @@
     | faToVcf stdin gisaid-$releaseLabel.unfiltered.vcf -includeRef \
         -ref='hCoV-19/Wuhan/Hu-1/2019|EPI_ISL_402125|2019-12-31' \
         -vcfChrom=NC_045512v2 -verbose=2 -excludeFile=rob-$releaseLabel.idsToExclude
-#Read 39587 sequences.
+#Read 59889 sequences.
 #Using hCoV-19/Wuhan/Hu-1/2019|EPI_ISL_402125|2019-12-31 as reference.
-#Excluded 245 sequences named in rob-11-7-20.idsToExclude (39342 sequences remaining including reference)
+#Excluded 289 sequences named in rob-28-08-20.idsToExclude (59600 sequences remaining including reference)
     # Remove some redundant parts of the very long concatenated IDs.
     perl -wpi -e 's@hCoV-19/@@g;  s@\|20(\d\d)@|$1@g;' gisaid-$releaseLabel.unfiltered.vcf
     ls -l gisaid-$releaseLabel.unfiltered.vcf
-#-rw-rw-r-- 1 angie genecats 1205224346 Jul 15 16:15 gisaid-11-7-20.unfiltered.vcf
+#-rw-rw-r-- 1 angie genecats 2155993752 Sep  2 17:59 gisaid-28-08-20.unfiltered.vcf
     wc -l gisaid-$releaseLabel.unfiltered.vcf
-#15287 gisaid-11-7-20.unfiltered.vcf
+#18059 gisaid-28-08-20.unfiltered.vcf
     gzip -f gisaid-$releaseLabel.unfiltered.vcf
 
     # Cross-check number of samples in tree with VCF sample IDs:
     zcat gisaid-$releaseLabel.unfiltered.vcf.gz | head | g ^#CHROM | cut -f 10- | wc -w
-#39342
+#59600
 
     # Use -ambiguousToN to avoid complaints about ambiguous alleles from display code
     # (also to prevent more situations where it looks like CZB maybe saw an alt, but according
@@ -108,63 +104,83 @@
         -vcfChrom=NC_045512v2 -verbose=2 -excludeFile=rob-$releaseLabel.idsToExclude
     perl -wpi -e 's@hCoV-19/@@g;  s@\|20(\d\d)@|$1@g;' gisaid-$releaseLabel.ambigToN.vcf
     ls -l gisaid-$releaseLabel.ambigToN.vcf
-#-rw-rw-r-- 1 angie genecats 915570837 Jul 15 16:16 gisaid-11-7-20.ambigToN.vcf
+#-rw-rw-r-- 1 angie genecats 1705011225 Sep  2 18:05 gisaid-28-08-20.ambigToN.vcf
     wc -l gisaid-$releaseLabel.ambigToN.vcf
-#11609 gisaid-11-7-20.ambigToN.vcf
+#14278 gisaid-28-08-20.ambigToN.vcf
     bgzip -f gisaid-$releaseLabel.ambigToN.vcf
     tabix -p vcf gisaid-$releaseLabel.ambigToN.vcf.gz
 
-    # Then with -ambiguousToN and -minAc (0.1% = 39342 / 1000 = 39)
+    # Then with -ambiguousToN and -minAc (0.1% = 59600 / 1000 = 60)
     # for not-terribly-slow browser display:
     xzcat aln_global_unmasked.fa.xz \
     | faToVcf stdin gisaid-$releaseLabel.minAf.001.vcf -includeRef \
-        -ambiguousToN -minAc=39 \
+        -ambiguousToN -minAc=60 \
         -ref='hCoV-19/Wuhan/Hu-1/2019|EPI_ISL_402125|2019-12-31' \
         -vcfChrom=NC_045512v2 -verbose=2 -excludeFile=rob-$releaseLabel.idsToExclude
     perl -wpi -e 's@hCoV-19/@@g;  s@\|20(\d\d)@|$1@g;' gisaid-$releaseLabel.minAf.001.vcf
     ls -l gisaid-$releaseLabel.minAf.001.vcf
-#-rw-rw-r-- 1 angie genecats 36004879 Jul 15 16:17 gisaid-11-7-20.minAf.001.vcf
+#-rw-rw-r-- 1 angie genecats 63014097 Sep  2 18:07 gisaid-28-08-20.minAf.001.vcf
     wc -l gisaid-$releaseLabel.minAf.001.vcf
-#438 gisaid-11-7-20.minAf.001.vcf
+#509 gisaid-28-08-20.minAf.001.vcf
     bgzip -f gisaid-$releaseLabel.minAf.001.vcf
     tabix -p vcf gisaid-$releaseLabel.minAf.001.vcf.gz
 
-    # The filtered version still takes ~6.5s to display when viewing the whole genome.
-    # Make an even more filtered version with -minAc=393 (1%):
+    # Make an even more filtered version with -minAc=596 (1%):
     xzcat aln_global_unmasked.fa.xz \
     | faToVcf stdin gisaid-$releaseLabel.minAf.01.vcf -includeRef \
-        -ambiguousToN -minAc=393 \
+        -ambiguousToN -minAc=596 \
         -ref='hCoV-19/Wuhan/Hu-1/2019|EPI_ISL_402125|2019-12-31' \
         -vcfChrom=NC_045512v2 -verbose=2 -excludeFile=rob-$releaseLabel.idsToExclude
     perl -wpi -e 's@hCoV-19/@@g;  s@\|20(\d\d)@|$1@g;' gisaid-$releaseLabel.minAf.01.vcf
     ls -l gisaid-$releaseLabel.minAf.01.vcf
-#-rw-rw-r-- 1 angie genecats 6085371 Jul 15 16:20 gisaid-11-7-20.minAf.01.vcf
+#-rw-rw-r-- 1 angie genecats 10185589 Sep  2 18:12 gisaid-28-08-20.minAf.01.vcf
     wc -l gisaid-$releaseLabel.minAf.01.vcf
-#58 gisaid-11-7-20.minAf.01.vcf
+#66 gisaid-28-08-20.minAf.01.vcf
     bgzip -f gisaid-$releaseLabel.minAf.01.vcf
     tabix -p vcf gisaid-$releaseLabel.minAf.01.vcf.gz
+
+    # Shorten tree IDs to match VCF:
+    perl -wpe 's@hCoV-19/@@g;  s@\|20(\d\d)@|$1@g; '"s@'@@g;" ft_SH.tree \
+      > ft_SH.shorterNames.tree
+    # Set the root of the tree to the Wuhan/Hu-1 (NC_045512.2) reference not WIV04:
+    ~/github/newick_utils/src/nw_reroot ft_SH.shorterNames.tree \
+      'Wuhan/Hu-1/2019|EPI_ISL_402125|19-12-31' > ft_SH.reroot.nh
+    # Use Yatish Turakhia's usher program to collapse nodes of the tree at which there is
+    # no mutation, but not to condense identical samples into new nodes.
+    ~angie/github/yatish_strain_phylogenetics/build/usher \
+      --vcf gisaid-$releaseLabel.unfiltered.vcf.gz  \
+      --tree ft_SH.reroot.nh \
+      --collapse-final-tree \
+      --print_uncondensed-final-tree \
+    | tail -1 \
+      > ft_SH.collapsed.nh
 
     # Get sample metadata from GISAID so we can color samples & branches by lineage.
     # This requires registering with gisaid.org.  Then go to https://www.epicov.org/epi3/frontend,
     # log in, click Downloads, and click "nextmeta" in the dialog that pops up.  That downloads
-    # a local file with timestamp name, in this case metadata_2020-07-13_15-16.tsv.gz .
+    # a local metadata_*.tsv.gz file with timestamp name.
     # Extract the EPI_ ID and lineage columns:
-    zcat metadata_2020-07-13*.tsv.gz | tail -n +2 | cut -f3,18 | tawk '$2 != ""' \
-      > metadata_2020-07-13.epiToLineage
+    zcat metadata_2020-09-01*.tsv.gz | tail -n +2 | cut -f3,18 | tawk '$2 != ""' \
+      > metadata_2020-09-01.epiToLineage
 
     # Add lineage colors.
     # I really want to replace this with proper tab-sep metadata, but for now, continue to use
     # the icky branch-length-RGB hack.
-    ~/kent/src/hg/utils/otto/nextstrainNcov/treeColorByLineage.py ft_FBP.tree \
-      metadata_2020-07-13.epiToLineage \
-      > rob-$releaseLabel.ft_FBP.linCol.nh
+    ~/kent/src/hg/utils/otto/nextstrainNcov/treeColorByLineage.py ft_SH.collapsed.nh \
+      metadata_2020-09-01.epiToLineage \
+      > sarscov2phylo-$releaseLabel.ft.linCol.nh
     # There are a few sequences that are not in the gisaid (Nextstrain?) metadata for some reason.
-#WARNING:root:No lineage for "hCoV-19/Korea/KCDC2003/2020|EPI_ISL_426167|2020-02-23"
-#WARNING:root:No lineage for "hCoV-19/Sichuan/SC-WCH2-006/2020|EPI_ISL_451377|2020-02-08"
-#WARNING:root:No lineage for "hCoV-19/Canada/NB-235/2020|EPI_ISL_479649|2020-03-31"
-#WARNING:root:No lineage for "hCoV-19/USA/CT-Yale-011/2020|EPI_ISL_428369|2020-03-11"
-#WARNING:root:4 samples had no lineage in metadata_2020-07-13.epiToLineage
-    perl -wpi -e 's@hCoV-19/@@g;  s@\|20(\d\d)@|$1@g;' rob-$releaseLabel.ft_FBP.linCol.nh
+#WARNING:root:No lineage for "Germany/HE-FFM1/2020|EPI_ISL_452218|20-03-02"
+#WARNING:root:No lineage for "Germany/HE-FFM5/2020|EPI_ISL_452221|20-03-02"
+#WARNING:root:No lineage for "Germany/HE-FFM7/2020|EPI_ISL_452223|20-03-02"
+#WARNING:root:No lineage for "USA/NY-QDX-01/2020|EPI_ISL_454691|20-03-12"
+#WARNING:root:No lineage for "USA/CT-Yale-011/2020|EPI_ISL_428369|20-03-11"
+#WARNING:root:No lineage for "Canada/NB-235/2020|EPI_ISL_479649|20-03-31"
+#WARNING:root:No lineage for "Germany/HE-FFM3/2020|EPI_ISL_452219|20-03-02"
+#WARNING:root:No lineage for "Germany/HE-FFM4/2020|EPI_ISL_452220|20-03-02"
+#WARNING:root:No lineage for "Germany/HE-FFM6/2020|EPI_ISL_452222|20-03-02"
+#WARNING:root:No lineage for "Peru/ARE-INS-087/2020|EPI_ISL_524472|20-03-10"
+#WARNING:root:13 samples had no lineage in metadata_2020-09-01.epiToLineage
 
     # Install files in /gbdb.
     mkdir -p /gbdb/wuhCor1/sarsCov2Phylo
@@ -173,18 +189,8 @@
       ln -sf `pwd`/$f /gbdb/wuhCor1/sarsCov2Phylo/$destName
       ln -sf `pwd`/$f.tbi /gbdb/wuhCor1/sarsCov2Phylo/$destName.tbi
     done
-    ln -sf `pwd`/rob-$releaseLabel.ft_FBP.linCol.nh \
-      /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.ft_FBP.linCol.nh
-
-    # 2020-07-22 Yatish provided a version of Rob's tree with nodes collapsed if there was
-    # no new variant at the node, collapsed-rob-11-7-20.ft_FBP.nh.  Add lineage colors:
-    ~/kent/src/hg/utils/otto/nextstrainNcov/treeColorByLineage.py collapsed-rob-11-7-20.ft_FBP.nh \
-      metadata_2020-07-13.epiToLineage \
-    | perl -wpi -e 's@hCoV-19/@@g;  s@\|20(\d\d)@|$1@g;' \
-      > collapsed-rob-$releaseLabel.ft_FBP.linCol.nh
-    # (same warnings about sequences not in metadata)
-    ln -sf `pwd`/collapsed-rob-$releaseLabel.ft_FBP.linCol.nh \
-      /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.ft_FBP.linCol.nh
+    ln -sf `pwd`/sarscov2phylo-$releaseLabel.ft.linCol.nh \
+      /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.ft.linCol.nh
 
 
 #########################################################################

@@ -17992,3 +17992,72 @@ TMPDIR=/dev/shm
     # see if the liftOver menus function in the browser from mm10 to mm39
 
 ##############################################################################
+# LASTZ mouse mm10 vs marmoset calJac4 (DONE - 2020-08-03 - Hiram)
+    #	establish a screen to control this job
+    mkdir /hive/data/genomes/mm10/bed/lastzCalJac4.2020-08-03
+    cd /hive/data/genomes/mm10/bed/lastzCalJac4.2020-08-03
+
+    printf '# mouse vs marmoset calJac4
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: marmoset calJac4
+SEQ2_DIR=/hive/data/genomes/calJac4/calJac4.2bit
+SEQ2_LEN=/hive/data/genomes/calJac4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzCalJac4.2020-08-03
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+XXX - running Thu Sep  3 15:24:58 PDT 2020
+    #	real    1052m41.484s
+
+    cat fb.mm10.chainCalJac4Link.txt
+    #	776486006 bases of 2652783500 (29.271%) in intersection
+    cat fb.mm10.chainSynCalJac4Link.txt
+    #   735561772 bases of 2652783500 (27.728%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm10 calJac4 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    #	real    214m12.449s
+
+    cat fb.mm10.chainRBest.CalJac4.txt
+    # 740117947 bases of 2652783500 (27.900%) in intersection
+
+    mkdir /hive/data/genomes/calJac4/bed/blastz.mm10.swap
+    cd /hive/data/genomes/calJac4/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCalJac4.2020-08-03/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    44m9.935s
+
+    cat fb.calJac4.chainMm10Link.txt
+    #	759821061 bases of 2337131234 (32.511%) in intersection
+    cat fb.calJac4.chainSynMm10Link.txt
+    #   731350605 bases of 2337131234 (31.293%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev calJac4 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    162m30.634s
+
+    cat fb.calJac4.chainRBest.Mm10.txt
+    # 739177732 bases of 2337131234 (31.628%) in intersection
+
+##############################################################################
