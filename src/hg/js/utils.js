@@ -1215,6 +1215,15 @@ function parsePositionWithDb(position)
     return out;
 }
 
+function getHighlight(highlightStr, index) 
+/* Parse out highlight at index and return as a position object (see parsePositionWithDb) */
+{
+    var hlStrings = highlightStr.split("|");
+    var myHlStr = hlStrings[index];
+    var posObj = parsePositionWithDb(myHlStr);
+    return parsePositionWithDb(posObj);
+}
+
 function getSizeFromCoordinates(position)
 {
 // Parse size out of a chr:start-end string
