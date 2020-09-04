@@ -536,9 +536,6 @@ extern int winStart;	  /* Start of window in sequence. */
 extern int winEnd;	  /* End of window in sequence. */
 extern int maxItemsInFullTrack;  /* Maximum number of items displayed in full */
 extern char *position; 		/* Name of position. */
-extern int leftLabelWidthDefaultChars;   /* default number of characters allowed for left label */
-extern int leftLabelWidthChars;   /* number of characters allowed for left label */
-extern int trackTabWidth;
 extern int gfxBorder;		/* Width of graphics border. */
 extern int insideWidth;		/* Width of area to draw tracks in in pixels. */
 extern int insideX;		/* Start of area to draw track in in pixels. */
