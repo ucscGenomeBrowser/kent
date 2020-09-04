@@ -21,7 +21,6 @@ longLabel NCBI Curated Common Structural Variants from dbVar
     filterValues.type alu deletion,copy number gain,copy number loss,copy number variation,deletion,duplication,herv deletion,line1 deletion,sva deletion
     filterLabel.length Variant Size
     filterValues.length Under 10KB,10KB to 100KB,100KB to 1MB,Over 1MB
-    release alpha
 
         track dbVar_common_gnomad
         parent dbVar_common on
@@ -31,7 +30,6 @@ longLabel NCBI Curated Common Structural Variants from dbVar
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
-        release alpha
 
         track dbVar_common_1000g
         parent dbVar_common on
@@ -41,7 +39,6 @@ longLabel NCBI Curated Common Structural Variants from dbVar
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
-        release alpha
 
         track dbVar_common_decipher
         parent dbVar_common on
@@ -51,7 +48,6 @@ longLabel NCBI Curated Common Structural Variants from dbVar
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
-        release alpha
 
         track dbVar_common_african
         parent dbVar_common on
@@ -61,7 +57,6 @@ longLabel NCBI Curated Common Structural Variants from dbVar
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
-        release alpha
 
         track dbVar_common_european
         parent dbVar_common on
@@ -71,7 +66,6 @@ longLabel NCBI Curated Common Structural Variants from dbVar
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
-        release alpha
 
         track dbVar_common_global
         parent dbVar_common on
@@ -81,7 +75,6 @@ longLabel NCBI Curated Common Structural Variants from dbVar
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
-        release alpha
 
     track dbVar_conflict
     superTrack dbVarSv pack
