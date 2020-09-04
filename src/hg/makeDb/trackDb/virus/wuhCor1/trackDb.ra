@@ -476,6 +476,7 @@ longLabel Potential pathogenic insertions and deletions from Gussow et al, PNAS 
 type bigBed 4
 bigDataUrl /gbdb/wuhCor1/bbi/potPathoIndel.bb
 group varRep
+pennantIcon New red ../goldenPath/newsarch.html "Released Sep. 4, 2020"
 
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
