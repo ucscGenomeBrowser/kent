@@ -12883,20 +12883,20 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-    # real    1038m20.721s
+    # real    560m59.358s
 
     cat fb.hg38.chainCalJac4Link.txt
-    # 1545648756 bases of 3110768607 (49.687%) in intersection
+    # 2338614467 bases of 3110768607 (75.178%) in intersection
 
     cat fb.hg38.chainSynCalJac4Link.txt
-    # 1484758745 bases of 3110768607 (47.730%) in intersection
+    # 2261509186 bases of 3110768607 (72.699%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
 	hg38 calJac4) > rbest.log 2>&1 &
-    # real    283m55.399s
+    # real    434m29.112s
 
     cat fb.hg38.chainRBest.CalJac4.txt
-    # 1422619513 bases of 3110768607 (45.732%) in intersection
+    # 2146650109 bases of 3110768607 (69.007%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/calJac4/bed/blastz.hg38.swap
@@ -12907,18 +12907,18 @@ TMPDIR=/dev/shm
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    78m37.078s
+    #  real    105m30.938s
 
     cat fb.calJac4.chainHg38Link.txt
-    # 1460025525 bases of 2337131234 (62.471%) in intersection
+    # 2256668215 bases of 2859817025 (78.910%) in intersection
     cat fb.calJac4.chainSynHg38Link.txt
-    # 1423305734 bases of 2337131234 (60.900%) in intersection
+    # 2183912419 bases of 2859817025 (76.365%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
 	calJac4 hg38) > rbest.log 2>&1 &
-    # real    255m9.076s
+    # real    467m22.590s
 
     cat fb.calJac4.chainRBest.Hg38.txt
-    # 1422612399 bases of 2337131234 (60.870%) in intersection
+    # 2147250913 bases of 2859817025 (75.084%) in intersection
 
 ############################################################################
