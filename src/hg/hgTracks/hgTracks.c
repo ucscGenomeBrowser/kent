@@ -626,6 +626,13 @@ for(cb = cbList; cb != NULL; cb = cb->next)
     }
 }
 
+static void maybeNewFonts(struct hvGfx *hvg)
+/* Check to see if we want to use the alternate font engine (FreeType2). */
+{
+if (sameString(cfgOptionDefault("freeType", "off"), "on"))
+    hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE);
+}
+
 boolean makeChromIdeoImage(struct track **pTrackList, char *psOutput,
                         struct tempName *ideoTn)
 /* Make an ideogram image of the chromosome and our position in it.  If the
@@ -701,6 +708,7 @@ if(doIdeo)
         trashDirFile(ideoTn, "hgtIdeo", "hgtIdeo", ".png");
         hvg = hvGfxOpenPng(ideoWidth, ideoHeight, ideoTn->forCgi, FALSE);
         }
+    maybeNewFonts(hvg);
     hvg->rc = revCmplDisp;
     initColors(hvg);
     ideoTrack->ixColor = hvGfxFindRgb(hvg, &ideoTrack->color);
@@ -5043,6 +5051,8 @@ else
         initColors(hvgSide);
         }
     }
+maybeNewFonts(hvg);
+maybeNewFonts(hvgSide);
 hvg->rc = revCmplDisp;
 initColors(hvg);
 

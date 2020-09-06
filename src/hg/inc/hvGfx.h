@@ -359,4 +359,7 @@ int hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2
 void hvGfxDottedLine(struct hvGfx *hvg, int x1, int y1, int x2, int y2, Color color, boolean isDash);
 /* Brezenham line algorithm, alternating dots, by 1 pixel or two (isDash true) */
 
+void hvGfxSetFontMethod(struct hvGfx *hvg, unsigned int method);
+/* Use the Free Type library to draw fonts. */
+
 #endif 

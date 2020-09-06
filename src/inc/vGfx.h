@@ -9,6 +9,9 @@
 #include "memgfx.h"
 #endif
 
+#define FONT_METHOD_GEM                 0
+#define FONT_METHOD_FREETYPE            1
+
 struct vGfx
 /* Virtual graphic object - mostly a bunch of function
  * pointers. */
@@ -105,6 +108,9 @@ struct vGfx
 
     int (*getFontStringWidth)(void *v, void *font, char *string);
     /* How wide is a string? */
+
+    void (*setFontMethod)(void *v, unsigned int method);
+    /* Which font drawing method shoud we use. */
     };
 
 struct vGfx *vgOpenPng(int width, int height, char *fileName, boolean useTransparency);
@@ -212,6 +218,9 @@ void vgClose(struct vGfx **pVg);
 #define vgGetFontStringWidth(v,font,string) \
 	v->getFontStringWidth(v->data,font,string)
     /* How wide is a string? */
+
+define vgSetFontMethod(v,method) \
+        v->setFontMethod(v->data,method)
 
 int vgFindRgb(struct vGfx *vg, struct rgbColor *rgb);
 /* Find color index corresponding to rgb color. */
