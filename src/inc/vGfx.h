@@ -219,7 +219,7 @@ void vgClose(struct vGfx **pVg);
 	v->getFontStringWidth(v->data,font,string)
     /* How wide is a string? */
 
-define vgSetFontMethod(v,method) \
+#define vgSetFontMethod(v,method) \
         v->setFontMethod(v->data,method)
 
 int vgFindRgb(struct vGfx *vg, struct rgbColor *rgb);
