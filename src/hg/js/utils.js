@@ -1221,7 +1221,7 @@ function getHighlight(highlightStr, index)
     var hlStrings = highlightStr.split("|");
     var myHlStr = hlStrings[index];
     var posObj = parsePositionWithDb(myHlStr);
-    return parsePositionWithDb(posObj);
+    return posObj;
 }
 
 function getSizeFromCoordinates(position)
