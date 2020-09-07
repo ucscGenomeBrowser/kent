@@ -10291,6 +10291,7 @@ dyStringPrintf(dy,"Mousetrap.bind('p s', function() { $('#publicSessionsMenuLink
 
 // also add an entry to the help menu that shows the keyboard shortcut help dialog
 dyStringPrintf(dy,"$(document).ready(addKeyboardHelpEntries);\n");
+dyStringPrintf(dy,"$(document).ready(function() { $('area').qtip(); } );\n");
 
 jsInline(dy->string);
 dyStringFree(&dy);
@@ -10438,12 +10439,17 @@ if(!trackImgOnly)
     hWrites(commonCssStyles());
     jsIncludeFile("mousetrap.min.js", NULL);
     jsIncludeFile("jquery.js", NULL);
+    //jsIncludeFile("jquery-1.7.0.min.js", NULL);
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js", NULL);
     jsIncludeFile("ajax.js", NULL);
     jsIncludeFile("jquery.watermarkinput.js", NULL);
-    if(!searching)
-        {
+    //jsIncludeFile("popper.min.js", NULL);
+    //jsIncludeFile("tippy-bundle.umd.min.js", NULL);
+    //jsIncludeFile("jquery.tooltipster.min.js", NULL);
+    //jsIncludeFile("tooltipster.bundle.min.js", NULL);
+    jsIncludeFile("jquery.qtip.min.js", NULL);
+    if(!searching) {
         jsIncludeFile("jquery.history.js", NULL);
         jsIncludeFile("jquery.imgareaselect.js", NULL);
         }
@@ -10459,8 +10465,10 @@ if(!trackImgOnly)
     jsIncludeFile("lowetooltip.js", NULL);
 #endif///def LOWELAB
 
+    webIncludeResourceFile("jquery.qtip.min.css");
     webIncludeResourceFile("spectrum.min.css");
     webIncludeResourceFile("jquery-ui.css");
+    webIncludeResourceFile("tooltipster.bundle.min.css");
     if (!searching)     // NOT doing search
         {
         webIncludeResourceFile("jquery.contextmenu.css");
