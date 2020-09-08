@@ -196,8 +196,10 @@ def main():
     # Parse command-line arguments
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
-	description="Generates usage statistics for dbs, tracks, and public hub \
-tracks using modified Apache error_log files")
+        description="Generates usage statistics for dbs, tracks, and hubs \
+tracks using processed Apache error_log files. \nThe processed files can be \
+found in the following directory: /hive/users/chmalee/logs/trimmedLogs/result\n\n\
+For more information, see RM#26191.")
     parser.add_argument("-f","--fileName", type=str, help='input file name, \
 must be space-separated Apache error_log file')
     parser.add_argument("-d","--dirName", type=str , help='input directory \
