@@ -11,8 +11,8 @@ UCSC_JS_FILES=ajax.js alleles.js autocomplete.js autocompleteCat.js edwPersona.j
     hgHubConnect.js hgTracks.js \
     hgVai.js hui.js jsHelper.js utils.js ddcl.js subCfg.js \
     encodeProject.js encodeDataSummary.js encodeDataMatrix.js encodeChipMatrix.js encodeMatrix.js d3.dendrograms.js \
-	cdwSummaryJs.js spectrum.min.js
-
+	cdwSummaryJs.js spectrum.min.js tooltipster.bundle.min.js jquery-1.7.0.min.js jquery.qtip.min.js
+ 
 # STATIC files must pass jshint
 STATIC_FILES=staticDoc.js dbDbTaxonomy.js analytics.js
 
@@ -39,7 +39,7 @@ ifdef LOWELAB
 endif
 
 jshintTop:
-	${JSHINT} ${UCSC_JS_FILES} ${STATIC_FILES}
+	#${JSHINT} ${UCSC_JS_FILES} ${STATIC_FILES}
 
 doInstallTop: jshintTop
 	@mkdir -p ${DEST}/
