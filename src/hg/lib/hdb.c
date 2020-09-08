@@ -48,6 +48,7 @@
 #include "filePath.h"
 #include "wikiLink.h"
 #include "cheapcgi.h"
+#include "chromAlias.h"
 
 
 #ifdef LOWELAB
@@ -198,6 +199,9 @@ char *hgOfficialChromName(char *db, char *name)
 /* Returns "canonical" name of chromosome or NULL
  * if not a chromosome. (Case-insensitive search w/sameWord()) */
 {
+/* aliasHash will be initialized if chromAlias table exists */
+static struct hash *aliasHash = NULL;
+
 if (strlen(name) > HDB_MAX_CHROM_STRING)
     return NULL;
 struct chromInfo *ci = NULL;
@@ -209,20 +213,30 @@ if (ci != NULL)
     return cloneString(ci->chrom);
 else
     {
-    if (hTableExists(db, "chromAlias"))
+    if (aliasHash || hTableExists(db, "chromAlias"))
        {
-       struct sqlConnection *conn = hAllocConn(db);
-       char query[512];
-       char *chrom;
-       sqlSafef(query, sizeof(query),
-          "select chrom from chromAlias where alias='%s'", name);
-       chrom = sqlQuickString(conn, query);
-       hFreeConn(&conn);
-       if (isNotEmpty(chrom))  // chrom is already a cloneString result
-         return chrom;
+       if (! aliasHash)	/* first time, initialize aliasHash */
+	    {
+            aliasHash = newHash(4);
+	    struct sqlConnection *conn = hAllocConn(db);
+	    char query[512];
+	    sqlSafef(query, sizeof(query), "select * from chromAlias");
+	    struct sqlResult *sr = sqlGetResult(conn, query);
+	    char **row;
+	    while ((row = sqlNextRow(sr)) != NULL)
+		{
+		struct chromAlias *new = chromAliasLoad(row);
+		hashAdd(aliasHash, new->alias, cloneString(new->chrom));
+		}
+	    sqlFreeResult(&sr);
+	    hFreeConn(&conn);
+	    }
+       char *chrom = (char *)hashFindVal(aliasHash, name);
+       if (isNotEmpty(chrom))
+         return cloneString(chrom);
        }
-    return NULL;
     }
+return NULL;
 }
 
 boolean hgIsOfficialChromName(char *db, char *name)
@@ -244,7 +258,7 @@ void setMinIndexLengthForTrashCleaner()
  * in order to touch the trash database table access times,
  * preserving them from the trash cleaner.
  * Only the trash cleaner should call this:
- *  src/hg/utils/refreshNamedCustomTracks/refreshNamedCustomTracks.c 
+ *  src/hg/utils/refreshNamedCustomTracks/refreshNamedCustomTracks.c
  */
 {
 minLen = 1;  // any value other than 0 is fine.
@@ -473,7 +487,7 @@ char *hDefaultGenomeForClade(char *clade)
 /* Return highest relative priority genome for clade. */
 {
 char *genome = NULL;
-if ((genome = trackHubCladeToGenome(clade)) != NULL) 
+if ((genome = trackHubCladeToGenome(clade)) != NULL)
     return genome;
 
 struct sqlConnection *conn = hConnectCentral();
@@ -1446,7 +1460,7 @@ return path;
 
 char *hReplaceGbdb(char* fileName)
  /* Returns a gbdb filename, potentially rewriting it according to hg.conf
-  * If the settings gbdbLoc1 and gbdbLoc2 are found, try them in order, by 
+  * If the settings gbdbLoc1 and gbdbLoc2 are found, try them in order, by
   * replacing /gbdb/ with the new locations.
   * Typically, gbdbLoc1 is /gbdb/ and gbdbLoc2 is http://hgdownload.soe.ucsc.edu/gbdb/
   * If after the replacement of gbdbLoc1 the resulting fileName does not exist,
@@ -1480,7 +1494,7 @@ char *hReplaceGbdbSeqDir(char *path, char *db)
  * gbdb, like /gbdb/hg19 (which by jkLib is translated to /gbdb/hg19/hg19.2bit).
  hReplaceGbdb would check only if the dir exists. For 2bit basename, we
  have to check if the 2bit file exists, do the rewriting, then strip off the
- 2bit filename again. 
+ 2bit filename again.
  This function works with .nib directories, but nib does not support opening
  from URLs.  As of Feb 2014, only hg16 and anoGam1 have no .2bit file.
 */
@@ -1534,9 +1548,9 @@ char *hTryExtFileNameC(struct sqlConnection *conn, char *extFileTable, unsigned 
 /* Get external file name from table and ID.  Typically
  * extFile table will be 'extFile' or 'gbExtFile'
  * If abortOnError is true, abort if the id is not in the table or if the file
- * fails size check, otherwise return NULL if either of those checks fail.   
- * Please freeMem the result when you are done with it. 
- * (requires conn passed in) 
+ * fails size check, otherwise return NULL if either of those checks fail.
+ * Please freeMem the result when you are done with it.
+ * (requires conn passed in)
  */
 {
 char query[256];
@@ -1553,7 +1567,7 @@ if ((row = sqlNextRow(sr)) == NULL)
     if (abortOnError)
 	errAbort("Database inconsistency table '%s.%s' no ext file with id %u",
 		 sqlGetDatabase(conn), extFileTable, extFileId);
-    else 
+    else
 	{
 	sqlFreeResult(&sr);
 	return NULL;
@@ -1575,7 +1589,7 @@ if (udcIsLocal(path))
             errAbort("External file %s cannot be opened or has wrong size.  "
                      "Old size %lld, new size %lld, error %s",
                      path, dbSize, diskSize, strerror(errno));
-        else 
+        else
             freez(&path);
         }
     }
@@ -1797,7 +1811,7 @@ return seqGetConn(conn, conn, acc, TRUE, seqTbl, extFileTbl);
 }
 
 struct dnaSeq *hDnaSeqMustGetConn(struct sqlConnection *conn, char *acc, char *seqTbl, char *extFileTbl)
-/* Get a cDNA or DNA sequence from the specified seq and extFile tables. 
+/* Get a cDNA or DNA sequence from the specified seq and extFile tables.
  * Abort if not found. */
 {
 return seqMustGetConn(conn, conn, acc, TRUE, seqTbl, extFileTbl);
@@ -3309,17 +3323,17 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
 	{
 	if (chrom != NULL)
 	    {
-            // first try the non-split table name then the split table name. 
+            // first try the non-split table name then the split table name.
             // In 2013, very few assemblies have split tables
             // This avoids dozens of mostly useless chrX_table lookups
             isSplit = TRUE;
 	    if (hTableExists(db, fullName))
 		isSplit = FALSE;
-            else 
+            else
                 {
                 safef(fullName, sizeof(fullName), "%s_%s", chrom, rootName);
                 if (hTableExists(db, fullName))
-                    isSplit = TRUE; 
+                    isSplit = TRUE;
                 else
                     return NULL;
                 }
@@ -3396,10 +3410,10 @@ else
 boolean hFindSplitTable(char *db, char *chrom, char *rootName,
 	char *retTableBuf, int tableBufSize, boolean *hasBin)
 /* Find name of table in a given database that may or may not
- * be split across chromosomes. Return FALSE if table doesn't exist. 
+ * be split across chromosomes. Return FALSE if table doesn't exist.
  *
- * Do not ignore the return value. 
- * This function does NOT tell you whether or not the table is split. 
+ * Do not ignore the return value.
+ * This function does NOT tell you whether or not the table is split.
  * It tells you if the table exists. */
 {
 struct hTableInfo *hti = hFindTableInfo(db, chrom, rootName);
@@ -3453,7 +3467,7 @@ if (httpHost == NULL && !gethostname(host, sizeof(host)))
 return httpHost;
 }
 
-char *hLocalHostCgiBinUrl() 
+char *hLocalHostCgiBinUrl()
 /* Return the current full absolute URL of the cgi-bin directory of the local
  * server in the format http(s)://<host>/<cgiBinDir>, e.g.
  * https://genome.ucsc.edu/cgi-bin/.
@@ -3463,7 +3477,7 @@ char *hLocalHostCgiBinUrl()
  * location of the cgi program relative to Apache's DOCUMENT_ROOT.
  * Https is used if the variable HTTPS is set by Apache.
  *
- * If login.relativeLink=on is set, return only the empty string. 
+ * If login.relativeLink=on is set, return only the empty string.
  * (This is used on the CIRM server, as it has no way of knowing what its
  * actual server name or protocol is, it is behind a reverse proxy)
  * Result has to be free'd. */
@@ -3480,16 +3494,16 @@ safef(buf, sizeof(buf), "http%s://%s%s", cgiAppendSForHttps(), hgLoginHost, cgiD
 return cloneString(buf);
 }
 
-char *hLoginHostCgiBinUrl() 
+char *hLoginHostCgiBinUrl()
 /* Return the current full absolute URL of the cgi-bin directory of the host
  * used for logins. Genome-euro/genome-asia use genome.ucsc.edu for the login,
  * as we have only one single server for user accounts.
  * Returns a string in the format
- * http(s)://<host>/cgi-bin/ e.g. http://genome.ucsc.edu/cgi-bin/ 
+ * http(s)://<host>/cgi-bin/ e.g. http://genome.ucsc.edu/cgi-bin/
  * - the <host> is coming from the wiki.host variable in hg.conf.
  * - https is used unless login.useHttps=off in hg.conf
  *
- * If login.relativeLink=on is set, return only the empty string. 
+ * If login.relativeLink=on is set, return only the empty string.
  * (see hLocalCgiBinUrl)
  * Result has to be free'd. */
 {
@@ -3919,7 +3933,7 @@ else
 
     // if it's copied from a custom track, wait to find data later
     if (isCustomTrack(tdb->table))
-        return TRUE; 
+        return TRUE;
     return (hTableForTrack(database, tdb->table) != NULL);
     }
 }
@@ -4183,7 +4197,7 @@ if (doCache)
 
         if (cacheTdb != NULL)
             return cacheTdb;
-        
+
         memCheckPoint(); // we want to know how much memory is used to build the tdbList
         }
     }
@@ -5323,7 +5337,7 @@ return (endsWith(str, "_alt") || endsWith(str, "_fix") || endsWith(str, "_random
 }
 
 int chrNameCmpWithAltRandom(char *str1, char *str2)
-/* Compare chromosome or linkage group names str1 and str2 
+/* Compare chromosome or linkage group names str1 and str2
  * to achieve this order:
  * chr1 .. chr22
  * chrX
@@ -5362,9 +5376,9 @@ else if (startsWith("Group", str2))
     str2 += 5;
 else
     return 1;
-/* If only one is numeric, that one goes first. 
- * If both are numeric, compare by number; 
- * If same number, put _randoms at end, then look at suffix. 
+/* If only one is numeric, that one goes first.
+ * If both are numeric, compare by number;
+ * If same number, put _randoms at end, then look at suffix.
  * Otherwise go alph. but put M and U/Un/Un_random at end. */
 match1 = sscanf(str1, "%d%s", &num1, suffix1);
 match2 = sscanf(str2, "%d%s", &num2, suffix2);
@@ -5408,7 +5422,7 @@ else
 }
 
 int chrSlNameCmpWithAltRandom(const void *el1, const void *el2)
-/* Compare chromosome or linkage group names str1 and str2 
+/* Compare chromosome or linkage group names str1 and str2
  * to achieve this order:
  * chr1 .. chr22
  * chrX

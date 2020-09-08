@@ -184,7 +184,7 @@ def processDir(dirName, toProcess, perMonth=False):
     fileNames = os.listdir(dirName)
     for log in fileNames:
         fileName = os.path.join(dirName, log)
-        processFile(fileName, perMonth)
+        processFile(fileName, toProcess, perMonth)
 
 def dumpToJson(data, outputFile, outputDir):
     """output data to named outputFile"""
