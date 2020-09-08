@@ -53,6 +53,13 @@ boolean cartTablesOk(struct sqlConnection *conn);
 /* Return TRUE if cart tables are accessible (otherwise, the connection
  * doesn't do us any good). */
 
+void cartParseSomeOverHash(struct cart *cart, char *contents, char* skip[]);
+/* Parse cgi-style contents into a hash table, except all names in skip.
+ *
+ * replace existing members of hash that have same name, so we can
+ * support multi-select form inputs (same var name can have multiple
+ * values which will be in separate hashEl's). */
+
 void cartParseOverHash(struct cart *cart, char *contents);
 /* Parse cgi-style contents into a hash table.  This will *not*
  * replace existing members of hash that have same name, so we can

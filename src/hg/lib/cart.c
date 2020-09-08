@@ -150,8 +150,9 @@ if (!sqlTableExists(conn, sessionDbTable()))
 return TRUE;
 }
 
-void cartParseOverHash(struct cart *cart, char *contents)
-/* Parse cgi-style contents into a hash table.  This will *not*
+void cartParseSomeOverHash(struct cart *cart, char *contents, char* skip[])
+/* Parse cgi-style contents into a hash table, except all names in skip.
+ *
  * replace existing members of hash that have same name, so we can
  * support multi-select form inputs (same var name can have multiple
  * values which will be in separate hashEl's). */
@@ -170,10 +171,35 @@ while (namePt != NULL && namePt[0] != 0)
 	nextNamePt = strchr(dataPt, ';');	/* Accomodate DAS. */
     if (nextNamePt != NULL)
          *nextNamePt++ = 0;
-    cgiDecode(dataPt,dataPt,strlen(dataPt));
-    hashAdd(hash, namePt, cloneString(dataPt));
+
+    boolean doAdd = TRUE;
+    if (skip) {
+        int skipI = 0;
+        while (skip[skipI]!=NULL) {
+            if (sameWord(namePt, skip[skipI])) {
+                doAdd = FALSE;
+                break;
+            }
+            skipI++;
+        }
+    }
+
+    if (doAdd) {
+        cgiDecode(dataPt,dataPt,strlen(dataPt));
+        hashAdd(hash, namePt, cloneString(dataPt));
+    }
+
     namePt = nextNamePt;
     }
+}
+
+void cartParseOverHash(struct cart *cart, char *contents)
+/* Parse all cgi-style contents into a hash table.
+ * replace existing members of hash that have same name, so we can
+ * support multi-select form inputs (same var name can have multiple
+ * values which will be in separate hashEl's). */
+{
+cartParseSomeOverHash(cart, contents, NULL);
 }
 
 static boolean looksCorrupted(struct cartDb *cdb)
@@ -554,7 +580,8 @@ if ((row = sqlNextRow(sr)) != NULL)
 	struct sqlConnection *conn2 = hConnectCentral();
 	sessionTouchLastUse(conn2, encSessionOwner, encSessionName);
 	cartRemoveLike(cart, "*");
-	cartParseOverHash(cart, row[1]);
+        char *ignoreVars[] = {"pix"};
+	cartParseSomeOverHash(cart, row[1], ignoreVars);
 	cartSetString(cart, sessionVar, hgsid);
 	if (sessionTableString != NULL)
 	    cartSetString(cart, hgSessionTableState, sessionTableString);
