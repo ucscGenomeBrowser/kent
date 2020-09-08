@@ -2508,7 +2508,7 @@ var rightClick = {
             }
         } else if (cmd === 'jumpToHighlight') { // If highlight exists for this assembly, jump to it
             if (hgTracks.highlight && rightClick.clickedHighlightIdx!==null) {
-                var newPos = parsePositionWithDb(hgTracks.highlight.split("|")[rightClick.clickedHighlightIdx]);
+                var newPos = getHighlight(hgTracks.highlight, rightClick.clickedHighlightIdx);
                 if (newPos && newPos.db === getDb()) {
                     if ( $('#highlightItem').length === 0) { // not visible? jump to it
                         var curPos = parsePosition(genomePos.get());
@@ -2933,24 +2933,21 @@ var rightClick = {
 
             menu.push($.contextMenu.separator);
             if (hgTracks.highlight && rightClick.clickedHighlightIdx!==null) {
+                var currentlySeen = ($('#highlightItem').length > 0); 
+                o = {};
+                // Jumps to highlight when not currently seen in image
+                var text = (currentlySeen ? " Zoom" : " Jump") + " to highlight";
+                o[rightClick.makeImgTag("highlightZoom.png") + text] = {
+                    onclick: rightClick.makeHitCallback('jumpToHighlight')
+                };
 
-                if (hgTracks.highlight.search(getDb() + '.') === 0) {
-                    var currentlySeen = ($('#highlightItem').length > 0); 
-                    o = {};
-                    // Jumps to highlight when not currently seen in image
-                    var text = (currentlySeen ? " Zoom" : " Jump") + " to highlight";
-                    o[rightClick.makeImgTag("highlightZoom.png") + text] = {
-                        onclick: rightClick.makeHitCallback('jumpToHighlight')
+                if ( currentlySeen ) {   // Remove only when seen
+                    o[rightClick.makeImgTag("highlightRemove.png") + 
+                                                               " Remove highlight"] = {
+                        onclick: rightClick.makeHitCallback('removeHighlight')
                     };
-
-                    if ( currentlySeen ) {   // Remove only when seen
-                        o[rightClick.makeImgTag("highlightRemove.png") + 
-                                                                   " Remove highlight"] = {
-                            onclick: rightClick.makeHitCallback('removeHighlight')
-                        };
-                    }
-                    menu.push(o);
                 }
+                menu.push(o);
             }
 
             if (rec.isCustomComposite)

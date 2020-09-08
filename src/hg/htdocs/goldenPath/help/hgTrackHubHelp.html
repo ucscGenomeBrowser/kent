@@ -935,7 +935,7 @@ model requires rare and rate-limited data access, which is too slow or too limit
 genome annotation display. However, commercial
 cloud <b>storage</b> offers that charge per GB transferred (Amazon S3, Microsoft
 Azure Storage, Google Cloud Storage, Backblaze, Alibaba Object Store, etc.)
-typically do work. As of 2020, they cost around 2-3 US cents /GB/month to store
+typically do work. As of 2020, they cost around 2-3 US cents/GB/month to store
 the hub data and 12-18 US cents per GB transferred, when the hub is used.
 For optimal performance, select a San Francisco / San Jose data center for the main
 UCSC site genome.ucsc.edu,  a Frankfurt/Germany data center for
@@ -965,9 +965,11 @@ each of the providers mentioned above.</p>
 <h3>Hosting Hubs on CyVerse</h3>
 <p>
 <a href="http://www.cyverse.org/" target="_blank">CyVerse</a>, previously known as the iPlant Collaborative, is 
-an NSF funded site created for assisting data scientists with their data storage and compute 
-needs. CyVerse supports free data hosting and byte-range access to hosted data, making them 
-perfect for hosting the binary data required for track hubs.</p>
+an NSF-funded site created for assisting data scientists with their data storage and compute 
+needs. Data hosting by CyVerse is free for academic groups and they support byte-range access, 
+so they can be used for track hubs. However, Cyverse is sometimes slow, 
+and may result in error messages if your hub includes many tracks that are 
+meant to be shown at the same time by your users.</p>
 
 <p>In order to host your data on CyVerse, you first must create an account and then use their
 <a href="https://de.cyverse.org/de" target="_blank">Discovery Environment</a> to upload data. After creating an 
