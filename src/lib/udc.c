@@ -1018,11 +1018,11 @@ void udcParseUrl(char *url, char **retProtocol, char **retAfterProtocol, char **
 udcParseUrlFull(url, retProtocol, retAfterProtocol, retColon, NULL);
 }
 
-static void addElementToDy(struct dyString *dy, char *name)
+static void addElementToDy(struct dyString *dy, int maxLen, char *name)
 /* add one element of a path to a dyString, hashing it if it's longer 
  * than NAME_MAX */
 {
-if (strlen(name) > pathconf(name, _PC_NAME_MAX))
+if (strlen(name) > maxLen)
     {
     unsigned char hash[SHA_DIGEST_LENGTH];
     char newName[(SHA_DIGEST_LENGTH + 1) * 2];
@@ -1036,16 +1036,19 @@ else
     dyStringAppend(dy, name);
 }
 
-static char *longDirHash(char *name)
+static char *longDirHash(char *cacheDir, char *name)
 /* take a path and hash the elements that are longer than NAME_MAX */
 {
+int maxLen = pathconf(cacheDir, _PC_NAME_MAX);
+if (maxLen < 0)   // if we can't get the real system max, assume it's 255
+    maxLen = 255;
 struct dyString *dy = newDyString(strlen(name));
 char *ptr = strchr(name, '/');
 
 while(ptr)
     {
     *ptr = 0;
-    addElementToDy(dy, name);
+    addElementToDy(dy, maxLen, name);
 
     dyStringAppend(dy, "/");
 
@@ -1053,7 +1056,7 @@ while(ptr)
     ptr = strchr(name, '/');
     }
 
-addElementToDy(dy, name);
+addElementToDy(dy, maxLen, name);
 
 return dyStringCannibalize(&dy);
 }
@@ -1063,7 +1066,7 @@ void udcPathAndFileNames(struct udcFile *file, char *cacheDir, char *protocol, c
 {
 if (cacheDir==NULL)
     return;
-char *hashedAfterProtocol = longDirHash(afterProtocol);
+char *hashedAfterProtocol = longDirHash(cacheDir, afterProtocol);
 int len = strlen(cacheDir) + 1 + strlen(protocol) + 1 + strlen(hashedAfterProtocol) + 1;
 file->cacheDir = needMem(len);
 safef(file->cacheDir, len, "%s/%s/%s", cacheDir, protocol, hashedAfterProtocol);
