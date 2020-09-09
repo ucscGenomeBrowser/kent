@@ -256,7 +256,7 @@ compositeTrack on
         bigDataUrl /gbdb/wuhCor1/bbi/M2_peptides.bb
 
 track microdel
-shortLabel GISAID Microdeletions
+shortLabel Microdeletions
 longLabel Microdeletions in GISAID sequences
 type bed 6
 group varRep
