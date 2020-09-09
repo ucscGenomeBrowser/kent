@@ -31,7 +31,7 @@ def parseArgs():
 
     """)
 
-    parser.add_option("", "--get", dest="doDownload", action="store", help="download a chrom alias table from UCSC for the genomeDb into the current directory and exit")
+    parser.add_option("", "--get", dest="downloadDb", action="store", help="download a chrom alias table from UCSC for the genomeDb into the current directory and exit")
     parser.add_option("-a", "--chromAlias", dest="aliasFname", action="store", help="a UCSC chromAlias file in tab-sep format. or a URL to one")
     parser.add_option("-i", "--in", dest="inFname", action="store", help="input filename, default: /dev/stdin")
     parser.add_option("-o", "--out", dest="outFname", action="store", help="output filename, default: /dev/stdout")
@@ -41,11 +41,7 @@ def parseArgs():
 
     (options, args) = parser.parse_args()
 
-    if options.doDownload and not options.db:
-        print("If you use --get you need to provide a genome assembly code like 'mm10' with the -g option")
-        exit(1)
-
-    if options.doDownload is None and options.aliasFname is None:
+    if options.downloadDb is None and options.aliasFname is None:
         parser.print_help()
         exit(1)
 
@@ -93,17 +89,15 @@ def parseAlias(fname):
     return toUcsc
 
 def chromToUcsc(aliasFname, fieldIdx, ifh, ofh):
-    " convert the first column to UCSC-style chrom names "
+    " convert column number fieldIdx to UCSC-style chrom names "
     toUcsc = parseAlias(aliasFname)
 
     ucscChroms = set(toUcsc.values())
 
-    mtSkipCount = 0
-
     for lineNo, sep, row in splitLines(ifh):
         # just pass through any UCSC chrom names
         chrom = row[fieldIdx]
-        if chrom in ucscChroms:
+        if row[0].startswith("#") or chrom in ucscChroms:
             ucscChrom = chrom
         else:
             ucscChrom = toUcsc.get(chrom)
@@ -115,9 +109,6 @@ def chromToUcsc(aliasFname, fieldIdx, ifh, ofh):
         row[fieldIdx] = ucscChrom
         ofh.write(sep.join(row))
         ofh.write("\n")
-
-    if mtSkipCount!=0:
-        stderr.write("%d features were skipped because they were located on the M chromosome. hg19 includes an older version of the mitochondrial genome and these features cannot be mapped yet.\n" % mtSkipCount)
 
 def download(db):
     url = "http://hgdownload.soe.ucsc.edu/goldenPath/%s/database/chromAlias.txt.gz" % db
@@ -142,8 +133,8 @@ def main():
     inFname = options.inFname
     outFname = options.outFname
 
-    if options.doDownload:
-        download(db)
+    if options.downloadDb:
+        download(options.downloadDb)
 
     if aliasFname is None:
         logging.error("You need to provide an alias table with the -a option or use --get to download one.")

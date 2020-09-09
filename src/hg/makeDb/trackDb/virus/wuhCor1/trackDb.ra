@@ -257,7 +257,7 @@ compositeTrack on
 
 track microdel
 shortLabel Microdeletions
-longLabel Microdeletions
+longLabel Microdeletions in GISAID sequences
 type bed 6
 group varRep
 spectrum on
