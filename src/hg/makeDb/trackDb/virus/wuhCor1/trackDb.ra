@@ -317,7 +317,7 @@ visibility hide
 release alpha
 
 track sarsCov2Phylo
-shortLabel GISAID Variants
+shortLabel SARS-CoV-2 Phylogeny
 longLabel Phylogenetic Tree and Variants from High-coverage Sequences in GISAID EpiCoV TM
 compositeTrack on
 type vcfTabix
@@ -364,7 +364,7 @@ release beta,public
     release beta,public
 
 track sarsCov2Phylo
-shortLabel GISAID Variants
+shortLabel SARS-CoV-2 Phylogeny
 longLabel Phylogenetic Tree and Variants from High-coverage Sequences in GISAID EpiCoV TM
 compositeTrack on
 type vcfTabix
