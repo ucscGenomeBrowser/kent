@@ -1,12 +1,10 @@
 track liftHg19
-shortLabel hg19 Mapping
-longLabel hg19 Mappings: UCSC LiftOver and NCBI ReMap
+shortLabel Hg19 Mapping
+longLabel Hg19 Mappings: UCSC LiftOver and NCBI ReMap
 group map
 visibility hide
-priority 499
 type chain
 compositeTrack on
-release alpha
 
         track liftOverHg19
         shortLabel UCSC liftOver to hg19
@@ -19,7 +17,6 @@ release alpha
         chainMinScore 3000
         chainLinearGap medium
         parent liftHg19
-        release alpha
 
         track chainHg19ReMap
         shortLabel NCBI ReMap hg19
@@ -32,7 +29,6 @@ release alpha
         chainMinScore 3000
         chainLinearGap medium
         parent liftHg19
-        release alpha
 
         track chainHg19ReMapAxtChain
         shortLabel ReMap + axtChain hg19
@@ -45,6 +41,5 @@ release alpha
         chainMinScore 3000
         chainLinearGap medium
         parent liftHg19
-        release alpha
 
 
