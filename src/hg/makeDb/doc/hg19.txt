@@ -33728,3 +33728,10 @@ ln -s `pwd`/clinsub.bb /gbdb/hg19
 #############################################################################
 # Trios for Genome In a Bottle - DONE 08/04/2020 ChrisL
 # see ~/kent/src/hg/makeDb/giab/make.txt
+
+#############################################################################
+# COVID GWAS from  COVID-19 Host Genetics Initiative  Sep 2020  Kate
+# see ~kent/src/hg/makeDb/doc/covid/covidHgiGwas.txt
+
+
+
