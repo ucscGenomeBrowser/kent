@@ -5485,5 +5485,4 @@ termRegex nssv[0-9]+
 searchType bed
 searchPriority 50
 
-#include covidGwas.ra alpha
 include covidHgiGwas.ra alpha
