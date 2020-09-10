@@ -927,6 +927,20 @@
     </pre>
 </DIV>
 
+<DIV class="mouseOver"><span class="types bigBed"></span>
+    <div class="format">
+        <code>mouseOver &lt;pattern&gt;</code><BR>
+    </div>
+    <P>For bigBed files this setting creates mouse over text from a pattern based on the values 
+    of fields in the file.  The pattern is constructed with fieldnames from the .as file, preceded
+    by the dollar sign ($), and can include arbitrary text between the fieldnames.</P>
+
+    <P><B>Example:</B></P>
+    <pre>
+    mouseOver variant $name/$chrom:$chromStart value $score
+    </pre>
+</DIV>
+
 <DIV class="wgEncode"><span class="types all"></span>
 <div class="format"><code>wgEncode on</code></div>
     <P><I>NOT FOR HUBS.</I></P>
