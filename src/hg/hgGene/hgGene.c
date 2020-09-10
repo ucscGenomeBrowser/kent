@@ -690,7 +690,10 @@ void doKgMethod()
  * Method, Credits, and Data Use Restrictions) */
 {
 cartWebStart(cart, database, "Methods, Credits, and Use Restrictions");
-struct trackDb *tdb = hTrackDbForTrack(database, genomeSetting("knownGene"));
+char *tableName = cartUsualString(cart, hggType, NULL);
+if (tableName == NULL)
+    tableName = "knownGene";
+struct trackDb *tdb = hTrackDbForTrack(database, tableName);
 hPrintf("%s", tdb->html);
 cartWebEnd();
 }
