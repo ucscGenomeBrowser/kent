@@ -1,6 +1,27 @@
 
 #include "freeType.h"
 
+#ifndef USE_FREETYPE
+int ftInitialize()
+{
+errAbort("FreeType not enabled");
+return 0;
+}
+
+int ftWidth(MgFont *font, unsigned char *chars, int charCount)
+{
+errAbort("FreeType not enabled");
+return 0;
+}
+
+void ftText(struct memGfx *mg, int x, int y, Color color, 
+	MgFont *font, char *text)
+{
+errAbort("FreeType not enabled");
+}
+
+#else 
+
 int ftInitialize()
 {
 FT_Error error;
@@ -40,6 +61,7 @@ draw_bitmap( struct memGfx *mg, FT_Bitmap*  bitmap, Color color,
     }
   }
 }
+
 void ftText(struct memGfx *mg, int x, int y, Color color, 
 	MgFont *font, char *text)
 /* Draw a line of text with upper left corner x,y. */
@@ -83,3 +105,4 @@ for(n = 0; n < charCount; n++)
     }
 return offset;
 }
+#endif /*USE_FREETYPE */

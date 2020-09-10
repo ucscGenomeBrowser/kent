@@ -1,4 +1,4 @@
-Found 11 problems:
+Found 47 problems:
 
 Couldn't open https://bad.url.txt/missing.bb
 No subtracks in group: Blank.  This indicates a problem in the subGroup line for this group.
@@ -9,4 +9,40 @@ container multiWig H2A_Z_MultiWig_ImputedComp has only one subtrack. multiWigs m
 missing 'subgroups' setting for subtrack RegBuildOverview
 state3 not a member of sortOrder subgroup view
 subtrack track2 not a member of subgroup sub1
+warning: missing description page for track: 'BuildOverview'
+warning: missing description page for track: 'H2A_Z_MultiWig_ImputedComp'
+warning: missing description page for track: 'MissingSubs'
+warning: missing description page for track: 'RegBuildOverview'
+warning: missing description page for track: 'SuperEnhancersBadSubgroupsComposite'
+warning: missing description page for track: 'SuperEnhancersComposite2'
+warning: missing description page for track: 'TFBSSummary'
+warning: missing description page for track: 'comp1'
+warning: missing description page for track: 'comp1View1'
+warning: missing description page for track: 'comp1View2'
+warning: missing description page for track: 'comp1Wig1'
+warning: missing description page for track: 'comp1Wig2'
+warning: missing description page for track: 'comp1Wig3'
+warning: missing description page for track: 'comp1Wig4'
+warning: missing description page for track: 'comp2'
+warning: missing description page for track: 'comp2View1'
+warning: missing description page for track: 'comp2View2'
+warning: missing description page for track: 'comp2Wig1'
+warning: missing description page for track: 'comp2Wig2'
+warning: missing description page for track: 'comp2Wig3'
+warning: missing description page for track: 'comp2Wig4'
+warning: missing description page for track: 'cpgIslandViewContainer'
+warning: missing description page for track: 'multiWigExample'
+warning: missing description page for track: 'multiWigSubtrack1'
+warning: missing description page for track: 'multiWigSubtrack2'
+warning: missing description page for track: 'multiWigSubtrack3'
+warning: missing description page for track: 'multiWigSubtrack4'
+warning: missing description page for track: 'multiWigSubtrack5'
+warning: missing description page for track: 'state1'
+warning: missing description page for track: 'state2'
+warning: missing description page for track: 'state3'
+warning: missing description page for track: 'state4'
+warning: missing description page for track: 'track1'
+warning: missing description page for track: 'track2'
+warning: missing description page for track: 'viewStanza'
+warning: missing description page for track: 'viewTrack'
 warning: missing htmlPath setting for assembly hub 'araTha1'
