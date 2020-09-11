@@ -28,42 +28,109 @@ TMPDIR=/dev/shm
 
     time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
 	-syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
-XXX - running - Mon Aug 17 12:48:39 PDT 2020
-    #	real    1052m41.484s
+    #	real    200m16.271s
 
     cat fb.mm39.chainCanFam5Link.txt
-    #	776486006 bases of 2652783500 (29.271%) in intersection
+    #	778327929 bases of 2654624157 (29.320%) in intersection
     cat fb.mm39.chainSynCanFam5Link.txt
-    #   735561772 bases of 2652783500 (27.728%) in intersection
+    #   735515331 bases of 2654624157 (27.707%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev mm39 canFam5 \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    #	real    219m16.168s
+    #	real    213m30.572s
 
     cat fb.mm39.chainRBest.CanFam5.txt
-    # 741307883 bases of 2652783500 (27.945%) in intersection
+    # 740738480 bases of 2654624157 (27.904%) in intersection
 
     mkdir /hive/data/genomes/canFam5/bed/blastz.mm39.swap
     cd /hive/data/genomes/canFam5/bed/blastz.mm39.swap
     time (doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/mm39/bed/lastzCanFam5.2020-08-17/DEF \
 	-swap -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
-    #	real    50m20.639s
+    #	real    44m12.732s
 
-    cat fb.canFam5.chainMm10Link.txt
-    #	772902855 bases of 2481941580 (31.141%) in intersection
-    cat fb.canFam5.chainSynMm10Link.txt
-    #   737924732 bases of 2481941580 (29.732%) in intersection
+    cat fb.canFam5.chainMm39Link.txt
+    #	762233776 bases of 2337131234 (32.614%) in intersection
+    cat fb.canFam5.chainSynMm39Link.txt
+    #   731337903 bases of 2337131234 (31.292%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev canFam5 mm39 \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    173m38.016s
+    # real    174m14.398s
 
-    cat fb.canFam5.chainRBest.Mm10.txt
-    # 740357755 bases of 2481941580 (29.830%) in intersection
+    cat fb.canFam5.chainRBest.Mm39.txt
+    # 739648625 bases of 2337131234 (31.648%) in intersection
+
+##############################################################################
+# LASTZ mouse mm39 vs marmoset calJac4 (DONE - 2020-09-04 - Hiram)
+    #	establish a screen to control this job
+    mkdir /hive/data/genomes/mm39/bed/lastzCalJac4.2020-09-04
+    cd /hive/data/genomes/mm39/bed/lastzCalJac4.2020-09-04
+
+    printf '# mouse vs marmoset calJac4
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.03/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm39
+SEQ1_DIR=/hive/data/genomes/mm39/mm39.2bit
+SEQ1_LEN=/hive/data/genomes/mm39/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: marmoset calJac4
+SEQ2_DIR=/hive/data/genomes/calJac4/calJac4.2bit
+SEQ2_LEN=/hive/data/genomes/calJac4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm39/bed/lastzCalJac4.2020-09-04
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #	real    269m7.515s
+
+    cat fb.mm39.chainCalJac4Link.txt
+    #	878425270 bases of 2654624157 (33.090%) in intersection
+    cat fb.mm39.chainSynCalJac4Link.txt
+    #   830808798 bases of 2654624157 (31.297%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm39 calJac4 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    #	real    342m45.296s
+
+    cat fb.mm39.chainRBest.CalJac4.txt
+    # 835984408 bases of 2654624157 (31.492%) in intersection
+
+    mkdir /hive/data/genomes/calJac4/bed/blastz.mm39.swap
+    cd /hive/data/genomes/calJac4/bed/blastz.mm39.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm39/bed/lastzCalJac4.2020-09-04/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    51m44.991s
+
+    cat fb.calJac4.chainMm39Link.txt
+    #	885334904 bases of 2859817025 (30.958%) in intersection
+    cat fb.calJac4.chainSynMm39Link.txt
+    #   831225065 bases of 2859817025 (29.066%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev calJac4 mm39 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    298m22.974s
+
+    cat fb.calJac4.chainRBest.Mm39.txt
+    # 834211414 bases of 2859817025 (29.170%) in intersection
 
 ##############################################################################
