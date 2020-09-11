@@ -213,14 +213,12 @@ snpTable snp144
 snpVersion 144
 
 track liftHg38
-shortLabel hg38 Mapping
-longLabel hg38 Mappings: UCSC LiftOver and NCBI ReMap
+shortLabel Hg38 Mapping
+longLabel Hg38 Mappings: UCSC LiftOver and NCBI ReMap
 group map
 visibility hide
-priority 499
 type chain
 compositeTrack on
-release alpha
 
         track liftOverHg38
         shortLabel UCSC liftOver to hg38
@@ -233,7 +231,6 @@ release alpha
         chainMinScore 3000
         chainLinearGap medium
         parent liftHg38
-        release alpha
 
         track chainHg38ReMap
         shortLabel NCBI ReMap hg38
@@ -246,7 +243,6 @@ release alpha
         chainMinScore 3000
         chainLinearGap medium
         parent liftHg38
-        release alpha
 
         track chainHg38ReMapAxtChain
         shortLabel ReMap + axtChain hg38
@@ -259,7 +255,6 @@ release alpha
         chainMinScore 3000
         chainLinearGap medium
         parent liftHg38
-        release alpha
 
 track ucscRetroAli5
 shortLabel Retroposed Genes
