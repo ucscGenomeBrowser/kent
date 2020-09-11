@@ -19,3 +19,5 @@ superTrack on show
 priority 3
 
 include ../../refSeqComposite.ra
+
+include trackDb.chainNet.ra
