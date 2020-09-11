@@ -498,10 +498,10 @@ chr6    47663669        47714277        chr6:47663670-47714277  304     +      4
 	-continue=collapsePairedEnds \
 	    -twoBit=/hive/data/genomes/mm39/mm39.unmasked.2bit mm39) \
         > collapsePairedEnds.log 2>&1 &
-XXX - running - Thu Jul 30 09:19:46 PDT 2020
+    # real    3m23.138s
 
     cat fb.mm39.tandemDups.txt
-    # 155315479 bases of 3044872214 (5.101%) in intersection
+    # 66584052 bases of 2728222451 (2.441%) in intersection
 
     bigBedInfo mm39.tandemDups.bb | sed -e 's/^/#  /;'
 #  version: 4
@@ -510,16 +510,16 @@ XXX - running - Thu Jul 30 09:19:46 PDT 2020
 #  isCompressed: yes
 #  isSwapped: 0
 #  extraIndexCount: 0
-#  itemCount: 2,822,307
-#  primaryDataSize: 72,710,994
-#  primaryIndexSize: 292,560
+#  itemCount: 858,983
+#  primaryDataSize: 22,513,298
+#  primaryIndexSize: 62,976
 #  zoomLevels: 9
-#  chromCount: 5335
-#  basesCovered: 1,635,503,835
-#  meanDepth (of bases covered): 14.396921
+#  chromCount: 57
+#  basesCovered: 1,408,031,925
+#  meanDepth (of bases covered): 5.083425
 #  minDepth: 1.000000
-#  maxDepth: 381.000000
-#  std of depth: 29.341113
+#  maxDepth: 240.000000
+#  std of depth: 8.811752
 
 #########################################################################
 # ucscToINSDC and ucscToRefSeq table/track (DONE - 2020-07-27 - Hiram)
@@ -805,11 +805,10 @@ searchPriority 8
     cd /hive/data/genomes/mm39/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku mm39) > do.log 2>&1
-XXX - running - Thu Jul 30 09:20:26 PDT 2020
-    # real    3m29.034s
+    # real    3m28.053s
 
     cat fb.mm39.cpgIslandExt.txt
-    # 47618882 bases of 2481941580 (1.919%) in intersection
+    # 10571422 bases of 2654624157 (0.398%) in intersection
 
 ##############################################################################
 # genscan - (DONE - 2020-07-30 - Hiram)
@@ -817,24 +816,32 @@ XXX - running - Thu Jul 30 09:20:26 PDT 2020
     cd /hive/data/genomes/mm39/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku mm39) > do.log 2>&1
-XXX - running - Thu Jul 30 09:20:55 PDT 2020
     # real    8m19.775s
 
-    # two jobs broken:
-./runGsBig2M.csh chr22 000 gtf/000/chr22.gtf pep/000/chr22.pep subopt/000/chr22.bed &
-./runGsBig2M.csh chr34 000 gtf/000/chr34.gtf pep/000/chr34.pep subopt/000/chr34.bed
-wait
-    # real    14m27.845s
+    # one job broken:
+./runGsBig2M.csh chr10 000 gtf/000/chr10.gtf pep/000/chr10.pep subopt/000/chr10.bed
+    # real    34m35.712s
 
+    # continuing
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -continue=makeBed -bigClusterHub=ku mm39) > makeBed.log 2>&1
     # real    0m45.365s
 
     cat fb.mm39.genscan.txt
-    # 57650331 bases of 2481941580 (2.323%) in intersection
+    # 55445747 bases of 2654624157 (2.089%) in intersection
 
     cat fb.mm39.genscanSubopt.txt
-    # 50129491 bases of 2481941580 (2.020%) in intersection
+    # 57607700 bases of 2654624157 (2.170%) in intersection
+
+#########################################################################
+# ncbiGene (WORKING - 2020-07-30 - Hiram)
+
+    mkdir /hive/data/genomes/mm39/bed/xenoRefGene
+    cd /hive/data/genomes/mm39/bed/xenoRefGene
+
+    time (~/kent/src/hg/utils/automation/doXenoRefGene.pl -buildDir=`pwd` \
+       -bigClusterHub=ku -workhorse=hgwdev -dbHost=hgwdev mm39) > do.log 2>&1 &
+    # real    67m18.015s
 
 #########################################################################
 # Create kluster run files (DONE - 2020-07-30 - Hiram)
@@ -929,82 +936,38 @@ wait
 	| cut -f4 | sort -n | uniq -c | less
 
 ########################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2020-04-10 - Hiram)
+# lastz/chain/net swap human/hg38 (DONE - 2020-08-18 - Hiram)
 
-    # original alignment
-    cd /hive/data/genomes/hg38/bed/lastzMm39.2020-04-02
+    # alignment on hg38:
+    cd /hive/data/genomes/hg38/bed/lastzMm39.2020-08-17
+    sed -e 's/^/    # /;' fb.hg38.chainMm39Link.txt
+    # 966592868 bases of 3110768607 (31.072%) in intersection
+    sed -e 's/^/    # /;' fb.hg38.chainSynMm39Link.txt
+    # 913448433 bases of 3110768607 (29.364%) in intersection
+    sed -e 's/^/    # /;' fb.hg38.chainRBest.Mm39.txt
+    # 891660271 bases of 3110768607 (28.664%) in intersection
 
-    cat fb.hg38.chainMm39Link.txt
-    # 1549397508 bases of 3110768607 (49.808%) in intersection
-    cat fb.hg38.chainSynMm39Link.txt
-    # 1488468205 bases of 3110768607 (47.849%) in intersection
-
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
-	hg38 mm39) > rbest.log 2>&1 &
-    # real    310m32.196s
-
-    cat fb.hg38.chainRBest.Mm39.txt
-    # 1425406620 bases of 3110768607 (45.822%) in intersection
-
-    # and for the swap:
+    #	and the swap
     mkdir /hive/data/genomes/mm39/bed/blastz.hg38.swap
     cd /hive/data/genomes/mm39/bed/blastz.hg38.swap
-
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzMm39.2020-04-02/DEF \
-        -swap -chainMinScore=3000 -chainLinearGap=medium \
-          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > swap.log 2>&1
-    #  real    99m10.990s
+      /hive/data/genomes/hg38/bed/lastzMm39.2020-08-17/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
+            -swap -syntenicNet) > swap.log 2>&1
+    #   real    47m57.164s
 
-    cat fb.mm39.chainHg38Link.txt
-    # 1493209286 bases of 2481941580 (60.163%) in intersection
-    cat fb.mm39.chainSynHg38Link.txt
-    # 1448164376 bases of 2481941580 (58.348%) in intersection
+    sed -e 's/^/    # /;' fb.mm39.chainHg38Link.txt
+    # 939000954 bases of 2654624157 (35.372%) in intersection
+    sed -e 's/^/    # /;' fb.mm39.chainSynHg38Link.txt
+    # 891050480 bases of 2654624157 (33.566%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
 	mm39 hg38) > rbest.log 2>&1 &
     # real    257m59.713s
 
-    cat fb.mm39.chainRBest.Hg38.txt
-    # 1425296830 bases of 2481941580 (57.427%) in intersection
-
-###########################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2020-04-20 - Hiram)
-
-    # original alignment
-    cat fb.mm10.chainMm39Link.txt
-    #	777883731 bases of 2652783500 (29.323%) in intersection
-    cat fb.mm10.chainSynMm39Link.txt
-    #   736602602 bases of 2652783500 (27.767%) in intersection
-
-    time (doRecipBest.pl -load -workhorse=hgwdev mm10 mm39 \
-      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    #	real    219m16.168s
-
-    cat fb.mm10.chainRBest.Mm39.txt
-    # 741307883 bases of 2652783500 (27.945%) in intersection
-
-    mkdir /hive/data/genomes/mm39/bed/blastz.mm10.swap
-    cd /hive/data/genomes/mm39/bed/blastz.mm10.swap
-    time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzMm39.2020-04-02/DEF \
-	-swap -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
-    #	real    50m20.639s
-
-    cat fb.mm39.chainMm10Link.txt
-    #	772902855 bases of 2481941580 (31.141%) in intersection
-    cat fb.mm39.chainSynMm10Link.txt
-    #   737924732 bases of 2481941580 (29.732%) in intersection
-
-    time (doRecipBest.pl -load -workhorse=hgwdev mm39 mm10 \
-      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    173m38.016s
-
-    cat fb.mm39.chainRBest.Mm10.txt
-    # 740357755 bases of 2481941580 (29.830%) in intersection
+    sed -e 's/^/    # /;' fb.mm39.chainRBest.Hg38.txt
+    # 893176796 bases of 2654624157 (33.646%) in intersection
 
 ##############################################################################
 # GENBANK AUTO UPDATE (DONE - 2020-07-30 - Hiram)
@@ -1033,6 +996,7 @@ wait
 mm39.serverGenome = /hive/data/genomes/mm39/mm39.2bit
 mm39.ooc = /hive/data/genomes/mm39/jkStuff/mm39.11.ooc
 mm39.lift = /hive/data/genomes/mm39/jkStuff/mm39.5Kgaps.lft
+mm39.perChromTables = no
 mm39.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
 mm39.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
 mm39.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
@@ -1155,23 +1119,24 @@ mm39.upstreamGeneTbl = refGene
     # see if the liftOver menus function in the browser from mm39 to mm10
 
 ##############################################################################
-#  BLATSERVERS ENTRY (TBD - 2020-04-02 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2020-09-10 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("mm39", "blat1b", "17904", "1", "0"); \
+	VALUES ("mm39", "blat1a", "17904", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("mm39", "blat1b", "17905", "0", "1");' \
+	VALUES ("mm39", "blat1a", "17905", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
-## reset default position to gene: CDH2 upon recommendation from Kerstin
-##  (TBD - 2020-06-22 - Hiram)
+## reset default position to same as mm10 default via blat of DNA
+##  (DONE - 2020-09-10 - Hiram)
 
+chr12:56,741,761-56,761,390
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr7:60683331-61003907"
+    hgsql -e 'update dbDb set defaultPos="chr12:56741761-56761390"
 	where name="mm39";' hgcentraltest
 
 ##############################################################################
@@ -1186,11 +1151,11 @@ mm39.upstreamGeneTbl = refGene
     -fileServer=hgwdev \
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev) >> ranges.log 2>&1
-XXX - running - Thu Jul 30 10:12:03 PDT 2020
-    # real    1m16.539s
+    # real    62m2.060s - failed on 'genscan' genes
+    # real    1m16.884s - rerun on 'augustusGene'
 
     time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
-       -continue=guides -stop=specScores mm39 genscan \
+       -continue=guides -stop=specScores mm39 augustusGene \
 	-shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev) > specScores.log 2>&1
@@ -1198,76 +1163,98 @@ XXX - running - Thu Jul 30 10:12:03 PDT 2020
 
     cat guides/run.time | sed -e 's/^/# /;'
 # Completed: 100 of 100 jobs
-# CPU time in finished jobs:      11979s     199.66m     3.33h    0.14d  0.000 y
-# IO & Wait Time:                   251s       4.18m     0.07h    0.00d  0.000 y
-# Average job time:                 122s       2.04m     0.03h    0.00d
-# Longest finished job:             289s       4.82m     0.08h    0.00d
-# Submission to last job:           303s       5.05m     0.08h    0.00d
+# CPU time in finished jobs:      13031s     217.19m     3.62h    0.15d  0.000 y
+# IO & Wait Time:                   299s       4.98m     0.08h    0.00d  0.000 y
+# Average job time:                 133s       2.22m     0.04h    0.00d
+# Longest finished job:             920s      15.33m     0.26h    0.01d
+# Submission to last job:           935s      15.58m     0.26h    0.01d
 
     cat specScores/run.time | sed -e 's/^/# /;'
-# Completed: 3096565 of 3096565 jobs
-# CPU time in finished jobs:  263946983s 4399116.38m 73318.61h 3054.94d  8.370 y
-# IO & Wait Time:              17766691s  296111.52m  4935.19h  205.63d  0.563 y
-# Average job time:                  91s       1.52m     0.03h    0.00d
-# Longest finished job:             851s      14.18m     0.24h    0.01d
-# Submission to last job:        324649s    5410.82m    90.18h    3.76d
+# Completed: 2947790 of 2947790 jobs
+# CPU time in finished jobs:  247411142s 4123519.03m 68725.32h 2863.55d  7.845 y
+# IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+# Average job time:                  82s       1.37m     0.02h    0.00d
+# Longest finished job:             353s       5.88m     0.10h    0.00d
+# Submission to last job:        561467s    9357.78m   155.96h    6.50d
 
-# # Number of specScores: 233102255
+
+# Number of specScores: 220274834
 
     ### remember to get back to hgwdev to run this
     time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
-       -continue=effScores -stop=load mm39 genscan \
+       -continue=effScores -stop=load mm39 augustusGene \
     -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev) > load.log 2>&1
-    #  real    932m13.229s
+    #  real    1615m13.200s
 
     cat effScores/run.time | sed -e 's/^/# /;'
-# Completed: 25662 of 25662 jobs
-# CPU time in finished jobs:   12763858s  212730.96m  3545.52h  147.73d  0.405 y
-# IO & Wait Time:                144123s    2402.05m    40.03h    1.67d  0.005 y
-# Average job time:                 503s       8.38m     0.14h    0.01d
-# Longest finished job:            4091s      68.18m     1.14h    0.05d
-# Submission to last job:         15067s     251.12m     4.19h    0.17d
+# Completed: 27714 of 27714 jobs
+# CPU time in finished jobs:   13108172s  218469.53m  3641.16h  151.71d  0.416 y
+# IO & Wait Time:                 52457s     874.29m    14.57h    0.61d  0.002 y
+# Average job time:                 475s       7.91m     0.13h    0.01d
+# Longest finished job:            2486s      41.43m     0.69h    0.03d
+# Submission to last job:         44334s     738.90m    12.31h    0.51d
 
     cat offTargets/run.time | sed -e 's/^/# /;'
-# Completed: 154829 of 154829 jobs
-# CPU time in finished jobs:    1805712s   30095.20m   501.59h   20.90d  0.057 y
-# IO & Wait Time:               3128264s   52137.73m   868.96h   36.21d  0.099 y
-# Average job time:                  32s       0.53m     0.01h    0.00d
-# Longest finished job:             273s       4.55m     0.08h    0.00d
-# Submission to last job:          5337s      88.95m     1.48h    0.06d
+# Completed: 147390 of 147390 jobs
+# CPU time in finished jobs:    2280286s   38004.77m   633.41h   26.39d  0.072 y
+# IO & Wait Time:                505943s    8432.38m   140.54h    5.86d  0.016 y
+# Average job time:                  19s       0.32m     0.01h    0.00d
+# Longest finished job:              36s       0.60m     0.01h    0.00d
+# Submission to last job:         13489s     224.82m     3.75h    0.16d
+
+    bigBedInfo crispr.bb | sed -e 's/^/# /;'
+# version: 4
+# fieldCount: 22
+# hasHeaderExtension: yes
+# isCompressed: yes
+# isSwapped: 0
+# extraIndexCount: 0
+# itemCount: 276,331,386
+# primaryDataSize: 12,229,621,910
+# primaryIndexSize: 17,345,476
+# zoomLevels: 10
+# chromCount: 33
+# basesCovered: 2,179,930,088
+# meanDepth (of bases covered): 2.915516
+# minDepth: 1.000000
+# maxDepth: 32.000000
+# std of depth: 1.944181
 
 #########################################################################
 # all.joiner update, downloads and in pushQ - (WORKING - 2019-11-20 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # verify all the business is done for release
     ~/kent/src/hg/utils/automation/verifyBrowser.pl mm39
-# 66 tables in database mm39 - Dog, Canis lupus familiaris
-# verified 55 tables in database mm39, 11 extra tables, 14 optional tables
+# 65 tables in database mm39 - Mouse, Mus musculus
+# verified 45 tables in database mm39, 20 extra tables, 8 optional tables
 # chainNetRBestHg38     3 optional tables
-# chainNetRBestMm10     3 optional tables
 # chainNetSynHg38       3 optional tables
-# chainNetSynMm10       3 optional tables
 # gapOverlap    1 optional tables
 # tandemDups    1 optional tables
-# 1     chainCanFam3    - extra table
-# 2     chainCanFam3Link        - extra table
-# 3     chainRBestCanFam3       - extra table
-# 4     chainRBestCanFam3Link   - extra table
+# 1     chainCalJac4    - extra table
+# 2     chainCalJac4Link        - extra table
+# 3     chainCanFam5    - extra table
+# 4     chainCanFam5Link        - extra table
 # . . . etc . . .
-# 8     crisprAllTargets        - extra table
-# 9     netCanFam3      - extra table
-# 10    netRBestCanFam3 - extra table
-# 11    netSynCanFam3   - extra table
-# 13 genbank tables found
-# verified 28 required tables, 1 missing tables
-# 1     ucscToRefSeq    - missing table
+# 17    netRBestCalJac4 - extra table
+# 18    netRBestCanFam5 - extra table
+# 19    netSynCalJac4   - extra table
+# 20    netSynCanFam5   - extra table
+# 12 genbank tables found
+# verified 25 required tables, 4 missing tables
+# 1     chainMm10       - missing table
+# 2     chainMm10Link   - missing table
+# 3     netMm10 - missing table
+# 4     ucscToRefSeq    - missing table
+# missing mm10.chainMm39
+# missing mm10.chainMm39Link
+# missing mm10.netMm39
 # hg38 chainNet to mm39 found 3 required tables
-# mm10 chainNet to mm39 found 3 required tables
 # hg38 chainNet RBest and syntenic to mm39 found 6 optional tables
-# mm10 chainNet RBest and syntenic to mm39 found 3 optional tables
 # liftOver to previous versions: 1, from previous versions: 1
+# blatServers: mm39 blat1a 17905 0 1 mm39 blat1a 17904 1 0
 
     # fixup all.joiner until this is a clean output
     joinerCheck -database=mm39 -tableCoverage all.joiner
@@ -1281,14 +1268,38 @@ XXX - running - Thu Jul 30 10:12:03 PDT 2020
     # into the hgwdev/genome-test system
 
     cd /hive/data/genomes/mm39
-    time (makeDownloads.pl mm39) > downloads.log 2>&1
+    time (makeDownloads.pl -noChromFiles mm39) > downloads.log 2>&1
     #  real    16m11.233s
+    # going to make a chromosomes directory and perChrom tar image to
+    #   be compatible with mm10
+    mkdir /hive/data/genomes/mm39/goldenPath/chromosomes
+    cd /hive/data/genomes/mm39/goldenPath/chromosomes
+    time zcat ../bigZips/mm39.fa.gz | faSplit byname stdin ./
+    # real    0m28.876s
+    tar tar cvzf ../bigZips/mm39.chromFa.tar.gz *.fa
+    time gzip *.fa
+    # real    9m17.575s
+    time md5sum *.fa.gz > md5sum.txt
+    # real    0m4.835s
+    # add a README.txt file to this directory, copy from mm10
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm39/chromosomes
+    ln -s `pwd`/* \
+       /usr/local/apache/htdocs-hgdownload/goldenPath/mm39/chromosomes/
+    cd ../bigZips
+    ln -s `pwd`/mm39.chromFa.tar.gz \
+       /usr/local/apache/htdocs-hgdownload/goldenPath/mm39/bigZips/
+
+
+    
+    cd ..
+    md5sum mm39.chromFa.tar.gz >> md5sum.txt
+    # add comments about these items to README.txt
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/mm39/pushQ
     cd /hive/data/genomes/mm39/pushQ
  time ($HOME/kent/src/hg/utils/automation/makePushQSql.pl -redmineList mm39) > mm39.pushQ.sql 2> stderr.out
-    # real    15m2.385s
+    # real    10m44.233s
 
     # remove the tandemDups and gapOverlap from the file list:
     sed -i -e "/tandemDups/d" redmine.mm39.table.list
@@ -1315,11 +1326,10 @@ done
 
     # verify database tables, how many to expect:
     wc -l redmine.mm39.table.list
-    # 52 redmine.mm39.table.list
+    # 45 redmine.mm39.table.list
 
-    # how many actual:
     awk -F'.' '{printf "hgsql -N %s -e '"'"'show table status like \"%s\";'"'"'\n", $1, $2}' redmine.mm39.table.list | sh | wc -l
-    # 52
+    # 45
 
     # would be a smaller number actual if some were missing
 
