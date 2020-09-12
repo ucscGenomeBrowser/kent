@@ -1,9 +1,9 @@
 track clinsub
-shortLabel clinsub
-longLabel clinsub
+shortLabel ClinVar SNVs interpretations
+longLabel ClinVar SNVs submitted interpretations and evidence
 bigDataUrl /gbdb/hg19/clinsub.bb
 type bigLolly
-group varRep
+group phenDis
 lollySizeField 10
 yNumLabels off
 noStems on
