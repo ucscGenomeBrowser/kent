@@ -7,11 +7,10 @@
 
 <h1>bigLolly Track Format</h1>
 <p>
-The bigLolly format is a standard bigBed file that generates a lollipop graph. 
-bigLolly files are compressed and indexed as bigBeds. The trackDb defines the fields used to create
-the graph.
+The bigLolly format uses a standard bigBed file that is used to generate a lollipop graph. 
+By default the score is used to decide how high to draw the lollipop, but there are trackDb options to specify which fields to use for the height and width of the lollipop, as well as to draw lines on the graph.
 <p>
-The bigLolly files are in an indexed binary format. The main advantage of this format is that only 
+The bigBed files used in bigLolly type are in an indexed binary format. The main advantage of this format is that only 
 those portions of the file needed to display a particular region are transferred to the Genome 
 Browser server.  The bigLolly file remains on your local 
 web-accessible server (http, https or ftp), not on the UCSC server, and only the portion needed for 
@@ -23,12 +22,12 @@ documentation.</p>
 <a name=bigLolly></a>
 <h2>bigLolly format definition</h2>
 <p>
-Any bigBed file can be displayed as a bigLolly.  
+Any bigBed file can be displayed as a bigLolly.  See <a href="bigBed.html">bigBed format</a>.
 <p>
 
 <h2>Creating a bigLolly track</h2>
 <p>
-To create a bigLolly track, follow these steps to build a bigBed <a href="goldenPath/help/bigBed.html"> here</a></p>
+To create a bigLolly track, follow these steps to build a bigBed <a href="bigBed.html"> here</a></p>
 <h2>Examples</h2>
 <h3>Example #1</h3>
 <p>
