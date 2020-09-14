@@ -7,7 +7,7 @@
 juha.karjalainen@helsinki.fi
 
 # Create build dir
-cd /hive/data/outside/covidHostGenetics
+cd /hive/data/outside/covid/covidHostGenetics
 
 # GWAS meta-analyses file format
 

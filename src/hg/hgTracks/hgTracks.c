@@ -8995,6 +8995,19 @@ if (!hideControls)
     }
 if (showTrackControls)
     hButton("hgt.refresh", "refresh");
+
+if (sameString(database, "wuhCor1"))
+    {
+    // GISAID wants this displayed on any page that shows any GISAID data
+    puts("<p class='centeredCol'>\n"
+         "GISAID data displayed in the Genome Browser are subject to GISAID's\n"
+         "<a href='https://www.gisaid.org/registration/terms-of-use/' "
+         "target=_blank>Terms and Conditions</a>.\n"
+         "SARS-CoV-2 genome sequences and metadata are available for download from\n"
+         "<a href='https://gisaid.org' target=_blank>GISAID</a> EpiCoV&trade;.\n"
+         "</p>");
+    }
+
 hPrintf("</CENTER>\n");
 
 #ifdef SLOW

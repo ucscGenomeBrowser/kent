@@ -3200,7 +3200,10 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
     {
     //struct trackDb *tdbParent = tdbFillInAncestry(cartString(cart, "db"),tdb);
     if (tdb->html != NULL && tdb->html[0] != 0)
+        {
+        printRelatedTracks(database,trackHash,tdb,cart);
         puts(tdb->html);
+        }
     else
         {
         struct trackDb *tdbParent = tdb->parent;
@@ -3211,6 +3214,7 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
             {
             printf("<h2 style='color:%s'>Retrieved from %s Track...</h2>\n",
                    COLOR_DARKGREEN,tdbParent->shortLabel);
+            printRelatedTracks(database,trackHash,tdb,cart);
             puts(tdbParent->html);
             }
         else
@@ -3473,6 +3477,7 @@ if (!ct)
     {
     /* Print data version setting, if any */
     cgiDown(0.7);
+    printRelatedTracks(database,trackHash,tdb,cart);
     printDataVersion(database, tdb);
 
     /* Print lift information from trackDb, if any */

@@ -1,54 +1,56 @@
 <H2>Description</H2>
 <P>
-<p>This track shows data from  Pond et al, 2020 <a target="_blank" 
+<p>This track shows data from  Pond <i>et al</i>, 2020 <a target="_blank" 
 href = "https://observablehq.com/@spond/natural-selection-analysis-of-sars-cov-2-covid-19">
 "Natural selection analysis of SARS-CoV-2/COVID-19"</a>
 
 <p>The authors use several statistical techniques to identify selection sites of interest in 
-SARS-CoV-2 data from GISAID.
+SARS-CoV-2 data from <a target="_blank" href="https://www.gisaid.org/about-us/mission/">GISAID</a>.
+Each site receives points for eight different categories, explained below, and sites with 
+the most points are ranked higher.</p>
 
 <h2>Display Conventions and Configuration</h2>
-<p> 
-<p>The gray to black colorscale denotes increasing scores given by the authors for 
-selection sites where each site has the potential to receive one additional point 
-for each of the eight categories.</p>  
+ 
+<p>The gray to black color scale denotes increasing scores for selection sites 
+where each site has the potential to receive one additional point for any of the 
+eight following categories.</p>
 
-<p><b>Positive Selection</b> is described as follows: &quot;on average along interior 
-tree branches, this site has a dN/dS&gt;1 is accumulating non-synonymous changes (
-some of which might have a functional impact, but most probably don't) faster 
+<p><b>Positive Selection:</b> &quot;On average along interior 
+tree branches, this site has a dN/dS&gt;1 is accumulating non-synonymous changes (some 
+of which might have a functional impact, but most probably don't) faster 
 relative to synonymous changes than would be expected under neutral evolution.&quot;</p>
 
-<p><b>Negative Selection</b> is described as follows: &quot;on average along interior 
+<p><b>Negative Selection:</b> &quot;On average along interior 
 tree branches, this site has a dN/dS&lt;1, meaning that it conserved, i.e. 
 non-synonymous changes might be selected against. Note that sites with no 
 changes (i.e. perfectly conserved sites) cannot be detected by dN/dS based methods&quot;</p>
 
-<p><b>Multiple Clades</b> is described as follows: &quot;If a site belongs to this 
+<p><b>Multiple Clades:</b> &quot;If a site belongs to this 
 category, then at least two internal branches in the tree are inferred to be 
 subject to positive selection, implying several selective events (not just a 
 single introduction)&quot;</p>
 
-<p><b>Increasing frequency</b> is described as follows: &quot;When a site belongs to 
+<p><b>Increasing frequency:</b> &quot;When a site belongs to 
 this category, alternative amino-acids at this site has an increasing frequency 
 trend (based on applying the Jonckheere-Terpstra test to 10-day intervals)&quot;</p>
 
-<p><b>Predicted CTL epitopes</b> is described as follows: &quot;This site belongs to 
+<p><b>Predicted CTL epitopes:</b> &quot;This site belongs to 
 one or more CTL linear epitopes that are predicted to be recognized by one or 
-more HLA alleles reported in Campbell et al&quot;</p>
+more HLA alleles reported in Campbell <i>et al</i>&quot;</p>
 
-<p><b>Intra-host variants</b> is described as follows: &quot;When a site belongs to 
+<p><b>Intra-host variants:</b> &quot;When a site belongs to 
 this category, there is at least one deep sequencing dataset that shows the presence 
 of intra-host variation at the same site at between 2 and 90%.&quot;</p>
 
-<p><b>Unexpected residues</b> is described as follows: &quot;When a site belongs to 
+<p><b>Unexpected residues:</b> &quot;When a site belongs to 
 this category, there is at least one amino-acid present in more than one 
 sequence that was not predicted to occur at this site based on the evolution 
 of other betacoronaviruses. It might indicate evolutionary events that we 
 have not observed in similar viruses before.&quot;</p>
 
-<p><b>Selected in animals</b> is described as follows: &quot;There is evidence of 
+<p><b>Selected in animals:</b> &quot;There is evidence of 
 positive selection or differential selection acting on the bat/pangolin isolates 
-closely related to the SARS-CoV-2 genome based on data from Boni et al&quot;</p>
+closely related to the SARS-CoV-2 genome based on data from Boni <i>et al</i>&quot;</p>
 
 <p><b>New</b> is any site that was recently detected as of June 30th, 2020.</p>  
 
@@ -62,7 +64,7 @@ and the position, gene, site_in_gene, kind, score, and type fields were used to
 generate the resulting fields provided for each &quot;kind&quot; provided in the data.</p>
 
 <h2>References</h2>
-<p>Pond et al, 2020 <a target="_blank" 
+<p>Pond <i>et al</i>, 2020 <a target="_blank" 
 href = "https://observablehq.com/@spond/natural-selection-analysis-of-sars-cov-2-covid-19">
 "Natural selection analysis of SARS-CoV-2/COVID-19"</a></p>
 

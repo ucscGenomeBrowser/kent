@@ -218,6 +218,8 @@ update: ${DBS:%=%_update}
 %_update:
 	./loadTracks ${EXTRA} trackDb_${USERTABLE} hgFindSpec_${USERTABLE} $*
 	./checkMetaDb alpha metaDb_${USERTABLE} $*
+	# now build the relatedTracks table for each db
+	./buildRelatedTracks relatedTrack_${USERTABLE} $*
 
 #  if you want to test track search tool with your own trix file
 #	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb_${USERTABLE}.{ixx,ix}}
@@ -238,6 +240,8 @@ alpha_all: ${DBS:%=%_alpha}
 	rm -f ${HIVE_TRIX}/$*_trackDb.{ixx,ix}}
 	HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/alpha/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} $*
 	./makeTrixLinks trackDb ${HIVE_TRIX} $*
+	# now build the relatedTracks table for each db
+	./buildRelatedTracks relatedTrack $*
 
 onbeta:	/cluster/home/${USER}/.hg.conf.beta
 

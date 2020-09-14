@@ -42,7 +42,7 @@ baseColorUseCds bed psl genePred bigPsl bigGenePred
 baseColorUseSequence *
 baseQualRange bam
 bedFilter bed
-bedNameLabel bed barChart bigBarChart bigBed
+bedNameLabel bed barChart bigBarChart bigBed bigLolly
 bedPackDense bed bigBed
 bigDataUrl customTracks big* bam vcfTabix halSnake gtexTranscExpr hic vcfPhasedTrio
 bigGeneDataUrl genePred

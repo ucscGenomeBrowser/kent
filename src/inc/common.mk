@@ -27,7 +27,7 @@ HOSTNAME = $(shell uname -n)
 
 ifeq (${HOSTNAME},hgwdev)
   IS_HGWDEV = yes
-  HG_INC+=-I/usr/include/freetype2
+  HG_INC+=-I/usr/include/freetype2 -DUSE_FREETYPE
 else
   IS_HGWDEV = no
 endif
@@ -102,7 +102,8 @@ ifneq (${SSL_DIR}, "/usr/include/openssl")
 endif
 # on hgwdev, already using the static library with mysqllient.
 ifeq (${IS_HGWDEV},yes)
-   L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -lk5crypto -ldl -lfreetype
+   L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a -lbz2
+   L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -lk5crypto -ldl
 else
    ifneq ($(wildcard /opt/local/lib/libssl.a),)
        L+=/opt/local/lib/libssl.a
