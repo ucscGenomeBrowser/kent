@@ -415,7 +415,7 @@ subGroup2	aa amino_acid \
 	 V=Val \
 	 W=Trp \
 	 Y=Tyr \
-	total=total	\
+	total=total \
 	max=max...
 dimensions	dimX=ab dimY=aa
 sortOrder	ab=+ aa=+
