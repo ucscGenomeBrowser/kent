@@ -162,6 +162,7 @@
     <A onclick="return jumpTo(this);" HREF="#">bigBarChart</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigBed</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigInteract</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigLolly</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigChain</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigMaf</A>,
@@ -211,6 +212,7 @@
     <A onclick="return jumpTo(this);" HREF="#">bigBed</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigChain</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigInteract</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigLolly</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigMaf</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigWig</A>,
@@ -356,7 +358,37 @@
     <P>The location of a remote data file containing the chain link data.</P>
 </DIV>
 
-<DIV class="bigDataUrl"><span class="types bigBarChart bigBed bigChain bigInteract bigMaf bigPsl bigWig bam hic vcfTabix vcfPhasedTrio"></span>
+<DIV class="lollyField"><span class="types bigLolly"></span>
+<div class="format"><code>lollyField &lt;integer&gt;</code></div>
+    Use the given field as the height of the lollipop.
+</DIV>
+
+<DIV class="noStems"><span class="types bigLolly"></span>
+<div class="format"><code>noStems &lt;on/off&gt;</code></div>
+    Don't draw the stems of the lollipops.
+</DIV>
+
+<DIV class="lolliSizeField"><span class="types bigLolly"></span>
+<div class="format"><code>lolliSizeField &lt;integer&gt;</code></div>
+    Use the given field as the size of the lollipop, measured in percentage of the total available drawing area.
+</DIV>
+
+<DIV class="lolliMaxSize"><span class="types bigLolly"></span>
+<div class="format"><code>lolliMaxSize &lt;integer&gt;</code></div>
+    The maximum size of a lollipop in the file, used to establish margins.
+</DIV>
+
+<DIV class="yLabel"><span class="types bigLolly"></span>
+<div class="format"><code>yLabel.&lt;integer&gt; &lt;integer&gt;</code></div>
+    Add a label on the y axis at the given position. Draw a line of color if requested.
+</DIV>
+
+<DIV class="yNumLabels"><span class="types bigLolly"></span>
+<div class="format"><code>yNumLabels.&lt;on/off&gt; &lt;integer&gt;</code></div>
+    Turn the y axis number labels on or off
+</DIV>
+
+<DIV class="bigDataUrl"><span class="types bigBarChart bigBed bigChain bigInteract bigLolly bigMaf bigPsl bigWig bam hic vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
     <P class="isRequired">Required: <span class="red">For Hubs</span></P>
     <P>The location of a remote data file containing the bulk of the data for the track.
@@ -365,7 +397,7 @@
     <P>The setting is either the full URL (including <code>http:</code> or another protocol)
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
-    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigInteract, bigMaf, bigPsl, bigGenePred, bigNarrowPeak, bigWig or
+    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigLolly, bigInteract, bigMaf, bigPsl, bigGenePred, bigNarrowPeak, bigWig or
     vcfTabix.  Note that bam/cram and vcfTabix/vcfPhasedTrio types require a separate
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively), unless <A
@@ -1109,6 +1141,12 @@ There are no extra options that can appear on the type bigMaf line.
 <div class="format">
     <code>type bigBarChart</code></div>
 There are no extra options that can appear on the type bigBarChart line.
+</DIV>
+
+<DIV class="bigLolly"><span class="types bigLolly"></span>
+<div class="format">
+    <code>type bigLolly</code></div>
+There are no extra options that can appear on the type bigLolly line.
 </DIV>
 
 <DIV class="bigInteract"><span class="types bigInteract"></span>
@@ -4795,6 +4833,17 @@ For the complete bigInteract format definitions please see the
     bigDataUrl http://...
     </pre>
 </div>
+
+<!-- - - - - - - - bigLolly settings - - - - - - - -->
+<DIV class="bigLolly_intro">
+<H3>bigLolly: Lollipop Charts</H3>
+    <P>
+    Lollipops are the coolest of graph types.
+</DIV>
+
+<DIV class="bigLolly_example"><span class="types bigLolly"></span>
+<div class="format"><B>Example of a bigLolly track</B></div>
+</DIV>
 
 <!-- - - - - - - - hic settings - - - - - - - -->
 <DIV class="hic_intro">

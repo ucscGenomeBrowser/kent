@@ -33,7 +33,7 @@ set +e
 ./makeCnv.sh ${WORKDIR}
 ./makeDosage.sh ${WORKDIR}
 #./makeEvRepo.sh ${WORKDIR}
-#./makeGeneValidity.sh ${WORKDIR}
+./makeGeneValidity.sh ${WORKDIR}
 set -e
 
 echo "ClinGen update done."
