@@ -1,0 +1,28 @@
+<h2>Description</h2>
+This track contains deep mutational scanning data measuring the effect of the mutations to the Spike RBD to binding of antibodies using a yeast surface display system.
+The authors "first used fluorescence-activated cell sorting (FACS) to eliminate RBD variants with less than 0.01x the affinity for ACE2 compared to that of the unmutated RBD (Figure S1A,B). We reasoned this sorting would purge the libraries of completely nonfunctional RBD mutants, but retain mutants with decreased ACE2 affinity that"
+
+<h2>Display Conventions and Configuration</h2>
+<p>Scores represent the "escape fraction" (discussed at length in the Methods of the paper) which "represent the fraction of a given variant that escape antibody binding, and should in principle range from 0 to 1. "
+
+<p>A higher score indicates a greater level of escape.
+
+<p>Each subtrack contains all the scores representing mutations to a particular amino acid (each annotation is a Spike codon).
+For instance the A subtrack measures the escape fraction for a particular antibody if the annotated amino acid is mutated to alanine (if the wildtype amino acid is A, then the score is 0).
+The "total" subtracks represent the sum of all escape fractions for all amino acid changes at a position.
+The "max" subtracks are the escape fraction for the amino acid subsitution with the greatest escape fraction.
+
+<p>"Note that the magnitude of the measured effects of mutations on antibody escape depends on
+the antibody concentration and the flow cytometry gates applied, meaning that the
+escape fractions are comparable across sites for any given antibody, but are not precisely
+comparable among antibodies without external calibration.""
+
+Visualizations of the data are available from the authors <a href = "https://jbloomlab.github.io/SARS-CoV-2-RBD_MAP_Crowe_antibodies/"> here.</a>
+
+
+<h2>Methods</h2>
+Table S1 from Greaney et al, was downloaded and parsed into bedGraph format.
+
+
+<h2>References</h2>
+<p><a href="https://www.biorxiv.org/content/10.1101/2020.09.10.292078v1.full.pdf">Greaney et al. <i>biorXiv</i> 2020</a></p>
