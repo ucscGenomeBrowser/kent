@@ -109,17 +109,24 @@ wc -l covidHgiGwas*
 mkdir -p /gbdb/hg19/covidHgiGwas /gbdb/hg38/covidHgiGwas
 
 cat > makeHgi.csh << 'EOF'
-set bin = ~/kent/src/makeDb/outside/covid
+set bin = ~/kent/src/hg/makeDb/outside/covid
 foreach d (B2.hg19 B2.hg38 C2.hg19 C2.hg38)
     set db = $d:e
     set a = $d:r
     set sizes = /hive/data/genomes/$db/chrom.sizes
-    set f = covidHgiGwas$a.$db
-    echo $f.txt
-    perl $bin/makeCovidHgiGwas.pl $db $f.txt > $f.bed
+    set b = covidHgiGwas
+    set f = $b.$a.$db
+    set bb = $b$a.$db
+    echo $b.$a.$db
+    if ($a == "B2") then
+        set studies = 8
+    else
+        set studies = 18
+    endif
+    perl $bin/makeCovidHgiGwas.pl $db $studies $f.txt > $f.bed
     bedSort $f.bed $f.sorted.bed
-    bedToBigBed -type=bed9+10 -as=$bin/covidHgiGwas.as -tab $f.sorted.bed $sizes $f.bb
-    ln -s `pwd`/$f.bb /gbdb/hg19/covidHgiGwas
+    bedToBigBed -type=bed9+12 -as=$bin/covidHgiGwas.as -tab $f.sorted.bed $sizes $bb.bb
+    ln -s `pwd`/$bb.bb /gbdb/hg19/covidHgiGwas
 end
 'EOF'
 

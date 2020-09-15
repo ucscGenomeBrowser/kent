@@ -27,7 +27,7 @@ include trackDb.clinvar.ra
 include trackDb.dbVar.ra
 
 # ClinGen
-include trackDb.clinGen.ra alpha
+include trackDb.clinGen.ra alpha,beta
 
 # Genome In a Bottle
 include trackDb.giab.ra alpha
@@ -122,6 +122,7 @@ type bed 4
 tableBrowser off decipherRaw knownToDecipher knownCanonToDecipher
 prevExonText Left edge
 nextExonText Right edge
+release public
 
 track decipherCnv
 shortLabel Decipher CNV New
@@ -142,7 +143,7 @@ filterValues.pathogenicity Benign,Likely Benign,Likely Pathogenic,Pathogenic,Unc
 mergeSpannedItems on
 searchIndex name
 mouseOverField _mouseOver
-release alpha
+release alpha,beta
 
 searchTable  decipherCnv
 searchMethod exact
@@ -3703,7 +3704,7 @@ compositeTrack on
 type bigBed 4 +
 tableBrowser off lovdComp
 html lovdComp
-release alpha
+release alpha,beta
 
         track lovdShort
         shortLabel LOVD Variants < 50 bp
@@ -3714,7 +3715,7 @@ release alpha
         noScoreFilter on
         bigDataUrl /gbdb/$D/lovd/lovd.$D.short.bb
         parent lovdComp
-        release alpha
+        release alpha,beta
 
         track lovdLong
         shortLabel LOVD Variants >= 50 bp
@@ -3725,7 +3726,7 @@ release alpha
         noScoreFilter on
         bigDataUrl /gbdb/$D/lovd/lovd.$D.long.bb
         parent lovdComp
-        release alpha
+        release alpha,beta
 
 track lovdComp
 shortLabel LOVD Variants
@@ -3736,7 +3737,7 @@ compositeTrack on
 type bedDetail
 tableBrowser off lovdComp
 html lovdComp
-release beta,public
+release public
 
         track lovdShort
         shortLabel LOVD Variants < 50bp
@@ -3748,7 +3749,7 @@ release beta,public
         urlLabel Link to LOVD:
         noScoreFilter on
         parent lovdComp
-        release beta,public
+        release public
 
         track lovdLong
         shortLabel LOVD Variants >= 50bp
@@ -3760,7 +3761,7 @@ release beta,public
         urlLabel Link to LOVD:
         noScoreFilter on
         parent lovdComp
-        release beta,public
+        release public
 
 
 track hgmd

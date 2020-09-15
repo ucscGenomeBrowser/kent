@@ -9,3 +9,5 @@
 Clinical SNV	Kate	CURATED%20Clinical%20SNV%20hg19	Assess potential disease contributions of single nucleotide variants in coding regions
 Clinical CNV	Kate	CURATED%20Clinical%20CNV%20hg19	Assess potential disease contributions of structural variants in coding regions
 Non-coding SNV	Kate	CURATED%20Non%20coding%20SNV%20hg19	Investigate functional aspects of non-coding variants
+Clinical SNVs	View	SNVs%20Clinical	Assess potential disease contributions of single nucleotide variants in coding regions
+Clinical CNVs	View	CNVs%20Clinical	Assess potential disease contributions of structural variants in coding regions

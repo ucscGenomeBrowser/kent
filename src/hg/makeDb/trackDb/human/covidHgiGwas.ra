@@ -8,15 +8,20 @@ autoScale on
 maxHeightPixels 48:90:128
 pennantIcon New red
 type bigLolly 9 +
-lollyField 19
+lollyField 21
+lollySizeField 20
+lollyMaxSize 8
 mouseOver $name $ref/$alt effect $effectSize pval $pValue studies $sourceCount
 maxItems 500000
 filter.sourceCount 1
 filterLabel.sourceCount Minimum number of studies
-filter.pValue 3
-filter.effectSize -10:10
+filter.pValueLog 3
+filter.effectSize -25:25
+filterLabel.effectSize Effect size range
 filterByRange.effectSize on
-filterLimits.effectSize -10:10
+filterLimits.effectSize -25:25
+filter._effectSizeAbs 0
+filterLabel._effectSizeAbs Minimum effect size +-
 noScoreFilter on
 bedNameLabel SNP
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22
