@@ -47,13 +47,8 @@ href="https://www.ncbi.nlm.nih.gov/clinvar/">ClinVar</a> database.
 <p>
 The available data tracks are:
 <ul>
-<li><b>Clinical Genome Resource Structural Variants (ClinGen Structural Variants)</b> -
-Shows curated copy number variants (CNVs) with sufficient pathogenic or benign evidence 
-as a mechanism for disease from the dbVar study 
-<a target="_blank" href="https://www.ncbi.nlm.nih.gov/dbvar/studies/nstd45/">nstd45</a>
-(ClinGen Curated Dosage Sensitivity Map-obsoleted).
-</li>
-<li><b>Clinical Genome Resource Dosage Sensitivity Map Haploinsufficiency (ClinGen Haploinsufficiency) and Triplosensitivity (ClinGen Triplosensitivity)</b> -
+<li><b>Clinical Genome Resource Dosage Sensitivity Map Haploinsufficiency (ClinGen 
+Haploinsufficiency) and Triplosensitivity (ClinGen Triplosensitivity)</b> -
 Shows evidence supporting or refuting haploinsufficiency (loss) and triplosensitivity (gain) as 
 mechanisms for disease at gene-level and larger genomic regions.
 </li>
@@ -74,19 +69,7 @@ Evidence that haploinsufficiency or triplosensitivity of a gene is associated wi
 phenotype will aid in the interpretive assessment of CNVs including that gene.
 </p>
 <h2>Display Conventions</h2>
-<p>
-<b>Structural Variants</b> are shaded according to variant type, 
-<b><font color="red">red</font color></b> for CNV loss, <b><font color="blue"> blue</font color></b>
-for CNV gain.
-<p>
-Mouseover on items indicates affected protein-coding genes, size of the variant, variant type, and 
-associated phenotype. When more than 2 genes are affected by a variant, the full 
-list can be obtained by clicking on the item and reading the details page.
-</p>
-<p>
-All tracks can be filtered according to the size of the variant, variant type (loss or gain), and 
-clinical significance (benign or pathogenic).
-</p>
+<h3>Haploinsufficiency/Triplosensitivity tracks</h3>
 <p>
 <b>Dosage Scores</b> are used to classify the evidence of the supporting dosage sensitivity map:
 <dl>
@@ -100,8 +83,8 @@ clinical significance (benign or pathogenic).
 </p>
 For more information on the use of the scores see the ClinGen
 <a target="_blank" href="https://clinicalgenome.org/tools/cnv-webinar/faq/">FAQs</a>.
-Items are shaded according to dosage sensitivity type, <b><font color="red">red</font></b> for haploinsufficiency,
-<b><font color="blue">blue</font></b> for triplosensitivity, 
+Items are shaded according to dosage sensitivity type, <b><font color="red">red</font></b> 
+for haploinsufficiency, <b><font color="blue">blue</font></b> for triplosensitivity, 
 and <B><font color="#a8a8a8">grey</font></b> for other evidence scores or 
 for genes/regions that have not been evaluated yet or no evidence is available. A light to dark
 gradient color is used according to the degree of supporting evidence.
@@ -120,7 +103,7 @@ within a track has separate display controls, as described
 <p>
 The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>,
 or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. For automated analysis, the data may 
-be queried from our REST API. Please refer to our 
+be queried from our <a href="/goldenPath/help/api.html">REST API</a>. Please refer to our 
 <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
 for questions, or our <a href="../FAQ/FAQdownloads.html#downloads36">Data Access FAQ</a> for more
 information.
