@@ -4740,6 +4740,7 @@ subGroup3 level Evidence cur=Curated sub=Submitted
 dimensions dimensionY=class dimensionX=level
 sortOrder class=+ level=+ view=+
 type bed 3
+pennantIcon Outdated red
 
     track iscaViewTotal
     shortLabel Coverage (Graphical)
