@@ -281,7 +281,7 @@ maxWindowToDraw bam big* rmsk joinedRmsk bed narrowPeak broadPeak bedlogR genepr
 maxWindowToQuery bigWig bed bedlogR
 metadata *
 mouseOverField big*
-mouseOver bigLolly bigBed
+mouseOver bigLolly bigBed bigPsl
 mergeSpannedItems bigBed
 mgiUrl bed
 mgiUrlLabel bed
@@ -446,8 +446,8 @@ showSubtrackColorOnUi *
 showTopScorers bed5FloatScoreWithFdr bed5FloatScore bed
 signalFilter bed narrowPeak broadPeak
 signalFilterLimits bed narrowPeak broadPeak
-skipFields bigBed
-skipEmptyFields bigBed
+skipFields bigBed bigPsl
+skipEmptyFields bigBed bigPsl
 smoothingWindow wig bed5FloatScore bedGraph bigWig
 snpExceptions bed
 snpExceptionDesc bed
