@@ -8,14 +8,10 @@ autoScale on
 maxHeightPixels 48:90:128
 pennantIcon New red
 type bigLolly 9 +
-lollyField 21
-lollySizeField 20
-lollyMaxSize 8
 mouseOver $name $ref/$alt effect $effectSize pval $pValue studies $sourceCount
 maxItems 500000
 filter.sourceCount 1
 filterLabel.sourceCount Minimum number of studies
-filter.pValueLog 3
 filter.effectSize -25:25
 filterLabel.effectSize Effect size range
 filterByRange.effectSize on

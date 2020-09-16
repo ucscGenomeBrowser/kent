@@ -879,3 +879,10 @@ baseColorDefault genomicCodons
 track clinGenCnv override
 filter.size 773:11309456
 filterLimits.size 773:11309456
+
+track covidHgiGwas override
+lollyField 21
+lollySizeField 20
+lollyMaxSize 8
+filter.pValueLog 3
+
