@@ -6,9 +6,11 @@ type bigBed 9 +
 group phenDis
 itemRgb on
 compositeTrack on
+noParentConfig on
 html clinGen
 
     track clinGenHaplo
+    showCfg on
     priority 1
     parent clinGenComp on
     shortLabel ClinGen Haploinsufficiency
