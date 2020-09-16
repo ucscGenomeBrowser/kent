@@ -14,7 +14,6 @@ wgEncode 1
 group regulation
 visibility dense
 priority 1
-pennantIcon New red ../goldenPath/newsarch.html#061820 "Released Jun. 18, 2020"
 darkerLabels on
 labelFields accessionLabel,ucscLabel,encodeLabel
 defaultLabelFields accessionLabel,ucscLabel

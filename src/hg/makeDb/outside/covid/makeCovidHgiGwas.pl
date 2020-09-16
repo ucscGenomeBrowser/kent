@@ -1,11 +1,11 @@
-# Format files from COVID Host Genetics Initiative as BED 9+10 (covidHgiGwas.as) for lollipop display
-#
+# Format files from COVID Host Genetics Initiative as BED 9+11 (covidHgiGwas.as) for lollipop display
 
 use strict;
 use English;
 
 my $db = $ARGV[0];
-my $file = $ARGV[1];
+my $allStudies = $ARGV[1];
+my $file = $ARGV[2];
 open(my $fh, $file) or die ("can't open file $file\n");
 
 my $hdr = <$fh>;
@@ -20,6 +20,8 @@ if ($db eq "hg38") {
 my $first = $fields-11;
 my $last = $fields-4;
 
+my $scale = 3;
+my $sizeBins = 5;
 while (<$fh>) {
     chomp;
     my ($chromNum, $pos, $ref, $alt) = split;
@@ -36,7 +38,7 @@ while (<$fh>) {
 
     my $blue = "0,0,255"; my $red = "255,0,0";
     my $lightBlue = "160,160,255"; my $lightRed = "255,160,160";
-    my $logPval = -(log($pval)/log(10)); my $logPvalHet =  -(log($pvalHet)/log(10));
+    my $logPval = -(log($pval)/log(10));
     my $intPval = int($logPval);
     my $color;
     if ($effectSize > 0) {
@@ -47,10 +49,12 @@ while (<$fh>) {
         $color = ($intPval >= 5) ? $blue : $lightBlue;
     }
     my $name = ($snp eq "NA") ? $chromNum . ":" . $pos : $snp;
+    my $studyWeight = int(($studies * $sizeBins) / $allStudies) + $scale; 
     $OFS = "\t"; print $chr, $start, $end, $name, $score, '.', $start, $end, $color; $OFS = "";
     printf("\t%.3f\t%.3f", $effectSize, $effectSE);
-    printf("\t%.3f\t%.3f", $logPval, $logPvalHet);
-    printf("\t%s\t%s\t%.3f\t%s\t%s\t%.3f", $ref, $alt, $alleleFreq, $samples, $studies, abs($effectSize));
+    printf("\t%.2e\t%.3f\t%.2e", $pval, $logPval, $pvalHet);
+    printf("\t%s\t%s\t%.3f\t%s\t%s\t%d\t%.3f", $ref, $alt, $alleleFreq, $samples, $studies, 
+                $studyWeight, abs($effectSize));
     print "\n";
 }
 close ($fh);

@@ -8,8 +8,6 @@ hideEmptySubtracks off
 group map
 visibility hide
 type bigBed 3 +
-pennantIcon New red ../goldenPath/newsarch.html#050620 "Released May. 6, 2020"
-
 
     track comments
     shortLabel UCSC Unusual Regions

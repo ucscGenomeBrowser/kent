@@ -6,9 +6,11 @@ type bigBed 9 +
 group phenDis
 itemRgb on
 compositeTrack on
+noParentConfig on
 html clinGen
 
     track clinGenHaplo
+    showCfg on
     priority 1
     parent clinGenComp on
     shortLabel ClinGen Haploinsufficiency
@@ -33,3 +35,26 @@ html clinGen
     filterValues.triploScore 0|No evidence available,1|Little evidence for dosage pathogenicity,2|Some evidence for dosage pathogenicity,3|Sufficient evidence for dosage pathogenicity,30|Gene associated with autosomal recessive phenotype,40|Dosage sensitivity unlikely
     filterLabel.triploScore Dosage Sensitivity Score
     urls url="$$" PMID1="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" PMID2="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" PMID3="https://pubmed.ncbi.nlm.nih.gov/$$/?from_single_result=$$&expanded_search_query=$$" omimID="https://omim.org/entry/$$"
+
+    track clinGenGeneDisease
+    priority 3
+    parent clinGenComp on
+    type bigBed 9 +
+    shortLabel ClinGen Validity
+    longLabel ClinGen Gene-Disease Validity Classification
+    bigDataUrl /gbdb/$D/bbi/clinGen/clinGenGeneDisease.bb
+    visibility pack
+    mouseOverField Mouseover
+    urls ClinGenURL="https://search.clinicalgenome.org/kb/gene-validity/$$" HGNCid="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/$$" MONDOid="https://monarchinitiative.org/disease/$$"
+    #skipFields score,strand,thickStart,thickEnd,Mouseover
+    sepFields MONDOid,SOPversion
+    itemRgb on
+    noScoreFilter on
+    searchIndex name,geneSymbol,HGNCid,MONDOid,Classification
+    filterValues.Inheritance Autosomal Dominant,Autosomal Recessive,Semidominant,X-Linked,X-linked recessive,Other
+    filterLabel.Inheritance Inheritance Pattern
+    filterValues.SOPversion SOP4,SOP5,SOP6,SOP7
+    filterLabel.SOPversion ClinGen SOP Version Number
+    filterValues.Classification Definitive,Strong,Moderate,Limited,Animal Model Only,No Reported Evidence,Disputed,Refuted
+    filterLabel.Classification ClinGen Gene-Disease Validity Classification
+    bedNameLabel Associated Disease
