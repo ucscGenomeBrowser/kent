@@ -5,7 +5,7 @@ compositeTrack on
 group phenDis
 visibility hide
 autoScale on
-maxHeightPixels 48:90:128
+maxHeightPixels 48:75:128
 pennantIcon New red
 type bigLolly 9 +
 lollyField 21
