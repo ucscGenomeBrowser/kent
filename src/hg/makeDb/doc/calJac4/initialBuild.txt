@@ -130,6 +130,18 @@ ncbiBioSample notFound
 to
 ncbiBioSample SAMN12783337
 
+Should have fixed the commonName from:
+commonName White-tufted-ear marmoset
+to
+commonName Marmoset
+
+To make it match the other calJac assemblies.   To fix later:
+
+hgsql -e 'select genome from dbDb where name="calJac4";' hgcentraltest
+hgsql -e 'update dbDb set genome="Marmoset" where name="calJac4";' hgcentraltest
+hgsql -e 'select genome from dbDb where name="calJac4";' hgcentraltest
+
+
 # see also: https://www.ncbi.nlm.nih.gov/biosample/?term=SAMN12783337
 
     # compare with previous version to see if it is sane:
@@ -313,22 +325,6 @@ real    10m48.905s
    # the gaps file defined 1 more gap at 40 bases:
 # count 379
 # total 38007442.000000
-XXX - TBD - Wed Sep  2 07:44:09 PDT 2020
-
-    # survey gap types from gap file
-    # the gaps file defines 23 more gaps than the AGP files,
-    # the gaps file defines 13 more gaps but 54 less bases than the sequence
-    # note the 'unknown' types (== 23 gaps)
-    zgrep -v "^#" ../refseq/*gaps* | cut -f5,6 | sort | uniq -c \
-	| sed -e 's/^/# /;'
-#      15 between_scaffolds     na
-#      22 centromere    na
-#       1 unknown       inferred_from_sequence
-#     341 within_scaffold       map
-
-    # the single 'unknown' gap is the 40 base gap that is not in the AGP files
-    zgrep "unknown" ../refseq/*gaps*
-    # NC_048406.1     8006927 8006966 40      unknown inferred_from_sequence
 
     # survey of AGP types of gaps:
     #   beware, can also be type U in col 5, doesn't happen here:
@@ -376,7 +372,7 @@ XXX - TBD - Wed Sep  2 07:44:09 PDT 2020
     ln -s `pwd`/calJac4.unmasked.2bit /gbdb/calJac4/calJac4.2bit
 
 #############################################################################
-# verify gap table vs NCBI gap file (TBD - 2020-07-27 - Hiram)
+# verify gap table vs NCBI gap file (DONE - 2020-09-17 - Hiram)
     mkdir /hive/data/genomes/calJac4/bed/gap
     cd /hive/data/genomes/calJac4/bed/gap
 
@@ -386,52 +382,31 @@ XXX - TBD - Wed Sep  2 07:44:09 PDT 2020
 
     # type survey:
     cut -f4 *.bed | sort | uniq -c | sed -e 's/^/# /;'
-#      60 between_scaffolds_na
-#      20 centromere_na
-#      21 short_arm_na
-#      42 telomere_na
-#       4 unknown_inferred_from_sequence
-#      19 unknown_unspecified
-#       5 within_scaffold_align_genus
-#      36 within_scaffold_map
-#      96 within_scaffold_paired-ends
-#      44 within_scaffold_unspecified
+#      15 between_scaffolds_na
+#      22 centromere_na
+#       1 unknown_inferred_from_sequence
+#     341 within_scaffold_map
+
 
     # how much defined by NCBI:
     awk '{print $3-$2}' *.bed | ave stdin | grep -w total
-    # total 73600614.000000
+    # total 38007442.000000
 
     # how much in the gap table:
     hgsql -e 'select * from gap;' calJac4 | awk '{print $4-$3}' \
 	| ave stdin | grep -w total
-    # total 73598294.000000
+    # total 38007402.000000
 
-    # an extra 2320 bases marked in the gap file
-    # Compare to mm10:
-    hgsql -e 'select * from gap;' mm10 | awk '{print $4-$3}' \
-      | ave stdin | sed -e 's/^/# /;'
-# Q1 100.000000
-# median 838.000000
-# Q3 50000.000000
-# average 113665.609898
-# min 0.000000
-# max 2890000.000000
-# count 687
-# total 78088274.000000
-# standard deviation 485103.795880
+    # gap table type survey:
+    hgsql -N -e 'select type from gap;' calJac4 \
+        | sort | uniq -c | sed -e 's/^/    #/;'
+    #     22 centromere
+    #     15 contig
+    #    341 scaffold
 
-    hgsql -e 'select * from gap;' calJac4 | awk '{print $4-$3}' \
-	| ave stdin | sed -e 's/^/# /;'
-# Q1 1357.000000
-# median 50000.000000
-# Q3 100000.000000
-# average 226456.289231
-# min 0.000000
-# max 2890000.000000
-# count 325
-# total 73598294.000000
-# standard deviation 687212.981441
-
+    # the one extra definition at 40 bases in the NCBI gap file is the unknown:
+    grep unknown *.bed
+    #  NC_048406.1     8006926 8006966 unknown_inferred_from_sequence
 
 ##############################################################################
 # cpgIslands on UNMASKED sequence (DONE - 2020-09-02 - Hiram)
@@ -442,11 +417,10 @@ XXX - TBD - Wed Sep  2 07:44:09 PDT 2020
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/calJac4/calJac4.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku calJac4) > do.log 2>&1
-XXX - running - Wed Sep  2 10:08:50 PDT 2020
-    # real    3m30.591s
+    # real    3m43.555s
 
     cat fb.calJac4.cpgIslandExtUnmasked.txt
-    # 56535294 bases of 2481941580 (2.278%) in intersection
+    # 26183576 bases of 2859817025 (0.916%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2020-09-02 - Hiram)
@@ -474,18 +448,19 @@ XXX - running - Wed Sep  2 10:08:50 PDT 2020
     time (doGapOverlap.pl \
         -twoBit=/hive/data/genomes/calJac4/calJac4.unmasked.2bit calJac4 ) \
         > do.log 2>&1 &
-    # XXX empty result ?? did it run in 54 seconds ?
     # real    0m54.302s
 
-    # there is one only:
-    wc -l bed.tab
-    # 1 bed.tab
-    cut -f2- bed.tab
-chr6    47663669        47714277        chr6:47663670-47714277  304     +      47663669 47714277        0       2       304,304 0,50304
+    # there were not very many gaps, it only had to do one job and blat
+    # found nothing.
 
+    # this result does not exist:
     cat fb.calJac4.gapOverlap.txt
     # 608 bases of 2728222451 (0.000%) in intersection
 
+    # manually finish off since it quit in the load step
+    doGapOverlap.pl -continue=cleanup \
+        -twoBit=/hive/data/genomes/calJac4/calJac4.unmasked.2bit calJac4
+        
 #############################################################################
 # tandemDups (DONE - 2020-09-02 - Hiram)
     mkdir /hive/data/genomes/calJac4/bed/tandemDups
@@ -824,27 +799,29 @@ searchPriority 8
     cd /hive/data/genomes/calJac4/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku calJac4) > do.log 2>&1
-XXX - running - Thu Sep  3 11:46:01 PDT 2020
-    # real    8m19.775s
+    # real    73m39.179s
 
-    # one job broken:
-./runGsBig2M.csh chr10 000 gtf/000/chr10.gtf pep/000/chr10.pep subopt/000/chr10.bed
-    # real    34m35.712s
+    # two jobs broken:
+./runGsBig2M.csh chr22 000 gtf/000/chr22.gtf pep/000/chr22.pep subopt/000/chr22.bed &
+./runGsBig2M.csh chr4 000 gtf/000/chr4.gtf pep/000/chr4.pep subopt/000/chr4.bed
+wait
+    # real    56m30.462s
 
     # continuing
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -continue=makeBed -bigClusterHub=ku calJac4) > makeBed.log 2>&1
-    # real    0m45.365s
+    # real    1m1.807s
 
     cat fb.calJac4.genscan.txt
-    # 55445747 bases of 2654624157 (2.089%) in intersection
+    # 56416049 bases of 2859817025 (1.973%) in intersection
 
     cat fb.calJac4.genscanSubopt.txt
-    # 57607700 bases of 2654624157 (2.170%) in intersection
+    # 54809849 bases of 2859817025 (1.917%) in intersection
 
 #########################################################################
 # ncbiGene (TBD - 2020-09-03 - Hiram)
 
+    # don't need to do this on GCF/RefSeq assemblies, they have RefSeq genes
     mkdir /hive/data/genomes/calJac4/bed/xenoRefGene
     cd /hive/data/genomes/calJac4/bed/xenoRefGene
 
@@ -916,82 +893,75 @@ XXX - running - Thu Sep  3 11:46:01 PDT 2020
 	| cut -f4 | sort -n | uniq -c | less
 
 ########################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2020-04-10 - Hiram)
+# lastz/chain/net swap human/hg38 (DONE - 2020-04-10 - Hiram)
 
     # original alignment
-    cd /hive/data/genomes/hg38/bed/lastzCalJac4.2020-04-02
+    cd /hive/data/genomes/hg38/bed/lastzCalJac4.2020-08-03
 
     cat fb.hg38.chainCalJac4Link.txt
-    # 1549397508 bases of 3110768607 (49.808%) in intersection
+    # 2338614467 bases of 3110768607 (75.178%) in intersection
     cat fb.hg38.chainSynCalJac4Link.txt
-    # 1488468205 bases of 3110768607 (47.849%) in intersection
-
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
-	hg38 calJac4) > rbest.log 2>&1 &
-    # real    310m32.196s
-
+    # 2261509186 bases of 3110768607 (72.699%) in intersection
     cat fb.hg38.chainRBest.CalJac4.txt
-    # 1425406620 bases of 3110768607 (45.822%) in intersection
+    # 2146650109 bases of 3110768607 (69.007%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/calJac4/bed/blastz.hg38.swap
     cd /hive/data/genomes/calJac4/bed/blastz.hg38.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzCalJac4.2020-04-02/DEF \
+      /hive/data/genomes/hg38/bed/lastzCalJac4.2020-08-03/DEF \
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    99m10.990s
+    #  real    105m30.938s
 
     cat fb.calJac4.chainHg38Link.txt
-    # 1493209286 bases of 2481941580 (60.163%) in intersection
+    # 2256668215 bases of 2859817025 (78.910%) in intersection
     cat fb.calJac4.chainSynHg38Link.txt
-    # 1448164376 bases of 2481941580 (58.348%) in intersection
+    # 2183912419 bases of 2859817025 (76.365%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
 	calJac4 hg38) > rbest.log 2>&1 &
-    # real    257m59.713s
+    # real    467m22.590s
 
     cat fb.calJac4.chainRBest.Hg38.txt
-    # 1425296830 bases of 2481941580 (57.427%) in intersection
+    # 2147250913 bases of 2859817025 (75.084%) in intersection
 
-###########################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2020-04-20 - Hiram)
+############################################################################
+# lastz/chain/net swap mouse/mm10 (DONE - 2020-08-03 - Hiram)
 
     # original alignment
+    cd /hive/data/genomes/mm10/bed/lastzCalJac4.2020-08-03
+
     cat fb.mm10.chainCalJac4Link.txt
-    #	777883731 bases of 2652783500 (29.323%) in intersection
+    #	877278264 bases of 2652783500 (33.070%) in intersection
     cat fb.mm10.chainSynCalJac4Link.txt
-    #   736602602 bases of 2652783500 (27.767%) in intersection
-
-    time (doRecipBest.pl -load -workhorse=hgwdev mm10 calJac4 \
-      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    #	real    219m16.168s
-
+    #   830868888 bases of 2652783500 (31.321%) in intersection
     cat fb.mm10.chainRBest.CalJac4.txt
-    # 741307883 bases of 2652783500 (27.945%) in intersection
+    # 835445771 bases of 2652783500 (31.493%) in intersection
 
     mkdir /hive/data/genomes/calJac4/bed/blastz.mm10.swap
     cd /hive/data/genomes/calJac4/bed/blastz.mm10.swap
+
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzCalJac4.2020-04-02/DEF \
+	/hive/data/genomes/mm10/bed/lastzCalJac4.2020-08-03/DEF \
 	-swap -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-workhorse=hgwdev -smallClusterHub=hgwdev -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
-    #	real    50m20.639s
+    #	real    51m16.400s
 
     cat fb.calJac4.chainMm10Link.txt
-    #	772902855 bases of 2481941580 (31.141%) in intersection
+    #	882506277 bases of 2859817025 (30.859%) in intersection
     cat fb.calJac4.chainSynMm10Link.txt
-    #   737924732 bases of 2481941580 (29.732%) in intersection
+    #   831171319 bases of 2859817025 (29.064%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev calJac4 mm10 \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    173m38.016s
+    # real    308m53.845s
 
     cat fb.calJac4.chainRBest.Mm10.txt
-    # 740357755 bases of 2481941580 (29.830%) in intersection
+    # 833789913 bases of 2859817025 (29.155%) in intersection
 
 ##############################################################################
 # GENBANK AUTO UPDATE (DONE - 2020-09-03 - Hiram)
@@ -1053,53 +1023,36 @@ calJac4.genbank.mrna.xeno.load  = yes
     # appear
 
 #############################################################################
-# augustus gene track (TBD - 2020-09-03 - Hiram)
+# augustus gene track (DONE - 2020-09-04 - Hiram)
 
     mkdir /hive/data/genomes/calJac4/bed/augustus
     cd /hive/data/genomes/calJac4/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev calJac4) > do.log 2>&1
-    # real    119m8.866s
+    # real    119m49.652s
 
     cat fb.calJac4.augustusGene.txt
-    # 49120541 bases of 2654624157 (1.850%) in intersection
+    # 56033149 bases of 2859817025 (1.959%) in intersection
 
 #########################################################################
-# ncbiRefSeq (TBD - 2019-11-20 - Hiram)
-    ### XXX ### Not available on GCA/genbank assemblies
+# ncbiRefSeq (DONE - 2020-09-17 - Hiram)
 
     mkdir /hive/data/genomes/calJac4/bed/ncbiRefSeq
     cd /hive/data/genomes/calJac4/bed/ncbiRefSeq
-    # running step wise just to be careful
+
     time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
       -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_mammalian Gorilla_gorilla \
-      GCA_008122165.1_Kamilah_GGO_v0 calJac4) > download.log 2>&1
-    # real    1m37.523s
-
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_mammalian Gorilla_gorilla \
-      GCF_008122165.1_Kamilah_GGO_v0 calJac4) > process.log 2>&1
-    # real    2m9.450s
-
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_mammalian Gorilla_gorilla \
-      GCF_008122165.1_Kamilah_GGO_v0 calJac4) > load.log 2>&1
-    # real    0m21.982s
+      -fileServer=hgwdev -smallClusterHub=hgwdev -workhorse=hgwdev \
+      GCF_009663435.1_Callithrix_jacchus_cj1700_1.1 calJac4) > do.log 2>&1 &
 
     cat fb.ncbiRefSeq.calJac4.txt
-    #  74279781 bases of 2999027915 (2.477%) in intersection
+    #  102754440 bases of 2859817025 (3.593%) in intersection
 
-    # add: include ../../refSeqComposite.ra alpha
-    # to the gorilla/calJac4/trackDb.ra to turn on the track in the browser
+    # add: include ../../refSeqComposite.ra
+    # to the marmoset/calJac4/trackDb.ra to turn on the track in the browser
 
-    # XXX 2019-11-20 - ready for this after genbank runs
+    # XXX 2020-09-17 - ready for this after genbank runs
 
     featureBits -enrichment calJac4 refGene ncbiRefSeq 
  # refGene 0.402%, ncbiRefSeq 3.148%, both 0.402%, cover 99.90%, enrich 31.73x
@@ -1113,51 +1066,52 @@ calJac4.genbank.mrna.xeno.load  = yes
  # refGene 0.402%, ncbiRefSeqCurated 0.401%, both 0.400%, cover 99.33%, enrich 247.79x
 
 ##############################################################################
-# LIFTOVER TO mm10 (TBD - 2020-09-03 - Hiram)
+# LIFTOVER TO calJac3 (DONE - 2020-09-04 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/calJac4/bed/blat.mm10.2020-09-03
-    cd /hive/data/genomes/calJac4/bed/blat.mm10.2020-09-03
+    mkdir /hive/data/genomes/calJac4/bed/blat.calJac3.2020-09-04
+    cd /hive/data/genomes/calJac4/bed/blat.calJac3.2020-09-04
     doSameSpeciesLiftOver.pl -verbose=2 \
         -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -query2Bit=/hive/data/genomes/mm10/mm10.2bit \
-        -querySizes=/hive/data/genomes/mm10/chrom.sizes \
+        -query2Bit=/hive/data/genomes/calJac3/calJac3.2bit \
+        -querySizes=/hive/data/genomes/calJac3/chrom.sizes \
         -ooc=/hive/data/genomes/calJac4/jkStuff/calJac4.11.ooc \
-         calJac4 mm10
+         calJac4 calJac3
     time (doSameSpeciesLiftOver.pl -verbose=2 \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -query2Bit=/hive/data/genomes/mm10/mm10.2bit \
-        -querySizes=/hive/data/genomes/mm10/chrom.sizes \
+        -query2Bit=/hive/data/genomes/calJac3/calJac3.2bit \
+        -querySizes=/hive/data/genomes/calJac3/chrom.sizes \
         -ooc=/hive/data/genomes/calJac4/jkStuff/calJac4.11.ooc \
-         calJac4 mm10) > doLiftOverToMm10.log 2>&1
-    # real    257m18.898s
+         calJac4 calJac3) > doLiftOverToCalJac4.log 2>&1
+    # real    248m51.413s
 
-    # see if the liftOver menus function in the browser from calJac4 to mm10
+    # see if the liftOver menus function in the browser from calJac4 to calJac3
 
 ##############################################################################
-#  BLATSERVERS ENTRY (TBD - 2020-04-02 - Hiram)
-# request sent 2020-08-17
+#  BLATSERVERS ENTRY (DONE - 2020-09-04 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("calJac4", "blat1b", "17904", "1", "0"); \
+	VALUES ("calJac4", "blat1a", "17902", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("calJac4", "blat1b", "17905", "0", "1");' \
+	VALUES ("calJac4", "blat1a", "17903", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
-## reset default position to gene: CDH2 upon recommendation from Kerstin
-##  (TBD - 2020-06-22 - Hiram)
+## reset default position to same as calJac3 via blat of the protein from there
+##  (DONE - 2020-09-17 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr7:60683331-61003907"
+    hgsql -e 'update dbDb set defaultPos="chr15:67061035-67077513"
 	where name="calJac4";' hgcentraltest
 
 ##############################################################################
-# crispr whole genome (TBD - 2020-09-03 - Hiram)
+# crispr whole genome (DONE - 2020-09-04 -> 2020-09-10 - Hiram)
     mkdir /hive/data/genomes/calJac4/bed/crisprAll
     cd /hive/data/genomes/calJac4/bed/crisprAll
+
+    # need to have augustus genes done.  This will not work with genscan
 
     # the large shoulder argument will cause the entire genome to be scanned
     # this takes a while for a new genome to get the bwa indexing done
@@ -1166,58 +1120,49 @@ calJac4.genbank.mrna.xeno.load  = yes
     -fileServer=hgwdev \
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev) >> ranges.log 2>&1
-    # real    62m2.060s - failed on 'genscan' genes
-    # real    1m16.884s - rerun on 'augustusGene'
+    # real    73m51.391s
 
     time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
-       -continue=guides -stop=specScores calJac4 augustusGene \
+       -continue=guides -stop=load calJac4 augustusGene \
 	-shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
     -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev) > specScores.log 2>&1
-    # real    6558m26.295s
+    # real    7968m4.344s
 
     cat guides/run.time | sed -e 's/^/# /;'
 # Completed: 100 of 100 jobs
-# CPU time in finished jobs:      13031s     217.19m     3.62h    0.15d  0.000 y
-# IO & Wait Time:                   299s       4.98m     0.08h    0.00d  0.000 y
-# Average job time:                 133s       2.22m     0.04h    0.00d
-# Longest finished job:             920s      15.33m     0.26h    0.01d
-# Submission to last job:           935s      15.58m     0.26h    0.01d
+# CPU time in finished jobs:      12157s     202.62m     3.38h    0.14d  0.000 y
+# IO & Wait Time:                   252s       4.20m     0.07h    0.00d  0.000 y
+# Average job time:                 124s       2.07m     0.03h    0.00d
+# Longest finished job:             505s       8.42m     0.14h    0.01d
+# Submission to last job:           517s       8.62m     0.14h    0.01d
 
     cat specScores/run.time | sed -e 's/^/# /;'
-# Completed: 2947790 of 2947790 jobs
-# CPU time in finished jobs:  247411142s 4123519.03m 68725.32h 2863.55d  7.845 y
-# IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
-# Average job time:                  82s       1.37m     0.02h    0.00d
-# Longest finished job:             353s       5.88m     0.10h    0.00d
-# Submission to last job:        561467s    9357.78m   155.96h    6.50d
+# Completed: 3085907 of 3085907 jobs
+# CPU time in finished jobs:  294759806s 4912663.43m 81877.72h 3411.57d  9.347 y
+# IO & Wait Time:               6938403s  115640.05m  1927.33h   80.31d  0.220 y
+# Average job time:                  98s       1.63m     0.03h    0.00d
+# Longest finished job:             372s       6.20m     0.10h    0.00d
+# Submission to last job:        324356s    5405.93m    90.10h    3.75d
 
-
-# Number of specScores: 220274834
-
-    ### remember to get back to hgwdev to run this
-    time (~/kent/src/hg/utils/automation/doCrispr.pl -verbose=2 \
-       -continue=effScores -stop=load calJac4 augustusGene \
-    -shoulder=250000000 -tableName=crisprAll -fileServer=hgwdev \
-    -buildDir=`pwd` -smallClusterHub=hgwdev -bigClusterHub=ku \
-      -workhorse=hgwdev) > load.log 2>&1
-    #  real    1615m13.200s
+     grep "Number of specScores" specScores.log
+# Number of specScores: 230996937
 
     cat effScores/run.time | sed -e 's/^/# /;'
-# Completed: 27714 of 27714 jobs
-# CPU time in finished jobs:   13108172s  218469.53m  3641.16h  151.71d  0.416 y
-# IO & Wait Time:                 52457s     874.29m    14.57h    0.61d  0.002 y
-# Average job time:                 475s       7.91m     0.13h    0.01d
-# Longest finished job:            2486s      41.43m     0.69h    0.03d
-# Submission to last job:         44334s     738.90m    12.31h    0.51d
+# Completed: 28837 of 28837 jobs
+# CPU time in finished jobs:   14627399s  243789.98m  4063.17h  169.30d  0.464 y
+# IO & Wait Time:                527816s    8796.94m   146.62h    6.11d  0.017 y
+# Average job time:                 526s       8.76m     0.15h    0.01d
+# Longest finished job:            1466s      24.43m     0.41h    0.02d
+# Submission to last job:         32001s     533.35m     8.89h    0.37d
 
     cat offTargets/run.time | sed -e 's/^/# /;'
-# Completed: 147390 of 147390 jobs
-# CPU time in finished jobs:    2280286s   38004.77m   633.41h   26.39d  0.072 y
-# IO & Wait Time:                505943s    8432.38m   140.54h    5.86d  0.016 y
-# Average job time:                  19s       0.32m     0.01h    0.00d
-# Longest finished job:              36s       0.60m     0.01h    0.00d
-# Submission to last job:         13489s     224.82m     3.75h    0.16d
+# Completed: 154296 of 154296 jobs
+# CPU time in finished jobs:    2640432s   44007.20m   733.45h   30.56d  0.084 y
+# IO & Wait Time:                986281s   16438.02m   273.97h   11.42d  0.031 y
+# Average job time:                  24s       0.39m     0.01h    0.00d
+# Longest finished job:              49s       0.82m     0.01h    0.00d
+# Submission to last job:         12302s     205.03m     3.42h    0.14d
 
     bigBedInfo crispr.bb | sed -e 's/^/# /;'
 # version: 4
@@ -1226,16 +1171,16 @@ calJac4.genbank.mrna.xeno.load  = yes
 # isCompressed: yes
 # isSwapped: 0
 # extraIndexCount: 0
-# itemCount: 276,331,386
-# primaryDataSize: 12,229,621,910
-# primaryIndexSize: 17,345,476
+# itemCount: 287,101,022
+# primaryDataSize: 12,714,904,685
+# primaryIndexSize: 18,017,884
 # zoomLevels: 10
-# chromCount: 33
-# basesCovered: 2,179,930,088
-# meanDepth (of bases covered): 2.915516
+# chromCount: 34
+# basesCovered: 2,272,744,456
+# meanDepth (of bases covered): 2.905440
 # minDepth: 1.000000
-# maxDepth: 32.000000
-# std of depth: 1.944181
+# maxDepth: 29.000000
+# std of depth: 1.956870
 
 #########################################################################
 # all.joiner update, downloads and in pushQ - (WORKING - 2019-11-20 - Hiram)
