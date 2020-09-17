@@ -145,9 +145,10 @@ searchIndex name
 mouseOverField _mouseOver
 release alpha,beta
 
-searchTable  decipherCnv
+searchTable decipher
 searchMethod exact
 searchType bigBed
+release alpha,beta
 
 track decipherSnvs
 shortLabel DECIPHER SNVs
