@@ -5,21 +5,22 @@ compositeTrack on
 group phenDis
 visibility hide
 autoScale on
-maxHeightPixels 48:90:128
+maxHeightPixels 48:75:128
 pennantIcon New red
 type bigLolly 9 +
 lollyField 21
-lollySizeField 20
-lollyMaxSize 8
+# V2
+#lollySizeField 20
+#lollyMaxSize 8
 mouseOver $name $ref/$alt effect $effectSize pval $pValue studies $sourceCount
 maxItems 500000
 filter.sourceCount 1
 filterLabel.sourceCount Minimum number of studies
 filter.pValueLog 3
-filter.effectSize -25:25
+filter.effectSize -13:21
 filterLabel.effectSize Effect size range
 filterByRange.effectSize on
-filterLimits.effectSize -25:25
+filterLimits.effectSize -13:21
 filter._effectSizeAbs 0
 filterLabel._effectSizeAbs Minimum effect size +-
 noScoreFilter on
