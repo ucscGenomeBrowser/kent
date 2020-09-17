@@ -4766,7 +4766,7 @@ subGroup3 level Evidence cur=Curated sub=Submitted
 dimensions dimensionY=class dimensionX=level
 sortOrder class=+ level=+ view=+
 type bed 3
-pennantIcon Outdated red
+pennantIcon Deprecated red /goldenPath/newsarch.html "Track no longer updated, see news archive for details"
 
     track iscaViewTotal
     shortLabel Coverage (Graphical)
