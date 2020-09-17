@@ -25817,7 +25817,7 @@ else if (sameWord(table, "gad"))
     {
     doGad(tdb, item, NULL);
     }
-else if (sameWord(table, "decipher"))
+else if (sameWord(table, "decipherOld"))
     {
     doDecipherCnvs(tdb, item, NULL);
     }

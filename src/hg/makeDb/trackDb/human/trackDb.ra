@@ -124,9 +124,9 @@ prevExonText Left edge
 nextExonText Right edge
 release public
 
-track decipherCnv
-shortLabel Decipher CNV New
-longLabel Decipher CNV New
+track decipher
+shortLabel Decipher CNVs
+longLabel Decipher CNVs
 group phenDis
 visibility hide
 type bigBed 9 +
