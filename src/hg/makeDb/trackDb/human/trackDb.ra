@@ -4900,6 +4900,7 @@ searchTable decipher
 termRegex [0-9]+
 searchType bed
 searchPriority 50
+release public
 
 searchName decipherSnvsId
 searchTable decipherSnvs
