@@ -3180,6 +3180,32 @@ url2Label miRBase:
 url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
 dataVersion miRBase Release 13.0 (March 2009) and snoRNABase Version 3
 
+track lrgBigPsl
+shortLabel LRG Transcripts (RM 24672)
+longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations (RedMine 24672)
+group genes
+visibility hide
+type bigPsl
+mouseOverField mouseOver
+skipFields mouseOver
+skipEmptyFields on
+urls ncbiTranscript=https://www.ncbi.nlm.nih.gov/nuccore/$$ ensemblTranscript=http://www.ensembl.org/Multi/Search/Results?site=ensembl_all;q=$$ ncbiProtein=https://www.ncbi.nlm.nih.gov/protein/$$ ensemblProtein=http://www.ensembl.org/Multi/Search/Results?site=ensembl_all;q=$$
+cdsTable lrgCds
+cdnaTable lrgCdna
+pepTable lrgPep
+baseColorDefault diffCodons
+baseColorUseCds table lrgCds
+baseColorUseSequence table lrgCdna
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+color 54,125,29
+urlLabel Link to LRG transcript:
+url ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
+
 track lrgTranscriptAli
 shortLabel LRG Transcripts
 longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations
@@ -5486,4 +5512,4 @@ termRegex nssv[0-9]+
 searchType bed
 searchPriority 50
 
-include covidHgiGwas.ra alpha
+include covidHgiGwas.ra alpha,beta,public
