@@ -3744,6 +3744,7 @@ release alpha,beta
         release alpha,beta
 
         track lovdLong
+        type bigBed 9 +
         shortLabel LOVD Variants >= 50 bp
         longLabel Leiden Open Variation Database Public Variants, long >= 50 bp variants
         group phenDis
@@ -3752,6 +3753,7 @@ release alpha,beta
         noScoreFilter on
         bigDataUrl /gbdb/$D/lovd/lovd.$D.long.bb
         parent lovdComp
+        mergeSpannedItems on
         release alpha,beta
 
 track lovdComp
