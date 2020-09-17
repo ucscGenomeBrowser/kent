@@ -9607,7 +9607,7 @@ if (isNotEmpty(version))
 void printRelatedTracks(char *database, struct hash *trackHash, struct trackDb *tdb, struct cart *cart)
 /* Maybe print a "related track" section */
 {
-if (!cfgOption("db.relatedTrack"))
+if (!cfgOption("db.relatedTrack") || trackHubDatabase(database))
     return;
 char *relatedTrackTable = cfgOptionDefault("db.relatedTrack","relatedTrack");
 struct sqlConnection *conn = hAllocConn(database);
