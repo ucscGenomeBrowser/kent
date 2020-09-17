@@ -749,12 +749,18 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
+void lineFileExpectWordsMesg(struct lineFile *lf, int expecting, int got, char* extraMessage)
+/* Check line has right number of words. Add extraMessage to end of error message. */
+{
+if (expecting != got)
+    errAbort("Expecting %d words line %d of %s got %d. %s",
+	    expecting, lf->lineIx, lf->fileName, got, extraMessage);
+}
+
 void lineFileExpectWords(struct lineFile *lf, int expecting, int got)
 /* Check line has right number of words. */
 {
-if (expecting != got)
-    errAbort("Expecting %d words line %d of %s got %d",
-	    expecting, lf->lineIx, lf->fileName, got);
+    lineFileExpectWordsMesg(lf, expecting, got, "");
 }
 
 void lineFileExpectAtLeast(struct lineFile *lf, int expecting, int got)

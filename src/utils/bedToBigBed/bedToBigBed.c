@@ -199,7 +199,7 @@ for (;;)
 	    wordCount = chopTabs(line, row);
 	else
 	    wordCount = chopLine(line, row);
-	lineFileExpectWords(lf, fieldCount, wordCount);
+	lineFileExpectWordsMesg(lf, fieldCount, wordCount, "If the input is a tab-sep file, do not forget to use the -tab option");
 
 	loadAndValidateBedExt(row, bedN, fieldCount, lf, bed, as, FALSE, allow1bpOverlap);
 
