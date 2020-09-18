@@ -124,9 +124,9 @@ prevExonText Left edge
 nextExonText Right edge
 release public
 
-track decipherCnv
-shortLabel Decipher CNV New
-longLabel Decipher CNV New
+track decipher
+shortLabel Decipher CNVs
+longLabel Decipher CNVs
 group phenDis
 visibility hide
 type bigBed 9 +
@@ -145,9 +145,10 @@ searchIndex name
 mouseOverField _mouseOver
 release alpha,beta
 
-searchTable  decipherCnv
+searchTable decipher
 searchMethod exact
 searchType bigBed
+release alpha,beta
 
 track decipherSnvs
 shortLabel DECIPHER SNVs
@@ -3744,6 +3745,7 @@ release alpha,beta
         release alpha,beta
 
         track lovdLong
+        type bigBed 9 +
         shortLabel LOVD Variants >= 50 bp
         longLabel Leiden Open Variation Database Public Variants, long >= 50 bp variants
         group phenDis
@@ -3752,6 +3754,7 @@ release alpha,beta
         noScoreFilter on
         bigDataUrl /gbdb/$D/lovd/lovd.$D.long.bb
         parent lovdComp
+        mergeSpannedItems on
         release alpha,beta
 
 track lovdComp
@@ -4766,7 +4769,7 @@ subGroup3 level Evidence cur=Curated sub=Submitted
 dimensions dimensionY=class dimensionX=level
 sortOrder class=+ level=+ view=+
 type bed 3
-pennantIcon Outdated red
+pennantIcon Deprecated red /goldenPath/newsarch.html "Track no longer updated, see news archive for details"
 
     track iscaViewTotal
     shortLabel Coverage (Graphical)
@@ -4898,6 +4901,7 @@ searchTable decipher
 termRegex [0-9]+
 searchType bed
 searchPriority 50
+release public
 
 searchName decipherSnvsId
 searchTable decipherSnvs

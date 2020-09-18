@@ -72,6 +72,7 @@
 #include "hex.h"
 #include <openssl/sha.h>
 #include "customComposite.h"
+#include "chromAlias.h"
 
 //#include "bed3Sources.h"
 
@@ -9927,12 +9928,39 @@ cgiTableFieldEnd();
 cgiTableRowEnd();
 }
 
+static char *chrAliases(struct hash *aliasHash, char *sequenceName)
+/* lookup the sequenceName in the aliasHash and return csv string
+ * of alias names
+ */
+{
+if (NULL == aliasHash)
+    return NULL;
+struct dyString *returned = dyStringNew(512);
+struct hashEl *hel = hashLookup(aliasHash, sequenceName);
+if (hel)
+    {
+    dyStringPrintf(returned, "%s", ((struct chromAlias *)hel->val)->alias);
+    hel = hashLookupNext(hel);
+    while (hel != NULL)
+        {
+        dyStringPrintf(returned, ", %s",((struct chromAlias *)hel->val)->alias);
+        hel = hashLookupNext(hel);
+        }
+    }
+return dyStringCannibalize(&returned);
+}
+
 void chromInfoRowsChromExt(char *sortType)
 /* Make table rows of chromosomal chromInfo name & size, sorted by name. */
 {
 struct slName *chromList = hAllChromNames(database);
 struct slName *chromPtr = NULL;
 long long total = 0;
+boolean hasAlias = hTableExists(database, "chromAlias");
+struct hash *aliasHash = chromAliasMakeReverseLookupTable(database);
+/* key is database sequence name, value is an alias name, can be multiple
+ *   entries for the same sequence name.  NULL if no chromAlias available
+ */
 
 if (sameString(sortType,"default"))
     slSort(&chromList, chrSlNameCmp);
@@ -9944,6 +9972,7 @@ else
 for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     {
     unsigned size = hChromSize(database, chromPtr->name);
+    char *aliasNames = chrAliases(aliasHash, chromPtr->name);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
     htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
@@ -9954,6 +9983,15 @@ for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     printLongWithCommas(stdout, size);
     puts("&nbsp;&nbsp;");
     cgiTableFieldEnd();
+    if (hasAlias)
+	{
+	cgiSimpleTableFieldStart();
+	if (aliasNames)
+            htmlPrintf("%s", aliasNames);
+	else
+            htmlPrintf("&nbsp;");
+        cgiTableFieldEnd();
+        }
     cgiTableRowEnd();
     total += size;
     }
@@ -10057,6 +10095,11 @@ if (trackHubDatabase(database))
     }
 
 struct sqlConnection *conn = hAllocConn(database);
+boolean hasAlias = hTableExists(database, "chromAlias");
+struct hash *aliasHash = chromAliasMakeReverseLookupTable(database);
+/* key is database sequence name, value is an alias name, can be multiple
+ *   entries for the same sequence name.  NULL if no chromAlias available
+ */
 struct sqlResult *sr = NULL;
 char **row = NULL;
 long long total = 0;
@@ -10087,11 +10130,21 @@ while ((row = sqlNextRow(sr)) != NULL)
     htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            row[0], row[0]);
+    char *aliasNames = chrAliases(aliasHash, row[0]);
     cgiTableFieldEnd();
     cgiTableFieldStartAlignRight();
     printLongWithCommas(stdout, size);
     puts("&nbsp;&nbsp;");
     cgiTableFieldEnd();
+    if (hasAlias)
+        {
+        cgiSimpleTableFieldStart();
+        if (aliasNames)
+            htmlPrintf("%s", aliasNames);
+        else
+            htmlPrintf("&nbsp;");
+        cgiTableFieldEnd();
+        }
     cgiTableRowEnd();
     total += size;
     }
@@ -10194,6 +10247,12 @@ cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
 puts("Length (bp) including gaps &nbsp;");
 cgiTableFieldEnd();
+if (hTableExists(database, "chromAlias"))
+    {
+    cgiSimpleTableFieldStart();
+    puts("alias sequence names &nbsp;");
+    cgiTableFieldEnd();
+    }
 cgiTableRowEnd();
 
 if (sameString(database,"hg38"))

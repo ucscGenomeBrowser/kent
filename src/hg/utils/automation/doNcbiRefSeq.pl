@@ -314,7 +314,10 @@ sub doProcess {
   my $warnOnly = "";
   $warnOnly = "-warnAndContinue" if ($toGpWarnOnly);
 
-  my $localLiftFile = "\$downloadDir/\${asmId}To\${db}.lift";
+  my $localLiftFile = "$downloadDir/${asmId}To${db}.lift";
+  if (! -s "$localLiftFile") {
+     $localLiftFile = "../download/${asmId}To${db}.lift" if (-s "../download/${asmId}To${db}.lift");
+  }
   $localLiftFile = "" if (! -s "$localLiftFile");
   $localLiftFile = $liftFile if (-s $liftFile);
   my $pslTargetSizes = "-db=\$db";
