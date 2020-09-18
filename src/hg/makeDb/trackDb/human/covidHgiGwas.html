@@ -26,18 +26,20 @@ size: primary analysis on disease severity. Two meta-analyses are represented in
 <H2>Display Conventions</H2>
 <p>
 Displayed items are colored by <b>GWAS effect</b>:  red for positive, blue for negative. 
-The height of the item reflects the <b>effect size</b> (beta coefficient).
-The color saturation indicates <b>statistical significance</b>: p-values smaller than .05
+The height of the item reflects the <b>effect size</b>. The effect size, defined as the 
+contribution of a SNP to the genetic variance of the trait, was measured as beta coefficient 
+(beta). The higher the absolute value of the beta coefficient, the stronger the effect.
+The color saturation indicates <b>statistical significance</b>: p-values smaller than 1e-5
 are brightly colored (bright red
 <span style='background-color: #ff0000;'>&nbsp;&nbsp;</span>
 , bright blue
 <span style='background-color: #0000ff;'>&nbsp;&nbsp;</span>
 ),
-those with less significance (p >= .05) are paler (light red
+those with less significance (p >= 1e-5) are paler (light red
 <span style='background-color: #ffa0a0;'>&nbsp;&nbsp;</span>
 , light blue
 <span style='background-color: #a0a0ff;'>&nbsp;&nbsp;</span>
-). For better visualization of the data, only SNPs with p-values smaller than .03 are 
+). For better visualization of the data, only SNPs with p-values smaller than 1e-3 are 
 displayed by default. 
 </p>
 
@@ -56,9 +58,28 @@ Additional information on each variant can be found on the details page by click
 
 <H2>Methods</H2>
 <p>
-Data were generated from genome-wide SNP array and whole exome and genome sequencing: leveraging 
-the impact of both common and rare variants. The statistical analysis performed takes into account 
-differences between sex, ancestry, and date of sample collection. More information about the 
+COVID-19 Host Genetics Initiative (HGI) GWAS meta-analysis round 3 (July 2020) results were used 
+in this study. Each participating study partner submitted GWAS summary statistics for up to four 
+of the <a target=_blank href="https://www.covid19hg.org/results/">COVID-19 phenotype definitions</a>.
+</p>
+<p>
+Data were generated from genome-wide SNP array and whole exome and genome
+sequencing, leveraging the impact of both common and rare variants. The statistical analysis
+performed takes into account differences between sex, ancestry, and date of sample collection. 
+Alleles were harmonized across studies and reported allele frequencies are based on gnomAD 
+version 3.0 reference data. Most study partners used the <b>SAIGE GWAS</b> pipeline in order 
+to generate summary statistics used for the COVID-19 HGI meta-analysis. The summary statistics 
+of individual studies were manually examined for inflation, 
+deflation, and excessive number of false positives. Qualifying summary statistics were filtered for 
+<b>INFO > 0.6</b> and <b>MAF > 0.0001</b> prior to meta-analyzing the entirety of the data. 
+The meta-analysis was done using inverse variance weighting of effects method, accounting for 
+strand differences and allele flips in the individual studies. 
+</p>
+<p>
+The meta-analysis results of variants appearing in at least three studies (analysis C2) or two 
+studies (all other analyses) were made publicly available.
+The meta-analysis software and workflow are available <a target=_blank 
+href="https://github.com/covid19-hg/META_ANALYSIS">here</a>. More information about the 
 prospective studies, processing pipeline, results and data sharing can be found 
 <a target=_blank href="https://www.covid19hg.org/about/">here</a>.
 </p>

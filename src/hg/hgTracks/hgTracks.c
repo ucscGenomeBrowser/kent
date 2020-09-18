@@ -9915,7 +9915,7 @@ if (recTrackSetsEnabled())
     printRecTrackSets();
 }
 
-void chromInfoTotalRow(int count, long long total)
+static void chromInfoTotalRow(int count, long long total, boolean hasAlias)
 /* Make table row with total number of sequences and size from chromInfo. */
 {
 cgiSimpleTableRowStart();
@@ -9925,6 +9925,12 @@ cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
 printLongWithCommas(stdout, total);
 cgiTableFieldEnd();
+if (hasAlias)
+    {
+    cgiSimpleTableFieldStart();
+    puts("&nbsp");
+    cgiTableFieldEnd();
+    }
 cgiTableRowEnd();
 }
 
@@ -9995,7 +10001,7 @@ for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     cgiTableRowEnd();
     total += size;
     }
-chromInfoTotalRow(slCount(chromList), total);
+chromInfoTotalRow(slCount(chromList), total, hasAlias);
 slFreeList(&chromList);
 }
 
@@ -10021,6 +10027,10 @@ void chromInfoRowsNonChromTrackHub(int limit)
 struct chromInfo *chromInfo = trackHubAllChromInfo(database);
 slSort(&chromInfo, chromInfoCmpSize);
 int seqCount = slCount(chromInfo);
+struct hash *aliasHash = trackHubAllChromAlias(database);
+boolean hasAlias = FALSE;
+if (aliasHash)
+    hasAlias = TRUE;
 long long total = 0;
 char msg1[512], msg2[512];
 boolean truncating;
@@ -10030,6 +10040,7 @@ truncating = (limit > 0) && (seqCount > limit);
 
 for(;count-- && (chromInfo != NULL); chromInfo = chromInfo->next)
     {
+    char *aliasNames = chrAliases(aliasHash, chromInfo->chrom);
     unsigned size = chromInfo->size;
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
@@ -10041,12 +10052,21 @@ for(;count-- && (chromInfo != NULL); chromInfo = chromInfo->next)
     printLongWithCommas(stdout, size);
     puts("&nbsp;&nbsp;");
     cgiTableFieldEnd();
+    if (hasAlias)
+	{
+	cgiSimpleTableFieldStart();
+	if (aliasNames)
+            htmlPrintf("%s", aliasNames);
+	else
+            htmlPrintf("&nbsp;");
+        cgiTableFieldEnd();
+        }
     cgiTableRowEnd();
     total += size;
     }
 if (!truncating)
     {
-    chromInfoTotalRow(seqCount, total);
+    chromInfoTotalRow(seqCount, total, hasAlias);
     }
 else
     {
@@ -10150,7 +10170,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 if (!truncating)
     {
-    chromInfoTotalRow(seqCount, total);
+    chromInfoTotalRow(seqCount, total, hasAlias);
     }
 else
     {
@@ -10195,7 +10215,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-static void chromSizesDownloadRow()
+static void chromSizesDownloadRow(boolean hasAlias, char *hubAliasFile)
 /* Show link to chrom.sizes file at end of chromInfo table (unless this is a hub) */
 {
 if (! trackHubDatabase(database))
@@ -10208,6 +10228,26 @@ if (! trackHubDatabase(database))
     printf("<A HREF='http://%s/goldenPath/%s/bigZips/%s.chrom.sizes'>%s.chrom.sizes</A>",
            hDownloadsServer(), database, database, database);
     cgiTableFieldEnd();
+    if (hasAlias)
+	{
+	cgiSimpleTableFieldStart();
+	puts("&nbsp");
+	cgiTableFieldEnd();
+	}
+    cgiTableRowEnd();
+    }
+else if (hubAliasFile)
+    {
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    puts("Download as file");
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    puts("&nbsp");
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    printf("<a href='%s' target=_blank>assembly hub alias file</A>", hubAliasFile);
+    cgiTableFieldEnd();
     cgiTableRowEnd();
     }
 }
@@ -10215,6 +10255,17 @@ if (! trackHubDatabase(database))
 void chromInfoPage()
 /* Show list of chromosomes (or scaffolds, etc) on which this db is based. */
 {
+boolean hasAlias = FALSE;
+char *aliasFile = NULL;
+if (trackHubDatabase(database))
+    {
+    aliasFile = trackHubAliasFile(database);
+    if (aliasFile)
+        hasAlias = TRUE;
+    }
+else
+    hasAlias = hTableExists(database, "chromAlias");
+
 char *position = cartUsualString(cart, "position", hDefaultPos(database));
 char *defaultChrom = hDefaultChrom(database);
 char *freeze = hFreezeFromDb(database);
@@ -10253,6 +10304,12 @@ if (hTableExists(database, "chromAlias"))
     puts("alias sequence names &nbsp;");
     cgiTableFieldEnd();
     }
+else if (hasAlias)
+    {
+    cgiSimpleTableFieldStart();
+    puts("alias sequence names &nbsp;");
+    cgiTableFieldEnd();
+    }
 cgiTableRowEnd();
 
 if (sameString(database,"hg38"))
@@ -10262,7 +10319,7 @@ else if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) 
     chromInfoRowsChrom();
 else
     chromInfoRowsNonChrom(1000);
-chromSizesDownloadRow();
+chromSizesDownloadRow(hasAlias, aliasFile);
 
 hTableEnd();
 cgiDown(0.9);
@@ -10271,8 +10328,7 @@ hgPositionsHelpHtml(organism, database);
 puts("</FORM>");
 dyStringFree(&title);
 webEndSectionTables();
-}
-
+}	/*	void chromInfoPage()	*/
 
 void resetVars()
 /* Reset vars except for position and database. */
