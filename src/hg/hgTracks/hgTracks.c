@@ -10215,7 +10215,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-static void chromSizesDownloadRow()
+static void chromSizesDownloadRow(boolean hasAlias, char *hubAliasFile)
 /* Show link to chrom.sizes file at end of chromInfo table (unless this is a hub) */
 {
 if (! trackHubDatabase(database))
@@ -10228,6 +10228,26 @@ if (! trackHubDatabase(database))
     printf("<A HREF='http://%s/goldenPath/%s/bigZips/%s.chrom.sizes'>%s.chrom.sizes</A>",
            hDownloadsServer(), database, database, database);
     cgiTableFieldEnd();
+    if (hasAlias)
+	{
+	cgiSimpleTableFieldStart();
+	puts("&nbsp");
+	cgiTableFieldEnd();
+	}
+    cgiTableRowEnd();
+    }
+else if (hubAliasFile)
+    {
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    puts("Download as file");
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    puts("&nbsp");
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    printf("<a href='%s' target=_blank>assembly hub alias file</A>", hubAliasFile);
+    cgiTableFieldEnd();
     cgiTableRowEnd();
     }
 }
@@ -10235,6 +10255,17 @@ if (! trackHubDatabase(database))
 void chromInfoPage()
 /* Show list of chromosomes (or scaffolds, etc) on which this db is based. */
 {
+boolean hasAlias = FALSE;
+char *aliasFile = NULL;
+if (trackHubDatabase(database))
+    {
+    aliasFile = trackHubAliasFile(database);
+    if (aliasFile)
+        hasAlias = TRUE;
+    }
+else
+    hasAlias = hTableExists(database, "chromAlias");
+
 char *position = cartUsualString(cart, "position", hDefaultPos(database));
 char *defaultChrom = hDefaultChrom(database);
 char *freeze = hFreezeFromDb(database);
@@ -10273,7 +10304,7 @@ if (hTableExists(database, "chromAlias"))
     puts("alias sequence names &nbsp;");
     cgiTableFieldEnd();
     }
-else if (trackHubAliasFile(database))
+else if (hasAlias)
     {
     cgiSimpleTableFieldStart();
     puts("alias sequence names &nbsp;");
@@ -10288,7 +10319,7 @@ else if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) 
     chromInfoRowsChrom();
 else
     chromInfoRowsNonChrom(1000);
-chromSizesDownloadRow();
+chromSizesDownloadRow(hasAlias, aliasFile);
 
 hTableEnd();
 cgiDown(0.9);
@@ -10297,8 +10328,7 @@ hgPositionsHelpHtml(organism, database);
 puts("</FORM>");
 dyStringFree(&title);
 webEndSectionTables();
-}
-
+}	/*	void chromInfoPage()	*/
 
 void resetVars()
 /* Reset vars except for position and database. */
