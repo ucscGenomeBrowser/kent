@@ -447,6 +447,7 @@ html gnomad
         shortLabel gnomAD PEXT mean_proportion
         longLabel gnomAD PEXT mean_proportion
         parent gnomadPext
+        color 66,139,202
         release alpha
 
         track gnomADPextAdipose_Subcutaneous
@@ -454,6 +455,7 @@ html gnomad
         parent gnomadPext
         shortLabel gnomAD PEXT Adipose Subcut
         longLabel gnomAD PEXT Adipose Subcutaneous
+        color 255,102,0
         release alpha
 
         track gnomADPextAdipose_Visceral_Omentum_
@@ -461,6 +463,7 @@ html gnomad
         shortLabel gnomAD PEXT Adipose_Visceral_Omentum_
         longLabel gnomAD PEXT Adipose_Visceral_Omentum_
         parent gnomadPext
+        color 255,170,0
         release alpha
 
         track gnomADPextAdrenalGland
@@ -468,6 +471,7 @@ html gnomad
         shortLabel gnomAD PEXT AdrenalGland
         longLabel gnomAD PEXT AdrenalGland
         parent gnomadPext
+        color 51,221,51
         release alpha
 
         track gnomADPextArtery_Aorta
@@ -475,6 +479,7 @@ html gnomad
         shortLabel gnomAD PEXT Artery_Aorta
         longLabel gnomAD PEXT Artery_Aorta
         parent gnomadPext
+        color 255,85,85
         release alpha
 
         track gnomADPextArtery_Coronary
@@ -482,6 +487,7 @@ html gnomad
         shortLabel gnomAD PEXT Artery_Coronary
         longLabel gnomAD PEXT Artery_Coronary
         parent gnomadPext
+        color 255,170,153
         release alpha
 
         track gnomADPextArtery_Tibial
@@ -489,6 +495,7 @@ html gnomad
         shortLabel gnomAD PEXT Artery_Tibial
         longLabel gnomAD PEXT Artery_Tibial
         parent gnomadPext
+        color 255,0,0
         release alpha
 
         track gnomADPextBladder
@@ -496,6 +503,7 @@ html gnomad
         shortLabel gnomAD PEXT Bladder
         longLabel gnomAD PEXT Bladder
         parent gnomadPext
+        color 170,0,0
         release alpha
 
         track gnomADPextBrain_Amygdala
@@ -503,6 +511,7 @@ html gnomad
         shortLabel gnomAD PEXT Brain_Amygdala
         longLabel gnomAD PEXT Brain_Amygdala
         parent gnomadPext
+        color 238,238,0
         release alpha
 
         track gnomADPextBrain_Anteriorcingulatecortex_BA24_
@@ -510,6 +519,7 @@ html gnomad
         shortLabel gnomAD PEXT Brain_Anteriorcingulatecortex_BA24_
         longLabel gnomAD PEXT Brain_Anteriorcingulatecortex_BA24_
         parent gnomadPext
+        color 238,238,0
         release alpha
 
         track gnomADPextBrain_Caudate_basalganglia_
@@ -517,6 +527,7 @@ html gnomad
         shortLabel gnomAD PEXT Brain_Caudate_basalganglia_
         longLabel gnomAD PEXT Brain_Caudate_basalganglia_
         parent gnomadPext
+        color 238,238,0
         release alpha
 
         track gnomADPextBrain_CerebellarHemisphere
@@ -524,6 +535,7 @@ html gnomad
         shortLabel gnomAD PEXT Brain_CerebellarHemisphere
         longLabel gnomAD PEXT Brain_CerebellarHemisphere
         parent gnomadPext
+        color 238,238,0
         release alpha
 
         track gnomADPextBrain_Cerebellum
@@ -531,6 +543,7 @@ html gnomad
         shortLabel gnomAD PEXT Brain_Cerebellum
         longLabel gnomAD PEXT Brain_Cerebellum
         parent gnomadPext
+        color 238,238,0
         release alpha
 
         track gnomADPextBrain_Cortex
@@ -538,6 +551,7 @@ html gnomad
         shortLabel gnomAD PEXT Brain_Cortex
         longLabel gnomAD PEXT Brain_Cortex
         parent gnomadPext
+        color 238,238,0
         release alpha
 
         track gnomADPextBrain_FrontalCortex_BA9_
@@ -545,6 +559,7 @@ html gnomad
         shortLabel gnomAD PEXT Brain_FrontalCortex_BA9_
         longLabel gnomAD PEXT Brain_FrontalCortex_BA9_
         parent gnomadPext
+        color 238,238,0
         release alpha
 
         track gnomADPextBrain_Hippocampus
@@ -552,6 +567,7 @@ html gnomad
         shortLabel gnomAD PEXT Brain_Hippocampus
         longLabel gnomAD PEXT Brain_Hippocampus
         parent gnomadPext
+        color 238,238,0
         release alpha
 
         track gnomADPextBrain_Hypothalamus
@@ -559,6 +575,7 @@ html gnomad
         shortLabel gnomAD PEXT Brain_Hypothalamus
         longLabel gnomAD PEXT Brain_Hypothalamus
         parent gnomadPext
+        color 238,238,0
         release alpha
 
         track gnomADPextBrain_Nucleusaccumbens_basalganglia_
@@ -566,6 +583,7 @@ html gnomad
         shortLabel gnomAD PEXT Brain_Nucleusaccumbens_basalganglia_
         longLabel gnomAD PEXT Brain_Nucleusaccumbens_basalganglia_
         parent gnomadPext
+        color 238,238,0
         release alpha
 
         track gnomADPextBrain_Putamen_basalganglia_
@@ -573,6 +591,7 @@ html gnomad
         shortLabel gnomAD PEXT Brain_Putamen_basalganglia_
         longLabel gnomAD PEXT Brain_Putamen_basalganglia_
         parent gnomadPext
+        color 238,238,0
         release alpha
 
         track gnomADPextBrain_Spinalcord_cervicalc_1_
@@ -580,6 +599,7 @@ html gnomad
         shortLabel gnomAD PEXT Brain_Spinalcord_cervicalc_1_
         longLabel gnomAD PEXT Brain_Spinalcord_cervicalc_1_
         parent gnomadPext
+        color 238,238,0
         release alpha
 
         track gnomADPextBrain_Substantianigra
@@ -587,6 +607,7 @@ html gnomad
         shortLabel gnomAD PEXT Brain_Substantianigra
         longLabel gnomAD PEXT Brain_Substantianigra
         parent gnomadPext
+        color 238,238,0
         release alpha
 
         track gnomADPextBreast_MammaryTissue
@@ -594,6 +615,7 @@ html gnomad
         shortLabel gnomAD PEXT Breast_MammaryTissue
         longLabel gnomAD PEXT Breast_MammaryTissue
         parent gnomadPext
+        color 51,204,204
         release alpha
 
         track gnomADPextCells_EBV_transformedlymphocytes
@@ -601,6 +623,7 @@ html gnomad
         shortLabel gnomAD PEXT Cells_EBV_transformedlymphocytes
         longLabel gnomAD PEXT Cells_EBV_transformedlymphocytes
         parent gnomadPext
+        color 204,102,255
         release alpha
 
         track gnomADPextCells_Transformedfibroblasts
@@ -608,6 +631,7 @@ html gnomad
         shortLabel gnomAD PEXT Cells_Transformedfibroblasts
         longLabel gnomAD PEXT Cells_Transformedfibroblasts
         parent gnomadPext
+        color 170,238,255
         release alpha
 
         track gnomADPextCervix_Ectocervix
@@ -615,6 +639,7 @@ html gnomad
         shortLabel gnomAD PEXT Cervix_Ectocervix
         longLabel gnomAD PEXT Cervix_Ectocervix
         parent gnomadPext
+        color 255,204,204
         release alpha
 
         track gnomADPextCervix_Endocervix
@@ -622,6 +647,7 @@ html gnomad
         shortLabel gnomAD PEXT Cervix_Endocervix
         longLabel gnomAD PEXT Cervix_Endocervix
         parent gnomadPext
+        color 204,170,221
         release alpha
 
         track gnomADPextColon_Sigmoid
@@ -629,6 +655,7 @@ html gnomad
         shortLabel gnomAD PEXT Colon_Sigmoid
         longLabel gnomAD PEXT Colon_Sigmoid
         parent gnomadPext
+        color 238,187,119
         release alpha
 
         track gnomADPextColon_Transverse
@@ -636,6 +663,7 @@ html gnomad
         shortLabel gnomAD PEXT Colon_Transverse
         longLabel gnomAD PEXT Colon_Transverse
         parent gnomadPext
+        color 204,153,85
         release alpha
 
         track gnomADPextEsophagus_GastroesophagealJunction
@@ -643,6 +671,7 @@ html gnomad
         shortLabel gnomAD PEXT Esophagus_GastroesophagealJunction
         longLabel gnomAD PEXT Esophagus_GastroesophagealJunction
         parent gnomadPext
+        color 139,115,85
         release alpha
 
         track gnomADPextEsophagus_Mucosa
@@ -650,6 +679,7 @@ html gnomad
         shortLabel gnomAD PEXT Esophagus_Mucosa
         longLabel gnomAD PEXT Esophagus_Mucosa
         parent gnomadPext
+        color 85,34,0
         release alpha
 
         track gnomADPextEsophagus_Muscularis
@@ -657,6 +687,7 @@ html gnomad
         shortLabel gnomAD PEXT Esophagus_Muscularis
         longLabel gnomAD PEXT Esophagus_Muscularis
         parent gnomadPext
+        color 187,153,136
         release alpha
 
         track gnomADPextFallopianTube
@@ -664,6 +695,7 @@ html gnomad
         shortLabel gnomAD PEXT FallopianTube
         longLabel gnomAD PEXT FallopianTube
         parent gnomadPext
+        color 255,204,204
         release alpha
 
         track gnomADPextHeart_AtrialAppendage
@@ -671,6 +703,7 @@ html gnomad
         shortLabel gnomAD PEXT Heart_AtrialAppendage
         longLabel gnomAD PEXT Heart_AtrialAppendage
         parent gnomadPext
+        color 153,0,255
         release alpha
 
         track gnomADPextHeart_LeftVentricle
@@ -678,6 +711,7 @@ html gnomad
         shortLabel gnomAD PEXT Heart_LeftVentricle
         longLabel gnomAD PEXT Heart_LeftVentricle
         parent gnomadPext
+        color 102,0,153
         release alpha
 
         track gnomADPextKidney_Cortex
@@ -685,6 +719,7 @@ html gnomad
         shortLabel gnomAD PEXT Kidney_Cortex
         longLabel gnomAD PEXT Kidney_Cortex
         parent gnomadPext
+        color 34,255,221
         release alpha
 
         track gnomADPextLiver
@@ -692,6 +727,7 @@ html gnomad
         shortLabel gnomAD PEXT Liver
         longLabel gnomAD PEXT Liver
         parent gnomadPext
+        color 170,187,102
         release alpha
 
         track gnomADPextLung
@@ -699,6 +735,7 @@ html gnomad
         shortLabel gnomAD PEXT Lung
         longLabel gnomAD PEXT Lung
         parent gnomadPext
+        color 153,255,0
         release alpha
 
         track gnomADPextMinorSalivaryGland
@@ -706,6 +743,7 @@ html gnomad
         shortLabel gnomAD PEXT MinorSalivaryGland
         longLabel gnomAD PEXT MinorSalivaryGland
         parent gnomadPext
+        color 153,187,136
         release alpha
 
         track gnomADPextMuscle_Skeletal
@@ -713,6 +751,7 @@ html gnomad
         shortLabel gnomAD PEXT Muscle_Skeletal
         longLabel gnomAD PEXT Muscle_Skeletal
         parent gnomadPext
+        color 170,170,255
         release alpha
 
         track gnomADPextNerve_Tibial
@@ -720,6 +759,7 @@ html gnomad
         shortLabel gnomAD PEXT Nerve_Tibial
         longLabel gnomAD PEXT Nerve_Tibial
         parent gnomadPext
+        color 255,215,0
         release alpha
 
         track gnomADPextOvary
@@ -727,6 +767,7 @@ html gnomad
         shortLabel gnomAD PEXT Ovary
         longLabel gnomAD PEXT Ovary
         parent gnomadPext
+        color 255,170,255
         release alpha
 
         track gnomADPextPancreas
@@ -734,6 +775,7 @@ html gnomad
         shortLabel gnomAD PEXT Pancreas
         longLabel gnomAD PEXT Pancreas
         parent gnomadPext
+        color 153,85,34
         release alpha
 
         track gnomADPextPituitary
@@ -741,6 +783,7 @@ html gnomad
         shortLabel gnomAD PEXT Pituitary
         longLabel gnomAD PEXT Pituitary
         parent gnomadPext
+        color 170,255,153
         release alpha
 
         track gnomADPextProstate
@@ -748,6 +791,7 @@ html gnomad
         shortLabel gnomAD PEXT Prostate
         longLabel gnomAD PEXT Prostate
         parent gnomadPext
+        color 221,221,221
         release alpha
 
         track gnomADPextSkin_NotSunExposed_Suprapubic_
@@ -755,6 +799,7 @@ html gnomad
         shortLabel gnomAD PEXT Skin_NotSunExposed_Suprapubic_
         longLabel gnomAD PEXT Skin_NotSunExposed_Suprapubic_
         parent gnomadPext
+        color 0,0,255
         release alpha
 
         track gnomADPextSkin_SunExposed_Lowerleg_
@@ -762,6 +807,7 @@ html gnomad
         shortLabel gnomAD PEXT Skin_SunExposed_Lowerleg_
         longLabel gnomAD PEXT Skin_SunExposed_Lowerleg_
         parent gnomadPext
+        color 119,119,255
         release alpha
 
         track gnomADPextSmallIntestine_TerminalIleum
@@ -769,6 +815,7 @@ html gnomad
         shortLabel gnomAD PEXT SmallIntestine_TerminalIleum
         longLabel gnomAD PEXT SmallIntestine_TerminalIleum
         parent gnomadPext
+        color 85,85,34
         release alpha
 
         track gnomADPextSpleen
@@ -776,6 +823,7 @@ html gnomad
         shortLabel gnomAD PEXT Spleen
         longLabel gnomAD PEXT Spleen
         parent gnomadPext
+        color 119,136,85
         release alpha
 
         track gnomADPextStomach
@@ -783,6 +831,7 @@ html gnomad
         shortLabel gnomAD PEXT Stomach
         longLabel gnomAD PEXT Stomach
         parent gnomadPext
+        color 255,221,153
         release alpha
 
         track gnomADPextTestis
@@ -790,6 +839,7 @@ html gnomad
         shortLabel gnomAD PEXT Testis
         longLabel gnomAD PEXT Testis
         parent gnomadPext
+        color 170,170,170
         release alpha
 
         track gnomADPextThyroid
@@ -797,6 +847,7 @@ html gnomad
         shortLabel gnomAD PEXT Thyroid
         longLabel gnomAD PEXT Thyroid
         parent gnomadPext
+        color 0,102,0
         release alpha
 
         track gnomADPextUterus
@@ -804,6 +855,7 @@ html gnomad
         shortLabel gnomAD PEXT Uterus
         longLabel gnomAD PEXT Uterus
         parent gnomadPext
+        color 255,102,255
         release alpha
 
         track gnomADPextVagina
@@ -811,6 +863,7 @@ html gnomad
         shortLabel gnomAD PEXT Vagina
         longLabel gnomAD PEXT Vagina
         parent gnomadPext
+        color 255,85,153
         release alpha
 
         track gnomADPextWholeBlood
@@ -818,6 +871,7 @@ html gnomad
         shortLabel gnomAD PEXT WholeBlood
         longLabel gnomAD PEXT WholeBlood
         parent gnomadPext
+        color 255,0,187
         release alpha
 
 searchTable pliByTranscript
