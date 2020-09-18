@@ -9915,7 +9915,7 @@ if (recTrackSetsEnabled())
     printRecTrackSets();
 }
 
-void chromInfoTotalRow(int count, long long total)
+static void chromInfoTotalRow(int count, long long total, boolean hasAlias)
 /* Make table row with total number of sequences and size from chromInfo. */
 {
 cgiSimpleTableRowStart();
@@ -9925,6 +9925,12 @@ cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
 printLongWithCommas(stdout, total);
 cgiTableFieldEnd();
+if (hasAlias)
+    {
+    cgiSimpleTableFieldStart();
+    puts("&nbsp");
+    cgiTableFieldEnd();
+    }
 cgiTableRowEnd();
 }
 
@@ -9995,7 +10001,7 @@ for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     cgiTableRowEnd();
     total += size;
     }
-chromInfoTotalRow(slCount(chromList), total);
+chromInfoTotalRow(slCount(chromList), total, hasAlias);
 slFreeList(&chromList);
 }
 
@@ -10021,6 +10027,10 @@ void chromInfoRowsNonChromTrackHub(int limit)
 struct chromInfo *chromInfo = trackHubAllChromInfo(database);
 slSort(&chromInfo, chromInfoCmpSize);
 int seqCount = slCount(chromInfo);
+struct hash *aliasHash = trackHubAllChromAlias(database);
+boolean hasAlias = FALSE;
+if (aliasHash)
+    hasAlias = TRUE;
 long long total = 0;
 char msg1[512], msg2[512];
 boolean truncating;
@@ -10030,6 +10040,7 @@ truncating = (limit > 0) && (seqCount > limit);
 
 for(;count-- && (chromInfo != NULL); chromInfo = chromInfo->next)
     {
+    char *aliasNames = chrAliases(aliasHash, chromInfo->chrom);
     unsigned size = chromInfo->size;
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
@@ -10041,12 +10052,21 @@ for(;count-- && (chromInfo != NULL); chromInfo = chromInfo->next)
     printLongWithCommas(stdout, size);
     puts("&nbsp;&nbsp;");
     cgiTableFieldEnd();
+    if (hasAlias)
+	{
+	cgiSimpleTableFieldStart();
+	if (aliasNames)
+            htmlPrintf("%s", aliasNames);
+	else
+            htmlPrintf("&nbsp;");
+        cgiTableFieldEnd();
+        }
     cgiTableRowEnd();
     total += size;
     }
 if (!truncating)
     {
-    chromInfoTotalRow(seqCount, total);
+    chromInfoTotalRow(seqCount, total, hasAlias);
     }
 else
     {
@@ -10150,7 +10170,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 if (!truncating)
     {
-    chromInfoTotalRow(seqCount, total);
+    chromInfoTotalRow(seqCount, total, hasAlias);
     }
 else
     {
@@ -10248,6 +10268,12 @@ cgiSimpleTableFieldStart();
 puts("Length (bp) including gaps &nbsp;");
 cgiTableFieldEnd();
 if (hTableExists(database, "chromAlias"))
+    {
+    cgiSimpleTableFieldStart();
+    puts("alias sequence names &nbsp;");
+    cgiTableFieldEnd();
+    }
+else if (trackHubAliasFile(database))
     {
     cgiSimpleTableFieldStart();
     puts("alias sequence names &nbsp;");

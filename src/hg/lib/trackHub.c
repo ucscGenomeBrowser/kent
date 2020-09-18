@@ -53,6 +53,7 @@
 #include "bedTabix.h"
 #include "hic.h"
 #include "hui.h"
+#include "chromAlias.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -329,6 +330,121 @@ if (ci == NULL)
 
 return ci;
 }
+
+static struct hash *readAliasFile(char *url)
+/* given the URL (might be a file) read and process into chromAlias hash
+ * file structure:  lines of white space separated words
+ * first word is the sequence name in the assembly, words following are
+ * alias names for that sequences name.  Same format as use by IGV
+ */
+{
+struct hash *aliasHash = NULL;
+struct dyString *ds = NULL;
+
+/* adding error trapping because various net.c functions can errAbort */
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    int sd = netUrlOpen(url);
+    if (sd >= 0)
+        {
+        char *newUrl = NULL;
+        int newSd = 0;
+        if (netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
+            {
+            if (newUrl)	/* redirect can modify the url */
+                {
+                freeMem(newUrl);
+                sd = newSd;
+                }
+            ds = netSlurpFile(sd);
+            close(sd);
+            }
+        }
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    warn("%s", errCatch->message->string);
+errCatchFree(&errCatch);
+/* if the read worked, process it */
+if (ds)
+    {
+    char *words[1024];	/* process lines, no more than 1,024 words on a line */
+    char *line;
+    int size;
+    aliasHash = hashNew(0);
+    struct lineFile *lf = lineFileOnString("chromAlias", TRUE,
+                                            dyStringCannibalize(&ds));
+    while (lineFileNext(lf, &line, &size))
+    {
+    int wordCount = chopByWhite(line, words, ArraySize(words));
+    if (wordCount > 1)
+	{
+	int i = 1;
+        for ( ; i < wordCount; ++i )
+	    {
+	    if (isNotEmpty(words[i]))
+		{
+		struct chromAlias *ali;
+		AllocVar(ali);
+		ali->alias = cloneString(words[i]);
+		ali->chrom = cloneString(words[0]);
+		ali->source = cloneString("asmHub");
+		hashAdd(aliasHash, words[0], ali);
+		}
+	    }
+	}
+    }
+    lineFileClose(&lf);  /* frees cannibalized ds string */
+    }
+
+return aliasHash;
+}	/*	static struct hash *readAliasFile(char *url)	*/
+
+char *trackHubAliasFile(char *database)
+/* see if this assembly hub has an alias file, return url if present */
+{
+struct trackHubGenome *genome = trackHubGetGenome(database);
+if (genome == NULL)
+    return NULL;
+char *aliasFile = hashFindVal(genome->settingsHash, "chromAlias");
+char *absAliasFile  = NULL;
+if (aliasFile)
+    absAliasFile  = trackHubRelativeUrl((genome->trackHub)->url, aliasFile);
+if  (absAliasFile)
+    {
+    hashReplace(genome->settingsHash, "chromAlias", absAliasFile);
+    aliasFile = absAliasFile;
+    }
+return aliasFile;
+}
+
+struct hash *trackHubAllChromAlias(char *database)
+/* Return a hash of chroms with alias names from alias file if present */
+{
+char *aliasFile = trackHubAliasFile(database);
+if (aliasFile == NULL)
+    return NULL;
+
+#ifdef NOT
+struct trackHubGenome *genome = trackHubGetGenome(database);
+if (genome == NULL)
+    return NULL;
+char *aliasFile = hashFindVal(genome->settingsHash, "chromAlias");
+char *absAliasFile  = NULL;
+if (aliasFile)
+    absAliasFile  = trackHubRelativeUrl((genome->trackHub)->url, aliasFile);
+if  (absAliasFile)
+    {
+    hashReplace(genome->settingsHash, "chromAlias", absAliasFile);
+    aliasFile = absAliasFile;
+    }
+#endif
+
+struct hash *aliasHash = readAliasFile(aliasFile);
+
+return aliasHash;
+}	/*	struct hash *trackHubAllChromAlias(char *database)	*/
 
 struct chromInfo *trackHubAllChromInfo(char *database)
 /* Return a chromInfo structure for all the chroms in this database. */
