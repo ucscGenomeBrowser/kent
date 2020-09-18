@@ -33733,5 +33733,46 @@ ln -s `pwd`/clinsub.bb /gbdb/hg19
 # COVID GWAS from  COVID-19 Host Genetics Initiative  Sep 2020  Kate
 # see ~kent/src/hg/makeDb/doc/covid/covidHgiGwas.txt
 
+#############################################################################
+# gnomAD PEXT scores
+
+# PEXT data:
+# The baselevel is the sum of the expression value for all transcripts touching that base
+# The annotation-level is the sum of the expression of transcripts on which a variant has a
+# given annotation
+
+# download the pext data:
+wget https://storage.googleapis.com/gnomad-public/papers/2019-tx-annotation/pre_computed/all.possible.snvs.tx_annotated.GTEx.v7.021520.tsv.bgz
+wget https://storage.googleapis.com/gnomad-public/papers/2019-tx-annotation/gnomad_browser/all.baselevel.021620.tsv.bgz
+
+# these files are humongous even with compression:
+ls -lh all.*
+-rw-rw-r-- 1 chmalee genecats 307M Apr  8 21:54 all.baselevel.021620.tsv.bgz
+-rw-rw-r-- 1 chmalee genecats 6.7G Feb 14  2020 all.possible.snvs.tx_annotated.GTEx.v7.021520.tsv.bgz
+
+# how large are these files?
+time zcat all.base* | wc -l
+35305149
+
+real    1m11.964s
+user    1m8.725s
+sys 0m10.385s
+
+# this is theoretically all coding bases in gencode v19, split by tissue then run buildPext.py to
+# make one bigWig per tissue:
+mkdir run
+seq 4 57 | parallel -j10 'zcat all.baselevel.021620.tsv.bgz | cut -f1-3,{} | gzip -c > run/tissue{}.pext.gz'
+
+# overlapping exons in coding regions causes problems, don't output any scores
+# for those regions
+seq 4 57 | parallel --joblog run.log -j20 './buildPext.py run/tissue{}.pext.gz -o split'
+tail -n +2 run.log | cut -f4 | awk '{sum += $1}END{print sum/NR}'
+452.034
+
+# Turn into bigWigs:
+find split/ -name "*.bed" | parallel -j15 'sort -k1,1 -k2,2n {} | cut -f1-3,5 > {.}.bedGraph'
+find split/ -name "*.bedGraph" | parallel -j15 'bedGraphToBigWig {} /hive/data/genomes/hg19/chrom.sizes {.}.bw'
+mkdir -p /gbdb/hg19/gnomAD/pext
+ln -s `pwd`/split/*.bw /gbdb/hg19/gnomAD/pext/
 
 
