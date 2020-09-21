@@ -46,6 +46,7 @@ jsInlineF(
 "      } else {\n"
 "         document.location=url;\n"
 "      }\n"
+"      return false;\n"
 "  }"
 "  $(document).ready(function() {\n"
 "      var anchors = document.getElementsByTagName('a');\n"
