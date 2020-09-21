@@ -199,7 +199,10 @@ char *hgOfficialChromName(char *db, char *name)
 /* Returns "canonical" name of chromosome or NULL
  * if not a chromosome. (Case-insensitive search w/sameWord()) */
 {
-/* aliasHash will be initialized if chromAlias table exists */
+/* aliasHash will be initialized if chromAlias table exists
+ *   or track chromAlias file exists
+ *  hash key is alias name, hash value is chromosome name
+ */
 static struct hash *aliasHash = NULL;
 
 if (strlen(name) > HDB_MAX_CHROM_STRING)
@@ -213,6 +216,27 @@ if (ci != NULL)
     return cloneString(ci->chrom);
 else
     {
+    if (!aliasHash && trackHubDatabase(db))
+	{
+        aliasHash = newHash(4); /* could remain empty if no hubHash which
+	 * will prevent getting into this initalization again and all hash
+	 * lookups will return NULL.
+	 * hub hash is different than what we want here, its key is
+         * the chrom name with a hash value of: struct chromAlias *
+         */
+        struct hash *hubHash = trackHubAllChromAlias(db);
+        if (hubHash)
+	    {
+	    /* rearrange hubHash into the hash we need here */
+	    struct hashCookie cookie = hashFirst(hubHash);
+	    struct hashEl *hel;
+	    while ((hel = hashNext(&cookie)) != NULL)
+		{
+		struct chromAlias *ca = (struct chromAlias *)hel->val;
+		hashAdd(aliasHash, ca->alias, cloneString(ca->chrom));
+		}
+	    }
+	}
     if (aliasHash || hTableExists(db, "chromAlias"))
        {
        if (! aliasHash)	/* first time, initialize aliasHash */
@@ -225,19 +249,19 @@ else
 	    char **row;
 	    while ((row = sqlNextRow(sr)) != NULL)
 		{
-		struct chromAlias *new = chromAliasLoad(row);
-		hashAdd(aliasHash, new->alias, cloneString(new->chrom));
+		struct chromAlias *ca = chromAliasLoad(row);
+		hashAdd(aliasHash, ca->alias, cloneString(ca->chrom));
 		}
 	    sqlFreeResult(&sr);
 	    hFreeConn(&conn);
 	    }
-       char *chrom = (char *)hashFindVal(aliasHash, name);
+	char *chrom = (char *)hashFindVal(aliasHash, name);
        if (isNotEmpty(chrom))
          return cloneString(chrom);
        }
     }
 return NULL;
-}
+}	/*	char *hgOfficialChromName(char *db, char *name)	*/
 
 boolean hgIsOfficialChromName(char *db, char *name)
 /* Determine if name is exact (case-sensitive) match with

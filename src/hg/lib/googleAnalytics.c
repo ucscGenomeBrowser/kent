@@ -40,6 +40,8 @@ jsInlineF(
 "  function anchorClicked(ev) {\n"
 "      var isExternal = (ev.target.target==='_blank');\n"
 "      var url = ev.target.href;\n"
+"      if (url === undefined)\n" // this happens on hgTracks, for the case <a href....><p>bla</p></a>
+"           url = ev.target.parentElement.href;\n"
 "      if (isExternal) {\n"
 "         ga('send', 'event', 'outbound', 'click', url,\n"
 "           { 'transport': 'beacon', 'hitCallback': function(){window.open(url);} });\n"
@@ -50,6 +52,9 @@ jsInlineF(
 "  }"
 "  $(document).ready(function() {\n"
 "      var anchors = document.getElementsByTagName('a');\n"
-"      for (var i in anchors) { anchors[i].onclick = anchorClicked };\n"
+"      for (var i in anchors) { \n"
+"           if (ev.target.attributes.href.value!=='#')\n" // do not run on javascript-only links for now
+"               anchors[i].onclick = anchorClicked;"
+"      };\n"
 "  });");
 }
