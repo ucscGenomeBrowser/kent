@@ -35,4 +35,20 @@ jsInlineF(
 "  ga('send', 'pageview');\n"
 "\n"
 , analyticsKey);
+// see https://support.google.com/analytics/answer/1136920?hl=en
+jsInlineF(
+"  function anchorClicked(ev) {\n"
+"      var isExternal = (ev.target.target==='_blank');\n"
+"      var url = ev.target.href;\n"
+"      if (isExternal) {\n"
+"         ga('send', 'event', 'outbound', 'click', url,\n"
+"           { 'transport': 'beacon', 'hitCallback': function(){window.open(url);} });\n"
+"      } else {\n"
+"         document.location(url);\n"
+"      }\n"
+"  }"
+"  $(document).ready(function() {\n"
+"      var anchors = document.getElementsByTagName('a');\n"
+"      for (var i in anchors) { anchors[i].onclick = anchorClicked };\n"
+"  });");
 }
