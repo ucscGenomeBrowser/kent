@@ -336,6 +336,7 @@ static struct hash *readAliasFile(char *url)
  * file structure:  lines of white space separated words
  * first word is the sequence name in the assembly, words following are
  * alias names for that sequences name.  Same format as use by IGV
+ * returned hash is key: sequence chrom name, hash value struct chromAlias *
  */
 {
 struct hash *aliasHash = NULL;
@@ -426,24 +427,7 @@ char *aliasFile = trackHubAliasFile(database);
 if (aliasFile == NULL)
     return NULL;
 
-#ifdef NOT
-struct trackHubGenome *genome = trackHubGetGenome(database);
-if (genome == NULL)
-    return NULL;
-char *aliasFile = hashFindVal(genome->settingsHash, "chromAlias");
-char *absAliasFile  = NULL;
-if (aliasFile)
-    absAliasFile  = trackHubRelativeUrl((genome->trackHub)->url, aliasFile);
-if  (absAliasFile)
-    {
-    hashReplace(genome->settingsHash, "chromAlias", absAliasFile);
-    aliasFile = absAliasFile;
-    }
-#endif
-
-struct hash *aliasHash = readAliasFile(aliasFile);
-
-return aliasHash;
+return readAliasFile(aliasFile);
 }	/*	struct hash *trackHubAllChromAlias(char *database)	*/
 
 struct chromInfo *trackHubAllChromInfo(char *database)
