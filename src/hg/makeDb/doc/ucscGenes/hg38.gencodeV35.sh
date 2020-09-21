@@ -8,6 +8,37 @@ kent=$HOME/kent
 spDb=sp180404
 cpuFarm=ku
 export curVer=13
+export Db=Hg38
+export xdb=mm10
+export Xdb=Mm10
+export ydb=canFam3
+export zdb=rheMac8
+export ratDb=rn6
+export RatDb=Rn6
+export fishDb=danRer11
+export flyDb=dm6
+export wormDb=ce11
+export yeastDb=sacCer3
+export tempFa=$dir/ucscGenes.faa
+export genomes=/hive/data/genomes
+export xdbFa=$genomes/$xdb/bed/ucsc.18.1/ucscGenes.faa
+export ratFa=$genomes/$ratDb/bed/ensGene.95/ensembl.faa
+#export ratFa=$genomes/$ratDb/bed/blastpRgdGene2/rgdGene2Pep.faa
+export fishFa=$genomes/$fishDb/bed/ensGene.95/ensembl.faa
+#export fishFa=$genomes/$fishDb/bed/blastp/ensembl.faa
+export flyFa=$genomes/$flyDb/bed/ensGene.95/ensembl.faa
+#export flyFa=$genomes/$flyDb/bed/hgNearBlastp/100806/$flyDb.flyBasePep.faa
+export wormFa=$genomes/$wormDb/bed/ws245Genes/ws245Pep.faa
+#export wormFa=$genomes/$wormDb/bed/blastp/wormPep190.faa
+export yeastFa=$genomes/$yeastDb/bed/sgdAnnotations/blastTab/sacCer3.sgd.faa
+export scratchDir=/hive/users/braney/scratch
+
+export blastTab=hgBlastTab
+export xBlastTab=mmBlastTab
+export rnBlastTab=rnBlastTab
+export dbHost=hgwdev
+export ramFarm=ku
+export cpuFarm=ku
 
 mkdir -p $dir
 cd $dir
@@ -330,3 +361,117 @@ hgsql hgcentraltest -e \
             'INSERT into targetDb values("hg38KgSeq13", "GENCODE Genes", \
                      "hg38", "knownGeneV35.kgTargetAli", "", "", \
                               "/gbdb/hg38/targetDb/hg38KgSeq13.2bit", 1, now(), "");'
+
+for i in  $tempFa $xdbFa $ratFa $fishFa $flyFa $wormFa $yeastFa
+do
+if test ! -f $i
+then echo $i not found
+fi
+done
+
+rm -rf   $dir/hgNearBlastp
+mkdir  $dir/hgNearBlastp
+cd $dir/hgNearBlastp
+tcsh
+cat << _EOF_ > config.ra
+# Latest human vs. other Gene Sorter orgs:
+# mouse, rat, zebrafish, worm, yeast, fly
+
+targetGenesetPrefix known
+targetDb $tempDb
+queryDbs $xdb $ratDb $fishDb $flyDb $wormDb $yeastDb
+
+${tempDb}Fa $tempFa
+${xdb}Fa $xdbFa
+${ratDb}Fa $ratFa
+${fishDb}Fa $fishFa
+${flyDb}Fa $flyFa
+${wormDb}Fa $wormFa
+${yeastDb}Fa $yeastFa
+
+buildDir $dir/hgNearBlastp
+scratchDir $scratchDir/brHgNearBlastp
+_EOF_
+
+# exit tcsh
+
+rm -rf  $scratchDir/brHgNearBlastp
+doHgNearBlastp.pl -noLoad -clusterHub=ku -distrHost=hgwdev -dbHost=hgwdev -workhorse=hgwdev config.ra >  do.log  2>&1 &
+
+# Load self
+cd $dir/hgNearBlastp/run.$tempDb.$tempDb
+# builds knownBlastTab
+./loadPairwise.csh
+
+# Load mouse and rat
+cd $dir/hgNearBlastp/run.$tempDb.$xdb
+hgLoadBlastTab $tempDb $xBlastTab -maxPer=1 out/*.tab
+cd $dir/hgNearBlastp/run.$tempDb.$ratDb
+hgLoadBlastTab $tempDb $rnBlastTab -maxPer=1 out/*.tab
+
+# Remove non-syntenic hits for mouse and rat
+# Takes a few minutes
+mkdir -p /gbdb/$tempDb/liftOver
+rm -f /gbdb/$tempDb/liftOver/${tempDb}To$RatDb.over.chain.gz /gbdb/$tempDb/liftOver/${tempDb}To$Xdb.over.chain.gz
+ln -s $genomes/$db/bed/liftOver/${db}To$RatDb.over.chain.gz \
+    /gbdb/$tempDb/liftOver/${tempDb}To$RatDb.over.chain.gz
+ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
+    /gbdb/$tempDb/liftOver/${tempDb}To$Xdb.over.chain.gz
+
+# delete non-syntenic genes from rat and mouse blastp tables
+cd $dir/hgNearBlastp
+synBlastp.csh $tempDb $xdb
+# old number of unique query values: 93277
+# old number of unique target values 27504
+# new number of unique query values: 86329
+# new number of unique target values 26151
+
+synBlastp.csh $tempDb $ratDb knownGene ensGene
+#old number of unique query values: 92243
+#old number of unique target values 19898
+#new number of unique query values: 85663
+#new number of unique target values 19025
+
+# Make reciprocal best subset for the blastp pairs that are too
+# Far for synteny to help
+
+# Us vs. fish
+cd $dir/hgNearBlastp
+export aToB=run.$db.$fishDb
+export bToA=run.$fishDb.$db
+cat $aToB/out/*.tab > $aToB/all.tab
+cat $bToA/out/*.tab > $bToA/all.tab
+blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
+hgLoadBlastTab $tempDb drBlastTab $aToB/recipBest.tab
+
+# Us vs. fly
+cd $dir/hgNearBlastp
+export aToB=run.$db.$flyDb
+export bToA=run.$flyDb.$db
+cat $aToB/out/*.tab > $aToB/all.tab
+cat $bToA/out/*.tab > $bToA/all.tab
+blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
+hgLoadBlastTab $tempDb dmBlastTab $aToB/recipBest.tab
+
+# Us vs. worm
+cd $dir/hgNearBlastp
+export aToB=run.$db.$wormDb
+export bToA=run.$wormDb.$db
+cat $aToB/out/*.tab > $aToB/all.tab
+cat $bToA/out/*.tab > $bToA/all.tab
+blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
+hgLoadBlastTab $tempDb ceBlastTab $aToB/recipBest.tab
+
+# Us vs. yeast
+cd $dir/hgNearBlastp
+export aToB=run.$db.$yeastDb
+export bToA=run.$yeastDb.$db
+cat $aToB/out/*.tab > $aToB/all.tab
+cat $bToA/out/*.tab > $bToA/all.tab
+blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
+hgLoadBlastTab $tempDb scBlastTab $aToB/recipBest.tab
+
+# Clean up
+cd $dir/hgNearBlastp
+cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
+gzip run.*/all.tab
