@@ -432,6 +432,448 @@ html gnomad
         priority 3
         mouseOverField _mouseOver
 
+    track gnomadPext
+    shortLabel gnomAD PEXT
+    longLabel gnomAD Proportion Expression Across Transcript Scores
+    parent gnomadSuper
+    compositeTrack on
+    type bigWig 0 1
+    maxHeightPixels 100:16:8
+    viewLimits 0:1
+    release alpha
+
+        track gnomADPextmean_proportion
+        bigDataUrl /gbdb/hg19/gnomAD/pext/mean_proportion.bw
+        shortLabel gnomAD PEXT mean_proportion
+        longLabel gnomAD PEXT mean_proportion
+        parent gnomadPext
+        color 66,139,202
+        release alpha
+
+        track gnomADPextAdipose_Subcutaneous
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Adipose_Subcutaneous.bw
+        parent gnomadPext
+        shortLabel gnomAD PEXT Adipose Subcut
+        longLabel gnomAD PEXT Adipose Subcutaneous
+        color 255,102,0
+        release alpha
+
+        track gnomADPextAdipose_Visceral_Omentum_
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Adipose_Visceral_Omentum_.bw
+        shortLabel gnomAD PEXT Adipose_Visceral_Omentum_
+        longLabel gnomAD PEXT Adipose_Visceral_Omentum_
+        parent gnomadPext
+        color 255,170,0
+        release alpha
+
+        track gnomADPextAdrenalGland
+        bigDataUrl /gbdb/hg19/gnomAD/pext/AdrenalGland.bw
+        shortLabel gnomAD PEXT AdrenalGland
+        longLabel gnomAD PEXT AdrenalGland
+        parent gnomadPext
+        color 51,221,51
+        release alpha
+
+        track gnomADPextArtery_Aorta
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Artery_Aorta.bw
+        shortLabel gnomAD PEXT Artery_Aorta
+        longLabel gnomAD PEXT Artery_Aorta
+        parent gnomadPext
+        color 255,85,85
+        release alpha
+
+        track gnomADPextArtery_Coronary
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Artery_Coronary.bw
+        shortLabel gnomAD PEXT Artery_Coronary
+        longLabel gnomAD PEXT Artery_Coronary
+        parent gnomadPext
+        color 255,170,153
+        release alpha
+
+        track gnomADPextArtery_Tibial
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Artery_Tibial.bw
+        shortLabel gnomAD PEXT Artery_Tibial
+        longLabel gnomAD PEXT Artery_Tibial
+        parent gnomadPext
+        color 255,0,0
+        release alpha
+
+        track gnomADPextBladder
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Bladder.bw
+        shortLabel gnomAD PEXT Bladder
+        longLabel gnomAD PEXT Bladder
+        parent gnomadPext
+        color 170,0,0
+        release alpha
+
+        track gnomADPextBrain_Amygdala
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Amygdala.bw
+        shortLabel gnomAD PEXT Brain_Amygdala
+        longLabel gnomAD PEXT Brain_Amygdala
+        parent gnomadPext
+        color 238,238,0
+        release alpha
+
+        track gnomADPextBrain_Anteriorcingulatecortex_BA24_
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Anteriorcingulatecortex_BA24_.bw
+        shortLabel gnomAD PEXT Brain_Anteriorcingulatecortex_BA24_
+        longLabel gnomAD PEXT Brain_Anteriorcingulatecortex_BA24_
+        parent gnomadPext
+        color 238,238,0
+        release alpha
+
+        track gnomADPextBrain_Caudate_basalganglia_
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Caudate_basalganglia_.bw
+        shortLabel gnomAD PEXT Brain_Caudate_basalganglia_
+        longLabel gnomAD PEXT Brain_Caudate_basalganglia_
+        parent gnomadPext
+        color 238,238,0
+        release alpha
+
+        track gnomADPextBrain_CerebellarHemisphere
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_CerebellarHemisphere.bw
+        shortLabel gnomAD PEXT Brain_CerebellarHemisphere
+        longLabel gnomAD PEXT Brain_CerebellarHemisphere
+        parent gnomadPext
+        color 238,238,0
+        release alpha
+
+        track gnomADPextBrain_Cerebellum
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Cerebellum.bw
+        shortLabel gnomAD PEXT Brain_Cerebellum
+        longLabel gnomAD PEXT Brain_Cerebellum
+        parent gnomadPext
+        color 238,238,0
+        release alpha
+
+        track gnomADPextBrain_Cortex
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Cortex.bw
+        shortLabel gnomAD PEXT Brain_Cortex
+        longLabel gnomAD PEXT Brain_Cortex
+        parent gnomadPext
+        color 238,238,0
+        release alpha
+
+        track gnomADPextBrain_FrontalCortex_BA9_
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_FrontalCortex_BA9_.bw
+        shortLabel gnomAD PEXT Brain_FrontalCortex_BA9_
+        longLabel gnomAD PEXT Brain_FrontalCortex_BA9_
+        parent gnomadPext
+        color 238,238,0
+        release alpha
+
+        track gnomADPextBrain_Hippocampus
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Hippocampus.bw
+        shortLabel gnomAD PEXT Brain_Hippocampus
+        longLabel gnomAD PEXT Brain_Hippocampus
+        parent gnomadPext
+        color 238,238,0
+        release alpha
+
+        track gnomADPextBrain_Hypothalamus
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Hypothalamus.bw
+        shortLabel gnomAD PEXT Brain_Hypothalamus
+        longLabel gnomAD PEXT Brain_Hypothalamus
+        parent gnomadPext
+        color 238,238,0
+        release alpha
+
+        track gnomADPextBrain_Nucleusaccumbens_basalganglia_
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Nucleusaccumbens_basalganglia_.bw
+        shortLabel gnomAD PEXT Brain_Nucleusaccumbens_basalganglia_
+        longLabel gnomAD PEXT Brain_Nucleusaccumbens_basalganglia_
+        parent gnomadPext
+        color 238,238,0
+        release alpha
+
+        track gnomADPextBrain_Putamen_basalganglia_
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Putamen_basalganglia_.bw
+        shortLabel gnomAD PEXT Brain_Putamen_basalganglia_
+        longLabel gnomAD PEXT Brain_Putamen_basalganglia_
+        parent gnomadPext
+        color 238,238,0
+        release alpha
+
+        track gnomADPextBrain_Spinalcord_cervicalc_1_
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Spinalcord_cervicalc_1_.bw
+        shortLabel gnomAD PEXT Brain_Spinalcord_cervicalc_1_
+        longLabel gnomAD PEXT Brain_Spinalcord_cervicalc_1_
+        parent gnomadPext
+        color 238,238,0
+        release alpha
+
+        track gnomADPextBrain_Substantianigra
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Substantianigra.bw
+        shortLabel gnomAD PEXT Brain_Substantianigra
+        longLabel gnomAD PEXT Brain_Substantianigra
+        parent gnomadPext
+        color 238,238,0
+        release alpha
+
+        track gnomADPextBreast_MammaryTissue
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Breast_MammaryTissue.bw
+        shortLabel gnomAD PEXT Breast_MammaryTissue
+        longLabel gnomAD PEXT Breast_MammaryTissue
+        parent gnomadPext
+        color 51,204,204
+        release alpha
+
+        track gnomADPextCells_EBV_transformedlymphocytes
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Cells_EBV_transformedlymphocytes.bw
+        shortLabel gnomAD PEXT Cells_EBV_transformedlymphocytes
+        longLabel gnomAD PEXT Cells_EBV_transformedlymphocytes
+        parent gnomadPext
+        color 204,102,255
+        release alpha
+
+        track gnomADPextCells_Transformedfibroblasts
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Cells_Transformedfibroblasts.bw
+        shortLabel gnomAD PEXT Cells_Transformedfibroblasts
+        longLabel gnomAD PEXT Cells_Transformedfibroblasts
+        parent gnomadPext
+        color 170,238,255
+        release alpha
+
+        track gnomADPextCervix_Ectocervix
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Cervix_Ectocervix.bw
+        shortLabel gnomAD PEXT Cervix_Ectocervix
+        longLabel gnomAD PEXT Cervix_Ectocervix
+        parent gnomadPext
+        color 255,204,204
+        release alpha
+
+        track gnomADPextCervix_Endocervix
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Cervix_Endocervix.bw
+        shortLabel gnomAD PEXT Cervix_Endocervix
+        longLabel gnomAD PEXT Cervix_Endocervix
+        parent gnomadPext
+        color 204,170,221
+        release alpha
+
+        track gnomADPextColon_Sigmoid
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Colon_Sigmoid.bw
+        shortLabel gnomAD PEXT Colon_Sigmoid
+        longLabel gnomAD PEXT Colon_Sigmoid
+        parent gnomadPext
+        color 238,187,119
+        release alpha
+
+        track gnomADPextColon_Transverse
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Colon_Transverse.bw
+        shortLabel gnomAD PEXT Colon_Transverse
+        longLabel gnomAD PEXT Colon_Transverse
+        parent gnomadPext
+        color 204,153,85
+        release alpha
+
+        track gnomADPextEsophagus_GastroesophagealJunction
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Esophagus_GastroesophagealJunction.bw
+        shortLabel gnomAD PEXT Esophagus_GastroesophagealJunction
+        longLabel gnomAD PEXT Esophagus_GastroesophagealJunction
+        parent gnomadPext
+        color 139,115,85
+        release alpha
+
+        track gnomADPextEsophagus_Mucosa
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Esophagus_Mucosa.bw
+        shortLabel gnomAD PEXT Esophagus_Mucosa
+        longLabel gnomAD PEXT Esophagus_Mucosa
+        parent gnomadPext
+        color 85,34,0
+        release alpha
+
+        track gnomADPextEsophagus_Muscularis
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Esophagus_Muscularis.bw
+        shortLabel gnomAD PEXT Esophagus_Muscularis
+        longLabel gnomAD PEXT Esophagus_Muscularis
+        parent gnomadPext
+        color 187,153,136
+        release alpha
+
+        track gnomADPextFallopianTube
+        bigDataUrl /gbdb/hg19/gnomAD/pext/FallopianTube.bw
+        shortLabel gnomAD PEXT FallopianTube
+        longLabel gnomAD PEXT FallopianTube
+        parent gnomadPext
+        color 255,204,204
+        release alpha
+
+        track gnomADPextHeart_AtrialAppendage
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Heart_AtrialAppendage.bw
+        shortLabel gnomAD PEXT Heart_AtrialAppendage
+        longLabel gnomAD PEXT Heart_AtrialAppendage
+        parent gnomadPext
+        color 153,0,255
+        release alpha
+
+        track gnomADPextHeart_LeftVentricle
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Heart_LeftVentricle.bw
+        shortLabel gnomAD PEXT Heart_LeftVentricle
+        longLabel gnomAD PEXT Heart_LeftVentricle
+        parent gnomadPext
+        color 102,0,153
+        release alpha
+
+        track gnomADPextKidney_Cortex
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Kidney_Cortex.bw
+        shortLabel gnomAD PEXT Kidney_Cortex
+        longLabel gnomAD PEXT Kidney_Cortex
+        parent gnomadPext
+        color 34,255,221
+        release alpha
+
+        track gnomADPextLiver
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Liver.bw
+        shortLabel gnomAD PEXT Liver
+        longLabel gnomAD PEXT Liver
+        parent gnomadPext
+        color 170,187,102
+        release alpha
+
+        track gnomADPextLung
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Lung.bw
+        shortLabel gnomAD PEXT Lung
+        longLabel gnomAD PEXT Lung
+        parent gnomadPext
+        color 153,255,0
+        release alpha
+
+        track gnomADPextMinorSalivaryGland
+        bigDataUrl /gbdb/hg19/gnomAD/pext/MinorSalivaryGland.bw
+        shortLabel gnomAD PEXT MinorSalivaryGland
+        longLabel gnomAD PEXT MinorSalivaryGland
+        parent gnomadPext
+        color 153,187,136
+        release alpha
+
+        track gnomADPextMuscle_Skeletal
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Muscle_Skeletal.bw
+        shortLabel gnomAD PEXT Muscle_Skeletal
+        longLabel gnomAD PEXT Muscle_Skeletal
+        parent gnomadPext
+        color 170,170,255
+        release alpha
+
+        track gnomADPextNerve_Tibial
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Nerve_Tibial.bw
+        shortLabel gnomAD PEXT Nerve_Tibial
+        longLabel gnomAD PEXT Nerve_Tibial
+        parent gnomadPext
+        color 255,215,0
+        release alpha
+
+        track gnomADPextOvary
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Ovary.bw
+        shortLabel gnomAD PEXT Ovary
+        longLabel gnomAD PEXT Ovary
+        parent gnomadPext
+        color 255,170,255
+        release alpha
+
+        track gnomADPextPancreas
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Pancreas.bw
+        shortLabel gnomAD PEXT Pancreas
+        longLabel gnomAD PEXT Pancreas
+        parent gnomadPext
+        color 153,85,34
+        release alpha
+
+        track gnomADPextPituitary
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Pituitary.bw
+        shortLabel gnomAD PEXT Pituitary
+        longLabel gnomAD PEXT Pituitary
+        parent gnomadPext
+        color 170,255,153
+        release alpha
+
+        track gnomADPextProstate
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Prostate.bw
+        shortLabel gnomAD PEXT Prostate
+        longLabel gnomAD PEXT Prostate
+        parent gnomadPext
+        color 221,221,221
+        release alpha
+
+        track gnomADPextSkin_NotSunExposed_Suprapubic_
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Skin_NotSunExposed_Suprapubic_.bw
+        shortLabel gnomAD PEXT Skin_NotSunExposed_Suprapubic_
+        longLabel gnomAD PEXT Skin_NotSunExposed_Suprapubic_
+        parent gnomadPext
+        color 0,0,255
+        release alpha
+
+        track gnomADPextSkin_SunExposed_Lowerleg_
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Skin_SunExposed_Lowerleg_.bw
+        shortLabel gnomAD PEXT Skin_SunExposed_Lowerleg_
+        longLabel gnomAD PEXT Skin_SunExposed_Lowerleg_
+        parent gnomadPext
+        color 119,119,255
+        release alpha
+
+        track gnomADPextSmallIntestine_TerminalIleum
+        bigDataUrl /gbdb/hg19/gnomAD/pext/SmallIntestine_TerminalIleum.bw
+        shortLabel gnomAD PEXT SmallIntestine_TerminalIleum
+        longLabel gnomAD PEXT SmallIntestine_TerminalIleum
+        parent gnomadPext
+        color 85,85,34
+        release alpha
+
+        track gnomADPextSpleen
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Spleen.bw
+        shortLabel gnomAD PEXT Spleen
+        longLabel gnomAD PEXT Spleen
+        parent gnomadPext
+        color 119,136,85
+        release alpha
+
+        track gnomADPextStomach
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Stomach.bw
+        shortLabel gnomAD PEXT Stomach
+        longLabel gnomAD PEXT Stomach
+        parent gnomadPext
+        color 255,221,153
+        release alpha
+
+        track gnomADPextTestis
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Testis.bw
+        shortLabel gnomAD PEXT Testis
+        longLabel gnomAD PEXT Testis
+        parent gnomadPext
+        color 170,170,170
+        release alpha
+
+        track gnomADPextThyroid
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Thyroid.bw
+        shortLabel gnomAD PEXT Thyroid
+        longLabel gnomAD PEXT Thyroid
+        parent gnomadPext
+        color 0,102,0
+        release alpha
+
+        track gnomADPextUterus
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Uterus.bw
+        shortLabel gnomAD PEXT Uterus
+        longLabel gnomAD PEXT Uterus
+        parent gnomadPext
+        color 255,102,255
+        release alpha
+
+        track gnomADPextVagina
+        bigDataUrl /gbdb/hg19/gnomAD/pext/Vagina.bw
+        shortLabel gnomAD PEXT Vagina
+        longLabel gnomAD PEXT Vagina
+        parent gnomadPext
+        color 255,85,153
+        release alpha
+
+        track gnomADPextWholeBlood
+        bigDataUrl /gbdb/hg19/gnomAD/pext/WholeBlood.bw
+        shortLabel gnomAD PEXT WholeBlood
+        longLabel gnomAD PEXT WholeBlood
+        parent gnomadPext
+        color 255,0,187
+        release alpha
+
 searchTable pliByTranscript
 searchType bigBed
 searchDescription gnomAD Loss of Function Metrics by Transcript
