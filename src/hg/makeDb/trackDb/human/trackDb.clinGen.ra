@@ -1,7 +1,7 @@
 track clinGenComp
 shortLabel ClinGen
 longLabel Clinical Genome Resource (ClinGen) Dosage Sensitivity Map
-visibility pack
+visibility hide
 type bigBed 9 +
 group phenDis
 itemRgb on
