@@ -44,7 +44,7 @@ jsInlineF(
 "         ga('send', 'event', 'outbound', 'click', url,\n"
 "           { 'transport': 'beacon', 'hitCallback': function(){window.open(url);} });\n"
 "      } else {\n"
-"         document.location(url);\n"
+"         document.location=url;\n"
 "      }\n"
 "  }"
 "  $(document).ready(function() {\n"
