@@ -40,6 +40,8 @@ jsInlineF(
 "  function anchorClicked(ev) {\n"
 "      var isExternal = (ev.target.target==='_blank');\n"
 "      var url = ev.target.href;\n"
+"      if (url === undefined)\n" // this happens on hgTracks, for the case <a href....><p>bla</p></a>
+"           url = ev.target.parentElement.href;\n"
 "      if (isExternal) {\n"
 "         ga('send', 'event', 'outbound', 'click', url,\n"
 "           { 'transport': 'beacon', 'hitCallback': function(){window.open(url);} });\n"
