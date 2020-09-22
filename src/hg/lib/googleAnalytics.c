@@ -38,10 +38,11 @@ jsInlineF(
 // see https://support.google.com/analytics/answer/1136920?hl=en
 jsInlineF(
 "  function anchorClicked(ev) {\n"
+"  /* user clicked an anchor: send event to Google analytics and navigate to the link */\n"
 "      var isExternal = (ev.target.target==='_blank');\n"
 "      var url = ev.target.href;\n"
 "      if (url === undefined)\n" // this happens on hgTracks, for the case <a href....><p>bla</p></a>
-"           url = ev.target.parentElement.href;\n"
+"           url = ev.target.closest('a');\n"
 "      if (isExternal) {\n"
 "         ga('send', 'event', 'outbound', 'click', url,\n"
 "           { 'transport': 'beacon', 'hitCallback': function(){window.open(url);} });\n"
@@ -52,9 +53,15 @@ jsInlineF(
 "  }"
 "  $(document).ready(function() {\n"
 "      var anchors = document.getElementsByTagName('a');\n"
-"      for (var i in anchors) { \n"
-"           if (ev.target.attributes.href.value!=='#')\n" // do not run on javascript-only links for now
-"               anchors[i].onclick = anchorClicked;"
+"      for (var i = 0; i < anchors.length; i++) { \n"
+"           var a = anchors[i];\n"
+"           if (a.attributes.href && a.attributes.href.value!=='#')\n" // do not run on javascript links
+"               a.onclick = anchorClicked;"
 "      };\n"
-"  });");
+"      // on hgTracks: send an event with the current db, so we can report popularity of assemblies to NIH\n"
+"      if (typeof hgTracks !== undefined)\n"
+"          ga('send', 'event', 'hgTracks', 'load', getDb());\n"
+"  });"
+);
+
 }
