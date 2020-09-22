@@ -402,22 +402,40 @@ if (ds)
 return aliasHash;
 }	/*	static struct hash *readAliasFile(char *url)	*/
 
-char *trackHubAliasFile(char *database)
-/* see if this assembly hub has an alias file, return url if present */
+static char *assemblyHubGenomeSetting(char *database, char *tagName)
+/* see if this assembly hub has specified tagName, return url if present
+ * returns NULL when not present
+ */
 {
 struct trackHubGenome *genome = trackHubGetGenome(database);
 if (genome == NULL)
     return NULL;
-char *aliasFile = hashFindVal(genome->settingsHash, "chromAlias");
-char *absAliasFile  = NULL;
-if (aliasFile)
-    absAliasFile  = trackHubRelativeUrl((genome->trackHub)->url, aliasFile);
-if  (absAliasFile)
+char *fileName = hashFindVal(genome->settingsHash, tagName);
+char *absFileName  = NULL;
+if (fileName)
+    absFileName  = trackHubRelativeUrl((genome->trackHub)->url, fileName);
+if  (absFileName)
     {
-    hashReplace(genome->settingsHash, "chromAlias", absAliasFile);
-    aliasFile = absAliasFile;
+    hashReplace(genome->settingsHash, tagName, absFileName);
+    fileName = absFileName;
     }
-return aliasFile;
+return fileName;
+}
+
+char *trackHubChromSizes(char *database)
+/* see if this assembly hub has a chrom.sizes file, return url if present
+ * returns NULL when not present
+ */
+{
+return assemblyHubGenomeSetting(database, "chromSizes");
+}
+
+char *trackHubAliasFile(char *database)
+/* see if this assembly hub has an alias file, return url if present
+ * returns NULL when not present
+ */
+{
+return assemblyHubGenomeSetting(database, "chromAlias");
 }
 
 struct hash *trackHubAllChromAlias(char *database)
