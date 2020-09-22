@@ -9922,8 +9922,9 @@ cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
 printf("Total: %d", count);
 cgiTableFieldEnd();
-cgiSimpleTableFieldStart();
+cgiTableFieldStartAlignRight();
 printLongWithCommas(stdout, total);
+puts("&nbsp;&nbsp;");
 cgiTableFieldEnd();
 if (hasAlias)
     {
@@ -10215,14 +10216,14 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-static void chromSizesDownloadRow(boolean hasAlias, char *hubAliasFile)
+static void chromSizesDownloadRow(boolean hasAlias, char *hubAliasFile, char *chromSizesFile)
 /* Show link to chrom.sizes file at end of chromInfo table (unless this is a hub) */
 {
 if (! trackHubDatabase(database))
     {
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    puts("Download as file");
+    puts("Download as file:");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
     printf("<A HREF='http://%s/goldenPath/%s/bigZips/%s.chrom.sizes'>%s.chrom.sizes</A>",
@@ -10240,13 +10241,19 @@ else if (hubAliasFile)
     {
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    puts("Download as file");
+    puts("Download as file:");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    puts("&nbsp");
+    if (chromSizesFile)
+	{
+        printf("<a href='%s' target=_blank>%s.chrom.sizes.txt</A>", chromSizesFile, trackHubSkipHubName(database));
+        puts("&nbsp;&nbsp;");
+	}
+    else
+        puts("&nbsp");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    printf("<a href='%s' target=_blank>assembly hub alias file</A>", hubAliasFile);
+    printf("<a href='%s' target=_blank>%s.chromAlias.txt</A>", hubAliasFile, trackHubSkipHubName(database));
     cgiTableFieldEnd();
     cgiTableRowEnd();
     }
@@ -10256,12 +10263,14 @@ void chromInfoPage()
 /* Show list of chromosomes (or scaffolds, etc) on which this db is based. */
 {
 boolean hasAlias = FALSE;
+char *chromSizesFile = NULL;
 char *aliasFile = NULL;
 if (trackHubDatabase(database))
     {
     aliasFile = trackHubAliasFile(database);
     if (aliasFile)
         hasAlias = TRUE;
+    chromSizesFile = trackHubChromSizes(database);
     }
 else
     hasAlias = hTableExists(database, "chromAlias");
@@ -10319,7 +10328,7 @@ else if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) 
     chromInfoRowsChrom();
 else
     chromInfoRowsNonChrom(1000);
-chromSizesDownloadRow(hasAlias, aliasFile);
+chromSizesDownloadRow(hasAlias, aliasFile, chromSizesFile);
 
 hTableEnd();
 cgiDown(0.9);

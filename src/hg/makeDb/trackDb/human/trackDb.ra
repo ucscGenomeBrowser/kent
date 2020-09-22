@@ -27,7 +27,7 @@ include trackDb.clinvar.ra
 include trackDb.dbVar.ra
 
 # ClinGen
-include trackDb.clinGen.ra alpha,beta
+include trackDb.clinGen.ra
 
 # Genome In a Bottle
 include trackDb.giab.ra alpha
