@@ -5,4 +5,4 @@ EMAIL="chmalee@ucsc.edu"
 WORKDIR="/hive/data/outside/otto/dbVar"
 
 cd $WORKDIR
-./checkDbVar $WORKDIR 2>&1 |  mail -s "dbVar Build" $EMAIL
+./checkDbVar.sh $WORKDIR 2>&1 |  mail -s "dbVar Build" $EMAIL
