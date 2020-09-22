@@ -471,7 +471,7 @@ def hgBotDelay(fraction=1.0):
     host = cfgOption("bottleneck.host")
     port = cfgOption("bottleneck.port")
 
-    if not "bottleneck.host" or not "bottleneck.port" or not ip:
+    if not host or not port or not ip:
         return
 
     botCheckString = getBotCheckString(ip, fraction)

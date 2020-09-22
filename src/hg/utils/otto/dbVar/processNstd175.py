@@ -51,7 +51,8 @@ def getMouseover(bed):
     ret = "Position: %s:%s-%s" % (bed["chrom"], int(bed["chromStart"])+1, bed["chromEnd"])
     ret += ", Size: %d" % (int(bed["chromEnd"]) - int(bed["chromStart"]))
     ret += ", Variant Type: %s" % (bed["Variant Type"])
-    ret += ", Phenotype: %s" % bed["Phenotype"]
+    if "Phenotype" in bed:
+        ret += ", Phenotype: %s" % bed["Phenotype"]
     return ret
 
 def dumpBedLines():
@@ -132,7 +133,12 @@ def processNstd175(inf):
             extraHash[fixedName] = v
         bedId = itemName
         extraHash["Variant Type"] = fields[2]
-        bedLines[bedId] = makeBedLine(fields[0], int(fields[3]) - 1, int(fields[4]), bedId, extraHash)
+        try:
+            bedLines[bedId] = makeBedLine(fields[0], int(fields[3]) - 1, int(fields[4]), bedId, extraHash)
+        except KeyError as e:
+            sys.stderr.write("KeyError\n")
+            sys.stderr.write("Offending line: %s\n" % line)
+            sys.exit(1)
     dumpBedLines()
 
 def main():
