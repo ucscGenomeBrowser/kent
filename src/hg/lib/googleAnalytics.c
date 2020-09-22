@@ -52,6 +52,9 @@ jsInlineF(
 "  }"
 "  $(document).ready(function() {\n"
 "      var anchors = document.getElementsByTagName('a');\n"
-"      for (var i in anchors) { anchors[i].onclick = anchorClicked };\n"
+"      for (var i in anchors) { \n"
+"           if (ev.target.attributes.href.value!=='#')\n" // do not run on javascript-only links for now
+"               anchors[i].onclick = anchorClicked;"
+"      };\n"
 "  });");
 }
