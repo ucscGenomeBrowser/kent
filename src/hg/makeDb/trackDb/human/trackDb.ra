@@ -153,8 +153,7 @@ release alpha,beta
 track decipherSnvs
 shortLabel DECIPHER SNVs
 longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans (SNVs)
-group phenDisbigDataUrl /gbdb/$D/decipher/decipherCnv.bb
-
+group phenDis
 visibility hide
 color 0,0,0
 type bed 4
