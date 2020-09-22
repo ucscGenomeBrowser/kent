@@ -1,4 +1,4 @@
-table lovd
+table lovdShort
 "Leiden Open Variation Database Public Variants"
     (
     string chrom;        "Chromosome (or contig, scaffold, etc.)"
