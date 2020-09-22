@@ -32,6 +32,7 @@ jsInlineF(
 "  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');\n"
 "  ga('create', '%s', 'auto');\n"
 "  ga('require', 'displayfeatures');\n"
+"  ga('set', 'transport', 'beacon');\n"
 "  ga('send', 'pageview');\n"
 "\n"
 , analyticsKey);
@@ -52,6 +53,8 @@ jsInlineF(
 "      return false;\n"
 "  }"
 "  $(document).ready(function() {\n"
+"      if (!window.ga || ga.loaded)\n"
+"          return;\n"
 "      var anchors = document.getElementsByTagName('a');\n"
 "      for (var i = 0; i < anchors.length; i++) { \n"
 "           var a = anchors[i];\n"
