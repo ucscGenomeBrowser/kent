@@ -103,8 +103,8 @@ if ( -s "$dupsList" ) {
   open (FH, "zcat $dupsList | awk '{print \$1, \$3}'|") or die "can not read $dupsList";
   while (my $line = <FH>) {
     chomp $line;
-#    my ($dupAlias, $dupTarget) = split('\s+', $line);
-    my ($dupTarget, $dupAlias) = split('\s+', $line);
+    my ($dupAlias, $dupTarget) = split('\s+', $line);
+### early version    my ($dupTarget, $dupAlias) = split('\s+', $line);
     if ($ucscNames) {
       if (!defined($ncbiToUcsc{$dupTarget})) {
        printf STDERR "# ERROR: can not find dupTarget: $dupTarget in ncbiToUcsc for dupAlias: $dupAlias\n";
