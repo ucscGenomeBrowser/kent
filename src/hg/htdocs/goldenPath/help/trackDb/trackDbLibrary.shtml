@@ -368,13 +368,13 @@
     Don't draw the stems of the lollipops.
 </DIV>
 
-<DIV class="lolliSizeField"><span class="types bigLolly"></span>
-<div class="format"><code>lolliSizeField &lt;integer&gt;</code></div>
+<DIV class="lollySizeField"><span class="types bigLolly"></span>
+<div class="format"><code>lollySizeField &lt;integer&gt;</code></div>
     Use the given field as the size of the lollipop, measured in percentage of the total available drawing area.
 </DIV>
 
-<DIV class="lolliMaxSize"><span class="types bigLolly"></span>
-<div class="format"><code>lolliMaxSize &lt;integer&gt;</code></div>
+<DIV class="lollyMaxSize"><span class="types bigLolly"></span>
+<div class="format"><code>lollyMaxSize &lt;integer&gt;</code></div>
     The maximum size of a lollipop in the file, used to establish margins.
 </DIV>
 
@@ -4838,7 +4838,7 @@ For the complete bigInteract format definitions please see the
 <DIV class="bigLolly_intro">
 <H3>bigLolly: Lollipop Charts</H3>
     <P>
-    Lollipops are the coolest of graph types.
+    Lollipop graphs are usually used to display data that is local to a single base that has one to three data values assigned to it which can be displayed using the lollipop height, the color, and the size of the circle at the top of the lollipop.
 </DIV>
 
 <DIV class="bigLolly_example"><span class="types bigLolly"></span>

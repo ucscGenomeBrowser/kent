@@ -193,7 +193,6 @@ if (row != NULL)
     hub->status = sqlUnsigned(row[1]);
     hub->errorMessage = cloneString(row[2]);
     char *shortLabel = row[4];
-
     if (isEmpty(row[2]) || hubTimeToCheck(hub, row[3]))
 	{
 	char *errorMessage = NULL;
@@ -204,7 +203,10 @@ if (row != NULL)
 	    {
             boolean isCollection = (strstr(hub->hubUrl, "hgComposite") != NULL);
             if (isCollection)
-                warn("Your Track Collections have been removed by our trash collectors.  If you'd like your Track Collections to stay on our servers, you need to save them in a session." );
+                warn("It looks as though you made a <a href=\"/cgi-bin/hgCollection\"><b>Track "
+         "Collection</b></a> on a previous visit, which has since been deleted. Collections "
+         "expire 48 hours after their last use. You must  <a href=\"/cgi-bin/hgSession\"><b>"
+         "save your session</b></a> to preserve collections long-term and to allow sharing.");
             else
                 warn("Could not connect to hub \"%s\": %s", shortLabel, hub->errorMessage);
 	    }

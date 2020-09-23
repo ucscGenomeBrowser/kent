@@ -40,6 +40,7 @@ my $stepper = new HgStepManager(
     [ { name => 'download',   func => \&doDownload },
       { name => 'sequence',   func => \&doSequence },
       { name => 'assemblyGap',   func => \&doAssemblyGap },
+      { name => 'chromAlias',   func => \&doChromAlias },
       { name => 'gatewayPage',   func => \&doGatewayPage },
       { name => 'cytoBand',   func => \&doCytoBand },
       { name => 'gc5Base',   func => \&doGc5Base },
@@ -132,6 +133,7 @@ Automates build of assembly hub.  Steps:
     sequence: establish AGP and 2bit file from NCBI directory
     assemblyGap: create assembly and gap bigBed files and indexes
                  for assembly track names
+    chromAlias:  construct asmId.chromAlias.txt for alias name recognition
     gatewayPage: create html/asmId.description.html contents (USE: asmHubName)
     cytoBand: create cytoBand track and navigation ideogram
     gc5Base: create bigWig file for gc5Base track
@@ -936,6 +938,37 @@ _EOF_
 } # assemblyGap
 
 #########################################################################
+# * step: chromAlias [workhorse]
+sub doChromAlias {
+  my $runDir = "$buildDir/trackData/chromAlias";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct asmId.chromAlias.txt for alias name recognition";
+  my $bossScript = newBash HgRemoteScript("$runDir/doChromAlias.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export buildDir=$buildDir
+export asmId=$asmId
+
+\$HOME/kent/src/hg/utils/automation/asmHubChromAlias.pl \\
+    \${asmId} | sort > \${asmId}.chromAlias.txt
+# verify each sequence name has an alias
+export sizeCount=`cat ../../\${asmId}.chrom.sizes | wc -l`
+export aliasCount=`grep -v "^#" \${asmId}.chromAlias.txt | wc -l`
+if [ "\${sizeCount}" -ne "\${aliasCount}" ]; then
+  printf "ERROR: chromAlias: incorrect number of aliases %d != %d\\n" "\${sizeCount}" "\${aliasCount}" 1>&2
+  exit 255
+fi
+
+exit 0
+
+_EOF_
+  );
+  $bossScript->execute();
+} # chromAlias
+
+#########################################################################
 # * step: gatewayPage [workhorse]
 sub doGatewayPage {
   if ($asmHubName eq "n/a") {
@@ -1731,9 +1764,15 @@ sub doTrackDb {
   my $bossScript = newBash HgRemoteScript("$runDir/doTrackDb.bash",
                     $workhorse, $runDir, $whatItDoes);
 
+  if (! -s "${buildDir}/trackData/chromAlias/${asmId}.chromAlias.txt" ) {
+    die "ERROR: can not find ${asmId}.chromAlias.txt in\n# ${buildDir}/trackData/chromAlias/\n";
+  }
+
   $bossScript->add(<<_EOF_
 export asmId=$asmId
 
+rm -f \$asmId.chromAlias.txt
+ln -s trackData/chromAlias/\${asmId}.chromAlias.txt .
 \$HOME/kent/src/hg/utils/automation/asmHubTrackDb.sh \$asmId $runDir \\
    > \$asmId.trackDb.txt
 

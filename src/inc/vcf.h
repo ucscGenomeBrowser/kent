@@ -346,4 +346,17 @@ char *vcfGetSlashSepAllelesFromWords(char **words, struct dyString *dy);
 void vcfRecordWriteNoGt(FILE *f, struct vcfRecord *rec);
 /* Write the first 8 columns of VCF rec to f.  Genotype data will be ignored if present. */
 
+// Characters we expect to see in |-separated parts of an ##INFO description that specifies
+// tabular contents:
+#define COL_DESC_WORD_REGEX "[A-Za-z_0-9.-]+"
+// Series of |-separated words:
+#define COL_DESC_REGEX COL_DESC_WORD_REGEX"(\\|"COL_DESC_WORD_REGEX")+"
+
+// Minimum number of |-separated values for interpreting descriptions and values as tabular:
+#define MIN_COLUMN_COUNT 3
+
+boolean looksTabular(const struct vcfInfoDef *def, const struct vcfInfoElement *el);
+/* Return TRUE if def->description seems to contain a |-separated description of columns
+ * and el's first non-empty string value has the same number of |-separated parts. */
+
 #endif // vcf_h
