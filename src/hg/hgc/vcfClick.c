@@ -99,40 +99,7 @@ else
     }
 }
 
-// Characters we expect to see in |-separated parts of an ##INFO description that specifies
-// tabular contents:
-#define COL_DESC_WORD_REGEX "[A-Za-z_0-9.-]+"
-// Series of |-separated words:
-#define COL_DESC_REGEX COL_DESC_WORD_REGEX"(\\|"COL_DESC_WORD_REGEX")+"
 
-// Minimum number of |-separated values for interpreting descriptions and values as tabular:
-#define MIN_COLUMN_COUNT 3
-
-static boolean looksTabular(const struct vcfInfoDef *def, struct vcfInfoElement *el)
-/* Return TRUE if def->description seems to contain a |-separated description of columns
- * and el's first non-empty string value has the same number of |-separated parts. */
-{
-if (!def || def->type != vcfInfoString || isEmpty(def->description))
-    return FALSE;
-if (regexMatch(def->description, COL_DESC_REGEX))
-    {
-    int descColCount = countChars(def->description, '|') + 1;
-    if (descColCount >= MIN_COLUMN_COUNT)
-        {
-        int j;
-        for (j = 0;  j < el->count;  j++)
-            {
-            char *val = el->values[j].datString;
-            if (isEmpty(val))
-                continue;
-            int elColCount = countChars(val, '|') + 1;
-            if (elColCount == descColCount)
-                return TRUE;
-            }
-        }
-    }
-return FALSE;
-}
 
 static void printTabularHeaderRow(const struct vcfInfoDef *def)
 /* Parse the column header parts out of def->description and print as table header row;

@@ -1739,3 +1739,29 @@ fputc('\t', f);
 vcfWriteInfo(f, rec);
 fputc('\n', f);
 }
+
+boolean looksTabular(const struct vcfInfoDef *def, const struct vcfInfoElement *el)
+/* Return TRUE if def->description seems to contain a |-separated description of columns
+ * and el's first non-empty string value has the same number of |-separated parts. */
+{
+if (!def || def->type != vcfInfoString || isEmpty(def->description))
+    return FALSE;
+if (regexMatch(def->description, COL_DESC_REGEX))
+    {
+    int descColCount = countChars(def->description, '|') + 1;
+    if (descColCount >= MIN_COLUMN_COUNT)
+        {
+        int j;
+        for (j = 0;  j < el->count;  j++)
+            {
+            char *val = el->values[j].datString;
+            if (isEmpty(val))
+                continue;
+            int elColCount = countChars(val, '|') + 1;
+            if (elColCount == descColCount)
+                return TRUE;
+            }
+        }
+    }
+return FALSE;
+}
