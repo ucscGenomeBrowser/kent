@@ -767,7 +767,7 @@ return (alleleCount == 2 &&
         (sameString(alleles[0], alleles[1]) || sameString(".", alleles[1])));
 }
 
-static boolean allelesHavePaddingBase(char **alleles, int alleleCount)
+boolean allelesHavePaddingBase(char **alleles, int alleleCount)
 /* Examine alleles to see if they either a) all start with the same base or
  * b) include a symbolic or 0-length allele.  In either of those cases, there
  * must be an initial padding base that we'll need to trim from non-symbolic

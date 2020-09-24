@@ -5,9 +5,10 @@
 #include "hash.h"
 #include "options.h"
 #include "vcf.h"
+#include "dnautil.h"
 
 #define MAX_BED_EXTRA 50 // how many extra fields  can we put into the bigBed itself (for filtering, labels, etc)
-#define bed9Header "#chrom\tchromStart\tchromEnd\tname\tscore\tstrand\tthickStart\tthickEnd\titemRgb"
+#define bed9Header "#chrom\tchromStart\tchromEnd\tname\tscore\tstrand\tthickStart\tthickEnd\titemRgb\tref\talt"
 
 // hash up all the info tags and their vcfInfoDef structs for faster searching
 struct hash *infoHash = NULL;
@@ -33,17 +34,6 @@ static struct optionSpec options[] = {
     {"fields", OPTION_STRING},
     {NULL, 0},
 };
-
-void hashInfoTags(struct vcfFile *vcff)
-{
-if (!infoHash)
-    infoHash = hashNew(0);
-struct vcfInfoDef *def = NULL;
-for (def = vcff->infoDefs; def != NULL; def = def->next)
-    {
-    hashAdd(infoHash, def->key, def);
-    }
-}
 
 int trimMissingTagsFromFieldList(char **keepFields, char **tempKeepFields, int keepCount, struct vcfFile *vcff)
 /* If there are requested fields in keepFields that don't exist in vcff, warn about them
@@ -74,61 +64,29 @@ else
     return chrom;
 }
 
-char *fixupVcfRecordName(struct vcfRecord *rec, int fixedChromStart)
-/* Fill in for often missing vcf record name (subs out '.' for something useful) */
-{
-static struct dyString *ds;
-if (!ds)
-    ds = dyStringNew(0);
-char *name = NULL;
-if (isNotEmpty(rec->name) && !sameString(rec->name,"."))
-    name = cloneString(rec->name);
-else
-    {
-    dyStringPrintf(ds, "%s_%d:", fixupChromName(rec->chrom), fixedChromStart);
-    if (rec->alleleCount < 2)
-        dyStringPrintf(ds, "?");
-    else
-        dyStringPrintf(ds, "%s/%s", rec->alleles[0], rec->alleles[1]);
-    name = cloneString(ds->string);
-    }
-dyStringClear(ds);
-return name;
-}
+#define VCF_MAX_INFO (4*1024)
 
-void printVcfInfoElem(struct vcfFile *vcff, struct vcfRecord *rec, char *tag, FILE *out, boolean printTabular)
-/* Maybe print a VCF INFO tag element to out */
+void fixupLeftPadding(int *start, char *ref, char *alt)
+/* If an indel is left padded fix up the star position */
 {
-const struct vcfInfoElement *elem = vcfRecordFindInfo(rec, tag);
-if (elem)
+char *altTmp = cloneString(alt);
+char *alleles[VCF_MAX_INFO+1];
+alleles[0] = cloneString(ref);
+char *altAlleles[VCF_MAX_INFO];
+int altCount = chopCommas(altTmp, altAlleles);
+int alleleCount = 1 + altCount;
+if (alleleCount > 1)
     {
-    const struct vcfInfoDef *def = hashMustFindVal(infoHash, elem->key);
-    //const struct vcfInfoDef *def = vcfInfoDefForKey(vcff, elem->key);
-    enum vcfInfoType type = def ? def->type : vcfInfoString;
-    if (elem != NULL)
-        {
-        if (type == vcfInfoFlag && elem->count == 0)
-            fprintf(out, "Yes");
-        if (looksTabular(def, elem) && !printTabular)
-            errAbort("Error: Tables not supported in bigBed fields, tag '%s'", elem->key);
-        else
-            {
-            int j;
-            for (j = 0; j < elem->count; j++)
-                {
-                if (j > 0)
-                    fprintf(out, ", ");
-                if (elem->missingData[j])
-                    fprintf(out, ".");
-                else
-                    vcfPrintDatum(out, elem->values[j], type);
-                }
-            }
-        }
+    int i;
+    for (i = 0; i < altCount; i++)
+        alleles[1+i] = altAlleles[i];
+    boolean hasPaddingBase = allelesHavePaddingBase(alleles, alleleCount);
+    if (hasPaddingBase)
+        (*start)++;
     }
 }
 
-void printHeaders(struct vcfFile *vcff, char **keepFields, int keepCount, FILE *outBed, FILE *outExtra)
+void printHeaders(struct vcfFile *vcff, char **keepFields, int keepCount, FILE *outBed)
 /* Print the required header into extraFields.tab, and put a technically optional
  * comment into outBed */
 {
@@ -138,61 +96,91 @@ for (i = 0; i < keepCount; i++)
     if (keepFields[i] != NULL)
         fprintf(outBed, "\t%s", keepFields[i]);
 fprintf(outBed, "\n");
-
-if (outExtra)
-    {
-    struct vcfInfoDef *def;
-    boolean first = TRUE;
-    for (def = vcff->infoDefs; def != NULL; def = def->next)
-        {
-        if (stringArrayIx(def->key, keepFields, keepCount) == -1)
-            {
-            if (!first)
-                fprintf(outExtra, "\t");
-            fprintf(outExtra, "%s", def->key);
-            first = FALSE;
-            }
-        }
-    fprintf(outExtra, "\n");
-    }
 }
 
 void vcfLinesToBed(struct vcfFile *vcff, char **keepFields, int extraFieldCount,
-                    FILE *outBed, FILE *outExtra)
+                    FILE *outBed) //, FILE *outExtra)
 /* Turn a VCF line into a bed9+ line */
 {
-struct vcfRecord *rec;
+struct dyString *name = dyStringNew(0);
+struct dyString *maybeShortenedRef = dyStringNew(0);
+struct dyString *maybeShortenedAlt = dyStringNew(0);
+char *line = NULL;
+char *chopped[9];
+int infoCount = slCount(vcff->infoDefs);
+char *infoTags[infoCount];
 int i;
-while ( (rec = vcfNextRecord(vcff)) != NULL)
+while (lineFileNext(vcff->lf, &line, NULL))
     {
-    int start = vcfRecordTrimIndelLeftBase(rec);
-    char *name = fixupVcfRecordName(rec, start);
-    fprintf(outBed, "%s\t%d\t%d\t%s", fixupChromName(rec->chrom), start, rec->chromEnd, name);
-    fprintf(outBed, "0\t.\t%d\t%d\t0,0,0", start, rec->chromEnd);
-    for (i = 0; i < extraFieldCount; i++)
+    int fieldCount = chopTabs(line, chopped);
+    if (fieldCount < 8)
+        errAbort("ERROR: malformed VCF, missing fields at line: '%d'", vcff->lf->lineIx);
+    char *chrom = fixupChromName(chopped[0]);
+    int start = atoi(chopped[1]);
+    int end = start + 1;
+    char *ref = chopped[3];
+    char *alt = chopped[4];
+    if (strlen(ref) == dnaFilteredSize(ref))
+        end = start + strlen(ref);
+    fixupLeftPadding(&start, ref, alt);
+    if (!sameString(chopped[2], "."))
+        dyStringPrintf(name, "%s", chopped[2]);
+    else
+        {
+        if (strlen(ref) > 10)
+            {
+            for (i = 0; i < 10; i++)
+                dyStringAppendC(maybeShortenedRef, ref[i]);
+            dyStringAppend(maybeShortenedRef, "...");
+            }
+        else
+            maybeShortenedRef->string = ref;
+        if (strlen(alt) > 10)
+            {
+            for (i = 0; i < 10; i++)
+                dyStringAppendC(maybeShortenedAlt, alt[i]);
+            dyStringAppend(maybeShortenedAlt, "...");
+            }
+        else
+            maybeShortenedAlt->string = alt;
+        dyStringPrintf(name, "%s_%d:%s/%s", chrom,start,maybeShortenedRef->string,maybeShortenedAlt->string);
+        }
+    fprintf(outBed, "%s\t%d\t%d\t%s\t0\t.\t%d\t%d\t0,0,0", chrom,start,end,name->string,start,end);
+    fprintf(outBed, "\t%s\t%s", ref, alt);
+    if (extraFieldCount)
         {
         fprintf(outBed, "\t");
-        printVcfInfoElem(vcff, rec, keepFields[i], outBed, FALSE);
+        chopByChar(chopped[7], ';', infoTags, infoCount);
+        int i;
+        for (i = 0; i < extraFieldCount; i++)
+            {
+            char *extraField = keepFields[i];
+            char *infoTagVal = NULL;
+            int j;
+            for (j = 0; j < infoCount; j++)
+                {
+                if (infoTags[j] && startsWith(extraField, infoTags[j]))
+                    {
+                    infoTagVal = cloneString(infoTags[j]);
+                    break;
+                    }
+                }
+            if (infoTagVal)
+                {
+                char *val = strchr(infoTagVal, '=');
+                if (val)
+                    {
+                    val += 1;
+                    fprintf(outBed, "%s", val);
+                    }
+                }
+            fprintf(outBed, "\t");
+            }
         }
     fprintf(outBed, "\n");
-
-    // write out extra tags for this line, if any:
-    if (outExtra)
-        {
-        fprintf(outExtra, "%s", name);
-        struct vcfInfoDef *def;
-        for (def = vcff->infoDefs; def != NULL; def = def->next)
-            {
-            if (stringArrayIx(def->key, keepFields, extraFieldCount) == -1)
-                {
-                fprintf(outExtra, "\t");
-                printVcfInfoElem(vcff, rec, def->key, outExtra, TRUE);
-                }
-            }
-        fprintf(outExtra, "\n");
-        }
-    fflush(outBed);
-    fflush(outExtra);
+    dyStringClear(name);
+    dyStringClear(maybeShortenedRef);
+    dyStringClear(maybeShortenedAlt);
     }
 }
 
@@ -200,7 +188,7 @@ void vcfToBed(char *vcfFileName, char *outPrefix, char *tagsToKeep)
 /* vcfToBed - Convert VCF to BED9+ with optional extra fields.
  * Extra VCF tags get placed into a separate tab file for later indexing. */
 {
-FILE *outBed, *outExtra;
+FILE *outBed;
 struct vcfFile *vcff = NULL;
 char tbiFile[4096];
 int i;
@@ -220,7 +208,6 @@ if (fileExists(tbiFile))
     if (vcff == NULL)
         errAbort("error opening %s\n", vcfFileName);
     vcfTagCount = slCount(vcff->infoDefs);
-    hashInfoTags(vcff);
     // do a batch read and use the reuse pool
     vcfFileMakeReusePool(vcff, 64*1024*1024);
     }
@@ -236,25 +223,11 @@ if (tagsToKeep)
     }
 
 // open output for writing
-char *outBedName = NULL, *outExtraName = NULL;
+char *outBedName = NULL;
 if (endsWith(outPrefix, ".bed"))
-    {
     outBedName = cloneString(outPrefix);
-    if (keepCount <= vcfTagCount)
-        {
-        outExtraName = replaceChars(outPrefix, ".bed", ".extraFields.tab");
-        outExtra = mustOpen(outExtraName, "w");
-        }
-    }
 else
-    {
     outBedName = catTwoStrings(outPrefix, ".bed");
-    if (keepCount <= vcfTagCount)
-        {
-        outExtraName =  catTwoStrings(outPrefix, ".extraFields.tab");
-        outExtra = mustOpen(outExtraName, "w");
-        }
-    }
 outBed = mustOpen(outBedName, "w");
 
 verbose(2, "input vcf tag count = %d\n", vcfTagCount);
@@ -263,11 +236,10 @@ for (i = 0; i < keepCount; i++)
     if (keepFields[i] != NULL)
         verbose(2, "found tag: '%s'\n", keepFields[i]);
 
-printHeaders(vcff, keepFields, keepCount, outBed, outExtra);
-vcfLinesToBed(vcff, keepFields, keepCount, outBed, outExtra);
+printHeaders(vcff, keepFields, keepCount, outBed);
+vcfLinesToBed(vcff, keepFields, keepCount, outBed);
 vcfFileFree(&vcff);
 carefulClose(&outBed);
-carefulClose(&outExtra);
 }
 
 int main(int argc, char *argv[])
