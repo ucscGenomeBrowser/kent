@@ -1,6 +1,6 @@
 track	Starr_Bloom
-shortLabel	RDB Mut Scanning 
-longLabel	S RBD mutational scanning data from Jesse Bloom's Group
+shortLabel	RBD Mut Expr
+longLabel	S RBD Deep mutational scanning: Expression (Jesse Bloom's Group)
 visibility	hide
 type	bigWig
 priority	1
@@ -188,9 +188,10 @@ compositeTrack	on
 	bigDataUrl	/gbdb/wuhCor1/bbi/bloom/expr/Y_expr_avg.bw
 
 track	Starr_Bloom_bind
-shortLabel	Starr_Bloom_ACE2_Bind
-longLabel	S RBD DMS Binding data from Jesse Bloom's Group
+shortLabel	RBD Mut Bind
+longLabel	S RBD Deep Mutational Scanning: ACE2 binding (Jesse Bloom's Group)
 visibility	hide
+group immu
 type	bigWig
 priority	1
 compositeTrack	on
@@ -376,9 +377,9 @@ compositeTrack	on
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/expr/Y_bind_avg.bw
 
 track	Starr_Bloom_antibody
-shortLabel	RDB Antibody escape
-longLabel	S RBD Mutational scanning - Antibody Escape Data from Jesse Bloom's Group
-visibility	dense
+shortLabel	RBD Antibody escape
+longLabel	S RBD Deep mutational scanning: Antibody Escape (Jesse Bloom's Group)
+visibility	hide
 group immu
 type	bigWig
 priority	1
@@ -422,7 +423,7 @@ sortOrder	ab=+ aa=+
 autoScale	group
 
 	track	COV2-2050_A_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=A
 	 shortLabel COV2-2050_A
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -432,7 +433,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_A_mut_escape.bw
 
 	track	COV2-2050_C_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=C
 	 shortLabel COV2-2050_C
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -442,7 +443,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_C_mut_escape.bw
 
 	track	COV2-2050_D_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=D
 	 shortLabel COV2-2050_D
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -452,7 +453,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_D_mut_escape.bw
 
 	track	COV2-2050_E_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=E
 	 shortLabel COV2-2050_E
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -462,7 +463,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_E_mut_escape.bw
 
 	track	COV2-2050_F_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=F
 	 shortLabel COV2-2050_F
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -472,7 +473,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_F_mut_escape.bw
 
 	track	COV2-2050_G_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=G
 	 shortLabel COV2-2050_G
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -482,7 +483,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_G_mut_escape.bw
 
 	track	COV2-2050_H_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=H
 	 shortLabel COV2-2050_H
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -492,7 +493,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_H_mut_escape.bw
 
 	track	COV2-2050_I_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=I
 	 shortLabel COV2-2050_I
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -502,7 +503,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_I_mut_escape.bw
 
 	track	COV2-2050_K_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=K
 	 shortLabel COV2-2050_K
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -512,7 +513,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_K_mut_escape.bw
 
 	track	COV2-2050_L_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=L
 	 shortLabel COV2-2050_L
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -522,7 +523,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_L_mut_escape.bw
 
 	track	COV2-2050_max_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=max
 	 shortLabel COV2-2050_max
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -532,7 +533,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_max_mut_escape.bw
 
 	track	COV2-2050_M_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=M
 	 shortLabel COV2-2050_M
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -542,7 +543,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_M_mut_escape.bw
 
 	track	COV2-2050_N_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=N
 	 shortLabel COV2-2050_N
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -552,7 +553,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_N_mut_escape.bw
 
 	track	COV2-2050_P_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=P
 	 shortLabel COV2-2050_P
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -562,7 +563,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_P_mut_escape.bw
 
 	track	COV2-2050_Q_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=Q
 	 shortLabel COV2-2050_Q
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -572,7 +573,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_Q_mut_escape.bw
 
 	track	COV2-2050_R_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=R
 	 shortLabel COV2-2050_R
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -582,7 +583,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_R_mut_escape.bw
 
 	track	COV2-2050_S_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=S
 	 shortLabel COV2-2050_S
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -592,7 +593,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_S_mut_escape.bw
 
 	track	COV2-2050_T_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=T
 	 shortLabel COV2-2050_T
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -602,7 +603,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_T_mut_escape.bw
 
 	track	COV2-2050_total_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody on
 	 subGroups ab=COV2-2050 aa=total
 	 shortLabel COV2-2050_total
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -612,7 +613,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_total_mut_escape.bw
 
 	track	COV2-2050_V_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=V
 	 shortLabel COV2-2050_V
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -622,7 +623,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_V_mut_escape.bw
 
 	track	COV2-2050_W_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=W
 	 shortLabel COV2-2050_W
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -632,7 +633,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_W_mut_escape.bw
 
 	track	COV2-2050_Y_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2050 aa=Y
 	 shortLabel COV2-2050_Y
 	 longLabel DMS data for RBD antibody COV2-2050 escape
@@ -642,7 +643,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2050_Y_mut_escape.bw
 
 	track	COV2-2082_A_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=A
 	 shortLabel COV2-2082_A
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -652,7 +653,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_A_mut_escape.bw
 
 	track	COV2-2082_C_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=C
 	 shortLabel COV2-2082_C
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -662,7 +663,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_C_mut_escape.bw
 
 	track	COV2-2082_D_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=D
 	 shortLabel COV2-2082_D
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -672,7 +673,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_D_mut_escape.bw
 
 	track	COV2-2082_E_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=E
 	 shortLabel COV2-2082_E
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -682,7 +683,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_E_mut_escape.bw
 
 	track	COV2-2082_F_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=F
 	 shortLabel COV2-2082_F
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -692,7 +693,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_F_mut_escape.bw
 
 	track	COV2-2082_G_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=G
 	 shortLabel COV2-2082_G
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -702,7 +703,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_G_mut_escape.bw
 
 	track	COV2-2082_H_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=H
 	 shortLabel COV2-2082_H
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -712,7 +713,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_H_mut_escape.bw
 
 	track	COV2-2082_I_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=I
 	 shortLabel COV2-2082_I
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -722,7 +723,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_I_mut_escape.bw
 
 	track	COV2-2082_K_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=K
 	 shortLabel COV2-2082_K
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -732,7 +733,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_K_mut_escape.bw
 
 	track	COV2-2082_L_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=L
 	 shortLabel COV2-2082_L
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -742,7 +743,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_L_mut_escape.bw
 
 	track	COV2-2082_max_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=max
 	 shortLabel COV2-2082_max
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -752,7 +753,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_max_mut_escape.bw
 
 	track	COV2-2082_M_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=M
 	 shortLabel COV2-2082_M
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -762,7 +763,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_M_mut_escape.bw
 
 	track	COV2-2082_N_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=N
 	 shortLabel COV2-2082_N
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -772,7 +773,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_N_mut_escape.bw
 
 	track	COV2-2082_P_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=P
 	 shortLabel COV2-2082_P
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -782,7 +783,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_P_mut_escape.bw
 
 	track	COV2-2082_Q_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=Q
 	 shortLabel COV2-2082_Q
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -792,7 +793,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_Q_mut_escape.bw
 
 	track	COV2-2082_R_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=R
 	 shortLabel COV2-2082_R
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -802,7 +803,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_R_mut_escape.bw
 
 	track	COV2-2082_S_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=S
 	 shortLabel COV2-2082_S
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -812,7 +813,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_S_mut_escape.bw
 
 	track	COV2-2082_T_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=T
 	 shortLabel COV2-2082_T
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -822,17 +823,17 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_T_mut_escape.bw
 
 	track	COV2-2082_total_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody on
 	 subGroups ab=COV2-2082 aa=total
 	 shortLabel COV2-2082_total
 	 longLabel DMS data for RBD antibody COV2-2082 escape
-	 visibility hide
+	 visibility dense
 	 type bigWig
 	 priority 1
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_total_mut_escape.bw
 
 	track	COV2-2082_V_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=V
 	 shortLabel COV2-2082_V
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -842,7 +843,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_V_mut_escape.bw
 
 	track	COV2-2082_W_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=W
 	 shortLabel COV2-2082_W
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -852,7 +853,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_W_mut_escape.bw
 
 	track	COV2-2082_Y_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2082 aa=Y
 	 shortLabel COV2-2082_Y
 	 longLabel DMS data for RBD antibody COV2-2082 escape
@@ -862,7 +863,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2082_Y_mut_escape.bw
 
 	track	COV2-2094_A_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=A
 	 shortLabel COV2-2094_A
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -872,7 +873,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_A_mut_escape.bw
 
 	track	COV2-2094_C_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=C
 	 shortLabel COV2-2094_C
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -882,7 +883,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_C_mut_escape.bw
 
 	track	COV2-2094_D_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=D
 	 shortLabel COV2-2094_D
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -892,7 +893,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_D_mut_escape.bw
 
 	track	COV2-2094_E_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=E
 	 shortLabel COV2-2094_E
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -902,7 +903,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_E_mut_escape.bw
 
 	track	COV2-2094_F_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=F
 	 shortLabel COV2-2094_F
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -912,7 +913,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_F_mut_escape.bw
 
 	track	COV2-2094_G_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=G
 	 shortLabel COV2-2094_G
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -922,7 +923,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_G_mut_escape.bw
 
 	track	COV2-2094_H_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=H
 	 shortLabel COV2-2094_H
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -932,7 +933,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_H_mut_escape.bw
 
 	track	COV2-2094_I_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=I
 	 shortLabel COV2-2094_I
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -942,7 +943,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_I_mut_escape.bw
 
 	track	COV2-2094_K_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=K
 	 shortLabel COV2-2094_K
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -952,7 +953,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_K_mut_escape.bw
 
 	track	COV2-2094_L_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=L
 	 shortLabel COV2-2094_L
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -962,7 +963,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_L_mut_escape.bw
 
 	track	COV2-2094_max_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=max
 	 shortLabel COV2-2094_max
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -972,7 +973,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_max_mut_escape.bw
 
 	track	COV2-2094_M_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=M
 	 shortLabel COV2-2094_M
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -982,7 +983,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_M_mut_escape.bw
 
 	track	COV2-2094_N_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=N
 	 shortLabel COV2-2094_N
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -992,7 +993,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_N_mut_escape.bw
 
 	track	COV2-2094_P_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=P
 	 shortLabel COV2-2094_P
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -1002,7 +1003,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_P_mut_escape.bw
 
 	track	COV2-2094_Q_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=Q
 	 shortLabel COV2-2094_Q
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -1012,7 +1013,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_Q_mut_escape.bw
 
 	track	COV2-2094_R_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=R
 	 shortLabel COV2-2094_R
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -1022,7 +1023,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_R_mut_escape.bw
 
 	track	COV2-2094_S_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=S
 	 shortLabel COV2-2094_S
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -1032,7 +1033,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_S_mut_escape.bw
 
 	track	COV2-2094_T_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=T
 	 shortLabel COV2-2094_T
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -1042,17 +1043,17 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_T_mut_escape.bw
 
 	track	COV2-2094_total_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody on
 	 subGroups ab=COV2-2094 aa=total
 	 shortLabel COV2-2094_total
 	 longLabel DMS data for RBD antibody COV2-2094 escape
-	 visibility hide
+	 visibility dense
 	 type bigWig
 	 priority 1
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_total_mut_escape.bw
 
 	track	COV2-2094_V_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=V
 	 shortLabel COV2-2094_V
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -1062,7 +1063,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_V_mut_escape.bw
 
 	track	COV2-2094_W_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=W
 	 shortLabel COV2-2094_W
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -1072,7 +1073,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_W_mut_escape.bw
 
 	track	COV2-2094_Y_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2094 aa=Y
 	 shortLabel COV2-2094_Y
 	 longLabel DMS data for RBD antibody COV2-2094 escape
@@ -1082,7 +1083,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2094_Y_mut_escape.bw
 
 	track	COV2-2096_A_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=A
 	 shortLabel COV2-2096_A
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1092,7 +1093,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_A_mut_escape.bw
 
 	track	COV2-2096_C_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=C
 	 shortLabel COV2-2096_C
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1102,7 +1103,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_C_mut_escape.bw
 
 	track	COV2-2096_D_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=D
 	 shortLabel COV2-2096_D
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1112,7 +1113,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_D_mut_escape.bw
 
 	track	COV2-2096_E_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=E
 	 shortLabel COV2-2096_E
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1122,7 +1123,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_E_mut_escape.bw
 
 	track	COV2-2096_F_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=F
 	 shortLabel COV2-2096_F
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1132,7 +1133,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_F_mut_escape.bw
 
 	track	COV2-2096_G_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=G
 	 shortLabel COV2-2096_G
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1142,7 +1143,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_G_mut_escape.bw
 
 	track	COV2-2096_H_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=H
 	 shortLabel COV2-2096_H
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1152,7 +1153,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_H_mut_escape.bw
 
 	track	COV2-2096_I_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=I
 	 shortLabel COV2-2096_I
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1162,7 +1163,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_I_mut_escape.bw
 
 	track	COV2-2096_K_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=K
 	 shortLabel COV2-2096_K
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1172,7 +1173,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_K_mut_escape.bw
 
 	track	COV2-2096_L_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=L
 	 shortLabel COV2-2096_L
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1182,7 +1183,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_L_mut_escape.bw
 
 	track	COV2-2096_max_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=max
 	 shortLabel COV2-2096_max
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1192,7 +1193,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_max_mut_escape.bw
 
 	track	COV2-2096_M_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=M
 	 shortLabel COV2-2096_M
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1202,7 +1203,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_M_mut_escape.bw
 
 	track	COV2-2096_N_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=N
 	 shortLabel COV2-2096_N
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1212,7 +1213,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_N_mut_escape.bw
 
 	track	COV2-2096_P_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=P
 	 shortLabel COV2-2096_P
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1222,7 +1223,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_P_mut_escape.bw
 
 	track	COV2-2096_Q_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=Q
 	 shortLabel COV2-2096_Q
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1232,7 +1233,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_Q_mut_escape.bw
 
 	track	COV2-2096_R_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=R
 	 shortLabel COV2-2096_R
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1242,7 +1243,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_R_mut_escape.bw
 
 	track	COV2-2096_S_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=S
 	 shortLabel COV2-2096_S
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1252,7 +1253,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_S_mut_escape.bw
 
 	track	COV2-2096_T_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=T
 	 shortLabel COV2-2096_T
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1262,17 +1263,17 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_T_mut_escape.bw
 
 	track	COV2-2096_total_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody on
 	 subGroups ab=COV2-2096 aa=total
 	 shortLabel COV2-2096_total
 	 longLabel DMS data for RBD antibody COV2-2096 escape
-	 visibility hide
+	 visibility dense
 	 type bigWig
 	 priority 1
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_total_mut_escape.bw
 
 	track	COV2-2096_V_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=V
 	 shortLabel COV2-2096_V
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1282,7 +1283,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_V_mut_escape.bw
 
 	track	COV2-2096_W_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=W
 	 shortLabel COV2-2096_W
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1292,7 +1293,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_W_mut_escape.bw
 
 	track	COV2-2096_Y_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2096 aa=Y
 	 shortLabel COV2-2096_Y
 	 longLabel DMS data for RBD antibody COV2-2096 escape
@@ -1302,7 +1303,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2096_Y_mut_escape.bw
 
 	track	COV2-2165_A_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=A
 	 shortLabel COV2-2165_A
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1312,7 +1313,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_A_mut_escape.bw
 
 	track	COV2-2165_C_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=C
 	 shortLabel COV2-2165_C
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1322,7 +1323,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_C_mut_escape.bw
 
 	track	COV2-2165_D_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=D
 	 shortLabel COV2-2165_D
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1332,7 +1333,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_D_mut_escape.bw
 
 	track	COV2-2165_E_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=E
 	 shortLabel COV2-2165_E
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1342,7 +1343,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_E_mut_escape.bw
 
 	track	COV2-2165_F_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=F
 	 shortLabel COV2-2165_F
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1352,7 +1353,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_F_mut_escape.bw
 
 	track	COV2-2165_G_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=G
 	 shortLabel COV2-2165_G
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1362,7 +1363,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_G_mut_escape.bw
 
 	track	COV2-2165_H_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=H
 	 shortLabel COV2-2165_H
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1372,7 +1373,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_H_mut_escape.bw
 
 	track	COV2-2165_I_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=I
 	 shortLabel COV2-2165_I
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1382,7 +1383,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_I_mut_escape.bw
 
 	track	COV2-2165_K_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=K
 	 shortLabel COV2-2165_K
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1392,7 +1393,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_K_mut_escape.bw
 
 	track	COV2-2165_L_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=L
 	 shortLabel COV2-2165_L
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1402,7 +1403,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_L_mut_escape.bw
 
 	track	COV2-2165_max_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=max
 	 shortLabel COV2-2165_max
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1412,7 +1413,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_max_mut_escape.bw
 
 	track	COV2-2165_M_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=M
 	 shortLabel COV2-2165_M
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1422,7 +1423,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_M_mut_escape.bw
 
 	track	COV2-2165_N_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=N
 	 shortLabel COV2-2165_N
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1432,7 +1433,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_N_mut_escape.bw
 
 	track	COV2-2165_P_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=P
 	 shortLabel COV2-2165_P
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1442,7 +1443,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_P_mut_escape.bw
 
 	track	COV2-2165_Q_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=Q
 	 shortLabel COV2-2165_Q
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1452,7 +1453,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_Q_mut_escape.bw
 
 	track	COV2-2165_R_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=R
 	 shortLabel COV2-2165_R
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1462,7 +1463,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_R_mut_escape.bw
 
 	track	COV2-2165_S_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=S
 	 shortLabel COV2-2165_S
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1472,7 +1473,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_S_mut_escape.bw
 
 	track	COV2-2165_T_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=T
 	 shortLabel COV2-2165_T
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1482,17 +1483,17 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_T_mut_escape.bw
 
 	track	COV2-2165_total_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody on
 	 subGroups ab=COV2-2165 aa=total
 	 shortLabel COV2-2165_total
 	 longLabel DMS data for RBD antibody COV2-2165 escape
-	 visibility hide
+	 visibility dense
 	 type bigWig
 	 priority 1
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_total_mut_escape.bw
 
 	track	COV2-2165_V_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=V
 	 shortLabel COV2-2165_V
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1502,7 +1503,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_V_mut_escape.bw
 
 	track	COV2-2165_W_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=W
 	 shortLabel COV2-2165_W
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1512,7 +1513,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_W_mut_escape.bw
 
 	track	COV2-2165_Y_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2165 aa=Y
 	 shortLabel COV2-2165_Y
 	 longLabel DMS data for RBD antibody COV2-2165 escape
@@ -1522,7 +1523,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2165_Y_mut_escape.bw
 
 	track	COV2-2479_A_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=A
 	 shortLabel COV2-2479_A
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1532,7 +1533,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_A_mut_escape.bw
 
 	track	COV2-2479_C_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=C
 	 shortLabel COV2-2479_C
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1542,7 +1543,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_C_mut_escape.bw
 
 	track	COV2-2479_D_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=D
 	 shortLabel COV2-2479_D
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1552,7 +1553,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_D_mut_escape.bw
 
 	track	COV2-2479_E_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=E
 	 shortLabel COV2-2479_E
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1562,7 +1563,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_E_mut_escape.bw
 
 	track	COV2-2479_F_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=F
 	 shortLabel COV2-2479_F
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1572,7 +1573,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_F_mut_escape.bw
 
 	track	COV2-2479_G_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=G
 	 shortLabel COV2-2479_G
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1582,7 +1583,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_G_mut_escape.bw
 
 	track	COV2-2479_H_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=H
 	 shortLabel COV2-2479_H
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1592,7 +1593,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_H_mut_escape.bw
 
 	track	COV2-2479_I_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=I
 	 shortLabel COV2-2479_I
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1602,7 +1603,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_I_mut_escape.bw
 
 	track	COV2-2479_K_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=K
 	 shortLabel COV2-2479_K
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1612,7 +1613,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_K_mut_escape.bw
 
 	track	COV2-2479_L_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=L
 	 shortLabel COV2-2479_L
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1622,7 +1623,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_L_mut_escape.bw
 
 	track	COV2-2479_max_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=max
 	 shortLabel COV2-2479_max
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1632,7 +1633,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_max_mut_escape.bw
 
 	track	COV2-2479_M_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=M
 	 shortLabel COV2-2479_M
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1642,7 +1643,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_M_mut_escape.bw
 
 	track	COV2-2479_N_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=N
 	 shortLabel COV2-2479_N
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1652,7 +1653,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_N_mut_escape.bw
 
 	track	COV2-2479_P_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=P
 	 shortLabel COV2-2479_P
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1662,7 +1663,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_P_mut_escape.bw
 
 	track	COV2-2479_Q_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=Q
 	 shortLabel COV2-2479_Q
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1672,7 +1673,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_Q_mut_escape.bw
 
 	track	COV2-2479_R_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=R
 	 shortLabel COV2-2479_R
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1682,7 +1683,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_R_mut_escape.bw
 
 	track	COV2-2479_S_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=S
 	 shortLabel COV2-2479_S
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1692,7 +1693,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_S_mut_escape.bw
 
 	track	COV2-2479_T_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=T
 	 shortLabel COV2-2479_T
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1702,17 +1703,17 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_T_mut_escape.bw
 
 	track	COV2-2479_total_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody on
 	 subGroups ab=COV2-2479 aa=total
 	 shortLabel COV2-2479_total
 	 longLabel DMS data for RBD antibody COV2-2479 escape
-	 visibility hide
+	 visibility dense
 	 type bigWig
 	 priority 1
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_total_mut_escape.bw
 
 	track	COV2-2479_V_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=V
 	 shortLabel COV2-2479_V
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1722,7 +1723,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_V_mut_escape.bw
 
 	track	COV2-2479_W_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=W
 	 shortLabel COV2-2479_W
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1732,7 +1733,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_W_mut_escape.bw
 
 	track	COV2-2479_Y_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2479 aa=Y
 	 shortLabel COV2-2479_Y
 	 longLabel DMS data for RBD antibody COV2-2479 escape
@@ -1742,7 +1743,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2479_Y_mut_escape.bw
 
 	track	COV2-2499_A_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=A
 	 shortLabel COV2-2499_A
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1752,7 +1753,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_A_mut_escape.bw
 
 	track	COV2-2499_C_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=C
 	 shortLabel COV2-2499_C
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1762,7 +1763,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_C_mut_escape.bw
 
 	track	COV2-2499_D_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=D
 	 shortLabel COV2-2499_D
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1772,7 +1773,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_D_mut_escape.bw
 
 	track	COV2-2499_E_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=E
 	 shortLabel COV2-2499_E
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1782,7 +1783,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_E_mut_escape.bw
 
 	track	COV2-2499_F_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=F
 	 shortLabel COV2-2499_F
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1792,7 +1793,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_F_mut_escape.bw
 
 	track	COV2-2499_G_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=G
 	 shortLabel COV2-2499_G
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1802,7 +1803,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_G_mut_escape.bw
 
 	track	COV2-2499_H_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=H
 	 shortLabel COV2-2499_H
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1812,7 +1813,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_H_mut_escape.bw
 
 	track	COV2-2499_I_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=I
 	 shortLabel COV2-2499_I
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1822,7 +1823,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_I_mut_escape.bw
 
 	track	COV2-2499_K_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=K
 	 shortLabel COV2-2499_K
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1832,7 +1833,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_K_mut_escape.bw
 
 	track	COV2-2499_L_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=L
 	 shortLabel COV2-2499_L
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1842,7 +1843,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_L_mut_escape.bw
 
 	track	COV2-2499_max_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=max
 	 shortLabel COV2-2499_max
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1852,7 +1853,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_max_mut_escape.bw
 
 	track	COV2-2499_M_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=M
 	 shortLabel COV2-2499_M
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1862,7 +1863,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_M_mut_escape.bw
 
 	track	COV2-2499_N_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=N
 	 shortLabel COV2-2499_N
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1872,7 +1873,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_N_mut_escape.bw
 
 	track	COV2-2499_P_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=P
 	 shortLabel COV2-2499_P
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1882,7 +1883,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_P_mut_escape.bw
 
 	track	COV2-2499_Q_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=Q
 	 shortLabel COV2-2499_Q
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1892,7 +1893,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_Q_mut_escape.bw
 
 	track	COV2-2499_R_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=R
 	 shortLabel COV2-2499_R
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1902,7 +1903,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_R_mut_escape.bw
 
 	track	COV2-2499_S_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=S
 	 shortLabel COV2-2499_S
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1912,7 +1913,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_S_mut_escape.bw
 
 	track	COV2-2499_T_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=T
 	 shortLabel COV2-2499_T
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1922,17 +1923,17 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_T_mut_escape.bw
 
 	track	COV2-2499_total_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody on
 	 subGroups ab=COV2-2499 aa=total
 	 shortLabel COV2-2499_total
 	 longLabel DMS data for RBD antibody COV2-2499 escape
-	 visibility hide
+	 visibility dense
 	 type bigWig
 	 priority 1
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_total_mut_escape.bw
 
 	track	COV2-2499_V_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=V
 	 shortLabel COV2-2499_V
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1942,7 +1943,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_V_mut_escape.bw
 
 	track	COV2-2499_W_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=W
 	 shortLabel COV2-2499_W
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1952,7 +1953,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_W_mut_escape.bw
 
 	track	COV2-2499_Y_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2499 aa=Y
 	 shortLabel COV2-2499_Y
 	 longLabel DMS data for RBD antibody COV2-2499 escape
@@ -1962,7 +1963,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2499_Y_mut_escape.bw
 
 	track	COV2-2677_A_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=A
 	 shortLabel COV2-2677_A
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -1972,7 +1973,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_A_mut_escape.bw
 
 	track	COV2-2677_C_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=C
 	 shortLabel COV2-2677_C
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -1982,7 +1983,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_C_mut_escape.bw
 
 	track	COV2-2677_D_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=D
 	 shortLabel COV2-2677_D
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -1992,7 +1993,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_D_mut_escape.bw
 
 	track	COV2-2677_E_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=E
 	 shortLabel COV2-2677_E
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -2002,7 +2003,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_E_mut_escape.bw
 
 	track	COV2-2677_F_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=F
 	 shortLabel COV2-2677_F
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -2012,7 +2013,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_F_mut_escape.bw
 
 	track	COV2-2677_G_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=G
 	 shortLabel COV2-2677_G
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -2022,7 +2023,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_G_mut_escape.bw
 
 	track	COV2-2677_H_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=H
 	 shortLabel COV2-2677_H
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -2032,7 +2033,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_H_mut_escape.bw
 
 	track	COV2-2677_I_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=I
 	 shortLabel COV2-2677_I
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -2042,7 +2043,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_I_mut_escape.bw
 
 	track	COV2-2677_K_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=K
 	 shortLabel COV2-2677_K
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -2052,7 +2053,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_K_mut_escape.bw
 
 	track	COV2-2677_L_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=L
 	 shortLabel COV2-2677_L
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -2062,7 +2063,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_L_mut_escape.bw
 
 	track	COV2-2677_max_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=max
 	 shortLabel COV2-2677_max
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -2072,7 +2073,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_max_mut_escape.bw
 
 	track	COV2-2677_M_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=M
 	 shortLabel COV2-2677_M
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -2082,7 +2083,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_M_mut_escape.bw
 
 	track	COV2-2677_N_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=N
 	 shortLabel COV2-2677_N
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -2092,7 +2093,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_N_mut_escape.bw
 
 	track	COV2-2677_P_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=P
 	 shortLabel COV2-2677_P
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -2102,7 +2103,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_P_mut_escape.bw
 
 	track	COV2-2677_Q_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=Q
 	 shortLabel COV2-2677_Q
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -2112,7 +2113,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_Q_mut_escape.bw
 
 	track	COV2-2677_R_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=R
 	 shortLabel COV2-2677_R
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -2122,7 +2123,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_R_mut_escape.bw
 
 	track	COV2-2677_S_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=S
 	 shortLabel COV2-2677_S
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -2132,7 +2133,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_S_mut_escape.bw
 
 	track	COV2-2677_T_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=T
 	 shortLabel COV2-2677_T
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -2142,17 +2143,17 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_T_mut_escape.bw
 
 	track	COV2-2677_total_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody on
 	 subGroups ab=COV2-2677 aa=total
 	 shortLabel COV2-2677_total
 	 longLabel DMS data for RBD antibody COV2-2677 escape
-	 visibility hide
+	 visibility dense
 	 type bigWig
 	 priority 1
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_total_mut_escape.bw
 
 	track	COV2-2677_V_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=V
 	 shortLabel COV2-2677_V
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -2162,7 +2163,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_V_mut_escape.bw
 
 	track	COV2-2677_W_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=W
 	 shortLabel COV2-2677_W
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -2172,7 +2173,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_W_mut_escape.bw
 
 	track	COV2-2677_Y_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2677 aa=Y
 	 shortLabel COV2-2677_Y
 	 longLabel DMS data for RBD antibody COV2-2677 escape
@@ -2182,7 +2183,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2677_Y_mut_escape.bw
 
 	track	COV2-2832_A_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=A
 	 shortLabel COV2-2832_A
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2192,7 +2193,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_A_mut_escape.bw
 
 	track	COV2-2832_C_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=C
 	 shortLabel COV2-2832_C
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2202,7 +2203,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_C_mut_escape.bw
 
 	track	COV2-2832_D_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=D
 	 shortLabel COV2-2832_D
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2212,7 +2213,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_D_mut_escape.bw
 
 	track	COV2-2832_E_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=E
 	 shortLabel COV2-2832_E
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2222,7 +2223,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_E_mut_escape.bw
 
 	track	COV2-2832_F_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=F
 	 shortLabel COV2-2832_F
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2232,7 +2233,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_F_mut_escape.bw
 
 	track	COV2-2832_G_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=G
 	 shortLabel COV2-2832_G
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2242,7 +2243,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_G_mut_escape.bw
 
 	track	COV2-2832_H_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=H
 	 shortLabel COV2-2832_H
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2252,7 +2253,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_H_mut_escape.bw
 
 	track	COV2-2832_I_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=I
 	 shortLabel COV2-2832_I
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2262,7 +2263,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_I_mut_escape.bw
 
 	track	COV2-2832_K_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=K
 	 shortLabel COV2-2832_K
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2272,7 +2273,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_K_mut_escape.bw
 
 	track	COV2-2832_L_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=L
 	 shortLabel COV2-2832_L
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2282,7 +2283,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_L_mut_escape.bw
 
 	track	COV2-2832_max_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=max
 	 shortLabel COV2-2832_max
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2292,7 +2293,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_max_mut_escape.bw
 
 	track	COV2-2832_M_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=M
 	 shortLabel COV2-2832_M
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2302,7 +2303,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_M_mut_escape.bw
 
 	track	COV2-2832_N_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=N
 	 shortLabel COV2-2832_N
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2312,7 +2313,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_N_mut_escape.bw
 
 	track	COV2-2832_P_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=P
 	 shortLabel COV2-2832_P
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2322,7 +2323,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_P_mut_escape.bw
 
 	track	COV2-2832_Q_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=Q
 	 shortLabel COV2-2832_Q
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2332,7 +2333,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_Q_mut_escape.bw
 
 	track	COV2-2832_R_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=R
 	 shortLabel COV2-2832_R
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2342,7 +2343,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_R_mut_escape.bw
 
 	track	COV2-2832_S_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=S
 	 shortLabel COV2-2832_S
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2352,7 +2353,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_S_mut_escape.bw
 
 	track	COV2-2832_T_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=T
 	 shortLabel COV2-2832_T
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2362,17 +2363,17 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_T_mut_escape.bw
 
 	track	COV2-2832_total_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody on
 	 subGroups ab=COV2-2832 aa=total
 	 shortLabel COV2-2832_total
 	 longLabel DMS data for RBD antibody COV2-2832 escape
-	 visibility hide
+	 visibility dense
 	 type bigWig
 	 priority 1
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_total_mut_escape.bw
 
 	track	COV2-2832_V_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=V
 	 shortLabel COV2-2832_V
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2382,7 +2383,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_V_mut_escape.bw
 
 	track	COV2-2832_W_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=W
 	 shortLabel COV2-2832_W
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2392,7 +2393,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_W_mut_escape.bw
 
 	track	COV2-2832_Y_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=COV2-2832 aa=Y
 	 shortLabel COV2-2832_Y
 	 longLabel DMS data for RBD antibody COV2-2832 escape
@@ -2402,7 +2403,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/COV2-2832_Y_mut_escape.bw
 
 	track	rCR3022_A_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=A
 	 shortLabel rCR3022_A
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2412,7 +2413,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_A_mut_escape.bw
 
 	track	rCR3022_C_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=C
 	 shortLabel rCR3022_C
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2422,7 +2423,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_C_mut_escape.bw
 
 	track	rCR3022_D_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=D
 	 shortLabel rCR3022_D
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2432,7 +2433,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_D_mut_escape.bw
 
 	track	rCR3022_E_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=E
 	 shortLabel rCR3022_E
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2442,7 +2443,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_E_mut_escape.bw
 
 	track	rCR3022_F_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=F
 	 shortLabel rCR3022_F
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2452,7 +2453,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_F_mut_escape.bw
 
 	track	rCR3022_G_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=G
 	 shortLabel rCR3022_G
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2462,7 +2463,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_G_mut_escape.bw
 
 	track	rCR3022_H_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=H
 	 shortLabel rCR3022_H
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2472,7 +2473,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_H_mut_escape.bw
 
 	track	rCR3022_I_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=I
 	 shortLabel rCR3022_I
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2482,7 +2483,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_I_mut_escape.bw
 
 	track	rCR3022_K_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=K
 	 shortLabel rCR3022_K
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2492,7 +2493,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_K_mut_escape.bw
 
 	track	rCR3022_L_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=L
 	 shortLabel rCR3022_L
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2502,7 +2503,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_L_mut_escape.bw
 
 	track	rCR3022_max_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=max
 	 shortLabel rCR3022_max
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2512,7 +2513,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_max_mut_escape.bw
 
 	track	rCR3022_M_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=M
 	 shortLabel rCR3022_M
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2522,7 +2523,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_M_mut_escape.bw
 
 	track	rCR3022_N_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=N
 	 shortLabel rCR3022_N
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2532,7 +2533,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_N_mut_escape.bw
 
 	track	rCR3022_P_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=P
 	 shortLabel rCR3022_P
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2542,7 +2543,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_P_mut_escape.bw
 
 	track	rCR3022_Q_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=Q
 	 shortLabel rCR3022_Q
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2552,7 +2553,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_Q_mut_escape.bw
 
 	track	rCR3022_R_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=R
 	 shortLabel rCR3022_R
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2562,7 +2563,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_R_mut_escape.bw
 
 	track	rCR3022_S_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=S
 	 shortLabel rCR3022_S
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2572,7 +2573,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_S_mut_escape.bw
 
 	track	rCR3022_T_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=T
 	 shortLabel rCR3022_T
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2582,17 +2583,17 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_T_mut_escape.bw
 
 	track	rCR3022_total_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody on
 	 subGroups ab=rCR3022 aa=total
 	 shortLabel rCR3022_total
 	 longLabel DMS data for RBD antibody rCR3022 escape
-	 visibility hide
+	 visibility dense
 	 type bigWig
 	 priority 1
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_total_mut_escape.bw
 
 	track	rCR3022_V_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=V
 	 shortLabel rCR3022_V
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2602,7 +2603,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_V_mut_escape.bw
 
 	track	rCR3022_W_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=W
 	 shortLabel rCR3022_W
 	 longLabel DMS data for RBD antibody rCR3022 escape
@@ -2612,7 +2613,7 @@ autoScale	group
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/antibody/rCR3022_W_mut_escape.bw
 
 	track	rCR3022_Y_mut_escape
-	 parent Starr_Bloom_antibody
+	 parent Starr_Bloom_antibody off
 	 subGroups ab=rCR3022 aa=Y
 	 shortLabel rCR3022_Y
 	 longLabel DMS data for RBD antibody rCR3022 escape
