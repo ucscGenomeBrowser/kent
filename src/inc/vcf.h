@@ -262,6 +262,12 @@ struct vcfRecord *vcfNextRecord(struct vcfFile *vcff);
 struct vcfRecord *vcfRecordFromRow(struct vcfFile *vcff, char **words);
 /* Parse words from a VCF data line into a VCF record structure. */
 
+boolean allelesHavePaddingBase(char **alleles, int alleleCount);
+/* Examine alleles to see if they either a) all start with the same base or
+ * b) include a symbolic or 0-length allele.  In either of those cases, there
+ * must be an initial padding base that we'll need to trim from non-symbolic
+ * alleles. */
+
 unsigned int vcfRecordTrimIndelLeftBase(struct vcfRecord *rec);
 /* For indels, VCF includes the left neighboring base; for example, if the alleles are
  * AA/- following a G base, then the VCF record will start one base to the left and have
