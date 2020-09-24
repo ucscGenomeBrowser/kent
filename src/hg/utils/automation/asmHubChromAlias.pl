@@ -19,16 +19,17 @@ if ($argc != 1) {
 my %ucscToRefSeq;	# key is UCSC sequence name, value is RefSeq name
 my %ucscToGenbank;	# key is UCSC sequence name, value is GenBank name
 my $ucscNames = 0;	# == 1 if sequence is UCSC names, == 0 if NCBI names
+my $dupCount = 0;
 
 my %aliasOut;	# key is alias name, value is sequence name in this assembly
 
 sub showAlias() {
-printf "# sequenceName\talias names\n";
+  printf "# sequenceName\talias names\n";
   my %chromIndex;	# key is sequence name in assembly, value
                         # is a tab separated list of aliases
   foreach my $alias (sort keys %aliasOut) {
     my $name = $aliasOut{$alias};
-#    printf "%s\t%s\n", $alias, $aliasOut{$alias};
+    next if ($alias eq "na");
     if (defined($chromIndex{$name})) {
       $chromIndex{$name} .= "\t" . $alias;
     } else {
@@ -58,22 +59,6 @@ sub addAlias($$) {
   return;
 }
 
-##############################################################################
-########## experimental addVariations, not in use at this time ###############
-##############################################################################
-sub addVariations($$) {
-  my ($alias, $sequence) = @_;
-  addAlias($alias, $sequence);
-  return;
-
-  addAlias(lc($alias), $sequence);      # add lower case equivalent
-  my $noDotName = $alias;
-  $noDotName =~ s/\..*//;
-  addAlias($noDotName, $sequence);      # add noDot name
-  addAlias(lc($noDotName), $sequence);  # and lower case noDot nae
-  return;
-}
-
 my $asmId = shift;
 
 my $refSeq = 0; #       == 0 for Genbank assembly, == 1 for RefSeq assembly
@@ -81,7 +66,6 @@ $refSeq = 1 if ($asmId =~ m/^GCF/);
 
 my $twoBit = "../../$asmId.2bit";
 my $sequenceCount = 0;
-
 my %sequenceSizes;	# key is sequence name, value is sequence size
 
 open (FH, "twoBitInfo $twoBit stdout|") or die "can not twoBitInfo $twoBit stdout";
@@ -95,14 +79,14 @@ while (my $line = <FH>) {
 close (FH);
 
 my $nameCount = 0;
-my %ncbiNames;	# key is NCBI sequence name, value is 'chr' UCSC chromosome name
-my %ucscNames;	# key is 'chr' UCSC name, value is NCBI sequence name
+my %ncbiToUcsc;	# key is NCBI sequence name, value is 'chr' UCSC chromosome name
+my %ucscToNcbi;	# key is 'chr' UCSC name, value is NCBI sequence name
 open (FH, "cat ../../sequence/*.names|") or die "can not cat ../../sequence/*.names";
 while (my $line = <FH>) {
   chomp $line;
   my ($ucscName, $seqName) = split('\s+', $line);
-  $ncbiNames{$seqName} = $ucscName;
-  $ucscNames{$ucscName} = $seqName;
+  $ncbiToUcsc{$seqName} = $ucscName;
+  $ucscToNcbi{$ucscName} = $seqName;
   ++$nameCount;
   $ucscNames = 1 if (defined($sequenceSizes{$ucscName}));
   if ($refSeq) {
@@ -113,28 +97,58 @@ while (my $line = <FH>) {
 }
 close (FH);
 
-if ($sequenceCount != $nameCount) {
-  printf STDERR "ERROR: do not find the same name count in sequence vs. names files\n";
-  printf STDERR "sequenceCount %d != %d names count\n", $sequenceCount, $nameCount;
+my $dupsNotFound = 0;
+my $dupsList = "../../download/$asmId.dups.txt.gz";
+if ( -s "$dupsList" ) {
+  open (FH, "zcat $dupsList | awk '{print \$1, \$3}'|") or die "can not read $dupsList";
+  while (my $line = <FH>) {
+    chomp $line;
+    my ($dupAlias, $dupTarget) = split('\s+', $line);
+### early version    my ($dupTarget, $dupAlias) = split('\s+', $line);
+    if ($ucscNames) {
+      if (!defined($ncbiToUcsc{$dupTarget})) {
+       printf STDERR "# ERROR: can not find dupTarget: $dupTarget in ncbiToUcsc for dupAlias: $dupAlias\n";
+         $dupsNotFound += 1;
+      } else {
+        addAlias($dupAlias, $ncbiToUcsc{$dupTarget});
+      }
+    } elsif (defined($ucscToNcbi{$dupTarget})) {
+        addAlias($dupAlias, $ucscToNcbi{$dupTarget});
+    } else {
+      printf STDERR "# ERROR: can not find duplicate name $dupAlias for sequence $dupTarget\n";
+      $dupsNotFound += 1;
+    }
+    ++$dupCount;
+  }
+  close (FH);
+}
+
+if ($dupsNotFound > 0) {
+  printf STDERR "ERROR: can not find %d duplicate names\n", $dupsNotFound;
   exit 255;
 }
 
-printf STDERR "# initial set with UCSC names\n";
+if ($sequenceCount != $nameCount) {
+  printf STDERR "ERROR: do not find the same name count in sequence vs. names files\n";
+  printf STDERR "sequenceCount %d != %d names count - %d duplicates\n", $sequenceCount, $nameCount, $dupCount;
+  exit 255;
+}
+
+printf STDERR "# initial set of %d UCSC names\n", $sequenceCount;
 ### first set of names is the UCSC to NCBI sequence names
 foreach my $sequence (sort keys %sequenceSizes) {
   my $seqName = $sequence;
   my $alias = $sequence;
-#   addVariations($seqName, $alias);      # obsolete identical usage
   if ($ucscNames) {
-     $alias = $ucscNames{$seqName};
+     $alias = $ucscToNcbi{$seqName};
   } else {
-     $alias = $ncbiNames{$seqName};
+     $alias = $ncbiToUcsc{$seqName};
   } 
   if (!defined($alias)) {
     printf STDERR "ERROR: can not find alias name for '%s' sequence\n", $seqName;
     exit 255;
   }
-  addVariations($alias, $seqName);
+  addAlias($alias, $seqName);
 }
 
 # foreach my $sequence (sort keys %chrNames) {
@@ -154,9 +168,9 @@ if ( $asmStructCount > 0 ) {
     my ($alias, $seqName) = split('\s+', $line);
     $chr2acc{$seqName} = $alias;
     if ($ucscNames) {
-       $seqName = $ncbiNames{$seqName};
+       $seqName = $ncbiToUcsc{$seqName};
     }
-    addVariations($alias, $seqName);
+    addAlias($alias, $seqName);
   }
   close (FH);
 }
@@ -166,26 +180,37 @@ if ( $asmStructCount > 0 ) {
 # }
 
 my %gbk2acc;	# key is refseq name, value is genbank accession
-  printf STDERR "# third set processing assembly_report\n";
+printf STDERR "# third set processing assembly_report\n";
 # column 5 is the GenBank-Accn, column 7 is the RefSeq-Accn
 open (FH, "grep -v '^#' ../../download/${asmId}_assembly_report.txt | cut -d\$'\t' -f5,7|") or die "can not grep assembly_report";
 while (my $line = <FH>) {
   chomp $line;
   my ($gbkName, $refSeqName) = split('\s+', $line);
-  next if ($refSeqName eq "na");	# may not be any RefSeq names
+  next if ($refSeqName eq "na");	# may not be any RefSeq name
+  next if ($gbkName eq "na");	# may not be any GenBank name
   $gbk2acc{$gbkName} = $refSeqName;
   if ($refSeq) {
     my $seqName = $refSeqName;
     if ($ucscNames) {
-       $seqName = $ncbiNames{$seqName};
+       $seqName = $ncbiToUcsc{$seqName};
     }
-    addVariations($gbkName, $seqName);
+    if (!defined($seqName)) {
+       if (defined($aliasOut{$refSeqName})) {
+          $seqName = $aliasOut{$refSeqName};
+       }
+    }
+    addAlias($gbkName, $seqName);
   } else {
     my $seqName = $gbkName;
     if ($ucscNames) {
-       $seqName = $ncbiNames{$seqName};
+       $seqName = $ncbiToUcsc{$seqName};
     }
-    addVariations($refSeqName, $seqName);
+    if (!defined($seqName)) {
+       if (defined($aliasOut{$gbkName})) {
+          $seqName = $aliasOut{$gbkName};
+       }
+    }
+    addAlias($refSeqName, $seqName);
   }
 }
 close (FH);
