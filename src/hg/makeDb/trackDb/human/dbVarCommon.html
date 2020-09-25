@@ -55,18 +55,25 @@ DECIPHER Consensus CNVs.</li>
 </p>
 
 <h2>Display Conventions and Configuration</h2>
-Items in all subtracks follow the same conventions: items are shaded according to variant type. 
+Items in all subtracks follow the same conventions: items are colored by variant type, and are 
+based on the dbVar colors described in the 
+<a target="_blank" href="https://www.ncbi.nlm.nih.gov/dbvar/content/overview/">dbVar Overview page</a>. 
 <b><font color="red">Red</font></b> for copy number loss or deletion,
-<b><font color="blue">blue</font></b> for copy number gain or duplication and
-<b><font color="#662180">violet</font></b> for copy number variation. Mouseover on items indicates
-Allele Frequencies (AF). All tracks can be filtered according to the Variant Size and Variant Type.
+<b><font color="blue">blue</font></b> for copy number gain or duplication, and
+<b><font color="#662180">violet</font></b> for copy number variation. 
+</p>
+
+<p>
+<b>Mouseover</b> on items indicates genes affected, size, variant type, and allele frequencies (AF). 
+All tracks can be filtered according to the <b>Variant Size</b> and <b>Variant Type</b>.
+</p>
 
 <h2>Data Access</h2>
 The raw data can be explored interactively with the 
 <a href="https://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</a>, or the
 <a href="https://genome.ucsc.edu/cgi-bin/hgIntegrator">Data Integrator</a>. For automated analysis,
 the data may be queried from our <a href="https://genome.ucsc.edu/goldenPath/help/api.html">REST API</a>.
-The data can also be found directly from the dbVar nstd186 <a target=_blank 
+The data can also be found directly from the dbVar nstd186 <a target="_blank" 
 href="https://www.ncbi.nlm.nih.gov/dbvar/content/common_summary/#data_access">data access</a>.
 For questions about dbVar track data, please contact <em>dbvar@ncbi.nlm.nih.gov</em>.
 </p>

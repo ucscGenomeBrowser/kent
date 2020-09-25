@@ -1,6 +1,6 @@
 track clinGenComp
 shortLabel ClinGen
-longLabel Clinical Genome Resource (ClinGen) Dosage Sensitivity Map
+longLabel ClinGen curation activities (Dosage Sensitivity and Gene-Disease Validity)
 visibility hide
 type bigBed 9 +
 group phenDis
