@@ -4062,10 +4062,10 @@ if (filterBySet == NULL)
 #define FILTERBY_HELP_LINK "<A HREF=\"../goldenPath/help/multiView.html\" TARGET=ucscHelp>help</A>"
 int count = slCount(filterBySet);
 if (count == 1)
-    puts("<TABLE class='trackUiFilterTable' cellpadding=3><TR valign='top'>");
+    puts("<TABLE class='trackUiFilterTable'><TR valign='top'>");
 else
     printf("<B>%s items by:</B> (select multiple categories and items - %s)"
-	   "<TABLE class='trackUiFilterTable' cellpadding=3><TR valign='bottom'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
+	   "<TABLE class='trackUiFilterTable'><TR valign='bottom'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
 
 #ifdef ADVANCED_BUTTON
 if (tdbIsBigBed(tdb))
