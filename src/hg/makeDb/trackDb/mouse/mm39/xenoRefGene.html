@@ -43,8 +43,8 @@ and the query.fa is the mRNAs from RefSeq
 </pre>
 The resulting PSL outputs are filtered:
 <pre>
-pslCDnaFilter -minId=0.35 -minCover=0.25  -globalNearBest=0.0100 -minQSize=20 
-  -ignoreIntrons -repsAsMatch -ignoreNs -bestOverlap 
+pslCDnaFilter -minId=0.35 -minCover=0.25  -globalNearBest=0.0100 -minQSize=20 \
+  -ignoreIntrons -repsAsMatch -ignoreNs -bestOverlap \
     all.results.psl mm39.xenoRefGene.psl
 </pre>
 The filtered mm39.xenoRefGene.psl is converted to
