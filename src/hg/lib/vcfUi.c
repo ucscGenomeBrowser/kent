@@ -182,7 +182,12 @@ if (vcff != NULL && vcff->genotypeCount > 1)
     jsInlineF("$('input[type=radio][name=\"%s\"]').change(function() { "
               "if (this.value == '"VCF_HAP_METHOD_CENTER_WEIGHTED"') {"
               "  $('#leafShapeContainer').show();"
+              "  $('#sampleColorContainer').hide();"
+              "} else if (this.value == '"VCF_HAP_METHOD_TREE_FILE"') {"
+              "  $('#sampleColorContainer').show();"
+              "  $('#leafShapeContainer').hide();"
               "} else {"
+              "  $('#sampleColorContainer').hide();"
               "  $('#leafShapeContainer').hide();"
               "}});\n",
               varName);
@@ -278,6 +283,47 @@ cgiMakeRadioButton(varName, VCF_HAP_COLORBY_BASE, sameString(colorBy, VCF_HAP_CO
 printf("first base of allele (A = red, C = blue, G = green, T = magenta)<BR>\n");
 }
 
+static void vcfCfgHapClusterSampleColor(struct cart *cart, struct trackDb *tdb, char *name,
+                                        boolean parentLevel)
+/* If sampleColorFile specifies multiple files, when hapClusterMethod treeFile is selected,
+ * let the user choose sample-coloring scheme for the tree. */
+{
+char *tdbSetting = trackDbSetting(tdb, VCF_SAMPLE_COLOR_FILE);
+if (tdbSetting && strchr(tdbSetting, ' '))
+    {
+    char *hapMethod = cartOrTdbString(cart, tdb, VCF_HAP_METHOD_VAR, VCF_DEFAULT_HAP_METHOD);
+    printf("<div id='sampleColorContainer'%s>\n",
+           startsWithWord(VCF_HAP_METHOD_TREE_FILE, hapMethod) ? "" : " style='display: none;'");
+    printf("<b>Sample coloring scheme for tree:</b><br>\n");
+    char *setting = cartOrTdbString(cart, tdb, VCF_SAMPLE_COLOR_FILE, tdbSetting);
+    char *options[16];
+    int optionCount = chopLine(tdbSetting, options);
+    char *labels[optionCount];
+    char *values[optionCount];
+    int i;
+    for (i = 0;  i < optionCount;  i++)
+        {
+        char *eq = strchr(options[i], '=');
+        if (eq)
+            {
+            *eq = '\0';
+            labels[i] = options[i];
+            replaceChar(options[i], '_', ' ');
+            values[i] = eq+1;
+            }
+        else
+            {
+            labels[i] = values[i] = options[i];
+            }
+        }
+    char *selected = strchr(setting, ' ') ? values[0] : setting;
+    char varName[1024];
+    safef(varName, sizeof varName, "%s." VCF_SAMPLE_COLOR_FILE, name);
+    cgiMakeDropListWithVals(varName, labels, values, optionCount, selected);
+    puts("</div>");
+    }
+}
+
 static void vcfCfgHapClusterTreeAngle(struct cart *cart, struct trackDb *tdb, char *name,
 				   boolean parentLevel)
 /* Let the user choose branch shape. */
@@ -325,6 +371,7 @@ printf("<H3>%s sorting display</H3>\n", hapOrSample);
 vcfCfgHapClusterEnable(cart, tdb, name, parentLevel);
 vcfCfgHaplotypeMethod(cart, tdb, name, parentLevel, vcff);
 vcfCfgHapClusterTreeAngle(cart, tdb, name, parentLevel);
+vcfCfgHapClusterSampleColor(cart, tdb, name, parentLevel);
 vcfCfgHapClusterColor(cart, tdb, name, parentLevel);
 vcfCfgHapClusterHeight(cart, tdb, vcff, name, parentLevel);
 }
