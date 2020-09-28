@@ -41,7 +41,7 @@
 
 
 #########################################################################
-# SARS-CoV-2 PHYLOGENY (DONE - 2020-09-03 - Angie)
+# SARS-CoV-2 PHYLOGENY (DONE - 2020-09-03 - Angie)  (sampleColorFile added 2020-09-27)
 # First done 2020-07-15; updated 2020-07-22 with tree from Yatish Turakhia, collapsed to keep
 # only nodes with associated mutations.
 # Updated 2020-09-03 with latest release 28-08-20.
@@ -160,27 +160,24 @@
     # log in, click Downloads, and click "nextmeta" in the dialog that pops up.  That downloads
     # a local metadata_*.tsv.gz file with timestamp name.
     # Extract the EPI_ ID and lineage columns:
-    zcat metadata_2020-09-01*.tsv.gz | tail -n +2 | cut -f3,18 | tawk '$2 != ""' \
-      > metadata_2020-09-01.epiToLineage
+    zcat metadata_2020-09-01*.tsv.gz \
+    | tail -n +2 \
+    | cut -f3,18,19 \
+    | sort > metadata_2020-09-01.epiToLineageAndGisaid
+    # Map EPI ID to sample name used in tree & vcf
+    awk -F\| '{print $2 "\t" $0;}' tree.ids.sorted \
+    | perl -wpe 's@hCoV-19/@@g;  s@\|20(\d\d)@|$1@g; '"s@'@@g;" \
+    | sort > epiToSample
+    # Join on EPI ID to associate tree sample names with lineages.
+    join epiToSample metadata_2020-09-01.epiToLineageAndGisaid -o 1.2,2.2,2.3 > sampleToLineage
 
-    # Add lineage colors.
-    # I really want to replace this with proper tab-sep metadata, but for now, continue to use
-    # the icky branch-length-RGB hack.
-    ~/kent/src/hg/utils/otto/nextstrainNcov/treeColorByLineage.py ft_SH.collapsed.nh \
-      metadata_2020-09-01.epiToLineage \
-      > sarscov2phylo-$releaseLabel.ft.linCol.nh
-    # There are a few sequences that are not in the gisaid (Nextstrain?) metadata for some reason.
-#WARNING:root:No lineage for "Germany/HE-FFM1/2020|EPI_ISL_452218|20-03-02"
-#WARNING:root:No lineage for "Germany/HE-FFM5/2020|EPI_ISL_452221|20-03-02"
-#WARNING:root:No lineage for "Germany/HE-FFM7/2020|EPI_ISL_452223|20-03-02"
-#WARNING:root:No lineage for "USA/NY-QDX-01/2020|EPI_ISL_454691|20-03-12"
-#WARNING:root:No lineage for "USA/CT-Yale-011/2020|EPI_ISL_428369|20-03-11"
-#WARNING:root:No lineage for "Canada/NB-235/2020|EPI_ISL_479649|20-03-31"
-#WARNING:root:No lineage for "Germany/HE-FFM3/2020|EPI_ISL_452219|20-03-02"
-#WARNING:root:No lineage for "Germany/HE-FFM4/2020|EPI_ISL_452220|20-03-02"
-#WARNING:root:No lineage for "Germany/HE-FFM6/2020|EPI_ISL_452222|20-03-02"
-#WARNING:root:No lineage for "Peru/ARE-INS-087/2020|EPI_ISL_524472|20-03-10"
-#WARNING:root:13 samples had no lineage in metadata_2020-09-01.epiToLineage
+    # Add files with lineage colors and GISAID clade colors (trackDb setting sampleColorFile).
+    # Color choices adapted from Figure 1 of
+    # https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2020.25.32.2001410
+    $HOME/kent/src/hg/makeDb/doc/wuhCor1/cladeLineageColors.pl sampleToLineage \
+    | gzip > lineageColors.gz
+    $HOME/kent/src/hg/makeDb/doc/wuhCor1/gisaidCladeColors.pl sampleToLineage \
+    | gzip > gisaidColors.gz
 
     # Install files in /gbdb.
     mkdir -p /gbdb/wuhCor1/sarsCov2Phylo
@@ -189,8 +186,11 @@
       ln -sf `pwd`/$f /gbdb/wuhCor1/sarsCov2Phylo/$destName
       ln -sf `pwd`/$f.tbi /gbdb/wuhCor1/sarsCov2Phylo/$destName.tbi
     done
-    ln -sf `pwd`/sarscov2phylo-$releaseLabel.ft.linCol.nh \
-      /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.ft.linCol.nh
+    ln -sf `pwd`/lineageColors.gz /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.lineageColors.gz
+    ln -sf `pwd`/gisaidColors.gz /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.gisaidColors.gz
+    #TODO
+    ln -sf `pwd`/ft_SH.collapsed.nh \
+      /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.ft.nh
 
 
 #########################################################################
