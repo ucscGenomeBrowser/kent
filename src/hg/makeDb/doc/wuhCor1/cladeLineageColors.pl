@@ -17,35 +17,35 @@ my %lin2col = ( # Some, but not all, of the "gray area" where GH and Nextstrain 
                "B.1.9"  => "#888888",
 
                # Some, but not all, of the green B.1 sublineages (G and 20A)
-               "B.1.6"  => "#44ff44",
-               "B.1.67" => "#88ff88",
-               "B.1.5"  => "#44ff44",
-               "B.1.72" => "#88ff88",
-               "B.1.70" => "#44ff44",
-               "B.1.8"  => "#88ff88",
-               "B.1.34" => "#44ff44",
-               "B.1.71" => "#88ff88",
-               "B.1.69" => "#44ff44",
-               "B.1.19" => "#88ff88",
-               "B.1.23" => "#44ff44",
-               "B.1.32" => "#88ff88",
-               "B.1.33" => "#44ff44",
-               "B.1.35" => "#88ff88",
+               "B.1.6"  => "#44cc44",
+               "B.1.67" => "#88cc88",
+               "B.1.5"  => "#44cc44",
+               "B.1.72" => "#88cc88",
+               "B.1.70" => "#44cc44",
+               "B.1.8"  => "#88cc88",
+               "B.1.34" => "#44cc44",
+               "B.1.71" => "#88cc88",
+               "B.1.69" => "#44cc44",
+               "B.1.19" => "#88cc88",
+               "B.1.23" => "#44cc44",
+               "B.1.32" => "#88cc88",
+               "B.1.33" => "#44cc44",
+               "B.1.35" => "#88cc88",
 
                # Some, but not all, of the blue B.1 sublineages (GH and 20C)
-               "B.1.12" => "#4444ff",
+               "B.1.12" => "#8888ff",
                "B.1.30" => "#8888ff",
-               "B.1.38" => "#4444ff",
+               "B.1.38" => "#8888ff",
                "B.1.66" => "#8888ff",
-               "B.1.44" => "#4444ff",
+               "B.1.44" => "#8888ff",
                "B.1.40" => "#8888ff",
-               "B.1.31" => "#4444ff",
+               "B.1.31" => "#8888ff",
                "B.1.39" => "#8888ff",
-               "B.1.41" => "#4444ff",
+               "B.1.41" => "#8888ff",
                "B.1.3"  => "#8888ff",
-               "B.1.26" => "#4444ff",
+               "B.1.26" => "#8888ff",
                "B.1.43" => "#8888ff",
-               "B.1.29" => "#4444ff"
+               "B.1.29" => "#8888ff"
               );
 
 my %gc2col = ( # GISAID clade coloring
@@ -69,53 +69,65 @@ while (<>) {
     if (defined $gc2col{$gClade}) {
       $color = $gc2col{$gClade};
     }
-  } elsif ($lineage eq "B.1.1" ||
-           substr($lineage, 0, 6) eq "B.1.1." ||
-           substr($lineage, 0, 1) eq "C") {
-    # Shades of purple
-    my $endNum = ($lineage =~ m/\.(\d+)$/) ? ($1 + 0) : 0;
-    if (substr($lineage, 0, 1) eq "C") {
-      $color = ($endNum & 1) ? "#662288" : "#8822aa";
-    } elsif (length($lineage) > 6) {
-      $color = ($endNum & 1) ? "#aa44cc" : "#cc44ee";
-    } else {
-      $color = "#cc88ff";
+  } else {
+    my @linPath = split(/\./, $lineage);
+    my $linDepth = scalar @linPath;
+    if (! $linPath[0]) {
+      die "no linpath[0] for '$lineage'\n";
+    } elsif ($linPath[0] eq "C") {
+      $linDepth += 4;
     }
-  } elsif ($lineage eq "B.1" ||
-           substr($lineage, 0, 4) eq "B.1.") {
-    # Green, blue or gray... complicated.  We really need a tree-based coloring method.
-    my $endNum = ($lineage =~ m/\.(\d+)$/) ? ($1 + 0) : 0;
-    if (substr($lineage, 0, 6) eq "B.1.5.") {
-      $color = ($endNum & 1) ? "#00aa00" : "#00cc00";
-    } else {
-      # Unfortunately now GISAID clade is all we have to go on.  We don't know where 20A overlaps GH.
-      if ($gClade eq "G") {
-        $color = ($endNum & 1) ? "#66cc66" : "#88cc88";
-      } elsif ($gClade eq "GH") {
-        $color = ($endNum & 1) ? "#6666ff" : "#8888ff";
+    if ($lineage eq "B.1.1" ||
+        substr($lineage, 0, 6) eq "B.1.1." ||
+        substr($lineage, 0, 1) eq "C") {
+      # Shades of purple -- minimum depth is 3, use even/odd to alternate colors
+      my $endNum = ($lineage =~ m/\.(\d+)$/) ? ($1 + 0) : 0;
+      if ($linDepth > 4) {
+        $color = ($endNum & 1) ? "#662288" : "#8822aa";
+      } elsif ($linDepth > 3) {
+        $color = ($endNum & 1) ? "#aa44cc" : "#cc44ee";
       } else {
-        $color = ($endNum & 1) ? "#aaaaaa" : "#cccccc";
+        $color = "#cc88ff";
       }
-    }
-  } elsif (substr($lineage, 0, 1) eq "B") {
-    # Shades of orange
-    my $endNum = ($lineage =~ m/\.(\d+)$/) ? ($1 + 0) : 0;
-    if ($lineage =~ /^B\.\d+\.\d+/) {
-      $color = ($endNum & 1) ? "#cc5533" : "#dd6640";
-    } elsif ($lineage =~ /^B\.\d+/) {
-      $color = ($endNum & 1) ? "#ee6640" : "#ff774a";
-    } else {
-      $color = "#ff8844";
-    }
-  } elsif (substr($lineage, 0, 1) eq "A") {
-    # Shades of red
-    my $endNum = ($lineage =~ m/\.(\d+)$/) ? ($1 + 0) : 0;
-    if ($lineage =~ /^A\.\d+\.\d+/) {
-      $color = ($endNum & 1) ? "#bb2222" : "#cc2222";
-    } elsif ($lineage =~ /^A\.\d+/) {
-      $color = ($endNum & 1) ? "#dd2222" : "#ee3333";
-    } else {
-      $color = "#ff6666";
+    } elsif ($lineage eq "B.1" ||
+             substr($lineage, 0, 4) eq "B.1.") {
+      # Green, blue or gray... complicated.  We really need a tree-based coloring method.
+      my $endNum = ($lineage =~ m/\.(\d+)$/) ? ($1 + 0) : 0;
+      if (substr($lineage, 0, 6) eq "B.1.5.") {
+        $color = ($endNum & 1) ? "#88dd88" : "#88ee88";
+      } else {
+        # Unfortunately now GISAID clade is all we have to go on; don't know where 20A overlaps GH.
+        if ($gClade eq "G") {
+          # green
+          $color = ($endNum & 1) ? "#66cc66" : "#88cc88";
+        } elsif ($gClade eq "GH") {
+          # blue
+          $color = ($endNum & 1) ? "#6666ff" : "#8888ff";
+        } else {
+          # gray
+          $color = ($endNum & 1) ? "#aaaaaa" : "#cccccc";
+        }
+      }
+    } elsif (substr($lineage, 0, 1) eq "B") {
+      # Shades of orange (not as much depth in B.>1)
+      my $endNum = ($lineage =~ m/\.(\d+)$/) ? ($1 + 0) : 0;
+      if ($linDepth >= 3) {
+        $color = ($endNum & 1) ? "#ee6640" : "#ff774a";
+      } elsif ($linDepth == 2) {
+        $color = ($endNum & 1) ? "#f07850" : "#ff8844";
+      } else {
+        $color = "#ff9060";
+      }
+    } elsif (substr($lineage, 0, 1) eq "A") {
+      # Shades of red
+      my $endNum = ($lineage =~ m/\.(\d+)$/) ? ($1 + 0) : 0;
+      if ($linDepth >= 3) {
+        $color = ($endNum & 1) ? "#bb2222" : "#cc2222";
+      } elsif ($linDepth == 2) {
+        $color = ($endNum & 1) ? "#dd2222" : "#ee3333";
+      } else {
+        $color = "#ff6666";
+      }
     }
   }
   print "$sample\t$color\n";
