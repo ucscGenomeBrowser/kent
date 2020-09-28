@@ -65,6 +65,14 @@ foreach my $asmId (@orderList) {
   if ($gcPrefix eq "GCA") {
      $buildDir = "/hive/data/genomes/asmHubs/genbankBuild/$accessionDir/$asmId";
   }
+  if ( ! -s "${buildDir}/${asmId}.chrom.sizes" ) {
+    printf STDERR "# ERROR: missing ${asmId}.chrom.sizes in\n# ${buildDir}\n";
+    next;
+  }
+  if ( ! -s "${buildDir}/${asmId}.chromAlias.txt" ) {
+    printf STDERR "# ERROR: missing ${asmId}.chromAlias.txt in\n# ${buildDir}\n";
+    next;
+  }
   my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
   my $trackDb = "$buildDir/$asmId.trackDb.txt";
   if ( ! -s "${trackDb}" ) {
@@ -88,6 +96,8 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   printf "groups groups.txt\n";
   printf "description %s\n", $orgName;
   printf "twoBitPath ../%s/%s/%s.2bit\n", $accessionDir, $accessionId, $accessionId;
+  printf "chromSizes ../%s/%s/%s.chrom.sizes.txt\n", $accessionDir, $accessionId, $accessionId;
+  printf "chromAlias ../%s/%s/%s.chromAlias.txt\n", $accessionDir, $accessionId, $accessionId;
   printf "organism %s\n", $descr;
   my $chrName=`head -1 $buildDir/$asmId.chrom.sizes | awk '{print \$1}'`;
   chomp $chrName;
@@ -114,6 +124,8 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessio
   printf GF "groups groups.txt\n";
   printf GF "description %s\n", $orgName;
   printf GF "twoBitPath %s.2bit\n", $accessionId;
+  printf GF "chromSizes %s.chrom.sizes.txt\n", $accessionId;
+  printf GF "chromAlias %s.chromAlias.txt\n", $accessionId;
   printf GF "organism %s\n", $descr;
   printf GF "defaultPos %s\n", $defPos;
   printf GF "orderKey %d\n", $localOrderKey++;
