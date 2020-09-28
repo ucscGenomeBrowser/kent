@@ -8,7 +8,7 @@
 #include "dnautil.h"
 
 #define MAX_BED_EXTRA 50 // how many extra fields  can we put into the bigBed itself (for filtering, labels, etc)
-#define bed9Header "#chrom\tchromStart\tchromEnd\tname\tscore\tstrand\tthickStart\tthickEnd\titemRgb\tref\talt"
+#define bed9Header "#chrom\tchromStart\tchromEnd\tname\tscore\tstrand\tthickStart\tthickEnd\titemRgb\tref\talt\tFILTER"
 
 // hash up all the info tags and their vcfInfoDef structs for faster searching
 struct hash *infoHash = NULL;
@@ -67,7 +67,7 @@ else
 #define VCF_MAX_INFO (4*1024)
 
 void fixupLeftPadding(int *start, char *ref, char *alt)
-/* If an indel is left padded fix up the star position */
+/* If an indel is left padded fix up the start position */
 {
 char *altTmp = cloneString(alt);
 char *alleles[VCF_MAX_INFO+1];
@@ -86,9 +86,62 @@ if (alleleCount > 1)
     }
 }
 
+void shortenRefAltString(struct dyString *shortenedRef, struct dyString *shortenedAlt, char *ref, char *alt)
+/* Shorten up the Ref and Alt strings for bed labels */
+{
+int i;
+if (strlen(ref) > 10)
+    {
+    for (i = 0; i < 10; i++)
+        dyStringAppendC(shortenedRef, ref[i]);
+    dyStringAppend(shortenedRef, "...");
+    }
+else
+    shortenedRef->string = ref;
+if (strlen(alt) > 10)
+    {
+    for (i = 0; i < 10; i++)
+        dyStringAppendC(shortenedAlt, alt[i]);
+    dyStringAppend(shortenedAlt, "...");
+    }
+else
+    shortenedAlt->string = alt;
+}
+
+void printExtraFieldInfo(FILE *outBed, char *info, char **infoTags, int infoCount, char **keepFields, int extraFieldCount)
+{
+int i,j;
+int numTags = chopByChar(info, ';', infoTags, infoCount);
+for (i = 0; i < extraFieldCount; i++)
+    {
+    char *extraField = keepFields[i];
+    for (j = 0; j < numTags && infoTags[j]; j++)
+        {
+        boolean isKeyVal = (strchr(infoTags[j], '=') != NULL);
+        if (isKeyVal && startsWithWordByDelimiter(extraField, '=', infoTags[j]))
+            {
+            char *infoTagVal = infoTags[j];
+            char *val = strchr(infoTagVal, '=');
+            *(val++) = '\0';
+            if (sameString(infoTagVal, extraField))
+                {
+                fprintf(outBed, "%s", val);
+                break;
+                }
+            }
+        else if (sameString(infoTags[j], extraField))
+            {
+            fprintf(outBed, "Yes");
+            break;
+            }
+        }
+    if (i < (extraFieldCount - 1))
+        fprintf(outBed, "\t");
+    }
+}
+
 void printHeaders(struct vcfFile *vcff, char **keepFields, int keepCount, FILE *outBed)
-/* Print the required header into extraFields.tab, and put a technically optional
- * comment into outBed */
+/* Print a comment describing all the fields into outBed */
 {
 int i;
 fprintf(outBed, "%s", bed9Header);
@@ -103,13 +156,12 @@ void vcfLinesToBed(struct vcfFile *vcff, char **keepFields, int extraFieldCount,
 /* Turn a VCF line into a bed9+ line */
 {
 struct dyString *name = dyStringNew(0);
-struct dyString *maybeShortenedRef = dyStringNew(0);
-struct dyString *maybeShortenedAlt = dyStringNew(0);
+struct dyString *shortenedRef = dyStringNew(0);
+struct dyString *shortenedAlt = dyStringNew(0);
 char *line = NULL;
-char *chopped[9];
+char *chopped[9]; // 9 fields in case VCF has genotype fields, keep them separate from info fields
 int infoCount = slCount(vcff->infoDefs);
 char *infoTags[infoCount];
-int i;
 while (lineFileNext(vcff->lf, &line, NULL))
     {
     int fieldCount = chopTabs(line, chopped);
@@ -127,60 +179,20 @@ while (lineFileNext(vcff->lf, &line, NULL))
         dyStringPrintf(name, "%s", chopped[2]);
     else
         {
-        if (strlen(ref) > 10)
-            {
-            for (i = 0; i < 10; i++)
-                dyStringAppendC(maybeShortenedRef, ref[i]);
-            dyStringAppend(maybeShortenedRef, "...");
-            }
-        else
-            maybeShortenedRef->string = ref;
-        if (strlen(alt) > 10)
-            {
-            for (i = 0; i < 10; i++)
-                dyStringAppendC(maybeShortenedAlt, alt[i]);
-            dyStringAppend(maybeShortenedAlt, "...");
-            }
-        else
-            maybeShortenedAlt->string = alt;
-        dyStringPrintf(name, "%s_%d:%s/%s", chrom,start,maybeShortenedRef->string,maybeShortenedAlt->string);
+        shortenRefAltString(shortenedRef, shortenedAlt, ref, alt);
+        dyStringPrintf(name, "%s_%d:%s/%s", chrom,start,shortenedRef->string,shortenedAlt->string);
         }
     fprintf(outBed, "%s\t%d\t%d\t%s\t0\t.\t%d\t%d\t0,0,0", chrom,start,end,name->string,start,end);
-    fprintf(outBed, "\t%s\t%s", ref, alt);
+    fprintf(outBed, "\t%s\t%s\t%s", ref, alt, chopped[6]);
     if (extraFieldCount)
         {
         fprintf(outBed, "\t");
-        chopByChar(chopped[7], ';', infoTags, infoCount);
-        int i;
-        for (i = 0; i < extraFieldCount; i++)
-            {
-            char *extraField = keepFields[i];
-            char *infoTagVal = NULL;
-            int j;
-            for (j = 0; j < infoCount; j++)
-                {
-                if (infoTags[j] && startsWith(extraField, infoTags[j]))
-                    {
-                    infoTagVal = cloneString(infoTags[j]);
-                    break;
-                    }
-                }
-            if (infoTagVal)
-                {
-                char *val = strchr(infoTagVal, '=');
-                if (val)
-                    {
-                    val += 1;
-                    fprintf(outBed, "%s", val);
-                    }
-                }
-            fprintf(outBed, "\t");
-            }
+        printExtraFieldInfo(outBed, chopped[7], infoTags, infoCount, keepFields, extraFieldCount);
         }
     fprintf(outBed, "\n");
     dyStringClear(name);
-    dyStringClear(maybeShortenedRef);
-    dyStringClear(maybeShortenedAlt);
+    dyStringClear(shortenedRef);
+    dyStringClear(shortenedAlt);
     }
 }
 

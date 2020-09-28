@@ -19,6 +19,7 @@ errAbort(
   "   -includeRef           Include the reference in the genotype columns\n"
   "                         (default: omitted as redundant)\n"
   "   -minAc=N              Ignore alternate alleles observed fewer than N times\n"
+  "   -noGenotypes          Output 8-column VCF, without the sample genotype columns\n"
   "   -ref=seqName          Use seqName as the reference sequence; must be present in faFile\n"
   "                         (default: first sequence in faFile)\n"
   "   -resolveAmbiguous     For IUPAC ambiguous characters like R (A or G), if the character\n"
@@ -39,6 +40,7 @@ static struct optionSpec options[] = {
     { "excludeFile", OPTION_STRING },
     { "includeRef", OPTION_BOOLEAN },
     { "minAc", OPTION_INT },
+    { "noGenotypes", OPTION_BOOLEAN },
     { "ref", OPTION_STRING },
     { "resolveAmbiguous", OPTION_BOOLEAN },
     { "startOffset", OPTION_INT},
@@ -133,19 +135,22 @@ return sequences;
 }
 
 static void writeVcfHeader(FILE *outF, char *faFile, char *vcfFile,
-                           struct dnaSeq *sequences, boolean includeRef)
+                           struct dnaSeq *sequences, boolean includeRef, boolean includeGenotypes)
 /* Write a simple VCF header with sequence names as genotype columns. */
 {
 fprintf(outF,
         "##fileformat=VCFv4.2\n"
         "##reference=%s:%s\n"
         "##source=faToVcf %s %s\n"  //#*** Should document options used.
-        "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT",
+        "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO",
         faFile, sequences->name, faFile, vcfFile);
-
-struct dnaSeq *seqsForGt = (includeRef ? sequences : sequences->next), *seq;
-for (seq = seqsForGt;  seq != NULL;  seq = seq->next)
-    fprintf(outF, "\t%s", seq->name);
+if (includeGenotypes)
+    {
+    printf("\tFORMAT");
+    struct dnaSeq *seqsForGt = (includeRef ? sequences : sequences->next), *seq;
+    for (seq = seqsForGt;  seq != NULL;  seq = seq->next)
+        fprintf(outF, "\t%s", seq->name);
+    }
 fprintf(outF, "\n");
 }
 
@@ -159,7 +164,8 @@ boolean includeRef = optionExists("includeRef");
 
 verbose(2, "Writing VCF to %s\n", vcfFile);
 FILE *outF = mustOpen(vcfFile, "w");
-writeVcfHeader(outF, faFile, vcfFile, sequences, includeRef);
+boolean noGenotypes = optionExists("noGenotypes");
+writeVcfHeader(outF, faFile, vcfFile, sequences, includeRef, !noGenotypes);
 
 char *refName = sequences->name;
 char *vcfChrom = optionVal("vcfChrom", refName);
@@ -170,10 +176,16 @@ int gtCount = includeRef ? seqCount : seqCount - 1;
 int *genotypes = needMem(sizeof(int) * gtCount);
 boolean *missing = needMem(sizeof(boolean) * gtCount);
 
-int chromStart;
-for (chromStart = 0;  chromStart < seqSize;  chromStart++)
+int baseIx, chromStart = 0;
+for (baseIx = 0, chromStart = 0;  baseIx < seqSize;  baseIx++, chromStart++)
     {
-    char ref = toupper(sequences->dna[chromStart]);
+    char ref = toupper(sequences->dna[baseIx]);
+    if (ref == '-')
+        {
+        // Insertion into reference -- ignore and adjust reference coordinate.
+        chromStart--;
+        continue;
+        }
     if (ref == 'N')
         continue;
     if (ref == 'U')
@@ -184,11 +196,12 @@ for (chromStart = 0;  chromStart < seqSize;  chromStart++)
     memset(altAlleles, 0, sizeof(altAlleles));
     memset(genotypes, 0, sizeof(int) * gtCount);
     memset(missing, 0, sizeof(boolean) * gtCount);
+    int nonNCount = seqCount;
     struct dnaSeq *seq;
     int gtIx;
     for (seq = seqsForGt, gtIx = 0;  seq != NULL;  seq = seq->next, gtIx++)
         {
-        char al = toupper(seq->dna[chromStart]);
+        char al = toupper(seq->dna[baseIx]);
         if (al == 'U')
             al = 'T';
         if (isIupacAmbiguous(al))
@@ -208,7 +221,10 @@ for (chromStart = 0;  chromStart < seqSize;  chromStart++)
                 }
             }
         if (al == 'N' || al == '-')
+            {
             missing[gtIx] = TRUE;
+            nonNCount--;
+            }
         else if (al != ref)
             {
             char *altFound = strchr(altAlleles, al);
@@ -217,8 +233,8 @@ for (chromStart = 0;  chromStart < seqSize;  chromStart++)
                 {
                 altIx = altCount++;
                 if (altCount == MAX_ALTS)
-                    errAbort("faToVcf: base %d has at least %d alternate alleles; increase "
-                             "MAX_ALTS in faToVcf.c!", chromStart, MAX_ALTS);
+                    errAbort("faToVcf: fasta base %d (reference base %d) has at least %d alternate alleles; increase "
+                             "MAX_ALTS in faToVcf.c!", baseIx, chromStart, MAX_ALTS);
                 altAlleleCounts[altIx] = 1;
                 altAlleles[altIx] = al;
                 }
@@ -254,7 +270,10 @@ for (chromStart = 0;  chromStart < seqSize;  chromStart++)
                 // really reference.
                 for (gtIx = 0;  gtIx < gtCount;  gtIx++)
                     if (genotypes[gtIx] == altIx+1)
+                        {
                         missing[gtIx] = TRUE;
+                        nonNCount--;
+                        }
                 oldToNewIx[altIx] = -1;
                 }
             }
@@ -298,13 +317,17 @@ for (chromStart = 0;  chromStart < seqSize;  chromStart++)
                 fprintf(outF, ",");
             fprintf(outF, "%d", altAlleleCounts[altIx]);
             }
-        fprintf(outF, ";AN=%d\tGT", seqCount);
-        for (gtIx = 0;  gtIx < gtCount;  gtIx++)
+        fprintf(outF, ";AN=%d", nonNCount);
+        if (!noGenotypes)
             {
-            if (missing[gtIx])
-                fprintf(outF, "\t.");
-            else
-                fprintf(outF, "\t%d", genotypes[gtIx]);
+            fputs("\tGT", outF);
+            for (gtIx = 0;  gtIx < gtCount;  gtIx++)
+                {
+                if (missing[gtIx])
+                    fprintf(outF, "\t.");
+                else
+                    fprintf(outF, "\t%d", genotypes[gtIx]);
+                }
             }
         fprintf(outF, "\n");
         }
