@@ -1,0 +1,390 @@
+track weizmanOrfs
+type bed
+shortLabel Weizman ORFs
+longLabel New ORFs based on RNA-seq and Ribo-seq by the Weizman Institute
+superTrack on
+group genes
+priority 20
+visibility hide
+
+        track ORFs
+        type bigBed 12 +
+        shortLabel ORF predictions
+        longLabel ORF predictions
+        autoScale on
+        color 40,80,120
+        parent weizmanOrfs pack
+        bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/ORFs.bb
+        priority 1
+        itemRgb on
+        visibility pack
+
+        track Calu3_07hpi
+        type bigWig
+        shortLabel Calu3 7hpi
+        longLabel Calu3 7hpi Ribo-seq and RNA-seq
+        compositeTrack on show
+        parent weizmanOrfs show
+        priority 10
+        html calu3_07hpi.html
+        group genes
+        visibility hide
+
+                track CHX_7hr_1
+                type bigWig
+                longLabel Calu3 CHX 7hr 1
+                viewLimits 0:10
+                autoScale on
+                color 4,90,141
+                parent Calu3_07hpi on
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/fp_chx_07hr_1.bw
+                priority 21
+                maxHeightPixels 124:32:5
+                shortLabel Calu3 CHX 7hr 1
+                visibility full
+                alwaysZero on
+
+                track CHX_7hr_2
+                type bigWig
+                longLabel Calu3 CHX 7hr 2
+                viewLimits 0:10
+                autoScale on
+                color 4,90,141
+                parent Calu3_07hpi off
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/fp_chx_07hr_2.bw
+                priority 22
+                maxHeightPixels 124:32:5
+                visibility hide
+                shortLabel Calu3 CHX 7hr 2
+                alwaysZero on
+
+                track Harr_7hr_1
+                type bigWig
+                longLabel Calu3 Harr 7hr 1
+                viewLimits 0:10
+                autoScale on
+                color 179,0,0
+                parent Calu3_07hpi on
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/fp_harr_07hr_1.bw
+                priority 23
+                maxHeightPixels 124:32:5
+                shortLabel Calu3 Harr 7hr 1
+                visibility full
+                alwaysZero on
+
+                track Harr_7hr_2
+                type bigWig
+                longLabel Calu3 Harr 7hr 2
+                viewLimits 0:10
+                autoScale on
+                color 179,0,0
+                parent Calu3_07hpi off
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/fp_harr_07hr_2.bw
+                priority 24
+                maxHeightPixels 124:32:5
+                visibility hide
+                shortLabel Calu3 Harr 7hr 2
+                alwaysZero on
+
+                track LTM_7hr_1
+                type bigWig
+                longLabel Calu3 LTM 7hr 1
+                viewLimits 0:10
+                autoScale on
+                color 35,139,69
+                parent Calu3_07hpi on
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/fp_ltm_07hr_1.bw
+                priority 25
+                maxHeightPixels 124:32:5
+                shortLabel Calu3 LTM 7hr 1
+                visibility full
+                alwaysZero on
+
+                track LTM_7hr_2
+                type bigWig
+                longLabel Calu3 LTM 7hr 2
+                viewLimits 0:10
+                autoScale on
+                color 35,139,69
+                parent Calu3_07hpi off
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/fp_ltm_07hr_2.bw
+                priority 26
+                maxHeightPixels 124:32:5
+                visibility hide
+                shortLabel Calu3 LTM 7hr 2
+                alwaysZero on
+
+                track mRNA-seq_7hr_1
+                type bigWig
+                longLabel Calu3 mRNA 7hr 1
+                viewLimits 0:10
+                autoScale on
+                color 63,0,125
+                parent Calu3_07hpi on
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/mrna_07hr_1.bw
+                priority 27
+                maxHeightPixels 124:32:5
+                visibility full
+                shortLabel Calu3 mRNA 7hr 1
+                alwaysZero on
+
+                track mRNA-seq_7hr_2
+                type bigWig
+                longLabel Calu3 mRNA 7hr 2
+                viewLimits 0:10
+                autoScale on
+                color 63,0,125
+                parent Calu3_07hpi off
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/mrna_07hr_2.bw
+                priority 28
+                maxHeightPixels 124:32:5
+                visibility hide
+                shortLabel Calu3 mRNA 7hr 2
+                alwaysZero on
+
+        track Vero6_05hpi
+        type bigWig
+        shortLabel Vero6 5hpi
+        longLabel Vero6 5hpi Ribo-seq and RNA-seq
+        compositeTrack on show
+        parent weizmanOrfs show
+        priority 10
+        html vero6_05hpi.html
+        group genes
+        visibility hide
+
+                track CHX_5hr_1
+                type bigWig
+                longLabel Vero6 CHX 5hr 1
+                viewLimits 0:10
+                autoScale on
+                color 4,90,141
+                parent Vero6_05hpi on
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/fp_chx_05hr_1.bw
+                priority 11
+                maxHeightPixels 124:32:5
+                shortLabel Vero6 CHX 5hr 1
+                visibility full
+                alwaysZero on
+
+                track CHX_5hr_2
+                type bigWig
+                longLabel Vero6 CHX 5hr 2
+                viewLimits 0:10
+                autoScale on
+                color 4,90,141
+                parent Vero6_05hpi off
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/fp_chx_05hr_2.bw
+                priority 12
+                maxHeightPixels 124:32:5
+                visibility hide
+                shortLabel Vero6 CHX 5hr 2
+                alwaysZero on
+
+                track Harr_5hr_1
+                type bigWig
+                longLabel Vero6 Harr 5hr 1
+                viewLimits 0:10
+                autoScale on
+                color 179,0,0
+                parent Vero6_05hpi on
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/fp_harr_05hr_1.bw
+                priority 13
+                maxHeightPixels 124:32:5
+                shortLabel Vero6 Harr 5hr 1
+                visibility full
+                alwaysZero on
+
+                track Harr_5hr_2
+                type bigWig
+                longLabel Vero6 Harr 5hr 2
+                viewLimits 0:10
+                autoScale on
+                color 179,0,0
+                parent Vero6_05hpi off
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/fp_harr_05hr_2.bw
+                priority 14
+                maxHeightPixels 124:32:5
+                visibility hide
+                shortLabel Vero6 Harr 5hr 2
+                alwaysZero on
+
+                track LTM_5hr_1
+                type bigWig
+                longLabel Vero6 LTM 5hr 1
+                viewLimits 0:10
+                autoScale on
+                color 35,139,69
+                parent Vero6_05hpi on
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/fp_ltm_05hr_1.bw
+                priority 15
+                maxHeightPixels 124:32:5
+                visibility full
+                shortLabel Vero6 LTM 5hr 1
+                alwaysZero on
+
+                track LTM_5hr_2
+                type bigWig
+                longLabel Vero6 LTM 5hr 2
+                viewLimits 0:10
+                autoScale on
+                color 35,139,69
+                parent Vero6_05hpi off
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/fp_ltm_05hr_2.bw
+                priority 16
+                maxHeightPixels 124:32:5
+                shortLabel Vero6 LTM 5hr 2
+                visibility hide
+                alwaysZero on
+
+                track mRNA-seq_5hr_1
+                type bigWig
+                longLabel Vero6 mRNA 5hr 1
+                viewLimits 0:10
+                autoScale on
+                color 63,0,125
+                parent Vero6_05hpi on
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/mrna_05hr_1.bw
+                priority 17
+                maxHeightPixels 124:32:5
+                visibility full
+                shortLabel Vero6 mRNA 5hr 1
+                alwaysZero on
+
+                track mRNA-seq_5hr_2
+                type bigWig
+                longLabel Vero6 mRNA 5hr 2
+                viewLimits 0:10
+                autoScale on
+                color 63,0,125
+                parent Vero6_05hpi off
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/mrna_05hr_2.bw
+                priority 18
+                maxHeightPixels 124:32:5
+                visibility hide
+                shortLabel Vero6 mRNA 5hr 2
+                alwaysZero on
+
+        track Vero6_24hpi
+        type bigWig
+        shortLabel Vero6 24hpi
+        longLabel Vero6 24hpi Ribo-seq and RNA-seq
+        compositeTrack on show
+        parent weizmanOrfs show
+        priority 30
+        html vero6_24hpi.html
+        group genes
+        visibility hide
+
+                track CHX_24hr_1
+                type bigWig
+                longLabel Vero6 CHX 24hr 1
+                viewLimits 0:10
+                autoScale on
+                color 4,90,141
+                parent Vero6_24hpi on
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/fp_chx_24hr_1.bw
+                priority 31
+                maxHeightPixels 124:32:5
+                visibility full
+                shortLabel Vero6 CHX 24hr 1
+                alwaysZero on
+
+                track CHX_24hr_2
+                type bigWig
+                longLabel Vero6 CHX 24hr 2
+                viewLimits 0:10
+                autoScale on
+                color 4,90,141
+                parent Vero6_24hpi on
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/fp_chx_24hr_2.bw
+                priority 32
+                maxHeightPixels 124:32:5
+                visibility hide
+                shortLabel Vero6 CHX 24hr 2
+                alwaysZero on
+
+                track Harr_24hr_1
+                type bigWig
+                longLabel Vero6 Harr 24hr 1
+                viewLimits 0:10
+                autoScale on
+                color 179,0,0
+                parent Vero6_24hpi on
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/fp_harr_24hr_1.bw
+                priority 33
+                maxHeightPixels 124:32:5
+                visibility full
+                shortLabel Vero6 Harr 24hr 1
+                alwaysZero on
+
+                track Harr_24hr_2
+                type bigWig
+                longLabel Vero6 Harr 24hr 2
+                viewLimits 0:10
+                autoScale on
+                color 179,0,0
+                parent Vero6_24hpi on
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/fp_harr_24hr_2.bw
+                priority 34
+                maxHeightPixels 124:32:5
+                visibility hide
+                shortLabel Vero6 Harr 24hr 2
+                alwaysZero on
+
+                track LTM_24hr_1
+                type bigWig
+                longLabel Vero6 LTM 24hr 1
+                viewLimits 0:10
+                autoScale on
+                color 35,139,69
+                parent Vero6_24hpi on
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/fp_ltm_24hr_1.bw
+                priority 35
+                maxHeightPixels 124:32:5
+                visibility full
+                shortLabel Vero6 LTM 24hr 1
+                alwaysZero on
+
+                track LTM_24hr_2
+                type bigWig
+                longLabel Vero6 LTM 24hr 2
+                viewLimits 0:10
+                autoScale on
+                color 35,139,69
+                parent Vero6_24hpi on
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/fp_ltm_24hr_2.bw
+                priority 36
+                maxHeightPixels 124:32:5
+                visibility hide
+                shortLabel Vero6 LTM 24hr 2
+                alwaysZero on
+
+                track mRNA-seq_24hr_1
+                type bigWig
+                longLabel Vero6 mRNA 24hr 1
+                viewLimits 0:10
+                autoScale on
+                color 63,0,125
+                parent Vero6_24hpi on
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/mrna_24hr_1.bw
+                priority 37
+                maxHeightPixels 124:32:5
+                visibility full
+                shortLabel Vero6 mRNA 24hr 1
+                alwaysZero on
+
+                track mRNA-seq_24hr_2
+                type bigWig
+                longLabel Vero6 mRNA 24hr 2
+                viewLimits 0:10
+                autoScale on
+                color 63,0,125
+                parent Vero6_24hpi on
+                bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/mrna_24hr_2.bw
+                priority 38
+                maxHeightPixels 124:32:5
+                visibility hide
+                shortLabel Vero6 mRNA 24hr 2
+                alwaysZero on
+
