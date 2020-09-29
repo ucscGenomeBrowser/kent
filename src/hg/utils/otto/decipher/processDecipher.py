@@ -45,15 +45,14 @@ def getParentTerm(childTerm):
         return "Unknown"
 
 pathSteps = {
-    1: ["unknown", "not provided", "others", "drug response"],
-    2: ["benign", "likely benign"],
-    3: ["protective", "conflicting", "affects"],
-    4: ["uncertain", "association", "risk factor"],
-    5: ["likely pathogenic", "pathogenic"]
+    1: ["benign", "likely benign"],
+    2: ["unknown", "uncertain", "not provided", "others", "drug response"],
+    3: ["likely pathogenic", "pathogenic"]
 }
-lossShades = {1: "247,188,187", 2: "238,146,148", 3: "232,104,111", 4: "218,44,55", 5: "180,3,16"}
-gainShades = {1: "161,208,232", 2: "122,165,211", 3: "88,131,211", 4: "41,78,174", 5: "17,44,138"}
-structVarShades = {1: "166,235,182", 2: "96,208,121", 3: "47,172,76", 4: "6,104,28", 5: "1,69,17"}
+
+lossShades = {1: "255,128,128", 2: "255,0,0", 3: "153,0,0"}
+gainShades = {1: "133,177,255", 2: "0,0,255", 3: "0,0,128"}
+structVarShades = {1: "190,190,190", 2: "128,128,128", 3: "38,38,38"}
 
 def getPathStep(pathogenicity):
     """Return how many levels we need to increase darkness"""
@@ -67,8 +66,7 @@ def getColor(bed):
     pathogenicity = bed[14]
     pathStep = getPathStep(pathogenicity)
     if pathStep == -1:
-        sys.stderr.write("ERROR: unsupported pathogenicty: '%s'\n" % pathogenicity)
-        sys.exit(1)
+        return "0,0,0"
     ret = ""
     if varClass == "Loss":
         ret = lossShades[pathStep]
