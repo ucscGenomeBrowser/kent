@@ -10246,7 +10246,17 @@ if (! trackHubDatabase(database))
     if (hasAlias)
 	{
 	cgiSimpleTableFieldStart();
-	puts("&nbsp");
+	/* see if this database has the chromAlias.txt download file */
+	char aliasFile[1024];
+        safef(aliasFile, sizeof aliasFile, "http://%s/goldenPath/%s/bigZips/%s.chromAlias.txt", hDownloadsServer(), database, database);
+        struct udcFile *file = udcFileMayOpen(aliasFile, udcDefaultDir());
+	if (file)
+	    {
+	    udcFileClose(&file);
+	    printf("<A HREF='%s'>%s.chromAlias.txt</A>", aliasFile, database);
+	    }
+	else
+	    puts("&nbsp");
 	cgiTableFieldEnd();
 	}
     cgiTableRowEnd();

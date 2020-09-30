@@ -82,28 +82,28 @@ mouseOver = "Gene(s) affected: " geneListStr ", Position: " chrom ":" start+1 "-
 color=""
 switch(svtype) {
     case "BND":
-        color = "154,182,160"
+        color = "128,128,128"
         break
     case "CPX":
-        color = "182,239,195"
+        color = "0,179,179"
         break
     case "CTX":
-        color = "154,182,160"
+        color = "0,179,179"
         break
     case "DEL":
-        color = "231,154,144"
+        color = "0,0,255"
         break
     case "DUP":
-        color = "143,184,214"
+        color = "255,0,0"
         break
     case "INS":
-        color = "231,183,237"
+        color = "255,165,0"
         break
     case "INV":
-        color = "250,199,140"
+        color = "192,0,192"
         break
     case "MCNV":
-        color = "183,170,214"
+        color = "0,179,179"
         break
     default:
         color = "154,182,160"
