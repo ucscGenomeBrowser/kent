@@ -6,8 +6,9 @@ clusterGenes = ${DESTBINDIR}/clusterGenes
 all:
 
 test: refSeqTest refSeqCdsTest trackNamesTest joinTest joinCdsTest \
-	overlapUseStrandTest overlapIgnoreStrandsTest \
-	minOverlappingBasesTest
+	overlapUseStrandTest overlapIgnoreStrandsTest
+
+# minOverlappingBasesTest minOverlappingCdsBasesTest
 
 # test files blatRefSeq.gp  ncbiRefSeq.gp
 #  chr1:11,689,948-12,078,317 - some basic genes
@@ -54,8 +55,13 @@ overlapIgnoreStrandsTest: mkout
 	diff -u expected/$@.gl output/$@.gl
 
 # test of -minOverlappingBases
+# test case was one were original implmentation put a transcript in two clusters
 minOverlappingBasesTest: mkout
-	${clusterGenes} -minOverlappingBases=10 output/$@.gl no input/smallOverlap.gp
+	${clusterGenes} -minOverlappingBases=30 output/$@.gl no input/minOverlapCases.gp
+	diff -u expected/$@.gl output/$@.gl
+
+minOverlappingCdsBasesTest: mkout
+	${clusterGenes} -minOverlappingBases=30 -cds output/$@.gl no input/minOverlapCases.gp
 	diff -u expected/$@.gl output/$@.gl
 
 mkout:
