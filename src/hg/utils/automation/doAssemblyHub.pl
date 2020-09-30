@@ -370,10 +370,15 @@ sub unlocalizedAgp($$$$) {
          $acc =~ s/\./v/ if ($ucscNames);
          die "ERROR: chrN $chrN not correct for $acc"
              if ($accToChr{$acc} ne $chrN);
-         my $ucscName = "${acc}";
-         $ucscName = "chr${chrN}_${acc}_random" if ($ucscNames);
+         my $ucscName = "$ncbiAcc";
+         $ucscName = "chr${chrN}_${acc}_random";
+         $ucscName =~ s/\./v/;
          printf NAMES "%s\t%s\n", $ucscName, $ncbiAcc;
-         printf AGP "%s", $ucscName;    # begin AGP line with accession name
+         if ($ucscNames) {
+            printf AGP "%s", $ucscName;    # begin AGP line with accession name
+         } else {
+            printf AGP "%s", $ncbiAcc;    # begin AGP line with accession name
+         }
          for (my $i = 1; $i < scalar(@a); ++$i) {   # the rest of the AGP line
              printf AGP "\t%s", $a[$i];
          }
@@ -559,13 +564,15 @@ sub unplacedAgp($$$$) {
     } else {
         my ($ncbiAcc, undef) = split('\s+', $line, 2);
         next if (exists($dupAccessionList{$ncbiAcc}));
+        my $ucscAcc = $ncbiAcc;
+        $ucscAcc =~ s/\./v/;
+        printf NAMES "%s%s\t%s\n", $chrPrefix, $ucscAcc, $ncbiAcc;
         if ($ucscNames) {
-          my $ucscAcc = $ncbiAcc;
-          $ucscAcc =~ s/\./v/;
-          printf NAMES "%s%s\t%s\n", $chrPrefix, $ucscAcc, $ncbiAcc;
           $line =~ s/\./v/;
+          printf AGP "%s%s", $chrPrefix, $line;
+        } else {
+          printf AGP "%s", $line;
         }
-        printf AGP "%s%s", $chrPrefix, $line;
     }
   }
   close (FH);
@@ -607,7 +614,11 @@ sub unplacedFasta($$$$) {
       $line =~ s/^>//;
       $line =~ s/ .*//;
       die "ERROR: twoBitToFa $twoBitFile returns unknown acc $line" if (! exists($contigName{$line}));
-      printf FA ">%s%s\n", $chrPrefix, $contigName{$line};
+      if ($ucscNames) {
+        printf FA ">%s%s\n", $chrPrefix, $contigName{$line};
+      } else {
+        printf FA ">%s\n", $contigName{$line};
+      }
     } else {
       print FA $line;
     }
@@ -743,7 +754,7 @@ sub doSequence {
   my $unplacedScafAgp = "$primaryAssembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
   if ( -s $unplacedScafAgp ) {
     my $chrPrefix = "";   # no prefix if no other chrom parts
-    $chrPrefix = "chrUn_" if ($otherChrParts);
+    $chrPrefix = "chrUn_" if ($otherChrParts && ! $ucscNames);
     my $agpOutput = "$runDir/$asmId.unplaced.agp.gz";
     my $agpNames = "$runDir/$asmId.unplaced.names";
     $partsDone += 1;
@@ -1803,6 +1814,12 @@ _EOF_
 
 # Make sure we have valid options and exactly 1 argument:
 &checkOptions();
+if (scalar(@ARGV) != 1) {
+  printf STDERR "ERROR: can not find 1 argument in ARGV, instead: %d\n", scalar(@ARGV);
+  for (my $i = 0; $i < scalar(@ARGV); ++$i) {
+    printf "# ARGV[%d] : '%s'\n", $i, $ARGV[$i];
+  }
+}
 &usage(1) if (scalar(@ARGV) != 1);
 $secondsStart = `date "+%s"`;
 chomp $secondsStart;
@@ -1866,6 +1883,8 @@ printf STDERR "# assemblySource: %s\n", $assemblySource;
 printf STDERR "# asmHubName %s\n", $asmHubName;
 printf STDERR "# rmskSpecies %s\n", $rmskSpecies;
 printf STDERR "# augustusSpecies %s\n", $augustusSpecies;
+printf STDERR "# ncbiRmsk %s\n", $ncbiRmsk ? "TRUE" : "FALSE";
+printf STDERR "# ucscNames %s\n", $ucscNames ? "TRUE" : "FALSE";
 
 # Do everything.
 $stepper->execute();
