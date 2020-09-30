@@ -63,6 +63,7 @@ boolean fontExtras = trackLayoutInclFontExtras();
 if (fontExtras)
     fontType = cartUsualString(cart, "fontType", fontType);
 
+tl->textFont = cartUsualString(cart, textFontVar, "nimbus mono medium r");
 tl->textSize = mgFontSizeBackwardsCompatible(cartUsualString(cart, textSizeVar, "small"));
 MgFont *font = mgFontForSizeAndStyle(tl->textSize, fontType);
 tl->font = font;

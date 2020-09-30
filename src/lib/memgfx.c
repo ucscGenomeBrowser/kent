@@ -808,15 +808,9 @@ return font_line_height(font);
 int mgFontWidth(MgFont *font, char *chars, int charCount)
 /* How wide are a couple of letters? */
 {
-/*
-switch (mg->fontMethod)
-    {
-    case FONT_METHOD_GEM:
-    */
-        return 1.00 * fnstring_width(font, (unsigned char *)chars, charCount);
-    //case FONT_METHOD_FREETYPE:
-        //return ftWidth(font, (unsigned char *)chars, charCount);
-    // }
+if (face == NULL)  // have we turned on freetype
+    return fnstring_width(font, (unsigned char *)chars, charCount);
+return ftWidth(font, (unsigned char *)chars, charCount);
 }
 
 int mgFontStringWidth(MgFont *font, char *string)
@@ -831,13 +825,13 @@ int mgGetFontStringWidth(struct memGfx *mg, MgFont *font, char *string)
 return mgFontStringWidth(font, string);
 }
 
-void mgSetFontMethod(struct memGfx *mg, unsigned int method)
+void mgSetFontMethod(struct memGfx *mg, unsigned int method, char *fontFile)
 /* Which font drawing method shoud we use. */
 {
 mg->fontMethod = method;
 
 if (method == FONT_METHOD_FREETYPE)
-    ftInitialize();
+    ftInitialize(fontFile);
 }
 
 int mgFontCharWidth(MgFont *font, char c)

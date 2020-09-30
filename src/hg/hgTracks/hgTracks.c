@@ -631,7 +631,21 @@ static void maybeNewFonts(struct hvGfx *hvg)
 /* Check to see if we want to use the alternate font engine (FreeType2). */
 {
 if (sameString(cfgOptionDefault("freeType", "off"), "on"))
-    hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE);
+    {
+    char *fontDir = cfgOptionDefault("freeTypeDir", "/usr/share/fonts/default/Type1");
+    char *defaultFont = cfgOptionDefault("freeTypeDefault", "n022003l.pfb");
+    char buffer[4096];
+
+    extern char *freeTypeFontNames[];
+    extern char *freeTypeFontFiles[];
+    int ii;
+    for(ii=0; ii < 33; ii++)
+        if (sameString(freeTypeFontNames[ii], tl.textFont))
+            break;
+    defaultFont = freeTypeFontFiles[ii];
+    safef(buffer, sizeof buffer, "%s/%s", fontDir, defaultFont);
+    hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, buffer );
+    }
 }
 
 boolean makeChromIdeoImage(struct track **pTrackList, char *psOutput,

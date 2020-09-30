@@ -294,8 +294,8 @@ else
     }   
 }   
 
-void hvGfxSetFontMethod(struct hvGfx *hvg, unsigned int method)
+void hvGfxSetFontMethod(struct hvGfx *hvg, unsigned int method, char *fontFile)
 /* Use the Free Type library to draw fonts. */
 {
-vgSetFontMethod(hvg->vg, method);
+vgSetFontMethod(hvg->vg, method, fontFile);
 }

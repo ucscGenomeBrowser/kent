@@ -55,6 +55,84 @@ slFreeList(themes);
 hPrintf("</TD>");
 }
 
+char *freeTypeFontNames[] = {
+"gothic medium-r",
+"gothic semibold-r",
+"gothic medium-o",
+"gothic semibold-o",
+"bookman medium-r",
+"bookman bold-r",
+"bookman medium-i",
+"bookman bold-i",
+"schoolbook medium-r",
+"schoolbook bold-r",
+"schoolbook medium-i",
+"schoolbook bold-i",
+"nimbus sans medium-r",
+"nimbus sans bold-r",
+"nimbus sans medium-i",
+"nimbus sans bold-i",
+"nimbus sans medium-r-condensed",
+"nimbus sans bold-r-condensed",
+"nimbus sans medium-i-condensed",
+"nimbus sans bold-i-condensed",
+"nimbus roman medium-r",
+"nimbus roman bold-r",
+"nimbus roman medium-i",
+"nimbus roman bold-i",
+"nimbus mono l-medium-r",
+"nimbus mono l-bold-r",
+"nimbus mono l-medium-o",
+"nimbus mono l-bold-o",
+"palladio medium-r",
+"palladio bold-r",
+"palladio medium-i",
+"palladio bold-i",
+"chancery"
+};
+
+char *freeTypeFontFiles[] = {
+"a010013l.pfb",
+"a010015l.pfb",
+"a010033l.pfb",
+"a010035l.pfb",
+"b018012l.pfb",
+"b018015l.pfb",
+"b018032l.pfb",
+"b018035l.pfb",
+"c059013l.pfb",
+"c059016l.pfb",
+"c059033l.pfb",
+"c059036l.pfb",
+"n019003l.pfb",
+"n019004l.pfb",
+"n019023l.pfb",
+"n019024l.pfb",
+"n019043l.pfb",
+"n019044l.pfb",
+"n019063l.pfb",
+"n019064l.pfb",
+"n021003l.pfb",
+"n021004l.pfb",
+"n021023l.pfb",
+"n021024l.pfb",
+"n022003l.pfb",
+"n022004l.pfb",
+"n022023l.pfb",
+"n022024l.pfb",
+"p052003l.pfb",
+"p052004l.pfb",
+"p052023l.pfb",
+"p052024l.pfb",
+"z003034l.pfb",
+};
+
+static void textFontDropDown()
+/* Create drop down for font size. */
+{
+hDropList(textFontVar, freeTypeFontNames, ArraySize(freeTypeFontNames), tl.textFont);
+}
+
 static void textSizeDropDown()
 /* Create drop down for font size. */
 {
@@ -450,6 +528,15 @@ if (trackLayoutInclFontExtras())
     hPrintf("</TD>");
     }
 hPrintf("</TR>");
+
+if (sameString(cfgOptionDefault("freeType", "off"), "on"))
+    {
+    hPrintf("<TR><TD>font:");
+    hPrintf("<TD style=\"text-align: right\">");
+    textFontDropDown();
+    hPrintf("</TD>");
+    hPrintf("</TR>");
+    }
 
 themeDropDown(cart);
 

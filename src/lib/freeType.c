@@ -1,6 +1,8 @@
 
 #include "freeType.h"
 
+#define FONTFACTOR 0.90
+
 #ifndef USE_FREETYPE
 int ftInitialize()
 {
@@ -22,7 +24,7 @@ errAbort("FreeType not enabled");
 
 #else 
 
-int ftInitialize()
+int ftInitialize(char *fontFile)
 {
 FT_Error error;
 error = FT_Init_FreeType( &library );              /* initialize library */
@@ -30,8 +32,7 @@ error = FT_Init_FreeType( &library );              /* initialize library */
 if (error !=0)
     return error;
 
-char *filename = "/usr/share/fonts/default/Type1/n022004l.pfb";
-error = FT_New_Face( library, filename, 0, &face );
+error = FT_New_Face( library, fontFile, 0, &face );
 if (error !=0)
     return error;
 
@@ -66,8 +67,8 @@ void ftText(struct memGfx *mg, int x, int y, Color color,
 	MgFont *font, char *text)
 /* Draw a line of text with upper left corner x,y. */
 {
-unsigned int fontHeight = 1.0 * mgFontPixelHeight(font);
-unsigned int fontWidth = 1.0 * mgFontPixelHeight(font);
+unsigned int fontHeight = FONTFACTOR * mgFontPixelHeight(font);
+unsigned int fontWidth = FONTFACTOR * mgFontPixelHeight(font);
 FT_Set_Pixel_Sizes( face, fontWidth, fontHeight);
 int length = strlen(text);
 int n;
@@ -85,14 +86,15 @@ for(n = 0; n < length; n++)
     if (!error)
         draw_bitmap( mg,  &slot->bitmap, color,
          dx + slot->bitmap_left, y - slot->bitmap_top, mg->pixels, mg->width ); 
+         //offset + slot->bitmap_left, y - slot->bitmap_top, mg->pixels, mg->width ); 
     offset += slot->advance.x;
     }
 }
 
 int ftWidth(MgFont *font, unsigned char *chars, int charCount)
 {
-unsigned int fontHeight = 1.4 * mgFontPixelHeight(font);
-unsigned int fontWidth = 1.4 * mgFontPixelHeight(font);
+unsigned int fontHeight = FONTFACTOR * mgFontPixelHeight(font);
+unsigned int fontWidth = FONTFACTOR * mgFontPixelHeight(font);
 FT_Set_Pixel_Sizes( face, fontWidth, fontHeight);
 int n;
 unsigned long offset = 0;
@@ -103,6 +105,7 @@ for(n = 0; n < charCount; n++)
     slot = face->glyph;
     offset += slot->advance.x;
     }
+offset /= 64;
 return offset;
 }
 #endif /*USE_FREETYPE */
