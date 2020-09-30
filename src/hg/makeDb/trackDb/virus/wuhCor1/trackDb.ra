@@ -334,6 +334,7 @@ visibility squish
 priority 0.2
 dataVersion 28-08-20
 pennantIcon New red ../goldenPath/newsarch.html "Released Sep. 14, 2020"
+html sarsCov2PhyloOldColors
 release beta,public
 
     track sarsCov2PhyloMinAf01

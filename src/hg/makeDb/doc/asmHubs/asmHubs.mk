@@ -29,7 +29,7 @@ hubIndex::
 asmStats::
 	rm -f ${destDir}/${statsName}.html ${destDir}/${testStatsName}.html
 	${toolsDir}/mkAsmStats.pl ${Name} ${name} ${orderList} > ${destDir}/${statsName}.html
-	sed -e "s/hgdownload.soe/hgdownload-test.gi/g; s/index.html/${testIndexName}.html/; s#/${statsName}#/${testStatsName}#; s#${dataName}.html#${testDataName}.html#;" ${destDir}/${statsName}.html > ${destDir}/${testStatsName}.html
+	sed -e "s#genome.ucsc.edu/h/#genome-test.gi.ucsc.edu/h/#g; s/hgdownload.soe/hgdownload-test.gi/g; s/index.html/${testIndexName}.html/; s#/${statsName}#/${testStatsName}#; s#${dataName}.html#${testDataName}.html#;" ${destDir}/${statsName}.html > ${destDir}/${testStatsName}.html
 	chmod +x ${destDir}/${statsName}.html ${destDir}/${testStatsName}.html
 
 # trackData makes different tables for the test vs. production version

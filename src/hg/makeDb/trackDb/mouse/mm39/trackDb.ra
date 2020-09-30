@@ -6,6 +6,9 @@ html gold
 track gap override
 html gap
 
+track chainNetCalJac4 override
+chainMinScore 3000
+
 searchTable gold
 shortCircuit 1
 termRegex [ABCFLM][ACEFGHLNOPQRTUXY][AEKJQR0-9]+(\.[0-9_]+)?
