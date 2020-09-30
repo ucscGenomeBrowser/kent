@@ -44,7 +44,6 @@ clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	HGNC_ID	ClinicalSi
 # benign = B, likely benign = LB, conflicting = CF, likely pathogenic= LP, 
 # pathogenic = P, other = OT, uncertain = VUS, RF=risk factor
 # colors were defined by Ana Benet Pages
-# see colortable at https://drive.google.com/file/d/1-iqHrZTwT1wuatNA_A5b6knyqE6JG14f/view?usp=sharing
 cnvColors = {
         "INS" : {
             "OT" : "225,165,0",

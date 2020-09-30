@@ -52,23 +52,109 @@
 <!-- ============= 2020 archived news ============= -->
 <a name="2020"></a>
 
-<a name="092520"></a>
-<h2>New data and visualization types: Covid GWAS (Lollypop) and Family Trios (VCF Trios)</h2>
-<h3>Covid GWAS meta-analysis (Lollypop format)</h3>
+<a name="093020"></a>
+<h2>Sept. 30, 2020 &nbsp;&nbsp; Updates to ClinVar and ClinGen (GRCh37/hg19)(GRCh38/hg38)</h2>
+
 <p>
-We are happy to announce the COVID-19 GWAS tracks in /both popular human genomes 
-(<a href="../../cgi-bin/hgGateway?db=hg19">GRCh37/hg19</a> and
-<a href="../../cgi-bin/hgGateway?db=hg38">GRCh38/hg38</a>).
-These tracks show GWAS meta-analyses from the <a href="https://www.covid19hg.org/" target="_blank">
-COVID-19 Host Genetics Initiative (HGI)</a>, a collaborative effort to analyze and share viral host
-genetics research. This track brings together data from 26 GWAS studies and aims to identify
-genetic determinants of SARS-CoV-2 infection susceptibility and disease severity.
+We have updated the <b>ClinVar Variants track (hg19/hg38)</b>, and made changes to the current
+<b>ClinGen CNVs track (hg19/hg38)</b>. We have also added three new tracks in support of a new
+ClinGen composite. These changes have been made in an effort to support our clinical users,
+with an emphasis on facilitating Genome Browser use in variant interpretation.</p>
+
+<a name="093020a"></a>
+<h3>Updates to ClinVar Variants track</h3>
+<p>
+The <a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&c=chrX&g=clinvar">ClinVar Variants
+track</a> has been reorganized based on variant length.
+The previous tracks, ClinVar Short Variants (&lt;= 100bp) and
+ClinVar Long Variants (&gt; 100bp), are now ClinVar SNVs (&lt; 50bp) and
+ClinVar CNVs (&gt;= 50bp). We have also added a mouse-over from the track display which
+shows phenotype and clinical significance information. In addition,
+the CNV track now has the following improvements:</p>
+<ul>
+<li>The <a target="_blank" href="/goldenPath/help/trackDb/trackDbHub.html#mergeSpannedItems">
+mergeSpannedItems</a> feature has been enabled which collapses all CNVs that span a larger
+genomic region than the browser's window display. Merged items can be shown by right-click.</li>
+<li>CNVs now have a color gradient according to the clinical significance for easy
+identification of pathogenic variants.</li></ul>
+<p>
+Lastly, multiple feature options have been added to both tracks independently:</p>
+<ul>
+<li>Filtering by variant length is available on both tracks.</li>
+<li>Filter by variation (INS, DEL, etc.) now available on both tracks.</li>
+<li>Filter by clinical significance (benign, conflicting, etc.) now available on both tracks.</li>
+<li>Filter on allele origin (somatic, germ line, de novo, etc.) now available on both tracks.</li>
+<li>Filter by molecular consequence (stop lost, nonsense, intron variant, etc.) now available
+on short variants track.</li>
+</ul>
+<p>
+Below is an example of the filter options available for the <b>ClinVar SNVs track</b>. For
+additional details on the updated display, see the <a target="_blank" 
+href="/cgi-bin/hgTrackUi?db=hg38&c=chr1&g=clinvar">track description page</a>.</p>
+
+<p class="text-center">
+  <img class='text-center' src="../images/clinVarFilters.png"  width='60%' 
+alt="Example of filter options in ClinVar SNVs track">
 </p>
+
+<a name="093020b"></a>
+<h3>Changes to ClinGen and new tracks</h3>
 <p>
-These data are shown in our new Lollypop visualization in order to show the added 
-dimensions of effect size and p-value in addition to location. Filters are also
+We have created a new composite track, <a target="_blank" 
+href="/cgi-bin/hgTrackUi?db=hg38&c=chr1&g=clinGenComp">ClinGen</a>, and deprecated the previous
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&c=chr1&g=iscaComposite">
+ClinGen CNVs track</a>. The ClinGen CNVs track will continue to be available, however,
+the data will no longer be updated. This was done by request of ClinGen, as all the
+data, as well as further updates, can be found in the <a target="_blank" 
+href="/cgi-bin/hgTrackUi?db=hg38&g=clinvar">ClinVar Copy Number Variants (ClinVar CNVs) track</a>.</p>
+<p>
+The new <a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=clinGenComp">ClinGen composite 
+track</a> includes three new tracks described below:</p>
+<ul>
+<li><b>ClinGen Dosage Sensitivity Map - Haploinsufficiency</b> - Shows evidence supporting or
+refuting haploinsufficiency (loss) as mechanisms for disease at gene-level and larger genomic
+regions.</li>
+<li><b>ClinGen Dosage Sensitivity Map - Triplosensitivity</b> - Shows evidence supporting or
+refuting triplosensitivity (gain) as mechanisms for disease at gene-level and larger genomic
+regions.</li>
+<li><b>ClinGen Gene-Disease Validity Classification (ClinGen Validity)</b> - Provides a
+semi-qualitative measurement for the strength of evidence of a gene-disease relationship.</li>
+</ul>
+
+<p class="text-center">
+  <img class='text-center' src="../images/clinGenComp.png"  width='90%' 
+alt="Example of three new ClinGen Composite tracks">
+</p>
+
+<p>
+For more information on these tracks, including display conventions, scores, and classifications,
+see the <a target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=clinGenComp">track description
+page</a>.</p><br>
+<p>
+We would like to thank Erin Riggs and May Flowers as well as the rest of the ClinGen team. We
+would also like to thank ClinVar for making these data available. Track development and release
+was made possible by Anna Benet-Pages, Christopher Lee, Max Haeussler, and Lou Nassar.</p>
+
+<a name="092520"></a>
+<h2>Sept. 25, 2020 &nbsp;&nbsp New data and visualization types: Covid GWAS (Lollypop) and Family Trios (VCF Trios)</h2>
+<h3>Covid GWAS meta-analysis</h3>
+<p>
+We are happy to announce the first COVID-19 tracks in our human genome browsers
+<a href="../../cgi-bin/hgGateway?db=hg19">GRCh37/hg19</a> and
+<a href="../../cgi-bin/hgGateway?db=hg38">GRCh38/hg38</a>, the COVID-19 GWAS meta-analysis.
+This track brings together data from 17 international GWAS studies and aims to identify
+genetic determinants of SARS-CoV-2 infection susceptibility and disease severity.
+These data are from the <a href="https://www.covid19hg.org/results/" target="_blank">
+COVID-19 Host Genetics Initiative (HGI)</a>, a collaborative effort to analyze and share viral host
+genetics research. More resources 
+are available on our page: <a href="../../covid19.html">COVID-19 Resources at UCSC</a>.
+</p>
+
+<p>
+These data are shown in our new lollypop visualization in order to show the dimensions of 
+effect size and p-value in addition to location. Filters are also
 available for these variables and the number of studies. Custom tracks using the 
-lollypop format is not yet available. For more information on these
+lollypop format are not yet available. For more information on these
 datasets, please read the track description page and try the interactive visualization
 for yourself:</p>
 <ul>
@@ -84,8 +170,10 @@ with the colored head showing the p-value and the height of the stick showing ef
 </div>
 
 <p>Our gratitude goes to the COVID-19 Host Genetics Initiative contributors and project leads for
-making this data available and Kumar Veerapen at the Broad for their input during track
-development. We would also like to thank Kate Rosenbloom, Daniel Schmelter, and Ana Benet-Pages for
+making this data available, Kumar Veerapen, Rachel Liao, and Juha Karjalainen
+at the Broad Institute for their input during track development. 
+We would also like to thank the UCSC Genome Browser staff Kate Rosenbloom, 
+Daniel Schmelter, Brain Raney, and Ana Benet-Pages for
 developing, staging, and documenting this track.</p>
 
  

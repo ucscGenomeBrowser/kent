@@ -84,6 +84,8 @@ foreach my $asmId (@orderList) {
   `rm -f "${destDir}/${accessionId}.2bit"`;
   `rm -f "${destDir}/${accessionId}.agp.gz"`;
   `rm -f "${destDir}/${accessionId}.chrom.sizes"`;
+  `rm -f "${destDir}/${accessionId}.chrom.sizes.txt"`;
+  `rm -f "${destDir}/${accessionId}.chromAlias.txt"`;
   `rm -f "${destDir}/${accessionId}_assembly_report.txt"`;
   `rm -f "${destDir}/${accessionId}.userTrackDb.txt"`;
   `rm -f "${destDir}/trackDb.txt"`;
@@ -102,7 +104,8 @@ foreach my $asmId (@orderList) {
 #  `ln -s ${buildDir}/html/*.png "${destDir}/genomes/${asmId}/html/"`;
   `ln -s "${buildDir}/${asmId}.2bit" "${destDir}/${accessionId}.2bit"` if (-s "${buildDir}/${asmId}.2bit");
   `ln -s "${buildDir}/${asmId}.agp.gz" "${destDir}/${accessionId}.agp.gz"` if (-s "${buildDir}/${asmId}.agp.gz");
-  `ln -s "${buildDir}/${asmId}.chrom.sizes" "${destDir}/${accessionId}.chrom.sizes"` if (-s "${buildDir}/${asmId}.chrom.sizes");
+  `ln -s "${buildDir}/${asmId}.chrom.sizes" "${destDir}/${accessionId}.chrom.sizes.txt"` if (-s "${buildDir}/${asmId}.chrom.sizes");
+  `ln -s "${buildDir}/${asmId}.chromAlias.txt" "${destDir}/${accessionId}.chromAlias.txt"` if (-s "${buildDir}/${asmId}.chromAlias.txt");
   `ln -s "${buildDir}/download/${asmId}_assembly_report.txt" "${destDir}/${accessionId}_assembly_report.txt"` if (-s "${buildDir}/${asmId}_assembly_report.txt");
   `ln -s "${buildDir}/${asmId}.trackDb.txt" "${destDir}/trackDb.txt"` if (-s "${buildDir}/${asmId}.trackDb.txt");
   `ln -s "${buildDir}/${asmId}.genomes.txt" "${destDir}/genomes.txt"` if (-s "${buildDir}/${asmId}.genomes.txt");

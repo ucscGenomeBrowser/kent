@@ -2,6 +2,7 @@ track xenoMRnas
 shortLabel RefSeq mRNAs
 longLabel RefSeq mRNAs mapped to this assembly
 group rna
+priority 2
 visibility pack
 color 180,0,0
 type bigGenePred

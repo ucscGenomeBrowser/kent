@@ -307,18 +307,22 @@ label.trackUiHicLabel
 
 table.trackUiFilterTable 
 {
+        padding : 3px;`
         margin-top : 6px;
         border-collapse : collapse;
         border: none;
 }
+
 table.trackUiFilterTable tr:first-child td { 
         border-top : 1px solid #CCC;
         padding-top: 8px;
 }
+
 table.trackUiFilterTable tr:last-child td { 
         border-bottom : 1px solid #CCC;
         padding-bottom: 5px;
 }
+
 table.trackUiFilterTable tr td:first-child { 
         border-left: 1px solid #CCC;
 }
