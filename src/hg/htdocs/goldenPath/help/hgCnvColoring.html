@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser Codon Coloring" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<a name="Topic5"></a>
+
+<h1>Structural Variants Color Code</h1>
+<p>
+CNV items in the Genome Browser tracks are coloured by <em>Variant Type</em>. The categories can be:
+
+<ul>
+ <li><b>Gain:</b> duplications, triplications, tandem duplications, and copy number gains</li>
+ <li><b>Loss:</b> deletions and copy number losses</li>
+ <li><b>Insertion:</b> insertions, Indels, and mobile element insertions</li>
+ <li><b>Inversion:</b> inversions</li>
+ <li><b>Structural Alteration:</b> translocations, complex structural alterations and chromosomal rearrangements, fusions, and multi-allele CNVs</li>
+ <li><b>Other Sequence Alterations:</b> NT expansions, tandem repeats, microsatellites, breakend, and undetermined or not defined alterations</li>
+</ul>
+</p>
+
+<p>
+Three levels of color intensity are used in CNV items to indicate the <em>Clinical 
+Significance</em>. The lightest shade indicates <b>benign/likely-benign</b> variants, the darkest 
+shade indicates <b>pathogenic/likely pathogenic</b> variants, and the medium shade indicates 
+<b>other</b> or <b>no clinical significance</b> has been defined.
+</p>
+
+<table class="stdTbl">
+  <tr>
+    <th>Variant Type</th>
+    <th>Benign</th>
+    <th>Other</th>
+    <th>Pathogenic</th>
+    </tr>
+    <tr>
+    <td>Gain</td>
+    <td style="background-color: rgb(133,177,255)"></td>
+    <td style="background-color: rgb(0,0,255)"></td>
+    <td style="background-color: rgb(0,0,128)"></td>
+  </tr>
+  <tr>
+    <td>Loss</td>
+    <td style="background-color: rgb(255,128,128)"></td>
+    <td style="background-color: rgb(255,0,0)"></td>
+    <td style="background-color: rgb(153,0,0)"></td>
+  </tr>
+  <tr>
+    <td>Insertion</td>
+    <td style="background-color: rgb(255,225,105)"></td>
+    <td style="background-color: rgb(255,165,0)"></td>
+    <td style="background-color: rgb(199,114,3)"></td>
+  </tr>
+  <tr>
+    <td>Inversion</td>
+    <td style="background-color: rgb(251,150,251)"></td>
+    <td style="background-color: rgb(192,0,192)"></td>
+    <td style="background-color: rgb(128,0,128)"></td>
+  </tr>
+  <tr>
+    <td>Structural Alteration</td>
+    <td style="background-color: rgb(0,255,255)"></td>
+    <td style="background-color: rgb(0,179,179)"></td>
+    <td style="background-color: rgb(0,102,102)"></td>
+  </tr>
+  <tr>
+    <td>Other Sequence Alterations</td>
+    <td style="background-color: rgb(190,190,190)"></td>
+    <td style="background-color: rgb(128,128,128)"></td>
+    <td style="background-color: rgb(38,38,38)"></td>
+  </tr>
+</table>
+
+<p>
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
+
