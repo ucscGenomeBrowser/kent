@@ -109,7 +109,7 @@ struct vGfx
     int (*getFontStringWidth)(void *v, void *font, char *string);
     /* How wide is a string? */
 
-    void (*setFontMethod)(void *v, unsigned int method, char *fontFile);
+    void (*setFontMethod)(void *v, unsigned int method, char *fontName, char *fontFile);
     /* Which font drawing method shoud we use. */
     };
 
@@ -219,8 +219,8 @@ void vgClose(struct vGfx **pVg);
 	v->getFontStringWidth(v->data,font,string)
     /* How wide is a string? */
 
-#define vgSetFontMethod(v,method,fontFile) \
-        v->setFontMethod(v->data,method,fontFile)
+#define vgSetFontMethod(v,method,fontName,fontFile) \
+        v->setFontMethod(v->data,method,fontName,fontFile)
 
 int vgFindRgb(struct vGfx *vg, struct rgbColor *rgb);
 /* Find color index corresponding to rgb color. */

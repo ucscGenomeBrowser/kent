@@ -825,7 +825,7 @@ int mgGetFontStringWidth(struct memGfx *mg, MgFont *font, char *string)
 return mgFontStringWidth(font, string);
 }
 
-void mgSetFontMethod(struct memGfx *mg, unsigned int method, char *fontFile)
+void mgSetFontMethod(struct memGfx *mg, unsigned int method, char *fontName, char *fontFile)
 /* Which font drawing method shoud we use. */
 {
 mg->fontMethod = method;

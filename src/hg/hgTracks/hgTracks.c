@@ -633,7 +633,6 @@ static void maybeNewFonts(struct hvGfx *hvg)
 if (sameString(cfgOptionDefault("freeType", "off"), "on"))
     {
     char *fontDir = cfgOptionDefault("freeTypeDir", "/usr/share/fonts/default/Type1");
-    char *defaultFont = cfgOptionDefault("freeTypeDefault", "n022003l.pfb");
     char buffer[4096];
 
     extern char *freeTypeFontNames[];
@@ -642,9 +641,10 @@ if (sameString(cfgOptionDefault("freeType", "off"), "on"))
     for(ii=0; ii < 33; ii++)
         if (sameString(freeTypeFontNames[ii], tl.textFont))
             break;
-    defaultFont = freeTypeFontFiles[ii];
-    safef(buffer, sizeof buffer, "%s/%s", fontDir, defaultFont);
-    hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, buffer );
+    char *fontFile = freeTypeFontFiles[ii];
+    char *fontName = freeTypeFontNames[ii];
+    safef(buffer, sizeof buffer, "%s/%s", fontDir, fontFile);
+    hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, fontName, buffer );
     }
 }
 
