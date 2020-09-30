@@ -39,13 +39,20 @@ jsInlineF(
 // see https://support.google.com/analytics/answer/1136920?hl=en
 jsInlineF(
 "  function anchorClicked(ev) {\n"
-"  /* user clicked an anchor: send event to Google analytics and navigate to the link */\n"
-"      var isExternal = (ev.target.target==='_blank');\n"
-"      var url = ev.target.href;\n"
-"      if (url === undefined)\n" // this happens on hgTracks, for the case <a href....><p>bla</p></a>
-"           url = ev.target.closest('a');\n"
+"  /* user clicked an anchor: if external link, send event to Google analytics and navigate to the link */\n"
+"      var isExternal = (ev.currentTarget.target.toLowerCase()==='_blank');\n"
+"      var url = ev.currentTarget.href;\n"
+"      var hostname = null;\n"
+"      if (typeof URL===undefined) {\n"
+"          hostname = url.split('//')[1].split('/')[0];\n" // for MSIE
+"      } else {\n"
+"          var urlObj = new URL(url);\n"
+"          hostname = urlObj.hostname;\n"
+"          if (hostname.indexOf('.ncbi.')!==-1)\n" // for NCBI, we keep the first part of the pathname
+"              hostname = hostname+'/'+urlObj.pathname.split('/')[1];\n"
+"      }\n"
 "      if (isExternal) {\n"
-"         ga('send', 'event', 'outbound', 'click', url,\n"
+"         ga('send', 'event', 'outbound', 'click', hostname, url,\n"
 "           { 'transport': 'beacon', 'hitCallback': function(){window.open(url);} });\n"
 "      } else {\n"
 "         document.location=url;\n"
@@ -53,7 +60,7 @@ jsInlineF(
 "      return false;\n"
 "  }"
 "  $(document).ready(function() {\n"
-"      if (!window.ga || ga.loaded)\n"
+"      if (!window.ga || ga.loaded)\n" // When using an Adblocker, the ga object does not exist
 "          return;\n"
 "      var anchors = document.getElementsByTagName('a');\n"
 "      for (var i = 0; i < anchors.length; i++) { \n"
