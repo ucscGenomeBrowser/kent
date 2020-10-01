@@ -377,8 +377,8 @@ compositeTrack	on
 	 bigDataUrl /gbdb/wuhCor1/bbi/bloom/expr/Y_bind_avg.bw
 
 track	Starr_Bloom_antibody
-shortLabel	RBD Antibody escape
-longLabel	S RBD Deep mutational scanning: Antibody Escape (Jesse Bloom's Group)
+shortLabel	RBD Antibody Escape
+longLabel	S RBD Deep Mutational Scanning: Antibody Escape (Jesse Bloom's Group)
 visibility	hide
 group immu
 type	bigWig
