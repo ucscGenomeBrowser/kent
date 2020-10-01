@@ -9,7 +9,7 @@ invertebrate mRNA in
 
 <h2>Track statistics summary</h2>
 <p>
-<b>Total genome size: </b>2,654,624,157<br> (not counting gaps)
+<b>Total genome size: </b>2,654,624,157 (not counting gaps)<br>
 <b>Gene count: </b>22,442<br>
 <b>Bases in genes: </b>838,462,469 (txStart to txEnd)<br>
 <b>Genes percent genome coverage: </b>% 31.585<br>
@@ -43,8 +43,8 @@ and the query.fa is the mRNAs from RefSeq
 </pre>
 The resulting PSL outputs are filtered:
 <pre>
-pslCDnaFilter -minId=0.35 -minCover=0.25  -globalNearBest=0.0100 -minQSize=20 
-  -ignoreIntrons -repsAsMatch -ignoreNs -bestOverlap 
+pslCDnaFilter -minId=0.35 -minCover=0.25  -globalNearBest=0.0100 -minQSize=20 \
+  -ignoreIntrons -repsAsMatch -ignoreNs -bestOverlap \
     all.results.psl mm39.xenoRefGene.psl
 </pre>
 The filtered mm39.xenoRefGene.psl is converted to

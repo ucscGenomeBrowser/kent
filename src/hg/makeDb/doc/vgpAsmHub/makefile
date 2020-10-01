@@ -1,5 +1,5 @@
 
-destDir=/hive/data/genomes/asmHubs/vgp
+destDir=/hive/data/genomes/asmHubs/VGP
 srcDir=${HOME}/kent/src/hg/makeDb/doc/vgpAsmHub
 orderList=$(CURDIR)/vgp.primary.orderList.tsv
 

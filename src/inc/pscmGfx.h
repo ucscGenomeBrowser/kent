@@ -28,6 +28,8 @@ struct pscmGfx
     int clipMinY, clipMaxY;     /* lower right, not inclusive */
     struct hash *hints;   /* Hints to guide behavior */
     int writeMode;        /* current write mode */
+    int fontMethod;        /* current font mode */
+    char *fontName;
     };
 
 struct pscmGfx *pscmOpen(int width, int height, char *file);

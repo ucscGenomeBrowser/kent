@@ -767,7 +767,7 @@ return (alleleCount == 2 &&
         (sameString(alleles[0], alleles[1]) || sameString(".", alleles[1])));
 }
 
-static boolean allelesHavePaddingBase(char **alleles, int alleleCount)
+boolean allelesHavePaddingBase(char **alleles, int alleleCount)
 /* Examine alleles to see if they either a) all start with the same base or
  * b) include a symbolic or 0-length allele.  In either of those cases, there
  * must be an initial padding base that we'll need to trim from non-symbolic
@@ -1738,4 +1738,30 @@ vcfWriteWordArrayWithSep(f, rec->filterCount, rec->filters, ';');
 fputc('\t', f);
 vcfWriteInfo(f, rec);
 fputc('\n', f);
+}
+
+boolean looksTabular(const struct vcfInfoDef *def, const struct vcfInfoElement *el)
+/* Return TRUE if def->description seems to contain a |-separated description of columns
+ * and el's first non-empty string value has the same number of |-separated parts. */
+{
+if (!def || def->type != vcfInfoString || isEmpty(def->description))
+    return FALSE;
+if (regexMatch(def->description, COL_DESC_REGEX))
+    {
+    int descColCount = countChars(def->description, '|') + 1;
+    if (descColCount >= MIN_COLUMN_COUNT)
+        {
+        int j;
+        for (j = 0;  j < el->count;  j++)
+            {
+            char *val = el->values[j].datString;
+            if (isEmpty(val))
+                continue;
+            int elColCount = countChars(val, '|') + 1;
+            if (elColCount == descColCount)
+                return TRUE;
+            }
+        }
+    }
+return FALSE;
 }

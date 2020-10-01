@@ -32,6 +32,8 @@
 #define VCF_HAP_TREEANGLE_RECTANGLE "rectangle"
 #define VCF_DEFAULT_HAP_TREEANGLE VCF_HAP_TREEANGLE_TRIANGLE
 
+#define VCF_SAMPLE_COLOR_FILE "sampleColorFile"
+
 #define VCF_SHOW_HW_VAR "showHardyWeinberg"
 
 #define VCF_APPLY_MIN_QUAL_VAR "applyMinQual"

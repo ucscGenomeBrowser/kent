@@ -9,6 +9,7 @@ noParentConfig on
 itemRgb on
 urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
 scoreLabel ClinVar Star-Rating (0-4)
+pennantIcon Updated red /goldenPath/newsarch.html#093020a "Updated Sep. 30, 2020"
 
         track clinvarMain
         parent clinvar
@@ -40,7 +41,7 @@ scoreLabel ClinVar Star-Rating (0-4)
         track clinvarCnv
         parent clinvar
         shortLabel ClinVar CNVs
-        longLabel ClinVar Copy Number Variants > 50bp
+        longLabel ClinVar Copy Number Variants >= 50bp
         visibility hide
         type bigBed 12 +
         itemRgb on

@@ -27,7 +27,7 @@ include trackDb.clinvar.ra
 include trackDb.dbVar.ra
 
 # ClinGen
-include trackDb.clinGen.ra alpha,beta
+include trackDb.clinGen.ra
 
 # Genome In a Bottle
 include trackDb.giab.ra alpha
@@ -3731,7 +3731,6 @@ compositeTrack on
 type bigBed 4 +
 tableBrowser off lovdComp
 html lovdComp
-release alpha,beta
 
         track lovdShort
         shortLabel LOVD Variants < 50 bp
@@ -3742,7 +3741,6 @@ release alpha,beta
         noScoreFilter on
         bigDataUrl /gbdb/$D/lovd/lovd.$D.short.bb
         parent lovdComp
-        release alpha,beta
 
         track lovdLong
         type bigBed 9 +
@@ -3755,43 +3753,6 @@ release alpha,beta
         bigDataUrl /gbdb/$D/lovd/lovd.$D.long.bb
         parent lovdComp
         mergeSpannedItems on
-        release alpha,beta
-
-track lovdComp
-shortLabel LOVD Variants
-longLabel Leiden Open Variation Database Public Variants
-group phenDis
-visibility hide
-compositeTrack on
-type bedDetail
-tableBrowser off lovdComp
-html lovdComp
-release public
-
-        track lovdShort
-        shortLabel LOVD Variants < 50bp
-        longLabel Leiden Open Variation Database, short < 50bp variants
-        group phenDis
-        visibility hide
-        type bedDetail 6
-        url http://varcache.lovd.nl/redirect/$$
-        urlLabel Link to LOVD:
-        noScoreFilter on
-        parent lovdComp
-        release public
-
-        track lovdLong
-        shortLabel LOVD Variants >= 50bp
-        longLabel Leiden Open Variation Database Public Variants, long >= 50bp variants
-        group phenDis
-        visibility hide
-        type bedDetail 6
-        url http://varcache.lovd.nl/redirect/$$
-        urlLabel Link to LOVD:
-        noScoreFilter on
-        parent lovdComp
-        release public
-
 
 track hgmd
 shortLabel HGMD Variants
@@ -4769,7 +4730,7 @@ subGroup3 level Evidence cur=Curated sub=Submitted
 dimensions dimensionY=class dimensionX=level
 sortOrder class=+ level=+ view=+
 type bed 3
-pennantIcon Deprecated red /goldenPath/newsarch.html "Track no longer updated, see news archive for details"
+pennantIcon Deprecated red /goldenPath/newsarch.html#093020b "Track no longer updated, see news archive for details"
 
     track iscaViewTotal
     shortLabel Coverage (Graphical)
@@ -5516,4 +5477,4 @@ termRegex nssv[0-9]+
 searchType bed
 searchPriority 50
 
-include covidHgiGwas.ra alpha,beta,public
+include covidHgiGwas.ra

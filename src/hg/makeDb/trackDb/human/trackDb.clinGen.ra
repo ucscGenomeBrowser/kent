@@ -1,14 +1,14 @@
 track clinGenComp
 shortLabel ClinGen
-longLabel Clinical Genome Resource (ClinGen) Dosage Sensitivity Map
-visibility pack
+longLabel ClinGen curation activities (Dosage Sensitivity and Gene-Disease Validity)
+visibility hide
 type bigBed 9 +
 group phenDis
 itemRgb on
 compositeTrack on
 noParentConfig on
 html clinGen
-pennantIcon New red /goldenPath/newsarch.html#092320 "Released Sep. 23, 2020"
+pennantIcon New red /goldenPath/newsarch.html#093020b "Released Sep. 30, 2020"
 
     track clinGenHaplo
     showCfg on

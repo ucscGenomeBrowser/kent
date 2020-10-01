@@ -40,6 +40,7 @@ my $stepper = new HgStepManager(
     [ { name => 'download',   func => \&doDownload },
       { name => 'sequence',   func => \&doSequence },
       { name => 'assemblyGap',   func => \&doAssemblyGap },
+      { name => 'chromAlias',   func => \&doChromAlias },
       { name => 'gatewayPage',   func => \&doGatewayPage },
       { name => 'cytoBand',   func => \&doCytoBand },
       { name => 'gc5Base',   func => \&doGc5Base },
@@ -132,6 +133,7 @@ Automates build of assembly hub.  Steps:
     sequence: establish AGP and 2bit file from NCBI directory
     assemblyGap: create assembly and gap bigBed files and indexes
                  for assembly track names
+    chromAlias:  construct asmId.chromAlias.txt for alias name recognition
     gatewayPage: create html/asmId.description.html contents (USE: asmHubName)
     cytoBand: create cytoBand track and navigation ideogram
     gc5Base: create bigWig file for gc5Base track
@@ -368,10 +370,15 @@ sub unlocalizedAgp($$$$) {
          $acc =~ s/\./v/ if ($ucscNames);
          die "ERROR: chrN $chrN not correct for $acc"
              if ($accToChr{$acc} ne $chrN);
-         my $ucscName = "${acc}";
-         $ucscName = "chr${chrN}_${acc}_random" if ($ucscNames);
+         my $ucscName = "$ncbiAcc";
+         $ucscName = "chr${chrN}_${acc}_random";
+         $ucscName =~ s/\./v/;
          printf NAMES "%s\t%s\n", $ucscName, $ncbiAcc;
-         printf AGP "%s", $ucscName;    # begin AGP line with accession name
+         if ($ucscNames) {
+            printf AGP "%s", $ucscName;    # begin AGP line with accession name
+         } else {
+            printf AGP "%s", $ncbiAcc;    # begin AGP line with accession name
+         }
          for (my $i = 1; $i < scalar(@a); ++$i) {   # the rest of the AGP line
              printf AGP "\t%s", $a[$i];
          }
@@ -557,13 +564,15 @@ sub unplacedAgp($$$$) {
     } else {
         my ($ncbiAcc, undef) = split('\s+', $line, 2);
         next if (exists($dupAccessionList{$ncbiAcc}));
+        my $ucscAcc = $ncbiAcc;
+        $ucscAcc =~ s/\./v/;
+        printf NAMES "%s%s\t%s\n", $chrPrefix, $ucscAcc, $ncbiAcc;
         if ($ucscNames) {
-          my $ucscAcc = $ncbiAcc;
-          $ucscAcc =~ s/\./v/;
-          printf NAMES "%s%s\t%s\n", $chrPrefix, $ucscAcc, $ncbiAcc;
           $line =~ s/\./v/;
+          printf AGP "%s%s", $chrPrefix, $line;
+        } else {
+          printf AGP "%s", $line;
         }
-        printf AGP "%s%s", $chrPrefix, $line;
     }
   }
   close (FH);
@@ -605,7 +614,11 @@ sub unplacedFasta($$$$) {
       $line =~ s/^>//;
       $line =~ s/ .*//;
       die "ERROR: twoBitToFa $twoBitFile returns unknown acc $line" if (! exists($contigName{$line}));
-      printf FA ">%s%s\n", $chrPrefix, $contigName{$line};
+      if ($ucscNames) {
+        printf FA ">%s%s\n", $chrPrefix, $contigName{$line};
+      } else {
+        printf FA ">%s\n", $contigName{$line};
+      }
     } else {
       print FA $line;
     }
@@ -741,7 +754,7 @@ sub doSequence {
   my $unplacedScafAgp = "$primaryAssembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
   if ( -s $unplacedScafAgp ) {
     my $chrPrefix = "";   # no prefix if no other chrom parts
-    $chrPrefix = "chrUn_" if ($otherChrParts);
+    $chrPrefix = "chrUn_" if ($otherChrParts && ! $ucscNames);
     my $agpOutput = "$runDir/$asmId.unplaced.agp.gz";
     my $agpNames = "$runDir/$asmId.unplaced.names";
     $partsDone += 1;
@@ -934,6 +947,37 @@ _EOF_
   );
   $bossScript->execute();
 } # assemblyGap
+
+#########################################################################
+# * step: chromAlias [workhorse]
+sub doChromAlias {
+  my $runDir = "$buildDir/trackData/chromAlias";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct asmId.chromAlias.txt for alias name recognition";
+  my $bossScript = newBash HgRemoteScript("$runDir/doChromAlias.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export buildDir=$buildDir
+export asmId=$asmId
+
+\$HOME/kent/src/hg/utils/automation/asmHubChromAlias.pl \\
+    \${asmId} | sort > \${asmId}.chromAlias.txt
+# verify each sequence name has an alias
+export sizeCount=`cat ../../\${asmId}.chrom.sizes | wc -l`
+export aliasCount=`grep -v "^#" \${asmId}.chromAlias.txt | wc -l`
+if [ "\${sizeCount}" -ne "\${aliasCount}" ]; then
+  printf "ERROR: chromAlias: incorrect number of aliases %d != %d\\n" "\${sizeCount}" "\${aliasCount}" 1>&2
+  exit 255
+fi
+
+exit 0
+
+_EOF_
+  );
+  $bossScript->execute();
+} # chromAlias
 
 #########################################################################
 # * step: gatewayPage [workhorse]
@@ -1731,9 +1775,15 @@ sub doTrackDb {
   my $bossScript = newBash HgRemoteScript("$runDir/doTrackDb.bash",
                     $workhorse, $runDir, $whatItDoes);
 
+  if (! -s "${buildDir}/trackData/chromAlias/${asmId}.chromAlias.txt" ) {
+    die "ERROR: can not find ${asmId}.chromAlias.txt in\n# ${buildDir}/trackData/chromAlias/\n";
+  }
+
   $bossScript->add(<<_EOF_
 export asmId=$asmId
 
+rm -f \$asmId.chromAlias.txt
+ln -s trackData/chromAlias/\${asmId}.chromAlias.txt .
 \$HOME/kent/src/hg/utils/automation/asmHubTrackDb.sh \$asmId $runDir \\
    > \$asmId.trackDb.txt
 
@@ -1764,6 +1814,12 @@ _EOF_
 
 # Make sure we have valid options and exactly 1 argument:
 &checkOptions();
+if (scalar(@ARGV) != 1) {
+  printf STDERR "ERROR: can not find 1 argument in ARGV, instead: %d\n", scalar(@ARGV);
+  for (my $i = 0; $i < scalar(@ARGV); ++$i) {
+    printf "# ARGV[%d] : '%s'\n", $i, $ARGV[$i];
+  }
+}
 &usage(1) if (scalar(@ARGV) != 1);
 $secondsStart = `date "+%s"`;
 chomp $secondsStart;
@@ -1827,6 +1883,8 @@ printf STDERR "# assemblySource: %s\n", $assemblySource;
 printf STDERR "# asmHubName %s\n", $asmHubName;
 printf STDERR "# rmskSpecies %s\n", $rmskSpecies;
 printf STDERR "# augustusSpecies %s\n", $augustusSpecies;
+printf STDERR "# ncbiRmsk %s\n", $ncbiRmsk ? "TRUE" : "FALSE";
+printf STDERR "# ucscNames %s\n", $ucscNames ? "TRUE" : "FALSE";
 
 # Do everything.
 $stepper->execute();

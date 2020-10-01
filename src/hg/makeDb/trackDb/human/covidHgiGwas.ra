@@ -6,7 +6,7 @@ group phenDis
 visibility hide
 autoScale on
 maxHeightPixels 48:75:128
-pennantIcon New red
+pennantIcon New red ../goldenPath/newsarch.html#092520 "Released Sep. 25, 2020"
 type bigLolly 9 +
 lollyField 21
 # V2

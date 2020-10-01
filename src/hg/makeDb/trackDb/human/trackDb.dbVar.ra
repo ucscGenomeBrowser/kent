@@ -2,8 +2,9 @@ track dbVarSv
 superTrack on
 group varRep
 html dbVarCurated
-shortLabel NCBI Common Struct Var
+shortLabel dbVar Common Struct Var
 longLabel NCBI Curated Common Structural Variants from dbVar
+pennantIcon New red ../goldenPath/newsarch.html#100520 "Released Oct. 5, 2020"
 
     track dbVar_common
     superTrack  dbVarSv pack

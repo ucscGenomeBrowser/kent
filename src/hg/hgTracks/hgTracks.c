@@ -631,7 +631,21 @@ static void maybeNewFonts(struct hvGfx *hvg)
 /* Check to see if we want to use the alternate font engine (FreeType2). */
 {
 if (sameString(cfgOptionDefault("freeType", "off"), "on"))
-    hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE);
+    {
+    char *fontDir = cfgOptionDefault("freeTypeDir", "/usr/share/fonts/default/Type1");
+    char buffer[4096];
+
+    extern char *freeTypeFontNames[];
+    extern char *freeTypeFontFiles[];
+    int ii;
+    for(ii=0; ii < 33; ii++)
+        if (sameString(freeTypeFontNames[ii], tl.textFont))
+            break;
+    char *fontFile = freeTypeFontFiles[ii];
+    char *fontName = freeTypeFontNames[ii];
+    safef(buffer, sizeof buffer, "%s/%s", fontDir, fontFile);
+    hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, fontName, buffer );
+    }
 }
 
 boolean makeChromIdeoImage(struct track **pTrackList, char *psOutput,
@@ -9922,8 +9936,9 @@ cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
 printf("Total: %d", count);
 cgiTableFieldEnd();
-cgiSimpleTableFieldStart();
+cgiTableFieldStartAlignRight();
 printLongWithCommas(stdout, total);
+puts("&nbsp;&nbsp;");
 cgiTableFieldEnd();
 if (hasAlias)
     {
@@ -10215,14 +10230,14 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-static void chromSizesDownloadRow(boolean hasAlias, char *hubAliasFile)
+static void chromSizesDownloadRow(boolean hasAlias, char *hubAliasFile, char *chromSizesFile)
 /* Show link to chrom.sizes file at end of chromInfo table (unless this is a hub) */
 {
 if (! trackHubDatabase(database))
     {
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    puts("Download as file");
+    puts("Download as file:");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
     printf("<A HREF='http://%s/goldenPath/%s/bigZips/%s.chrom.sizes'>%s.chrom.sizes</A>",
@@ -10231,7 +10246,17 @@ if (! trackHubDatabase(database))
     if (hasAlias)
 	{
 	cgiSimpleTableFieldStart();
-	puts("&nbsp");
+	/* see if this database has the chromAlias.txt download file */
+	char aliasFile[1024];
+        safef(aliasFile, sizeof aliasFile, "http://%s/goldenPath/%s/bigZips/%s.chromAlias.txt", hDownloadsServer(), database, database);
+        struct udcFile *file = udcFileMayOpen(aliasFile, udcDefaultDir());
+	if (file)
+	    {
+	    udcFileClose(&file);
+	    printf("<A HREF='%s'>%s.chromAlias.txt</A>", aliasFile, database);
+	    }
+	else
+	    puts("&nbsp");
 	cgiTableFieldEnd();
 	}
     cgiTableRowEnd();
@@ -10240,13 +10265,19 @@ else if (hubAliasFile)
     {
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    puts("Download as file");
+    puts("Download as file:");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    puts("&nbsp");
+    if (chromSizesFile)
+	{
+        printf("<a href='%s' target=_blank>%s.chrom.sizes.txt</A>", chromSizesFile, trackHubSkipHubName(database));
+        puts("&nbsp;&nbsp;");
+	}
+    else
+        puts("&nbsp");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    printf("<a href='%s' target=_blank>assembly hub alias file</A>", hubAliasFile);
+    printf("<a href='%s' target=_blank>%s.chromAlias.txt</A>", hubAliasFile, trackHubSkipHubName(database));
     cgiTableFieldEnd();
     cgiTableRowEnd();
     }
@@ -10256,12 +10287,14 @@ void chromInfoPage()
 /* Show list of chromosomes (or scaffolds, etc) on which this db is based. */
 {
 boolean hasAlias = FALSE;
+char *chromSizesFile = NULL;
 char *aliasFile = NULL;
 if (trackHubDatabase(database))
     {
     aliasFile = trackHubAliasFile(database);
     if (aliasFile)
         hasAlias = TRUE;
+    chromSizesFile = trackHubChromSizes(database);
     }
 else
     hasAlias = hTableExists(database, "chromAlias");
@@ -10319,7 +10352,7 @@ else if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) 
     chromInfoRowsChrom();
 else
     chromInfoRowsNonChrom(1000);
-chromSizesDownloadRow(hasAlias, aliasFile);
+chromSizesDownloadRow(hasAlias, aliasFile, chromSizesFile);
 
 hTableEnd();
 cgiDown(0.9);

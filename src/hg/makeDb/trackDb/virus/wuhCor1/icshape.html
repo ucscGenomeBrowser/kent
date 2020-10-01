@@ -1,0 +1,37 @@
+<H2>Description</H2>
+<p>This track shows normalized icSHAPE reactivity data of in vivo and in vitro SARS-CoV-2 experiments.
+</p>
+
+<H2>Methods</H2>
+<p>
+icSHAPE scores were provided by Qiangfeng Cliff Zhang and converted to bigWig.
+The first five nucleotides of the genome and the last thirty nucleotides have
+no data due to technical defects (on the 5' and 3' ends of the virus) or insufficient 
+sequencing depth. The icSHAPE score is distributed between 0 and 1.
+</p>
+
+<h2>Data Access</h2>
+<p>
+You can download the bigWig file underlying this track (icshape/*.bw) from our
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/bbi/icshape/"
+target="_blank">Download Server</a>. The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a>
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be
+accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>.
+<pre>
+http://api.genome.ucsc.edu/getData/track?genome=wuhCor1;track=icshapeInvitro;chrom=NC_045512v2;start=100;end=7875
+</pre>
+Command-line extraction can be accomplished using an example like the following command:
+<pre>
+bigWigToWig -udcDir=. -chrom=NC_045512v2 -start=100 end=7875 https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/bbi/icshape/invivo.bigWig myOutput.wig
+</pre></p>
+<p>
+Please refer to our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list archives</a> for questions, or our
+<a href="../FAQ/FAQdownloads.html#download36" target="_blank">Data Access FAQ</a> for more
+information.</p>
+
+<H2>References</H2>
+<p>Lei Sun, Pan Li, Xiaohui Ju, Jian Rao, Wenze Huang, Shaojun Zhang, Tuanlin Xiong, Kui Xu, Xiaolin Zhou, Lili Ren, Qiang Ding, Jianwei Wang, Qiangfeng Cliff Zhang
+<A HREF="https://www.biorxiv.org/content/10.1101/2020.07.07.192732v1" target=_blank>
+"In vivo structural characterization of the whole SARS-CoV-2 RNA genome identifies host cell target proteins vulnerable to re-purposed drugs"</A>, Biorxiv July 8 2020</p>

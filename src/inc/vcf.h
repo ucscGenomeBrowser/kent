@@ -262,6 +262,12 @@ struct vcfRecord *vcfNextRecord(struct vcfFile *vcff);
 struct vcfRecord *vcfRecordFromRow(struct vcfFile *vcff, char **words);
 /* Parse words from a VCF data line into a VCF record structure. */
 
+boolean allelesHavePaddingBase(char **alleles, int alleleCount);
+/* Examine alleles to see if they either a) all start with the same base or
+ * b) include a symbolic or 0-length allele.  In either of those cases, there
+ * must be an initial padding base that we'll need to trim from non-symbolic
+ * alleles. */
+
 unsigned int vcfRecordTrimIndelLeftBase(struct vcfRecord *rec);
 /* For indels, VCF includes the left neighboring base; for example, if the alleles are
  * AA/- following a G base, then the VCF record will start one base to the left and have
@@ -345,5 +351,18 @@ char *vcfGetSlashSepAllelesFromWords(char **words, struct dyString *dy);
 
 void vcfRecordWriteNoGt(FILE *f, struct vcfRecord *rec);
 /* Write the first 8 columns of VCF rec to f.  Genotype data will be ignored if present. */
+
+// Characters we expect to see in |-separated parts of an ##INFO description that specifies
+// tabular contents:
+#define COL_DESC_WORD_REGEX "[A-Za-z_0-9.-]+"
+// Series of |-separated words:
+#define COL_DESC_REGEX COL_DESC_WORD_REGEX"(\\|"COL_DESC_WORD_REGEX")+"
+
+// Minimum number of |-separated values for interpreting descriptions and values as tabular:
+#define MIN_COLUMN_COUNT 3
+
+boolean looksTabular(const struct vcfInfoDef *def, const struct vcfInfoElement *el);
+/* Return TRUE if def->description seems to contain a |-separated description of columns
+ * and el's first non-empty string value has the same number of |-separated parts. */
 
 #endif // vcf_h

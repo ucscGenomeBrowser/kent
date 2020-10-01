@@ -52,27 +52,48 @@ consent requirements of the DECIPHER project and are approved for
 unrestricted public release.  Clicking the Patient View ID link
 brings up a more detailed informational page on the patient at the 
 DECIPHER web site. 
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+The genomic locations of DECIPHER variants are labelled with the DECIPHER variant descriptions. 
+<b>Mouseover</b> on items shows variant details, clinical interpretation, and associated conditions. 
+Further information on each variant is displayed on the details page by a click onto any variant. 
+</p>
+
+<P>
+For the <b>CNVs track</b>, the entries are colored by the <b>type of variant</b>:
+<ul>
+ <li><b><font color="red">red</font></b> for loss</li>
+ <li><b><font color="blue">blue</font></b> for gain</li>
+ <li><b><font color="grey">grey</font></b> for amplification</li>
+</ul>
+</P>
+
+<P>
+A light-to-dark color gradient indicates the <b>clinical significance</b> of each variant, with 
+the lightest shade being benign, to the darkest shade being pathogenic. Detailed information on the 
+CNV color code is described <a href="https://genome.ucsc.edu/goldenPath/help/hgCnvColoring.html">here</a>.
+Items can be filtered according to the size of the variant, variant type, and clinical significance 
+using the track <b>Configure</b> options.
+</P>
+ 
+<P>
+For the <b>SNVs track</b>, the entries are colored according to the estimated <b>clinical significance</b> 
+of the variant:
+<ul>
+ <li><b><font color="black">black</font></b> for likely or definitely pathogenic</li>
+ <li><b><font color="#888">dark grey</font></b> for uncertain or unknown</li>
+ <li><b><font color="#c8c8c8">light grey</font></b> for likely or definitely benign</li>
+ </ul>
+</P>
+
 <H2>Method</H2>
 <P>
-Data provided by the DECIPHER project group are imported and processed 
-to create a simple BED track to annotate the genomic regions associated 
-with individual patients.  
+Data provided by the DECIPHER project group are imported and processed
+to create a simple BED track to annotate the genomic regions associated
+with individual patients.
 </P>
-<ul>
-  <li>
-    For the CNVs track, the entries are colored <B><FONT COLOR = RED>red</FONT></B> for deletions 
-    (mean log ratio &lt; 0) and <B><FONT COLOR = BLUE>blue</FONT></B> for duplications 
-    (mean log ratio &gt; 0).  Entries where no mean ratio is available are colored
-    <b><font color="#888">grey</font></b>.</li>
-  <li>
-    For the SNVs track, the entries are colored according to the estimated pathogenicity of the
-    variant. <br>Entries are colored:
-    <ul>
-      <li><b><font color="black">black</font></b> for likely or definitely pathogenic</li>
-      <li><b><font color="#888">dark grey</font></b> for uncertain or unknown</li>
-      <li><b><font color="#c8c8c8">light grey</font></b> for likely or definitely benign</li>
-    </ul>
-</ul>
+
 
 <H2>Contact</H2>
 <P>

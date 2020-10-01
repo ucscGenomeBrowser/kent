@@ -32,6 +32,7 @@ UTILS_APPLIST = \
 	chromGraphToBin \
 	crTreeIndexBed \
 	crTreeSearchBed \
+	faToVcf \
 	gapToLift \
 	genePredFilter \
 	genePredToBigGenePred \

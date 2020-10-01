@@ -1934,36 +1934,86 @@ else
 return leafIx;
 }
 
-static void rDrawPhyloTreeInLabelArea(struct phyloTree *node, struct hvGfx *hvg, int x,
-                                      int yOff, double pxPerHap, MgFont *font,
-                                      struct hash *highlightSamples)
+static int colorCmp(const void *pa, const void *pb)
+/* Compare two colors for sorting by numeric value. */
+{
+const Color ca = *(Color *)pa;
+const Color cb = *(Color *)pb;
+return ca - cb;
+}
+
+static Color colorFromChildColors(Color *childColors, int childCount, Color defaultCol)
+/* If the majority of children have the same color, then return that color, otherwise defaultCol. */
+{
+Color childColCopy[childCount];
+memcpy(childColCopy, childColors, sizeof childColCopy);
+qsort(childColCopy, childCount, sizeof(*childColCopy), colorCmp);
+Color maxRunColor = childCount > 0 ? childColors[0] : defaultCol;
+int runLength = 1, maxRunLength = 1;
+int ix;
+for (ix = 1;  ix < childCount;  ix++)
+    {
+    if (childColors[ix] == childColors[ix-1])
+        {
+        runLength++;
+        }
+    else
+        {
+        if (runLength > maxRunLength)
+            {
+            maxRunLength = runLength;
+            maxRunColor = childColors[ix-1];
+            }
+        runLength = 1;
+        }
+    }
+if (runLength > maxRunLength)
+    {
+    maxRunLength = runLength;
+    maxRunColor = childColors[ix-1];
+    }
+if (maxRunLength > (childCount>>1))
+    return maxRunColor;
+return defaultCol;
+}
+
+static Color rDrawPhyloTreeInLabelArea(struct phyloTree *node, struct hvGfx *hvg, int x,
+                                       int yOff, double pxPerHap, MgFont *font,
+                                       struct hash *highlightSamples, struct hash *sampleColors)
 /* Recursively draw the tree in the left label area. */
 {
 const int branchW = 4;
 int labelEnd = leftLabelX + leftLabelWidth;
-// Misuse the branch length value as RGB color (if it's the typical small number, will still
-// draw as approximately black):
-unsigned int rgb = node->ident->length;
-Color color = MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
-
+Color color = MG_BLACK;
+if (!sampleColors)
+    {
+    // Misuse the branch length value as RGB color (if it's the typical small number, will still
+    // draw as approximately black):
+    unsigned int rgb = node->ident->length;
+    color = MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
+    }
 if (node->numEdges > 0)
     {
     // Draw each child and a horizontal line to child
     int minY = -1, maxY = 0;
+    Color childColors[node->numEdges];
     int ix;
     for (ix = 0;  ix < node->numEdges;  ix++)
         {
         struct phyloTree *child = node->edges[ix];
-        rDrawPhyloTreeInLabelArea(child, hvg, x+branchW, yOff, pxPerHap, font, highlightSamples);
+        childColors[ix] = rDrawPhyloTreeInLabelArea(child, hvg, x+branchW, yOff, pxPerHap, font,
+                                                    highlightSamples, sampleColors);
         struct nodeCoords *childCoords = child->priv;
         int childY = yOff + ((0.5 + childCoords->rank) * pxPerHap);
-        hvGfxLine(hvg, x, childY, x+branchW, childY, color);
+        hvGfxLine(hvg, x, childY, x+branchW, childY, childColors[ix]);
         if (minY < 0 || childY < minY)
             minY = childY;
         if (childY > maxY)
             maxY = childY;
         }
     // Draw a vertical line to connect the children
+    if (sampleColors != NULL)
+        color = colorFromChildColors(childColors, node->numEdges, color);
     hvGfxLine(hvg, x, minY, x, maxY, color);
     }
 else
@@ -1980,16 +2030,20 @@ else
     if (highlightSamples && node->ident->name && hashLookup(highlightSamples, node->ident->name))
         hvGfxBox(hvg, leftLabelX, yBox, leftLabelWidth, pxPerHap,
                  MAKECOLOR_32_A(170, 255, 255, 128));
+    if (sampleColors != NULL)
+        color = (Color)hashIntValDefault(sampleColors, node->ident->name, MG_BLACK);
     hvGfxLine(hvg, x, yLine, x+branchW, yLine, color);
     int textX = x + branchW + 3;
     if (pxPerHap >= tl.fontHeight+1 && textX < labelEnd)
         hvGfxText(hvg, textX, yText, MG_BLACK, font, node->ident->name);
     }
+return color;
 }
 
 static void drawPhyloTreeInLabelArea(struct phyloTree *tree, struct hvGfx *hvg, int yOff,
                                      int clipHeight, int gtHapCount,
-                                     MgFont *font, struct hash *highlightSamples)
+                                     MgFont *font, struct hash *highlightSamples,
+                                     struct hash *sampleColors)
 {
 struct hvGfx *hvgLL = (hvgSide != NULL) ? hvgSide : hvg;
 int clipXBak, clipYBak, clipWidthBak, clipHeightBak;
@@ -1999,7 +2053,7 @@ hvGfxSetClip(hvgLL, leftLabelX, yOff, leftLabelWidth, clipHeight);
 // Draw the tree:
 int x = leftLabelX;
 double pxPerHap = (double)clipHeight / gtHapCount;
-rDrawPhyloTreeInLabelArea(tree, hvgLL, x, yOff, pxPerHap, font, highlightSamples);
+rDrawPhyloTreeInLabelArea(tree, hvgLL, x, yOff, pxPerHap, font, highlightSamples, sampleColors);
 // Restore the prior clipping:
 hvGfxUnclip(hvgLL);
 hvGfxSetClip(hvgLL, clipXBak, clipYBak, clipWidthBak, clipHeightBak);
@@ -2030,7 +2084,48 @@ else
     }
 }
 
-struct hash *getHighlightSamples(struct trackDb *tdb)
+static struct hash *getSampleColors(struct trackDb *tdb)
+/* Return a hash of sample names to colors if specified in tdb, or NULL if none specified. */
+{
+struct hash *sampleColors = NULL;
+char *setting = cartOrTdbString(cart, tdb, VCF_SAMPLE_COLOR_FILE, NULL);
+if (isNotEmpty(setting))
+    {
+    // If the setting has not been set in the cart then we're getting the trackDb setting which
+    // may specify a list of files and possibly labels like "Thing_one=file1 Thing_two=file2".
+    // In that case, pick out the first file.
+    if (strchr(setting, '=') || strchr(setting, ' '))
+        {
+        setting = nextWord(&setting);
+        char *eq = (strchr(setting, '='));
+        if (eq)
+            setting = eq+1;
+        }
+    char *fileName = hReplaceGbdb(setting);
+    struct lineFile *lf = lineFileUdcMayOpen(fileName, TRUE);
+    if (lf)
+        {
+        sampleColors = hashNew(0);
+        char *line;
+        while (lineFileNextReal(lf, &line))
+            {
+            char *words[2];
+            chopTabs(line, words);
+            char *sample = words[0];
+            char *colorStr = words[1];
+            int rgb = bedParseColor(colorStr);
+            Color color = MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
+            hashAddInt(sampleColors, sample, color);
+            }
+        lineFileClose(&lf);
+        }
+    else
+        warn("Can't open sampleColorFile '%s'", fileName);
+    }
+return sampleColors;
+}
+
+static struct hash *getHighlightSamples(struct trackDb *tdb)
 /* Return a hash of node IDs to highlight in the phylo tree display, or NULL if none specified. */
 {
 struct hash *highlightSamples = NULL;
@@ -2080,7 +2175,9 @@ for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     drawOneRec(rec, gtHapOrder, gtHapCount, tg, hvg, xOff, yOff, width, FALSE, FALSE,
                colorMode, funcTerm);
     }
-drawPhyloTreeInLabelArea(tree, hvg, yOff+extraPixel, hapHeight, gtHapCount, font, highlightSamples);
+struct hash *sampleColors = getSampleColors(tg->tdb);
+drawPhyloTreeInLabelArea(tree, hvg, yOff+extraPixel, hapHeight, gtHapCount, font, highlightSamples,
+                         sampleColors);
 drawSampleTitles(vcff, yOff+extraPixel, hapHeight, gtHapOrder, gtHapCount, tg->track);
 }
 

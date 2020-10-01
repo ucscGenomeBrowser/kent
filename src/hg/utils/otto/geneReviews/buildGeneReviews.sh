@@ -24,12 +24,22 @@ then
 fi
 cat grRefGene.lst | while read G
     do
-    hgsql $1 -N -e \
-        "SELECT e.chrom,e.txStart,e.txEnd,j.geneSymbol \
-        FROM knownGene e, kgXref j WHERE e.name = j.kgID AND \
-        j.geneSymbol ='${G}' ORDER BY e.chrom,e.txStart;" > temp.in
-        bedRemoveOverlap temp.in temp.out
-        cat temp.out >> geneReviews.tab
+    if [ "$1" = "hg38" ]
+    then
+        hgsql $1 -N -e \
+            "SELECT e.chrom,e.txStart,e.txEnd,e.name2 \
+            FROM gencodeAnnotV35 e where e.name2 ='${G}' \
+            ORDER BY e.chrom,e.txStart;" > temp.in
+            bedRemoveOverlap temp.in temp.out
+            cat temp.out >> geneReviews.tab
+    else
+        hgsql $1 -N -e \
+            "SELECT e.chrom,e.txStart,e.txEnd,j.geneSymbol \
+            FROM knownGene e, kgXref j WHERE e.name = j.kgID AND \
+            j.geneSymbol ='${G}' ORDER BY e.chrom,e.txStart;" > temp.in
+            bedRemoveOverlap temp.in temp.out
+            cat temp.out >> geneReviews.tab
+    fi
     done
 rm temp.*
 
