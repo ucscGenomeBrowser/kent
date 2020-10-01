@@ -2059,147 +2059,155 @@ else
 	pthread_t *threads = NULL;
 
 	pfdListCount = slCount(pfdList);
-	/* launch parallel threads */
-	ptMax = min(ptMax, pfdListCount);
-	if (ptMax > 0)
+        if (pfdListCount > 0)
 	    {
-	    AllocArray(threads, ptMax);
-	    /* Create threads */
-	    int pt;
-	    for (pt = 0; pt < ptMax; ++pt)
+
+	    /* launch parallel threads */
+	    ptMax = min(ptMax, pfdListCount);
+	    if (ptMax > 0)
 		{
-		int rc = pthread_create(&threads[pt], NULL, remoteParallelLoad, &threads[pt]);
-		if (rc)
+		AllocArray(threads, ptMax);
+		/* Create threads */
+		int pt;
+		for (pt = 0; pt < ptMax; ++pt)
 		    {
-		    errAbort("Unexpected error %d from pthread_create(): %s",rc,strerror(rc));
+		    int rc = pthread_create(&threads[pt], NULL, remoteParallelLoad, &threads[pt]);
+		    if (rc)
+			{
+			errAbort("Unexpected error %d from pthread_create(): %s",rc,strerror(rc));
+			}
 		    }
 		}
-	    }
 
-	if (ptMax > 0)
-	    {
-	    /* wait for remote parallel load to finish */
-	    remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
-	    }
-
-	// Should continue with pfdDone since threads could still be running that might access pdfList ?
-
-	// Hide weaker of RC'd query pairs, if not debugging.
-	// Combine pairs with a query and its RC.
-	if (!(debuggingGfResults) &&
-	   (sameString(pfdDone->xType,"dna") || sameString(pfdDone->xType,"dnax")))
-	    {
-	    slSort(&pfdDone, rcPairsCmp);  
-	    hideWeakerOfQueryRcPairs(pfdDone);
-	    }
-
-	// requires db for chromSize, do database after multi-threading done.
-	changeMaxGenePositionToPositiveStrandCoords(pfdDone);
-
-        // sort by maximum hits
-	slSort(&pfdDone, genomeHitsCmp);
-
-	// Print instructions
-        printf("The single best alignment found for each assembly is shown below.\n"
-		"The approximate results below are sorted by number of matching 'tiles', "
-                "perfectly matching sub-sequences of length 11 (DNA) "
-                "or 4 (protein). Using only tile hits, this speedy method can not see mismatches.");
-	printf("Click the 'assembly' link to trigger a full BLAT alignment for that genome. \n");
-	printf("The entire alignment, including mismatches and gaps, must score 20 or higher in order to appear in the Blat output.\n");
-	printf("For more details see the <a href='/FAQ/FAQblat.html#blat9'>BLAT FAQ</a>.<br>\n");
-
-	// Print report  // move to final report at the end of ALL Assemblies
-	int lastSeqNumber = -1;
-	int idCount = 0;
-	char id[256];
-	struct genomeHits *gH = NULL;
-	for (gH = pfdDone; gH; gH = gH->next)
-	    {
-	    if (lastSeqNumber != gH->seqNumber)
+	    if (ptMax > 0)
 		{
-		if (lastSeqNumber != -1) // end previous table
+		/* wait for remote parallel load to finish */
+		remoteParallelLoadWait(atoi(cfgOptionDefault("parallelFetch.timeout", "90")));  // wait up to default 90 seconds.
+		}
+
+	    // Should continue with pfdDone since threads could still be running that might access pdfList ?
+
+	    // Hide weaker of RC'd query pairs, if not debugging.
+	    // Combine pairs with a query and its RC.
+	    if (!(debuggingGfResults) &&
+	       (sameString(pfdDone->xType,"dna") || sameString(pfdDone->xType,"dnax")))
+		{
+		slSort(&pfdDone, rcPairsCmp);  
+		hideWeakerOfQueryRcPairs(pfdDone);
+		}
+
+	    // requires db for chromSize, do database after multi-threading done.
+	    changeMaxGenePositionToPositiveStrandCoords(pfdDone);
+
+	    // sort by maximum hits
+	    slSort(&pfdDone, genomeHitsCmp);
+
+	    // Print instructions
+	    printf("The single best alignment found for each assembly is shown below.\n"
+		    "The approximate results below are sorted by number of matching 'tiles', "
+		    "perfectly matching sub-sequences of length 11 (DNA) "
+		    "or 4 (protein). Using only tile hits, this speedy method can not see mismatches.");
+	    printf("Click the 'assembly' link to trigger a full BLAT alignment for that genome. \n");
+	    printf("The entire alignment, including mismatches and gaps, must score 20 or higher in order to appear in the Blat output.\n");
+	    printf("For more details see the <a href='/FAQ/FAQblat.html#blat9'>BLAT FAQ</a>.<br>\n");
+
+	    // Print report  // move to final report at the end of ALL Assemblies
+	    int lastSeqNumber = -1;
+	    int idCount = 0;
+	    char id[256];
+	    struct genomeHits *gH = NULL;
+	    for (gH = pfdDone; gH; gH = gH->next)
+		{
+		if (lastSeqNumber != gH->seqNumber)
 		    {
-		    printf("</TABLE><br><br>\n");
-		    }
-		lastSeqNumber = gH->seqNumber;
-		// print next sequence table header
-		printf("<TABLE cellspacing='5'>\n");
-		printf("<TR>\n");
-		printf(
-		    "<th style='text-align:left'>Name</th>"
-		    "<th style='text-align:left'>Genome</th>"
-		    "<th style='text-align:left'>Assembly</th>"
-		    );
-		
-		printf(
-		    "<th style='text-align:right'>Tiles</th>"
-		    "<th style='text-align:left'>Chrom</th>"
-			);
-		if (debuggingGfResults)
-		    {
+		    if (lastSeqNumber != -1) // end previous table
+			{
+			printf("</TABLE><br><br>\n");
+			}
+		    lastSeqNumber = gH->seqNumber;
+		    // print next sequence table header
+		    printf("<TABLE cellspacing='5'>\n");
+		    printf("<TR>\n");
 		    printf(
-		    "<th style='text-align:left'>Pos</th>"
-		    "<th style='text-align:left'>Strand</th>"
-		    "<th style='text-align:left'>Exons</th>"
-		    "<th style='text-align:left'>Query RC'd</th>"
-		    "<th style='text-align:left'>Type</th>"
+			"<th style='text-align:left'>Name</th>"
+			"<th style='text-align:left'>Genome</th>"
+			"<th style='text-align:left'>Assembly</th>"
 			);
+		    
+		    printf(
+			"<th style='text-align:right'>Tiles</th>"
+			"<th style='text-align:left'>Chrom</th>"
+			    );
+		    if (debuggingGfResults)
+			{
+			printf(
+			"<th style='text-align:left'>Pos</th>"
+			"<th style='text-align:left'>Strand</th>"
+			"<th style='text-align:left'>Exons</th>"
+			"<th style='text-align:left'>Query RC'd</th>"
+			"<th style='text-align:left'>Type</th>"
+			    );
+			}
+		    printf("\n");
+		    printf("</TR>\n");
 		    }
-		printf("\n");
+
+		if (gH->hide) // hide weaker of pairs for dna and dnax with reverse-complimented queries.
+			continue;
+		printf("<TR>\n");
+		if (gH->error)
+		    {
+		    printf("<td>%s</td><td>%s</td><td>%s</td><td></td><td>%s</td><td></td>",
+			gH->faName, trackHubSkipHubName(gH->genome), trackHubSkipHubName(gH->db), gH->networkErrMsg); 
+		    if (debuggingGfResults)
+			printf("<td>%d</td><td>%s</td><td></td>", 
+			gH->queryRC, gH->type);
+		    printf("\n");
+		    }
+		else
+		    {
+		    char pos[256];
+		    safef(pos, sizeof pos, "%s:%d-%d", gH->maxGeneChrom, gH->maxGeneTStart+1, gH->maxGeneTEnd); // 1-based closed coord
+		    if (!gH->maxGeneChrom) // null
+			pos[0] = 0;  // empty string
+		    safef(id, sizeof id, "res%d", idCount);
+		    printf("<td>%s</td><td>%s</td>"
+			"<td><a id=%s href=''>%s</a></td>"
+			, gH->faName, trackHubSkipHubName(gH->genome), id, trackHubSkipHubName(gH->db));
+
+		    printf("<td style='text-align:right'>%d</td><td>%s</td>", gH->maxGeneHits, 
+			gH->maxGeneChrom ? gH->maxGeneChrom : "");
+
+		    if (debuggingGfResults)
+			{
+			printf("<td>%s</td><td>%s</td>", pos, gH->maxGeneStrand);
+			printf( "<td>%d</td><td>%d</td><td>%s</td>", gH->maxGeneExons, gH->queryRC, gH->xType);
+			}
+
+		    printf("\n");
+		    jsOnEventByIdF("click", id, 
+			"document.mainForm.org.value=\"%s\";"  // some have single-quotes in their value.
+			"document.mainForm.db.value='%s';"
+			"document.mainForm.submit();"
+			"return false;"   // cancel the default link url
+			, gH->genome, gH->db
+			);
+		    idCount++;
+		    }
+	    
 		printf("</TR>\n");
 		}
+	    printf("</TABLE><br><br>\n");
 
-	    if (gH->hide) // hide weaker of pairs for dna and dnax with reverse-complimented queries.
-		    continue;
-	    printf("<TR>\n");
-	    if (gH->error)
-		{
-		printf("<td>%s</td><td>%s</td><td>%s</td><td></td><td>%s</td><td></td>",
-		    gH->faName, trackHubSkipHubName(gH->genome), trackHubSkipHubName(gH->db), gH->networkErrMsg); 
-		if (debuggingGfResults)
-		    printf("<td>%d</td><td>%s</td><td></td>", 
-		    gH->queryRC, gH->type);
-		printf("\n");
-		}
-	    else
-		{
-		char pos[256];
-		safef(pos, sizeof pos, "%s:%d-%d", gH->maxGeneChrom, gH->maxGeneTStart+1, gH->maxGeneTEnd); // 1-based closed coord
-		if (!gH->maxGeneChrom) // null
-		    pos[0] = 0;  // empty string
-		safef(id, sizeof id, "res%d", idCount);
-		printf("<td>%s</td><td>%s</td>"
-		    "<td><a id=%s href=''>%s</a></td>"
-		    , gH->faName, trackHubSkipHubName(gH->genome), id, trackHubSkipHubName(gH->db));
+	    if (debuggingGfResults)
+		printDebugging();
 
-		printf("<td style='text-align:right'>%d</td><td>%s</td>", gH->maxGeneHits, 
-		    gH->maxGeneChrom ? gH->maxGeneChrom : "");
-
-		if (debuggingGfResults)
-		    {
-		    printf("<td>%s</td><td>%s</td>", pos, gH->maxGeneStrand);
-		    printf( "<td>%d</td><td>%d</td><td>%s</td>", gH->maxGeneExons, gH->queryRC, gH->xType);
-		    }
-
-		printf("\n");
-		jsOnEventByIdF("click", id, 
-		    "document.mainForm.org.value=\"%s\";"  // some have single-quotes in their value.
-		    "document.mainForm.db.value='%s';"
-		    "document.mainForm.submit();"
-		    "return false;"   // cancel the default link url
-		    , gH->genome, gH->db
-		    );
-		idCount++;
-		}
-	
-	    printf("</TR>\n");
+	    fakeAskForSeqForm(organism, db);
 	    }
-	printf("</TABLE><br><br>\n");
-
-	if (debuggingGfResults)
-	    printDebugging();
-
-	fakeAskForSeqForm(organism, db);
+	else
+	    {
+	    printf("No input sequences provided.<br><br>\n");
+	    }
 
 	cartWebEnd();
 	}
