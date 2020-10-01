@@ -203,10 +203,10 @@ if (row != NULL)
 	    {
             boolean isCollection = (strstr(hub->hubUrl, "hgComposite") != NULL);
             if (isCollection)
-                warn("It looks as though you made a <a href=\"/cgi-bin/hgCollection\"><b>Track "
-         "Collection</b></a> on a previous visit, which has since been deleted. Collections "
-         "expire 48 hours after their last use. You must  <a href=\"/cgi-bin/hgSession\"><b>"
-         "save your session</b></a> to preserve collections long-term and to allow sharing.");
+                warn("You created a <a href=\"/cgi-bin/hgCollection\"><b>Track "
+         "Collection</b></a> that has expired and been removed. Track Collections "
+         "expire 48 hours after their last use. <a href=\"/cgi-bin/hgSession\"><b>"
+         "Save your session</b></a> to preserve collections long-term and to allow sharing.");
             else
                 warn("Could not connect to hub \"%s\": %s", shortLabel, hub->errorMessage);
 	    }
