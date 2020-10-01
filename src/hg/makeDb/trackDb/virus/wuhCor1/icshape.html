@@ -13,7 +13,7 @@ sequencing depth. The icSHAPE score is distributed between 0 and 1.
 <h2>Data Access</h2>
 <p>
 You can download the bigWig file underlying this track (icshape/*.bw) from our
-<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/nextstrain/"
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/bbi/icshape/"
 target="_blank">Download Server</a>. The data can be explored interactively with the
 <a href="../cgi-bin/hgTables">Table Browser</a>
 or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be
@@ -23,26 +23,13 @@ http://api.genome.ucsc.edu/getData/track?genome=wuhCor1;track=icshapeInvitro;chr
 </pre>
 Command-line extraction can be accomplished using an example like the following command:
 <pre>
-bigWigToWig -udcDir=. -chrom=NC_045512v2 -start=100 end=7875 http://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/bbi/icshape/invivo.bigWig myOutput.wig
+bigWigToWig -udcDir=. -chrom=NC_045512v2 -start=100 end=7875 https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/bbi/icshape/invivo.bigWig myOutput.wig
 </pre></p>
 <p>
 Please refer to our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
 target="_blank">mailing list archives</a> for questions, or our
 <a href="../FAQ/FAQdownloads.html#download36" target="_blank">Data Access FAQ</a> for more
 information.</p>
-<h2>Data Access</h2>
-<p>
-The raw data can be explored interactively with the
-<a href="hgTables">Table Browser</a>, combined with other datasets in the
-<a href="hgIntegrator">Data Integrator</a> tool, 
-or downloaded directly as &quot;microdel.txt.gz&quot; from
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/wuhCor1/database">the download server</a>.
-Please refer to our
-<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
-for questions, or our
-<a href="../../FAQ/FAQdownloads.html#download36">Data Access FAQ</a>
-for more information.</p>
-
 
 <H2>References</H2>
 <p>Lei Sun, Pan Li, Xiaohui Ju, Jian Rao, Wenze Huang, Shaojun Zhang, Tuanlin Xiong, Kui Xu, Xiaolin Zhou, Lili Ren, Qiang Ding, Jianwei Wang, Qiangfeng Cliff Zhang
