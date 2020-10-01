@@ -68,7 +68,7 @@ static double freeTypeCorrection(unsigned int size)
 switch (size)
     {
     case 6: return 8;
-    case 7: return 11;
+    case 7: return 9;
     }
 return size;
 }
