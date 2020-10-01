@@ -63,12 +63,22 @@ draw_bitmap( struct memGfx *mg, FT_Bitmap*  bitmap, Color color,
   }
 }
 
+static double freeTypeCorrection(unsigned int size)
+{
+switch (size)
+    {
+    case 6: return 8;
+    case 7: return 9;
+    }
+return size;
+}
+
 void ftText(struct memGfx *mg, int x, int y, Color color, 
 	MgFont *font, char *text)
 /* Draw a line of text with upper left corner x,y. */
 {
-unsigned int fontHeight = FONTFACTOR * mgFontPixelHeight(font);
-unsigned int fontWidth = FONTFACTOR * mgFontPixelHeight(font);
+unsigned int fontHeight = FONTFACTOR * freeTypeCorrection(mgFontPixelHeight(font));
+unsigned int fontWidth = FONTFACTOR * freeTypeCorrection(mgFontPixelHeight(font));
 FT_Set_Pixel_Sizes( face, fontWidth, fontHeight);
 int length = strlen(text);
 int n;
@@ -93,8 +103,8 @@ for(n = 0; n < length; n++)
 
 int ftWidth(MgFont *font, unsigned char *chars, int charCount)
 {
-unsigned int fontHeight = FONTFACTOR * mgFontPixelHeight(font);
-unsigned int fontWidth = FONTFACTOR * mgFontPixelHeight(font);
+unsigned int fontHeight = FONTFACTOR * freeTypeCorrection(mgFontPixelHeight(font));
+unsigned int fontWidth = FONTFACTOR * freeTypeCorrection(mgFontPixelHeight(font));
 FT_Set_Pixel_Sizes( face, fontWidth, fontHeight);
 int n;
 unsigned long offset = 0;
