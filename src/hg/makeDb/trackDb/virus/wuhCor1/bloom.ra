@@ -189,12 +189,13 @@ compositeTrack	on
 
 track	Starr_Bloom_bind
 shortLabel	RBD Mut Bind
-longLabel	S RBD Deep Mutational Scanning: ACE2 binding (Jesse Bloom's Group)
+longLabel	S RBD Deep Mutational Scanning: ACE2 Binding (Jesse Bloom's Group)
 visibility	hide
 group immu
 type	bigWig
 priority	1
 compositeTrack	on
+autoScale on
 
 	track	A_bind_avg
 	 parent Starr_Bloom_bind
