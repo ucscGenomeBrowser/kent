@@ -45,6 +45,7 @@ static struct optionSpec optionSpecs[] = {
     {"syslog", OPTION_BOOLEAN},
     {"perSeqMax", OPTION_STRING},
     {"noSimpRepMask", OPTION_BOOLEAN},
+    {"timeout", OPTION_INT},
     {NULL, 0}
 };
 
@@ -66,6 +67,8 @@ boolean seqLog = FALSE;
 boolean ipLog = FALSE;
 boolean doMask = FALSE;
 boolean canStop = FALSE;
+
+int timeout = 10;  // default timeout in seconds
 
 void usage()
 /* Explain usage and exit. */
@@ -126,7 +129,9 @@ errAbort(
   "                   have at most maxDnaHits/2 hits.\n"
   "                   Useful for assemblies with many alternate/patch sequences.\n"
   "   -canStop        If set, a quit message will actually take down the server.\n"
-  ,	gfVersion, repMatch, maxDnaHits, maxTransHits, maxNtSize, maxAaSize
+  "   -timeout=N      Timeout in seconds.\n"
+  "                   Default is %d.\n"
+  ,	gfVersion, repMatch, maxDnaHits, maxTransHits, maxNtSize, maxAaSize, timeout
   );
 
 }
@@ -143,6 +148,16 @@ errAbort(
        webBlat will append the path(s) given to path specified in webBlat.cfg.
       gfClient will append the path(s) given to the seqDir path specified.
 */
+
+static void setSocketTimeout(int sockfd, int delayInSeconds)
+// put socket read and write timeout so it will not take forever to timeout during a read or write
+{
+struct timeval tv;
+tv.tv_sec = delayInSeconds;
+tv.tv_usec = 0;
+setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO, (const char*)&tv, sizeof tv);
+}
 
 void genoFindDirect(char *probeName, int fileCount, char *seqFiles[])
 /* Don't set up server - just directly look for matches. */
@@ -624,6 +639,7 @@ for (;;)
 	{
 	connectFailCount = 0;
 	}
+    setSocketTimeout(connectionHandle, timeout);
     if (ipLog)
 	{
 	struct sockaddr_in6 clientAddr;
@@ -1022,6 +1038,7 @@ ipLog = optionExists("ipLog");
 doMask = optionExists("mask");
 canStop = optionExists("canStop");
 noSimpRepMask = optionExists("noSimpRepMask");
+timeout = optionInt("timeout", timeout);
 if (argc < 2)
     usage();
 if (optionExists("log"))
