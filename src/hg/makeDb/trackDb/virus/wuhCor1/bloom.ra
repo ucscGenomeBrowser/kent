@@ -1,11 +1,12 @@
 track	Starr_Bloom
 shortLabel	RBD Mut Expr
-longLabel	S RBD Deep mutational scanning: Expression (Jesse Bloom's Group)
+longLabel	S RBD Deep Mutational Scanning: Expression (Jesse Bloom's Group)
 visibility	hide
 type	bigWig
 priority	1
 group immu
 compositeTrack	on
+autoScale on
 
 	track	A_expr_avg_Expression
 	parent	Starr_Bloom
