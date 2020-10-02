@@ -6,6 +6,7 @@ superTrack on
 group genes
 priority 20
 visibility hide
+pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 2, 2020"
 
         track ORFs
         type bigBed 12 +
