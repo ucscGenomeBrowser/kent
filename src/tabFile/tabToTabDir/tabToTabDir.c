@@ -32,7 +32,7 @@ errAbort(
 "   in.tsv is a tab-separated input file.  The first line is the label names and may start with #\n"
 "   spec.txt is a file that says what columns to put into the output, described in more detail below\n"
 "   outDir is a directory that will be populated with tab-separated files with no duplicate records\n"
-"The spec.txt file contains one blank line separated stanza per output table.\n"
+"The spec.x file contains one blank line separated stanza per output table.\n"
 "Each stanza should look like:\n"
 "        table tableName    key-column\n"
 "        columnName1	sourceField1\n"
