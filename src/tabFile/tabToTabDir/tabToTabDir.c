@@ -46,7 +46,7 @@ errAbort(
 "all of the other fields that are generated agree as well.  An exception for this is made for\n"
 "summary expressions,  which all begin with the character '$'.   The allowed summary expressions are\n"
 "    $count - counts up number of input rows that yield this row\n"
-"    $all sourceExpression - creates comma separated list of all values of sourceExpression\n"
+"    $stats sourceExpression - creates comma separated list of all values and some statistics\n"
 "    $list sourceExpression - creates comma separated list of unique values of sourceExpression\n"
 "If the source field starts with '@' then it is followed\n"
 "by a table name and is intepreted as the same value as the key field in the this table\n" 
@@ -82,7 +82,7 @@ enum fieldValType
 enum combineType
 /* A way to combine values from a field */
     {
-    ctCount, ctUniq, ctAll,
+    ctCount, ctUniq, ctStats,
     };
 
 struct newFieldInfo
@@ -250,9 +250,10 @@ else
 	    {
 	    fv->combineType = ctUniq;
 	    }
-        else if (startsWithWord("all", command))
+        else if (startsWithWord("stats", command))
 	    {
-	    fv->combineType = ctAll;
+	    fv->combineType = ctStats;
+	    uglyf("ctStats command\n");
 	    }
 	else
 	    {
@@ -354,11 +355,18 @@ else
 struct uniqValLister
 /* A list of unique values */
    {
-   struct uniqValList *next;
+   struct uniqValLister *next;
    struct dyString *csv;    // Comma separated list of values seen so far
    struct hash *uniq;	    // Hash of values seen so far.
    };
 
+struct uniqValCounter
+/* A list of unique values and how often they occur */
+    {
+    struct uniqValCounter *next;
+    struct hash *uniq;	    // Integer valued list of values seen so far
+    struct slName *list;    // List of uniq values seen so far
+    };
 
 
 void selectUniqueIntoTable(struct fieldedTable *inTable,  struct symRec *symbols,
@@ -405,6 +413,8 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	    outRow[i] = strexEvalAsString(fv->exp, symbols, symLookup, warnHandler, NULL);
 	    verbose(2, "evaluated %s to %s\n", fv->val, outRow[i]);
 	    }
+	else
+	    outRow[i] = NULL;
 	}
 
     char *key = outRow[keyFieldIx];
@@ -439,9 +449,21 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 			    }
 			break;
 			}
-		    case ctAll:
+		    case ctStats:
 		        {
-			errAbort("ctAll is Not yet implemented");
+			struct uniqValCounter *counter = hashFindVal(fv->combineHash, key);
+			if (counter == NULL)
+			    {
+			    AllocVar(counter);
+			    counter->uniq = hashNew(0);
+			    hashAdd(fv->combineHash, key, counter);
+			    }
+			char *val = outRow[fv->newIx];
+			if (hashLookup(counter->uniq, val) == NULL)
+			    {
+			    slNameAddHead(&counter->list, val);
+			    }
+			hashIncInt(counter->uniq, val);
 			break;
 			}
 		    }
@@ -504,9 +526,16 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 			fr->row[fv->newIx] = lister->csv->string;
 			break;
 			}
-		    case ctAll:
+		    case ctStats:
 		        {
-			errAbort("Ctal not implemented");
+			struct uniqValCounter *counter = hashMustFindVal(fv->combineHash, key);
+			struct dyString *dy = dyStringNew(0);
+			struct slName *el;
+			for (el = counter->list; el != NULL; el = el->next)
+			    {
+			    dyStringPrintf(dy, "%s(%d),", el->name, hashIntVal(counter->uniq, el->name) );
+			    }
+			fr->row[fv->newIx] = dyStringCannibalize(&dy);
 			break;
 			}
 		    }
