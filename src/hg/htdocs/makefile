@@ -3,7 +3,15 @@ include ../../inc/common.mk
 
 GIT = git
 GITUP = ${GIT} pull
-FIND=gitFiles
+
+ifeq (${FIND},)
+    INSIDEGIT := $(shell git rev-parse --is-inside-work-tree 2>/dev/null)
+    ifeq (${INSIDEGIT},true)
+    	FIND = gitFiles
+    else
+	FIND = find
+    endif
+endif
 
 # if you need to pick up files not checked-in yet for rsync,
 # you can run it like this:
