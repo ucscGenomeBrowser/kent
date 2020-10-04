@@ -253,7 +253,6 @@ else
         else if (startsWithWord("stats", command))
 	    {
 	    fv->combineType = ctStats;
-	    uglyf("ctStats command\n");
 	    }
 	else
 	    {
@@ -360,12 +359,28 @@ struct uniqValLister
    struct hash *uniq;	    // Hash of values seen so far.
    };
 
+struct oneValCount
+/* Counts occurences of one */
+    {
+    struct oneValCount *next;
+    char *name;		// Name - not allocated here
+    int count;		// Number of times seen
+    };
+
+int oneValCountCmp(const void *va, const void *vb)
+/* Compare two oneValCounts. */
+{
+const struct oneValCount *a = *((struct oneValCount **)va);
+const struct oneValCount *b = *((struct oneValCount **)vb);
+return b->count - a->count;
+}
+
 struct uniqValCounter
 /* A list of unique values and how often they occur */
     {
     struct uniqValCounter *next;
-    struct hash *uniq;	    // Integer valued list of values seen so far
-    struct slName *list;    // List of uniq values seen so far
+    struct hash *uniq;	    // Integer valued list of values seen so far - oneValCount values
+    struct oneValCount *list;    // List of uniq values seen so far
     };
 
 
@@ -459,11 +474,14 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 			    hashAdd(fv->combineHash, key, counter);
 			    }
 			char *val = outRow[fv->newIx];
-			if (hashLookup(counter->uniq, val) == NULL)
+			struct oneValCount *one = hashFindVal(counter->uniq, val);
+			if (one == NULL)
 			    {
-			    slNameAddHead(&counter->list, val);
+			    AllocVar(one);
+			    hashAddSaveName(counter->uniq, val, one, &one->name);
+			    slAddHead(&counter->list, one);
 			    }
-			hashIncInt(counter->uniq, val);
+			one->count += 1;
 			break;
 			}
 		    }
@@ -530,10 +548,11 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 		        {
 			struct uniqValCounter *counter = hashMustFindVal(fv->combineHash, key);
 			struct dyString *dy = dyStringNew(0);
-			struct slName *el;
+			struct oneValCount *el;
+			slSort(&counter->list, oneValCountCmp);
 			for (el = counter->list; el != NULL; el = el->next)
 			    {
-			    dyStringPrintf(dy, "%s(%d),", el->name, hashIntVal(counter->uniq, el->name) );
+			    dyStringPrintf(dy, "%s(%d),", el->name, el->count);
 			    }
 			fr->row[fv->newIx] = dyStringCannibalize(&dy);
 			break;
