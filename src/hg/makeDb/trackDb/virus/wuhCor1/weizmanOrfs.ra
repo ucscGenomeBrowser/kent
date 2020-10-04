@@ -6,27 +6,28 @@ superTrack on
 group genes
 priority 20
 visibility hide
+pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 2, 2020"
 
         track ORFs
         type bigBed 12 +
         shortLabel ORF predictions
         longLabel ORF predictions
-        autoScale on
         color 40,80,120
         parent weizmanOrfs pack
         bigDataUrl /gbdb/wuhCor1/bbi/weizmanOrfs/ORFs.bb
         priority 1
         itemRgb on
-        visibility pack
+        noScoreFilter on
+        html weizmanOrfs
 
         track Calu3_07hpi
         type bigWig
         shortLabel Calu3 7hpi
         longLabel Calu3 7hpi Ribo-seq and RNA-seq
-        compositeTrack on show
-        parent weizmanOrfs show
+        compositeTrack on
+        parent weizmanOrfs off
         priority 10
-        html calu3_07hpi.html
+        html weizmanOrfs
         group genes
         visibility hide
 
@@ -146,10 +147,10 @@ visibility hide
         type bigWig
         shortLabel Vero6 5hpi
         longLabel Vero6 5hpi Ribo-seq and RNA-seq
-        compositeTrack on show
-        parent weizmanOrfs show
+        compositeTrack on
+        parent weizmanOrfs off
         priority 10
-        html vero6_05hpi.html
+        html weizmanOrfs
         group genes
         visibility hide
 
@@ -269,10 +270,10 @@ visibility hide
         type bigWig
         shortLabel Vero6 24hpi
         longLabel Vero6 24hpi Ribo-seq and RNA-seq
-        compositeTrack on show
-        parent weizmanOrfs show
+        compositeTrack on
+        parent weizmanOrfs off
         priority 30
-        html vero6_24hpi.html
+        html weizmanOrfs
         group genes
         visibility hide
 

@@ -447,6 +447,7 @@ type bigWig
 visibility hide
 group rna
 compositeTrack on
+pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 2, 2020"
 
         track icshapeInvivo
         shortLabel icSHAPE In-vivo
@@ -493,3 +494,4 @@ include phylocsf.ra
 include addgene.ra
 include pond.ra
 include bloom.ra
+include weizmanOrfs.ra

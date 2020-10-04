@@ -1,11 +1,13 @@
 track	Starr_Bloom
 shortLabel	RBD Mut Expr
-longLabel	S RBD Deep mutational scanning: Expression (Jesse Bloom's Group)
+longLabel	S RBD Deep Mutational Scanning: Expression (Jesse Bloom's Group)
 visibility	hide
 type	bigWig
 priority	1
 group immu
 compositeTrack	on
+autoScale on
+pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 2, 2020"
 
 	track	A_expr_avg_Expression
 	parent	Starr_Bloom
@@ -196,6 +198,7 @@ type	bigWig
 priority	1
 compositeTrack	on
 autoScale on
+pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 2, 2020"
 
 	track	A_bind_avg
 	 parent Starr_Bloom_bind
@@ -422,6 +425,7 @@ subGroup2	aa amino_acid \
 dimensions	dimX=ab dimY=aa
 sortOrder	ab=+ aa=+
 autoScale	group
+pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 2, 2020"
 
 	track	COV2-2050_A_mut_escape
 	 parent Starr_Bloom_antibody off
