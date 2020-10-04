@@ -45,10 +45,9 @@ errAbort(
 "If a more than one row of the input generates the same key in the output that is ok so long as\n"
 "all of the other fields that are generated agree as well.  An exception for this is made for\n"
 "summary expressions,  which all begin with the character '$'.   The allowed summary expressions are\n"
-"    $ - counts up number of input rows that yield this row\n"
-// "    $count - counts up number of input rows that yield this row\n"
-// "    $list sourceExpression - creates comma separated list of all values of sourceExpression\n"
-// "    $uniq sourceExpression - creates comma separated list of unique values of sourceExpression\n"
+"    $count - counts up number of input rows that yield this row\n"
+"    $all sourceExpression - creates comma separated list of all values of sourceExpression\n"
+"    $list sourceExpression - creates comma separated list of unique values of sourceExpression\n"
 "If the source field starts with '@' then it is followed\n"
 "by a table name and is intepreted as the same value as the key field in the this table\n" 
 "\n"
@@ -80,6 +79,12 @@ enum fieldValType
     fvVar, fvLink, fvExp, fvCount,
     };
 
+enum combineType
+/* A way to combine values from a field */
+    {
+    ctCount, ctUniq, ctAll,
+    };
+
 struct newFieldInfo
 /* An expression that can define what fits in a field */
     {
@@ -93,7 +98,8 @@ struct newFieldInfo
     struct newFieldInfo *link;	/* If it's fvLink then pointer to the linked field */
     struct strexParse *exp;	/* A parsed out string expression */
     boolean optional;		/* If true, then skip rather than stop if old field doesn't exist */
-    struct hash *countHash;     /* If it's type fvCount an int valued hash here */
+    struct hash *combineHash;     /* If it's type fvCombine an int valued hash here */
+    enum combineType combineType;  /* How to combine if multiple values allowed */
     };
 
 struct newFieldInfo *findField(struct newFieldInfo *list, char *name)
@@ -222,31 +228,52 @@ if (c == '@')
     {
     char *val = fv->val = cloneString(skipLeadingSpaces(s+1));
     if (isEmpty(val))
-	errAbort("Nothing following %c", c);
+	errAbort("Nothing following %c line %d of %s", c, fileLineNumber, fileName);
     fv->type = fvLink;
     ++gLinkFields;
     }
-else if (c == '$')
-    {
-    if (!isEmpty(skipLeadingSpaces(s+1)))
-        errAbort("Something following %c", c);
-    fv->type = fvCount;
-    fv->countHash = hashNew(0);
-    }
 else 
     {
-    if (isTotallySimple(s) && hashLookup(symbols->varHash, s) == NULL)
+    if (c == '$')
 	{
-	fv->val = cloneString(skipLeadingSpaces(s));
-	eraseTrailingSpaces(fv->val);
-	fv->type = fvVar;
+	char *command = skipLeadingSpaces(s+1);
+	s = skipToSpaces(command);
+	fv->combineHash = hashNew(0);
+	if (startsWithWord("count", command))
+	    {
+	    if (!isEmpty(s))
+		errAbort("Something following $count line %d of %s", fileLineNumber, fileName);;
+	    fv->combineType = ctCount;
+	    fv->type = fvCount;
+	    }
+        else if (startsWithWord("list", command))
+	    {
+	    fv->combineType = ctUniq;
+	    }
+        else if (startsWithWord("all", command))
+	    {
+	    fv->combineType = ctAll;
+	    }
+	else
+	    {
+	    errAbort("Unrecognized command $%s line %d of %s", command, fileLineNumber, fileName);
+	    }
 	}
-    else
+    if (fv->combineHash == NULL || fv->combineType != ctCount)
 	{
-	fv->val = cloneString(s);
-	fv->exp = strexParseString(fv->val, fileName, fileLineNumber-1, symbols, lookup);
-	fv->type = fvExp;
-	gStrexFields += 1;
+	if (isTotallySimple(s) && hashLookup(symbols->varHash, s) == NULL)
+	    {
+	    fv->val = cloneString(skipLeadingSpaces(s));
+	    eraseTrailingSpaces(fv->val);
+	    fv->type = fvVar;
+	    }
+	else
+	    {
+	    fv->val = cloneString(s);
+	    fv->exp = strexParseString(fv->val, fileName, fileLineNumber-1, symbols, lookup);
+	    fv->type = fvExp;
+	    gStrexFields += 1;
+	    }
 	}
     }
 gTotalFields += 1;
@@ -324,6 +351,15 @@ else
 }
 
 
+struct uniqValLister
+/* A list of unique values */
+   {
+   struct uniqValList *next;
+   struct dyString *csv;    // Comma separated list of values seen so far
+   struct hash *uniq;	    // Hash of values seen so far.
+   };
+
+
 
 void selectUniqueIntoTable(struct fieldedTable *inTable,  struct symRec *symbols,
     char *specFile,  // Just for error reporting
@@ -374,12 +410,42 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
     char *key = outRow[keyFieldIx];
     if (!isEmpty(key))
 	{
-	/* Increment any count fields */
+	/* Do any aggregate fields */
 	struct newFieldInfo *fv;
 	for (fv = fieldList; fv != NULL; fv = fv->next)
 	    {
-	    if (fv->type == fvCount)
-	        hashIncInt(fv->countHash, key);
+	    if (fv->combineHash != NULL)
+		{
+		switch (fv->combineType)
+		    {
+		    case ctCount:
+			hashIncInt(fv->combineHash, key);
+			break;
+		    case ctUniq:
+		        {
+			struct uniqValLister *lister = hashFindVal(fv->combineHash, key);
+			if (lister == NULL)
+			    {
+			    AllocVar(lister);
+			    lister->csv = dyStringNew(0);
+			    lister->uniq = hashNew(0);
+			    hashAdd(fv->combineHash, key, lister);
+			    }
+			char *val = outRow[fv->newIx];
+			if (hashLookup(lister->uniq, val) == NULL)
+			    {
+			    hashAdd(lister->uniq, val, NULL);
+			    csvEscapeAndAppend(lister->csv, val);
+			    }
+			break;
+			}
+		    case ctAll:
+		        {
+			errAbort("ctAll is Not yet implemented");
+			break;
+			}
+		    }
+		}
 	    }
 
 	struct fieldedRow *uniqFr = hashFindVal(uniqHash, key);
@@ -394,10 +460,11 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	    char **uniqRow = uniqFr->row;
 	    for (i=0,fv=fieldList; fv != NULL; fv = fv->next, ++i)
 	        {
-		if (fv->type != fvCount)
+		if (fv->combineHash == NULL)
 		     {
 		     if (!sameString(uniqRow[i], outRow[i]))
 		         {
+			 uglyf("fv->type of %s is %d\n", fv->name, (int)fv->type);
 			 warn("There is a problem with the key to table %s in %s", 
 			     outTable->name, specFile);
 			 warn("%s %s", uniqFr->row[keyFieldIx], uniqFr->row[i]);
@@ -412,19 +479,37 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 	}
     }
 
-/* Make a loop through output table fixing up count-oriented fields */
+/* Make a loop through output table fixing up aggregation-oriented fields */
     {
     struct newFieldInfo *fv;
     for (fv = fieldList; fv != NULL; fv = fv->next)
         {
-	if (fv->countHash != NULL)
+	if (fv->combineHash != NULL)
 	    {
 	    for (fr = outTable->rowList; fr != NULL; fr = fr->next)
 	        {
 		char *key = fr->row[keyFieldIx];
-		char countBuf[16];
-		safef(countBuf, sizeof(countBuf), "%d", hashIntVal(fv->countHash, key));
-		fr->row[fv->newIx] = lmCloneString(outTable->lm, countBuf);
+		switch (fv->combineType)
+		    {
+		    case ctCount:
+			{
+			char countBuf[16];
+			safef(countBuf, sizeof(countBuf), "%d", hashIntVal(fv->combineHash, key));
+			fr->row[fv->newIx] = lmCloneString(outTable->lm, countBuf);
+			break;
+			}
+		    case ctUniq:
+			{
+			struct uniqValLister *lister = hashMustFindVal(fv->combineHash, key);
+			fr->row[fv->newIx] = lister->csv->string;
+			break;
+			}
+		    case ctAll:
+		        {
+			errAbort("Ctal not implemented");
+			break;
+			}
+		    }
 		}
 	    }
 	}
@@ -584,7 +669,7 @@ while (raSkipLeadingEmptyLines(lf, NULL))
 	       {
 	       if (fv->optional)
 	           continue;	    // Just skip optional ones we don't have
-	       errAbort("%s doesn't exist in the %d fields of %s line %d of %s", 
+	       errAbort("'%s' doesn't exist in the %d fields of %s line %d of %s", 
 		oldName, inTable->fieldCount, inTable->name,
 		    lf->lineIx, lf->fileName);
 	       }
