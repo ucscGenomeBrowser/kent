@@ -115,6 +115,7 @@ lab
 submitters $list submitter
 fluidics_chip
 age $list GEO_Sample_age
+age_stats $stats GEO_Sample_age
 
 table donor_organ_cells id
 id biosample_source_id
