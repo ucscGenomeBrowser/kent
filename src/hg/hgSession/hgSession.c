@@ -300,7 +300,7 @@ jsInlineF(
         "if (theClient.isIePre11() === false)\n{\n"
         "$(document).ready(function () {\n"
         "    $('#sessionTable').DataTable({\"columnDefs\": [{\"orderable\":false, \"targets\":[0,4,5,6,7,8]}],\n"
-        "                                       \"order\":[1,'asc'],\n"
+        "                                       \"order\":[2,'desc'],\n"
         "                                       \"stateSave\":true,\n"
         "                                       \"stateSaveCallback\": %s,\n"
         "                                       \"stateLoadCallback\": %s\n"
