@@ -2,7 +2,15 @@ kentSrc = ../../../..
 include ../../../../inc/common.mk
 
 #Get list of files to copy over. Will only copy over files which are being tracked by git.
-FIND=gitFiles
+ifeq (${FIND},)
+    INSIDEGIT := $(shell git rev-parse --is-inside-work-tree 2>/dev/null)
+    ifeq (${INSIDEGIT},true)
+       FIND = gitFiles
+    else
+       FIND = find
+    endif
+endif
+
 
 user:
 	if test -d ${DOCUMENTROOT}-${USER}; then \
