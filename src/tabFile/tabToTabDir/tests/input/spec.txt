@@ -120,6 +120,7 @@ table donor_organ_cells id
 id biosample_source_id
 age GEO_Sample_age
 organ organ_anatomical_name
+cell_count $count
 cell_types $list biosample_cell_type
 
 
