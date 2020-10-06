@@ -1405,28 +1405,31 @@ else if (sameWord(type, "protein"))
 else  // BLAT's Guess
     {
     seqList = faSeqListFromMemTextRaw(seqLetters);
-    isTx = !seqIsDna(seqList); // only tests first element, assumes the rest are the same type.
-    if (!isTx)
+    if (seqList)
 	{
-	xType = "dna"; 
-	for (seq = seqList; seq != NULL; seq = seq->next)
+	isTx = !seqIsDna(seqList); // only tests first element, assumes the rest are the same type.
+	if (!isTx)
 	    {
-	    seq->size = dnaFilteredSize(seq->dna);
-	    dnaFilter(seq->dna, seq->dna);
-	    toLowerN(seq->dna, seq->size);
-	    subChar(seq->dna, 'u', 't');
+	    xType = "dna"; 
+	    for (seq = seqList; seq != NULL; seq = seq->next)
+		{
+		seq->size = dnaFilteredSize(seq->dna);
+		dnaFilter(seq->dna, seq->dna);
+		toLowerN(seq->dna, seq->size);
+		subChar(seq->dna, 'u', 't');
+		}
 	    }
-	}
-    else
-	{
-	for (seq = seqList; seq != NULL; seq = seq->next)
+	else
 	    {
-	    seq->size = aaFilteredSize(seq->dna);
-	    aaFilter(seq->dna, seq->dna);
-	    toUpperN(seq->dna, seq->size);
+	    for (seq = seqList; seq != NULL; seq = seq->next)
+		{
+		seq->size = aaFilteredSize(seq->dna);
+		aaFilter(seq->dna, seq->dna);
+		toUpperN(seq->dna, seq->size);
+		}
+	    qIsProt = TRUE;
+	    xType = "prot"; 
 	    }
-	qIsProt = TRUE;
-	xType = "prot"; 
 	}
     }
 if (seqList != NULL && seqList->name[0] == 0)
