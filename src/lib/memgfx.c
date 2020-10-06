@@ -808,9 +808,13 @@ return font_line_height(font);
 int mgFontWidth(MgFont *font, char *chars, int charCount)
 /* How wide are a couple of letters? */
 {
+#ifndef USE_FREETYPE
+return fnstring_width(font, (unsigned char *)chars, charCount);
+#else
 if (face == NULL)  // have we turned on freetype
     return fnstring_width(font, (unsigned char *)chars, charCount);
 return ftWidth(font, (unsigned char *)chars, charCount);
+#endif
 }
 
 int mgFontStringWidth(MgFont *font, char *string)
