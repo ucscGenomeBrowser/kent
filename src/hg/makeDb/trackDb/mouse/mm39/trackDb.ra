@@ -6,8 +6,8 @@ html gold
 track gap override
 html gap
 
-track chainNetCalJac4 override
-chainMinScore 3000
+#track chainNetCalJac4 override
+#chainMinScore 3000
 
 searchTable gold
 shortCircuit 1

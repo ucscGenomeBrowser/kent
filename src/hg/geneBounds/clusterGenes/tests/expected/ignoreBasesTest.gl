@@ -1,0 +1,5 @@
+#cluster	table	gene	chrom	txStart	txEnd	strand	rnaLength	cdsLength
+1	overlapCases	b2886-0-0	MG1655	3029484	3029973	-	489	489
+2	overlapCases	b2887-0-0	MG1655	3029972	3031892	-	1920	1920
+3	overlapCases	augPB-32603.t2	chr16	34968583	35025057	-	618	618
+3	overlapCases	augPB-32603.t1	chr16	34966666	35025057	-	555	555

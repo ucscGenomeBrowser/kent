@@ -20,11 +20,12 @@ my %ucscToRefSeq;	# key is UCSC sequence name, value is RefSeq name
 my %ucscToGenbank;	# key is UCSC sequence name, value is GenBank name
 my $ucscNames = 0;	# == 1 if sequence is UCSC names, == 0 if NCBI names
 my $dupCount = 0;
+my $asmId = shift;
 
 my %aliasOut;	# key is alias name, value is sequence name in this assembly
 
 sub showAlias() {
-  printf "# sequenceName\talias names\n";
+  printf "# sequenceName\talias names\tassembly: %s\n", $asmId;
   my %chromIndex;	# key is sequence name in assembly, value
                         # is a tab separated list of aliases
   foreach my $alias (sort keys %aliasOut) {
@@ -58,8 +59,6 @@ sub addAlias($$) {
   $aliasOut{$alias} = $sequence;
   return;
 }
-
-my $asmId = shift;
 
 my $refSeq = 0; #       == 0 for Genbank assembly, == 1 for RefSeq assembly
 $refSeq = 1 if ($asmId =~ m/^GCF/);

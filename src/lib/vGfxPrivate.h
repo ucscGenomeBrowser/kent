@@ -49,5 +49,5 @@ typedef void (*vg_setHint)(void *v, char *hint, char *value);
 typedef char * (*vg_getHint)(void *v, char *hint);
 typedef int (*vg_getFontPixelHeight)(void *v, void *font);
 typedef int (*vg_getFontStringWidth)(void *v, void *font, char *string);
-typedef void (*vg_setFontMethod)(void *v, unsigned int);
+typedef void (*vg_setFontMethod)(void *v, unsigned int, char *fontName, char *fontFile);
 

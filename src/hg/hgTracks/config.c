@@ -55,6 +55,84 @@ slFreeList(themes);
 hPrintf("</TD>");
 }
 
+char *freeTypeFontNames[] = {
+"AvantGarde-Book",
+"AvantGarde-Demi",
+"AvantGarde-BookOblique",
+"AvantGarde-DemiOblique",
+"Bookman-Light",
+"Bookman-Demi",
+"Bookman-LightItalic",
+"Bookman-DemiItalic",
+"NewCenturySchlbk-Roman",
+"NewCenturySchlbk-Bold",
+"NewCenturySchlbk-Italic",
+"NewCenturySchlbk-BoldItalic",
+"Helvetica",
+"Helvetica-Bold",
+"Helvetica-Oblique",
+"Helvetica-BoldOblique",
+"Helvetica-Narrow",
+"Helvetica-Narrow-Bold",
+"Helvetica-Narrow-Oblique",
+"Helvetica-Narrow-BoldOblique",
+"Times-Roman",
+"Times-Bold",
+"Times-Italic",
+"Times-BoldItalic",
+"Courier",
+"Courier-Bold",
+"Courier-Oblique",
+"Courier-BoldOblique",
+"Palatino-Roman",
+"Palatino-Bold",
+"Palatino-Italic",
+"Palatino-BoldItalic",
+"ZapfChancery-MediumItalic",
+};
+
+char *freeTypeFontFiles[] = {
+"a010013l.pfb",
+"a010015l.pfb",
+"a010033l.pfb",
+"a010035l.pfb",
+"b018012l.pfb",
+"b018015l.pfb",
+"b018032l.pfb",
+"b018035l.pfb",
+"c059013l.pfb",
+"c059016l.pfb",
+"c059033l.pfb",
+"c059036l.pfb",
+"n019003l.pfb",
+"n019004l.pfb",
+"n019023l.pfb",
+"n019024l.pfb",
+"n019043l.pfb",
+"n019044l.pfb",
+"n019063l.pfb",
+"n019064l.pfb",
+"n021003l.pfb",
+"n021004l.pfb",
+"n021023l.pfb",
+"n021024l.pfb",
+"n022003l.pfb",
+"n022004l.pfb",
+"n022023l.pfb",
+"n022024l.pfb",
+"p052003l.pfb",
+"p052004l.pfb",
+"p052023l.pfb",
+"p052024l.pfb",
+"z003034l.pfb",
+};
+
+static void textFontDropDown()
+/* Create drop down for font size. */
+{
+hDropList(textFontVar, freeTypeFontNames, ArraySize(freeTypeFontNames), tl.textFont);
+}
+
 static void textSizeDropDown()
 /* Create drop down for font size. */
 {
@@ -450,6 +528,15 @@ if (trackLayoutInclFontExtras())
     hPrintf("</TD>");
     }
 hPrintf("</TR>");
+
+if (sameString(cfgOptionDefault("freeType", "off"), "on"))
+    {
+    hPrintf("<TR><TD>font:");
+    hPrintf("<TD style=\"text-align: right\">");
+    textFontDropDown();
+    hPrintf("</TD>");
+    hPrintf("</TR>");
+    }
 
 themeDropDown(cart);
 
