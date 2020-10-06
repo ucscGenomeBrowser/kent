@@ -28,10 +28,11 @@ fi
 
 cd "${WORKDIR}"/upload
 
-rm -f omimGene2.date
-touch omimGene2.date
+rm -f omimGene2.date omimAvSnp.date
+touch omimGene2.date omimAvSnp.date
 hgsqlTableDate hg19 omimGene2 omimGene2.date
-if test \! omimGene2.date -nt upload.omim2.date
+hgsqlTableDate hg19 omimAvSnp omimAvSnp.date
+if [ ! omimGene2.date -nt upload.omim2.date -a ! omimAvSnp.date -nt omimAvSnp.date ]
 then
     echo "No new table."
     exit 0;
@@ -63,6 +64,7 @@ gzip omimTableDump.tar
 cp -p omimTableDump.tar.gz "$UPLOADDIR/omimTableDump.tgz"
 
 mv omimGene2.date upload.omim2.date
+mv omimAvSnp.date upload.omimAvSnp.date
 
 echo "Process successful"
 exit 0

@@ -481,6 +481,16 @@ bigDataUrl /gbdb/wuhCor1/bbi/potPathoIndel.bb
 group varRep
 pennantIcon New red ../goldenPath/newsarch.html "Released Sep. 4, 2020"
 
+track iedb
+shortLabel Validated epitopes from IEDB
+longLabel Validated epitopes from IEDB
+visibility dense
+urls epitopeID="http://www.iedb.org/epitope/$$"
+type bigBed
+priority 1
+bigDataUrl /gbdb/wuhCor1/iedb/iedb.bb
+
+
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
 include epitopes.ra

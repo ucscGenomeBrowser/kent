@@ -7,7 +7,7 @@ all:
 
 test: refSeqTest refSeqCdsTest trackNamesTest joinTest joinCdsTest \
 	overlapUseStrandTest overlapIgnoreStrandsTest \
-	minOverlappingBasesTest
+	ignoreBasesTest ignoreBasesCdsTest
 
 # test files blatRefSeq.gp  ncbiRefSeq.gp
 #  chr1:11,689,948-12,078,317 - some basic genes
@@ -53,9 +53,13 @@ overlapIgnoreStrandsTest: mkout
 	${clusterGenes} -ignoreStrand -trackNames output/$@.gl no genes input/overlapDiffStrands.gp
 	diff -u expected/$@.gl output/$@.gl
 
-# test of -minOverlappingBases
-minOverlappingBasesTest: mkout
-	${clusterGenes} -minOverlappingBases=10 output/$@.gl no input/smallOverlap.gp
+# test of -ignoreBases
+ignoreBasesTest: mkout
+	${clusterGenes} -ignoreBases=5 output/$@.gl no input/overlapCases.gp
+	diff -u expected/$@.gl output/$@.gl
+
+ignoreBasesCdsTest: mkout
+	${clusterGenes} -ignoreBases=5 -cds output/$@.gl no input/overlapCases.gp
 	diff -u expected/$@.gl output/$@.gl
 
 mkout:
