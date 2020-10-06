@@ -60,7 +60,6 @@ errAbort(
   "    transcript when determine overlap.  This prevents small amounts of overlap\n"
   "    from merging transcripts.  If -cds is specified, this amount of the CDS.\n"
   "    is ignored. The default is 0.\n"
-  "   -minOverlappingBases=N - mapped to ignoreBases, did not work correctly.\n"
   "\n"
   "The cdsConflicts and exonConflicts columns contains `y' if the cluster has\n"
   "conficts. A conflict is a cluster where all of the genes don't share exons. \n"
@@ -79,7 +78,6 @@ static struct optionSpec options[] = {
    {"joinContained", OPTION_BOOLEAN},
    {"conflicted", OPTION_BOOLEAN},
    {"ignoreStrand", OPTION_BOOLEAN},
-   {"minOverlappingBases", OPTION_INT},  /* deprecated, use ignoreBases */
    {"ignoreBases", OPTION_INT},
    {NULL, 0},
 };
@@ -1068,13 +1066,7 @@ gTrackNames = optionExists("trackNames");
 gJoinContained = optionExists("joinContained");
 gDetectConflicted = optionExists("conflicted");
 gIgnoreStrand = optionExists("ignoreStrand");
-if (optionExists("ignoreBases"))
-    gIgnoreBases = optionInt("ignoreBases", gIgnoreBases);
-else if (optionExists("minOverlappingBases"))
-    {
-    fprintf(stderr, "WARNING: -minOverlappingBases is deprecated and may not work as expected\n");
-    gIgnoreBases = optionInt("minOverlappingBases", gIgnoreBases);  /* deprecated */
-    }
+gIgnoreBases = optionInt("ignoreBases", gIgnoreBases);
 if (!gTrackNames)
     {
     if (argc < 4)
