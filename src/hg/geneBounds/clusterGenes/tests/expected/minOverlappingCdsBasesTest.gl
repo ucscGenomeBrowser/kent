@@ -1,3 +1,0 @@
-#cluster	table	gene	chrom	txStart	txEnd	strand	rnaLength	cdsLength
-1	novel-cen16.CHM13.augPB	augPB-32603.t2	chr16	34968583	35025057	-	618	618
-1	novel-cen16.CHM13.augPB	augPB-32603.t1	chr16	34966666	35025057	-	555	555

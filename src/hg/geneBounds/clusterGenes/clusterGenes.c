@@ -54,12 +54,13 @@ errAbort(
   "    into that loci. Intended as a way to handled fragments and exon-level\n"
   "    predictsions, as genes-in-introns on the same strand are very rare.\n"
   "   -conflicted - detect conflicted loci. Conflicted loci are loci that\n"
-  "    contain genes that share not sequence.  This option greatly increases\n"
+  "    contain genes that share no sequence.  This option greatly increases\n"
   "    size of output file.\n"
-  "   -ignoreEndBases=N - ignore this many based to the start and end of each\n"
+  "   -ignoreBases=N - ignore this many based to the start and end of each\n"
   "    transcript when determine overlap.  This prevents small amounts of overlap\n"
   "    from merging transcripts.  If -cds is specified, this amount of the CDS.\n"
   "    is ignored. The default is 0.\n"
+  "   -minOverlappingBases=N - mapped to ignoreBases, did not work correctly.\n"
   "\n"
   "The cdsConflicts and exonConflicts columns contains `y' if the cluster has\n"
   "conficts. A conflict is a cluster where all of the genes don't share exons. \n"
@@ -78,8 +79,8 @@ static struct optionSpec options[] = {
    {"joinContained", OPTION_BOOLEAN},
    {"conflicted", OPTION_BOOLEAN},
    {"ignoreStrand", OPTION_BOOLEAN},
-   {"minOverlappingBases", OPTION_INT},  /* deprecated, use ignoreEndBases */
-   {"ignoreEndBases", OPTION_INT},
+   {"minOverlappingBases", OPTION_INT},  /* deprecated, use ignoreBases */
+   {"ignoreBases", OPTION_INT},
    {NULL, 0},
 };
 
@@ -89,7 +90,7 @@ static boolean gTrackNames;
 static boolean gJoinContained = FALSE;
 static boolean gDetectConflicted = FALSE;
 static boolean gIgnoreStrand = FALSE;
-static int gIgnoreEndBases = 1;
+static int gIgnoreBases = 0;
 
 struct track
 /*  Object representing a track. */
@@ -306,25 +307,6 @@ slNameSort(&chroms);
 return chroms;
 }
 
-boolean gpGetExon(struct genePred* gp, int exonIx, boolean cdsOnly, 
-                  int *exonStartRet, int *exonEndRet)
-/* Get the start and end of an exon, adjusting if we are only examining CDS.
- * Return false if exon should not be used.  */
-{
-int exonStart = gp->exonStarts[exonIx];
-int exonEnd = gp->exonEnds[exonIx];
-if (cdsOnly)
-    {
-    if (exonStart < gp->cdsStart)
-        exonStart = gp->cdsStart;
-    if (exonEnd > gp->cdsEnd)
-        exonEnd = gp->cdsEnd;
-    }
-*exonStartRet = exonStart;
-*exonEndRet = exonEnd;
-return exonStart < exonEnd;
-}
-
 struct clusterGene
 /* A gene in a cluster */
 {
@@ -332,7 +314,7 @@ struct clusterGene
     struct track* track;         /* aka table for gene */
     struct genePred* gp;
     struct cluster* cluster;  /* cluster containing gene */
-    int effectiveStart;     /* start/end based on -cds and -ignoreEndBases */
+    int effectiveStart;     /* start/end based on -cds and -ignoreBases */
     int effectiveEnd;
     struct slRef *exonConflicts; /* list of genes in cluster that don't share
                                   * exons with this gene */
@@ -340,16 +322,15 @@ struct clusterGene
                                  * CDS with this gene */
 };
 
-#if 0
-static int findStartExon(struct genePred* gp)
+static int findStartExon(struct genePred* gp,
+                         int minStart)
 /* find start exon based on using cds or not */
 {
-int start = gUseCds ? gp->cdsStart : gp->txStart;
-int iExon;
-for (iExon = 0; iExon < gp->exonCount; iExon++)
+int exonIx;
+for (exonIx = 0; exonIx < gp->exonCount; exonIx++)
     {
-    if (start < gp->exonEnds[iExon))
-        return iExon;
+    if (minStart >= gp->exonStarts[exonIx])
+        return exonIx;
     }
 errAbort("BUG: findStartExon failed: %s", gp->name);
 return 0;
@@ -358,13 +339,47 @@ return 0;
 static int calcEffectiveStart(struct genePred* gp)
 /* calculate the genomic start position to use for overlaps */
 {
-int iExon = findStartExon(gp);
-for (iExon = 0; iExon < gp->exonCount; iExon++)
+int minStart = gUseCds ? gp->cdsStart : gp->txStart;
+int exonIx = findStartExon(gp, minStart);
+for (; exonIx < gp->exonCount; exonIx++)
     {
-    int possibleStart =;
+    int possibleStart = minStart + gIgnoreBases;
+    if (possibleStart >= gp->exonStarts[exonIx])
+        return possibleStart;
     }
+errAbort("BUG: calcEffectiveStart failed: %s", gp->name);
+return 0;
 }
-#endif
+
+static int findEndExon(struct genePred* gp,
+                       int maxEnd)
+/* find end exon based on using cds or not */
+{
+int exonIx;
+for (exonIx = gp->exonCount-1; exonIx >= 0; exonIx--)
+    {
+    if (maxEnd <= gp->exonEnds[exonIx])
+        return exonIx;
+    }
+errAbort("BUG: findEndExon failed: %s", gp->name);
+return 0;
+}
+
+static int calcEffectiveEnd(struct genePred* gp)
+/* calculate the genomic end position to use for overlaps */
+{
+int maxEnd = gUseCds ? gp->cdsEnd : gp->txEnd;
+int exonIx = findEndExon(gp, maxEnd);
+for (; exonIx >= 0; exonIx--)
+    {
+    int possibleEnd = maxEnd - gIgnoreBases;
+    if (possibleEnd <= gp->exonEnds[exonIx])
+        return possibleEnd;
+    }
+errAbort("BUG: calcEffectiveEnd failed: %s", gp->name);
+return 0;
+}
+
 
 struct clusterGene* clusterGeneNew(struct track* track, struct genePred* gp)
 /* create a new clusterGene. */
@@ -373,10 +388,8 @@ struct clusterGene* cg;
 AllocVar(cg);
 cg->track = track;
 cg->gp = gp;
-#if 0
 cg->effectiveStart = calcEffectiveStart(gp);
 cg->effectiveEnd = calcEffectiveEnd(gp);
-#endif
 return cg;
 }
 
@@ -411,7 +424,7 @@ struct cluster
     struct clusterGene *genes;  /* Associated genes. */
     char *chrom;                /* chrom, memory not owned */
     int start,end;		/* Range covered by cluster. */
-    int txStart,txEnd;          /* txStart/txEnd range, diff if -cds  */
+    int txStart,txEnd;          /* txStart/txEnd range, diff from start/end if effective bounds differ */
     boolean hasExonConflicts;   /* does this cluster have conflicts? */
     boolean hasCdsConflicts;
     };
@@ -483,6 +496,30 @@ int dif = a->start - b->start;
 if (dif == 0)
     dif = a->end - b->end;
 return dif;
+}
+
+static boolean gpGetExon(struct clusterGene *cg, int exonIx, boolean cdsOnly, 
+                         int *exonStartRet, int *exonEndRet)
+/* Get the start and end of an exon, adjusting if we are only examining CDS,
+ * Return false if exon should not be used.  */
+{
+int exonStart = cg->gp->exonStarts[exonIx];
+int exonEnd = cg->gp->exonEnds[exonIx];
+if (exonStart < cg->effectiveStart)
+    exonStart = cg->effectiveStart;
+if (exonEnd > cg->effectiveEnd)
+    exonEnd = cg->effectiveEnd;
+// still need to check CDS for CDS conflict check
+if (cdsOnly)
+    {
+    if (exonStart < cg->gp->cdsStart)
+        exonStart = cg->gp->cdsStart;
+    if (exonEnd > cg->gp->cdsEnd)
+        exonEnd = cg->gp->cdsEnd;
+    }
+*exonStartRet = exonStart;
+*exonEndRet = exonEnd;
+return exonStart < exonEnd;
 }
 
 void clusterAddExon(struct cluster *cluster,
@@ -566,23 +603,23 @@ if (verboseLevel() >= 3)
     }
 }
 
-boolean shareExons(struct genePred *gp1, struct genePred *gp2, boolean cdsOnly)
+boolean shareExons(struct clusterGene *cg1, struct clusterGene *cg2, boolean cdsOnly)
 /* determine if two genes share exons or CDS exons */
 {
 int exonIx1, exonStart1, exonEnd1;
 int exonIx2, exonStart2, exonEnd2;
 
-for (exonIx1 = 0; exonIx1 < gp1->exonCount; exonIx1++)
+for (exonIx1 = 0; exonIx1 < cg1->gp->exonCount; exonIx1++)
     {
-    if (gpGetExon(gp1, exonIx1, cdsOnly, &exonStart1, &exonEnd1))
+    if (gpGetExon(cg1, exonIx1, cdsOnly, &exonStart1, &exonEnd1))
         {
         /* exonStart2 >= exon1End indicates there can't be overlap on this
          * exon */
         for (exonIx2 = 0, exonStart2 = 0;
-             (exonIx2 < gp2->exonCount) && (exonStart2 < exonEnd1);
+             (exonIx2 < cg2->gp->exonCount) && (exonStart2 < exonEnd1);
              exonIx2++)
             {
-            if (gpGetExon(gp2, exonIx2, cdsOnly, &exonStart2, &exonEnd2))
+            if (gpGetExon(cg2, exonIx2, cdsOnly, &exonStart2, &exonEnd2))
                 {
                 if ((exonStart2 < exonEnd1) && (exonEnd2 > exonStart1))
                     return TRUE; /* overlaps */
@@ -603,7 +640,7 @@ struct clusterGene *cg;
 /* check all other genes */
 for (cg = cluster->genes; cg != NULL; cg = cg->next)
     {
-    if ((cg != gene) && !shareExons(cg->gp, gene->gp, cdsOnly))
+    if ((cg != gene) && !shareExons(cg, gene, cdsOnly))
         refAdd(&conflicts, cg);
     }
 return conflicts;
@@ -698,26 +735,25 @@ freez(pCm);
 return clusterList;
 }
 
-static bool isOverlapped(int exon1Start, int exon1End,
-                         int exon2Start, int exon2End)
-/* check if two ranges are overlapped by minimum overlap */
+static struct dlNode *clusterMakerAddExonNoOverlap(struct clusterMaker *cm, struct clusterGene *cg,
+                                                   int exonStart, int exonEnd, struct dlNode *currentNode)
+/* add an exon to a cluster when it doesn't overlap any existing exons, return node */
 {
-int maxStart = max(exon1Start, exon2Start);
-int minEnd = min(exon1End, exon2End);
-return (minEnd - maxStart) >= gIgnoreEndBases;
+if (currentNode == NULL)
+    {
+    struct cluster *cluster = clusterNew();
+    currentNode = dlAddValTail(cm->clusters, cluster);
+    }
+addExon(cm->bk, currentNode, exonStart, exonEnd, cg);
+return currentNode;
 }
 
-static bool overlappingCluster(int exonStart, int exonEnd, struct dlNode *node)
-/* check if the overlap with cluster is over threshold  */
+static struct dlNode *clusterMakerAddExonOverlap(struct clusterMaker *cm, struct clusterGene *cg,
+                                                 int exonStart, int exonEnd, struct binElement *bList,
+                                                 struct dlNode *currentNode)
+/* add an exon that overlap exons in clusters, return node */
 {
-struct cluster *cluster = node->val;
-return isOverlapped(exonStart, exonEnd, cluster->txStart, cluster->txEnd);
-}
-
-static struct dlNode *clusterMakerAddExonMerge(struct clusterMaker *cm, int exonStart, int exonEnd, struct dlNode *currentNode)
-/* merge notes that overlap exon over threshold, return node */
-{
-struct binElement *bEl, *bList = binKeeperFind(cm->bk, exonStart, exonEnd);
+struct binElement *bEl;
 for (bEl = bList; bEl != NULL; bEl = bEl->next)
     {
     struct dlNode *newNode = bEl->val;
@@ -728,7 +764,7 @@ for (bEl = bList; bEl != NULL; bEl = bEl->next)
             /* Add to existing cluster. */
             currentNode = newNode;
             }
-        else if (overlappingCluster(exonStart, exonEnd, currentNode))
+        else
             {
             /* Merge new cluster into old one. */
             verbose(3, "Merging %p %p\n", currentNode, newNode);
@@ -736,6 +772,7 @@ for (bEl = bList; bEl != NULL; bEl = bEl->next)
             }
         }
     }
+addExon(cm->bk, currentNode, exonStart, exonEnd, cg);
 slFreeList(&bList);
 return currentNode;
 }
@@ -744,18 +781,12 @@ static void clusterMakerAddExon(struct clusterMaker *cm, struct clusterGene *cg,
                                 int exonStart, int exonEnd, struct dlNode **currentNodePtr)
 /* Add a gene exon to clusterMaker. */
 {
-verbose(4, "  %s %d-%d\n", cg->track->name, exonStart, exonEnd);
-struct dlNode *currentNode = clusterMakerAddExonMerge(cm, exonStart, exonEnd, *currentNodePtr);
-
-if ((currentNode == NULL) || !overlappingCluster(exonStart, exonEnd, currentNode))
-    {
-    struct cluster *cluster = clusterNew();
-    currentNode = dlAddValTail(cm->clusters, cluster);
-    addExon(cm->bk, currentNode, exonStart, exonEnd, cg);
-    }
+verbose(4, "  exon %d-%d\n", exonStart, exonEnd);
+struct binElement *bList = binKeeperFind(cm->bk, exonStart, exonEnd);
+if (bList == NULL)
+    *currentNodePtr = clusterMakerAddExonNoOverlap(cm, cg, exonStart, exonEnd, *currentNodePtr);
 else
-    addExon(cm->bk, currentNode, exonStart, exonEnd, cg);
-*currentNodePtr = currentNode;
+    *currentNodePtr = clusterMakerAddExonOverlap(cm, cg, exonStart, exonEnd, bList, *currentNodePtr);
 }
 
 void clusterMakerAdd(struct clusterMaker *cm, struct clusterGene *cg)
@@ -771,20 +802,17 @@ struct dlNode *currentNode = NULL;
  * case merge the new cluster into the old one.  If we are joining contained
  * genes, the only gene range is added as if it was a single exon. */
 
-verbose(2, "%s %s %d-%d\n", cg->track->name, cg->gp->name, cg->gp->txStart, cg->gp->txEnd);
+verbose(2, "add gene: [%s] %s %d-%d\n", cg->track->name, cg->gp->name, cg->gp->txStart, cg->gp->txEnd);
 if (gJoinContained)
     {
-    int start =(gUseCds) ? cg->gp->cdsStart : cg->gp->txStart;
-    int end =(gUseCds) ? cg->gp->cdsEnd : cg->gp->txEnd;
-    if (end > start) 
-        clusterMakerAddExon(cm, cg, start, end, &currentNode);
+    clusterMakerAddExon(cm, cg, cg->effectiveStart, cg->effectiveEnd, &currentNode);
     }
 else
     {
     for (exonIx = 0; exonIx < cg->gp->exonCount; ++exonIx)
         {
         int exonStart, exonEnd;
-        if (gpGetExon(cg->gp, exonIx, gUseCds, &exonStart, &exonEnd))
+        if (gpGetExon(cg, exonIx, FALSE, &exonStart, &exonEnd))
             clusterMakerAddExon(cm, cg, exonStart, exonEnd, &currentNode);
         }
     }
@@ -795,7 +823,7 @@ void loadGenes(struct clusterMaker *cm, struct sqlConnection *conn,
 /* load genes into cluster from a table or file */
 {
 struct genePred *genes, *gp;
-verbose(2, "%s %s %c\n", track->table, chrom, strand);
+verbose(2, "loadGenes: [%s] %s %c\n", track->name, chrom, strand);
 
 if (track->isDb)
     genes = trackTableGetGenes(track, conn, chrom, strand);
@@ -849,12 +877,12 @@ Bits* mkClusterMap(struct cluster *cluster)
 int len = (cluster->end - cluster->start);
 Bits *map = bitAlloc(len);
 struct clusterGene *cg;
-int exonStart, exonEnd, iExon;
+int exonStart, exonEnd, exonIx;
 
 for (cg = cluster->genes; cg != NULL; cg = cg->next)
     {
-    for (iExon = 0; iExon < cg->gp->exonCount; iExon++)
-        if (gpGetExon(cg->gp, iExon, gUseCds, &exonStart, &exonEnd))
+    for (exonIx = 0; exonIx < cg->gp->exonCount; exonIx++)
+        if (gpGetExon(cg, exonIx, FALSE, &exonStart, &exonEnd))
             bitSetRange(map, (exonStart-cluster->start), (exonEnd - exonStart));
     }
 return map;
@@ -1040,10 +1068,13 @@ gTrackNames = optionExists("trackNames");
 gJoinContained = optionExists("joinContained");
 gDetectConflicted = optionExists("conflicted");
 gIgnoreStrand = optionExists("ignoreStrand");
-if (optionExists("ignoreEndBases"))
-    gIgnoreEndBases = optionInt("ignoreEndBases", gIgnoreEndBases);
-else
-    gIgnoreEndBases = optionInt("minOverlappingBases", gIgnoreEndBases);  /* deprecated */
+if (optionExists("ignoreBases"))
+    gIgnoreBases = optionInt("ignoreBases", gIgnoreBases);
+else if (optionExists("minOverlappingBases"))
+    {
+    fprintf(stderr, "WARNING: -minOverlappingBases is deprecated and may not work as expected\n");
+    gIgnoreBases = optionInt("minOverlappingBases", gIgnoreBases);  /* deprecated */
+    }
 if (!gTrackNames)
     {
     if (argc < 4)
