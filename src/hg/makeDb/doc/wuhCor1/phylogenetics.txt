@@ -147,6 +147,8 @@
       'Wuhan/Hu-1/2019|EPI_ISL_402125|19-12-31' > ft_SH.reroot.nh
     # Use Yatish Turakhia's usher program to collapse nodes of the tree at which there is
     # no mutation, but not to condense identical samples into new nodes.
+    #*** NOTE FOR NEXT TIME: use ~angie/github/yatish_usher/build/usher; output file names changed
+    #*** and --print_uncondensed-final-tree changed to --write-uncondensed-final-tree
     ~angie/github/yatish_strain_phylogenetics/build/usher \
       --vcf gisaid-$releaseLabel.unfiltered.vcf.gz  \
       --tree ft_SH.reroot.nh \
