@@ -42,26 +42,7 @@ errAbort(
 "Otherwise the sourceField can be a strex expression involving fields in in.tsv.\n"
 "\n"
 "Each output table has duplicate rows merged using the key-column to determine uniqueness.\n"
-"If a more than one row of the input generates the same key in the output that is ok so long as\n"
-"all of the other fields that are generated agree as well.  An exception for this is made for\n"
-"summary expressions,  which all begin with the character '$'.   The allowed summary expressions are\n"
-"    $count - counts up number of input rows that yield this row\n"
-"    $stats sourceExpression - creates comma separated list of all values and some statistics\n"
-"    $list sourceExpression - creates comma separated list of unique values of sourceExpression\n"
-"If the source field starts with '@' then it is followed\n"
-"by a table name and is intepreted as the same value as the key field in the this table\n" 
-"\n"
-"If there is a '?' in front of the column name it is taken to mean an optional field.\n"
-"if the corresponding source field does not exist then there's no error (and no output)\n"
-"for that column\n"
-"\n"
-"You can also use strex expressions for more complicated situations.\n"
-"            See src/lib/strex.doc\n"
-"In addition to the table stanza there can be a 'define' stanza that defines variables\n"
-"that can be used in sourceFields for tables.  This looks like:\n"
-"         define\n"
-"         variable1 sourceField1\n"
-"         variable2 sourceField2\n"
+"Please see tabToTabDir.doc in the source code for more information on what can go into spec.x.\n"
 );
 }
 
@@ -381,6 +362,7 @@ struct uniqValCounter
     struct uniqValCounter *next;
     struct hash *uniq;	    // Integer valued list of values seen so far - oneValCount values
     struct oneValCount *list;    // List of uniq values seen so far
+    int total;	    /* Total of counts in list */
     };
 
 
@@ -482,6 +464,7 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 			    slAddHead(&counter->list, one);
 			    }
 			one->count += 1;
+			counter->total += 1;
 			break;
 			}
 		    }
@@ -552,7 +535,8 @@ for (fr = inTable->rowList; fr != NULL; fr = fr->next)
 			slSort(&counter->list, oneValCountCmp);
 			for (el = counter->list; el != NULL; el = el->next)
 			    {
-			    dyStringPrintf(dy, "%s(%d),", el->name, el->count);
+			    dyStringPrintf(dy, "%s(%d %d%%),", el->name, el->count, 
+				round(100.0 * el->count / counter->total));
 			    }
 			fr->row[fv->newIx] = dyStringCannibalize(&dy);
 			break;
