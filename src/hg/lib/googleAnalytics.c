@@ -36,6 +36,15 @@ jsInlineF(
 "  ga('send', 'pageview');\n"
 "\n"
 , analyticsKey);
+
+// to reduce the risk of breaking existing click handlers, only track links on hgc and hgTracks pages
+char* scriptName = getenv("SCRIPT_NAME");
+if (!scriptName)
+    return;
+
+char* cgiName = basename(scriptName);
+if (sameWord(cgiName, "hgc") || sameWord(cgiName, "hgTracks"))
+{
 // see https://support.google.com/analytics/answer/1136920?hl=en
 jsInlineF(
 "  function anchorClicked(ev) {\n"
@@ -66,12 +75,13 @@ jsInlineF(
 "      for (var i = 0; i < anchors.length; i++) { \n"
 "           var a = anchors[i];\n"
 "           if (a.attributes.href && a.attributes.href.value!=='#')\n" // do not run on javascript links
-"               a.onclick = anchorClicked;"
+"               a.onclick = anchorClicked;" // addEventHandler would not work here, the default click stops propagation.
 "      };\n"
 "      // on hgTracks: send an event with the current db, so we can report popularity of assemblies to NIH\n"
 "      if (typeof hgTracks !== undefined)\n"
 "          ga('send', 'event', 'hgTracks', 'load', getDb());\n"
 "  });"
 );
+}
 
 }
