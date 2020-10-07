@@ -238,11 +238,14 @@ char **fieldNames = NULL;
 if (!mouseOverIdx)
     {
     mouseOverPattern = cartOrTdbString(cart, tg->tdb, "mouseOver", NULL);
-    AllocArray(fieldNames, bbi->fieldCount);
-    struct slName *field = NULL, *fields = bbFieldNames(bbi);
-    int i =  0;
-    for (field = fields; field != NULL; field = field->next)
-        fieldNames[i++] = field->name;
+    if (mouseOverPattern)
+        {
+        AllocArray(fieldNames, bbi->fieldCount);
+        struct slName *field = NULL, *fields = bbFieldNames(bbi);
+        int i =  0;
+        for (field = fields; field != NULL; field = field->next)
+            fieldNames[i++] = field->name;
+        }
     }
                     
 int filtered = 0;
