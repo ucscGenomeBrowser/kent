@@ -1920,7 +1920,7 @@ char varName[256];
 safef(varName, sizeof(varName), "%s.label", tdb->track);
 printf("<br><b>Label:</b> ");
 labelMakeCheckBox(cart, tdb, "gene", "gene symbol", TRUE);
-labelMakeCheckBox(cart, tdb, "acc", "accession", FALSE);
+labelMakeCheckBox(cart, tdb, "acc", "accession", TRUE);
 struct sqlConnection *conn = hAllocConn(database);
 boolean omimAvail = sqlQuickNum(conn,
                                 NOSQLINJ"select 1 from ncbiRefSeqLink where omimId != 0 limit 1");
