@@ -1231,7 +1231,7 @@ page. Please acknowledge the contributor(s) of the data you use.
 <h3>Downloading the data</h3>
 <p>
 Genome data can be downloaded in different ways using our North American and European download
-servers, hgdownload and hgdownload-euro.</p>
+servers, hgdownload, hgdownload2, and hgdownload-euro.</p>
 <dl>
   <dt>Via rsync:</dt>
   <dd>
@@ -1239,11 +1239,13 @@ servers, hgdownload and hgdownload-euro.</p>
     currently accessible in the Genome Browser. Either of the following rsync commands can quickly
     and efficiently download large files to your current directory (./).</dd>
     <pre><code>rsync -a -P rsync://hgdownload.soe.ucsc.edu/path/file ./</code></pre>
+    <pre><code>rsync -a -P rsync://hgdownload2.soe.ucsc.edu/path/file ./</code></pre>
     <pre><code>rsync -a -P rsync://hgdownload-euro.soe.ucsc.edu/path/file ./</code></pre>
   <dd>
     To download an entire directory (note the trailing slash), you would use an expression such
     as:</dd>
     <pre><code>rsync -a -P rsync://hgdownload.soe.ucsc.edu/directory/ ./</code></pre>
+    <pre><code>rsync -a -P rsync://hgdownload2.soe.ucsc.edu/directory/ ./</code></pre>
     <pre><code>rsync -a -P rsync://hgdownload-euro.soe.ucsc.edu/directory/ ./</code></pre>
   <dd>
     For more information please click <a href="../help/ftp.html" target="_blank">here</a>.</dd>
@@ -1251,7 +1253,8 @@ servers, hgdownload and hgdownload-euro.</p>
   <dd>
     The UCSC Genome Browser FTP server contains download directories for all genome versions
     currently accessible in the Genome Browser. The FTP URLs
-    <code>ftp://hgdownload.soe.ucsc.edu/goldenPath/</code>
+    <code>ftp://hgdownload.soe.ucsc.edu/goldenPath/</code>,
+    <code>ftp://hgdownload2.soe.ucsc.edu/goldenPath/</code>,
     or
     <code>ftp://hgdownload-euro.soe.ucsc.edu/goldenPath/</code>
     will take you to a directory that contains the genome download directories. This download method

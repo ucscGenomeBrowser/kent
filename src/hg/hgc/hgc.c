@@ -26753,7 +26753,7 @@ else if (sameString("cosmic", table))
     {
     doCosmic(tdb, item);
     }
-else if (sameString("geneReviews", table))
+else if (startsWith("geneReviews", table))
     {
     doGeneReviews(tdb, item);
     }

@@ -513,11 +513,15 @@ char **fieldNames = NULL;
 if (!mouseOverIdx)
     {
     mouseOverPattern = cartOrTdbString(cart, track->tdb, "mouseOver", NULL);
-    AllocArray(fieldNames, bbi->fieldCount);
-    struct slName *field = NULL, *fields = bbFieldNames(bbi);
-    int i =  0;
-    for (field = fields; field != NULL; field = field->next)
-        fieldNames[i++] = field->name;
+
+    if (mouseOverPattern)
+        {
+        AllocArray(fieldNames, bbi->fieldCount);
+        struct slName *field = NULL, *fields = bbFieldNames(bbi);
+        int i =  0;
+        for (field = fields; field != NULL; field = field->next)
+            fieldNames[i++] = field->name;
+        }
     }
 
 // a fake item that is the union of the items that span the current  window
