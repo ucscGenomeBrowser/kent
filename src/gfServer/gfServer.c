@@ -68,7 +68,8 @@ boolean ipLog = FALSE;
 boolean doMask = FALSE;
 boolean canStop = FALSE;
 
-int timeout = 10;  // default timeout in seconds
+int timeout = 90;  // default timeout in seconds
+
 
 void usage()
 /* Explain usage and exit. */
@@ -157,6 +158,26 @@ tv.tv_sec = delayInSeconds;
 tv.tv_usec = 0;
 setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
 setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO, (const char*)&tv, sizeof tv);
+}
+
+static boolean sendOk = TRUE;
+
+void setSendOk()
+// Reset to OK to send
+{
+sendOk = TRUE;
+}
+
+void errSendString(int sd, char *s)
+// Send string. If not OK, remember we had an error, do not try to write anything more on this connection.
+{
+if (sendOk) sendOk = netSendString(sd, s);
+}
+
+void errSendLongString(int sd, char *s)
+// Send string unless we had an error already on the connection.
+{
+if (sendOk) sendOk = netSendLongString(sd, s);
 }
 
 void genoFindDirect(char *probeName, int fileCount, char *seqFiles[])
@@ -275,7 +296,7 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
     sprintf(buf, "%d\t%d\t%s\t%d\t%d\t%d", 
 	clump->qStart, clump->qEnd, ss->fileName,
 	clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount);
-    netSendString(connectionHandle, buf);
+    errSendString(connectionHandle, buf);
     ++clumpCount;
     int perSeqCount = -1;
     if (perSeqMaxHash &&
@@ -306,7 +327,7 @@ int clumpCount = 0, hitCount = 0, oneHit;
 struct lm *lm = lmInit(0);
 
 sprintf(buf, "tileSize %d", tileSize);
-netSendString(connectionHandle, buf);
+errSendString(connectionHandle, buf);
 for (frame = 0; frame < 3; ++frame)
     clumps[frame] = NULL;
 for (isRc = 0; isRc <= 1; ++isRc)
@@ -324,11 +345,11 @@ for (isRc = 0; isRc <= 1; ++isRc)
 		clump->qStart, clump->qEnd, ss->fileName,
 		clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount,
 		strand, frame);
-	    netSendString(connectionHandle, buf);
+	    errSendString(connectionHandle, buf);
 	    dyStringClear(dy);
 	    for (hit = clump->hitList; hit != NULL; hit = hit->next)
 	        dyStringPrintf(dy, " %d %d", hit->qStart, hit->tStart - ss->start);
-	    netSendLongString(connectionHandle, dy->string);
+	    errSendLongString(connectionHandle, dy->string);
 	    ++clumpCount;
 	    if (--limit < 0)
 		break;
@@ -356,7 +377,7 @@ struct gfHit *hit;
 int clumpCount = 0, hitCount = 0, oneCount;
 
 sprintf(buf, "tileSize %d", tileSize);
-netSendString(connectionHandle, buf);
+errSendString(connectionHandle, buf);
 for (qFrame = 0; qFrame<3; ++qFrame)
     for (tFrame=0; tFrame<3; ++tFrame)
 	clumps[qFrame][tFrame] = NULL;
@@ -378,13 +399,13 @@ for (isRc = 0; isRc <= 1; ++isRc)
 		    clump->qStart, clump->qEnd, ss->fileName,
 		    clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount,
 		    strand, qFrame, tFrame);
-		netSendString(connectionHandle, buf);
+		errSendString(connectionHandle, buf);
 		dyStringClear(dy);
 		for (hit = clump->hitList; hit != NULL; hit = hit->next)
 		    {
 		    dyStringPrintf(dy, " %d %d", hit->qStart, hit->tStart - ss->start);
 		    }
-		netSendLongString(connectionHandle, dy->string);
+		errSendLongString(connectionHandle, dy->string);
 		++clumpCount;
 		if (--limit < 0)
 		    break;
@@ -416,7 +437,7 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
     struct gfSeqSource *ss = clump->target;
     safef(buf, sizeof(buf), "%s\t%d\t%d\t+", ss->fileName, 
         clump->tStart, clump->tEnd);
-    netSendString(connectionHandle, buf);
+    errSendString(connectionHandle, buf);
     ++clumpCount;
     }
 gfClumpFreeList(&clumpList);
@@ -428,11 +449,11 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
     struct gfSeqSource *ss = clump->target;
     safef(buf, sizeof(buf), "%s\t%d\t%d\t-", ss->fileName, 
         clump->tStart, clump->tEnd);
-    netSendString(connectionHandle, buf);
+    errSendString(connectionHandle, buf);
     ++clumpCount;
     }
 gfClumpFreeList(&clumpList);
-netSendString(connectionHandle, "end");
+errSendString(connectionHandle, "end");
 logDebug("%lu PCR %s %s %d clumps\n", clock1000(), fPrimer, rPrimer, clumpCount);
 }
 
@@ -468,7 +489,7 @@ static void errorSafeCleanupMess(int connectionHandle, char *message)
 {
 errorSafeCleanup();
 logError("Recovering from error via longjmp");
-netSendString(connectionHandle, message);
+errSendString(connectionHandle, message);
 }
 
 static void errorSafeQuery(boolean doTrans, boolean queryIsProt, 
@@ -626,6 +647,7 @@ for (;;)
     ZeroVar(&fromAddr);
     fromLen = sizeof(fromAddr);
     connectionHandle = accept(socketHandle, (struct sockaddr*)&fromAddr, &fromLen);
+    setSendOk();
     if (connectionHandle < 0)
         {
 	warn("Error accepting the connection");
@@ -685,39 +707,39 @@ for (;;)
     else if (sameString("status", command))
         {
 	sprintf(buf, "version %s", gfVersion);
-	netSendString(connectionHandle, buf);
+	errSendString(connectionHandle, buf);
 	sprintf(buf, "type %s", (doTrans ? "translated" : "nucleotide"));
-	netSendString(connectionHandle, buf);
+	errSendString(connectionHandle, buf);
 	sprintf(buf, "host %s", hostName);
-	netSendString(connectionHandle, buf);
+	errSendString(connectionHandle, buf);
 	sprintf(buf, "port %s", portName);
-	netSendString(connectionHandle, buf);
+	errSendString(connectionHandle, buf);
 	sprintf(buf, "tileSize %d", tileSize);
-	netSendString(connectionHandle, buf);
+	errSendString(connectionHandle, buf);
 	sprintf(buf, "stepSize %d", stepSize);
-	netSendString(connectionHandle, buf);
+	errSendString(connectionHandle, buf);
 	sprintf(buf, "minMatch %d", minMatch);
-	netSendString(connectionHandle, buf);
+	errSendString(connectionHandle, buf);
 	sprintf(buf, "pcr requests %ld", pcrCount);
-	netSendString(connectionHandle, buf);
+	errSendString(connectionHandle, buf);
 	sprintf(buf, "blat requests %ld", blatCount);
-	netSendString(connectionHandle, buf);
+	errSendString(connectionHandle, buf);
 	sprintf(buf, "bases %ld", baseCount);
-	netSendString(connectionHandle, buf);
+	errSendString(connectionHandle, buf);
 	if (doTrans)
 	    {
 	    sprintf(buf, "aa %ld", aaCount);
-	    netSendString(connectionHandle, buf);
+	    errSendString(connectionHandle, buf);
 	    }
 	sprintf(buf, "misses %d", missCount);
-	netSendString(connectionHandle, buf);
+	errSendString(connectionHandle, buf);
 	sprintf(buf, "noSig %d", noSigCount);
-	netSendString(connectionHandle, buf);
+	errSendString(connectionHandle, buf);
 	sprintf(buf, "trimmed %d", trimCount);
-	netSendString(connectionHandle, buf);
+	errSendString(connectionHandle, buf);
 	sprintf(buf, "warnings %d", warnCount);
-	netSendString(connectionHandle, buf);
-	netSendString(connectionHandle, "end");
+	errSendString(connectionHandle, buf);
+	errSendString(connectionHandle, "end");
 	}
     else if (sameString("query", command) || 
     	sameString("protQuery", command) || sameString("transQuery", command))
@@ -794,7 +816,7 @@ for (;;)
 			    }
 			freez(&seq.dna);
 			}
-		    netSendString(connectionHandle, "end");
+		    errSendString(connectionHandle, "end");
 		    }
 		}
 	    }
@@ -831,11 +853,11 @@ for (;;)
         {
 	int i;
 	sprintf(buf, "%d", fileCount);
-	netSendString(connectionHandle, buf);
+	errSendString(connectionHandle, buf);
 	for (i=0; i<fileCount; ++i)
 	    {
 	    sprintf(buf, "%s", seqFiles[i]);
-	    netSendString(connectionHandle, buf);
+	    errSendString(connectionHandle, buf);
 	    }
 	}
     else
