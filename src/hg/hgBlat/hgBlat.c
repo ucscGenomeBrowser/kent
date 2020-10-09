@@ -65,6 +65,8 @@ struct genomeHits
 /* Information about hits on a genome assembly */
     {
     struct genomeHits *next;
+    char *host;		/* Host. */
+    char *port;	        /* Port. */
     char *db;		/* Database name. */
     char *genome;	/* Genome name. */
     int seqNumber;      /* Submission order */
@@ -844,7 +846,7 @@ else
 *pDescription = cloneString(description);
 }
 
-void queryServer(int conn, char *db, struct dnaSeq *seq, char *type, char *xType,
+void queryServer(char *host, char *port, char *db, struct dnaSeq *seq, char *type, char *xType,
     boolean complex, boolean isProt, boolean queryRC, int seqNumber)
 /* Send simple query to server and report results.
  * queryRC is true when the query has been reverse-complemented */
@@ -852,6 +854,8 @@ void queryServer(int conn, char *db, struct dnaSeq *seq, char *type, char *xType
 struct genomeHits *gH;
 AllocVar(gH);
 
+gH->host=cloneString(host);
+gH->port=cloneString(port);
 gH->db = cloneString(db);
 gH->genome = cloneString(hGenome(db));
 gH->seqNumber = seqNumber;
@@ -863,12 +867,7 @@ gH->xType = cloneString(xType);
 gH->queryRC = queryRC;
 gH->complex = complex;
 gH->isProt = isProt;
-gH->sd = conn;
-if (gH->sd == -1)
-    {
-    gH->error = TRUE;
-    gH->networkErrMsg = "Connection to gfServer failed.";
-    }
+
 gH->dbg = dyStringNew(256);
 slAddHead(&pfdList, gH);
 }
@@ -975,11 +974,31 @@ for(gfR=gH->gfList; gfR; gfR=gfR->next)
     }
 }
 
+int gfConnectEx(char *host, char *port)
+/* Try to connect to gfServer */
+{
+int conn = -1;
+if (allGenomes)
+    conn = gfMayConnect(host, port); // returns -1 on failure
+else
+    conn = gfConnect(host, port);  // errAborts on failure.
+return conn;
+}
+
+
 void queryServerFinish(struct genomeHits *gH)
 /* Report results from gfServer. */
 {
 char buf[256];
 int matchCount = 0;
+
+gH->sd = gfConnectEx(gH->host, gH->port);
+if (gH->sd == -1)
+    {
+    gH->error = TRUE;
+    gH->networkErrMsg = "Connection to gfServer failed.";
+    return;
+    }
 
 dyStringPrintf(gH->dbg,"query strand %s qsize %d<br>\n", gH->queryRC ? "-" : "+", gH->dnaSize);
 
@@ -991,7 +1010,7 @@ if (read(gH->sd, buf, 1) < 0)
     errAbort("queryServerFinish: read failed: %s", strerror(errno));
 if (buf[0] != 'Y')
     errAbort("Expecting 'Y' from server, got %c", buf[0]);
-mustWriteFd(gH->sd, gH->dna, gH->dnaSize);
+mustWriteFd(gH->sd, gH->dna, gH->dnaSize);  // Cannot shifted earlier for speed. must wait for Y confirmation.
 
 if (gH->complex)
     {
@@ -1220,17 +1239,6 @@ if (gH->complex && !gH->isProt)  // rnax, dnax
 
 
 close(gH->sd);
-}
-
-int gfConnectEx(char *host, char *port)
-/* Try to connect to gfServer */
-{
-int conn = -1;
-if (allGenomes)
-    conn = gfMayConnect(host, port); // returns -1 on failure
-else
-    conn = gfConnect(host, port);  // errAborts on failure.
-return conn;
 }
 
 int findMinMatch(long genomeSize, boolean isProt)
@@ -1588,47 +1596,58 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	break;
 	}
 
-    conn = gfConnectEx(serve->host, serve->port);
-
     if (isTx)
 	{
 	gvo->reportTargetStrand = TRUE;
 	if (isTxTx)
 	    {
 	    if (allGenomes)
-		queryServer(conn, db, seq, "transQuery", xType, TRUE, FALSE, FALSE, seqNumber);
+		queryServer(serve->host, serve->port, db, seq, "transQuery", xType, TRUE, FALSE, FALSE, seqNumber);
 	    else
+		{
+		conn = gfConnectEx(serve->host, serve->port);
 		gfAlignTransTrans(&conn, serve->nibDir, seq, FALSE, 5, tFileCache, gvo, !txTxBoth);
+		}
 	    if (txTxBoth)
 		{
 		reverseComplement(seq->dna, seq->size);
-		conn = gfConnectEx(serve->host, serve->port);
 		if (allGenomes)
-		    queryServer(conn, db, seq, "transQuery", xType, TRUE, FALSE, TRUE, seqNumber);
+		    queryServer(serve->host, serve->port, db, seq, "transQuery", xType, TRUE, FALSE, TRUE, seqNumber);
 		else
+		    {
+		    conn = gfConnectEx(serve->host, serve->port);
 		    gfAlignTransTrans(&conn, serve->nibDir, seq, TRUE, 5, tFileCache, gvo, FALSE);
+		    }
 		}
 	    }
 	else
 	    {
 	    if (allGenomes)
-		queryServer(conn, db, seq, "protQuery", xType, TRUE, TRUE, FALSE, seqNumber);
+		queryServer(serve->host, serve->port, db, seq, "protQuery", xType, TRUE, TRUE, FALSE, seqNumber);
 	    else
+		{
+		conn = gfConnectEx(serve->host, serve->port);
 		gfAlignTrans(&conn, serve->nibDir, seq, 5, tFileCache, gvo);
+		}
 	    }
 	}
     else
 	{
 	if (allGenomes)
-	    queryServer(conn, db, seq, "query", xType, FALSE, FALSE, FALSE, seqNumber);
+	    queryServer(serve->host, serve->port, db, seq, "query", xType, FALSE, FALSE, FALSE, seqNumber);
 	else
+	    {
+	    conn = gfConnectEx(serve->host, serve->port);
 	    gfAlignStrand(&conn, serve->nibDir, seq, FALSE, minMatchShown, tFileCache, gvo);
+	    }
 	reverseComplement(seq->dna, seq->size);
-	conn = gfConnectEx(serve->host, serve->port);
 	if (allGenomes)
-	    queryServer(conn, db, seq, "query", xType, FALSE, FALSE, TRUE, seqNumber);
+	    queryServer(serve->host, serve->port, db, seq, "query", xType, FALSE, FALSE, TRUE, seqNumber);
 	else
+	    {
+	    conn = gfConnectEx(serve->host, serve->port);
 	    gfAlignStrand(&conn, serve->nibDir, seq, TRUE, minMatchShown, tFileCache, gvo);
+	    }
 	}
     gfOutputQuery(gvo, f);
     ++seqNumber;
