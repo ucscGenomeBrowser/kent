@@ -3640,6 +3640,7 @@ hgsid on
 url http://www.omim.org/entry/
 tableBrowser noGenome omimGeneMap omimGeneMap2 omimPhenotype omimGeneSymbol omim2gene
 noGenomeReason Distribution restrictions by OMIM. See the track documentation for details. You can download the complete OMIM dataset for free from omim.org
+release public
 
 track omimGene2bb
 shortLabel OMIM Genes (New)
@@ -3660,6 +3661,8 @@ labelFields name,mainSym
 defaultLabelFields name,mainSym
 html omimGene2 
 noGenomeReason Distribution restrictions by OMIM. See the track documentation for details. You can download the complete OMIM dataset for free from omim.org
+release alpha,beta
+searchIndex name
 
 track omimAvSnp
 shortLabel OMIM Alleles
@@ -4309,6 +4312,17 @@ shortCircuit 1
 semiShortCircuit 1
 termRegex ([0-9]{6})
 searchPriority 10
+release beta,public
+
+searchName omimGene2AccBb
+searchTable omimGene2bb
+searchMethod exact
+searchType bigBed
+shortCircuit 1
+semiShortCircuit 1
+termRegex ([0-9]{6})
+searchPriority 10
+release alpha
 
 searchName omimGeneLocAcc
 searchTable omimLocation
