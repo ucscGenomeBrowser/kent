@@ -5101,6 +5101,20 @@ include decode.rmap.ra
 
 #geneReviews track
 track geneReviews
+release alpha
+shortLabel GeneReviews
+longLabel GeneReviews
+group  phenDis
+visibility hide
+color 0, 80, 0
+type bigBed 9 +
+bigDataUrl /gbdb/$D/geneReviews/geneReviews.bb
+mouseOver $name disease(s): $diseases
+html geneReviews
+url https://www.ncbi.nlm.nih.gov/books/NBK1116/?term=$$
+
+track geneReviews
+release beta,public
 shortLabel GeneReviews
 longLabel GeneReviews
 group  phenDis
