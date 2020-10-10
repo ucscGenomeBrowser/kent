@@ -5126,6 +5126,7 @@ bigDataUrl /gbdb/$D/geneReviews/geneReviews.bb
 mouseOver $name disease(s): $diseases
 html geneReviews
 url https://www.ncbi.nlm.nih.gov/books/NBK1116/?term=$$
+noScoreFilter on
 
 track geneReviews
 release beta,public
