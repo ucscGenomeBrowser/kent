@@ -258,6 +258,7 @@
 #include "bPlusTree.h"
 #include "customFactory.h"
 #include "iupac.h"
+#include "clinvarSubLolly.h"
 
 static char *rootDir = "hgcData";
 
@@ -26788,6 +26789,10 @@ else if (startsWith("gtexEqtlCluster", table))
 else if (startsWith("snake", trackHubSkipHubName(table)))
     {
     doSnakeClick(tdb, item);
+    }
+else if (startsWith("clinvarSubLolly", trackHubSkipHubName(table)))
+    {
+    doClinvarSubLolly(tdb, item);
     }
 else if (tdb != NULL &&
         (startsWithWord("vcfTabix", tdb->type) || sameWord("vcfPhasedTrio", tdb->type)))

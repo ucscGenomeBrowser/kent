@@ -1,7 +1,7 @@
-track clinsub
-shortLabel ClinVar SNVs interpretations
+track clinvarSubLolly
+shortLabel ClinVar SNVs interp
 longLabel ClinVar SNVs submitted interpretations and evidence
-bigDataUrl /gbdb/hg19/clinsub.bb
+bigDataUrl /gbdb/$D/clinvarSubLolly/clinvarSubLolly.bb
 type bigLolly
 group phenDis
 lollySizeField 10
@@ -17,3 +17,4 @@ yLabel.5 5 on 150,150,150 P
 lollyMaxSize 10
 viewLimits 0:5
 mouseOverField _mouseOver
+xrefTrack clinvarMain

@@ -543,6 +543,7 @@ wigColorBy wig
 wigFile customTracks
 wiggle wigMaf
 windowingFunction *
+xrefTrack *
 yalePseudoAssoc *
 yaleUrl *
 yalePseudoUrl *
