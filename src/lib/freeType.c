@@ -58,7 +58,8 @@ draw_bitmap( struct memGfx *mg, FT_Bitmap*  bitmap, Color color,
     for ( j = y, q = 0; j < y_max; j++, q++ )
     {
     unsigned long src =  bitmap->buffer[q * bitmap->width + p];
-    mixDot(mg, i, j, (double)src / 255, color); 
+    if (src)
+        mixDot(mg, i, j, (double)src / 255, color); 
     }
   }
 }

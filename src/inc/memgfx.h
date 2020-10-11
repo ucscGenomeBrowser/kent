@@ -412,6 +412,7 @@ struct rgbColor colorIxToRgb(int colorIx);
 INLINE void mixDot(struct memGfx *img, int x, int y,  float frac, Color col)
 /* Puts a single dot on the image, mixing it with what is already there
  * based on the frac argument. */
+/* Shouldn't this pay attention to the transparency of the current pixel? */
 {
 if ((x < img->clipMinX) || (x >= img->clipMaxX) || (y < img->clipMinY) || (y >= img->clipMaxY))
     return;
