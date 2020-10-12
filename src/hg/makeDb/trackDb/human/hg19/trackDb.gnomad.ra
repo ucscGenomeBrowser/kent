@@ -442,6 +442,7 @@ html gnomad
     viewLimits 0:1
     visibility full
     release alpha
+    html gnomadPext
 
         track gnomADPextmean_proportion
         bigDataUrl /gbdb/hg19/gnomAD/pext/mean_proportion.bw
