@@ -98,7 +98,7 @@ if (!extras->categNames)
     }
 if (id >= count)
     {
-    warn("Bar chart track: can't find id %d\n", id);
+    warn("Bar chart track: can't find sample ID %d in category file. The category file is a two-column file where sample IDs are associated to categories, specified with the setting 'barChartSampleUrl'.\n", id);
     return NULL;        // Exclude this category
     }
 return extras->categNames[id];
