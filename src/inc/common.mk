@@ -381,6 +381,13 @@ ifeq (${ENCODE_PIPELINE_BIN},)
     ENCODE_PIPELINE_BIN=/cluster/data/encode/pipeline/bin
 endif
 
+# This is used by cgi-alpha and cgi-beta to keep a log files with "who built what when".
+# The file can be useful when debugging problems on the alpha and beta builds.
+logUser:
+ifeq (${IS_HGWDEV},yes)
+	echo ${USER}, $(MAKECMDGOALS), `date` >> ${CGI_BIN}/buildLog.txt
+endif
+
 # avoid an extra leading slash when DESTDIR is empty
 ifeq (${DESTDIR},)
   DESTBINDIR=${BINDIR}

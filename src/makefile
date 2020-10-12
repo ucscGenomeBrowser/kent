@@ -34,11 +34,11 @@ cgi: libs
 	cd hg && ${MAKE} cgi
 	cd utils/bedToBigBed && ${MAKE} cgi
 
-cgi-alpha: check-alpha libs
+cgi-alpha: check-alpha libs logUser
 	cd hg && ${MAKE} alpha
 	cd utils/bedToBigBed && ${MAKE} alpha
 
-cgi-beta: check-beta libs
+cgi-beta: check-beta libs logUser
 	cd hg && ${MAKE} beta
 	cd utils/bedToBigBed && ${MAKE} beta
 
