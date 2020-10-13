@@ -3725,6 +3725,7 @@ compositeTrack on
 type bigBed 4 +
 tableBrowser off lovdComp
 html lovdComp
+pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
 
         track lovdShort
         shortLabel LOVD Variants < 50 bp
@@ -3747,7 +3748,6 @@ html lovdComp
         bigDataUrl /gbdb/$D/lovd/lovd.$D.long.bb
         parent lovdComp
         mergeSpannedItems on
-        pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
 
 track hgmd
 shortLabel HGMD Variants
