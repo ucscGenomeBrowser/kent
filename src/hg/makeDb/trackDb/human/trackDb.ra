@@ -5118,7 +5118,7 @@ include decode.rmap.ra
 
 #geneReviews track
 track geneReviews
-release alpha
+release alpha,beta
 shortLabel GeneReviews
 longLabel GeneReviews
 group  phenDis
@@ -5132,7 +5132,7 @@ url https://www.ncbi.nlm.nih.gov/books/NBK1116/?term=$$
 noScoreFilter on
 
 track geneReviews
-release beta,public
+release public
 shortLabel GeneReviews
 longLabel GeneReviews
 group  phenDis

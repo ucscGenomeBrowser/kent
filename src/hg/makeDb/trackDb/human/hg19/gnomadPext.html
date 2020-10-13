@@ -1,31 +1,22 @@
 <h2>Description</h2>
 <p>
-The <b>${longLabel}</b> <b>(PEXT)</b> track set displays isoform expression levels across 53 
-tissues, based on 11,706 tissue samples from the Genotype Tissue Expression (GTEx) v7 dataset.
+The <b>${longLabel}</b> track set shows isoform expression values across tissues. The pext metric
+allows for quick visualization of the expression status of exons across a gene. The median
+transcript expression levels in 53 tissue samples was calculated based on RNA-seq data from the
+GTEx v7 dataset.
 </p>
 
 <p>
-The <b> gnomAD PEXT tracks</p> provide a comprehensive view of the expression of exons across a gene using 
-the <em>proportion expression across transcripts</em>, or <em>pext metric</em>, a transcript-level 
-annotation metric which quantifies isoform expression for variants. This metric was calculated by 
-annotating each variant with the expression of all possible consequences across all transcripts for 
-each tissue and normalizing the expression of the annotation to the total expression of the gene, 
-which can be interpreted as a measure of the proportion of the total transcriptional output from a 
-gene that would be affected by the variant annotation in question.
+The <b>gnomAD PEXT mean_proportion</b> subtrack displays the mean expression of a transcript calculated
+from all 53 GTEx tissue samples.
 </p>
 
 <p>
-Each of the subtracks shows the <em>pext metrics</em> for a specific tissue, except the <b>gnomAD 
-PEXT mean_proportion </b> subtrack which shows the average pext metrics calculated from the 53 
-GTEx tissues.
-</p>
-
-<p>
-Note that isoform quantification tools can be imprecise, especially for longer genes with many 
-annotated isoforms. Regions with low pext values might be enriched for annotation errors (ie. there 
-may be edge cases for which an exon that is established to be critical for gene function may appear 
-unexpressed with pext). Also note that the GTEx dataset is postmortem adult tissue, and thus 
-the possibility that an exon may be development-specific or may be expressed in tissues not 
+Note that isoform quantification tools can be imprecise, especially for longer genes with many
+annotated isoforms. Regions with low pext values might be enriched for annotation errors (ie. there
+may be edge cases for which an exon that is established to be critical for gene function may appear
+unexpressed with pext). Also note that the GTEx dataset is postmortem adult tissue, and thus
+the possibility that an exon may be development-specific or may be expressed in tissues not
 represented in GTEx can not be dismissed.
 </p>
 
@@ -33,27 +24,31 @@ represented in GTEx can not be dismissed.
 
 <p>
 The pext graphs display the mean expression at each base position for protein-coding (CDS) regions.
-While UTRs do have expression in transcriptome datasets, note that this information is not included 
-for the visualization. The details page shows calculated sample percentages for the range of 
-sequence within the browser window. 
+While UTRs do have expression in transcriptome datasets, note that this information is not included
+for the visualization. The details page shows calculated sample percentages for the range of
+sequence within the browser window.
 </p>
 
 <H2>Methods</H2>
-
 <p>
 The pext values are derived from isoform quantifications using the <a target="blank"
-href="http://deweylab.biostat.wisc.edu/rsem/">RSEM tool</a>. Detailed information about 
-development and commands to create these files can be found <a target="blank" 
-href="https://github.com/macarthur-lab/tx_annotation/">here</a>. 
+href="http://deweylab.biostat.wisc.edu/rsem/">RSEM tool</a>. Detailed information about
+development and commands to create these files can be found <a target="blank"
+href="https://github.com/macarthur-lab/tx_annotation/">here</a>. Pext values were downloaded
+from the <a href="https://gnomad.broadinstitute.org/downloads#v2-pext">gnomAD website</a> and
+transformed into bigWigs, one per tissue. For the full list of UCSC specific steps, please
+see the &quot;gnomAD PEXT scores&quot; section of the
+<a href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg19.txt">
+hg19 makedoc</a> from our GitHub repository.
 </p>
 
 <h2>Data Access</h2>
 <p>
 The raw data can be explored interactively with the <a href="../hgTables">Table Browser</a>, or
-the <a href="../hgIntegrator">Data Integrator</a>. For automated access, this track, like all 
-others, is available via our <a href="../goldenPath/help/api.html">API</a>.  
+the <a href="../hgIntegrator">Data Integrator</a>. For automated access, this track, like all
+others, is available via our <a href="../goldenPath/help/api.html">API</a>.
 The data can also be found directly from the gnomAD <a target="_blank"
-href="https://gnomad.broadinstitute.org/downloads">downloads page</a>. 
+href="https://gnomad.broadinstitute.org/downloads">downloads page</a>.
 </p>
 
 <p>
