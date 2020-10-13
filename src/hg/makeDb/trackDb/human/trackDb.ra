@@ -134,6 +134,7 @@ filterValues.pathogenicity Benign,Likely Benign,Likely Pathogenic,Pathogenic,Unc
 mergeSpannedItems on
 searchIndex name
 mouseOverField _mouseOver
+pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
 
 searchTable decipher
 searchMethod exact
@@ -3746,6 +3747,7 @@ html lovdComp
         bigDataUrl /gbdb/$D/lovd/lovd.$D.long.bb
         parent lovdComp
         mergeSpannedItems on
+        pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
 
 track hgmd
 shortLabel HGMD Variants
