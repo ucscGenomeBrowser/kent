@@ -1,14 +1,25 @@
 <h2>Description</h2>
 <p>
-The <b>${longLabel}</b> track set shows isoform expression values across tissues. The pext metric 
-allows for quick visualization of the expression status of exons across a gene. The median 
-transcript expression levels in 53 tissue samples was calculated based on RNA-seq data from the 
-GTEx v7 dataset.  
+The <b>${longLabel}</b> <b>(PEXT)</b> track set displays isoform expression levels across 53 
+tissues, based on 11,706 tissue samples from the Genotype Tissue Expression (GTEx) v7 dataset.
 </p>
+
 <p>
-The <b>gnomAD PEXT mean_proportion</b> subtrack displays the mean expression of a transcript calculated 
-from all 53 GTEx tissue samples. 
+The <b> gnomAD PEXT tracks</p> provide a comprehensive view of the expression of exons across a gene using 
+the <em>proportion expression across transcripts</em>, or <em>pext metric</em>, a transcript-level 
+annotation metric which quantifies isoform expression for variants. This metric was calculated by 
+annotating each variant with the expression of all possible consequences across all transcripts for 
+each tissue and normalizing the expression of the annotation to the total expression of the gene, 
+which can be interpreted as a measure of the proportion of the total transcriptional output from a 
+gene that would be affected by the variant annotation in question.
 </p>
+
+<p>
+Each of the subtracks shows the <em>pext metrics</em> for a specific tissue, except the <b>gnomAD 
+PEXT mean_proportion </b> subtrack which shows the average pext metrics calculated from the 53 
+GTEx tissues.
+</p>
+
 <p>
 Note that isoform quantification tools can be imprecise, especially for longer genes with many 
 annotated isoforms. Regions with low pext values might be enriched for annotation errors (ie. there 
