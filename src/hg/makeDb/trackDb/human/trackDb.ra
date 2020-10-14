@@ -5488,3 +5488,16 @@ searchType bed
 searchPriority 50
 
 include covidHgiGwas.ra
+
+track covidHgeMuts
+type bigBed 12 + 
+shortLabel Covid Variants
+longLabel Covid Human Genetics Effort Variants
+group covid 
+visibility hide
+html covidHgeMuts
+bigDataUrl /gbdb/hg38/covid/covidMuts.bb
+ 
+
+
+
