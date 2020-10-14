@@ -245,6 +245,8 @@ useItemRgb = bedItemRgb(tdb);
 if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
     struct bbiFile *bbi = fetchBbiForTrack(tg);
+    if (bbi->fieldCount < 9)
+        errAbort("track %s has a bigBed being read as a bed9 that has %d columns.", tg->track, bbi->fieldCount);
     bigBedLabelCalculateFields(cart, tg->tdb, bbi,  &tg->labelColumns);
     bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 9, &lfList);
