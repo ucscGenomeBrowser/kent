@@ -17,4 +17,12 @@ yLabel.5 5 on 150,150,150 P
 lollyMaxSize 10
 viewLimits 0:5
 mouseOverField _mouseOver
-xrefTrack clinvarMain
+xrefTrack clinvarSubBB
+
+track clinvarSubBB
+shortLabel ClinVar Subs
+longLabel ClinVar Subs
+type bigBed 9 +
+group phenDis
+bigDataUrl /gbdb/$D/clinvarSubLolly/clinvarSub.bb
+urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"

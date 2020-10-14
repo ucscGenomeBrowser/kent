@@ -8,30 +8,21 @@
 #include "hui.h"
 #include "subText.h"   
 #include "trackHub.h"   
-#include "clinvarSub.h"   
 #include "clinvarSubLolly.h"   
 
-static void printVariant(struct trackDb *tdb, struct bbiFile *bbi, struct bigBedInterval *bbList, char *variant)
-{
-struct bigBedInterval *bb;
-for (bb = bbList; bb != NULL; bb = bb->next)
-    {
-    char *fields[bbi->fieldCount];
-    int restCount = chopTabs(cloneString(bb->rest), fields);
-    if (differentString(fields[36], variant))
-        continue;
-    int restBedFields = 12 - 3;
-    char **extraFields = (fields + restBedFields);
-    int extraFieldCount = restCount - restBedFields;
-    extraFieldsPrint(tdb,NULL,extraFields, extraFieldCount);
-    }
-}
 
-static void printVariants(struct trackDb *tdb, char *variants, char *chrom, int start, int end)
+char *statusByScore[] =
 {
-int count = chopByChar(variants, ',', NULL, 0);
-char *words[count];
-chopByChar(variants, ',', words, count);
+"Other",
+"Benign",
+"Likely Benign",
+"Uncertain significance",
+"Likely pathogenic",
+"Pathogenic",
+};
+
+void printSubmissions(struct trackDb *tdb, char *chrom, int start, int end, unsigned wantScore, int numSubs, boolean not)
+{
 char *xrefTrack = trackDbSetting(tdb, "xrefTrack");
 struct trackDb *mainTdb = hashFindVal(trackHash, xrefTrack);
 char *mainBigBedFile = trackDbSetting(mainTdb, "bigDataUrl");
@@ -39,59 +30,36 @@ struct bbiFile *bbi = bigBedFileOpen(mainBigBedFile);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 
-printf("There are %d variants at this position.\n", count);
-int ii;
-for(ii=0; ii < count; ii++)
+int count;
+char *extra = "";
+if (not)
     {
-    printVariant(mainTdb, bbi, bbList, words[ii]);
+    count = slCount(bbList) - numSubs;
+    extra = "other than ";
     }
-}
+else 
+    count = numSubs;
 
+if (count == 0)
+    return;
 
-static char *subFields[] =
-{
-"VariationID",
-"ClinicalSignificance",
-"DateLastEvaluated",
-"Description",
-"SubmittedPhenotypeInfo",
-"ReportedPhenotypeInfo",
-"ReviewStatus",
-"CollectionMethod",
-"OriginCounts",
-"Submitter",
-"SCV",
-"SubmittedGeneSymbol",
-};
+printf("<B>There are %d submissions at this position with status %s '%s'</B><BR>\n", count, extra, statusByScore[wantScore]);
 
-static void printSub(struct sqlConnection *conn,  char *sub)
-{
-char query[4096];
-sqlSafef(query, sizeof(query), "select * from clinvarSub where scv = '%s'", sub);
-struct sqlResult *sr;
-sr = sqlGetResult(conn, query);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
+struct bigBedInterval *bb;
+for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    printf("<br><table class='bedExtraTbl'>");
-    int ii;
-    for(ii=0; ii < ArraySize(subFields); ii++)
-        printf("<tr><td>%s</td><td>%s</td>", subFields[ii], row[ii]);
-    printf("</table>\n");
-    }
-}
-static void printSubs(struct sqlConnection *conn, char *subs, char *chrom, int start, int end)
-{
-int count = chopByChar(subs, ',', NULL, 0);
-char *words[count];
-chopByChar(subs, ',', words, count);
+    char *fields[bbi->fieldCount];
+    int restCount = chopTabs(cloneString(bb->rest), fields);
+    int score = atoi(fields[1]);
+    if (not ^ (score != wantScore))
+        continue;
 
-printf("There are %d submissions at this position.\n", count);
-int ii;
-for(ii=0; ii < count; ii++)
-    {
-    printSub(conn, words[ii]);
+    int restBedFields = 6;
+    char **extraFields = (fields + restBedFields);
+    int extraFieldCount = restCount - restBedFields;
+    extraFieldsPrint(mainTdb,NULL,extraFields, extraFieldCount);
     }
+printf("<BR>");
 }
 
 void doClinvarSubLolly(struct trackDb *tdb, char *item)
@@ -110,7 +78,7 @@ char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
 struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
-int  bedSize = bbi->definedFieldCount;
+//int  bedSize = bbi->definedFieldCount;
 
 struct bigBedInterval *bb;
 char *fields[bbi->fieldCount];
@@ -124,10 +92,10 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         continue;
     char startBuf[16], endBuf[16];
     bigBedIntervalToRow(bb, chrom, startBuf, endBuf, fields, bbi->fieldCount);
-    struct bed *bed = bedLoadN(fields, bedSize);
-    bedPrintPos(bed, bedSize, tdb);
-    printSubs(conn, fields[12], chrom, start, end);
-    printVariants(tdb, fields[11], chrom, start, end);
+    int numSubs = chopString(fields[12], ",", NULL, 0);
+
+    printSubmissions(tdb,  chrom, start, end, atoi(fields[4]), numSubs, FALSE);
+    printSubmissions(tdb,  chrom, start, end, atoi(fields[4]), numSubs, TRUE);
     break;
     }
 }
