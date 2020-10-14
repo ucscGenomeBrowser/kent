@@ -20,7 +20,8 @@ static struct optionSpec optionSpecs[] = {
     {"out", OPTION_STRING},
     {"maxIntron", OPTION_INT},
     {"nohead", OPTION_BOOLEAN},
-    {"genomeDir", OPTION_STRING},
+    {"genome", OPTION_STRING},
+    {"genomeDataDir", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -181,7 +182,7 @@ genome = optionVal("genome", NULL);
 genomeDataDir = optionVal("genomeDataDir", NULL);
 if ((genomeDataDir != NULL) && (genome == NULL))
     errAbort("-genomeDataDir requires the -genome option");
-if ((genome == NULL) && (genomeDataDir != NULL))
+if ((genome != NULL) && (genomeDataDir == NULL))
     genomeDataDir = ".";
 
 
