@@ -325,54 +325,6 @@ hapClusterEnabled on
 hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.ft.linCol.nh
 hapClusterHeight 500
 hapClusterColorBy function
-tableBrowser off
-vcfDoQual off
-vcfDoFilter off
-geneTrack ncbiGeneBGP
-group varRep
-visibility squish
-priority 0.2
-dataVersion 28-08-20
-pennantIcon New red ../goldenPath/newsarch.html "Released Sep. 14, 2020"
-html sarsCov2PhyloOldColors
-release public
-
-    track sarsCov2PhyloMinAf01
-    shortLabel Min alt AF 1%
-    longLabel Single Nucleotide Variants in GISAID EpiCov TM sequences with alternate allele frequency >= 1%
-    parent sarsCov2Phylo on
-    bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.01.vcf.gz
-    type vcfTabix
-    priority 10
-    release public
-
-    track sarsCov2PhyloMinAf001
-    shortLabel Min alt AF 0.1%
-    longLabel Single Nucleotide Variants in GISAID EpiCov TM sequences with alternate allele frequency >= 0.1%
-    parent sarsCov2Phylo off
-    type vcfTabix
-    bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.001.vcf.gz
-    priority 20
-    release public
-
-    track sarsCov2PhyloFull
-    shortLabel All (slow!)
-    longLabel All Single Nucleotide Variants in GISAID EpiCov TM sequences (slow at whole-genome scale)
-    parent sarsCov2Phylo off
-    type vcfTabix
-    bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.ambigToN.vcf.gz
-    priority 30
-    release public
-
-track sarsCov2Phylo
-shortLabel SARS-CoV-2 Phylogeny
-longLabel Phylogenetic Tree and Variants from High-coverage Sequences in GISAID EpiCoV TM
-compositeTrack on
-type vcfTabix
-hapClusterEnabled on
-hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.ft.linCol.nh
-hapClusterHeight 500
-hapClusterColorBy function
 sampleColorFile Pangolin_lineage=/gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.lineageColors.gz GISAID_clade=/gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.gisaidColors.gz
 tableBrowser off
 vcfDoQual off
@@ -382,8 +334,6 @@ group varRep
 visibility squish
 priority 0.2
 dataVersion 28-08-20
-pennantIcon New red ../goldenPath/newsarch.html "Released Sep. 14, 2020"
-release alpha,beta
 
     track sarsCov2PhyloMinAf01
     shortLabel Min alt AF 1%
@@ -392,7 +342,6 @@ release alpha,beta
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.01.vcf.gz
     type vcfTabix
     priority 10
-    release alpha,beta
 
     track sarsCov2PhyloMinAf001
     shortLabel Min alt AF 0.1%
@@ -401,7 +350,6 @@ release alpha,beta
     type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.001.vcf.gz
     priority 20
-    release alpha,beta
 
     track sarsCov2PhyloFull
     shortLabel All (slow!)
@@ -410,7 +358,6 @@ release alpha,beta
     type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.ambigToN.vcf.gz
     priority 30
-    release alpha,beta
 
 track problematicSites
 shortLabel Problematic Sites
