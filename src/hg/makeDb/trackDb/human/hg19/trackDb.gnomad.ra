@@ -446,8 +446,8 @@ html gnomad
 
         track gnomADPextmean_proportion
         bigDataUrl /gbdb/hg19/gnomAD/pext/mean_proportion.bw
-        shortLabel mean_proportion
-        longLabel gnomAD PEXT mean_proportion
+        shortLabel mean-proportion
+        longLabel gnomAD PEXT mean-proportion
         parent gnomadPext on
         color 66,139,202
         visibility full
@@ -457,16 +457,16 @@ html gnomad
         track gnomADPextAdipose_Subcutaneous
         bigDataUrl /gbdb/hg19/gnomAD/pext/Adipose_Subcutaneous.bw
         parent gnomadPext off
-        shortLabel Adipose Subcut
-        longLabel gnomAD PEXT Adipose Subcutaneous
+        shortLabel Adipose-Subcut
+        longLabel gnomAD PEXT Adipose-Subcutaneous
         color 255,102,0
         visibility hide
         release alpha
 
         track gnomADPextAdipose_Visceral_Omentum_
         bigDataUrl /gbdb/hg19/gnomAD/pext/Adipose_Visceral_Omentum_.bw
-        shortLabel Adipose_Visceral_Omentum_
-        longLabel gnomAD PEXT Adipose_Visceral_Omentum_
+        shortLabel Adipose-Visceral_(Omentum)
+        longLabel gnomAD PEXT Adipose-Visceral_(Omentum)
         parent gnomadPext off
         color 255,170,0
         visibility hide
@@ -474,8 +474,8 @@ html gnomad
 
         track gnomADPextAdrenalGland
         bigDataUrl /gbdb/hg19/gnomAD/pext/AdrenalGland.bw
-        shortLabel AdrenalGland
-        longLabel gnomAD PEXT AdrenalGland
+        shortLabel Adrenal-Gland
+        longLabel gnomAD PEXT Adrenal-Gland
         parent gnomadPext off
         color 51,221,51
         visibility hide
@@ -483,8 +483,8 @@ html gnomad
 
         track gnomADPextArtery_Aorta
         bigDataUrl /gbdb/hg19/gnomAD/pext/Artery_Aorta.bw
-        shortLabel Artery_Aorta
-        longLabel gnomAD PEXT Artery_Aorta
+        shortLabel Artery-Aorta
+        longLabel gnomAD PEXT Artery-Aorta
         parent gnomadPext off
         color 255,85,85
         visibility hide
@@ -492,8 +492,8 @@ html gnomad
 
         track gnomADPextArtery_Coronary
         bigDataUrl /gbdb/hg19/gnomAD/pext/Artery_Coronary.bw
-        shortLabel Artery_Coronary
-        longLabel gnomAD PEXT Artery_Coronary
+        shortLabel Artery-Coronary
+        longLabel gnomAD PEXT Artery-Coronary
         parent gnomadPext off
         color 255,170,153
         visibility hide
@@ -501,8 +501,8 @@ html gnomad
 
         track gnomADPextArtery_Tibial
         bigDataUrl /gbdb/hg19/gnomAD/pext/Artery_Tibial.bw
-        shortLabel Artery_Tibial
-        longLabel gnomAD PEXT Artery_Tibial
+        shortLabel Artery-Tibial
+        longLabel gnomAD PEXT Artery-Tibial
         parent gnomadPext off
         color 255,0,0
         visibility hide
@@ -519,8 +519,8 @@ html gnomad
 
         track gnomADPextBrain_Amygdala
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Amygdala.bw
-        shortLabel Brain_Amygdala
-        longLabel gnomAD PEXT Brain_Amygdala
+        shortLabel Brain-Amygdala
+        longLabel gnomAD PEXT Brain-Amygdala
         parent gnomadPext off
         color 238,238,0
         visibility hide
@@ -528,8 +528,8 @@ html gnomad
 
         track gnomADPextBrain_Anteriorcingulatecortex_BA24_
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Anteriorcingulatecortex_BA24_.bw
-        shortLabel Brain_Anteriorcingulatecortex_BA24_
-        longLabel gnomAD PEXT Brain_Anteriorcingulatecortex_BA24_
+        shortLabel Brain-Anterior_cingulate_cortex_(BA24)
+        longLabel gnomAD PEXT Brain-Anterior_cingulate_cortex_(BA24)
         parent gnomadPext off
         color 238,238,0
         visibility hide
@@ -537,8 +537,8 @@ html gnomad
 
         track gnomADPextBrain_Caudate_basalganglia_
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Caudate_basalganglia_.bw
-        shortLabel Brain_Caudate_basalganglia_
-        longLabel gnomAD PEXT Brain_Caudate_basalganglia_
+        shortLabel Brain-Caudate_(basal_ganglia)
+        longLabel gnomAD PEXT Brain-Caudate_(basal_ganglia)
         parent gnomadPext off
         color 238,238,0
         visibility hide
@@ -546,8 +546,8 @@ html gnomad
 
         track gnomADPextBrain_CerebellarHemisphere
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_CerebellarHemisphere.bw
-        shortLabel Brain_CerebellarHemisphere
-        longLabel gnomAD PEXT Brain_CerebellarHemisphere
+        shortLabel Brain-Cerebellar_Hemisphere
+        longLabel gnomAD PEXT Brain-Cerebellar_Hemisphere
         parent gnomadPext off
         color 238,238,0
         visibility hide
@@ -555,8 +555,8 @@ html gnomad
 
         track gnomADPextBrain_Cerebellum
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Cerebellum.bw
-        shortLabel Brain_Cerebellum
-        longLabel gnomAD PEXT Brain_Cerebellum
+        shortLabel Brain-Cerebellum
+        longLabel gnomAD PEXT Brain-Cerebellum
         parent gnomadPext off
         color 238,238,0
         visibility hide
@@ -564,8 +564,8 @@ html gnomad
 
         track gnomADPextBrain_Cortex
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Cortex.bw
-        shortLabel Brain_Cortex
-        longLabel gnomAD PEXT Brain_Cortex
+        shortLabel Brain-Cortex
+        longLabel gnomAD PEXT Brain-Cortex
         parent gnomadPext off
         color 238,238,0
         visibility hide
@@ -573,8 +573,8 @@ html gnomad
 
         track gnomADPextBrain_FrontalCortex_BA9_
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_FrontalCortex_BA9_.bw
-        shortLabel Brain_FrontalCortex_BA9_
-        longLabel gnomAD PEXT Brain_FrontalCortex_BA9_
+        shortLabel Brain-Frontal_Cortex_(BA9)
+        longLabel gnomAD PEXT Brain-Frontal_Cortex_(BA9)
         parent gnomadPext off
         color 238,238,0
         visibility hide
@@ -582,8 +582,8 @@ html gnomad
 
         track gnomADPextBrain_Hippocampus
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Hippocampus.bw
-        shortLabel Brain_Hippocampus
-        longLabel gnomAD PEXT Brain_Hippocampus
+        shortLabel Brain-Hippocampus
+        longLabel gnomAD PEXT Brain-Hippocampus
         parent gnomadPext off
         color 238,238,0
         visibility hide
@@ -591,8 +591,8 @@ html gnomad
 
         track gnomADPextBrain_Hypothalamus
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Hypothalamus.bw
-        shortLabel Brain_Hypothalamus
-        longLabel gnomAD PEXT Brain_Hypothalamus
+        shortLabel Brain-Hypothalamus
+        longLabel gnomAD PEXT Brain-Hypothalamus
         parent gnomadPext off
         color 238,238,0
         visibility hide
@@ -600,8 +600,8 @@ html gnomad
 
         track gnomADPextBrain_Nucleusaccumbens_basalganglia_
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Nucleusaccumbens_basalganglia_.bw
-        shortLabel Brain_Nucleusaccumbens_basalganglia_
-        longLabel gnomAD PEXT Brain_Nucleusaccumbens_basalganglia_
+        shortLabel Brain-Nucleus_accumbens_(basal_ganglia)
+        longLabel gnomAD PEXT Brain-Nucleus_accumbens_(basal_ganglia)
         parent gnomadPext off
         color 238,238,0
         visibility hide
@@ -609,8 +609,8 @@ html gnomad
 
         track gnomADPextBrain_Putamen_basalganglia_
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Putamen_basalganglia_.bw
-        shortLabel Brain_Putamen_basalganglia_
-        longLabel gnomAD PEXT Brain_Putamen_basalganglia_
+        shortLabel Brain-Putamen_(basal_ganglia)
+        longLabel gnomAD PEXT Brain-Putamen_(basal_ganglia)
         parent gnomadPext off
         color 238,238,0
         visibility hide
@@ -618,8 +618,8 @@ html gnomad
 
         track gnomADPextBrain_Spinalcord_cervicalc_1_
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Spinalcord_cervicalc_1_.bw
-        shortLabel Brain_Spinalcord_cervicalc_1_
-        longLabel gnomAD PEXT Brain_Spinalcord_cervicalc_1_
+        shortLabel Brain-Spinal_cord_(cervicalc_1)
+        longLabel gnomAD PEXT Brain-Spinal_cord_(cervicalc_1)
         parent gnomadPext off
         color 238,238,0
         visibility hide
@@ -627,8 +627,8 @@ html gnomad
 
         track gnomADPextBrain_Substantianigra
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Substantianigra.bw
-        shortLabel Brain_Substantianigra
-        longLabel gnomAD PEXT Brain_Substantianigra
+        shortLabel Brain-Substantia_nigra
+        longLabel gnomAD PEXT Brain-Substantia_nigra
         parent gnomadPext off
         color 238,238,0
         visibility hide
@@ -636,8 +636,8 @@ html gnomad
 
         track gnomADPextBreast_MammaryTissue
         bigDataUrl /gbdb/hg19/gnomAD/pext/Breast_MammaryTissue.bw
-        shortLabel Breast_MammaryTissue
-        longLabel gnomAD PEXT Breast_MammaryTissue
+        shortLabel Breast-Mammary_Tissue
+        longLabel gnomAD PEXT Breast-Mammary_Tissue
         parent gnomadPext off
         color 51,204,204
         visibility hide
@@ -645,8 +645,8 @@ html gnomad
 
         track gnomADPextCells_EBV_transformedlymphocytes
         bigDataUrl /gbdb/hg19/gnomAD/pext/Cells_EBV_transformedlymphocytes.bw
-        shortLabel Cells_EBV_transformedlymphocytes
-        longLabel gnomAD PEXT Cells_EBV_transformedlymphocytes
+        shortLabel Cells-EBV-transformed_lymphocytes
+        longLabel gnomAD PEXT Cells-EBV-transformed_lymphocytes
         parent gnomadPext off
         color 204,102,255
         visibility hide
@@ -654,8 +654,8 @@ html gnomad
 
         track gnomADPextCells_Transformedfibroblasts
         bigDataUrl /gbdb/hg19/gnomAD/pext/Cells_Transformedfibroblasts.bw
-        shortLabel Cells_Transformedfibroblasts
-        longLabel gnomAD PEXT Cells_Transformedfibroblasts
+        shortLabel Cells-Transformed_fibroblasts
+        longLabel gnomAD PEXT Cells-Transformed_fibroblasts
         parent gnomadPext off
         color 170,238,255
         visibility hide
@@ -663,8 +663,8 @@ html gnomad
 
         track gnomADPextCervix_Ectocervix
         bigDataUrl /gbdb/hg19/gnomAD/pext/Cervix_Ectocervix.bw
-        shortLabel Cervix_Ectocervix
-        longLabel gnomAD PEXT Cervix_Ectocervix
+        shortLabel Cervix-Ectocervix
+        longLabel gnomAD PEXT Cervix-Ectocervix
         parent gnomadPext off
         color 255,204,204
         visibility hide
@@ -672,8 +672,8 @@ html gnomad
 
         track gnomADPextCervix_Endocervix
         bigDataUrl /gbdb/hg19/gnomAD/pext/Cervix_Endocervix.bw
-        shortLabel Cervix_Endocervix
-        longLabel gnomAD PEXT Cervix_Endocervix
+        shortLabel Cervix-Endocervix
+        longLabel gnomAD PEXT Cervix-Endocervix
         parent gnomadPext off
         color 204,170,221
         visibility hide
@@ -681,8 +681,8 @@ html gnomad
 
         track gnomADPextColon_Sigmoid
         bigDataUrl /gbdb/hg19/gnomAD/pext/Colon_Sigmoid.bw
-        shortLabel Colon_Sigmoid
-        longLabel gnomAD PEXT Colon_Sigmoid
+        shortLabel Colon-Sigmoid
+        longLabel gnomAD PEXT Colon-Sigmoid
         parent gnomadPext off
         color 238,187,119
         visibility hide
@@ -690,8 +690,8 @@ html gnomad
 
         track gnomADPextColon_Transverse
         bigDataUrl /gbdb/hg19/gnomAD/pext/Colon_Transverse.bw
-        shortLabel Colon_Transverse
-        longLabel gnomAD PEXT Colon_Transverse
+        shortLabel Colon-Transverse
+        longLabel gnomAD PEXT Colon-Transverse
         parent gnomadPext off
         color 204,153,85
         visibility hide
@@ -699,8 +699,8 @@ html gnomad
 
         track gnomADPextEsophagus_GastroesophagealJunction
         bigDataUrl /gbdb/hg19/gnomAD/pext/Esophagus_GastroesophagealJunction.bw
-        shortLabel Esophagus_GastroesophagealJunction
-        longLabel gnomAD PEXT Esophagus_GastroesophagealJunction
+        shortLabel Esophagus-Gastroesophageal_Junction
+        longLabel gnomAD PEXT Esophagus-Gastroesophageal_Junction
         parent gnomadPext off
         color 139,115,85
         visibility hide
@@ -708,8 +708,8 @@ html gnomad
 
         track gnomADPextEsophagus_Mucosa
         bigDataUrl /gbdb/hg19/gnomAD/pext/Esophagus_Mucosa.bw
-        shortLabel Esophagus_Mucosa
-        longLabel gnomAD PEXT Esophagus_Mucosa
+        shortLabel Esophagus-Mucosa
+        longLabel gnomAD PEXT Esophagus-Mucosa
         parent gnomadPext off
         color 85,34,0
         visibility hide
@@ -717,8 +717,8 @@ html gnomad
 
         track gnomADPextEsophagus_Muscularis
         bigDataUrl /gbdb/hg19/gnomAD/pext/Esophagus_Muscularis.bw
-        shortLabel Esophagus_Muscularis
-        longLabel gnomAD PEXT Esophagus_Muscularis
+        shortLabel Esophagus-Muscularis
+        longLabel gnomAD PEXT Esophagus-Muscularis
         parent gnomadPext off
         color 187,153,136
         visibility hide
@@ -726,8 +726,8 @@ html gnomad
 
         track gnomADPextFallopianTube
         bigDataUrl /gbdb/hg19/gnomAD/pext/FallopianTube.bw
-        shortLabel FallopianTube
-        longLabel gnomAD PEXT FallopianTube
+        shortLabel Fallopian_Tube
+        longLabel gnomAD PEXT Fallopian_Tube
         parent gnomadPext off
         color 255,204,204
         visibility hide
@@ -735,8 +735,8 @@ html gnomad
 
         track gnomADPextHeart_AtrialAppendage
         bigDataUrl /gbdb/hg19/gnomAD/pext/Heart_AtrialAppendage.bw
-        shortLabel Heart_AtrialAppendage
-        longLabel gnomAD PEXT Heart_AtrialAppendage
+        shortLabel Heart-Atrial_Appendage
+        longLabel gnomAD PEXT Heart-Atrial_Appendage
         parent gnomadPext off
         color 153,0,255
         visibility hide
@@ -744,8 +744,8 @@ html gnomad
 
         track gnomADPextHeart_LeftVentricle
         bigDataUrl /gbdb/hg19/gnomAD/pext/Heart_LeftVentricle.bw
-        shortLabel Heart_LeftVentricle
-        longLabel gnomAD PEXT Heart_LeftVentricle
+        shortLabel Heart-Left_Ventricle
+        longLabel gnomAD PEXT Heart-Left_Ventricle
         parent gnomadPext off
         color 102,0,153
         visibility hide
@@ -753,8 +753,8 @@ html gnomad
 
         track gnomADPextKidney_Cortex
         bigDataUrl /gbdb/hg19/gnomAD/pext/Kidney_Cortex.bw
-        shortLabel Kidney_Cortex
-        longLabel gnomAD PEXT Kidney_Cortex
+        shortLabel Kidney-Cortex
+        longLabel gnomAD PEXT Kidney-Cortex
         parent gnomadPext off
         color 34,255,221
         visibility hide
@@ -780,8 +780,8 @@ html gnomad
 
         track gnomADPextMinorSalivaryGland
         bigDataUrl /gbdb/hg19/gnomAD/pext/MinorSalivaryGland.bw
-        shortLabel MinorSalivaryGland
-        longLabel gnomAD PEXT MinorSalivaryGland
+        shortLabel Minor_Salivary_Gland
+        longLabel gnomAD PEXT Minor_Salivary_Gland
         parent gnomadPext off
         color 153,187,136
         visibility hide
@@ -789,8 +789,8 @@ html gnomad
 
         track gnomADPextMuscle_Skeletal
         bigDataUrl /gbdb/hg19/gnomAD/pext/Muscle_Skeletal.bw
-        shortLabel Muscle_Skeletal
-        longLabel gnomAD PEXT Muscle_Skeletal
+        shortLabel Muscle-Skeletal
+        longLabel gnomAD PEXT Muscle-Skeletal
         parent gnomadPext off
         color 170,170,255
         visibility hide
@@ -798,8 +798,8 @@ html gnomad
 
         track gnomADPextNerve_Tibial
         bigDataUrl /gbdb/hg19/gnomAD/pext/Nerve_Tibial.bw
-        shortLabel Nerve_Tibial
-        longLabel gnomAD PEXT Nerve_Tibial
+        shortLabel Nerve-Tibial
+        longLabel gnomAD PEXT Nerve-Tibial
         parent gnomadPext off
         color 255,215,0
         visibility hide
@@ -843,8 +843,8 @@ html gnomad
 
         track gnomADPextSkin_NotSunExposed_Suprapubic_
         bigDataUrl /gbdb/hg19/gnomAD/pext/Skin_NotSunExposed_Suprapubic_.bw
-        shortLabel Skin_NotSunExposed_Suprapubic_
-        longLabel gnomAD PEXT Skin_NotSunExposed_Suprapubic_
+        shortLabel Skin-Not_Sun_Exposed_(Suprapubic)
+        longLabel gnomAD PEXT Skin-Not_Sun_Exposed_(Suprapubic)
         parent gnomadPext off
         color 0,0,255
         visibility hide
@@ -852,8 +852,8 @@ html gnomad
 
         track gnomADPextSkin_SunExposed_Lowerleg_
         bigDataUrl /gbdb/hg19/gnomAD/pext/Skin_SunExposed_Lowerleg_.bw
-        shortLabel Skin_SunExposed_Lowerleg_
-        longLabel gnomAD PEXT Skin_SunExposed_Lowerleg_
+        shortLabel Skin-Sun_Exposed_(Lowerleg)
+        longLabel gnomAD PEXT Skin-Sun_Exposed_(Lowerleg)
         parent gnomadPext off
         color 119,119,255
         visibility hide
@@ -861,8 +861,8 @@ html gnomad
 
         track gnomADPextSmallIntestine_TerminalIleum
         bigDataUrl /gbdb/hg19/gnomAD/pext/SmallIntestine_TerminalIleum.bw
-        shortLabel SmallIntestine_TerminalIleum
-        longLabel gnomAD PEXT SmallIntestine_TerminalIleum
+        shortLabel Small_Intestine-Terminal_Ileum
+        longLabel gnomAD PEXT Small_Intestine-Terminal_Ileum
         parent gnomadPext off
         color 85,85,34
         visibility hide
@@ -924,8 +924,8 @@ html gnomad
 
         track gnomADPextWholeBlood
         bigDataUrl /gbdb/hg19/gnomAD/pext/WholeBlood.bw
-        shortLabel WholeBlood
-        longLabel gnomAD PEXT WholeBlood
+        shortLabel Whole_Blood
+        longLabel gnomAD PEXT Whole_Blood
         parent gnomadPext off
         color 255,0,187
         visibility hide

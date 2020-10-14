@@ -29,6 +29,7 @@ use vars qw/
     $opt_species
     $opt_rmskSpecies
     $opt_ncbiRmsk
+    $opt_noRmsk
     $opt_augustusSpecies
     $opt_xenoRefSeq
     $opt_ucscNames
@@ -68,10 +69,11 @@ my $sourceDir = "/hive/data/outside/ncbi/genomes";
 my $species = "";       # usually found in asmId_assembly_report.txt
 my $ftpDir = "";	# will be determined from given asmId
 my $rmskSpecies = "";
+my $noRmsk = 0;	# when RepeatMasker is not possible, such as bacteria
 my $ncbiRmsk = 0;	# when =1 call doRepeatMasker.pl
                         # with -ncbiRmsk=path.out.gz and -liftSpec=...
 my $augustusSpecies = "human";
-my $xenoRefSeq = "/hive/data/genomes/asmHubs/VGP/xenoRefSeq";
+my $xenoRefSeq = "/hive/data/genomes/asmHubs/xenoRefSeq";
 my $ucscNames = 0;  # default 'FALSE' (== 0)
 my $asmHubName = "n/a";  # directory name in: /gbdb/hubs/asmHubName
 my $workhorse = "hgwdev";  # default workhorse when none chosen
@@ -112,6 +114,7 @@ options:
     -rmskSpecies <name> to override default 'species' name for repeat masker
                       the default is found in the asmId_asssembly_report.txt
                       e.g. -rmskSpecies=viruses
+    -noRmsk           when RepeatMasker is not possible, such as bacteria
     -ncbiRmsk         use NCBI rm.out.gz file instead of local cluster run
                       for repeat masking
     -augustusSpecies <human|chicken|zebrafish> default 'human'
@@ -193,6 +196,7 @@ sub checkOptions {
 		      'buildDir=s',
 		      'sourceDir=s',
 		      'rmskSpecies=s',
+		      'noRmsk',
 		      'ncbiRmsk',
 		      'augustusSpecies=s',
 		      'xenoRefSeq=s',
@@ -655,8 +659,12 @@ if [ ! -s \${asmId}.2bit -o \${asmId}_genomic.fna.gz -nt \$asmId.2bit ]; then
 
   ln -s $assemblySource/\${asmId}_genomic.fna.gz .
   ln -s $assemblySource/\${asmId}_assembly_report.txt .
-  ln -s $assemblySource/\${asmId}_rm.out.gz .
-  ln -s $assemblySource/\${asmId}_rm.run .
+  if [ -s $assemblySource/\${asmId}_rm.out.gz ]; then
+    ln -s $assemblySource/\${asmId}_rm.out.gz .
+  fi
+  if [ -s $assemblySource/\${asmId}_rm.run ]; then
+    ln -s $assemblySource/\${asmId}_rm.run .
+  fi
   if [ -d $assemblySource/\${asmId}_assembly_structure ]; then
     ln -s $assemblySource/\${asmId}_assembly_structure .
   fi
@@ -821,12 +829,21 @@ _EOF_
 ### construct sequence when no AGP files exist
   if (0 == $partsDone) {
 printf STDERR "creating fake AGP\n";
-    $bossScript->add(<<_EOF_
+    if ($ucscNames) {
+      $bossScript->add(<<_EOF_
 twoBitToFa ../download/\$asmId.2bit stdout | sed -e "s/\\.\\([0-9]\\+\\)/v\\1/;" | gzip -c > \$asmId.fa.gz
 hgFakeAgp -minContigGap=1 -minScaffoldGap=50000 \$asmId.fa.gz stdout | gzip -c > \$asmId.fake.agp.gz
 zgrep "^>" \$asmId.fa.gz | sed -e 's/>//;' | sed -e 's/\\(.*\\)/\\1 \\1/;' | sed -e 's/v\\([0-9]\\+\\)/.\\1/;' | awk '{printf "%s\\t%s\\n", \$2, \$1}' > \$asmId.fake.names
 _EOF_
-    );
+      );
+    } else {
+      $bossScript->add(<<_EOF_
+twoBitToFa ../download/\$asmId.2bit stdout | gzip -c > \$asmId.fa.gz
+hgFakeAgp -minContigGap=1 -minScaffoldGap=50000 \$asmId.fa.gz stdout | gzip -c > \$asmId.fake.agp.gz
+zgrep "^>" \$asmId.fa.gz | sed -e 's/>//;' | sed -e 's/\\(.*\\)/\\1 \\1/;' | sed -e 's/v\\([0-9]\\+\\)/.\\1/;' | awk '{printf "%s\\t%s\\n", \$2, \$1}' > \$asmId.fake.names
+_EOF_
+      );
+    }
 } else {
 printf STDERR "partsDone: %d\n", $partsDone;
   }
@@ -1089,6 +1106,10 @@ _EOF_
 #########################################################################
 # * step: repeatMasker [workhorse]
 sub doRepeatMasker {
+  if ($noRmsk) {
+       &HgAutomate::verbose(1, "# -noRmsk == RepeatMasker not being run\n");
+	return;
+  }
   my $runDir = "$buildDir/trackData/repeatMasker";
   if ( -d "$buildDir/trackData/repeatMasker/run.cluster" ) {
      if ( ! -s "$buildDir/trackData/repeatMasker/faSize.rmsk.txt" ) {
@@ -1105,11 +1126,13 @@ sub doRepeatMasker {
 
   my $rmskOpts = "";
   if ($ncbiRmsk) {
-     $rmskOpts = " \\
+     if ( -s "$buildDir/download/${asmId}_rm.out.gz" ) {
+       $rmskOpts = " \\
   -ncbiRmsk=\"$buildDir/download/${asmId}_rm.out.gz\" ";
-     if ($ucscNames) {
-       $rmskOpts .= " \\
+       if ($ucscNames) {
+         $rmskOpts .= " \\
   -liftSpec=\"$buildDir/sequence/$asmId.ncbiToUcsc.lift\"";
+       }
      }
   }
 
@@ -1312,10 +1335,12 @@ sub doAddMask {
   my $runDir = "$buildDir/trackData/addMask";
 
   my $goNoGo = 0;
-  if ( ! -s "$buildDir/trackData/repeatMasker/$asmId.rmsk.2bit" ) {
-      printf STDERR "ERROR: repeatMasker step not completed\n";
-      printf STDERR "can not find: $buildDir/trackData/repeatMasker/$asmId.rmsk.2bit\n";
-      $goNoGo = 1;
+  if (! $noRmsk) {
+    if ( ! -s "$buildDir/trackData/repeatMasker/$asmId.rmsk.2bit" ) {
+       printf STDERR "ERROR: repeatMasker step not completed\n";
+       printf STDERR "can not find: $buildDir/trackData/repeatMasker/$asmId.rmsk.2bit\n";
+       $goNoGo = 1;
+    }
   }
   if ( ! -s "$buildDir/trackData/windowMasker/$asmId.cleanWMSdust.2bit" ) {
       printf STDERR "ERROR: windowMasker step not completed\n";
@@ -1338,10 +1363,13 @@ sub doAddMask {
                     $workhorse, $runDir, $whatItDoes);
 
   my $wmMasked=`grep "masked total" $buildDir/trackData/windowMasker/faSize.$asmId.cleanWMSdust.txt | awk '{print \$1}' | sed -e 's/%//;'`;
-  my $rmMasked=`grep "masked total" $buildDir/trackData/repeatMasker/faSize.rmsk.txt | awk '{print \$1}' | sed -e 's/%//;'`;
+  my $rmMasked = 0;
+  if (! $noRmsk) {
+    $rmMasked=`grep "masked total" $buildDir/trackData/repeatMasker/faSize.rmsk.txt | awk '{print \$1}' | sed -e 's/%//;'`;
+  }
 
   my $src2BitToMask = "../repeatMasker/$asmId.rmsk.2bit";
-  if ($wmMasked > $rmMasked) {
+  if ($noRmsk || ($wmMasked > $rmMasked)) {
     $src2BitToMask = "../windowMasker/$asmId.cleanWMSdust.2bit";
   }
 
@@ -1390,12 +1418,16 @@ if [ ../../\$asmId.unmasked.2bit -nt faSize.\$asmId.cleanWMSdust.txt ]; then
     \$asmId.cleanWMSdust.2bit
   twoBitToFa \$asmId.cleanWMSdust.2bit stdout \\
     | faSize stdin > faSize.\$asmId.cleanWMSdust.txt
-  zcat ../repeatMasker/\$asmId.sorted.fa.out.gz | sed -e 's/^  *//; /^\$/d;' \\
-    | egrep -v "^SW|^score" | awk '{printf "%s\\t%d\\t%d\\n", \$5, \$6-1, \$7}' \\
-      | bedSingleCover.pl stdin > rmsk.bed
-  intersectRmskWM=`bedIntersect -minCoverage=0.0000000014 cleanWMask.bed \\
-    rmsk.bed stdout | bedSingleCover.pl stdin | ave -col=4 stdin \\
-     | grep "^total" | awk '{print \$2}' | sed -e 's/.000000//;'`
+  if [ -s ../repeatMasker/\$asmId.sorted.fa.out.gz ]; then
+    zcat ../repeatMasker/\$asmId.sorted.fa.out.gz | sed -e 's/^  *//; /^\$/d;' \\
+      | egrep -v "^SW|^score" | awk '{printf "%s\\t%d\\t%d\\n", \$5, \$6-1, \$7}' \\
+        | bedSingleCover.pl stdin > rmsk.bed
+    intersectRmskWM=`bedIntersect -minCoverage=0.0000000014 cleanWMask.bed \\
+      rmsk.bed stdout | bedSingleCover.pl stdin | ave -col=4 stdin \\
+       | grep "^total" | awk '{print \$2}' | sed -e 's/.000000//;'`
+  else
+    intersectRmskWM=0
+  fi
   chromSize=`ave -col=2 ../../\$asmId.chrom.sizes \\
      | grep "^total" | awk '{print \$2}' | sed -e 's/.000000//;'`
   echo \$intersectRmskWM \$chromSize | \\
@@ -1873,6 +1905,7 @@ $smallClusterHub = $opt_smallClusterHub ? $opt_smallClusterHub : $smallClusterHu
 $fileServer = $opt_fileServer ? $opt_fileServer : $fileServer;
 $asmHubName = $opt_asmHubName ? $opt_asmHubName : $asmHubName;
 $ncbiRmsk = $opt_ncbiRmsk ? 1 : 0;
+$noRmsk = $opt_noRmsk ? 1 : 0;
 
 die "can not find assembly source directory\n$assemblySource" if ( ! -d $assemblySource);
 printf STDERR "# buildDir: %s\n", $buildDir;

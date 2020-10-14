@@ -116,18 +116,6 @@ type bed 4
 url http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=gene=
 
 track decipher
-shortLabel DECIPHER CNVs
-longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans (CNVs)
-group phenDis
-visibility hide
-color 0,0,0
-type bed 4
-tableBrowser off decipherRaw knownToDecipher knownCanonToDecipher
-prevExonText Left edge
-nextExonText Right edge
-release public
-
-track decipher
 shortLabel Decipher CNVs
 longLabel Decipher CNVs
 group phenDis
@@ -146,7 +134,7 @@ filterValues.pathogenicity Benign,Likely Benign,Likely Pathogenic,Pathogenic,Unc
 mergeSpannedItems on
 searchIndex name
 mouseOverField _mouseOver
-release alpha,beta
+pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
 
 searchTable decipher
 searchMethod exact
@@ -3737,6 +3725,7 @@ compositeTrack on
 type bigBed 4 +
 tableBrowser off lovdComp
 html lovdComp
+pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
 
         track lovdShort
         shortLabel LOVD Variants < 50 bp
@@ -5118,7 +5107,6 @@ include decode.rmap.ra
 
 #geneReviews track
 track geneReviews
-release alpha,beta
 shortLabel GeneReviews
 longLabel GeneReviews
 group  phenDis
@@ -5130,17 +5118,7 @@ mouseOver $name disease(s): $diseases
 html geneReviews
 url https://www.ncbi.nlm.nih.gov/books/NBK1116/?term=$$
 noScoreFilter on
-
-track geneReviews
-release public
-shortLabel GeneReviews
-longLabel GeneReviews
-group  phenDis
-visibility hide
-color 0, 80, 0
-type bed 4
-html geneReviews
-url https://www.ncbi.nlm.nih.gov/books/NBK1116/?term=$$
+pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
 
 searchName geneReviews
 searchTable geneReviews
@@ -5510,3 +5488,16 @@ searchType bed
 searchPriority 50
 
 include covidHgiGwas.ra
+
+track covidHgeMuts
+type bigBed 12 + 
+shortLabel Covid Variants
+longLabel Covid Human Genetics Effort Variants
+group covid 
+visibility hide
+html covidHgeMuts
+bigDataUrl /gbdb/hg38/covid/covidMuts.bb
+ 
+
+
+
