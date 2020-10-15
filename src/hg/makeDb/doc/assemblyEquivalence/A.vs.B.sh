@@ -33,7 +33,6 @@ join -t$'\t' -2 2 ${A}.${B}.toMatch.list \
       | awk '{printf "%d\t%s\t%d\n", $4,$1,$3}' | sort -n \
          > uniqueCounts.${A}.${B}.txt
 
-/cluster/home/hiram/kent/src/hg/makeDb/doc/assemblyEquivalence
 ~/kent/src/hg/makeDb/doc/assemblyEquivalence/createNearMissRunList.pl 10 \
    uniqueCounts.${B}.${A}.txt uniqueCounts.${A}.${B}.txt \
      > nearMiss.${A}.${B}.run.list
