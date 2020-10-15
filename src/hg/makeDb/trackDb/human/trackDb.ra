@@ -5493,7 +5493,12 @@ track covidHgeMuts
 type bigBed 12 + 
 shortLabel COVID-19 Immunity Variants
 longLabel COVID-19 Immunity Variants from the COVID Human Genetics Effort
+mouseOver $name $rsId $gene Genotype: $genotype; Zygosity: $zygo ; Inheritance: $inhMode
+labelFields gene, name
+defaultLabelFields gene, name
+noScoreFilter on
 group covid 
+color 179,0,0
 visibility hide
 html covidHgeMuts
 bigDataUrl /gbdb/hg38/covid/covidMuts.bb
