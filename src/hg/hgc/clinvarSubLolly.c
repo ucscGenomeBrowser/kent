@@ -31,19 +31,18 @@ struct lm *lm = lmInit(0);
 struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 
 int count;
-char *extra = "";
 if (not)
-    {
     count = slCount(bbList) - numSubs;
-    extra = "other than ";
-    }
 else 
     count = numSubs;
 
 if (count == 0)
     return;
 
-printf("<B>There are %d submissions at this position with status %s '%s'</B><BR>\n", count, extra, statusByScore[wantScore]);
+if (!not)
+    printf("<BR><B>There are %d submissions at this position with clinical significance '%s'.</B><BR>\n", count, statusByScore[wantScore]);
+else
+    printf("<BR><B>There are %d submissions at this position with other clinical significance.</B><BR>\n", count);
 
 struct bigBedInterval *bb;
 for (bb = bbList; bb != NULL; bb = bb->next)
@@ -78,7 +77,6 @@ char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
 struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
-//int  bedSize = bbi->definedFieldCount;
 
 struct bigBedInterval *bb;
 char *fields[bbi->fieldCount];
@@ -94,6 +92,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     bigBedIntervalToRow(bb, chrom, startBuf, endBuf, fields, bbi->fieldCount);
     int numSubs = chopString(fields[12], ",", NULL, 0);
 
+    printPos(chrom, bb->start, bb->end, NULL, FALSE, name);
     printSubmissions(tdb,  chrom, start, end, atoi(fields[4]), numSubs, FALSE);
     printSubmissions(tdb,  chrom, start, end, atoi(fields[4]), numSubs, TRUE);
     break;
