@@ -84,6 +84,7 @@ longLabel Validated Epitopes from SARS 2003 outbreak
 group immu
 type bigBed 4 +
 bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
+pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 14, 2020"
 
 track publicAnnots
 shortLabel Crowd-Sourced Data
