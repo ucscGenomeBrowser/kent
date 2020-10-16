@@ -5,9 +5,10 @@
 # Note that named sessions support description in settings field, however the description in
 #       this file is used in browser (allows non-owner of session, e.g. QA, to edit)
 #       
+# For details on how to update this file, see the wiki: http://genomewiki.ucsc.edu/genecats/index.php/Recommended_Track_Sets
+#       
 # Format: label, userName, sessionName, description
-Clinical SNV	Kate	CURATED%20Clinical%20SNV%20hg19	Assess potential disease contributions of single nucleotide variants in coding regions
-Clinical CNV	Kate	CURATED%20Clinical%20CNV%20hg19	Assess potential disease contributions of structural variants in coding regions
-Non-coding SNV	Kate	CURATED%20Non%20coding%20SNV%20hg19	Investigate functional aspects of non-coding variants
 Clinical SNVs	View	SNVs%20Clinical	Assess potential disease contributions of single nucleotide variants in coding regions
 Clinical CNVs	View	CNVs%20Clinical	Assess potential disease contributions of structural variants in coding regions
+Non-coding SNVs	View	Non%2Dcoding%20SNVs	Investigate functional aspects of non-coding variants
+
