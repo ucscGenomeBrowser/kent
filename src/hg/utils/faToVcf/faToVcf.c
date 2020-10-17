@@ -18,6 +18,8 @@ errAbort(
   "   -excludeFile=file     Exclude sequences named in file which has one sequence name per line\n"
   "   -includeRef           Include the reference in the genotype columns\n"
   "                         (default: omitted as redundant)\n"
+  "   -maskSites=file       Exclude variants in positions recommended for masking in file\n"
+  "                         (typically https://github.com/W-L/ProblematicSites_SARS-CoV2/raw/master/problematic_sites_sarsCov2.vcf)\n"
   "   -minAc=N              Ignore alternate alleles observed fewer than N times\n"
   "   -noGenotypes          Output 8-column VCF, without the sample genotype columns\n"
   "   -ref=seqName          Use seqName as the reference sequence; must be present in faFile\n"
@@ -39,6 +41,7 @@ static struct optionSpec options[] = {
     { "ambiguousToN", OPTION_BOOLEAN },
     { "excludeFile", OPTION_STRING },
     { "includeRef", OPTION_BOOLEAN },
+    { "maskSites", OPTION_STRING },
     { "minAc", OPTION_INT },
     { "noGenotypes", OPTION_BOOLEAN },
     { "ref", OPTION_STRING },
@@ -146,12 +149,49 @@ fprintf(outF,
         faFile, sequences->name, faFile, vcfFile);
 if (includeGenotypes)
     {
-    printf("\tFORMAT");
+    fprintf(outF, "\tFORMAT");
     struct dnaSeq *seqsForGt = (includeRef ? sequences : sequences->next), *seq;
     for (seq = seqsForGt;  seq != NULL;  seq = seq->next)
         fprintf(outF, "\t%s", seq->name);
     }
 fprintf(outF, "\n");
+}
+
+static boolean *getMaskSites(char *maskSitesFile, struct dnaSeq *ref)
+/* If -maskSites=file is given, parse sites to be masked from file (expecting VCF with 'mask' in
+ * the filter column at reference positions to be masked) and return an array of booleans indexed
+ * by reference position, TRUE for mask.  Otherwise return NULL. */
+{
+boolean *maskSites = NULL;
+if (maskSitesFile)
+    {
+    int chromSize = strlen(ref->dna) - countChars(ref->dna, '-');
+    AllocArray(maskSites, chromSize);
+    struct lineFile *lf = lineFileOpen(maskSitesFile, TRUE);
+    char *line;
+    while (lineFileNext(lf, &line, NULL))
+        {
+        if (line[0] == '#')
+            continue;
+        char *words[9];
+        int wordCount = chopTabs(line, words);
+        lineFileExpectWords(lf, 8, wordCount);
+        if (!isAllDigits(words[1]))
+            lineFileAbort(lf, "Expected second column to contain numeric position but got '%s'",
+                          words[1]);
+        int pos = atol(words[1]);
+        if (pos < 1 || pos > chromSize)
+            {
+            warn("Warning line %d of %s: "
+                 "Expected second column to contain positions between 1 and %d but got %d",
+                 lf->lineIx, lf->fileName, chromSize, pos);
+            }
+        else if (sameString(words[6], "mask"))
+            maskSites[pos-1] = TRUE;
+        }
+    lineFileClose(&lf);
+    }
+return maskSites;
 }
 
 void faToVcf(char *faFile, char *vcfFile)
@@ -167,9 +207,10 @@ FILE *outF = mustOpen(vcfFile, "w");
 boolean noGenotypes = optionExists("noGenotypes");
 writeVcfHeader(outF, faFile, vcfFile, sequences, includeRef, !noGenotypes);
 
-char *refName = sequences->name;
-char *vcfChrom = optionVal("vcfChrom", refName);
+struct dnaSeq *refSeq = sequences;
+char *vcfChrom = optionVal("vcfChrom", refSeq->name);
 int startOffset = optionInt("startOffset", 0);
+boolean *maskSites = getMaskSites(optionVal("maskSites", NULL), refSeq);
 
 struct dnaSeq *seqsForGt = (includeRef ? sequences : sequences->next);
 int gtCount = includeRef ? seqCount : seqCount - 1;
@@ -179,7 +220,7 @@ boolean *missing = needMem(sizeof(boolean) * gtCount);
 int baseIx, chromStart = 0;
 for (baseIx = 0, chromStart = 0;  baseIx < seqSize;  baseIx++, chromStart++)
     {
-    char ref = toupper(sequences->dna[baseIx]);
+    char ref = toupper(refSeq->dna[baseIx]);
     if (ref == '-')
         {
         // Insertion into reference -- ignore and adjust reference coordinate.
@@ -187,6 +228,8 @@ for (baseIx = 0, chromStart = 0;  baseIx < seqSize;  baseIx++, chromStart++)
         continue;
         }
     if (ref == 'N')
+        continue;
+    if (maskSites && maskSites[chromStart])
         continue;
     if (ref == 'U')
         ref = 'T';
