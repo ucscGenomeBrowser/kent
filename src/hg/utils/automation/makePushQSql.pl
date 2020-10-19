@@ -158,7 +158,7 @@ sub getInfrastructureEntry {
     ("liftOver/${sameSpecies}*To$Db.over.chain.gz");
 
   my @goldenPathFiles = map {"$HgAutomate::goldenPath/$db/$_"}
-    (qw( bigZips/* database/* chromosomes/* ),
+    (qw( bigZips/genes/* bigZips/*.gz bigZips/*.sizes bigZips/*.2bit bigZips/*.txt database/* chromosomes/* ),
      "liftOver/${db}To$SameSpecies*");
 
   my @otherGoldenPathFiles = map {"$HgAutomate::goldenPath/${sameSpecies}*/$_"}

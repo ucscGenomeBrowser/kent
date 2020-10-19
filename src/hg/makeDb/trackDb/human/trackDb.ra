@@ -23,9 +23,6 @@ include trackDb.geneHancer.ra
 # NCBI ClinVar
 include trackDb.clinvar.ra
 
-# NCBI ClinVar Submissions
-include clinvarSubLolly.ra alpha
-
 # NCBI dbVar
 include trackDb.dbVar.ra
 
@@ -5491,9 +5488,14 @@ include covidHgiGwas.ra
 
 track covidHgeMuts
 type bigBed 12 + 
-shortLabel Covid Variants
-longLabel Covid Human Genetics Effort Variants
+shortLabel COVID-19 Immunity Variants
+longLabel COVID-19 Immunity Variants from the COVID Human Genetics Effort
+mouseOver $name $rsId $gene Genotype: $genotype; Zygosity: $zygo ; Inheritance: $inhMode
+labelFields gene, name
+defaultLabelFields gene, name
+noScoreFilter on
 group covid 
+color 179,0,0
 visibility hide
 html covidHgeMuts
 bigDataUrl /gbdb/hg38/covid/covidMuts.bb

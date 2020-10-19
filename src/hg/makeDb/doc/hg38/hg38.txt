@@ -3672,12 +3672,18 @@ _EOF_
 
     # No longer necessary to filter out alt and fix patches since they have been added to hg38.
 
-    # four extra columns have been added to the genePred (2020-09-16 - Hiram)
-    # extract them so they can be added to the psl:
-    awk -F$'\t' '{printf "%s\t%s\t%s\t%s\t%s\t%s %s %s %s\n", $1,$16,$17,$18,$19, $16,$18,$17,$19}' lrgTranscriptsUnmapped.gp | sort > lrgTransExtraFields.tsv
+    # and we need the transcript plus gene name later:
+    cut -f1,12 lrgTranscriptsUnmapped.gp | sort > transcript.gene.name.txt
 
-    # the four extra fields are identifiers for:
-    # NCBI transcript, Ensembl transcript, NCBI protein, Ensembl protein
+    # five extra columns have been added to the genePred (2020-10-05 - Hiram)
+    # extract them so they can be added to the psl:
+    awk -F$'\t' '{printf "%s\t%s\t%s\t%s\t%s\t%s %s %s %s\n", $1,$16,$17,$18,$19, $16,$18,$17,$19}' lrgTranscriptsUnmapped.gp | sort \
+       | join -t$'\t' - transcript.gene.name.txt \
+         | awk -F$'\t' '{printf "%s\t%s\t%s\t%s\t%s\t%s\t%s %s\n", $1,$2,$3,$4,$5,$7,$6,$7}' > lrgTransExtraFields.tsv
+
+    # the five extra fields are identifiers for:
+    # NCBI transcript, Ensembl transcript, NCBI protein, Ensembl protein,
+    #	Gene name
 
     # Load LRG regions:
     bedToBigBed lrg.bed /hive/data/genomes/hg38/chrom.sizes lrg.bb \
@@ -3702,17 +3708,17 @@ _EOF_
 #LRG_163.xml
 #LRG_347.xml
 
-    # construct bigPsl with four extra fields
+    # construct bigPsl with five extra fields
     pslToBigPsl lrgTranscriptsHg38.psl bigPsl.txt
 
-    # add the four extra identifiers to the bigPsl file:
+    # add the five extra identifiers to the bigPsl file:
     join -t$'\t' -1 4 \
        -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,1.12,1.13,1.14,1.15\
-,1.16,1.17,1.18,1.19,1.20,1.21,1.22,1.23,1.24,1.25,2.2,2.3,2.4,2.5,2.6 \
+,1.16,1.17,1.18,1.19,1.20,1.21,1.22,1.23,1.24,1.25,2.2,2.3,2.4,2.5,2.6,2.7 \
        <(sort -k4 bigPsl.txt) lrgTransExtraFields.tsv \
          | sort -k1,1 -k2,2n > lrgExtraTranscriptsHg38.bigPsl.bed
 
-    bedToBigBed -as=bigPsl+5.as -type=bed12+17 -tab \
+    bedToBigBed -as=bigPsl+6.as -type=bed12+19 -tab \
        lrgExtraTranscriptsHg38.bigPsl.bed ../../../chrom.sizes lrgBigPsl.bb
     bigBedInfo lrgBigPsl.bb
     ln -sf `pwd`/lrgBigPsl.bb /gbdb/hg38/bbi

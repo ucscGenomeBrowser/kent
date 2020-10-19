@@ -84,6 +84,7 @@ longLabel Validated Epitopes from SARS 2003 outbreak
 group immu
 type bigBed 4 +
 bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
+pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 14, 2020"
 
 track publicAnnots
 shortLabel Crowd-Sourced Data
@@ -334,6 +335,7 @@ group varRep
 visibility squish
 priority 0.2
 dataVersion 28-08-20
+release beta,public
 
     track sarsCov2PhyloMinAf01
     shortLabel Min alt AF 1%
@@ -342,6 +344,7 @@ dataVersion 28-08-20
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.01.vcf.gz
     type vcfTabix
     priority 10
+    release beta,public
 
     track sarsCov2PhyloMinAf001
     shortLabel Min alt AF 0.1%
@@ -350,6 +353,7 @@ dataVersion 28-08-20
     type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.001.vcf.gz
     priority 20
+    release beta,public
 
     track sarsCov2PhyloFull
     shortLabel All (slow!)
@@ -357,6 +361,97 @@ dataVersion 28-08-20
     parent sarsCov2Phylo off
     type vcfTabix
     bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.ambigToN.vcf.gz
+    priority 30
+    release beta,public
+
+track sarsCov2Phylo
+shortLabel Phylogeny: GISAID
+longLabel Phylogenetic Tree and Variants from High-coverage Sequences in GISAID EpiCoV TM
+compositeTrack on
+type vcfTabix
+hapClusterEnabled on
+hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.ft.linCol.nh
+hapClusterHeight 500
+hapClusterColorBy function
+sampleColorFile Pangolin_lineage=/gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.lineageColors.gz GISAID_clade=/gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.gisaidColors.gz
+tableBrowser off
+vcfDoQual off
+vcfDoFilter off
+geneTrack ncbiGeneBGP
+group varRep
+visibility hide
+priority 0.2
+dataVersion 28-08-20
+release alpha
+
+    track sarsCov2PhyloMinAf01
+    shortLabel Min alt AF 1%
+    longLabel Single Nucleotide Variants in GISAID EpiCov TM sequences with alternate allele frequency >= 1%
+    parent sarsCov2Phylo on
+    bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.01.vcf.gz
+    type vcfTabix
+    priority 10
+    release alpha
+
+    track sarsCov2PhyloMinAf001
+    shortLabel Min alt AF 0.1%
+    longLabel Single Nucleotide Variants in GISAID EpiCov TM sequences with alternate allele frequency >= 0.1%
+    parent sarsCov2Phylo off
+    type vcfTabix
+    bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.minAf.001.vcf.gz
+    priority 20
+    release alpha
+
+    track sarsCov2PhyloFull
+    shortLabel All (slow!)
+    longLabel All Single Nucleotide Variants in GISAID EpiCov TM sequences (slow at whole-genome scale)
+    parent sarsCov2Phylo off
+    type vcfTabix
+    bigDataUrl /gbdb/wuhCor1/sarsCov2Phylo/gisaid.ambigToN.vcf.gz
+    priority 30
+    release alpha
+
+track sarsCov2PhyloPub
+shortLabel Phylogeny: Public
+longLabel Phylogenetic Tree and Variants from High-coverage Sequences in Public Databases
+compositeTrack on
+type vcfTabix
+hapClusterEnabled on
+hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.ft.nh
+hapClusterHeight 500
+hapClusterColorBy function
+sampleColorFile Pangolin_lineage=/gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.lineageColors.gz
+vcfDoQual off
+vcfDoFilter off
+geneTrack ncbiGeneBGP
+group varRep
+visibility squish
+priority 0.1
+dataVersion 28-08-20
+pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 19, 2020"
+
+    track sarsCov2PhyloPubMinAf01
+    shortLabel Min alt AF 1%
+    longLabel Single Nucleotide Variants in public sequences with alternate allele frequency >= 1%
+    parent sarsCov2PhyloPub on
+    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.minAf.01.vcf.gz
+    type vcfTabix
+    priority 10
+
+    track sarsCov2PhyloPubMinAf001
+    shortLabel Min alt AF 0.1%
+    longLabel Single Nucleotide Variants in public sequences with alternate allele frequency >= 0.1%
+    parent sarsCov2PhyloPub off
+    type vcfTabix
+    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.minAf.001.vcf.gz
+    priority 20
+
+    track sarsCov2PhyloPubFull
+    shortLabel All (slow!)
+    longLabel All Single Nucleotide Variants in public sequences (slow at whole-genome scale)
+    parent sarsCov2PhyloPub off
+    type vcfTabix
+    bigDataUrl /gbdb/wuhCor1/sarsCov2PhyloPub/public.ambigToN.vcf.gz
     priority 30
 
 track problematicSites

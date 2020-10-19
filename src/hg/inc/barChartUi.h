@@ -26,7 +26,7 @@
 #define BAR_CHART_MAX_VIEW_LIMIT_DEFAULT     50
 
 /* Category (bar) info */
-#define BAR_CHART_MAX_CATEGORIES        100
+#define BAR_CHART_MAX_CATEGORIES        1000
 
 /* Category filter */
 #define BAR_CHART_CATEGORY_SELECT      "categories"

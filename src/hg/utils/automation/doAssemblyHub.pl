@@ -31,7 +31,9 @@ use vars qw/
     $opt_ncbiRmsk
     $opt_noRmsk
     $opt_augustusSpecies
+    $opt_noAugustus
     $opt_xenoRefSeq
+    $opt_noXenoRefSeq
     $opt_ucscNames
     $opt_asmHubName
     /;
@@ -74,6 +76,8 @@ my $ncbiRmsk = 0;	# when =1 call doRepeatMasker.pl
                         # with -ncbiRmsk=path.out.gz and -liftSpec=...
 my $augustusSpecies = "human";
 my $xenoRefSeq = "/hive/data/genomes/asmHubs/xenoRefSeq";
+my $noAugustus = 0;     # bacteria do *not* create an augustus track
+my $noXenoRefSeq = 0;	# bacteria do *not* create a xenoRefSeq track
 my $ucscNames = 0;  # default 'FALSE' (== 0)
 my $asmHubName = "n/a";  # directory name in: /gbdb/hubs/asmHubName
 my $workhorse = "hgwdev";  # default workhorse when none chosen
@@ -118,6 +122,8 @@ options:
     -ncbiRmsk         use NCBI rm.out.gz file instead of local cluster run
                       for repeat masking
     -augustusSpecies <human|chicken|zebrafish> default 'human'
+    -noAugustus       do *not* create the Augustus gene track
+    -noXenoRefSeq     do *not* create the Xeno RefSeq gene track
     -xenoRefSeq </path/to/xenoRefSeqMrna> - location of xenoRefMrna.fa.gz
                 expanded directory of mrnas/ and xenoRefMrna.sizes, default
                 $xenoRefSeq
@@ -840,7 +846,10 @@ _EOF_
       $bossScript->add(<<_EOF_
 twoBitToFa ../download/\$asmId.2bit stdout | gzip -c > \$asmId.fa.gz
 hgFakeAgp -minContigGap=1 -minScaffoldGap=50000 \$asmId.fa.gz stdout | gzip -c > \$asmId.fake.agp.gz
-zgrep "^>" \$asmId.fa.gz | sed -e 's/>//;' | sed -e 's/\\(.*\\)/\\1 \\1/;' | sed -e 's/v\\([0-9]\\+\\)/.\\1/;' | awk '{printf "%s\\t%s\\n", \$2, \$1}' > \$asmId.fake.names
+twoBitInfo ../download/\$asmId.2bit stdout | cut -f1 \\
+  | sed -e "s/\\.\\([0-9]\\+\\)/v\\1/;" \\
+    | sed -e 's/\\(.*\\)/\\1 \\1/;' | sed -e 's/v\\([0-9]\\+\$\\)/.\\1/;' \\
+      | awk '{printf "%s\\t%s\\n", \$2, \$1}' > \$asmId.fake.names
 _EOF_
       );
     }
@@ -1725,6 +1734,10 @@ _EOF_
 #########################################################################
 # * step: augustus [workhorse]
 sub doAugustus {
+  if ($noAugustus) {
+  &HgAutomate::verbose(1, "# -noAugustus == Augustus gene track not created\n");
+	return;
+  }
   my $runDir = "$buildDir/trackData/augustus";
   if (! -s "$buildDir/$asmId.2bit") {
     &HgAutomate::verbose(1,
@@ -1769,6 +1782,10 @@ _EOF_
 #########################################################################
 # * step: xenoRefGene [bigClusterHub]
 sub doXenoRefGene {
+  if ($noXenoRefSeq) {
+	&HgAutomate::verbose(1, "# -noXenoRefSeq == Xeno RefSeq gene track not created\n");
+	return;
+  }
   my $runDir = "$buildDir/trackData/xenoRefGene";
 
   &HgAutomate::mustMkdir($runDir);
@@ -1899,6 +1916,8 @@ $rmskSpecies = $opt_rmskSpecies ? $opt_rmskSpecies : $species;
 $augustusSpecies = $opt_augustusSpecies ? $opt_augustusSpecies : $augustusSpecies;
 $xenoRefSeq = $opt_xenoRefSeq ? $opt_xenoRefSeq : $xenoRefSeq;
 $ucscNames = $opt_ucscNames ? 1 : $ucscNames;   # '1' == 'TRUE'
+$noAugustus = $opt_noAugustus ? 1 : $noAugustus;   # '1' == 'TRUE'
+$noXenoRefSeq = $opt_noXenoRefSeq ? 1 : $noXenoRefSeq;   # '1' == 'TRUE'
 $workhorse = $opt_workhorse ? $opt_workhorse : $workhorse;
 $bigClusterHub = $opt_bigClusterHub ? $opt_bigClusterHub : $bigClusterHub;
 $smallClusterHub = $opt_smallClusterHub ? $opt_smallClusterHub : $smallClusterHub;
@@ -1918,6 +1937,9 @@ printf STDERR "# rmskSpecies %s\n", $rmskSpecies;
 printf STDERR "# augustusSpecies %s\n", $augustusSpecies;
 printf STDERR "# ncbiRmsk %s\n", $ncbiRmsk ? "TRUE" : "FALSE";
 printf STDERR "# ucscNames %s\n", $ucscNames ? "TRUE" : "FALSE";
+printf STDERR "# noAugustus %s\n", $noAugustus ? "TRUE" : "FALSE";
+printf STDERR "# noXenoRefSeq %s\n", $noXenoRefSeq ? "TRUE" : "FALSE";
+printf STDERR "# noRmsk %s\n", $noRmsk ? "TRUE" : "FALSE";
 
 # Do everything.
 $stepper->execute();

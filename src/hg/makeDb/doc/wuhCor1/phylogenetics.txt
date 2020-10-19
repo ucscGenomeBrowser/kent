@@ -196,6 +196,129 @@
 
 
 #########################################################################
+# SARS-CoV-2 PHYLOGENY - PUBLIC SEQUENCE (DONE - 2020-10-15 - Angie)
+    releaseLabel=28-08-20
+    cd /hive/data/genomes/wuhCor1/bed/sarsCov2Phylo/$releaseLabel
+    # First, regenerate collapsed tree with latest usher so that branch lengths aren't munged.
+    ~angie/github/yatish_usher/build/usher --vcf gisaid-28-08-20.unfiltered.vcf.gz --tree ft_SH.reroot.nh --collapse-final-tree --write-uncondensed-final-tree
+    mv uncondensed-final-tree.nh ft_SH.collapsed.nh
+
+    # Use Chris's latest mapping of EPI IDs to public sequence IDs to map tree IDs to public IDs.
+    tawk '{if ($4 == "") { print $1, $2 "|" $3;} else { print $1, $2 "|" $3 "|" $4;} }' \
+      /hive/users/angie/gisaid/epiToPublicAndDate.2020-10-08 \
+    | sed -re 's/20([0-9][0-9])(-[0-9-]+)?$/\1\2/' \
+      > epiToPublicName
+
+    sed -re 's/[\):][^,]+,/\n/g; s/\(//g; s/,/\n/g; s/\)[0-9:]*;//;' ft_SH.collapsed.nh \
+    | awk -F"|" '{print $2 "\t" $0;}' | sort > epiToTreeName
+
+    join -t"	" epiToTreeName epiToPublicName | cut -f 2,3 > treeToPublic
+    wc -l treeToPublic
+#30241 treeToPublic
+
+    # Use new utils to limit tree and VCF to just the public sequences:
+    phyloRenameAndPrune ft_SH.collapsed.nh treeToPublic ft_SH.collapsed.public.nh
+    sed -re 's/,/,\n/g' ft_SH.collapsed.public.nh | wc -l
+#30241
+    vcfRenameAndPrune gisaid-$releaseLabel.ambigToN.vcf.gz treeToPublic \
+      public-$releaseLabel.ambigToN.vcf
+    head public-$releaseLabel.ambigToN.vcf | grep ^#CHROM | wc
+#      1   30250 1460345
+    bgzip public-$releaseLabel.ambigToN.vcf
+    tabix -p vcf public-$releaseLabel.ambigToN.vcf.gz
+
+    # Make allele-frequency-filtered versions
+    zcat public-$releaseLabel.ambigToN.vcf.gz \
+    | perl -wne 'if (/^#/) { print; } else { die unless m/^(\S+\t){7}AC=([\d,]+);AN=(\d+)/; ($acVal, $an) = ($2, $3); @acs = sort {$b <=> $a} split(",", $acVal); $maxAc = $acs[0]; $freq = $maxAc / $an;  if ($freq >= 0.01) { print; } }' \
+      > public-$releaseLabel.minAf.01.vcf
+    wc -l public-$releaseLabel.minAf.01.vcf
+#64 public-$releaseLabel.minAf.01.vcf
+    bgzip public-$releaseLabel.minAf.01.vcf
+    tabix -p vcf public-$releaseLabel.minAf.01.vcf.gz
+
+    zcat public-$releaseLabel.ambigToN.vcf.gz \
+    | perl -wne 'if (/^#/) { print; } else { die unless m/^(\S+\t){7}AC=([\d,]+);AN=(\d+)/; ($acVal, $an) = ($2, $3); @acs = sort {$b <=> $a} split(",", $acVal); $maxAc = $acs[0]; $freq = $maxAc / $an;  if ($freq >= 0.001) { print; } }' \
+      > public-$releaseLabel.minAf.001.vcf
+    wc -l public-$releaseLabel.minAf.001.vcf
+#594 public-$releaseLabel.minAf.001.vcf
+    bgzip public-$releaseLabel.minAf.001.vcf
+    tabix -p vcf public-$releaseLabel.minAf.001.vcf.gz
+
+    sed -re 's/\|/\\|/g;' treeToPublic \
+    | tawk '{print "s@" $1 "@" $2 "@;";}' \
+    > treeToPublic.sed
+    zcat lineageColors.gz | sed -rf treeToPublic.sed | grep -v EPI_ISL_ > publicLineageColors
+    # 20 minutes!  Need a faster substitution method.
+    wc -l publicLineageColors
+#30239 publicLineageColors
+    gzip publicLineageColors
+
+    # Author credits file... strip GenBank version numbers because NCBI metadata doesn't have those
+    cut -f 2 treeToPublic \
+    | cut -d \| -f 1 \
+    | sed -re 's/^([A-Z][A-Z][0-9]{6})\.[0-9]/\1/;' \
+    | sort > publicIdsInTree
+# Three categories of IDs, different metadata sources:
+# CNA0013884 -- from https://bigd.big.ac.cn/ncov/release_genome
+#   * Advanced search, database = CNGBdb
+#   * Select Column button, enable originating & submitting labs [no authors option unfortunately]
+#   * Download Table button
+#   * That saves an Excel .xlsx file; export to TSV, save as cncb.metadata.<date>.tsv
+# LC528232.1 -- from GenBank
+#   * https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&VirusLineage_ss=SARS-CoV-2,%20taxid:2697049
+#   * Download button
+#   * Current table view result --> CSV format, Next button
+#   * Download all records, Next button
+#   * Select Accession and Authors [no labs options unfortunately]
+#   * Download button, save as ncbi.authors.date.csv
+# England/BIRM-5E2A3/2020 -- from COG-UK
+#   * https://www.ebi.ac.uk/ena/browser/view/PRJEB37886
+#   * select columns center_name, sample_accession, sample_alias
+#   * Download report: TSV
+#   * file saved to filereport_read_run_PRJEB37886_tsv.txt (extra first column, run_accession)
+    tail -n+2 cncb.metadata.20-10-15.tsv \
+    | cut -f 2,12,14 \
+    | egrep -v '^[A-Z][A-Z][0-9]{6}' \
+    | sed -e 's/"//g; s/$/\tn\/a/;' \
+      > cncb.credits
+    tail -n+2 ncbi.authors.20-10-15.csv \
+    | csvToTab \
+    | tawk '{print $1, "n/a", "n/a", $2;}' \
+      > ncbi.credits
+    tail -n+2 filereport_read_run_PRJEB37886_tsv.txt \
+    | tawk '{print $4, $3, $3, "COVID-19 Genomics UK Consortium";}' \
+    | sed -e 's@^COG-UK/@@;' \
+    | sort -u \
+      > cogUk.credits.partialIds
+    grep / publicIdsInTree \
+    | awk -F/ '{print $2 "\t" $0;}' \
+    | sort \
+      > cogUk.partialToFull
+    join -a 2 -e "n/a" -t"	" -o 2.2,1.2,1.3,1.4 cogUk.credits.partialIds cogUk.partialToFull \
+    | tawk '$4 == "n/a" { $4 = "COVID-19 Genomics UK Consortium"; }' \
+      > cogUk.credits
+    /bin/echo -e "accession\toriginating_lab\tsubmitting_lab\tauthors" > acknowledgements.tsv
+    grep -Fwf publicIdsInTree cncb.credits >> acknowledgements.tsv
+    grep -Fwf publicIdsInTree ncbi.credits >> acknowledgements.tsv
+    grep -Fwf publicIdsInTree cogUk.credits >> acknowledgements.tsv
+    gzip acknowledgements.tsv
+
+    # Install
+    mkdir /gbdb/wuhCor1/sarsCov2PhyloPub
+    for f in public-$releaseLabel.{ambigToN,minAf.001,minAf.01}.vcf.gz; do
+      destName=$(echo $f | sed -re "s/-$releaseLabel//")
+      ln -sf `pwd`/$f /gbdb/wuhCor1/sarsCov2Phylo/$destName
+      ln -sf `pwd`/$f.tbi /gbdb/wuhCor1/sarsCov2Phylo/$destName.tbi
+    done
+    ln -s `pwd`/ft_SH.collapsed.public.nh \
+      /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.ft.nh
+    ln -s `pwd`/publicLineageColors.gz \
+      /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.lineageColors.gz
+    ln -s `pwd`/acknowledgements.tsv.gz \
+      /gbdb/wuhCor1/sarsCov2PhyloPub/acknowledgements.tsv.gz
+
+
+#########################################################################
 # PROBLEMATIC SITES (DONE - 2020-08-26 - Angie)
 
     today=$(date +%y-%m-%d)

@@ -511,6 +511,11 @@ struct slPair* getExtraFields(struct trackDb *tdb, char **fields, int fieldCount
 struct slPair *getFields(struct trackDb *tdb, char **fields);
 /* return field names and their values as a list of slPairs.  */
 
+int extraFieldsPrintAs(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount, struct asObject *as);
+// Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
+// sr may be null for bigBeds.
+// Returns number of extra fields actually printed.
+
 int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount);
 // Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
 // sr may be null for bigBeds.
