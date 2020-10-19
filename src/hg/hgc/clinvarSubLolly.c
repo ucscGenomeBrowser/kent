@@ -10,7 +10,6 @@
 #include "trackHub.h"   
 #include "clinvarSubLolly.h"   
 
-
 char *statusByScore[] =
 {
 "Other",
@@ -22,11 +21,16 @@ char *statusByScore[] =
 };
 
 void printSubmissions(struct trackDb *tdb, char *chrom, int start, int end, unsigned wantScore, int numSubs, boolean not)
+/* Print out all the submissions at this position that match the 
+ * desired score (ie. clinical status).
+ * If "not" is true, then print out all submissions that do NOT match score.
+ * We're grabbing these records out of a second bigBed that's referenced by
+ * "xrefDataUrl" in the trackDb.
+ */
 {
-char *xrefTrack = trackDbSetting(tdb, "xrefTrack");
-struct trackDb *mainTdb = hashFindVal(trackHash, xrefTrack);
-char *mainBigBedFile = trackDbSetting(mainTdb, "bigDataUrl");
-struct bbiFile *bbi = bigBedFileOpen(mainBigBedFile);
+char *xrefDataUrl = hReplaceGbdb(trackDbSetting(tdb, "xrefDataUrl"));
+struct bbiFile *bbi = bigBedFileOpen(xrefDataUrl);
+struct asObject *as = bigBedAsOrDefault(bbi);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 
@@ -36,14 +40,16 @@ if (not)
 else 
     count = numSubs;
 
+// nothing to print
 if (count == 0)
     return;
 
 if (!not)
     printf("<BR><B>There are %d submissions at this position with clinical significance '%s'.</B><BR>\n", count, statusByScore[wantScore]);
 else
-    printf("<BR><B>There are %d submissions at this position with other clinical significance.</B><BR>\n", count);
+    printf("<BR><B>There are %d submissions at this position with some other clinical significance.</B><BR>\n", count);
 
+// Step through intervals at the position to find ones that match the score we're looking for
 struct bigBedInterval *bb;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
@@ -56,7 +62,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     int restBedFields = 6;
     char **extraFields = (fields + restBedFields);
     int extraFieldCount = restCount - restBedFields;
-    extraFieldsPrint(mainTdb,NULL,extraFields, extraFieldCount);
+    extraFieldsPrintAs(tdb,NULL,extraFields, extraFieldCount, as);
     }
 printf("<BR>");
 }
@@ -74,7 +80,7 @@ int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 char *chrom = cartString(cart, "c");
 char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi = bigBedFileOpen(hReplaceGbdb(fileName));
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 
@@ -84,17 +90,26 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     {
     if (!(bb->start == start && bb->end == end))
 	continue;
+
+    // our names are unique
     char *name = cloneFirstWordByDelimiterNoSkip(bb->rest, '\t');
     boolean match = (isEmpty(name) && isEmpty(item)) || sameOk(name, item);
     if (!match)
         continue;
+
     char startBuf[16], endBuf[16];
     bigBedIntervalToRow(bb, chrom, startBuf, endBuf, fields, bbi->fieldCount);
     int numSubs = chopString(fields[12], ",", NULL, 0);
 
     printPos(chrom, bb->start, bb->end, NULL, FALSE, name);
+    // print all the submissions that match the clinical significance of the
+    // bead that the user clicked on.
     printSubmissions(tdb,  chrom, start, end, atoi(fields[4]), numSubs, FALSE);
+
+    // no print the ones with a different clinical status
     printSubmissions(tdb,  chrom, start, end, atoi(fields[4]), numSubs, TRUE);
+
+    // we found what we wanted
     break;
     }
 }
