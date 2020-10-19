@@ -1443,6 +1443,7 @@ drawArbitraryYLine(vis, (enum wiggleGridOptEnum)wigCart->yLineOnOff,
     hvg, xOff, yOff, width, tg->lineHeight, wigCart->yLineMark, graphRange,
     wigCart->yLineOnOff);
 
+#ifdef NOT_YET_TOO_SLOW
 if (mouseOverData)
     {
     int i;
@@ -1458,6 +1459,7 @@ if (mouseOverData)
         }
     }
 else
+#endif
     wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
 
 }
