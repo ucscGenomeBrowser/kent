@@ -421,7 +421,6 @@ hapClusterMethod treeFile /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.ft.nh
 hapClusterHeight 500
 hapClusterColorBy function
 sampleColorFile Pangolin_lineage=/gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.lineageColors.gz
-tableBrowser off
 vcfDoQual off
 vcfDoFilter off
 geneTrack ncbiGeneBGP
@@ -429,7 +428,7 @@ group varRep
 visibility squish
 priority 0.1
 dataVersion 28-08-20
-pennantIcon New red ../goldenPath/newsarch.html "Released Oct. ??, 2020"
+pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 19, 2020"
 
     track sarsCov2PhyloPubMinAf01
     shortLabel Min alt AF 1%
