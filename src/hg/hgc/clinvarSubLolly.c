@@ -28,7 +28,7 @@ void printSubmissions(struct trackDb *tdb, char *chrom, int start, int end, unsi
  * "xrefDataUrl" in the trackDb.
  */
 {
-char *xrefDataUrl = trackDbSetting(tdb, "xrefDataUrl");
+char *xrefDataUrl = hReplaceGbdb(trackDbSetting(tdb, "xrefDataUrl"));
 struct bbiFile *bbi = bigBedFileOpen(xrefDataUrl);
 struct asObject *as = bigBedAsOrDefault(bbi);
 struct lm *lm = lmInit(0);
@@ -80,7 +80,7 @@ int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 char *chrom = cartString(cart, "c");
 char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi = bigBedFileOpen(hReplaceGbdb(fileName));
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 
