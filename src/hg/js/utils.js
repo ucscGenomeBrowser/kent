@@ -1080,7 +1080,11 @@ function getDb()
 
 function getTrack()
 {
-    var track = normed($("input[name='g']").first());
+    var track = normed($("input#g").first());
+    if (track)
+        return track.value;
+
+    track = normed($("input[name='g']").first());
     if (track)
         return track.value;
 
@@ -1091,10 +1095,6 @@ function getTrack()
     // This may be moved to 1st position as the most likely source
     if (typeof(common) !== 'undefined' && common.track)
         return common.track;
-
-    track = normed($("input#g").first());
-    if (track)
-        return track.value;
 
     return "";
 }

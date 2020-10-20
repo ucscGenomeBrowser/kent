@@ -1754,6 +1754,7 @@ void cgiMakeCheckBoxFourWay(char *name, boolean checked, boolean enabled, char *
  * Also makes a shadow hidden variable that supports the 2 boolean states. */
 {
 char shadName[256];
+char shadId[256];
 
 printf("<INPUT TYPE=CHECKBOX NAME='%s'", name);
 if (id)
@@ -1773,7 +1774,9 @@ printf(">");
 
 // The hidden var needs to hold the 4way state
 safef(shadName, sizeof(shadName), "%s%s", cgiBooleanShadowPrefix(), name);
-cgiMakeHiddenVarWithExtra(shadName, ( enabled ? "0" : (checked ? "-1" : "-2")),BOOLSHAD_EXTRA);
+if (id)
+    safef(shadId, sizeof(shadId), "%s%s", cgiBooleanShadowPrefix(), id);
+cgiMakeHiddenVarWithIdExtra(shadName, id ? shadId : NULL, ( enabled ? "0" : (checked ? "-1" : "-2")),BOOLSHAD_EXTRA);
 }
 
 
@@ -2334,21 +2337,22 @@ for (i=0; i<count; ++i)
 printf("</SELECT>\n");
 }
 
-void cgiMakeHiddenVarWithExtra(char *varName, char *string,char *extra)
+void cgiMakeHiddenVarWithIdExtra(char *varName, char *id, char *string,char *extra)
 /* Store string in hidden input for next time around. */
 {
-printf("<INPUT TYPE=HIDDEN NAME='%s' VALUE='%s'", varName, string);
+printf("<INPUT TYPE=HIDDEN NAME='%s'", varName);
+if (id)
+    printf(" ID='%s'", id);
 if (extra)
-    printf(" %s>\n",extra);
-else
-    puts(">");
+    printf(" %s",extra);
+printf(" VALUE='%s'>\n", string);
 }
 
 void cgiContinueHiddenVar(char *varName)
 /* Write CGI var back to hidden input for next time around. */
 {
 if (cgiVarExists(varName))
-    cgiMakeHiddenVar(varName, cgiString(varName));
+    cgiMakeHiddenVarWithIdExtra(varName, varName, cgiString(varName), NULL);
 }
 
 void cgiVarExclude(char *varName)
