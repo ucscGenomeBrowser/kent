@@ -52,6 +52,153 @@
 <!-- ============= 2020 archived news ============= -->
 <a name="2020"></a>
 
+<a name="102120"></a>
+<h2>Oct. 21, 2020 &nbsp;&nbsp; October 21st release for SARS-CoV-2 genome browser</h2>
+<p>
+We are pleased to announce our fourth data release for the <a href="/cgi-bin/hgTracks?db=wuhCor1" 
+target="_blank">coronavirus genome browser</a>. (See also our <a 
+href="#040320">first</a>, <a href="#050420">second</a>, and <a href="#080720">third</a> 
+releases)</p>
+<p>
+In line with our previous releases, these tracks include diverse data such as gene 
+models, immunology, pathogenicity, and conservation. We would also like to bring 
+attention to our <a href="#092520">recently released</a> COVID-19 GWAS 
+tracks for the <a href="/cgi-bin/hgTrackUi?db=hg19&g=covidHgiGwas&position=lastDbPos" 
+target="_blank">GRCh37/hg19</a> and <a 
+href="/cgi-bin/hgTrackUi?db=hg38&g=covidHgiGwas&position=lastDbPos" 
+target="_blank">GRCh38/hg38</a> human assemblies. The COVID-19 GWAS track displays data 
+which aims to identify genetic determinants of SARS-CoV-2 infection susceptibility 
+and disease severity.</p>
+<p>
+Clicking on any of the track titles below will lead to the track description 
+page, which includes additional information and allows for configuration of 
+various display options.<br><br>This release includes the following tracks:</p><br>
+
+<ul>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=phyloGenes">
+PhyloCSF Genes - Curated conserved genes</a> - This composite includes two tracks 
+displaying curated SARS-CoV-2 protein-coding genes conserved within the 
+<em>Sarbecovirus</em> subgenus as determined using PhyloCSF, FRESCo, and other 
+comparative genomics methods, consistent with experimental evidence in SARS-CoV-2.
+<ul>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=phyloGenes">
+PhyloCSF Genes</a> - This track shows the conserved protein-coding genes, namely 
+ORF1a, ORF1ab, S, ORF3a, ORF3c (a.k.a. ORF3h, ORF3a*, and 3a.iORF1), E, M, 
+ORF6, ORF7a, ORF7b, ORF8, N, and ORF9b (a.k.a. ORF9a).</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=phyloGenes">
+PhyloCSF Rejected Genes</a> - This track shows other genes that have been proposed 
+that do not show the signature of conserved protein-coding genes or persuasive 
+experimental evidence, and are thus unlikely to be actual protein-coding genes, 
+namely ORF3d, ORF3b, ORF14 (a.k.a. ORF9b, ORF9c), and ORF10.</li></ul>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=weizmanOrfs">
+New ORFs based on RNA-seq and Ribo-seq by the Weizman Institute tracks</a> - The 
+Weizman ORFs (Open Reading Frames) track shows previously unannotated ORF predictions 
+based on Ribo-Seq and RNA-seq data. It contains four tracks comprised of the 
+predicted gene models, and data supporting them.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=icshape">
+icSHAPE RNA Structure</a> - This track shows normalized icSHAPE reactivity data of 
+in vivo and in vitro SARS-CoV-2 experiments.</li>	
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=icshape">
+Validated epitopes from IEDB</a> - This track shows epitope sequences displayed by 
+various class I MHC alleles as annotated by National Institute for Allergy and 
+Infectious Diseases (NIAID) <a href="https://www.iedb.org/" target="_blank">
+Immune Epitope Database (IEDB)</a>.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=potPathoIndel">
+Potential pathogenic insertions and deletions from Gussow <em>et al</em>, PNAS 2020</a>
+- This track shows genomic features that differentiate SARS-CoV-2 and the viruses 
+behind the two previous deadly coronavirus outbreaks, SARS-CoV and Middle East 
+respiratory syndrome coronavirus (MERS-CoV), from less pathogenic coronaviruses.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=pond">
+Natural selection analysis from Sergei Pond's research group</a> - This track shows 
+data from Pond <em>et al</em>, 2020 &quot;Natural selection analysis of 
+SARS-CoV-2/COVID-19&quot; where authors used several statistical techniques to 
+identify selection sites of interest in SARS-CoV-2 data from <a 
+href="https://www.gisaid.org/about-us/mission/" target="_blank">GISAID</a>.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=sarsCov2PhyloPub">
+Phylogenetic Tree and Variants from High-coverage Sequences in Public Databases</a>
+- This track displays a phylogenetic tree inferred from SARS-CoV-2 genome sequences 
+from <a 
+href="https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&VirusLineage_ss=SARS-CoV-2,%20taxid:2697049" 
+target="_blank">GenBank</a>, <a href="https://www.cogconsortium.uk/data/" 
+target="_blank">COG-UK</a> and the <a href="https://bigd.big.ac.cn/ncov/release_genome" 
+target="_blank">China National Center for Bioinformation</a>, and variants found 
+in the sequences. It uses the phylogenetic tree from the <a 
+href="https://github.com/roblanf/sarscov2phylo/releases/tag/28-08-20" 
+target="_blank">sarscov2phylo 28-08-20</a> release, pruned to include only public 
+sequences. Since the public sequences are unrestricted, we can offer VCF files with 
+sequence variants for <a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/sarsCov2PhyloPub/" 
+target="_blank">download</a>.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=Starr_Bloom_antibody">
+Spike protein receptor-binding domain (S RBD) Deep Mutational Scanning</a> - Tracks created 
+from this data include:<ul>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=Starr_Bloom_antibody">
+S RBD Deep Mutational Scanning: Antibody Escape</a> - This track shows deep mutational 
+scanning data measuring the effect of the mutations to the Spike RBD to binding of antibodies 
+using a yeast surface display system.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=Starr_Bloom_bind">
+S RBD Deep Mutational Scanning: ACE2 Binding</a> - This track shows deep mutational scanning 
+data measuring effect of all possible point (amino acid) RBD mutations on ACE2 binding 
+affinity using a yeast surface display system.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=Starr_Bloom">
+S RBD Deep Mutational Scanning: Expression</a> - This track shows deep mutational scanning 
+data measuring effect of all possible point (amino acid) RBD mutations on protein expression 
+using a yeast surface display system.</li></ul></li></ul>
+<ul>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=problematicSites">
+Updated - Problematic sites where masking or caution are recommended for analysis</a>
+- This track shows locations in the SARS-CoV-2 genome that have been identified as 
+problematic for analysis for various reasons. The data was updated to the most recent 
+release from July 29th.</li>
+<li>
+<a target="_blank" href="/cgi-bin/hgTrackUi?db=wuhCor1&c=NC_045512v2&g=sarsCov2Phylo">
+Updated - Phylogenetic Tree and Variants from High-coverage Sequences in GISAID EpiCoV TM</a>
+- This track displays a phylogenetic tree inferred from SARS-CoV-2 genome sequences 
+collected by GISAID, and variants found in the sequences. It has now been updated to 
+sarscov2phylo 28-08-20 release.</li></ul><br>
+
+<p>
+We would like to thank the publication authors <a 
+href="https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473" 
+target="_blank">De Maio <em>et al</em></a>, <a href="https://www.pnas.org/content/117/26/15193" 
+target="_blank">Gussow <em>et al</em></a>, <a 
+href="https://observablehq.com/@spond/natural-selection-analysis-of-sars-cov-2-covid-19" 
+target="_blank">Pond <em>et al</em></a>, <a href="https://pubmed.ncbi.nlm.nih.gov/32841599/" 
+target="_blank">Starr <em>et al</em></a>, <a href="https://www.biorxiv.org/content/10.1101/2020.07.07.192732v1" 
+target="_blank">Sun <em>et al</em></a>, and <a href="https://www.biorxiv.org/content/10.1101/2020.06.08.141127v1" 
+target="_blank">Turakhia <em>et al</em></a> for making these data available. 
+We would also like to thank <a href="http://www.robertlanfear.com/" target="_blank">
+Rob Lanfear</a>, <a href="https://www.biorxiv.org/content/10.1101/2020.06.02.130955v1" 
+target="_blank">Irwin Jungreis</a>, <a href="http://zhanglab.net/" target="_blank">
+Qiangfeng Cliff Zhang</a>, <a href="http://public.gi.ucsc.edu/~jferna10/" target="_blank">
+Jason Fernandes</a>, <a href="https://snerli.wordpress.com/about/" target="_blank">
+Santrupti Nerli</a>, <a href="https://www.lji.org/faculty-research/labs/peters/#overview" 
+target="_blank">Bjoern Peters</a>,
+the <a href="https://research.fhcrc.org/bloom/en.html" 
+target="_blank">Bloom Lab</a>, the <a href="https://www.weizmann.ac.il/pages/" 
+target="_blank">Weizmann Institute of Science</a> and the <a href="https://gisaid.org/" 
+target="_blank">GISAID Initiative</a>.</p>
+<p>
+These tracks are made possible due to the worldwide efforts of scientists, including the 
+<a href="/staff.html" target="_blank">Genome Browser team</a>. Will will continue to 
+provide SARS-COVID-2 resources as they become available. For the latest data, see our 
+<a href="http://genome-preview.soe.ucsc.edu/cgi-bin/hgTracks?db=wuhCor1&position=lastDbPos" 
+target="_blank">development site</a>. Note that content on our preview server has not 
+undergone our QA process, and is subject to change at any time.</p>
+
 <a name="101520"></a>
 <h2>Oct. 15, 2020 &nbsp;&nbsp; Updated Ensembl gene tracks for 47 assemblies (v101)</h2>
 <p>
