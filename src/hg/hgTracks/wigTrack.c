@@ -843,6 +843,21 @@ wgo->yOff = yOff;
 return wgo;
 }
 
+/* prototype version of mouseOverData using this static array,
+ *   will alter this to be a private linked list
+ */
+static struct wigMouseOver *mouseOverData = NULL;
+static int mouseOverIdx = -1;
+
+struct wigMouseOver
+    {
+    int x;	/* x,y coordinates bottom left corner of box */
+    int y;
+    int width;	/* width,height of this box */
+    int height;
+    double value;	/* data value for this region */
+    };
+
 void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
     struct track *tg, void *image, WigVerticalLineVirtual vLine, int xOff, int yOff, double *yOffsets, int numTrack,
     double graphUpperLimit, double graphLowerLimit, double graphRange,
@@ -862,6 +877,15 @@ enum wiggleGraphOptEnum lineBar = wigCart->lineBar;
 boolean whiskers = (wigCart->windowingFunction == wiggleWindowingWhiskers
 			&& width < winEnd-winStart);
 
+AllocArray(mouseOverData, width);
+
+int mouseOverX2 = -1;
+double previousValue = 0;
+boolean skipMouseOvers = FALSE;
+#define epsilonLimit 1.0e-6
+// if (psOutput)
+//    skipMouseOvers = TRUE;
+
 /*	right now this is a simple pixel by pixel loop.  Future
  *	enhancements could draw boxes where pixels
  *	are all the same height in a run.
@@ -871,6 +895,59 @@ for (x1 = 0; x1 < width; ++x1)
     int x = x1 + xOff;
     int preDrawIndex = x1 + preDrawZero;
     struct preDrawElement *p = &preDraw[preDrawIndex];
+    /* ===== mouseOver calculations===== */
+    if (!skipMouseOvers && (p->count > 0)) /* checking mouseOver construction */
+	{
+	if (p->count < 3)	/* allow 1 or 2 values to display */
+	    {
+	    double thisValue = p->sumData/p->count;	/* average if 2 */
+	    if (mouseOverX2 < 0)    /* first valid data found */
+		{
+		++mouseOverIdx;
+		mouseOverX2 = x1+1;
+		mouseOverData[mouseOverIdx].x = xOff+x1;
+		mouseOverData[mouseOverIdx].width = mouseOverX2 - x1;
+		mouseOverData[mouseOverIdx].y = yOff;
+		mouseOverData[mouseOverIdx].height = h;
+		mouseOverData[mouseOverIdx].value = thisValue;
+		previousValue = thisValue;
+		}
+	    else	/* see if we need a new item */
+		{
+		if (fabs(thisValue - previousValue) > epsilonLimit)
+		    {
+		    /* finish off the existing run of data */
+		    mouseOverData[mouseOverIdx].width = mouseOverX2 - (mouseOverData[mouseOverIdx].x - xOff);
+		    mouseOverX2 = x1+1;
+		    ++mouseOverIdx;
+		    mouseOverData[mouseOverIdx].x = xOff+x1;
+		    mouseOverData[mouseOverIdx].width = mouseOverX2 - x1;
+		    mouseOverData[mouseOverIdx].y = yOff;
+		    mouseOverData[mouseOverIdx].height = h;
+		    mouseOverData[mouseOverIdx].value = thisValue;
+		    previousValue = thisValue;
+		    }
+		else	/* continue run of same data value */
+		    mouseOverX2 = x1+1;
+		}
+	    }
+	else
+	    skipMouseOvers = TRUE;	/* has become too dense to make sense */
+	}
+    else  /* perhaps entered region without values after some data already */
+	{
+	if (mouseOverX2 > 0)	/* yes, been in data, end it here */
+	    {
+	    mouseOverData[mouseOverIdx].width = mouseOverX2 - (mouseOverData[mouseOverIdx].x - xOff);
+	    mouseOverX2 = -1;	/* start over with new data when found */
+	    }
+	}
+    /* potentially end the last mouseOver box */
+    if (mouseOverX2 > 0 && (mouseOverX2 - (mouseOverData[mouseOverIdx].x - xOff)) > mouseOverData[mouseOverIdx].width)
+	    mouseOverData[mouseOverIdx].width = mouseOverX2 - (mouseOverData[mouseOverIdx].x - xOff);
+
+    /* ===== done with mouseOver calculations===== */
+
     assert(x1/pixelBins->binSize < pixelBins->binCount);
     unsigned long *bitCount = &pixelBins->bins[x1/pixelBins->binSize];
 
@@ -1081,6 +1158,10 @@ for (x1 = 0; x1 < width; ++x1)
             }   /*	vis == tvDense || vis == tvSquish	*/
 	}	/*	if (preDraw[].count)	*/
     }	/*	for (x1 = 0; x1 < width; ++x1)	*/
+
+    if (skipMouseOvers || mouseOverIdx < 0)
+	freez(&mouseOverData);
+
 }	/*	graphPreDraw()	*/
 
 static void graphPreDrawContainer(struct preDrawContainer *preDrawContainer, 
@@ -1362,7 +1443,24 @@ drawArbitraryYLine(vis, (enum wiggleGridOptEnum)wigCart->yLineOnOff,
     hvg, xOff, yOff, width, tg->lineHeight, wigCart->yLineMark, graphRange,
     wigCart->yLineOnOff);
 
-wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
+#ifdef NOT_YET_TOO_SLOW
+if (mouseOverData)
+    {
+    int i;
+    /* could put up a 'no data' box when these items are not contiguous
+     *    e.g. when gaps interrupt the track data
+     */
+    for (i = 0; i <= mouseOverIdx; ++i)
+	{
+	char value[64];
+	safef(value, sizeof(value), " %g", mouseOverData[i].value);
+	mapBoxHc(hvg, seqStart, seqEnd, mouseOverData[i].x, mouseOverData[i].y, mouseOverData[i].width, mouseOverData[i].height,
+      tg->track, value, value);
+        }
+    }
+else
+#endif
+    wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
 
 }
 

@@ -18,15 +18,20 @@ of the relationships among human variations and phenotypes, with supporting
 evidence. </p>
 
 <p>
-The <b>ClinVar CNVs track</b> displays copy number variants 
-(CNVs) equal or larger than 50 bp, and the <b>ClinVar SNVs track</b> displays substitutions and 
-indels shorter than 50 bp. 
+The <b>ClinVar SNVs track</b> displays substitutions and indels shorter than 50 bp and 
+the <b>ClinVar CNVs track</b> displays copy number variants (CNVs) equal or larger than 50 bp.
 Until October 2017, all variants with the ClinVar types 
 <em>copy number gain/loss</em> and <em>DbVar "nsv" accessions</em> were assigned in the CNV 
 category. Because the ClinVar type no longer captures this information, any variation equal to or 
 larger than 50 bp is now considered a CNV.
 </p>
 
+<p>
+The <b>ClinVar Interpretations track</b> displays the genomic positions of individual variant 
+submissions and interpretations of the clinical significance and their relationship to disease in 
+the ClinVar database.
+</p>
+ 
 <p>
 <b>Note:</b> The data in the track are obtained directly from ClinVar's FTP site.
 We display the data obtained from ClinVar as-is to avoid discrepancies between UCSC and NCBI. 
@@ -39,9 +44,20 @@ to make ClinVar more comparable to VCF files.</p>
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-The genomic locations of ClinVar variants are labelled with the ClinVar variant descriptions. 
-<b>Mouseover</b> on items shows variant details, clinical interpretation, and associated conditions. 
-Further information on each variant is displayed on the details page by a click onto any variant.
+Items can be filtered according to the size of the variant, variant type, clinical significance,
+allele origin, and molecular consequence, using the track <b>Configure</b> options.
+Each subtrack has separate display controls, as described
+<a href="../../goldenPath/help/multiView.html">here</a>.
+</p>
+
+<p>
+<b>Mouseover</b> on the genomic locations of ClinVar variants shows variant details, clinical 
+interpretation, and associated conditions. Further information on each variant is displayed on 
+the details page by a click onto any variant. ClinVar is an archive for assertions of clinical 
+significance made by the submitters. The level of review supporting the assertion of clinical 
+significance for the variation is reported as the 
+<a target="_blank" href="https://www.ncbi.nlm.nih.gov/clinvar/docs/review_status/">review status</a>. 
+<b>Stars</b> (0 to 4) provide a graphical representation of the aggregate review status. 
 </p>
 
 <p>
@@ -59,7 +75,8 @@ CNV color code is described
 </p>
 
 <p>
-Entries in the <b>ClinVar SNVs track</b> are colored by <b>clinical significance</b>:
+Entries in the <b>ClinVar SNVs and ClinVar Interpretations tracks</b> are colored by <b>clinical 
+significance</b>:
 <ul>
  <li><b><font color="d20000">red for pathogenic</font></b></li>
  <li><b><font color="000088">dark blue for variant of uncertain significance</font></b></li>
@@ -70,12 +87,24 @@ Entries in the <b>ClinVar SNVs track</b> are colored by <b>clinical significance
 </p>
 
 <p>
-Items can be filtered according to the size of the variant, variant type, clinical significance, 
-allele origin, and molecular consequence, using the track <b>Configure</b> options. 
-Each subtrack has separate display controls, as described 
-<a href="../../goldenPath/help/multiView.html">here</a>.
+The variants in the <b>ClinVar Interpretations track</b> are sorted by the variant 
+classification of each submission (P: Pathogenic, LP: Likely Pathogenic, VUS: Variant of 
+Unknown Significance, LB: Likely Benign, B: Benign, OTH: Others), the size of the bead represents 
+the number of submissions at that genomic position. 
+Hovering on the track items shows the genomic variations which start at that position 
+and the number of individual submissions with that classification. The details page lists all
+rated submissions from ClinVar, with specific details to the interpretation of the clinical or 
+functional significance of each variant in relation to a condition. Interpretation is at 
+variant-level, not at case (or patient-specific) level.
+</p>
 
-<p>For the human genome version hg19: the hg19 genome released by UCSC in 2009 had a 
+<p>
+More information about using and understanding the ClinVar data can be found 
+<a target="_blank" href="https://www.ncbi.nlm.nih.gov/clinvar/docs/faq/">here</a>.
+</p>
+
+<p>
+For the human genome version hg19: the hg19 genome released by UCSC in 2009 had a 
 mitochondrial genome "chrM" that was not the same as the one later used for most
 databases like ClinVar. As a result, we added the official mitochondrial genome
 in 2020 as "chrMT" and all mitochondrial annotations of ClinVar and most other
@@ -143,3 +172,14 @@ ClinVar: public archive of interpretations of clinically relevant variants</a>.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26582918" target="_blank">26582918</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4702865/" target="_blank">PMC4702865</a>
 </p>
+
+<p>
+Azzariti DR, Riggs ER, Niehaus A, Rodriguez LL, Ramos EM, Kattman B, Landrum MJ, Martin CL, Rehm HL.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/29437798" target="_blank">
+Points to consider for sharing variant-level information from clinical genetic testing with
+ClinVar</a>.
+<em>Cold Spring Harb Mol Case Stud</em>. 2018 Feb;4(1).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29437798" target="_blank">29437798</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5793773/" target="_blank">PMC5793773</a>
+</p>
+

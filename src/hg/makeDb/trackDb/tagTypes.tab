@@ -247,7 +247,7 @@ itemCount customTracks
 itemDetailsHtmlTable genePred psl bed bigPsl
 itemFirstCharCase wigMafProt wigMaf
 itemImagePath bed
-itemRgb bedDetail bedGraph bed bedLogR bigBed bigPsl interact bigInteract bigGenePred
+itemRgb bedDetail bedGraph bed bedLogR bigBed bigPsl interact bigInteract bigGenePred bigLolly
 lfPslTable bed
 linesAt chromGraph
 linkDataUrl  bigChain
@@ -305,7 +305,7 @@ noColorTag bam
 noInherit *
 nonBedFieldsLabel bigBed
 noScoreFilter bedGraph bed bedLogR gvf bedDetail bigBed bigPsl interact bigInteract
-noParentConfig bed bigBed
+noParentConfig bed bigBed bigLolly
 notNCBI bed
 noGenomeReason *
 noStems bigBed bigLolly
@@ -428,7 +428,7 @@ scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR peptideMapping bi
 scoreFilterMax bed bedlogR peptideMapping bigBed bigPsl
 scoreMax bed bedlogR interaction peptideMapping narrowPeak bigBed bigPsl
 scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping bigBed bigPsl
-scoreLabel bed bigBed bigPsl bigGenePred
+scoreLabel bed bigBed bigPsl bigGenePred bigLolly
 searchIndex bigBed bigPsl bigGenePred bigBarChart
 searchTrix bigBed bigPsl bigGenePred
 selectSubject psl bigPsl
@@ -543,7 +543,7 @@ wigColorBy wig
 wigFile customTracks
 wiggle wigMaf
 windowingFunction *
-xrefTrack *
+xrefDataUrl *
 yalePseudoAssoc *
 yaleUrl *
 yalePseudoUrl *

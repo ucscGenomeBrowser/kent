@@ -23,9 +23,6 @@ include trackDb.geneHancer.ra
 # NCBI ClinVar
 include trackDb.clinvar.ra
 
-# NCBI ClinVar Submissions
-include clinvarSubLolly.ra alpha
-
 # NCBI dbVar
 include trackDb.dbVar.ra
 

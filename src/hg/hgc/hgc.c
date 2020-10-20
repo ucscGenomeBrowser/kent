@@ -1550,15 +1550,11 @@ slReverse(fields);
 return fields;
 }
 
-int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount)
+int extraFieldsPrintAs(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount, struct asObject *as)
 // Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
 // sr may be null for bigBeds.
 // Returns number of extra fields actually printed.
 {
-struct asObject *as = asForDb(tdb, database);
-if (as == NULL)
-    return 0;
-
 // We are trying to print extra fields so we need to figure out how many fields to skip
 int start = extraFieldsStart(tdb, fieldCount, as);
 
@@ -1640,7 +1636,6 @@ for (;col != NULL && count < fieldCount;col=col->next)
     else
         printf("<td>%s</td></tr>\n", fields[ix]);
     }
-asObjectFree(&as);
 if (skipIds)
     slFreeList(skipIds);
 if (sepFields)
@@ -1651,6 +1646,22 @@ if (count > 0)
 
 return count;
 }
+
+int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount)
+// Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
+// sr may be null for bigBeds.
+// Returns number of extra fields actually printed.
+{
+struct asObject *as = asForDb(tdb, database);
+if (as == NULL)
+    return 0;
+
+int ret =  extraFieldsPrintAs(tdb, sr, fields,fieldCount, as);
+//asObjectFree(&as);
+
+return ret;
+}
+
 
 void genericBedClick(struct sqlConnection *conn, struct trackDb *tdb,
 		     char *item, int start, int bedSize)
