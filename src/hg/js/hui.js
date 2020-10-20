@@ -319,14 +319,9 @@ function matSubCBsetShadow(subCB,triggerChange)
         shadowState = 1;
     if (isFauxDisabled(subCB,true))
         shadowState -= 2;
-    var fourWay = normed($("input.cbShadow[name='boolshad\\."+subCB.name+"']"));
-    if (!fourWay && subCB.name) {
-        fourWay = normed($("input.cbShadow#boolshad_-"+subCB.id)); // subCfg noname version specific
-        if (!fourWay)
-            fourWay = normed($("#"+subCB.name+"_4way"));
-    }
+    var fourWay = normed($("input.cbShadow#boolshad\\."+subCB.id)); // fast using id GALT
     if (!fourWay) {
-        warn("DEBUG: Failed to find fourWay shadow for '#"+subCB.id+"' ["+subCB.name+"]");
+        warn("DEBUG: Failed to find fourWay shadow for '#"+subCB.id);
         return;
     }
     if ($(fourWay).val() !== shadowState.toString()) {
@@ -669,13 +664,14 @@ function hideOrShowSubtrack(obj)
     var tr = normed($(obj).parents('tr#tr_'+obj.id));
     if (tr) {
         if (!obj.checked || isFauxDisabled(obj,true))  {
-            var radio = $('input.allOrOnly');
-            for (var ix=0;ix<radio.length;ix++) {
-                if (radio[ix].checked && radio[ix].value === "selected") {
-                    $(tr).hide();
-                    return;
-                }
-            }
+
+	    var g = getTrack();
+	    var sel = normed($("#"+g+"_displaySubtracks_selected"));
+	    if (sel.checked && sel.value === "selected") {
+		$(tr).hide();
+		return;
+	    }
+
         }
         $(tr).show();
     }

@@ -4201,24 +4201,6 @@ filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Highlight", "hbc", "Non
 		  "align=\"CENTER\"><hr noshade color=\"%s\" width=\"100%%\"></TD></TR>\n"
 #define DIVIDER_PRINT(color) printf(DIVIDING_LINE,COLOR_BG_DEFAULT,(color))
 
-static char *checkBoxIdMakeForTrack(struct trackDb *tdb,members_t** dims,int dimMax,
-				membership_t *membership)
-// Creates an 'id' string for subtrack checkbox in style that matrix understand:
-//     "cb_dimX_dimY_view_cb"
-{
-int len = strlen(tdb->track) + 10;
-char *id = needMem(len);
-safef(id,len,"%s_sel",tdb->track);
-return id;
-}
-
-static void checkBoxIdFree(char**id)
-// Frees 'id' string 
-{
-if (id && *id)
-    freez(id);
-}
-
 static boolean divisionIfNeeded(char **lastDivide,dividers_t *dividers,membership_t *membership)
 // Keeps track of location within subtracks in order to provide requested division lines
 {
@@ -4868,6 +4850,7 @@ boolean useDragAndDrop = settings->useDragAndDrop;
 boolean restrictions = settings->restrictions;
 struct dyString *dyHtml = newDyString(SMALLBUF);
 char buffer[SMALLBUF];
+char id[SMALLBUF];
 char *db = cartString(cart, "db");
 
 // The subtracks need to be sorted by priority but only sortable and dragable will have
@@ -4951,9 +4934,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	dividersFree(&dividers);
 	}
 
-    // Start the TR which must have an id that is directly related to the checkBox id
-    char *id = checkBoxIdMakeForTrack(subtrack,membersForAll->members,membersForAll->dimMax,
-				      membership); // view is known tag
+    safef(id, sizeof(id), "%s_sel", subtrack->track);
     printf("<TR valign='top' class='%s%s'",
 		colors[colorIx],(useDragAndDrop?" trDraggable":""));
     printf(" id=tr_%s%s>\n",id,(!visibleCB && !settings->displayAll?" style='display:none'":""));
@@ -5173,7 +5154,6 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 
     // End of row and free ourselves of this subtrack
     puts("</TD></TR>\n");
-    checkBoxIdFree(&id);
 
     boolean showCfg = trackDbSettingOn(subtrack, "showCfg");
     if (showCfg)
