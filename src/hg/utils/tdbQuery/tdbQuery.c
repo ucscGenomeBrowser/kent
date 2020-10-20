@@ -888,7 +888,7 @@ if (startsWith("yLabel.", name))
     return TRUE;
 if (startsWith("filter.", name))
     return TRUE;
-if (startsWith("filterValues.", name))
+if (startsWith("filterValues", name))
     return TRUE;
 if (startsWith("filterType.", name))
     return TRUE;
