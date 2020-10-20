@@ -84,7 +84,6 @@ longLabel Validated Epitopes from SARS 2003 outbreak
 group immu
 type bigBed 4 +
 bigDataUrl /gbdb/wuhCor1/bbi/epiValid.bb
-pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 14, 2020"
 
 track publicAnnots
 shortLabel Crowd-Sourced Data
@@ -526,11 +525,12 @@ pennantIcon New red ../goldenPath/newsarch.html "Released Sep. 4, 2020"
 track iedb
 shortLabel Validated epitopes from IEDB
 longLabel Validated epitopes from IEDB
-visibility dense
+visibility hide
+group immu
 urls epitopeID="http://www.iedb.org/epitope/$$"
 type bigBed
-priority 1
 bigDataUrl /gbdb/wuhCor1/iedb/iedb.bb
+pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 20, 2020"
 
 
 include trackDb.119way.ra
