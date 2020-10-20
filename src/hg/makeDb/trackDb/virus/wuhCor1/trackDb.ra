@@ -427,7 +427,7 @@ group varRep
 visibility squish
 priority 0.1
 dataVersion 28-08-20
-pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 19, 2020"
+pennantIcon New red ../goldenPath/newsarch.html#102120 "Released Oct. 21, 2020"
 
     track sarsCov2PhyloPubMinAf01
     shortLabel Min alt AF 1%
