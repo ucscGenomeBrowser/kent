@@ -188,7 +188,7 @@ var genomePos = {
             }
         }
         //  return new virt undisguised position as a string
-        var newPos = "virt:" + (newStart+1) + "-" + newEnd;
+        var newPos = "multi:" + (newStart+1) + "-" + newEnd;
         return newPos;
     },
 
@@ -280,11 +280,12 @@ var genomePos = {
         //warn("genomePos.set() called "+obj.stack);
 
         position = position.replace(/,/g, ""); // strip out any commas
+        position.replace("virt:", "multi:");
 
         if (position) {
             // DISGUISE VMODE
             //warn("genomePos.set() called, position = "+position);
-            if (hgTracks.virtualSingleChrom && (position.search("virt:")===0)) {
+            if (hgTracks.virtualSingleChrom && (position.search("multi:")===0)) {
                 var newPosition = genomePos.disguisePosition(position);
                 //warn("genomePos.set() position = "+position+", newPosition = "+newPosition);
                 position = newPosition;
@@ -308,7 +309,7 @@ var genomePos = {
             $('#positionDisplay').text(commaPosition);
         }
         if (size) {
-            if (hgTracks.virtualSingleChrom && (position.search("virt:")!==0)) {
+            if (hgTracks.virtualSingleChrom && (position.search("multi:")!==0)) {
                 var newSize = genomePos.disguiseSize(position);
                 //warn("genomePos.set() position = "+position+", newSize = "+newSize);
                 if (newSize > 0)
@@ -556,6 +557,7 @@ var genomePos = {
     // Show the virtual and real positions of the windows
     {   
         var position = genomePos.get();
+        position.replace("virt:", "multi:");
         var positionDialog = $("#positionDialog")[0];
         if (!positionDialog) {
             $("body").append("<div id='positionDialog'><span id='positionDisplayPosition'></span>");
@@ -563,12 +565,12 @@ var genomePos = {
         }
         if (hgTracks.windows) {
             var i, len, end;
-            var matches = /^virt:[0-9]+-([0-9]+)/.exec(position);
+            var matches = /^multi:[0-9]+-([0-9]+)/.exec(position);
             var str = position;
             if (matches) {
                 end = matches[1];
                 if (end < hgTracks.chromEnd) {
-                    str += "<br>(full virtual region is virt:1-" + hgTracks.chromEnd + ")";
+                    str += "<br>(full virtual region is multi:1-" + hgTracks.chromEnd + ")";
                 }
             }
             if (!(hgTracks.virtualSingleChrom && (hgTracks.windows.length === 1))) {
@@ -1052,6 +1054,7 @@ var dragSelect = {
     highlightThisRegion: function(newPosition, doAdd, hlColor)
     // set highlighting newPosition in server-side cart and apply the highlighting in local UI.
     {
+        newPosition.replace("virt:", "multi:");
         var hlColorName = hlColor; // js convention: do not assign to argument variables
         if (hlColor==="" || hlColor===null || hlColor===undefined)
             hlColorName = dragSelect.hlColor;
@@ -1112,6 +1115,7 @@ var dragSelect = {
     selectionEndDialog: function (newPosition)
     // Let user choose between zoom-in and highlighting.
     {   
+        newPosition.replace("virt:", "multi:");
         // if the user hit Escape just before, do not show this dialo
         if (dragSelect.startTime===null)
             return;
@@ -1167,7 +1171,7 @@ var dragSelect = {
         if (hgTracks.windows) {
             var i,len;
             var newerPosition = newPosition;
-            if (hgTracks.virtualSingleChrom && (newPosition.search("virt:")===0)) {
+            if (hgTracks.virtualSingleChrom && (newPosition.search("multi:")===0)) {
                 newerPosition = genomePos.disguisePosition(newPosition);
             }
             var str = newerPosition + "<br>\n";
@@ -1212,7 +1216,7 @@ var dragSelect = {
                         if ($("#disableDragHighlight").attr('checked'))
                             hgTracks.enableHighlightingDialog = false;
                         if (imageV2.inPlaceUpdate) {
-                            if (hgTracks.virtualSingleChrom && (newPosition.search("virt:")===0)) {
+                            if (hgTracks.virtualSingleChrom && (newPosition.search("multi:")===0)) {
                                 newPosition = genomePos.disguisePosition(newPosition); // DISGUISE
                             }
                             var params = "position=" + newPosition;
@@ -1301,6 +1305,7 @@ var dragSelect = {
                               || dragSelect.startTime === null
                               || (now.getTime() - dragSelect.startTime) < 100);
             var newPosition = genomePos.update(img, selection, singleClick);
+            newPosition.replace("virt:", "multi:");
             if (newPosition) {
                 if (event.altKey) {
                     // with the alt-key, only highlight the region, do not zoom
@@ -1314,7 +1319,7 @@ var dragSelect = {
                         // in every other case, show the dialog
                         $(imageV2.imgTbl).imgAreaSelect({hide:true});
                         if (imageV2.inPlaceUpdate) {
-                            if (hgTracks.virtualSingleChrom && (newPosition.search("virt:")===0)) {
+                            if (hgTracks.virtualSingleChrom && (newPosition.search("multi:")===0)) {
                                 newPosition = genomePos.disguisePosition(newPosition); // DISGUISE
                             }
                             imageV2.navigateInPlace("position=" + newPosition, null, true);
@@ -3346,11 +3351,12 @@ function gotoGetDnaPage() {
 function zoomTo(zoomSize) {
     var flankSize = Math.floor(zoomSize/2);
     var pos = parsePosition(genomePos.get());
+    pos.replace("virt:", "multi:");
     var mid = pos.start+(Math.floor((pos.end-pos.start)/2));
     var newStart = Math.max(mid - flankSize, 0);
     var newEnd = mid + flankSize - 1;
     var newPos = genomePos.setByCoordinates(pos.chrom, newStart, newEnd);
-    if (hgTracks.virtualSingleChrom && (newPos.search("virt:")===0))
+    if (hgTracks.virtualSingleChrom && (newPos.search("multi:")===0))
         newPos = genomePos.disguisePosition(newPosition); // DISGUISE?
     imageV2.navigateInPlace("position="+newPos, null, true);
 }

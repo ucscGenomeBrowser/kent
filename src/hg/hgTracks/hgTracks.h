@@ -61,6 +61,8 @@
 
 #define BIGBEDMAXIMUMITEMS 100000
 
+#define MULTI_REGION_CHROM      "multi"
+
 /* for botDelay call, 10 second for warning, 20 second for immediate exit */
 #define delayFraction   0.25
 extern long enteredMainTime;
@@ -569,6 +571,7 @@ extern Color shadesOfGray[10+1];  /* 10 shades of gray from white to black
                                    * Red is put at end to alert overflow. */
 extern Color shadesOfBrown[10+1]; /* 10 shades of brown from tan to tar. */
 extern struct rgbColor guidelineColor;
+extern struct rgbColor lightGuidelineColor;
 extern struct rgbColor undefinedYellowColor;
 extern Color darkGreenColor;
 

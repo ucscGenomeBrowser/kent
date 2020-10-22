@@ -199,7 +199,7 @@ char *db = cartString(cart, "db");
 char *pos = cartString(cart, "position");
 
 // Try to deal with virt chrom position used by hgTracks.
-if (startsWith("virt:", cartUsualString(cart, "position", "")))
+if (startsWith(MULTI_REGION_CHROM, cartUsualString(cart, "position", "")))
     pos = cartString(cart, "nonVirtPosition");
 
 if (!parsePosition(pos, &chromName, (uint *)&winStart, (uint *)&winEnd))
