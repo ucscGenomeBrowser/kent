@@ -6,19 +6,15 @@ var mapData = {};
 // mapData.visible - keep track of window visible or not, value: true|false
 // mapData.tracks[]  - list of tracks with mapBoxes
 
+// =========================================================================
+// intersect the point with the rectangle, were rect corners are x1,y1 x2,y2
+// =========================================================================
 function intersectPointRectangle(x,y, rect) {
   var answer = true;
   if (x <= rect.x1 || x > rect.x2) { answer = false; }
      else if (y <= rect.y1 || y > rect.y2) { answer = false; }
   return answer;
 }
-
-// function addOneBox(box) {
-//    var rect = { x:box.x, y:box.y, w:box.w, h:box.h, v:box.v };
-//    alert("x:" + rect.x + ", y:" + rect.y + ", w:" + rect.w + ", h:" + rect.h + ", v:" + rect.v);
-//    mapData.rects.push(box);
-//    mapData.rects.push(rect);
-//}
 
 // =========================================================================
 // receiveData() callback for successful JSON request, receives incoming JSON
@@ -36,20 +32,6 @@ function receiveData(arr) {
     arr[mapId].forEach(function(box) {
       mapData.rects.push(box)});
   }
-//  alert(mapData.rects.length + " total map boxes after '" + mapId + "'");
-//  alert(mapData.tracks.length + " total track names after '" + mapId + "'");
-//  mapData.rects.forEach(function(rect) {
-//    alert("x:" + rect.x + ", y:" + rect.y + ", w:" + rect.w + ", h:" + rect.h + ", v:" + rect.v);
-//   });
-//  for (var i = 0; i < mapData.tracks.length; i++) {
-//     var trackName = mapData.tracks[i];
-//     var imgData = "img_data_" + trackName;
-//     var imgMap  = document.getElementById(imgData);
-//     var rect = imgMap.getBoundingClientRect();
-//     var msg = ". . . rect[" + i + "] for " + imgData + ":" + Math.floor(rect.left) + "," + Math.floor(rect.right);
-// alert(msg);
-//     $('#mouseOverData').text(msg);
-//  }
 }
 
 // =========================================================================
@@ -72,72 +54,62 @@ function fetchMapData(url) {
 // Mouse x,y positions arrive as fractions when the
 // WEB page is zoomed into to make the pixels larger.  Hence the Math.floor
 // to keep them as integers.
-function showMousePos(x, y) {
-    var msg = ". . . mouse: x,y: " + x + "," + y;
-    $('#mouseXY').text(msg);
-  for (var i = 0; i < mapData.tracks.length; i++) {
-     var trackName = mapData.tracks[i];
-     var imgData = "img_data_" + trackName;
-     var imgMap  = document.getElementById(imgData);
-     var imageRect = imgMap.getBoundingClientRect();
-     msg = ". . . imageRect[" + i + "] for " + imgData + ":" + Math.floor(imageRect.left) + "," + Math.floor(imageRect.top);
-// alert(msg);
-     $('#mouseOverData').text(msg);
-     var imageTop = imageRect.top;
-  var x1 = x - Math.floor(imageRect.left);
-  var y1 = y - Math.floor(imageRect.top);
-  if (x1 >= 0 && y1 >= 0 && x1 < Math.floor(imageRect.width) && y1 < Math.floor(imageRect.height)) {
-  }
+function mouseMoving(x, y) {
   if (typeof mapData.rects !== 'undefined') { // if there are rectangles
-    var windowUp = false;
-    for (var rect of mapData.rects) {
-      if (intersectPointRectangle(x1,y1, rect)) {
-        var msg = "&nbsp;" + rect.v + "&nbsp;";
-        $('#mouseOverText').html(msg);
-        var msgWidth = Math.ceil($('#mouseOverText').width());
-        var msgHeight = Math.ceil($('#mouseOverText').height());
-//        $('#hitBox').text(msg);
-//        $('#hitBox').text(msgWidth);
-        var posLeft = (x - msgWidth) + "px";
-        var posTop = (imageTop + rect.y1) + "px";
-        $('#mouseOverContainer').css('left',posLeft);
-        $('#mouseOverContainer').css('top',posTop);
-        windowUp = true;
-        break;
-      }
-    }
-    if (windowUp) {
-        if (! mapData.visible) {
-            var contain = document.getElementById('mouseOverContainer');
-            var text = document.getElementById('mouseOverText');
-            text.style.backgroundColor = "#ff69b4";
-            var mouseOver = document.querySelector(".wigMouseOver");
-            mouseOver.classList.toggle("showMouseOver");
-            mapData.visible = true;
+    for (var i = 0; i < mapData.tracks.length; i++) {
+      var trackName = mapData.tracks[i];
+      var imgData = "img_data_" + trackName;
+      var imgMap  = document.getElementById(imgData);
+      var imageRect = imgMap.getBoundingClientRect();
+      var imageTop = imageRect.top;
+      // x1,y1 are coordinates of mouse relative to the top,left corner of
+      // the browser tracks image
+      var x1 = x - Math.floor(imageRect.left);
+      var y1 = y - Math.floor(imageRect.top);
+      var windowUp = false;     // see if window is supposed to become visible
+
+      for (var rect of mapData.rects) {         // work through rects list
+        if (intersectPointRectangle(x1,y1, rect)) {     // found mouse in rect
+          var msg = "&nbsp;" + rect.v + "&nbsp;";       // value to display
+          $('#mouseOverText').html(msg);
+          var msgWidth = Math.ceil($('#mouseOverText').width());
+          var msgHeight = Math.ceil($('#mouseOverText').height());
+          var posLeft = (x - msgWidth) + "px";
+          var posTop = (imageTop + rect.y1) + "px";
+          $('#mouseOverContainer').css('left',posLeft);
+          $('#mouseOverContainer').css('top',posTop);
+          windowUp = true;      // yes, window is to become visible
+          break;        //      can stop looking after first match
         }
-    } else {
+      }
+      if (windowUp) {     // the window should become visible
+        if (! mapData.visible) {        // should *NOT* have to keep track !*!
+          var contain = document.getElementById('mouseOverContainer');
+          var text = document.getElementById('mouseOverText');
+          text.style.backgroundColor = "#ff69b4";
+          var mouseOver = document.querySelector(".wigMouseOver");
+          mouseOver.classList.toggle("showMouseOver");
+          mapData.visible = true;
+        }
+      } else {    // the window should disappear
         if (mapData.visible) {
             var mouseOver = document.querySelector(".wigMouseOver");
             mouseOver.classList.toggle("showMouseOver");
             mapData.visible = false;
         }
-    }
-  }
-  }
-}
+      } //      window visible/not visible
+    }	//	for each track
+  }     //	if there are rectangles defined
+}	//	function mouseMoving(x, y)
 
 function getMouseOverData() {
+  // there could be a number of these mouseOver class elements
+  // there is one for each track that has this mouseOver data
   var x = document.getElementsByClassName("mouseOver");
-  var trackCount = x.length;
-  var msg = ". . . https://hgwdev-hiram.gi.ucsc.edu/cgi-bin/" + x[0].getAttribute('trashFile');
-//  msg = ". . . track count: " + trackCount;
-  $('#trashFile').text(msg);
   for (var i = 0; i < x.length; i++) {
      var trashUrl = x[i].getAttribute('trashFile');
-//     alert(" looking for track name trash file: '" + trashUrl + "'");
      fetchMapData(trashUrl);
   }
-//  fetchMapData(x[0].getAttribute('trashFile'));
 }
 
 function getMousePos(evt) {
@@ -150,7 +122,7 @@ function addMouseMonitor() {
   }, false);
   window.addEventListener('mousemove', function(evt) {
     var mousePos = getMousePos(evt);
-    showMousePos(Math.floor(mousePos.x), Math.floor(mousePos.y));
+    mouseMoving(Math.floor(mousePos.x), Math.floor(mousePos.y));
   }, false);
 }
 
