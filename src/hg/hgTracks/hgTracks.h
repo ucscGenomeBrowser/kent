@@ -569,6 +569,7 @@ extern Color shadesOfGray[10+1];  /* 10 shades of gray from white to black
                                    * Red is put at end to alert overflow. */
 extern Color shadesOfBrown[10+1]; /* 10 shades of brown from tan to tar. */
 extern struct rgbColor guidelineColor;
+extern struct rgbColor lightGuidelineColor;
 extern struct rgbColor undefinedYellowColor;
 extern Color darkGreenColor;
 

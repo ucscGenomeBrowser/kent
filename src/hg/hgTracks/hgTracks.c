@@ -5376,7 +5376,7 @@ if (withGuidelines)
 	    if (emAltHighlight)
 		{
 		// light blue alternating backgrounds
-		Color lightBlue = hvGfxFindRgb(bgImg, &guidelineColor);
+		Color lightBlue = hvGfxFindRgb(bgImg, &lightGuidelineColor);
 		for (window=windows; window; window=window->next) // background under every other window
 		    {
 		    if (window->regionOdd)
@@ -8610,6 +8610,20 @@ if (!hideControls)
 		printAssemblyListHtmlExtra(database, "change", javascript);
 		}
 
+        /* Multi-region button on position line */
+        if (sameString(virtModeType, "default"))
+            {
+            hButtonMaybePressed("hgTracksConfigMultiRegionPage", "multi-region",
+                    "Configure view in multi-region display mode",
+                    "popUpHgt.hgTracks('multi-region config'); return false;", FALSE);
+            }
+        else
+            {
+            hButtonWithMsg("hgt.exitMultiRegion", "exit multi-region", 
+                                "Exit multi-region display mode");
+            }
+        hPrintf(" ");
+
 	if (virtualSingleChrom()) // DISGUISE VMODE
 	    safef(buf, sizeof buf, "%s", windowsSpanPosition());
 	else
@@ -9471,6 +9485,13 @@ if (!positionIsVirt)
     {
     if (! resolvePosition(&position))
         return;
+    }
+
+if  (cgiVarExists("hgt.exitMultiRegion"))
+    {
+    cartRemove(cart, "hgt.exitMultiRegion");
+    cartSetString(cart, "virtModeType", "default");
+    cartSetBoolean(cart, "virtMode", FALSE);
     }
 
 virtMode = cartUsualBoolean(cart, "virtMode", FALSE);
