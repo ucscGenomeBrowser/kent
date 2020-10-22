@@ -81,12 +81,14 @@ DIRS = ${buildRefresh} \
 	geoMirrorNode \
 	makeTrackIndex \
 	mysqlSecurityCheck \
+	phyloRenameAndPrune \
 	pslFixCdsJoinGap \
 	pslMismatchGapToBed \
 	pslUniq \
 	refSeqGet \
 	safePush \
 	toDev64 \
+	vcfRenameAndPrune \
 	vcfToHgvs \
 	wigBedToStep
 

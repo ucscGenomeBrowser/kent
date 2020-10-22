@@ -117,6 +117,7 @@ dimensions *
 directUrl *
 dividers *
 dragAndDrop *
+drawMode hic
 endFudge bed
 ensemblIdUrl genePred
 ensArchive genePred
@@ -308,6 +309,7 @@ noScoreFilter bedGraph bed bedLogR gvf bedDetail bigBed bigPsl interact bigInter
 noParentConfig bed bigBed bigLolly
 notNCBI bed
 noGenomeReason *
+normalization hic
 noStems bigBed bigLolly
 ococci bed
 offset customTracks
@@ -342,11 +344,13 @@ pslTable bed bigPsl
 refSeqAnnoVersion genePred
 release *
 refUrl bam
+resolution hic
 ucscRetroInfo psl bigPsl
 ucscRetroParentTables *
 vcfChildSample vcfPhasedTrio
 vcfParentSamples vcfPhasedTrio
 vcfUseAltSampleNames vcfPhasedTrio
+saturationScore hic
 sGroup_Afrotheria wigMaf
 sGroup_Aves wigMaf
 sGroup_bird wigMaf

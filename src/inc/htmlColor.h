@@ -21,8 +21,14 @@ boolean htmlColorForName(char *name, unsigned *value);
 boolean htmlColorForCode(char *code, unsigned *value);
 /* Convert value to decimal and return true if code is valid #NNNNNN hex code */
 
+char *htmlColorToCode(unsigned value);
+/* Return the HTML color code for a particular unsigned RGB value */
+
 void htmlColorToRGB(unsigned value, int *r, int *g, int *b);
 /* Convert an unsigned RGB value into separate R, G, and B components */
+
+void htmlColorFromRGB(unsigned *value, int r, int g, int b);
+/* Convert separate R, G, and B components into a single unsigned RGB value */
 
 #endif
 
