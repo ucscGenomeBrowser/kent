@@ -310,7 +310,7 @@ noParentConfig bed bigBed bigLolly
 notNCBI bed
 noGenomeReason *
 normalization hic
-noStems bigBed bigLolly
+lollyNoStems bigBed bigLolly
 ococci bed
 offset customTracks
 oldToNew genePred
@@ -554,4 +554,4 @@ yalePseudoUrl *
 yLinOnOff wigMaf
 yLineMark *
 yLineOnOff *
-yNumLabels bigBed bigLolly
+yAxisNumLabels bigBed bigLolly
