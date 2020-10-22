@@ -13,6 +13,7 @@
 #include "regexHelper.h"
 #include "obscure.h"
 #include "htmshell.h"
+#include "htmlColor.h"
 
 char *hicUiFetchNormalization(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
 /* Return the current normalization selection, or the default if none
@@ -23,18 +24,17 @@ char *hicUiFetchNormalization(struct cart *cart, struct trackDb *tdb, struct hic
 char cartVar[1024];
 safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_NORMALIZATION);
 char *selected = cartNonemptyString(cart, cartVar);
+if (selected == NULL)
+    selected = trackDbSetting(tdb, HIC_TDB_NORMALIZATION);
 char *menu[] = {"NONE", "VC", "VC_SQRT", "KR"};
-int i, sanityCheck = 0;
-for (i=0; i<4; i++)
+int i;
+char *result = menu[0];
+for (i=1; i<4; i++)
     {
-    if (sameOk(selected, menu[i]))
-        sanityCheck = 1;
+    if (sameWordOk(selected, menu[i]))
+        result = menu[i];
     }
-if (!sanityCheck)
-    {
-    selected = menu[0];
-    }
-return selected;
+return result;
 }
 
 void hicUiNormalizationDropDown(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta)
@@ -60,16 +60,16 @@ char *hicUiFetchResolution(struct cart *cart, struct trackDb *tdb, struct hicMet
 char cartVar[1024];
 safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HIC_RESOLUTION);
 char *selected = cartNonemptyString(cart, cartVar);
-int sanityCheck = sameOk(selected, "Auto");
+if (selected == NULL)
+    selected = trackDbSetting(tdb, HIC_TDB_RESOLUTION);
 int i;
+char *result = "Auto";
 for (i=0; i<meta->nRes; i++)
     {
     if (sameOk(selected, meta->resolutions[i]))
-        sanityCheck = 1;
+        result = selected;
     }
-if (!sanityCheck)
-    selected = "Auto";
-return selected;
+return result;
 }
 
 int hicUiFetchResolutionAsInt(struct cart *cart, struct trackDb *tdb, struct hicMeta *meta, int windowSize)
@@ -79,7 +79,7 @@ int hicUiFetchResolutionAsInt(struct cart *cart, struct trackDb *tdb, struct hic
 {
 char *resolutionString = hicUiFetchResolution(cart, tdb, meta);
 int result;
-if (sameOk(resolutionString, "Auto"))
+if (sameWordOk(resolutionString, "Auto"))
     {
     int idealRes = windowSize/500;
     int autoRes = atoi(meta->resolutions[meta->nRes-1]);
@@ -144,13 +144,18 @@ char *hicUiFetchDrawMode(struct cart *cart, struct trackDb *tdb)
  * has been selected. */
 {
 char *selected = cartOptionalStringClosestToHome(cart, tdb, FALSE, HIC_DRAW_MODE);
-if (    !sameOk(selected, HIC_DRAW_MODE_SQUARE) &&
-        !sameOk(selected, HIC_DRAW_MODE_ARC) &&
-        !sameOk(selected, HIC_DRAW_MODE_TRIANGLE) )
+if (selected == NULL)
     {
-    selected = HIC_DRAW_MODE_DEFAULT;
+    selected = trackDbSetting(tdb, HIC_TDB_DRAW_MODE);
     }
-return selected;
+char *result = HIC_DRAW_MODE_DEFAULT;
+if (sameWordOk(selected, HIC_DRAW_MODE_SQUARE))
+    result = HIC_DRAW_MODE_SQUARE;
+else if (sameWordOk(selected, HIC_DRAW_MODE_ARC))
+    result = HIC_DRAW_MODE_ARC;
+else if (sameWordOk(selected, HIC_DRAW_MODE_TRIANGLE))
+    result = HIC_DRAW_MODE_TRIANGLE;
+return result;
 }
 
 
@@ -175,9 +180,23 @@ char *hicUiFetchDrawColor(struct cart *cart, struct trackDb *tdb)
 /* Retrieve the HTML hex code for the color to draw the
  * track values in (e.g., #00ffa1) */
 {
+// Color might have been specified in the cart, probably in #aabbcc format
 char* selected = cartOptionalStringClosestToHome(cart, tdb, FALSE, HIC_DRAW_COLOR);
 if (selected == NULL)
-    selected = HIC_DRAW_COLOR_DEFAULT;
+    // Or color might be in trackDb, probably in R,G,B format
+    selected = trackDbSettingClosestToHomeOrDefault(tdb, HIC_TDB_COLOR, HIC_DRAW_COLOR_DEFAULT);
+const char *commaColorExpr = "^[0-9]+,[0-9]+,[0-9]+$";
+if (regexMatch(selected, commaColorExpr))
+    {
+    // Parse a color in %d,%d,%d format and convert to something the html color tool can use.
+    // Don't want to use pre-parsed trackDb color values just in case string came from the cart instead
+    unsigned char r, g, b;
+    unsigned unifiedColor;
+    parseColor(selected, &r, &g, &b);
+    htmlColorFromRGB(&unifiedColor, r, g, b);
+    char *hexColor = htmlColorToCode(unifiedColor);
+    selected = hexColor;
+    }
 const char *colorExpr ="^#[0-9a-fA-F]{6}$";
 if (!regexMatch(selected, colorExpr))
     {
@@ -206,7 +225,11 @@ double hicUiFetchMaxValue(struct cart *cart, struct trackDb *tdb)
  * its maximum intensity.  Any scores above this value will
  * share that same draw color. */
 {
-return cartUsualDoubleClosestToHome(cart, tdb, FALSE, HIC_DRAW_MAX_VALUE, HIC_DRAW_MAX_VALUE_DEFAULT);
+double defaultValue = HIC_DRAW_MAX_VALUE_DEFAULT;
+char *tdbString = trackDbSetting(tdb, HIC_TDB_MAX_VALUE);
+if (!isEmpty(tdbString))
+    defaultValue = atof(tdbString);
+return cartUsualDoubleClosestToHome(cart, tdb, FALSE, HIC_DRAW_MAX_VALUE, defaultValue);
 }
 
 
@@ -230,7 +253,11 @@ boolean hicUiFetchAutoScale(struct cart *cart, struct trackDb *tdb)
  * depending on the scores present in the window, or if it should stick to a
  * gradient based on the user's selected maximum value. */
 {
-return cartUsualBooleanClosestToHome(cart, tdb, FALSE, HIC_DRAW_AUTOSCALE, TRUE);
+boolean defaultVal = TRUE;
+char *tdbSetting = trackDbSetting(tdb, HIC_TDB_AUTOSCALE);
+if (tdbSetting != NULL)
+    defaultVal = trackDbSettingClosestToHomeOn(tdb, HIC_TDB_AUTOSCALE);
+return cartUsualBooleanClosestToHome(cart, tdb, FALSE, HIC_DRAW_AUTOSCALE, defaultVal);
 }
 
 
