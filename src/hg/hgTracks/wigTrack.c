@@ -1447,6 +1447,7 @@ drawArbitraryYLine(vis, (enum wiggleGridOptEnum)wigCart->yLineOnOff,
 #ifdef NOT_READY_TO_GO
 if (mouseOverData)
     {
+    static boolean beenHereDoneThat = FALSE;
     struct tempName jsonData;
     trashDirFile(&jsonData, "hgt", tg->track, ".json");
     FILE *trashJson = mustOpen(jsonData.forCgi, "w");
@@ -1475,18 +1476,18 @@ if (mouseOverData)
     hPrintf("<MAP Name=%s class=mouseOver trashFile='%s'>\n", tg->track, jsonData.forHtml);
     hPrintf("</MAP>\n");
     carefulClose(&trashJson);
+    if (! beenHereDoneThat )
+	{
+	hPrintf("<div id='mouseOverContainer' class='wigMouseOver'>\n");
+	hPrintf("  <span id='mouseOverText' class=wigMouseOverValue'>\n");
+	hPrintf("  </span>\n");
+	hPrintf("</div>\n");
+        beenHereDoneThat = TRUE;
+	}
     }
 else
 #endif
     wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
-
-#ifdef NOT_READY_TO_GO
-hPrintf("<div id='mouseOverContainer' class='wigMouseOver'>\n");
-hPrintf("  <span id='mouseOverText' class=wigMouseOverValue'>\n");
-// hPrintf("    <p id='mouseOverValue'>. . . mouse over values</p>\n");
-hPrintf("  </span>\n");
-hPrintf("</div>\n");
-#endif
 }
 
 struct preDrawContainer *wigLoadPreDraw(struct track *tg, int seqStart, int seqEnd, int width)
