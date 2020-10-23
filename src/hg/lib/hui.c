@@ -8290,20 +8290,30 @@ dyStringPrintf(dy,
 "var mtxSubMap = {};\n"
 "$( document ).ready(function()\n"
 "{\n"
+"matCB = $('input.matCB:first');\n"
+"if (!matCB)\n"
+"    return;\n"
+"var matClassList = $( matCB ).attr('class').split(' ');\n"
+"matClassList = aryRemove(matClassList,['matCB','changed','disabled','abc']);\n"
+"if (matClassList.length === 0 )\n"
+"    return;\n"
 "subCBs = $('input.subCB');\n"
 "$( subCBs ).each( function (i) { \n"
 "  // class='subCB BS-Seq Mantle_Cell_Lymphoma venous_blood A007MCL CNAG CPG_methylation_cov signal' \n"
 "  var classList = $( this ).attr('class').split(' ');\n"
-"  var classes = '.' + classList[1] + '.' + classList[2]; // dimX and dimY \n"
+"  if (matClassList.length === 1) {\n"
+"      var classes = '.' + classList[1]; // dimX or dimY \n"
+"  } else {\n"
+"      var classes = '.' + classList[1] + '.' + classList[2]; // dimX and dimY \n"
+"  }\n"
 "  if (mtxSubMap[classes] === undefined) {\n"
 "    mtxSubMap[classes] = [this];\n"
 "  } else {\n"
 "    mtxSubMap[classes].push(this);\n"
-"  }"
+"  }\n"
 "});\n"
 "});\n"
 );
-
 
 jsInline(dy->string);
 dyStringFree(&dy);

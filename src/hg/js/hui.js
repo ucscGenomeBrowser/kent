@@ -665,8 +665,10 @@ function hideOrShowSubtrack(obj)
     if (tr) {
         if (!obj.checked || isFauxDisabled(obj,true))  {
 
-	    var g = getTrack();
+	    var g = common.track;
 	    var sel = normed($("#"+g+"_displaySubtracks_selected"));
+	    if (!sel)
+		sel = normed($("#displaySubtracks_selected"));
 	    if (sel.checked && sel.value === "selected") {
 		$(tr).hide();
 		return;
