@@ -319,7 +319,7 @@ function matSubCBsetShadow(subCB,triggerChange)
         shadowState = 1;
     if (isFauxDisabled(subCB,true))
         shadowState -= 2;
-    var fourWay = normed($("input.cbShadow#boolshad\\."+subCB.id)); // fast using id GALT
+    var fourWay = normed($("input.cbShadow#boolshad\\."+subCB.id));
     if (!fourWay) {
         warn("DEBUG: Failed to find fourWay shadow for '#"+subCB.id);
         return;
@@ -345,7 +345,7 @@ function matChkBoxNormalize(matCB)
 
     // create string filter of classes converting "matCB K562 H3K4me1" as ".K562.H3K4me1"
     var classes = '.' + classList.join(".");
-    var subCBs = $("input.subCB").filter(classes); // All subtrack CBs that match matrix CB
+    var subCBs = mtxSubMap[classes]; // All subtrack CBs that match matrix CB
 
     if (arguments.length > 1 && arguments[1].length > 0) { // dim ABC NOT classes
         subCBs = objsFilterByClasses(subCBs,"not",arguments[1]);

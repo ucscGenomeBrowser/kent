@@ -8281,6 +8281,34 @@ puts("<BR>\n");
 
 return TRUE;
 }
+void fastMatixToSubtrackMap()
+// prints out the "common" globals json hash
+// This hash is the one utils.js and therefore all CGIs know about
+{
+struct dyString *dy = dyStringNew(1024);
+dyStringPrintf(dy,
+"var mtxSubMap = {};\n"
+"$( document ).ready(function()\n"
+"{\n"
+"subCBs = $('input.subCB');\n"
+"$( subCBs ).each( function (i) { \n"
+"  // class='subCB BS-Seq Mantle_Cell_Lymphoma venous_blood A007MCL CNAG CPG_methylation_cov signal' \n"
+"  var classList = $( this ).attr('class').split(' ');\n"
+"  var classes = '.' + classList[1] + '.' + classList[2]; // dimX and dimY \n"
+"  if (mtxSubMap[classes] === undefined) {\n"
+"    mtxSubMap[classes] = [this];\n"
+"  } else {\n"
+"    mtxSubMap[classes].push(this);\n"
+"  }"
+"});\n"
+"});\n"
+);
+
+
+jsInline(dy->string);
+dyStringFree(&dy);
+}
+
 
 static boolean compositeUiByMatrix(char *db, struct cart *cart, struct trackDb *parentTdb,
                                    char *formName)
@@ -8504,6 +8532,8 @@ if (treeImage != NULL)
 
 // If any filter additional filter composites, they can be added at the end.
 compositeUiByFilter(db, cart, parentTdb, formName);
+
+fastMatixToSubtrackMap();  
 
 return TRUE;
 }
