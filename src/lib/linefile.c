@@ -312,6 +312,13 @@ if (udcIsLocal(fileOrUrl))
      return lineFileOpen(fileOrUrl, zTerm);
 else
     {
+    if (getDecompressor(fileOrUrl) != NULL)
+        {
+        warn("lineFileUdcMayOpen: can't open %s, support for compressed files not implemented. "
+             "[developer: use netLineFileMayOpen for compressed remote files.]",
+             fileOrUrl);
+        return NULL;
+        }
     struct udcFile *udcFile = udcFileMayOpen(fileOrUrl, NULL);
     if (udcFile == NULL)
 	return NULL;

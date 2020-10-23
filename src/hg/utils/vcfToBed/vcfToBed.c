@@ -170,8 +170,8 @@ while (lineFileNext(vcff->lf, &line, NULL))
     char *chrom = fixupChromName(chopped[0]);
     int start = atoi(chopped[1]);
     int end = start + 1;
-    char *ref = chopped[3];
-    char *alt = chopped[4];
+    char *ref = cloneString(chopped[3]);
+    char *alt = cloneString(chopped[4]);
     if (strlen(ref) == dnaFilteredSize(ref))
         end = start + strlen(ref);
     fixupLeftPadding(&start, ref, alt);

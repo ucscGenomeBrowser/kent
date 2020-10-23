@@ -247,8 +247,11 @@
     sed -re 's/\|/\\|/g;' treeToPublic \
     | tawk '{print "s@" $1 "@" $2 "@;";}' \
     > treeToPublic.sed
+    # NOTE FOR NEXT TIME: this sed took 20 minutes!  Need a faster substitution method.
+    # ALSO we ended up with some garbage at the end of the file!  lineFileUdcMayOpen on local file
+    # somehow ignored the garbage which started with a large block of null characters, but
+    # netLineFileMayOpen on remote compressed file did not ignore the garbage.  Fixed 10/21/20.
     zcat lineageColors.gz | sed -rf treeToPublic.sed | grep -v EPI_ISL_ > publicLineageColors
-    # 20 minutes!  Need a faster substitution method.
     wc -l publicLineageColors
 #30239 publicLineageColors
     gzip publicLineageColors

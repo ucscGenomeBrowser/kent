@@ -22,7 +22,8 @@
 #include "imageV2.h"
 #include "memgfx.h"
 #include "udc.h"
-
+#include "trashDir.h"
+#include "jsonWrite.h"
 
 struct wigItem
 /* A wig track item. */
@@ -1443,25 +1444,50 @@ drawArbitraryYLine(vis, (enum wiggleGridOptEnum)wigCart->yLineOnOff,
     hvg, xOff, yOff, width, tg->lineHeight, wigCart->yLineMark, graphRange,
     wigCart->yLineOnOff);
 
-#ifdef NOT_YET_TOO_SLOW
+#ifdef NOT_READY_TO_GO
 if (mouseOverData)
     {
+    static boolean beenHereDoneThat = FALSE;
+    struct tempName jsonData;
+    trashDirFile(&jsonData, "hgt", tg->track, ".json");
+    FILE *trashJson = mustOpen(jsonData.forCgi, "w");
+    struct jsonWrite *jw = jsonWriteNew();
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteListStart(jw, tg->track);
     int i;
     /* could put up a 'no data' box when these items are not contiguous
      *    e.g. when gaps interrupt the track data
      */
     for (i = 0; i <= mouseOverIdx; ++i)
 	{
-	char value[64];
-	safef(value, sizeof(value), " %g", mouseOverData[i].value);
-	mapBoxHc(hvg, seqStart, seqEnd, mouseOverData[i].x, mouseOverData[i].y, mouseOverData[i].width, mouseOverData[i].height,
-      tg->track, value, value);
+        jsonWriteObjectStart(jw, NULL);
+        jsonWriteNumber(jw, "x1", (long long)mouseOverData[i].x);
+        jsonWriteNumber(jw, "y1", (long long)mouseOverData[i].y);
+        jsonWriteNumber(jw, "x2", (long long)(mouseOverData[i].x + mouseOverData[i].width));
+        jsonWriteNumber(jw, "y2", (long long)(mouseOverData[i].y + mouseOverData[i].height));
+        jsonWriteDouble(jw, "v", mouseOverData[i].value);
+        jsonWriteObjectEnd(jw);
         }
+    jsonWriteListEnd(jw);
+    jsonWriteObjectEnd(jw);
+    fputs(jw->dy->string,trashJson);
+    // This is the hidden signal to the javaScript of where to pick up
+    //  the json file
+    hPrintf("<MAP Name=%s class=mouseOver trashFile='%s'>\n", tg->track, jsonData.forHtml);
+    hPrintf("</MAP>\n");
+    carefulClose(&trashJson);
+    if (! beenHereDoneThat )
+	{
+	hPrintf("<div id='mouseOverContainer' class='wigMouseOver'>\n");
+	hPrintf("  <span id='mouseOverText' class=wigMouseOverValue'>\n");
+	hPrintf("  </span>\n");
+	hPrintf("</div>\n");
+        beenHereDoneThat = TRUE;
+	}
     }
 else
 #endif
     wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
-
 }
 
 struct preDrawContainer *wigLoadPreDraw(struct track *tg, int seqStart, int seqEnd, int width)

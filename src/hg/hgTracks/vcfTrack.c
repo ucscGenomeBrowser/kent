@@ -15,6 +15,7 @@
 #include "hgColors.h"
 #include "hgTracks.h"
 #include "iupac.h"
+#include "net.h"
 #include "pgSnp.h"
 #include "phyloTree.h"
 #include "trackHub.h"
@@ -2102,15 +2103,16 @@ if (isNotEmpty(setting))
             setting = eq+1;
         }
     char *fileName = hReplaceGbdb(setting);
-    struct lineFile *lf = lineFileUdcMayOpen(fileName, TRUE);
+    struct lineFile *lf = netLineFileMayOpen(fileName);
     if (lf)
         {
         sampleColors = hashNew(0);
         char *line;
         while (lineFileNextReal(lf, &line))
             {
-            char *words[2];
-            chopTabs(line, words);
+            char *words[3];
+            int wordCount = chopTabs(line, words);
+            lineFileExpectWords(lf, 2, wordCount);
             char *sample = words[0];
             char *colorStr = words[1];
             int rgb = bedParseColor(colorStr);

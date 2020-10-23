@@ -14,6 +14,16 @@
 #define HIC_SCORE_BINS              1024
 
 
+/* hic-specific trackDb setting names */
+
+#define HIC_TDB_DRAW_MODE       "drawMode"
+#define HIC_TDB_NORMALIZATION   "normalization"
+#define HIC_TDB_RESOLUTION      "resolution" 
+#define HIC_TDB_MAX_VALUE       "saturationScore"
+#define HIC_TDB_AUTOSCALE       "autoScale"
+#define HIC_TDB_COLOR           "color"
+
+
 /* Cart variables */
 
 #define HIC_DRAW_MODE               "drawMode"

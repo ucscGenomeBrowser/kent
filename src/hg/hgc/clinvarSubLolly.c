@@ -62,7 +62,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     int restBedFields = 6;
     char **extraFields = (fields + restBedFields);
     int extraFieldCount = restCount - restBedFields;
-    extraFieldsPrintAs(tdb,NULL,extraFields, extraFieldCount, as);
+    extraFieldsPrintAs(tdb, NULL, extraFields, extraFieldCount, as);
     }
 printf("<BR>");
 }
