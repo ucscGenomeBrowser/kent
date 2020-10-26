@@ -67,7 +67,7 @@ function mouseInTrackImage(evt) {
     $('#mouseOverText').html(msg);
     var msgWidth = Math.ceil($('#mouseOverText').width());
     var msgHeight = Math.ceil($('#mouseOverText').height());
-    var posLeft = offLeft + (rectLeft - msgWidth) + "px";
+    var posLeft = evt.x - msgWidth + "px";
     var posTop = rectTop + "px";
     $('#mouseOverContainer').css('left',posLeft);
     $('#mouseOverContainer').css('top',posTop);
@@ -124,6 +124,7 @@ function receiveData(arr) {
     var objectId  = document.getElementById(objectName);
     objectId.addEventListener('mousemove', mouseInTrackImage);
     objectId.addEventListener('mouseout', mouseLeftTrackImage);
+//    window.addEventListener('onscroll', mouseLeftTrackImage);
     var itemCount = 0;	// just for monitoring purposes
     // save incoming x1,x2,v data into the mapData.spans[trackName][] array
     arr[trackName].forEach(function(box) {
