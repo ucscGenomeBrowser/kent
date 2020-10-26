@@ -46,15 +46,8 @@ function mouseLeftTrackImage(evt) {
 
 function mouseInTrackImage(evt) {
   var trackName = evt.target.id.replace("img_data_", "");
-  var firstRect = "";
-  if (mapData.spans[trackName]) {
-    var lastRect = mapData.spans[trackName].length - 1;
-    firstRect = mapData.spans[trackName][lastRect].x1 + ".." + mapData.spans[trackName][lastRect].x2;
-  }
   var evX = evt.x;
   var evY = evt.y;
-  var oLeft = $(this).offset().left;
-  var oTop = $(this).offset().top;
   var offLeft = Math.max(0, Math.floor(evt.x - $(this).offset().left));
   var windowUp = false;     // see if window is supposed to become visible
   var foundIdx = -1;
@@ -63,21 +56,25 @@ function mouseInTrackImage(evt) {
      foundIdx = findRange(offLeft, mapData.spans[trackName]);
   }
   if (foundIdx > -1) {
+    var tdName = "td_data_" + trackName;
+    var elId  = document.getElementById(tdName);
+    var rectBounds = elId.getBoundingClientRect();
+    var rectTop = Math.floor(rectBounds.top);	// follows window scrolling
+    var rectLeft = Math.floor(rectBounds.left);
     valP = mapData.spans[trackName][foundIdx].v;
     // value to display
     var msg = "&nbsp;" + mapData.spans[trackName][foundIdx].v + "&nbsp;";
     $('#mouseOverText').html(msg);
     var msgWidth = Math.ceil($('#mouseOverText').width());
     var msgHeight = Math.ceil($('#mouseOverText').height());
-    var posLeft = (evt.x - msgWidth) + "px";
-//    var posTop = (oTop + rect.y1) + "px";
-    var posTop = oTop + "px";
+    var posLeft = offLeft + (rectLeft - msgWidth) + "px";
+    var posTop = rectTop + "px";
     $('#mouseOverContainer').css('left',posLeft);
     $('#mouseOverContainer').css('top',posTop);
     windowUp = true;      // yes, window is to become visible
   }
   var offTop = Math.max(0, Math.floor(evt.y - $(this).offset().top));
-  var msg = "<p>. . . mouse in target.id: " + evt.target.id + "(" + trackName + ")[" + foundIdx + "]='" + valP + "' ["  + firstRect + "] at " + offLeft + "," + offTop + ", evX,Y: " + evX + "," + evY + ", offL,T: " + oLeft + "," + oTop + "</p>";
+  var msg = "<p>. . . mouse in target.id: " + evt.target.id + "(" + trackName + ")[" + foundIdx + "]='" + valP + "' at " + offLeft + "," + offTop + ", evX,Y: " + evX + "," + evY + "</p>";
   $('#eventRects').html(msg);
   if (windowUp) {     // the window should become visible
     if (! mapData.visible) {        // should *NOT* have to keep track !*!
@@ -121,7 +118,8 @@ function receiveData(arr) {
   for (var trackName in arr) {
     mapData.tracks.push(trackName);
     mapData.spans[trackName] = [];      // start array
-    // add a 'mousemove' event listener to each track display object
+    // add a 'mousemove' and 'mouseout' event listener to each track
+    //     display object
     var objectName = "td_data_" + trackName;
     var objectId  = document.getElementById(objectName);
     objectId.addEventListener('mousemove', mouseInTrackImage);
@@ -132,20 +130,20 @@ function receiveData(arr) {
       mapData.spans[trackName].push(box); ++itemCount});
     mapData.boxCount.push(itemCount);	// merely for debugging watch
   }
-  var msg = "<ul>";
-  for (var idx in mapData.tracks) {
-      var trackName = mapData.tracks[idx];
-      var imgData = "td_data_" + trackName;
-      var imgMap  = document.getElementById(imgData);
-      var imageRect = imgMap.getBoundingClientRect();
-      var top = Math.floor(imageRect.top);
-      var left = Math.floor(imageRect.left);
-      var width = Math.floor(imageRect.width);
-      var height = Math.floor(imageRect.height);
-     msg += "<li>" + trackName + " at left,top (x,y)(w,h):" + left + "," + top + "(" + width + "," + height + ") has: " + mapData.boxCount[idx] + " mapBoxes</li>";
-  }
-  msg += "</ul>";
-  $('#debugMsg').html(msg);
+//  var msg = "<ul>";
+//  for (var idx in mapData.tracks) {
+//      var trackName = mapData.tracks[idx];
+//      var imgData = "td_data_" + trackName;
+//      var imgMap  = document.getElementById(imgData);
+//      var imageRect = imgMap.getBoundingClientRect();
+//      var top = Math.floor(imageRect.top);
+//      var left = Math.floor(imageRect.left);
+//      var width = Math.floor(imageRect.width);
+//      var height = Math.floor(imageRect.height);
+//     msg += "<li>" + trackName + " at left,top (x,y)(w,h):" + left + "," + top + "(" + width + "," + height + ") has: " + mapData.boxCount[idx] + " mapBoxes</li>";
+//  }
+//  msg += "</ul>";
+//  $('#debugMsg').html(msg);
 }
 
 // =========================================================================
