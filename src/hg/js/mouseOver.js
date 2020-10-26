@@ -1,8 +1,6 @@
 
 // One single top-level object variable to hold all other global variables
 var mapData = {};
-// mapData.rects[] - an array of the rectangles, where each rect is
-//                   {x1, y1, x2, y2, v} == x1,y1 x2,y2, value
 // mapData.spans{} - key name is track name, value is an array of
 //                   objects: {x1, x2, value}
 // mapData.visible - keep track of window visible or not, value: true|false
@@ -15,12 +13,12 @@ var mapData = {};
 // =========================================================================
 // intersect the point with the rectangle, where rect corners are x1,y1 x2,y2
 // =========================================================================
-function intersectPointRectangle(x,y, rect) {
-  var answer = true;
-  if (x <= rect.x1 || x > rect.x2) { answer = false; }
-     else if (y <= rect.y1 || y > rect.y2) { answer = false; }
-  return answer;
-}
+// function intersectPointRectangle(x,y, rect) {
+//   var answer = true;
+//   if (x <= rect.x1 || x > rect.x2) { answer = false; }
+//      else if (y <= rect.y1 || y > rect.y2) { answer = false; }
+//   return answer;
+// }
 
 // given an X coordinate: x, find the index idx
 // in the rects[idx] array where rects[idx].x1 <= x < rects[idx].x2
@@ -36,6 +34,14 @@ function findRange(x, rects) {
      }
   }
   return answer;
+}
+
+function mouseLeftTrackImage(evt) {
+  if (mapData.visible) {
+    var mouseOver = document.querySelector(".wigMouseOver");
+    mouseOver.classList.toggle("showMouseOver");
+    mapData.visible = false;
+  }
 }
 
 function mouseInTrackImage(evt) {
@@ -97,43 +103,33 @@ function mouseInTrackImage(evt) {
 //        (currently only one object per json file, one file for each track,
 //           this may change to have multiple tracks in one json file.)
 //  The value associated with each track name
-//  is an array of box definitions, where each element in the array is a
+//  is an array of span definitions, where each element in the array is a
 //     mapBox definition object:
-//        {x1:n ,y1:n, x2:n, y2:n, value:s}
+//        {x1:n, x2:n, value:s}
 //        where n is an integer in the range: 0..width,
 //        and s is the value string to display
-//  Expecting to simplify this in the next iteration to need only
-//        x1:n, x2:n, value:s
-//     since the y coordinates are found in the DOM object for each track
 //     Will need to get them sorted on x1 for efficient searching as
 //     they accumulate in the local data structure here.
 // =========================================================================
 function receiveData(arr) {
-  if (typeof mapData.rects === 'undefined') {
-    mapData.rects = [];	// get this array started first time
+  if (typeof mapData.spans === 'undefined') {
+    mapData.spans = {};         // get this object started first time
     mapData.tracks = [];
     mapData.boxCount = [];
-    mapData.spans = {};
   }
   mapData.visible = false;
   for (var trackName in arr) {
     mapData.tracks.push(trackName);
-    mapData.spans[trackName] = [];
+    mapData.spans[trackName] = [];      // start array
     // add a 'mousemove' event listener to each track display object
     var objectName = "td_data_" + trackName;
     var objectId  = document.getElementById(objectName);
     objectId.addEventListener('mousemove', mouseInTrackImage);
+    objectId.addEventListener('mouseout', mouseLeftTrackImage);
     var itemCount = 0;	// just for monitoring purposes
-// got to artifically rewrite the x coordinates going into spans
-    var tdData = "td_data_" + trackName;
-    var tdDataMap = document.getElementById(tdData);
-    var tdRect = tdDataMap.getBoundingClientRect();
-    var xOff = Math.floor(tdRect.left - 71);
-    // save all the incoming mapBoxes into the mapData.rects[] array
+    // save incoming x1,x2,v data into the mapData.spans[trackName][] array
     arr[trackName].forEach(function(box) {
-      var span = { "x1":box.x1-xOff, "x2":box.x2-xOff, "v":box.v };
-      mapData.spans[trackName].push(span);
-      mapData.rects.push(box); ++itemCount});
+      mapData.spans[trackName].push(box); ++itemCount});
     mapData.boxCount.push(itemCount);	// merely for debugging watch
   }
   var msg = "<ul>";
