@@ -36,18 +36,33 @@ function findRange(x, rects) {
   return answer;
 }
 
-function mouseLeftTrackImage(evt) {
-  if (mapData.visible) {
+function popUpDisappear() {
+  if (mapData.visible) {        // should *NOT* have to keep track !*!
     var mouseOver = document.querySelector(".wigMouseOver");
     mouseOver.classList.toggle("showMouseOver");
     mapData.visible = false;
   }
 }
 
+function popUpVisible() {
+  if (! mapData.visible) {        // should *NOT* have to keep track !*!
+    var contain = document.getElementById('mouseOverContainer');
+    var mouseOver = document.querySelector(".wigMouseOver");
+    mouseOver.classList.toggle("showMouseOver");
+    mapData.visible = true;
+  }
+}
+
+function mouseLeftTrackImage(evt) {
+  popUpDisappear();
+}
+
 function mouseInTrackImage(evt) {
   var trackName = evt.target.id.replace("img_data_", "");
   var evX = evt.x;
   var evY = evt.y;
+  // This offset is not correct.  It doesn't follow window scrolling
+  //  left or right
   var offLeft = Math.max(0, Math.floor(evt.x - $(this).offset().left));
   var windowUp = false;     // see if window is supposed to become visible
   var foundIdx = -1;
@@ -77,18 +92,9 @@ function mouseInTrackImage(evt) {
   var msg = "<p>. . . mouse in target.id: " + evt.target.id + "(" + trackName + ")[" + foundIdx + "]='" + valP + "' at " + offLeft + "," + offTop + ", evX,Y: " + evX + "," + evY + "</p>";
   $('#eventRects').html(msg);
   if (windowUp) {     // the window should become visible
-    if (! mapData.visible) {        // should *NOT* have to keep track !*!
-      var contain = document.getElementById('mouseOverContainer');
-      var mouseOver = document.querySelector(".wigMouseOver");
-      mouseOver.classList.toggle("showMouseOver");
-      mapData.visible = true;
-    }
+    popUpVisible();
   } else {    // the window should disappear
-    if (mapData.visible) {
-      var mouseOver = document.querySelector(".wigMouseOver");
-      mouseOver.classList.toggle("showMouseOver");
-      mapData.visible = false;
-    }
+    popUpDisappear();
   } //      window visible/not visible
 }
 
