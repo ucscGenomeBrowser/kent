@@ -881,12 +881,14 @@ for (childFp = child->posList; childFp != NULL; childFp = childFp->next)
     }
 }
 
-static boolean isFilter(char *name)
+static boolean isComplex(char *name)
 /* Check to see if this is one of the filter variables that have arbitrary initial strings. */
 {
+if (startsWith("yAxisLabel.", name))
+    return TRUE;
 if (startsWith("filter.", name))
     return TRUE;
-if (startsWith("filterValues.", name))
+if (startsWith("filterValues", name))
     return TRUE;
 if (startsWith("filterType.", name))
     return TRUE;
@@ -924,7 +926,7 @@ for (record = recordList; record != NULL; record = record->next)
     struct tdbField *field;
     for (field = record->fieldList; field != NULL; field = field->next)
         {
-        if (isFilter(field->name))
+        if (isComplex(field->name))
             continue;
 
 	struct slName *typeList = rqlHashFindValEvenInWilds(glTagTypes, field->name);

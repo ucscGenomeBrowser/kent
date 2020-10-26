@@ -12,6 +12,7 @@ fi
 export asmId=$1
 export buildDir=$2
 export hubLinks="/hive/data/genomes/asmHubs/hubLinks"
+export accessionId=`echo "$asmId" | awk -F"_" '{printf "%s_%s", $1, $2}'`
 
 export scriptDir="$HOME/kent/src/hg/utils/automation"
 
@@ -718,4 +719,8 @@ fi
 
 if [ -s ${hubLinks}/${asmId}/rnaSeqData/$asmId.trackDb.txt ]; then
   printf "include rnaSeqData/%s.trackDb.txt\n\n" "${asmId}"
+fi
+
+if [ -s "${buildDir}/$asmId.userTrackDb.txt" ]; then
+  printf "include %s.userTrackDb.txt\n\n" "${accessionId}"
 fi

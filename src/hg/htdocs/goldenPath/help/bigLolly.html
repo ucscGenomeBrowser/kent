@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser bigLolly Track Format" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<h1>bigLolly Track Format</h1>
+<p>
+The bigLolly format uses a standard bigBed file that is used to generate a lollipop graph. 
+By default the score is used to decide how high to draw the lollipop, but there are trackDb options to specify which fields to use for the height and width of the lollipop, as well as to draw lines on the graph.
+<p>
+The bigBed files used in bigLolly type are in an indexed binary format. The main advantage of this format is that only 
+those portions of the file needed to display a particular region are transferred to the Genome 
+Browser server.  The bigLolly file remains on your local 
+web-accessible server (http, https or ftp), not on the UCSC server, and only the portion needed for 
+the currently displayed chromosomal position is locally cached as a &quot;sparse file&quot;. If 
+you do not have access to a web-accessible server and need hosting space for your bigLolly files, 
+please see the <a href="hgTrackHubHelp.html#Hosting">Hosting</a> section of the Track Hub Help
+documentation.</p>
+
+<a name=bigLolly></a>
+<h2>bigLolly format definition</h2>
+<p>
+Any bigBed file can be displayed as a bigLolly.  See <a href="bigBed.html">bigBed format</a>.
+<p>
+
+<h2>Creating a bigLolly track</h2>
+<p>
+To create a bigLolly track, follow these steps to build a bigBed <a href="bigBed.html"> here</a></p>
+<h2>Examples</h2>
+<h3>Example #1</h3>
+<p>
+In this example, you will create a bigLolly custom track using an existing bigBed file,
+<em>bigBed.bb</em>, located on the UCSC Genome Browser http server. This file contains data for 
+the hg38 assembly.</p>
+<p>
+To create a custom track using this bigLolly file: 
+<ol>
+  <li>
+  Construct a track line that references the file:</p>
+  <pre><code>track type=bigLolly name=&quot;bigLolly Example One&quot; description=&quot;A bigLolly file&quot; bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigLolly.bb linkDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigLolly.link.bb</code></pre></li>
+  <li>
+  Paste the track line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
+  page</a> for the human assembly hg38 (Dec. 2013).</li> 
+  <li>
+  Click the &quot;submit&quot; button.</li>
+</ol>
+<p>
+<!-- FIX ME -->
+Custom tracks can also be loaded via one URL line. 
+<a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr22_KI270731v1_random&hgct_customText=track%20type=bigLolly%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigLolly.bb%20linkDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigLolly.link.bb%20visibility=pack"
+target="_blank">This link</a> loads the same <em>bigLolly.bb</em> track and sets additional display parameters in the URL:</p>
+<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr22_KI270731v1_random &hgct_customText=track%20type=bigLolly%20name=Example %20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigLolly.bb %20linkDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigLolly.link.bb%20visibility=pack</a></code></pre>
+<p>
+After this example bigLolly is loaded in the Genome Browser, click into a chain on the browser's 
+track display. Note that the details page displays information about the individual chains, similar 
+to that which is available for a standard chain track.</p>
+
+<h3>Example #2</h3>
+<p>
+In this example, you will create your own bigLolly file from an existing chain input file.</p>
+<ol>
+  <li>
+  Save <a href="examples/chr22_KI270731v1_random.hg38.mm10.rbest.chain">this chain file</a> to your 
+  computer (<em>Step 1</em> in <em>Creating a bigLolly track</em>, above).</li>
+  <li>
+  Save the autoSql files <a href="examples/bigLolly.as"><em>bigLolly.as</em></a> and 
+  <a href="examples/bigLink.as"><em>bigLink.as</em></a> to your computer (<em>Step 2</em>, 
+  above).</li>
+  <li>
+  Download the <code>bedToBigBed</code> and <code>hgLoadChain</code> 
+  <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">utilities</a> (<em>Step 3</em>, above).</li>
+  <li>
+  Save the <a href="hg38.chrom.sizes"><em>hg38.chrom.sizes</em> text file</a> to your computer. This
+  file contains the chrom.sizes for the human hg38 assembly (<em>Step 4</em>, above).</li>
+  <li>
+  Run the utilities in <em>Steps 5-7</em>, above, to create the bigLolly and bigLink output 
+  files. </li> 
+  <li>
+  Place the newly created bigLolly (<em>bigLolly.bb</em>) and and bigLink 
+  (<em>bigLolly.link.bb</em>) files on a web-accessible server (<em>Step 8</em>).</li>
+  <li>
+  Construct a track line that points to the bigLolly file (<em>Step 9</em>, above).</li>
+  <li>
+  Create the custom track on the human assembly hg38 (Dec. 2013), and view it in the Genome Browser 
+  (<em>Step 10</em>, above).</li>
+</ol>
+
+<h2>Sharing your data with others</h2>
+<p>
+If you would like to share your bigLolly data track with a colleague, learn how to create a URL by 
+looking at Example 6 on <a href="customTrack.html#EXAMPLE6">this page</a>.</p>
+
+<h2>Extracting data from the bigLolly format</h2>
+<p>
+Because the bigLolly files are an extension of bigBed files, which are indexed binary files, it can 
+be difficult to extract data from them. UCSC has developed the following programs to assist
+in working with bigBed formats, available from the 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<ul>
+  <li>
+  <code>bigBedToBed</code> &mdash; converts a bigBed file to ASCII BED format.</li>
+  <li>
+  <code>bigBedSummary</code> &mdash; extracts summary information from a bigBed file.</li>
+  <li>
+  <code>bigBedInfo</code> &mdash; prints out information about a bigBed file.</li>
+</ul>
+<p>
+As with all UCSC Genome Browser programs, simply type the program name (with no parameters) at the 
+command line to view the usage statement.</p>
+
+<h2>Troubleshooting</h2>
+<p>
+If you encounter an error when you run the <code>bedToBigBed</code> program, check your input 
+file for data coordinates that extend past the the end of the chromosome. If these are present, run 
+the <code>bedClip</code> program 
+(<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">available here</a>) to remove the problematic
+row(s) in your input file before running the <code>bedToBigBed</code> program.</p> 
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

@@ -1,18 +1,27 @@
 
 track gencodeV35
 table gencodeAnnotV35
-shortLabel Gencode V35
-longLabel Gencode V35
+shortLabel GENCODE V35
+longLabel GENCODE V35
+priority 1
 visibility pack
 type bigGenePred
 bigDataUrl /gbdb/hg38/gencode/gencodeV35.bb
 group genes
 isGencode2 on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
-#labelFields geneName,name2,name
 labelFields geneName,name,geneName2,name2
 defaultLabelFields geneName
 itemRgb on
-filterValues.transcriptClass coding,nonCoding,other,pseudo
 externalDb knownGeneV35
+maxItems 50000
 
+searchName gencodeV35
+searchTable gencodeAnnotV35
+searchType knownGene
+searchPriority 1
+
+#searchTable gencodeV35
+#searchPriority 2.07207
+#searchType bigBed
+#

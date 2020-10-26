@@ -22,6 +22,7 @@
 
 #define VCF_HAP_COLORBY_VAR "hapClusterColorBy"
 #define VCF_HAP_COLORBY_ALTONLY "altOnly"
+#define VCF_HAP_COLORBY_FUNCTION "function"
 #define VCF_HAP_COLORBY_REFALT "refAlt"
 #define VCF_HAP_COLORBY_BASE "base"
 #define VCF_DEFAULT_HAP_COLORBY VCF_HAP_COLORBY_ALTONLY
@@ -31,16 +32,22 @@
 #define VCF_HAP_TREEANGLE_RECTANGLE "rectangle"
 #define VCF_DEFAULT_HAP_TREEANGLE VCF_HAP_TREEANGLE_TRIANGLE
 
+#define VCF_SAMPLE_COLOR_FILE "sampleColorFile"
+
 #define VCF_SHOW_HW_VAR "showHardyWeinberg"
 
 #define VCF_APPLY_MIN_QUAL_VAR "applyMinQual"
 #define VCF_DEFAULT_APPLY_MIN_QUAL FALSE
 
+#define VCF_DO_QUAL_UI "vcfDoQual"
 #define VCF_MIN_QUAL_VAR "minQual"
 #define VCF_DEFAULT_MIN_QUAL 0
 
+#define VCF_DO_FILTER_UI "vcfDoFilter"
+
 #define VCF_EXCLUDE_FILTER_VAR "excludeFilterValues"
 
+#define VCF_DO_MAF_UI "vcfDoMaf"
 #define VCF_MIN_ALLELE_FREQ_VAR "minFreq"
 #define VCF_DEFAULT_MIN_ALLELE_FREQ 0.0
 
@@ -52,8 +59,13 @@
 #define VCF_PHASED_ALIAS_LABEL_VAR "doAliasLabel"
 #define VCF_PHASED_HIDE_OTHER_VAR "hideParents"
 #define VCF_PHASED_TDB_USE_ALT_NAMES "vcfUseAltSampleNames"
-#define VCF_PHASED_HIGHLIGHT_INCONSISTENT "vcfHighlightDiffs"
 #define VCF_PHASED_CHILD_BELOW_VAR "sortChildBelow"
+
+#define VCF_PHASED_COLORBY_VAR "vcfPhasedColorBy"
+#define VCF_PHASED_COLORBY_MENDEL_DIFF "mendelDiff"
+#define VCF_PHASED_COLORBY_DE_NOVO "deNovo"
+#define VCF_PHASED_COLORBY_FUNCTION "function"
+#define VCF_PHASED_COLORBY_DEFAULT "noColor"
 
 void vcfCfgHaplotypeCenter(struct cart *cart, struct trackDb *tdb, char *track,
 			   boolean parentLevel, struct vcfFile *vcff,

@@ -30,8 +30,11 @@ fi
 
 cd "${WORKDIR}"
 
+# check if genome in a bottle variants have updated:
+./checkNstd175.sh ${WORKDIR}
+
 #	see if anything is changing, if so, email notify, download, and build
-wget https://ftp.ncbi.nlm.nih.gov/pub/dbVar/sandbox/dbvarhub/hub.txt -O tempUpdate
+wget -q https://ftp.ncbi.nlm.nih.gov/pub/dbVar/sandbox/dbvarhub/hub.txt -O tempUpdate
 if [[ ! -e lastUpdate || tempUpdate -nt lastUpdate ]]; then
     printf "New dbVar track hub:\nhttps://ftp.ncbi.nlm.nih.gov/pub/dbVar/sandbox/dbvarhub/\n"
     today=`date +%F`
@@ -44,7 +47,7 @@ if [[ ! -e lastUpdate || tempUpdate -nt lastUpdate ]]; then
     cp dbVar/hg38/conflict*.bb ../release/hg38/
     cd ..
     mv tempUpdate lastUpdate
-    echo "dbVar update done: `date`" 
+    echo "dbVar hub update done: `date`"
 else
     rm tempUpdate
     echo "No update"

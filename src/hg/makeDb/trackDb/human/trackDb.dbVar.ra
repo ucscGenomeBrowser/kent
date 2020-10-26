@@ -2,8 +2,9 @@ track dbVarSv
 superTrack on
 group varRep
 html dbVarCurated
-shortLabel dbVar Curated Structural Variants
-longLabel NCBI Curated Structural Variants from dbVar
+shortLabel dbVar Common Struct Var
+longLabel NCBI Curated Common Structural Variants from dbVar
+pennantIcon New red ../goldenPath/newsarch.html#100520 "Released Oct. 5, 2020"
 
     track dbVar_common
     superTrack  dbVarSv pack
@@ -21,7 +22,6 @@ longLabel NCBI Curated Structural Variants from dbVar
     filterValues.type alu deletion,copy number gain,copy number loss,copy number variation,deletion,duplication,herv deletion,line1 deletion,sva deletion
     filterLabel.length Variant Size
     filterValues.length Under 10KB,10KB to 100KB,100KB to 1MB,Over 1MB
-    release alpha
 
         track dbVar_common_gnomad
         parent dbVar_common on
@@ -31,7 +31,6 @@ longLabel NCBI Curated Structural Variants from dbVar
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
-        release alpha
 
         track dbVar_common_1000g
         parent dbVar_common on
@@ -41,7 +40,6 @@ longLabel NCBI Curated Structural Variants from dbVar
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
-        release alpha
 
         track dbVar_common_decipher
         parent dbVar_common on
@@ -51,7 +49,6 @@ longLabel NCBI Curated Structural Variants from dbVar
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
-        release alpha
 
         track dbVar_common_african
         parent dbVar_common on
@@ -61,7 +58,6 @@ longLabel NCBI Curated Structural Variants from dbVar
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
-        release alpha
 
         track dbVar_common_european
         parent dbVar_common on
@@ -71,7 +67,6 @@ longLabel NCBI Curated Structural Variants from dbVar
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
-        release alpha
 
         track dbVar_common_global
         parent dbVar_common on
@@ -81,7 +76,6 @@ longLabel NCBI Curated Structural Variants from dbVar
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
-        release alpha
 
     track dbVar_conflict
     superTrack dbVarSv pack
@@ -109,3 +103,31 @@ longLabel NCBI Curated Structural Variants from dbVar
         type bigBed 9 + .
         url https://www.ncbi.nlm.nih.gov/dbvar/variants/$$
         urlLabel NCBI Variant Page:
+
+searchTable dbVar_common_gnomad
+searchMethod exact
+searchType bigBed
+
+searchTable dbVar_common_1000g
+searchMethod exact
+searchType bigBed
+
+searchTable dbVar_common_decipher
+searchMethod exact
+searchType bigBed
+
+searchTable dbVar_common_european
+searchMethod exact
+searchType bigBed
+
+searchTable dbVar_common_african
+searchMethod exact
+searchType bigBed
+
+searchTable dbVar_common_global
+searchMethod exact
+searchType bigBed
+
+searchTable dbVar_conflict_pathogenic
+searchMethod exact
+searchType bigBed

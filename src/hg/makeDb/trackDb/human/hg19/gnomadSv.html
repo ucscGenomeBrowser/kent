@@ -20,7 +20,7 @@ There are three subtracks in this track set:
 
 <p>
 Items in all subtracks follow the same conventions: items are shaded according to variant type,
-mouseover on items indicates affected protein-coding genes, size of the variant (which may differ
+<b>mouseover</b> on items indicates affected protein-coding genes, size of the variant (which may differ
 from the chromosomal coordinates in cases like insertions), variant type (insertion, duplication,
 etc), Allele Count, Allele Number, and Allele Frequency. When more than 2 genes are affected by a
 variant, the full list can be obtained by clicking on the item and reading the details page. A short
@@ -34,49 +34,49 @@ summary of the 3 datasets is available in the below table:</p>
     <th>Non-neuro</th>
   </tr>
   <tr>
-    <td style="background-color: rgb(154,182,160)">Breakend (BND)</td>
+    <td style="background-color: rgb(128,128,128)">Breakend (BND)</td>
     <td>52604</td>
     <td>37891</td>
     <td>44952</td>
   </tr>
   <tr>
-    <td style="background-color: rgb(182,239,195)">Complex (CPX)</td>
+    <td style="background-color: rgb(0,179,179)">Complex (CPX)</td>
     <td>4778</td>
     <td>3129</td>
     <td>4167</td>
   </tr>
   <tr>
-    <td style="background-color: rgb(154,182,160)">Translocation (CTX)</td>
+    <td style="background-color: rgb(0,179,179)">Translocation (CTX)</td>
     <td>8</td>
     <td>4</td>
     <td>5</td>
   </tr>
   <tr>
-    <td style="background-color: rgb(231,154,144)">Deletion (DEL)</td>
+    <td style="background-color: rgb(0,0,225)">Deletion (DEL)</td>
     <td>169635</td>
     <td>116401</td>
     <td>145978</td>
   </tr>
   <tr>
-    <td style="background-color: rgb(143,184,214)">Duplication (DUP)</td>
+    <td style="background-color: rgb(255,0,0)">Duplication (DUP)</td>
     <td>49571</td>
     <td>36223</td>
     <td>43916</td>
   </tr>
   <tr>
-    <td style="background-color: rgb(231,183,237)">Insertion (INS)</td>
+    <td style="background-color: rgb(255,165,0)">Insertion (INS)</td>
     <td>109025</td>
     <td>78475</td>
     <td>95658</td>
   </tr>
   <tr>
-    <td style="background-color: rgb(250,199,140)">Inversion (INV)</td>
+    <td style="background-color: rgb(192,0,192)">Inversion (INV)</td>
     <td>748</td>
     <td>492</td>
     <td>667</td>
   </tr>
   <tr>
-    <td style="background-color: rgb(183,170,214)">Multi-Allele CNV (MCNV)</td>
+    <td style="background-color: rgb(0,179,179)">Multi-Allele CNV (MCNV)</td>
     <td>1108</td>
     <td>1108</td>
     <td>1108</td>
@@ -84,7 +84,11 @@ summary of the 3 datasets is available in the below table:</p>
 </table>
 
 <p>
-All tracks can be filtered according to the size of the variant and variant type.</p>
+Detailed information on the CNV color code is described 
+<a href="../../goldenPath/help/hgCnvColoring.html">here</a>. All tracks can be 
+filtered according to the size of the variant and variant type, using the track <b>Configure</b>
+options.
+</p>
 
 <H2>Methods</H2>
 <p>
@@ -127,26 +131,58 @@ for questions and example queries, or our
 <a HREF="../FAQ/FAQdownloads.html#download36" target="_blank">Data Access FAQ</a>
 for more information.</p>
 
+<p>
+More information about using and understanding the GnomAD data can be found in the
+<a target="_blank" href="https://gnomad.broadinstitute.org/faq">GnomAD FAQ</a> site.
+</p>
+
 <h2>Credits</h2>
 <p>
-Thanks to the gnomAD team, especially Anne O'Donnell Luria and Emily O'Heir for their help with
-making these data and recommendations on how to display the data.
+Thanks to the <a href="https://gnomad.broadinstitute.org/about" target="_blank">Genome Aggregation
+Database Consortium</a> for making these data available. The data are released under the <a
+href="https://opendatacommons.org/licenses/odbl/1.0/" target="_blank">ODC Open Database License
+(OBdL)</a> as described <a href="https://gnomad.broadinstitute.org/terms" target="_blank">here</a>.
 </p>
+
 
 <h2>References</h2>
+
 <p>
-Collins RJ, Brand H, Karczewski KJ, Zhao H, Alfoldi J, Francioli LC, Khera AV, Lowther C, Gauthier
-LD, Wang H, <em>et al</em>. <a href="https://doi.org/10.1101/578674" target="_blank">
-An open resource of structural variation for medical and population genetics</a>.
-<em>bioRxiv</em>. 2019 October 21.
-<a href="https://www.biorxiv.org/content/10.1101/578674v2" target="_blank">bioRxiv</a>
+Lek M, Karczewski KJ, Minikel EV, Samocha KE, Banks E, Fennell T, O'Donnell-Luria AH, Ware JS, Hill
+AJ, Cummings BB <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">
+Analysis of protein-coding genetic variation in 60,706 humans</a>.
+<em>Nature</em>. 2016 Aug 18;536(7616):285-91.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
 </p>
 
 <p>
-Karczewski KJ, Francioli LC, Tiao G, Cummings BB, Alfoldi J, Wang Q, Collins RL, Laricchia KM,
-Gann A, Birnbaum DP, <em>et al</em>. <a href="https://doi.org/10.1101/531210" target="_blank">
-Variation across 141,456 human exomes and genomes reveals the spectrum of loss-of-function
-intolerance across human protein-coding genes</a>.
-<em>bioRxiv</em>. 2019 August 13.
-<a href="https://www.biorxiv.org/content/10.1101/531210v3" target="_blank">bioRxiv</a>
+Karczewski KJ, Francioli LC, Tiao G, Cummings BB, Alf&#246;ldi J, Wang Q, Collins RL, Laricchia KM,
+Ganna A, Birnbaum DP <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461654" target="_blank">
+The mutational constraint spectrum quantified from variation in 141,456 humans</a>.
+<em>Nature</em>. 2020 May;581(7809):434-443.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461654" target="_blank">32461654</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334197/" target="_blank">PMC7334197</a>
 </p>
+
+<p>
+Collins RL, Brand H, Karczewski KJ, Zhao X, Alf&#246;ldi J, Francioli LC, Khera AV, Lowther C,
+Gauthier LD, Wang H <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461652" target="_blank">
+A structural variation reference for medical and population genetics</a>.
+<em>Nature</em>. 2020 May;581(7809):444-451.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461652" target="_blank">32461652</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334194/" target="_blank">PMC7334194</a>
+</p>
+<p>
+Cummings BB, Karczewski KJ, Kosmicki JA, Seaby EG, Watts NA, Singer-Berk M, Mudge JM, Karjalainen J,
+Satterstrom FK, O'Donnell-Luria AH <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461655" target="_blank">
+Transcript expression-aware annotation improves rare variant interpretation</a>.
+<em>Nature</em>. 2020 May;581(7809):452-458.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461655" target="_blank">32461655</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334198/" target="_blank">PMC7334198</a>
+</p>
+

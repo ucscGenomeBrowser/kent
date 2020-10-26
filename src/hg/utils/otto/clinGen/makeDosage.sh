@@ -33,31 +33,30 @@ then
     today=`date +%F`
     mkdir -p ${today}/{download,output}
     cd ${today}/download
-    for grc in GRCh37 GRCh38
+    for db in hg19 hg38
     do
-        wget -N -q "ftp://ftp.clinicalgenome.org/ClinGen_haploinsufficiency_gene_${grc}.bed"
-        wget -N -q "ftp://ftp.clinicalgenome.org/ClinGen_triplosensitivity_gene_${grc}.bed"
-        wget -N -q "ftp://ftp.clinicalgenome.org/ClinGen_region_curation_list_${grc}.tsv"
-        wget -N -q "ftp://ftp.clinicalgenome.org/ClinGen_gene_curation_list_${grc}.tsv"
-        if [ ${grc} == "GRCh37" ]
+        grc=""
+        if [ ${db} == "hg19" ]
         then
-            echo $grc
-            ../../../processClinGenDosage.py ClinGen_haploinsufficiency_gene_${grc}.bed ClinGen_gene_curation_list_${grc}.tsv haplo | sort -k1,1 -k2,2n > ../output/hg19.clinGenHaplo.bed
-            ../../../processClinGenDosage.py ClinGen_triplosensitivity_gene_${grc}.bed ClinGen_gene_curation_list_${grc}.tsv triplo | sort -k1,1 -k2,2n > ../output/hg19.clinGenTriplo.bed
-            bedToBigBed -type=bed9+10 -as=../../clinGenDosageHaplo.as -tab ../output/hg19.clinGenHaplo.bed /hive/data/genomes/hg19/chrom.sizes ../output/hg19.clinGenHaplo.bb
-            bedToBigBed -type=bed9+10 -as=../../clinGenDosageTriplo.as -tab ../output/hg19.clinGenTriplo.bed /hive/data/genomes/hg19/chrom.sizes ../output/hg19.clinGenTriplo.bb
-            cp ../output/hg19.clinGenHaplo.bb ${WORKDIR}/release/hg19/clinGenHaplo.bb
-            cp ../output/hg19.clinGenTriplo.bb ${WORKDIR}/release/hg19/clinGenTriplo.bb
-        elif [ ${grc} == "GRCh38" ]
+            grc="GRCh37"
+            wget -N -q "ftp://ftp.clinicalgenome.org/ClinGen_region_curation_list_${grc}.tsv"
+            wget -N -q "ftp://ftp.clinicalgenome.org/ClinGen_gene_curation_list_${grc}.tsv"
+        elif [ ${db} == "hg38" ]
         then
-            echo $grc
-            ../../../processClinGenDosage.py ClinGen_haploinsufficiency_gene_${grc}.bed ClinGen_gene_curation_list_${grc}.tsv haplo | sort -k1,1 -k2,2n > ../output/hg38.clinGenHaplo.bed
-            ../../../processClinGenDosage.py ClinGen_triplosensitivity_gene_${grc}.bed ClinGen_gene_curation_list_${grc}.tsv triplo | sort -k1,1 -k2,2n > ../output/hg38.clinGenTriplo.bed
-            bedToBigBed -type=bed9+10 -as=../../clinGenDosageHaplo.as -tab ../output/hg38.clinGenHaplo.bed /hive/data/genomes/hg38/chrom.sizes ../output/hg38.clinGenHaplo.bb
-            bedToBigBed -type=bed9+10 -as=../../clinGenDosageTriplo.as -tab ../output/hg38.clinGenTriplo.bed /hive/data/genomes/hg38/chrom.sizes ../output/hg38.clinGenTriplo.bb
-            cp ../output/hg38.clinGenHaplo.bb ${WORKDIR}/release/hg38/clinGenHaplo.bb
-            cp ../output/hg38.clinGenTriplo.bb ${WORKDIR}/release/hg38/clinGenTriplo.bb
+            grc="GRCh38"
+            wget -N -q "ftp://ftp.clinicalgenome.org/ClinGen_region_curation_list_${grc}.tsv"
+            wget -N -q "ftp://ftp.clinicalgenome.org/ClinGen_gene_curation_list_${grc}.tsv"
         fi
+        echo $grc
+        # the process script creates a haplo.bed and triplo.bed file:
+        hgsql -Ne "select phenotypeId, description from omimPhenotype" ${db} > ${db}.omimPhenotypes
+        ../../../processClinGenDosage.py ClinGen_region_curation_list_${grc}.tsv ClinGen_gene_curation_list_${grc}.tsv ${db}.omimPhenotypes ../output/${db}
+        sort -k1,1 -k2,2n ../output/${db}.haplo.bed > ../output/${db}.clinGenHaplo.bed
+        sort -k1,1 -k2,2n ../output/${db}.triplo.bed > ../output/${db}.clinGenTriplo.bed
+        bedToBigBed -type=bed9+13 -as=../../clinGenDosageHaplo.as -tab ../output/${db}.clinGenHaplo.bed /hive/data/genomes/${db}/chrom.sizes ../output/${db}.clinGenHaplo.bb
+        bedToBigBed -type=bed9+13 -as=../../clinGenDosageTriplo.as -tab ../output/${db}.clinGenTriplo.bed /hive/data/genomes/${db}/chrom.sizes ../output/${db}.clinGenTriplo.bb
+        cp ../output/${db}.clinGenHaplo.bb ${WORKDIR}/release/${db}/clinGenHaplo.bb
+        cp ../output/${db}.clinGenTriplo.bb ${WORKDIR}/release/${db}/clinGenTriplo.bb
     done
     cd ../..
 else

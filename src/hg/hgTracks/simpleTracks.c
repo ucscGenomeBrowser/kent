@@ -7217,7 +7217,7 @@ struct sqlConnection *conn = hAllocConn(database);
 boolean isNative = !sameString(tg->table, "xenoRefGene");
 boolean labelStarted = FALSE;
 boolean useGeneName = FALSE;
-boolean useAcc =  FALSE;
+boolean useAcc =  TRUE;
 boolean useMim =  FALSE;
 char trackLabel[1024];
 char *labelString = tg->table;
@@ -7249,8 +7249,8 @@ for (label = refGeneLabels; label != NULL; label = label->next)
     {
     if (endsWith(label->name, "gene") && differentString(label->val, "0"))
         useGeneName = TRUE;
-    else if (endsWith(label->name, "acc") && differentString(label->val, "0"))
-        useAcc = TRUE;
+    else if (endsWith(label->name, "acc") && sameString(label->val, "0"))
+        useAcc = FALSE;
     else if (endsWith(label->name, omimLabel) && differentString(label->val, "0"))
         useMim = TRUE;
     else if (!endsWith(label->name, "gene") &&
@@ -14834,7 +14834,7 @@ registerTrackHandler("hg17Kg", hg17KgMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("gad", gadMethods);
 registerTrackHandler("rdmr", rdmrMethods);
-registerTrackHandler("decipher", decipherCnvsMethods);
+registerTrackHandler("decipherOld", decipherCnvsMethods);
 registerTrackHandler("decipherSnvs", decipherSnvsMethods);
 registerTrackHandler("rgdQtl", rgdQtlMethods);
 registerTrackHandler("rgdRatQtl", rgdQtlMethods);

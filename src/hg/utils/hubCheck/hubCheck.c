@@ -792,13 +792,17 @@ if (errCatchStart(errCatch))
 
     if (options->checkFiles)
         hubCheckBigDataUrl(hub, genome, tdb);
+    trackHubAddDescription(genome->trackDbFile, tdb);
+    if (!tdb->html)
+        warn("warning: missing description page for track: '%s'", tdb->track);
     }
 errCatchEnd(errCatch);
-if (errCatch->gotError)
+if (errCatch->gotError || errCatch->gotWarning)
     {
-    trackDbErrorCount += 1;
     retVal = 1;
     trackDbErr(errors, errCatch->message->string, genome, tdb, options->htmlOut);
+    if (errCatch->gotError)
+        trackDbErrorCount += 1;
     }
 errCatchFree(&errCatch);
 

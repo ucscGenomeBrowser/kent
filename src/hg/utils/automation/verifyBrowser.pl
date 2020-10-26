@@ -281,6 +281,8 @@ if ($dbVersion > 1) {
 my $blatServers=`hgsql -N -e 'select * from blatServers where db="$db";' hgcentraltest | wc -l`;
 if ($blatServers != 2) {
   printf STDERR "# ERROR: blat server not found in hgcentraltest.blatServers ?\n";
+} else {
+  printf "# blatServers: %s", `hgsql -N -e 'select * from blatServers where db="$db";' hgcentraltest | xargs echo`;
 }
 
 my $chainNet = 0;

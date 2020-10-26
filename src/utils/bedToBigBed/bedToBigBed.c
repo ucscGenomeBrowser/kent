@@ -10,6 +10,7 @@
 #include "obscure.h"
 #include "asParse.h"
 #include "basicBed.h"
+#include "memalloc.h"
 #include "sig.h"
 #include "rangeTree.h"
 #include "zlibFace.h"
@@ -81,6 +82,7 @@ errAbort(
   "   -sizesIs2Bit  -- If set, the chrom.sizes file is assumed to be a 2bit file.\n"
   "   -udcDir=/path/to/udcCacheDir  -- sets the UDC cache dir for caching of remote files.\n"
   "   -allow1bpOverlap  -- allow exons to overlap by at most one base pair\n"
+  "   -maxAlloc=N -- Set the maximum memory allocation size to N bytes\n"
   , version, bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
@@ -96,6 +98,7 @@ static struct optionSpec options[] = {
    {"extraIndex", OPTION_STRING},
    {"udcDir", OPTION_STRING},
    {"allow1bpOverlap", OPTION_BOOLEAN},
+   {"maxAlloc", OPTION_LONG_LONG},
    {NULL, 0},
 };
 
@@ -196,7 +199,7 @@ for (;;)
 	    wordCount = chopTabs(line, row);
 	else
 	    wordCount = chopLine(line, row);
-	lineFileExpectWords(lf, fieldCount, wordCount);
+	lineFileExpectWordsMesg(lf, fieldCount, wordCount, "If the input is a tab-sep file, do not forget to use the -tab option");
 
 	loadAndValidateBedExt(row, bedN, fieldCount, lf, bed, as, FALSE, allow1bpOverlap);
 
@@ -827,9 +830,12 @@ extraIndex = optionVal("extraIndex", NULL);
 tabSep = optionExists("tab");
 allow1bpOverlap = optionExists("allow1bpOverlap");
 udcDir = optionVal("udcDir", udcDefaultDir());
+size_t maxAlloc = optionLongLong("maxAlloc", 0);
 if (argc != 4)
     usage();
 udcSetDefaultDir(udcDir);
+if (maxAlloc > 0)
+    setMaxAlloc(maxAlloc);
 
 if (optionExists("type"))
     {

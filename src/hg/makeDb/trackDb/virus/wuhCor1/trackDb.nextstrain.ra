@@ -17,35 +17,42 @@ priority 0.5
 bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainClade.bb
 url https://nextstrain.org/ncov?d=tree&m=div&label=clade:$$
 urlLabel View in Nextstrain: 
+pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
 
 track nextstrainOldClade
 shortLabel Nextstrn Old Clades
-longLabel Old (March 2020) Nextstrain clades designations (A1a, A2, etc.) from nextstrain.org/ncov
+longLabel Old (March 2020) Nextstrain clade designations (A1a, A2, etc.) from nextstrain.org/ncov
 type bigBed 12 +
 itemRgb on
 visibility hide
 group varRep
 priority 0.505
 bigDataUrl /gbdb/wuhCor1/nextstrain/nextstrainOldClade.bb
+pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
 
 track nextstrainSamples
 shortLabel Nextstrain Variants
 longLabel Nextstrain/GISAID Sample Variants from nextstrain.org/ncov
 type vcfTabix
-visibility pack
+visibility hide
 hapClusterEnabled on
 hapClusterHeight 500
+tableBrowser off
+vcfDoQual off
+vcfDoFilter off
 group varRep
 priority 0.51
-html nextstrainSamplesDevOnly
+hapClusterColorBy function
+geneTrack ncbiGeneBGP
 subGroup1 view Views all=All_Samples newClades=New_Clades(19A,_19B_etc.) oldClades=Old_Clades_(A1a,_A2_etc.)
 compositeTrack on
+pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
 
     track nextstrainSamplesViewAll
     view all
     parent nextstrainSamples
     shortLabel All Samples
-    visibility pack
+    visibility squish
 
         track nextstrainSamplesRb
         parent nextstrainSamplesViewAll on
@@ -242,6 +249,7 @@ autoScale off
 viewLimits 0:1.0
 viewLimitsMax 0:1.0
 maxHeightPixels 100:40:8
+pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"
 
     track nextstrainFreqViewAll
     view all
@@ -432,3 +440,4 @@ autoScale off
 viewLimits 0:20
 viewLimitsMax 0:100
 maxHeightPixels 100:40:8
+pennantIcon Updated red ../goldenPath/newsarch.html#071720 "Now updated daily"

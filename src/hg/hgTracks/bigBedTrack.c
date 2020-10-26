@@ -172,6 +172,69 @@ for(; choices; choices = choices->next)
 return filter;
 }
 
+static void addGencodeFilters(struct cart *cart, struct trackDb *tdb, struct bigBedFilter **pFilters)
+/* Add GENCODE custom bigBed filters. */
+{
+struct bigBedFilter *filter;
+char varName[64];
+struct hash *hash;
+
+/* canonical */
+safef(varName, sizeof(varName), "%s.show.spliceVariants", tdb->track);
+boolean option = cartUsualBoolean(cart, varName, TRUE);
+if (!option)
+    {
+    AllocVar(filter);
+    slAddHead(pFilters, filter);
+    filter->fieldNum = 25;
+    filter->comparisonType = COMPARE_HASH_LIST_OR;
+    hash = newHash(5);
+    filter->valueHash = hash;
+    filter->numValuesInHash = 1;
+    hashStore(hash, "canonical" );
+    }
+
+/* transcript class */
+AllocVar(filter);
+slAddHead(pFilters, filter);
+filter->fieldNum = 20;
+filter->comparisonType = COMPARE_HASH;
+hash = newHash(5);
+filter->valueHash = hash;
+filter->numValuesInHash = 1;
+hashStore(hash,"coding");  // coding is always included
+
+safef(varName, sizeof(varName), "%s.show.noncoding", tdb->track);
+if (cartUsualBoolean(cart, varName, TRUE))
+    {
+    filter->numValuesInHash++;
+    hashStore(hash,"nonCoding");
+    }
+
+safef(varName, sizeof(varName), "%s.show.pseudo", tdb->track);
+if (cartUsualBoolean(cart, varName, FALSE))
+    {
+    filter->numValuesInHash++;
+    hashStore(hash,"pseudo");
+    }
+
+/* tagged sets */
+safef(varName, sizeof(varName), "%s.show.set", tdb->track);
+char *setString = cartUsualString(cart, varName, "basic");
+
+if (differentString(setString, "all"))
+    {
+    AllocVar(filter);
+    slAddHead(pFilters, filter);
+    filter->fieldNum = 23;
+    filter->comparisonType = COMPARE_HASH_LIST_OR;
+    hash = newHash(5);
+    filter->valueHash = hash;
+    filter->numValuesInHash = 1;
+    hashStore(hash, setString);
+    }
+}
+
 struct bigBedFilter *bigBedBuildFilters(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb)
 /* Build all the numeric and filterBy filters for a bigBed */
 {
@@ -213,6 +276,10 @@ for (;filterBy != NULL; filterBy = filterBy->next)
             slAddHead(&filters, filter);
         }
     }
+
+/* custom gencode filters */
+if (startsWith("gencodeV", tdb->track))
+    addGencodeFilters(cart, tdb, &filters);
 
 return filters;
 }
@@ -439,12 +506,31 @@ struct bigBedFilter *filters = bigBedBuildFilters(cart, bbi, track->tdb) ;
 if (compositeChildHideEmptySubtracks(cart, track->tdb, NULL, NULL))
    labelTrackAsHideEmpty(track);
 
+// mouseOvers can be built constructed via trackDb settings instead
+// of embedded directly in bigBed
+char *mouseOverPattern = NULL;
+char **fieldNames = NULL;
+if (!mouseOverIdx)
+    {
+    mouseOverPattern = cartOrTdbString(cart, track->tdb, "mouseOver", NULL);
+
+    if (mouseOverPattern)
+        {
+        AllocArray(fieldNames, bbi->fieldCount);
+        struct slName *field = NULL, *fields = bbFieldNames(bbi);
+        int i =  0;
+        for (field = fields; field != NULL; field = field->next)
+            fieldNames[i++] = field->name;
+        }
+    }
+
 // a fake item that is the union of the items that span the current  window
 struct linkedFeatures *spannedLf = NULL;
 unsigned filtered = 0;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     struct linkedFeatures *lf = NULL;
+    char *bedRow[bbi->fieldCount];
     if (sameString(track->tdb->type, "bigPsl"))
 	{
 	char *seq, *cds;
@@ -470,7 +556,6 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     else
 	{
         char startBuf[16], endBuf[16];
-        char *bedRow[bbi->fieldCount];
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
         if (bigBedFilterInterval(bedRow, filters))
             {
@@ -508,7 +593,10 @@ for (bb = bbList; bb != NULL; bb = bb->next)
                 // item would be. If multiple items are merged then the labels and mouseOvers
                 // will get fixed up later
                 tmp->label = bigBedMakeLabel(track->tdb, track->labelColumns,  bb, chromName);
-                tmp->mouseOver   = restField(bb, mouseOverIdx);
+                if (mouseOverIdx > 0)
+                    tmp->mouseOver = restField(bb, mouseOverIdx);
+                else if (mouseOverPattern)
+                    tmp->mouseOver = replaceFieldInPattern(mouseOverPattern, bbi->fieldCount, fieldNames, bedRow);
                 slAddHead(&spannedLf, tmp);
                 }
             continue; // lf will be NULL, but these items aren't "filtered", they're merged
@@ -530,8 +618,10 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
     if (lf->mouseOver == NULL)
         {
-        char* mouseOver = restField(bb, mouseOverIdx);
-        lf->mouseOver   = mouseOver; // leaks some memory, cloneString handles NULL ifself 
+        if (mouseOverIdx > 0)
+            lf->mouseOver = restField(bb, mouseOverIdx);
+        else if (mouseOverPattern)
+            lf->mouseOver = replaceFieldInPattern(mouseOverPattern, bbi->fieldCount, fieldNames, bedRow);
         }
     slAddHead(pLfList, lf);
     }

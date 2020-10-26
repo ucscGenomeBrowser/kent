@@ -1056,4 +1056,9 @@ char *hRefSeqAccForChrom(char *db, char *chrom);
 boolean isMito(char *chrom);
 /* Return True if chrom is chrM or chrMT */
 
+char *hdbDefaultKnownDb(char *db);
+/* Get the default knownGene database from the defaultKnown table. */
+
+char *hdbGetMasterGeneTrack(char *knownDb);
+/* Get the native gene track for a knownGene database. */
 #endif /* HDB_H */

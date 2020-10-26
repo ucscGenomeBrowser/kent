@@ -98,6 +98,7 @@ struct memGfx
     int clipMinY, clipMaxY;
     struct colHash *colorHash;	/* Hash for fast look up of color. */
     unsigned int writeMode;
+    unsigned int fontMethod;
     };
 
 struct memGfx *mgNew(int width, int height);
@@ -408,4 +409,20 @@ struct rgbColor mgColorIxToRgb(struct memGfx *mg, int colorIx);
 struct rgbColor colorIxToRgb(int colorIx);
 /* Return rgb value at color index. */
 
+INLINE void mixDot(struct memGfx *img, int x, int y,  float frac, Color col)
+/* Puts a single dot on the image, mixing it with what is already there
+ * based on the frac argument. */
+/* Shouldn't this pay attention to the transparency of the current pixel? */
+{
+if ((x < img->clipMinX) || (x >= img->clipMaxX) || (y < img->clipMinY) || (y >= img->clipMaxY))
+    return;
+
+Color *pt = _mgPixAdr(img,x,y);
+float invFrac = 1 - frac;
+
+int r = COLOR_32_RED(*pt) * invFrac + COLOR_32_RED(col) * frac;
+int g = COLOR_32_GREEN(*pt) * invFrac + COLOR_32_GREEN(col) * frac;
+int b = COLOR_32_BLUE(*pt) * invFrac + COLOR_32_BLUE(col) * frac;
+mgPutDot(img,x,y,MAKECOLOR_32(r,g,b));
+}
 #endif /* MEMGFX_H */

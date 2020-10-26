@@ -1206,7 +1206,7 @@ sub makeDownloads {
   return if ($opt_skipDownload);
   # Make an md5sum.txt file.
   my $net = $isSelf ? "" : "$tDb.$qDb.net.gz";
-  if (! -s "$net") {
+  if (! -s "$runDir/$net") {
      $net = "";
   }
   my $whatItDoes =
@@ -1302,7 +1302,7 @@ sub getBlastzParams {
       my $p = $1;
       if ($p ne 'K' && $p ne 'L' && $p ne 'H' && $p ne 'Q') {
 	if ($blastzOther eq '') {
-	  $blastzOther = 'Other blastz
+	  $blastzOther = 'Other lastz
 parameters specifically set for this species pair:';
 	}
 	$blastzOther .= "\n    $p=$defVars{$var}";
@@ -1507,6 +1507,9 @@ All files in this directory are freely available for public use.
 
 --------------------------------------------------------------------
 References
+
+Harris, R.S. (2007) Improved pairwise alignment of genomic DNA
+Ph.D. Thesis, The Pennsylvania State University
 
 Chiaromonte F, Yap VB, Miller W. Scoring pairwise genomic sequence
 alignments. Pac Symp Biocomput.  2002:115-26.

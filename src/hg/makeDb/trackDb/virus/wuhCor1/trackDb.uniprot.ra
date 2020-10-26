@@ -26,7 +26,7 @@ longLabel UniProt Protein Products (Polypeptide Chains)
 priority 2
 visibility pack
 color 0,2,80
-type bigBed 12 +
+type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipChainCov2.bb
 #urls uniProtId="http://www.uniprot.org/uniprot/$$#ptm_processing" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
@@ -36,6 +36,7 @@ dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
 itemRgb on
 html uniprotCov2
+baseColorDefault genomicCodons
 
 track unipCov2Interest
 shortLabel Highlights
@@ -44,7 +45,7 @@ priority 3
 visibility pack
 color 2,12,100
 group uniprot
-type bigBed 12 +
+type bigGenePred
 bigDataUrl /gbdb/wuhCor1/uniprot/unipInterestCov2.bb
 #urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
@@ -52,6 +53,7 @@ mouseOverField comments
 dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
 itemRgb on
+baseColorDefault genomicCodons
 
 track unipCov2Domain
 shortLabel Protein Domains
@@ -60,13 +62,14 @@ priority 8
 group uniprot
 #parent uniprotCov2 off
 visibility dense
-type bigBed 12 +
+type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipDomainCov2.bb
 #urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
 dataVersion /gbdb/$D/uniprot/version.txt
 exonNumbers off
 html uniprotCov2
+baseColorDefault genomicCodons
 
 track unipProtease
 shortLabel Protease Cleavage
@@ -86,13 +89,14 @@ priority 8
 group uniprot
 #parent uniprotCov2 off
 visibility dense
-type bigBed 12 +
+type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipDisulfBondCov2.bb
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 exonNumbers off
 itemRgb on
 html uniprotCov2
+baseColorDefault genomicCodons
 
 track unipCov2Modif
 shortLabel Glycosyl/Phosph.
@@ -100,7 +104,7 @@ longLabel UniProt Amino Acid Glycosylation/Phosphorylation sites
 priority 9
 #parent uniprotCov2 off
 visibility dense
-type bigBed 12 +
+type bigGenePred
 group uniprot
 bigDataUrl /gbdb/$D/uniprot/unipModifCov2.bb
 #urls uniProtId="http://www.uniprot.org/uniprot/$$#aaMod_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
@@ -108,13 +112,14 @@ mouseOverField comments
 dataVersion /gbdb/$D/uniprot/version.txt
 itemRgb on
 html uniprotCov2
+baseColorDefault genomicCodons
 
 #track uniprotCov2
 #shortLabel UniProt Other
 #longLabel UniProt Protein Annotations (configure track to show more)
 #group uniprot
 #visibility dense
-#type bigBed 12 +
+#type bigGenePred
 #exonNumbers off
 #compositeTrack on
 #allButtonPair on
@@ -154,7 +159,7 @@ longLabel UniProt Signal Peptides
 priority 3
 #parent uniprotCov2 off
 visibility dense
-type bigBed 12 +
+type bigGenePred
 group uniprot
 bigDataUrl /gbdb/$D/uniprot/unipLocSignalCov2.bb
 color 255,0,150
@@ -162,6 +167,7 @@ itemRgb off
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 html uniprotCov2
+baseColorDefault genomicCodons
 
         #track unipCov2LocExtra
         #shortLabel Extracellular
@@ -169,7 +175,7 @@ html uniprotCov2
         #priority 4
         #parent uniprotCov2 off
         #visibility dense
-        #type bigBed 12 +
+        #type bigGenePred
         #bigDataUrl /gbdb/$D/uniprot/unipLocExtraCov2.bb
         #color 0,150,255
         #itemRgb off
@@ -180,7 +186,7 @@ longLabel UniProt Transmembrane Domains
 priority 5
 #parent uniprotCov2 on
 visibility dense
-type bigBed 12 +
+type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipLocTransMembCov2.bb
 group uniprot
 color 0,150,0
@@ -188,6 +194,7 @@ itemRgb off
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 html uniprotCov2
+baseColorDefault genomicCodons
 
         #track unipCov2LocCytopl
         #shortLabel Cytoplasmic
@@ -195,7 +202,7 @@ html uniprotCov2
         #priority 6
         #parent uniprotCov2 off
         #visibility dense
-        #type bigBed 12 +
+        #type bigGenePred
         #bigDataUrl /gbdb/$D/uniprot/unipLocCytoplCov2.bb
         #color 255,150,0
         #itemRgb off
@@ -206,7 +213,7 @@ html uniprotCov2
         #priority 10
         #parent uniprotCov2 off
         #visibility dense
-        #type bigBed 12 +
+        #type bigGenePred
         #bigDataUrl /gbdb/$D/uniprot/unipMutCov2.bb
         ##urls uniProtId="http://www.uniprot.org/uniprot/$$#pathology_and_biotech" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$" variationId="http://www.uniprot.org/uniprot/$$"
         #urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
@@ -217,7 +224,7 @@ longLabel UniProt Protein Primary/Secondary Structure Annotations
 priority 11
 #parent uniprotCov2 off
 visibility dense
-type bigBed 12 +
+type bigGenePred
 group uniprot
 bigDataUrl /gbdb/$D/uniprot/unipStructCov2.bb
 #urls uniProtId="http://www.uniprot.org/uniprot/$$#structure" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
@@ -225,6 +232,7 @@ urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 html uniprotCov2
+baseColorDefault genomicCodons
 
 track unipCov2Other
 shortLabel Other Annot.
@@ -233,13 +241,14 @@ priority 11
 #parent uniprotCov2 off
 visibility dense
 group uniprot
-type bigBed 12 +
+type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipOtherCov2.bb
 #urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 html uniprotCov2
+baseColorDefault genomicCodons
 
 track unipCov2Repeat
 shortLabel Repeats
@@ -248,13 +257,14 @@ priority 12
 group uniprot
 #parent uniprotCov2 off
 visibility dense
-type bigBed 12 +
+type bigGenePred
 bigDataUrl /gbdb/$D/uniprot/unipRepeatCov2.bb
 #urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 dataVersion /gbdb/$D/uniprot/version.txt
 mouseOverField comments
 html uniprotCov2
+baseColorDefault genomicCodons
 
         #track unipCov2Conflict
         #shortLabel Seq. Conflicts
@@ -262,7 +272,7 @@ html uniprotCov2
         #priority 13
         #parent uniprotCov2 off
         #visibility dense
-        #type bigBed 12 +
+        #type bigGenePred
         #bigDataUrl /gbdb/$D/uniprot/unipConflictCov2.bb
         ##urls uniProtId="http://www.uniprot.org/uniprot/$$#Sequence_conflict_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
         #urls pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"

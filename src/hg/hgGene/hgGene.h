@@ -56,6 +56,10 @@ struct section *sectionNew(struct hash *sectionRa, char *name);
 /* Create a section loading all common parts but the methods 
  * sectionRa. */
 
+struct section *gencodeSection(struct sqlConnection *conn, 
+	struct hash *sectionRa);
+/* Create gencode section. */
+
 struct section *linksSection(struct sqlConnection *conn, 
 	struct hash *sectionRa);
 /* Create links section. */
@@ -318,6 +322,7 @@ extern boolean isGencode2;             /* is this based on the Gencode models an
 extern int curGeneStart,curGeneEnd;	/* Position in chromosome. */
 struct sqlConnection *spConn;	/* Connection to SwissProt database. */
 extern char *swissProtAcc;	/* SwissProt accession (may be NULL). */
+extern struct trackDb *globalTdb;  /* The trackDb structure for the table containing the current item. */
 
 #define KG_UNKNOWN 0
 #define KG_I       1

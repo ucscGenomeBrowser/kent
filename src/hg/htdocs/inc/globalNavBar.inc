@@ -27,6 +27,7 @@
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a id="configureMenuLink" href="../cgi-bin/hgTracks?hgTracksConfigPage=configure">Configure</a></li>
 	<li><a id="trackSearchMenuLink" href="../cgi-bin/hgTracks?hgt_tSearch=track+search">Track Search</a></li>
+        <!-- OPTIONAL_RECOMMENDED_TRACK_SETS_MENU -->
 	<li><a id="cartResetMenuLink" href="../cgi-bin/cartReset">Reset All User Settings</a></li>
         </ul>
 </li>
@@ -83,7 +84,8 @@
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a href="../gtex.html">Genotype Tissue Expression (GTEx)</a></li>
 	<li><a href="../ENCODE/index.html">Encyclopedia of DNA Elements (ENCODE)</a></li>
-	<li class="last"><a href="../singlecell.html">UCSC Cell Browser</a></li>
+	<li><a href="../singlecell.html">UCSC Cell Browser</a></li>
+	<li class="last"><a href="../covid19.html">UCSC COVID-19 Resources</a></li>
 	</ul>
 <!-- OPTIONAL_PROJECT_MENU_END -->
 

@@ -72,6 +72,8 @@
 #include "hex.h"
 #include <openssl/sha.h>
 #include "customComposite.h"
+#include "chromAlias.h"
+
 //#include "bed3Sources.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
@@ -625,6 +627,27 @@ for(cb = cbList; cb != NULL; cb = cb->next)
     }
 }
 
+static void maybeNewFonts(struct hvGfx *hvg)
+/* Check to see if we want to use the alternate font engine (FreeType2). */
+{
+if (sameString(cfgOptionDefault("freeType", "off"), "on"))
+    {
+    char *fontDir = cfgOptionDefault("freeTypeDir", "/usr/share/fonts/default/Type1");
+    char buffer[4096];
+
+    extern char *freeTypeFontNames[];
+    extern char *freeTypeFontFiles[];
+    int ii;
+    for(ii=0; ii < 33; ii++)
+        if (sameString(freeTypeFontNames[ii], tl.textFont))
+            break;
+    char *fontFile = freeTypeFontFiles[ii];
+    char *fontName = freeTypeFontNames[ii];
+    safef(buffer, sizeof buffer, "%s/%s", fontDir, fontFile);
+    hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, fontName, buffer );
+    }
+}
+
 boolean makeChromIdeoImage(struct track **pTrackList, char *psOutput,
                         struct tempName *ideoTn)
 /* Make an ideogram image of the chromosome and our position in it.  If the
@@ -650,7 +673,7 @@ if(ideoTrack == NULL)
     {
     doIdeo = FALSE;
     }
-else if(trackImgOnly && !ideogramToo)
+else if (trackImgOnly && !ideogramToo)
     {
     doIdeo = FALSE;
     }
@@ -700,6 +723,7 @@ if(doIdeo)
         trashDirFile(ideoTn, "hgtIdeo", "hgtIdeo", ".png");
         hvg = hvGfxOpenPng(ideoWidth, ideoHeight, ideoTn->forCgi, FALSE);
         }
+    maybeNewFonts(hvg);
     hvg->rc = revCmplDisp;
     initColors(hvg);
     ideoTrack->ixColor = hvGfxFindRgb(hvg, &ideoTrack->color);
@@ -2144,7 +2168,12 @@ char *hexColor;
 
 struct highlightVar *parseHighlightInfo()
 // Parse highlight info from cart var to a linked list of highlightVar structs
-// db.chrom:start-end#hexColor|db.chrom:start-end#hexColor|...
+// Accepts four input formats for the highlight variable:
+// 0) chrom:start-end (format in very old carts)
+// 1) db.chrom:start-end (format in very old carts)
+// 2) db.chrom:start-end#hexColor|db.chrom:start-end#hexColor|... (old format)
+// 3) db#chrom#start#end#hexColor|db#chrom#start#end#hexColor|... (current format, to allow . in seq names)
+//
 {
 struct highlightVar *hlList = NULL;
 char *highlightDef = cartOptionalString(cart, "highlight");
@@ -2157,19 +2186,48 @@ if(highlightDef)
         {
         char *oneHl = hlArr[i];
         struct highlightVar *h;
+        char *chromStart, *chromEnd;
         AllocVar(h);
-        h->db     = cloneNextWordByDelimiter(&oneHl,'.');
-        h->chrom  = cloneNextWordByDelimiter(&oneHl,':');
-        // long to handle virt chrom coordinates
-        h->chromStart = atol(cloneNextWordByDelimiter(&oneHl,'-'));
-        h->chromEnd   = atol(cloneNextWordByDelimiter(&oneHl,'#'));
-        h->chromStart--; // Not zero based
-        if (highlightDef && *highlightDef != '\0')
+        if (countSeparatedItems(oneHl, '#')==5)
+            // the new format: db#chrom#start#end#color
+            {
+            h->db     = cloneNextWordByDelimiter(&oneHl,'#');
+            h->chrom  = cloneNextWordByDelimiter(&oneHl,'#');
+            chromStart = cloneNextWordByDelimiter(&oneHl,'#');
+            chromEnd = cloneNextWordByDelimiter(&oneHl,'#');
             h->hexColor = cloneString(oneHl);
-        slAddHead(&hlList, h);
+            }
+        else  // the syntax only used in old saved sessions
+            // the old format: db.chr:start-end followed optionally by #color
+            // or just chr:start-end
+            {
+            if (strchr(oneHl, '.')== NULL)
+                h->db = database;
+             else
+                h->db     = cloneNextWordByDelimiter(&oneHl,'.');
+
+            h->chrom  = cloneNextWordByDelimiter(&oneHl,':');
+            chromStart = cloneNextWordByDelimiter(&oneHl,'-');
+            chromEnd = cloneNextWordByDelimiter(&oneHl,'#');
+            if (oneHl && *oneHl != '\0')
+                h->hexColor = cloneString(oneHl);
+            }
+
+        if (!isEmpty(chromStart) && !isEmpty(chromEnd) &&
+                isNumericString(chromStart) && isNumericString(chromEnd) &&
+                !isEmpty(h->db) && !isEmpty(h->chrom))
+            {
+            // long to handle virt chrom coordinates
+            h->chromStart = atol(chromStart);
+            h->chromEnd   = atol(chromEnd);
+            h->chromStart--; // Not zero based
+            slAddHead(&hlList, h);
+            }
         }
+
     slReverse(&hlList);
     }
+
 return hlList;
 }
 
@@ -5008,6 +5066,8 @@ else
         initColors(hvgSide);
         }
     }
+maybeNewFonts(hvg);
+maybeNewFonts(hvgSide);
 hvg->rc = revCmplDisp;
 initColors(hvg);
 
@@ -7113,8 +7173,20 @@ static void pruneRedundantCartVis(struct track *trackList)
 struct track *track;
 for (track = trackList; track != NULL; track = track->next)
     {
+    if (track->parent)  // has super track
+        pruneRedundantCartVis(track->parent);
+        
     char *cartVis = cartOptionalString(cart, track->track);
-    if (cartVis != NULL && hTvFromString(cartVis) == track->tdb->visibility)
+    if (cartVis == NULL)
+        continue;
+
+    if (tdbIsSuper(track->tdb))
+        {
+        if ((sameString("hide", cartVis) && (track->tdb->isShow == 0)) ||
+            (sameString("show", cartVis) && (track->tdb->isShow == 1)))
+            cartRemove(cart, track->track);
+        }
+    else if (hTvFromString(cartVis) == track->tdb->visibility)
         cartRemove(cart, track->track);
     }
 }
@@ -7744,6 +7816,155 @@ if (hubFile != NULL)
     }
 }
 
+// TODO: move to a file in lib (cheapcgi?)
+char *cgiVarStringSort(char *cgiVarString)
+/* Return cgi var string sorted alphabetically by vars */
+{
+struct slName *vars = slNameListFromString(cgiVarString, '&');
+slNameSort(&vars);
+char *cgiString = slNameListToString(vars, '&');
+return cgiString;
+}
+
+char *cgiTrackVisString(char *cgiVarString)
+/* Filter cgi var string (var=val&) to just track visibilities, but equivalence
+ * dense/pack/squish/full by replacing as 'on'.
+ * Return string with track data vars in alphabetic order */
+{
+// TODO: use cheapcgi.cgiParsedVarsNew() to parse and get list ?
+#define MAX_CGI_VARS 1000
+// NOTE: Ana featured sessions have: 473, 308, 288
+char *cgiVars[MAX_CGI_VARS];
+int ct = chopByChar(cgiVarString, '&', cgiVars, sizeof cgiVars);
+
+char *cgiVar = NULL;
+char *val = NULL;
+int i;
+struct dyString *dsCgiTrackVis = dyStringCreate("db=%s", database);
+for (i=0; i<ct; i++)
+    {
+    // TODO: attention to memory allocation
+    cgiVar = cloneString(cgiVars[i]);
+    val = rStringIn("=", cgiVar);
+    if (!val)     // expect always
+        continue;
+    val++;
+    if (sameString(val, "hide") || sameString(val, "dense") || sameString(val, "squish") ||
+        sameString(val, "pack") || sameString(val, "full") || sameString(val, "show"))
+        {
+        char *p = val;
+        *--p = 0;
+        dyStringPrintf(dsCgiTrackVis, "&%s=%s", cgiVar, sameString(val, "hide") ? "hide" : "on");
+        }
+    else if (stringIn("_sel=", cgiVar) && sameString(val, "1"))
+        {
+    val -= 5;
+    *val = 0;
+        dyStringAppend(dsCgiTrackVis, "&");
+        dyStringAppend(dsCgiTrackVis, cloneString(cgiVars[i]));
+        }
+    else
+        {
+        val = rStringIn("_imgOrd=", cgiVar);
+        if (!val)
+            val = rStringIn(".showCfg=", cgiVar);
+        if (!val)
+            continue;
+        *val = 0;
+        }
+    }
+return cgiVarStringSort(dyStringCannibalize(&dsCgiTrackVis));
+}
+
+// TODO: move to lib. Used by hgSession and hgTracks
+static void outIfNotPresent(struct cart *cart, struct dyString *dy, char *track, int tdbVis)
+/* Output default trackDb visibility if it's not mentioned in the cart. */
+{
+char *cartVis = cartOptionalString(cart, track);
+if (cartVis == NULL)
+    {
+    if (dy)
+        dyStringPrintf(dy,"&%s=%s", track, hStringFromTv(tdbVis));
+    else
+        printf("%s %s\n", track, hStringFromTv(tdbVis));
+    }
+}
+
+// TODO: move to lib. Used by hgSession and hgTracks
+static void outDefaultTracks(struct cart *cart, struct dyString *dy)
+/* Output the default trackDb visibility for all tracks
+ * in trackDb if the track is not mentioned in the cart. */
+{
+struct hash *parentHash = newHash(5);
+struct track *track;
+for (track=trackList; track; track=track->next)
+    {
+    struct trackDb *parent = track->tdb->parent;
+    if (parent)
+        {
+        if (hashLookup(parentHash, parent->track) == NULL)
+            {
+            hashStore(parentHash, parent->track);
+            if (parent->isShow)
+                outIfNotPresent(cart, dy, parent->track, tvShow);
+            }
+        }
+    if (track->tdb->visibility != tvHide)
+        outIfNotPresent(cart, dy, track->tdb->track, track->tdb->visibility);
+    }
+// Put a variable in the cart that says we put the default 
+// visibilities in it.
+if (dy)
+    dyStringPrintf(dy,"&%s=on", CART_HAS_DEFAULT_VISIBILITY);
+else
+    printf("%s on", CART_HAS_DEFAULT_VISIBILITY);
+}
+
+boolean hasSessionChanged()
+{
+/* Have any tracks been hidden or added ? */
+
+// get featured session from database
+char *sessionName = cartString(cart, "hgS_otherUserSessionName");
+if (!sessionName)
+    return FALSE;
+struct sqlConnection *conn = hConnectCentral();
+char query[1000];
+sqlSafef(query, sizeof query,
+        "SELECT contents FROM namedSessionDb where sessionName='%s'",
+                replaceChars(sessionName, " ", "%20"));
+char *cartString = sqlQuickNonemptyString(conn, query);
+hDisconnectCentral(&conn);
+
+// TODO: use cheapcgi.cgiParsedVarsNew() to parse and get list ?
+#define MAX_SESSION_LEN 100000
+char *curSessCart = (char *)needMem(MAX_SESSION_LEN);
+cgiDecodeFull(cartString, curSessCart, MAX_SESSION_LEN);
+char *curSessVisTracks = cgiTrackVisString(curSessCart);
+
+// get track-related vars from current cart
+struct dyString *dsCgiVars = newDyString(0);
+cartEncodeState(cart, dsCgiVars);
+outDefaultTracks(cart, dsCgiVars);
+char *this = dyStringCannibalize(&dsCgiVars);
+// TODO: again, better parsing
+char *this2 = replaceChars(this, "%2D", "-");
+char *thisSessVars = replaceChars(this2, "%2B", "+");
+char *thisSessVisTracks = cgiTrackVisString(thisSessVars);
+
+//freeMem(curSessCart);
+boolean isSessChanged = FALSE;
+if (differentString(curSessVisTracks, thisSessVisTracks))
+    {
+    isSessChanged = TRUE;
+    #ifdef DEBUG
+    uglyf("<br>curSess vis tracks: %s", curSessVisTracks);
+    uglyf("<br>thsSess vis tracks: %s", thisSessVisTracks);
+    #endif
+    }
+return isSessChanged;
+}
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -8228,6 +8449,7 @@ if ((trackImgOnly && !ideogramToo)
 
 if (trackImgOnly && !ideogramToo)
     {
+    // right-click to change viz 
     makeActiveImage(trackList, psOutput);
     fflush(stdout);
     return;  // bail out b/c we are done
@@ -8241,7 +8463,7 @@ if (!hideControls)
     printMenuBar();
     //menuBarAppendExtTools();
 
-    /* Show title . */
+    /* Show title */
     freezeName = hFreezeFromDb(database);
     if(freezeName == NULL)
         freezeName = "Unknown";
@@ -8267,8 +8489,49 @@ if (!hideControls)
 		hPrintf("%s %s on %s %s Assembly (%s)",
 			organization, browserName, trackHubSkipHubName(organism), freezeName, trackHubSkipHubName(database));
 	    }
+	}
+    hPrintf("</B></SPAN>");
+
+    // Disable recommended track set panel when changing tracks, session, database
+    char *sessionLabel = cartOptionalString(cart, hgsOtherUserSessionLabel);
+    char *oldDb = hashFindVal(oldVars, "db");
+    if (sessionLabel)
+        {
+        if (defaultTracks || hideAll || 
+            (oldDb && differentString(database, oldDb)) ||
+            !hasRecTrackSet(cart) ||
+            sameString(sessionLabel, "off"))
+                cartRemove(cart, hgsOtherUserSessionLabel);
         }
-    hPrintf("</B></span><BR>\n");
+    sessionLabel = cartOptionalString(cart, hgsOtherUserSessionLabel);
+    if (sessionLabel)
+        {
+        char *panel = "recTrackSetsPanel";
+        boolean isSessChanged = FALSE;
+        if (recTrackSetsChangeDetectEnabled())
+            isSessChanged = hasSessionChanged();
+        struct dyString *hoverText = dyStringNew(0);
+        dyStringPrintf(hoverText, "Your browser is displaying the %s track set%s. "
+                                " Click to change to another.", sessionLabel,
+                                isSessChanged ? 
+                                ", with changes (added or removed tracks) you have requested" : "");
+        // TODO: cleanup layout tweaking for FF on IE10
+        hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
+        hPrintf("<span id='spacer' style='display: inline; padding-left: 10px;' >&nbsp;</span>");
+
+        hPrintf("<span id='%s' class='gbSessionLabelPanel' style='display: inline-block;' title='%s'>",
+                        panel, dyStringCannibalize(&hoverText));
+        hPrintf("<span id='recTrackSetLabel' class='gbSessionLabelText gbSessionChangeIndicator %s' "
+                        "style='margin-right: 3px;'>%s</span>",
+                        isSessChanged ? "gbSessionChanged" : "", sessionLabel);
+        hPrintf("<i id='removeSessionPanel' title='Close' class='fa fa-remove' "
+                        "style='color: #a9a9a9; font-size:smaller; vertical-align: super;'></i>");
+        hPrintf("</span>");
+
+        jsOnEventById("click", "recTrackSetLabel", "showRecTrackSetsPopup(); return false;");
+        jsOnEventById("click", "removeSessionPanel", "removeSessionPanel(); return false;");
+        }
+    hPrintf("<BR>\n");
 
     /* This is a clear submit button that browsers will use by default when enter is pressed in position box. */
     hPrintf("<INPUT TYPE=IMAGE BORDER=0 NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\">");
@@ -8453,11 +8716,12 @@ hPrintf("<td width='40' align='right'><a href='?hgt.right3=1' """
 hPrintf("</tr></table>\n");
 #endif///def USE_NAVIGATION_LINKS
 
+
 /* Make clickable image and map. */
 makeActiveImage(trackList, psOutput);
 fflush(stdout);
 
-if(trackImgOnly)
+if (trackImgOnly)
     {
     // bail out b/c we are done
     if (measureTiming)
@@ -8746,6 +9010,19 @@ if (!hideControls)
     }
 if (showTrackControls)
     hButton("hgt.refresh", "refresh");
+
+if (sameString(database, "wuhCor1"))
+    {
+    // GISAID wants this displayed on any page that shows any GISAID data
+    puts("<p class='centeredCol'>\n"
+         "GISAID data displayed in the Genome Browser are subject to GISAID's\n"
+         "<a href='https://www.gisaid.org/registration/terms-of-use/' "
+         "target=_blank>Terms and Conditions</a>.\n"
+         "SARS-CoV-2 genome sequences and metadata are available for download from\n"
+         "<a href='https://gisaid.org' target=_blank>GISAID</a> EpiCoV&trade;.\n"
+         "</p>");
+    }
+
 hPrintf("</CENTER>\n");
 
 #ifdef SLOW
@@ -9648,20 +9925,50 @@ boolean gotExtTools = extToolsEnabled();
 setupHotkeys(gotExtTools);
 if (gotExtTools)
     printExtMenuData(chromName);
-
+if (recTrackSetsEnabled())
+    printRecTrackSets();
 }
 
-void chromInfoTotalRow(int count, long long total)
+static void chromInfoTotalRow(int count, long long total, boolean hasAlias)
 /* Make table row with total number of sequences and size from chromInfo. */
 {
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
 printf("Total: %d", count);
 cgiTableFieldEnd();
-cgiSimpleTableFieldStart();
+cgiTableFieldStartAlignRight();
 printLongWithCommas(stdout, total);
+puts("&nbsp;&nbsp;");
 cgiTableFieldEnd();
+if (hasAlias)
+    {
+    cgiSimpleTableFieldStart();
+    puts("&nbsp");
+    cgiTableFieldEnd();
+    }
 cgiTableRowEnd();
+}
+
+static char *chrAliases(struct hash *aliasHash, char *sequenceName)
+/* lookup the sequenceName in the aliasHash and return csv string
+ * of alias names
+ */
+{
+if (NULL == aliasHash)
+    return NULL;
+struct dyString *returned = dyStringNew(512);
+struct hashEl *hel = hashLookup(aliasHash, sequenceName);
+if (hel)
+    {
+    dyStringPrintf(returned, "%s", ((struct chromAlias *)hel->val)->alias);
+    hel = hashLookupNext(hel);
+    while (hel != NULL)
+        {
+        dyStringPrintf(returned, ", %s",((struct chromAlias *)hel->val)->alias);
+        hel = hashLookupNext(hel);
+        }
+    }
+return dyStringCannibalize(&returned);
 }
 
 void chromInfoRowsChromExt(char *sortType)
@@ -9670,6 +9977,11 @@ void chromInfoRowsChromExt(char *sortType)
 struct slName *chromList = hAllChromNames(database);
 struct slName *chromPtr = NULL;
 long long total = 0;
+boolean hasAlias = hTableExists(database, "chromAlias");
+struct hash *aliasHash = chromAliasMakeReverseLookupTable(database);
+/* key is database sequence name, value is an alias name, can be multiple
+ *   entries for the same sequence name.  NULL if no chromAlias available
+ */
 
 if (sameString(sortType,"default"))
     slSort(&chromList, chrSlNameCmp);
@@ -9681,6 +9993,7 @@ else
 for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     {
     unsigned size = hChromSize(database, chromPtr->name);
+    char *aliasNames = chrAliases(aliasHash, chromPtr->name);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
     htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
@@ -9691,10 +10004,19 @@ for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     printLongWithCommas(stdout, size);
     puts("&nbsp;&nbsp;");
     cgiTableFieldEnd();
+    if (hasAlias)
+	{
+	cgiSimpleTableFieldStart();
+	if (aliasNames)
+            htmlPrintf("%s", aliasNames);
+	else
+            htmlPrintf("&nbsp;");
+        cgiTableFieldEnd();
+        }
     cgiTableRowEnd();
     total += size;
     }
-chromInfoTotalRow(slCount(chromList), total);
+chromInfoTotalRow(slCount(chromList), total, hasAlias);
 slFreeList(&chromList);
 }
 
@@ -9720,6 +10042,10 @@ void chromInfoRowsNonChromTrackHub(int limit)
 struct chromInfo *chromInfo = trackHubAllChromInfo(database);
 slSort(&chromInfo, chromInfoCmpSize);
 int seqCount = slCount(chromInfo);
+struct hash *aliasHash = trackHubAllChromAlias(database);
+boolean hasAlias = FALSE;
+if (aliasHash)
+    hasAlias = TRUE;
 long long total = 0;
 char msg1[512], msg2[512];
 boolean truncating;
@@ -9729,6 +10055,7 @@ truncating = (limit > 0) && (seqCount > limit);
 
 for(;count-- && (chromInfo != NULL); chromInfo = chromInfo->next)
     {
+    char *aliasNames = chrAliases(aliasHash, chromInfo->chrom);
     unsigned size = chromInfo->size;
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
@@ -9740,12 +10067,21 @@ for(;count-- && (chromInfo != NULL); chromInfo = chromInfo->next)
     printLongWithCommas(stdout, size);
     puts("&nbsp;&nbsp;");
     cgiTableFieldEnd();
+    if (hasAlias)
+	{
+	cgiSimpleTableFieldStart();
+	if (aliasNames)
+            htmlPrintf("%s", aliasNames);
+	else
+            htmlPrintf("&nbsp;");
+        cgiTableFieldEnd();
+        }
     cgiTableRowEnd();
     total += size;
     }
 if (!truncating)
     {
-    chromInfoTotalRow(seqCount, total);
+    chromInfoTotalRow(seqCount, total, hasAlias);
     }
 else
     {
@@ -9794,6 +10130,11 @@ if (trackHubDatabase(database))
     }
 
 struct sqlConnection *conn = hAllocConn(database);
+boolean hasAlias = hTableExists(database, "chromAlias");
+struct hash *aliasHash = chromAliasMakeReverseLookupTable(database);
+/* key is database sequence name, value is an alias name, can be multiple
+ *   entries for the same sequence name.  NULL if no chromAlias available
+ */
 struct sqlResult *sr = NULL;
 char **row = NULL;
 long long total = 0;
@@ -9824,17 +10165,27 @@ while ((row = sqlNextRow(sr)) != NULL)
     htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            row[0], row[0]);
+    char *aliasNames = chrAliases(aliasHash, row[0]);
     cgiTableFieldEnd();
     cgiTableFieldStartAlignRight();
     printLongWithCommas(stdout, size);
     puts("&nbsp;&nbsp;");
     cgiTableFieldEnd();
+    if (hasAlias)
+        {
+        cgiSimpleTableFieldStart();
+        if (aliasNames)
+            htmlPrintf("%s", aliasNames);
+        else
+            htmlPrintf("&nbsp;");
+        cgiTableFieldEnd();
+        }
     cgiTableRowEnd();
     total += size;
     }
 if (!truncating)
     {
-    chromInfoTotalRow(seqCount, total);
+    chromInfoTotalRow(seqCount, total, hasAlias);
     }
 else
     {
@@ -9879,18 +10230,54 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-static void chromSizesDownloadRow()
+static void chromSizesDownloadRow(boolean hasAlias, char *hubAliasFile, char *chromSizesFile)
 /* Show link to chrom.sizes file at end of chromInfo table (unless this is a hub) */
 {
 if (! trackHubDatabase(database))
     {
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    puts("Download as file");
+    puts("Download as file:");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
     printf("<A HREF='http://%s/goldenPath/%s/bigZips/%s.chrom.sizes'>%s.chrom.sizes</A>",
            hDownloadsServer(), database, database, database);
+    cgiTableFieldEnd();
+    if (hasAlias)
+	{
+	cgiSimpleTableFieldStart();
+	/* see if this database has the chromAlias.txt download file */
+	char aliasFile[1024];
+        safef(aliasFile, sizeof aliasFile, "http://%s/goldenPath/%s/bigZips/%s.chromAlias.txt", hDownloadsServer(), database, database);
+        struct udcFile *file = udcFileMayOpen(aliasFile, udcDefaultDir());
+	if (file)
+	    {
+	    udcFileClose(&file);
+	    printf("<A HREF='%s'>%s.chromAlias.txt</A>", aliasFile, database);
+	    }
+	else
+	    puts("&nbsp");
+	cgiTableFieldEnd();
+	}
+    cgiTableRowEnd();
+    }
+else if (hubAliasFile)
+    {
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    puts("Download as file:");
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    if (chromSizesFile)
+	{
+        printf("<a href='%s' target=_blank>%s.chrom.sizes.txt</A>", chromSizesFile, trackHubSkipHubName(database));
+        puts("&nbsp;&nbsp;");
+	}
+    else
+        puts("&nbsp");
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    printf("<a href='%s' target=_blank>%s.chromAlias.txt</A>", hubAliasFile, trackHubSkipHubName(database));
     cgiTableFieldEnd();
     cgiTableRowEnd();
     }
@@ -9899,6 +10286,19 @@ if (! trackHubDatabase(database))
 void chromInfoPage()
 /* Show list of chromosomes (or scaffolds, etc) on which this db is based. */
 {
+boolean hasAlias = FALSE;
+char *chromSizesFile = NULL;
+char *aliasFile = NULL;
+if (trackHubDatabase(database))
+    {
+    aliasFile = trackHubAliasFile(database);
+    if (aliasFile)
+        hasAlias = TRUE;
+    chromSizesFile = trackHubChromSizes(database);
+    }
+else
+    hasAlias = hTableExists(database, "chromAlias");
+
 char *position = cartUsualString(cart, "position", hDefaultPos(database));
 char *defaultChrom = hDefaultChrom(database);
 char *freeze = hFreezeFromDb(database);
@@ -9931,6 +10331,18 @@ cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
 puts("Length (bp) including gaps &nbsp;");
 cgiTableFieldEnd();
+if (hTableExists(database, "chromAlias"))
+    {
+    cgiSimpleTableFieldStart();
+    puts("alias sequence names &nbsp;");
+    cgiTableFieldEnd();
+    }
+else if (hasAlias)
+    {
+    cgiSimpleTableFieldStart();
+    puts("alias sequence names &nbsp;");
+    cgiTableFieldEnd();
+    }
 cgiTableRowEnd();
 
 if (sameString(database,"hg38"))
@@ -9940,7 +10352,7 @@ else if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) 
     chromInfoRowsChrom();
 else
     chromInfoRowsNonChrom(1000);
-chromSizesDownloadRow();
+chromSizesDownloadRow(hasAlias, aliasFile, chromSizesFile);
 
 hTableEnd();
 cgiDown(0.9);
@@ -9949,8 +10361,7 @@ hgPositionsHelpHtml(organism, database);
 puts("</FORM>");
 dyStringFree(&title);
 webEndSectionTables();
-}
-
+}	/*	void chromInfoPage()	*/
 
 void resetVars()
 /* Reset vars except for position and database. */
@@ -9971,31 +10382,33 @@ void setupHotkeys(boolean gotExtTools)
 struct dyString *dy = dyStringNew(1024);
 // wire the keyboard hotkeys
 
+// the javascript click handler does not seem to call the submit handler, so I'm calling submit manually, every time.
+
 // left
-dyStringPrintf(dy,"Mousetrap.bind('ctrl+j', function() { $('input[name=\"hgt.left1\"]').click(); return false; }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('j', function() { $('input[name=\"hgt.left2\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('J', function() { $('input[name=\"hgt.left3\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('ctrl+j', function() { $('input[name=\"hgt.left1\"]').submit().click(); return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('j', function() { $('input[name=\"hgt.left2\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('J', function() { $('input[name=\"hgt.left3\"]').submit().click() }); \n");
 
 // right
-dyStringPrintf(dy,"Mousetrap.bind('ctrl+l', function() { $('input[name=\"hgt.right1\"]').click(); return false; }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('l', function() { $('input[name=\"hgt.right2\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('L', function() { $('input[name=\"hgt.right3\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('ctrl+l', function() { $('input[name=\"hgt.right1\"]').submit().click(); return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('l', function() { $('input[name=\"hgt.right2\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('L', function() { $('input[name=\"hgt.right3\"]').submit().click() }); \n");
 
 // zoom in
-dyStringPrintf(dy,"Mousetrap.bind('ctrl+i', function() { $('input[name=\"hgt.in1\"]').click(); return false; }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('i', function() { $('input[name=\"hgt.in2\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('I', function() { $('input[name=\"hgt.in3\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('b', function() { $('input[name=\"hgt.inBase\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('ctrl+i', function() { $('input[name=\"hgt.in1\"]').submit().click(); return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('i', function() { $('input[name=\"hgt.in2\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('I', function() { $('input[name=\"hgt.in3\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('b', function() { $('input[name=\"hgt.inBase\"]').submit().click() }); \n");
 
 // zoom out
 dyStringPrintf(dy,"Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').click(); return false; }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').click(); return false; }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').submit().click(); return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('1', function() { zoomTo(50);} ); \n");
 dyStringPrintf(dy,"Mousetrap.bind('2', function() { zoomTo(500);} ); \n");
 dyStringPrintf(dy,"Mousetrap.bind('3', function() { zoomTo(5000);} ); \n");
@@ -10004,17 +10417,17 @@ dyStringPrintf(dy,"Mousetrap.bind('5', function() { zoomTo(500000);} ); \n");
 dyStringPrintf(dy,"Mousetrap.bind('6', function() { zoomTo(5000000);} ); \n");
 
 // buttons
-dyStringPrintf(dy,"Mousetrap.bind('c f', function() { $('input[name=\"hgTracksConfigPage\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('t s', function() { $('input[name=\"hgt_tSearch\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('h a', function() { $('input[name=\"hgt.hideAll\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('d t', function() { $('input[name=\"hgt.reset\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('d o', function() { $('input[name=\"hgt.defaultImgOrder\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('c f', function() { $('input[name=\"hgTracksConfigPage\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('t s', function() { $('input[name=\"hgt_tSearch\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('h a', function() { $('input[name=\"hgt.hideAll\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('d t', function() { $('input[name=\"hgt.reset\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('d o', function() { $('input[name=\"hgt.defaultImgOrder\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('c t', function() { document.customTrackForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('t h', function() { document.trackHubForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('t c', function() { document.editHubForm.submit();return false; }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').click() }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').submit().click(); }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').submit().click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').submit().click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('v d', gotoGetDnaPage); \n");
 
 // highlight
@@ -10211,6 +10624,7 @@ if(!trackImgOnly)
     jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
     jsIncludeFile("autocompleteCat.js", NULL);
     jsIncludeFile("hgTracks.js", NULL);
+//    jsIncludeFile("mouseOver.js", NULL);
     jsIncludeFile("spectrum.min.js", NULL);
 
 #ifdef LOWELAB
@@ -10219,6 +10633,7 @@ if(!trackImgOnly)
 
     webIncludeResourceFile("spectrum.min.css");
     webIncludeResourceFile("jquery-ui.css");
+//    webIncludeResourceFile("mouseOver.css");
     if (!searching)     // NOT doing search
         {
         webIncludeResourceFile("jquery.contextmenu.css");
@@ -10320,7 +10735,7 @@ jsonObjectAdd(jsonForClient, "measureTiming", newJsonBoolean(measureTiming));
 // js code needs to know if a highlightRegion is defined for this db
 checkAddHighlight(); // call again in case tracksDisplay's call to resolvePosition changed vars
 char *highlightDef = cartOptionalString(cart, "highlight");
-if (highlightDef && startsWith(database,highlightDef) && highlightDef[strlen(database)] == '.')
+if (highlightDef)
     jsonObjectAdd(jsonForClient, "highlight", newJsonString(highlightDef));
 jsonObjectAdd(jsonForClient, "enableHighlightingDialog",
 	      newJsonBoolean(cartUsualBoolean(cart, "enableHighlightingDialog", TRUE)));

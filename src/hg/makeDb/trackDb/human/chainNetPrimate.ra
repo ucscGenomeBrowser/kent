@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Primate Chain/Net
 longLabel Primate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species s000=Human s001=Human s002=J._Craig_Venter s0025=Chimp s003=Chimp s004=Chimp s005=Chimp s006=Chimp s007a=Bonobo s007b=Bonobo s008=Bonobo s009a=Gorilla s009b=Gorilla s010=Gorilla s011=Gorilla s012=Gorilla s013a=Orangutan s013b=Orangutan s014=Gibbon s015=Gibbon s016=Proboscis_monkey s017=Black_snub-nosed_monkey s018=Golden_snub-nosed_monkey s019=Angolan_colobus s020=Crab-eating_macaque s021=Rhesus s022=Rhesus s023=Rhesus s024=Baboon s025=Baboon s026=Baboon s027=Pig-tailed_macaque s028=Sooty_mangabey s029=Green_monkey s030=Green_monkey s031=Drill s032=Squirrel_monkey s033=Ma's_night_monkey s034=Marmoset s035=Marmoset s036=White-faced_sapajou s037=Tarsier s038=Tarsier s039=Sclater's_lemur s040=Black_lemur s041=Coquerel's_sifaka s042=Mouse_lemur s043=Mouse_lemur s044=Mouse_lemur s045=Bushbaby s046=Bushbaby
+subGroup2 species Species s000a=Human s000b=Hg38P2 s001=Human s002=J._Craig_Venter s0025=Chimp s003=Chimp s004=Chimp s005=Chimp s006=Chimp s007a=Bonobo s007b=Bonobo s008=Bonobo s009a=Gorilla s009b=Gorilla s010=Gorilla s011=Gorilla s012=Gorilla s013a=Orangutan s013b=Orangutan s014=Gibbon s015=Gibbon s016=Proboscis_monkey s017=Black_snub-nosed_monkey s018=Golden_snub-nosed_monkey s019=Angolan_colobus s020=Crab-eating_macaque s021=Rhesus s022=Rhesus s023a=Rhesus s023b=Rhesus s024=Baboon s025=Baboon s026=Baboon s027=Pig-tailed_macaque s028=Sooty_mangabey s029=Green_monkey s030=Green_monkey s031=Drill s032=Squirrel_monkey s033=Ma's_night_monkey s034a=Marmoset s034b=Marmoset s035=Marmoset s036=White-faced_sapajou s037=Tarsier s038=Tarsier s039=Sclater's_lemur s040=Black_lemur s041=Coquerel's_sifaka s042=Mouse_lemur s043=Mouse_lemur s044=Mouse_lemur s045=Bushbaby s046=Bushbaby
 subGroup3 clade Clade c00=hominidae c01=cercopithecinae c02=haplorrhini c03=strepsirrhini
 dragAndDrop subTracks
 visibility hide
@@ -29,11 +29,19 @@ priority 7
 
         track chainHg38
         subTrack primateChainNetViewchain off
-        subGroups view=chain species=s000 clade=c00
+        subGroups view=chain species=s000a clade=c00
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain hg38
         otherDb hg38
+
+        track chainHg38Patch2
+        subTrack primateChainNetViewchain off
+        subGroups view=chain species=s000b clade=c00
+        shortLabel $o_db Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain hg38Patch2
+        otherDb hg38Patch2
 
         track chainHg18
         subTrack primateChainNetViewchain off
@@ -219,20 +227,33 @@ priority 7
         type chain macFas5
         otherDb macFas5
 
-#include chainNetRheMac8.ra
-#include chainNetRheMac10.ra
-
         track chainRheMac10
         subTrack primateChainNetViewchain off
-        subGroups view=chain species=s022 clade=c01
+        subGroups view=chain species=s021 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain rheMac10
         otherDb rheMac10
 
+        track chainRheMac8
+        subTrack primateChainNetViewchain off
+        subGroups view=chain species=s022 clade=c01
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain rheMac8
+        otherDb rheMac8
+
+        track chainRheMac3
+        subTrack primateChainNetViewchain off
+        subGroups view=chain species=s023a clade=c01
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain rheMac3
+        otherDb rheMac3
+
         track chainRheMac2
         subTrack primateChainNetViewchain off
-        subGroups view=chain species=s023 clade=c01
+        subGroups view=chain species=s023b clade=c01
         shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain rheMac2
@@ -326,9 +347,17 @@ priority 7
         type chain aotNan1
         otherDb aotNan1
 
+        track chainCalJac4
+        subTrack primateChainNetViewchain off
+        subGroups view=chain species=s034a clade=c02
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain calJac4
+        otherDb calJac4
+
         track chainCalJac3
         subTrack primateChainNetViewchain off
-        subGroups view=chain species=s034 clade=c02
+        subGroups view=chain species=s034b clade=c02
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain calJac3
@@ -438,11 +467,19 @@ priority 7
 
         track netHg38
         subTrack primateChainNetViewnet off
-        subGroups view=net species=s000 clade=c00
+        subGroups view=net species=s000a clade=c00
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign hg38 chainHg38
         otherDb hg38
+
+        track netHg38Patch2
+        subTrack primateChainNetViewnet off
+        subGroups view=net species=s000b clade=c00
+        shortLabel $o_db Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign hg38Patch2 chainHg38Patch2
+        otherDb hg38Patch2
 
         track netHg18
         subTrack primateChainNetViewnet off
@@ -630,15 +667,31 @@ priority 7
 
         track netRheMac10
         subTrack primateChainNetViewnet off
-        subGroups view=net species=s022 clade=c01
+        subGroups view=net species=s021 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign rheMac10 chainRheMac10
         otherDb rheMac10
 
+        track netRheMac8
+        subTrack primateChainNetViewnet on
+        subGroups view=net species=s022 clade=c01
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign rheMac8 chainRheMac8
+        otherDb rheMac8
+
+        track netRheMac3
+        subTrack primateChainNetViewnet on
+        subGroups view=net species=s023a clade=c01
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign rheMac3 chainRheMac3
+        otherDb rheMac3
+
         track netRheMac2
         subTrack primateChainNetViewnet off
-        subGroups view=net species=s023 clade=c01
+        subGroups view=net species=s023b clade=c01
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign rheMac2 chainRheMac2
@@ -732,9 +785,17 @@ priority 7
         type netAlign aotNan1 chainAotNan1
         otherDb aotNan1
 
+        track netCalJac4
+        subTrack primateChainNetViewnet on
+        subGroups view=net species=s034a clade=c02
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign calJac4 chainCalJac4
+        otherDb calJac4
+
         track netCalJac3
         subTrack primateChainNetViewnet on
-        subGroups view=net species=s034 clade=c02
+        subGroups view=net species=s034b clade=c02
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign calJac3 chainCalJac3

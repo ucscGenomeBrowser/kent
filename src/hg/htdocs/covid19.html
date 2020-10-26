@@ -5,36 +5,47 @@
 <!--#include virtual="$ROOT/inc/gbPageStart.html"-->
 
 <h1>COVID-19 Pandemic Resources at UCSC 
-        <span bgcolor=#f3e0be><font color=#555 size=-1 style="background-color: #f3e0be; padding-left: 10px; padding-right: 10px; margin-left: 15px;">
-            <a href="#news">Updated: &nbsp; June 1, 2020</a></font></span></h1>
+<span> <font size=-1 style="padding-left: 10px; padding-right: 10px; margin-left: 15px;">
+<a href="#news">Updated: September 23, 2020</a></font></span></h1>
 
 <div class="row">
     <div class="col-md-6">
 <p>
 The SARS-CoV-2 coronavirus emerged in December 2019 as a novel human pathogen causing
-a severe acute respiratory syndrome (COVID-19). In the following months, the disease
-spread internationally and was
+a severe acute respiratory syndrome (COVID-19). The disease
+spread rapidly worldwide and was
 <A TARGET="_BLANK" 
     HREF="https://www.who.int/dg/speeches/detail/who-director-general-s-opening-remarks-at-the-media-briefing-on-covid-19---11-march-2020">
 declared a pandemic by the World Health Organization</a>
 on March 11, 2020.
 </p>
-
+<p>
+Genome sequencing of thousands of viral samples has helped researchers study mechanisms of 
+infection, transmission and response of the human immune system. 
+Since the beginning of SARS-CoV-2 circulation in humans, the viral genome has been accummulating
+mutations.  Compared to other RNA viruses its mutation rate is low, but enough variants are known 
+to determine how samples cluster into groups and how they are related (see COVID-19 transmission map).
+</p>
 <p>
 We at the
 <a target="_blank" href="https://ucscgenomics.soe.ucsc.edu/">UC Santa Cruz Genomics Institute</a>
 are responding to the urgency of supporting biomedical research aimed at 
-developing therapeutics and a vaccine for this devastating illness by fast-tracking the 
-<a target="_blank" href="../cgi-bin/hgGateway?db=wuhCor1">UCSC Genome Browser for SARS-Cov-2</a> 
-and incorporating relevant biomedical datasets such as single-cell lung gene expression into the 
-<a target="_blank" href="../singlecell.html">UCSC Cell Browser</a>.
-A manuscript describing this work,
-<a target="_blank" href="https://www.biorxiv.org/content/10.1101/2020.05.04.075945v1">
-The UCSC SARS-CoV-2 Genome Browser</a>, 
-is available from the 
-<a target="_blank" href="https://biorxiv.org">bioRxiv</a> preprint server.
+developing treatments and a vaccine for this devastating illness by fast-tracking 
+visualization of genome sequences and analyses in the
+<a target="_blank" href="../cgi-bin/hgGateway?db=wuhCor1">UCSC Genome Browser for SARS-Cov-2</a>.
+Moreover, we are incorporating relevant biomedical datasets such as single-cell lung gene 
+expression into the 
+<a target="_blank" href="../singlecell.html">UCSC Cell Browser</a>, and are creating data tracks
+of
+<a target="_blank" href="#covidHgiGwas">COVID-19 annotations in our Human Genome Browsers</a>
+as datasets become publicly available.  These annotations can further understanding of the
+human genetic determinants of infection susceptibility, disease severity, and outcomes. 
 </p>
-
+<p>
+A manuscript describing 
+<a href="https://www.nature.com/articles/s41588-020-0700-8" target="_blank">
+The UCSC SARS-CoV-2 Genome Browser</a>, was published in the September 9 issue of <em>Nature Genetics</em>.
+</p>
     </div>
 
     <div class="col-md-6">
@@ -71,20 +82,63 @@ img {
         target = _blank>coronavirus browser</a>.
     </div>
 
-     <!-- Cell browser -->
+    <!-- Cell browser -->
     <div class="col-md-6">
-        <h2>UCSC Cell Browser view of lung gene expression datasets</h2>
-            <a href="https://cells.ucsc.edu/?bp=lung" target="_blank">
-                <img src="../images/cellBrowserAce2EilsLung.png"></a>
+        <h2>COVID-19 and Lung gene expression data in the UCSC Cell Browser:</h2>
+            <p>COVID-19 Datasets:
+            <ul>
+              <li><a href="https://covid19-balf.cells.ucsc.edu"
+              target="_blank">Bronchoalveolar Immune Cells in COVID-19</a>
+              <li><a href="https://covid-airways.cells.ucsc.edu"
+              target="_blank">COVID-19 Airways</a>
+              <li><a href="https://covid19-influenza-response.cells.ucsc.edu"
+              target="_blank">COVID-19 and Influenza Immunophenotyping</a>
+              <li><a href="https://covid19atlas.cells.ucsc.edu" target="_blank">COVID-19 Cell Atlas</a>
+              <li><a href="https://scarface.cells.ucsc.edu"
+              target="_blank">COVID-19 SARS-CoV-2 and coronavirus-associated
+              receptors and factors (SCARFs)</a>
+              <li><a href="https://hca-lungmap-integrated.cells.ucsc.edu"
+              target="_blank">HCA-LungMAP COVID-19 Integrated Analysis</a>
+            </ul>
+            <p><a href="https://cells.ucsc.edu/?bp=lung"
+            target="blank">Other Lung datasets in the Cell Browser</a>
     </div>
 </div>
 
 <h2 id="news">News</h2>
 <ul>
-<li>May 29, 2020: Release of public track hub 
+<li id="covidHgiGwas">
+<b>September 22, 2020</b>: 
+First COVID-19-related annotation track on UCSC human genome browser: 
+<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&g=covidHgiGwas" target="_blank">
+COVID-19 GWAS</a>: GWAS meta-analyses of studies contributed by multiple partners world-wide (18 in
+this release), as part of the
+<a target="_blank" href="https://www.covid19hg.org">COVID-19 Host Genetics Initiative</a>,  
+a collaborative effort to facilitate the generation, analysis and sharing of COVID-19 host genetics research.
+</li>
+<li>
+<b>September 9, 2020</b>: 
+The manuscript describing the
+<a href="https://www.nature.com/articles/s41588-020-0700-8" target="_blank">
+The UCSC SARS-CoV-2 Genome Browser</a>, is now published in <em>Nature Genetics</em>.
+</li>
+<li>
+<b>August 7, 2020</b>: 
+<a target="_blank" href="https://genome.ucsc.edu/goldenPath/newsarch.html#080720">
+Eight new annotation tracks</a>, presenting information about 
+duplication regions, sequencing, gene identities, plasmid constructs, protein contact sites, 
+and variant distribution.</li>
+<li>
+<b>July 7, 2020</b>: 
+Annotation tracks released: <a target="_blank" 
+href="https://genome.ucsc.edu/goldenPath/newsarch.html#070720">
+PhyloCSF (Codon Substitution Frequency), Microdeletions, and Human CoV</a>
+(multiple alignment of SARS-CoV-2, SARS-CoV-1, MERS, and three other human-infecting coronaviruses)
+</li>
+<li><b>May 29, 2020</b>: Public track hub 
 <a target="_blank" 
 href="http://ftp.ebi.ac.uk/pub/databases/gencode/covid19_trackhub/COVID19_Hub.html">
-GENCODE annotation of COVID-19 associated genes</a>.
+GENCODE annotation of COVID-19 associated genes</a> released.
 View in <a target="_blank" 
 href="../cgi-bin/hgTracks?hubUrl=http://ftp.ebi.ac.uk/pub/databases/gencode/covid19_trackhub/hub.txt&genome=hg38&position=lastDbPos" >
 browser</a>. </li>
@@ -105,6 +159,11 @@ data release for SARS-CoV-2 genome browser</a></li>
     <a href="https://connect.biorxiv.org/relate/content/181" 
         target="_blank">BioRxiv/MedRxiv COVID-19 Collection</a> (all freely available)</li>
 <li><a target="_blank" href="https://pages.semanticscholar.org/coronavirus-research">COVID-19 Open Research Dataset</a> of scholarly literature</li>
+
+<li>
+GISAID 
+<a target="_blank" href="https://gisaid.org">the main repository of SARS-CoV-2 sequences</a> 
+</li>
 
 <li>
 NIH Office of Data Science Strategy

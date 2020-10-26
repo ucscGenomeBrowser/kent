@@ -2,45 +2,39 @@
 # get raw data file from DECIPHER
 set -eEu -o pipefail
 
-#cp $1  decipherRawNew.txt -p
-sort $1| grep -v '#' | uniq >  decipherRawNew.txt 
+# get canonical gene symbols:
+hgsql -Ne "select chrom,chromStart,chromEnd,geneSymbol from knownCanonical kc join kgXref kg on kc.transcript=kg.kgID" hg19 | sort -k1,1 -k2,2n > hg19.knownCanonical.genes
 
-hgsql hg19 -e 'drop table if exists decipherRawNew'
-hgLoadSqlTab hg19 decipherRawNew ../decipherRaw.sql decipherRawNew.txt
+sort $1 | grep -v '#' | tawk '$2 == "MT" {$2 = "M";}; {
+    $2 = "chr"$2;
+    $3 = $3 - 1;
+    printf "%s\t%s\t%s\t%s\t0\t.\t%s\t%s", $2,$3,$4,$1,$3,$4;
+    # placeholder itemRgb
+    printf "\t0,0,0";
+    # size field for filter
+    printf "\t%d", $4 - $3;
+    # force a float for mean_ratio:
+    printf "\t%0.2f", $5
+    # rest of the fields:
+    for (i = 6; i <= NF; i++) {
+        printf "\t%s", $i;
+    }
+    printf "\n";
+    }' | sort -k1,1 -k2,2n > decipherCnv.bed17
 
-hgsql hg19 -N -e 'select "chr", chr, start-1, end, id from decipherRawNew ' |\
-sed -e 's/chr\t/chr/' |sort >j.tmp
-
-cp j.tmp decipherNew.bed
-# fix some out of range of entries
-#cat j.tmp|sed -e 's/243000000/242951149/' |\
-#sed -e 's/115090019/114142980/' >decipherNew.bed
-rm j.tmp
-
-# Load decipher table
-hgLoadBed hg19 decipherNew decipherNew.bed
-
-# Create knownToDecipher table
-hgMapToGene -trackDb=trackDb -noLoad -all -type="bed 4" hg19 decipherNew knownGene knownToDecipherNew
-hgsql hg19 -e 'drop table if exists knownToDecipherNew'
-hgsql hg19 -e 'create table knownToDecipherNew select * from knownToDecipher limit 0'
-sort knownToDecipherNew.tab | uniq > knownToDecipherNew.uniq
-hgsql hg19 -e \
-'load data local infile "knownToDecipherNew.uniq" into table knownToDecipherNew'
-
-# Create knownCanonToDecipher table
-
-hgsql hg19 -N -e \
-'select d.* from knownToDecipherNew d, knownCanonical c where c.transcript=d.name' >knownCanonToDecipherNew.tab
-
-hgsql hg19 -e 'drop table if exists knownCanonToDecipherNew'
-hgsql hg19 -e 'create table knownCanonToDecipherNew select * from knownCanonToDecipher limit 0'
-hgsql hg19 -e 'load data local infile "knownCanonToDecipherNew.tab" into table knownCanonToDecipherNew'
+# append a list of genes for each cnv:
+../processDecipher.py decipherCnv.bed17 hg19.knownCanonical.genes | sort -k1,1 -k2,2n > decipherCnv.bed
+oldLc=`bigBedToBed ../release/hg19/decipherCnv.bb stdout | wc -l`
+newLc=`grep -v "^#" decipherCnv.bed | wc -l | cut -d' ' -f1`
+echo decipherCnv rowcount: old $oldLc new: $newLc
+echo $oldLc $newLc | awk '{if (($2-$1)/$1 > 0.1) {printf "validate on DECIPHER CNV failed: old count: %d, new count: %d\n", $1,$2; exit 1;}}'
+bedToBigBed -extraIndex=name -tab -as=../decipherCnv.as -type=bed9+10 decipherCnv.bed /hive/data/genomes/hg19/chrom.sizes decipherCnv.bb
+cp decipherCnv.bb ../release/hg19/
 
 
 # SNVs pipeline
 
-sort $2| grep -v '#' | uniq | tawk '{if ($2=="MT") $2="M"; print $0;}' >  decipherSnvsRawNew.txt
+sort $2| grep -v '#' | tawk '$2 == "MT" {$2 = "M";}; {print;}' | sort -u >  decipherSnvsRawNew.txt
 
 hgsql hg19 -e 'drop table if exists decipherSnvsRawNew'
 hgLoadSqlTab hg19 decipherSnvsRawNew ../decipherSnvsRaw.sql decipherSnvsRawNew.txt

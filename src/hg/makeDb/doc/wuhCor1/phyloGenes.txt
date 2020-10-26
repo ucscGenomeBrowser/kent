@@ -1,0 +1,2 @@
+#wget https://data.broadinstitute.org/compbio1/SARS-CoV-2_PhyloCSF_Genes/PhyloCSFgenes.bb
+wget https://data.broadinstitute.org/compbio1/SARS-CoV-2_PhyloCSF_Genes/PhyloCSFrejectedGenes.bb

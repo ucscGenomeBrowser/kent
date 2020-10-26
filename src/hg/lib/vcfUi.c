@@ -182,7 +182,12 @@ if (vcff != NULL && vcff->genotypeCount > 1)
     jsInlineF("$('input[type=radio][name=\"%s\"]').change(function() { "
               "if (this.value == '"VCF_HAP_METHOD_CENTER_WEIGHTED"') {"
               "  $('#leafShapeContainer').show();"
+              "  $('#sampleColorContainer').hide();"
+              "} else if (this.value == '"VCF_HAP_METHOD_TREE_FILE"') {"
+              "  $('#sampleColorContainer').show();"
+              "  $('#leafShapeContainer').hide();"
               "} else {"
+              "  $('#sampleColorContainer').hide();"
               "  $('#leafShapeContainer').hide();"
               "}});\n",
               varName);
@@ -261,10 +266,62 @@ char varName[1024];
 safef(varName, sizeof(varName), "%s." VCF_HAP_COLORBY_VAR, name);
 cgiMakeRadioButton(varName, VCF_HAP_COLORBY_ALTONLY, sameString(colorBy, VCF_HAP_COLORBY_ALTONLY));
 printf("reference alleles invisible, alternate alleles in black<BR>\n");
+char *geneTrack = cartOrTdbString(cart, tdb, "geneTrack", NULL);
+if (isNotEmpty(geneTrack))
+    {
+    cgiMakeRadioButton(varName, VCF_HAP_COLORBY_FUNCTION,
+                       sameString(colorBy, VCF_HAP_COLORBY_FUNCTION));
+    printf("reference alleles invisible, alternate alleles in "
+           "<span style='color:red'>red</span> for non-synonymous, "
+           "<span style='color:green'>green</span> for synonymous, "
+           "<span style='color:blue'>blue</span> for UTR/noncoding, "
+           "black otherwise<BR>\n");
+    }
 cgiMakeRadioButton(varName, VCF_HAP_COLORBY_REFALT, sameString(colorBy, VCF_HAP_COLORBY_REFALT));
 printf("reference alleles in blue, alternate alleles in red<BR>\n");
 cgiMakeRadioButton(varName, VCF_HAP_COLORBY_BASE, sameString(colorBy, VCF_HAP_COLORBY_BASE));
 printf("first base of allele (A = red, C = blue, G = green, T = magenta)<BR>\n");
+}
+
+static void vcfCfgHapClusterSampleColor(struct cart *cart, struct trackDb *tdb, char *name,
+                                        boolean parentLevel)
+/* If sampleColorFile specifies multiple files, when hapClusterMethod treeFile is selected,
+ * let the user choose sample-coloring scheme for the tree. */
+{
+char *tdbSetting = trackDbSetting(tdb, VCF_SAMPLE_COLOR_FILE);
+if (tdbSetting && strchr(tdbSetting, ' '))
+    {
+    char *hapMethod = cartOrTdbString(cart, tdb, VCF_HAP_METHOD_VAR, VCF_DEFAULT_HAP_METHOD);
+    printf("<div id='sampleColorContainer'%s>\n",
+           startsWithWord(VCF_HAP_METHOD_TREE_FILE, hapMethod) ? "" : " style='display: none;'");
+    printf("<b>Sample coloring scheme for tree:</b><br>\n");
+    char *setting = cartOrTdbString(cart, tdb, VCF_SAMPLE_COLOR_FILE, tdbSetting);
+    char *options[16];
+    int optionCount = chopLine(tdbSetting, options);
+    char *labels[optionCount];
+    char *values[optionCount];
+    int i;
+    for (i = 0;  i < optionCount;  i++)
+        {
+        char *eq = strchr(options[i], '=');
+        if (eq)
+            {
+            *eq = '\0';
+            labels[i] = options[i];
+            replaceChar(options[i], '_', ' ');
+            values[i] = eq+1;
+            }
+        else
+            {
+            labels[i] = values[i] = options[i];
+            }
+        }
+    char *selected = strchr(setting, ' ') ? values[0] : setting;
+    char varName[1024];
+    safef(varName, sizeof varName, "%s." VCF_SAMPLE_COLOR_FILE, name);
+    cgiMakeDropListWithVals(varName, labels, values, optionCount, selected);
+    puts("</div>");
+    }
 }
 
 static void vcfCfgHapClusterTreeAngle(struct cart *cart, struct trackDb *tdb, char *name,
@@ -314,6 +371,7 @@ printf("<H3>%s sorting display</H3>\n", hapOrSample);
 vcfCfgHapClusterEnable(cart, tdb, name, parentLevel);
 vcfCfgHaplotypeMethod(cart, tdb, name, parentLevel, vcff);
 vcfCfgHapClusterTreeAngle(cart, tdb, name, parentLevel);
+vcfCfgHapClusterSampleColor(cart, tdb, name, parentLevel);
 vcfCfgHapClusterColor(cart, tdb, name, parentLevel);
 vcfCfgHapClusterHeight(cart, tdb, vcff, name, parentLevel);
 }
@@ -519,7 +577,7 @@ printf("<br>");
 if (!parentLevel)
     {
     printf("<b>or:</b><br>\n");
-    printf("<b>Click and drag to change order:</b>\n");
+    printf("<b>Drag to change order:</b>\n");
     printf("<div>\n");
     printf("<table id=\"%s_table\" class=\"tableWithDragAndDrop\">\n", tdb->track);
     for (pair = tdbOrder; pair != NULL; pair = pair->next)
@@ -599,11 +657,35 @@ if (trackDbSetting(tdb,VCF_PHASED_PARENTS_SAMPLE_SETTING))
     cgiMakeCheckBox(hideVarName, hidingOtherSamples);
     }
 printf("<br>");
-printf("Highlight child variants that are inconsistent with phasing red");
-char shadeByDiffs[1024];
-safef(shadeByDiffs, sizeof(shadeByDiffs), "%s.%s", name, VCF_PHASED_HIGHLIGHT_INCONSISTENT);
-boolean highlightChildDiffs = cartUsualBooleanClosestToHome(cart, tdb, FALSE, VCF_PHASED_HIGHLIGHT_INCONSISTENT, FALSE);
-cgiMakeCheckBox(shadeByDiffs, highlightChildDiffs);
+printf("Allele coloring scheme:");
+printf("<br>");
+char *colorBy = cartOrTdbString(cart, tdb, VCF_PHASED_COLORBY_VAR, VCF_PHASED_COLORBY_DEFAULT);
+char varName[1024];
+safef(varName, sizeof(varName), "%s.%s", name, VCF_PHASED_COLORBY_VAR);
+cgiMakeRadioButton(varName, VCF_PHASED_COLORBY_DEFAULT, sameString(colorBy, VCF_PHASED_COLORBY_DEFAULT));
+printf("No color<br>");
+char *geneTrack = cartOrTdbString(cart, tdb, "geneTrack", NULL);
+if (isNotEmpty(geneTrack))
+    {
+    cgiMakeRadioButton(varName, VCF_PHASED_COLORBY_FUNCTION, sameString(colorBy, VCF_PHASED_COLORBY_FUNCTION));
+    printf("predicted functional affect: ");
+    printf("reference alleles invisible, alternate alleles in "
+           "<span style='color:red'>red</span> for non-synonymous, "
+           "<span style='color:green'>green</span> for synonymous, "
+           "<span style='color:blue'>blue</span> for UTR/noncoding, "
+           "black otherwise<BR>\n");
+    }
+cgiMakeRadioButton(varName, VCF_PHASED_COLORBY_DE_NOVO, sameString(colorBy, VCF_PHASED_COLORBY_DE_NOVO));
+printf("predicted de novo child mutations <span style='color:red'>red</span>");
+char *deNovoInfoText = "Check this box to color child variants red if they are unique to the child";
+printInfoIcon(deNovoInfoText);
+printf("<br>");
+cgiMakeRadioButton(varName, VCF_PHASED_COLORBY_MENDEL_DIFF, sameString(colorBy, VCF_PHASED_COLORBY_MENDEL_DIFF));
+printf("child variants that are inconsistent with phasing <span style='color:red'>red</span>");
+char *phasedInfoText = "Check this box to color child variants red if they do not agree with the implied "
+    "parental transmitted allele at this location. This configuration is only available when parent "
+    "haplotypes are displayed.";
+printInfoIcon(phasedInfoText);
 }
 
 void vcfCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
@@ -615,21 +697,27 @@ struct vcfFile *vcff = vcfHopefullyOpenHeader(cart, tdb);
 if (vcff != NULL)
     {
     boolean parentLevel = isNameAtParentLevel(tdb, name);
+    boolean doVcfFilterUi = cartOrTdbBoolean(cart, tdb, VCF_DO_FILTER_UI, TRUE);
+    boolean doVcfQualUi = cartOrTdbBoolean(cart, tdb, VCF_DO_QUAL_UI, TRUE);
+    boolean doVcfMafUi = cartOrTdbBoolean(cart, tdb, VCF_DO_MAF_UI, TRUE);
     if (vcff->genotypeCount > 1 && !sameString(tdb->type, "vcfPhasedTrio"))
-	{
-	vcfCfgHapCluster(cart, tdb, vcff, name, parentLevel);
-	}
+        {
+        vcfCfgHapCluster(cart, tdb, vcff, name, parentLevel);
+        }
     if (sameString(tdb->type, "vcfPhasedTrio"))
         {
         vcfCfgPhasedTrioUi(cart, tdb, vcff, name, parentLevel);
         }
-    if (differentString(tdb->track,"evsEsp6500"))
+    if (differentString(tdb->track,"evsEsp6500") && (doVcfFilterUi || doVcfQualUi))
         {
         puts("<H3>Filters</H3>");
-        vcfCfgMinQual(cart, tdb, vcff, name, parentLevel);
-        vcfCfgFilterColumn(cart, tdb, vcff, name, parentLevel);
+        if (doVcfQualUi)
+            vcfCfgMinQual(cart, tdb, vcff, name, parentLevel);
+        if (doVcfFilterUi)
+            vcfCfgFilterColumn(cart, tdb, vcff, name, parentLevel);
         }
-    vcfCfgMinAlleleFreq(cart, tdb, vcff, name, parentLevel);
+    if (doVcfMafUi)
+        vcfCfgMinAlleleFreq(cart, tdb, vcff, name, parentLevel);
     }
 else
     {

@@ -1,5 +1,8 @@
 # if CC is undefined, set it to gcc
 CC?=gcc
+# allow the somewhat more modern C syntax, e.g. 'for (int i=5; i<10, i++)'
+CFLAGS += -std=c99
+
 # to build on sundance: CC=gcc -mcpu=v9 -m64
 ifeq (${COPT},)
     COPT=-O -g
@@ -27,6 +30,7 @@ HOSTNAME = $(shell uname -n)
 
 ifeq (${HOSTNAME},hgwdev)
   IS_HGWDEV = yes
+  HG_INC+=-I/usr/include/freetype2 -DUSE_FREETYPE
 else
   IS_HGWDEV = no
 endif
@@ -101,6 +105,7 @@ ifneq (${SSL_DIR}, "/usr/include/openssl")
 endif
 # on hgwdev, already using the static library with mysqllient.
 ifeq (${IS_HGWDEV},yes)
+   L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a -lbz2
    L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -lk5crypto -ldl
 else
    ifneq ($(wildcard /opt/local/lib/libssl.a),)

@@ -85,7 +85,9 @@ for (ra = raList; ra != NULL; ra = ra->next)
 	    otherOrg->shortLabel = otherOrgRequiredField(ra, "shortLabel");
 	    otherOrg->idSql = otherOrgRequiredField(ra, "idSql");
 	    otherOrg->idToProtIdSql = otherOrgOptionalField(ra, "idToProtIdSql");
-	    otherOrg->otherIdSql = otherOrgOptionalField(ra, "otherIdSql");
+            char *otherIdSql = otherOrgOptionalField(ra, "otherIdSql");
+            if (otherIdSql)
+                otherOrg->otherIdSql = replaceChars(otherIdSql, "KNOWNDB",sqlGetDatabase(conn));
 	    otherOrg->otherIdSql2 = otherOrgOptionalField(ra, "otherIdSql2");
 	    otherOrg->genomeUrl = otherOrgOptionalField(ra, "genomeUrl");
 	    otherOrg->sorterUrl = otherOrgOptionalField(ra, "sorterUrl");

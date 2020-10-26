@@ -29,8 +29,11 @@ use vars qw/
     $opt_species
     $opt_rmskSpecies
     $opt_ncbiRmsk
+    $opt_noRmsk
     $opt_augustusSpecies
+    $opt_noAugustus
     $opt_xenoRefSeq
+    $opt_noXenoRefSeq
     $opt_ucscNames
     $opt_asmHubName
     /;
@@ -40,6 +43,7 @@ my $stepper = new HgStepManager(
     [ { name => 'download',   func => \&doDownload },
       { name => 'sequence',   func => \&doSequence },
       { name => 'assemblyGap',   func => \&doAssemblyGap },
+      { name => 'chromAlias',   func => \&doChromAlias },
       { name => 'gatewayPage',   func => \&doGatewayPage },
       { name => 'cytoBand',   func => \&doCytoBand },
       { name => 'gc5Base',   func => \&doGc5Base },
@@ -67,10 +71,13 @@ my $sourceDir = "/hive/data/outside/ncbi/genomes";
 my $species = "";       # usually found in asmId_assembly_report.txt
 my $ftpDir = "";	# will be determined from given asmId
 my $rmskSpecies = "";
+my $noRmsk = 0;	# when RepeatMasker is not possible, such as bacteria
 my $ncbiRmsk = 0;	# when =1 call doRepeatMasker.pl
                         # with -ncbiRmsk=path.out.gz and -liftSpec=...
 my $augustusSpecies = "human";
-my $xenoRefSeq = "/hive/data/genomes/asmHubs/VGP/xenoRefSeq";
+my $xenoRefSeq = "/hive/data/genomes/asmHubs/xenoRefSeq";
+my $noAugustus = 0;     # bacteria do *not* create an augustus track
+my $noXenoRefSeq = 0;	# bacteria do *not* create a xenoRefSeq track
 my $ucscNames = 0;  # default 'FALSE' (== 0)
 my $asmHubName = "n/a";  # directory name in: /gbdb/hubs/asmHubName
 my $workhorse = "hgwdev";  # default workhorse when none chosen
@@ -111,9 +118,12 @@ options:
     -rmskSpecies <name> to override default 'species' name for repeat masker
                       the default is found in the asmId_asssembly_report.txt
                       e.g. -rmskSpecies=viruses
+    -noRmsk           when RepeatMasker is not possible, such as bacteria
     -ncbiRmsk         use NCBI rm.out.gz file instead of local cluster run
                       for repeat masking
     -augustusSpecies <human|chicken|zebrafish> default 'human'
+    -noAugustus       do *not* create the Augustus gene track
+    -noXenoRefSeq     do *not* create the Xeno RefSeq gene track
     -xenoRefSeq </path/to/xenoRefSeqMrna> - location of xenoRefMrna.fa.gz
                 expanded directory of mrnas/ and xenoRefMrna.sizes, default
                 $xenoRefSeq
@@ -132,6 +142,7 @@ Automates build of assembly hub.  Steps:
     sequence: establish AGP and 2bit file from NCBI directory
     assemblyGap: create assembly and gap bigBed files and indexes
                  for assembly track names
+    chromAlias:  construct asmId.chromAlias.txt for alias name recognition
     gatewayPage: create html/asmId.description.html contents (USE: asmHubName)
     cytoBand: create cytoBand track and navigation ideogram
     gc5Base: create bigWig file for gc5Base track
@@ -191,6 +202,7 @@ sub checkOptions {
 		      'buildDir=s',
 		      'sourceDir=s',
 		      'rmskSpecies=s',
+		      'noRmsk',
 		      'ncbiRmsk',
 		      'augustusSpecies=s',
 		      'xenoRefSeq=s',
@@ -368,10 +380,15 @@ sub unlocalizedAgp($$$$) {
          $acc =~ s/\./v/ if ($ucscNames);
          die "ERROR: chrN $chrN not correct for $acc"
              if ($accToChr{$acc} ne $chrN);
-         my $ucscName = "${acc}";
-         $ucscName = "chr${chrN}_${acc}_random" if ($ucscNames);
+         my $ucscName = "$ncbiAcc";
+         $ucscName = "chr${chrN}_${acc}_random";
+         $ucscName =~ s/\./v/;
          printf NAMES "%s\t%s\n", $ucscName, $ncbiAcc;
-         printf AGP "%s", $ucscName;    # begin AGP line with accession name
+         if ($ucscNames) {
+            printf AGP "%s", $ucscName;    # begin AGP line with accession name
+         } else {
+            printf AGP "%s", $ncbiAcc;    # begin AGP line with accession name
+         }
          for (my $i = 1; $i < scalar(@a); ++$i) {   # the rest of the AGP line
              printf AGP "\t%s", $a[$i];
          }
@@ -557,13 +574,15 @@ sub unplacedAgp($$$$) {
     } else {
         my ($ncbiAcc, undef) = split('\s+', $line, 2);
         next if (exists($dupAccessionList{$ncbiAcc}));
+        my $ucscAcc = $ncbiAcc;
+        $ucscAcc =~ s/\./v/;
+        printf NAMES "%s%s\t%s\n", $chrPrefix, $ucscAcc, $ncbiAcc;
         if ($ucscNames) {
-          my $ucscAcc = $ncbiAcc;
-          $ucscAcc =~ s/\./v/;
-          printf NAMES "%s%s\t%s\n", $chrPrefix, $ucscAcc, $ncbiAcc;
           $line =~ s/\./v/;
+          printf AGP "%s%s", $chrPrefix, $line;
+        } else {
+          printf AGP "%s", $line;
         }
-        printf AGP "%s%s", $chrPrefix, $line;
     }
   }
   close (FH);
@@ -605,7 +624,11 @@ sub unplacedFasta($$$$) {
       $line =~ s/^>//;
       $line =~ s/ .*//;
       die "ERROR: twoBitToFa $twoBitFile returns unknown acc $line" if (! exists($contigName{$line}));
-      printf FA ">%s%s\n", $chrPrefix, $contigName{$line};
+      if ($ucscNames) {
+        printf FA ">%s%s\n", $chrPrefix, $contigName{$line};
+      } else {
+        printf FA ">%s\n", $contigName{$line};
+      }
     } else {
       print FA $line;
     }
@@ -642,8 +665,12 @@ if [ ! -s \${asmId}.2bit -o \${asmId}_genomic.fna.gz -nt \$asmId.2bit ]; then
 
   ln -s $assemblySource/\${asmId}_genomic.fna.gz .
   ln -s $assemblySource/\${asmId}_assembly_report.txt .
-  ln -s $assemblySource/\${asmId}_rm.out.gz .
-  ln -s $assemblySource/\${asmId}_rm.run .
+  if [ -s $assemblySource/\${asmId}_rm.out.gz ]; then
+    ln -s $assemblySource/\${asmId}_rm.out.gz .
+  fi
+  if [ -s $assemblySource/\${asmId}_rm.run ]; then
+    ln -s $assemblySource/\${asmId}_rm.run .
+  fi
   if [ -d $assemblySource/\${asmId}_assembly_structure ]; then
     ln -s $assemblySource/\${asmId}_assembly_structure .
   fi
@@ -741,7 +768,7 @@ sub doSequence {
   my $unplacedScafAgp = "$primaryAssembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
   if ( -s $unplacedScafAgp ) {
     my $chrPrefix = "";   # no prefix if no other chrom parts
-    $chrPrefix = "chrUn_" if ($otherChrParts);
+    $chrPrefix = "chrUn_" if ($otherChrParts && ! $ucscNames);
     my $agpOutput = "$runDir/$asmId.unplaced.agp.gz";
     my $agpNames = "$runDir/$asmId.unplaced.names";
     $partsDone += 1;
@@ -808,12 +835,24 @@ _EOF_
 ### construct sequence when no AGP files exist
   if (0 == $partsDone) {
 printf STDERR "creating fake AGP\n";
-    $bossScript->add(<<_EOF_
+    if ($ucscNames) {
+      $bossScript->add(<<_EOF_
 twoBitToFa ../download/\$asmId.2bit stdout | sed -e "s/\\.\\([0-9]\\+\\)/v\\1/;" | gzip -c > \$asmId.fa.gz
 hgFakeAgp -minContigGap=1 -minScaffoldGap=50000 \$asmId.fa.gz stdout | gzip -c > \$asmId.fake.agp.gz
 zgrep "^>" \$asmId.fa.gz | sed -e 's/>//;' | sed -e 's/\\(.*\\)/\\1 \\1/;' | sed -e 's/v\\([0-9]\\+\\)/.\\1/;' | awk '{printf "%s\\t%s\\n", \$2, \$1}' > \$asmId.fake.names
 _EOF_
-    );
+      );
+    } else {
+      $bossScript->add(<<_EOF_
+twoBitToFa ../download/\$asmId.2bit stdout | gzip -c > \$asmId.fa.gz
+hgFakeAgp -minContigGap=1 -minScaffoldGap=50000 \$asmId.fa.gz stdout | gzip -c > \$asmId.fake.agp.gz
+twoBitInfo ../download/\$asmId.2bit stdout | cut -f1 \\
+  | sed -e "s/\\.\\([0-9]\\+\\)/v\\1/;" \\
+    | sed -e 's/\\(.*\\)/\\1 \\1/;' | sed -e 's/v\\([0-9]\\+\$\\)/.\\1/;' \\
+      | awk '{printf "%s\\t%s\\n", \$2, \$1}' > \$asmId.fake.names
+_EOF_
+      );
+    }
 } else {
 printf STDERR "partsDone: %d\n", $partsDone;
   }
@@ -855,6 +894,10 @@ if [ "\$checkAgp" != "All AGP and FASTA entries agree - both files are valid" ];
   printf "# ERROR: checkAgpAndFa \$asmId.agp.gz \$asmId.2bit failing\\n" 1>&2
   exit 255
 fi
+_EOF_
+  );
+  if ($ucscNames) {
+    $bossScript->add(<<_EOF_
 join -t\$'\\t' <(sort ../\$asmId.chrom.sizes) <(sort \${asmId}*.names) | awk '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$3,\$2,\$1,\$2}' > \$asmId.ncbiToUcsc.lift
 join -t\$'\\t' <(sort ../\$asmId.chrom.sizes) <(sort \${asmId}*.names) | awk '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$1,\$2,\$3,\$2}' > \$asmId.ucscToNcbi.lift
 export c0=`cat \$asmId.ncbiToUcsc.lift | wc -l`
@@ -869,6 +912,10 @@ if [ "\$c1" -ne "\$c2" ]; then
   printf "# ERROR: not all names accounted for in \$asmId.ucscToNcbi.lift" 1>&2
   exit 255
 fi
+_EOF_
+    );
+  }
+  $bossScript->add(<<_EOF_
 twoBitToFa ../\$asmId.2bit stdout | faCount stdin | gzip -c > \$asmId.faCount.txt.gz
 touch -r ../\$asmId.2bit \$asmId.faCount.txt.gz
 zgrep -P "^total\t" \$asmId.faCount.txt.gz > \$asmId.faCount.signature.txt
@@ -926,6 +973,37 @@ _EOF_
   );
   $bossScript->execute();
 } # assemblyGap
+
+#########################################################################
+# * step: chromAlias [workhorse]
+sub doChromAlias {
+  my $runDir = "$buildDir/trackData/chromAlias";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct asmId.chromAlias.txt for alias name recognition";
+  my $bossScript = newBash HgRemoteScript("$runDir/doChromAlias.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export buildDir=$buildDir
+export asmId=$asmId
+
+\$HOME/kent/src/hg/utils/automation/asmHubChromAlias.pl \\
+    \${asmId} | sort > \${asmId}.chromAlias.txt
+# verify each sequence name has an alias
+export sizeCount=`cat ../../\${asmId}.chrom.sizes | wc -l`
+export aliasCount=`grep -v "^#" \${asmId}.chromAlias.txt | wc -l`
+if [ "\${sizeCount}" -ne "\${aliasCount}" ]; then
+  printf "ERROR: chromAlias: incorrect number of aliases %d != %d\\n" "\${sizeCount}" "\${aliasCount}" 1>&2
+  exit 255
+fi
+
+exit 0
+
+_EOF_
+  );
+  $bossScript->execute();
+} # chromAlias
 
 #########################################################################
 # * step: gatewayPage [workhorse]
@@ -1037,6 +1115,10 @@ _EOF_
 #########################################################################
 # * step: repeatMasker [workhorse]
 sub doRepeatMasker {
+  if ($noRmsk) {
+       &HgAutomate::verbose(1, "# -noRmsk == RepeatMasker not being run\n");
+	return;
+  }
   my $runDir = "$buildDir/trackData/repeatMasker";
   if ( -d "$buildDir/trackData/repeatMasker/run.cluster" ) {
      if ( ! -s "$buildDir/trackData/repeatMasker/faSize.rmsk.txt" ) {
@@ -1053,11 +1135,13 @@ sub doRepeatMasker {
 
   my $rmskOpts = "";
   if ($ncbiRmsk) {
-     $rmskOpts = " \\
+     if ( -s "$buildDir/download/${asmId}_rm.out.gz" ) {
+       $rmskOpts = " \\
   -ncbiRmsk=\"$buildDir/download/${asmId}_rm.out.gz\" ";
-     if ($ucscNames) {
-       $rmskOpts .= " \\
+       if ($ucscNames) {
+         $rmskOpts .= " \\
   -liftSpec=\"$buildDir/sequence/$asmId.ncbiToUcsc.lift\"";
+       }
      }
   }
 
@@ -1260,10 +1344,12 @@ sub doAddMask {
   my $runDir = "$buildDir/trackData/addMask";
 
   my $goNoGo = 0;
-  if ( ! -s "$buildDir/trackData/repeatMasker/$asmId.rmsk.2bit" ) {
-      printf STDERR "ERROR: repeatMasker step not completed\n";
-      printf STDERR "can not find: $buildDir/trackData/repeatMasker/$asmId.rmsk.2bit\n";
-      $goNoGo = 1;
+  if (! $noRmsk) {
+    if ( ! -s "$buildDir/trackData/repeatMasker/$asmId.rmsk.2bit" ) {
+       printf STDERR "ERROR: repeatMasker step not completed\n";
+       printf STDERR "can not find: $buildDir/trackData/repeatMasker/$asmId.rmsk.2bit\n";
+       $goNoGo = 1;
+    }
   }
   if ( ! -s "$buildDir/trackData/windowMasker/$asmId.cleanWMSdust.2bit" ) {
       printf STDERR "ERROR: windowMasker step not completed\n";
@@ -1286,10 +1372,13 @@ sub doAddMask {
                     $workhorse, $runDir, $whatItDoes);
 
   my $wmMasked=`grep "masked total" $buildDir/trackData/windowMasker/faSize.$asmId.cleanWMSdust.txt | awk '{print \$1}' | sed -e 's/%//;'`;
-  my $rmMasked=`grep "masked total" $buildDir/trackData/repeatMasker/faSize.rmsk.txt | awk '{print \$1}' | sed -e 's/%//;'`;
+  my $rmMasked = 0;
+  if (! $noRmsk) {
+    $rmMasked=`grep "masked total" $buildDir/trackData/repeatMasker/faSize.rmsk.txt | awk '{print \$1}' | sed -e 's/%//;'`;
+  }
 
   my $src2BitToMask = "../repeatMasker/$asmId.rmsk.2bit";
-  if ($wmMasked > $rmMasked) {
+  if ($noRmsk || ($wmMasked > $rmMasked)) {
     $src2BitToMask = "../windowMasker/$asmId.cleanWMSdust.2bit";
   }
 
@@ -1338,12 +1427,16 @@ if [ ../../\$asmId.unmasked.2bit -nt faSize.\$asmId.cleanWMSdust.txt ]; then
     \$asmId.cleanWMSdust.2bit
   twoBitToFa \$asmId.cleanWMSdust.2bit stdout \\
     | faSize stdin > faSize.\$asmId.cleanWMSdust.txt
-  zcat ../repeatMasker/\$asmId.sorted.fa.out.gz | sed -e 's/^  *//; /^\$/d;' \\
-    | egrep -v "^SW|^score" | awk '{printf "%s\\t%d\\t%d\\n", \$5, \$6-1, \$7}' \\
-      | bedSingleCover.pl stdin > rmsk.bed
-  intersectRmskWM=`bedIntersect -minCoverage=0.0000000014 cleanWMask.bed \\
-    rmsk.bed stdout | bedSingleCover.pl stdin | ave -col=4 stdin \\
-     | grep "^total" | awk '{print \$2}' | sed -e 's/.000000//;'`
+  if [ -s ../repeatMasker/\$asmId.sorted.fa.out.gz ]; then
+    zcat ../repeatMasker/\$asmId.sorted.fa.out.gz | sed -e 's/^  *//; /^\$/d;' \\
+      | egrep -v "^SW|^score" | awk '{printf "%s\\t%d\\t%d\\n", \$5, \$6-1, \$7}' \\
+        | bedSingleCover.pl stdin > rmsk.bed
+    intersectRmskWM=`bedIntersect -minCoverage=0.0000000014 cleanWMask.bed \\
+      rmsk.bed stdout | bedSingleCover.pl stdin | ave -col=4 stdin \\
+       | grep "^total" | awk '{print \$2}' | sed -e 's/.000000//;'`
+  else
+    intersectRmskWM=0
+  fi
   chromSize=`ave -col=2 ../../\$asmId.chrom.sizes \\
      | grep "^total" | awk '{print \$2}' | sed -e 's/.000000//;'`
   echo \$intersectRmskWM \$chromSize | \\
@@ -1486,9 +1579,11 @@ sub doNcbiGene {
     &HgAutomate::verbose(1, "# step ncbiGene: no gff file found at:\n#  $gffFile\n");
     return;
   }
-  if ( ! -s "$buildDir/sequence/$asmId.ncbiToUcsc.lift" ) {
-    &HgAutomate::verbose(1, "# ERROR: ncbiGene: can not find $buildDir/sequence/$asmId.ncbiToUcsc.lift\n");
-    exit 255;
+  if ($ucscNames) {
+    if ( ! -s "$buildDir/sequence/$asmId.ncbiToUcsc.lift" ) {
+      &HgAutomate::verbose(1, "# ERROR: ncbiGene: can not find $buildDir/sequence/$asmId.ncbiToUcsc.lift\n");
+      exit 255;
+    }
   }
   my $runDir = "$buildDir/trackData/ncbiGene";
   if (-d "${runDir}" ) {
@@ -1533,21 +1628,31 @@ if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
      cleanUp
      exit 0
   fi
+  export ncbiGenePred="\$asmId.ncbiGene.genePred.gz"
+_EOF_
+  );
+  if ($ucscNames) {
+    $bossScript->add(<<_EOF_
   liftUp -extGenePred -type=.gp stdout \\
-      ../../sequence/\$asmId.ncbiToUcsc.lift warn \\
-       \$asmId.ncbiGene.genePred.gz | gzip -c \\
-          > \$asmId.ncbiGene.ucsc.genePred.gz
-  genePredToBed -tab -fillSpace \$asmId.ncbiGene.ucsc.genePred.gz stdout \\
+    ../../sequence/\$asmId.ncbiToUcsc.lift warn \\
+      \$asmId.ncbiGene.genePred.gz | gzip -c \\
+        > \$asmId.ncbiGene.ucsc.genePred.gz
+  ncbiGenePred="\$asmId.ncbiGene.ucsc.genePred.gz"
+_EOF_
+      );
+  }
+  $bossScript->add(<<_EOF_
+  genePredToBed -tab -fillSpace \$ncbiGenePred stdout \\
     | bedToExons stdin stdout | bedSingleCover.pl stdin > \$asmId.exons.bed
   export baseCount=`awk '{sum+=\$3-\$2}END{printf "%d", sum}' \$asmId.exons.bed`
   export asmSizeNoGaps=`grep sequences ../../\$asmId.faSize.txt | awk '{print \$5}'`
   export perCent=`echo \$baseCount \$asmSizeNoGaps | awk '{printf "%.3f", 100.0*\$1/\$2}'`
   rm -f \$asmId.exons.bed
-  ~/kent/src/hg/utils/automation/gpToIx.pl \$asmId.ncbiGene.ucsc.genePred.gz \\
+  ~/kent/src/hg/utils/automation/gpToIx.pl \$ncbiGenePred \\
     | sort -u > \$asmId.ncbiGene.ix.txt
   ixIxx \$asmId.ncbiGene.ix.txt \$asmId.ncbiGene.ix \$asmId.ncbiGene.ixx
   rm -f \$asmId.ncbiGene.ix.txt
-  genePredToBigGenePred \$asmId.ncbiGene.ucsc.genePred.gz stdout \\
+  genePredToBigGenePred \$ncbiGenePred stdout \\
       | sort -k1,1 -k2,2n > \$asmId.ncbiGene.bed
   (bedToBigBed -type=bed12+8 -tab -as=\$HOME/kent/src/hg/lib/bigGenePred.as \\
       -extraIndex=name \$asmId.ncbiGene.bed \\
@@ -1601,17 +1706,20 @@ sub doNcbiRefSeq {
   my $bossScript = newBash HgRemoteScript("$runDir/doNcbiRefSeq.bash",
                     $workhorse, $runDir, $whatItDoes);
 
+  my $liftSpec = "";
+  if ($ucscNames) {
+    $liftSpec="-liftFile=\"\$buildDir/sequence/\$asmId.ncbiToUcsc.lift\"";
+  }
   $bossScript->add(<<_EOF_
 export asmId="$asmId"
 export buildDir="$buildDir"
-export liftFile="\$buildDir/sequence/\$asmId.ncbiToUcsc.lift"
+export liftSpec="$liftSpec"
 export target2bit="\$buildDir/\$asmId.2bit"
 
 if [ $buildDir/\$asmId.2bit -nt \$asmId.ncbiRefSeq.bb ]; then
 
 ~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -toGpWarnOnly -buildDir=`pwd` \\
-      -bigClusterHub=$bigClusterHub -dbHost=$dbHost \\
-      -liftFile="\$liftFile" \\
+      -assemblyHub -bigClusterHub=$bigClusterHub -dbHost=$dbHost $liftSpec \\
       -target2bit="\$target2bit" \\
       -stop=load -fileServer=$fileServer -smallClusterHub=$smallClusterHub -workhorse=$workhorse \\
       \$asmId \$asmId
@@ -1626,6 +1734,10 @@ _EOF_
 #########################################################################
 # * step: augustus [workhorse]
 sub doAugustus {
+  if ($noAugustus) {
+  &HgAutomate::verbose(1, "# -noAugustus == Augustus gene track not created\n");
+	return;
+  }
   my $runDir = "$buildDir/trackData/augustus";
   if (! -s "$buildDir/$asmId.2bit") {
     &HgAutomate::verbose(1,
@@ -1670,6 +1782,10 @@ _EOF_
 #########################################################################
 # * step: xenoRefGene [bigClusterHub]
 sub doXenoRefGene {
+  if ($noXenoRefSeq) {
+	&HgAutomate::verbose(1, "# -noXenoRefSeq == Xeno RefSeq gene track not created\n");
+	return;
+  }
   my $runDir = "$buildDir/trackData/xenoRefGene";
 
   &HgAutomate::mustMkdir($runDir);
@@ -1708,9 +1824,15 @@ sub doTrackDb {
   my $bossScript = newBash HgRemoteScript("$runDir/doTrackDb.bash",
                     $workhorse, $runDir, $whatItDoes);
 
+  if (! -s "${buildDir}/trackData/chromAlias/${asmId}.chromAlias.txt" ) {
+    die "ERROR: can not find ${asmId}.chromAlias.txt in\n# ${buildDir}/trackData/chromAlias/\n";
+  }
+
   $bossScript->add(<<_EOF_
 export asmId=$asmId
 
+rm -f \$asmId.chromAlias.txt
+ln -s trackData/chromAlias/\${asmId}.chromAlias.txt .
 \$HOME/kent/src/hg/utils/automation/asmHubTrackDb.sh \$asmId $runDir \\
    > \$asmId.trackDb.txt
 
@@ -1741,6 +1863,12 @@ _EOF_
 
 # Make sure we have valid options and exactly 1 argument:
 &checkOptions();
+if (scalar(@ARGV) != 1) {
+  printf STDERR "ERROR: can not find 1 argument in ARGV, instead: %d\n", scalar(@ARGV);
+  for (my $i = 0; $i < scalar(@ARGV); ++$i) {
+    printf "# ARGV[%d] : '%s'\n", $i, $ARGV[$i];
+  }
+}
 &usage(1) if (scalar(@ARGV) != 1);
 $secondsStart = `date "+%s"`;
 chomp $secondsStart;
@@ -1788,12 +1916,15 @@ $rmskSpecies = $opt_rmskSpecies ? $opt_rmskSpecies : $species;
 $augustusSpecies = $opt_augustusSpecies ? $opt_augustusSpecies : $augustusSpecies;
 $xenoRefSeq = $opt_xenoRefSeq ? $opt_xenoRefSeq : $xenoRefSeq;
 $ucscNames = $opt_ucscNames ? 1 : $ucscNames;   # '1' == 'TRUE'
+$noAugustus = $opt_noAugustus ? 1 : $noAugustus;   # '1' == 'TRUE'
+$noXenoRefSeq = $opt_noXenoRefSeq ? 1 : $noXenoRefSeq;   # '1' == 'TRUE'
 $workhorse = $opt_workhorse ? $opt_workhorse : $workhorse;
 $bigClusterHub = $opt_bigClusterHub ? $opt_bigClusterHub : $bigClusterHub;
 $smallClusterHub = $opt_smallClusterHub ? $opt_smallClusterHub : $smallClusterHub;
 $fileServer = $opt_fileServer ? $opt_fileServer : $fileServer;
 $asmHubName = $opt_asmHubName ? $opt_asmHubName : $asmHubName;
 $ncbiRmsk = $opt_ncbiRmsk ? 1 : 0;
+$noRmsk = $opt_noRmsk ? 1 : 0;
 
 die "can not find assembly source directory\n$assemblySource" if ( ! -d $assemblySource);
 printf STDERR "# buildDir: %s\n", $buildDir;
@@ -1804,6 +1935,11 @@ printf STDERR "# assemblySource: %s\n", $assemblySource;
 printf STDERR "# asmHubName %s\n", $asmHubName;
 printf STDERR "# rmskSpecies %s\n", $rmskSpecies;
 printf STDERR "# augustusSpecies %s\n", $augustusSpecies;
+printf STDERR "# ncbiRmsk %s\n", $ncbiRmsk ? "TRUE" : "FALSE";
+printf STDERR "# ucscNames %s\n", $ucscNames ? "TRUE" : "FALSE";
+printf STDERR "# noAugustus %s\n", $noAugustus ? "TRUE" : "FALSE";
+printf STDERR "# noXenoRefSeq %s\n", $noXenoRefSeq ? "TRUE" : "FALSE";
+printf STDERR "# noRmsk %s\n", $noRmsk ? "TRUE" : "FALSE";
 
 # Do everything.
 $stepper->execute();

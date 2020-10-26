@@ -1,2 +1,2 @@
 all:
-	cp bedDetail4.sql checkAndLoad.sh doUpdate.sh download.sh /hive/data/outside/otto/lovd/
+	cp lovd.as checkAndLoad.sh doUpdate.sh download.sh /hive/data/outside/otto/lovd/

@@ -280,6 +280,13 @@ int tabixSeqId = ti_get_tid(lf->tabix, seqName);
 if (tabixSeqId < 0 && startsWith("chr", seqName))
     // We will get some files that have chr-less Ensembl chromosome names:
     tabixSeqId = ti_get_tid(lf->tabix, seqName+strlen("chr"));
+// Allow SARS-CoV-2 VCF to use GenBank or RefSeq ID instead of our chromified RefSeq ID:
+if (tabixSeqId < 0 && sameString(seqName, "NC_045512v2"))
+    {
+    tabixSeqId = ti_get_tid(lf->tabix, "MN908947.3");
+    if (tabixSeqId < 0)
+        tabixSeqId = ti_get_tid(lf->tabix, "NC_045512.2");
+    }
 if (tabixSeqId < 0)
     return FALSE;
 ti_iter_t *iter = ti_queryi((tbx_t *)lf->tabix, tabixSeqId, start, end);
@@ -305,6 +312,13 @@ if (udcIsLocal(fileOrUrl))
      return lineFileOpen(fileOrUrl, zTerm);
 else
     {
+    if (getDecompressor(fileOrUrl) != NULL)
+        {
+        warn("lineFileUdcMayOpen: can't open %s, support for compressed files not implemented. "
+             "[developer: use netLineFileMayOpen for compressed remote files.]",
+             fileOrUrl);
+        return NULL;
+        }
     struct udcFile *udcFile = udcFileMayOpen(fileOrUrl, NULL);
     if (udcFile == NULL)
 	return NULL;
@@ -742,12 +756,18 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
+void lineFileExpectWordsMesg(struct lineFile *lf, int expecting, int got, char* extraMessage)
+/* Check line has right number of words. Add extraMessage to end of error message. */
+{
+if (expecting != got)
+    errAbort("Expecting %d words line %d of %s got %d. %s",
+	    expecting, lf->lineIx, lf->fileName, got, extraMessage);
+}
+
 void lineFileExpectWords(struct lineFile *lf, int expecting, int got)
 /* Check line has right number of words. */
 {
-if (expecting != got)
-    errAbort("Expecting %d words line %d of %s got %d",
-	    expecting, lf->lineIx, lf->fileName, got);
+    lineFileExpectWordsMesg(lf, expecting, got, "");
 }
 
 void lineFileExpectAtLeast(struct lineFile *lf, int expecting, int got)

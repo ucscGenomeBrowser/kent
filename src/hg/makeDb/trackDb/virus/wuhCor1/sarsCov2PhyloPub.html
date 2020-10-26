@@ -1,0 +1,299 @@
+<h2>Description</h2>
+<p>
+This track displays a phylogenetic tree relating public SARS-CoV-2 genome sequences
+available from
+<a href="https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&VirusLineage_ss=SARS-CoV-2,%20taxid:2697049" target=_blank>NCBI Virus / GenBank</a>,
+<a href="https://www.cogconsortium.uk/data/" target=_blank>COG-UK</a> and the
+<a href="https://bigd.big.ac.cn/ncov/release_genome"
+   target=_blank>China National Center for Bioinformation</a>,
+contributed by laboratories around the world,
+and variants found in those sequences.  By default, only very common variants (alternate allele found
+in at least 1% of samples) are displayed, but other subtracks may be made visible in order to see
+more rare variants.</p>
+<p>
+The phylogenetic tree is inferred by the
+<a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a> pipeline
+(Lanfear).
+For display in the narrow space to the left of the main genome browser image, nodes in the tree
+are collapsed unless a mutation is associated with a node; i.e. the only branching points displayed
+are those at which mutations occurred.
+</p>
+<p>
+The tree is colored by
+<a href="https://github.com/cov-lineages/pangolin/" target=_blank>Pangolin</a>
+lineage (Rambaut <em>et al.</em>).
+The coloring scheme is adapted from Figure 1 of
+(<a href="https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2020.25.32.2001410"
+    target=_blank>Alm <em>et al.</em></a>) which presents a unified view of a simplified
+phylogenetic tree, Pangolin lineages,
+<a href="https://nextstrain.org/blog/2020-06-02-SARSCoV2-clade-naming"
+   target=_blank>Nextstrain clades</a> and
+<a href="https://www.gisaid.org/references/statements-clarifications/clade-and-lineage-nomenclature-aids-in-genomic-epidemiology-of-active-hcov-19-viruses/"
+   target=_blank>GISAID clades</a>.
+<table style="border-spacing: 20px 2px;">
+  <tr>
+    <th>color</th><th>Pangolin lineage(s)</th><th>Nextstrain clade</th><th>GISAID clade</th></tr>
+  <tr>
+    <td><span style="background-color: #ec676d;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>A</td>
+    <td>19B</td>
+    <td>S</td></tr>
+  <tr>
+    <td><span style="background-color: #f79e43;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B.<em>n</em> (<em>n</em> > 1)</td>
+    <td>19A</td>
+    <td>L</td></tr>
+  <tr>
+    <td><span style="background-color: #f9d136;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td><em>n/a</em> (color not used when coloring by lineage; overlaps on tree with B.4 - B.7)</td>
+    <td><em>n/a</em> (overlaps on tree with 19A)</td>
+    <td>O</td></tr>
+  <tr>
+    <td><span style="background-color: #faea95;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td><em>n/a</em> (color not used when coloring by lineage; overlaps on tree with B.2)</td>
+    <td><em>n/a</em> (overlaps on tree with 19A)</td>
+    <td>V</td></tr>
+  <tr>
+    <td><span style="background-color: #b6d77a;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B.1.5, B.1.6, B.1.8, other B.1.<em>n</em> that overlap GISAID clade G</td>
+    <td>20A (partial)</td>
+    <td>G</td></tr>
+  <tr>
+    <td><span style="background-color: #888888;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B.1.9, B.1.13, B.1.22, B.1.22, B.1.36, B.1.37</td>
+    <td>20A (partial)</td>
+    <td>GH (partial)</td></tr>
+  <tr>
+    <td><span style="background-color: #8fd4ed;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B.1.3, B.1.12, B.1.26, other B.1.<em>n</em> that overlap GISAID clade GH</td>
+    <td>20C</td>
+    <td>GH (partial)</td></tr>
+  <tr>
+    <td><span style="background-color: #a692c3;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+    <td>B.1.1</td>
+    <td>20B</td>
+    <td>GR</td></tr>
+</table>
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+In &quot;dense&quot; mode, a vertical line is drawn at each position where there is a variant.
+In &quot;squish&quot; and &quot;pack&quot; modes, the display shows a plot of all 
+samples' variants, with samples ordered using the phylogenetic tree in order to highlight 
+patterns of linkage. &quot;Full&quot; display mode shows each variant on its own row, 
+ordered by position instead of lineage.</p>
+<p>
+Each sample is placed in a horizontal row of pixels; when the number of
+samples exceeds the number of vertical pixels for the track, multiple
+samples fall in the same pixel row and pixels are averaged across samples.</p>
+<p>
+Each variant is a vertical bar at its position in the SARS-CoV-2 genome
+with white (invisible) representing the reference allele;
+the non-reference allele is shown in red if it changes the protein sequence of a gene,
+green if it falls within a gene but does not change the protein,
+and black if it does not fall within a gene.
+Tick marks are drawn at the top and bottom of each variant's vertical bar
+to make the bar more visible when most alleles are reference alleles.
+Only single-nucleotide variants (SNVs) are displayed, not insertions or deletions.
+</p>
+<p>
+The phylogenetic tree showing inferred relationships between the samples is depicted
+in the left column of the display.
+Mousing over this will show the sample identifiers.
+At the default track height, about 100 samples are averaged into each row of pixels.
+The track height can be adjusted in the track controls, which can be reached by
+clicking on the gray button to the left of the tree or by right-clicking on the image.
+</p>
+
+<h2>Methods</h2>
+<p>
+<a href="http://www.robertlanfear.com/" target=_blank>Rob Lanfear</a> regularly runs the
+<a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a> pipeline
+on all complete, high-coverage sequences available from
+<a href="https://gisaid.org" target=_blank>GISAID</a> EpiCoV&trade;.
+The pipeline aligns all sequences to the same reference genome used by the Genome Browser
+(RefSeq <a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2" target=_blank>NC_045512.2</a>,
+GenBank <a href="https://www.ncbi.nlm.nih.gov/nuccore/MN908947.3" target=_blank>MN908947.3</a>,
+<a href="https://gisaid.org" target=_blank>GISAID</a> sample
+hCoV-19/Wuhan/Hu-1/2019|EPI_ISL_402125|2019-12-31)
+using
+<a href="https://mafft.cbrc.jp/alignment/software/" target=_blank>MAFFT</a>
+(Katoh <em>et al.</em>).
+It masks sites identified as problematic by the 
+<a href="https://github.com/W-L/ProblematicSites_SARS-CoV2/"
+   target=_blank>ProblematicSites_SARS-CoV2</a> repository
+(De Maio <em>et al.</em>),
+as well as sites that are N's or gaps in >50% of samples.
+<a href="http://www.microbesonline.org/fasttree" target=_blank>fasttree</a>
+(Price <em>et al.</em>)
+is used to infer the phylogenetic tree;
+sequences on very long branches are removed using
+<a href="https://github.com/uym2/TreeShrink" target=_blank>TreeShrink</a>
+(Mai <em>et al.</em>).
+The tree is re-rooted to hCoV-19/Wuhan/WH04/2020|EPI_ISL_406801|2020-01-05.
+</p>
+<p>
+For full details, see the
+<a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a>
+documentation.
+</p>
+<p>UCSC makes a reduced version of the tree that contains only samples from fully public
+databases (GenBank, COG-UK direct release, CNCB)
+that do not prohibit UCSC from offering sequence variants for download (see Data Access).
+UCSC also makes several adjustments to the phylogenetic tree for compact display:
+  <ul>
+    <li> We shorten &quot;2019&quot; and &quot;2020&quot; in dates to &quot;19&quot;
+      and &quot;20&quot;.
+    <li> We change the root of the tree to the reference genome used by the Genome Browser
+      (<a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2" target=_blank>NC_045512.2</a>,
+      Wuhan/Hu-1).
+    <li> Nodes that do not have an associated mutation are collapsed using
+      <a href="https://github.com/yatisht/usher" target=_blank>UShER</a>
+      (Turakhia <em>et al.</em>).
+  </ul>
+</p>
+
+<h2>Data Access</h2>
+<p>
+Files are available from our
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/sarsCov2PhyloPub/" 
+target=_blank>Download Server</a>:
+<ul>
+  <li>Sequence variants, allele counts and sample genotypes in
+    <a href="https://samtools.github.io/hts-specs/VCFv4.2.pdf"
+       target=_blank>Variant Call Format (VCF)</a> files:
+    <ul>
+      <li>Variants with a minimum alternate allele frequency of 1% (<a
+        href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/sarsCov2PhyloPub/public.minAf.01.vcf.gz" 
+        target=_blank>public.minAf.01.vcf.gz</a>)
+      <li>Variants with a minimum alternate allele frequency of 0.1% (<a
+        href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/sarsCov2PhyloPub/public.minAf.001.vcf.gz" 
+        target=_blank>public.minAf.001.vcf.gz</a>)
+      <li>All variants (<a
+        href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/sarsCov2PhyloPub/public.ambigToN.vcf.gz" 
+        target=_blank>public.ambigToN.vcf.gz</a>)
+    </ul>
+  <li>UCSC's rerooted, collapsed, public-sequence-only version of the phylogenetic tree
+    (<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.ft.nh" 
+        target=_blank>sarscov2phylo.pub.ft.nh</a>)
+  <li>Author credits
+    (<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/sarsCov2PhyloPub/acknowledgements.tsv.gz" 
+        target=_blank>acknowledgements.tsv.gz</a>)
+  </ul>
+<p>
+The VCF data can be explored interactively with the 
+<a href="../cgi-bin/hgTables">Table Browser</a>
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>,
+and accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>.
+</p>
+<p>
+The <a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a>
+repository includes all releases of the full phylogenetic tree.
+</p>
+
+
+<h2>Credits</h2>
+<p>
+This work is made possible by the open sharing of genetic data by research
+groups from all over the world.
+We gratefully acknowledge the authors and the originating laboratories where the clinical
+specimen or virus isolate was first obtained and the submitting laboratories, where sequence
+data have been generated and submitted to public databases,
+on which this research is based.
+</p>
+<p>
+Special thanks to
+<a href="http://www.robertlanfear.com/" target=_blank>Rob Lanfear</a>
+for developing, running and sharing the
+<a href="https://github.com/roblanf/sarscov2phylo/" target=_blank>sarscov2phylo</a> pipeline
+and results.
+</p>
+
+<h2>Data usage policy</h2>
+<p>
+The data presented here is intended to rapidly disseminate analysis of
+important pathogens. Unpublished data is included with permission of the data
+generators, and does not impact their right to publish. Please contact the
+respective authors
+if you intend to carry out further research using their data.
+Authors and/or institutions that provided the sequences are listed in
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/sarsCov2PhyloPub/acknowledgements.tsv.gz" 
+   target=_blank>acknowledgements.tsv.gz</a>.
+</p>
+
+<h2>References</h2>
+
+<p>
+Lanfear, R.
+<a href="https://zenodo.org/badge/latestdoi/260124648"
+   target=_blank>A global phylogeny of SARS-CoV-2 sequences from GISAID</a>.
+<em>Zenodo</em> DOI: <a href="https://www.doi.org/10.5281/zenodo.3958883"
+target=_blank>10.5281/zenodo.3958883</a>. 2020.
+
+<p>
+Rambaut A, Holmes EC, Hill V, O'Toole A, McCrone JT, Ruis Chris, du Plessis L, Pybus OG.
+<a href="https://www.biorxiv.org/content/10.1101/2020.04.17.046086v1"
+   target=_blank>A dynamic nomenclature proposal for SARS-CoV-2 to assist genomic epidemiology</a>.
+<em>bioRxiv</em>. 2020 Apr 19.
+</p>
+
+<p>
+Alm E, Broberg EK, Connor T, Hodcroft EB, Komissarov AB, Maurer-Stroh S, Melidou A, Neher RA,
+O'Toole &#193;, Pereyaslov D <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32794443" target="_blank">
+Geographical and temporal distribution of SARS-CoV-2 clades in the WHO European Region, January to
+June 2020</a>.
+<em>Euro Surveill</em>. 2020 Aug;25(32).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32794443" target="_blank">32794443</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7427299/" target="_blank">PMC7427299</a>
+</p>
+
+<p>
+Katoh K, Standley DM.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/23329690" target="_blank">
+MAFFT multiple sequence alignment software version 7: improvements in performance and usability</a>.
+<em>Mol Biol Evol</em>. 2013 Apr;30(4):772-80.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23329690" target="_blank">23329690</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3603318/" target="_blank">PMC3603318</a>
+</p>
+
+<p>
+De Maio N, Walker C, Borges R, Weilguny L, Slodkowicz G, Goldman N.
+<a href="https://virological.org/t/masking-strategies-for-sars-cov-2-alignments/480"
+   target=_blank>Masking strategies for SARS-CoV-2 alignments</a>.
+virological.org. 2020 May 13.
+</p>
+
+<p>
+De Maio N, Gozashti L, Turakhia Y, Walker C, Lanfear R, Corbett-Detig R, Goldman N.
+<a href="https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473/12"
+   target=_blank>Updated analysis with data from 12th June 2020</a>.
+virological.org. 2020 July 14.
+</p>
+
+<p>
+Turakhia Y, Thornlow B, Hinrichs AS, De Maio N, Gozashti L, Lanfear R, Haussler D, and Corbett-Detig R.
+<a href="https://www.biorxiv.org/content/10.1101/2020.09.26.314971v1"
+   target=_blank>Ultrafast Sample Placement on Existing Trees (UShER) Empowers Real-Time Phylogenetics for the SARS-CoV-2 Pandemic</a>.
+<em>bioRxiv</em>. 2020 September 28.
+</p>
+
+<p>
+Price MN, Dehal PS, Arkin AP.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/20224823" target="_blank">
+FastTree 2--approximately maximum-likelihood trees for large alignments</a>.
+<em>PLoS One</em>. 2010 Mar 10;5(3):e9490.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/20224823" target="_blank">20224823</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2835736/" target="_blank">PMC2835736</a>
+</p>
+
+<p>
+Mai U, Mirarab S.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/29745847" target="_blank">
+TreeShrink: fast and accurate detection of outlier long branches in collections of phylogenetic
+trees</a>.
+<em>BMC Genomics</em>. 2018 May 8;19(Suppl 5):272.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29745847" target="_blank">29745847</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5998883/" target="_blank">PMC5998883</a>
+</p>

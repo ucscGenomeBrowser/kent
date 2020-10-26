@@ -1969,3 +1969,5 @@ EOF
     INDEL: 619294
 
 ##############################################################################
+# Trios for Genome In a Bottle - DONE 08/04/2020 ChrisL
+# see ~/kent/src/hg/makeDb/giab/make.txt

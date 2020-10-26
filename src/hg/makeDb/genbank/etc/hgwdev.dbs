@@ -7,12 +7,13 @@
 hg38
 hg19
 mm10
+mm39
 # 
 # Most recent assembly for each org
 #
 ailMel1
 allMis1
-ambMex1
+ambMex2
 ancCey1
 anoCar2
 anoGam3
@@ -29,9 +30,9 @@ braFlo2
 caeJap1
 caePb2
 caeRem3
-calJac3
+calJac4
 calMil1
-canFam4
+canFam5
 casCan1
 cavApe1
 cavPor3
@@ -150,6 +151,7 @@ xenTro9
 #
 # this is the beginning of the list of secondary assemblies
 #
+ambMex1
 anoCar1
 anoGam1
 apiMel1
@@ -162,7 +164,9 @@ bosTau2
 braFlo1
 caePb1
 caeRem2
+calJac3
 calJac1
+canFam4
 canFam3
 canFam2
 canFam1

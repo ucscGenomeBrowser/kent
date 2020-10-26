@@ -3786,9 +3786,12 @@ filterBy_t *filterBySetGetGuts(struct trackDb *tdb, struct cart *cart, char *nam
 // Gets one or more "filterBy" settings (ClosestToHome).  returns NULL if not found
 {
 // first check to see if this tdb is using "new" FilterValues cart variables
-struct trackDbFilter *trackDbFilters = tdbGetTrackFilterByFilters( tdb);
-if (trackDbFilters)
-    return filterByValues(tdb, cart, trackDbFilters, name);
+if (differentString(subName, "highlightBy"))
+    {
+    struct trackDbFilter *trackDbFilters = tdbGetTrackFilterByFilters( tdb);
+    if (trackDbFilters)
+        return filterByValues(tdb, cart, trackDbFilters, name);
+    }
 
 filterBy_t *filterBySet = NULL;
 char *setting = trackDbSettingClosestToHome(tdb, settingName);
@@ -4059,10 +4062,10 @@ if (filterBySet == NULL)
 #define FILTERBY_HELP_LINK "<A HREF=\"../goldenPath/help/multiView.html\" TARGET=ucscHelp>help</A>"
 int count = slCount(filterBySet);
 if (count == 1)
-    puts("<TABLE cellpadding=3><TR valign='top'>");
+    puts("<TABLE class='trackUiFilterTable'><TR valign='top'>");
 else
     printf("<B>%s items by:</B> (select multiple categories and items - %s)"
-	   "<TABLE cellpadding=3><TR valign='bottom'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
+	   "<TABLE class='trackUiFilterTable'><TR valign='bottom'>\n",filterTypeTitle,FILTERBY_HELP_LINK);
 
 #ifdef ADVANCED_BUTTON
 if (tdbIsBigBed(tdb))
@@ -4197,24 +4200,6 @@ filterBySetCfgUiGuts(cart, tdb, filterBySet, onOneLine, "Highlight", "hbc", "Non
 #define DIVIDING_LINE "<TR valign=\"CENTER\" line-height=\"1\" BGCOLOR=\"%s\"><TH colspan=\"5\" " \
 		  "align=\"CENTER\"><hr noshade color=\"%s\" width=\"100%%\"></TD></TR>\n"
 #define DIVIDER_PRINT(color) printf(DIVIDING_LINE,COLOR_BG_DEFAULT,(color))
-
-static char *checkBoxIdMakeForTrack(struct trackDb *tdb,members_t** dims,int dimMax,
-				membership_t *membership)
-// Creates an 'id' string for subtrack checkbox in style that matrix understand:
-//     "cb_dimX_dimY_view_cb"
-{
-int len = strlen(tdb->track) + 10;
-char *id = needMem(len);
-safef(id,len,"%s_sel",tdb->track);
-return id;
-}
-
-static void checkBoxIdFree(char**id)
-// Frees 'id' string 
-{
-if (id && *id)
-    freez(id);
-}
 
 static boolean divisionIfNeeded(char **lastDivide,dividers_t *dividers,membership_t *membership)
 // Keeps track of location within subtracks in order to provide requested division lines
@@ -4865,6 +4850,7 @@ boolean useDragAndDrop = settings->useDragAndDrop;
 boolean restrictions = settings->restrictions;
 struct dyString *dyHtml = newDyString(SMALLBUF);
 char buffer[SMALLBUF];
+char id[SMALLBUF];
 char *db = cartString(cart, "db");
 
 // The subtracks need to be sorted by priority but only sortable and dragable will have
@@ -4948,9 +4934,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	dividersFree(&dividers);
 	}
 
-    // Start the TR which must have an id that is directly related to the checkBox id
-    char *id = checkBoxIdMakeForTrack(subtrack,membersForAll->members,membersForAll->dimMax,
-				      membership); // view is known tag
+    safef(id, sizeof(id), "%s_sel", subtrack->track);
     printf("<TR valign='top' class='%s%s'",
 		colors[colorIx],(useDragAndDrop?" trDraggable":""));
     printf(" id=tr_%s%s>\n",id,(!visibleCB && !settings->displayAll?" style='display:none'":""));
@@ -5170,7 +5154,11 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 
     // End of row and free ourselves of this subtrack
     puts("</TD></TR>\n");
-    checkBoxIdFree(&id);
+
+    boolean showCfg = trackDbSettingOn(subtrack, "showCfg");
+    if (showCfg)
+        jsInlineF(" subCfg.cfgToggle(document.getElementById(\"%s_toggle\"),\"%s\");",  subtrack->track, subtrack->track);
+
     }
 
 // End of the table
@@ -6371,7 +6359,17 @@ void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, ch
 // Put up UI for filtering bed track based on a score
 {
 char option[256];
+if (cartOptionalString(cart, "ajax") == NULL)
+    {
+    webIncludeResourceFile("ui.dropdownchecklist.css");
+    jsIncludeFile("ui.dropdownchecklist.js",NULL);
+    jsIncludeFile("ddcl.js",NULL);
+    }
+
 boolean parentLevel = isNameAtParentLevel(tdb,name);
+if (parentLevel)
+    if (trackDbSettingOn(tdb->parent, "noParentConfig"))
+        return;
 boolean skipScoreFilter = FALSE;
 
 // Numeric filters are first
@@ -6381,13 +6379,6 @@ if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name,
 
 if (textFiltersShowAll(db, cart, tdb))
     skipScoreFilter = TRUE;
-
-if (cartOptionalString(cart, "ajax") == NULL)
-    {
-    webIncludeResourceFile("ui.dropdownchecklist.css");
-    jsIncludeFile("ui.dropdownchecklist.js",NULL);
-    jsIncludeFile("ddcl.js",NULL);
-    }
 
 // Add any multi-selects next
 filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
@@ -6997,6 +6988,39 @@ for (i = 0; labelsNames[i][0] != NULL; i++)
     }
 }
 
+static void newGencodeShowOptions(struct cart *cart, struct trackDb *tdb)
+/* Put up line of controls that describe what parts to show. */
+{
+char varName[64];
+
+printf("<BR><B>Show:</B> ");
+
+safef(varName, sizeof(varName), "%s.show.noncoding", tdb->track);
+boolean option = cartUsualBoolean(cart, varName, TRUE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "non-coding genes");
+
+safef(varName, sizeof(varName), "%s.show.spliceVariants", tdb->track);
+option = cartUsualBoolean(cart, varName, TRUE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "splice variants");
+
+safef(varName, sizeof(varName), "%s.show.pseudo", tdb->track);
+option = cartUsualBoolean(cart, varName, FALSE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "pseudogenes");
+
+printf("<BR><B>Tagged Sets:</B> ");
+safef(varName, sizeof(varName), "%s.show.set", tdb->track);
+char *setString = cartUsualString(cart, varName, "basic");
+cgiMakeRadioButton(varName, "MANE_Select", sameString(setString, "MANE_Select"));
+printf(" %s&nbsp;&nbsp;&nbsp;", "MANE only");
+cgiMakeRadioButton(varName, "basic", sameString(setString, "basic"));
+printf(" %s&nbsp;&nbsp;&nbsp;", "BASIC only");
+cgiMakeRadioButton(varName, "all", sameString(setString, "all"));
+printf(" %s&nbsp;&nbsp;&nbsp;", "All");
+}
+
 void genePredCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* Put up genePred-specific controls */
 {
@@ -7013,6 +7037,10 @@ if (sameString(name, "acembly"))
     printf("<p><b>Gene Class: </b>");
     acemblyDropDown("acembly.type", acemblyClass);
     printf("  ");
+    }
+else if (startsWith("gencodeV", name))
+    {
+    newGencodeShowOptions(cart, tdb);
     }
 else if (startsWith("wgEncodeGencode", name))
     {
@@ -8253,6 +8281,44 @@ puts("<BR>\n");
 
 return TRUE;
 }
+void fastMatixToSubtrackMap()
+// prints out the "common" globals json hash
+// This hash is the one utils.js and therefore all CGIs know about
+{
+struct dyString *dy = dyStringNew(1024);
+dyStringPrintf(dy,
+"var mtxSubMap = {};\n"
+"$( document ).ready(function()\n"
+"{\n"
+"matCB = $('input.matCB:first');\n"
+"if (!matCB)\n"
+"    return;\n"
+"var matClassList = $( matCB ).attr('class').split(' ');\n"
+"matClassList = aryRemove(matClassList,['matCB','changed','disabled','abc']);\n"
+"if (matClassList.length === 0 )\n"
+"    return;\n"
+"subCBs = $('input.subCB');\n"
+"$( subCBs ).each( function (i) { \n"
+"  // class='subCB BS-Seq Mantle_Cell_Lymphoma venous_blood A007MCL CNAG CPG_methylation_cov signal' \n"
+"  var classList = $( this ).attr('class').split(' ');\n"
+"  if (matClassList.length === 1) {\n"
+"      var classes = '.' + classList[1]; // dimX or dimY \n"
+"  } else {\n"
+"      var classes = '.' + classList[1] + '.' + classList[2]; // dimX and dimY \n"
+"  }\n"
+"  if (mtxSubMap[classes] === undefined) {\n"
+"    mtxSubMap[classes] = [this];\n"
+"  } else {\n"
+"    mtxSubMap[classes].push(this);\n"
+"  }\n"
+"});\n"
+"});\n"
+);
+
+jsInline(dy->string);
+dyStringFree(&dy);
+}
+
 
 static boolean compositeUiByMatrix(char *db, struct cart *cart, struct trackDb *parentTdb,
                                    char *formName)
@@ -8476,6 +8542,8 @@ if (treeImage != NULL)
 
 // If any filter additional filter composites, they can be added at the end.
 compositeUiByFilter(db, cart, parentTdb, formName);
+
+fastMatixToSubtrackMap();  
 
 return TRUE;
 }
@@ -9333,6 +9401,40 @@ slReverse(&list);
 return list;
 }
 
+static struct dyString *subMultiField(char *pattern, int fieldCount,
+                                 char *in[], char *out[])
+/* Substitute $in with out values in pattern */
+{
+int i;
+struct dyString *s = newDyString(256), *d = NULL;
+dyStringAppend(s, pattern);
+for (i=0; i<fieldCount; ++i)
+    {
+    if (out[i]==NULL)
+        continue;
+
+    // prefix field with $
+    char *field = in[i];
+    char *spec = needMem(strlen(field) + 2);
+    *spec = '$';
+    strcpy(spec + 1, field);
+
+    d = dyStringSub(s->string, spec, out[i]);
+    dyStringFree(&s);
+    freeMem(spec);
+    s = d;
+    d = NULL;
+    }
+return s;
+}
+
+char *replaceFieldInPattern(char *pattern, int fieldCount, char **fieldNames, char **fieldVals)
+/* Replace $fieldName in pattern with value.  Used in trackDb mouseOver setting */
+{
+struct dyString *ds = subMultiField(pattern, fieldCount, fieldNames, fieldVals);
+return dyStringCannibalize(&ds);
+}
+
 static struct dyString *subMulti(char *orig, int subCount,
                                  char *in[], char *out[])
 /* Perform multiple substitions on orig. */
@@ -9522,3 +9624,54 @@ if (isNotEmpty(version))
     printf("<B>Data version:</B> %s <BR>\n", version);
 }
 
+void printRelatedTracks(char *database, struct hash *trackHash, struct trackDb *tdb, struct cart *cart)
+/* Maybe print a "related track" section */
+{
+if (!cfgOption("db.relatedTrack") || trackHubDatabase(database))
+    return;
+char *relatedTrackTable = cfgOptionDefault("db.relatedTrack","relatedTrack");
+struct sqlConnection *conn = hAllocConn(database);
+if (!sqlTableExists(conn, relatedTrackTable))
+    {
+    hFreeConn(&conn);
+    return;
+    }
+
+char query[256];
+sqlSafef(query, sizeof(query),
+    "select track1, track2, why from %s where track1='%s' or track2='%s'", relatedTrackTable, tdb->track, tdb->track);
+
+char **row;
+struct sqlResult *sr;
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    puts("<b>Related tracks</b>\n");
+    puts("<ul>\n");
+    char *track1, *track2, *why, *otherTrack;
+    for (; row != NULL; row = sqlNextRow(sr))
+        {
+        track1 = row[0];
+        track2 = row[1];
+        why    = row[2];
+
+        if (sameWord(track1, tdb->track))
+            otherTrack = track2;
+        else
+            otherTrack = track1;
+
+        struct trackDb *otherTdb = hashFindVal(trackHash, otherTrack);
+        if (otherTdb)
+            {
+            puts("<li>");
+            printf("<a href=\"%s?g=%s&%s\">%s</a>", hTrackUiForTrack(otherTdb->track), otherTdb->track, cartSidUrlString(cart), otherTdb->shortLabel);
+            puts(": ");
+            puts(why);
+            }
+        }
+    puts("</ul>\n");
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}

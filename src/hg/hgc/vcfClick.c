@@ -99,40 +99,7 @@ else
     }
 }
 
-// Characters we expect to see in |-separated parts of an ##INFO description that specifies
-// tabular contents:
-#define COL_DESC_WORD_REGEX "[A-Za-z_0-9.-]+"
-// Series of |-separated words:
-#define COL_DESC_REGEX COL_DESC_WORD_REGEX"(\\|"COL_DESC_WORD_REGEX")+"
 
-// Minimum number of |-separated values for interpreting descriptions and values as tabular:
-#define MIN_COLUMN_COUNT 3
-
-static boolean looksTabular(const struct vcfInfoDef *def, struct vcfInfoElement *el)
-/* Return TRUE if def->description seems to contain a |-separated description of columns
- * and el's first non-empty string value has the same number of |-separated parts. */
-{
-if (!def || def->type != vcfInfoString || isEmpty(def->description))
-    return FALSE;
-if (regexMatch(def->description, COL_DESC_REGEX))
-    {
-    int descColCount = countChars(def->description, '|') + 1;
-    if (descColCount >= MIN_COLUMN_COUNT)
-        {
-        int j;
-        for (j = 0;  j < el->count;  j++)
-            {
-            char *val = el->values[j].datString;
-            if (isEmpty(val))
-                continue;
-            int elColCount = countChars(val, '|') + 1;
-            if (elColCount == descColCount)
-                return TRUE;
-            }
-        }
-    }
-return FALSE;
-}
 
 static void printTabularHeaderRow(const struct vcfInfoDef *def)
 /* Parse the column header parts out of def->description and print as table header row;
@@ -259,19 +226,27 @@ struct vcfFile *vcff = rec->file;
 enum vcfInfoType formatTypes[256];
 char *formatKeys[256];
 int formatCount = chopString(tmp1->string, ":", formatKeys, ArraySize(formatKeys));
-puts("<B>Genotype info key:</B><BR>");
+boolean firstInfo = TRUE;
 int i;
 for (i = 0;  i < formatCount;  i++)
     {
     if (sameString(formatKeys[i], vcfGtGenotype))
 	continue;
+    if (firstInfo)
+        {
+        puts("<B>Genotype info key:</B><BR>");
+        firstInfo = FALSE;
+        }
     const struct vcfInfoDef *def = vcfInfoDefForGtKey(vcff, formatKeys[i]);
     char *desc = def ? def->description : "<em>not described in VCF header</em>";
     printf("&nbsp;&nbsp;<B>%s:</B> %s<BR>\n", formatKeys[i], desc);
     formatTypes[i] = def ? def->type : vcfInfoString;
     }
 hTableStart();
-puts("<TR><TH>Sample ID</TH><TH>Genotype</TH><TH>Phased?</TH>");
+boolean isDiploid = sameString(vcfHaplotypeOrSample(cart), "Haplotype");
+puts("<TR><TH>Sample ID</TH><TH>Genotype</TH>");
+if (isDiploid)
+    puts("<TH>Phased?</TH>");
 for (i = 0;  i < formatCount;  i++)
     {
     if (sameString(formatKeys[i], vcfGtGenotype))
@@ -291,8 +266,10 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 	hapB = displayAls[(unsigned char)gt->hapIxB];
     char sep = gt->isHaploid ? ' ' : gt->isPhased ? '|' : '/';
     char *phasing = gt->isHaploid ? NA : gt->isPhased ? "Y" : "n";
-    printf("<TR><TD>%s</TD><TD>%s%c%s</TD><TD>%s</TD>", vcff->genotypeIds[i],
-	   hapA, sep, hapB, phasing);
+    printf("<TR><TD>%s</TD><TD>%s%c%s</TD>", vcff->genotypeIds[i],
+	   hapA, sep, hapB);
+    if (isDiploid)
+        printf("<TD>%s</TD>", phasing);
     int j;
     for (j = 0;  j < gt->infoCount;  j++)
 	{
@@ -339,14 +316,21 @@ popWarnHandler();
 int *gtCounts = NULL, *alCounts = NULL;;
 int phasedGts = 0, diploidCount = 0;
 vcfCountGenotypes(rec, &gtCounts, &alCounts, &phasedGts, &diploidCount);
-printf("<B>Genotype count:</B> %d", vcff->genotypeCount);
-if (diploidCount == 0)
-    printf(" (haploid)");
-else if (diploidCount != vcff->genotypeCount)
-    printf(" (%d phased, %d diploid, %d haploid)", phasedGts, diploidCount,
-           vcff->genotypeCount - diploidCount);
+boolean isDiploid = sameString(vcfHaplotypeOrSample(cart), "Haplotype");
+if (isDiploid)
+    {
+    printf("<B>Genotype count:</B> %d", vcff->genotypeCount);
+    if (diploidCount == 0)
+        printf(" (haploid)");
+    else if (diploidCount != vcff->genotypeCount)
+        printf(" (%d phased, %d diploid, %d haploid)", phasedGts, diploidCount,
+               vcff->genotypeCount - diploidCount);
+    else
+        printf(" (%d phased)", phasedGts);
+    }
 else
-    printf(" (%d phased)", phasedGts);
+    printf("<B>Sample count:</B> %d", vcff->genotypeCount);
+
 puts("<BR>");
 int totalAlleles = vcff->genotypeCount + diploidCount;
 double refAf = (double)alCounts[0]/totalAlleles;

@@ -41,7 +41,7 @@ name palTrack
 shortLabel Other Species FASTA
 tables knownGene 
 idSql select chrom,txStart+1,txEnd,name from knownGene where name = '%s'
-url ../cgi-bin/hgPal?g=knownGene&c=%s&l=%s&r=%s&i=%s
+url ../cgi-bin/hgPal?g=KNOWNDB.knownGene&c=%s&l=%s&r=%s&i=%s
 hgsid on
 dbInUrl on
 priority 1

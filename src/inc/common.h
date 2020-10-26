@@ -770,6 +770,13 @@ int differentWord(char *s1, char *s2);
 #define sameWord(a,b) (!differentWord(a,b))
 /* Return TRUE if two strings are same ignoring case */
 
+int differentWordNullOk(char *s1, char *s2);
+/* Returns 0 if two strings (either of which may be NULL)
+ * are the same, ignoring case.  Otherwise returns the
+ * difference between the first non-matching characters. */
+
+#define sameWordOk(a,b) (!differentWordNullOk(a,b))
+
 #define differentString(a,b) (strcmp(a,b))
 /* Returns FALSE if two strings same. */
 

@@ -44,21 +44,21 @@ def getColor(cnvtype, pathOrBen):
         return "0,0,0"
     if cnvtype == "copy_number_loss":
         if pathOrBen == "Pathogenic":
-            return "255,104,104"
+            return "180,3,16"
         else:
-            return "231,154,144"
+            return "238,146,148"
     if cnvtype == "copy_number_gain":
         if pathOrBen == "Pathogenic":
-            return "103,104,255"
+            return "17,44,138"
         else:
-            return "143,184,214"
+            return "122,165,211"
 
 def getMouseover(bed):
     """Return the mouseOver string for this bed record."""
     ret = ""
-    ret += "%s:%s-%s" % (bed["chrom"], int(bed["chromStart"])+1, bed["chromEnd"])
+    ret += "Gene(s) affected: %s" % (", ".join(bed["ClinGen"]))
+    ret += ", Position: %s:%s-%s" % (bed["chrom"], int(bed["chromStart"])+1, bed["chromEnd"])
     ret += ", Size: %d" % (int(bed["chromEnd"]) - int(bed["chromStart"]))
-    ret += ", Gene(s) affected: %s" % (", ".join(bed["ClinGen"]))
     if bed["Variant Type"] == "copy_number_loss":
         ret += ", Type: loss"
     else:

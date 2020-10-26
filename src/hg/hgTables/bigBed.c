@@ -32,6 +32,10 @@ boolean isBigBed(char *database, char *table, struct trackDb *parent,
 /* Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed. */
 {
 struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
+
+// if "table" is explicitly listed, we're going to use that instead of any bigDataUrl
+if (tdb && hashLookup(tdb->settingsHash, "table"))
+    return FALSE;
 if (tdb)
     return tdbIsBigBed(tdb);
 else

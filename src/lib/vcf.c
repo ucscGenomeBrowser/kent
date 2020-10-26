@@ -264,7 +264,7 @@ return vcfInfoString;
 }
 
 // Regular expressions to check format and extract information from header lines:
-static const char *fileformatRegex = "^##(file)?format=VCFv([0-9]+)(\\.([0-9]+))?$";
+static const char *fileformatRegex = "^##(file)?format=VCFv([0-9]+)(\\.([0-9]+))?";
 static const char *infoOrFormatRegex =
     "^##(INFO|FORMAT)="
     "<ID=([\\.+A-Za-z0-9_:-]+),"
@@ -403,7 +403,7 @@ if (! sameString(exp1, words[ix]))
 #define expectColumnName(vcff, exp, words, ix) expectColumnName2(vcff, exp, NULL, words, ix)
 
 // There might be a whole lot of genotype columns...
-#define VCF_MAX_COLUMNS 64 * 1024
+#define VCF_MAX_COLUMNS 256 * 1024
 #define VCF_MIN_COLUMNS 8
 
 char *vcfDefaultHeader = "#CHROM POS ID REF ALT QUAL FILTER INFO";
@@ -767,7 +767,7 @@ return (alleleCount == 2 &&
         (sameString(alleles[0], alleles[1]) || sameString(".", alleles[1])));
 }
 
-static boolean allelesHavePaddingBase(char **alleles, int alleleCount)
+boolean allelesHavePaddingBase(char **alleles, int alleleCount)
 /* Examine alleles to see if they either a) all start with the same base or
  * b) include a symbolic or 0-length allele.  In either of those cases, there
  * must be an initial padding base that we'll need to trim from non-symbolic
@@ -927,8 +927,12 @@ static boolean chromsMatch(char *chromA, char *chromB)
 // Return TRUE if chromA and chromB are non-NULL and identical, possibly ignoring
 // "chr" at the beginning of one but not the other.
 {
+// Allow SARS-CoV-2 VCF to use GenBank or RefSeq ID instead of our chromified RefSeq ID:
+static char *sarsCoV2Ids[] = {"NC_045512v2", "MN908947.3", "NC_045512.2"};
 if (chromA == NULL || chromB == NULL)
     return FALSE;
+else if (stringIx(chromA, sarsCoV2Ids) >= 0 && stringIx(chromB, sarsCoV2Ids) >= 0)
+    return TRUE;
 char *chromAPlus = startsWith("chr", chromA) ? chromA+3 : chromA;
 char *chromBPlus = startsWith("chr", chromB) ? chromB+3 : chromB;
 return sameString(chromAPlus, chromBPlus);
@@ -1454,6 +1458,37 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 record->genotypeUnparsedStrings = NULL;
 }
 
+void vcfParseGenotypesGtOnly(struct vcfRecord *record)
+/* Translate record->genotypesUnparsedStrings[] into proper struct vcfGenotype[], but ignore
+ * genotype info elements, IDs, etc; parse only the genotypes (e.g. for quick display in hgTracks).
+ * This destroys genotypesUnparsedStrings. */
+{
+if (record->genotypeUnparsedStrings == NULL)
+    return;
+struct vcfFile *vcff = record->file;
+record->genotypes = vcfFileAlloc(vcff, vcff->genotypeCount * sizeof(struct vcfGenotype));
+int i;
+for (i = 0;  i < vcff->genotypeCount;  i++)
+    {
+    // Parse (.|[0-9])([/|](.|[0-9]))? in first one to four characters
+    char *string = record->genotypeUnparsedStrings[i];
+    struct vcfGenotype *gt = &(record->genotypes[i]);
+    gt->hapIxA = gt->hapIxB = -1;
+    if (string[0] != '.' && isdigit(string[0]))
+        gt->hapIxA = atoi(string);
+    if (string[1] == '/' || string[1] == '|')
+        {
+        if (isdigit(string[2]))
+            gt->hapIxB = atoi(string+2);
+        if (string[1] == '|')
+            gt->isPhased = TRUE;
+        }
+    else
+        gt->isHaploid = TRUE;
+    }
+record->genotypeUnparsedStrings = NULL;
+}
+
 const struct vcfGenotype *vcfRecordFindGenotype(struct vcfRecord *record, char *sampleId)
 /* Find the genotype and associated info for the individual, or return NULL.
  * This calls vcfParseGenotypes if it has not already been called. */
@@ -1703,4 +1738,30 @@ vcfWriteWordArrayWithSep(f, rec->filterCount, rec->filters, ';');
 fputc('\t', f);
 vcfWriteInfo(f, rec);
 fputc('\n', f);
+}
+
+boolean looksTabular(const struct vcfInfoDef *def, const struct vcfInfoElement *el)
+/* Return TRUE if def->description seems to contain a |-separated description of columns
+ * and el's first non-empty string value has the same number of |-separated parts. */
+{
+if (!def || def->type != vcfInfoString || isEmpty(def->description))
+    return FALSE;
+if (regexMatch(def->description, COL_DESC_REGEX))
+    {
+    int descColCount = countChars(def->description, '|') + 1;
+    if (descColCount >= MIN_COLUMN_COUNT)
+        {
+        int j;
+        for (j = 0;  j < el->count;  j++)
+            {
+            char *val = el->values[j].datString;
+            if (isEmpty(val))
+                continue;
+            int elColCount = countChars(val, '|') + 1;
+            if (elColCount == descColCount)
+                return TRUE;
+            }
+        }
+    }
+return FALSE;
 }

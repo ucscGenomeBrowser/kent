@@ -33679,4 +33679,106 @@ hgLoadBed hg19 -noBin -tab -type=bed6+4 \
 
 # TODO: Add to gene sorter
 
+#############################################################################
+# Build ncbiRefSeqGenomicDiff (DONE - 2020-06-10 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/ncbiRefSeqAnomalies.p13
+    cd /hive/data/genomes/hg19/bed/ncbiRefSeqAnomalies.p13
+
+    db=hg19
+    pre=ncbiRefSeqGenomicDiff
+    buildDir=/hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2020-01-21
+    asmId=GCF_000001405.25_GRCh37.p13
+
+    time (zcat $buildDir/process/$asmId.rna.cds.gz \
+        | egrep '[0-9]+\.\.[0-9]+' \
+        | pslMismatchGapToBed -cdsFile=stdin -db=$db -ignoreQNamePrefix=X \
+            $buildDir/process/$asmId.$db.psl.gz \
+            /hive/data/genomes/$db/$db.2bit \
+            $buildDir/$db.rna.fa \
+            $pre)
+
+# pslMismatchGapToBed: NM_001365372.1 gapIx 9 shifted right 74 bases, but next block size is only 38; report to NCBI
+# pslMismatchGapToBed: NM_001288811.1 gapIx 1 shifted left 6 bases, but previous block size is only 5; report to NCBI
+
+#  real    0m21.265s
+
+ bedToBigBed -type=bed9+ -tab -as=$HOME/kent/src/hg/lib/txAliDiff.as $pre.bed \
+        /hive/data/genomes/$db/chrom.sizes $pre.bb
+# pass1 - making usageList (180 chroms): 77 millis
+# pass2 - checking and writing primary data (27362 records, 20 fields): 234 millis
+    ln -sf `pwd`/$pre.bb /gbdb/hg19/ncbiRefSeq/$pre.bb
+
+#############################################################################
+# clinvarSubLolly track  IN PROGRESS BRANEY 10/17/2020
+mkdir /cluster/data/hg19/bed/clinvarSubLolly
+cd /cluster/data/hg19/bed/clinvarSubLolly
+bigBedToBed /gbdb/hg19/bbi/clinvar/clinvarMain.bb stdout | tawk '{print $40, $1,$2,$2+1,$4}' | sort  -S 40g > sort.main.bed
+hgsql hg19 -Ne "select varId,clinSign,scv from clinvarSub" | sort  -S 40g  > clinvarSubSub.txt
+
+join -t $'\t' sort.main.bed clinvarSubSub.txt | tawk '{print $2,$3,$4,$5,$6,$1, $7}' | sort -S 40g -k1,1 -k2,2n -k5,5 | tawk -f makeFranklin   | tawk -f assignColors > tmp1
+tawk '{print $1":"$2 + 1"-"$3"←Variants (submissions):"$11}' tmp1 > tmp2
+paste tmp1 tmp2 > bigBedInput.bed
+
+bedToBigBed -as=$HOME/kent/src/hg/lib/clinvarSubLolly.as -type=bed9+5 -tab bigBedInput.bed /cluster/data/hg19/chrom.sizes clinvarSubLolly.bb
+mkdir -p /gbdb/hg19/clinvarSubLolly
+ln -s `pwd`/clinvarSubLolly.bb /gbdb/hg19/clinvarSubLolly/clinvarSubLolly.bb
+
+bigBedToBed /gbdb/hg19/bbi/clinvar/clinvarMain.bb stdout | tawk '{print $40, $1,$2,$2+1,$4,$13,$15,$18,$19}' | sort  -S 40g > sort.main.bed
+hgsql hg19 -Ne "select * from clinvarSub" | sort  -S 40g  > clinvarSubSub.txt
+join -t $'\t' sort.main.bed clinvarSubSub.txt | tawk '{print $2,$3,$4,$5,0,"+",0,0,"0,0,0",$6,$20,$8, $9,$1,$10,$7,$11,$12,$13,$14,$15,$16,$17,$18,$19,$21}' | sort -S 40g -k1,1 -k2,2n | tawk -f assignScore > bigBedInput.bed
+
+bedToBigBed -as=clinvarSubBB.as -type=bed9+11 -tab bigBedInput.bed /cluster/data/hg19/chrom.sizes clinvarSub.bb
+ln -s `pwd`/clinvarSub.bb /gbdb/hg19/clinvarSubLolly/clinvarSub.bb
+
+
+#############################################################################
+# Trios for Genome In a Bottle - DONE 08/04/2020 ChrisL
+# see ~/kent/src/hg/makeDb/giab/make.txt
+
+#############################################################################
+# COVID GWAS from  COVID-19 Host Genetics Initiative  Sep 2020  Kate
+# see ~kent/src/hg/makeDb/doc/covid/covidHgiGwas.txt
+
+#############################################################################
+# gnomAD PEXT scores
+
+# PEXT data:
+# The baselevel is the sum of the expression value for all transcripts touching that base
+# The annotation-level is the sum of the expression of transcripts on which a variant has a
+# given annotation
+
+# download the pext data:
+wget https://storage.googleapis.com/gnomad-public/papers/2019-tx-annotation/pre_computed/all.possible.snvs.tx_annotated.GTEx.v7.021520.tsv.bgz
+wget https://storage.googleapis.com/gnomad-public/papers/2019-tx-annotation/gnomad_browser/all.baselevel.021620.tsv.bgz
+
+# these files are humongous even with compression:
+ls -lh all.*
+-rw-rw-r-- 1 chmalee genecats 307M Apr  8 21:54 all.baselevel.021620.tsv.bgz
+-rw-rw-r-- 1 chmalee genecats 6.7G Feb 14  2020 all.possible.snvs.tx_annotated.GTEx.v7.021520.tsv.bgz
+
+# how large are these files?
+time zcat all.base* | wc -l
+35305149
+
+real    1m11.964s
+user    1m8.725s
+sys 0m10.385s
+
+# this is theoretically all coding bases in gencode v19, split by tissue then run buildPext.py to
+# make one bigWig per tissue:
+mkdir run
+seq 4 57 | parallel -j10 'zcat all.baselevel.021620.tsv.bgz | cut -f1-3,{} | gzip -c > run/tissue{}.pext.gz'
+
+# overlapping exons in coding regions causes problems, don't output any scores
+# for those regions
+seq 4 57 | parallel --joblog run.log -j20 './buildPext.py run/tissue{}.pext.gz -o split'
+tail -n +2 run.log | cut -f4 | awk '{sum += $1}END{print sum/NR}'
+452.034
+
+# Turn into bigWigs:
+find split/ -name "*.bed" | parallel -j15 'sort -k1,1 -k2,2n {} | cut -f1-3,5 > {.}.bedGraph'
+find split/ -name "*.bedGraph" | parallel -j15 'bedGraphToBigWig {} /hive/data/genomes/hg19/chrom.sizes {.}.bw'
+mkdir -p /gbdb/hg19/gnomAD/pext
+ln -s `pwd`/split/*.bw /gbdb/hg19/gnomAD/pext/
+
 

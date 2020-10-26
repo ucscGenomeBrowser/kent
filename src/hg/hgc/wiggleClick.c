@@ -134,24 +134,70 @@ if ((winEnd - winStart) < MAX_WINDOW_ALLOW_STATS)
 	    hRange = 0.0;
 	}
 
-    /*	If we have a valid range, use a specified 20 bin histogram
-     *	NOTE: pass 21 as binCount to get a 20 bin histogram
-     */
-    if (hRange > 0.0)
-	histoGramResult = histoGram(valuesArray, valueCount, (hRange/20.0),
-	    (unsigned) 21, hMin, hMin, hMax, (struct histoResult *)NULL);
+    if (valuesMatched < 25)
+	{
+	struct wigAsciiData *asciiData = NULL;
+        unsigned long long valuesDone = 0;
+	double worstCaseResolution = 0.0;
+
+	struct dyString *tableData = dyStringNew(256);
+	for (asciiData = wds->ascii; asciiData && (valuesDone < valuesMatched);
+	    asciiData = asciiData->next)
+	    {
+	    if (asciiData->count)
+		{
+		double resolution = asciiData->dataRange / (MAX_WIG_VALUE+1);
+		if (resolution > worstCaseResolution)
+		    worstCaseResolution = resolution;
+		struct asciiDatum *data = asciiData->data;
+		unsigned i = 0;
+		for (;(i < asciiData->count)&&(valuesDone < valuesMatched); ++i)
+		    {
+		    dyStringPrintf(tableData, "<tr>");
+		    dyStringPrintf(tableData, "<td>%s</td>", asciiData->chrom);
+		    dyStringPrintf(tableData, "<td>%d</td>", data->chromStart);
+		    dyStringPrintf(tableData, "<td>%d</td>", data->chromStart+asciiData->span);
+		    dyStringPrintf(tableData, "<td align=right>%.3f</td>", data->value);
+		    dyStringPrintf(tableData, "</tr>\n");
+		    ++data;
+		    ++valuesDone;
+		    }
+		}
+	    }
+        printf("<table class='stdTbl'>\n");
+        printf("<thead>\n");
+	printf("<tr><th colspan=4>%llu data values in this window view</th></tr>\n", valuesMatched);
+	printf("<tr><th>chromosome</th><th>chromStart</th><th>chromEnd</th><th>dataValue</th></tr>\n");
+        printf("</thead>\n");
+        printf("<tbody>\n");
+	printf("%s", dyStringCannibalize(&tableData));
+        printf("</tbody>\n");
+        printf("<tfoot>\n");
+	printf("<tr><td colspan=4>compressed data has resolution of + or - %.3f</td></tr>\n", worstCaseResolution);
+        printf("</tfoot>\n");
+        printf("</table>\n");
+	}
     else
-	histoGramResult = histoGram(valuesArray, valueCount,
-	    NAN, (unsigned) 0, NAN, (float) wds->stats->lowerLimit,
-		(float) (wds->stats->lowerLimit + wds->stats->dataRange),
-		    (struct histoResult *)NULL);
+	{
+	/*	If we have a valid range, use a specified 20 bin histogram
+	 *	NOTE: pass 21 as binCount to get a 20 bin histogram
+	 */
+	if (hRange > 0.0)
+	    histoGramResult = histoGram(valuesArray, valueCount, (hRange/20.0),
+	        (unsigned) 21, hMin, hMin, hMax, (struct histoResult *)NULL);
+	else
+	    histoGramResult = histoGram(valuesArray, valueCount,
+	        NAN, (unsigned) 0, NAN, (float) wds->stats->lowerLimit,
+		    (float) (wds->stats->lowerLimit + wds->stats->dataRange),
+		        (struct histoResult *)NULL);
 
-    /*	histoGram() may return NULL if it doesn't work, that's OK, the
-     *	print out will indicate no results  (TRUE == html output)
-     */
-    printHistoGram(histoGramResult, TRUE);
+	/*	histoGram() may return NULL if it doesn't work, that's OK, the
+	 *	print out will indicate no results  (TRUE == html output)
+	 */
+	printHistoGram(histoGramResult, TRUE);
 
-    freeHistoGram(&histoGramResult);
+	freeHistoGram(&histoGramResult);
+	}
     freeMem(valuesArray);
     }
 else

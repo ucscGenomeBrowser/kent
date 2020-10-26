@@ -1,0 +1,65 @@
+<h2>Description</h2>
+<p>
+This track contains deep mutational scanning data measuring the effect of the mutations to 
+the Spike RBD to binding of antibodies using a yeast surface display system.</p>
+
+
+<p>Note that the authors &quot;first used fluorescence-activated cell sorting (FACS) 
+to eliminate RBD variants with less than 0.01x the affinity for ACE2 compared to that 
+of the unmutated RBD (Figure S1A,B). We reasoned this sorting would purge the libraries 
+of completely nonfunctional RBD mutants, but retain mutants with decreased ACE2 affinity 
+that might enable antibody escape.&quot;</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>Scores represent the &quot;escape fraction&quot; (discussed at length in the Methods 
+of the paper) which &quot;represent the fraction of a given variant that escape antibody 
+binding, and should in principle range from 0 to 1.&quot;</p>
+
+<p>A higher score indicates a greater level of escape.</p>
+
+<p>Each subtrack contains all the scores representing mutations to a particular amino 
+acid (each annotation is a Spike codon). For instance the A subtrack measures the escape 
+fraction for a particular antibody if the annotated amino acid is mutated to alanine (if 
+the wildtype amino acid is A, then the score is 0). The &quot;total&quot; subtracks 
+represent the sum of all escape fractions for all amino acid changes at a position. 
+The &quot;max&quot; subtracks are the escape fraction for the amino acid substitution 
+with the greatest escape fraction.</p>
+
+<p>&quot;Note that the magnitude of the measured effects of mutations on antibody escape depends on
+the antibody concentration and the flow cytometry gates applied, meaning that the
+escape fractions are comparable across sites for any given antibody, but are not precisely
+comparable among antibodies without external calibration.&quot;</p>
+
+<p>Visualizations of the data are available from the authors <a target="_blank" 
+href="https://jbloomlab.github.io/SARS-CoV-2-RBD_MAP_Crowe_antibodies/">here</a>.</p>
+
+<h2>Methods</h2>
+<p>
+Table S1 from Starr et al, was downloaded and parsed into bedGraph format.</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a target="_blank" href="hgTables">Table Browser</a>, or combined with other datasets in the
+<a target="_blank" href="hgIntegrator">Data Integrator</a> tool.</p>
+
+<p>
+Please refer to our
+<a target="_blank" 
+href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our
+<a target="_blank" href="../../FAQ/FAQdownloads.html#download36">Data Access FAQ</a>
+for more information.</p>
+
+<h2>References</h2>
+<p>
+Starr TN, Greaney AJ, Hilton SK, Ellis D, Crawford KHD, Dingens AS, Navarro MJ, Bowen JE, Tortorici
+MA, Walls AC <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32841599" target="_blank">
+Deep Mutational Scanning of SARS-CoV-2 Receptor Binding Domain Reveals Constraints on Folding and
+ACE2 Binding</a>.
+<em>Cell</em>. 2020 Sep 3;182(5):1295-1310.e20.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32841599" target="_blank">32841599</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7418704/" target="_blank">PMC7418704</a>
+</p>
+

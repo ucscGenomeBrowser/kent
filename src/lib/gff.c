@@ -292,8 +292,8 @@ gl->feature = hel->name;
 
 if (!isdigit(words[3][0]) || !isdigit(words[4][0]))
    gffSyntaxError(fileName, lineIx, "col 3 or 4 not a number ");	
-gl->start = atoi(words[3])-1 + baseOffset;
-gl->end = atoi(words[4]) + baseOffset;
+gl->start = atol(words[3])-1 + baseOffset;
+gl->end = atol(words[4]) + baseOffset;
 gl->score = atof(words[5]);
 gl->strand = words[6][0];
 gl->frame = words[7][0];
@@ -382,15 +382,15 @@ static void getGroupBoundaries(struct gffGroup *group)
 /* Fill in start, end, strand of group from lines. */
 {
 struct gffLine *line;
-int start = 0x3fffffff;
-int end = -start;
+long start = -1;
+long end = -1;
 line = group->lineList;
 group->strand = line->strand;
 for (; line != NULL; line = line->next)
     {
-    if (start > line->start)
+    if ((start < 0) || (start > line->start))
 	start = line->start;
-    if (end < line->end)
+    if ((end < 0) || (end < line->end))
 	end = line->end;
     }
 group->start = start;
@@ -449,9 +449,9 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->feature);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->start+1);
+fprintf(f, "%lu", el->start+1);
 fputc(sep,f);
-fprintf(f, "%u", el->end);
+fprintf(f, "%lu", el->end);
 fputc(sep,f);
 fprintf(f, "%f", el->score);
 fputc(sep,f);

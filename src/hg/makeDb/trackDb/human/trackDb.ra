@@ -21,14 +21,16 @@ include trackDb.gtex.ra
 include trackDb.geneHancer.ra
 
 # NCBI ClinVar
-include trackDb.clinvar.ra public,beta
-include trackDb.clinvarTest.ra alpha
+include trackDb.clinvar.ra
 
 # NCBI dbVar
 include trackDb.dbVar.ra
 
 # ClinGen
-include trackDb.clinGen.ra alpha
+include trackDb.clinGen.ra
+
+# Genome In a Bottle
+include trackDb.giab.ra alpha
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
@@ -111,15 +113,30 @@ type bed 4
 url http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=gene=
 
 track decipher
-shortLabel DECIPHER CNVs
-longLabel DECIPHER: Chromosomal Imbalance and Phenotype in Humans (CNVs)
+shortLabel Decipher CNVs
+longLabel Decipher CNVs
 group phenDis
 visibility hide
-color 0,0,0
-type bed 4
-tableBrowser off decipherRaw knownToDecipher knownCanonToDecipher
-prevExonText Left edge
-nextExonText Right edge
+type bigBed 9 +
+itemRgb on
+tableBrowser off
+bigDataUrl /gbdb/$D/decipher/decipherCnv.bb
+url https://decipher.sanger.ac.uk/patient/$$
+urlLabel Decipher Patient View:
+filter.size 0
+filterByRange.size on
+filterLimits.size 2:170487333
+filterValues.variant_class Amplification,Copy-Number Gain,Deletion,Duplication,Duplication/Trip
+filterValues.pathogenicity Benign,Likely Benign,Likely Pathogenic,Pathogenic,Uncertain,Unknown
+mergeSpannedItems on
+searchIndex name
+mouseOverField _mouseOver
+pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
+
+searchTable decipher
+searchMethod exact
+searchType bigBed
+release alpha,beta
 
 track decipherSnvs
 shortLabel DECIPHER SNVs
@@ -3152,6 +3169,32 @@ url2Label miRBase:
 url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
 dataVersion miRBase Release 13.0 (March 2009) and snoRNABase Version 3
 
+track lrgBigPsl
+shortLabel LRG Transcripts (RM 24672)
+longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations (RedMine 24672)
+group genes
+visibility hide
+type bigPsl
+mouseOverField mouseOver
+skipFields mouseOver
+skipEmptyFields on
+urls ncbiTranscript=https://www.ncbi.nlm.nih.gov/nuccore/$$ ensemblTranscript=http://www.ensembl.org/Multi/Search/Results?site=ensembl_all;q=$$ ncbiProtein=https://www.ncbi.nlm.nih.gov/protein/$$ ensemblProtein=http://www.ensembl.org/Multi/Search/Results?site=ensembl_all;q=$$
+cdsTable lrgCds
+cdnaTable lrgCdna
+pepTable lrgPep
+baseColorDefault diffCodons
+baseColorUseCds table lrgCds
+baseColorUseSequence table lrgCdna
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+color 54,125,29
+urlLabel Link to LRG transcript:
+url ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
+
 track lrgTranscriptAli
 shortLabel LRG Transcripts
 longLabel Locus Reference Genomic (LRG) Fixed Transcript Annotations
@@ -3572,6 +3615,7 @@ type bed 4
 hgsid on
 url http://www.omim.org/entry/
 tableBrowser noGenome
+noGenomeReason Distribution restrictions by OMIM. See the track documentation for details. You can download the complete OMIM dataset for free from omim.org
 
 track omimGene2
 shortLabel OMIM Genes
@@ -3583,6 +3627,8 @@ type bed 4
 hgsid on
 url http://www.omim.org/entry/
 tableBrowser noGenome omimGeneMap omimGeneMap2 omimPhenotype omimGeneSymbol omim2gene
+noGenomeReason Distribution restrictions by OMIM. See the track documentation for details. You can download the complete OMIM dataset for free from omim.org
+release public
 
 track omimGene2bb
 shortLabel OMIM Genes (New)
@@ -3602,6 +3648,9 @@ noScoreFilter on
 labelFields name,mainSym
 defaultLabelFields name,mainSym
 html omimGene2 
+noGenomeReason Distribution restrictions by OMIM. See the track documentation for details. You can download the complete OMIM dataset for free from omim.org
+release alpha,beta
+searchIndex name
 
 track omimAvSnp
 shortLabel OMIM Alleles
@@ -3613,6 +3662,7 @@ type bed 4
 hgsid on
 url http://www.omim.org/entry/
 tableBrowser noGenome omimAv omimAvRepl
+noGenomeReason Distribution restrictions by OMIM. See the track documentation for details. You can download the complete OMIM dataset for free from omim.org
 
 track cosmic
 shortLabel COSMIC
@@ -3669,32 +3719,32 @@ longLabel Leiden Open Variation Database Public Variants
 group phenDis
 visibility hide
 compositeTrack on
-type bedDetail 6
+type bigBed 4 +
 tableBrowser off lovdComp
 html lovdComp
+pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
 
         track lovdShort
-        shortLabel LOVD Variants < 50bp
-        longLabel Leiden Open Variation Database, short <=100bp variants
+        shortLabel LOVD Variants < 50 bp
+        longLabel Leiden Open Variation Database, short < 50 bp variants
         group phenDis
         visibility hide
-        type bedDetail 6
-        url http://varcache.lovd.nl/redirect/$$
-        urlLabel Link to LOVD:
+        urls id="http://varcache.lovd.nl/redirect/$$"
         noScoreFilter on
+        bigDataUrl /gbdb/$D/lovd/lovd.$D.short.bb
         parent lovdComp
 
         track lovdLong
-        shortLabel LOVD Variants >= 50bp
-        longLabel Leiden Open Variation Database Public Variants, long >100bp variants
+        type bigBed 9 +
+        shortLabel LOVD Variants >= 50 bp
+        longLabel Leiden Open Variation Database Public Variants, long >= 50 bp variants
         group phenDis
         visibility hide
-        type bedDetail 6
-        url http://varcache.lovd.nl/redirect/$$
-        urlLabel Link to LOVD:
+        urls id="http://varcache.lovd.nl/redirect/$$"
         noScoreFilter on
+        bigDataUrl /gbdb/$D/lovd/lovd.$D.long.bb
         parent lovdComp
-
+        mergeSpannedItems on
 
 track hgmd
 shortLabel HGMD Variants
@@ -4251,6 +4301,17 @@ shortCircuit 1
 semiShortCircuit 1
 termRegex ([0-9]{6})
 searchPriority 10
+release beta,public
+
+searchName omimGene2AccBb
+searchTable omimGene2bb
+searchMethod exact
+searchType bigBed
+shortCircuit 1
+semiShortCircuit 1
+termRegex ([0-9]{6})
+searchPriority 10
+release alpha
 
 searchName omimGeneLocAcc
 searchTable omimLocation
@@ -4672,6 +4733,7 @@ subGroup3 level Evidence cur=Curated sub=Submitted
 dimensions dimensionY=class dimensionX=level
 sortOrder class=+ level=+ view=+
 type bed 3
+pennantIcon Deprecated red /goldenPath/newsarch.html#093020b "Track no longer updated, see news archive for details"
 
     track iscaViewTotal
     shortLabel Coverage (Graphical)
@@ -4803,6 +4865,7 @@ searchTable decipher
 termRegex [0-9]+
 searchType bed
 searchPriority 50
+release public
 
 searchName decipherSnvsId
 searchTable decipherSnvs
@@ -4850,49 +4913,42 @@ release beta,public
 searchTable iscaCuratedBenign
 searchMethod exact
 searchType bed
-semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
 searchTable iscaBenign
 searchMethod exact
 searchType bed
-semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
 searchTable iscaLikelyBenign
 searchMethod exact
 searchType bed
-semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
 searchTable iscaCuratedPathogenic
 searchMethod exact
 searchType bed
-semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
 searchTable iscaPathogenic
 searchMethod exact
 searchType bed
-semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
 searchTable iscaLikelyPathogenic
 searchMethod exact
 searchType bed
-semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
 searchTable iscaUncertain
 searchMethod exact
 searchType bed
-semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
@@ -5053,9 +5109,13 @@ longLabel GeneReviews
 group  phenDis
 visibility hide
 color 0, 80, 0
-type bed 4
+type bigBed 9 +
+bigDataUrl /gbdb/$D/geneReviews/geneReviews.bb
+mouseOver $name disease(s): $diseases
 html geneReviews
 url https://www.ncbi.nlm.nih.gov/books/NBK1116/?term=$$
+noScoreFilter on
+pennantIcon Updated red ../goldenPath/newsarch.html#101320 "Updated Oct. 13, 2020"
 
 searchName geneReviews
 searchTable geneReviews
@@ -5423,4 +5483,23 @@ semiShortCircuit 1
 termRegex nssv[0-9]+
 searchType bed
 searchPriority 50
+
+include covidHgiGwas.ra
+
+track covidHgeMuts
+type bigBed 12 + 
+shortLabel COVID-19 Immunity Variants
+longLabel COVID-19 Immunity Variants from the COVID Human Genetics Effort
+mouseOver $name $rsId $gene Genotype: $genotype; Zygosity: $zygo ; Inheritance: $inhMode
+labelFields gene, name
+defaultLabelFields gene, name
+noScoreFilter on
+group covid 
+color 179,0,0
+visibility hide
+html covidHgeMuts
+bigDataUrl /gbdb/hg38/covid/covidMuts.bb
+ 
+
+
 

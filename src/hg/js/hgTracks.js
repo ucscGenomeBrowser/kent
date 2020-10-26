@@ -810,13 +810,6 @@ var cart = {
         return url;
     },
     
-    beforeUnload: function ()
-    {   // named function that can be bound and unbound to beforeunload event
-        // Makes sure any outstanding queued updates are sent before leaving the page.
-        //console.log('cart.beforeUnload: '+objKeyCount(cart.updateQueue)+' vars');
-        cart.setVarsObj( {}, null, false ); // synchronous
-    },
-    
     varsToUrlData: function (varsObj)
     {   // creates a url data (var1=val1&var2=val2...) string from vars object and queue
         // The queue will be emptied by this call.
@@ -834,6 +827,7 @@ var cart = {
     
     setVarsObj: function (varsObj, errFunc, async)
     {   // Set all vars in a var hash, appending any queued updates
+        // The default behavior is async = true
         //console.log('cart.setVarsObj: were:'+objKeyCount(cart.updateQueue) + 
         //            ' new:'+objKeyCount(varsObj);
         cart.queueVarsObj(varsObj); // lay ontop of queue, to give new values precedence
@@ -847,6 +841,7 @@ var cart = {
     
     setVars: function (names, values, errFunc, async)
     {   // ajax updates the cart, and includes any queued updates.
+        cart.updateSessionPanel();      // handles hide from left minibutton
         cart.setVarsObj(arysToObj(names, values), errFunc, async);
     },
 
@@ -858,21 +853,32 @@ var cart = {
             //            ' new:'+objKeyCount(varsObj));
             for (var name in varsObj) {
                 cart.updateQueue[name] = varsObj[name];
-                
-                // Could update in background, however, failing to hit "refresh" is user choice
-                // first in queue, schedule background update
-                if (objKeyCount(cart.updateQueue) === 1) {
-                    // By unbind/bind, we assure that there is only one instance bound
-                    $(window).unbind('beforeunload', cart.beforeUnload); 
-                    $(window).bind(  'beforeunload', cart.beforeUnload); 
-                }
             }
         }
     },
-    
+
     addVarsToQueue: function (names,values)
     {   // creates a string of updates to save for ajax batch or a submit
         cart.queueVarsObj(arysToObj(names,values));
+    },
+
+    updateSessionPanel: function()
+    {
+    if (typeof recTrackSetsDetectChanges === 'undefined' || recTrackSetsDetectChanges === null)
+        return;
+
+    // change color of text
+    $('span.gbSessionChangeIndicator').addClass('gbSessionChanged');
+
+    // change mouseover on the panel.  A bit fragile here inserting text in the mouseover specified in
+    // hgTracks.js, so depends on match with text there, and should present same message as C code
+    // (Perhaps this could be added as a script tag, so not duplicated)
+    var txt = $('span.gbSessionLabelPanel').attr('title');
+    if (txt && !txt.match(/with changes/)) {
+        $('span.gbSessionLabelPanel').attr('title', txt.replace(
+                                   "track set", 
+                                   "track set, with changes (added or removed tracks) you have requested"));
+        }
     }
 };
 
@@ -916,6 +922,7 @@ var vis = {
 
     makeTrackVisible: function (track)
     {   // Sets the vis box to visible, and ques a cart update, but does not update the image
+        // Trusts that the cart update will be submitted later.
         if (track && vis.get(track) !== "full") {
             vis.update(track, 'pack');
             cart.addVarsToQueue([track], ['pack']);
@@ -956,12 +963,13 @@ var vis = {
                     rec.visibility = 0;
                 // else Would be nice to hide subtracks as well but that may be overkill
                 $(document.getElementById('tr_' + track)).remove();
+                cart.updateSessionPanel();
                 imageV2.highlightRegion();
                 $(this).attr('class', 'hiddenText');
             } else
                 $(this).attr('class', 'normalText');
             
-            cart.addVarsToQueue([track], [$(this).val()]);
+            cart.setVars([track], [$(this).val()]);
             imageV2.markAsDirtyPage();
             return false;
         });
@@ -1051,7 +1059,7 @@ var dragSelect = {
         var pos = parsePosition(newPosition);
         var start = pos.start;
         var end = pos.end;
-        var newHighlight = getDb() + "." + pos.chrom + ":" + start + "-" + end + hlColorName;
+        var newHighlight = makeHighlightString(getDb(), pos.chrom, start, end, hlColorName);
         newHighlight = imageV2.disguiseHighlight(newHighlight);
         var oldHighlight = hgTracks.highlight;
         if (oldHighlight===undefined || doAdd===undefined || doAdd===false || oldHighlight==="") {
@@ -1092,7 +1100,7 @@ var dragSelect = {
                 }
             }
             if (nonVirtChrom !== "")
-                cartSettings.nonVirtHighlight = getDb() + '.' + nonVirtChrom + ':' + nonVirtStart + '-' + (nonVirtEnd+1) + hlColorName;
+                cartSettings.nonVirtHighlight = makeHighlightString(getDb(), nonVirtChrom, nonVirtStart, (nonVirtEnd+1), hlColorName);
         } else if (hgTracks.windows && hgTracks.virtualSingleChrom) {
                 cartSettings.nonVirtHighlight = hgTracks.highlight;
         }
@@ -1104,7 +1112,7 @@ var dragSelect = {
     selectionEndDialog: function (newPosition)
     // Let user choose between zoom-in and highlighting.
     {   
-        // if the user hit Escape just before, do not show this dialog
+        // if the user hit Escape just before, do not show this dialo
         if (dragSelect.startTime===null)
             return;
         var dragSelectDialog = $("#dragSelectDialog")[0];
@@ -2305,7 +2313,8 @@ var rightClick = {
                             else
                                 ele = document.TrackHeaderForm;
                             if (name)
-                                cart.addVarsToQueue(['hgFind.matches'], [name]);
+                                // Add or update form input with gene to highlight
+                                suggestBox.updateFindMatches(name);
                             ele.submit();
                         }
                     }
@@ -2499,7 +2508,7 @@ var rightClick = {
             }
         } else if (cmd === 'jumpToHighlight') { // If highlight exists for this assembly, jump to it
             if (hgTracks.highlight && rightClick.clickedHighlightIdx!==null) {
-                var newPos = parsePositionWithDb(hgTracks.highlight.split("|")[rightClick.clickedHighlightIdx]);
+                var newPos = getHighlight(hgTracks.highlight, rightClick.clickedHighlightIdx);
                 if (newPos && newPos.db === getDb()) {
                     if ( $('#highlightItem').length === 0) { // not visible? jump to it
                         var curPos = parsePosition(genomePos.get());
@@ -2540,7 +2549,7 @@ var rightClick = {
             } else {
                 args[key] = 1;
                 updateObj[key] = 1;
-                cart.setVars(updateObj,null,false);
+                cart.setVarsObj(updateObj,null,false);
                 imageV2.requestImgUpdate(id, id + ".doMergeItems=1");
             }
         } else {   // if ( cmd in 'hide','dense','squish','pack','full','show' )
@@ -2572,7 +2581,7 @@ var rightClick = {
                     document.TrackForm.submit();
                 } else {
                         // Add vis update to queue then submit
-                        cart.addVarsToQueue([id], [cmd]);
+                        cart.setVars([id], [cmd], null, false); // synchronous
                         document.TrackHeaderForm.submit();
                 }
             } else {
@@ -2924,24 +2933,21 @@ var rightClick = {
 
             menu.push($.contextMenu.separator);
             if (hgTracks.highlight && rightClick.clickedHighlightIdx!==null) {
+                var currentlySeen = ($('#highlightItem').length > 0); 
+                o = {};
+                // Jumps to highlight when not currently seen in image
+                var text = (currentlySeen ? " Zoom" : " Jump") + " to highlight";
+                o[rightClick.makeImgTag("highlightZoom.png") + text] = {
+                    onclick: rightClick.makeHitCallback('jumpToHighlight')
+                };
 
-                if (hgTracks.highlight.search(getDb() + '.') === 0) {
-                    var currentlySeen = ($('#highlightItem').length > 0); 
-                    o = {};
-                    // Jumps to highlight when not currently seen in image
-                    var text = (currentlySeen ? " Zoom" : " Jump") + " to highlight";
-                    o[rightClick.makeImgTag("highlightZoom.png") + text] = {
-                        onclick: rightClick.makeHitCallback('jumpToHighlight')
+                if ( currentlySeen ) {   // Remove only when seen
+                    o[rightClick.makeImgTag("highlightRemove.png") + 
+                                                               " Remove highlight"] = {
+                        onclick: rightClick.makeHitCallback('removeHighlight')
                     };
-
-                    if ( currentlySeen ) {   // Remove only when seen
-                        o[rightClick.makeImgTag("highlightRemove.png") + 
-                                                                   " Remove highlight"] = {
-                            onclick: rightClick.makeHitCallback('removeHighlight')
-                        };
-                    }
-                    menu.push(o);
                 }
+                menu.push(o);
             }
 
             if (rec.isCustomComposite)
@@ -3257,6 +3263,22 @@ var popUpHgt = {
     }
 };
 
+// Show the recommended track sets popup
+function showRecTrackSetsPopup() {
+    // Update links with current position
+    $('a.recTrackSetLink').each(function() {
+        var $this = $(this);
+        var link = $this.attr("href").replace(/position=.*/, 'position=');
+        $this.attr("href", link + genomePos.original);
+    });
+    $('#recTrackSetsPopup').dialog({width:'650'});
+}
+
+function removeSessionPanel() {
+    $('#recTrackSetsPanel').remove();
+    setCartVar("hgS_otherUserSessionLabel", "off", null, false);
+}
+
 // A function to show the keyboard help dialog box, bound to ? and called from the menu bar
 function showHotkeyHelp() {
     $("#hotkeyHelp").dialog({width:'600'});
@@ -3442,6 +3464,7 @@ var popUp = {
                     cart.setVarsObj(changedVars);
                 $(document.getElementById('tr_' + trackName)).remove();
                 imageV2.afterImgChange(true);
+                cart.updateSessionPanel();
             } else {
                 // Keep local state in sync if user changed visibility
                 if (newVis) {
@@ -3634,6 +3657,14 @@ var imageV2 = {
         return false;
     },
 
+    moveTiming: function() 
+    {    // move measure timing messages to the end of the page
+        if ($(".timing").length > 0) {
+            $("body").append("<div id='timingDiv'></div>");
+            $(".timing").detach().appendTo('#timingDiv');
+        }
+    },
+
     updateTiming: function (response)
     {   // update measureTiming text on current page based on what's in the response
         var reg = new RegExp("(<span class='timing'>.+?</span>)", "g");
@@ -3644,7 +3675,7 @@ var imageV2 = {
         if (strs.length > 0) {
             $('.timing').remove();
             for (var ix = strs.length; ix > 0; ix--) {
-                $('body').prepend(strs[ix - 1]);
+                $('#timingDiv').append(strs[ix - 1]);
             }
         }
         reg = new RegExp("(<span class='trackTiming'>[\\S\\s]+?</span>)");
@@ -3658,23 +3689,23 @@ var imageV2 = {
     {
         if ($('#positionInput').length) {
             if (!suggestBox.initialized) { // only call init once
-                 suggestBox.init(getDb(), 
+                suggestBox.init(getDb(),
                             $("#suggestTrack").length > 0,
                             function (item) {
                                 genomePos.set(item.id, getSizeFromCoordinates(item.id));
+                                if ($("#suggestTrack").length && $('#hgFindMatches').length) {
+                                    // Set cart variables to open the hgSuggest gene track and highlight
+                                    // the chosen transcript.  These variables will be submittted by the goButton
+                                    // click handler.
+                                    vis.makeTrackVisible($("#suggestTrack").val());
+                                    cart.addVarsToQueue(["hgFind.matches"],[$('#hgFindMatches').val()]);
+                                }
                                 $("#goButton").click();
                             },
                             function (position) {
                                 genomePos.set(position, getSizeFromCoordinates(position));
-                            });
-            }
-            // Make sure suggestTrack is visible when user chooses via gene select (#3484).
-            if ($("#suggestTrack").length) {
-                $(document.TrackForm || document.TrackHeaderForm).submit(function(event) {
-                                               if ($('#hgFindMatches').length) {
-                                                   vis.makeTrackVisible($("#suggestTrack").val());
-                                               }
-                                           });
+                            }
+                );
             }
         }
     },
@@ -3794,8 +3825,11 @@ var imageV2 = {
                 if (imageV2.backSupport) {
                     $(imgTbl).append("<tr id='tr_" + id + "' abbr='0'" + // abbr gets filled in
                                         " class='imgOrd trDraggable'></tr>");
-                    if (!imageV2.updateImgForId(response, id, true, newJsonRec))
+                    if (!imageV2.updateImgForId(response, id, true, newJsonRec)) {
                         warn("Couldn't insert new image for id: " + id);
+                    } else {
+                        cart.updateSessionPanel();
+                    }
                 }
             }
         }
@@ -3946,6 +3980,8 @@ var imageV2 = {
                     var rec = oldJson.trackDb[this.id];
                     rec.limitedVis = newJson.trackDb[this.id].limitedVis;
                     vis.update(this.id, visibility);
+                    if (visibility === "hide")
+                        cart.updateSessionPanel(); // notify when vis change to hide track
                     valid = true;
                 } else {
                     // what got returned from the AJAX request was a different
@@ -4142,10 +4178,6 @@ var imageV2 = {
             return false;  // Shouldn't return from fullReload but I have seen it in FF
         }
     
-        // If UCSC Genes (or any suggestion) is supposed to be made visible, then do so
-        if ($("#suggestTrack").length && $('#hgFindMatches').length)
-            vis.makeTrackVisible($("#suggestTrack").val());
-
         jQuery('body').css('cursor', 'wait');
         var currentId, currentIdYOffset;
         if (keepCurrentTrackVisible) {
@@ -4191,7 +4223,7 @@ var imageV2 = {
             pos.start = newPos.start;
             pos.end   = newPos.end;
         }
-        return pos.db+"."+pos.chrom+":"+pos.start+"-"+pos.end+pos.color;
+        return makeHighlightString(pos.db, pos.chrom, pos.start, pos.end, pos.color);
     },
 
     undisguiseHighlight: function(pos)
@@ -4477,6 +4509,8 @@ var trackSearch = {
 ///////////////
 $(document).ready(function()
 {
+    imageV2.moveTiming();
+
     // on Safari the back button doesn't call the ready function.  Reload the page if
     // the back button was pressed.
     $(window).bind("pageshow", function(event) {
@@ -4616,7 +4650,9 @@ $(document).ready(function()
 
     // ensure clicks into hgTrackUi save the cart state
     $("td a").each( function (tda) {
-        this.onclick = posting.saveSettings;
+        if (this.href && this.href.indexOf("hgTrackUi") !== -1) {
+            this.onclick = posting.saveSettings;
+        }
     });
 
 });

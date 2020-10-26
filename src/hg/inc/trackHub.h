@@ -129,6 +129,19 @@ int trackHubChromCount(char *database);
 struct slName *trackHubAllChromNames(char *database);
 /* Return a list of all the chrom names in this assembly hub database. */
 
+char *trackHubChromSizes(char *database);
+/* see if this assembly hub has a chrom.sizes file, return url if present
+ * returns NULL when not present
+ */
+
+char *trackHubAliasFile(char *database);
+/* see if this assembly hub has an alias file, return url if present
+ * returns NULL when not present
+ */
+
+struct hash *trackHubAllChromAlias(char *database);
+/* Return a hash of chroms with alias names from alias file if present */
+
 struct chromInfo *trackHubAllChromInfo(char *database);
 /* Return a chromInfo structure for all the chroms in this database. */
 

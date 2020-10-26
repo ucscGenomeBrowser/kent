@@ -258,6 +258,7 @@
 #include "bPlusTree.h"
 #include "customFactory.h"
 #include "iupac.h"
+#include "clinvarSubLolly.h"
 
 static char *rootDir = "hgcData";
 
@@ -1549,15 +1550,11 @@ slReverse(fields);
 return fields;
 }
 
-int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount)
+int extraFieldsPrintAs(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount, struct asObject *as)
 // Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
 // sr may be null for bigBeds.
 // Returns number of extra fields actually printed.
 {
-struct asObject *as = asForDb(tdb, database);
-if (as == NULL)
-    return 0;
-
 // We are trying to print extra fields so we need to figure out how many fields to skip
 int start = extraFieldsStart(tdb, fieldCount, as);
 
@@ -1639,7 +1636,6 @@ for (;col != NULL && count < fieldCount;col=col->next)
     else
         printf("<td>%s</td></tr>\n", fields[ix]);
     }
-asObjectFree(&as);
 if (skipIds)
     slFreeList(skipIds);
 if (sepFields)
@@ -1650,6 +1646,22 @@ if (count > 0)
 
 return count;
 }
+
+int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount)
+// Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
+// sr may be null for bigBeds.
+// Returns number of extra fields actually printed.
+{
+struct asObject *as = asForDb(tdb, database);
+if (as == NULL)
+    return 0;
+
+int ret =  extraFieldsPrintAs(tdb, sr, fields,fieldCount, as);
+//asObjectFree(&as);
+
+return ret;
+}
+
 
 void genericBedClick(struct sqlConnection *conn, struct trackDb *tdb,
 		     char *item, int start, int bedSize)
@@ -3141,6 +3153,7 @@ void printTrackHtml(struct trackDb *tdb)
 {
 if (!isCustomTrack(tdb->track))
     {
+    printRelatedTracks(database, trackHash, tdb, cart);
     extraUiLinks(database, tdb);
     printTrackUiLink(tdb);
     printOrigAssembly(tdb);
@@ -4293,8 +4306,7 @@ else if (wordCount > 0)
         }
     else if (sameString(type, "bigLolly") )
 	{
-	int num = 12;
-        genericBigBedClick(conn, tdb, item, start, end, num);
+        genericBigBedClick(conn, tdb, item, start, end, 0);
 	}
     else if (sameString(type, "bigDbSnp") )
 	{
@@ -10768,9 +10780,10 @@ if (url != NULL && url[0] != 0)
         }
 
     // show Related UCSC Gene links
+    char *knownDatabase = hdbDefaultKnownDb(database);
     sqlSafef(query, sizeof(query),
-          "select distinct kgId from kgXref x, %s l, omim2gene g where x.refseq = mrnaAcc and l.omimId=%s and g.omimId=l.omimId and g.entryType='gene'",
-	  refLinkTable, itemName);
+          "select distinct kgId from %s.kgXref x, %s l, omim2gene g where x.refseq = mrnaAcc and l.omimId=%s and g.omimId=l.omimId and g.entryType='gene'",
+	  knownDatabase, refLinkTable, itemName);
     sr = sqlMustGetResult(conn, query);
     if (sr != NULL)
 	{
@@ -25816,7 +25829,7 @@ else if (sameWord(table, "gad"))
     {
     doGad(tdb, item, NULL);
     }
-else if (sameWord(table, "decipher"))
+else if (sameWord(table, "decipherOld"))
     {
     doDecipherCnvs(tdb, item, NULL);
     }
@@ -26752,7 +26765,7 @@ else if (sameString("cosmic", table))
     {
     doCosmic(tdb, item);
     }
-else if (sameString("geneReviews", table))
+else if (startsWith("geneReviews", table))
     {
     doGeneReviews(tdb, item);
     }
@@ -26787,6 +26800,10 @@ else if (startsWith("gtexEqtlCluster", table))
 else if (startsWith("snake", trackHubSkipHubName(table)))
     {
     doSnakeClick(tdb, item);
+    }
+else if (startsWith("clinvarSubLolly", trackHubSkipHubName(table)))
+    {
+    doClinvarSubLolly(tdb, item);
     }
 else if (tdb != NULL &&
         (startsWithWord("vcfTabix", tdb->type) || sameWord("vcfPhasedTrio", tdb->type)))

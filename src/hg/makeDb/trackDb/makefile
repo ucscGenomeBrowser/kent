@@ -58,9 +58,9 @@ DBS = \
 	caeSp51 \
 	caeSp71 \
 	caeSp91 \
-	calJac1 calJac3 \
+	calJac1 calJac3 calJac4 \
 	calMil1 \
-	canFam1 canFam2 canFamPoodle1 canFam3 canFam4 \
+	canFam1 canFam2 canFamPoodle1 canFam3 canFam4 canFam5 \
 	casCan1 \
 	cavApe1 cavPor3 \
 	cb1 cb2 cb3 cb4 \
@@ -129,7 +129,7 @@ DBS = \
 	melInc1 melInc2 \
 	micMur1 micMur2 micMur3 \
 	micOch1 \
-	mm6 mm7 mm8 mm9 mm10 mm10Patch1 mm10Strains1 mm10Patch4 GRCm38B \
+	mm6 mm7 mm8 mm9 mm10 mm10Patch1 mm10Strains1 mm10Patch4 GRCm38B mm39 \
 	monDom1 monDom4 monDom5 \
 	musFur1 \
 	myoLuc1 myoLuc2 \
@@ -218,6 +218,8 @@ update: ${DBS:%=%_update}
 %_update:
 	./loadTracks ${EXTRA} trackDb_${USERTABLE} hgFindSpec_${USERTABLE} $*
 	./checkMetaDb alpha metaDb_${USERTABLE} $*
+	# now build the relatedTracks table for each db
+	./buildRelatedTracks relatedTrack_${USERTABLE} $*
 
 #  if you want to test track search tool with your own trix file
 #	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb_${USERTABLE}.{ixx,ix}}
@@ -238,6 +240,8 @@ alpha_all: ${DBS:%=%_alpha}
 	rm -f ${HIVE_TRIX}/$*_trackDb.{ixx,ix}}
 	HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/alpha/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} $*
 	./makeTrixLinks trackDb ${HIVE_TRIX} $*
+	# now build the relatedTracks table for each db
+	./buildRelatedTracks relatedTrack $*
 
 onbeta:	/cluster/home/${USER}/.hg.conf.beta
 

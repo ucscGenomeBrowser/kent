@@ -1,4 +1,4 @@
- <h2>Description</h2>
+<h2>Description</h2>
 
 <p>
 This track displays common copy number genomic variations from <a target=_blank
@@ -55,27 +55,45 @@ DECIPHER Consensus CNVs.</li>
 </p>
 
 <h2>Display Conventions and Configuration</h2>
-Items in all subtracks follow the same conventions: items are shaded according to variant type. 
+Items in all subtracks follow the same conventions: items are colored by variant type, and are 
+based on the dbVar colors described in the 
+<a target="_blank" href="https://www.ncbi.nlm.nih.gov/dbvar/content/overview/">dbVar Overview page</a>. 
 <b><font color="red">Red</font></b> for copy number loss or deletion,
-<b><font color="blue">blue</font></b> for copy number gain or duplication and
-<b><font color="#662180">violet</font></b> for copy number variation. Mouseover on items indicates
-Allele Frequencies (AF). All tracks can be filtered according to the Variant Size and Variant Type.
+<b><font color="blue">blue</font></b> for copy number gain or duplication, and
+<b><font color="#662180">violet</font></b> for copy number variation. 
+</p>
+
+<p>
+<b>Mouseover</b> on items indicates genes affected, size, variant type, and allele frequencies (AF). 
+All tracks can be filtered according to the <b>Variant Size</b> and <b>Variant Type</b>.
+</p>
 
 <h2>Data Access</h2>
-The raw data can be explored interactively with the 
-<a href="https://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</a>, or the
-<a href="https://genome.ucsc.edu/cgi-bin/hgIntegrator">Data Integrator</a>. For automated analysis,
-the data may be queried from our <a href="https://genome.ucsc.edu/goldenPath/help/api.html">REST API</a>.
-The data can also be found directly from the dbVar nstd186 <a target=_blank 
-href="https://www.ncbi.nlm.nih.gov/dbvar/content/common_summary/#data_access">data access</a>.
-For questions about dbVar track data, please contact <em>dbvar@ncbi.nlm.nih.gov</em>.
+The raw data can be explored interactively with the
+<a href="../../hgTables">Table Browser</a>, or the
+<a href="../../hgIntegrator">Data Integrator</a>. For automated analysis,
+the data may be queried from our
+<a href="../../goldenPath/help/api.html">REST API</a>. 
 </p>
+<p>The data can also be found directly from the <a target=_blank 
+href="https://www.ncbi.nlm.nih.gov/dbvar/content/common_summary/#data_access">dbVar 
+nstd186 data access</a>, as well as in the
+<a href="hgHubConnect?hubUrl=
+https://ftp.ncbi.nlm.nih.gov/pub/dbVar/sandbox/dbvarhub/hub.txt&hgHub_do_redirect=on">
+dbVar Track Hub</a>, where additional subtracks are included. For questions about
+dbVar track data, please contact <A HREF="mailto:&#100;&#98;&#118;&#97;r&#64;&#110;&#99;&#98;&#105;.
+n&#108;&#109;.&#110;&#105;&#104;.&#103;&#111;v">
+&#100;&#98;&#118;&#97;r&#64;&#110;&#99;&#98;&#105;.n&#108;&#109;.&#110;&#105;&#104;.&#103;&#111;v
+</A>.
+<!-- above address is dbvar at ncbi.nlm.nih.gov -->
+</p>
+
 
 <h2>Credits</h2>
 <p>
-Thanks to the dbVAR team at NCBI, especially Timothy Hefferon for technical coordination and
-consultation, and to Christopher Lee, Anna Benet-Pages, and Maximilian Haeussler 
-of the Genome Browser team for engineering the track display. 
+Thanks to the dbVAR team at NCBI, especially John Lopez and Timothy Hefferon for technical 
+coordination and consultation, and to Christopher Lee, Anna Benet-Pages, and Daniel Schmelter, of 
+the Genome Browser team for engineering the track display. 
 </p>
 
 <h2>References</h2>

@@ -3,7 +3,15 @@ include ../../../inc/common.mk
 
 # recursive target to do install to DEST, with extra excludes EXCL.
 
-FIND=gitFiles
+ifeq (${FIND},)
+    INSIDEGIT := $(shell git rev-parse --is-inside-work-tree 2>/dev/null)
+    ifeq (${INSIDEGIT},true)
+       FIND = gitFiles
+    else
+       FIND = find
+    endif
+endif
+
 CSS_FILES=HGStyle.css autocomplete.css blueStyle.css encodeProject.css floretStyle.css \
     hgHubConnect.css jquery-ui.css jquery.contextmenu.css \
     jquery.ui.autocomplete.css jquery.ui.colorPicker.css \

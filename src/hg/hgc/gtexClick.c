@@ -83,7 +83,8 @@ else
                 "SELECT kgXref.description FROM kgXref WHERE geneSymbol='%s'", 
                         gtexGene->name);
     }
-struct sqlConnection *conn = hAllocConn(database);
+char *knownDatabase = hdbDefaultKnownDb(database);
+struct sqlConnection *conn = hAllocConn(knownDatabase);
 char *desc = sqlQuickString(conn, query);
 hFreeConn(&conn);
 return desc;

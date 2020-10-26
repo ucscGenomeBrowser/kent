@@ -141,7 +141,7 @@ longLabel Superenhancers
         view ROSE
         type bigBed 3 +
         visibility hide
-        bigDataUrl https://cotneylab.cam.uchc.edu/~jcotney/CRANIOFACIAL_HUB/hg19/CS13-12383_25state_dense_Gateway_SuperEnhancers.bigBed
+        bigDataUrl http://genome-test.gi.ucsc.edu/~chmalee/hubValidate/plants/cshl2013/araTha1/CS13-12383_25state_dense_Gateway_SuperEnhancers.bigBed
         color 255,197,77
         parent SuperEnhancersBadSubgroupsComposite on
 
@@ -152,7 +152,7 @@ longLabel Superenhancers
         #subGroups view=SuperEnhancers
         type bigBed 3 +
         visibility hide
-        bigDataUrl https://cotneylab.cam.uchc.edu/~jcotney/CRANIOFACIAL_HUB/hg19/CS13-12690_25state_dense_Gateway_SuperEnhancers.bigBed
+        bigDataUrl  http://genome-test.gi.ucsc.edu/~chmalee/hubValidate/plants/cshl2013/araTha1/CS13-12690_25state_dense_Gateway_SuperEnhancers.bigBed
         color 255,197,77
         parent SuperEnhancersBadSubgroupsComposite on
 
@@ -180,7 +180,7 @@ configurable on
     view ROSE
     type bigBed 4 .
     visibility hide
-    bigDataUrl https://cotneylab.cam.uchc.edu/~jcotney/CRANIOFACIAL_HUB/hg19/CS13-12383_25state_dense_Gateway_SuperEnhancers.bigBed
+    bigDataUrl http://genome-test.gi.ucsc.edu/~chmalee/hubValidate/plants/cshl2013/araTha1/CS13-12383_25state_dense_Gateway_SuperEnhancers.bigBed
     color 255,197,77
     parent SuperEnhancersComposite2 on
 
@@ -191,7 +191,7 @@ configurable on
     subGroups view=SuperEnhancers
     type bigBed 4 .
     visibility hide
-    bigDataUrl https://cotneylab.cam.uchc.edu/~jcotney/CRANIOFACIAL_HUB/hg19/CS13-12690_25state_dense_Gateway_SuperEnhancers.bigBed
+    bigDataUrl http://genome-test.gi.ucsc.edu/~chmalee/hubValidate/plants/cshl2013/araTha1/CS13-12690_25state_dense_Gateway_SuperEnhancers.bigBed
     color 255,197,77
     parent SuperEnhancersComposite2 on
     configurable on

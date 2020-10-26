@@ -1,3 +1,0 @@
-#cluster	table	gene	chrom	txStart	txEnd	strand	rnaLength	cdsLength
-1	smallOverlap	b2886-0-0	MG1655	3029484	3029973	-	489	489
-2	smallOverlap	b2887-0-0	MG1655	3029972	3031892	-	1920	1920

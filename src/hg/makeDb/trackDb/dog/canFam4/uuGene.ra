@@ -1,0 +1,8 @@
+
+track uuGene
+shortLabel UU TAMA Genes
+longLabel UU Stringtie2 TAMA gene annotations
+group genes
+visibility hide
+color 12,12,120
+type bed 12 .

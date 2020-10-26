@@ -10,7 +10,7 @@
 
 
 
-char *gencodeAttrsCommaSepFieldNames = "geneId,geneName,geneType,transcriptId,transcriptName,transcriptType,ccdsId,level,proteinId,transcriptClass";
+char *gencodeAttrsCommaSepFieldNames = "geneId,geneName,geneType,unused1,transcriptId,transcriptName,transcriptType,unused2,unused3,unused4,ccdsId,level,transcriptClass,proteinId";
 
 void gencodeAttrsStaticLoad(char **row, struct gencodeAttrs *ret)
 /* Load a row from gencodeAttrs table into ret.  The contents of ret will
@@ -20,13 +20,17 @@ void gencodeAttrsStaticLoad(char **row, struct gencodeAttrs *ret)
 ret->geneId = row[0];
 ret->geneName = row[1];
 ret->geneType = row[2];
-ret->transcriptId = row[3];
-ret->transcriptName = row[4];
-ret->transcriptType = row[5];
-ret->ccdsId = row[6];
-ret->level = sqlSigned(row[7]);
-ret->proteinId = row[8];
-ret->transcriptClass = row[9];
+ret->unused1 = row[3];
+ret->transcriptId = row[4];
+ret->transcriptName = row[5];
+ret->transcriptType = row[6];
+ret->unused2 = row[7];
+ret->unused3 = row[8];
+ret->unused4 = row[9];
+ret->ccdsId = row[10];
+ret->level = sqlSigned(row[11]);
+ret->transcriptClass = row[12];
+ret->proteinId = row[13];
 }
 
 struct gencodeAttrs *gencodeAttrsLoad(char **row)
@@ -39,13 +43,17 @@ AllocVar(ret);
 ret->geneId = cloneString(row[0]);
 ret->geneName = cloneString(row[1]);
 ret->geneType = cloneString(row[2]);
-ret->transcriptId = cloneString(row[3]);
-ret->transcriptName = cloneString(row[4]);
-ret->transcriptType = cloneString(row[5]);
-ret->ccdsId = cloneString(row[6]);
-ret->level = sqlSigned(row[7]);
-ret->proteinId = cloneString(row[8]);
-ret->transcriptClass = cloneString(row[9]);
+ret->unused1 = cloneString(row[3]);
+ret->transcriptId = cloneString(row[4]);
+ret->transcriptName = cloneString(row[5]);
+ret->transcriptType = cloneString(row[6]);
+ret->unused2 = cloneString(row[7]);
+ret->unused3 = cloneString(row[8]);
+ret->unused4 = cloneString(row[9]);
+ret->ccdsId = cloneString(row[10]);
+ret->level = sqlSigned(row[11]);
+ret->transcriptClass = cloneString(row[12]);
+ret->proteinId = cloneString(row[13]);
 return ret;
 }
 
@@ -55,7 +63,7 @@ struct gencodeAttrs *gencodeAttrsLoadAll(char *fileName)
 {
 struct gencodeAttrs *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[14];
 
 while (lineFileRow(lf, row))
     {
@@ -73,7 +81,7 @@ struct gencodeAttrs *gencodeAttrsLoadAllByChar(char *fileName, char chopper)
 {
 struct gencodeAttrs *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[14];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -97,13 +105,17 @@ if (ret == NULL)
 ret->geneId = sqlStringComma(&s);
 ret->geneName = sqlStringComma(&s);
 ret->geneType = sqlStringComma(&s);
+ret->unused1 = sqlStringComma(&s);
 ret->transcriptId = sqlStringComma(&s);
 ret->transcriptName = sqlStringComma(&s);
 ret->transcriptType = sqlStringComma(&s);
+ret->unused2 = sqlStringComma(&s);
+ret->unused3 = sqlStringComma(&s);
+ret->unused4 = sqlStringComma(&s);
 ret->ccdsId = sqlStringComma(&s);
 ret->level = sqlSignedComma(&s);
-ret->proteinId = sqlStringComma(&s);
 ret->transcriptClass = sqlStringComma(&s);
+ret->proteinId = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -118,12 +130,16 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->geneId);
 freeMem(el->geneName);
 freeMem(el->geneType);
+freeMem(el->unused1);
 freeMem(el->transcriptId);
 freeMem(el->transcriptName);
 freeMem(el->transcriptType);
+freeMem(el->unused2);
+freeMem(el->unused3);
+freeMem(el->unused4);
 freeMem(el->ccdsId);
-freeMem(el->proteinId);
 freeMem(el->transcriptClass);
+freeMem(el->proteinId);
 freez(pEl);
 }
 
@@ -156,6 +172,10 @@ fprintf(f, "%s", el->geneType);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->unused1);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->transcriptId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
@@ -168,17 +188,29 @@ fprintf(f, "%s", el->transcriptType);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->unused2);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->unused3);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->unused4);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->ccdsId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%d", el->level);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->proteinId);
+fprintf(f, "%s", el->transcriptClass);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->transcriptClass);
+fprintf(f, "%s", el->proteinId);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

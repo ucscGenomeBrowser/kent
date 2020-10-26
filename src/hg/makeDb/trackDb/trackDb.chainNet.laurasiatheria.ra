@@ -1024,7 +1024,6 @@ html chainNet
 # pteAle1 - Black flying-fox - Pteropus alecto - mammal - chiroptera - 2530
 ################################################################
 track chainNetPteAle1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -1047,7 +1046,6 @@ spectrum on
 html chainNet
 
     track chainNetPteAle1Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -1055,7 +1053,6 @@ html chainNet
     spectrum on
 
         track chainPteAle1
-        release alpha
         parent chainNetPteAle1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -1064,14 +1061,12 @@ html chainNet
         html chainNet
 
     track chainNetPteAle1Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetPteAle1
 
         track netPteAle1
-        release alpha
         parent chainNetPteAle1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -1083,7 +1078,6 @@ html chainNet
 # lepWed1 - Weddell seal - Leptonychotes weddellii - mammal - carnivora - 2480
 ################################################################
 track chainNetLepWed1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -1106,7 +1100,6 @@ spectrum on
 html chainNet
 
     track chainNetLepWed1Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -1114,7 +1107,6 @@ html chainNet
     spectrum on
 
         track chainLepWed1
-        release alpha
         parent chainNetLepWed1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -1123,14 +1115,12 @@ html chainNet
         html chainNet
 
     track chainNetLepWed1Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetLepWed1
 
         track netLepWed1
-        release alpha
         parent chainNetLepWed1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net

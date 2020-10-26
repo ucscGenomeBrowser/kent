@@ -1,6 +1,6 @@
 <h2>Description</h2>
 <p>
-<a href="https://nextstrain.org/ncov" target=_blank>Nextstrain.org</a> displays
+<a href="https://nextstrain.org/ncov/global" target=_blank>Nextstrain.org</a> displays
 data about single nucleotide variant alleles in the SARS-CoV-2 RNA and protein sequences that have
 occurred in different samples of the virus during the current 2019/2020 outbreak.
 Nextstrain has a powerful user interface for viewing the evolutionary tree
@@ -21,15 +21,19 @@ position in each GISAID sample, etc.
 </p>
 <p>
 Nextstrain identifies certain clades within the phylogenetic tree
-according to a
-<a href="https://github.com/nextstrain/ncov/blob/master/config/clades.tsv"
-   target=_blank>set of defining variants</a>.
-The <em>Nextstrain Clades</em> track provides more information about these clades
+according to
+<a href="https://github.com/nextstrain/ncov/blob/master/defaults/clades.tsv" target="_blank">a set of defining variants</a>.
+The <a href="hgTrackUi?db=wuhCor1&g=nextstrainClade"><em>Nextstrain Clades</em></a>
+track provides more information about these clades
 and serves as a useful color key for the clade colors in the phylogenetic tree display.
 </p>
 <p>
 This track is composed of several subtracks so that different subsets of variants may be viewed:
   <ul>
+    <li><b>Recurrent Bi-allelic</b>: This is the only subtrack displayed by default.
+      It is limited to variants that have been observed in at least two samples, and
+      excludes positions at which more than one alternate allele has been observed in
+      more than one sample.</li>
     <li><b>All Variants</b>: All variants found in all samples.</li>
     <li><b><em>&lt;Clade&gt;</em> Variants</b>: All variants found in samples belonging to
       <em>&lt;Clade&gt;</em>, which is one of Nextstrain's clades:
@@ -65,39 +69,66 @@ When the vertical height of the track is set sufficiently high
 sample names are drawn to the right of the tree; however, with thousands of
 samples in the Nextstrain tree, and a maximum track height of 2500 pixels,
 the full Nextstrain tree is too large for sample names to be displayed.
-In the track controls the user can choose to display subtracks containing
+In the track controls, the user can choose to display subtracks containing
 the phylogenetic trees and variants for individual clades.
 Some clades have few enough samples that they can be made tall enough to
 display sample names.
 Branches of the phylogenetic tree are colored by clade using the same
 color scheme as
-<a href="https://nextstrain.org/ncov" target=_blank>nextstrain.org</a>.
+<a href="https://nextstrain.org/ncov/global?c=clade_membership" target=_blank>nextstrain.org</a>.
 </p>
 
 <h2>Methods</h2>
 <p>Nextstrain downloads SARS-CoV-2 genomes from
   <a href="https://gisaid.org/" target=_blank>GISAID</a>
-  as they are submitted by labs worldwide.
-  The sequences are processed by an
-  <a href="https://github.com/nextstrain/ncov" target=_blank>automated pipeline</a>
-  and annotations are written to a data file
-  that UCSC downloads and extracts annotations for display.</p>
+  as they are submitted by labs worldwide, and downsamples to a subset of several thousand
+  sequences in order to provide an interactive display.
+  The selected subset of GISAID sequences is processed by an
+  <a href="https://github.com/nextstrain/ncov" target=_blank>automated pipeline</a>,
+  producing an annotated phylogenetic tree data structure underlying the Nextstrain display;
+  UCSC downloads the results and extracts annotations for display.</p>
 
 <h2>Data Access</h2>
 <p>
-You can download the VCF files underlying this track (nextstrainSamples*.vcf.gz) from our
-<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/nextstrain/" 
-target=_blank>Download Server</a>. The data can be explored interactively with the 
-<a href="../cgi-bin/hgTables">Table Browser</a>
-or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be
-accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>.
+SARS-CoV-2 variants displayed by Nextstrain are derived from a subset of
+<a href="https://www.gisaid.org" target="_blank">GISAID</a> sequences, and the GISAID
+<a href="https://www.gisaid.org/registration/terms-of-use/" target="_blank">Terms and Conditions</a>
+prohibit the redistribution of GISAID-derived data. They also require that the submitters of all
+sequences be acknowledged when the variants are used.
+<a href="https://nextstrain.org/ncov/global" target="_blank">Nextstrain.org</a> offers
+phylogenetic trees, author credits and other files:
+scroll to the bottom of the page and click &quot;DOWNLOAD DATA&quot;, and a dialog with
+download options appears.
 </p>
+
 <p>
-<a href="https://nextstrain.org/ncov" target=_blank>nextstrain.org</a>
-offers phylogenetic trees and metadata files:
-scroll to the bottom of the page and click "DOWNLOAD DATA",
-and a dialog with download options appears.
-</p>
+All GISAID SARS-CoV-2 genome sequences and metadata are available for download from
+<a href="https://gisaid.org" target="_blank">GISAID</a> EpiCoV&trade; by registered users.
+We have a program faToVcf that can extract VCF from a multi-sequence FASTA alignment such as the
+&quot;msa_<em>date</em>&quot;
+download file from GISAID.  faToVcf is available for Linux and MacOSX on the download server:
+<a href="https://hgdownload.soe.ucsc.edu/admin/exe/"
+target="_blank">https://hgdownload.soe.ucsc.edu/admin/exe</a>.
+It requires at least 4GB of memory to process the complete msa_<em>date</em> file.
+Here are some steps to get started using faToVcf:</p>
+<ul>
+  <li> This command enables faToVcf to be run as a program (otherwise the command would say
+&quot;Permission denied&quot;):
+<pre>chmod a+x faToVcf</pre>
+
+  <li> This command shows basic usage instructions and describes the options:
+<pre>./faToVcf</pre>
+
+  <li> This command converts msa fasta to VCF without per-sample genotype columns
+    (substitute correct date for &quot;0925&quot; in filenames):
+<pre>
+./faToVcf -includeRef \
+    -ref='hCoV-19/Wuhan/Hu-1/2019|EPI_ISL_402125|2019-12-31|Asia' \
+    -vcfChrom=NC_045512.2 \
+    -noGenotypes \
+    msa_0925.fasta msa_0925.sites.vcf
+</pre>
+</ul>
 
 <h2>Credits</h2>
 <p>This work is made possible by the open sharing of genetic data by research

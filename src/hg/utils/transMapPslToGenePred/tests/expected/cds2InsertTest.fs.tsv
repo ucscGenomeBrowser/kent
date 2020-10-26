@@ -1,0 +1,3 @@
+name	chrom	chromStart	chromEnd	strand	shift	location
+ENST00000486585.1-1	000000F_1_80365438_quiver_pilon	185917	185919	-	1	first
+ENST00000475537.1-0	000007F_1_36303434_quiver_pilon	15563341	15563344	+	1	last

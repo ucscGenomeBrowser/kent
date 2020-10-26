@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser Codon Coloring" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<a name="Topic5"></a>
+
+<h1>Structural Variants Color Code</h1>
+<p>
+CNV items in the Genome Browser tracks are colored by <em>Variant Type</em>. Three levels of 
+color intensity are used to indicate the <em>Clinical Significance</em>. The lightest shade 
+indicates <b>benign/likely-benign</b> variants, the darkest shade indicates <b>pathogenic/likely 
+pathogenic</b> variants, and the medium shade indicates <b>other</b> or <b>no clinical significance</b> 
+has been defined.
+</p>
+
+<table class="stdTbl">
+  <tr>
+    <th>Variant Type</th>
+    <th>Benign</th>
+    <th>Other</th>
+    <th>Pathogenic</th>
+    </tr>
+    <tr>
+    <td>Gain</td>
+    <td style="background-color: rgb(133,177,255)"></td>
+    <td style="background-color: rgb(0,0,255)"></td>
+    <td style="background-color: rgb(0,0,128)"></td>
+  </tr>
+  <tr>
+    <td>Loss</td>
+    <td style="background-color: rgb(255,128,128)"></td>
+    <td style="background-color: rgb(255,0,0)"></td>
+    <td style="background-color: rgb(153,0,0)"></td>
+  </tr>
+  <tr>
+    <td>Insertion</td>
+    <td style="background-color: rgb(255,225,105)"></td>
+    <td style="background-color: rgb(255,165,0)"></td>
+    <td style="background-color: rgb(199,114,3)"></td>
+  </tr>
+  <tr>
+    <td>Inversion</td>
+    <td style="background-color: rgb(251,150,251)"></td>
+    <td style="background-color: rgb(192,0,192)"></td>
+    <td style="background-color: rgb(128,0,128)"></td>
+  </tr>
+  <tr>
+    <td>Structural Alteration</td>
+    <td style="background-color: rgb(0,255,255)"></td>
+    <td style="background-color: rgb(0,179,179)"></td>
+    <td style="background-color: rgb(0,102,102)"></td>
+  </tr>
+  <tr>
+    <td>Other Sequence Alterations</td>
+    <td style="background-color: rgb(190,190,190)"></td>
+    <td style="background-color: rgb(128,128,128)"></td>
+    <td style="background-color: rgb(38,38,38)"></td>
+  </tr>
+</table>
+
+<p>
+Each color category includes various <em>Variant Types</em>:
+
+<ul>
+ <li>
+ <b>Gain:</b> duplications
+ <a target=_blank href="http://www.sequenceontology.org/browser/current_release/term/SO:1000035">(SO:1000035)</a>,
+ tandem duplications
+ <a target=_blank href="http://www.sequenceontology.org/browser/current_release/term/SO:1000173">(SO:1000173)</a>,
+ and copy number gains
+ <a target=_blank href="http://www.sequenceontology.org/browser/current_release/term/SO:0001742">(SO:0001742)</a>
+ </li>
+ <li>
+ <b>Loss:</b> deletions 
+ <a target=_blank href="http://www.sequenceontology.org/browser/current_release/term/SO:0000159">(SO: 0000159)</a>,
+ and copy number losses 
+ <a target=_blank href="http://www.sequenceontology.org/browser/current_release/term/SO:0001743">(SO:0001743)</a>
+ </li>
+ <li>
+ <b>Insertion:</b> insertions
+ <a target=_blank href="http://www.sequenceontology.org/browser/current_release/term/SO:0000667">(SO: 0000667)</a>,
+ indels
+ <a target=_blank href="http://www.sequenceontology.org/browser/current_release/term/SO:1000032">(SO: 1000032)</a>,
+ and mobile element insertions
+ <a target=_blank href="http://www.sequenceontology.org/browser/current_release/term/SO:0001837">(SO: 0001837)</a>
+ </li>
+ <li>
+ <b>Inversion:</b> inversions
+ <a target=_blank href="http://www.sequenceontology.org/browser/current_release/term/SO:1000036">(SO: 1000036)</a>
+ </li>
+ <li>
+ <b>Structural Alteration:</b> translocations
+ <a target=_blank href="http://www.sequenceontology.org/browser/current_release/term/SO:0000199">(SO: 0000199)</a>,
+ complex structural alterations 
+ <a target=_blank href="http://www.sequenceontology.org/browser/current_release/term/SO:0001784">(SO: 0001784)</a>,
+ complex chromosomal rearrangements
+ <a target=_blank href="http://www.sequenceontology.org/browser/current_release/term/SO:0002062">(SO: 0002062)</a>, 
+ fusions
+ <a target=_blank href="http://www.sequenceontology.org/browser/current_release/term/SO:0000806">(SO: 0000806)</a>,
+ and multi-allele CNVs
+ </li>
+ <li>
+ <b>Other Sequence Alterations:</b> short tandem repeat expansions
+ <a target=_blank href="http://www.sequenceontology.org/browser/current_release/term/SO:0002162">(SO: 0002162)</a>,
+ short tandem repeat contractions
+ <a target=_blank href="http://www.sequenceontology.org/browser/current_release/term/SO:0002163">(SO: 0002163)</a>,
+ microsatellites
+ <a target=_blank href="http://www.sequenceontology.org/browser/current_release/term/SO:0000289">(SO: 0000289)</a>, 
+ and undetermined or undefined alterations
+ </li>
+</ul>
+</p>
+ 
+<p>
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
+

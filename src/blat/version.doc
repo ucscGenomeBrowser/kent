@@ -7,6 +7,8 @@
      o (in 36x5) If ipv6 disabled, retries with ipv4-only socket.
      o (in 36x6) Added noSimpRepMask option to blat gfServer isPcr to skip simple repeat masking.
      o (in 36x7) Fixed compiler optimization issue on mac 2020-06-17 in dlSort().
+     o (in 36x8) Added -timeout option to prevent hanging on blocking input for server read and write.
+     o (in 36x9) Changed default -timeout to 90 seconds instead of 10. Improved handling skips further sending on socket after failure to avoid multiple long timeouts.
 
 36:
      o (in 35x1) added repMatch default values for tileSizes 16 to 18 in genoFind.c

@@ -1,12 +1,44 @@
 # This doc assumes that the gencode* tables have been built on $db
 db=hg38
 GENCODE_VERSION=V35
-dir=/hive/data/genomes/$db/bed/gencode$GENCODE_VERSION
+dir=/hive/data/genomes/$db/bed/gencode$GENCODE_VERSION/build
 genomes=/hive/data/genomes
 tempDb=knownGeneV35
 kent=$HOME/kent
 spDb=sp180404
 cpuFarm=ku
+export curVer=13
+export Db=Hg38
+export xdb=mm10
+export Xdb=Mm10
+export ydb=canFam3
+export zdb=rheMac8
+export ratDb=rn6
+export RatDb=Rn6
+export fishDb=danRer11
+export flyDb=dm6
+export wormDb=ce11
+export yeastDb=sacCer3
+export tempFa=$dir/ucscGenes.faa
+export genomes=/hive/data/genomes
+export xdbFa=$genomes/$xdb/bed/ucsc.18.1/ucscGenes.faa
+export ratFa=$genomes/$ratDb/bed/ensGene.95/ensembl.faa
+#export ratFa=$genomes/$ratDb/bed/blastpRgdGene2/rgdGene2Pep.faa
+export fishFa=$genomes/$fishDb/bed/ensGene.95/ensembl.faa
+#export fishFa=$genomes/$fishDb/bed/blastp/ensembl.faa
+export flyFa=$genomes/$flyDb/bed/ensGene.95/ensembl.faa
+#export flyFa=$genomes/$flyDb/bed/hgNearBlastp/100806/$flyDb.flyBasePep.faa
+export wormFa=$genomes/$wormDb/bed/ws245Genes/ws245Pep.faa
+#export wormFa=$genomes/$wormDb/bed/blastp/wormPep190.faa
+export yeastFa=$genomes/$yeastDb/bed/sgdAnnotations/blastTab/sacCer3.sgd.faa
+export scratchDir=/hive/users/braney/scratch
+
+export blastTab=hgBlastTab
+export xBlastTab=mmBlastTab
+export rnBlastTab=rnBlastTab
+export dbHost=hgwdev
+export ramFarm=ku
+export cpuFarm=ku
 
 mkdir -p $dir
 cd $dir
@@ -92,9 +124,14 @@ hgsql $db -Ne "select transcriptId, tag from gencodeTag$GENCODE_VERSION" | sort 
 join -t $'\t' -a 1  -e"none" -o auto   join4 tags.txt > join5
 hgsql $db -Ne "select transcriptId, level from gencodeAttrs$GENCODE_VERSION" | sort > level.txt
 join -t $'\t'   join5 level.txt > join6
-cut -f 2- -d $'\t' join6 | sort -k1,1 -k2,2n > bgpInput.txt
+grep basic tags.txt | tawk '{print $1, 1, "basic"}' > basic.txt
+tawk '{print $5,0,"canonical"}'  knownCanonical.tab | sort > canonical.txt
+tawk '{print $4,2,"all"}' gencodeAnnot$GENCODE_VERSION.bgpInput | sort > all.txt
+sort -k1,1 -k2,2n basic.txt canonical.txt all.txt | tawk '{if ($1 != last) {print last,buff; buff=$3}else {buff=buff "," $3} last=$1} END {print last,buff}' | tail -n +2  > tier.txt
+join -t $'\t'   join6 tier.txt > join7
+cut -f 2- -d $'\t' join7 | sort -k1,1 -k2,2n > bgpInput.txt
 
-bedToBigBed -type=bed12+15 -tab -as=$HOME/kent/src/hg/lib/gencodeBGP.as bgpInput.txt /cluster/data/$db/chrom.sizes $db.gencode$GENCODE_VERSION.bb
+bedToBigBed -extraIndex=name -type=bed12+16 -tab -as=$HOME/kent/src/hg/lib/gencodeBGP.as bgpInput.txt /cluster/data/$db/chrom.sizes $db.gencode$GENCODE_VERSION.bb
 
 ln -s `pwd`/$db.gencode$GENCODE_VERSION.bb /gbdb/$db/gencode/gencode$GENCODE_VERSION.bb
 
@@ -104,6 +141,7 @@ join  tmp2 tmp1 > knownGene.ev
 
 txGeneAlias $db $spDb kgXref.tab knownGene.ev oldToNew.tab foo.alias foo.protAlias
 tawk '{split($2,a,"."); for(ii = 1; ii <= a[2]; ii++) print $1,a[1] "." ii }' txToAcc.tab >> foo.alias
+tawk '{split($1,a,"."); for(ii = 1; ii <= a[2] - 1; ii++) print $1,a[1] "." ii }' txToAcc.tab >> foo.alias
 sort foo.alias | uniq > ucscGenes.alias
 sort foo.protAlias | uniq > ucscGenes.protAlias
 rm foo.alias foo.protAlias
@@ -148,6 +186,16 @@ hgMapToGene -tempDb=$tempDb $db affyU95 knownGene knownToU95
 hgsql $tempDb -Ne "create view all_mrna as select * from $db.all_mrna"
 hgsql $tempDb -Ne "create view ensGene as select * from $db.ensGene"
 hgsql $tempDb -Ne "create view gtexGene as select * from $db.gtexGene"
+hgsql $tempDb -Ne "create view gencodeAnnotV35 as select * from $db.gencodeAnnotV35"
+hgsql $tempDb -Ne "create view gencodeAttrsV35 as select * from $db.gencodeAttrsV35"
+hgsql $tempDb -Ne "create view gencodeGeneSourceV35 as select * from $db.gencodeGeneSourceV35"
+hgsql $tempDb -Ne "create view gencodeTranscriptSourceV35 as select * from $db.gencodeTranscriptSourceV35"
+hgsql $tempDb -Ne "create view gencodeToPdbV35 as select * from $db.gencodeToPdbV35"
+hgsql $tempDb -Ne "create view gencodeToPubMedV35 as select * from $db.gencodeToPubMedV35"
+hgsql $tempDb -Ne "create view gencodeToRefSeqV35 as select * from $db.gencodeToRefSeqV35"
+hgsql $tempDb -Ne "create view gencodeTagV35 as select * from $db.gencodeTagV35"
+hgsql $tempDb -Ne "create view gencodeTranscriptSupportV35 as select * from $db.gencodeTranscriptSupportV35"
+hgsql $tempDb -Ne "create view gencodeToUniProtV35 as select * from $db.gencodeToUniProtV35"
 
 bioCycDir=/hive/data/outside/bioCyc/190905/download/humancyc/21.0/data
 mkdir $dir/bioCyc
@@ -263,3 +311,167 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para time"
     rm -r split fold err batch.bak
     cd ../utr5
     rm -r split fold err batch.bak
+
+hgKgGetText $tempDb tempSearch.txt
+sort tempSearch.txt > tempSearch2.txt
+tawk '{split($2,a,"."); printf "%s\t", $1;for(ii = 1; ii <= a[2]; ii++) printf "%s ",a[1] "." ii; printf "\n" }' txToAcc.tab | sort > tempSearch3.txt
+join tempSearch2.txt tempSearch3.txt | sort > knownGene.txt
+ixIxx knownGene.txt knownGene${GENCODE_VERSION}.ix knownGene${GENCODE_VERSION}.ixx
+ rm -rf /gbdb/$db/knownGene${GENCODE_VERSION}.ix /gbdb/$db/knownGene${GENCODE_VERSION}.ixx
+ln -s $dir/knownGene${GENCODE_VERSION}.ix  /gbdb/$db/knownGene${GENCODE_VERSION}.ix
+ln -s $dir/knownGene${GENCODE_VERSION}.ixx /gbdb/$db/knownGene${GENCODE_VERSION}.ixx  
+
+#zcat gencode${GENCODE_VERSION}.bed.gz > ucscGenes.bed
+#jtwoBitToFa -noMask /cluster/data/$db/$db.2bit -bed=ucscGenes.bed stdout | faFilter -uniq stdin  ucscGenes.fa
+#jhgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
+bedToPsl /cluster/data/$db/chrom.sizes ucscGenes.bed ucscGenes.psl
+pslRecalcMatch ucscGenes.psl /cluster/data/$db/$db.2bit ucscGenes.fa kgTargetAli.psl
+# should be zero
+awk '$11 != $1 + $3+$4' kgTargetAli.psl
+hgLoadPsl $tempDb kgTargetAli.psl
+
+cd $dir
+# Make PCR target for UCSC Genes, Part 1.
+# 1. Get a set of IDs that consist of the UCSC Gene accession concatenated with the
+#    gene symbol, e.g. uc010nxr.1__DDX11L1
+hgsql $tempDb -N -e 'select kgId,geneSymbol from kgXref' \
+    | perl -wpe 's/^(\S+)\t(\S+)/$1\t${1}__$2/ || die;' \
+      | sort -u > idSub.txt 
+# 2. Get a file of per-transcript fasta sequences that contain the sequences of each UCSC Genes transcript, with this new ID in the place of the UCSC Genes accession.   Convert that file to TwoBit format and soft-link it into /gbdb/hg38/targetDb/ 
+awk '{if (!found[$4]) print; found[$4]=1 }' ucscGenes.bed > nodups.bed
+subColumn 4 nodups.bed idSub.txt ucscGenesIdSubbed.bed 
+sequenceForBed -keepName -db=$db -bedIn=ucscGenesIdSubbed.bed -fastaOut=stdout  | faToTwoBit stdin ${db}KgSeq${curVer}.2bit
+mkdir -p /gbdb/$db/targetDb/ 
+rm -f /gbdb/$db/targetDb/${db}KgSeq${curVer}.2bit
+ln -s $dir/${db}KgSeq${curVer}.2bit /gbdb/$db/targetDb/
+# Load the table kgTargetAli, which shows where in the genome these targets are.
+cut -f 1-10 knownGene.gp | genePredToFakePsl $tempDb stdin kgTargetAli.psl /dev/null
+hgLoadPsl $tempDb kgTargetAli.psl
+
+# 3. Ask cluster-admin to start an untranslated, -stepSize=5 gfServer on       
+# /gbdb/$db/targetDb/${db}KgSeq${curVer}.2bit 
+
+# 4. On hgwdev, insert new records into blatServers and targetDb, using the 
+# host (field 2) and port (field 3) specified by cluster-admin.  Identify the
+# blatServer by the keyword "$db"Kg with the version number appended
+# untrans gfServer for hg38KgSeq12 on host blat1b, port 17897
+hgsql hgcentraltest -e \
+      'INSERT into blatServers values ("hg38KgSeq13", "blat1b", 1909, 0, 1);'
+hgsql hgcentraltest -e \
+            'INSERT into targetDb values("hg38KgSeq13", "GENCODE Genes", \
+                     "hg38", "knownGeneV35.kgTargetAli", "", "", \
+                              "/gbdb/hg38/targetDb/hg38KgSeq13.2bit", 1, now(), "");'
+
+for i in  $tempFa $xdbFa $ratFa $fishFa $flyFa $wormFa $yeastFa
+do
+if test ! -f $i
+then echo $i not found
+fi
+done
+
+rm -rf   $dir/hgNearBlastp
+mkdir  $dir/hgNearBlastp
+cd $dir/hgNearBlastp
+tcsh
+cat << _EOF_ > config.ra
+# Latest human vs. other Gene Sorter orgs:
+# mouse, rat, zebrafish, worm, yeast, fly
+
+targetGenesetPrefix known
+targetDb $tempDb
+queryDbs $xdb $ratDb $fishDb $flyDb $wormDb $yeastDb
+
+${tempDb}Fa $tempFa
+${xdb}Fa $xdbFa
+${ratDb}Fa $ratFa
+${fishDb}Fa $fishFa
+${flyDb}Fa $flyFa
+${wormDb}Fa $wormFa
+${yeastDb}Fa $yeastFa
+
+buildDir $dir/hgNearBlastp
+scratchDir $scratchDir/brHgNearBlastp
+_EOF_
+
+# exit tcsh
+
+rm -rf  $scratchDir/brHgNearBlastp
+doHgNearBlastp.pl -noLoad -clusterHub=ku -distrHost=hgwdev -dbHost=hgwdev -workhorse=hgwdev config.ra >  do.log  2>&1 &
+
+# Load self
+cd $dir/hgNearBlastp/run.$tempDb.$tempDb
+# builds knownBlastTab
+./loadPairwise.csh
+
+# Load mouse and rat
+cd $dir/hgNearBlastp/run.$tempDb.$xdb
+hgLoadBlastTab $tempDb $xBlastTab -maxPer=1 out/*.tab
+cd $dir/hgNearBlastp/run.$tempDb.$ratDb
+hgLoadBlastTab $tempDb $rnBlastTab -maxPer=1 out/*.tab
+
+# Remove non-syntenic hits for mouse and rat
+# Takes a few minutes
+mkdir -p /gbdb/$tempDb/liftOver
+rm -f /gbdb/$tempDb/liftOver/${tempDb}To$RatDb.over.chain.gz /gbdb/$tempDb/liftOver/${tempDb}To$Xdb.over.chain.gz
+ln -s $genomes/$db/bed/liftOver/${db}To$RatDb.over.chain.gz \
+    /gbdb/$tempDb/liftOver/${tempDb}To$RatDb.over.chain.gz
+ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
+    /gbdb/$tempDb/liftOver/${tempDb}To$Xdb.over.chain.gz
+
+# delete non-syntenic genes from rat and mouse blastp tables
+cd $dir/hgNearBlastp
+synBlastp.csh $tempDb $xdb
+# old number of unique query values: 93277
+# old number of unique target values 27504
+# new number of unique query values: 86329
+# new number of unique target values 26151
+
+synBlastp.csh $tempDb $ratDb knownGene ensGene
+#old number of unique query values: 92243
+#old number of unique target values 19898
+#new number of unique query values: 85663
+#new number of unique target values 19025
+
+# Make reciprocal best subset for the blastp pairs that are too
+# Far for synteny to help
+
+# Us vs. fish
+cd $dir/hgNearBlastp
+export aToB=run.$db.$fishDb
+export bToA=run.$fishDb.$db
+cat $aToB/out/*.tab > $aToB/all.tab
+cat $bToA/out/*.tab > $bToA/all.tab
+blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
+hgLoadBlastTab $tempDb drBlastTab $aToB/recipBest.tab
+
+# Us vs. fly
+cd $dir/hgNearBlastp
+export aToB=run.$db.$flyDb
+export bToA=run.$flyDb.$db
+cat $aToB/out/*.tab > $aToB/all.tab
+cat $bToA/out/*.tab > $bToA/all.tab
+blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
+hgLoadBlastTab $tempDb dmBlastTab $aToB/recipBest.tab
+
+# Us vs. worm
+cd $dir/hgNearBlastp
+export aToB=run.$db.$wormDb
+export bToA=run.$wormDb.$db
+cat $aToB/out/*.tab > $aToB/all.tab
+cat $bToA/out/*.tab > $bToA/all.tab
+blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
+hgLoadBlastTab $tempDb ceBlastTab $aToB/recipBest.tab
+
+# Us vs. yeast
+cd $dir/hgNearBlastp
+export aToB=run.$db.$yeastDb
+export bToA=run.$yeastDb.$db
+cat $aToB/out/*.tab > $aToB/all.tab
+cat $bToA/out/*.tab > $bToA/all.tab
+blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
+hgLoadBlastTab $tempDb scBlastTab $aToB/recipBest.tab
+
+# Clean up
+cd $dir/hgNearBlastp
+cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
+gzip run.*/all.tab
