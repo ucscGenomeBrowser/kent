@@ -10624,6 +10624,7 @@ if(!trackImgOnly)
     jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
     jsIncludeFile("autocompleteCat.js", NULL);
     jsIncludeFile("hgTracks.js", NULL);
+//    jsIncludeFile("mouseOver.js", NULL);
     jsIncludeFile("spectrum.min.js", NULL);
 
 #ifdef LOWELAB
@@ -10632,6 +10633,7 @@ if(!trackImgOnly)
 
     webIncludeResourceFile("spectrum.min.css");
     webIncludeResourceFile("jquery-ui.css");
+//    webIncludeResourceFile("mouseOver.css");
     if (!searching)     // NOT doing search
         {
         webIncludeResourceFile("jquery.contextmenu.css");

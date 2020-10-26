@@ -50,8 +50,8 @@ double topAndBottomMargins = LOLLY_DIAMETER / 2 + LOLLY_DIAMETER / 2;
 double usableHeight = height - topAndBottomMargins - minimumStemHeight; 
 yOff += LOLLY_DIAMETER / 2;
 
-struct hashEl *hel = trackDbSettingsLike(tg->tdb, "yLabel*");
-// parse lines like yLabel <y offset> <draw line ?>  <R,G,B> <label>
+struct hashEl *hel = trackDbSettingsLike(tg->tdb, "yAxisLabel*");
+// parse lines like yAxisLabel <y offset> <draw line ?>  <R,G,B> <label>
 for(; hel; hel = hel->next)
     {
     char *setting = cloneString((char *)hel->val);
@@ -151,7 +151,7 @@ doYLabels(tg, hvg, width, height-fontHeight, lollyCart, xOff, yOff+fontHeight, c
 
 hvGfxText(hvg, xOff, yOff+centerLabel, color, font, tg->shortLabel);
 
-char *setting = trackDbSetting(tg->tdb, "yNumLabels");
+char *setting = trackDbSetting(tg->tdb, "yAxisNumLabels");
 if (setting && sameString("off", setting))
     return;
 if (isnan(lollyCart->upperLimit))
@@ -352,7 +352,7 @@ wigFetchMinMaxYWithCart(cart, tdb, tdb->track, &lollyCart->minY, &lollyCart->max
 lollyCart->upperLimit = lollyCart->maxY;
 lollyCart->lowerLimit = lollyCart->minY;
 lollyCart->radius = 5;
-lollyCart->noStems = trackDbSettingOn(tdb, "noStems");
+lollyCart->noStems = trackDbSettingOn(tdb, "lollyNoStems");
 char *setting = trackDbSetting(tdb, "lollyMaxSize");
 if (setting)
     lollyCart->radius = atoi(setting);

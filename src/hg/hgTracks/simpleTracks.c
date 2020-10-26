@@ -12656,12 +12656,47 @@ tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
 
+static char *getCode(char *inhMode)
+/* Translate inheritance mode strings into much shorter codes. */
+{
+static struct dyString *dy = NULL;  // re-use this string
+if (dy == NULL)
+    dy = dyStringNew(0);
+dyStringClear(dy);
+
+struct slName *modes = slNameListFromString(inhMode, ',');
+
+for(; modes; modes = modes->next)
+    {
+    stripChar(modes->name, '?');
+    char *mode = skipLeadingSpaces(modes->name);
+    if (sameString(mode, "Autosomal dominant"))
+        dyStringAppend(dy, "AD");
+    else if (sameString(mode, "Autosomal recessive"))
+        dyStringAppend(dy, "AR");
+    else if (sameString(mode, "X-linked"))
+        dyStringAppend(dy, "XL");
+    else if (sameString(mode, "X-linked dominant"))
+        dyStringAppend(dy, "XLD");
+    else if (sameString(mode, "X-linked recessive"))
+        dyStringAppend(dy, "XLR");
+    else if (sameString(mode, "Y-linked"))
+        dyStringAppend(dy, "YL");
+    else if (!isEmpty(mode))
+        dyStringAppend(dy, mode);
+
+    if (modes->next)
+        dyStringAppend(dy, "/");
+    }
+return dy->string;
+}
+
 static char *omimGene2DisorderList(char *name)
 /* Return list of disorders associated with a OMIM entry.  Do not free result! */
 {
 static struct dyString *dy = NULL;
 struct sqlConnection *conn;
-char query[256];
+char query[4096];
 
 if (dy == NULL)
     dy = dyStringNew(0);
@@ -12671,19 +12706,63 @@ dyStringClear(dy);
 conn = hAllocConn(database);
 sqlSafef(query,sizeof(query),
         "select geneSymbol from omimGeneMap2 where omimId =%s", name);
-char buf[256];
+char buf[4096];
 char *ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
 if (isNotEmpty(ret))
-    dyStringAppend(dy, ret);
-
-sqlSafef(query,sizeof(query),
-        "select distinct description from omimPhenotype, omimGene2 where name='%s' and name=cast(omimId as char) order by description", name);
-char *disorders = collapseRowsFromQuery(query, "; ", 20);
-if (isNotEmpty(disorders))
     {
-    dyStringAppend(dy, "; disorder(s): ");
-    dyStringAppend(dy, disorders);
+    struct slName *genes = slNameListFromString(ret, ',');
+    dyStringPrintf(dy, "Gene: %s", genes->name);
+    genes = genes->next;
+    if (genes)
+        {
+        if (slCount(genes) > 1)
+            dyStringPrintf(dy, ", Synonyms: ");
+        else
+            dyStringPrintf(dy, ", Synonym: ");
+        for(; genes; genes = genes->next)
+            {
+            dyStringPrintf(dy, "%s", genes->name);
+            if (genes->next)
+                dyStringPrintf(dy, ",");
+        }
     }
+
+    // now phenotype information
+    sqlSafef(query,sizeof(query),
+            "select GROUP_CONCAT(omimPhenotype.description, '|',inhMode  , '|',omimPhenoMapKey SEPARATOR '$') from omimGene2, omimGeneMap, omimPhenotype where omimGene2.name=omimGeneMap.omimId and omimGene2.name=omimPhenotype.omimId and omimGene2.name =%s", name);
+    ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
+
+    if (ret)
+        {
+        struct slName *phenotypes = slNameListFromString(ret, '$');
+        if (slCount(phenotypes))
+            {
+            if (slCount(phenotypes) > 1)
+                dyStringPrintf(dy, ", Phenotypes: ");
+            else
+                dyStringPrintf(dy, ", Phenotype: ");
+
+            for(; phenotypes; phenotypes = phenotypes->next)
+                {
+                struct slName *components = slNameListFromString(phenotypes->name, '|');
+                dyStringPrintf(dy, "%s", components->name);
+                components = components->next;
+
+                char *inhCode = getCode(components->name);
+                if (!isEmpty(inhCode))
+                    dyStringPrintf(dy, ", %s", inhCode);
+                components = components->next;
+
+                if (!isEmpty(components->name))
+                    dyStringPrintf(dy, ", %s", components->name);
+
+                if (phenotypes->next)
+                    dyStringPrintf(dy, "; ");
+                }
+            }
+        }
+    }
+
 hFreeConn(&conn);
 return(dy->string);
 }

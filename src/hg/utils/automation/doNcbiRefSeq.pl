@@ -719,15 +719,19 @@ if [ -s \$db.noRna.available.list ]; then
   fi
 fi
 
-if [ -s process/\$asmId.rna.cds.gz ]; then
-  zcat process/\$asmId.rna.cds.gz egrep '[0-9]+\\.\\.[0-9]\\+' \\
-    pslMismatchGapToBed -cdsFile=stdin -db=\$db -ignoreQNamePrefix=X \\
+if [ -s process/\$asmId.rna.cds ]; then
+  cat process/\$asmId.rna.cds | grep '[0-9]\\+\\.\\.[0-9]\\+' \\
+    | pslMismatchGapToBed -cdsFile=stdin -db=\$db -ignoreQNamePrefix=X \\
       process/\$asmId.\$db.psl.gz \$target2bit \\
         \$db.rna.fa ncbiRefSeqGenomicDiff || true
 
-  wget -O txAliDiff.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/txAliDiff.as'
-  bedToBigBed -type=bed9+ -tab -as=txAliDiff.as \\
-    ncbiRefSeqGenomicDiff.bed \$db.chrom.sizes ncbiRefSeqGenomicDiff.bb
+  if [ -s ncbiRefSeqGenomicDiff.bed ]; then
+    wget -O txAliDiff.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/txAliDiff.as'
+    bedToBigBed -type=bed9+ -tab -as=txAliDiff.as \\
+      ncbiRefSeqGenomicDiff.bed \$db.chrom.sizes ncbiRefSeqGenomicDiff.bb
+  else
+    rm -f ncbiRefSeqGenomicDiff.bed
+  fi
 fi
 
 export totalBases=`ave -col=2 \$db.chrom.sizes | grep "^total" | awk '{printf "%d", \$2}'`
@@ -827,16 +831,20 @@ hgLoadSeq -drop -seqTbl=seqNcbiRefSeq -extFileTbl=extNcbiRefSeq \$db $gbdbDir/se
 
 hgLoadPsl \$db -table=ncbiRefSeqPsl process/\$asmId.\$db.psl.gz
 
-if [ -s process/\$asmId.rna.cds.gz ]; then
-  zcat process/\$asmId.rna.cds.gz egrep '[0-9]+\\.\\.[0-9]\\+' \\
-    pslMismatchGapToBed -cdsFile=stdin -db=\$db -ignoreQNamePrefix=X \\
+if [ -s process/\$asmId.rna.cds ]; then
+  zcat process/\$asmId.rna.cds | grep '[0-9]\\+\\.\\.[0-9]\\+' \\
+    | pslMismatchGapToBed -cdsFile=stdin -db=\$db -ignoreQNamePrefix=X \\
       process/\$asmId.\$db.psl.gz $dbTwoBit \\
         \$db.rna.fa ncbiRefSeqGenomicDiff || true
 
-  bedToBigBed -type=bed9+ -tab -as=~/kent/src/hg/lib/txAliDiff.as \\
-    ncbiRefSeqGenomicDiff.bed process/\$db.chrom.sizes ncbiRefSeqGenomicDiff.bb
   rm -f $gbdbDir/ncbiRefSeqGenomicDiff.bb
-  ln -s `pwd`/ncbiRefSeqGenomicDiff.bb $gbdbDir/ncbiRefSeqGenomicDiff.bb
+  if [ -s ncbiRefSeqGenomicDiff.bed ]; then
+    bedToBigBed -type=bed9+ -tab -as=~/kent/src/hg/lib/txAliDiff.as \\
+      ncbiRefSeqGenomicDiff.bed process/\$db.chrom.sizes ncbiRefSeqGenomicDiff.bb
+    ln -s `pwd`/ncbiRefSeqGenomicDiff.bb $gbdbDir/ncbiRefSeqGenomicDiff.bb
+  else
+    rm -f ncbiRefSeqGenomicDiff.bed
+  fi
 fi
 
 if [ -d "/usr/local/apache/htdocs-hgdownload/goldenPath/archive" ]; then

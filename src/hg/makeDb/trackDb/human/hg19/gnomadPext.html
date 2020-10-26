@@ -1,11 +1,11 @@
 <h2>Description</h2>
 <p>
-The <b>${longLabel}</b> <b>(PEXT)</b> track set displays isoform expression levels across 53 
+The <b>${longLabel}</b> <b>(pext)</b> track set displays isoform expression levels across 53 
 tissues, based on 11,706 tissue samples from the Genotype Tissue Expression (GTEx) v7 dataset.
 </p>
 
 <p>
-The <b>gnomAD PEXT tracks</b> provide a comprehensive view of the expression of exons across a 
+The <b>gnomAD pext tracks</b> provide a comprehensive view of the expression of exons across a 
 gene using the <em>proportion expression across transcripts</em>, or <em>pext metric</em>, a 
 transcript-level annotation metric which quantifies isoform expression for variants. This metric 
 was calculated by annotating each variant with the expression of all possible consequences across 
@@ -16,7 +16,7 @@ transcriptional output from a gene that would be affected by the variant annotat
 
 <p>
 Each of the subtracks shows the pext metric for a specific tissue, except the <b>gnomAD 
-PEXT mean_proportion</b> subtrack which shows the average pext metrics calculated from the 53 GTEx 
+pext Mean Proportion</b> subtrack which shows the average pext metrics calculated from the 53 GTEx 
 tissues.
 </p>
 
@@ -29,16 +29,18 @@ for the visualization. The details page shows calculated sample percentages for 
 sequence within the browser window.
 </p>
 
+
 <H2>Methods</H2>
 <p>
-The pext values are derived from isoform quantifications using the <a target="blank"
+The pext values are derived from isoform quantifications using the <a target="_blank"
 href="http://deweylab.biostat.wisc.edu/rsem/">RSEM tool</a>. Detailed information about
-development and commands to create these files can be found <a target="blank"
+development and commands to create these files can be found <a target="_blank"
 href="https://github.com/macarthur-lab/tx_annotation/">here</a>. Pext values were downloaded
-from the <a href="https://gnomad.broadinstitute.org/downloads#v2-pext">gnomAD website</a> and
-transformed into bigWigs, one per tissue. For the full list of UCSC specific steps, please
+from the <a target="_blank" href="https://gnomad.broadinstitute.org/downloads#v2-pext">gnomAD website</a> 
+and transformed into bigWigs, one per tissue. For the full list of UCSC specific steps, please
 see the &quot;gnomAD PEXT scores&quot; section of the
-<a href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg19.txt">
+<a target="_blank" 
+href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg19.txt">
 hg19 makedoc</a> from our GitHub repository.
 </p>
 
@@ -68,13 +70,53 @@ for questions and example queries, or our
 <a HREF="../FAQ/FAQdownloads.html#download36" target="_blank">Data Access FAQ</a>
 for more information.</p>
 
+<p>
+More information about using and understanding the GnomAD data can be found in the
+<a target="_blank" href="https://gnomad.broadinstitute.org/faq">GnomAD FAQ</a> site.
+</p>
+
 <h2>Credits</h2>
 <p>
-Thanks to the gnomAD team, especially Anne O'Donnell Luria for her help with
-making these data and recommendations on how to display the data.
+Thanks to the <a href="https://gnomad.broadinstitute.org/about" target="_blank">Genome Aggregation
+Database Consortium</a> for making these data available, Nick Watts for developing this track on 
+the gnomAD Browser, and Anna Benet-Pag√s and Chris Lee for building this track on the UCSC Genome 
+Browser. The data are released under the <a
+href="https://opendatacommons.org/licenses/odbl/1.0/" target="_blank">ODC Open Database License
+(OBdL)</a> as described <a href="https://gnomad.broadinstitute.org/terms" target="_blank">here</a>.
 </p>
 
 <h2>References</h2>
+
+<p>
+Lek M, Karczewski KJ, Minikel EV, Samocha KE, Banks E, Fennell T, O'Donnell-Luria AH, Ware JS, Hill
+AJ, Cummings BB <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">
+Analysis of protein-coding genetic variation in 60,706 humans</a>.
+<em>Nature</em>. 2016 Aug 18;536(7616):285-91.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27535533" target="_blank">27535533</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5018207/" target="_blank">PMC5018207</a>
+</p>
+
+<p>
+Karczewski KJ, Francioli LC, Tiao G, Cummings BB, Alf&#246;ldi J, Wang Q, Collins RL, Laricchia KM,
+Ganna A, Birnbaum DP <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461654" target="_blank">
+The mutational constraint spectrum quantified from variation in 141,456 humans</a>.
+<em>Nature</em>. 2020 May;581(7809):434-443.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461654" target="_blank">32461654</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334197/" target="_blank">PMC7334197</a>
+</p>
+
+<p>
+Collins RL, Brand H, Karczewski KJ, Zhao X, Alf&#246;ldi J, Francioli LC, Khera AV, Lowther C,
+Gauthier LD, Wang H <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32461652" target="_blank">
+A structural variation reference for medical and population genetics</a>.
+<em>Nature</em>. 2020 May;581(7809):444-451.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461652" target="_blank">32461652</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334194/" target="_blank">PMC7334194</a>
+</p>
+
 <p>
 Cummings BB, Karczewski KJ, Kosmicki JA, Seaby EG, Watts NA, Singer-Berk M, Mudge JM, Karjalainen J,
 Satterstrom FK, O'Donnell-Luria AH <em>et al</em>.
@@ -84,3 +126,4 @@ Transcript expression-aware annotation improves rare variant interpretation</a>.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32461655" target="_blank">32461655</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7334198/" target="_blank">PMC7334198</a>
 </p>
+

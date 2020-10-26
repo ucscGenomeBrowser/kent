@@ -513,7 +513,7 @@ hashMayRemove(tdb->settingsHash, "useScore");
 if (tdb->priority != def->priority)
     fprintf(f, "\t%s='%.3f'", "priority", tdb->priority);
 hashMayRemove(tdb->settingsHash, "priority");
-if (tdb->colorR != def->colorR || tdb->colorG != def->colorG || tdb->colorB != def->colorB)
+if (tdb->colorR != def->colorR || tdb->colorG != def->colorG || tdb->colorB != def->colorB || sameOk(tdb->type, "hic"))
     fprintf(f, "\t%s='%d,%d,%d'", "color", tdb->colorR, tdb->colorG, tdb->colorB);
 hashMayRemove(tdb->settingsHash, "color");
 if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG
