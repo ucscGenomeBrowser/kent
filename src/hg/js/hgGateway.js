@@ -621,7 +621,7 @@ var hgGateway = (function() {
     // graphical species-picker, db select, and position autocomplete.
 
     // Constants
-    var speciesWatermark = 'Enter species or common name';
+    var speciesWatermark = 'Enter species, common name or assembly accession/id';
     var positionWatermark = 'Enter position, gene symbol or search terms';
     // Shortcuts to popular species:
     var favIconTaxId = [ ['Human', 9606],
