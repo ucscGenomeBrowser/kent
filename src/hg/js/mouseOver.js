@@ -25,6 +25,8 @@ function intersectPointRectangle(x,y, rect) {
 // given an X coordinate: x, find the index idx
 // in the rects[idx] array where rects[idx].x1 <= x < rects[idx].x2
 // returning -1 when not found
+// if we knew the array was sorted on x1 we could get out early
+//   when x < x1
 function findRange(x, rects) {
   var answer = -1;
   for ( var idx in rects ) {
@@ -48,16 +50,43 @@ function mouseInTrackImage(evt) {
   var oLeft = $(this).offset().left;
   var oTop = $(this).offset().top;
   var offLeft = Math.max(0, Math.floor(evt.x - $(this).offset().left));
-  // need to find where offLeft is in the spans
+  var windowUp = false;     // see if window is supposed to become visible
   var foundIdx = -1;
   var valP = "noX";
   if (mapData.spans[trackName]) {
      foundIdx = findRange(offLeft, mapData.spans[trackName]);
   }
-  if (foundIdx > -1) { valP = mapData.spans[trackName][foundIdx].v; }
+  if (foundIdx > -1) {
+    valP = mapData.spans[trackName][foundIdx].v;
+    // value to display
+    var msg = "&nbsp;" + mapData.spans[trackName][foundIdx].v + "&nbsp;";
+    $('#mouseOverText').html(msg);
+    var msgWidth = Math.ceil($('#mouseOverText').width());
+    var msgHeight = Math.ceil($('#mouseOverText').height());
+    var posLeft = (evt.x - msgWidth) + "px";
+//    var posTop = (oTop + rect.y1) + "px";
+    var posTop = oTop + "px";
+    $('#mouseOverContainer').css('left',posLeft);
+    $('#mouseOverContainer').css('top',posTop);
+    windowUp = true;      // yes, window is to become visible
+  }
   var offTop = Math.max(0, Math.floor(evt.y - $(this).offset().top));
   var msg = "<p>. . . mouse in target.id: " + evt.target.id + "(" + trackName + ")[" + foundIdx + "]='" + valP + "' ["  + firstRect + "] at " + offLeft + "," + offTop + ", evX,Y: " + evX + "," + evY + ", offL,T: " + oLeft + "," + oTop + "</p>";
   $('#eventRects').html(msg);
+  if (windowUp) {     // the window should become visible
+    if (! mapData.visible) {        // should *NOT* have to keep track !*!
+      var contain = document.getElementById('mouseOverContainer');
+      var mouseOver = document.querySelector(".wigMouseOver");
+      mouseOver.classList.toggle("showMouseOver");
+      mapData.visible = true;
+    }
+  } else {    // the window should disappear
+    if (mapData.visible) {
+      var mouseOver = document.querySelector(".wigMouseOver");
+      mouseOver.classList.toggle("showMouseOver");
+      mapData.visible = false;
+    }
+  } //      window visible/not visible
 }
 
 // =========================================================================
@@ -146,51 +175,6 @@ function fetchMapData(url) {
 function mouseMoving(x, y) {
   var xyMouse = "<p>. . . mouse at x,y: " + Math.floor(x) + "," + Math.floor(y);
   $('#xyMouse').html(xyMouse);
-  if (typeof mapData.rects !== 'undefined') { // if there are rectangles
-    for (var i = 0; i < mapData.tracks.length; i++) {
-      var trackName = mapData.tracks[i];
-      var imgData = "img_data_" + trackName;
-      var imgMap  = document.getElementById(imgData);
-      var imageRect = imgMap.getBoundingClientRect();
-      var imageTop = imageRect.top;
-      // x1,y1 are coordinates of mouse relative to the top,left corner of
-      // the browser tracks image
-      var x1 = x - Math.floor(imageRect.left);
-      var y1 = y - Math.floor(imageRect.top);
-      var windowUp = false;     // see if window is supposed to become visible
-
-      for (var rect of mapData.rects) {         // work through rects list
-        if (intersectPointRectangle(x1,y1, rect)) {     // found mouse in rect
-          var msg = "&nbsp;" + rect.v + "&nbsp;";       // value to display
-          $('#mouseOverText').html(msg);
-          var msgWidth = Math.ceil($('#mouseOverText').width());
-          var msgHeight = Math.ceil($('#mouseOverText').height());
-          var posLeft = (x - msgWidth) + "px";
-          var posTop = (imageTop + rect.y1) + "px";
-          $('#mouseOverContainer').css('left',posLeft);
-          $('#mouseOverContainer').css('top',posTop);
-          windowUp = true;      // yes, window is to become visible
-          break;        //      can stop looking after first match
-        }
-      }
-      if (windowUp) {     // the window should become visible
-        if (! mapData.visible) {        // should *NOT* have to keep track !*!
-          var contain = document.getElementById('mouseOverContainer');
-//          var text = document.getElementById('mouseOverText');
-//          text.style.backgroundColor = "#ff69b4";
-          var mouseOver = document.querySelector(".wigMouseOver");
-          mouseOver.classList.toggle("showMouseOver");
-          mapData.visible = true;
-        }
-      } else {    // the window should disappear
-        if (mapData.visible) {
-            var mouseOver = document.querySelector(".wigMouseOver");
-            mouseOver.classList.toggle("showMouseOver");
-            mapData.visible = false;
-        }
-      } //      window visible/not visible
-    }	//	for each track
-  }     //	if there are rectangles defined
 }	//	function mouseMoving(x, y)
 
 function getMouseOverData() {
