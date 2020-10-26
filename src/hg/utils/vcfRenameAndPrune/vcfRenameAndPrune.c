@@ -12,11 +12,11 @@ void usage()
 errAbort(
   "vcfRenameAndPrune - Rename samples in VCF; if new name not found, remove sample.\n"
   "usage:\n"
-  "   vcfRenameAndPrune vcfIn.vcf[.gz] renaming.tab vcfOut.vcf\n"
+  "   vcfRenameAndPrune vcfIn.vcf[.gz] renaming.txt vcfOut.vcf\n"
 //  "options:\n"
 //  "   -xxx=XXX\n"
-  "renaming.tab has two columns: old name (must uniquely match some sample\n"
-  "named in #CHROM header line) and new name.\n"
+  "renaming.txt has two whitespace-separated columns: old name (must uniquely match\n"
+  "some sample named in #CHROM header line) and new name.\n"
   );
 }
 
