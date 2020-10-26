@@ -3302,4 +3302,25 @@ TMPDIR=/dev/shm
 	> rbest.log 2>&1 &
     # real    1183m6.027s
 
-############################################################################
+##############################################################################
+# LIFTOVER TO calJac4 (DONE - 2020-09-04 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/calJac3/bed/blat.calJac4.2020-09-04
+    cd /hive/data/genomes/calJac3/bed/blat.calJac4.2020-09-04
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/calJac3/calJac3.2bit \
+        -targetSizes=/hive/data/genomes/calJac3/chrom.sizes \
+        -ooc=/hive/data/genomes/calJac3/jkStuff/calJac3.11.ooc \
+         calJac3 calJac4
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -target2Bit=/hive/data/genomes/calJac3/calJac3.2bit \
+        -targetSizes=/hive/data/genomes/calJac3/chrom.sizes \
+        -ooc=/hive/data/genomes/calJac3/jkStuff/calJac3.11.ooc \
+         calJac3 calJac4) > doLiftOverToCalJac4.log 2>&1
+    # real    257m56.056s
+
+    # see if the liftOver menus function in the browser from calJac3 to calJac4
+
+##############################################################################

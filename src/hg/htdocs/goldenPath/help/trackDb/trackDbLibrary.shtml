@@ -2428,25 +2428,36 @@ There are no extra options that can appear on the type hic line.
     </P>
 </DIV>
 
-<DIV class="autoScale"><span class="types wig bigWig bedGraph"></span>
+<DIV class="autoScale"><span class="types wig bigWig bedGraph hic"></span>
 <div class="format"><code>autoScale &lt;off/on/group&gt;</code></div>
-    <P>The graph of the
-    data displayed in the Browser image is usually scaled on the y-axis 
-    in absolute coordinates.  However, you can display the data
-    in two types of autoScale which will ensure either that the high score in the current
-    viewing window will peak at the top of the graph, or that all tracks in a 
-    composite will be scaled according to the highest point in the viewing 
-    window of any visible tracks in the same composite.  Like most graph settings, 
-    this is configurable by the user.  Setting it to "<code>on</code>" in trackDb will default 
-    the track to <code>auto-scale to data view</code>.
-    Setting it to "<code>group</code>" in trackDb will default 
-    the track to <code>group auto-scale</code>. The default is 
-    "<code>off</code>" which will set the track to <code>use vertical viewing 
-    range setting</code>.</P>
+    <P>This setting is available for both the graph types of tracks (wig,
+    bigWig, bedGraph) and the Hi-C heatmap tracks (hic).  It behaves slightly
+    differently for each.</p>
+    <p>For graph tracks, the graph of the data displayed in the Browser image
+    is usually scaled on the y-axis in absolute coordinates.  However, you can
+    display the data in two types of autoScale which will ensure either that
+    the high score in the current viewing window will peak at the top of the
+    graph, or that all tracks in a composite will be scaled according to the
+    highest point in the viewing window of any visible tracks in the same
+    composite.  Like most graph settings, this is configurable by the user.
+    Setting it to "<code>on</code>" in trackDb will default the track to
+    <code>auto-scale to data view</code>.  Setting it to "<code>group</code>"
+    in trackDb will default the track to <code>group auto-scale</code>. The
+    default is "<code>off</code>" which will set the track to
+    <code>use vertical viewing range setting</code>.</P>
     <P>NOTE: These options can be misleading if a noisy, low signal
     erroneously appears as significant because there is no high signal in the
     view window. The "<code>group</code>" option only applies to composite 
     bigWig tracks.</P>
+    <p>For Hi-C tracks, higher interaction scores are represented with more
+    intense colors.  When this setting is set to "<code>off</code>", the score
+    at which the color reaches maximum intensity is a fixed value that can
+    be chosen with the <code>saturationScore</code> trackDb setting.  When this
+    setting is set to "<code>on</code>", the maximum intensity score
+    changes dynamically depending on the values in the current viewing window.
+    The default value for this setting is "<code>on</code>".  The
+    "<code>group</code>" option for autoScale is not available for Hi-C
+    tracks.</p>
     <P><B>Example:</B></P>
     <pre>   autoScale on</pre>
 </DIV>
@@ -4905,18 +4916,6 @@ intensity.  At some point, however, maximum color saturation is reached and high
 interaction scores don't change the color any further.  This setting determines
 what the default score is for the point at which that maximum color saturation is
 reached.
-    </p>
-</div>
-
-<div class="autoScaleHic"><span class="types hic"></span>
-<div class="format"><code>autoScale &lt;on|off&gt;</code></div>
-    <p>The autoScale setting for hic tracks determines the default method for
-determining the saturation score for colors in the heatmap.  If this setting is
-set to "on" (also the default if no value is specified), then the maximum score
-is determined dynamically by the browser depending on the data in the current
-window.  If this setting is set to "off", then the default behavior for the browser
-will be to use the value from the saturationScore setting for this track (or 100,
-if that setting is not used).
     </p>
 </div>
 
