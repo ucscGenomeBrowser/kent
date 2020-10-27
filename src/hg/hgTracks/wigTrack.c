@@ -852,10 +852,8 @@ static int mouseOverIdx = -1;
 
 struct wigMouseOver
     {
-    int x;	/* x,y coordinates bottom left corner of box */
-    int y;
-    int width;	/* width,height of this box */
-    int height;
+    int x1;	/* beginning of a rectangle for this value */
+    int x2;	/* end of the rectangle */
     double value;	/* data value for this region */
     };
 
@@ -878,6 +876,12 @@ enum wiggleGraphOptEnum lineBar = wigCart->lineBar;
 boolean whiskers = (wigCart->windowingFunction == wiggleWindowingWhiskers
 			&& width < winEnd-winStart);
 
+/* start new data for a new track, freez old data if exists */
+if (mouseOverData)
+    {
+    mouseOverIdx = -1;
+    freez(&mouseOverData);
+    }
 AllocArray(mouseOverData, width);
 
 int mouseOverX2 = -1;
@@ -906,10 +910,8 @@ for (x1 = 0; x1 < width; ++x1)
 		{
 		++mouseOverIdx;
 		mouseOverX2 = x1+1;
-		mouseOverData[mouseOverIdx].x = xOff+x1;
-		mouseOverData[mouseOverIdx].width = mouseOverX2 - x1;
-		mouseOverData[mouseOverIdx].y = yOff;
-		mouseOverData[mouseOverIdx].height = h;
+		mouseOverData[mouseOverIdx].x1 = x1;
+		mouseOverData[mouseOverIdx].x2 = mouseOverX2;
 		mouseOverData[mouseOverIdx].value = thisValue;
 		previousValue = thisValue;
 		}
@@ -918,13 +920,11 @@ for (x1 = 0; x1 < width; ++x1)
 		if (fabs(thisValue - previousValue) > epsilonLimit)
 		    {
 		    /* finish off the existing run of data */
-		    mouseOverData[mouseOverIdx].width = mouseOverX2 - (mouseOverData[mouseOverIdx].x - xOff);
+		    mouseOverData[mouseOverIdx].x2 = mouseOverX2;
 		    mouseOverX2 = x1+1;
 		    ++mouseOverIdx;
-		    mouseOverData[mouseOverIdx].x = xOff+x1;
-		    mouseOverData[mouseOverIdx].width = mouseOverX2 - x1;
-		    mouseOverData[mouseOverIdx].y = yOff;
-		    mouseOverData[mouseOverIdx].height = h;
+		    mouseOverData[mouseOverIdx].x1 = x1;
+		    mouseOverData[mouseOverIdx].x2 = mouseOverX2;
 		    mouseOverData[mouseOverIdx].value = thisValue;
 		    previousValue = thisValue;
 		    }
@@ -939,13 +939,13 @@ for (x1 = 0; x1 < width; ++x1)
 	{
 	if (mouseOverX2 > 0)	/* yes, been in data, end it here */
 	    {
-	    mouseOverData[mouseOverIdx].width = mouseOverX2 - (mouseOverData[mouseOverIdx].x - xOff);
+	    mouseOverData[mouseOverIdx].x2 = mouseOverX2;
 	    mouseOverX2 = -1;	/* start over with new data when found */
 	    }
 	}
     /* potentially end the last mouseOver box */
-    if (mouseOverX2 > 0 && (mouseOverX2 - (mouseOverData[mouseOverIdx].x - xOff)) > mouseOverData[mouseOverIdx].width)
-	    mouseOverData[mouseOverIdx].width = mouseOverX2 - (mouseOverData[mouseOverIdx].x - xOff);
+    if (mouseOverX2 > 0 && mouseOverX2 > mouseOverData[mouseOverIdx].x2)
+	    mouseOverData[mouseOverIdx].x2 = mouseOverX2;
 
     /* ===== done with mouseOver calculations===== */
 
@@ -1161,7 +1161,10 @@ for (x1 = 0; x1 < width; ++x1)
     }	/*	for (x1 = 0; x1 < width; ++x1)	*/
 
     if (skipMouseOvers || mouseOverIdx < 0)
+	{
+        mouseOverIdx = -1;
 	freez(&mouseOverData);
+	}
 
 }	/*	graphPreDraw()	*/
 
@@ -1445,7 +1448,7 @@ drawArbitraryYLine(vis, (enum wiggleGridOptEnum)wigCart->yLineOnOff,
     wigCart->yLineOnOff);
 
 #ifdef NOT_READY_TO_GO
-if (mouseOverData)
+if (NULL != mouseOverData)
     {
     static boolean beenHereDoneThat = FALSE;
     struct tempName jsonData;
@@ -1461,16 +1464,16 @@ if (mouseOverData)
     for (i = 0; i <= mouseOverIdx; ++i)
 	{
         jsonWriteObjectStart(jw, NULL);
-        jsonWriteNumber(jw, "x1", (long long)mouseOverData[i].x);
-        jsonWriteNumber(jw, "y1", (long long)mouseOverData[i].y);
-        jsonWriteNumber(jw, "x2", (long long)(mouseOverData[i].x + mouseOverData[i].width));
-        jsonWriteNumber(jw, "y2", (long long)(mouseOverData[i].y + mouseOverData[i].height));
+        jsonWriteNumber(jw, "x1", (long long)mouseOverData[i].x1);
+        jsonWriteNumber(jw, "x2", (long long)mouseOverData[i].x2);
         jsonWriteDouble(jw, "v", mouseOverData[i].value);
         jsonWriteObjectEnd(jw);
         }
     jsonWriteListEnd(jw);
     jsonWriteObjectEnd(jw);
     fputs(jw->dy->string,trashJson);
+    mouseOverIdx = -1;
+    freez(&mouseOverData);
     // This is the hidden signal to the javaScript of where to pick up
     //  the json file
     hPrintf("<MAP Name=%s class=mouseOver trashFile='%s'>\n", tg->track, jsonData.forHtml);
@@ -1483,10 +1486,14 @@ if (mouseOverData)
 	hPrintf("  </span>\n");
 	hPrintf("</div>\n");
         beenHereDoneThat = TRUE;
+// hPrintf("<div id='mouseDbg'><span id='debugMsg'><p>. . . mouseDbg</p></span></div>\n");
+// hPrintf("<div id='mouseXY'><span id='xyMouse'><p>. . . mouse X,Y</p></span></div>\n");
+// hPrintf("<div id='rectEvent'><span id='eventRects'><p>. . . eventRects</p></span></div>\n");
+// hPrintf("<div id='dbgMsg'><span id='msgDebug'><p>. . . debug message</p></span></div>\n");
 	}
     }
 else
-#endif
+#endif  /*       NOT_READY_TO_GO        */
     wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
 }
 

@@ -6,10 +6,8 @@ var mapData = {};
 // mapData.visible - keep track of window visible or not, value: true|false
 //                   shouldn't need to do this here, the window knows if it
 //                   is visible or not, just ask it for status
-// mapData.tracks[]  - list of tracks that came in with mapBoxes
-// mapData.boxCount[]  - in same order as tracks[] number of boxes for track
-//                       this boxCount is just for debugging information
-
+// mapData.tracks{}  - tracks that came in with mapBoxes, key is track name
+//                     value is the number of boxes (for debugging)
 // =========================================================================
 // intersect the point with the rectangle, where rect corners are x1,y1 x2,y2
 // =========================================================================
@@ -19,6 +17,27 @@ var mapData = {};
 //      else if (y <= rect.y1 || y > rect.y2) { answer = false; }
 //   return answer;
 // }
+
+// called from: updateImgForId when it has updated a track in place
+// need to refresh the event handlers and json data
+function updateMouseOver(trackName) {
+  if (mapData.tracks[trackName]) {
+    var tdName = "td_data_" + trackName;
+    var tdElement  = document.getElementById(tdName);
+    var id = tdElement.id;
+    tdElement.addEventListener('mousemove', mouseInTrackImage);
+    tdElement.addEventListener('mouseout', mouseLeftTrackImage);
+    var imgName = "img_data_" + trackName;
+    var imgElement  = document.getElementById(imgName);
+    var src = imgElement.src;
+    var jsonUrl = imgElement.src.replace("hgt/hgt_", "hgt/" + trackName + "_");
+    jsonUrl = jsonUrl.replace(".png", ".json");
+    fetchMapData(jsonUrl);
+// alert("updateMouseOver id: '" + jsonUrl + "' valid track here");
+  } else {
+    return;     // not a track we are working on here
+  }
+}
 
 // given an X coordinate: x, find the index idx
 // in the rects[idx] array where rects[idx].x1 <= x < rects[idx].x2
@@ -57,25 +76,45 @@ function mouseLeftTrackImage(evt) {
   popUpDisappear();
 }
 
+// the evt.target.id is the img_data_<trackName> element of the track graphic
 function mouseInTrackImage(evt) {
+//  $('#msgDebug').html(". . . debug message");
+  // the center label also events here, can't use that
+  //  plus there is a one pixel line under the center label that has no
+  //   id name at all
+  if (! evt.target.id.includes("img_data_")) { return; }
   var trackName = evt.target.id.replace("img_data_", "");
-  var evX = evt.x;
+  if (trackName.length < 1) { return; }
+  // find location of this <td> slice in the image, this is the track
+  //   image in the graphic, including left margin and center label
+  //   This location follows the window scrolling
+  var tdName = "td_data_" + trackName;
+  var tdId  = document.getElementById(tdName);
+  var tdRect = tdId.getBoundingClientRect();
+  var tdLeft = Math.floor(tdRect.left);
+  var tdTop = Math.floor(tdRect.top);
+  // find the location of the image itself, this could be the single complete
+  //  graphic image of all the tracks, or possibly the single image of the
+  //  track itself.  This location also follows the window scrolling and can
+  //  even go negative when the web browser scrolls a window that is larger
+  //  than the width of the web browser.
+  var imageId = document.getElementById(evt.target.id);
+  var imageRect = imageId.getBoundingClientRect();
+  var imageLeft = Math.floor(imageRect.left);
+  var imageTop = Math.floor(imageRect.top);
+  var srcUrl = evt.target.src;
+  var evX = evt.x;      // location of mouse on the web browser screen
   var evY = evt.y;
-  // This offset is not correct.  It doesn't follow window scrolling
-  //  left or right
-  var offLeft = Math.max(0, Math.floor(evt.x - $(this).offset().left));
+  var offLeft = Math.max(0, Math.floor(evt.x - tdLeft));
   var windowUp = false;     // see if window is supposed to become visible
   var foundIdx = -1;
   var valP = "noX";
+  var lengthSpansArray = -1;
   if (mapData.spans[trackName]) {
      foundIdx = findRange(offLeft, mapData.spans[trackName]);
+     lengthSpansArray = mapData.spans[trackName].length;
   }
   if (foundIdx > -1) {
-    var tdName = "td_data_" + trackName;
-    var elId  = document.getElementById(tdName);
-    var rectBounds = elId.getBoundingClientRect();
-    var rectTop = Math.floor(rectBounds.top);	// follows window scrolling
-    var rectLeft = Math.floor(rectBounds.left);
     valP = mapData.spans[trackName][foundIdx].v;
     // value to display
     var msg = "&nbsp;" + mapData.spans[trackName][foundIdx].v + "&nbsp;";
@@ -83,14 +122,14 @@ function mouseInTrackImage(evt) {
     var msgWidth = Math.ceil($('#mouseOverText').width());
     var msgHeight = Math.ceil($('#mouseOverText').height());
     var posLeft = evt.x - msgWidth + "px";
-    var posTop = rectTop + "px";
+    var posTop = tdTop + "px";
     $('#mouseOverContainer').css('left',posLeft);
     $('#mouseOverContainer').css('top',posTop);
     windowUp = true;      // yes, window is to become visible
   }
-  var offTop = Math.max(0, Math.floor(evt.y - $(this).offset().top));
-  var msg = "<p>. . . mouse in target.id: " + evt.target.id + "(" + trackName + ")[" + foundIdx + "]='" + valP + "' at " + offLeft + "," + offTop + ", evX,Y: " + evX + "," + evY + "</p>";
-  $('#eventRects').html(msg);
+//  var offTop = Math.max(0, Math.floor(evt.y - $(this).offset().top));
+//  var msg = "<p>. . . mouse in target.id: " + evt.target.id + "(" + trackName + ")[" + foundIdx + "]='" + valP + "' spansLength: " + lengthSpansArray + " at " + offLeft + "," + offTop + ", evX,Y: " + evX + "," + evY + "</p>";
+//  $('#eventRects').html(msg);
   if (windowUp) {     // the window should become visible
     popUpVisible();
   } else {    // the window should disappear
@@ -117,12 +156,11 @@ function mouseInTrackImage(evt) {
 function receiveData(arr) {
   if (typeof mapData.spans === 'undefined') {
     mapData.spans = {};         // get this object started first time
-    mapData.tracks = [];
-    mapData.boxCount = [];
+    mapData.tracks = {};
   }
   mapData.visible = false;
   for (var trackName in arr) {
-    mapData.tracks.push(trackName);
+// alert("receiving data for " + trackName);
     mapData.spans[trackName] = [];      // start array
     // add a 'mousemove' and 'mouseout' event listener to each track
     //     display object
@@ -130,16 +168,17 @@ function receiveData(arr) {
     var objectId  = document.getElementById(objectName);
     objectId.addEventListener('mousemove', mouseInTrackImage);
     objectId.addEventListener('mouseout', mouseLeftTrackImage);
+    // would be nice to know when the window is scrolling in the browser so
+    // the text box could disappear
 //    window.addEventListener('onscroll', mouseLeftTrackImage);
     var itemCount = 0;	// just for monitoring purposes
     // save incoming x1,x2,v data into the mapData.spans[trackName][] array
     arr[trackName].forEach(function(box) {
       mapData.spans[trackName].push(box); ++itemCount});
-    mapData.boxCount.push(itemCount);	// merely for debugging watch
+    mapData.tracks[trackName] = itemCount;	// merely for debugging watch
   }
 //  var msg = "<ul>";
-//  for (var idx in mapData.tracks) {
-//      var trackName = mapData.tracks[idx];
+//  for (var trackName in mapData.tracks) {
 //      var imgData = "td_data_" + trackName;
 //      var imgMap  = document.getElementById(imgData);
 //      var imageRect = imgMap.getBoundingClientRect();
@@ -147,7 +186,7 @@ function receiveData(arr) {
 //      var left = Math.floor(imageRect.left);
 //      var width = Math.floor(imageRect.width);
 //      var height = Math.floor(imageRect.height);
-//     msg += "<li>" + trackName + " at left,top (x,y)(w,h):" + left + "," + top + "(" + width + "," + height + ") has: " + mapData.boxCount[idx] + " mapBoxes</li>";
+//     msg += "<li>" + trackName + " at left,top (x,y)(w,h):" + left + "," + top + "(" + width + "," + height + ") has: " + mapData.tracks[trackName] + " mapBoxes</li>";
 //  }
 //  msg += "</ul>";
 //  $('#debugMsg').html(msg);
@@ -157,6 +196,7 @@ function receiveData(arr) {
 // fetchMapData() sends JSON request, callback to receiveData() upon return
 // =========================================================================
 function fetchMapData(url) {
+// alert("fetchMapData(" + url + ")");
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function() {
     if (4 === this.readyState && 200 === this.status) {
@@ -173,10 +213,10 @@ function fetchMapData(url) {
 // Mouse x,y positions arrive as fractions when the
 // WEB page is zoomed into to make the pixels larger.  Hence the Math.floor
 // to keep them as integers.
-function mouseMoving(x, y) {
-  var xyMouse = "<p>. . . mouse at x,y: " + Math.floor(x) + "," + Math.floor(y);
-  $('#xyMouse').html(xyMouse);
-}	//	function mouseMoving(x, y)
+// function mouseMoving(x, y) {
+//   var xyMouse = "<p>. . . mouse at x,y: " + Math.floor(x) + "," + Math.floor(y);
+//   $('#xyMouse').html(xyMouse);
+// }	//	function mouseMoving(x, y)
 
 function getMouseOverData() {
   // there could be a number of these mouseOver class elements
@@ -196,10 +236,10 @@ function addMouseMonitor() {
   window.addEventListener('load', function(evt) {
     getMouseOverData();
   }, false);
-  window.addEventListener('mousemove', function(evt) {
-    var mousePos = getMousePos(evt);
-    mouseMoving(Math.floor(mousePos.x), Math.floor(mousePos.y));
-  }, false);
+//  window.addEventListener('mousemove', function(evt) {
+//    var mousePos = getMousePos(evt);
+//    mouseMoving(Math.floor(mousePos.x), Math.floor(mousePos.y));
+//  }, false);
 }
 
 $('document').ready(addMouseMonitor());
