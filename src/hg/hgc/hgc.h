@@ -505,6 +505,14 @@ void printAddWbr(char *text, int distance);
  * We need to add a <wbr> tag every x characters in the text to make text breakable.
  */
 
+void printIframe(struct trackDb *tdb, char *itemName);
+/* print an iframe with the URL specified in trackDb (iframeUrl), can have
+ * the standard codes in it (like $$ for itemName, etc) */
+
+char *getIdInUrl(struct trackDb *tdb, char *itemName);
+/* If we have an idInUrlSql tag, look up itemName in that, else just
+ * return itemName. */
+
 struct slPair* getExtraFields(struct trackDb *tdb, char **fields, int fieldCount);
 /* return the extra field names and their values as a list of slPairs */
 
