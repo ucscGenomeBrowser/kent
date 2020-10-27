@@ -839,7 +839,7 @@ if [ -s process/\$asmId.rna.cds ]; then
 
   rm -f $gbdbDir/ncbiRefSeqGenomicDiff.bb
   if [ -s ncbiRefSeqGenomicDiff.bed ]; then
-    bedToBigBed -type=bed9+ -tab -as=~/kent/src/hg/lib/txAliDiff.as \\
+    bedToBigBed -type=bed9+ -tab -as=\${HOME}/kent/src/hg/lib/txAliDiff.as \\
       ncbiRefSeqGenomicDiff.bed process/\$db.chrom.sizes ncbiRefSeqGenomicDiff.bb
     ln -s `pwd`/ncbiRefSeqGenomicDiff.bb $gbdbDir/ncbiRefSeqGenomicDiff.bb
   else

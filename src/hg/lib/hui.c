@@ -9413,15 +9413,32 @@ for (i=0; i<fieldCount; ++i)
     if (out[i]==NULL)
         continue;
 
-    // prefix field with $
+    // If a field is a prefix or suffix to another field, for example 'chrom' and 'chromStart'
+    // we don't want to erroneously sub out the 'chrom' in 'chromStart'. Allow the wrapping
+    // protected fields in ${} to prevent the substitution:
     char *field = in[i];
-    char *spec = needMem(strlen(field) + 2);
+    int fieldLen = strlen(field);
+    char *spec = needMem(fieldLen + 2);
+    char *strictSpec = needMem(fieldLen + 4);
     *spec = '$';
+    *strictSpec = '$';
+    strictSpec[1] = '{';
     strcpy(spec + 1, field);
+    strcpy(strictSpec + 2, field);
+    strictSpec[fieldLen + 2] = '}';
+    strictSpec[fieldLen + 3] = '\0';
 
+    if (stringIn(strictSpec, s->string))
+        {
+        d = dyStringSub(s->string, strictSpec, out[i]);
+        s = d;
+        }
+    // the user may have both a ${} enclosed instance and a non-enclosed one!
     d = dyStringSub(s->string, spec, out[i]);
+
     dyStringFree(&s);
     freeMem(spec);
+    freeMem(strictSpec);
     s = d;
     d = NULL;
     }

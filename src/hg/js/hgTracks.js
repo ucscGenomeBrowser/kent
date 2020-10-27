@@ -3794,7 +3794,7 @@ var imageV2 = {
                     if (newJsonRec)
                         vis.update(id, vis.enumOrder[newJsonRec.visibility]);
                 }
-
+//                updateMouseOver(id);
                 return true;
             }
         }
