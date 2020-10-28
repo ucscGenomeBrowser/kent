@@ -1,0 +1,30 @@
+.wigMouseOver {
+    position: fixed;
+    left: 0px;
+    top: 100px;
+    width: auto;
+    height: auto;
+    background-color: rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+    margin-left: 200;
+}
+
+.wigMouseOverValue {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 1rem 1.5rem;
+    width: 24rem;
+    border-radius: 0.5rem;
+}
+
+.showMouseOver {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1.0);
+    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}

@@ -1,6 +1,6 @@
 track epitopes
-shortLabel Predicted Epitopes
-longLabel Predicted Epitopes from Grifoni et al 2020
+shortLabel IEDB Predictions
+longLabel IEDB-Predicted Epitopes from Grifoni et al 2020
 group immu
 visibility hide
 itemRgb on
@@ -9,7 +9,7 @@ compositeTrack on
 
     track bCellEpitopes
     shortLabel B Cell
-    longLabel B Cell epitopes
+    longLabel B Cell Epitopes
     parent epitopes on
     visibility dense
     priority 1
@@ -18,8 +18,8 @@ compositeTrack on
     bigDataUrl /gbdb/wuhCor1/epitopes/bCellEpitopes.bb
 
     track cd4Epitopes
-    shortLabel CD4
-    longLabel CD4
+    shortLabel CD4+ T-Cell
+    longLabel CD4+ T-Cell Epitopes
     parent epitopes on
     visibility dense
     priority 2
@@ -28,8 +28,8 @@ compositeTrack on
     bigDataUrl /gbdb/wuhCor1/epitopes/cd4Epitopes.bb
 
     track cd8Epitopes
-    shortLabel CD8
-    longLabel CD8
+    shortLabel CD8+ T-Cell
+    longLabel CD8+ T-Cell Epitopes
     parent epitopes on
     visibility dense
     priority 3

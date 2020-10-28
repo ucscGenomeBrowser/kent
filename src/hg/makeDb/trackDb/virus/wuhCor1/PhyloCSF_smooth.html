@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1265.21">
+  <style type="text/css">
+    p.p1 {margin: 0.0pt 0.0pt 0.0pt 0.0pt; font: 18.0pt Helvetica; min-height: 22.0pt}
+    p.p2 {margin: 0.0pt 0.0pt 0.0pt 0.0pt; font: 18.0pt Helvetica}
+    p.p3 {margin: 0.0pt 0.0pt 0.0pt 0.0pt; font: 12.0pt Helvetica; min-height: 14.0pt}
+    p.p4 {margin: 0.0pt 0.0pt 0.0pt 0.0pt; font: 12.0pt Helvetica}
+    p.p5 {margin: 0.0pt 0.0pt 0.0pt 0.0pt; font: 12.0pt Times}
+    li.li4 {margin: 0.0pt 0.0pt 0.0pt 0.0pt; font: 12.0pt Helvetica}
+    span.s1 {text-decoration: underline ; color: #0000ee}
+    span.s2 {text-decoration: underline}
+    span.s3 {font: 12.0pt Helvetica}
+    span.s4 {color: #0000ee}
+    table.t1 {border-collapse: collapse}
+    td.td1 {width: 59.0pt; border-style: solid; border-width: 1.0pt 1.0pt 1.0pt 1.0pt; 
+       border-color: #cbcbcb #cbcbcb #cbcbcb #cbcbcb; padding: 0.0pt 5.0pt 0.0pt 5.0pt}
+    td.td2 {width: 123.0pt; border-style: solid; border-width: 1.0pt 1.0pt 1.0pt 1.0pt; 
+       border-color: #cbcbcb #cbcbcb #cbcbcb #cbcbcb; padding: 0.0pt 5.0pt 0.0pt 5.0pt}
+    td.td3 {width: 328.0pt; border-style: solid; border-width: 1.0pt 1.0pt 1.0pt 1.0pt; 
+       border-color: #cbcbcb #cbcbcb #cbcbcb #cbcbcb; padding: 0.0pt 5.0pt 0.0pt 5.0pt}
+    ul.ul1 {list-style-type: disc}
+  </style>
+</head>
+<body>
+<p class="p3"><br></p>
+<p class="p2"><b>Description</b></p>
+<p class="p4">These tracks show evolutionary protein-coding potential as determined by 
+PhyloCSF [1] to help identify conserved, functional, protein-coding regions of genomes. 
+PhyloCSF examines evolutionary signatures characteristic of alignments of conserved coding 
+regions, such as the high frequencies of synonymous codon substitutions and conservative 
+amino acid substitutions, and the low frequencies of other missense and nonsense substitutions 
+(CSF = Codon Substitution Frequencies). PhyloCSF provides more information than conservation of 
+the amino acid sequence, because it distinguishes the different codons that code for the same 
+amino acid. One of PhyloCSF's main current applications is to help distinguish protein-coding 
+and non-coding RNAs represented among novel transcript models obtained from high-throughput 
+transcriptome sequencing. More information on PhyloCSF can be found on the 
+<a href="https://github.com/mlin/PhyloCSF/wiki"><span class="s1">PhyloCSF wiki</span></a>.</p>
+<p class="p3"><br></p>
+<p class="p4">The <b>Smoothed PhyloCSF</b> track shows the PhyloCSF score for each codon in 
+each of 6 frames, smoothed using an HMM. Regions in which most codons have score greater than 
+0 are likely to be protein-coding in that frame. No score is shown when the relative branch 
+length is less than 0.1 (see <b>PhyloCSF Power</b>).</p>
+<p class="p3"><br></p>
+<p class="p4">The <b>PhyloCSF Power</b> track shows the branch length score at each codon, 
+i.e., the ratio of the branch length of the species present in the local alignment to the 
+total branch length of all species in the full genome alignment. It is an indication of the 
+statistical power available to PhyloCSF. Codons with branch length score less than 0.1 have 
+been excluded altogether (from all tracks) because PhyloCSF does not have sufficient power to 
+get a meaningful score at these codons. Codons with branch length score greater than 0.1 but 
+much less than 1 should be considered less certain.</p>
+<p class="p3"><br></p>
+<p class="p2"><b>Caveats</b></p>
+<ul class="ul1">
+  <li class="li4">Around 10% of annotated protein-coding regions in human get scores less than 0. 
+This can happen for various reasons. For example, the region could be coding in the reference 
+species but not in other species, or the alignment does not represent a true orthology 
+relationship between the species.</li>
+  <li class="li4">Protein-coding regions will often have positive score on the reverse strand 
+in the frame in which the third codon positions match up (the "antisense" frame), though the 
+score will usually be higher on the correct strand.</li>
+</ul>
+<p class="p3"><br></p>
+<p class="p2"><b>Methods</b></p>
+<p class="p3"><br></p>
+<p class="p4">Tracks were constructed as described in <a href=
+"https://genome.cshlp.org/content/early/2019/09/19/gr.246462.118.abstract" target="_blank">
+Mudge et al. 2019</a> and <a href="https://www.biorxiv.org/content/10.1101/2020.06.02.130955v1"
+target="_blank">Jungreis et al. 2020</a>. In brief, PhyloCSF was run with the &quot;fixed&quot; strategy 
+on every codon in every frame 
+on each strand in the wuhCor1/SARS-CoV-2 assembly using an alignment of 44 Sarbecovirus genomes, 
+using the PhyloCSF parameters for 29mammals with the tree replaced with a tree of the 44 
+Sarbecovirus genomes. </p>
+<p>The scores were smoothed using a Hidden Markov Model (HMM) with 4 states, 
+one representing coding regions and three representing non-coding regions. The emission of each 
+codon is its PhyloCSF score. The ratio of the emissions probabilities for the coding and 
+non-coding models are computed from the PhyloCSF score, since it represents the log-likelihood 
+ratio of the alignment under the coding and non-coding models. The three non-coding states have 
+the same emissions probabilities but different transition probabilities (they can only transition 
+to coding) to better capture the multimodal distribution of gaps between same-frame coding exons. 
+These transition probabilities represent the best approximation of this gap distribution as a 
+mixture model of three exponential distributions, computed using Expectation Maximization. The 
+HMM defines a probability that each codon is coding, based on the PhyloCSF scores of that codon 
+and nearby codons on the same strand in the same frame, without taking into account start codons, 
+stop codons, or potential splice sites. PhyloCSF+1 shows the log-odds that codons in frame 1 
+(sometimes called frame 0) on the '+' strand are in the coding state according to the HMM, and 
+similarly for strand '-' and frames 2 and 3.</p>
+
+<h2>Data Access</h2>
+<p>
+The raw bigWig data can be explored interactively with the
+<a href="hgTables">Table Browser</a>, combined with other datasets in the
+<a href="hgIntegrator">Data Integrator</a> tool, or downloaded directly from
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/bbi/phylocsf">the download server</a>.
+Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our
+<a href="../../FAQ/FAQdownloads.html#download36">Data Access FAQ</a>
+for more information.</p>
+
+<p class="p2"><b>Credits and Citations</b></p>
+<p class="p3"><br></p>
+<p class="p4">Questions about the algorithm itself should be directed to 
+<a href="mailto:iljungr@csail.mit.edu"><span class="s1">Irwin Jungreis</span></a>.
+If you use the PhyloCSF browser tracks, please cite Mudge et al. 2019 and
+Jungreis et al. 2020.</p>
+<p class="p3"><br></p>
+<p class="p2"><b>References</b></p>
+<p>
+Lin MF, Jungreis I, Kellis M.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/21685081" target="_blank">
+PhyloCSF: a comparative genomics method to distinguish protein coding and non-coding regions</a>.
+<em>Bioinformatics</em>. 2011 Jul 1;27(13):i275-82.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/21685081" target="_blank">21685081</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3117341/" target="_blank">PMC3117341</a>
+</p>
+<p>
+Mudge JM, Jungreis I, Hunt T, Gonzalez JM, Wright JC, Kay M, Davidson C, Fitzgerald S, Seal R,
+Tweedie S <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31537640" target="_blank">
+Discovery of high-confidence human protein-coding genes and exons by whole-genome PhyloCSF helps
+elucidate 118 GWAS loci</a>.
+<em>Genome Res</em>. 2019 Dec;29(12):2073-2087.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31537640" target="_blank">31537640</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6886504/" target="_blank">PMC6886504</a>
+</p>
+
+<p>
+Jungreis I, Sealfon R, Kellis M.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32577641" target="_blank">
+Sarbecovirus comparative genomics elucidates gene content of SARS-CoV-2 and functional impact of
+COVID-19 pandemic mutations</a>.
+<em>bioRxiv</em>. 2020 Jun 3;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32577641" target="_blank">32577641</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7302193/" target="_blank">PMC7302193</a>
+</p>

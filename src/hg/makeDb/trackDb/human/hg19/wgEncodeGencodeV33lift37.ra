@@ -1,6 +1,6 @@
 track wgEncodeGencodeV33lift37
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide 
 shortLabel GENCODE V33lift37
 longLabel GENCODE lifted annotations from V33lift37 (Ensembl 99)
 group genes
@@ -29,7 +29,6 @@ wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV33lift37
 wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV33lift37
 wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV33lift37
 wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV33lift37
-pennantIcon Updated red ../goldenPath/newsarch.html#021120 "Updated Feb. 11, 2020"
 
     track wgEncodeGencodeV33lift37ViewGenes
     shortLabel Genes

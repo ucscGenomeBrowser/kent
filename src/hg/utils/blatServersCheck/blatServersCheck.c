@@ -24,6 +24,10 @@ struct sqlConnection *conn = NULL;
 
 char *blatServersTableName = "blatServers";
 
+int timeout = 10;  // default timeout in seconds
+
+char *hostFilter = NULL;  // default to searching all hosts
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -33,6 +37,8 @@ errAbort(
   "   blatServersCheck profile\n"
   "profile should be from hg.conf like central or rrcentral\n"
   "options:\n"
+  " -timeout=10 timeout in seconds.\n"
+  " -host=blatx only check records with matching host.\n"
   " -verbose=2  can show details for each server.\n"
   "\n"
   );
@@ -40,6 +46,8 @@ errAbort(
 
 
 static struct optionSpec options[] = {
+   {"timeout", OPTION_INT},
+   {"host",  OPTION_STRING},
    {"-help", OPTION_BOOLEAN},
    {NULL, 0},
 };
@@ -53,6 +61,16 @@ char *value = cfgOption(temp);
 if (!value)
     errAbort("setting %s not found!",temp);
 return value;
+}
+
+void setSocketTimeout(int sockfd, int delayInSeconds)
+// put socket read timeout so it will not take forever to timeout during a read
+{
+struct timeval tv;
+tv.tv_sec = delayInSeconds;
+tv.tv_usec = 0;
+setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO, (const char*)&tv, sizeof tv);
 }
 
 int statusServer(char *hostName, char *portName, boolean isTrans, struct hash *versionHash)
@@ -69,12 +87,14 @@ int sd = 0;
 int ret = 0;
 
 /* Put together command. */
-sd = gfMayConnect(hostName, portName);
+sd = netConnectWithTimeout(hostName, atoi(portName), timeout * 1000); // 10 seconds connect timeout
 if (sd == -1)
     {
     warn("Error connecting to %s:%s",  hostName, portName);
     return -1;
     }
+
+setSocketTimeout(sd, timeout);
 
 sprintf(buf, "%sstatus", gfSignature());
 mustWriteFd(sd, buf, strlen(buf));
@@ -156,7 +176,10 @@ char twoBitName[256];
 safef(twoBitName, sizeof twoBitName, "%s.2bit", db);
 
 /* Put together command. */
-sd = netMustConnectTo(hostName, portName);
+sd = netConnectWithTimeout(hostName, atoi(portName), timeout * 1000); // 10 seconds connect timeout
+
+setSocketTimeout(sd, timeout);
+
 sprintf(buf, "%sfiles", gfSignature());
 mustWriteFd(sd, buf, strlen(buf));
 
@@ -268,6 +291,8 @@ verbose(1, "Reading table %s\n", blatServersTableName);
 totalRows = sqlTableSize(conn, blatServersTableName);
 verbose(1,"totalRows=%d\n", totalRows);
 
+verbose(1,"\n");
+
 if (totalRows==0)
     {
     errAbort("table %s is empty!", blatServersTableName);
@@ -275,7 +300,7 @@ if (totalRows==0)
 
 int errCount = 0;
 
-sqlSafef(query,sizeof(query), "select db, host, port, isTrans from %s", blatServersTableName);
+sqlSafef(query,sizeof(query), "select db, host, port, isTrans from %s order by db,port", blatServersTableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -285,6 +310,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     unsigned int port  = sqlUnsigned(portStr);
     unsigned int trans = sqlUnsigned(row[3]);
     boolean isTrans = (trans == 1);
+
+    if (hostFilter && !sameString(hostFilter, host))
+	continue;   // skip
 
     int res = statusServer(host, portStr, isTrans, versionHash);
     int res2 = 0;
@@ -343,6 +371,10 @@ optionInit(&argc, argv, options);
 
 if ((argc != 2) || optionExists("-help"))
     usage();
+
+timeout = optionInt("timeout", timeout);
+
+hostFilter = optionVal("host", hostFilter);
 
 blatServersCheck(argv[1]);
 

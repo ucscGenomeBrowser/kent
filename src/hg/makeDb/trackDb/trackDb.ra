@@ -12,6 +12,9 @@ include trackDb.chainNet.sarcopterygii.ra
 include trackDb.chainNet.fish.ra
 include trackDb.chainNet.insects.ra
 include trackDb.chainNet.other.ra
+include trackDb.chainNet.asmHub.ra
+
+include trackDb.encode3.ra
 
 include trackDb.transMap.ra
 
@@ -575,6 +578,7 @@ group genes
 visibility hide
 color 150,0,0
 type genePred ensPep
+pennantIcon Updated red ../goldenPath/newsarch.html#101520 "Updated to v101 Oct. 15, 2020"
 
 track ensEstGene
 shortLabel Ensembl EST Genes
@@ -1022,9 +1026,7 @@ group compGeno
 visibility hide
 type bigBed 12 +
 bigDataUrl /gbdb/$D/bbi/clinvarLift.bb
-release alpha
 itemRgb on
-# how should we handle the hgsid here? Isn't the hgsid required for backlinks? Or maybe not here, as it'll open in a new tab?
 urls origPos="/cgi-bin/hgTracks?position=$$" rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
 mouseOverField _mouseOver
 scoreLabel ClinVar Star-Rating (0-4)

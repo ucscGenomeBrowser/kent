@@ -2,26 +2,52 @@
 
 use strict;
 use warnings;
+use FindBin qw($Bin);
+use lib "$Bin";
+use commonHtml;
 use File::stat;
 
 my $argc = scalar(@ARGV);
-if ($argc != 2) {
-  printf STDERR "usage: trackData.pl Name asmHubName > trackData.html\n";
-  printf STDERR "e.g.: trackData.pl Mammals mammals > trackData.html\n";
+if ($argc < 3) {
+  printf STDERR "usage: trackData.pl Name asmHubName [two column name list] > trackData.html\n";
+  printf STDERR "e.g.: trackData.pl Mammals mammals mammals.asmId.commonName.tsv > trackData.html\n";
+  printf STDERR "the name list is found in \$HOME/kent/src/hg/makeDb/doc/asmHubs/\n";
+  printf STDERR "\nthe two columns are 1: asmId (accessionId_assemblyName)\n";
+  printf STDERR "column 2: common name for species, columns separated by tab\n";
   exit 255;
 }
-my $Name = shift;
-my $asmHubName = shift;
 
 my $home = $ENV{'HOME'};
 my $toolsDir = "$home/kent/src/hg/makeDb/doc/asmHubs";
 
-my $commonNameList = "$asmHubName.asmId.commonName.tsv";
-my $commonNameOrder = "$asmHubName.commonName.asmId.orderList.tsv";
-my @orderList;	# asmId of the assemblies in order from the *.list files
-# the order to read the different .list files:
-my %betterName;	# key is asmId, value is better common name than found in
+my $testOutput = 0;
+my $spliceOut = -1;
+
+if ($argc > 2) {
+  for (my $i = 0; $i < $argc; ++$i) {
+    if ($ARGV[$i] =~ /-test/) {
+      $testOutput = 1;
+      $spliceOut = $i;
+    }
+  }
+}
+if ($spliceOut != -1) {
+  splice @ARGV, $spliceOut, 1;
+}
+my $Name = shift;
+my $asmHubName = shift;
+my $inputList = shift;
+my $orderList = $inputList;
+if ( ! -s "$orderList" ) {
+  $orderList = $toolsDir/$inputList;
+}
+
+my @orderList;	# asmId of the assemblies in order from the orderList file
+my %commonName;	# key is asmId, value is a common name, perhaps more appropriate
+                # than found in assembly_report file
 		# assembly_report
+my $vgpIndex = 0;
+$vgpIndex = 1 if ($Name =~ m/vgp/i);
 
 my $assemblyTotal = 0;	# complete list of assemblies in this group
 my $asmCount = 0;	# count of assemblies completed and in the table
@@ -39,7 +65,7 @@ sub commify($) {
     return scalar reverse $text
 }
 
-# ($itemCount, $percentCover) = oneTrackData($trackFile, $sizeNoGaps, $trackFb);
+# ($itemCount, $percentCover) = oneTrackData($asmId, $track, $trackFile, $totalSize, $trackFb, $runDir);
 # might have a track feature bits file (trackFb), maybe not
 sub oneTrackData($$$$$$) {
   my ($asmId, $trackName, $file, $genomeSize, $trackFb, $runDir) = @_;
@@ -57,18 +83,20 @@ sub oneTrackData($$$$$$) {
          return("n/a", "n/a");
        }
       }
+    } elsif ($trackName eq "gap") {
+      return("0", "0 %");
     } else {
       return("n/a", "n/a");
     }
-  }
-  if ($file =~ m/.bw$/) {
+  } else {
+    if ($file =~ m/.bw$/) {
       my $bigWigInfo = `bigWigInfo "$file" | egrep "basesCovered:|mean:" | awk '{print \$NF}' | xargs echo | sed -e 's/,//g;'`;
       chomp $bigWigInfo;
       my ($bases, $mean) = split('\s+', $bigWigInfo);
       $percentCover = sprintf("%.2f %%", 100.0 * $bases / $genomeSize);
       $itemCount = sprintf ("%.2f", $mean);
 # printf STDERR "# bigWigInfo %s %s %s\n", $itemCount, $percentCover, $file;
-  } else {
+    } else {
       my $bigBedInfo = `bigBedInfo "$file" | egrep "itemCount:|basesCovered:" | awk '{print \$NF}' | xargs echo | sed -e 's/,//g;'`;
       chomp $bigBedInfo;
       my ($items, $bases) = split('\s', $bigBedInfo);
@@ -76,11 +104,11 @@ sub oneTrackData($$$$$$) {
       $percentCover = sprintf("%.2f %%", 100.0 * $bases / $genomeSize);
 #             56992654 bases of 2616369673 (2.178%) in intersection
       if ( -s "${trackFb}" ) {
-printf STDERR "# $trackFb\n";
           my ($itemBases, undef, undef, $noGapSize, undef) = split('\s+', `cat $trackFb`, 5);
           $percentCover = sprintf("%.2f %%", 100.0 * $itemBases / $noGapSize);
       }
 # printf STDERR "# bigBedInfo %s %s %s\n", $itemCount, $percentCover, $file;
+    }
   }
   return ($itemCount, $percentCover);
 }
@@ -98,19 +126,54 @@ if ($asmHubName eq "vertebrate") {
    $subSetMessage = "subset of other ${asmHubName}s only";
 }
 
-print <<"END"
+if ($vgpIndex) {
+  my $vgpSubset = "(set of primary assemblies)";
+  if ($orderList =~ m/vgp.alternate/) {
+     $vgpSubset = "(set of alternate/haplotype assemblies)";
+  } elsif ($orderList =~ m/vgp.trio/) {
+     $vgpSubset = "(set of trio assemblies, maternal/paternal)";
+  } elsif ($orderList =~ m/vgp.legacy/) {
+     $vgpSubset = "(set of legacy/superseded assemblies)";
+  }
+  print <<"END"
 <!DOCTYPE HTML 4.01 Transitional>
-<!--#set var="TITLE" value="$Name genomes assembly hubs" -->
+<!--#set var="TITLE" value="VGP - Vertebrate Genomes Project assembly hubs, track statistics" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
 
-<h1>$Name Genomes assembly hubs</h1>
+<h1>VGP - Vertebrate Genomes Project assembly hubs, track statistics</h1>
+<p>
+<a href='https://vertebrategenomesproject.org/' target=_blank>
+<img src='VGPlogo.png' width=280 alt='VGP logo'></a></p>
+<p>
+This assembly hub contains assemblies released
+by the <a href='https://vertebrategenomesproject.org/' target=_blank>
+Vertebrate Genomes Project.</a> $vgpSubset
+</p>
+
+END
+} else {
+  print <<"END"
+<!DOCTYPE HTML 4.01 Transitional>
+<!--#set var="TITLE" value="$Name genomes assembly hubs, track statistics" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!--#include virtual="\$ROOT/inc/gbPageStartHardcoded.html" -->
+
+<h1>$Name Genomes assembly hubs, track statistics</h1>
 <p>
 Assemblies from NCBI/Genbank/Refseq sources, $subSetMessage.
 </p>
 
-<h3>See also: <a href='index.html'>hub access</a></h3><br>
+END
+}
+  my $indexUrl = "index";
+  $indexUrl = "testIndex" if ($testOutput);
+  my $asmStats = "asmStats";
+  $asmStats = "testAsmStats" if ($testOutput);
+  print <<"END"
+<h3>See also: <a href='$indexUrl.html'>hub access</a>,&nbsp;<a href='$asmStats.html'>assembly statistics</a></h3><br>
 
 <h3>Data resource links</h3>
 NOTE: <em>Click on the column headers to sort the table by that column</em><br>
@@ -119,34 +182,59 @@ the genome browser.<br>
 The numbers are: item count (percent coverage)<br>
 Except for the gc5Base column which is: overall GC % average (percent coverage)
 END
-}
+}	#	sub startHtml()
+
+# order of columns in the table
+# eliminated the ncbiGene track
+my @trackList = qw(ncbiRefSeq xenoRefGene augustus ensGene gc5Base allGaps assembly rmsk simpleRepeat windowMasker cpgIslandExtUnmasked);
 
 ##############################################################################
 ### start the table output
 ##############################################################################
 sub startTable() {
-print <<"END"
-<table class="sortable" border="1">
+
+# coordinate the order of these column headings with the @trackList listed above
+
+print '<table class="sortable" border="1">
 <thead><tr><th>count</th>
   <th>common name<br>link&nbsp;to&nbsp;genome&nbsp;browser</th>
+  <th class="sorttable_numeric">ncbiRefSeq</th>
+';
+
+print "  <th class=\"sorttable_numeric\">ncbiGene</th>\n" if ($testOutput);
+
+print '  <th class="sorttable_numeric">xenoRefGene</th>
+  <th class="sorttable_numeric">augustus<br>genes</th>
+  <th class="sorttable_numeric">Ensembl<br>genes</th>
   <th class="sorttable_numeric">gc5 base</th>
-  <th class="sorttable_numeric">AGP<br>gap</th>
-  <th class="sorttable_numeric">all<br>gaps</th>
-  <th class="sorttable_numeric">assembly<br>sequences</th>
-  <th class="sorttable_numeric">rmsk</th>
+';
+
+if ($testOutput) {
+  print "  <th class=\"sorttable_numeric\">AGP<br>gap</th>\n";
+  print "  <th class=\"sorttable_numeric\">all<br>gaps</th>\n";
+} else {
+  print "  <th class=\"sorttable_numeric\">gaps</th>\n";
+}
+
+print '  <th class="sorttable_numeric">assembly<br>sequences</th>
+  <th class="sorttable_numeric">Repeat<br>Masker</th>
   <th class="sorttable_numeric">TRF<br>simpleRepeat</th>
   <th class="sorttable_numeric">window<br>Masker</th>
-  <th class="sorttable_numeric">gap<br>Overlap</th>
+';
+
+if ($testOutput) {
+print '  <th class="sorttable_numeric">gap<br>Overlap</th>
   <th class="sorttable_numeric">tandem<br>Dups</th>
   <th class="sorttable_numeric">cpg<br>unmasked</th>
   <th class="sorttable_numeric">cpg<br>island</th>
-  <th class="sorttable_numeric">genes<br>ncbi</th>
-  <th class="sorttable_numeric">ncbiRefSeq</th>
-  <th class="sorttable_numeric">xenoRefGene</th>
-  <th class="sorttable_numeric">augustus</th>
-</tr></thead><tbody>
-END
+';
+
+} else {
+  print "  <th class=\"sorttable_numeric\">cpg<br>islands</th>\n";
 }
+
+print "</tr></thead><tbody>\n";
+}	#	sub startTable()
 
 ##############################################################################
 ### end the table output
@@ -159,12 +247,18 @@ my $commaGapSize = commify($overallGapSize);
 my $commaGapCount = commify($overallGapCount);
 
 my $percentDone = 100.0 * $asmCount / $assemblyTotal;
+my $doneMsg = "";
+if ($asmCount < $assemblyTotal) {
+  $doneMsg = sprintf(" (%d build completed, %.2f %% finished)", $asmCount, $percentDone);
+}
+my $columnCount = scalar(@trackList);
+my $colSpanFill = $columnCount - 1;
 
 if ($assemblyTotal > 1) {
   print <<"END"
 
 </tbody>
-<tfoot><tr><th>TOTALS:</th><td align=center colspan=13>total assembly count&nbsp;${assemblyTotal}</td>
+<tfoot><tr><th>TOTALS:</th><td align=center colspan=$colSpanFill>total assembly count&nbsp;${assemblyTotal}${doneMsg}</td>
   </tr></tfoot>
 </table>
 END
@@ -182,31 +276,10 @@ END
 ##############################################################################
 sub endHtml() {
 
-if ($asmHubName ne "viral") {
-  printf "<p>\nOther assembly hubs available:<br>\n<table border='1'><thead>\n<tr>";
+&commonHtml::otherHubLinks($vgpIndex, $asmHubName);
+&commonHtml::htmlFooter($vgpIndex, $asmHubName);
 
-  printf "<th><a href='../primates/trackData.html'>Primates</a></th>\n"
-    if ($asmHubName ne "primates");
-  printf "<th><a href='../mammals/trackData.html'>Mammals</a></th>\n"
-    if ($asmHubName ne "mammals");
-  printf "<th><a href='../birds/trackData.html'>Birds</a></th>\n"
-    if ($asmHubName ne "birds");
-  printf "<th><a href='../fish/trackData.html'>Fish</a></th>\n"
-    if ($asmHubName ne "fish");
-  printf "<th><a href='../vertebrate/trackData.html'>other vertebrates</a></th>\n"
-    if ($asmHubName ne "vertebrate");
-
-  printf "</tr></thead>\n</table>\n</p>\n";
-}
-
-print <<"END"
-</div><!-- closing gbsPage from gbPageStartHardcoded.html -->
-</div><!-- closing container-fluid from gbPageStartHardcoded.html -->
-<!--#include virtual="\$ROOT/inc/gbFooterHardcoded.html"-->
-<script type="text/javascript" src="/js/sorttable.js"></script>
-</body></html>
-END
-}
+}	#	sub endHtml()
 
 sub asmCounts($) {
   my ($chromSizes) = @_;
@@ -247,11 +320,23 @@ sub gapStats($$) {
 ### tableContents()
 ##############################################################################
 sub tableContents() {
-
-  my @trackList = qw(gc5Base gap allGaps assembly rmsk simpleRepeat windowMasker gapOverlap tandemDups cpgIslandExtUnmasked cpgIslandExt ncbiGene ncbiRefSeq xenoRefGene augustus);
-
-
-  foreach my $asmId (reverse(@orderList)) {
+  my $asmCounted = 0;
+  if ($testOutput) {  # add extra columns during 'test' output
+#                       0          1          2        3       4      5    6
+#  7       8      9            10           11        12          13
+#     14
+# my @trackList = qw(ncbiRefSeq xenoRefGene augustus ensGene gc5Base gap allGaps assembly rmsk simpleRepeat windowMasker gapOverlap tandemDups cpgIslandExtUnmasked cpgIslandExt);
+#                       0            1         2        3       4      5      6
+#      7      8           9               10
+# my @trackList = qw(ncbiRefSeq xenoRefGene augustus ensGene gc5Base allGaps assembly rmsk simpleRepeat windowMasker cpgIslandExtUnmasked);
+    splice @trackList, 11, 0, "cpgIslandExt";
+    splice @trackList, 10, 0, "tandemDups";
+    splice @trackList, 10, 0, "gapOverlap";
+    splice @trackList, 5, 0, "gap";
+    splice @trackList, 1, 0, "ncbiGene";
+  }
+  foreach my $asmId (@orderList) {
+    my $tracksCounted = 0;
     my ($gcPrefix, $asmAcc, $asmName) = split('_', $asmId, 3);
     my $accessionId = sprintf("%s_%s", $gcPrefix, $asmAcc);
     my $accessionDir = substr($asmId, 0 ,3);
@@ -259,7 +344,11 @@ sub tableContents() {
     $accessionDir .= "/" . substr($asmId, 7 ,3);
     $accessionDir .= "/" . substr($asmId, 10 ,3);
     my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
-#    next if ($asmId ne "GCF_000001405.39_GRCh38.p13");
+    if ($gcPrefix eq "GCA") {
+     $buildDir = "/hive/data/genomes/asmHubs/genbankBuild/$accessionDir/$asmId";
+    }
+    my $trackDb="$buildDir/${asmId}.trackDb.txt";
+    next if (! -s "$trackDb");	# assembly build not complete
     my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
     if (! -s "$asmReport") {
       printf STDERR "# no assembly report:\n# %s\n", $asmReport;
@@ -311,16 +400,19 @@ sub tableContents() {
            $sciName = $line;
            $commonName =~ s/.*\(//;
            $commonName =~ s/\)//;
-           $commonName = $betterName{$asmId} if (exists($betterName{$asmId}));
+           $commonName = $commonName{$asmId} if (exists($commonName{$asmId}));
            $sciName =~ s/.*:\s+//;
            $sciName =~ s/\s+\(.*//;
         }
       }
     }
     close (FH);
-    my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$accessionDir/$accessionId";
+    my $hubUrl = "https://genome.ucsc.edu/h/$accessionId";
+    if ($testOutput) {
+      $hubUrl = "https://genome-test.gi.ucsc.edu/h/$accessionId";
+    }
     printf "<tr><td align=right>%d</td>\n", ++$asmCount;
-    printf "<td align=center><a href='https://genome-test.gi.ucsc.edu/h/%s' target=_blank>%s<br>%s</a></td>\n", $accessionId, $commonName, $accessionId;
+    printf "<td align=center><a href='%s' target=_blank>%s<br>%s</a></td>\n", $hubUrl, $commonName, $accessionId;
     foreach my $track (@trackList) {
       my $trackFile = "$buildDir/bbi/$asmId.$track";
       my $trackFb = "$buildDir/trackData/$track/fb.$asmId.$track.txt";
@@ -331,6 +423,7 @@ sub tableContents() {
       } else {
          $trackFile .= ".bb";
       }
+      my $customKey = "";
       if ( "$track" eq "rmsk") {
         my $rmskStats = "$buildDir/trackData/repeatMasker/$asmId.rmsk.stats";
         if (! -s "${rmskStats}") {
@@ -351,15 +444,39 @@ sub tableContents() {
           }
         } else {
           ($itemCount, $percentCover) = split('\s+', `cat $rmskStats`);
-          $percentCover = sprintf("%.2f %%", $percentCover);
           chomp $percentCover;
+          $customKey = sprintf("%.2f", $percentCover);
+          $percentCover = sprintf("%.2f %%", $percentCover);
         }
-      } else {
+      } else {	# not the rmsk track
         ($itemCount, $percentCover) = oneTrackData($asmId, $track, $trackFile, $totalSize, $trackFb, $runDir);
+        if (0 == $testOutput) {
+          # if track ncbiRefSeq does not exist, try the ncbiGene track
+          if ($trackDb eq "ncbiRefSeq" && $itemCount eq "n/a") {
+           $runDir = "$buildDir/trackData/ncbiGene";
+           $trackFile = "$buildDir/bbi/$asmId.$track.bb";
+          ($itemCount, $percentCover) = oneTrackData($asmId, "ncbiGene", $trackFile, $totalSize, $trackFb, $runDir);
+          }
+        }
+        if (($percentCover =~ m/%/) || ($percentCover !~ m#n/a#)) {
+          $customKey = $percentCover;
+          $customKey =~ s/[ %]+//;
+        }
       }
+      if (length($customKey)) {
+      printf "    <td align=right sorttable_customkey='%s'>%s<br>(%s)</td>\n", $customKey, $itemCount, $percentCover;
+      } else {
+        if ($itemCount eq "n/a") {
+      printf "    <td align=right>n/a</td>\n";
+        } else {
       printf "    <td align=right>%s<br>(%s)</td>\n", $itemCount, $percentCover;
-    }
+        }
+      }
+      $tracksCounted += 1 if ($itemCount ne "n/a");
+    }	#	foreach my $track (@trackList)
     printf "</tr>\n";
+    $asmCounted += 1;
+    printf STDERR "# %03d\t%02d tracks\t%s\n", $asmCounted, $tracksCounted, $asmId;
   }
 }
 
@@ -367,13 +484,13 @@ sub tableContents() {
 ### main()
 ##############################################################################
 
-open (FH, "<$toolsDir/${commonNameOrder}") or die "can not read ${commonNameOrder}";
+open (FH, "<${orderList}") or die "can not read ${orderList}";
 while (my $line = <FH>) {
   next if ($line =~ m/^#/);
   chomp $line;
-  my ($commonName, $asmId) = split('\t', $line);
+  my ($asmId, $commonName) = split('\t', $line);
   push @orderList, $asmId;
-  $betterName{$asmId} = $commonName;
+  $commonName{$asmId} = $commonName;
   ++$assemblyTotal;
 }
 close (FH);

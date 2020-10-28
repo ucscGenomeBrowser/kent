@@ -176,6 +176,7 @@ static char *hpvNames[] = {"Human papillomavirus", "Human papillomavirus type 16
 static char *staAurNames[] = {"Staphylococcus", "Staphylococcus aureus", "Staphylococcus aureus subsp. aureus NCTC 8325", "Staphylococcus aureus subsp. aureus RN4220", "Staphylococcus epidermidis", "Staphylococcus lentus", "Staphylococcus lugdunensis", "Staphylococcus phage phi-42", "Staphylococcus pseudintermedius", NULL};
 static char *cotJapNames[] = {"Coturnix japonica", NULL};
 static char *enhLutNames[] = {"Enhydra lutris", "Enhydra lutris nereis", "Enhydra lutris kenyoni", NULL};
+static char *wuhCorNames[] = {"Severe acute respiratory syndrome coronavirus 2", "Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1", "Wuhan seafood market pneumonia virus", "Severe acute respiratory syndrome-related coronavirus", NULL};
 
 static char *endNames[] = {NULL};
 
@@ -331,6 +332,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"regenRn", rnNames},
     {"regenCho", criGriNames},
     {"enhLut", enhLutNames},
+    {"wuhCor", wuhCorNames},
     {NULL, endNames}
 };
 

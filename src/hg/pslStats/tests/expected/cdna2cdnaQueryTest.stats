@@ -1,4 +1,4 @@
-#qName	qSize	alnCnt	minIdent	maxIndent	meanIdent	minQCover	maxQCover	meanQCover	minRepMatch	maxRepMatch	meanRepMatch	minTCover	maxTCover
+#qName	qSize	alnCnt	minIdent	maxIdent	meanIdent	minQCover	maxQCover	meanQCover	minRepMatch	maxRepMatch	meanRepMatch	minTCover	maxTCover
 chr7.3131.24.f.wu1	523	1	1.0000	1.0000	1.0000	1.0000	1.0000	1.0000	0.0000	0.0000	0.0000	1.0000	1.0000
 chr10.1029.9.wu1	373	0	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000
 chr19.293.38.wu1	594	0	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000

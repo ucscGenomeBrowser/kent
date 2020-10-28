@@ -38,7 +38,7 @@ my $workhorse = 'hgwdev';
 my $dbHost = 'hgwdev';
 my $defaultWorkhorse = 'hgwdev';
 my $maskedSeq = "$HgAutomate::clusterData/\$db/\$db.2bit";
-my $mrnas = "/hive/data/genomes/asmHubs/VGP/xenoRefSeq";
+my $mrnas = "/hive/data/genomes/asmHubs/xenoRefSeq";
 my $noDbGenePredCheck = 1;    # default yes, use -db for genePredCheck
 my $augustusDir = "/hive/data/outside/augustus/augustus-3.3.1";
 my $augustusConfig="$augustusDir/config";
@@ -137,13 +137,14 @@ sub doSplitTarget {
 export asmId="$db"
 export maskedSeq="$maskedSeq"
 export queryCount=`cat "$mrnas/query.list" | wc -l`
-# aim for 1,000,000 cluster job batch size
-export targetPartCount=`echo \$queryCount | awk '{printf "%d", 1 + (1000000 / \$1)}'`
+# aim for 100,000 cluster job batch size
+export targetPartCount=`echo \$queryCount | awk '{printf "%d", 1 + (100000 / \$1)}'`
 twoBitInfo \$maskedSeq stdout | sort -k2,2nr > \$asmId.chrom.sizes
 export targetParts=`cat \$asmId.chrom.sizes | wc -l`
 export maxChunk=`head -1 \$asmId.chrom.sizes | awk '{printf "%d", 1.1*\$(NF)}'`
 export seqLimit=`echo \$targetParts \$targetPartCount | awk '{printf "%d", 1 + (\$1 / \$2)}'`
 export totalJobs=`echo \$queryCount \$targetPartCount | awk '{printf "%d", \$1 * \$2}'`
+printf "# batch job count will be: \%d\\n", \$totalJobs
 rm -fr targetList
 ~/kent/src/hg/utils/automation/partitionSequence.pl -concise \\
    -lstDir=targetList \$maxChunk 0 \$maskedSeq \$asmId.chrom.sizes \$seqLimit
@@ -259,7 +260,7 @@ pslCDnaFilter -minId=0.35 -minCover=0.25  -globalNearBest=0.0100 -minQSize=20 \\
     \$db.all.psl \$db.xenoRefGene.psl
 
 pslCheck -targetSizes=\$db.chrom.sizes \\
-  -querySizes=/hive/data/genomes/asmHubs/VGP/xenoRefSeq/xenoRefMrna.sizes \\
+  -querySizes=$mrnas/xenoRefMrna.sizes \\
      \$db.xenoRefGene.psl
 _EOF_
   );

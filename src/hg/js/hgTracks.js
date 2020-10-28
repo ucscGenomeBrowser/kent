@@ -657,39 +657,6 @@ var makeItemsByDrag = {
     }
 };
 
-  ///////////////////
- /////  mouse  /////
-///////////////////
-var mouse = {
-
-    savedOffset: {x:0, y:0},
-
-    saveOffset: function (ev)
-    {   // Save the mouse offset associated with this event
-        mouse.savedOffset = {x: ev.clientX, y: ev.clientY};
-    },
-
-    hasMoved: function (ev)
-    {   // return true if mouse has moved a significant amount
-        var minPixels = 10;
-        var movedX = ev.clientX - mouse.savedOffset.x;
-        var movedY = ev.clientY - mouse.savedOffset.y;
-        if (arguments.length === 2) {
-            var num = Number(arguments[1]);
-            if (isNaN(num)) {
-                if ( arguments[1].toLowerCase() === "x" )
-                    return (movedX > minPixels || movedX < (minPixels * -1));
-                if ( arguments[1].toLowerCase() === "y" )
-                    return (movedY > minPixels || movedY < (minPixels * -1));
-            }
-            else
-                minPixels = num;
-        }
-        return (   movedX > minPixels || movedX < (minPixels * -1)
-                || movedY > minPixels || movedY < (minPixels * -1));
-    }
-};
-
   /////////////////
  //// posting ////
 /////////////////
@@ -726,6 +693,19 @@ var posting = {
     mapClk: function ()
     {
         var done = false;
+        // if we clicked on a merged item then show all the items, similar to clicking a
+        // dense track to turn it to pack
+        if (this && this.href && this.href.indexOf("i=mergedItem") !== -1) {
+            var id = this.href.slice(this.href.indexOf("&g="));
+            id = id.split(/&[^=]+=/)[1];
+            updateObj={};
+            updateObj[id+".doMergeItems"] = 0;
+            hgTracks.trackDb[id][id+".doMergeItems"] = 0;
+            cart.setVarsObj(updateObj,null,false);
+            imageV2.requestImgUpdate(id, id + ".doMergeItems=0");
+            return false;
+        }
+
         if (false && imageV2.inPlaceUpdate) {
             // XXXX experimental and only turned on in larrym's tree.
             // Use in-place update if the map item just modifies the current position (this is nice
@@ -830,13 +810,6 @@ var cart = {
         return url;
     },
     
-    beforeUnload: function ()
-    {   // named function that can be bound and unbound to beforeunload event
-        // Makes sure any outstanding queued updates are sent before leaving the page.
-        //console.log('cart.beforeUnload: '+objKeyCount(cart.updateQueue)+' vars');
-        cart.setVarsObj( {}, null, false ); // synchronous
-    },
-    
     varsToUrlData: function (varsObj)
     {   // creates a url data (var1=val1&var2=val2...) string from vars object and queue
         // The queue will be emptied by this call.
@@ -854,6 +827,7 @@ var cart = {
     
     setVarsObj: function (varsObj, errFunc, async)
     {   // Set all vars in a var hash, appending any queued updates
+        // The default behavior is async = true
         //console.log('cart.setVarsObj: were:'+objKeyCount(cart.updateQueue) + 
         //            ' new:'+objKeyCount(varsObj);
         cart.queueVarsObj(varsObj); // lay ontop of queue, to give new values precedence
@@ -867,6 +841,7 @@ var cart = {
     
     setVars: function (names, values, errFunc, async)
     {   // ajax updates the cart, and includes any queued updates.
+        cart.updateSessionPanel();      // handles hide from left minibutton
         cart.setVarsObj(arysToObj(names, values), errFunc, async);
     },
 
@@ -878,21 +853,32 @@ var cart = {
             //            ' new:'+objKeyCount(varsObj));
             for (var name in varsObj) {
                 cart.updateQueue[name] = varsObj[name];
-                
-                // Could update in background, however, failing to hit "refresh" is user choice
-                // first in queue, schedule background update
-                if (objKeyCount(cart.updateQueue) === 1) {
-                    // By unbind/bind, we assure that there is only one instance bound
-                    $(window).unbind('beforeunload', cart.beforeUnload); 
-                    $(window).bind(  'beforeunload', cart.beforeUnload); 
-                }
             }
         }
     },
-    
+
     addVarsToQueue: function (names,values)
     {   // creates a string of updates to save for ajax batch or a submit
         cart.queueVarsObj(arysToObj(names,values));
+    },
+
+    updateSessionPanel: function()
+    {
+    if (typeof recTrackSetsDetectChanges === 'undefined' || recTrackSetsDetectChanges === null)
+        return;
+
+    // change color of text
+    $('span.gbSessionChangeIndicator').addClass('gbSessionChanged');
+
+    // change mouseover on the panel.  A bit fragile here inserting text in the mouseover specified in
+    // hgTracks.js, so depends on match with text there, and should present same message as C code
+    // (Perhaps this could be added as a script tag, so not duplicated)
+    var txt = $('span.gbSessionLabelPanel').attr('title');
+    if (txt && !txt.match(/with changes/)) {
+        $('span.gbSessionLabelPanel').attr('title', txt.replace(
+                                   "track set", 
+                                   "track set, with changes (added or removed tracks) you have requested"));
+        }
     }
 };
 
@@ -936,6 +922,7 @@ var vis = {
 
     makeTrackVisible: function (track)
     {   // Sets the vis box to visible, and ques a cart update, but does not update the image
+        // Trusts that the cart update will be submitted later.
         if (track && vis.get(track) !== "full") {
             vis.update(track, 'pack');
             cart.addVarsToQueue([track], ['pack']);
@@ -976,12 +963,13 @@ var vis = {
                     rec.visibility = 0;
                 // else Would be nice to hide subtracks as well but that may be overkill
                 $(document.getElementById('tr_' + track)).remove();
+                cart.updateSessionPanel();
                 imageV2.highlightRegion();
                 $(this).attr('class', 'hiddenText');
             } else
                 $(this).attr('class', 'normalText');
             
-            cart.addVarsToQueue([track], [$(this).val()]);
+            cart.setVars([track], [$(this).val()]);
             imageV2.markAsDirtyPage();
             return false;
         });
@@ -1071,7 +1059,7 @@ var dragSelect = {
         var pos = parsePosition(newPosition);
         var start = pos.start;
         var end = pos.end;
-        var newHighlight = getDb() + "." + pos.chrom + ":" + start + "-" + end + hlColorName;
+        var newHighlight = makeHighlightString(getDb(), pos.chrom, start, end, hlColorName);
         newHighlight = imageV2.disguiseHighlight(newHighlight);
         var oldHighlight = hgTracks.highlight;
         if (oldHighlight===undefined || doAdd===undefined || doAdd===false || oldHighlight==="") {
@@ -1112,7 +1100,7 @@ var dragSelect = {
                 }
             }
             if (nonVirtChrom !== "")
-                cartSettings.nonVirtHighlight = getDb() + '.' + nonVirtChrom + ':' + nonVirtStart + '-' + (nonVirtEnd+1) + hlColorName;
+                cartSettings.nonVirtHighlight = makeHighlightString(getDb(), nonVirtChrom, nonVirtStart, (nonVirtEnd+1), hlColorName);
         } else if (hgTracks.windows && hgTracks.virtualSingleChrom) {
                 cartSettings.nonVirtHighlight = hgTracks.highlight;
         }
@@ -1124,7 +1112,7 @@ var dragSelect = {
     selectionEndDialog: function (newPosition)
     // Let user choose between zoom-in and highlighting.
     {   
-        // if the user hit Escape just before, do not show this dialog
+        // if the user hit Escape just before, do not show this dialo
         if (dragSelect.startTime===null)
             return;
         var dragSelectDialog = $("#dragSelectDialog")[0];
@@ -1731,370 +1719,6 @@ this.each(function(){
 });
 };
 
-  ///////////////////////////
- //// Drag Reorder Code ////
-///////////////////////////
-var dragReorder = {
-
-    setOrder: function (table)
-    {   // Sets the 'order' value for the image table after a drag reorder
-        var varsToUpdate = {};
-        $("tr.imgOrd").each(function (i) {
-            if ($(this).attr('abbr') !== $(this).attr('rowIndex').toString()) {
-                $(this).attr('abbr',$(this).attr('rowIndex').toString());
-                var name = this.id.substring('tr_'.length) + '_imgOrd';
-                varsToUpdate[name] = $(this).attr('abbr');
-            }
-        });
-        if (objNotEmpty(varsToUpdate)) {
-            cart.setVarsObj(varsToUpdate);
-            imageV2.markAsDirtyPage();
-        }
-    },
-
-    sort: function (table)
-    {   // Sets the table row order to match the order of the abbr attribute.
-        // This is needed for back-button, and for visBox changes combined with refresh.
-        var tbody = $(table).find('tbody')[0];
-        if (!tbody)
-            tbody = table;
-        
-        // Do we need to sort?
-        var trs = tbody.rows;
-        var needToSort = false;
-        $(trs).each(function(ix) {
-            if ($(this).attr('abbr') !== $(this).attr('rowIndex').toString()) {
-                needToSort = true;
-                return false;  // break for each() loops
-            }
-        });
-        if (!needToSort)
-            return false;
-            
-        // Create array of tr holders to sort
-        var ary = [];
-        $(trs).each(function(ix) {  // using sortTable found in utils.js
-            ary.push(new sortTable.field(parseInt($(this).attr('abbr')),false,this));
-        });
-
-        // Sort the array
-        ary.sort(sortTable.fieldCmp);
-
-        // most efficient reload of sorted rows I have found
-        var sortedRows = jQuery.map(ary, function(ary, i) { return ary.row; });
-        $(tbody).append( sortedRows ); // removes tr from current position and adds to end.
-        return true;
-    },
-
-    showCenterLabel: function (tr, show)
-    {   // Will show or hide centerlabel as requested
-        // adjust button, sideLabel height, sideLabelOffset and centerlabel display
-
-        if (!$(tr).hasClass('clOpt'))
-            return;
-        var center = normed($(tr).find(".sliceDiv.cntrLab"));
-        if (!center)
-            return;
-        var seen = ($(center).css('display') !== 'none');
-        if (show === seen)
-            return;
-
-        var centerHeight = $(center).height();
-
-        var btn = normed($(tr).find("p.btn"));
-        var side = normed($(tr).find(".sliceDiv.sideLab"));
-        if (btn && side) {
-            var sideImg = normed($(side).find("img"));
-            if (sideImg) {
-                var top = parseInt($(sideImg).css('top'));
-                if (show) {
-                    $(btn).css('height',$(btn).height() + centerHeight);
-                    $(side).css('height',$(side).height() + centerHeight);
-                    top += centerHeight; // top is a negative number
-                    $(sideImg).css( {'top': top.toString() + "px" });
-                    $( center ).show();
-                } else if (!show) {
-                    $(btn).css('height',$(btn).height() - centerHeight);
-                    $(side).css('height',$(side).height() - centerHeight);
-                    top -= centerHeight; // top is a negative number
-                    $(sideImg).css( {'top': top.toString() + "px" });
-                    $( center ).hide();
-                }
-            }
-        }
-    },
-
-    getContiguousRowSet: function (row)
-    {   // Returns the set of rows that are of the same class and contiguous
-        if (!row)
-            return null;
-        var btn = $( row ).find("p.btn");
-        if (btn.length === 0)
-            return null;
-        var classList = $( btn ).attr("class").split(" ");
-        var matchClass = classList[0];
-        var table = $(row).parents('table#imgTbl')[0];
-        var rows = $(table).find('tr');
-
-        // Find start index
-        var startIndex = $(row).attr('rowIndex');
-        var endIndex = startIndex;
-        for (var ix=startIndex-1; ix >= 0; ix--) {
-            btn = $( rows[ix] ).find("p.btn");
-            if (btn.length === 0)
-                break;
-            classList = $( btn ).attr("class").split(" ");
-            if (classList[0] !== matchClass)
-                break;
-            startIndex = ix;
-        }
-
-        // Find end index
-        for (var rIx=endIndex; rIx<rows.length; rIx++) {
-            btn = $( rows[rIx] ).find("p.btn");
-            if (btn.length === 0)
-                break;
-            classList = $( btn ).attr("class").split(" ");
-            if (classList[0] !== matchClass)
-                break;
-            endIndex = rIx;
-        }
-        return rows.slice(startIndex,endIndex+1); // endIndex is 1 based!
-    },
-
-    getCompositeSet: function (row)
-    {   // Returns the set of rows that are of the same class and contiguous
-        if (!row)
-            return null;
-        var rowId = $(row).attr('id').substring('tr_'.length);
-        var rec = hgTracks.trackDb[rowId];
-        if (tdbIsSubtrack(rec) === false)
-            return null;
-
-        var rows = $('tr.trDraggable:has(p.' + rec.parentTrack+')');
-        return rows;
-    },
-
-    zipButtons: function (table)
-    {   // Goes through the image and binds composite track buttons when adjacent
-        var rows = $(table).find('tr');
-        var lastClass="";
-        var lastBtn = null;
-        var lastSide = null;
-        var lastMatchesLast=false;
-        var lastBlue=true;
-        var altColors=false;
-        var count=0;
-        var countN=0;
-        for (var ix=0; ix<rows.length; ix++) {    // Need to have buttons in order
-            var btn = $( rows[ix] ).find("p.btn");
-            var side = $( rows[ix] ).find(".sliceDiv.sideLab"); // added by GALT
-            if (btn.length === 0)
-                continue;
-            var classList = $( btn ).attr("class").split(" ");
-            var curMatchesLast=(classList[0] === lastClass);
-
-            // centerLabels may be conditionally seen
-            if ($( rows[ix] ).hasClass('clOpt')) {
-                // if same composite and previous also centerLabel optional then hide center label
-                if (curMatchesLast && $( rows[ix - 1] ).hasClass('clOpt'))
-                    dragReorder.showCenterLabel(rows[ix],false);
-                else
-                    dragReorder.showCenterLabel(rows[ix],true);
-            }
-
-            // On with buttons
-            if (lastBtn) {
-                $( lastBtn ).removeClass('btnN btnU btnL btnD');
-                if (curMatchesLast && lastMatchesLast) {
-                    $( lastBtn ).addClass('btnL');
-                    $( lastBtn ).css('height', $( lastSide ).height() - 0);  // added by GALT
-                } else if (lastMatchesLast) {
-                    $( lastBtn ).addClass('btnU');
-                    $( lastBtn ).css('height', $( lastSide ).height() - 1);  // added by GALT
-                } else if (curMatchesLast) {
-                    $( lastBtn ).addClass('btnD');
-                    $( lastBtn ).css('height', $( lastSide ).height() - 2);  // added by GALT
-                } else {
-                    $( lastBtn ).addClass('btnN');
-                    $( lastBtn ).css('height', $( lastSide ).height() - 3);  // added by GALT
-                    countN++;
-                }
-                count++;
-                if (altColors) {
-                    // lastMatch and lastBlue or not lastMatch and notLastBlue
-                    lastBlue = (lastMatchesLast === lastBlue);
-                    if (lastBlue)    // Too  smart by 1/3rd
-                        $( lastBtn ).addClass(    'btnBlue' );
-                    else
-                        $( lastBtn ).removeClass( 'btnBlue' );
-                }
-            }
-            lastMatchesLast = curMatchesLast;
-            lastClass = classList[0];
-            lastBtn = btn;
-            lastSide = side;
-        }
-        if (lastBtn) {
-            $( lastBtn ).removeClass('btnN btnU btnL btnD');
-            if (lastMatchesLast) {
-                $( lastBtn ).addClass('btnU');
-                $( lastBtn ).css('height', $( lastSide ).height() - 1);  // added by GALT
-            } else {
-                $( lastBtn ).addClass('btnN');
-                $( lastBtn ).css('height', $( lastSide ).height() - 3);  // added by GALT
-                countN++;
-            }
-            if (altColors) {
-                // lastMatch and lastBlue or not lastMatch and notLastBlue
-                lastBlue = (lastMatchesLast === lastBlue); 
-                if (lastBlue)    // Too  smart by 1/3rd
-                    $( lastBtn ).addClass(    'btnBlue' );
-                else
-                    $( lastBtn ).removeClass( 'btnBlue' );
-            }
-            count++;
-        }
-        //warn("Zipped "+count+" buttons "+countN+" are independent.");
-    },
-
-    dragHandleMouseOver: function ()
-    {   // Highlights a single row when mouse over a dragHandle column (sideLabel and buttons)
-        if ( ! jQuery.tableDnD ) {
-            //var handle = $("td.dragHandle");
-            //$(handle)
-            //    .unbind('mouseenter')//, jQuery.tableDnD.mousemove);
-            //    .unbind('mouseleave');//, jQuery.tableDnD.mouseup);
-            return;
-        }
-        if ( ! jQuery.tableDnD.dragObject ) {
-            $( this ).parents("tr.trDraggable").addClass("trDrag");
-        }
-    },
-
-    dragHandleMouseOut: function ()
-    {   // Ends row highlighting by mouse over
-        $( this ).parents("tr.trDraggable").removeClass("trDrag");
-    },
-
-    buttonMouseOver: function ()
-    {   // Highlights a composite set of buttons, regarless of whether tracks are adjacent
-        if ( ! jQuery.tableDnD || ! jQuery.tableDnD.dragObject ) {
-            var classList = $( this ).attr("class").split(" ");
-            var btns = $( "p." + classList[0] );
-            $( btns ).removeClass('btnGrey');
-            $( btns ).addClass('btnBlue');
-            if (jQuery.tableDnD) {
-                var rows = dragReorder.getContiguousRowSet($(this).parents('tr.trDraggable')[0]);
-                if (rows)
-                    $( rows ).addClass("trDrag");
-            }
-        }
-    },
-
-    buttonMouseOut: function ()
-    {   // Ends composite highlighting by mouse over
-        var classList = $( this ).attr("class").split(" ");
-        var btns = $( "p." + classList[0] );
-        $( btns ).removeClass('btnBlue');
-        $( btns ).addClass('btnGrey');
-        if (jQuery.tableDnD) {
-            var rows = dragReorder.getContiguousRowSet($(this).parents('tr.trDraggable')[0]);
-            if (rows)
-            $( rows ).removeClass("trDrag");
-        }
-    },
-
-    trMouseOver: function (e)
-    {   // Trying to make sure there is always a imageV2.lastTrack so that we know where we are
-        var id = '';
-        var a = /tr_(.*)/.exec($(this).attr('id'));  // voodoo
-        if (a && a[1]) {
-            id = a[1];
-        }
-        if (id.length > 0) {
-            if ( ! imageV2.lastTrack || imageV2.lastTrack.id !== id)
-                imageV2.lastTrack = rightClick.makeMapItem(id); 
-                // currentMapItem gets set by mapItemMapOver.   This is just backup
-        }
-    },
-
-    mapItemMouseOver: function ()
-    {
-        // Record data for current map area item
-        var id = this.id;
-        if (!id || id.length === 0) {
-            id = '';
-            var tr = $( this ).parents('tr.imgOrd');
-            if ( $(tr).length === 1 ) {
-                var a = /tr_(.*)/.exec($(tr).attr('id'));  // voodoo
-                if (a && a[1]) {
-                    id = a[1];
-                }
-            }
-        }
-        if (id.length > 0) {
-            rightClick.currentMapItem = rightClick.makeMapItem(id);
-            if (rightClick.currentMapItem) {
-                rightClick.currentMapItem.href = this.href;
-                rightClick.currentMapItem.title = this.title;
-
-                // Handle linked features with separate clickmaps for each exon/intron 
-                if ((this.title.indexOf('Exon ') === 0) || (this.title.indexOf('Intron ') === 0)) {
-                    // if the title is Exon ... or Intron ... 
-                    // then search for the sibling with the same href
-                    // that has the real title item label
-                    var elem = this.parentNode.firstChild;
-                    while (elem) {
-                        if ((elem.href === this.href)
-                            && !((elem.title.indexOf('Exon ') === 0) || (elem.title.indexOf('Intron ') === 0))) {
-                            rightClick.currentMapItem.title = elem.title;
-                            break;
-                        }
-                        elem = elem.nextSibling;
-                    }
-                }
-
-            }
-        }
-    },
-
-    mapItemMouseOut: function ()
-    {
-        imageV2.lastTrack = rightClick.currentMapItem; // Just a backup
-        rightClick.currentMapItem = null;
-    },
-
-    init: function ()
-    {   // Make side buttons visible (must also be called when updating rows in the imgTbl).
-        var btns = $("p.btn");
-        if (btns.length > 0) {
-            dragReorder.zipButtons($('#imgTbl'));
-            $(btns).mouseenter( dragReorder.buttonMouseOver );
-            $(btns).mouseleave( dragReorder.buttonMouseOut  );
-            $(btns).show();
-        }
-        var handle = $("td.dragHandle");
-        if (handle.length > 0) {
-            $(handle).mouseenter( dragReorder.dragHandleMouseOver );
-            $(handle).mouseleave( dragReorder.dragHandleMouseOut  );
-        }
-
-        // setup mouse callbacks for the area tags
-        $(imageV2.imgTbl).find("tr").mouseover( dragReorder.trMouseOver );
-
-        // ensure clicks into hgTrackUi save the cart state
-        $("td a").each( function (tda) {
-            this.onclick = posting.saveSettings;
-        });
-
-        $(".area").each( function(t) {
-                            this.onmouseover = dragReorder.mapItemMouseOver;
-                            this.onmouseout = dragReorder.mapItemMouseOut;
-                            this.onclick = posting.mapClk;
-                        });
-    }
-};
 
 
   //////////////////////////
@@ -2689,7 +2313,8 @@ var rightClick = {
                             else
                                 ele = document.TrackHeaderForm;
                             if (name)
-                                cart.addVarsToQueue(['hgFind.matches'], [name]);
+                                // Add or update form input with gene to highlight
+                                suggestBox.updateFindMatches(name);
                             ele.submit();
                         }
                     }
@@ -2883,7 +2508,7 @@ var rightClick = {
             }
         } else if (cmd === 'jumpToHighlight') { // If highlight exists for this assembly, jump to it
             if (hgTracks.highlight && rightClick.clickedHighlightIdx!==null) {
-                var newPos = parsePositionWithDb(hgTracks.highlight.split("|")[rightClick.clickedHighlightIdx]);
+                var newPos = getHighlight(hgTracks.highlight, rightClick.clickedHighlightIdx);
                 if (newPos && newPos.db === getDb()) {
                     if ( $('#highlightItem').length === 0) { // not visible? jump to it
                         var curPos = parsePosition(genomePos.get());
@@ -2911,7 +2536,22 @@ var rightClick = {
             hgTracks.highlight = highlights.join("|");
             cart.setVarsObj({'highlight' : hgTracks.highlight});
             imageV2.highlightRegion();
-
+        } else if (cmd === 'toggleMerge') {
+            // toggle both the cart (if the user goes to trackUi)
+            // and toggle args[key], if the user doesn't leave hgTracks
+            var key = id + ".doMergeItems";
+            var updateObj = {};
+            if (args[key] === 1) {
+                args[key] = 0;
+                updateObj[key] = 0;
+                cart.setVarsObj(updateObj,null,false);
+                imageV2.requestImgUpdate(id, id + ".doMergeItems=0");
+            } else {
+                args[key] = 1;
+                updateObj[key] = 1;
+                cart.setVarsObj(updateObj,null,false);
+                imageV2.requestImgUpdate(id, id + ".doMergeItems=1");
+            }
         } else {   // if ( cmd in 'hide','dense','squish','pack','full','show' )
             // Change visibility settings:
             //
@@ -2941,7 +2581,7 @@ var rightClick = {
                     document.TrackForm.submit();
                 } else {
                         // Add vis update to queue then submit
-                        cart.addVarsToQueue([id], [cmd]);
+                        cart.setVars([id], [cmd], null, false); // synchronous
                         document.TrackHeaderForm.submit();
                 }
             } else {
@@ -3100,7 +2740,7 @@ var rightClick = {
                     if (title.length > maxLength) {
                         title = title.substring(0, maxLength) + "...";
                     }
-                    if (isGene || isHgc || id === "wikiTrack") {
+                    if ((isGene || isHgc || id === "wikiTrack") && href.indexOf("i=mergedItem") === -1) {
                         // Add "Open details..." item
                         var displayItemFunctions = false;
                         if (rec) {
@@ -3202,7 +2842,7 @@ var rightClick = {
                         };
                         any = true;
                     }
-                    if (href && href.length  > 0) {
+                    if (href && href.length  > 0 && href.indexOf("i=mergedItem") === -1) {
                         // Add "Show details..." item
                         if (title.indexOf("Click to alter ") === 0) {
                             // suppress the "Click to alter..." items
@@ -3272,30 +2912,42 @@ var rightClick = {
                             return true; }
                     };
                 }
+                // add a toggle to hide/show the merged item(s)
+                mergeTrack = rightClick.selectedMenuItem.id + ".doMergeItems";
+                if (rec.hasOwnProperty(mergeTrack)) {
+                    var hasMergedItems = rec[mergeTrack] === 1;
+                    titleStr = rightClick.makeImgTag("wrench.png") + " ";
+                    if (hasMergedItems) {
+                        titleStr += "Show merged items";
+                    } else {
+                        titleStr += "Merge items that span the current region";
+                    }
+                    o[titleStr] = {onclick: function(menuItemClick, menuObject) {
+                        rightClick.hit(menuItemClick, menuObject, "toggleMerge", rec);
+                        return true; }
+                    };
+                }
                 menu.push($.contextMenu.separator);
                 menu.push(o);
             }
 
             menu.push($.contextMenu.separator);
             if (hgTracks.highlight && rightClick.clickedHighlightIdx!==null) {
+                var currentlySeen = ($('#highlightItem').length > 0); 
+                o = {};
+                // Jumps to highlight when not currently seen in image
+                var text = (currentlySeen ? " Zoom" : " Jump") + " to highlight";
+                o[rightClick.makeImgTag("highlightZoom.png") + text] = {
+                    onclick: rightClick.makeHitCallback('jumpToHighlight')
+                };
 
-                if (hgTracks.highlight.search(getDb() + '.') === 0) {
-                    var currentlySeen = ($('#highlightItem').length > 0); 
-                    o = {};
-                    // Jumps to highlight when not currently seen in image
-                    var text = (currentlySeen ? " Zoom" : " Jump") + " to highlight";
-                    o[rightClick.makeImgTag("highlightZoom.png") + text] = {
-                        onclick: rightClick.makeHitCallback('jumpToHighlight')
+                if ( currentlySeen ) {   // Remove only when seen
+                    o[rightClick.makeImgTag("highlightRemove.png") + 
+                                                               " Remove highlight"] = {
+                        onclick: rightClick.makeHitCallback('removeHighlight')
                     };
-
-                    if ( currentlySeen ) {   // Remove only when seen
-                        o[rightClick.makeImgTag("highlightRemove.png") + 
-                                                                   " Remove highlight"] = {
-                            onclick: rightClick.makeHitCallback('removeHighlight')
-                        };
-                    }
-                    menu.push(o);
                 }
+                menu.push(o);
             }
 
             if (rec.isCustomComposite)
@@ -3611,6 +3263,22 @@ var popUpHgt = {
     }
 };
 
+// Show the recommended track sets popup
+function showRecTrackSetsPopup() {
+    // Update links with current position
+    $('a.recTrackSetLink').each(function() {
+        var $this = $(this);
+        var link = $this.attr("href").replace(/position=.*/, 'position=');
+        $this.attr("href", link + genomePos.original);
+    });
+    $('#recTrackSetsPopup').dialog({width:'650'});
+}
+
+function removeSessionPanel() {
+    $('#recTrackSetsPanel').remove();
+    setCartVar("hgS_otherUserSessionLabel", "off", null, false);
+}
+
 // A function to show the keyboard help dialog box, bound to ? and called from the menu bar
 function showHotkeyHelp() {
     $("#hotkeyHelp").dialog({width:'600'});
@@ -3796,6 +3464,7 @@ var popUp = {
                     cart.setVarsObj(changedVars);
                 $(document.getElementById('tr_' + trackName)).remove();
                 imageV2.afterImgChange(true);
+                cart.updateSessionPanel();
             } else {
                 // Keep local state in sync if user changed visibility
                 if (newVis) {
@@ -3988,6 +3657,14 @@ var imageV2 = {
         return false;
     },
 
+    moveTiming: function() 
+    {    // move measure timing messages to the end of the page
+        if ($(".timing").length > 0) {
+            $("body").append("<div id='timingDiv'></div>");
+            $(".timing").detach().appendTo('#timingDiv');
+        }
+    },
+
     updateTiming: function (response)
     {   // update measureTiming text on current page based on what's in the response
         var reg = new RegExp("(<span class='timing'>.+?</span>)", "g");
@@ -3998,7 +3675,7 @@ var imageV2 = {
         if (strs.length > 0) {
             $('.timing').remove();
             for (var ix = strs.length; ix > 0; ix--) {
-                $('body').prepend(strs[ix - 1]);
+                $('#timingDiv').append(strs[ix - 1]);
             }
         }
         reg = new RegExp("(<span class='trackTiming'>[\\S\\s]+?</span>)");
@@ -4012,22 +3689,23 @@ var imageV2 = {
     {
         if ($('#positionInput').length) {
             if (!suggestBox.initialized) { // only call init once
-                 suggestBox.init(getDb(), 
+                suggestBox.init(getDb(),
                             $("#suggestTrack").length > 0,
                             function (item) {
                                 genomePos.set(item.id, getSizeFromCoordinates(item.id));
+                                if ($("#suggestTrack").length && $('#hgFindMatches').length) {
+                                    // Set cart variables to open the hgSuggest gene track and highlight
+                                    // the chosen transcript.  These variables will be submittted by the goButton
+                                    // click handler.
+                                    vis.makeTrackVisible($("#suggestTrack").val());
+                                    cart.addVarsToQueue(["hgFind.matches"],[$('#hgFindMatches').val()]);
+                                }
+                                $("#goButton").click();
                             },
                             function (position) {
                                 genomePos.set(position, getSizeFromCoordinates(position));
-                            });
-            }
-            // Make sure suggestTrack is visible when user chooses via gene select (#3484).
-            if ($("#suggestTrack").length) {
-                $(document.TrackForm || document.TrackHeaderForm).submit(function(event) {
-                                               if ($('#hgFindMatches').length) {
-                                                   vis.makeTrackVisible($("#suggestTrack").val());
-                                               }
-                                           });
+                            }
+                );
             }
         }
     },
@@ -4116,7 +3794,7 @@ var imageV2 = {
                     if (newJsonRec)
                         vis.update(id, vis.enumOrder[newJsonRec.visibility]);
                 }
-
+//                updateMouseOver(id);
                 return true;
             }
         }
@@ -4147,8 +3825,11 @@ var imageV2 = {
                 if (imageV2.backSupport) {
                     $(imgTbl).append("<tr id='tr_" + id + "' abbr='0'" + // abbr gets filled in
                                         " class='imgOrd trDraggable'></tr>");
-                    if (!imageV2.updateImgForId(response, id, true, newJsonRec))
+                    if (!imageV2.updateImgForId(response, id, true, newJsonRec)) {
                         warn("Couldn't insert new image for id: " + id);
+                    } else {
+                        cart.updateSessionPanel();
+                    }
                 }
             }
         }
@@ -4299,6 +3980,8 @@ var imageV2 = {
                     var rec = oldJson.trackDb[this.id];
                     rec.limitedVis = newJson.trackDb[this.id].limitedVis;
                     vis.update(this.id, visibility);
+                    if (visibility === "hide")
+                        cart.updateSessionPanel(); // notify when vis change to hide track
                     valid = true;
                 } else {
                     // what got returned from the AJAX request was a different
@@ -4495,10 +4178,6 @@ var imageV2 = {
             return false;  // Shouldn't return from fullReload but I have seen it in FF
         }
     
-        // If UCSC Genes (or any suggestion) is supposed to be made visible, then do so
-        if ($("#suggestTrack").length && $('#hgFindMatches').length)
-            vis.makeTrackVisible($("#suggestTrack").val());
-
         jQuery('body').css('cursor', 'wait');
         var currentId, currentIdYOffset;
         if (keepCurrentTrackVisible) {
@@ -4544,7 +4223,7 @@ var imageV2 = {
             pos.start = newPos.start;
             pos.end   = newPos.end;
         }
-        return pos.db+"."+pos.chrom+":"+pos.start+"-"+pos.end+pos.color;
+        return makeHighlightString(pos.db, pos.chrom, pos.start, pos.end, pos.color);
     },
 
     undisguiseHighlight: function(pos)
@@ -4659,7 +4338,7 @@ var imageV2 = {
         
         // With history support it is best that most position changes will ajax-update the image
         // This ensures that the 'go' and 'refresh' button will do so unless the chrom changes.
-        $("input[value='go'],input[value='refresh']").click(function () {
+        $("#goButton,input[value='refresh']").click(function () {
             var newPos = genomePos.get().replace(/,/g,'');
             if (newPos.length > 2000) {
                alert("Sorry, you cannot paste identifiers or sequences with more than 2000 characters into this box.");
@@ -4830,6 +4509,8 @@ var trackSearch = {
 ///////////////
 $(document).ready(function()
 {
+    imageV2.moveTiming();
+
     // on Safari the back button doesn't call the ready function.  Reload the page if
     // the back button was pressed.
     $(window).bind("pageshow", function(event) {
@@ -4966,5 +4647,12 @@ $(document).ready(function()
     if (imageV2.enabled && imageV2.backSupport) {
         imageV2.setupHistory();
     }
+
+    // ensure clicks into hgTrackUi save the cart state
+    $("td a").each( function (tda) {
+        if (this.href && this.href.indexOf("hgTrackUi") !== -1) {
+            this.onclick = posting.saveSettings;
+        }
+    });
 
 });

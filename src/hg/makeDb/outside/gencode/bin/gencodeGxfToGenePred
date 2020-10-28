@@ -1,0 +1,92 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
+sys.path.append(os.path.join(myBinDir, "../lib"))
+sys.path.append(os.path.expanduser("~markd/compbio/code/pycbio/lib"))
+import argparse
+import pipettor
+import tempfile
+from gencode.gencodeProcess import GencodeLiftOver, getEditIdCmd
+
+def parseArgs():
+    desc = """Convert GENCODE GTF or GFF3 to an genePred and replace ENSTR or
+_PAR id hacks used for dealing with PAR transcripts.  Uses liftOver to
+convert Ensembl chromosome name to UCSC chromosome and to convert between
+versions of chrM in GRCh37/hg19.
+
+In the case of GRCh37 backmap, annotations are generate to both chrM and chrMT.
+The chrMT sequence was add to the UCSC browser and matches what GENCODE annotated,
+so we just do a special pass to get these.
+
+The chains can be generated with
+  ensToUcscMkLift hg19 ensemblToUcscChain
+"""
+    parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument("--verbose", dest="verbose", action="store_true", default=False,
+                        help="verbose output for debugging")
+    parser.add_argument("--warnAndContinue", dest="warnAndContinue", action="store_true", default=False,
+                        help="output warning on invalid GFF3 entries and continue")
+    parser.add_argument("--unmapped", dest="unmappedGenePred", action="store", default=None,
+                        help="output genepred of annotations that couldn't be mapped to UCSC chromosomes to this file")
+    parser.add_argument("hgdb",
+                        help="UCSC genome database name.")
+    parser.add_argument("inGxf",
+                        help="input GENCODE GTF or GFF3")
+    parser.add_argument("ensemblToUcscChain",
+                        help="chain file to lift over to UCSC chromosome names")
+    parser.add_argument("outGenePred",
+                        help="output GenePred file")
+    return parser.parse_args()
+
+
+def gxfToGenePred(inGxf, verbose, warnAndContinue):
+    # Need to ignore GTF groups formed with only gene records
+    tmpGpFh = tempfile.NamedTemporaryFile(prefix=os.path.basename(inGxf), suffix=".tmp.gp")
+    tmpGp = tmpGpFh.name
+    tmpGpFh.close()
+    if inGxf.find(".gff3") > 0:
+        toGenePredCmd = ["gff3ToGenePred", "-geneNameAttr=gene_name", "-rnaNameAttr=transcript_id", inGxf, tmpGp]
+        if warnAndContinue:
+            toGenePredCmd.append("-warnAndContinue")
+    else:
+        toGenePredCmd = ["gtfToGenePred", "-genePredExt", "-geneNameAsName2", "-ignoreGroupsWithoutExons", inGxf, tmpGp]
+    if verbose:
+        print(*toGenePredCmd, file=sys.stderr)
+    pipettor.run(toGenePredCmd)
+    return tmpGp
+
+
+def liftToEditChromNames(inGp, verbose, liftFile, outGpFh, unmappedGenePred):
+    liftOver = GencodeLiftOver("genePred", liftFile, unmappedGenePred)
+    cnvPipe = pipettor.Pipeline([getEditIdCmd(0), liftOver.getLiftoverCmd(stdout="stdout")], stdin=inGp, stdout=outGpFh)
+    if verbose:
+        print(str(cnvPipe), file=sys.stderr)
+    cnvPipe.wait()
+    unmappedInfo = liftOver.getLiftOverUnmappedInfo()
+    liftOver.removeTmp()
+    unmappedInfo.report()
+
+def copyChrMToChrMT(tmpGp, verbose, outGpFh):
+    "special case to handle chrMT added to hg19"
+    cpCmd = ("tawk", '$2 == "chrM"{$2 = "chrMT"; print $0}', tmpGp)
+    if verbose:
+        print(*cpCmd, file=sys.stderr)
+    pipettor.run(cpCmd, stdout=outGpFh)
+
+def convert(hgdb, inGxf, liftFile, outGenePred, unmappedGenePred, verbose, warnAndContinue):
+    # Need to update transcript id if it's for of the PAR hacked ids
+    tmpGp = gxfToGenePred(inGxf, verbose, warnAndContinue)
+    with open(outGenePred, "w") as outGpFh:
+        liftToEditChromNames(tmpGp, verbose, liftFile, outGpFh, unmappedGenePred)
+        if hgdb == "hg19":
+            copyChrMToChrMT(tmpGp, verbose, outGpFh)
+    os.unlink(tmpGp)
+
+def gencodeGxfToGenePred(opts):
+    convert(opts.hgdb, opts.inGxf, opts.ensemblToUcscChain, opts.outGenePred, opts.unmappedGenePred,
+            opts.verbose, opts.warnAndContinue)
+
+
+gencodeGxfToGenePred(parseArgs())

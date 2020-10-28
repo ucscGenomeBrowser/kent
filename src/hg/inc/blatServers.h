@@ -2,11 +2,12 @@
  * generated blatServers.c and blatServers.sql.  This header links the database and
  * the RAM representation of objects. */
 
-/* Copyright (C) 2002 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
-
 #ifndef BLATSERVERS_H
 #define BLATSERVERS_H
+
+#define BLATSERVERS_NUM_COLS 5
+
+extern char *blatServersCommaSepFieldNames;
 
 struct blatServers
 /* Description of online BLAT servers */
@@ -16,6 +17,7 @@ struct blatServers
     char *host;	/* Host (machine) name */
     int port;	/* TCP/IP port on host */
     signed char isTrans;	/* 0 for nucleotide/1 for translated nucleotide */
+    signed char canPcr;	/* 1 for use with PCR, 0 for not */
     };
 
 void blatServersStaticLoad(char **row, struct blatServers *ret);
@@ -27,12 +29,15 @@ struct blatServers *blatServersLoad(char **row);
  * from database.  Dispose of this with blatServersFree(). */
 
 struct blatServers *blatServersLoadAll(char *fileName);
-/* Load all blatServers from a tab-separated file.
+/* Load all blatServers from whitespace-separated file.
  * Dispose of this with blatServersFreeList(). */
 
-struct blatServers *blatServersLoadWhere(struct sqlConnection *conn, char *table, char *where);
-/* Load all blatServers from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
+struct blatServers *blatServersLoadAllByChar(char *fileName, char chopper);
+/* Load all blatServers from chopper separated file.
+ * Dispose of this with blatServersFreeList(). */
+
+#define blatServersLoadAllByTab(a) blatServersLoadAllByChar(a, '\t');
+/* Load all blatServers from tab separated file.
  * Dispose of this with blatServersFreeList(). */
 
 struct blatServers *blatServersCommaIn(char **pS, struct blatServers *ret);
@@ -55,6 +60,8 @@ void blatServersOutput(struct blatServers *el, FILE *f, char sep, char lastSep);
 
 #define blatServersCommaOut(el,f) blatServersOutput(el,f,',',',');
 /* Print out blatServers as a comma separated list including final comma. */
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 #endif /* BLATSERVERS_H */
 

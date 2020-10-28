@@ -6,9 +6,13 @@ include hoffMap.ra
 
 include cancerExpr.ra
 
-include mane.ra
+include mane.ra beta,public
+include mane.alpha.ra alpha
 
 include gdcCancer.ra
+
+include gencodeV35.ra alpha
+include liftOver.ra
 
 track miRnaAtlas
 compositeTrack on
@@ -353,6 +357,8 @@ include trackDb.17way.ra alpha
 include trackDb.20way.ra
 include trackDb.27way.ra alpha
 include trackDb.30way.ra
+include trackDb.10way.ra
+include trackDb.mito204way.ra
 
 track ucscRetroAli8
 shortLabel Retroposed Genes 8.0
@@ -533,8 +539,87 @@ group varRep
 visibility hide
 maxWindowToDraw 5000000
 showHardyWeinberg on
+geneTrack ncbiRefSeqCurated
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-pennantIcon New red ../goldenPath/newsarch.html#012020 Track Released Jan. 20, 2020
+
+track tgpTrios
+type vcfPhasedTrio
+group varRep
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+maxWindowToDraw 5000000
+shortLabel 1000 Genomes Trios
+longLabel Thousand Genomes Project Family VCF Trios
+vcfUseAltSampleNames on
+vcfDoFilter off
+vcfDoQual off
+vcfDoMaf off
+compositeTrack on
+geneTrack ncbiRefSeqCurated
+pennantIcon New red ../goldenPath/newsarch.html#092520 "Released Jul. 21, 2020"
+
+
+    track tgpNA19685_m011_MXL
+    parent tgpTrios
+    type vcfPhasedTrio
+    shortLabel m011 MXL Trio
+    longLabel 1000 Genomes m011 Mexican Ancestry from Los Angeles Trio
+    vcfChildSample NA19685|child
+    vcfParentSamples NA19660|mother,NA19661|father
+    visibility full
+
+    track tgpNA19675_m004_MXL
+    parent tgpTrios
+    type vcfPhasedTrio
+    shortLabel m004 MXL Trio
+    longLabel 1000 Genomes m004 Mexican Ancestry from Los Angeles Trio
+    vcfChildSample NA19675|child
+    vcfParentSamples NA19678|mother,NA19679|father
+    visibility full
+
+    track tgpNA19240_Y117_YRI
+    parent tgpTrios
+    type vcfPhasedTrio
+    shortLabel Y117 YRI Trio
+    longLabel 1000 Genomes Yoruban in Ibadan, Nigeria Trio
+    vcfChildSample NA19240|child
+    vcfParentSamples NA19238|mother,NA19239|father
+    visibility full
+
+    track tgpNA12878_1463_CEU
+    parent tgpTrios
+    type vcfPhasedTrio
+    shortLabel 1463 CEU Trio
+    longLabel 1000 Genomes Utah CEPH Trio
+    vcfChildSample NA12878|child
+    vcfParentSamples NA12892|mother,NA12891|father
+    visibility full
+
+    track tgpHG02024_VN049_KHV
+    parent tgpTrios
+    type vcfPhasedTrio
+    shortLabel VN049 KHV Trio
+    longLabel 1000 Genomes Kinh in Ho Chi Minh City, Vietnam Trio
+    vcfChildSample HG02024|child
+    vcfParentSamples HG02025|mother,HG02026|father
+    visibility full
+
+    track tgpHG00733_PR05_PUR
+    parent tgpTrios
+    type vcfPhasedTrio
+    shortLabel PR05 PUR Trio
+    longLabel 1000 Genomes Puerto Ricans from Puerto Rico Trio
+    vcfChildSample HG00733|child
+    vcfParentSamples HG00732|mother,HG00731|father
+    visibility full
+
+    track tgpHG00702_SH089_CHS
+    parent tgpTrios
+    type vcfPhasedTrio
+    shortLabel SH089 CHS Trio
+    longLabel 1000 Genomes Southern Han Chinese Trio
+    vcfChildSample HG00702|child
+    vcfParentSamples HG00657|mother,HG00656|father
+    visibility full
 
 track genomicSuperDups override
 group rep
@@ -605,7 +690,7 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch11.ra alpha
 
-include knownGene.ra
+include knownGene.ra beta,public
 
 include trackDb.100way.ra
 include trackDb.145way.ra alpha
@@ -639,55 +724,6 @@ snpVersion 144
 # override to use hg38 specific html page
 track crispr override
 html crispr
-
-track liftHg19
-shortLabel hg19 Mapping
-longLabel hg19 Mappings: UCSC LiftOver and NCBI ReMap
-group map
-visibility hide
-priority 499
-type chain
-compositeTrack on
-release alpha
-
-        track liftOverHg19
-        shortLabel UCSC liftOver to hg19
-        longLabel UCSC liftOver alignments to hg19
-        priority 1
-        type chain hg19
-        matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-        matrixHeader A, C, G, T
-        otherDb hg19
-        chainMinScore 3000
-        chainLinearGap medium
-        parent liftHg19
-        release alpha
-
-        track chainHg19ReMap
-        shortLabel NCBI ReMap hg19
-        longLabel NCBI ReMap alignments to hg19/GRCh37
-        priority 2
-        type chain hg19
-        matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-        matrixHeader A, C, G, T
-        otherDb hg19
-        chainMinScore 3000
-        chainLinearGap medium
-        parent liftHg19
-        release alpha
-
-        track chainHg19ReMapAxtChain
-        shortLabel ReMap + axtChain 19hg38
-        longLabel NCBI ReMap alignments to hg19/GRCh37, joined by axtChain
-        priority 3
-        type chain hg19
-        matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-        matrixHeader A, C, G, T
-        otherDb hg19
-        chainMinScore 3000
-        chainLinearGap medium
-        parent liftHg19
-        release alpha
 
 track ncbiRefSeqRefGene
 compositeTrack on
@@ -840,4 +876,8 @@ idXref ncbiRefSeqLink mrnaAcc name
 color 20,20,160
 baseColorUseCds given
 baseColorDefault genomicCodons
+
+track clinGenCnv override
+filter.size 773:11309456
+filterLimits.size 773:11309456
 

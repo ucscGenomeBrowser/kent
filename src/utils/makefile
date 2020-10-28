@@ -77,6 +77,7 @@ UTILS_APPLIST = \
 	paraSync \
 	pslLiftSubrangeBlat \
 	pslPosTarget \
+	pslRemoveFrameShifts \
 	pslScore \
 	pslToPslx \
 	randomLines \
@@ -99,6 +100,7 @@ UTILS_APPLIST = \
 	timing \
 	toLower \
 	toUpper \
+        trackDbIndexBb \
 	twoBitDup \
 	twoBitInfo \
 	twoBitToFa \
@@ -145,7 +147,7 @@ UCSC_APPS = \
 	upper \
 	venn \
 	verticalSplitSqlTable \
-	weedLines \
+	weedLines
 
 
 # list of scripts to install
@@ -153,10 +155,11 @@ UCSC_APPS = \
 USER_APP_SCRIPTS = \
 	bedJoinTabOffset.py \
 	expMatrixToBarchartBed \
+	barChartMaxLimit \
 	ucscApiClient \
 	tdbRename \
 	tdbSort \
-	webSync
+	webSync \
 
 SCRIPT_FILES = \
 	agpToLift \
@@ -195,6 +198,8 @@ SCRIPT_FILES = \
 	cancerMafToBigBed \
 	pq \
 	bedAppendPaperInfo \
+	googleSheetToBigBed \
+	doClinvarLift \
 	${USER_APP_SCRIPTS}
 
 # List of all directories to build

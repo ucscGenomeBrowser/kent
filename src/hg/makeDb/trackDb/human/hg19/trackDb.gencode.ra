@@ -3,7 +3,6 @@ superTrack on
 group genes
 shortLabel GENCODE
 longLabel GENCODE Gene Annotation 
-pennantIcon Updated red ../goldenPath/newsarch.html#021120 "Updated Feb. 11, 2020"
 # doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
 
 # GENCODE genes on alpha only (wrangler: markd)
@@ -32,4 +31,6 @@ include wgEncodeGencodeV30lift37.ra
 include wgEncodeGencodeV31lift37.ra
 include wgEncodeGencodeV32lift37.ra
 include wgEncodeGencodeV33lift37.ra
+include wgEncodeGencodeV34lift37.ra
+include wgEncodeGencodeV35lift37.ra
 

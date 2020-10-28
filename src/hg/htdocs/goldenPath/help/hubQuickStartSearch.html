@@ -110,12 +110,12 @@ search run quickly even in large files.</p>
 Enter the URL to your hub on the My Hubs tab of the 
 <a href="../../cgi-bin/hgHubConnect#unlistedHubs">Track Data Hubs</a> page. Alternately, you can
 enter your hub.txt URL in the following web address:</p>
-<pre><code>genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=<strong>YourUrlHere</strong></code></pre>
+<pre><code>genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hubUrl=<strong>YourUrlHere</strong></code></pre>
 <p>
 If you would like to look at an already-made example, click the following link which includes
 <code>hideTracks=1</code> to hide other tracks. After the link is a picture of what the hub 
 should look like:</p>
-<pre><code><a href="../../cgi-bin/hgTracks?db=hg19&hideTracks=1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubSearchable/hub.txt">https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hideTracks=1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubSearchable/hub.txt</a></code></pre>
+<pre><code><a href="../../cgi-bin/hgTracks?db=hg38&hideTracks=1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubSearchable/hub.txt">https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hideTracks=1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubSearchable/hub.txt</a></code></pre>
 
 <p class='text-center'>
   <img class='text-center' src="../../images/defaultViewSearchTracks.png" 
@@ -156,21 +156,23 @@ the <a href="hgTrackHubHelp.html" target="_blank">Track Hub User Guide</a>.</p>
 <a name="hub.txt"></a>
 <h2>Understanding hub.txt with useOneFile</h2>
 <p>
-The hub.txt file is a configuration file with names, descriptions, and paths to other files,
-The example below uses the setting <code>useOneFile on</code> to indicate that all the settings and paths
-appear in only the hub.txt file as opposed to having two additional settings files (genome.txt and
-trackDb.txt). To see the actual hub.txt file for the above example, click 
-<a href="examples/hubExamples/hubSearchable/hub.txt">here</a>.</p>
+The hub.txt file is a configuration file with names, descriptions, and paths to other files.
+The example below uses the setting <code>useOneFile on</code> to indicate that all the settings
+and paths appear in only the hub.txt file as opposed to having two additional settings files 
+(genomes.txt and trackDb.txt). Please visit the <a href="hgTracksHelp.html#UseOneFile" 
+target="_blank">UseOneFile guide</a> for more information.
+
 <p>
 The most important settings to make the hub searchable appear in the third section, in what would
 formerly be the trackDb.txt file. The <code>searchIndex</code> and <code>searchTrix</code> 
 indicate which fields are indexed in the bigBed file and where to find the .ix file respectively.
+To see the actual hub.txt file for the above example, click 
+<a href="examples/hubExamples/hubSearchable/hub.txt">here</a>.
 </p>
 
 <pre><code><strong>hub</strong> <em>MyHubsNameWithoutSpaces</em>
 <strong>shortLabel</strong> <em>My Hub's Name</em>
 <strong>longLabel</strong> <em>Name up to 80 characters versus shortLabel limited to 17 characters</em>
-<strong>genomesFile</strong> <em>genomes.txt</em>
 <strong>email</strong> <em>myEmail@address</em>
 <strong>descriptionUrl</strong> <em>aboutMyHub.html</em>
 <strong>useOneFile</strong> <em>on</em>

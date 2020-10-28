@@ -211,7 +211,14 @@ struct dlSorter *a = (struct dlSorter *)elem1;
 struct dlSorter *b = (struct dlSorter *)elem2;
 return compareFunc(&a->node->val, &b->node->val);
 }
-    
+
+// BLAT compiled on the mac Clang version 11.0.0 build 33.17 (gcc version 4.2.1) 
+// failed unless compiler optimization is set to level 1 when compiling dlSort().
+// Clang pragma supports turning optimization off, but not setting it to a specific level.
+#if defined(__clang__)
+#pragma clang optimize off
+#endif
+
 void dlSort(struct dlList *list, 
 	int (*compare )(const void *elem1,  const void *elem2))
 /* Sort a singly linked list with Qsort and a temporary array. 
@@ -241,6 +248,9 @@ if (len > 1)
     freeMem(sorter);
     }
 }
+#if defined(__clang__)
+#pragma clang optimize on
+#endif
 
 
 boolean dlEmpty(struct dlList *list)

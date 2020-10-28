@@ -1,56 +1,61 @@
 # generic makefile to construct the index pages and symlinks
-# for any of the assembly hubs:
-# primates, mammals, birds, fish, vertebrate
+# for any assembly hub
 #
 # will be included by those individual build directories with the
-# Name and name defined to use here
+# following variables defined to customize the resulting files:
+#
+# destDir, srcDir, orderList, indexName, testIndexName,
+# statsName, testStatsName, dataName, testDataName, genomesTxt, hubFile
+# testHubFile, Name and name
 
-destDir=/hive/data/genomes/asmHubs/${name}
-srcDir=${HOME}/kent/src/hg/makeDb/doc/${name}AsmHub
 toolsDir=${HOME}/kent/src/hg/makeDb/doc/asmHubs
 
-all:: makeDirs symLinks ${destDir}/hub.txt ${destDir}/groups.txt \
-	mkGenomes ${destDir}/index.html \
-	${destDir}/asmStats${Name}.html
+all:: makeDirs mkGenomes symLinks hubIndex asmStats trackData hubTxt groupsTxt
 
 makeDirs:
 	mkdir -p ${destDir}
 
+mkGenomes::
+	${toolsDir}/mkGenomes.pl ${orderList} > ${destDir}/${genomesTxt}.txt
+
 symLinks::
-	${toolsDir}/mkSymLinks.pl ${Name} ${name}
+	${toolsDir}/mkSymLinks.pl ${orderList}
 
 hubIndex::
-	${toolsDir}/mkHubIndex.pl ${Name} ${name} ${defaultAssembly} > ${destDir}/index.html
-	sed -e "s/hgdownload.soe/hgdownload-test.gi/g; s#/index.html#/testIndex.html#; s#${name}/hub.txt#${name}/testHub.txt#; s/asmStats${Name}/testAsmStats${Name}/;" ${destDir}/index.html > ${destDir}/testIndex.html
-	chmod +x ${destDir}/index.html ${destDir}/testIndex.html
+	${toolsDir}/mkHubIndex.pl ${Name} ${name} ${defaultAssembly} ${orderList} | sed -e 's#${name}/hub.txt#${name}/${hubFile}.txt#;' > ${destDir}/${indexName}.html
+	sed -e "s#genome.ucsc.edu/h/#genome-test.gi.ucsc.edu/h/#g; s/hgdownload.soe/hgdownload-test.gi/g; s#/${indexName}.html#/${testIndexName}.html#; s#${name}/${hubFile}.txt#${name}/${testHubFile}.txt#; s/asmStats/${testStatsName}/; s#${dataName}.html#${testDataName}.html#;" ${destDir}/${indexName}.html > ${destDir}/${testIndexName}.html
+	chmod +x ${destDir}/${indexName}.html ${destDir}/${testIndexName}.html
 
 asmStats::
-	${toolsDir}/mkAsmStats.pl ${Name} ${name} > ${destDir}/asmStats${Name}.html
-	sed -e "s/hgdownload.soe/hgdownload-test.gi/g; s/index.html/testIndex.html/; s#/asmStats#/testAsmStats#;" ${destDir}/asmStats${Name}.html > ${destDir}/testAsmStats${Name}.html
-	chmod +x ${destDir}/asmStats${Name}.html ${destDir}/testAsmStats${Name}.html
+	rm -f ${destDir}/${statsName}.html ${destDir}/${testStatsName}.html
+	${toolsDir}/mkAsmStats.pl ${Name} ${name} ${orderList} > ${destDir}/${statsName}.html
+	sed -e "s#genome.ucsc.edu/h/#genome-test.gi.ucsc.edu/h/#g; s/hgdownload.soe/hgdownload-test.gi/g; s/index.html/${testIndexName}.html/; s#/${statsName}#/${testStatsName}#; s#${dataName}.html#${testDataName}.html#;" ${destDir}/${statsName}.html > ${destDir}/${testStatsName}.html
+	chmod +x ${destDir}/${statsName}.html ${destDir}/${testStatsName}.html
 
+# trackData makes different tables for the test vs. production version
+# mkHubIndex.pl and mkAsmStats.pl should do this too . . .  TBD
 trackData::
-	${toolsDir}/trackData.pl ${Name} ${name} > ${destDir}/trackData.html
-	chmod +x ${destDir}/trackData.html
+	${toolsDir}/trackData.pl ${Name} ${name} ${orderList} > ${destDir}/${dataName}.html
+	${toolsDir}/trackData.pl -test ${Name} ${name} ${orderList} | sed -e "s#testIndex.html#${testIndexName}.html#; s#testAsmStats.html#${testStatsName}.html#;" > ${destDir}/${testDataName}.html
+	chmod +x ${destDir}/${dataName}.html
+	chmod +x ${destDir}/${testDataName}.html
 
-mkGenomes::
-	${toolsDir}/mkGenomes.pl ${Name} ${name} > ${destDir}/genomes.txt
+hubTxt:
+	rm -f ${destDir}/${hubFile}.txt
+	sed -e "s#index.html#${indexName}.html#; s#genomes.txt#${genomesTxt}.txt#;" ${srcDir}/${hubTxtFile} > ${destDir}/${hubFile}.txt
+	sed -e 's/index.html/${testIndexName}.html/; s#genomes.txt#${genomesTxt}.txt#;' ${srcDir}/${hubTxtFile} > ${destDir}/${testHubFile}.txt
 
-${destDir}/hub.txt: ${srcDir}/hub.txt
-	rm -f ${destDir}/hub.txt
-	cp -p ${srcDir}/hub.txt ${destDir}/hub.txt
-	sed -e 's/index.html/testIndex.html/;' ${srcDir}/hub.txt > ${destDir}/testHub.txt
-
-${destDir}/groups.txt: ${toolsDir}/groups.txt
+# all hubs have the same set of groups, no need for any name customization
+groupsTxt:
 	rm -f ${destDir}/groups.txt
 	cp -p ${toolsDir}/groups.txt ${destDir}/groups.txt
 
 clean::
-	rm -f ${destDir}/hub.txt
-	rm -f ${destDir}/testHub.txt
+	rm -f ${destDir}/${hubFile}.txt
+	rm -f ${destDir}/${testHubFile}.txt
 	rm -f ${destDir}/groups.txt
-	rm -f ${destDir}/genomes.txt
-	rm -f ${destDir}/index.html
-	rm -f ${destDir}/testIndex.html
-	rm -f ${destDir}/asmStats${Name}.html
-	rm -f ${destDir}/testAsmStats${Name}.html
+	rm -f ${destDir}/${genomesTxt}.txt
+	rm -f ${destDir}/${indexName}.html
+	rm -f ${destDir}/${testIndexName}.html
+	rm -f ${destDir}/${statsName}.html
+	rm -f ${destDir}/${testStatsName}.html

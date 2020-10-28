@@ -73,6 +73,15 @@ html gtexGeneExprV4
 group expression
 priority 10.1
 
+track gtexGeneV8
+shortLabel GTEx Gene V8
+longLabel Gene Expression in 54 tissues from GTEx RNA-seq of 17382 samples, 948 donors (V8, Aug 2019)
+type bed 6 +
+group expression
+maxItems 200
+spectrum on
+priority 10.1
+
 track gtexSnp
 release alpha
 type bed 4

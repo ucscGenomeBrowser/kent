@@ -1,12 +1,7 @@
-Red blocks are drawn when a polymorphism in a coding region results in a change in the amino acid that is generated.
-Green blocks are drawn when a polymorphism in a coding region results in no change to the amino acid that is generated.
-Blue blocks are drawn when a polymorphism is outside a coding region.
-Pale yellow blocks are drawn when there are no aligning bases to that region in the reference genome.
-
 track cons44way
 compositeTrack on
-shortLabel 44 Bat Strains
-longLabel Multiz Alignment - 44 Strains with bats as hosts: red=nonsyn green=syn blue=noncod yellow=noalign
+shortLabel 44 Bat Aln
+longLabel Multiz Alignment and Conservation of 44 Strains with bats as hosts
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility hide
@@ -24,7 +19,7 @@ group compGeno
         track multiz44way
         subTrack cons44wayViewalign on
         shortLabel Bat CoV multiz
-        longLabel Multiz Genome Alignments of 44 Coronavirus bat strains
+        longLabel Multiz Alignment of 44 strains with bats as hosts: red=nonsyn green=syn blue=noncod yellow=noalign
         subGroups view=align
         noInherit on
 #        irows on
@@ -50,7 +45,7 @@ group compGeno
     track cons44wayViewphyloP
     shortLabel Basewise Bat Strain Conservation (phyloP)
     view phyloP
-    visibility full
+    visibility hide
     subTrack cons44way
     viewLimits -4:5
     viewLimitsMax -11.968:4.256
@@ -76,7 +71,7 @@ group compGeno
     track cons44wayViewphastcons
     shortLabel Bat Element Conservation (phastCons)
     view phastcons
-    visibility full
+    visibility dense
     subTrack cons44way
 
         track phastCons44way
@@ -96,18 +91,18 @@ group compGeno
         priority 13
 
     # Conserved Elements (Most Conserved)
-    track cons44wayViewelements
-    shortLabel Bat Conserved Elements
-    view elements
-    visibility dense
-    subTrack cons44way
+    #track cons44wayViewelements
+    #shortLabel Bat Conserved Elements
+    #view elements
+    #visibility hide
+    #subTrack cons44way
 
-        track phastConsElements44way
-        subTrack cons44wayViewelements on
-        subGroups view=elements
-        shortLabel Bat Cons. El.
-        longLabel 44 bat virus strains Conserved Elements
-        noInherit on
-        color 110,10,40
-        type bed 5 .
-        priority 23
+        #track phastConsElements44way
+        #subTrack cons44wayViewelements on
+        #subGroups view=elements
+        #shortLabel Bat Cons. El.
+        #longLabel 44 bat virus strains Conserved Elements
+        #noInherit on
+        #color 110,10,40
+        #type bed 5 .
+        #priority 23

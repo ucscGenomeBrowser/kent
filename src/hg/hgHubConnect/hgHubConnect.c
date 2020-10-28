@@ -404,6 +404,9 @@ dyStringFree(&cmd);
 }
 
 void hgHubConnectDeveloperMode()
+/* Put up the controls for the "Hub Development" Tab, which includes a button to run the
+ * hubCheck utility on a hub and load a hub with the udcTimeout and measureTiming
+ * variables turned on */
 {
 // put out the top of our page
 char *hubUrl = cartOptionalString(cart, "validateHubUrl");
@@ -451,7 +454,7 @@ printf("<label for=\"addMeasureTiming\">Display load times</label>\n");
 // and a tooltip explaining this checkbox
 printf("<div class=\"tooltip\"> (?)\n");
 printf("<span class=\"tooltiptext\">"
-    "Checking this box shows the timing measurements below the Genome Browser image. "
+    "Checking this box shows the timing measurements at the bottom of the Genome Browser page. "
     "Useful for determining slowdowns to loading or drawing tracks."
     "</span>\n");
 printf("</div></li>\n"); // tooltip div
@@ -1272,14 +1275,17 @@ outputPublicTableRow(hubInfo, count);
 if (hubSearchResult != NULL)
     {
     printf("</tbody></table>\n");
-    printf("<div class=\"hubTdbTree\">\n");
-    printf("<div id='tracks%d'></div>", hubInfo->id); // div for the jstree for this hub's search result(s)
-    printf("</div>\n");
     struct trackHub *hub = fetchTrackHub(hubInfo);
-    struct hubOutputStructure *hubOut = buildHubSearchOutputStructure(hub, hubSearchResult);
-    if (dyStringIsEmpty(hubOut->descriptionMatch) && (hubOut->genomes == NULL))
-        return; // no detailed search results; hit must have been to hub short label or something   
-    printHubOutputStructure(hubOut, hubInfo);
+    if (hub != NULL)
+        {
+        struct hubOutputStructure *hubOut = buildHubSearchOutputStructure(hub, hubSearchResult);
+        if (dyStringIsEmpty(hubOut->descriptionMatch) && (hubOut->genomes == NULL))
+            return; // no detailed search results; hit must have been to hub short label or something
+        printf("<div class=\"hubTdbTree\">\n");
+        printf("<div id='tracks%d'></div>", hubInfo->id); // div for the jstree for this hub's search result(s)
+        printf("</div>\n");
+        printHubOutputStructure(hubOut, hubInfo);
+        }
     }
 }
 
@@ -1300,11 +1306,6 @@ void printHubList(struct slName *hubsToPrint, struct hash *hubLookup, struct has
  */
 {
 int count = 0;
-int udcTimeoutVal = udcCacheTimeout();
-char *udcOldDir = cloneString(udcDefaultDir());
-char *searchUdcDir = cfgOptionDefault("hgHubConnect.cacheDir", udcOldDir);
-udcSetDefaultDir(searchUdcDir);
-udcSetCacheTimeout(1<<30);
 struct hubEntry *hubList = NULL;
 struct hubEntry *hubInfo;
 long slTime;
@@ -1348,8 +1349,6 @@ if (hubsToPrint != NULL)
     if (searchResultHash == NULL)
         printf("</tbody></table>\n");
     }
-udcSetCacheTimeout(udcTimeoutVal);
-udcSetDefaultDir(udcOldDir);
 if (hubsToPrint != NULL)
     {
     /* Write out the list of hubs in a single table inside a div that will be hidden by

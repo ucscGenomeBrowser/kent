@@ -10,7 +10,7 @@ use File::Basename;
 my $argc = scalar(@ARGV);
 
 if ($argc != 3) {
-  printf STDERR "usage: asmHubRmsk.pl asmId asmId.names.tab asmId.rmsk.class.profile > asmId.gap.html\n";
+  printf STDERR "usage: asmHubRmsk.pl asmId asmId.names.tab asmId.rmsk.class.profile > asmId.repeatMasker.html\n";
   printf STDERR "where asmId is the assembly identifier,\n";
   printf STDERR "and   asmId.names.tab is naming file for this assembly,\n";
   printf STDERR "and   asmId.rmsk.class.profile counts of rmsk categories.\n";

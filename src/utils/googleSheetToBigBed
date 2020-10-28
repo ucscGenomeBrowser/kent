@@ -1,0 +1,230 @@
+#!/usr/bin/env python3
+
+import logging, sys, optparse
+from collections import defaultdict
+from os.path import join, basename, dirname, isfile
+import hashlib, re, subprocess, os
+
+chromName = "NC_045512v2"
+chromSizes = "/hive/data/genomes/wuhCor1/chrom.sizes"
+TMPDIR = "/scratch/tmp"
+MAXLINES = 1000
+MAXFIELDLEN = 16000
+DEBUG = False
+
+asBed4 = """table bedDetail
+"Browser extensible data, with extended fields "
+    (
+    string chrom;      "Reference sequence chromosome or scaffold"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Short Name of item"
+    uint   score;      "Score from 0-1000"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "Start of where display should be thick (start codon)"
+    uint thickEnd;     "End of where display should be thick (stop codon)"
+    uint reserved;     "Used as itemRgb as of 2004-11-22"
+"""
+# ==== functions =====
+    
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("usage: %prog credentialsJson URL bbFname [options] - convert tsv to bigBed, taking care to skip invalid rows. Credentials JSON is a Google Sheets API json credentials file. For an example see /cluster/home/max/.user-annots-browser-track-c513a43ffff8.json")
+
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    #parser.add_option("-f", "--file", dest="file", action="store", help="run on file") 
+    #parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+    (options, args) = parser.parse_args()
+
+    if args==[]:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+        logging.getLogger().setLevel(logging.DEBUG)
+        global DEBUG
+        DEBUG=True
+    else:
+        logging.basicConfig(level=logging.INFO)
+        logging.getLogger().setLevel(logging.INFO)
+
+    return args, options
+# ----------- main --------------
+def cleanString(s):
+    " remove any non-alnum and space characters from string "
+    pat = re.compile('[ \W_-]+')
+    return pat.sub('', s)
+
+def openSheet(credFname, url):
+    import gspread
+    if not DEBUG:
+        logging.getLogger().setLevel(logging.CRITICAL)
+
+    from oauth2client.service_account import ServiceAccountCredentials
+    scope = ['https://spreadsheets.google.com/feeds',
+                     'https://www.googleapis.com/auth/drive']
+
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(credFname, scopes=scope)
+    gc = gspread.authorize(credentials)
+    sh = gc.open_by_url(url)
+    wks = sh.get_worksheet(0)
+    rows =  wks.get_all_values()
+    if DEBUG:
+        logging.getLogger().setLevel(logging.DEBUG)
+    else:
+        logging.getLogger().setLevel(logging.INFO)
+    return rows
+
+def openTsvRows(credFname, url, oldMd5):
+    " return data as (headers, list of rows, newMd5), if data is different than oldMd5, or None if not changed "
+    #import requests
+    #r = requests.get(url)
+    #text = r.text
+    #lines = r.text.split("\r\n")
+    #logging.debug("lines"+repr(lines))
+
+    inRows = openSheet(credFname, url)
+    rowsAsStrings = ["|".join(row) for row in inRows]
+    inStr = "||".join(rowsAsStrings)
+    md5 = hashlib.md5(inStr.encode("utf8")).hexdigest()
+    logging.debug("New Md5: %s" % md5)
+
+    if md5==oldMd5:
+        logging.debug("No change. Stop.")
+        return None, None, None
+
+
+    headers = None
+    rows = []
+
+    i = 0
+    for row in inRows:
+        #l = l.rstrip("\n\r")
+        i+=1
+        #logging.debug("line: %s" % l)
+        if i > MAXLINES:
+            print("too many lines")
+            break
+
+        if str(row[0]).startswith("#"):
+            continue
+
+        #row = l.split("\t")
+        if len(row)==0:
+            logging.debug("line %d: empty line" % i)
+            continue
+
+        if row[0]=="Start" and headers is None:
+            headers = row
+            continue
+
+        assert(headers!=None)
+        if len(row)!=len(headers):
+            print("line %d: number of fields is %d, but have %d headers" % (i, len(row), len(headers)))
+            continue
+
+        if not str(row[0]).isdigit():
+            print("line %d: start pos is not a number" % (i))
+            continue
+        if not str(row[1]).isdigit():
+            print("line %d: end pos is not a number" % (i))
+            continue
+
+        start = int(row[0])
+        end = int(row[1])
+
+        if end < start:
+            print("line %d: end pos is not after start pos" % (i))
+            continue
+        if start < 0 or end < 0:
+            print("line %d: start or end pos is negative" % (i))
+            continue
+
+        row[0] = start
+        row[1] = end
+
+        logging.debug("Accepted row: %s" % row)
+        rows.append(row)
+
+    assert(headers[0]=="Start")
+    assert(headers[1]=="End")
+    return headers, rows, md5
+
+def makeBb(headers, rows, bbFname):
+    " make bed and autosql file and convert to bb file "
+    asFname = join(TMPDIR, "temp.as")
+    afh = open(asFname, "w")
+    afh.write(asBed4)
+
+    otherHeaders = headers[3:]
+    for colIdx, oh in enumerate(otherHeaders):
+        fieldName = "extraField%d" % colIdx
+        fieldDesc = cleanString(oh)
+        fieldDesc = fieldDesc[:150] # limit field length
+        afh.write('     lstring %s;   "%s"\n' % (fieldName, oh))
+
+    afh.write(")\n")
+    afh.close()
+
+    bedFname = join(TMPDIR, "temp.bed")
+    bedFh = open(bedFname, "wt")
+
+    rows.sort() # numbers should be sorted correctly, since they're ints
+
+    for row in rows:
+        newRow = [chromName, row[0], row[1]]
+        bedName = row[2]
+        if len(bedName) > 17:
+            bedName = bedName[:16]+"..."
+        newRow.append(bedName)
+
+        newRow.extend(["0", "+", row[0], row[1], "0"])
+
+        otherCols = row[3:]
+        for oc in otherCols:
+            if oc.startswith("http"):
+                oc = "<a target=_blank href='%s'>%s</a>" % (oc, oc)
+            newRow.append(oc[:MAXFIELDLEN])
+
+        newRow = [str(x) for x in newRow]
+
+        bedFh.write("\t".join(newRow))
+        bedFh.write("\n")
+        logging.debug("Wrote bed row: %s" % newRow)
+    bedFh.close()
+
+    bbTmp = bbFname+".tmp"
+    cmd = ["bedToBigBed", "-tab", "-type=bed9+", "-as="+asFname, bedFname, chromSizes, bbTmp]
+
+    fnull = open(os.devnull, 'w')
+    proc = subprocess.run(cmd, stderr=fnull)
+    if proc.returncode != 0:
+        print("could not convert to bigBed")
+        sys.exit(1)
+
+    os.rename(bbTmp, bbFname)
+
+def main():
+    args, options = parseArgs()
+
+    credFname, url, bbFname = args
+
+    oldMd5 = None
+    statusFname = bbFname+".md5"
+    if isfile(statusFname) and not options.debug:
+    #if isfile(statusFname):
+        oldMd5 = open(statusFname).read()
+        logging.debug("Old md5: %s" % oldMd5)
+
+    headers, rows, newMd5 = openTsvRows(credFname, url, oldMd5)
+
+    if headers is None:
+        return
+
+    open(statusFname, "wt").write(newMd5)
+
+    logging.debug("rows: %s" % rows)
+    makeBb(headers, rows, bbFname)
+
+main()

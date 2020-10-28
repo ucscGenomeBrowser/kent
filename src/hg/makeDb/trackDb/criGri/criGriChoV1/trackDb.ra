@@ -39,8 +39,10 @@ visibility dense
 track xenoRefGene override
 visibility dense
 
-track refGene override
-visibility pack
+## track refGene override
+## visibility pack
 
 track mrna override
 visibility hide
+
+include ../../refSeqComposite.ra

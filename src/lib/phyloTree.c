@@ -22,7 +22,9 @@ return tree;
 
 struct phyloTree *phyloOpenTree(char *fileName)
 {
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct lineFile *lf = lineFileUdcMayOpen(fileName, TRUE);
+if (lf == NULL)
+    errAbort("phyloOpenTree: Can't open '%s'", fileName);
 struct phyloTree *tree = phyloReadTree(lf);
 
 lineFileClose(&lf);
@@ -112,7 +114,12 @@ if(ptr > start)
 if (*ptr == ':')
     {
     ptr++;
-    sscanf(ptr, "%lg", &pName->length);
+    char *lStart = ptr;
+    while (isdigit(*ptr) || *ptr == '.' || *ptr == 'e' || *ptr == 'E' || *ptr == '+' || *ptr == '-')
+        ptr++;
+    int lSize = ptr - lStart;
+    if (lSize)
+        pName->length = strtod(lStart, NULL);
     while ((*ptr != '[') && (*ptr != ')') && (*ptr != ',') && (*ptr != ';'))
 	ptr++;
     }

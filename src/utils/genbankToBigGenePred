@@ -1,0 +1,209 @@
+#!/usr/bin/env python
+
+import logging, sys, optparse, json, subprocess
+from collections import defaultdict
+from os.path import join, basename, dirname, isfile, expanduser
+
+from Bio import SeqIO # not found? Install with pip --user install biopython --upgrade
+
+# ==== functions =====
+    
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("usage: %prog [options] filename")
+
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    #parser.add_option("-f", "--file", dest="file", action="store", help="run on file") 
+    #parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+    (options, args) = parser.parse_args()
+
+    if args==[]:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+        logging.getLogger().setLevel(logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+        logging.getLogger().setLevel(logging.INFO)
+
+    return args, options
+
+def writeQualifiers(ft, ofh):
+    for key, vals in ft.qualifiers.items():
+        ofh.write(key+"\t"+"|".join(vals)+"\n")
+
+doneProducts = set() # products can be duplicated. let's just skip anything with a duplicated name for now
+
+def writeFeatures(ft, chromName, ofh, isGenePred=False, rec=None, nameField="type"):
+    global doneProducts
+    strand = "+"
+    if ft.strand==-1:
+        strand = "-"
+    elif ft.strand==0:
+        strand = "."
+    start = ft.location.start
+    end = ft.location.end
+    size = ft.location.end-ft.location.start
+
+    geneList =  ft.qualifiers.get("gene")
+    geneId = ""
+    if geneList and len(geneList)==1:
+        geneId = geneList[0]
+
+    # requested by Jason Fernandes, email Apr 29, 2020, 9:34 PM
+    if chromName=="NC_045512v2" and start==265 and end==13483:
+        geneId = "ORF1a"
+
+    prodList =  ft.qualifiers.get("product")
+    prod = ""
+    if prodList and len(prodList)==1:
+        prod = prodList[0]
+
+    if nameField=="product" and prod in doneProducts:
+        return
+
+    doneProducts.add(prod)
+
+    # set the BED name field
+    if nameField=="gene":
+        name = geneId
+    elif nameField=="product":
+        name = prod
+        geneId = prod
+    else:
+        name = ft.type
+
+    # extract a few qualifiers and assign to variables
+    protId =  ft.qualifiers.get("protein_id")
+    if protId and len(protId)==1:
+        protId = protId[0]
+
+    dbx =  ft.qualifiers.get("db_xref")
+    xrefs = {}
+    if dbx and len(dbx)==1:
+        for part in dbx[0].split():
+            # "GeneID:43740578"
+            k, v = part.split(":")
+            xrefs[k] = v
+
+    color = "0"
+
+    exonSizes = []
+    exonStarts = []
+    for p in ft.location.parts:
+        exSize = p.end-p.start
+        exStart = p.start-start
+        exonSizes.append(str(exSize))
+        exonStarts.append(str(exStart))
+
+    exonSizStr = ",".join(exonSizes)
+    exonStStr = ",".join(exonStarts)
+
+    # XX - what am I going to do here? Exonframe right now are ALL to 0 FIX ONE DAY
+    exonFrames = ",".join(["0"]*len(exonSizes))
+
+    # bed 12
+    row = [chromName, str(start), str(end), name, "0", strand, start, end, color, str(len(exonSizes)),  \
+            exonSizStr, exonStStr]
+
+    #    string name2;       "Alternative/human readable name"
+    #string cdsStartStat; "Status of CDS start annotation (none, unknown, incomplete, or complete)"
+    #string cdsEndStat;   "Status of CDS end annotation (none, unknown, incomplete, or complete)"
+    #int[blockCount] exonFrames; "Exon frame {0,1,2}, or -1 if no frame for exon"
+    #string type;        "Transcript type"
+    #string geneName;    "Primary identifier for gene"
+    #string geneName2;   "Alternative/human readable gene name"
+    #string geneType;    "Gene type"
+    #string note;    "Notes"
+    #string product;    "Protein Product ID"
+    #string geneId;    "NCBI Gene ID"
+    #string _cdnaSeq;    "cDNA Sequence"
+    #string _cdnaPsl;    "cDNA to genome PSL alignment (or empty)"
+    #string _protSeq;    "Protein Sequence"
+    #string _protPsl;    "protein to cDNA PSL alignment (or empty)"
+    if isGenePred:
+        row.append(geneId)
+        row.append("cmpl") # ???
+        row.append("cmpl")
+        row.append(exonFrames) # exonFrames
+        row.append("N.a.") # transcript type
+        row.append(geneId) # Primary identifier for gene
+        row.append(geneId) # Alternative/human readable gene name
+        row.append("N.a.") # Gene type
+        row.append(ft.qualifiers.get("note", [""])[0]) # Notes
+        row.append(protId) # Protein product ID
+        row.append(xrefs.get("GeneID", "")) # NCBI Gene ID
+        row.append(str(ft.extract(rec).seq)) # Gene type
+        row.append("") # cDNA PSL
+        row.append(repr(ft.qualifiers)) # protein sequence
+        row.append("") # prot to cDNA PSL
+        #row.append(repr(ft.qualifiers)) # anythign else
+    else:
+        row.append(ft.qualifiers.get("inference", [""])[0])
+        row.append(ft.qualifiers.get("function", [""])[0])
+        #row.append(repr(ft.qualifiers)) # anythign else, for debugging
+
+    row = [str(x) for x in row]
+    ofh.write("\t".join(row))
+    ofh.write("\n")
+
+def bedToBigBed(fname, chromSizes, asName, bbDir):
+    " convert bed to bigBed "
+    cmd = ["bedSort", fname, fname]
+    assert (subprocess.call(cmd)==0)
+
+    outFname = basename(fname).replace(".bed", ".bb")
+    cmd = ["/cluster/home/braney/bin/x86_64/bedToBigBed", "-tab", "-type=bed12+", "-as="+asName, fname, chromSizes, join(bbDir, outFname), "-extraIndex=name", "-allow1bpOverlap"]
+    logging.info("Running: "+(" ".join(cmd)))
+    ret = subprocess.call(cmd)
+    assert(ret==0)
+
+def gbToBigGenePred(fname, chromName, chromSizes, outDir, bbDir):
+    outFnames = {
+            "source" : join(outDir, "source.ra"),
+            "genes" : join(outDir, "genes.bed"),
+            "peptides" : join(outDir, "peptides.bed"),
+            "other" : join(outDir, "other.bed"),
+            }
+
+    outFhs = {}
+    for k, val in outFnames.items():
+        outFhs[k] = open(val, "w")
+
+    for rec in SeqIO.parse(fname, "genbank"):
+        for ft in rec.features:
+            ftType = ft.type
+            if ftType=="source":
+                writeQualifiers(ft, outFhs["source"])
+            elif ftType=="mat_peptide":
+                writeFeatures(ft, chromName, outFhs["peptides"], isGenePred=True, rec=rec, nameField="product")
+            elif ftType == "gene":
+                pass # cannot do anything with these right now, are they useful at all?
+            elif ftType in ["CDS"]:
+                writeFeatures(ft, chromName, outFhs["genes"], isGenePred=True, rec=rec, nameField="gene")
+            else:
+                writeFeatures(ft, chromName, outFhs["other"])
+
+    for ofh in outFhs.values():
+        ofh.close()
+
+
+    for key, fname in outFnames.items():
+        if key=="source":
+            continue
+        asName = "~/kent/src/hg/lib/genbankBed12.as"
+        if key in ["genes", "peptides"]:
+            asName = "~/kent/src/hg/lib/genbankBigGenePred.as"
+        asName = expanduser(asName)
+        bedToBigBed(fname, chromSizes, asName, bbDir)
+
+# ----------- main --------------
+def main():
+    args, options = parseArgs()
+
+    fname, chromName, chromSizes, outDir, bbDir = args
+    gbToBigGenePred(fname, chromName, chromSizes, outDir, bbDir)
+
+main()

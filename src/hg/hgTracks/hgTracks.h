@@ -44,6 +44,8 @@
 #endif /* ITEMATTR_H */
 #endif /* GBROWSE */
 
+#include "soTerm.h"
+
 /* A few hgGenome cart constant defaults copied from */
 #define hggPrefix "hgGenome_"
 #define hggGraphPrefix hggPrefix "graph"
@@ -480,6 +482,9 @@ extern char *emGeneTable;           /* Gene table to use for exon mostly */
 extern struct track *emGeneTrack;   /* Track for gene table for exon mostly */
 extern struct rgbColor vertWindowSeparatorColor; /* color for vertical windows separator */
 extern char *multiRegionsBedUrl;       /* URL to bed regions list */
+
+// is genome RNA?
+extern boolean genomeIsRna;
 
 // demo2
 extern int demo2NumWindows;
@@ -1020,6 +1025,9 @@ void mafMethods(struct track *tg);
 void bamMethods(struct track *track);
 /* Methods for BAM alignment files. */
 
+void vcfPhasedMethods(struct track *track);
+/* Load items from a VCF of one individuals phased genotypes */
+
 void vcfTabixMethods(struct track *track);
 /* Methods for Variant Call Format compressed & indexed by tabix. */
 
@@ -1526,6 +1534,8 @@ void pgSnpMethods (struct track *tg);
 /* Personal Genome SNPs: show two alleles with stacked color bars for base alleles and
  * (if available) allele counts in mouseover. */
 
+int pgSnpHeight(struct track *tg, enum trackVisibility vis);
+
 void pgSnpCtMethods (struct track *tg);
 /* Load pgSnp track from custom tracks */
 
@@ -1675,6 +1685,9 @@ void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut);
 void labelTrackAsFiltered(struct track *tg);
 /* add text to track long label to indicate filter is active */
 
+void labelTrackAsHideEmpty(struct track *tg);
+/* add text to track long label to indicate empty subtracks are hidden */
+
 void setupHotkeys(boolean gotExtTools);
 /* setup keyboard shortcuts and a help dialog for it */
 
@@ -1691,6 +1704,25 @@ Color blackItemNameColor(struct track *tg, void *item, struct hvGfx *hvg);
 void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height);
+
+boolean recTrackSetsEnabled();
+/* Return TRUE if feature is available */
+
+boolean recTrackSetsChangeDetectEnabled();
+/* Return TRUE if feature is available, in hgConf */
+
+int recTrackSetsForDb();
+/* Return number of recommended track sets for this database */
+
+boolean hasRecTrackSet(struct cart *cart);
+/* Check if currently loaded session is in the recommended track set */
+
+void printRecTrackSets();
+/* Create dialog with list of recommended track sets */
+
+Color colorFromSoTerm(enum soTerm term);
+/* Assign a Color according to soTerm: red for non-synonymous, green for synonymous, blue for
+ * UTR/noncoding, black otherwise. */
 
 #endif /* HGTRACKS_H */
 

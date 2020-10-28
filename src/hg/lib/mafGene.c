@@ -269,10 +269,7 @@ int exonCount = 0;
 struct exonInfo *gi = giList;
 
 for(; gi; gi = gi->next)
-    {
-    if (gi->exonSize > 1)
-	exonCount++;
-    }
+    exonCount++;
 
 for(gi = giList; gi; gi = gi->next, exonNum++)
     {

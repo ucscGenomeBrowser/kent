@@ -88,13 +88,18 @@ int i;
 int x1, x2;
 Color clr;
 
-for (i=0; i<count; i++, text++, scores++)
+for (i=0; i<count; i++, text++)
     {
     x1         = i * width / count;
     x2         = (i+1) * width/count;
-    clr        = colorIxs[assignBin(*scores, minScore, maxScore, maxShade+1)];
+    if (scores)
+        clr        = colorIxs[assignBin(*scores, minScore, maxScore, maxShade+1)];
+    else
+        clr        = colorIxs[maxShade];
     c[0]       = *text;
     hvGfxTextCentered(hvg, x1+x, y, x2-x1, height, clr, font, c);
+    if (scores)
+        scores++;
     }
 }
 
@@ -109,15 +114,19 @@ void spreadRnaFoldAnno(struct hvGfx *hvg, int x, int y, int width, int height, C
 /* Draw parenthesis structure which defines rna secondary structure. */
 {
 char *fold     = cloneString(item->secStr);
-double *scores = CloneArray(item->conf, item->size);
+double *scores = NULL;
+if (item->conf != NULL)
+    scores = CloneArray(item->conf, item->size);
 if (*item->strand == '-')
 {
     reverseFold(fold);
-    reverseDoubles(scores, item->size);
+    if (scores)
+        reverseDoubles(scores, item->size);
 }
 spreadAndGrayShadeString(hvg, x, y, width, height, font, fold, item->size, scores, 0.0, 1.0);
 freeMem(fold);
-freeMem(scores);
+if (scores)
+    freeMem(scores);
 }
 
 

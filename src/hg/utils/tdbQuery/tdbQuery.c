@@ -267,20 +267,23 @@ for (p=list; p != NULL; p = p->next)
 return p;
 }
 
-unsigned buildReleaseBits(struct tdbRecord *record, char *rel)
+unsigned buildReleaseBits(struct tdbRecord *record)
 /* unpack the comma separated list of possible release tags */
 {
+char *rel = tdbRecordFieldVal(record, "release");
 
 if (rel == NULL)
     return RELEASE_ALPHA |  RELEASE_BETA |  RELEASE_PUBLIC;
 
+char relCpy[strlen(rel) + 1];
+safecpy(relCpy, sizeof relCpy, rel);
+rel = relCpy;
 unsigned bits = 0;
 while(rel)
     {
     char *end = strchr(rel, ',');
-
     if (end)
-	*end = 0;
+	*end++ = 0;
     rel = trimSpaces(rel);
 
     if (sameString(rel, "alpha"))
@@ -290,11 +293,9 @@ while(rel)
     else if (sameString(rel, "public"))
 	bits |= RELEASE_PUBLIC;
     else
-	errAbort("Tracks must have a release combination of alpha, beta, and public on line %d of %s",
-		tdbRecordLineIx(record), tdbRecordFileName(record));
-
-    if (end)
-	*end++ = ',';
+	errAbort("Tracks must have a release combination of alpha, beta, and public on line %d of %s"
+                 "(not '%s')",
+                 tdbRecordLineIx(record), tdbRecordFileName(record), rel);
     rel = end;
     }
 
@@ -304,31 +305,28 @@ return bits;
 boolean recordMatchesRelease( struct tdbRecord *record, unsigned currentReleaseBit)
 /* Return TRUE if record is compatible with release. */
 {
-unsigned bits;
-char *release = NULL;
-struct tdbField *releaseField = tdbRecordField(record, "release");
-
-if (releaseField != NULL)
-    release = releaseField->val;
-
-bits = buildReleaseBits(record, release);
+unsigned bits = buildReleaseBits(record);
 if (bits & currentReleaseBit)
     return TRUE;
 
 return FALSE;
 }
 
-boolean compatibleReleases(char *a, char *b)
-/* Return TRUE if either a or b is null, or if a and b are the same. */
+boolean compatibleReleases(struct tdbRecord *a, struct tdbRecord *b, unsigned currentReleaseBit)
+/* Return TRUE if either a or b release is null, or if a and b are the same regarding the
+ * current release. */
 {
-return a == NULL || b == NULL || sameString(a, b);
+return (tdbRecordFieldVal(a, "release") == NULL ||
+        tdbRecordFieldVal(b, "release") == NULL ||
+        recordMatchesRelease(a, currentReleaseBit) == recordMatchesRelease(b, currentReleaseBit));
 }
 
-boolean sameKeyCompatibleRelease(struct tdbRecord *a, struct tdbRecord *b)
+boolean sameKeyCompatibleRelease(struct tdbRecord *a, struct tdbRecord *b,
+                                 unsigned currentReleaseBit)
 /* Return TRUE if a and b have the same key and compatible releases. */
 {
 return sameString(a->key, b->key) &&
-	compatibleReleases(tdbRecordFieldVal(a, "release"), tdbRecordFieldVal(b, "release"));
+       compatibleReleases(a, b, currentReleaseBit);
 }
 
 struct tdbRecord *filterOnRelease( struct tdbRecord *list, unsigned currentReleaseBit)
@@ -385,28 +383,8 @@ for (field = record->fieldList; field != NULL; field = field->next)
 hashFree(&uniqHash);
 }
 
-static struct tdbField *findFieldInSelfOrParents(struct tdbRecord *record, char *fieldName)
-/* Find field if it exists in self or ancestors. */
-{
-struct tdbRecord *p;
-for (p = record; p != NULL; p = p->parent)
-    {
-    struct tdbField *field = tdbRecordField(p, fieldName);
-    if (field != NULL)
-        return field;
-    }
-return NULL;
-}
-
-static char *findFieldValInSelfOrParents(struct tdbRecord *record, char *fieldName)
-/* Find value of given field if it exists in self or ancestors.  Return NULL if
- * field does not exist. */
-{
-struct tdbField *field = findFieldInSelfOrParents(record, fieldName);
-return (field != NULL ? field->val : NULL);
-}
-
-static void checkDupeKeys(struct tdbRecord *recordList, boolean checkRelease)
+static void checkDupeKeys(struct tdbRecord *recordList, boolean checkRelease,
+                          unsigned currentReleaseBit)
 /* Make sure that there are no duplicate records (with keys) */
 {
 struct tdbRecord *record;
@@ -424,12 +402,7 @@ for (record = recordList; record != NULL; record = record->next)
 	    struct tdbFilePos *newPos = record->posList;
 	    boolean doAbort = TRUE;
 	    if (checkRelease)
-		{
-		doAbort = FALSE;
-		char *oldRelease = findFieldValInSelfOrParents(oldRecord, "release");
-		char *newRelease = findFieldValInSelfOrParents(record, "release");
-		doAbort = compatibleReleases(oldRelease, newRelease);
-		}
+		doAbort = compatibleReleases(oldRecord, record, currentReleaseBit);
 	    if (doAbort)
 		{
 		char *oldRelease = tdbRecordFieldVal(oldRecord, "release");
@@ -588,12 +561,12 @@ return distance;
 }
 
 static struct tdbRecord *findParent(struct tdbRecord *rec,
-                                    char *parentFieldName, struct hash *hash)
+                                    char *parentFieldName, struct hash *hash,
+                                    unsigned currentReleaseBit)
 /* Find parent record if possible.  This is a bit complicated by wanting to
  * match parents and children from the same release if possible.  Our
  * strategy is to just ignore records from the wrong release. */
 {
-char *release = tdbRecordFieldVal(rec, "release");
 if (clNoCompSub)
     return NULL;
 struct tdbField *parentField = tdbRecordField(rec, parentFieldName);
@@ -610,7 +583,7 @@ int closestDistance = BIGNUM;
 for (hel = hashLookup(hash, parentName); hel != NULL; hel = hashLookupNext(hel))
     {
     struct tdbRecord *parent = hel->val;
-    if (compatibleReleases(release, tdbRecordFieldVal(parent, "release")))
+    if (compatibleReleases(rec, parent, currentReleaseBit))
 	{
 	int distance = parentChildFileDistance(parent, rec);
 	if (distance < closestDistance)
@@ -623,7 +596,8 @@ for (hel = hashLookup(hash, parentName); hel != NULL; hel = hashLookupNext(hel))
 if (closestParent != NULL)
     return closestParent;
 
-recordWarn(rec, "parent %s of %s release %s doesn't exist", parentName, rec->key, naForNull(release));
+recordWarn(rec, "parent %s of %s release %s doesn't exist", parentName, rec->key,
+           naForNull(tdbRecordFieldVal(rec, "release")));
 return NULL;
 }
 
@@ -647,7 +621,7 @@ for (rec = list; rec != NULL; rec = rec->next)
 /* Scan through linking up parents. */
 for (rec = list; rec != NULL; rec = rec->next)
     {
-    struct tdbRecord *parent = findParent(rec, parentField, hash);
+    struct tdbRecord *parent = findParent(rec, parentField, hash, currentReleaseBit);
     if (parent != NULL)
 	{
 	rec->parent = parent;
@@ -676,14 +650,14 @@ for (fileLevel = fileLevelList; fileLevel != NULL; fileLevel = fileLevel->next)
     fileRecords = filterOnRelease(fileRecords, currentReleaseBit);
     verbose(2, "After filterOnRelease %d records\n", slCount(fileRecords));
     linkUpParents(fileRecords, parentField, currentReleaseBit);
-    checkDupeKeys(fileRecords, TRUE);
+    checkDupeKeys(fileRecords, TRUE, currentReleaseBit);
     struct tdbRecord *record, *nextRecord;
     for (record = fileRecords; record != NULL; record = nextRecord)
 	{
 	nextRecord = record->next;
 	char *key = record->key;
 	struct tdbRecord *oldRecord = hashFindVal(recordHash, key);
-	if (oldRecord != NULL && sameKeyCompatibleRelease(record, oldRecord))
+	if (oldRecord != NULL && sameKeyCompatibleRelease(record, oldRecord, currentReleaseBit))
 	    {
 	    if (!record->override)
 		{
@@ -907,12 +881,14 @@ for (childFp = child->posList; childFp != NULL; childFp = childFp->next)
     }
 }
 
-static boolean isFilter(char *name)
+static boolean isComplex(char *name)
 /* Check to see if this is one of the filter variables that have arbitrary initial strings. */
 {
+if (startsWith("yAxisLabel.", name))
+    return TRUE;
 if (startsWith("filter.", name))
     return TRUE;
-if (startsWith("filterValues.", name))
+if (startsWith("filterValues", name))
     return TRUE;
 if (startsWith("filterType.", name))
     return TRUE;
@@ -950,7 +926,7 @@ for (record = recordList; record != NULL; record = record->next)
     struct tdbField *field;
     for (field = record->fieldList; field != NULL; field = field->next)
         {
-        if (isFilter(field->name))
+        if (isComplex(field->name))
             continue;
 
 	struct slName *typeList = rqlHashFindValEvenInWilds(glTagTypes, field->name);
@@ -1036,7 +1012,7 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
     verbose(2, "Composed %d records from %s\n", slCount(recordList), db);
     inheritFromParents(recordList, "parent", "noInherit", releaseBit, lm);
     linkUpParents(recordList, "parent", releaseBit);
-    checkDupeKeys(recordList, FALSE);
+    checkDupeKeys(recordList, FALSE, releaseBit);
 
     if (clCheck)
         doRecordChecks(recordList, lm);

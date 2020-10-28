@@ -1,0 +1,27 @@
+cd /hive/data/genomes/wuhCor1/bed/kim2020
+wget http://cookies.qbio.io:18080/kim-2020-scv2-gbtracks/kim-scv2-drs-leader-to-body-breakpoints.bigWig
+wget http://cookies.qbio.io:18080/kim-2020-scv2-gbtracks/kim-scv2-drs-3p-breakpoints.bigWig
+wget http://cookies.qbio.io:18080/kim-2020-scv2-gbtracks/kim-scv2-drs-modifications.bb
+wget http://cookies.qbio.io:18080/kim-2020-scv2-gbtracks/kim-scv2-mgiseq-3p-breakpoints.bigWig
+wget http://cookies.qbio.io:18080/kim-2020-scv2-gbtracks/kim-scv2-mgiseq-5p-breakpoints.bigWig
+wget http://cookies.qbio.io:18080/kim-2020-scv2-gbtracks/kim-scv2-drs-5p-breakpoints.bigWig
+cd /gbdb/wuhCor1/bbi/kim2020/
+for i in `ls /hive/data/genomes/wuhCor1/bed/kim2020/*.b*`; do ln -s $i; done
+
+#generate the bed12 for all transcripts from Table S2
+awk -v OFS="\t" '{if($3 > 1000){$3=1000} else {$3 = int($3/100)}} {print "NC_045512v2", "0", "29903", "RNA_"NR, $3, "+", "0", "0", "0,0,0", "2", $1","29903-$2, 0","$2}' Kim_TableS2.tab > Kim_recombination.bed 
+bedSort Kim_recombination.bed Kim_recombination.bed 
+bedToBigBed Kim_recombination.bed ../wuhCor1.sizes Kim_recombination.bb
+
+#generate the bed12 for TRS transcripts from Table S3
+awk -F"\t" -v OFS="\t" '{if($3 > 1000){$3=1000} else {$3 = int($3/100)}}{if ($10==""){$10="unknown"}}{print "NC_045512v2", "0", "29903", $10, $3, "+", $4, $4+$5*3, "0,0,0", "2", $1","29903-$2, 0","$2}' Kim_TableS3.tab > Kim_TRS.bed 
+awk '$5>1' Kim_TRS.bed > Kim_TRS_filter.bed 
+bedSort Kim_TRS_filter.bed Kim_TRS_filter.bed
+bedToBigBed Kim_TRS_filter.bed ../wuhCor1.sizes Kim_TRS_filter.bb
+
+
+#generate the bed12 for TRS transcripts from Table S4
+awk -F"\t" -v OFS="\t" '{if($1 > 1000){$1=1000}}{print "NC_045512v2", "0", "29903", $5, $1, "+", 265, 2155, "0,0,0", "2", $2","29903-$3, 0","$3}' Kim_TableS4.tab > Kim_notTRS.bed 
+awk '$5>100' Kim_notTRS.bed > Kim_notTRS_filter.bed
+bedSort Kim_notTRS_filter.bed Kim_notTRS_filter.bed
+bedToBigBed Kim_notTRS_filter.bed ../wuhCor1.sizes Kim_notTRS.bb

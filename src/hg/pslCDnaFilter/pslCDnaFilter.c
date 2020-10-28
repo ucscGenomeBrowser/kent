@@ -63,7 +63,6 @@ static struct optionSpec optionSpecs[] =
     {"weirdOverlapped", OPTION_STRING},
     {"filterWeirdOverlapped", OPTION_BOOLEAN},
     {"noValidate", OPTION_BOOLEAN},
-    {"alignStats", OPTION_STRING},
     {"hapRefMapped", OPTION_STRING},
     {"hapRefCDnaAlns", OPTION_STRING},
     {"hapLociAlns", OPTION_STRING},

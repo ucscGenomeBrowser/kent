@@ -18,61 +18,50 @@ today=`date +%F`
 cd $today
 
 # count columns and make sure new files have 6 columns
-new19Cc=`cat lovd.hg19.bed | $TAWK '(NF!=6)' | wc -l`
-#new18Cc=`cat lovd.hg18.bed | $TAWK '(NF!=6)' | wc -l`
+new38Cc=`cat lovd.hg38.bed | $TAWK '(NF!=7)' | wc -l`
+new19Cc=`cat lovd.hg19.bed | $TAWK '(NF!=7)' | wc -l`
+if [ "$new38Cc" -ne "0" ]; then
+        echo LVOD hg38 $today: found rows with not six columns, quitting
+        exit 255
+fi
 if [ "$new19Cc" -ne "0" ]; then
         echo LVOD hg19 $today: found rows with not six columns, quitting
         exit 255
 fi
 
-#if [ "$new18Cc" -ne "0" ]; then
-#        echo LVOD hg18 $today: found rows with not six columns, quitting
-#        exit 255
-#fi
+for db in hg38 hg19
+do
+    if [ ${db} == "hg19" ]
+    then
+        $KENTBIN/bedClip lovd.${db}.bed /cluster/data/${db}/chrom.sizes stdout | sed -e 's/^chrM/chrMT/g' > lovd.${db}.clipped.bed
+    else
+        $KENTBIN/bedClip lovd.${db}.bed /cluster/data/${db}/chrom.sizes lovd.${db}.clipped.bed
+    fi
 
-# compare old and new line counts and abort if no increase
-$KENTBIN/bedClip lovd.hg19.bed /cluster/data/hg19/chrom.sizes stdout | sed -e 's/^chrM/chrMT/g' > lovd.hg19.clipped.bed
-echo 
-cat lovd.hg19.clipped.bed | awk '(($3-$2)<=100)' > lovd.hg19.short.bed
-echo -e 'chrM\t0\t16571\tCheck chrMT\tPlease look at chrMT, not chrM, for LOVD annotations.\t' >> lovd.hg19.short.bed
-cat lovd.hg19.clipped.bed | awk '(($3-$2)>100)' > lovd.hg19.long.bed
-echo -e 'chrM\t0\t16571\tCheck chrMT\tPlease look at chrMT, not chrM, for LOVD annotations.\t' >> lovd.hg19.long.bed
-old19ShortLc=`$KENTBIN/hgsql hg19 -e "SELECT COUNT(*) from lovdShort" -NB`
-old19LongLc=`$KENTBIN/hgsql hg19 -e "SELECT COUNT(*) from lovdLong" -NB`
-new19ShortLc=`wc -l lovd.hg19.short.bed | cut -d' ' -f1 `
-new19LongLc=`wc -l lovd.hg19.long.bed | cut -d' ' -f1 `
+    sort -k1,1 -k2,2n lovd.${db}.clipped.bed | tawk '(($3-$2)<50)' > lovd.${db}.short.bed
+    # the long variants turn into bed9+ so that mergeSpannedItems works:
+    sort -k1,1 -k2,2n lovd.${db}.clipped.bed | tawk '(($3-$2)>=50){print $1,$2,$3,$4,0,".",$2,$3,"0,0,0",$5,$6,$7}' > lovd.${db}.long.bed
+    if [ ${db} == "hg19" ]
+    then
+        echo -e 'chrM\t0\t16571\tCheck chrMT\tPlease look at chrMT, not chrM, for LOVD annotations.\t\t' >> lovd.${db}.short.bed
+        echo -e 'chrM\t0\t16571\tCheck chrMT\t0\t.\t0\t16571\t0,0,0\tPlease look at chrMT, not chrM, for LOVD annotations.\t\t' >> lovd.${db}.long.bed
+    fi
 
-echo hg19 short rowcount: old $old19ShortLc new: $new19ShortLc
-echo hg19 long rowcount: old $old19LongLc new: $new19LongLc
+    sort -k1,1 -k2,2n lovd.${db}.short.bed > lovd.${db}.short.bed.sorted
+    sort -k1,1 -k2,2n lovd.${db}.long.bed > lovd.${db}.long.bed.sorted
+    oldShortLc=`bigBedToBed ../release/${db}/lovd.${db}.short.bb stdout | wc -l`
+    oldLongLc=`bigBedToBed ../release/${db}/lovd.${db}.long.bb stdout | wc -l`
+    newShortLc=`wc -l lovd.${db}.short.bed.sorted | cut -d' ' -f1`
+    newLongLc=`wc -l lovd.${db}.long.bed.sorted | cut -d' ' -f1`
+    echo ${db} short rowcount: old $oldShortLc new: $newShortLc
+    echo ${db} long rowcount: old $oldLongLc new: $newLongLc
+    echo $oldShortLc $newShortLc | awk -v d=${db} '{if (($2-$1)/$1 > 0.1) {printf "validate on %s LOVD short failed: old count: %d, new count: %d\n", d,$1,$2; exit 1;}}'
+    echo $oldLongLc $newLongLc | awk -v d=${db} '{if (($2-$1)/$1 > 0.1) {printf "validate on %s LOVD long failed: old count: %d, new count: %d\n", d,$1,$2; exit 1;}}'
 
-if [ "$new19ShortLc" -eq "$old19ShortLc" ]; then
-        echo LOVD hg19 short: rowcount for $today is equal to old rowcount in mysql, quitting
-        exit 0
-fi
+    bedToBigBed -type=bed4+3 -tab -as=../lovd.short.as lovd.${db}.short.bed.sorted /cluster/data/${db}/chrom.sizes lovd.${db}.short.bb
+    bedToBigBed -type=bed9+3 -tab -as=../lovd.long.as lovd.${db}.long.bed.sorted /cluster/data/${db}/chrom.sizes lovd.${db}.long.bb
+    mkdir -p ${WORKDIR}/release/${db}
+    cp lovd.${db}.{short,long}.bb ${WORKDIR}/release/${db}/
+done
 
-if [ "$new19LongLc" -eq "$old19LongLc" ]; then
-        echo LOVD hg19 long: rowcount for $today is equal to old rowcount in mysql, quitting
-        exit 0
-fi
-
-if [ "$new19ShortLc" -lt "$old19ShortLc" ]; then
-        echo LOVD hg19 short: rowcount for $today is smaller to old rowcount in mysql, quitting
-        exit 255
-fi
-
-if [ "$new19LongLc" -lt "$old19LongLc" ]; then
-        echo LOVD hg19 long: rowcount for $today is smaller to old rowcount in mysql, quitting
-        exit 255
-fi
-
-echo $old19ShortLc $new19ShortLc | awk '{if (($2-$1)/$1 > 0.1) printf "validate on hg19 LOVD short failed: old count: %d, new count: %d\n", $1,$2; exit 1;}'
-echo $old19LongLc $new19LongLc | awk '{if (($2-$1)/$1 > 0.1) printf "validate on hg19 LOVD long failed: old count: %d, new count: %d\n", $1,$2; exit 1;}'
-
-# bedDetail4.sql was generated like this:
-# egrep -v 'score|strand|thick|reserved|block|chromStarts' /cluster/home/max/kent/src/hg/lib/bedDetail.sql > bedDetail4.sql 
-# need to use bedClip as current files include invalid coords which LOVD won't fix.
-#$KENTBIN/bedClip lovd.hg19.bed /cluster/data/hg19/chrom.sizes lovd.hg19.clipped.bed
-cat lovd.hg19.short.bed | $KENTBIN/hgLoadBed hg19 lovdShort stdin -tab -sqlTable=../bedDetail4.sql -renameSqlTable -noBin
-cat lovd.hg19.long.bed | $KENTBIN/hgLoadBed hg19 lovdLong stdin -tab -sqlTable=../bedDetail4.sql -renameSqlTable -noBin
-#$KENTBIN/bedClip lovd.hg18.bed /cluster/data/hg18/chrom.sizes stdout | $KENTBIN/hgLoadBed hg18 lovd stdin  -tab -sqlTable=../bedDetail4.sql -renameSqlTable -noBin
 echo LOVD update: OK

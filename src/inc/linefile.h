@@ -167,6 +167,9 @@ void lineFileVaAbort(struct lineFile *lf, char *format, va_list args);
 void lineFileUnexpectedEnd(struct lineFile *lf);
 /* Complain about unexpected end of file. */
 
+void lineFileExpectWordsMesg(struct lineFile *lf, int expecting, int got, char* extraMessage);
+/* Check line has right number of words. Add extraMessage to end of error message. */
+
 void lineFileExpectWords(struct lineFile *lf, int expecting, int got);
 /* Check line has right number of words. */
 

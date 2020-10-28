@@ -710,8 +710,14 @@ cp wuhCor1.ncbiGene.bed  extra.wuhCor1.ncbiGene.bed
 
 bedToBigBed -type=bed12+10 -tab -as=ncbiGene.as       -extraIndex=name extra.wuhCor1.ncbiGene.bed         ../../chrom.sizes ncbiGene.bb 
 
-cp ncbiGene.bb /gbdb/wuhCor1/ncbiGene.bb
+ln -s `pwd`/ncbiGene.bb /gbdb/wuhCor1
 
+awk '{printf "%s ",$4; for(ii=18; ii <= NF; ii++) printf "%s ",$ii; printf "%s\n",$4 }' extra.wuhCor1.ncbiGene.bed |  sed 's/\.[0-9]$//' > extra.search.txt
+
+ixIxx extra.search.txt ncbiSearch.ix ncbiSearch.ixx
+
+ln -s `pwd`/ncbiSearch.ix /gbdb/wuhCor1/
+ln -s `pwd`/ncbiSearch.ixx /gbdb/wuhCor1/
 
 #########################################################################
 #  BLATSERVERS ENTRY (DONE - 2020-01-29 - Hiram)

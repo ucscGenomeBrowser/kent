@@ -12,6 +12,7 @@ fi
 export asmId=$1
 export buildDir=$2
 export hubLinks="/hive/data/genomes/asmHubs/hubLinks"
+export accessionId=`echo "$asmId" | awk -F"_" '{printf "%s_%s", $1, $2}'`
 
 export scriptDir="$HOME/kent/src/hg/utils/automation"
 
@@ -173,8 +174,10 @@ shortLabel RepeatMasker
 longLabel Repeating Elements by RepeatMasker
 group varRep
 visibility dense
-type bed 3 .
-noInherit on
+type bigBed 6 +
+colorByStrand 50,50,150 150,50,50
+maxWindowToDraw 10000000
+spectrum on
 html html/%s.repeatMasker\n\n" "${asmId}"
 $scriptDir/asmHubRmsk.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData/repeatMasker/$asmId.rmsk.class.profile.txt > $buildDir/html/$asmId.repeatMasker.html
 fi
@@ -186,11 +189,8 @@ printf "    track repeatMaskerSINE
     parent repeatMasker
     shortLabel SINE
     longLabel SINE Repeating Elements by RepeatMasker
-    priority 1
-    spectrum on
-    maxWindowToDraw 10000000
-    colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
+    priority 1
     bigDataUrl bbi/%s.rmsk.SINE.bb\n\n" "${asmId}"
 fi
 
@@ -201,11 +201,8 @@ printf "    track repeatMaskerLINE
     parent repeatMasker
     shortLabel LINE
     longLabel LINE Repeating Elements by RepeatMasker
-    priority 2
-    spectrum on
-    maxWindowToDraw 10000000
-    colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
+    priority 2
     bigDataUrl bbi/%s.rmsk.LINE.bb\n\n" "${asmId}"
 fi
 
@@ -216,11 +213,8 @@ printf "    track repeatMaskerLTR
     parent repeatMasker
     shortLabel LTR
     longLabel LTR Repeating Elements by RepeatMasker
-    priority 3
-    spectrum on
-    maxWindowToDraw 10000000
-    colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
+    priority 3
     bigDataUrl bbi/%s.rmsk.LTR.bb\n\n" "${asmId}"
 fi
 
@@ -231,11 +225,8 @@ printf "    track repeatMaskerDNA
     parent repeatMasker
     shortLabel DNA
     longLabel DNA Repeating Elements by RepeatMasker
-    priority 4
-    spectrum on
-    maxWindowToDraw 10000000
-    colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
+    priority 4
     bigDataUrl bbi/%s.rmsk.DNA.bb\n\n" "${asmId}"
 fi
 
@@ -246,11 +237,8 @@ printf "    track repeatMaskerSimple
     parent repeatMasker
     shortLabel Simple
     longLabel Simple Repeating Elements by RepeatMasker
-    priority 5
-    spectrum on
-    maxWindowToDraw 10000000
-    colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
+    priority 5
     bigDataUrl bbi/%s.rmsk.Simple.bb\n\n" "${asmId}"
 fi
 
@@ -261,11 +249,8 @@ printf "    track repeatMaskerLowComplexity
     parent repeatMasker
     shortLabel Low Complexity
     longLabel Low Complexity Repeating Elements by RepeatMasker
-    priority 6
-    spectrum on
-    maxWindowToDraw 10000000
-    colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
+    priority 6
     bigDataUrl bbi/%s.rmsk.Low_complexity.bb\n\n" "${asmId}"
 fi
 
@@ -276,11 +261,8 @@ printf "    track repeatMaskerSatellite
     parent repeatMasker
     shortLabel Satellite
     longLabel Satellite Repeating Elements by RepeatMasker
-    priority 7
-    spectrum on
-    maxWindowToDraw 10000000
-    colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
+    priority 7
     bigDataUrl bbi/%s.rmsk.Satellite.bb\n\n" "${asmId}"
 fi
 
@@ -291,11 +273,8 @@ printf "    track repeatMaskerRNA
     parent repeatMasker
     shortLabel RNA
     longLabel RNA Repeating Elements by RepeatMasker
-    priority 8
-    spectrum on
-    maxWindowToDraw 10000000
-    colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
+    priority 8
     bigDataUrl bbi/%s.rmsk.RNA.bb\n\n" "${asmId}"
 fi
 
@@ -306,11 +285,8 @@ printf "    track repeatMaskerOther
     parent repeatMasker
     shortLabel Other
     longLabel Other Repeating Elements by RepeatMasker
-    priority 9
-    spectrum on
-    maxWindowToDraw 10000000
-    colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
+    priority 9
     bigDataUrl bbi/%s.rmsk.Other.bb\n\n" "${asmId}"
 fi
 
@@ -328,43 +304,10 @@ html html/%s.simpleRepeat\n\n" "${asmId}" "${asmId}"
 $scriptDir/asmHubSimpleRepeat.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.simpleRepeat.html
 fi
 
-# may or may not have a searchTrix for ncbiGene, assume none
-searchTrix=""
-# check to see if there is a index for ncbiGene
-if [ -s ${buildDir}/trackData/ncbiGene/$asmId.ncbiGene.ix ]; then
-  searchTrix="
-searchTrix ixIxx/$asmId.ncbiGene.ix"
-fi
-
-export haveNcbiGene="no"
-
-if [ -s ${buildDir}/trackData/ncbiGene/$asmId.ncbiGene.bb ]; then
-rm -f $buildDir/bbi/${asmId}.ncbiGene.bb
-rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ix
-rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ixx
-ln -s ../trackData/ncbiGene/$asmId.ncbiGene.bb $buildDir/bbi/${asmId}.ncbiGene.bb
-ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ix $buildDir/ixIxx/${asmId}.ncbiGene.ix
-ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ixx $buildDir/ixIxx/${asmId}.ncbiGene.ixx
-  printf "track ncbiGene
-longLabel NCBI gene predictions
-shortLabel NCBI Genes
-visibility pack
-color 0,80,150
-altColor 150,80,0
-colorByStrand 0,80,150 150,80,0
-bigDataUrl bbi/%s.ncbiGene.bb
-type bigGenePred
-html html/%s.ncbiGene
-searchIndex name%s
-url https://www.ncbi.nlm.nih.gov/gene/?term=\$\$
-urlLabel Entrez gene
-labelFields geneName,geneName2
-group genes\n\n" "${asmId}" "${asmId}" "${searchTrix}"
-
-  $scriptDir/asmHubNcbiGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.ncbiGene.html
-
-haveNcbiGene="yes"
-fi
+### assume there is no ncbiRefSeq track
+### when there is, this will eliminate the ncbiGene track
+### and it figures into setting the visibility of the augustus gene track
+export haveNcbiRefSeq="no"
 
 ###################################################################
 # ncbiRefSeq composite track
@@ -540,7 +483,55 @@ rm -f $buildDir/ixIxx/${asmId}.xenoRefGene.ix
 
   $scriptDir/asmHubNcbiRefSeq.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.refSeqComposite.html
 
+haveNcbiRefSeq="yes"
 fi	# ncbiRefSeq composite track
+
+### assume there is no ncbiGene track
+### it figures into setting the visibility of the augustus gene track
+export haveNcbiGene="no"
+
+###################################################################
+## setup ncbiGene only if ncbiRefSeq is not present
+if [ "${haveNcbiRefSeq}" = "no" ]; then
+
+# may or may not have a searchTrix for ncbiGene, assume none
+searchTrix=""
+# check to see if there is a index for ncbiGene
+if [ -s ${buildDir}/trackData/ncbiGene/$asmId.ncbiGene.ix ]; then
+  searchTrix="
+searchTrix ixIxx/$asmId.ncbiGene.ix"
+fi
+
+
+if [ -s ${buildDir}/trackData/ncbiGene/$asmId.ncbiGene.bb ]; then
+rm -f $buildDir/bbi/${asmId}.ncbiGene.bb
+rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ix
+rm -f $buildDir/ixIxx/${asmId}.ncbiGene.ixx
+ln -s ../trackData/ncbiGene/$asmId.ncbiGene.bb $buildDir/bbi/${asmId}.ncbiGene.bb
+ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ix $buildDir/ixIxx/${asmId}.ncbiGene.ix
+ln -s ../trackData/ncbiGene/$asmId.ncbiGene.ixx $buildDir/ixIxx/${asmId}.ncbiGene.ixx
+  printf "track ncbiGene
+longLabel NCBI gene predictions
+shortLabel NCBI Genes
+visibility pack
+color 0,80,150
+altColor 150,80,0
+colorByStrand 0,80,150 150,80,0
+bigDataUrl bbi/%s.ncbiGene.bb
+type bigGenePred
+html html/%s.ncbiGene
+searchIndex name%s
+url https://www.ncbi.nlm.nih.gov/gene/?term=\$\$
+urlLabel Entrez gene
+labelFields geneName,geneName2
+group genes\n\n" "${asmId}" "${asmId}" "${searchTrix}"
+
+  $scriptDir/asmHubNcbiGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData > $buildDir/html/$asmId.ncbiGene.html
+
+haveNcbiGene="yes"
+fi	#	if [ -s ${buildDir}/trackData/ncbiGene/$asmId.ncbiGene.bb ]
+fi	#	if [ "${haveNcbiRefSeq}" = "no" ]
+###################################################################
 
 ###################################################################
 # CpG Islands composite
@@ -558,8 +549,7 @@ shortLabel CpG Islands
 longLabel CpG Islands (Islands < 300 Bases are Light Green)
 group regulation
 visibility pack
-type bed 3 .
-noInherit on
+type bigBed 4 +
 html html/%s.cpgIslands\n\n" "${asmId}"
 fi
 
@@ -569,8 +559,8 @@ printf "    track cpgIslandExt
     parent cpgIslands %s
     shortLabel CpG Islands
     longLabel CpG Islands (Islands < 300 Bases are Light Green)
-    priority 1
     type bigBed 4 +
+    priority 1
     bigDataUrl bbi/%s.cpgIslandExt.bb\n\n" "${cpgVis}" "${asmId}"
 fi
 
@@ -580,8 +570,8 @@ printf "    track cpgIslandExtUnmasked
     parent cpgIslands on
     shortLabel Unmasked CpG
     longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
-    priority 2
     type bigBed 4 +
+    priority 2
     bigDataUrl bbi/%s.cpgIslandExtUnmasked.bb\n\n" "${asmId}"
 fi
 
@@ -631,7 +621,7 @@ ln -s ../trackData/augustus/${asmId}.augustus.bb ${buildDir}/bbi/${asmId}.august
 
 export augustusVis="dense"
 
-if [ "${haveNcbiGene}" = "no" ]; then
+if [ "${haveNcbiGene}" = "no" -a "${haveNcbiRefSeq}" = "no" ]; then
    augustusVis="pack"
 fi
 printf "track augustus
@@ -729,4 +719,8 @@ fi
 
 if [ -s ${hubLinks}/${asmId}/rnaSeqData/$asmId.trackDb.txt ]; then
   printf "include rnaSeqData/%s.trackDb.txt\n\n" "${asmId}"
+fi
+
+if [ -s "${buildDir}/$asmId.userTrackDb.txt" ]; then
+  printf "include %s.userTrackDb.txt\n\n" "${accessionId}"
 fi

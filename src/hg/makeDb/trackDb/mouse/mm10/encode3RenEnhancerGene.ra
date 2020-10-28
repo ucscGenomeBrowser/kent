@@ -12,7 +12,6 @@ dimensions dimX=set dimY=view
 type bed 3
 visibility hide
 group regulation
-pennantIcon New red ../goldenPath/newsarch.html#112719b Track Released Nov. 27, 2019
 wgEncode 1
 
     track egPromoterView

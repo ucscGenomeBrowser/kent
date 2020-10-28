@@ -1,6 +1,6 @@
 track wgEncodeGencodeV33
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE V33
 longLabel All GENCODE annotations from V33 (Ensembl 99)
 group genes
@@ -14,7 +14,6 @@ sortOrder name=+ view=+
 fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
 type genePred
 configurable off
-pennantIcon Updated red ../goldenPath/newsarch.html#021120 "Updated Feb. 11, 2020"
 wgEncodeGencodeVersion 33
 wgEncodeGencodeAttrs wgEncodeGencodeAttrsV33
 wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportV33

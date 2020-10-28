@@ -1,5 +1,8 @@
 # if CC is undefined, set it to gcc
 CC?=gcc
+# allow the somewhat more modern C syntax, e.g. 'for (int i=5; i<10, i++)'
+CFLAGS += -std=c99
+
 # to build on sundance: CC=gcc -mcpu=v9 -m64
 ifeq (${COPT},)
     COPT=-O -g
@@ -27,6 +30,7 @@ HOSTNAME = $(shell uname -n)
 
 ifeq (${HOSTNAME},hgwdev)
   IS_HGWDEV = yes
+  HG_INC+=-I/usr/include/freetype2 -DUSE_FREETYPE
 else
   IS_HGWDEV = no
 endif
@@ -52,7 +56,7 @@ ifneq ($(UNAME_S),Darwin)
 else
   ifneq ($(wildcard /opt/local/lib/libiconv.a),)
        ICONVLIB=/opt/local/lib/libiconv.a
-  else
+   else
        ICONVLIB=-liconv
   endif
 endif
@@ -82,6 +86,13 @@ ifeq (${IS_HGWDEV},yes)
    L+=${HALLIBS}
 endif
 
+ifeq (${USE_HIC},)
+    USE_HIC=1
+endif
+
+ifeq (${USE_HIC},1)
+    HG_DEFS+=-DUSE_HIC
+endif
 
 # libssl: disabled by default
 ifneq (${SSL_DIR}, "/usr/include/openssl")
@@ -94,6 +105,7 @@ ifneq (${SSL_DIR}, "/usr/include/openssl")
 endif
 # on hgwdev, already using the static library with mysqllient.
 ifeq (${IS_HGWDEV},yes)
+   L+=/hive/groups/browser/freetype/freetype-2.10.0/objs/.libs/libfreetype.a -lbz2
    L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5 -lk5crypto -ldl
 else
    ifneq ($(wildcard /opt/local/lib/libssl.a),)
@@ -102,13 +114,21 @@ else
      ifneq ($(wildcard /usr/lib/x86_64-linux-gnu/libssl.a),)
 	L+=/usr/lib/x86_64-linux-gnu/libssl.a
      else
-	L+=-lssl
+        ifneq ($(wildcard /usr/local/opt/openssl/lib/libssl.a),)
+           L+=/usr/local/opt/openssl/lib/libssl.a
+        else
+           L+=-lssl
+        endif
      endif
    endif
    ifneq ($(wildcard /opt/local/lib/libcrypto.a),)
        L+=/opt/local/lib/libcrypto.a
    else
-       L+=-lcrypto
+        ifneq ($(wildcard /usr/local/opt/openssl/lib/libcrypto.a),)
+           L+=/usr/local/opt/openssl/lib/libcrypto.a
+        else
+           L+=-lcrypto
+        endif
    endif
 endif
 
@@ -204,6 +224,11 @@ ifneq ($(MAKECMDGOALS),clean)
     endif
   endif
   ifeq (${MYSQLLIBS},)
+   ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a),)
+          MYSQLLIBS+=/usr/local/Cellar/mariadb/10.4.12/lib/libmariadbclient.a
+     endif
+  endif
+  ifeq (${MYSQLLIBS},)
     ifneq ($(wildcard /opt/local/lib/mysql57/mysql/libmysqlclient.a),)
 	  MYSQLLIBS=/opt/local/lib/mysql57/mysql/libmysqlclient.a
     endif
@@ -294,6 +319,12 @@ L += $(kentSrc)/htslib/libhts.a
 
 L+=${PNGLIB} ${MLIB} ${ZLIB} ${ICONVLIB}
 HG_INC+=${PNGINCL}
+ifneq ($(wildcard /usr/local/Cellar/mariadb/10.4.12/include/mysql/mysql.h),)
+  HG_INC+=-I/usr/local/Cellar/mariadb/10.4.12/include/mysql
+endif
+ifneq ($(wildcard /usr/local/opt/openssl/include/openssl/hmac.h),)
+  HG_INC+=-I/usr/local/opt/openssl/include
+endif
 
 # pass through COREDUMP
 ifneq (${COREDUMP},)

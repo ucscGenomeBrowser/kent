@@ -258,6 +258,7 @@
 #include "bPlusTree.h"
 #include "customFactory.h"
 #include "iupac.h"
+#include "clinvarSubLolly.h"
 
 static char *rootDir = "hgcData";
 
@@ -970,7 +971,7 @@ if (sameWord(tdb->table, "npredGene"))
 else
     {
     char *label = itemName;
-    if (isNotEmpty(itemLabel) && sameString(itemName, itemLabel))
+    if (isNotEmpty(itemLabel) && differentString(itemName, itemLabel))
         label = itemLabel;
     printf("%s</A><BR>\n", label);
     }
@@ -983,7 +984,7 @@ void printCustomUrlWithFields(struct trackDb *tdb, char *itemName, char *itemLab
 char urlSetting[10];
 safef(urlSetting, sizeof(urlSetting), "url");
 
-printCustomUrlWithLabel(tdb, itemName, itemName, urlSetting, encode, fields);
+printCustomUrlWithLabel(tdb, itemName, itemLabel, urlSetting, encode, fields);
 }
 
 void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
@@ -1463,6 +1464,8 @@ for (itemId = slIds; itemId!=NULL; itemId = itemId->next)
         itemName = parts[1];
         encode = FALSE; // assume the link is already encoded
         }
+    if (startsWith("http", itemName)) // the ID may be a full URL already, encoding would destroy it
+        encode = FALSE;
 
     char *idUrl = replaceInUrl(url, idForUrl, cart, database, seqName, winStart, 
                     winEnd, tdb->track, encode, NULL);
@@ -1547,15 +1550,11 @@ slReverse(fields);
 return fields;
 }
 
-int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount)
+int extraFieldsPrintAs(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount, struct asObject *as)
 // Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
 // sr may be null for bigBeds.
 // Returns number of extra fields actually printed.
 {
-struct asObject *as = asForDb(tdb, database);
-if (as == NULL)
-    return 0;
-
 // We are trying to print extra fields so we need to figure out how many fields to skip
 int start = extraFieldsStart(tdb, fieldCount, as);
 
@@ -1637,7 +1636,6 @@ for (;col != NULL && count < fieldCount;col=col->next)
     else
         printf("<td>%s</td></tr>\n", fields[ix]);
     }
-asObjectFree(&as);
 if (skipIds)
     slFreeList(skipIds);
 if (sepFields)
@@ -1648,6 +1646,22 @@ if (count > 0)
 
 return count;
 }
+
+int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount)
+// Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
+// sr may be null for bigBeds.
+// Returns number of extra fields actually printed.
+{
+struct asObject *as = asForDb(tdb, database);
+if (as == NULL)
+    return 0;
+
+int ret =  extraFieldsPrintAs(tdb, sr, fields,fieldCount, as);
+//asObjectFree(&as);
+
+return ret;
+}
+
 
 void genericBedClick(struct sqlConnection *conn, struct trackDb *tdb,
 		     char *item, int start, int bedSize)
@@ -3139,6 +3153,7 @@ void printTrackHtml(struct trackDb *tdb)
 {
 if (!isCustomTrack(tdb->track))
     {
+    printRelatedTracks(database, trackHash, tdb, cart);
     extraUiLinks(database, tdb);
     printTrackUiLink(tdb);
     printOrigAssembly(tdb);
@@ -3362,7 +3377,6 @@ else if (hDbIsActive(otherDb) && subChain != chain)
 	   subSetScore);
 else
     printf("<BR>\n");
-printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
 
 boolean normScoreAvailable = chainDbNormScoreAvailable(tdb);
 
@@ -3378,11 +3392,16 @@ if (normScoreAvailable)
 	 "select normScore from %s where id = '%s'", tableName, item);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
-	printf("<B>Normalized Score:</B> %1.0f (bases matched: %d)<BR>\n",
-	    atof(row[0]), (int) (chain->score/atof(row[0])));
+        {
+        double normScore = atof(row[0]);
+        int basesAligned = chain->score / normScore;
+	printf("<B>Normalized Score:</B> %1.0f (aligned bases: %d)", normScore, basesAligned);
+        }
     sqlFreeResult(&sr);
+    printf("<BR>\n");
     }
 
+printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
 printf("<BR>\n");
 
 chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
@@ -3396,9 +3415,10 @@ if (!startsWith("big", tdb->type) && sqlDatabaseExists(otherDb) && chromSeqFileE
     {
     if (chainWinSize < 1000000)
         {
+        printf("View ");
         hgcAnchorSomewhere("htcChainAli", item, tdb->track, chain->tName);
-        printf("View details of parts of chain within browser "
-           "window</A>.<BR>\n");
+        printf("DNA sequence alignment</A> details of parts of chain within browser "
+           "window.<BR>\n");
         }
     else
         {
@@ -4135,7 +4155,7 @@ if (differentString(type, "bigInteract") && differentString(type, "interact"))
     {
     // skip generic URL code as these may have multiple items returned for a click
     itemForUrl = getIdInUrl(tdb, item);
-    if (itemForUrl != NULL && trackDbSetting(tdb, "url"))
+    if (itemForUrl != NULL && trackDbSetting(tdb, "url") && differentString(type, "bigBed"))
         {
         printCustomUrl(tdb, itemForUrl, item == itemForUrl);
         printIframe(tdb, itemForUrl);
@@ -4286,8 +4306,7 @@ else if (wordCount > 0)
         }
     else if (sameString(type, "bigLolly") )
 	{
-	int num = 12;
-        genericBigBedClick(conn, tdb, item, start, end, num);
+        genericBigBedClick(conn, tdb, item, start, end, 0);
 	}
     else if (sameString(type, "bigDbSnp") )
 	{
@@ -4639,9 +4658,9 @@ cartWebStart(cart, database, "Extended DNA Case/Color");
 
 if (NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))))
     hgParseChromRange(database, pos, &seqName, &winStart, &winEnd);
-if (winEnd - winStart > 1000000)
+if (winEnd - winStart > 5000000)
     {
-    printf("Please zoom in to 1 million bases or less to color the DNA");
+    printf("Please zoom in to 5 million bases or less to color the DNA");
     return;
     }
 
@@ -10564,6 +10583,101 @@ printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
 
 #include "omim.h"
 
+static void showOmimDisorderTable(struct sqlConnection *conn, char *url, char *itemName)
+{
+/* display disorder(s) as a table, in the same format as on the OMIM webpages, 
+ * e.g. see the "Gene-Phenotype-Relationships" table at https://www.omim.org/entry/601542 */
+struct sqlResult *sr;
+char query[256];
+char **row;
+
+// be tolerant of old table schema
+if (sqlColumnExists(conn, "omimPhenotype", "inhMode"))
+    sqlSafef(query, sizeof(query),
+          "select description, %s, phenotypeId, inhMode from omimPhenotype where omimId=%s order by description",
+          omimPhenotypeClassColName, itemName);
+else
+    // E.g. on a mirror that has not updated their OMIM tables yet
+    sqlSafef(query, sizeof(query),
+          "select description, %s, phenotypeId, 'data-missing' from omimPhenotype where omimId=%s order by description",
+          omimPhenotypeClassColName, itemName);
+
+sr = sqlStoreResult(conn, query);
+
+if (sqlCountRows(sr)==0) {
+    sqlFreeResult(&sr);
+    return;
+}
+
+char *phenotypeClass, *phenotypeId, *disorder, *inhMode;
+
+puts("<table style='margin-top: 15px' class='omimTbl'>\n");
+puts("<thead>\n");
+puts("<th>Phenotype</th>\n");
+puts("<th style='width:100px'>Phenotype MIM Number</th>\n");
+puts("<th>Inheritance</th>\n");
+puts("<th>Phenotype Key</th>\n");
+puts("</thead>\n");
+
+puts("<tbody>\n");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    disorder       = row[0];
+    phenotypeClass = row[1];
+    phenotypeId    = row[2];
+    inhMode        = row[3];
+
+    puts("<tr>\n");
+
+    puts("<td>");
+    if (disorder)
+        puts(disorder);
+    puts("</td>\n");
+
+    puts("<td>");
+    if (phenotypeId && (!sameWord(phenotypeId, "-1")))
+        printf("<a HREF=\"%s%s\" target=_blank>%s</a>", url, phenotypeId, phenotypeId);
+    puts("</td>\n");
+
+    puts("<td>");
+    if (inhMode)
+        puts(inhMode);
+    puts("</td>");
+
+    puts("<td>");
+    if (phenotypeClass && !sameWord(phenotypeClass, "-1"))
+        {
+        puts(phenotypeClass);
+        if (isdigit(phenotypeClass[0]))
+            {
+            int phenoClass = atoi(phenotypeClass);
+            char* descs[] = 
+                { 
+                "disease was positioned by mapping of the wild-type gene",
+                "disorder itself was mapped",
+                "molecular basis of the disease is known",
+                "disorder is a chromosome deletion of duplication syndrome"
+                };
+            if (phenoClass>=1 && phenoClass<=4)
+                {
+                puts(" - ");
+                puts(descs[phenoClass-1]);
+                }
+            else
+                // just in case that they ever add another class in the future
+                puts(phenotypeClass);
+            }
+        }
+    puts("</td>");
+
+    puts("</tr>");
+    }
+
+sqlFreeResult(&sr);
+puts("<tbody>\n");
+puts("</table>\n");
+}
+
 void printOmimGene2Details(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of an omimGene2 entry. */
 {
@@ -10572,36 +10686,18 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 char *url = tdb->url;
-char *title1 = NULL;
-char *geneSymbol = NULL;
 char *chrom, *chromStart, *chromEnd;
 
 chrom      = cartOptionalString(cart, "c");
 chromStart = cartOptionalString(cart, "o");
 chromEnd   = cartOptionalString(cart, "t");
 
+printf("<div id='omimText'>");
 if (url != NULL && url[0] != 0)
     {
-    printf("<B>OMIM: ");
+    printf("<B>MIM gene number: ");
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
-    printf("%s</A></B>", itemName);
-    sqlSafef(query, sizeof(query),
-          "select geneName from omimGeneMap2 where omimId=%s;", itemName);
-    sr = sqlMustGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-        {
-        if (row[0] != NULL)
-            {
-            title1 = cloneString(row[0]);
-                printf(" %s", title1);
-            }
-        }
-    else
-        {
-	printf("<BR>");
-	}
-    sqlFreeResult(&sr);
+    printf("%s</A></B><BR>", itemName);
 
     // disable NCBI link until they work it out with OMIM
     /*
@@ -10611,63 +10707,42 @@ if (url != NULL && url[0] != 0)
     printf("%s</A></B>", itemName);
     */
 
+    struct dyString *symQuery = newDyString(1024);
+    sqlDyStringPrintf(symQuery, "SELECT approvedSymbol from omimGeneMap2 where omimId=%s", itemName);
+    char *approvSym = sqlQuickString(conn, symQuery->string);
+    if (approvSym) {
+	printf("<B>HGNC-approved symbol:</B> %s", approvSym);
+    }
+
+    sqlSafef(query, sizeof(query),
+          "select geneName from omimGeneMap2 where omimId=%s;", itemName);
+    char *longName = sqlQuickString(conn, query);
+    if (longName) {
+	printf(" &mdash; %s", longName);
+        freez(&longName);
+    }
+    puts("<BR><BR>");
+
+    printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
+
     sqlSafef(query, sizeof(query),
           "select geneSymbol from omimGeneMap2 where omimId=%s;", itemName);
-    sr = sqlMustGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
+    char *altSyms = sqlQuickString(conn, query);
+
+    if (altSyms)
         {
-	geneSymbol = cloneString(row[0]);
-	}
-    sqlFreeResult(&sr);
-
-    if (geneSymbol!= NULL)
-        {
-	boolean disorderShown;
-	char *phenotypeClass, *phenotypeId, *disorder;
-
-	printf("<BR><B>Gene symbol(s):</B> %s", geneSymbol);
-	printf("<BR>\n");
-
-	/* display disorder(s) */
-        sqlSafef(query, sizeof(query),
-	      "select description, %s, phenotypeId from omimPhenotype where omimId=%s order by description",
-	      omimPhenotypeClassColName, itemName);
-	sr = sqlMustGetResult(conn, query);
-	disorderShown = FALSE;
-        while ((row = sqlNextRow(sr)) != NULL)
+        if (approvSym) 
             {
-	    if (!disorderShown)
-                {
-                printf("<B>Disorder(s):</B><UL>\n");
-		disorderShown = TRUE;
-		}
-	    disorder       = row[0];
-            phenotypeClass = row[1];
-            phenotypeId    = row[2];
-            printf("<LI>%s", disorder);
-            if (phenotypeId != NULL)
-                {
-                if (!sameWord(phenotypeId, "-1"))
-                    {
-                    printf(" (phenotype <A HREF=\"%s%s\" target=_blank>", url, phenotypeId);
-                    printf("%s</A></B>", phenotypeId);
-		    // show phenotype class if available
-		    if (!sameWord(phenotypeClass, "-1")) printf(" (%s)", phenotypeClass);
-		    printf(")");
-		    }
-		else
-		    {
-		    // show phenotype class if available, even phenotypeId is not available
-		    if (!sameWord(phenotypeClass, "-1")) printf(" (%s)", phenotypeClass);
-		    }
-
-		}
-	    printf("<BR>\n");
-	    }
-	if (disorderShown) printf("</UL>\n");
-        sqlFreeResult(&sr);
-	}
+            char symRe[255];
+            safef(symRe, sizeof(symRe), "^%s, ", approvSym);
+            altSyms = replaceRegEx(altSyms, "", symRe, 0);
+            }
+	printf("<B>Alternative symbols:</B> %s", altSyms);
+	printf("<BR>\n");
+        freez(&altSyms);
+        }
+    if (approvSym)
+        freez(&approvSym);
 
     // show RefSeq Gene link(s)
     sqlSafef(query, sizeof(query),
@@ -10705,9 +10780,10 @@ if (url != NULL && url[0] != 0)
         }
 
     // show Related UCSC Gene links
+    char *knownDatabase = hdbDefaultKnownDb(database);
     sqlSafef(query, sizeof(query),
-          "select distinct kgId from kgXref x, %s l, omim2gene g where x.refseq = mrnaAcc and l.omimId=%s and g.omimId=l.omimId and g.entryType='gene'",
-	  refLinkTable, itemName);
+          "select distinct kgId from %s.kgXref x, %s l, omim2gene g where x.refseq = mrnaAcc and l.omimId=%s and g.omimId=l.omimId and g.entryType='gene'",
+	  knownDatabase, refLinkTable, itemName);
     sr = sqlMustGetResult(conn, query);
     if (sr != NULL)
 	{
@@ -10716,7 +10792,7 @@ if (url != NULL && url[0] != 0)
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    if (printedCnt < 1)
-		printf("<B>Related UCSC Gene(s): </B>");
+		printf("<B>Related Transcripts: </B>");
 	    else
 		printf(", ");
             printf("<A HREF=\"%s%s&hgg_chrom=none\">", "../cgi-bin/hgGene?hgg_gene=", row[0]);
@@ -10744,10 +10820,10 @@ if (url != NULL && url[0] != 0)
         sqlFreeResult(&sr);
         }
 
+    showOmimDisorderTable(conn, url, itemName);
     }
 
-printf("<HR>");
-printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
+printf("</div>"); // #omimText
 }
 
 void printOmimLocationDetails(struct trackDb *tdb, char *itemName, boolean encode)
@@ -11103,7 +11179,7 @@ printTrackHtml(tdb);
 void doOmimGene2(struct trackDb *tdb, char *item)
 /* Put up OmimGene track info. */
 {
-genericHeader(tdb, item);
+cartWebStart(cart, database, "OMIM genes - %s", item);
 printOmimGene2Details(tdb, item, FALSE);
 printTrackHtml(tdb);
 }
@@ -21323,7 +21399,7 @@ else if (sameWord(type, "bigInteract") || sameWord(type, "interact"))
     doInteractDetails(ct->tdb, item);
 else if (sameWord(type, "bam"))
     doBamDetails(ct->tdb, itemName);
-else if (sameWord(type, "vcfTabix"))
+else if (sameWord(type, "vcfTabix") || sameWord(type, "vcfPhasedTrio"))
     doVcfTabixDetails(ct->tdb, itemName);
 else if (sameWord(type, "vcf"))
     doVcfDetails(ct->tdb, itemName);
@@ -25725,7 +25801,7 @@ else if (sameWord(table, "omimGeneClass2"))
     {
     doOmimGene2(tdb, item);
     }
-else if (sameWord(table, "omimGene2"))
+else if (sameAltWords(table, handler, "omimGene2", "omimGene2bb", NULL))
     {
     doOmimGene2(tdb, item);
     }
@@ -25753,7 +25829,7 @@ else if (sameWord(table, "gad"))
     {
     doGad(tdb, item, NULL);
     }
-else if (sameWord(table, "decipher"))
+else if (sameWord(table, "decipherOld"))
     {
     doDecipherCnvs(tdb, item, NULL);
     }
@@ -25976,7 +26052,8 @@ else if (sameWord(table, "rnaGene"))
     {
     doRnaGene(tdb, item);
     }
-else if (sameWord(table, "RfamSeedFolds")
+else if (startsWith("rnaStruct", table) 
+         || sameWord(table, "RfamSeedFolds")
 	 || sameWord(table, "RfamFullFolds")
 	 || sameWord(table, "rfamTestFolds")
 	 || sameWord(table, "evofold")
@@ -26688,7 +26765,7 @@ else if (sameString("cosmic", table))
     {
     doCosmic(tdb, item);
     }
-else if (sameString("geneReviews", table))
+else if (startsWith("geneReviews", table))
     {
     doGeneReviews(tdb, item);
     }
@@ -26724,7 +26801,12 @@ else if (startsWith("snake", trackHubSkipHubName(table)))
     {
     doSnakeClick(tdb, item);
     }
-else if (tdb != NULL && startsWithWord("vcfTabix", tdb->type))
+else if (startsWith("clinvarSubLolly", trackHubSkipHubName(table)))
+    {
+    doClinvarSubLolly(tdb, item);
+    }
+else if (tdb != NULL &&
+        (startsWithWord("vcfTabix", tdb->type) || sameWord("vcfPhasedTrio", tdb->type)))
     {
     doVcfTabixDetails(tdb, item);
     }

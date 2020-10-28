@@ -1,0 +1,110 @@
+<h2>Description</h2>
+
+<p>
+This track displays common copy number genomic variations from <a target=_blank
+href="https://www.ncbi.nlm.nih.gov/dbvar/studies/nstd186/">nstd186 (NCBI Curated Common
+Structural Variants)</a>, divided into subtracks according to population and source of original
+submission.
+</p>
+
+<p>
+This curated dataset of all structural variants in dbVar includes variants from <b>gnomAD</b>, <b>1000
+Genomes Phase 3</b>, and <b>DECIPHER</b> (dbVar studies
+<a target=_blank href="https://www.ncbi.nlm.nih.gov/dbvar/studies/nstd166/">nstd166</a>,
+<a target=_blank href="https://www.ncbi.nlm.nih.gov/dbvar/studies/estd219/">estd219</a>, and
+<a target=_blank href="https://www.ncbi.nlm.nih.gov/dbvar/studies/nstd183/">nstd183</a>, respectively).
+</p>
+
+<p>
+It only includes copy number gain, copy number loss, copy number variation, duplications, and
+deletions (including mobile element deletions), that are part of a study with at least 100 samples,
+include allele frequency data, and have an allele frequency of &gt;=0.01 in at least one population.
+</p>
+
+<p>
+For more information on the number of variant calls and latest statistics for nstd186 see
+<a target=_blank href="https://www.ncbi.nlm.nih.gov/dbvar/content/common_summary/">Summary of nstd186</a>
+(NCBI Curated Common Structural Variants).
+</p>
+ 
+<p>
+There are six subtracks in this track set:
+</p>
+
+<p>
+<ul>
+<li><b>NCBI Curated Common SVs: African -</b> 
+<a href="https://www.ncbi.nlm.nih.gov/dbvar/studies/nstd186">Variants</a> with AF &gt;= 0.01 for 
+African Population.</li>
+<li><b>NCBI Curated Common SVs: European -</b>
+<a href="https://www.ncbi.nlm.nih.gov/dbvar/studies/nstd186">Variants</a> with AF &gt;= 0.01 for 
+European Population.</li>
+<li><b>NCBI Curated Common SVs: all populations -</b>
+<a href="https://www.ncbi.nlm.nih.gov/dbvar/studies/nstd186">Variants</a> with AF &gt;= 0.01 for 
+Global Population.</li>
+<li><b>NCBI Curated Common SVs: all populations from gnomAD - </b>
+<a href="https://www.ncbi.nlm.nih.gov/dbvar/studies/nstd186">Variants</a> with AF &gt;= 0.01 from 
+gnomAD Structural Variants.</li>
+<li><b>NCBI Curated Common SVs: all populations from 1000 Genomes - </b>
+<a href="https://www.ncbi.nlm.nih.gov/dbvar/studies/nstd186">Variants</a> with AF &gt;= 0.01 from 
+1000 Genomes Consortium Phase 3 Integrated SV.</li>
+<li><b>NCBI Curated Common SVs: all populations from DECIPHER -</b>
+<a href="https://www.ncbi.nlm.nih.gov/dbvar/studies/nstd186">Variants</a> with AF &gt;= 0.01 from 
+DECIPHER Consensus CNVs.</li>
+</ul>
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+Items in all subtracks follow the same conventions: items are colored by variant type, and are 
+based on the dbVar colors described in the 
+<a target="_blank" href="https://www.ncbi.nlm.nih.gov/dbvar/content/overview/">dbVar Overview page</a>. 
+<b><font color="red">Red</font></b> for copy number loss or deletion,
+<b><font color="blue">blue</font></b> for copy number gain or duplication, and
+<b><font color="#662180">violet</font></b> for copy number variation. 
+</p>
+
+<p>
+<b>Mouseover</b> on items indicates genes affected, size, variant type, and allele frequencies (AF). 
+All tracks can be filtered according to the <b>Variant Size</b> and <b>Variant Type</b>.
+</p>
+
+<h2>Data Access</h2>
+The raw data can be explored interactively with the
+<a href="../../hgTables">Table Browser</a>, or the
+<a href="../../hgIntegrator">Data Integrator</a>. For automated analysis,
+the data may be queried from our
+<a href="../../goldenPath/help/api.html">REST API</a>. 
+</p>
+<p>The data can also be found directly from the <a target=_blank 
+href="https://www.ncbi.nlm.nih.gov/dbvar/content/common_summary/#data_access">dbVar 
+nstd186 data access</a>, as well as in the
+<a href="hgHubConnect?hubUrl=
+https://ftp.ncbi.nlm.nih.gov/pub/dbVar/sandbox/dbvarhub/hub.txt&hgHub_do_redirect=on">
+dbVar Track Hub</a>, where additional subtracks are included. For questions about
+dbVar track data, please contact <A HREF="mailto:&#100;&#98;&#118;&#97;r&#64;&#110;&#99;&#98;&#105;.
+n&#108;&#109;.&#110;&#105;&#104;.&#103;&#111;v">
+&#100;&#98;&#118;&#97;r&#64;&#110;&#99;&#98;&#105;.n&#108;&#109;.&#110;&#105;&#104;.&#103;&#111;v
+</A>.
+<!-- above address is dbvar at ncbi.nlm.nih.gov -->
+</p>
+
+
+<h2>Credits</h2>
+<p>
+Thanks to the dbVAR team at NCBI, especially John Lopez and Timothy Hefferon for technical 
+coordination and consultation, and to Christopher Lee, Anna Benet-Pages, and Daniel Schmelter, of 
+the Genome Browser team for engineering the track display. 
+</p>
+
+<h2>References</h2>
+<p>
+Lappalainen I, Lopez J, Skipper L, Hefferon T, Spalding JD, Garner J, Chen C, Maguire M, Corbett M,
+Zhou G <em>et al</em>.
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gks1213" target="_blank">
+DbVar and DGVa: public archives for genomic structural variation</a>.
+<em>Nucleic Acids Res</em>. 2013 Jan;41(Database issue):D936-41.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23193291" target="_blank">23193291</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3531204/" target="_blank">PMC3531204</a>
+</p>
+
+

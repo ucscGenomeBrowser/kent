@@ -67,11 +67,25 @@ if (hubWarnDy == NULL)
 dyStringPrintf(hubWarnDy, "%s\n", warning);
 }
 
+static void sanitizeString(char *str)
+// Remove % so we can disable format-security
+{
+for(; *str; str++)
+    if (*str == '%')
+        *str = ' ';
+}
+
 void cartFlushHubWarnings()
 /* flush the hub warning (if any) */
 {
 if (hubWarnDy)
-    warn("%s",hubWarnDy->string);
+    {
+    sanitizeString(hubWarnDy->string);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-security"
+    warn(hubWarnDy->string);
+#pragma GCC diagnostic pop
+    }
 }
 
 

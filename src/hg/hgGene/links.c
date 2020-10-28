@@ -88,7 +88,7 @@ for (ra = raList; ra != NULL; ra = ra->next)
 	    link->idSql = linkRequiredField(ra, "idSql");
 	    link->nameSql = linkOptionalField(ra, "nameSql");
 	    link->nameFormat = linkOptionalField(ra, "nameFormat");
-	    link->url = linkRequiredField(ra, "url");
+	    link->url = replaceChars(linkRequiredField(ra, "url"), "KNOWNDB",sqlGetDatabase(conn));
 	    link->useHgsid = (linkOptionalField(ra, "hgsid") != NULL);
 	    link->useDb = (linkOptionalField(ra, "dbInUrl") != NULL);
 	    link->preCutAt = linkOptionalField(ra, "preCutAt");
@@ -142,7 +142,7 @@ if (sameString(link->name, "family"))
 if (sameString(link->name, "tbSchema"))
     {
     char *geneTable = genomeSetting("knownGene");
-    struct trackDb *tdb = hTrackDbForTrack(sqlGetDatabase(conn), geneTable);
+    struct trackDb *tdb = hTrackDbForTrack(database, geneTable);
     struct dyString *dy = NULL;
     if (tdb == NULL)
 	return NULL;

@@ -45,6 +45,7 @@
 #include "hubConnect.h"
 #include "trix.h"
 #include "vcf.h"
+#include "vcfUi.h"
 #include "htmshell.h"
 #include "bigBedFind.h"
 #include "customComposite.h"
@@ -52,6 +53,7 @@
 #include "bedTabix.h"
 #include "hic.h"
 #include "hui.h"
+#include "chromAlias.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -328,6 +330,123 @@ if (ci == NULL)
 
 return ci;
 }
+
+static struct hash *readAliasFile(char *url)
+/* given the URL (might be a file) read and process into chromAlias hash
+ * file structure:  lines of white space separated words
+ * first word is the sequence name in the assembly, words following are
+ * alias names for that sequences name.  Same format as use by IGV
+ * returned hash is key: sequence chrom name, hash value struct chromAlias *
+ */
+{
+struct hash *aliasHash = NULL;
+struct dyString *ds = NULL;
+
+/* adding error trapping because various net.c functions can errAbort */
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    int sd = netUrlOpen(url);
+    if (sd >= 0)
+        {
+        char *newUrl = NULL;
+        int newSd = 0;
+        if (netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
+            {
+            if (newUrl)	/* redirect can modify the url */
+                {
+                freeMem(newUrl);
+                sd = newSd;
+                }
+            ds = netSlurpFile(sd);
+            close(sd);
+            }
+        }
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    warn("%s", errCatch->message->string);
+errCatchFree(&errCatch);
+/* if the read worked, process it */
+if (ds)
+    {
+    char *words[1024];	/* process lines, no more than 1,024 words on a line */
+    char *line;
+    int size;
+    aliasHash = hashNew(0);
+    struct lineFile *lf = lineFileOnString("chromAlias", TRUE,
+                                            dyStringCannibalize(&ds));
+    while (lineFileNext(lf, &line, &size))
+    {
+    int wordCount = chopByWhite(line, words, ArraySize(words));
+    if (wordCount > 1)
+	{
+	int i = 1;
+        for ( ; i < wordCount; ++i )
+	    {
+	    if (isNotEmpty(words[i]))
+		{
+		struct chromAlias *ali;
+		AllocVar(ali);
+		ali->alias = cloneString(words[i]);
+		ali->chrom = cloneString(words[0]);
+		ali->source = cloneString("asmHub");
+		hashAdd(aliasHash, words[0], ali);
+		}
+	    }
+	}
+    }
+    lineFileClose(&lf);  /* frees cannibalized ds string */
+    }
+
+return aliasHash;
+}	/*	static struct hash *readAliasFile(char *url)	*/
+
+static char *assemblyHubGenomeSetting(char *database, char *tagName)
+/* see if this assembly hub has specified tagName, return url if present
+ * returns NULL when not present
+ */
+{
+struct trackHubGenome *genome = trackHubGetGenome(database);
+if (genome == NULL)
+    return NULL;
+char *fileName = hashFindVal(genome->settingsHash, tagName);
+char *absFileName  = NULL;
+if (fileName)
+    absFileName  = trackHubRelativeUrl((genome->trackHub)->url, fileName);
+if  (absFileName)
+    {
+    hashReplace(genome->settingsHash, tagName, absFileName);
+    fileName = absFileName;
+    }
+return fileName;
+}
+
+char *trackHubChromSizes(char *database)
+/* see if this assembly hub has a chrom.sizes file, return url if present
+ * returns NULL when not present
+ */
+{
+return assemblyHubGenomeSetting(database, "chromSizes");
+}
+
+char *trackHubAliasFile(char *database)
+/* see if this assembly hub has an alias file, return url if present
+ * returns NULL when not present
+ */
+{
+return assemblyHubGenomeSetting(database, "chromAlias");
+}
+
+struct hash *trackHubAllChromAlias(char *database)
+/* Return a hash of chroms with alias names from alias file if present */
+{
+char *aliasFile = trackHubAliasFile(database);
+if (aliasFile == NULL)
+    return NULL;
+
+return readAliasFile(aliasFile);
+}	/*	struct hash *trackHubAllChromAlias(char *database)	*/
 
 struct chromInfo *trackHubAllChromInfo(char *database)
 /* Return a chromInfo structure for all the chroms in this database. */
@@ -838,6 +957,7 @@ else
                   startsWithWord("halSnake", type) ||
 #endif
                   startsWithWord("vcfTabix", type) ||
+                  startsWithWord("vcfPhasedTrio", type) ||
                   startsWithWord("bigPsl", type) ||
                   startsWithWord("bigMaf", type) ||
                   startsWithWord("longTabix", type) ||
@@ -860,6 +980,8 @@ else
 
         if (sameString("barChart", type) || sameString("bigBarChart", type))
             requireBarChartBars(hub, genome, tdb);
+        if (sameString("vcfPhasedTrio", type))
+            requiredSetting(hub, genome, tdb, VCF_PHASED_CHILD_SAMPLE_SETTING);
         }
     }
 }
@@ -1226,7 +1348,7 @@ if (relativeUrl != NULL)
             }
         bbiFileClose(&bbi);
         }
-    else if (startsWithWord("vcfTabix", type))
+    else if (startsWithWord("vcfTabix", type) || startsWithWord("vcfPhasedTrio", type))
         {
         /* Just open and close to verify file exists and is correct type. */
         struct vcfFile *vcf = vcfTabixFileAndIndexMayOpen(bigDataUrl, bigDataIndex, NULL, 0, 0, 1, 1);

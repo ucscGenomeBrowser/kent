@@ -696,7 +696,7 @@ each subdirectory of $outRoot into a per-target-chunk file.";
         | sed -e 's#/\$##; s#^./##' > tParts.lst
 chmod a+x cat.csh
 $gensub2 tParts.lst single gsub jobList
-mkdir ../pslParts
+mkdir -p ../pslParts
 $paraRun
 _EOF_
     );
@@ -823,7 +823,7 @@ to each target sequence.";
   $bossScript->add(<<_EOF_
 chmod a+x chain.csh
 $gensub2 pslParts.lst single gsub jobList
-mkdir chain liftedChain
+mkdir -p chain liftedChain
 $paraRun
 rmdir liftedChain
 _EOF_
@@ -990,7 +990,7 @@ _EOF_
 # Make axtNet for download: one .axt per $tDb seq.
 netSplit noClass.net net
 cd ..
-mkdir axtNet
+mkdir -p axtNet
 foreach f (axtChain/net/*.net)
 netToAxt \$f axtChain/chain/\$f:t:r.chain \\
   $seq1Dir $seq2Dir stdout \\
@@ -999,7 +999,7 @@ netToAxt \$f axtChain/chain/\$f:t:r.chain \\
 end
 
 # Make mafNet for multiz: one .maf per $tDb seq.
-mkdir mafNet
+mkdir -p mafNet
 foreach f (axtNet/*.$tDb.$qDb.net.axt.gz)
   axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. \$f \\
         $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} \\
@@ -1021,14 +1021,14 @@ _EOF_
   } else {
     $bossScript->add(<<_EOF_
 # Make axtNet for download: one .axt for all of $tDb.
-mkdir ../axtNet
+mkdir -p ../axtNet
 netToAxt -verbose=0 noClass.net $chain \\
   $seq1Dir $seq2Dir stdout \\
 | axtSort stdin stdout \\
 | gzip -c > ../axtNet/$tDb.$qDb.net.axt.gz
 
 # Make mafNet for multiz: one .maf for all of $tDb.
-mkdir ../mafNet
+mkdir -p ../mafNet
 axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. ../axtNet/$tDb.$qDb.net.axt.gz \\
   $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} \\
   stdout \\
@@ -1046,8 +1046,8 @@ _EOF_
   if ($opt_trackHub) {
     $bossScript->add(<<_EOF_
 cd $buildDir/bigMaf
-wget -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigMaf.as'
-wget -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/mafSummary.as'
+wget --no-check-certificate -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigMaf.as'
+wget --no-check-certificate -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/mafSummary.as'
 mafToBigMaf $tDb $tDb.$qDb.net.maf.gz stdout \\
   | sort -k1,1 -k2,2n > $tDb.$qDb.net.txt
 bedToBigBed -type=bed3+1 -as=bigMaf.as -tab \\
@@ -1127,8 +1127,8 @@ _EOF_
       $bossScript->add(<<_EOF_
 cd $runDir
 hgLoadChain -test -noBin -tIndex $tDb chain$QDb $tDb.$qDb.all.chain.gz
-wget -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigChain.as'
-wget -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigLink.as'
+wget --no-check-certificate -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigChain.as'
+wget --no-check-certificate -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigLink.as'
 sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chain${QDb}.tab
 bedToBigBed -type=bed6+6 -as=bigChain.as -tab chain${QDb}.tab $defVars{SEQ1_LEN} chain${QDb}.bb
 awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chain${QDb}Link.tab
@@ -1206,7 +1206,7 @@ sub makeDownloads {
   return if ($opt_skipDownload);
   # Make an md5sum.txt file.
   my $net = $isSelf ? "" : "$tDb.$qDb.net.gz";
-  if (! -s "$net") {
+  if (! -s "$runDir/$net") {
      $net = "";
   }
   my $whatItDoes =
@@ -1302,7 +1302,7 @@ sub getBlastzParams {
       my $p = $1;
       if ($p ne 'K' && $p ne 'L' && $p ne 'H' && $p ne 'Q') {
 	if ($blastzOther eq '') {
-	  $blastzOther = 'Other blastz
+	  $blastzOther = 'Other lastz
 parameters specifically set for this species pair:';
 	}
 	$blastzOther .= "\n    $p=$defVars{$var}";
@@ -1508,6 +1508,9 @@ All files in this directory are freely available for public use.
 --------------------------------------------------------------------
 References
 
+Harris, R.S. (2007) Improved pairwise alignment of genomic DNA
+Ph.D. Thesis, The Pennsylvania State University
+
 Chiaromonte F, Yap VB, Miller W. Scoring pairwise genomic sequence
 alignments. Pac Symp Biocomput.  2002:115-26.
 
@@ -1552,7 +1555,7 @@ sub installDownloads {
   $bossScript->add(<<_EOF_
 mkdir -p $HgAutomate::goldenPath/$tDb
 rm -rf $HgAutomate::goldenPath/$tDb/vs$QDb
-mkdir $HgAutomate::goldenPath/$tDb/vs$QDb
+mkdir -p $HgAutomate::goldenPath/$tDb/vs$QDb
 cd $HgAutomate::goldenPath/$tDb/vs$QDb
 ln -s $runDir/$tDb.$qDb.all.chain.gz .
 ln -s $runDir/README.txt .
@@ -1562,7 +1565,7 @@ _EOF_
     );
   if (! $isSelf) {
     my $axt = ($splitRef ?
-	       "mkdir axtNet\n" . "ln -s $buildDir/axtNet/*.axt.gz axtNet/" :
+	       "mkdir -p axtNet\n" . "ln -s $buildDir/axtNet/*.axt.gz axtNet/" :
 	       "ln -s $buildDir/axtNet/$tDb.$qDb.net.axt.gz .");
     if ( -s "$runDir/$tDb.$qDb.net.gz") {
     $bossScript->add(<<_EOF_
@@ -1693,7 +1696,7 @@ netFilter -syn $tDb.$qDb.net.gz  \\
     | netSplit stdin synNet
 chainSplit chain $tDb.$qDb.all.chain.gz
 cd ..
-mkdir $successDir
+mkdir -p $successDir
 foreach f (axtChain/synNet/*.net)
   netToAxt \$f axtChain/chain/\$f:t:r.chain \\
     $defVars{'SEQ1_DIR'} $defVars{'SEQ2_DIR'} stdout \\
@@ -1749,8 +1752,8 @@ _EOF_
 set lineCount = `zcat $tDb.$qDb.syn.chain.gz | wc -l`
 if (\$lineCount > 0) then
   hgLoadChain -test -noBin -tIndex $tDb chainSyn$QDb $tDb.$qDb.syn.chain.gz
-  wget -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigChain.as'
-  wget -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigLink.as'
+  wget --no-check-certificate -O bigChain.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigChain.as'
+  wget --no-check-certificate -O bigLink.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigLink.as'
   sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chainSyn${QDb}.tab
   bedToBigBed -type=bed6+6 -as=bigChain.as -tab chainSyn${QDb}.tab $defVars{SEQ1_LEN} chainSyn${QDb}.bb
   awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chainSyn${QDb}Link.tab
@@ -1787,8 +1790,8 @@ _EOF_
 if (\$lineCount > 0) then
   mkdir -p ../bigMaf
   cd ../bigMaf
-  wget -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigMaf.as'
-  wget -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/mafSummary.as'
+  wget --no-check-certificate -O bigMaf.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/bigMaf.as'
+  wget --no-check-certificate -O mafSummary.as 'http://genome-source.soe.ucsc.edu/gitlist/kent.git/raw/master/src/hg/lib/mafSummary.as'
   mafToBigMaf $tDb ../axtChain/$tDb.$qDb.synNet.maf.gz stdout \\
     | sort -k1,1 -k2,2n > $tDb.$qDb.synNet.txt
   bedToBigBed -type=bed3+1 -as=bigMaf.as -tab  $tDb.$qDb.synNet.txt \\

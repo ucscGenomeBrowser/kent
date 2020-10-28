@@ -21,6 +21,8 @@ html gnomad
     bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r3.0.sites.vcf.gz
     priority 1
     visibility dense
+    url http://gnomad.broadinstitute.org/variant/$s-$<pos>-$<ref>-$<firstAlt>?dataset=gnomad_r3&ignore=$$
+    urlLabel gnomAD: 
 
     track gnomadVariantsV2
     parent gnomadVariants 

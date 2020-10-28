@@ -730,7 +730,7 @@ struct searchResult *lookupTypeSimpleSearch(struct column *col,
 {
 struct dyString *query = dyStringNew(512);
 char *searchHow = columnSetting(col, "search", "exact");
-struct sqlConnection *searchConn = hAllocConn(database);
+struct sqlConnection *searchConn = hAllocConn(sqlGetDatabase(conn));
 struct sqlResult *sr;
 char **row;
 struct searchResult *resList = NULL, *res;
@@ -1897,7 +1897,8 @@ cart = theCart;
 getDbAndGenome(cart, &database, &genome, oldVars);
 makeSureDbHasHgNear();
 getGenomeSettings();
-conn = hAllocConn(database);
+char *knownDb = hdbDefaultKnownDb(database);
+conn = hAllocConn(knownDb);
 
 /* if kgProtMap2 table exists, this means we are doing KG III */
 if (hTableExists(database, "kgProtMap2")) kgVersion = KG_III;

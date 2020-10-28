@@ -10,7 +10,7 @@ To add a new statement to the trackDb documentation:
         * Use hubCheck to verify the doc entry is properly formatted:
             % make
             % hubCheck -settings \
-                -version=http://hgwdev-<user>/goldenPath/help/trackDb/trackDbHub.v1.html
+                -version=https://hgwdev-<user>/goldenPath/help/trackDb/trackDbHub.v1.html
           OR
             % make alpha
             % hubCheck -settings -test

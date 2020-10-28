@@ -96,7 +96,7 @@ dataVersion /gbdb/$D/uniprot/version.txt
 
         track unipChain
         shortLabel Chains
-        longLabel UniProt Polypeptide Chains
+        longLabel UniProt Mature Protein Products (Polypeptide Chains)
         priority 7
         parent uniprot
         visibility dense

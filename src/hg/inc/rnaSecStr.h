@@ -27,7 +27,11 @@ struct rnaSecStr
 
 struct rnaSecStr *rnaSecStrLoad(char **row);
 /* Load a rnaSecStr from row fetched with select * from rnaSecStr
- * from database.  Dispose of this with rnaSecStrFree(). */
+ * from database. Ignores conf column if present.  Dispose of this with rnaSecStrFree(). */
+
+struct rnaSecStr *rnaSecStrLoadConf(char **row);
+/* Load a rnaSecStr from row fetched with select * from rnaSecStr
+ * from database. Loads conf column.  Dispose of this with rnaSecStrFree(). */
 
 struct rnaSecStr *rnaSecStrLoadAll(char *fileName);
 /* Load all rnaSecStr from whitespace-separated file.

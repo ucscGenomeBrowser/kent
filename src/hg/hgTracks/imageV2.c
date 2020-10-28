@@ -246,6 +246,17 @@ if (kindOfChild != kocOrphan)
 
 boolean isCustomComposite = trackDbSettingOn(track->tdb, CUSTOM_COMPOSITE_SETTING);
 jsonObjectAdd(ele, "isCustomComposite", newJsonBoolean(isCustomComposite));
+
+// check if track can have merged items, needed for context clicks in track
+char *canHaveMergedItems = trackDbSetting(track->tdb, MERGESPAN_TDB_SETTING);
+if (canHaveMergedItems != NULL)
+    {
+    // tells hgTracks.js whether we currently are merged or not
+    char setting[256];
+    safef(setting, sizeof(setting), "%s.%s", track->track, MERGESPAN_CART_SETTING);
+    jsonObjectAdd(ele, setting, newJsonNumber(cartUsualInt(cart, setting, 0)));
+    }
+
 // XXXX really s/d be numChildren
 jsonObjectAdd(ele, "hasChildren", newJsonNumber(slCount(track->tdb->subtracks)));
 
@@ -1097,6 +1108,8 @@ int imgTrackAddMapItem(struct imgTrack *imgTrack,char *link,char *title,
 // returns count of map items added, which could be 0, 1 or more than one if item spans slices
 // NOTE: Precedence is given to first map item when adding items with same coordinates!
 {
+if (imgTrack == NULL)
+    return 0;
 struct imgSlice *slice;
 char *imgFile = NULL;               // name of file that hold the image
 char *neededId = NULL; // id is only added it it is NOT the trackId.

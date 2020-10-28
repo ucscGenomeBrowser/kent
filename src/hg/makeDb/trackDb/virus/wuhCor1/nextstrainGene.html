@@ -1,19 +1,42 @@
 <h2>Description</h2>
 <p>
 <a href="https://nextstrain.org/ncov" target=_blank>Nextstrain.org</a> displays
-data about protein-coding variants that occur in the current 2019/2020 outbreak. 
-Since next-strain shows only protein coding variants but this Genome Browser shows
-the whole genome, we have added a genome track to show which part of the genome 
-is covered by Nextstrain.
+data about variants that occur in the current 2019/2020 outbreak.
+Nextstrain has a powerful user interface for viewing the evolutionary tree
+that it infers from the patterns of variants in sequences worldwide, but
+does not offer a detailed plot of variants along the genome, so we have processed
+their genome annotations into genome browser tracks.
+</p>
+<p>
+Use this track in conjunction with the track
+<em>Nextstrain Variants</em> (protein-coding variants use gene names from this track).
 </p>
 
-<p>
-Use this track in conjunction with the tracks 
-    Nextstrain Vars</em> (all variants) and <em>Nextstrain Clades</em> (the main classes
-of variants as defined by Nextstrain).
-
 <h2>Methods</h2>
-<p>Data was downloaded from Nextstrain, file ncov.json.</p>
+<p>Nextstrain downloads SARS-CoV-2 genomes from
+  <a href="https://gisaid.org/" target=_blank>GISAID</a>
+  as they are submitted by labs worldwide.
+  The sequences are processed by an
+  <a href="https://github.com/nextstrain/ncov" target=_blank>automated pipeline</a>
+  and annotations are written to a data file
+  that UCSC downloads and extracts annotations for display.</p>
+
+<h2>Data Access</h2>
+<p>
+You can download the bigBed file underlying this track (nextstrainGene) from our 
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/nextstrain/" 
+target=_blank>Download Server.</a> The data can be explored interactively with 
+the <a href="../cgi-bin/hgTables">Table Browser</a>
+or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be
+accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>.</p>
+
+<h2>Credits</h2>
+<p>Thanks to
+  <a href="https://nextstrain.org/ncov" target=_blank>nextstrain.org</a> for
+  sharing its analysis of genomes collected by
+  <a href="https://gisaid.org/" target=_blank>GISAID</a>,
+  and to researchers worldwide for sharing their SARS-CoV-2 genome sequences.
+</p>
 
 <h2>References</h2>
 <p>
@@ -26,4 +49,3 @@ RA.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29790939" target="_blank">29790939</a>; PMC: <a
     href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6247931/" target="_blank">PMC6247931</a>
 </p>
-

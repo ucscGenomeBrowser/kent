@@ -11,6 +11,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 #include "colHash.h"
+#include "freeType.h"
 
 
 Color multiply(Color src, Color new)
@@ -329,23 +330,6 @@ switch(mg->writeMode)
     }
 }
 
-
-INLINE void mixDot(struct memGfx *img, int x, int y,  float frac, Color col)
-/* Puts a single dot on the image, mixing it with what is already there
- * based on the frac argument. */
-{
-if ((x < img->clipMinX) || (x >= img->clipMaxX) || (y < img->clipMinY) || (y >= img->clipMaxY))
-    return;
-
-Color *pt = _mgPixAdr(img,x,y);
-float invFrac = 1 - frac;
-
-int r = COLOR_32_RED(*pt) * invFrac + COLOR_32_RED(col) * frac;
-int g = COLOR_32_GREEN(*pt) * invFrac + COLOR_32_GREEN(col) * frac;
-int b = COLOR_32_BLUE(*pt) * invFrac + COLOR_32_BLUE(col) * frac;
-mgPutDot(img,x,y,MAKECOLOR_32(r,g,b));
-}
- 
 #define fraction(X) (((double)(X))-(double)(int)(X))
 #define invFraction(X) (1.0-fraction(X))
 
@@ -756,7 +740,15 @@ void mgText(struct memGfx *mg, int x, int y, Color color,
 	MgFont *font, char *text)
 /* Draw a line of text with upper left corner x,y. */
 {
-gfText(mg, font, text, x, y, color, mgTextBlit, MG_WHITE);
+switch (mg->fontMethod)
+    {
+    case FONT_METHOD_GEM:
+        gfText(mg, font, text, x, y, color, mgTextBlit, MG_WHITE);
+        break;
+    case FONT_METHOD_FREETYPE:
+        ftText(mg, x, y, color, font, text);
+        break;
+    }
 }
 
 void mgTextCentered(struct memGfx *mg, int x, int y, int width, int height, 
@@ -816,7 +808,13 @@ return font_line_height(font);
 int mgFontWidth(MgFont *font, char *chars, int charCount)
 /* How wide are a couple of letters? */
 {
+#ifndef USE_FREETYPE
 return fnstring_width(font, (unsigned char *)chars, charCount);
+#else
+if (face == NULL)  // have we turned on freetype
+    return fnstring_width(font, (unsigned char *)chars, charCount);
+return ftWidth(font, (unsigned char *)chars, charCount);
+#endif
 }
 
 int mgFontStringWidth(MgFont *font, char *string)
@@ -829,6 +827,15 @@ int mgGetFontStringWidth(struct memGfx *mg, MgFont *font, char *string)
 /* How wide is a string? */
 {
 return mgFontStringWidth(font, string);
+}
+
+void mgSetFontMethod(struct memGfx *mg, unsigned int method, char *fontName, char *fontFile)
+/* Which font drawing method shoud we use. */
+{
+mg->fontMethod = method;
+
+if (method == FONT_METHOD_FREETYPE)
+    ftInitialize(fontFile);
 }
 
 int mgFontCharWidth(MgFont *font, char c)
@@ -1019,6 +1026,7 @@ vg->setHint = (vg_setHint)mgSetHint;
 vg->getHint = (vg_getHint)mgGetHint;
 vg->getFontPixelHeight = (vg_getFontPixelHeight)mgGetFontPixelHeight;
 vg->getFontStringWidth = (vg_getFontStringWidth)mgGetFontStringWidth;
+vg->setFontMethod = (vg_setFontMethod)mgSetFontMethod;
 }
 
 

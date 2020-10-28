@@ -5,74 +5,99 @@ use warnings;
 use File::Basename;
 
 my $argc = scalar(@ARGV);
-if ($argc != 2) {
-  printf STDERR "mkGenomes.pl Name asmName\n";
-  printf STDERR "e.g.: mkAsmStats Mammals mammals\n";
+if ($argc != 1) {
+  printf STDERR "mkGenomes.pl [two column name list] > .../hub/genomes.txt\n";
+  printf STDERR "e.g.: mkGenomes.pl vgp.primary.assemblies.tsv > .../vgp/genomes.txt\n";
+  printf STDERR "the name list is found in \$HOME/kent/src/hg/makeDb/doc/asmHubs/\n";
+  printf STDERR "\nthe two columns are 1: asmId (accessionId_assemblyName)\n";
+  printf STDERR "column 2: common name for species, columns separated by tab\n";
+  printf STDERR "result will write a local asmId.genomes.txt file for each hub\n";
+  printf STDERR "and a local asmId.hub.txt file for each hub\n";
+  printf STDERR "and a local asmId.groups.txt file for each hub\n";
+  printf STDERR "and the output to stdout will be the overall genomes.txt\n";
+  printf STDERR "index file for all genomes in the given list\n";
   exit 255;
 }
-my $Name = shift;
-my $asmHubName = shift;
-
-my %betterName;	# key is asmId, value is common name
-my $srcDocDir = "${asmHubName}AsmHub";
-my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild";
-my $destDir = "/hive/data/genomes/asmHubs/$asmHubName";
 
 my $home = $ENV{'HOME'};
 my $toolsDir = "$home/kent/src/hg/makeDb/doc/asmHubs";
-my $commonNameList = "$asmHubName.asmId.commonName.tsv";
-my $commonNameOrder = "$asmHubName.commonName.asmId.orderList.tsv";
 
-open (FH, "<$toolsDir/${commonNameList}") or die "can not read $toolsDir/${commonNameList}";
-while (my $line = <FH>) {
-  next if ($line =~ m/^#/);
-  chomp $line;
-  my ($asmId, $name) = split('\t', $line);
-  $betterName{$asmId} = $name;
+my $inputList = shift;
+my $orderList = $inputList;
+if ( ! -s "$orderList" ) {
+  $orderList = $toolsDir/$inputList;
 }
-close (FH);
 
+my %commonName;	# key is asmId, value is common name
 my @orderList;	# asmId of the assemblies in order from the *.list files
 # the order to read the different .list files:
 my $assemblyCount = 0;
 
-open (FH, "<$toolsDir/${commonNameOrder}") or die "can not read ${commonNameOrder}";
+open (FH, "<${orderList}") or die "can not read ${orderList}";
 while (my $line = <FH>) {
   next if ($line =~ m/^#/);
   chomp $line;
-  my ($commonName, $asmId) = split('\t', $line);
+  my ($asmId, $commonName) = split('\t', $line);
+  if (defined($commonName{$asmId})) {
+    printf STDERR "ERROR: duplicate asmId: '%s'\n", $asmId;
+    printf STDERR "previous name: '%s'\n", $commonName{$asmId};
+    printf STDERR "duplicate name: '%s'\n", $commonName;
+    exit 255;
+  }
+  $commonName{$asmId} = $commonName;
   push @orderList, $asmId;
+  printf STDERR "orderList[$assemblyCount] = $asmId\n";
   ++$assemblyCount;
 }
 close (FH);
 
-my $orderKey = 1;
-foreach my $asmId (reverse(@orderList)) {
+my $buildDone = 0;
+my $orderKey = 0;
+foreach my $asmId (@orderList) {
+  ++$orderKey;
   my ($gcPrefix, $accession, undef) = split('_', $asmId);
   my $accessionId = sprintf("%s_%s", $gcPrefix, $accession);
   my $accessionDir = substr($asmId, 0 ,3);
   $accessionDir .= "/" . substr($asmId, 4 ,3);
   $accessionDir .= "/" . substr($asmId, 7 ,3);
   $accessionDir .= "/" . substr($asmId, 10 ,3);
-  my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/" . substr($asmId, 0 ,3);
-  $buildDir .= "/" . substr($asmId, 4 ,3);
-  $buildDir .= "/" . substr($asmId, 7 ,3);
-  $buildDir .= "/" . substr($asmId, 10 ,3);
-  $buildDir .= "/" . $asmId;
+  my $buildDir = "/hive/data/genomes/asmHubs/refseqBuild/$accessionDir/$asmId";
+  if ($gcPrefix eq "GCA") {
+     $buildDir = "/hive/data/genomes/asmHubs/genbankBuild/$accessionDir/$asmId";
+  }
+  if ( ! -s "${buildDir}/${asmId}.chrom.sizes" ) {
+    printf STDERR "# ERROR: missing ${asmId}.chrom.sizes in\n# ${buildDir}\n";
+    next;
+  }
+  if ( ! -s "${buildDir}/${asmId}.chromAlias.txt" ) {
+    printf STDERR "# ERROR: missing ${asmId}.chromAlias.txt in\n# ${buildDir}\n";
+    next;
+  }
   my $asmReport="$buildDir/download/${asmId}_assembly_report.txt";
-  next if (! -s $asmReport);
-printf STDERR "# %03d genomes.txt %s/%s\n", $orderKey, $accessionDir, $accessionId;
+  my $trackDb = "$buildDir/$asmId.trackDb.txt";
+  if ( ! -s "${trackDb}" ) {
+    printf STDERR "# %03d not built yet: %s\n", $orderKey, $asmId;
+    printf STDERR "# '%s'\n", $trackDb;
+    next;
+  }
+  if ( ! -s "${asmReport}" ) {
+    printf STDERR "# %03d missing assembly_report: %s\n", $orderKey, $asmId;
+    next;
+  }
+  ++$buildDone;
+printf STDERR "# %03d genomes.txt %s/%s\n", $buildDone, $accessionDir, $accessionId;
   my $descr=`grep -i "organism name:" $asmReport | head -1 | sed -e 's#.*organism name: *##i; s# (.*\$##;'`;
   chomp $descr;
   my $orgName=`grep -i "organism name:" $asmReport | head -1 | sed -e 's#.* name: .* (##; s#).*##;'`;
   chomp $orgName;
-  $orgName = $betterName{$asmId} if (exists($betterName{$asmId}));
 
   printf "genome %s\n", $accessionId;
   printf "trackDb ../%s/%s/trackDb.txt\n", $accessionDir, $accessionId;
   printf "groups groups.txt\n";
   printf "description %s\n", $orgName;
   printf "twoBitPath ../%s/%s/%s.2bit\n", $accessionDir, $accessionId, $accessionId;
+  printf "chromSizes ../%s/%s/%s.chrom.sizes.txt\n", $accessionDir, $accessionId, $accessionId;
+  printf "chromAlias ../%s/%s/%s.chromAlias.txt\n", $accessionDir, $accessionId, $accessionId;
   printf "organism %s\n", $descr;
   my $chrName=`head -1 $buildDir/$asmId.chrom.sizes | awk '{print \$1}'`;
   chomp $chrName;
@@ -87,7 +112,7 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $orderKey, $accessionDir, $accession
     chomp $defPos;
   }
   printf "defaultPos %s\n", $defPos;
-  printf "orderKey %d\n", $orderKey++;
+  printf "orderKey %d\n", $buildDone;
   printf "scientificName %s\n", $descr;
   printf "htmlPath ../%s/%s/html/%s.description.html\n", $accessionDir, $accessionId, $asmId;
   printf "\n";
@@ -99,6 +124,8 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $orderKey, $accessionDir, $accession
   printf GF "groups groups.txt\n";
   printf GF "description %s\n", $orgName;
   printf GF "twoBitPath %s.2bit\n", $accessionId;
+  printf GF "chromSizes %s.chrom.sizes.txt\n", $accessionId;
+  printf GF "chromAlias %s.chromAlias.txt\n", $accessionId;
   printf GF "organism %s\n", $descr;
   printf GF "defaultPos %s\n", $defPos;
   printf GF "orderKey %d\n", $localOrderKey++;
@@ -119,22 +146,22 @@ printf STDERR "# %03d genomes.txt %s/%s\n", $orderKey, $accessionDir, $accession
   open (GR, ">$localGroups") or die "can not write to $localGroups";
   print GR <<_EOF_
 name user
-label Custom
+label Custom Tracks
 priority 1
 defaultIsClosed 1
 
 name map
-label Mapping
+label Mapping and Sequencing
 priority 2
 defaultIsClosed 0
 
 name genes
-label Genes
+label Genes and Gene Predictions
 priority 3
 defaultIsClosed 0
 
 name rna
-label mRNA
+label mRNA and EST
 priority 4
 defaultIsClosed 0
 
@@ -144,7 +171,7 @@ priority 5
 defaultIsClosed 0
 
 name compGeno
-label Comparative
+label Comparative Genomics
 priority 6
 defaultIsClosed 0
 

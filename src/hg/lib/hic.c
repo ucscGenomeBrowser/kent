@@ -12,6 +12,8 @@
 #include "chromAlias.h"
 #include "interact.h"
 
+#ifdef USE_HIC
+
 void mangleName(char *ucscName, char mangledUcscName[], int size)
 /* Generate a version of an assembly's chromosome name that matches
  * the mangling performed by the Juicer .hic creation tool (strip any initial
@@ -197,3 +199,17 @@ for (i=0; i<numRecords; i++)
     }
 return networkErrMsg;
 }
+
+#else // USE_HIC
+
+char *hicLoadHeader(char *filename, struct hicMeta **header, char *ucscAssembly)
+{
+return cloneString("Hi-C support not compiled in");
+}
+
+char *hicLoadData(struct hicMeta *fileInfo, int resolution, char *normalization, char *chrom1, int start1,
+         int end1, char *chrom2, int start2, int end2, struct interact **resultPtr)
+{
+return cloneString("Hi-C support not compiled in");
+}
+#endif // USE_HIC

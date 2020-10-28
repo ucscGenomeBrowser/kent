@@ -1,0 +1,41 @@
+#!/usr/bin/env perl
+
+# barChartMaxLimit
+#
+# Print max category value in barChart file
+#
+# usage: barChartMaxLimit <barChart.bed>
+
+use strict;
+use warnings;
+
+#use English;            # for built-in variable names, use awk names
+#use POSIX;
+#use feature 'say';      # append newline to prints
+#use autodie;
+
+if (@ARGV != 1) {
+    die "usage: barChartMaxLimit file.bed\n\n" . 
+        "Get maxLimit setting (maximum category value) from barChart bed file\n";
+}
+
+our $file = $ARGV[0];
+
+local $SIG{__WARN__} = sub {
+    my $message = shift;
+    print "Format error in barChart bed file '$file'.\n";
+    die $message;
+  };
+
+my $maxLimit = 0;
+open(my $fh, '<', $file) or die ("Can't open file '$file' for reading\n");
+while (<$fh>) {
+    my ($chrom, $start, $end, $name, $score, $strand, $name2, $expCount, $expScores) = split;
+    my @values = split(',', $expScores);
+    foreach my $i (@values) {
+        if ($i > $maxLimit) {
+            $maxLimit = $i;
+        }
+    }
+}
+print "$maxLimit\n";

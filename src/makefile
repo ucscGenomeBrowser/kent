@@ -34,13 +34,19 @@ cgi: libs
 	cd hg && ${MAKE} cgi
 	cd utils/bedToBigBed && ${MAKE} cgi
 
-cgi-alpha: check-alpha libs
+cgi-alpha: check-alpha libs logUser
 	cd hg && ${MAKE} alpha
 	cd utils/bedToBigBed && ${MAKE} alpha
 
-cgi-beta: check-beta libs
+cgi-beta: check-beta libs logUser
 	cd hg && ${MAKE} beta
 	cd utils/bedToBigBed && ${MAKE} beta
+
+# This log file can be useful when debugging problems on the alpha and beta builds.
+logUser:
+ifeq (${IS_HGWDEV},yes)
+	echo ${USER}, $(MAKECMDGOALS), `date` >> ${CGI_BIN}/buildLog.txt
+endif
 
 check-alpha:
 	# this will fail if we are not on master branch:

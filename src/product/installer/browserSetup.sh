@@ -613,10 +613,9 @@ function installRedhat () {
     waitKey
     # make sure we have and EPEL and ghostscript and rsync (not installed on vagrant boxes)
     # imagemagick is required for the session gallery
-    # MySQL-python is required for hgGeneGraph
-    yum update
+    yum -y update
     yum -y install epel-release
-    yum -y install ghostscript rsync ImageMagick R-core MySQL-python curl
+    yum -y install ghostscript rsync ImageMagick R-core curl
 
     # centos 7 and fedora 20 do not provide libpng by default
     if ldconfig -p | grep libpng12.so > /dev/null; then
@@ -703,6 +702,24 @@ function installRedhat () {
     else
         echo2 Mysql already installed
     fi
+
+    # MySQL-python is required for hgGeneGraph
+    # CentOS up to and including 7 default to python2, so MySQL-python is in the repos
+    if yum list MySQL-python 2> /dev/null ; then
+            yum -y MySQL-python
+    # Centos 8 defaults to python3 and it does not have a package MySQL-python anymore
+    # So we install python2, the mysql libraries and fix up my_config.h manually
+    # This is strange, but I was unable to find a different working solution. MariaDB does not have my_config.h
+    else
+            yum install -y python2 mysql-devel python2-devel wget
+            if [ -f /usr/include/mysql/my_config.h ]; then
+                    echo my_config.h found
+            else
+                wget https://raw.githubusercontent.com/paulfitz/mysql-connector-c/master/include/my_config.h -P /usr/include/mysql/
+            fi
+            pip2 install MySQL-python
+    fi
+
 }
 
 # OSX specific setup of the installation
@@ -1155,27 +1172,28 @@ function mysqlDbSetup ()
     #  Full access to all databases for the user 'browser'
     #       This would be for browser developers that need read/write access
     #       to all database tables.  
+    $MYSQL -e "CREATE USER browser@localhost IDENTIFIED BY 'genome';"
     $MYSQL -e "GRANT SELECT, INSERT, UPDATE, DELETE, FILE, "\
-"CREATE, DROP, ALTER, CREATE TEMPORARY TABLES on *.* TO browser@localhost "\
-"IDENTIFIED BY 'genome';"
+"CREATE, DROP, ALTER, CREATE TEMPORARY TABLES on *.* TO browser@localhost; "
     
     # FILE permission for this user to all databases to allow DB table loading with
     #       statements such as: "LOAD DATA INFILE file.tab"
     # For security details please read:
     #       http://dev.mysql.com/doc/refman/5.1/en/load-data.html
     #       http://dev.mysql.com/doc/refman/5.1/en/load-data-local.html
-    $MYSQL -e "GRANT FILE on *.* TO browser@localhost IDENTIFIED BY 'genome';" 
+    $MYSQL -e "GRANT FILE on *.* TO browser@localhost;" 
     
     #   Read only access to genome databases for the browser CGI binaries
+    $MYSQL -e "CREATE USER readonly@localhost IDENTIFIED BY 'access';"
     $MYSQL -e "GRANT SELECT, CREATE TEMPORARY TABLES on "\
-"*.* TO readonly@localhost IDENTIFIED BY 'access';"
+"*.* TO readonly@localhost;"
     $MYSQL -e "GRANT SELECT, INSERT, CREATE TEMPORARY TABLES on hgTemp.* TO "\
-"readonly@localhost IDENTIFIED BY 'access';"
+"readonly@localhost;"
     
     # Readwrite access to hgcentral for browser CGI binaries to keep session state
+    $MYSQL -e "CREATE USER readwrite@localhost IDENTIFIED BY 'update';"
     $MYSQL -e "GRANT SELECT, INSERT, UPDATE, "\
-"DELETE, CREATE, DROP, ALTER on hgcentral.* TO readwrite@localhost "\
-"IDENTIFIED BY 'update';"
+"DELETE, CREATE, DROP, ALTER on hgcentral.* TO readwrite@localhost; "
     
     # create /gbdb and let the apache user write to it
     # hgConvert will download missing liftOver files on the fly and needs write
@@ -1184,8 +1202,9 @@ function mysqlDbSetup ()
     chown $APACHEUSER:$APACHEUSER $GBDBDIR
     
     # the custom track database needs it own user and permissions
+    $MYSQL -e "CREATE USER ctdbuser@localhost IDENTIFIED BY 'ctdbpassword';"
     $MYSQL -e "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX "\
-"on customTrash.* TO ctdbuser@localhost IDENTIFIED by 'ctdbpassword';"
+"on customTrash.* TO ctdbuser@localhost;"
     
     # removed these now for the new hgGateway page, Apr 2016
     # by default hgGateway needs an empty hg19 database, will crash otherwise
@@ -1211,7 +1230,7 @@ function installBrowser ()
     echo 
     echo This script will go through three steps:
     echo "1 - setup apache and mysql, open port 80, deactivate SELinux"
-    echo "2 - copy CGI binaries into $CGIBINDIR, html files into HTDOCDIR"
+    echo "2 - copy CGI binaries into $CGIBINDIR, html files into $HTDOCDIR"
     echo "3 - optional: download genome assembly databases into mysql and /gbdb"
     echo
     echo This script will now install and configure Mysql and Apache if they are not yet installed. 
@@ -1384,7 +1403,7 @@ function downloadGenomes
             echo2 Downloading $DBS plus hgFixed proteome go hgFixed
             MYSQLDBS="$DBS proteome uniProt go hgFixed"
         else
-            echo2 Downloading $DBS plus GenBank tables
+            echo2 Downloading $DBS plus GenBank and RefSeq tables
             MYSQLDBS="$DBS"
             GENBANKTBLS="author cell description development gbCdnaInfo gbExtFile gbLoaded \
                          gbMiscDiff gbSeq gbWarn geneName imageClone keyword library \
@@ -1544,7 +1563,7 @@ function downloadMinimal
     echo2 Downloading minimal tables for databases $DBS 
 
     # only these db tables are copied over by default
-    minRsyncOpt="--include=cytoBand.* --include=chromInfo.* --include=cytoBandIdeo.* --include=kgColor.* --include=knownAttrs.* --include=knownGene.* --include=knownToTag.* --include=kgXref.* --include=ensemblLift.* --include=ucscToEnsemblwgEncodeRegTfbsCells.* --include=tableList.* --include=refSeqStatus.* --include=wgEncodeRegTfbsCellsV3.* --include=extFile.* --include=trackDb.* --include=grp.* --include=ucscRetroInfo5.* --include=refLink.* --include=ucscRetroSeq5.* --include=ensemblLift.* --include=knownCanonical.* --include=gbExtFile.* --include=flyBase2004Xref --include=hgFindSpec.*"
+    minRsyncOpt="--include=cytoBand.* --include=chromInfo.* --include=cytoBandIdeo.* --include=kgColor.* --include=knownAttrs.* --include=knownGene.* --include=knownToTag.* --include=kgXref.* --include=ensemblLift.* --include=ucscToEnsembl.* --include=wgEncodeRegTfbsCells.* --include=encRegTfbsClusteredSources.* --include=tableList.* --include=refSeqStatus.* --include=wgEncodeRegTfbsCellsV3.* --include=extFile.* --include=trackDb.* --include=grp.* --include=ucscRetroInfo5.* --include=refLink.* --include=ucscRetroSeq5.* --include=ensemblLift.* --include=knownCanonical.* --include=gbExtFile.* --include=flyBase2004Xref --include=hgFindSpec.* --include=ncbiRefSeq*"
 
     # these tables are not used for searches by default. Searches are very slow. We focus on genes.
     notSearchTables='wgEncodeGencodeBasicV19 wgEncodeGencodeCompV17 wgEncodeGencodeBasicV14 wgEncodeGencodeBasicV17 wgEncode GencodeCompV14 mgcFullMrna wgEncodeGencodeBasicV7 orfeomeMrna wgEncodeGencodePseudoGeneV14 wgEncodeGencodePseudoGeneV17 wgEncodeGencodePseudoGeneV19 wgEncodeGencodeCompV7 knownGeneOld6 geneReviews transMapAlnSplicedEst gbCdnaInfo oreganno vegaPseudoGene transMapAlnMRna ucscGenePfam qPcrPrimers transMapAlnUcscGenes transMapAlnRefSeq genscan bacEndPairs fosEndPairs'

@@ -239,8 +239,8 @@ int winEnd;                     /* End of window in sequence. */
 char *position = NULL;          /* Name of position. */
 
 int trackTabWidth = 11;
-int leftLabelWidthDefaultChars = 17;   /* default number of characters allowed for left label */
-int leftLabelWidthChars = 17;   /* number of characters allowed for left label */
+int leftLabelWidthDefaultChars = 20;   /* default number of characters allowed for left label */
+int leftLabelWidthChars = 20;   /* number of characters allowed for left label */
 int insideX;			/* Start of area to draw track in in pixels. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
 int leftLabelX;                 /* Start of area to draw left labels on. */
@@ -6140,7 +6140,7 @@ struct hashEl *knownGeneLabels = cartFindPrefix(cart, "knownGene.label");
 struct hashEl *label;
 boolean labelStarted = FALSE;
 
-if (hTableExists(database, "kgXref"))
+if (isBigGenePred || hTableExists(database, "kgXref"))
     {
     char omimLabel[48];
     safef(omimLabel, sizeof(omimLabel), "omim%s", cartString(cart, "db"));
@@ -6550,6 +6550,15 @@ if (hTableExists(database, "kgColor"))
     }
 else
     return knownGeneColorCalc(tg, item, hvg);
+}
+
+void gencodeMethods(struct track *tg)
+/* Make track of known genes. */
+{
+tg->loadItems   = loadKnownGene;
+tg->itemName    = knownGeneName;
+tg->mapItemName = knownGeneMapName;
+tg->itemColor   = knownGeneColor;
 }
 
 void knownGeneMethods(struct track *tg)
@@ -7208,7 +7217,7 @@ struct sqlConnection *conn = hAllocConn(database);
 boolean isNative = !sameString(tg->table, "xenoRefGene");
 boolean labelStarted = FALSE;
 boolean useGeneName = FALSE;
-boolean useAcc =  FALSE;
+boolean useAcc =  TRUE;
 boolean useMim =  FALSE;
 char trackLabel[1024];
 char *labelString = tg->table;
@@ -7240,8 +7249,8 @@ for (label = refGeneLabels; label != NULL; label = label->next)
     {
     if (endsWith(label->name, "gene") && differentString(label->val, "0"))
         useGeneName = TRUE;
-    else if (endsWith(label->name, "acc") && differentString(label->val, "0"))
-        useAcc = TRUE;
+    else if (endsWith(label->name, "acc") && sameString(label->val, "0"))
+        useAcc = FALSE;
     else if (endsWith(label->name, omimLabel) && differentString(label->val, "0"))
         useMim = TRUE;
     else if (!endsWith(label->name, "gene") &&
@@ -12647,12 +12656,47 @@ tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
 
+static char *getCode(char *inhMode)
+/* Translate inheritance mode strings into much shorter codes. */
+{
+static struct dyString *dy = NULL;  // re-use this string
+if (dy == NULL)
+    dy = dyStringNew(0);
+dyStringClear(dy);
+
+struct slName *modes = slNameListFromString(inhMode, ',');
+
+for(; modes; modes = modes->next)
+    {
+    stripChar(modes->name, '?');
+    char *mode = skipLeadingSpaces(modes->name);
+    if (sameString(mode, "Autosomal dominant"))
+        dyStringAppend(dy, "AD");
+    else if (sameString(mode, "Autosomal recessive"))
+        dyStringAppend(dy, "AR");
+    else if (sameString(mode, "X-linked"))
+        dyStringAppend(dy, "XL");
+    else if (sameString(mode, "X-linked dominant"))
+        dyStringAppend(dy, "XLD");
+    else if (sameString(mode, "X-linked recessive"))
+        dyStringAppend(dy, "XLR");
+    else if (sameString(mode, "Y-linked"))
+        dyStringAppend(dy, "YL");
+    else if (!isEmpty(mode))
+        dyStringAppend(dy, mode);
+
+    if (modes->next)
+        dyStringAppend(dy, "/");
+    }
+return dy->string;
+}
+
 static char *omimGene2DisorderList(char *name)
 /* Return list of disorders associated with a OMIM entry.  Do not free result! */
 {
 static struct dyString *dy = NULL;
 struct sqlConnection *conn;
-char query[256];
+char query[4096];
 
 if (dy == NULL)
     dy = dyStringNew(0);
@@ -12662,19 +12706,63 @@ dyStringClear(dy);
 conn = hAllocConn(database);
 sqlSafef(query,sizeof(query),
         "select geneSymbol from omimGeneMap2 where omimId =%s", name);
-char buf[256];
+char buf[4096];
 char *ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
 if (isNotEmpty(ret))
-    dyStringAppend(dy, ret);
-
-sqlSafef(query,sizeof(query),
-        "select distinct description from omimPhenotype, omimGene2 where name='%s' and name=cast(omimId as char) order by description", name);
-char *disorders = collapseRowsFromQuery(query, "; ", 20);
-if (isNotEmpty(disorders))
     {
-    dyStringAppend(dy, "; disorder(s): ");
-    dyStringAppend(dy, disorders);
+    struct slName *genes = slNameListFromString(ret, ',');
+    dyStringPrintf(dy, "Gene: %s", genes->name);
+    genes = genes->next;
+    if (genes)
+        {
+        if (slCount(genes) > 1)
+            dyStringPrintf(dy, ", Synonyms: ");
+        else
+            dyStringPrintf(dy, ", Synonym: ");
+        for(; genes; genes = genes->next)
+            {
+            dyStringPrintf(dy, "%s", genes->name);
+            if (genes->next)
+                dyStringPrintf(dy, ",");
+        }
     }
+
+    // now phenotype information
+    sqlSafef(query,sizeof(query),
+            "select GROUP_CONCAT(omimPhenotype.description, '|',inhMode  , '|',omimPhenoMapKey SEPARATOR '$') from omimGene2, omimGeneMap, omimPhenotype where omimGene2.name=omimGeneMap.omimId and omimGene2.name=omimPhenotype.omimId and omimGene2.name =%s", name);
+    ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
+
+    if (ret)
+        {
+        struct slName *phenotypes = slNameListFromString(ret, '$');
+        if (slCount(phenotypes))
+            {
+            if (slCount(phenotypes) > 1)
+                dyStringPrintf(dy, ", Phenotypes: ");
+            else
+                dyStringPrintf(dy, ", Phenotype: ");
+
+            for(; phenotypes; phenotypes = phenotypes->next)
+                {
+                struct slName *components = slNameListFromString(phenotypes->name, '|');
+                dyStringPrintf(dy, "%s", components->name);
+                components = components->next;
+
+                char *inhCode = getCode(components->name);
+                if (!isEmpty(inhCode))
+                    dyStringPrintf(dy, ", %s", inhCode);
+                components = components->next;
+
+                if (!isEmpty(components->name))
+                    dyStringPrintf(dy, ", %s", components->name);
+
+                if (phenotypes->next)
+                    dyStringPrintf(dy, "; ");
+                }
+            }
+        }
+    }
+
 hFreeConn(&conn);
 return(dy->string);
 }
@@ -14133,6 +14221,10 @@ else if (sameWord(type, "halSnake"))
     halSnakeMethods(track, tdb, wordCount, words);
     }
 #endif
+else if (sameWord(type, "vcfPhasedTrio"))
+    {
+    vcfPhasedMethods(track);
+    }
 else if (sameWord(type, "vcfTabix"))
     {
     vcfTabixMethods(track);
@@ -14239,6 +14331,8 @@ if (startsWith("peptideAtlas", track->track))
     peptideAtlasMethods(track);
 else if (startsWith("gtexGene", track->track))
     gtexGeneMethods(track);
+else if (startsWith("rnaStruct", track->track))
+    rnaSecStrMethods(track);
 #endif /* GBROWSE */
 }
 
@@ -14819,7 +14913,7 @@ registerTrackHandler("hg17Kg", hg17KgMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("gad", gadMethods);
 registerTrackHandler("rdmr", rdmrMethods);
-registerTrackHandler("decipher", decipherCnvsMethods);
+registerTrackHandler("decipherOld", decipherCnvsMethods);
 registerTrackHandler("decipherSnvs", decipherSnvsMethods);
 registerTrackHandler("rgdQtl", rgdQtlMethods);
 registerTrackHandler("rgdRatQtl", rgdQtlMethods);

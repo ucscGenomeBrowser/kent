@@ -20,7 +20,8 @@ else
 boolean assemblySupportsGeneSuggest(char *database)
 // return true if this assembly has tables to support gene autocompletion
 {
-struct sqlConnection *conn = hAllocConn(database);
+char *knownDatabase = hdbDefaultKnownDb(database);
+struct sqlConnection *conn = hAllocConn(knownDatabase);
 char *table = connGeneSuggestTable(conn);
 hFreeConn(&conn);
 return table != NULL;
@@ -30,13 +31,20 @@ char *assemblyGeneSuggestTrack(char *database)
 // return name of gene suggest track if this assembly has tables to support gene autocompletion, NULL otherwise
 // Do NOT free returned string.
 {
-struct sqlConnection *conn = hAllocConn(database);
+char *knownDatabase = hdbDefaultKnownDb(database);
+struct sqlConnection *conn = hAllocConn(knownDatabase);
 char *table = connGeneSuggestTable(conn);
 hFreeConn(&conn);
 if(table != NULL)
     {
     if(sameString(table, "knownCanonical"))
+        {
+        if (differentString(knownDatabase, database))
+            {
+            return hdbGetMasterGeneTrack(knownDatabase);
+            }
         return "knownGene";
+        }
     else
         return "refGene";
     }

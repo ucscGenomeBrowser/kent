@@ -34,6 +34,7 @@
 #include "sig.h"
 #include "net.h"
 #include "cheapcgi.h"
+#include "htmlPage.h"
 #include "udc.h"
 #include "hex.h"
 #include <dirent.h>
@@ -529,6 +530,8 @@ while (TRUE)
 	status = netUrlFakeHeadByGet(url, hash);
 	if (status == 206) 
 	    break;
+	if (status == 200)  // helps get more info to user
+	    break;
 	}
     if (status != 301 && status != 302 && status != 307 && status != 308)
 	return FALSE;
@@ -539,7 +542,23 @@ while (TRUE)
 	return FALSE;
 	}
     char *newUrl = hashFindValUpperCase(hash, "Location:");
-    retInfo->ci.redirUrl = cloneString(newUrl);
+     if (!newUrl)
+	{
+	warn("code %d redirects: redirect location missing, %s", status, url);
+	return FALSE;
+	}
+
+    // path may be relative
+    if (hasProtocol(newUrl))
+	{
+        newUrl = cloneString(newUrl);
+	}
+    else
+	{
+	newUrl = expandUrlOnBase(url, newUrl);
+	}
+
+    retInfo->ci.redirUrl = newUrl;
     url = transferParamsToRedirectedUrl(url, newUrl);		
     hashFree(&hash);
     }
@@ -999,11 +1018,11 @@ void udcParseUrl(char *url, char **retProtocol, char **retAfterProtocol, char **
 udcParseUrlFull(url, retProtocol, retAfterProtocol, retColon, NULL);
 }
 
-static void addElementToDy(struct dyString *dy, char *name)
+static void addElementToDy(struct dyString *dy, int maxLen, char *name)
 /* add one element of a path to a dyString, hashing it if it's longer 
- * than MAXNAMLEN */
+ * than NAME_MAX */
 {
-if (strlen(name) > MAXNAMLEN)
+if (strlen(name) > maxLen)
     {
     unsigned char hash[SHA_DIGEST_LENGTH];
     char newName[(SHA_DIGEST_LENGTH + 1) * 2];
@@ -1017,16 +1036,19 @@ else
     dyStringAppend(dy, name);
 }
 
-static char *longDirHash(char *name)
-/* take a path and hash the elements that are longer than MAXNAMLEN */
+static char *longDirHash(char *cacheDir, char *name)
+/* take a path and hash the elements that are longer than NAME_MAX */
 {
+int maxLen = pathconf(cacheDir, _PC_NAME_MAX);
+if (maxLen < 0)   // if we can't get the real system max, assume it's 255
+    maxLen = 255;
 struct dyString *dy = newDyString(strlen(name));
 char *ptr = strchr(name, '/');
 
 while(ptr)
     {
     *ptr = 0;
-    addElementToDy(dy, name);
+    addElementToDy(dy, maxLen, name);
 
     dyStringAppend(dy, "/");
 
@@ -1034,7 +1056,7 @@ while(ptr)
     ptr = strchr(name, '/');
     }
 
-addElementToDy(dy, name);
+addElementToDy(dy, maxLen, name);
 
 return dyStringCannibalize(&dy);
 }
@@ -1044,7 +1066,7 @@ void udcPathAndFileNames(struct udcFile *file, char *cacheDir, char *protocol, c
 {
 if (cacheDir==NULL)
     return;
-char *hashedAfterProtocol = longDirHash(afterProtocol);
+char *hashedAfterProtocol = longDirHash(cacheDir, afterProtocol);
 int len = strlen(cacheDir) + 1 + strlen(protocol) + 1 + strlen(hashedAfterProtocol) + 1;
 file->cacheDir = needMem(len);
 safef(file->cacheDir, len, "%s/%s/%s", cacheDir, protocol, hashedAfterProtocol);
@@ -1926,8 +1948,12 @@ for (file = fileList; file != NULL; file = file->next)
 	}
     else if (sameString(file->name, bitmapName))
         {
-	if (file->size > udcBitmapHeaderSize) /* prevent failure on bitmap files of size 0 or less than header size */
-	    verbose(4, "%ld (%ld) %s/%s\n", bitRealDataSize(file->name), (long)file->size, getCurrentDir(), file->name);
+        if (verboseLevel() >= 4)
+            {
+            if (file->size > udcBitmapHeaderSize) /* prevent failure on bitmap files of size 0 or less than header size */
+                verbose(4, "%ld (%ld) %s/%s\n", bitRealDataSize(file->name), (long)file->size, getCurrentDir(), file->name);
+            }
+
 	if (file->lastAccess < deleteTime)
 	    {
 	    /* Remove all files when get bitmap, so that can ensure they are deleted in 

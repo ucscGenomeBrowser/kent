@@ -789,7 +789,6 @@ int fudgeThickStart = 0, fudgeThickEnd = 0;
 bool gotThickStart = FALSE, gotThickEnd = FALSE;
 bool gotFudgeThickStart = FALSE;
 bool needThick = (thickStart != thickEnd);
-boolean done = FALSE;
 static char bErr[512];
 char *err = NULL;
 
@@ -811,33 +810,29 @@ nextR = r->next;
 for (;;)
     {
     /* Skip over chain blocks that end before range starts. */
-    while (b->tEnd <= r->start)
+    if (b->tEnd <= r->start)
 	{
 	b = b->next;
 	if (b == NULL)
 	    {
-	    done = TRUE;
 	    break;
 	    }
+        continue;
 	}
-    if (done) 
-	break;
 
     /* Put any range blocks that end before block starts on badList */
-    while (r->end <= b->tStart)
+    if (r->end <= b->tStart)
 	{
 	slAddHead(&badList, r);
 	r = nextR;
 	if (r == NULL)
 	    {
-	    done = TRUE;
 	    break;
 	    }
 	nextR = r->next;
 	gotStart = FALSE;
+        continue;
 	}
-    if (done) 
-	break;
 
     /* Map start and end of 'thick area' in a slightly picky fashion. */
     if (needThick)
@@ -889,25 +884,21 @@ for (;;)
 	r = nextR;
 	if (r == NULL)
 	    {
-	    done = TRUE;
 	    break;
 	    }
 	nextR = r->next;
 	gotStart = FALSE;
+	continue;
 	}
-    if (done) 
-	break;
+
     if (b->tEnd < r->end)
 	{
 	b = b->next;
 	if (b == NULL)
 	    {
-	    done = TRUE;
 	    break;
 	    }
 	}
-    if (done) 
-	break;
     }
 slReverse(&goodList);
 slReverse(&badList);

@@ -26,7 +26,7 @@ struct phmmMatrix *phmmMatrixNew(int stateCount,
 {
 int i;
 struct phmmMommy *allCells;
-int allCellSize;
+size_t allCellSize;
 int rowSize;
 int *allScores;
 struct phmmMatrix *am;
@@ -44,7 +44,7 @@ am->stateByteSize = am->stateSize * sizeof(struct phmmMommy);
 am->states = needMem(stateCount * sizeof(struct phmmState));
 
 /* Initialize matrix of cells for each state. */
-allCellSize = stateCount * am->stateByteSize;
+allCellSize = (size_t)stateCount * (size_t)am->stateByteSize;
 am->allCells = allCells = needLargeMem(allCellSize); 
 memset(allCells, 0, allCellSize);
 for (i=0; i<stateCount; ++i)
@@ -96,7 +96,7 @@ static void phmmFindMatrixIx(struct phmmMatrix *am, struct phmmMommy *cell,
 	int *retStateIx, int *retQix, int *retTix)
 /* Given a cell in matrix return state, query, and target index. */
 {
-int cellIx = cell - am->allCells;
+size_t cellIx = cell - am->allCells;
 *retStateIx = cellIx/am->stateSize;
 cellIx %= am->stateSize;
 *retTix = cellIx / am->qDim;

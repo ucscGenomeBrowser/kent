@@ -4,21 +4,18 @@ track problematic
 shortLabel Problematic Regions
 longLabel Problematic Regions for NGS or Sanger sequencing or very variable regions
 compositeTrack on
-hideEmptySubtracks on
+hideEmptySubtracks off
 group map
 visibility hide
 type bigBed 3 +
-release alpha
-
 
     track comments
-    shortLabel Comments
-    longLabel UCSC FAQ comments on assembly structure
-    type bigBed 9 +
-    bigDataUrl /gbdb/hg19/bbi/special/comments.bb
+    shortLabel UCSC Unusual Regions
+    longLabel UCSC unusual regions on assembly structure
+    type bigBed 9 
+    bigDataUrl /gbdb/hg19/bbi/problematic/comments.bb
     visibility dense
     parent problematic
-    release alpha
     priority 1
     mouseOverField note
 
@@ -26,110 +23,99 @@ release alpha
     shortLabel ENCODE Blacklist
     longLabel ENCODE Blacklist
     type bigBed 4
-    bigDataUrl /gbdb/hg19/bbi/special/encBlacklist.bb
+    bigDataUrl /gbdb/hg19/bbi/problematic/encBlacklist.bb
     visibility dense
     parent problematic
-    release alpha
     priority 2
 
     track getRmNgsDeadZone
-    shortLabel NBCI NGS Dead Zone
-    longLabel NCBI Get-RM NGS Dead Zone
+    shortLabel NCBI NGS Dead Zone
+    longLabel NCBI GeT-RM NGS Dead Zone
     type bigBed 3 +
-    bigDataUrl /gbdb/hg19/bbi/special/deadZone.bb
+    bigDataUrl /gbdb/hg19/bbi/problematic/deadZone.bb
     visibility dense
     parent problematic
-    release alpha
     priority 3
 
     track getRmSangerDeadZone
-    shortLabel NBCI Sanger Dead Zone
-    longLabel NCBI Get-RM Sanger Dead Zone
+    shortLabel NCBI Sanger Dead Zone
+    longLabel NCBI GeT-RM Sanger Dead Zone
     type bigBed 3 +
-    bigDataUrl /gbdb/hg19/bbi/special/sangerDeadZone.bb
+    bigDataUrl /gbdb/hg19/bbi/problematic/sangerDeadZone.bb
     visibility dense
     parent problematic
-    release alpha
     priority 4
 
     track getRmNgsProblemLow
-    shortLabel NBCI NGS Problem Low Stringency
-    longLabel NCBI Get-RM NGS Problem List, Low Stringency
+    shortLabel NCBI NGS Low Stringency
+    longLabel NCBI GeT-RM NGS Problem List, Low Stringency
     type bigBed 3 +
-    bigDataUrl /gbdb/hg19/bbi/special/ngsProblemLow.bb
+    bigDataUrl /gbdb/hg19/bbi/problematic/ngsProblemLow.bb
     visibility dense
     parent problematic
-    release alpha
     priority 5
 
     track getRmNgsProblemHigh
-    shortLabel NBCI NGS Problem High Stringency
-    longLabel NCBI Get-RM NGS Problem List, High Stringency
+    shortLabel NCBI NGS High Stringency
+    longLabel NCBI GeT-RM NGS Problem List, High Stringency
     type bigBed 3 +
-    bigDataUrl /gbdb/hg19/bbi/special/ngsProblemHigh.bb
+    bigDataUrl /gbdb/hg19/bbi/problematic/ngsProblemHigh.bb
     visibility dense
     parent problematic
-    release alpha
     priority 6
 
     track filterSSE
     shortLabel GIAB filter SSE
-    longLabel Genome-in-a-bottle: calls with evidence of systematic sequencing errors 
+    longLabel NIST Genome-in-a-bottle: calls with evidence of systematic sequencing errors 
     type bigBed 3
-    bigDataUrl /gbdb/hg19/bbi/special/filterSSE.bb
+    bigDataUrl /gbdb/hg19/bbi/problematic/filterSSE.bb
     visibility dense
     parent problematic
-    release alpha
     priority 7
 
     track filterHapNoVar
-    shortLabel GIAB hapl var
-    longLabel Genome-in-a-bottle: HaplotypeCaller makes no call and UnifiedGenotyper makes a variant call
+    shortLabel GIAB call conflict
+    longLabel NIST Genome-in-a-bottle: HaplotypeCaller makes no call and UnifiedGenotyper makes a variant call
     type bigBed 3
-    bigDataUrl /gbdb/hg19/bbi/special/filterHapNoVar.bb
+    bigDataUrl /gbdb/hg19/bbi/problematic/filterHapNoVar.bb
     visibility dense
     parent problematic
-    release alpha
     priority 9
 
     track filterMap
-    shortLabel GIAB filter map
-    longLabel Genome-in-a-bottle: calls with low mapping quality or high coverage
+    shortLabel GIAB quality issue
+    longLabel NIST Genome-in-a-bottle: calls with low mapping quality or high coverage
     type bigBed 3
-    bigDataUrl /gbdb/hg19/bbi/special/filterMap.bb
+    bigDataUrl /gbdb/hg19/bbi/problematic/filterMap.bb
     visibility dense
     parent problematic
-    release alpha
     priority 10
 
     track filterABQD
-    shortLabel GIAB abnorm all bal
-    longLabel Genome-in-a-bottle: Calls with abnormal allele balance
+    shortLabel GIAB allele imbalance
+    longLabel NIST Genome-in-a-bottle: calls with abnormal allele balance
     type bigBed 3
-    bigDataUrl /gbdb/hg19/bbi/special/filterABQD.bb
+    bigDataUrl /gbdb/hg19/bbi/problematic/filterABQD.bb
     visibility dense
     parent problematic
-    release alpha
     priority 11
 
     track filterAlign
-    shortLabel GIAB align probl
-    longLabel Genome-in-a-bottle: Calls with evidence of local alignment problems like clipped reads
+    shortLabel GIAB align problem
+    longLabel NIST Genome-in-a-bottle: calls with evidence of local alignment problems like clipped reads
     type bigBed 3
-    bigDataUrl /gbdb/hg19/bbi/special/filterAlign.bb
+    bigDataUrl /gbdb/hg19/bbi/problematic/filterAlign.bb
     visibility dense
     parent problematic
-    release alpha
     priority 12
 
     track filterConflicting
-    shortLabel GIAB confl genot
-    longLabel Genome-in-a-bottle: Calls with unresolved conflicting genotypes after arbitration
+    shortLabel GIAB genotype conflict
+    longLabel NIST Genome-in-a-bottle: calls with unresolved conflicting genotypes after arbitration
     type bigBed 3
-    bigDataUrl /gbdb/hg19/bbi/special/filterConflicting.bb
+    bigDataUrl /gbdb/hg19/bbi/problematic/filterConflicting.bb
     visibility dense
     parent problematic
-    release alpha
     priority 13
 
 track cosmicRegions
@@ -222,14 +208,12 @@ snpTable snp144
 snpVersion 144
 
 track liftHg38
-shortLabel hg38 Mapping
-longLabel hg38 Mappings: UCSC LiftOver and NCBI ReMap
+shortLabel Hg38 Mapping
+longLabel Hg38 Mappings: UCSC LiftOver and NCBI ReMap
 group map
 visibility hide
-priority 499
 type chain
 compositeTrack on
-release alpha
 
         track liftOverHg38
         shortLabel UCSC liftOver to hg38
@@ -242,7 +226,6 @@ release alpha
         chainMinScore 3000
         chainLinearGap medium
         parent liftHg38
-        release alpha
 
         track chainHg38ReMap
         shortLabel NCBI ReMap hg38
@@ -255,7 +238,6 @@ release alpha
         chainMinScore 3000
         chainLinearGap medium
         parent liftHg38
-        release alpha
 
         track chainHg38ReMapAxtChain
         shortLabel ReMap + axtChain hg38
@@ -268,7 +250,6 @@ release alpha
         chainMinScore 3000
         chainLinearGap medium
         parent liftHg38
-        release alpha
 
 track ucscRetroAli5
 shortLabel Retroposed Genes
@@ -1283,23 +1264,6 @@ informant Human N-SCAN Human N-SCAN uses mouse (mm9) as the informant and iterat
 track chainNetVenter override
 priority 450
 
-# Add override for patchwork fix and alt haplotypes track and remove old haplotype track ref#18855
-track altSeqLiftOverPsl override
-release alpha
-
-track fixSeqLiftOverPsl override
-release alpha
-
-track altLocations
-type bed 4
-group map
-color 32,32,190
-shortLabel Alt Haplotypes
-longLabel Alternate Haplotypes to Reference Sequence Correspondence
-url ../cgi-bin/hgTracks?db=$D&position=$$
-urlLabel Corresponding position:
-release beta,public
-
 # Some, but not all subtracks of pgSnp (Personal Genome Variants) were lifted
 track pgAk1 override
 origAssembly hg18
@@ -1500,6 +1464,7 @@ group varRep
 visibility hide
 maxWindowToDraw 5000000
 showHardyWeinberg on
+geneTrack ncbiRefSeqCurated
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 
 track tgpPhase3Accessibility
@@ -1558,6 +1523,8 @@ showHardyWeinberg on
 bigDataUrl /gbdb/hg19/ExAC/ExAC.r0.3.sites.vep.hg19.vcf.gz
 configureByPopup off
 chromosomes chr1,chr10,chr11,chr11_gl000202_random,chr12,chr13,chr14,chr15,chr16,chr17,chr17_gl000203_random,chr17_gl000204_random,chr17_gl000205_random,chr17_gl000206_random,chr18,chr18_gl000207_random,chr19,chr19_gl000208_random,chr19_gl000209_random,chr1_gl000191_random,chr1_gl000192_random,chr2,chr20,chr21,chr21_gl000210_random,chr22,chr3,chr4,chr4_gl000193_random,chr4_gl000194_random,chr5,chr6,chr7,chr7_gl000195_random,chr8,chr8_gl000196_random,chr8_gl000197_random,chr9,chr9_gl000198_random,chr9_gl000199_random,chr9_gl000200_random,chr9_gl000201_random,chrUn_gl000211,chrUn_gl000212,chrUn_gl000213,chrUn_gl000214,chrUn_gl000215,chrUn_gl000216,chrUn_gl000217,chrUn_gl000218,chrUn_gl000219,chrUn_gl000220,chrUn_gl000221,chrUn_gl000222,chrUn_gl000223,chrUn_gl000224,chrUn_gl000225,chrUn_gl000226,chrUn_gl000227,chrUn_gl000228,chrUn_gl000229,chrUn_gl000230,chrUn_gl000231,chrUn_gl000232,chrUn_gl000233,chrUn_gl000234,chrUn_gl000235,chrUn_gl000236,chrUn_gl000237,chrUn_gl000238,chrUn_gl000239,chrUn_gl000240,chrUn_gl000241,chrUn_gl000242,chrUn_gl000243,chrUn_gl000244,chrUn_gl000245,chrUn_gl000246,chrUn_gl000247,chrUn_gl000248,chrUn_gl000249,chrX,chrY
+url http://gnomad.broadinstitute.org/variant/$s-$<pos>-$<ref>-$<firstAlt>?dataset=exac&ignore=$$
+urlLabel ExAC: 
 
 track exacRegions
 subTrack exac
@@ -1829,7 +1796,7 @@ include altSeqComposite9.ra alpha
 
 include altSeqComposite10.ra alpha
 
-include hg19Patch13.ra
+include hg19Patch13.ra alpha
 
 track vistaEnhancers override
 url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
@@ -2856,4 +2823,8 @@ idXref ncbiRefSeqLink mrnaAcc name
 color 20,20,160
 baseColorUseCds given
 baseColorDefault genomicCodons
+
+track clinGenCnv override
+filter.size 773:11309570
+filterLimits.size 773:11309570
 

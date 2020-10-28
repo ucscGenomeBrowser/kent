@@ -1,0 +1,417 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes tracks built for the manuscript by Yatish Turakhia, Russ Corbet-Detig
+# et al. about apparent recurrent mutations (some erroneous, some real) that can cause trouble for
+# phylogenetic analyses, and comparisons of phylogenetic trees from different groups
+# (mainly Nextstrain and COG-UK).
+# Relevant github repos:
+# https://github.com/yatisht/strain_phylogenetics
+# https://github.com/lgozasht/COVID-19-Lab-Specific-Bias-Filter
+
+#########################################################################
+# Lab-associated mutations (DONE - 2020-06-03 - Angie)
+
+    mkdir /hive/data/genomes/wuhCor1/bed/labAssocMuts
+    cd /hive/data/genomes/wuhCor1/bed/labAssocMuts
+    # Saved file '2020-04-19 - Table_S1_Lab_Associated.tsv' emailed from Landen Gozashti
+    # Convert file to bed & bigBed with labAssocMuts.as:
+    perl -wne 's/[\r\n]//g;
+        @w = split("\t");
+        next unless (@w and $w[0] =~ m/^[A-Z](\d+)[A-Z]$/);
+        $pos = $1;
+        # Tweak columns to match output of github.com/lgozasht/COVID-19-Lab-Specific-Bias-Filter
+        ($name, $aaChange, $articPrimer, $altCount, $pars, $comment, $maf) = @w;
+        $name =~ s/T/U/;
+        $aaChange =~ s/^AACHANGE=//;
+        $articPrimer =~ s/left/LEFT/g;
+        $articPrimer =~ s/right/RIGHT/g;
+        $articPrimer =~ s/^/nCoV-2019_/ if ($articPrimer ne "");
+        $articPrimer =~ s/, /,nCoV-2019_/g;
+        print join("\t", "NC_045512v2", ($pos-1), $pos, $name, $pars, $altCount, $maf,
+                   $articPrimer, $aaChange, $comment) . "\n";' \
+     '2020-04-19 - Table_S1_Lab_Associated.tsv' \
+    | sort -k2n,2n \
+      > labAssocMutsNs419.bed
+    bedToBigBed -tab -type=bed4+9 -as=$HOME/kent/src/hg/lib/labAssocMuts.as \
+      labAssocMutsNs419.bed ../../chrom.sizes labAssocMutsNs419.bb
+
+    # Install in /gbdb
+    mkdir /gbdb/wuhCor1/phylogenetics/
+    ln -s `pwd`/labAssocMutsNs419.bb /gbdb/wuhCor1/phylogenetics/
+
+
+#########################################################################
+# SARS-CoV-2 PHYLOGENY (DONE - 2020-09-03 - Angie)  (sampleColorFile added 2020-09-27)
+# First done 2020-07-15; updated 2020-07-22 with tree from Yatish Turakhia, collapsed to keep
+# only nodes with associated mutations.
+# Updated 2020-09-03 with latest release 28-08-20.
+
+    releaseLabel=28-08-20
+    mkdir -p /hive/data/genomes/wuhCor1/bed/sarsCov2Phylo/$releaseLabel
+    cd /hive/data/genomes/wuhCor1/bed/sarsCov2Phylo/$releaseLabel
+    wget https://github.com/roblanf/sarscov2phylo/releases/download/28-08-20/ft_SH.tree
+    # aln_global_unmasked.fa.xz emailed from Rob
+
+    # Figure out what fasta sequences are not in the tree and therefore need to be excluded from VCF:
+    xzcat aln_global_unmasked.fa.xz \
+    | grep ^\> \
+    | sed -re 's/^>//;' \
+    | sort > fa.ids.sorted
+    sed -re 's/\)[0-9.]+:/\):/g; s/:[0-9e.:-]+//g; s/[\(\);]//g; s/,/\n/g;'" s/'//g;" ft_SH.tree \
+    | sort > tree.ids.sorted
+    # How many samples?
+    wc -l tree.ids.sorted
+#59600 tree.ids.sorted
+
+    # Make sure the number of samples in tree but not fasta is 0
+    # (if not, probably need to fix sed command):
+    comm -13 fa.ids.sorted tree.ids.sorted | wc -l
+#0
+    # Make list of samples in fasta but not tree:
+    comm -23 fa.ids.sorted tree.ids.sorted > rob-$releaseLabel.idsToExclude
+
+    # Get the name for the reference (Wuhan-Hu-1 or Wuhan/Hu-1):
+    grep EPI_ISL_402125 fa.ids.sorted
+    #hCoV-19/Wuhan/Hu-1/2019|EPI_ISL_402125|2019-12-31
+
+    # Run faToVcf.  First without -ambiguousToN and -minAc for Yatish Turakhia's tools:
+    xzcat aln_global_unmasked.fa.xz \
+    | faToVcf stdin gisaid-$releaseLabel.unfiltered.vcf -includeRef \
+        -ref='hCoV-19/Wuhan/Hu-1/2019|EPI_ISL_402125|2019-12-31' \
+        -vcfChrom=NC_045512v2 -verbose=2 -excludeFile=rob-$releaseLabel.idsToExclude
+#Read 59889 sequences.
+#Using hCoV-19/Wuhan/Hu-1/2019|EPI_ISL_402125|2019-12-31 as reference.
+#Excluded 289 sequences named in rob-28-08-20.idsToExclude (59600 sequences remaining including reference)
+    # Remove some redundant parts of the very long concatenated IDs.
+    perl -wpi -e 's@hCoV-19/@@g;  s@\|20(\d\d)@|$1@g;' gisaid-$releaseLabel.unfiltered.vcf
+    ls -l gisaid-$releaseLabel.unfiltered.vcf
+#-rw-rw-r-- 1 angie genecats 2155993752 Sep  2 17:59 gisaid-28-08-20.unfiltered.vcf
+    wc -l gisaid-$releaseLabel.unfiltered.vcf
+#18059 gisaid-28-08-20.unfiltered.vcf
+    gzip -f gisaid-$releaseLabel.unfiltered.vcf
+
+    # Cross-check number of samples in tree with VCF sample IDs:
+    zcat gisaid-$releaseLabel.unfiltered.vcf.gz | head | g ^#CHROM | cut -f 10- | wc -w
+#59600
+
+    # Use -ambiguousToN to avoid complaints about ambiguous alleles from display code
+    # (also to prevent more situations where it looks like CZB maybe saw an alt, but according
+    # to them they didn't see an alt, it was a low-conf base).
+    xzcat aln_global_unmasked.fa.xz \
+    | faToVcf stdin gisaid-$releaseLabel.ambigToN.vcf -includeRef \
+        -ambiguousToN \
+        -ref='hCoV-19/Wuhan/Hu-1/2019|EPI_ISL_402125|2019-12-31' \
+        -vcfChrom=NC_045512v2 -verbose=2 -excludeFile=rob-$releaseLabel.idsToExclude
+    perl -wpi -e 's@hCoV-19/@@g;  s@\|20(\d\d)@|$1@g;' gisaid-$releaseLabel.ambigToN.vcf
+    ls -l gisaid-$releaseLabel.ambigToN.vcf
+#-rw-rw-r-- 1 angie genecats 1705011225 Sep  2 18:05 gisaid-28-08-20.ambigToN.vcf
+    wc -l gisaid-$releaseLabel.ambigToN.vcf
+#14278 gisaid-28-08-20.ambigToN.vcf
+    bgzip -f gisaid-$releaseLabel.ambigToN.vcf
+    tabix -p vcf gisaid-$releaseLabel.ambigToN.vcf.gz
+
+    # Then with -ambiguousToN and -minAc (0.1% = 59600 / 1000 = 60)
+    # for not-terribly-slow browser display:
+    xzcat aln_global_unmasked.fa.xz \
+    | faToVcf stdin gisaid-$releaseLabel.minAf.001.vcf -includeRef \
+        -ambiguousToN -minAc=60 \
+        -ref='hCoV-19/Wuhan/Hu-1/2019|EPI_ISL_402125|2019-12-31' \
+        -vcfChrom=NC_045512v2 -verbose=2 -excludeFile=rob-$releaseLabel.idsToExclude
+    perl -wpi -e 's@hCoV-19/@@g;  s@\|20(\d\d)@|$1@g;' gisaid-$releaseLabel.minAf.001.vcf
+    ls -l gisaid-$releaseLabel.minAf.001.vcf
+#-rw-rw-r-- 1 angie genecats 63014097 Sep  2 18:07 gisaid-28-08-20.minAf.001.vcf
+    wc -l gisaid-$releaseLabel.minAf.001.vcf
+#509 gisaid-28-08-20.minAf.001.vcf
+    bgzip -f gisaid-$releaseLabel.minAf.001.vcf
+    tabix -p vcf gisaid-$releaseLabel.minAf.001.vcf.gz
+
+    # Make an even more filtered version with -minAc=596 (1%):
+    xzcat aln_global_unmasked.fa.xz \
+    | faToVcf stdin gisaid-$releaseLabel.minAf.01.vcf -includeRef \
+        -ambiguousToN -minAc=596 \
+        -ref='hCoV-19/Wuhan/Hu-1/2019|EPI_ISL_402125|2019-12-31' \
+        -vcfChrom=NC_045512v2 -verbose=2 -excludeFile=rob-$releaseLabel.idsToExclude
+    perl -wpi -e 's@hCoV-19/@@g;  s@\|20(\d\d)@|$1@g;' gisaid-$releaseLabel.minAf.01.vcf
+    ls -l gisaid-$releaseLabel.minAf.01.vcf
+#-rw-rw-r-- 1 angie genecats 10185589 Sep  2 18:12 gisaid-28-08-20.minAf.01.vcf
+    wc -l gisaid-$releaseLabel.minAf.01.vcf
+#66 gisaid-28-08-20.minAf.01.vcf
+    bgzip -f gisaid-$releaseLabel.minAf.01.vcf
+    tabix -p vcf gisaid-$releaseLabel.minAf.01.vcf.gz
+
+    # Shorten tree IDs to match VCF:
+    perl -wpe 's@hCoV-19/@@g;  s@\|20(\d\d)@|$1@g; '"s@'@@g;" ft_SH.tree \
+      > ft_SH.shorterNames.tree
+    # Set the root of the tree to the Wuhan/Hu-1 (NC_045512.2) reference not WIV04:
+    ~/github/newick_utils/src/nw_reroot ft_SH.shorterNames.tree \
+      'Wuhan/Hu-1/2019|EPI_ISL_402125|19-12-31' > ft_SH.reroot.nh
+    # Use Yatish Turakhia's usher program to collapse nodes of the tree at which there is
+    # no mutation, but not to condense identical samples into new nodes.
+    #*** NOTE FOR NEXT TIME: use ~angie/github/yatish_usher/build/usher; output file names changed
+    #*** and --print_uncondensed-final-tree changed to --write-uncondensed-final-tree
+    ~angie/github/yatish_strain_phylogenetics/build/usher \
+      --vcf gisaid-$releaseLabel.unfiltered.vcf.gz  \
+      --tree ft_SH.reroot.nh \
+      --collapse-final-tree \
+      --print_uncondensed-final-tree \
+    | tail -1 \
+      > ft_SH.collapsed.nh
+
+    # Get sample metadata from GISAID so we can color samples & branches by lineage.
+    # This requires registering with gisaid.org.  Then go to https://www.epicov.org/epi3/frontend,
+    # log in, click Downloads, and click "nextmeta" in the dialog that pops up.  That downloads
+    # a local metadata_*.tsv.gz file with timestamp name.
+    # Extract the EPI_ ID and lineage columns:
+    zcat metadata_2020-09-01*.tsv.gz \
+    | tail -n +2 \
+    | cut -f3,18,19 \
+    | sort > metadata_2020-09-01.epiToLineageAndGisaid
+    # Map EPI ID to sample name used in tree & vcf
+    awk -F\| '{print $2 "\t" $0;}' tree.ids.sorted \
+    | perl -wpe 's@hCoV-19/@@g;  s@\|20(\d\d)@|$1@g; '"s@'@@g;" \
+    | sort > epiToSample
+    # Join on EPI ID to associate tree sample names with lineages.
+    join epiToSample metadata_2020-09-01.epiToLineageAndGisaid -o 1.2,2.2,2.3 > sampleToLineage
+
+    # Add files with lineage colors and GISAID clade colors (trackDb setting sampleColorFile).
+    # Color choices adapted from Figure 1 of
+    # https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2020.25.32.2001410
+    $HOME/kent/src/hg/makeDb/doc/wuhCor1/cladeLineageColors.pl sampleToLineage \
+    | gzip > lineageColors.gz
+    $HOME/kent/src/hg/makeDb/doc/wuhCor1/gisaidCladeColors.pl sampleToLineage \
+    | gzip > gisaidColors.gz
+
+    # Install files in /gbdb.
+    mkdir -p /gbdb/wuhCor1/sarsCov2Phylo
+    for f in gisaid-$releaseLabel.{ambigToN,minAf.001,minAf.01}.vcf.gz; do
+      destName=$(echo $f | sed -re "s/-$releaseLabel//")
+      ln -sf `pwd`/$f /gbdb/wuhCor1/sarsCov2Phylo/$destName
+      ln -sf `pwd`/$f.tbi /gbdb/wuhCor1/sarsCov2Phylo/$destName.tbi
+    done
+    ln -sf `pwd`/lineageColors.gz /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.lineageColors.gz
+    ln -sf `pwd`/gisaidColors.gz /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.gisaidColors.gz
+    #TODO
+    ln -sf `pwd`/ft_SH.collapsed.nh \
+      /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.ft.nh
+
+
+#########################################################################
+# SARS-CoV-2 PHYLOGENY - PUBLIC SEQUENCE (DONE - 2020-10-15 - Angie)
+    releaseLabel=28-08-20
+    cd /hive/data/genomes/wuhCor1/bed/sarsCov2Phylo/$releaseLabel
+    # First, regenerate collapsed tree with latest usher so that branch lengths aren't munged.
+    ~angie/github/yatish_usher/build/usher --vcf gisaid-28-08-20.unfiltered.vcf.gz --tree ft_SH.reroot.nh --collapse-final-tree --write-uncondensed-final-tree
+    mv uncondensed-final-tree.nh ft_SH.collapsed.nh
+
+    # Use Chris's latest mapping of EPI IDs to public sequence IDs to map tree IDs to public IDs.
+    tawk '{if ($4 == "") { print $1, $2 "|" $3;} else { print $1, $2 "|" $3 "|" $4;} }' \
+      /hive/users/angie/gisaid/epiToPublicAndDate.2020-10-08 \
+    | sed -re 's/20([0-9][0-9])(-[0-9-]+)?$/\1\2/' \
+      > epiToPublicName
+
+    sed -re 's/[\):][^,]+,/\n/g; s/\(//g; s/,/\n/g; s/\)[0-9:]*;//;' ft_SH.collapsed.nh \
+    | awk -F"|" '{print $2 "\t" $0;}' | sort > epiToTreeName
+
+    join -t"	" epiToTreeName epiToPublicName | cut -f 2,3 > treeToPublic
+    wc -l treeToPublic
+#30241 treeToPublic
+
+    # Use new utils to limit tree and VCF to just the public sequences:
+    phyloRenameAndPrune ft_SH.collapsed.nh treeToPublic ft_SH.collapsed.public.nh
+    sed -re 's/,/,\n/g' ft_SH.collapsed.public.nh | wc -l
+#30241
+    vcfRenameAndPrune gisaid-$releaseLabel.ambigToN.vcf.gz treeToPublic \
+      public-$releaseLabel.ambigToN.vcf
+    head public-$releaseLabel.ambigToN.vcf | grep ^#CHROM | wc
+#      1   30250 1460345
+    bgzip public-$releaseLabel.ambigToN.vcf
+    tabix -p vcf public-$releaseLabel.ambigToN.vcf.gz
+
+    # Make allele-frequency-filtered versions
+    zcat public-$releaseLabel.ambigToN.vcf.gz \
+    | perl -wne 'if (/^#/) { print; } else { die unless m/^(\S+\t){7}AC=([\d,]+);AN=(\d+)/; ($acVal, $an) = ($2, $3); @acs = sort {$b <=> $a} split(",", $acVal); $maxAc = $acs[0]; $freq = $maxAc / $an;  if ($freq >= 0.01) { print; } }' \
+      > public-$releaseLabel.minAf.01.vcf
+    wc -l public-$releaseLabel.minAf.01.vcf
+#64 public-$releaseLabel.minAf.01.vcf
+    bgzip public-$releaseLabel.minAf.01.vcf
+    tabix -p vcf public-$releaseLabel.minAf.01.vcf.gz
+
+    zcat public-$releaseLabel.ambigToN.vcf.gz \
+    | perl -wne 'if (/^#/) { print; } else { die unless m/^(\S+\t){7}AC=([\d,]+);AN=(\d+)/; ($acVal, $an) = ($2, $3); @acs = sort {$b <=> $a} split(",", $acVal); $maxAc = $acs[0]; $freq = $maxAc / $an;  if ($freq >= 0.001) { print; } }' \
+      > public-$releaseLabel.minAf.001.vcf
+    wc -l public-$releaseLabel.minAf.001.vcf
+#594 public-$releaseLabel.minAf.001.vcf
+    bgzip public-$releaseLabel.minAf.001.vcf
+    tabix -p vcf public-$releaseLabel.minAf.001.vcf.gz
+
+    sed -re 's/\|/\\|/g;' treeToPublic \
+    | tawk '{print "s@" $1 "@" $2 "@;";}' \
+    > treeToPublic.sed
+    # NOTE FOR NEXT TIME: this sed took 20 minutes!  Need a faster substitution method.
+    # ALSO we ended up with some garbage at the end of the file!  lineFileUdcMayOpen on local file
+    # somehow ignored the garbage which started with a large block of null characters, but
+    # netLineFileMayOpen on remote compressed file did not ignore the garbage.  Fixed 10/21/20.
+    zcat lineageColors.gz | sed -rf treeToPublic.sed | grep -v EPI_ISL_ > publicLineageColors
+    wc -l publicLineageColors
+#30239 publicLineageColors
+    gzip publicLineageColors
+
+    # Author credits file... strip GenBank version numbers because NCBI metadata doesn't have those
+    cut -f 2 treeToPublic \
+    | cut -d \| -f 1 \
+    | sed -re 's/^([A-Z][A-Z][0-9]{6})\.[0-9]/\1/;' \
+    | sort > publicIdsInTree
+# Three categories of IDs, different metadata sources:
+# CNA0013884 -- from https://bigd.big.ac.cn/ncov/release_genome
+#   * Advanced search, database = CNGBdb
+#   * Select Column button, enable originating & submitting labs [no authors option unfortunately]
+#   * Download Table button
+#   * That saves an Excel .xlsx file; export to TSV, save as cncb.metadata.<date>.tsv
+# LC528232.1 -- from GenBank
+#   * https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/virus?SeqType_s=Nucleotide&VirusLineage_ss=SARS-CoV-2,%20taxid:2697049
+#   * Download button
+#   * Current table view result --> CSV format, Next button
+#   * Download all records, Next button
+#   * Select Accession and Authors [no labs options unfortunately]
+#   * Download button, save as ncbi.authors.date.csv
+# England/BIRM-5E2A3/2020 -- from COG-UK
+#   * https://www.ebi.ac.uk/ena/browser/view/PRJEB37886
+#   * select columns center_name, sample_accession, sample_alias
+#   * Download report: TSV
+#   * file saved to filereport_read_run_PRJEB37886_tsv.txt (extra first column, run_accession)
+    tail -n+2 cncb.metadata.20-10-15.tsv \
+    | cut -f 2,12,14 \
+    | egrep -v '^[A-Z][A-Z][0-9]{6}' \
+    | sed -e 's/"//g; s/$/\tn\/a/;' \
+      > cncb.credits
+    tail -n+2 ncbi.authors.20-10-15.csv \
+    | csvToTab \
+    | tawk '{print $1, "n/a", "n/a", $2;}' \
+      > ncbi.credits
+    tail -n+2 filereport_read_run_PRJEB37886_tsv.txt \
+    | tawk '{print $4, $3, $3, "COVID-19 Genomics UK Consortium";}' \
+    | sed -e 's@^COG-UK/@@;' \
+    | sort -u \
+      > cogUk.credits.partialIds
+    grep / publicIdsInTree \
+    | awk -F/ '{print $2 "\t" $0;}' \
+    | sort \
+      > cogUk.partialToFull
+    join -a 2 -e "n/a" -t"	" -o 2.2,1.2,1.3,1.4 cogUk.credits.partialIds cogUk.partialToFull \
+    | tawk '$4 == "n/a" { $4 = "COVID-19 Genomics UK Consortium"; }' \
+      > cogUk.credits
+    /bin/echo -e "accession\toriginating_lab\tsubmitting_lab\tauthors" > acknowledgements.tsv
+    grep -Fwf publicIdsInTree cncb.credits >> acknowledgements.tsv
+    grep -Fwf publicIdsInTree ncbi.credits >> acknowledgements.tsv
+    grep -Fwf publicIdsInTree cogUk.credits >> acknowledgements.tsv
+    gzip acknowledgements.tsv
+
+    # Install
+    mkdir /gbdb/wuhCor1/sarsCov2PhyloPub
+    for f in public-$releaseLabel.{ambigToN,minAf.001,minAf.01}.vcf.gz; do
+      destName=$(echo $f | sed -re "s/-$releaseLabel//")
+      ln -sf `pwd`/$f /gbdb/wuhCor1/sarsCov2Phylo/$destName
+      ln -sf `pwd`/$f.tbi /gbdb/wuhCor1/sarsCov2Phylo/$destName.tbi
+    done
+    ln -s `pwd`/ft_SH.collapsed.public.nh \
+      /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.ft.nh
+    ln -s `pwd`/publicLineageColors.gz \
+      /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.lineageColors.gz
+    ln -s `pwd`/acknowledgements.tsv.gz \
+      /gbdb/wuhCor1/sarsCov2PhyloPub/acknowledgements.tsv.gz
+
+
+#########################################################################
+# PROBLEMATIC SITES (DONE - 2020-08-26 - Angie)
+
+    today=$(date +%y-%m-%d)
+    mkdir -p /hive/data/genomes/wuhCor1/bed/problematicSites/$today
+    cd /hive/data/genomes/wuhCor1/bed/problematicSites/$today
+    # They call the format VCF, but it is really just VCF-like with extra tab-sep columns.
+    wget https://raw.githubusercontent.com/W-L/ProblematicSites_SARS-CoV2/master/problematic_sites_sarsCov2.vcf
+    # Make a bigBed4+.  First make sure the columns haven't changed since last time.
+    columns=$(grep ^#CHROM problematic_sites_sarsCov2.vcf)
+    expected=$(cat ../columns.expected)
+    if [ "$columns" != "$expected" ]; then
+      echo "STOP!  COLUMNS CHANGED!  Change the script."
+    fi
+    perl -we \
+      'while (<>) {
+         chomp; chomp;
+         # The header defines some keywords and expanded values; store those for later use.
+         if (/^##\s+(\w+) = (.+)/) {
+           ($key, $val) = ($1, $2);
+           if (exists $expand{$key}) { warn "Clash for key {$key}: |$expand{$key}| vs |$val|\n"; }
+           $expand{$key} = $val;
+         }
+         if (/^#/) {
+           next;
+         }
+         (undef, $pos, undef, $ref, $alt, undef, $filter, $info) = split("\t");
+         %info = map { ($key, $val) = split("="); $key => $val } split(";", $info);
+         # Used to be columns: $contrib, $exc, $country, $lab, $gene, $aaPos, $aaRef, $aaAlt)
+         # Now in info: SUB (submitter), EXC, SRC_COUNTRY, SRC_LAB, GENE, AA_POS, AA_REF, AA_ALT
+         foreach $tag (qw/SRC_COUNTRY SRC_LAB GENE AA_POS AA_REF AA_ALT/) {
+           if (! exists $info{$tag} || $info{$tag} eq ".") {
+             $info{$tag} = "";
+           }
+         }
+         # Expand keywords used in a couple of the columns.
+         @contribs = map { $expand{$_} || $_ } split(",", $info{SUB});
+         @labs = map { $expand{$_} || $_ } split(",", $info{SRC_LAB});
+         if ($info{SRC_LAB} ne "") {
+            @countries = split(",", $info{SRC_COUNTRY});
+            if (scalar @labs != scalar @countries) {
+              if (scalar @countries == 1) {
+                for ($i = 1;  $i < @labs;  $i++) {
+                  $countries[$i] = $countries[0];
+                }
+              } else {
+                die "Differing numbers of countries and labs";
+              }
+            } else {
+              for ($i = 0;  $i < @labs;  $i++) {
+                $labs[$i] .= " ($countries[$i])"
+              }
+            }
+         }
+         $info{GENE} =~ s/gene-//g;
+         # Print out one joined record for each sequence of "seq_end" single-base annotations.
+         if (defined $seqEndStart && $info{EXC} !~ /seq_end/) {
+           print join("\t", "NC_045512v2", $seqEndStart, $seqEndEnd, "seq_end", "mask", "", "",
+                      $expand{"NDM"}, "", "", "", "", "") . "\n";
+           $seqEndStart = $seqEndEnd = undef;
+         }
+         if ($info{EXC} eq "seq_end") {
+           if (! defined $seqEndStart) {
+             $seqEndStart = $pos-1;
+           }
+           $seqEndEnd = $pos;
+         } else {
+           print join("\t", "NC_045512v2", $pos-1, $pos, $info{EXC}, $filter, $ref, $alt,
+                      join(", ", @contribs), join(", ", @labs),
+                      $info{GENE}, $info{AA_POS}, $info{AA_REF}, $info{AA_ALT}) . "\n";
+         }
+       }
+       if (defined $seqEndStart) {
+         print join("\t", "NC_045512v2", $seqEndStart, $seqEndEnd, "seq_end", "mask", "", "",
+                    $expand{"NDM"}, "", "", "", "", "") . "\n";
+       }' problematic_sites_sarsCov2.vcf \
+         > problematicSites.bed
+    tawk '$5 == "mask"' problematicSites.bed | cut -f 1-4,6- \
+    | sort -k2n > problematicSitesMask.bed
+    tawk '$5 == "caution"' problematicSites.bed | cut -f 1-4,6- \
+    | sort -k2n > problematicSitesCaution.bed
+    # Split into two subtracks so we can color them differently: red for mask, orange for caution
+    bedToBigBed -type=bed4+ -as=$HOME/kent/src/hg/lib/problematicSites.as -tab \
+      problematicSitesMask.bed ../../../chrom.sizes problematicSitesMask.bb
+    bedToBigBed -type=bed4+ -as=$HOME/kent/src/hg/lib/problematicSites.as -tab \
+      problematicSitesCaution.bed ../../../chrom.sizes problematicSitesCaution.bb
+    echo "$columns" > ../columns.expected
+
+    # Install files
+    mkdir -p /gbdb/wuhCor1/problematicSites
+    ln -sf `pwd`/problematicSites{Mask,Caution}.bb /gbdb/wuhCor1/problematicSites/
+
+
+#########################################################################
