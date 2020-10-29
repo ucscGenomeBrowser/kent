@@ -160,6 +160,8 @@ struct group *groupList = NULL;    /* List of all tracks. */
 char *browserName;              /* Test, preview, or public browser */
 char *organization;             /* UCSC */
 
+boolean enableMouseOver = FALSE;
+
 struct hash *trackHash = NULL; /* Hash of the tracks by their name. */
 
 #ifdef DEBUG
@@ -10534,6 +10536,12 @@ measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTi
 if (measureTiming)
     measureTime("Startup (bottleneck %d ms) ", botDelayMillis);
 
+char *mouseOverEnabled = cfgOption("mouseOverEnabled");
+if (sameWordOk(mouseOverEnabled, "on"))
+    enableMouseOver = TRUE;
+else
+    enableMouseOver = FALSE;
+
 if (issueBotWarning)
     {
     char *ip = getenv("REMOTE_ADDR");
@@ -10632,9 +10640,8 @@ if(!trackImgOnly)
 
     webIncludeResourceFile("spectrum.min.css");
     webIncludeResourceFile("jquery-ui.css");
-    char *mouseOverEnabled = cfgOption("mouseOverEnabled");
-    if (sameWordOk(mouseOverEnabled, "on"))
-	webIncludeResourceFile("mouseOver.css");
+    if (enableMouseOver)
+      webIncludeResourceFile("mouseOver.css");
 
     if (!searching)     // NOT doing search
         {
@@ -10748,13 +10755,10 @@ jsInline(dy->string);
 dyStringFree(&dy);
 
 dy = dyStringNew(1024);
-char *mouseOverEnabled = cfgOption("mouseOverEnabled");
-if (sameWordOk(mouseOverEnabled, "on"))
-    {
+if (enableMouseOver)
       dyStringPrintf(dy, "window.mouseOverEnabled=true;\n");
-    } else {
+    else
       dyStringPrintf(dy, "window.mouseOverEnabled=false;\n");
-    }
 jsInline(dy->string);
 dyStringFree(&dy);
 
