@@ -81,11 +81,25 @@ If there is a '?' in front of the column name it is taken to mean an optional fi
 if the corresponding source field does not exist then there's no error (and no output)
 for that column
 
-In addition to the table stanza there can be a 'define' stanza that defines variables
-that can be used in sourceFields for tables.  This looks like:
+In addition to the table stanza there can be a 'define' stanza at the start of the file
+that defines variables that can be used in sourceFields for tables.  This looks like:
          define
          variable1 sourceField1
          variable2 sourceField2
 The defines can be useful particularly when multiple tables of output want the same field.
 Though tabToTabDir encourages normalization,  realistically it is used to fill in things
 for some pretty redundant formats.
+
+There is also a 'unroll' stanza that can be used to make up a table that unrolls comma-separated
+list fields into a tables instead. The format is
+	unroll tableName id
+	field1  [expression1]
+	field2	[expression2]
+	     ...
+	fieldN  [expressionN]
+where the expression rules follow the same logic as the they do for table stanzas.  The
+expressions for an unroll need to evaluate to the same comma separated list for each row
+in the input table,  and all fields must have the same number of values.  Thus the 
+unroll stanza only works on a small subset of input fields.  Nonetheless it is useful for
+unpacking author lists and in some other cases as well.
+
