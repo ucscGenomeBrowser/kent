@@ -1472,13 +1472,9 @@ if (NULL != mouseOverData)
     jsonWriteListEnd(jw);
     jsonWriteObjectEnd(jw);
     fputs(jw->dy->string,trashJson);
+    carefulClose(&trashJson);
     mouseOverIdx = -1;
     freez(&mouseOverData);
-    // This is the hidden signal to the javaScript of where to pick up
-    //  the json file
-    hPrintf("<MAP Name=%s class=mouseOver trashFile='%s'>\n", tg->track, jsonData.forHtml);
-    hPrintf("</MAP>\n");
-    carefulClose(&trashJson);
     if (! beenHereDoneThat )
 	{
 	hPrintf("<div id='mouseOverContainer' class='wigMouseOver'>\n");
@@ -1486,14 +1482,10 @@ if (NULL != mouseOverData)
 	hPrintf("  </span>\n");
 	hPrintf("</div>\n");
         beenHereDoneThat = TRUE;
-// hPrintf("<div id='mouseDbg'><span id='debugMsg'><p>. . . mouseDbg</p></span></div>\n");
-// hPrintf("<div id='mouseXY'><span id='xyMouse'><p>. . . mouse X,Y</p></span></div>\n");
-// hPrintf("<div id='rectEvent'><span id='eventRects'><p>. . . eventRects</p></span></div>\n");
-// hPrintf("<div id='dbgMsg'><span id='msgDebug'><p>. . . debug message</p></span></div>\n");
 	}
     }
 else
-#endif  /*       NOT_READY_TO_GO        */
+#endif
     wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
 }
 
