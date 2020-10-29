@@ -881,7 +881,6 @@ boolean whiskers = (wigCart->windowingFunction == wiggleWindowingWhiskers
 /* start new data for a new track, freez old data if exists */
 if (enableMouseOver)
     {
-verbose(0, "# DBG enableMouseOver '%s'\n", tg->track);
     if (mouseOverData)
 	{
 	mouseOverIdx = -1;
@@ -889,8 +888,6 @@ verbose(0, "# DBG enableMouseOver '%s'\n", tg->track);
 	}
     AllocArray(mouseOverData, width);
     }
-else
-verbose(0, "# DBG OFF enableMouseOver '%s'\n", tg->track);
 
 int mouseOverX2 = -1;
 double previousValue = 0;
@@ -1462,7 +1459,6 @@ drawArbitraryYLine(vis, (enum wiggleGridOptEnum)wigCart->yLineOnOff,
 
 if (enableMouseOver && mouseOverData)
     {
-verbose(0, "# DBG writing json for track '%s'\n", tg->track);
     static boolean beenHereDoneThat = FALSE;
     struct tempName jsonData;
     trashDirFile(&jsonData, "hgt", tg->track, ".json");
