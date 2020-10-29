@@ -10632,7 +10632,10 @@ if(!trackImgOnly)
 
     webIncludeResourceFile("spectrum.min.css");
     webIncludeResourceFile("jquery-ui.css");
-//    webIncludeResourceFile("mouseOver.css");
+    char *mouseOverEnabled = cfgOption("mouseOverEnabled");
+    if (sameWordOk(mouseOverEnabled, "on"))
+	webIncludeResourceFile("mouseOver.css");
+
     if (!searching)     // NOT doing search
         {
         webIncludeResourceFile("jquery.contextmenu.css");
@@ -10741,6 +10744,17 @@ jsonObjectAdd(jsonForClient, "enableHighlightingDialog",
 
 struct dyString *dy = dyStringNew(1024);
 jsonDyStringPrint(dy, (struct jsonElement *) jsonForClient, "hgTracks", 0);
+jsInline(dy->string);
+dyStringFree(&dy);
+
+dy = dyStringNew(1024);
+char *mouseOverEnabled = cfgOption("mouseOverEnabled");
+if (sameWordOk(mouseOverEnabled, "on"))
+    {
+      dyStringPrintf(dy, "window.mouseOverEnabled=true;\n");
+    } else {
+      dyStringPrintf(dy, "window.mouseOverEnabled=false;\n");
+    }
 jsInline(dy->string);
 dyStringFree(&dy);
 
