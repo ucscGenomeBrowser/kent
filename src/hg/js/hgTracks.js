@@ -4567,8 +4567,6 @@ var mouseOver = {
     var evX = evt.x;      // location of mouse on the web browser screen
     var evY = evt.y;
     var offLeft = Math.max(0, Math.floor(evt.x - tdLeft));
-var msg = ". . . mouse x,y: " + evX + "," + evY + ", offLeft: " + offLeft;
-$('#xyMouse').html(msg);
     var windowUp = false;     // see if window is supposed to become visible
     var foundIdx = -1;
     if (mouseOver.spans[trackName]) {
@@ -4577,8 +4575,8 @@ $('#xyMouse').html(msg);
     // might want to indicate 'no data' when not found
     if (foundIdx > -1) {
       // value to display
-      var msg = "&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
-      $('#mouseOverText').html(msg);
+      var mouseOverValue = "&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
+      $('#mouseOverText').html(mouseOverValue);
       var msgWidth = Math.ceil($('#mouseOverText').width());
       var msgHeight = Math.ceil($('#mouseOverText').height());
       var posLeft = evt.x - msgWidth + "px";
@@ -4630,8 +4628,11 @@ $('#xyMouse').html(msg);
 //    window.addEventListener('onscroll', popUpDisappear);
       var itemCount = 0;	// just for monitoring purposes
       // save incoming x1,x2,v data into the mouseOver.spans[trackName][] array
-      arr[trackName].forEach(function(box) {
-        mouseOver.spans[trackName].push(box); ++itemCount});
+//      arr[trackName].forEach(function(box) {
+      for (var span in arr[trackName]) {
+        mouseOver.spans[trackName].push(span);
+       ++itemCount;
+      }
       mouseOver.tracks[trackName] = itemCount;	// merely for debugging watch
       }
     },  //      receiveData: function (arr)
