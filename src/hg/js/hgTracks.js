@@ -3794,8 +3794,8 @@ var imageV2 = {
                     if (newJsonRec)
                         vis.update(id, vis.enumOrder[newJsonRec.visibility]);
                 }
-//                // uncomment to enable the mouseOver system 2020-10 - Hiram
-//                mouseOver.updateMouseOver(id);
+                // hg.conf will turn this on 2020-10 - Hiram
+                if (window.mouseOverEnabled) { mouseOver.updateMouseOver(id); }
                 return true;
             }
         }
@@ -4628,9 +4628,8 @@ var mouseOver = {
 //    window.addEventListener('onscroll', popUpDisappear);
       var itemCount = 0;	// just for monitoring purposes
       // save incoming x1,x2,v data into the mouseOver.spans[trackName][] array
-//      arr[trackName].forEach(function(box) {
       for (var span in arr[trackName]) {
-        mouseOver.spans[trackName].push(span);
+        mouseOver.spans[trackName].push(arr[trackName][span]);
        ++itemCount;
       }
       mouseOver.tracks[trackName] = itemCount;	// merely for debugging watch
@@ -4733,8 +4732,8 @@ $(document).ready(function()
 {
     imageV2.moveTiming();
 
-    // uncomment to enable mouseOver 2020-10 (also one line in updateImgForId)
-//    mouseOver.addListener();
+    // hg.conf will turn this on 2020-10 - Hiram
+    if (window.mouseOverEnabled) { mouseOver.addListener(); }
 
     // on Safari the back button doesn't call the ready function.  Reload the page if
     // the back button was pressed.
