@@ -4,11 +4,12 @@
     top: 100px;
     width: auto;
     height: auto;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: #ff69b4;
     opacity: 0;
     visibility: hidden;
     transform: scale(1.1);
     margin-left: 200;
+    z-index: 1000;
 }
 
 .wigMouseOverValue {

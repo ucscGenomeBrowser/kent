@@ -5463,7 +5463,7 @@ searchPriority 50
 
 include covidHgiGwas.ra
 
-track covidHgeMuts
+track covidMuts
 type bigBed 12 + 
 shortLabel COVID-19 Immunity Variants
 longLabel COVID-19 Immunity Variants from the COVID Human Genetics Effort
@@ -5474,8 +5474,7 @@ noScoreFilter on
 group covid 
 color 179,0,0
 visibility hide
-html covidHgeMuts
-bigDataUrl /gbdb/hg38/covid/covidMuts.bb
+bigDataUrl /gbdb/$D/covidMuts/covidMuts.bb
  
 
 

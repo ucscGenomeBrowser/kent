@@ -36,6 +36,8 @@ void printGenomicSeqLink(struct sqlConnection *conn, char *geneId,
 /* Figure out known genes table, position of gene, link it. */
 {
 char *table = genomeSetting("knownGene");
+if (globalTdb)
+    table = globalTdb->table;
 webPrintWideCellStart(3, HG_COL_TABLE);
 printGenomicAnchor(table, geneId, chrom, start, end);
 hPrintf("Genomic Sequence (%s:", chrom);
