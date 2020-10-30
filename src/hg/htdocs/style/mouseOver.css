@@ -33,7 +33,7 @@
 .mouseOverHighlight {
   border-left: 4px solid orange;
   height: 60px;
-  position: absolute;
+  position: fixed;
   left: 0;
   margin-left: -2px;
   top: 0;
