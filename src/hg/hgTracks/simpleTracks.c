@@ -4075,8 +4075,10 @@ if (tg->tdb)
     char *type = tg->tdb->type;
     if (sameString(type, "interact") || sameString(type, "bigInteract"))
         return FALSE;
+    if (sameString(type, "bigGenePred") || sameString(type, "genePred"))
+        return TRUE;
     }
-boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", "on"), "on");
+boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", "off"), "on");
 return (withExonNumbers && exonNumbers && (vis==tvFull || vis==tvPack) && (winEnd - winStart < 400000)
  && (tg->nextPrevExon==linkedFeaturesNextPrevItem));
 }

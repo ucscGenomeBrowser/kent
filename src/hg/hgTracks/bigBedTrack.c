@@ -241,7 +241,7 @@ struct bigBedFilter *bigBedBuildFilters(struct cart *cart, struct bbiFile *bbi, 
 struct bigBedFilter *filters = NULL, *filter;
 struct trackDbFilter *tdbFilters = tdbGetTrackNumFilters(tdb);
 
-if ((tdbFilters == NULL) && !trackDbSettingOn(tdb, "noScoreFilter"))
+if ((tdbFilters == NULL) && !trackDbSettingOn(tdb, "noScoreFilter") && (bbi->definedFieldCount >= 5))
     {
     AllocVar(filter);
     slAddHead(&filters, filter);
