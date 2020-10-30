@@ -888,7 +888,9 @@ if (startsWith("yAxisLabel.", name))
     return TRUE;
 if (startsWith("filter.", name))
     return TRUE;
-if (startsWith("filterValues", name))
+if (startsWith("filterValues.", name))
+    return TRUE;
+if (startsWith("filterValuesDefault.", name))
     return TRUE;
 if (startsWith("filterType.", name))
     return TRUE;
