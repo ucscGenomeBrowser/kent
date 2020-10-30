@@ -3794,7 +3794,8 @@ var imageV2 = {
                     if (newJsonRec)
                         vis.update(id, vis.enumOrder[newJsonRec.visibility]);
                 }
-//                updateMouseOver(id);
+                // hg.conf will turn this on 2020-10 - Hiram
+                if (window.mouseOverEnabled) { mouseOver.updateMouseOver(id); }
                 return true;
             }
         }
@@ -4458,6 +4459,226 @@ var imageV2 = {
     }
 };
 
+  ///////////////////////////////////////
+ //// mouseOver data display 2020-10 ///
+///////////////////////////////////////
+var mouseOver = {
+
+    spans: {},
+    visible: false,
+    tracks: {},
+
+    // spans{} - key name is track name, value is an array of
+    //                   objects: {x1, x2, value}
+    // visible - keep track of window visible or not, value: true|false
+    //           shouldn't need to do this here, the window knows if it
+    //           is visible or not, just ask it for status
+    // tracks{}  - tracks that were set up initially, key is track name
+    //             value is the number of boxes (for debugging)
+
+    // given hgt_....png file name, change to trackName_....json file name
+    jsonFileName: function(imgElement, trackName)
+    {
+      var jsonFile=imgElement.src.replace("hgt/hgt_", "hgt/" + trackName + "_");
+      jsonFile = jsonFile.replace(".png", ".json");
+      return jsonFile;
+    },
+
+    // called from: updateImgForId when it has updated a track in place
+    // need to refresh the event handlers and json data
+    updateMouseOver: function (trackName)
+    {
+      if (mouseOver.tracks[trackName]) {
+      // there should be a more simple jQuery function to bind these events
+      var tdName = "td_data_" + trackName;
+      var tdElement  = document.getElementById(tdName);
+      var id = tdElement.id;
+      tdElement.addEventListener('mousemove', mouseOver.mouseInTrackImage);
+      tdElement.addEventListener('mouseout', mouseOver.popUpDisappear);
+      var imgName = "img_data_" + trackName;
+      var imgElement  = document.getElementById(imgName);
+      mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName));
+      }
+    },
+
+    // given an X coordinate: x, find the index idx
+    // in the rects[idx] array where rects[idx].x1 <= x < rects[idx].x2
+    // returning -1 when not found
+    // if we knew the array was sorted on x1 we could get out early
+    //   when x < x1
+    findRange: function (x, rects)
+    {
+      var answer = -1;  // assmume not found
+      for ( var idx in rects ) {
+         if ((rects[idx].x1 <= x) && (x < rects[idx].x2)) {
+           answer = idx;
+           break;
+         }
+      }
+      return answer;
+    },
+
+    popUpDisappear: function () {
+      if (mouseOver.visible) {        // should *NOT* have to keep track !*!
+//       $('#mouseOverText').hide();       // does not function ?
+        var msgWindow = document.querySelector(".wigMouseOver");
+        msgWindow.classList.toggle("showMouseOver");
+        mouseOver.visible = false;
+      }
+    },
+
+    popUpVisible: function () {
+      if (! mouseOver.visible) {        // should *NOT* have to keep track !*!
+//      $('#mouseOverText').show();     // does not function ?
+        var msgWindow = document.querySelector(".wigMouseOver");
+        msgWindow.classList.toggle("showMouseOver");
+        mouseOver.visible = true;
+      }
+    },
+
+    //the evt.target.id is the img_data_<trackName> element of the track graphic
+    mouseInTrackImage: function (evt)
+    {
+    // the center label also events here, can't use that
+    //  plus there is a one pixel line under the center label that has no
+    //   id name at all, so verify we are getting the event from the correct
+    //   element.
+    if (! evt.target.id.includes("img_data_")) { return; }
+    var trackName = evt.target.id.replace("img_data_", "");
+    if (trackName.length < 1) { return; }	// verify valid trackName
+    // find location of this <td> slice in the image, this is the track
+    //   image in the graphic, including left margin and center label
+    //   This location follows the window scrolling, could go negative
+    var tdName = "td_data_" + trackName;
+    var tdId  = document.getElementById(tdName);
+    var tdRect = tdId.getBoundingClientRect();
+    var tdLeft = Math.floor(tdRect.left);
+    var tdTop = Math.floor(tdRect.top);
+    // find the location of the image itself, this could be the single complete
+    //  graphic image of all the tracks, or possibly the single image of the
+    //  track itself.  This location also follows the window scrolling and can
+    //  even go negative when the web browser scrolls a window that is larger
+    //  than the width of the web browser.
+    var imageId = document.getElementById(evt.target.id);
+    var imageRect = imageId.getBoundingClientRect();
+    var imageLeft = Math.floor(imageRect.left);
+    var imageTop = Math.floor(imageRect.top);
+    var srcUrl = evt.target.src;
+    var evX = evt.x;      // location of mouse on the web browser screen
+    var evY = evt.y;
+    var offLeft = Math.max(0, Math.floor(evt.x - tdLeft));
+    var windowUp = false;     // see if window is supposed to become visible
+    var foundIdx = -1;
+    if (mouseOver.spans[trackName]) {
+       foundIdx = mouseOver.findRange(offLeft, mouseOver.spans[trackName]);
+    }
+    // might want to indicate 'no data' when not found
+    if (foundIdx > -1) {
+      // value to display
+      var mouseOverValue = "&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
+      $('#mouseOverText').html(mouseOverValue);
+      var msgWidth = Math.ceil($('#mouseOverText').width());
+      var msgHeight = Math.ceil($('#mouseOverText').height());
+      var posLeft = evt.x - msgWidth + "px";
+      var posTop = tdTop + "px";
+      $('#mouseOverContainer').css('left',posLeft);
+      $('#mouseOverContainer').css('top',posTop);
+      windowUp = true;      // yes, window is to become visible
+    }
+    if (windowUp) {     // the window should become visible
+      mouseOver.popUpVisible();
+    } else {    // the window should disappear
+      mouseOver.popUpDisappear();
+    } //      window visible/not visible
+    },  //      mouseInTrackImage function (evt)
+
+    // =======================================================================
+    // receiveData() callback for successful JSON request, receives incoming
+    //             JSON data and gets it into global variables for use here.
+    //  The incoming 'arr' is a a set of objects where the object key name is
+    //      the track name, used here as an array reference: arr[trackName]
+    //        (currently only one object per json file, one file for each track,
+    //           this may change to have multiple tracks in one json file.)
+    //  The value associated with each track name
+    //  is an array of span definitions, where each element in the array is a
+    //     mapBox definition object:
+    //        {x1:n, x2:n, value:s}
+    //        where n is an integer in the range: 0..width,
+    //        and s is the value string to display
+    //     Will need to get them sorted on x1 for efficient searching as
+    //     they accumulate in the local data structure here.
+    // =======================================================================
+    receiveData: function (arr)
+    {
+      mouseOver.visible = false;
+      for (var trackName in arr) {
+      mouseOver.spans[trackName] = [];      // start array
+      // add a 'mousemove' and 'mouseout' event listener to each track
+      //     display object
+      var objectName = "td_data_" + trackName;
+      var objectId  = document.getElementById(objectName);
+      if (! objectId) { return; } // not sure why objects are not found
+      // there should be a more simple jQuery function to bind these events
+      objectId.addEventListener('mousemove', mouseOver.mouseInTrackImage);
+      objectId.addEventListener('mouseout', mouseOver.popUpDisappear);
+      // would be nice to know when the window is scrolling in the browser so
+      // the text box could disappear.  These do not appear to work.
+      // Beware, onscroll event is continuous while scrolling.
+//    objectId.addEventListener('onscroll', popUpDisappear);
+//    window.addEventListener('onscroll', popUpDisappear);
+      var itemCount = 0;	// just for monitoring purposes
+      // save incoming x1,x2,v data into the mouseOver.spans[trackName][] array
+      for (var span in arr[trackName]) {
+        mouseOver.spans[trackName].push(arr[trackName][span]);
+       ++itemCount;
+      }
+      mouseOver.tracks[trackName] = itemCount;	// merely for debugging watch
+      }
+    },  //      receiveData: function (arr)
+
+    // =========================================================================
+    // fetchMapData() sends JSON request, callback to receiveData() upon return
+    // =========================================================================
+    fetchMapData: function (url)
+    {
+       var xmlhttp = new XMLHttpRequest();
+       xmlhttp.onreadystatechange = function() {
+       if (4 === this.readyState && 200 === this.status) {
+          var mapData = JSON.parse(this.responseText);
+          mouseOver.receiveData(mapData);
+       }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();  // sends request and exits this function
+                     // the onreadystatechange callback above will trigger
+                     // when the data has safely arrived
+    },
+
+    getMouseOverData: function ()
+    {	// verify hgTracks and hgTracks.trackDb exist before running wild
+      if (typeof(hgTracks) !== "undefined") {
+        if (typeof (hgTracks.trackDb) !== "undefined") {
+          for (var trackName in hgTracks.trackDb) {
+           var isWiggle = false;
+           var rec = hgTracks.trackDb[trackName];
+           if (rec.type.includes("wig")) { isWiggle = true; }
+           if (rec.type.includes("bigWig")) { isWiggle = true; }
+           if (! isWiggle) { continue; }
+           var imgName = "img_data_" + trackName;
+           var imgElement  = document.getElementById(imgName);
+           if (imgElement) {
+             mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName));
+           }
+         }
+       }
+     }
+    },
+
+    addListener: function () {
+        window.addEventListener('load', mouseOver.getMouseOverData, false);
+    }
+};	//	var mouseOver
+
   //////////////////////
  //// track search ////
 //////////////////////
@@ -4510,6 +4731,9 @@ var trackSearch = {
 $(document).ready(function()
 {
     imageV2.moveTiming();
+
+    // hg.conf will turn this on 2020-10 - Hiram
+    if (window.mouseOverEnabled) { mouseOver.addListener(); }
 
     // on Safari the back button doesn't call the ready function.  Reload the page if
     // the back button was pressed.

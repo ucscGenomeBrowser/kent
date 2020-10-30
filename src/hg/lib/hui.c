@@ -9481,8 +9481,8 @@ char *replaceInUrl(char *url, char *idInUrl, struct cart *cart, char *db, char *
 {
 struct dyString *uUrl = NULL;
 struct dyString *eUrl = NULL;
-char startString[64], endString[64];
-char *ins[13], *outs[13];
+char startString[64], endString[64],oneBasedStart[64];
+char *ins[14], *outs[14];
 char *eItem = (encode ? cgiEncode(idInUrl) : cloneString(idInUrl));
 
 char *scName = NULL;
@@ -9545,17 +9545,22 @@ if (stringIn(":", idInUrl)) {
 // URL may now contain item boundaries
 ins[9] = "${";
 ins[10] = "$}";
+ins[13] = "$#";
 if (cart!=NULL && cartOptionalString(cart, "o") && cartOptionalString(cart, "t"))
     {
     char *itemBeg = cartString(cart, "o"); // unexpected commas?
     char *itemEnd = cartString(cart, "t");
     outs[9] = itemBeg;
     outs[10] = itemEnd;
+    safef(oneBasedStart, sizeof(oneBasedStart), "%d", cartInt(cart, "o") + 1);
+    outs[13] = oneBasedStart;
     }
 else // should never be but I am unwilling to bet the farm
     {
     outs[9] = startString;
     outs[10] = endString;
+    safef(oneBasedStart, sizeof(oneBasedStart), "%d", winStart + 1);
+    outs[13] = oneBasedStart;
     }
 
 ins[11] = "$n";
