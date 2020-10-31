@@ -31,12 +31,13 @@
 }
 
 .mouseOverHighlight {
-  border-left: 4px solid orange;
+  border-left: 2px solid orange;
   height: 60px;
   position: fixed;
   left: 0;
-  margin-left: -2px;
+  margin-left: -1px;
   top: 0;
   display: none;
-  z-index: 1000;
+  z-index: 999;
+  pointer-events: none
 }

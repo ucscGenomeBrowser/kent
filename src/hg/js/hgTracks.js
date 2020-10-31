@@ -4467,6 +4467,7 @@ var mouseOver = {
     spans: {},
     visible: false,
     tracks: {},
+//    popUpDelay: 100000,       // can not get this to work ?
 
     // spans{} - key name is track name, value is an array of
     //                   objects: {x1, x2, value}
@@ -4527,6 +4528,7 @@ var mouseOver = {
 //        $('#mouseOverContainer').css('display','none'); // does not work
         $('#mouseOverLine').css('display','none');
       }
+//      mouseOver.popUpDelay = 100000;
     },
 
     popUpVisible: function () {
@@ -4538,6 +4540,7 @@ var mouseOver = {
 //        $('#mouseOverContainer').css('display','block');  // does not work
         $('#mouseOverLine').css('display','block');
       }
+//      mouseOver.popUpDelay = 10;
     },
 
     //the evt.target.id is the img_data_<trackName> element of the track graphic
@@ -4558,6 +4561,7 @@ var mouseOver = {
     var tdRect = tdId.getBoundingClientRect();
     var tdLeft = Math.floor(tdRect.left);
     var tdTop = Math.floor(tdRect.top);
+    var tdHeight = Math.floor(tdRect.height);
     // find the location of the image itself, this could be the single complete
     //  graphic image of all the tracks, or possibly the single image of the
     //  track itself.  This location also follows the window scrolling and can
@@ -4567,7 +4571,7 @@ var mouseOver = {
     var imageRect = imageId.getBoundingClientRect();
     var imageLeft = Math.floor(imageRect.left);
     var imageTop = Math.floor(imageRect.top);
-    var imageHeight = Math.floor(imageRect.height);
+//    var imageHeight = Math.floor(imageRect.height);
     var srcUrl = evt.target.src;
     var evX = evt.x;      // location of mouse on the web browser screen
     var evY = evt.y;
@@ -4592,7 +4596,7 @@ var mouseOver = {
       $('#mouseOverLine').css('top',posTop);
       // Setting the height of this line to the full image height eliminates
       //  the mouse event area
-//      $('#mouseOverLine').css('height',imageHeight + "px");
+      $('#mouseOverLine').css('height',tdHeight + "px");
 //      $('#mouseOverLine').height(imageHeight + "px");
       windowUp = true;      // yes, window is to become visible
     }
@@ -4602,6 +4606,20 @@ var mouseOver = {
       mouseOver.popUpDisappear();
     } //      window visible/not visible
     },  //      mouseInTrackImage function (evt)
+
+/*      this doesn't work, claims there is an error in security policy
+    mouseMoveDelay: function (evt)
+    {
+      if (mouseOver.popUpDelay == 100000) {     // first time here
+        mouseOver.popUpDelay -= 1;              // no longer first time
+        setTimeout(mouseOver.mouseInTrackImage(evt), mouseOver.popUpDelay);
+      } else if (mouseOver.popUpDelay > 10) {
+        return; // wait for first one to complete before issuing more
+      } else {
+        mouseOver.mouseInTrackImage(evt);  // after first one is done, pass them along
+      }
+    },
+*/
 
     // =======================================================================
     // receiveData() callback for successful JSON request, receives incoming
@@ -4662,7 +4680,7 @@ var mouseOver = {
           mouseOver.receiveData(mapData);
        } else {
           if (4 === this.readyState && 404 === this.status) {
-             failedRequest(trackName);
+             mouseOver.failedRequest(trackName);
           }
        }
     };
