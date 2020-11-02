@@ -181,15 +181,16 @@ bigDataUrl /gbdb/wuhCor1/bbi/rapid.bb
 noScoreFilter on
 pennantIcon New red ../goldenPath/newsarch.html#071720 "Released Jul. 17, 2020"
 
-track conticello
-shortLabel RNA editing
-longLabel RNA editing events from Conticello et al 2020
-visibility hide
-group map
-type bigBed 9 +
-bigDataUrl /gbdb/wuhCor1/bbi/conticello.bb
-noScoreFilter on
-filter.freq 0.01
+# track removed as per David H email, authors got a track hub instead
+#track conticello
+#shortLabel RNA editing
+#longLabel RNA editing events from Conticello et al 2020
+#visibility hide
+#group map
+#type bigBed 9 +
+#bigDataUrl /gbdb/wuhCor1/bbi/conticello.bb
+#noScoreFilter on
+#filter.freq 0.01
 
 # original source for this composite: 
 # https://data.broadinstitute.org/compbio1/SARS-CoV-2_PhyloCSF_Genes/trackHub/wuhCor1/trackDb.txt

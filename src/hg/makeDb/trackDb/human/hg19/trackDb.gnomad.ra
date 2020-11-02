@@ -441,7 +441,6 @@ html gnomad
     maxHeightPixels 100:16:8
     viewLimits 0:1
     visibility full
-    release alpha
     html gnomadPext
 
         track gnomADPextmean_proportion
@@ -452,7 +451,6 @@ html gnomad
         color 66,139,202
         visibility full
         priority 1
-        release alpha
 
         track gnomADPextAdipose_Subcutaneous
         bigDataUrl /gbdb/hg19/gnomAD/pext/Adipose_Subcutaneous.bw
@@ -461,7 +459,6 @@ html gnomad
         longLabel gnomAD pext Adipose-Subcutaneous
         color 255,102,0
         visibility hide
-        release alpha
 
         track gnomADPextAdipose_Visceral_Omentum_
         bigDataUrl /gbdb/hg19/gnomAD/pext/Adipose_Visceral_Omentum_.bw
@@ -470,7 +467,6 @@ html gnomad
         parent gnomadPext off
         color 255,170,0
         visibility hide
-        release alpha
 
         track gnomADPextAdrenalGland
         bigDataUrl /gbdb/hg19/gnomAD/pext/AdrenalGland.bw
@@ -479,7 +475,6 @@ html gnomad
         parent gnomadPext off
         color 51,221,51
         visibility hide
-        release alpha
 
         track gnomADPextArtery_Aorta
         bigDataUrl /gbdb/hg19/gnomAD/pext/Artery_Aorta.bw
@@ -488,7 +483,6 @@ html gnomad
         parent gnomadPext off
         color 255,85,85
         visibility hide
-        release alpha
 
         track gnomADPextArtery_Coronary
         bigDataUrl /gbdb/hg19/gnomAD/pext/Artery_Coronary.bw
@@ -497,7 +491,6 @@ html gnomad
         parent gnomadPext off
         color 255,170,153
         visibility hide
-        release alpha
 
         track gnomADPextArtery_Tibial
         bigDataUrl /gbdb/hg19/gnomAD/pext/Artery_Tibial.bw
@@ -506,7 +499,6 @@ html gnomad
         parent gnomadPext off
         color 255,0,0
         visibility hide
-        release alpha
 
         track gnomADPextBladder
         bigDataUrl /gbdb/hg19/gnomAD/pext/Bladder.bw
@@ -515,7 +507,6 @@ html gnomad
         parent gnomadPext off
         color 170,0,0
         visibility hide
-        release alpha
 
         track gnomADPextBrain_Amygdala
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Amygdala.bw
@@ -524,7 +515,6 @@ html gnomad
         parent gnomadPext off
         color 238,238,0
         visibility hide
-        release alpha
 
         track gnomADPextBrain_Anteriorcingulatecortex_BA24_
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Anteriorcingulatecortex_BA24_.bw
@@ -533,7 +523,6 @@ html gnomad
         parent gnomadPext off
         color 238,238,0
         visibility hide
-        release alpha
 
         track gnomADPextBrain_Caudate_basalganglia_
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Caudate_basalganglia_.bw
@@ -542,7 +531,6 @@ html gnomad
         parent gnomadPext off
         color 238,238,0
         visibility hide
-        release alpha
 
         track gnomADPextBrain_CerebellarHemisphere
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_CerebellarHemisphere.bw
@@ -551,7 +539,6 @@ html gnomad
         parent gnomadPext off
         color 238,238,0
         visibility hide
-        release alpha
 
         track gnomADPextBrain_Cerebellum
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Cerebellum.bw
@@ -560,7 +547,6 @@ html gnomad
         parent gnomadPext off
         color 238,238,0
         visibility hide
-        release alpha
 
         track gnomADPextBrain_Cortex
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Cortex.bw
@@ -569,7 +555,6 @@ html gnomad
         parent gnomadPext off
         color 238,238,0
         visibility hide
-        release alpha
 
         track gnomADPextBrain_FrontalCortex_BA9_
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_FrontalCortex_BA9_.bw
@@ -578,7 +563,6 @@ html gnomad
         parent gnomadPext off
         color 238,238,0
         visibility hide
-        release alpha
 
         track gnomADPextBrain_Hippocampus
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Hippocampus.bw
@@ -587,7 +571,6 @@ html gnomad
         parent gnomadPext off
         color 238,238,0
         visibility hide
-        release alpha
 
         track gnomADPextBrain_Hypothalamus
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Hypothalamus.bw
@@ -596,7 +579,6 @@ html gnomad
         parent gnomadPext off
         color 238,238,0
         visibility hide
-        release alpha
 
         track gnomADPextBrain_Nucleusaccumbens_basalganglia_
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Nucleusaccumbens_basalganglia_.bw
@@ -605,7 +587,6 @@ html gnomad
         parent gnomadPext off
         color 238,238,0
         visibility hide
-        release alpha
 
         track gnomADPextBrain_Putamen_basalganglia_
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Putamen_basalganglia_.bw
@@ -614,7 +595,6 @@ html gnomad
         parent gnomadPext off
         color 238,238,0
         visibility hide
-        release alpha
 
         track gnomADPextBrain_Spinalcord_cervicalc_1_
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Spinalcord_cervicalc_1_.bw
@@ -623,7 +603,6 @@ html gnomad
         parent gnomadPext off
         color 238,238,0
         visibility hide
-        release alpha
 
         track gnomADPextBrain_Substantianigra
         bigDataUrl /gbdb/hg19/gnomAD/pext/Brain_Substantianigra.bw
@@ -632,7 +611,6 @@ html gnomad
         parent gnomadPext off
         color 238,238,0
         visibility hide
-        release alpha
 
         track gnomADPextBreast_MammaryTissue
         bigDataUrl /gbdb/hg19/gnomAD/pext/Breast_MammaryTissue.bw
@@ -641,7 +619,6 @@ html gnomad
         parent gnomadPext off
         color 51,204,204
         visibility hide
-        release alpha
 
         track gnomADPextCells_EBV_transformedlymphocytes
         bigDataUrl /gbdb/hg19/gnomAD/pext/Cells_EBV_transformedlymphocytes.bw
@@ -650,7 +627,6 @@ html gnomad
         parent gnomadPext off
         color 204,102,255
         visibility hide
-        release alpha
 
         track gnomADPextCells_Transformedfibroblasts
         bigDataUrl /gbdb/hg19/gnomAD/pext/Cells_Transformedfibroblasts.bw
@@ -659,7 +635,6 @@ html gnomad
         parent gnomadPext off
         color 170,238,255
         visibility hide
-        release alpha
 
         track gnomADPextCervix_Ectocervix
         bigDataUrl /gbdb/hg19/gnomAD/pext/Cervix_Ectocervix.bw
@@ -668,7 +643,6 @@ html gnomad
         parent gnomadPext off
         color 255,204,204
         visibility hide
-        release alpha
 
         track gnomADPextCervix_Endocervix
         bigDataUrl /gbdb/hg19/gnomAD/pext/Cervix_Endocervix.bw
@@ -677,7 +651,6 @@ html gnomad
         parent gnomadPext off
         color 204,170,221
         visibility hide
-        release alpha
 
         track gnomADPextColon_Sigmoid
         bigDataUrl /gbdb/hg19/gnomAD/pext/Colon_Sigmoid.bw
@@ -686,7 +659,6 @@ html gnomad
         parent gnomadPext off
         color 238,187,119
         visibility hide
-        release alpha
 
         track gnomADPextColon_Transverse
         bigDataUrl /gbdb/hg19/gnomAD/pext/Colon_Transverse.bw
@@ -695,7 +667,6 @@ html gnomad
         parent gnomadPext off
         color 204,153,85
         visibility hide
-        release alpha
 
         track gnomADPextEsophagus_GastroesophagealJunction
         bigDataUrl /gbdb/hg19/gnomAD/pext/Esophagus_GastroesophagealJunction.bw
@@ -704,7 +675,6 @@ html gnomad
         parent gnomadPext off
         color 139,115,85
         visibility hide
-        release alpha
 
         track gnomADPextEsophagus_Mucosa
         bigDataUrl /gbdb/hg19/gnomAD/pext/Esophagus_Mucosa.bw
@@ -713,7 +683,6 @@ html gnomad
         parent gnomadPext off
         color 85,34,0
         visibility hide
-        release alpha
 
         track gnomADPextEsophagus_Muscularis
         bigDataUrl /gbdb/hg19/gnomAD/pext/Esophagus_Muscularis.bw
@@ -722,7 +691,6 @@ html gnomad
         parent gnomadPext off
         color 187,153,136
         visibility hide
-        release alpha
 
         track gnomADPextFallopianTube
         bigDataUrl /gbdb/hg19/gnomAD/pext/FallopianTube.bw
@@ -731,7 +699,6 @@ html gnomad
         parent gnomadPext off
         color 255,204,204
         visibility hide
-        release alpha
 
         track gnomADPextHeart_AtrialAppendage
         bigDataUrl /gbdb/hg19/gnomAD/pext/Heart_AtrialAppendage.bw
@@ -740,7 +707,6 @@ html gnomad
         parent gnomadPext off
         color 153,0,255
         visibility hide
-        release alpha
 
         track gnomADPextHeart_LeftVentricle
         bigDataUrl /gbdb/hg19/gnomAD/pext/Heart_LeftVentricle.bw
@@ -749,7 +715,6 @@ html gnomad
         parent gnomadPext off
         color 102,0,153
         visibility hide
-        release alpha
 
         track gnomADPextKidney_Cortex
         bigDataUrl /gbdb/hg19/gnomAD/pext/Kidney_Cortex.bw
@@ -758,7 +723,6 @@ html gnomad
         parent gnomadPext off
         color 34,255,221
         visibility hide
-        release alpha
 
         track gnomADPextLiver
         bigDataUrl /gbdb/hg19/gnomAD/pext/Liver.bw
@@ -767,7 +731,6 @@ html gnomad
         parent gnomadPext off
         color 170,187,102
         visibility hide
-        release alpha
 
         track gnomADPextLung
         bigDataUrl /gbdb/hg19/gnomAD/pext/Lung.bw
@@ -776,7 +739,6 @@ html gnomad
         parent gnomadPext off
         color 153,255,0
         visibility hide
-        release alpha
 
         track gnomADPextMinorSalivaryGland
         bigDataUrl /gbdb/hg19/gnomAD/pext/MinorSalivaryGland.bw
@@ -785,7 +747,6 @@ html gnomad
         parent gnomadPext off
         color 153,187,136
         visibility hide
-        release alpha
 
         track gnomADPextMuscle_Skeletal
         bigDataUrl /gbdb/hg19/gnomAD/pext/Muscle_Skeletal.bw
@@ -794,7 +755,6 @@ html gnomad
         parent gnomadPext off
         color 170,170,255
         visibility hide
-        release alpha
 
         track gnomADPextNerve_Tibial
         bigDataUrl /gbdb/hg19/gnomAD/pext/Nerve_Tibial.bw
@@ -803,7 +763,6 @@ html gnomad
         parent gnomadPext off
         color 255,215,0
         visibility hide
-        release alpha
 
         track gnomADPextOvary
         bigDataUrl /gbdb/hg19/gnomAD/pext/Ovary.bw
@@ -812,7 +771,6 @@ html gnomad
         parent gnomadPext off
         color 255,170,255
         visibility hide
-        release alpha
 
         track gnomADPextPancreas
         bigDataUrl /gbdb/hg19/gnomAD/pext/Pancreas.bw
@@ -821,7 +779,6 @@ html gnomad
         parent gnomadPext off
         color 153,85,34
         visibility hide
-        release alpha
 
         track gnomADPextPituitary
         bigDataUrl /gbdb/hg19/gnomAD/pext/Pituitary.bw
@@ -830,7 +787,6 @@ html gnomad
         parent gnomadPext off
         color 170,255,153
         visibility hide
-        release alpha
 
         track gnomADPextProstate
         bigDataUrl /gbdb/hg19/gnomAD/pext/Prostate.bw
@@ -839,7 +795,6 @@ html gnomad
         parent gnomadPext off
         color 221,221,221
         visibility hide
-        release alpha
 
         track gnomADPextSkin_NotSunExposed_Suprapubic_
         bigDataUrl /gbdb/hg19/gnomAD/pext/Skin_NotSunExposed_Suprapubic_.bw
@@ -848,7 +803,6 @@ html gnomad
         parent gnomadPext off
         color 0,0,255
         visibility hide
-        release alpha
 
         track gnomADPextSkin_SunExposed_Lowerleg_
         bigDataUrl /gbdb/hg19/gnomAD/pext/Skin_SunExposed_Lowerleg_.bw
@@ -857,7 +811,6 @@ html gnomad
         parent gnomadPext off
         color 119,119,255
         visibility hide
-        release alpha
 
         track gnomADPextSmallIntestine_TerminalIleum
         bigDataUrl /gbdb/hg19/gnomAD/pext/SmallIntestine_TerminalIleum.bw
@@ -866,7 +819,6 @@ html gnomad
         parent gnomadPext off
         color 85,85,34
         visibility hide
-        release alpha
 
         track gnomADPextSpleen
         bigDataUrl /gbdb/hg19/gnomAD/pext/Spleen.bw
@@ -875,7 +827,6 @@ html gnomad
         parent gnomadPext off
         color 119,136,85
         visibility hide
-        release alpha
 
         track gnomADPextStomach
         bigDataUrl /gbdb/hg19/gnomAD/pext/Stomach.bw
@@ -884,7 +835,6 @@ html gnomad
         parent gnomadPext off
         color 255,221,153
         visibility hide
-        release alpha
 
         track gnomADPextTestis
         bigDataUrl /gbdb/hg19/gnomAD/pext/Testis.bw
@@ -893,7 +843,6 @@ html gnomad
         parent gnomadPext off
         color 170,170,170
         visibility hide
-        release alpha
 
         track gnomADPextThyroid
         bigDataUrl /gbdb/hg19/gnomAD/pext/Thyroid.bw
@@ -902,7 +851,6 @@ html gnomad
         parent gnomadPext off
         color 0,102,0
         visibility hide
-        release alpha
 
         track gnomADPextUterus
         bigDataUrl /gbdb/hg19/gnomAD/pext/Uterus.bw
@@ -911,7 +859,6 @@ html gnomad
         parent gnomadPext off
         color 255,102,255
         visibility hide
-        release alpha
 
         track gnomADPextVagina
         bigDataUrl /gbdb/hg19/gnomAD/pext/Vagina.bw
@@ -920,7 +867,6 @@ html gnomad
         parent gnomadPext off
         color 255,85,153
         visibility hide
-        release alpha
 
         track gnomADPextWholeBlood
         bigDataUrl /gbdb/hg19/gnomAD/pext/WholeBlood.bw
@@ -929,7 +875,6 @@ html gnomad
         parent gnomadPext off
         color 255,0,187
         visibility hide
-        release alpha
 
     track gnomadExomes
     shortLabel gnomAD Exomes Variants
