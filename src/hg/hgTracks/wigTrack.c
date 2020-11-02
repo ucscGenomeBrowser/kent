@@ -1486,6 +1486,7 @@ if (enableMouseOver && mouseOverData)
     freez(&mouseOverData);
     if (! beenHereDoneThat )
         {
+        hPrintf("<div id='mouseOverLine' class='mouseOverHighlight'></div>\n");
         hPrintf("<div id='mouseOverContainer' class='wigMouseOver'>\n");
         hPrintf("  <span id='mouseOverText' class=wigMouseOverValue'>\n");
         hPrintf("  </span>\n");
