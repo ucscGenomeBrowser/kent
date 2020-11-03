@@ -74,7 +74,7 @@ html gnomad
             track gnomadGenomesMeanCoverage
             shortLabel Mean Coverage
             longLabel gnomAD Mean Genome Sample Coverage
-            parent gnomadGenomesAvgCoverage on
+            parent gnomadGenomesAvgCoverage off
             visibility dense
             color 255,0,0
             bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.genomes.coverage.mean.bw
@@ -200,7 +200,7 @@ html gnomad
             track gnomadExomesMeanCoverage
             shortLabel Mean Coverage
             longLabel gnomAD Mean Exome Sample Coverage
-            parent gnomadExomesAvgCoverage on
+            parent gnomadExomesAvgCoverage off
             color 255,0,0
             bigDataUrl /gbdb/hg19/gnomAD/coverage/gnomad.exomes.coverage.mean.bw
             subGroups view=eAvg
