@@ -18,10 +18,63 @@ var mapData = {};
 //   return answer;
 // }
 
+function dbgShowTracks() {
+var dbgMsg = "<ol>";
+var dbgCounted = 0;
+if (typeof(hgTracks) !== "undefined") {
+  if (typeof (hgTracks.trackDb) !== "undefined") {
+    for (var trackName in hgTracks.trackDb) {
+       var isWiggle = false;
+       var tdName = "td_data_" + trackName;
+       var tdId  = document.getElementById(tdName);
+       var tdRect = tdId.getBoundingClientRect();
+       var tdLeft = Math.floor(tdRect.left);
+       var tdTop = Math.floor(tdRect.top);
+       var imgName = "img_data_" + trackName;
+       var imgElement  = document.getElementById(imgName);
+       var jsonUrl = "no img element";
+       if (imgElement) {
+   var src = imgElement.src;
+   jsonUrl = imgElement.src.replace("hgt/hgt_", "hgt/" + trackName + "_");
+    jsonUrl = jsonUrl.replace(".png", ".json");
+jsonUrl = jsonUrl.replace("https://hgwdev-hiram.gi.ucsc.edu", "");
+       }
+       var rec = hgTracks.trackDb[trackName];
+       if (rec.type.includes("wig")) { isWiggle = true; }
+       if (rec.type.includes("bigWig")) { isWiggle = true; }
+       if (! isWiggle) { jsonUrl = "not wiggle"; }
+       var viz = vis.enumOrder[hgTracks.trackDb[trackName].visibility];
+       dbgMsg += "<li>" + trackName + ", " + rec.type + ", " + viz + ", " + tdLeft + "," + tdTop + ", " + jsonUrl + "</li>";
+       dbgCounted += 1;
+    }
+  } else {
+     dbgMsg += "<li>no hgTracks.trackDb</li>";
+  }
+} else {
+     dbgMsg += "<li>no hgTracks</li>";
+}
+dbgMsg += "</ol>";
+// if (hgTracks && hgTracks.trackDb) {
+//   dbgMsg = ". hgTracks.trackDb exists with " + objKeyCount(hgTracks.trackDb) + "objKeyCount";
+// }
+$('#debugMsg').html(dbgMsg);
+}
+
 // called from: updateImgForId when it has updated a track in place
 // need to refresh the event handlers and json data
 function updateMouseOver(trackName) {
+// alert("updateMouseOver '" + trackName + ")");
+dbgShowTracks();
+// var msg = ". . . updateMouseOver trackName: '" + trackName + "'";
+// $('#debugMsg').html(msg);
+  if (! mapData.tracks) {
+ var msg = ". . . updateMouseOver mapData.tracks has disappeared: '" + trackName + "'";
+ $('#debugMsg').html(msg);
+return;
+}
   if (mapData.tracks[trackName]) {
+ // var msg = ". . . updateMouseOver trackName: '" + trackName + "'";
+ // $('#debugMsg').html(msg);
     var tdName = "td_data_" + trackName;
     var tdElement  = document.getElementById(tdName);
     var id = tdElement.id;
@@ -35,6 +88,8 @@ function updateMouseOver(trackName) {
     fetchMapData(jsonUrl);
 // alert("updateMouseOver id: '" + jsonUrl + "' valid track here");
   } else {
+var msg = ". . . updateMouseOver NOT trackName: '" + trackName + "'";
+$('#debugMsg').html(msg);
     return;     // not a track we are working on here
   }
 }
@@ -105,6 +160,8 @@ function mouseInTrackImage(evt) {
   var srcUrl = evt.target.src;
   var evX = evt.x;      // location of mouse on the web browser screen
   var evY = evt.y;
+var msg = ". . . mouse x,y: " + evX + "," + evY";
+$('#xyMouse').html(msg);
   var offLeft = Math.max(0, Math.floor(evt.x - tdLeft));
   var windowUp = false;     // see if window is supposed to become visible
   var foundIdx = -1;
@@ -166,10 +223,13 @@ function receiveData(arr) {
     //     display object
     var objectName = "td_data_" + trackName;
     var objectId  = document.getElementById(objectName);
+    if (! objectId) { return; } // not sure why objects are not found
     objectId.addEventListener('mousemove', mouseInTrackImage);
     objectId.addEventListener('mouseout', mouseLeftTrackImage);
     // would be nice to know when the window is scrolling in the browser so
-    // the text box could disappear
+    // the text box could disappear.  These do not appear to work.
+    // Beware, onscroll event is continuous while scrolling.
+//    objectId.addEventListener('onscroll', mouseLeftTrackImage);
 //    window.addEventListener('onscroll', mouseLeftTrackImage);
     var itemCount = 0;	// just for monitoring purposes
     // save incoming x1,x2,v data into the mapData.spans[trackName][] array
@@ -177,6 +237,7 @@ function receiveData(arr) {
       mapData.spans[trackName].push(box); ++itemCount});
     mapData.tracks[trackName] = itemCount;	// merely for debugging watch
   }
+// dbgShowTracks();
 //  var msg = "<ul>";
 //  for (var trackName in mapData.tracks) {
 //      var imgData = "td_data_" + trackName;
@@ -196,7 +257,7 @@ function receiveData(arr) {
 // fetchMapData() sends JSON request, callback to receiveData() upon return
 // =========================================================================
 function fetchMapData(url) {
-// alert("fetchMapData(" + url + ")");
+//  alert("fetchMapData(" + url + ")");
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function() {
     if (4 === this.readyState && 200 === this.status) {
@@ -219,27 +280,48 @@ function fetchMapData(url) {
 // }	//	function mouseMoving(x, y)
 
 function getMouseOverData() {
+  if (typeof(hgTracks) !== "undefined") {
+    if (typeof (hgTracks.trackDb) !== "undefined") {
+      for (var trackName in hgTracks.trackDb) {
+       var isWiggle = false;
+       var rec = hgTracks.trackDb[trackName];
+       if (rec.type.includes("wig")) { isWiggle = true; }
+       if (rec.type.includes("bigWig")) { isWiggle = true; }
+       if (! isWiggle) { continue; }
+       var imgName = "img_data_" + trackName;
+       var imgElement  = document.getElementById(imgName);
+       if (imgElement) {
+         var src = imgElement.src;
+         var jsonUrl = src.replace("hgt/hgt_", "hgt/" + trackName + "_");
+         jsonUrl = jsonUrl.replace(".png", ".json");
+         jsonUrl = jsonUrl.replace("https://hgwdev-hiram.gi.ucsc.edu", "");
+         fetchMapData(jsonUrl);
+       }
+      }
+    }
+  }
+dbgShowTracks();
   // there could be a number of these mouseOver class elements
   // there is one for each track that has this mouseOver data
-  var x = document.getElementsByClassName("mouseOver");
-  for (var i = 0; i < x.length; i++) {
-     var trashUrl = x[i].getAttribute('trashFile');
-     fetchMapData(trashUrl);
-  }
+//  var x = document.getElementsByClassName("mouseOver");
+//  for (var i = 0; i < x.length; i++) {
+//     var trashUrl = x[i].getAttribute('trashFile');
+//     fetchMapData(trashUrl);
+//  }
 }
 
-function getMousePos(evt) {
-  return { x: evt.clientX, y: evt.clientY };
-}
+// function getMousePos(evt) {
+//   return { x: evt.clientX, y: evt.clientY };
+// }
 
-function addMouseMonitor() {
-  window.addEventListener('load', function(evt) {
-    getMouseOverData();
-  }, false);
+// function addMouseMonitor() {
+//   window.addEventListener('load', function(evt) {
+//     getMouseOverData();
+//   }, false);
 //  window.addEventListener('mousemove', function(evt) {
 //    var mousePos = getMousePos(evt);
 //    mouseMoving(Math.floor(mousePos.x), Math.floor(mousePos.y));
 //  }, false);
-}
+// }
 
-$('document').ready(addMouseMonitor());
+// $('document').ready(addMouseMonitor());

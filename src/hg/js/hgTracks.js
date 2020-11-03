@@ -4467,6 +4467,11 @@ var mouseOver = {
     spans: {},
     visible: false,
     tracks: {},
+    popUpDelay: 1000,   // one second delay before popUp appears
+    popUpTimer: null,// handle from setTimeout to use in clearTimout(popUpTimer)
+    delayDone: true,   // mouse has not left element, still receiving move evts
+    delayInProgress: false,        // true if working with delay timer done
+    mostRecentMouseEvt: null,
 
     // spans{} - key name is track name, value is an array of
     //                   objects: {x1, x2, value}
@@ -4490,14 +4495,14 @@ var mouseOver = {
     {
       if (mouseOver.tracks[trackName]) {
       // there should be a more simple jQuery function to bind these events
-      var tdName = "td_data_" + trackName;
-      var tdElement  = document.getElementById(tdName);
+      var tdData = "td_data_" + trackName;
+      var tdElement  = document.getElementById(tdData);
       var id = tdElement.id;
-      tdElement.addEventListener('mousemove', mouseOver.mouseInTrackImage);
+      tdElement.addEventListener('mousemove', mouseOver.mouseMoveDelay);
       tdElement.addEventListener('mouseout', mouseOver.popUpDisappear);
-      var imgName = "img_data_" + trackName;
-      var imgElement  = document.getElementById(imgName);
-      mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName));
+      var imgData = "img_data_" + trackName;
+      var imgElement  = document.getElementById(imgData);
+      mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
       }
     },
 
@@ -4524,15 +4529,25 @@ var mouseOver = {
         var msgWindow = document.querySelector(".wigMouseOver");
         msgWindow.classList.toggle("showMouseOver");
         mouseOver.visible = false;
+//        $('#mouseOverContainer').css('display','none'); // does not work
+        $('#mouseOverLine').css('display','none');
       }
+      if (mouseOver.popUpTimer) {
+         clearTimeout(mouseOver.popUpTimer);
+         mouseOver.popUpTimer = null;
+      }
+      mouseOver.delayDone = true;
+      mouseOver.delayInProgress = false;
     },
 
     popUpVisible: function () {
       if (! mouseOver.visible) {        // should *NOT* have to keep track !*!
 //      $('#mouseOverText').show();     // does not function ?
-        var msgWindow = document.querySelector(".wigMouseOver");
+      var msgWindow = document.querySelector(".wigMouseOver");
         msgWindow.classList.toggle("showMouseOver");
         mouseOver.visible = true;
+//        $('#mouseOverContainer').css('display','block');  // does not work
+        $('#mouseOverLine').css('display','block');
       }
     },
 
@@ -4554,6 +4569,7 @@ var mouseOver = {
     var tdRect = tdId.getBoundingClientRect();
     var tdLeft = Math.floor(tdRect.left);
     var tdTop = Math.floor(tdRect.top);
+    var tdHeight = Math.floor(tdRect.height);
     // find the location of the image itself, this could be the single complete
     //  graphic image of all the tracks, or possibly the single image of the
     //  track itself.  This location also follows the window scrolling and can
@@ -4563,6 +4579,7 @@ var mouseOver = {
     var imageRect = imageId.getBoundingClientRect();
     var imageLeft = Math.floor(imageRect.left);
     var imageTop = Math.floor(imageRect.top);
+//    var imageHeight = Math.floor(imageRect.height);
     var srcUrl = evt.target.src;
     var evX = evt.x;      // location of mouse on the web browser screen
     var evY = evt.y;
@@ -4583,6 +4600,12 @@ var mouseOver = {
       var posTop = tdTop + "px";
       $('#mouseOverContainer').css('left',posLeft);
       $('#mouseOverContainer').css('top',posTop);
+      $('#mouseOverLine').css('left',evt.x + "px");
+      $('#mouseOverLine').css('top',posTop);
+      // Setting the height of this line to the full image height eliminates
+      //  the mouse event area
+      $('#mouseOverLine').css('height',tdHeight + "px");
+//      $('#mouseOverLine').height(imageHeight + "px");
       windowUp = true;      // yes, window is to become visible
     }
     if (windowUp) {     // the window should become visible
@@ -4591,6 +4614,42 @@ var mouseOver = {
       mouseOver.popUpDisappear();
     } //      window visible/not visible
     },  //      mouseInTrackImage function (evt)
+
+    // timeout calls here upon completion
+    delayCompleted: function()
+    {
+       mouseOver.delayDone = true;
+       // mouse could just be sitting there with no events, if there
+       // have been events during the timer, the evt has been recorded
+       // so the popUp appears where the mouse is while it moved during the
+       // time delay since mostRecentMouseEvt is up to date to now
+       // If mouse has moved out of element during timeout, the
+       // delayInProgress will be false and nothing happens.
+       if (mouseOver.delayInProgress) {
+          mouseOver.mouseInTrackImage(mouseOver.mostRecentMouseEvt);
+       }
+    },
+
+    // all mouse move events come here even during timeout
+    mouseMoveDelay: function (evt)
+    {
+      mouseOver.mostRecentMouseEvt = evt;   // record evt for delayCompleted
+      if (mouseOver.delayInProgress) {
+        if (mouseOver.delayDone) {
+          mouseOver.mouseInTrackImage(evt);	// OK to trigger event now
+          return;
+        } else {
+          return; // wait for delay to be done
+        }
+      }
+      mouseOver.delayDone = false;
+      mouseOver.delayInProgress = true;
+      if (mouseOver.popUpTimer) {
+         clearTimeout(mouseOver.popUpTimer);
+         mouseOver.popUpTimer = null;
+      }
+      mouseOver.popUpTimer = setTimeout(mouseOver.delayCompleted, mouseOver.popUpDelay);
+    },
 
     // =======================================================================
     // receiveData() callback for successful JSON request, receives incoming
@@ -4615,17 +4674,12 @@ var mouseOver = {
       mouseOver.spans[trackName] = [];      // start array
       // add a 'mousemove' and 'mouseout' event listener to each track
       //     display object
-      var objectName = "td_data_" + trackName;
-      var objectId  = document.getElementById(objectName);
-      if (! objectId) { return; } // not sure why objects are not found
+      var tdData = "td_data_" + trackName;
+      var tdDataId  = document.getElementById(tdData);
+      if (! tdDataId) { return; } // not sure why objects are not always found
       // there should be a more simple jQuery function to bind these events
-      objectId.addEventListener('mousemove', mouseOver.mouseInTrackImage);
-      objectId.addEventListener('mouseout', mouseOver.popUpDisappear);
-      // would be nice to know when the window is scrolling in the browser so
-      // the text box could disappear.  These do not appear to work.
-      // Beware, onscroll event is continuous while scrolling.
-//    objectId.addEventListener('onscroll', popUpDisappear);
-//    window.addEventListener('onscroll', popUpDisappear);
+      tdDataId.addEventListener('mousemove', mouseOver.mouseMoveDelay);
+      tdDataId.addEventListener('mouseout', mouseOver.popUpDisappear);
       var itemCount = 0;	// just for monitoring purposes
       // save incoming x1,x2,v data into the mouseOver.spans[trackName][] array
       for (var span in arr[trackName]) {
@@ -4636,16 +4690,28 @@ var mouseOver = {
       }
     },  //      receiveData: function (arr)
 
+    failedRequest: function(trackName)
+    {   // failed request to get json data, remove it from the track list
+      if (mouseOver.tracks[trackName]) {
+//      alert("failed request trackName: '"+ trackName + "'");
+        delete mouseOver.tracks[trackName];
+      }
+    },
+
     // =========================================================================
     // fetchMapData() sends JSON request, callback to receiveData() upon return
     // =========================================================================
-    fetchMapData: function (url)
+    fetchMapData: function (url, trackName)
     {
        var xmlhttp = new XMLHttpRequest();
        xmlhttp.onreadystatechange = function() {
        if (4 === this.readyState && 200 === this.status) {
           var mapData = JSON.parse(this.responseText);
           mouseOver.receiveData(mapData);
+       } else {
+          if (4 === this.readyState && 404 === this.status) {
+             mouseOver.failedRequest(trackName);
+          }
        }
     };
     xmlhttp.open("GET", url, true);
@@ -4654,28 +4720,50 @@ var mouseOver = {
                      // when the data has safely arrived
     },
 
-    getMouseOverData: function ()
-    {	// verify hgTracks and hgTracks.trackDb exist before running wild
+    getData: function ()
+    {
+    // check for the hidden div elements for mouseOverData
+    var trackList = document.getElementsByClassName("mouseOverData");
+    for (var i = 0; i < trackList.length; i++) {
+      var jsonData = trackList[i].getAttribute('jsonData');
+      var trackName = trackList[i].getAttribute('name');
+      mouseOver.fetchMapData(jsonData, trackName);
+    }
+
+    // verify hgTracks and hgTracks.trackDb exist before running wild
+/* obsolete method of finding tracks by track type, not all wiggle
+    tracks are identified as type 'wig' or 'bigWig', for example
+    a bam track displayed as a density graph isn't such a type.
       if (typeof(hgTracks) !== "undefined") {
         if (typeof (hgTracks.trackDb) !== "undefined") {
           for (var trackName in hgTracks.trackDb) {
-           var isWiggle = false;
            var rec = hgTracks.trackDb[trackName];
+           if (rec.visibility !== 2) { continue; }
+           var isWiggle = false;
            if (rec.type.includes("wig")) { isWiggle = true; }
            if (rec.type.includes("bigWig")) { isWiggle = true; }
            if (! isWiggle) { continue; }
-           var imgName = "img_data_" + trackName;
-           var imgElement  = document.getElementById(imgName);
+           var imgData = "img_data_" + trackName;
+           var imgElement  = document.getElementById(imgData);
            if (imgElement) {
-             mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName));
+             mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
            }
          }
        }
      }
+*/
+    },
+
+    // any scrolling turns the popUp message off
+    scroll: function()
+    {
+    if (mouseOver.visible) { mouseOver.popUpDisappear(); }
     },
 
     addListener: function () {
-        window.addEventListener('load', mouseOver.getMouseOverData, false);
+        mouseOver.visible = false;
+        window.addEventListener('scroll', mouseOver.scroll, false);
+        window.addEventListener('load', mouseOver.getData, false);
     }
 };	//	var mouseOver
 

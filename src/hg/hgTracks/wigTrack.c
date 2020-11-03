@@ -1486,12 +1486,17 @@ if (enableMouseOver && mouseOverData)
     freez(&mouseOverData);
     if (! beenHereDoneThat )
         {
+        hPrintf("<div id='mouseOverLine' class='mouseOverHighlight'></div>\n");
         hPrintf("<div id='mouseOverContainer' class='wigMouseOver'>\n");
         hPrintf("  <span id='mouseOverText' class=wigMouseOverValue'>\n");
         hPrintf("  </span>\n");
         hPrintf("</div>\n");
+// hPrintf("<div id='mouseDbg'><span id='debugMsg'><p>. . . mouseDbg</p></span></div>\n");
         beenHereDoneThat = TRUE;
         }
+    // hidden element to pass along jsonData file name and also the trigger
+    // that this track has data to display.
+    hPrintf("<div id='mouseOver_%s' name='%s' class='hiddenText mouseOverData' jsonData='%s'></div>\n", tg->track, tg->track, jsonData.forCgi);
     }
 else
     wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);

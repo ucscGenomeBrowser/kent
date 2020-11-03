@@ -21391,7 +21391,7 @@ else if (sameWord(type, "bigMaf"))
     genericMafClick(NULL, ct->tdb, item, start);
 else if (sameWord(type, "bigDbSnp"))
     doBigDbSnp(ct->tdb, item);
-else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred"))
+else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred") || sameWord(type, "bigLolly"))
     bigBedCustomClick(ct->tdb);
 else if (sameWord(type, "bigBarChart") || sameWord(type, "barChart"))
     doBarChartDetails(ct->tdb, item);
