@@ -4,6 +4,7 @@ shortLabel gnomAD
 longLabel Genome Aggregation Database (gnomAD) - Variants, Coverage, and Constraint
 group varRep
 html gnomad
+pennantIcon Updated red ../goldenPath/newsarch.html#110320 "Updated Nov. 3, 2020"
 
     track gnomadVariants
     compositeTrack on
@@ -442,6 +443,7 @@ html gnomad
     viewLimits 0:1
     visibility full
     html gnomadPext
+    pennantIcon New red ../goldenPath/newsarch.html#110320 "Released Nov. 3, 2020"
 
         track gnomADPextmean_proportion
         bigDataUrl /gbdb/hg19/gnomAD/pext/mean_proportion.bw
