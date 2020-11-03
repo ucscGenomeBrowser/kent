@@ -4,6 +4,7 @@ shortLabel gnomAD
 longLabel Genome Aggregation Database (gnomAD) - Variants, Coverage, and Constraint
 group varRep
 html gnomad
+pennantIcon Updated red ../goldenPath/newsarch.html#110320 "Updated Nov. 3, 2020"
 
     track gnomadVariants
     compositeTrack on
@@ -442,6 +443,7 @@ html gnomad
     viewLimits 0:1
     visibility full
     html gnomadPext
+    pennantIcon New red ../goldenPath/newsarch.html#110320 "Released Nov. 3, 2020"
 
         track gnomADPextmean_proportion
         bigDataUrl /gbdb/hg19/gnomAD/pext/mean_proportion.bw
@@ -876,12 +878,12 @@ html gnomad
         color 255,0,187
         visibility hide
 
-    track gnomadExomes
-    shortLabel gnomAD Exomes Variants
-    longLabel Genome Aggregation Database (gnomAD) Exome Variants
+    track gnomadGenomes
+    shortLabel gnomAD Genomes Variants
+    longLabel Genome Aggregation Database (gnomAD) Whole Genome Variants
     itemRgb on
     type bigBed 9 +
-    bigDataUrl /gbdb/hg19/gnomAD/vcf/gnomad.exomes.bb
+    bigDataUrl /gbdb/hg19/gnomAD/variants/v2.1.1.genomes.bb
     parent gnomadSuper
     labelFields name,rsId
     defaultLabelFields name
@@ -896,7 +898,31 @@ html gnomad
     filterType.variation_type multipleListOr
     maxItems 50000
     mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); rsId: $rsId; Genes: $genes; Annotation: $annot; FILTER: $FILTER; Variation: $variation_type
-    url http://gnomad.broadinstitute.org/variant/$s-$#-$<ref>-$<alt>?dataset=gnomad_r2_1&ignore=$<rsId>
+    url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r2_1&ignore=$<rsId>
+    urlLabel View this variant at gnomAD
+    release alpha
+
+    track gnomadExomes
+    shortLabel gnomAD Exomes Variants
+    longLabel Genome Aggregation Database (gnomAD) Exome Variants
+    itemRgb on
+    type bigBed 9 +
+    bigDataUrl /gbdb/hg19/gnomAD/variants/v2.1.1.exomes.bb
+    parent gnomadSuper
+    labelFields name,rsId
+    defaultLabelFields name
+    sepFields AC_afr
+    filterText.genes *
+    filterValues.annot pLoF,missense,synonymous,other
+    filterValuesDefault.annot pLoF,missense,synonymous
+    filterValues.FILTER PASS,InbreedingCoeff,RF,AC0
+    filterType.FILTER multipleListAnd
+    filterValuesDefault.FILTER PASS
+    filterValues.variation_type 3_prime_UTR_variant,5_prime_UTR_variant,NMD_transcript_variant,TFBS_ablation,TF_binding_site_variant,coding_sequence_variant,frameshift_variant,incomplete_terminal_codon_variant,inframe_deletion,inframe_insertion,intergenic_variant,intron_variant,mature_miRNA_variant,missense_variant,non_coding_transcript_exon_variant,non_coding_transcript_variant,protein_altering_variant,splice_acceptor_variant,splice_donor_variant,splice_region_variant,start_lost,stop_gained,stop_lost,stop_retained_variant,synonymous_variant,transcript_ablation
+    filterType.variation_type multipleListOr
+    maxItems 50000
+    mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); rsId: $rsId; Genes: $genes; Annotation: $annot; FILTER: $FILTER; Variation: $variation_type
+    url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r2_1&ignore=$<rsId>
     urlLabel View this variant at gnomAD
     release alpha
 

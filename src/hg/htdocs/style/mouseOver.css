@@ -30,14 +30,29 @@
     transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
 }
 
-.mouseOverHighlight {
-  border-left: 2px solid orange;
-  height: 60px;
+.mouseOverVerticalLine {
   position: fixed;
-  left: 0;
+  border-left: 2px solid orange;
   margin-left: -1px;
+  height: 60px;
+  left: 0;
   top: 0;
   display: none;
   z-index: 999;
   pointer-events: none
+}
+
+.mouseOverText {
+    position: fixed;
+    left: 100px;
+    top: 100px;
+    width: auto;
+    height: auto;
+    background-color: #3333cc;
+    color: #ffff00;
+    display: none;
+    opacity: 1;
+    border-radius: 0.5rem;
+    z-index: 1000;
+    pointer-events: none
 }
