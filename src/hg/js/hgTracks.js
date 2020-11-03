@@ -4467,7 +4467,11 @@ var mouseOver = {
     spans: {},
     visible: false,
     tracks: {},
-//    popUpDelay: 100000,       // can not get this to work ?
+    popUpDelay: 1000,   // one second delay before popUp appears
+    popUpTimer: null,// handle from setTimeout to use in clearTimout(popUpTimer)
+    delayDone: true,   // mouse has not left element, still receiving move evts
+    delayInProgress: false,        // true if working with delay timer done
+    mostRecentMouseEvt: null,
 
     // spans{} - key name is track name, value is an array of
     //                   objects: {x1, x2, value}
@@ -4494,7 +4498,7 @@ var mouseOver = {
       var tdData = "td_data_" + trackName;
       var tdElement  = document.getElementById(tdData);
       var id = tdElement.id;
-      tdElement.addEventListener('mousemove', mouseOver.mouseInTrackImage);
+      tdElement.addEventListener('mousemove', mouseOver.mouseMoveDelay);
       tdElement.addEventListener('mouseout', mouseOver.popUpDisappear);
       var imgData = "img_data_" + trackName;
       var imgElement  = document.getElementById(imgData);
@@ -4528,7 +4532,12 @@ var mouseOver = {
 //        $('#mouseOverContainer').css('display','none'); // does not work
         $('#mouseOverLine').css('display','none');
       }
-//      mouseOver.popUpDelay = 100000;
+      if (mouseOver.popUpTimer) {
+         clearTimeout(mouseOver.popUpTimer);
+         mouseOver.popUpTimer = null;
+      }
+      mouseOver.delayDone = true;
+      mouseOver.delayInProgress = false;
     },
 
     popUpVisible: function () {
@@ -4540,7 +4549,6 @@ var mouseOver = {
 //        $('#mouseOverContainer').css('display','block');  // does not work
         $('#mouseOverLine').css('display','block');
       }
-//      mouseOver.popUpDelay = 10;
     },
 
     //the evt.target.id is the img_data_<trackName> element of the track graphic
@@ -4607,19 +4615,41 @@ var mouseOver = {
     } //      window visible/not visible
     },  //      mouseInTrackImage function (evt)
 
-/*      this doesn't work, claims there is an error in security policy
+    // timeout calls here upon completion
+    delayCompleted: function()
+    {
+       mouseOver.delayDone = true;
+       // mouse could just be sitting there with no events, if there
+       // have been events during the timer, the evt has been recorded
+       // so the popUp appears where the mouse is while it moved during the
+       // time delay since mostRecentMouseEvt is up to date to now
+       // If mouse has moved out of element during timeout, the
+       // delayInProgress will be false and nothing happens.
+       if (mouseOver.delayInProgress) {
+          mouseOver.mouseInTrackImage(mouseOver.mostRecentMouseEvt);
+       }
+    },
+
+    // all mouse move events come here even during timeout
     mouseMoveDelay: function (evt)
     {
-      if (mouseOver.popUpDelay == 100000) {     // first time here
-        mouseOver.popUpDelay -= 1;              // no longer first time
-        setTimeout(mouseOver.mouseInTrackImage(evt), mouseOver.popUpDelay);
-      } else if (mouseOver.popUpDelay > 10) {
-        return; // wait for first one to complete before issuing more
-      } else {
-        mouseOver.mouseInTrackImage(evt);  // after first one is done, pass them along
+      mouseOver.mostRecentMouseEvt = evt;   // record evt for delayCompleted
+      if (mouseOver.delayInProgress) {
+        if (mouseOver.delayDone) {
+          mouseOver.mouseInTrackImage(evt);	// OK to trigger event now
+          return;
+        } else {
+          return; // wait for delay to be done
+        }
       }
+      mouseOver.delayDone = false;
+      mouseOver.delayInProgress = true;
+      if (mouseOver.popUpTimer) {
+         clearTimeout(mouseOver.popUpTimer);
+         mouseOver.popUpTimer = null;
+      }
+      mouseOver.popUpTimer = setTimeout(mouseOver.delayCompleted, mouseOver.popUpDelay);
     },
-*/
 
     // =======================================================================
     // receiveData() callback for successful JSON request, receives incoming
@@ -4648,7 +4678,7 @@ var mouseOver = {
       var tdDataId  = document.getElementById(tdData);
       if (! tdDataId) { return; } // not sure why objects are not always found
       // there should be a more simple jQuery function to bind these events
-      tdDataId.addEventListener('mousemove', mouseOver.mouseInTrackImage);
+      tdDataId.addEventListener('mousemove', mouseOver.mouseMoveDelay);
       tdDataId.addEventListener('mouseout', mouseOver.popUpDisappear);
       var itemCount = 0;	// just for monitoring purposes
       // save incoming x1,x2,v data into the mouseOver.spans[trackName][] array
