@@ -4691,7 +4691,7 @@ var mouseOver = {
     },  //      receiveData: function (arr)
 
     failedRequest: function(trackName)
-    {
+    {   // failed request to get json data, remove it from the track list
       if (mouseOver.tracks[trackName]) {
 //      alert("failed request trackName: '"+ trackName + "'");
         delete mouseOver.tracks[trackName];
@@ -4721,7 +4721,19 @@ var mouseOver = {
     },
 
     getData: function ()
-    {	// verify hgTracks and hgTracks.trackDb exist before running wild
+    {
+    // check for the hidden div elements for mouseOverData
+    var trackList = document.getElementsByClassName("mouseOverData");
+    for (var i = 0; i < trackList.length; i++) {
+      var jsonData = trackList[i].getAttribute('jsonData');
+      var trackName = trackList[i].getAttribute('name');
+      mouseOver.fetchMapData(jsonData, trackName);
+    }
+
+    // verify hgTracks and hgTracks.trackDb exist before running wild
+/* obsolete method of finding tracks by track type, not all wiggle
+    tracks are identified as type 'wig' or 'bigWig', for example
+    a bam track displayed as a density graph isn't such a type.
       if (typeof(hgTracks) !== "undefined") {
         if (typeof (hgTracks.trackDb) !== "undefined") {
           for (var trackName in hgTracks.trackDb) {
@@ -4739,6 +4751,7 @@ var mouseOver = {
          }
        }
      }
+*/
     },
 
     // any scrolling turns the popUp message off
