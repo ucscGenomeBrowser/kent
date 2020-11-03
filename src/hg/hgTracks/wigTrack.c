@@ -1491,6 +1491,7 @@ if (enableMouseOver && mouseOverData)
         hPrintf("  <span id='mouseOverText' class=wigMouseOverValue'>\n");
         hPrintf("  </span>\n");
         hPrintf("</div>\n");
+// hPrintf("<div id='mouseDbg'><span id='debugMsg'><p>. . . mouseDbg</p></span></div>\n");
         beenHereDoneThat = TRUE;
         }
     }
