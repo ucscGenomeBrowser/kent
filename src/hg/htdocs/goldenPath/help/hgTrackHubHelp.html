@@ -125,62 +125,57 @@ Assembly Hubs</a>.</p>
 <!-- ========== Viewing Hub Tracks in the Browser ==================== -->
 <a name="View"></a>
 <h2>Viewing Track Hubs in the browser</h2> 
+<h3>Public hubs</h3>
 <p>
-<strong><em>Public hubs</em></strong><br>
 The Genome Browser provides links to a collection of public track hubs that have been registered 
-with UCSC. To view a list of the public track hubs available for the currently selected assembly, 
-click the &quot;track hubs&quot; button on the Genome Browser gateway or annotation tracks page. The
-Public Hubs tab on the Track Hubs page lists the hubs that are available for display in the browser.
-To add a hub to your display, click the &quot;Connect&quot; button next to the hub. You can also 
-click &quot;Description&quot; and &quot;Hub Name&quot; to see more details about some Public Hubs. 
-After connecting to the hub, click the &quot;Genome Browser&quot; link from the top blue bar. The 
-default assembly for the selected hub will be displayed with hub tracks in a separate track group 
-below the browser image. The tracks can be <a href="hgTracksHelp.html#FineTuning">configured and 
-manipulated</a> in the same fashion as native browser tracks. As with any very large track in the 
-Genome Browser, exercise caution when viewing a broad genomic region that requires the Genome 
-Browser to display a large number of track features: the browser display may time out.</p>
+with UCSC. To view a list of the public track hubs available, click into the blue navigation bar 
+&quot;My Data&quot; and then &quot;Track Hubs&quot; to reach the 
+<a href="../../cgi-bin/hgHubConnect?#publicHubs">Public Track Hubs page</a>.
+You can click links in the &quot;Description&quot; column to see details about a particular Hub.
+To view a hub's data, click on an assembly name on the row of your 
+hub or the &quot;Connect&quot; button. If you clicked the &quot;Connect&quot; button, 
+choose your assembly or click the &quot;Genome Browser&quot; link from the top blue bar to be brought to the
+default assembly. The selected hub tracks will be listed in a separate track group 
+below the browser image and can be <a href="hgTracksHelp.html#FineTuning">configured</a> just like
+native browser tracks. Exercise caution when viewing a wide region that requires the Genome 
+Browser to display a large number of track features: the browser display may time out.
+</p>
+
+<a name="unlistedHubs"></a>
+<h3>Unlisted hubs (located in the <a href="../../cgi-bin/hgHubConnect#unlistedHubs">My
+Hubs</a> tab)</h3>
+<p>In addition to the Public Hubs listed, it is possible to load 
+your own track hub or one created by a colleague. To add an 
+unlisted hub, open the Track Hubs page and click the <a href="../../cgi-bin/hgHubConnect#unlistedHubs">
+My Hubs</a> tab. 
+To import a new hub, type or paste its URL into the text box, then click the Add Hub button. 
+If successful, your track hub will appear on that page.</p> 
 <p>
-<strong><em>Unlisted hubs (located in the <a href="../../cgi-bin/hgHubConnect" target="_blank">My
-Hubs</a> tab)</em></strong><br>
-In addition to the publicly available hubs listed on the Public Hubs tab, it is possible to load 
-your own unlisted track hub or one created by a colleague as long as you know its URL. To add an 
-unlisted hub, open the Track Hubs page and click the <a href="../../cgi-bin/hgHubConnect" 
-target="_blank">My Hubs</a> tab. This tab lists the unlisted track hubs that you have loaded into 
-your browser. To import a new hub, type its URL into the text box, then click the Add Hub button. 
-If the track hub is imported successfully, it will be added to the list. It is also possible to add 
-a track hub by directly adding the hub's URL to the browser URL. If you add
+It is also possible to add or share a track hub by directly by URL. If you add
 <strong>hubUrl=[URL]</strong> to your hgTracks URL line, it will add the hub directly into the 
-browser (e.g., <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://vizhub.wustl.edu/VizHub/RoadmapRelease3.txt">
-http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19<strong>&hubUrl=</strong>http://vizhub.wustl.edu/VizHub/RoadmapRelease3.txt</a>).
-If the hub you've selected is an assembly hub, the supported assemblies will be selectable from the 
-gateway page by selecting the name of the track hub in the group pulldown.</p>
+browser:</p>
+<ul>
+<li><a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://vizhub.wustl.edu/VizHub/RoadmapRelease3.txt">
+http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19<strong>&hubUrl=</strong>
+http://vizhub.wustl.edu/VizHub/RoadmapRelease3.txt</a></li></ul>
 <p>
-If the browser is unable to load the track hub, it will display an error message. Some common causes
-for an import to fail include typos in the URL, attempting to add a track hub from a different 
-assembly, a hub server that is offline, or errors in the track hub files. Once you have successfully
-loaded a hub, you can view it in the browser by clicking the &quot;Connect&quot; button. Please note
-that unlisted hubs are in no way secure. The URL helps to obfuscate the location of the data; it is 
-a simple barrier to casual users. Please also know that hubs can be loaded from a local directory 
-when using <a  href="hubQuickStartAssembly.html#blatGbib" target="_blank">GBiB</a>.</p>  
-<p>
-To remove a track hub from your Genome Browser display, click the &quot;Disconnect&quot; button on 
-the Track Data Hubs page.</p>
-<p>
-Occasionally, remote track hubs may be missing, off-line, or otherwise unavailable. If a user is 
-already browsing data from the remote hub when it disconnects, a yellow error message will be 
-displayed instead of the expected data.</p>
-<p>
-The track sets in hubs are genome assembly specific. The Track Hubs page lists each hub and the 
-assemblies it supports. To switch to a different assembly, click the Genomes link in the top menu 
-bar, then select the new assembly from the Gateway page. If the hub supports assemblies that are not
-natively supported by UCSC or the mirror you're visiting, the assembly can be selected by choosing 
-the track hub name under the group menu.</p>
+If you are adding an assembly hub with multiple genomes, you can link directly to hgGateway, 
+the assembly selection page and a particular genome:</p>
+<ul>
+<li><a href="../../cgi-bin/hgGateway?genome=GCF_000699105.1&hubUrl=https://hgdownload.soe.ucsc.edu/hubs/birds/hub.txt">
+http://genome.ucsc.edu/cgi-bin/hgGateway?genome=GCF_000699105.1&hubUrl=https://hgdownload.soe.ucsc.edu/hubs/birds/hub.txt</a></li></ul>
 <p>
 Tracks accessed through a hub can be used in Genome Browser 
 <a href="hgSessionHelp.html">sessions</a> and <a href="hgTracksHelp.html#CustomTracks">custom 
 tracks</a> in the same manner as other tracks. The data underlying data hub tracks can be viewed, 
-manipulated, and downloaded using the <a href="../../cgi-bin/hgTables">UCSC Table Browser</a>.</p> 
-<!--Question: Are there any restrictions to these uses?-->
+manipulated, and downloaded using the <a href="../../cgi-bin/hgTables">UCSC Table Browser</a>.
+To remove a track hub from your Genome Browser display, click the &quot;Disconnect&quot; button on 
+the Track Hubs page.</p>
+<p>
+For confidential or private data,please note
+that unlisted hubs are not secure. The URL helps to hide the location of the data; it is
+a simple barrier of obscurity. Please also know that hubs can be loaded from local directories
+when using <a  href="hubQuickStartAssembly.html#blatGbib">GBiB</a>.</p>
 
 <!-- ========== Setting Up Your Own Track Hub ============================== -->
 <a name="Setup"></a>
@@ -700,6 +695,16 @@ Note that you will have to use the udcDir if /tmp/udcCache is not writable on yo
 <p>
 The hubCheck program is available from the UCSC downloads server at 
 <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">http://hgdownload.soe.ucsc.edu/admin/exe/</a>.</p>
+
+<a name="troubleConnecting"></a>
+<h3>Troubleshooting Track Hub connections</h3>
+<p>
+If the browser is unable to load a track hub, it will display an error message. Some common causes
+for an import to fail include typos in the URL, a hub server that is offline, 
+or errors in the track hub configuration files. Occasionally, remote track
+hubs may be missing, off-line, or otherwise unavailable. If a user is
+already browsing data from the remote hub when it disconnects, a yellow error message will be
+displayed instead of the expected data.</p>
 
 <!-- ========== Setting Up Track Item Search ============================== -->
 <a name="Search"></a>
