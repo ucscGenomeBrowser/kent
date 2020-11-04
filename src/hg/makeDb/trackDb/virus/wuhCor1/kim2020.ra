@@ -106,7 +106,7 @@ priority 2
 
 track kimRnaMod
 type bigBarChart
-shortLabel Kim RNA Modifific.
+shortLabel Kim RNA Modific.
 longLabel Kim et al. Nanopore RNA Modifications: gRNA S 3a E M 6 7a 7b 8 N
 barChartBars gRNA S ORF3a E M ORF6 ORF7a ORF7b ORF8 N
 barChartMetric median 
