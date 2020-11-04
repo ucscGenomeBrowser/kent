@@ -4472,9 +4472,6 @@ var mouseOver = {
     delayDone: true,   // mouse has not left element, still receiving move evts
     delayInProgress: false,        // true if working with delay timer done
     mostRecentMouseEvt: null,
-    mouseMoveCount: 0,
-    mouseDelayCount: 0,
-    mouseInTrackCount: 0,
 
     // spans{} - key name is track name, value is an array of
     //                   objects: {x1, x2, value}
@@ -4497,18 +4494,13 @@ var mouseOver = {
     updateMouseOver: function (trackName)
     {
       if (mouseOver.tracks[trackName]) {
-      // there should be a more simple jQuery function to bind these events
-      var tdData = "td_data_" + trackName;
-      var tdDataId  = document.getElementById(tdData);
-      $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
-      $( tdDataId ).mouseout(mouseOver.popUpDisappear);
-//      $( tdDataId ).bind('mousemove', mouseOver.mouseMoveDelay);
-//      $( tdDataId ).bind('mouseout', mouseOver.popUpDisappear);
-//      tdDataId.addEventListener('mousemove', mouseOver.mouseMoveDelay, true);
-//      tdDataId.addEventListener('mouseout', mouseOver.popUpDisappear, true);
-      var imgData = "img_data_" + trackName;
-      var imgElement  = document.getElementById(imgData);
-      mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
+        var tdData = "td_data_" + trackName;
+        var tdDataId  = document.getElementById(tdData);
+        $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
+        $( tdDataId ).mouseout(mouseOver.popUpDisappear);
+        var imgData = "img_data_" + trackName;
+        var imgElement  = document.getElementById(imgData);
+        mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
       }
     },
 
@@ -4531,12 +4523,7 @@ var mouseOver = {
 
     popUpDisappear: function () {
       if (mouseOver.visible) {        // should *NOT* have to keep track !*!
-//       $('#mouseOverText').hide();       // does not function ?
-//        var msgWindow = document.querySelector(".wigMouseOver");
-//        msgWindow.classList.toggle("showMouseOver");
         mouseOver.visible = false;
-//   hPrintf("<div id='mouseOverText' class='mouseOverText'></div>\n");
-//        $('#mouseOverContainer').css('display','none'); // does not work
         $('#mouseOverText').css('display','none');
         $('#mouseOverVerticalLine').css('display','none');
       }
@@ -4550,26 +4537,16 @@ var mouseOver = {
 
     popUpVisible: function () {
       if (! mouseOver.visible) {        // should *NOT* have to keep track !*!
-//      $('#mouseOverText').show();     // does not function ?
-//      var msgWindow = document.querySelector(".wigMouseOver");
-//        msgWindow.classList.toggle("showMouseOver");
         mouseOver.visible = true;
-//        $('#mouseOverContainer').css('display','block');  // does not work
         $('#mouseOverText').css('display','block');
         $('#mouseOverVerticalLine').css('display','block');
       }
     },
-//   hPrintf("<div id='mouseOverVerticalLine' class='mouseOverVerticalLine'></div>\n");
-//   hPrintf("<div id='mouseOverText' class='mouseOverText'></div>\n");
 
-    //the evt.currentTarget.id is the td_data_<trackName> element of the track graphic
+    //  the evt.currentTarget.id is the td_data_<trackName> element of
+    //     the track graphic
     mouseInTrackImage: function (evt)
     {
-    ++mouseOver.mouseInTrackCount;
-
-//      var msg = ". . . mouseInTrackImage: evt.currentTarget.id: " + evt.currentTarget.id + ", mouseMoveCount: " + mouseOver.mouseMoveCount + ", mouseDelayCount: " + mouseOver.mouseDelayCount + ", mouseInTrackCount: " + mouseOver.mouseInTrackCount;
-//      $('#debugMsg').html(msg);
-
     // the center label also events here, can't use that
     //  plus there is a one pixel line under the center label that has no
     //   id name at all, so verify we are getting the event from the correct
@@ -4580,56 +4557,72 @@ var mouseOver = {
     // find location of this <td> slice in the image, this is the track
     //   image in the graphic, including left margin and center label
     //   This location follows the window scrolling, could go negative
-//    var tdName = "td_data_" + trackName;
     var tdId  = document.getElementById(evt.currentTarget.id);
     var tdRect = tdId.getBoundingClientRect();
     var tdLeft = Math.floor(tdRect.left);
     var tdTop = Math.floor(tdRect.top);
     var tdHeight = Math.floor(tdRect.height);
+
     // find the location of the image itself, this could be the single complete
     //  graphic image of all the tracks, or possibly the single image of the
     //  track itself.  This location also follows the window scrolling and can
     //  even go negative when the web browser scrolls a window that is larger
     //  than the width of the web browser.
-    var imageName = "img_data_" + trackName;
-    var imageId = document.getElementById(imageName);
-    var imageRect = imageId.getBoundingClientRect();
-    var imageLeft = Math.floor(imageRect.left);
-    var imageTop = Math.floor(imageRect.top);
-//    var imageHeight = Math.floor(imageRect.height);
-    var evtX = evt.pageX;      // location of mouse on the web browser screen
-    var evtY = evt.pageY;
-    var offLeft = Math.max(0, Math.floor(evtX - tdLeft));
+    var imgName = "img_data_" + trackName;
+    var imgId = document.getElementById(imgName);
+    var imgRect = imgId.getBoundingClientRect();
+    var imgLeft = Math.floor(imgRect.left);
+    var imgTop = Math.floor(imgRect.top);
+    var imgWidth = Math.floor(imgRect.width);
+    var imgHeight = Math.floor(imgRect.height);
+    var imgRectX = Math.floor(imgRect.x);
+    var evtX = Math.floor(evt.pageX);      // location of mouse relative to the whole page
+    var evtY = Math.floor(evt.pageY);      // even when the top of page has scolled off
+    var offX = Math.floor(evt.offsetX);
+    // This is very strange how this offLeft worked out, but it does work.
+    //   What offLeft measures is how far into the graph is the cursor from
+    //     the left side of the graph.  This is needed as an index to find
+    //     the data values that belong to the graph which are in mouseOver.spans
+    //     It is always a positive number from 0 to (N-1) where N is the
+    //       number of pixels in the graph.
+    //  The jQuery pageX,pageY are a bit odd, they are always positive as
+    //      measured from the top left corner of the page.  The 'page' is
+    //      the whole document even when it scrolls off screen to the top.
+    //      jQuery documentation says the evt.offsetX is not always supported
+    //      by all browsers.  Will see about that.
+    //  I don't see a way to simplify this offLeft.  What I'm seeing is that
+    //      evtX-offsetX is always 3, which I believe is the margin on the left
+    //      side of the page between the page edge and where the image begins.
+    //      Then, tdLeft is the offset from the left edge of the image to where
+    //      the graph begins.  This tdLeft changes as the window scrolls left
+    //      and right, including going negative when it scrolls off screen left.
+    //
+    var offLeft = Math.max(0, Math.floor(2*offX - tdLeft + imgRectX - evtX));
     var windowUp = false;     // see if window is supposed to become visible
     var foundIdx = -1;
     if (mouseOver.spans[trackName]) {
        foundIdx = mouseOver.findRange(offLeft, mouseOver.spans[trackName]);
     }
-// var msg = ". . . tdRect: " + tdLeft + "," + tdTop + ", imgRect: " + imageLeft + "," + imageTop + ", evtXY: " + evtX + "," + evtY + ", offLeft: " + offLeft + ", foundIdx: " + foundIdx;
-//      $('#debugMsg').html(msg);
-    // might want to indicate 'no data' when not found
+    // can show 'no data' when not found
     if (foundIdx > -1) {
       // value to display
-      var mouseOverValue = "&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
+      mouseOverValue = "&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
       $('#mouseOverText').html(mouseOverValue);
-      var msgWidth = Math.ceil($('#mouseOverText').width());
-      var msgHeight = Math.ceil($('#mouseOverText').height());
-      var posLeft = evtX - msgWidth + "px";
-      var posTop = tdTop + "px";
-// var msg = ". . . posLeft,Top: " + posLeft + "," + posTop + ", evXY: " + evtX + "," + evtY + ", imageTop: " + imageTop;
-//      $('#debugMsg').html(msg);
-      $('#mouseOverText').css('left',posLeft);
-      $('#mouseOverText').css('top',posTop);
-      $('#mouseOverVerticalLine').css('left',evtX + "px");
-      $('#mouseOverVerticalLine').css('top',posTop);
-//      msg = ". . . mouseOverText: " + mouseOverValue + " at: " + posLeft + "," + posTop;
-//      $('#debugMsg').html(msg);
-      // Setting the height of this line to the full image height eliminates
-      //  the mouse event area
-      $('#mouseOverVerticalLine').css('height',tdHeight + "px");
-//      $('#mouseOverVerticalLine').height(imageHeight + "px");
-      windowUp = true;      // yes, window is to become visible
+    } else {
+      var mouseOverValue = "no data";
+      $('#mouseOverText').html(mouseOverValue);
     }
+    var msgWidth = Math.ceil($('#mouseOverText').width());
+    var msgHeight = Math.ceil($('#mouseOverText').height());
+    var posLeft = imgLeft + offX - msgWidth + "px";
+    var posTop = tdTop + "px";
+    $('#mouseOverText').css('left',posLeft);
+    $('#mouseOverText').css('top',posTop);
+    $('#mouseOverVerticalLine').css('left',imgLeft + offX + "px");
+    $('#mouseOverVerticalLine').css('top',posTop);
+    $('#mouseOverVerticalLine').css('height',tdHeight + "px");
+    windowUp = true;      // yes, window is to become visible
+
     if (windowUp) {     // the window should become visible
       mouseOver.popUpVisible();
     } else {    // the window should disappear
@@ -4640,7 +4633,6 @@ var mouseOver = {
     // timeout calls here upon completion
     delayCompleted: function()
     {
-       ++mouseOver.mouseDelayCount;
        mouseOver.delayDone = true;
        // mouse could just be sitting there with no events, if there
        // have been events during the timer, the evt has been recorded
@@ -4656,12 +4648,7 @@ var mouseOver = {
     // all mouse move events come here even during timeout
     mouseMoveDelay: function (evt)
     {
-      ++mouseOver.mouseMoveCount;
-
       mouseOver.mostRecentMouseEvt = evt;   // record evt for delayCompleted
-
-//      var msg = ". . . mouseMoveDelay evt.currentTarget.id: " + evt.currentTarget.id + ", mouseMoveCount: " + mouseOver.mouseMoveCount + ", mouseDelayCount: " + mouseOver.mouseDelayCount + ", mouseInTrackCount: " + mouseOver.mouseInTrackCount;
-//      $('#debugMsg').html(msg);
 
       if (mouseOver.delayInProgress) {
         if (mouseOver.delayDone) {
@@ -4710,14 +4697,8 @@ var mouseOver = {
 //  As the .mousemove() method is just a shorthand
 //    for .on( "mousemove", handler ), detaching is possible
 //      using .off( "mousemove" ).
-      // there should be a more simple jQuery function to bind these events
-//      $(tdData).bind('mousemove', mouseOver.mouseMoveDelay); does not work
       $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
       $( tdDataId ).mouseout(mouseOver.popUpDisappear);
-//      $( tdDataId ).bind('mousemove', mouseOver.mouseMoveDelay);
-//      $( tdDataId ).bind('mouseout', mouseOver.popUpDisappear);
-//      tdDataId.addEventListener('mousemove', mouseOver.mouseMoveDelay, true);
-//      tdDataId.addEventListener('mouseout', mouseOver.popUpDisappear, true);
       var itemCount = 0;	// just for monitoring purposes
       // save incoming x1,x2,v data into the mouseOver.spans[trackName][] array
       for (var span in arr[trackName]) {
@@ -4731,7 +4712,6 @@ var mouseOver = {
     failedRequest: function(trackName)
     {   // failed request to get json data, remove it from the track list
       if (mouseOver.tracks[trackName]) {
-//      alert("failed request trackName: '"+ trackName + "'");
         delete mouseOver.tracks[trackName];
       }
     },
@@ -4760,36 +4740,13 @@ var mouseOver = {
 
     getData: function ()
     {
-    // check for the hidden div elements for mouseOverData
-    var trackList = document.getElementsByClassName("mouseOverData");
-    for (var i = 0; i < trackList.length; i++) {
-      var jsonData = trackList[i].getAttribute('jsonData');
-      var trackName = trackList[i].getAttribute('name');
-      mouseOver.fetchMapData(jsonData, trackName);
-    }
-
-    // verify hgTracks and hgTracks.trackDb exist before running wild
-/* obsolete method of finding tracks by track type, not all wiggle
-    tracks are identified as type 'wig' or 'bigWig', for example
-    a bam track displayed as a density graph isn't such a type.
-      if (typeof(hgTracks) !== "undefined") {
-        if (typeof (hgTracks.trackDb) !== "undefined") {
-          for (var trackName in hgTracks.trackDb) {
-           var rec = hgTracks.trackDb[trackName];
-           if (rec.visibility !== 2) { continue; }
-           var isWiggle = false;
-           if (rec.type.includes("wig")) { isWiggle = true; }
-           if (rec.type.includes("bigWig")) { isWiggle = true; }
-           if (! isWiggle) { continue; }
-           var imgData = "img_data_" + trackName;
-           var imgElement  = document.getElementById(imgData);
-           if (imgElement) {
-             mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
-           }
-         }
-       }
-     }
-*/
+      // check for the hidden div elements for mouseOverData
+      var trackList = document.getElementsByClassName("mouseOverData");
+      for (var i = 0; i < trackList.length; i++) {
+        var jsonData = trackList[i].getAttribute('jsonData');
+        var trackName = trackList[i].getAttribute('name');
+        mouseOver.fetchMapData(jsonData, trackName);
+      }
     },
 
     // any scrolling turns the popUp message off
