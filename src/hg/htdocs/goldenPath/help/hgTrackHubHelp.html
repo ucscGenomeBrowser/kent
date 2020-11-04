@@ -151,7 +151,36 @@ My Hubs</a> tab.
 To import a new hub, type or paste its URL into the text box, then click the Add Hub button. 
 If successful, your track hub will appear on that page.</p> 
 <p>
-It is also possible to add or share a track hub by directly by URL. If you add
+Tracks accessed through a hub can be used in Genome Browser
+<a href="hgSessionHelp.html">sessions</a> and <a href="hgTracksHelp.html#CustomTracks">custom 
+tracks</a> in the same manner as other tracks. The data underlying data hub tracks can be viewed,
+manipulated, and downloaded using the <a href="../../cgi-bin/hgTables">UCSC Table Browser</a>.
+To remove a track hub from your Genome Browser display, click the &quot;Disconnect&quot; button on
+the Track Hubs page.</p>
+<p>
+For confidential or private data, please note
+that unlisted hubs are not secure. The URL helps to hide the location of the data; it is
+a simple barrier of obscurity. Please also know that hubs can be loaded from local directories
+when using <a  href="hubQuickStartAssembly.html#blatGbib">GBiB</a>.</p>
+
+<a name="Sharing"></a>
+<h3>Sharing Track Hubs</h3>
+<p>When sharing track hubs on a single assembly from manuscripts, publications,
+or on research websites, we recommend using a session to link to
+the Genome Browser view attached to that particular track hub. This has the advantage 
+of being able to save and share configuration settings made on other, native browser tracks.
+The process for generating a session link to share a track hub for a manuscript is to
+make the hub on your web-accessible server, attach the hub to the Genome Browser, configure
+browser position and related tracks, then <a href="../../cgi-bin/hgSession">
+save your named session</a> and share the
+session link. Your session links will be in the following format with 
+your chosen username and session name:</p>
+<ul>
+<li><a href="http://genome.ucsc.edu/s/ExampleUser/TrackHubSession">
+http://genome.ucsc.edu/s/ExampleUser/TrackHubSession</a></li>
+</ul>
+<p>
+It is also possible to add or share a track hub directly by URL. If you add
 <strong>hubUrl=[URL]</strong> to your hgTracks URL line, it will add the hub directly into the 
 browser:</p>
 <ul>
@@ -163,18 +192,6 @@ the assembly selection page and a particular genome:</p>
 <ul>
 <li><a href="../../cgi-bin/hgGateway?genome=GCF_000699105.1&hubUrl=https://hgdownload.soe.ucsc.edu/hubs/birds/hub.txt">
 http://genome.ucsc.edu/cgi-bin/hgGateway?genome=GCF_000699105.1&hubUrl=https://hgdownload.soe.ucsc.edu/hubs/birds/hub.txt</a></li></ul>
-<p>
-Tracks accessed through a hub can be used in Genome Browser 
-<a href="hgSessionHelp.html">sessions</a> and <a href="hgTracksHelp.html#CustomTracks">custom 
-tracks</a> in the same manner as other tracks. The data underlying data hub tracks can be viewed, 
-manipulated, and downloaded using the <a href="../../cgi-bin/hgTables">UCSC Table Browser</a>.
-To remove a track hub from your Genome Browser display, click the &quot;Disconnect&quot; button on 
-the Track Hubs page.</p>
-<p>
-For confidential or private data, please note
-that unlisted hubs are not secure. The URL helps to hide the location of the data; it is
-a simple barrier of obscurity. Please also know that hubs can be loaded from local directories
-when using <a  href="hubQuickStartAssembly.html#blatGbib">GBiB</a>.</p>
 
 <!-- ========== Setting Up Your Own Track Hub ============================== -->
 <a name="Setup"></a>
