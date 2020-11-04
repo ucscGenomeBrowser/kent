@@ -56,7 +56,7 @@ struct hashEl *hel = trackDbSettingsLike(tg->tdb, "yAxisLabel*");
 for(; hel; hel = hel->next)
     {
     char *setting = cloneString((char *)hel->val);
-    int number = atoi(nextWord(&setting)); 
+    double number = atof(nextWord(&setting)); 
     boolean drawLine = sameString("on", nextWord(&setting));
     unsigned char red, green, blue;
     char *colorStr = nextWord(&setting);
@@ -170,7 +170,7 @@ char lower[1024];
 if (lollyCart->lowerLimit < lollyCart->upperLimit)
     {
     safef(lower, sizeof(lower), "%g -", lollyCart->lowerLimit);
-    hvGfxTextRight(hvg, xOff, yOff+height - LOLLY_DIAMETER - fontHeight/2 , width - 1, fontHeight,
+    hvGfxTextRight(hvg, xOff, yOff+height - LOLLY_DIAMETER / 2 - 2 *fontHeight + fontHeight/2 , width - 1, fontHeight,
         color, font, lower);
     }
 }
