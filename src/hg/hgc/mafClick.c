@@ -545,6 +545,25 @@ else
     if (speciesOrder == NULL)
 	speciesOrder = trackDbSetting(tdb, "speciesOrder");
 
+    int speciesCt = 0;
+    char *species[2048];
+    struct mafComp **newOrder;
+    if (speciesOrder)
+        {
+        // chop up speciesOrder string and store it away, checking for errors along the way
+        speciesCt = chopLine(cloneString(speciesOrder), species);
+        newOrder = needMem((speciesCt + 1) * sizeof (struct mafComp *));
+
+        int ii;
+        struct hash *nameHash = newHash(5);
+        for(ii=0; ii < speciesCt; ii++)
+            {
+            if (hashLookup(nameHash, species[ii]))
+                errAbort("speciesOrder contains %s more than once.", species[ii]);
+            hashStore(nameHash, species[ii]);
+            }
+        }
+
     for (maf = mafList; maf != NULL; maf = maf->next)
         {
         int mcCount = 0;
@@ -584,11 +603,9 @@ else
         if (mcCount == 0)
             continue;
 
-	if (speciesOrder)
+	if (speciesCt)
 	    {
-	    int speciesCt;
-	    char *species[2048];
-	    struct mafComp **newOrder, *mcThis;
+	    struct mafComp *mcThis;
 	    int i;
 
 	    mcCount = 0;
@@ -600,6 +617,8 @@ else
 		{
 		if ((mcThis = mafMayFindCompSpecies(maf, species[i], '.')) == NULL)
 		    continue;
+                if (mcThis == maf->components)
+                    errAbort("Reference species (%s) shouldn't be in speciesOrder in trackDb", species[i]);
 		newOrder[mcCount++] = mcThis;
 		}
 
