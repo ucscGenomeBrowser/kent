@@ -1,0 +1,26 @@
+track pyle
+shortLabel SHAPE Struct Pyle
+longLabel RNA Structure (in silico and SHAPE) from the Pyle group
+visibility hide
+type bigWig
+group rna
+priority 1
+compositeTrack on
+
+  track Entropy
+  parent pyle
+  shortLabel Shannon Entropy
+  longLabel Shannon Entropy (in silico prediction)
+  type bigWig
+  bigDataUrl /gbdb/wuhCor1/pyle/Full_Length_Shannon_Entropy.bw
+  visibility full
+  viewLimits 0:1
+
+  track SHAPE
+  parent pyle
+  shortLabel SHAPE Reactivity
+  longLabel SHAPE Reactivity (VeroE6 cells, virus isolate USA-WA1/2020)
+  type bigWig
+  bigDataUrl  /gbdb/wuhCor1/pyle/SHAPE_Reactivity.bw
+  visibility full
+  viewLimits 0:55

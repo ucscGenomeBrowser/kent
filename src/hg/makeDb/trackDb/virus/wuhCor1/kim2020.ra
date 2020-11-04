@@ -124,8 +124,8 @@ barChartSizeWindows 500 8000
 priority 3
 
 track transcriptome
-shortLabel Transcriptome
-longLabel SARS-CoV-2 Trancriptome tracks
+shortLabel Transcriptome Kim
+longLabel SARS-CoV-2 Transcriptome tracks from the Kim lab
 visibility hide
 group genes
 type bigBed 12
