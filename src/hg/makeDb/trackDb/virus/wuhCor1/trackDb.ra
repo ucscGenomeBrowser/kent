@@ -24,7 +24,7 @@ include ncbiGene.ra
 track rnaStructRangan
 shortLabel Rangan RNA
 longLabel Rangan et al. RNA predictions
-group genes
+group rna
 visibility hide
 color 20,90,0
 type bed 6 +
@@ -41,7 +41,7 @@ track rfam
 shortLabel Rfam
 longLabel Rfam families
 visibility hide
-group genes
+group rna
 color 98,23,0
 url https://rfam.org/family/$$
 type bed 5
@@ -497,3 +497,5 @@ include addgene.ra
 include pond.ra
 include bloom.ra
 include weizmanOrfs.ra
+include pyle.ra
+include treangen.ra
