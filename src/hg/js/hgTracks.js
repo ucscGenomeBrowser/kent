@@ -4554,6 +4554,11 @@ var mouseOver = {
     if (! evt.currentTarget.id.includes("td_data_")) { return; }
     var trackName = evt.currentTarget.id.replace("td_data_", "");
     if (trackName.length < 1) { return; }	// verify valid trackName
+
+    var evtX = Math.floor(evt.pageX);      // location of mouse relative to the whole page
+    var evtY = Math.floor(evt.pageY);      // even when the top of page has scolled off
+    var offX = Math.floor(evt.offsetX);
+
     // find location of this <td> slice in the image, this is the track
     //   image in the graphic, including left margin and center label
     //   This location follows the window scrolling, could go negative
@@ -4562,6 +4567,12 @@ var mouseOver = {
     var tdLeft = Math.floor(tdRect.left);
     var tdTop = Math.floor(tdRect.top);
     var tdHeight = Math.floor(tdRect.height);
+    var clientX = Math.floor(evt.clientX);
+    var clientY = Math.floor(evt.clientY);
+    // the graphOffset is the index (x coordinate) into the 'spans' definitions
+    //  of the data value boxes for the graph.  Seems to always be off by 3,
+    //  don't know why that is.
+    var graphOffset = Math.max(0, clientX - tdLeft - 3);
 
     // find the location of the image itself, this could be the single complete
     //  graphic image of all the tracks, or possibly the single image of the
@@ -4572,46 +4583,21 @@ var mouseOver = {
     var imgId = document.getElementById(imgName);
     var imgRect = imgId.getBoundingClientRect();
     var imgLeft = Math.floor(imgRect.left);
-    var imgTop = Math.floor(imgRect.top);
-    var imgWidth = Math.floor(imgRect.width);
-    var imgHeight = Math.floor(imgRect.height);
-    var imgRectX = Math.floor(imgRect.x);
-    var evtX = Math.floor(evt.pageX);      // location of mouse relative to the whole page
-    var evtY = Math.floor(evt.pageY);      // even when the top of page has scolled off
-    var offX = Math.floor(evt.offsetX);
-    // This is very strange how this offLeft worked out, but it does work.
-    //   What offLeft measures is how far into the graph is the cursor from
-    //     the left side of the graph.  This is needed as an index to find
-    //     the data values that belong to the graph which are in mouseOver.spans
-    //     It is always a positive number from 0 to (N-1) where N is the
-    //       number of pixels in the graph.
-    //  The jQuery pageX,pageY are a bit odd, they are always positive as
-    //      measured from the top left corner of the page.  The 'page' is
-    //      the whole document even when it scrolls off screen to the top.
-    //      jQuery documentation says the evt.offsetX is not always supported
-    //      by all browsers.  Will see about that.
-    //  I don't see a way to simplify this offLeft.  What I'm seeing is that
-    //      evtX-offsetX is always 3, which I believe is the margin on the left
-    //      side of the page between the page edge and where the image begins.
-    //      Then, tdLeft is the offset from the left edge of the image to where
-    //      the graph begins.  This tdLeft changes as the window scrolls left
-    //      and right, including going negative when it scrolls off screen left.
-    //
-    var offLeft = Math.max(0, Math.floor(2*offX - tdLeft + imgRectX - evtX));
+//    var imgTop = Math.floor(imgRect.top);
+//    var imgWidth = Math.floor(imgRect.width);
+//    var imgHeight = Math.floor(imgRect.height);
+//    var imgRectX = Math.floor(imgRect.x);
     var windowUp = false;     // see if window is supposed to become visible
     var foundIdx = -1;
     if (mouseOver.spans[trackName]) {
-       foundIdx = mouseOver.findRange(offLeft, mouseOver.spans[trackName]);
+       foundIdx = mouseOver.findRange(graphOffset, mouseOver.spans[trackName]);
     }
     // can show 'no data' when not found
-    if (foundIdx > -1) {
-      // value to display
+    var mouseOverValue = "no data";
+    if (foundIdx > -1) { // value to display
       mouseOverValue = "&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
-      $('#mouseOverText').html(mouseOverValue);
-    } else {
-      var mouseOverValue = "no data";
-      $('#mouseOverText').html(mouseOverValue);
     }
+    $('#mouseOverText').html(mouseOverValue);
     var msgWidth = Math.ceil($('#mouseOverText').width());
     var msgHeight = Math.ceil($('#mouseOverText').height());
     var posLeft = imgLeft + offX - msgWidth + "px";
