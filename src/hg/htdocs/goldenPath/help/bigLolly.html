@@ -28,7 +28,7 @@ Any bigBed file can be displayed as a bigLolly.  See <a href="bigBed.html">bigBe
 <h2>Creating a bigLolly track</h2>
 <h3>Example #1</h3>
 <p>
-In this example, you will create a bigLolly custom track using an existing bigBed file, located on the UCSC Genome Browser http server. This file contains data for 
+In this example, you will create a bigLolly custom track using an existing bigBed file, located on the UCSC Genome Browser http server. By default the score field is used to define the lollipop height. This file contains data for 
 the hg38 assembly.</p>
 <p>
 To create a custom track using this bigBed file: 
@@ -41,18 +41,20 @@ To create a custom track using this bigBed file:
   page</a> for the human assembly hg38 (Dec. 2013).</li> 
   <li>
   Click the &quot;submit&quot; button.</li>
+  <li>
+  Go to chr21:17,030,007-17,055,589 to see the data.
 </ol>
 <p>
 <!-- FIX ME -->
 Custom tracks can also be loaded via one URL line. 
 <a href="http://hgwdev.gi.ucsc.edu/cgi-bin/hgTracks?ignoreCookie=1&db=hg38&position=chr21:17,002,145-17,159,243&hgct_customText=track%20type=bigLolly%20name=Example%20bigDataUrl=http://hgwdev.gi.ucsc.edu/goldenPath/help/examples/bigBedExample3.bb%20visibility=pack"
-target="_blank">This link</a> loads the same <em>bigLolly.bb</em> track and sets additional display parameters in the URL:</p>
-<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?ignoreCookie=1&db=hg38&position=chr21:17,002,145-17,159,243&hgct_customText=track%20type=bigLolly%20name=Example %20bigDataUrl=http://hgwdev.gi.ucsc.edu/goldenPath/help/examples/bigBedExample3.bb %20visibility=full</a></code></pre>
+target="_blank">This link</a> loads the same <em>bigBedExample3.bb</em> track and sets additional display parameters in the URL:</p>
+<pre><code>http://hgwdev.gi.ucsc.edu/cgi-bin/hgTracks?ignoreCookie=1&db=hg38&position=chr21:17,002,145-17,159,243&hgct_customText=track%20type=bigLolly%20name=Example %20bigDataUrl=http://hgwdev.gi.ucsc.edu/goldenPath/help/examples/bigBedExample3.bb %20visibility=full</a></code></pre>
 <p>
 
 <h3>Example #2</h3>
 <p>
-In this example, you will create your own bigBed file to display as a bigLolly from an bed file. Using an extra field to define the height of the lollipops</p>
+In this example, you will create your own bigBed file to display as a bigLolly from an bed file, using an extra field to define the height of the lollipops.</p>
 <ol>
   <li>
   Save <a href="examples/bigLollyExample2.bed">this bed file</a> to your 
@@ -70,9 +72,12 @@ Use the <code>bedToBigBed</code> utility to create a bigBed file from your sorte
 the <em>bigLollyExample2.bed</em> file and <em>chrom.sizes</em> files created above. </p> 
 <pre><code><strong>bedToBigBed</strong> -as=bigLollyExample2.as -type=bed9+1 bigLollyExample2.bed hg38.chrom.sizes bigLollyExample2.bb</code></pre>
 <p>
+  <li>
 Move the newly created bigBed file (<em>bigLollyExample2.bb</em>) to a web-accessible http, https, or 
 ftp location. At this point you should have a URL to your data, such as &quot;https://institution.edu/bigLollyExample2.bb&quot;, and the file should be accessible outside of your institution/hosting providers network. For more information on where to host your data, please see the <a href="hgTrackHubHelp.html#Hosting">Hosting</a> section of the Track Hub Help documentation.</p>
   <pre><code>track type=bigLolly name=&quot;bigLolly Example Two&quot; description=&quot;A second bigLolly file&quot; bigDataUrl=http://hgwdev.gi.ucsc.edu/goldenPath/help/examples/bigLollyExample2.bb lollyField=pValueLog visibility=full</code></pre></li>
+  <li>
+  Go to chr21:15,593,670-15,632,442 to see the data.
 </ol>
   <li>
 <h3>Example #3</h3>
@@ -99,10 +104,9 @@ the <em>bigLollyExample3.bed</em> file and <em>chrom.sizes</em> files created ab
   <li>
 Move the newly created bigBed file (<em>bigLollyExample3.bb</em>) to a web-accessible http, https, or 
 ftp location. At this point you should have a URL to your data, such as &quot;https://institution.edu/bigLollyExample3.bb&quot;, and the file should be accessible outside of your institution/hosting providers network. For more information on where to host your data, please see the <a href="hgTrackHubHelp.html#Hosting">Hosting</a> section of the Track Hub Help documentation.</p>
-  <pre><code>track type=bigLolly name=&quot;bigLolly Example Three&quot; description=&quot;A third bigLolly file&quot; bigDataUrl=http://hgwdev.gi.ucsc.edu/goldenPath/help/examples/bigLollyExample3.bb lollySizeField=lollySize visibility=full yAxisLabel.0="0 on 30,30,190 0" yAxisLabel.1="5 on 30,30,190 5" lollyNoStems=on</code></pre></li>
-</ol>
+  <pre><code>track type=bigLolly name=&quot;bigLolly Example Three&quot; description=&quot;A third bigLolly file&quot; bigDataUrl=http://hgwdev.gi.ucsc.edu/goldenPath/help/examples/bigLollyExample3.bb lollySizeField=lollySize visibility=full yAxisLabel.0="0 on 30,30,190 0" yAxisLabel.1="5 on 30,30,190 5" lollyNoStems=on lollyMaxSize=10 yAxisNumLabels=off</code></pre></li>
   <li>
-  Create the custom track on the human assembly hg38 (Dec. 2013), and view it in the Genome Browser 
+  Go to chr21:25,891,755-25,891,870 to see the data.
 </ol>
 
 <h2>Sharing your data with others</h2>
