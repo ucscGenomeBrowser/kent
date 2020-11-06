@@ -891,7 +891,7 @@ if (enableMouseOver)
 
 int mouseOverX2 = -1;
 double previousValue = 0;
-boolean skipMouseOvers = FALSE;
+boolean skipMouseOvers = TRUE;
 #define epsilonLimit 1.0e-6
 
 /*	right now this is a simple pixel by pixel loop.  Future
