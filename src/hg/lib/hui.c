@@ -9413,15 +9413,32 @@ for (i=0; i<fieldCount; ++i)
     if (out[i]==NULL)
         continue;
 
-    // prefix field with $
+    // If a field is a prefix or suffix to another field, for example 'chrom' and 'chromStart'
+    // we don't want to erroneously sub out the 'chrom' in 'chromStart'. Allow the wrapping
+    // protected fields in ${} to prevent the substitution:
     char *field = in[i];
-    char *spec = needMem(strlen(field) + 2);
+    int fieldLen = strlen(field);
+    char *spec = needMem(fieldLen + 2);
+    char *strictSpec = needMem(fieldLen + 4);
     *spec = '$';
+    *strictSpec = '$';
+    strictSpec[1] = '{';
     strcpy(spec + 1, field);
+    strcpy(strictSpec + 2, field);
+    strictSpec[fieldLen + 2] = '}';
+    strictSpec[fieldLen + 3] = '\0';
 
+    if (stringIn(strictSpec, s->string))
+        {
+        d = dyStringSub(s->string, strictSpec, out[i]);
+        s = d;
+        }
+    // the user may have both a ${} enclosed instance and a non-enclosed one!
     d = dyStringSub(s->string, spec, out[i]);
+
     dyStringFree(&s);
     freeMem(spec);
+    freeMem(strictSpec);
     s = d;
     d = NULL;
     }
@@ -9464,8 +9481,8 @@ char *replaceInUrl(char *url, char *idInUrl, struct cart *cart, char *db, char *
 {
 struct dyString *uUrl = NULL;
 struct dyString *eUrl = NULL;
-char startString[64], endString[64];
-char *ins[13], *outs[13];
+char startString[64], endString[64],oneBasedStart[64];
+char *ins[14], *outs[14];
 char *eItem = (encode ? cgiEncode(idInUrl) : cloneString(idInUrl));
 
 char *scName = NULL;
@@ -9528,17 +9545,22 @@ if (stringIn(":", idInUrl)) {
 // URL may now contain item boundaries
 ins[9] = "${";
 ins[10] = "$}";
+ins[13] = "$#";
 if (cart!=NULL && cartOptionalString(cart, "o") && cartOptionalString(cart, "t"))
     {
     char *itemBeg = cartString(cart, "o"); // unexpected commas?
     char *itemEnd = cartString(cart, "t");
     outs[9] = itemBeg;
     outs[10] = itemEnd;
+    safef(oneBasedStart, sizeof(oneBasedStart), "%d", cartInt(cart, "o") + 1);
+    outs[13] = oneBasedStart;
     }
 else // should never be but I am unwilling to bet the farm
     {
     outs[9] = startString;
     outs[10] = endString;
+    safef(oneBasedStart, sizeof(oneBasedStart), "%d", winStart + 1);
+    outs[13] = oneBasedStart;
     }
 
 ins[11] = "$n";

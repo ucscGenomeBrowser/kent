@@ -378,13 +378,13 @@
     The maximum size of a lollipop in the file, used to establish margins.
 </DIV>
 
-<DIV class="yLabel"><span class="types bigLolly"></span>
-<div class="format"><code>yLabel.&lt;integer&gt; &lt;integer&gt;</code></div>
+<DIV class="yAxisLabel"><span class="types bigLolly"></span>
+<div class="format"><code>yAxisLabel.&lt;integer&gt; &lt;integer&gt; &lt;on/off&gt; &lt;R,G,B&gt; &lt;string&gt; </code></div>
     Add a label on the y axis at the given position. Draw a line of color if requested.
 </DIV>
 
-<DIV class="yNumLabels"><span class="types bigLolly"></span>
-<div class="format"><code>yNumLabels.&lt;on/off&gt; &lt;integer&gt;</code></div>
+<DIV class="yAxisNumLabels"><span class="types bigLolly"></span>
+<div class="format"><code>yAxisNumLabels.&lt;on/off&gt; &lt;integer&gt;</code></div>
     Turn the y axis number labels on or off
 </DIV>
 

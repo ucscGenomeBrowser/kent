@@ -45,7 +45,7 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 struct genePos *gp;
-struct sqlConnection *conn2 = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(sqlGetDatabase(conn));
 char *tableName = genomeSetting(tableId);
 struct column *descCol = findNamedColumn("description");
 struct column *nameCol = findNamedColumn("name");
@@ -227,7 +227,7 @@ void doGetGenomicSeq(struct sqlConnection *conn, struct column *colList,
 /* Retrieve genomic sequence sequence according to options. */
 {
 char *table = genomeSetting("geneTable");
-struct hTableInfo *hti = hFindTableInfo(database, NULL, table);
+struct hTableInfo *hti = hFindTableInfo(sqlGetDatabase(conn), NULL, table);
 struct genePos *gp;
 char query[256];
 struct sqlResult *sr;

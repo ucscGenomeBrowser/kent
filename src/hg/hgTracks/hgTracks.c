@@ -160,6 +160,8 @@ struct group *groupList = NULL;    /* List of all tracks. */
 char *browserName;              /* Test, preview, or public browser */
 char *organization;             /* UCSC */
 
+boolean enableMouseOver = FALSE;
+
 struct hash *trackHash = NULL; /* Hash of the tracks by their name. */
 
 #ifdef DEBUG
@@ -10534,6 +10536,12 @@ measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTi
 if (measureTiming)
     measureTime("Startup (bottleneck %d ms) ", botDelayMillis);
 
+char *mouseOverEnabled = cfgOption("mouseOverEnabled");
+if (sameWordOk(mouseOverEnabled, "on"))
+    enableMouseOver = TRUE;
+else
+    enableMouseOver = FALSE;
+
 if (issueBotWarning)
     {
     char *ip = getenv("REMOTE_ADDR");
@@ -10624,7 +10632,6 @@ if(!trackImgOnly)
     jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
     jsIncludeFile("autocompleteCat.js", NULL);
     jsIncludeFile("hgTracks.js", NULL);
-//    jsIncludeFile("mouseOver.js", NULL);
     jsIncludeFile("spectrum.min.js", NULL);
 
 #ifdef LOWELAB
@@ -10633,7 +10640,9 @@ if(!trackImgOnly)
 
     webIncludeResourceFile("spectrum.min.css");
     webIncludeResourceFile("jquery-ui.css");
-//    webIncludeResourceFile("mouseOver.css");
+    if (enableMouseOver)
+      webIncludeResourceFile("mouseOver.css");
+
     if (!searching)     // NOT doing search
         {
         webIncludeResourceFile("jquery.contextmenu.css");
@@ -10742,6 +10751,14 @@ jsonObjectAdd(jsonForClient, "enableHighlightingDialog",
 
 struct dyString *dy = dyStringNew(1024);
 jsonDyStringPrint(dy, (struct jsonElement *) jsonForClient, "hgTracks", 0);
+jsInline(dy->string);
+dyStringFree(&dy);
+
+dy = dyStringNew(1024);
+if (enableMouseOver)
+      dyStringPrintf(dy, "window.mouseOverEnabled=true;\n");
+    else
+      dyStringPrintf(dy, "window.mouseOverEnabled=false;\n");
 jsInline(dy->string);
 dyStringFree(&dy);
 

@@ -1,0 +1,44 @@
+<H2>Description</H2>
+<p>This track shows iSNP's (intrahost SNP's).  These are SNPs that have
+evidence for variation within one host. For instance, one patient can have
+variation in the viral sequences within their cells. This variation is lost
+when a single consensus genome sequence is reported for a patient.  The data
+was published in Sapoval et al, 2020 <a target="_blank" href =
+"https://www.biorxiv.org/content/10.1101/2020.07.02.184481v1">"Hidden genomic
+diversity of SARS-CoV-2: implications for qRT-PCR diagnostics and
+transmission"</a>.</p> 
+<p>In this track, iSNP's (intrahost SNP's) of human patients
+from New York City and Houston are shown.</p>
+
+<H2>Display Conventions and Configuration</H2>
+<p>The track contains list of iSNP's found in patient data from New York City 
+and Houston with base and amino acid changes. One feature per variant. The 
+name field in this track represents the median observed allele frequency for 
+patients meeting inclusion criteria in the VCF’s provided by Sapoval et al. 
+Finally, bedToBigBed was used to create the BigBed track.</p>
+<p>Interested users may wish to inspect each of the individual VCFs; for 
+this track we have chosen to show a condensed version of all VCFs (see Methods).</p>
+
+<H2>Methods</H2>
+<p>VCF files were downloaded from the Rice University data repository. SARS-CoV-2 
+iSNP's from New York City and Houston patient data were parsed, and if the base 
+position was modified in more than one sample then it was included. The frequency 
+of observing a particular base (A,C,G,T) at the position when a change was recorded 
+was then included, and the dominant base change was used to determine whether the 
+base modification would also result in an amino acid change.</p>
+<p>The original data files are available from <a
+target="_blank" 
+href="https://rice.app.box.com/v/SARS-COV-2-SNV-data">a shared box.com folder with VCF files</a>.</p>
+
+<H2>References</H2>
+
+<p>
+Sapoval N, Mahmoud M, Jochum MD, Liu Y, Leo Elworth RA, Wang Q, Albin D, Ogilvie H, Lee MD, Villapol
+S <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32637955" target="_blank">
+    Hidden genomic diversity of SARS-CoV-2: implications for qRT-PCR diagnostics and transmission</a>.
+<em>bioRxiv</em>. 2020 Jul 2;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32637955" target="_blank">32637955</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7337385/" target="_blank">PMC7337385</a>
+</p>
+

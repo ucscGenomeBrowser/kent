@@ -56,7 +56,10 @@ drawBoxPlot <- function(df) {
         marLeft = nchar(longestLabel)/2.5 # 2.5 was trial and error, strwidth(longestLabel, "inches") didn't work
         par(mar=c(3,marLeft,2,1) + 0.1, mgp=c(2,1,0), font.main=1)
         yLimit <- c(-(max*.02), max+ (max*.03))
+        # by default, the order of horizontal barcharts is reversed compared to vertical barcharts
+        # this is why we inverse the order with at=rev(...) and later for text() apply rev(...) on all y-coords
         exprPlot <- boxplot(value ~ df$category, data=df, xlab=yLabel, ylim=yLimit, xlim=c(0, count),
+                        at=rev(1:nlevels(df$category)),
                         main=title, 
                         horizontal=TRUE,
                         space = 0.3,
@@ -77,11 +80,11 @@ drawBoxPlot <- function(df) {
         # draw numbers only black, at 90 degrees and left-adjusted
         rot <- 0
         adjust <- .15*abs(y1)
-        text(y1 + adjust, 1:count, exprPlot$n, cex=size, col="black", srt=rot, adj=0.0)
+        text(y1 + adjust, rev(1:count), exprPlot$n, cex=size, col="black", srt=rot, adj=0.0)
         # draw labels
         size <- .9
         adjust <- .4*abs(y1)
-        text(y1-adjust, 1:count, cex=size, labels=labels, srt=rot, xpd=TRUE, adj=c(1,.5), col="black")
+        text(y1-adjust, rev(1:count), cex=size, labels=labels, srt=rot, xpd=TRUE, adj=c(1,.5), col="black")
     }
 }
 

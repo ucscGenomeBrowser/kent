@@ -168,8 +168,8 @@ while (lineFileNext(vcff->lf, &line, NULL))
     if (fieldCount < 8)
         errAbort("ERROR: malformed VCF, missing fields at line: '%d'", vcff->lf->lineIx);
     char *chrom = fixupChromName(chopped[0]);
-    int start = atoi(chopped[1]);
-    int end = start + 1;
+    int start = atoi(chopped[1]) - 1;
+    int end = start;
     char *ref = cloneString(chopped[3]);
     char *alt = cloneString(chopped[4]);
     if (strlen(ref) == dnaFilteredSize(ref))

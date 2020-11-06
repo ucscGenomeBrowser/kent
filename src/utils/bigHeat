@@ -1,0 +1,181 @@
+#!/usr/bin/env python
+
+import logging, sys, optparse, subprocess, os
+from collections import defaultdict
+from os.path import *
+
+# made with: import cm from matplotlib; (cm.get_cmap("viridis")(x)*255)[:, 0:3].astype(int).tolist()
+pal = [[68, 1, 84], [72, 35, 116], [64, 67, 135], [52, 94, 141], [41, 120, 142], [32, 144, 140], [34, 167, 132], [68, 190, 112], [121, 209, 81], [189, 222, 38], [253, 231, 36]]
+palStrs = [ ",".join([str(x) for x in col]) for col in pal]
+colorCount = len(pal)
+colSteps = 1.0/colorCount
+
+# can be set to something like '/gbdb/wuhCor1/pbm/IgG_Z-score-Healthy_Controls/' if your symlinks are in place
+bbDir = None
+
+# ==== functions =====
+    
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("""usage: %prog [options] locationBed locationMatrixFnames chromSizes outDir - create one feature
+            Duplicate BED features and color by them by the values in locationMatrix.
+            Creates new bigBed files in outDir and creates a basic trackDb.ra file there.
+
+    BED file looks like this:
+
+            chr1 1 1000 myGene 0 + 1 1000 0,0,0
+            chr2 1 1000 myGene2 0 + 1 1000 0,0,0
+
+    locationMatrix looks like this:
+
+            gene sample1 sample2 sample3
+            myGene 1 2 3
+            myGene2 0.1 3 10
+
+    This will create a composite with three subtracks (sample1, sample2, sample). Each subtrack will have myGene,
+    and colored in intensity with sample3 more intense than sample1 and sample2. Same for myGene2.""")
+
+    #parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    #(options, args) = parser.parse_args()
+
+    parser.add_option("-b", "--bbDir", dest="bbDir", action="store", help="when writing trackDb, prefix all bigDataUrl filenames with this. Use this with the /gbdb directory.")
+    (options, args) = parser.parse_args()
+
+    if args==[]:
+        parser.print_help()
+        exit(1)
+
+    #if options.debug:
+        #logging.basicConfig(level=logging.DEBUG)
+        #logging.getLogger().setLevel(logging.DEBUG)
+    #else:
+    logging.basicConfig(level=logging.INFO)
+    logging.getLogger().setLevel(logging.INFO)
+
+    return args, options
+
+def parseBed(bedFname):
+    beds = {}
+    for line in open(bedFname):
+        row = line.rstrip("\n").split("\t")
+        assert(len(row)>=9)
+        row = row[:9]
+        beds[row[3]] = row
+    return beds
+
+def toBigBed(bedFnames, chromSizes):
+    " convert to bigBed "
+    bbFnames = []
+    for fname in bedFnames:
+        bbFname = splitext(fname)[0]+".bb"
+        bbFnames.append(bbFname)
+        print("Converting %s to %s" % (fname, bbFname))
+        cmd = ["bedSort", fname, fname]
+        assert(subprocess.call(cmd)==0)
+        cmd = ["bedToBigBed", fname, chromSizes, bbFname, "-tab"]
+        assert(subprocess.call(cmd)==0)
+        os.remove(fname)
+    return bbFnames
+
+def makeTrackDb(bbFnames, outDir, parentName):
+    " write a trackDb file to outDir "
+    global bbDir
+    tdbFn = join(outDir, "trackDb.ra")
+    tdbFh = open(tdbFn, "w")
+
+    label = parentName.replace("_", " ")
+    tdbFh.write("track %s\n" % parentName)
+    tdbFh.write("shortLabel %s\n" % label)
+    tdbFh.write("longLabel %s\n" % label)
+    tdbFh.write("type bed 9\n")
+    tdbFh.write("compositeTrack on\n")
+    tdbFh.write("visibility dense\n")
+    tdbFh.write("labelOnFeature on\n")
+    tdbFh.write("itemRgb on\n")
+    tdbFh.write("\n")
+
+    for bbFname in bbFnames:
+        trackName = splitext(basename(bbFname))[0]
+        trackLabel = trackName.replace("_", " ")
+        fullTrackName = parentName+"_"+trackName # avoid subtrack name clashes
+        if bbDir:
+            bbPath = join(bbDir, basename(bbFname))
+        else:
+            bbPath = bbFname
+        tdbFh.write("    track %s\n" % fullTrackName)
+        tdbFh.write("    shortLabel %s\n" % trackLabel)
+        tdbFh.write("    longLabel %s\n" % trackLabel)
+        tdbFh.write("    type bigBed 9\n")
+        tdbFh.write("    bigDataUrl %s\n" % bbPath)
+        tdbFh.write("    parent %s on\n" % parentName)
+        tdbFh.write("\n")
+
+    tdbFh.close()
+
+def bigHeat(beds, fname, chromSizes, outDir):
+    " create bed files, convert them to bigBeds and make trackDb.ra in the directory "
+    global bbDir
+    baseIn = basename(fname).split(".")[0]
+    #outDir = join(outDir, baseIn)
+    if not isdir(outDir):
+        os.makedirs(outDir)
+
+    print("Processing %s to output directory %s" % (fname, outDir))
+    ofhs = {}
+    for line in open(fname):
+        row = line.rstrip("\n").split("\t")
+
+        if row[0]=="Sample":
+            sampleNames = row[1:]
+            # create output file handles
+            for sn in sampleNames:
+                ofn = join(outDir, sn+".bed")
+                ofhs[sn] = open(ofn, "w")
+            continue
+        if row[0].startswith("Seq.") or "protein" in row[0] or row[0]=="":
+            continue
+
+        name = row[0]
+        values = row[1:]
+        assert(len(values)==len(sampleNames))
+
+        nums = [float(x) for x in values]
+        minX = min(nums)
+        maxX = max(nums)
+        minMax = maxX - minX
+        ratios = [(x - minX)/minMax for x in nums]
+        ratios = [min(0.999, x) for x in ratios] # make sure that 1.0 doesn't appear
+        colIdx = [int(float(x) / colSteps) for x in ratios]
+        colors = [palStrs[x] for x in colIdx]
+
+        bed = beds[name]
+        for sampleName, rgbCol in zip(sampleNames, colors):
+            bed[8] = rgbCol
+            ofh = ofhs[sampleName]
+            ofh.write("\t".join(bed))
+            ofh.write("\n")
+
+    bedFnames = []
+    for ofh in ofhs.values():
+        bedFnames.append(ofh.name)
+        ofh.close()
+
+    bbFnames = toBigBed(bedFnames, chromSizes)
+    makeTrackDb(bbFnames, outDir, baseIn)
+
+# ----------- main --------------
+def main():
+    global bbDir
+    args, options = parseArgs()
+
+    bedFname = args[0]
+    matrixFname = args[1]
+    chromSizes = args[2]
+    outDir = args[3]
+
+    bbDir = options.bbDir
+
+    beds = parseBed(bedFname)
+    bigHeat(beds, matrixFname, chromSizes, outDir)
+
+main()

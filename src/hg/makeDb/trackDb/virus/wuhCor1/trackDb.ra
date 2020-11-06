@@ -24,7 +24,7 @@ include ncbiGene.ra
 track rnaStructRangan
 shortLabel Rangan RNA
 longLabel Rangan et al. RNA predictions
-group genes
+group rna
 visibility hide
 color 20,90,0
 type bed 6 +
@@ -41,7 +41,7 @@ track rfam
 shortLabel Rfam
 longLabel Rfam families
 visibility hide
-group genes
+group rna
 color 98,23,0
 url https://rfam.org/family/$$
 type bed 5
@@ -181,15 +181,16 @@ bigDataUrl /gbdb/wuhCor1/bbi/rapid.bb
 noScoreFilter on
 pennantIcon New red ../goldenPath/newsarch.html#071720 "Released Jul. 17, 2020"
 
-track conticello
-shortLabel RNA editing
-longLabel RNA editing events from Conticello et al 2020
-visibility hide
-group map
-type bigBed 9 +
-bigDataUrl /gbdb/wuhCor1/bbi/conticello.bb
-noScoreFilter on
-filter.freq 0.01
+# track removed as per David H email, authors got a track hub instead
+#track conticello
+#shortLabel RNA editing
+#longLabel RNA editing events from Conticello et al 2020
+#visibility hide
+#group map
+#type bigBed 9 +
+#bigDataUrl /gbdb/wuhCor1/bbi/conticello.bb
+#noScoreFilter on
+#filter.freq 0.01
 
 # original source for this composite: 
 # https://data.broadinstitute.org/compbio1/SARS-CoV-2_PhyloCSF_Genes/trackHub/wuhCor1/trackDb.txt
@@ -496,3 +497,5 @@ include addgene.ra
 include pond.ra
 include bloom.ra
 include weizmanOrfs.ra
+include pyle.ra
+include treangen.ra

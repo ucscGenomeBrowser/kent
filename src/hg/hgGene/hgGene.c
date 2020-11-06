@@ -206,8 +206,15 @@ char *abbreviateSummary(char *summary)
 char *pattern =
 "Publication Note:  This RefSeq record includes a subset "
 "of the publications that are available for this gene. "
-"Please see the Entrez Gene record to access additional publications.";
+"Please see the Gene record to access additional publications.";
 stripString(summary, pattern);
+
+// remove anything after ##Evidence-Data-START##
+char *findStr = "##Evidence-Data-START##";
+char *start = memMatch(findStr, strlen(findStr), summary, strlen(summary));
+if (start)
+    *start = 0;
+
 return summary;
 }
 

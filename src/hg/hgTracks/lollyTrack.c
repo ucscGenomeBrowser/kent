@@ -12,6 +12,7 @@
 #include "limits.h"
 #include "float.h"
 #include "bigBedFilter.h"
+#include "asParse.h"
 
 #define LOLLY_DIAMETER    2 * (lollyCart->radius + 2)
 
@@ -55,7 +56,7 @@ struct hashEl *hel = trackDbSettingsLike(tg->tdb, "yAxisLabel*");
 for(; hel; hel = hel->next)
     {
     char *setting = cloneString((char *)hel->val);
-    int number = atoi(nextWord(&setting)); 
+    double number = atof(nextWord(&setting)); 
     boolean drawLine = sameString("on", nextWord(&setting));
     unsigned char red, green, blue;
     char *colorStr = nextWord(&setting);
@@ -169,7 +170,7 @@ char lower[1024];
 if (lollyCart->lowerLimit < lollyCart->upperLimit)
     {
     safef(lower, sizeof(lower), "%g -", lollyCart->lowerLimit);
-    hvGfxTextRight(hvg, xOff, yOff+height - LOLLY_DIAMETER - fontHeight/2 , width - 1, fontHeight,
+    hvGfxTextRight(hvg, xOff, yOff+height - LOLLY_DIAMETER / 2 - 2 *fontHeight + fontHeight/2 , width - 1, fontHeight,
         color, font, lower);
     }
 }
@@ -193,6 +194,25 @@ const struct lolly *b = *((struct lolly **)vb);
 return a->height - b->height;
 }
 
+static int getField(struct trackDb *tdb, char *name, struct asObject *as, int defaultValue)
+/* Get the as field (if any) that a trackDb variable references.  This can either be
+ * a field name, or a number. */
+{
+int ret = defaultValue;
+char *setting = trackDbSetting(tdb, name);
+if (setting != NULL)
+    {
+    if (isNumericString(setting))
+        ret = atoi(setting);
+    else 
+        {
+        struct asColumn *columns = as->columnList;
+        ret = asColumnMustFindIx(columns, setting) + 1;
+        }
+    }
+return ret;
+}
+
 void lollyLoadItems(struct track *tg)
 // load lollies from the data file
 {
@@ -209,21 +229,15 @@ else if (tg->visibility == tvPack)
     }
 struct lm *lm = lmInit(0);
 struct bbiFile *bbi =  fetchBbiForTrack(tg);
+struct asObject *as = bigBedAsOrDefault(bbi);
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
 char *bedRow[bbi->fieldCount];
 char startBuf[16], endBuf[16];
 struct lolly *popList = NULL, *pop;
 
-unsigned lollyField = 5;  // we use the score field by default
-char *setting = trackDbSetting(tg->tdb, "lollyField");
-if (setting != NULL)
-    lollyField = atoi(setting);
+unsigned lollyField = getField(tg->tdb, "lollyField", as, 5);  // we use the score field by default
+int lollySizeField = getField(tg->tdb, "lollySizeField", as, -1);  // no size field by default
 
-int lollySizeField = -1 ;
-setting = trackDbSetting(tg->tdb, "lollySizeField");
-if (setting != NULL)
-    lollySizeField = atoi(setting);
-    
 double minVal = DBL_MAX, maxVal = -DBL_MAX;
 //double sumData = 0.0, sumSquares = 0.0;
 unsigned count = 0;

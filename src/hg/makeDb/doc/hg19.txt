@@ -33781,4 +33781,27 @@ find split/ -name "*.bedGraph" | parallel -j15 'bedGraphToBigWig {} /hive/data/g
 mkdir -p /gbdb/hg19/gnomAD/pext
 ln -s `pwd`/split/*.bw /gbdb/hg19/gnomAD/pext/
 
+#############################################################################
+# update 2020-10-27 (DONE - Hiram - 2020-10-27)
 
+  mkdir /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2020-10-27
+  cd /hive/data/genomes/hg19/bed/ncbiRefSeq.p13.2020-10-27
+
+  time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -fileServer=hgwdev -smallClusterHub=hgwdev -workhorse=hgwdev \
+      GCF_000001405.25_GRCh37.p13 hg19) > do.log 2>&1 &
+  # real    6m47.005s
+
+  cat fb.ncbiRefSeq.hg19.txt
+  # 93720294 bases of 2991710746 (3.133%) in intersection
+
+#############################################################################
+# Covid-19 rare mutations, Max, Fri Oct 30 08:40:34 PDT 2020
+# received table from qzhang02@rockefeller.edu, wrote to UCSC.txt
+cd /hive/data/genomes/hg19/bed/covidMuts/
+dos2unix UCSC.txt
+cat UCSC.txt | tawk '{$1="chr"$1; chrom=$1; start=$2; rsId=$3; ref=$4; alt=$5; zygo=$6; gene=$7; genotype=$8; inh=$9; end=$2+length(ref); print chrom, start, end, ref">"alt, "0", ".", start, end, "0,0,0", "1", length(ref), "0", ref, alt, rsId, zygo, gene, genotype, inh;}' | grep -v chrchr > covidMuts.bed
+bedSort covidMuts.bed covidMuts.bed
+bedToBigBed -tab covidMuts.bed ../../chrom.sizes covidMuts.bb -as=../../hg19/bed/covidMuts/covidMuts.as -type=bed12+
+#############################################################################
