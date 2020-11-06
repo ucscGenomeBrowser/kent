@@ -4544,7 +4544,7 @@ var mouseOver = {
     },
 
     //  the evt.currentTarget.id is the td_data_<trackName> element of
-    //     the track graphic
+    //     the track graphic.  There doesn't seem to be a evt.target.id ?
     mouseInTrackImage: function (evt)
     {
     // the center label also events here, can't use that
@@ -4554,6 +4554,13 @@ var mouseOver = {
     if (! evt.currentTarget.id.includes("td_data_")) { return; }
     var trackName = evt.currentTarget.id.replace("td_data_", "");
     if (trackName.length < 1) { return; }	// verify valid trackName
+
+    // location of mouse relative to the whole page
+    //     even when the top of page has scolled off
+    var evtX = Math.floor(evt.pageX);
+//  var evtY = Math.floor(evt.pageY);
+//  var offX = Math.floor(evt.offsetX);       // no need for evtY or offX
+
     // find location of this <td> slice in the image, this is the track
     //   image in the graphic, including left margin and center label
     //   This location follows the window scrolling, could go negative
@@ -4562,40 +4569,35 @@ var mouseOver = {
     var tdLeft = Math.floor(tdRect.left);
     var tdTop = Math.floor(tdRect.top);
     var tdHeight = Math.floor(tdRect.height);
-    // find the location of the image itself, this could be the single complete
-    //  graphic image of all the tracks, or possibly the single image of the
-    //  track itself.  This location also follows the window scrolling and can
-    //  even go negative when the web browser scrolls a window that is larger
-    //  than the width of the web browser.
-    var imageName = "img_data_" + trackName;
-    var imageId = document.getElementById(imageName);
-    var imageRect = imageId.getBoundingClientRect();
-    var imageLeft = Math.floor(imageRect.left);
-    var imageTop = Math.floor(imageRect.top);
-    var evtX = evt.pageX;      // location of mouse on the web browser screen
-    var evtY = evt.pageY;
-    var offLeft = Math.max(0, Math.floor(evtX - tdLeft));
+    var clientX = Math.floor(evt.clientX);
+    // the graphOffset is the index (x coordinate) into the 'spans' definitions
+    //  of the data value boxes for the graph.  The magic number three
+    //   is used elsewhere in this code, note the comment on the constant
+    //   LEFTADD.
+    var graphOffset = Math.max(0, clientX - tdLeft - 3);
+
     var windowUp = false;     // see if window is supposed to become visible
     var foundIdx = -1;
     if (mouseOver.spans[trackName]) {
-       foundIdx = mouseOver.findRange(offLeft, mouseOver.spans[trackName]);
+       foundIdx = mouseOver.findRange(graphOffset, mouseOver.spans[trackName]);
     }
-    // TBD: will want to indicate 'no data' when not found
-    if (foundIdx > -1) {
-      // value to display
-      var mouseOverValue = "&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
-      $('#mouseOverText').html(mouseOverValue);
-      var msgWidth = Math.ceil($('#mouseOverText').width());
-      var msgHeight = Math.ceil($('#mouseOverText').height());
-      var posLeft = evtX - msgWidth + "px";
-      var posTop = tdTop + "px";
-      $('#mouseOverText').css('left',posLeft);
-      $('#mouseOverText').css('top',posTop);
-      $('#mouseOverVerticalLine').css('left',evtX + "px");
-      $('#mouseOverVerticalLine').css('top',posTop);
-      $('#mouseOverVerticalLine').css('height',tdHeight + "px");
-      windowUp = true;      // yes, window is to become visible
+    // can show 'no data' when not found
+    var mouseOverValue = "no data";
+    if (foundIdx > -1) { // value to display
+      mouseOverValue = "&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
     }
+    $('#mouseOverText').html(mouseOverValue);
+    var msgWidth = Math.ceil($('#mouseOverText').width());
+    var msgHeight = Math.ceil($('#mouseOverText').height());
+    var posLeft = clientX - msgWidth + "px";
+    var posTop = tdTop + "px";
+    $('#mouseOverText').css('left',posLeft);
+    $('#mouseOverText').css('top',posTop);
+    $('#mouseOverVerticalLine').css('left',clientX + "px");
+    $('#mouseOverVerticalLine').css('top',posTop);
+    $('#mouseOverVerticalLine').css('height',tdHeight + "px");
+    windowUp = true;      // yes, window is to become visible
+
     if (windowUp) {     // the window should become visible
       mouseOver.popUpVisible();
     } else {    // the window should disappear
