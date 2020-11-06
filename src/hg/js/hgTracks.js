@@ -4544,7 +4544,7 @@ var mouseOver = {
     },
 
     //  the evt.currentTarget.id is the td_data_<trackName> element of
-    //     the track graphic
+    //     the track graphic.  There doesn't seem to be a evt.target.id ?
     mouseInTrackImage: function (evt)
     {
     // the center label also events here, can't use that
@@ -4555,9 +4555,11 @@ var mouseOver = {
     var trackName = evt.currentTarget.id.replace("td_data_", "");
     if (trackName.length < 1) { return; }	// verify valid trackName
 
-    var evtX = Math.floor(evt.pageX);      // location of mouse relative to the whole page
-    var evtY = Math.floor(evt.pageY);      // even when the top of page has scolled off
-    var offX = Math.floor(evt.offsetX);
+    // location of mouse relative to the whole page
+    //     even when the top of page has scolled off
+    var evtX = Math.floor(evt.pageX);
+//  var evtY = Math.floor(evt.pageY);
+//  var offX = Math.floor(evt.offsetX);       // no need for evtY or offX
 
     // find location of this <td> slice in the image, this is the track
     //   image in the graphic, including left margin and center label
@@ -4568,25 +4570,12 @@ var mouseOver = {
     var tdTop = Math.floor(tdRect.top);
     var tdHeight = Math.floor(tdRect.height);
     var clientX = Math.floor(evt.clientX);
-    var clientY = Math.floor(evt.clientY);
     // the graphOffset is the index (x coordinate) into the 'spans' definitions
-    //  of the data value boxes for the graph.  Seems to always be off by 3,
-    //  don't know why that is.
+    //  of the data value boxes for the graph.  The magic number three
+    //   is used elsewhere in this code, note the comment on the constant
+    //   LEFTADD.
     var graphOffset = Math.max(0, clientX - tdLeft - 3);
 
-    // find the location of the image itself, this could be the single complete
-    //  graphic image of all the tracks, or possibly the single image of the
-    //  track itself.  This location also follows the window scrolling and can
-    //  even go negative when the web browser scrolls a window that is larger
-    //  than the width of the web browser.
-    var imgName = "img_data_" + trackName;
-    var imgId = document.getElementById(imgName);
-    var imgRect = imgId.getBoundingClientRect();
-    var imgLeft = Math.floor(imgRect.left);
-//    var imgTop = Math.floor(imgRect.top);
-//    var imgWidth = Math.floor(imgRect.width);
-//    var imgHeight = Math.floor(imgRect.height);
-//    var imgRectX = Math.floor(imgRect.x);
     var windowUp = false;     // see if window is supposed to become visible
     var foundIdx = -1;
     if (mouseOver.spans[trackName]) {
@@ -4600,11 +4589,11 @@ var mouseOver = {
     $('#mouseOverText').html(mouseOverValue);
     var msgWidth = Math.ceil($('#mouseOverText').width());
     var msgHeight = Math.ceil($('#mouseOverText').height());
-    var posLeft = imgLeft + offX - msgWidth + "px";
+    var posLeft = clientX - msgWidth + "px";
     var posTop = tdTop + "px";
     $('#mouseOverText').css('left',posLeft);
     $('#mouseOverText').css('top',posTop);
-    $('#mouseOverVerticalLine').css('left',imgLeft + offX + "px");
+    $('#mouseOverVerticalLine').css('left',clientX + "px");
     $('#mouseOverVerticalLine').css('top',posTop);
     $('#mouseOverVerticalLine').css('height',tdHeight + "px");
     windowUp = true;      // yes, window is to become visible
