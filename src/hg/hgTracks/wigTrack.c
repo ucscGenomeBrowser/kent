@@ -882,7 +882,7 @@ AllocArray(mouseOverData, width);
 
 int mouseOverX2 = -1;
 double previousValue = 0;
-boolean skipMouseOvers = FALSE;
+boolean skipMouseOvers = TRUE;
 #define epsilonLimit 1.0e-6
 // if (psOutput)
 //    skipMouseOvers = TRUE;
