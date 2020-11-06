@@ -2738,6 +2738,14 @@ static struct customFactory bigWigFactory =
 
 /*** Big Bed Factory - for big client-side BED tracks ***/
 
+static boolean bigLollyRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a bigLolly track */
+{
+return (sameType(type, "bigLolly"));
+}
+
 static boolean bigMafRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
@@ -2950,6 +2958,15 @@ static struct customFactory bigMafFactory =
     NULL,
     "bigMaf",
     bigMafRecognizer,
+    bigBedLoader,
+    };
+
+static struct customFactory bigLollyFactory =
+/* Factory for bigLolly tracks */
+    {
+    NULL,
+    "bigLolly",
+    bigLollyRecognizer,
     bigBedLoader,
     };
 
@@ -3536,6 +3553,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &interactFactory);
     slAddTail(&factoryList, &bigInteractFactory);
     slAddTail(&factoryList, &hicFactory);
+    slAddTail(&factoryList, &bigLollyFactory);
     }
 }
 
