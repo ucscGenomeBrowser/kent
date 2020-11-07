@@ -4493,14 +4493,32 @@ var mouseOver = {
     // need to refresh the event handlers and json data
     updateMouseOver: function (trackName)
     {
+      var tdData = "td_data_" + trackName;
+      var tdDataId  = document.getElementById(tdData);
+      var imgData = "img_data_" + trackName;
+      var imgElement  = document.getElementById(imgData);
       if (mouseOver.tracks[trackName]) {
-        var tdData = "td_data_" + trackName;
-        var tdDataId  = document.getElementById(tdData);
-        $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
-        $( tdDataId ).mouseout(mouseOver.popUpDisappear);
-        var imgData = "img_data_" + trackName;
-        var imgElement  = document.getElementById(imgData);
-        mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
+        if (tdDataId) {
+          $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
+          $( tdDataId ).mouseout(mouseOver.popUpDisappear);
+          if (imgElement) {
+            mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
+          }
+        }
+      } else {
+        var trackType = hgTracks.trackDb[trackName].type;
+        var validType = false;
+        if (trackType.indexOf("wig") === 0) { validType = true; }
+        if (trackType.indexOf("bigWig") === 0) { validType = true; }
+        if (validType) {
+          if (tdDataId) {
+            $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
+            $( tdDataId ).mouseout(mouseOver.popUpDisappear);
+            if (imgElement) {
+              mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
+            }
+          }
+        }
       }
     },
 
@@ -4569,6 +4587,7 @@ var mouseOver = {
     var tdLeft = Math.floor(tdRect.left);
     var tdTop = Math.floor(tdRect.top);
     var tdHeight = Math.floor(tdRect.height);
+    // clientX appears to be the X coordinate of the mouse hot spot
     var clientX = Math.floor(evt.clientX);
     // the graphOffset is the index (x coordinate) into the 'spans' definitions
     //  of the data value boxes for the graph.  The magic number three
@@ -4589,13 +4608,14 @@ var mouseOver = {
     $('#mouseOverText').html(mouseOverValue);
     var msgWidth = Math.ceil($('#mouseOverText').width());
     var msgHeight = Math.ceil($('#mouseOverText').height());
-    var posLeft = clientX - msgWidth + "px";
-    var posTop = tdTop + "px";
-    $('#mouseOverText').css('left',posLeft);
-    $('#mouseOverText').css('top',posTop);
+    var lineHeight = Math.max(0, tdHeight - msgHeight);
+    var lineTop = Math.max(0, tdTop + msgHeight);
+    var msgLeft = Math.max(0, clientX - (msgWidth/2));
+    $('#mouseOverText').css('left',msgLeft + "px");
+    $('#mouseOverText').css('top',tdTop + "px");
     $('#mouseOverVerticalLine').css('left',clientX + "px");
-    $('#mouseOverVerticalLine').css('top',posTop);
-    $('#mouseOverVerticalLine').css('height',tdHeight + "px");
+    $('#mouseOverVerticalLine').css('top',lineTop + "px");
+    $('#mouseOverVerticalLine').css('height',lineHeight + "px");
     windowUp = true;      // yes, window is to become visible
 
     if (windowUp) {     // the window should become visible
@@ -4718,9 +4738,11 @@ var mouseOver = {
       // check for the hidden div elements for mouseOverData
       var trackList = document.getElementsByClassName("mouseOverData");
       for (var i = 0; i < trackList.length; i++) {
-        var jsonData = trackList[i].getAttribute('jsonData');
         var trackName = trackList[i].getAttribute('name');
-        mouseOver.fetchMapData(jsonData, trackName);
+        var jsonData = trackList[i].getAttribute('jsonData');
+        if (jsonData) {
+          mouseOver.fetchMapData(jsonData, trackName);
+        }
       }
     },
 
