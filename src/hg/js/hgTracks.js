@@ -4610,10 +4610,11 @@ var mouseOver = {
     var msgHeight = Math.ceil($('#mouseOverText').height());
     var lineHeight = Math.max(0, tdHeight - msgHeight);
     var lineTop = Math.max(0, tdTop + msgHeight);
-    var msgLeft = Math.max(0, clientX - (msgWidth/2));
+    var msgLeft = Math.max(0, clientX - (msgWidth/2) - 3); // with magic 3
+    var lineLeft = Math.max(0, clientX - 3);  // with magic 3
     $('#mouseOverText').css('left',msgLeft + "px");
     $('#mouseOverText').css('top',tdTop + "px");
-    $('#mouseOverVerticalLine').css('left',clientX + "px");
+    $('#mouseOverVerticalLine').css('left',lineLeft + "px");
     $('#mouseOverVerticalLine').css('top',lineTop + "px");
     $('#mouseOverVerticalLine').css('height',lineHeight + "px");
     windowUp = true;      // yes, window is to become visible
