@@ -4603,7 +4603,11 @@ var mouseOver = {
     // can show 'no data' when not found
     var mouseOverValue = "no data";
     if (foundIdx > -1) { // value to display
-      mouseOverValue = "&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
+      if (mouseOver.spans[trackName][foundIdx].m) {
+        mouseOverValue = "&nbsp;mean:&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
+      } else {
+        mouseOverValue = "&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
+      }
     }
     $('#mouseOverText').html(mouseOverValue);
     var msgWidth = Math.ceil($('#mouseOverText').width());
