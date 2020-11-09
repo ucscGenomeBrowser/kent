@@ -459,6 +459,21 @@ else
 return retVal;
 }
 
+boolean extFileExists(char *path)
+/* Check that a remote URL actually exists, path may be a URL or a local path relative to hub.txt */
+{
+// if the file is local check that it exists:
+if (!hasProtocol(path) && udcExists(path))
+    return TRUE;
+else
+    {
+    // netLineFileSilentOpen will handle 301 redirects and the like
+    if (netLineFileSilentOpen(path) != NULL)
+        return TRUE;
+    }
+return FALSE;
+}
+
 char *makeFolderObjectString(char *id, char *text, char *parent, char *title, boolean children, boolean openFolder)
 /* Construct a folder item for one of the jstree arrays */
 {
@@ -524,16 +539,21 @@ else
     {
     static int count = 0; // forces unique ID's which the jstree object needs
     char id[512];
+    char *errorMessages[16];
     char *strippedMessage = NULL;
     char *genomeName = trackHubSkipHubName(genome->name);
     if (message)
         strippedMessage = cloneString(message);
-    stripChar(strippedMessage, '\n');
-    safef(id, sizeof(id), "%s%d", genomeName, count);
-
-    dyStringPrintf(errors, "trackData['%s'] = [%s,", genomeName,
-        makeChildObjectString(id, "Genome Error", genomeName, genomeName, "#550073", genomeName, strippedMessage, genomeName));
-    count++;
+    // multiple errors may be in a single message, chop by newline and make a node in the tree for each message
+    int numMessages = chopByChar(strippedMessage, '\n', errorMessages, sizeof(errorMessages));
+    int i = 0;
+    dyStringPrintf(errors, "trackData['%s'] = [", genomeName);
+    for (; i < numMessages && isNotEmpty(errorMessages[i]); i++)
+        {
+        safef(id, sizeof(id), "%s%d", genomeName, count);
+        dyStringPrintf(errors, "%s,", makeChildObjectString(id, "Genome Error", genomeName, genomeName, "#550073", genomeName, errorMessages[i], genomeName));
+        count++;
+        }
     }
 }
 
@@ -844,11 +864,22 @@ if (errCatchStart(errCatch))
     {
     if (genome->twoBitPath != NULL)
         {
+        // check that twoBitPath is a valid file, warn instead of errAbort so we can continue checking
+        // the genome stanza
+        char *twoBit = genome->twoBitPath;
+        if (!extFileExists(twoBit))
+            warn("Error: '%s' twoBitPath does not exist or is not accessible: '%s'", genome->name, twoBit);
+
+        // groups and htmlPath are optional settings, again only warn if they are malformed
+        char *groupsFile = genome->groups;
+        if (groupsFile != NULL && !extFileExists(groupsFile))
+            warn("warning: '%s' groups file does not exist or is not accessible: '%s'", genome->name, groupsFile);
+
         char *htmlPath = hashFindVal(genome->settingsHash, "htmlPath");
         if (htmlPath == NULL)
             warn("warning: missing htmlPath setting for assembly hub '%s'", genome->name);
-        else if ((!hasProtocol(htmlPath) && !udcExists(htmlPath)) || netUrlHead(htmlPath, NULL) < 0)
-            warn("warning: htmlPath file does not exist: '%s'", htmlPath);
+        else if (!extFileExists(htmlPath))
+            warn("warning: '%s' htmlPath file does not exist or is not accessible: '%s'", genome->name, htmlPath);
         }
     tdbList = trackHubTracksForGenome(hub, genome);
     tdbList = trackDbLinkUpGenerations(tdbList);
@@ -860,7 +891,7 @@ if (errCatch->gotError || errCatch->gotWarning)
     {
     openedGenome = TRUE;
     genomeErr(errors, errCatch->message->string, hub, genome, options->htmlOut);
-    if (errCatch->gotError)
+    if (errCatch->gotError || errCatch->gotWarning)
         genomeErrorCount += 1;
     }
 errCatchFree(&errCatch);
@@ -923,13 +954,10 @@ int retVal = 0;
 if (errCatchStart(errCatch))
     {
     hub = trackHubOpen(hubUrl, "");
-    // servers that don't return Content-Length header aren't found by udcExists so
-    // use netUrlHead too. We still want udcExists so if a file is a local file we
-    // can still find it
     char *descUrl = hub->descriptionUrl;
     if (descUrl == NULL)
         warn("warning: missing hub overview descripton page (descriptionUrl setting)");
-    else if ((!hasProtocol(descUrl) && !udcExists(descUrl)) || netUrlHead(descUrl, NULL) < 0)
+    else if (!extFileExists(descUrl))
         warn("warning: %s descriptionUrl setting does not exist", hub->descriptionUrl);
     }
 errCatchEnd(errCatch);

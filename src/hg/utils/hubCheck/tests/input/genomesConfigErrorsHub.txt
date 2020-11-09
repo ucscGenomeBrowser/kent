@@ -1,0 +1,7 @@
+hub ErrorWithGenomeConfig
+longLabel Errors in genomesConfig
+genomesFile misconfigGenomes.txt
+email genome-www@soe.ucsc.edu
+descriptionUrl http://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/plants.html
+shortLabel Errors in genomesConfig
+
