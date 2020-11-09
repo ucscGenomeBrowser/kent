@@ -482,6 +482,22 @@ type bigBed
 bigDataUrl /gbdb/wuhCor1/iedb/iedb.bb
 pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 20, 2020"
 
+# testing-only track, most likely not for public release
+track minkMuts
+shortLabel Mink mutations
+longLabel Mink mutations from Denmark
+group varRep
+type vcfTabix
+release alpha
+bigDataUrl /hive/data/outside/otto/sarscov2phylo/26-10-20/danishMink.vcf.gz
+
+track escape
+shortLabel Antibody escape
+longLabel Antibody escape mutations from the Whelan lab, WUSTL
+type bigBed 9 +
+group immu
+bigDataUrl /gbdb/wuhCor1/escape/escape.bb
+mouseOverField _mouseOver
 
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
@@ -499,3 +515,4 @@ include bloom.ra
 include weizmanOrfs.ra
 include pyle.ra
 include treangen.ra
+include pbm.ra

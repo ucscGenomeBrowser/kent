@@ -46,6 +46,11 @@ var subCfg = { // subtrack config module.
             var boolshad = normed($("input.cbShadow#boolshad\\."+obj.id));
             if (boolshad) {
                 $(boolshad).addClass('changed');
+	    } else {
+		boolshad = normed($("input.cbShadow[name='boolshad\\." + obj.name+"']"));
+		if (boolshad) {
+		    $(boolshad).addClass('changed');
+		}
             }
         }
     },
@@ -59,6 +64,11 @@ var subCfg = { // subtrack config module.
             var boolshad = normed($("input.cbShadow#boolshad\\."+obj.id));
             if (boolshad) {
                 $(boolshad).removeClass('changed');
+	    } else {
+		boolshad = normed($("input.cbShadow[name='boolshad\\." + obj.name+"']"));
+		if (boolshad) {
+		    $(boolshad).removeClass('changed');
+		}
             }
         }
     },
