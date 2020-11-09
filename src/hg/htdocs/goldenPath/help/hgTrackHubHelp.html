@@ -124,7 +124,7 @@ Assembly Hubs</a>.</p>
 
 <!-- ========== Viewing Hub Tracks in the Browser ==================== -->
 <a name="View"></a>
-<h2>Viewing Track Hubs in the browser</h2> 
+<h2>Viewing Track Hubs</h2> 
 <h3>Public hubs</h3>
 <p>
 The Genome Browser provides links to a collection of public track hubs that have been registered 
@@ -167,9 +167,9 @@ when using <a  href="hubQuickStartAssembly.html#blatGbib">GBiB</a>.</p>
 <h2>Sharing Track Hubs</h2>
 <p>When sharing track hubs on a single assembly, we recommend using 
 <a href="../../cgi-bin/hgSession">Saved Sessions</a>
-(for manuscripts, publications). These have the advantage 
-of being able to save and share configuration settings made on other browser tracks.
-If you are just starting, an overview of the proces is to make the hub on 
+(especially for publications). These have the advantages 
+of being single-click access and sharing a full browser configuration.
+If you are just starting, an overview of the process is to make the hub on 
 your web-accessible server, attach the hub to the Genome Browser, configure
 browser position and related tracks, then <a href="../../cgi-bin/hgSession">
 save your named session</a> and share the
@@ -641,9 +641,9 @@ file name should correspond to the symbolic name of the top-level track in the c
 
 <!-- ========== Debugging and Updating Track Hubs ============================== -->
 <a name="Debug"></a>
-<h2>Debugging and updating Track Hubs</strong></h2>
+<h2>Debugging Track Hubs</strong></h2>
 
-<h3>Changing udcTimeout to debug hub display</h3>
+<h3>Not updating? Change udcTimeout</h3>
 <p>
 As part of the track hub mechanism, UCSC caches data from the hub on the local server. The hub
 utility periodically checks the time stamps on the hub files, and downloads them again only if they
@@ -679,7 +679,7 @@ and allow instant hub refresh instead of 5 minute refresh. These options can be 
 activated by clicking "View Hub on Genome Browser". The following picture shows 
 <a href="examples/hubExamples/hubGroupings/hub.txt">the example track grouping hub</a>
 with the warning that the hub has no hub description page, no configuration errors,
-and "Dispay load times" checked:</p>
+and "Display load times" checked:</p>
 
 <p class='text-center'>
   <img class='text-center' src="../../images/hubDevelopment.png" 
@@ -737,7 +737,7 @@ this behavior you have to add an index to the bigBed file when you initially cre
 file from the bed file input. Indices are usually created on the name field of the bed, but can be 
 created on any field of the bed. Free-text searches can also be enabled by creating a 
 <a href="trix.html">TRIX index file</a> that maps id's in the track to free-text metadata. Further
-intructions can be found in the <a href="hubQuickStartSearch.html">Searchable Hub Quick Start 
+instructions can be found in the <a href="hubQuickStartSearch.html">Searchable Hub Quick Start 
 Guide</a>.</p>
 <p>
 See the searchIndex and searchTrix fields in the <a href="trackDb/trackDbHub.html">Hub Track 
@@ -769,7 +769,7 @@ to be about sharing hub data.-->
 
 <!-- ======== Testing hub compatibility between genome browsers ============== -->
 <a name="Compatibility"></a>
-<h2>Testing hub compatibility between genome browsers</h2>
+<h2>Checking Hub settings and Compatibility</h2>
 <p>
 Due to the growth in popularity of the track hub format, other genome browsers have
 begun supporting the UCSC track hub format. The hubCheck utility can be used to check
@@ -993,7 +993,7 @@ Browser&quot; links in the menu.
 Please see the <a href="https://wiki.cyverse.org/wiki/display/DEmanual/Viewing+Genome+Files+in+a+Genome+Browser" target="_blank">
 Viewing Genome Files in a Genome Browser</a> wiki page on the CyVerse wiki for more information
 (please note the difference of the Data Commons for final curated publication material,
-and the Discovery Envirnoment for developing data).
+and the Discovery Environment for developing data).
 Please direct any questions about CyVerse or the Discovery Environment to their 
 <a href="http://www.cyverse.org/learning-center/ask-cyverse" target="_blank">Ask CyVerse</a> page or contact
 Cyverse support staff directly via the blue Intercom button on the bottom right of the
