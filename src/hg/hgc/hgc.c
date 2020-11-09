@@ -11589,7 +11589,9 @@ if (sqlTableExists(conn, refSeqSummaryTable))
     sqlSafef(query, sizeof(query),
           "select summary from %s where mrnaAcc = '%s'", refSeqSummaryTable, acc);
     summary = sqlQuickString(conn, query);
+    summary = abbreviateRefSeqSummary(summary);
     }
+
 return summary;
 }
 
