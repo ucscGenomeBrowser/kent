@@ -138,7 +138,7 @@ hDisconnectCentral(&conn);
 return galList;
 }
 
-void galleryDisplay(struct galleryEntry *galList)
+void galleryDisplay(struct galleryEntry *galList, char *searchString)
 /* Print a table containing the gallery data from galList */
 {
 struct galleryEntry *thisSession = galList;
@@ -156,7 +156,8 @@ jsInlineF(
     "                                       \"stateSaveCallback\": %s,\n"
     "                                       \"stateLoadCallback\": %s,\n"
     "                                });\n"
-    /* Recover previous sorting choice from the cart settings, if available */
+    /* Recover previous sorting/searching choice from the cart settings, if available */
+    "    $('#sessionTable').DataTable().search(\"%s\").draw();\n"
     "    var startOrder = $('#sessionTable').DataTable().order();\n"
     "    if (startOrder[0][0] == 3) {\n"
     "        if (startOrder[0][1] == \"asc\") {\n"
@@ -177,7 +178,7 @@ jsInlineF(
     "        }\n"
     "    }\n"
     "});\n",
-    jsDataTableStateSave(hgPublicSessionsPrefix), jsDataTableStateLoad(hgPublicSessionsPrefix, cart));
+    jsDataTableStateSave(hgPublicSessionsPrefix), jsDataTableStateLoad(hgPublicSessionsPrefix, cart), searchString != NULL ? searchString : "");
 
 jsInline(
    "function changeSort() {\n"
@@ -258,11 +259,11 @@ printf ("</tbody>\n");
 printf ("</table>\n");
 }
 
-void showGalleryTab ()
+void showGalleryTab (char *searchString)
 /* Rather boring now, but a placeholder against the day that there's also a "favorites" tab */
 {
 struct galleryEntry *galList = galleryFetch();
-galleryDisplay(galList);
+galleryDisplay(galList, searchString);
 }
 
 void doMiddle(struct cart *theCart)
@@ -270,6 +271,7 @@ void doMiddle(struct cart *theCart)
 {
 cart = theCart;
 char *db = cartUsualString(cart, "db", hDefaultDb());
+char *searchString = cgiOptionalString("search");
 cartWebStart(cart, db, "Public Sessions");
 
 /* Not in a form; can't use cartSaveSession() to set up an hgsid input */
@@ -288,7 +290,7 @@ printf("<p>Sessions allow users to save snapshots of the Genome Browser "
 "<a href=\"../goldenPath/help/hgSessionHelp.html\">Sessions User's Guide</a> "
 "for more information.\n</p>", cartSidUrlString(cart));
 
-showGalleryTab();
+showGalleryTab(searchString);
 
 cartWebEnd();
 }
