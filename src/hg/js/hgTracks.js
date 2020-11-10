@@ -4747,6 +4747,7 @@ var mouseOver = {
          mouseOverValue = "&nbsp;" + longestNumber + "&nbsp;";
       }
       $('#mouseOverText').html(mouseOverValue);	// see how big as rendered
+      $('#mouseOverText').css('fontSize',mouseOver.browserTextSize);
       var maximumWidth = Math.ceil($('#mouseOverText').width());
       $('#mouseOverText').html("no&nbsp;data");	// might be bigger
       if (Math.ceil($('#mouseOverText').width() > maximumWidth)) {
