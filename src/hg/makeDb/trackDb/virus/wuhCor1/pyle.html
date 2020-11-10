@@ -1,27 +1,31 @@
 <H2>Description</H2>
-<p>
-<p>Genome-wide RNA Secondary Structure Measurements and Prediction</a>
-<p>This track shows data from Anna Pyle's lab describing the secondary structure of the SARS-CoV-2 RNA genome.
-<p>The authors perform in-silico analyses as well as experimental measurements using SHAPE (selective 2 hydroxyl acylation) to experimentally analyze the RNA structure of the SARS-CoV-2 genome.
-<p>This data is described in depth in <a target=_blank href="https://www.biorxiv.org/content/10.1101/2020.07.06.190660v1.">de Cesaris Araujo Tavares et al</a> for Shanon entropy values and <a target=_blank href="https://www.biorxiv.org/content/10.1101/2020.07.10.197079v1.full.pdf">Huston, Wan, et al.</a> for SHAPE data.
+<p>Genome-wide RNA Secondary Structure Measurements and Prediction</p>
+<p>This track shows data from Anna Pyle's lab describing the secondary 
+structure of the SARS-CoV-2 RNA genome. The authors perform in-silico analyses 
+as well as experimental measurements using SHAPE (selective 2 hydroxyl acylation) 
+to experimentally analyze the RNA structure of the SARS-CoV-2 genome.</p>
+<p>This data is described in depth in <a target="_blank" 
+href="https://www.biorxiv.org/content/10.1101/2020.07.06.190660v1.">de Cesaris Araujo Tavares <em>et al</em></a> 
+for Shanon entropy values and <a target="_blank" 
+href="https://www.biorxiv.org/content/10.1101/2020.07.10.197079v1.full.pdf">Huston, Wan, <em>et al</em></a> for SHAPE data.
 
 <H2>Display Conventions and Configuration</H2>
 
-<p>Two tracks are available:</a>
-<p>Full Length Shannon Entropy : A genome-wide Shannon entropy profile derived
+<p>Two tracks are available:</p>
+<p><b>Full Length Shannon Entropy:</b> A genome-wide Shannon entropy profile derived
 from base pairing probabilities was computed using SuperFold.  A low Shannon
-entropy (near 0) is evidence for RNA structure.
-<p>SHAPE reactivity: In-vivo SHAPE reactivity per nucleotide of SARS-CoV2
-genome. A high positive score indicates that the nucleotide is accesible (not
+entropy (near 0) is evidence for RNA structure.</p>
+<p><b>SHAPE reactivity:</b> In-vivo SHAPE reactivity per nucleotide of SARS-CoV2
+genome. A high positive score indicates that the nucleotide is accessible (not
 base-paired).  A low score (close to 0) indicates the nucleotide is not
-accesible (base-paired). A score of -999 means no data for that nucleotide was
+accessible (base-paired). A score of -999 means no data for that nucleotide was
 recovered experimentally. For visualization purposes the minimum display value
-has been set to -1 and the max has been set to 10.</a>
+has been set to -1 and the max has been set to 10.</p>
 
-<p>Note that the authors provide further data (including secondary structure predictions) at their github repository.
+<p>Note that the authors provide further data (including secondary structure 
+predictions) at their github repository.</p>
 
 <H2>Methods</H2>
-
 <p>For Shannon entropy, comSuperFold was used with default settings to predict
 secondary structure for the full-length SARS-CoV-2 RNA genome.</p>
 <p>For
@@ -32,7 +36,8 @@ for further details.
 wigToBigWig was used to convert wiggles from the author's github repository to bigWig files after filtering out headers.
 </p>
 
-<p>The Github repository with all raw data files can be found here: <a target=_blank href="https://github.com/pylelab/SARS-CoV-2_SHAPE_MaP_structure">https://github.com/pylelab/SARS-CoV-2_SHAPE_MaP_structure</a>.</p>
+<p>The Github repository with all raw data files can be found here: <a target="_blank" 
+href="https://github.com/pylelab/SARS-CoV-2_SHAPE_MaP_structure">https://github.com/pylelab/SARS-CoV-2_SHAPE_MaP_structure</a>.</p>
 
 <H2>References</H2>
 

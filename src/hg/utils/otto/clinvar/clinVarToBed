@@ -672,6 +672,7 @@ hg38BedCnv = open("archive/clinvarCnv.hg38.%sbed" % outSuffix, "w", encoding="la
 longCount = 0
 noAssCount = 0
 noMcCount = 0
+minusAccs = []
 
 # convert lines
 for line in ifh:
@@ -721,6 +722,10 @@ for line in ifh:
 
     if len(longName)>60:
         longName = longName[:60]+"..."
+
+    if start=="-1" and end=="-1":
+        minusAccs.append(irvcAcc)
+        continue
 
     if start=="" or end=="":
         print("empty start or end coordinate. record %s, start/end = %s/%s "% (irvcAcc, start, end))
@@ -868,6 +873,7 @@ hg38BedCnv.close()
 
 logging.info("%d lines with feature name that was too long, shortened them" % longCount)
 logging.info("%d lines without, with old assembly or no chrom, skipped" % noAssCount)
+logging.info("%d lines with -1/-1 start/end positions skipped. Examples: %s" % (len(minusAccs), minusAccs[:3]))
 
 fnames = [hg19Bed.name, hg38Bed.name, hg19BedCnv.name, hg38BedCnv.name]
 

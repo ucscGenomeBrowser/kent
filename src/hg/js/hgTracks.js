@@ -4467,19 +4467,26 @@ var mouseOver = {
     spans: {},
     visible: false,
     tracks: {},
+    maximumWidth: {},
     popUpDelay: 1000,   // one second delay before popUp appears
     popUpTimer: null,// handle from setTimeout to use in clearTimout(popUpTimer)
     delayDone: true,   // mouse has not left element, still receiving move evts
     delayInProgress: false,        // true if working with delay timer done
     mostRecentMouseEvt: null,
+    browserTextSize: 12,
 
     // spans{} - key name is track name, value is an array of
-    //                   objects: {x1, x2, value}
+    //                   objects: {x1, x2, v, c}
+    //           where [x1..x2) is the array index where the value 'v'
+    //           is found, and 'c' is the data value count in this value
+    //           i.e. when c > 1 the value is a 'mean' of 'c' data values
     // visible - keep track of window visible or not, value: true|false
     //           shouldn't need to do this here, the window knows if it
     //           is visible or not, just ask it for status
     // tracks{}  - tracks that were set up initially, key is track name
     //             value is the number of boxes (for debugging)
+    // maximumWidth{} - key is track name, value is length of longest
+    //                         number string as measured when rendered
 
     // given hgt_....png file name, change to trackName_....json file name
     jsonFileName: function(imgElement, trackName)
@@ -4493,14 +4500,32 @@ var mouseOver = {
     // need to refresh the event handlers and json data
     updateMouseOver: function (trackName)
     {
+      var tdData = "td_data_" + trackName;
+      var tdDataId  = document.getElementById(tdData);
+      var imgData = "img_data_" + trackName;
+      var imgElement  = document.getElementById(imgData);
       if (mouseOver.tracks[trackName]) {
-        var tdData = "td_data_" + trackName;
-        var tdDataId  = document.getElementById(tdData);
-        $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
-        $( tdDataId ).mouseout(mouseOver.popUpDisappear);
-        var imgData = "img_data_" + trackName;
-        var imgElement  = document.getElementById(imgData);
-        mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
+        if (tdDataId) {
+          $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
+          $( tdDataId ).mouseout(mouseOver.popUpDisappear);
+          if (imgElement) {
+            mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
+          }
+        }
+      } else {
+        var trackType = hgTracks.trackDb[trackName].type;
+        var validType = false;
+        if (trackType.indexOf("wig") === 0) { validType = true; }
+        if (trackType.indexOf("bigWig") === 0) { validType = true; }
+        if (validType) {
+          if (tdDataId) {
+            $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
+            $( tdDataId ).mouseout(mouseOver.popUpDisappear);
+            if (imgElement) {
+              mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
+            }
+          }
+        }
       }
     },
 
@@ -4512,11 +4537,22 @@ var mouseOver = {
     findRange: function (x, rects)
     {
       var answer = -1;  // assmume not found
-      for ( var idx in rects ) {
-         if ((rects[idx].x1 <= x) && (x < rects[idx].x2)) {
-           answer = idx;
-           break;
-         }
+      var idx = 0;
+      if (hgTracks.revCmplDisp) {
+        var rectsLen = rects.length - 1;
+        for ( idx in rects ) {
+           if ((rects[rectsLen-idx].x1 <= x) && (x < rects[rectsLen-idx].x2)) {
+             answer = rectsLen-idx;
+             break;
+           }
+        }
+      } else {
+        for ( idx in rects ) {
+           if ((rects[idx].x1 <= x) && (x < rects[idx].x2)) {
+             answer = idx;
+             break;
+           }
+        }
       }
       return answer;
     },
@@ -4569,12 +4605,18 @@ var mouseOver = {
     var tdLeft = Math.floor(tdRect.left);
     var tdTop = Math.floor(tdRect.top);
     var tdHeight = Math.floor(tdRect.height);
+    var tdWidth = Math.floor(tdRect.width);
+    var rightSide = tdLeft + tdWidth;
+    // clientX is the X coordinate of the mouse hot spot
     var clientX = Math.floor(evt.clientX);
     // the graphOffset is the index (x coordinate) into the 'spans' definitions
     //  of the data value boxes for the graph.  The magic number three
     //   is used elsewhere in this code, note the comment on the constant
     //   LEFTADD.
     var graphOffset = Math.max(0, clientX - tdLeft - 3);
+    if (hgTracks.revCmplDisp) {
+       graphOffset = Math.max(0, rightSide - clientX);
+    }
 
     var windowUp = false;     // see if window is supposed to become visible
     var foundIdx = -1;
@@ -4582,20 +4624,28 @@ var mouseOver = {
        foundIdx = mouseOver.findRange(graphOffset, mouseOver.spans[trackName]);
     }
     // can show 'no data' when not found
-    var mouseOverValue = "no data";
+    var mouseOverValue = "no&nbsp;data";
     if (foundIdx > -1) { // value to display
-      mouseOverValue = "&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
+      if (mouseOver.spans[trackName][foundIdx].c > 1) {
+        mouseOverValue = "&nbsp;mean:&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
+      } else {
+        mouseOverValue = "&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
+      }
     }
     $('#mouseOverText').html(mouseOverValue);
-    var msgWidth = Math.ceil($('#mouseOverText').width());
+    var msgWidth = mouseOver.maximumWidth[trackName];
+    $('#mouseOverText').width(msgWidth);
     var msgHeight = Math.ceil($('#mouseOverText').height());
-    var posLeft = clientX - msgWidth + "px";
-    var posTop = tdTop + "px";
-    $('#mouseOverText').css('left',posLeft);
-    $('#mouseOverText').css('top',posTop);
-    $('#mouseOverVerticalLine').css('left',clientX + "px");
-    $('#mouseOverVerticalLine').css('top',posTop);
-    $('#mouseOverVerticalLine').css('height',tdHeight + "px");
+    var lineHeight = Math.max(0, tdHeight - msgHeight);
+    var lineTop = Math.max(0, tdTop + msgHeight);
+    var msgLeft = Math.max(0, clientX - (msgWidth/2) - 3); // with magic 3
+    var lineLeft = Math.max(0, clientX - 3);  // with magic 3
+    $('#mouseOverText').css('fontSize',mouseOver.browserTextSize);
+    $('#mouseOverText').css('left',msgLeft + "px");
+    $('#mouseOverText').css('top',tdTop + "px");
+    $('#mouseOverVerticalLine').css('left',lineLeft + "px");
+    $('#mouseOverVerticalLine').css('top',lineTop + "px");
+    $('#mouseOverVerticalLine').css('height',lineHeight + "px");
     windowUp = true;      // yes, window is to become visible
 
     if (windowUp) {     // the window should become visible
@@ -4676,11 +4726,34 @@ var mouseOver = {
       $( tdDataId ).mouseout(mouseOver.popUpDisappear);
       var itemCount = 0;	// just for monitoring purposes
       // save incoming x1,x2,v data into the mouseOver.spans[trackName][] array
+      var lengthLongestNumberString = 0;
+      var longestNumber = 0;
+      var hasMean = false;
       for (var span in arr[trackName]) {
+         if (arr[trackName][span].c > 1) { hasMean = true; }
+         var lenV = arr[trackName][span].v.toString().length;
+         if (lenV > lengthLongestNumberString) {
+	   lengthLongestNumberString = lenV;
+	   longestNumber = arr[trackName][span].v;
+         }
         mouseOver.spans[trackName].push(arr[trackName][span]);
        ++itemCount;
       }
       mouseOver.tracks[trackName] = itemCount;	// merely for debugging watch
+      var mouseOverValue = "";
+      if (hasMean) {
+         mouseOverValue = "&nbsp;mean:&nbsp;" + longestNumber + "&nbsp;";
+      } else {
+         mouseOverValue = "&nbsp;" + longestNumber + "&nbsp;";
+      }
+      $('#mouseOverText').html(mouseOverValue);	// see how big as rendered
+      $('#mouseOverText').css('fontSize',mouseOver.browserTextSize);
+      var maximumWidth = Math.ceil($('#mouseOverText').width());
+      $('#mouseOverText').html("no&nbsp;data");	// might be bigger
+      if (Math.ceil($('#mouseOverText').width() > maximumWidth)) {
+          maximumWidth = Math.ceil($('#mouseOverText').width());
+      }
+      mouseOver.maximumWidth[trackName] = maximumWidth;
       }
     },  //      receiveData: function (arr)
 
@@ -4698,15 +4771,15 @@ var mouseOver = {
     {
        var xmlhttp = new XMLHttpRequest();
        xmlhttp.onreadystatechange = function() {
-       if (4 === this.readyState && 200 === this.status) {
-          var mapData = JSON.parse(this.responseText);
-          mouseOver.receiveData(mapData);
-       } else {
-          if (4 === this.readyState && 404 === this.status) {
-             mouseOver.failedRequest(trackName);
-          }
-       }
-    };
+         if (4 === this.readyState && 200 === this.status) {
+            var mapData = JSON.parse(this.responseText);
+            mouseOver.receiveData(mapData);
+         } else {
+            if (4 === this.readyState && 404 === this.status) {
+               mouseOver.failedRequest(trackName);
+            }
+         }
+       };
     xmlhttp.open("GET", url, true);
     xmlhttp.send();  // sends request and exits this function
                      // the onreadystatechange callback above will trigger
@@ -4718,9 +4791,11 @@ var mouseOver = {
       // check for the hidden div elements for mouseOverData
       var trackList = document.getElementsByClassName("mouseOverData");
       for (var i = 0; i < trackList.length; i++) {
-        var jsonData = trackList[i].getAttribute('jsonData');
         var trackName = trackList[i].getAttribute('name');
-        mouseOver.fetchMapData(jsonData, trackName);
+        var jsonData = trackList[i].getAttribute('jsonData');
+        if (jsonData) {
+          mouseOver.fetchMapData(jsonData, trackName);
+        }
       }
     },
 
@@ -4732,6 +4807,9 @@ var mouseOver = {
 
     addListener: function () {
         mouseOver.visible = false;
+        if (window.browserTextSize) {
+           mouseOver.browserTextSize = window.browserTextSize;
+        }
         window.addEventListener('scroll', mouseOver.scroll, false);
         window.addEventListener('load', mouseOver.getData, false);
     }

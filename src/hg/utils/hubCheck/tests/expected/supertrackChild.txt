@@ -1,0 +1,10 @@
+Found 9 problems:
+warning: missing description page for track: 'max1'
+warning: missing description page for track: 'max2'
+warning: missing description page for track: 'myFirstTrackA'
+warning: missing description page for track: 'myFirstTrackB'
+warning: missing description page for track: 'myFirstTrackC'
+warning: missing description page for track: 'mySecondTrackA'
+warning: missing description page for track: 'mySecondTrackB'
+warning: missing description page for track: 'mySecondTrackC'
+warning: missing hub overview descripton page (descriptionUrl setting)

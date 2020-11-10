@@ -857,6 +857,7 @@ struct wigMouseOver
     int x1;	/* beginning of a rectangle for this value */
     int x2;	/* end of the rectangle */
     double value;	/* data value for this region */
+    int valueCount;	/* number of data values in this rectangle */
     };
 
 void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
@@ -908,7 +909,7 @@ for (x1 = 0; x1 < width; ++x1)
         {
         if (!skipMouseOvers && (p->count > 0)) /* checking mouseOver construction */
             {
-            if (p->count < 3)	/* allow 1 or 2 values to display */
+            if (p->count > 0)	/* allow any number of values to display */
                 {
                 double thisValue = p->sumData/p->count;	/* average if 2 */
                 if (mouseOverX2 < 0)    /* first valid data found */
@@ -918,6 +919,7 @@ for (x1 = 0; x1 < width; ++x1)
                     mouseOverData[mouseOverIdx].x1 = x1;
                     mouseOverData[mouseOverIdx].x2 = mouseOverX2;
                     mouseOverData[mouseOverIdx].value = thisValue;
+		    mouseOverData[mouseOverIdx].valueCount = p->count;
                     previousValue = thisValue;
                     }
                 else	/* see if we need a new item */
@@ -931,6 +933,7 @@ for (x1 = 0; x1 < width; ++x1)
                         mouseOverData[mouseOverIdx].x1 = x1;
                         mouseOverData[mouseOverIdx].x2 = mouseOverX2;
                         mouseOverData[mouseOverIdx].value = thisValue;
+			mouseOverData[mouseOverIdx].valueCount = p->count;
                         previousValue = thisValue;
                         }
                     else	/* continue run of same data value */
@@ -1476,6 +1479,7 @@ if (enableMouseOver && mouseOverData)
         jsonWriteNumber(jw, "x1", (long long)mouseOverData[i].x1);
         jsonWriteNumber(jw, "x2", (long long)mouseOverData[i].x2);
         jsonWriteDouble(jw, "v", mouseOverData[i].value);
+        jsonWriteNumber(jw, "c", mouseOverData[i].valueCount);
         jsonWriteObjectEnd(jw);
         }
     jsonWriteListEnd(jw);
@@ -1495,6 +1499,12 @@ if (enableMouseOver && mouseOverData)
     // that this track has data to display.
     hPrintf("<div id='mouseOver_%s' name='%s' class='hiddenText mouseOverData' jsonData='%s'></div>\n", tg->track, tg->track, jsonData.forCgi);
     }
+// Might need something like this later for other purposes
+// else if (enableMouseOver)       // system enabled, but no data for this track
+//     {
+    /* signal to indicate zoom in required to see data */
+//     hPrintf("<div id='mouseOver_%s' name='%s' class='hiddenText mouseOverData'></div>\n", tg->track, tg->track);
+//     }
 
 wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
 }
