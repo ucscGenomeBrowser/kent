@@ -857,7 +857,7 @@ struct wigMouseOver
     int x1;	/* beginning of a rectangle for this value */
     int x2;	/* end of the rectangle */
     double value;	/* data value for this region */
-    boolean mean;	/* if data value is mean */
+    int valueCount;	/* number of data values in this rectangle */
     };
 
 void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
@@ -919,9 +919,7 @@ for (x1 = 0; x1 < width; ++x1)
                     mouseOverData[mouseOverIdx].x1 = x1;
                     mouseOverData[mouseOverIdx].x2 = mouseOverX2;
                     mouseOverData[mouseOverIdx].value = thisValue;
-		    mouseOverData[mouseOverIdx].mean = FALSE;
-		    if (p->count > 1)
-			mouseOverData[mouseOverIdx].mean = TRUE;
+		    mouseOverData[mouseOverIdx].valueCount = p->count;
                     previousValue = thisValue;
                     }
                 else	/* see if we need a new item */
@@ -935,9 +933,7 @@ for (x1 = 0; x1 < width; ++x1)
                         mouseOverData[mouseOverIdx].x1 = x1;
                         mouseOverData[mouseOverIdx].x2 = mouseOverX2;
                         mouseOverData[mouseOverIdx].value = thisValue;
-			mouseOverData[mouseOverIdx].mean = FALSE;
-			if (p->count > 1)
-			    mouseOverData[mouseOverIdx].mean = TRUE;
+			mouseOverData[mouseOverIdx].valueCount = p->count;
                         previousValue = thisValue;
                         }
                     else	/* continue run of same data value */
@@ -1483,7 +1479,7 @@ if (enableMouseOver && mouseOverData)
         jsonWriteNumber(jw, "x1", (long long)mouseOverData[i].x1);
         jsonWriteNumber(jw, "x2", (long long)mouseOverData[i].x2);
         jsonWriteDouble(jw, "v", mouseOverData[i].value);
-        jsonWriteBoolean(jw, "m", mouseOverData[i].mean);
+        jsonWriteNumber(jw, "c", mouseOverData[i].valueCount);
         jsonWriteObjectEnd(jw);
         }
     jsonWriteListEnd(jw);
