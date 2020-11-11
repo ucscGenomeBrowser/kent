@@ -144,6 +144,7 @@ UCSC_APPS = \
 	udcCleanup \
 	undupFa \
 	upper \
+	vcfFilter \
 	venn \
 	verticalSplitSqlTable \
 	weedLines
