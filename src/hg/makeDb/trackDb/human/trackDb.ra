@@ -5465,8 +5465,8 @@ include covidHgiGwas.ra
 
 track covidMuts
 type bigBed 12 + 
-shortLabel COVID Immunity Vars
-longLabel COVID-19 Immunity Variants from the COVID Human Genetics Effort
+shortLabel Risk Variants
+longLabel Rare variants underlying COVID-19 severity and susceptibility from the COVID Human Genetics Effort
 mouseOver $gene $name $rsId Genotype: $genotype; Zygosity: $zygo ; Inheritance: $inhMode
 labelFields gene, name
 defaultLabelFields gene, name

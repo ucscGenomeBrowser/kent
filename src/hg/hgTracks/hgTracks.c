@@ -10756,9 +10756,14 @@ dyStringFree(&dy);
 
 dy = dyStringNew(1024);
 if (enableMouseOver)
+    {
+      dyStringPrintf(dy, "window.browserTextSize=%s;\n", tl.textSize);
       dyStringPrintf(dy, "window.mouseOverEnabled=true;\n");
+    }
     else
+    {
       dyStringPrintf(dy, "window.mouseOverEnabled=false;\n");
+    }
 jsInline(dy->string);
 dyStringFree(&dy);
 

@@ -12666,7 +12666,7 @@ tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
 
-static char *getCode(char *inhMode)
+static char *omimGetInheritanceCode(char *inhMode)
 /* Translate inheritance mode strings into much shorter codes. */
 {
 static struct dyString *dy = NULL;  // re-use this string
@@ -12758,7 +12758,7 @@ if (isNotEmpty(ret))
                 dyStringPrintf(dy, "%s", components->name);
                 components = components->next;
 
-                char *inhCode = getCode(components->name);
+                char *inhCode = omimGetInheritanceCode(components->name);
                 if (!isEmpty(inhCode))
                     dyStringPrintf(dy, ", %s", inhCode);
                 components = components->next;
