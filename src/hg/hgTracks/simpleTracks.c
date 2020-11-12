@@ -2693,12 +2693,20 @@ for (ref = exonList; TRUE; )
 		--numExonIntrons;  // introns are one fewer than exons
 		}
 
-	    if (!revStrand)
+            char strandChar;
+	    if (!revStrand) {
 		exonIntronNumber = exonIx;
-	    else
+                strandChar = '+';
+            }
+	    else {
 		exonIntronNumber = numExonIntrons-exonIx+1;
+                strandChar = '-';
+            }
 
-	    safef(mouseOverText, sizeof(mouseOverText), "%s (%d/%d)", exonIntronText, exonIntronNumber, numExonIntrons);
+            if (!isEmpty(lf->name))
+                safef(mouseOverText, sizeof(mouseOverText), "%s, strand %c, %s %d of %d", lf->name, strandChar, exonIntronText, exonIntronNumber, numExonIntrons);
+            else
+                safef(mouseOverText, sizeof(mouseOverText), "strand %c, %s %d of %d", strandChar, exonIntronText, exonIntronNumber, numExonIntrons);
 
 	    if (w > 0) // draw exon or intron if width is greater than 0
 		{
