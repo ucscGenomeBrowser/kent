@@ -4627,7 +4627,7 @@ var mouseOver = {
     var mouseOverValue = "no&nbsp;data";
     if (foundIdx > -1) { // value to display
       if (mouseOver.spans[trackName][foundIdx].c > 1) {
-        mouseOverValue = "&nbsp;mean:&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
+        mouseOverValue = "&nbsp;&mu;&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
       } else {
         mouseOverValue = "&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
       }
@@ -4742,7 +4742,7 @@ var mouseOver = {
       mouseOver.tracks[trackName] = itemCount;	// merely for debugging watch
       var mouseOverValue = "";
       if (hasMean) {
-         mouseOverValue = "&nbsp;mean:&nbsp;" + longestNumber + "&nbsp;";
+         mouseOverValue = "&nbsp;&mu;&nbsp;" + longestNumber + "&nbsp;";
       } else {
          mouseOverValue = "&nbsp;" + longestNumber + "&nbsp;";
       }
