@@ -2,7 +2,7 @@
 track pbm
 shortLabel Antibody Prot Array
 longLabel Antibody Proteome Binding Microarray from Wang et al, ACS 2020
-superTrack on show
+superTrack on
 group immu
 visibility hide
 
