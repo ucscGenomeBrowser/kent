@@ -58,10 +58,10 @@ return keepIx;
 char *fixupChromName(char *chrom)
 /* Prepend "chr" if missing */
 {
-if (!startsWith(chrom, "chr"))
-    return catTwoStrings("chr", chrom);
-else
+if (startsWith("chr", chrom))
     return chrom;
+else
+    return catTwoStrings("chr", chrom);
 }
 
 #define VCF_MAX_INFO (4*1024)
