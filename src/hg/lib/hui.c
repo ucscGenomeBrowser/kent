@@ -9252,7 +9252,7 @@ if (tableName)
     {
     char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
     if (date != NULL)
-	printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", date);
+	printf("<B>Data last updated at UCSC:&nbsp;</B>%s<BR>\n", date);
     }
 hFreeConn(&conn);
 }
@@ -9260,7 +9260,7 @@ hFreeConn(&conn);
 void printBbiUpdateTime(time_t *timep)
 /* for bbi files, print out the timep value */
 {
-    printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", sqlUnixTimeToDate(timep, FALSE));
+    printf("<B>Data last updated at UCSC:&nbsp;</B>%s<BR>\n", sqlUnixTimeToDate(timep, FALSE));
 }
 
 static boolean tableDescriptionsExists(struct sqlConnection *conn)
@@ -9643,7 +9643,7 @@ if (version == NULL)
     }
 
 if (isNotEmpty(version))
-    printf("<B>Data version:</B> %s <BR>\n", version);
+    printf("<B>Source database version:</B> %s <BR>\n", version);
 }
 
 void printRelatedTracks(char *database, struct hash *trackHash, struct trackDb *tdb, struct cart *cart)

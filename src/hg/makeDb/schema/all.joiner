@@ -3837,7 +3837,7 @@ identifier wgEncodeGencodePseudoGeneAttrsV35lift37
 identifier wgEncodeGencodeGeneSourceV35lift37
 "Link together Gencode Gene Source table with Attributes table"
     hg19.wgEncodeGencodeGeneSourceV35lift37.geneId
-    hg19.wgEncodeGencodeAttrsV35lift37.geneId
+    hg19.wgEncodeGencodeAttrsV35lift37.geneId minCheck=0.99
 
 identifier wgEncodeGencodeGeneSymbolV35lift37
 "Link together Gencode gene symbol table with Attributes table"
@@ -3873,7 +3873,7 @@ identifier wgEncodeGencodeTagV35lift37
 identifier wgEncodeGencodeTranscriptSourceV35lift37
 "Link together Gencode Transcript Source table with Attributes table"
     hg19.wgEncodeGencodeTranscriptSourceV35lift37.transcriptId
-    hg19.wgEncodeGencodeAttrsV35lift37.transcriptId
+    hg19.wgEncodeGencodeAttrsV35lift37.transcriptId minCheck=0.99
 
 identifier wgEncodeGencodeTranscriptSupportV35lift37
 "Link together Gencode Transcript Support table with Attributes table"

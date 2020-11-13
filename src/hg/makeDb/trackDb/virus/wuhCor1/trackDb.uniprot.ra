@@ -4,7 +4,7 @@ track unipCov2AliSwissprot
 shortLabel Full Proteins
 longLabel UniProt full-length proteins
 priority 1
-visibility hide
+visibility dense
 type bigPsl
 bigDataUrl /gbdb/$D/uniprot/unipAliSwissprotCov2.bb
 searchIndex name,acc
