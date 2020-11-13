@@ -6964,6 +6964,20 @@ if (hideTracks)
 struct hash *superTrackHash = newHash(5);  // cache whether supertrack is hiding tracks or not
 char buffer[4096];
 
+// Check to see if we have a versioned default gene track and let the knownGene 
+// cart variable determine its visibility
+char *defaultGeneTrack = NULL;
+char *knownDb = hdbDefaultKnownDb(database);
+if (differentString(knownDb, database))
+    defaultGeneTrack = hdbGetMasterGeneTrack(knownDb);
+
+if (defaultGeneTrack)
+    {
+    char *s = cartOptionalString(cart, "knownGene");
+    if ((s != NULL) && (differentString(s, "hide")))
+        cartSetString(cart, defaultGeneTrack, s);
+    }
+
 for (track = trackList; track != NULL; track = track->next)
     {
     // deal with any supertracks we're seeing for the first time

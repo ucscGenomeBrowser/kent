@@ -2,7 +2,7 @@ track covidHgiGwas
 shortLabel COVID-19 GWAS
 longLabel GWAS meta-analyses from the COVID-19 Host Genetics Initiative
 compositeTrack on
-group phenDis
+group covid
 visibility hide
 autoScale on
 maxHeightPixels 48:75:128

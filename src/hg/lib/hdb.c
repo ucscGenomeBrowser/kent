@@ -5889,6 +5889,9 @@ char *hdbDefaultKnownDb(char *db)
 static char *checkedDb = NULL;
 static char *knownDb = NULL;
 
+if (cfgOptionBooleanDefault("ignoreDefaultKnown", FALSE))
+    return db;
+
 if (sameOk(checkedDb, db))            // if we already know it, return it.
     return knownDb;
 knownDb = NULL;

@@ -5465,7 +5465,7 @@ include covidHgiGwas.ra
 
 track covidMuts
 type bigBed 12 + 
-shortLabel Risk Variants
+shortLabel Rare Harmful Vars
 longLabel Rare variants underlying COVID-19 severity and susceptibility from the COVID Human Genetics Effort
 mouseOver $gene $name $rsId Genotype: $genotype; Zygosity: $zygo ; Inheritance: $inhMode
 labelFields gene, name
@@ -5475,6 +5475,7 @@ group covid
 color 179,0,0
 visibility hide
 bigDataUrl /gbdb/$D/covidMuts/covidMuts.bb
+pennantIcon New red ../goldenPath/newsarch.html "Released Nov. 12, 2020"
  
 
 

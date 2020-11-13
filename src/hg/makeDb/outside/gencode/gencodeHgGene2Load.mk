@@ -39,18 +39,18 @@ mach = $(shell uname -m)
 ##
 db = hg38
 #db = hg19
-#db = mm10
+db = mm10
 #preRelease = no
 preRelease = yes
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
-    ver = M23
-    prevVer = M22
+    ver = M25
+    prevVer = M24
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 97_39
-    ensemblPrevVer = 96_38
+    ensemblVer = 100_39
+    ensemblPrevVer = 99_38
     ensemblCDnaDb = mus_musculus_cdna_${ensemblPrevVer}
 else ifeq (${db},hg38)
     grcRefAssembly = GRCh38
@@ -96,7 +96,7 @@ relRootDir = release
 relDir = ${relRootDir}/release_${ver}
 annotationGff = ${relDir}/gencode.v${ver}.${annGffTypeName}.gff3.gz
 
-kentDir = /cluster/home/markd/compbio/gencode/projs/hggene-gencode/kent/src
+kentDir = ${HOME}/kent/src
 gencodeBinDir = ${kentDir}/hg/makeDb/outside/gencode/bin
 autoSqlDir = ${kentDir}/hg/lib
 gencodeExonSupportToTable = ${gencodeBinDir}/gencodeExonSupportToTable
