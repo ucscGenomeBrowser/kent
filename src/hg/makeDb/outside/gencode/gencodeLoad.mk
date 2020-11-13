@@ -66,7 +66,7 @@ else ifeq (${db},hg19)
     ver = ${verBase}lift37
     backmapTargetVer = 19
     ftpReleaseSubdir = release_${verBase}/GRCh37_mapping
-    prevVer = 35lift37
+    prevVer = 34lift37
     gencodeOrg = Gencode_human
     annGffTypeName = annotation
     ensemblVer = 74_37      # only used to get genome chromsome name mappings, don't change
