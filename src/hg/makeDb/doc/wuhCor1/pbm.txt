@@ -5,4 +5,4 @@ cd locs
 cat ../orig/*.tsv | cut -f3 | grep -v Sample | grep -v group | grep -v protein | sort -u | grep -v ^$ | awk '{print ">"$1"\n"$1}' > prots.fa
 blat ../../../wuhCor1.2bit -q=prot -t=dnax prots.fa stdout -noHead -minScore=10 -tileSize=3 -stepSize=1 -noTrimA -fine -maxIntron=1 | pslBest /dev/stdin /dev/stdout > prots.bed
 cd ..
-for d in IgG_Z-score-Healthy_Controls IgG_Z-score-_COVID-19_patients IgM_Z-score-Healthy_Controls IgM_Z-score-_COVID-19_patients ; do ~/kent/src/utils/bigHeat locs/prots.bed cut/$d.tsv ../../chrom.sizes bb/$d --bbDir=/gbdb/wuhCor1/pbm/$d/; done
+for d in IgG_Z-score-Healthy_Controls IgG_Z-score-_COVID-19_patients IgM_Z-score-Healthy_Controls IgM_Z-score-_COVID-19_patients ; do ~/kent/src/utils/bigHeat locs/prots.bed cut/$d.tsv ../../chrom.sizes bb/$d --bbDir=/gbdb/wuhCor1/pbm/$d/ --cmap seismic --min -1 --max 1 --mult 2,0.285 --palRange 0.1:0.9; done
