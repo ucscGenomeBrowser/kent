@@ -879,6 +879,7 @@ enum wiggleGraphOptEnum lineBar = wigCart->lineBar;
 boolean whiskers = (wigCart->windowingFunction == wiggleWindowingWhiskers
 			&& width < winEnd-winStart);
 
+boolean skipMouseOvers = FALSE;
 /* start new data for a new track, freez old data if exists */
 if (enableMouseOver)
     {
@@ -889,11 +890,8 @@ if (enableMouseOver)
 	}
     AllocArray(mouseOverData, width);
     }
-
-int mouseOverX2 = -1;
-double previousValue = 0;
-boolean skipMouseOvers = FALSE;
-#define epsilonLimit 1.0e-6
+else
+    skipMouseOvers = TRUE;
 
 /*	right now this is a simple pixel by pixel loop.  Future
  *	enhancements could draw boxes where pixels
@@ -907,6 +905,8 @@ for (x1 = 0; x1 < width; ++x1)
     /* ===== mouseOver calculations===== */
     if (enableMouseOver)
         {
+	int mouseOverX2 = -1;
+	double previousValue = 0;
         if (!skipMouseOvers && (p->count > 0)) /* checking mouseOver construction */
             {
             if (p->count > 0)	/* allow any number of values to display */
@@ -924,6 +924,7 @@ for (x1 = 0; x1 < width; ++x1)
                     }
                 else	/* see if we need a new item */
                     {
+#define epsilonLimit 1.0e-6
                     if (fabs(thisValue - previousValue) > epsilonLimit)
                         {
                         /* finish off the existing run of data */
@@ -1602,12 +1603,10 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
          *      no need to walk through it, just use the block's specified
          *      max/min.  It is OK if these end up + or - values, we do want to
          *      keep track of pixels before and after the screen for
-         *      later smoothing operations.
+         *      later smoothing operations.  x1d,x2d are pixel coordinates
          */
 double x1d = (double)(wi->start - seqStart) * pixelsPerBase;
-        x1 = round(x1d);
 double x2d = (double)((wi->start+(wi->count * usingDataSpan))-seqStart) * pixelsPerBase;
-	x2 = round(x2d);
 
         /* this used to be if (x2 > x1) which often caused reading of blocks
 	 * when they were merely x2 = x1 + 1 due to rounding errors as
@@ -1622,13 +1621,21 @@ double x2d = (double)((wi->start+(wi->count * usingDataSpan))-seqStart) * pixels
 	    readData = (unsigned char *) needMem((size_t) (wi->count + 1));
 	    udcRead(wibFH, readData,
 		(size_t) wi->count * (size_t) sizeof(unsigned char));
-	    /*	walk through all the data in this block	*/
+	    /*	walk through all the data in this wiggle data block	*/
 	    for (dataOffset = 0; dataOffset < wi->count; ++dataOffset)
 		{
 		unsigned char datum = readData[dataOffset];
 		if (datum != WIG_NO_DATA)
 		    {
+		    /* (wi->start-seqStart) == base where this wiggle data block
+		     *	begins.  Add to that (dataOffset * usingDataSpan) which
+		     *	is how many bases this specific datum is from the start
+		     *	of this wiggle data block.
+		     * x1,x2 are the pixel begin and end for this data item */
 		    x1 = ((wi->start-seqStart) + (dataOffset * usingDataSpan)) * pixelsPerBase;
+		    /* (usingDataSpan * pixelsPerBase) is the number of pixels
+		     *	occupied by this one data item
+		     */
 		    x2 = x1 + (usingDataSpan * pixelsPerBase);
 		    for (i = x1; i <= x2; ++i)
 			{
