@@ -1,0 +1,80 @@
+track IgM_Z-score-_COVID-19_patients
+shortLabel IgM Z-score- COVID-19 patients
+longLabel Proteome Microarray - IgM - COVID-19 patients
+type bed 9
+compositeTrack on
+visibility dense
+labelOnFeature on
+itemRgb on
+parent pbm
+
+    track IgM_Z-score-_COVID-19_patients_P4
+    shortLabel P4
+    longLabel P4
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-_COVID-19_patients/P4.bb
+    parent IgM_Z-score-_COVID-19_patients on
+
+    track IgM_Z-score-_COVID-19_patients_P1
+    shortLabel P1
+    longLabel P1
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-_COVID-19_patients/P1.bb
+    parent IgM_Z-score-_COVID-19_patients on
+
+    track IgM_Z-score-_COVID-19_patients_P10
+    shortLabel P10
+    longLabel P10
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-_COVID-19_patients/P10.bb
+    parent IgM_Z-score-_COVID-19_patients on
+
+    track IgM_Z-score-_COVID-19_patients_P45
+    shortLabel P45
+    longLabel P45
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-_COVID-19_patients/P45.bb
+    parent IgM_Z-score-_COVID-19_patients on
+
+    track IgM_Z-score-_COVID-19_patients_P52
+    shortLabel P52
+    longLabel P52
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-_COVID-19_patients/P52.bb
+    parent IgM_Z-score-_COVID-19_patients on
+
+    track IgM_Z-score-_COVID-19_patients_P33
+    shortLabel P33
+    longLabel P33
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-_COVID-19_patients/P33.bb
+    parent IgM_Z-score-_COVID-19_patients on
+
+    track IgM_Z-score-_COVID-19_patients_P32
+    shortLabel P32
+    longLabel P32
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-_COVID-19_patients/P32.bb
+    parent IgM_Z-score-_COVID-19_patients on
+
+    track IgM_Z-score-_COVID-19_patients_P6
+    shortLabel P6
+    longLabel P6
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-_COVID-19_patients/P6.bb
+    parent IgM_Z-score-_COVID-19_patients on
+
+    track IgM_Z-score-_COVID-19_patients_P15
+    shortLabel P15
+    longLabel P15
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-_COVID-19_patients/P15.bb
+    parent IgM_Z-score-_COVID-19_patients on
+
+    track IgM_Z-score-_COVID-19_patients_P11
+    shortLabel P11
+    longLabel P11
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-_COVID-19_patients/P11.bb
+    parent IgM_Z-score-_COVID-19_patients on
+

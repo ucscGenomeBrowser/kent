@@ -1,0 +1,94 @@
+track IgM_Z-score-Healthy_Controls
+shortLabel IgM Z-score-Healthy Controls
+longLabel Proteome Microarray - IgM - Healthy Controls
+type bed 9
+compositeTrack on
+visibility dense
+labelOnFeature on
+itemRgb on
+parent pbm
+
+    track IgM_Z-score-Healthy_Controls_1-015
+    shortLabel 1-015
+    longLabel 1-015
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-Healthy_Controls/1-015.bb
+    parent IgM_Z-score-Healthy_Controls on
+
+    track IgM_Z-score-Healthy_Controls_1-058
+    shortLabel 1-058
+    longLabel 1-058
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-Healthy_Controls/1-058.bb
+    parent IgM_Z-score-Healthy_Controls on
+
+    track IgM_Z-score-Healthy_Controls_2-059
+    shortLabel 2-059
+    longLabel 2-059
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-Healthy_Controls/2-059.bb
+    parent IgM_Z-score-Healthy_Controls on
+
+    track IgM_Z-score-Healthy_Controls_2-073
+    shortLabel 2-073
+    longLabel 2-073
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-Healthy_Controls/2-073.bb
+    parent IgM_Z-score-Healthy_Controls on
+
+    track IgM_Z-score-Healthy_Controls_2-096
+    shortLabel 2-096
+    longLabel 2-096
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-Healthy_Controls/2-096.bb
+    parent IgM_Z-score-Healthy_Controls on
+
+    track IgM_Z-score-Healthy_Controls_2-102
+    shortLabel 2-102
+    longLabel 2-102
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-Healthy_Controls/2-102.bb
+    parent IgM_Z-score-Healthy_Controls on
+
+    track IgM_Z-score-Healthy_Controls_2-134
+    shortLabel 2-134
+    longLabel 2-134
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-Healthy_Controls/2-134.bb
+    parent IgM_Z-score-Healthy_Controls on
+
+    track IgM_Z-score-Healthy_Controls_3-066
+    shortLabel 3-066
+    longLabel 3-066
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-Healthy_Controls/3-066.bb
+    parent IgM_Z-score-Healthy_Controls on
+
+    track IgM_Z-score-Healthy_Controls_3-067
+    shortLabel 3-067
+    longLabel 3-067
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-Healthy_Controls/3-067.bb
+    parent IgM_Z-score-Healthy_Controls on
+
+    track IgM_Z-score-Healthy_Controls_3-174
+    shortLabel 3-174
+    longLabel 3-174
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-Healthy_Controls/3-174.bb
+    parent IgM_Z-score-Healthy_Controls on
+
+    track IgM_Z-score-Healthy_Controls_3-227
+    shortLabel 3-227
+    longLabel 3-227
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-Healthy_Controls/3-227.bb
+    parent IgM_Z-score-Healthy_Controls on
+
+    track IgM_Z-score-Healthy_Controls_3-234
+    shortLabel 3-234
+    longLabel 3-234
+    type bigBed 9
+    bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-Healthy_Controls/3-234.bb
+    parent IgM_Z-score-Healthy_Controls on
+

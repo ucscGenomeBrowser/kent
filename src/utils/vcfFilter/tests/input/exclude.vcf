@@ -1,0 +1,14 @@
+##fileformat=VCFv4.3
+##source=http://virological.org/t/masking-strategies-for-sars-cov-2-alignments/480
+# Hacked down to just a few by Angie
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+NC_045512v2	1	.	A	.	.	mask	SUB=NDM;EXC=seq_end
+NC_045512v2	2	.	T	.	.	mask	SUB=NDM;EXC=seq_end
+NC_045512v2	3	.	T	.	.	mask	SUB=NDM;EXC=seq_end
+NC_045512v2	2091	.	C	T,Y	.	mask	SUB=NDM;EXC=highly_ambiguous,homoplasic,narrow_src;SRC_COUNTRY=India,UK;SRC_LAB=NCDC,NU-OMICS;GENE=gene-orf1ab;AA_POS=609;AA_REF=T;AA_ALT=I,X
+NC_045512v2	2094	.	C	T,Y	.	mask	SUB=NDM;EXC=highly_ambiguous,narrow_src;SRC_COUNTRY=Belgium,India;SRC_LAB=KU_Leuven,NCDC;GENE=gene-orf1ab;AA_POS=610;AA_REF=S;AA_ALT=L,X
+NC_045512v2	2198	.	G	R,T,A	.	mask	SUB=NDM,RCD;EXC=homoplasic,ambiguous,narrow_src;SRC_COUNTRY=Netherlands;SRC_LAB=Erasmus;GENE=gene-orf1ab;AA_POS=645;AA_REF=G;AA_ALT=X,C,S
+NC_045512v2	28881	.	G	A,R,T,K	.	caution	SUB=NDM;EXC=neighbour_linked;SRC_COUNTRY=.;SRC_LAB=.;GENE=gene-N;AA_POS=203;AA_REF=R;AA_ALT=K,X,M,X
+NC_045512v2	28882	.	G	A,R,T,K,S	.	caution	SUB=NDM;EXC=neighbour_linked;SRC_COUNTRY=.;SRC_LAB=.;GENE=gene-N;AA_POS=203;AA_REF=R;AA_ALT=R,R,S,X,X
+NC_045512v2	28883	.	G	C,S,A	.	caution	SUB=NDM;EXC=neighbour_linked;SRC_COUNTRY=.;SRC_LAB=.;GENE=gene-N;AA_POS=204;AA_REF=G;AA_ALT=R,X,R
+NC_045512v2	28985	.	G	R,D,T,K,A	.	mask	SUB=NDM,RCD;EXC=highly_ambiguous,homoplasic,single_src;SRC_COUNTRY=Switzerland;SRC_LAB=ETH_Zurich;GENE=gene-N;AA_POS=238;AA_REF=G;AA_ALT=X,X,C,X,S

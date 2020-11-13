@@ -6964,6 +6964,20 @@ if (hideTracks)
 struct hash *superTrackHash = newHash(5);  // cache whether supertrack is hiding tracks or not
 char buffer[4096];
 
+// Check to see if we have a versioned default gene track and let the knownGene 
+// cart variable determine its visibility
+char *defaultGeneTrack = NULL;
+char *knownDb = hdbDefaultKnownDb(database);
+if (differentString(knownDb, database))
+    defaultGeneTrack = hdbGetMasterGeneTrack(knownDb);
+
+if (defaultGeneTrack)
+    {
+    char *s = cartOptionalString(cart, "knownGene");
+    if ((s != NULL) && (differentString(s, "hide")))
+        cartSetString(cart, defaultGeneTrack, s);
+    }
+
 for (track = trackList; track != NULL; track = track->next)
     {
     // deal with any supertracks we're seeing for the first time
@@ -8754,7 +8768,7 @@ if (!hideControls)
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("<TD class='infoText' COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
     hWrites("Click on a feature for details. ");
-    hWrites("Click or drag in the base position track to zoom in. ");
+    hWrites("Click+shift+drag to zoom in. ");
     hWrites("Click side bars for track options. ");
     hWrites("Drag side bars or labels up or down to reorder tracks. ");
     hWrites("Drag tracks left or right to new position. ");
@@ -10756,9 +10770,14 @@ dyStringFree(&dy);
 
 dy = dyStringNew(1024);
 if (enableMouseOver)
+    {
+      dyStringPrintf(dy, "window.browserTextSize=%s;\n", tl.textSize);
       dyStringPrintf(dy, "window.mouseOverEnabled=true;\n");
+    }
     else
+    {
       dyStringPrintf(dy, "window.mouseOverEnabled=false;\n");
+    }
 jsInline(dy->string);
 dyStringFree(&dy);
 

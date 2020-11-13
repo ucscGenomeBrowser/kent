@@ -1053,6 +1053,10 @@ char *hRefSeqAccForChrom(char *db, char *chrom);
 /* Return the RefSeq NC_000... accession for chrom if we can find it, else just chrom.
  * db must never change. */
 
+char *abbreviateRefSeqSummary(char *summary);
+/* strip off the uninformative parts from the RefSeq Summary text: the repetitive note
+ * about the publication subset and the Evidence-Data-Notes */
+
 boolean isMito(char *chrom);
 /* Return True if chrom is chrM or chrMT */
 

@@ -101,9 +101,10 @@ else
 
 
 
-static void printTabularHeaderRow(const struct vcfInfoDef *def)
+static int printTabularHeaderRow(const struct vcfInfoDef *def)
 /* Parse the column header parts out of def->description and print as table header row;
- * call this only when looksTabular returns TRUE. */
+ * call this only when looksTabular returns TRUE.
+ * Returns the number of columns in the header */
 {
 regmatch_t substrArr[PATH_LEN];
 if (regexMatchSubstr(def->description, COL_DESC_REGEX, substrArr, ArraySize(substrArr)))
@@ -122,13 +123,15 @@ if (regexMatchSubstr(def->description, COL_DESC_REGEX, substrArr, ArraySize(subs
     for (i = 0;  i < descColCount; i++)
         printf("<TH class='withThinBorder'>%s</TH>", words[i]);
     puts("</TR>");
+    return descColCount;
     }
 else
     errAbort("printTabularHeaderRow: code bug, if looksTabular returns true then "
              "regex should work here");
+    return -1;
 }
 
-static void printTabularData(struct vcfInfoElement *el)
+static void printTabularData(struct vcfInfoElement *el, int headerCount)
 /* Print a row for each value in el, separating columns by '|'. */
 {
 int j;
@@ -142,9 +145,12 @@ for (j = 0;  j < el->count;  j++)
         char copy[len+1];
         safencpy(copy, sizeof(copy), val, len);
         char *words[PATH_LEN];
-        int colCount = chopByChar(copy, '|', words, ArraySize(words));
+        chopByChar(copy, '|', words, ArraySize(words));
         int k;
-        for (k = 0;  k < colCount;  k++)
+        // printTabularHeaderRow strips off (but still prints!) a trailing '|'
+        // because of the regex, so enforce that here too so the rows after
+        // the header don't get all out of whack
+        for (k = 0;  k < headerCount;  k++)
             printf("<TD class='withThinBorder'>%s</TD>", words[k]);
         }
     puts("</TR>");
@@ -152,14 +158,15 @@ for (j = 0;  j < el->count;  j++)
 }
 
 
-static void vcfInfoDetails(struct vcfRecord *rec)
+static void vcfInfoDetails(struct vcfRecord *rec, char *trackName)
 /* Expand info keys to descriptions, then print out keys and values. */
 {
 if (rec->infoCount == 0)
     return;
 struct vcfFile *vcff = rec->file;
-puts("<B>INFO column annotations:</B><BR>");
-puts("<TABLE border=0 cellspacing=0 cellpadding=2>");
+puts("<table>"); // wrapper table for collapsible section
+jsBeginCollapsibleSectionFontSize(cart, trackName, "infoFields", "INFO column annotations:", FALSE, "medium");
+puts("<TABLE class=\"stdTbl\">\n");
 int i;
 for (i = 0;  i < rec->infoCount;  i++)
     {
@@ -189,13 +196,15 @@ for (i = 0;  i < rec->infoCount;  i++)
                 vcfPrintDatum(stdout, el->values[j], type);
             }
         }
-    if (def != NULL)
+    if (def != NULL && !looksTabular(def, el))
 	printf("&nbsp;&nbsp;</TD><TD>%s", def->description);
     else
 	printf("</TD><TD>");
     printf("</TD></TR>\n");
     }
 puts("</TABLE>");
+jsEndCollapsibleSection();
+puts("</table>"); // close the wrapper around the collapsible section
 // Now show the tabular fields, if any
 for (i = 0;  i < rec->infoCount;  i++)
     {
@@ -206,8 +215,8 @@ for (i = 0;  i < rec->infoCount;  i++)
         puts("<BR>");
         printf("<B>%s</B>: %s<BR>\n", el->key, def->description);
         puts("<TABLE class='stdTbl'>");
-        printTabularHeaderRow(def);
-        printTabularData(el);
+        int headerCount = printTabularHeaderRow(def);
+        printTabularData(el, headerCount);
         puts("</TABLE>");
         }
     }
@@ -504,7 +513,7 @@ printf("<B>Reference allele:</B> %s<BR>\n", displayAls[0]);
 vcfAltAlleleDetails(rec, displayAls);
 vcfQualDetails(rec);
 vcfFilterDetails(rec);
-vcfInfoDetails(rec);
+vcfInfoDetails(rec, tdb->track);
 pgSnpCodingDetail(rec);
 makeDisplayAlleles(rec, showLeftBase, leftBase, 5, FALSE, TRUE, displayAls);
 vcfGenotypesDetails(rec, tdb, displayAls);

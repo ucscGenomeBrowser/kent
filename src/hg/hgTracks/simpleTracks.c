@@ -2693,12 +2693,20 @@ for (ref = exonList; TRUE; )
 		--numExonIntrons;  // introns are one fewer than exons
 		}
 
-	    if (!revStrand)
+            char strandChar;
+	    if (!revStrand) {
 		exonIntronNumber = exonIx;
-	    else
+                strandChar = '+';
+            }
+	    else {
 		exonIntronNumber = numExonIntrons-exonIx+1;
+                strandChar = '-';
+            }
 
-	    safef(mouseOverText, sizeof(mouseOverText), "%s (%d/%d)", exonIntronText, exonIntronNumber, numExonIntrons);
+            if (!isEmpty(lf->name))
+                safef(mouseOverText, sizeof(mouseOverText), "%s, strand %c, %s %d of %d", lf->name, strandChar, exonIntronText, exonIntronNumber, numExonIntrons);
+            else
+                safef(mouseOverText, sizeof(mouseOverText), "strand %c, %s %d of %d", strandChar, exonIntronText, exonIntronNumber, numExonIntrons);
 
 	    if (w > 0) // draw exon or intron if width is greater than 0
 		{
@@ -12658,7 +12666,7 @@ tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
 
-static char *getCode(char *inhMode)
+static char *omimGetInheritanceCode(char *inhMode)
 /* Translate inheritance mode strings into much shorter codes. */
 {
 static struct dyString *dy = NULL;  // re-use this string
@@ -12750,7 +12758,7 @@ if (isNotEmpty(ret))
                 dyStringPrintf(dy, "%s", components->name);
                 components = components->next;
 
-                char *inhCode = getCode(components->name);
+                char *inhCode = omimGetInheritanceCode(components->name);
                 if (!isEmpty(inhCode))
                     dyStringPrintf(dy, ", %s", inhCode);
                 components = components->next;

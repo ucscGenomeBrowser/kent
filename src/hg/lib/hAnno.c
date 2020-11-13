@@ -242,7 +242,7 @@ else if (sameString("longTabix", tdb->type))
     char *fileOrUrl = getBigDataFileName(dataDb, tdb, selTable, chrom);
     streamer = annoStreamLongTabixNew(fileOrUrl,  assembly, maxOutRows);
     }
-else if (sameString("vcfTabix", tdb->type))
+else if (sameString("vcfTabix", tdb->type) || sameString("vcfPhasedTrio", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(dataDb, tdb, selTable, chrom);
     char *indexUrl = getBigDataIndexName(tdb);
