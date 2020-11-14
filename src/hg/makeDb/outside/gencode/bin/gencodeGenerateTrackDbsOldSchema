@@ -1,0 +1,703 @@
+#!/usr/bin/env python2.7
+"""
+Generate GENCODE trackDb .ra and .html files and git add them.
+Also generate blurb to section to edit into joinerCheck.
+This needs to be done after tracks are loaded
+
+Should be run in trackDb directory.
+
+In order to easily track priority numbers in one place, this file is edited to add a new genome releases,
+commenting out
+rather than
+"""
+from __future__ import print_function
+import os
+import re
+import subprocess
+import argparse
+
+##
+# Templates generators to generate ra, html, and joiner files.  Functions are passed a specification
+# of what is being generated. and returns either an empty string or the template
+#  - std is only in normal GENCODE
+#  - lift is only backmap GENCODE
+#  - both is normal and backmap.
+##
+
+def forStd(params, lines):
+    """return lines merge into text if this is a standard release"""
+    if not params.isLifted():
+        return "\n".join(lines) + "\n"
+    else:
+        return ""
+
+def forLift(params, lines):
+    """return lines merge into text if this is a back-mapped release"""
+    if params.isLifted():
+        return "\n".join(lines) + "\n"
+    else:
+        return ""
+
+def forBoth(params, lines):
+    """return lines merge into text for any type of release"""
+    return "\n".join(lines) + "\n"
+
+def forStdHuman(params, lines):
+    """return lines merge into text if this is a huma nstandard release"""
+    if params.isHuman() and not params.isLifted():
+        return "\n".join(lines) + "\n"
+    else:
+        return ""
+
+def trackDbTemplateGen(params):
+    """Generate template for trackDb ra"""
+    yield forBoth(params, (
+        "track wgEncodeGencodeV{gencodeVer}",
+        "compositeTrack on",
+        "superTrack wgEncodeGencodeSuper pack",))
+    yield forStd(params, (
+        "shortLabel All GENCODE V{gencodeVer}",
+        "longLabel All GENCODE annotations from V{gencodeVer} (Ensembl {ensemblVer})",))
+    yield forLift(params, (
+        "shortLabel GENCODE V{gencodeVer}",
+        "longLabel GENCODE lifted annotations from V{gencodeVer} (Ensembl {ensemblVer})",))
+    yield forBoth(params, (
+        "group genes",
+        "dragAndDrop subTracks",
+        "priority {superTrackPriority:.3f}",
+        "visibility pack",
+        "subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA",
+        "subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA",
+        "allButtonPair on",
+        "sortOrder name=+ view=+",
+        "fileSortOrder labVersion=Contents dccAccession=UCSC_Accession",
+        "type genePred",
+        "configurable off",
+        "wgEncodeGencodeVersion {gencodeVer}",
+        "wgEncodeGencodeAttrs wgEncodeGencodeAttrsV{gencodeVer}"))
+    yield forStd(params, (
+        "wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportV{gencodeVer}",))
+    yield forBoth(params, (
+        "wgEncodeGencodeGeneSource wgEncodeGencodeGeneSourceV{gencodeVer}",
+        "wgEncodeGencodeTranscriptSource wgEncodeGencodeTranscriptSourceV{gencodeVer}",
+        "wgEncodeGencodeHgnc wgEncodeGencodeHgncV{gencodeVer}",
+        "wgEncodeGencodePdb wgEncodeGencodePdbV{gencodeVer}",
+        "wgEncodeGencodePubMed wgEncodeGencodePubMedV{gencodeVer}",
+        "wgEncodeGencodeRefSeq wgEncodeGencodeRefSeqV{gencodeVer}",
+        "wgEncodeGencodeTag wgEncodeGencodeTagV{gencodeVer}",
+        "wgEncodeGencodeTranscriptSupport wgEncodeGencodeTranscriptSupportV{gencodeVer}",
+        "wgEncodeGencodeUniProt wgEncodeGencodeUniProtV{gencodeVer}",
+        "wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV{gencodeVer}",
+        "wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV{gencodeVer}",
+        "wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV{gencodeVer}",
+        "wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV{gencodeVer}",
+        "",
+        "    track wgEncodeGencodeV{gencodeVer}ViewGenes",
+        "    shortLabel Genes",
+        "    view aGenes",
+        "    configurable on",
+        "    visibility pack",
+        "    subTrack wgEncodeGencodeV{gencodeVer}",
+        "    type genePred",
+        "    idXref wgEncodeGencodeAttrsV{gencodeVer} transcriptId geneId",
+        "    itemClassTbl wgEncodeGencodeAttrsV{gencodeVer}",
+        "    itemClassNameColumn transcriptId",
+        "    itemClassClassColumn transcriptClass",
+        "    cdsDrawDefault genomic\ codons",
+        "    baseColorUseCds given",
+        "    baseColorDefault genomicCodons",
+        "    geneClasses coding nonCoding pseudo problem",
+        "    gClass_coding 12,12,120",
+        "    gClass_nonCoding 0,153,0",
+        "    gClass_pseudo 255,51,255",
+        "    gClass_problem 254,0,0",
+        "    highlightColor 255,255,0",
+        "    # filterBy notes:",
+        "    #  - attrs is an alias for the current wgEncodeGencodeAttrs in the sql",
+        "    #  - transcriptMethod is a pseudo-column name, which is handled explictly in the code",
+        "    #  - attrs.transcriptType are transcript biotypes.  This will get the current list of values:",
+        "    #    hgsql -Ne 'select distinct(transcriptType) from wgEncodeGencodeAttrsV{gencodeVer} order by transcriptType' {orgHgDb}",
+        "    #  - tag - is s pseudo-column name for join with the tag table.  This will get the current list of values:",
+        "    #    hgsql -Ne 'select distinct(tag) from wgEncodeGencodeTagV{gencodeVer} order by tag' {orgHgDb}",
+        "    #  - supportLevel is a pseudo-column name handled in the code",
+        "    filterBy attrs.transcriptClass:Transcript_Class=coding,nonCoding,pseudo,problem \\",
+        "             transcriptMethod:Transcript_Annotation_Method=manual,automatic,manual_only,automatic_only \\",
+        "             attrs.transcriptType:Transcript_Biotype={transBiotypes} \\",
+        "             tag:Tag={tags} \\",
+        "             supportLevel:Support_Level=tsl1,tsl2,tsl3,tsl4,tsl5,tslNA",
+        "    highlightBy transcriptMethod:Transcript_Annotation_Method=manual,automatic,manual_only,automatic_only \\",
+        "                attrs.transcriptType:Transcript_Biotype={transBiotypes} \\",
+        "                tag:Tag={tags} \\",
+        "                supportLevel:Support_Level=tsl1,tsl2,tsl3,tsl4,tsl5,tslNA",
+        "",
+        "        track wgEncodeGencodeBasicV{gencodeVer}",
+        "        trackHandler wgEncodeGencode",
+        "        subTrack wgEncodeGencodeV{gencodeVer}ViewGenes on",
+        "        shortLabel Basic",
+        "        subGroups view=aGenes name=Basic",
+        "        longLabel Basic Gene Annotation Set from GENCODE Version {gencodeVer} (Ensembl {ensemblVer})",
+        "        type genePred",
+        "        priority 1",
+        "",
+        "        track wgEncodeGencodeCompV{gencodeVer}",
+        "        trackHandler wgEncodeGencode",
+        "        subTrack wgEncodeGencodeV{gencodeVer}ViewGenes off",
+        "        subGroups view=aGenes name=Comprehensive",
+        "        shortLabel Comprehensive",
+        "        longLabel Comprehensive Gene Annotation Set from GENCODE Version {gencodeVer} (Ensembl {ensemblVer})",
+        "        type genePred",
+        "        priority 2",
+        "",
+        "        track wgEncodeGencodePseudoGeneV{gencodeVer}",
+        "        trackHandler wgEncodeGencode",
+        "        subTrack wgEncodeGencodeV{gencodeVer}ViewGenes on",
+        "        subGroups view=aGenes name=Pseudogenes",
+        "        shortLabel Pseudogenes",
+        "        longLabel Pseudogene Annotation Set from GENCODE Version {gencodeVer} (Ensembl {ensemblVer})",
+        "        type genePred",
+        "        color 255,51,255",
+        "        priority 3",
+        ""))
+    yield forStd(params, (
+        "    track wgEncodeGencodeV{gencodeVer}View2Way",
+        "    shortLabel 2-Way",
+        "    view b2-way",
+        "    visibility hide",
+        "    subTrack wgEncodeGencodeV{gencodeVer}",
+        "    type genePred",
+        "    configurable off",
+        "",
+        "        track wgEncodeGencode2wayConsPseudoV{gencodeVer}",
+        "        trackHandler wgEncodeGencode",
+        "        subTrack wgEncodeGencodeV{gencodeVer}View2Way off",
+        "        subGroups view=b2-way name=yTwo-way",
+        "        shortLabel 2-way Pseudogenes",
+        "        longLabel 2-way Pseudogene Annotation Set from GENCODE Version {gencodeVer} (Ensembl {ensemblVer})",
+        "        type genePred",
+        "        color 255,51,255",
+        "        priority 4",
+        "",
+        "    track wgEncodeGencodeV{gencodeVer}ViewPolya",
+        "    shortLabel PolyA",
+        "    view cPolya",
+        "    visibility hide",
+        "    subTrack wgEncodeGencodeV{gencodeVer}",
+        "    type genePred",
+        "    configurable off",
+        "",
+        "        track wgEncodeGencodePolyaV{gencodeVer}",
+        "        trackHandler wgEncodeGencode",
+        "        subTrack wgEncodeGencodeV{gencodeVer}ViewPolya off",
+        "        subGroups view=cPolya name=zPolyA",
+        "        shortLabel PolyA",
+        "        longLabel PolyA Transcript Annotation Set from GENCODE Version {gencodeVer} (Ensembl {ensemblVer})",
+        "        type genePred",
+        "        color 0,0,0",
+        "        priority 5",
+        ""))
+    yield forBoth(params, (
+        "# searches for basic",
+        "searchName wgEncodeGencodeBasicV{gencodeVer}",
+        "searchTable wgEncodeGencodeBasicV{gencodeVer}",
+        "searchMethod prefix",
+        "searchType genePred",
+        "termRegex {ensemblTransIdRegex}",
+        "searchPriority {basicSearchPriority:.5f}",
+        "",
+        "searchName wgEncodeGencodeBasicGeneSymV{gencodeVer}",
+        "searchTable wgEncodeGencodeBasicV{gencodeVer}",
+        "searchMethod exact",
+        "searchType genePred",
+        "searchPriority {basicGeneSymSearchPriority:.5f}",
+        "query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'",
+        "",
+        "searchName wgEncodeGencodeBasicGeneV{gencodeVer}",
+        "searchTable wgEncodeGencodeBasicV{gencodeVer}",
+        "searchMethod prefix",
+        "searchType genePred",
+        "termRegex {ensemblGeneIdRegex}",
+        "searchPriority {basicGeneSearchPriority:.5f}",
+        "xrefTable wgEncodeGencodeAttrsV{gencodeVer}",
+        "xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'",
+        "",
+        "searchName wgEncodeGencodeBasicHavanaTranscriptV{gencodeVer}",
+        "searchTable wgEncodeGencodeBasicV{gencodeVer}",
+        "searchMethod prefix",
+        "searchType genePred",
+        "termRegex {havanaTransIdRegex}",
+        "searchPriority {basicHavanaTranscriptSearchPriority:.5f}",
+        "xrefTable wgEncodeGencodeAttrsV{gencodeVer}",
+        "xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'",
+        "",
+        "searchName wgEncodeGencodeBasicHavanaGeneV{gencodeVer}",
+        "searchTable wgEncodeGencodeBasicV{gencodeVer}",
+        "searchMethod prefix",
+        "searchType genePred",
+        "termRegex {havanaGeneIdRegex}",
+        "searchPriority {basicHavanaGeneSearchPriority:.5f}",
+        "xrefTable wgEncodeGencodeAttrsV{gencodeVer}",
+        "xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'",
+        ""))
+    yield forStd(params, (
+        "searchName wgEncodeGencodeBasicProtV{gencodeVer}",
+        "searchTable wgEncodeGencodeBasicV{gencodeVer}",
+        "searchMethod prefix",
+        "searchType genePred",
+        "termRegex {ensemblProtIdRegex}",
+        "searchPriority {basicEnsemblProtSearchPriority:.5f}",
+        "xrefTable wgEncodeGencodeAttrsV{gencodeVer}",
+        "xrefQuery select transcriptId,proteinId from %s where proteinId like '%s%%'",
+        ""))
+    yield forBoth(params, (
+        "# searches for comp",
+        "searchName wgEncodeGencodeCompV{gencodeVer}",
+        "searchTable wgEncodeGencodeCompV{gencodeVer}",
+        "searchMethod prefix",
+        "searchType genePred",
+        "termRegex {ensemblTransIdRegex}",
+        "searchPriority {compSearchPriority:.5f}",
+        "",
+        "searchName wgEncodeGencodeCompGeneSymV{gencodeVer}",
+        "searchTable wgEncodeGencodeCompV{gencodeVer}",
+        "searchMethod exact",
+        "searchType genePred",
+        "searchPriority {compGeneSymSearchPriority:.5f}",
+        "query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'",
+        "",
+        "searchName wgEncodeGencodeCompGeneV{gencodeVer}",
+        "searchTable wgEncodeGencodeCompV{gencodeVer}",
+        "searchMethod prefix",
+        "searchType genePred",
+        "termRegex {ensemblGeneIdRegex}",
+        "searchPriority {compGeneSearchPriority:.5f}",
+        "xrefTable wgEncodeGencodeAttrsV{gencodeVer}",
+        "xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'",
+        "",
+        "searchName wgEncodeGencodeCompHavanaTranscriptV{gencodeVer}",
+        "searchTable wgEncodeGencodeCompV{gencodeVer}",
+        "searchMethod prefix",
+        "searchType genePred",
+        "termRegex {havanaTransIdRegex}",
+        "searchPriority {compHavanaTranscriptSearchPriority:.5f}",
+        "xrefTable wgEncodeGencodeAttrsV{gencodeVer}",
+        "xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'",
+        "",
+        "searchName wgEncodeGencodeCompHavanaGeneV{gencodeVer}",
+        "searchTable wgEncodeGencodeCompV{gencodeVer}",
+        "searchMethod prefix",
+        "searchType genePred",
+        "termRegex {havanaGeneIdRegex}",
+        "searchPriority {compHavanaGeneSearchPriority:.5f}",
+        "xrefTable wgEncodeGencodeAttrsV{gencodeVer}",
+        "xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'",
+        ""))
+    yield forStd(params, (
+        "searchName wgEncodeGencodeCompProtV{gencodeVer}",
+        "searchTable wgEncodeGencodeCompV{gencodeVer}",
+        "searchMethod prefix",
+        "searchType genePred",
+        "termRegex {ensemblProtIdRegex}",
+        "searchPriority {compEnsemblProtSearchPriority:.5f}",
+        "xrefTable wgEncodeGencodeAttrsV{gencodeVer}",
+        "xrefQuery select transcriptId,proteinId from %s where proteinId like '%s%%'",
+        ""))
+    yield forBoth(params, (
+        "# searches for pseudogene",
+        "searchName wgEncodeGencodePseudoGeneV{gencodeVer}",
+        "searchTable wgEncodeGencodePseudoGeneV{gencodeVer}",
+        "searchMethod prefix",
+        "searchType genePred",
+        "termRegex {ensemblTransIdRegex}",
+        "searchPriority {pseudoGeneSearchPriority:.5f}",
+        "",
+        "searchName wgEncodeGencodePseudoGeneGeneSymV{gencodeVer}",
+        "searchTable wgEncodeGencodePseudoGeneV{gencodeVer}",
+        "searchMethod exact",
+        "searchType genePred",
+        "searchPriority {pseudoGeneGeneSymSearchPriority:.5f}",
+        "query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'",
+        "",
+        "searchName wgEncodeGencodePseudoGeneGeneV{gencodeVer}",
+        "searchTable wgEncodeGencodePseudoGeneV{gencodeVer}",
+        "searchMethod prefix",
+        "searchType genePred",
+        "termRegex {ensemblGeneIdRegex}",
+        "searchPriority {pseudoGeneGeneSearchPriority:.5f}",
+        "xrefTable wgEncodeGencodeAttrsV{gencodeVer}",
+        "xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'",
+        "",
+        "searchName wgEncodeGencodePseudoGeneHavanaTranscriptV{gencodeVer}",
+        "searchTable wgEncodeGencodePseudoGeneV{gencodeVer}",
+        "searchMethod prefix",
+        "searchType genePred",
+        "termRegex {havanaTransIdRegex}",
+        "searchPriority {pseudoGeneHavanaTranscriptSearchPriority:.5f}",
+        "xrefTable wgEncodeGencodeAttrsV{gencodeVer}",
+        "xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'",
+        "",
+        "searchName wgEncodeGencodePseudoGeneHavanaGeneV{gencodeVer}",
+        "searchTable wgEncodeGencodePseudoGeneV{gencodeVer}",
+        "searchMethod prefix",
+        "searchType genePred",
+        "termRegex {havanaGeneIdRegex}",
+        "searchPriority {pseudoGeneHavanaGeneSearchPriority:.5f}",
+        "xrefTable wgEncodeGencodeAttrsV{gencodeVer}",
+        "xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'",
+        ""))
+    yield forStd(params, (
+        "# searches for 2-way consensus",
+        "searchName wgEncodeGencode2wayConsPseudoV{gencodeVer}",
+        "searchTable wgEncodeGencode2wayConsPseudoV{gencodeVer}",
+        "searchMethod exact",
+        "searchType genePred",
+        "termRegex {twoWayPseudoIdRegex}",
+        "searchPriority {twoWayConsPseudoSearchPriority:.5f}"))
+
+def trackHtmlTemplateGen(params):
+    """Generate template for track HTML"""
+    yield forBoth(params, (
+        "<h2>Description</h2>",
+        "<p>",
+        "The GENCODE Genes track (version {gencodeVer}, {gencodeDate}) shows high-quality manual",
+        "annotations merged with evidence-based automated annotations across the entire",
+        "{orgName} genome generated by the",
+        '<a href="{gencodeGenesUrl}/" target="_blank">GENCODE project</a>.',
+        "The GENCODE gene set presents a full merge",
+        "between HAVANA manual annotation process and Ensembl automatic annotation pipeline.",
+        "Priority is given to the manually curated HAVANA annotation using predicted",
+        "Ensembl annotations when there are no corresponding manual annotations."))
+    yield forStd(params, (
+        "The {gencodeVer} annotation was carried out on genome assembly {orgGrcRel} ({orgHgDb}).",
+        "</p>"))
+    yield forLift(params, (
+        "The GENCODE V{gencodeSrcVer} annotations on the GRCh38 (hg38) primary assembly",
+        "were mapped to GRCh37 (hg19) using the process",
+        '<a href="ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/_README_GRCh37_mapping.txt" target="_blank">documented here</a>.',
+        "</p>"))
+    yield forBoth(params, (
+        "<p>",
+        "The Ensembl human and mouse data sets are the same gene annotations as GENCODE for the",
+        "corresponding release.",
+        "</p>",
+        "",
+        '<!--#insert file="{displayHtml}"-->',
+        "",
+        "<h2>Downloads</h2>",
+        "<p>GENCODE GFF3 and GTF files are available from the",
+        '<a href="{gencodeReleaseUrl}" target="_blank">GENCODE release {gencodeVer}</a> site.</p>',
+        ""))
+    yield forStdHuman(params, (
+        "<h2>Verification</h2>",
+        "",
+        "<P>",
+        "Selected transcript models are verified experimentally by RT-PCR amplification followed by sequencing.",
+        "Those experiments can be found at GEO:</P>",
+        "<ul>",
+        '  <li> <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30619" target="_blank"><b>GSE30619:[E-MTAB-612]</b></a> - Batch I is based on annotation from July 2008 (without pseudogenes).</li>',
+        '  <li> <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE25711" target="_blank"><b>GSE25711:[E-MTAB-407]</b></a> - Batch II is based on annotation from April 2009. </li>',
+        '  <li> <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30612" target="_blank"><b>GSE30612:[E-MTAB-533]</b></a> - Batch III is verifying RGASP models for c.elegans and human.</li>',
+        '  <li> <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE34797" target="_blank"><b>GSE34797:[E-MTAB-684]</b></a> - Batch IV is based on chromosome 3, 4 and 5 annotations from GENCODE 4 (January 2010).</li>',
+        '  <li> <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE34820" target="_blank"><b>GSE34820:[E-MTAB-737]</b></a> - Batch V is based on annotations from GENCODE 6 (November 2010).</li>',
+        '  <li> <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE34821" target="_blank"><b>GSE34821:[E-MTAB-831]</b></a> - Batch VI is based on annotations from GENCODE 6 (November 2010) as well as transcript models predicted by the Ensembl Genebuild group based on the Illumina Human BodyMap 2.0 data. </li>',
+        "</ul>",
+        "<P> See Harrow <em>et al.</em> (2006) for information on verification",
+        "techniques.",
+        "</P>",
+        ""))
+    yield forBoth(params, (
+        "<h2>Release Notes</h2>",
+        "<p>",
+        '<span style="font-weight: bold;">GENCODE version {gencodeVer} corresponds to Ensembl {ensemblVer}.</p>',
+        '<p>See also: <a href="{gencodeGenesUrl}/" target="_blank">The GENCODE Project</a>',
+        "</p>",
+        "",
+        '<!--#insert file="../../wgEncodeGencodeCredits1.shared.html"-->',))
+
+def joinerCheckTemplateGen(params):
+    """Generate template for all.joiner"""
+    yield forBoth(params, (
+        "# begin Gencode V{gencodeVer}",
+        "",
+        "# gencode genePred tables with no associations",
+        "# wgEncodeGencodePolyaV{gencodeVer}",
+        "# wgEncodeGencode2wayConsPseudoV{gencodeVer}",
+        "",
+        "# gencode genePred tables with joining through wgEncodeGencodeAttrsV{gencodeVer}",
+        "identifier wgEncodeGencodeBasicAttrsV{gencodeVer}",
+        '"Link together Gencode Basic Table with Attributes table"',
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId",
+        "    {orgHgDb}.wgEncodeGencodeBasicV{gencodeVer}.name",
+        "",
+        "identifier wgEncodeGencodeCompAttrsV{gencodeVer}",
+        '"Link together Gencode Comprehensive Table with Attributes table"',
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId",
+        "    {orgHgDb}.wgEncodeGencodeCompV{gencodeVer}.name",
+        "",
+        "identifier wgEncodeGencodePseudoGeneAttrsV{gencodeVer}",
+        '"Link together Gencode PseudoGene Table with Attributes table"',
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId",
+        "    {orgHgDb}.wgEncodeGencodePseudoGeneV{gencodeVer}.name",
+        "",
+        "# gencode association tables (joined through wgEncodeGencodeAttrsV{gencodeVer})",
+        "identifier wgEncodeGencodeGeneSourceV{gencodeVer}",
+        '"Link together Gencode Gene Source table with Attributes table"',
+        "    {orgHgDb}.wgEncodeGencodeGeneSourceV{gencodeVer}.geneId",
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.geneId",
+        "",
+        "identifier wgEncodeGencodeGeneSymbolV{gencodeVer}",
+        '"Link together Gencode gene symbol table with Attributes table"',
+        "    {orgHgDb}.wgEncodeGencodeGeneSymbolV{gencodeVer}.transcriptId dupeOk",
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.20",
+        "",
+        "identifier wgEncodeGencodePdbV{gencodeVer}",
+        '"Link together Gencode Pdb table with Attributes table"',
+        "    {orgHgDb}.wgEncodeGencodePdbV{gencodeVer}.transcriptId dupeOk",
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.015",
+        "",
+        "identifier wgEncodeGencodePubMedV{gencodeVer}",
+        '"Link together Gencode Pubmed table with Attributes table"',
+        "    {orgHgDb}.wgEncodeGencodePubMedV{gencodeVer}.transcriptId dupeOk",
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId  minCheck=0.63",
+        "",
+        "identifier wgEncodeGencodeRefSeqV{gencodeVer}",
+        '"Link together Gencode RefSeq table with Attributes table"',
+        "    {orgHgDb}.wgEncodeGencodeRefSeqV{gencodeVer}.transcriptId dupeOk",
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.05",
+        "",
+        "identifier wgEncodeGencodeRefSeqToRefGeneV{gencodeVer}",
+        '"Link together Gencode RefSeq table with refGene track"',
+        "    {orgHgDb}.wgEncodeGencodeRefSeqV{gencodeVer}.rnaAcc dupeOk chopAfter=.",
+        "    {orgHgDb}.refGene.name minCheck=0.77",
+        "",
+        "identifier wgEncodeGencodeTagV{gencodeVer}",
+        '"Link together Gencode Tag table with Attributes table"',
+        "    {orgHgDb}.wgEncodeGencodeTagV{gencodeVer}.transcriptId dupeOk",
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.36",
+        "    {orgHgDb}.wgEncodeGencodeRefSeqV{gencodeVer}.transcriptId minCheck=0.9",
+        "",
+        "identifier wgEncodeGencodeTranscriptSourceV{gencodeVer}",
+        '"Link together Gencode Transcript Source table with Attributes table"',
+        "    {orgHgDb}.wgEncodeGencodeTranscriptSourceV{gencodeVer}.transcriptId",
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId",
+        "",
+        "identifier wgEncodeGencodeTranscriptSupportV{gencodeVer}",
+        '"Link together Gencode Transcript Support table with Attributes table"',
+        "    {orgHgDb}.wgEncodeGencodeTranscriptSupportV{gencodeVer}.transcriptId dupeOk",
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.20",
+        "",
+        "identifier wgEncodeGencodeTranscriptionSupportLevelV{gencodeVer}",
+        '"Link together Gencode Transcription Support Level table with Attributes table"',
+        "    {orgHgDb}.wgEncodeGencodeTranscriptionSupportLevelV{gencodeVer}.transcriptId dupeOk",
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.30",
+        "",
+        "identifier wgEncodeGencodeUniProtV{gencodeVer}",
+        '"Link together Gencode UniProt Support table with Attributes table"',
+        "    {orgHgDb}.wgEncodeGencodeUniProtV{gencodeVer}.transcriptId dupeOk",
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.35",
+        "",
+        "identifier wgEncodeGencodeAnnotationRemarkV{gencodeVer}",
+        '"Link together Gencode Annotation Remark table with Attributes table"',
+        "    {orgHgDb}.wgEncodeGencodeAnnotationRemarkV{gencodeVer}.transcriptId dupeOk",
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.10",
+        "",
+        "identifier wgEncodeGencodeEntrezGeneV{gencodeVer}",
+        '"Link together Gencode UniProt Support table with Attributes table"',
+        "    {orgHgDb}.wgEncodeGencodeEntrezGeneV{gencodeVer}.transcriptId dupeOk",
+        "    {orgHgDb}.wgEncodeGencodeEntrezGeneV{gencodeVer}.transcriptId minCheck=0.35",
+    ""))
+    yield forStd(params, (
+        "identifier wgEncodeGencodeExonSupportV{gencodeVer}",
+        '"Link together Gencode Exon Support table with Attributes table"',
+        "    {orgHgDb}.wgEncodeGencodeExonSupportV{gencodeVer}.transcriptId dupeOk",
+        "    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.90",
+        ""))
+    yield forBoth(params, (
+        "# end Gencode V{gencodeVer}",
+        ""))
+
+def hgSql(orgHgDb, sql):
+    return subprocess.check_output(["hgsql", orgHgDb, "-Ne", sql]).split('\n')[0:-1]
+
+def gitAdd(fname):
+    subprocess.check_call(["git", "add", fname])
+
+def getTransBioTypes(orgHgDb, gencodeVer):
+    "obtain sorted list of transcript biotypes"
+    return hgSql(orgHgDb, "SELECT DISTINCT(transcriptType) FROM wgEncodeGencodeAttrsV{} ORDER BY transcriptType".format(gencodeVer))
+
+def getTags(orgHgDb, gencodeVer):
+    "obtain sorted list of tags"
+    return hgSql(orgHgDb, "SELECT DISTINCT(tag) FROM wgEncodeGencodeTagV{} ORDER BY tag".format(gencodeVer))
+
+class GencodeParams(object):
+    """parameters to format info output files, base on GENCODE release.  Base
+    priorities are the start point for generating actually priorities using
+    the version number.
+    """
+    def __init__(self, orgName, orgHgDb, gencodeVer, ensemblVer, gencodeDate,
+                 superTrackBasePriority, searchBasePriority,
+                 ensemblTransIdRegex, havanaTransIdRegex,
+                 ensemblGeneIdRegex, havanaGeneIdRegex,
+                 ensemblProtIdRegex, twoWayPseudoIdRegex):
+        self.gencodeGenesUrl = "https://www.gencodegenes.org"
+        self.orgName = orgName
+        self.orgHgDb = orgHgDb
+        if (orgHgDb == "hg38") or (orgHgDb == "grcHhh38"):
+            self.orgGrcRel = "GRCh38"
+        elif orgHgDb == "hg19":
+            self.orgGrcRel = "GRCh37"
+        elif orgHgDb == "mm10":
+            self.orgGrcRel = "GRCm38"
+        else:
+            raise Exception("not a GENCODE hgdb: {}".format(orgHgDb))
+        self.gencodeVer = gencodeVer
+        self.gencodeSrcVer = gencodeVer.split("lift")[0]
+        self.ensemblVer = ensemblVer
+        self.gencodeDate = gencodeDate
+        m = re.match("M?([0-9]+)(lift37)?$", gencodeVer)
+        self.numVersion = int(m.group(1))  # for constructing priorities
+        self.gencodeReleaseUrl =  "{}/{}/release_{}.html".format(self.gencodeGenesUrl, self.orgName, gencodeVer)
+        self.ensemblTransIdRegex = ensemblTransIdRegex
+        self.havanaTransIdRegex = havanaTransIdRegex
+        self.ensemblGeneIdRegex = ensemblGeneIdRegex
+        self.havanaGeneIdRegex = havanaGeneIdRegex
+        self.ensemblProtIdRegex = ensemblProtIdRegex
+        self.twoWayPseudoIdRegex = twoWayPseudoIdRegex
+
+        self.transBiotypes = ",".join(getTransBioTypes(orgHgDb, gencodeVer))
+        self.tags = ",".join(getTags(orgHgDb, gencodeVer))
+
+        # Compute priorities based on version.  This generated
+        # priorities lower than ones that were hard-code before this
+        # program was written. Adjusting track priority and search priorities by
+        # -0.001*numVersion
+
+        self.superTrackPriority = superTrackBasePriority - (0.001 * self.numVersion)
+
+        self.searchPriority =  searchBasePriority - (0.001 * self.numVersion)
+        self.nextPriorityOff = 0.00000  # incremented when each priority is allocated
+
+        self.basicSearchPriority = self.nextPriority()
+        self.basicGeneSymSearchPriority = self.nextPriority()
+        self.basicGeneSearchPriority = self.nextPriority()
+        self.basicHavanaTranscriptSearchPriority = self.nextPriority()
+        self.basicHavanaGeneSearchPriority = self.nextPriority()
+        self.basicHavanaGeneSearchPriority = self.nextPriority()
+        self.basicEnsemblProtSearchPriority = self.nextPriority()
+
+        self.compSearchPriority = self.nextPriority()
+        self.compGeneSymSearchPriority = self.nextPriority()
+        self.compGeneSearchPriority = self.nextPriority()
+        self.compHavanaTranscriptSearchPriority = self.nextPriority()
+        self.compHavanaGeneSearchPriority = self.nextPriority()
+        self.compEnsemblProtSearchPriority = self.nextPriority()
+
+        self.pseudoGeneSearchPriority = self.nextPriority()
+        self.pseudoGeneGeneSymSearchPriority = self.nextPriority()
+        self.pseudoGeneGeneSearchPriority = self.nextPriority()
+        self.pseudoGeneHavanaTranscriptSearchPriority = self.nextPriority()
+        self.pseudoGeneHavanaGeneSearchPriority = self.nextPriority()
+
+        self.twoWayConsPseudoSearchPriority = self.nextPriority()
+
+        if self.isLifted():
+            self.displayHtml = "../../wgEncodeGencodeDisplayLift1.shared.html"
+        else:
+            self.displayHtml = "../../wgEncodeGencodeDisplay1.shared.html"
+
+    def nextPriority(self):
+        """allocated the next search priority"""
+        p = self.searchPriority + self.nextPriorityOff
+        self.nextPriorityOff += 0.00001
+        return p
+
+    def getTrackDbFileName(self, ext):
+        return os.path.join(self.orgName, self.orgHgDb, "wgEncodeGencodeV{}.{}".format(self.gencodeVer, ext))
+
+    def isHuman(self):
+        return self.orgName == "human"
+
+    def isLifted(self):
+        return self.gencodeVer.find("lift") >= 0
+
+def getHumanGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
+    "create GENCODE parameters for human GENCODE"
+    return GencodeParams("human", orgHgDb, gencodeVer, ensemblVer, gencodeDate,
+                          34.205, 2.29701,
+                          "ENST[0-9.]+", "OTTHUMT[0-9.]+",
+                          "ENSG[0-9.]+", "OTTHUMG[0-9.]+",
+                          "ENSP[0-9.]+", "PGOHUM[0-9.]+")
+
+def getHumanBackmapGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
+    "create GENCODE parameters for human backmapped GENCODE"
+    return GencodeParams("human", orgHgDb, gencodeVer, ensemblVer, gencodeDate,
+                          34.205, 2.29701,
+                          "ENST[0-9._]+", "OTTHUMT[0-9._]+",
+                          "ENSG[0-9._]+", "OTTHUMG[0-9._]+",
+                          None, None)
+
+def getMouseGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
+    "create GENCODE parameters for mouse GENCODE"
+    return GencodeParams("mouse", orgHgDb, gencodeVer, ensemblVer, gencodeDate,
+                         2.984, 2.27401,
+                         "ENSMUST[0-9.]+", "OTTMUST[0-9.]+",
+                         "ENSMUSG[0-9.]+", "OTTMUSG[0-9.]+",
+                         "ENSMUSP[0-9.]+", "PGOMOU[0-9.]+")
+
+def getGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
+    "create GencodeParams object for a single"
+    if (orgHgDb == "hg38") or (orgHgDb == "grcHhh38"):
+        return getHumanGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate)
+    elif orgHgDb == "hg19":
+        return getHumanBackmapGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate)
+    elif orgHgDb == "mm10":
+        return getMouseGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate)
+    else:
+        raise Exception("unknown GENCODE hg db: {}".format(orgHgDb))
+
+def writePart(fh, templ, params):
+    "output one section, formatting params"
+    fh.write(templ.format(**vars(params)))
+
+def generateRaFile(params):
+    raFile = params.getTrackDbFileName("ra")
+    print("generating {}".format(raFile))
+    with open(raFile, "w") as fh:
+        for part in trackDbTemplateGen(params):
+            writePart(fh, part, params)
+    gitAdd(raFile)
+
+def generateHtmlFile(params):
+    htmlFile = params.getTrackDbFileName("html")
+    print("generating {}".format(htmlFile))
+    with open(htmlFile, "w") as fh:
+        for part in trackHtmlTemplateGen(params):
+            writePart(fh, part, params)
+    gitAdd(htmlFile)
+
+def generateJoinerFile(params):
+    joinerFile = os.path.expanduser("~/tmp/gencodeV{}.joiner".format(params.gencodeVer))
+    print("generating {}".format(joinerFile))
+    with open(joinerFile, "w") as joinerFh:
+        for part in joinerCheckTemplateGen(params):
+            writePart(joinerFh, part, params)
+
+def gencodeGenerateTrackDbs(opts):
+    params = getGencodeParams(opts.hgDb, opts.gencodeVer, opts.ensemblVer, opts.gencodeDate)
+    generateRaFile(params)
+    generateHtmlFile(params)
+    generateJoinerFile(params)
+
+def parseArgs():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("hgDb", help="UCSC database")
+    parser.add_argument("gencodeVer", help="GENCODE version number ")
+    parser.add_argument("ensemblVer", help="Ensembl version number ")
+    parser.add_argument("gencodeDate", help="Month and year of GENCODE release, in the form `August 2014'")
+    opts = parser.parse_args()
+    verRe = "M?([0-9]+)(lift37)?$"
+    if re.match(verRe, opts.gencodeVer) is None:
+        raise Exception("GENCODE version should match {}, got `{}'".format(verRe, opts.gencodeVer))
+    return opts
+
+gencodeGenerateTrackDbs(parseArgs())

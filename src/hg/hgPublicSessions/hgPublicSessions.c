@@ -138,10 +138,14 @@ hDisconnectCentral(&conn);
 return galList;
 }
 
-void galleryDisplay(struct galleryEntry *galList, char *searchString)
+void galleryDisplay(struct galleryEntry *galList)
 /* Print a table containing the gallery data from galList */
 {
 struct galleryEntry *thisSession = galList;
+boolean searchStrExists = cgiVarExists("search");
+char *searchStr = NULL;
+if (searchStrExists)
+    searchStr = cgiOptionalString("search");
 
 /* Hide the orderable columns and disable ordering on the visible columns
  * https://datatables.net/reference/option/columnDefs for more info.
@@ -155,9 +159,15 @@ jsInlineF(
     "                                       \"stateSave\":true,\n"
     "                                       \"stateSaveCallback\": %s,\n"
     "                                       \"stateLoadCallback\": %s,\n"
-    "                                });\n"
-    /* Recover previous sorting/searching choice from the cart settings, if available */
-    "    $('#sessionTable').DataTable().search(\"%s\").draw();\n"
+    "                                });\n",
+    jsDataTableStateSave(hgPublicSessionsPrefix), jsDataTableStateLoad(hgPublicSessionsPrefix, cart));
+
+// the user may have cleared the previous search via cgi option, or tried a new search:
+if (searchStrExists)
+    jsInlineF("     $('#sessionTable').DataTable().search(\"%s\").draw();\n", searchStr);
+
+/* Recover previous sorting choice from the cart settings, if available */
+jsInlineF(
     "    var startOrder = $('#sessionTable').DataTable().order();\n"
     "    if (startOrder[0][0] == 3) {\n"
     "        if (startOrder[0][1] == \"asc\") {\n"
@@ -177,8 +187,7 @@ jsInlineF(
     "            $('#sortMethod').val(\"dateDesc\");\n"
     "        }\n"
     "    }\n"
-    "});\n",
-    jsDataTableStateSave(hgPublicSessionsPrefix), jsDataTableStateLoad(hgPublicSessionsPrefix, cart), searchString != NULL ? searchString : "");
+    "});\n");
 
 jsInline(
    "function changeSort() {\n"
@@ -259,11 +268,11 @@ printf ("</tbody>\n");
 printf ("</table>\n");
 }
 
-void showGalleryTab (char *searchString)
+void showGalleryTab ()
 /* Rather boring now, but a placeholder against the day that there's also a "favorites" tab */
 {
 struct galleryEntry *galList = galleryFetch();
-galleryDisplay(galList, searchString);
+galleryDisplay(galList);
 }
 
 void doMiddle(struct cart *theCart)
@@ -271,7 +280,6 @@ void doMiddle(struct cart *theCart)
 {
 cart = theCart;
 char *db = cartUsualString(cart, "db", hDefaultDb());
-char *searchString = cgiOptionalString("search");
 cartWebStart(cart, db, "Public Sessions");
 
 /* Not in a form; can't use cartSaveSession() to set up an hgsid input */
@@ -290,7 +298,7 @@ printf("<p>Sessions allow users to save snapshots of the Genome Browser "
 "<a href=\"../goldenPath/help/hgSessionHelp.html\">Sessions User's Guide</a> "
 "for more information.\n</p>", cartSidUrlString(cart));
 
-showGalleryTab(searchString);
+showGalleryTab();
 
 cartWebEnd();
 }

@@ -4504,24 +4504,20 @@ var mouseOver = {
       var tdDataId  = document.getElementById(tdData);
       var imgData = "img_data_" + trackName;
       var imgElement  = document.getElementById(imgData);
-      if (mouseOver.tracks[trackName]) {
-        if (tdDataId) {
-          $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
-          $( tdDataId ).mouseout(mouseOver.popUpDisappear);
-          if (imgElement) {
-            mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
-          }
-        }
-      } else {
-        var trackType = hgTracks.trackDb[trackName].type;
-        var validType = false;
-        if (trackType.indexOf("wig") === 0) { validType = true; }
-        if (trackType.indexOf("bigWig") === 0) { validType = true; }
-        if (validType) {
-          if (tdDataId) {
+      if (imgElement && tdDataId) {
+        if (mouseOver.tracks[trackName]) {
             $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
             $( tdDataId ).mouseout(mouseOver.popUpDisappear);
-            if (imgElement) {
+            mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
+        } else {
+	  if (hgTracks.trackDb[trackName]) {
+            var trackType = hgTracks.trackDb[trackName].type;
+            var validType = false;
+            if (trackType.indexOf("wig") === 0) { validType = true; }
+            if (trackType.indexOf("bigWig") === 0) { validType = true; }
+            if (validType) {
+              $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
+              $( tdDataId ).mouseout(mouseOver.popUpDisappear);
               mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
             }
           }

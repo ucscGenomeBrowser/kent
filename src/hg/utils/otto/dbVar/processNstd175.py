@@ -11,7 +11,7 @@ bed9Fields = ["chrom", "chromStart", "chromEnd", "name", "score", "strand", "thi
     "thickEnd", "itemRgb"]
 
 # the following list of fields may not exist for every record in the input file
-extraFieldList = ["Size", "Variant Type", "Variant Region", "Link to dbVar", "Sample Name", "Sampleset Name", "Phenotype", "Variant Seq", "Reference Seq"]
+extraFieldList = ["Size", "Variant Type", "Variant Region", "Link to dbVar", "Sample Name", "Sampleset Name", "Phenotype"]
 
 bedLines = {}
 chromLift = {}
@@ -77,7 +77,7 @@ def processExtraFields(extraFields):
     ret = {}
     for key in extraFields:
         val = extraFields[key]
-        if key == "ID" or key == "Name":
+        if key == "ID" or key == "Name" or key == "Variant Seq" or key == "Reference Seq":
             continue
         elif key == "Dbxref":
             splitxrefs = val.split(',')

@@ -1,9 +1,9 @@
 track mane
-bigDataUrl /gbdb/hg38/mane/mane.0.9.bb
-shortLabel MANE select v0.9
-longLabel NCBI RefSeq and Ensembl transcripts from the MANE Project (v0.9)
+bigDataUrl /gbdb/hg38/mane/mane.0.92.bb
+shortLabel MANE select v0.92
+longLabel NCBI RefSeq and Ensembl transcripts from the MANE Project (v0.92)
 searchIndex name
-searchTrix /gbdb/hg38/mane/mane.0.9.ix
+searchTrix /gbdb/hg38/mane/mane.0.92.ix
 type bigGenePred
 visibility hide
 group genes
@@ -13,5 +13,6 @@ maxItems 5000
 
 searchTable mane
 searchType bigBed
-searchDescription NCBI RefSeq and Ensembl transcripts from the MANE Project (v0.9)
+searchDescription NCBI RefSeq and Ensembl transcripts from the MANE Project (v0.92)
 searchPriority 1.3
+

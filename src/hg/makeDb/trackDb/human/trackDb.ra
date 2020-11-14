@@ -30,7 +30,7 @@ include trackDb.dbVar.ra
 include trackDb.clinGen.ra
 
 # Genome In a Bottle
-include trackDb.giab.ra alpha
+include trackDb.giab.ra alpha,beta
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
@@ -5475,6 +5475,7 @@ group covid
 color 179,0,0
 visibility hide
 bigDataUrl /gbdb/$D/covidMuts/covidMuts.bb
+pennantIcon New red ../goldenPath/newsarch.html "Released Nov. 12, 2020"
  
 
 
