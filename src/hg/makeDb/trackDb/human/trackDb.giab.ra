@@ -35,7 +35,7 @@ html giab
     view trios
     type vcfPhasedTrio
     parent giab
-    visibility dense
+    visibility hide
 
         track ashkenazimTrio
         parent triosView
