@@ -30,7 +30,7 @@ include trackDb.dbVar.ra
 include trackDb.clinGen.ra
 
 # Genome In a Bottle
-include trackDb.giab.ra alpha,beta
+include trackDb.giab.ra
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
