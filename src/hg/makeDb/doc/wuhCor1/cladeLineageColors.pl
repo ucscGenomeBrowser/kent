@@ -76,13 +76,18 @@ while (<>) {
       die "no linpath[0] for '$lineage'\n";
     } elsif ($linPath[0] eq "C") {
       $linDepth += 4;
+    } elsif ($linPath[0] eq "D") {
+      $linDepth += 5;
     }
     if ($lineage eq "B.1.1" ||
         substr($lineage, 0, 6) eq "B.1.1." ||
-        substr($lineage, 0, 1) eq "C") {
+        substr($lineage, 0, 1) eq "C" ||
+        substr($lineage, 0, 1) eq "D") {
       # Shades of purple -- minimum depth is 3, use even/odd to alternate colors
       my $endNum = ($lineage =~ m/\.(\d+)$/) ? ($1 + 0) : 0;
-      if ($linDepth > 4) {
+      if ($linDepth > 5) {
+        $color = ($endNum & 1) ? "#602080" : "#8020a0";
+      } elsif ($linDepth > 4) {
         $color = ($endNum & 1) ? "#662288" : "#8822aa";
       } elsif ($linDepth > 3) {
         $color = ($endNum & 1) ? "#aa44cc" : "#cc44ee";
