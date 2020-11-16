@@ -3795,7 +3795,7 @@ var imageV2 = {
                         vis.update(id, vis.enumOrder[newJsonRec.visibility]);
                 }
                 // hg.conf will turn this on 2020-10 - Hiram
-                if (window.mouseOverEnabled) { mouseOver.updateMouseOver(id); }
+                if (window.mouseOverEnabled) { mouseOver.updateMouseOver(id, newJsonRec); }
                 return true;
             }
         }
@@ -4498,8 +4498,20 @@ var mouseOver = {
 
     // called from: updateImgForId when it has updated a track in place
     // need to refresh the event handlers and json data
-    updateMouseOver: function (trackName)
+    updateMouseOver: function (trackName, trackDb)
     {
+      var trackType = null;
+      var hasChildren = null;
+      if (trackDb) {
+	trackType = trackDb.type;
+	hasChildren = trackDb.hasChildren;
+      } else {
+	if (hgTracks.trackDb) {
+	   if (hgTracks.trackDb[trackName]) {
+	      trackType = hgTracks.trackDb[trackName].type;
+	   }
+	}
+      }
       var tdData = "td_data_" + trackName;
       var tdDataId  = document.getElementById(tdData);
       var imgData = "img_data_" + trackName;
@@ -4510,11 +4522,12 @@ var mouseOver = {
             $( tdDataId ).mouseout(mouseOver.popUpDisappear);
             mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
         } else {
-	  if (hgTracks.trackDb[trackName]) {
-            var trackType = hgTracks.trackDb[trackName].type;
+	  if (trackType) {
             var validType = false;
             if (trackType.indexOf("wig") === 0) { validType = true; }
             if (trackType.indexOf("bigWig") === 0) { validType = true; }
+            if (trackType.indexOf("wigMaf") === 0) { validType = false; }
+            if (hasChildren) { validType = false; }
             if (validType) {
               $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
               $( tdDataId ).mouseout(mouseOver.popUpDisappear);

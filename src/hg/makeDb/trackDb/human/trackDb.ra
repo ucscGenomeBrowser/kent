@@ -174,7 +174,7 @@ type bed 3
         longLabel Genomenon Mastermind Variants extracted from full text publications
         visibility dense
         type bigBed 9 +
-        urls url=https://mastermind.genomenon.com/detail?disease=all%20diseases&$$
+        urls url=$$
         bigDataUrl /gbdb/$D/bbi/mastermind.bb
         noScoreFilter on
         exonNumbers off
