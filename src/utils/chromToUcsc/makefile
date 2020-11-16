@@ -2,7 +2,7 @@ kentSrc = ../..
 include ../../inc/common.mk
 
 compile:
-	cp -p chromToUcsc ${DESTBINDIR}/chromToUcsc
+	cp chromToUcsc ${DESTBINDIR}/chromToUcsc
 
 clean:
 	cd tests && ${MAKE} clean
