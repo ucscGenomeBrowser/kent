@@ -461,6 +461,14 @@ struct positionMatch
  long virtEnd;
  };
 
+struct wigMouseOver
+    {
+    struct wigMouseOver *next;
+    int x1;	/* beginning of a rectangle for this value */
+    int x2;	/* end of the rectangle */
+    double value;	/* data value for this region */
+    int valueCount;	/* number of data values in this rectangle */
+    };
 
 extern struct virtRegion *virtRegionList;
 extern struct virtChromRegionPos *virtChrom; // Array

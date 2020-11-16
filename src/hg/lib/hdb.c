@@ -5889,6 +5889,9 @@ char *hdbDefaultKnownDb(char *db)
 static char *checkedDb = NULL;
 static char *knownDb = NULL;
 
+if (trackHubDatabase(db))
+    return db;
+
 if (cfgOptionBooleanDefault("ignoreDefaultKnown", FALSE))
     return db;
 
