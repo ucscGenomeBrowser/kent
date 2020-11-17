@@ -94,7 +94,7 @@ visibility hide
 type bigBed 12 +
 noScoreFilter .
 urlLabel Link to LRG report: 
-url ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml
+url http://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml
 urls hgncId="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:$$" ncbiAcc="https://www.ncbi.nlm.nih.gov/nuccore/$$"
 baseColorDefault diffBases
 baseColorUseSequence lrg
@@ -3193,7 +3193,7 @@ showCdsAllScales .
 showCdsMaxZoom 10000.0
 color 54,125,29
 urlLabel Link to LRG transcript:
-url ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
+url http://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
 
 track lrgTranscriptAli
 shortLabel LRG Transcripts
@@ -3215,7 +3215,7 @@ showCdsAllScales .
 showCdsMaxZoom 10000.0
 color 54,125,29
 urlLabel Link to LRG transcript:
-url ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
+url http://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
 
 track affyHuEx1
 shortLabel Affy HuEx 1.0

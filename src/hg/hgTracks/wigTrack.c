@@ -868,6 +868,8 @@ struct wigMouseOver *mouseOverData = NULL;
 	/* list of mouse over data, if created here */
 
 boolean skipMouseOvers = TRUE;	/* assuming not using */
+int mouseOverX2 = -1;
+double previousValue = 0;
 if (enableMouseOver)
     skipMouseOvers = FALSE;
 
@@ -883,13 +885,11 @@ for (x1 = 0; x1 < width; ++x1)
     /* ===== mouseOver calculations===== */
     if (enableMouseOver)
         {
-	int mouseOverX2 = -1;
-	double previousValue = 0;
         if (!skipMouseOvers && (p->count > 0)) /* checking mouseOver construction */
             {
             if (p->count > 0)	/* allow any number of values to display */
                 {
-                double thisValue = p->sumData/p->count;	/* average if 2 */
+                double thisValue = p->sumData/p->count;	/*average if count > 1*/
                 if (mouseOverX2 < 0)    /* first valid data found */
                     {
 		    struct wigMouseOver *dataItem;
