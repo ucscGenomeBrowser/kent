@@ -4468,7 +4468,7 @@ var mouseOver = {
     visible: false,
     tracks: {},
     maximumWidth: {},
-    popUpDelay: 1000,   // one second delay before popUp appears
+    popUpDelay: 200,   // 0.2 second delay before popUp appears
     popUpTimer: null,// handle from setTimeout to use in clearTimout(popUpTimer)
     delayDone: true,   // mouse has not left element, still receiving move evts
     delayInProgress: false,        // true if working with delay timer done
