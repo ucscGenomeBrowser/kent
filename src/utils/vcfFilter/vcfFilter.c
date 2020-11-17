@@ -20,6 +20,8 @@ errAbort(
   "                   Discard variants with no remaining alleles.\n"
   "                   Update AC in INFO column; if input has genotypes then\n"
   "                   update AN in INFO column and recode genotypes.\n"
+  "                   Note: if input has genotypes, then incoming AC and AN\n"
+  "                   are ignored, i.e. genotypes are trusted more than AC/AN.\n"
   "   -rename         Replace the ID value with a comma-separated list of\n"
   "                   <ref><pos><alt> names, one for each alt (after -minAc)\n"
   );
@@ -225,7 +227,8 @@ int newAn = wordCount - VCF_NUM_COLS_BEFORE_GENOTYPES - missingCount;
 int oldToNewIx[altCount+1];
 for (i = 0;  i < altCount;  i++)
     {
-    // Default to reference (ix = 0) for discarded alleles.
+    // Default to reference (ix = 0) for discarded alleles, because that is effectively what we
+    // do when we discard the whole variant because no allele passes the minAc threshold.
     int newIx = 0;
     int j;
     for (j = 0;  j < newAltCount;  j++)
@@ -350,6 +353,8 @@ while (lineFileNext(lf, &line, NULL))
             continue;
         if (minAc > 0)
             {
+            // Renaming happens (if specified) after filtering alleles by minAc,
+            // while printing output, inside these functions:
             if (wordCount > VCF_NUM_COLS_BEFORE_GENOTYPES)
                 filterMinAcFromGenotypes(words, wordCount, minAc, rename);
             else
