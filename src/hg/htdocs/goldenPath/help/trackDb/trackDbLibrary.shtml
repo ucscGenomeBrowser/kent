@@ -5004,8 +5004,8 @@ For the complete bigBarChart format definitions please see the
 <DIV class="barChartColors"><span class="types bigBarChart"></span>
 <div class="format"><code>barChartColors &lt;color1 color2...&gt;</code></div>
     <P>This setting is a list of colors, one for each category (bar).
-        Colors are specified as RGB values (#FFFFFF) or by name (the 16 HTML color names defined
-        in HTML 4.01).  
+        Colors are specified as RGB values (255,255,255 or #FFFFFF) or by name 
+        (the 16 HTML color names defined in HTML 4.01).  
         The named HTML colors are: <div class='dot' style='background: #000000'></div>black,
             <div class='dot'style='background: silver'></div>silver,
             <div class='dot'style='background: gray'></div>gray,
@@ -5037,6 +5037,14 @@ Used together with barChartSampleUrl to generate a box plot on the details page.
 barChartMatrixUrl file.  Used for generating a box plot on the details page.
     </P>
 </DIV>
+<DIV class="barChartCategoryUrl"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartCategoryUrl &lt;url&gt;</code></div>
+    <P>Specifies a tab-separated file that provides labels and optionally colors for the 
+categories (bars).
+This setting can replace the <code>barChartBars</code> and <code>barChartColors</code> settings,
+and is particularly useful for tracks with large numbers of categories.
+    </P>
+</DIV>
 
 <DIV class="bigBarChart_example"><span class="types bigBarChart"></span>
 <div class="format"><B>Example of a bigBarChart track</B></div>
@@ -5048,7 +5056,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     barChartLabel Brain Regions
     barChartMetric median
     barChartBars Amygdala Cerebellum Cortex Hippocampus
-    barChartColors #ff0000 green maroon navy
+    barChartColors #ff0000 0,255,0 maroon navy
     shortLabel Brain RNA
     longLabel Brain Gene Expression
     spectrum on
