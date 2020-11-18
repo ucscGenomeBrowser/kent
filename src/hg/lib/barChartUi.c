@@ -6,6 +6,7 @@
 #include "cheapcgi.h"
 #include "cart.h"
 #include "net.h"
+#include "errCatch.h"
 #include "hui.h"
 #include "trackDb.h"
 #include "jsHelper.h"
@@ -160,100 +161,90 @@ printf("<span class='%s'> %s (range 0-%d)</span>\n", buf, unit,
 // TODO: libify
 static boolean isUrl(char *url)
 {
-return ((startsWith("http://", url)
+return startsWith("http://", url)
    || startsWith("https://", url)
-   || startsWith("ftp://", url)));
+   || startsWith("ftp://", url);
 }
 
-struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb *tdb)
-/* Get category colors and descriptions.  
-   Use labels in tab-sep file specified by barChartCategoryUrl setting, o/w in barChartBars setting.
-   If colors are not specified via barChartColors setting or second column in category file,
-   assign rainbow colors.
- */
+static void getCategsFromSettings(char *track, char *labelSetting, char *colorSetting, 
+                                        struct slName **labels, struct slName **colors)
+/* Get category labels and optionally colors, from track settings */
 {
-int count = 0;
-struct slName *labels = NULL, *colors = NULL;
-char *fileOrUrl = trackDbSetting(tdb, BAR_CHART_CATEGORY_URL);
-if (isEmpty(fileOrUrl))
+if (!labels || !colors)
+    return;
+if (isEmpty(labelSetting))
     {
-    // use trackDb settings for labels and perhaps colors
-    char *labelSetting = trackDbSetting(tdb, BAR_CHART_CATEGORY_LABELS);
-    if (isEmpty(labelSetting))
-        {
-        errAbort("barChart track %s missing required setting: %s or %s\n",
-                        tdb->track, BAR_CHART_CATEGORY_LABELS, BAR_CHART_CATEGORY_URL);
-        }
-    char *words[BAR_CHART_MAX_CATEGORIES];
-    count = chopLine(cloneString(labelSetting), words);
-    labels = slNameListFromStringArray(words, count);
-    char *colorSetting = trackDbSetting(tdb, BAR_CHART_CATEGORY_COLORS);
-    if (isNotEmpty(colorSetting))
-        {
-        int ct = chopLine(cloneString(colorSetting), words);
-        if (ct != count)
-            errAbort("barChart track %s settings mismatch: %s (%d) and  %s (%d)\n",
-                        tdb->track, BAR_CHART_CATEGORY_LABELS, count, BAR_CHART_CATEGORY_COLORS, ct);
-        colors = slNameListFromStringArray(words, count);
-        }
+    errAbort("barChart track %s missing required setting: %s or %s\n",
+                    track, BAR_CHART_CATEGORY_LABELS, BAR_CHART_CATEGORY_URL);
     }
-else
+char *words[BAR_CHART_MAX_CATEGORIES];
+int labelCount = chopLine(cloneString(labelSetting), words);
+*labels = slNameListFromStringArray(words, labelCount);
+if (isNotEmpty(colorSetting))
     {
-    // use file for labels and perhaps colors
-    struct lineFile *lf = NULL;
+    int colorCount = chopLine(cloneString(colorSetting), words);
+    if (colorCount != labelCount)
+        errAbort("barChart track %s settings mismatch: %s (%d) and  %s (%d)\n",
+            track, BAR_CHART_CATEGORY_LABELS, labelCount, BAR_CHART_CATEGORY_COLORS, colorCount);
+    *colors = slNameListFromStringArray(words, labelCount);
+    }
+}
 
-#ifdef TODO
-// TODO: protect against network error
+static void getCategsFromFile(char *track, char *categUrl,
+                                        struct slName **labels, struct slName **colors)
+/* Get category labels and optionally colors, from category file.
+ * This is tab-sep file, column 1 is category label, optional column 2 is a color spec */
+{
+if (!labels || !colors) return;
+struct lineFile *lf = NULL;
+
+// protect against network error
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    if (isUrl(fileOrUrl))
-        {
-        lf = netLineFileOpen(fileOrUrl);
+    if (isUrl(categUrl))
+        lf = netLineFileOpen(categUrl);
     else
-        lf = lineFileMayOpen(fileOrUrl, TRUE);
-        }
+        lf = lineFileMayOpen(categUrl, TRUE);
     }
 errCatchEnd(errCatch); 
 if (errCatch->gotError)
     {
     if (isNotEmpty(errCatch->message->string))
-        warn("unable to open %s: %s", fileOrUrl, errCatch->message->string);
+        warn("unable to open %s track file %s: %s", 
+                    track, categUrl, errCatch->message->string);
     }
 errCatchFree(&errCatch);
-#endif
-
-    if (isUrl(fileOrUrl))
-        lf = netLineFileOpen(fileOrUrl);
-    else
-        lf = lineFileMayOpen(fileOrUrl, TRUE);
-    char *line = NULL;
-    int cols = 0;
-    while (lineFileNextReal(lf, &line))
+char *line = NULL;
+int cols = 0;
+while (lineFileNextReal(lf, &line))
+    {
+    char *words[2];
+    int wordCount = chopTabs(line, words);
+    if (cols)
         {
-        char *words[2];
-        int wordCount = chopTabs(line, words);
-        if (cols)
-            {
-            if (wordCount != cols)
-                errAbort("barChart track %s category file %s expecting %d words, got %d",
-                            tdb->track, fileOrUrl, cols, wordCount);
-            }
-        else
-            {
-            cols = wordCount;
-            }
-        slAddHead(&labels, slNameNew(words[0]));
-        if (wordCount == 2)
-            slAddHead(&colors, slNameNew(words[1]));
-        count++;
+        if (wordCount != cols)
+            errAbort("barChart track %s category file %s expecting %d words, got %d",
+                        track, categUrl, cols, wordCount);
         }
-    slReverse(&labels);
-    slReverse(&colors);
+    else
+        {
+        cols = wordCount;
+        }
+    slAddHead(&labels, slNameNew(words[0]));
+    if (wordCount == 2)
+        slAddHead(&colors, slNameNew(words[1]));
     }
+slReverse(&labels);
+slReverse(&colors);
+}
 
-// populate categories
+static struct barChartCategory *createCategs(char *track, 
+                                                struct slName *labels, struct slName *colors)
+/* Populate category structs from label and color lists.  Assign rainbow if no color list */
+{
 struct barChartCategory *categs = NULL, *categ = NULL;
+int count = slCount(labels);
 struct rgbColor *rainbow = NULL;
 if (!colors)
     {
@@ -268,27 +259,37 @@ for (i=0 ; i<count && labels; i++)
     safef(buf, sizeof buf, "%d", i);
     categ->name = cloneString(buf);
     categ->label = labels->name;
-    if (colors)
+    if (!colors)
         {
-        unsigned rgb;
-        char *color = colors->name;
-        if (htmlColorForCode(color, &rgb))
-            {
-            categ->color = rgb;
-            }
-        else if (htmlColorForName(color, &rgb))
-            {
-            categ->color = rgb;
-            }
-        else
-            warn("barChart track %s unknown color %s. Must be one of %s\n",
-                    tdb->track, color, slNameListToString(htmlColorNames(),','));
-        }
-    else
-        {
+        // rainbow
         categ->color = ((rainbow[i].r & 0xff)<<16) + 
                     ((rainbow[i].g & 0xff)<<8) + 
                     ((rainbow[i].b & 0xff));
+        }
+    else
+        {
+        // colors from user
+        unsigned rgb = 0;
+        char *color = colors->name;
+        if (!htmlColorForCode(color, &rgb))
+            {
+            if (!htmlColorForName(color, &rgb))
+                {
+                /* try r,g,b */
+                if (index(color, ','))
+                    {
+                    unsigned char r, g, b;
+                    parseColor(color, &r, &g, &b);
+                    htmlColorFromRGB(&rgb, r, g, b);
+                    }
+                else
+                    {
+                    warn("barChart track %s unknown color %s. Must r,g,b or #ffffff or one of %s\n",
+                            track, color, slNameListToString(htmlColorNames(),','));
+                    }
+                }
+            }
+        categ->color = rgb;
         }
     slAddHead(&categs, categ);
     labels = labels->next;
@@ -297,6 +298,25 @@ for (i=0 ; i<count && labels; i++)
     }
 slReverse(&categs);
 return categs;
+}
+
+struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb *tdb)
+/* Get category colors and descriptive labels.
+   Use labels in tab-sep file specified by barChartCategoryUrl setting, o/w in barChartBars setting.
+   If colors are not specified via barChartColors setting or second column in category file,
+   assign rainbow colors.  Colors are specified as #fffff or r,g,b  or html color name) */
+{
+struct slName *labels = NULL, *colors = NULL;
+char *categUrl = trackDbSetting(tdb, BAR_CHART_CATEGORY_URL);
+if (isNotEmpty(categUrl))
+    getCategsFromFile(tdb->track, categUrl, &labels, &colors);
+else
+    {
+    char *labelSetting = trackDbSetting(tdb, BAR_CHART_CATEGORY_LABELS);
+    char *colorSetting = trackDbSetting(tdb, BAR_CHART_CATEGORY_COLORS);
+    getCategsFromSettings(tdb->track, labelSetting, colorSetting, &labels, &colors);
+    }
+return createCategs(tdb->track, labels, colors);
 }
 
 struct barChartCategory *barChartUiGetCategoryById(int id, char *database, 
