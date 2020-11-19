@@ -4083,7 +4083,7 @@ if (tg->tdb)
     char *type = tg->tdb->type;
     if (sameString(type, "interact") || sameString(type, "bigInteract"))
         return FALSE;
-    if (sameString(type, "bigGenePred") || sameString(type, "genePred"))
+    if (startsWith("bigGenePred", type) || startsWith("genePred", type))
         return TRUE;
     }
 boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", "off"), "on");
