@@ -7,7 +7,8 @@
 #include "vcf.h"
 #include "dnautil.h"
 
-#define MAX_BED_EXTRA 50 // how many extra fields  can we put into the bigBed itself (for filtering, labels, etc)
+// how many extra fields  can we put into the bigBed itself (for filtering, labels, etc):
+#define MAX_BED_EXTRA 100
 #define bed9Header "#chrom\tchromStart\tchromEnd\tname\tscore\tstrand\tthickStart\tthickEnd\titemRgb\tref\talt\tFILTER"
 
 // hash up all the info tags and their vcfInfoDef structs for faster searching
