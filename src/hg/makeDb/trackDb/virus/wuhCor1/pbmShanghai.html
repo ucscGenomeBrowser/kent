@@ -1,0 +1,80 @@
+<h2>Description</h2>
+
+<p>
+This track shows intensities of a microarray spotted with short peptides
+derived from the S protein.  Fifty-five sera from convalescent COVID-19
+patients and 18 control sera were screened on the
+peptide microarray for both IgG and IgM responses.
+</p>
+
+<p>
+A total of 211 peptides were synthesized and conjugated to
+BSA. The conjugates along with control proteins were prepared in triplicate at
+three dilutions. </p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>This track contains two composite tracks, for IgG and IgM. It also contains
+two signal (wiggle) tracks, that show the "response frequency", roughly calculated as described
+in the paper, for IgG and IgM separately.
+</p>
+
+<p>
+Genomic locations of peptides that were spotted on the array are highlighted.
+Because these peptides overlap, the tracks default to dense mode and the
+sequence is shown as labels drawn onto the rectangles, but only visible on high
+zoom levels. Put any track into pack mode to fully see the sequence and also
+the triplicates. Since every peptide was spotted in three concentrations, every
+peptide is shown three times in pack mode.</p>
+
+<p>
+The color is assigned based on the log of the fluorescent signal, with all negative values replaced by 0.
+The fluorescent signal was restricted to the range 0-15, scaled to 0-1.0 and
+the viridis color palette was used to assign a color intensity. This color
+palette is different from the one used in the original paper, to make the
+quantitative data easier to see.</p>
+
+<p>
+The two signal tracks show the "response frequency", as defined in the paper.
+The response frequency is the share of Covid samples at a position that exceed
+the threshold mean(x)+3*stdev(y), with x being all values at a position and y
+being the negative controls. At positions where two peptides overlap, the two
+values are summed up, which means that the result on the Genome Browser can
+exceed 1.0.
+</p>
+
+<h2>Methods</h2>
+<p>
+Supplemental files were received from the authors, converted from Excel,
+rearranged and run through the command line script bigHeat to create a
+heatmap-like display.  0.285 for positive values. For better visibility,
+colormap viridis from matplotlib was used.  Like all tracks, the exact commands
+are documented in our <a
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/wuhCor1/pbmShanghai.txt"
+target="_blank">makeDoc text files</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the <a href="hgTables">Table Browser</a> or combined
+with other datasets in the <a href="hgIntegrator">Data Integrator</a> tool. For automated analysis,
+the genome annotation is stored in a bigBed file that can be downloaded from
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/wuhCor1/pbmShanghai/">the download server</a>.</p>
+<p>
+Annotations can be converted from binary to ASCII text by our command-line tool bigBedToBed.
+Instructions for downloading this command can be found on our
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">utilities page</a>. Please refer to our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list archives</a> for questions, or our
+<a href="../../FAQ/FAQdownloads.html#download36" target="_blank">Data Access FAQ</a> for more
+information.</p>
+
+<h2>References</h2>
+<p>
+Li Y, Lai DY, Zhang HN, Jiang HW, Tian X, Ma ML, Qi H, Meng QF, Guo SJ, Wu Y <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32895485" target="_blank">
+    Linear epitopes of SARS-CoV-2 spike protein elicit neutralizing antibodies in COVID-19 patients</a>.
+<em>Cell Mol Immunol</em>. 2020 Oct;17(10):1095-1097.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32895485" target="_blank">32895485</a>; PMC: <a
+    href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7475724/" target="_blank">PMC7475724</a>
+</p>

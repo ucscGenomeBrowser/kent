@@ -1,0 +1,11 @@
+# protein binding microarray data
+track pbmShanghai
+shortLabel S Antib Pept Array
+longLabel S Protein Antibody Peptide Binding Microarray from Li et al, Cell & Mol Imm 2020, Sheng-ce Tao group, Jiao Tung Univ.
+superTrack on
+priority 8
+group immu
+visibility hide
+
+include pbmShanghaiIgg.ra
+include pbmShanghaiIgm.ra
