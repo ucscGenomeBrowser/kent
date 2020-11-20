@@ -6,6 +6,7 @@ superTrack on
 group immu
 priority 7
 visibility hide
+html pbm
 
 track bpmIggCovidSum
 shortLabel Antib Pept Array Sum
@@ -16,6 +17,7 @@ autoScale on
 parent pbm
 maxHeightPixels 100:30:8
 bigDataUrl /gbdb/wuhCor1/pbm/IgG_Z-score-_COVID-19_patients/allSum.bw
+html pbm
 
 include pbmIggCovid.ra
 
@@ -28,6 +30,7 @@ autoScale on
 parent pbm
 maxHeightPixels 100:30:8
 bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-_COVID-19_patients/allSum.bw
+html pbm
 
 include pbmIgmCovid.ra
 # healthy data removed as per request by the authors - not published yet

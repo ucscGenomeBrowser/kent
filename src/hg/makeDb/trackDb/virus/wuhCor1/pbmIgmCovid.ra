@@ -7,6 +7,7 @@ visibility dense
 labelOnFeature on
 itemRgb on
 parent pbm
+html pbm
 
     track IgM_Z-score-_COVID-19_patients_P4
     shortLabel P4

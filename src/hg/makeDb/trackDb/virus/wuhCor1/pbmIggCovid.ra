@@ -7,6 +7,7 @@ visibility dense
 labelOnFeature on
 parent pbm
 itemRgb on
+html pbm
 
     track P4
     shortLabel P4
