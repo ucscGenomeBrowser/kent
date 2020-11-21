@@ -4467,6 +4467,7 @@ var mouseOver = {
     spans: {},
     visible: false,
     tracks: {},
+    jsonUrl: {},       // list of json files from hidden DIV elements
     maximumWidth: {},
     popUpDelay: 200,   // 0.2 second delay before popUp appears
     popUpTimer: null,// handle from setTimeout to use in clearTimout(popUpTimer)
@@ -4488,11 +4489,10 @@ var mouseOver = {
     // maximumWidth{} - key is track name, value is length of longest
     //                         number string as measured when rendered
 
-    // given hgt_....png file name, change to trackName_....json file name
-    jsonFileName: function(imgElement, trackName)
+    // given hgt_....png file name, change to hgt_....json file name
+    jsonFileName: function(imgDataId)
     {
-      var jsonFile=imgElement.src.replace("hgt/hgt_", "hgt/" + trackName + "_");
-      jsonFile = jsonFile.replace(".png", ".json");
+      var jsonFile=imgDataId.src.replace(".png", ".json");
       return jsonFile;
     },
 
@@ -4515,12 +4515,13 @@ var mouseOver = {
       var tdData = "td_data_" + trackName;
       var tdDataId  = document.getElementById(tdData);
       var imgData = "img_data_" + trackName;
-      var imgElement  = document.getElementById(imgData);
-      if (imgElement && tdDataId) {
-        if (mouseOver.tracks[trackName]) {
+      var imgDataId  = document.getElementById(imgData);
+      if (imgDataId && tdDataId) {
+	var url = mouseOver.jsonFileName(imgDataId);
+        if (mouseOver.tracks[trackName]) {  // > 0 -> seen before in receiveData
             $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
             $( tdDataId ).mouseout(mouseOver.popUpDisappear);
-            mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
+            mouseOver.fetchJsonData(url);  // may be a refresh, don't know
         } else {
 	  if (trackType) {
             var validType = false;
@@ -4531,7 +4532,7 @@ var mouseOver = {
             if (validType) {
               $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
               $( tdDataId ).mouseout(mouseOver.popUpDisappear);
-              mouseOver.fetchMapData(mouseOver.jsonFileName(imgElement, trackName), trackName);
+              mouseOver.fetchJsonData(url);
             }
           }
         }
@@ -4613,8 +4614,8 @@ var mouseOver = {
     var tdRect = tdId.getBoundingClientRect();
     var tdLeft = Math.floor(tdRect.left);
     var tdTop = Math.floor(tdRect.top);
-    var tdHeight = Math.floor(tdRect.height);
     var tdWidth = Math.floor(tdRect.width);
+    var tdHeight = Math.floor(tdRect.height);
     var rightSide = tdLeft + tdWidth;
     // clientX is the X coordinate of the mouse hot spot
     var clientX = Math.floor(evt.clientX);
@@ -4721,12 +4722,14 @@ var mouseOver = {
     {
       mouseOver.visible = false;
       for (var trackName in arr) {
+	// clear these variables if they existed before
+      if (mouseOver.spans[trackName]) {mouseOver.spans[trackName] = undefined;}
+      if (mouseOver.tracks[trackName]) {mouseOver.tracks[trackName] = 0;}
       mouseOver.spans[trackName] = [];      // start array
       // add a 'mousemove' and 'mouseout' event listener to each track
       //     display object
       var tdData = "td_data_" + trackName;
       var tdDataId  = document.getElementById(tdData);
-      if (! tdDataId) { return; } // not sure why objects are not always found
 // from jQuery doc:
 //  As the .mousemove() method is just a shorthand
 //    for .on( "mousemove", handler ), detaching is possible
@@ -4748,7 +4751,7 @@ var mouseOver = {
         mouseOver.spans[trackName].push(arr[trackName][span]);
        ++itemCount;
       }
-      mouseOver.tracks[trackName] = itemCount;	// merely for debugging watch
+      mouseOver.tracks[trackName] = itemCount;	// != 0 -> indicates valid track
       var mouseOverValue = "";
       if (hasMean) {
          mouseOverValue = "&nbsp;&mu;&nbsp;" + longestNumber + "&nbsp;";
@@ -4766,18 +4769,25 @@ var mouseOver = {
       }
     },  //      receiveData: function (arr)
 
-    failedRequest: function(trackName)
-    {   // failed request to get json data, remove it from the track list
-      if (mouseOver.tracks[trackName]) {
-        delete mouseOver.tracks[trackName];
+    failedRequest: function(url)
+    {   // failed request to get json data, remove it from the URL list
+      if (mouseOver.jsonUrl[url]) {
+        delete mouseOver.jsonUrl[url];
       }
     },
 
     // =========================================================================
-    // fetchMapData() sends JSON request, callback to receiveData() upon return
+    // fetchJsonData() sends JSON request, callback to receiveData() upon return
     // =========================================================================
-    fetchMapData: function (url, trackName)
+    fetchJsonData: function (url)
     {
+       // avoid fetching the same URL multiple times.  Multiple track data
+       // can be in a single json file
+       if (mouseOver.jsonUrl[url]) {
+          mouseOver.jsonUrl[url] += 1;
+          return;
+       }
+       mouseOver.jsonUrl[url] = 1;     // remember already done this one
        var xmlhttp = new XMLHttpRequest();
        xmlhttp.onreadystatechange = function() {
          if (4 === this.readyState && 200 === this.status) {
@@ -4785,7 +4795,7 @@ var mouseOver = {
             mouseOver.receiveData(mapData);
          } else {
             if (4 === this.readyState && 404 === this.status) {
-               mouseOver.failedRequest(trackName);
+               mouseOver.failedRequest(url);
             }
          }
        };
@@ -4798,13 +4808,13 @@ var mouseOver = {
     getData: function ()
     {
       // check for the hidden div elements for mouseOverData
+      // single file version can find many trackNames, but will all
+      // be the same URL
       var trackList = document.getElementsByClassName("mouseOverData");
       for (var i = 0; i < trackList.length; i++) {
         var trackName = trackList[i].getAttribute('name');
-        var jsonData = trackList[i].getAttribute('jsonData');
-        if (jsonData) {
-          mouseOver.fetchMapData(jsonData, trackName);
-        }
+        var jsonFileUrl = trackList[i].getAttribute('jsonUrl');
+        if (jsonFileUrl) { mouseOver.fetchJsonData(jsonFileUrl); }
       }
     },
 

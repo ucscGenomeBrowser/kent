@@ -73,6 +73,7 @@
 #include <openssl/sha.h>
 #include "customComposite.h"
 #include "chromAlias.h"
+#include "jsonWrite.h"
 
 //#include "bed3Sources.h"
 
@@ -160,7 +161,15 @@ struct group *groupList = NULL;    /* List of all tracks. */
 char *browserName;              /* Test, preview, or public browser */
 char *organization;             /* UCSC */
 
+/* mouseOver popUp global data, each track that wants to send json
+ * data will need to know the json file name from mouseOverJson
+ * and will write the track data to mouseOverJson.  The structure
+ * of the data in the json output will depend upon what the track needs
+ * to send.
+ */
 boolean enableMouseOver = FALSE;
+struct tempName *mouseOverJsonFile = NULL;
+struct jsonWrite *mouseOverJson = NULL;
 
 struct hash *trackHash = NULL; /* Hash of the tracks by their name. */
 
@@ -5043,6 +5052,17 @@ else
     if (measureTiming)
         measureTime("Time at start of obtaining trash hgt png image file");
     trashDirFile(&pngTn, "hgt", "hgt", ".png");
+    if (enableMouseOver)
+	{   /* created here at this time to get the same name as .png file */
+        /* this file name should actually be a copy of pngTn with the suffix
+         * changed png -> json since the name does have a time element thrown
+         * in.  This name needs to be identical since the javascript only sees
+         *      the .png name and thus needs to figure out the .json name
+         */
+        /* will open this file upon successful exit to write the data */
+	AllocVar(mouseOverJsonFile);
+	trashDirFile(mouseOverJsonFile, "hgt", "hgt", ".json");
+	}
     hvg = hvGfxOpenPng(pixWidth, pixHeight, pngTn.forCgi, transparentImage);
 
     if (theImgBox)
@@ -8692,6 +8712,10 @@ for(window=windows;window;window=window->next)
     }
 setGlobalsFromWindow(windows); // first window // restore globals
 
+/* DBG - a message box to display information from the javascript
+hPrintf("<div id='mouseDbg'><span id='dbgMouseOver'><p>. . . dbgMouseOver</p></span></div>\n");
+ */
+
 #ifdef USE_NAVIGATION_LINKS
 hPrintf("<TABLE BORDER=0 CELLPADDING=0 width='%d'><tr style='font-size:small;'>\n",
         tl.picWidth);//min(tl.picWidth, 800));
@@ -9822,6 +9846,7 @@ virtWinBaseCount = virtWinEnd - virtWinStart;
 if (virtWinBaseCount <= 0)
     hUserAbort("Window out of range on %s", virtChromName);
 
+
 if (!cartUsualBoolean(cart, "hgt.psOutput", FALSE)
  && !cartUsualBoolean(cart, "hgt.imageV1" , FALSE))
     {
@@ -10552,7 +10577,18 @@ if (measureTiming)
 
 char *mouseOverEnabled = cfgOption("mouseOverEnabled");
 if (sameWordOk(mouseOverEnabled, "on"))
+    {
     enableMouseOver = TRUE;
+    /* mouseOverJsonFile will be initializes and created at the same
+     * time as the browser .png image file
+     */
+    mouseOverJson = jsonWriteNew();
+    jsonWriteObjectStart(mouseOverJson, NULL);
+    /* this jsonWrite structure will finish off upon successful exit.
+     * each track will start a list with the track name:
+     *   jsonWriteListStart(mouseOverJson, tg->track);
+     */
+    }
 else
     enableMouseOver = FALSE;
 
@@ -10672,6 +10708,7 @@ if(!trackImgOnly)
     cartFlushHubWarnings();
     }
 
+
 if (cartVarExists(cart, "chromInfoPage"))
     {
     cartRemove(cart, "chromInfoPage");
@@ -10771,12 +10808,23 @@ dyStringFree(&dy);
 dy = dyStringNew(1024);
 if (enableMouseOver)
     {
-      dyStringPrintf(dy, "window.browserTextSize=%s;\n", tl.textSize);
-      dyStringPrintf(dy, "window.mouseOverEnabled=true;\n");
+    jsonWriteObjectEnd(mouseOverJson);
+    /* if any data was written, it is longer than 4 bytes */
+    if (strlen(mouseOverJson->dy->string) > 4)
+	{
+	FILE *trashJson = mustOpen(mouseOverJsonFile->forCgi, "w");
+	fputs(mouseOverJson->dy->string,trashJson);
+	carefulClose(&trashJson);
+	}
+
+    hPrintf("<div id='mouseOverVerticalLine' class='mouseOverVerticalLine'></div>\n");
+    hPrintf("<div id='mouseOverText' class='mouseOverText'></div>\n");
+    dyStringPrintf(dy, "window.browserTextSize=%s;\n", tl.textSize);
+    dyStringPrintf(dy, "window.mouseOverEnabled=true;\n");
     }
-    else
+else
     {
-      dyStringPrintf(dy, "window.mouseOverEnabled=false;\n");
+    dyStringPrintf(dy, "window.mouseOverEnabled=false;\n");
     }
 jsInline(dy->string);
 dyStringFree(&dy);
