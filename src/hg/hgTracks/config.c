@@ -134,6 +134,14 @@ char *emptyStyles[] = {
 static void textFontDropDown()
 /* Create drop down for font size. */
 {
+/* get current values for font and style */
+char *currentFontName = cloneString(tl.textFont);
+char *currentStyle = strchr(currentFontName, '-');
+if (currentStyle)
+    *currentStyle++ = 0;
+else
+    currentStyle = "Normal";
+
 char *faceNames[sizeof(freeTypeFontNames)];
 int ii;
 int numFonts = 0;
@@ -183,8 +191,10 @@ dyStringPrintf(dy, "  val= $(this).find(':selected').val(); \n");
 dyStringPrintf(dy, "  for(ii=0; ii < fontStyles[val].length; ii++) { $(\"[name='textStyle']\").append( new Option(fontStyles[val][ii],fontStyles[val][ii],))};\n");
 dyStringPrintf(dy, "  });\n");
 dyStringPrintf(dy, "$(\"[name='textFont']\").change();\n");
+dyStringPrintf(dy, "$(\"[name='textStyle']\").val('%s');\n", currentStyle);
 jsInline(dy->string);
-hDropList(textFontVar, faceNames, numFonts, tl.textFont);
+
+hDropList(textFontVar, faceNames, numFonts, currentFontName);
 }
 
 static void textStyleDropDown()
