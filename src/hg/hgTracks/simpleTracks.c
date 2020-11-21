@@ -238,9 +238,6 @@ int winStart;                   /* Start of window in sequence. */
 int winEnd;                     /* End of window in sequence. */
 char *position = NULL;          /* Name of position. */
 
-int trackTabWidth = 11;
-int leftLabelWidthDefaultChars = 20;   /* default number of characters allowed for left label */
-int leftLabelWidthChars = 20;   /* number of characters allowed for left label */
 int insideX;			/* Start of area to draw track in in pixels. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
 int leftLabelX;                 /* Start of area to draw left labels on. */
@@ -288,18 +285,6 @@ void initTl()
 {
 trackLayoutInit(&tl, cart);
 
-// label width, but don't exceed 1/2 of image
-leftLabelWidthChars = cartUsualInt(cart, "hgt.labelWidth", leftLabelWidthDefaultChars);
-if (leftLabelWidthChars < 2)
-    leftLabelWidthChars = leftLabelWidthDefaultChars;
-tl.leftLabelWidth = leftLabelWidthChars*tl.nWidth + trackTabWidth + 3;
-int maxLabelWidth = 0.5*tl.picWidth;
-if (tl.leftLabelWidth  > maxLabelWidth)
-    {
-    // overflow, force to 1/2 width
-    leftLabelWidthChars = maxLabelWidth/tl.nWidth;
-    tl.leftLabelWidth = leftLabelWidthChars * tl.nWidth;
-    }
 }
 
 static boolean isTooLightForTextOnWhite(struct hvGfx *hvg, Color color)

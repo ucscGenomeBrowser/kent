@@ -507,7 +507,7 @@ hPrintf("<TD>pixels</TR>");
 
 hPrintf("<TR><TD>label area width:");
 hPrintf("<TD style=\"text-align: right\">");
-hIntVar("hgt.labelWidth", leftLabelWidthChars, 2);
+hIntVar(leftLabelWidthVar, tl.leftLabelWidthChars, 2);
 hPrintf("<TD>characters<TD></TR>");
 
 hPrintf("<TR><TD>text size:");

@@ -74,4 +74,16 @@ tl->barbHeight = tl->fontHeight/4;
 tl->barbSpacing = (tl->fontHeight+1)/2;
 tl->picWidth = hgDefaultPixWidth;
 trackLayoutSetPicWidth(tl, cartOptionalString(cart, "pix"));
+// label width, but don't exceed 1/2 of image
+tl->leftLabelWidthChars = cartUsualInt(cart, leftLabelWidthVar, leftLabelWidthDefaultChars);
+if (tl->leftLabelWidthChars < 2)
+    tl->leftLabelWidthChars = leftLabelWidthDefaultChars;
+tl->leftLabelWidth = tl->leftLabelWidthChars*tl->nWidth + trackTabWidth + 3;
+int maxLabelWidth = 0.5*tl->picWidth;
+if (tl->leftLabelWidth  > maxLabelWidth)
+    {
+    // overflow, force to 1/2 width
+    tl->leftLabelWidthChars = maxLabelWidth/tl->nWidth;
+    tl->leftLabelWidth = tl->leftLabelWidthChars * tl->nWidth;
+    }
 }
