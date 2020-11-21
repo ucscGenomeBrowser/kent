@@ -634,6 +634,9 @@ static void maybeNewFonts(struct hvGfx *hvg)
 {
 if (sameString(cfgOptionDefault("freeType", "off"), "on"))
     {
+    if (sameString(tl.textFont, "Bitmap"))
+        return;
+
     char *fontDir = cfgOptionDefault("freeTypeDir", "/usr/share/fonts/default/Type1");
     char buffer[4096];
 

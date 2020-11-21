@@ -62,8 +62,21 @@ char *fontType = "medium";
 boolean fontExtras = trackLayoutInclFontExtras();
 if (fontExtras)
     fontType = cartUsualString(cart, "fontType", fontType);
+if (cfgOptionBooleanDefault("freeType", FALSE))
+    {
+    tl->textFont = cartUsualString(cart, textFontVar, cfgOptionDefault("freeTypeFont","Bitmap"));
+    char *style =  cartUsualString(cart, textStyleVar, "Normal");
 
-tl->textFont = cartUsualString(cart, textFontVar, cfgOptionDefault("freeTypeFont","Helvetica"));
+    if (differentString(style, "Normal"))
+        {
+        char buffer[4096];
+        safef(buffer, sizeof buffer, "%s-%s",tl->textFont, style);
+        tl->textFont = cloneString(buffer);
+        }
+    }
+else
+    tl->textFont = cartUsualString(cart, textFontVar, "Helvetica");
+
 tl->textSize = mgFontSizeBackwardsCompatible(cartUsualString(cart, textSizeVar, cfgOptionDefault(textSizeVar,"small")));
 MgFont *font = mgFontForSizeAndStyle(tl->textSize, fontType);
 tl->font = font;
