@@ -1,25 +1,29 @@
 <h2>Description</h2>
 
 <p>
-This track shows where IgG and IgM antibodies bind the SARS-CoV-2 proteins, on data from 10 COVID
-patients and 12 healthy controls, determined with a SARS-CoV-2 protein peptide microarray.</p>
+This track shows intensities of a microarray spotted with short peptides
+derived from the entire proteome of SARS-CoV-2. Sera from 10 COVID-19
+patients (early stage) and 12 healthy controls were screened on the
+peptide microarray for both IgG and IgM responses. 
+Note that the infections
+here were in the early stage, unlike the other microarray track shown on this genome browser.</p>
 
 <h2>Display Conventions and Configuration</h2>
 
 <p>
 Genomic locations of peptides that were spotted on the array are highlighted. Because these peptides
 overlap, the tracks default to dense mode and the sequence is shown as labels drawn onto the
-rectangles, but only visible on high zoom levels. Put any track into pack mode to fully see the
-sequence.</p>
+rectangles, but only visible on high zoom levels. Put any track into pack mode to fully see all
+probe sequences.</p>
 
 <p>
 The color is assigned based on the Z-Score, without any other normalization. Blue with decreasing
 intensity is assigned to the values -5 to 0, white is 0, and red colors with increasing intensity
-are used for the values 0-3.5, very similar as in the original publication figures.</p>
+are used for the values 0-3.5, exactly as in the original publication figures.</p>
 
 <p>
 There are also two wiggle/signal style tracks to summary the information, they
-show the sum of across all the IgG/IgM peptides, one score per nucleotide.
+show the sum of Z-scores across all peptides, as one score per nucleotide.
 </p>
 
 <h2>Methods</h2>

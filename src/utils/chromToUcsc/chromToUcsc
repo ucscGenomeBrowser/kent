@@ -63,12 +63,15 @@ def splitLines(ifh):
             yield lineNo, " ", row # *step lines are always space-separated
         else:
             if sep==-1:
-                if "\t" in line:
-                    sep = "\t"
-                else:
+                # why test first for space? Because after fixedStep, the lines are just single numbers
+                if " " in line:
                     sep = None # = split on any whitespace, consec. whitespc counts as one
+                else:
+                    sep = "\t" # default is to split on tab
             row = line.rstrip("\n\t").split(sep)
             lineNo += 1
+            if sep is None:
+                sep = " "
             yield lineNo, sep, row
 
 def parseAlias(fname):
