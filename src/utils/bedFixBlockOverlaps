@@ -36,14 +36,15 @@ for line in ifh:
     newLens = []
     newStarts = []
 
-    # go over blockLens/blockStarts and fix overlaps
-    pos = 0
+    lastEnd = 0
     for bs, bl in zip(bStarts, bSizes):
-        if pos>bs:
-            diff = pos-bs
-            bs = pos
+        #print("lastEnd, start, length", lastEnd, bs, bl)
+        if lastEnd!=0 and lastEnd>bs:
+            diff = lastEnd-bs
+            bs = lastEnd
             bl = bl-diff
-        pos += bl
+            #print("fixed to: lastEnd, start, length", lastEnd, bs, bl)
+        lastEnd= bs+bl
         newLens.append(str(bl))
         newStarts.append(str(bs))
     row[10] = ",".join(newLens)
