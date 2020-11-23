@@ -25,8 +25,6 @@
 #include "trashDir.h"
 #include "jsonWrite.h"
 
-extern boolean enableMouseOver;
-
 struct wigItem
 /* A wig track item. */
     {
@@ -941,6 +939,7 @@ for (x1 = 0; x1 < width; ++x1)
         }       //      if (enableMouseOver)
     else
 	skipMouseOvers = TRUE;
+
     /* ===== done with mouseOver calculations===== */
 
     assert(x1/pixelBins->binSize < pixelBins->binCount);
@@ -1439,39 +1438,23 @@ drawArbitraryYLine(vis, (enum wiggleGridOptEnum)wigCart->yLineOnOff,
 
 if (enableMouseOver && mouseOverData)
     {
-    static boolean beenHereDoneThat = FALSE;
-    struct tempName jsonData;
-    trashDirFile(&jsonData, "hgt", tg->track, ".json");
-    FILE *trashJson = mustOpen(jsonData.forCgi, "w");
-    struct jsonWrite *jw = jsonWriteNew();
-    jsonWriteObjectStart(jw, NULL);
-    jsonWriteListStart(jw, tg->track);
+    jsonWriteListStart(mouseOverJson, tg->track);
     slReverse(&mouseOverData);
     struct wigMouseOver *dataItem = mouseOverData;
     for (; dataItem; dataItem = dataItem->next)
         {
-        jsonWriteObjectStart(jw, NULL);
-        jsonWriteNumber(jw, "x1", (long long)dataItem->x1);
-        jsonWriteNumber(jw, "x2", (long long)dataItem->x2);
-        jsonWriteDouble(jw, "v", dataItem->value);
-        jsonWriteNumber(jw, "c", dataItem->valueCount);
-        jsonWriteObjectEnd(jw);
+        jsonWriteObjectStart(mouseOverJson, NULL);
+        jsonWriteNumber(mouseOverJson, "x1", (long long)dataItem->x1);
+        jsonWriteNumber(mouseOverJson, "x2", (long long)dataItem->x2);
+        jsonWriteDouble(mouseOverJson, "v", dataItem->value);
+        jsonWriteNumber(mouseOverJson, "c", dataItem->valueCount);
+        jsonWriteObjectEnd(mouseOverJson);
         }
-    jsonWriteListEnd(jw);
-    jsonWriteObjectEnd(jw);
-    fputs(jw->dy->string,trashJson);
-    carefulClose(&trashJson);
+    jsonWriteListEnd(mouseOverJson);
     slFreeList(&mouseOverData);
-    if (! beenHereDoneThat )
-        {
-        hPrintf("<div id='mouseOverVerticalLine' class='mouseOverVerticalLine'></div>\n");
-        hPrintf("<div id='mouseOverText' class='mouseOverText'></div>\n");
-// hPrintf("<div id='mouseDbg'><span id='debugMsg'><p>. . . mouseDbg</p></span></div>\n");
-        beenHereDoneThat = TRUE;
-        }
-    // hidden element to pass along jsonData file name and also the trigger
+    // hidden element to pass along jsonUrl file name and also the trigger
     // that this track has data to display.
-    hPrintf("<div id='mouseOver_%s' name='%s' class='hiddenText mouseOverData' jsonData='%s'></div>\n", tg->track, tg->track, jsonData.forCgi);
+    hPrintf("<div id='mouseOver_%s' name='%s' class='hiddenText mouseOverData' jsonUrl='%s'></div>\n", tg->track, tg->track, mouseOverJsonFile->forCgi);
     }
 // Might need something like this later for other purposes
 // else if (enableMouseOver)       // system enabled, but no data for this track

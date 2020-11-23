@@ -461,6 +461,11 @@ struct positionMatch
  long virtEnd;
  };
 
+/* mouseOver business declared in hgTracks.c */
+extern boolean enableMouseOver;
+extern struct tempName *mouseOverJsonFile;
+extern struct jsonWrite *mouseOverJson;
+
 struct wigMouseOver
     {
     struct wigMouseOver *next;

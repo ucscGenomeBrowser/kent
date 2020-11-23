@@ -6,9 +6,10 @@ superTrack on
 group immu
 priority 7
 visibility hide
+html pbm
 
 track bpmIggCovidSum
-shortLabel Antib Pept Array Sum
+shortLabel Antib Pept Array Sum (IgG)
 longLabel Antibody Proteome Peptide Binding Microarray, Wang et al 2020 - IgG, Covid - Sum of scores per nucleotide
 type bigWig
 visibility full
@@ -16,11 +17,12 @@ autoScale on
 parent pbm
 maxHeightPixels 100:30:8
 bigDataUrl /gbdb/wuhCor1/pbm/IgG_Z-score-_COVID-19_patients/allSum.bw
+html pbm
 
 include pbmIggCovid.ra
 
 track bpmIgmCovidSum
-shortLabel Antib Pept Array Sum
+shortLabel Antib Pept Array Sum (IgM)
 longLabel Antibody Proteome Peptide Binding Microarray, Wang et al 2020 - IgM, Covid - Sum of scores per nucleotide
 type bigWig
 visibility full
@@ -28,6 +30,7 @@ autoScale on
 parent pbm
 maxHeightPixels 100:30:8
 bigDataUrl /gbdb/wuhCor1/pbm/IgM_Z-score-_COVID-19_patients/allSum.bw
+html pbm
 
 include pbmIgmCovid.ra
 # healthy data removed as per request by the authors - not published yet
