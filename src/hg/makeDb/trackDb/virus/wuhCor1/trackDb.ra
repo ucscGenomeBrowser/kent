@@ -446,7 +446,7 @@ pennantIcon New red ../goldenPath/newsarch.html "Released Oct. 2, 2020"
         type bigWig
         bigDataUrl /gbdb/wuhCor1/bbi/icshape/invivo.bw
         autoScale off
-        viewLimits 0.0:1.0
+        viewLimits -0.4:4.0
         visibility full
         parent icshape
         maxHeightPixels 100:40:8
@@ -516,3 +516,4 @@ include weizmanOrfs.ra
 include pyle.ra
 include treangen.ra
 include pbm.ra
+include pbmShanghai.ra
