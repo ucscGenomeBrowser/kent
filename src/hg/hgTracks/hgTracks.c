@@ -5056,15 +5056,23 @@ else
         measureTime("Time at start of obtaining trash hgt png image file");
     trashDirFile(&pngTn, "hgt", "hgt", ".png");
     if (enableMouseOver)
-	{   /* created here at this time to get the same name as .png file */
-        /* this file name should actually be a copy of pngTn with the suffix
-         * changed png -> json since the name does have a time element thrown
-         * in.  This name needs to be identical since the javascript only sees
-         *      the .png name and thus needs to figure out the .json name
-         */
+	{   /* created here at this time to get the same name as .png file
+	     * it is copied from pngTn since if we repeated trashFileDir()
+	     * to get the name, it could be different since there is a
+	     * timestamp involved in making the name.
+	     */
         /* will open this file upon successful exit to write the data */
 	AllocVar(mouseOverJsonFile);
-	trashDirFile(mouseOverJsonFile, "hgt", "hgt", ".json");
+	char *tmpStr = cloneString(pngTn.forCgi);
+	char *jsonStr = replaceChars(tmpStr, ".png", ".json");
+	safef(mouseOverJsonFile->forCgi, ArraySize(mouseOverJsonFile->forCgi), "%s", jsonStr);
+	freeMem(tmpStr);
+	freeMem(jsonStr);
+	tmpStr = cloneString(pngTn.forHtml);
+        jsonStr = replaceChars(tmpStr, ".png", ".json");
+	safef(mouseOverJsonFile->forHtml, ArraySize(mouseOverJsonFile->forHtml), "%s", jsonStr);
+	freeMem(tmpStr);
+	freeMem(jsonStr);
 	}
     hvg = hvGfxOpenPng(pixWidth, pixHeight, pngTn.forCgi, transparentImage);
 
