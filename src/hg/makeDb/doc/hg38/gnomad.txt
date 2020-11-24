@@ -83,6 +83,69 @@ md5sum gnomad.genomes.r3.0.sites.vcf.bgz
 ln -s `pwd`/gnomad.genomes.r3.0.sites.vcf.bgz /gbdb/hg38/gnomAD/vcf/gnomad.genomes.r3.0.sites.vcf.gz
 
 
+##############################################################################
+# gnomAD v3.1 Update - Nov 24, 2020 - ChrisL - DONE
+# See /hive/data/outside/gnomAD.3/v3.1/make.txt for how to download
+# the new version
 
+WORKDIR=/hive/data/inside/gnomAD/v3.1
+cd $WORKDIR
+db="hg38"
+mkdir -p $db/genomes
 
+# get the headers:
+bcftools view -h /hive/data/outside/gnomAD.3/v3.1/genomes/gnomad.genomes.v3.1.sites.chr1.vcf.bgz > gnomad.v3.1.header
 
+# The VEP field has the important information, format:
+bcftools view -h /hive/data/outside/gnomAD.3/v3.1/genomes/gnomad.genomes.v3.1.sites.chr1.vcf.bgz | grep vep | grep -o "Format: .*$" | cut -d' ' -f2- | tr '|' '\t' | tl > gnomad.v3.1.vep.fields
+
+# the specific fields (same as v2.1.1 except '_' has been swapped to '-' EXCEPT in popmax
+# fields -___-), also add some new fields like CADD scores:
+fields="AC,AN,AF,faf95,nhomalt,vep,popmax,AC_popmax,AN_popmax,AF_popmax,AC-afr,AN-afr,AF-afr,nhomalt-afr,AC-ami,AN-ami,AF-ami,nhomalt-ami,AC-amr,AN-amr,AF-amr,nhomalt-amr,AC-asj,AN-asj,AF-asj,nhomalt-asj,AC-eas,AN-eas,AF-eas,nhomalt-eas,AC-fin,AN-fin,AF-fin,nhomalt-fin,AC-mid,AN-mid,AF-mid,nhomalt-mid,AC-nfe,AN-nfe,AF-nfe,nhomalt-nfe,AC-sas,AN-sas,AF-sas,nhomalt-sas,AC-oth,AN-oth,AF-oth,nhomalt-oth,cadd_phred,revel_score,splice_ai_max_ds,splice_ai_consequence,primate_ai_score"
+
+# Don't use parallel anymore, use parasol cause this still takes far too long and bogs down hgwdev:
+
+# make script to run each job:
+cat <<'_EOF' > run.sh
+#!/bin/bash
+
+# don't do the following, as vcfToBed will correctly exit with an error
+#set -beEu -o pipefail
+fields="AC,AN,AF,faf95,nhomalt,vep,popmax,AC_popmax,AN_popmax,AF_popmax,AC-afr,AN-afr,AF-afr,nhomalt-afr,AC-ami,AN-ami,AF-ami,nhomalt-ami,AC-amr,AN-amr,AF-amr,nhomalt-amr,AC-asj,AN-asj,AF-asj,nhomalt-asj,AC-eas,AN-eas,AF-eas,nhomalt-eas,AC-fin,AN-fin,AF-fin,nhomalt-fin,AC-mid,AN-mid,AF-mid,nhomalt-mid,AC-nfe,AN-nfe,AF-nfe,nhomalt-nfe,AC-sas,AN-sas,AF-sas,nhomalt-sas,AC-oth,AN-oth,AF-oth,nhomalt-oth,cadd_phred,revel_score,splice_ai_max_ds,splice_ai_consequence,primate_ai_score"
+infile=$1
+finalBed=$2
+
+# get the suffix name after the final '/':
+suffix=${infile#/hive/data/outside/gnomAD.3/v3.1/genomes/}
+suffix=${suffix%.vcf.bgz}
+
+outBed=/hive/data/inside/gnomAD/v3.1/hg38/genomes/${suffix}.bed
+
+vcfToBed -fields="${fields}" ${infile} ${outBed} 2>/dev/null
+/hive/data/inside/gnomAD/v3.1/gnomadVcfBedToBigBed ${outBed} stdout | sort -k1,1 -k2,2n > ${finalBed}
+_EOF
+
+# make a jobList file, here's a sample line:
+./run.sh /hive/data/outside/gnomAD.3/v3.1/genomes/gnomad.genomes.v3.1.sites.chr1.vcf.bgz {check out exists+ /hive/data/inside/gnomAD/v3.1/hg38/genomes/chr1.bed}
+
+ssh ku "cd ${WORKDIR}; para create jobList; para try; exit"
+
+# woops errors in the gnomadVcfBedToBigBed script caused the first 10 jobs fail, fix up the script
+# and run those jobs separately:
+# the regular expression is for extracting chr*.bed out of the input file and making just that name
+# the output file
+
+# first start the rest of the jobs:
+ssh ku "cd ${WORKDIR}; para push; exit"
+# then finish off:
+parallel -j10 --joblog secondhalf.run.log --plus "./gnomadVcfBedToBigBed {} hg38/genomes/{= s/.*(chr[0-9]+\.bed$)/\$1/ =}" ::: hg38/genomes/gnomad.genomes.v3.1.sites.chr{1,10,11,12,13,14,15,16,17,18}.bed
+# See para.time and secondhalf.run.log for timing info
+
+time sort -k1,1 -k2,2n hg38/genomes/chr*.bed > gnomad.v3.1.genomes.bed
+# real    26m7.992s
+# user    31m40.053s
+# sys     14m31.118s
+
+nohup time bedToBigBed -type=bed9+64 -tab -as=genomes.as gnomad.v3.1.genomes.bed /hive/data/genomes/hg38/chrom.sizes genomes.bb &> bigBed.log &
+mkdir -p /gbdb/hg38/gnomAD/v3.1/variants/
+ln -s `pwd`/genomes.bb /gbdb/hg38/gnomAD/v3.1/variants/
