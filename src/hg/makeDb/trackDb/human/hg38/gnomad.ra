@@ -77,4 +77,5 @@ html gnomad
     mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); rsId: $rsId; Genes: $genes; Annotation: $annot; FILTER: $FILTER; Variation: $variation_type
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r3&ignore=$<rsId>
     urlLabel View this variant at gnomAD
+    extraDetailsTable /gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
     release alpha
