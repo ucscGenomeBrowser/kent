@@ -516,4 +516,4 @@ include weizmanOrfs.ra
 include pyle.ra
 include treangen.ra
 include pbm.ra
-include pbmShanghai.ra alpha
+include pbmShanghai.ra alpha,beta
