@@ -1438,7 +1438,9 @@ drawArbitraryYLine(vis, (enum wiggleGridOptEnum)wigCart->yLineOnOff,
 
 if (enableMouseOver && mouseOverData)
     {
-    jsonWriteListStart(mouseOverJson, tg->track);
+    jsonWriteObjectStart(mouseOverJson, tg->track);
+    jsonWriteString(mouseOverJson, "t", tg->tdb->type);
+    jsonWriteListStart(mouseOverJson, "d");
     slReverse(&mouseOverData);
     struct wigMouseOver *dataItem = mouseOverData;
     for (; dataItem; dataItem = dataItem->next)
@@ -1451,6 +1453,7 @@ if (enableMouseOver && mouseOverData)
         jsonWriteObjectEnd(mouseOverJson);
         }
     jsonWriteListEnd(mouseOverJson);
+    jsonWriteObjectEnd(mouseOverJson);
     slFreeList(&mouseOverData);
     // hidden element to pass along jsonUrl file name and also the trigger
     // that this track has data to display.

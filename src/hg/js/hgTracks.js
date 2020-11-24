@@ -4464,19 +4464,22 @@ var imageV2 = {
 ///////////////////////////////////////
 var mouseOver = {
 
-    spans: {},
-    visible: false,
-    tracks: {},
+    items: {},  // items[trackName][] - data for each item in this track
+    visible: false,     // keeping track of popUp window visibility
+    tracks: {}, // tracks[trackName] - number of data items for this track
+    trackType: {},	// key is track name, value is track type from hgTracks
     jsonUrl: {},       // list of json files from hidden DIV elements
-    maximumWidth: {},
+    maximumWidth: {},   // maximumWidth[trackName] - largest string to display
     popUpDelay: 200,   // 0.2 second delay before popUp appears
     popUpTimer: null,// handle from setTimeout to use in clearTimout(popUpTimer)
     delayDone: true,   // mouse has not left element, still receiving move evts
-    delayInProgress: false,        // true if working with delay timer done
-    mostRecentMouseEvt: null,
-    browserTextSize: 12,
+    delayInProgress: false,        // true while waiting for delay timer
+    mostRecentMouseEvt: null,   // to use when mouse delay is finished
+    browserTextSize: 12,        // default if not found otherwise
 
-    // spans{} - key name is track name, value is an array of
+    // items{} - key name is track name, value is an array of data items
+    //           where the format of each item can be different for different
+    //           data tracks.  For example, the wiggle track is an array of:
     //                   objects: {x1, x2, v, c}
     //           where [x1..x2) is the array index where the value 'v'
     //           is found, and 'c' is the data value count in this value
@@ -4485,9 +4488,9 @@ var mouseOver = {
     //           shouldn't need to do this here, the window knows if it
     //           is visible or not, just ask it for status
     // tracks{}  - tracks that were set up initially, key is track name
-    //             value is the number of boxes (for debugging)
+    //             value is the number of items (for debugging)
     // maximumWidth{} - key is track name, value is length of longest
-    //                         number string as measured when rendered
+    //                  number string as measured when rendered
 
     // given hgt_....png file name, change to hgt_....json file name
     jsonFileName: function(imgDataId)
@@ -4505,12 +4508,10 @@ var mouseOver = {
       if (trackDb) {
 	trackType = trackDb.type;
 	hasChildren = trackDb.hasChildren;
-      } else {
-	if (hgTracks.trackDb) {
-	   if (hgTracks.trackDb[trackName]) {
-	      trackType = hgTracks.trackDb[trackName].type;
-	   }
-	}
+      } else if (hgTracks.trackDb && hgTracks.trackDb[trackName]) {
+	trackType = hgTracks.trackDb[trackName].type;
+      } else if (mouseOver.trackType[trackName]) {
+	trackType = mouseOver.trackType[trackName];
       }
       var tdData = "td_data_" + trackName;
       var tdDataId  = document.getElementById(tdData);
@@ -4544,6 +4545,10 @@ var mouseOver = {
     // returning -1 when not found
     // if we knew the array was sorted on x1 we could get out early
     //   when x < x1
+    // Note, different track types could have different intersection
+    //       procedures.  For example, the HiC track will need to intersect
+    //       the mouse position within the diamond/square defined by the
+    //       items in the display.
     findRange: function (x, rects)
     {
       var answer = -1;  // assmume not found
@@ -4619,7 +4624,7 @@ var mouseOver = {
     var rightSide = tdLeft + tdWidth;
     // clientX is the X coordinate of the mouse hot spot
     var clientX = Math.floor(evt.clientX);
-    // the graphOffset is the index (x coordinate) into the 'spans' definitions
+    // the graphOffset is the index (x coordinate) into the 'items' definitions
     //  of the data value boxes for the graph.  The magic number three
     //   is used elsewhere in this code, note the comment on the constant
     //   LEFTADD.
@@ -4630,16 +4635,16 @@ var mouseOver = {
 
     var windowUp = false;     // see if window is supposed to become visible
     var foundIdx = -1;
-    if (mouseOver.spans[trackName]) {
-       foundIdx = mouseOver.findRange(graphOffset, mouseOver.spans[trackName]);
+    if (mouseOver.items[trackName]) {
+       foundIdx = mouseOver.findRange(graphOffset, mouseOver.items[trackName]);
     }
     // can show 'no data' when not found
     var mouseOverValue = "no&nbsp;data";
     if (foundIdx > -1) { // value to display
-      if (mouseOver.spans[trackName][foundIdx].c > 1) {
-        mouseOverValue = "&nbsp;&mu;&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
+      if (mouseOver.items[trackName][foundIdx].c > 1) {
+        mouseOverValue = "&nbsp;&mu;&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
       } else {
-        mouseOverValue = "&nbsp;" + mouseOver.spans[trackName][foundIdx].v + "&nbsp;";
+        mouseOverValue = "&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
       }
     }
     $('#mouseOverText').html(mouseOverValue);
@@ -4717,15 +4722,21 @@ var mouseOver = {
     //        and s is the value string to display
     //     Will need to get them sorted on x1 for efficient searching as
     //     they accumulate in the local data structure here.
+    //  2020-11-24 more generalized incoming data structure, don't care
+    //             what the structure is for each item, this will vary
+    //             depending upon the type of track.  trackType now remembered
+    //             in mouseOver.trackType[trackName]
     // =======================================================================
     receiveData: function (arr)
     {
       mouseOver.visible = false;
       for (var trackName in arr) {
 	// clear these variables if they existed before
-      if (mouseOver.spans[trackName]) {mouseOver.spans[trackName] = undefined;}
+      if (mouseOver.trackType[trackName]) {mouseOver.trackType[trackName] = undefined;}
+      if (mouseOver.items[trackName]) {mouseOver.items[trackName] = undefined;}
       if (mouseOver.tracks[trackName]) {mouseOver.tracks[trackName] = 0;}
-      mouseOver.spans[trackName] = [];      // start array
+      mouseOver.items[trackName] = [];      // start array
+      mouseOver.trackType[trackName] = arr[trackName].t;
       // add a 'mousemove' and 'mouseout' event listener to each track
       //     display object
       var tdData = "td_data_" + trackName;
@@ -4737,18 +4748,18 @@ var mouseOver = {
       $( tdDataId ).mousemove(mouseOver.mouseMoveDelay);
       $( tdDataId ).mouseout(mouseOver.popUpDisappear);
       var itemCount = 0;	// just for monitoring purposes
-      // save incoming x1,x2,v data into the mouseOver.spans[trackName][] array
+      // save incoming x1,x2,v data into the mouseOver.items[trackName][] array
       var lengthLongestNumberString = 0;
       var longestNumber = 0;
       var hasMean = false;
-      for (var span in arr[trackName]) {
-         if (arr[trackName][span].c > 1) { hasMean = true; }
-         var lenV = arr[trackName][span].v.toString().length;
+      for (var datum in arr[trackName].d) {      // .d is the data array
+         if (arr[trackName].d[datum].c > 1) { hasMean = true; }
+         var lenV = arr[trackName].d[datum].v.toString().length;
          if (lenV > lengthLongestNumberString) {
 	   lengthLongestNumberString = lenV;
-	   longestNumber = arr[trackName][span].v;
+	   longestNumber = arr[trackName].d[datum].v;
          }
-        mouseOver.spans[trackName].push(arr[trackName][span]);
+        mouseOver.items[trackName].push(arr[trackName].d[datum]);
        ++itemCount;
       }
       mouseOver.tracks[trackName] = itemCount;	// != 0 -> indicates valid track
