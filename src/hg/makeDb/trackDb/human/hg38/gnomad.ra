@@ -52,3 +52,29 @@ html gnomad
         longLabel Genome Aggregation Database (gnomAD) Exome Variants v2.1
         bigDataUrl /gbdb/hg38/gnomAD/vcf/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.gz
         priority 2
+
+    track gnomadGenomesVariantsV3.1
+    parent gnomadVariants
+    shortLabel gnomAD v3.1
+    longLabel Genome Aggregation Database (gnomAD) Genome Variants v3.1
+    dataVersion Release 3.1 (October 29, 2020)
+    type bigBed 9 +
+    itemRgb on
+    html gnomad
+    bigDataUrl /gbdb/hg38/gnomAD/v3.1/variants/genomes.bb
+    priority 1
+    labelFields name,rsId
+    defaultLabelFields name
+    sepFields AC_afr
+    filterValues.annot pLoF,missense,synonymous,other
+    filterValuesDefault.annot pLoF,missense,synonymous
+    filterValues.FILTER PASS,InbreedingCoeff,RF,AC0
+    filterType.FILTER multipleListAnd
+    filterValuesDefault.FILTER PASS
+    filterValues.variation_type 3_prime_UTR_variant,5_prime_UTR_variant,NMD_transcript_variant,TFBS_ablation,TF_binding_site_variant,coding_sequence_variant,frameshift_variant,incomplete_terminal_codon_variant,inframe_deletion,inframe_insertion,intergenic_variant,intron_variant,mature_miRNA_variant,missense_variant,non_coding_transcript_exon_variant,non_coding_transcript_variant,protein_altering_variant,splice_acceptor_variant,splice_donor_variant,splice_region_variant,start_lost,stop_gained,stop_lost,stop_retained_variant,synonymous_variant,transcript_ablation
+    filterType.variation_type multipleListOr
+    maxItems 50000
+    mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); rsId: $rsId; Genes: $genes; Annotation: $annot; FILTER: $FILTER; Variation: $variation_type
+    url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r3&ignore=$<rsId>
+    urlLabel View this variant at gnomAD
+    release alpha
