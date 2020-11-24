@@ -31,8 +31,8 @@ if (error !=0)
     return error;
 
 error = FT_New_Face( library, fontFile, 0, &face );
-if (error !=0)
-    return error;
+if ((error !=0) || (face == NULL))
+    errAbort("Cannot open font file '%s'.  Does it exist?", fontFile);
 
 return 0;
 }
