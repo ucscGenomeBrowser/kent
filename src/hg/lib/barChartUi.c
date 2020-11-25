@@ -211,7 +211,7 @@ errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
     if (isNotEmpty(errCatch->message->string))
-        warn("unable to open %s track file %s: %s", 
+        errAbort("unable to open %s track file %s: %s", 
                     track, categUrl, errCatch->message->string);
     }
 errCatchFree(&errCatch);
