@@ -9643,7 +9643,7 @@ if (version == NULL)
     }
 
 if (isNotEmpty(version))
-    printf("<B>Source database version:</B> %s <BR>\n", version);
+    printf("<B>Source data version:</B> %s <BR>\n", version);
 }
 
 void printRelatedTracks(char *database, struct hash *trackHash, struct trackDb *tdb, struct cart *cart)

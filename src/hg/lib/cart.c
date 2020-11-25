@@ -253,6 +253,23 @@ else
     }
 }
 
+static char *getDefaultCart(struct sqlConnection *conn)
+/* Get the default cart if any. */
+{
+char *contents = "";
+char *table = defaultCartTable();
+if (sqlTableExists(conn, table))
+    {
+    char buffer[16 * 1024];
+    char query[1024];
+
+    sqlSafef(query, sizeof query, "select contents from %s", table);
+    sqlQuickQuery(conn, query, buffer, sizeof buffer);
+    contents = cloneString(buffer);
+    }
+return contents;
+}
+
 struct cartDb *loadDb(struct sqlConnection *conn, char *table, char *secureId, boolean *found)
 /* Load bits from database and save in hash. */
 {
@@ -1327,6 +1344,11 @@ if (sessionIdFound)
     cartParseOverHash(cart, cart->sessionInfo->contents);
 else if (userIdFound)
     cartParseOverHash(cart, cart->userInfo->contents);
+else
+    {
+    char *defaultCartContents = getDefaultCart(conn);
+    cartParseOverHash(cart, defaultCartContents);
+    }
 char when[1024];
 safef(when, sizeof(when), "open %s %s", userId, sessionId);
 cartTrace(cart, when, conn);
@@ -2153,7 +2175,8 @@ if (!secureId)
 struct dyString *query = dyStringNew(256);
 char *sessionKey = NULL;	    
 unsigned int id = cartDbParseId(secureId, &sessionKey);
-sqlDyStringPrintf(query, "update %s set contents='' where id=%u", table, id);
+char *defaultCartContents = getDefaultCart(conn);
+sqlDyStringPrintf(query, "update %s set contents='%s' where id=%u", table, defaultCartContents, id);
 if (cartDbUseSessionKey())
     {
     if (!sessionKey)

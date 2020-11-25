@@ -8,6 +8,7 @@ group genes
 visibility pack
 color 12,12,120
 type genePred knownGenePep knownGeneMrna
+exonNumbers on
 idXref kgAlias kgID alias
 hgGene on
 hgsid on
@@ -117,6 +118,7 @@ group genes
 visibility hide
 color 155,0,125
 type genePred acemblyPep acemblyMrna
+exonNumbers on
 autoTranslate 0
 url https://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=mouse&l=$$
 itemClassTbl acemblyClass
