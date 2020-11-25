@@ -475,7 +475,7 @@ geneTrack ncbiGeneBGP
 group varRep
 visibility squish
 priority 0.1
-dataVersion /gbdb/wuhCor1/sarsCov2Phylo/sarscov2phylo.pub.version.txt
+dataVersion /gbdb/wuhCor1/sarsCov2PhyloPub/sarscov2phylo.pub.version.txt
 pennantIcon New red ../goldenPath/newsarch.html#? "Updated Nov. ?, 2020"
 release alpha
 
