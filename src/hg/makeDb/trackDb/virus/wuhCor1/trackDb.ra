@@ -631,6 +631,7 @@ type bigBed 9 +
 group immu
 bigDataUrl /gbdb/wuhCor1/escape/escape.bb
 mouseOverField _mouseOver
+noScoreFilter on
 
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
