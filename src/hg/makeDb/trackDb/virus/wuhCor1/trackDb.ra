@@ -632,6 +632,7 @@ group immu
 bigDataUrl /gbdb/wuhCor1/escape/escape.bb
 mouseOverField _mouseOver
 noScoreFilter on
+pennantIcon New red ../goldenPath/newsarch.html "Released Nov. 25, 2020"
 
 include trackDb.119way.ra
 include trackDb.strainName119way.ra
