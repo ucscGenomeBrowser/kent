@@ -111,8 +111,8 @@ if ( -s "$dupsList" ) {
       } else {
         addAlias($dupAlias, $ncbiToUcsc{$dupTarget});
       }
-    } elsif (defined($ucscToNcbi{$dupTarget})) {
-        addAlias($dupAlias, $ucscToNcbi{$dupTarget});
+    } elsif (defined($ncbiToUcsc{$dupTarget})) {
+        addAlias($dupAlias, $ncbiToUcsc{$dupTarget});
     } else {
       printf STDERR "# ERROR: can not find duplicate name $dupAlias for sequence $dupTarget\n";
       $dupsNotFound += 1;

@@ -767,6 +767,9 @@ priority 274.0
 track ensGene override
 visibility dense
 
+track uniprot override
+hideEmptySubtracks off
+
 #facebase microarray track
 track FaceBase24SampleTypesAvg
 shortLabel FaceBase 24STypes

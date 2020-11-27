@@ -862,28 +862,33 @@ struct dyString *dy = dyStringCreate("%s/fetch/%s", nextstrainHost(), jsonUrlFor
 return dyStringCannibalize(&dy);
 }
 
-static void makeButtonRow(struct subtreeInfo *subtreeInfoList, struct tempName *jsonTns[],
-                          boolean isFasta)
+static void makeNextstrainButton(char *idBase, int ix, struct tempName *jsonTns[])
+/* Make a button to view results in Nextstrain.  idBase is a short string and
+ * ix is 0-based subtree number. */
+{
+char buttonId[256];
+safef(buttonId, sizeof buttonId, "%s%d", idBase, ix+1);
+char buttonLabel[256];
+safef(buttonLabel, sizeof buttonLabel, "view subtree %d in Nextstrain", ix+1);
+char *nextstrainUrl = nextstrainUrlFromTn(jsonTns[ix]);
+struct dyString *js = dyStringCreate("window.open('%s');", nextstrainUrl);
+cgiMakeOnClickButton(buttonId, js->string, buttonLabel);
+dyStringFree(&js);
+freeMem(nextstrainUrl);
+}
+
+static void makeButtonRow(struct tempName *jsonTns[], int subtreeCount, boolean isFasta)
 /* Russ's suggestion: row of buttons at the top to view results in GB, Nextstrain, Nextclade. */
 {
 puts("<p>");
 cgiMakeButton("submit", "view in Genome Browser");
 if (nextstrainHost())
     {
-    struct subtreeInfo *ti;
     int ix;
-    for (ix = 0, ti = subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
+    for (ix = 0;  ix < subtreeCount;  ix++)
         {
         printf("&nbsp;");
-        char buttonId[256];
-        safef(buttonId, sizeof buttonId, "viewNextstrain%d", ix+1);
-        char buttonLabel[256];
-        safef(buttonLabel, sizeof buttonLabel, "view subtree %d in Nextstrain", ix+1);
-        char *nextstrainUrl = nextstrainUrlFromTn(jsonTns[ix]);
-        struct dyString *js = dyStringCreate("window.open('%s');", nextstrainUrl);
-        cgiMakeOnClickButton(buttonId, js->string, buttonLabel);
-        dyStringFree(&js);
-        freeMem(nextstrainUrl);
+        makeNextstrainButton("viewNextstrainTopRow", ix, jsonTns);
         }
     }
 if (0 && isFasta)
@@ -1377,7 +1382,7 @@ if (vcfTn)
             treeToAuspiceJson(ti, db, refGenome, bigGenePredFile, metadataFile, jsonTns[ix]->forCgi);
             }
         puts("<p></p>");
-        makeButtonRow(results->subtreeInfoList, jsonTns, isFasta);
+        makeButtonRow(jsonTns, subtreeCount, isFasta);
         summarizeSequences(seqInfoList, isFasta, results, jsonTns, db, bigTree);
         reportTiming(&startTime, "write summary table (including reading in lineages)");
         for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
@@ -1389,6 +1394,8 @@ if (vcfTn)
             else if (subtreeCount > 1)
                 printf("Unrelated sample");
             printf("</h3>\n");
+            makeNextstrainButton("viewNextstrainSub", ix, jsonTns);
+            puts("<br>");
             // Make a sub-subtree with only user samples for display:
             struct phyloTree *subtree = phyloOpenTree(ti->subtreeTn->forCgi);
             subtree = phyloPruneToIds(subtree, ti->subtreeUserSampleIds);

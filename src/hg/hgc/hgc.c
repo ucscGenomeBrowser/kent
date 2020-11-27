@@ -1550,6 +1550,50 @@ slReverse(fields);
 return fields;
 }
 
+void printExtraDetailsTable(char *trackName, char *tableName, char *fileName, struct dyString *tableText)
+// convert a tab-sep table to HTML
+{
+struct lineFile *lf = lineFileOnString(fileName, TRUE, tableText->string);
+char *description = tableName != NULL ? tableName : "Additional Details";
+printf("<table>");
+jsBeginCollapsibleSection(cart, trackName, "extraTbl", description, FALSE);
+printf("<table class=\"bedExtraTbl\">\n");
+char *line;
+while (lineFileNext(lf, &line, NULL))
+    {
+    printf("<tr><td>");
+    char *toPrint = replaceChars(line, "\t", "</td><td>");
+    printf("%s", toPrint);
+    printf("</td></tr>\n");
+    }
+printf("</table>\n"); // closes bedExtraTbl
+jsEndCollapsibleSection();
+printf("</table>\n"); // close wrapper table
+}
+
+static struct slName *findFieldsInExtraFile(char *detailsTableUrl, struct asColumn *col, struct dyString *ds)
+// return a list of the ${}-enclosed fields from an extra file
+{
+struct slName *foundFields = NULL;
+char *table = netReadTextFileIfExists(hReplaceGbdb(detailsTableUrl));
+if (table)
+    {
+    for (; col != NULL; col = col->next)
+        {
+        char field[256];
+        safef(field, sizeof(field), "${%s}", col->name);
+        if (stringIn(field, table))
+            {
+            struct slName *replaceField = slNameNew(col->name);
+            slAddHead(&foundFields, replaceField);
+            }
+        }
+    dyStringPrintf(ds, "%s", table);
+    slReverse(foundFields);
+    }
+return foundFields;
+}
+
 int extraFieldsPrintAs(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount, struct asObject *as)
 // Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
 // sr may be null for bigBeds.
@@ -1574,6 +1618,20 @@ char *sepFieldsStr = trackDbSetting(tdb, "sepFields");
 struct slName *sepFields = NULL;
 if (sepFieldsStr)
     sepFields = slNameListFromComma(sepFieldsStr);
+
+// make list of fields that we want to substitute
+// this setting has format description|URLorFilePath, with the stuff before the pipe optional
+char *extraDetailsTableName = NULL, *extraDetails = cloneString(trackDbSetting(tdb, "extraDetailsTable"));
+if (extraDetails && strchr(extraDetails,'|'))
+    {
+    extraDetailsTableName = extraDetails;
+    extraDetails = strchr(extraDetails,'|');
+    *extraDetails++ = 0;
+    }
+struct dyString *extraTblStr = dyStringNew(0);
+struct slName *detailsTableFields = NULL;
+if (extraDetails)
+    detailsTableFields = findFieldsInExtraFile(extraDetails, col, extraTblStr);
 
 // iterate over fields, print as table rows
 int count = 0;
@@ -1604,6 +1662,20 @@ for (;col != NULL && count < fieldCount;col=col->next)
     // external extra fields in that _ field names have some meaning and are not shown
     if (startsWith("_", fieldName) || (skipIds && slNameInList(skipIds, fieldName)))
         continue;
+
+    // don't print this field if we are gonna print it later in a custom table
+    if (detailsTableFields && slNameInList(detailsTableFields, fieldName))
+        {
+        int fieldLen = strlen(fieldName);
+        char *replaceField = needMem(fieldLen+4);
+        replaceField[0] = '$';
+        replaceField[1] = '{';
+        strcpy(replaceField+2, fieldName);
+        replaceField[fieldLen+2] = '}';
+        replaceField[fieldLen+3] = 0;
+        extraTblStr = dyStringSub(extraTblStr->string, replaceField, fields[ix]);
+        continue;
+        }
 
     // skip this row if it's empty and "skipEmptyFields" option is set
     if (skipEmptyFields && isEmpty(fields[ix]))
@@ -1643,6 +1715,12 @@ if (sepFields)
 
 if (count > 0)
     printf("</table>\n");
+
+if (detailsTableFields)
+    {
+    printf("<br>\n");
+    printExtraDetailsTable(tdb->track, extraDetailsTableName, extraDetails, extraTblStr);
+    }
 
 return count;
 }

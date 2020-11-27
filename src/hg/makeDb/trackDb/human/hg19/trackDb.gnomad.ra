@@ -899,6 +899,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#110320 "Updated Nov. 3, 2020
     mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); rsId: $rsId; Genes: $genes; Annotation: $annot; FILTER: $FILTER; Variation: $variation_type
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r2_1&ignore=$<rsId>
     urlLabel View this variant at gnomAD
+    extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.genomes.popTable.txt
     release alpha
 
     track gnomadExomes
@@ -910,7 +911,6 @@ pennantIcon Updated red ../goldenPath/newsarch.html#110320 "Updated Nov. 3, 2020
     parent gnomadSuper
     labelFields name,rsId
     defaultLabelFields name
-    sepFields AC_afr
     filterValues.annot pLoF,missense,synonymous,other
     filterValuesDefault.annot pLoF,missense,synonymous
     filterValues.FILTER PASS,InbreedingCoeff,RF,AC0
@@ -922,6 +922,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#110320 "Updated Nov. 3, 2020
     mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); rsId: $rsId; Genes: $genes; Annotation: $annot; FILTER: $FILTER; Variation: $variation_type
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r2_1&ignore=$<rsId>
     urlLabel View this variant at gnomAD
+    extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.genomes.popTable.txt
     release alpha
 
 searchTable pliByTranscript

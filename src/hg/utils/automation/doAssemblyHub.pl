@@ -993,8 +993,8 @@ export asmId=$asmId
 # verify each sequence name has an alias
 export sizeCount=`cat ../../\${asmId}.chrom.sizes | wc -l`
 export aliasCount=`grep -v "^#" \${asmId}.chromAlias.txt | wc -l`
-if [ "\${sizeCount}" -ne "\${aliasCount}" ]; then
-  printf "ERROR: chromAlias: incorrect number of aliases %d != %d\\n" "\${sizeCount}" "\${aliasCount}" 1>&2
+if [ "\${sizeCount}" -gt "\${aliasCount}" ]; then
+  printf "ERROR: chromAlias: incorrect number of aliases chromSizes %d > %d aliasCount\\n" "\${sizeCount}" "\${aliasCount}" 1>&2
   exit 255
 fi
 
