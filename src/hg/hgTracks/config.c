@@ -60,14 +60,6 @@ char *freeTypeFontNames[] = {
 "AvantGarde-Demi",
 "AvantGarde-BookOblique",
 "AvantGarde-DemiOblique",
-"Bookman-Light",
-"Bookman-Demi",
-"Bookman-LightItalic",
-"Bookman-DemiItalic",
-"NewCenturySchlbk-Roman",
-"NewCenturySchlbk-Bold",
-"NewCenturySchlbk-Italic",
-"NewCenturySchlbk-BoldItalic",
 "Helvetica",
 "Helvetica-Bold",
 "Helvetica-Oblique",
@@ -84,10 +76,6 @@ char *freeTypeFontNames[] = {
 "Courier-Bold",
 "Courier-Oblique",
 "Courier-BoldOblique",
-"Palatino-Roman",
-"Palatino-Bold",
-"Palatino-Italic",
-"Palatino-BoldItalic",
 "ZapfChancery-MediumItalic",
 };
 
@@ -96,14 +84,6 @@ char *freeTypeFontFiles[] = {
 "a010015l.pfb",
 "a010033l.pfb",
 "a010035l.pfb",
-"b018012l.pfb",
-"b018015l.pfb",
-"b018032l.pfb",
-"b018035l.pfb",
-"c059013l.pfb",
-"c059016l.pfb",
-"c059033l.pfb",
-"c059036l.pfb",
 "n019003l.pfb",
 "n019004l.pfb",
 "n019023l.pfb",
@@ -120,10 +100,6 @@ char *freeTypeFontFiles[] = {
 "n022004l.pfb",
 "n022023l.pfb",
 "n022024l.pfb",
-"p052003l.pfb",
-"p052004l.pfb",
-"p052023l.pfb",
-"p052024l.pfb",
 "z003034l.pfb",
 };
 
@@ -188,8 +164,11 @@ dyStringPrintf(dy, "  $(\"[name='%s']\").change(function()\n", textFontVar);
 dyStringPrintf(dy, "  {\n");
 dyStringPrintf(dy, "$(\"[name='textStyle']\").empty();");
 dyStringPrintf(dy, "  val= $(this).find(':selected').val(); \n");
+dyStringPrintf(dy, "  if (fontStyles[val].length == 1) {$(\"[id='textStyleDrop']\").hide();$(\"[id='textStyleName']\").hide();}\n");
+dyStringPrintf(dy, "else\n");
+dyStringPrintf(dy, "  {$(\"[id='textStyleDrop']\").show();$(\"[id='textStyleName']\").show();\n");
 dyStringPrintf(dy, "  for(ii=0; ii < fontStyles[val].length; ii++) { $(\"[name='textStyle']\").append( new Option(fontStyles[val][ii],fontStyles[val][ii],))};\n");
-dyStringPrintf(dy, "  });\n");
+dyStringPrintf(dy, "  }});\n");
 dyStringPrintf(dy, "$(\"[name='textFont']\").change();\n");
 dyStringPrintf(dy, "$(\"[name='textStyle']\").val('%s');\n", currentStyle);
 jsInline(dy->string);
@@ -605,8 +584,8 @@ if (sameString(cfgOptionDefault("freeType", "off"), "on"))
     hPrintf("<TD style=\"text-align: right\">");
     textFontDropDown();
     hPrintf("</TD></TR>");
-    hPrintf("<TR><TD>style:");
-    hPrintf("<TD style=\"text-align: right\">");
+    hPrintf("<TR><TD id='textStyleName'>style:");
+    hPrintf("<TD style=\"text-align: right\" id='textStyleDrop' >");
     textStyleDropDown();
     hPrintf("</TR>");
     hPrintf("</TR>");
