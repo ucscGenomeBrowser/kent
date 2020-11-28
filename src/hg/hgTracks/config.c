@@ -160,15 +160,18 @@ for (ii=0; ii < ArraySize(freeTypeFontNames); ii++)
     }
     dyStringPrintf(dy, "  ];\n");
 
-dyStringPrintf(dy, "  $(\"[name='%s']\").change(function()\n", textFontVar);
-dyStringPrintf(dy, "  {\n");
-dyStringPrintf(dy, "$(\"[name='textStyle']\").empty();");
+dyStringPrintf(dy, "$(\"[name='%s']\").change(function()\n", textFontVar);
+dyStringPrintf(dy, "{\n");
+dyStringPrintf(dy, "  $(\"[name='textStyle']\").empty();");
 dyStringPrintf(dy, "  val= $(this).find(':selected').val(); \n");
-dyStringPrintf(dy, "  if (fontStyles[val].length == 1) {$(\"[id='textStyleDrop']\").hide();$(\"[id='textStyleName']\").hide();}\n");
-dyStringPrintf(dy, "else\n");
-dyStringPrintf(dy, "  {$(\"[id='textStyleDrop']\").show();$(\"[id='textStyleName']\").show();\n");
+dyStringPrintf(dy, "  if (fontStyles[val].length == 1) {\n");
+dyStringPrintf(dy, "    $(\"[id='textStyleDrop']\").hide();$(\"[id='textStyleName']\").hide();\n");
+dyStringPrintf(dy, "    $(\"[name='textStyle']\").val('Normal');\n");
+dyStringPrintf(dy, "  } else {\n");
+dyStringPrintf(dy, "    $(\"[id='textStyleDrop']\").show();$(\"[id='textStyleName']\").show();\n");
+dyStringPrintf(dy, "  }\n");
 dyStringPrintf(dy, "  for(ii=0; ii < fontStyles[val].length; ii++) { $(\"[name='textStyle']\").append( new Option(fontStyles[val][ii],fontStyles[val][ii],))};\n");
-dyStringPrintf(dy, "  }});\n");
+dyStringPrintf(dy, "});\n");
 dyStringPrintf(dy, "$(\"[name='textFont']\").change();\n");
 dyStringPrintf(dy, "$(\"[name='textStyle']\").val('%s');\n", currentStyle);
 jsInline(dy->string);
