@@ -1138,6 +1138,10 @@ sub doRepeatMasker {
      if ( -s "$buildDir/download/${asmId}_rm.out.gz" ) {
        $rmskOpts = " \\
   -ncbiRmsk=\"$buildDir/download/${asmId}_rm.out.gz\" ";
+       if ( -s "${buildDir}/download/${asmId}.remove.dups.list" ) {
+         $rmskOpts .= " \\
+  -dupList=\"${buildDir}/download/${asmId}.remove.dups.list\" ";
+       }
        if ($ucscNames) {
          $rmskOpts .= " \\
   -liftSpec=\"$buildDir/sequence/$asmId.ncbiToUcsc.lift\"";
