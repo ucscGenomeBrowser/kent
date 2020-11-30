@@ -5449,6 +5449,9 @@ bigDataUrl /gbdb/$D/uniprot/unipMut.bb
 track sgpGene override
 longLabel SGP Gene Predictions Using Mouse/$Organism Homology
 
+track uniprot override
+hideEmptySubtracks off
+
 searchTable cnvDevDelayCase
 semiShortCircuit 1
 termRegex nssv[0-9]+

@@ -13,6 +13,7 @@ scoreLabel Score (1000=SwissProt, 0=Trembl)
 scoreFilter 0
 itemRgb on
 dataVersion /gbdb/$D/uniprot/version.txt
+hideEmptySubtracks on
 
         track unipAliSwissprot
         shortLabel SwissProt Aln.

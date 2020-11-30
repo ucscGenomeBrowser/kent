@@ -994,7 +994,7 @@ export asmId=$asmId
 export sizeCount=`cat ../../\${asmId}.chrom.sizes | wc -l`
 export aliasCount=`grep -v "^#" \${asmId}.chromAlias.txt | wc -l`
 if [ "\${sizeCount}" -ne "\${aliasCount}" ]; then
-  printf "ERROR: chromAlias: incorrect number of aliases %d != %d\\n" "\${sizeCount}" "\${aliasCount}" 1>&2
+  printf "ERROR: chromAlias: incorrect number of aliases chromSizes %d > %d aliasCount\\n" "\${sizeCount}" "\${aliasCount}" 1>&2
   exit 255
 fi
 
@@ -1138,6 +1138,10 @@ sub doRepeatMasker {
      if ( -s "$buildDir/download/${asmId}_rm.out.gz" ) {
        $rmskOpts = " \\
   -ncbiRmsk=\"$buildDir/download/${asmId}_rm.out.gz\" ";
+       if ( -s "${buildDir}/download/${asmId}.remove.dups.list" ) {
+         $rmskOpts .= " \\
+  -dupList=\"${buildDir}/download/${asmId}.remove.dups.list\" ";
+       }
        if ($ucscNames) {
          $rmskOpts .= " \\
   -liftSpec=\"$buildDir/sequence/$asmId.ncbiToUcsc.lift\"";
