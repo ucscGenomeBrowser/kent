@@ -1,0 +1,6 @@
+hub Legacy genome assemblies
+shortLabel Legacy assemblies
+longLabel Legacy genome assemblies
+genomesFile genomes.txt
+email hclawson@ucsc.edu
+descriptionUrl index.html
