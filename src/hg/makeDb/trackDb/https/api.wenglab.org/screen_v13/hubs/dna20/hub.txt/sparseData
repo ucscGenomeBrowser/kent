@@ -1,0 +1,7 @@
+
+hub ENCODE
+shortLabel ENCODE DNA Trackhub
+longLabel ENCODE Trackhub for DNA-based assays
+genomesFile genomes.txt
+email zhiping.weng@umassmed.edu
+descriptionUrl description.html

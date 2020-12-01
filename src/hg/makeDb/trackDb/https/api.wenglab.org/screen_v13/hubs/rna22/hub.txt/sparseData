@@ -1,0 +1,7 @@
+
+hub ENCODE
+shortLabel ENCODE RNA Trackhub
+longLabel ENCODE Trackhub for RNA-based assays
+genomesFile genomes.txt
+email zhiping.weng@umassmed.edu
+descriptionUrl hub.html
