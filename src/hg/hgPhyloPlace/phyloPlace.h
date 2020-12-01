@@ -13,6 +13,8 @@
 
 #define PHYLOPLACE_DATA_DIR "hgPhyloPlaceData"
 
+#define NEXTSTRAIN_DRAG_DROP_DOC "https://docs.nextstrain.org/projects/auspice/en/latest/advanced-functionality/drag-drop-csv-tsv.html"
+
 struct seqInfo
 /* User sequences, alignments and statistics */
 {

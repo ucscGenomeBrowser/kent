@@ -1383,6 +1383,10 @@ if (vcfTn)
             }
         puts("<p></p>");
         makeButtonRow(jsonTns, subtreeCount, isFasta);
+        printf("<p>If you have metadata you wish to display, click a 'view subtree in Nextstrain' "
+               "button, and then you can drag on a CSV file to "
+               "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' target=_blank>add it to the tree view</a>."
+               "</p>\n");
         summarizeSequences(seqInfoList, isFasta, results, jsonTns, db, bigTree);
         reportTiming(&startTime, "write summary table (including reading in lineages)");
         for (ix = 0, ti = results->subtreeInfoList;  ti != NULL;  ti = ti->next, ix++)
