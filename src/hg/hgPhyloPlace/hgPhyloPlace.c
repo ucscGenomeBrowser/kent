@@ -174,7 +174,13 @@ puts("<p>Upload your SARS-CoV-2 sequence (FASTA or VCF file) to find the most si
      "<a href='https://github.com/yatisht/usher' target=_blank>"
      "Ultrafast Sample placement on Existing tRee (UShER)</a> "
      "(<a href='https://www.biorxiv.org/content/10.1101/2020.09.26.314971v1' target=_blank>"
-     "Turakhia <em>et al.</em></a>).</p>\n");
+     "Turakhia <em>et al.</em></a>).  UShER also generates local subtrees to show samples "
+     "in the context of the most closely related sequences.  The subtrees can be visualized "
+     "as Genome Browser custom tracks and/or using "
+     "<a href='https://nextstrain.org' target=_blank>Nextstrain</a>'s interactive display "
+     "which supports "
+     "<a href='https://docs.nextstrain.org/projects/auspice/en/latest/advanced-functionality/drag-drop-csv-tsv.html' "
+     "target=_blank>drag-and-drop</a> of local metadata that remains on your computer.</p>\n");
 puts("<p><b>Note:</b> "
      "Please do not upload any files that contain "
      "<a href='https://en.wikipedia.org/wiki/Protected_health_information#United_States' "
@@ -223,6 +229,18 @@ puts("  </div>");
 puts("</form>");
 }
 
+static void linkToLandingPage()
+/* David asked for a link back to our covid19 landing page. */
+{
+puts("<div class='gbControl col-md-12'>");
+puts("<div class='readableWidth'>");
+puts("<p></p>");
+puts("<p>\n"
+     "<a href='/covid19.html'>COVID-19 Pandemic Resources at UCSC</a></p>\n");
+puts("</div>");
+puts("</div>");
+}
+
 static void gisaidFooter()
 /* GISAID wants this on all pages that have anything to do with GISAID samples. */
 {
@@ -257,6 +275,7 @@ if (hgPhyloPlaceEnabled())
     {
     inputForm();
     exampleForm();
+    linkToLandingPage();
     gisaidFooter();
     }
 else
@@ -329,6 +348,7 @@ else
     }
 puts("</div>\n");
 
+linkToLandingPage();
 gisaidFooter();
 newPageEndStuff();
 }
