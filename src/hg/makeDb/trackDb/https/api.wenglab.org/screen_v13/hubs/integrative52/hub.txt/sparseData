@@ -1,7 +1,0 @@
-hub ENCODE
-shortLabel ENCODE integrative Trackhub
-longLabel ENCODE Trackhub for integrative results
-genomesFile genomes.txt
-email zhiping.weng@umassmed.edu
-descriptionUrl hub.html
-
