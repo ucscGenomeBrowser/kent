@@ -5413,6 +5413,7 @@ identifier wgEncodeGencodeExonSupportVM25
 
 # end Gencode VM25
 
+# begin Gencode V35 (2020 reorganization quick change)
 identifier gencodeAnnotV35
 "Link together Gencode Annotation Table with Attributes table"
     $gbd.gencodeAttrsV35.transcriptId
@@ -5435,6 +5436,84 @@ identifier gencodeAnnotV35Gene
 "Link together Gencode Annotation Table with Attributes table"
     $gbd.gencodeGeneSourceV35.geneId
     $gbd.gencodeAttrsV35.geneId
+
+# end Gencode V35 (2020 reorganization quick change)
+
+# begin Gencode V36 (2020 reorganization)
+
+identifier gencodeAnnotAttrsV36
+"Link together Gencode Annotation Table with Attributes table"
+    hg38.gencodeAttrsV36.transcriptId
+    hg38.gencodeAnnotV36.name
+
+# gencode association tables (joined through gencodeAttrsV36)
+identifier gencodeGeneSourceV36
+"Link together Gencode Gene Source table with Attributes table"
+    hg38.gencodeGeneSourceV36.geneId
+    hg38.gencodeAttrsV36.geneId
+
+identifier gencodeToGeneSymbolV36
+"Link together Gencode gene symbol table with Attributes table"
+    hg38.gencodeToGeneSymbolV36.transcriptId dupeOk
+    hg38.gencodeAttrsV36.transcriptId minCheck=0.20
+
+identifier gencodeToPdbV36
+"Link together Gencode Pdb table with Attributes table"
+    hg38.gencodeToPdbV36.transcriptId dupeOk
+    hg38.gencodeAttrsV36.transcriptId minCheck=0.015
+
+identifier gencodeToPubMedV36
+"Link together Gencode Pubmed table with Attributes table"
+    hg38.gencodeToPubMedV36.transcriptId dupeOk
+    hg38.gencodeAttrsV36.transcriptId  minCheck=0.63
+
+identifier gencodeToRefSeqV36
+"Link together Gencode RefSeq table with Attributes table"
+    hg38.gencodeToRefSeqV36.transcriptId dupeOk
+    hg38.gencodeAttrsV36.transcriptId minCheck=0.05
+
+identifier gencodeTagV36
+"Link together Gencode Tag table with Attributes table"
+    hg38.gencodeTagV36.transcriptId dupeOk
+    hg38.gencodeAttrsV36.transcriptId minCheck=0.36
+    hg38.gencodeToRefSeqV36.transcriptId minCheck=0.9
+
+identifier gencodeTranscriptSourceV36
+"Link together Gencode Transcript Source table with Attributes table"
+    hg38.gencodeTranscriptSourceV36.transcriptId
+    hg38.gencodeAttrsV36.transcriptId
+
+identifier gencodeTranscriptSupportV36
+"Link together Gencode Transcript Support table with Attributes table"
+    hg38.gencodeTranscriptSupportV36.transcriptId dupeOk
+    hg38.gencodeAttrsV36.transcriptId minCheck=0.10
+
+identifier gencodeTranscriptionSupportLevelV36
+"Link together Gencode Transcription Support Level table with Attributes table"
+    hg38.gencodeTranscriptionSupportLevelV36.transcriptId dupeOk
+    hg38.gencodeAttrsV36.transcriptId minCheck=0.30
+
+identifier gencodeToUniProtV36
+"Link together Gencode UniProt Support table with Attributes table"
+    hg38.gencodeToUniProtV36.transcriptId dupeOk
+    hg38.gencodeAttrsV36.transcriptId minCheck=0.35
+
+identifier gencodeAnnotationRemarkV36
+"Link together Gencode Annotation Remark table with Attributes table"
+    hg38.gencodeAnnotationRemarkV36.transcriptId dupeOk
+    hg38.gencodeAttrsV36.transcriptId minCheck=0.10
+
+identifier gencodeToEntrezGeneV36
+"Link together Gencode Entrez table with Attributes table"
+    hg38.gencodeToEntrezGeneV36.transcriptId dupeOk
+    hg38.gencodeToEntrezGeneV36.transcriptId minCheck=0.35
+
+identifier gencodeExonSupportV36
+"Link together Gencode Exon Support table with Attributes table"
+    hg38.gencodeExonSupportV36.transcriptId dupeOk
+    hg38.gencodeAttrsV36.transcriptId minCheck=0.70
+
+# end Gencode V36 (2020 reorganization)
 
 identifier wgEncodeGencodeClassesV3Hg19
 "Link together Gencode gene model (Known) and class for July 2009 Data Version"
