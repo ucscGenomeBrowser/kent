@@ -89,7 +89,7 @@ html chainNet
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type bigChain
+        type bigChain GCF_009829145.1
         bigDataUrl /gbdb/mm39/bbi/chainNet/chainGCF_009829145.1.bb
         linkDataUrl /gbdb/mm39/bbi/chainNet/chainGCF_009829145.1Link.bb
         html chainNet
