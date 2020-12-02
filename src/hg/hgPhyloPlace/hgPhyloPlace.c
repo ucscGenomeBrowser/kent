@@ -179,7 +179,7 @@ puts("<p>Upload your SARS-CoV-2 sequence (FASTA or VCF file) to find the most si
      "as Genome Browser custom tracks and/or using "
      "<a href='https://nextstrain.org' target=_blank>Nextstrain</a>'s interactive display "
      "which supports "
-     "<a href='https://docs.nextstrain.org/projects/auspice/en/latest/advanced-functionality/drag-drop-csv-tsv.html' "
+     "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' "
      "target=_blank>drag-and-drop</a> of local metadata that remains on your computer.</p>\n");
 puts("<p><b>Note:</b> "
      "Please do not upload any files that contain "
@@ -193,9 +193,9 @@ puts("<p><b>Note:</b> "
      "please share your SARS-CoV-2 sequences by submitting them to an "
      "<a href='https://ncbiinsights.ncbi.nlm.nih.gov/2020/08/17/insdc-covid-data-sharing/' "
      "target=_blank>INSDC</a> member institution\n"
-     "(<a href='https://submit.ncbi.nlm.nih.gov/sarscov2/' target=_blank>NCBI</a> in the U.S.,\n"
-     "<a href='https://www.covid19dataportal.org/submit-data' target=_blank>EMBL-EBI</a> in Europe\n"
-     "and <a href='https://www.ddbj.nig.ac.jp/ddbj/websub.html' target=_blank>DDBJ</a> in Japan)\n"
+     "(<a href='https://submit.ncbi.nlm.nih.gov/sarscov2/' target=_blank>NCBI</a>,\n"
+     "<a href='https://www.covid19dataportal.org/submit-data' target=_blank>EMBL-EBI</a>\n"
+     "or <a href='https://www.ddbj.nig.ac.jp/ddbj/websub.html' target=_blank>DDBJ</a>)\n"
      "and <a href='https://www.gisaid.org/' target=_blank>GISAID</a>.\n"
      "</p>\n");
 puts("</div>");
