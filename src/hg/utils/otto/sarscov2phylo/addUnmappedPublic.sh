@@ -25,6 +25,7 @@ ref2bit=/hive/data/genomes/wuhCor1/wuhCor1.2bit
 usherDir=~angie/github/usher
 usher=$usherDir/build/usher
 matToVcf=$usherDir/build/matToVcf
+find_parsimonious_assignments=~angie/github/strain_phylogenetics/build/find_parsimonious_assignments
 
 scriptDir=$(dirname "${BASH_SOURCE[0]}")
 
@@ -48,7 +49,7 @@ wc -l public-$releaseLabel.all.vcf
 bgzip -f public-$releaseLabel.all.vcf
 tabix -p vcf public-$releaseLabel.all.vcf.gz
 
-# Then with masking for usher/hgPhyloPlace:
+# Then with masking to collapse the tree & make protobuf for usher/hgPhyloPlace:
 time vcfFilter -excludeVcf=mask.vcf unmapped.vcf.gz \
 | gzip -c \
     > unmapped.masked.vcf.gz
@@ -58,6 +59,17 @@ time $usher -u -T 50 \
     -o public-$releaseLabel.all.masked.pb \
     >& usher.addUnmappedPublic.log
 mv uncondensed-final-tree.nh public-$releaseLabel.all.nh
+
+# Parsimony scores on collapsed tree
+time $find_parsimonious_assignments --tree public-$releaseLabel.all.nh \
+    --vcf <(gunzip -c public-$releaseLabel.all.vcf.gz) \
+| tail -n+2 \
+| sed -re 's/^[A-Z]([0-9]+)[A-Z,]+.*parsimony_score=([0-9]+).*/\1\t\2/;' \
+| tawk '{print "NC_045512v2", $1-1, $1, $2;}' \
+| sort -k2n,2n \
+    > public-$releaseLabel.all.parsimony.bg
+bedGraphToBigWig public-$releaseLabel.all.parsimony.bg /hive/data/genomes/wuhCor1/chrom.sizes \
+    public-$releaseLabel.all.parsimony.bw
 
 # Make allele-frequency-filtered versions
 # Disregard pipefail just for this pipe because head prevents the cat from completing:
