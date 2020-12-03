@@ -31,6 +31,11 @@ fputs("\", "
       "\"colorings\": [ "
       "  { \"key\": \"pangolin_lineage\", "
       "    \"title\": \"Pangolin lineage\", \"type\": \"categorical\" },"
+      "  { \"key\": \"Nextstrain_clade\","
+      "    \"scale\": [ [ \"19B\", \"#EC676D\" ], [ \"19A\", \"#F79E43\" ],"
+      "        [ \"20A\", \"#B6D77A\" ], [ \"20C\", \"#8FD4ED\" ],"
+      "        [ \"20B\", \"#A692C3\" ] ],"
+      "    \"title\": \"Nextstrain Clade\", \"type\": \"categorical\" },"
       "  { \"key\": \"GISAID_clade\","
       "    \"scale\": [ [ \"S\", \"#EC676D\" ], [ \"L\", \"#F79E43\" ], [ \"O\", \"#F9D136\" ],"
       "        [ \"V\", \"#FAEA95\" ], [ \"G\", \"#B6D77A\" ], [ \"GH\", \"#8FD4ED\" ],"
@@ -58,25 +63,6 @@ fputs("If you have metadata you wish to display, you can now drag on a CSV file 
       , outF);
 }
 
-struct sampleMetadata
-/* Information about a virus sample. */
-    {
-    char *strain;       // Strain name, usually of the form Country/ArbitraryId/YYYY-MM-DD
-    char *epiId;        // GISAID EPI_ISL_[0-9]+ ID
-    char *date;         // Sample collection date
-    char *author;       // Author(s) to credit
-    char *gClade;       // GISAID clade
-    char *lineage;      // Pangolin lineage
-    char *country;      // Country in which sample was collected
-    char *division;     // Administrative division in which sample was collected (country or state)
-    char *location;     // Location in which sample was collected (city)
-    char *countryExp;   // Country in which host was exposed to virus
-    char *divExp;       // Administrative division in which host was exposed to virus
-    char *origLab;      // Originating lab
-    char *subLab;       // Submitting lab
-    char *region;       // Continent on which sample was collected
-    };
-
 static void jsonWriteObjectValue(struct jsonWrite *jw, char *name, char *value)
 /* Write an object with one member, "value", set to value, as most Auspice node attributes are
  * formatted. */
@@ -86,9 +72,10 @@ jsonWriteString(jw, "value", value);
 jsonWriteObjectEnd(jw);
 }
 
-static void jsonWriteLeafNodeAttributes(struct jsonWrite *jw, char *db, char *name,
+static void jsonWriteLeafNodeAttributes(struct jsonWrite *jw, char *name,
                                         struct sampleMetadata *met, boolean isUserSample,
-                                        char **retUserOrOld, char **retGClade, char **retLineage)
+                                        char **retUserOrOld, char **retNClade, char **retGClade,
+                                        char **retLineage)
 /* Write elements of node_attrs for a sample which may be preexisting and in our metadata hash,
  * or may be a new sample from the user.  Set rets for color categories so parent branches can
  * determine their color categories. */
@@ -103,15 +90,20 @@ if (met && met->author)
     // Note: Nextstrain adds paper_url and title when available; they also add author and use
     // a uniquified value (e.g. "author": "Wenjie Tan et al" / "value": "Wenjie Tan et al A")
     }
+*retNClade = isUserSample ? "uploaded sample" : (met && met->nClade) ? met->nClade : NULL;
+if (isNotEmpty(*retNClade))
+    jsonWriteObjectValue(jw, "Nextstrain_clade", *retNClade);
 *retGClade = isUserSample ? "uploaded sample" : (met && met->gClade) ? met->gClade : NULL;
 if (isNotEmpty(*retGClade))
     jsonWriteObjectValue(jw, "GISAID_clade", *retGClade);
 *retLineage = isUserSample ? "uploaded sample" :
-                               (met && met->lineage) ? met->lineage : lineageForSample(db, name);
+                             (met && met->lineage) ? met->lineage : NULL;
 if (isNotEmpty(*retLineage))
     jsonWriteObjectValue(jw, "pangolin_lineage", *retLineage);
 if (met && met->epiId)
     jsonWriteObjectValue(jw, "gisaid_epi_isl", met->epiId);
+if (met && met->gbAcc)
+    jsonWriteObjectValue(jw, "genbank_accession", met->gbAcc);
 if (met && met->country)
     jsonWriteObjectValue(jw, "country", met->country);
 if (met && met->division)
@@ -130,12 +122,14 @@ if (met && met->region)
     jsonWriteObjectValue(jw, "region", met->region);
 }
 
-static void jsonWriteBranchNodeAttributes(struct jsonWrite *jw, char *userOrOld, char *gClade,
-                                          char *lineage)
+static void jsonWriteBranchNodeAttributes(struct jsonWrite *jw, char *userOrOld,
+                                          char *nClade, char *gClade, char *lineage)
 /* Write elements of node_attrs for a branch. */
 {
 if (userOrOld)
     jsonWriteObjectValue(jw, "userOrOld", userOrOld);
+if (nClade)
+    jsonWriteObjectValue(jw, "Nextstrain_clade", nClade);
 if (gClade)
     jsonWriteObjectValue(jw, "GISAID_clade", gClade);
 if (lineage)
@@ -283,7 +277,6 @@ struct auspiceJsonInfo
  * recursive function doesn't need a dozen args. */
     {
     struct jsonWrite *jw;
-    char *db;
     struct slName *subtreeUserSampleIds;  // Subtree node names for user samples (not from big tree)
     struct geneInfo *geneInfoList;        // Transcript seq & alignment for predicting AA change
     struct seqWindow *gSeqWin;            // Reference genome seq for predicting AA change
@@ -332,7 +325,8 @@ return (maxRunLength > (arraySize >> 1)) ? maxRunVal : NULL;
 }
 
 static void rTreeToAuspiceJson(struct phyloTree *node, int depth, struct auspiceJsonInfo *aji,
-                               char **retUserOrOld, char **retGClade, char **retLineage)
+                               char **retUserOrOld, char **retNClade, char **retGClade,
+                               char **retLineage)
 /* Write Augur/Auspice V2 JSON for tree.  Enclosing object start and end are written by caller. */
 {
 if (node->priv)
@@ -344,12 +338,9 @@ boolean isUserSample = FALSE;
 if (node->ident->name)
     isUserSample = slNameInList(aji->subtreeUserSampleIds, node->ident->name);
 char *name = node->ident->name;
-char *epiId = name ? epiIdFromSampleName(name) : NULL;
-struct sampleMetadata *met = NULL;
-if (epiId && aji->sampleMetadata)
-    met = hashFindVal(aji->sampleMetadata, epiId);
+struct sampleMetadata *met = name ? metadataForSample(aji->sampleMetadata, name) : NULL;
 if (!isUserSample && met && met->strain)
-    // Some of Rob's names are outdated; use latest from metadata.
+    // Some of Rob's tree names are outdated; use latest from metadata.
     name = met->strain;
 if (name)
     jsonWriteString(aji->jw, "name", name);
@@ -360,6 +351,7 @@ if (node->numEdges > 0)
     {
     jsonWriteListStart(aji->jw, "children");
     char *kidUserOrOld[node->numEdges];
+    char *kidNClade[node->numEdges];
     char *kidGClade[node->numEdges];
     char *kidLineage[node->numEdges];
     int i;
@@ -367,12 +359,14 @@ if (node->numEdges > 0)
         {
         jsonWriteObjectStart(aji->jw, NULL);
         rTreeToAuspiceJson(node->edges[i], depth, aji,
-                           &kidUserOrOld[i], &kidGClade[i], &kidLineage[i]);
+                           &kidUserOrOld[i], &kidNClade[i], &kidGClade[i], &kidLineage[i]);
         jsonWriteObjectEnd(aji->jw);
         }
     jsonWriteListEnd(aji->jw);
     if (retUserOrOld)
         *retUserOrOld = majorityMaybe(kidUserOrOld, node->numEdges);
+    if (retNClade)
+        *retNClade = majorityMaybe(kidNClade, node->numEdges);
     if (retGClade)
         *retGClade = majorityMaybe(kidGClade, node->numEdges);
     if (retLineage)
@@ -381,10 +375,10 @@ if (node->numEdges > 0)
 jsonWriteObjectStart(aji->jw, "node_attrs");
 jsonWriteDouble(aji->jw, "div", depth);
 if (node->numEdges == 0)
-    jsonWriteLeafNodeAttributes(aji->jw, aji->db, name, met, isUserSample,
-                                retUserOrOld, retGClade, retLineage);
+    jsonWriteLeafNodeAttributes(aji->jw, name, met, isUserSample,
+                                retUserOrOld, retNClade, retGClade, retLineage);
 else if (retUserOrOld && retGClade && retLineage)
-    jsonWriteBranchNodeAttributes(aji->jw, *retUserOrOld, *retGClade, *retLineage);
+    jsonWriteBranchNodeAttributes(aji->jw, *retUserOrOld, *retNClade, *retGClade, *retLineage);
 jsonWriteObjectEnd(aji->jw);
 }
 
@@ -438,88 +432,8 @@ slReverse(&geneInfoList);
 return geneInfoList;
 }
 
-static struct hash *getSampleMetadata(char *metadataFile)
-/* If config.ra defines a metadataFile, load its contents into a hash indexed by EPI ID and return;
- * otherwise return NULL. */
-{
-struct hash *sampleMetadata = NULL;
-if (isNotEmpty(metadataFile) && fileExists(metadataFile))
-    {
-    sampleMetadata = hashNew(0);
-    struct lineFile *lf = lineFileOpen(metadataFile, TRUE);
-    int headerWordCount = 0;
-    char **headerWords = NULL;
-    char *line;
-    // Check for header line
-    if (lineFileNext(lf, &line, NULL))
-        {
-        if (startsWithWord("strain", line))
-            {
-            char *headerLine = cloneString(line);
-            headerWordCount = chopString(headerLine, "\t", NULL, 0);
-            AllocArray(headerWords, headerWordCount);
-            chopString(headerLine, "\t", headerWords, headerWordCount);
-            }
-        else
-            errAbort("Missing header line from metadataFile %s", metadataFile);
-        }
-    int strainIx = stringArrayIx("strain", headerWords, headerWordCount);
-    int epiIdIx = stringArrayIx("gisaid_epi_isl", headerWords, headerWordCount);
-    int dateIx = stringArrayIx("date", headerWords, headerWordCount);
-    int authorIx = stringArrayIx("authors", headerWords, headerWordCount);
-    int gCladeIx = stringArrayIx("GISAID_clade", headerWords, headerWordCount);
-    int lineageIx = stringArrayIx("pangolin_lineage", headerWords, headerWordCount);
-    int countryIx = stringArrayIx("country", headerWords, headerWordCount);
-    int divisionIx = stringArrayIx("division", headerWords, headerWordCount);
-    int locationIx = stringArrayIx("location", headerWords, headerWordCount);
-    int countryExpIx = stringArrayIx("country_exposure", headerWords, headerWordCount);
-    int divExpIx = stringArrayIx("division_exposure", headerWords, headerWordCount);
-    int origLabIx = stringArrayIx("originating_lab", headerWords, headerWordCount);
-    int subLabIx = stringArrayIx("submitting_lab", headerWords, headerWordCount);
-    int regionIx = stringArrayIx("region", headerWords, headerWordCount);
-    while (lineFileNext(lf, &line, NULL))
-        {
-        char *words[headerWordCount];
-        int wordCount = chopTabs(line, words);
-        lineFileExpectWords(lf, headerWordCount, wordCount);
-        struct sampleMetadata *met;
-        AllocVar(met);
-        met->strain = cloneString(words[strainIx]);
-        if (epiIdIx >= 0)
-            met->epiId = cloneString(words[epiIdIx]);
-        if (dateIx >= 0)
-            met->date = cloneString(words[dateIx]);
-        if (authorIx >= 0)
-            met->author = cloneString(words[authorIx]);
-        if (gCladeIx >= 0)
-            met->gClade = cloneString(words[gCladeIx]);
-        if (lineageIx >= 0)
-            met->lineage = cloneString(words[lineageIx]);
-        if (countryIx >= 0)
-            met->country = cloneString(words[countryIx]);
-        if (divisionIx >= 0)
-            met->division = cloneString(words[divisionIx]);
-        if (locationIx >= 0)
-            met->location = cloneString(words[locationIx]);
-        if (countryExpIx >= 0)
-            met->countryExp = cloneString(words[countryExpIx]);
-        if (divExpIx >= 0)
-            met->divExp = cloneString(words[divExpIx]);
-        if (origLabIx >= 0)
-            met->origLab = cloneString(words[origLabIx]);
-        if (subLabIx >= 0)
-            met->subLab = cloneString(words[subLabIx]);
-        if (regionIx >= 0)
-            met->region = cloneString(words[regionIx]);
-        hashAdd(sampleMetadata, words[epiIdIx], met);
-        }
-    lineFileClose(&lf);
-    }
-return sampleMetadata;
-}
-
 void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct dnaSeq *ref,
-                       char *bigGenePredFile, char *metadataFile, char *jsonFile)
+                       char *bigGenePredFile, struct hash *sampleMetadata, char *jsonFile)
 /* Write JSON for tree in Nextstrain's Augur/Auspice V2 JSON format
  * (https://github.com/nextstrain/augur/blob/master/augur/data/schema-export-v2.json). */
 {
@@ -540,10 +454,9 @@ phyloAddEdge(root, tree);
 tree = root;
 struct geneInfo *geneInfoList = getGeneInfoList(bigGenePredFile, ref);
 struct seqWindow *gSeqWin = chromSeqWindowNew(db, chrom, 0, chromSize);
-struct hash *sampleMetadata = getSampleMetadata(metadataFile);
-struct auspiceJsonInfo aji = { jw, db, sti->subtreeUserSampleIds, geneInfoList, gSeqWin,
+struct auspiceJsonInfo aji = { jw, sti->subtreeUserSampleIds, geneInfoList, gSeqWin,
                                sampleMetadata, nodeNum };
-rTreeToAuspiceJson(tree, depth, &aji, NULL, NULL, NULL);
+rTreeToAuspiceJson(tree, depth, &aji, NULL, NULL, NULL, NULL);
 chromSeqWindowFree(&gSeqWin);
 jsonWriteObjectEnd(jw);
 fputs(jw->dy->string, outF);

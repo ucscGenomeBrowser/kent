@@ -85,6 +85,27 @@ struct usherResults
     struct subtreeInfo *subtreeInfoList; // For each subtree: tree, file, node info etc.
     };
 
+struct sampleMetadata
+/* Information about a virus sample. */
+    {
+    char *strain;       // Strain name, usually of the form Country/ArbitraryId/YYYY-MM-DD
+    char *epiId;        // GISAID EPI_ISL_[0-9]+ ID
+    char *gbAcc;        // GenBank accession
+    char *date;         // Sample collection date
+    char *author;       // Author(s) to credit
+    char *nClade;       // Nextstrain year-letter clade
+    char *gClade;       // GISAID amino acid change clade
+    char *lineage;      // Pangolin lineage
+    char *country;      // Country in which sample was collected
+    char *division;     // Administrative division in which sample was collected (country or state)
+    char *location;     // Location in which sample was collected (city)
+    char *countryExp;   // Country in which host was exposed to virus
+    char *divExp;       // Administrative division in which host was exposed to virus
+    char *origLab;      // Originating lab
+    char *subLab;       // Submitting lab
+    char *region;       // Continent on which sample was collected
+    };
+
 struct tempName *vcfFromFasta(struct lineFile *lf, char *db, struct dnaSeq *refGenome,
                               boolean *informativeBases, struct slName **maskSites,
                               struct slName **retSampleIds, struct seqInfo **retSeqInfo,
@@ -102,7 +123,7 @@ struct usherResults *runUsher(char *usherPath, char *usherAssignmentsPath, char 
  * and parse other results out of stderr output. */
 
 void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct dnaSeq *ref,
-                       char *bigGenePredFile, char *metadataFile, char *jsonFile);
+                       char *bigGenePredFile, struct hash *sampleMetadata, char *jsonFile);
 /* Write JSON for tree in Nextstrain's Augur/Auspice V2 JSON format
  * (https://github.com/nextstrain/augur/blob/master/augur/data/schema-export-v2.json). */
 
@@ -112,11 +133,8 @@ struct tempName *writeCustomTracks(struct tempName *vcfTn, struct usherResults *
 /* Write one custom track per subtree, and one custom track with just the user's uploaded samples. */
 
 
-char *epiIdFromSampleName(char *sampleId);
-/* If an EPI_ISL_# ID is present somewhere in sampleId, extract and return it, otherwise NULL. */
-
-char *lineageForSample(char *db, char *sampleId);
-/* Look up sampleId's lineage in epiToLineage file. Return NULL if we don't find a match. */
+struct sampleMetadata *metadataForSample(struct hash *sampleMetadata, char *sampleId);
+/* Look up sampleId in sampleMetadata, by accession if sampleId seems to include an accession. */
 
 struct phyloTree *phyloPruneToIds(struct phyloTree *node, struct slName *sampleIds);
 /* Prune all descendants of node that have no leaf descendants in sampleIds. */
