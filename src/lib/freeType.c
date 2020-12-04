@@ -66,6 +66,8 @@ void getFontCorrection(unsigned int requestSize, unsigned int *actualSize, unsig
 {
 switch(requestSize)
     {
+    // the constants herein were determine empirically by comparing the freeType font drawing
+    // with the GEM font drawing for each text size in the hgTracks configure menu
     case 6:  // 6
         *actualSize = 6;
         *baseline = 5;
@@ -97,6 +99,10 @@ switch(requestSize)
     case 38:  // 34
         *actualSize = 34;
         *baseline = 31;
+        break;
+    default:
+        *actualSize = (double)requestSize * 0.9;
+        *baseline = (double)requestSize / 1.2;
         break;
     }
 }
