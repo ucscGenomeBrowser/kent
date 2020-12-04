@@ -207,6 +207,8 @@ sub checkOptions {
 		      'augustusSpecies=s',
 		      'xenoRefSeq=s',
 		      'asmHubName=s',
+		      'noXenoRefSeq',
+		      'noAugustus',
 		      'ucscNames',
 		      @HgAutomate::commonOptionSpec,
 		      );
@@ -849,7 +851,7 @@ hgFakeAgp -minContigGap=1 -minScaffoldGap=50000 \$asmId.fa.gz stdout | gzip -c >
 twoBitInfo ../download/\$asmId.2bit stdout | cut -f1 \\
   | sed -e "s/\\.\\([0-9]\\+\\)/v\\1/;" \\
     | sed -e 's/\\(.*\\)/\\1 \\1/;' | sed -e 's/v\\([0-9]\\+\$\\)/.\\1/;' \\
-      | awk '{printf "%s\\t%s\\n", \$2, \$1}' > \$asmId.fake.names
+      | awk '{printf "%s\\t%s\\n", \$1, \$2}' | sort > \$asmId.fake.names
 _EOF_
       );
     }
@@ -993,7 +995,7 @@ export asmId=$asmId
 # verify each sequence name has an alias
 export sizeCount=`cat ../../\${asmId}.chrom.sizes | wc -l`
 export aliasCount=`grep -v "^#" \${asmId}.chromAlias.txt | wc -l`
-if [ "\${sizeCount}" -gt "\${aliasCount}" ]; then
+if [ "\${sizeCount}" -ne "\${aliasCount}" ]; then
   printf "ERROR: chromAlias: incorrect number of aliases chromSizes %d > %d aliasCount\\n" "\${sizeCount}" "\${aliasCount}" 1>&2
   exit 255
 fi
@@ -1138,6 +1140,10 @@ sub doRepeatMasker {
      if ( -s "$buildDir/download/${asmId}_rm.out.gz" ) {
        $rmskOpts = " \\
   -ncbiRmsk=\"$buildDir/download/${asmId}_rm.out.gz\" ";
+       if ( -s "${buildDir}/download/${asmId}.remove.dups.list" ) {
+         $rmskOpts .= " \\
+  -dupList=\"${buildDir}/download/${asmId}.remove.dups.list\" ";
+       }
        if ($ucscNames) {
          $rmskOpts .= " \\
   -liftSpec=\"$buildDir/sequence/$asmId.ncbiToUcsc.lift\"";
@@ -1607,6 +1613,11 @@ sub doNcbiGene {
   my $bossScript = newBash HgRemoteScript("$runDir/doNcbiGene.bash",
                     $workhorse, $runDir, $whatItDoes);
 
+  my $dupList = "";
+  if ( -s "${buildDir}/download/${asmId}.remove.dups.list" ) {
+    $dupList = " | grep -v -f \"${buildDir}/download/${asmId}.remove.dups.list\" ";
+  }
+
   $bossScript->add(<<_EOF_
 export asmId=$asmId
 export gffFile=$gffFile
@@ -1620,7 +1631,7 @@ if [ \$gffFile -nt \$asmId.ncbiGene.bb ]; then
   (gff3ToGenePred -warnAndContinue -useName \\
     -attrsOut=\$asmId.geneAttrs.ncbi.txt \$gffFile stdout \\
       2>> \$asmId.ncbiGene.log.txt || true) | genePredFilter stdin stdout \\
-        | gzip -c > \$asmId.ncbiGene.genePred.gz
+        $dupList | gzip -c > \$asmId.ncbiGene.genePred.gz
   genePredCheck \$asmId.ncbiGene.genePred.gz
   export howMany=`genePredCheck \$asmId.ncbiGene.genePred.gz 2>&1 | grep "^checked" | awk '{print \$2}'`
   if [ "\${howMany}" -eq 0 ]; then

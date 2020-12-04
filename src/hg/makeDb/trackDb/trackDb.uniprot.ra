@@ -14,6 +14,7 @@ scoreFilter 0
 itemRgb on
 dataVersion /gbdb/$D/uniprot/version.txt
 hideEmptySubtracks on
+pennantIcon Updated red ../goldenPath/newsarch.html#120220 "Updated Dec. 2, 2020"
 
         track unipAliSwissprot
         shortLabel SwissProt Aln.

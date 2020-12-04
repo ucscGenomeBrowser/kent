@@ -20,6 +20,9 @@ my %ucscToRefSeq;	# key is UCSC sequence name, value is RefSeq name
 my %ucscToGenbank;	# key is UCSC sequence name, value is GenBank name
 my $ucscNames = 0;	# == 1 if sequence is UCSC names, == 0 if NCBI names
 my $dupCount = 0;
+my %dupToSequence;	# key is duplicate name, value is target sequence name
+			# to manage duplicates coming in from assembly report
+
 my $asmId = shift;
 
 my %aliasOut;	# key is alias name, value is sequence name in this assembly
@@ -103,7 +106,7 @@ if ( -s "$dupsList" ) {
   while (my $line = <FH>) {
     chomp $line;
     my ($dupAlias, $dupTarget) = split('\s+', $line);
-### early version    my ($dupTarget, $dupAlias) = split('\s+', $line);
+    $dupToSequence{$dupAlias} = $dupTarget;
     if ($ucscNames) {
       if (!defined($ncbiToUcsc{$dupTarget})) {
        printf STDERR "# ERROR: can not find dupTarget: $dupTarget in ncbiToUcsc for dupAlias: $dupAlias\n";
@@ -111,11 +114,8 @@ if ( -s "$dupsList" ) {
       } else {
         addAlias($dupAlias, $ncbiToUcsc{$dupTarget});
       }
-    } elsif (defined($ncbiToUcsc{$dupTarget})) {
-        addAlias($dupAlias, $ncbiToUcsc{$dupTarget});
     } else {
-      printf STDERR "# ERROR: can not find duplicate name $dupAlias for sequence $dupTarget\n";
-      $dupsNotFound += 1;
+        addAlias($dupAlias, $dupTarget);
     }
     ++$dupCount;
   }
@@ -198,7 +198,11 @@ while (my $line = <FH>) {
           $seqName = $aliasOut{$refSeqName};
        }
     }
-    addAlias($gbkName, $seqName);
+    if ($dupToSequence{$seqName}) {
+      addAlias($gbkName, $dupToSequence{$seqName});
+    } else {
+      addAlias($gbkName, $seqName);
+    }
   } else {
     my $seqName = $gbkName;
     if ($ucscNames) {
@@ -209,7 +213,11 @@ while (my $line = <FH>) {
           $seqName = $aliasOut{$gbkName};
        }
     }
-    addAlias($refSeqName, $seqName);
+    if ($dupToSequence{$seqName}) {
+      addAlias($refSeqName, $dupToSequence{$seqName});
+    } else {
+      addAlias($refSeqName, $seqName);
+    }
   }
 }
 close (FH);

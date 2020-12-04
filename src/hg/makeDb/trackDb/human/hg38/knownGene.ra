@@ -7,6 +7,7 @@ visibility pack
 priority 1
 color 12,12,120
 type genePred knownGenePep knownGeneMrna
+exonNumbers on
 idXref kgAlias kgID alias
 hgGene on
 hgsid on

@@ -39,9 +39,9 @@ mach = $(shell uname -m)
 ##
 db = hg38
 #db = hg19
-db = mm10
-#preRelease = no
-preRelease = yes
+#db = mm10
+preRelease = no
+#preRelease = yes
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
     ver = M25
@@ -54,13 +54,13 @@ ifeq (${db},mm10)
     ensemblCDnaDb = mus_musculus_cdna_${ensemblPrevVer}
 else ifeq (${db},hg38)
     grcRefAssembly = GRCh38
-    ver = 35
-    prevVer = 34
+    ver = 36
+    prevVer = 35
     gencodeOrg = Gencode_human
     ftpReleaseSubdir = release_${ver}
     annGffTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 101_39
-    ensemblPrevVer = 100_38
+    ensemblVer = 102_38
+    ensemblPrevVer = 101_38
     ensemblCDnaDb = homo_sapiens_cdna_${ensemblPrevVer}
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
@@ -405,7 +405,8 @@ gencode-cmp.tsv: loadTables
 joinerCheck: loadTables
 	@mkdir -p check
 	for tbl in $$(hgsql -Ne 'show tables like "gencode%V${ver}"' ${db}) ; do \
-	    echo  table=$$tbl; \
+	    echo ============================================================; \
+	    echo table=$$tbl; \
 	    runJoiner.csh ${db} $$tbl ~/kent/src/hg/makeDb/schema/all.joiner noTimes; \
 	    done >check/joiner.out 2>&1
 	if fgrep Error: check/joiner.out ; then false;  else true; fi

@@ -130,7 +130,13 @@ while (lineFileNext(lf, &line, NULL))
                         newAltCounts[newAltIx]++;
                     // Update gt, i.e. words[keeperColumns[i]], with the new allele index.
                     int newAlIx = newAltIx + 1;
-                    safef(gt, strlen(gt)+1, "%d", newAlIx);
+                    char newGt[16];
+                    safef(newGt, sizeof newGt, "%d", newAlIx);
+                    if (strlen(newGt) <= strlen(gt))
+                        safecpy(gt, strlen(gt)+1, newGt);
+                    else
+                        // Extremely rare: single-digit ix to double-digit ix.  Leak a little mem.
+                        words[keeperColumns[i]] = cloneString(newGt);
                     }
                 }
             }
