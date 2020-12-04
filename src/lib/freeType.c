@@ -68,39 +68,39 @@ switch(requestSize)
     {
     // the constants herein were determine empirically by comparing the freeType font drawing
     // with the GEM font drawing for each text size in the hgTracks configure menu
-    case 6:  // 6
+    case 6:  // text size number from menu: 6
         *actualSize = 6;
         *baseline = 5;
         break;
-    case 7:  // 8
+    case 7:  // text size number from menu: 8
         *actualSize = 8;
         *baseline = 5;
         break;
-    case 13:  // 10
+    case 13:  // text size number from menu: 10
         *actualSize = 11;
         *baseline = 11;
         break;
-    case 15:  // 12
+    case 15:  // text size number from menu: 12
         *actualSize = 13;
         *baseline = 12;
         break;
-    case 17:  // 14
+    case 17:  // text size number from menu: 14
         *actualSize = 15;
         *baseline = 14;
         break;
-    case 22:  // 18
+    case 22:  // text size number from menu: 18
         *actualSize = 19;
         *baseline = 18;
         break;
-    case 29:  // 24
+    case 29:  // text size number from menu: 24
         *actualSize = 26;
         *baseline = 24;
         break;
-    case 38:  // 34
+    case 38:  // text size number from menu: 34
         *actualSize = 34;
         *baseline = 31;
         break;
-    default:
+    default:  // some other use not from configure memory
         *actualSize = (double)requestSize * 0.9;
         *baseline = (double)requestSize / 1.2;
         break;
