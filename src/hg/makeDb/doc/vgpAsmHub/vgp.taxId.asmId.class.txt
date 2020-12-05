@@ -85,6 +85,7 @@
 13146	GCA_012275265.1_bMelUnd1.mat	birds
 13146	GCA_012275275.1_bMelUnd1.pat	birds
 13146	GCA_012275295.1_bMelUnd1.mat.Z	birds
+13146	GCF_012275295.1_bMelUnd1.mat.Z	birds
 8005	GCF_013358815.1_fEleEle1.pri	fish
 9407	GCF_014176215.1_mRouAeg1.p	mammals
 42514	GCF_015220715.1_fPygNat1.pri	fish
@@ -150,6 +151,7 @@
 36723	GCF_009829155.1_mMusErm1.Pri	mammals
 386614	GCF_010909765.1_sAmbRad1.pri	sharks
 7757	GCF_010993605.1_kPetMar1.pri	otherChordates
+8469	GCF_015237465.1_rCheMyd1.pri	reptiles
 8154	GCF_900246225.1_fAstCal1.2	fish
 64144	GCF_900324465.2_fAnaTes1.2	fish
 205130	GCF_900324485.2_fMasArm1.2	fish
