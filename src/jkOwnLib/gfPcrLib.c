@@ -458,15 +458,15 @@ struct gfRange *gfPcrGetRanges(char *host, char *port, char *fPrimer, char *rPri
 /* Query gfServer with primers and convert response to a list of gfRanges. */
 {
 char buf[256];
-int conn = gfConnect(host, port);
+struct gfConnection *conn = gfConnect(host, port);
 struct gfRange *rangeList = NULL, *range;
 
 /* Query server and put results into rangeList. */
 safef(buf, sizeof(buf), "%spcr %s %s %d", gfSignature(), fPrimer, rPrimer, maxSize);
-mustWriteFd(conn, buf, strlen(buf));
+mustWriteFd(conn->fd, buf, strlen(buf));
 for (;;)
     {
-    if (netGetString(conn, buf) == NULL)
+    if (netGetString(conn->fd, buf) == NULL)
 	break;
     if (sameString(buf, "end"))
 	break;
@@ -490,7 +490,8 @@ for (;;)
 	slAddHead(&rangeList, range);
 	}
     }
-close(conn);
+close(conn->fd);
+conn->fd = -1;
 slReverse(&rangeList);
 return rangeList;
 }

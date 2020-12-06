@@ -114,7 +114,7 @@ gvo = gfOutputAny(outputFormat,  round(minIdentity*10), qType == gftProt, tType 
 gfOutputHead(gvo, out);
 while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt))
     {
-    int conn = gfConnect(hostName, portName);
+    struct gfConnection *conn = gfConnect(hostName, portName);
     if (dots != 0)
         {
 	if (++dotMod >= dots)
@@ -127,28 +127,28 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt)
     if (qType == gftProt && (tType == gftDnaX || tType == gftRnaX))
         {
 	gvo->reportTargetStrand = TRUE;
-	gfAlignTrans(&conn, tSeqDir, &seq, minScore, tFileCache, gvo, genome, genomeDataDir);
+	gfAlignTrans(conn, tSeqDir, &seq, minScore, tFileCache, gvo, genome, genomeDataDir);
 	}
     else if ((qType == gftRnaX || qType == gftDnaX) && (tType == gftDnaX || tType == gftRnaX))
         {
 	gvo->reportTargetStrand = TRUE;
-	gfAlignTransTrans(&conn, tSeqDir, &seq, FALSE, minScore, tFileCache, 
-		gvo, qType == gftRnaX, genome, genomeDataDir);
+	gfAlignTransTrans(conn, tSeqDir, &seq, FALSE, minScore, tFileCache, 
+                          gvo, qType == gftRnaX, genome, genomeDataDir);
 	if (qType == gftDnaX)
 	    {
 	    reverseComplement(seq.dna, seq.size);
-	    close(conn);
+	    gfDisconnect(&conn);
 	    conn = gfConnect(hostName, portName);
-	    gfAlignTransTrans(&conn, tSeqDir, &seq, TRUE, minScore, tFileCache,
-	    	gvo, FALSE, genome, genomeDataDir);
+	    gfAlignTransTrans(conn, tSeqDir, &seq, TRUE, minScore, tFileCache,
+                              gvo, FALSE, genome, genomeDataDir);
 	    }
 	}
     else if ((tType == gftDna || tType == gftRna) && (qType == gftDna || qType == gftRna))
 	{
-	gfAlignStrand(&conn, tSeqDir, &seq, FALSE, minScore, tFileCache, gvo, genome, genomeDataDir);
+	gfAlignStrand(conn, tSeqDir, &seq, FALSE, minScore, tFileCache, gvo, genome, genomeDataDir);
 	conn = gfConnect(hostName, portName);
 	reverseComplement(seq.dna, seq.size);
-	gfAlignStrand(&conn, tSeqDir, &seq, TRUE,  minScore, tFileCache, gvo, genome, genomeDataDir);
+	gfAlignStrand(conn, tSeqDir, &seq, TRUE,  minScore, tFileCache, gvo, genome, genomeDataDir);
 	}
     else
         {

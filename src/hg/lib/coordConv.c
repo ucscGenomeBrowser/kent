@@ -247,7 +247,6 @@ struct psl* doDnaAlignment(struct dnaSeq *seq, char *db, char *blatHost,
 /* get the alignment from the blat host for this sequence */
 {
 struct psl *pslList = NULL;
-int conn =0;
 struct tempName pslTn;
 FILE *f = NULL;
 struct gfOutput *gvo;
@@ -266,11 +265,13 @@ gvo = gfOutputPsl(920, FALSE, FALSE, f, FALSE, FALSE);
 gfOutputHead(gvo, f);
 
 /* align to genome, both strands */
-conn = gfConnect(blatHost, port);
-gfAlignStrand(&conn, nibDir, seq, FALSE, 20, tFileCache, gvo, NULL, NULL);
+struct gfConnection *conn = gfConnect(blatHost, port);
+gfAlignStrand(conn, nibDir, seq, FALSE, 20, tFileCache, gvo, NULL, NULL);
 reverseComplement(seq->dna, seq->size);
+gfDisconnect(&conn);
 conn = gfConnect(blatHost, port);
-gfAlignStrand(&conn, nibDir, seq, TRUE, 20 , tFileCache, gvo, NULL, NULL);
+gfAlignStrand(conn, nibDir, seq, TRUE, 20 , tFileCache, gvo, NULL, NULL);
+gfDisconnect(&conn);
 gfOutputQuery(gvo, f);
 carefulClose(&f);
 pslList = pslLoadAll(pslTn.forCgi);

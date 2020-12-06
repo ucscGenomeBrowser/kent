@@ -33,6 +33,12 @@
 #include "axt.h"
 #endif
 
+struct gfConnection
+/* connection to a gfServer.  This allows reuse of the connection when supported. */
+{
+    int fd;  // socket descriptor
+};
+
 enum gfConstants {
     gfMinMatch = 2,
     gfMaxGap = 2,
@@ -357,7 +363,7 @@ struct hash *gfFileCacheNew();
 void gfFileCacheFree(struct hash **pCache);
 /* Free up resources in cache. */
 
-void gfAlignStrand(int *pConn, char *nibDir, struct dnaSeq *seq,
+void gfAlignStrand(struct gfConnection *conn, char *nibDir, struct dnaSeq *seq,
                    boolean isRc,  int minMatch, 
                    struct hash *tFileCache, struct gfOutput *out,
                    char *genome, char *genomeDataDir);
@@ -366,14 +372,14 @@ void gfAlignStrand(int *pConn, char *nibDir, struct dnaSeq *seq,
  * Call 'outFunction' with each alignment that is found.  gfSavePsl is a handy
  * outFunction to use. */
 
-void gfAlignTrans(int *pConn, char *nibDir, aaSeq *seq,
+void gfAlignTrans(struct gfConnection *conn, char *nibDir, aaSeq *seq,
                   int minMatch, struct hash *tFileHash, struct gfOutput *out,
                   char *genome, char *genomeDataDir);
 /* Search indexed translated genome on server with an amino acid sequence. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found. */
 
-void gfAlignTransTrans(int *pConn, char *nibDir, struct dnaSeq *seq, 
+void gfAlignTransTrans(struct gfConnection *conn, char *nibDir, struct dnaSeq *seq, 
                        boolean qIsRc, int minMatch, struct hash *tFileCache, 
                        struct gfOutput *out, boolean isRna,
                        char *genome, char *genomeDataDir);
@@ -382,11 +388,14 @@ void gfAlignTransTrans(int *pConn, char *nibDir, struct dnaSeq *seq,
  * and do detailed alignment.  Call 'outFunction' with each alignment
  * that is found. */
 
-int gfMayConnect(char *hostName, char *portName);
-/* Set up our network connection to server, or return -1. */
+struct gfConnection *gfMayConnect(char *hostName, char *portName);
+/* Set up our network connection to server, or return NULL. */
 
-int gfConnect(char *hostName, char *portName);
+struct gfConnection * gfConnect(char *hostName, char *portName);
 /* Set up our network connection to server. Aborts on error. */
+
+void gfDisconnect(struct gfConnection **pConn);
+/* Disconnect from server */
 
 int gfDefaultRepMatch(int tileSize, int stepSize, boolean protTiles);
 /* Figure out appropriate step repMatch value. */
