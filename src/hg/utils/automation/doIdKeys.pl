@@ -127,10 +127,11 @@ sub doSetup {
   my $bossScript = newBash HgRemoteScript("$runDir/doSetup.bash", $workhorse,
 				      $runDir, $whatItDoes);
 
+  # improved twoBitDup 2020-12-04 can now do billions in one go
   $bossScript->add(<<_EOF_
 twoBitInfo $twoBit stdout | sort -k2nr | cut -f1 > part.list
 export partCount=`cat part.list | wc -l`
-if [ "\${partCount}" -lt 5000 ]; then
+if [ "\${partCount}" -lt 10000000000 ]; then
   time ( twoBitDup -keyList=stdout $twoBit | grep -v "are identical" | sort > $db.idKeys.txt) > twoBitDup.log 2>&1
 else
   mkdir -p splitList
