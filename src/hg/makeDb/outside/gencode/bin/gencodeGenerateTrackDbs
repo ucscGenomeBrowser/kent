@@ -53,6 +53,7 @@ def trackDbTemplateGen(params):
     yield forBoth(params, (
         "track gencodeV{gencodeVer}",
         "compositeTrack on",
+        "release alpha",
         "superTrack gencodeSuper pack",))
     yield forStd(params, (
         "shortLabel All GENCODE V{gencodeVer}",
@@ -80,16 +81,16 @@ def trackDbTemplateGen(params):
         "gencodeGeneSource gencodeGeneSourceV{gencodeVer}",
         "gencodeTranscriptSource gencodeTranscriptSourceV{gencodeVer}",
         "gencodeHgnc gencodeHgncV{gencodeVer}",
-        "gencodePdb gencodePdbV{gencodeVer}",
-        "gencodePubMed gencodePubMedV{gencodeVer}",
-        "gencodeRefSeq gencodeRefSeqV{gencodeVer}",
+        "gencodeToPdb gencodeToPdbV{gencodeVer}",
+        "gencodeToPubMed gencodeToPubMedV{gencodeVer}",
+        "gencodeToRefSeq gencodeToRefSeqV{gencodeVer}",
         "gencodeTag gencodeTagV{gencodeVer}",
         "gencodeTranscriptSupport gencodeTranscriptSupportV{gencodeVer}",
-        "gencodeUniProt gencodeUniProtV{gencodeVer}",
+        "gencodeToUniProt gencodeToUniProtV{gencodeVer}",
         "gencodePolyAFeature gencodePolyAFeatureV{gencodeVer}",
         "gencodeAnnotationRemark gencodeAnnotationRemarkV{gencodeVer}",
         "gencodeTranscriptionSupportLevel gencodeTranscriptionSupportLevelV{gencodeVer}",
-        "gencodeEntrezGene gencodeEntrezGeneV{gencodeVer}",
+        "gencodeToEntrezGene gencodeToEntrezGeneV{gencodeVer}",
         "",
         "    track gencodeV{gencodeVer}ViewGenes",
         "    shortLabel Genes",
@@ -410,7 +411,7 @@ def trackHtmlTemplateGen(params):
         '<p>See also: <a href="{gencodeGenesUrl}/" target="_blank">The GENCODE Project</a>',
         "</p>",
         "",
-        '<!--#insert file="../../gencodeCredits1.shared.html"-->',))
+        '<!--#insert file="../../wgEncodeGencodeCredits1.shared.html"-->',))
 
 def joinerCheckTemplateGen(params):
     """Generate template for all.joiner"""
@@ -428,31 +429,31 @@ def joinerCheckTemplateGen(params):
         "    {orgHgDb}.gencodeGeneSourceV{gencodeVer}.geneId",
         "    {orgHgDb}.gencodeAttrsV{gencodeVer}.geneId",
         "",
-        "identifier gencodeGeneSymbolV{gencodeVer}",
+        "identifier gencodeToGeneSymbolV{gencodeVer}",
         '"Link together Gencode gene symbol table with Attributes table"',
-        "    {orgHgDb}.gencodeGeneSymbolV{gencodeVer}.transcriptId dupeOk",
+        "    {orgHgDb}.gencodeToGeneSymbolV{gencodeVer}.transcriptId dupeOk",
         "    {orgHgDb}.gencodeAttrsV{gencodeVer}.transcriptId minCheck=0.20",
         "",
-        "identifier gencodePdbV{gencodeVer}",
+        "identifier gencodeToPdbV{gencodeVer}",
         '"Link together Gencode Pdb table with Attributes table"',
-        "    {orgHgDb}.gencodePdbV{gencodeVer}.transcriptId dupeOk",
+        "    {orgHgDb}.gencodeToPdbV{gencodeVer}.transcriptId dupeOk",
         "    {orgHgDb}.gencodeAttrsV{gencodeVer}.transcriptId minCheck=0.015",
         "",
-        "identifier gencodePubMedV{gencodeVer}",
+        "identifier gencodeToPubMedV{gencodeVer}",
         '"Link together Gencode Pubmed table with Attributes table"',
-        "    {orgHgDb}.gencodePubMedV{gencodeVer}.transcriptId dupeOk",
+        "    {orgHgDb}.gencodeToPubMedV{gencodeVer}.transcriptId dupeOk",
         "    {orgHgDb}.gencodeAttrsV{gencodeVer}.transcriptId  minCheck=0.63",
         "",
-        "identifier gencodeRefSeqV{gencodeVer}",
+        "identifier gencodeToRefSeqV{gencodeVer}",
         '"Link together Gencode RefSeq table with Attributes table"',
-        "    {orgHgDb}.gencodeRefSeqV{gencodeVer}.transcriptId dupeOk",
+        "    {orgHgDb}.gencodeToRefSeqV{gencodeVer}.transcriptId dupeOk",
         "    {orgHgDb}.gencodeAttrsV{gencodeVer}.transcriptId minCheck=0.05",
         "",
         "identifier gencodeTagV{gencodeVer}",
         '"Link together Gencode Tag table with Attributes table"',
         "    {orgHgDb}.gencodeTagV{gencodeVer}.transcriptId dupeOk",
         "    {orgHgDb}.gencodeAttrsV{gencodeVer}.transcriptId minCheck=0.36",
-        "    {orgHgDb}.gencodeRefSeqV{gencodeVer}.transcriptId minCheck=0.9",
+        "    {orgHgDb}.gencodeToRefSeqV{gencodeVer}.transcriptId minCheck=0.9",
         "",
         "identifier gencodeTranscriptSourceV{gencodeVer}",
         '"Link together Gencode Transcript Source table with Attributes table"',
@@ -469,9 +470,9 @@ def joinerCheckTemplateGen(params):
         "    {orgHgDb}.gencodeTranscriptionSupportLevelV{gencodeVer}.transcriptId dupeOk",
         "    {orgHgDb}.gencodeAttrsV{gencodeVer}.transcriptId minCheck=0.30",
         "",
-        "identifier gencodeUniProtV{gencodeVer}",
+        "identifier gencodeToUniProtV{gencodeVer}",
         '"Link together Gencode UniProt Support table with Attributes table"',
-        "    {orgHgDb}.gencodeUniProtV{gencodeVer}.transcriptId dupeOk",
+        "    {orgHgDb}.gencodeToUniProtV{gencodeVer}.transcriptId dupeOk",
         "    {orgHgDb}.gencodeAttrsV{gencodeVer}.transcriptId minCheck=0.35",
         "",
         "identifier gencodeAnnotationRemarkV{gencodeVer}",
@@ -479,10 +480,10 @@ def joinerCheckTemplateGen(params):
         "    {orgHgDb}.gencodeAnnotationRemarkV{gencodeVer}.transcriptId dupeOk",
         "    {orgHgDb}.gencodeAttrsV{gencodeVer}.transcriptId minCheck=0.10",
         "",
-        "identifier gencodeEntrezGeneV{gencodeVer}",
-        '"Link together Gencode UniProt Support table with Attributes table"',
-        "    {orgHgDb}.gencodeEntrezGeneV{gencodeVer}.transcriptId dupeOk",
-        "    {orgHgDb}.gencodeEntrezGeneV{gencodeVer}.transcriptId minCheck=0.35",
+        "identifier gencodeToEntrezGeneV{gencodeVer}",
+        '"Link together Gencode Entrez table with Attributes table"',
+        "    {orgHgDb}.gencodeToEntrezGeneV{gencodeVer}.transcriptId dupeOk",
+        "    {orgHgDb}.gencodeToEntrezGeneV{gencodeVer}.transcriptId minCheck=0.35",
         ""))
     yield forStd(params, (
         "identifier gencodeExonSupportV{gencodeVer}",
@@ -580,9 +581,9 @@ class GencodeParams(object):
         self.twoWayConsPseudoSearchPriority = self.nextPriority()
 
         if self.isLifted():
-            self.displayHtml = "../../gencodeDisplayLift1.shared.html"
+            self.displayHtml = "../../wgEncodeGencodeDisplayLift1.shared.html"
         else:
-            self.displayHtml = "../../gencodeDisplay1.shared.html"
+            self.displayHtml = "../../wgEncodeGencodeDisplay1.shared.html"
 
     def nextPriority(self):
         """allocated the next search priority"""

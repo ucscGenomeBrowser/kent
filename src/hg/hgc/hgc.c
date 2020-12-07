@@ -826,6 +826,18 @@ if (item != NULL && item[0] != 0)
     cartWebStart(cart, database, "%s (%s)", tdb->longLabel, item);
 else
     cartWebStart(cart, database, "%s", tdb->longLabel);
+
+// QA noticed that clicking the +- buttons to collapse item detail tables was
+// generating messages in the Apache log if you went directly to an item page
+// without first visiting hgTracks. Clicking those buttons causes a cartDump
+// in order to save the state of visibility of the table, which in
+// turn needs an hgsid in order to save the state correctly. However, because
+// we aren't in a form, we have never saved the hgsid to a hidden
+// input element, and so the javascript that creates the cartDump link attaches
+// an empty 'hgsid=' parameter, which cartDump doesn't like. Since we aren't in
+// a form, use the 'common' object to store the parameter so the links to cartDump
+// are correct:
+jsInlineF("var common = {hgsid:\"%s\"};\n", cartSessionId(cart));
 }
 
 void printItemDetailsHtml(struct trackDb *tdb, char *itemName)

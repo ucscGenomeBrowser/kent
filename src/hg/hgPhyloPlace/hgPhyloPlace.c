@@ -174,7 +174,13 @@ puts("<p>Upload your SARS-CoV-2 sequence (FASTA or VCF file) to find the most si
      "<a href='https://github.com/yatisht/usher' target=_blank>"
      "Ultrafast Sample placement on Existing tRee (UShER)</a> "
      "(<a href='https://www.biorxiv.org/content/10.1101/2020.09.26.314971v1' target=_blank>"
-     "Turakhia <em>et al.</em></a>).</p>\n");
+     "Turakhia <em>et al.</em></a>).  UShER also generates local subtrees to show samples "
+     "in the context of the most closely related sequences.  The subtrees can be visualized "
+     "as Genome Browser custom tracks and/or using "
+     "<a href='https://nextstrain.org' target=_blank>Nextstrain</a>'s interactive display "
+     "which supports "
+     "<a href='"NEXTSTRAIN_DRAG_DROP_DOC"' "
+     "target=_blank>drag-and-drop</a> of local metadata that remains on your computer.</p>\n");
 puts("<p><b>Note:</b> "
      "Please do not upload any files that contain "
      "<a href='https://en.wikipedia.org/wiki/Protected_health_information#United_States' "
@@ -187,9 +193,9 @@ puts("<p><b>Note:</b> "
      "please share your SARS-CoV-2 sequences by submitting them to an "
      "<a href='https://ncbiinsights.ncbi.nlm.nih.gov/2020/08/17/insdc-covid-data-sharing/' "
      "target=_blank>INSDC</a> member institution\n"
-     "(<a href='https://submit.ncbi.nlm.nih.gov/sarscov2/' target=_blank>NCBI</a> in the U.S.,\n"
-     "<a href='https://www.covid19dataportal.org/submit-data' target=_blank>EMBL-EBI</a> in Europe\n"
-     "and <a href='https://www.ddbj.nig.ac.jp/ddbj/websub.html' target=_blank>DDBJ</a> in Japan)\n"
+     "(<a href='https://submit.ncbi.nlm.nih.gov/sarscov2/' target=_blank>NCBI</a>,\n"
+     "<a href='https://www.covid19dataportal.org/submit-data' target=_blank>EMBL-EBI</a>\n"
+     "or <a href='https://www.ddbj.nig.ac.jp/ddbj/websub.html' target=_blank>DDBJ</a>)\n"
      "and <a href='https://www.gisaid.org/' target=_blank>GISAID</a>.\n"
      "</p>\n");
 puts("</div>");
@@ -221,6 +227,18 @@ puts("If you don't have a local file, you can try an "
 cgiMakeButton("submit", "try example");
 puts("  </div>");
 puts("</form>");
+}
+
+static void linkToLandingPage()
+/* David asked for a link back to our covid19 landing page. */
+{
+puts("<div class='gbControl col-md-12'>");
+puts("<div class='readableWidth'>");
+puts("<p></p>");
+puts("<p>\n"
+     "<a href='/covid19.html'>COVID-19 Pandemic Resources at UCSC</a></p>\n");
+puts("</div>");
+puts("</div>");
 }
 
 static void gisaidFooter()
@@ -257,6 +275,7 @@ if (hgPhyloPlaceEnabled())
     {
     inputForm();
     exampleForm();
+    linkToLandingPage();
     gisaidFooter();
     }
 else
@@ -329,6 +348,7 @@ else
     }
 puts("</div>\n");
 
+linkToLandingPage();
 gisaidFooter();
 newPageEndStuff();
 }

@@ -20,6 +20,7 @@ epiToPublic=$3
 usherDir=~angie/github/usher
 usher=$usherDir/build/usher
 matToVcf=$usherDir/build/matToVcf
+find_parsimonious_assignments=~angie/github/strain_phylogenetics/build/find_parsimonious_assignments
 
 echo "releaseLabel=$releaseLabel problematicSitesVcf=$problematicSitesVcf epiToPublic=$epiToPublic"
 
@@ -49,7 +50,7 @@ time $matToVcf -i public-$releaseLabel.notMasked.pb \
 bgzip -f public-$releaseLabel.vcf
 tabix -p vcf public-$releaseLabel.vcf.gz
 
-# Run usher on masked public VCF to get protobuf for usher/hgPhyloPlace:
+# Run usher on masked public VCF to collapse tree and get protobuf for usher/hgPhyloPlace:
 time vcfFilter -excludeVcf=mask.vcf public-$releaseLabel.unfiltered.vcf.gz \
 | gzip -c \
     > public-$releaseLabel.unfiltered.masked.vcf.gz
@@ -59,8 +60,16 @@ time $usher -c -u \
     -o public-$releaseLabel.masked.pb
 mv uncondensed-final-tree.nh ft_SH.reroot.collapsed.public-$releaseLabel.nwk
 
-#*** Should we get rid of ambigToN... or keep it around as an option?  Maybe inferring missing
-#*** info is too ambitious/optimistic for some purposes?
+# Parsimony scores on collapsed tree
+time $find_parsimonious_assignments --tree ft_SH.reroot.collapsed.public-$releaseLabel.nwk \
+    --vcf <(gunzip -c public-$releaseLabel.vcf.gz) \
+| tail -n+2 \
+| sed -re 's/^[A-Z]([0-9]+)[A-Z,]+.*parsimony_score=([0-9]+).*/\1\t\2/;' \
+| tawk '{print "NC_045512v2", $1-1, $1, $2;}' \
+| sort -k2n,2n \
+    > public-$releaseLabel.parsimony.bg
+bedGraphToBigWig public-$releaseLabel.parsimony.bg /hive/data/genomes/wuhCor1/chrom.sizes \
+    public-$releaseLabel.parsimony.bw
 
 # Make allele-frequency-filtered versions
 # Disregard pipefail just for this pipe because head prevents the cat from completing:
