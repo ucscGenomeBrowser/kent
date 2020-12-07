@@ -1735,5 +1735,7 @@ Color colorFromSoTerm(enum soTerm term);
 /* Assign a Color according to soTerm: red for non-synonymous, green for synonymous, blue for
  * UTR/noncoding, black otherwise. */
 
+void maybeNewFonts(struct hvGfx *hvg);
+/* Check to see if we want to use the alternate font engine (FreeType2). */
 #endif /* HGTRACKS_H */
 

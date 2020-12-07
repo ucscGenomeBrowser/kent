@@ -107,6 +107,28 @@ char *emptyStyles[] = {
 "Normal"
 };
 
+void maybeNewFonts(struct hvGfx *hvg)
+/* Check to see if we want to use the alternate font engine (FreeType2). */
+{
+if (sameString(cfgOptionDefault("freeType", "off"), "on"))
+    {
+    if (sameString(tl.textFont, "Bitmap"))
+        return;
+
+    char *fontDir = cfgOptionDefault("freeTypeDir", "/usr/share/fonts/default/Type1");
+    char buffer[4096];
+
+    int ii;
+    for(ii=0; ii < ArraySize(freeTypeFontNames); ii++)
+        if (sameString(freeTypeFontNames[ii], tl.textFont))
+            break;
+    char *fontFile = freeTypeFontFiles[ii];
+    char *fontName = freeTypeFontNames[ii];
+    safef(buffer, sizeof buffer, "%s/%s", fontDir, fontFile);
+    hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, fontName, buffer );
+    }
+}
+
 static void textFontDropDown()
 /* Create drop down for font size. */
 {
