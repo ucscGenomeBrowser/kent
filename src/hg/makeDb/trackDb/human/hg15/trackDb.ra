@@ -2,9 +2,22 @@
 track clonePos override
 longLabel Clone Coverage
 
-track knownGene override
+track knownGene 
 shortLabel Known Genes
 longLabel Known Genes Based on SWISS-PROT, TrEMBL, mRNA, and RefSeq
+group genes
+visibility pack
+color 12,12,120
+type genePred knownGenePep knownGeneMrna
+idXref kgAlias kgID alias
+hgGene on
+hgsid on
+directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+baseColorUseCds given
+baseColorDefault genomicCodons
+defaultLinkedTables kgXref
+intronGap 12
+
 
 track vegaGene
 #replaces record vegaGene in parent dir missing/extra release

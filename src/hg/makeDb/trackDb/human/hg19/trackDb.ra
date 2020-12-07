@@ -2417,6 +2417,7 @@ priority 1
 color 12,12,120
 type genePred knownGenePep knownGeneMrna
 idXref kgAlias kgID alias
+exonNumbers on
 hgGene on
 hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s

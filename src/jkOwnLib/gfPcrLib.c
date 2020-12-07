@@ -457,7 +457,7 @@ struct gfRange *gfPcrGetRanges(char *host, char *port, char *fPrimer, char *rPri
 	int maxSize)
 /* Query gfServer with primers and convert response to a list of gfRanges. */
 {
-char buf[256];
+char buf[4096];
 struct gfConnection *conn = gfConnect(host, port, FALSE);
 struct gfRange *rangeList = NULL, *range;
 

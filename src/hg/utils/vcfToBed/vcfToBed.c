@@ -7,7 +7,8 @@
 #include "vcf.h"
 #include "dnautil.h"
 
-#define MAX_BED_EXTRA 50 // how many extra fields  can we put into the bigBed itself (for filtering, labels, etc)
+// how many extra fields  can we put into the bigBed itself (for filtering, labels, etc):
+#define MAX_BED_EXTRA 100
 #define bed9Header "#chrom\tchromStart\tchromEnd\tname\tscore\tstrand\tthickStart\tthickEnd\titemRgb\tref\talt\tFILTER"
 
 // hash up all the info tags and their vcfInfoDef structs for faster searching
@@ -58,10 +59,10 @@ return keepIx;
 char *fixupChromName(char *chrom)
 /* Prepend "chr" if missing */
 {
-if (!startsWith(chrom, "chr"))
-    return catTwoStrings("chr", chrom);
-else
+if (startsWith("chr", chrom))
     return chrom;
+else
+    return catTwoStrings("chr", chrom);
 }
 
 #define VCF_MAX_INFO (4*1024)
@@ -168,8 +169,8 @@ while (lineFileNext(vcff->lf, &line, NULL))
     if (fieldCount < 8)
         errAbort("ERROR: malformed VCF, missing fields at line: '%d'", vcff->lf->lineIx);
     char *chrom = fixupChromName(chopped[0]);
-    int start = atoi(chopped[1]);
-    int end = start + 1;
+    int start = atoi(chopped[1]) - 1;
+    int end = start;
     char *ref = cloneString(chopped[3]);
     char *alt = cloneString(chopped[4]);
     if (strlen(ref) == dnaFilteredSize(ref))

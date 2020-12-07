@@ -45,6 +45,7 @@
 # First done 2020-07-15; updated 2020-07-22 with tree from Yatish Turakhia, collapsed to keep
 # only nodes with associated mutations.
 # Updated 2020-09-03 with latest release 28-08-20.
+# NOTE: updates from 2020-11 onward are driven by scripts in hg/utils/otto/sarscov2phylo/ .
 
     releaseLabel=28-08-20
     mkdir -p /hive/data/genomes/wuhCor1/bed/sarsCov2Phylo/$releaseLabel
@@ -197,6 +198,7 @@
 
 #########################################################################
 # SARS-CoV-2 PHYLOGENY - PUBLIC SEQUENCE (DONE - 2020-10-15 - Angie)
+# NOTE: updates from 2020-11 onward are driven by scripts in hg/utils/otto/sarscov2phylo/ .
     releaseLabel=28-08-20
     cd /hive/data/genomes/wuhCor1/bed/sarsCov2Phylo/$releaseLabel
     # First, regenerate collapsed tree with latest usher so that branch lengths aren't munged.
@@ -413,5 +415,11 @@
     mkdir -p /gbdb/wuhCor1/problematicSites
     ln -sf `pwd`/problematicSites{Mask,Caution}.bb /gbdb/wuhCor1/problematicSites/
 
+
+#########################################################################
+#
+# updates to SARS-CoV-2 PHYLOGENY (both GISAID and PUBLIC SEQUENCE) from
+# 2020-11 onward are driven by scripts in hg/utils/otto/sarscov2phylo/ .
+#
 
 #########################################################################

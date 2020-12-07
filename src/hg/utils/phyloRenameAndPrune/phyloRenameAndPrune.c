@@ -12,10 +12,11 @@ void usage()
 errAbort(
   "phyloRenameAndPrune - Rename or remove leaves of phylogenetic tree and prune any branches with no remaining leaves\n"
   "usage:\n"
-  "   phyloRenameAndPrune treeIn.nh renaming.tab treeOut.nh\n"
+  "   phyloRenameAndPrune treeIn.nh renaming.txt treeOut.nh\n"
 //  "options:\n"
 //  "   -xxx=XXX\n"
-  "renaming.tab has two columns: old name (must uniquely match some leaf in tree) and new name.\n"
+  "renaming.txt has two whitespace-separated columns: old name (must uniquely match\n"
+  "some leaf in tree) and new name.\n"
   );
 }
 

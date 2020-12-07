@@ -5842,6 +5842,29 @@ if (seqAcc == NULL)
 return seqAcc;
 }
 
+char *abbreviateRefSeqSummary(char *summary) 
+/* strip off the uninformative parts from the RefSeq Summary text: the repetitive note
+ * about the publication subset and the Evidence-Data-Notes */
+{
+if (!summary)
+    return summary;
+
+char *pattern =
+"Publication Note:  This RefSeq record includes a subset "
+"of the publications that are available for this gene. "
+"Please see the Gene record to access additional publications.";
+stripString(summary, pattern);
+
+// remove anything after ##Evidence-Data-START##
+char *findStr = "##Evidence-Data-START##";
+char *start = memMatch(findStr, strlen(findStr), summary, strlen(summary));
+if (start)
+    *start = 0;
+
+return summary;
+}
+
+
 char *hdbGetMasterGeneTrack(char *knownDb)
 /* Get the native gene track for a knownGene database. */
 {
@@ -5865,6 +5888,12 @@ char *hdbDefaultKnownDb(char *db)
 {
 static char *checkedDb = NULL;
 static char *knownDb = NULL;
+
+if (trackHubDatabase(db))
+    return db;
+
+if (cfgOptionBooleanDefault("ignoreDefaultKnown", FALSE))
+    return db;
 
 if (sameOk(checkedDb, db))            // if we already know it, return it.
     return knownDb;

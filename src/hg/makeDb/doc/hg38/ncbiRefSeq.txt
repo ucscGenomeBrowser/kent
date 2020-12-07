@@ -320,3 +320,20 @@ hgLoadGenePred -genePredExt hg38 ncbiRefSeqSelect refseqSelect.curated.gp
 wc -l refseqSelect.curated.gp
 21071 refseqSelect.curated.gp
 #############################################################################
+
+#############################################################################
+# update 2020-10-27 (DONE - Hiram - 2020-10-27)
+
+  mkdir /hive/data/genomes/hg38/bed/ncbiRefSeq.p13.2020-10-27
+  cd /hive/data/genomes/hg38/bed/ncbiRefSeq.p13.2020-10-27
+
+  time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -fileServer=hgwdev -smallClusterHub=hgwdev -workhorse=hgwdev \
+      GCF_000001405.39_GRCh38.p13 hg38) > do.log 2>&1 &
+  # real    11m46.506s
+
+  cat fb.ncbiRefSeq.hg38.txt
+  # 137385668 bases of 3110768607 (4.416%) in intersection
+
+#############################################################################

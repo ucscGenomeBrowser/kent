@@ -28,13 +28,14 @@ sub otherHubLinks($$) {
 
 if ((0 == $vgpIndex) && ($asmHubName ne "viral")) {
   printf "<p>\n<table border='1'><thead>\n";
-  printf "<tr><th colspan=6 style='text-align:center;'>Additional hubs with collections of assemblies</th></tr>\n";
+  printf "<tr><th colspan=7 style='text-align:center;'>Additional hubs with collections of assemblies</th></tr>\n";
   printf "<tr><th>Assembly hubs index pages:&nbsp;</th>\n";
   printf "<th><a href='../primates/index.html'>Primates</a></th>\n";
   printf "<th><a href='../mammals/index.html'>Mammals</a></th>\n";
   printf "<th><a href='../birds/index.html'>Birds</a></th>\n";
   printf "<th><a href='../fish/index.html'>Fish</a></th>\n";
   printf "<th><a href='../vertebrate/index.html'>other vertebrates</a></th>\n";
+  printf "<th><a href='../legacy/index.html'>legacy/superseded</a></th>\n";
 
   printf "</tr><tr>\n";
   printf "<th>Hubs assembly statistics:&nbsp;</th>\n";
@@ -43,6 +44,7 @@ if ((0 == $vgpIndex) && ($asmHubName ne "viral")) {
   printf "<th><a href='../birds/asmStats.html'>Birds</a></th>\n";
   printf "<th><a href='../fish/asmStats.html'>Fish</a></th>\n";
   printf "<th><a href='../vertebrate/asmStats.html'>other vertebrates</a></th>\n";
+  printf "<th><a href='../legacy/asmStats.html'>legacy/superseded</a></th>\n";
 
   printf "</tr><tr>\n";
   printf "<th>Hubs track statistics:&nbsp;</th>\n";
@@ -51,6 +53,7 @@ if ((0 == $vgpIndex) && ($asmHubName ne "viral")) {
   printf "<th><a href='../birds/trackData.html'>Birds</a></th>\n";
   printf "<th><a href='../fish/trackData.html'>Fish</a></th>\n";
   printf "<th><a href='../vertebrate/trackData.html'>other vertebrates</a></th>\n";
+  printf "<th><a href='../legacy/trackData.html'>legacy/superseded</a></th>\n";
 
   printf "</tr></thead>\n</table>\n</p>\n";
 } elsif (1 == $vgpIndex) {

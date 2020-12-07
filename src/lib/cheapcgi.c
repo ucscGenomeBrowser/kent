@@ -1680,7 +1680,7 @@ static void cgiMakeCheckBox2Bool(char *name, boolean checked, boolean enabled,
  * Also make a shadow hidden variable and support 2 boolean states:
  *    checked/unchecked and enabled/disabled. */
 {
-char buf[256], idBuf[256];
+char buf[256], idBuf[256], shadId[256];
 
 if(id)
     safef(idBuf, sizeof(idBuf), " id=\"%s\"", id);
@@ -1692,7 +1692,9 @@ printf("<INPUT TYPE=CHECKBOX NAME=\"%s\"%s VALUE=on %s%s%s>", name, idBuf,
         (checked ? " CHECKED" : ""),
         (enabled ? "" : " DISABLED"));
 safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
-cgiMakeHiddenVarWithExtra(buf, ( enabled ? "0" : (checked ? "-1" : "-2")),BOOLSHAD_EXTRA);
+if (id)
+    safef(shadId, sizeof(shadId), "%s%s", cgiBooleanShadowPrefix(), id);
+cgiMakeHiddenVarWithIdExtra(buf, id ? shadId : NULL, ( enabled ? "0" : (checked ? "-1" : "-2")),BOOLSHAD_EXTRA);
 }
 
 void cgiMakeCheckBoxUtil(char *name, boolean checked, char *msg, char *id)

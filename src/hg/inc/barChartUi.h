@@ -39,6 +39,9 @@
 /* Colors for categories */
 #define BAR_CHART_CATEGORY_COLORS        "barChartColors"
 
+/* Labels and colors */
+#define BAR_CHART_CATEGORY_URL          "barChartCategoryUrl"
+
 /* Units to display on bar mouseover */
 #define BAR_CHART_UNIT                   "barChartUnit"
 

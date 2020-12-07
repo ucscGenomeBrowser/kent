@@ -1,2 +1,9 @@
 CM000663.1	10	30	testFeat
 MT	10	50	Test2
+fixedStep chrom=MT start=47 step=1
+3.000000
+4.000000
+4.000000
+4.000000
+4.000000
+4.000000

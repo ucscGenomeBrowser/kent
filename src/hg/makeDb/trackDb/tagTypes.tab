@@ -26,6 +26,7 @@ bamGrayMode bam
 bamSkipPrintQualScore bam
 barChartBars barChart bigBarChart
 barChartColors barChart bigBarChart
+barChartCategoryUrl barChart bigBarChart
 barChartMatrixUrl barChart bigBarChart
 # below for backwards compatibility during QA. 
 barChartDataUrl barChart bigBarChart
@@ -131,6 +132,7 @@ expStep bed expRatio
 expTable bed expRatio
 extTable *
 externalDb bigGenePred
+extraDetailsTable bigBed
 fieldCount customTracks
 filePos *
 fileSortOrder *

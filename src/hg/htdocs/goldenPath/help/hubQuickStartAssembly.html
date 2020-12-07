@@ -71,16 +71,16 @@ the <a href="hgTrackHubHelp.html" target="_blank">Track Hub User Guide</a>. Also
 instructions on setting up a regular hub, please see the <a href="hgTrackHubHelp.html#Setup" 
 target="_blank">Setting Up Your Own Track Hub</a> section of the Track Hub User Guide.</p> 
 
-<h2>Setting up Blat for an Assembly Hub</h2>
+<h2>Setting up Blat and In-Silico PCR for an Assembly Hub</h2>
 <p>
 By running gfServers from your institution, you can enable blat on your assembly hubs. See
-<a href="#blat">Starting Blat for an Assembly Hub</a> for details.</p>
+<a href="#blat">Starting Blat and In-Silico PCR for an Assembly Hub</a> for details.</p>
 
-<h2>Setting up an Assembly Hub on GBiB with Blat included</h2>
+<h2>Setting up an Assembly Hub on GBiB with Blat and In-Silico PCR included</h2>
 <p>
 With an operational installation of Genome Browser in a Box (GBiB), you can quickly and easily 
-acquire an example assembly hub and run gfServers locally on the GBiB to enable blat. See the 
-section <a href="#blatGbib">Starting a Blat enabled Assembly Hub on GBiB</a> for more 
+acquire an example assembly hub and run gfServers locally on the GBiB to enable Blat and In-Silico PCR. See the 
+section <a href="#blatGbib">Starting a Blat and In-Silico PCR enabled Assembly Hub on GBiB</a> for more 
 information.</p>
 
 <h2>Resources</h2>
@@ -107,7 +107,7 @@ information.</p>
 <!-- ========= assembly blat ============================== -->
 
 <a name="blat"></a>
-<h2>Starting Blat for an Assembly Hub</h2>
+<h2>Starting Blat and In-Silico PCR for an Assembly Hub</h2>
 <p>
 From the location of yourAssembly.2bit file,
 <code>http://yourURL/yourAssembly/yourAssembly.2bit</code>, you can start two gfServers, specifying 
@@ -116,11 +116,12 @@ sequence, <code>17779</code>, in this example:</p>
 <pre><code>gfServer start localhost 17777 -trans -mask yourAssembly.2bit &
 gfServer start localhost 17779 -stepSize=5 yourAssembly.2bit &</code></pre>
 <p>
-Then you can edit the genomes.txt file of your assembly hub to include two lines in the stanza 
+Then you can edit the genomes.txt file of your assembly hub to include three lines in the stanza 
 referring to yourAssembly, that would have matching port numbers:</p>
 <pre>
    transBlat yourLab.yourInstitution.edu 17777
    blat yourLab.yourInstitution.edu 17779
+   isPcr yourLab.yourInstitution.edu 17779 </code></pre>
 </pre>
 <p>
 The assembly hub can be configured to talk to a dynamic BLAT server that loads
@@ -203,7 +204,7 @@ the Asia-based mirror, and the UCSC development server.</p>
 <!-- ========== blat assembly hub GBiB ============================== -->
 
 <a name="blatGbib"></a>
-<h2>Starting a Blat enabled Assembly Hub on GBiB</h2>
+<h2>Starting a Blat and In-Silico PCR enabled Assembly Hub on GBiB</h2>
 <p>
 <strong>STEP 1.</strong> Acquire and install Genome Browser in a Box: 
 <a href="gbib.html" target="_blank">http://genome.ucsc.edu/goldenPath/help/gbib.html</a>.
@@ -246,7 +247,8 @@ Edit the currently commented-out blat lines with <code>sudo vi genomes.txt</code
 use &quot;x&quot; when the cursor is over the <code>#</code> at the start of the line to remove it 
 and <code>:w!</code> to save the changes and <code>:q</code> to quit. </p>
 <pre><code>blat localhost 17779
-transBlat localhost 17777</code></pre>
+transBlat localhost 17777
+isPcr yourLab.yourInstitution.edu 17779 </code></pre>
 <p>
 Please note that if you loaded your hub earlier, it will take five minutes (300 seconds)
 for the browser to check for any changes to genomes.txt, and that this delay can be

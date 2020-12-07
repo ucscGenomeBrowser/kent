@@ -25,4 +25,5 @@ table manePred
    string ncbiId;      "NCBI id"
    string ncbiGene;      "NCBI gene"
    string ncbiProtAcc;    "NCBI protein identifier, none for noncoding"
+   string maneStat;     "MANE transcript status"
    )

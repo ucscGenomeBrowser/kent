@@ -74,4 +74,7 @@ extern void phyloPrintTreeNoDups( struct phyloTree *tree,FILE *f);
 
 extern int phyloCountLeaves( struct phyloTree *tree);
 
+int phyloCountInternalNodes(struct phyloTree *tree);
+/* Return the number of internal nodes (not leaf nodes) in tree. */
+
 #endif

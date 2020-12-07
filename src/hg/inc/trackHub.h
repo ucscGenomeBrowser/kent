@@ -207,5 +207,10 @@ void hubCheckBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome,
     struct trackDb *tdb);
 /* Check remote file exists and is of correct type. Wrap this in error catcher */
 
+struct dbDb *trackHubGetPcrServers();
+/* Look through attached trackHubs to see which of them have "isPcr" line in them. */
+
+boolean trackHubGetPcrParams(char *database, char **pHost, char **pPort);
+/* Get the isPcr params from a trackHub genome. */
 #endif /* TRACKHUB_H */
 

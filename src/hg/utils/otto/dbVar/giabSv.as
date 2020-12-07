@@ -17,7 +17,5 @@ table giabSv
     string sample_name; "Sample Name"
     string sampleset_name; "Sampleset Name"
     string phenotype;  "Phenotype"
-    string Variant_seq; "Variant Sequence"
-    string Reference_seq; "Reference Sequence"
     lstring _mouseOver; "mouseover string"
     )

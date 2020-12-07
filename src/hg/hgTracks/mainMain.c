@@ -52,6 +52,7 @@ oldVars = hashNew(10);
 
 if (cgiVarExists("hgt.redirectTool"))
     {
+    // user has selected one of the tools in View > In external tools: Do not plot, just redirect.
     printf("Content-type: text/html\n\n");
     errAbortSetDoContentType(FALSE);
     cart = cartForSession(hUserCookie(), NULL, NULL);

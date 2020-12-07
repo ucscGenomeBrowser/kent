@@ -1,0 +1,9 @@
+track treangen
+shortLabel Intrahost SNPs
+longLabel Intrahost SNP patient data from Todd Treangen's group
+visibility hide
+type bigBed
+group varRep
+priority 1
+bigDataUrl /gbdb/wuhCor1/treangen/Treangen_iSNP.bb
+pennantIcon New red ../goldenPath/newsarch.html "Released Nov. 5, 2020"

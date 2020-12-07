@@ -12,11 +12,11 @@ void usage()
 errAbort(
   "vcfRenameAndPrune - Rename samples in VCF; if new name not found, remove sample.\n"
   "usage:\n"
-  "   vcfRenameAndPrune vcfIn.vcf[.gz] renaming.tab vcfOut.vcf\n"
+  "   vcfRenameAndPrune vcfIn.vcf[.gz] renaming.txt vcfOut.vcf\n"
 //  "options:\n"
 //  "   -xxx=XXX\n"
-  "renaming.tab has two columns: old name (must uniquely match some sample\n"
-  "named in #CHROM header line) and new name.\n"
+  "renaming.txt has two whitespace-separated columns: old name (must uniquely match\n"
+  "some sample named in #CHROM header line) and new name.\n"
   );
 }
 
@@ -130,7 +130,13 @@ while (lineFileNext(lf, &line, NULL))
                         newAltCounts[newAltIx]++;
                     // Update gt, i.e. words[keeperColumns[i]], with the new allele index.
                     int newAlIx = newAltIx + 1;
-                    safef(gt, strlen(gt)+1, "%d", newAlIx);
+                    char newGt[16];
+                    safef(newGt, sizeof newGt, "%d", newAlIx);
+                    if (strlen(newGt) <= strlen(gt))
+                        safecpy(gt, strlen(gt)+1, newGt);
+                    else
+                        // Extremely rare: single-digit ix to double-digit ix.  Leak a little mem.
+                        words[keeperColumns[i]] = cloneString(newGt);
                     }
                 }
             }

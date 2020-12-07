@@ -34,24 +34,26 @@ GCF_000788275.1_BP.fa	great blue-spotted mudskipper
 GCF_002260705.1_Sdu_1.0	greater amberjack
 GCF_000633615.1_Guppy_female_1.0_MT	guppy
 GCF_900634625.1_fParRan2.1	Indian glassy fish
-GCF_002922805.1_Om_v0.7.RACA	Indian medaka
+GCF_002922805.2_ASM292280v2	Indian medaka
 GCF_001970005.1_Flounder_ref_guided_V1.0	Japanese flounder
 GCF_002234675.1_ASM223467v1	Japanese medaka
 GCF_902148845.1_fSalaFa1.1	jewelled blenny
 GCF_000972845.2_L_crocea_2.0	large yellow croaker
 GCF_900963305.1_fEcheNa1.1	live sharksucker
 GCF_000239395.1_NeoBri1.0	lyretail cichlid
-GCF_001649575.1_ASM164957v1	mangrove rivulus
+GCF_001649575.2_ASM164957v2	mangrove rivulus
 GCF_000372685.2_Astyanax_mexicanus-2.0	Mexican tetra
 GCF_902362185.1_fChaCha1.1	milkfish
 GCF_001444195.1_X_couchianus-1.0	Monterrey platyfish
 GCF_000826765.1_Fundulus_heteroclitus-3.0.2	mummichog
+GCF_011125445.2_MU-UCD_Fhet_4.1	mummichog
 GCF_001858045.2_O_niloticus_UMD_NMBU	Nile tilapia
 GCF_004634155.1_Eluc_v4	northern pike
 GCF_902148855.1_fSphaOr1.1	orbiculate cardinalfish
-GCF_008315115.1_SLUC_FBN_1	pike-perch
+GCF_008315115.2_SLUC_FBN_1.2	pike-perch
 GCF_902150065.1_fMyrMur1.1	pinecone soldierfish
 GCF_002163495.1_Omyk_1.0	rainbow trout
+GCF_013265735.2_USDA_OmykA_1.1	rainbow trout
 GCF_001682695.1_Pygocentrus_nattereri-1.0.2	red-bellied piranha
 GCF_901001165.1_fSalTru1.1	river trout
 GCF_001443285.1_P_latipinna-1.0	sailfin molly
@@ -62,6 +64,7 @@ GCF_006149115.1_Oner_1.0	sockeye salmon
 GCF_002775205.1_X_maculatus-5.0-male	southern platyfish
 GCF_002109545.1_ASM210954v1	spiny chromis
 GCF_003671635.1_VN_pangasius	striped catfish
+GCF_009078355.1_GENO_Phyp_1.0	striped catfish
 GCF_001952655.1_M_albus_1.0	swamp eel
 GCF_001891065.1_H_comes_QL1_v1	tiger tail seahorse
 GCF_000523025.1_Cse_v1.0	tongue sole

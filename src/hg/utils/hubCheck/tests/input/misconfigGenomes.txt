@@ -1,0 +1,21 @@
+genome araTha1
+description Feb. 2011 Thale cress
+defaultPos chr1:1000000-2000000
+scientificName Arabidopsis thaliana
+htmlPath http://bad.url.path
+organism Arabidopsis thaliana
+orderKey 4700
+groups badLocalPath.txt
+twoBitPath https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/araTha1/noTwoBitPath.2bit
+trackDb noErrors.araTha1.trackDb.txt
+
+genome ricCom1
+description July 2011 Castor bean
+defaultPos EQ973772:1000000-2000000
+scientificName Ricinus communis
+htmlPath https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/description.html
+organism Ricinus communis
+orderKey 4800
+groups https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/groups.txt
+twoBitPath https://genome-test.gi.ucsc.edu/~hiram/hubs/Plants/ricCom1/ricCom1.2bit
+trackDb noErrors.araTha1.trackDb.txt

@@ -1,0 +1,133 @@
+<h2>Description</h2>
+<p>
+This track shows rare variants associated with monogenic congenital defects of immunity to 
+the <b>SARS-CoV-2</b> virus identified by the 
+<a target=_blank href="https://www.covidhge.com/">COVID Human Genetic Effort</a>. 
+This international consortium aims to discover truly causative variations: those underlying 
+severe forms of COVID-19 in previously healthy individuals, and those that make certain 
+individuals resistant to infection by the SARS-CoV2 virus despite repeated exposure.
+</p>
+<p>
+The major feature of the small set of  variants in this track is that they are functionally tested
+to be <b>deleterious</b> and genetically tested to be <b>disease-causing</b>. 
+Specifically, rare variants were predicted to be loss-of-function at human loci known to govern
+interferon (IFN) immunity to influenza virus in patients with life-threatening COVID-19 pneumonia, 
+relative to subjects with asymptomatic or benign infection.
+These genetic defects display incomplete penetrance for influenza respiratory distress and only
+appear clinically upon infection with the more virulent SARS-CoV-2.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+Only eight genes and few variants are contained in this track. Use the links in the table to
+browse the gene of interest:
+</p>
+
+<table class="stdTbl">
+  <tr>
+    <th>Gene Name</th>
+    <th>Human GRCh37/hg19 Assembly</th>
+    <th>Human GRCh38/hg38 Assembly</th>
+  </tr>
+  <tr>
+   <td>TLR3</td>
+    <td><a href="../cgi-bin/hgTracks?db=hg19&covidMuts=pack&position=chr4:186990309-187006252">
+chr4:186990309-187006252</a></td>
+    <td><a href="../cgi-bin/hgTracks?db=hg38&covidMuts=pack&position=chr4:186069152-186088069">
+chr4:186069152-186088069</a></td>
+  </tr>
+  <tr>
+    <td>IRF7</td>
+    <td><a href="../cgi-bin/hgTracks?db=hg19&covidMuts=pack&position=chr11:612555-615999">
+chr11:612555-615999</a></td>
+    <td><a href="../cgi-bin/hgTracks?db=hg38&covidMuts=pack&position=chr11:612591-615970">
+chr11:612591-615970</a></td>
+  </tr>
+  <tr>
+    <td>UNC93B1</td>
+    <td><a href="../cgi-bin/hgTracks?db=hg19&covidMuts=pack&position=chr11:67758575-67771593">
+chr11:67758575-67771593</a></td>
+    <td><a href="../cgi-bin/hgTracks?db=hg38&covidMuts=pack&position=chr11:67991100-68004097">
+chr11:67991100-68004097</a></td>
+  </tr>
+  <tr>
+    <td>TBK1</td>
+    <td><a href="../cgi-bin/hgTracks?db=hg19&covidMuts=pack&position=chr12:64845840-64895899">
+chr12:64845840-64895899</a></td>
+    <td><a href="../cgi-bin/hgTracks?db=hg38&covidMuts=pack&position=chr12:64452120-64502114">
+chr12:64452120-64502114</a></td>
+  </tr>
+  <tr>
+    <td>TICAM1</td>
+    <td><a href="../cgi-bin/hgTracks?db=hg19&covidMuts=pack&position=chr19:4815936-4831754">
+chr19:4815936-4831754</a></td>
+    <td><a href="../cgi-bin/hgTracks?db=hg38&covidMuts=pack&position=chr19:4815932-4831704">
+chr19:4815932-4831704</a></td>
+  </tr>
+  <tr>
+    <td>IRF3</td>
+    <td><a href="../cgi-bin/hgTracks?db=hg19&covidMuts=pack&position=chr19:50162826-50169132">
+chr19:50162826-50169132</a></td>
+    <td><a href="../cgi-bin/hgTracks?db=hg38&covidMuts=pack&position=chr19:49659570-49665875">
+chr19:49659570-49665875</a></td>
+  </tr>
+  <tr>
+    <td>IFNAR1</td>
+   <td><a href="../cgi-bin/hgTracks?db=hg19&covidMuts=pack&position=chr21:34697214-34732128">
+chr21:34697214-34732128</a></td>
+    <td><a href="../cgi-bin/hgTracks?db=hg38&covidMuts=pack&position=chr21:33324970-33359864">
+chr21:33324970-33359864</a></td>
+  </tr>
+  <tr>
+    <td>IFNAR2</td>
+    <td><a href="../cgi-bin/hgTracks?db=hg19&covidMuts=pack&position=chr21:34602231-34636820">
+chr21:34602231-34636820</a></td>
+    <td><a href="../cgi-bin/hgTracks?db=hg38&covidMuts=pack&position=chr21:33229974-33264525">
+chr21:33229974-33264525</a></td>
+  </tr>
+</table>
+
+<h2>Methods</h2>
+<p>
+This track uses variant calls in autosomal IFN-related genes from whole exome and genome data 
+with a MAF lower than 0.001 (gnomAD v2.1.1) and experimental demonstration of loss-of-function.
+The patient population studied consisted of 659 patients with life-threatening COVID-19 pneumonia 
+relative to 534 subjects with asymptomatic or benign infection of varying ethnicities. 
+Variants underlying autosomal-recessive or autosomal-dominant deficiencies were identified in 
+23 patients (3.5%) 17 to 77 years of age.
+The proportion of individuals carrying at least one variant was compared between severe cases 
+and control cases by means of logistic regression with the likelihood ratio test.
+Principal Component Analysis (PCA) was conducted with Plink v1.9 software on whole exome and 
+genome sequencing data with the 1000 Genomes (1kG) Project phase 3 public database as reference.
+Analysis of enrichment in rare synonymous variants of the genes was performed to check the 
+calibration of the burden test. 
+The odds ratio was also estimated by logistic regression and adjusted for ethnic heterogeneity.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the <a target="_blank" href="../cgi-bin/hgTables">
+Table Browser</a>, or the <a target="_blank" href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+Please refer to
+our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list archives</a> for questions, or our <a target="_blank"
+href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a> for more information.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the COVID Human Genetic Effort contributors for making these data available, and in
+particular to Qian Zhang at the Rockefeller University for review and input during browser track
+development.
+</p>
+
+<h2>References</h2>
+<p>
+Zhang Q, Bastard P, Liu Z, Le Pen J, Moncada-Velez M, Chen J, Ogishi M, Sabli IKD, Hodeib S, Korol C
+<em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32972995" target="_blank">
+Inborn errors of type I IFN immunity in patients with life-threatening COVID-19</a>.
+<em>Science</em>. 2020 Sep 24;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32972995" target="_blank">32972995</a>
+</p>
+

@@ -28,6 +28,7 @@ use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_buildDir
     $opt_ncbiRmsk
+    $opt_dupList
     $opt_liftSpec
     $opt_species
     $opt_unmaskedSeq
@@ -56,6 +57,7 @@ my $defaultSpecies = 'scientificName from dbDb';
 my $ncbiRmsk = "";	# path to NCBI *_rm.out.gz file to use NCBI result
                         # for repeat masking result
                         # in the assembly as calculated by NCBI
+my $dupList = "";	# path to download/asmId.remove.dups.list for NCBI
 my $liftSpec = "";	# lift file from NCBI coordinates to UCSC coordinates
                         # usually required with ncbiRmsk
 
@@ -80,6 +82,8 @@ options:
                           Default: $defaultSpecies.
     -ncbiRmsk path/file_rm.out.gz - Use the repeat masker result supplied in
                           the assembly as calculated by NCBI
+    -dupList .../download/asmId.remove.dups.list - to remove duplicates from
+			  NCBI repeat masker file
     -liftSpec path/file.lift - Use this lift file to lift the NCBI coordinates
                           to UCSC coordinates, usually used with ncbiRmsk
     -unmaskedSeq seq.2bit Use seq.2bit as the unmasked input sequence instead
@@ -131,6 +135,7 @@ sub checkOptions {
 		      'buildDir=s',
 		      'species=s',
 		      'ncbiRmsk=s',
+		      'dupList=s',
 		      'liftSpec=s',
 		      'unmaskedSeq=s',
 		      'customLib=s',
@@ -466,15 +471,31 @@ _EOF_
     );
     }
     if ($zippedSource) {
-    $bossScript->add(<<_EOF_
+      if ( -s "${dupList}" ) {
+        $bossScript->add(<<_EOF_
+zcat "\${ncbiRmOutFile}" | tail -n +4 | sort -k5,5 -k6,6n $liftOpts \\
+   | grep -v -f ${dupList} >> "\${db}.sorted.fa.out"
+_EOF_
+        );
+      } else {
+        $bossScript->add(<<_EOF_
 zcat "\${ncbiRmOutFile}" | tail -n +4 | sort -k5,5 -k6,6n $liftOpts >> "\${db}.sorted.fa.out"
 _EOF_
-    );
+        );
+      }
     } else {
-    $bossScript->add(<<_EOF_
+      if ( -s "${dupList}" ) {
+        $bossScript->add(<<_EOF_
+tail -n +4 "\${ncbiRmOutFile}" sort -k5,5 -k6,6n $liftOpts \\
+    | grep -v -f ${dupList} >> "\${db}.sorted.fa.out"
+_EOF_
+        );
+      } else {
+        $bossScript->add(<<_EOF_
 tail -n +4 "\${ncbiRmOutFile}" sort -k5,5 -k6,6n $liftOpts >> "\${db}.sorted.fa.out"
 _EOF_
-    );
+        );
+      }
     }
   } else {	# not using the NCBI supplied file, use local cluster run result
   my $partDir = "$buildDir/RMPart";
@@ -728,6 +749,7 @@ my $seqCount = `twoBitInfo $unmaskedSeq stdout | wc -l`;
 $chromBased = ($seqCount <= $HgAutomate::splitThreshold) && $opt_splitTables;
 $updateTable = $opt_updateTable ? "Update" : "";
 $ncbiRmsk = $opt_ncbiRmsk ? $opt_ncbiRmsk : "";
+$dupList = $opt_dupList ? $opt_dupList : "";
 $liftSpec = $opt_liftSpec ? $opt_liftSpec : "";
 
 # Do everything.

@@ -461,6 +461,19 @@ struct positionMatch
  long virtEnd;
  };
 
+/* mouseOver business declared in hgTracks.c */
+extern boolean enableMouseOver;
+extern struct tempName *mouseOverJsonFile;
+extern struct jsonWrite *mouseOverJson;
+
+struct wigMouseOver
+    {
+    struct wigMouseOver *next;
+    int x1;	/* beginning of a rectangle for this value */
+    int x2;	/* end of the rectangle */
+    double value;	/* data value for this region */
+    int valueCount;	/* number of data values in this rectangle */
+    };
 
 extern struct virtRegion *virtRegionList;
 extern struct virtChromRegionPos *virtChrom; // Array
@@ -528,9 +541,6 @@ extern int winStart;	  /* Start of window in sequence. */
 extern int winEnd;	  /* End of window in sequence. */
 extern int maxItemsInFullTrack;  /* Maximum number of items displayed in full */
 extern char *position; 		/* Name of position. */
-extern int leftLabelWidthDefaultChars;   /* default number of characters allowed for left label */
-extern int leftLabelWidthChars;   /* number of characters allowed for left label */
-extern int trackTabWidth;
 extern int gfxBorder;		/* Width of graphics border. */
 extern int insideWidth;		/* Width of area to draw tracks in in pixels. */
 extern int insideX;		/* Start of area to draw track in in pixels. */

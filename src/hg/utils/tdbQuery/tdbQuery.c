@@ -479,6 +479,10 @@ while ((record = tdbRecordReadOne(lf, glKeyField, lm)) != NULL)
                     errAbort("Include with bad release tag %s at line %d of %s",
                         subRelease, tdbRecordLineIx(record), lf->fileName);
                 }
+            else if (releaseTag != NULL)
+                {
+                subRelease = releaseTag;
+                }
 
             if (subRelease && releaseTag && !sameString(subRelease, releaseTag))
                 errAbort("Include with release %s included from include with release %s at line "
@@ -888,7 +892,9 @@ if (startsWith("yAxisLabel.", name))
     return TRUE;
 if (startsWith("filter.", name))
     return TRUE;
-if (startsWith("filterValues", name))
+if (startsWith("filterValues.", name))
+    return TRUE;
+if (startsWith("filterValuesDefault.", name))
     return TRUE;
 if (startsWith("filterType.", name))
     return TRUE;

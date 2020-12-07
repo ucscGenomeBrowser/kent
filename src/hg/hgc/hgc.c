@@ -826,6 +826,18 @@ if (item != NULL && item[0] != 0)
     cartWebStart(cart, database, "%s (%s)", tdb->longLabel, item);
 else
     cartWebStart(cart, database, "%s", tdb->longLabel);
+
+// QA noticed that clicking the +- buttons to collapse item detail tables was
+// generating messages in the Apache log if you went directly to an item page
+// without first visiting hgTracks. Clicking those buttons causes a cartDump
+// in order to save the state of visibility of the table, which in
+// turn needs an hgsid in order to save the state correctly. However, because
+// we aren't in a form, we have never saved the hgsid to a hidden
+// input element, and so the javascript that creates the cartDump link attaches
+// an empty 'hgsid=' parameter, which cartDump doesn't like. Since we aren't in
+// a form, use the 'common' object to store the parameter so the links to cartDump
+// are correct:
+jsInlineF("var common = {hgsid:\"%s\"};\n", cartSessionId(cart));
 }
 
 void printItemDetailsHtml(struct trackDb *tdb, char *itemName)
@@ -1550,6 +1562,50 @@ slReverse(fields);
 return fields;
 }
 
+void printExtraDetailsTable(char *trackName, char *tableName, char *fileName, struct dyString *tableText)
+// convert a tab-sep table to HTML
+{
+struct lineFile *lf = lineFileOnString(fileName, TRUE, tableText->string);
+char *description = tableName != NULL ? tableName : "Additional Details";
+printf("<table>");
+jsBeginCollapsibleSection(cart, trackName, "extraTbl", description, FALSE);
+printf("<table class=\"bedExtraTbl\">\n");
+char *line;
+while (lineFileNext(lf, &line, NULL))
+    {
+    printf("<tr><td>");
+    char *toPrint = replaceChars(line, "\t", "</td><td>");
+    printf("%s", toPrint);
+    printf("</td></tr>\n");
+    }
+printf("</table>\n"); // closes bedExtraTbl
+jsEndCollapsibleSection();
+printf("</table>\n"); // close wrapper table
+}
+
+static struct slName *findFieldsInExtraFile(char *detailsTableUrl, struct asColumn *col, struct dyString *ds)
+// return a list of the ${}-enclosed fields from an extra file
+{
+struct slName *foundFields = NULL;
+char *table = netReadTextFileIfExists(hReplaceGbdb(detailsTableUrl));
+if (table)
+    {
+    for (; col != NULL; col = col->next)
+        {
+        char field[256];
+        safef(field, sizeof(field), "${%s}", col->name);
+        if (stringIn(field, table))
+            {
+            struct slName *replaceField = slNameNew(col->name);
+            slAddHead(&foundFields, replaceField);
+            }
+        }
+    dyStringPrintf(ds, "%s", table);
+    slReverse(foundFields);
+    }
+return foundFields;
+}
+
 int extraFieldsPrintAs(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount, struct asObject *as)
 // Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
 // sr may be null for bigBeds.
@@ -1574,6 +1630,20 @@ char *sepFieldsStr = trackDbSetting(tdb, "sepFields");
 struct slName *sepFields = NULL;
 if (sepFieldsStr)
     sepFields = slNameListFromComma(sepFieldsStr);
+
+// make list of fields that we want to substitute
+// this setting has format description|URLorFilePath, with the stuff before the pipe optional
+char *extraDetailsTableName = NULL, *extraDetails = cloneString(trackDbSetting(tdb, "extraDetailsTable"));
+if (extraDetails && strchr(extraDetails,'|'))
+    {
+    extraDetailsTableName = extraDetails;
+    extraDetails = strchr(extraDetails,'|');
+    *extraDetails++ = 0;
+    }
+struct dyString *extraTblStr = dyStringNew(0);
+struct slName *detailsTableFields = NULL;
+if (extraDetails)
+    detailsTableFields = findFieldsInExtraFile(extraDetails, col, extraTblStr);
 
 // iterate over fields, print as table rows
 int count = 0;
@@ -1604,6 +1674,20 @@ for (;col != NULL && count < fieldCount;col=col->next)
     // external extra fields in that _ field names have some meaning and are not shown
     if (startsWith("_", fieldName) || (skipIds && slNameInList(skipIds, fieldName)))
         continue;
+
+    // don't print this field if we are gonna print it later in a custom table
+    if (detailsTableFields && slNameInList(detailsTableFields, fieldName))
+        {
+        int fieldLen = strlen(fieldName);
+        char *replaceField = needMem(fieldLen+4);
+        replaceField[0] = '$';
+        replaceField[1] = '{';
+        strcpy(replaceField+2, fieldName);
+        replaceField[fieldLen+2] = '}';
+        replaceField[fieldLen+3] = 0;
+        extraTblStr = dyStringSub(extraTblStr->string, replaceField, fields[ix]);
+        continue;
+        }
 
     // skip this row if it's empty and "skipEmptyFields" option is set
     if (skipEmptyFields && isEmpty(fields[ix]))
@@ -1643,6 +1727,12 @@ if (sepFields)
 
 if (count > 0)
     printf("</table>\n");
+
+if (detailsTableFields)
+    {
+    printf("<br>\n");
+    printExtraDetailsTable(tdb->track, extraDetailsTableName, extraDetails, extraTblStr);
+    }
 
 return count;
 }
@@ -4155,7 +4245,7 @@ if (differentString(type, "bigInteract") && differentString(type, "interact"))
     {
     // skip generic URL code as these may have multiple items returned for a click
     itemForUrl = getIdInUrl(tdb, item);
-    if (itemForUrl != NULL && trackDbSetting(tdb, "url"))
+    if (itemForUrl != NULL && trackDbSetting(tdb, "url") && differentString(type, "bigBed"))
         {
         printCustomUrl(tdb, itemForUrl, item == itemForUrl);
         printIframe(tdb, itemForUrl);
@@ -11589,7 +11679,9 @@ if (sqlTableExists(conn, refSeqSummaryTable))
     sqlSafef(query, sizeof(query),
           "select summary from %s where mrnaAcc = '%s'", refSeqSummaryTable, acc);
     summary = sqlQuickString(conn, query);
+    summary = abbreviateRefSeqSummary(summary);
     }
+
 return summary;
 }
 
@@ -21391,7 +21483,7 @@ else if (sameWord(type, "bigMaf"))
     genericMafClick(NULL, ct->tdb, item, start);
 else if (sameWord(type, "bigDbSnp"))
     doBigDbSnp(ct->tdb, item);
-else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred"))
+else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred") || sameWord(type, "bigLolly"))
     bigBedCustomClick(ct->tdb);
 else if (sameWord(type, "bigBarChart") || sameWord(type, "barChart"))
     doBarChartDetails(ct->tdb, item);
