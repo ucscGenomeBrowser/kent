@@ -1144,8 +1144,8 @@ wget --timestamping \
 
     grep -v "^track" UU_GSD1.0_gene_annotation.bed \
 	| hgLoadBed -type=bed12 canFam4 uuGene stdin
-
-    grep -v "^track" GSD1.0_july1_reduced_number.bed \
-	| hgLoadBed -type=bed12 canFam4 uuGeneReduced stdin
+ 
+    grep -v "^track" filled_cf3.1_gaps.bed \
+	| hgLoadBed -type=bed3 canFam4 filledGaps stdin
 
 #########################################################################
