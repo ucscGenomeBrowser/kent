@@ -8029,6 +8029,7 @@ long thisTime = 0, lastTime = 0;
 basesPerPixel = ((float)virtWinBaseCount) / ((float)fullInsideWidth);
 zoomedToBaseLevel = (virtWinBaseCount <= fullInsideWidth / tl.mWidth);
 zoomedToCodonLevel = (ceil(virtWinBaseCount/3) * tl.mWidth) <= fullInsideWidth;
+zoomedToCodonNumberLevel = (ceil(virtWinBaseCount/3) * tl.mWidth * 5) <= fullInsideWidth;
 zoomedToCdsColorLevel = (virtWinBaseCount <= fullInsideWidth*3);
 
 if (psOutput != NULL)

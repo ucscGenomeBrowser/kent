@@ -558,6 +558,7 @@ extern int winBaseCount;  /* Number of bases in window. */
 extern float basesPerPixel;       /* bases covered by a pixel; a measure of zoom */
 extern boolean zoomedToBaseLevel; /* TRUE if zoomed so we can draw bases. */
 extern boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codon text in genePreds*/
+extern boolean zoomedToCodonNumberLevel; /* TRUE if zoomed so we can print codons and exon number text in genePreds*/
 extern boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we cancolor each codon*/
 
 extern char *ctFileName;	/* Custom track file. */
