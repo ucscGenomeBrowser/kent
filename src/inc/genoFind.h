@@ -34,9 +34,14 @@
 #endif
 
 struct gfConnection
-/* connection to a gfServer.  This allows reuse of the connection when supported. */
+/* connection to a gfServer.  This supports reuse of the connection for dynamic 
+ * servers and reopening a connection for static server. */
 {
-    int fd;  // socket descriptor
+    
+    int fd;  // socket descriptor, -1 if closed
+    char *hostName;   // need when reconnecting
+    int port;
+    boolean isDynamic;  // is this a dynamic server?
 };
 
 enum gfConstants {
@@ -96,7 +101,8 @@ struct genoFind
  * WARNING: MUST MODIFY CODE TO STORE/LOAD INDEX TO FILES IF THIS STRUCTURE IS
  * MODIFIED!!!
  */
-    {
+{
+    boolean isMapped;                    /* is this a mapped file? */
     int maxPat;                          /* Max # of times pattern can occur
                                           * before it is ignored. */
     int minMatch;                        /* Minimum number of tile hits needed
@@ -153,6 +159,9 @@ struct genoFindIndex* genoFindIndexBuild(int fileCount, char *seqFiles[],
                                          boolean allowOneMismatch, boolean doMask,
                                          int stepSize, boolean noSimpRepMask);
 /* build a untranslated or translated index */
+
+void genoFindIndexFree(struct genoFindIndex **pGfIdx);
+/* free a genoFindIndex */
 
 void genoFindIndexWrite(struct genoFindIndex *gfIdx, char *fileName);
 /* write index to file that can be mapped */
@@ -388,11 +397,20 @@ void gfAlignTransTrans(struct gfConnection *conn, char *nibDir, struct dnaSeq *s
  * and do detailed alignment.  Call 'outFunction' with each alignment
  * that is found. */
 
-struct gfConnection *gfMayConnect(char *hostName, char *portName);
+struct gfConnection *gfMayConnect(char *hostName, char *portName, boolean isDynamic);
 /* Set up our network connection to server, or return NULL. */
 
-struct gfConnection * gfConnect(char *hostName, char *portName);
+struct gfConnection *gfConnect(char *hostName, char *portName, boolean isDynamic);
 /* Set up our network connection to server. Aborts on error. */
+
+void gfBeginRequest(struct gfConnection *conn);
+/* called before a request is started.  If the connect is not open, reopen
+ * it. */
+
+void gfEndRequest(struct gfConnection *conn);
+/* End a request that might be followed by another requests. For
+ * a static server, this closed the connection.  A dynamic server
+ * it is left open. *///
 
 void gfDisconnect(struct gfConnection **pConn);
 /* Disconnect from server */

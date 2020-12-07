@@ -593,7 +593,6 @@ for (i = 0; i < fileCount; i++)
 return FALSE;
 }
 
-
 static struct hash *buildPerSeqMax(int fileCount, char *seqFiles[], char* perSeqMaxFile)
 /* do work of building perSeqMaxhash */
 {
@@ -1093,59 +1092,117 @@ logError("%s", buf);
 printf("Error: %s\n", buf);
 }
 
-static void dynReadBytes(char *buf, int bufSize)
-/* read pending bytes */
+struct dynSession
+/* information on dynamic server connection session.  This is all data
+ * currently cached.  If is not changed if the genome and query mode is the
+ * same as the previous request.
+ */
+{
+    boolean isTrans;              // translated 
+    char genome[256];             // genome name
+    char genomeDataDir[PATH_LEN]; // relative directory of data dir
+    char gfIdxFile[PATH_LEN];     // index file location
+    struct hash *perSeqMaxHash;   // max hits per sequence
+    struct genoFindIndex *gfIdx;  // index
+};
+
+static void dynSessionInit(struct dynSession *dynSession, char *rootDir,
+                           char *genome, char *genomeDataDir, boolean isTrans)
+/* Initialize or reinitialize a dynSession object */
+{
+// will free current content if initialized
+genoFindIndexFree(&dynSession->gfIdx);
+hashFree(&dynSession->perSeqMaxHash);
+
+time_t startTime = clock1000();
+dynSession->isTrans = isTrans;
+safecpy(dynSession->genome, sizeof(dynSession->genome), genome);
+safecpy(dynSession->genomeDataDir, sizeof(dynSession->genomeDataDir), genomeDataDir);
+    
+char seqFile[PATH_LEN];
+safef(seqFile, PATH_LEN, "%s/%s/%s.2bit", rootDir, genomeDataDir, genome);
+if (!fileExists(seqFile))
+    errAbort("sequence file for %s does not exist: %s", genome, seqFile);
+
+char gfIdxFile[PATH_LEN];
+safef(gfIdxFile, PATH_LEN, "%s/%s/%s.%s.gfidx", rootDir, genomeDataDir, genome, isTrans ? "trans" : "untrans");
+if (!fileExists(gfIdxFile))
+    errAbort("gf index file for %s does not exist: %s", genome, gfIdxFile);
+dynSession->gfIdx = genoFindIndexLoad(gfIdxFile, isTrans);
+
+char perSeqMaxFile[PATH_LEN];
+safef(perSeqMaxFile, PATH_LEN, "%s/%s/%s.perseqmax", rootDir, genomeDataDir, genome);
+if (fileExists(perSeqMaxFile))
+    {
+    /* only the basename of the file is saved in the index */
+    char *slash = strrchr(seqFile, '/');
+    char *seqFiles[1] = {(slash != NULL) ? slash + 1 : seqFile};
+    dynSession->perSeqMaxHash = buildPerSeqMax(1, seqFiles, perSeqMaxFile);
+    }
+logInfo("dynserver: index loading completed in %4.3f seconds", 0.001 * (clock1000() - startTime));
+}
+
+static char *dynReadCommand(char* rootDir, char *buf, int bufSize)
+/* read command and log, NULL if no more */
 {
 int readSize = read(STDIN_FILENO, buf, bufSize-1);
 if (readSize < 0)
     errAbort("EOF from client");
+if (readSize == 0)
+    return NULL;
 buf[readSize] = '\0';
+logDebug("query received: %s", buf);
+if (!startsWith(gfSignature(), buf))
+    errAbort("query does not start with signature, got '%s'", buf);
+return buf + strlen(gfSignature());
 }
 
-static void dynReadCommand(char **commandRet, int *qsizeRet, boolean *isTransRet,
-                           char **genomeRet, char **genomeDataDirRet)
-/* read query request from stdin, same as server expect includes database
+static boolean dynNextCommand(char* rootDir, struct dynSession *dynSession, char **commandRet, int *qsizeRet)
+/* Read query request from stdin and (re)initialize session to match paramters.
  * Format for query commands:
- *  signature+command qsize genome genomeDataDir
+ *  signature+command genome genomeDataDir qsize
  * Formats for info command:
  *  signature+command genome genomeDataDir
  */
 {
-char buf[256];
-dynReadBytes(buf, sizeof(buf));
-logDebug("query: %s", buf);
-
-if (!startsWith(gfSignature(), buf))
-    errAbort("query does not start with signature, got '%s'", buf);
+char buf[PATH_LEN];
+char *cmdStr = dynReadCommand(rootDir, buf, sizeof(buf));
+if (cmdStr == NULL)
+    return FALSE;
 
 char *words[6];
-int numWords = chopByWhite(buf, words, ArraySize(words));
+int numWords = chopByWhite(cmdStr, words, ArraySize(words));
 if (numWords == 0)
     errAbort("empty command");
-char *command = buf + strlen(gfSignature());
+char *command = words[0];
 *commandRet = cloneString(command);
-*isTransRet = sameString("protQuery", command) || sameString("transQuery", command)
+boolean isTrans = sameString("protQuery", command) || sameString("transQuery", command)
     || sameString("transInfo", command);
 
+char genome[256],  genomeDataDir[PATH_LEN];
 if (sameString("query", command) || sameString("protQuery", command)
       || sameString("transQuery", command))
     {
     if (numWords != 4)
         errAbort("expected 4 words in query command, got %d", numWords);
-    *qsizeRet = atoi(words[1]);
-    *genomeRet = cloneString(words[2]);
-    *genomeDataDirRet = cloneString(words[3]);
+    *qsizeRet = atoi(words[3]);
     }
 else if (sameString("untransInfo", command) || sameString("transInfo", command))
     {
     if (numWords != 3)
-        errAbort("expected 3 words in query command, got %d", numWords);
+        errAbort("expected 3 words in info command, got %d", numWords);
     *qsizeRet = 0;
-    *genomeRet = cloneString(words[1]);
-    *genomeDataDirRet = cloneString(words[2]);
     }
 else
     errAbort("invalid command '%s'", command);
+
+safecpy(genome, sizeof(genome), words[1]);
+safecpy(genomeDataDir, sizeof(genomeDataDir), words[2]);
+
+// initialize session if new or changed
+if ((dynSession->isTrans != isTrans) || (!sameString(dynSession->genome, genome)) || (!sameString(dynSession->genomeDataDir, genomeDataDir)))
+    dynSessionInit(dynSession, rootDir, genome, genomeDataDir, isTrans);
+return TRUE;
 }
 
 static struct dnaSeq* dynReadQuerySeq(int qSize, boolean isTrans, boolean queryIsProt)
@@ -1179,32 +1236,6 @@ if (seq->size > maxSize)
 return seq;
 }
 
-static void dynGetDataFiles(char *rootDir, char *genome, char *genomeDataDir,
-                            boolean isTrans, char gfIdxFile[PATH_LEN],
-                            struct hash **perSeqMaxHashRet)
-/* get paths for sequence files to handle requests and validate they exist */
-{
-char seqFile[PATH_LEN];
-safef(seqFile, PATH_LEN, "%s/%s/%s.2bit", rootDir, genomeDataDir, genome);
-if (!fileExists(seqFile))
-    errAbort("sequence file for %s does not exist: %s", genome, seqFile);
-
-safef(gfIdxFile, PATH_LEN, "%s/%s/%s.%s.gfidx", rootDir, genomeDataDir, genome, isTrans ? "trans" : "untrans");
-if (!fileExists(gfIdxFile))
-    errAbort("gf index file for %s does not exist: %s", genome, gfIdxFile);
-
-char perSeqMaxFile[PATH_LEN];
-safef(perSeqMaxFile, PATH_LEN, "%s/%s/%s.perseqmax", rootDir, genomeDataDir, genome);
-*perSeqMaxHashRet = NULL;
-if (fileExists(perSeqMaxFile))
-    {
-    /* only the basename of the file is saved in the index */
-    char *slash = strrchr(seqFile, '/');
-    char *seqFiles[1] = {(slash != NULL) ? slash + 1 : seqFile};
-    *perSeqMaxHashRet = buildPerSeqMax(1, seqFiles, perSeqMaxFile);
-    }
-}
-
 static void dynamicServerQuery(char *command, int qSize, struct genoFindIndex *gfIdx, struct hash *perSeqMaxHash)
 /* handle search queries */
 {
@@ -1224,7 +1255,6 @@ else
     dnaQuery(gfIdx->untransGf, seq, STDOUT_FILENO, perSeqMaxHash);
     }
 netSendString(STDOUT_FILENO, "end");
-logDebug("query done");
 }
 
 static void dynamicServerInfo(char *command, struct genoFindIndex *gfIdx)
@@ -1245,32 +1275,37 @@ netSendString(STDOUT_FILENO, buf);
 netSendString(STDOUT_FILENO, "end");
 }
 
+static bool dynamicServerCommand(char* rootDir, struct dynSession* dynSession)
+/* Execute one command from stdin, (re)initializing session as needed */
+{
+time_t startTime = clock1000();
+char *command;
+int qSize;
+if (!dynNextCommand(rootDir, dynSession, &command, &qSize))
+    return FALSE;
+logInfo("dynserver: %s %s %s %s size=%d ", command, dynSession->genome, dynSession->genomeDataDir, (dynSession->isTrans ? "trans" : "untrans"), qSize);
+if (endsWith(command, "Info"))
+    dynamicServerInfo(command, dynSession->gfIdx);
+else
+    dynamicServerQuery(command, qSize, dynSession->gfIdx, dynSession->perSeqMaxHash);
+logInfo("dynserver: %s completed in %4.3f seconds", command, 0.001 * (clock1000() - startTime));
+return TRUE;
+}
+
 static void dynamicServer(char* rootDir)
 /* dynamic server for inetd. Read query from stdin, open index, query, respond, exit.
  * only one query at a time */
 {
-// make sure error is logged
+logDebug("dynamicServer connect");
+
+// make sure errors are logged
 pushWarnHandler(dynWarnErrorVa);
+struct dynSession dynSession;
+ZeroVar(&dynSession);
 
-char *command, *genome, *genomeDataDir;
-int qSize;
-boolean isTrans;
-dynReadCommand(&command, &qSize, &isTrans, &genome, &genomeDataDir);
-logInfo("dynserver: %s %s %s %s size=%d ", command, genome, genomeDataDir, (isTrans ? "trans" : "untrans"), qSize);
-
-time_t startTime = clock1000();
-char gfIdxFile[PATH_LEN];
-struct hash *perSeqMaxHash = NULL;
-dynGetDataFiles(rootDir, genome, genomeDataDir, isTrans, gfIdxFile, &perSeqMaxHash);
-logInfo("dynserver: index loading completed in %4.3f seconds", 0.001 * (clock1000() - startTime));
-startTime = clock1000();
-
-struct genoFindIndex *gfIdx = genoFindIndexLoad(gfIdxFile, isTrans);
-if (endsWith(command, "Info"))
-    dynamicServerInfo(command, gfIdx);
-else
-    dynamicServerQuery(command, qSize, gfIdx, perSeqMaxHash);
-logInfo("dynserver: %s completed in %4.3f seconds", command, 0.001 * (clock1000() - startTime));
+while (dynamicServerCommand(rootDir, &dynSession))
+    continue;
+logDebug("dynamicServer disconnect");
 }
 
 int main(int argc, char *argv[])

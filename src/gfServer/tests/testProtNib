@@ -3,4 +3,4 @@ gfServer start -trans localhost 17768 -canStop input/mCreaGeno.nib input/hCreaGe
 sleep 1
 gfServer protQuery localhost 17768 input/mCrea.pep > output/testProtNib.out
 gfServer stop localhost 17768 > /dev/null
-diff expected/testProtNib.out output/testProtNib.out
+diff -u expected/testProtNib.out output/testProtNib.out

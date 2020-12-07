@@ -109,14 +109,10 @@ static void startSeqQuery(struct gfConnection *conn, bioSeq *seq, char *type, ch
 /* Send a query that involves some sequence. */
 {
 char buf[1024]; // room for error message if we need it.
-safef(buf, sizeof(buf), "%s%s %d", gfSignature(), type, seq->size);
+safef(buf, sizeof(buf), "%s%s", gfSignature(), type);
 if (genomeDataDir != NULL)
-    {
-    safecat(buf, sizeof(buf), " ");
-    safecat(buf, sizeof(buf), genome);
-    safecat(buf, sizeof(buf), " ");
-    safecat(buf, sizeof(buf), genomeDataDir);
-    }
+    safefcat(buf, sizeof(buf), " %s %s", genome, genomeDataDir);
+safefcat(buf, sizeof(buf), " %d", seq->size);
 mustWriteFd(conn->fd, buf, strlen(buf));
 if (read(conn->fd, buf, 1) < 0)
     errAbort("startSeqQuery: read failed: %s", strerror(errno));
@@ -144,6 +140,7 @@ struct gfRange *rangeList = NULL, *range;
 char buf[256], *row[6];
 int rowSize;
 
+gfBeginRequest(conn);
 startSeqQuery(conn, seq, "query", genome, genomeDataDir);
 
 /* Read results line by line and save in list, and return. */
@@ -169,6 +166,7 @@ for (;;)
 	}
     }
 slReverse(&rangeList);
+gfEndRequest(conn);
 return rangeList;
 }
 
@@ -237,6 +235,7 @@ for (isRc = 0; isRc <= 1; ++isRc)
 	clumps[isRc][frame] = NULL;
 
 /* Send sequence to server. */
+gfBeginRequest(conn);
 startSeqQuery(conn, seq, "protQuery", genome, genomeDataDir);
 line = netRecieveString(conn->fd, buf);
 if (!startsWith("Error:", line))
@@ -286,6 +285,7 @@ else
     {
     gfServerWarn(seq, line);
     }
+gfEndRequest(conn);
 *retSsList = ssList;
 *retTileSize = tileSize;
 }
@@ -310,6 +310,7 @@ for (isRc = 0; isRc <= 1; ++isRc)
 	    clumps[isRc][qFrame][tFrame] = NULL;
 
 /* Send sequence to server. */
+gfBeginRequest(conn);
 startSeqQuery(conn, seq, "transQuery", genome, genomeDataDir);
 line = netRecieveString(conn->fd, buf);
 if (!startsWith("Error:", line))
@@ -361,6 +362,7 @@ else
     {
     gfServerWarn(seq, buf);
     }
+gfEndRequest(conn);
 *retSsList = ssList;
 *retTileSize = tileSize;
 }
@@ -1073,8 +1075,6 @@ struct lm *lm = lmInit(0);
 
 /* Get clumps from server. */
 gfQuerySeqTrans(conn, seq, clumps, lm, &ssList, &tileSize, genome, genomeDataDir);
-close(conn->fd);
-conn->fd = -1;
 
 for (isRc = 0; isRc <= 1;  ++isRc)
     {
@@ -1197,8 +1197,6 @@ enum ffStringency stringency = (isRna ? ffCdna : ffLoose);
 
 /* Query server for clumps. */
 gfQuerySeqTransTrans(conn, qSeq, clumps, lm, &ssList, &tileSize, genome, genomeDataDir);
-close(conn->fd);
-conn->fd = -1;
 
 for (tIsRc=0; tIsRc <= 1; ++tIsRc)
     {

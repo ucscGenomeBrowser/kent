@@ -119,11 +119,11 @@ tempDir ../tmp
 
 
 For dynamic gfServer, which server both untranslated and translated request,
-must be given a genome name, multiple genomes can be on same port.
-The specification is in the form:
+must be given a genome name and server root relative directory.
+Multiple genomes can be on same port. The specification is in the form:
 
-dynServer mediumRamMachine 17799 hg19 /data/genomes/hg19 Human Genome
-dynServer mediumRamMachine 17799 mm10 /data/genomes/mm10 Mouse Genome
+dynServer mediumRamMachine 17799 hg19 genomes/hg19 /data/genomes/hg19 Human Genome
+dynServer mediumRamMachine 17799 mm10 genomes/mm10 /data/genomes/mm10 Mouse Genome
 
 
 PUTTING WEBBLAT WHERE THE WEB SERVER CAN EXECUTE IT

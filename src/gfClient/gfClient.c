@@ -112,16 +112,15 @@ snprintf(databaseName, sizeof(databaseName), "%s:%s", hostName, portName);
 gvo = gfOutputAny(outputFormat,  round(minIdentity*10), qType == gftProt, tType == gftProt,
 	optionExists("nohead"), databaseName, 23, 3.0e9, minIdentity, out);
 gfOutputHead(gvo, out);
+struct gfConnection *conn = gfConnect(hostName, portName, (genome != NULL));
 while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt))
     {
-    struct gfConnection *conn = gfConnect(hostName, portName);
     if (dots != 0)
         {
 	if (++dotMod >= dots)
 	    {
 	    dotMod = 0;
-	    fputc('.', stdout);
-	    fflush(stdout);
+            verboseDot();
 	    }
 	}
     if (qType == gftProt && (tType == gftDnaX || tType == gftRnaX))
@@ -137,8 +136,6 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt)
 	if (qType == gftDnaX)
 	    {
 	    reverseComplement(seq.dna, seq.size);
-	    gfDisconnect(&conn);
-	    conn = gfConnect(hostName, portName);
 	    gfAlignTransTrans(conn, tSeqDir, &seq, TRUE, minScore, tFileCache,
                               gvo, FALSE, genome, genomeDataDir);
 	    }
@@ -146,7 +143,6 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt)
     else if ((tType == gftDna || tType == gftRna) && (qType == gftDna || qType == gftRna))
 	{
 	gfAlignStrand(conn, tSeqDir, &seq, FALSE, minScore, tFileCache, gvo, genome, genomeDataDir);
-	conn = gfConnect(hostName, portName);
 	reverseComplement(seq.dna, seq.size);
 	gfAlignStrand(conn, tSeqDir, &seq, TRUE,  minScore, tFileCache, gvo, genome, genomeDataDir);
 	}
@@ -157,6 +153,8 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt)
 	}
     gfOutputQuery(gvo, out);
     }
+gfDisconnect(&conn);
+
 if (out != stdout)
     printf("Output is in %s\n", outName);
 gfFileCacheFree(&tFileCache);

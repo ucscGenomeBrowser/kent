@@ -77,8 +77,11 @@ struct gfSeqSource *sources;
 if (gf != NULL)
     {
     freeMem(gf->lists);
-    freeMem(gf->listSizes);
-    freeMem(gf->allocated);
+    if (!gf->isMapped)
+        {
+        freeMem(gf->listSizes);
+        freeMem(gf->allocated);
+        }
     if ((sources = gf->sources) != NULL)
 	{
 	for (i=0; i<gf->sourceCount; ++i)
@@ -255,7 +258,7 @@ int i;
 for (i = 0; i < gf->tileSpaceSize; i++)
     {
     if (gf->listSizes[i] < gf->maxPat)
-         {
+        {
         gf->lists[i] = cur;
         cur += gf->listSizes[i];
         count += gf->listSizes[i];
@@ -326,6 +329,7 @@ static struct genoFind *genoFindLoad(FILE* f ,void *memMapped, off_t off)
 {
 struct genoFind *gf;
 AllocVar(gf);
+gf->isMapped = TRUE;
 struct genoFindFileHdr *hdr = memMapped + off;
 genoFindReadHdr(hdr, gf);
 
@@ -481,6 +485,29 @@ else
 
 carefulClose(&f);
 return gfIdx;
+}
+
+void genoFindIndexFree(struct genoFindIndex **pGfIdx)
+/* free a genoFindIndex */
+{
+struct genoFindIndex *gfIdx = *pGfIdx;
+if (gfIdx != NULL)
+    {
+    if (gfIdx->untransGf != NULL)
+        genoFindFree(&gfIdx->untransGf);
+    else
+        {
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 3; j++)
+                genoFindFree(&gfIdx->transGf[i][j]);
+        }
+    if (gfIdx->memMapped != NULL)
+        {
+        if (munmap(gfIdx->memMapped, gfIdx->memLength))
+            errnoAbort("munmap error");
+        }
+    freez(pGfIdx);
+    }
 }
 
 int gfPowerOf20(int n)

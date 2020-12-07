@@ -308,7 +308,6 @@ bioSeq *seqList, *seq;
 char *type = NULL;
 boolean txServer = FALSE, protQuery = FALSE;
 struct gfServerAt *server;
-int conn;
 FILE *f;
 struct gfOutput *gvo;
 struct hash *tFileCache = gfFileCacheNew();
@@ -361,39 +360,41 @@ txServer = isTxType(type);
 server = findServer(txServer);
 
 /* Loop through sequences doing alignments and saving to file. */
+struct gfConnection *conn = gfConnect(server->host, server->port, server->dynGenomeDir != NULL);
 for (seq = seqList; seq != NULL; seq = seq->next)
     {
-    conn = gfConnect(server->host, server->port);
     if (txServer)
         {
 	gvo->reportTargetStrand = TRUE;
 	if (protQuery)
 	    {
-	    gfAlignTrans(&conn, server->seqDir, seq, 5, tFileCache, gvo, server->dynGenomeDir);
+	    gfAlignTrans(conn, server->seqDir, seq, 5,
+                         tFileCache, gvo, server->genome, server->dynGenomeDir);
 	    }
 	else
 	    {
 	    boolean isRna = sameWord(type, "RNA");
-	    gfAlignTransTrans(&conn, server->seqDir, seq, FALSE, 5,
-			    tFileCache, gvo, isRna, NULL);
+	    gfAlignTransTrans(conn, server->seqDir, seq, FALSE, 5,
+                              tFileCache, gvo, isRna, server->genome, server->dynGenomeDir);
 	    if (!isRna)
 	        {
 		reverseComplement(seq->dna, seq->size);
-		conn = gfConnect(server->host, server->port);
-		gfAlignTransTrans(&conn, server->seqDir, seq, TRUE, 5,
-		                        tFileCache, gvo, FALSE, server->dynGenomeDir);
+		gfAlignTransTrans(conn, server->seqDir, seq, TRUE, 5,
+                                  tFileCache, gvo, FALSE, server->genome, server->dynGenomeDir);
 		}
 	    }
 	}
     else
         {
-	gfAlignStrand(&conn, server->seqDir, seq, FALSE, 16, tFileCache, gvo, server->dynGenomeDir);
+	gfAlignStrand(conn, server->seqDir, seq, FALSE, 16,
+                      tFileCache, gvo, server->genome, server->dynGenomeDir);
 	reverseComplement(seq->dna, seq->size);
-	conn = gfConnect(server->host, server->port);
-	gfAlignStrand(&conn, server->seqDir, seq, TRUE, 16, tFileCache, gvo, server->dynGenomeDir);
+	gfAlignStrand(conn, server->seqDir, seq, TRUE, 16,
+                      tFileCache, gvo, server->genome, server->dynGenomeDir);
 	}
     gfOutputQuery(gvo, f);
     }
+gfDisconnect(&conn);
 carefulClose(&f);
 
 /* Display alignment results. */

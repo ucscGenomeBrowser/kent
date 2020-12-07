@@ -1,4 +1,4 @@
-0ddf270562684f29transQuery 1540 crea crea
+0ddf270562684f29transQuery crea crea 1540
 
 tileSize 11
 0	104	crea.2bit:hCreaGeno	80	184	23	+	0	0
@@ -90,7 +90,7 @@ tileSize 11
 171	191	crea.2bit:hCreaGeno	520	540	4	+	2	2
  171 520 179 528 183 532 187 536
 end
-0ddf270562684f29transQuery 1606 crea crea
+0ddf270562684f29transQuery crea crea 1606
 
 tileSize 11
 452	528	crea.2bit:mCreatGeno	2348	2424	16	+	0	0

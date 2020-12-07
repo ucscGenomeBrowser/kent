@@ -265,11 +265,11 @@ gvo = gfOutputPsl(920, FALSE, FALSE, f, FALSE, FALSE);
 gfOutputHead(gvo, f);
 
 /* align to genome, both strands */
-struct gfConnection *conn = gfConnect(blatHost, port);
+struct gfConnection *conn = gfConnect(blatHost, port, FALSE);
 gfAlignStrand(conn, nibDir, seq, FALSE, 20, tFileCache, gvo, NULL, NULL);
 reverseComplement(seq->dna, seq->size);
 gfDisconnect(&conn);
-conn = gfConnect(blatHost, port);
+conn = gfConnect(blatHost, port, FALSE);
 gfAlignStrand(conn, nibDir, seq, TRUE, 20 , tFileCache, gvo, NULL, NULL);
 gfDisconnect(&conn);
 gfOutputQuery(gvo, f);

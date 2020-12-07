@@ -3460,6 +3460,19 @@ va_end(args);
 return sz;
 }
 
+int safefcat(char* buffer, int bufSize, char *format, ...)
+/* Safely format string to the end of the buffer.  Returns number of characters
+ * appended. */
+{
+int sz, len = strlen(buffer);;
+va_list args;
+va_start(args, format);
+sz = vasafef(buffer + len, bufSize - len, format, args);
+va_end(args);
+return sz;
+}
+
+
 void safecpy(char *buf, size_t bufSize, const char *src)
 /* copy a string to a buffer, with bounds checking.*/
 {

@@ -2,4 +2,4 @@
 gfServer pcrDirect CCTGAAGGCATCAGTGTACCCCAGGAATGCCCAA CTCATGAGTGGCTCCTAAAGCAGCTGCGTGG input/testPcr.2bit | grep -v seconds > output/testPcr.out
 gfServer pcrDirect tggtgagagggggaaggtttt ggagctctgacatctgggttctg input/testPcr.2bit | grep -v seconds >> output/testPcr.out
 gfServer pcrDirect GGAGCTCTGACATCTGGGTTCTGGA tggtgagagggggaaggttttcttt input/testPcr.2bit | grep -v seconds >> output/testPcr.out
-diff expected/testPcr.out output/testPcr.out
+diff -u expected/testPcr.out output/testPcr.out

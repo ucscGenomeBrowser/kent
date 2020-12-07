@@ -9,7 +9,8 @@ struct gfServerAt
     char *port;		/* IP Port on host. */
     char *seqDir;	/* Where associated sequence lives. */
     char *name;		/* Name user sees. */
-    char *dynGenomeDir; /* Genome name for dynamic server */
+    char *genome;       /* Genome name for dynamic server */
+    char *dynGenomeDir; /* Relative genome directory for dynamic server */
     };
 
 struct gfServerAt *gfWebFindServer(struct gfServerAt *serverList, char *varName);

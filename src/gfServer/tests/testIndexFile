@@ -11,4 +11,4 @@ gfServer start -indexFile=$gfIdx localhost 17768 -canStop input/creaGeno.2bit >/
 sleep 1
 gfServer query localhost 17768 input/mCrea.mrna > output/testIndexFile.out
 gfServer stop localhost 17768 > /dev/null
-diff expected/testIndexFile.out output/testIndexFile.out
+diff -u expected/testIndexFile.out output/testIndexFile.out

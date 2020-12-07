@@ -46,7 +46,10 @@ AllocVar(server);
 server->host = nextWord(&dupe);
 server->port = nextWord(&dupe);
 if (isDynamic)
+    {
+    server->genome = nextWord(&dupe);
     server->dynGenomeDir = nextWord(&dupe);
+    }
 server->seqDir = nextWord(&dupe);
 server->name = trimSpaces(dupe);
 if (server->name == NULL || server->name[0] == 0)

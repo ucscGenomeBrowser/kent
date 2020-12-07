@@ -1432,6 +1432,14 @@ __attribute__((format(printf, 3, 4)))
 #endif
 ;
 
+int safefcat(char* buffer, int bufSize, char *format, ...)
+/* Safely format string to the end of the buffer.  Returns number of characters
+ * appended. */
+#ifdef __GNUC__
+__attribute__((format(printf, 3, 4)))
+#endif
+;
+
 void safecpy(char *buf, size_t bufSize, const char *src);
 /* copy a string to a buffer, with bounds checking.*/
 

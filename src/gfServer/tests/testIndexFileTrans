@@ -11,4 +11,4 @@ gfServer start -trans -indexFile=$gfIdx localhost 17768 -canStop input/creaGeno.
 sleep 1
 gfServer transQuery localhost 17768 input/mCrea.mrna > output/testIndexFileTrans.out
 gfServer stop localhost 17768 > /dev/null
-diff expected/testIndexFileTrans.out output/testIndexFileTrans.out
+diff -u expected/testIndexFileTrans.out output/testIndexFileTrans.out
