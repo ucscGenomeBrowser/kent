@@ -101,3 +101,25 @@ for source in gisaid lineage nextstrain; do
     wc -l public${Source}Colors
     gzip -f public${Source}Colors
 done
+
+# Metadata for hgPhyloPlace:
+# Header names same as nextmeta (with strain first) so hgPhyloPlace recognizes them:
+echo -e "strain\tgenbank_accession\tdate\tcountry\thost\tcompleteness\tlength\tpangolin_lineage" \
+    > public-$releaseLabel.metadata.tsv
+# NCBI metadata (strip colon-separated location after country if present):
+tawk '$8 >= 29000 { print $6, $1, $3, $4, $5, "", $8, ""; }' \
+    /hive/data/outside/otto/sarscov2phylo/ncbi.latest/ncbi_dataset.plusBioSample.tsv \
+| sed -re 's/\t([A-Za-z -]+):[A-Za-z0-9 ,()_-]+\t/\t\1\t/;' \
+| sed -re 's@SARS-Co[Vv]-2/human/@@; s@SARS-Co[Vv]-2/@@; s@hCo[Vv]-19/@@;' \
+    >> public-$releaseLabel.metadata.tsv
+# COG-UK metadata:
+tail -n+2 /hive/data/outside/otto/sarscov2phylo/cogUk.latest/cog_metadata.csv \
+| awk -F, -v 'OFS=\t' '{print $1, "", $4, $2, "", "", "", $6; }' \
+    >> public-$releaseLabel.metadata.tsv
+# CNCB metadata:
+tail -n+2 /hive/data/outside/otto/sarscov2phylo/cncb.latest/cncb.metadata.tsv \
+| tawk '$3 != "GISAID" && $3 != "GenBank" && $3 != "Genbank" { print $1, "", $10, $11, $9, $5, $6, ""; }' \
+| sed -re 's@\t([A-Za-z -]+)( / [A-Za-z -'"'"']+)+\t@\t\1\t@;  s@BetaCo[Vv]/@@;' \
+| sed -re 's@SARS-Co[Vv]-2/human/@@; s@SARS-Co[Vv]-2/@@; s@hCo[Vv]-19/@@;' \
+    >> public-$releaseLabel.metadata.tsv
+gzip -f public-$releaseLabel.metadata.tsv

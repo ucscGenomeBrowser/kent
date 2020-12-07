@@ -638,29 +638,6 @@ for(cb = cbList; cb != NULL; cb = cb->next)
     }
 }
 
-static void maybeNewFonts(struct hvGfx *hvg)
-/* Check to see if we want to use the alternate font engine (FreeType2). */
-{
-if (sameString(cfgOptionDefault("freeType", "off"), "on"))
-    {
-    if (sameString(tl.textFont, "Bitmap"))
-        return;
-
-    char *fontDir = cfgOptionDefault("freeTypeDir", "/usr/share/fonts/default/Type1");
-    char buffer[4096];
-
-    extern char *freeTypeFontNames[];
-    extern char *freeTypeFontFiles[];
-    int ii;
-    for(ii=0; ii < 33; ii++)
-        if (sameString(freeTypeFontNames[ii], tl.textFont))
-            break;
-    char *fontFile = freeTypeFontFiles[ii];
-    char *fontName = freeTypeFontNames[ii];
-    safef(buffer, sizeof buffer, "%s/%s", fontDir, fontFile);
-    hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, fontName, buffer );
-    }
-}
 
 boolean makeChromIdeoImage(struct track **pTrackList, char *psOutput,
                         struct tempName *ideoTn)
@@ -8029,6 +8006,7 @@ long thisTime = 0, lastTime = 0;
 basesPerPixel = ((float)virtWinBaseCount) / ((float)fullInsideWidth);
 zoomedToBaseLevel = (virtWinBaseCount <= fullInsideWidth / tl.mWidth);
 zoomedToCodonLevel = (ceil(virtWinBaseCount/3) * tl.mWidth) <= fullInsideWidth;
+zoomedToCodonNumberLevel = (ceil(virtWinBaseCount/3) * tl.mWidth * 5) <= fullInsideWidth;
 zoomedToCdsColorLevel = (virtWinBaseCount <= fullInsideWidth*3);
 
 if (psOutput != NULL)

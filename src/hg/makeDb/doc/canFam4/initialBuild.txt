@@ -1106,3 +1106,46 @@ done
 #	/hive/data/genomes/canFam4/pushQ/redmine.canFam4.table.list
 
 #########################################################################
+# annotations from Lindblad-Toh lab (DONE - 2020-12-07 - Hiram)
+
+    mkdir /hive/data/genomes/canFam4/bed/annotations
+    cd /hive/data/genomes/canFam4/bed/annotations
+
+wget --timestamping \
+"https://export.uppmax.uu.se/uppstore2017228/ucsc_cf4_annotation/28ChromiumDogs.filtered.b614.simple.NoMishcka.vcf.gz.tbi"
+wget --timestamping \
+"https://export.uppmax.uu.se/uppstore2017228/ucsc_cf4_annotation/GSD1.0_july1_reduced_number.bed"
+wget --timestamping \
+"https://export.uppmax.uu.se/uppstore2017228/ucsc_cf4_annotation/SVs.ind1.cf4b614.simple.bed.ucsc.bed"
+wget --timestamping \
+"https://export.uppmax.uu.se/uppstore2017228/ucsc_cf4_annotation/UU_GSD1.0_gene_annotation.bed"
+wget --timestamping \
+"https://export.uppmax.uu.se/uppstore2017228/ucsc_cf4_annotation/filled_cf3.1_gaps.bed"
+wget --timestamping \
+"https://export.uppmax.uu.se/uppstore2017228/ucsc_cf4_annotation/miRNA.bed"
+wget --timestamping \
+"https://export.uppmax.uu.se/uppstore2017228/ucsc_cf4_annotation/miRNA.bed.bg"
+
+
+    mkdir -p /gbdb/canFam4/bbi/altAllele
+    rm -f /gbdb/canFam4/bbi/altAllele/28ChromiumDogs.filtered.b614.simple.NoMishcka.vcf.gz
+    rm -f /gbdb/canFam4/bbi/altAllele/28ChromiumDogs.filtered.b614.simple.NoMishcka.vcf.gz.tbi
+
+    ln -s `pwd`/28ChromiumDogs.filtered.b614.simple.NoMishcka.vcf.gz \
+	/gbdb/canFam4/bbi/altAllele/
+    ln -s `pwd`/28ChromiumDogs.filtered.b614.simple.NoMishcka.vcf.gz.tbi \
+	/gbdb/canFam4/bbi/altAllele/
+
+    hgBbiDbLink canFam4 altAllele \
+	/gbdb/canFam4/bbi/altAllele/28ChromiumDogs.filtered.b614.simple.NoMishcka.vcf.gz
+
+    grep -v "^track" SVs.ind1.cf4b614.simple.bed.ucsc.bed \
+	| hgLoadBed -allowStartEqualEnd -type=bed4 canFam4 structVar stdin
+
+    grep -v "^track" UU_GSD1.0_gene_annotation.bed \
+	| hgLoadBed -type=bed12 canFam4 uuGene stdin
+
+    grep -v "^track" GSD1.0_july1_reduced_number.bed \
+	| hgLoadBed -type=bed12 canFam4 uuGeneReduced stdin
+
+#########################################################################
