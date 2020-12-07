@@ -1,7 +1,7 @@
 
 track altAllele
-shortLabel Alt Allele
-longLabel Alternative allele
+shortLabel SNP and indels
+longLabel SNP and indels
 group varRep
 type vcfTabix
 visibility hide

@@ -1565,7 +1565,9 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
          *      later smoothing operations.  x1d,x2d are pixel coordinates
          */
 double x1d = (double)(wi->start - seqStart) * pixelsPerBase;
+	x1 = round(x1d);
 double x2d = (double)((wi->start+(wi->count * usingDataSpan))-seqStart) * pixelsPerBase;
+	x2 = round(x2d);
 
         /* this used to be if (x2 > x1) which often caused reading of blocks
 	 * when they were merely x2 = x1 + 1 due to rounding errors as

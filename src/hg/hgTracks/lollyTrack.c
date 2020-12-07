@@ -39,9 +39,49 @@ itemRgb.b = color & 0xff;
 return  hvGfxFindColorIx(hvg, itemRgb.r, itemRgb.g, itemRgb.b);
 }
 
-void doYLabels(struct track *tg, struct hvGfx *hvg, int width, int height, struct lollyCartOptions *lollyCart, int xOff, int yOff, Color color, MgFont *font, boolean doLabels )
-/* Draw labels or lines for labels. */
+// structure to capture yLabels
+struct yLabel
 {
+struct yLabel *next;
+unsigned y;
+char *label;
+unsigned long color;
+boolean on;
+};
+
+int cmpY(const void *va, const void *vb)
+// sort the lines by y value
+{
+const struct yLabel *a = *((struct yLabel **)va);
+const struct yLabel *b = *((struct yLabel **)vb);
+return a->y - b->y;
+}
+
+// font heights available to the user
+unsigned fontHeights[] = { 6,8,10,12,14,18,24 ,34 };
+
+unsigned findBiggest(unsigned num)
+/* find biggest font not bigger than num */
+{
+int ii;
+unsigned prev = 0;
+
+for (ii=0; ii < ArraySize(fontHeights); prev = fontHeights[ii], ii++)
+    if (fontHeights[ii] > num)
+        return prev;
+
+return 34;
+}
+
+void doYLabels(struct track *tg, struct hvGfx *hvg, int width, int height, struct lollyCartOptions *lollyCart, int xOff, int yOff, Color color, MgFont *font, boolean doLabels )
+/* parse lines like yAxisLabel <y offset> <draw line ?>  <R,G,B> <label>
+ * Draw labels or lines for labels. */
+{
+struct hashEl *hel = trackDbSettingsLike(tg->tdb, "yAxisLabel*");
+
+if (hel == NULL)
+    return;
+
 double range = tg->graphUpperLimit - tg->graphLowerLimit;
 int fontHeight = tl.fontHeight+1;
 // we need a margin on top and bottom for half a lolly, and some space at the bottom
@@ -51,23 +91,67 @@ double topAndBottomMargins = LOLLY_DIAMETER / 2 + LOLLY_DIAMETER / 2;
 double usableHeight = height - topAndBottomMargins - minimumStemHeight; 
 yOff += LOLLY_DIAMETER / 2;
 
-struct hashEl *hel = trackDbSettingsLike(tg->tdb, "yAxisLabel*");
-// parse lines like yAxisLabel <y offset> <draw line ?>  <R,G,B> <label>
+struct yLabel *lineList = NULL;
+struct yLabel *line;
 for(; hel; hel = hel->next)
     {
+    AllocVar(line);
+    slAddHead(&lineList, line);
+
     char *setting = cloneString((char *)hel->val);
     double number = atof(nextWord(&setting)); 
-    boolean drawLine = sameString("on", nextWord(&setting));
+    line->on = sameString("on", nextWord(&setting));
     unsigned char red, green, blue;
     char *colorStr = nextWord(&setting);
     parseColor(colorStr, &red, &green, &blue);
-    unsigned long  lineColor = MAKECOLOR_32(red, green, blue);
-    char *label = setting;
+    line->color = MAKECOLOR_32(red, green, blue);
+    line->label = cloneString(setting);
+
     int offset = usableHeight * ((double)number  - tg->graphLowerLimit) / range;
+    line->y = yOff + (usableHeight - offset);
+    }
+
+slSort(&lineList, cmpY);
+unsigned minDiff = BIGNUM;
+struct yLabel *prev = NULL;
+MgFont *labelfont = font;
+
+// figure out what font height we should use
+if (doLabels)
+    {
+    for(line = lineList; line; prev = line, line = line->next)
+        {
+        if (prev)
+            {
+            unsigned min = line->y - prev->y;
+            
+            if (min < minDiff)
+                minDiff = min;
+            }
+        }
+
+    if (minDiff <= tl.fontHeight)
+        {
+        unsigned choice = findBiggest(minDiff);
+        if (doLabels && (choice == 0))
+            return;
+        if (choice < tl.fontHeight)
+            {
+            char size[1024];
+
+            safef(size, sizeof size, "%d", choice);
+            labelfont = mgFontForSizeAndStyle(size, "medium");
+            }
+        }
+    fontHeight = mgFontPixelHeight(labelfont) + 1;
+    }
+
+for(line = lineList; line; line = line->next)
+    {
     if (doLabels)
-        hvGfxTextRight(hvg, xOff, yOff + (usableHeight - offset) - fontHeight / 2 , width - 1, fontHeight, color, font, label);
-    else if (drawLine)
-        hvGfxLine(hvg, xOff, yOff + (usableHeight - offset),  xOff + width , yOff + (usableHeight - offset), lineColor);
+        hvGfxTextRight(hvg, xOff, line->y - fontHeight / 2 , width - 1, fontHeight, line->color, labelfont, line->label);
+    else if (line->on)
+        hvGfxLine(hvg, xOff, line->y,  xOff + width , line->y, line->color);
     }
 }
 

@@ -1,41 +1,49 @@
-#!/usr/bin/env python2
-import urllib2, time, os, datetime, optparse, sys, logging, subprocess, glob, shutil
+#!/usr/bin/env python3
+import urllib.request, urllib.error, urllib.parse, time, os, atexit
+import datetime, optparse, sys, logging, subprocess, glob, shutil
 import sys, gzip, logging,re
-from ftputil import FTPHost # not found? run 'pip2.7 install ftputil'
-from urlparse import urlparse
+
+from urllib.parse import urlparse
 from os.path import *
-from os import system, makedirs, mkdir, remove
+from os import system, makedirs, mkdir, remove, listdir
 from shutil import move
 from subprocess import PIPE
-import gzip
 from collections import defaultdict, namedtuple, Counter
 
 # main driver script for uniprot updates
 
+# This script has evolved over a long time. Parts of it do not have an optimal structure.
+# One reason is that the script used to parse only mutations. Even normal annotations
+# are still put into a structure that resembles mutations.
+
 # Globals  ---
-upUrl = "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.xml.gz"
+#upUrl = "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.xml.gz"
+upUrl = "https://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.xml.gz"
 
-# mapping from uniProt taxon IDs to UCSC databases
-taxIdDbs = (
-    (9606 , ["hg19", "hg38"]), # human
-    (10090 , ["mm10"]), # mouse
-    (10116 , ["rn6"]), # rat
-    (8364 , ["xenTro9"]), # xenopus
-    (6239 , ["ce11", "ce10"]), # c elegans
-    (7227 , ["dm6"]), # fruitfly
-    (7955 , ["danRer7", "danRer10"]), # zebrafish
-    (4932 , ["sacCer3"]), # yeast
-    (7719 , ["ci3"]), # ciona
-    (9913, ["bosTau8"]), # cow
-    (9940, ["oviAri3"]), # sheep
-    (9823, ["susScr3"]), # pig
-)
+# manual mapping from uniProt taxon IDs to UCSC databases, the default mapping is taken from dbDb
+# these are added in addition, I obtained them in 2018 using some Apache log mining
+# the list could probably be a lot shorter now
+manualTaxIdDbs = {
+    9606   : ["hg19", "hg38"], # human
+    10090  : ["mm10"], # mouse
+    10116  : ["rn6"], # rat
+    8364   : ["xenTro9"], # xenopus
+    6239   : ["ce11", "ce10"], # c elegans
+    7227   : ["dm6"], # fruitfly
+    7955   : ["danRer7", "danRer10"], # zebrafish
+    4932   : ["sacCer3"], # yeast
+    9940   : ["oviAri3"], # sheep
+    9823   : ["susScr3"], # pig
+    2697049: None # ["wuhCor1"] # do not run on wuhCor1 - wuhCor1 has a special daily otto job in /hive/data/genomes/wuhCor1/bed/uniprot
+}
 
+# when we update the parasol cluster, no need to patch this script
 clusterFname = "/cluster/bin/scripts/cluster.txt"
 
 TREMBLCOLOR="0,150,250" # light blue
 SWISSPCOLOR="12,12,120" # dark blue
 
+asDir = dirname(__file__)
 #urls = {
     ##"var": "http://web.expasy.org/cgi-bin/variant_pages/get-sprot-variant.pl?",
     #"var": "http://www.uniprot.org/uniprot/",
@@ -77,6 +85,28 @@ disShortNames = {
     "a colon cancer cell line":"ColC-CL"
 }
 
+def getTaxIdDbs():
+    " return a dict with taxonId -> list of most recent dbs (e.g. for human, it's hg19 and hg38) "
+    query = "select taxId, name from dbDb where active=1 order by orderKey;"
+    rows = runQuery("hgcentral", query, usePublic=True)
+    taxIdToDbs = defaultdict(list)
+    # take only the first database for every taxonId
+    for taxId, dbCode in rows:
+        taxId = int(taxId)
+        if taxId not in taxIdToDbs:
+            taxIdToDbs[taxId].append(dbCode)
+
+    for taxId, manNames in manualTaxIdDbs.items():
+        # "None" means: do not do anything for this taxonId
+        if manNames is None:
+            del taxIdToDbs[taxId]
+        else:
+            for manName in manNames:
+                if manName not in taxIdToDbs[taxId]:
+                    taxIdToDbs[taxId].append(manName)
+
+    return taxIdToDbs.items()
+
 def parseArgs():
     parser = optparse.OptionParser("""usage: %prog [options] [run] - run uniprot update: download UniProt, parse the annotations to .tab files, build liftOver .psls and lift the annotations to bigBed files, one set per genome db""")
     parser.add_option("-d", "--debug", dest="debug", action="store_true", \
@@ -85,6 +115,8 @@ def parseArgs():
             help="only run on certain databases, comma-sep list of UCSC database names, e.g. 'hg19,mm10' (debugging)")
     parser.add_option("-l", "--skipDownload", dest="skipDownload", action="store_true", \
             help="Skip the download step (debugging)")
+    parser.add_option("", "--skipTrembl", dest="skipTrembl", action="store_true", \
+            help="Skip processing Trembl")
     parser.add_option("-p", "--skipParse", dest="skipParse", action="store_true", \
             help="Skip the download and parsing step (debugging)")
     parser.add_option("", "--onlyMap", dest="onlyMap", action="store_true", \
@@ -103,23 +135,31 @@ def parseArgs():
             help="skip the check of differences against the previous version")
     parser.add_option("", "--onlyLinks", dest="onlyLinks", action="store_true", \
             help="only create the /gbdb/ symlinks")
+    parser.add_option("", "--skipLinks", dest="skipLinks", action="store_true", \
+            help="do not create the /gbdb/ symlinks")
     parser.add_option("", "--mapQa", dest="mapQa", action="store_true", \
             help="output some QA stats for the maps")
+    parser.add_option("", "--db", dest="db", action="store_true", \
+            help="output the trackDb make command and uniprot <-> UCSC db assignments for debugging trackDb problems and showing which UCSC databases will be processed by the otto job and why")
 
     (options, args) = parser.parse_args()
 
-    if len(args)==0 and not options.mapQa:
-        parser.print_help()
-        print("To actually run the pipeline, you need to specify the argument 'run'.")
-        print("Current TaxId<->database assignment: %s" % str(taxIdDbs))
+    if options.db:
+        taxIdDbs = getTaxIdDbs()
+        print(("Current TaxId<->database assignment: %s" % str(taxIdDbs)))
         allDbs = []
         for taxId, dbs in taxIdDbs:
             allDbs.extend(dbs)
-        print("hint: make alpha DBS='%s'" % " ".join(allDbs))
+        print(("To make the uniProt trackDbs for all DBs, run this in kent/src/hg/makeDb/trackDb: make alpha DBS='%s'" % " ".join(allDbs)))
 
         taxIdStr = ",".join([str(x) for (x,y) in taxIdDbs]) # just the taxIds themselves
-        print("hint: uniprotToTab %s %s %s" % (options.uniprotDir, taxIdStr, options.tabDir))
+        print(("to just convert the XML files (debugging?), run this: uniprotToTab %s %s %s" % (options.uniprotDir, taxIdStr, options.tabDir)))
         sys.exit(1)
+
+    if len(args)==0 and not options.mapQa:
+        print("To actually run the pipeline, you need to specify the argument 'run'.")
+        parser.print_help()
+        print("To actually run the pipeline, you need to specify the argument 'run'.")
 
     if options.debug:
         consLevel = logging.DEBUG
@@ -169,10 +209,10 @@ def iterTsvRows(inFile,encoding="utf8", fieldSep="\t", isGzip=False):
         line = line.rstrip("\n")
         fields = line.split(fieldSep)
         if encoding!=None:
-            fields = [f.decode(encoding) for f in fields]
+            fields = [f for f in fields]
         try:
             rec = Record(*fields)
-        except Exception, msg:
+        except Exception as msg:
             logging.error("Exception occured while parsing line, %s" % msg)
             logging.error("Filename %s" % fh.name)
             logging.error("Line was: %s" % line)
@@ -191,7 +231,7 @@ threeToOne = \
      'Sec': 'U' # very very rare amino acid (=stop codon)
      }
 
-oneToThree = dict([[v,k] for k,v in threeToOne.items()])
+oneToThree = dict([[v,k] for k,v in list(threeToOne.items())])
 
 def aaToLong(seq):
     " convert amino acid to three letter code "
@@ -272,7 +312,7 @@ def makeBedLine(dbName, firstAnnot, bed, isMut, color):
             bed[3] = "Transmembrane"
         if firstAnnot.featType==fullSeqType:
             bed[3] = firstAnnot.acc
-            
+
         if firstAnnot.comment=="Nuclear localization signal":
             bed[3] = "Nuclear loc"
         if firstAnnot.comment=="Involved in receptor recognition and/or post-binding events":
@@ -293,6 +333,14 @@ def makeBedLine(dbName, firstAnnot, bed, isMut, color):
             bed[3] = firstAnnot.comment.replace("Required for ", "")
         if firstAnnot.comment.startswith("Cleavage; by host "):
             bed[3] = "Cleave:"+firstAnnot.comment.split()[-1]
+        if firstAnnot.comment=="Receptor-binding motif; binding to human ACE2":
+            bed[3] = "binds ACE2"
+
+        # chain annotations
+        if firstAnnot.longName!="":
+            bed[3] = firstAnnot.longName
+        if firstAnnot.shortName!="":
+            bed[3] = firstAnnot.shortName
 
         if bed[3] == "Intrinsically disordered":
             bed[3] = "Disordered"
@@ -310,6 +358,20 @@ def makeBedLine(dbName, firstAnnot, bed, isMut, color):
         if annoType=="strand":
             annoType="beta strand"
 
+    # bigGenePred format makes no sense for mutations but a lot for the other annotations
+    # add the bigGenePred fields: name2, cdsStartStat, cdsEndStat, exonFrames, type, geneName, geneName2, geneType
+    if not isMut:
+        bed.append("") # name2
+        bed.append("cmpl") # cdsStartStat
+        bed.append("cmpl") # cdsEndStat
+        blockCount = int(bed[9])
+        bed.append(",".join(blockCount*["0"])) #exonFrames
+        bed.append("") # type
+        bed.append("") # geneName
+        bed.append("") # geneName2
+        bed.append("") # geneType
+
+    # status field
     if dbName=="trembl":
         bed.append("Unreviewed (TrEMBL)")
     else:
@@ -339,6 +401,11 @@ def makeBedLine(dbName, firstAnnot, bed, isMut, color):
             posStr = "amino acids %s-%s" % (firstAnnot.begin, str(int(firstAnnot.end)-1))
         posStr += " on protein %s" % firstAnnot.acc
         bed.append(posStr)
+
+    if not isMut:
+        bed.append(firstAnnot.longName)
+        bed.append(firstAnnot.syns.replace("|", "; "))
+        bed.append(firstAnnot.subCellLoc)
 
     # construct the comment field, which is also used for the mouse over
     commentField = firstAnnot.comment
@@ -377,7 +444,7 @@ def parseSizes(inFname):
     seqSizes = {}
     for line in open(inFname):
         seq, size = line.rstrip("\n").split()
-        seqSizes[seq] = int(size)/3
+        seqSizes[seq] = int(int(size)/3)
     logging.debug("Parsed %s, found %d sequence sizes" % (inFname, len(seqSizes)))
     return seqSizes
 
@@ -429,17 +496,18 @@ def writeProtAnnot(annotFnames, protBedName, seqSizes):
             annotPosEnd = 3*(int(annot.end)-1)
             if annotName not in doneAnnots:
                 isoAcc = getMainIsoAcc(annot)
-                ofh.write("\t".join([isoAcc, str(annotPos), str(annotPosEnd), annotName])+"\n")
+                newLine = "\t".join([isoAcc, str(int(annotPos)), str(int(annotPosEnd)), annotName])
+                ofh.write(newLine+"\n")
             doneAnnots.add(annotName)
 
             if Record is None:
                 Record = namedtuple('fullSeqRec', annot._fields)
 
     # add one line for every accession, 
-    for accId, accSize in seqSizes.iteritems():
+    for accId, accSize in seqSizes.items():
         annot = fakeAnnot(Record, accId, accSize)
         annotName = annotToString(annot)
-        ofh.write("\t".join([accId, str(0), str(accSize*3), annotName]))
+        ofh.write("\t".join([accId, str(0), str(int(accSize*3)), annotName]))
         ofh.write("\n")
 
     ofh.close()
@@ -456,7 +524,7 @@ def fakeAnnot(Record, seqId, seqSize):
     #empty["comment"] = "Complete sequence %s mapped to the genome" % seqId
     empty["acc"] = seqId
     empty["begin"] = str(1) # UniProt is 1-based, like most protein resources
-    empty["end"] = str(seqSize) # and inclusive?
+    empty["end"] = str(int(seqSize)) # and inclusive?
     empty["featType"] = fullSeqType
     fakeAnnot = Record(**empty)
     return fakeAnnot
@@ -482,11 +550,11 @@ def parseAnnots(fnames, seqSizes):
 
     logging.debug("Found %d annotations" % len(annotData))
     # now add entries for all protein sequences
-    for seqId, seqSize in seqSizes.iteritems():
+    for seqId, seqSize in seqSizes.items():
         annot = fakeAnnot(Record, seqId, seqSize)
         annotData[annotToString(annot)] = [annot]
 
-    for key, annots in annotData.iteritems():
+    for key, annots in annotData.items():
         if len(annots)!=1:
             # they do have complete dupes, maybe typos, e.g. on O44342 at position 50
             logging.warn("Duplicated annotation, will be collapsed: %s" % repr( annots))
@@ -495,14 +563,16 @@ def parseAnnots(fnames, seqSizes):
     return annotData
 
 def convertToBigBed(bedFiles, genomeChromSizesFname, bigBedDir):
-    for f in bedFiles.values():
+    for f in list(bedFiles.values()):
         f.close()
 
+    myDir = dirname(__file__)
+
     bbFnames = []
-    for trackName, bedFile in bedFiles.iteritems():
-        asFname = "bed12UniProtAnnot.as"
+    for trackName, bedFile in bedFiles.items():
+        asFname = join(asDir, "bed12UniProtAnnotBgp.as")
         if trackName=="unipMut":
-            asFname = "bed12UniProtMut.as"
+            asFname = join(asDir, "bed12UniProtMut.as")
         bedFname = bedFile.name
         assert(isfile(bedFname))
         bbFname = join(bigBedDir, trackName+".new.bb")
@@ -531,6 +601,8 @@ def moveBigBedToOutDir(bbFnames, outDir):
             remove(targetFname)
         move(bbFname, targetFname)
 
+commentRe = re.compile(r' [(][^)]+[)]')
+
 def parseGroupAndAnnotate(genomeBedName, annotData, accToDb):
     """ parse bed file, pull out original UniProt fields, and group by genomePosition+category:
     group all beds with same coordinates and uniprot features together.
@@ -554,13 +626,24 @@ def parseGroupAndAnnotate(genomeBedName, annotData, accToDb):
         annot = annots[0]
         # group identifier is: genome position and block structure + 
         # feature type + comment + disease + mutation from -> to
+        
+        # we need the genome block structure, as a feature could be split over different exons
+        # depending on the splicing
         keyFields = [bed[0], bed[1], bed[2], bed[10], bed[11]]
-        #keyFields.append(annot.begin)
-        #keyFields.append(annot.end)
+
+        # for mutations, we need the from -> to amino acids, otherwise two mutations at the same position
+        # would get filtered out
         keyFields.append(annot.origAa)
         keyFields.append(annot.mutAa)
         keyFields.append(annot.featType)
-        keyFields.append(annot.comment) # hopefully does not include the accession...
+
+        # we don't want to remove identical annotations with different comments
+        # but UniProt maps things to other proteins and then adds (By similarity)
+        # to avoid duplicates, remove these comments in comments
+        comment = commentRe.sub("", annot.comment) # strips things like: ... (By similarity) (PubMed:32198291, PubMed:32272481)
+        keyFields.append(comment) # I hope the comment does not include the accession
+
+        #
         keyFields.append(annot.disease)
         keyFields.append(annot.disCode)
         #keyFields.append(annot.varId) # for chains this is the unique chain identifier, so cannot use it
@@ -574,7 +657,6 @@ def parseGroupAndAnnotate(genomeBedName, annotData, accToDb):
         bedGroups[bedKey].append((dbName, bed, annot))
 
     return bedGroups
-
 
 def uniprotLift(seqFname, cdnaSizesFname, annotFnames, genomeChromSizesFname, liftFname, outDir, accToDb, protSizes, options):
     " lift uniProt annotations from annotFname using liftFname and write bigBed files to outDir "
@@ -592,17 +674,19 @@ def uniprotLift(seqFname, cdnaSizesFname, annotFnames, genomeChromSizesFname, li
 
     writeProtAnnot(annotFnames, protBedName, protSizes)
 
+    # lift the raw start-end information from the protein to the genome
     if (options.debug and isfile(genomeBedName)):
         logging.info("%s already exists, not remaking" % genomeBedName)
     else:
         logging.debug("lifting to genome coords")
-        cmd = "bedToPsl %(cdnaSizesFname)s %(protBedName)s stdout | pslMap stdin %(liftFname)s stdout | pslToBed stdin stdout | LC_COLLATE=C sort -k1,1 -k2,2n | bedFixBlockOverlaps /dev/stdin > %(genomeBedName)s" % locals()
+        # added tawk '($16!=$17)' because in strPur2, with lots of tiny contigs, just a few amino acids got mapped
+        # and after pslMap, nothing was left of a domain on the contig
+        cmd = "bedToPsl %(cdnaSizesFname)s %(protBedName)s stdout | pslMap stdin %(liftFname)s stdout | tawk '($16!=$17)' | pslToBed stdin stdout | LC_COLLATE=C sort -k1,1 -k2,2n | bedFixBlockOverlaps /dev/stdin > %(genomeBedName)s" % locals()
         run(cmd)
 
     annotData = parseAnnots(annotFnames, protSizes)
 
     logging.debug("Adding extra fields to lifted coords")
-    # read lifted bed and add uniprot annotations to it as additional fields
 
     tracks = [
         "unipFullSeq", # full protein sequence on genome
@@ -614,6 +698,7 @@ def uniprotLift(seqFname, cdnaSizesFname, annotFnames, genomeChromSizesFname, li
         #"unipBlacklist", #blacklisted high-throughput-only features
         "unipLocSignal", "unipLocExtra", "unipLocTransMemb", "unipLocCytopl", # localization-related
         "unipDomain", "unipModif", "unipChain", "unipDisulfBond", # domains, etc
+        "unipInterest", # regions of interest
         "unipOther", # all other features
     ]
 
@@ -624,9 +709,19 @@ def uniprotLift(seqFname, cdnaSizesFname, annotFnames, genomeChromSizesFname, li
     bedGroups = parseGroupAndAnnotate(genomeBedName, annotData, accToDb)
 
     count = 0 # total number of annotations
-    for bedName, beds in bedGroups.iteritems():
+    for bedName, beds in bedGroups.items():
         beds.sort() # because "swissprot" comes before trembl alphabetically, all swissprot annotations are now first in this list
+        # features are grouped by bedName, bedName includes chrom,start,end,type and various other fields
+        # the aim is to not show something twice. UniProt projects features from one protein to others
+        # and so often we risk ending up with duplicated annotation, when we project to the genome.
+        # The grouping of features by (start, end, bedName, ...) removes the duplicates.
+        # It is also dangerous, as we may drop some annotations accidentally. 
+        # The current system looks OK but may drop too much
+        # if UniProt ever changes the way it uses the fields.
         dbName, bed, annot = beds[0] # of a group of identical annotations, we only show the first BED feature
+        if len(beds)>1:
+            logging.debug("Of the group '%s', only kept this feature: %s" % (bedName, repr(beds[0])))
+            logging.debug("Dropped these features because they have the same key: %s" % (repr(beds[1:])))
 
         # pull out the original full Uniprot fields of this BED group
         bedName = bed[3]
@@ -667,6 +762,8 @@ def uniprotLift(seqFname, cdnaSizesFname, annotFnames, genomeChromSizesFname, li
             ofh = bedFiles["unipDomain"]
         elif annot.featType in ["glycosylation site", "modified residue", "lipid moiety-binding region"]:
             ofh = bedFiles["unipModif"]
+        elif annot.featType in ["region of interest"]:
+            ofh = bedFiles["unipInterest"]
         elif annot.featType==fullSeqType:
             ofh = bedFiles["unipFullSeq"]
             color = "0,0,170"
@@ -700,18 +797,19 @@ def uniprotLift(seqFname, cdnaSizesFname, annotFnames, genomeChromSizesFname, li
 def isNewer(url, localFname):
     " return true if url is more recent than localFname "
     # little helper class to download only the http HEAD
-    class HeadRequest(urllib2.Request):
+    class HeadRequest(urllib.request.Request):
         def get_method(self):
             return "HEAD"
 
     # get the mtime of the file on the server
     if url.startswith("http"):
-        response = urllib2.urlopen(HeadRequest(url))
-        timeStr = response.headers.getheader("Last-Modified")
+        response = urllib.request.urlopen(HeadRequest(url))
+        timeStr = response.headers.get("Last-Modified")
         serverTime = datetime.datetime.fromtimestamp(time.mktime(time.strptime(timeStr, "%a, %d %b %Y %H:%M:%S GMT")))
     elif url.startswith("ftp://"):
         # https://stackoverflow.com/questions/25724497/getting-servers-date-using-ftp
         u = urlparse(url)
+        from ftputil import FTPHost # not found? run 'pip install ftputil'
         with FTPHost(u.netloc, "anonymous", "genome-www@soe.ucsc.edu") as host:
             mod_time = host.path.getmtime(u.path)
             logging.debug("mod time %s" % mod_time)
@@ -738,6 +836,7 @@ def run(cmd, ignoreErr=False):
     logging.debug(cmd)
     cmd = "set -o pipefail; "+cmd
     ret = os.system(cmd)
+    logging.info("Running: %s" % (cmd))
     if ret!=0 and not ignoreErr:
         logging.error("command returned error: %s" % cmd)
         sys.exit(ret)
@@ -750,19 +849,57 @@ def fastaMd5(fname):
     else:
         catCmd = "cat"
     cmd = """%s %s | awk 'BEGIN{RS=">"}{print $1"\t"$2;}' | sort -k1,1 | md5sum""" % (catCmd, fname)
-    proc = subprocess.Popen(cmd, stdout=PIPE, shell=True)
+    proc = subprocess.Popen(cmd, stdout=PIPE, shell=True, encoding="latin1")
     md5 = proc.stdout.readline().split()[0]
     return md5[:15]
 
+def runQuery(db, query, usePublic=False):
+    " run mysql query, yield tuples "
+    logging.debug("Running query on db %s: %s" % (db, query))
+
+    cmd = ["hgsql", db, "-NB", "-e", query]
+    if usePublic:
+        cmd.extend(["-h", "genome-mysql.cse.ucsc.edu", "-u", "genome", "--password="])
+    proc = subprocess.Popen(cmd, encoding="latin1", stdout=subprocess.PIPE)
+
+    try:
+        for line in iter(proc.stdout.readline,''):
+            yield line.rstrip().split("\t")
+    except:
+        while proc.poll() is None:
+            # Process hasn't exited yet, let's wait some
+            time.sleep(0.5)
+
+        logging.error("could not run query: %s " %query )
+        assert(False)
+
+def hasNoMultiMappers(db, table):
+    " return true if the gene table has at least one geneId that is mapped to two chroms "
+    # this happens with Ensembl scaffold assemblies. It breaks our whole data model "
+    logging.debug("Checking for multi-mapping genes")
+    cmd = "hgsql %s -N -e 'select * from %s' | cut -f2- | sort -k1 | cut -f1 | uniq -c | sort -rn | head -n1" % \
+            (db, table)
+    proc = subprocess.Popen(cmd, stdout=PIPE, shell=True, encoding="latin1")
+    row1 = proc.stdout.readline().strip().split()
+    count, gene = row1
+    count = int(count)
+    if count!=1:
+        logging.warn("Gene %s appears on %d chromosomes - this assembly has multi-mappers." % (gene, count))
+        return False
+    return True
+
 def findBestGeneTable(db):
     " find the best gene table for a given organism and return it "
-    for table in ["knownGene", "ensGene"]:
-        cmd = "hgsql %s -e 'DESCRIBE %s' > /dev/null 2>&1 " % (db, table)
+    for table in ["knownGene", "ensGene", "augustusGene"]:
+        query = "DESCRIBE %s" % (table)
+        cmd = "hgsql %s -e 'DESCRIBE %s'" % (db, table)
         ret = os.system(cmd)
         if ret==0:
             logging.debug("Best gene table for db %s is %s" % (db, table))
-            return table
-    return None
+            if hasNoMultiMappers(db, table):
+                logging.info("%s: Gene table %s. No multi mappers." % (db, table))
+                return table
+    return "blat"
 
 def gz_is_empty(fname):
     # from https://stackoverflow.com/questions/37874936/how-to-check-empty-gzip-file-in-python
@@ -778,7 +915,8 @@ def gz_is_empty(fname):
 def parseFaIds(fname):
     "concat files and write to outFname. Also create a dict with seqId -> dbName "
     seqIds = set()
-    ifh = gzip.open(fname)
+    logging.debug("Opening %s" % fname)
+    ifh = gzip.open(fname, "rt")
     for line in ifh:
         if line.startswith(">"):
             seqId = line.lstrip(">").rstrip("\n").split()[0]
@@ -787,18 +925,23 @@ def parseFaIds(fname):
 
 def concatFiles(fnames, outFname):
     "concat files and write to outFname. Also create a dict with seqId -> dbName "
+    logging.debug("infiles: %s, outfile: %s" % (fnames, outFname))
     accToDb = {}
-    ofh = open(outFname, "w")
+    ofh = open(outFname, "wt")
     for dbName, fname in fnames:
         if not isfile(fname):
             raise Exception("%s not found" % fname)
-        ifh = gzip.open(fname)
-        for line in ifh:
-            ofh.write(line)
+        ifh = gzip.open(fname, "rt")
+        try:
+            for line in ifh:
+                ofh.write(line)
 
-            if line.startswith(">"):
-                seqId = line.lstrip(">").rstrip("\n").split()[0]
-                accToDb[seqId] = dbName
+                if line.startswith(">"):
+                    seqId = line.lstrip(">").rstrip("\n").split()[0]
+                    accToDb[seqId] = dbName
+        except:
+            logging.error("Error reading %s" % fname)
+            sys.exit(1)
 
     return accToDb
 
@@ -832,7 +975,7 @@ def pslToBigPsl(mapFname, protFaFname, cdnaSizes, accToDb, accToAnnot, chromSize
     bpInputTremblFname = mapFname.replace(".psl", ".trembl.pslInput")
 
     # convert to bigPslInput
-    cmd = "pslToBigPsl %(mapFname)s stdout | sort -k1,1 -k2,2n > %(bpInputFname)s" % locals()
+    cmd = "pslToBigPsl %(mapFname)s stdout | sort -k1,1 -k2,2n | bedFixBlockOverlaps /dev/stdin > %(bpInputFname)s" % locals()
     run(cmd)
 
     # rewrite the bigPslInput file:
@@ -840,7 +983,10 @@ def pslToBigPsl(mapFname, protFaFname, cdnaSizes, accToDb, accToAnnot, chromSize
     # - add extra fields
     # - split into two subtracks: swissprot and trembl
     ofhSwiss = open(bpInputSwissFname, "w")
-    ofhTrembl = open(bpInputTremblFname, "w")
+
+    ofhTrembl = None
+    if bigPslTremblFname:
+        ofhTrembl = open(bpInputTremblFname, "w")
 
     for line in open(bpInputFname):
         # chr1    11994   12144   B4E2Z4  1000    +       11994   12144   0       1       150,    0,      186     336     +       336     186,          249250621        150     0       0       0       0
@@ -872,26 +1018,52 @@ def pslToBigPsl(mapFname, protFaFname, cdnaSizes, accToDb, accToAnnot, chromSize
             # logging.debug("No annotations for %s" % acc)
             continue
 
-        row.append( recAnnot.acc ) # uniprot accessions
-        row.append( recAnnot.name ) # uniprot curated name
+        row.append( recAnnot.acc ) # uniprot accessions, field 26
+        row.append( recAnnot.name ) # uniprot curated name, field 27
 
         if db=="trembl":
             dbDesc = "Unreviewed (TrEMBL)"
         else:
             dbDesc = "Manually reviewed (Swiss-Prot)"
 
-        row.append( dbDesc )
+        row.append( dbDesc ) # db source, field 28
 
-        row.append( recAnnot.accList.replace("|", ", ")) # uniprot alternative IDs
-        row.append( recAnnot.isoIds.replace("|", ", "))
+        row.append( recAnnot.accList.replace("|", ", ")) # uniprot alternative IDs, #29
+        row.append( recAnnot.isoIds.replace("|", ", ")) # isoform IDs, #30
 
-        row.append( recAnnot.protFullNames ) # uniprot full names
-        row.append( recAnnot.protShortNames.replace("|", "; ") ) # uniprot short names
-        row.append( recAnnot.protAltFullNames.replace("; ", ", ").replace("|", "; ")) # uniprot alt names
-        row.append( recAnnot.protAltShortNames.replace("; ", ", ").replace("|", "; ")) # uniprot alt names
-        row.append( recAnnot.geneName.replace("; ", ", ").replace("|", "; "))
-        row.append( recAnnot.geneSynonyms.replace("|", "; "))
-        row.append( recAnnot.functionText )
+        fullNames = recAnnot.protFullNames
+        row.append( fullNames ) # uniprot full names, #31
+
+        # merge all these fields into one list of "gene synonyms"
+        #14  geneSynonyms
+        #15  isoNames
+        #16  geneOrdLocus
+        #17  geneOrf           
+        syns = recAnnot.geneSynonyms.split("|")
+        syns.extend(recAnnot.isoNames.split("|"))
+        syns.extend(recAnnot.geneOrdLocus.split("|"))
+        syns.extend(recAnnot.geneOrf.split("|"))
+        syns = [x.strip() for x in syns if x.strip()!=""]
+        geneNames = recAnnot.geneName.replace("; ", ", ").replace("|", "; ") # relevant later but need it now
+        shortNames = recAnnot.protShortNames.replace("|", "; ")
+        if shortNames=="":
+            shortNames = geneNames # in cov-2 pre-release, one protein only has a geneName, nothing else
+        if shortNames=="" and len(syns)>0:
+            shortNames = syns[0]
+        if shortNames=="":
+            shortNames = fullNames # in cov-2 pre-release, some proteins have no short name
+
+        row.append( shortNames ) # uniprot short names #32
+        row.append( recAnnot.protAltFullNames.replace("; ", ", ").replace("|", "; ")) # uniprot alt names #33
+        row.append( recAnnot.protAltShortNames.replace("; ", ", ").replace("|", "; ")) # uniprot alt names #34
+
+        row.append( geneNames ) #  #35
+
+        synStr = "; ".join(syns)
+        row.append( synStr ) # #field 36: gene synonyms
+
+        funcText = recAnnot.functionText.replace("|", "<li>").replace("-<li>-", "-|-") # address: [ILMVF]-Q-|-[SGACN]
+        row.append( "<ul><li>"+funcText+"</ul>" ) # #37
 
         row.append( recAnnot.hgncSym.replace("|", ", "))
         row.append( recAnnot.hgncId.replace("|", ", "))
@@ -906,20 +1078,27 @@ def pslToBigPsl(mapFname, protFaFname, cdnaSizes, accToDb, accToAnnot, chromSize
         ofh.write("\n")
 
     ofhSwiss.close()
-    ofhTrembl.close()
+    if ofhTrembl:
+        ofhTrembl.close()
 
-    cmd = "bedToBigBed -extraIndex=acc -type=bed12+ -as=bigPslUniprot.as -tab %s %s %s" % (bpInputSwissFname, chromSizesFname, bigPslSwissFname)
+    asFname = join(asDir, "bigPslUniprot.as")
+    cmd = "bedToBigBed -extraIndex=acc -type=bed12+ -as=%s -tab %s %s %s" % \
+            (asFname, bpInputSwissFname, chromSizesFname, bigPslSwissFname)
     run(cmd)
 
-    cmd = "bedToBigBed -extraIndex=acc -type=bed12+ -as=bigPslUniprot.as -tab %s %s %s" % (bpInputTremblFname, chromSizesFname, bigPslTremblFname)
-    run(cmd)
+    if ofhTrembl:
+        cmd = "bedToBigBed -extraIndex=acc -type=bed12+ -as=%s -tab %s %s %s" % \
+                (asFname, bpInputTremblFname, chromSizesFname, bigPslTremblFname)
+        run(cmd)
 
-def parseAnnot(tabDir, taxId):
+def parseAnnot(tabDir, taxId, doTrembl):
     " parse the uniprot record-level annotations, like xrefs etc. return dict acc -> namedtuple "
     fnames = [
-            (join(tabDir,"swissprot.%d.tab" % taxId)),
-            (join(tabDir,"trembl.%d.tab" % taxId))
+            (join(tabDir,"swissprot.%d.tab" % taxId))
     ]
+
+    if doTrembl:
+        fnames.append( (join(tabDir,"trembl.%d.tab" % taxId)) )
 
     ret = {}
     for fname in fnames:
@@ -928,12 +1107,20 @@ def parseAnnot(tabDir, taxId):
             ret[acc] = row
     return ret
 
-def updateUniprot(args, onlyDbs, options):
+def blatProteinsKeepBest(fullFaFname, db, mapFname):
+    " blat the proteins directly, only good for small genomes where we don't have any gene models "
+    cmd = "blat -q=prot -t=dnax /gbdb/{db}/{db}.2bit {inf} stdout -noHead | sort -k10 | pslReps stdin stdout /dev/null " \
+        "-minAli=0.99 -nohead | pslProtCnv > {out} ".format(db=db, inf=fullFaFname, out=mapFname)
+    run(cmd)
+
+def updateUniprot(args, onlyDbs, taxIdDbs, options):
     uprotDir = options.uniprotDir
+    tmpDir = join(uprotDir, "download.tmp")
     tabDir = options.tabDir
     mapDir = options.mapDir
     bigBedDir = options.bigBedDir
     faDir = options.faDir
+    doTrembl = not options.skipTrembl
 
     relFname = join(tabDir, "version.txt")
 
@@ -944,11 +1131,19 @@ def updateUniprot(args, onlyDbs, options):
             sys.exit(0)
 
         # use lftp to update uniprot and download only changed files
-        cmd = 'lftp ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/ -e "lcd %s && mirror . --use-pget-n=10 --exclude-glob *.dat.gz && exit"' % uprotDir
+        cmd = 'lftp ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/ -e "lcd %s && mirror . -P 3 --use-pget-n=4 --exclude-glob *.dat.gz && exit"' % tmpDir
         run(cmd)
 
-        # UniProtKB/Swiss-Prot Release 2017_09 of 27-Sep-2017
-        relString = open(join(uprotDir, "reldate.txt")).read().splitlines()[1]
+        # make sure that download interruptions don't mess up the files in the target dir
+        logging.info("Moving files from %s to %s" % (tmpDir, uprotDir))
+        file_names = os.listdir(tmpDir)
+        for file_name in file_names:
+            shutil.move(os.path.join(tmpDir, file_name), uprotDir)
+
+        # only use the first four words of version string
+        # 'UniProt Knowledgebase Release 2017_09 consists of:'
+        relString = open(join(uprotDir, "reldate.txt")).read().splitlines()[0]
+        relString = " ".join(relString.split()[:4])
         relFh = open(relFname, "w")
         relFh.write(relString)
         relFh.close()
@@ -957,7 +1152,7 @@ def updateUniprot(args, onlyDbs, options):
     logging.info("Converting uniprot from %s to %s, using maps in %s" % (uprotDir, tabDir, mapDir))
     if not options.skipParse:
         # parsing the UniProt XML files
-        logging.info("Converting uniprot XML from %s to tab-sep in %s, 2-3 days. Specify -p to skip this." % (uprotDir, tabDir))
+        logging.info("Converting uniprot XML from %s to tab-sep in %s, this can take 2-3 days!! Specify -p to skip this." % (uprotDir, tabDir))
         dbToTaxIds = {}
         if onlyDbs:
             for taxId, dbs in taxIdDbs:
@@ -967,12 +1162,14 @@ def updateUniprot(args, onlyDbs, options):
         else:
             taxIds = [x for (x,y) in taxIdDbs] # just the taxIds themselves
         taxIdStr = ",".join([str(x) for x in taxIds])
-        # 15 minutes
-        cmd="uniprotToTab %s %s %s" % (uprotDir, taxIdStr, tabDir)
+
+        myDir = dirname(__file__) # directory of doUniprot
+        # takes an hour or so
+        cmd="%s/uniprotToTab %s %s %s" % (myDir, uprotDir, taxIdStr, tabDir)
         run(cmd)
 
-        # 28 hours on old hgwdev
-        cmd="uniprotToTab %s %s %s --trembl" % (uprotDir, taxIdStr, tabDir)
+        # takes 2-3 days on hgwdev - big data and XML don't mix
+        cmd="%s/uniprotToTab %s %s %s --trembl" % (myDir, uprotDir, taxIdStr, tabDir)
         run(cmd)
 
     # if the uniprot update changed the sequences, update the corresponding pslMap files of that genome
@@ -980,7 +1177,6 @@ def updateUniprot(args, onlyDbs, options):
     run("mkdir -p %s" % mapDir)
 
     # parasol cluster name
-    #if isfile(clusterFname):
     assert(isfile(clusterFname)) # not running at UCSC?
     cluster = open(clusterFname).read().strip()
 
@@ -998,8 +1194,9 @@ def updateUniprot(args, onlyDbs, options):
 
         faFnames = [
                 ("swissprot", join(tabDir,"swissprot.%d.fa.gz" % taxId)),
-                ("trembl", join(tabDir,"trembl.%d.fa.gz" % taxId))
         ]
+        if doTrembl:
+            faFnames.append( ("trembl", join(tabDir,"trembl.%d.fa.gz" % taxId)) )
 
         fullFaFname = join(faDir, str(taxId)+".fa")
 
@@ -1021,21 +1218,31 @@ def updateUniprot(args, onlyDbs, options):
                 logging.debug("%s already exists" % mapFname)
             else:
                 logging.debug("%s does not exist" % mapFname)
-                if geneTable is None:
-                    logging.error("Could not find a gene table for %s" % db)
-                    continue
-                cmd = "time makeUniProtPsl.sh %(fullFaFname)s %(db)s %(geneTable)s %(cluster)s %(mapFname)s" % locals()
-                run(cmd)
+                if geneTable=="blat":
+                    logging.error("Could not find a gene table for %s, using BLAT to map proteins" % db)
+                    blatProteinsKeepBest(fullFaFname, db, mapFname)
+                else:
+                    cmd = "time makeUniProtPsl.sh %(fullFaFname)s %(db)s %(geneTable)s %(cluster)s %(mapFname)s" % locals()
+                    run(cmd)
 
             # get the sizes of the cDNAs and write them to a file
             cdnaSizesFname = fullFaFname.replace(".fa", ".cdnaSize")
             makeSeqSizes(fullFaFname, cdnaSizesFname)
             protSizes = parseSizes(cdnaSizesFname)
 
-            bigPslSwissFname = join(bigBedDir, db, "%(geneTable)s_%(md5)s.swissprot.new.bb" % locals())
-            bigPslTremblFname = join(bigBedDir, db, "%(geneTable)s_%(md5)s.trembl.new.bb" % locals())
-            
-            accToAnnot = parseAnnot(tabDir, taxId)
+            bigPslDir = join(bigBedDir, db)
+            if not isdir(bigPslDir):
+                os.makedirs(bigPslDir)
+
+            bigPslSwissFname = join(bigPslDir, "%(geneTable)s_%(md5)s.swissprot.new.bb" % locals())
+
+            if doTrembl:
+                bigPslTremblFname = join(bigBedDir, db, "%(geneTable)s_%(md5)s.trembl.new.bb" % locals())
+            else:
+                bigPslTremblFname = None
+
+            accToAnnot = parseAnnot(tabDir, taxId, doTrembl)
+
             pslToBigPsl(mapFname, fullFaFname, protSizes, accToDb, accToAnnot, chromSizesFname, bigPslSwissFname, bigPslTremblFname)
 
             if options.onlyMap:
@@ -1045,7 +1252,10 @@ def updateUniprot(args, onlyDbs, options):
             if not isdir(dbBigBedDir):
                 mkdir(dbBigBedDir)
 
-            tabFnames = ["tab/swissprot.%d.annots.tab" % taxId, "tab/trembl.%d.annots.tab" % taxId]
+            tabFnames = ["tab/swissprot.%d.annots.tab" % taxId]
+            if doTrembl:
+                tabFnames.append( "tab/trembl.%d.annots.tab" % taxId )
+
             uniprotLift(fullFaFname, cdnaSizesFname, tabFnames, chromSizesFname, mapFname, dbBigBedDir, accToDb, protSizes, options)
 
             # add a trackVersion entry
@@ -1082,7 +1292,7 @@ def findForMask(fileMask):
     fname = fnames[0]
     return fname
 
-def makeLinks(bigBedDir, faDir, onlyDbs):
+def makeLinks(bigBedDir, faDir, onlyDbs, taxIdDbs):
     " check the /gbdb symlinks "
     for taxId, dbs in taxIdDbs:
         fullFaFname = join(faDir, str(taxId)+".fa")
@@ -1110,8 +1320,6 @@ def makeLinks(bigBedDir, faDir, onlyDbs):
                     continue # this has now been replaced by the bigPsl file
                 if "_" in bbFname:
                     continue # the bigPsl files need special treatment later
-                if "new.bb" in bbFname:
-                    continue # never link to a .new.bb file
                 bbLink = join(bbTargetDir, basename(bbFname))
                 makeSymlink(bbFname, bbLink)
 
@@ -1148,6 +1356,10 @@ def checkPsl(pslName, faFname):
 
     accCount = len(accs)
 
+    if accCount==0:
+        logging.error("No single sequence found in %s" % faFname)
+        return
+
     unmappedIds = seqIds - set(qNames)
     unmapCount = len(unmappedIds)
 
@@ -1156,7 +1368,7 @@ def checkPsl(pslName, faFname):
 
     multiMapCount = 0
     multiMapIds = {}
-    for qName, qCount in qNames.iteritems():
+    for qName, qCount in qNames.items():
         if qCount > 1:
             multiMapCount += 1
             multiMapIds[qName] = qCount
@@ -1184,7 +1396,7 @@ def checkPsl(pslName, faFname):
 def bedInfo(fname):
     " return number of features and coverage in bigBed file "
     cmd = "bigBedInfo %s" % fname
-    proc = subprocess.Popen(cmd, stdout=PIPE, shell=True)
+    proc = subprocess.Popen(cmd, encoding="latin1", stdout=PIPE, shell=True)
     for line in proc.stdout:
         # itemCount: 2,662
         # basesCovered: 341,994
@@ -1194,7 +1406,7 @@ def bedInfo(fname):
             basesCovered = int(line.split()[1].replace(",",""))
     return (itemCount, basesCovered)
 
-def flipNewVersionCheckMaxDiff(bigBedDir, maxDiff, force, onlyDbs):
+def flipNewVersionCheckMaxDiff(bigBedDir, maxDiff, force, onlyDbs, taxIdDbs):
     " rename all .new.bb files to .bb files, but only if they do not diff in more than 10% "
     for taxId, dbs in taxIdDbs:
         for db in dbs:
@@ -1212,7 +1424,7 @@ def flipNewVersionCheckMaxDiff(bigBedDir, maxDiff, force, onlyDbs):
                     newCount, newCov = bedInfo(newFname)
                     oldCount, oldCov = bedInfo(oldFname)
 
-                    if oldCount > 500 and (newCount-oldCount) / oldCount > maxDiff:
+                    if oldCount > 1500 and (newCount-oldCount) / oldCount > maxDiff:
                         logging.error("%s: old feature count %d, new feature count %d. Too big difference. Stopping now." % (oldFname, oldCount, newCount))
                         sys.exit(1)
                     if oldCov > 10000 and (oldCov-newCov) / oldCov > maxDiff:
@@ -1231,7 +1443,7 @@ def flipNewVersionCheckMaxDiff(bigBedDir, maxDiff, force, onlyDbs):
                     logging.debug("Renaming %s -> %s" % (fname, oldFname))
                     shutil.move(fname, oldFname)
 
-def mapQa(tabDir, faDir, mapDir, onlyDbs):
+def mapQa(tabDir, faDir, mapDir, onlyDbs, taxIdDbs):
     " check the pslMap files "
     for taxId, dbs in taxIdDbs:
         fullFaFname = join(faDir, str(taxId)+".fa")
@@ -1254,43 +1466,66 @@ def mapQa(tabDir, faDir, mapDir, onlyDbs):
             faFname = join(tabDir, "trembl.%s.fa.gz" % taxId)
             checkPsl(pslName, faFname)
 
-def createVersionFile(tabDir, bigBedDir):
+def createVersionFiles(tabDir, bigBedDir, onlyDbs, taxIdDbs):
     " update the release version file. This is the indicator for the auto-archiver to create a new archive "
     relFname = join(tabDir, "version.txt")
     versionString = open(relFname).read()
-    shortVersion = versionString.split()[2]
-    assert(len(shortVersion)==7)
+    shortVersion = versionString.split()[-1]
+    if (len(shortVersion)!=7):
+        logging.warning("UniProt Version string is not seven characters long")
 
-    versionOfh = open(join(bigBedDir, "version.txt"), "w")
-    versionOfh.write(shortVersion)
-    versionOfh.close()
-    logging.debug("Wrote short version to %s" % versionOfh.name)
+    for taxId, dbs in taxIdDbs:
+        for db in dbs:
+            if onlyDbs is not None and db not in onlyDbs:
+                continue
+            dbDir = join(bigBedDir, db)
+            if not isdir(dbDir):
+                continue
+            versionOfh = open(join(dbDir, "version.txt"), "w")
+            versionOfh.write(versionString)
+            versionOfh.close()
+
+            linkName = join("/gbdb", db, "uniprot", "version.txt")
+            makeSymlink(versionOfh.name, linkName)
+
+            logging.debug("Wrote release string to %s, symlink from %s" % (versionOfh.name, linkName))
+
+def delFlag():
+    os.remove(flagFname)
 
 def main():
+    global flagFname
+
     args, options = parseArgs()
 
     onlyDbs = None
     if options.dbs:
         onlyDbs = set(options.dbs.split(","))
 
+    taxIdDbs = getTaxIdDbs()
+
     if options.mapQa:
-        mapQa(options.tabDir, options.faDir, options.mapDir, onlyDbs)
+        mapQa(options.tabDir, options.faDir, options.mapDir, onlyDbs, taxIdDbs)
         sys.exit(0)
 
     # create a lock file
     flagFname = join(options.uniprotDir, "doUniprot.lock")
-    if isfile(flagFname):
-        logging.error("%s exists. Is a doUniprot process already running ?" % flagFname)
+    atexit.register(delFlag)
+    if isfile(flagFname) and not options.debug:
+        logging.error("%s exists. Is a doUniprot process already running ? "
+            "If not, remove the flag file and restart this script." % flagFname)
         sys.exit(1)
     open(flagFname, "w")
 
+
     if not options.onlyLinks:
-        updateUniprot(args, onlyDbs, options)
-        flipNewVersionCheckMaxDiff(options.bigBedDir, 0.1, options.force, onlyDbs)
+        updateUniprot(args, onlyDbs, taxIdDbs, options)
+        flipNewVersionCheckMaxDiff(options.bigBedDir, 0.1, options.force, onlyDbs, taxIdDbs)
 
-    makeLinks(options.bigBedDir, options.faDir, onlyDbs)
+    if not options.skipLinks:
+        makeLinks(options.bigBedDir, options.faDir, onlyDbs, taxIdDbs)
 
-    createVersionFile(options.tabDir, options.bigBedDir)
+    createVersionFiles(options.tabDir, options.bigBedDir, onlyDbs, taxIdDbs)
 
     os.remove(flagFname)
 

@@ -304,6 +304,7 @@
 ./runBuild GCF_001640805.1 GCF_001640805.1_ASM164080v1 vertebrate_other Lates_calcarifer
 ./runBuild GCF_001642345.1 GCF_001642345.1_ASM164234v2 vertebrate_other Rhincodon_typus
 ./runBuild GCF_001649575.1 GCF_001649575.1_ASM164957v1 vertebrate_other Kryptolebias_marmoratus
+./runBuild GCF_001649575.2 GCF_001649575.2_ASM164957v2 fishes Kryptolebias_marmoratus
 ./runBuild GCF_001660625.1 GCF_001660625.1_IpCoco_1.2 vertebrate_other Ictalurus_punctatus
 ./runBuild GCF_001663975.1 GCF_001663975.1_Xenopus_laevis_v2 vertebrate_other Xenopus_laevis
 ./runBuild GCF_001682695.1 GCF_001682695.1_Pygocentrus_nattereri-1.0.2 vertebrate_other Pygocentrus_nattereri
@@ -352,6 +353,7 @@
 ./runBuild GCF_002910315.2 GCF_002910315.2_ASM291031v2 vertebrate_other Salvelinus_alpinus
 ./runBuild GCF_002922805.1 GCF_002922805.1_Om_v0.7.RACA vertebrate_other Oryzias_melastigma
 ./runBuild GCF_002922805.2 GCF_002922805.2_ASM292280v2 fishes Oryzias_melastigma
+./runBuild GCF_002925995.2 GCF_002925995.2_T_m_triunguis-2.0 vertebrate Terrapene_carolina_triunguis
 ./runBuild GCF_002940915.1 GCF_002940915.1_ASM294091v2 vertebrate_mammalian Desmodus_rotundus
 ./runBuild GCF_003031525.1 GCF_003031525.1_Neophocaena_asiaeorientalis_V1 vertebrate_mammalian Neophocaena_asiaeorientalis
 ./runBuild GCF_003031625.1 GCF_003031625.1_ASM303162v1 vertebrate_other Empidonax_traillii
@@ -436,6 +438,7 @@
 ./runBuild GCF_009829155.1 GCF_009829155.1_mMusErm1.Pri mammals Mustela_erminea
 ./runBuild GCF_009834535.1 GCF_009834535.1_BCGSAC_Cfer_1.0 mammals Camelus_ferus
 ./runBuild GCF_009858895.2 GCF_009858895.2_ASM985889v3 viral Wuhan_seafood_market_pneumonia_virus
+./runBuild GCF_009873245.2 GCF_009873245.2_mBalMus1.pri.v3 mammals Balaenoptera_musculus
 ./runBuild GCF_010909765.1 GCF_010909765.1_sAmbRad1.pri vertebrate Amblyraja_radiata
 ./runBuild GCF_010993605.1 GCF_010993605.1_kPetMar1.pri vertebrate Petromyzon_marinus
 ./runBuild GCF_011004845.1 GCF_011004845.1_fEsoLuc1.pri fishes Esox_lucius
@@ -448,10 +451,20 @@
 ./runBuild GCF_012393455.1 GCF_012393455.1_Tufts_HGry_1.1 mammals Halichoerus_grypus
 ./runBuild GCF_013265735.2 GCF_013265735.2_USDA_OmykA_1.1 fishes Oncorhynchus_mykiss
 ./runBuild GCF_013358815.1 GCF_013358815.1_fEleEle1.pri fishes Electrophorus_electricus
+./runBuild GCF_013368585.1 GCF_013368585.1_fMegCyp1.pri vertebrate Megalops_cyprinoides
+./runBuild GCF_014108245.1 GCF_014108245.1_mPipKuh1.p mammals Pipistrellus_kuhlii
 ./runBuild GCF_014176215.1 GCF_014176215.1_mRouAeg1.p mammals Rousettus_aegyptiacus
 ./runBuild GCF_014570535.1 GCF_014570535.1_YNU_ManJav_2.0 mammals Manis_javanica
+./runBuild GCF_014570555.1 GCF_014570555.1_YNU_ManPten_2.0 mammals Manis_pentadactyla
 ./runBuild GCF_014633375.1 GCF_014633375.1_OchPri4.0 mammals Ochotona_princeps
+./runBuild GCF_014824575.1 GCF_014824575.1_WHU_Shon_v2 mammals Sturnira_hondurensis
+./runBuild GCF_014825515.1 GCF_014825515.1_WHU_Ajam_v2 mammals Artibeus_jamaicensis
+./runBuild GCF_014898055.1 GCF_014898055.1_MPIMG_talOcc4 mammals Talpa_occidentalis
+./runBuild GCF_014905685.1 GCF_014905685.1_NemWhi1 fish Nematolebias_whitei
+./runBuild GCF_015220075.1 GCF_015220075.1_bFalRus1.pri birds Falco_rusticolus
+./runBuild GCF_015220235.1 GCF_015220235.1_mChoDid1.pri mammals Choloepus_didactylus
 ./runBuild GCF_015220715.1 GCF_015220715.1_fPygNat1.pri fishes Pygocentrus_nattereri
+./runBuild GCF_015220745.1 GCF_015220745.1_fSebUmb1.pri fish Sebastes_umbrosus
 ./runBuild GCF_015237465.1 GCF_015237465.1_rCheMyd1.pri vertebrate Chelonia_mydas
 ./runBuild GCF_900067755.1 GCF_900067755.1_pvi1.1 vertebrate_other Pogona_vitticeps
 ./runBuild GCF_900080235.1 GCF_900080235.1_BallGen_V1 vertebrate_other Labrus_bergylta
@@ -480,6 +493,7 @@
 ./runBuild GCF_901000725.2 GCF_901000725.2_fTakRub1.2 vertebrate_other Takifugu_rubripes
 ./runBuild GCF_901001135.1 GCF_901001135.1_aRhiBiv1.1 vertebrate_other Rhinatrema_bivittatum
 ./runBuild GCF_901001165.1 GCF_901001165.1_fSalTru1.1 vertebrate_other Salmo_trutta
+./runBuild GCF_901709675.1 GCF_901709675.1_fSynAcu1.2 fish Syngnathus_acus
 ./runBuild GCF_901765095.1 GCF_901765095.1_aMicUni1.1 vertebrate_other Microcaecilia_unicolor
 ./runBuild GCF_901933205.1 GCF_901933205.1_STF_HiC vertebrate_other Camarhynchus_parvulus
 ./runBuild GCF_902148845.1 GCF_902148845.1_fSalaFa1.1 vertebrate_other Salarias_fasciatus
@@ -489,5 +503,8 @@
 ./runBuild GCF_902362185.1 GCF_902362185.1_fChaCha1.1 vertebrate_other Chanos_chanos
 ./runBuild GCF_902459465.1 GCF_902459465.1_eAstRub1.3 vertebrate Asterias_rubens
 ./runBuild GCF_902459505.1 GCF_902459505.1_aGeoSer1.1 vertebrate Geotrypetes_seraphini
+./runBuild GCF_902500615.1 GCF_902500615.1_NSP_V7 fish Pungitius_pungitius
 ./runBuild GCF_902635505.1 GCF_902635505.1_mSarHar1.11 vertebrate_mammalian Sarcophilus_harrisii
 ./runBuild GCF_903995425.1 GCF_903995425.1_mOncTor1.1 mammals Onychomys_torridus
+./runBuild GCF_904425465.1 GCF_904425465.1_Colossoma_macropomum fish Colossoma_macropomum
+./runBuild GCF_904848185.1 GCF_904848185.1_fAcaLat1.1 fish Acanthopagrus_latus

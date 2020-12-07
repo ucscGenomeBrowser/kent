@@ -244,6 +244,7 @@ int leftLabelX;                 /* Start of area to draw left labels on. */
 int leftLabelWidth;             /* Width of area to draw left labels on. */
 float basesPerPixel = 0;       /* bases covered by a pixel; a measure of zoom */
 boolean zoomedToBaseLevel;      /* TRUE if zoomed so we can draw bases. */
+boolean zoomedToCodonNumberLevel; /* TRUE if zoomed so we can print codons and exon number text in genePreds*/
 boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codons text in genePreds*/
 boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we can color each codon*/
 
