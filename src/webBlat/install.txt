@@ -97,7 +97,11 @@ commands are:
                 the webPcr web page.
    gfServerTrans - defines location of a translated server.
    dynServer - define the location of a dynamic gfServer that runs under xinetd with
-               pre-build indexes.
+               pre-build indexes.  Arguments are:
+               - host, port
+               - genome - symbolic name of genome
+               - genomeDataDir - absolute or gfServer root-relative directory containing index files
+               - sequenceDir
    background - defines the background image if any to display on web page
    company    - defines company name to display on web page
    tempDir    - where to put temporary files.  This path is relative to where the web

@@ -73,7 +73,6 @@ struct genomeHits
     char *faName;       /* fasta name */
     char *dna;          /* query dna */
     int dnaSize;        /* query dna size */
-    struct gfConnection *conn;  /* Connection */
     char *type;         /* query type = query, protQuery, transQuery */
     char *xType;        /* query type = dna, prot, rnax, dnax */
     boolean queryRC;    /* is the query reverse-complemented */
@@ -878,7 +877,7 @@ else
 
 void queryServer(char *host, char *port, char *db, struct dnaSeq *seq, char *type, char *xType,
     boolean complex, boolean isProt, boolean queryRC, int seqNumber, char *genomeDataDir)
-/* Send simple query to server and report results.
+/* Send simple query to server and report results. (no, it doesn't do this)
  * queryRC is true when the query has been reverse-complemented */
 {
 struct genomeHits *gH;
@@ -1005,24 +1004,14 @@ for(gfR=gH->gfList; gfR; gfR=gfR->next)
     }
 }
 
-struct gfConnection *gfConnectEx(char *host, char *port, boolean isDynamic)
-/* Try to connect to gfServer */
-{
-if (allGenomes)
-    return gfMayConnect(host, port, isDynamic); // returns NULL on failure
-else
-    return gfConnect(host, port, isDynamic);  // errAborts on failure.
-}
-
-
 void queryServerFinish(struct genomeHits *gH)
 /* Report results from gfServer. */
 {
 char buf[256];
 int matchCount = 0;
 
-gH->conn = gfConnectEx(gH->host, gH->port, gH->isDynamic);
-if (gH->conn == NULL)
+struct gfConnection *conn = gfMayConnect(gH->host, gH->port, gH->isDynamic);
+if (conn == NULL)
     {
     gH->error = TRUE;
     gH->networkErrMsg = "Connection to gfServer failed.";
@@ -1037,17 +1026,18 @@ if (gH->isDynamic)
           dynServerGenome(gH->db), gH->genomeDataDir, gH->dnaSize);
 else
     safef(buf, sizeof buf, "%s%s %d", gfSignature(), gH->type, gH->dnaSize);
-mustWriteFd(gH->conn->fd, buf, strlen(buf));
+gfBeginRequest(conn);
+mustWriteFd(conn->fd, buf, strlen(buf));
 
-if (read(gH->conn->fd, buf, 1) < 0)
+if (read(conn->fd, buf, 1) < 0)
     errAbort("queryServerFinish: read failed: %s", strerror(errno));
 if (buf[0] != 'Y')
     errAbort("Expecting 'Y' from server, got %c", buf[0]);
-mustWriteFd(gH->conn->fd, gH->dna, gH->dnaSize);  // Cannot shifted earlier for speed. must wait for Y confirmation.
+mustWriteFd(conn->fd, gH->dna, gH->dnaSize);  // Cannot shifted earlier for speed. must wait for Y confirmation.
 
 if (gH->complex)
     {
-    char *s = netRecieveString(gH->conn->fd, buf);
+    char *s = netRecieveString(conn->fd, buf);
     if (!s)
 	errAbort("expected response from gfServer with tileSize");
     dyStringPrintf(gH->dbg,"%s<br>\n", s);  // from server: tileSize 4
@@ -1055,7 +1045,7 @@ if (gH->complex)
 
 for (;;)
     {
-    if (netGetString(gH->conn->fd, buf) == NULL)
+    if (netGetString(conn->fd, buf) == NULL)
         break;
     if (sameString(buf, "end"))
         {
@@ -1148,7 +1138,7 @@ for (;;)
 	
         if (gH->complex)
             {
-            char *s = netGetLongString(gH->conn->fd);
+            char *s = netGetLongString(conn->fd);
             if (s == NULL)
                 break;
             dyStringPrintf(gH->dbg,"%s<br>\n", s); //dumps out qstart1 tstart1 qstart2 tstart2 ...  
@@ -1270,8 +1260,7 @@ if (gH->complex && !gH->isProt)  // rnax, dnax
 
     }
 
-
-gfDisconnect(&gH->conn);
+gfDisconnect(&conn);
 }
 
 int findMinMatch(long genomeSize, boolean isProt)
@@ -1336,7 +1325,7 @@ return genomeSize;
 }
 
 
-int findGenomeParams(struct serverTable *serve)
+int findGenomeParams(struct gfConnection *conn, struct serverTable *serve)
 /* Send status message to server arnd report result.
  * Get tileSize stepSize and minMatch.
  */
@@ -1345,8 +1334,7 @@ char buf[256];
 int ret = 0;
 
 /* Put together command. */
-// FIXME: need to keep open
-struct gfConnection *conn = gfConnectEx(serve->host, serve->port, serve->isDynamic);
+gfBeginRequest(conn);
 if (serve->isDynamic)
     sprintf(buf, "%s%s %s %s", gfSignature(), (serve->isTrans ? "transInfo" : "untransInfo"),
             dynServerGenome(serve->db), serve->genomeDataDir);
@@ -1380,7 +1368,7 @@ for (;;)
 	    }
         }
     }
-gfDisconnect(&conn);
+gfEndRequest(conn);
 return(ret); 
 }
 
@@ -1584,8 +1572,10 @@ else
     if (allResults)
 	minMatchShown = 0;
 
+    conn = gfConnect(serve->host, serve->port, serve->isDynamic);
+
     // read tileSize stepSize minMatch from server status
-    findGenomeParams(serve);
+    findGenomeParams(conn, serve);
 
     int minLucky = (serve->minMatch * serve->stepSize + (serve->tileSize - serve->stepSize)) * xlat;
 
@@ -1642,7 +1632,6 @@ for (seq = seqList; seq != NULL; seq = seq->next)
                             serve->genomeDataDir);
 	    else
 		{
-		conn = gfConnectEx(serve->host, serve->port, serve->isDynamic);
 		gfAlignTransTrans(conn, serve->nibDir, seq, FALSE, 5, tFileCache, gvo, !txTxBoth,
                                   dynServerGenome(serve->db), serve->genomeDataDir);
 		}
@@ -1654,7 +1643,6 @@ for (seq = seqList; seq != NULL; seq = seq->next)
                                      serve->genomeDataDir);
 		else
 		    {
-		    conn = gfConnectEx(serve->host, serve->port, serve->isDynamic);
 		    gfAlignTransTrans(conn, serve->nibDir, seq, TRUE, 5, tFileCache, gvo, FALSE,
                                       dynServerGenome(serve->db), serve->genomeDataDir);
 		    }
@@ -1667,7 +1655,6 @@ for (seq = seqList; seq != NULL; seq = seq->next)
                             serve->genomeDataDir);
 	    else
 		{
-		conn = gfConnectEx(serve->host, serve->port, serve->isDynamic);
 		gfAlignTrans(conn, serve->nibDir, seq, 5, tFileCache, gvo,
                              dynServerGenome(serve->db), serve->genomeDataDir);
 		}
@@ -1680,7 +1667,6 @@ for (seq = seqList; seq != NULL; seq = seq->next)
                         serve->genomeDataDir);
 	else
 	    {
-	    conn = gfConnectEx(serve->host, serve->port, serve->isDynamic);
 	    gfAlignStrand(conn, serve->nibDir, seq, FALSE, minMatchShown, tFileCache, gvo,
                           dynServerGenome(serve->db), serve->genomeDataDir);
 	    }
@@ -1690,7 +1676,6 @@ for (seq = seqList; seq != NULL; seq = seq->next)
                         serve->genomeDataDir);
 	else
 	    {
-	    conn = gfConnectEx(serve->host, serve->port, serve->isDynamic);
 	    gfAlignStrand(conn, serve->nibDir, seq, TRUE, minMatchShown, tFileCache, gvo,
                           dynServerGenome(serve->db), serve->genomeDataDir);
 	    }

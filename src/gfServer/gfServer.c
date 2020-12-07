@@ -118,7 +118,9 @@ errAbort(
   "         $rootdir/$genomeDataDir/$genome.untrans.gfidx\n"
   "     in this case, one would call gfClient with \n"
   "         -genome=$genome -genomeDataDir=$genomeDataDir\n"
-  "     Where the contain directories are optional.\n"
+  "     Often $genomeDataDir will be the same name as $genome, however it\n"
+  "     can be a multi-level path.  The $genomeDataDir may also be an absolute\n"
+  "     path.\n"
   "     The -perSeqMax functionality can be implemented by creating a file\n"
   "         $rootdir/$genomeDataDir/$genome.perseqmax\n"
   "\n"
@@ -200,6 +202,7 @@ sendOk = TRUE;
 void errSendString(int sd, char *s)
 // Send string. If not OK, remember we had an error, do not try to write anything more on this connection.
 {
+
 if (sendOk) sendOk = netSendString(sd, s);
 }
 
@@ -1100,11 +1103,24 @@ struct dynSession
 {
     boolean isTrans;              // translated 
     char genome[256];             // genome name
-    char genomeDataDir[PATH_LEN]; // relative directory of data dir
     char gfIdxFile[PATH_LEN];     // index file location
     struct hash *perSeqMaxHash;   // max hits per sequence
     struct genoFindIndex *gfIdx;  // index
 };
+
+static struct genoFindIndex *loadGfIndex(char *gfIdxFile, boolean isTrans)
+/* load index and set globals from it */
+{
+struct genoFindIndex *gfIdx = genoFindIndexLoad(gfIdxFile, isTrans);
+struct genoFind *gf = isTrans ? gfIdx->transGf[0][0] : gfIdx->untransGf;
+minMatch = gf->minMatch;
+maxGap = gf->maxGap;
+tileSize = gf->tileSize;
+noSimpRepMask = gf->noSimpRepMask;
+allowOneMismatch = gf->allowOneMismatch;
+stepSize = gf->stepSize;
+return gfIdx;
+}
 
 static void dynSessionInit(struct dynSession *dynSession, char *rootDir,
                            char *genome, char *genomeDataDir, boolean isTrans)
@@ -1117,21 +1133,27 @@ hashFree(&dynSession->perSeqMaxHash);
 time_t startTime = clock1000();
 dynSession->isTrans = isTrans;
 safecpy(dynSession->genome, sizeof(dynSession->genome), genome);
-safecpy(dynSession->genomeDataDir, sizeof(dynSession->genomeDataDir), genomeDataDir);
+
+// construct path to sequence and index files
+char seqFileDir[PATH_LEN];
+if (genomeDataDir[0] == '/')  // abs or relative
+    safecpy(seqFileDir, sizeof(seqFileDir), genomeDataDir);
+else
+    safef(seqFileDir, sizeof(seqFileDir), "%s/%s", rootDir, genomeDataDir);
     
 char seqFile[PATH_LEN];
-safef(seqFile, PATH_LEN, "%s/%s/%s.2bit", rootDir, genomeDataDir, genome);
+safef(seqFile, PATH_LEN, "%s/%s.2bit", seqFileDir, genome);
 if (!fileExists(seqFile))
     errAbort("sequence file for %s does not exist: %s", genome, seqFile);
 
 char gfIdxFile[PATH_LEN];
-safef(gfIdxFile, PATH_LEN, "%s/%s/%s.%s.gfidx", rootDir, genomeDataDir, genome, isTrans ? "trans" : "untrans");
+safef(gfIdxFile, PATH_LEN, "%s/%s.%s.gfidx", seqFileDir, genome, isTrans ? "trans" : "untrans");
 if (!fileExists(gfIdxFile))
     errAbort("gf index file for %s does not exist: %s", genome, gfIdxFile);
-dynSession->gfIdx = genoFindIndexLoad(gfIdxFile, isTrans);
+dynSession->gfIdx = loadGfIndex(gfIdxFile, isTrans);
 
 char perSeqMaxFile[PATH_LEN];
-safef(perSeqMaxFile, PATH_LEN, "%s/%s/%s.perseqmax", rootDir, genomeDataDir, genome);
+safef(perSeqMaxFile, PATH_LEN, "%s/%s.perseqmax", seqFileDir, genome);
 if (fileExists(perSeqMaxFile))
     {
     /* only the basename of the file is saved in the index */
@@ -1200,7 +1222,7 @@ safecpy(genome, sizeof(genome), words[1]);
 safecpy(genomeDataDir, sizeof(genomeDataDir), words[2]);
 
 // initialize session if new or changed
-if ((dynSession->isTrans != isTrans) || (!sameString(dynSession->genome, genome)) || (!sameString(dynSession->genomeDataDir, genomeDataDir)))
+if ((dynSession->isTrans != isTrans) || (!sameString(dynSession->genome, genome)))
     dynSessionInit(dynSession, rootDir, genome, genomeDataDir, isTrans);
 return TRUE;
 }
@@ -1283,7 +1305,8 @@ char *command;
 int qSize;
 if (!dynNextCommand(rootDir, dynSession, &command, &qSize))
     return FALSE;
-logInfo("dynserver: %s %s %s %s size=%d ", command, dynSession->genome, dynSession->genomeDataDir, (dynSession->isTrans ? "trans" : "untrans"), qSize);
+logInfo("dynserver: %s %s %s [%s] qsize=%d ", command, dynSession->genome, dynSession->gfIdxFile,
+        (dynSession->isTrans ? "trans" : "untrans"), qSize);
 if (endsWith(command, "Info"))
     dynamicServerInfo(command, dynSession->gfIdx);
 else
