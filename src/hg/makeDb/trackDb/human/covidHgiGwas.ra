@@ -1,6 +1,6 @@
 track covidHgiGwasR4
 shortLabel COVID GWAS R4
-longLabel GWAS meta-analyses Release 3 (Oct 2020) from the COVID-19 Host Genetics Initiative
+longLabel GWAS meta-analyses Release 4 (Oct 2020) from the COVID-19 Host Genetics Initiative
 compositeTrack on
 group covid
 visibility hide
@@ -14,9 +14,8 @@ maxItems 500000
 filter.sourceCount 1
 filterLabel.sourceCount Minimum number of studies
 filter.pValueLog 3
-# changeme
-filter.effectSize -13:21
-filterLimits.effectSize -13:21
+filter.effectSize -1.6:2.2
+filterLimits.effectSize -1.6:2.2
 filterLabel.effectSize Effect size range
 filterByRange.effectSize on
 filter._effectSizeAbs 0
@@ -37,6 +36,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
     longLabel Hospitalized COVID GWAS Release 4 (Oct 2020) from the COVID-19 Host Genetics Initiative (XX cases, XX studies)
     bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4B2.$D.bb
 
+
 track covidHgiGwas
 shortLabel COVID-19 GWAS
 longLabel GWAS meta-analyses from the COVID-19 Host Genetics Initiative
@@ -52,10 +52,10 @@ maxItems 500000
 filter.sourceCount 1
 filterLabel.sourceCount Minimum number of studies
 filter.pValueLog 3
-filter.effectSize -1.6:2.2
+filter.effectSize -13:21
+filterLimits.effectSize -13:21
 filterLabel.effectSize Effect size range
 filterByRange.effectSize on
-filterLimits.effectSize -1.6:2.2
 filter._effectSizeAbs 0
 filterLabel._effectSizeAbs Minimum effect size +-
 noScoreFilter on
