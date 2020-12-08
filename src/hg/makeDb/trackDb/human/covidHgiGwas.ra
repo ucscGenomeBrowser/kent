@@ -33,7 +33,7 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
     track covidHgiGwasR4B2
     parent covidHgiGwasR4 off
     shortLabel Hosp COVID GWAS R4
-    longLabel Hospitalized COVID GWAS Release 4 (Oct 2020) from the COVID-19 Host Genetics Initiative (XX cases, XX studies)
+    longLabel Hospitalized COVID GWAS Release 4 (Oct 2020) from the COVID-19 Host Genetics Initiative (7885 cases, 21 studies)
     bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4B2.$D.bb
 
 
