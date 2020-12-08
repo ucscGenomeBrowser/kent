@@ -3183,7 +3183,7 @@ cdsTable lrgCds
 cdnaTable lrgCdna
 pepTable lrgPep
 altColor 127,127,127
-baseColorDefault diffBases
+baseColorDefault genomicCodons
 baseColorUseSequence lfExtra
 baseColorUseCds table lrgCds
 indelDoubleInsert on
