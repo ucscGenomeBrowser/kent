@@ -17,7 +17,7 @@
 extern char *chrom;
 extern int chromSize;
 
-static void writeAuspiceMeta(FILE *outF, struct slName *subtreeUserSampleIds)
+static void writeAuspiceMeta(FILE *outF, struct slName *subtreeUserSampleIds, char *source)
 /* Write metadata to configure Auspice display. */
 {
 fprintf(outF,
@@ -41,10 +41,12 @@ fputs("\", "
       "        [ \"V\", \"#FAEA95\" ], [ \"G\", \"#B6D77A\" ], [ \"GH\", \"#8FD4ED\" ],"
       "        [ \"GR\", \"#A692C3\" ] ],"
       "    \"title\": \"GISAID Clade\", \"type\": \"categorical\" },"
-      "  { \"key\": \"userOrOld\", "
-      "    \"scale\": [ [ \"uploaded sample\", \"#CC0000\"] , [ \"GISAID sample\", \"#000000\"] ],"
-      "    \"title\": \"Sample type\", \"type\": \"categorical\" }"
-      "  ] , "
+      , outF);
+fprintf(outF, "  { \"key\": \"userOrOld\", "
+        "    \"scale\": [ [ \"uploaded sample\", \"#CC0000\"] , [ \"%s\", \"#000000\"] ],"
+        "    \"title\": \"Sample type\", \"type\": \"categorical\" }"
+        , source);
+fputs("  ] , "
 //#*** Filters didn't seem to work... maybe something about the new fetch feature, or do I need to spcify in some other way?
 //#***      "\"filters\": [ \"GISAID_clade\", \"region\", \"country\", \"division\", \"author\" ], "
       "\"display_defaults\": { "
@@ -74,13 +76,14 @@ jsonWriteObjectEnd(jw);
 
 static void jsonWriteLeafNodeAttributes(struct jsonWrite *jw, char *name,
                                         struct sampleMetadata *met, boolean isUserSample,
+                                        char *source,
                                         char **retUserOrOld, char **retNClade, char **retGClade,
                                         char **retLineage)
 /* Write elements of node_attrs for a sample which may be preexisting and in our metadata hash,
  * or may be a new sample from the user.  Set rets for color categories so parent branches can
  * determine their color categories. */
 {
-*retUserOrOld = isUserSample ? "uploaded sample" : "GISAID sample";
+*retUserOrOld = isUserSample ? "uploaded sample" : source;
 jsonWriteObjectValue(jw, "userOrOld", *retUserOrOld);
 if (met && met->date)
     jsonWriteObjectValue(jw, "date", met->date);
@@ -282,6 +285,7 @@ struct auspiceJsonInfo
     struct seqWindow *gSeqWin;            // Reference genome seq for predicting AA change
     struct hash *sampleMetadata;          // Sample metadata for decorating tree
     int nodeNum;                          // For generating sequential node ID (in absence of name)
+    char *source;                         // Source of non-user sequences in tree (GISAID or public)
     };
 
 static int cmpstringp(const void *p1, const void *p2)
@@ -372,7 +376,7 @@ if (node->numEdges > 0)
 jsonWriteObjectStart(aji->jw, "node_attrs");
 jsonWriteDouble(aji->jw, "div", depth);
 if (node->numEdges == 0)
-    jsonWriteLeafNodeAttributes(aji->jw, name, met, isUserSample,
+    jsonWriteLeafNodeAttributes(aji->jw, name, met, isUserSample, aji->source,
                                 retUserOrOld, retNClade, retGClade, retLineage);
 else if (retUserOrOld && retGClade && retLineage)
     jsonWriteBranchNodeAttributes(aji->jw, *retUserOrOld, *retNClade, *retGClade, *retLineage);
@@ -430,14 +434,15 @@ return geneInfoList;
 }
 
 void treeToAuspiceJson(struct subtreeInfo *sti, char *db, struct dnaSeq *ref,
-                       char *bigGenePredFile, struct hash *sampleMetadata, char *jsonFile)
+                       char *bigGenePredFile, struct hash *sampleMetadata, char *jsonFile,
+                       char *source)
 /* Write JSON for tree in Nextstrain's Augur/Auspice V2 JSON format
  * (https://github.com/nextstrain/augur/blob/master/augur/data/schema-export-v2.json). */
 {
 struct phyloTree *tree = sti->subtree;
 FILE *outF = mustOpen(jsonFile, "w");
 fputs("{ \"version\": \"v2\", ", outF);
-writeAuspiceMeta(outF, sti->subtreeUserSampleIds);
+writeAuspiceMeta(outF, sti->subtreeUserSampleIds, source);
 // The meta part is mostly constant & easier to just write out, but jsonWrite is better for the
 // nested tree structure.
 struct jsonWrite *jw = jsonWriteNew();
@@ -452,7 +457,7 @@ tree = root;
 struct geneInfo *geneInfoList = getGeneInfoList(bigGenePredFile, ref);
 struct seqWindow *gSeqWin = chromSeqWindowNew(db, chrom, 0, chromSize);
 struct auspiceJsonInfo aji = { jw, sti->subtreeUserSampleIds, geneInfoList, gSeqWin,
-                               sampleMetadata, nodeNum };
+                               sampleMetadata, nodeNum, source };
 rTreeToAuspiceJson(tree, depth, &aji, NULL, NULL, NULL, NULL);
 chromSeqWindowFree(&gSeqWin);
 jsonWriteObjectEnd(jw);

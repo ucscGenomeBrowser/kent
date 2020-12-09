@@ -1,0 +1,329 @@
+#!/cluster/software/bin/python3
+
+"""
+Helper script to do some gnomAD specific stuff to the vcfToBed output
+
+NOTE: This script is dependent on the format of the VEP INFO field
+in a particular VCF file. Use the -v option to pass the right version
+options to this script, and if necessary, add a new one.
+
+Example format for the v2.1.1 version of gnomAD:
+##INFO=<ID=vep,Number=.,Type=String,Description="Consequence annotations from Ensembl VEP. \
+    Format: \
+        Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc\
+        |HGVSp|cDNA _position|CDS_position|Protein_position|Amino_acids|Codons\
+        |Existing_variation|ALLELE_NUM|DISTANCE|STRAND|FLAGS|VARIANT_CLASS|MINIMISED\
+        |SYMBOL_SOURCE|HGNC_ID|CANONICAL|TSL|APPRIS|CCDS|ENSP|SWISSPROT|TREMBL|UNIPARC\
+        |GENE_PHENO|SIFT|PolyPhen|DOMAINS|HGVS_OFFSET|GMAF|AFR_MAF|AMR_MAF|EAS_MAF|EUR_MAF\
+        |SAS_MAF|AA_MAF|EA_MAF|ExAC_MAF|ExAC_Adj_MAF|ExAC_AFR_MAF|ExAC_AMR_MAF|ExAC_EAS_MAF\
+        |ExAC_FIN_MAF|ExAC_NFE_MAF|ExAC_OTH_MAF|ExAC_SAS_MAF|CLIN_SIG|SOMATIC|PHENO|PUBMED\
+        |MOTIF_NAME|MOTIF_POS|HIGH_INF_POS|MOTIF_SCORE_CHANGE|LoF|LoF_filter|LoF_flags|LoF_info">
+"""
+
+import sys, argparse
+from collections import defaultdict,namedtuple
+
+# which version of gnomAD for parsing VEP string
+versions = ["v2.1.1", "v3.1"]
+
+# the number of fields in the VEP string (depends on version):
+# how to count:
+#   bcftools view -h in.vcf.gz | grep "^##INFO=<ID=vep" | grep -o "Format:.*" \
+#   | tr '|' '\t' | tl0 | wc -l
+numVepFields = {"v2.1.1" : 68, "v3.1": 45}
+# the different pipe separated fields in the VEP struct
+# how to get:
+#   bcftools view -h in.vcf.gz | grep "^##INFO=<ID=vep" | grep -o "Format: .*" \
+#   | cut -d' ' -f2- | cut -d'"' -f1 | sed -e 's/^/"/' -e 's/$/"/' -e 's/|/", "/g'
+versionVepFields = {
+    "v2.1.1": [
+        "Allele", "Consequence", "IMPACT", "SYMBOL", "Gene", "Feature_type",
+        "Feature", "BIOTYPE", "EXON", "INTRON", "HGVSc", "HGVSp", "cDNA_position",
+        "CDS_position", "Protein_position", "Amino_acids", "Codons",
+        "Existing_variation", "ALLELE_NUM", "DISTANCE", "STRAND", "FLAGS",
+        "VARIANT_CLASS", "MINIMISED", "SYMBOL_SOURCE", "HGNC_ID", "CANONICAL", "TSL",
+        "APPRIS", "CCDS", "ENSP", "SWISSPROT", "TREMBL", "UNIPARC", "GENE_PHENO",
+        "SIFT", "PolyPhen", "DOMAINS", "HGVS_OFFSET", "GMAF", "AFR_MAF", "AMR_MAF",
+        "EAS_MAF", "EUR_MAF", "SAS_MAF", "AA_MAF", "EA_MAF", "ExAC_MAF", "ExAC_Adj_MAF",
+        "ExAC_AFR_MAF", "ExAC_AMR_MAF", "ExAC_EAS_MAF", "ExAC_FIN_MAF", "ExAC_NFE_MAF",
+        "ExAC_OTH_MAF", "ExAC_SAS_MAF", "CLIN_SIG", "SOMATIC", "PHENO", "PUBMED",
+        "MOTIF_NAME", "MOTIF_POS", "HIGH_INF_POS", "MOTIF_SCORE_CHANGE", "LoF",
+        "LoF_filter", "LoF_flags", "LoF_info"
+    ],
+    "v3.1": [
+        "Allele", "Consequence", "IMPACT", "SYMBOL", "Gene", "Feature_type", "Feature",
+        "BIOTYPE", "EXON", "INTRON", "HGVSc", "HGVSp", "cDNA_position", "CDS_position",
+        "Protein_position", "Amino_acids", "Codons", "ALLELE_NUM", "DISTANCE", "STRAND",
+        "VARIANT_CLASS", "MINIMISED", "SYMBOL_SOURCE", "HGNC_ID", "CANONICAL", "TSL",
+        "APPRIS", "CCDS", "ENSP", "SWISSPROT", "TREMBL", "UNIPARC", "GENE_PHENO",
+        "SIFT", "PolyPhen", "DOMAINS", "HGVS_OFFSET", "MOTIF_NAME", "MOTIF_POS",
+        "HIGH_INF_POS", "MOTIF_SCORE_CHANGE", "LoF", "LoF_filter", "LoF_flags",
+        "LoF_info"
+    ]
+}
+
+# determines the color of the variant in the browser
+plofTypes = ["frameshift", "stop gained", "splice donor", "splice acceptor"]
+missenseTypes = ["missense", "inframe deletion", "inframe insertion", "start lost", "stop list"]
+synTypes = ["synonymous"]
+
+# for printing the name of the popmax:
+popAbbr = {"afr": "African/African American", "amr": "Latino/Admixed American",
+    "asj": "Ashkenazi Jewish", "eas": "East Asian", "fin": "Finnish",
+    "mid": "Middle Eastern", "ami": "Amish",
+    "nfe": "Non-Finnish European", "sas": "South Asian", "oth": "Other (population not assigned)"}
+
+lofDesc = {"HC": "High-confidence", "OS": "Other Splice (beta)", "LC": "Low-confidence"}
+
+header = None
+
+def parseCommandLine():
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
+        description="""Transform gnomAD VCF to bigBed. This looks something like:
+    vcfToBed -fields="list,of,info,fields" in.vcf.gz firstOut.bed
+    gnomadVcfBedToBigBed -v v2.1.1 -lof lofFile.txt firstOut.bed finalOut.bed""",
+            )
+    parser.add_argument("infile", help="Input bed file with a vep field, use 'stdin' to read \
+            from stdin")
+    parser.add_argument("-lof", "--lofFilePath", action="store", help="Path to tab separated \
+            loss-of-function curation file, where the first line is a header describing each \
+            of the fields")
+    parser.add_argument("-v", "--version", action="store", help="Version of gnomAD. Each \
+            version of gnomAD tends to have slightly different VEP annotations or populations, \
+            so you can specify what you are working with here. Current supported versions: %s" % ", ".join(versions))
+    parser.add_argument("outfile", help="Output bed file name, use 'stdout' to write to stdout")
+    args = parser.parse_args()
+    if not args.version or args.version not in versions: 
+        sys.stderr.write("ERROR: missing version or wrong version. Please supply -v VERSION where VERSION is one of: [%s]\n" % ", ".join(versions))
+        sys.exit(255)
+    return args
+
+def parseHeader(headerStr, infh, outfh):
+    """Parse the field names out of a header string"""
+    global header
+    headerStr = headerStr[1:] # chop off '#'
+    fields = headerStr.strip('\n').split('\t')
+    if not header:
+        header = fields
+        outfh.write("#%s\n" % ("\t".join(header[:17] + 
+            ["rsID","genes","annot","variation_type","hgvs_c","hgvs_p", "pLoF"] 
+            + header[18:] + ["_pos"])))
+    elif fields != header:
+        sys.stderr.write("Header differs from others: '%s'\n" % infh.name)
+        sys.exit(1)
+
+def pickColor(consequenceList):
+    """Assign a color to this item based on it's predicted consequences"""
+    cleanedList = [x.replace("variant","").lower().replace("_", " ").strip() for x in consequenceList]
+    if any(item in plofTypes for item in cleanedList):
+        return "pLoF", "255,32,0"
+    elif any(item in missenseTypes for item in cleanedList):
+        return "missense", "247,189,0"
+    elif any(item in synTypes for item in cleanedList):
+        return "synonymous", "4,255,0"
+    else:
+        return "other", "95,95,95"
+
+def unshiftLeftPad(start, ref, alt):
+    """When an indel has been left-padded in VCF, vcfToBed will shift the start position
+        by one, which is correct for browser display, but is wrong for link-outs. Because VCF
+        also uses 1-based coordinates, the correct link out will be the 0-based start for
+        a shifted variant, and the 1-based start for everything else."""
+    if (ref != "-" and ref != alt and ref[0] == alt[0]):
+        return start
+    else:
+        return start + 1
+
+def flagsForVar(lofDict, x):
+    """Returns the relevant flags for why a variant is loss-of-function or not"""
+    flags = ""
+    if x in lofDict:
+        flags = ", ".join([flag.replace("Flag ", "") for flag in lofDict[x] if lofDict[x][flag] == "TRUE"])
+    return flags
+
+def getLofCurationKey(version, ucscChrom, unshiftedStart, ref, alt):
+    """Form the key into lofDict for a given variant"""
+    if version == "v2.1.1":
+        chrom = ucscChrom.replace("chr","")
+    return "-".join([chrom, unshiftedStart, ref, alt])
+
+lofCurationStrs = { "likely_lof": "Curated as Likely LoF", "likely_not_lof": "Curated as Likely Not LoF",
+"lof": "Curated as LoF", "not_lof": "Curated as Not LoF", "uncertain": "Curated as Uncertain" }
+
+def getLofCuration(lofDict, version, ucscChrom, unshiftedStart, ref, alt):
+    """Return the lof curation info for a variant, or an empty list"""
+    key = getLofCurationKey(version, ucscChrom, unshiftedStart, ref, alt)
+    curation = ""
+    flags = ""
+    if key in lofDict:
+        curation = lofDict[key]["Verdict"]
+        if curation != "lof":
+            flags = flagsForVar(lofDict, key)
+        curation = lofCurationStrs[curation]
+    return [curation, flags]
+        
+        
+def splitVepField(vep, version):
+    """Commas both delimit the multiple annotations of a single variant,
+        and can be part of the pipe separated strings that make up a
+        single annotation, so can't just split on ',' like normal"""
+    ret = []
+    # at the 46th '|', go back until we find a comma and replace that comma
+    # with a tab and then split on tab:
+    ix = 1
+    copy = vep.split('|')
+    try:
+        numFields = numVepFields[version]
+    except ValueError:
+        sys.stderr.write("ERROR: version '%s' not a supported version. Currently \
+            supported versions: [%s]\n" % ", ".join(versions))
+        sys.exit(255)
+    for i in range(round(len(copy) / numFields)):
+        start = (i*numFields) - (i*1)
+        end = numFields + (numFields*i) - i
+        thisElem = copy[start:end]
+        if thisElem:
+            # fix up the first element which will contain part of the previous annotation
+            if i != 0 and ',' in thisElem[0]:
+                thisElem[0] = thisElem[0].split(',')[-1]
+            # the last element will always contain part of the next annotation
+            thisElem[-1] = ",".join(thisElem[-1].split(',')[:-1])
+            ret.append("|".join(thisElem))
+    return ret
+
+def parseVep(vep, version):
+    """Return a more compacted version of the VEP annotations for a variant,
+        organized by the affected genes"""
+    genes = defaultdict(dict)
+    annotList = splitVepField(vep, version)
+    for annot in annotList:
+        group = annot.split('|')
+        if "&" in group[1]:
+            consList = group[1].split('&')
+        else:
+            consList = [group[1]]
+        if "regulatory_region_variant" in consList \
+                or "downstream_gene_variant" in consList \
+                or "upstream_gene_variant" in consList \
+                or "TF_binding_site_variant" in consList: 
+            continue
+        vepFields = dict(zip(versionVepFields[version],group)) 
+        gene = vepFields["SYMBOL"]
+        hgvsc = [vepFields["HGVSc"]] if vepFields["HGVSc"] != "" else None
+        hgvsp = [vepFields["HGVSp"]] if vepFields["HGVSp"] != "" else None
+        lof = [vepFields["LoF"]] if vepFields["LoF"] != "" else None
+        lofFlags = [vepFields["LoF_flags"]] if vepFields["LoF_flags"] != "" else None
+        lofFilter = [vepFields["LoF_filter"]] if vepFields["LoF_filter"] != "" else None
+        if lof:
+            try:
+                for i,x in enumerate(lof):
+                    if x == "LC":
+                        lof[i] = "Low Confidence (%s)" % lofFilter[i]
+                    else:
+                        lof[i] = lofDesc[x]
+            except KeyError:
+                sys.stderr.write("ERROR parsing lof information:\n")
+                sys.stderr.write("lof: %s\n" % lof)
+                sys.stderr.write("lofFlags: %s\n" % lof)
+                sys.stderr.write("lofFilter: %s\n" % lof)
+                sys.exit(255)
+        if gene in genes:
+            genes[gene]["cons"].update(list(consList))
+            if hgvsc:
+                genes[gene]["hgvsc"].update(hgvsc)
+            if hgvsp:
+                genes[gene]["hgvsp"].update(hgvsp)
+            if lof:
+                genes[gene]["pLoF"] = set(lof)
+            if lofFlags:
+                genes[gene]["Flag"] = set(lofFlags)
+        else:
+            genes[gene]["cons"] = set(consList)
+            genes[gene]["hgvsc"] = set(hgvsc) if hgvsc else set()
+            genes[gene]["hgvsp"] = set(hgvsp) if hgvsp else set()
+            genes[gene]["pLoF"] = set(lof) if lof else set()
+            genes[gene]["Flag"] = set(lof) if lofFlags else set()
+    return genes
+
+def gnomadVcfBedToBigBed(infh, outfh, version, lofDict):
+    """Read from already opened infh, convert to more compact bed format, then write
+        to already opened outfh."""
+    for line in infh:
+        genes = defaultdict(dict)
+        extraInfo = []
+        if line.startswith("#"):
+            parseHeader(line, infh, outfh)
+            continue
+        fixedLine = line.strip('\n').split('\t')
+        vep = fixedLine[17]
+        bed8Fields = fixedLine[:8]
+        color = fixedLine[8] # defaults to black
+        firstExtra = fixedLine[9:17]
+        filterTag = firstExtra[2]
+        firstExtra[2] = filterTag.replace(";",",") # replace so trackDb filterValues works
+        savedPostFields = [x if x else "N/A" for x in fixedLine[18:]]
+        savedPostFields[0] = popAbbr[savedPostFields[0]] if savedPostFields[0] in popAbbr else 'N/A'
+        for ix in range(len(savedPostFields)):
+            if not savedPostFields[ix]:
+                savedPostFields[ix] = "N/A"
+        if vep != "":
+            genes = parseVep(vep, version)
+        for gene in genes:
+            annot,color = pickColor(genes[gene]["cons"])
+            consList = [",".join(list(genes[gene]["cons"]))]
+            hgvscList = [", ".join(list(genes[gene]["hgvsc"]))]
+            hgvspList = [", ".join(list(genes[gene]["hgvsp"]))]
+            pLoFList = [", ".join(list(genes[gene]["pLoF"]))]
+            pLoFFlags = [", ".join(list(genes[gene]["Flag"]))]
+            rsId = ""
+            name = bed8Fields[3]
+            if bed8Fields[3].startswith("rs"):
+                rsId = bed8Fields[3]
+            name = bed8Fields[0]+":"+bed8Fields[1]+"-"+bed8Fields[2] + " ("
+            ref = firstExtra[0]
+            alt = firstExtra[1]
+            name += ref[:10]+"..." if len(ref) > 13 else ref
+            name += "/"
+            name += alt[:10]+"..." if len(alt) > 13 else alt
+            name += ")"
+            unshiftedStart = unshiftLeftPad(int(bed8Fields[1]), ref, alt)
+            pLoFCuration = getLofCuration(lofDict, version, bed8Fields[0], str(unshiftedStart), ref, alt)
+            savedPreFields = bed8Fields[:3] + [name] + bed8Fields[4:] + [color] + firstExtra
+            outfh.write("\t".join(savedPreFields + [rsId] + [gene] + [annot] + \
+                    consList + hgvscList + hgvspList + pLoFList + pLoFFlags + pLoFCuration + savedPostFields + [str(unshiftedStart)]) + "\n")
+
+def parseLofFile(fpath):
+    """Make a struct of the different loss of function flags for a curated variant."""
+    gotHeader = False
+    lofHeader = []
+    ret = {}
+    with open(fpath) as fh:
+        for line in fh:
+            if not gotHeader:
+                lofHeader = line.strip().split("\t")
+                gotHeader = True
+            else:
+                lofDetails = line.strip().split("\t")
+                ret[lofDetails[0]] = {lofHeader[x]: lofDetails[x] for x in range(len(lofHeader))} 
+    return ret
+
+def main():
+    args = parseCommandLine()
+    lofDict = {}
+    lofFile = args.lofFilePath
+    if lofFile:
+        lofDict = parseLofFile(lofFile)
+    if args.infile == "stdin":
+        infh = sys.stdin
+    else:
+        infh = open(args.infile)
+    if args.outfile == "stdout":
+        outfh = sys.stdout
+    else:
+        outfh = open(args.outfile, "w")
+    gnomadVcfBedToBigBed(infh, outfh, args.version, lofDict)
+    infh.close()
+    outfh.close()
+
+if __name__ == "__main__":
+    main()
