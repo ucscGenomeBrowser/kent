@@ -558,6 +558,7 @@ extern int winBaseCount;  /* Number of bases in window. */
 extern float basesPerPixel;       /* bases covered by a pixel; a measure of zoom */
 extern boolean zoomedToBaseLevel; /* TRUE if zoomed so we can draw bases. */
 extern boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codon text in genePreds*/
+extern boolean zoomedToCodonNumberLevel; /* TRUE if zoomed so we can print codons and exon number text in genePreds*/
 extern boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we cancolor each codon*/
 
 extern char *ctFileName;	/* Custom track file. */
@@ -1734,5 +1735,7 @@ Color colorFromSoTerm(enum soTerm term);
 /* Assign a Color according to soTerm: red for non-synonymous, green for synonymous, blue for
  * UTR/noncoding, black otherwise. */
 
+void maybeNewFonts(struct hvGfx *hvg);
+/* Check to see if we want to use the alternate font engine (FreeType2). */
 #endif /* HGTRACKS_H */
 

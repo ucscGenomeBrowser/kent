@@ -700,6 +700,17 @@ if (!met)
     }
 if (!met)
     met = hashFindVal(sampleMetadata, sampleId);
+if (!met && strchr(sampleId, '|'))
+    {
+    char copy[strlen(sampleId)+1];
+    safecpy(copy, sizeof copy, sampleId);
+    char *words[4];
+    int wordCount = chopString(copy, "|", words, ArraySize(words));
+    if (isNotEmpty(words[0]))
+        met = hashFindVal(sampleMetadata, words[0]);
+    if (met == NULL && wordCount > 1 && isNotEmpty(words[1]))
+        met = hashFindVal(sampleMetadata, words[1]);
+    }
 return met;
 }
 
