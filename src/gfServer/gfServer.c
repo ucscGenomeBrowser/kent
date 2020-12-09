@@ -1122,6 +1122,14 @@ stepSize = gf->stepSize;
 return gfIdx;
 }
 
+static void dynWarnHandler(char *format, va_list args)
+/* log error warning and error message, along with printing */
+{
+logErrorVa(format, args);
+vfprintf(stderr, format, args);
+fputc('\n', stderr);
+}
+
 static void dynSessionInit(struct dynSession *dynSession, char *rootDir,
                            char *genome, char *genomeDataDir, boolean isTrans)
 /* Initialize or reinitialize a dynSession object */
@@ -1164,67 +1172,49 @@ if (fileExists(perSeqMaxFile))
 logInfo("dynserver: index loading completed in %4.3f seconds", 0.001 * (clock1000() - startTime));
 }
 
-static char *dynReadCommand(char* rootDir, char *buf, int bufSize)
+static char *dynReadCommand(char* rootDir)
 /* read command and log, NULL if no more */
 {
-int readSize = read(STDIN_FILENO, buf, bufSize-1);
+char buf[PATH_LEN];
+int readSize = read(STDIN_FILENO, buf, sizeof(buf)-1);
 if (readSize < 0)
     errAbort("EOF from client");
 if (readSize == 0)
     return NULL;
 buf[readSize] = '\0';
-logDebug("query received: %s", buf);
 if (!startsWith(gfSignature(), buf))
     errAbort("query does not start with signature, got '%s'", buf);
-return buf + strlen(gfSignature());
+char *cmd = cloneString(buf + strlen(gfSignature()));
+logInfo("dynserver: %s", cmd);
+return cmd;
 }
 
-static boolean dynNextCommand(char* rootDir, struct dynSession *dynSession, char **commandRet, int *qsizeRet)
-/* Read query request from stdin and (re)initialize session to match paramters.
- * Format for query commands:
- *  signature+command genome genomeDataDir qsize
- * Formats for info command:
- *  signature+command genome genomeDataDir
+static const int DYN_CMD_MAX_ARGS = 8;  // more than needed to check for junk
+
+static int dynNextCommand(char* rootDir, struct dynSession *dynSession, char **args)
+/* Read query request from stdin and (re)initialize session to match
+ * parameters.  Return number of arguments or zero on EOF
+ *
+ * Commands are in the format:
+ *  signature+command genome genomeDataDir [arg ...]
  */
 {
-char buf[PATH_LEN];
-char *cmdStr = dynReadCommand(rootDir, buf, sizeof(buf));
+char *cmdStr = dynReadCommand(rootDir);
 if (cmdStr == NULL)
-    return FALSE;
+    return 0;
 
-char *words[6];
-int numWords = chopByWhite(cmdStr, words, ArraySize(words));
-if (numWords == 0)
+int numArgs = chopByWhite(cmdStr, args, DYN_CMD_MAX_ARGS);
+if (numArgs == 0)
     errAbort("empty command");
-char *command = words[0];
-*commandRet = cloneString(command);
-boolean isTrans = sameString("protQuery", command) || sameString("transQuery", command)
-    || sameString("transInfo", command);
-
-char genome[256],  genomeDataDir[PATH_LEN];
-if (sameString("query", command) || sameString("protQuery", command)
-      || sameString("transQuery", command))
-    {
-    if (numWords != 4)
-        errAbort("expected 4 words in query command, got %d", numWords);
-    *qsizeRet = atoi(words[3]);
-    }
-else if (sameString("untransInfo", command) || sameString("transInfo", command))
-    {
-    if (numWords != 3)
-        errAbort("expected 3 words in info command, got %d", numWords);
-    *qsizeRet = 0;
-    }
-else
-    errAbort("invalid command '%s'", command);
-
-safecpy(genome, sizeof(genome), words[1]);
-safecpy(genomeDataDir, sizeof(genomeDataDir), words[2]);
+if (numArgs < 3)
+    errAbort("expected at least 3 arguments for a dynamic server command");
+boolean isTrans = sameString("protQuery", args[0]) || sameString("transQuery", args[0])
+    || sameString("transInfo", args[0]);
 
 // initialize session if new or changed
-if ((dynSession->isTrans != isTrans) || (!sameString(dynSession->genome, genome)))
-    dynSessionInit(dynSession, rootDir, genome, genomeDataDir, isTrans);
-return TRUE;
+if ((dynSession->isTrans != isTrans) || (!sameString(dynSession->genome, args[1])))
+    dynSessionInit(dynSession, rootDir, args[1], args[2], isTrans);
+return numArgs;
 }
 
 static struct dnaSeq* dynReadQuerySeq(int qSize, boolean isTrans, boolean queryIsProt)
@@ -1258,12 +1248,19 @@ if (seq->size > maxSize)
 return seq;
 }
 
-static void dynamicServerQuery(char *command, int qSize, struct genoFindIndex *gfIdx, struct hash *perSeqMaxHash)
-/* handle search queries */
+static void dynamicServerQuery(struct dynSession *dynSession, int numArgs, char **args)
+/* handle search queries
+ *
+ *  signature+command genome genomeDataDir qsize
+ */
 {
-mustWriteFd(STDOUT_FILENO, "Y", 1);
+struct genoFindIndex *gfIdx = dynSession->gfIdx;
+if (numArgs != 4)
+    errAbort("expected 4 words in %s command, got %d", args[0], numArgs);
+int qSize = atoi(args[3]);
 
-boolean queryIsProt = sameString(command, "protQuery");
+boolean queryIsProt = sameString(args[0], "protQuery");
+mustWriteFd(STDOUT_FILENO, "Y", 1);
 struct dnaSeq* seq = dynReadQuerySeq(qSize, gfIdx->isTrans, queryIsProt);
 if (gfIdx->isTrans)
     {
@@ -1274,14 +1271,21 @@ if (gfIdx->isTrans)
     }
 else
     {
-    dnaQuery(gfIdx->untransGf, seq, STDOUT_FILENO, perSeqMaxHash);
+    dnaQuery(gfIdx->untransGf, seq, STDOUT_FILENO, dynSession->perSeqMaxHash);
     }
 netSendString(STDOUT_FILENO, "end");
 }
 
-static void dynamicServerInfo(char *command, struct genoFindIndex *gfIdx)
-/* handle one of the info commands */
+static void dynamicServerInfo(struct dynSession *dynSession, int numArgs, char **args)
+/* handle one of the info commands
+ *
+ *  signature+command genome genomeDataDir
+ */
 {
+struct genoFindIndex *gfIdx = dynSession->gfIdx;
+if (numArgs != 3)
+    errAbort("expected 3 words in %s command, got %d", args[0], numArgs);
+
 char buf[256];
 struct genoFind *gf = gfIdx->isTrans ? gfIdx->transGf[0][0] : gfIdx->untransGf;
 sprintf(buf, "version %s", gfVersion);
@@ -1297,21 +1301,49 @@ netSendString(STDOUT_FILENO, buf);
 netSendString(STDOUT_FILENO, "end");
 }
 
+static void dynamicServerPcr(struct dynSession *dynSession, int numArgs, char **args)
+/* Execute a PCR query
+ *
+ *  signature+command genome genomeDataDir forward reverse maxDistance
+ */
+{
+struct genoFindIndex *gfIdx = dynSession->gfIdx;
+if (numArgs != 6)
+    errAbort("expected 6 words in %s command, got %d", args[0], numArgs);
+char *fPrimer = args[3];
+char *rPrimer = args[4];
+int maxDistance = atoi(args[5]);
+if (badPcrPrimerSeq(fPrimer) || badPcrPrimerSeq(rPrimer))
+    errAbort("Can only handle ACGT in primer sequences.");
+pcrQuery(gfIdx->untransGf, fPrimer, rPrimer, maxDistance, STDOUT_FILENO);
+}
+
 static bool dynamicServerCommand(char* rootDir, struct dynSession* dynSession)
 /* Execute one command from stdin, (re)initializing session as needed */
 {
 time_t startTime = clock1000();
-char *command;
-int qSize;
-if (!dynNextCommand(rootDir, dynSession, &command, &qSize))
+char *args[DYN_CMD_MAX_ARGS];
+int numArgs = dynNextCommand(rootDir, dynSession, args);
+if (numArgs == 0)
     return FALSE;
-logInfo("dynserver: %s %s %s [%s] qsize=%d ", command, dynSession->genome, dynSession->gfIdxFile,
-        (dynSession->isTrans ? "trans" : "untrans"), qSize);
-if (endsWith(command, "Info"))
-    dynamicServerInfo(command, dynSession->gfIdx);
+if (sameString("query", args[0]) || sameString("protQuery", args[0])
+    || sameString("transQuery", args[0]))
+    {
+    dynamicServerQuery(dynSession, numArgs, args);
+    }
+else if (sameString("untransInfo", args[0]) || sameString("transInfo", args[0]))
+    {
+    dynamicServerInfo(dynSession, numArgs, args);
+    }
+else if (sameString("pcr", args[0]))
+    {
+    dynamicServerPcr(dynSession, numArgs, args);
+    }
 else
-    dynamicServerQuery(command, qSize, dynSession->gfIdx, dynSession->perSeqMaxHash);
-logInfo("dynserver: %s completed in %4.3f seconds", command, 0.001 * (clock1000() - startTime));
+    errAbort("invalid command '%s'", args[0]);
+
+logInfo("dynserver: %s completed in %4.3f seconds", args[0], 0.001 * (clock1000() - startTime));
+freeMem(args[0]);
 return TRUE;
 }
 
@@ -1319,6 +1351,7 @@ static void dynamicServer(char* rootDir)
 /* dynamic server for inetd. Read query from stdin, open index, query, respond, exit.
  * only one query at a time */
 {
+pushWarnHandler(dynWarnHandler);
 logDebug("dynamicServer connect");
 
 // make sure errors are logged

@@ -329,17 +329,18 @@ struct serverTable *st;
 AllocVar(st);
 
 /* Do a little join to get data to fit into the serverTable and grab
- * dbDb.nibPath too.  check for newer dynamic flag.  sqlSafef doesn't lets us
- * format in comma in field spec, so need to do this in two steps. */
-char *blatServersTbl = "blatServers"; // this can be hack to use another db.table for debugging
-char queryTmpl[512];
+ * dbDb.nibPath too.  Check for newer dynamic flag and allow with or without
+ * it.
+ * For debugging, one set the variable blatServersTbl to some db.table to
+ * pick up settings from somewhere other than dbDb.blatServers.
+ */
+char *blatServersTbl = cfgOptionDefault("blatServersTbl", "blatServers");
 boolean haveDynamic = sqlColumnExists(conn, blatServersTbl, "dynamic");
-safef(queryTmpl, sizeof(queryTmpl), "select dbDb.name, dbDb.description, blatServers.isTrans,"
-      "blatServers.host, blatServers.port, dbDb.nibPath %s "
-      "from dbDb, %s blatServers where blatServers.isTrans = %%d and "
-      "dbDb.name = '%%s' and dbDb.name = blatServers.db", 
-      (haveDynamic ? ", blatServers.dynamic" : ""), blatServersTbl);
-sqlSafef(query, sizeof(query), queryTmpl, isTrans, db);
+sqlSafef(query, sizeof(query), "select dbDb.name, dbDb.description, blatServers.isTrans,"
+         "blatServers.host, blatServers.port, dbDb.nibPath, %s "
+         "from dbDb, %s blatServers where blatServers.isTrans = %d and "
+         "dbDb.name = '%s' and dbDb.name = blatServers.db", 
+         (haveDynamic ? "blatServers.dynamic" : "0"), blatServersTbl, isTrans, db);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     {
@@ -355,10 +356,10 @@ st->isTrans = atoi(row[2]);
 st->host = cloneString(row[3]);
 st->port = cloneString(row[4]);
 st->nibDir = hReplaceGbdbSeqDir(row[5], st->db);
-if (haveDynamic && atoi(row[6]))
+if (atoi(row[6]))
     {
     st->isDynamic = TRUE;
-    st->genomeDataDir = cloneString(st->db);  // db only allows directories by database
+    st->genomeDataDir = cloneString(st->db);  // directories by database name for database genomes
     }
 
 sqlFreeResult(&sr);
@@ -395,13 +396,6 @@ if (genomeDataDir != NULL)
     st->genomeDataDir = cloneString(genomeDataDir);
     }
 return st;
-}
-
-static char *dynServerGenome(char *db)
-/* translate the database to the genome string to send to a dynamic
- * gfServer */
-{
-return trackHubDatabase(db) ? trackHubAssemblyField(db, "genome") : db;
 }
 
 struct serverTable *findServer(char *db, boolean isTrans)
@@ -1010,7 +1004,7 @@ void queryServerFinish(struct genomeHits *gH)
 char buf[256];
 int matchCount = 0;
 
-struct gfConnection *conn = gfMayConnect(gH->host, gH->port, gH->isDynamic);
+struct gfConnection *conn = gfMayConnect(gH->host, gH->port, trackHubDatabaseToGenome(gH->db), gH->genomeDataDir);
 if (conn == NULL)
     {
     gH->error = TRUE;
@@ -1023,7 +1017,7 @@ dyStringPrintf(gH->dbg,"query strand %s qsize %d<br>\n", gH->queryRC ? "-" : "+"
 /* Put together query command. */
 if (gH->isDynamic)
     safef(buf, sizeof buf, "%s%s %s %s %d", gfSignature(), gH->type,
-          dynServerGenome(gH->db), gH->genomeDataDir, gH->dnaSize);
+          conn->genome, conn->genomeDataDir, gH->dnaSize);
 else
     safef(buf, sizeof buf, "%s%s %d", gfSignature(), gH->type, gH->dnaSize);
 gfBeginRequest(conn);
@@ -1337,7 +1331,7 @@ int ret = 0;
 gfBeginRequest(conn);
 if (serve->isDynamic)
     sprintf(buf, "%s%s %s %s", gfSignature(), (serve->isTrans ? "transInfo" : "untransInfo"),
-            dynServerGenome(serve->db), serve->genomeDataDir);
+            conn->genome, conn->genomeDataDir);
 else
     sprintf(buf, "%sstatus", gfSignature());
 mustWriteFd(conn->fd, buf, strlen(buf));
@@ -1572,7 +1566,7 @@ else
     if (allResults)
 	minMatchShown = 0;
 
-    conn = gfConnect(serve->host, serve->port, serve->isDynamic);
+    conn = gfConnect(serve->host, serve->port, trackHubDatabaseToGenome(serve->db), serve->genomeDataDir);
 
     // read tileSize stepSize minMatch from server status
     findGenomeParams(conn, serve);
@@ -1632,19 +1626,17 @@ for (seq = seqList; seq != NULL; seq = seq->next)
                             serve->genomeDataDir);
 	    else
 		{
-		gfAlignTransTrans(conn, serve->nibDir, seq, FALSE, 5, tFileCache, gvo, !txTxBoth,
-                                  dynServerGenome(serve->db), serve->genomeDataDir);
+		gfAlignTransTrans(conn, serve->nibDir, seq, FALSE, 5, tFileCache, gvo, !txTxBoth);
 		}
 	    if (txTxBoth)
 		{
 		reverseComplement(seq->dna, seq->size);
 		if (allGenomes)
 		    queryServer(serve->host, serve->port, db, seq, "transQuery", xType, TRUE, FALSE, TRUE, seqNumber,
-                                     serve->genomeDataDir);
+                                serve->genomeDataDir);
 		else
 		    {
-		    gfAlignTransTrans(conn, serve->nibDir, seq, TRUE, 5, tFileCache, gvo, FALSE,
-                                      dynServerGenome(serve->db), serve->genomeDataDir);
+		    gfAlignTransTrans(conn, serve->nibDir, seq, TRUE, 5, tFileCache, gvo, FALSE);
 		    }
 		}
 	    }
@@ -1655,8 +1647,7 @@ for (seq = seqList; seq != NULL; seq = seq->next)
                             serve->genomeDataDir);
 	    else
 		{
-		gfAlignTrans(conn, serve->nibDir, seq, 5, tFileCache, gvo,
-                             dynServerGenome(serve->db), serve->genomeDataDir);
+		gfAlignTrans(conn, serve->nibDir, seq, 5, tFileCache, gvo);
 		}
 	    }
 	}
@@ -1667,8 +1658,7 @@ for (seq = seqList; seq != NULL; seq = seq->next)
                         serve->genomeDataDir);
 	else
 	    {
-	    gfAlignStrand(conn, serve->nibDir, seq, FALSE, minMatchShown, tFileCache, gvo,
-                          dynServerGenome(serve->db), serve->genomeDataDir);
+	    gfAlignStrand(conn, serve->nibDir, seq, FALSE, minMatchShown, tFileCache, gvo);
 	    }
 	reverseComplement(seq->dna, seq->size);
 	if (allGenomes)
@@ -1676,8 +1666,7 @@ for (seq = seqList; seq != NULL; seq = seq->next)
                         serve->genomeDataDir);
 	else
 	    {
-	    gfAlignStrand(conn, serve->nibDir, seq, TRUE, minMatchShown, tFileCache, gvo,
-                          dynServerGenome(serve->db), serve->genomeDataDir);
+	    gfAlignStrand(conn, serve->nibDir, seq, TRUE, minMatchShown, tFileCache, gvo);
 	    }
 	}
     gfOutputQuery(gvo, f);

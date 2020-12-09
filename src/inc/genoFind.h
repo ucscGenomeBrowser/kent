@@ -42,6 +42,8 @@ struct gfConnection
     char *hostName;   // need when reconnecting
     int port;
     boolean isDynamic;  // is this a dynamic server?
+    char *genome;   // genome name for dynamic server
+    char *genomeDataDir; // genome data directory for dynamic server
 };
 
 enum gfConstants {
@@ -374,34 +376,31 @@ void gfFileCacheFree(struct hash **pCache);
 
 void gfAlignStrand(struct gfConnection *conn, char *nibDir, struct dnaSeq *seq,
                    boolean isRc,  int minMatch, 
-                   struct hash *tFileCache, struct gfOutput *out,
-                   char *genome, char *genomeDataDir);
+                   struct hash *tFileCache, struct gfOutput *out);
 /* Search genome on server with one strand of other sequence to find homology. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found.  gfSavePsl is a handy
  * outFunction to use. */
 
 void gfAlignTrans(struct gfConnection *conn, char *nibDir, aaSeq *seq,
-                  int minMatch, struct hash *tFileHash, struct gfOutput *out,
-                  char *genome, char *genomeDataDir);
+                  int minMatch, struct hash *tFileHash, struct gfOutput *out);
 /* Search indexed translated genome on server with an amino acid sequence. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found. */
 
 void gfAlignTransTrans(struct gfConnection *conn, char *nibDir, struct dnaSeq *seq, 
                        boolean qIsRc, int minMatch, struct hash *tFileCache, 
-                       struct gfOutput *out, boolean isRna,
-                       char *genome, char *genomeDataDir);
+                       struct gfOutput *out, boolean isRna);
 /* Search indexed translated genome on server with an dna sequence.  Translate
  * this sequence in three frames. Load homologous bits of genome locally
  * and do detailed alignment.  Call 'outFunction' with each alignment
  * that is found. */
 
-struct gfConnection *gfMayConnect(char *hostName, char *portName, boolean isDynamic);
-/* Set up our network connection to server, or return NULL. */
+struct gfConnection *gfMayConnect(char *hostName, char *portName, char *genome, char *genomeDataDir);
+/* Set up our network connection to server, or return NULL. genome and genomeDataDir are for dynamic server. */
 
-struct gfConnection *gfConnect(char *hostName, char *portName, boolean isDynamic);
-/* Set up our network connection to server. Aborts on error. */
+struct gfConnection *gfConnect(char *hostName, char *portName, char *genome, char *genomeDataDir);
+/* Set up our network connection to server. Aborts on error. genome and genomeDataDir are for dynamic server. */
 
 void gfBeginRequest(struct gfConnection *conn);
 /* called before a request is started.  If the connect is not open, reopen

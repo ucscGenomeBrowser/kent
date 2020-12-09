@@ -66,11 +66,11 @@ void gfPcrLocal(char *pcrName,
 /* Do detailed PCR scan on DNA already loaded into memory and put results
  * (in reverse order) on *pOutList. */
 
-struct gfRange *gfPcrGetRanges(char *host, char *port, char *fPrimer, char *rPrimer,
+struct gfRange *gfPcrGetRanges(struct gfConnection *conn, char *fPrimer, char *rPrimer,
 	int maxSize);
 /* Query gfServer with primers and convert response to a list of gfRanges. */
 
-struct gfPcrOutput *gfPcrViaNet(char *host, char *port, char *seqDir, 
+struct gfPcrOutput *gfPcrViaNet(struct gfConnection *conn, char *seqDir, 
 	struct gfPcrInput *inList,
 	int maxSize, int minPerfect, int minGood);
 /* Do PCRs using gfServer index, returning list of results. */

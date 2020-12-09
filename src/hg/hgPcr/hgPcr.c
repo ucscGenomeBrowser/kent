@@ -7,12 +7,14 @@
 #include "errAbort.h"
 #include "errCatch.h"
 #include "hCommon.h"
+#include "hgConfig.h"
 #include "dystring.h"
 #include "jksql.h"
 #include "linefile.h"
 #include "dnautil.h"
 #include "fa.h"
 #include "psl.h"
+#include "genoFind.h"
 #include "gfPcrLib.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
@@ -56,6 +58,8 @@ struct pcrServer
    char *host;		/* Name of machine hosting server. */
    char *port;		/* Port that hosts server. */
    char *seqDir;	/* Directory of sequence files. */
+   boolean isDynamic;   /* is a dynamic server */
+   char* genomeDataDir; /* genome name for dynamic gfServer  */
    };
 
 struct targetPcrServer
@@ -81,7 +85,7 @@ for(; dbDbList; dbDbList = dbDbList->next)
     server->db = dbDbList->name;
     server->genome = dbDbList->organism;
     server->description = dbDbList->description;
-    trackHubGetPcrParams(server->db, &server->host, &server->port);
+    trackHubGetPcrParams(server->db, &server->host, &server->port, &server->genomeDataDir);
     struct trackHubGenome *genome = trackHubGetGenome(server->db);
     server->seqDir = cloneString(genome->twoBitPath);
     char *ptr = strrchr(server->seqDir, '/');
@@ -104,13 +108,21 @@ char **row;
 
 serverList = getTrackHubServers();
 
-/* Do a little join to get data to fit into the pcrServer. */
-sr = sqlGetResult(conn, 
-   NOSQLINJ "select dbDb.name,dbDb.genome,dbDb.description,blatServers.host,"
-   "blatServers.port,dbDb.nibPath "
-   "from dbDb,blatServers where "
-   "dbDb.name = blatServers.db "
-   "and blatServers.canPcr = 1 order by dbDb.orderKey" );
+/* Do a little join to get data to fit into the pcrServer.  Check for newer
+ * dynamic flag and allow with or without it.  For debugging, one set the
+ * variable blatServersTbl to some db.table to pick up settings from somewhere
+ * other than dbDb.blatServers. */
+char *blatServersTbl = cfgOptionDefault("blatServersTbl", "blatServers");
+boolean haveDynamic = sqlColumnExists(conn, blatServersTbl, "dynamic");
+char query[512];
+sqlSafef(query, sizeof(query),
+         "select dbDb.name,dbDb.genome,dbDb.description,blatServers.host,"
+         "blatServers.port,dbDb.nibPath, %s "
+         "from dbDb, %s blatServers where "
+         "dbDb.name = blatServers.db "
+         "and blatServers.canPcr = 1 order by dbDb.orderKey",
+         (haveDynamic ? "blatServers.dynamic" : "0"), blatServersTbl);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(server);
@@ -120,6 +132,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     server->host = cloneString(row[3]);
     server->port = cloneString(row[4]);
     server->seqDir = hReplaceGbdbSeqDir(row[5], server->db);
+    if (atoi(row[6]))
+        {
+        server->isDynamic = TRUE;
+        server->genomeDataDir = cloneString(server->db);  // directories by database name for database genomes
+        }
     slAddHead(&serverList, server);
     }
 sqlFreeResult(&sr);
@@ -376,6 +393,7 @@ struct sqlConnection *conn = hConnectCentral();
 boolean gotTargetDb = sqlTableExists(conn, "targetDb");
 hDisconnectCentral(&conn);
 
+
 printf("<FORM ACTION=\"../cgi-bin/hgPcr\" METHOD=\"GET\" NAME=\"mainForm\">\n");
 cartSaveSession(cart);
 
@@ -507,8 +525,10 @@ void doQuery(struct pcrServer *server, struct gfPcrInput *gpi,
 	     int maxSize, int minPerfect, int minGood)
 /* Send a query to a genomic assembly PCR server and print the results. */
 {
+struct gfConnection *conn = gfConnect(server->host, server->port,
+                                      trackHubDatabaseToGenome(server->db), server->genomeDataDir);
 struct gfPcrOutput *gpoList =
-    gfPcrViaNet(server->host, server->port, server->seqDir, gpi,
+    gfPcrViaNet(conn, server->seqDir, gpi,
 		maxSize, minPerfect, minGood);
 if (gpoList != NULL)
     {
@@ -526,19 +546,20 @@ else
     printf("No matches to %s %s in %s %s", gpi->fPrimer, gpi->rPrimer, 
 	   server->genome, server->description);
     }
+gfDisconnect(&conn);
 }
 
 void doTargetQuery(struct targetPcrServer *server, struct gfPcrInput *gpi,
 		   int maxSize, int minPerfect, int minGood)
 /* Send a query to a non-genomic target PCR server and print the results. */
 {
+struct gfConnection *conn = gfConnect(server->host, server->port, NULL, NULL);
 struct gfPcrOutput *gpoList;
 char seqDir[PATH_LEN];
 splitPath(server->targetDb->seqFile, seqDir, NULL, NULL);
 if (endsWith("/", seqDir))
     seqDir[strlen(seqDir) - 1] = '\0';
-gpoList = gfPcrViaNet(server->host, server->port, seqDir, gpi,
-		      maxSize, minPerfect, minGood);
+gpoList = gfPcrViaNet(conn, seqDir, gpi, maxSize, minPerfect, minGood);
 if (gpoList != NULL)
     {
     struct gfPcrOutput *gpo;
@@ -570,6 +591,7 @@ else
     printf("No matches to %s %s in %s", gpi->fPrimer, gpi->rPrimer, 
 	   server->targetDb->description);
     }
+gfDisconnect(&conn);
 }
 
 boolean doPcr(struct pcrServer *server, struct targetPcrServer *targetServer,

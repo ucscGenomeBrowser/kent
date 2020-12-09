@@ -67,9 +67,9 @@ with blat.
 
 CREATING A DYNAMIC GFSERVER
 
-To avoid having a larger number of gfServer processing sitting in memory,
-indices can be pre-generate as files on disk and then gfServer instances
-launched dynamically using xinetd.
+To avoid having a number of gfServer processing sitting in memory, indices can
+be pre-generate as files on disk and then gfServer instances launched
+dynamically using xinetd.
 
 See gfServer/blat-xinetd.example for an example xinetd configuration file.
 Data files must be create using the following layout, where the $rootdir

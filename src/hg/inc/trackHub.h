@@ -117,6 +117,10 @@ char *trackHubCladeToGenome(char *clade);
 boolean trackHubDatabase(char *database);
 /* Is this an assembly from an Assembly Data hub? */
 
+char *trackHubDatabaseToGenome(char *db);
+/* get a database name that is either a genome database or a trackHub
+ * database, return the genome assembly */
+
 char *trackHubDefaultChrom(char *database);
 /* Return the default chromosome for this track hub assembly. */
 
@@ -210,7 +214,7 @@ void hubCheckBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome,
 struct dbDb *trackHubGetPcrServers();
 /* Look through attached trackHubs to see which of them have "isPcr" line in them. */
 
-boolean trackHubGetPcrParams(char *database, char **pHost, char **pPort);
+boolean trackHubGetPcrParams(char *database, char **pHost, char **pPort, char **pGenomeDataDir);
 /* Get the isPcr params from a trackHub genome. */
 #endif /* TRACKHUB_H */
 

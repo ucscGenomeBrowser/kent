@@ -67,7 +67,6 @@ while (totalRead < size)
 return totalRead;
 }
 
-
 void genoFindFree(struct genoFind **pGenoFind)
 /* Free up a genoFind index. */
 {
@@ -213,7 +212,7 @@ static void genoFindReadSources(FILE *f, off_t off, struct genoFind *gf)
 /* read the sources from the file */
 {
 mustSeek(f, off, SEEK_SET);
-gf->sources = needLargeMem(gf->sourceCount * sizeof(struct gfSeqSource));
+gf->sources = needMem(gf->sourceCount * sizeof(struct gfSeqSource));
 int i;
 for (i = 0; i < gf->sourceCount; i++)
     genoFindReadSource(f, gf->sources + i);
