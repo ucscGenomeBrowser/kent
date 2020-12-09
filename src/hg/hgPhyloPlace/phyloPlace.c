@@ -108,6 +108,56 @@ boolean isEnabled = (isNotEmpty(cfgSetting) &&
 return (isEnabled && hDbExists("wuhCor1"));
 }
 
+static void addPathIfNecessary(struct dyString *dy, char *db, char *fileName)
+/* If fileName exists, copy it into dy, else try hgPhyloPlaceData/<db>/fileName */
+{
+dyStringClear(dy);
+if (fileExists(fileName))
+    dyStringAppend(dy, fileName);
+else
+    dyStringPrintf(dy, PHYLOPLACE_DATA_DIR "/%s/%s", db, fileName);
+}
+
+struct treeChoices *loadTreeChoices(char *db)
+/* If <db>/config.ra specifies a treeChoices file, load it up, else return NULL. */
+{
+struct treeChoices *treeChoices = NULL;
+char *filename = phyloPlaceDbSettingPath(db, "treeChoices");
+if (isNotEmpty(filename) && fileExists(filename))
+    {
+    AllocVar(treeChoices);
+    int maxChoices = 128;
+    AllocArray(treeChoices->protobufFiles, maxChoices);
+    AllocArray(treeChoices->metadataFiles, maxChoices);
+    AllocArray(treeChoices->sources, maxChoices);
+    AllocArray(treeChoices->descriptions, maxChoices);
+    struct lineFile *lf = lineFileOpen(filename, TRUE);
+    char *line;
+    while (lineFileNextReal(lf, &line))
+        {
+        char *words[5];
+        int wordCount = chopTabs(line, words);
+        lineFileExpectWords(lf, 4, wordCount);
+        if (treeChoices->count >= maxChoices)
+            {
+            warn("File %s has too many lines, only showing first %d phylogenetic tree choices",
+                 filename, maxChoices);
+            break;
+            }
+        struct dyString *dy = dyStringNew(0);
+        addPathIfNecessary(dy, db, words[0]);
+        treeChoices->protobufFiles[treeChoices->count] = cloneString(dy->string);
+        addPathIfNecessary(dy, db, words[1]);
+        treeChoices->metadataFiles[treeChoices->count] = dyStringCannibalize(&dy);
+        treeChoices->sources[treeChoices->count] = cloneString(words[2]);
+        treeChoices->descriptions[treeChoices->count] = cloneString(words[3]);
+        treeChoices->count++;
+        }
+    lineFileClose(&lf);
+    }
+return treeChoices;
+}
+
 static char *urlFromTn(struct tempName *tn)
 /* Make a full URL to a trash file that our net.c code will be able to follow, for when we can't
  * just leave it up to the user's web browser to do the right thing with "../". */
@@ -724,13 +774,13 @@ if (met)
 return lineage;
 }
 
-static void displayNearestNeighbors(struct mutationAnnotatedTree *bigTree,
+static void displayNearestNeighbors(struct mutationAnnotatedTree *bigTree, char *source,
                                     struct placementInfo *info, struct hash *sampleMetadata)
 /* Use info->variantPaths to find sample's nearest neighbor(s) in tree. */
 {
 if (bigTree)
     {
-    printf("<p>Nearest neighboring GISAID sequence already in phylogenetic tree: ");
+    printf("<p>Nearest neighboring %s sequence already in phylogenetic tree: ", source);
     struct slName *neighbors = findNearestNeighbor(bigTree, info->sampleId, info->variantPath);
     struct slName *neighbor;
     for (neighbor = neighbors;  neighbor != NULL;  neighbor = neighbor->next)
@@ -867,7 +917,7 @@ if (node->numEdges > 0)
 
 static void describeSamplePlacements(struct slName *sampleIds, struct hash *samplePlacements,
                                      struct phyloTree *subtree, struct hash *sampleMetadata,
-                                     struct mutationAnnotatedTree *bigTree)
+                                     struct mutationAnnotatedTree *bigTree, char *source)
 /* Report how each sample fits into the big tree. */
 {
 // Sort sample placements by sampleMuts so we can group identical samples.
@@ -924,7 +974,7 @@ while ((clumpSize = countIdentical(refsToGo)) > 0)
     displayVariantPath(info->variantPath, clumpSize == 1 ? info->sampleId : "samples");
     displayBestNodes(info, sampleMetadata);
     if (!showBestNodePaths)
-        displayNearestNeighbors(bigTree, info, sampleMetadata);
+        displayNearestNeighbors(bigTree, source, info, sampleMetadata);
     if (showParsimonyScore && info->parsimonyScore > 0)
         printf("<p>Parsimony score added by your sample: %d</p>\n", info->parsimonyScore);
         //#*** TODO: explain parsimony score
@@ -1434,8 +1484,8 @@ struct subtreeInfo *tiB = *(struct subtreeInfo **)pb;
 return slCount(tiB->subtreeUserSampleIds) - slCount(tiA->subtreeUserSampleIds);
 }
 
-char *phyloPlaceSamples(struct lineFile *lf, char *db, boolean doMeasureTiming, int subtreeSize,
-                        int fontHeight)
+char *phyloPlaceSamples(struct lineFile *lf, char *db, char *defaultProtobuf,
+                        boolean doMeasureTiming, int subtreeSize, int fontHeight)
 /* Given a lineFile that contains either FASTA or VCF, prepare VCF for usher;
  * if that goes well then run usher, report results, make custom track files
  * and return the top-level custom track file; otherwise return NULL. */
@@ -1446,7 +1496,37 @@ int startTime = clock1000();
 struct tempName *vcfTn = NULL;
 struct slName *sampleIds = NULL;
 char *usherPath = getUsherPath(TRUE);
-char *usherAssignmentsPath = getUsherAssignmentsPath(db, TRUE);
+char *usherAssignmentsPath = NULL;
+char *source = NULL;
+char *metadataFile = NULL;
+struct treeChoices *treeChoices = loadTreeChoices(db);
+if (treeChoices)
+    {
+    usherAssignmentsPath = defaultProtobuf;
+    if (isEmpty(usherAssignmentsPath))
+        usherAssignmentsPath = treeChoices->protobufFiles[0];
+    int i;
+    for (i = 0;  i < treeChoices->count;  i++)
+        if (sameString(treeChoices->protobufFiles[i], usherAssignmentsPath))
+            {
+            metadataFile = treeChoices->metadataFiles[i];
+            source = treeChoices->sources[i];
+            break;
+            }
+    if (i == treeChoices->count)
+        {
+        usherAssignmentsPath = treeChoices->protobufFiles[0];
+        metadataFile = treeChoices->metadataFiles[0];
+        source = treeChoices->sources[0];
+        }
+    }
+else
+    {
+    // Fall back on old settings
+    usherAssignmentsPath = getUsherAssignmentsPath(db, TRUE);
+    metadataFile = phyloPlaceDbSettingPath(db, "metadataFile");
+    source = "GISAID";
+    }
 struct mutationAnnotatedTree *bigTree = parseParsimonyProtobuf(usherAssignmentsPath);
 reportTiming(&startTime, "parse protobuf file");
 if (! bigTree)
@@ -1511,7 +1591,6 @@ if (vcfTn)
         slSort(&results->subtreeInfoList, subTreeInfoUserSampleCmp);
         // Make Nextstrain/auspice JSON file for each subtree.
         char *bigGenePredFile = phyloPlaceDbSettingPath(db, "bigGenePredFile");
-        char *metadataFile = phyloPlaceDbSettingPath(db, "metadataFile");
         struct hash *sampleMetadata = getSampleMetadata(metadataFile);
         struct tempName *jsonTns[subtreeCount];
         struct subtreeInfo *ti;
@@ -1521,7 +1600,7 @@ if (vcfTn)
             AllocVar(jsonTns[ix]);
             trashDirFile(jsonTns[ix], "ct", "subtreeAuspice", ".json");
             treeToAuspiceJson(ti, db, refGenome, bigGenePredFile, sampleMetadata,
-                              jsonTns[ix]->forCgi);
+                              jsonTns[ix]->forCgi, source);
             }
         puts("<p></p>");
         makeButtonRow(jsonTns, subtreeCount, isFasta);
@@ -1546,7 +1625,7 @@ if (vcfTn)
             struct phyloTree *subtree = phyloOpenTree(ti->subtreeTn->forCgi);
             subtree = phyloPruneToIds(subtree, ti->subtreeUserSampleIds);
             describeSamplePlacements(ti->subtreeUserSampleIds, results->samplePlacements, subtree,
-                                     sampleMetadata, bigTree);
+                                     sampleMetadata, bigTree, source);
             }
         reportTiming(&startTime, "describe placements");
 
