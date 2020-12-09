@@ -112,7 +112,7 @@ snprintf(databaseName, sizeof(databaseName), "%s:%s", hostName, portName);
 gvo = gfOutputAny(outputFormat,  round(minIdentity*10), qType == gftProt, tType == gftProt,
 	optionExists("nohead"), databaseName, 23, 3.0e9, minIdentity, out);
 gfOutputHead(gvo, out);
-struct gfConnection *conn = gfConnect(hostName, portName, (genome != NULL));
+struct gfConnection *conn = gfConnect(hostName, portName, genome, genomeDataDir);
 while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt))
     {
     if (dots != 0)
@@ -126,25 +126,23 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt)
     if (qType == gftProt && (tType == gftDnaX || tType == gftRnaX))
         {
 	gvo->reportTargetStrand = TRUE;
-	gfAlignTrans(conn, tSeqDir, &seq, minScore, tFileCache, gvo, genome, genomeDataDir);
+	gfAlignTrans(conn, tSeqDir, &seq, minScore, tFileCache, gvo);
 	}
     else if ((qType == gftRnaX || qType == gftDnaX) && (tType == gftDnaX || tType == gftRnaX))
         {
 	gvo->reportTargetStrand = TRUE;
-	gfAlignTransTrans(conn, tSeqDir, &seq, FALSE, minScore, tFileCache, 
-                          gvo, qType == gftRnaX, genome, genomeDataDir);
+	gfAlignTransTrans(conn, tSeqDir, &seq, FALSE, minScore, tFileCache, gvo, qType == gftRnaX);
 	if (qType == gftDnaX)
 	    {
 	    reverseComplement(seq.dna, seq.size);
-	    gfAlignTransTrans(conn, tSeqDir, &seq, TRUE, minScore, tFileCache,
-                              gvo, FALSE, genome, genomeDataDir);
+	    gfAlignTransTrans(conn, tSeqDir, &seq, TRUE, minScore, tFileCache, gvo, FALSE);
 	    }
 	}
     else if ((tType == gftDna || tType == gftRna) && (qType == gftDna || qType == gftRna))
 	{
-	gfAlignStrand(conn, tSeqDir, &seq, FALSE, minScore, tFileCache, gvo, genome, genomeDataDir);
+	gfAlignStrand(conn, tSeqDir, &seq, FALSE, minScore, tFileCache, gvo);
 	reverseComplement(seq.dna, seq.size);
-	gfAlignStrand(conn, tSeqDir, &seq, TRUE,  minScore, tFileCache, gvo, genome, genomeDataDir);
+	gfAlignStrand(conn, tSeqDir, &seq, TRUE,  minScore, tFileCache, gvo);
 	}
     else
         {
