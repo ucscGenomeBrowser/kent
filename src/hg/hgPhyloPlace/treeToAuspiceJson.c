@@ -339,9 +339,6 @@ if (node->ident->name)
     isUserSample = slNameInList(aji->subtreeUserSampleIds, node->ident->name);
 char *name = node->ident->name;
 struct sampleMetadata *met = name ? metadataForSample(aji->sampleMetadata, name) : NULL;
-if (!isUserSample && met && met->strain)
-    // Some of Rob's tree names are outdated; use latest from metadata.
-    name = met->strain;
 if (name)
     jsonWriteString(aji->jw, "name", name);
 else

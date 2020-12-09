@@ -900,6 +900,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#110320 "Updated Nov. 3, 2020
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r2_1&ignore=$<rsId>
     urlLabel View this variant at gnomAD
     extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.genomes.popTable.txt
+    html gnomadExomesGenomes
     release alpha
 
     track gnomadExomes
@@ -922,7 +923,8 @@ pennantIcon Updated red ../goldenPath/newsarch.html#110320 "Updated Nov. 3, 2020
     mouseOver Position: $chrom:${chromStart}-${chromEnd} ($ref/$alt); rsId: $rsId; Genes: $genes; Annotation: $annot; FILTER: $FILTER; Variation: $variation_type
     url https://gnomad.broadinstitute.org/variant/$s-$<_startPos>-$<ref>-$<alt>?dataset=gnomad_r2_1&ignore=$<rsId>
     urlLabel View this variant at gnomAD
-    extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.genomes.popTable.txt
+    extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.exomes.popTable.txt
+    html gnomadExomesGenomes
     release alpha
 
 searchTable pliByTranscript
