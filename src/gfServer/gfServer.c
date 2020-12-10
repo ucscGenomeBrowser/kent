@@ -8,6 +8,7 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include "portable.h"
+#include "filePath.h"
 #include "net.h"
 #include "dnautil.h"
 #include "dnaseq.h"
@@ -1134,6 +1135,11 @@ static void dynSessionInit(struct dynSession *dynSession, char *rootDir,
                            char *genome, char *genomeDataDir, boolean isTrans)
 /* Initialize or reinitialize a dynSession object */
 {
+if ((!isSafeRelativePath(genome)) || (strchr(genome, '/') != NULL))
+    errAbort("genome argument can't contain '/' or '..': %s", genome);
+if (!isSafeRelativePath(genomeDataDir))
+    errAbort("genomeDataDir argument must be a relative path without '..' elements: %s", genomeDataDir);
+
 // will free current content if initialized
 genoFindIndexFree(&dynSession->gfIdx);
 hashFree(&dynSession->perSeqMaxHash);
