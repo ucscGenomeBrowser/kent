@@ -37,6 +37,14 @@ void undosPath(char *path);
  * this actually.) */
 
 char *makeRelativePath(char *from, char *to);
-/* Calculate relative path between two absolute ones */
+/* Calculate a relative path from one absolute directory/file to another.
+ * Assumptions: both from and to are canonicalized absolute paths beginning
+ * at "/" or "//".  Filenames are okay, but all directory names must end with
+ * a "/" to distinguish them from files.
+ * e.g., /test/dir/ is a directory, but /test/dir is a file.
+ */
+
+boolean isSafeRelativePath(char *path);
+/* check that path is relative and contains no ".." elements */
 
 #endif /* FILEPATH_H */
