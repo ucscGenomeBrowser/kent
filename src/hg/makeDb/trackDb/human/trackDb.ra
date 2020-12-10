@@ -3194,6 +3194,7 @@ showCdsMaxZoom 10000.0
 color 54,125,29
 urlLabel Link to LRG transcript:
 url http://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
+bigDataUrl /gbdb/$D/bbi/lrgBigPsl.bb
 
 track lrgTranscriptAli
 shortLabel LRG Transcripts
