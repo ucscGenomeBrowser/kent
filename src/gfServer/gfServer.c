@@ -1150,10 +1150,7 @@ safecpy(dynSession->genome, sizeof(dynSession->genome), genome);
 
 // construct path to sequence and index files
 char seqFileDir[PATH_LEN];
-if (genomeDataDir[0] == '/')  // abs or relative
-    safecpy(seqFileDir, sizeof(seqFileDir), genomeDataDir);
-else
-    safef(seqFileDir, sizeof(seqFileDir), "%s/%s", rootDir, genomeDataDir);
+safef(seqFileDir, sizeof(seqFileDir), "%s/%s", rootDir, genomeDataDir);
     
 char seqFile[PATH_LEN];
 safef(seqFile, PATH_LEN, "%s/%s.2bit", seqFileDir, genome);
