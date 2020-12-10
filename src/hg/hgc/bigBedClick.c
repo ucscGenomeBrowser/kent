@@ -427,7 +427,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if (seq1Seq2 && bedSize+seq1Seq2Fields == 8)
         printf("<table><tr><th>Sequence 1</th><th>Sequence 2</th></tr>"
 	       "<tr><td> %s </td><td> %s </td></tr></table>", fields[6], fields[7]);
-    else if (isNotEmpty(rest))
+    else if (restCount > 0)
 	{
 	if (restCount > restBedFields)
 	    {

@@ -161,7 +161,8 @@ static void inputForm()
 printf("<form action='%s' name='mainForm' method=POST enctype='multipart/form-data'>\n\n",
        "hgPhyloPlace");
 cartSaveSession(cart);
-cgiMakeHiddenVar("db", "wuhCor1");
+char *db = "wuhCor1";
+cgiMakeHiddenVar("db", db);
 puts("  <div class='gbControl col-md-12'>");
 puts("<div class='readableWidth'>");
 puts("<p>Upload your SARS-CoV-2 sequence (FASTA or VCF file) to find the most similar\n"
@@ -201,15 +202,28 @@ puts("<p><b>Note:</b> "
 puts("</div>");
 puts("  </div>");
 puts("  <div class='gbControl col-md-12'>");
+printf("<p>Select your FASTA or VCF file: ");
 printf("<input type='file' id='%s' name='%s' "
        "accept='.fa, .fasta, .vcf, .vcf.gz, .fa.gz, .fasta.gz'>",
        seqFileVar, seqFileVar);
+struct treeChoices *treeChoices = loadTreeChoices(db);
+if (treeChoices)
+    {
+    puts("</p><p>");
+    printf("Phylogenetic tree version: ");
+    char *phyloPlaceTree = cartOptionalString(cart, "phyloPlaceTree");
+    cgiMakeDropListWithVals("phyloPlaceTree", treeChoices->descriptions, treeChoices->protobufFiles,
+                            treeChoices->count, phyloPlaceTree);
+    }
+puts("</p><p>");
 printf("Number of samples per subtree showing sample placement: ");
 int subtreeSize = cartUsualInt(cart, "subtreeSize", 50);
 cgiMakeIntVarWithLimits("subtreeSize", subtreeSize,
  "Number of samples in subtree showing neighborhood of placement",
  5, 10, 1000);
+puts("</p><p>");
 cgiMakeOnClickSubmitButton(CHECK_FILE_INPUT_JS, "submit", "upload");
+puts("</p>");
 puts("  </div>");
 puts("</form>");
 }
@@ -317,8 +331,10 @@ if (lf != NULL)
     struct trackLayout tl;
     trackLayoutInit(&tl, cart);
     // Do our best to place the user's samples, make custom tracks if successful:
+    char *phyloPlaceTree = cartOptionalString(cart, "phyloPlaceTree");
     int subtreeSize = cartUsualInt(cart, "subtreeSize", 50);
-    char *ctFile = phyloPlaceSamples(lf, db, measureTiming, subtreeSize, tl.fontHeight);
+    char *ctFile = phyloPlaceSamples(lf, db, phyloPlaceTree, measureTiming, subtreeSize,
+                                     tl.fontHeight);
     if (ctFile)
         {
         cgiMakeHiddenVar(CT_CUSTOM_TEXT_VAR, ctFile);

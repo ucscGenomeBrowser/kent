@@ -3182,10 +3182,12 @@ urls ncbiTranscript=https://www.ncbi.nlm.nih.gov/nuccore/$$ ensemblTranscript=ht
 cdsTable lrgCds
 cdnaTable lrgCdna
 pepTable lrgPep
-baseColorDefault diffCodons
+altColor 127,127,127
+baseColorDefault genomicCodons
+baseColorUseSequence lfExtra
 baseColorUseCds table lrgCds
-baseColorUseSequence table lrgCdna
 indelDoubleInsert on
+indelPolyA on
 indelQueryInsert on
 showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0

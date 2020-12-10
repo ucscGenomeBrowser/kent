@@ -137,24 +137,38 @@ certain parameters: </p>
   custom track listing to view the bigBed track in the Genome Browser.</li>
 </ol>
 
+<a name=Ex2></a>
 <h3>Example #2</h3>
 <p>
 In this example, you will create your own bigBed file from an existing bed file.</p>
 <ol>
   <li> 
-  Save the BED file <a href="examples/bedExample.txt"><em>bedExample.txt</em></a> to your computer 
-  (<em>Steps 1</em> and <em>2</em> in <em>Creating a bigBed track</em>, above).</li>  
+  Save the BED file <a href="examples/bedExample.txt"><em>bedExample.txt</em></a> to a server, ideally one
+  that is accessible from the internet.
+  (<em>Steps 1</em> and <em>2</em> in <em>Creating a bigBed track</em>, above).<br>
+    <pre><code>wget https://genome.ucsc.edu/goldenPath/help/examples/bedExample.txt</code></pre>
+  </li>  
   <li> 
   Save the file <a href="hg19.chrom.sizes"><em>hg19.chrom.sizes</em></a> to your computer. It 
-  contains the chrom.sizes data for the human (hg19) assembly (<em>Step 4</em>, above).</li>
+  contains the chrom.sizes data for the human (hg19) assembly (<em>Step 4</em>, above).<br>
+    <pre><code>wget https://genome.ucsc.edu/goldenPath/help/hg19.chrom.sizes</code></pre>
+  </li>
   <li> 
-  Download the <code>bedToBigBed</code> utility (<em>Step 3</em>, above).</li> 
+  Download the <code>bedToBigBed</code> utility (<em>Step 3</em>, above). Replace "linux" below with "macOSX" 
+  if your server is a Mac.
+    <pre><code>wget http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bedToBigBed
+chmod a+x bedToBigBed</code></pre>
+  </li>
   <li> 
   Run the utility to create the bigBed output file (<em>Step 5</em>, above):
 <pre><code><strong>bedToBigBed</strong> bedExample.txt hg19.chrom.sizes myBigBed.bb</code></pre></li>
   <li> 
   Place the bigBed file you just created (<em>myBigBed.bb</em>) on a web-accessible server 
-  (<em>Step 6</em>, above).</li>
+  (<em>Step 6</em>, above).<br>
+    <pre><code>mv myBigBed.bb ~/public_html/</code></pre>
+  At some Universities, this involves using the commands ftp, scp or rsync to copy the file to a different server, one that is accessible 
+  from the internet. We have <a href="hgTrackHubHelp.html#Hosting">documentation</a> how to find such a server.
+  </li>
   <li> 
   Paste the URL itself into the Custom Tracks entry form or construct a track line that 
   points to your bigBed file (<em>Step 7</em>, above).</li>

@@ -925,7 +925,7 @@
 
 <DIV class="sepFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
-        <code>sepFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
+        <code>sepFields fieldName1,fieldName2 ...</code><BR>
     </div>
         
     <P>This setting changes the item details page and splits the table used for showing extra fields
