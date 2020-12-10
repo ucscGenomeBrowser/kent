@@ -1,4 +1,61 @@
 ################################################################
+# GCF_003668045.3_CriGri-PICRH-1.0 - Chinese hamster - Cricetulus griseus - mammals
+################################################################
+track chainNetGCF_003668045.3
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 200.3
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb GCF_003668045.3
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetGCF_003668045.3Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCF_003668045.3
+    spectrum on
+
+        track chainGCF_003668045.3_CriGri-PICRH-1.0i
+        parent chainNetGCF_003668045.3Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type bigChain GCF_003668045.3
+        bigDataUrl /gbdb/mm39/bbi/chainNet/chainGCF_003668045.3.bb
+        linkDataUrl /gbdb/mm39/bbi/chainNet/chainGCF_003668045.3Link.bb
+        html chainNet
+
+    track chainNetGCF_003668045.3Viewnet
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetGCF_003668045.3
+
+        track netGCF_003668045.3_CriGri-PICRH-1.0i
+        parent chainNetGCF_003668045.3Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign GCF_003668045.3 chainGCF_003668045.3_CriGri-PICRH-1.0i
+        html chainNet
+
+################################################################
+################################################################
 # GCA_901343595v1_MONAX5 - woodchuck - Marmota monax - mammal
 ################################################################
 track chainNetGCA_901343595v1
