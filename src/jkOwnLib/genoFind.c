@@ -126,10 +126,9 @@ struct genoFindFileHdr
     off_t listsOff;       // offset of lists or endLists
     off_t endListsOff;
 
-    // Reserved area. This is really padding, as all structures are accessed via
-    // offsets, so fields can be added without decreasing padding as long as the
-    // reserved is not consumed.
-    bits64 reserved[32];  // vesion 1.0: 32
+    // Reserved area. These are bytes of zero, so that need fields can be added
+    // that default to zero without needed check the version in code.
+    bits64 reserved[32];  // vesion 1.0: 32 words
 };
 
 static void genoFindInitHdr(struct genoFind *gf,
@@ -382,10 +381,9 @@ struct genoFindIndexFileHdr
     off_t untransOff;
     off_t transOff[2][3];
 
-    // Reserved area. This is really padding, as all structures are accessed via
-    // offsets, so fields can be added without decreasing padding as long as the
-    // reserved is not consumed.
-    bits64 reserved[32];  // vesion 1.0: 32
+    // Reserved area. These are bytes of zero, so that need fields can be added
+    // that default to zero without needed check the version in code.
+    bits64 reserved[32];  // vesion 1.0: 32 words
 };
 
 static void genoFindIndexInitHeader(struct genoFindIndex *gfIdx,

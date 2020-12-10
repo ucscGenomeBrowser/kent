@@ -115,7 +115,7 @@ errAbort(
   "     the form:\n"
   "         $rootdir/$genomeDataDir/$genome.2bit\n"
   "         $rootdir/$genomeDataDir/$genome.untrans.gfidx\n"
-  "         $rootdir/$genomeDataDir/$genome.untrans.gfidx\n"
+  "         $rootdir/$genomeDataDir/$genome.trans.gfidx\n"
   "     in this case, one would call gfClient with \n"
   "         -genome=$genome -genomeDataDir=$genomeDataDir\n"
   "     Often $genomeDataDir will be the same name as $genome, however it\n"
