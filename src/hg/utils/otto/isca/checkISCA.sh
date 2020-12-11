@@ -52,7 +52,7 @@ cp -p release.list prev.release.list
 rm -f release.list
 
 #	connect and list a directory, result to file: ls.check
-ftp -n -v -i ftp.ncbi.nlm.nih.gov  < ftp.isca.rsp > ls.check
+ftp -n -v -i ftp.ncbi.nlm.nih.gov 2>&1 < ftp.isca.rsp &> ls.check
 
 #	fetch the release directory names from the ls.check result file
 grep "gvf.gz" ls.check | sort > release.list || echo "Error - no gvf files found"
@@ -111,7 +111,7 @@ if [ "${WC}" -gt 1 ]; then
         cd ${WORKDIR}/archive/${db}
         mkdir ${today}
         cd ${today}
-        printf "This directory contains a backup of the ISCA/ClinGen track data tables built on %s\n" "${today}" > README
+        printf "This directory contains a backup of the ISCA/ClinGen track data tables built on %s\n" "${today}" > README 
         for i in `cat ${WORKDIR}/isca.tables`
         do
             hgsql --raw -Ne "show create table ${i}" ${db} > ${i}.sql
@@ -119,9 +119,9 @@ if [ "${WC}" -gt 1 ]; then
         done
     done
     cd ${WORKDIR}/${today}
-
+ 
     rm -f ../old.release.list
-    echo "ISCA/ClinGen Installed `date`"
+    echo "ISCA/ClinGen Installed `date`" 
 else
     echo "No update"
 fi

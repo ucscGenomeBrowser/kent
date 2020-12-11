@@ -25,6 +25,9 @@ installSub: ${SUBDIRS:%=%.install}
 %.install:
 	${MAKE} -C $* install
 
+validate: check-prefix
+	$(foreach i, $(OTTO_SCRIPTS) $(BUILD_FILES) $(BUILD_SCRIPTS), echo $(i); diff ${PREFIX}/$(i) $(i);)
+
 make-prefix: check-prefix
 	mkdir -p ${PREFIX}
 
