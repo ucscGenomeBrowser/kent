@@ -27,12 +27,14 @@ bedNameLabel SNP
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22
 
     track covidHgiGwasR4PvalC2
+    release alpha
     parent covidHgiGwasR4Pval on
     shortLabel COVID GWAS R4 Pval
     longLabel COVID GWAS Pvalue Release 4 (Oct 2020) from the COVID-19 Host Genetics Initiative (17965 cases, 33 studies)
     bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4C2.$D.EC.bb
 
     track covidHgiGwasR4PvalB2
+    release alpha
     parent covidHgiGwasR4Pval off
     shortLabel Hosp COVID GWAS R4 Pval
     longLabel Hospitalized COVID GWAS Pvalue Release 4 (Oct 2020) from the COVID-19 Host Genetics Initiative (7885 cases, 21 studies)
@@ -67,12 +69,14 @@ bedNameLabel SNP
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22
 
     track covidHgiGwasR4C2
+    release alpha
     parent covidHgiGwasR4 on
     shortLabel COVID GWAS R4
     longLabel COVID GWAS Release 4 (Oct 2020) from the COVID-19 Host Genetics Initiative (17965 cases, 33 studies)
     bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4C2.$D.bb
 
     track covidHgiGwasR4B2
+    release alpha
     parent covidHgiGwasR4 off
     shortLabel Hosp COVID GWAS R4
     longLabel Hospitalized COVID GWAS Release 4 (Oct 2020) from the COVID-19 Host Genetics Initiative (7885 cases, 21 studies)
