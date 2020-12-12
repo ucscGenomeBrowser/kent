@@ -21,8 +21,8 @@ file, translates and untranslated indices for the genome, and must follow this
 naming convention:
 
      $rootdir/$genomeDataDir/$genome.2bit
-          $rootdir/$genomeDataDir/$genome.untrans.gfidx\n"
-               $rootdir/$genomeDataDir/$genome.trans.gfidx\n"
+     $rootdir/$genomeDataDir/$genome.untrans.gfidx
+     $rootdir/$genomeDataDir/$genome.trans.gfidx
 
 All search parameters, such as tileSize, are store in the index file and can
 not be changed at runtime.
@@ -41,8 +41,8 @@ the file's address space.  A madvise system call informs the kernel that the
 entire file will be accessed randomly.
 
 The static server protocol only handles one command per connection. A
-translated DNA query is implemented as six requires to the server. To
-implement the "I'm feeling luckly", hgBlats makes an addition status query. To
+translated DNA query is implemented as six requests to the server. To
+implement the "I'm feeling luckly", hgBlat makes an addition status query. To
 avoid loading the index multiple time for a given client task, gfServer
 supports multiple commands over a single connection.
 
