@@ -1544,6 +1544,7 @@ tg->drawLeftLabels = halSnakeDrawLeftLabels;
 
 tg->drawItemAt = snakeDrawAt;
 tg->itemHeight = snakeItemHeight;
+tg->nextItemButtonable = FALSE;
 }
 #endif  // USE_HAL
 
