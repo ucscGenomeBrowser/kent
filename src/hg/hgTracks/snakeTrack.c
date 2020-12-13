@@ -1354,7 +1354,7 @@ if (errCatchStart(errCatch))
     {
     char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
     char *otherSpecies = trackDbSetting(tg->tdb, "otherSpecies");
-    char *errString = "empty";
+    char *errString = "<HAL error message not set>";
     int handle = -1;
     if (!isPsl)
         {
