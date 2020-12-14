@@ -2,6 +2,8 @@ SUBDIRS =
 
 all: ${SUBDIRS:%=%.suball}
 
+FILES = gwasWrapper.sh checkGwas.sh validateGwas.sh perlParser.pl expectedColumns.txt
+
 %.suball:
 	${MAKE} -C $* all
 
@@ -15,6 +17,9 @@ installSub: ${SUBDIRS:%=%.install}
 
 %.install:
 	${MAKE} -C $* install
+
+validate: check-prefix
+	$(foreach i, $(FILES), echo $(i); diff ${PREFIX}/$(i) $(i);)
 
 make-prefix: check-prefix
 	mkdir -p ${PREFIX}
