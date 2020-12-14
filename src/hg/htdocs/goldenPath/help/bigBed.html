@@ -39,7 +39,7 @@ explained in more detail in the following sections on this page:
 <pre><code>wget https://genome.ucsc.edu/goldenPath/help/examples/bedExample.txt
 wget https://genome.ucsc.edu/goldenPath/help/hg19.chrom.sizes
 wget http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bedToBigBed
-chmod a+x bedTod
+chmod a+x bedToBigBed
 bedToBigBed bedExample.txt hg19.chrom.sizes myBigBed.bb
 mv myBigBed.bb ~/public_html/
 </code></pre>
@@ -57,18 +57,18 @@ To create a bigBed track, follow these steps (for concrete Unix commands, see th
 Create a BED format file following the directions 
 <a href="../../FAQ/FAQformat.html#format1">here</a>. When converting a BED file to a bigBed file, 
 you are limited to one track of data in your input file; therefore, you must create a separate BED 
-file for each data track. Your BED file must be sorted first on the <code>chrom</code> field, and 
-secondarily on the <code>chromStart</code> field. </p> 
+file for each data track. Your BED file must be sorted.
 <p>
 If your BED file was originally a custom track, remove any existing
 &quot;track&quot; or &quot;browser&quot; lines from your BED file so that it
 contains only data.</p>
 
 <p> 
-<strong>Step 3.</strong>
+<strong>Step 2.</strong>
 Download the <code>bedToBigBed</code> program from the 
 <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>. 
-Example #2 below shows the exact Unix command.</p>
+Example #2 below shows the exact Unix command.
+</p>
 
 <p>
 The <code>bedToBigBed</code> program can be run with several additional options. Some of these,
@@ -79,27 +79,30 @@ specifies the number of extra fields, not required, but preferred. Describing th
 is needed for access to extra fields like name, itemRgb, etc.
 Examples:<code>-type=bed6</code> or <code>-type=bed6+</code> or <code>-type=bed6+3 </code>.  
 For a full list of the available options, type <code>bedToBigBed</code> (with no arguments) on the
-command line to display the usage message.</p>
+command line to display the usage message.
+</p>
 
-<strong>Step 4.</strong>
+<p>
+<strong>Step 3.</strong>
 Use the <code>fetchChromSizes</code> script from the 
 <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> 
 to create the <em>chrom.sizes</em> file for the UCSC database you are working with (e.g., hg19).
 If the assembly <code>genNom</code> is hosted by UCSC, chrom.sizes can be a URL like:
 <code>http://hgdownload.soe.ucsc.edu/goldenPath/genNom/bigZips/genNom.chrom.sizes</code>. 
 </p>
+
 <p> 
-<strong>Step 5.</strong>
+<strong>Step 4.</strong>
 Use the <code>bedToBigBed</code> utility to create a bigBed file from your sorted BED file, using 
 the <em>input.bed</em> file and <em>chrom.sizes</em> files created in <em>Steps 1</em> and
-<em>4</em>:</p> 
+<em>3</em>:</p> 
 <pre><code><strong>bedToBigBed</strong> input.bed chrom.sizes myBigBed.bb</code></pre>
 <p>
-<strong>Step 6.</strong>
+<strong>Step 5.</strong>
 Move the newly created bigBed file (<em>myBigBed.bb</em>) to a web-accessible http, https, or 
 ftp location. At this point you should have a URL to your data, such as &quot;https://institution.edu/myBigBed.bb&quot;, and the file should be accessible outside of your institution/hosting providers network. For more information on where to host your data, please see the <a href="hgTrackHubHelp.html#Hosting">Hosting</a> section of the Track Hub Help documentation.</p>
 <p> 
-<strong>Step 7.</strong>
+<strong>Step 6.</strong>
 If the file name ends with a <em>.bigBed</em> or <em>.bb</em> suffix, you can paste the URL of the 
 file directly into the 
 <a href="../../cgi-bin/hgCustom">custom track</a> management page, click &quot;submit&quot; and 
@@ -164,17 +167,20 @@ In this example, you will create your own bigBed file from an existing bed file.
   (<em>Steps 1</em> and <em>2</em> in <em>Creating a bigBed track</em>, above).<br>
     <pre><code>wget https://genome.ucsc.edu/goldenPath/help/examples/bedExample.txt</code></pre>
   </li>  
-  <li> 
+<li> 
   Save the file <a href="hg19.chrom.sizes"><em>hg19.chrom.sizes</em></a> to your computer. It 
   contains the chrom.sizes data for the human (hg19) assembly (<em>Step 4</em>, above).<br>
     <pre><code>wget https://genome.ucsc.edu/goldenPath/help/hg19.chrom.sizes</code></pre>
-  </li>
-  <li>If you use your own file, it has to be sorted. You can use the utility <code>bedSort</code>
+</li>
+<li>If you use your own file, it has to be sortedi, first on the
+  <code>chrom</code> field, and secondarily on the <code>chromStart</code>
+  field. You can use the utility <code>bedSort</code>
 available <a href="http://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">here</a>
 or the following UNIX <code>sort</code>
 command to do this: </p>
 <pre><code>sort -k1,1 -k2,2n unsorted.bed &gt; input.bed</code></pre>
-  </li>
+</li>
+
 <li> 
   Download the <code>bedToBigBed</code> utility (<em>Step 3</em>, above). Replace "linux" below with "macOSX" 
   if your server is a Mac.
