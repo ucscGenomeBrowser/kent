@@ -9,7 +9,7 @@ table covidHgiGwas
     char[1]  strand;           "Unused.  Always '.'"
     uint     thickStart;       "Start position in chrom"
     uint     thickEnd;         "End position in chrom"
-    uint     color;            "Red (positive effect) or blue (negative). Brightness reflects pvalue"
+    uint     color;            "Red (positive effect) or blue (negative) 
     double   effectSize;       "Effect size (beta coefficient)
     double   effectSizeSE;     "Effect size standard error"
     string   pValue;           "p-value"
