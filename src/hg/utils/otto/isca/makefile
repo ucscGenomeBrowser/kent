@@ -2,6 +2,8 @@ SUBDIRS =
 
 all: ${SUBDIRS:%=%.suball}
 
+FILES = gvfToBed8Attrs.pl isca.tables buildISCA.csh validateISCA.sh checkISCA.sh iscaWrapper.sh
+
 %.suball:
 	${MAKE} -C $* all
 
@@ -12,6 +14,9 @@ installSub: ${SUBDIRS:%=%.install}
 
 %.install:
 	${MAKE} -C $* install
+
+validate: check-prefix
+	$(foreach i, $(FILES), echo $(i); diff ${PREFIX}/$(i) $(i);)
 
 make-prefix: check-prefix
 	mkdir -p ${PREFIX}

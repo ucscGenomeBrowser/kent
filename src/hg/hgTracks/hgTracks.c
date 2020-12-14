@@ -10597,9 +10597,8 @@ if (measureTiming)
 /* #if 1 this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
  * is more than 4k */
-#if  0
-state = cgiUrlString();
-printf("State: %s\n", state->string);
+#if 0
+printf("State: %s\n", cgiUrlString()->string);
 #endif
 
 getDbAndGenome(cart, &database, &organism, oldVars);

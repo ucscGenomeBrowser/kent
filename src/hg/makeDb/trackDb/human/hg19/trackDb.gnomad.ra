@@ -901,7 +901,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#110320 "Updated Nov. 3, 2020
     urlLabel View this variant at gnomAD
     extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.genomes.popTable.txt
     html gnomadExomesGenomes
-    release alpha
+    release alpha,beta
 
     track gnomadExomes
     shortLabel gnomAD Exomes Variants
@@ -925,7 +925,7 @@ pennantIcon Updated red ../goldenPath/newsarch.html#110320 "Updated Nov. 3, 2020
     urlLabel View this variant at gnomAD
     extraDetailsTable Population Frequencies|/gbdb/hg19/gnomAD/variants/v2.1.1.exomes.popTable.txt
     html gnomadExomesGenomes
-    release alpha
+    release alpha,beta
 
 searchTable pliByTranscript
 searchType bigBed
