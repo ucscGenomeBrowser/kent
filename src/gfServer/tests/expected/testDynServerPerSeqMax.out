@@ -44,7 +44,7 @@ end
 end
 0ddf270562684f29untransInfo crea crea
 
-version 36x9
+version 37x0
 type nucleotide
 tileSize 11
 stepSize 11
