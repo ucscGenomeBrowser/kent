@@ -1,5 +1,9 @@
 # Format files from COVID Host Genetics Initiative as BED 9+11 (covidHgiGwas.as) for lollipop display
 
+# Usage: makeCovidHgiGwas.pl <db> <#studies> <input file> [R4] [effect-threshold]
+
+# R4 indicates newer format of input files.  effect | pvalue are alternative views
+
 use strict;
 use English;
 
@@ -12,6 +16,15 @@ my $version = "R3";     # initial track
 if ($#ARGV >= 3) {
     $version = $ARGV[3];
 }
+
+# color light/bright threshold
+my $colorBy = "pvalue";
+my $threshold = "5";  # if coloring by -log10 pvalue
+if ($#ARGV >=4) {
+    $colorBy = "effect";
+    $threshold = $ARGV[4];
+}
+
 open(my $fh, $file) or die ("can't open file $file\n");
 
 my $hdr = <$fh>;
@@ -35,9 +48,10 @@ my $last = $fields-5;
 my $scale = 3;
 my $sizeBins = 5;
 while (<$fh>) {
+    # parse and generate field values
     chomp;
     my ($chromNum, $pos, $ref, $alt) = split;
-    # drop 'chr23' entries (tills we identify)
+    # drop 'chr23' entries (till we identify)
     next if $chromNum eq "23";
     my @data = split;
     my ($studies, $effectSize, $effectSE, $pval, $pvalHet, 
@@ -46,25 +60,32 @@ while (<$fh>) {
     my $start = $pos - 1;
     my $end = $pos;
     my $score = 0;
+    my $name = ($snp eq "NA") ? $chromNum . ":" . $pos : $snp;
+    my $studyWeight = int(($studies * $sizeBins) / $allStudies) + $scale; 
+
+    # assign color
+    my $color;
     my $blue = "0,0,255"; my $red = "255,0,0";
     my $lightBlue = "160,160,255"; my $lightRed = "255,160,160";
     my $logPval = -(log($pval)/log(10));
-    my $intPval = int($logPval);
-    my $color;
+    my $absEffectSize = abs($effectSize);
+    my $colorThresholdVal = int($logPval);
+    if ($colorBy eq "effect") {
+        $colorThresholdVal = $absEffectSize;
+    }
     if ($effectSize > 0) {
         # positive (red)
-        $color = ($intPval >= 5) ? $red : $lightRed;
+        $color = ($colorThresholdVal >= $threshold) ? $red : $lightRed;
     } else {
         # negative (blue)
-        $color = ($intPval >= 5) ? $blue : $lightBlue;
+        $color = ($colorThresholdVal >= $threshold) ? $blue : $lightBlue;
     }
-    my $name = ($snp eq "NA") ? $chromNum . ":" . $pos : $snp;
-    my $studyWeight = int(($studies * $sizeBins) / $allStudies) + $scale; 
+    # print
     $OFS = "\t"; print $chr, $start, $end, $name, $score, '.', $start, $end, $color; $OFS = "";
     printf("\t%.3f\t%.3f", $effectSize, $effectSE);
     printf("\t%.2e\t%.3f\t%.2e", $pval, $logPval, $pvalHet);
     printf("\t%s\t%s\t%.3f\t%s\t%s\t%d\t%.3f", $ref, $alt, $alleleFreq, $samples, $studies, 
-                $studyWeight, abs($effectSize));
+                $studyWeight, $absEffectSize);
     print "\n";
 }
 close ($fh);
