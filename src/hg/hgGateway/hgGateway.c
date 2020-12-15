@@ -209,10 +209,21 @@ static void setDb(struct cartJson *cj, struct hash *paramHash)
 {
 char *db = cartJsonRequiredParam(paramHash, "db", cj->jw, "setDb");
 char *hubUrl = cartJsonOptionalParam(paramHash, "hubUrl");
+// we want to go back to the most recent position on this db
+// so push "lastDbPos" into the cart so cartGetPosition() can find it
+char *maybePosition = cartJsonOptionalParam(paramHash, "position");
+if (maybePosition)
+    cartSetString(cart, "position", maybePosition);
 int taxId = hTaxId(db);
-writeFindPositionInfo(cj->jw, db, taxId, hubUrl, hDefaultPos(db));
+
+// look up the old position the user was browsing (if they came here from
+// a hub connection for instance) and start them there, otherwise use
+// the assembly default position
+char *maybeLastPos = cartGetPosition(cart, db, NULL);
+char *pos = maybeLastPos != NULL ? maybeLastPos : hDefaultPos(db);
+writeFindPositionInfo(cj->jw, db, taxId, hubUrl, pos);
 cartSetString(cart, "db", db);
-cartSetString(cart, "position", hDefaultPos(db));
+cartSetString(cart, "position", pos);
 }
 
 static void getUiState(struct cartJson *cj, struct hash *paramHash)
