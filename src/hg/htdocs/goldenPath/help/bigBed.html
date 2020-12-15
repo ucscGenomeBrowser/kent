@@ -31,63 +31,45 @@ Note that the <code>bedToBigBed</code> utility uses a substantial amount of memo
 approximately 25% more RAM than the uncompressed BED input file.</p>
 <p>
 
-<h2>Creating a bigBed track</h2>
+<h2>Quickstart example commands</h2>
+
+It is not hard to create a bigBed file. The following UNIX commands create one on a Linux machine and are 
+explained in more detail in the following sections on this page:
+
+<pre><code>wget https://genome.ucsc.edu/goldenPath/help/examples/bedExample.txt
+wget https://genome.ucsc.edu/goldenPath/help/hg19.chrom.sizes
+wget http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bedToBigBed
+chmod a+x bedToBigBed
+bedToBigBed bedExample.txt hg19.chrom.sizes myBigBed.bb
+mv myBigBed.bb ~/public_html/
+</code></pre>
+
+The last step assumes that your ~/public_html/ directory is accessible from the internet. This may not be the case
+on your server. You may have to copy the file to another server and web-accessible location at your University. 
+Once you know the URL to the file myBigBed.bb, you can paste this URL into the <a href="../../cgi-bin/hgCustom">custom track</a>
+box on the UCSC Genome Browser to display the file.
+
+<h2>Overview of the steps to create a bigBed track</h2>
 <p>
-To create a bigBed track, follow these steps:<p>
+To create a bigBed track, follow these steps (for concrete Unix commands, see the examples below on this page):<p>
 <p>
 <strong>Step 1.</strong>
 Create a BED format file following the directions 
 <a href="../../FAQ/FAQformat.html#format1">here</a>. When converting a BED file to a bigBed file, 
 you are limited to one track of data in your input file; therefore, you must create a separate BED 
-file for each data track. Your BED file must be sorted first on the <code>chrom</code> field, and 
-secondarily on the <code>chromStart</code> field. You can use utility <code>bedSort</code>
-available <a href="http://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">here</a>
-or the following UNIX <code>sort</code>
-command to do this: </p>
-<pre><code>sort -k1,1 -k2,2n unsorted.bed &gt; input.bed</code></pre>
+file for each data track. Your BED file must be sorted.
+<p>
+If your BED file was originally a custom track, remove any existing
+&quot;track&quot; or &quot;browser&quot; lines from your BED file so that it
+contains only data.</p>
+
 <p> 
 <strong>Step 2.</strong>
-Remove any existing &quot;track&quot; or &quot;browser&quot; lines from your BED file so that it 
-contains only data.</p>
-<p> 
-<strong>Step 3.</strong>
 Download the <code>bedToBigBed</code> program from the 
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
-<p> 
-<strong>Step 4.</strong>
-Use the <code>fetchChromSizes</code> script from the 
-<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> 
-to create the <em>chrom.sizes</em> file for the UCSC database you are working with (e.g., hg19).
-If the assembly <code>genNom</code> is hosted by UCSC, chrom.sizes can be a URL like:
-<code>http://hgdownload.soe.ucsc.edu/goldenPath/genNom/bigZips/genNom.chrom.sizes</code></p>
-<p> 
-<strong>Step 5.</strong>
-Use the <code>bedToBigBed</code> utility to create a bigBed file from your sorted BED file, using 
-the <em>input.bed</em> file and <em>chrom.sizes</em> files created in <em>Steps 1</em> and
-<em>4</em>:</p> 
-<pre><code><strong>bedToBigBed</strong> input.bed chrom.sizes myBigBed.bb</code></pre>
-<p>
-<strong>Step 6.</strong>
-Move the newly created bigBed file (<em>myBigBed.bb</em>) to a web-accessible http, https, or 
-ftp location. At this point you should have a URL to your data, such as &quot;https://institution.edu/myBigBed.bb&quot;, and the file should be accessible outside of your institution/hosting providers network. For more information on where to host your data, please see the <a href="hgTrackHubHelp.html#Hosting">Hosting</a> section of the Track Hub Help documentation.</p>
-<p> 
-<strong>Step 7.</strong>
-If the file name ends with a <em>.bigBed</em> or <em>.bb</em> suffix, you can paste the URL of the 
-file directly into the 
-<a href="../../cgi-bin/hgCustom">custom track</a> management page, click &quot;submit&quot; and 
-view the file as a track in the Genome Browser. By default, the file name will be used to name the track. To configure the track 
-name and descriptions, you must create a &quot;<a href="hgTracksHelp.html#TRACK">track 
-line</a>&quot;, as shown in <em>Step 8</em>.</p>
-<p> 
-<strong>Step 8.</strong>
-Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a single track line. 
-Note that any of the track attributes listed
-<a href="customTrack.html#TRACK">here</a> are applicable to tracks of type bigBed. The most basic 
-version of the track line will look something like this:</p>
-<pre><code><strong>track type=</strong>bigBed <strong>name=</strong>"My Big Bed" <strong>description=</strong>"A Graph of Data from My Lab" <strong>bigDataUrl=</strong>http://myorg.edu/mylab/myBigBed.bb</code></pre>
-<p> 
-Paste this custom track line into the text box on the <a href="../../cgi-bin/hgCustom">custom 
-track</a> management page.</p>
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>. 
+Example #2 below shows the exact Unix command.
+</p>
+
 <p>
 The <code>bedToBigBed</code> program can be run with several additional options. Some of these,
 such as the <code>-as</code> and <code>-type</code> options, are used in examples below. The 
@@ -97,14 +79,51 @@ specifies the number of extra fields, not required, but preferred. Describing th
 is needed for access to extra fields like name, itemRgb, etc.
 Examples:<code>-type=bed6</code> or <code>-type=bed6+</code> or <code>-type=bed6+3 </code>.  
 For a full list of the available options, type <code>bedToBigBed</code> (with no arguments) on the
-command line to display the usage message.</p>
+command line to display the usage message.
+</p>
 
+<p>
+<strong>Step 3.</strong>
+Use the <code>fetchChromSizes</code> script from the 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> 
+to create the <em>chrom.sizes</em> file for the UCSC database you are working with (e.g., hg19).
+If the assembly <code>genNom</code> is hosted by UCSC, chrom.sizes can be a URL like:
+<code>http://hgdownload.soe.ucsc.edu/goldenPath/genNom/bigZips/genNom.chrom.sizes</code>. 
+</p>
 
+<p> 
+<strong>Step 4.</strong>
+Use the <code>bedToBigBed</code> utility to create a bigBed file from your sorted BED file, using 
+the <em>input.bed</em> file and <em>chrom.sizes</em> files created in <em>Steps 1</em> and
+<em>3</em>:</p> 
+<pre><code><strong>bedToBigBed</strong> input.bed chrom.sizes myBigBed.bb</code></pre>
+<p>
+<strong>Step 5.</strong>
+Move the newly created bigBed file (<em>myBigBed.bb</em>) to a web-accessible http, https, or 
+ftp location. At this point you should have a URL to your data, such as &quot;https://institution.edu/myBigBed.bb&quot;, and the file should be accessible outside of your institution/hosting providers network. For more information on where to host your data, please see the <a href="hgTrackHubHelp.html#Hosting">Hosting</a> section of the Track Hub Help documentation.</p>
+<p> 
+<strong>Step 6.</strong>
+If the file name ends with a <em>.bigBed</em> or <em>.bb</em> suffix, you can paste the URL of the 
+file directly into the 
+<a href="../../cgi-bin/hgCustom">custom track</a> management page, click &quot;submit&quot; and 
+view the file as a track in the Genome Browser. By default, the file name will be used to name the track. To configure the track 
+name and descriptions, you must create a &quot;<a href="hgTracksHelp.html#TRACK">track 
+line</a>&quot;, as shown in <em>Step 8</em>.</p>
+<p> 
+Alternatively, if you want to set the track labels and other options yourself,
+construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a single track line. 
+Note that any of the track attributes listed
+<a href="customTrack.html#TRACK">here</a> are applicable to tracks of type bigBed. The most basic 
+version of the track line will look something like this:</p>
+<pre><code><strong>track type=</strong>bigBed <strong>name=</strong>"My Big Bed" <strong>description=</strong>"A Graph of Data from My Lab" <strong>bigDataUrl=</strong>http://myorg.edu/mylab/myBigBed.bb</code></pre>
+<p> 
+Paste this custom track line into the text box on the <a href="../../cgi-bin/hgCustom">custom 
+track</a> management page.</p>
 
 <h2>Examples</h2>
 <h3>Example #1</h3>
 <p>
-In this example, you will create a bigBed custom track using an existing bigBed file,
+In this example, you will load an existing bigBed file,
 <em>bigBedExample.bb</em>, on the UCSC http server. This file contains chromosome 21 data on the 
 human hg19 assembly.</p>
 <p>
@@ -148,12 +167,21 @@ In this example, you will create your own bigBed file from an existing bed file.
   (<em>Steps 1</em> and <em>2</em> in <em>Creating a bigBed track</em>, above).<br>
     <pre><code>wget https://genome.ucsc.edu/goldenPath/help/examples/bedExample.txt</code></pre>
   </li>  
-  <li> 
+<li> 
   Save the file <a href="hg19.chrom.sizes"><em>hg19.chrom.sizes</em></a> to your computer. It 
   contains the chrom.sizes data for the human (hg19) assembly (<em>Step 4</em>, above).<br>
     <pre><code>wget https://genome.ucsc.edu/goldenPath/help/hg19.chrom.sizes</code></pre>
-  </li>
-  <li> 
+</li>
+<li>If you use your own file, it has to be sortedi, first on the
+  <code>chrom</code> field, and secondarily on the <code>chromStart</code>
+  field. You can use the utility <code>bedSort</code>
+available <a href="http://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">here</a>
+or the following UNIX <code>sort</code>
+command to do this: </p>
+<pre><code>sort -k1,1 -k2,2n unsorted.bed &gt; input.bed</code></pre>
+</li>
+
+<li> 
   Download the <code>bedToBigBed</code> utility (<em>Step 3</em>, above). Replace "linux" below with "macOSX" 
   if your server is a Mac.
     <pre><code>wget http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bedToBigBed
@@ -259,8 +287,14 @@ improper input.</p>
 
 <h2>Sharing Your Data with Others</h2>
 <p>
-If you would like to share your bigBed data track with a colleague, learn how to create a URL by 
-looking at Example #6 on <a href="customTrack.html#EXAMPLE6">this page</a>.</p>
+If you would like to share your bigBed data track with a colleague, the best solution is to 
+save your current view as a stable <a href="hgSessionHelp.html">Genome Browser Session Link</a>.
+This will save the position and all settings that you made, all track visibilities, filters, 
+highlights, etc.
+</p>
+<p>
+If you want to create URLs programmatically from software, look at Example #6 on <a href="customTrack.html#EXAMPLE6">this page</a>.
+</p>
 
 <h2>Extracting Data from the bigBed Format</h2>
 <p>

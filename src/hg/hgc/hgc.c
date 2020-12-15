@@ -3123,31 +3123,23 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
         // we're assuming that if there are multiple psl's with the same id that
         // they are the same query sequence so we only put out one set of sequences
-        if (firstTime)  
+        if (firstTime  && !isEmpty(seq))    // if there is a query sequence
             {
             firstTime = FALSE;
             printf("<H3>Links to sequence:</H3>\n");
             printf("<UL>\n");
 
-            if (!isEmpty(seq))    // if there is a query sequence
+            if (!isEmpty(cdsStr))  // if we have CDS 
                 {
-                if (!isEmpty(cdsStr))  // if we have CDS 
-                    {
-                    puts("<LI>\n");
-                    hgcAnchorSomewhere("htcTranslatedBigPsl", item, "translate", seqName);
-                    printf("Translated Amino Acid Sequence</A> from Query Sequence\n");
-                    puts("</LI>\n");
-                    }
-
                 puts("<LI>\n");
-                hgcAnchorSomewhere("htcBigPslSequence", item, tdb->track, seqName);
-                printf("Query Sequence</A> \n");
+                hgcAnchorSomewhere("htcTranslatedBigPsl", item, "translate", seqName);
+                printf("Translated Amino Acid Sequence</A> from Query Sequence\n");
                 puts("</LI>\n");
                 }
 
             puts("<LI>\n");
-            hgcAnchorSomewhere("htcGeneInGenome", item, tdb->track, seqName);
-            printf("Genomic Sequence</A> from assembly\n");
+            hgcAnchorSomewhere("htcBigPslSequence", item, tdb->track, seqName);
+            printf("Query Sequence</A> \n");
             puts("</LI>\n");
             printf("</UL>\n");
             }
@@ -8651,7 +8643,12 @@ int end = cartInt(cart, "r");
 char *table = cartString(cart, "table");
 
 struct trackDb *tdb ;
-if (isHubTrack(table))
+if (isCustomTrack(table))
+    {
+    struct customTrack *ct = lookupCt(table);
+    tdb = ct->tdb;
+    }
+else if (isHubTrack(table))
     tdb = hubConnectAddHubForTrackAndFindTdb( database, table, NULL, trackHash);
 else
     tdb = hashFindVal(trackHash, table);
