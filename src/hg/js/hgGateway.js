@@ -1454,7 +1454,7 @@ var hgGateway = (function() {
         var cmd;
         if (db !== uiState.db) {
             setAssemblyDescriptionTitle(db, uiState.genome);
-            cmd = { setDb: { db: db } };
+            cmd = { setDb: { db: db, position: "lastDbPos" } };
             if (uiState.hubUrl) {
                 cmd.setDb.hubUrl = uiState.hubUrl;
             }
