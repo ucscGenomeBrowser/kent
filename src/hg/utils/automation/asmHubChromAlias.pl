@@ -164,7 +164,9 @@ if ( $asmStructCount > 0 ) {
   open (FH, "grep -h -v '^#' ../../download/${asmId}_assembly_structure/*/*/chr2acc|") or die "can not grep chr2acc files";
   while (my $line = <FH>) {
     chomp $line;
-    my ($alias, $seqName) = split('\s+', $line);
+    my ($alias, $seqName) = split('\t', $line);
+    $alias =~ s/ /_/g;	# some assemblies have spaces in chr names ...
+    $alias =~ s/:/_/g;	# one assembly had : in a chr name
     $chr2acc{$seqName} = $alias;
     if ($ucscNames) {
        $seqName = $ncbiToUcsc{$seqName};
