@@ -164,6 +164,8 @@ def main():
 
     if inFname is None:
         ifh = stdin
+    elif inFname.endswith(".gz"):
+        ifh = gzip.open(inFname)
     else:
         ifh = open(inFname)
 
