@@ -73,7 +73,9 @@ open(my $gF, ">gisaidColors") || die "Can't open gisaidColors: $!";
 
 while (<>) {
   chomp;
-  my ($sample, $nsClade, $lineage, $gClade) = split;
+  my ($sample, $nsClade, $lineage, $gClade) = split("\t");
+  # Strip subclade from Nextstrain clade
+  $nsClade =~ s/\..*//;
   if (defined $ns2col{$nsClade}) {
     print $nsF "$sample\t$ns2col{$nsClade}\n";
   } else {

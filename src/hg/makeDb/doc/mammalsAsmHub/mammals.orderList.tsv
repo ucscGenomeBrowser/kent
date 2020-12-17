@@ -26,6 +26,7 @@ GCF_002263795.1_ARS-UCD1.2	cattle
 GCF_003709585.1_Aci_jub_2	cheetah
 GCF_000223135.1_CriGri_1.0	Chinese hamster
 GCF_003668045.3_CriGri-PICRH-1.0	Chinese hamster CHO
+GCF_014570555.1_YNU_ManPten_2.0	Chinese pangolin
 GCF_000334495.1_TupChi_1.0	Chinese tree shrew
 GCF_001922835.1_NIST_Tur_tru_v1	common bottlenose dolphin
 GCF_002940915.1_ASM294091v2	common vampire bat
@@ -48,9 +49,11 @@ GCF_000002295.2_MonDom5	gray short-tailed opossum
 GCF_012393455.1_Tufts_HGry_1.1	gray seal
 GCF_001890085.1_ASM189008v1	great roundleaf bat
 GCF_002201575.1_ASM220157v1	Hawaiian monk seal
+GCF_014824575.1_WHU_Shon_v2	Honduran yellow-shouldered bat
 GCF_002863925.1_EquCab3.0	horse
 GCF_000001635.27_GRCm39	house mouse
-GCF_003369695.1_UOA_Brahman_1	hybrid cattle
+GCF_014898055.1_MPIMG_talOcc4	Iberian mole
+GCF_014825515.1_WHU_Ajam_v2	Jamaican fruit-eating bat
 GCF_000331955.2_Oorc_1.1	killer whale
 GCF_002099425.1_phaCin_unsw_v4.1	koala
 GCF_000151845.1_Pvam_2.0	large flying fox
@@ -98,7 +101,7 @@ GCF_000696425.1_G_variegatus-3.0.2	Sunda flying lemur
 GCF_902635505.1_mSarHar1.11	Tasmanian devil
 GCF_000236235.1_SpeTri2.0	thirteen-lined ground squirrel
 GCF_000622305.1_S.galili_v1.0	Upper Galilee mountains blind mole rat
-GCF_003121395.1_ASM312139v1	water buffalo
+GCF_003121395.1_UOA_WB_1	water buffalo
 GCF_000349705.1_LepWed1.0	Weddell seal
 GCF_000296755.1_EriEur2.0	western European hedgehog
 GCF_004664715.2_UCI_PerLeu_2.1	white-footed mouse

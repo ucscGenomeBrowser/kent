@@ -16,10 +16,11 @@ GCF_001515605.1_SAMN03320099.WGS_v1.1	bony fishes
 GCF_001515625.1_SAMN03320098_v1.1	bony fishes
 GCF_001515645.1_SAMN03320097.WGS_v1.1	bony fishes
 GCF_002872115.1_PKINGS_0.1	bony fishes
-GCF_900634415.1_fCotGob3.1	bony fishes
 GCF_000239415.1_AstBur1.0	Burton's mouthbrooder
+GCF_900634415.1_fCotGob3.1	channel bull blenny
 GCF_001660625.1_IpCoco_1.2	channel catfish
 GCF_002872995.1_Otsh_v1.0	Chinook salmon
+GCF_012931545.1_Oket_V1	chum salmon
 GCF_900324465.1_fAnaTes1.1	climbing perch
 GCF_002776465.1_AmpOce1.0	clown anemonefish
 GCF_002021735.2_Okis_V2	coho salmon
@@ -32,7 +33,9 @@ GCF_900880675.1_fSpaAur1.1	gilthead seabream
 GCF_003368295.1_ASM336829v1	goldfish
 GCF_000788275.1_BP.fa	great blue-spotted mudskipper
 GCF_002260705.1_Sdu_1.0	greater amberjack
+GCF_901709675.1_fSynAcu1.2	greater pipefish
 GCF_000633615.1_Guppy_female_1.0_MT	guppy
+GCF_015220745.1_fSebUmb1.pri	honeycomb rockfish
 GCF_900634625.1_fParRan2.1	Indian glassy fish
 GCF_002922805.2_ASM292280v2	Indian medaka
 GCF_001970005.1_Flounder_ref_guided_V1.0	Japanese flounder
@@ -48,6 +51,7 @@ GCF_001444195.1_X_couchianus-1.0	Monterrey platyfish
 GCF_000826765.1_Fundulus_heteroclitus-3.0.2	mummichog
 GCF_011125445.2_MU-UCD_Fhet_4.1	mummichog
 GCF_001858045.2_O_niloticus_UMD_NMBU	Nile tilapia
+GCF_902500615.1_NSP_V7	ninespine stickleback
 GCF_004634155.1_Eluc_v4	northern pike
 GCF_902148855.1_fSphaOr1.1	orbiculate cardinalfish
 GCF_008315115.2_SLUC_FBN_1.2	pike-perch
@@ -55,6 +59,7 @@ GCF_902150065.1_fMyrMur1.1	pinecone soldierfish
 GCF_002163495.1_Omyk_1.0	rainbow trout
 GCF_013265735.2_USDA_OmykA_1.1	rainbow trout
 GCF_001682695.1_Pygocentrus_nattereri-1.0.2	red-bellied piranha
+GCF_014905685.1_NemWhi1	Rio pearlfish
 GCF_901001165.1_fSalTru1.1	river trout
 GCF_001443285.1_P_latipinna-1.0	sailfin molly
 GCF_000732505.1_C_variegatus-1.0	sheepshead minnow
@@ -66,6 +71,7 @@ GCF_002109545.1_ASM210954v1	spiny chromis
 GCF_003671635.1_VN_pangasius	striped catfish
 GCF_009078355.1_GENO_Phyp_1.0	striped catfish
 GCF_001952655.1_M_albus_1.0	swamp eel
+GCF_904425465.1_Colossoma_macropomum	tambaqui
 GCF_001891065.1_H_comes_QL1_v1	tiger tail seahorse
 GCF_000523025.1_Cse_v1.0	tongue sole
 GCF_901000725.2_fTakRub1.2	torafugu
@@ -73,6 +79,7 @@ GCF_001465895.1_Nfu_20140520	turquoise killifish
 GCF_004355925.1_GSC_Weel_1.0	wolf-eel
 GCF_003724035.1_ASM372403v1	yellow catfish
 GCF_004354835.1_PFLA_1.0	yellow perch
+GCF_904848185.1_fAcaLat1.1	yellowfin seabream
 GCF_002814215.1_Sedor1	yellowtail amberjack
 GCF_000238955.4_M_zebra_UMD2a	zebra mbuna
 GCF_000002035.6_GRCz11	zebrafish
