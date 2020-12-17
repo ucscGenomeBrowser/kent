@@ -3739,6 +3739,7 @@ mouseOverField variantType
 tableBrowser off hgmd
 noScoreFilter on
 maxItems 1000
+pennantIcon Updated red
 
 track snpedia
 shortLabel SNPedia
