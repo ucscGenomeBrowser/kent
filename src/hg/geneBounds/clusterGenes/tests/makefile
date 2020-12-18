@@ -7,7 +7,7 @@ all:
 
 test: refSeqTest refSeqCdsTest trackNamesTest joinTest joinCdsTest \
 	overlapUseStrandTest overlapIgnoreStrandsTest \
-	ignoreBasesTest ignoreBasesCdsTest
+	ignoreBasesTest ignoreBasesCdsTest ignoreBasesTinyTest
 
 # test files blatRefSeq.gp  ncbiRefSeq.gp
 #  chr1:11,689,948-12,078,317 - some basic genes
@@ -60,6 +60,12 @@ ignoreBasesTest: mkout
 
 ignoreBasesCdsTest: mkout
 	${clusterGenes} -ignoreBases=5 -cds output/$@.gl no input/overlapCases.gp
+	diff -u expected/$@.gl output/$@.gl
+
+# -ignoreBases bases was discarding when overlap exceeded ignored, it should
+# still put in a cluster.
+ignoreBasesTinyTest: mkout
+	${clusterGenes} -ignoreBases=40 output/$@.gl no input/Mt-tRNA.gp
 	diff -u expected/$@.gl output/$@.gl
 
 mkout:

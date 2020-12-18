@@ -5,18 +5,17 @@ set -beEu -x -o pipefail
 #	kent/src/hg/utils/otto/sarscov2phylo/updateSarsCov2Phylo.sh
 
 usage() {
-    echo "usage: $0 releaseLabel metadata_date.tsv.gz sequences_date.fasta.gz epiToPublicAndDate.date"
+    echo "usage: $0 releaseLabel metadata_date.tsv.gz epiToPublicAndDate.date"
 }
 
-if [ $# != 4 ]; then
+if [ $# != 3 ]; then
   usage
   exit 1
 fi
 
 releaseLabel=$1
 nextmeta=$2
-nextfasta=$3
-epiToPublic=$4
+epiToPublic=$3
 
 scriptDir=$(dirname "${BASH_SOURCE[0]}")
 ottoDir=/hive/data/outside/otto/sarscov2phylo
@@ -28,11 +27,10 @@ cncbFa=$ottoDir/cncb.latest/cncb.nonGenBank.fasta
 mkdir -p $ottoDir/$releaseLabel
 cd $ottoDir/$releaseLabel
 
-$scriptDir/getRelease.sh $releaseLabel $nextmeta $nextfasta >& getRelease.log
+$scriptDir/processGisaid.sh $releaseLabel $treeDir $msaFile $nextmeta $problematicSitesVcf \
+    >& processGisaid.log
 
-$scriptDir/processRelease.sh $releaseLabel $problematicSitesVcf >& processRelease.log
-
-$scriptDir/mapPublic.sh $releaseLabel $problematicSitesVcf $epiToPublic >& mapPublic.log
+$scriptDir/mapPublic.sh $releaseLabel $nextmeta $problematicSitesVcf $epiToPublic >& mapPublic.log
 
 $scriptDir/extractUnmappedPublic.sh $epiToPublic $genbankFa $cogUkFa $cncbFa \
     >& extractUnmappedPublic.log

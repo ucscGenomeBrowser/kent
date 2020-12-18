@@ -2763,7 +2763,7 @@ var rightClick = {
                                 }
                             }
                         }
-                        if (isHgc && href.indexOf('g=gtexGene') !== -1) {
+                        if (isHgc && ( href.indexOf('g=gtexGene')!== -1 || href.indexOf('g=unip') !== -1 )) {
                             // For GTEx gene mouseovers, replace title (which may be a tissue name) with 
                             // item (gene) name
                             a = /i=([^&]+)/.exec(href);
