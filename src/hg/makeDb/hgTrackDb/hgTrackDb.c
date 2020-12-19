@@ -872,6 +872,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 	    }
 	}
 
+    sqlUpdate(conn, NOSQLINJ "flush tables");
     sqlDisconnect(&conn);
     verbose(1, "Loaded database %s\n", database);
     }
