@@ -314,19 +314,21 @@ return hashAdd(hash, name, pt + val);
 }
 
 
-void hashIncInt(struct hash *hash, char *name)
-/* Increment integer value in hash */
+int hashIncInt(struct hash *hash, char *name)
+/* Increment integer value in hash. Return value after increment. */
 {
 struct hashEl *hel = hashLookup(hash, name);
 if (hel == NULL)
   {
   hashAddInt(hash, name, 1);
+  return 1;
   }
 else
   {
-  hel->val = ((char *)hel->val)+1;
-  /* The much simpler ++hel->val works for gnu C, but really adding one to a void pointer
-   * I think is not well defined. */
+  char *ptVal = hel->val;
+  ptVal += 1;
+  hel->val = ptVal;
+  return ptToInt(ptVal);
   }
 }
 

@@ -165,8 +165,8 @@ void *hashFindValUpperCase(struct hash *hash, char *name);
 struct hashEl *hashAddInt(struct hash *hash, char *name, int val);
 /* Store integer value in hash */
 
-void hashIncInt(struct hash *hash, char *name);
-/* Increment integer value in hash */
+int hashIncInt(struct hash *hash, char *name);
+/* Increment integer value in hash. Return value after increment. */
 
 int hashIntVal(struct hash *hash, char *name);
 /* Return integer value associated with name in a simple 
