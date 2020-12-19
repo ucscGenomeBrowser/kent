@@ -44,6 +44,7 @@ UTILS_APPLIST = \
 	chopFaLines \
 	colTransform \
 	countChars \
+	clusterMatrixToBarchartBed \
 	endsInLf \
 	cpgIslandExt \
 	faAlign \
