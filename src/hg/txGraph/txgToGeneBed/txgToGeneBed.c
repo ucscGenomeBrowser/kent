@@ -12,7 +12,7 @@ void usage()
 errAbort(
   "txgToGeneBed - Convert txg to a simple bed with one block and the most common gene name.\n"
   "usage:\n"
-  "   txgToGeneBed in.txg txToGene.tsv	out.bed\n"
+  "   txgToGeneBed in.txg txToGene.tsv geneToName.tsv out.bed\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -49,17 +49,22 @@ else
     }
 }
 
-void txgToGeneBed(char *inTxg, char *txToGeneFile, char *outBed)
+void txgToGeneBed(char *inTxg, char *txToGeneFile, char *geneToNameFile, char *outBed)
 /* txgToGeneBed - Convert txg to a simple bed with one block and the most common gene name.. */
 {
 struct hash *txToGeneHash = hashTwoColumnFile(txToGeneFile);
+struct hash *geneToNameHash = hashTwoColumnFile(geneToNameFile);
 struct txGraph *txgList = txGraphLoadAll(inTxg);
 FILE *f = mustOpen(outBed, "w");
 struct txGraph *txg;
 for (txg = txgList; txg != NULL; txg = txg->next)
     {
     char *gene = pickGene(txg, txToGeneHash);
-    fprintf(f, "%s\t%d\t%d\t%s\t0\t%s\n", txg->tName, txg->tStart, txg->tEnd,gene,txg->strand);
+    char *name = hashFindVal(geneToNameHash, gene);
+    if (name == NULL)
+        name = gene;
+    fprintf(f, "%s\t%d\t%d\t%s\t0\t%s\t%s\n", 
+	txg->tName, txg->tStart, txg->tEnd, gene, txg->strand, name);
     }
 carefulClose(&f);
 }
@@ -68,8 +73,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 5)
     usage();
-txgToGeneBed(argv[1], argv[2], argv[3]);
+txgToGeneBed(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
