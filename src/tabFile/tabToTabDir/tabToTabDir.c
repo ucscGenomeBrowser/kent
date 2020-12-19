@@ -223,17 +223,21 @@ else
 	if (startsWithWord("count", command))
 	    {
 	    if (!isEmpty(s))
-		errAbort("Something following $count line %d of %s", fileLineNumber, fileName);;
+		errAbort("Something following $count line %d of %s", fileLineNumber, fileName);
 	    fv->combineType = ctCount;
 	    fv->type = fvCount;
 	    }
         else if (startsWithWord("list", command))
 	    {
 	    fv->combineType = ctUniq;
+	    if (isEmpty(skipLeadingSpaces(s)))
+	        errAbort("Missing parameters to $list line %d of %s", fileLineNumber, fileName);
 	    }
         else if (startsWithWord("stats", command))
 	    {
 	    fv->combineType = ctStats;
+	    if (isEmpty(skipLeadingSpaces(s)))
+	        errAbort("Missing parameters to $stats line %d of %s", fileLineNumber, fileName);
 	    }
 	else
 	    {
