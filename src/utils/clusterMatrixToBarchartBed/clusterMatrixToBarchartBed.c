@@ -59,7 +59,7 @@ while (lineFileNextReal(lf, &line))
 	errAbort("Expecting %d words, got more than that line %d of %s", 
 	    colCount, lf->lineIx, lf->fileName);
 	}
-    hashAddUnique(hash, row[keyColIx], lmCloneRow(hash->lm, row, colCount) );
+    hashAdd(hash, row[keyColIx], lmCloneRow(hash->lm, row, colCount) );
     }
 lineFileClose(&lf);
 return hash;
@@ -204,60 +204,68 @@ for (;;)
     lineFileExpectWords(lf, colCount, rowSize);
 
     char *geneName = matrixRow[0];
-    char **geneBedVal = hashFindVal(geneHash, geneName);
-    if (geneBedVal == NULL)
+    struct hashEl *onePos = hashLookup(geneHash, geneName);
+    if (onePos == NULL)
 	{
-        warn("Can't find gene %s in %s", geneName, geneBed);
+	warn("Can't find gene %s in %s", geneName, geneBed);
 	++missCount;
 	continue;
 	}
     else
-        ++hitCount;
-
-
-    /* Zero out cluster histogram */
-    int i;
-    for (i=0; i<clusterCount; ++i)
-        {
-	clusterTotal[i] = 0.0;
-	clusterElements[i] = 0;
+	{
+	++hitCount;
 	}
 
-    zeroBytes(&clusterTotal, sizeof(clusterTotal));
-    zeroBytes(&clusterElements, sizeof(clusterElements));
-
-    /* Loop through rest of row filling in histogram */
-    for (i=1; i<colCount; ++i)
+    for (; onePos != NULL; onePos = hashLookupNext(onePos))
         {
-	int clusterIx = colToCluster[i];
-	double val = sqlDouble(matrixRow[i]);
-	int pos = clusterElements[clusterIx];
-	if (pos >= clusterSize[clusterIx])
-	    internalErr();
-	clusterElements[clusterIx] = pos+1;
-	clusterSamples[clusterIx][pos] = val;
-	clusterTotal[clusterIx] += val;
+	char **geneBedVal = onePos->val;
+
+	/* Zero out cluster histogram */
+	int i;
+	for (i=0; i<clusterCount; ++i)
+	    {
+	    clusterTotal[i] = 0.0;
+	    clusterElements[i] = 0;
+	    }
+
+	zeroBytes(&clusterTotal, sizeof(clusterTotal));
+	zeroBytes(&clusterElements, sizeof(clusterElements));
+
+	/* Loop through rest of row filling in histogram */
+	for (i=1; i<colCount; ++i)
+	    {
+	    int clusterIx = colToCluster[i];
+	    double val = sqlDouble(matrixRow[i]);
+	    int pos = clusterElements[clusterIx];
+	    if (pos >= clusterSize[clusterIx])
+		internalErr();
+	    clusterElements[clusterIx] = pos+1;
+	    clusterSamples[clusterIx][pos] = val;
+	    clusterTotal[clusterIx] += val;
+	    }
+
+	/* Output info */
+	for (i=0; i<bedRowSize; ++i)
+	    fprintf(f, "%s\t",  geneBedVal[i]);
+	fprintf(f, "%d\t", clusterCount);
+	for (i=0; i<clusterCount; ++i)
+	    {
+	    if (i != 0)
+	       fprintf(f, ",");
+	    if (clMean)
+		fprintf(f, "%g",  clusterTotal[i]/clusterElements[i]);
+	    else
+		fprintf(f, "%g", doubleMedian(clusterElements[i], clusterSamples[i]));
+	    }
+	
+	/* Data file offset info */
+	if (clDataOffset)
+	    fprintf(f, "\t%lld\t%lld",  (long long)lineFileTell(lf), (long long)lineLength);
+
+	fprintf(f, "\n");
 	}
 
-    /* Output info */
-    for (i=0; i<bedRowSize; ++i)
-        fprintf(f, "%s\t",  geneBedVal[i]);
-    fprintf(f, "%d\t", clusterCount);
-    for (i=0; i<clusterCount; ++i)
-        {
-	if (i != 0)
-	   fprintf(f, ",");
-	if (clMean)
-	    fprintf(f, "%g",  clusterTotal[i]/clusterElements[i]);
-	else
-	    fprintf(f, "%g", doubleMedian(clusterElements[i], clusterSamples[i]));
-	}
-    
-    /* Data file offset info */
-    if (clDataOffset)
-        fprintf(f, "\t%lld\t%lld",  (long long)lineFileTell(lf), (long long)lineLength);
 
-    fprintf(f, "\n");
     }
 verbose(1, "%d genes found, %d missed\n", hitCount, missCount);
 carefulClose(&f);
