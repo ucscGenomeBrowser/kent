@@ -293,12 +293,13 @@ for (projectRef = rootEl->val.jeList; projectRef != NULL; projectRef = projectRe
         errAbort("Expecting list value for ingest-info");
     int ingestListSize = slCount(ingestList->val.jeList);
     if (ingestListSize != 1)
-        verbose(2, "ingest-info[] has %d members\n", ingestListSize);
+        verbose(1, "ingest-info[] has %d members\n", ingestListSize);
 
     int subBunCount = 0;
     struct slRef *ingestRef;
     char *submissionId = NULL;
     char *shortName = NULL;
+    boolean gotReal = FALSE;
     for (ingestRef = ingestList->val.jeList; ingestRef != NULL; ingestRef = ingestRef->next)
 	{
 	struct jsonElement *ingestEl = ingestRef->val;
@@ -311,6 +312,11 @@ for (projectRef = rootEl->val.jeList; projectRef != NULL; projectRef = projectRe
 	 * the first (complete) one and warn about the rest.  Some of the dupes have the
 	 * same uuid, some different.  Yes, it's a little messy this input . */
 	shortName = jsonStringField(ingestEl, "project_short_name");
+	if (shortName == NULL)
+	    {
+	    verbose(1, "Skipping project without shortName '%s'\n", shortName);
+	    continue;
+	    }
 	// Abbreviate what is really and truly not a short name!
 	if (startsWith("Single cell RNAseq characterization of cell types produced over time in an in ",
 	     shortName))
@@ -327,6 +333,11 @@ for (projectRef = rootEl->val.jeList; projectRef != NULL; projectRef = projectRe
 
 	/* Grab more string fields we like from ingest-info. */
 	submissionId = jsonStringField(ingestEl, "submission_id");
+	if (submissionId == NULL)
+	   {
+	   warn("submissionId for %s is NULL", projectUuid);
+	   continue;
+	   }
 	char *title = jsonStringField(ingestEl, "project_title");
 	char *wrangler = jsonStringField(ingestEl, "data_curator");
 	char *contributors = jsonStringField(ingestEl, "primary_investigator");
@@ -365,6 +376,7 @@ for (projectRef = rootEl->val.jeList; projectRef != NULL; projectRef = projectRe
 	fprintf(fProject, "%s\t%s\t", shortName, title);
 	fprintf(fProject, "%s\t%s\t%s\t", species, techs, contribCsv->string);
 	fprintf(fProject, "%s\n", submissionDate);
+	gotReal = TRUE;
 
 	break;	    // Still figuring out if this loop is here to stay
 	}
@@ -372,8 +384,9 @@ for (projectRef = rootEl->val.jeList; projectRef != NULL; projectRef = projectRe
     /* We processed the heck out of the ingest-info, and this routine is so long,
      * pass along what we parsed out that goes into the tracker table, and have it
      * deal with the azul-info, matrix-info, etc,  which are read-only to wranglers. */
-    outputTracker(fTracker, shortName, submissionId, projectUuid, projectHash, 
-	subBunCount, scratch);
+    if (gotReal)
+	outputTracker(fTracker, shortName, submissionId, projectUuid, projectHash, 
+	    subBunCount, scratch);
     }
 }
 
