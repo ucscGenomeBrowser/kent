@@ -1,7 +1,8 @@
 track covidHgiGwasR4Pval
+html covidHgiGwasR4
 release alpha
 shortLabel COVID GWAS Pval
-longLabel GWAS meta-analyses (by Pvalue) Release 4 (Oct 2020) from the COVID-19 Host Genetics Initiative
+longLabel GWAS meta-analyses (by Pvalue) Release 4 (Oct 2020) from COVID-19 Host Genetics Initiative
 compositeTrack on
 group covid
 visibility hide
@@ -30,20 +31,34 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
     release alpha
     parent covidHgiGwasR4Pval on
     shortLabel COVID GWAS R4 Pval
-    longLabel COVID GWAS Pvalue Release 4 (Oct 2020) from the COVID-19 Host Genetics Initiative (17965 cases, 33 studies)
+    longLabel COVID GWAS Pvalue Rel 4 (Oct 2020) from COVID-19 Host Genetics Initiative (Analysis C2: 17965 cases, 33 studies)
     bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4C2.$D.EC.bb
 
     track covidHgiGwasR4PvalB2
     release alpha
-    parent covidHgiGwasR4Pval off
+    parent covidHgiGwasR4Pval on
     shortLabel Hosp COVID GWAS R4 Pval
-    longLabel Hospitalized COVID GWAS Pvalue Release 4 (Oct 2020) from the COVID-19 Host Genetics Initiative (7885 cases, 21 studies)
+    longLabel Hospitalized COVID GWAS Pvalue Rel 4 (Oct 2020) from COVID-19 Host Genetics Initiative (Analysis B2: 7885 cases, 21 studies)
     bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4B2.$D.EC.bb
+
+    track covidHgiGwasR4PvalA2
+    release alpha
+    parent covidHgiGwasR4Pval on
+    shortLabel Severe COVID GWAS R4 Pval
+    longLabel Very severe respiratory COVID GWAS Pvalue Rel 4 (Oct 2020) from COVID-19 Host Genetics Initiative (Analysis A2: 4336 cases, 12 studies)
+    bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4A2.$D.EC.bb
+
+    track covidHgiGwasR4PvalC1
+    release alpha
+    parent covidHgiGwasR4Pval on
+    shortLabel Tested COVID GWAS R4 Pval
+    longLabel Tested GWAS Pvalue (Analysis C1) Rel 4 (Oct 2020) from COVID-19 Host Genetics Initiative (11085 cases: 20 studies)
+    bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4C1.$D.EC.bb
 
 track covidHgiGwasR4
 release alpha
 shortLabel COVID GWAS R4
-longLabel GWAS meta-analyses (by Effect size) Release 4 (Oct 2020) from the COVID-19 Host Genetics Initiative
+longLabel GWAS meta-analyses (by effect size) Release 4 (Oct 2020) from the COVID-19 Host Genetics Initiative
 compositeTrack on
 group covid
 visibility hide
@@ -72,15 +87,29 @@ chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13
     release alpha
     parent covidHgiGwasR4 on
     shortLabel COVID GWAS R4
-    longLabel COVID GWAS Release 4 (Oct 2020) from the COVID-19 Host Genetics Initiative (17965 cases, 33 studies)
+    longLabel COVID GWAS Rel 4 (Oct 2020) from COVID-19 Host Genetics Initiative (Analysis C2: 17965 cases, 33 studies)
     bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4C2.$D.bb
 
     track covidHgiGwasR4B2
     release alpha
-    parent covidHgiGwasR4 off
+    parent covidHgiGwasR4 on
     shortLabel Hosp COVID GWAS R4
-    longLabel Hospitalized COVID GWAS Release 4 (Oct 2020) from the COVID-19 Host Genetics Initiative (7885 cases, 21 studies)
+    longLabel Hospitalized COVID GWAS Rel 4 (Oct 2020) from COVID-19 Host Genetics Initiative (Analysis B2: 7885 cases, 21 studies)
     bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4B2.$D.bb
+
+    track covidHgiGwasR4A2
+    release alpha
+    parent covidHgiGwasR4 on
+    shortLabel Severe COVID GWAS R4
+    longLabel Very severe respiratory COVID GWAS Release 4 (Oct 2020) from COVID-19 Host Genetics Initiative (Analysis A2: 4336 cases, 12 studies)
+    bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4A2.$D.bb
+
+    track covidHgiGwasR4C1
+    release alpha
+    parent covidHgiGwasR4 on
+    shortLabel Tested COVID GWAS R4
+    longLabel Tested GWAS Rel 4 (Oct 2020) from COVID-19 Host Genetics Initiative (Analysis C1: 11085 cases, 20 studies)
+    bigDataUrl /gbdb/$D/covidHgiGwas/covidHgiGwasR4C1.$D.bb
 
 
 track covidHgiGwas

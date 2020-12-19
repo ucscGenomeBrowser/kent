@@ -1,8 +1,10 @@
 # Format files from COVID Host Genetics Initiative as BED 9+11 (covidHgiGwas.as) for lollipop display
 
-# Usage: makeCovidHgiGwas.pl <db> <#studies> <input file> [R4] [effect-threshold]
+# Usage: makeCovidHgiGwas.pl <db> <#studies> <input file> [R4] [neg-threshold pos-threshold]
 
 # R4 indicates newer format of input files.  effect | pvalue are alternative views
+# thresholds are for effect size coloring when using pvalue view
+# effect size view is hard-coded to pvalue 5 threshold (conventional threshold for GWAS)
 
 use strict;
 use English;
@@ -19,10 +21,12 @@ if ($#ARGV >= 3) {
 
 # color light/bright threshold
 my $colorBy = "pvalue";
-my $threshold = "5";  # if coloring by -log10 pvalue
+my $negThreshold = "5";  # if coloring by -log10 pvalue
+my $posThreshold = "5";  # if coloring by -log10 pvalue
 if ($#ARGV >=4) {
     $colorBy = "effect";
-    $threshold = $ARGV[4];
+    $negThreshold = $ARGV[4];
+    $posThreshold = $ARGV[5];
 }
 
 open(my $fh, $file) or die ("can't open file $file\n");
@@ -75,10 +79,10 @@ while (<$fh>) {
     }
     if ($effectSize > 0) {
         # positive (red)
-        $color = ($colorThresholdVal >= $threshold) ? $red : $lightRed;
+        $color = ($colorThresholdVal >= $posThreshold) ? $red : $lightRed;
     } else {
         # negative (blue)
-        $color = ($colorThresholdVal >= $threshold) ? $blue : $lightBlue;
+        $color = ($colorThresholdVal >= $negThreshold) ? $blue : $lightBlue;
     }
     # print
     $OFS = "\t"; print $chr, $start, $end, $name, $score, '.', $start, $end, $color; $OFS = "";
